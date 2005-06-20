@@ -1,4 +1,4 @@
-      SUBROUTINE FSPREAD( NEEDFMT, RECUSED )
+      SUBROUTINE FSPREAD( NEEDFMT )
 C
 C     Routine for SCHED, called by SETFORM, that propagates
 C     track bit rates across setup files and numbers of track
@@ -17,7 +17,7 @@ C
       REAL     MAXTOT, TRKBPS
       REAL     TTBPS(MAXSET), BTBPS(MAXSET)
       REAL     SETTBPS(MAXSET), FSAMPR(MAXSET), MAXFTOT(MAXSET)
-      LOGICAL  NEEDFMT(*), RECUSED(*), OK
+      LOGICAL  NEEDFMT(*), OK
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'FSPREAD starting' )
 C

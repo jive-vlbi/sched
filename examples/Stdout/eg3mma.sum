@@ -7,7 +7,7 @@ COVER INFORMATION:
   Start Day 187 is Wed   5 Jul 2000   MJD  51730          
 
   Schedule Version:       1.00                                              
-  Processed by SCHED version:   6.0  Release: March 2005                    
+  Processed by SCHED version:   6.02  May 2005                              
 
   PI:       Craig Walker                                                    
 
@@ -93,15 +93,19 @@ BASELINE LENGTHS (km)
 
 
 RECORDING SYSTEM INFORMATION:
+     Some stations may be scheduled for both tape and disk.
 
   TAPES - Stations potentially recording on tape.
     (See setup details later for times per pass.)
-   Station Drives Head pos  Tape len  Density  Start position  Auto   Auto   Recorder 
+   Station Drives Head pos  Tape len  Density  Start position  Auto   Auto   Recorder  DAR
                                 (ft)           Driv Head indx  Aloc  Reverse
-   VLBA_FD     2      14      17600    High      1      1       Yes    Yes    VLBA  
-   VLBA_PT     2      14      17600    High      1      1       Yes    Yes    VLBA  
-   VLBA_KP     2      14      17600    High      1      1       Yes    Yes    VLBA  
-   VLBA_LA     2      14      17600    High      1      1       Yes    Yes    VLBA  
+   VLBA_FD     2      14      17600    High      1      1       Yes    Yes    VLBA    VLBA 
+   VLBA_PT     2      14      17600    High      1      1       Yes    Yes    VLBA    VLBA 
+
+  DISKS - Stations potentially recording on disks.
+   Station    Drive type 
+   VLBA_KP      MARK5A
+   VLBA_LA      MARK5A
 
 
 
@@ -114,14 +118,25 @@ EXPERIMENT SUMMARY:
   Number of setup files used:     2
 
  Station summaries (tape stations): 
-  Station  Control   Scans  Scan Hours  Tape hours   Tapes    Passes   Readbacks 
-  VLBA_FD    VLBA      81      5.90        4.93         1        14        28
-  VLBA_PT    VLBA      81      5.90        4.93         1        14        28
-  VLBA_KP    VLBA      81      5.90        4.93         1        14        28
-  VLBA_LA    VLBA      81      5.90        4.93         1        14        28
+  Station  Control   Scans   Scan   Tape   Tapes  Passes Readbacks  Formatter   Sync 
+                            Hours   Hours                         Reconfigures  Hours  
+  VLBA_FD    VLBA      81    5.90    4.93    1      14      28      0/  0       0.03
+  VLBA_PT    VLBA      81    5.90    4.93    1      14      28      0/  0       0.03
 
  Station summaries (disk stations): 
-  Station  Control   Scans  Scan Hours  Record hrs   Gbytes
+  Station  Control   Scans  Scan Hours  Record hrs   Gbytes      Formatter     Sync 
+                                                               Reconfigures    Hours  
+  VLBA_KP    VLBA      81      5.90        4.93        685.        0/  0       0.12
+  VLBA_LA    VLBA      81      5.90        4.93        685.        0/  0       0.12
+
+Notes on the station summaries: 
+
+    "Sync Hours" is on-source, in-scan time lost during correlation to resyncing
+    recordings.  Resyncs follow tape stoppages and formatter reconfigures.
+
+    For VLBA stations, total reconfigures and reconfigures during recording are shown.
+    Reconfigures during recording can cause slow correlator sync.
+    Any reconfigure can slow sync at JIVE.
 
 
 
@@ -132,7 +147,7 @@ The following setup groups are the same as group   1 below.
 
 
  Setup file: v3mm-256-8-2.set
-   Matches group v3mm_ff in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group v3mm_ff in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
 
    Setup group:    1         Station: VLBA_FD           Total bit rate:  256
    Format: VLBA1:2           Bits per sample: 2         Sample rate: 16.000
@@ -180,8 +195,8 @@ The following setup groups are the same as group   5 below.
    6:VLBA_PT   7:VLBA_KP   8:VLBA_LA
 
 
- Setup file: /home/cwalker/mach/mach/cwalker/code/sched/setups/v7mm-256-8-2.set
-   Matches group v7mm_c8 in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+ Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/v7mm-256-8-2.set
+   Matches group v7mm_c8 in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
 
    Setup group:    5         Station: VLBA_FD           Total bit rate:  256
    Format: VLBA1:2           Bits per sample: 2         Sample rate: 16.000
@@ -562,7 +577,7 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 187  02:03:00 3C273         P Stop Stop Stop Stop
 187  02:05:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  02:05:00 3C273         - 1F01 1F01 1F01 1F01
+187  02:05:00 3C273         - 1F01 1F01   23   23
 187  02:15:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00
 
 187  02:15:00 SGRA          - Stop Stop Stop Stop
@@ -571,37 +586,37 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 187  02:19:00 P-AHSCO       P Stop Stop Stop Stop
 187  02:21:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  02:21:00 P-AHSCO       - 1F01 1F01 1F01 1F01
-187  02:22:00 -             - 1/08 1/08 1/08 1/08
+187  02:21:00 P-AHSCO       - 1F01 1F01   36   36
+187  02:22:00 -             - 1/08 1/08 1/00 1/00
 
-187  02:22:00 SGRA          - 1F01 1F01 1F01 1F01
-187  02:32:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  02:22:00 SGRA          - 1F01 1F01   56   56
+187  02:32:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  02:32:00 P-AHSCO       P Stop Stop Stop Stop
 187  02:34:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  02:34:00 P-AHSCO       - 1F01 1F01 1F01 1F01
-187  02:35:00 -             - 1/17 1/17 1/17 1/17
+187  02:34:00 P-AHSCO       - 1F01 1F01   61   61
+187  02:35:00 -             - 1/17 1/17 1/00 1/00
 
-187  02:35:00 SGRA          - 1R02 1R02 1R02 1R02
-187  02:45:00 v3mm-256-8-2  - 1/18 1/18 1/18 1/18
+187  02:35:00 SGRA          - 1R02 1R02   81   81
+187  02:45:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00
 
 187  02:45:00 P-AHSCO       P Stop Stop Stop Stop
 187  02:47:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  02:47:00 P-AHSCO       - 1R02 1R02 1R02 1R02
-187  02:48:00 -             - 1/10 1/10 1/10 1/10
+187  02:47:00 P-AHSCO       - 1R02 1R02   87   87
+187  02:48:00 -             - 1/10 1/10 1/00 1/00
 
-187  02:48:00 SGRA          - 1R02 1R02 1R02 1R02
-187  02:58:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  02:48:00 SGRA          - 1R02 1R02  106  106
+187  02:58:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  02:58:00 P-AHSCO       P Stop Stop Stop Stop
 187  03:00:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  03:00:00 P-AHSCO       - 1R02 1R02 1R02 1R02
-187  03:01:00 -             - 1/01 1/01 1/01 1/01
+187  03:00:00 P-AHSCO       - 1R02 1R02  112  112
+187  03:01:00 -             - 1/01 1/01 1/00 1/00
 
-187  03:01:00 SGRA          - 1F03 1F03 1F03 1F03
+187  03:01:00 SGRA          - 1F03 1F03  131  131
 187  03:11:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00
 
 187  03:11:00 P-AHSCO       P Stop Stop Stop Stop
@@ -619,53 +634,53 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
       STOP UT                   Fd   Pt   Kp   La
 
-187  03:13:00 P-AHSCO       - 1F03 1F03 1F03 1F03
-187  03:14:00 v7mm-256-8-2  - 1/08 1/08 1/08 1/08
+187  03:13:00 P-AHSCO       - 1F03 1F03  137  137
+187  03:14:00 v7mm-256-8-2  - 1/08 1/08 1/00 1/00
 
-187  03:14:00 SGRA          - 1F03 1F03 1F03 1F03
-187  03:24:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  03:14:00 SGRA          - 1F03 1F03  156  156
+187  03:24:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  03:24:00 P-AHSCO       P Stop Stop Stop Stop
 187  03:26:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  03:26:00 P-AHSCO       - 1F03 1F03 1F03 1F03
-187  03:27:00 -             - 1/17 1/17 1/17 1/17
+187  03:26:00 P-AHSCO       - 1F03 1F03  162  162
+187  03:27:00 -             - 1/17 1/17 1/00 1/00
 
-187  03:27:00 SGRA          - 1R04 1R04 1R04 1R04
-187  03:37:00 v3mm-256-8-2  - 1/18 1/18 1/18 1/18
+187  03:27:00 SGRA          - 1R04 1R04  181  181
+187  03:37:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00
 
 187  03:37:00 P-AHSCO       P Stop Stop Stop Stop
 187  03:39:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  03:39:00 P-AHSCO       - 1R04 1R04 1R04 1R04
-187  03:40:00 -             - 1/10 1/10 1/10 1/10
+187  03:39:00 P-AHSCO       - 1R04 1R04  187  187
+187  03:40:00 -             - 1/10 1/10 1/00 1/00
 
-187  03:40:00 SGRA          - 1R04 1R04 1R04 1R04
-187  03:50:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  03:40:00 SGRA          - 1R04 1R04  207  207
+187  03:50:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  03:50:00 P-AHSCO       P Stop Stop Stop Stop
 187  03:52:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  03:52:00 P-AHSCO       - 1R04 1R04 1R04 1R04
-187  03:53:00 -             - 1/01 1/01 1/01 1/01
+187  03:52:00 P-AHSCO       - 1R04 1R04  212  212
+187  03:53:00 -             - 1/01 1/01 1/00 1/00
 
-187  03:53:00 SGRA          - 1F05 1F05 1F05 1F05
+187  03:53:00 SGRA          - 1F05 1F05  232  232
 187  04:03:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00
 
 187  04:03:00 P-AHSCO       P Stop Stop Stop Stop
 187  04:05:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  04:05:00 P-AHSCO       - 1F05 1F05 1F05 1F05
-187  04:06:00 -             - 1/08 1/08 1/08 1/08
+187  04:05:00 P-AHSCO       - 1F05 1F05  238  238
+187  04:06:00 -             - 1/08 1/08 1/00 1/00
 
-187  04:06:00 SGRA          - 1F05 1F05 1F05 1F05
-187  04:16:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  04:06:00 SGRA          - 1F05 1F05  257  257
+187  04:16:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  04:16:00 P-AHSCO       P Stop Stop Stop Stop
 187  04:18:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  04:18:00 P-AHSCO       - 1F05 1F05 1F05 1F05
-187  04:19:00 -             - 1/17 1/17 1/17 1/17
+187  04:18:00 P-AHSCO       - 1F05 1F05  263  263
+187  04:19:00 -             - 1/17 1/17 1/00 1/00
 
 
 
@@ -679,53 +694,53 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
       STOP UT                   Fd   Pt   Kp   La
 
-187  04:19:00 SGRA          - 1R06 1R06 1R06 1R06
-187  04:29:00 v3mm-256-8-2  - 1/18 1/18 1/18 1/18
+187  04:19:00 SGRA          - 1R06 1R06  282  282
+187  04:29:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00
 
 187  04:29:00 P-AHSCO       P Stop Stop Stop Stop
 187  04:31:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  04:31:00 P-AHSCO       - 1R06 1R06 1R06 1R06
-187  04:32:00 -             - 1/10 1/10 1/10 1/10
+187  04:31:00 P-AHSCO       - 1R06 1R06  288  288
+187  04:32:00 -             - 1/10 1/10 1/00 1/00
 
-187  04:32:00 SGRA          - 1R06 1R06 1R06 1R06
-187  04:42:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  04:32:00 SGRA          - 1R06 1R06  307  307
+187  04:42:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  04:42:00 P-AHSCO       P Stop Stop Stop Stop
 187  04:44:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  04:44:00 P-AHSCO       - 1R06 1R06 1R06 1R06
-187  04:45:00 -             - 1/01 1/01 1/01 1/01
+187  04:44:00 P-AHSCO       - 1R06 1R06  313  313
+187  04:45:00 -             - 1/01 1/01 1/00 1/00
 
-187  04:45:00 SGRA          - 1F07 1F07 1F07 1F07
+187  04:45:00 SGRA          - 1F07 1F07  332  332
 187  04:55:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00
 
 187  04:55:00 P-AHSCO       P Stop Stop Stop Stop
 187  04:57:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  04:57:00 P-AHSCO       - 1F07 1F07 1F07 1F07
-187  04:58:00 -             - 1/08 1/08 1/08 1/08
+187  04:57:00 P-AHSCO       - 1F07 1F07  338  338
+187  04:58:00 -             - 1/08 1/08 1/00 1/00
 
-187  04:58:00 SGRA          - 1F07 1F07 1F07 1F07
-187  05:08:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  04:58:00 SGRA          - 1F07 1F07  358  358
+187  05:08:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  05:08:00 P-AHSCO       P Stop Stop Stop Stop
 187  05:10:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  05:10:00 P-AHSCO       - 1F07 1F07 1F07 1F07
-187  05:11:00 -             - 1/17 1/17 1/17 1/17
+187  05:10:00 P-AHSCO       - 1F07 1F07  363  363
+187  05:11:00 -             - 1/17 1/17 1/00 1/00
 
-187  05:11:00 SGRA          - 1R08 1R08 1R08 1R08
-187  05:21:00 v3mm-256-8-2  - 1/18 1/18 1/18 1/18
+187  05:11:00 SGRA          - 1R08 1R08  383  383
+187  05:21:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00
 
 187  05:21:00 P-AHSCO       P Stop Stop Stop Stop
 187  05:23:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  05:23:00 P-AHSCO       - 1R08 1R08 1R08 1R08
-187  05:24:00 -             - 1/10 1/10 1/10 1/10
+187  05:23:00 P-AHSCO       - 1R08 1R08  389  389
+187  05:24:00 -             - 1/10 1/10 1/00 1/00
 
-187  05:24:00 SGRA          - 1R08 1R08 1R08 1R08
-187  05:34:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  05:24:00 SGRA          - 1R08 1R08  408  408
+187  05:34:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 
 
@@ -742,46 +757,46 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 187  05:34:00 P-AHSCO       P Stop Stop Stop Stop
 187  05:36:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  05:36:00 P-AHSCO       - 1R08 1R08 1R08 1R08
-187  05:37:00 -             - 1/01 1/01 1/01 1/01
+187  05:36:00 P-AHSCO       - 1R08 1R08  414  414
+187  05:37:00 -             - 1/01 1/01 1/00 1/00
 
-187  05:37:00 SGRA          - 1F09 1F09 1F09 1F09
+187  05:37:00 SGRA          - 1F09 1F09  433  433
 187  05:47:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00
 
 187  05:47:00 P-AHSCO       P Stop Stop Stop Stop
 187  05:49:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  05:49:00 P-AHSCO       - 1F09 1F09 1F09 1F09
-187  05:50:00 -             - 1/08 1/08 1/08 1/08
+187  05:49:00 P-AHSCO       - 1F09 1F09  439  439
+187  05:50:00 -             - 1/08 1/08 1/00 1/00
 
-187  05:50:00 SGRA          - 1F09 1F09 1F09 1F09
-187  06:00:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  05:50:00 SGRA          - 1F09 1F09  458  458
+187  06:00:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  06:00:00 P-AHSCO       P Stop Stop Stop Stop
 187  06:02:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  06:02:00 P-AHSCO       - 1F09 1F09 1F09 1F09
-187  06:03:00 -             - 1/17 1/17 1/17 1/17
+187  06:02:00 P-AHSCO       - 1F09 1F09  464  464
+187  06:03:00 -             - 1/17 1/17 1/00 1/00
 
-187  06:03:00 SGRA          - 1R10 1R10 1R10 1R10
-187  06:13:00 v3mm-256-8-2  - 1/18 1/18 1/18 1/18
+187  06:03:00 SGRA          - 1R10 1R10  483  483
+187  06:13:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00
 
 187  06:13:00 P-AHSCO       P Stop Stop Stop Stop
 187  06:15:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  06:15:00 P-AHSCO       - 1R10 1R10 1R10 1R10
-187  06:16:00 -             - 1/10 1/10 1/10 1/10
+187  06:15:00 P-AHSCO       - 1R10 1R10  489  489
+187  06:16:00 -             - 1/10 1/10 1/00 1/00
 
-187  06:16:00 SGRA          - 1R10 1R10 1R10 1R10
-187  06:26:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  06:16:00 SGRA          - 1R10 1R10  508  508
+187  06:26:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  06:26:00 P-AHSCO       P Stop Stop Stop Stop
 187  06:28:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  06:28:00 P-AHSCO       - 1R10 1R10 1R10 1R10
-187  06:29:00 -             - 1/01 1/01 1/01 1/01
+187  06:28:00 P-AHSCO       - 1R10 1R10  514  514
+187  06:29:00 -             - 1/01 1/01 1/00 1/00
 
-187  06:29:00 SGRA          - 1F11 1F11 1F11 1F11
+187  06:29:00 SGRA          - 1F11 1F11  534  534
 187  06:39:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00
 
 187  06:39:00 P-AHSCO       P Stop Stop Stop Stop
@@ -799,53 +814,53 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
       STOP UT                   Fd   Pt   Kp   La
 
-187  06:41:00 P-AHSCO       - 1F11 1F11 1F11 1F11
-187  06:42:00 v7mm-256-8-2  - 1/08 1/08 1/08 1/08
+187  06:41:00 P-AHSCO       - 1F11 1F11  539  539
+187  06:42:00 v7mm-256-8-2  - 1/08 1/08 1/00 1/00
 
-187  06:42:00 SGRA          - 1F11 1F11 1F11 1F11
-187  06:52:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  06:42:00 SGRA          - 1F11 1F11  559  559
+187  06:52:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  06:52:00 P-AHSCO       P Stop Stop Stop Stop
 187  06:54:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  06:54:00 P-AHSCO       - 1F11 1F11 1F11 1F11
-187  06:55:00 -             - 1/17 1/17 1/17 1/17
+187  06:54:00 P-AHSCO       - 1F11 1F11  565  565
+187  06:55:00 -             - 1/17 1/17 1/00 1/00
 
-187  06:55:00 SGRA          - 1R12 1R12 1R12 1R12
-187  07:05:00 v3mm-256-8-2  - 1/18 1/18 1/18 1/18
+187  06:55:00 SGRA          - 1R12 1R12  584  584
+187  07:05:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00
 
 187  07:05:00 P-AHSCO       P Stop Stop Stop Stop
 187  07:07:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  07:07:00 P-AHSCO       - 1R12 1R12 1R12 1R12
-187  07:08:00 -             - 1/10 1/10 1/10 1/10
+187  07:07:00 P-AHSCO       - 1R12 1R12  590  590
+187  07:08:00 -             - 1/10 1/10 1/00 1/00
 
-187  07:08:00 SGRA          - 1R12 1R12 1R12 1R12
-187  07:18:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  07:08:00 SGRA          - 1R12 1R12  609  609
+187  07:18:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  07:18:00 P-AHSCO       P Stop Stop Stop Stop
 187  07:20:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  07:20:00 P-AHSCO       - 1R12 1R12 1R12 1R12
-187  07:21:00 -             - 1/01 1/01 1/01 1/01
+187  07:20:00 P-AHSCO       - 1R12 1R12  615  615
+187  07:21:00 -             - 1/01 1/01 1/00 1/00
 
-187  07:21:00 SGRA          - 1F13 1F13 1F13 1F13
+187  07:21:00 SGRA          - 1F13 1F13  634  634
 187  07:31:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00
 
 187  07:31:00 P-AHSCO       P Stop Stop Stop Stop
 187  07:33:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  07:33:00 P-AHSCO       - 1F13 1F13 1F13 1F13
-187  07:34:00 -             - 1/08 1/08 1/08 1/08
+187  07:33:00 P-AHSCO       - 1F13 1F13  640  640
+187  07:34:00 -             - 1/08 1/08 1/00 1/00
 
-187  07:34:00 SGRA          - 1F13 1F13 1F13 1F13
-187  07:44:00 v3mm-256-8-2  - 1/09 1/09 1/09 1/09
+187  07:34:00 SGRA          - 1F13 1F13  659  659
+187  07:44:00 v3mm-256-8-2  - 1/09 1/09 1/00 1/00
 
 187  07:47:00 P-RPEG        P Stop Stop Stop Stop
 187  07:49:00 v7mm-256-8-2  N ---- ---- ---- ----
 
-187  07:49:00 P-RPEG        - 1F13 1F13 1F13 1F13
-187  07:50:00 -             - 1/17 1/17 1/17 1/17
+187  07:49:00 P-RPEG        - 1F13 1F13  665  665
+187  07:50:00 -             - 1/17 1/17 1/00 1/00
 
 
 
@@ -859,19 +874,20 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
       STOP UT                   Fd   Pt   Kp   La
 
-187  07:50:00 3C454.3       - 1R14 1R14 1R14 1R14
-187  08:00:00 v3mm-256-8-2  - 1/18 1/18 1/18 1/18
+187  07:50:00 3C454.3       - 1R14 1R14  685  685
+187  08:00:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00
 
 
  Automatic tape allocation requested for sites using VLBA control files and having
  2 or more drives.  SCHED cannot predict tape changes.
 
- Number of tapes used at each autoaloc station:
-   Station      Tapes 
+ Number of tapes or GBytes used at each autoaloc station:
+    Includes all disk stations.
+   Station      Tapes        GBytes
    VLBA_FD       0.96
    VLBA_PT       0.96
-   VLBA_KP       0.96
-   VLBA_LA       0.96
+   VLBA_KP                    685.1
+   VLBA_LA                    685.1
 
  ESTIMATED TAPE TIMES (With autoallocation):
         Times are approximate and assume project starts at the beginning of a tape.
@@ -926,13 +942,13 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 
    J1229+0203        12 26 33.245835   * 12 29 06.699731     12 29 07.226271       0.30
    1226+023          02 19 43.30564    * 02 03 08.59814      02 03 07.46619        0.20
- * 3C273             /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C273             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    3C273B            VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
    J1229+02             0.167 scan hours,      0.993 baseline hours above horizon.
 
    J2253+1608        22 51 29.519743   * 22 53 57.747942     22 53 59.131177       0.31
    2251+158          15 52 54.34803    * 16 08 53.56086      16 08 55.78539        0.20
- * 3C454.3           /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C454.3           /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J2253+16          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.167 scan hours,      0.971 baseline hours above horizon.
 
@@ -981,18 +997,18 @@ name = '3C454.3'  ra = 22h53m57.747942s  dec = 16d08'53.56086"
 
 
 Catalogs: 
-  Station:   /home/cwalker/mach/mach/cwalker/code/sched/catalogs/stations.dat
-                 Version:  2005Feb28-16:32:35
-  Location:  /home/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
-                 Version:  25 Feb 2005
-  Frequency: /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
-                 Version:  2005Feb28-16:32:35
-  Source:   /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+  Station:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/stations.dat
+                 Version:  2005May23-14:53:23
+  Location:  /users/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
+                 Version:  08 Mar 2005
+  Frequency: /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+                 Version:  2005May23-14:53:23
+  Source:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                  Version:  2005 March 1
 
 
 Code versions: 
-  Release version:            6.0  Release: March 2005
+  Release version:            6.02  May 2005
   Version of VEX standard:   1.50
   Version of VEX code:       0.84
   Version of plot code:      1.05

@@ -172,6 +172,7 @@ C
       REAL              TBPS(MSET)
       REAL              TOTBPS(MSET)
       LOGICAL           VLBAMKIV(MSET)
+      LOGICAL           RECUSED(MSET)
 C
 C     Keep track of last values written for some parameters.
 C
@@ -186,7 +187,7 @@ C
      1                  LEVEL, LLEVEL, BBC, TAPEMODE, TPMODE, SWTCHDUR,
      2                  PCALFR1, PCALFR2, DUALPOL, FRSWITCH, DUALX, 
      3                  MODETEST, USED, MINTRAK, MAXTRAK, MINTBPS, 
-     4                  MAXTBPS, TBPS, TOTBPS, VLBAMKIV
+     4                  MAXTBPS, TBPS, TOTBPS, VLBAMKIV, RECUSED
       COMMON  /SETC2/   SETSTA, BAND, SIDEBD, POL, NOISE, NOISEFRQ, FE, 
      1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, IFDIST,
      2                  SPCAL, PCALX1, PCALX2, NETSIDE, SIDE1, 

@@ -7,7 +7,7 @@ C     beginning of scan ISCN should have been filled with calls
 C     to SCHGEO.  Also, WRAP should have been called to set where
 C     in the azimuths are in the wrap for ALTAZ antennas for both scans.
 C
-C     Will be called in OPTGEO and SCHOPT.
+C     This routine is called from OPTGEO, SCNGEO, SUVOPT, and PLOTSTA.
 C
 C     Units are degrees for Az, El, X, and Y.  Ha is in hours.  Dec
 C     is radians on input, but the DEC4 parameters are degrees.

@@ -1,7 +1,7 @@
 !*  Schedule for VLA27     *!
 !*  Experiment CE001    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:   6.0  Release: March 2005 *!
+!* Processed by SCHED version:   6.02  May 2005 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!
@@ -36,7 +36,6 @@ extlosideband = (4,U)
 logging=STANDARD
 nchan= 4
 format=NONE
-barrel=roll_off
 ifdistr=(1,0),(2,0),(3,0),(4,0)
 baseband=(1,1),(2,2),(3,3),(4,4)
 ifchan=(1,B),(2,D),(3,A),(4,C)

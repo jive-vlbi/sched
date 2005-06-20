@@ -229,7 +229,8 @@ C
             LFORMAT = FORMAT(LS)
          END IF
 C
-         IF( FIRSTS .OR. BARREL(LS) .NE. LBARREL ) THEN
+         IF( ( FIRSTS .OR. BARREL(LS) .NE. LBARREL ) .AND. 
+     1        USETAPE(ISTA) ) THEN
             WRITE( IUVBA, '( 2A )' ) 'barrel=', 
      1           BARREL(LS)(1:LEN1(BARREL(LS)))
             LBARREL = BARREL(LS)
@@ -357,7 +358,8 @@ C
          SMPR = SAMPRATE(LS)
          CALL VLBABWS( 'samplerate', 10, 1, SMPR, LSAMPR, 
      1       MSAMPR, FIRSTS, IUVBA )
-         IF( .NOT. AUTOALOC(ISTA) .AND. .NOT. NOREC(ISCN) ) THEN
+         IF( .NOT. AUTOALOC(ISTA) .AND. .NOT. NOREC(ISCN) .AND.
+     1       USETAPE(ISTA) ) THEN
             IF( TRACK(1,TPCHEAD,LS) .EQ. 0 ) THEN
                CALL WLOG( 1, ' ' )
                CALL WLOG( 1, 'VLBASU: Track specifications needed. ' )

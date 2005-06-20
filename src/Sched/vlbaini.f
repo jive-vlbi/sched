@@ -44,7 +44,7 @@ C
 C
 C     Ask for automatic tape allocation if desired.
 C
-      IF( VLBITP ) THEN
+      IF( VLBITP .AND. USETAPE(ISTA) ) THEN
          IF( AUTOALOC(ISTA) ) THEN
             WRITE( IUVBA, '( A )' ) 'autoallocate=on'
          ELSE
@@ -74,7 +74,7 @@ C     catalog.
 C
       IF( .NOT. DISK(STANUM(ISTA)) .EQ. 'NONE' ) THEN
          IF( .NOT. VLBITP ) THEN
-            WRITE( IUVBA, '( A )' ) 'media=none'
+            WRITE( IUVBA, '( A )' ) 'media=(1,none)'
          ELSE
             IF( USETAPE(ISTA) ) THEN
                IF( USEDISK(ISTA) ) THEN

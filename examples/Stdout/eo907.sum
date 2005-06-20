@@ -7,7 +7,7 @@ COVER INFORMATION:
   Start Day 359 is Wed  25 Dec 2002   MJD  52633          
 
   Schedule Version:       1.00                                              
-  Processed by SCHED version:   6.0  Release: March 2005                    
+  Processed by SCHED version:   6.02  May 2005                              
 
   PI:       A.N. Observer                                                   
 
@@ -101,14 +101,14 @@ RECORDING SYSTEM INFORMATION:
 
   TAPES - Stations potentially recording on tape.
     (See setup details later for times per pass.)
-   Station Drives Head pos  Tape len  Density  Start position  Auto   Auto   Recorder 
+   Station Drives Head pos  Tape len  Density  Start position  Auto   Auto   Recorder  DAR
                                 (ft)           Driv Head indx  Aloc  Reverse
-   JODRELL2    1      14      17600    High      1      1        No     No    MKIV  
-   CAMBG32M    1      14      17600    High      1      1        No     No    VLBA4 
-   EFLSBERG    1      14      17600    High      1      1        No     No    VLBA4 
-   ONSALA85    1      14      17600    High      1      1        No     No    MKIV  
-   MEDICINA    1      14      17600    High      1      1        No     No    MKIV  
-   TORUN       1      14      17600    High      1      1        No     No    VLBA4 
+   JODRELL2    1      14      17600    High      1      1        No     No    MKIV    MKIV 
+   CAMBG32M    1      14      17600    High      1      1        No     No    VLBA4   VLBA4
+   EFLSBERG    1      14      17600    High      1      1        No     No    VLBA4   MKIV 
+   ONSALA85    1      14      17600    High      1      1        No     No    MKIV    MKIV 
+   MEDICINA    1      14      17600    High      1      1        No     No    MKIV    MKIV 
+   TORUN       1      14      17600    High      1      1        No     No    VLBA4   VLBA4
 
 
 
@@ -121,27 +121,34 @@ EXPERIMENT SUMMARY:
   Number of setup files used:     1
 
  Station summaries (tape stations): 
-  Station  Control   Scans  Scan Hours  Tape hours   Tapes    Passes   Readbacks 
-  JODRELL2   VEX      220     10.27       10.27         1        14        17
-  CAMBG32M   VEX      220     10.27       10.27         1        14        17
-  EFLSBERG   VEX      220     10.27       10.27         1        14        17
-  ONSALA85   VEX      220     10.27       10.27         1        14        17
-  MEDICINA   VEX      220     10.27       10.27         1        14        17
-  TORUN      VEX      220     10.27       10.27         1        14        17
+  Station  Control   Scans   Scan   Tape   Tapes  Passes Readbacks  Formatter   Sync 
+                            Hours   Hours                         Reconfigures  Hours  
+  JODRELL2   VEX      220   10.27   10.27    1      14      17         0        0.10
+  CAMBG32M   VEX      220   10.27   10.27    1      14      17      0/  0       0.10
+  EFLSBERG   VEX      220   10.27   10.27    1      14      17         0        0.10
+  ONSALA85   VEX      220   10.27   10.27    1      14      17         0        0.57
+  MEDICINA   VEX      220   10.27   10.27    1      14      17         0        0.50
+  TORUN      VEX      220   10.27   10.27    1      14      17      0/  0       0.10
 
  Station summaries (disk stations): 
-  Station  Control   Scans  Scan Hours  Record hrs   Gbytes
+  Station  Control   Scans  Scan Hours  Record hrs   Gbytes      Formatter     Sync 
+                                                               Reconfigures    Hours  
+
+Notes on the station summaries: 
+
+    "Sync Hours" is on-source, in-scan time lost during correlation to resyncing
+    recordings.  Resyncs follow tape stoppages and formatter reconfigures.
+
+    For VLBA stations, total reconfigures and reconfigures during recording are shown.
+    Reconfigures during recording can cause slow correlator sync.
+    Any reconfigure can slow sync at JIVE.
 
 
 
-
-
-The following setup groups are the same as group   1 below.
-   3:EFLSBERG   4:ONSALA85   5:MEDICINA
 
 
  Setup file: eo999.5cm
-   Matches group j2b5cm in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group j2b5cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
     Values confirmed by E-mail P.Burgess (JFD 26Oct98)
 
    Setup group:    1         Station: JODRELL2          Total bit rate:   32
@@ -173,12 +180,8 @@ The following setup groups are the same as group   1 below.
     barrel=roll_off 
 
 
-The following setup groups are the same as group   2 below.
-   6:TORUN
-
-
  Setup file: eo999.5cm
-   Matches group cm5cm in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group cm5cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
     MK2 LO setting-400MHz, P. Burgess (JFD 15Oct01)
 
    Setup group:    2         Station: CAMBG32M          Total bit rate:   32
@@ -200,6 +203,146 @@ The following setup groups are the same as group   2 below.
   Frequency Set:   2  Based on FREQ, BW, and/or DOPPLER in schedule.  Used pcal sets:   1
    LO sum=    6666.46   6666.46   6666.46   6666.46
    BBC fr=     546.46    546.46    546.46    546.46
+   Bandwd=      2.000     2.000     2.000     2.000
+
+  The following pulse cal sets were used with this setup:
+
+   Pulse cal detection set:   1  PCAL = OFF 
+    PCALXB1=   S1    S2    S3    S4    OFF   OFF   OFF   OFF
+    PCALXB2=   M1    M2    M3    M4    OFF   OFF   OFF   OFF
+    PCALFR1=     0     0     0     0     0     0     0     0
+    PCALFR2=     0     0     0     0     0     0     0     0
+
+   Track assignments are: 
+    track1=   2,  6, 10, 14
+    track2=  18, 22, 26, 30
+    track3=   3,  7, 11, 15
+    track4=  19, 23, 27, 31
+    barrel=roll_off 
+
+
+ Setup file: eo999.5cm
+   Matches group ef5cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+    Values confirmed by E-mail R.Schulze (JFD 26Oct98)
+
+   Setup group:    3         Station: EFLSBERG          Total bit rate:   32
+   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    Passes/head pos:   4       Speedup factor:   2.00
+
+   Tape speeds: Low density - 135.000 ips,  High density -  80.00 ips
+   Time per pass for  17600 ft, High density tapes is: 00:44:00
+
+   1st LO=   6500.00   6500.00   6500.00   6500.00
+   Net SB=         U         U         U         U
+   Pol.  =      RCP       LCP       RCP       LCP 
+   BBC   =         2         1         4         3
+   BBC SB=         U         U         U         U
+   IF    =        2N        1N        2N        1N
+
+  The following frequency sets based on this setup were used.
+
+  Frequency Set:   3  Based on FREQ, BW, and/or DOPPLER in schedule.  No pcal detection.
+   LO sum=    6666.46   6666.46   6666.46   6666.46
+   BBC fr=     166.46    166.46    166.46    166.46
+   Bandwd=      2.000     2.000     2.000     2.000
+
+   Track assignments are: 
+    track1=   2,  6, 10, 14
+    track2=  18, 22, 26, 30
+    track3=   3,  7, 11, 15
+    track4=  19, 23, 27, 31
+    barrel=roll_off 
+
+
+ Setup file: eo999.5cm
+   Matches group on5cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+    Values confirmed by E-mail J.Conway (CR 18Jan02)
+
+   Setup group:    4         Station: ONSALA85          Total bit rate:   32
+   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    Passes/head pos:   4       Speedup factor:   2.00
+
+   Tape speeds: Low density - 135.000 ips,  High density -  80.00 ips
+   Time per pass for  17600 ft, High density tapes is: 00:44:00
+
+   1st LO=   6500.00   6500.00   6500.00   6500.00
+   Net SB=         U         U         U         U
+   Pol.  =      RCP       LCP       RCP       LCP 
+   BBC   =         2         1         4         3
+   BBC SB=         U         U         U         U
+   IF    =        2N        1N        2N        1N
+
+  The following frequency sets based on this setup were used.
+
+  Frequency Set:   4  Based on FREQ, BW, and/or DOPPLER in schedule.  No pcal detection.
+   LO sum=    6666.46   6666.46   6666.46   6666.46
+   BBC fr=     166.46    166.46    166.46    166.46
+   Bandwd=      2.000     2.000     2.000     2.000
+
+   Track assignments are: 
+    track1=   2,  6, 10, 14
+    track2=  18, 22, 26, 30
+    track3=   3,  7, 11, 15
+    track4=  19, 23, 27, 31
+    barrel=roll_off 
+
+
+ Setup file: eo999.5cm
+   Matches group mc5cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+    Updated by E-mail Orlati (CR 15Nov2004)
+
+   Setup group:    5         Station: MEDICINA          Total bit rate:   32
+   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    Passes/head pos:   4       Speedup factor:   2.00
+
+   Tape speeds: Low density - 135.000 ips,  High density -  80.00 ips
+   Time per pass for  17600 ft, High density tapes is: 00:44:00
+
+   1st LO=   6300.00   6300.00   6300.00   6300.00
+   Net SB=         U         U         U         U
+   Pol.  =      RCP       LCP       RCP       LCP 
+   BBC   =         2         1         4         3
+   BBC SB=         U         U         U         U
+   IF    =        2N        1N        2N        1N
+
+  The following frequency sets based on this setup were used.
+
+  Frequency Set:   5  Based on FREQ, BW, and/or DOPPLER in schedule.  No pcal detection.
+   LO sum=    6666.46   6666.46   6666.46   6666.46
+   BBC fr=     366.46    366.46    366.46    366.46
+   Bandwd=      2.000     2.000     2.000     2.000
+
+   Track assignments are: 
+    track1=   2,  6, 10, 14
+    track2=  18, 22, 26, 30
+    track3=   3,  7, 11, 15
+    track4=  19, 23, 27, 31
+    barrel=roll_off 
+
+
+ Setup file: eo999.5cm
+   Matches group tr5cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+    Values confirmed by E-mail Borkowski (JFD 26Oct98)
+
+   Setup group:    6         Station: TORUN             Total bit rate:   32
+   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    Passes/head pos:   4       Speedup factor:   2.00
+
+   Tape speeds: Low density - 135.000 ips,  High density -  80.00 ips
+   Time per pass for  17600 ft, High density tapes is: 00:44:00
+
+   1st LO=   5900.00   5900.00   5900.00   5900.00
+   Net SB=         U         U         U         U
+   Pol.  =      RCP       LCP       RCP       LCP 
+   BBC   =         1         2         3         4
+   BBC SB=         U         U         U         U
+   IF    =        C         A         C         A 
+
+  The following frequency sets based on this setup were used.
+
+  Frequency Set:   6  Based on FREQ, BW, and/or DOPPLER in schedule.  Used pcal sets:   1
+   LO sum=    6666.46   6666.46   6666.46   6666.46
+   BBC fr=     766.46    766.46    766.46    766.46
    Bandwd=      2.000     2.000     2.000     2.000
 
   The following pulse cal sets were used with this setup:
@@ -1885,35 +2028,35 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 
  * J1557-0001        15 55 17.754019   * 15 57 51.433969     15 57 58.498135       0.20
    1555+001          00 10 24.35815    * 00 01 50.41371      00 01 20.03227        0.30
-   J1557-00          /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+   J1557-00          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                      Doppler based on other sources.
                         0.050 scan hours,      0.750 baseline hours above horizon.
 
  * J1922+1530        19 20 18.227194   * 19 22 34.699341     19 22 40.599782       0.84
    1920+154          15 24 21.35477    * 15 30 10.03242      15 30 27.25372        0.81
-   J1922+15          /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+   J1922+15          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                      Doppler based on other sources.
                         2.700 scan hours,     29.789 baseline hours above horizon.
 
  * J2005+7752        20 07 20.430184   * 20 05 30.998512     20 05 18.679832       0.96
    2007+777          77 43 58.12306    * 77 52 43.24759      77 53 18.01591        0.40
-   J2005+77          /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+   J2005+77          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                      Doppler based on other sources.
                         0.133 scan hours,      1.333 baseline hours above horizon.
 
    J2253+1608        22 51 29.519743   * 22 53 57.747942     22 54 05.132943       0.31
    2251+158          15 52 54.34803    * 16 08 53.56086      16 09 49.06164        0.20
- * 3C454.3           /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C454.3           /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J2253+16          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                      Doppler based on other sources.
                         0.133 scan hours,      1.951 baseline hours above horizon.
 
  * J2320+0513        23 18 12.130377   * 23 20 44.856599     23 20 52.691934       0.30
    2318+049          04 57 23.44641    * 05 13 49.95252      05 14 43.60866        0.20
-   J2320+05          /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+   J2320+05          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                      Doppler based on other sources.
                         0.050 scan hours,      0.750 baseline hours above horizon.
@@ -1965,18 +2108,18 @@ name = 'J2320+0513'  ra = 23h20m44.856599s  dec = 05d13'49.95252"
 
 
 Catalogs: 
-  Station:   /home/cwalker/mach/mach/cwalker/code/sched/catalogs/stations.dat
-                 Version:  2005Feb28-16:32:35
-  Location:  /home/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
-                 Version:  25 Feb 2005
-  Frequency: /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
-                 Version:  2005Feb28-16:32:35
-  Source:   /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+  Station:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/stations.dat
+                 Version:  2005May23-14:53:23
+  Location:  /users/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
+                 Version:  08 Mar 2005
+  Frequency: /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+                 Version:  2005May23-14:53:23
+  Source:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                  Version:  2005 March 1
 
 
 Code versions: 
-  Release version:            6.0  Release: March 2005
+  Release version:            6.02  May 2005
   Version of VEX standard:   1.50
   Version of VEX code:       0.84
   Version of plot code:      1.05

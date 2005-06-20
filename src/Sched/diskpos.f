@@ -27,9 +27,11 @@ C     was called.
 C
       RECTIME = ( STOPJ(ISCN) - STARTJ(ISCN) + TPSTART(ISCN,ISTA) )
       KS = NSETUP(ISCN,ISTA)
-      TBR =  NCHAN(KS) * BITS(1,KS) * SAMPRATE(KS)
-      GBYTES(ISCN,ISTA) = GBYTES(ISCN,ISTA) + 
+      IF( RECUSED(KS) ) THEN
+         TBR =  NCHAN(KS) * BITS(1,KS) * SAMPRATE(KS)
+         GBYTES(ISCN,ISTA) = GBYTES(ISCN,ISTA) + 
      1       RECTIME * 86400.0 * TBR * 1.008 / ( 1000.D0 * 8 )
+      END IF
 C
       RETURN
       END

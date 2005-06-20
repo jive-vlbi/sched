@@ -118,20 +118,21 @@ C
      5             .NOT. NOREC(ISCN) ) THEN
 C
                   SGWARN = .FALSE.
-                  CALL WLOG( 0, 'SETTPS: WARNING - Synchronized tape '//
+                  CALL WLOG( 0, 'SETTPS: **** WARNING ****' )
+                  CALL WLOG( 0, '    Synchronized tape '//
      1              'starts for VEX have left some short tape stops.' )
-                  CALL WLOG( 0, '        This may cause problems at ' //
+                  CALL WLOG( 0, '    This may cause problems at ' //
      1              'the correlator.' )
                   CALL TIMEJ( STARTJ(ISCN), YEAR, DAY, TIMED )
                   TIMECH = TFORM( TIMED, 'T', 0, 2, 2, '::@' )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, I3, A, A, A, A )' )
-     1               '         Problem first encountered at ', DAY,
+     1               '    Problem first encountered at ', DAY,
      2               '/', TIMECH, ' at ', STCODE(STANUM(ISTA))
                   CALL WLOG( 0, MSGTXT )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( 2A )' ) 
-     1               '         Note VEX file contains all ',
+     1               '    Note VEX file contains all ',
      2               'stations, not just VEX stations.'
                   CALL WLOG( 0, MSGTXT )
 C

@@ -1,6 +1,6 @@
 /.BE001   600
 //* *** 
-//* *** SCHED version:   6.0  Release: March 2005
+//* *** SCHED version:   6.02  May 2005
 //* *** 
 //* *** Observation day 56,720 at 20 19 36 LST, 1995.10.21 18:30:00 MST.  
 //* *** 

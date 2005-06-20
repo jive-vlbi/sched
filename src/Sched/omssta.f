@@ -59,6 +59,8 @@ C
      1         TAPES(ISTA)
             WRITE( IOMS, '( A, I4 )' ) '    PASSES             = ',
      1         PASSES(ISTA)
+            WRITE( IOMS, '( A, F7.1 )' ) '    DISK               = ',
+     1         TGBYTES(ISTA)
 C	    
 C           Get the first and last times.
 C	    

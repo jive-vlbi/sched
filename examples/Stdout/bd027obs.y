@@ -1,6 +1,6 @@
 /.BD027   600
 //* *** 
-//* *** SCHED version:   6.0  Release: March 2005
+//* *** SCHED version:   6.02  May 2005
 //* *** 
 //* *** Observation day 56,789 at 17 22 26 LST, 1995.12.29 11:02:00 MST.  
 //* *** 

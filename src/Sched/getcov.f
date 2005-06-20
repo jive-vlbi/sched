@@ -32,7 +32,7 @@ C     Make up the cover message for printouts.  Done with arrays to
 C     help enclose in location specific comment indicators etc.
 C
       WRITE( COVER(1), '( A, F10.2 )' ) 'Schedule Version: ', SCHVER
-      WRITE( COVER(2), '( A, F5.1, 2X, A )' ) 
+      WRITE( COVER(2), '( A, F6.2, 2X, A )' ) 
      1      'Processed by SCHED version: ', VERNUM, 
      2      VERSION(1:LEN1(VERSION))
       COVER(3)  = 'PI:       ' // PINAME

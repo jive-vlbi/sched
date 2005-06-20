@@ -2,6 +2,8 @@
 
 #  Make a tar file of a complete SCHED installation.
 #  See package to make make src, aux, stdout, and devrcw files.
+#  Don't use $SCHED so that this can be used to package various
+#  versions, such as the SUN version.
 
 # ==============================================================
 #  Usage:  package arch vernum 
@@ -9,7 +11,12 @@ set archname=$1
 set schver=$2
 # ==============================================================
 
-set instaltar=$SCHED/TARFILES/sched.$archname.$schver.tar
+echo 'Be sure you are in the base SCHED directory for this distribution'
+if( ! -e TARFILES ) then
+   mkdir TARFILES
+endif
+
+set instaltar=TARFILES/sched.$archname.$schver.tar
 
 echo ' '
 echo Deleting files with same names as this routine\'s output files.
@@ -31,8 +38,6 @@ echo Deleting the \~ files.
 #  Note, on a Sun, the tar FF causes .o and core files to be ignored, 
 #  among others.  That doesn't seem to be an option under Linux.
 #  For Linux, try making a file with the files to exclude.
-
-cd $SCHED
 
 echo ' '
 echo Making exclude file
@@ -66,6 +71,6 @@ tar -cf  $instaltar \
 
 echo ' '
 echo Compressing the tar file.
-cd $SCHED/TARFILES
+cd TARFILES
 gzip *.tar
-cd $SCHED
+cd ..

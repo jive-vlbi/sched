@@ -1,23 +1,47 @@
-#!/bin/csh
+Instructions for making a release of SCHED
+
+Before a release:
+
+1.  Get the latest versions of the Vex and plot code from 
+    Cormac and Franco.
+
+2.  Make sure VERSION and VERNUM in versched.f are up to date.
+    Make sure the version on the manual first page are current.
+
+    Set the NEWVER in the window where this work is being done so
+    that script segments below can be used with a cut-and-paste
+    Also check a couple of places below (other machines) where the
+    version number is also needed.
+
+setenv NEWVER 6.01
+
+3.  Compile and link SCHED on the development machine.
+    Afterwards leave the link "Makefile" pointing to "Makefile.linux".
+    That is what we want in the distribution, but we want the local
+    version linked with the spice package.  
+    Do not use the form "make -f Makefile.linux.spice".  During 
+    execution of make, make is again invoked without -f and you 
+    will get whatever "Makefile" points to for the final link.
+
+/bin/rm Makefile
+ln -s Makefile.linux.spice Makefile
+make
+/bin/rm Makefile
+ln -s Makefile.linux Makefile
+
+4.  Update the manual and the web version:
+
+5.  Write a release note.  This will be mainly a link to the manual
+    update section.
+
+6.  Check the README and README.ftp files in $SCHED.
 
 
-#  Tasks that need to be done before a release.
 
-Update VERSION in sched.f and the specific version in versched.f
-Update the version on the manual first page in sched.tex
+Prepare the manual:
 
-#  Get the latest versions from Huib and Franco.
-
-#  Check the README and README.ftp files in $SCHED
-
-#  Write a release note.
-
-#  Update the manual and the web version.
-
-#  First, update the examples embedded in the manual.
-
-*********  Remove the 04Oct2004 warning from the top of sched.tex
-
+1.  Update the examples embedded in the manual.  You can use the 
+    following lines as a script.
 
 cd $SCHED/doc
 /bin/rm sched.tex.tmp
@@ -26,160 +50,253 @@ inserttex
 sched.tex.tmp
 sched.tex
  
-#  Process the manual.  latex will probably need to be run up to
-#  3 times to get all the links right.
-#  The local icons switch keeps users from having to go to
-#  NRAO for the up etc buttons (it didn't seem to be available
-#  on my latex2html under RedHat 5.2 Linux on my home PC).
-#  The -link option controls how deep the automatic contents 
-#  go at each level.  Without it, the contents on the top level
-#  page are long enought to frighten off users.
+2.  Process the manual.  latex will probably need to be run up to
+    3 times to get all the links right.
+    The local icons switch keeps users from having to go to
+    NRAO for the up etc buttons.
+    The -link option controls how deep the automatic contents pages
+    go at each level.  Without it, the contents on the top level
+    page are long enought to frighten off users.
 
 latex sched.tex
 latex2html -local_icons -link 2 sched.tex
 
-#  Update the setup files.
+
+
+Update the setup files:
 
 cd $SCHED/setups
 makesetup
 
-#  Update the catalogs from the masters.
+
+
+Update the catalogs from the masters.
 
 cd $SCHED/catalogs
 Update
 
-Then hand update the VERSIONs in the source and locations files 
-(at least until this is automated - I've asked John for automated versions).
+    Then hand update the VERSIONs in the source, stations, and 
+    locations files 
 
-#  Update the examples and clean up the area.
-#  Check that testruns.out shows a clean comparison after Verify.
+
+
+Update the examples and clean up the area.
+   Check that testruns.out shows a clean comparison after Verify.
 
 cd $SCHED/examples
 Verify
 Newstd
 schclean "*"
 
-#  Test the plot functions on egplan.key.  For 2002Jul02, there
-#  was a bug in plotxy and plotuv that only showed up on a Sun.
-
-#  Make the tar files.
-#  First, move any files from TARFILES that should be archived to 
-#  $SCHED/ARCHIVE.  If proper proceedures were followed last time, 
-#  they should already be there.  At least each release should be 
-#  archived for a few years, by which time it will be on a number 
-#  of long term backup tapes.
-#  Run "package" and "package2" for the current version.
-
-package 6.0
-package2 linux 6.0
 
 
-#  Copy the release tar files to ARCHIVE.
-#  Next time, I should try making this an actual script to see
-#  if it can be truely automated.
+Test the plot functions on egplan.key.  Verify does not make plots.
+    Do this at some point on a different machine (like a Sun).
+    For 2002Jul02, there was a bug in plotxy and plotuv that 
+    only showed up on a Sun.
 
-#  Install the release in /users/cwalker/sched_sun
-#  and compile using one of the sun machines.
 
-#  Set the release date for file names.  Use the same as in package.
 
-setenv NEWVER 6.0
+Make the tar files.
 
-#  Unpack the source distribution into /users/cwalker/sched_test and
-#  test the compilation without the satellite stuff (clean out 
-#  sched_test first if needed).
+1.  First, move any files from TARFILES that should be archived to 
+    $SCHED/ARCHIVE.
+
+2.  Run "package" and "package2" for the current version using the
+    lines below.
+      The use of "source" seems to be needed on the Mac to get the 
+      right SCHED environment variable.
+
+package {$NEWVER}
+source ./package2 Linux {$NEWVER}
+
+
+
+
+
+Test the release.
+
+   Unpack the source distribution into /users/cwalker/sched_test and
+   test the compilation without the satellite stuff (clean out 
+   sched_test first if needed).
+   Use the makefile that does not use the spice package
+   Check testruns.out at the end.
 
 cd /users/cwalker/sched_test
-setenv SCHED 
+chmod u+w /users/cwalker/sched_test/catalogs/*
 /bin/rm -r *
 tar -xvf $SCHED/TARFILES/sched.aux.{$NEWVER}.tar.gz --gunzip
 tar -xvf $SCHED/TARFILES/sched.src.{$NEWVER}.tar.gz --gunzip
 tar -xvf $SCHED/TARFILES/sched.stdout.{$NEWVER}.tar.gz --gunzip
 cd src
-make -f Makefile.linux
+/bin/rm Makefile
+ln -s Makefile.linux Makefile
+make
 cd ../examples
 setenv SCHEDSAVE $SCHED
 setenv SCHED /users/cwalker/sched_test
 Verify
 setenv SCHED $SCHEDSAVE
 
+
+
 #  Make the release directory using the binary tar file.
 
 mkdir /users/cwalker/files/sched_{$NEWVER}
 cd /users/cwalker/files/sched_{$NEWVER}
-tar -xvf $SCHED/TARFILES/sched.linux.{$NEWVER}.tar.gz --gunzip
+tar -xvf $SCHED/TARFILES/sched.Linux.{$NEWVER}.tar.gz --gunzip
 mkdir bin/LINUX
 mv bin/* bin/LINUX
+
+#  Later copy in the sun and MacOSX versions of the binaries with
+#  the sun version in /bin for historical reasons.
 
 
 
 #  Copy documentation to the web server master files on the mach disk
-#  My cron jobs will move them to the main web server
-#  Careful with the big delete (rm) below.
-#  Someday, rationalize where the catalog stuff is located.
-#
-***********************************************   FIX ALL THIS FOR MACH ***
-mkdir /users/cwalker/public_html/sched_{$NEWVER}
-chmod u+w /users/cwalker/public_html/sched_{$NEWVER}/*
-/bin/rm -r /users/cwalker/public_html/sched_{$NEWVER}/*
-cp -r doc/sched /users/cwalker/public_html_{$NEWVER}/sched
-/bin/rm /users/cwalker/public_html/sched_{$NEWVER}/sched/examples
-/bin/rm /users/cwalker/public_html/sched_{$NEWVER}/sched/catalogs
-cp catalogs/stations.dat /users/cwalker/public_html/sched_{$NEWVER}/stations
-cp catalogs/sources.vlba /users/cwalker/public_html/sched_{$NEWVER}/sources
-cp catalogs/freq.dat /users/cwalker/public_html/sched_{$NEWVER}/frequencies
-mkdir /users/cwalker/public_html/sched_{$NEWVER}/sched/examples
-cp examples/*.key /users/cwalker/public_html/sched_{$NEWVER}/sched/examples
-cp examples/*.com /users/cwalker/public_html/sched_{$NEWVER}/sched/examples
-cp examples/*.set /users/cwalker/public_html/sched_{$NEWVER}/sched/examples
-mkdir /users/cwalker/public_html/sched_{$NEWVER}/sched/catalogs
-cp catalogs/peak.cmd /users/cwalker/public_html/sched_{$NEWVER}/sched/catalogs
+#  My cron jobs will move them to the main web server or run 
+#  /home/eolus/cwalker/backups/rsync_mach_cwalker afterwards.
+#  Careful with the big delete (rm) below (that's why the cd ~ first)
+#  The initial removal of the catalogs etc directories is because the
+#  cp -r copied too much into those places.
 
+setenv WEBDIR /mnt/mach/mach/cwalker/webnrao
 
+#  Clean out any previous attempts and make the directory.
 
+cd ~
+chmod u+w $WEBDIR/sched_{$NEWVER}/sched/catalogs/*
+/bin/rm -r $WEBDIR/sched_{$NEWVER}
+mkdir $WEBDIR/sched_$NEWVER
+
+#  Copy the manual, catalogs, and examples to the web directory.
+
+cd $SCHED
+cp -r doc/sched $WEBDIR/sched_{$NEWVER}
+/bin/rm $WEBDIR/sched_{$NEWVER}/sched/catalogs
+/bin/rm $WEBDIR/sched_{$NEWVER}/sched/examples
+mkdir $WEBDIR/sched_{$NEWVER}/sched/catalogs
+cp catalogs/sources.vlba  $WEBDIR/sched_{$NEWVER}/sched/catalogs
+cp catalogs/freq.dat      $WEBDIR/sched_{$NEWVER}/sched/catalogs
+cp catalogs/stations.dat  $WEBDIR/sched_{$NEWVER}/sched/catalogs
+mkdir $WEBDIR/sched_{$NEWVER}/sched/examples
+cp examples/*.key $WEBDIR/sched_{$NEWVER}/sched/examples
+cp examples/*.com $WEBDIR/sched_{$NEWVER}/sched/examples
+cp examples/*.set $WEBDIR/sched_{$NEWVER}/sched/examples
+
+# Point to this new version.  Consider cleaning up old ones.
+
+/bin/rm $WEBDIR/sched
+ln -s $WEBDIR/sched_{NEWVER} $WEBDIR/sched
 
 #  Copy to ftp  (FTP=/var/spool/ftp/pub)
-#  No longer update skedconv or uptime.
+#  No longer update skedconv or uptime.  In fact get rid of any seen.
 
 cd $SCHED
 /bin/rm $FTP/sched/README
-/bin/rm $FTP/sched/sched.aux.{$NEWVER}.tar.gz
-/bin/rm $FTP/sched/sched.src.{$NEWVER}.tar.gz
-/bin/rm $FTP/sched/sched.stdout.{$NEWVER}.tar.gz
-/bin/rm $FTP/staff/cwalker/Sched/rcwsrc.{$NEWVER}.tar.gz
-/bin/rm $FTP/sched/intel-linux/sched.{$NEWVER}.intel-linux*
-/bin/rm $FTP/sched/intel-linux/schclean
-/bin/rm $FTP/sched/sun/sched.{$NEWVER}.sun*
-/bin/rm $FTP/sched/sun/schclean
+/bin/rm $FTP/sched/*{$NEWVER}.tar.gz
+/bin/rm $FTP/staff/cwalker/Sched/*{$NEWVER}.tar.gz
+
 cp $SCHED/README.ftp $FTP/sched/README
-cp $SCHED/TARFILES/sched.aux.{$NEWVER}.tar.gz     $FTP/sched
-cp $SCHED/TARFILES/sched.src.{$NEWVER}.tar.gz     $FTP/sched
-cp $SCHED/TARFILES/sched.stdout.{$NEWVER}.tar.gz  $FTP/sched
-qcp $SCHED/TARFILES/rcwsrc.{$NEWVER}.tar.gz           $FTP/staff/cwalker/Sched
-cp $SCHED/bin/sched   $FTP/sched/intel-linux/sched.{$NEWVER}.intel-linux
-cp $SCHED/bin/schclean $FTP/sched/intel-linux
-cd $FTP/sched/intel-linux
-gzip sched.{$NEWVER}.intel-linux
-cd /users/cwalker/sched_sun
-cp bin/sched   $FTP/sched/sun/sched.{$NEWVER}.sun
-cp bin/schclean $FTP/sched/sun
-cd $FTP/sched/sun
-gzip sched.{$NEWVER}.sun
+cp $SCHED/TARFILES/*{$NEWVER}.tar.gz     $FTP/sched
+cp $FTP/sched/rcwsrc.{$NEWVER}.tar.gz $FTP/staff/cwalker/Sched
+
+
+
+
+Other architectures:
+
+
+#  Install the release in /users/cwalker/sched_sun
+#  and compile using one of the sun machines.  Then distribute
+
+cd ~
+mkdir sched_sun_{$NEWVER}
+cd sched_sun_{$NEWVER}
+tar -xvf $SCHED/TARFILES/sched.aux.{$NEWVER}.tar.gz --gunzip
+tar -xvf $SCHED/TARFILES/sched.src.{$NEWVER}.tar.gz --gunzip
+tar -xvf $SCHED/TARFILES/sched.stdout.{$NEWVER}.tar.gz --gunzip
+cd src
+/bin/rm Makefile
+ln -s Makefile.sun Makefile
+
+#  Log into a Solaris box and run:
+
+slogin paso
+
+setenv NEWVER 6.01
+setenv SCHED ~/sched_sun_{$NEWVER}
+cd ~/sched_sun_{$NEWVER}/src
+gmake
+cd ../examples
+Verify
+
+#  Check testruns.out, then exit from the Sun.
+
+less testruns.out
+exit
+
+#  Make the binary Sun distribution and put the executable where
+#  it is needed on the Linux distribution.
+#  Keep $SCHED pointing at the Linux version.
+
+cd ~/sched_sun_{$NEWVER}
+source ./package2 Sun $NEWVER
+mv TARFILES/sched.Sun.{$NEWVER}.tar.gz $SCHED/TARFILES
+cp $SCHED/TARFILES/sched.Sun.{$NEWVER}.tar.gz $FTP/sched
+cp bin/sched ~/sched_{$NEWVER}/bin
+
+
+
+#  Install the release on a Mac and compile.  Then distribute.
+  
 cd $SCHED
-#  Try to get executables for the other architectures.
+scp TARFILES/sched.aux.{$NEWVER}.tar.gz \
+    horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}
+scp TARFILES/sched.src.{$NEWVER}.tar.gz \
+    horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}
+scp TARFILES/sched.stdout.{$NEWVER}.tar.gz \
+    horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}
+
+# Go to horton
+
+slogin horton
+
+setenv NEWVER 6.01
+setenv SCHED /Users/cwalker/code/sched_MacOSX_{$NEWVER}
+cd $SCHED
+tar -xvf sched.aux.{$NEWVER}.tar.gz --gunzip
+tar -xvf sched.src.{$NEWVER}.tar.gz --gunzip
+tar -xvf sched.stdout.{$NEWVER}.tar.gz --gunzip
+/bin/rm Makefile
+ln -s Makefile.MacOSX Makefile
+make
+cd ../examples
+Verify
+cd ..
+mkdir TARFILES
+mv *.tar.gz TARFILES
+source ./package2 MacOSX $NEWVER
+exit
+
+scp horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}/TARFILES/sched.MacOSX.{$NEWVER}.tar.gz \
+    TARFILES
+cp TARFILES/sched.MacOSX.{$NEWVER}.tar.gz $FTP/sched
+
 
 #  Activate the new version.
+#  Be sure the webversion link was also changed as per above.
 
 cd /users/cwalker
 /bin/rm sched
-ln -s sched_{$NEWVER} sched
+ln -s files/sched_{$NEWVER} sched
 
 
 
 #  Send the email announcement to:
 #  vlbi@nrao.edu,scistaff,analysts,pperley,vlbaops.
 
-#  I think that is all.
+#  I think that is all.  It's still too much.
 
 
 

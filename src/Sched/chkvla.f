@@ -24,20 +24,19 @@ C
 C
       INTEGER     KS, I, J, NBANDS, ICH, IB, JB, ISTA, ISCN, VSTA
       PARAMETER   (NBANDS=19)
-      CHARACTER   BNAME(NBANDS)*2
+      CHARACTER   BNAME(NBANDS)*2, LIFCH(MCHAN)*2, LMODE*2
       DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4), DIFF
       DOUBLE PRECISION  LFLUKEA, LFLUKEB
       LOGICAL     ERRS, GOTLO, GOTFI, OK, DOVLASC
-      LOGICAL     GOTBD, BADLO, OKVLB, FLKWARN
+      LOGICAL     GOTBD, BADLO, OKVLB, FLKWARN, OKIF
       CHARACTER   DIG(10)*1
-      SAVE        DIG, BNAME, DOVLASC, LFLUKEA, LFLUKEB, FLKWARN
+      SAVE        DIG, BNAME, LFLUKEA, LFLUKEB, FLKWARN
       DATA        LFLUKEA, LFLUKEB / 0.D0, 0.D0 /
       DATA        FLKWARN / .TRUE. /
       DATA        DIG / '0','1','2','3','4','5','6','7','8','9' /
       DATA        (BNAME(I), I=1,NBANDS) /
      1     '44','4P','PP','LP','HH','LL','18','CC','XX','UU',
      2     'KK','QQ','VP','VL','VC','VX','VU','VK','VQ' /
-      DATA        DOVLASC / .TRUE. /
 C  --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKVLA: Starting.' )
 C
@@ -299,91 +298,6 @@ C
      2             VFLO(1), VFLO(2), VFLO(3), VFLO(4)
                CALL WLOG( 1, '        '//SETMSG)
                ERRS = .TRUE.
-            END IF
-         END DO
-      END IF
-C
-C     To keep the VLA checking together, do some scan based checks
-C     here.  Only do the first time this routine is called.
-C     Only do for scans that include the VLA.
-C
-      IF( DOVLASC ) THEN
-C
-C     Get the VLA's station number and be sure the VLA is in
-C     this experiment (this may have already been checked to 
-C     get this far, but we need the station number anyway.
-C
-         VSTA = 0
-         DO ISTA = 1, NSTA
-            IF( STANAME(ISTA)(1:3) .EQ. 'VLA' ) THEN
-               VSTA = ISTA
-            END IF
-         END DO
-         IF( VSTA .EQ. 0 ) DOVLASC = .FALSE.
-      END IF
-      IF( DOVLASC ) THEN
-C
-C        Check that a VLBI mode is being requested for recording scans.
-C        Otherwise VLA data will not be possible to correlate in a 
-C        normal manner as the fringe rotators etc will be on.  Allow 
-C        pointing to occur during reference pointing scans (mode IR)
-C
-         OKVLB = .TRUE.
-         DO ISCN = 1, NSCANS
-            IF( VLBITP .AND. .NOT. NOREC(ISCN) .AND. 
-     1          STASCN(ISCN,VSTA) ) THEN
-               IF( VLAMODE(ISCN) .NE. 'VS' .AND. 
-     1             VLAMODE(ISCN) .NE. 'VX' .AND.
-     2             VLAMODE(ISCN) .NE. 'VA' .AND. 
-     3             VLAMODE(ISCN) .NE. 'VB' .AND.
-     4             VLAMODE(ISCN) .NE. 'VL' .AND.
-     5             VLAMODE(ISCN) .NE. 'VR' .AND.
-     6             VLAMODE(ISCN) .NE. 'IR' ) THEN
-                  OKVLB = .FALSE.
-               END IF
-            END IF
-         END DO
-         IF( .NOT. OKVLB ) THEN
-            CALL WLOG( 1, 'CHKVLA:  --------   WARNING   ----------' )
-            CALL WLOG( 1, '   For successful VLBI, the VLAMODE must ' //
-     1          'be VS, VX, VA, VL, or VR' )
-            CALL WLOG( 1, '   for all recording scans.' )
-         END IF
-C
-C        Check pointing stuff.
-C
-         DO ISCN = 1, NSCANS
-            IF( STASCN(ISCN,VSTA) ) THEN
-               IF( VLAPEAK(ISCN) .NE. ' ' .AND.
-     1             VLAPEAK(ISCN) .NE. 'T' .AND.
-     2             VLAPEAK(ISCN) .NE. 'R' .AND.
-     3             VLAPEAK(ISCN) .NE. 'S' .AND.
-     4             VLAPEAK(ISCN) .NE. 'D' ) THEN
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, A, A, I5 )' ) 
-     1                'CHKVLA: Invalid VLAPEAK: ', VLAPEAK(ISCN),
-     2                ' in scan ', ISCN 
-                  CALL WLOG( 1, MSGTXT )
-                  CALL ERRLOG( 
-     1               ' VLAPEAK must be '' '', ''T'', ''R'', ''S'', or'//
-     2               ' ''D'' ' )
-               END IF
-C
-               IF( (VLAPEAK(ISCN) .EQ. 'R' .OR. VLAPEAK(ISCN) .EQ. 'S' )
-     1             .AND. VLAMODE(ISCN) .NE. 'IR' ) THEN
-                  CALL ERRLOG( 
-     1                'CHKVLA: For VLAPEAK=R or S, VLAMODE must be IR' )
-               END IF
-C
-               IF( VLAMODE(ISCN) .NE. 'IR' .AND.
-     1             DOPEAK(ISCN) .GT. 0 ) THEN
-                  CALL WLOG( 1, 'CHKVLA ******  WARNING  ******' )
-                  CALL WLOG( 1, '      PEAK specified, but VLA not ' //
-     1               'in pointing mode (VLAMODE=IR).  Intentional?' )
-                  CALL WLOG( 1, '      PEAK no longer ' //
-     1               'affects VLA pointing.  See VLAPEAK in manual.' )
-               END IF
-C
             END IF
          END DO
       END IF
