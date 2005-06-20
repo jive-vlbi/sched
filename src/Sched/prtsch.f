@@ -14,11 +14,11 @@ C
       INTEGER            KF, LKF
       REAL               LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
       DOUBLE PRECISION   LFREQ(MCHAN), SFREQ(MCHAN), START, STOP 
-      DOUBLE PRECISION   TSTART
+      DOUBLE PRECISION   TSTART, RTCORR
       LOGICAL            FIRSTS, DOWRTF, DOWRTB
       CHARACTER          TFORM*15, SHORTN*10
       CHARACTER          CLST1*9, CLST2*9, FF*1
-      CHARACTER          CSTART*15, CSTOP*15, CTSTART*15
+      CHARACTER          CSTART*15, CSTOP*15, CTSTART*15, CTCORR*15
       CHARACTER          OUTFRQ(MCHAN)*9, OUTBW(MCHAN)*9
       CHARACTER          PRTSRC*12, DIRECT*1, OUTBBC(MCHAN)*9
       CHARACTER          MNAME1*3, MNAME2*3, DNAME1*3, DNAME2*3
@@ -78,6 +78,8 @@ C
       CALL TIMEJ( STOPJ(ISCN), YEAR2, DAY2, STOP )
       CALL TIMEJ( STARTJ(ISCN) - TPSTART(ISCN,ISTA), 
      1            YEAR3, DAY3, TSTART )
+      CALL TIMEJ( TCORR(ISCN,ISTA), 
+     1            YEAR3, DAY3, RTCORR )
 C
 C     Get the dwell time and the margin of arrival time.
 C
@@ -163,7 +165,7 @@ C
      2      '  (Code ', STCODE(STANUM(ISTA)), ') ', 
      3      'Page ', IPAGE,     EXPT(1:LEN1(EXPT))
 C
-         WRITE( IPRT, '( 2A, /, 2A, /, 2A, /, 2A )' )
+         WRITE( IPRT, '( 2A, /, 2A, /, 2A, /, 2A, /, A )' )
      1      '  UP:  D => Below limits;  H => Below horizon mask.',
      2      '  blank => Up.',
      3      '  Early: Seconds between end of slew and start. ',
@@ -171,7 +173,8 @@ C
      5      '  Tapes: Drive, Index, Start footage ',
      6      '/ Direction, Head Group, End footage.',
      7      '  TPStart:  Tape motion start time.',
-     8      '  Frequencies are LO sum (band edge).'
+     8      '  Frequencies are LO sum (band edge).',
+     9      '  SYNC: Time correlator is expected to sync up.'
 C
          IF( AUTOALOC(ISTA) ) THEN
             WRITE( IPRT, '( A, A )' )
@@ -184,7 +187,7 @@ C
      1      'Start UT  Source               Start / Stop           ',
      2      '      Early    Tapes      TPStart',
      3      'Stop UT                  LST      EL    AZ   HA  UP   ',
-     4      'ParA  Dwell  (see above)'
+     4      'ParA  Dwell  (see above)   SYNC'
 C                         
          LASTDY = -999
       END IF
@@ -274,9 +277,12 @@ C
       CSTOP = TFORM( STOP,  'T', 0, 2, 2, '  @' )
       IF( NOREC(ISCN) ) THEN
          CTSTART = 'Stopped '
+         CTCORR  = ' '
       ELSE
          CTSTART = TFORM( TSTART, 'T', 0, 2, 2, '  @' )
+         CTCORR = TFORM( RTCORR, 'T', 0, 2, 2, '  @' )
       END IF
+
 C
       WRITE( IPRT, '( 2X, /, A8, 1X, A, T24, A8, 2F6.1, F5.1, 2X,  ' //
      1     ' A, F7.1, I6, 3X, I1, I3, I7, 2X, A8 )' )
@@ -286,11 +292,12 @@ C
      5     TPDRIV, TPINDX, NINT( TPFOOT1(ISCN,ISTA) ), CTSTART
 C
       WRITE( IPRT, '( A8, 2X, A, T24, A8, 2F6.1, F5.1, 2X, ' // 
-     1     ' A, F7.1, I6, 3X, A, I3, I7 )' ) 
+     1     ' A, F7.1, I6, 3X, A, I3, I7, 2X, A8 )' ) 
      2     CSTOP, SHORTN, CLST2, 
      3     EL2(ISCN,ISTA), AZ2(ISCN,ISTA), HA2(ISCN,ISTA), 
      4     UP2(ISCN,ISTA), PA2(ISCN,ISTA), TDWELL,
-     5     DIRECT, TPHEAD, NINT( TPFOOT2(ISCN,ISTA) )
+     5     DIRECT, TPHEAD, NINT( TPFOOT2(ISCN,ISTA) ),
+     6     CTCORR
 C
       ILINE = ILINE + 3
 C

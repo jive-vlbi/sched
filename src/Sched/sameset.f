@@ -17,6 +17,7 @@ C
       INTEGER   KS, JS, I, ICH, IIF, ITP, IPC
       INTEGER   LEN1
       LOGICAL   SA, LOCDBG
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       PARAMETER  (LOCDBG=.FALSE.)
@@ -41,12 +42,12 @@ C
 C
       DO ICH = 1, NCHAN(KS)
          SA = SA .AND.
-     1        SFCHAN(MCHAN,KS)  .EQ. SFCHAN(MCHAN,JS) .AND.
-     2        SGCHAN(MCHAN,KS)  .EQ. SGCHAN(MCHAN,JS) .AND.
-     3        FREQREF(MCHAN,KS) .EQ. FREQREF(MCHAN,JS) .AND.
-     4        FIRSTLO(MCHAN,KS) .EQ. FIRSTLO(MCHAN,JS) .AND.
-     5        FIFMIN(MCHAN,KS)  .EQ. FIFMIN(MCHAN,JS) .AND.
-     6        FIFMAX(MCHAN,KS)  .EQ. FIFMAX(MCHAN,JS)
+     1        SFCHAN(ICH,KS)  .EQ. SFCHAN(ICH,JS) .AND.
+     2        SGCHAN(ICH,KS)  .EQ. SGCHAN(ICH,JS) .AND.
+     3        FREQREF(ICH,KS) .EQ. FREQREF(ICH,JS) .AND.
+     4        FIRSTLO(ICH,KS) .EQ. FIRSTLO(ICH,JS) .AND.
+     5        FIFMIN(ICH,KS)  .EQ. FIFMIN(ICH,JS) .AND.
+     6        FIFMAX(ICH,KS)  .EQ. FIFMAX(ICH,JS)
       END DO
 C
 C     Don't worry about the pointing offsets since they don't appear
@@ -61,9 +62,9 @@ C    4     PTOFF(KS)   .EQ. PTOFF(JS)
 C
       DO ICH = 1, NCHAN(KS)
          SA = SA .AND.
-     1        BBSYN(MCHAN,KS)  .EQ. BBSYN(MCHAN,JS)  .AND.
-     2        BBSYN2(MCHAN,KS) .EQ. BBSYN2(MCHAN,JS) .AND.
-     3        BBFILT(MCHAN,KS) .EQ. BBFILT(MCHAN,JS)
+     1        BBSYN(ICH,KS)  .EQ. BBSYN(ICH,JS)  .AND.
+     2        BBSYN2(ICH,KS) .EQ. BBSYN2(ICH,JS) .AND.
+     3        BBFILT(ICH,KS) .EQ. BBFILT(ICH,JS)
       END DO
       IF ( .NOT. SA ) THEN
          IF( LOCDBG ) CALL WLOG( 0, 'SAMESET: before bbfilt' )
@@ -91,11 +92,11 @@ C
       DO ICH = 1, NCHAN(KS)
          DO ITP = 1, TPMODE(KS)
             SA = SA .AND.
-     1          TRACK(MCHAN,MTPMOD,KS) .EQ. TRACK(MCHAN,MTPMOD,JS)
+     1          TRACK(ICH,ITP,KS) .EQ. TRACK(ICH,ITP,JS)
          END DO
          SA = SA .AND.
-     1     BITS(MCHAN,KS) .EQ. BITS(MCHAN,JS) .AND.
-     2     BBC(MCHAN,KS)  .EQ. BBC(MCHAN,JS)
+     1     BITS(ICH,KS) .EQ. BITS(ICH,JS) .AND.
+     2     BBC(ICH,KS)  .EQ. BBC(ICH,JS)
       END DO
       SA = SA .AND.
      1     PERIOD(KS)   .EQ. PERIOD(JS)   .AND.

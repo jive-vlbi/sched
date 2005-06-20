@@ -27,8 +27,14 @@ sed -e s:"$SCHED":"$SCHED_STD":g $1.runlog | \
 #   Check crd file of the requested station, if present.
 
 echo '----------------------' $1.sum '-------------------------'
-sed -e s:"$SCHED":"$SCHED_STD"/:g $1.sum | \
-  sed -f Check_sed | diff - $3/$1.sum
+if( -e $1.sum ) then
+  sed -e s:"$SCHED":"$SCHED_STD"/:g $1.sum | \
+     sed -f Check_sed | diff - $3/$1.sum
+else
+  echo '*************  SCHED did not run. ***************'
+  echo 'This might be ok if the example tried to use an unsupported'
+  echo 'feature for this installation, like satellite tracking.'
+endif
 
 #   Check crd file of the requested station, if present.
 

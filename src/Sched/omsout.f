@@ -1,7 +1,7 @@
       SUBROUTINE OMSOUT( RESTART )
 C
-C     Write information to the summary file that is meant to be
-C     read by OMS.  Do regardless of correlator to be used.
+C     Write information to the file to be read by OMS.
+C     Do regardless of correlator to be used.
 C
       INCLUDE           'sched.inc'
 C
@@ -112,9 +112,10 @@ C
       WRITE( IOMS, '( 1X, /, A, /, 1X )' )
      1   'END = PROJECT_INFO'
 C     
-C     Write setup information.
+C     Write setup information if there is a setup (there may not be
+C     for planning modes).
 C
-      CALL OMSSET
+      IF( .NOT. NOSET ) CALL OMSSET
 C     
 C     Write the station info - one per station.
 C     

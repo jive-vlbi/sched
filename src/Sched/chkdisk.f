@@ -12,29 +12,42 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER  KS, ISTA, NTRACKS
-      LOGICAL  ERRS
+      LOGICAL  ERRS, WARNED
+      DATA     WARNED / .FALSE. /
+      SAVE     WARNED
 C -----------------------------------------------------------------
 C     Get the station number.
 C
       ISTA = ISCHSTA(ISETSTA(KS))
 C
 C     Don't allow less than 8 tracks for Mark5A.
+C     But don't complain if not recording with this setup.
+C     Don't worry about non-recording setups - like pointing.
 C
-      IF( DISK(ISETSTA(KS)) .EQ. 'MARK5A' ) THEN
+      IF( DISK(ISETSTA(KS)) .EQ. 'MARK5A' .AND. RECUSED(KS) ) THEN
          NTRACKS = NCHAN(KS) * FANOUT(KS) * BITS(1,KS)
          IF( NTRACKS .LT. 8 ) THEN
-            CALL WLOG( 1, 'CHKDISK: ****** Too few tracks for '//
+            CALL WLOG( 1, 'CHKDISK:  Less than 8 tracks for '//
      1         'Mark5A at '// SETSTA(1,KS) )
-            CALL WLOG( 1, 
-     1         '                Minimum is 8 (chan*fanout*bits)' )
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I3, A, I3, A, F4.1, A, I2 )' )
-     1         '                Tracks=', NTRACKS, 
-     1         '  NCHAN=', NCHAN(KS), 
-     2         '  FANOUT=', FANOUT(KS),
-     3         '  BITS=', BITS(1,KS)
-            CALL WLOG( 1, MSGTXT )
-            ERRS = .TRUE.
+            IF( .NOT. WARNED ) THEN
+               CALL WLOG( 1, 
+     1            '          On VLBA systems, dummy data will '//
+     2            'be added to make 8.  This will use extra disk. ')
+               CALL WLOG( 1, 
+     1            '          Note ntracks = nchan * fanout * bits)' )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I3, A, I3, A, F4.1, A, I2 )' )
+     1            '                Tracks=', NTRACKS, 
+     2            '  NCHAN=', NCHAN(KS), 
+     3            '  FANOUT=', FANOUT(KS),
+     4            '  BITS=', BITS(1,KS)
+               CALL WLOG( 1, MSGTXT )
+            END IF
+C
+C            Walter doesn't want this to be an error, just a warning.
+C
+C            ERRS = .TRUE.
+            WARNED = .TRUE.
          END IF
       END IF   
 C

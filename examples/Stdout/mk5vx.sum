@@ -7,7 +7,7 @@ COVER INFORMATION:
   Start Day  56 is Tue  25 Feb 2003   MJD  52695          
 
   Schedule Version:       2.10                                              
-  Processed by SCHED version:   6.0  Release: March 2005                    
+  Processed by SCHED version:   6.02  May 2005                              
 
   PI:       Cormac                                                          
 
@@ -121,28 +121,35 @@ EXPERIMENT SUMMARY:
   Number of setup files used:     1
 
  Station summaries (tape stations): 
-  Station  Control   Scans  Scan Hours  Tape hours   Tapes    Passes   Readbacks 
+  Station  Control   Scans   Scan   Tape   Tapes  Passes Readbacks  Formatter   Sync 
+                            Hours   Hours                         Reconfigures  Hours  
 
  Station summaries (disk stations): 
-  Station  Control   Scans  Scan Hours  Record hrs   Gbytes
-  MEDICINA   VEX       14      4.03        4.03        234.
-  NOTO       VEX       14      4.03        4.03        234.
-  EFLSBERG   VEX       14      4.03        4.03        234.
-  JODRELL2   VEX       14      4.03        4.03        234.
-  EB_VLBA    VLBA      14      4.03        4.03        234.
-  WSTRBORK   VEX       14      4.03        4.03        234.
-  VLBA_PT    VLBA       3      1.10        1.10         64.
+  Station  Control   Scans  Scan Hours  Record hrs   Gbytes      Formatter     Sync 
+                                                               Reconfigures    Hours  
+  MEDICINA   VEX       14      4.03        4.03        234.            0        0.05
+  NOTO       VEX       14      4.03        4.03        234.        0/  0       0.04
+  EFLSBERG   VEX       14      4.03        4.03        234.            0        0.04
+  JODRELL2   VEX       14      4.03        4.03        234.            0        0.04
+  EB_VLBA    VLBA      14      4.03        4.03        234.        0/  0       0.03
+  WSTRBORK   VEX       14      4.03        4.03        234.            0        0.05
+  VLBA_PT    VLBA       3      1.10        1.10         64.        0/  0       0.01
+
+Notes on the station summaries: 
+
+    "Sync Hours" is on-source, in-scan time lost during correlation to resyncing
+    recordings.  Resyncs follow tape stoppages and formatter reconfigures.
+
+    For VLBA stations, total reconfigures and reconfigures during recording are shown.
+    Reconfigures during recording can cause slow correlator sync.
+    Any reconfigure can slow sync at JIVE.
 
 
 
-
-
-The following setup groups are the same as group   1 below.
-   3:EFLSBERG   4:JODRELL2   6:WSTRBORK
 
 
  Setup file: NME-MK5.18CM
-   Matches group mc18cm in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group mc18cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
     updated from Maccaferri (CR 2Dec00)
 
    Setup group:    1         Station: MEDICINA          Total bit rate:  128
@@ -169,7 +176,7 @@ The following setup groups are the same as group   1 below.
 
 
  Setup file: NME-MK5.18CM
-   Matches group nt18cm in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group nt18cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
     LO from Trigilio 26Sep96
 
    Setup group:    2         Station: NOTO              Total bit rate:  128
@@ -203,8 +210,39 @@ The following setup groups are the same as group   1 below.
     barrel=roll_off 
 
 
+The following setup groups are the same as group   3 below.
+   4:JODRELL2
+
+
  Setup file: NME-MK5.18CM
-   Matches group eb_1640 in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group ef18cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+    Prime focus receiver, standard LO Graham 26/1/00
+
+   Setup group:    3         Station: EFLSBERG          Total bit rate:  128
+   Format: MKIV1:4           Bits per sample: 2         Sample rate: 16.000
+   Number of channels:  4    Passes/head pos:   1       Speedup factor:   2.00
+
+   1st LO=   1510.00   1510.00   1510.00   1510.00
+   Net SB=         U         U         U         U
+   Pol.  =      RCP       LCP       RCP       LCP 
+   BBC   =         2         1         4         3
+   BBC SB=         U         U         U         U
+   IF    =        2N        1N        2N        1N
+
+  The following frequency sets based on this setup were used.
+
+   Frequency Set:   3  Setup file default.  No pcal detection.
+   LO sum=    1642.49   1642.49   1650.49   1650.49
+   BBC fr=     132.49    132.49    140.49    140.49
+   Bandwd=      8.000     8.000     8.000     8.000
+
+   Track assignments are: 
+    track1=   2, 18,  3, 19
+    barrel=roll_off 
+
+
+ Setup file: NME-MK5.18CM
+   Matches group eb_1640 in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
     Prime focus receiver.
 
    Setup group:    5         Station: EB_VLBA           Total bit rate:  128
@@ -239,7 +277,34 @@ The following setup groups are the same as group   1 below.
 
 
  Setup file: NME-MK5.18CM
-   Matches group v20cm_2 in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group wb18cm in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+    E-mail Foley 22Jan97 MFFE, must be using Low patch
+
+   Setup group:    6         Station: WSTRBORK          Total bit rate:  128
+   Format: MKIV1:4           Bits per sample: 2         Sample rate: 16.000
+   Number of channels:  4    Passes/head pos:   1       Speedup factor:   2.00
+
+   1st LO=   1510.00   1510.00   1510.00   1510.00
+   Net SB=         U         U         U         U
+   Pol.  =      RCP       LCP       RCP       LCP 
+   BBC   =         2         1         4         3
+   BBC SB=         U         U         U         U
+   IF    =        2N        1N        2N        1N
+
+  The following frequency sets based on this setup were used.
+
+   Frequency Set:   6  Setup file default.  No pcal detection.
+   LO sum=    1642.49   1642.49   1650.49   1650.49
+   BBC fr=     132.49    132.49    140.49    140.49
+   Bandwd=      8.000     8.000     8.000     8.000
+
+   Track assignments are: 
+    track1=   2, 18,  3, 19
+    barrel=roll_off 
+
+
+ Setup file: NME-MK5.18CM
+   Matches group v20cm_2 in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
     FD filtered above 1760.  SC filtered above 1740.
 
    Setup group:    7         Station: VLBA_PT           Total bit rate:  128
@@ -416,13 +481,13 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 
    J0319+4130        03 16 29.567289   * 03 19 48.160119     03 19 59.004441       0.28
    0316+413          41 19 51.91675    * 41 30 42.10387      41 31 29.23437        0.41
- * 3C84              /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C84              /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J0319+41          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         1.833 scan hours,     33.115 baseline hours above horizon.
 
    J0555+3948        05 52 01.407172   * 05 55 30.805614     05 55 43.528241       0.26
    0552+398          39 48 21.94585    * 39 48 49.16500      39 49 00.05424        0.40
- * DA193             /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * DA193             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J0555+39          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         2.200 scan hours,     32.511 baseline hours above horizon.
 
@@ -466,16 +531,16 @@ name = 'DA193'  ra = 05h55m30.805614s  dec = 39d48'49.16500"
 Catalogs: 
   Station:   egmk5vex_stations.dat
                  Version:  
-  Location:  /home/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
-                 Version:  25 Feb 2005
-  Frequency: /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
-                 Version:  2005Feb28-16:32:35
-  Source:   /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+  Location:  /users/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
+                 Version:  08 Mar 2005
+  Frequency: /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+                 Version:  2005May23-14:53:23
+  Source:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                  Version:  2005 March 1
 
 
 Code versions: 
-  Release version:            6.0  Release: March 2005
+  Release version:            6.02  May 2005
   Version of VEX standard:   1.50
   Version of VEX code:       0.84
   Version of plot code:      1.05

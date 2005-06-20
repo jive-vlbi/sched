@@ -344,6 +344,9 @@ C
      1           '                     Schedule only has a ', 
      2           TAVAIL * 24.D0 * 60.D0, ' minute gap.'
                CALL WLOG( 1, MSGTXT )
+C
+               CALL WLOG( 1, '                     Ignore ' //
+     1           'this if really using Mark5.' )
 C        
             END IF
          END IF

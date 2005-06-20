@@ -109,7 +109,7 @@ C        Write cover information.  This needs a very precise format
 C        to keep OBSERVE happy when the files are remade by the
 C        analysts.
 C
-         WRITE( IULOC, '( A,/, 2A, F5.1, 2X, A,/, A,/, 3A,/,A,/,2A )' )
+         WRITE( IULOC, '( A,/, 2A, F6.2, 2X, A,/, A,/, 3A,/,A,/,2A )' )
      1      CC,
      2      CC, 'SCHED version: ', VERNUM, VERSION(1:LEN1(VERSION)),
      3      CC,

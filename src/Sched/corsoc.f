@@ -72,20 +72,21 @@ C        Warn if data rate is too high.  The limit was changed from
 C        500 Mbytes/sec to 1000 Mbytes/sec on May 9, 2003.
 C
          IF( MAXDR .GT. 1000000. .AND. .NOT. TWOHEAD ) THEN
-            WRITE( ISUM, '( A, A, A / T22, A )' )
-     1           ' ******** WARNING:  ',
-     2           'Projected correlator output data rate ',
+            WRITE( ISUM, '( A, /, A, A / A )' )
+     1           ' **** WARNING ****',
+     2           '    Projected correlator output data rate ',
      3           'exceeds VLBA correlator ',
-     4           'limit of 1000 kbytes per second. '
+     4           '    limit of 1000 kbytes per second. '
 C            WRITE( ISUM, '( A, A )' ) 
 C     1           '                    ',
 C     2           'Higher rates may be ok.  Contact Socorro for info.'
-            CALL WLOG( 1, 'CORLST:  ***** WARNING: Correlator output '//
+            CALL WLOG( 1, 'CORSOC:  **** WARNING ****' )
+            CALL WLOG( 1, '    Correlator output '//
      1         'data rate limit exceeded.  See summary file.' )
             WARN = .TRUE.
          ELSE IF( MAXDR .GT. 2.0E6 .AND. TWOHEAD ) THEN
             WRITE( ISUM, '( A, A, A / T22, A )' )
-     1           '  ******** WARNING:  ',
+     1           ' **** WARNING ****',
      2           'Projected correlator output data rate ',
      3           'exceeds VLBA correlator ',
      4           'limit of 1000 kbytes per second per pass. '
@@ -95,7 +96,8 @@ C     2           'Higher rates may be ok.  Contact Socorro for info.'
             WRITE( ISUM, '( T22, A, A )' )
      1           'Assuming 2 pass processing for this wide band ',
      2           'observation.'
-            CALL WLOG( 1, 'CORLST:  ***** WARNING: Correlator output '//
+            CALL WLOG( 1, 'CORSOC: **** WARNING **** ' )
+            CALL WLOG( 1, '    Correlator output '//
      1           'data rate limit exceeded.  See summary.' )
             WARN = .TRUE.
          END IF

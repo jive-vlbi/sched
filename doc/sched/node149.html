@@ -1,8 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
-patched version by:  Kenshi Muto, Debian Project.
-LaTeX2HTML 2002 (1.62),
+<!--Converted with LaTeX2HTML 2K.1beta (1.50)
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
@@ -16,7 +14,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -29,26 +27,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2331"
+<A NAME="tex2html2357"
   HREF="node150.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2327"
+<A NAME="tex2html2353"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2321"
+<A NAME="tex2html2347"
   HREF="node148.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2329"
+<A NAME="tex2html2355"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2332"
+<B> Next:</B> <A NAME="tex2html2358"
   HREF="node150.html">PTDUR</A>
-<B> Up:</B> <A NAME="tex2html2328"
+<B> Up:</B> <A NAME="tex2html2354"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2322"
+<B> Previous:</B> <A NAME="tex2html2348"
   HREF="node148.html">PRESCAN</A>
- &nbsp <B>  <A NAME="tex2html2330"
+ &nbsp <B>  <A NAME="tex2html2356"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
@@ -60,19 +58,19 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 </H3>
 
 <P>
-<TT>PRESTART</TT> gives a time by which to start the tapes rolling at a
+<TT>PRESTART</TT> gives a time by which to start the recording at a
 site before the nominal start time as established by <A HREF="node171.html#MP:START"><TT>START</TT></A>, <A HREF="node97.html#MP:GAP"><TT>GAP</TT></A>, <A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A>, <A HREF="node148.html#MP:PRESCAN"><TT>PRESCAN</TT></A> etc.  Like <TT>PRESCAN</TT>, if the requested <TT>PRESTART</TT> moves the start of motion to
-before the stop time of the previous scan, the tape will just be kept
+before the stop time of the previous scan, the recording will just be kept
 moving.  But, unlike <TT>PRESCAN</TT>, this time shift is done on a
 per-station basis -- if a station was not participating in the
-previous scan, it's tape motion start will be shifted the full
+previous scan, it's recording start will be shifted the full
 <TT>PRESTART</TT> time, even if that means starting while other stations
 are still recording the previous scan.  Also unlike <TT>PRESCAN</TT>,
 the shift due to <TT>PRESTART</TT> is not reflected in the scan
 times reported in the summary or sch files.
 
 <P>
-The amount of time by which the tape motion start is shifted before
+The amount of time by which the recording start is shifted before
 the nominal start time can be displayed using the <TT>TPSTART</TT> option
 in the <A HREF="node174.html#MP:SUMITEM"><TT>SUMITEM</TT></A> list.
 
@@ -86,6 +84,21 @@ all start times currently (Oct. 2001) must be equal. SCHED&nbsp; will issue
 a warning if this condition is violated.
 
 <P>
+Starting the recording early allows time for the correlator to
+synchronize the inputs from different stations before the start of
+good data.  Anytime the recording stops, the correlator takes time to
+resync.  On the VLBA correlator, that time is about 20 seconds times
+the speedup factor for tape and 5 seconds times the speedup factor for
+disk (Mark5).  In addition, any time that the formatter needs to be
+reconfigured (number of channels, BBC assignments, sidebands, pulse
+cal detector setups etc), the recording stops for about 20 seconds
+with VLBA systems.  That time is lost and the resync time so triggered
+is lost.  Formatter reconfigures happen at the start of the scan that
+needs them.  But if the recording is stopped with something like a gap
+command or dwell time scheduling, the formatter will be reconfigured
+during the during the interval between scans.
+
+<P>
 
 <UL>
 <LI><B>Argument:</B> A time.
@@ -96,7 +109,7 @@ a warning if this condition is violated.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>PRESTART=15</TT>, meaning start the tape 15 seconds early.
+<LI><B>Example:</B>  <TT>PRESTART=15</TT>, meaning start the recording 15 seconds early.
   
 </LI>
 </UL>
@@ -104,31 +117,31 @@ a warning if this condition is violated.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2331"
+<A NAME="tex2html2357"
   HREF="node150.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2327"
+<A NAME="tex2html2353"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2321"
+<A NAME="tex2html2347"
   HREF="node148.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2329"
+<A NAME="tex2html2355"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2332"
+<B> Next:</B> <A NAME="tex2html2358"
   HREF="node150.html">PTDUR</A>
-<B> Up:</B> <A NAME="tex2html2328"
+<B> Up:</B> <A NAME="tex2html2354"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2322"
+<B> Previous:</B> <A NAME="tex2html2348"
   HREF="node148.html">PRESCAN</A>
- &nbsp <B>  <A NAME="tex2html2330"
+ &nbsp <B>  <A NAME="tex2html2356"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-03-02
+2005-05-25
 </ADDRESS>
 </BODY>
 </HTML>
