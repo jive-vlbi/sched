@@ -1,0 +1,557 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Station Catalog and Locations Catalog</TITLE>
+<META NAME="description" CONTENT="Station Catalog and Locations Catalog">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node198.html">
+<LINK REL="previous" HREF="node196.html">
+<LINK REL="up" HREF="node49.html">
+<LINK REL="next" HREF="node198.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html2905"
+  HREF="node198.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2901"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2895"
+  HREF="node196.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2903"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2906"
+  HREF="node198.html">Tape Initialization File</A>
+<B> Up:</B> <A NAME="tex2html2902"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html2896"
+  HREF="node196.html">Source Catalog</A>
+ &nbsp <B>  <A NAME="tex2html2904"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00430000000000000000"></A><A NAME="SEC:STACAT"></A>
+<BR>
+Station Catalog and Locations Catalog
+</H1>
+
+<P>
+SCHED&nbsp; uses a catalog to get station information such as names,
+positions, horizons, slew characteristics and more.  This catalog is
+in keyin format.  Station positions may be stored separately in a
+Locations Catalog.  There are standard Station and Location Catalogs
+which will almost certainly have all stations used by a project.
+SCHED&nbsp; will find these catalogs by default or their locations may be
+specified.  Any or all of the Station Catalog entries may be given in
+the main SCHED input if desired.  In any case, the scheduler
+should consult the catalog to be sure that the right station names are
+being used in the schedule.  The catalog associated with this release
+of SCHED&nbsp; is at <A NAME="tex2html71"
+  HREF="catalogs/stations.dat"><TT>$SCHED/catalogs/stations.dat</TT></A>.
+
+<P>
+SCHED&nbsp; input parameter <TT>STAFILE</TT> is used to point to any desired
+external catalog.  A file name of up to 80 characters can be
+specified. The default is the standard catalog: 
+<BR><TT>STAFILE=$SCHED/catalogs/stations.dat</TT>
+
+<P>
+Station catalog information can be given in the main SCHED&nbsp; keyin
+file. If the keyword <TT>STACAT</TT> appears, all input after the next
+``/'' is assumed to consist of station catalog entries until a line
+containing the keyword <TT>ENDCAT</TT> and a ``/'' is encountered (don't
+combine this keyword with a catalog entry).  Such ``in-line'' catalogs
+must appear in the SCHED&nbsp; keyin file before the all of the input
+for the first scan is complete.  This allows the use of station codes
+to specify stations in each scan.
+
+<P>
+Both in-line catalog entries and an external catalog may be used for
+the station catalog.  This would mainly be useful if there is a
+non-standard antenna in the schedule.  That antenna's parameters can
+be put in the in-line catalog while all other antennas are picked up
+from the external catalog.  If you wish to prevent SCHED&nbsp; from
+looking in external catalogs, specify <TT>STAFILE=NONE</TT>.
+
+<P>
+It is only necessary to give one of <TT>X</TT>, <TT>Y</TT>, and <TT>Z</TT> or
+<TT>ELev</TT>, <TT>LAT</TT>, and <TT>LONG</TT>.  The missing set will be
+calculated.  If both are given, the provided values will be used.  If
+a conversion is done, the WGS84 ellipsoid is used and the calculations
+are accurate at the cm level.  Since WGS84 is tied to the ITRF, this
+should be a good way to convert GPS coordinates to the Earth centered
+coordinates used in VLBI.
+
+<P>
+Some of the information that can be given in the station catalog can
+also be provided through a locations catalog.  This is mostly position
+information.  The locations catalog can be specified by <A HREF="node114.html#MP:LOCFILE"><TT>LOCFILE</TT></A>.  SCHED&nbsp; will read and store the locations
+catalog before reading the stations catalog.  If the station position
+is missing from the stations catalog, SCHED&nbsp; will search for a
+station in the locations catalog with the name specified with <TT>DBNAME</TT> in the stations catalog.  If a match is found, the associated
+coordinates will be used.  The locations catalog is used because, in
+the standard catalogs, the station locations are from the VLBA
+correlator data base while all the other information is from other
+places.  It is much easier to maintain separate catalogs.  Users will
+probably not need to worry about all this, except perhaps to specify
+<A HREF="node114.html#MP:LOCFILE"><TT>LOCFILE</TT></A> if they keep the SCHED&nbsp; standard
+catalogs in a non-standard place.
+
+<P>
+The parameters of the station catalog are given below.  Items that can
+be in the locations catalog are noted.  Lower case letters are
+optional.  Entries for a station in the Station Catalog are terminated with
+a ``/''.
+
+<P>
+<DL>
+<DT><STRONG><TT>STAtion</TT>:</STRONG></DT>
+<DD>Station name. Up to 8 characters.
+
+<P>
+</DD>
+<DT><STRONG><TT>STCode</TT>:</STRONG></DT>
+<DD>Station code. Up to 3 characters.  Usually there
+are 2 characters.  See Appendix <A HREF="node285.html#APP:STACODES">A.4</A> for a list
+of codes.
+
+<P>
+</DD>
+<DT><STRONG><TT>DBNAME</TT>:</STRONG></DT>
+<DD>The station name used in the VLBA correlator
+data base.  Might not be the same as <TT>STAtion</TT>.  <TT>DBNAME</TT> is
+used to associate entries in the locations catalog with station
+catalog entries.  SCHED&nbsp; uses <TT>STAtion</TT> for almost everything
+else.  This name distinguishes each pad of the interferometers.
+There is a matching parameter with the same name in the locations
+catalog.  Up to 10 characters.
+
+<P>
+</DD>
+<DT><STRONG><TT>DBCODE</TT>:</STRONG></DT>
+<DD>The station code used in the VLBA correlator
+data base.  May not be the same as <TT>STCode</TT>.  SCHED&nbsp; uses
+<TT>STCode</TT> for almost everything.  This code distinguishes each
+pad of the intererometers so contains more information than the
+usual 2 letter codes given in <TT>STCode</TT>.  Can be put in the
+locations catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>FRAME</TT>:</STRONG></DT>
+<DD>A character string indicating the origin
+of the station location information.  Can be put in the locations
+catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>CONtrol</TT>:</STRONG></DT>
+<DD>Telescope control file type. Valid options are
+<TT>VLBA</TT> for VLBA control files,
+<TT>VEX</TT> for Mark IV stations and any other stations with that
+understand the VEX format,
+<TT>SNAP</TT> for most stations (Mark II only -- does not handle
+Mark&nbsp;III or Mark IV),
+<TT>NRAO</TT> for 140-ft type control files,
+<TT>VLA</TT> for VLA observe files,
+<TT>VSOP</TT> for VSOP type DRUDG files (Japanese version only), and
+<TT>NONE</TT> for no control file - the default.
+A <TT>V</TT> in the 5th character will cause a VLBA
+control file to be produced without non-DAS (Data Aquisition System
+-- BBC's, formatter, tape recorder etc) to be produced.  If the first
+4 characters were VLBA, this will be the only file.  If they were
+something else, both the other type of file and the reduced VLBA file
+will be produced.  This is the default when <TT>CONTROL = VLA</TT>.
+Option <TT>SN50</TT> is also available for snap files with forced B1950
+coordinates.  The <TT>VEX</TT> option for even one station triggers
+production of a VEX format .skd file (once this software is ready) for
+all stations in addition to any antenna specific files requested.
+
+<P>
+</DD>
+<DT><STRONG><TT>DAR</TT>:</STRONG></DT>
+<DD>Gives the type of Data Aquisition Rack present.
+This is mainly to identify the type of formatter is at the station
+which will let the program know about the capabilities available.
+Valid types are: <TT>VLBA</TT>, <TT>MKIV</TT>, <TT>VLBA4</TT>, <TT>MKIII</TT>,
+<TT>S2</TT>, <TT>K4</TT>, <TT>VSOP</TT> and <TT>NONE</TT> (the default).  Note
+that for Mark II scheduling (basically obsolete), any site scheduled
+will be assumed to have Mark II equipment.  The main non-obvious
+option above is <TT>VLBA4</TT>, which is a VLBA DAR but with a Mark IV
+formatter installed.  This will have VLBA BBC's and IF switching, but
+Mark IV formatting characteristics.
+
+<P>
+</DD>
+<DT><STRONG><TT>RECORDER</TT>:</STRONG></DT>
+<DD>Gives the type of tape recorder(s) present
+Valid options are: <TT>VLBA</TT>, <TT>MKIV</TT>, <TT>VLBA4</TT>, <TT>MKIII</TT>,
+<TT>S2</TT>, <TT>K4</TT>, <TT>VSOP</TT>, and <TT>NONE</TT> (the default).  The
+<TT>VLBA4</TT> option is for VLBA recorders which have been modified
+for 16 Mbps per track operation and can be equiped with 2 recording
+heads.  They are usually associated with <TT>MKIV</TT> or <TT>VLBA4</TT> DARs.
+
+<P>
+</DD>
+<DT><STRONG><TT>NBBC</TT>:</STRONG></DT>
+<DD>Tells SCHED&nbsp; how many BBC's or VC's are at the
+site.
+
+<P>
+</DD>
+<DT><STRONG><TT>NDRIVES</TT>:</STRONG></DT>
+<DD>Gives the number of tape drives at the sites.
+Most have only 1 but all VLBA sites, for example, have 2.  This
+can be overridden for a schedule using the NDRIVES parameter in
+the tape initialization information.
+
+<P>
+</DD>
+<DT><STRONG><TT>NHEADS</TT>:</STRONG></DT>
+<DD>Gives the number of recording head blocks on
+each VLBA or MKIV drive.  This will be useful mainly for MKIV
+(and VLBA4) which will at some point have 2.
+
+<P>
+</DD>
+<DT><STRONG><TT>DISK</TT>:</STRONG></DT>
+<DD>Used to indicate that a disk based recording system
+is available at the station.  Which system to use depends on the value
+of the <A HREF="node200.html#TP:MEDIA"><TT>MEDIA</TT></A> parameter in the
+<A HREF="node198.html#SEC:TPINI">tape initialization information</A>.  For VLBA
+systems, commands for both <TT>RECORDER</TT> and <TT>DISK</TT> can be
+included in the control file.  Valid arguments to <TT>DISK</TT> for
+now are restricted to <TT>MARK5A</TT> and <TT>NONE</TT> (the default).
+<TT>MARK5B</TT> will be valid later.
+
+<P>
+</DD>
+<DT><STRONG><TT>MEDIADEF</TT>:</STRONG></DT>
+<DD>Gives the type of recording system to use if
+it is not specified elsewhere, like in a <A HREF="node179.html#MP:TAPEINI"><TT>TAPEINI</TT></A>
+section.  The options are <TT>TAPE</TT> and <TT>DISK</TT>.  This is meant
+to facilitate VLBA operations during the transition from tape to disk.
+
+<P>
+</DD>
+<DT><STRONG><TT>ELev</TT>:</STRONG></DT>
+<DD>Station elevation in meters above (mean?) sea
+level for geodetic coordinates or meters from the center of the Earth
+for geocentric coordinates; these cases are distinguished by value
+magnitude.
+
+<P>
+</DD>
+<DT><STRONG><TT>LAT</TT>:</STRONG></DT>
+<DD>Station latitude, either geodetic or geocentric.
+The format is <TT>dd:mm:ss</TT>. Positive in Northern Hemisphere.
+
+<P>
+</DD>
+<DT><STRONG><TT>LONG</TT>:</STRONG></DT>
+<DD>Station longitude, either geodetic or geocentric.
+The format is <TT>ddd:mm:ss</TT>. Positive in Western Hemisphere.
+
+<P>
+</DD>
+<DT><STRONG><TT>ZALim</TT>:</STRONG></DT>
+<DD>Zenith angle limit in degrees.  Can be used to
+limit elevation coverage for stations with other than AZEL mounts.
+The antenna will be assumed to point below this limit to whatever
+limits are specified with <TT>AX1LIM</TT> and <TT>AX2LIM</TT> for purposes
+of slew calculations.  However, if the antenna is below this limit,
+the source will be considered to be down during any optimizations.
+
+<P>
+</DD>
+<DT><STRONG><TT>X</TT>:</STRONG></DT>
+<DD>Station X coordinate in meters.  This is in the
+direction of the Greenwich meridian.  Can be put in the locations
+catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>Y</TT>:</STRONG></DT>
+<DD>Station Y coordinate in meters.  This makes a right
+handed coordinate system with X and Z.  Can be put in the locations
+catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>Z</TT>:</STRONG></DT>
+<DD>Station Z coordinate in meters.  This is in the
+direction of the north pole.  Can be put in the locations catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>DXDT</TT>:</STRONG></DT>
+<DD>Station rate of change of the X coordinate in
+meters per year.  Not used in SCHED.  Can be put in the locations
+catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>DYDT</TT>:</STRONG></DT>
+<DD>Station rate of change of the Y coordinate
+in meters per year.  Not used in SCHED.  Can be put in the locations
+catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>DZDT</TT>:</STRONG></DT>
+<DD>Station rate of change of the Z coordinate
+in meters per year.  Not used in SCHED.  Can be put in the locations
+catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>EPOCH</TT>:</STRONG></DT>
+<DD>The epoch in MJD at which the X, Y, Z
+coordinates apply.  In other words, when the offsets due to the
+rates is zero.  Not used by SCHED.  Can be put in the locations
+catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>DEScrip</TT>:</STRONG></DT>
+<DD>Any text up to 80 characters (not used
+by SCHED).
+
+<P>
+</DD>
+<DT><STRONG><TT>NDRIVES</TT>:</STRONG></DT>
+<DD>Number of wide band tape recorders at each site.
+This should be the maximum number of drives at the station.  If less
+are in service, the <A HREF="node198.html#SEC:TPINI">tape initialization</A> input,
+<A HREF="node201.html#TP:NDRIVES"><TT>NDRIVES</TT></A> can be used to sepcify the
+smaller number.  For S2 sites, NDRIVES should be the number of individual
+recorders.
+
+<P>
+</DD>
+<DT><STRONG><TT>HOR_AZ</TT>:</STRONG></DT>
+<DD>Up to 200 azimuths at which horizon elevations
+are given in <TT>HOR_EL</TT>.
+
+<P>
+</DD>
+<DT><STRONG><TT>HOR_EL</TT>:</STRONG></DT>
+<DD>Up to 200 elevations for the horizon at the
+azimuths specified by <TT>HOR_AZ</TT>. SCHED's down, rise, and set
+notes will take these horizons into account. They will also be used in
+the optimization mode.
+
+<P>
+</DD>
+<DT><STRONG><TT>MOUNT</TT>:</STRONG></DT>
+<DD>The type of mount.  SCHED&nbsp; uses this, along with
+the axis limits and rates, to calculate slew times.  The understood
+options are <TT>ALTAZ</TT>, <TT>EQUAT</TT>, <TT>XYEW</TT> and <TT>XYNS</TT>.  Note
+that <TT>XYNS</TT> is for an XY axis system with the fixed axis in the
+north-south direction (for example, Fairbanks).  <TT>XYEW</TT>
+is for the other orientation (for example, Hobart).
+
+<P>
+</DD>
+<DT><STRONG><TT>AXISTYPE</TT>:</STRONG></DT>
+<DD>The axis type as recorded in the VLBA
+correlator data base.  Not used by SCHED.  There are different
+keywords here than for <TT>MOUNT</TT>.  Some day this should be cleaned
+up.  Can be put in the locations catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>AXISOFF</TT>:</STRONG></DT>
+<DD>The axis offset in meters.  Not used by SCHED.
+Can be put in the locations catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>AX1LIM</TT>:</STRONG></DT>
+<DD>The slew limits for the first axis which is
+usually azimuth, hour angle or X.  The units are degrees for azimuth
+or X and hours for equatatorial mounts.  There are up to 3 pairs of
+numbers giving the lower and upper limits for 3 different parts of the
+sky.  This is required to describe the limits for the 140' at Green
+Bank and for XY antennas such as Hobart.  Only the first set will be
+used for altaz antennas.  For altaz antennas, the zero for azimuth is
+to the north and positive is clockwise looking down on the antenna.
+For XY antennas, positive is to the north or east.
+
+<P>
+</DD>
+<DT><STRONG><TT>AX2LIM</TT>:</STRONG></DT>
+<DD>The slew limits for the second axis which is
+usually elevation, declination, or Y.  The units are degrees in all
+cases.  There are 3 pairs of numbers which define the three parts
+of the sky over which the 3 pairs of <TT>AX1LIM</TT>s apply.  The ranges
+for altaz antennas should not overlap, although they can touch.  For
+XY antennas, overlaps are ok.
+
+<P>
+</DD>
+<DT><STRONG><TT>AX1RATE</TT>:</STRONG></DT>
+<DD>The slew rate for the first axis in degrees
+per minute for all mount types.
+
+<P>
+</DD>
+<DT><STRONG><TT>AX2RATE</TT>:</STRONG></DT>
+<DD>The slew rate for the second axis in degrees
+per minute.
+
+<P>
+</DD>
+<DT><STRONG><TT>AX1ACC</TT>:</STRONG></DT>
+<DD>The acceleration for the first axis in degrees
+per second squared for all mount types.
+
+<P>
+</DD>
+<DT><STRONG><TT>AX2ACC</TT>:</STRONG></DT>
+<DD>The acceleration for the second axis in degrees
+per second squared.
+
+<P>
+</DD>
+<DT><STRONG><TT>TSETTLE</TT>:</STRONG></DT>
+<DD>The time in seconds (or mm:ss etc) to add to
+the slew time for dwell time scheduling to determine when the antenna
+is ready to observe.  This will include any computer overhead,
+and time to make calibration observations.  Acceleration and
+deceleration will be calculated explicitly if the above acceleration
+parameters are provided in the station catalog.
+
+<P>
+</DD>
+<DT><STRONG><TT>MINSETUP</TT>:</STRONG></DT>
+<DD>The minimum interval between scans when using
+dwell time scheduling.  If the slew time plus the settling time
+drops below <TT>MINSETUP</TT>, <TT>MINSETUP</TT> will be used as the
+interval between scans.  This is required because some antennas have
+a minimum scan setup time but the actions that take that time can
+overlap with the slew.  When the slew is long, the extra time does
+not need to be added.
+
+<P>
+</DD>
+<DT><STRONG><TT>MAXSRCHR</TT>:</STRONG></DT>
+<DD>The maximum number of sources per hour.
+This is originally intended to enable enforcement of the limit in
+the number of slews per hour on the Mark1 telescope at Jodrell.  They
+are very worried about fatigue and will refuse to run fast switching
+schedules.  The default is 1.E6 which should be more than anyone
+would try to schedule.
+
+<P>
+</DD>
+</DL>
+
+<P>
+Below is a sample segment of the standard station catalog.
+
+<P>
+<PRE>
+  STATION=VLBA_MK   STCODE=Mk  CONTROL=VLBA
+    ELEV=3720.00  LONG=155:27:28.95    LAT=19:48:15.85
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90
+    AX1RATE=90 AX2RATE=30
+    TSETTLE=2  DAR=VLBA  RECORDER=VLBA  NDRIVES=2  NHEADS=1 NBBC=8
+    ! MK    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 10, 15, 20,120,125,130,135,140,145,150,155,160,
+             165,170,175,185,190,195,200,205,210,215,220,255,260,270,
+             275,280,285,290,295,300,305,310,315,320,325,330,335,340,
+             345,350,355,360
+    HOR_EL =   5,  4,  3,  3,  2,  2,  4,  5,  5,  4,  4,  6,  8,  8,
+              11, 12, 13, 13, 11, 11,  9,  7,  5,  3,  2,  2,  3,  3,
+               5,  6,  8, 10, 12, 14, 12, 11,  9, 10, 11, 10, 12, 14,
+              12,  9,  7,  5
+  /
+  STATION=VLBA_HN   STCODE=Hn  CONTROL=VLBA
+    ELEV=309.00  LONG=071:59:11.69    LAT=42:56:00.96
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=90 AX2RATE=30
+    TSETTLE=2  DAR=VLBA  RECORDER=VLBA  NDRIVES=2  NHEADS=1 NBBC=8
+    ! HN    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 30, 35, 40, 45, 65, 70, 80, 85, 90, 95,100,105,
+             110,115,120,125,130,135,140,145,150,155,160,165,170,190,
+             195,200,205,210,220,225,230,235,240,245,250,255,270,275,
+             290,295,315,320,325,330,335,345,350,355,360
+    HOR_EL =   6,  6,  6,  4,  5,  4,  4,  5,  5,  4,  5,  4,  4,  5,
+               3,  4,  4,  5,  4,  6,  5,  7,  7,  5,  3,  5,  4,  4,
+               2,  5,  5,  6,  6,  5,  6,  4,  5,  5,  4,  5,  5,  4,
+               4,  5,  5,  6,  5,  5,  6,  6,  5,  5,  6
+ /
+!   Some stations with VLBA terminals and control computers:
+!   See other entries if Mark~III versions are desired.
+  STATION=EB_VLBA   STCODE=Eb  CONTROL=VLBA  ZALIM=78.000
+    MOUNT=ALTAZ AX1RATE=30 AX2RATE=15 AX1LIM=33,507 AX2LIM=9,89
+    TSETTLE=2  DAR=VLBA  RECORDER=VLBA  NDRIVES=1  NHEADS=1 NBBC=4
+    ELEV= 6365911.00  LONG=-006:53:03.98    LAT= 50:20:09.70     /
+
+  STATION=JODRELL2   STCODE=Jb  CONTROL=SN50
+    MOUNT=ALTAZ AX1RATE=22.5 AX2RATE=22.5 AX1LIM=-85,325 AX2LIM=3,89
+    ELEV= 6364546.00  LONG= 002:18:24.01    LAT= 53:03:06.01
+    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
+   /
+  STATION=MEDICINA  STCODE=Mc  CONTROL=SNAP
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=30 AX1LIM=90,540 AX2LIM=5,88.5
+    ELEV=     100.00  LONG=-011:18:00.00    LAT= 44:30:00.00
+    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
+   /
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2905"
+  HREF="node198.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2901"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2895"
+  HREF="node196.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2903"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2906"
+  HREF="node198.html">Tape Initialization File</A>
+<B> Up:</B> <A NAME="tex2html2902"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html2896"
+  HREF="node196.html">Source Catalog</A>
+ &nbsp <B>  <A NAME="tex2html2904"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

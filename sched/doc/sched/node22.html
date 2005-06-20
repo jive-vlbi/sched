@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>TAPE LENGTHS and PASS TIMES</TITLE>
+<META NAME="description" CONTENT="TAPE LENGTHS and PASS TIMES">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node23.html">
+<LINK REL="previous" HREF="node21.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node23.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html505"
+  HREF="node23.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html501"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html495"
+  HREF="node21.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html503"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html506"
+  HREF="node23.html">NUMBER of PASSES</A>
+<B> Up:</B> <A NAME="tex2html502"
+  HREF="node19.html">Tape Management</A>
+<B> Previous:</B> <A NAME="tex2html496"
+  HREF="node21.html">TAPE HANDLING at SCAN</A>
+ &nbsp <B>  <A NAME="tex2html504"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00324300000000000000"></A><A NAME="SSSEC:TAPELEN"></A>
+<BR>
+TAPE LENGTHS and PASS TIMES
+</H3>
+
+<P>
+Tapes for the Mark III and VLBA systems come in two nominal lengths,
+9600 ft and 18000 ft.  Actually, nearly all of the shorter tapes have
+now been removed from the system so most users will not encounter
+them.  The lengths vary plus the usable length is shortened by the
+amount of leader needed at each reel.  Experience has shown that it is
+best not to count on more than 17600 feet for the long ``thin'' tapes.
+Most short ``thick'' tapes are over 9000 feet, but there are a
+significant number as short as 8500.  It is probably reasonable to
+assume that the short tapes will be 8800 ft, half the length of the
+long tapes, for scheduling purposes.
+
+<P>
+There are three basic recording speeds to consider, at least when
+using the VLBA correlator.  The ``normal'' speed it that at which 4
+million data bits per second are recorded on each track.  Mark III and
+Mark IV format data at low density are recorded at 135 ips (inches per
+second).  VLBA format data at low density are recorded at 133.33 ips.
+All formats at high density are recorded at 80 ips, which is now the
+standard for most observations.  Recording rates of half and twice
+these values are used when the number of bits per second per track is
+half or twice the 4 Mbps.  High density recordings can only be made on
+``thin'' tapes.  The VLBA correlator plays back all observations at a
+track bit rate of 8 Mbps, using 160 ips for high density recordings.
+Thus there is a speed up factor for recordings made at lower speeds
+-- a factor of 2 for 4 Mbps tracks and a factor of 4 for 2 Mbps
+tracks.
+
+<P>
+The following table gives the recording times per pass to expect with
+these tape speeds and recording rates:
+
+<P>
+<PRE>
+ ------------------------------------------------------------------
+     RECORDING TIMES for 1 pass on VLBA and Mark III tapes.
+ ------------------------------------------------------------------
+     Tape length   Format /        Bit rate per track
+        (feet)      density     (2 Mbps)   (4 Mbps)   (8 Mbps)
+ ------------------------------------------------------------------
+        17600      All/High     1:28:00      44:00      22:00
+        17600      VLBA/Low       52:48      26:24      13:12
+        17600      Mark III/IV    52:08      26:04      13:02
+         8800      VLBA/Low       26:24      13:12       6:36
+         8800      Mark III/IV    26:04      13:02       6:31
+ ------------------------------------------------------------------
+</PRE>
+
+<P>
+When full <A HREF="node27.html#SSSEC:AUTOTAPE">automatic tape handling</A> is not
+being used, scans should be scheduled so that they are in blocks that
+constitute a pass.  This is not absolutely necessary, because,
+regardless of the scan times, SCHED&nbsp; will make sure that the scan
+will fit on the tape and, if not, will reverse the tape.  If a scan
+cannot fit, SCHED&nbsp; will complain and die.  Because of these actions,
+no data will be lost if the schedule is not in blocks of a tape pass,
+but some amount of tape will be wasted -- it is better to be aware of
+the pass lengths.  In fact, it is not uncommon for a user to find that,
+when he/she deletes a scan, the amount of tape used increases.  This
+happens when a schedule that went to the end of tape on each pass
+gets out-of-sync and has to reverse the tape before the end.  Once this
+starts to happen, it often continues for the rest of the experiment.
+Note that it is typical to round down the pass times to, for
+example, 13 minutes for those cases where the full number is 13:02 or
+13:13.
+
+<P>
+Scheduling in blocks of tape passes is more complicated if there is a
+mixture of thin, high density tape at some sites and thick, low
+density tapes at other sites.  For Mark III, the longer tapes will
+hold 3.37 times as much data per pass as the shorter tapes.  Probably
+the best way to deal with this is to schedule in blocks such that the
+2 blocks fit per pass on the thick tapes and 7 blocks fit on the high
+density, thin tapes.  The appropriate time for this for Mark III or
+VLBA formats is 6:17.  Be careful with scans less than 30 seconds in
+such a schedule because the passes could get out of sync.  Mixed
+thick and thin tape observations should be rare, especially since
+the VLBA correlator refuses to deal with thick tapes.
+
+<P>
+Note that, if there is a problem at a station and a tape does not
+start on time, or a scan is missed, the tape position will be behind
+that expected by SCHED.  At the end of the pass, the tape will reverse
+when the schedule tells it to, which in this case will be some distance
+from the end.  For this reason, the next pass is likely to run out of
+tape before it is finished and some data will be lost.  The pass after
+that will begin at the expected place and there will be no further
+problems.
+
+<P>
+Users of PCFS controled stations (eg EVN) should be aware that during
+long scans no Tsys information is acquired. It is necessary to insert
+gaps to make sure Tsys measurements are made.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html505"
+  HREF="node23.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html501"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html495"
+  HREF="node21.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html503"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html506"
+  HREF="node23.html">NUMBER of PASSES</A>
+<B> Up:</B> <A NAME="tex2html502"
+  HREF="node19.html">Tape Management</A>
+<B> Previous:</B> <A NAME="tex2html496"
+  HREF="node21.html">TAPE HANDLING at SCAN</A>
+ &nbsp <B>  <A NAME="tex2html504"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

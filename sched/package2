@@ -1,0 +1,71 @@
+#! /bin/csh
+
+#  Make a tar file of a complete SCHED installation.
+#  See package to make make src, aux, stdout, and devrcw files.
+
+# ==============================================================
+#  Usage:  package arch vernum 
+set archname=$1
+set schver=$2
+# ==============================================================
+
+set instaltar=$SCHED/TARFILES/sched.$archname.$schver.tar
+
+echo ' '
+echo Deleting files with same names as this routine\'s output files.
+/bin/rm $instaltar.gz
+
+echo ' '
+echo Comparing versions in packagedev with versions in code:
+echo Release version number:
+grep "VERNUM=" src/Sched/versched.f | grep -v "C   "
+echo SCHED version in package: $schver
+echo Vex and Plot versions:
+grep "VEXVER =" src/Vex/vxlink.inc
+grep "PLTVER =" src/Plot/plver.f
+
+echo ' '
+echo Deleting the \~ files.
+/bin/rm -r *~ */*~ */*/*~ */*/*/*~
+
+#  Note, on a Sun, the tar FF causes .o and core files to be ignored, 
+#  among others.  That doesn't seem to be an option under Linux.
+#  For Linux, try making a file with the files to exclude.
+
+cd $SCHED
+
+echo ' '
+echo Making exclude file
+/bin/rm objexclude
+ls -1 src/*/*.o src/*/*/*.o > objexclude
+ls -1 examples/*crd* examples/*sch* examples/*oms >>& objexclude
+ls -1 examples/*sum examples/*skd examples/*runlog >>& objexclude
+ls -1 examples/*flag >>& objexclude
+cat <<eofz >>& objexclude
+catalogs/Master_NRAO
+catalogs/Master_JIVE
+catalogs/Master_HSTK
+doc/sched.aux
+doc/sched.dvi
+doc/sched.ps
+doc/sched.tex.tmp
+doc/sched.toc
+doc/texput.log
+eofz
+
+echo Write $instaltar 
+tar -cf  $instaltar \
+     --exclude-from objexclude \
+     catalogs \
+     setups \
+     doc \
+     examples \
+     src \
+     bin \
+     package*  README  Release_instructions 
+
+echo ' '
+echo Compressing the tar file.
+cd $SCHED/TARFILES
+gzip *.tar
+cd $SCHED

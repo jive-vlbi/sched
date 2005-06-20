@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Release of 1 Aug. 1997</TITLE>
+<META NAME="description" CONTENT="Release of 1 Aug. 1997">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node297.html">
+<LINK REL="previous" HREF="node295.html">
+<LINK REL="up" HREF="node288.html">
+<LINK REL="next" HREF="node297.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html4275"
+  HREF="node297.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html4271"
+  HREF="node288.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html4265"
+  HREF="node295.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html4273"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html4276"
+  HREF="node297.html">Release of 18 August</A>
+<B> Up:</B> <A NAME="tex2html4272"
+  HREF="node288.html">OLD RELEASES</A>
+<B> Previous:</B> <A NAME="tex2html4266"
+  HREF="node295.html">Release of 10 Feb.</A>
+ &nbsp <B>  <A NAME="tex2html4274"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00661800000000000000"></A><A NAME="SSSEC:AUG97"></A>
+<BR>
+Release of 1 Aug. 1997
+</H3>
+
+<P>
+
+<UL>
+<LI>Add some items to SAVE in tpsch to keep from having problems
+      with tape change time warnings.  11Feb97.
+
+<P>
+</LI>
+<LI>Set proper S2 default tape speeds. 12Feb97.
+
+<P>
+</LI>
+<LI>Put comment to screen when postpassing single tape site. 12Feb97.
+
+<P>
+</LI>
+<LI>Fixed bug in telescope position code for XY antennas. 12Feb97.
+
+<P>
+</LI>
+<LI>Check that the BBC frequencies for VLBA stations are
+      multiples of 10 kHz.  13Feb1997.
+
+<P>
+</LI>
+<LI>Remove complaint about more than 2 drives (triggered by S2) and
+      chech tape initialization NDRIVES against max given in catalog.
+      24mar97 RCW.
+
+<P>
+</LI>
+<LI>VEX enhancements by Huib 25mar97 
+<BR>
+DAR = NONE works OK, producing VEX files readable by fs9.3.8 
+<BR>
+VEX mode name will always be unique. 
+<BR>
+XYEW and XYNS mounts allowed for VEX output. 
+<BR>
+Cleared up some warnings that were inappropriate for S2. 
+<BR>
+Put in a number of warnings when schedule would viloate PCFS capbilities.
+
+<P>
+</LI>
+<LI>Split the station and frequency catalogs into portions to
+      maintained by huib and I.  There is a script "Update" which
+      combines them to form the single catalogs seen by the users.
+      RCW 25mar97
+
+<P>
+</LI>
+<LI>Add OKMODES routine and MODETEST input to discourage, but allow
+      in special cases, the use of untested Mark&nbsp;IV and VLBA
+      recording modes.
+      RCW 20may97
+
+<P>
+</LI>
+<LI>Protect against too many tracks.  This may need to change
+      when we go to 512 mode.  In SETCHAN.  RCW 21may97.
+
+<P>
+</LI>
+<LI>Add SETBBC.  This should allow VLBA and Mark IV setups to leave
+      the BBC assignments for SCHED to determine.  The defaulting of
+      sidebands in SETCHAN was also beefed up to those could be left
+      for SCHED to do.   RCW  6jun97.
+
+<P>
+</LI>
+<LI>Add routine SETSTDEF to establish default stations for a setup
+      file if none are given.  Also it will eliminate stations that
+      do not use the setup in the schedule to keep the number of
+      setup groups down.  12Jun97  RCW.
+
+<P>
+</LI>
+<LI>Add blank default for FORMAT.  If FORMAT = ' ' or FORMAT is not
+      given, FORMAT will be set to DAR for the station.  This will
+      generally be VLBA or MKIV.  The fanout will then default as
+      before, trying to achieve speedup factor 2.  The barrel roll
+      will be turned off except for VLBA format stations. 12Jun97 RCW.
+
+<P>
+</LI>
+<LI>Fixed warning about missing BBC frequency in SETFREQ.  Before it
+      claimed the BBSYN was there regardless of the truth.  25Jun97 RCW.
+
+<P>
+</LI>
+<LI>Added ISETSTA to schset.inc to keep a pointer from the setup
+      group to the corresponding station catalog entry.  25Jun97.
+
+<P>
+</LI>
+<LI>Reorder the NAMES and VALUES arrays in KD in the KEYIN support
+      routines.  This allows elimination of the EQUIVALENCE statements
+      which works around the new SUN compiler bug.  It also somewhat
+      simplifies the use of the routines.   25Jun97 RCW.
+
+<P>
+</LI>
+<LI>MAKESETUP, the program that makes the standard setup files from
+      the Master_setups file, has received major revisions.  All
+      setup files are now significantly different, taking advantage
+      of the new abilities of SCHED to default stations, bbcs etc.
+      26jun97 RCW.
+
+<P>
+</LI>
+<LI>Made IFCHAN = R, L work with the frequency catalog as an
+      alternative to POL.  1 July 97. RCW
+
+<P>
+</LI>
+<LI>Set up so default fan outs cause different setups to use the
+      same number of tracks.  This should help users trying to mix
+      bit rates with two tape modes, not to mention other modes.
+      8Jul97 RCW
+
+<P>
+</LI>
+<LI>Tape summary in .sum file did not always reflect actual
+      tape change times if SCHED was able to start during preceeding
+      no-tape-motion scans.  Fixed 8Jul97  RCW.
+
+<P>
+</LI>
+<LI>Allowing setup to match with a specified IF that matches ALTIFC.
+      (bug fix).  14Jul1997 RCW.
+
+<P>
+</LI>
+<LI>Documented SUMITEM=SLEW.  Fixed bug in summary where the "up"
+      flag for AZ2 was actually for the start of scan.  Thanks to
+      Huib for finding these.  14Jul1997  RCW.
+
+<P>
+</LI>
+<LI>Make anything that starts with VLBA in the frequency file
+      match any setup file station that starts with VLBA.
+      15Jul97 RCW.
+
+<P>
+</LI>
+<LI>Block tracks assignments that won't work for polarization
+      processing on the Socorro correlator (only if that correlator
+      is specified in the header stuff).  Also try to prevent
+      16 track barrel roll for data that will want the 2K FFT.
+      18 July 1997 RCW.
+
+<P>
+</LI>
+<LI>Set up for 512 Mbps mode using 2 tapes at the VLBA or 2 heads
+      on Mark IV systems.  The Mark IV implementation is not yet
+      complete.  SCHED treats the second tape/head as just more
+      heads.  The tapes are kept in sync in an extension of the
+      prohibition of changes of numbers of tracks in use.
+      17 July 1997.
+
+<P>
+</LI>
+<LI>Allow user to only specify one <TT>NETSIDE</TT> if they are all
+      the same.  18Jul97 RCW.
+
+<P>
+</LI>
+<LI>Allow POL='R' or 'L' in addition to 'RCP' and 'LCP'.
+      18Jul1997 RCW.
+
+<P>
+</LI>
+<LI>Make thin, high density tape the default for all cases.
+      21Jul1997 RCW.
+
+<P>
+</LI>
+<LI>When setting the default pcal tone detection frequencies for
+      observations with wide channel bandwidths, use the second or
+      third one from the upper edge of the band for second one
+      selected.  Previously, SCHED&nbsp; chose the highest tone
+      available.  But this was often on the steep dropoff part
+      of the filters and did not work very well.  21Jul1997 RCW.
+
+<P>
+</LI>
+<LI>Fix problem with defaulting of station names in setup files.
+      When several were specified per group, and then another
+      group with fewer was specified, some names could carry over.
+      21Jul1997 RCW.
+
+<P>
+</LI>
+<LI>Add to comments in opttim.f to warn that PRESCAN may be the
+      problem if the user winds up with a zero length scan.
+      21Jul1997 RCW.
+
+<P>
+</LI>
+<LI>Abort if the number of spectral channels requested with
+      polarization processing exceeds 128 per baseband.
+      21Jul1997 RCW.
+
+<P>
+</LI>
+<LI>Try to account better for S2 tape needs by adding up to
+      3 minutes between scans (2.5 before, 0.5 after).
+      22Jul1995
+
+<P>
+</LI>
+<LI>Change to new IF scheme for VLA now that the computer controlled
+      patch panel is available.  Now VLA IF A is routed to VLBA
+      IF A and so forth.  28Jul97  RCW.
+
+<P>
+</LI>
+<LI>Upgraded VEX section to 1.5.44. 31Jul97 Huib.
+<BR>
+Changed to ``adaptive'' tape modes, enabling continuous tape
+      motion (this enhancement can be switched off by setting
+      VXADPT=.FALSE. in vxlink.inc and recompile). 
+<BR>
+Set needed flags to keep FS timing happy. 
+<BR>
+Support NOREC by seeting drive = 0 in scans. 
+<BR>
+Give proper message for use of plug-in filters. 
+<BR>
+Stop identical station codes. 
+<BR>
+31 July 1997   Huib.
+
+<P>
+</LI>
+<LI>Changed maximum correlator output data rate (VLBA correlator) from
+      350 kbps to 500 kbps reflecting a recent increase in capability.
+      31 July 1997.  RCW.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html4275"
+  HREF="node297.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html4271"
+  HREF="node288.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html4265"
+  HREF="node295.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html4273"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html4276"
+  HREF="node297.html">Release of 18 August</A>
+<B> Up:</B> <A NAME="tex2html4272"
+  HREF="node288.html">OLD RELEASES</A>
+<B> Previous:</B> <A NAME="tex2html4266"
+  HREF="node295.html">Release of 10 Feb.</A>
+ &nbsp <B>  <A NAME="tex2html4274"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

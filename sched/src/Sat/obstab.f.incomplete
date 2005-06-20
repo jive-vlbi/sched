@@ -1,0 +1,63 @@
+      SUBROUTINE ORBTAB( ISAT )
+C
+C     Routine for SCHED that writes the "Spacecraft Table" for
+C     VLBA correlator job scripts.  It writes one record per
+C     minute for the full time of the experiment.  It only runs
+C     if there were some recording scans.
+C
+      INCLUDE       'sched.inc'
+C
+      INTEGER           ISAT, ISCN, IT
+      INTEGER           LEN1, IOERR, VLBOPE
+      INTEGER           YEAR, DAY, DOY, JD, MONTH, NTPS
+      LOGICAL           DOIT
+      DOUBLE PRECISION  TIME
+      CHARACTER         DNAME*3, MNAME*3, ORBFILE*80
+C -----------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 0, 'OBSTAB: starting.' )
+C
+C     Loop through scans to check if recording.  If not found, 
+C     skip out and don't do anything.
+C
+      DOIT = .FALSE.
+      DO ISCN = SCAN1, SCANL
+         IF( .NOT. NOREC(ISCN) ) DOIT = .TRUE.
+      END DO
+      IF( .NOT. DOIT ) RETURN
+C
+C     Open the orbit table.
+C
+      WRITE( ORBFILE, '( 4A )' ) EXPCODE(1:LEN1(EXPCODE)),
+     1   '_', SATNAME(ISAT)(1:LEN1(SATNAME(ISAT))), '.ORB'
+      CALL DWCASE( ORBFILE )
+      IF( DEBUG ) CALL WLOG( 0, 'ORBTAB: Opening ' //
+     1      ORBFILE(1:LEN1(ORBFILE)) )
+C
+C     Find out if the .orb file already exists.
+C
+      INQUIRE( FILE=ORBFILE, EXIST=EXISTS )
+      IF( EXISTS .AND. ( RESTART .OR. OVERWRIT ) ) THEN
+         OPSTAT = 'OLD'
+      ELSE IF( EXISTS ) THEN
+         NCH = LEN1(ORBFILE) 
+         CALL WLOG( 1, 'SUMOPE: ' //
+     1       ORBFILE(1:NCH) // ' already exists.' )
+         CALL ERRLOG( 
+     1   'SUMOPE: You need to delete old output files or use OVERWRIT.')
+      ELSE
+         OPSTAT = 'NEW'
+      END IF
+C
+C     OPEN the orbit file.
+C
+      IOERR = VLBOPE( ISUM, ORBFILE, 'TEXT', OPSTAT, OPTEXT )
+      IF( IOERR .NE. 1 ) CALL ERRLOG( ' Open problem:'//OPTEXT )
+
+C
+C     Setup to get the times.  Make table on even minutes from
+C     TFIRST to TEND.
+C
+      CALL TIMEJ( STOPJ(1), YEAR, DOY, STOP )
+      MONTH = 1
+      DAY = DOY
+      CALL TDATECW( YEAR, MONTH, DAY, JD, MNAME, DNAME )

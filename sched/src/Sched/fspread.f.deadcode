@@ -1,0 +1,177 @@
+
+
+
+
+
+
+
+
+
+
+
+
+C     Now try to propagate the number of tracks in time for
+C     each station.  Allow, but try to avoid, not using the
+C     same number of tracks all the time at the station.
+C
+C     Enforce all setup groups in a setup file having
+C     the same track bit rate.  Use TBPS to hold the bit rates
+C     while checking this.  I don't think it matters if it is
+C     set before the format is forced through SETFMT.  It does
+C     get set to zero immediately by SETFMT.
+C
+C     Save the maximum number of channels we want for this setup
+C     group in case we want to alter the bit rate later for
+C     constance across a setup file.
+C
+      DO KS = 1, NSET
+         SETMCH(KS) = 0.0
+      END DO
+      DO ISTA = 1, NSTA
+C
+C        First flag the setups that are VLBAMKIV or MARKIII and 
+C        were used by this station.  This avoids repeating this
+C        process multiple times later.
+C
+         DO KS = 1, NSET
+            STASET(KS) = .FALSE.
+         END DO
+         DO ISCN = 1, NSCANS
+            KS = NSETUP(ISCN,ISTA)
+            IF( RECUSED(KS) .AND. 
+      1       ( VLBAMKIV(KS) .OR. FORMAT(KS) .EQ. 'MARKIII' ) ) THEN
+               STASET(KS) = .TRUE.
+            END IF
+         END DO
+C
+C        Determine the minimum number of tracks that the station can
+C        use (STATRK).  Hopefully this will end up being equal to the
+C        number used by setups with preset formats, but it could
+C        be larger.  It is not allowed to be smaller.
+C        NTRACK is the number of tracks required to support preset 
+C        formats.  MINSTRK is the minimum number required to support 
+C        other setups at the maximum track bits per second allowed
+C        for the setup file (TTBPS) (that should be larger than
+C        what would be derived using MINTRK(KS) by the way TTBPS
+C        is derived).
+C
+         MINSTRK = 0
+         NTRACK = 0
+         MAXSTOT(ISTA) = 0.0
+         DO KS = 1, NSET
+            ISETF = ISETNUM(KS)
+            IF( STASET(KS) ) THEN
+               MINSTRK = MAX( MINSTRK, TOTBPS(KS) / TTBPS(ISETF) )
+               IF( .NOT. NEEDFMT(KS) ) THEN
+                  NTRACK = MAX( NTRACK, TOTBPS(KS) / TBPS(KS) )
+               END IF
+               MAXSTOT(ISTA) = MAX( MAXSTOT(ISTA), TOTBPS(KS) )
+            END IF
+         END DO
+         STATRK(ISTA) = MAX( NTRACK, MINSTRK )
+C
+C        This is really the minimum number of tracks that can be
+C        used by this station.  If necessary, it could be increased
+C        but the already assigned setups would waste tape.
+C
+C        Set TBPS to the derived track bit rate on NEEDFMT setups only.
+C        Note that the logic above prevents SETFTRK from being less
+C        than MINTRK(KS), so USETRK won't be too small.  The MIN below
+C        ensures that it won't be too big for the setup.  But it could
+C        be less than STATRK.
+C
+         IF( NTRACK .NE. 0 ) THEN
+            DO KS = 1, NSET
+               ISETF = ISETNUM(KS)
+               IF( STASET(KS) .AND. NEEDFMT(KS) ) THEN
+                  USETRK = MIN( MAXTRK(KS), STATRK(ISTA) )
+                  TBPS(KS) = TOTBPS(KS) / USETRK
+C
+C                 Adjust to be in the range allowed for the setup file.
+C                 I think these limits are guaranteed by earlier 
+C                 settings, but just be sure.
+C
+                  IF( TBPS(KS) .GT. TTBPS(ISETF) ) 
+     1                    TBPS(KS) = TTBPS(ISETF)
+                  IF( TBPS(KS) .LT. BTBPS(ISETF) ) 
+     1                    TBPS(KS) = BTBPS(ISETF)
+C
+C                 Adjust SETFTRK if needed.  Only go up.  Try hard
+C                 not to go yet higher later because of tape wastage
+C                 at the preset formats.
+C
+                  IF( TOTBPS(KS) / TBPS(KS) .GT. STATRK(ISTA) ) THEN
+                     STATRK(ISTA) = TOTBPS(KS) / TBPS(KS)
+                  END IF
+               END IF
+            END DO
+         END IF
+C
+      END DO
+C
+
+  ****************  Getting way too late.  I think the above
+is ok, but now I need to get TBPS constant across the setup 
+files, and then set the station tracks again.  The worms in the can
+are still wiggling vigorously.
+
+Perhaps I should switch to a TOTBPS based setting of TBPS.  The
+above does seem to want to get me in trouble.
+The problems come in with setups that are not used by all stations.
+Say there is a 64 track observation but some stations only have
+32 and the fixed setups know about it.  There could be setups only
+used on low bandwidth scans at the single head stations that want
+to use the same bit rate as higher bandwidth scans that use all 64
+tracks.  This is proving rather painful.  Could the problem be 
+that there is no really good solution?
+
+
+
+
+C     Go through and make sure that each setup file has constant
+C     TBPS. If the above process came up with different rates,
+C     opt to increase the bit rate of the slower group, thereby
+C     decreasing the number of tracks, which wastes tape, but can
+C     be processed.  Increasing the number of tracks would require
+C     redoing all the other setup files that are used by that 
+C     station.  If the bit rate is equal to the samprate
+C     it cannot be increased, but this would imply that the samprate
+C     is not constant across the setup file.  CHKSFIL will prevent
+C     this, but it hasn't been called yet, so abort here if it is found.
+C     All of this hoop jumping is meant to prevent some goofy setup
+C     groups (odd antenna constraints, perhaps) from distorting the 
+C     setup file bit rate.
+C
+C     First find the maximum bit rate for the setup file, FILEBPS.
+C
+      DO ISETF = 1, NSETF
+         FILEBPS(ISETF) = 0.0
+      END DO
+      DO KS = 1, NSET
+         ISETF = ISETNUM(KS)
+         IF( TBPS(KS) .NE. 0.0 ) THEN
+            FILEBPS(ISETF) = MAX( FILEBPS(ISETF), TBPS(KS) )
+         END IF
+      END DO
+C
+C     Go through the setups and actually set the formats
+C     where we have decided we can based on the constancy of
+C     tracks with time (TBPS(KS) NE 0).  TRKBPS is used because
+C     SETFMT immediately sets TBPS to zero before passing the
+C     number of tracks to routines like FMTVLBA etc.
+C
+      DO KS = 1, NSET
+         IF( NEEDFMT .AND. TBPS(KS) .NE. 0.0 ) THEN
+            TRKBPS = TBPS(KS)
+            CALL SETFMT( KS, USETRK, OK )
+            IF( OK ) NEEDFMT(KS) = .FALSE.
+         END IF
+      END DO
+C
+C     I think we're done.  Somewhere, a sanity check should be done.
+C     But probably should wait until all formats are done, which they
+C     are not, at least the first time this routine is called.
+C
+      RETURN
+      END
+

@@ -1,0 +1,68 @@
+
+C++++++++++++++++++++++++
+C
+      SUBROUTINE FSIZER2(NRECL,KSIZE,NRFILE)
+C
+C++++++++++++++++++++++++
+C  THIS SUBROUTINE OPENS THE FILE, 'NAMFIL', WITH A PHONY RECORD LENGTH, READS 
+C  THE FIRST RECORD, AND USES THE INFO TO COMPUTE KSIZE, THE NUMBER OF SINGLE 
+C  PRECISION WORDS IN A RECORD.  
+C
+C  THE SUBROUTINE ALSO SETS THE VALUES OF  NRECL, AND NRFILE.
+
+C     IMPLICIT DOUBLE PRECISION(A-H,O-Z)
+
+      SAVE
+
+      CHARACTER*6 TTL(14,3),CNAM(400)
+      CHARACTER*80 NAMFIL
+      COMMON/FNAME/NAMFIL
+
+      DOUBLE PRECISION SS(3), AU, EMRAT
+
+      INTEGER IPT(3,13), NRECL, NRFILE, KSIZE, MRECL, NCON, J, I, 
+     *        NUMDE, KMX, KHI, ND
+
+      NRECL=4
+      NRFILE=12
+
+C  *****************************************************************
+C  *****************************************************************
+
+C  **  OPEN THE DIRECT-ACCESS FILE AND GET THE POINTERS IN ORDER TO 
+C  **  DETERMINE THE SIZE OF THE EPHEMERIS RECORD
+
+      MRECL=NRECL*1000
+
+        OPEN(NRFILE,
+     *       FILE=NAMFIL,
+     *       ACCESS='DIRECT',
+     *       FORM='UNFORMATTED',
+     *       RECL=MRECL,
+     *       STATUS='OLD')
+
+      READ(NRFILE,REC=1)TTL,CNAM,SS,NCON,AU,EMRAT,
+     * ((IPT(I,J),I=1,3),J=1,12),NUMDE,(IPT(I,13),I=1,3)
+
+      CLOSE(NRFILE)
+
+C  FIND THE NUMBER OF EPHEMERIS COEFFICIENTS FROM THE POINTERS
+
+      KMX = 0
+      KHI = 0
+
+      DO I = 1,13
+         IF (IPT(1,I) .GT. KMX) THEN
+            KMX = IPT(1,I)
+            KHI = I
+         ENDIF
+      ENDDO
+
+      ND = 3
+      IF (KHI .EQ. 12) ND=2
+
+      KSIZE = 2*(IPT(1,KHI)+ND*IPT(2,KHI)*IPT(3,KHI)-1)
+
+      RETURN
+
+      END

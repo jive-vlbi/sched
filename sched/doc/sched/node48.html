@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Satellite Tracking</TITLE>
+<META NAME="description" CONTENT="Satellite Tracking">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="previous" HREF="node47.html">
+<LINK REL="up" HREF="node13.html">
+<LINK REL="next" HREF="node49.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html818"
+  HREF="node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html814"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html810"
+  HREF="node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html816"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html819"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Up:</B> <A NAME="tex2html815"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html811"
+  HREF="node47.html">Configuration Studies</A>
+ &nbsp <B>  <A NAME="tex2html817"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION003110000000000000000"></A><A NAME="SEC:SATEL"></A>
+<BR>
+Satellite Tracking
+</H1>
+
+<P>
+There is a project to use the VLBA to provide positional data to help
+navigate interplanetary spacecraft.  For this project, the VLBA must
+be able to point at the spacecraft so the ability to do so has been
+added to SCHED&nbsp; as of March 2004.  The spacecraft positions are
+obtained with the help of <I>spice</I> files that are typically from
+JPL.  The NAIF software package from JPL is called to read the spice
+files and calculate positions.  The NAIF software significantly
+increases the size of a SCHED&nbsp; distribution, and the satellite
+tracking capability is unlikely to be needed outside the AOC.
+Therefore the tracking capability is not included in the default
+SCHED&nbsp; distribution.
+
+<P>
+To use the tracking capability, a <A HREF="node272.html#SEC:SATINIT"><TT>Satellite
+Initialization</TT></A> section needs to be included in the
+main input file.  That section contains a group of inputs for each
+satellite.  There are four input parameters in each group:
+
+<P>
+Note that the satellite routines also set the velocity for the
+satellite for use with <A HREF="node78.html#MP:DOPPLER"><TT>DOPPLER</TT></A>.
+The satellite frequencies can be specified with their rest frequencies
+in a <A HREF="node111.html#MP:LINEINIT"><TT>LINEINIT</TT></A> section.
+
+<P>
+
+<OL>
+<LI><TT>SATNAME:</TT> The name of the satellite.  This is only used internally
+in SCHED.  It is the name that should be used as the <TT>SOURCE</TT> in
+the scan inputs.  This name is not sent to the NAIF software.
+
+<P>
+</LI>
+<LI><TT>SATNUM:</TT> The number, used in the spice files, for the satellite (or
+other celestial body, for that matter).  This number is assigned by JPL.
+You need to know this number but I'm not really sure how you get it.
+This number is sent to the NAIF software to tell it which satellite to
+process.  For satellites, these numbers are negative.  The are positive
+for planets etc.
+
+<P>
+</LI>
+<LI><TT>KERFILE:</TT> A <I>spice</I> kernel file that gives information such
+as leap seconds.  It is likely to have the extension <I>.tls</I>.
+
+<P>
+</LI>
+<LI><TT>SATFILE:</TT> The <I>spice</I> file for the satellite.  It is likely
+to have the extension <I>.bsp</I>.
+
+<P>
+</LI>
+</OL>
+
+<P>
+When groups have been given for all satellites, give a line that
+contains the word <TT>ENDSAT</TT> and a slash.
+
+<P>
+If the above section is provided and one of the satellites is a source
+in the schedule, SCHED&nbsp; will call the NAIF software every scan to
+get updated positions and rates.  It will also calculate an approximate
+parallax correction for each station.  This can amount to several
+arcseconds, and the calculation is believed to be good to an arcsecond
+or better.
+
+<P>
+For a satellite (or any moving source, for that matter), SCHED&nbsp; plotting
+can help you see where the object is going.  In the RD (RA/Dec) plots,
+a line will be plotted for each scan.  A likely use for this capability
+would be to obtain the transmission schedule for a satellite over some
+days or weeks, make a schedule with a scan for each period that it
+is transmitting, then make the RD plot and show the calibrators.  This
+will help identify times when the satellite is both on and near
+a likely phase reference source.
+
+<P>
+There is a SCHED&nbsp; example, <A NAME="tex2html69"
+  HREF="examples/egsat.key"><I>egsat.com</I></A>
+that demonstrates the use of the satellite
+capability.  Interested users are recommended to start with that
+example.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html818"
+  HREF="node49.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html814"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html810"
+  HREF="node47.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html816"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html819"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Up:</B> <A NAME="tex2html815"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html811"
+  HREF="node47.html">Configuration Studies</A>
+ &nbsp <B>  <A NAME="tex2html817"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

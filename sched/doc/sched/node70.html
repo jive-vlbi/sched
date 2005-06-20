@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>CORWTFN</TITLE>
+<META NAME="description" CONTENT="CORWTFN">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node71.html">
+<LINK REL="previous" HREF="node69.html">
+<LINK REL="up" HREF="node52.html">
+<LINK REL="next" HREF="node71.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1383"
+  HREF="node71.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1379"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1373"
+  HREF="node69.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1381"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1384"
+  HREF="node71.html">COVERLET</A>
+<B> Up:</B> <A NAME="tex2html1380"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html1374"
+  HREF="node69.html">CORTAPE</A>
+ &nbsp <B>  <A NAME="tex2html1382"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION004121800000000000000"></A><A NAME="MP:CORWTFN"></A>
+<BR>
+<TT>CORWTFN</TT>
+</H3>
+
+<P>
+<TT>CORWTFN</TT> specifies the weighting function to be used on the VLBA
+correlator.  The weighting function is applied by weighting the data
+points before they are sent to the FFT.  Valid options are:
+
+<P>
+
+<UL>
+<LI><TT>UNIFORM</TT>.  No weights are applied.  The data are used
+as is.  The is the option that most users will want.
+
+<P>
+</LI>
+<LI><TT>ZEROPAD</TT>.  With this option, the input data for the
+FFTs are padded with zeros by a factor of two.  This reduces the
+resolution of each spectral point.  With the FX correlator, the
+frequency response of each spectral channel is sharper than with
+an XF correlator and this may not be what is desired for some
+spectral line observations.  If so, <TT>ZEROPAD</TT> is a way to
+reduce the effect.  Actually reproducing the frequency response
+of an XF correlator is possible in theory, but not with any
+of the available windowing functions.  Note that <TT>ZEROPAD</TT>
+should not be used with the 1:4 fan out because that causes
+there to be no overlapping of FFTs so half the data are not used.
+
+<P>
+</LI>
+<LI><TT>HANNING</TT>.  With this option, a Hanning weighting is
+applied in before the FFT.  This is done in the voltage (sample)
+domain and has the effect, after cross correlation, of applying
+a ``Hanning squared'' weighting on the final power spectra.  This
+is probably not what the user wants.
+
+<P>
+</LI>
+<LI><TT>QANNING</TT>.  With this option, an approximation of a
+``root Hanning'' weighting is applied to get close to the expected
+Hanning response in the power domain after correlation.  It is
+only an approximation because the windowing function cannot have
+the negative values that would be required to do this exactly.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Eventually more options may be available.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> Any text string of up to 16 characters
+</LI>
+<LI><B>Options:</B>  <TT>UNIFORM</TT> and <TT>HANNING</TT> are the useful options.
+</LI>
+<LI><B>Default:</B>  <TT>UNIFORM</TT>
+</LI>
+<LI><B>Usage:</B>    Only one value used -- the last.
+</LI>
+<LI><B>Example:</B>  <TT>CORWTFN = 'HANNING'</TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1383"
+  HREF="node71.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1379"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1373"
+  HREF="node69.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1381"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1384"
+  HREF="node71.html">COVERLET</A>
+<B> Up:</B> <A NAME="tex2html1380"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html1374"
+  HREF="node69.html">CORTAPE</A>
+ &nbsp <B>  <A NAME="tex2html1382"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,90 @@
+
+
+
+cC  Dead code section - in case I want it back.:
+c
+cC
+cC     Sanity check for the number of tracks.
+cC
+c      IF( NTRACKS .NE. 0 ) THEN
+cC
+cC        First, if both TRKBPS and NTRACKS were set, check 
+cC        consistency.  If there is a conflict, warn user
+cC        and reset NTRACKS.  Only allow reductions.
+cC
+c         IF( NTRACKS .NE. TOTBPS / TRKBPS ) THEN
+c            MSGPRT = ' '
+c            WRITE( MSGPRT, '( A, I8, A, F8.2 )' ) 
+c     1       'FMTVLBA: Number of tracks request ', NTRACKS, 
+c     2       ' not consistent with track bit rate request ', TRKBPS
+c            CALL WLOG( 1, MSGPRT )
+c            CALL WLOG( 1, '       setup file: ' //
+c     1          SETNAME(KS)(1:LEN1(SETNAME(KS))) )
+c            CALL WLOG( 1, '         station: '//
+c     1          STATION(ISETSTA(KS)) )
+c            CALL WLOG( 1, '         format: ' // FORMAT(KS) )
+c            IF( NTRACKS .GT. TOTBPS / TRKBPS ) THEN
+c               NTRACKS = TOTBPS / TRKBPS
+c               MSGPRT = ' '
+c               WRITE( MSGPRT, '( A, I8 )' ) 
+c     1          'FMTVLBA: Resetting NTRACKS to ', NTRACKS
+c               CALL WLOG( 1, MSGPRT )
+c            ELSE IF( NTRACKS .LT. TOTBPS / TRKBPS ) THEN
+c               CALL WLOG( 1, '         Probable programming error.' )
+c               OK = FALSE
+c               GO TO 999
+c            END IF
+c         END IF
+cC
+cC        Check if two few tracks requested to do it at all.
+cC
+c         IF( NTRACKS .LT. NCHAN(KS) * BITS(1,KS) * 
+c     1       SAMPRATE(KS) / MIN( SAMPRATE(KS), 8.0 ) ) THEN
+c            MSGPRT = ' '
+c            WRITE( MSGPRT, '( A, I8, A )' ) 
+c     1       'FMTVLBA: Number of tracks request ', NTRACKS, 
+c     2       ' too small for this format on VLBA recorders.'
+c            CALL WLOG( 1, MSGPRT )
+c            CALL WLOG( 1, '       setup file: ' //
+c     1          SETNAME(KS)(1:LEN1(SETNAME(KS))) )
+c            CALL WLOG( 1, '         station: '//
+c     1          STATION(ISETSTA(KS)) )
+c            CALL WLOG( 1, '         format: ' // FORMAT(KS) )
+c            CALL WLOG( 1, '         Probable programming error.' )
+c            OK = .FALSE.
+c            GO TO 999
+c         END IF
+c         IF( ( NTRACKS .GT. 32 .AND. .NOT. TWOHEAD ) .OR.
+c     1         NTRACKS .GT. 64 ) THEN
+c            MSGPRT = ' '
+c            WRITE( MSGPRT, '( A, I8, A )' ) 
+c     1       'FMTVLBA: Number of tracks request ', NTRACKS, 
+c     2       ' too large for VLBA recorders.'
+c            CALL WLOG( 1, MSGPRT )
+c            CALL WLOG( 1, '       setup file: ' //
+c     1          SETNAME(KS)(1:LEN1(SETNAME(KS))) )
+c            CALL WLOG( 1, '         station: '//
+c     1          STATION(ISETSTA(KS)) )
+c            CALL WLOG( 1, '         format: ' // FORMAT(KS) )
+c            CALL WLOG( 1, '         Probable programming error.' )
+c            OK = .FALSE.
+c            GO TO 999
+c         END IF
+c         IF( NTRACKS .GT. NCHAN(KS) * BITS(1,KS) * 
+c     1       SAMPRATE(KS) / MIN( SAMPRATE(KS), 8.0 ) ) THEN
+c            MSGPRT = ' '
+c            WRITE( MSGPRT, '( A, I8, A )' ) 
+c     1       'FMTVLBA: Number of tracks request ', NTRACKS, 
+c     2       ' more than maximum for this format on VLBA recorders.'
+c            CALL WLOG( 1, MSGPRT )
+c            CALL WLOG( 1, '       setup file: ' //
+c     1          SETNAME(KS)(1:LEN1(SETNAME(KS))) )
+c            CALL WLOG( 1, '         station: '//
+c     1          STATION(ISETSTA(KS)) )
+c            CALL WLOG( 1, '         format: ' // FORMAT(KS) )
+c            CALL WLOG( 1, '         Probable programming error.' )
+c
+c            OK = .FALSE.
+c            GO TO 999
+c         END IF
+c      END IF

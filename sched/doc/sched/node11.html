@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Plotting</TITLE>
+<META NAME="description" CONTENT="Plotting">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="previous" HREF="node8.html">
+<LINK REL="up" HREF="node4.html">
+<LINK REL="next" HREF="node12.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html330"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html326"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html322"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html328"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html331"
+  HREF="node12.html">Keyin Input for Plotting</A>
+<B> Up:</B> <A NAME="tex2html327"
+  HREF="node4.html">INTRODUCTION</A>
+<B> Previous:</B> <A NAME="tex2html323"
+  HREF="node10.html">A Minimal Schedule for</A>
+ &nbsp <B>  <A NAME="tex2html329"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00250000000000000000"></A><A NAME="SEC:PLOT"></A>
+<BR>
+Plotting
+</H1>
+
+<P>
+SCHED&nbsp; has the ability to plot the u-v coverage and beam of sources in a
+schedule and to plot azimuth, elevation, hour angle, or paralactic
+angle against any of those quatities or against UT or GST for one to
+all stations in a schedule.  These plots are useful for assessing the
+quality of the schedule.  SCHED&nbsp; can also plot the positions of the
+sources in a schedule in RA and DEC and plot the positions of all
+other sources in the specified catalog.  The latter is useful for
+identifying candidate calibrators.  The plots can be very useful
+for planning observations, both at the proposal stage and as the
+schedule is prepared.  For this use, see the section on
+<A HREF="node14.html#SEC:PLANNING">planning</A> and for a
+very simple example schedule for obtaining plots of hypothetical
+schedules, see the <A HREF="node10.html#SSEC:EXAMPLE3">second example</A> in the
+<A HREF="node8.html#SEC:EXAMPLES">Examples section.</A>.  Some of the other examples are also
+oriented toward planning VLBA and VLA observations.
+
+<P>
+To cause SCHED&nbsp; to make plots, specify <A HREF="node144.html#MP:PLOT"><TT>PLOT</TT></A>
+somewhere in the input.  Since it is unlikely that this will be
+desired in the final run of the program, it is best to start a
+plotting session interactively and then specify <TT>PLOT</TT> and use
+<A HREF="node163.html#MP:SCHEDULE"><TT>SCHedule</TT></A> to specify the input file.
+Thus, you would type (on a unix box, anyway):
+
+<P>
+<PRE>
+sched
+plot  schedule=bv016d.key /
+</PRE>
+
+<P>
+(substituting your file for the <TT>bv016d.key</TT>.
+
+<P>
+The plotting utilizes the <A NAME="tex2html51"
+  HREF="http://www.astro.caltech.edu/~tjp/pgplot/">PGPLOT subroutine
+library</A>
+written by Tim
+Pearson used by the other Caltech Package programs and in wide use in
+astronomy.  Be sure that the environment variables <TT>PGPLOT_DIR</TT>
+is set to the location of the PGPLOT libraries on your system
+and that <TT>PGPLOT_FONT</TT> is set the the location of the PGPLOT font files.
+
+<P>
+If <TT>PLOT</TT> has been invoked, SCHED&nbsp; will proceed to read all of
+the input files, check the schedule, and do any requested optimization
+normally.  It will write the summary file, but will not write the
+antenna specific files, at least until later.  The summary file will
+be closed and can be examined while in the plotting session.  This may
+be useful in studying details of what is being plotted.
+
+<P>
+When the plotting session begins, SCHED&nbsp; opens a control panel with a
+variety of buttons that can be clicked with the mouse.  It also writes
+some instructions to the window in which SCHED&nbsp; is being run.  On the
+control panel, the left most column has buttons that either select
+different control functions (items to the right will change) or cause
+something to happen.  The latter options include actually drawing a
+plot (<TT>PLOT</TT>), closing the plot (<TT>CLOSE</TT>), restarting the
+program to read a new input file (<TT>RESTART</TT>), continuing to (<TT>FINISH</TT>) the rest of SCHED&nbsp; (only allowed if neither <TT>RESTART</TT> or
+<TT>OPTMODE=UPTIME</TT> were used), exit the program (<TT>EXIT</TT>), or
+revert the the older style terminal input (<TT>TERM</TT>) described
+below.  The <TT>FILES</TT> options allows changing output from the
+terminal to postscript or other files and allows restriction of plots
+to scans with specific setup files.  The <TT>OPTIONS</TT> button allows
+selection of colors and line widths.  The <TT>AXIS</TT> button allows
+selection plot type and axis scales.  The <TT>SOURCES</TT> button
+(default on wakeup) allows selection of antennas and sources.
+Antennas can be selected both for plotting at all and for highlighting
+in red.  The use of the buttons should be fairly intuitive and won't
+be documented extensively here.  Some information included in the
+descriptions of the terminal input below also applies to interactive
+operation so it is worth reading through the documentation quickly.
+
+<P>
+Many thanks to Franco Tinarelli of Bologna for providing the code
+for the plot control.
+
+<P>
+Note that, if elevation is plotted against azimuth, the horizon, as
+specified in the stations catalog, will be plotted in addition to the
+tracks followed by the sources.
+
+<P>
+If the RD Plot option is selected, the location on the sky of each
+source in the schedule is shown.  This particular plot option has
+acquired a number of interactive capabilities.  It is possible to
+zoom in on a region, to look for calibrators around a target location,
+to show (as calibrators) all sources in the catalog, not just those
+listed in the schedule, and to label the source and catalog names.
+These capabilities should be useful in attempts to locate calibrators
+near reference sources.  Currently, a rectangular coordinate system
+is used for the displays, but a more general projection scheme is
+under development.
+
+<P>
+Plots are made, of whatever quantities are specified, by drawing
+a line from the value at the beginning of each scan to the value
+at the end of the scan.  Thus, if you have very long scans, the
+individual line segments may become apparent and the plot will not
+be an exact representation of the data that will be collected.
+
+<P>
+The <TT>RESTART</TT> option is especially interesting for experiment
+planning.  It causes SCHED&nbsp; to return to the beginning of the
+program, read and process the input file again, and return to the plot
+section, remembering the current plot inputs.  If the input file has
+been changed in any way, those changes will be reflected in the new
+plots.  Thus scan times can be changed, new sources specified etc.
+This is useful, for example, in exploring the u-v coverage for various
+sources (much like the Caltech program <I>HAZI</I>) or determining the
+times that various sources are visible (like the Caltech program <I>UPTIME</I>).  It is more flexible than the other programs because you
+have full control of the schedule so, for example, the u-v coverage
+from multiple snapshots can be explored.  Because it is possible, by
+deleting some parameters from the input file, to cause SCHED&nbsp; to get
+confused about the value of some of the parameters for which only one
+value per project is accepted, the <TT>FINISH</TT> option is locked out
+after a <TT>RESTART</TT>.  If a <TT>RESTART</TT> option has been used, it
+will be necessary to rerun the program from scratch to get final
+output schedules.  Since you have been modifying the input file on
+each restart, this should not be a problem.
+
+<P>
+In older versions of SCHED&nbsp; or if the <TT>TERMINAL</TT> button is pressed,
+the plot control is from the terminal window using KEYIN input as
+described below.  This form of input will probably be removed eventually
+unless there is demand to keep it.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html332"
+  HREF="node12.html">Keyin Input for Plotting (obsolete)</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html330"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html326"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html322"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html328"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html331"
+  HREF="node12.html">Keyin Input for Plotting</A>
+<B> Up:</B> <A NAME="tex2html327"
+  HREF="node4.html">INTRODUCTION</A>
+<B> Previous:</B> <A NAME="tex2html323"
+  HREF="node10.html">A Minimal Schedule for</A>
+ &nbsp <B>  <A NAME="tex2html329"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

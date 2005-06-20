@@ -1,0 +1,525 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Single Dish VLBA Observing</TITLE>
+<META NAME="description" CONTENT="Single Dish VLBA Observing">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node47.html">
+<LINK REL="previous" HREF="node44.html">
+<LINK REL="up" HREF="node13.html">
+<LINK REL="next" HREF="node47.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html796"
+  HREF="node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html792"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html786"
+  HREF="node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html794"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html797"
+  HREF="node47.html">Configuration Studies</A>
+<B> Up:</B> <A NAME="tex2html793"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html787"
+  HREF="node45.html">Green Bank.</A>
+ &nbsp <B>  <A NAME="tex2html795"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00390000000000000000"></A><A NAME="SEC:SPECIALVLBA"></A>
+<BR>
+Single Dish VLBA Observing
+</H1>
+
+<P>
+SCHED&nbsp; is used primarily to schedule VLBI observations on the VLBA
+and most of the rest of this manual is devoted to details of how to
+do that.  However, there are a variety of types of observations that
+are rather different.  These are mainly single antenna observations
+usually done to measure system performance.  SCHED&nbsp; is able to
+make the schedules for these observations.  Such observations are
+not likely to be of interest to users other than NRAO staff involved
+in the testing and maintenance of the instrument.
+
+<P>
+Some items of special interest for VLBA scheduling are:
+
+<UL>
+<LI><A HREF="node166.html#MP:SOURCE"><TT>SOURCE:</TT></A> The source name is used in
+the usual way.  However, for pointing, there is a useful capability
+to specify the name of a Solar System object and have SCHED&nbsp; 
+determine its location from a JPL ephemeris.  See the description
+of <TT>SOURCE</TT> for more details.
+
+<P>
+</LI>
+<LI><A HREF="node124.html#MP:OBSTYPE"><TT>OBSTYPE:</TT></A> This should be set to
+<TT>NONE</TT> for single dish observations.
+
+<P>
+</LI>
+<LI><A HREF="node196.html#SEC:SRCCAT"><TT>CALCODE:</TT></A> If set to ``<TT>L</TT>'',
+pointing data will be processed using differences between the
+on-line and off-line channels.
+
+<P>
+</LI>
+<LI><A HREF="node153.html#MP:PTVLBA"><TT>PTVLBA:</TT></A> This can be specified on a
+scan basis and causes SCHED&nbsp; to write out a pointing pattern.  It can
+be turned off with <TT>NOPTVLBA</TT>
+
+<P>
+</LI>
+<LI><A HREF="node181.html#MP:TAVLBA"><TT>TAVLBA:</TT></A> This can also be specifiec
+on a scan basis, but not for a scan with <TT>PTVLBA</TT>.  It is another
+special mode, very similar to PTVLBA, for measuring antenna
+temperatures.  It can be turned off with <TT>NOTAVLBA</TT>.
+
+<P>
+</LI>
+<LI><A HREF="node146.html#MP:PN3DB"><TT>PN3DB:</TT></A> This can be specified on a
+scan basis and causes SCHED&nbsp; to write out half power tracking test
+pattern.  It can be turned off with <TT>NOPN3DB</TT>
+
+<P>
+</LI>
+<LI><A HREF="node218.html#SP:AZCOLIM"><TT>AZCOLIM:</TT></A> This specifies a pointing
+offset in arcminutes in the azimuth direction.  It is equivalent to
+the term used in the pointing equations to account for feed offsets
+so it is a constant angle on the sky.  The actual change in azimuth
+increases at high elevation because of the cos(El) dependence of
+the angular effect of an azimuth change.  It is available both
+<A HREF="node218.html#SP:AZCOLIM">in the setup file</A> and <A HREF="node56.html#MP:AZCOLIM">in the main schedule.</A>
+
+<P>
+</LI>
+<LI><A HREF="node227.html#SP:ELCOLIM"><TT>ELCOLIM:</TT></A> This specifies a pointing
+offset in arcminutes in the elevation direction.  It is equivalent to
+the term used in the pointing equations to account for feed offsets
+and encoder offsets, which are equivalent for elevation.  It is in
+the setup file.
+
+<P>
+</LI>
+<LI><A HREF="node253.html#SP:PTINCR"><TT>PTINCR:</TT></A> This is the jump in arc minutes
+between the on-source and half-power pointing positions for use in
+setting up pointing patterns.  It is used in <TT>PTVLBA</TT>, <TT>PN3DB</TT> and
+<TT>TAVLBA</TT> modes.  This is a setup file parameter.
+
+<P>
+</LI>
+<LI><A HREF="node254.html#SP:PTOFF"><TT>PTOFF:</TT></A> This is the jump in arc minutes
+between the on-source and off-source pointing positions for use in
+setting up pointing patterns.  It is used in <TT>PTVLBA</TT>, <TT>PN3DB</TT>,
+and <TT>TAVLBA</TT> modes.  The default is 6 times <TT>PTINCR</TT>.
+This is a setup file parameter.
+
+<P>
+</LI>
+<LI><A HREF="node150.html#MP:PTDUR"><TT>PTDUR:</TT></A>  This parameter is a time (in
+the usual time format) that specifies the time spent in each pointing
+position of a pointing pattern.  A reasonable value is 15 seconds.
+
+<P>
+</LI>
+<LI><A HREF="node152.html#MP:PTSLEW"><TT>PTSLEW:</TT></A>  This parameter specifies the
+time to allow to slew to the source.  It is specified in the usual time
+units (seconds).  With dwell time scheduling or schedule optimization,
+it should be kept small, often equal to <TT>PTDUR</TT>.
+
+<P>
+</LI>
+<LI><A HREF="node93.html#MP:FOCUS"><TT>FOCUS:</TT></A>  This is used to increment the
+subreflector focus position.  The value is added to the nominal value
+known to the on-line system for the particular receiver.
+
+<P>
+</LI>
+<LI><A HREF="node159.html#MP:ROTATION"><TT>ROTATION:</TT></A> This is used to increment
+the subreflector rotation position.  The value is added to the nominal
+value known to the on-line system for the particular receiver.
+
+<P>
+</LI>
+<LI><A HREF="node160.html#MP:ROTPAT"><TT>ROTPAT:</TT></A>  This triggers generation
+of a focus-rotation test pattern of pointing observations.
+
+<P>
+</LI>
+<LI><A HREF="node161.html#MP:ROTOFF"><TT>ROTOFF:</TT></A>  This is used to specify
+the rotation offset positions of a focus-rotation pattern.
+
+<P>
+</LI>
+<LI><A HREF="node92.html#MP:FOCOFF"><TT>FOCOFF:</TT></A>  This is used to specify
+the focus offset positions of a focus-rotation pattern.
+
+<P>
+</LI>
+<LI><A HREF="node86.html#MP:EPHFILE"><TT>EPHFILE:</TT></A> This is the name of
+the ephemeris file if to use if planets are included in the pointing,
+as they typically are at high frequencies.  At the AOC, the
+ephemeris files are typically kept in a directory assigned the
+environment variable <TT>PLANET_DATA</TT>.  That assignment can
+depend on computer architecture because the files are binary.
+
+<P>
+</LI>
+</UL>
+
+<P>
+There are a number of setup files among the standard setups that are
+for VLBA test observations.  Those that start with <I>pt</I> are for
+pointing or antenna temperature observations.  Those that start with
+<I>pc</I> are for pulse cal tests.
+
+<P>
+In addition to the above parameters, it is often best to make use
+of one of the optimization modes to make the actual schedules.
+<A HREF="node132.html#MP:OPTMODE"><TT>OPTMODE=SCANS</TT></A> is perhaps the most
+useful.  With this mode, only a few template scans need be specified
+and SCHED&nbsp; will pick the ones appropriate for use in the desired
+time range.  Below is an example of a script, including everything
+necessary to run SCHED&nbsp; on each VLBA station, for making pointing
+and gain check observations.  This example is at a somewhat higher
+level of complexity than most in this document, but it shows what
+can be done with the program.  It actually makes a different schedule
+for each station, taking into account the different portions of
+the sky that can be seen.
+
+<P>
+<PRE>
+#!/bin/csh
+# ========================================================
+# =====  Script to make pointing files for the VLBA  =====
+# ========================================================
+#  Set stations to be processed.
+#  The schedules need to be different depending on whether
+#  a 3mm receiver is present.
+#  Examples:
+#  set stalist_3mm="HN NL FD LA PT KP OV MK"
+#  set stalist_no3mm="BR SC"
+#  set stalist_no3mm=""      eg use blank if no stations of this type.
+set stalist_3mm="HN FD PT"
+set stalist_no3mm="BR SC"
+
+#
+#  Set times and experiment code
+#
+echo Sched environment variable = $SCHED
+echo PLANET_DATA environoment variable = $PLANET_DATA
+cat &lt;&lt;eofp &gt;! times.par
+  year    = 1996
+  month   = 10
+  day     = 25
+  start   = 0:00:00
+  opdur   = 4:00:00         !  Total project duration
+  expcode = ptg
+eofp
+
+# =====================================================================
+# =====================================================================
+# ======                                                         ======
+# ======      Changes not normally needed below this line.       ======
+# ======                                                         ======
+# =====================================================================
+# =====================================================================
+# Specify the location of the setup files.
+#
+setenv SETDIR $SCHED/setups
+#
+# Put much of the generic setup information in ptg_setup.par
+#
+cat &lt;&lt;eofs &gt;! ptg_setup.par
+! ---------------------------------------------------------------------
+! SCHED input file setup stuff to be used with pointing proceedure doptg.
+
+! -----  Cover information
+version  = 1
+expt     = 'STARTUP pointing'
+obstype  = PTVLBA
+obsmode  = 'Multi-frequency pointing observations.'
+piname   = 'Operations'
+phone    = '505 835 7251'
+obsphone = '505 835 7251'
+fax      = '505 835 7027'
+email    = 'vlbaops@nrao.edu'
+address1 = 'AOC'
+
+! -----  Catalogs etc.
+srcfile = '$SCHED/catalogs/sources.pointing'
+stafile = '$SCHED/catalogs/stations.dat'
+ephfile = '$PLANET_DATA/JPLEPH.405.2'
+!ephfile = '$SCHED/catalogs/JPLEPH.405.2.Linux'
+! -----  Schedule instructions
+sumitem = EL1, AZ1 ! Start elevation and azimuth in summary.
+ptvlba
+ptdur   = 15       ! =&gt; scan length = ptslew + 2*ptdur + N*10*ptdur
+                   ! The autoleveling scan is 2*ptdur long for pcx.
+                   ! Here we have 15+30+2*150 = 345s = 5:45
+dwell   = 5:45
+ptslew  = 15
+optmode = SCANS    ! Select scans that are above minimum elevation.
+opminel = 20.      ! Minimum elevation.
+
+eofs
+
+#  Now make a file with the actual schedule info for 3mm sites.
+#  Any imbedded catalogs etc must be here.
+
+cat &lt;&lt;eofs &gt;! ptg_3mm.par
+! -----  Spectral lines
+! -----  Set up for 4 channels - 2 on line, 2 off.
+lineinit /
+ lineset ='H2O'    restfreq=22235.08,22235.08,22285.08,22285.08 /
+ lineset ='SiO431' restfreq=43122.03,43122.03,43222.03,43222.03 /
+ lineset ='SiO862' restfreq=86243.4, 86243.4, 86343.4, 86343.4  /
+endlines /
+
+! -----  The detailed schedule
+! The frequencies are in an order reasonable for FRM.
+!  50/90 cm  CYGA,    TAUA,    3C274
+!  20-4 cm   3C454.3, 3C123,   3C274
+!  2, 1 cm   DR21,    3C84,    3C274
+!  7 mm      RCAS,    RLEO,    WHYA, DR21, 3C84, 3C273, planets
+!  3 mm      RCAS,    RLEO,    WHYA, planets
+
+!  Group must equal the number of scans below.
+!  (Group*rep) must be less than 2000 (as of 18 Apr 1996).
+!  The 7mm line sources used to have qual=50.  This used to be the way
+!     to trigger line processing.  Now CALCODE='L' does it.
+!  Note that for a peak=1 scan, no reference pointing will be done
+!  if the slew takes longer than 40 seconds.  That is partly why
+!  there is a second peak scan.
+
+group=(9*3+8*3) rep=50
+setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
+setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt13cm.set'  source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt4cmsx.set' source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt1cm.set'   source 'DR21'    nodop   bw=0,0   /
+setup='$SETDIR/pt2cm.set'   source 'DR21'    nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source 'DR21'    nodop   bw=0,0   /
+
+setup='$SETDIR/pt7mm.set'   source 'JUPITER' nodop   bw=0,0 qual=0
+  noptvlba peak=1 dwell=01:00  /
+  noptvlba peak=1 dwell=01:00  /
+  nopeak ptvlba   dwell = 5:45  /
+  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45   /
+setup='$SETDIR/pt7mm.set'   source 'RCAS'    doppler bw=2,2 qual=0
+  linename='SiO431'
+  noptvlba peak=1 dwell=01:00  /
+  noptvlba peak=1 dwell=01:00  /
+  nopeak ptvlba   dwell = 5:45 /
+  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45  linename='SiO862'  /
+
+
+setup='$SETDIR/pt90cm.set'  source 'TAUA'    nodop   bw=0,0   /
+setup='$SETDIR/pt4cm.set'   source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt18cm.set'  source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt13cm.set'  source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt4cmsx.set' source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt1cm.set'   source '3C84'    nodop   bw=0,0   /
+setup='$SETDIR/pt2cm.set'   source '3C84'    nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source '3C84'    nodop   bw=0,0   /
+
+setup='$SETDIR/pt7mm.set'   source 'RLEO'    doppler bw=2,2 qual=0
+  linename='SiO431'
+  noptvlba peak=1 dwell=01:00  /
+  noptvlba peak=1 dwell=01:00  /
+  nopeak ptvlba   dwell = 5:45  /
+  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45  linename='SiO862' /
+setup='$SETDIR/pt7mm.set'   source 'VENUS'   nodop   bw=0,0 qual=0
+  noptvlba peak=1 dwell=01:00  /
+  noptvlba peak=1 dwell=01:00  /
+  nopeak ptvlba   dwell = 5:45  /
+  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45   /
+
+setup='$SETDIR/pt90cm.set'  source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt4cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt18cm.set'  source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt13cm.set'  source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt4cmsx.set' source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt1cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt2cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source '3C273'   nodop   bw=0,0   /
+
+setup='$SETDIR/pt7mm.set'   source 'WHYA'    doppler bw=2,2 qual=0
+  linename='SiO431'
+  noptvlba peak=1 dwell=01:00  /
+  noptvlba peak=1 dwell=01:00  /
+  nopeak ptvlba   dwell = 5:45  /
+  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45  linename='SiO862' /
+setup='$SETDIR/pt7mm.set'   source 'SATURN'  nodop   bw=0,0 qual=0
+  noptvlba peak=1 dwell=01:00  /
+  noptvlba peak=1 dwell=01:00  /
+  nopeak ptvlba   dwell = 5:45  /
+  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45   /
+
+! ---------------------------------------------------------------------
+eofs
+
+#  Now make a file with the actual schedule info for sites without 3mm.
+#  Any imbedded catalogs etc must be here.
+
+cat &lt;&lt;eofs &gt;! ptg_no3mm.par
+! -----  Spectral lines
+! -----  Set up for 4 channels - 2 on line, 2 off.
+lineinit /
+ lineset ='H2O'    restfreq=22235.08,22235.08,22285.08,22285.08 /
+ lineset ='SiO431' restfreq=43122.03,43122.03,43222.03,43222.03 /
+ lineset ='SiO862' restfreq=86243.4, 86243.4, 86243.4, 86243.4  /
+endlines /
+
+! -----  The detailed schedule
+! The frequencies are in an order reasonable for FRM.
+!  50/90 cm  CYGA,    TAUA,    3C274
+!  20-4 cm   3C454.3, 3C123,   3C274
+!  2, 1 cm   DR21,    3C84,    3C274
+!  7 mm      RCAS,    RLEO,    WHYA, DR21, 3C84, 3C273, planets
+!  Group must equal the number of scans below.
+!  (Group*rep) must be less than 2000 (as of 18 Apr 1996).
+!  The 7mm line sources used to have qual=50.  This used to be the way
+!     to trigger line processing.  Now CALCODE='L' does it.
+
+linename='SiO431'
+
+group=(11*3) rep=60
+setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
+setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt13cm.set'  source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt4cmsx.set' source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt1cm.set'   source 'DR21'    nodop   bw=0,0   /
+setup='$SETDIR/pt2cm.set'   source 'DR21'    nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source 'DR21'    nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source 'RCAS'    doppler bw=2,2 qual=0 /
+setup='$SETDIR/pt7mm.set'   source 'JUPITER' nodop   bw=0,0 qual=0 /
+
+setup='$SETDIR/pt90cm.set'  source 'TAUA'    nodop   bw=0,0   /
+setup='$SETDIR/pt4cm.set'   source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt18cm.set'  source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt13cm.set'  source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt4cmsx.set' source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt1cm.set'   source '3C84'    nodop   bw=0,0   /
+setup='$SETDIR/pt2cm.set'   source '3C84'    nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source '3C84'    nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source 'RLEO'    doppler bw=2,2 qual=0 /
+setup='$SETDIR/pt7mm.set'   source 'VENUS'   nodop   bw=0,0 qual=0 /
+
+setup='$SETDIR/pt90cm.set'  source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt4cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt18cm.set'  source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt13cm.set'  source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt4cmsx.set' source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt1cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt2cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source '3C273'   nodop   bw=0,0   /
+setup='$SETDIR/pt7mm.set'   source 'WHYA'    doppler bw=2,2 qual=0 /
+setup='$SETDIR/pt7mm.set'   source 'SATURN'  nodop   bw=0,0 qual=0 /
+! ---------------------------------------------------------------------
+eofs
+
+#
+# Now run sched separately for each 3mm station.
+#
+foreach station ( $stalist_3mm[1*] )
+   echo station=vlba_$station &gt;! station.par
+   $SCHED/bin/sched &lt;&lt;eofst
+       @times.par
+       @station.par
+       @ptg_setup.par
+       sch = ptg_3mm.par
+       overwrit /
+eofst
+end
+#
+# Finally run sched separately for each no 3mm station.
+#
+foreach station ( $stalist_no3mm[1*] )
+   echo station=vlba_$station &gt;! station.par
+   $SCHED/bin/sched &lt;&lt;eofst
+       @times.par
+       @station.par
+       @ptg_setup.par
+       sch = ptg_no3mm.par
+       overwrit /
+eofst
+end
+#
+#   Some clean up.
+#
+/bin/rm times.par
+/bin/rm ptg_setup.par
+/bin/rm ptg_3mm.par
+/bin/rm ptg_no3mm.par
+#
+#   END
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html796"
+  HREF="node47.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html792"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html786"
+  HREF="node45.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html794"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html797"
+  HREF="node47.html">Configuration Studies</A>
+<B> Up:</B> <A NAME="tex2html793"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html787"
+  HREF="node45.html">Green Bank.</A>
+ &nbsp <B>  <A NAME="tex2html795"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

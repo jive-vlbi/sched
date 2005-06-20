@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>PCALFR1 and PCALFR2</TITLE>
+<META NAME="description" CONTENT="PCALFR1 and PCALFR2">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node251.html">
+<LINK REL="previous" HREF="node249.html">
+<LINK REL="up" HREF="node217.html">
+<LINK REL="next" HREF="node251.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html3669"
+  HREF="node251.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3665"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3659"
+  HREF="node249.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3667"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3670"
+  HREF="node251.html">PCALXB1 and PCALXB2</A>
+<B> Up:</B> <A NAME="tex2html3666"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3660"
+  HREF="node249.html">PCAL</A>
+ &nbsp <B>  <A NAME="tex2html3668"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION004643300000000000000"></A><A NAME="SP:PCALFR1"></A>
+<BR>
+<TT>PCALFR1</TT> and <TT>PCALFR2</TT>
+</H3>
+
+<P>
+There are 16 pulse cal detectors in the VLBA formatters, each with the
+ability to detect signals from 2 bit streams. Each can be set to
+detect a tone at a different frequency at any multiple of 10&nbsp;kHz in
+the baseband. <TT>PCALFR1</TT> and <TT>PCALFR2</TT> are arrays of 16
+frequencies in kHz for the 16 detectors. <EM>ACTUALLY, UNTIL A
+FORMATTER UPGRADE IS COMPLETE, THERE ARE ONLY 8 DETECTORS.</EM> If a
+frequency of <TT>0</TT> is given, the detector will be used to count bits
+in each state. <TT>PCALFR1</TT> applies to the first channel of the
+detector, while <TT>PCALFR2</TT> applies to the second; they need not be
+the same. SCHED&nbsp; is capable of setting <TT>PCALFR1</TT>, <TT>PCALFR2</TT>, <TT>PCALXB1</TT>, and <TT>PCALXB2</TT> automatically, and this is
+probably the option that most users should take. SCHED&nbsp; will use
+the automatic settings if <TT>PCALXB1(1)</TT> is not set.  If the <TT>PCALFR</TT> and <TT>PCALXB</TT> values are defaulted, they will be adjusted
+on a scan by scan basis for any changes in observing frequency,
+including those requested by <TT>FREQ</TT> or <TT>DOPPLER</TT> in the SCHED keyin file.
+
+<P>
+The default will be to set up all available channels to detect, using
+sign bits only, first tone near the lower edge of the band in each
+channel, then a second tone near the high edge of the band in each
+channel, and then state counts (sign and magnitude for 2 bit data) for
+each channel, then a third tone which is (usually) 1 MHz away from the
+first tone being detected.  As many of these tones will be detected as
+possible up to a total number of detected signals that does not exceed
+the number of available detectors.
+
+<P>
+There is usually no problem with setting the <TT>PCALFR</TT> and <TT>PCALXB</TT> parameters when <TT>PCAL</TT> is off, so there is usually no need
+to turn off this default. The one exception would be if the
+frequencies are being switched rapidly in such a way that the <TT>PCALFR</TT> frequencies are changing. Each time they are changed, the
+formatter is reconfigured, which blocks data output to the tapes for
+up to about 15 seconds. To prevent this, specify the pulse cal
+detector parameters and they will be kept constant.
+
+<P>
+Detection of Phase cal is not currently (Oct 2001) implemented on the
+PCFS, although the VEX file has a way of specifying the desired
+detection.  On MkIV telescopes this requires the installation of
+additional hardware, but even on PCFS controlled telescopes with VLBA
+hardware this is not yet supported.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> An array of 16 integers, each giving a frequency in kHz.
+</LI>
+<LI><B>Options:</B>  Any multiple of <TT>10</TT> from <TT>0</TT> to <TT>16000</TT>.
+</LI>
+<LI><B>Default:</B>  See above. Note that defaulting depends on whether or not <TT>PCALXB1(1)</TT>
+is set, not whether any <TT>PCALFR</TT>s are set.
+</LI>
+<LI><B>Usage:</B>    Defaults to previous station.
+</LI>
+<LI><B>Example:</B>  <TT>PCALFR1=10,10,10,10,7010,7010,7010,7010</TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3669"
+  HREF="node251.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3665"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3659"
+  HREF="node249.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3667"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3670"
+  HREF="node251.html">PCALXB1 and PCALXB2</A>
+<B> Up:</B> <A NAME="tex2html3666"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3660"
+  HREF="node249.html">PCAL</A>
+ &nbsp <B>  <A NAME="tex2html3668"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

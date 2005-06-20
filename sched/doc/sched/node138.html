@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>PEAK and NOPEAK</TITLE>
+<META NAME="description" CONTENT="PEAK and NOPEAK">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node139.html">
+<LINK REL="previous" HREF="node137.html">
+<LINK REL="up" HREF="node52.html">
+<LINK REL="next" HREF="node139.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html2199"
+  HREF="node139.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2195"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2189"
+  HREF="node137.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2197"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2200"
+  HREF="node139.html">PEAKFILE</A>
+<B> Up:</B> <A NAME="tex2html2196"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2190"
+  HREF="node137.html">PCAL</A>
+ &nbsp <B>  <A NAME="tex2html2198"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION004128600000000000000"></A><A NAME="MP:PEAK"></A>
+<BR>
+<TT>PEAK</TT> and <TT>NOPEAK</TT>
+</H3>
+
+<P>
+<TT>PEAK</TT>, if specified, will cause commands to be issued to tell
+some antennas to peak up their pointing.  <TT>NOPEAK</TT> causes
+SCHED&nbsp; to stop issuing those commands.
+
+<P>
+For Green Bank (NRAO type files), ``cards'' will be issued that
+request that the antenna peak up on source. This will happen for any
+<TT>PEAK</TT> argument greater than or equal to zero. It can be turned
+off by setting a negative argument or by specifying <TT>NOPEAK</TT>.
+The peak takes about 5 minutes in addition to slew time on the 140'.
+
+<P>
+As of March 1999, <TT>PEAK</TT> is no longer used to control VLA
+pointing.  Please see parameter <A HREF="node190.html#MP:VLAPEAK"><TT>VLAPEAK</TT></A>.
+
+<P>
+For the VLBA, if <TT>PEAK</TT> is greater than <TT>0</TT>, a peakup will be
+done using the channel number specified by the <TT>PEAK</TT> argument.
+The peakup begins either when the scan starts, or when the antenna
+reaches the source, whichever is later.  But the on-line system will
+wait for a maximum of 30 or 40 seconds to reach source before giving
+up. If it will take longer than that to reach source, a dummy scan or
+a gap between scans should be inserted. The peakup routine reads the
+total power after being on each position for 2 seconds and then goes
+on to the next position. The pattern contains 10 points. Therefore the
+peakup will take 20 seconds plus slew times which may be as little as
+30 seconds - call it 45 seconds to be conservative - at high
+frequencies. It could take significantly longer at low frequencies but
+there is no good reason to use reference pointing there. After the
+peakup is done, the results will be used until either another peakup
+is done or the project code changes.  Hopefully, we'll have some way
+to turn it off eventually.
+
+<P>
+It will be common to peak up at a different frequency from that being
+used for observing (eg peak at 7mm for 3mm observations).  It will
+also be common to peak on a line source during a continuum
+observation.  Therefore a different setup file will be needed for the
+peaking scans.  It is reasonable to use the standard pointing setup
+files.  They have names like <I>pt7mm.set</I>.  They use <TT>FORMAT=NONE</TT> which causes the on-line system on the VLBA to
+not touch the formatter.  Note that this is very likely to mean
+that any pulse cal data gathered during such scans are likely to
+be spurious.
+
+<P>
+See the section on <A HREF="node37.html#SEC:REFPOINT">reference pointing</A> for
+much more information on easy ways to insert pointing scans.
+
+<P>
+This command has no effect on the VEX file, there is currently no
+means to peak up telescopes that are controlled through the PCFS.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> A digit that for the VLBA is a baseband channel number.
+</LI>
+<LI><B>Options:</B>  See discussion above.
+</LI>
+<LI><B>Default:</B>  Don't peak up.
+</LI>
+<LI><B>Usage:</B>    Defaults to previous scan.
+</LI>
+<LI><B>Example:</B>  <TT>PEAK=3</TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2199"
+  HREF="node139.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2195"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2189"
+  HREF="node137.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2197"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2200"
+  HREF="node139.html">PEAKFILE</A>
+<B> Up:</B> <A NAME="tex2html2196"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2190"
+  HREF="node137.html">PCAL</A>
+ &nbsp <B>  <A NAME="tex2html2198"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

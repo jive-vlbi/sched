@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>VLA-Only Project Example</TITLE>
+<META NAME="description" CONTENT="VLA-Only Project Example">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node42.html">
+<LINK REL="previous" HREF="node39.html">
+<LINK REL="up" HREF="node38.html">
+<LINK REL="next" HREF="node42.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html739"
+  HREF="node42.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html735"
+  HREF="node38.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html729"
+  HREF="node40.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html737"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html740"
+  HREF="node42.html">Parameters Specific to the</A>
+<B> Up:</B> <A NAME="tex2html736"
+  HREF="node38.html">Scheduling the VLA</A>
+<B> Previous:</B> <A NAME="tex2html730"
+  HREF="node40.html">An Example</A>
+ &nbsp <B>  <A NAME="tex2html738"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00372000000000000000"></A><A NAME="SSEC:VLAONLY"></A>
+<BR>
+VLA-Only Project Example
+</H2>
+
+<P>
+This second VLA example demonstrates the use of SCHED&nbsp; to schedule a
+pure VLA project.  The SCHED&nbsp; input for VLA observations is very much
+like that for VLBI observations.  There are some parameters provided,
+and listed below, to control some of the input information for which
+the VLBI defaults may not be appropriate.  The example is a modified
+version of an actual schedule used to make the VLA observations
+described.  The modifications were required by changes in the way in
+which SCHED&nbsp; handles setup files and the parameters <A HREF="node266.html#SP:VLABAND"><TT>VLABAND</TT></A>, <A HREF="node267.html#SP:VLABW"><TT>VLABW</TT></A>, <A HREF="#SP:PEAK"><TT>PEAK</TT></A>, <A HREF="#SP:VLAMODE"><TT>VLAMODE</TT></A> (for pointing
+scans), and <A HREF="#SP:VLAPEAK"><TT>VLAPEAK</TT></A>.  Some of these
+parameters are now read from the setup files, not the main schedule
+input.
+
+<P>
+<PRE>
+! -------------------------------------------------------------------
+! EXAMPLE of SCHED file for non-VLBI VLA observations.
+! -------------------------------------------------------------------
+!  VLA observations to get flux densities of DA193 and 3C84 at VLA.
+!  Note that the example setup files are used for cc and qq bands.
+
+! -----  Cover Information
+
+version  = 1
+expt     = 'Get flux densities for BV16'
+piname   = 'Craig Walker'
+address1 = 'National Radio Astronomy Observatory'
+address2 = 'P. O. Box O'
+address3 = 'Socorro, New Mexico, 87801'
+address4 = ' U.S.A. '
+phone    = '505 835 7247 '
+obsphone = '505 835 7247 '
+email    = 'cwalker@nrao.edu'
+fax      = '505 835 7027 '
+obsmode  = 'Continuum'
+correl   = 'Socorro'
+
+! -----  File names and other details.
+
+stafile   = $SCHED/catalogs/stations.dat
+srcfile   = $SCHED/catalogs/sources.vlba
+obstype   = vla           ! Tells SCHED that this is VLA only.
+expcode   = BV016
+stations  = VLA
+vlatype   = CONTINUUM
+vlausern  = 450
+vlamode   = '  '
+
+lst                       ! Schedule in LST.
+
+! -----  A source that is not in the external source list:
+
+srccat /
+
+source='CTA21'   ra=03:16:09.1383   dec= 16:17:40.448
+equinox='B1950'   calcode='B' /
+
+endcat /
+
+! -----  Scans.
+
+day = 56719               ! LST day of stop of first scan.
+start = 4:00:00           ! LST start time.
+
+source = 'DA193'
+
+ ! No reference pointing at the lower frequencies
+ vlamode = ' '  vlapeak = ' '
+ dur = 8:00  setup = $SCHED/examples/manual_vla-cc.set  /
+ dur = 3:00  setup = $SCHED/setups/vla-uu.set  /
+ dur = 3:00  setup = $SCHED/setups/vla-xx.set  /
+
+ ! Use reference pointing at X band for K and Q band observations.
+ vlamode = IR  vlapeak = ' '
+ dur = 5:00  setup = $SCHED/setups/vla-xx.set  /
+ vlamode = ' '  vlapeak = T
+ dur = 4:00  setup = $SCHED/examples/manual_vla-qq.set  /
+             setup = $SCHED/setups/vla-kk.set  /
+
+source = '3C48'
+ vlamode = IR  vlapeak = ' '
+ dur = 8:00  setup = $SCHED/setups/vla-xx.set  /
+ vlamode = ' '  vlapeak = T
+ dur = 4:00  setup = $SCHED/examples/manual_vla-qq.set  /
+             setup = $SCHED/setups/vla-kk.set  /
+
+source = '3C84'
+ vlamode = IR  vlapeak = ' '
+ dur = 6:00  setup = $SCHED/setups/vla-xx.set  /
+ vlamode = ' '  vlapeak = T
+ dur = 3:00  setup = $SCHED/examples/manual_vla-qq.set  /
+             setup = $SCHED/setups/vla-kk.set  /
+
+ ! Do not use reference pointing for the rest of the session.
+source = '3C84'
+ vlamode = ' '  vlapeak = ' '
+             setup = $SCHED/setups/vla-uu.set  /
+             setup = $SCHED/setups/vla-xx.set  /
+             setup = $SCHED/examples/manual_vla-cc.set  /
+             setup = $SCHED/examples/manual_vla-cc.set  /
+             setup = $SCHED/setups/vla-pp.set  /
+
+source = '3C48'
+ dur=6:00    setup = $SCHED/setups/vla-uu.set  /
+ dur=3:00    setup = $SCHED/setups/vla-xx.set  /
+             setup = $SCHED/examples/manual_vla-cc.set  /
+             setup = $SCHED/examples/manual_vla-cc.set  /
+ dur=4:00    setup = $SCHED/setups/vla-pp.set  /
+
+source = 'DA193'
+ dur=9:00    setup = $SCHED/setups/vla-uu.set  /
+ dur=4:00    setup = $SCHED/setups/vla-xx.set  /
+             setup = $SCHED/examples/manual_vla-cc.set  /
+
+source = 'CTA21'
+ dur=10:00   setup = $SCHED/setups/vla-ll.set  /
+ dur=4:00    setup = $SCHED/setups/vla-pp.set  /
+
+! -------------------------------------------------------------------
+</PRE>
+
+<P>
+The above file used several setup files since it was sampling all
+bands used at the VLA.  Two are shown below.  All of the others are
+like the first -- very simple because they use the standard mode.
+The second specifies the LO settings for the Q (7mm) band observations
+so it is rather more complicated.  Note that, for many frequency settings,
+SCHED&nbsp; can obtain the required information from entries in the
+<A HREF="node211.html#SEC:FRQCAT">frequency catalog</A>.
+
+<P>
+<PRE>
+! -------------------------------------------------------------------
+! EXAMPLE setup file for non-VLBI observations at the VLA at 6cm.
+! -------------------------------------------------------------------
+!  vla-cc.set
+!  Non-VLBI observations at the VLA at C band
+format=none  station=VLA  vlaband=CC  vlabw='0000' /
+! -------------------------------------------------------------------
+</PRE>
+
+<P>
+<PRE>
+! -------------------------------------------------------------------
+! EXAMPLE setup file for non-VLBI observations at the VLA at 7mm.
+!     (Use as an example of the format, not the detailed numbers)
+! -------------------------------------------------------------------
+! firstlo (ifa, qband) = feab-fecd+syna+flukea+900MHz-600MHz
+freqref = 43210.99
+format = none
+vlaband = VQ
+vlabw   = '0000'
+!
+firstlo  = 42589.9
+vlafeab = 51.6      vlafecd = 13.0
+vlasyna = 3589.9    vlasynb = 3639.9
+flukea = 100.0      flukeb = 200.0
+station  = 'VLA'  /
+! -------------------------------------------------------------------
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html739"
+  HREF="node42.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html735"
+  HREF="node38.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html729"
+  HREF="node40.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html737"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html740"
+  HREF="node42.html">Parameters Specific to the</A>
+<B> Up:</B> <A NAME="tex2html736"
+  HREF="node38.html">Scheduling the VLA</A>
+<B> Previous:</B> <A NAME="tex2html730"
+  HREF="node40.html">An Example</A>
+ &nbsp <B>  <A NAME="tex2html738"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

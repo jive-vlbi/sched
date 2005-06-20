@@ -1,0 +1,46 @@
+#! /bin/csh
+#
+#  Make some checks of the sched code.  This is simple stuff so far.
+#
+#  Do an ls -l on the important include files that
+#  are shared through logical links.  A quick scan checks whether
+#  some of the links have been turned into hard copies by a tar 
+#  operation.
+
+echo ' '
+echo The following files are the master include files.
+echo ' '
+ls -l Sched/sched.inc
+ls -l Sched/schset.inc
+ls -l Sched/srlist.inc
+ls -l Cit/rdcat.inc
+
+
+echo ' '
+echo The following include files should all be links to the above
+echo master include files.
+echo ' '
+ls -l Vex/sched.inc
+ls -l Vex/schset.inc
+ls -l Plot/sched.inc
+ls -l Plot/srlist.inc
+ls -l Sched/rdcat.inc
+
+#  Find the versions of the code.  
+
+echo ' '
+echo greps of lines containing version numbers
+grep "VERSION=" Sched/sched.f | grep -v "C   "
+grep "VERNUM =" Sched/versched.f
+grep "(VEXVER =" Vex/vxlink.inc
+grep "PLTVER =" Plot/plver.f
+grep "JPVER =" Jpl/jplver.f
+
+echo ' '
+echo tail -tr and ls -l to check if files are up to date.
+ls -ltr Sched/*.f Sched/*.inc | grep -v "\->" | tail -1
+ls -ltr Plot/*.f Plot/*.inc | grep -v "\->" | tail -1
+ls -ltr Vex/*.f Vex/*.inc | grep -v "\->" | tail -1
+ls -ltr Jpl/*.f Jpl/*.inc | grep -v "\->" | tail -1
+ls -ltr Cit/*.f Cit/*.inc Cit/*/*.f Cit/*/*.c | grep -v "\->" | tail -1
+ls -ltr Sla/*.f | grep -v "\->" | tail -1

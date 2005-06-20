@@ -1,0 +1,208 @@
+
+
+
+
+
+
+
+
+
+
+
+
+         
+C
+C     Find the setup with the highest bit rate.
+C     While at it, flag the setups that are still needed.
+C
+      KSMAX = 0
+      MAXBPS = 0.0
+      DO KS = 1, NSET
+         TESTSU(KS) = .FALSE.
+         IF( VLBAMKIV(KS) .AND. RECUSED(KS) ) THEN
+            IF( NEEDFMT(KS) ) TESTSU(KS) = .TRUE.
+            IF( TOTBPS(KS) .GT. MAXBPS ) THEN
+               MAXBPS = TOTBPS(KS)
+               KSMAX = KS
+            END IF
+         END IF
+      END DO
+C
+C     Take that setup and fix the bit rate at the maximum.
+C     Then run FSPREAD to try to set everything else that is
+C     correlated.
+C
+      CALL SETFMT( KSMAX, MAXTBPS(KSMAX), OK )
+      IF( OK ) THEN
+         NEEDFMT(KSMAX) = .FALSE.
+         CALL FSPREAD( NEEDFMT, RECUSED, .TRUE., IRET )
+      ELSE
+         CALL WLOG( 1, 'FMTPICK: Programming probem. Could not set '//
+     1      'format of high bit rate scan'. )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, I5, A, F8.2 )' )
+     1      '       Setup group ', KSMAX, ' , max track bit per sec: ',
+     2      MAXTBPS(KSMAX)
+         CALL SETERR( KSMAX )
+      END IF
+
+C
+C     If can't use, reset everything.  Note that FORMAT and TAPEMODE
+C     were not set, or NEEDFMT would not have been false.
+C
+      DO KS = 1, NSET 
+         IF( TESTSU(KS) ) THEN
+            NEEDFMT(KS) = .TRUE.
+            FORMAT(KS) = FORMAT(KS)(1:4)
+            FANOUT(KS) = 0.0
+            SPEEDUP(KS) = 0.0
+            TAPEMODE(KS) = 0.0
+            USEDTBPS(KS) = 0.0
+         END IF
+      END DO
+C
+C     Get the minimum number of tracks that can be used in this
+C     observation at all stations (some stations might be able to
+C     use fewer, but ignore that for now).  Also get the range
+C     of bit rates allowed in each setup file.
+C
+      FEWTRK = 0.0
+      DO ISETF = 1, NSETF
+         TTBPS(ISETF) = 99999.
+         BTBPS(ISETF) = 0.0
+      END DO
+      DO KS = 1, NSET
+         IF( VLBAMKIV(KS) .AND. RECUSED(KS) ) THEN
+            FEWTRK = MAX( FEWTRK, MINTRK(KS) )
+            ISETF = ISETNUM(KS)
+            TTBPS(ISETF) = MIN( TTBPS(ISETF), MAXTBPS(KS) )
+            BTBPS(ISETF) = MAX( BTBPS(ISETF), MINTBPS(KS) )
+         END IF
+      END DO
+C
+C     
+C     
+
+
+
+
+
+C
+C     The track bits per second must scale with the total bit rate
+C     at a station if the number of tracks is to stay constant at
+C     that station.  Assume that the maximum total bit rate for the
+C     setup file (MAXFBPS) can be compared with the maximum overall
+C     total bit rate seen (MAXBPS) to get this scale factor, which must
+C     be global for the setup file.  Using these maxima hopefully
+C     will protect us against some setup groups being set with
+C     lower bit rates than in the rest of the file.
+C     Use MINFBPS as a flag that this setup is the right type and 
+C     is used in the schedule.
+C
+      DO ISETF = 1, NSETF
+         IF( MINFBPS(ISETF) .NE. 0.0 ) 
+            BPSSCALE(ISETF) = MAXFBPS(ISETF) / MAXBPS
+         ELSE
+            BPSSCALE(ISETF) = 0.0
+         END IF
+      END DO
+C
+C     Get the largest value of TTBPS / BPSCALE to use as a starting
+C     point to try to find the best formats. 
+C
+      STRTBPS = 0.0
+      DO ISETF = 1, NSETF
+         IF( BPSSCALE(ISETF) .NE. 0.0 ) THEN
+            BUFFBPS = TTBPS(ISETF) / BPSCALE(ISETF)
+            STRTBPS = MAX( STRTBPS, BUFFBPS )
+         END IF
+      END DO
+C
+C     Now get the average track bits per second if we use STRTBPS 
+C     for the unscaled formats.  Again MINFBPS is used as a flag
+C     to indicate we are using this setup.
+C
+      ACCBPS = 0.0
+      ACCTIM = 0.0
+      MINUSE = 0.0
+      MAXUSE = 999999.
+      DO ISETF = 1, NSETF
+         IF( MINFBPS(ISETF) .NE. 0.0 ) THEN
+            ACCBPS = ACCBPS + SETTIME(ISETF) * 
+     1               STRTBPS * BPSSCALE(ISETF)
+            ACCTIM = ACCTIM + SETTIME(ISETF)
+            MINUSE = MAX( MINUSE, BTBPS(ISETF) * BPSCALE(ISETF) )
+            MAXUSE = MIN( MAXUSE, TTBPS(ISETF) * BPSCALE(ISETF) )
+         END IF
+      END DO
+      IF( ACCTIM .NE. 0.0 ) THEN
+         AVGBPS = ACCBPS / ACCTIM
+C
+C        Select the base bit rate to use.  Assume that the AVGBPS
+C        came out less than 8.0 (if higher, the formats would have
+C        been forced by now and this routine would not have been
+C        called)
+C
+         IF( AVGBPS .LT. 6.0 ) THEN
+            USEBPS = STRTBPS 
+         ELSE
+            USEBPS = STRTBPS / 2.0
+         END IF
+C
+C        Be sure that the chosen bit rate can be used.
+C 
+         DO KS = 1, NSET
+            ISETF = ISETNUM(KS)
+            IF( VLBAMKIV(KS) .AND. RECUSED(KS) ) THEN
+               IF( USEBPS * BPSSCALE(ISETF) .GT. TTBPS(ISETF) ) THEN
+                  CALL WLOG( 1, 'FMTPICK: Logic problem.' )
+                  CALL WLOG( 1, '         Format picking is trying '//
+     1               'for too many bits per second per track.' )
+                  CALL WLOG( 1, '         Please report to SCHED '//
+     1               'maintainers.'
+                  CALL WLOG( 1, '         A workaround would be to '//
+     1               'set TPMODE or the full format (eg MKIV1:2)' )
+                  CALL WLOG( 1, 
+     1               '         for at least one setup group.' )
+                  CALL SETERR( KS )
+               ELSE IF( USEBPS * BPSSCALE(ISETF) .LT. BTBPS(ISETF)) THEN
+                  IF( USEBPS .NE. STRTBPS ) THEN
+C
+C                    If we can't drop this bps this low, avoid the tape
+C                    waster mode and go back to STRTBPS.
+C
+                     USEBPS = STRTBPS
+                  ELSE
+C
+C                    The required BPS is too low, which means that
+C                    fewer tracks will be used for this setup.  That
+C                    is the tape waster mode, but it can't be avoided
+C                    here.
+C
+                  END IF
+C
+               END IF
+            END IF
+         END DO
+C
+C        Ok now we want to set the bit rates on unset scans to
+C        the maximum of USEBPS * BPSCALE(ISEF) or BTBPS(ISETF).
+C
+         DO KS = 1, NSET
+            IF( NEEDFMT(KS) .AND. RECUSED(KS) ) THEN
+               KSBPS = MAX( USEBPS * BPSCALE(ISETF), BTBPS(ISETF) )
+               CALL SETFMT( KS, KSBPS, OK ) 
+               IF( OK ) NEEDFMT(KS) = .FALSE.
+            END IF
+         END DO
+C
+      ELSE
+C
+C        Got no accumulation.  Can't set files.  Leave it up to 
+C        SETFORM to deal with incomplete settings.
+C
+      END IF
+C
+  999 CONTINUE
+      RETURN
+      END 

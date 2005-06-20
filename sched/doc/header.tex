@@ -1,0 +1,205 @@
+\documentstyle[11pt,html]{article}
+\special{psfile=logo.ps hoffset=-65 voffset=-60}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\topfraction}{1.0}
+\renewcommand{\bottomfraction}{1.0}
+%
+%  For testing features in latex2html without taking forever.
+%
+% last updated 05dec95
+%
+% fonts
+% {\sc SMALL CAPS} - computer programs names
+% {\sl emphatic}   - file names
+% {\tt typewriter} - {\sc SCHED}, setup file parms
+%
+
+\def\rcwbox#1#2#3#4#5{
+\begin{description}
+\item[Argument:] #1
+\item[Options:]  #2
+\item[Default:]  #3
+\item[Usage:]    #4
+\item[Example:]  #5
+\end{description}
+}
+
+\begin{document}
+\title{LATEX2HTML TESTER}
+\author{R.C. Walker}
+\date{1995 December 5}
+\maketitle
+
+Here is some text to go at the start of the table of contents.
+Ver 2
+
+\tableofcontents
+%\listoftables
+%\listoffigures
+
+And this comes after.
+
+\newpage
+\section{INTRODUCTION}
+\label{SEC:INTRO}
+
+Program {\sc SCHED} was originally written in the late 1970's at
+Caltech as the scheduling program for VLBI projects recorded in
+Mark~II format. It can provide the necessary control files for
+essentially all telescopes that do, or used to do, Mark~II
+observations. There should be enough information in
+Sections~\ref{SEC:OVER} and {\tt SEC:MKII} to allow scheduling of
+simple Mark~II VLBI observations. However, currently {\sc SCHED} is
+mainly used for scheduling VLBI projects in VLBA and Mark~III formats
+on the VLBA and VLA. It can also provide control files for other
+antennas that use the VLBA style files to control their tape
+drives. In addition, {\sc SCHED} can be used to schedule many types of
+VLA observations besides just VLBI ones. When run, {\sc SCHED}
+produces operator schedules and telescope control files for each
+telescope. {\sc SCHED} also produces a summary file giving an overview
+of the schedule. To schedule global Mark~III observations, program
+{\sc PC-SCHED} (from Haystack) should be used to create the so-called
+drg file and the Mark~III station snap files. Very stripped down
+inputs for this {\sc SCHED} can be read into {\tt PC-SCHED} if
+desired.
+
+Recent versions of {\sc SCHED} were compiled and tested under the VMS
+(VAX), UNIX (CONVEX and SUN), and MS-DOS (PC) operating systems.
+Currently, the program is only being developed and tested under UNIX
+(SUN), but the system files for the other operating systems are still
+available and the programming style has not changed. It should still
+work under VMS, at least. Under an old MS-DOS, {\tt SCHED} simply got
+too big so it may not work there any more.
+
+\section{OVERVIEW}
+\label{SEC:OVER}
+
+Program {\sc SCHED} can be used to generate:
+\begin{enumerate}
+\item Operator schedule files and computer control files for most 
+observatories for Mark~II VLBI observations. This is the primary use
+of {\sc SCHED} and determines most defaults. Cover information, such
+as the PI's name and address, are included in these files.
+
+\item Observe files for some types of VLA-only observations. {\sc 
+SCHED} can produce source cards along with limited varieties of
+``//LO'', ``//FI'', and ``//PM'' cards.
+
+\item VLBA control files for Mark~III VLBI observations.
+
+\item Observe files and VLBA recorder control files for Mark~III VLBI 
+observations at the VLA.
+
+\item VLBA control files for single dish pointing and other testing.
+\end{enumerate}
+
+{\sc SCHED} is currently (1992) the primary scheduling program
+worldwide for Mark~II VLBI and for all types of VLBA observations.
+{\sc SCHED} is normally run from a input control file, called a {\tt
+SCHED} keyin file hereafter, which contains commands in the 
+ common to all Caltech 
+VLBI package programs. The {\sc SCHED}
+keyin file is generated using any text editor. Users unfamiliar with
+the Caltech package should read Section {\tt SEC:KEYIN}. Within the
+{\sc SCHED} keyin file, a series of observations are divided into
+scans. A separate group of input keyin parameters, ending with a
+``/'', is used to specify a scan. Most parameters default to their
+previous values so, generally, only items that change need be
+repeated. {\sc SCHED} also writes cover letter information in the
+schedule files and control files via values for various keyin
+parameters; this cover letter information includes the PI's name,
+address, phone number, project type (e.g., Mark~III mode~B at 4cm),
+plus other details.
+
+{\sc SCHED} requires the following ancillary information via either
+external files or their in-line versions:
+\begin{description}
+\item [Source and station catalog files:] {\sc SCHED} uses two 
+catalog files, one for sources and one for stations. These catalogs
+are also in keyin format. Details of the catalog formats and usage are
+given in Section {\tt SEC:CAT}.
+
+\item [Setup file:] For any VLBA telescope control file, and for 
+control of the VLBA tape system at some non-VLBA stations, {\sc SCHED}
+requires extensive information on the details of the hardware
+setup. These details are typically the same for all observations of
+the same basic type (e.g., Mark~III mode~A at 6cm). {\sc SCHED}
+obtains such information from setup files. The VLBA staff maintains a
+standard set of such setup files at the Array Operations Center. For
+Mark~II programs, {\sc SCHED} can be run without a setup file
+specification to check that the schedule is as intended. Then the {\sc
+SCHED} keyin file can be sent to the AOC (via, for example, the normal
+aspen schedule distribution system) where the appropriate setup file
+specification will be added and the final schedule files and control
+files will be produced. Setup files are in keyin format.
+
+\item [Tape initialization file:] {\sc SCHED} reads this to obtain 
+startup configuration information for the tapes at the sites. This is
+mainly for VLBA observations which may put more than one project on a
+tape. It is expected that tape initialization files will only be used
+by the VLBA operations staff. Users can ignore them in schedule
+planning. As with the setup files, VLBA operations must have the {\sc
+SCHED} keyin file if a tape initialization file will be needed to
+produce the final control files. Tape initialization files are also in
+keyin format.
+
+\item [Line initialization file:] Doppler calculations can be 
+done for spectral line sources based on velocities in the source
+catalog file and rest frequencies in a separate line initialization
+file (keyin format, of course). This file is not needed for continuum
+projects
+\end{description}
+
+The output of {\sc SCHED} consists of three types of files:
+\begin{description}
+\item [Operator schedule files:] These are intended to be read by 
+personnel at the observatories, although they are also useful for the
+scheduler. They contain the important parameters of each scan, along
+with information about the pointing position (azimuth, elevation, hour
+angle, parallactic angle and slew distances). Cover information is
+also included. Warnings appear for sources that are too low or within
+10 degrees of the Sun. These files have names like {\sl bq001sch.xx},
+where {\tt bq001} is an example project code specified with keyin
+parameter {\tt EXPCODE} and {\sl xx} is the station code from the
+station catalog.
+
+\item [Telescope control files:] These files are intended to be
+used to control the telescope computers. The type given for each
+station is controlled by a parameter in the station catalog. These
+files have names like {\sl bq001crd.xx}, where {\tt bq001} is an
+example project code specified with keyin parameter {\tt EXPCODE} and
+{\sl xx} is the station code from the station catalog. For non-VLBA
+stations with VLBA data aquisition systems controlled by the VLBA
+software (VLA, Green Bank and Bonn), two files can be provided. The
+{\sl bq001crd.xx} file is a VLBA format file to control the data
+aquisition system including tape drive, while the {\sl bq001obs.xx}
+file is the local computer control file for use by the telescope
+on-line system. All of these files contain cover information.
+
+\item [Project summary file:] This file provides an overview of the 
+project including the elevation of the source at each station and the
+times of tape changes. These file have names like {\sl bq001.sum},
+where {\tt bq001} is an example project code specified with keyin
+parameter {\tt EXPCODE}.
+\end{description}
+
+Users of older versions of {\sc SCHED} should read
+Section{\tt SEC:CHANG} to avoid problems.
+
+{\sc SCHED} is not the same program as {\sc PC-SCHED}. That program,
+which was written at Haystack, is the primary program for scheduling
+of Mark~III observations. The VLBA staff (or any user) can convert the
+{\sc DRUDG} file from {\sc PC-SCHED} (or {\sc SKED}) into a {\tt
+SCHED} keyin file using {\sc SKEDCONV}. This is the standard way in
+which VLBA and VLA control files are produced for Mark~III programs.
+
+A note on notation: the names of computer programs will be given in
+{\sc SMALL CAPS} font, the names of files will appear in {\sl slant}
+font, and the names of {\sc SCHED} and setup file parameters will
+appear in {\tt typewriter} font. Some parameters may be abbreviated;
+where both compulsory and optional characters are displayed, the
+compulsory ones will be shown in {\tt UPPER-CASE TYPEWRITER} font and
+the optional ones shown in {\tt lower-case typewriter} font.
+
+\end{document}
+
