@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>NUMBER of PASSES</TITLE>
+<META NAME="description" CONTENT="NUMBER of PASSES">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node24.html">
+<LINK REL="previous" HREF="node22.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node24.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html517"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html513"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html507"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html515"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html518"
+  HREF="node24.html">READBACK TESTS</A>
+<B> Up:</B> <A NAME="tex2html514"
+  HREF="node19.html">Tape Management</A>
+<B> Previous:</B> <A NAME="tex2html508"
+  HREF="node22.html">TAPE LENGTHS and PASS</A>
+ &nbsp <B>  <A NAME="tex2html516"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00324400000000000000"></A><A NAME="SSSEC:NUMPASSES"></A>
+<BR>
+NUMBER of PASSES
+</H3>
+
+<P>
+The amount of data that can fit on a tape depends on the length
+of the tape, the tape speed, and on the number of passes.  The
+Mark III and VLBA systems make longitudinal recordings using many
+heads, all mounted on a head stack.  The width of each head is 38
+microns and the ``head pitch'', or spacing between heads, is
+698.5 microns.  This difference allows many passes to be recorded
+with each head simply by shifting the whole head stack over by
+something more than 38 microns between passes (48 microns is used
+on the VLBA).  The Mark III systems typically use 12 passes while
+the VLBA and Mark IV use 14.
+
+<P>
+Many recording modes do not use all of the heads at once.  Mark III
+systems use 28 heads while VLBA and Mark IV systems use 32 (they all
+actually use the same 36 head headstack so the head pitch etc is the
+same).  Mark III Mode A uses all heads in a pass.  Modes B and C use
+half the heads while Mode E uses a quarter.  There are many VLBA
+modes, but they typically use a quarter, half, or all heads, although
+lesser options are available.  If not all the heads are used in a
+pass, more passes can be made at the same head position, increasing
+the total time over which data can be recorded on tape.  The setup
+file parameter <A HREF="node261.html#SP:TPMODE"><TT>TPMODE</TT></A> gives the number of
+passes that can be recorded at each head position.  SCHED&nbsp; will
+figure it out if it is not given and will report it in the summary.
+
+<P>
+If multiple setups are used in a project, SCHED&nbsp; will figure out
+which uses the minimum number passes per head position (most
+tracks per pass) and will use that number of passes per head position
+for all setups.  This wastes tape because some tracks never get
+recorded, but the alternative is a bookkeeping mess.  Therefore,
+it is strongly recommended that all setups used in a project use
+the same number of heads per pass (have the same <TT>TPMODE</TT>).
+
+<P>
+It is perfectly possible to use setups that record at different speeds
+in the same schedule.  As long as they all use the same number of
+heads, the tape will be used efficiently.  However, a change of
+recording speed causes the VLBA correlator to need a new job.  This is
+not a fundamental problem, but there is overhead for each job which
+causes work for the correlator staff.  Current guidelines on how often
+changes of this sort can be made can be found in the guidelines for
+scheduling document found by going to the VLBA home page from the NRAO
+home page on the WWW.  As of late 1996, changes more often than every
+2 hours are discouraged.  Note that using different tape speeds in
+different subarrays at the same time will preclude simultaneous
+correlation and will present the current job script making program
+with bookkeeping problems it is not equipped to handle.  Don't do it!
+
+<P>
+The total time that can be recorded on a tape is the time per pass
+times the number of passes per head position times the number of head
+positions.  The following table gives the total time per tape, and
+also the total bit rate, for various combinations of these parameters.
+
+<P>
+<PRE>
+ ------------------------------------------------------------------
+     TOTAL RECORDING TIMES per TAPE
+ ------------------------------------------------------------------
+  Pass/head   Heads     Track bit   Passes  Tape time  Total bit
+   position  recording  rate (Mbps)                   rate (Mbps)
+ ------------------------------------------------------------------
+       1        1           2         14     20:32:00      64
+       1        1           4         14     10:16:00     128
+       1        1           8         14      5:08:00     256
+       1        2           8         12      4:24:00     512
+       1        2          16         12      2:12:00    1024
+       2        1           2         28     41:04:00      32
+       2        1           4         28     20:32:00      64
+       2        1           8         28     10:16:00     128
+       4        1           2         56     82:08:00      16
+       4        1           4         56     41:04:00      32
+       4        1           8         56     20:32:00      64
+ ------------------------------------------------------------------
+   All tapes are assumed to be 17600 ft long.
+   All recordings are assumed to be done at high density.
+   Modes with 2 heads are MarkIV only.
+   VLBA uses 2 drives at 256 Mbps each for 512 Mbps.
+ ------------------------------------------------------------------
+</PRE>
+
+<P>
+For mostly historical interest, below is the old version of the
+table which includes the tape times for the low density and/or
+thick tapes.  The 512 and 1024 Mbps modes were not available
+at the time.
+
+<P>
+<PRE>
+ ------------------------------------------------------------------
+     TOTAL RECORDING TIMES per TAPE (14 Head positions, 32 Heads) *
+ ------------------------------------------------------------------
+  Tape length   Format/den
+  Bit rate per track
+     (feet)                  (2 Mbps)   (4 Mbps)   (8 Mbps)
+ ------------------------------------------------------------------
+  1 Pass/head pos.  Bit rate: 64 Mbps   128 Mbps   256 Mbps
+     17600      All/High     20:32:00   10:16:00    5:08:00
+     17600      VLBA/Low     12:19:12    6:09:36    3:04:48
+     17600  Mark III/IV/Low  12:09:52    6:04:56    3:02:28
+      8800      VLBA/Low      6:09:36    3:04:48    1:32:24
+      8800  Mark III/IV/Low   6:04:56    3:02:28    1:31:14
+
+  2 Pass/head pos.  Bit rate: 32 Mbps    64 Mbps   128 Mbps
+     17600      All/High     41:04:00   20:32:00   10:16:00
+     17600      VLBA/Low     24:38:24   12:19:12    6:09:36
+     17600  Mark III/IV/Low  24:19:44   12:09:52    6:04:56
+      8800      VLBA/Low     12:19:12    6:09:36    3:04:48
+      8800  Mark III/IV/Low  12:09:52    6:04:56    3:02:28
+
+  4 Pass/head pos.  Bit rate: 16 Mbps    32 Mbps    64 Mbps
+     17600      All/High     82:08:00   41:04:00   20:32:00
+     17600      VLBA/Low     49:16:48   24:38:24   12:19:12
+     17600  Mark III/IV/Low  48:39:28   24:19:44   12:09:52
+      8800      VLBA/Low     24:38:24   12:19:12    6:09:36
+      8800  Mark III/IV/Low  24:19:44   12:09:52    6:04:56
+
+ ------------------------------------------------------------------
+ *  Systems with Mark III hardware use 28 heads and 12 head positions
+    so the recording times are lower.
+</PRE>
+
+<P>
+If the tape allocated is insufficient to record for the whole allocated
+time at the desired bit rate, there are several options.  The most
+common is to use a duty factor of less than one -- to stop the tape
+for some of the time.  Otherwise, it is necessary to cut down the
+bit rate or to request more tapes (good luck).  Some periods of stopped
+tapes are desirable for <A HREF="node24.html#SSSEC:READBACK">readback tests.</A>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html517"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html513"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html507"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html515"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html518"
+  HREF="node24.html">READBACK TESTS</A>
+<B> Up:</B> <A NAME="tex2html514"
+  HREF="node19.html">Tape Management</A>
+<B> Previous:</B> <A NAME="tex2html508"
+  HREF="node22.html">TAPE LENGTHS and PASS</A>
+ &nbsp <B>  <A NAME="tex2html516"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

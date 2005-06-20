@@ -1,0 +1,607 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Spectral Line Observations</TITLE>
+<META NAME="description" CONTENT="Spectral Line Observations">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node37.html">
+<LINK REL="previous" HREF="node35.html">
+<LINK REL="up" HREF="node13.html">
+<LINK REL="next" HREF="node37.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html675"
+  HREF="node37.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html671"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html665"
+  HREF="node35.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html673"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html676"
+  HREF="node37.html">Reference Pointing</A>
+<B> Up:</B> <A NAME="tex2html672"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html666"
+  HREF="node35.html">Wide Band VLBA and</A>
+ &nbsp <B>  <A NAME="tex2html674"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00350000000000000000"></A><A NAME="SEC:LINE"></A>
+<BR>
+Spectral Line Observations
+</H1>
+
+<P>
+SCHED&nbsp; can set observing frequencies for spectral line observations
+based on velocities provided in the source catalog and rest
+frequencies provided in a separate type of input. This option is
+invoked by specifying <A HREF="node78.html#MP:DOPPLER"><TT>DOPPLER</TT></A> and can be
+turned off with <A HREF="node78.html#MP:DOPPLER"><TT>NODOP</TT></A> (<TT>DOPCAL</TT> is an
+obsolete form that was too easy to confuse with ``DO PCAL'').  If <TT>DOPPLER</TT> is invoked, SCHED&nbsp; calculates the velocity of the center of
+the Earth with respect to the designated reference frame (<TT>VREF</TT>
+in the direction of the source at the time of the middle of the
+project. From this velocity, the source velocity from the source
+catalog, and the rest frequency, the required observing center
+frequency is calculated.  The antennas need to know the LO settings so
+SCHED&nbsp; must know the bandwidth.  The bandwidth will usually be
+obtained from the setup file.  It may be provided for the scan with
+the <A HREF="node57.html#MP:BW"><TT>BW</TT></A> parameter.
+
+<P>
+The reference frames supported by SCHED&nbsp; are the ``Local Standard
+of Rest'' or LSR <TT>VREF=L</TT>, heliocentric <TT>VREF=H</TT>, and
+geocentric <TT>VREF=G</TT>.
+
+<P>
+Note that channels assigned to the same BBC will be given the same
+frequency as the first channel on that BBC, no matter what velocities
+etc are given for the other channels.  This will be the case when
+there are upper/lower sideband pairs.  Their frequencies cannot
+be set independently.  Because of the different sidebands, they
+will, however, cover different velocity ranges.
+
+<P>
+The frequencies derived from the doppler calculations have to be
+rounded off to a value that can be set on the available synthesizers.
+For the Mark&nbsp;III/IV and VLBA systems, frequencies can be set to
+the nearest 10 kHz.  However other systems are different -- VSOP, for
+example, can only be set to the nearest 1 MHz.  The parameter
+<A HREF="node77.html#MP:DOPINCR"><TT>DOPINCR</TT></A> can be used to control the rounding.
+
+<P>
+The doppler calculations are for the center of the Earth for the
+middle of the project. This implies that the frequency for each source
+will be constant for the duration of the project. Experience over the
+years with spectral line VLBI has shown this to be the preferred
+observing mode since it minimizes the chances of mistakes at stations
+that do not have automatic frequency setting. The shifts of the
+resulting spectra of about a km per second that result from the
+rotation of the Earth can be removed in post-processing with the CVEL program in the NRAO spectral line software or with a task of the
+same name and with similar capability in AIPS.
+
+<P>
+The LO sum used when doppler calculations are requested are calculated
+by either the radio definition (<TT>VDEF=R</TT> in the source catalog )
+or the optical definition (<TT>VDEF=O</TT> or <TT>VDEF=Z</TT>). With the
+radio definition, the LO sum is calculated as RESTFREQ * (1 - v/c) -
+BW/2 where RESTFREQ is the line rest frequency from the line
+initialization input, c is the speed of light, and BW is the bandwidth
+(appropriately signed according to the sideband).  With the optical
+definition, the LO sum is RESTFREQ / (1 + v/c) - BW/2.  Typically
+velocities for radio spectral lines in galactic sources are given in
+the radio definition in the LSR frame.  Extragalactic velocities, on
+the other hand, are typically in the optical definition in the
+heliocentric frame.  The differences in the radio and optical
+definitions only matter at large (typically extragalactic) velocities.
+
+<P>
+SCHED&nbsp; will accept redshifts if <TT>VDEF=Z</TT> in place of
+velocities, but be very careful that you have adequate accuracy
+to calculate proper frequencies - the bandwidths are typically
+very much smaller than the observing frequency so the velocities
+must be accurate.
+
+<P>
+Internally, if Doppler calculation is requested, SCHED&nbsp; calculates
+the desired observing frequencies and puts them in the same array that
+would be used if <A HREF="node94.html#MP:FREQ"><TT>FREQ</TT></A> were used. This will
+override any <TT>FREQ</TT> specifications in the main schedule and any
+frequency specifications in the setup files.  The frequencies of
+baseband converters will then be set properly based on the
+<A HREF="node230.html#SP:FIRSTLO"><TT>FIRSTLO</TT></A> for the station.  Please note that
+the setup files must still contain a complete, valid frequency
+specification.  This is to allow validity checking and to allow
+SCHED&nbsp; to pick up default parameters from the
+<A HREF="node211.html#SEC:FRQCAT">frequency catalog</A>.  The frequency in the setup
+should be close enough to the desired observing frequency that only
+final tuning of the BBCs is needed to get the exact desired frequency.
+For the VLBA with its 500 MHz IFs, this is not a serious concern.  It
+might be for the VLA (50 MHz IFs) or other antennas with narrow IFs.
+
+<P>
+The number of channels desired is set with <A HREF="node244.html#SP:NCHAN"><TT>NCHAN</TT></A> in the setup file (<TT>NCHAN</TT> in the main schedule
+is an obsolete parameter and is not used.).  To calculate a frequency,
+SCHED&nbsp; must have, for each channel, a bandwidth, a velocity from
+the source catalog, and a rest frequency from the line initialization
+input information.  If a value is missing for any channel of any
+parameter, the value of that parameter for channel 1 will be
+used. This avoids the need, for example, of specifying lots of
+bandwidths when they are all the same.
+
+<P>
+For continuum sources mixed in with line sources, specify <A HREF="node78.html#MP:DOPPLER"><TT>NODOP</TT></A> for that scan to avoid the Doppler calculations.
+
+<P>
+Often it is desired to observe a continuum source at the same
+frequency as a line source for bandpass calibration. This can be done
+by specifying the line source with <A HREF="node79.html#MP:DOPSRC"><TT>DOPSRC</TT></A>
+in the continuum source's scan. The <TT>DOPSRC</TT> will be used for the
+Doppler calculation.
+
+<P>
+The important parameters in the SCHED&nbsp; keyin file for Doppler
+frequency calculation are listed below. Detailed descriptions are
+given with the descriptions of other SCHED&nbsp; parameters.
+
+<P>
+
+<UL>
+<LI><A HREF="node78.html#MP:DOPPLER"><TT>DOPPLER</TT> and <TT>NODOP</TT></A> turn the
+Doppler calculations on and off.
+
+<P>
+</LI>
+<LI><A HREF="node79.html#MP:DOPSRC"><TT>DOPSRC</TT></A> is used to specify the source,
+if it is different from the scan source, for which the Doppler calculations
+should be made.  This is useful for bandpass calibration.  Warning -
+as with nearly all SCHED variables, it defaults to the previous scan.
+After using it, be sure to set it to blank or to the next source.
+
+<P>
+</LI>
+<LI><A HREF="node77.html#MP:DOPINCR"><TT>DOPINCR</TT></A> is used to determine the level
+of rounding of frequencies that is used.
+
+<P>
+</LI>
+<LI><A HREF="node112.html#MP:LINENAME"><TT>LINENAME</TT></A> specifies which group of
+rest frequencies to use. It must match one of the sets of lines
+named with <TT>LINESET</TT> in the <TT>LINEINIT</TT> input.
+
+<P>
+</LI>
+<LI><A HREF="node57.html#MP:BW"><TT>BW</TT></A> sets the bandwidth for the scan and
+overrides the setup file value.  This is useful for switching between
+wideband observations on calibrators and narrow band observations on
+line sources.  The value in the setup file will be used if it is
+not specified.  This parameter is not allowed if VEX files are being
+written.  In general, it is a good idea to use a new setup file when
+changing bandwidths because quite a few other parameters also change.
+
+<P>
+</LI>
+<LI><A HREF="node111.html#MP:LINEINIT"><TT>LINEINIT</TT></A> indicates that after the
+next ``/'', information on the rest frequencies of spectral lines will
+be given.  If invoked, the rest frequencies will be read, and SCHED&nbsp; 
+will return to reading input for the same scan that it was on before
+the ``/''.
+
+<P>
+</LI>
+</UL>
+
+<P>
+The rest frequencies are specified in separate keyin inputs in the
+SCHED&nbsp; keyin file following a ``/'' if <TT>LINEINIT</TT> was specified.
+There can be one rest frequency per channel, although any not
+specified default to the first which is often the desired
+behavior. There should be one velocity per channel in the source file
+for each source to be observed (other than continuum
+calibrators). Each group of lines has a name which is then refered to
+using <A HREF="node112.html#MP:LINENAME"><TT>LINENAME</TT></A> in the scan input. The
+group can change with each scan, but be careful to change the setup
+file, too, if necessary.  Up to 10 groups of lines are allowed. The
+parameters in the <TT>LINEINIT</TT> group are:
+
+<P>
+<DL>
+<DT><STRONG><TT>LINESET</TT>:</STRONG></DT>
+<DD>Name of the group of lines. <TT>LINENAME</TT> in
+the scan input will be used to invoke this group.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> Name of up to 8 characters.
+</LI>
+<LI><B>Options:</B>  Any name.
+</LI>
+<LI><B>Default:</B>  None
+</LI>
+<LI><B>Usage:</B>    Defaults to previous value - don't do it!
+</LI>
+<LI><B>Example:</B>  <TT>LINESET='H2O'</TT>
+  
+</LI>
+</UL>
+
+<P>
+</DD>
+<DT><STRONG><TT>RESTFREQ</TT>:</STRONG></DT>
+<DD>Rest frequencies.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> Up to one real number per channel. The first value will be used
+for any channels for which a value is not given.
+</LI>
+<LI><B>Options:</B>  Any value.
+</LI>
+<LI><B>Default:</B>  <TT>0</TT>
+</LI>
+<LI><B>Usage:</B>    Defaults to previous value.
+</LI>
+<LI><B>Example:</B>  <TT>RESTFREQ=22235.08</TT>
+  
+</LI>
+</UL>
+
+<P>
+</DD>
+<DT><STRONG><TT>ENDLINES</TT>:</STRONG></DT>
+<DD>This parameter, on a separate line with a ``/'',
+ends the restfrequency inputs much like the <TT>ENDCAT</TT> parameter
+ends in-line source and station catalog inputs.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> None.
+</LI>
+<LI><B>Options:</B>  None.
+</LI>
+<LI><B>Default:</B>  Not specified.
+</LI>
+<LI><B>Usage:</B>    Defaults to previous value, but this has no effect since this will be
+the last line of the rest frequency input to be read.
+</LI>
+<LI><B>Example:</B>  <TT>ENDLINES /</TT>
+  
+</LI>
+</UL>
+
+<P>
+</DD>
+</DL>
+
+<P>
+A fairly extensive list of possible rest frequencies is given below.
+These frequencies are not guaranteed.  If anyone finds an error,
+please notify Craig Walker (cwalkernrao.edu).
+
+<P>
+<PRE>
+---------------------------------------------------------------
+lineinit /
+!   Frequencies from Reid and Moran's Annual Reviews article preprint.
+!   Do not keep more than 10 lines in a SCHED input file.
+lineset='OH1612'  restfreq=1612.231   /
+lineset='OH1665'  restfreq=1665.402   /
+lineset='OH1667'  restfreq=1667.359   /
+lineset='OH1720'  restfreq=1720.530   /
+lineset='OH4660'  restfreq=4660.42    /
+lineset='OH4765'  restfreq=4765.562   /
+lineset='OH6030'  restfreq=6030.747   /
+lineset='OH6035'  restfreq=6035.092   /
+lineset='CH3OH'   restfreq=6668.5192  /  Breckenridge and Kukolich ApJ 438.
+lineset='CH3OH'   restfreq=12178.597  /  Breckenridge and Kukolich ApJ 438.
+lineset='OH13'    restfreq=13441.417  /
+lineset='NH3'     restfreq=18499.393  /  Pratrap Preprint.
+lineset='CH3OH'   restfreq=19967.3961 /  Menton preprint.
+lineset='H2O'     restfreq=22235.08   /
+lineset='CH3OH'   restfreq=23121.0242 /  Menton preprint.
+lineset='CH3OH'   restfreq=25124.87   /
+lineset='SiO425'  restfreq=42519.3    /
+lineset='SiO428'  restfreq=42820.54   /
+lineset='SiO431'  restfreq=43122.03   /
+lineset='SiO862'  restfreq=86243.35   /
+lineset='SiO868'  restfreq=86846.89   /
+lineset='CH3OH'   restfreq=44069.43   /  Bachiller preprint (SAO)
+lineset='CH3OH'   restfreq=97980.97   /  Plambeck preprint (SAO)
+lineset='SiO1293' restfreq=129363.26  /
+! some more from VLA OBSERVE
+lineset='H'        restfreq=1420.405752   /
+lineset='H2CO4830' restfreq=4829.656900   /
+lineset='H2CO145'  restfreq=14488.475000  /
+lineset='NH3(1,1)' restfreq=23694.495500  /
+lineset='NH3(2,2)' restfreq=23722.633600  /
+lineset='NH3(3,3)' restfreq=23870.129600  /
+lineset='NH3(4,4)' restfreq=24139.416900  /
+lineset='NH3(5,5)' restfreq=24532.988700  /
+endlines /
+-----------------------------------------------------------------
+</PRE>
+
+<P>
+The example below shows the SCHED&nbsp; input for a spectral line
+It is a modified version of the file used for a project by Phil Diamond
+in Dec 95.  The modifications are to adjust for some of the new features
+of SCHED&nbsp; that were not available at the time the file was used.
+Note that the tape initialization stuff probably could be defaulted
+and that it is not necessary to repeat the DUR and GAP specification
+every scan.  However some users prefer to show these details and
+it certainly doesn't hurt.  Also, the bandwidth specification is the
+same as the setup file so it is not required (it used to be).
+
+<P>
+<PRE>
+! EXAMPLE - spectral line observations.
+
+! ==========================================================
+! =================  Cover Information  ====================
+! ==========================================================
+
+EXPT = 'BD27 VLBA format 7mm line 1995 DEC 29 18:00 -&gt; DEC 30 18:00 UT'
+EXPCODE  = 'BD027'
+VERSION  = 1
+
+PINAME   = 'P.J.Diamond'
+ADDRESS1 = 'NRAO'
+ADDRESS2 = 'P.O. Box O'
+ADDRESS3 = 'Socorro, NM 87801, USA'
+PHONE    = '1-505-835-7365 (work) or 1-505-835-2095 (home)'
+OBSPHONE = '1-505-835-7365 (work) or 1-505-835-2095 (home)'
+FAX      = '1-505-835-7027'
+EMAIL    = 'pdiamond@nrao.edu (internet)'
+OBSMODE  = 'VLBA'
+OBSTYPE  = 'VLBA'
+NOTE1 = 'At VLA use antenna 27'
+NOTE2 = 'its the standard VLBI antenna and has good Q band performance'
+
+! ==========================================================
+! ==============  Correlator Information  ==================
+! ==========================================================
+
+correl   = 'Socorro'
+coravg   = 4
+corchan  = 256
+cornant  = 10
+corpol   = 'off'
+corwtfn  = 'uniform'
+corsrcs  = 'standard'
+cortape  = DAT
+corship1 = 'Athol Kemball'
+corship2 = 'P. O. Box O'
+corship3 = 'Socorro NM 87801'
+
+! ==========================================================
+! ====================  Source Catalog  ====================
+! ==========================================================
+!  This has sources with positions in mixed equinoxes.
+!  It is normally recommended to use J2000.
+!  Note most of the continuum sources below could be picked up
+!  from $SCHED/catalogs/sources.vlba
+
+SRCCAT /
+SOURCE='3C273'    RA=12:26:33.2480 DEC= 02:19:43.290 EQUINOX='B1950' /
+SOURCE='3C279'    RA=12:53:35.8380 DEC=-05:31:08.040 EQUINOX='B1950' /
+SOURCE='3C345'    RA=16:41:17.6080 DEC= 39:54:10.820 EQUINOX='B1950' /
+SOURCE='3C454.3'  RA=22:51:29.52   DEC= 15:52:54.35  EQUINOX='B1950' /
+SOURCE='OJ287'    RA=08:51:57.2530 DEC= 20:17:58.440 EQUINOX='B1950' /
+SOURCE='1823+568' RA=18:23:14.9490 DEC= 56:49:18.050 EQUINOX='B1950' /
+SOURCE='1334-127' RA=13:34:59.8150 DEC=-12:42:09.900 EQUINOX='B1950' /
+SOURCE='1633+382' RA=16:33:30.6280 DEC= 38:14:10.050 EQUINOX='B1950' /
+SOURCE='0420-014' RA=04:20:43.5400 DEC=-01:27:28.660 EQUINOX='B1950' /
+SOURCE='1749+096' RA=17:51:32.8185 DEC= 09:39:00.728 EQUINOX='J2000' /
+SOURCE='RAQR'     RA=23:41:14.269  DEC=-15:33:42.89   EQUINOX='B1950'
+                  VEL = -27.0, -27.0 /
+SOURCE='RLEO'     RA=09:44:52.2    DEC= 11:39:40.8   EQUINOX='B1950'
+                  VEL = -2.0,  -2.0 /
+SOURCE='VYCMA'    RA=07:20:54.6    DEC=-25:40:12.2   EQUINOX='B1950'
+                  VEL = 20.0 /
+SOURCE='VXSGR'    RA=18:05:02.9    DEC=-22:13:55.6   EQUINOX='B1950'
+                  VEL = 8.0 /
+SOURCE='UHER'     RA=16:23:35.0    DEC= 19:00:18.0   EQUINOX='B1950'
+                  VEL = -15.0, -15.0 /
+SOURCE='IKTAU'    RA=03:50:43.7    DEC= 11:15:31.8   EQUINOX='B1950'
+                  VEL = 34.0, 34.0  /
+SOURCE='TXCAM'    RA=04:56:41.4    DEC= 56:06:29.9   EQUINOX='B1950'
+                  VEL = 9.0, 9.0 /
+SOURCE='NMLCYG'   RA=20:46:25.59   DEC= 40:06:58.3   EQUINOX='J2000'
+                  VEL = -5.0, -5.0 /
+SOURCE='SPER'     RA=02:19:15.1    DEC=+58:21:34.0   EQUINOX='B1950'
+                  VEL = -40.0, -40.0 /
+
+ENDCAT /
+
+! ==========================================================
+! ====================  Station Catalog  ===================
+! ==========================================================
+
+stafile  = '$SCHED/catalogs/stations.dat'
+
+! ==========================================================
+! ==============  Spectral line rest frequecies  ===========
+! ==========================================================
+
+LINEINIT /
+lineset='ccal'  restfreq=43122.027, 43122.027, 43126.027, 43126.027,
+                         43130.027, 43130.027, 43134.027, 43134.027 /
+lineset='prog'  restfreq=43122.027, 43122.027 /
+ENDLINES /
+
+! ==========================================================
+! ====================  Observing setup  ===================
+! ==========================================================
+!  This is a fairly fully specified setup file.
+
+setinit = bd27.set  /
+nchan    = 8  samprate = 8.0  bits = 1  bbfilter = 4.0  !  128 Mbps
+tpmode   = 4  format = VLBA1:1
+bbc      = 1, 2, 3, 4, 5, 6, 7, 8
+netside  = U, U, U, U, U, U, U, U
+ifchan   = R, L, R, L, R, L, R, L
+!    Radio Astronomy allocation:  42400-43500
+pcal     = 'off'
+freqref  = 43150.99
+freqoff  = -8,-8,-4,-4,0,0,4,4
+firstlo  = 42400.00  fe(1) = '7mm'   fe(3) = '7mm'
+synth(2) = 7.6  synth(3)= 11.6   ! LO = Syn(2) + 3*Syn(3)
+station  = 'VLBA'   rchan = A  lchan = C   /
+firstlo  = 42489.9, 42489.9
+vlaband  = VQ
+vlabw    = '0000'
+vlafeab  = 51.6
+vlafecd  = 13.4
+vlasyna  = 3889.9
+vlasynb  = 3889.9
+flukea   = 100.0
+flukeb   = 200.0
+pcal     = 'off'    !  Pulse cal tone can mess up spectra.
+station  = 'VLA1'   rchan = B  lchan = D
+/
+endset /
+
+!  As a demonstration, the following is all that is needed
+!  to get an equivalent setup to the above.  It uses A,C IFs at
+!  the VLA and a different VLA LO setup (better), but is otherwise
+!  the same.  Note that both turn off the pulse calibration tones
+!  which can mess up spectral line observations.
+
+!  Neither setup uses the default 'format' because that would give a
+!  speedup factor on correlation and the correlator output data
+!  rate would be too high.  Note that the format can be forced
+!  with either 'tpmode' or 'format'.
+
+setinit = bd27a.set  /
+nchan    = 8  bits = 1  bbfilter = 4.0
+tpmode   = 4
+pol      = dual
+pcal     = 'off'
+band     = '7mm'
+/
+endset /
+
+! ==========================================================
+! =================  Initial Scan Information  =============
+! ==========================================================
+!
+STATIONS = VLBA_SC, VLBA_HN, VLBA_NL, VLBA_FD, VLBA_LA,
+           VLBA_PT, VLBA_KP, VLBA_OV, VLBA_BR, VLBA_MK, VLA1
+VLAMODE 'VS'
+
+YEAR   = 1995
+MONTH  = 12
+DAY    = 29
+START  = 18:02:00
+!
+!
+LINENAME = 'ccal'  DOPPLER
+SETUP  = 'bd27a.set'
+
+! ==========================================================
+! ========================  The Scans  =====================
+! ==========================================================
+
+SOURCE = '1749+096'  GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'SPER'/
+!
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+!
+SOURCE = '3C454.3'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'SPER'/
+!
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+!
+SOURCE = '3C454.3'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'SPER'/
+!
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
+!
+!     __________________________________
+!    |                                  |
+!    |   Many scans in the same style.  |
+!    |__________________________________|
+!
+
+SOURCE = '1749+096'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'UHER'/
+!
+SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
+!
+SOURCE = '1749+096'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'UHER'/
+!
+SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
+SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
+!
+SOURCE = '1749+096'   GAP = 00:02:00 DUR = 00:11:00  DOPSRC 'UHER'/
+! ---------------------------------------------------------------------
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html675"
+  HREF="node37.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html671"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html665"
+  HREF="node35.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html673"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html676"
+  HREF="node37.html">Reference Pointing</A>
+<B> Up:</B> <A NAME="tex2html672"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html666"
+  HREF="node35.html">Wide Band VLBA and</A>
+ &nbsp <B>  <A NAME="tex2html674"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

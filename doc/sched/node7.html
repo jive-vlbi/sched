@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>SCHED&nbsp; Input and Output Files</TITLE>
+<META NAME="description" CONTENT="SCHED&nbsp; Input and Output Files">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node8.html">
+<LINK REL="previous" HREF="node6.html">
+<LINK REL="up" HREF="node4.html">
+<LINK REL="next" HREF="node8.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html284"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html280"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html274"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html282"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html285"
+  HREF="node8.html">Examples</A>
+<B> Up:</B> <A NAME="tex2html281"
+  HREF="node4.html">INTRODUCTION</A>
+<B> Previous:</B> <A NAME="tex2html275"
+  HREF="node6.html">Keyin Free-format Input</A>
+ &nbsp <B>  <A NAME="tex2html283"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00230000000000000000"></A><A NAME="SEC:FILES"></A>
+<BR>
+SCHED&nbsp; Input and Output Files
+</H1>
+
+<P>
+SCHED&nbsp; takes input from several types of files in addition to any
+interactive input.  All of these files can be separate, as long as
+SCHED&nbsp; can find them, or most of them can be imbedded in the main
+input file.  The former is more convenient.  But, when the input file
+is to be sent somewhere else to be run again, it may be safer to imbed
+the catalog information in the main file.  All input to SCHED&nbsp; is in
+the <A HREF="node6.html#SEC:KEYIN">keyin free format</A>.  This is the same format as is used by all Caltech VLBI
+package programs.  The input file types are:
+
+<P>
+<DL>
+<DT><STRONG><A HREF="node50.html#SEC:SCHPAR">Main Schedule Input File</A>:</STRONG></DT>
+<DD>This is the
+file that contains the details of the particular project.  It can have
+the most of the other files imbedded in it.  This file must be created
+by the user.  This file should be given a name like <I>bv016.key</I>
+for project BV016.
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node196.html#SEC:SRCCAT">Source Catalog</A>:</STRONG></DT>
+<DD>This file contains the
+information about the sources, especially names, positions, and, for
+line sources, velocities.  There are standard source catalogs,
+although the user may need to add non-standard sources.  Source
+catalog entries can be included in the <A HREF="node50.html#SEC:SCHPAR">Main Schedule Input
+File</A>.
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node197.html#SEC:STACAT">Station Catalog</A>:</STRONG></DT>
+<DD>This file contains
+information about the antennas including names, positions, slew
+limits, horizons etc.  There is a standard station catalog that should
+suffice for nearly all users.  If not, entries can be included in
+the <A HREF="node50.html#SEC:SCHPAR">Main Schedule Input File</A>.  Station positions
+may stored sparately in the <A HREF="node197.html#SEC:STACAT">Location Catalog</A>
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node197.html#SEC:STACAT">Location Catalog</A>:</STRONG></DT>
+<DD>This file contains
+station locations.  The standard version reflects the locations and
+velocities used on the VLBA correlator.  It is documented along with
+the [<A HREF="node197.html#SEC:STACAT">Station Catalog</A> because they are tightly
+coupled.  The Locations Catalog is optional since it is not needed if
+the station locations are specified in the Station Catalog.  It exists
+separately for ease of maintenance.
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node213.html#SEC:SETUPS">Setup Files</A>:</STRONG></DT>
+<DD>These files contain the
+details required to configure the hardware at the stations.  Different
+projects using the same hardware configuration can use the same setup
+files.  There are many standard setup files.  Setup file names
+conventionally end in <I>.set</I>.
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node211.html#SEC:FRQCAT">Frequency Catalog</A>:</STRONG></DT>
+<DD>This file contains
+information about valid frequency setups at the stations.  The RF
+ranges that can be covered and the local oscillator and polarization
+of each IF are given.  SCHED&nbsp; can use this information to provide
+good defaults for many parameters in the setup files.  The standard
+file should be used.  Any non-standard information can be in the setup
+files.  This file cannot be imbedded in the main input file.
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node198.html#SEC:TPINI">Tape Initialization File</A>:</STRONG></DT>
+<DD>This file tells
+SCHED&nbsp; the properties of the tape systems at the stations and where
+to start on each tape.  For most experiments, the default tape
+initialization parameters will be adequate and this file need not be
+provided.  The main exceptions are observations using thick tapes
+at some sites.
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node37.html#SEC:REFPOINT">Reference Pointing Control File</A>:</STRONG></DT>
+<DD>SCHED&nbsp; can insert scans for reference pointing at high frequencies
+on the VLBA and VLA.  This file contains information needed to
+control that function.  It will only be of interest for observations
+at 43 GHz on the VLA and at 86 GHz on the VLBA.
+
+<P>
+</DD>
+<DT><STRONG><A HREF="node36.html#SEC:LINE">Spectral Line Rest Frequencies</A>:</STRONG></DT>
+<DD>SCHED&nbsp; can adjust the observing frequency to remove the doppler
+shifts due to the motions of the Earth around the Sun and to
+the Sun with respect to a desired reference frame.  To do this,
+SCHED&nbsp; needs to know the rest frequency of the line being
+observed.  This is given in a <TT>lineinit</TT> section imbedded
+either in the main file or in the reference pointing control file.
+
+<P>
+</DD>
+</DL>
+
+<P>
+SCHED&nbsp; processes the input files and creates several output
+files.  Most follow a naming convention where that starts with
+the project code (BV016 will be used in the examples here) followed
+by a file type indicator, then a period, then a two letter station
+code (pt for Pie Town in the examples below).  The experiment code
+is read by SCHED&nbsp; in the <A HREF="node89.html#MP:EXPCODE"><TT>EXPCODE</TT></A> parameter
+in the main schedule input.  The station code comes from the
+<A HREF="node197.html#SEC:STACAT">station catalog</A> and a list if given in
+Appendix <A HREF="node285.html#APP:STACODES">A.4</A>. The output files are:
+
+<P>
+<DL>
+<DT><STRONG>Summary File:</STRONG></DT>
+<DD>This file gives a rather extensive summary of the
+setups and observations.  This is the most useful output file for the
+user as it shows how SCHED&nbsp; has interpreted the input commands.  The
+file will be called, for example, <I>bv016.sum</I>.  The items displayed
+for each scan can be controlled with the parameter <A HREF="node174.html#MP:SUMITEM"><TT>SUMITEM</TT></A>.
+
+<P>
+</DD>
+<DT><STRONG>sched.runlog:</STRONG></DT>
+<DD>This file reflects most of what you see on the
+screen when SCHED&nbsp; is running, plus may contain additional messages
+that help debug problems should they occur.
+
+<P>
+</DD>
+<DT><STRONG>Operator Schedule Files:</STRONG></DT>
+<DD>These files, of which there is one per
+antenna, give much information the schedule than can be included in
+the summary file and are useful when that level of detail is needed.
+They were originally meant for the use of operators of manually
+controlled antennas, but now most antennas are computer controlled and
+these files are more useful for the scheduler.  The files are named,
+for example, <I>bv016sch.pt</I>.
+
+<P>
+</DD>
+<DT><STRONG>VLBA type Antenna Control Files:</STRONG></DT>
+<DD>These files provide
+the on-line control systems of the type found at VLBA antennas with
+the information they need to control the observations.  There is one
+file per antenna that uses a VLBA control computer for either full
+control of the station or for control of just the data aquisition
+system (tape drives, baseband converters etc.).  The files are named,
+for example, <I>bv016crd.pt</I>.
+
+<P>
+</DD>
+<DT><STRONG>Other Antenna Control Files:</STRONG></DT>
+<DD>These files are
+antenna control files in VLA observe deck format, Green Bank Card
+format, or SNAP (Mark III style, but SCHED&nbsp; can make them
+for Mark II only).  Some antennas, such as the VLA, require both
+crd. and obs. files.  The files are named, for example, <I>bv016obs.y</I> for the VLA file.
+
+<P>
+</DD>
+<DT><STRONG>Mark IV .skd Files in VEX format:</STRONG></DT>
+<DD>These are the files needed
+  for stations under control of the Goddard ``Field System'', e.g.   MkIV telescopes.  Writing of such files is available in SCHED&nbsp; 
+  (depending on switches in the Makefile).  Reading of such files, in
+  order to make control files for the VLBA, will be added later.  They
+  will be named, for example, <I>bv016.skd</I>.  A single such file
+  describes the observations for all antennas.
+
+<P>
+</DD>
+<DT><STRONG>Flag file:</STRONG></DT>
+<DD>SCHED&nbsp; writes a file with the <I>.flag</I> extension
+that can be helpful in data processing.  It contains flag entries,
+in the format appropriate for the AIPS task UVFLG, that cover the
+times when the tape is moving, but the antenna is expected to be
+slewing.  For the VLBA, the monitor flags would take care of such
+times, but for other types of stations, such information is not
+always available from the logs.
+
+<P>
+</DD>
+<DT><STRONG>Plots:</STRONG></DT>
+<DD>Sched can make plots of u-v coverage and of various
+combinations of azimuth, elevation, paralactic angle, hour angle,
+UT, and GST against each other.
+
+<P>
+</DD>
+<DT><STRONG>Optimized Schedule:</STRONG></DT>
+<DD>When one of SCHED's optimization modes
+is turned on, the program writes out a file, such as <I>bv016.sch</I>
+containing the basic scan inputs for a new main schedule file.  If
+desired, the user can use this to construct, and perhaps modify,
+a new optimized main schedule input.  This used to be the way all
+optimized schedules were constructed, but now that SCHED&nbsp; fully
+processes an optimized schedule, it is rarely used or needed.
+
+<P>
+</DD>
+<DT><STRONG><I>frequencies.list</I>:</STRONG></DT>
+<DD>If the user specifies the parameter
+<A HREF="node96.html#MP:FREQLIST"><TT>FREQLIST</TT></A>, SCHED&nbsp; will read the
+frequency catalog and make a table of all known setups which can
+be used to make observations in the specified frequency range.  Then
+SCHED&nbsp; will quit without doing further processing.  This is useful
+for planning and for information while making setup files.
+
+<P>
+</DD>
+</DL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html284"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html280"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html274"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html282"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html285"
+  HREF="node8.html">Examples</A>
+<B> Up:</B> <A NAME="tex2html281"
+  HREF="node4.html">INTRODUCTION</A>
+<B> Previous:</B> <A NAME="tex2html275"
+  HREF="node6.html">Keyin Free-format Input</A>
+ &nbsp <B>  <A NAME="tex2html283"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

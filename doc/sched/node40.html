@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>An Example</TITLE>
+<META NAME="description" CONTENT="An Example">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="previous" HREF="node39.html">
+<LINK REL="up" HREF="node39.html">
+<LINK REL="next" HREF="node41.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html727"
+  HREF="node41.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html723"
+  HREF="node39.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html719"
+  HREF="node39.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html725"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html728"
+  HREF="node41.html">VLA-Only Project Example</A>
+<B> Up:</B> <A NAME="tex2html724"
+  HREF="node39.html">VLBI at the VLA</A>
+<B> Previous:</B> <A NAME="tex2html720"
+  HREF="node39.html">VLBI at the VLA</A>
+ &nbsp <B>  <A NAME="tex2html726"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00371100000000000000"></A><A NAME="SSSEC:VLBIEG"></A>
+<BR>
+An Example
+</H3>
+
+<P>
+Below is an example of a file for a VLBI observation that uses the
+phased VLA.  For phasing, a source is used that can also be used as a
+VLBI phase or fringe fitting reference.  All antennas are sent to the
+reference and VLBI data is taken on it.  This is now the prefered
+style for phasing.  Of course the <A HREF="node192.html#MP:VLAPSRC"><TT>VLAPSRC</TT></A>
+parameter could also have been used if non-recording scans with only
+the VLA on the calibrator had been desired.
+
+<P>
+Note that the <A HREF="node9.html#SSEC:EXAMPLE1">main example</A> in the
+<A HREF="#GETSTART">Getting Started</A> section has a single VLA antenna
+in it and serves as an example of that type of observing.
+
+<P>
+<PRE>
+! Start file bw099.key.  Example of a VLBI observation using the
+!                        VLA as a phased array.
+!                        Original file by J. Wrobel.
+!                        Modified for the SCHED manual by C. Walker.
+!
+! ==========================================================
+! =================  Cover Information  ====================
+! ==========================================================
+
+expt     = 'bw099 1cm 15jan97 Wrobel'
+expcode  = 'bw099'
+version  = 1
+piname   = 'J.M. Wrobel'
+address1 = 'NRAO, P.O. Box O'
+address2 = 'Socorro, NM 87801'
+address3 = 'USA'
+phone    = '+1-505-835-7392'
+obsphone = 'VLA'
+fax      = '+1-505-835-7027'
+email    = 'jwrobel@nrao.edu (internet)'
+obsmode  = '128-4-2'
+obstype  = 'VLBA'
+note1    = 'VLBA target                : J1220+29=NGC4278=UGC07386 ***'
+note2    = 'VLBA DR check/VLA phase ref: J1221+28                  ***'
+note3    = 'VLBA FF/manual pcal/bpass  : J1229+02=3C273            ***'
+note4    = 'VLBA amp check, VLA amp std: J1310+32, J1331+30=3C286  ***'
+
+! ==========================================================
+! ==============  Correlator Information  ==================
+! ==========================================================
+
+correl   = 'socorro'
+cornant  = 11
+corchan  = 16
+coravg   = 2
+corpol   = 'on'
+corwtfn  = 'uniform'
+corsrcs  = 'NGC4278 from schedule, else standard'
+cortape  = 'dat'
+corship1 = 'jwrobel at aoc'
+
+! ==========================================================
+! ==================== Source Catalog  =====================
+! ==========================================================
+
+! Imbedded catalog for possible non-standard source.
+srccat  /
+source='J1220+2916','J1220+29','B1217+295','NGC4278','UGC07386'
+     ra=12:20:06.8243  dec= 29:16:50.716  equinox='J2000'  calcode='M'
+     remarks='From preliminary JVAS paper III' /
+endcat /
+
+! standard catalogs
+!        These are the defaults - included to show format.
+
+srcfile  = $SCHED/catalogs/sources.vlba
+stafile  = $SCHED/catalogs/stations.dat
+
+! ==========================================================
+! ==================== Setup Information ===================
+! ==========================================================
+!  This shows how to specify a full VLA setup when doing
+!  a frequency set unlike any in freq.dat.  This is fairly
+!  common when trying to span more than the 50 MHz of a
+!  single VLA IF.  Start SCHED and specify FREQLIST=&lt;f1&gt;,&lt;f2&gt;
+!  for lists of possible inputs.
+
+setinit = '1cmwide.set' /
+  nchan    = 4
+  bits     = 2
+  bbfilter = 8.0
+  freqref  =  22228.49
+  freqoff  =   -200.00,  -192.00,   +200.00,   +208.00
+  netside  =  U, U, U, U
+  pol      = LCP
+  /
+  station = vla1, vla27
+  ifchan  = C, C, D, D
+  firstlo = 21410.10, 21410.10, 21810.10, 21810.10
+  vlaband = VK    vlafeab = 17.5  vlasyna = 3510.1  flukea = 100.0
+  vlabw = '0000'  vlafecd = 17.5  vlasynb = 3910.1  flukeb = 200.0
+  fefilter = '0000'
+  /
+endset /
+
+
+! ==========================================================
+! ========================  The Scans  =====================
+! ==========================================================
+
+year     = 1997
+month    = 1
+day      = 15
+start    = 06:45:00
+autotape = 2
+stations = vlba_sc, vlba_hn, vlba_nl, vlba_fd, vlba_la,
+           vla27,
+           vlba_pt, vlba_kp, vlba_ov, vlba_br, vlba_mk
+
+
+! Adopt 14 passes per tape and 44m per thin tape pass.
+! Note that this sample was set up before automatic tape allocation
+! was used.  Keeping track of passes is no longer necessary, and
+! can occasionally be counterproductive.
+
+! Use the setup specified above.
+setup   = '1cmwide.set'
+
+! Point vla27 south to make wraps predictable. Assess phasing.
+! Use vlamode 'VL' to phase IFs C and D, rather than the A and D
+! normally used with mode 'VA'.
+
+source  = 'J0725-00' gap = 00:00 dur = 12:00 vlamode 'VL' norecord /
+
+! Swing vla27 to ngc4278's phase ref source.
+source  = 'J1221+28' gap = 00:00 dur = 05:00 vlamode 'VL' norecord /
+
+! Do passes 1-4.  This is a sequence of calibrator/source pairs.
+group 2   repeat 16
+ source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
+ source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
+
+! Start pass 5.   Get VLBI fringe finder and VLA flux calibrator.
+comment = '**** Start 1st calibration sequence.'
+! vla27 mode VA is ok for J1310+32 but not for 3C273.
+! vla27 mode VX for 3C286 to hold phases constant.
+ source = 'J1224+03' gap = 00:00 dur = 04:00 vlamode 'VL' norecord /
+ source = '3C273'    gap = 00:00 dur = 05:30 vlamode 'VX'   record /
+ source = 'J1310+32' gap = 01:00 dur = 05:30 vlamode 'VL'   record /
+ source = '3C286'    gap = 00:00 dur = 04:00 vlamode 'VX' norecord /
+comment = '**** End   1st calibration sequence.'
+
+! Swing vla27 to ngc4278's phase ref source.
+source  = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL' norecord /
+
+! Finish pass 5.
+group   2 repeat 3
+ source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
+ source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
+
+! Do passes 6-9.
+group   2 repeat 16
+ source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
+ source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
+
+! Start pass 10.
+comment = '**** Start 2nd calibration sequence.'
+ source = 'J1224+03' gap = 00:00 dur = 04:00 vlamode 'VL' norecord /
+ source = '3C273'    gap = 00:00 dur = 05:30 vlamode 'VX'   record /
+ source = 'J1310+32' gap = 01:00 dur = 05:30 vlamode 'VL'   record /
+ source = '3C286'    gap = 00:00 dur = 04:00 vlamode 'VX' norecord /
+comment = '**** End   2nd calibration sequence.'
+
+! Swing vla27 to ngc4278's phase ref source.
+source  = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL' norecord /
+
+! Finish pass 10.
+group   2 repeat 3
+ source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
+ source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
+
+! Do passes 11-14.
+group   2 repeat 16
+ source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
+ source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
+
+! end bw099.key
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

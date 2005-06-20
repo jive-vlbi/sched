@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>VLAFEAB and VLAFECD</TITLE>
+<META NAME="description" CONTENT="VLAFEAB and VLAFECD">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node269.html">
+<LINK REL="previous" HREF="node267.html">
+<LINK REL="up" HREF="node217.html">
+<LINK REL="next" HREF="node269.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html3885"
+  HREF="node269.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3881"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3875"
+  HREF="node267.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3883"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3886"
+  HREF="node269.html">VLAIF</A>
+<B> Up:</B> <A NAME="tex2html3882"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3876"
+  HREF="node267.html">VLABW</A>
+ &nbsp <B>  <A NAME="tex2html3884"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION004645100000000000000"></A><A NAME="SP:VLAFEAB"></A>
+<BR>
+<TT>VLAFEAB</TT> and <TT>VLAFECD</TT>
+</H3>
+
+<P>
+<TT>VLAFEAB</TT> is the VLA front end synthesizer for the A and B IFs
+(RCP).  <TT>VLAFECD</TT> is the VLA front end synthesizer for the C and D
+IFs (LCP).  See the discussion of the parameter <A HREF="node230.html#SP:FIRSTLO"><TT>FIRSTLO</TT></A> for more details. If specified, a ``//LO'' card
+will be written, and <TT>VLAFECD</TT>, <TT>VLASYNA</TT>, and <TT>VLASYNB</TT>
+will also be required.  Note that, except at 7mm, <TT>VLAFEAB</TT> must
+be the same as <TT>VLAFECD</TT> -- there is really only one synthesizer.
+
+<P>
+Allowed values for the front end synthesizer are (in GHz) (this list
+was extended downward for 1 and 2 cm on 2004 Aug 27 after consulting
+with Ken Sowinski):
+
+<P>
+<PRE>
+  For 90 cm:       0.0
+  For 18-20 cm:   -3.2
+  For 6 cm:        0.0
+  For 4 cm         11.8, 12.2, 12.4, 12.8, 13.0, 13.4,
+                   13.6, 14.0, 14.2, 14.6, 14.8, 15.2
+
+  For 1 and 2 cm:  15.1, 15.2, 15.4, 15.5, 15.7, 15.8, 16.0,
+                   16.1, 16.3, 16.4, 16.6,
+                   16.7, 16.9, 17.0, 17.2, 17.3, 17.5, 17.6,
+                   17.8, 17.9, 18.1, 18.2, 18.4, 18.5, 18.7,
+                   18.8, 19.0, 19.1, 19.3, 19.4, 19.6, 19.7,
+                   19.9, 20.0, 20.2, 20.3, 20.5, 20.6
+</PRE>
+
+<P>
+Note that many of the above settings will not produce usable
+signals.
+
+<P>
+After conversion by one of the above frequencies, the upper sideband
+is kept at 90, 18-20, 6, 1.3 cm bands and the lower sideband is
+kept for the 3.6 and 2 cm bands.  The resulting IF should fit within the
+6 cm receiver band of 4500-5000 MHz (actually a 4355 to 5145 MHz
+filter).  See <A HREF="node271.html#SP:VLASYNA"><TT>VLASYNA</TT> and <TT>VLASYNB</TT></A>
+for more frequency constraints based on allowed values of the L6
+synthesizer.
+
+<P>
+At 7 mm, <TT>VLAFEAB</TT> should be 3 times a valid value for the
+1/2 cm synthesizer.  <TT>VLAFECD</TT> should be a valid 4 cm value.
+The first value (51.6 is a typical one) will produce a lower
+sideband IF in the 4 cm part of the spectrum which is then fed
+to the 4 cm frequency conversion system.
+
+<P>
+Note that, if any of <TT>FLUKEA</TT>, <TT>FLUKEB</TT>, <TT>VLAFEAB</TT>, <TT>VLAFECD</TT>, <TT>VLASYNA</TT>, <TT>VLASYNB</TT>, <TT>VLAIF</TT>, <TT>FEFILTER</TT>,
+or <TT>VLAROT</TT> are specified, both LO and FI cards will be made.  In
+such cases, any other parameters allowed to default will be set to the
+standard value for the specified <TT>VLABAND</TT>.
+
+<P>
+<TT>FEFLITER</TT> can be provided in the <A HREF="node211.html#SEC:FRQCAT">frequency
+catalog</A>.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> A frequency in GHz.
+</LI>
+<LI><B>Options:</B>  See VLA documentation for details.
+</LI>
+<LI><B>Default:</B>  Takes the VLA default for the specified band.
+</LI>
+<LI><B>Usage:</B>    Defaults to previous station.
+</LI>
+<LI><B>Example:</B>  <TT>VLAFEAB=-3.2  VLAFECD=-3.2</TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3885"
+  HREF="node269.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3881"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3875"
+  HREF="node267.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3883"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3886"
+  HREF="node269.html">VLAIF</A>
+<B> Up:</B> <A NAME="tex2html3882"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3876"
+  HREF="node267.html">VLABW</A>
+ &nbsp <B>  <A NAME="tex2html3884"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

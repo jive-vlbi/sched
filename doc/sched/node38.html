@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Scheduling the VLA</TITLE>
+<META NAME="description" CONTENT="Scheduling the VLA">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node44.html">
+<LINK REL="previous" HREF="node37.html">
+<LINK REL="up" HREF="node13.html">
+<LINK REL="next" HREF="node39.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html699"
+  HREF="node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html695"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html689"
+  HREF="node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html697"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html700"
+  HREF="node39.html">VLBI at the VLA</A>
+<B> Up:</B> <A NAME="tex2html696"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html690"
+  HREF="node37.html">Reference Pointing</A>
+ &nbsp <B>  <A NAME="tex2html698"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00370000000000000000"></A><A NAME="SEC:VLA"></A>
+<BR>
+Scheduling the VLA
+</H1>
+
+<P>
+SCHED&nbsp; can be used to schedule essentially all types of VLBI
+observations on the VLA.  It can also be used instead of OBSERVE
+to schedule pure VLA observations involving a limited subset of the
+special cards that can be in VLA schedules.  This includes most
+continuum observations.  For more information on the VLA, check out
+the VLA from the NRAO home page at <A NAME="tex2html65"
+  HREF="http://www.nrao.edu"><I>http://www.nrao.edu</I></A>.  For much detailed
+information on VLBI at the VLA, follow the links to
+<A NAME="tex2html66"
+  HREF="http://www.aoc.nrao.edu/vla/vlbivla/current/html/">VLBI at the VLA</A>.  The latter
+document is available in postscript form from the VLA home page.
+
+<P>
+All observations at the VLA need an observe file that is used by the
+VLA on-line computers to control the antennas and correlator.  In
+addition, all VLBI observations at the VLA also require a VLBA-style
+control file for the VME that controls the VLBA data aquisition rack
+and tape recorder.  SCHED&nbsp; produces both kinds of files.
+
+<P>
+The VLBA control file, called <I>bq001crd.y</I> by SCHED&nbsp; for an
+example project with <TT>EXPCODE=bq001</TT>, is similar to those provided
+for VLBA stations, except that some VLBA specific commands for
+receivers, etc. are omitted. This file controls BBC settings, when the
+tape starts and stops, what head positions are in use, and which head
+groups are activated.
+
+<P>
+The observe file, called <I>bq001obs.y</I> by SCHED&nbsp; in this example,
+is the file that is normally created by the NRAO program <TT>OBSERVE</TT>
+(can be found from the <A NAME="tex2html67"
+  HREF="http://www.nrao.edu">NRAO home page</A>) and given to the VLA on-line system. While
+SCHED&nbsp; is intended for VLBI scheduling and this output is provided
+mainly for projects that use the VLA for VLBI, there is no reason that
+it cannot be used for scheduling pure VLA projects. In fact, a few
+parameters of interest only for non-VLBI projects are provided for VLA
+observers, including the ability to schedule in LST. However, SCHED&nbsp; 
+has only limited ability to provide the special setup cards, namely
+those that start with ``//''.
+
+<P>
+SCHED&nbsp; can provide ``//LO'' and ``//FI'' cards with parameters to set
+synthesizers to fixed values. The setup file can be used to provide
+values for the synthesizer settings. If <A HREF="node94.html#MP:FREQ"><TT>FREQ</TT></A>
+or <A HREF="node78.html#MP:DOPPLER"><TT>DOPPLER</TT></A> is used, the BBC settings will
+be adjusted to try to reach the right frequency for the VLBI
+data. Note that this has no effect on the VLA observing
+frequency. ``//LO'' and ``//FI'' cards are provided if, and only if,
+the required information is present in the setup file or could be
+obtained for the setup file by SCHED&nbsp; from the frequency catalog.
+SCHED&nbsp; also provides the ``//PM'' cards if proper (or planetary)
+motion is present for the source in the source catalog. Since the
+epoch of zero offset is given in IAT, IAT-UTC must be provided with
+parameter <A HREF="node110.html#MP:IATUTC"><TT>IATUTC</TT></A> in the SCHED&nbsp; keyin
+file. If other ``//'' cards are needed, or other options are needed on
+the ``//LO'' and ``//FI' cards, the regular VLA <I>OBSERVE</I> must be
+used or they must be edited in by hand. Beware of the fixed formats:
+if values are put in the wrong columns, the VLA on-line system will
+not behave as expected!
+
+<P>
+Support for the Pie Town link is being added.  Parameter <A HREF="node151.html#MP:PTLINK"><TT>PTLINK</TT></A> tells SCHED&nbsp; that the link is to be used.  This
+causes <TT>//LO</TT> cards to be written to the VLA OBS file and causes
+SCHED&nbsp; to put the Pie Town first LO value on those cards.  A setup
+parameter, <TT>NOISEFRQ</TT> has been added to control the noise cal
+switching frequency.  This is a new project and features will be added
+as necessary.  The example file <I>ptlink.key</I> shows how to
+construct a file for an observation using the link.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html701"
+  HREF="node39.html">VLBI at the VLA</A>
+<UL>
+<LI><A NAME="tex2html702"
+  HREF="node40.html">An Example</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html703"
+  HREF="node41.html">VLA-Only Project Example</A>
+<LI><A NAME="tex2html704"
+  HREF="node42.html">Parameters Specific to the VLA</A>
+<LI><A NAME="tex2html705"
+  HREF="node43.html">VLA Standard Bands.</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html699"
+  HREF="node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html695"
+  HREF="node13.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html689"
+  HREF="node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html697"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html700"
+  HREF="node39.html">VLBI at the VLA</A>
+<B> Up:</B> <A NAME="tex2html696"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Previous:</B> <A NAME="tex2html690"
+  HREF="node37.html">Reference Pointing</A>
+ &nbsp <B>  <A NAME="tex2html698"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

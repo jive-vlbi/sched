@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Examples of Setup Files</TITLE>
+<META NAME="description" CONTENT="Examples of Setup Files">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node216.html">
+<LINK REL="previous" HREF="node214.html">
+<LINK REL="up" HREF="node213.html">
+<LINK REL="next" HREF="node216.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html3197"
+  HREF="node216.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3193"
+  HREF="node213.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3187"
+  HREF="node214.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3195"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3198"
+  HREF="node216.html">Summary List of Setup</A>
+<B> Up:</B> <A NAME="tex2html3194"
+  HREF="node213.html">Setup Files</A>
+<B> Previous:</B> <A NAME="tex2html3188"
+  HREF="node214.html">Standard Setup Files</A>
+ &nbsp <B>  <A NAME="tex2html3196"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00462000000000000000"></A><A NAME="SSEC:SETEGS"></A>
+<BR>
+Examples of Setup Files
+</H2>
+
+<P>
+The standard setup files described above (Section&nbsp;/refSSEC:SETSTD)
+can be used as examples.  However a few of them are shown here
+to show what they are like to someone who does not have easy access
+to the machine readable files.
+
+<P>
+The examples below show the setup files for a
+for a Mark&nbsp;III mode B observation that requires much more
+information for formatter and tape control; for a spectral line
+Mark&nbsp;II observation that (daringly) includes the VLA; and for a VLBA
+observation using a common VLBA continuum setup. The allowed keyin
+parameters are listed after the example. Construction of setup files,
+other than minor changes in frequency for example, is best left to
+someone who knows the VLBA on-line system.
+
+<P>
+
+<P>
+The first example is of a minimal setup file of a sort that might be
+imbedded in a SCHED&nbsp; input file.  It includes the lines needed for
+that imbedding.  This specifies a 4 channel, 8 MHz/channel, dual
+polarization, 2 bit per sample mode (sometimes called 128-4-2 -- 128
+is the total number of bits per second) for observations near 15 GHz.
+It is invoked in the schedule by including ``<TT>setup=egvlba.2cm</TT>''
+among the inputs for a scan.  This is all many users will need.
+
+<P>
+<PRE>
+setini = egvlba.2cm /
+  band='2cm'  nchan=4  bbfilt=8.0  pol=DUAL  bits=2 /
+endset /
+</PRE>
+
+<P>
+The next example is of a rather simple file for 1 cm VSOP
+observations using VLBA and MarkIV formats.  It is the standard setup
+file <I>vsop1cm.set</I>.  SCHED&nbsp; defaults are used to set almost
+everything including the station names and recording formats.
+
+<P>
+<PRE>
+! Standard setup file: vsop1cm.set
+!     (Produced by MAKESETUP)
+!  VSOP covers 22.0 - 22.3 GHz
+!      128 Mbps - 2 pass/headpos
+!     Format      Tape length  Density  Tape speed  Time/pass
+! VLBA/MkIII/MkIV    17600      High     160.00        22:00
+!    MkIII/MkIV       8800      Low      270.00         6:31
+  nchan    = 2
+  bits     = 2
+  bbfilter = 16.0
+  pol      = lcp
+  freqref  = 22200.0, 22216.0
+  netside  = U, U
+  barrel   = 'roll_off'
+  /
+</PRE>
+
+<P>
+
+<P>
+This example is for a Mark&nbsp;III mode B observation.  This shows a
+number of items being specified that do not actually need to be
+specified since the defaults are reasonable.  In particular, these
+are the track assignments and the pulse cal extractor assignments.
+The example just shows how one might specify all of these items
+if desired.  Please start with the standard m3b6cm.set, rather than
+this, for any real observations.
+
+<P>
+<PRE>
+ --------------------------------------------------------------------
+ EXAMPLE:   Mark~III observations, Mode B (with extra inputs)
+ --------------------------------------------------------------------
+! m3b6cm.set
+!  Tape length  Density  Tape speed  Time/pass
+!     17600      High      80.0         44:00
+!      8800      Low      135.0         13.02
+nchan = 14  samprate = 4.0  bits = 1  bbfilter = 2.0  !   56 Mbps
+tpmode = 2  format = MARKIII
+bbc      = 1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7,  7
+netside  = L,  U,  L,  U,  L,  U,  L,  U,  L,  U,  L,  U,  L,  U
+ifchan  = L,L,L,L,L,L,L, L,L,L,L,L,L,L
+freqoff = -16, -16, -12, -12, -8, -8, -4, -4, 0, 0, 4, 4, 8, 8
+track1=4,18,6,20,8,22,10,24,12,26,14,28,16,30
+track2=5,19,7,21,9,23,11,25,13,27,15,29,17,31
+pcalxb1  =  S1,  S2,  S3,  S4,  S5,  S6,  S7,  S8,
+            S9, S10, S11, S12, S13, S14,  S1,  S2
+pcalxfr1 = 990,  10, 990,  10, 990,  10, 990,  10,
+           990,  10, 990,  10, 990,  10,1990, 1010
+!    Radio Astronomy allocation: 4990-5000
+!    Radio Astnomomy footnote:   4950-4990
+!    VLA 50MHz 4960.1 to 5010.1 with VC mode.
+!        VLA 6cm receiver falling off at high end.
+station  = VLBA
+freqref  = 4990.99  !  Mark II network standard.
+fe(1)    = '6cm'   fe(3) =  '6cm'
+synth(2) = 4.1
+firstlo  = 4100.00    rchan = A  lchan = C
+   /
+station  = VLA27
+vlaband  = VC     vlabw = '0000'
+firstlo  = 4360.10    rchan = A  lchan = C
+   /
+station  = VLA1
+fe(2) = '6cm'  fe(4) = '6cm'
+rchan    = B  lchan = D
+   /
+station  = GB_VLBA
+fe(1)    = '6cm'   fe(3) =  '6cm'
+firstlo  = 4260.0   rchan = A  lchan = C
+   /
+station  = EB_VLBA
+firstlo  = 4100.0   rchan = A  lchan = C    /
+</PRE>
+
+<P>
+
+<P>
+This example shows a setup file for dual frequency, wide spanned
+bandwidth, geodetic style observations.  Note that the firstlo
+has to be specified separately for each channel because it varies.
+
+<P>
+<PRE>
+! Standard setup file: vgeo-128-8-1.set
+!     (Produced by MAKESETUP)
+!  For dual frequency, single polarization, 13cm/4cm observations.
+!  Changed to use RDV frequencies (but ending in .49) 27 Feb 2002  RCW.
+!  Changed again to follow RDV away from satellite radio  29Jul2004 RCW.
+!  RDV32 uses: 2225.99, 2255.99, 2345.99, 2365.99
+!              8405.99, 8475.99, 8790.99, 8895.99
+!  RDV45 uses: 2232.99, 2262.99, 2352.99, 2272.99 and same X as above.
+! ***  Geodesy reference frequecies ***
+!        Space Research (eg DSN) allocation: 2290-2300
+!        Space Research (eg DSN) allocation: 8400-8450
+!        Satellite radio 2320-2345.
+!     Format      Tape length  Density  Tape speed  Time/pass
+! VLBA/MkIII/MkIV    17600      High      80.0         44:00
+!    MkIII/MkIV       8800      Low      135.0         13.02
+!      128 Mbps - 1 pass/headpos
+  nchan    = 8
+  bits     = 1
+  bbfilter = 8.0
+  freqref  =   2232.49,  2232.49,  2232.49,  2232.49,  8405.49,  8405.49,
+               8405.49,  8405.49
+  freqoff  =  0.0, 30.0, 120.0, 140.0, 0.0, 70.0, 385.0, 490.0
+  netside  =  U, U, U, U, U, U, U, U
+  pol      = rcp
+!
+!  VLBA recorders with VLBA control
+!
+  format = VLBA1:4
+  station  =  VLBA, EB_VLBA
+  /
+!
+!  VLBA recorders with VEX control.
+!
+  barrel   = roll_off
+  format = VLBA1:4
+  station  =  NOTO, YEBES
+  /
+!
+!  MkIV recorders with VEX control.
+!  Be careful about BBC asignments.
+!
+  barrel   = roll_off
+  format = MKIV1:4
+  station  =  MEDICINA, ONSALA85, WSTRBORK
+  /
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3197"
+  HREF="node216.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3193"
+  HREF="node213.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3187"
+  HREF="node214.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3195"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3198"
+  HREF="node216.html">Summary List of Setup</A>
+<B> Up:</B> <A NAME="tex2html3194"
+  HREF="node213.html">Setup Files</A>
+<B> Previous:</B> <A NAME="tex2html3188"
+  HREF="node214.html">Standard Setup Files</A>
+ &nbsp <B>  <A NAME="tex2html3196"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

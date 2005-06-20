@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Setup Files</TITLE>
+<META NAME="description" CONTENT="Setup Files">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node272.html">
+<LINK REL="previous" HREF="node211.html">
+<LINK REL="up" HREF="node49.html">
+<LINK REL="next" HREF="node214.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html3115"
+  HREF="node214.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3111"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3105"
+  HREF="node212.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3113"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3116"
+  HREF="node214.html">Standard Setup Files</A>
+<B> Up:</B> <A NAME="tex2html3112"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html3106"
+  HREF="node212.html">List of Frequency File</A>
+ &nbsp <B>  <A NAME="tex2html3114"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00460000000000000000"></A><A NAME="SEC:SETUPS"></A>
+<BR>
+Setup Files
+</H1>
+
+<P>
+Setup files are used to provide station-specific input parameters.
+Most are for the VLBA, which requires complete configuration
+information be present in each VLBA control file, and the VLA, which
+requires information for the frequency setup.  For each scan in a
+schedule, the setup file is specified with <TT>SETUP</TT>.  Once specified,
+it need not be given again unless it changes.  Several setup files
+may be used in a schedule -- usually for switching between frequency
+bands.
+
+<P>
+SCHED&nbsp; will not run without a setup file specified for each
+scan.
+
+<P>
+Setup files can be imbedded in the main program input, much like
+source and station catalogs.  The group of inputs immediately before
+the setup file should contain the parameter <TT>SETINIT</TT> with an
+argument that gives this ``setup file'' (which may contain more than
+one group of stations) a name.  This proceedure may be used multiple
+times to specify several ``setup files''.  In the main schedule,
+the name given the imbedded file can be used as the argument to
+<TT>SETUP</TT> as if it were an external file.
+
+<P>
+The setup files can be used to control many aspects of the hardware
+setup at the stations.  Mostly it is used to set frequencies and
+recording modes, but it also has pulse cal detection, pointing, and a
+number of other items.  Most parameters can be left unspecified and
+SCHED, with the help of the <A HREF="node211.html#SEC:FRQCAT">frequency catalog</A>,
+will find reasonable defaults.  See the discussions of individual
+parameters for details. A reasonable minimum set would be:
+<A HREF="node244.html#SP:NCHAN"><TT>NCHAN</TT></A>, <A HREF="node221.html#SP:BBFILTER"><TT>BBFILTER</TT></A>, <A HREF="node225.html#SP:BITS"><TT>BITS</TT></A>, <A HREF="node252.html#SP:POL"><TT>POL</TT></A> (can be <TT>DUAL</TT>), and either <A HREF="node219.html#SP:BAND"><TT>BAND</TT></A> or <A HREF="node235.html#SP:FREQREF"><TT>FREQREF</TT></A> (and
+<A HREF="node234.html#SP:FREQOFF"><TT>FREQOFF</TT></A>.  Some users may wish to specify
+more information, for example <A HREF="node222.html#SP:BBC"><TT>BBC</TT></A>,
+<A HREF="node245.html#SP:NETSIDE"><TT>NETSIDE</TT></A>, and <A HREF="node233.html#SP:FORMAT"><TT>FORMAT</TT></A> and perhaps many others rather than taking the
+defaults.
+
+<P>
+Each setup file can consist of several setup groups separated by ``/''.
+Each group applies to the stations listed.  This allows some parameters,
+such as <A HREF="node230.html#SP:FIRSTLO"><TT>FIRSTLO</TT></A>, to be station specific.
+However, if no station specific values are included, stations may be
+lumped together into a single group even though SCHED&nbsp; will have
+to separate them before using other information to set the station
+dependent parameters.  The ultimate case of this is to have just
+one setup group and not specify any stations.  This is possible if
+only generic parameters are given.  SCHED&nbsp; will figure out what
+stations are needed and establish the necessary setup information.
+
+<P>
+If you don't take the defaults, SCHED&nbsp; will check your setup against
+the information it has internally and in the frequency catalog.  If
+your setup does not match one in the frequency catalog in terms of the
+setup of the IF's, SCHED&nbsp; will complain, but not stop.  If the
+complaint is about a VLBA setup, you are probably using a poor set of
+synthesizer settings or have some other such problem because the
+frequency catalog contains an essentially complete list of reasonable
+setups.  Please be aware that there are filters in the LO and IF
+signal paths of the VLBA that many users do not know about.  If your
+setup is not in the frequency catalog, you may simply have specified
+the wrong IF or synthesizer or you may be trying to use a signal
+outside of the band of some filter.  For other stations, the frequency
+catalog is not so complete.  If SCHED&nbsp; complains, double check your
+parameters to be sure they are right.  In such cases, it is best to
+email your setup to Craig Walker (cwalker@nrao.edu) for further
+checking.
+
+<P>
+If only generic parameters such as those above are specified,
+multiple stations can be specified for a setup group.  SCHED&nbsp; will
+actually take those multiple stations and create multiple setup
+groups before filling in the defaults, many of which will be
+station dependent.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html3117"
+  HREF="node214.html">Standard Setup Files</A>
+<LI><A NAME="tex2html3118"
+  HREF="node215.html">Examples of Setup Files</A>
+<LI><A NAME="tex2html3119"
+  HREF="node216.html">Summary List of Setup File Parameters</A>
+<LI><A NAME="tex2html3120"
+  HREF="node217.html">Details of Setup File Parameters</A>
+<UL>
+<LI><A NAME="tex2html3121"
+  HREF="node218.html"><TT>AZCOLIM</TT></A>
+<LI><A NAME="tex2html3122"
+  HREF="node219.html"><TT>BAND</TT></A>
+<LI><A NAME="tex2html3123"
+  HREF="node220.html"><TT>BARREL</TT></A>
+<LI><A NAME="tex2html3124"
+  HREF="node221.html"><TT>BBFILTER</TT></A>
+<LI><A NAME="tex2html3125"
+  HREF="node222.html"><TT>BBC</TT></A>
+<LI><A NAME="tex2html3126"
+  HREF="node223.html"><TT>BBSYN</TT></A>
+<LI><A NAME="tex2html3127"
+  HREF="node224.html"><TT>BBSYN2</TT></A>
+<LI><A NAME="tex2html3128"
+  HREF="node225.html"><TT>BITS</TT></A>
+<LI><A NAME="tex2html3129"
+  HREF="node226.html"><TT>DUALX</TT></A>
+<LI><A NAME="tex2html3130"
+  HREF="node227.html"><TT>ELCOLIM</TT></A>
+<LI><A NAME="tex2html3131"
+  HREF="node228.html"><TT>FE</TT></A>
+<LI><A NAME="tex2html3132"
+  HREF="node229.html"><TT>FEFILTER</TT></A>
+<LI><A NAME="tex2html3133"
+  HREF="node230.html"><TT>FIRSTLO</TT></A>
+<LI><A NAME="tex2html3134"
+  HREF="node231.html"><TT>FLUKEA</TT> and <TT>FLUKEB</TT></A>
+<LI><A NAME="tex2html3135"
+  HREF="node232.html"><TT>FLUKESET</TT></A>
+<LI><A NAME="tex2html3136"
+  HREF="node233.html"><TT>FORMAT</TT></A>
+<LI><A NAME="tex2html3137"
+  HREF="node234.html"><TT>FREQOFF</TT></A>
+<LI><A NAME="tex2html3138"
+  HREF="node235.html"><TT>FREQREF</TT></A>
+<LI><A NAME="tex2html3139"
+  HREF="node236.html"><TT>FRSWITCH</TT></A>
+<LI><A NAME="tex2html3140"
+  HREF="node237.html"><TT>IFCHAN</TT></A>
+<LI><A NAME="tex2html3141"
+  HREF="node238.html"><TT>IFDIST</TT></A>
+<LI><A NAME="tex2html3142"
+  HREF="node239.html"><TT>LCHAN</TT> and <TT>RCHAN</TT></A>
+<LI><A NAME="tex2html3143"
+  HREF="node240.html"><TT>LEVEL</TT></A>
+<LI><A NAME="tex2html3144"
+  HREF="node241.html"><TT>LOGGING</TT></A>
+<LI><A NAME="tex2html3145"
+  HREF="node242.html"><TT>LCP50CM</TT> and <TT>RCP50CM</TT></A>
+<LI><A NAME="tex2html3146"
+  HREF="node243.html"><TT>MODETEST</TT></A>
+<LI><A NAME="tex2html3147"
+  HREF="node244.html"><TT>NCHAN</TT></A>
+<LI><A NAME="tex2html3148"
+  HREF="node245.html"><TT>NETSIDE</TT></A>
+<LI><A NAME="tex2html3149"
+  HREF="node246.html"><TT>NOISE</TT></A>
+<LI><A NAME="tex2html3150"
+  HREF="node247.html"><TT>NOISEFRQ</TT></A>
+<LI><A NAME="tex2html3151"
+  HREF="node248.html"><TT>PERIOD</TT></A>
+<LI><A NAME="tex2html3152"
+  HREF="node249.html"><TT>PCAL</TT></A>
+<LI><A NAME="tex2html3153"
+  HREF="node250.html"><TT>PCALFR1</TT> and <TT>PCALFR2</TT></A>
+<LI><A NAME="tex2html3154"
+  HREF="node251.html"><TT>PCALXB1</TT> and <TT>PCALXB2</TT></A>
+<LI><A NAME="tex2html3155"
+  HREF="node252.html"><TT>POL</TT></A>
+<LI><A NAME="tex2html3156"
+  HREF="node253.html"><TT>PTINCR</TT></A>
+<LI><A NAME="tex2html3157"
+  HREF="node254.html"><TT>PTOFF</TT></A>
+<LI><A NAME="tex2html3158"
+  HREF="node255.html"><TT>SAMPRATE</TT></A>
+<LI><A NAME="tex2html3159"
+  HREF="node256.html"><TT>SIDEBAND</TT></A>
+<LI><A NAME="tex2html3160"
+  HREF="node257.html"><TT>STATION</TT></A>
+<LI><A NAME="tex2html3161"
+  HREF="node258.html"><TT>STRING1, STRING2, STRING3,</TT> and <TT>STRING4</TT></A>
+<LI><A NAME="tex2html3162"
+  HREF="node259.html"><TT>SWTCHDUR</TT></A>
+<LI><A NAME="tex2html3163"
+  HREF="node260.html"><TT>SYNTH</TT></A>
+<LI><A NAME="tex2html3164"
+  HREF="node261.html"><TT>TPMODE</TT></A>
+<LI><A NAME="tex2html3165"
+  HREF="node262.html"><TT>TPSPEED</TT></A>
+<LI><A NAME="tex2html3166"
+  HREF="node263.html"><TT>TPSPEEDH</TT></A>
+<LI><A NAME="tex2html3167"
+  HREF="node264.html"><TT>TPSPEEDL</TT></A>
+<LI><A NAME="tex2html3168"
+  HREF="node265.html"><TT>TRACK1, TRACK2, ... , TRACK7,</TT> and <TT>TRACK8</TT></A>
+<LI><A NAME="tex2html3169"
+  HREF="node266.html"><TT>VLABAND</TT></A>
+<LI><A NAME="tex2html3170"
+  HREF="node267.html"><TT>VLABW</TT></A>
+<LI><A NAME="tex2html3171"
+  HREF="node268.html"><TT>VLAFEAB</TT> and <TT>VLAFECD</TT></A>
+<LI><A NAME="tex2html3172"
+  HREF="node269.html"><TT>VLAIF</TT></A>
+<LI><A NAME="tex2html3173"
+  HREF="node270.html"><TT>VLAROT</TT></A>
+<LI><A NAME="tex2html3174"
+  HREF="node271.html"><TT>VLASYNA</TT> and <TT>VLASYNB</TT></A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3115"
+  HREF="node214.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3111"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3105"
+  HREF="node212.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3113"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3116"
+  HREF="node214.html">Standard Setup Files</A>
+<B> Up:</B> <A NAME="tex2html3112"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html3106"
+  HREF="node212.html">List of Frequency File</A>
+ &nbsp <B>  <A NAME="tex2html3114"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,55 @@
+Franco,
+
+I have done something that violates our code management scheme and
+I hope I haven't gotten us in trouble.  I have worked on some of
+the plot routines so make it more useful for my EVLA configuration
+study.  The following is what I have done:
+
+plotuv.f  Do not list stations, sources, and setup if doing a
+          single source specified by KSRC.  This will occur when
+          plplot is doing one panel per source.
+
+          Removed JSRC and changed KSRC to source index in schedule
+          list, not catalog.
+
+          Some other changes.  For a while, I had it writing coordinates
+          for some stations under some conditions, but I moved that
+          function to plotsta.f.  But in the process, various
+          things got changed.
+
+          Moved the line line width spec etc out from the IF(COLOR)
+          block.  The values were needed later outside of that block
+          so, if COLOR was false, the values would get used in an
+          uninitialized state.
+
+plplot.f  Made changes to call PLOTUV once per source when there are
+          more than one, but less than 23 sources.  A new panel is
+          made for each source.
+
+          Removed JSRC from calls to PLOTXY and PLOTUV.
+
+plotxy.f  Removed JSRC and changed KSRC to name in schedule list.
+
+plotty.f  Removed JSRC and changed KSRC to name in schedule list
+          for calls to PLOTUV and PLOTXY.
+
+plotsta.f New routine that makes two panels in a multiple source uv
+          plot output.  The first has the source list with
+          coordinates.  The second is a latitude/longitude plot
+          of station locations.  This now functions, but needs
+          some clean up like flexible lat/long limits (I've hardwired
+          the ones I want for the EVLA study for now).  It might be
+          useful to make it optional.  I might add an ability to
+          plot vector files to get things like borders, roads etc.
+          I will put this routine in my Sched directory for now.
+
+Note.  JSRC should be removed from PLOTBM.  It is not used.
+
+Let me know if you have been working on any of the above routines.
+If not, please don't start until we've updated your versions.  If
+so, we have some rationalization to do.
+
+Happy New Year
+
+Craig
+

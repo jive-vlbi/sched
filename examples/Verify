@@ -1,0 +1,258 @@
+#!/bin/csh -f
+
+#  Shell script to verify operation of a version of SCHED.  It:
+#     1.  Runs SCHED on the example input files.
+#     2.  Compares the results with "standard" results in the "stdout" 
+#         directories using diff.
+#     Note - the plotting functions are not tested with this routine 
+#            although the examples normally used to do that are tested
+#            as regular examples.
+#
+#  To run, type "Verify SUN" if the executables in the bin/SUN directory
+#  are to be used.
+#
+#  The -f above prevents resetting of $SCHED
+
+echo "==================================================="
+echo "Be sure that the SCHED environment variable is set."
+echo "Currently set to " $SCHED
+echo "==================================================="
+echo " "
+
+# Set the directory of the SCHED executable to be tested:
+setenv SCHBIN $SCHED/bin/$1
+echo Running SCHED from $SCHBIN
+
+# Set location of "standard" results.
+setenv SCH_STDOUT $SCHED/examples/Stdout
+
+# Set the location of the current $SCHED so that Verify can ignore
+# differences in file paths on future comparisons.
+source $SCH_STDOUT/SetSchedStd
+
+#  First clean out any old files.
+$SCHBIN/schclean "*"
+/bin/rm doptgt.com
+/bin/rm testruns.out
+
+date > testruns.out
+
+#  Now run SCHED on the examples and compare results with standards.
+#  In alphabetical order for ease of comparison with ls etc.
+
+echo All output will be in testruns.out
+
+echo Processing eg3mma.key | tee -a testruns.out
+$SCHBIN/sched < eg3mma.key >> testruns.out
+mv sched.runlog eg3mma.runlog
+./Check_results eg3mma pt $SCH_STDOUT eg3mma.key >> testruns.out
+
+echo Processing eg3mmb.key | tee -a testruns.out
+$SCHBIN/sched < eg3mmb.key >> testruns.out
+mv sched.runlog eg3mmb.runlog
+./Check_results eg3mmb pt $SCH_STDOUT eg3mmb.key >> testruns.out
+
+echo Processing eg3mmc.key | tee -a testruns.out
+$SCHBIN/sched < eg3mmc.key >> testruns.out
+mv sched.runlog eg3mmc.runlog
+./Check_results eg3mmc pt $SCH_STDOUT eg3mmc.key >> testruns.out
+
+echo Processing eg512.key | tee -a testruns.out
+$SCHBIN/sched < eg512.key >> testruns.out
+mv sched.runlog eg512.runlog
+./Check_results eg512 hn $SCH_STDOUT eg512.key >> testruns.out
+
+echo Processing eg512g.key | tee -a testruns.out
+$SCHBIN/sched < eg512g.key >> testruns.out
+mv sched.runlog eg512g.runlog
+./Check_results eg512g hn $SCH_STDOUT eg512g.key >> testruns.out
+
+echo Processing eg2head.key | tee -a testruns.out
+$SCHBIN/sched < eg2head.key >> testruns.out
+mv sched.runlog n02l1.runlog
+./Check_results n02l1 ef $SCH_STDOUT eg2head.key >> testruns.out
+
+echo Processing egglobal.key | tee -a testruns.out
+$SCHBIN/sched < egglobal.key >> testruns.out
+mv sched.runlog ge001.runlog
+./Check_results ge001 hn $SCH_STDOUT egglobal.key >> testruns.out
+
+echo Processing egiii.key | tee -a testruns.out
+$SCHBIN/sched < egiii.key >> testruns.out
+mv sched.runlog egiii.runlog
+./Check_results egiii hn $SCH_STDOUT egiii.key >> testruns.out
+
+echo Processing egiv.key | tee -a testruns.out
+$SCHBIN/sched < egiv.key >> testruns.out
+mv sched.runlog gm031.runlog
+./Check_results gm031 hn $SCH_STDOUT egiv.key >> testruns.out
+
+echo Processing eglst.key | tee -a testruns.out
+$SCHBIN/sched < eglst.key >> testruns.out
+mv sched.runlog eglst.runlog
+./Check_results eglst hn $SCH_STDOUT eglst.key >> testruns.out
+
+echo Processing egOH.key | tee -a testruns.out
+$SCHBIN/sched < egOH.key >> testruns.out
+mv sched.runlog egoh.runlog
+./Check_results egoh hn $SCH_STDOUT egOH.key >> testruns.out
+
+echo Processing egplan.key | tee -a testruns.out
+$SCHBIN/sched < egplan.key >> testruns.out
+mv sched.runlog egplan.runlog
+./Check_results egplan hn $SCH_STDOUT egplan.key >> testruns.out
+
+echo Processing egvla.key | tee -a testruns.out
+$SCHBIN/sched < egvla.key >> testruns.out
+mv sched.runlog ah672.runlog
+./Check_results ah672 y $SCH_STDOUT egvla.key >> testruns.out
+
+echo Processing egvla7mm.key | tee -a testruns.out
+$SCHBIN/sched < egvla7mm.key >> testruns.out
+mv sched.runlog egvlaq.runlog
+./Check_results egvlaq y $SCH_STDOUT egvla7mm.key >> testruns.out
+
+echo Processing egvlba.key | tee -a testruns.out
+$SCHBIN/sched < egvlba.key >> testruns.out
+mv sched.runlog egvlba.runlog
+./Check_results egvlba hn $SCH_STDOUT egvlba.key >> testruns.out
+
+echo Processing egvsop.key | tee -a testruns.out
+$SCHBIN/sched < egvsop.key >> testruns.out
+mv sched.runlog vt002.runlog
+./Check_results vt002 hn $SCH_STDOUT egvsop.key >> testruns.out
+
+echo Processing manual_1.key | tee -a testruns.out
+$SCHBIN/sched < manual_1.key >> testruns.out
+mv sched.runlog be001.runlog
+./Check_results be001 hn $SCH_STDOUT manual_1.key >> testruns.out
+
+echo Processing manual_2.key | tee -a testruns.out
+$SCHBIN/sched < manual_2.key >> testruns.out
+mv sched.runlog be002.runlog
+./Check_results be002 hn $SCH_STDOUT manual_2.key >> testruns.out
+
+echo Processing manual_line.key | tee -a testruns.out
+$SCHBIN/sched < manual_line.key >> testruns.out
+mv sched.runlog bd027.runlog
+./Check_results bd027 hn $SCH_STDOUT manual_line.key >> testruns.out
+
+echo Processing manual_simp.key | tee -a testruns.out
+$SCHBIN/sched < manual_simp.key >> testruns.out
+mv sched.runlog uvcov.runlog
+./Check_results uvcov hn $SCH_STDOUT manual_simp.key >> testruns.out
+
+#  EVN examples
+
+echo Processing evn_cont_strong.key
+$SCHBIN/sched < evn_cont_strong.key >> testruns.out
+mv sched.runlog eo901.runlog
+./Check_results eo901 ef $SCH_STDOUT manual_simp.key >> testruns.out
+
+echo Processing evn_cont_strong_pol.key
+$SCHBIN/sched < evn_cont_strong_pol.key >> testruns.out
+mv sched.runlog eo902.runlog
+./Check_results eo902 ef $SCH_STDOUT manual_simp.key >> testruns.out
+
+echo Processing evn_cont_weak_256.key
+$SCHBIN/sched < evn_cont_weak_256.key >> testruns.out
+mv sched.runlog eo903.runlog
+./Check_results eo903 ef $SCH_STDOUT manual_simp.key >> testruns.out
+
+echo Processing evn_cont_weak_512.key
+$SCHBIN/sched < evn_cont_weak_512.key >> testruns.out
+mv sched.runlog eo904.runlog
+./Check_results eo904 ef $SCH_STDOUT manual_simp.key >> testruns.out
+
+echo Processing evn_cont_weak_snap.key
+$SCHBIN/sched < evn_cont_weak_snap.key >> testruns.out
+mv sched.runlog eo905.runlog
+./Check_results eo905 ef $SCH_STDOUT manual_simp.key >> testruns.out
+
+echo Processing evn_line_hi.key
+$SCHBIN/sched < evn_line_hi.key >> testruns.out
+mv sched.runlog eo906.runlog
+./Check_results eo906 ef $SCH_STDOUT manual_simp.key >> testruns.out
+
+echo Processing evn_line_meth.key
+$SCHBIN/sched < evn_line_meth.key >> testruns.out
+mv sched.runlog eo907.runlog
+./Check_results eo907 ef $SCH_STDOUT manual_simp.key >> testruns.out
+
+
+#  Misc examples
+
+echo Processing egmk2.key | tee -a testruns.out
+$SCHBIN/sched < egmk2.key >> testruns.out
+mv sched.runlog egmk2.runlog
+./Check_results egmk2 hn $SCH_STDOUT egmk2.key >> testruns.out
+
+echo Processing manual_vla.key | tee -a testruns.out
+$SCHBIN/sched < manual_vla.key >> testruns.out
+mv sched.runlog bv016.runlog
+./Check_results bv016 y $SCH_STDOUT manual_vla.key >> testruns.out
+
+echo Processing planvla.key | tee -a testruns.out
+$SCHBIN/sched < planvla.key >> testruns.out
+mv sched.runlog yplan.runlog
+./Check_results yplan y $SCH_STDOUT planvla.key >> testruns.out
+
+echo Processing ptlink.key | tee -a testruns.out
+$SCHBIN/sched < ptlink.key >> testruns.out
+mv sched.runlog ce001.runlog
+./Check_results ce001 pt $SCH_STDOUT ptlink.key >> testruns.out
+
+echo Processing vla_vlbi.key | tee -a testruns.out
+$SCHBIN/sched < vla_vlbi.key >> testruns.out
+mv sched.runlog bw099.runlog
+./Check_results bw099 hn $SCH_STDOUT vla_vlbi.key >> testruns.out
+
+echo Processing egmk5vlba.key | tee -a testruns.out
+$SCHBIN/sched < egmk5vlba.key >> testruns.out
+mv sched.runlog egmk5.runlog
+./Check_results egmk5 pt $SCH_STDOUT egmk5vlba.key >> testruns.out
+
+echo Processing egmk5vex.key | tee -a testruns.out
+$SCHBIN/sched < egmk5vex.key >> testruns.out
+mv sched.runlog mk5vx.runlog
+./Check_results mk5vx ef $SCH_STDOUT egmk5vex.key >> testruns.out
+
+#  Check planet and satellite pointing, and creation of pointing
+#  schedules.  The required ephemeris files and spice files are
+#  only available at the AOC, so don't try elsewhere.
+
+if ("$PLANET_DATA" == "/users/cwalker/PLANETDATA/Linux") then
+
+   echo Processing doptg.com
+   sed s.\$SCHED/bin.\$SCHBIN.g  doptg.com > doptgt.com
+   chmod +x doptgt.com
+   ./doptgt.com >> testruns.out
+   /bin/rm doptgt.com
+   mv sched.runlog ptg.runlog
+   ./Check_results ptg hn $SCH_STDOUT doptg.com >> testruns.out
+
+   echo Processing egsat.key | tee -a testruns.out
+   $SCHBIN/sched < egsat.key >> testruns.out
+   mv sched.runlog egsat.runlog
+   ./Check_results egsat pt $SCH_STDOUT egsat.key >> testruns.out
+
+endif
+
+echo ' --------------------------------------------------' >> testruns.out
+
+date >> testruns.out
+echo ' --------------------------------------------------' >> testruns.out
+
+echo "===================================================="
+echo "Examine   testruns.out   for results."
+echo "  It will contain sched runtime output and comparison"
+echo "  with standard results in directory Stdout."
+echo "Do not worry about numbers differing in last digit -"
+echo "  Some machines round differently"
+echo "===================================================="
+
+
+
+
+
+
