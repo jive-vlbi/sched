@@ -1,0 +1,184 @@
+README file for the SCHED root directory.
+By Craig Walker
+
+This is the root directory for everything needed to install and run
+the VLBI scheduling program SCHED.
+
+An HTML version of the SCHED Manual is on the World Wide Web at
+http://www.aoc.nrao.edu/~cwalker/sched/sched/sched.html or locally as
+./doc/sched/sched.html.  A postscript version can be made by running
+latex on sched.tex in ./doc.  Warning, it is large - about 230 pages -
+and evolving rapidly.  If you can use either Web version, it is more
+convenient and will be kept up to date.
+
+The subdirectories here are:
+
+./bin:          Base location of the execute modules and some scripts.
+                There are execute modules or links for the site default
+                computer type here.
+                This, or the type specific subdirectory, can be added 
+                to your PATH for easy execution.
+
+./bin/<arch>:   Possible computer type specific directories containing 
+                execute modules.
+
+./catalogs:     Station, source, and linename catalogs.  Also some
+                stuff that may be ignored related to catalog 
+                conversions.  There are some {\sl Master} subdirectories
+                containing the versions of the frequency and station
+                catalogs that are actually maintained, but users 
+                need not be concerned about them
+
+./catalogs/Master_JIVE:  Contains station and frequency catalog segments
+                maintained at JIVE.  Not meant for users.
+
+./catalogs/Master_NRAO:  Contains station and frequency catalog segments
+                maintained at NRAO.  Not meant for users.
+
+./catalogs/Master_HSTK:  Contains station and frequency catalog segments
+                maintained at HSTK for mm VLBI.  Not meant for users.
+
+./doc:          The SCHED Manual and some other documentation files.
+
+./examples:     Some example SCHED input files.  A good place to 
+                look for templates.  Also the location of the 
+                verification script Verify.
+
+./examples/Stdout:  Versions of outputs from the Verify script.  Will 
+                be used as comparison with local output when 
+                Verify is run.
+
+./setups:       Setup files.  Look here for what you need or 
+                something close that can be modified.
+
+./src:          The source code directory.  Also the location of the
+                Makefile (which requires GNU make - get from
+                prep.ai.mit.edu or the SCHED ftp area if necessary)
+
+./src/Cit:      A directory structure containing routines, some 
+                machine specific, taken, or closely associated  
+                with, the Caltech VLBI package.  There are a number
+                of architecture specific subdirectories (eg sys_sun)
+                that are needed for specific machines.
+
+./src/Sched:    The code for SCHED.
+
+./src/Jpl:      The code for planetary ephemeris access.
+
+./src/Jplstub:  Stub routines if the planetary routines are not
+                wanted.  These are probably not really needed
+                since the Jpl routines should compile anywhere.
+                Just don't try accessing the ephemeris if you
+                don't have it.
+
+./src/Plot:     Most of the plotting routines for SCHED.
+
+./src/PlotNRAO: A few plot routines supported at NRAO.
+
+./src/Plotstub: The stub routines for sites that don't have
+                PGPLOT.  SCHED won't link without these if 
+                PGPLOT libraries are not available.
+
+./src/Vex:      The code for writing VEX format files.
+
+./src/Sla:      The routines from the SLALIB required by SCHED and 
+                UPTIME.  This is only a subset of the SLALIB.
+
+
+Any subdirectories in all capital letters are associated with code
+management and testing and should be ignored (should not be in the
+export version).
+
+The installation instructions are in the manual.  Briefly, to install
+the programs on unix systems, cd to the src subdirectory, and edit the
+Makefile according to the comments in it.  Then run GNU make (gmake on
+some systems).  This should compile all modules in the subdirectories,
+link the programs, and put them in the bin subdirectory.
+
+SCHED uses the PGPLOT routines from Caltech for plotting.  SCHED
+requires PGPLOT Version 5.2 or later.  These routines are not included
+in this area and will have to be installed from the Caltech
+distribution.  There is exensive documenation, including instructions
+on how to get it, on the World Wide Web at
+http://astro.caltech.edu/~tjp/pgplot.
+
+If you cannot get pgplot, stubs are available and the comments in
+the Makefile show how to use them instead of the real pgplot.  In
+this case, plotting will not work, but otherwise the programs
+should be fine.  Plotting is not critical for the main program
+tasks.  But as of the 6 Mar 98 version, the plotting capabilities
+are quite nice and it is well worth the effort of getting pgplot
+installed.
+
+SCHED also understands how to get positions for the planets, the
+Moon and the Sun.  For this it uses a JPL ephemeris.  It is expected
+that, at least for now, this will only be used for testing and 
+will probably only be used at the AOC.  The emphemeris file is
+not included in the distribution because of its large size.  If you
+need it, contact cwalker@nrao.edu.  Also, the subroutines do not
+isolate machine dependencies so they could cause problems in the
+installation.  If they do, follow the directions in the Makefile
+to use the available stub.  The ephemeris file (input parameter
+EPHFILE) is kept in a separate directory tree.  On unix systems,
+the environment variable {\tt PLANET_DATA} can be used to set the
+directory in which the ephemeris is located.  Note that the emphemeris
+is binary so it cannot be shared between machines that use different
+binary formats, such as Sun workstations and i86 Linux boxes.
+
+SCHED can now deal with satellites via SPICE files.  This is meant
+for tracking deep space missions, not near Earth satellites.  Again
+both the SPICE related code and the ephemeris files will not be
+distributed with SCHED because they are not expected to be used outside
+of the AOC and they are very bulky.
+
+It seems that there are problems with the routine isatty on SGI
+machines.  This may involve a compiler bug.  If you have this problem,
+routine TSTTTY in ./src/Cit/sys_unix should just be modified to return
+.FALSE. (as it does in citmsdos.for).  Or check out the alternative
+in the sys_linux subdirectory.
+
+As of the May 2002 version, SCHED can plot the locations of stations
+on a map.  SCHED can read vector files to generate continental, national,
+and US state boundaries and New Mexico roads (it is being used for
+New Mexico Array configuration studies).  The vector files are kept
+in the same directory as the ephemeris.  They are not distributed with
+SCHED because they are individually larger than the whole rest of the
+SCHED distribution.  If you want the files, contact cwalker@nrao.edu
+for information on where to pick them up.
+
+Good luck and happy scheduling!
+
+Between me and a concerted effort by Franco Tinarelli in Bologna,
+SCHED has been tested and has worked at some recent time on:
+
+Recently tested at NRAO (Jan 2004)
+  Intel PC with LINUX using g77  (current development environment)
+  SUN Sparc stations under Solaris  (actively supported at the AOC)
+  OS X v10.3 with g77 on a Mac iBook G4 (Dec 2003).
+
+Tested in last few years:
+  Intel PC with LINUX using fort77 (f2c and gcc).
+  DEC Alpha
+  HP
+  SGI
+  IBM with AIX (Maybe not so recent).
+
+The Makefile contains the necessary compiler switches etc for all of
+the above.  SCHED has not been tested on non-unix machines in several
+years although it once worked on DOS PCs and VAXs.  If you install it
+on anything other than the above please let me know.  The FORTRAN
+is very generic and the known machine dependent pieces are isolated
+in the sys areas so ports should be fairly easy.
+
+Most of SCHED is supported by Craig Walker at NRAO, Socorro, NM.
+(cwalker@nrao.edu).  The VEX portions of SCHED are supported by Cormac
+Reynolds at JIVE in the Netherlands (reynolds@jive.nl).
+The interactive plotting capabilities are supported by Franco
+Tinarelli in Bologna, Italy (TINARELLI@astbo1.bo.cnr.it), although
+some of the recent changes for configuration studies were added
+by Craig Walker.
+
+
+
+
+

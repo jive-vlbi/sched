@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>BAND</TITLE>
+<META NAME="description" CONTENT="BAND">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node220.html">
+<LINK REL="previous" HREF="node218.html">
+<LINK REL="up" HREF="node217.html">
+<LINK REL="next" HREF="node220.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html3297"
+  HREF="node220.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3293"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3287"
+  HREF="node218.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3295"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3298"
+  HREF="node220.html">BARREL</A>
+<B> Up:</B> <A NAME="tex2html3294"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3288"
+  HREF="node218.html">AZCOLIM</A>
+ &nbsp <B>  <A NAME="tex2html3296"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00464200000000000000"></A><A NAME="SP:BAND"></A>
+<BR>
+<TT>BAND</TT>
+</H3>
+
+<P>
+<TT>BAND</TT> provides a simple way of requesting an observing frequency.
+SCHED&nbsp; has an internal table of standard center frequencies that can
+be called upon with <TT>BAND</TT>.  If <TT>BAND</TT> is specified, and
+<A HREF="node235.html#SP:FREQREF"><TT>FREQREF</TT></A> is not, SCHED&nbsp; will get the
+observing center frequency from its internal table and will calculate,
+based on the <A HREF="node244.html#SP:NCHAN"><TT>NCHAN</TT></A>, <A HREF="node221.html#SP:BBFILTER"><TT>BBFILTER</TT></A> and <A HREF="node252.html#SP:POL"><TT>POL</TT></A> parameters,
+the actual channel frequencies to use to center the observations at
+the desired frequency.
+
+<P>
+The bands and centerfrequencies are in the table below.  When a
+bandwidth is not zero, that center frequency is used if the
+observation total bandwidth is the given amount.  This allows
+the center to shift with increasing bandwidth, which is especially
+useful at 21 cm where the radio astronomy band is near the edge
+of the tuning range for the preferred IF at the VLBA.
+
+<P>
+<PRE>
+----------------------------------------------
+        SCHED STANDARD OBSERVING BANDS
+----------------------------------------------
+                   Center
+      BAND        Frequency(1)   Bandwidth
+     '90cm'         330.49          0.0
+     '50cm'         610.98          0.0
+     '21cm'        1465.49        128.0
+     '21cm'        1435.49         64.0
+     '21cm'        1416.49          0.0
+     '18cm'        1658.49          0.0  (2)
+     '18cm'        1653.99          0.0  (3)
+     '13cm'        2295.49          0.0
+      '6cm'        4990.49          0.0
+      '4cm'        8415.49          0.0
+      '2cm'       15285.49          0.0
+      '1cm'       22235.49          0.0
+      '7mm'       43135.49          0.0
+       'sx'   2295.49 and 8415.49   0.0
+----------------------------------------------
+1. Note, these are subject to change as the choices
+are discussed with the community.
+2. Most 18 cm observing.
+3. For 32 MHz wide observations involving Jodrell, but not the
+phased VLA.  Avoids RFI at Jodrell.  But must be higher to fit
+in the VLA IF's.
+</PRE>
+
+<P>
+Specifying the <TT>BAND</TT> works well when most setup file parameters
+are defaulted.  But if the user insists on specifying many of the
+other parameters, such as <TT>IFCHAN, BBC etc</TT>, in non-standard
+ways, the program may not do the right thing.  It is likely that
+this will generate an error when the setups are checked.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> A string of up to 5 characters.
+</LI>
+<LI><B>Options:</B>  One of the options listed above.
+</LI>
+<LI><B>Default:</B>  Blank, which means the frequencies must be specified elsewhere
+</LI>
+<LI><B>Usage:</B>    Defaults to previous station.
+</LI>
+<LI><B>Example:</B>  <TT>BAND='2cm'</TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3297"
+  HREF="node220.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3293"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3287"
+  HREF="node218.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3295"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3298"
+  HREF="node220.html">BARREL</A>
+<B> Up:</B> <A NAME="tex2html3294"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3288"
+  HREF="node218.html">AZCOLIM</A>
+ &nbsp <B>  <A NAME="tex2html3296"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>AUTOMATIC TAPE ALLOCATION</TITLE>
+<META NAME="description" CONTENT="AUTOMATIC TAPE ALLOCATION">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="previous" HREF="node26.html">
+<LINK REL="up" HREF="node19.html">
+<LINK REL="next" HREF="node28.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html563"
+  HREF="node28.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html559"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html555"
+  HREF="node26.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html561"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html564"
+  HREF="node28.html">Recording Systems.</A>
+<B> Up:</B> <A NAME="tex2html560"
+  HREF="node19.html">Tape Management</A>
+<B> Previous:</B> <A NAME="tex2html556"
+  HREF="node26.html">POSTPASSES</A>
+ &nbsp <B>  <A NAME="tex2html562"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00324800000000000000"></A><A NAME="SSSEC:AUTOTAPE"></A>
+<BR>
+AUTOMATIC TAPE ALLOCATION
+</H3>
+
+<P>
+Automatic tape allocation is provided on the VLBA.  In fact, its
+use is required for most observations.  With automatic tape
+allocation, the only thing the user needs or can worry about is the
+total tape consumption.  It much be kept below that allocated for the
+experiment.  There are two reasons for the use of automatic tape
+allocation.  The first is to relieve the user of all the worry about
+tape handling.  It is no longer necessary to schedule everything in
+units of passes.  The second is to decouple the tape change times from
+the times allocated to each project.  This allows the tape changes at
+the stations to be done on a fixed schedule that is the same every
+week and which fits well with the work schedule for the site techs.
+This does cause tapes to contain data from more than one project, but
+the bookkeeping is in place to insure that they don't get erased until
+all the projects are correlated.  Recall that the VLBA stations are
+unmanned most of the time.  The second reason is why the use of
+automatic allocation is required.
+
+<P>
+Automatic tape allocation is not available for all stations, including
+all that use VEX files.  SCHED&nbsp; knows which stations can use it and
+schedules accordingly.  For global observations to be correlated on
+the VLBA correlator, the scheduler needs to worry about tape handling
+at the stations without auto allocation, but can ignore it for the
+ones that have it.  For any observations to be correlated on other
+correlators (including JIVE), automatic tape allocation cannot be used
+and SCHED&nbsp; will not allow it.
+
+<P>
+Two levels of automatic tape handling are available on the VLBA.  They
+are invoked using the parameter <A HREF="node55.html#MP:AUTOTAPE"><TT>AUTOTAPE</TT></A>.  The lower level allows the on-line system to decide
+where on the tape to start the next scan.  However if the scan runs
+out of tape going in the current direction, the recorder will stop and
+the rest of the scan will be lost.  After the first forward pass, any
+scan starting less than 450 feet from the end of the tape will be
+started in the opposite direction.  The first forward pass always runs
+to the low tape sense to determine the tape length.  It is the
+author's opinion that, because of the variable length of tapes,
+projects scheduled with this scheme are very likely to exhibit
+unexpected behavior with possible considerable loss of data.  It
+should work ok for long scans that intentionally try to drive well
+beyond the end of the tape, but this is almost worse than worrying
+about specifying the tape behavior at schedule time.  This level of
+automation is not recommended.
+
+<P>
+The higher level of automation is the method of choice for tape
+scheduling.  It would be even better if the speed of synchronization
+on the correlator were improved, but that project doesn't seem to be
+getting any priority.  With this mode, whenever the tape gets to an
+end, it stops and reverses.  The minimum time lost is the time
+required to reverse the tape at the correlator, which is about 5
+seconds times the speed up factor.  However some time to resync after
+the reversal is required and the actual time is more like 10 seconds
+times the speed up factor and somewhat variable.  For most experiments
+the data loss should not be a significant problem.  Scans of arbitrary
+length can be scheduled.  The user only need to worry about not
+exceeding his/her total tape allotment.  The total amount of tape used
+in a schedule is reported in the summary file.  Note that the same
+behavior, where scans starting within 450 feet of the expected end of
+tape after the first pass will start in the opposite direction, also
+applies with this level of automation.  450 feet is 67.5 seconds at
+80ips -- the speed that gives a speed up factor of 2 on the VLBA and
+is used by a large fraction of observations.
+
+<P>
+When automatic tape handling is requested, as is required for most
+VLBA projects, it is futile to worry about coordinating scans with
+tape passes.  Don't bother to try.  There are two reasons for this.
+First, the tape position at the start of the project will depend on
+where it was left by the previous project.  It will not necessarily be
+at an end.  Second, the autoallocation software uses the real length
+of the tape as measured on the first pass.  Tapes vary in length by
+several hundred feet depending on their history of abuse.  So you
+cannot know ahead of time where a scan will be on the tape so there
+is no point in trying to schedule passes unless some antennas in the
+array are not using autoallocation.
+
+<P>
+If a station that is using automatic tape allocation is scheduled in a
+scan on a source that is below the antenna hardware limits (not just
+the horizon), that antenna will be removed from the scan by SCHED.
+This will not happen when or where automatic allocation is not in
+use because the tape management could be messed up.  This action is
+provided mainly to help the Mauna Kea site technicians who have a
+very long drive to change tapes and whose antenna is often scheduled
+in scans for which the source has not yet risen.  Mark5 stations
+that are not using tape will also be scheduled in this manner.  This
+behavior can be overridden using <A HREF="node75.html#MP:DODOWN"><TT>DODOWN</TT></A>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html563"
+  HREF="node28.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html559"
+  HREF="node19.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html555"
+  HREF="node26.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html561"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html564"
+  HREF="node28.html">Recording Systems.</A>
+<B> Up:</B> <A NAME="tex2html560"
+  HREF="node19.html">Tape Management</A>
+<B> Previous:</B> <A NAME="tex2html556"
+  HREF="node26.html">POSTPASSES</A>
+ &nbsp <B>  <A NAME="tex2html562"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

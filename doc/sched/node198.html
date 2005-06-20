@@ -1,0 +1,295 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Tape Initialization File</TITLE>
+<META NAME="description" CONTENT="Tape Initialization File">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node211.html">
+<LINK REL="previous" HREF="node197.html">
+<LINK REL="up" HREF="node49.html">
+<LINK REL="next" HREF="node199.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html2917"
+  HREF="node199.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2913"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2907"
+  HREF="node197.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2915"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2918"
+  HREF="node199.html">Details of Tape Initialization</A>
+<B> Up:</B> <A NAME="tex2html2914"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html2908"
+  HREF="node197.html">Station Catalog and Locations</A>
+ &nbsp <B>  <A NAME="tex2html2916"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00440000000000000000"></A><A NAME="SEC:TPINI"></A>
+<BR>
+Tape Initialization File
+</H1>
+
+<P>
+The tape initialization information can be used to select what
+type of recording to make at a station and to give details about
+the tape recordings if tape is used.
+
+<P>
+During the transition to Mark5, there will be a period where both
+tape and disk systems will be available at stations.  SCHED&nbsp; needs
+a way to select which to use.  For each station, a default can be
+set with <TT>MEDIADEF</TT> in the station catalog. To override that
+default, the <TT>MEDIA</TT> parameter is provided here to tell
+SCHED&nbsp; whether to assume that the data transmission system is
+specified by <A HREF="node197.html#SEC:STACAT"><TT>RECORDER</TT></A> or <A HREF="node197.html#SEC:STACAT"><TT>DISK</TT></A> in the <A HREF="node197.html#SEC:STACAT">station catalog</A>.
+
+<P>
+When using a tape system, the tape initialization information tells
+SCHED&nbsp; details about the tapes to be used at each site.  In nearly
+all cases, the defaults are appropriate and very few users need to
+specify any of this information.  Other than for test observations
+which the user may wish to start in the middle of a tape, the only
+exceptions are for observations that use thick tapes on Mark III or
+Mark IV systems.  But since such tapes are no longer allowed at most
+stations, this should be very rare.  If tape initialization
+information is needed, the information can be specified in an external
+file, the <A HREF="node178.html#MP:TAPEFILE"><TT>TAPEFILE</TT></A>, or can be imbedded
+in the main file following the parameter <A HREF="node179.html#MP:TAPEINI"><TT>TAPEINI</TT></A>.
+
+<P>
+The capability to have a separate <TT>TAPEFILE</TT> was originally part
+of an attempt to deal with the general case of VLBA tape handling.
+Such a file could have been used to schedule multiple projects per
+tape by specifying where each project starts.  The file would have one
+full set of inputs per project.  But the automatic tape allocation by
+the on-line system now deals with this situation in a cleaner manner.
+Automatic tape allocation and automatic reversals can be requested
+using SCHED's <A HREF="node55.html#MP:AUTOTAPE"><TT>AUTOTAPE</TT></A> parameter;
+however, these options only apply to sites with VLBA control systems
+and more than one tape drive and can only be used for projects to be
+correlated on the VLBA correlator.  When automatic tape handling is
+requested, SCHED&nbsp; puts the appropriate commands in the control files.
+It also attempts to predict what the tapes will do assuming that they
+start in the place specified in the tape initialization file.  Users
+should be aware that these predictions may be not be accurate because
+tape lengths can vary and the tape start position may depend on the
+preceeding project.
+
+<P>
+Note that the number of heads in use at a time (8, 16, or 32), which
+determines the number of passes per head index position (1, 2, or 4 as
+specified by <A HREF="node261.html#SP:TPMODE"><TT>TPMODE</TT></A> in the <A HREF="node213.html#SEC:SETUPS"><I>setup file</I></A>, is not allowed to change during a project
+at a station, although different stations may use different values for
+<TT>TPMODE</TT>.  This restriction avoids a the bookkeeping nightmare
+raised by the more general case.  SCHED&nbsp; checks all the requested
+setups for a station and remembers the largest number of heads
+(smallest <TT>TPMODE</TT>) and allocates tape for all scans as if that
+value were in use.  This is wasteful of tape, but allows some tests to
+be done with mode switching.
+
+<P>
+The following are some capabilities supported through the tape initilization
+file:
+
+<P>
+
+<OL>
+<LI>Different tape lengths at different stations.
+
+<P>
+</LI>
+<LI>Different bit densities, and hence tape speeds, at different
+stations.
+
+<P>
+</LI>
+<LI>Tape drive and index position at program start specified for
+each station.
+
+<P>
+</LI>
+<LI>Tape speed, bandwidth, and sample rate can change during run.
+Beware of operational restrictions on the use of this capability.
+See the <A NAME="tex2html72"
+  HREF="http://www.aoc.nrao.edu/vlba/obstatus/guidelines.ps">guidelines for preparing observing schedules</A>
+available from the NRAO WWW home page under VLBA.
+
+<P>
+</LI>
+<LI>Different number of tape drives at each station.
+</LI>
+</OL>
+
+<P>
+A single set of tape initialization conditions can be specified in the
+SCHED&nbsp; keyin file using <TT>TAPEINI</TT> followed by a ``/'', in
+much the same way that in-line catalogs are given. This is the normal
+way that the tape initialization information is provided.  Unlike
+the source and station catalogs, only one input group will be read and
+that group will be terminated by a ``/''.  No <TT>ENDCAT</TT> or
+equivalent is required, or even allowed.
+
+<P>
+The input parameters of the <TT>TAPEFILE</TT> are:
+
+<P>
+
+<DL COMPACT>
+<DT>&nbsp;
+<DD><A HREF="node200.html#TP:MEDIA"><TT>MEDIA:</TT></A><TT>&nbsp;&nbsp;&nbsp;</TT> Which record system to use.
+<DT>&nbsp;
+<DD><A HREF="node201.html#TP:NDRIVES"><TT>NDRIVES:</TT></A><TT>&nbsp;</TT> Number of drives at the site.
+<DT>&nbsp;
+<DD><A HREF="node202.html#TP:NHEADPOS"><TT>NHEADPOS:</TT></A> Number of head positions in use at site.
+<DT>&nbsp;
+<DD><A HREF="node203.html#TP:OBSCODE"><TT>OBSCODE:</TT></A><TT>&nbsp;</TT> Experiment code for this observation.
+<DT>&nbsp;
+<DD><A HREF="node204.html#TP:TPSTA"><TT>TPSTA:</TT></A><TT>&nbsp;&nbsp;&nbsp;</TT> Station name for this group of parameters.
+<DT>&nbsp;
+<DD><A HREF="node205.html#TP:TPDRIVE"><TT>TPDRIVE:</TT></A><TT>&nbsp;</TT> The drive to begin the observation on.
+<DT>&nbsp;
+<DD><A HREF="node206.html#TP:TPINDEX"><TT>TPINDEX:</TT></A><TT>&nbsp;</TT> The tape index at which to start the observations.
+<DT>&nbsp;
+<DD><A HREF="node207.html#TP:TPLENGTH"><TT>TPLENGTH:</TT></A> The length of the tapes to be used at the site.
+<DT>&nbsp;
+<DD><A HREF="node208.html#TP:DENSITY"><TT>DENSITY:</TT></A><TT>&nbsp;</TT> Are tapes at sites high or low density.
+<DT>&nbsp;
+<DD><A HREF="node209.html#TP:TPTIME"><TT>TPTIME:</TT></A><TT>&nbsp;&nbsp;</TT> Mark II tape length in time.
+<DT>&nbsp;
+<DD><A HREF="node210.html#TP:HEADMODE"><TT>HEADMODE:</TT></A> Indicator of head positions to use.
+</DD>
+</DL>
+
+<P>
+The first example shows a tapeini section that might be used during
+the transition to MARK5.  Note that <TT>BOTH</TT> means create a
+schedule with both types of control information so that operations
+can pick which to use.  This works for the VLBA, but not for
+stations controlled by the VEX file.  For this example, all
+tape parameter will take their default values.
+
+<P>
+<PRE>
+tapeini /
+tpsta    = vlba_sc, vlba_hn, vlba_nl, vlba_fd, vlba_la, vlba_pt,
+           vlba_kp, vlba_ov, vlba_br, vlba_mk, gb_vlba, medicina,
+           noto,    onsala60
+MEDIA    = TAPE,    TAPEDISK,TAPE,    DISK,    DISK,    DISK,
+           DISK,    TAPE,    TAPEDISK,TAPE,    TAPE,    DISK,
+           TAPE,    DISK
+  /
+</PRE>
+
+<P>
+The second example of a tape initialization group shows the usage for
+specifying the tape system.  Note the <TT>NDRIVES</TT> is not given so
+that it is picked up from the <A HREF="node197.html#SEC:STACAT">station catalog</A>.
+Note that the <A HREF="node40.html#SSSEC:VLBIEG">example file for VLBI at the VLA</A>
+contains a tape initialization group to show what it is like.  Usually
+it should be reasonable to take the defaults.
+
+<P>
+<PRE>
+obscode ='default'
+tpsta   ='vlba', 'vla1', 'vla27', 'eb_vlba', 'gb_vlba', 'default'
+tpdrive =1,      1,      1,       1,         1,         1
+tpindex =1,      1,      1,       1,         1,         1
+tplength=17600,  17600,  17600,   17600,     17600,     8800
+nheadpos=14,     14,     14,      14,        14,        14
+density =H,      H,      H,       H,         H,         L
+        /
+</PRE>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html2919"
+  HREF="node199.html">Details of Tape Initialization Parameters</A>
+<UL>
+<LI><A NAME="tex2html2920"
+  HREF="node200.html"><TT>MEDIA</TT></A>
+<LI><A NAME="tex2html2921"
+  HREF="node201.html"><TT>NDRIVES</TT></A>
+<LI><A NAME="tex2html2922"
+  HREF="node202.html"><TT>NHEADPOS</TT></A>
+<LI><A NAME="tex2html2923"
+  HREF="node203.html"><TT>OBSCODE</TT></A>
+<LI><A NAME="tex2html2924"
+  HREF="node204.html"><TT>TPSTA</TT></A>
+<LI><A NAME="tex2html2925"
+  HREF="node205.html"><TT>TPDRIVE</TT></A>
+<LI><A NAME="tex2html2926"
+  HREF="node206.html"><TT>TPINDEX</TT></A>
+<LI><A NAME="tex2html2927"
+  HREF="node207.html"><TT>TPLENGTH</TT></A>
+<LI><A NAME="tex2html2928"
+  HREF="node208.html"><TT>DENSITY</TT></A>
+<LI><A NAME="tex2html2929"
+  HREF="node209.html"><TT>TPTIME</TT></A>
+<LI><A NAME="tex2html2930"
+  HREF="node210.html"><TT>HEADMODE</TT></A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2917"
+  HREF="node199.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2913"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2907"
+  HREF="node197.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2915"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2918"
+  HREF="node199.html">Details of Tape Initialization</A>
+<B> Up:</B> <A NAME="tex2html2914"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html2908"
+  HREF="node197.html">Station Catalog and Locations</A>
+ &nbsp <B>  <A NAME="tex2html2916"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

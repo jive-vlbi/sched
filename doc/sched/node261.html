@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>TPMODE</TITLE>
+<META NAME="description" CONTENT="TPMODE">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node262.html">
+<LINK REL="previous" HREF="node260.html">
+<LINK REL="up" HREF="node217.html">
+<LINK REL="next" HREF="node262.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html3801"
+  HREF="node262.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3797"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3791"
+  HREF="node260.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3799"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3802"
+  HREF="node262.html">TPSPEED</A>
+<B> Up:</B> <A NAME="tex2html3798"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3792"
+  HREF="node260.html">SYNTH</A>
+ &nbsp <B>  <A NAME="tex2html3800"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION004644400000000000000"></A><A NAME="SP:TPMODE"></A>
+<BR>
+<TT>TPMODE</TT>
+</H3>
+
+<P>
+<TT>TPMODE</TT> sets the number of passes at each head index
+position. Allowed values are 1, 2, 4, and 8. For these cases, a
+maximum of 32, 16, 8, or 4 heads can be used at a time. <TT>TPMODE=1</TT>
+is appropriate for Mark&nbsp;III mode A, while <TT>TPMODE=2</TT> is used for
+Mark&nbsp;III mode B. Setups with different values of <TT>TPMODE</TT>
+may be specified for a station during an experiment, but SCHED&nbsp; 
+will determine the lowest value specified for the station for the
+whole experiment and use that for all scans.  Thus during the times
+when the setup calls for fewer heads than could be used with the
+minimum <TT>TPMODE</TT>, some tracks will be left blank.  This wastes
+tape, but saves a great deal of complexity in keeping track of
+where data should be recorded on the tape.  It is strongly advised
+that all setup files for a project use the same <TT>TPMODE</TT>.
+Note, however, that different stations can use different <TT>TPMODES</TT> without wasting tape.
+
+<P>
+The correct <TT>TPMODE</TT> can be determined from the <A HREF="node233.html#SP:FORMAT"><TT>FORMAT</TT></A>, the number of bits per sample (<A HREF="node225.html#SP:BITS"><TT>BITS</TT></A>), and the number of channels (<A HREF="node244.html#SP:NCHAN"><TT>NCHAN</TT></A>.
+Those parameters tell how many tracks are needed per channel and,
+multiplied by the number of channels, how many tracks are needed per
+pass.  For VLBA formats, that total number of tracks is divided into
+32 to get <TT>TPMODE</TT>.  For Mark&nbsp;III, observations, the total number
+of heads available is normally 28, although the VLBA systems can
+record 32 tracks in Mark&nbsp;III format.
+
+<P>
+SCHED&nbsp; will derive a reasonable default for <TT>TPMODE</TT> in almost
+all cases so it is not necessary to specify it.
+
+<P>
+<TT>TPMODE</TT> can be used to force a format if <TT>FORMAT</TT> is not being
+specified, as is reasonable in station independent setup files.  A fan
+out will be chosen that generates the requested number of passes per
+head position.  If the observation uses wide band, 2 head (Mark IV and
+VLBA4) or 2 tape (VLBA) mode, the fan out will be chosen assuming that
+all antennas have the 2 head/tape capability.  Later, for single drive
+stations, the number of channels will be cut in half.
+
+<P>
+For S2 recorders <TT>TPMODE</TT> denotes the number of groups the S2
+recorder can use in the desired recording mode. In other words it is
+the total number of recorders divided by the number of recorders
+implied by the mode. It must be consistent with the S2 mode implied by
+the number of channels and bandwidth to be record.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> An integer.
+</LI>
+<LI><B>Options:</B>  <TT>1</TT>, <TT>2</TT>, <TT>4</TT>, or <TT>8</TT>
+</LI>
+<LI><B>Default:</B>  <TT>0</TT> - SCHED&nbsp; will generate a reasonable default.
+</LI>
+<LI><B>Usage:</B>    Defaults to previous station.
+</LI>
+<LI><B>Example:</B>  <TT>TPMODE=2</TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3801"
+  HREF="node262.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3797"
+  HREF="node217.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3791"
+  HREF="node260.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3799"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3802"
+  HREF="node262.html">TPSPEED</A>
+<B> Up:</B> <A NAME="tex2html3798"
+  HREF="node217.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3792"
+  HREF="node260.html">SYNTH</A>
+ &nbsp <B>  <A NAME="tex2html3800"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Keyin Input for Plotting (obsolete)</TITLE>
+<META NAME="description" CONTENT="Keyin Input for Plotting (obsolete)">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="previous" HREF="node11.html">
+<LINK REL="up" HREF="node11.html">
+<LINK REL="next" HREF="node13.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html341"
+  HREF="node13.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html337"
+  HREF="node11.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html333"
+  HREF="node11.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html339"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html342"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Up:</B> <A NAME="tex2html338"
+  HREF="node11.html">Plotting</A>
+<B> Previous:</B> <A NAME="tex2html334"
+  HREF="node11.html">Plotting</A>
+ &nbsp <B>  <A NAME="tex2html340"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00251000000000000000">
+Keyin Input for Plotting (obsolete)</A>
+</H2>
+
+<P>
+This section describes the use of Keyin inputs to control the plotting
+functions.  This has been superceeded by the control panel scheme
+of inputs, but the documentation will be retained until the capability
+is removed.
+
+<P>
+If the <TT>TERMINAL</TT> button is pressed on the plot control panel,
+SCHED&nbsp; reverts to Keyin style input from the main window in which it
+is running to control the plots.  First, SCHED&nbsp; writes a description
+of the possible input parameters, which are also described below, and
+then prompts for KEYIN style input.  The user should specify any
+desired quantities and then type a ``/''.  If the user is on a machine
+with X windows graphics, simply taking all the defaults will cause a
+u-v plot of all sources and scans in the project to appear on the
+screen.
+
+<P>
+The inputs can be used to choose between u-v plots, xy, and Ra-Dec
+plots.  For u-v plots, the scale can be specified and a station can be
+selected for which, on color displays, the baselines to that station
+will be highlighted (displayed in red).  Also the source to be plotted
+can be specified.  XY plots are a bit more complicated because they
+are more flexible.  The quantity to plot on each axis can be selected,
+the scales specified and the station and source chosen to be one or
+all.  See the details of the input parameters below.  In addition, the
+plot can be restricted to scans that use one of the setup files.  This
+can be useful for assessing band switching observations.
+
+<P>
+The input parameters are not reset between runs of the plotting.  Thus
+the user need only specify those items that he/she wishes to change.
+Some of the built in KEYIN capabilities can be useful here.  If you
+type <TT>SHOW</TT> (and "/"????, KEYIN will list the input variables
+and their current values.  <TT>HELP</TT> generates a list of the variables.
+Also you can type <TT>SAVE filename</TT> and KEYIN will write a file with
+name <TT>filename</TT> in the default area containing the current parameter
+settings.  Later, perhaps in another run of SCHED, you can type
+<TT>@filename</TT> to recover those parameters.  The parameter file can
+be edited -- it is a normal KEYIN input file (actually any file can
+be read with the <TT>@filename</TT> construct, although only up to the first
+``/'').
+
+<P>
+Plotting Input Parameters (Terminal):
+
+<P>
+The KEYIN inputs to the plotting section of SCHED&nbsp; are:
+
+<P>
+<TT>PLotfile</TT>
+
+<P>
+<TT>PLOTfile</TT> gives the output specification for the plot.  As with
+any PGPLOT programs, it is in the form <TT>filename/device</TT>.
+For interactive devices, the filename need not be specified.  The
+default device is <TT>/xs</TT> which is a good choice for X windows systems.
+Other devices most likely to be of interest are <TT>/ps</TT> for a postscript
+file and <TT>/cps</TT> for a color postscript file.  See
+<A NAME="tex2html52"
+  HREF="http://www.astro.caltech.edu/~tjp/pgplot/">PGPLOT documentation</A>PGPLOT
+documentation for other options (more will be listed here in the future).
+The device can be changed at any time.
+If it is changed, the old one will be closed and the new one opened.  This
+allows the plot to be set up interactively, and then put out in postscript
+for printing.
+
+<P>
+<TT>SEtnum</TT>
+
+<P>
+When the plotting section is entered the first time, information is written
+to the screen about possible input options.  Among the information presented
+is a numbered list of the setup files encountered in the input.  With
+<TT>SEtnum</TT>, one of those setup files can be selected by number (avoids
+lots of typing since setup file names often include full paths and can
+be quite long).  Then the plot will only show scans which use that setup
+file.
+
+<P>
+<TT>TYpe</TT>
+
+<P>
+<TT>TYpe</TT> is used to specify the type of plot.  The option are <TT>UV</TT>,
+which is the default, <TT>XY</TT>, and <TT>RD</TT>.  <TT>UV</TT> causes a plot of the
+spatial frequency coverage to be plotted.  For now, the scale on the
+plot is km.  An expected enhancement eventually is for this to optionally
+be in wavelengths.  For <TT>XY</TT> plots, there are a variety of options
+which are specified with <TT>XAxis</TT> and <TT>YAxis</TT>, which independently
+specify the quatantity plotted on each axis.  <TT>RD</TT> requests that the
+locations of the sources in the schedule be plotted in Ra and Dec.
+
+<P>
+<TT>XAxis</TT>
+
+<P>
+<TT>XAxis</TT> specifies the quantity to be plotted on the horizontal axis
+in a <TT>TYPE=XY</TT> plot.  The options are <TT>el</TT> for elevation, <TT>az</TT> for azimuth, <TT>pa</TT> for paralactic angle (for polarization),
+<TT>ha</TT> for hour angle, <TT>ut</TT> for universal time, and <TT>gst</TT> for
+Greenwich Sidereal time.
+
+<P>
+<TT>YAxis</TT>
+
+<P>
+<TT>YAxis</TT> specifies the quantitiy to be plotted on the vertical axis
+in a <TT>TYPE=XY</TT> plot. The options are <TT>el</TT> for elevation, <TT>az</TT> for azimuth, <TT>pa</TT> for paralactic angle, and <TT>ha</TT> for hour
+angle.  If <TT>xaxis=az</TT> and <TT>yaxis=el</TT>, the antenna horizons
+will be plotted along with the source tracks.
+
+<P>
+<TT>XLeft</TT> and <TT>XRight</TT>
+
+<P>
+<TT>XLeft</TT> and <TT>XRight</TT> specify the minimum and maximum for the
+X axis plot scale.  If they are not set, or are set to -9999., the axis will
+be autoscaled.  For u-v plots, it is only necessary to specify one
+value, say <TT>XMax</TT>, and it will be used for all 4 limits.  If more
+than one are specified, they are used which allows off center plots.
+For <TT>XY</TT> plots, the limits should be specified in the units of
+the plots.  For the time axis, the limits should be in the form
+<TT>hh:mm:ss</TT> where this is the time offset since the beginning of the
+first day of the experiment for <TT>UT</TT> or is the GST.  Note for u-v
+plots, traditionaly, the plot has positive to the left so <TT>XLeft</TT> will
+be greater than <TT>XRight</TT>.  For Ra-Dec plots, <TT>XLeft</TT> and <TT>XRight</TT>
+specify the RA range and should be in the form <TT>hh:mm:ss</TT> (eg.
+<TT>XL = 5:30:00</TT>).
+
+<P>
+<TT>YBottom</TT> and <TT>YTop</TT>
+
+<P>
+<TT>YBottom</TT> and <TT>YTop</TT> specify the minimum and maximum for the Y
+axis plot scale.  If they are not set, or are set to -9999., the axis will
+be autoscaled.  For Ra-Dec plots, <TT>YBottom</TT> and <TT>YTop</TT> specify
+the declination limits and should be in the form <TT>dd:mm:ss</TT> (eg.
+<TT>YB = -12:15:00</TT>).
+
+<P>
+<TT>SOurce</TT>
+
+<P>
+<TT>SOurce</TT> can be used to restrict the plots to a single source.  The
+default, which can be specified at any time is <TT>ALL</TT>, which will
+cause all sources to be plotted.
+
+<P>
+<TT>STation</TT>
+
+<P>
+<TT>STation</TT> can be used to restrict <TT>TYPE=XY</TT> plots to one station.
+For <TT>TYPE=UV</TT> plots, all stations will be plotted, but all baselines
+to the specified station will be plotted in a contrasting color.
+The default, which may be specified at any time, is <TT>ALL</TT>, which
+will cause all stations to be plotted or not highlighted.
+
+<P>
+<TT>REstart</TT>
+
+<P>
+See the discussion above for details of the effect of <TT>REstart</TT>.  In
+short, it causes the program to return to the beginning and reread the
+input, which may have changed.
+
+<P>
+<TT>FInish</TT>
+
+<P>
+<TT>FInish</TT> tells SCHED&nbsp; to close the plot files and produce the
+station specific output files.  <TT>FInish</TT> is locked out after a
+<TT>REstart</TT> to make absolutely sure that the output files really
+correspond to what is in the schedule file.  If <TT>REstart</TT> has
+been used, it will be necessary to <TT>EXit</TT> and rerun SCHED&nbsp; from
+scratch to get the station output files.
+
+<P>
+<TT>EXit</TT>
+
+<P>
+<TT>EXIT</TT> tells SCHED&nbsp; to close the plot files and exit.  Antenna
+specific files will not be produced.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html341"
+  HREF="node13.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html337"
+  HREF="node11.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html333"
+  HREF="node11.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html339"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html342"
+  HREF="node13.html">INFORMATION AND ADVICE ON</A>
+<B> Up:</B> <A NAME="tex2html338"
+  HREF="node11.html">Plotting</A>
+<B> Previous:</B> <A NAME="tex2html334"
+  HREF="node11.html">Plotting</A>
+ &nbsp <B>  <A NAME="tex2html340"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>

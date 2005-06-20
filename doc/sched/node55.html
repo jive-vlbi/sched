@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>AUTOTAPE</TITLE>
+<META NAME="description" CONTENT="AUTOTAPE">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node56.html">
+<LINK REL="previous" HREF="node54.html">
+<LINK REL="up" HREF="node52.html">
+<LINK REL="next" HREF="node56.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1203"
+  HREF="node56.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1199"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1193"
+  HREF="node54.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1201"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1204"
+  HREF="node56.html">AZCOLIM</A>
+<B> Up:</B> <A NAME="tex2html1200"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html1194"
+  HREF="node54.html">AUTOPEAK</A>
+ &nbsp <B>  <A NAME="tex2html1202"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION00412300000000000000"></A><A NAME="MP:AUTOTAPE"></A>
+<BR>
+<TT>AUTOTAPE</TT>
+</H3>
+
+<P>
+<TT>AUTOTAPE</TT> is used to request that automatic tape allocation and
+control be used at stations that use the VLBA control system and have
+more than one tape drive.  It has no effect on other stations such as
+those that use VEX or on VLBA controlled stations with only one tape
+drive.  <TT>AUTOTAPE=1</TT> or <TT>AUTOTAPE=2</TT> causes the on-line system
+to determine the tape direction, head position and track allocation
+automatically. The schedules will only include instructions on whether
+to run, stop, or rewind. <TT>AUTOTAPE&gt;=2</TT> also activates automatic
+reversal of the tapes when the low tape mark is reached, even in the
+middle of scans; with <TT>AUTOTAPE=1</TT> the tape will stop at the low
+tape point and wait for the next scan. The default action (any other
+value of <TT>AUTOTAPE</TT> including no value) is to have SCHED&nbsp; 
+determine the tape motion and related information.
+
+<P>
+Automatic tape allocation is now required for most VLBA observations.
+<TT>AUTOTAPE=2</TT> should therefore be specified in most schedules.
+<TT>AUTOTAPE=1</TT> is risky and probably should not be used.  It is
+provided only so that SCHED&nbsp; can create schedules for all modes
+that the on-line systems can handle.
+
+<P>
+Automatic tape allocation cannot be used for projects that will not
+be correlated on the VLBA correlator.  SCHED&nbsp; will refuse to make
+such schedules.  This relates to how the correlators learn how the
+tape was handled at the stations.  Non-VLBA correlators generally
+obtain some of the tape positioning information from the schedules
+rather than the logs, and, with automatic allocation, the two
+can be very different.
+
+<P>
+When automatic tape allocation is specified (<TT>AUTOTAPE=2</TT>), any
+station that is using the automatic allocation will be removed from a
+scan if the source is below the hardware limits at both ends of the
+scan.  One can tell when this happened because a ``<TT>D</TT>'' will
+appear next to the <TT>--</TT> in the summary file elevation and azimuth
+for a scan where this happened.  There is no override.  If one is
+need, let Craig Walker know and it can be added.  This function
+will mainly affect the Mauna Kea VLBA site which is often scheduled
+in scans before the source rises and which has long access times
+for the site techs doing tape changes.
+
+<P>
+For more information on how automatic tape handling works, see the
+<A HREF="node27.html#SSSEC:AUTOTAPE">AUTOMATIC TAPE ALLOCATION</A> section.
+
+<P>
+The rest of this section concerns the use of <TT>AUTOTAPE</TT> for
+the Mark&nbsp;II system.  It can be ignored by most (all?) current
+users.
+
+<P>
+For Mark II, <TT>AUTOTAPE</TT> requests automatic tape changes.  Without
+it, tape changes must be explicitly specified.  The value specified
+for <TT>AUTOTAPE</TT>, if there is one, should be a time.  The default,
+if no argument is given, is <TT>4:00:00</TT>, which is the recommended
+value.  Specify a negative number to turn off tape changes and a
+positive number (a time) to change the default tape length.  Tape
+changes are requested at intervals of the requested time beginning
+with the earliest start time of the whole schedule. If this would
+require a change in the middle of a scan, the change is moved to the
+start of the scan and all following changes are moved up. This is
+station dependent and so can cause non-simultaneous tape changes. The
+tape is assumed to be kept moving between scans.
+
+<P>
+The reference time for <TT>AUTOTAPE</TT> (Mark&nbsp;II use) can be altered
+with <TT>TPREF</TT> in the SCHED&nbsp; keyin file and with the <TT>TPTIME</TT>
+in the <TT>TAPEFILE</TT>. See Section&nbsp;<A HREF="node198.html#SEC:TPINI">3.4</A> for information on
+<TT>TPTIME</TT>. <TT>TPREF</TT> is a time of the form <TT>hh:mm:ss</TT>. The
+automatic tape changes are requested at integral numbers of 4 hour
+intervals (for the recommended time) before or after <TT>TPREF</TT>. A
+date is not needed because 4 hours divides 24 hours evenly. Even if
+someone were to use the 2 or 6 hour VCR modes, those tape lengths
+still divide 24 hours evenly.
+
+<P>
+If <TT>TAPE</TT> is specified in a Mark&nbsp;II schedule for a scan while <TT>AUTOTAPE</TT> is set, a tape change will be requested and following tape
+changes will occur at 4 hour intervals from the time of the forced
+change. One specification of <TT>TAPE</TT> is usually all that is needed
+to get the tape changing sequence right if the earliest start time is
+a poor reference time.
+
+<P>
+For most Mark&nbsp;II projects, the default action of <TT>AUTOTAPE</TT> should
+be good. The major exceptions are projects that start on the half hour
+and tape changes are desired on the hour, and projects where it makes
+sense to have a short tape at the start on some stations to avoid
+short tape on other stations for which the source rises later. Both of
+these cases can be handled nicely with <TT>TPREF</TT>.
+
+<P>
+Note that for Mark&nbsp;II observations, if <TT>AUTOTAPE</TT> is turned off,
+no initial tape mount at the start of the project will be requested.
+This causes problems at some stations. It you insist on specifying all
+tape changes with <TT>TAPE</TT>, be sure to put one on the first scan for
+each station. This mode of setting tape changes is NOT recommended.
+
+<P>
+
+<UL>
+<LI><B>Argument:</B> None or a number.
+</LI>
+<LI><B>Options:</B>  Mark&nbsp;III or VLBA: Not <TT>1</TT> or <TT>2</TT> - SCHED&nbsp; sets tape
+direction, head position, and track assignments. <TT>=1</TT> - VLBA
+on-line systems set above parameters. <TT>=2</TT> - activate mid-scan
+automatic tape reversals. Mark&nbsp;II: No argument or <TT>0</TT> - do
+automatic tape changes at 4-hour intervals. <TT>-1</TT> - turn off
+automatic tape changes. <TT>hh:mm:ss</TT> - time for modified tape
+length.
+</LI>
+<LI><B>Default:</B>  Mark&nbsp;III or VLBA: SCHED&nbsp; controls tape. 
+<BR>
+Mark&nbsp;II: <TT>AUTOTAPE=4:00:00</TT>
+</LI>
+<LI><B>Usage:</B>    Only one value used, the last.
+</LI>
+<LI><B>Example:</B>  <TT>AUTOTAPE=2</TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1203"
+  HREF="node56.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1199"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1193"
+  HREF="node54.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1201"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1204"
+  HREF="node56.html">AZCOLIM</A>
+<B> Up:</B> <A NAME="tex2html1200"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html1194"
+  HREF="node54.html">AUTOPEAK</A>
+ &nbsp <B>  <A NAME="tex2html1202"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2005-03-02
+</ADDRESS>
+</BODY>
+</HTML>
