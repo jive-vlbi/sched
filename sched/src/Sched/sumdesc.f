@@ -77,6 +77,10 @@ C
       ELSE IF( ITEM .EQ. 'SLEW' ) THEN
          SUMDESC = 'Slew time in seconds from previous source.'
 C
+      ELSE IF( ITEM .EQ. 'SYNC' ) THEN
+         SUMDESC = 'Seconds the correlator is expected to be ' // 
+     1        'synced up during the scan.'
+C
       ELSE IF( ITEM .EQ. ' ' ) THEN
          SUMDESC = 'Nothing requested with SUMITEM.'
 C

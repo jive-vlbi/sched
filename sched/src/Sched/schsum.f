@@ -9,7 +9,7 @@ C
       INTEGER     YEAR, DAY, DOY, JD, MONTH, NTPS
       INTEGER     NSCHED
       LOGICAL     RESTART, ALLDONE, GOTTPS, GOTSCN
-      LOGICAL     PRTHEAD, PRTED(MAXSET), SAMESET
+      LOGICAL     PRTHEAD, PRTED(MSET), SAMESET
       DOUBLE PRECISION   STOP
       CHARACTER   DNAME*3, MNAME*3
       CHARACTER   FF*1, PDATE*50
@@ -19,7 +19,7 @@ C
 C-----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHSUM: Starting.' )
       FF = CHAR(12)
-      DO KS = 1, MAXSET
+      DO KS = 1, MSET
          PRTED(KS) = .FALSE.
       END DO
 C
@@ -72,17 +72,32 @@ C
 C     Do tape stations first.
 C
       IF( .NOT. NOTAPE ) THEN
-         WRITE( ISUM, '( A, /, A )' )  
-     1       ' Station summaries (tape stations): ',
-     2       '  Station  Control   Scans  Scan Hours  Tape hours' //
-     3       '   Tapes    Passes   Readbacks '
+         WRITE( ISUM, '( A )' )  
+     1       ' Station summaries (tape stations): '
+         WRITE( ISUM, '( A )' )  
+     2       '  Station  Control   Scans   Scan   Tape  ' //
+     3       ' Tapes  Passes Readbacks  Formatter   Sync '
+         WRITE( ISUM, '( A )' )  
+     1       '                            Hours   Hours ' //
+     2       '                        Reconfigures  Hours  '
          DO ISTA = 1, NSTA
             IF( USETAPE(ISTA) ) THEN
-               WRITE( ISUM, 
-     1             '( 2X, A8, 2X, A5, 2X, I6, F10.2, F12.2, 3I10 )' ) 
-     2             STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     3             SCNHR(ISTA), TPHR(ISTA), TAPES(ISTA), PASSES(ISTA), 
-     4             NRDBCK(ISTA)
+               IF( DAR(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
+                  WRITE( ISUM, 
+     1             '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2, I5, 2I8, 
+     2                I7, A, I3, F11.2 )' ) 
+     3             STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
+     4             SCNHR(ISTA), TPHR(ISTA), TAPES(ISTA), PASSES(ISTA), 
+     5             NRDBCK(ISTA), NRECONF(1,ISTA), '/', NRECONF(2,ISTA),
+     6             TTSYNC(ISTA) * 24.0
+               ELSE
+                  WRITE( ISUM, 
+     1             '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2, I5, 2I8, 
+     2                I10, F12.2 )' ) 
+     3             STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
+     4             SCNHR(ISTA), TPHR(ISTA), TAPES(ISTA), PASSES(ISTA), 
+     5             NRDBCK(ISTA), NRECONF(1,ISTA), TTSYNC(ISTA) * 24.0
+               END IF
             END IF
          END DO
 C
@@ -91,13 +106,26 @@ C
          WRITE( ISUM, '( 1X, /, A, /, A )' )  
      1       ' Station summaries (disk stations): ',
      2       '  Station  Control   Scans  Scan Hours  Record hrs' //
-     3       '   Gbytes'
+     3       '   Gbytes      Formatter     Sync '
+         WRITE( ISUM, '( T64, A )' )
+     1       'Reconfigures    Hours  '
+
          DO ISTA = 1, NSTA
             IF( USEDISK(ISTA) ) THEN
-               WRITE( ISUM, 
-     1            '( 2X, A8, 2X, A5, 2X, I6, F10.2, F12.2, 2X, F10.0 )'
-     2            ) STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     3             SCNHR(ISTA), TPHR(ISTA), TGBYTES(ISTA)
+               IF( DAR(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
+                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F10.2, F12.2,
+     1              2X, F10.0, I9, A, I3, F11.2 )' )
+     2              STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
+     3              SCNHR(ISTA), TPHR(ISTA), TGBYTES(ISTA),
+     4              NRECONF(1,ISTA),  '/', NRECONF(2,ISTA),
+     5              TTSYNC(ISTA) * 24.0
+               ELSE
+                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F10.2, F12.2,
+     1              2X, F10.0, I13, F12.2 )' )
+     2              STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
+     3              SCNHR(ISTA), TPHR(ISTA), TGBYTES(ISTA),
+     4              NRECONF(1,ISTA), TTSYNC(ISTA) * 24.0
+               END IF
             END IF
          END DO
 
@@ -109,6 +137,25 @@ C
      1          STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA) 
          END DO
       END IF
+C
+C     Explain Sync Hours.
+C
+      WRITE( ISUM, '( 1X )' )
+      WRITE( ISUM, '( A )' )
+     1      'Notes on the station summaries: '
+      WRITE( ISUM, '( 1X )' )
+      WRITE( ISUM, '( A, /, A)' )
+     2      '    "Sync Hours" is on-source, in-scan time ' //
+     3      'lost during correlation to resyncing',
+     4      '    recordings.  Resyncs follow tape stoppages '//
+     5      'and formatter reconfigures.'
+      WRITE( ISUM, '( 1X )' )
+      WRITE( ISUM, '( A, /, A, /, A )' )
+     1      '    For VLBA stations, total reconfigures and ' //
+     2      'reconfigures during recording are shown.',
+     3      '    Reconfigures during recording can cause ' //
+     4      'slow correlator sync.',
+     5      '    Any reconfigure can slow sync at JIVE.'
 C
 C     Set up a warning about early tape starts.
 C
@@ -124,14 +171,14 @@ C
       END DO
       IF( GOTTPS ) THEN
          WRITE( ISUM, '( 1X )' )
-         WRITE( ISUM, '( 2A, I5, A )' ) 'Note: Tapes started before',
+         WRITE( ISUM, '( 2A, I5, A )' ) '        Tapes started before',
      1         ' scan start time ', NTPS, 
      2         ' times.  See PRESTART and MINPAUSE.'
          WRITE( ISUM, '( 2A )' )
-     1         '      They may have been kept running through short ',
-     2         'scan gaps.'
+     1         '        They may have been kept running through ',
+     2         'short scan gaps.'
          WRITE( ISUM, '( 2A )' )
-     1         '      The number can be large because each ',
+     1         '        The number can be large because each ',
      2         'station/scan combination counts.'
       END IF
       WRITE( ISUM, '( 1X, /, 1X, / )' )
@@ -203,21 +250,37 @@ C
       IF( VLBITP ) WRITE( ISUM, '( A )' ) FF
       ALLDONE = .FALSE.
       IF( AUTOTAPE .AND. VLBITP .AND. .NOT. NOSET ) THEN
-         WRITE( ISUM, '( 2A, /, A, /, 2X, /, A, /, A )' )
+         WRITE( ISUM, '( 2A, /, A, /, 2X, /, A, /, A, /, A )' )
      1     ' Automatic tape allocation requested for sites',
      2     ' using VLBA control files and having',
      3     ' 2 or more drives.  SCHED cannot predict tape changes.',
-     4     ' Number of tapes used at each autoaloc station:',
-     5     '   Station      Tapes '
+     4     ' Number of tapes or GBytes used at each autoaloc station:',
+     5     '    Includes all disk stations.',
+     6     '   Station      Tapes        GBytes'
 C
          ALLDONE = .TRUE.
          DO ISTA = 1, NSTA
-            IF( AUTOALOC(ISTA) ) THEN
-               WRITE( ISUM, '( 3X, A8, 4X, F6.2 )' )
-     1            STANAME(ISTA), EXPTAPE(ISTA)
-            ELSE
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( 3X, A8 )' ) STANAME(ISTA)
+C
+C           Deal with tape stations.
+C
+            IF( USETAPE(ISTA) .AND. AUTOALOC(ISTA) ) THEN
+               WRITE( MSGTXT(16:21), '( F6.2 )' ) EXPTAPE(ISTA)
+            ELSE IF( USETAPE(ISTA) ) THEN
+               WRITE( MSGTXT(15:22), '( A8 )' ) 'Not Auto'
                ALLDONE = .FALSE.
             END IF
+C
+C           Deal with disk stations.
+C
+            IF( USEDISK(ISTA) ) THEN
+               WRITE( MSGTXT(28:36), '( F8.1 )' ) TGBYTES(ISTA)
+            END IF
+C
+C           Write the result.
+C
+            WRITE( ISUM, '( A )' ) MSGTXT(:LEN1(MSGTXT))
          END DO
       END IF
 C
@@ -272,7 +335,7 @@ C
       WRITE( ISUM, '( 1X, /, 1X, /, A )' )
      1   'Code versions: '  
 C
-      WRITE( ISUM, '( A, F5.1, 2X, A )' )
+      WRITE( ISUM, '( A, F6.2, 2X, A )' )
      1   '  Release version:          ', VERNUM, 
      2   VERSION(1:LEN1(VERSION))
 C

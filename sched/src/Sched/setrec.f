@@ -11,6 +11,9 @@ C
 C
       INTEGER           KS, ISTA
       INTEGER           NEEDDR
+      LOGICAL           BWARN
+      SAVE              BWARN
+      DATA              BWARN / .TRUE. /
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SETREC: Starting' )
 C
@@ -56,8 +59,11 @@ C
             END IF
          ELSE IF( BARREL(KS) .NE. 'roll_off' .AND. 
      1       ( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) ) THEN
-            CALL WLOG( 1, 'SETREC:  Barrel roll request will be'//
-     1           'ignored for stations using disk' )
+            IF( BWARN ) THEN
+               CALL WLOG( 1, 'SETREC:  Barrel roll request will be'//
+     1              'ignored for stations using disk' )
+               BWARN = .FALSE.
+            END IF
             BARREL(KS) = 'roll_off'
          END IF
       END DO

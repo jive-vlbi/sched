@@ -529,7 +529,7 @@ C
 C                      Pointers:
 C                        NSETUP(ISCN,ISTA) is the setup group for 
 C                          station ISTA in scan ISCN.
-C                        FSETI(ISCN,ISTA) it the frequency set for
+C                        FSETI(ISCN,ISTA) is the frequency set for
 C                          station ISTA in scan ISCN.
 C                        SRCNUM(ISCN) is the source catalog entry
 C                          for the source if scan ISCN.
@@ -615,23 +615,26 @@ C                      Calculated items.  Mostly in TPSCH.  Some for
 C                      summaries.
 C
       INTEGER          TPDAT(2,MAXSCN,MAXSTA)
-      INTEGER          NRDBCK(MAXSTA), NSTOP(MAXSTA)
+      INTEGER          NRDBCK(MAXSTA), NSTOP(MAXSTA), NRECONF(2,MAXSTA)
       INTEGER          NSTSC(MAXSTA), TAPES(MAXSTA), PASSES(MAXSTA)
       DOUBLE PRECISION TPSTART(MAXSCN,MAXSTA), DATASIZE
+      DOUBLE PRECISION TCORR(MAXSCN,MAXSTA)
       REAL             EXPTAPE(MAXSTA), TPHR(MAXSTA), SCNHR(MAXSTA)
       REAL             TPFOOT1(MAXSCN,MAXSTA), TPFOOT2(MAXSCN,MAXSTA)
       REAL             MAXDR, GBYTES(MAXSCN,MAXSTA), TGBYTES(MAXSTA)
+      REAL             TTSYNC(MAXSTA)
       LOGICAL          TWOHEAD, FASTTRK
 C
       COMMON  /SCHN5/  TPREF, TPLEN, MINPAUSE, PRESTART, TPTIME, 
-     1                 TPSTART, DATASIZE, AUTOTAPE, AUTOALOC, AUTOREV, 
-     2                 NTPSTA, TPSDRIV, TPSINDX, TPLENG, 
-     3                 NDRIVE, NHDPOS, USETAPE, USEDISK, 
-     4                 TPDAT, NRDBCK, NSTOP, NSTSC,
-     5                 TAPES, PASSES, EXPTAPE, TPHR, SCNHR, TPFOOT1, 
-     6                 TPFOOT2, MAXDR, GBYTES, TGBYTES, TWOHEAD, 
-     7                 FASTTRK, NOREC, TAPE, REWIND, FASTF, REVERSE,
-     8                 GRABTIME, GRABGAP
+     1                 TPSTART, DATASIZE, TCORR, 
+     2                 AUTOTAPE, AUTOALOC, AUTOREV, 
+     3                 NTPSTA, TPSDRIV, TPSINDX, TPLENG, 
+     4                 NDRIVE, NHDPOS, USETAPE, USEDISK, 
+     5                 TPDAT, NRDBCK, NSTOP, NRECONF, NSTSC,
+     6                 TAPES, PASSES, EXPTAPE, TPHR, SCNHR, TPFOOT1, 
+     7                 TPFOOT2, MAXDR, GBYTES, TGBYTES, TTSYNC, 
+     8                 TWOHEAD, FASTTRK, NOREC, TAPE, REWIND, 
+     9                 FASTF, REVERSE, GRABTIME, GRABGAP
       COMMON  /SCHC5/  DATAPATH, GRABTO, TPOBS, DENSITY, HEADMODE, 
      1                 MEDIA
 C
@@ -639,6 +642,8 @@ C
 C     Calculated observation geometry information:
 C                      TSLEW is the slew time from the previous source.
 C                      TONSRC is the time the antenna reaches source.
+C                      TCORR is the time SCHED predicts the correlator 
+C                            will sync up.
 C                      Beware that this and the tape info is where 
 C                      most of the memory goes.
 C
@@ -650,8 +655,9 @@ C
       REAL             HA2(MAXSCN,MAXSTA), PA2(MAXSCN,MAXSTA)
       CHARACTER        UP1(MAXSCN,MAXSTA)*1, UP2(MAXSCN,MAXSTA)*1
 C
-      COMMON  /SCHN6/  LST1, LST2, TONSRC, TSLEW, EL1, AZ1, HA1, PA1, 
-     1                 EL2, AZ2, HA2, PA2
+      COMMON  /SCHN6/  LST1, LST2, TONSRC, TSLEW,
+     1                 EL1, AZ1, HA1, PA1, 
+     2                 EL2, AZ2, HA2, PA2
       COMMON  /SCHC6/  UP1, UP2
 C
 C     End of SCHED include file.

@@ -1,4 +1,4 @@
-      SUBROUTINE SETNOREC( NEEDFMT, RECUSED )
+      SUBROUTINE SETNOREC( NEEDFMT )
 C
 C     Set the formats for non-recording scans.
 C     Try to match following scans fan out.  That might help
@@ -11,7 +11,7 @@ C
 C
       INTEGER  KS, ISTA, ISCN
       REAL     FANBUFF, TRKBPS
-      LOGICAL  NEEDFMT(*), RECUSED(*), OK
+      LOGICAL  NEEDFMT(*), OK
 C ----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SETNOREC: starting' )
 C

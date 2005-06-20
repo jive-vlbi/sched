@@ -160,14 +160,15 @@ C
 C        Warn if there are reasons to believe the data rates are wrong.
 C
          IF( OVERLAP ) THEN
-            WRITE( ISUM, '( 1X, /, 4( A, / ) )' )
-     1      ' **** Overlapping scans were detected.  Either there '//
-     2            'was subarraying',
-     3      '      or some stations were scheduled separtely from '//
-     4            'others.',
-     5      '      If the latter, the output data rates and volume '//
-     6            'are underestimated',
-     7      '      because the number of baselines was underestimated.'
+            WRITE( ISUM, '( 1X, /, A, /, 4( A, / ) )' )
+     1      ' **** WARNING *****', 
+     2      '      Overlapping scans were detected.  Either there '//
+     3            'was subarraying',
+     4      '      or some stations were scheduled separtely from '//
+     5            'others.',
+     6      '      If the latter, the output data rates and volume '//
+     7            'are underestimated',
+     8      '      because the number of baselines was underestimated.'
             IF( AUTOPEAK ) THEN
                WRITE( ISUM, '( A, /, A )' )
      1         '      This might be do to inserted pointing scans '//

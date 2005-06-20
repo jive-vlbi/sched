@@ -1,4 +1,4 @@
-      SUBROUTINE FMTPICK( NEEDFMT, RECUSED )
+      SUBROUTINE FMTPICK( NEEDFMT )
 C
 C     Routine for SCHED, called by SETFORM, that deals with picking
 C     formats for VLBA/MKIV stations when not all are forced by 
@@ -27,7 +27,7 @@ C
       REAL              MAXBPS, USEFBPS
       REAL              ACCBPS, ACCTIM, AVGBPS
       REAL              USENTRK, SETBPS(MAXSET)
-      LOGICAL           NEEDFMT(*), RECUSED(*), OK
+      LOGICAL           NEEDFMT(*), OK
       DOUBLE PRECISION  TOTIME, SETTIME(MAXSET)
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'FMTPICK starting' )

@@ -96,7 +96,7 @@ C
      2         '  TAPES - Stations potentially recording on tape.',
      3         '    (See setup details later for times per pass.)',
      4         '   Station Drives Head pos  Tape len  Density',
-     5         '  Start position  Auto   Auto   Recorder ',
+     5         '  Start position  Auto   Auto   Recorder  DAR',
      6         '                                (ft)           ',
      7         'Driv Head indx  Aloc  Reverse'
 C	   
@@ -129,10 +129,10 @@ C
 C                 Write the line.
 C	        
                   WRITE( ISUM, '( 3X, A8, I5, I8, I11, 4X, A4, '//
-     1                   'I7, I7, 7X, A, 4X, A, 4X, A )' )
+     1                   'I7, I7, 7X, A, 4X, A, 4X, A6, 2X, A5 )' )
      2                 STATION(ISCAT), STNDRIV(ISCAT), NHDPOS(ISTA),
      3                 TPLENG(ISTA), CDEN, TPSDRIV(ISTA), TPSINDX(ISTA),
-     4                 CAA, CAR, RECORDER(ISCAT)
+     4                 CAA, CAR, RECORDER(ISCAT), DAR(ISCAT)
                END IF
             END DO
          END IF

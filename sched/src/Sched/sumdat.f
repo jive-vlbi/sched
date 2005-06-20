@@ -5,7 +5,7 @@ C     item in a the summary file.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER     ISCN, ISTA, TEARLY, TDWELL, ITSLEW
+      INTEGER     ISCN, ISTA, TEARLY, TDWELL, ITSLEW, ISYNC
       CHARACTER   ITEM*(*), DIRECT*1
 C
 C     Tape information from TPDAT.
@@ -127,6 +127,11 @@ C
          ELSE IF( ITEM .EQ. 'SLEW' ) THEN
             ITSLEW = IDNINT( TSLEW(ISCN,ISTA) * 86400.D0 )
             WRITE( SUMDAT, '( I4, 1X )' ) ITSLEW
+C
+         ELSE IF( ITEM .EQ. 'SYNC' ) THEN
+            ISYNC = IDNINT( ( STOPJ(ISCN) - TCORR(ISCN,ISTA) ) *
+     1              86400.D0 )
+            WRITE( SUMDAT, '( I4, 1X )' ) ISYNC
 C
          ELSE IF( ITEM .EQ. ' ' ) THEN
             SUMDAT = '     '

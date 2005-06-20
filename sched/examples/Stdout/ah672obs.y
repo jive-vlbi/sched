@@ -1,6 +1,6 @@
 /.AH672   450
 //* *** 
-//* *** SCHED version:   6.0  Release: March 2005
+//* *** SCHED version:   6.02  May 2005
 //* *** 
 //* *** Observation day 58,260 at 22 30 00 LST, 2000.01.04 15:45:02 MST.  
 //* *** 

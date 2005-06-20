@@ -18,8 +18,10 @@ C      VERNUM = 5.26    !  Development after 4 October 2004
 C
 C      Change version scheme to be mainly numerical in Feb 2005.
 C
-      VERNUM = 6.0
-      VERSION = 'Release: March 2005'
+C      VERNUM = 6.0     !  Released March 8, 2005
+C      VERNUM  = 6.01   !  Released March 30, 2005.  Bug fixes.
+      VERNUM  = 6.02
+      VERSION = 'May 2005'
 C
       RETURN
       END

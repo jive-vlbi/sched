@@ -7,7 +7,7 @@ COVER INFORMATION:
   Start Day 363 is Fri  29 Dec 1995   MJD  50080          
 
   Schedule Version:       1.00                                              
-  Processed by SCHED version:   6.0  Release: March 2005                    
+  Processed by SCHED version:   6.02  May 2005                              
 
   PI:       P.J.Diamond                                                     
 
@@ -108,22 +108,26 @@ BASELINE LENGTHS (km)
 
 
 RECORDING SYSTEM INFORMATION:
+     Some stations may be scheduled for both tape and disk.
 
   TAPES - Stations potentially recording on tape.
     (See setup details later for times per pass.)
-   Station Drives Head pos  Tape len  Density  Start position  Auto   Auto   Recorder 
+   Station Drives Head pos  Tape len  Density  Start position  Auto   Auto   Recorder  DAR
                                 (ft)           Driv Head indx  Aloc  Reverse
-   VLBA_SC     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_HN     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_NL     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_FD     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_LA     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_PT     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_KP     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_OV     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_BR     2      14      17600    High      1      1        No     No    VLBA  
-   VLBA_MK     2      14      17600    High      1      1        No     No    VLBA  
-   VLA1        2      14      17600    High      1      1        No     No    VLBA  
+   VLBA_SC     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLBA_HN     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLBA_NL     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLBA_FD     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLBA_PT     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLBA_OV     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLBA_BR     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLBA_MK     2      14      17600    High      1      1        No     No    VLBA    VLBA 
+   VLA1        2      14      17600    High      1      1        No     No    VLBA    VLBA 
+
+  DISKS - Stations potentially recording on disks.
+   Station    Drive type 
+   VLBA_LA      MARK5A
+   VLBA_KP      MARK5A
 
 
 
@@ -136,21 +140,32 @@ EXPERIMENT SUMMARY:
   Number of setup files used:     2
 
  Station summaries (tape stations): 
-  Station  Control   Scans  Scan Hours  Tape hours   Tapes    Passes   Readbacks 
-  VLBA_SC    VLBA      23      4.22        4.22         1        12        22
-  VLBA_HN    VLBA      23      4.22        4.22         1        12        22
-  VLBA_NL    VLBA      23      4.22        4.22         1        12        22
-  VLBA_FD    VLBA      23      4.22        4.22         1        12        22
-  VLBA_LA    VLBA      23      4.22        4.22         1        12        22
-  VLBA_PT    VLBA      23      4.22        4.22         1        12        22
-  VLBA_KP    VLBA      23      4.22        4.22         1        12        22
-  VLBA_OV    VLBA      23      4.22        4.22         1        12        22
-  VLBA_BR    VLBA      23      4.22        4.22         1        12        22
-  VLBA_MK    VLBA      23      4.22        4.22         1        12        22
-  VLA1       VLA       23      4.22        4.22         1        12        22
+  Station  Control   Scans   Scan   Tape   Tapes  Passes Readbacks  Formatter   Sync 
+                            Hours   Hours                         Reconfigures  Hours  
+  VLBA_SC    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLBA_HN    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLBA_NL    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLBA_FD    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLBA_PT    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLBA_OV    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLBA_BR    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLBA_MK    VLBA      23    4.22    4.22    1      12      22      0/  0       0.05
+  VLA1       VLA       23    4.22    4.22    1      12      22      0/  0       0.05
 
  Station summaries (disk stations): 
-  Station  Control   Scans  Scan Hours  Record hrs   Gbytes
+  Station  Control   Scans  Scan Hours  Record hrs   Gbytes      Formatter     Sync 
+                                                               Reconfigures    Hours  
+  VLBA_LA    VLBA      23      4.22        4.22        122.        0/  0       0.11
+  VLBA_KP    VLBA      23      4.22        4.22        122.        0/  0       0.11
+
+Notes on the station summaries: 
+
+    "Sync Hours" is on-source, in-scan time lost during correlation to resyncing
+    recordings.  Resyncs follow tape stoppages and formatter reconfigures.
+
+    For VLBA stations, total reconfigures and reconfigures during recording are shown.
+    Reconfigures during recording can cause slow correlator sync.
+    Any reconfigure can slow sync at JIVE.
 
 
 
@@ -162,7 +177,7 @@ The following setup groups are the same as group   1 below.
 
 
  Setup file: bd27a.set
-   Matches group v7mm_c8 in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group v7mm_c8 in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
 
    Setup group:    1         Station: VLBA_SC           Total bit rate:   64
    Format: VLBA1:1           Bits per sample: 1         Sample rate:  8.000
@@ -210,7 +225,7 @@ The following setup groups are the same as group   1 below.
 
 
  Setup file: bd27a.set
-   Matches group y_vq in /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vq in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   11         Station: VLA1              Total bit rate:   64
@@ -367,53 +382,53 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
       STOP UT                   Sc   Hn   Nl   Fd   La   Pt   Kp   Ov   Br   Mk   Y
 
-363  18:02:00 1749+096      - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
+363  18:02:00 1749+096      - 1F01 1F01 1F01 1F01    5 1F01    5 1F01 1F01 1F01 1F01
 363  18:13:00 bd27a.set     - 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00
 
-363  18:15:00 SPER          - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
-363  18:26:00 -             - 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09
+363  18:15:00 SPER          - 1F01 1F01 1F01 1F01   10 1F01   10 1F01 1F01 1F01 1F01
+363  18:26:00 -             - 1/09 1/09 1/09 1/09 1/00 1/09 1/00 1/09 1/09 1/09 1/09
 
-363  18:28:00 SPER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  18:39:00 -             - 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18
+363  18:28:00 SPER          - 1R02 1R02 1R02 1R02   15 1R02   15 1R02 1R02 1R02 1R02
+363  18:39:00 -             - 1/18 1/18 1/18 1/18 1/00 1/18 1/00 1/18 1/18 1/18 1/18
 
-363  18:41:00 SPER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  18:52:00 -             - 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09
+363  18:41:00 SPER          - 1R02 1R02 1R02 1R02   21 1R02   21 1R02 1R02 1R02 1R02
+363  18:52:00 -             - 1/09 1/09 1/09 1/09 1/00 1/09 1/00 1/09 1/09 1/09 1/09
 
-363  18:54:00 3C454.3       - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
-363  19:05:00 -             - 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00
+363  18:54:00 3C454.3       - 1F01 1F01 1F01 1F01   26 1F01   26 1F01 1F01 1F01 1F01
+363  19:05:00 -             - 2/00 2/00 2/00 2/00 1/00 2/00 1/00 2/00 2/00 2/00 2/00
 
-363  19:07:00 SPER          - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
-363  19:18:00 -             - 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09
+363  19:07:00 SPER          - 1F01 1F01 1F01 1F01   31 1F01   31 1F01 1F01 1F01 1F01
+363  19:18:00 -             - 2/09 2/09 2/09 2/09 1/00 2/09 1/00 2/09 2/09 2/09 2/09
 
-363  19:20:00 SPER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  19:31:00 -             - 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18
+363  19:20:00 SPER          - 1R02 1R02 1R02 1R02   37 1R02   37 1R02 1R02 1R02 1R02
+363  19:31:00 -             - 2/18 2/18 2/18 2/18 1/00 2/18 1/00 2/18 2/18 2/18 2/18
 
-363  19:33:00 SPER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  19:44:00 -             - 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09
+363  19:33:00 SPER          - 1R02 1R02 1R02 1R02   42 1R02   42 1R02 1R02 1R02 1R02
+363  19:44:00 -             - 2/09 2/09 2/09 2/09 1/00 2/09 1/00 2/09 2/09 2/09 2/09
 
-363  19:46:00 SPER          - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
-363  19:57:00 -             - 3/00 3/00 3/00 3/00 3/00 3/00 3/00 3/00 3/00 3/00 3/00
+363  19:46:00 SPER          - 1F01 1F01 1F01 1F01   47 1F01   47 1F01 1F01 1F01 1F01
+363  19:57:00 -             - 3/00 3/00 3/00 3/00 1/00 3/00 1/00 3/00 3/00 3/00 3/00
 
-363  19:59:00 3C454.3       - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
-363  20:10:00 -             - 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09
+363  19:59:00 3C454.3       - 1F01 1F01 1F01 1F01   53 1F01   53 1F01 1F01 1F01 1F01
+363  20:10:00 -             - 3/09 3/09 3/09 3/09 1/00 3/09 1/00 3/09 3/09 3/09 3/09
 
-363  20:12:00 SPER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  20:23:00 -             - 3/18 3/18 3/18 3/18 3/18 3/18 3/18 3/18 3/18 3/18 3/18
+363  20:12:00 SPER          - 1R02 1R02 1R02 1R02   58 1R02   58 1R02 1R02 1R02 1R02
+363  20:23:00 -             - 3/18 3/18 3/18 3/18 1/00 3/18 1/00 3/18 3/18 3/18 3/18
 
-363  20:25:00 SPER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  20:36:00 -             - 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09 3/09
+363  20:25:00 SPER          - 1R02 1R02 1R02 1R02   63 1R02   63 1R02 1R02 1R02 1R02
+363  20:36:00 -             - 3/09 3/09 3/09 3/09 1/00 3/09 1/00 3/09 3/09 3/09 3/09
 
-363  20:38:00 SPER          - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
-363  20:49:00 -             - 4/00 4/00 4/00 4/00 4/00 4/00 4/00 4/00 4/00 4/00 4/00
+363  20:38:00 SPER          - 1F01 1F01 1F01 1F01   69 1F01   69 1F01 1F01 1F01 1F01
+363  20:49:00 -             - 4/00 4/00 4/00 4/00 1/00 4/00 1/00 4/00 4/00 4/00 4/00
 
-363  20:51:00 1749+096      - 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01 1F01
-363  21:02:00 -             - 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09
+363  20:51:00 1749+096      - 1F01 1F01 1F01 1F01   74 1F01   74 1F01 1F01 1F01 1F01
+363  21:02:00 -             - 4/09 4/09 4/09 4/09 1/00 4/09 1/00 4/09 4/09 4/09 4/09
 
-363  21:04:00 UHER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  21:15:00 -             - 4/18 4/18 4/18 4/18 4/18 4/18 4/18 4/18 4/18 4/18 4/18
+363  21:04:00 UHER          - 1R02 1R02 1R02 1R02   79 1R02   79 1R02 1R02 1R02 1R02
+363  21:15:00 -             - 4/18 4/18 4/18 4/18 1/00 4/18 1/00 4/18 4/18 4/18 4/18
 
-363  21:17:00 UHER          - 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02 1R02
-363  21:28:00 -             - 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09 4/09
+363  21:17:00 UHER          - 1R02 1R02 1R02 1R02   85 1R02   85 1R02 1R02 1R02 1R02
+363  21:28:00 -             - 4/09 4/09 4/09 4/09 1/00 4/09 1/00 4/09 4/09 4/09 4/09
 
 
 
@@ -426,26 +441,26 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
       STOP UT                   Sc   Hn   Nl   Fd   La   Pt   Kp   Ov   Br   Mk   Y
 
-363  21:30:00 UHER          - 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03
+363  21:30:00 UHER          - 1F03 1F03 1F03 1F03   90 1F03   90 1F03 1F03 1F03 1F03
 363  21:41:00 bd27a.set     - 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00 1/00
 
-363  21:43:00 UHER          - 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03
-363  21:54:00 -             - 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09
+363  21:43:00 UHER          - 1F03 1F03 1F03 1F03   95 1F03   95 1F03 1F03 1F03 1F03
+363  21:54:00 -             - 1/09 1/09 1/09 1/09 1/00 1/09 1/00 1/09 1/09 1/09 1/09
 
-363  21:56:00 1749+096      - 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04
-363  22:07:00 -             - 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18 1/18
+363  21:56:00 1749+096      - 1R04 1R04 1R04 1R04  101 1R04  101 1R04 1R04 1R04 1R04
+363  22:07:00 -             - 1/18 1/18 1/18 1/18 1/00 1/18 1/00 1/18 1/18 1/18 1/18
 
-363  22:09:00 UHER          - 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04
-363  22:20:00 -             - 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09 1/09
+363  22:09:00 UHER          - 1R04 1R04 1R04 1R04  106 1R04  106 1R04 1R04 1R04 1R04
+363  22:20:00 -             - 1/09 1/09 1/09 1/09 1/00 1/09 1/00 1/09 1/09 1/09 1/09
 
-363  22:22:00 UHER          - 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03
-363  22:33:00 -             - 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00 2/00
+363  22:22:00 UHER          - 1F03 1F03 1F03 1F03  111 1F03  111 1F03 1F03 1F03 1F03
+363  22:33:00 -             - 2/00 2/00 2/00 2/00 1/00 2/00 1/00 2/00 2/00 2/00 2/00
 
-363  22:35:00 UHER          - 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03 1F03
-363  22:46:00 -             - 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09 2/09
+363  22:35:00 UHER          - 1F03 1F03 1F03 1F03  117 1F03  117 1F03 1F03 1F03 1F03
+363  22:46:00 -             - 2/09 2/09 2/09 2/09 1/00 2/09 1/00 2/09 2/09 2/09 2/09
 
-363  22:48:00 1749+096      - 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04 1R04
-363  22:59:00 -             - 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18 2/18
+363  22:48:00 1749+096      - 1R04 1R04 1R04 1R04  122 1R04  122 1R04 1R04 1R04 1R04
+363  22:59:00 -             - 2/18 2/18 2/18 2/18 1/00 2/18 1/00 2/18 2/18 2/18 2/18
 
 
 
@@ -557,18 +572,18 @@ name = 'SPER'  ra = 02h22m51.725045s  dec = 58d35'11.99044"
 
 
 Catalogs: 
-  Station:   /home/cwalker/mach/mach/cwalker/code/sched/catalogs/stations.dat
-                 Version:  2005Feb28-16:32:35
-  Location:  /home/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
-                 Version:  25 Feb 2005
-  Frequency: /home/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
-                 Version:  2005Feb28-16:32:35
-  Source:   /home/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+  Station:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/stations.dat
+                 Version:  2005May23-14:53:23
+  Location:  /users/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
+                 Version:  08 Mar 2005
+  Frequency: /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+                 Version:  2005May23-14:53:23
+  Source:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                  Version:  ---
 
 
 Code versions: 
-  Release version:            6.0  Release: March 2005
+  Release version:            6.02  May 2005
   Version of VEX standard:   1.50
   Version of VEX code:       0.84
   Version of plot code:      1.05

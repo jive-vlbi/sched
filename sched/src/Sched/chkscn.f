@@ -8,7 +8,8 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    KSCN, KCHAN, ISET, ISTA, LSRC
+      INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC
+      INTEGER    NSSCAN
       REAL       NSRCCHG
       LOGICAL    DOPWARN
       DOUBLE PRECISION  TIME1, TIMEDUR
@@ -21,21 +22,21 @@ C     calibrator.  Therefore check in that situation if DOPPLER
 C     Continuum sources have channel velocities of -1.E9
 C
       DOPWARN = .FALSE.
-      DO KSCN = SCAN1, SCANL
-         IF( SRCNUM(KSCN) .NE. IDOPSRC(KSCN) .AND. DOPCAL(KSCN) ) THEN
-            DO KCHAN = 1, MSCHN(SETNUM(KSCN))
-               IF( VLSR(KCHAN,SRCNUM(KSCN)) .GT. -1.E8 .AND.
-     1             VLSR(KCHAN,IDOPSRC(KSCN)) .GT. -1.E8 ) THEN
+      DO ISCN = SCAN1, SCANL
+         IF( SRCNUM(ISCN) .NE. IDOPSRC(ISCN) .AND. DOPCAL(ISCN) ) THEN
+            DO KCHAN = 1, MSCHN(SETNUM(ISCN))
+               IF( VLSR(KCHAN,SRCNUM(ISCN)) .GT. -1.E8 .AND.
+     1             VLSR(KCHAN,IDOPSRC(ISCN)) .GT. -1.E8 ) THEN
                   DOPWARN = .TRUE.
                END IF
             END DO
          END IF
       END DO
       IF( DOPWARN ) THEN
-         CALL WLOG( 1, 'CHKSCN:  *** WARNING ***' )
-         CALL WLOG( 1, '         *** This schedule contains scans ' //
+         CALL WLOG( 1, 'CHKSCN:  **** WARNING ****' )
+         CALL WLOG( 1, '    This schedule contains scans ' //
      1      'for which SOURCE and DOPSRC are different and' )
-         CALL WLOG( 1, '         *** are both line sources.' //
+         CALL WLOG( 1, '    are both line sources.' //
      1              '  Is this intentional?' )
       END IF
 C
@@ -45,9 +46,9 @@ C     is where we flag them as not used.
 C
       DO ISET = 1, NSET
          USED(ISET) = .FALSE.
-         DO KSCN = SCAN1, SCANL
+         DO ISCN = SCAN1, SCANL
             DO ISTA = 1, NSTA
-               IF( STASCN(KSCN,ISTA) .AND. NSETUP(KSCN,ISTA) .EQ. ISET )
+               IF( STASCN(ISCN,ISTA) .AND. NSETUP(ISCN,ISTA) .EQ. ISET )
      1             THEN
                   USED(ISET) = .TRUE.
                   GO TO 100
@@ -64,12 +65,12 @@ C
          IF( MAXSRCHR(STANUM(ISTA)) .LT. 1.D4 ) THEN
             LSRC = 0
             NSRCCHG = 0
-            DO KSCN = SCAN1, SCANL
-                IF( STASCN(KSCN,ISTA) ) THEN
-                   IF( LSRC .EQ. 0 ) TIME1 = STARTJ(KSCN)
-                   TIMEDUR = STOPJ(KSCN) - TIME1
-                   IF( SRCNUM(KSCN) .NE. LSRC ) NSRCCHG = NSRCCHG + 1.0
-                   LSRC = SRCNUM(KSCN)
+            DO ISCN = SCAN1, SCANL
+                IF( STASCN(ISCN,ISTA) ) THEN
+                   IF( LSRC .EQ. 0 ) TIME1 = STARTJ(ISCN)
+                   TIMEDUR = STOPJ(ISCN) - TIME1
+                   IF( SRCNUM(ISCN) .NE. LSRC ) NSRCCHG = NSRCCHG + 1.0
+                   LSRC = SRCNUM(ISCN)
                 END IF
             END DO
 C
@@ -102,17 +103,28 @@ C     1             '    REDUCE NUMBER OF SCANS FOR THIS STATION' )
          END IF
       END DO
 C
-C     Get the "frequency sets".  
+C     Do some checking that only applies when using real setups.
 C
-      IF( .NOT. NOSET ) CALL GETFSET
+      IF( .NOT. NOSET ) THEN
 C
-C     Get the "pcal sets".
+C        Get the "frequency sets".  
 C
-      IF( .NOT. NOSET ) CALL GETPSET
+         CALL GETFSET
+C
+C        Get the "pcal sets".
+C
+         CALL GETPSET
+C
+C        Check for possible data loss due to correlator resyncs and 
+C        formatter reconfigures.
+C
+         CALL RESYNC
+C
+      END IF
+C
+C     Check some VLA issues.
+C
+      CALL VLASCHK
 C
       RETURN
       END
-
-
-
-

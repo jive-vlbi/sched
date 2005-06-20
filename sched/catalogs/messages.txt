@@ -192,6 +192,88 @@ This schedule is over 24 hours and contains the VLA.  That is not
 wise.  VLA telescope files do not have a day associated with each
 scan, so, if there is a restart after the first 24 hours are up,
 observing may resume on the wrong (previous day's) scan.
+
+++resync
+--Called by CHKSCN
+
+WARNING: More than 10% of the on-source, in-scan time in this schedule
+will be lost to correlator resyncs at at least one station.
+Correlator resyncs happen when the recordings stop and restart and
+when certain reconfigurations happen.  The details vary according to
+the recording system and the correlator.
+
+You can easily have excessive sync losses at the VLBA correlator if
+you stop the tape too often, such as between every scan in a phase
+referencing observation.  If this is happening, investigate the
+parameters PRESTART and MINPAUSE to try to keep the recordings moving
+between scans, or at least to start them before the nominal scan start
+time to allow for correlator sync.  MarkIV correlators are less
+sensitive to recording stoppages and JIVE is somewhere in between.
+
+For the VLBA recording system, a formatter reconfiguration causes a
+constant time code to be sent to the recording for about 8 seconds.
+This is treated as bad data at the correlator and delays
+synchronization.  In fact, on the VLBA correlator, it seems to be
+worse than having stopped the recording during the reconfigure.  It
+typically adds 15 seconds to the resync - 8 for the period of bad time
+and 7 more added to the typical resync time.  But for 10-20% of cases,
+the resync takes much longer - up to about 80 seconds.  If you must
+have a formatter reconfiguration, it is much better to do it while the
+recording is stopped.  Just adding a GAP of 20 seconds or more should
+do it.
+
+On the VLBA correlator, a resync takes about 8, 13, or 25 seconds of
+record time for speedup factors of 1, 2, or 4 for tape (about 8
+seconds of playback time).  For disk, it is currently about 10 seconds
+of record time longer than that, although we hope to bring that down
+to much shorter values.  
+
+At JIVE there is no speedup.  Tape resyncs take about 20 seconds and
+disk 10.  They are also hoping to reduce the disk value.  The tape
+value is reduced to about 10 seconds if the scan gap is less than
+about 20 seconds.  Resyncs take longer, 20-30 seconds if there is a
+new configuration that requires a new subjob.  The causes are
+basically the same as the causes of formatter reconfigurations (see
+below), except there is no sensitivity to pcal setups.
+
+The MarkIV correlators take about 10s to sync with tape and of order a
+second with disk.  Since each scan is handled independently, there is
+no sensitivity to configuration, other than that they could not
+correlate the period of bad time code produced during a
+reconfiguration.
+
+A common reason for excessive resyncs on the VLBA is unintended
+formatter reconfigures.  Reconfigures are caused by changes in the
+number of channels, the sample rate, the fanout, the format, the
+barrel roll, the track assignments, the BBC sideband, the number of
+bits, the BBC assignments, and the pcal detector setup.  Basically
+they happen whenever the switching in the formatter must change.
+
+One subtle cause of unintended reconfigures on VLBA systems is changes
+to the pcal setup forced by frequency changes.  If the kHz digits of
+the baseband frequency settings change, the tone detector frequencies
+have to change which triggers a reconfigure.  If the MHz digits
+change, no pcal change is needed because there is a tone every MHz.
+For example, if a baseband is set to 635.49 in one setup and 862.99 in
+another, a reconfigure will be triggered when switching between them.
+If one is 635.49 and the other is 862.49, the pcal tone frequency will
+be the same and there will not be a reconfigure despite the large
+difference in the MHz part.  When band switching, always try to keep
+the basic setup (number of channels, bits etc) the same and keep the
+kHz digits of the frequencies the same.  
+
+Another not-so-obvious cause for formatter reconfigures is changes to
+the BBC sideband.  Recall on the VLBA that the IF is net upper
+sideband for 6 cm and up but is lower sideband for the 20cm and 13cm
+(S and L bands) systems.  Typical standard setups use net upper
+sidebands.  For 20cm and 13cm, this requires a lower sideband mix at
+the BBC. Different BBC sidebands are sent to different samplers and
+hence require the formatter to reconfigure its input switches when
+there is a change.  This issue can be avoided by switching to net
+lower sideband for the 20cm and 13cm systems.
+
+It should essentially never be necessary to provoke reconfigurations,
+even when switching between observing bands.
    
 ++VXDISK
 --Called from VXWRT (obsolete)

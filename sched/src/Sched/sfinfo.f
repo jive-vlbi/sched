@@ -137,27 +137,29 @@ C
          DO ISETF = 1, NSETF
             IF( .NOT. OKXC(ISETF) ) THEN
                CALL WLOG( 1, 
-     1             'SFINFO:  **** WARNING ****   The setup file:' )
-               CALL WLOG( 1, '       ' //
+     1             'SFINFO:  **** WARNING ****' )
+               CALL WLOG( 1, '    The setup file:' )
+               CALL WLOG( 1, '    ' //
      1              SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))) )
-               CALL WLOG( 1, '       has unmatched channels at '//
+               CALL WLOG( 1, '    has unmatched channels at '//
      1              'different stations.' )
-               CALL WLOG( 1, '       Is this intentional?' )
-               CALL WLOG( 1, '       Some checks will be disabled.' )
-               CALL WLOG( 1, '       DOPPLER, FREQ, and BW will be '//
+               CALL WLOG( 1, '    Is this intentional?' )
+               CALL WLOG( 1, '    Some checks will be disabled.' )
+               CALL WLOG( 1, '    DOPPLER, FREQ, and BW will be '//
      1               'disabled for this setup.' )
             END IF
 C
             IF( DUP(ISETF) ) THEN
                CALL WLOG( 1, 
-     1               'SFINFO:  **** WARNING ****   The setup file:' )
-               CALL WLOG( 1, '       ' //
+     1               'SFINFO:  **** WARNING ****' )
+               CALL WLOG( 1, '    The setup file:' )
+               CALL WLOG( 1, '    ' //
      1              SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))) )
-               CALL WLOG( 1, '       has duplicate channels.  ' //
+               CALL WLOG( 1, '    has duplicate channels.  ' //
      1                      '  Is this intentional?' )
-               CALL WLOG( 1, '       This messes up SCHED internal ' //
+               CALL WLOG( 1, '    This messes up SCHED internal ' //
      1               'bookkeeping.  As a result,' )
-               CALL WLOG( 1, '       DOPPLER, FREQ, and BW will be '//
+               CALL WLOG( 1, '    DOPPLER, FREQ, and BW will be '//
      1               'disabled for scans using this setup.' )
 C
 C              Flag the bookkeeping as bad for later.

@@ -75,7 +75,7 @@ C
 C
       INTEGER           KS, ISETF, ISCN, ISTA
       REAL              MAXBPS
-      LOGICAL           OK, NEEDFMT(MSET), RECUSED(MSET)
+      LOGICAL           OK, NEEDFMT(MSET)
       LOGICAL           ANYLEFT, ANYLFT2
 C -------------------------------------------------------------------- 
       IF( DEBUG ) CALL WLOG( 0, 'SETFORM: Starting' )
@@ -178,7 +178,7 @@ C     of spreading the track bit rate across setup files, and then
 C     spreading the number of tracks across setup files by station.
 C
       IF( ANYLEFT ) THEN
-         CALL FSPREAD( NEEDFMT, RECUSED )
+         CALL FSPREAD( NEEDFMT )
          ANYLFT2 = .FALSE.
          DO KS = 1, NSET
             IF( NEEDFMT(KS) ) ANYLFT2 = .TRUE.
@@ -192,7 +192,7 @@ C     about 2.  This was painful to program and I hope I got it ok,
 C     but keep an eye on it.
 C
       IF( ANYLEFT ) THEN
-         CALL FMTPICK( NEEDFMT, RECUSED )
+         CALL FMTPICK( NEEDFMT )
       END IF
 C
 C     That should be the end of picking any recording formats.  Check.
@@ -253,7 +253,7 @@ C     Now set formats for setups only used in non-recording scans.
 C     These will basically be dummy values, but set anyway.  Try
 C     to match the fan-outs for following scans.
 C
-      CALL SETNOREC( NEEDFMT, RECUSED )
+      CALL SETNOREC( NEEDFMT )
 C
 C     This is by no means done.
 C

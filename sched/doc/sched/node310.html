@@ -1,26 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
-patched version by:  Kenshi Muto, Debian Project.
-LaTeX2HTML 2002 (1.62),
+<!--Converted with LaTeX2HTML 2K.1beta (1.50)
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of March 2005.</TITLE>
-<META NAME="description" CONTENT="Release of March 2005.">
+<TITLE>Scheduling Mark II Observations</TITLE>
+<META NAME="description" CONTENT="Scheduling Mark II Observations">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
+<LINK REL="next" HREF="node311.html">
 <LINK REL="previous" HREF="node309.html">
 <LINK REL="up" HREF="node308.html">
 <LINK REL="next" HREF="node311.html">
@@ -28,330 +27,203 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4441"
+<A NAME="tex2html4465"
   HREF="node311.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4437"
+<A NAME="tex2html4461"
   HREF="node308.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4433"
+<A NAME="tex2html4455"
   HREF="node309.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4439"
+<A NAME="tex2html4463"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4442"
-  HREF="node311.html">DEVELOPMENT VERSION.</A>
-<B> Up:</B> <A NAME="tex2html4438"
-  HREF="node308.html">CURRENT RELEASES</A>
-<B> Previous:</B> <A NAME="tex2html4434"
-  HREF="node309.html">Release of 18 September</A>
- &nbsp <B>  <A NAME="tex2html4440"
+<B> Next:</B> <A NAME="tex2html4466"
+  HREF="node311.html">Head Positions and Track</A>
+<B> Up:</B> <A NAME="tex2html4462"
+  HREF="node308.html">APPENDICES</A>
+<B> Previous:</B> <A NAME="tex2html4456"
+  HREF="node309.html">Mark&nbsp;III Observations</A>
+ &nbsp <B>  <A NAME="tex2html4464"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00662200000000000000"></A><A NAME="SSSEC:MAR2005"></A>
+<H1><A NAME="SECTION00720000000000000000"></A><A NAME="SEC:MKII"></A>
 <BR>
-Release of March 2005.
-</H3>
+Scheduling Mark II Observations
+</H1>
 
 <P>
-This includes many items that were in the 4 Oct 2004 release made
-in the AOC.
+SCHED&nbsp; was originally written in about 1978 as the Caltech
+Package scheduling program for Mark&nbsp;II VLBI.  Most Mark&nbsp;II
+observations done since then were scheduled with it.  But the
+program is outlasting the system that it was designed to
+support.  I began the process of removing Mark II from SCHED&nbsp; 
+when I learned that it is still in use in some parts of the
+world.  Therefore, it is being retained for now.
+
+<P>
+Mark&nbsp;II recording systems have been removed from most
+active VLBI stations and the main Mark&nbsp;II correlators are no longer
+operating.  However, the system is not completely gone.  An old
+Caltech correlator is being supported at Medicina and Mark&nbsp;II
+recording systems are being supported at a few places.  For these
+reasons, the Mark&nbsp;II specific features of SCHED&nbsp; have not
+yet been removed.
+
+<P>
+Mark&nbsp;II observations typically use one of the Mark&nbsp;III or VLBA data
+aquisition system baseband converters (called video converters in the
+Mark&nbsp;III world).  Therefore much of the setup information required
+for the wide band systems is also required for Mark&nbsp;II, although
+only for a single channel.  A very few parameters are available that
+are only for Mark&nbsp;II and the descriptions of those parameters should
+be consulted.  In the main program input, the only such parameter
+is <A HREF="node183.html#MP:TPREF"><TT>TPREF</TT></A> which helps get the tape changes
+synchronized.  In the tape initialization parameters, parameter
+<TT>TPTIME</TT> serves a similar purpose.  The main schedule parameter
+<A HREF="node55.html#MP:AUTOTAPE"><TT>AUTOTAPE</TT></A> has special meaning for
+Mark&nbsp;II observations.  Other than these special cases, the parameters
+used for a Mark&nbsp;II project are essentially the same as for a wide
+band experiment.  Of course, parameters related to control of the
+wide band tape systems are not needed.
+
+<P>
+Tape management for Mark&nbsp;II observations is simpler than for wide
+band observations.  Normally the tapes are run continuously for
+4 hours per tape and then changed, usually by hand.  Correlator
+operators normally prefer is all tapes are changed at the same
+time, which can be arranged using <A HREF="node183.html#MP:TPREF"><TT>TPREF</TT></A>
+or <TT>TPTIME</TT>.  The schedule should have scan breaks at the
+tape change times (this will be forced by SCHED, so tape
+changes might be requested at odd times if scan breaks don't occur
+at the nominal 4 hour intervals.
 
 <P>
 
-<UL>
-<LI>Add the Australian LBA to list of recognized correlators.
-30 Sept 2003 RCW.
+<P>
+Below is an example of a simple Mark II schedule.
+Be warned that this aspect of SCHED&nbsp; is not being maintained
+because Mark 2 is no longer available at most stations.  Also,
+this example is not being tested with each release.
 
 <P>
-</LI>
-<LI>Give the current SCHED&nbsp; version in the top level page
-of the manual.  Add a link to the ftp site where the distribution
-files are found.  16 Oct. 2003 RCW.
+<PRE>
+ SIMPLE EXAMPLE
+ --------------------------------------------------------------------
+     !   Cover information:
+ EXPT = 'Mark II, 3C345, May 1986'  ! Any description.
+ EXPCODE = 'C85G'                   ! Project code.
+ VERSION = 1                        ! Version 1 of schedule
+ PINAME = 'Craig Walker'            ! Principal Investigator's name.
+ ADDRESS1 = 'National Radio Astronomy Observatory'  ! Address
+ ADDRESS2 = 'P. O. Box O'                           ! Up to 4 lines.
+ ADDRESS3 = 'Socorro, New Mexico, 87801'
+ ADDRESS4 = ' U.S.A. '
+ PHONE    = '505 835 7247 '         ! Telephone number
+ OBSPHONE = '505 835 7247 '         ! Phone number during observations.
+ EMAIL    = 'Internet: cwalker@nrao.edu'   ! Electronic mail address.
+ FAX      = '505 835 7027 '         ! Phone number for FAX.
+ TELEX    = '910-988-1710 '         ! Telex number.
+ OBSMODE  = '6cm  Mark~II Standard Setup'  ! Observing mode.
+ CORREL   = 'Caltech'               ! Correlator to ship tapes to.
+ NOTE1    = 'You can put any comments you want to in these four lines.'
+ NOTE2    = ' More comments '
+ NOTE3    = ' More comments '
+ NOTE4    = ' Last of the comments'
+
+ !         Now the actual schedule information.
+ SRCFILE = sources.obs              ! Source catalog.
+ STAFILE = stations.dat             ! Station catalog.
+ SETUP   = nug6cm.set               ! Setup file.
+ YEAR = 1986  MONTH=5  DAY=11       ! Date of first stop time.
+ STATIONS=BONN,BOLOGNA,HSTK,NRAO,
+          VLA,VLBA_PT,OVRO          ! Stations list
+ VLAMODE='VS'                       ! Required information for VLA
+ START = 02:00:00                   ! Start time in UT.
+ TPREF = 1::                        ! Control tape change times.
+ SOURCE = '3C345'                   ! Source name.
+ DUR = 30:00   REP = 8              ! 8 scans of 30 minutes each
+ /                                  ! End of first group of scans.
+ SOURCE='NRAO512'  DUR=30:00  /     ! One scan on another source.
+ SOURCE='3C345'  DUR=30:00 REP 9 /  ! 9 more scans on main source.
+ --------------------------------------------------------------------
+</PRE>
 
 <P>
-</LI>
-<LI>Make the FANOUT default reasonable for non-power-of-two numbers
-of channels (before it could be fractional, leading to an error).
-27 Oct. 2003 RCW.
 
 <P>
-</LI>
-<LI>Fixed broken html link to <TT>DURation</TT> in the summary list of
-SCHED&nbsp; parameters.  4 Nov 2003  RCW.
+Below is an example setup file for Mark II observations.
+This is the standard setup file <I>nug6cm.set</I> and contains
+the correct information for the VLBA and VLA, which no longer have
+Mark II recording equipment.  For a real Mark II observations, the
+stations involved would have to be added.
 
 <P>
-</LI>
-<LI>First Mac OS X installation.  The main difficulty was getting
-PGPLOT installed.  Later this became easier if you could get the
-as-yet-unreleased version 5.3 of PGPLOT which includes Mac.  Since the
-compiler is g77 and the underlying operating system is unix, the only
-changes needed to sched were a couple of library pointers in the
-makefile.  The code was unchanged.  Dec 2003 RCW.
+<PRE>
+---------------------------------------------------------------------
+ EXAMPLE:   Setup file for Mark~II observations (1 channel) at 6cm.
+ --------------------------------------------------------------------
+! nug6cm.set
+!      Setup file produced by MAKESETUP.
+!      Modifications will be lost next time MAKESETUP is run.
+
+nchan = 1  bbfilter = 2.0 format = MARKII
+bbc = 1 netside = U
+ifchan = L
+!    Radio Astronomy allocation: 4990-5000
+!    Radio Astnomomy footnote:   4950-4990
+!    VLA 50MHz 4960.1 to 5010.1 with VC mode.
+!        VLA 6cm receiver falling off at high end.
+freqref  = 4990.99  !  Mark II network standard.
+fe(1) = '6cm'   fe(3) = '6cm'   synth(2) = 4.1
+firstlo  = 4100.00
+station  = VLBA   rchan = A  lchan = C   /
+firstlo  = 4360.10
+station  = VLA1   rchan = B  lchan = D   /
+station  = VLA27  rchan = A  lchan = C   /
+firstlo  = 4260.0
+station  = GB_VLBA  rchan = A  lchan = C  /
+station = 'EB_VLBA'
+fe(1)='6cm' fe(3)='6cm'
+firstlo = 4100.0  rchan=A lchan=C  /
+</PRE>
 
 <P>
-</LI>
-<LI>Moved some plot routines from <I>src/Sched</I> to <I>src/PlotNRAO</I> so that the plotstub option will actually work.  These
-are routines related to configuration searches that I, rather than
-Franco, support.  6 Nov 2003 RCW
-
-<P>
-</LI>
-<LI>Fixed some minor compatibility issues found by Patrick Charlot
-on a Compaq ALPHA machine.  Most had to do with mixed types in
-MIN and MAX arguments.  28 Jan 2004  RCW.
-
-<P>
-</LI>
-<LI>Added complete set of 3mm VLBA frequencies to freq.dat.  Added
-program makefreq to the <I>RELATED PROGRAMS</I> directory to do this.  That
-directory is not included in distributions.  02 Mar 2004  RCW.
-
-<P>
-</LI>
-<LI>Fixed the relative source separation printout to use the name used
-in the rest of the schedule.  Also upped the minimum separation for
-printed pairs to 30 degrees.  16 Mar 2004 RCW
-
-<P>
-</LI>
-<LI>Fixed an array overflow (segmentation fault) when a tapeini
-section is read more than once.  15 Mar 2004 RCW.
-
-<P>
-</LI>
-<LI>Add scan and baseline time calculation to source list in
-summary.  16 Mar 2004  RCW.  Fixed so it would also be written when
-Doppler information is written.  3 Feb 2005  RCW
-
-<P>
-</LI>
-<LI>Added satellite tracking.  This was a big change involving
-incorporation of the NAIF software from JPL.  However it is not expected
-to be of general interest and there is a stub available in the makefile
-to avoid needing NAIF.  With this change, SCHED&nbsp; can calculate the
-position of spacecraft if a SPICE file is available.  Note that there
-is an inconsistency in the handling of diurnal paralax that makes SPICE
-planet positions come out somewhat different from positions based on
-the JPL ephemeris. 24 Mar 2004 RCW.
-
-<P>
-</LI>
-<LI>For <TT>CORTAPE</TT>, remove <TT>9TRACK</TT> and add <TT>FTP</TT> to the
-options.  The correlators can no longer write 9 track tapes! 20 Apr
-2004 RCW.
-
-<P>
-</LI>
-<LI>Move geodetic (VGEO) setups away from satellite radio which is
-at 2320-2345 MHz.  29 Jul 2004. RCW.
-
-<P>
-</LI>
-<LI>VLA phasing scans were always phasing mode VA.  Change that to
-VL or VR if all channels are LCP or RCP in the following scan. 29 Jul
-2004 RCW
-
-<P>
-</LI>
-<LI>Update ATNF catalog entries based on info from Chris
-Phillips from 12 May 2004. 29 Jul 2004  RCW.
-
-<P>
-</LI>
-<LI>Modify DOPINCR to have 2 arguments so that the LO equation becomes
-<!-- MATH
- $N \times DOPINCR(1) + DOPINCR(2)$
- -->
-<IMG
- WIDTH="298" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
- SRC="img2.png"
- ALT="$N \times DOPINCR(1) + DOPINCR(2)$">.  Requested for the ATNF by Chris
-Phillips.  30 Jul 2004  RCW.
-
-<P>
-</LI>
-<LI>Add <TT>DATAPATH, GRABTO, GRABTIME,</TT> and <TT>GRABGAP</TT> for eVLBI
-control. 30 July 2004 RCW.
-
-<P>
-</LI>
-<LI>Begin support added for Mark5 on the VLBA.  Spring 2004.  RCW.
-
-<P>
-</LI>
-<LI>Allow use of <TT>DISC</TT> instead of <TT>DISK</TT> (I still maintain
-that DISC is the wrong spelling, but oh well.). 26 Aug 2004 RCW.
-
-<P>
-</LI>
-<LI>Extend downward the allowed values for <TT>VLAFEAB</TT> and
-<TT>VLAFECD</TT>.  27 Aug 2004 RCW.
-
-<P>
-</LI>
-<LI>Change default to tape only if <TT>MEDIA</TT> is not specified and
-tape is an option at the station.  Combined tape and disk commands
-are causing confusion for the VLBA.  30 Aug. 2004  RCW.
-
-<P>
-</LI>
-<LI>Add the <TT>MEDIADEF</TT> option to the station catalog.  13 Sep 2004
-RCW.  Also change some station catalog inputs to upper case just in case.
-
-<P>
-</LI>
-<LI>Add a version (date) to the station.dat and freq.dat files and
-report it in the summary file.  14 Sep 2004 RCW.
-
-<P>
-</LI>
-<LI>Add a warning if an unnamed source is found in the catalog.  This
-Can mean that someone put in an extra /.  30 Sept. 2004. RCW
-
-<P>
-</LI>
-<LI>Don't write track information to VLBA control files for norecord
-scans (like pointing).  This was causing a problem when pointing setups
-did not match recording scans in bit rate and, because of VEX's
-inability to deal with format=none, a format was was specified for the
-pointing scan.  30 Sept. 2004. RCW
-
-<P>
-</LI>
-<LI>Fix the count of Mark5 disk capacity used when not all stations
-are on all the time.  12 Nov. 2004 RCW
-
-<P>
-</LI>
-<LI>Don't complain about readbacks and tape stoppages when using disk.
-12 Nov. 2004.
-
-<P>
-</LI>
-<LI>Remove Mark5 stations from down scans, much like is done for
-autoallocate VLBA stations.  Parameter DODOWN added to override this
-if desired.  28 Nov. 2004  RCW
-
-<P>
-</LI>
-<LI>Allow a slight tolerance when testing if a scan start time was
-before the previous scan stop time.  We hit a case where a small rounding
-error was causing problems.  9 Dec. 2004  RCW
-
-<P>
-</LI>
-<LI>Turn off barrel roll for disk stations.  14 Dec 2004. RCW.
-
-<P>
-</LI>
-<LI>Use a separate setup file for every station, including VLBA stations.
-This should simplify some transition issues as we upgrade hardware.  But
-still maintain a single VLBA setup group in the OMS file when all are the
-same - although that won't happen much for a while because the barrel roll
-is different with Mark5 hand tape.  Note that this is an internal coding
-change. User specified setup files can still use VLBA to mean all VLBA
-stations.  19 Dec 2004  RCW
-
-<P>
-</LI>
-<LI>Add parameter <TT>MAXSRCHR</TT> to the station catalog to allow the
-number of sources per hour to be limited.  The MARK1 telescope at Jodrell
-needs to avoid frequent slews to prevent fatigue and will not run
-schedules that change sources too often.  19 Dec 2004  RCW
-
-<P>
-</LI>
-<LI>Fixed the tape count for VLBA systems in 2 tape, 512 Mbps mode.
-It had been low by factor of 2.  19 Dec 1004  RCW.
-
-<P>
-</LI>
-<LI>Don't allow fewer than 8 tracks on Mark5A.  27 Dec 2004  RCW.
-
-<P>
-</LI>
-<LI>For single polarization MarkIV, default to using both ``normal''
-and ``alternate'' IFs to try to keep all channels in the low numbered
-video converters.  This was requested by the EVN because some stations
-maintain the first 8 VCs better than the rest.  A side effect of the
-logic used to accomplish this effect is that dual polarization observations
-will only use the ``normal'' IFs.  Of course, any IF and VC (BBC) setting
-can be forced to whatever you want in the setup file.  2 Jan 2005  RCW.
-
-<P>
-</LI>
-<LI>Switch to numerical SCHED&nbsp; versions plus coarse dates.  The integer
-parts will change with major releases.  The fractional parts will change
-with bug fixes and minor releases.  3 Feb. 2005  RCW.
-
-<P>
-</LI>
-<LI>Add position error bars to the source catalog inputs and write
-the values to the printed source lists.  9 Feb 2005  RCW.
-
-<P>
-</LI>
-<LI>Fixed a bug that occurred when adding new modes iff the phase 
-cal tones were off.  Reynolds.  Feb. 2005
-
-<P>
-</LI>
-<LI>Prohibit oversampling greater than 4 coming to JIVE.  Reynolds. 
-24 Feb. 2005
-
-<P>
-</LI>
-<LI>Added ftp and evlbi scans (DATAPATH, GRABTO, GRABTIME) for VEX files
-Reynolds. 24 Feb 2005
-
-<P>
-</LI>
-<LI>Allow scheduling of Mk5 stations in VEX without specifying
-VEXTEST (though no entries have been added to the catalogues yet)
-Reynolds.  24 Feb 2005.
-
-<P>
-</LI>
-<LI>Added several evn examples.  Reynolds 24 Feb 2005.
-
-<P>
-</LI>
-</UL>
+END OF OLD TEXT.
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4441"
+<A NAME="tex2html4465"
   HREF="node311.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4437"
+<A NAME="tex2html4461"
   HREF="node308.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4433"
+<A NAME="tex2html4455"
   HREF="node309.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4439"
+<A NAME="tex2html4463"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4442"
-  HREF="node311.html">DEVELOPMENT VERSION.</A>
-<B> Up:</B> <A NAME="tex2html4438"
-  HREF="node308.html">CURRENT RELEASES</A>
-<B> Previous:</B> <A NAME="tex2html4434"
-  HREF="node309.html">Release of 18 September</A>
- &nbsp <B>  <A NAME="tex2html4440"
+<B> Next:</B> <A NAME="tex2html4466"
+  HREF="node311.html">Head Positions and Track</A>
+<B> Up:</B> <A NAME="tex2html4462"
+  HREF="node308.html">APPENDICES</A>
+<B> Previous:</B> <A NAME="tex2html4456"
+  HREF="node309.html">Mark&nbsp;III Observations</A>
+ &nbsp <B>  <A NAME="tex2html4464"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-03-02
+2005-05-25
 </ADDRESS>
 </BODY>
 </HTML>

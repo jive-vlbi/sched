@@ -27,7 +27,7 @@ C
 C
       CALL WLOG( 1, ' ' )
       MSGTXT = ' '
-      WRITE( MSGTXT, '( A, F5.1, 2X, A)' ) 
+      WRITE( MSGTXT, '( A, F6.2, 2X, A)' ) 
      1   '    Welcome to program SCHED.  Version: ', 
      2            VERNUM, VERSION(1:LEN1(VERSION))
       CALL WLOG( 1, MSGTXT )

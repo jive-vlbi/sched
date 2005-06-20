@@ -1,4 +1,4 @@
-# LaTeX2HTML 2002 (1.62)
+# LaTeX2HTML 2K.1beta (1.50)
 # Associate images original text with physical files.
 
 
