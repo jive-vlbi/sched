@@ -64,7 +64,7 @@ C
      3          SETSTA(1,I)(1:4) .EQ. 'VLBA' ))) KS = I
          END DO
 C
-C        Now write recorder
+C        Now write recorder - tape takes precedence over disk
 C
          IF( USETAPE(ISTA) ) THEN
              IF( RECORDER(ISCAT) .EQ. 'VLBA' .OR. 
@@ -90,7 +90,7 @@ C
                 CALL ERRLOG(' VXWRDA: Unknown recorder of type: '//
      1              RECORDER(ISCAT) )
              END IF
-         ELSE IF( MEDIA(ISTA) .EQ. 'DISK' .AND. USEDISK(ISTA) ) THEN
+         ELSE IF( USEDISK(ISTA) ) THEN
              IF( DISK(STANUM(ISTA)) .EQ. 'MARK5A' ) THEN
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',
@@ -150,7 +150,7 @@ C
             IF( USETAPE(ISTA) ) THEN
 C              WRITE (HEAD, '( A )' ) 'read/write'
                HEAD = 'read/write'
-            ELSE IF( MEDIA(ISTA) .EQ. 'DISK' .AND. USEDISK(ISTA) ) THEN
+            ELSE IF( USEDISK(ISTA) ) THEN
 C              WRITE (HEAD, '( A )' ) ''
                HEAD = ''
             END IF
@@ -221,13 +221,15 @@ C
             END IF
 C
 C           tapemotion can be start/stop or adaptive but fixed params!
+C           Use this for disks as well, as 0 second gaps seem to cause a
+C           problem
 C
-            IF( USETAPE(ISTA) ) THEN
+C            IF( USETAPE(ISTA) ) THEN
                WRITE( IVEX, '( 5X, A, A, A1, I2, A, A1, I2, A, A1, 
      1             I3, A, A1 )' ) 'tape_motion = ', 
      2             'adaptive ', COL, 0, ' min', COL,
      3             0, ' min', COL, 10, ' sec', SEP
-            END IF
+C            END IF
          ELSE
 C
 C           S2 in minutes, and adaptive schedules
