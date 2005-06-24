@@ -13,7 +13,7 @@ C
 C     variables
 C     
       INTEGER   I, ISETFL, ISET, ICH1, ICH2, ISTA, ISCAT
-      INTEGER   LEN1, J
+      INTEGER   LEN1
       CHARACTER NAME*32
 C ----------------------------------------------------------------------
 C

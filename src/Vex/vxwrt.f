@@ -11,7 +11,6 @@ C
       INTEGER    VLBOPE, LEN1, IOERR, IXX, ISTA, JSTA
       CHARACTER  VEXFILE*80, OPTEXT*255, OPSTAT*4, VXNMPR*32
       LOGICAL    EXISTS, VIOLFS, DISKER
-      INTEGER    IMODE
       REAL       PLTVER, VERJPL
 C ----------------------------------------------------------------------
 C
