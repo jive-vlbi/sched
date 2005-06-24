@@ -497,10 +497,10 @@ C
       END DO
 C
       IF( WARNTS ) THEN
-         CALL WLOG( 1,'VXSCH: Tsys calibration is taken every'//
-     1       ' new scan, but these appear over 15 min apart!')
-         CALL WLOG( 1,'       This can be improved by splitting'//
-     1       ' up individual tape passes in multiple scans. ')
+         CALL WLOG( 1,'VXSCH: Tsys calibration is taken during every'//
+     1       ' gap in recording, but these appear over 15 min apart!')
+         CALL WLOG( 1,'       This can be improved by inserting'//
+     1       ' 40 second gaps at regular intervals. ')
       END IF
       IF( WARNFS ) 
      1    CALL WLOG( 1,'VXSCH: WARNING: Scan timing problem '//
