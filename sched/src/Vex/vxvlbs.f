@@ -14,7 +14,8 @@ C
 C     variables
 C     
       INTEGER   ISETFL, ISET, ISTA, ISCAT
-      INTEGER   LEN1, J
+      INTEGER   J
+C      INTEGER   LEN1
 C ----------------------------------------------------------------------
 C
       IF( DEBUG ) CALL WLOG (1, 'VXVLBS: checking for special ' //
