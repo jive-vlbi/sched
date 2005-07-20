@@ -5,11 +5,11 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER     ISCN, ISTA, LEN1, KS, JS, ICH
+      INTEGER     ISCN, ISTA, KSTA, JSTA, KS, JS, ICH, LEN1
       INTEGER     YEAR, DAY, DOY, JD, MONTH, NTPS
       INTEGER     NSCHED
       LOGICAL     RESTART, ALLDONE, GOTTPS, GOTSCN
-      LOGICAL     PRTHEAD, PRTED(MSET), SAMESET
+      LOGICAL     PRTHEAD, PRTED(MSET), SAMESET, DUPSET
       DOUBLE PRECISION   STOP
       CHARACTER   DNAME*3, MNAME*3
       CHARACTER   FF*1, PDATE*50
@@ -197,44 +197,66 @@ C
                IF( KS .LT. NSET ) THEN
                   PRTHEAD = .TRUE.
                   LINE = ' '
-                  DO JS = KS + 1, NSET
+                  IF( KS .LT. NSET ) THEN
+                     DO JS = KS + 1, NSET
 C
-C                    If setups KS and JS are the same except for
-C                    the station, note that to user and don't flag
-C                    JS not to be printed in the future.
+C                       If setups KS and JS are the same except for
+C                       the station, note that to user and flag
+C                       JS not to be printed in the future.  SAMESET
+C                       doesn't test recording medium, so test that
+C                       too.  Do call tape and disk stations the same
+C                       for non-recording setups (eg pointing).
 C
-                     IF( SAMESET( KS, JS ) ) THEN
-                        PRTED(JS) = .TRUE.
+                        KSTA = ISCHSTA(ISETSTA(KS))
+                        JSTA = ISCHSTA(ISETSTA(JS))
+                        DUPSET = SAMESET( KS, JS ) .AND.
+     1                   ( ( .NOT. RECUSED(KS) .AND. .NOT. RECUSED(JS) )
+     2                      .OR. 
+     3                   ( ( USEDISK(KSTA) .EQV. USEDISK(JSTA) ) .AND.
+     4                   ( USETAPE(KSTA) .EQV. USETAPE(JSTA) ) ) )
 C
-                        IF( PRTHEAD ) THEN
-                           WRITE( ISUM, '( 1X,/,1X,/, A, A, I4, A )' )
-     1                       'The following setup groups ',
-     2                       'are the same as group', KS, ' below.'
-                           PRTHEAD = .FALSE.
+                        IF( DUPSET ) THEN
+C
+                           PRTED(JS) = .TRUE.
+C
+                           IF( PRTHEAD ) THEN
+                              WRITE( ISUM, '( 1X,/,1X,/, A, A, I4, A )')
+     1                          'The following setup groups ',
+     2                          'are the same as group', KS, ' below.'
+                              PRTHEAD = .FALSE.
+                           END IF
+C
+C                          Deal with a need for more than one line.
+C
+                           ICH = LEN1(LINE) + 1
+                           IF( ICH .GT. 65 ) THEN
+                              WRITE( ISUM, '( A )' ) LINE(1:ICH-1)
+                              ICH = 1           
+                              LINE = ' '
+                           END IF
+C
+C                          Add this station to the line.
+C
+                           WRITE( LINE(ICH:ICH+12), '( I4, A, A )' )
+     1                          JS, ':', SETSTA(1,JS)
                         END IF
+                     END DO
+                  END IF
 C
-C                       Deal with a need for more than one line.
+C                 Write out any accumulated stations in LINE.
 C
-                        ICH = LEN1(LINE) + 1
-                        IF( ICH .GT. 65 ) THEN
-                           WRITE( ISUM, '( A )' ) LINE(1:ICH-1)
-                           ICH = 1           
-                           LINE = ' '
-                        END IF
-C
-C                       Add this station to the line.
-C
-                        WRITE( LINE(ICH:ICH+12), '( I4, A, A )' )
-     1                       JS, ':', SETSTA(1,JS)
-                     END IF
-                  END DO
-                  IF ( .NOT. PRTHEAD ) THEN
-                     ICH = LEN1( LINE )
+                  ICH = LEN1( LINE )
+                  IF( ICH .GT. 2 ) THEN
                      WRITE( ISUM, '( A )' ) LINE(1:ICH)
                   END IF
+C
                END IF
+C
+C              Write the setup file details if this one needs it.
+C
                CALL PRTSET( KS, ISUM )
                PRTED(KS) = .TRUE.
+C
             END IF
          END DO
       END IF

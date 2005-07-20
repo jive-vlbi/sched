@@ -90,7 +90,7 @@ C
       END IF
 C
       DO ICH = 1, NCHAN(KS)
-         DO ITP = 1, TPMODE(KS)
+         DO ITP = 1, TAPEMODE(KS)
             SA = SA .AND.
      1          TRACK(ICH,ITP,KS) .EQ. TRACK(ICH,ITP,JS)
          END DO

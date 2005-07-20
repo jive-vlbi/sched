@@ -207,8 +207,8 @@ SETUP FILE INFORMATION:
    Format: VLBA1:2           Bits per sample: 2         Sample rate: 16.000
    Number of channels:  8    Passes/head pos:   1       Speedup factor:   1.00
 
-   Tape speeds: Low density - 266.660 ips,  High density - 160.00 ips
-   Time per pass for  17600 ft, High density tapes is: 00:22:00
+   Tape used at high density at 160.000 ips.  
+   Time per pass is   22.00 minutes.
 
    1st LO=   4360.10   4360.10   4360.10   4360.10   4360.10   4360.10   4360.10   4360.10
    Net SB=         L         L         U         U         L         L         U         U
