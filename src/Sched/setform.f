@@ -81,8 +81,8 @@ C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SETFORM: Starting' )
 C
 C     Initialize the format related variables.  This helps prevent
-C     problems on restarts.  Initialize TPMODE to the setup file
-C     value.
+C     problems on restarts.  Initialize TAPEMODE to the setup file
+C     TPMODE value.
 C
       DO KS = 1, NSET
          SPEEDUP(KS) = 0.0

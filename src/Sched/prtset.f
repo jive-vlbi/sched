@@ -27,6 +27,7 @@ C
       DATA              IFNAME / 'VLA IF A:', 'VLA IF B:', 
      1                           'VLA IF C:', 'VLA IF D:' /
 C ---------------------------------------------------------------------
+      ISTA = ISCHSTA(ISETSTA(KS))
       IF( DEBUG ) THEN
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, I5, I5 )' ) 
@@ -94,53 +95,91 @@ C
 C
 C        Various items, especilly related to tapes.
 C
-         IF( NOTAPE ) THEN
+         IF( NOTAPE .OR. .NOT. RECUSED(KS) ) THEN
             WRITE( IUNIT, '( A, I3 )' )
      1           '   Number of channels:', NCHAN(KS)   
-         ELSE
+         ELSE IF( USETAPE(ISTA) ) THEN
             WRITE( IUNIT, '( A, I3, A, I3, A, F6.2 )' )
      1          '   Number of channels:', NCHAN(KS),   
      2          '    Passes/head pos: ', TAPEMODE(KS),
      3          '       Speedup factor: ', SPEEDUP(KS)
+         ELSE
+            WRITE( IUNIT, '( A, I3, 24X, A, F6.2 )' )
+     1          '   Number of channels:', NCHAN(KS),   
+     2          '       Speedup factor: ', SPEEDUP(KS)
+         END IF
 C
-C           Worry about tape speeds etc if tapes will be used.
+         IF( .NOT. NOTAPE ) THEN
 C
-            ISTA = ISCHSTA(ISETSTA(KS))
+C           For tape, give the tape speeds and time per pass.
+C           For disk, just note that disk is being used.
+C           With one station per setup, this is now much simpler.
+C           and old subroutine PRTTPP has been relegated to the
+C           archive.
+C
             IF( FORMAT(KS) .NE. 'NONE' .AND. ISTA .NE. 0 ) THEN
-               IF( USETAPE(ISTA) ) THEN
+               IF( USETAPE(ISTA) .AND. DENSITY(ISTA) .EQ. 'H' ) THEN
                   WRITE( IUNIT, '( 1X, /, A, F7.3, A, F6.2, A )' )
-     1                '   Tape speeds: Low density - ', SPEEDL(KS),
-     2                ' ips,  High density - ', SPEEDH(KS), ' ips'
-C	     
-C                 Write time per pass.  Trying to only write the 
-C                 necessary information is a bit complicated, so 
-C                 use a subroutine.
-C	     
-                  CALL PRTTPP( KS, IUNIT )
-C	     
-C                 Add warning about two tapes.
-C	     
-                  IF( TWOHEAD .AND. NHEADS(ISETSTA(KS)) * 
-     1                STNDRIV(ISETSTA(KS)) .GE. 2 )  THEN
-                     IF( STNDRIV(ISETSTA(KS)) .GE. 2 .AND.
-     1                   FORMAT(KS)(1:4) .EQ. 'VLBA' ) THEN
-                        MSGTXT = '   Two tape drives will be used.'
-                     ELSE IF( NHEADS(ISETSTA(KS)) .GE. 2 .AND.
-     1                   FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
-                        MSGTXT = '   Two heads will be used.'
-                     END IF
-                     ICHR = LEN1( MSGTXT ) + 1
-                     IF( NCHAN(KS)*BITS(1,KS)*SAMPRATE(KS) .GT. 256.0 )
-     1                   THEN
-                        MSGTXT(ICHR:) = '  Required by this setup.'
-                     ELSE
-                        MSGTXT(ICHR:) = 
-     1                    '  Required by some other setup.'
-                     END IF
-                     ICHR = LEN1( MSGTXT )
-                     WRITE( IUNIT, '( A )' ) MSGTXT(1:ICHR)
+     1               '   Tape used at high density at ', 
+     2                SPEEDH(KS), ' ips.  '
+                  IF( SPEEDH(KS) .NE. 0.0 ) THEN
+                     WRITE( IUNIT, '( A, F7.2, A )' )
+     1                   '   Time per pass is ', 
+     2                   TPLENG(ISTA) * 12.0 / ( SPEEDH(KS) * 60.0 ),
+     3                   ' minutes.'
                   END IF
+               ELSE IF( USETAPE(ISTA) .AND. DENSITY(ISTA) .EQ. 'L' ) 
+     1             THEN
+C
+C                 I don't think low density tape is still in the 
+C                 system, but I'll leave this just in case.
+C
+                  WRITE( IUNIT, '( 1X, /, A, F7.3, A, F6.2, A )' )
+     1               '   Tape used at low density at ', 
+     2                SPEEDL(KS), ' ips.  '
+                  IF( SPEEDL(KS) .NE. 0.0 ) THEN
+                     WRITE( IUNIT, '( A, F7.2, A )' )
+     1                   '   Time per pass is ', 
+     2                   TPLENG(ISTA) * 12.0 / ( SPEEDL(KS) * 60.0 ),
+     3                   ' minutes.'
+                  END IF
+C
+               ELSE IF( USEDISK(ISTA) ) THEN
+                  WRITE( IUNIT, '( 1X, /, A, F7.3, A, F6.2, A )' )
+     1               '   Disk used to record data.'
                END IF
+C	     
+C              Add warning about two tapes.
+C	     
+               IF( USETAPE(ISTA) .AND. TWOHEAD .AND. 
+     1             NHEADS(ISETSTA(KS)) * STNDRIV(ISETSTA(KS)) .GE. 2 ) 
+     2             THEN
+C
+                  IF( STNDRIV(ISETSTA(KS)) .GE. 2 .AND.
+     1                FORMAT(KS)(1:4) .EQ. 'VLBA' ) THEN
+                     MSGTXT = '   Two tape drives will be used.'
+                  ELSE IF( NHEADS(ISETSTA(KS)) .GE. 2 .AND.
+     1                FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
+                     MSGTXT = '   Two heads will be used.'
+                  END IF
+                  ICHR = LEN1( MSGTXT ) + 1
+                  IF( NCHAN(KS)*BITS(1,KS)*SAMPRATE(KS) .GT. 256.0 )
+     1                THEN
+                     MSGTXT(ICHR:) = '  Required by this setup.'
+                  ELSE
+                     MSGTXT(ICHR:) = 
+     1                 '  Required by some other setup.'
+                  END IF
+                  ICHR = LEN1( MSGTXT )
+                  WRITE( IUNIT, '( A )' ) MSGTXT(1:ICHR)
+               END IF
+            END IF
+C
+C           Say something about setups used for other than recording.
+C
+            IF( .NOT. RECUSED(KS) ) THEN
+               WRITE( IUNIT, '( 1X, /, A )' )
+     1           '   Setup not used for recording data.'
             END IF
 C
          END IF
@@ -149,13 +188,9 @@ C        Frequency info.
 C
          CALL PRTFREQ( KS, IUNIT )
 C
-C        Track info.  The commented out WRITE statement works fine
-C        on SUNs.  There is some problem in this routine on a
-C        DEC Alpha.  This is an attempt to see if this is it.
-C        Note that the commented string needs help if MCHAN 
-C        increased.
+C        Track info.
 C
-         IF( .NOT. NOTAPE ) THEN
+         IF( .NOT. NOTAPE .AND. RECUSED(KS) ) THEN
             WRITE( IUNIT, '( 1X, /, A )' ) '   Track assignments are: '
             FMT = ' '
             IF( NCHAN(KS) .EQ. 1 ) THEN

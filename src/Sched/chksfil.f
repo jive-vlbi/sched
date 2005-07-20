@@ -1,6 +1,6 @@
       SUBROUTINE CHKSFIL
 C
-C     Routine for SCHED called by GETSET that checks parameters that
+C     Routine for SCHED called by DEFSET that checks parameters that
 C     shouldn't vary between setup groups within a file.
 C
 C     For now, only the speed up factor and samplerate are checked.

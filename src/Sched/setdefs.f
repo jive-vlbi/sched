@@ -22,6 +22,7 @@ C
 C     Now begin the real work.  First set the global parameters
 C     that are station independent and should match across stations.  
 C     But for the moment, don't attempt to check that they do match.
+C     Some checking is done in CHKSFIL.
 C     These are: 
 C     FREQREF   LO sum for channel.
 C     BBFILT    Bandwidth for channel
@@ -31,10 +32,6 @@ C     BITS      Bits per sample
 C     POL       Polarazition of each channel
 C     NETSIDE   Net sideband of each channel
 C     SPEEDUP   Processing speedup factor.
-C   ***************  I have not finished this yet.  I think it's a
-C                    bit of a can of worms so I want to wait until
-C                    after the next release.
-C
 C
 C     Set the contents of the baseband channels.
 C
@@ -105,7 +102,7 @@ C
 C        Now everything except formatting and recording details
 C        are set.
 C
-C        Set the tape recorder information including FORMAT etc.
+C        Set the recorder information including FORMAT etc.
 C
          CALL SETREC
 C

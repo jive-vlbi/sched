@@ -116,9 +116,7 @@ C        Set USETAPE and USEDISK based on RMEDIA and RECORDER.
 C
          IF( MEDIA(ISTA) .NE. ' ' .AND.
      1       MEDIA(ISTA) .NE. 'TAPE' .AND.
-     2       MEDIA(ISTA) .NE. 'DISK' .AND.
-     3       MEDIA(ISTA) .NE. 'TAPEDISK' .AND.
-     4       MEDIA(ISTA) .NE. 'DISKTAPE' ) THEN
+     2       MEDIA(ISTA) .NE. 'DISK' ) THEN
             WRITE( MSGTXT, '( 4A )' ) 'TPTPNS: Invalid MEDIA (',
      1           MEDIA(ISTA), ' for ', STATION(STANUM(ISTA)), ')'
             CALL WLOG( 1, MSGTXT )
@@ -149,27 +147,24 @@ C
      
 C       write(*,*) 'tptpns ', ista, usetape(ista), usedisk(ista),
 C     1  vlbitp, recorder(stanum(ista)), media(ista), 
-C     2  disk(stanum(ista)), mediadef(stanum(ista))
+C     2  disk(stanum(ista)), mediadef(stanum(ista)), staname(ista)
 C
-C        Keep non-VLBA control stations from using both, at least
-C        until I hear that Vex can support both.
+C        Don't allow a station to have both disk and tape.
+C        Walter Brisken does not want to support this in the VLBA
+C        on-line system and VEX does not support it.
 C
-         IF( ( CONTROL(STANUM(ISTA))(1:3) .NE. 'VLA'  .AND.
-     1         CONTROL(STANUM(ISTA))(1:4) .NE. 'VLBA' ) .AND. 
-     2       ( USETAPE(ISTA) .AND. USEDISK(ISTA) ) ) THEN
+         IF( USETAPE(ISTA) .AND. USEDISK(ISTA) ) THEN
             MSGTXT = ' '
             WRITE( MSGTXT, '( 3A )' )
      1         'TPTPNS: ',STANAME(ISTA), 
-     2         ' has tape and disk available.'
+     2         ' has been specified to use both tape and disk.'
             CALL WLOG( 1, MSGTXT )
-            CALL WLOG( 1, '        It does not use the VLBA ' //
-     1           'control system.' )
-            CALL WLOG( 1, '        Tape initialization parameter '//
-     1           'MEDIA = '''// MEDIA(ISTA) // ''' allows both.' )
-            CALL WLOG( 1, '        Be sure that this is allowed.' )
+            CALL WLOG( 1, '        This is not allowed.  ' )
+            CALL ERRLOG( '        Choose Tape OR Disk' )
          END IF
 C
-C        If VLBITP, insist that we use one.
+C        If VLBITP, insist that we use one for recording 
+C        observations.
 C
          IF( VLBITP .AND. ( 
      1       .NOT. USETAPE(ISTA) .AND.
@@ -186,7 +181,7 @@ C
      1         '              and the available drives at ', 
      2         STATION(STANUM(ISTA)), ' are not compatible.'
             CALL WLOG( 1, MSGTXT )
-            CALL ERRLOG( 'TPTPNS:  You probably need to fix MEDIA' )            
+            CALL ERRLOG( 'TPTPNS:  You probably need to fix MEDIA' )
 C
          END IF
 C

@@ -124,6 +124,14 @@ C        this should be ok wrt optimizations that are going on.
 C        STASCN for the first scans up to this point may have
 C        been modified, but all future scans involving this station
 C        should be represented.  Don't count non-recording scans.
+C
+C        I'm not sure all this is needed in view of the efforts
+C        made earlier to ensure that all setups that produce 
+C        recordings at a station have the same TAPEMODE.  But all
+C        this gets irrelevant once we switch to disk, so don't
+C        really worry about it for now.  The earlier efforts did
+C        not worry about the non-recording scans.
+C        (note added without code changes, June 2005  RCW)
 C     
          TPMODMIN(ISTA) = 100
          DO JSCN = 1, NSCANS
