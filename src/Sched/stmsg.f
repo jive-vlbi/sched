@@ -97,7 +97,7 @@ C
       END IF
       IF( MAXSCN .LT. 3000 ) THEN
          CALL WLOG( 1, ' -------------------------------------' )
-         CALL WLOG( 1, 'STMSG: *****  MAXSCN less than 000.' )
+         CALL WLOG( 1, 'STMSG: *****  MAXSCN less than 3000.' )
          CALL WLOG( 1, '       Increase MAXSCN before a release' )
          CALL WLOG( 1, ' -------------------------------------' )
       END IF

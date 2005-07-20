@@ -1,9 +1,37 @@
       SUBROUTINE TPMFIX
 C
-C     Deal with experiments that, at this stage, have setups with
-C     different TAPEMODEs.  These can get into big trouble with tape
-C     management and so we have not allowed this situation.  Here
-C     is where we enforce it.  For each station separately, go 
+C     Deal with cases were tape stations have varying TAPEMODE
+C     during an observation.  While varying TAPEMODE  might be 
+C     possible, it would introduce very serious complications 
+C     in the allocation of tape resources and possible inefficient 
+C     use of tape.  Don't allow it.  Note that different stations
+C     are allowed to use different tapemodes.
+C
+C     Note that TAPEMODE is really a statement of how many tracks
+C     are being used at once.  We don't want this to vary for tape.
+C
+C     For disk, variable numbers of tracks are not an issue.  Also
+C     there is no head position concept.  We just want to keep
+C     the same heads all the time - the ones that a tape would have
+C     used in the first pass.  So just set TAPEMODE=1.  Note that
+C     this is for MARK5A.  For MARK5B, the concept of tracks goes
+C     away and we are only setting channels.  This routine will
+C     probably be skipped, but I have to think about it.
+C
+C     The logic used to be a mess when one setup could control 
+C     several stations (like VLBA stations).  But SCHED was modified
+C     to avoid this situation so the logic is being simplified
+C     on June 28, 2005.
+C
+C     Note that this routine comes between setting the basic 
+C     formatter parameters and setting track assignments.  This is
+C     not where we attempt to adjust the fan outs etc to equalize
+C     the number of tracks.  This was already attempted in SETFORM
+C     in setting default formats.  But that might not have 
+C     succeeded, or the user might have forced a situation with
+C     variable TAPEMODEs.  
+C
+C     To enforce constant TAPEMODE, for each station separately, go 
 C     through all the setups looking at those with VLBA and MKIV 
 C     formats.  Get the minimum TAPEMODE.  Then go back and set 
 C     the TAPEMODE for all these setups to the minimum.  I tried to
@@ -13,238 +41,83 @@ C     per head position, as expected, but they would use only the
 C     even tracks, hence writing over half the tracks used by an
 C     earlier TAPEMODE=2 scan.
 C
-C     Doing this for each station separately allows for different
-C     bandwidths at different stations, but significantly 
-C     complicates the logic.
+C     Modified June 27, 2005 for the new regime with a separate setup
+C     for every station.  See the archive of obsolete code for the
+C     version that understands multiple stations per setup.  The
+C     changes were an immense simplification.  RCW.
 C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
 C
-      INTEGER    ISET, ISTA, KSTA, ISCN, MINTPM, MAXTPM
-      INTEGER    TPM(MAXSTA,MSET), GOTN, LEN1
-      LOGICAL    GOTMULTI, CHANGED, ANYCHG, ALERT
+      INTEGER    KS, ISTA, MINTPM
+      INTEGER    LEN1
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'TPMFIX starting' )
 C
-C     First go through the setups and see if there is any chance
-C     of a problem.  For most observations, this is all that
-C     will be needed.  Only check VLBA, MarkIII and MKIV 
-C     format setups (skips NONE, along with S2, MKII etc.)
+C     Since we are not changing track rates here, only deciding
+C     whether to waste some tracks, we can do each station 
+C     independently.
 C
-      MINTPM = 100
-      MAXTPM = 0
-      DO ISET = 1, NSET
-         IF( FORMAT(ISET)(1:4) .EQ. 'VLBA' .OR. 
-     1       FORMAT(ISET)(1:4) .EQ. 'MARK' .OR.
-     2       FORMAT(ISET)(1:4) .EQ. 'MKIV' ) THEN
-            MINTPM =  MIN( MINTPM, TAPEMODE(ISET) )
-            MAXTPM =  MAX( MAXTPM, TAPEMODE(ISET) )
+      DO ISTA = 1, NSTA
+         IF( USEDISK(ISTA) ) THEN
+            DO KS = 1, NSET
+               IF( ISCHSTA(ISETSTA(KS)) .EQ. ISTA .AND.
+     1             RECUSED(KS) .AND. (
+     2             FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
+     3             FORMAT(KS)(1:4) .EQ. 'MARK' .OR.
+     4             FORMAT(KS)(1:4) .EQ. 'MKIV' ) ) THEN
+                  TAPEMODE(KS) = 1
+               END IF
+            END DO
+         ELSE IF( USETAPE(ISTA) ) THEN
+C
+C           Find the minumum TAPEMODE for this station.
+C
+            MINTPM = 100
+            DO KS = 1, NSET
+               IF( ISCHSTA(ISETSTA(KS)) .EQ. ISTA .AND.
+     1             RECUSED(KS) .AND. (
+     2             FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
+     3             FORMAT(KS)(1:4) .EQ. 'MARK' .OR.
+     4             FORMAT(KS)(1:4) .EQ. 'MKIV' ) ) THEN
+                  MINTPM =  MIN( MINTPM, TAPEMODE(KS) )
+               END IF
+            END DO
+C
+C           Now set all setups for this station to MINTPM.
+C
+            DO KS = 1, NSET
+               IF( ISCHSTA(ISETSTA(KS)) .EQ. ISTA .AND.
+     1             RECUSED(KS) .AND. (
+     2             FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
+     3             FORMAT(KS)(1:4) .EQ. 'MARK' .OR.
+     4             FORMAT(KS)(1:4) .EQ. 'MKIV' ) ) THEN
+C
+                  IF( TAPEMODE(KS) .NE. MINTPM ) THEN
+C
+                     WRITE( MSGTXT, '( A, I2, A, I2, 4A )' )
+     1                  '          Changing TPMODE from ', 
+     2                  TAPEMODE(KS), ' to ', MINTPM,
+     3                  ' in setup: ',
+     4                  SETNAME(KS)(1:LEN1(SETNAME(KS))),
+     5                  ', station: ', 
+     6                  SETSTA(1,KS)(1:LEN1(SETSTA(1,KS)))
+                     CALL WLOG( 1, MSGTXT )
+                     MSGTXT = ' '
+                     CALL WLOG( 1, 'to match other setups.'//
+     1                 '  This will waste some tape space.' )
+C
+C                    Do it.
+C
+                     TAPEMODE(KS) =  MINTPM
+                  END IF
+               END IF
+            END DO
          END IF
       END DO
 C
-C     If all setups have the same TAPEMODE, we can quit.
-C
-      IF( MINTPM .NE. MAXTPM .AND. MINTPM .NE. 100 ) THEN
-C
-C        So now we need to try to set TAPEMODES the same for
-C        all setup groups used by a station.  The complication
-C        is that some setup groups (eg those that specify VLBA)
-C        are used for more than one station.  This makes 
-C        getting all the dependencies a mess.  
-C
-C        Set up a matrix TPM that gives the TAPEMODE for each
-C        station/setup group.  We will then manipulate that
-C        matrix to get what to change the TAPEMODES to.
-C        First initialize the matrix.
-C
-         DO ISTA = 1, NSTA
-            DO ISET = 1, NSET
-               TPM(ISTA,ISET) = 0
-            END DO
-         END DO
-C
-C        Now set the elements that are actually used to the 
-C        starting TAPEMODE.
-C
-         DO ISTA = 1, NSTA
-            KSTA = STANUM(ISTA)
-C
-C           Only do anything if this station is using a VLBA or MK??
-C           data aquisition rack.
-C
-            IF( DAR(KSTA)(1:4) .EQ. 'VLBA' .OR. 
-     1          DAR(KSTA)(1:2) .EQ. 'MK' ) THEN
-C
-C              Loop over scans finding the used setup groups.
-C
-               DO ISCN = 1, NSCANS
-C
-C                 Only consider recording scans that use this station.
-C
-                  IF( STASCN(ISCN,ISTA) .AND. .NOT. NOREC(ISCN) ) THEN
-C
-C                    Get the setup group number for this scan/station.
-C
-                     ISET = NSETUP(ISCN,ISTA)
-C
-C                    Only worry about it if this is a recording type
-C                    format.
-C
-                     IF( FORMAT(ISET)(1:4) .EQ. 'VLBA' .OR. 
-     1                   FORMAT(ISET)(1:4) .EQ. 'MARK' .OR.
-     2                   FORMAT(ISET)(1:4) .EQ. 'MKIV' ) THEN
-C
-C                       Ok, now set TPM
-C
-                        TPM(ISTA,ISET) = TAPEMODE(ISET)
-C
-                     END IF
-                  END IF
-               END DO
-            END IF
-         END DO
-C
-C        Now inspect TPM to see if any setups are used for multiple 
-C        stations.
-C
-         GOTMULTI = .FALSE.
-         DO ISET = 1, NSET
-            GOTN = 0
-            DO ISTA = 1, NSTA
-               IF( TPM(ISTA,ISET) .GT. 0 ) GOTN = GOTN + 1
-            END DO
-            GOTMULTI = GOTMULTI .OR. GOTN .GE. 2
-         END DO
-C
-C        For each station, set all the TPM cells to the minimum value.
-C
-         ANYCHG = .FALSE.
-         DO ISTA = 1, NSTA
-            MINTPM = 100
-            DO ISET = 1, NSET
-               IF ( TPM(ISTA,ISET) .NE. 0 ) THEN
-                  MINTPM = MIN( TPM(ISTA,ISET), MINTPM )
-               END IF
-            END DO
-            IF( MINTPM .LT. 100 ) THEN
-               DO ISET = 1, NSET
-                  IF ( TPM(ISTA,ISET) .NE. 0 ) THEN
-                     IF( TPM(ISTA,ISET) .NE. MINTPM ) 
-     1                    ANYCHG = .TRUE.
-                     TPM(ISTA,ISET) = MINTPM
-                  END IF
-               END DO
-            END IF
-         END DO
-C
-C        Now deal with the multi station setups.
-C
-         IF( GOTMULTI ) THEN
-C
-C           Do a few passes through a loop of setting equalizing
-C           TPM across a setup and then setting it to the minimum
-C           for a station.  Do until no changes are made.  I don't
-C           see an easy way out of this iterative proceedure.
-C
-  100       CONTINUE
-            CHANGED = .FALSE.
-C
-C           For each setup, set TPM to the minimum value.
-C
-            DO ISET = 1, NSET
-               MINTPM = 100
-               DO ISTA = 1, NSTA
-                  IF ( TPM(ISTA,ISET) .NE. 0 ) THEN
-                     MINTPM = MIN( TPM(ISTA,ISET), MINTPM )
-                  END IF
-               END DO
-               IF( MINTPM .LT. 100 ) THEN
-                  DO ISTA = 1, NSTA
-                     IF ( TPM(ISTA,ISET) .NE. 0 ) THEN
-                        CHANGED = TPM(ISTA,ISET) .NE. MINTPM
-                        TPM(ISTA,ISET) = MINTPM
-                     END IF
-                  END DO
-               END IF
-            END DO
-C
-C           Now redo the setting to the minimum across setups for
-C           a station.
-C
-            DO ISTA = 1, NSTA
-               MINTPM = 100
-               DO ISET = 1, NSET
-                  IF ( TPM(ISTA,ISET) .NE. 0 ) THEN
-                     MINTPM = MIN( TPM(ISTA,ISET), MINTPM )
-                  END IF
-               END DO
-               IF( MINTPM .LT. 100 ) THEN
-                  DO ISET = 1, NSET
-                     IF ( TPM(ISTA,ISET) .NE. 0 ) THEN
-                        CHANGED = TPM(ISTA,ISET) .NE. MINTPM
-                        TPM(ISTA,ISET) = MINTPM
-                     END IF
-                  END DO
-               END IF
-            END DO
-C
-C           If anything was changed, do it again.
-C
-            IF( CHANGED ) ANYCHG = .TRUE.
-            IF( CHANGED ) GO TO 100
-C
-C           If get this far, are done with the multi case.
-C
-         END IF
-C
-C        If changes are needed, deal with them.
-C
-         IF( ANYCHG ) THEN
-C
-C           Tell the user something about what we are doing.
-C
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( 2A )' )
-     1        'TPMFIX:   Forcing equal numbers of passes ',
-     2        'per head position for all scans at each station'
-            CALL WLOG( 1, MSGTXT )
-C
-C           Now reset the actual TAPEMODE values.
-C
-            DO ISET = 1, NSET
-               ALERT = .TRUE.
-               DO ISTA = 1, NSTA
-                  IF( TPM(ISTA,ISET) .NE. 0 .AND. 
-     1                TPM(ISTA,ISET) .NE. TAPEMODE(ISET) ) THEN
-C
-C                    Tell the user something was done to this setup.
-C
-                     IF( ALERT ) THEN
-                        MSGTXT = ' '
-                        WRITE( MSGTXT, '( A, I2, A, I2, 4A )' )
-     1                     '          Changing TPMODE from ', 
-     2                     TAPEMODE(ISET), ' to ', TPM(ISTA,ISET),
-     3                     ' in setup: ',
-     4                     SETNAME(ISET)(1:LEN1(SETNAME(ISET))),
-     5                     ', station: ', 
-     6                     SETSTA(1,ISET)(1:LEN1(SETSTA(1,ISET)))
-                        CALL WLOG( 1, MSGTXT )
-                        MSGTXT = ' '
-                        ALERT = .FALSE.
-                     END IF
-C
-C                    Actually do it.
-C
-                     TAPEMODE(ISET) = TPM(ISTA,ISET) 
-C
-                  END IF
-               END DO
-            END DO
-         END IF
-C
-C        I think this atrocity is done.
-C
-      END IF
+C     We're done.  If you look at the archive version of this
+C     routine, you'll see just how much easier this was!
 C
       RETURN
       END

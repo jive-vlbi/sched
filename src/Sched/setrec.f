@@ -66,9 +66,18 @@ C
             END IF
             BARREL(KS) = 'roll_off'
          END IF
+C
       END DO
 C
-C     Prevent changes in TAPEMODE.
+C     Make changes to TAPEMODE if needed.
+C
+C     For disk stations, set TAPEMODE to 1 which better reflects
+C     what they do.  This should only affect "track" assignments
+C     downstream from here.  Earlier it might affect mode 
+C     assignments.
+C
+C     For tape stations, prevent changes in TAPEMODE which can
+C     make tape management a nightmare.
 C
       CALL TPMFIX
 C

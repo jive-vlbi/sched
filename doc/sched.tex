@@ -9244,10 +9244,11 @@ included in the control file.  Valid arguments to {\tt DISK} for
 now are restricted to {\tt MARK5A} and {\tt NONE} (the default).
 {\tt MARK5B} will be valid later.
 
-\item [{\tt MEDIADEF}:] Gives the type of recording system to use if
-it is not specified elsewhere, like in a \htmlref{{\tt TAPEINI}}{MP:TAPEINI}
-section.  The options are {\tt TAPE} and {\tt DISK}.  This is meant
-to facilitate VLBA operations during the transition from tape to disk.
+\item [{\tt MEDIADEF}:] Gives the default recording system to use.  It
+can be overridden by {\tt MEDIA} in the \htmlref{{\tt
+TAPEINI}}{MP:TAPEINI} section.  The options are {\tt TAPE} and {\tt
+DISK}.  This is meant to facilitate VLBA operations during the
+transition from tape to disk.
 
 \item [{\tt ELev}:] Station elevation in meters above (mean?) sea
 level for geodetic coordinates or meters from the center of the Earth
@@ -9551,8 +9552,8 @@ tapeini /
 tpsta    = vlba_sc, vlba_hn, vlba_nl, vlba_fd, vlba_la, vlba_pt,
            vlba_kp, vlba_ov, vlba_br, vlba_mk, gb_vlba, medicina,
            noto,    onsala60
-MEDIA    = TAPE,    TAPEDISK,TAPE,    DISK,    DISK,    DISK,
-           DISK,    TAPE,    TAPEDISK,TAPE,    TAPE,    DISK,
+MEDIA    = TAPE,    TAPE,    TAPE,    DISK,    DISK,    DISK,
+           DISK,    TAPE,    DISK,    TAPE,    TAPE,    DISK,
            TAPE,    DISK
   /
 \end{verbatim}
@@ -9582,20 +9583,15 @@ density =H,      H,      H,       H,         H,         L
 
 \subsubsection{\label{TP:MEDIA}{\tt MEDIA}}
 
-{\tt MEDIA} is used to specify how the data are to be transmitted
-to the correlator.  This is mainly useful when a station has
+{\tt MEDIA} is used to specify how the data are to be transmitted to
+the correlator.  This is mainly useful when a station has
 alternatives, such as both a tape system (\htmlref{station catalog}
 {SEC:STACAT} parameter {\tt RECORDER}) and a disk system
-(\htmlref{station catalog}{SEC:STACAT} parameter {\tt DISK}).
-Valid arguments are blank (use the tape, if present, otherwise
-the disk), {\tt TAPE} (use the tape system), and {\tt DISK} (use the
-disk system).  Combinations like {\tt TAPEDISK} and {\tt DISKTAPE}
-are also valid and mean use both where that is possible, which is
-only on systems that use the VLBA control system.  If both are
-specified for a non-VLBA system, the tape will be used unless
-there is no {\tt RECORDER} specified, in which case {\tt DISK}
-will be used if available.  Eventually other
-options such as real time may be added.
+(\htmlref{station catalog}{SEC:STACAT} parameter {\tt DISK}) and the
+default needs to be overridden.  Valid arguments are blank (use the
+default), {\tt TAPE} (use the tape system), and {\tt DISK} (use the
+disk system).  Eventually other options such as real time may be
+added.
 
 If an option is specified that is not consistent with what is available
 at the station, an error will occur.
@@ -12482,6 +12478,16 @@ is issued if it is excessive.  19 Apr 2005  RCW.
 \item Add {\tt DISK} parameter to the {\sl .oms} file.  It gives the
 the number of Gbytes on the disk drive, if that has been calculated.
 12 May 2005  RCW.
+
+\item Remove joint tape and disk options even for VLBA. 27 June 2005 RCW
+
+\item Changed TPMODE to TAPEMODE in RECONFIG and SAMESET.  This is a bug 
+fix that might improve predictions of time lost to formatter reconfigures.
+27 June 2005.  RCW.
+
+\item Force TAPEMODE to 1 for disk so that constant track assignments
+are kept.  Make some cosmetic modifications to the summary file related
+to the conversion to Mark5. 29 June 2005.  RCW
 
 
 \end{itemize}
