@@ -13,6 +13,7 @@ C
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
       INTEGER     YEAR, DAY, DOY, JD, MONTH, FTMIN, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
+      INTEGER     I, LASTSCN
       REAL        STASPD(MANT) 
       CHARACTER   FULTIM*18, TPSUBP*1, TMPSRC*32
       CHARACTER   DNAME*3, MNAME*3, DIRECT*1 
@@ -398,8 +399,20 @@ C
                      WRITE( LINE(LPOS:LPOS+9), '( I6, A3, A1 )' ) 
      1                      NINT(TPFOOT1(ISCN,ISTA)),' ft', COL
                   ELSE IF( USEDISK(ISTA) ) THEN
-                     IF (ISCN .GT. 1) THEN
-                        STGB = (GBYTES(ISCN-1,ISTA))
+C                    Find the last scan that this station participated
+C                    in and print the GB at the end of that scan.
+C                    Note, STASCN(ISCN,ISTA) is a flag that indicates
+C                    that station ISTA is in scan ISCN.  
+                     IF( ISCN .GT. 1 ) THEN
+                        LASTSCN = 0
+                        DO I = 1, ISCN-1
+                          IF( STASCN(I, ISTA) ) LASTSCN = I
+                        END DO
+                        IF( LASTSCN .GT. 0 ) THEN
+                          STGB = GBYTES(LASTSCN,ISTA)
+                        ELSE
+                          STGB = 0.0
+                        END IF
                      ELSE 
                         STGB = 0.0
                      END IF
