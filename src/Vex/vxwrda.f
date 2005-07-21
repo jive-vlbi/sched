@@ -222,14 +222,15 @@ C
 C
 C           tapemotion can be start/stop or adaptive but fixed params!
 C           Use this for disks as well, as 0 second gaps seem to cause a
-C           problem
+C           problem - allow switching it off by using VEXTEST in case
+C           this gets fixed
 C
-C            IF( USETAPE(ISTA) ) THEN
+            IF( USETAPE(ISTA) .OR. .NOT. VEXTEST ) THEN
                WRITE( IVEX, '( 5X, A, A, A1, I2, A, A1, I2, A, A1, 
      1             I3, A, A1 )' ) 'tape_motion = ', 
      2             'adaptive ', COL, 0, ' min', COL,
      3             0, ' min', COL, 10, ' sec', SEP
-C            END IF
+            END IF
          ELSE
 C
 C           S2 in minutes, and adaptive schedules
