@@ -1,4 +1,4 @@
-cd $home2/sched_devel/dev_version/sched/src
+#!/bin/csh
 cd Vex
 ln -s ../Sched/sched.inc sched.inc
 ln -s ../Sched/schset.inc schset.inc
