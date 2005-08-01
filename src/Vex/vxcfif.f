@@ -84,18 +84,12 @@ C     can also have different IF blocks if have different IF-coding
 C     so need to find DAR for station involved
 C
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,ISET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,ISET) .OR. VLBASSET(ISET)) ) 
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) ) 
      4       IDAR = DAR(STANUM(ISTA))
       END DO
 C 
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,JSET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,JSET) .OR. VLBASSET(JSET)) ) 
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) ) 
      4       JDAR = DAR(STANUM(ISTA))
       END DO
 C

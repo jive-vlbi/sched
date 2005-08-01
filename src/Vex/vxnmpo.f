@@ -27,10 +27,7 @@ C
 C     Check if two heads applies
 C
          DO ISTA = 1, NSTA
-            IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,KS) .OR. 
-     1          STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2          SETSTA(1,KS)(1:4) .EQ. 'VLBA' .AND.
-     3          .NOT. (VLBASSTA(ISTA,KS) .OR. VLBASSET(KS)) ) 
+            IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,KS) ) 
      4          ASTAT = ISTA
          END DO
 C

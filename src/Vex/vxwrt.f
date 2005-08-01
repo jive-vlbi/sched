@@ -126,7 +126,8 @@ C      END IF
 C     
 C     Find out if any of the VLBAs are doing something different to the
 C     other VLBAs, so we can treat these as special cases later.
-      CALL VXVLBS 
+C     CR: 050801. VXVLBS no longer necessary (all stations get own setups)
+C      CALL VXVLBS 
 C     first find out how many modes there are
 C
       CALL VXMODE
