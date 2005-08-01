@@ -72,11 +72,7 @@ C
 C
 C                    This covers VLBA (changed CR 19 Oct 2004):
 C
-                     IF ( STATION(ISCAT) .EQ. SETSTA(1,ISET) .OR.
-     1                   (STATION(ISCAT)(1:4) .EQ. 'VLBA' .AND.
-     2                   SETSTA(1,ISET)(1:4) .EQ. 'VLBA' .AND.
-     3                   .NOT. (VLBASSTA(ISTA, ISET) .OR. 
-     4                   VLBASSET(ISET) )) ) THEN
+                     IF ( STATION(ISCAT) .EQ. SETSTA(1,ISET) ) THEN
 C
 C                    We should keep this the lowest matching number, don't set
 C                    again when already set.

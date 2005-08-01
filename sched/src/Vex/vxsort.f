@@ -226,11 +226,7 @@ C
                   IF( USED(KS) ) THEN
                      IF( SETISXX(KS) .EQ. IXX .AND. 
      .                   KS .EQ. MODSET(ISTA,IMODE)) THEN
-                        IF( STATION(ISCAT) .EQ. SETSTA(1,KS) .OR.
-     1                      (STATION(ISCAT)(1:4) .EQ. 'VLBA' .AND.
-     2                      SETSTA(1,KS)(1:4) .EQ. 'VLBA'. AND.
-     3                      .NOT. ( VLBASSTA(ISTA,KS) .OR.
-     4                      VLBASSET(KS))  ) ) THEN
+                        IF( STATION(ISCAT) .EQ. SETSTA(1,KS) ) THEN
                            NEWFND = .TRUE.
                            IF( NSTAXX(IXX,IMODE) .GE. 1 ) THEN
                               DO J = 1, NSTAXX(IXX,IMODE)

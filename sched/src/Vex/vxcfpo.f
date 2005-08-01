@@ -29,17 +29,11 @@ C
 C     Need to check the number of head positions
 C
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,ISET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,ISET) .OR. VLBASSET(ISET)) ) 
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) ) 
      4       STAI = ISTA
       END DO
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,JSET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,JSET) .OR. VLBASSET(JSET)) ) 
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) ) 
      4       STAJ = ISTA
       END DO
 C
@@ -47,10 +41,7 @@ C     Make sure stations in a set don't appear with different nhdpos
 C
       FNDHPOS = 0
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,ISET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,ISET) .OR. VLBASSET(ISET)) ) THEN
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) ) THEN
             IF( FNDHPOS .EQ. 0 ) FNDHPOS = NHDPOS(ISTA)
             IF( FNDHPOS .NE. NHDPOS(ISTA) ) THEN
                WRITE( MSGTXT, '( A, A, A )' ) 
@@ -64,10 +55,7 @@ C
 C
       FNDHPOS = 0
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,JSET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,JSET) .OR. VLBASSET(JSET)) ) THEN
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) ) THEN
             IF( FNDHPOS .EQ. 0 ) FNDHPOS = NHDPOS(ISTA)
             IF( FNDHPOS .NE. NHDPOS(ISTA) ) THEN
                WRITE( MSGTXT, '( A, A, A )' ) 
@@ -83,17 +71,11 @@ C
 C     compare MEDIA - no passorder for disks
 C
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,ISET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,ISET) .OR. VLBASSET(ISET)) )
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) )
      4       ISCAT = ISTA
       END DO
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,JSET)(1:4) .EQ. 'VLBA'.AND. 
-     3       .NOT. (VLBASSTA(ISTA,JSET) .OR. VLBASSET(JSET))  ) 
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) ) 
      4       JSCAT = ISTA
       END DO
       IF( USETAPE(ISCAT) .NEQV. USETAPE(JSCAT) ) IDENT = .FALSE.
