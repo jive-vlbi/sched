@@ -37,17 +37,11 @@ C
 C        find stations in order to compare DAR
 C
          DO ISTA = 1, NSTA
-            IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) .OR. 
-     1          STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2          SETSTA(1,ISET)(1:4) .EQ. 'VLBA' .AND.
-     3          .NOT. (VLBASSTA(ISTA,ISET) .OR. VLBASSET(ISET)) )
+            IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) )
      4          ISCAT = STANUM(ISTA)
          END DO
          DO ISTA = 1, NSTA
-            IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) .OR. 
-     1          STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2          SETSTA(1,JSET)(1:4) .EQ. 'VLBA' .AND.
-     3          .NOT. (VLBASSTA(ISTA,JSET) .OR. VLBASSET(JSET))  )
+            IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) )
      4          JSCAT = STANUM(ISTA)
          END DO
          IF( DAR(ISCAT) .NE. DAR(JSCAT) ) IDENT = .FALSE.
@@ -56,17 +50,11 @@ C
 C     compare MEDIA - no subpass for disks
 C
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,ISET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,ISET) .OR. VLBASSET(ISET)) )
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) )
      4       STAI = ISTA
       END DO
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) .OR. 
-     1       STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' .AND.
-     2       SETSTA(1,JSET)(1:4) .EQ. 'VLBA' .AND.
-     3       .NOT. (VLBASSTA(ISTA,JSET) .OR. VLBASSET(JSET)) )
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) )
      3       STAJ = ISTA
       END DO
       IF( USETAPE(STAI) .NEQV. USETAPE(STAJ) ) IDENT = .FALSE.
