@@ -27,9 +27,7 @@ C
       ISCAT = STANUM(ISTA)
       DO I = 1, NSET
          IF ( USED(I) .AND. (
-     1       STATION(ISCAT) .EQ. SETSTA(1,I) .OR.
-     2       (STATION(ISCAT)(1:4) .EQ. 'VLBA' .AND.
-     3       SETSTA(1,I)(1:4) .EQ. 'VLBA' ))) KS = I
+     1       STATION(ISCAT) .EQ. SETSTA(1,I) )) KS = I
       END DO
 C
 C     name depends on density (and number of drives and tape length)
