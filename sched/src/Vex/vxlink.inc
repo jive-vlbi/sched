@@ -2,7 +2,7 @@ C
 C     Set VEX version and version of VX routines
 C      
       CHARACTER VEXVER*3, VXSOFT*3
-      PARAMETER (VEXVER = '1.5', VXSOFT = '.85')
+      PARAMETER (VEXVER = '1.5', VXSOFT = '.86')
 C
 C     Store number of different def in sections
 C     this sturcture defines the referncing of different defs
@@ -72,10 +72,6 @@ C     for every MD we need to keep which file it came from
 C     enables us to have a MODE for every scan
 C
       INTEGER MDISFIL(MAXMOD)
-C     A VLBA station may have its own setup, which is different
-C     from the generic 'VLBA' setup which the other VLBA stations use.
-C     Need to keep track of these 'special' VLBA stations and modes.
-      LOGICAL VLBASSTA(MAXSTA, MSET), VLBASSET(MSET)
 C
 C     and the set that has the definitions for all these blocks
 C     for mode work the other way (up rather than down)
@@ -107,7 +103,7 @@ C
       COMMON /VEX1/ NMDVEX, NFQVEX, NTRVEX, NIFVEX, NBBVEX, 
      1     NHPVEX, NPOVEX, NRLVEX, NPHVEX, 
      2     NDAVEX, NSIVEX, NANVEX, NPRVEX,
-     1     MDISFIL, MODSET, VLBASSTA, VLBASSET,
+     1     MDISFIL, MODSET,
      1     NMODFQ, IMODFQ, FQISSET, NSTAFQ, ISTAFQ,
      1     NMODIF, IMODIF, IFISSET, NSTAIF, ISTAIF,
      1     NMODBB, IMODBB, BBISSET, NSTABB, ISTABB,

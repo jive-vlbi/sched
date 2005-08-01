@@ -59,9 +59,7 @@ C        because some things need to know eg. FORMAT
 C
          DO I = 1, NSET
             IF ( USED(I) .AND. 
-     1          ( STATION(ISCAT) .EQ. SETSTA(1,I) .OR.
-     2          (STATION(ISCAT)(1:4) .EQ. 'VLBA' .AND.
-     3          SETSTA(1,I)(1:4) .EQ. 'VLBA' ))) KS = I
+     1          ( STATION(ISCAT) .EQ. SETSTA(1,I) )) KS = I
          END DO
 C
 C        Now write recorder - tape takes precedence over disk
