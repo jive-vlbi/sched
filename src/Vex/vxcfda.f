@@ -33,17 +33,13 @@ C
       ISCAT = STANUM(ISTA)
       DO I = 1, NSET
          IF ( USED(I) .AND. ( 
-     1       STATION(ISCAT) .EQ. SETSTA(1,I) .OR.
-     2       (STATION(ISCAT)(1:4) .EQ. 'VLBA' .AND.
-     3       SETSTA(1,I)(1:4) .EQ. 'VLBA' ))) ISET = I
+     1       STATION(ISCAT) .EQ. SETSTA(1,I) )) ISET = I
       END DO
 C
       JSCAT = STANUM(JSTA)
       DO I = 1, NSET
          IF ( USED(I) .AND. (
-     1       STATION(JSCAT) .EQ. SETSTA(1,I) .OR.
-     2       (STATION(JSCAT)(1:4) .EQ. 'VLBA' .AND.
-     3       SETSTA(1,I)(1:4) .EQ. 'VLBA' ))) JSET = I
+     1       STATION(JSCAT) .EQ. SETSTA(1,I) )) JSET = I
       END DO
 C
       IF( CONTROL(ISCAT) .NE. CONTROL(JSCAT) ) IDENT = .FALSE.
