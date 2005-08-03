@@ -22,7 +22,7 @@ C
 C     NXXVEX              total number of defs in block XX
 C     NMODXX(IMODE)       number of XX defs referenced in mode IMODE
 C     IMODXX(I,IMODE)     list (I-NMODXX) of defs XX referenced in mode IMODE
-C     XXISET(IXX)         the original SCHED set (KS) that has the parameters
+C     XXISSET(IXX)         the original SCHED set (KS) that has the parameters
 C                         block XX def number IXX 
 C     NSTAXX(IXX,IMODE)   number of stations that use block XX def #IXX, 
 C                         used for mode imode
