@@ -58,7 +58,7 @@ C        Start by finding a set in which this station occurs,
 C        because some things need to know eg. FORMAT
 C
          DO I = 1, NSET
-            IF ( USED(I) .AND. 
+            IF ( USED(I) .AND. FORMAT(I) .NE. 'NONE' .AND.
      1          ( STATION(ISCAT) .EQ. SETSTA(1,I) )) KS = I
          END DO
 C
@@ -170,7 +170,7 @@ C              WRITE (HEAD, '( A )' ) ''
                END DO
             END IF
 C
-C           next write density, formally a fuction of FORMAT
+C           next write density, formally a function of FORMAT
 C           not an issue for S2 either (or disks)
 C
             IF( USETAPE(ISTA) ) THEN

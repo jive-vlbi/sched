@@ -10,100 +10,112 @@ C
       INCLUDE 'vxlink.inc'
 C
       INTEGER IPH, IFQ, IIF, I, J, ICH, NUP, NLO, ILPH, ILFQ, ILIF
-      INTEGER IMODE
+      INTEGER IMODE, VXGTST, ISET
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'VXTONE: Starting' )
 C
 C     first find out which PH, there are at least as many FQ sections
 C
       DO IMODE = 1, NMDVEX
+C 
+C     first check that it is not using FORMAT=NONE
 C
-C        in this mode find all IPH for which there are all antennas
+         ISET = VXGTST( IMODE )
+         IF( FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
 C
-         DO I = 1, NMODPH(IMODE)
-            IPH = IMODPH(I, IMODE)
-            DO ILPH= 1, NSTAPH(IPH,IMODE)               
+C          in this mode find all IPH for which there are all antennas
 C
-C           now find same antennas in one of the FQ in the same MODE
+           DO I = 1, NMODPH(IMODE)
+              IPH = IMODPH(I, IMODE)
+              DO ILPH= 1, NSTAPH(IPH,IMODE)               
 C
-               DO J = 1, NMODFQ(IMODE)
-                  IFQ = IMODFQ(J, IMODE)
-                  DO ILFQ= 1, NSTAFQ(IFQ,IMODE)
+C             now find same antennas in one of the FQ in the same MODE
 C
-C                    matching stations define links.
-C                    Huibhier...
+                 DO J = 1, NMODFQ(IMODE)
+                    IFQ = IMODFQ(J, IMODE)
+                    DO ILFQ= 1, NSTAFQ(IFQ,IMODE)
 C
-                     IF( ISTAFQ(ILFQ,IFQ,IMODE) .EQ. 
-     1                    ISTAPH(ILPH,IPH,IMODE) ) THEN
-                        IF( FQTOPH(IFQ) .EQ. 0) THEN
-                           FQTOPH(IFQ) = IPH
-                        ELSE
-                           IF( FQTOPH(IFQ) .NE. IPH ) THEN
-                              CALL ERRLOG(
-     2                          'VXTONE: different PHASE_CAL scheme '//
-     3                          'within FREQUENCY block')
+C                      matching stations define links.
+C                      Huibhier...
 C
-C                             when different phase cal schemes for
-C                             different telescopes need to be enabled,
-C                             the simplest thing is to have vxcffq to
-C                             look at the tone and detection schemes.
+                       IF( ISTAFQ(ILFQ,IFQ,IMODE) .EQ. 
+     1                      ISTAPH(ILPH,IPH,IMODE) ) THEN
+                          IF( FQTOPH(IFQ) .EQ. 0) THEN
+                             FQTOPH(IFQ) = IPH
+                          ELSE
+                             IF( FQTOPH(IFQ) .NE. IPH ) THEN
+                               CALL ERRLOG(
+     2                           'VXTONE: different PHASE_CAL scheme '//
+     3                           'within FREQUENCY block')
 C
-                           END IF
-                        END IF
-                     END IF
-                  END DO
-               END DO
+C                               when different phase cal schemes for
+C                               different telescopes need to be enabled,
+C                               the simplest thing is to have vxcffq to
+C                               look at the tone and detection schemes.
 C
-C           loop PH stations
+                             END IF
+                          END IF
+                       END IF
+                    END DO
+                 END DO
 C
-            END DO
-         END DO
+C             loop PH stations
+C
+              END DO
+           END DO
+        END IF
       END DO
 C
 C     first find out which IF, there are at least as many FQ sections
 C
       DO IMODE = 1, NMDVEX
+C 
+C     first check that it is not using FORMAT=NONE
 C
-C        in this mode find all IIF for which there are all antennas
+         ISET = VXGTST( IMODE )
+         IF( FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
 C
-         DO I = 1, NMODIF(IMODE)
-            IIF = IMODIF(I, IMODE)
-            DO ILIF= 1, NSTAIF(IIF,IMODE)               
+C          in this mode find all IIF for which there are all antennas
 C
-C           now find same antennas in one of the FQ in the same MODE
+           DO I = 1, NMODIF(IMODE)
+              IIF = IMODIF(I, IMODE)
+              DO ILIF= 1, NSTAIF(IIF,IMODE)               
 C
-               DO J = 1, NMODFQ(IMODE)
-                  IFQ = IMODFQ(J, IMODE)
-                  DO ILFQ= 1, NSTAFQ(IFQ,IMODE)
+C             now find same antennas in one of the FQ in the same MODE
 C
-C                    matching stations defined links.
+                 DO J = 1, NMODFQ(IMODE)
+                    IFQ = IMODFQ(J, IMODE)
+                    DO ILFQ= 1, NSTAFQ(IFQ,IMODE)
 C
-                     IF( ISTAFQ(ILFQ,IFQ,IMODE) .EQ. 
-     1                    ISTAIF(ILIF,IIF,IMODE) ) THEN
-                        IF( FQTOIF(IFQ) .EQ. 0) THEN
-                           FQTOIF(IFQ) = IIF
-                        ELSE
+C                      matching stations defined links.
 C
-C                          one FQ can refer to many IF, let's assume
-C                          tones are identical and register first
+                       IF( ISTAFQ(ILFQ,IFQ,IMODE) .EQ. 
+     1                      ISTAIF(ILIF,IIF,IMODE) ) THEN
+                          IF( FQTOIF(IFQ) .EQ. 0) THEN
+                             FQTOIF(IFQ) = IIF
+                          ELSE
 C
-                           IF( FQTOIF(IFQ) .NE. IIF ) THEN
-                              IF( TONEINT(IIF) .NE. 
-     1                            TONEINT(FQTOIF(IFQ)) ) THEN
-                                 CALL ERRLOG(
-     1                               'VXTONE: sorry different LO '//
-     2                               'MUST have same TONE insertion')
-                              END IF
-                           END IF
-                        END IF
-                     END IF
-                  END DO
-               END DO
+C                            one FQ can refer to many IF, let's assume
+C                            tones are identical and register first
 C
-C              loop IF stations
+                             IF( FQTOIF(IFQ) .NE. IIF ) THEN
+                                IF( TONEINT(IIF) .NE. 
+     1                              TONEINT(FQTOIF(IFQ)) ) THEN
+                                   CALL ERRLOG(
+     1                                 'VXTONE: sorry different LO '//
+     2                                 'MUST have same TONE insertion')
+                                END IF
+                             END IF
+                          END IF
+                       END IF
+                    END DO
+                 END DO
 C
-            END DO
-         END DO
+C                loop IF stations
+C
+              END DO
+           END DO
+        END IF
 C
 C        loop Modes
 C

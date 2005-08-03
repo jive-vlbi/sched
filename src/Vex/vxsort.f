@@ -56,7 +56,7 @@ C
 C
 C        Obviously a new block when it's the first.
 C
-         IF( USED(KS) ) THEN
+         IF( USED(KS) .AND. FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
             IF( NXXVEX .EQ. 0 ) THEN
                NEWFND = .TRUE.
             ELSE
