@@ -254,7 +254,7 @@ C
 C                 check if enough time is available at the end of the scan
 C                 to do the ftp data transfer - print warning if not
 C
-                  IF( GRABTO(ISCN) .EQ. 'FILE' .AND. ISCN .LT. NSCANS) 
+                  IF( GRABTO(ISCN) .EQ. 'FILE' .AND. ISCN .LT. SCANL) 
      1                                                          THEN
                      CALL VXTRAN ( TRANLEN, ISCN, ISTA, GAPERR )
                      IF (GAPERR) WARNGP = .TRUE.
