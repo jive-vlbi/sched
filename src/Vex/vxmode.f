@@ -70,8 +70,6 @@ C
                   DO ISTA = 1, NSTA
                      ISCAT = STANUM(ISTA)
 C
-C                    This covers VLBA (changed CR 19 Oct 2004):
-C
                      IF ( STATION(ISCAT) .EQ. SETSTA(1,ISET) ) THEN
 C
 C                    We should keep this the lowest matching number, don't set
