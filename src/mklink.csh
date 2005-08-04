@@ -13,3 +13,4 @@ ln -s ../Sched/plot.inc plot.inc
 ln -s ../Sched/sched.inc sched.inc
 cd ../Sat
 ln -s ../Sched/sched.inc sched.inc
+cd ../
