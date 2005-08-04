@@ -22,7 +22,8 @@ ARCH = LINUX
 
 #----- Architecture-specific compiler and options -  Choose one ------
 
-FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
+FC = g77 -Wall -Wimplicit -fno-backslash  # g77 (Linux, OS X, and others)
+#FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 #FC = f77 -C -u                       # SUN  IBM/AIX
 
 #FC = f77 -u -fpe3 -warn noinformational -assume backslash   # DEC ALPHA
