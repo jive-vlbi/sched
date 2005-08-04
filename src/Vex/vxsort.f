@@ -27,6 +27,7 @@ C
       INTEGER NMODXX(MAXMOD), IMODXX(MAXMOD,MAXMOD)
       INTEGER XXISSET(MAXMOD), NSTAXX(MAXMOD,MAXMOD), 
      .    ISTAXX(MAXSTA,MAXMOD,MAXMOD)
+      INTEGER VXGTST
 C
 C     local variables
 C     
@@ -223,7 +224,7 @@ C              first find an exact match:
 C              should be possible to make clearer
 C
                DO KS = 1, NSET
-                  IF( USED(KS) ) THEN
+                  IF( USED(KS) .AND. FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
                      IF( SETISXX(KS) .EQ. IXX .AND. 
      .                   KS .EQ. MODSET(ISTA,IMODE)) THEN
                         IF( STATION(ISCAT) .EQ. SETSTA(1,KS) ) THEN
@@ -263,44 +264,47 @@ C
       PROBLEM = .FALSE.
       IF( NMDVEX .GT. 1) THEN
          DO IMODE = 1, NMDVEX
-            IF( NMODXX(IMODE) .GT. 1 ) THEN
-               DO I = 2, NMODXX(IMODE)
-                  IXX = IMODXX(I,IMODE)
-                  DO ISTA = 1, NSTAXX(IXX,IMODE)
-                     DO J = 1, I-1
-                        JXX = IMODXX(J,IMODE)
-                        DO JSTA = 1, NSTAXX(JXX,IMODE)
-                           IF (ISTAXX(ISTA,IXX,IMODE) .EQ. 
-     1                         ISTAXX(JSTA,JXX,IMODE)) THEN
-                              PROBLEM = .TRUE.
-                              WRITE (MSGTXT, '( A, A, A, A, A, A,
-     .                            A, I2 )' ) 
-     1                            'VXSORT: Problem with ', BLOCK, 
-     2                            ' def, ref''d by ',
-     3                            MDLINK(IMODE)(1:LEN1(MDLINK(IMODE))),
-     4                            ' cannot resolve ', 
+           KS = VXGTST( IMODE ) 
+           IF( USED(KS) .AND. FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
+             IF( NMODXX(IMODE) .GT. 1 ) THEN
+                DO I = 2, NMODXX(IMODE)
+                   IXX = IMODXX(I,IMODE)
+                   DO ISTA = 1, NSTAXX(IXX,IMODE)
+                      DO J = 1, I-1
+                         JXX = IMODXX(J,IMODE)
+                         DO JSTA = 1, NSTAXX(JXX,IMODE)
+                            IF (ISTAXX(ISTA,IXX,IMODE) .EQ. 
+     1                          ISTAXX(JSTA,JXX,IMODE)) THEN
+                               PROBLEM = .TRUE.
+                               WRITE (MSGTXT, '( A, A, A, A, A, A,
+     .                             A, I2 )' ) 
+     1                             'VXSORT: Problem with ', BLOCK, 
+     2                             ' def, ref''d by ',
+     3                             MDLINK(IMODE)(1:LEN1(MDLINK(IMODE))),
+     4                             ' cannot resolve ', 
      5                          STATION(STANUM(ISTAXX(ISTA,IXX,IMODE))),
-     6                            ' = ', ISTAXX(ISTA,IXX,IMODE)
-                              CALL WLOG( 1, MSGTXT )
+     6                             ' = ', ISTAXX(ISTA,IXX,IMODE)
+                               CALL WLOG( 1, MSGTXT )
 C
-                              WRITE (MSGTXT, '( A, I2, A, I2, 
-     .                            A, A, 
-     .                            A, I2, A, I2, 
-     .                            A, A, A )' ) 
-     1                            'Occurs in  ',IXX,'-',IMODE,  
-     2                            ' (',
-     3                            XXLINK(IXX)(1:LEN1(XXLINK(IXX))),
-     4                            ') and in ', JXX,'-',IMODE,
-     4                            ' (',
-     5                            XXLINK(JXX)(1:LEN1(XXLINK(JXX))),
-     6                            ')'
-                              CALL WLOG( 1, MSGTXT )
-                           END IF
-                        END DO
-                     END DO
-                  END DO
-               END DO 
-            END IF
+                               WRITE (MSGTXT, '( A, I2, A, I2, 
+     .                             A, A, 
+     .                             A, I2, A, I2, 
+     .                             A, A, A )' ) 
+     1                             'Occurs in  ',IXX,'-',IMODE,  
+     2                             ' (',
+     3                             XXLINK(IXX)(1:LEN1(XXLINK(IXX))),
+     4                             ') and in ', JXX,'-',IMODE,
+     4                             ' (',
+     5                             XXLINK(JXX)(1:LEN1(XXLINK(JXX))),
+     6                             ')'
+                               CALL WLOG( 1, MSGTXT )
+                            END IF
+                         END DO
+                      END DO
+                   END DO
+                END DO 
+             END IF
+           END IF
          END DO
       END IF
       IF( PROBLEM ) THEN
