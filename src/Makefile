@@ -22,7 +22,7 @@ ARCH = LINUX
 
 #----- Architecture-specific compiler and options -  Choose one ------
 
-FC = g77 -Wall -Wimplicit -fno-backslash  # g77 (Linux, OS X, and others)
+FC = /usr/local/gcc-3.4.4/bin/g77 -Wall -Wimplicit -fno-backslash -fbounds-check  # g77 (Linux, OS X, and others)
 #FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 #FC = f77 -C -u                       # SUN  IBM/AIX
 
