@@ -15,6 +15,7 @@ C
       INTEGER   I, ISETFL, ISET, ICH1, ICH2, ISTA, ISCAT
       INTEGER   LEN1
       CHARACTER NAME*32
+      LOGICAL   NEWVXMD
 C ----------------------------------------------------------------------
 C
 C
@@ -25,7 +26,7 @@ C     usually 1 MODE has more than 1 SET, defining different antenas.
 C     NSETF is usually the number of modes, but we have to build a list
 C     of antenna setups:
 C
-      NMDVEX = 0      
+      NMDVEX = 1      
       DO ISETFL = 1, NSETF
 C
 C        It seems sometimes setname can be empty, be careful
@@ -48,19 +49,10 @@ C
             NAME = SETFILE(ISETFL)(ICH1:ICH2) 
          ENDIF
 C
-C        every file is a new mode
-C
-         NMDVEX = ISETFL
-         MDISFIL(NMDVEX) = ISETFL
-         IF( NMDVEX .GT. MAXMOD ) CALL ERRLOG(
-     1       'VXMODE: Number of $MODE defs '//
-     2       'exceeding MAXMOD, need to re-compile...')
-         MDLINK(NMDVEX) = NAME
-         CALL VXUNQL( NMDVEX, MDLINK )
-C
 C        for all antennas, each mode has 1 original sched-set
 C        unfortunately they don't match right up
 C
+         NEWVXMD = .FALSE.
          DO ISET = 1, NSET
             IF( USED(ISET) ) THEN 
 C
@@ -77,13 +69,30 @@ C                    again when already set.
 C
                        IF( MODSET(ISTA,NMDVEX) .EQ. 0 ) THEN
                           MODSET(ISTA,NMDVEX) = ISET
+                          NEWVXMD = .TRUE.
                        END IF
                      ENDIF
                   END DO
                END IF
             END IF
          END DO
+C
+C        every used file is a new mode
+C
+         IF( NEWVXMD ) THEN
+           MDISFIL(NMDVEX) = ISETFL
+           IF( NMDVEX .GT. MAXMOD ) CALL ERRLOG(
+     1         'VXMODE: Number of $MODE defs '//
+     2         'exceeding MAXMOD, need to re-compile...')
+           MDLINK(NMDVEX) = NAME
+           CALL VXUNQL( NMDVEX, MDLINK )
+           NMDVEX = NMDVEX + 1
+         END IF
       END DO
+C
+C     Last increment of NMDVEX is never used, so reduce by 1
+C
+      NMDVEX = NMDVEX - 1
 C
       RETURN
       END
