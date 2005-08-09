@@ -150,7 +150,7 @@ C              WRITE (HEAD, '( A )' ) 'read/write'
                HEAD = 'read/write'
             ELSE IF( USEDISK(ISTA) ) THEN
 C              WRITE (HEAD, '( A )' ) ''
-               HEAD = ''
+               HEAD = ' '
             END IF
             IF( STNDRIV(STANUM(ISTA)) .LT. 1 .OR. 
      1          STNDRIV(STANUM(ISTA)) .GT. 9 .OR.
