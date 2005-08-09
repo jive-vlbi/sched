@@ -15,7 +15,7 @@ C
       INTEGER   ROLLBY, NHDSTK, VXNHDS
       INTEGER   LEN1
       CHARACTER LINE*132
-      LOGICAL DOWARN
+      LOGICAL   DOWARN
 C ----------------------------------------------------------------------
 C
       LINE = ' ' 
