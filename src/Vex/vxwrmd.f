@@ -12,7 +12,7 @@ C
       INTEGER   IXX, I, ISTA, IMODE, LPOS
       INTEGER   LEN1, NTAPEST, ISET
       CHARACTER LINE*132, LSETNAME*80, DEL*1
-      INTEGER ISCAT, SETUP, VXGTST
+      INTEGER   VXGTST
 C     NTAPEST is a temporary counter for the number of stations in a
 C     given mode that use tapes.
 C ----------------------------------------------------------------------
