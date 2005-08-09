@@ -297,7 +297,7 @@ C
                   IF( IP .EQ. 7) TPSUBP = 'G'
                   IF( IP .EQ. 8) TPSUBP = 'H'
                ELSE IF( USEDISK(ISCAT) ) THEN
-                  TPSUBP = ''
+                  TPSUBP = ' '
                END IF
 C
                DO ICH = 1, NCHAN(KS)
