@@ -13,7 +13,7 @@ C
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
       INTEGER     YEAR, DAY, DOY, JD, MONTH, FTMIN, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
-      INTEGER     I, LASTSCN
+      INTEGER     I, LASTSCN, ISET, VXGTST
       REAL        STASPD(MANT) 
       CHARACTER   FULTIM*18, TPSUBP*1, TMPSRC*32
       CHARACTER   DNAME*3, MNAME*3, DIRECT*1 
@@ -69,9 +69,21 @@ C
             IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
          END DO
 C
+C        If this Mode uses FORMAT=NONE, then skip it. This can be
+C         changed (with a corresponding change in vxscns.f) whenever the FS
+C         gets an automated pointing procedure.
+C
+         ISET = VXGTST( MODSCN(ISCN) )
+         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
+           SKIPPED = .TRUE.
+         END IF
+C
+C
 C        Check various tape issues, return a common tape offset
 C
          CALL VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS )
+
+C
 C
          IF( SKIPPED ) THEN
             TMPSRC = SCNSRC(ISCN)

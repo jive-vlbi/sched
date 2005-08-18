@@ -52,8 +52,11 @@ C
 C
          MODSCN(ISCN) = IMODE
 C
-C        If this Mode uses FORMAT=NONE, then replace the mode with
-C        the mode of the previous recording scan and do nothing more
+C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
+C        mode can later be replaced the mode with the mode of the previous 
+C        recording scan, or can simply be skipped when writing the
+C        scans.
+C
          ISET = VXGTST( IMODE )
          IF( FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
 C
@@ -190,34 +193,41 @@ C
 C        end loop all scans
 C
       END DO
+C     CR 050818: The logic below works if you want the FORMAT=NONE scans
+C       to appear in the VEX file as non-recording scans, using the mode from
+C       another scan. However, at the current time FS stations would
+C       prefer that there were simply gaps in the schedule so they can
+C       use their own pointing procedures. So leave this section of code
+C       commented out for now and in VXSCH, the FORMAT=NONE scans can be
+C       skipped.
 C
 C     Now loop through the scans again and replace the MODSCN for any with 
 C     FORMAT=NONE (not processed first time) with the MODSCAN from a recording 
 C     scan.
 C
-      DO ISCN = SCAN1, SCANL
-         ISET = VXGTST( MODSCN(ISCN) )
-         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
-           RECSCN = 0
-C          Need to allow possibility of using a later scan in case there
-C          is no previous recording scan (there must be one recording
-C          scan somewhere)
-           DO JSCN = SCAN1, SCANL
-             IF( RECSCN .EQ. 0 .OR. JSCN .LT. ISCN ) THEN
-               IF( .NOT. NOREC(JSCN) ) THEN
-                 RECSCN = JSCN
-               END IF
-             END IF
-           END DO
-           IF( RECSCN .EQ. 0 ) THEN
-             CALL ERRLOG( 'VXSCNS: there do not appear to be any ' //
-     1       'recording scans in this schedule! Check use of '//
-     2       'NORECORD, POINT and FORMAT=NONE' )
-           ELSE
-             MODSCN(ISCN) = MODSCN(RECSCN)
-           END IF
-         END IF
-      END DO
+C      DO ISCN = SCAN1, SCANL
+C         ISET = VXGTST( MODSCN(ISCN) )
+C         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
+C           RECSCN = 0
+CC          Need to allow possibility of using a later scan in case there
+CC          is no previous recording scan (there must be one recording
+CC          scan somewhere)
+C           DO JSCN = SCAN1, SCANL
+C             IF( RECSCN .EQ. 0 .OR. JSCN .LT. ISCN ) THEN
+C               IF( .NOT. NOREC(JSCN) ) THEN
+C                 RECSCN = JSCN
+C               END IF
+C             END IF
+C           END DO
+C           IF( RECSCN .EQ. 0 ) THEN
+C             CALL ERRLOG( 'VXSCNS: there do not appear to be any ' //
+C     1       'recording scans in this schedule! Check use of '//
+C     2       'NORECORD, POINT and FORMAT=NONE' )
+C           ELSE
+C             MODSCN(ISCN) = MODSCN(RECSCN)
+C           END IF
+C         END IF
+C      END DO
 C     
       RETURN
       END
