@@ -21,6 +21,7 @@ C
       CHARACTER   DISKFILE*30, STNLC*2
       DOUBLE PRECISION  STARTT, STOPT, TAPOFF
       LOGICAL     SKIPPED, WARNFS, WARNTS, DATATRAN, WARNGP, GAPERR
+      LOGICAL     FMTNONE
       REAL        STGB, SCNGAP, MINGAP
 C
 C     Tape information from TPDAT.
@@ -73,9 +74,10 @@ C        If this Mode uses FORMAT=NONE, then skip it. This can be
 C         changed (with a corresponding change in vxscns.f) whenever the FS
 C         gets an automated pointing procedure.
 C
+         FMTNONE = .FALSE.
          ISET = VXGTST( MODSCN(ISCN) )
          IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
-           SKIPPED = .TRUE.
+           FMTNONE = .TRUE.
          END IF
 C
 C
@@ -90,6 +92,13 @@ C
             CALL VXSTNM( TMPSRC, .FALSE.)
             WRITE( IVEX, '(A1, 4X, A, A)' ) COM, 'Skipping scan on:',
      1          TMPSRC(1:LEN1(TMPSRC))
+            INPAGE = INPAGE + 1
+         ELSE IF( FMTNONE ) THEN
+            TMPSRC = SCNSRC(ISCN)
+            CALL VXSTNM( TMPSRC, .FALSE.)
+            WRITE( IVEX, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
+     1          'with FORMAT=NONE on:',
+     2          TMPSRC(1:LEN1(TMPSRC))
             INPAGE = INPAGE + 1
          ELSE
 C  
