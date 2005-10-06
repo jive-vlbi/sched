@@ -54,7 +54,7 @@ C
          MODSCN(ISCN) = IMODE
 C
 C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
-C        mode can later be replaced the mode with the mode of the previous 
+C        mode can later be replaced with the mode of the previous 
 C        recording scan, or can simply be skipped when writing the
 C        scans.
 C
@@ -115,11 +115,17 @@ C
                     END IF
                     MODSET(ISTA,VXMDIFP(IFS,IPS)) = MODSET(ISTA,IMODE)
 C
+C                   set VXMDIFP and MODSET for the new station's IFS and IPS
+C                   (bug fix, CR 051005)
+C
+                    VXMDIFP(FSETI(ISCN,ISTA), PSETI(ISCN,ISTA)) =
+     1                          VXMDIFP(IFS,IPS)
+C
                  END IF
               END IF
            END DO
 C
-C          Totally new mode, remeber IFS, IPS are set for one good value
+C          Totally new mode, remember IFS, IPS are set for one good value
 C          Problem ifs, ips could be first scan unmodified or modified..
 C
            IF( VXMDIFP(IFS,IPS) .EQ. 0 ) THEN
