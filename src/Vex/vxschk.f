@@ -1,17 +1,20 @@
-      SUBROUTINE VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS )
+      SUBROUTINE VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS, WARNTSOF, 
+     1                  NTSYS, NTSYSON, TSYSGAP, WARNBANK)
       IMPLICIT NONE
 C
 C     Routine specific for the VEX extension of SCHED. 
 C     By H.J. van Langevelde, JIVE, 061200
 C     This routine checks several scan related       
 C     timing issues for the $CHED section, including
-C     tape issues. It returns a common TAPOFF
+C     tape (and disk) issues. It returns a common TAPOFF
 C
 C     For all stations in scan:
 C        tape offsets are all equal
 C     For all VEX scans
 C         check scan is 15s
-C         set Warnts, unless last reverse
+C         long scans should set Warnts, unless last reverse
+C         Very long scans with disks should set Warnbank
+C
 C     For any scan but first
 C        check early start doesn't overlap
 C     For above and VEX control
@@ -24,16 +27,16 @@ C     Note 29/12/00 Craig suggested to make sure one knows what
 C     last station is (LASTISCN in SCHOPT) I think however, that
 C     is not urgent
 C
-      INTEGER ISCN
+      INTEGER ISCN, LASTSCN
       DOUBLE PRECISION TAPOFF
-      LOGICAL WARNFS, WARNTS
+      LOGICAL WARNFS
 
       INCLUDE 'sched.inc'      
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
 
       INTEGER ISTA
-      LOGICAL TPOINI, LASTPS
+      LOGICAL TPOINI, LASTPS, WARNTS(MAXSTA), WARNBANK
 C
 C     Tape information from TPDAT.
 C
@@ -44,8 +47,15 @@ C
       INTEGER NXPASS, NXDIR, NXINDX, NXHEAD, NXDRIV
       LOGICAL NXTAPE, NXFAST, NXREW
 C
-      LOGICAL PASSOK(MAXSTA)
+      LOGICAL PASSOK(MAXSTA), WARNTSOF(MAXSTA)
       SAVE PASSOK
+      INTEGER LASTTSYS(MAXSTA), LASTTSON(MAXSTA), DATLAT, I 
+      INTEGER NTSYSON(MAXSTA), NTSYS(MAXSTA), TSYSGAP(MAXSTA), THISGAP
+      INTEGER LASTGAP(MAXSTA)
+      SAVE LASTTSYS, LASTTSON, LASTGAP
+      DATA LASTTSYS /MAXSTA*0/
+      DATA LASTTSON /MAXSTA*0/
+      DATA LASTGAP /MAXSTA*0/
 C
       IF ( DEBUG .AND. ISCN .LE. 2) 
      .    CALL WLOG( 1,'VXSCHK:  Checking VEX tapes ')
@@ -111,9 +121,43 @@ C
                WARNFS = .TRUE.
             END IF
 C 
-C        scans longer than 15 min should cause a warning
-C        because Tsys is only measured at scan start
-C        Unfortunately we still like PI to avoid postpasses
+C           continuous motion longer than 90 min should cause a *MAJOR* 
+C           warning because bank switches can only occur during gaps in
+C           recording. Ignore the fact that stations are independent
+C           and just check for gaps in the schedule.
+C
+C
+C           Find the last scan that this station participated in (will
+C           be ISCN if this is the first scan for this station).
+            LASTSCN = 0
+            DO I = SCAN1, ISCN-1
+              IF( STASCN(I, ISTA) ) LASTSCN = I
+            END DO
+            IF( LASTSCN .EQ. 0 ) LASTSCN = ISCN
+C
+C           Only need to check for long passes at disk stations
+C
+            IF( USEDISK(ISTA) ) THEN
+C              Default the last gap in recording to be at start of scan 1
+               IF( LASTGAP(ISTA) .EQ. 0 ) THEN
+                  LASTGAP(ISTA) = SCAN1
+               END IF
+               IF( NINT( ( (STARTJ(ISCN)-TAPOFF) - STOPJ(LASTSCN) ) 
+     1             * 86400d0) .GT. 10 .OR. LASTSCN .EQ. ISCN ) THEN
+C                 This means there is a gap before this scan 
+                  LASTGAP(ISTA) = ISCN
+               END IF
+               IF( NINT( ( (STOPJ(ISCN)) - STARTJ(LASTGAP(ISTA)) ) 
+     1             * 1440d0) .GT. 90 ) THEN
+C                 This means there was no recent gap - issue a warning
+                  WARNBANK = .TRUE.
+               END IF
+            END IF
+C
+C 
+C           scans longer than 15 min should cause a warning
+C           because Tsys is only measured at scan start
+C           Unfortunately we still like PI to avoid postpasses
 C
             IF( NINT( ( STOPJ(ISCN) - (STARTJ(ISCN)-TAPOFF) ) 
      1          * 1440d0) .GT. 15 ) THEN  
@@ -124,16 +168,133 @@ C
      3                NXDRIV, NXDIR, NXINDX, NXHEAD )
                   LASTPS = NXTAPE
                END IF
-               IF( .NOT. LASTPS ) WARNTS = .TRUE.
+               IF( .NOT. LASTPS ) THEN 
+                  WARNTS(ISTA) = .TRUE.
+C                 And record the longest gap for information
+                  THISGAP = NINT( ( STOPJ(ISCN) - 
+     1                      (STARTJ(ISCN)-TAPOFF) ) * 1440d0)
+                  IF( THISGAP .GT. TSYSGAP(ISTA) ) THEN
+                     TSYSGAP(ISTA) = THISGAP
+                  END IF
+               END IF
+            END IF
+C        
+C           In fact, continuous motion also prevents the Tsys from being
+C           measured (cal diode only fired during gaps in recording), so try 
+C           to prevent greater than 15 mins of continuous motion
+C           Assume a gap of more than 10 seconds means that the cal diode
+C           will be fired.
+C           Ignore the TAPOFF of the LASTTSYS scan (small error, not
+C           enough to worry about).
+C           Check if the time between the beginning of the last Tsys scan
+C           and the end of the current scan is greater than 15
+C           minutes. 
+C           Allow continuous last passes to prevent having to postpass.
+C
+C           Default the last on-source Tsys to be scan 1
+            IF( LASTTSON(ISTA) .EQ. 0 ) THEN
+               LASTTSON(ISTA) = SCAN1
             END IF
 C
-C        For VEX scans check whether the current pass is
-C        OK for not doing a postpass
+C           Default Last Tsys scan to first scan
+C
+            IF( LASTTSYS(ISTA) .EQ. 0 ) THEN
+              LASTTSYS(ISTA) = SCAN1
+            END IF
+C
+C           check if there was a Tsys gap this scan
+C
+            IF( NINT( ( (STARTJ(ISCN)-TAPOFF) - STOPJ(LASTSCN) ) 
+     1          * 86400d0) .GT. 10 .OR. LASTSCN .EQ. ISCN ) THEN
+C              This means there is a TSYS in this scan 
+               LASTTSYS(ISTA) = ISCN
+               NTSYS(ISTA) = NTSYS(ISTA) + 1
+C
+C              We also like to encourage the Tsys to
+C              be on-source, so check for that here. This is station
+C              dependent (slew times differ). Make sure there is an
+C              on-source Tsys every 15 minutes for every antenna.
+C
+               DATLAT = IDNINT( ( TONSRC(ISCN,ISTA) - 
+     .            (STARTJ(ISCN) - TAPOFF) ) 
+     1            * 86400D0 )
+               IF( DATLAT .LE. 0 )  THEN
+                  LASTTSON(ISTA) = ISCN
+                  NTSYSON(ISTA) = NTSYSON(ISTA) + 1
+               ELSE IF( NINT( ( (STOPJ(ISCN)) - STARTJ(LASTTSON(ISTA)) )
+     1            * 1440d0) .GT. 15 ) THEN  
+                  WARNTSOF(ISTA) = .TRUE.
+               END IF
+            END IF
+C
+C           Check if there is no recent Tsys for this station - issue 
+C           a warning if so and its not the last pass.
+            IF( NINT( ( (STOPJ(ISCN)) - STARTJ(LASTTSYS(ISTA)) ) 
+     1          * 1440d0) .GT. 15 ) THEN
+               LASTPS = .FALSE.
+               IF ( ISCN .NE. SCANL ) THEN
+                  CALL TPPACK( 'UNPACK', TPDAT(1,(ISCN+1),ISTA), 
+     1                NXTAPE, NXFAST, NXREW, NXPASS, 
+     2                NXDRIV, NXDIR, NXINDX, NXHEAD )
+                  LASTPS = NXTAPE
+               END IF
+               IF( .NOT. LASTPS ) THEN
+                  WARNTS(ISTA) = .TRUE.
+C                 And record the longest gap for information
+                  THISGAP = NINT( ( (STOPJ(ISCN)) - 
+     1                   STARTJ(LASTTSYS(ISTA)) ) * 1440d0 ) 
+                  IF( THISGAP .GT. TSYSGAP(ISTA) ) THEN
+                     TSYSGAP(ISTA) = THISGAP
+                  END IF
+               END IF
+            END IF
+C
+C           For VEX scans check whether the current pass is
+C           OK for not doing a postpass
 C
             IF ( TPFOOT1(ISCN,ISTA) .GT. TPLENG(ISTA)*0.90 .AND.
      1          TPDIR .EQ. -1 ) THEN
-C           good start
+C              good start
                PASSOK(ISTA) = .TRUE.
+            END IF
+         END IF
+      END DO
+C
+C        Other checks depend on this not being the first scan
+C        Close the STASCN loop and start Majour loop again (note the
+C        RETURN half way through this to ensure not first scan.
+C
+      DO ISTA = 1, NSTA
+C     
+C     Will Need some station dependent values
+C
+         CALL TPPACK( 'UNPACK', TPDAT(1,ISCN,ISTA), DOTAPE, 
+     1       DOFAST, DOREW, TPPASS, TPDRIV, TPDIR, 
+     2       TPINDX, TPHEAD )
+C
+C
+C
+         IF( STASCN(ISCN,ISTA) ) THEN
+C        
+C        Current VEX does not allow for different tape starts, so 
+C        check and set the overall offset TPOFF
+C
+            IF( TPOINI ) THEN
+C           Remember tpstart is already the offset from startj
+               IF( ABS(TPSTART(ISCN,ISTA) - TAPOFF)
+     .             .GT. 0.1d0/86400D0 ) THEN
+                  CALL PRTSCN( ISCN )
+                  WRITE(MSGTXT, '( A, I3, A )' ) 
+     .                'Station tape starts differ,'// 
+     .                ' set MINPAUSE to ',
+     .                INT(TPSTART(ISCN,ISTA)*86400d0
+     .                /SPEEDUP(NSETUP(ISCN,ISTA))),
+     .                's to produce VEX file!'
+                  CALL ERRLOG( MSGTXT )
+               END IF
+            ELSE
+               TAPOFF = TPSTART(ISCN,ISTA) 
+               TPOINI = .TRUE.
             END IF
          END IF
 
