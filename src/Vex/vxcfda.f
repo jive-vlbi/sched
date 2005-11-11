@@ -6,6 +6,13 @@ C     returns true if DA block in 2 SCHED STAs are identical
 C     cf high or low density, thick or thin, n_heads etc
 C     Updated for 1.4 220796 Huib
 C
+C     CR: 8 Nov 2005. Note we have a problem here. If there is a station
+C      in the schedule that never appears in a scan (possible when AUTOTAPE is
+C      being used), then the tests for ISET and JSET can return
+C      undefined values which result in a segmentation error. Need to
+C      think how to deal with this - may affect other parts of the VEX
+C      writer too.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
