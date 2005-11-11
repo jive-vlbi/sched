@@ -13,15 +13,16 @@ C
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
       INTEGER     YEAR, DAY, DOY, JD, MONTH, FTMIN, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
-      INTEGER     I, LASTSCN, ISET, VXGTST
+      INTEGER     I, LASTSCN, ISET, VXGTST, NTSYS(MAXSTA)
+      INTEGER     NTSYSON(MAXSTA), TSYSGAP(MAXSTA)
       REAL        STASPD(MANT) 
       CHARACTER   FULTIM*18, TPSUBP*1, TMPSRC*32
       CHARACTER   DNAME*3, MNAME*3, DIRECT*1 
       CHARACTER   LINE*132, TFORM*9, TRANTYPE*10, SCANNAME*10
       CHARACTER   DISKFILE*30, STNLC*2
       DOUBLE PRECISION  STARTT, STOPT, TAPOFF
-      LOGICAL     SKIPPED, WARNFS, WARNTS, DATATRAN, WARNGP, GAPERR
-      LOGICAL     FMTNONE
+      LOGICAL     SKIPPED, WARNFS, WARNTS(MAXSTA), DATATRAN, WARNGP
+      LOGICAL     GAPERR, FMTNONE, TSYSMESS, WARNTSOF(MAXSTA), WARNBANK
       REAL        STGB, SCNGAP, MINGAP
 C
 C     Tape information from TPDAT.
@@ -32,8 +33,15 @@ C -------------------------------------------------------------
       IF (DEBUG) CALL WLOG( 1,'VXSCH: Start VEX SCHED section ')
       LINE = ' '      
       WARNFS = .FALSE.
-      WARNTS = .FALSE.
       WARNGP = .FALSE.
+      WARNBANK = .FALSE.
+      DO ISTA = 1,NSTA
+        WARNTSOF(ISTA) = .FALSE.
+        NTSYSON(ISTA) = 0
+        WARNTS(ISTA) = .FALSE.
+        NTSYS(ISTA) = 0
+        TSYSGAP(ISTA) = 0
+      END DO
 C
 C     initalise STASPD, speed for stations
 C
@@ -83,7 +91,8 @@ C
 C
 C        Check various tape issues, return a common tape offset
 C
-         CALL VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS )
+         CALL VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS, WARNTSOF, NTSYS,
+     1                  NTSYSON, TSYSGAP, WARNBANK)
 
 C
 C
@@ -426,7 +435,7 @@ C                    Note, STASCN(ISCN,ISTA) is a flag that indicates
 C                    that station ISTA is in scan ISCN.  
                      IF( ISCN .GT. 1 ) THEN
                         LASTSCN = 0
-                        DO I = 1, ISCN-1
+                        DO I = SCAN1, ISCN-1
                           IF( STASCN(I, ISTA) ) LASTSCN = I
                         END DO
                         IF( LASTSCN .GT. 0 ) THEN
@@ -530,18 +539,64 @@ C
          END IF
       END DO
 C
-      IF( WARNTS ) THEN
+C     Print warning about frequency of Tsys. 
+      TSYSMESS = .FALSE.
+      DO ISTA = 1, NSTA
+         IF( WARNTS(ISTA) ) THEN
+            WRITE( MSGTXT, '( A, A, I5, A , I4, A)' ) 
+     2         STATION(STANUM(ISTA)), ' has ',
+     3         NTSYS(ISTA), 
+     4         ' Tsys measurements. Maximum interval = ',
+     5         TSYSGAP(ISTA), ' minutes.'
+            CALL WLOG( 1, MSGTXT )
+            TSYSMESS = .TRUE.
+         END IF
+      END DO
+      IF( TSYSMESS ) THEN
          CALL WLOG( 1,'VXSCH: Tsys calibration at MkIV stations is '//
      1       'taken during every gap in recording, but these '//
-     2       'appear over 15 min apart!')
+     2       'appear over 15 min apart for the stations listed above!')
          CALL WLOG( 1,'       This can be improved by inserting'//
-     1       ' 40 second gaps at regular intervals. ')
+     1       ' gaps at regular intervals. ')
+         CALL WRTMSG( 'VXSCH', 'tsysgap' )
       END IF
+C
+      TSYSMESS = .FALSE.
+      DO ISTA = 1, NSTA
+         IF( WARNTSOF(ISTA) ) THEN
+            WRITE( MSGTXT, '( A, A, I5, A, I5, A )' ) 
+     1         STATION(STANUM(ISTA)), ': only ',
+     2         NTSYSON(ISTA), ' out of ', NTSYS(ISTA),
+     3         ' Tsys measurements are on-source'
+            CALL WLOG( 1, MSGTXT )
+            TSYSMESS = .TRUE.
+         ENDIF
+      END DO
+      IF( TSYSMESS ) THEN
+         CALL WLOG( 1, 'VXSCH: Stations listed above are affected ' //
+     1        'by slewing during Tsys calibration')
+         CALL WLOG( 1, 'VXSCH: Stations not listed above appear ' //
+     1        'to have at least one on-source Tsys every 15 mins ')
+         CALL WRTMSG( 'VXSCH', 'tsysoffsrc' )
+      END IF
+C
       IF( WARNFS ) 
      1    CALL WLOG( 1,'VXSCH: WARNING: Scan timing problem '//
      2    'for PCFS, this VEX will NOT run!!!!')
       IF( WARNGP ) THEN
          CALL WRTMSG( 'VXSCH', 'ftpgap' )
+      END IF
+C
+      IF( WARNBANK ) THEN
+          CALL WLOG( 1, ' ')
+          CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
+          CALL WLOG( 1, 'VXSCH: WARNING: one or more of  ' //
+     1          'your stations has continuous recording ' //
+     2          'for more than 90 minutes. Disk packs can ' //
+     3          'only be changed during gaps in recording which ' //
+     4          'should be much more frequent than this. Please add ' //
+     5          'some gaps to your schedule!' )
+          CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
       END IF
 C
       RETURN
