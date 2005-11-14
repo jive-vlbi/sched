@@ -36,7 +36,7 @@ C
                   FOUND = .TRUE.
                   INSCAN = JSCN
                   GOTO 100
-                END IF
+               END IF
             END DO
 C
   100       CONTINUE
