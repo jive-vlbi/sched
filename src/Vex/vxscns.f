@@ -68,12 +68,14 @@ C
            FRSTSCN = MAXSCN + 1
            IPS = 0
            DO ISTA = 1, NSTA
-              IF( STASCN(ISCN,ISTA) ) THEN  
+              IF( STASCN(ISCN,ISTA) ) THEN
                  IF (FSETSCN(FSETI(ISCN,ISTA)).LT.FRSTSCN) THEN
                     IFS = FSETI(ISCN,ISTA)
                     FRSTSCN = FSETSCN(IFS)
+C                   bug fix CR 20051114: make sure ips and ifs get set
+C                   to values from the same antenna
+                    IPS = PSETI(ISCN,ISTA)
                  END IF
-                 IF (IPS .EQ. 0) IPS = PSETI(ISCN,ISTA)
                  IF (IPS.GT.MPSET.OR.IFS.GT.MFSET) THEN
                     CALL ERRLOG('VXSCNS: Too many frequency'//
      .                  ' mode or Pcal changes ')
@@ -83,6 +85,10 @@ C
 C                I can only assume this was a leftover Huib v75
 C
 C                 IF (IPS .NE. PSETI(ISCN,ISTA)) THEN
+C                    WRITE( MSGTXT, '( A, A, I5 )' ) 'Problem with ',
+C     1                  'PCAL in scan ',ISCN
+C                    CALL WLOG( 1, MSGTXT )
+C                    CALL PRTSCN( ISCN )
 C                    CALL ERRLOG('VXSCNS: All telescopes should '//
 C     .                  'use similar PCal setup ')
 C                    STOP
@@ -116,7 +122,7 @@ C
                     MODSET(ISTA,VXMDIFP(IFS,IPS)) = MODSET(ISTA,IMODE)
 C
 C                   set VXMDIFP and MODSET for the new station's IFS and IPS
-C                   (bug fix, CR 051005)
+C                   (bug fix, CR 20051005)
 C
                     VXMDIFP(FSETI(ISCN,ISTA), PSETI(ISCN,ISTA)) =
      1                          VXMDIFP(IFS,IPS)
