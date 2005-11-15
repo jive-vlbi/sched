@@ -37,12 +37,18 @@ C
 C     Can also be a lot of things between the format & control
 C     find a typical Set for each telescope
 C
+      ISET = 0
       ISCAT = STANUM(ISTA)
       DO I = 1, NSET
          IF ( USED(I) .AND. ( 
      1       STATION(ISCAT) .EQ. SETSTA(1,I) )) ISET = I
       END DO
+      IF ( ISET .EQ. 0 ) THEN
+         CALL WLOG (1, 'VXCFDA: ' // STATION(ISCAT) // ' does ' //
+     1   'not appear in any scans!' )
+      END IF
 C
+      JSET = 0
       JSCAT = STANUM(JSTA)
       DO I = 1, NSET
          IF ( USED(I) .AND. (
@@ -54,11 +60,14 @@ C
       IF( RECORDER(ISCAT) .NE. RECORDER(JSCAT) ) IDENT = .FALSE.
       IF( USETAPE(ISTA) .NEQV. USETAPE(JSTA) ) IDENT = .FALSE.
 C
-C     This could be made more elegant, as the fanout may be omitted 
-C     but no harm can be done, only an extra def section
+C     If station appears in no scans, then ISET and JSET can still be 0
+      IF( ISET .GT. 0 .AND. JSET .GT. 0 ) THEN
+C        This could be made more elegant, as the fanout may be omitted 
+C        but no harm can be done, only an extra def section
 C
-      IF( FORMAT(ISET) .NE. FORMAT(JSET) ) IDENT = .FALSE.
-      IF( FANOUT(ISET) .NE. FANOUT(JSET) ) IDENT = .FALSE.
+         IF( FORMAT(ISET) .NE. FORMAT(JSET) ) IDENT = .FALSE.
+         IF( FANOUT(ISET) .NE. FANOUT(JSET) ) IDENT = .FALSE.
+      END IF
 C
       VXCFDA = IDENT 
 C
