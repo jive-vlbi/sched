@@ -123,8 +123,7 @@ C
 C 
 C           continuous motion longer than 90 min should cause a *MAJOR* 
 C           warning because bank switches can only occur during gaps in
-C           recording. Ignore the fact that stations are independent
-C           and just check for gaps in the schedule.
+C           recording. 
 C
 C
 C           Find the last scan that this station participated in (will
