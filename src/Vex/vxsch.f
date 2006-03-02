@@ -575,8 +575,6 @@ C
       IF( TSYSMESS ) THEN
          CALL WLOG( 1, 'VXSCH: Stations listed above are affected ' //
      1        'by slewing during Tsys calibration')
-         CALL WLOG( 1, 'VXSCH: Stations not listed above appear ' //
-     1        'to have at least one on-source Tsys every 15 mins ')
          CALL WRTMSG( 'VXSCH', 'tsysoffsrc' )
       END IF
 C
