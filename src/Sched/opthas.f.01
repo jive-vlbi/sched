@@ -1,0 +1,192 @@
+      SUBROUTINE OPTHAS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+C
+C     Determine scans to observe with OPTMODE='HASEQ'.  This 
+C     mode makes one pass through the schedule assigning the next 
+C     scan based on a quality measure.  It is meant to be the first, 
+C     and simplest, of the astronomy optimization modes that can 
+C     completely reorder the input schedule.
+C
+C
+C     Note we can let the geometry parameters and times be altered  
+C     in the input scan to save a lot of shuffling of data.
+C
+C     Input call arguments:
+C       KSCN:   Count calls to the optimization routines
+C       ISCN:   Output scan number (provided by SCHOPT)
+C     Output call arguments:
+C       ADJUST:  True=>later operations are allowed to change the time.
+C       KEEP:    Do keep this scan (will always be true here)
+C       DONE:    Done making output scans 
+C                   (this call won't generate a scan.)
+C
+      INCLUDE 'sched.inc'
+C
+      INTEGER    KSCN, ISCN, LASTISCN(MAXSTA)
+      LOGICAL    ADJUST, KEEP, DONE
+C
+      INTEGER    JSCN, NOUT, ISRC, ISTA
+      INTEGER    LASTLOOK(MAXSRC), SCNUSED(MAXSCN)
+      INTEGER    IREFSTA, IDUMMY
+      DOUBLE PRECISION  TAPPROX, LASTTIME
+      REAL       HAMIN(MAXSCN), HAMAX(MAXSCN)
+C
+
+      LOGICAL    SRUSED(MAXSRC) 
+      LOGICAL    LDUMMY
+      SAVE       NOUT, SCNUSED, HAMIN, HAMAX, IREFSTA
+      SAVE       SRUSED
+      SAVE       LASTLOOK
+C ----------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 0, 'OPTHAS: Starting.' )
+      write(*,*) 'OPTHAS started ', lastiscn(1), kscn, iscn
+C
+C     Assume that the number of output scans should be equal to the 
+C     number of scans provided by the user.
+C
+      IF( NOUT .GT. NSCANS ) THEN
+         DONE = .TRUE.
+         GO TO 999
+      END IF
+C
+      KEEP = .TRUE.
+C
+C     Initialize many items on first call.
+C
+      IF( KSCN .EQ. 1 ) THEN
+         NOUT = 0
+C
+C        Get the station number for the reference station.
+C
+         CALL STANO( OPHASTA, IDUMMY, IREFSTA, LDUMMY )
+C
+C        Initialize bookkeeping for the last time source was used.
+C
+         DO ISRC = 1, NSRC
+            SRUSED(ISRC) = .FALSE.
+            LASTLOOK(ISRC) = 0
+         END DO
+C
+C        Then look through the scans to find the sources used.
+C        Also initialize SCNUSED
+C
+         DO JSCN = 1, NSCANS
+            ISRC   = SRCNUM(JSCN)
+            SRUSED(ISRC) = .TRUE.
+            SCNUSED(JSCN) = 0
+         END DO
+C
+C        For each scan, find the minimum and maximum hour
+C        angles for the scan start time to adhere to the minimum 
+C        elevation and minimum number of antennas.  
+C        This is done on a per-scan basis to allow for different 
+C        elevation limits or minimum antennas.
+C        Also allows for future imposed limits.
+C        Note that HAMAX is the HA of the start of the scan so that
+C        the scan will be valid to the end.  This presumes later tests
+C        will be based on the start time.
+C
+         DO JSCN = 1, NSCANS
+            CALL HALIM( JSCN, IREFSTA, HAMIN(JSCN), HAMAX(JSCN) )
+         END DO
+         write(*,*) 'OPTHAS  - have all halims', irefsta
+C
+      END IF
+C
+C     Initialize items that need to be reset for each output scan.
+C
+C     Now go through the input scans and pick one.
+C
+C     Get the nominal start time of the scan for calculating
+C     geometry, slews etc.  For the first scan, use the experiment
+C     start time and don't allow that to be adjusted later.
+C     For later scans, use the last scan stop time and allow 
+C     adjustment later.
+C
+      IF( KSCN .EQ. 1 ) THEN
+C         STARTJ(ISCN) = STARTJ(1)
+C         STOPJ(ISCN) = STARTJ(1) + DUR(1)
+         TAPPROX = STARTJ(1)
+         ADJUST = .FALSE.
+      ELSE
+         TAPPROX = STOPJ(ISCN-1)
+         ADJUST = .TRUE.
+      END IF
+      DO JSCN = 1, NSCANS
+         IF( SCNUSED(JSCN) .EQ. 0 ) THEN
+C
+C           First see if the source is up at the reference station.
+C           If not, we save a lot of work.
+C
+            ISTA = IREFSTA
+            CALL SCHGEO( JSCN, ISTA, TAPPROX, HA1(JSCN,ISTA), 
+     1             EL1(JSCN,ISTA), AZ1(JSCN,ISTA),
+     2             LST1(JSCN,ISTA), PA1(JSCN,ISTA) )
+            IF( HA1(JSCN,ISTA) .GE. HAMIN(JSCN) .AND.
+     1          HA1(JSCN,ISTA) .LE. HAMAX(JSCN) ) THEN
+C
+C              Now get the geometry for all stations so that we can
+C              utilize slew times etc.
+C
+               DO ISTA = 1, NSTA
+                  IF( STASCN(JSCN,ISTA) ) THEN
+                     CALL OPTGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
+     1                      LASTTIME, TONSRC(JSCN,ISTA) )
+                  END IF
+               END DO
+C
+C              Make a stupidly simple scan selection for now to debug
+C              the rest of the infrastructure.  Note that the elev
+C              limits and minimum number of stations are already
+C              incorporated in the HAMIN and HAMAX.
+C
+C        write(*,*) 'OPTHAS ha ', ha1(jscn,irefsta), irefsta,
+C     1          hamin(jscn), hamax(jscn), jscn, ' ', scnsrc(jscn)
+C
+               IF( HA1(JSCN,IREFSTA) .GE. HAMIN(JSCN) .AND.
+     1             HA1(JSCN,IREFSTA) .LE. HAMAX(JSCN) ) THEN
+C
+                  NOUT = NOUT + 1
+                  CALL SCNDUP( ISCN, JSCN, .FALSE. )
+                  STARTJ(ISCN) = TAPPROX
+                  STOPJ(ISCN)  = STARTJ(ISCN) + DUR(ISCN)
+                  SCNUSED(JSCN) = ISCN
+C
+C                 Finish the subroutine once a scan is chosen.
+C
+                  GO TO 999
+C
+               END IF
+            END IF
+         END IF
+      END DO
+C
+C     If got here, couldn't find a usable scan.
+C
+      WRITE(*,*) 'OPTHAS   No usable scan at ', TAPPROX, KSCN, ISCN
+      DONE = .TRUE. 
+C
+  999 CONTINUE
+C
+C     Write a summary of use of input scans.
+C
+      IF( DONE ) THEN
+         WRITE( MSGTXT, '( A )' )
+     1       'Input scan  Source  Output scan  Time (MJD) '
+         CALL WLOG( 0, MSGTXT )
+         MSGTXT = ' '
+         DO JSCN = 1, NSCANS
+            WRITE( MSGTXT, '( I8, 4X, A12, I5, F15.5 )' )
+     1        JSCN, SCNSRC(JSCN), SCNUSED(JSCN), STARTJ(SCNUSED(JSCN))
+            CALL WLOG( 0, MSGTXT )
+            MSGTXT = ' '
+         END DO
+         WRITE( MSGTXT, '( A, I5, A, I5, A )' )
+     1      ' OPTHAS: There were ', NSCANS, ' requested scans and ', 
+     2      NOUT, ' Scheduled scans.'
+         CALL WLOG( 1, MSGTXT ) 
+         MSGTXT = ' '
+         CALL WLOG( 1, ' OPTHAS: See the sched.runlog for details.' )
+      END IF
+C
+      RETURN
+      END
