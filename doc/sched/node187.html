@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>VEXTEST</TITLE>
-<META NAME="description" CONTENT="VEXTEST">
+<TITLE>SUMITEM</TITLE>
+<META NAME="description" CONTENT="SUMITEM">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,63 +29,208 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2813"
+<A NAME="tex2html2842"
   HREF="node188.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2809"
+<A NAME="tex2html2838"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2803"
+<A NAME="tex2html2832"
   HREF="node186.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2811"
+<A NAME="tex2html2840"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2814"
-  HREF="node188.html">VLABAND and VLABW</A>
-<B> Up:</B> <A NAME="tex2html2810"
+<B> Next:</B> <A NAME="tex2html2843"
+  HREF="node188.html">TANT1 and TANT2</A>
+<B> Up:</B> <A NAME="tex2html2839"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2804"
-  HREF="node186.html">VERSION</A>
- &nbsp <B>  <A NAME="tex2html2812"
+<B> Previous:</B> <A NAME="tex2html2833"
+  HREF="node186.html">STOP</A>
+ &nbsp <B>  <A NAME="tex2html2841"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041213500000000000000"></A><A NAME="MP:VEXTEST"></A>
+<H3><A NAME="SECTION0041213500000000000000"></A><A NAME="MP:SUMITEM"></A>
 <BR>
-<TT>VEXTEST</TT>
+<TT>SUMITEM</TT>
 </H3>
 
 <P>
-<TT>VEXTEST</TT> is a switch that allows testing of VEX related features
-that have not been released for public use.  It is likely to only be
-of interest to the SCHED developers, although it is possible that
-early users of new features may need it.
+<TT>SUMITEM</TT> is used to control the items listed in the summary file
+for each antenna.  Two items are listed for each scan for each antenna
+on each summary pass.  Up to 10 items can be requested causing
+up to 5 summaries to be produced in the <I>.sum</I> file.  The items
+that can be requested are:
+
+<P>
+<DL>
+<DT><STRONG><TT>EL1:</TT></STRONG></DT>
+<DD>The elevation at the start of the scan.  For scans
+where the source is below the hardware limits or the horizon, a letter
+code will be included.
+
+<P>
+</DD>
+<DT><STRONG><TT>EL2:</TT></STRONG></DT>
+<DD>The elevation at the end of the scan.  The limit
+code will be included.
+
+<P>
+</DD>
+<DT><STRONG><TT>AZ1:</TT></STRONG></DT>
+<DD>The azimuth at the start of the scan.  The limit
+code will be included.
+
+<P>
+</DD>
+<DT><STRONG><TT>AZ2:</TT></STRONG></DT>
+<DD>The azimuth at the end of the scan.  The limit
+code will be included.
+
+<P>
+</DD>
+<DT><STRONG><TT>PA1:</TT></STRONG></DT>
+<DD>The paralactic angle at the start of the scan.
+
+<P>
+</DD>
+<DT><STRONG><TT>PA2:</TT></STRONG></DT>
+<DD>The paralactic angle at the end of the scan.
+
+<P>
+</DD>
+<DT><STRONG><TT>HA1:</TT></STRONG></DT>
+<DD>The hour angle at the start of the scan.
+
+<P>
+</DD>
+<DT><STRONG><TT>HA2:</TT></STRONG></DT>
+<DD>The hour angle at the end of the scan.
+
+<P>
+</DD>
+<DT><STRONG><TT>EARLY:</TT></STRONG></DT>
+<DD>The number of seconds that the antenna arrived on
+source before the scan started.  Negative numbers are common and are the
+number of seconds that the antenna arrived on source after the scan
+started.
+
+<P>
+</DD>
+<DT><STRONG><TT>DWELL:</TT></STRONG></DT>
+<DD>The number of seconds of on-source time in the
+scan.  This does not take into account correlator resync times.  See
+<TT>SYNC</TT> for that information.  The total integration time should be
+the smaller of <TT>DWELL</TT> and <TT>SYNC</TT>.  Note that neither takes
+into account the time needed to switch between receiver bands (that's
+on the wish list).
+
+<P>
+</DD>
+<DT><STRONG><TT>SLEW:</TT></STRONG></DT>
+<DD>The slew time in seconds from the previous source.
+
+<P>
+</DD>
+<DT><STRONG><TT>TAPE1:</TT></STRONG></DT>
+<DD>The tape drive in use, the recording direction,
+and the head index position.  Cannot be used if <A HREF="node121.html#MP:NOSETUP"><TT>NOSETUP</TT></A> is specified.  If the station only has disk, the
+total GBytes recorded at the station up the the end of the scan is
+given.
+
+<P>
+</DD>
+<DT><STRONG><TT>TAPE2:</TT></STRONG></DT>
+<DD>The set of heads in use (for example which of the
+<TT>TRACKn</TT> inputs is in use) and the tape footage in thousands.
+Cannot be used if <A HREF="node121.html#MP:NOSETUP"><TT>NOSETUP</TT></A> is specified.
+
+<P>
+</DD>
+<DT><STRONG><TT>DISK:</TT></STRONG></DT>
+<DD>The total GBytes recorded at the station up the
+the end of the scan is given.  Nothing useful is given for tape only
+stations.  Cannot be used if <A HREF="node121.html#MP:NOSETUP"><TT>NOSETUP</TT></A> is
+specified.
+
+<P>
+</DD>
+<DT><STRONG><TT>TPSTART:</TT></STRONG></DT>
+<DD>Show the offset of the tape start time from the
+scan start time.  This is established by parameters <A HREF="node161.html#MP:PRESTART"><TT>PRESTART</TT></A> and <A HREF="node118.html#MP:MINPAUSE"><TT>MINPAUSE</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>SYNC:</TT></STRONG></DT>
+<DD>The expected integration time with the correlator
+synchronized.  This takes into account time lost to resyncs and
+formatter reconfigures.  It does not take into account slew times, which
+<TT>DWELL</TT> does.
+
+<P>
+</DD>
+</DL>
+
+<P>
+If any other items are desired, please inform Craig Walker.
+
+<P>
+Users of EVN antennas (and any others controlled by the PCFS and VEX)
+are advised to study the listing created by <TT>EARLY</TT>.  Currently
+there is no complete mechanism for PCFS to monitor whether the
+telescope was on source when the tape starts spinning. Data taken
+during this time are invalid, but are not flagged automatically.
+Therefore it is advisable to make schedules with <TT>DWELL</TT> or
+inspect the listing for telescopes that arrive late on source.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> No argument - this is a logical
+<LI><B>Argument:</B> Up to 10 character strings.
 </LI>
-<LI><B>Options:</B>  No arguments
+<LI><B>Options:</B>  See the description above for valid parameters.
 </LI>
-<LI><B>Default:</B>  Not set, which may block some VEX features.
+<LI><B>Default:</B>  <TT>EL1, EL2, TAPE1, TAPE2</TT>
 </LI>
-<LI><B>Usage:</B>    Only last value specified will be used
+<LI><B>Usage:</B>    Only one value used, the last.
 </LI>
-<LI><B>Example:</B>  <TT>VEXTEST</TT>
+<LI><B>Example:</B>  <TT>sumitem=el1, az1</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2842"
+  HREF="node188.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2838"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2832"
+  HREF="node186.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2840"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2843"
+  HREF="node188.html">TANT1 and TANT2</A>
+<B> Up:</B> <A NAME="tex2html2839"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2833"
+  HREF="node186.html">STOP</A>
+ &nbsp <B>  <A NAME="tex2html2841"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

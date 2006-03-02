@@ -12,9 +12,7 @@ C
 C     Assumed sync times:
 C         VLBA correlator with tape (time/speedup): 8s/1   13s/2   25s/4
 C         VLBA correlator with disk:  tape resync + 10s (improve soon?)
-C         JIVE correlator:  20s (no speedup effect)
-C                           10s with gap < 20s
-C         Others (Bonn, Haystack) with disk: 1s
+C         Others (JIVE, Bonn, Haystack) with disk: 1s
 C     Assumed reconfigure times (need confirmation):
 C         VLBA Formatter: 8 sec.
 C         MarkIV Formatter: 3 sec.  But no big effect on resync.
@@ -227,7 +225,7 @@ C
                               TSADD = 20.D0 / 86400.D0
                            END IF
                         ELSE
-                           TSADD = 10.0D0 / 86400.D0
+                           TSADD = 1.0D0 / 86400.D0
                         END IF
                      END IF
 C

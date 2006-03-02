@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>TAPESYNC</TITLE>
-<META NAME="description" CONTENT="TAPESYNC">
+<TITLE>SRCCAT</TITLE>
+<META NAME="description" CONTENT="SRCCAT">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,64 +29,57 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2729"
+<A NAME="tex2html2758"
   HREF="node181.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2725"
+<A NAME="tex2html2754"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2719"
+<A NAME="tex2html2748"
   HREF="node179.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2727"
+<A NAME="tex2html2756"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2730"
-  HREF="node181.html">TAVLBA and NOTAVLBA</A>
-<B> Up:</B> <A NAME="tex2html2726"
+<B> Next:</B> <A NAME="tex2html2759"
+  HREF="node181.html">SRCFILE</A>
+<B> Up:</B> <A NAME="tex2html2755"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2720"
-  HREF="node179.html">TAPEINI</A>
- &nbsp <B>  <A NAME="tex2html2728"
+<B> Previous:</B> <A NAME="tex2html2749"
+  HREF="node179.html">SOURCE</A>
+ &nbsp <B>  <A NAME="tex2html2757"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041212800000000000000"></A><A NAME="MP:TAPESYNC"></A>
+<H3><A NAME="SECTION0041212800000000000000"></A><A NAME="MP:SRCCAT"></A>
 <BR>
-<TT>TAPESYNC</TT>
+<TT>SRCCAT</TT>
 </H3>
 
 <P>
-<TT>TAPESYNC</TT> requests that SCHED&nbsp; try to synchronize tape changes
-at the stations.  This is advisable to avoid slightly staggered tape
-changes that would naturally result from a subarrayed schedule.
-Such staggered tape changes can result in lost data because there
-is a minimum of about 3 minutes per correlator job and a new job
-is needed when a station changes tape.  This is a temporary
-restriction but was in effect in late 1996.
+<TT>SRCCAT</TT> is a flag to indicate that the following inputs are
+to be treated as an in-line source catalog. See
+Section&nbsp;<A HREF="node209.html#SEC:SRCCAT">3.2</A> for details of source catalog contents. The
+catalog input is terminated by <TT>ENDCAT /</TT> to resume schedule
+input.  It is best to specify <TT>SRCCAT /</TT> as a separate line not
+part of other SCHED&nbsp; keyin input. SCHED&nbsp; stores the source
+catalog information in internal arrays which have a maximum size that
+may depend on the computer but is 500 in the distributed version. All
+sources found in in-line catalogs are stored in these arrays because
+they may be read before all scheduled sources are known. In contrast,
+when an external source catalog is read, only scheduled sources are
+kept. See the examples in Section&nbsp;<A HREF="node323.html#SEC:MKIII">A.1</A> for illustrations
+of how in-line source catalogs are used.
 
 <P>
-WARNING:  <TT>TAPESYNC</TT> could cause very strange behavior if used
-with a schedule in which some stations are being scheduled separately
-from others.  It should only be used when the scans as specified to
-SCHED&nbsp; are in roughly time order (for subarrays, there can be
-small deviations from time order and that will be ok).  It is only
-recommended for use in conjunction with the optimization options.
-For any schedules in which every scan is specified in the input, it
-would be best to use <A HREF="node177.html#MP:TAPE"><TT>TAPE</TT></A> to force the
-tape changes at reasonable times, if necessary.
-
-<P>
-Also, be sure that any automatically generated tape change requests
-occur at times with sufficient gaps at single tape stations (all
-except the VLBA and VLA).  See the discussion of <A HREF="node177.html#MP:TAPE"><TT>TAPE</TT></A> for details.
-
-<P>
-Note that, with automatic tape allocation, SCHED&nbsp; does not set the
-tape change times so <TT>TAPESYNC</TT> will have no effect.
+If <TT>SRCCAT</TT>
+is found, the end of the input group (everything up to the ``/'')
+is not considered the end of inputs for this file.  The next inputs
+after the source data are entered will continue to apply to the current
+file (usually the first).
 
 <P>
 
@@ -95,9 +90,10 @@ tape change times so <TT>TAPESYNC</TT> will have no effect.
 </LI>
 <LI><B>Default:</B>  Not used.
 </LI>
-<LI><B>Usage:</B>    Last value used.
+<LI><B>Usage:</B>    There can be as many in-line catalogs as desired, consistent with
+the maximum number of allowed sources in the in-line catalogs.
 </LI>
-<LI><B>Example:</B>  <TT>TAPESYNC /</TT>
+<LI><B>Example:</B>  <TT>SRCCAT /</TT>
   
 </LI>
 </UL>
@@ -105,31 +101,31 @@ tape change times so <TT>TAPESYNC</TT> will have no effect.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2729"
+<A NAME="tex2html2758"
   HREF="node181.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2725"
+<A NAME="tex2html2754"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2719"
+<A NAME="tex2html2748"
   HREF="node179.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2727"
+<A NAME="tex2html2756"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2730"
-  HREF="node181.html">TAVLBA and NOTAVLBA</A>
-<B> Up:</B> <A NAME="tex2html2726"
+<B> Next:</B> <A NAME="tex2html2759"
+  HREF="node181.html">SRCFILE</A>
+<B> Up:</B> <A NAME="tex2html2755"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2720"
-  HREF="node179.html">TAPEINI</A>
- &nbsp <B>  <A NAME="tex2html2728"
+<B> Previous:</B> <A NAME="tex2html2749"
+  HREF="node179.html">SOURCE</A>
+ &nbsp <B>  <A NAME="tex2html2757"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

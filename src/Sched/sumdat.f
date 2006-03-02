@@ -68,7 +68,7 @@ C
                   WRITE( SUMDAT, '( I1, A1, I2.2 )' )
      1                    TPDRIV, DIRECT, TPINDX
                ELSE IF( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) THEN
-                  IGB = GBYTES(ISCN,ISTA)
+                  IGB = NINT( GBYTES(ISCN,ISTA) )
                   WRITE( SUMDAT, '( I4 )' ) IGB
                END IF
 C
@@ -90,7 +90,7 @@ C
             IF( NOREC(ISCN) ) THEN
                   SUMDAT = 'Stop '
             ELSE IF( USEDISK(ISTA) ) THEN
-               IGB = GBYTES(ISCN,ISTA)
+               IGB = NINT( GBYTES(ISCN,ISTA) )
                WRITE( SUMDAT, '( I4 )' ) IGB
             ELSE IF( USETAPE(ISTA) ) THEN
                SUMDAT = 'Tape'

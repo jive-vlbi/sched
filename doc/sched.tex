@@ -57,7 +57,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\ VERSION 6.02}
+\title{THE \schedb USER MANUAL \\ VERSION 6.04}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -836,6 +836,10 @@ that insertion is inserted in the main schedule file and is somewhat
 simplified from that in \htmladdnormallink{{\sl
 eg3mmb.key}}{examples/eg3mmb.key}
 
+\item[\htmladdnormallink{{\sl vips11.key}}
+{examples/vips11.key}] shows use of {\tt OPTMODE=HAS} for automatic
+scheduling.
+
 \item[\htmladdnormallink{{\sl evn\_cont\_strong.key}}
 {examples/evn\_cont\_strong.key}] is an example of EVN observations at
 18cm.  The observing pattern is an 11 minute cycle with 2 minutes on
@@ -910,10 +914,7 @@ III stations are a few millimeter and Russian observatories.
 
 \item[\htmladdnormallink{{\sl egmk5vex.key}}{examples/egmk5vex.key}]
 is an example of a schedule that uses the Mark5 recording system
-on EVN stations and that writes a VEX file.  As of Sept 2003, writing
-of such VEX files is blocked, unless the block is explicitly overridden,
-because the stations can't handle the files.  But this is a step toward
-implementation of Mark5.
+on EVN stations and that writes a VEX file.
 
 \item[\htmladdnormallink{{\sl egmk5vlba.key}}{examples/egmk5vlba.key}]
 is and example of a schedule that uses a Mark5 system at a VLBA station.
@@ -928,6 +929,13 @@ any time slot for any time of year.  This will not be run by the
 used for pointing at planets will not generally be available.  It
 is also not of much interest beyond the staff responsible for
 maintaining the VLBA.
+
+\item[\htmladdnormallink{{\sl vips11.key}}{examples/vips11.key}] demonstrates
+building a survey schedule using the {\tt HAS} optimization mode.  In this
+smode, \schedb tries to reorder the input scans to give each source coverage
+across the allowed time and the time when it is up.  Some attention is
+paid to slew times.  This mode significantly simplifies the problem of
+trying to obtain reasonable uv coverage on a large number of sources.
 
 \item[\htmladdnormallink{{\sl egsat.com}}{examples/egsat.key}] demonstrates
 scheduling a satellite observation using both MER-B and Stardust.  It
@@ -1711,10 +1719,10 @@ of the formatter at the station has to be changed.  This happens when
 there are changes in any of a number of parameters including the
 number of channels, the sample rate, the BBC assignments, the BBC
 sidebands, and the pulse cal detector setup.  A formatter
-reconfiguration takes about 20 seconds and during that time the
-formatter is not sending valid time codes to the recorder.  If this
-happens during recording, it knocks the correlator out of sync for
-both the duration of the reconfigure plus the time to resync.  In
+reconfiguration takes about 8 seconds on the VLBA and during that time
+the formatter is not sending valid time codes to the recorder.  If
+this happens during recording, it knocks the correlator out of sync
+for both the duration of the reconfigure plus the time to resync.  In
 practice, it also seems to confuse the VLBA correlator somehow for
 maybe one or two stations and they can take over a minute to resync.
 It is best to avoid reconfigurations if possible.  In the rare cases
@@ -1939,10 +1947,10 @@ will automatically keep the tape running if the gap is less than
 be adjusted with the parameter \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE}.
 
 One can request, preferably with parameter \htmlref{{\tt PRESTART}}
-{MP:PRESTART}, that tapes be started before the nominal start of a
-scan.  This can cause the tape to keep moving if the gap is short.
-For longer gaps, it can help optimize the amount of correlator output
-by providing time for the correlator to synchronize.
+{MP:PRESTART}, that recordings be started before the nominal start of
+a scan.  This can cause the recording medium to keep moving if the gap
+is short.  For longer gaps, it can help optimize the amount of
+correlator output by providing time for the correlator to synchronize.
 
 
 \subsubsection{\label{SSSEC:TAPELEN}TAPE LENGTHS and PASS TIMES}
@@ -2441,7 +2449,7 @@ During the transition from VLBA or Mark~IV systems to MARK5, it may
 not be obvious when the schedules are made which a station will have.
 Or stations may have both and want to run observations on one or the
 other depending on the supply of media.  Because of this situation, a
-separate input input, called {\tt DISK} can be specified in addition
+separate input, called {\tt DISK} can be specified in addition
 to {\tt RECORDER} in the station catalog.  It tells \schedb that the
 station has a disk system and schedules can be made for it.  There is
 another new parameter, {\tt MEDIADEF}, which can be {\tt TAPE} or {\tt
@@ -2538,9 +2546,10 @@ In order to cause \schedb to write VEX files, the user must either
 include in the schedule one telescope for which {\tt CONTROL = VEX} is
 specified in the \htmlref{station catalog}{SEC:STACAT} or must specify
 the input parameter \htmlref{{\tt DOVEX}}{MP:DOVEX}.
-Two example schedules that produce VEX files are included with the
+Some example schedules that produce VEX files are included with the
 \schedb distribution and are located in the {\sl \$SCHED/examples}
-subdirectory.  They are called {\sl egiv.key} and {\sl egvsop.key}.
+subdirectory.  They are called {\sl egiv.key}, {\sl egvsop.key}, and
+{\sl evn\_*.key}.
 
 Mark~IV (MkIV) telescopes are characterized by {\tt DAR = MKIV} and
 {\tt RECORDER = MKIV } in the \htmlref{station catalog}{SEC:STACAT}
@@ -2550,8 +2559,10 @@ IF distribution boxes. Currently \schedb only supports ``astronomical
 patching''. This requires odd BBC's to be connected to either {\tt
 IFCHAN = 1N} (normal input, usually LCP) or {\tt IFCHAN = 1A}
 (alternate, usually RCP). Even BBC's have to be connected to {\tt
-IFCHAN = 2N} (usually RCP) or {\tt IFCHAN = 2A} for LCP. This can be
-controlled by explicitly setting {\tt BBC}.
+IFCHAN = 2N} (usually RCP) or {\tt IFCHAN = 2A} for LCP.  Also, you
+must use at least one of IFCHAN = 1N or IFCHAN = 2N (i.e. a schedule
+that uses both IFCHAN = 1A and IFCHAN = 2A is not permitted).  This
+can be controlled by explicitly setting {\tt BBC}.
 
 In December 2000 the capability to record 512 Mb/s was introduced.
 This is achieved by recording 64 tracks simultaneously.  It requires
@@ -2567,20 +2578,22 @@ based Mark5 systems).  Some as of late 2004 are:
 
 \item Continuous tape motion has been used widely, however the ability
   to acquire the information needed to flag data which is recorded during
-  slewing is not universal. The \schedb output .flg file can be used
-  by the AIPS task {\tt UVFLG}.  In addition users need to insert gaps
-  during continuous tape motion whenever they want calibration data.
-  Finally, at least 40 seconds are required to turn the tape around.
+  slewing is not universal (though is standard for EVN stations).
+  The \schedb output {\sl .flg} file can be used by the AIPS task
+  {\tt UVFLG} if telescope flagging data are not available.  In addition
+  users need to insert gaps during continuous tape motion whenever they
+  want calibration data.  Finally, at least 40 seconds are required
+  to turn a tape around (which is not an issue with disk recordings).
 
 \item Phase Cal detection at the telescopes is not implemented at all
   telescopes. This
   requires soft-- and hardware upgrades at the telescopes,
-  the field system, and probably \sched.
+  the field system, and prossibly \sched.
 
 \item For MkIV (VLBA4) telescopes there is flexibility for controling
   when Tsys measurements will be made. Tsys measurements will typically
-  be made at the beginning of a scan if there is a tape stop. When
-  scheduling long scans or continuous tape motions, one may need to
+  be made at the beginning of a scan if there is a gap in the recording.
+  When scheduling long scans or continuous tape motions, one may need to
   insert gaps in order to obtain Tsys data.
 
 \end{list}
@@ -5129,6 +5142,7 @@ BASIC SCAN TIMING and CONFIGURATION:
 \htln{REPeat}{REPEAT}{~~} Number of times to repeat scan(s).
 \htlm{SETUP}{~~~} Name of file containing VLBA setup information.
 \htlm{COMMENT}{~} Comment to appear in schedule.
+\htlm{SCANTAG}{~} Name for scan to put in summary tables.
 \end{list}
 
 SCAN PROPERTIES:
@@ -5173,6 +5187,7 @@ SCAN PROPERTIES:
 \htlm{ROTPAT}{~~} Expand pointing patterns to include focus/rotation.
 \htlm{ROTOFF}{~~} Rotation offsets for ROTPAT pattern.
 \htlm{FOCOFF}{~~} Focus offsets for ROTPAT pattern.
+\htlm{CRDLINE}{~} Arbitrary line for VLBA files for on-line testing.
 
 \end{list}
 
@@ -5203,12 +5218,9 @@ OPTIMIZATION (Beware --- experimental features!):
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \htlm{OPDUR}{~~~} Duration for experimental optimizing mode.
-\htlm{OPELPRIO}{} Two elevation ranges in which {\tt OPSKIP} not
-                        active.
-\htlm{OPMINEL}{~} Minimum elevation for experimental optimizing
-                        mode.
-\htlm{OPMINANT}{} Minimum number of antennas in a scan in
-                        experimental optimizing mode.
+\htlm{OPELPRIO}{} Two elevation ranges in which {\tt OPSKIP} not active.
+\htlm{OPMINEL}{~} Minimum elevation for an "up" source.
+\htlm{OPMINANT}{} Minimum number of antennas in a scan.
 \html{OPMISS}{~~} For {\tt OPTMODE = SCANS}, only keep this scan
                         if this many scans have been skipped.
 \htlm{OPNOSUB}{~} Don't subarray in experimental optimizing mode.
@@ -5217,7 +5229,18 @@ OPTIMIZATION (Beware --- experimental features!):
 \htlm{OPTLOWT}{~} Time scale for low el samples in
                         {\tt OPTMODE = CELLS or CSUB}.
 \htlm{OPTMODE}{~} Optimization mode.
+\htlm{OPPRTLEV}{} Print level for optimizing routine (mainly mode HAS).
 \htlm{OPTSLEW}{~} Time scale for slews in {\tt OPTMODE = CELLS or CSUB}.
+\htlm{OPHA}{~~~~} Prefered hour angle for scan {\tt OPTMODE=HAS}.
+\htlm{OPHAWID}{~} Tolerance for hour angle {\tt OPTMODE=HAS}.
+\htlm{OPHAWT}{~~} Importance of HA vs other weights {\tt OPTMODE=HAS}.
+\htlm{OPHASTA}{~} Reference station for hour angles {\tt OPTMODE=HAS}.
+\htlm{OPMINSEP}{} Minimum separation of scans on a source {\tt OPTMODE=HAS}.
+\htlm{OPSLEWWT}{} Importance of slew time vs other weights {\tt OPTMODE=HAS}.
+\htlm{OPSLEWTI}{} Scale time for slew time weights {\tt OPTMODE=HAS}.
+\htlm{OPHLIMWT}{} Importance of near limits vs other weights {\tt OPTMODE=HAS}.
+\htlm{OPHLIMTI}{} Importance of HA vs other weights {\tt OPTMODE=HAS}.
+\htlm{OPHMAXDT}{} Maximum offset from desired HA to consider {\tt OPTMODE=HAS}.
 \htlm{TAPESYNC}{} Synchronize tape changes (see warnings).
 \htlm{AUTOPEAK}{} Insert reference pointing scans.
 \htlm{MAPLIM}{~~} Lat/long limits for station map when {\tt OBSTYPE=CONFIG}
@@ -5756,7 +5779,20 @@ The {\sl egglobal.key} example shows the use of {\tt COVERLET}.
 {Only use preceeding the cover letter input.}
 {{\tt COVERLET /}}
 
+\subsubsection{\label{MP:CRDLINE}{\tt CRDLINE}}
 
+{\tt CRDLINE} allows the scheduler to insert and arbitrary string
+into the crd control files for VLBA antennas.  It is intended to
+simplify the testing of new features by someone programming the
+on-line system.  You almost certainly don't want to use this parameter
+unless you are a VLBA programmer.
+
+\rcwbox
+{A character string of up to 80 characters.}
+{Any character string.}
+{Blank}
+{One per scan.  Remains at most recent value set.}
+{{\tt CRDLINE = 'This was requested by Walter'}}
 
 \subsubsection{\label{MP:DATAPATH}{\tt DATAPATH}}
 
@@ -5788,7 +5824,7 @@ at a remote location.}
 
 \subsubsection{\label{MP:DAY}{\tt DAY}}
 
-{\tt DAY} is the day number of {/em stop} time of scan. Day 1
+{\tt DAY} is the day number of {\em stop} time of scan. Day 1
 is the first day of the month specified with the {\tt MONTH}
 parameter, which defaults to 1 so that {\tt DAY} is the day of
 year. If {\tt LST} was specified, {\tt DAY} must be the (modified?)
@@ -5980,12 +6016,12 @@ scan length made with either parameter.
 
 Once the scan start time has been specified as above, it can be
 adjusted further with \htmlref{{\tt PRESCAN}}{MP:PRESCAN}.  Then the
-actual time that tapes start rolling is adjusted further with
+actual time that recording starts is adjusted further with
 \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} and \htmlref{{\tt PRESTART}}
 {MP:PRESTART}.  {\tt PRESTART}, {\tt MINPAUSE}, and {\tt PRESTART}
-allow the user to start tapes rolling early to give the correlator
+allow the user to start recording early to give the correlator
 a chance to synchronize before the start of good data.  They also
-can help prevent short tape stoppages which can cause problems
+can help prevent short stoppages which can cause problems
 with playback.  See the descriptions of those parameters for more
 information.  The \schedb defaults are generally reasonable so, if
 you are not an experienced user who wants to exercise fine control
@@ -6324,14 +6360,12 @@ seconds, the tapes are left running.
 
 The current status of PCFS software requires an interval of 36 seconds
 at tape reversals to produce a valid VEX file. A 40 second gap is
-required to change setup. Apart from these restrictions continuous
-tape motion is implied for gaps shorter than 10 seconds. However, this
-procedure is experimental at the moment and users should be aware that
-PCFS is not producing standard flagging information at these
-occasions. In addition, users should realize that during continuous
+required to change setup.  Apart from these restrictions continuous
+recording is implied for gaps shorter than 10 seconds.  In addition,
+users should realize that during continuous
 tape motion no calibration data is taken. Starting and stopping the
-tape can be forced using {\tt GAP} or \htmlref{{\tt
-    PRESCAN}}{MP:PRESCAN}, or by using \htmlref{{\tt START times}}
+recording can be forced using {\tt GAP} or \htmlref{{\tt
+PRESCAN}}{MP:PRESCAN}, or by using \htmlref{{\tt START times}}
 {MP:START}.  {\tt GAP} is probably the prefered mechanism.
 
 \rcwbox
@@ -6977,6 +7011,185 @@ used, the output schedule should be checked carefully.
 {Only one set of values, the last, used for the project.}
 {{\tt OPELPRIO = 2., 15., 75., 90.}}
 
+\subsubsection{\label{MP:OPHA}{\tt OPHA}}
+
+{\tt OPHA} is the parameter for {\tt OPTMODE=HAS} that sets the desired
+hour angle at the reference station \htmlref{{\tt OPHASTA}}{MP:OPHASTA}
+for this scan.  If this parameter is not set, \schedb figures out how
+many scans there are on the source, when the source can first be
+seen (either because of elevation limits or experiment start time) and
+when it can last be seen.  It then spaces the desired observation times
+evenly between those times.
+
+The weight based on deviation from the desired hour angle is calculated
+using the formula:
+\begin{verbatim}
+  TIMEWT=OPHAWT(JSCN)*(0.5+(1.0/PI)*
+           ATAN(1.5*(TAPPROX-OPHAT(JSCN))/ OPHAWIDT(JSCN)))
+\end{verbatim}
+where {\tt OPHAT} is {\tt OPHA} converted to a time, {\tt TAPPROX} is the
+proposed observe time of the next scan, and {\tt OPHAWT} and {\tt
+OPHAWIDT} are other \schedb input parameters.  Note {\tt TAPPROX} is
+likely to be adjusted slightly once the scan is chosen and full
+account of slew times is taken.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\subsubsection{\label{MP:OPHMAXDT}{\tt OPHMAXDT}}
+
+{\tt OPHMAXDT } is the parameter for {\tt OPTMODE=HAS} that sets
+the maximum deviation from the desired hour angle that a scan will
+be considered.  This helps limit the number of scans considered at
+any one time but, most importantly, prevents use of the scan at an
+inappropriate time, for example, because no appropriate scan was
+available at that time.  Because of this parameter and {\tt OPDUR}
+is is possible to not use all input scans.  Users should watch for
+this and probably adjust scan parameters to fix the problem.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real time}
+{Any}
+{2:0:0 (2 hours)}
+{Uses the most recent value specified.}
+{{\tt OPHMAXDT = 30:00 }}
+
+\rcwbox
+{Any real hour angle}
+{Any}
+{Zero.  \schedb will pick the values.  The default is usually what you
+will want.}
+{Uses the last value specified.  It is not a good idea to specify one
+and not the others as then all scans will have the same desired hour
+angle and the behavior will probably be a bit weird.}
+{{\tt OPHA=PT }}
+
+\subsubsection{\label{MP:OPHAWID}{\tt OPHAWID}}
+
+{\tt OPHAWID } is the parameter for {\tt OPTMODE=HAS} that sets the
+normalization time (normal time format) for the tolerance for
+deviation from the specified hour angle.  A larger value allows \schedb
+to be a more sloppy with placement of the scan.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real time, usually in a format like 30:00 for 30 minutes.}
+{Any positive value}
+{Zero.  Set to the spacing between desired scans on the source.}
+{Uses the most recent value specified.}
+{{\tt OPHAWID = 30:00 (for 30 minutes)}}
+
+\subsubsection{\label{MP:OPHAWT}{\tt OPHAWT}}
+
+{\tt OPHAWT } is the parameter for {\tt OPTMODE=HAS} that sets the
+relative importance of the deviation from the desired hour angle
+compared to minimizing slew time or getting a scan near a limit.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real number.  But negatives don't really make sense.}
+{Any}
+{1.0.}
+{Uses the most recent value specified.}
+{{\tt OPHAWT = 3.5}}
+
+\subsubsection{\label{MP:OPHASTA}{\tt OPHASTA}}
+
+{\tt OPHASTA } is the parameter for {\tt OPTMODE=HAS} that sets the
+reference station at which hour angles are calculated.  It is usually
+best to choose a station in the middle of the array, such as Pie Town
+({\tt VLBA\_PT} or {\tt PT}) for the VLBA.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{A station name or station code matching a scheduled station.}
+{Any valid station in the schedule}
+{{\tt PT}}
+{Uses the one value for the experiment - the last specified.}
+{{\tt OPHASTA = VLBA\_LA}}
+
+\subsubsection{\label{MP:OPLIMTI}{\tt OPLIMTI}}
+
+{\tt OPLIMTI } is the parameter for {\tt OPTMODE=HAS} that sets the
+normalization for the time offset from the limits of when a source
+is up.   The equations for the weights for rise and set are:
+\begin{verbatim}
+  RISEWT=MAX(0.0,OPHLIMWT(JSCN)*(1.0-ABS(HA1(JSCN,RSTA)-HAMIN(JSCN))*
+             3600.0/OPHLIMTI(JSCN)))
+  SETWT=MAX(0.0,OPHLIMWT(JSCN)*(1.0-ABS(HA1(JSCN,RSTA)-HAMAX(JSCN))*
+             3600.0/OPHLIMTI(JSCN)))
+\end{verbatim}
+where {\tt HA1} is the hour angle of the proposed scan, {\tt HAMIN}
+and {\tt HAMAX} are the hour angles at which the source rises or
+sets.  This only worries about the rise and set times.  Some day
+it maybe should also worry about experiment start and end.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real hour angle}
+{Any}
+{Zero.}
+{Uses the most recent value specified.}
+{{\tt OP = }}
+
+\subsubsection{\label{MP:OPLIMWT}{\tt OPLIMWT}}
+
+{\tt OPLIMWT } is the parameter for {\tt OPTMODE=HAS} that sets the
+relative importance of the weighting based on being near the
+rise or set time of a source.  For the equations
+for these weights, see \htmlref{{\tt OPLIMTI}}{MP:OPLIMTI}.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real number}
+{Any}
+{Zero.}
+{Uses the most recent value specified.}
+{{\tt OPLIMWT = 1.0 }}
+
+\subsubsection{\label{MP:OPMINSEP}{\tt OPMINSEP}}
+
+{\tt OPMINSEP } is the parameter for {\tt OPTMODE=HAS} that is used
+to prevent two scans on the same source from being scheduled too close
+together.  \schedb determines the default spacing of scans --- evenly
+spaced across the available time --- regardless of whether the user
+overrides that default by specifying the desired hour angles.  That
+default spacing is multiplied by {\tt OPMINSEP} to get the minimum
+separation.  Once a scan is scheduled,
+another scan on that source will not be scheduled until after that
+minimum separation has passed.  A different value can be given for
+each scan.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real hour angle, although usualy a fraction between about 0.0 and 1.0}
+{Any}
+{0.0 which means don't have a minimum separation.}
+{Uses the most recent value specified.}
+{{\tt OPMINSEP = 0.4}}
 
 \subsubsection{\label{MP:OPMISS}{\tt OPMISS}}
 
@@ -6996,8 +7209,9 @@ number, be sure to drop the value for the next.}
 \subsubsection{\label{MP:OPMINEL}{\tt OPMINEL}}
 
 {\tt OPMINEL} specifies the minimum elevation in degrees below which
-sources will be considered to be ``down''.  In all modes, if less
-than {\tt OPMINANT} antennas are up, the scan will be skipped.
+sources will be considered to be ``down''.  In all modes, if less than
+\htmlref{{\tt OPMINANT}}{MP:OPMINANT} antennas are up, the scan will
+be skipped.
 
 This is used mainly for optimizing modes to help select scans, and
 for experiment planning in order to, for example, plot the uv
@@ -7009,7 +7223,7 @@ effect on schedules.
 {A real number to be interpreted as an elevation.}
 {Any valid elevation.}
 {0.0}
-{Only one value used for the project --- the last.}
+{On per scan.  Defaults to previous scan.}
 {{\tt OPMINEL = 15.}}
 
 
@@ -7024,13 +7238,14 @@ This is used mainly for optimizing modes to help select scans, and
 for experiment planning in order to, for example, plot the uv
 coverage available if all low elevation data and all data with less
 than several antennas will be discarded.  The default will have no
-effect on schedules.
+effect on schedules.  A separate value can be specified for each
+scan.
 
 \rcwbox
 {An integer. }
 {Any}
 {0}
-{Only one value used for the project --- the last.}
+{One per scan.  Defaults to previous scan.}
 {{\tt OPMINANT = 4}}
 
 
@@ -7051,6 +7266,21 @@ used, the output schedule should be checked carefully.
 {{\tt OPNOSUB}}
 
 
+\subsubsection{\label{MP:OPPRTLEV}{\tt OPPRTLEV}}
+
+{\tt OPPRTLEV} tells the \schedb optimizing modes how much extra information
+on the inner workings of the scan choice to print.  So far, it is only
+used for \htmlref{{\tt OPTMODE=HAS}}{MP:OPTMODE}.  See the description in
+the section on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for details.
+
+\rcwbox
+{A integer.}
+{Useful values are between 0 and 3}
+{0, which gives only bare summaries.}
+{Only one value used for schedule --- the last.}
+{{\tt OPPRTLEV=3}}
+
+
 \subsubsection{\label{MP:OPSKIP}{\tt OPSKIP}}
 
 In optimizing mode ``{\tt SCANS}'', skip each source {\tt OPSKIP}
@@ -7068,6 +7298,47 @@ carefully.
 {Only one value used for schedule --- the last.}
 {{\tt OPSKIP = 2 }}
 
+\subsubsection{\label{MP:OPSLEWTI}{\tt OPSLEWTI}}
+
+{\tt OPSLEWTI } is the parameter for {\tt OPTMODE=HAS} that is used
+to normalize the weighting based on slew time.  The slew time weight
+is set by the equation:
+\begin{verbatim}
+ SLEWWT = MAX(0.0,OPSLEWWT(JSCN)*(1.0-OPSLEW/OPSLEWTI(JSCN)))
+\end{verbatim}
+Where OPSLEW is the difference between the stop time of the previous
+scan and the time when all antennas are ready to observe the scan
+being tested.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real hour angle}
+{Any}
+{Zero.}
+{Uses the most recent value specified.}
+{{\tt OPSLEWTI = 1:0:0 }}
+
+\subsubsection{\label{MP:OPSLEWWT}{\tt OPSLEWWT}}
+
+{\tt OPSLEWWT } is the parameter for {\tt OPTMODE=HAS} that sets
+the relative importance of the weight based on slew time compared to
+the other weights.  See \htmlref{{\tt OPSLEWWT}}{MP:OPSLEWWT} for
+the equation used to set the slew weight for a scan.
+
+See the discussion of the possible optimization modes in the section
+on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
+{\tt OPTMODE=HAS}
+
+\rcwbox
+{Any real number.  Positive is best.}
+{Any}
+{Zero. Don't pay attention to slew times.}
+{Uses the most recent value specified.}
+{{\tt OPSLEWWT = 1.0}}
+
 
 \subsubsection{\label{MP:OPTMODE}{\tt OPTMODE}}
 
@@ -7078,15 +7349,15 @@ carefully.
 \item[{\tt NONE}.]  This is the default.  The input schedule will
 be used as specified.
 
-\item[{\tt SCANS}.]  For this mode, the schedule will be followed
-as specified.  However only scans with more than {\tt OPMINANT}
-antennas with the source up (above the horizon and within the slew
-limits) and above {\tt OPMINEL} will be accepted.  For each accepted
-scan only those antennas that are up and above {\tt OPMINEL} will
-be scheduled unless {\tt OPNOSUB} is specified.  {\tt DWELL}
-would normally be specified to allow for slews.  Subarraying will
-happen if two successive souces can only be seen by different antennas
-since the optimization keeps track of the previous scan on a
+\item[{\tt SCANS}.]  For this mode, the schedule will be followed as
+specified.  However only scans with more than \htmlref{{\tt
+OPMINANT}}{MP:OPMINANT} antennas with the source up (above the horizon
+and within the slew limits) and above {\tt OPMINEL} will be accepted.
+For each accepted scan only those antennas that are up and above {\tt
+OPMINEL} will be scheduled unless {\tt OPNOSUB} is specified.  {\tt
+DWELL} would normally be specified to allow for slews.  Subarraying
+will happen if two successive souces can only be seen by different
+antennas since the optimization keeps track of the previous scan on a
 per-antenna basis.
 
 The usual way to use this mode is to specify a loop containing all
@@ -7132,15 +7403,15 @@ mode as for {\tt SCANS}.  The {\tt CSUB} mode is able to do almost
 the same thing as this mode plus it handles subarraying.  It may
 eventually completely replace the {\tt CELLS} mode.
 
-\item[{\tt CSUB}.]  This mode is much like the {\tt CELLS} mode
-except that it uses subarrays.  The sky over each antenna is divided
-into 9 cells.  For each possible pair or sources, a scan is
-constructed with each antenna observing the source for which the
-priority is highest.  The priority is the result of the time since the
-cell the source is in was sampled adjusted to downweight long slews
-({\tt OPTSLEW}) and upweight low elevation scans when other low
-elevation cells are not being sampled ({\tt OPTLOWT}).  If the minimum
-number of antennas per scan ({\tt OPMINANT}) is not satisfied, some
+\item[{\tt CSUB}.]  This mode is much like the {\tt CELLS} mode except
+that it uses subarrays.  The sky over each antenna is divided into 9
+cells.  For each possible pair or sources, a scan is constructed with
+each antenna observing the source for which the priority is highest.
+The priority is the result of the time since the cell the source is in
+was sampled adjusted to downweight long slews ({\tt OPTSLEW}) and
+upweight low elevation scans when other low elevation cells are not
+being sampled ({\tt OPTLOWT}).  If the minimum number of antennas per
+scan (\htmlref{{\tt OPMINANT}}{MP:OPMINANT}) is not satisfied, some
 are shifted so that it is.  Then the subarrayed scan is compared with
 single source scans with each of the two sources and the best option
 chosen.  There is a weighting factor which favors the single source
@@ -7149,11 +7420,12 @@ include all stations.  Some day this should be made an input
 parameter.  Finally, if there are more than 2 antennas left over, they
 are put in a third subarray with an optimized source.
 
-Like the {\tt CELLS} mode, this mode is for geodetic type observations.
-Various parameters have the same meaning here as for the other modes
-except that OPNOSUB is not allowed since it doesn't make sense.
-Also, OPMINANT is a goal.  The third subarray can have less as can
-one of the other two under certain very special circumstances.
+Like the {\tt CELLS} mode, this mode is for geodetic type
+observations.  Various parameters have the same meaning here as for
+the other modes except that OPNOSUB is not allowed since it doesn't
+make sense.  Also, \htmlref{{\tt OPMINANT}}{MP:OPMINANT} is a goal.
+The third subarray can have less as can one of the other two under
+certain very special circumstances.
 
 \item[{\tt UPTIME}.] This mode is designed for experiment planning.
 For each input scan, it creates a string of scans of duration
@@ -7167,6 +7439,105 @@ input scan would normally be on a different source.  Note that this
 mode gives a backward time jump at the first scan based on each input
 scan.  For this reason, writing telescope control files based on this
 optimization mode is not allowed.
+
+\item[{\tt HAS}.] For this mode, the user provides the scans that
+should be observed.  All parameters of the scans are retained, except
+the times.  As SCHED runs, once one scan is processed, the next is
+chosen from those that remain based on an attempt to come close to the
+desired reference station hour angle.  The user can specify the
+desired hour angle, or can take the default which is to spread the
+scans on each source evenly over the time interval during which it can
+be observed with enough stations above a specified elevation limit.
+The scan is chosen based on a weight which is the sum of a weight
+based on deviation from the desired time, a weight based on the slew
+time from the previous scan (to help try to minimize time lost to
+slewing), and weights based on proximity to the start and end of the
+time the source can be observed.  There is an example schedule among
+the sched examples called {\sl eghas.key} that shows a way of using
+this mode for survey type observations where there is a desire to
+observe many sources, each over a wide hour angle range to get good UV
+coverage.
+
+{\tt OPTMODE=HAS} should not be used to schedule projects longer than
+24 hours.  In that case, hour angles can be ambiguous.  Note that for
+normal schedules the 4 minute difference between the sidereal and solar
+days will not be important partly because only scan start times are
+considered.  However there is just a chance of weird behavior for an
+observation of 24 hours UT duration and short scans.
+
+There are a number of input parameters to help guide the {\tt HAS}
+mode in it's selection of scans.  Important parameter include
+\htmlref{{\tt OPDUR}}{MP:OPDUR}, which sets the total length of the
+observations, \htmlref{{\tt OPMINANT}}{MP:OPMINANT}, which sets the
+minimum number of stations that must be up for a scan to be chosen and
+\htmlref{{\tt OPMINEL}}{MP:OPMINEL}, which sets the minimum elevation
+a station must be above to be considered to be up.  Note that to be
+considered to be up, a station must also be above the local horizon as
+specified in the station catalog.
+
+\htmlref{{\tt OPHASTA}}{MP:OPHASTA} sets the reference station for
+this mode.  Either the full name or the code, if unique, can be used.
+\htmlref{{\tt OPHA}}{MP:OPHA} sets
+the desired hour angle (at the reference station) for this scan.
+\htmlref{{\tt OPHAWID}}{MP:OPHAWID} sets a normalization time interval
+relative to the desired hour angle over which the scan weight
+increases.  \htmlref{{\tt OPHAWT}}{MP:OPHAWT} controls which the
+scaling of the weight related to conforming to the desired hour angle
+relative to weights related to slew times and limit proximity.
+\htmlref{{\tt OPHASTA}}{MP:OPHASTA} is used to set the station for
+which the desired hour angles apply.  \htmlref{{\tt
+OPMINSEP}}{MP:OPMINSEP} sets the minimum separation of scans on a
+source as a fraction of the spacing of scans that would be used if
+they were spread evenly across the available time for that source.
+\htmlref{{\tt OPSLEWTI}}{MP:OPSLEWTI} and \htmlref{{\tt
+OPSLEWWT}}{MP:OPSLEWWT} set normalization slew time and the weighting
+(relative significance compared to other weighting factors) for the
+slew time base scan weight.  \htmlref{{\tt OPLIMTI}}{MP:OPLIMTI} and
+\htmlref{{\tt OPLIMWT}}{MP:OPLIMWT} set a similar normalization and
+weight for the proximity to the extreme times at which a source can be
+observed.  This latter is used to encourage a scan on the source, for
+example, before it sets.  \htmlref{{\tt OPHMAXDT}}{MP:OPHMAXDT} sets
+the maximum deviation from the desired hour angle at which a scan will
+be considered.  This prevents using very inappropriate scans when no
+other scans are available.  Most of the above parameter can have
+different values for different scans.
+
+The equations for the various weights are given in the descriptions
+for the parameters \htmlref{{\tt OPHA}}{MP:OPHA}, \htmlref{{\tt
+OPSLEWTI}}{MP:OPSLEWTI}, and \htmlref{{\tt OPLIMTI}}{MP:OPLIMTI}.  For
+the most accurate information on how weights are set, look at the code
+in {\sl \$SCHED/src/Sched/opthas.f}.
+
+When the {\tt HAS} mode is used, a lot of information from the guts of
+the algorithm can appear in the {\sl sched.runlog} depending on the
+setting of the parameter \htmlref{{\tt OPPRTLEV}}{MP:OPPRTLEV}.  For
+each output scan, some details of the weights etc for each possible
+choice from among the input scans are given ({\tt OPPRTLEV=3}) or just
+a summary for the scan can be given ({\tt OPPRTLEV=2} or higher).  At
+the end, for {\tt OPPRTLEV=1} or higher, the properties (like
+available observing time) and fate of each input scan are given in a
+table.  Also a number of summary parameters are given for any {\tt
+OPPRTLEV}.  All this information, while bulky, should help a user
+figure out how to drive the program --- how to set set the related
+input parameters.  But beware that, for {\tt OPPRTLEV=3}, the {\sl
+sched.runlog} can be very large.
+
+While constructing a schedule using this mode, it is very useful to
+use the plotting capability of \sched.  The UPTIME and UV Plot capabilities
+are especially useful in understanding what you have.  Also note that
+when \schedb runs, it creates an output file with the extension {\tt .sch}
+that could be used as the scan input section for another run of \sched.
+So if the optimization mode comes close, but you wish to make a small change,
+it is possible.  This is an old but little used capability and has not
+actually received any maintenance for a long time as of late 2005.
+
+
+In its early form, the {\tt HAS} mode is meant to be useful particularly for
+scheduling surveys.  But at the moment, there is no way to associate scans
+so it would be difficult to use it for phase referencing.  Also it would
+be awkward to use to schedule blocks of scans around the sky for atmospheric
+solutions (for aips task DELZN).  These limitations should be removed
+in future versions.
 
 \end{description}
 
@@ -7637,17 +8008,23 @@ a warning if this condition is violated.
 Starting the recording early allows time for the correlator to
 synchronize the inputs from different stations before the start of
 good data.  Anytime the recording stops, the correlator takes time to
-resync.  On the VLBA correlator, that time is about 20 seconds times
-the speedup factor for tape and 5 seconds times the speedup factor for
-disk (Mark5).  In addition, any time that the formatter needs to be
-reconfigured (number of channels, BBC assignments, sidebands, pulse
-cal detector setups etc), the recording stops for about 20 seconds
-with VLBA systems.  That time is lost and the resync time so triggered
-is lost.  Formatter reconfigures happen at the start of the scan that
-needs them.  But if the recording is stopped with something like a gap
-command or dwell time scheduling, the formatter will be reconfigured
-during the during the interval between scans.
+resync.  On the VLBA correlator, that time is empirically about 8, 13,
+and 25 seconds for speedup factors 1, 2 and 4 respectively.  Mark5
+takes about 10 seconds longer (it shouldn't and hopefully this will be
+fixed some day). Therefore it is best to keep recording through short
+gaps.  On other correlators playing Mark5 media, sync is rapid (order 1
+second) so these concerns are not so great.
 
+One exception when it may be a good idea to stop recording is when
+there will be a formatter reconfigure.  These happen when the internal
+switching in the formatter, or the pcal detection setup, change
+(number of channels, BBC assignments, sidebands, pulse cal detector
+frequencies etc.).  The media does not receive good data while this is
+happening and the correlator can have problems recovering sync afterward.
+At least a normal resync must happen and occasionally (maybe 10-20\%
+of the time) the correlator will get in a bad state and take a long time,
+maybe over a minute, to resync.  If the media are stopped during a
+reconfigure, a resync will be done normally.
 
 \rcwbox
 {A time.}
@@ -7889,6 +8266,26 @@ only used for single dish testing, specifically holography.
 {'NONE' --- means don't open such a file.}
 {Only one used per experiment.}
 {{\tt SATFILE = 'orbits.2000jan15.dat'}}
+
+
+\subsubsection{\label{MP:SCANTAG}\tt SCANTAG}
+
+{\tt SCANTAG} allows the user to specify a name for the scan.  That
+name appears in the summary file under the scan number.  Note that
+it resets after each scan.  This is just to help users with bookkeeping
+when constructing complicated schedules with loops and other constructs
+that complicate knowing which output scan is which scan in the
+summary.  The name is limited to 4 characters to fit in the desired
+column in the summary file.
+
+\rcwbox
+{Any character string of up to 4 characters.}
+{Any character string.}
+{Blank}
+{Reset after each scan, although all instances of that scan in a
+loop will share the name.}
+{{\tt SCANTAG='Cal2'}}
+
 
 \subsubsection{\label{MP:SCHEDULE}\tt SCHedule}
 
@@ -9451,6 +9848,16 @@ default, the {\tt MEDIA} parameter is provided here to tell
 specified by \htmlref{{\tt RECORDER}} {SEC:STACAT} or \htmlref{{\tt
 DISK}}{SEC:STACAT} in the \htmlref{station catalog}{SEC:STACAT}.
 
+If you are not using the {\tt MEDIA} parameter, then you almost
+certainly should not be using a tape initialization section {\tt
+TAPEINI} or tape initialization file.  All the parameters have good
+defaults for nearly all cases so explicitly setting them is more
+likely to get you into trouble than to help.  The capability provided
+by the file is only retained for special test observations.  Even the
+{\tt MEDIA} parameter is not normally needed.  If your \schedb input
+file contains a {\tt TAPEINI} section, you are probably an old time
+VLBI observer using ancient templates.
+
 When using a tape system, the tape initialization information tells
 \schedb details about the tapes to be used at each site.  In nearly
 all cases, the defaults are appropriate and very few users need to
@@ -9595,6 +10002,12 @@ added.
 
 If an option is specified that is not consistent with what is available
 at the station, an error will occur.
+
+Note that most, if not all, stations now have ways to convert tape to
+disk files so it is essentially never necessary to specify {\tt MEDIA},
+and, in fact, is essentially never necessary to have a tape initialization
+section.
+
 
 \rcwbox
 {An array of character strings of up to 8 characters each, one per
@@ -10790,7 +11203,7 @@ where:
 \item[] F1 = VLAFEAB(LS)*1000 for VLA A and B channels.
 \item[] F1 = VLAFECD(LS)*1000 for VLA C and D channels.
 \item[] F6 = VLASYNA(LS) for VLA A and C channels - not rounded.
-\item[] F6 = VLASYNA(LS) for VLA B and D channels - not rounded.
+\item[] F6 = VLASYNB(LS) for VLA B and D channels - not rounded.
 \item[] FA = FLUKEA(LS)  AC Fluke setting.
 \item[] 2*FB = FLUKEB(LS)  BD Fluke setting (usually FA + 100).
 \item[] F1ab = VLAFEAB(LS)*1000, F1cd = VLAFECD(LS)*1000
@@ -10941,7 +11354,8 @@ formatter.  This includes not readjusting the pcal detection.
 Format NONE will mainly be used by VLBA staff for testing and in
 high frequency projects that do reference pointing.  If the reference
 pointing scan uses this format, no formatter reconfigures are done
-which can save nearly 20 seconds at scan changes.
+which can prevent the significant data loss that can happen at
+reconfigures.
 
 Note that it is not necessary to specify {\tt FORMAT}.  {\tt FORMAT}
 will be set equal to {\tt DAR} in the \htmlref{station catalog.}
@@ -11382,7 +11796,7 @@ including those requested by {\tt FREQ} or {\tt DOPPLER} in the {\sc
 SCHED} keyin file.
 
 The default will be to set up all available channels to detect, using
-sign bits only, first tone near the lower edge of the band in each
+sign bits only, first the tone near the lower edge of the band in each
 channel, then a second tone near the high edge of the band in each
 channel, and then state counts (sign and magnitude for 2 bit data) for
 each channel, then a third tone which is (usually) 1 MHz away from the
@@ -11395,9 +11809,16 @@ PCALXB} parameters when {\tt PCAL} is off, so there is usually no need
 to turn off this default. The one exception would be if the
 frequencies are being switched rapidly in such a way that the {\tt
 PCALFR} frequencies are changing. Each time they are changed, the
-formatter is reconfigured, which blocks data output to the tapes for
-up to about 15 seconds. To prevent this, specify the pulse cal
-detector parameters and they will be kept constant.
+formatter is reconfigured, which blocks data to the recording for
+about 8 seconds and throws the VLBA correlator out of sync.  Total
+data loss is at least 16 seconds and can be more if there is a speedup
+factor greater than one or if the correlator has a hard time
+resyncing, which happens maybe 10-20% of the time.  To prevent this,
+either specify the pulse cal detector parameters and they will be kept
+constant or make sure the default pulse cal setup doesn't change (keep
+constant the number of baseband channels, the channel bandwidth, and
+the pulse cal tone frequencies in the basebands (don't change the kHz
+part of the frequency).
 
 Detection of Phase cal is not currently (Oct 2001) implemented on the
 PCFS, although the VEX file has a way of specifying the desired
@@ -11524,6 +11945,12 @@ usually, but not always, twice the baseband bandwidth specified with
 
 If not specified, twice the maximum bandwidth will be used, if
 \htmlref{{\tt BBFILTER}}{SP:BBFILTER} was specified.
+
+Note that the {\tt SAMPRATE} should not be less than 2 Mbps for the
+VLBA (may change with Mark5B).  That is the minimum track bit rate
+and the fan-in capability was never activated so lower sample rates
+cannot be recorded.
+
 
 \rcwbox
 {Sample rate in million samples per second.}
@@ -12431,7 +12858,91 @@ in \sched.
 
 \section{\label{SEC:CURRENT}Current Release}
 
-\subsection{\label{SSEC:VER_6.02}Version 6.02}
+
+\subsection{\label{SSEC:VER_6.04}Version 6.04}
+
+This release includes everything that was in the 6.03 mini-releases
+that occurred since 6.02.  Those mini-releases were not sent to the
+broader community and were intended mainly to make available the
+new {\tt OPTMODE=HAS} for use by the VIPS survey, which started before
+we could do a proper SCHED release.
+
+\begin{itemize}
+
+\item If VLA phasing mode scans were {\tt NORECORD}, SCHED warned
+about unphased VX mode scans.  Change to recognize non-recording
+phasing scans.  8 Aug 2005.
+
+\item Add station motion adjustments to summary file.  5 Aug 2005 RCW.
+
+\item Fix bug that might cause reading beyond the end of a character
+string if {\tt CORREL} is specified as blank.  10 Aug RCW based on
+information from Cormac.
+
+\item Update Sla/dat.f for the leap second announced for Jan. 1, 2006.
+11 Aug. 2005.  RCW.
+
+\item Send first message warning of possible unspecified {\tt OBSTYPE}
+to the terminal when \schedb runs.  14 Sept. 2005.
+
+\item Comment a redundant SAVE command in state.f in the Jpl ephemeris
+routines.  This gave gfortran a problem.  16 Sept. 2005
+
+\item Change OPMINANT and OPMINEL to be scan dependent.  25 Oct. 2005
+
+\item Fix the sync time discussion in the PRESTART section.  1 Nov. 2005 RCW
+
+\item Fix dealing with sources when loading a plot parms file when the
+source list has changed since the parms file was saved.  1 Nov. 2005.
+
+\item Add hour angle based optimization mode {\tt OPTMODE=HAS}.
+Initial application is the VLBA Imaging and Polarization Survey
+(VIPS).  03 Nov 2005 RCW
+
+\item Add the scan comment to the scan information dumped when certain
+errors occur.  14 Nov 2005 RCW
+
+\item Add note to users of tapeini sections that they normally are not
+needed and such use betrays the use of ancient templates.  15 Nov 2005 RCW
+
+\item Improve the choice of the maximum separation for the list of
+source separations.  14 Nov 2005  RCW.
+
+\item Add scan number to summary listings.  Add optional scan name based
+on {\tt SCANTAG} input variable.  18 Nov 2005  RCW.
+
+\item Protect against having a Vex station with no observations after taking
+out scans where the source is not up.  This befuddles the Vex writer.  Warn
+the user if this happens for any other station.  18 Nov 2005 RCW.
+
+\item Only require shipping address for correlator output if tape is
+requested.  08 Jan. 2006  RCW.
+
+\item Warn users when it looks like they might have forgotten to reset
+{\tt FREQ} or {\tt BW} when changing setup files.  24 Jan 2006 RCW.
+
+\item Fix bug in overlapped basebands warning when using Doppler calculations.
+25 Jan. 2006  RCW.
+
+\item Added {\tt CRDLINE} to aid development of VLBA on-line software.
+26 Jan. 2006  RCW.
+
+\item Improve documentation of reconfigure issues.  Jan 27, 2006. RCW.
+
+\item Warn when trying to use 1024 channels, fanout=1, and 16 times
+oversample on the VLBA correlator.  It won't work.  Feb. 2006.  RCW.
+
+\item Fix selection of the frequency to use when plotting beams.  Fix
+dealing with the save file stations when the station list changes.  Other
+minor plot fixes.  Franco Tinarelli and RCW  Feb. 2006
+
+\item Add Sec(z) to the XY plot options.  Franco Tinarelli  Feb. 10, 2006.
+
+
+
+\end{itemize}
+
+\subsection{\label{SSEC:VER_6.02}Version 6.02 (Released 29 July 2005)}
 
 \begin{itemize}
 
@@ -12481,7 +12992,7 @@ the number of Gbytes on the disk drive, if that has been calculated.
 
 \item Remove joint tape and disk options even for VLBA. 27 June 2005 RCW
 
-\item Changed TPMODE to TAPEMODE in RECONFIG and SAMESET.  This is a bug 
+\item Changed TPMODE to TAPEMODE in RECONFIG and SAMESET.  This is a bug
 fix that might improve predictions of time lost to formatter reconfigures.
 27 June 2005.  RCW.
 
@@ -14576,13 +15087,18 @@ This is a list of desired program changes, fixes or enhancements.
 
 \begin{itemize}
 
+\item Put the grab time stuff in for Walter.  See \$SCHED/vlbagrab.txt
+
+\item Need new OBSTYPE or get rid of OBSTYPE.  Old note  Jan 26, 2006.
+
+\item Add Sec(Z) to the plot options.  From George Moellenbrock.  Nov. 14,
+      2005.
+
 \item Supersimple setup parameters (band and bit rate).  From Jodrell
       discussions in Nov 2004 Dec 29, 2004
 
 \item VLBA takes about 1s to respond to commands.  Use prestart=1
       for Mark5?  Noted by Walter B.  Dec 19, 2004.
-
-\item Account VLBA formatter reconfigure time.  Sept 01, 2004  RCW
 
 \item Change autoallocate default?
 

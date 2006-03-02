@@ -52,7 +52,7 @@ C
          END IF
       END DO
       IF( .NOT. OKVLB ) THEN
-         CALL WLOG( 1, 'CHKVLA:  --------   WARNING   ----------' )
+         CALL WLOG( 1, 'VLASCHK:  --------   WARNING   ----------' )
          CALL WLOG( 1, '   For successful VLBI, the VLAMODE must ' //
      1       'be VS, VX, VA, VL, or VR' )
          CALL WLOG( 1, '   for all recording scans.' )
@@ -66,6 +66,21 @@ C
          WRTHEAD = .TRUE.
          DO ISCN = SCAN1, SCANL
             PHSWARN = .FALSE.
+C        
+C           Save the last phasing mode IF channels and last phasing 
+C           mode.  Allow the phasing scan to be a non-recording scan.
+C        
+            IF( VLBITP .AND. STASCN(ISCN,VSTA) ) THEN
+               IF( VLAMODE(ISCN) .EQ. 'VA' .OR.
+     1             VLAMODE(ISCN) .EQ. 'VB' .OR.
+     2             VLAMODE(ISCN) .EQ. 'VR' .OR.
+     3             VLAMODE(ISCN) .EQ. 'VL' ) THEN
+                  LMODE = VLAMODE(ISCN)
+               END IF
+            END IF
+C
+C           Now check the recording scans.
+C
             IF( VLBITP .AND. .NOT. NOREC(ISCN) .AND. 
      1          STASCN(ISCN,VSTA) ) THEN
                KS = NSETUP(ISCN,VSTA)
@@ -74,16 +89,6 @@ C              Look for a VX scan before any phasing scans.
 C        
                IF( VLAMODE(ISCN) .EQ. 'VX' .AND. LMODE .EQ. ' ' ) THEN
                   PHSWARN = .TRUE.
-               END IF
-C        
-C              Save the last phasing mode IF channels and last phasing 
-C              mode.
-C        
-               IF( VLAMODE(ISCN) .EQ. 'VA' .OR.
-     1             VLAMODE(ISCN) .EQ. 'VB' .OR.
-     2             VLAMODE(ISCN) .EQ. 'VR' .OR.
-     3             VLAMODE(ISCN) .EQ. 'VL' ) THEN
-                  LMODE = VLAMODE(ISCN)
                END IF
 C        
 C              Check for correspondence between the IF's used and the
@@ -126,7 +131,7 @@ C
                   IF( WRTHEAD ) THEN
                      CALL WLOG( 1, ' ' )
                      CALL WLOG( 1, 
-     1                  'CHKVLA:  **** WARNING ****' )
+     1                  'VLASCHK:  **** WARNING ****' )
                      CALL WLOG( 1, 
      1                  '    One or more scans at VLA27 uses an ' //
      2                  'unphased IF.' )
@@ -183,7 +188,7 @@ C
      4          VLAPEAK(ISCN) .NE. 'D' ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, A, I5 )' ) 
-     1             'CHKVLA: Invalid VLAPEAK: ', VLAPEAK(ISCN),
+     1             'VLASCHK: Invalid VLAPEAK: ', VLAPEAK(ISCN),
      2             ' in scan ', ISCN 
                CALL WLOG( 1, MSGTXT )
                CALL ERRLOG( 
@@ -194,12 +199,12 @@ C
             IF( (VLAPEAK(ISCN) .EQ. 'R' .OR. VLAPEAK(ISCN) .EQ. 'S' )
      1          .AND. VLAMODE(ISCN) .NE. 'IR' ) THEN
                CALL ERRLOG( 
-     1             'CHKVLA: For VLAPEAK=R or S, VLAMODE must be IR' )
+     1             'VLASCHK: For VLAPEAK=R or S, VLAMODE must be IR' )
             END IF
 C
             IF( VLAMODE(ISCN) .NE. 'IR' .AND.
      1          DOPEAK(ISCN) .GT. 0 ) THEN
-               CALL WLOG( 1, 'CHKVLA ******  WARNING  ******' )
+               CALL WLOG( 1, 'VLASCHK ******  WARNING  ******' )
                CALL WLOG( 1, '      PEAK specified, but VLA not ' //
      1            'in pointing mode (VLAMODE=IR).  Intentional?' )
                CALL WLOG( 1, '      PEAK no longer ' //

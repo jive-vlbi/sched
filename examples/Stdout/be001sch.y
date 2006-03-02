@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.02  May 2005                              
+Processed by SCHED version:   6.04  February 2006                         
 
 PI:       Craig Walker                                                    
 
@@ -32,6 +32,7 @@ Notes:
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -89,6 +90,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -145,6 +147,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -201,6 +204,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -257,6 +261,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -313,6 +318,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -369,6 +375,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -425,6 +432,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -481,6 +489,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -537,6 +546,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -593,6 +603,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -649,6 +660,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -705,6 +717,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -761,6 +774,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -817,6 +831,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -873,6 +888,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -926,6 +942,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -982,6 +999,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1035,6 +1053,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1091,6 +1110,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1147,6 +1167,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1203,6 +1224,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1259,6 +1281,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1312,6 +1335,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1368,6 +1392,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1421,6 +1446,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -1461,7 +1487,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: v6cm.set
-   Matches group y_vc in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vc in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   11         Station: VLA1              Total bit rate:   64
@@ -1512,7 +1538,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: v4cm.set
-   Matches group y_vx in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vx in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   22         Station: VLA1              Total bit rate:   64

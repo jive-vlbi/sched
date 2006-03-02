@@ -19,11 +19,14 @@ C     remove leading blanks for easier testing later.
 C
       CORREL     = KCHAR( 'CORREL', 62, .FALSE., VALUE, KC, KI )
       CALL UPCASE( CORREL )
+      MCH = LEN1( CORREL )
       ICH = 1
    30 CONTINUE
       IF( CORREL(ICH:ICH) .EQ. ' ' ) THEN
          ICH = ICH + 1
-         GO TO 30
+         IF( ICH .LT. MCH ) THEN
+           GO TO 30
+         END IF
       END IF
       MCH = LEN1( CORREL )
       CORREL = CORREL(ICH:MCH)
@@ -154,7 +157,12 @@ C
      1       //' media: '// CORTAPE )
          END IF
 C
-         IF( LEN1( CORSHIP(1) ) .EQ. 0 ) THEN
+C        Check that a shipping address was provided for the media that 
+C        need to be shipped.
+C
+         IF( LEN1( CORSHIP(1) ) .EQ. 0 .AND. ( 
+     1             CORTAPE(1:3) .EQ. 'DAT' .OR.
+     2             CORTAPE(1:7) .EQ. 'EXABYTE' ) ) THEN
             MISCOR = .TRUE.
             CALL WLOG( 1, '        Missing distribution tape shipping'//
      1            ' address.' )

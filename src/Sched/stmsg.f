@@ -12,7 +12,8 @@ C
       LOGICAL    EXISTS
       INTEGER    IERR, VLBOPE, LEN1
 C ---------------------------------------------------------------------
-C     Open the run log.
+C     Open the run log.  Note cannot use ERRLOG if there is a problem
+C     because the log file won't be open.
 C
       READLOG = .FALSE.
       LOGFILE = 'sched.runlog'
@@ -23,7 +24,11 @@ C
          OPSTAT = 'NEW'
       END IF
       IERR = VLBOPE( ILOG, LOGFILE, 'TEXT', OPSTAT, OPTEXT )
-      IF( IERR .NE. 1 ) CALL ERRLOG( OPTEXT )
+      IF( IERR .NE. 1 ) THEN 
+         WRITE(*,*) 'STMSG: CANNOT OPEN LOG FILE ' // LOGFILE
+         WRITE(*,*) '       Error text: ' // OPTEXT 
+         CALL ERROR( ' Check why log file cannot be opened' )
+      END IF
 C
       CALL WLOG( 1, ' ' )
       MSGTXT = ' '
@@ -91,13 +96,21 @@ C     release.
 C
       IF( MAXSTA .GT. 50 ) THEN
          CALL WLOG( 1, ' -------------------------------------' )
-         CALL WLOG( 1, 'STMSG: *****  MAXSTA greater than 50.' )
+         WRITE( MSGTXT, '( A, I5, A )' ) 
+     1         'STMSG: *****  MAXSTA greater than 50. (', MAXSTA, 
+     2         ')' 
+         CALL WLOG( 1, MSGTXT )
+         MSGTXT = ' '
          CALL WLOG( 1, '       Reduce MAXSTA before a release' )
          CALL WLOG( 1, ' -------------------------------------' )
       END IF
       IF( MAXSCN .LT. 3000 ) THEN
          CALL WLOG( 1, ' -------------------------------------' )
-         CALL WLOG( 1, 'STMSG: *****  MAXSCN less than 3000.' )
+         WRITE( MSGTXT, '( A, I5, A )' ) 
+     1         'STMSG: *****  MAXSCN less than 3000.(', MAXSCN, 
+     2         ')' 
+         CALL WLOG( 1, MSGTXT )
+         MSGTXT = ' '
          CALL WLOG( 1, '       Increase MAXSCN before a release' )
          CALL WLOG( 1, ' -------------------------------------' )
       END IF

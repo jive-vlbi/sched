@@ -1,6 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
@@ -14,7 +16,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,26 +29,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html655"
+<A NAME="tex2html658"
   HREF="node33.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html651"
+<A NAME="tex2html654"
   HREF="node28.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html645"
+<A NAME="tex2html648"
   HREF="node31.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html653"
+<A NAME="tex2html656"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html656"
+<B> Next:</B> <A NAME="tex2html659"
   HREF="node33.html">NON-VLBA Telescopes with VLBA</A>
-<B> Up:</B> <A NAME="tex2html652"
+<B> Up:</B> <A NAME="tex2html655"
   HREF="node28.html">Recording Systems.</A>
-<B> Previous:</B> <A NAME="tex2html646"
+<B> Previous:</B> <A NAME="tex2html649"
   HREF="node31.html">VLBA</A>
- &nbsp <B>  <A NAME="tex2html654"
+ &nbsp <B>  <A NAME="tex2html657"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
@@ -73,21 +75,24 @@ be correctly interpreted by FS9.3.11 (and higher).
 <P>
 In order to cause SCHED&nbsp; to write VEX files, the user must either
 include in the schedule one telescope for which <TT>CONTROL = VEX</TT> is
-specified in the <A HREF="node197.html#SEC:STACAT">station catalog</A> or must specify
-the input parameter <A HREF="node81.html#MP:DOVEX"><TT>DOVEX</TT></A>.
-Two example schedules that produce VEX files are included with the
+specified in the <A HREF="node210.html#SEC:STACAT">station catalog</A> or must specify
+the input parameter <A HREF="node82.html#MP:DOVEX"><TT>DOVEX</TT></A>.
+Some example schedules that produce VEX files are included with the
 SCHED&nbsp; distribution and are located in the <I>$SCHED/examples</I>
-subdirectory.  They are called <I>egiv.key</I> and <I>egvsop.key</I>.
+subdirectory.  They are called <I>egiv.key</I>, <I>egvsop.key</I>, and
+<I>evn_*.key</I>.
 
 <P>
 Mark&nbsp;IV (MkIV) telescopes are characterized by <TT>DAR = MKIV</TT> and
-<TT>RECORDER = MKIV </TT> in the <A HREF="node197.html#SEC:STACAT">station catalog</A>
+<TT>RECORDER = MKIV </TT> in the <A HREF="node210.html#SEC:STACAT">station catalog</A>
 and can only be requested to record in any of the MkIV FORMATs. Most
 MkIV telescopes only support specific BBC's to be connected to certain
 IF distribution boxes. Currently SCHED&nbsp; only supports ``astronomical
 patching''. This requires odd BBC's to be connected to either <TT>IFCHAN = 1N</TT> (normal input, usually LCP) or <TT>IFCHAN = 1A</TT>
-(alternate, usually RCP). Even BBC's have to be connected to <TT>IFCHAN = 2N</TT> (usually RCP) or <TT>IFCHAN = 2A</TT> for LCP. This can be
-controlled by explicitly setting <TT>BBC</TT>.
+(alternate, usually RCP). Even BBC's have to be connected to <TT>IFCHAN = 2N</TT> (usually RCP) or <TT>IFCHAN = 2A</TT> for LCP.  Also, you
+must use at least one of IFCHAN = 1N or IFCHAN = 2N (i.e. a schedule
+that uses both IFCHAN = 1A and IFCHAN = 2A is not permitted).  This
+can be controlled by explicitly setting <TT>BBC</TT>.
 
 <P>
 In December 2000 the capability to record 512 Mb/s was introduced.
@@ -106,24 +111,26 @@ based Mark5 systems).  Some as of late 2004 are:
 <UL>
 <LI>Continuous tape motion has been used widely, however the ability
   to acquire the information needed to flag data which is recorded during
-  slewing is not universal. The SCHED&nbsp; output .flg file can be used
-  by the AIPS task <TT>UVFLG</TT>.  In addition users need to insert gaps
-  during continuous tape motion whenever they want calibration data.
-  Finally, at least 40 seconds are required to turn the tape around.
+  slewing is not universal (though is standard for EVN stations).
+  The SCHED&nbsp; output <I>.flg</I> file can be used by the AIPS task
+  <TT>UVFLG</TT> if telescope flagging data are not available.  In addition
+  users need to insert gaps during continuous tape motion whenever they
+  want calibration data.  Finally, at least 40 seconds are required
+  to turn a tape around (which is not an issue with disk recordings).
 
 <P>
 </LI>
 <LI>Phase Cal detection at the telescopes is not implemented at all
   telescopes. This
   requires soft- and hardware upgrades at the telescopes,
-  the field system, and probably SCHED.
+  the field system, and prossibly SCHED.
 
 <P>
 </LI>
 <LI>For MkIV (VLBA4) telescopes there is flexibility for controling
   when Tsys measurements will be made. Tsys measurements will typically
-  be made at the beginning of a scan if there is a tape stop. When
-  scheduling long scans or continuous tape motions, one may need to
+  be made at the beginning of a scan if there is a gap in the recording.
+  When scheduling long scans or continuous tape motions, one may need to
   insert gaps in order to obtain Tsys data.
 
 <P>
@@ -135,7 +142,7 @@ SCHED has the ability to discourage recording modes that are not
 supported by one or the other of the VLBA or Mark&nbsp;IV (VLBA4) systems.
 Currently (Oct. 2001) the supported modes on both systems are the same
 so this facility has no effect, except for some Mark&nbsp;IV (and VLBA4)
-features that are experimental. An override (<A HREF="node243.html#SP:MODETEST"><TT>MODETEST</TT></A>) is available but should be used with caution.
+features that are experimental. An override (<A HREF="node256.html#SP:MODETEST"><TT>MODETEST</TT></A>) is available but should be used with caution.
 
 <P>
 In addition to requiring use of tested modes, SCHED&nbsp; will not
@@ -158,31 +165,31 @@ VLBA scheduling.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html655"
+<A NAME="tex2html658"
   HREF="node33.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html651"
+<A NAME="tex2html654"
   HREF="node28.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html645"
+<A NAME="tex2html648"
   HREF="node31.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html653"
+<A NAME="tex2html656"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html656"
+<B> Next:</B> <A NAME="tex2html659"
   HREF="node33.html">NON-VLBA Telescopes with VLBA</A>
-<B> Up:</B> <A NAME="tex2html652"
+<B> Up:</B> <A NAME="tex2html655"
   HREF="node28.html">Recording Systems.</A>
-<B> Previous:</B> <A NAME="tex2html646"
+<B> Previous:</B> <A NAME="tex2html649"
   HREF="node31.html">VLBA</A>
- &nbsp <B>  <A NAME="tex2html654"
+ &nbsp <B>  <A NAME="tex2html657"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

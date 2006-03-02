@@ -1,87 +1,140 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Running SCHED&nbsp; on an MS-DOS PC</TITLE>
-<META NAME="description" CONTENT="Running SCHED&nbsp; on an MS-DOS PC">
+<TITLE>TRACK1, TRACK2, ... , TRACK7, and TRACK8</TITLE>
+<META NAME="description" CONTENT="TRACK1, TRACK2, ... , TRACK7, and TRACK8">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
+<LINK REL="next" HREF="node279.html">
 <LINK REL="previous" HREF="node277.html">
-<LINK REL="up" HREF="node275.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node279.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4035"
+<A NAME="tex2html4060"
   HREF="node279.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4031"
-  HREF="node275.html">
+<A NAME="tex2html4056"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4027"
+<A NAME="tex2html4050"
   HREF="node277.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4033"
+<A NAME="tex2html4058"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4036"
-  HREF="node279.html">Distribution of Schedule Files</A>
-<B> Up:</B> <A NAME="tex2html4032"
-  HREF="node275.html">Running SCHED</A>
-<B> Previous:</B> <A NAME="tex2html4028"
-  HREF="node277.html">Running SCHED&nbsp; on a</A>
- &nbsp <B>  <A NAME="tex2html4034"
+<B> Next:</B> <A NAME="tex2html4061"
+  HREF="node279.html">VLABAND</A>
+<B> Up:</B> <A NAME="tex2html4057"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html4051"
+  HREF="node277.html">TPSPEEDL</A>
+ &nbsp <B>  <A NAME="tex2html4059"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00523000000000000000"></A><A NAME="SSEC:RUNDOS"></A>
+<H3><A NAME="SECTION004644800000000000000"></A><A NAME="SP:TRACK1"></A>
 <BR>
-Running SCHED&nbsp; on an MS-DOS PC
-</H2>
+<TT>TRACK1, TRACK2, ... , TRACK7,</TT> and <TT>TRACK8</TT>
+</H3>
 
 <P>
-To run SCHED&nbsp; on a PC (MS DOS), prepare the input file without
-system level commands. Then type, for example,
-<PRE>
-\CODE\SCHEDB &lt; INPUT.KEY
-</PRE>
-where the SCHED.EXE executable file is assumed to be in the CODE
-directory (substitute whatever is correct for your system) and the
-SCHED&nbsp; input commands are in INPUT.KEY in the default
-directory. The ``<IMG
- WIDTH="20" HEIGHT="33" ALIGN="MIDDLE" BORDER="0"
- SRC="img1.png"
- ALT="$&lt;$">'' pipes the information in INPUT.KEY to the
-program (note the similarity to UNIX). The files output by SCHED&nbsp; 
-will appear in the default directory.
+The <TT>TRACKn</TT> parameters are arrays of track specifications for
+use during the <TT>n</TT>th pass at a head position. One track is given
+for each baseband channel. For Mark&nbsp;III, there is a one-to-one
+correspondence between baseband channels and tracks so this makes
+sense.  For Mark&nbsp;III observations, the VLBA track for a channel is
+just the Mark&nbsp;III track plus 3.  For many VLBA modes, several tracks
+are used for each channel. In these cases, the first track used for
+the baseband channel is specified and the on-line system determines
+the rest. A fanned out channel uses adjacent tracks within the odd or
+even groups and the lowest VLBA track used for data is 2. For example,
+a 1:4 fan out channel uses tracks 2, 4, 6, and 8 for the low order
+bit. If 2-bit samples are used, tracks 10, 12, 14, and 16 would be
+used for those bits.  In such a case, the only track mentioned in a
+<TT>TRACKn</TT> parameter is 2.  If a fan-in mode is used, more than one
+channel should be given the same track specification.  Fan-in modes
+are not yet tested or in use.
 
 <P>
-It has been a long time since SCHED&nbsp; was ported to DOS.  It has
-never been ported to Windows.  It seriously outgrew DOS, but should
-work in Windows if someone were to take the effort to install it.
+For modes VLBA1:1, VLBA1:2, VLBA1:4, Mark&nbsp;III mode B with ascending
+frequency order (alternating sidebands), and Mark&nbsp;III mode E, <TT>TRACK1</TT> can be left out. All of the <TT>TRACKn</TT> commands will default
+to reasonable values. This is the recommended action for most users
+since track assignment is an easy area in which to make mistakes. SCHED will complain and stop if it does not know how to set the
+tracks for the requested mode. For the Mark&nbsp;III modes, extra baseband
+channels (2 for Mode B and 1 for Mode E) can be specified and will be
+put on the edge tracks that are not normally used for Mark&nbsp;III. For
+Mode B, they should follow the same alternating sideband pattern as
+the rest of the channels.
 
 <P>
-<BR><HR>
+
+<UL>
+<LI><B>Argument:</B> One integer track specifications per channel.
+</LI>
+<LI><B>Options:</B>  Any integer between <TT>2</TT> and <TT>33</TT>.
+</LI>
+<LI><B>Default:</B>  <TT>0</TT> which will trigger automatic assignments for many modes.
+</LI>
+<LI><B>Usage:</B>    Defaults to previous station.
+</LI>
+<LI><B>Example:</B>  <TT>TRACK1=4,18,6,20,8,22,10,24,12,26,14,28,16,30</TT> 
+<BR> <TT>TRACK2=5,19,7,21,9,23,11,25,13,27,15,29,17,31</TT> 
+<BR>
+This example is Mark&nbsp;III Mode B.
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html4060"
+  HREF="node279.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html4056"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html4050"
+  HREF="node277.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html4058"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html4061"
+  HREF="node279.html">VLABAND</A>
+<B> Up:</B> <A NAME="tex2html4057"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html4051"
+  HREF="node277.html">TPSPEEDL</A>
+ &nbsp <B>  <A NAME="tex2html4059"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

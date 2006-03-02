@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>ROTATION</TITLE>
-<META NAME="description" CONTENT="ROTATION">
+<TITLE>PRECDATE</TITLE>
+<META NAME="description" CONTENT="PRECDATE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,67 +29,146 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2477"
+<A NAME="tex2html2506"
   HREF="node160.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2473"
+<A NAME="tex2html2502"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2467"
+<A NAME="tex2html2496"
   HREF="node158.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2475"
+<A NAME="tex2html2504"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2478"
-  HREF="node160.html">ROTPAT</A>
-<B> Up:</B> <A NAME="tex2html2474"
+<B> Next:</B> <A NAME="tex2html2507"
+  HREF="node160.html">PRESCAN</A>
+<B> Up:</B> <A NAME="tex2html2503"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2468"
-  HREF="node158.html">REWIND</A>
- &nbsp <B>  <A NAME="tex2html2476"
+<B> Previous:</B> <A NAME="tex2html2497"
+  HREF="node158.html">PN3DB and NOPN3DB</A>
+ &nbsp <B>  <A NAME="tex2html2505"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041210700000000000000"></A><A NAME="MP:ROTATION"></A>
+<H3><A NAME="SECTION0041210700000000000000"></A><A NAME="MP:PRECDATE"></A>
 <BR>
-<TT>ROTATION</TT>
+<TT>PRECDATE</TT>
 </H3>
 
 <P>
-<TT>ROTATION</TT> is used in VLBA test observations to specify an
-increment to the subreflector rotation value used for the subreflector
-position.  This is added to the nominal position known by the on-line
-system for the particular receiver.
+The user provides SCHED&nbsp; with source coordinates in one of the J2000,
+B1950, or DATE coordinate systems.  SCHED&nbsp; then determines the source
+coordinates in the other systems.  The J2000 and B1950 systems are not
+stationary with respect to each other.  To do a proper conversion, it
+is necessary to specify for which date to do the conversion.  This
+date is specified using <TT>PRECDATE</TT>.  When SCHED&nbsp; converts from,
+for example, B1950 to J2000 coordinates, it uses the B1950 equations
+to precess to <TT>PRECDATE</TT>, and then the J2000 equations to precess
+from there to equinox 2000.  If the wrong date, by many years, is used,
+the errors in the conversions will be a few tenths of an arc second.
+This is enough to harm phasing of the VLA at high frequencies and
+enough to be rather undesirable for positions used on the correlator.
 
 <P>
-Note that changing the rotation also changes the pointing offset
-in a frequency dependent manner.
+The correct <TT>PRECDATE</TT> to use depends on various factors.  If the
+target source coordinates are being provided in the J2000 system, as
+they really should be, then it doesn't matter much.  The correlator
+and the VLA will be given the J2000 positions so no conversion is
+involved.  Some antennas will be given B1950 coordinates for pointing,
+but for single dishes, the few tenths of an arcsecond differences that
+can be caused by different <TT>PRECDATEs</TT> are not important.
+
+<P>
+The more important case is when the user has a B1950 coordinate for
+the target source and wants SCHED&nbsp; to take care of the conversion to
+J2000.  Then the correct <TT>PRECDATE</TT> should be used.  The correct
+date depends on how the B1950 coordinates were measured.  If they
+were determined based on absolute measurements made on some date,
+that is the date that should be used.  However, most target source
+positions will be based on measurements of offsets from some
+calibrator.  Then the date that should be used depends on the nature
+of the calibrator positions.  For example, the B1950 coordinates
+of the VLA calibrators are either based on absolute measurements
+made in 1979.9, or are converted from more modern J2000 coordinates
+using an assumed ``observe'' date of 1979.9.  Therefore, any B1950
+coordinates determined on the VLA using the B1950 coordinates of
+sources in the VLA calibrator list should be precessed with a
+<TT>PRECDATE</TT> of 1979.9, which is now the default in SCHED.  Note
+that the 1979.9 date is hard-wired into the VLA scheduling program
+OBSERVE and is not visible to the user.
+
+<P>
+Other systems may treat B1950 coordinates in a manner similer to the
+VLA, but with a different reference date.  An obvious choice is
+1950.0, which is used by MERLIN and is the default in the STARLINK
+COCO precession routine.  On MERLIN, The calibrator positions
+presumably are all based on measured positions originally determined
+in J2000 (by VLBI etc), then converted to the B1950 coordinates that
+are required by the on-line system.  Those conversions have all been
+done assuming an ``observe'' date of 1950.0.  Thus, if you have B1950
+source positions determined by offsets from a calibrator using MERLIN,
+<TT>PRECDATE=1950.0</TT> should be used.
+
+<P>
+If anyone knows what other systems of general interest do, let
+Craig Walker know and a section can be added here.
+
+<P>
+The default <TT>PRECDATE</TT> in SCHED&nbsp; has changed a few times over the
+years.  Prior to 5 Aug 1997, a date of 1985.0 was hardwired into
+the program.  After that, the user parameter was introduced with a
+default of 1997.0.  On 6 May 1998, the default in the development
+version of the code, and hence the next release (unknown date at this
+writing) was changed to 1979.9, the VLA value.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A rotation angle in degrees.
+<LI><B>Argument:</B> A fractional year.
 </LI>
-<LI><B>Options:</B>  Any rotation angle
+<LI><B>Options:</B>  Any valid time.  See the discussion above.
 </LI>
-<LI><B>Default:</B>  0.0
+<LI><B>Default:</B>  1979.9
 </LI>
-<LI><B>Usage:</B>    Default to previous scan.
+<LI><B>Usage:</B>    Only one value is used.
 </LI>
-<LI><B>Example:</B>  <TT>ROTATION = 10 </TT>
+<LI><B>Example:</B>  <TT>PRECDATE = 1950.0</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2506"
+  HREF="node160.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2502"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2496"
+  HREF="node158.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2504"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2507"
+  HREF="node160.html">PRESCAN</A>
+<B> Up:</B> <A NAME="tex2html2503"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2497"
+  HREF="node158.html">PN3DB and NOPN3DB</A>
+ &nbsp <B>  <A NAME="tex2html2505"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

@@ -53,11 +53,12 @@ C
       INTEGER           KI(MTPKEY)
       CHARACTER         KC(MTPKEY)*8, KCHAR*80
       DOUBLE PRECISION  KD(2*MTPKEY), ENDMARK, BLANK
-      LOGICAL           GOTKEYS
-      SAVE              KI, KD, KC, GOTKEYS, ENDMARK, BLANK
+      LOGICAL           GOTKEYS, GOTMEDIA
+      SAVE              KI, KD, KC, GOTKEYS, ENDMARK, BLANK, GOTMEDIA
 C
       DATA          (KI(I),I=1,3)   / MTPKEY, 0, 3 /
       DATA          GOTKEYS         / .FALSE. /
+      DATA          GOTMEDIA        / .FALSE. /
 C
 C     Set default tape lengths and station names.  Set default values in
 C     last element of arrays.   Use 0 for DFNDR so that the station
@@ -211,6 +212,7 @@ C
                         RNTPSTA = RNTPSTA + 1
                         WRITE( RMEDIA(RNTPSTA), '(A)' ) KD(JSTA+IR)
                         CALL UPCASE( RMEDIA(RNTPSTA) )
+                        IF( RMEDIA(RNTPSTA) .NE. ' ' ) GOTMEDIA = .TRUE.
                         WRITE( RTPSTA(RNTPSTA), '(A)' ) KD(JSTA+IS)
                         IF( LEN1( RTPSTA(RNTPSTA) ) .LE. 2 ) THEN
                            CALL WLOG( 1, 'TPINI: TPSTA must be the '//
@@ -251,6 +253,20 @@ C
          IF( TPFILE .NE. 'NEXTLINE' ) THEN
             CLOSE( UNIT=IUTP )
          END IF
+C
+C        Tweak the tails of the old timers with ancient templates.
+C
+         IF( .NOT. GOTMEDIA ) THEN
+            CALL WLOG( 1, 'TPINI:   *** Do you really need TAPEINI ' //
+     1            'data?' )
+            CALL WLOG( 1, '             The vast majority of ' //
+     1            'users do not.' )
+            CALL WLOG( 1, '             Most TAPEINI sections ' //
+     1            'betray the use of ancient templates.' )
+            CALL WLOG( 1, '             TAPEINI sections can cause ' //
+     1            'more harm than good by overriding current ' //
+     2            'catalog information.' )
+      END IF
 C
       END IF
 C

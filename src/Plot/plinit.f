@@ -69,25 +69,25 @@ C
 C     XY Axis Type
 C
       DATA PXYTYP / 'UT', 'GST', 'LST', 'AZ', 'EL', 'HA', 'PA',
-     1              'Ant', 'RA', 'DEC', 'Km' /
+     1              'Sec', 'Ant', 'RA', 'DEC', 'Km' /
 C
 C     Time Ofset Pointers
 C
-      DATA POFPOI /  1, -1, 2, 0, 0, 0 ,0 ,0, 0, 0, 0 /
+      DATA POFPOI /  1, -1, 2, 0, 0, 0 ,0 ,0, 0, 0, 0, 0 /
 C
 C     XY Axis Data Types
 C
       DATA PXSTYP / 'dHH MM SS',  'dHH MM SS', 'dHH MM SS', 
      1              ' DDD MM SS', ' DD MM SS', 'sHH MM SS',
-     2              'sDDD MM SS', 'Num',       ' HH MM SS',
-     3              'sDD MM SS',  'sKm' /
+     2              'sDDD MM SS', 'Value',       'Num',
+     3              ' HH MM SS' , 'sDD MM SS', 'sKm' /
 C
 C     XY Axis Data Limits
 C
-      DATA PXSLIM /   0,  0,  0,   0,       0, -12, 
-     1             -180,  1,  0, -90, -100000,
-     2               24, 24, 24, 360,      90, +12,
-     3             +180, 22, 24,  90,  100000 /
+      DATA PXSLIM /   0,  0,  0,   0,   0, -12, 
+     1             -180,  0,  1,   0, -90, -100000,
+     2               24, 24, 24, 360,  90, +12,
+     3             +180, 30, 22,  24,  90,  100000 /
 C
 C     XY Axis Add/Subtract Pointers
 C
@@ -403,6 +403,7 @@ C     Set the type of default plot (UV)
 C
       POPBCK = 1
       PXYBIG = .TRUE.
+      PXYONE = .FALSE.
       PYANTN = .FALSE.
 C
 C     Set Plot Type Radio Boxes Dimensions
@@ -434,51 +435,51 @@ C     Plot Types
 C
 C     UV Xaxis to Km
 C
-      POPLIM(1,1) = 11
-      POPLIM(1,2) = 11
-      POPLIM(1,3) = 11
-      POPLIM(1,4) = 11
+      POPLIM(1,1) = 12
+      POPLIM(1,2) = 12
+      POPLIM(1,3) = 12
+      POPLIM(1,4) = 12
 C
 C     XY Xaxis from UT to PA and Yaxis from AZ to PA
 C
       POPLIM(2,1) = 1
-      POPLIM(2,2) = 7
+      POPLIM(2,2) = 8
       POPLIM(2,3) = 4
-      POPLIM(2,4) = 7
+      POPLIM(2,4) = 8
 C
 C     RD Xaxis to RA and Yaxis to DEC
 C
-      POPLIM(3,1) = 9
-      POPLIM(3,2) = 9
-      POPLIM(3,3) = 10
-      POPLIM(3,4) = 10
+      POPLIM(3,1) = 10
+      POPLIM(3,2) = 10
+      POPLIM(3,3) = 11
+      POPLIM(3,4) = 11
 C
 C     UPT Xaxis from UT to LST and Yaxis to Ant
 C
       POPLIM(4,1) = 1
       POPLIM(4,2) = 3
-      POPLIM(4,3) = 8
-      POPLIM(4,4) = 8
+      POPLIM(4,3) = 9
+      POPLIM(4,4) = 9
 C
 C     ALL not defined and set to all
 C
       POPLIM(5,1) = 1
-      POPLIM(5,2) = 11
+      POPLIM(5,2) = 12
       POPLIM(5,3) = 1
-      POPLIM(5,4) = 11
+      POPLIM(5,4) = 12
 C
 C     BM XYaxis to Km ( dummy )
 C
-      POPLIM(6,1) = 11
-      POPLIM(6,2) = 11
-      POPLIM(6,3) = 11
-      POPLIM(6,4) = 11
+      POPLIM(6,1) = 12
+      POPLIM(6,2) = 12
+      POPLIM(6,3) = 12
+      POPLIM(6,4) = 12
 C
 C     Set the default Axis Type to Km and big input area
 C     to true
 C
-      PXYBCK(1) = 11
-      PXYBCK(2) = 11
+      PXYBCK(1) = 12
+      PXYBCK(2) = 12
       PXYBIG    = .TRUE.
 C
 C     Set the default Local Time Offset
@@ -654,7 +655,7 @@ C
 C
 C     Set Sun Defaults and Selection Box 
 C
-      PSUNEL = OPMINEL
+      PSUNEL = OPMINEL(1)
       PXYSUN = .FALSE.
 C
       XYSIZ = 0.035
@@ -809,7 +810,7 @@ C
       IF( SFFREQ(1,1) .GT. 0.0 ) THEN
          PBMFRQ = 30000.0 / SFFREQ(1,1)
       ELSE
-         PBMFRQ = 6.0
+         PBMFRQ = 0.0
       END IF
 C
 C     Set Schedule Axis Value for KM Axis Type

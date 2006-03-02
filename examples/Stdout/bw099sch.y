@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.02  May 2005                              
+Processed by SCHED version:   6.04  February 2006                         
 
 PI:       J.M. Wrobel                                                     
 
@@ -32,6 +32,7 @@ Notes:    VLBA target                : J1220+29=NGC4278=UGC07386 ***
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -89,6 +90,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -132,19 +134,20 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 08 55 00  NGC4278      09 23 55  52.5  84.9 -2.9     -71.1   -17   1  3  10000  08 55 00
 09 03 00  ---          09 31 57  54.2  85.9 -2.8     -71.3   463   F  1  13200  08 55 00
 
-09 03 00  J1221+28     09 31 57  53.5  87.4 -2.8     -69.9   -17   1  3  13200  09 03 00
-09 06 00  ---          09 34 57  54.2  87.8 -2.8     -70.0   163   F  1  14400  09 03 00
+09 03 00  J1221+28     09 31 57  53.5  87.4 -2.8     -69.9   -18   1  3  13200  09 03 00
+09 06 00  ---          09 34 57  54.2  87.8 -2.8     -70.0   162   F  1  14400  09 03 00
 
-09 06 00  NGC4278      09 34 57  54.8  86.2 -2.8     -71.4   -17   1  3  14400  09 06 00
-09 14 00  ---          09 42 59  56.5  87.2 -2.6     -71.5   463   F  1  17600  09 06 00
+09 06 00  NGC4278      09 34 57  54.8  86.2 -2.8     -71.4   -18   1  3  14400  09 06 00
+09 14 00  ---          09 42 59  56.5  87.2 -2.6     -71.5   462   F  1  17600  09 06 00
 
-09 14 00  J1221+28     09 42 59  55.8  88.8 -2.6     -70.1   -17   1  4  17600  09 14 00
-09 17 00  ---          09 45 59  56.5  89.2 -2.6     -70.1   163   R  1  16400  09 14 00
+09 14 00  J1221+28     09 42 59  55.8  88.8 -2.6     -70.1   -18   1  4  17600  09 14 00
+09 17 00  ---          09 45 59  56.5  89.2 -2.6     -70.1   162   R  1  16400  09 14 00
 Schedule for VLA27     (Code Y  )                                   Page   4
                bw099 1cm 15jan97 Wrobel
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -155,8 +158,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 
  --- Wed  15 Jan 1997   Day  15 ---
 
-09 17 00  NGC4278      09 45 59  57.1  87.6 -2.6     -71.6   -17   1  4  16400  09 17 00
-09 25 00  ---          09 54 00  58.7  88.6 -2.4     -71.7   463   R  1  13200  09 17 00
+09 17 00  NGC4278      09 45 59  57.1  87.6 -2.6     -71.6   -18   1  4  16400  09 17 00
+09 25 00  ---          09 54 00  58.7  88.6 -2.4     -71.7   462   R  1  13200  09 17 00
 
 09 25 00  J1221+28     09 54 00  58.1  90.3 -2.5     -70.1   -18   1  4  13200  09 25 00
 09 28 00  ---          09 57 01  58.7  90.8 -2.4     -70.1   162   R  1  12000  09 25 00
@@ -178,11 +181,11 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 
  ---------- **** Start 1st calibration sequence. ----------
 
-09 58 00  J1224+03     10 27 06  49.0 131.7 -2.0     -38.3   -72   1  4      0  Stopped 
-10 02 00  ---          10 31 06  49.6 132.9 -1.9     -37.4   168   S  1      0          
+09 58 00  J1224+03     10 27 06  49.0 131.7 -2.0     -38.3   -73   1  4      0  Stopped 
+10 02 00  ---          10 31 06  49.6 132.9 -1.9     -37.4   167   S  1      0          
 
-10 02 00  3C273        10 31 06  47.8 133.0 -2.0     -37.3   -20   1  5      0  10 02 00
-10 07 30  ---          10 36 37  48.6 134.6 -1.9     -36.2   310   F  1   2200  10 02 13
+10 02 00  3C273        10 31 06  47.8 133.0 -2.0     -37.3   -21   1  5      0  10 02 00
+10 07 30  ---          10 36 37  48.6 134.6 -1.9     -36.2   309   F  1   2200  10 02 13
 
 10 08 30  J1310+32     10 37 37  58.2  82.2 -2.5     -76.3   -34   1  5   2200  10 08 30
 10 14 00  ---          10 43 08  59.3  82.8 -2.5     -76.6   296   F  1   4400  10 08 43
@@ -202,6 +205,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -218,8 +222,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 10 32 00  J1221+28     11 01 11  71.9 103.4 -1.3     -66.2   -19   1  5   8800  10 32 00
 10 35 00  ---          11 04 12  72.5 104.2 -1.3     -65.7   161   F  1  10000  10 32 00
 
-10 35 00  NGC4278      11 04 12  73.2 101.4 -1.3     -68.6   -19   1  5  10000  10 35 00
-10 43 00  ---          11 12 13  74.8 103.8 -1.1     -67.3   461   F  1  13200  10 35 00
+10 35 00  NGC4278      11 04 12  73.2 101.4 -1.3     -68.6   -20   1  5  10000  10 35 00
+10 43 00  ---          11 12 13  74.8 103.8 -1.1     -67.3   460   F  1  13200  10 35 00
 
 10 43 00  J1221+28     11 12 13  74.1 106.9 -1.2     -64.1   -20   1  5  13200  10 43 00
 10 46 00  ---          11 15 14  74.7 107.9 -1.1     -63.4   160   F  1  14400  10 43 00
@@ -230,8 +234,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 10 54 00  J1221+28     11 23 15  76.3 111.2 -1.0     -61.2   -20   1  6  17600  10 54 00
 10 57 00  ---          11 26 15  76.9 112.6 -0.9     -60.2   160   R  1  16400  10 54 00
 
-10 57 00  NGC4278      11 26 15  77.6 109.1 -0.9     -63.8   -20   1  6  16400  10 57 00
-11 05 00  ---          11 34 17  79.2 113.1 -0.8     -60.9   460   R  1  13200  10 57 00
+10 57 00  NGC4278      11 26 15  77.6 109.1 -0.9     -63.8   -21   1  6  16400  10 57 00
+11 05 00  ---          11 34 17  79.2 113.1 -0.8     -60.9   459   R  1  13200  10 57 00
 
 11 05 00  J1221+28     11 34 17  78.4 116.9 -0.8     -57.0   -21   1  6  13200  11 05 00
 11 08 00  ---          11 37 17  78.9 118.8 -0.7     -55.5   159   R  1  12000  11 05 00
@@ -248,8 +252,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 11 27 00  J1221+28     11 56 20  82.1 135.8 -0.4     -41.0   -21   1  6   4400  11 27 00
 11 30 00  ---          11 59 21  82.5 139.6 -0.4     -37.6   159   R  1   3200  11 27 00
 
-11 30 00  NGC4278      11 59 21  83.5 136.1 -0.3     -41.2   -20   1  6   3200  11 30 00
-11 38 00  ---          12 07 22  84.5 149.9 -0.2     -28.4   460   R  1      0  11 30 00
+11 30 00  NGC4278      11 59 21  83.5 136.1 -0.3     -41.2   -21   1  6   3200  11 30 00
+11 38 00  ---          12 07 22  84.5 149.9 -0.2     -28.4   459   R  1      0  11 30 00
 
 11 38 00  J1221+28     12 07 22  83.4 151.9 -0.2     -26.3   -18   1  7      0  11 38 00
 11 41 00  ---          12 10 23  83.7 157.3 -0.2     -21.3   162   F  1   1200  11 38 00
@@ -258,6 +262,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -283,8 +288,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 12 03 00  NGC4278      12 32 26  84.5 209.8  0.2      28.2   -26   1  7  10000  12 03 00
 12 11 00  ---          12 40 28  83.5 223.7  0.3      41.0   454   F  1  13200  12 03 00
 
-12 11 00  J1221+28     12 40 28  82.9 216.2  0.3      33.8   -26   1  7  13200  12 11 00
-12 14 00  ---          12 43 28  82.5 220.5  0.4      37.6   154   F  1  14400  12 11 00
+12 11 00  J1221+28     12 40 28  82.9 216.2  0.3      33.8   -27   1  7  13200  12 11 00
+12 14 00  ---          12 43 28  82.5 220.5  0.4      37.6   153   F  1  14400  12 11 00
 
 12 14 00  NGC4278      12 43 28  83.1 227.8  0.4      44.7   -26   1  7  14400  12 14 00
 12 22 00  ---          12 51 29  81.8 236.6  0.5      52.5   454   F  1  17600  12 14 00
@@ -298,22 +303,23 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 12 33 00  J1221+28     13 02 31  79.5 239.2  0.7      53.9   -24   1  8  13200  12 33 00
 12 36 00  ---          13 05 32  78.9 241.3  0.7      55.5   156   R  1  12000  12 33 00
 
-12 36 00  NGC4278      13 05 32  79.2 246.8  0.8      60.8   -23   1  8  12000  12 36 00
-12 44 00  ---          13 13 33  77.7 250.9  0.9      63.8   457   R  1   8800  12 36 00
+12 36 00  NGC4278      13 05 32  79.2 246.8  0.8      60.8   -24   1  8  12000  12 36 00
+12 44 00  ---          13 13 33  77.7 250.9  0.9      63.8   456   R  1   8800  12 36 00
 
-12 44 00  J1221+28     13 13 33  77.4 245.9  0.9      59.1   -22   1  8   8800  12 44 00
-12 47 00  ---          13 16 34  76.9 247.4  0.9      60.2   158   R  1   7600  12 44 00
+12 44 00  J1221+28     13 13 33  77.4 245.9  0.9      59.1   -23   1  8   8800  12 44 00
+12 47 00  ---          13 16 34  76.9 247.4  0.9      60.2   157   R  1   7600  12 44 00
 
 12 47 00  NGC4278      13 16 34  77.1 252.2  0.9      64.7   -22   1  8   7600  12 47 00
 12 55 00  ---          13 24 35  75.5 255.2  1.1      66.7   458   R  1   4400  12 47 00
 
-12 55 00  J1221+28     13 24 35  75.3 250.9  1.1      62.7   -21   1  8   4400  12 55 00
-12 58 00  ---          13 27 35  74.7 252.1  1.1      63.5   159   R  1   3200  12 55 00
+12 55 00  J1221+28     13 24 35  75.3 250.9  1.1      62.7   -22   1  8   4400  12 55 00
+12 58 00  ---          13 27 35  74.7 252.1  1.1      63.5   158   R  1   3200  12 55 00
 Schedule for VLA27     (Code Y  )                                   Page   7
                bw099 1cm 15jan97 Wrobel
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -330,8 +336,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 13 06 00  J1221+28     13 35 37  73.1 254.8  1.2      65.2   -21   1  9      0  13 06 00
 13 09 00  ---          13 38 37  72.5 255.8  1.3      65.7   159   F  1   1200  13 06 00
 
-13 09 00  NGC4278      13 38 37  72.6 259.4  1.3      69.0   -20   1  9   1200  13 09 00
-13 17 00  ---          13 46 38  71.0 261.4  1.4      69.9   460   F  1   4400  13 09 00
+13 09 00  NGC4278      13 38 37  72.6 259.4  1.3      69.0   -21   1  9   1200  13 09 00
+13 17 00  ---          13 46 38  71.0 261.4  1.4      69.9   459   F  1   4400  13 09 00
 
 13 17 00  J1221+28     13 46 38  70.9 258.0  1.4      66.9   -20   1  9   4400  13 17 00
 13 20 00  ---          13 49 39  70.3 258.8  1.5      67.3   160   F  1   5600  13 17 00
@@ -339,11 +345,11 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 13 20 00  NGC4278      13 49 39  70.4 262.0  1.5      70.1   -20   1  9   5600  13 20 00
 13 28 00  ---          13 57 40  68.7 263.7  1.6      70.7   460   F  1   8800  13 20 00
 
-13 28 00  J1221+28     13 57 40  68.6 260.7  1.6      68.1   -19   1  9   8800  13 28 00
-13 31 00  ---          14 00 41  68.0 261.4  1.7      68.4   161   F  1  10000  13 28 00
+13 28 00  J1221+28     13 57 40  68.6 260.7  1.6      68.1   -20   1  9   8800  13 28 00
+13 31 00  ---          14 00 41  68.0 261.4  1.7      68.4   160   F  1  10000  13 28 00
 
-13 31 00  NGC4278      14 00 41  68.1 264.3  1.7      70.9   -19   1  9  10000  13 31 00
-13 39 00  ---          14 08 42  66.5 265.8  1.8      71.3   461   F  1  13200  13 31 00
+13 31 00  NGC4278      14 00 41  68.1 264.3  1.7      70.9   -20   1  9  10000  13 31 00
+13 39 00  ---          14 08 42  66.5 265.8  1.8      71.3   460   F  1  13200  13 31 00
 
 13 39 00  J1221+28     14 08 42  66.4 263.0  1.8      69.0   -19   1  9  13200  13 39 00
 13 42 00  ---          14 11 43  65.8 263.6  1.8      69.1   161   F  1  14400  13 39 00
@@ -359,8 +365,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 13 54 00  3C273        14 23 45  48.3 226.1  1.9      36.7   -19   1 10  17600  13 54 00
 13 59 30  ---          14 29 15  47.4 227.8  2.0      37.8   311   R  1  15400  13 54 13
 
-14 00 30  J1310+32     14 30 16  73.2 269.7  1.3      78.7   -32   1 10  15400  14 00 30
-14 06 00  ---          14 35 46  72.1 270.5  1.4      78.7   298   R  1  13200  14 00 43
+14 00 30  J1310+32     14 30 16  73.2 269.7  1.3      78.7   -33   1 10  15400  14 00 30
+14 06 00  ---          14 35 46  72.1 270.5  1.4      78.7   297   R  1  13200  14 00 43
 
 14 06 00  3C286        14 35 46  75.9 259.9  1.1      71.2   -31   1 10  13200  Stopped 
 14 10 00  ---          14 39 47  75.1 261.0  1.1      71.7   209   S  1  13200          
@@ -369,6 +375,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -414,19 +421,20 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 15 00 00  NGC4278      15 29 55  49.7 276.7  3.2      70.6   -18   1 11   5600  15 00 00
 15 08 00  ---          15 37 57  48.0 277.5  3.3      70.3   462   F  1   8800  15 00 00
 
-15 08 00  J1221+28     15 37 57  47.9 275.9  3.3      69.3   -17   1 11   8800  15 08 00
-15 11 00  ---          15 40 57  47.3 276.3  3.3      69.2   163   F  1  10000  15 08 00
+15 08 00  J1221+28     15 37 57  47.9 275.9  3.3      69.3   -18   1 11   8800  15 08 00
+15 11 00  ---          15 40 57  47.3 276.3  3.3      69.2   162   F  1  10000  15 08 00
 
-15 11 00  NGC4278      15 40 57  47.4 277.9  3.3      70.2   -17   1 11  10000  15 11 00
-15 19 00  ---          15 48 58  45.8 278.7  3.5      69.8   463   F  1  13200  15 11 00
+15 11 00  NGC4278      15 40 57  47.4 277.9  3.3      70.2   -18   1 11  10000  15 11 00
+15 19 00  ---          15 48 58  45.8 278.7  3.5      69.8   462   F  1  13200  15 11 00
 
-15 19 00  J1221+28     15 48 58  45.7 277.2  3.5      68.9   -17   1 11  13200  15 19 00
-15 22 00  ---          15 51 59  45.1 277.5  3.5      68.8   163   F  1  14400  15 19 00
+15 19 00  J1221+28     15 48 58  45.7 277.2  3.5      68.9   -18   1 11  13200  15 19 00
+15 22 00  ---          15 51 59  45.1 277.5  3.5      68.8   162   F  1  14400  15 19 00
 Schedule for VLA27     (Code Y  )                                   Page   9
                bw099 1cm 15jan97 Wrobel
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -437,14 +445,14 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 
  --- Wed  15 Jan 1997   Day  15 ---
 
-15 22 00  NGC4278      15 51 59  45.1 279.1  3.5      69.7   -17   1 11  14400  15 22 00
-15 30 00  ---          16 00 00  43.5 279.9  3.7      69.3   463   F  1  17600  15 22 00
+15 22 00  NGC4278      15 51 59  45.1 279.1  3.5      69.7   -18   1 11  14400  15 22 00
+15 30 00  ---          16 00 00  43.5 279.9  3.7      69.3   462   F  1  17600  15 22 00
 
-15 30 00  J1221+28     16 00 00  43.4 278.4  3.6      68.4   -17   1 12  17600  15 30 00
-15 33 00  ---          16 03 01  42.8 278.8  3.7      68.3   163   R  1  16400  15 30 00
+15 30 00  J1221+28     16 00 00  43.4 278.4  3.6      68.4   -18   1 12  17600  15 30 00
+15 33 00  ---          16 03 01  42.8 278.8  3.7      68.3   162   R  1  16400  15 30 00
 
-15 33 00  NGC4278      16 03 01  42.9 280.2  3.7      69.2   -17   1 12  16400  15 33 00
-15 41 00  ---          16 11 02  41.3 281.1  3.9      68.7   463   R  1  13200  15 33 00
+15 33 00  NGC4278      16 03 01  42.9 280.2  3.7      69.2   -18   1 12  16400  15 33 00
+15 41 00  ---          16 11 02  41.3 281.1  3.9      68.7   462   R  1  13200  15 33 00
 
 15 41 00  J1221+28     16 11 02  41.2 279.6  3.8      68.0   -17   1 12  13200  15 41 00
 15 44 00  ---          16 14 03  40.5 280.0  3.9      67.8   163   R  1  12000  15 41 00
@@ -483,6 +491,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -597,41 +606,41 @@ SETUP FILE INFORMATION:
    J1220+29          29 33 29.26404    * 29 16 50.71600      29 17 37.36101        0.00
    B1217+295         From catalog imbedded in main SCHED input file.
  * NGC4278           From preliminary JVAS paper III
-   UGC07386             7.200 scan hours,    354.425 baseline hours above horizon.
+   UGC07386             7.200 scan hours,    354.385 baseline hours above horizon.
 
    J0725-0054        07 23 15.846527   * 07 25 50.639961     07 25 42.950996       0.21
    0723-008          01 00 57.90590    * 00 54 56.54435      00 55 05.55787        0.32
- * J0725-00          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * J0725-00          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.000 scan hours,      0.000 baseline hours above horizon.
 
    J1221+2813        12 19 01.115614   * 12 21 31.690534     12 21 23.024369       0.25
    1219+285          28 30 36.52556    * 28 13 58.50011      28 14 45.43492        0.42
- * J1221+28          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * J1221+28          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
-                        2.700 scan hours,    128.766 baseline hours above horizon.
+                        2.700 scan hours,    128.728 baseline hours above horizon.
 
    J1224+0330        12 22 19.097168   * 12 24 52.421934     12 24 43.813395       0.31
    1222+037          03 47 27.06610    * 03 30 50.29295      03 31 44.91805        0.24
- * J1224+03          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * J1224+03          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.000 scan hours,      0.000 baseline hours above horizon.
 
    J1229+0203        12 26 33.245835   * 12 29 06.699731     12 28 58.074480       0.30
    1226+023          02 19 43.30564    * 02 03 08.59814      02 04 03.76475        0.20
- * 3C273             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C273             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    3C273B            VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
-   J1229+02             0.183 scan hours,      9.752 baseline hours above horizon.
+   J1229+02             0.183 scan hours,      9.751 baseline hours above horizon.
 
    J1310+3220        13 08 07.560130   * 13 10 28.663849     13 10 20.187960       0.24
    1308+326          32 36 40.23882    * 32 20 43.78289      32 21 28.67329        0.40
- * J1310+32          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * J1310+32          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                      VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
-                        0.183 scan hours,      9.780 baseline hours above horizon.
+                        0.183 scan hours,      9.779 baseline hours above horizon.
 
    J1331+3030        13 28 49.657757   * 13 31 08.288049     13 30 59.847409       0.37
    1328+307          30 45 58.64062    * 30 30 32.95926      30 31 17.28930        0.47
- * 3C286             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C286             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J1331+30          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.000 scan hours,      0.000 baseline hours above horizon.
 

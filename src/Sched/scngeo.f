@@ -41,8 +41,8 @@ C           to decide whether to keep the scan.   For this
 C           to matter, non-default OPMINANT and OPMINEL would
 C           have to be specified. 
 C     
-            IF( EL1(ISCN,ISTA) .GE. OPMINEL .AND. 
-     1          EL2(ISCN,ISTA) .GE. OPMINEL .AND.
+            IF( EL1(ISCN,ISTA) .GE. OPMINEL(ISCN) .AND. 
+     1          EL2(ISCN,ISTA) .GE. OPMINEL(ISCN) .AND.
      2          UP1(ISCN,ISTA) .EQ. ' ' .AND. 
      3          UP2(ISCN,ISTA) .EQ. ' ' ) THEN
                NGOOD = NGOOD + 1

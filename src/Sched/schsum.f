@@ -7,7 +7,7 @@ C
 C
       INTEGER     ISCN, ISTA, KSTA, JSTA, KS, JS, ICH, LEN1
       INTEGER     YEAR, DAY, DOY, JD, MONTH, NTPS
-      INTEGER     NSCHED
+      INTEGER     NSCHED, MJD
       LOGICAL     RESTART, ALLDONE, GOTTPS, GOTSCN
       LOGICAL     PRTHEAD, PRTED(MSET), SAMESET, DUPSET
       DOUBLE PRECISION   STOP
@@ -29,13 +29,14 @@ C
       MONTH = 1
       DAY = DOY
       CALL TDATECW( YEAR, MONTH, DAY, JD, MNAME, DNAME )
+      MJD = INT( JD - 2400000.5 )
       WRITE( PDATE, '( A, I3, A, A3, I4, 1X, A3, I5, A, I6 )' )
      1         'Day ', DOY, ' is ',  DNAME, DAY, MNAME, YEAR,
-     2    '   MJD ', INT( JD - 2400000.5 )
+     2    '   MJD ', MJD
 C
 C     Open the summary file and write some initial stuff.
 C
-      CALL SUMOPE( RESTART, PDATE )
+      CALL SUMOPE( RESTART, PDATE, MJD )
 C
 C     Get the number of scans actually scheduled, taking into
 C     account those that might have been skipped.
@@ -85,7 +86,7 @@ C
                IF( DAR(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
                   WRITE( ISUM, 
      1             '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2, I5, 2I8, 
-     2                I7, A, I3, F11.2 )' ) 
+     2                I7, A, I3, F12.2 )' ) 
      3             STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
      4             SCNHR(ISTA), TPHR(ISTA), TAPES(ISTA), PASSES(ISTA), 
      5             NRDBCK(ISTA), NRECONF(1,ISTA), '/', NRECONF(2,ISTA),
@@ -114,7 +115,7 @@ C
             IF( USEDISK(ISTA) ) THEN
                IF( DAR(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
                   WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F10.2, F12.2,
-     1              2X, F10.0, I9, A, I3, F11.2 )' )
+     1              2X, F10.0, I9, A, I3, F12.2 )' )
      2              STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
      3              SCNHR(ISTA), TPHR(ISTA), TGBYTES(ISTA),
      4              NRECONF(1,ISTA),  '/', NRECONF(2,ISTA),
@@ -151,7 +152,7 @@ C
      5      'and formatter reconfigures.'
       WRITE( ISUM, '( 1X )' )
       WRITE( ISUM, '( A, /, A, /, A )' )
-     1      '    For VLBA stations, total reconfigures and ' //
+     1      '    For VLBA DAR stations, total reconfigures and ' //
      2      'reconfigures during recording are shown.',
      3      '    Reconfigures during recording can cause ' //
      4      'slow correlator sync.',

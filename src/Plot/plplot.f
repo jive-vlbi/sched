@@ -76,9 +76,16 @@ C     Set Station numbers
 C
       KSTA = 0
 C
-C     Set the Setup File
+C     Check and Set the Setup File
 C
       KSET = PSFBCK
+      IF( KSET .EQ. 0 ) KSET = 1
+      IF( SFFREQ(1,KSET) .GT. 0.0 ) THEN
+         PBMFRQ = 30000.0 / SFFREQ(1,KSET)
+      ELSE
+         PBMFRQ = 0.0
+      END IF
+
 C
 C     Set the XY Axis Type and pointers
 C
@@ -103,7 +110,7 @@ C     Plots UV
 C
       IF( POPBCK .EQ. 1 .OR. POPBCK .EQ. 5 ) THEN
          IF( POPBCK .EQ. 5 ) THEN
-            CALL PLAXVL( 'Km', 'Km', 11, 11, 
+            CALL PLAXVL( 'Km', 'Km', 12, 12, 
      1                   RXMIN, RXMAX, RYMIN, RYMAX )
             CALL PGPANL ( 1, 1 )
          END IF
@@ -221,7 +228,7 @@ C     Plots RD
 C
       IF( POPBCK .EQ. 3 .OR. POPBCK .EQ. 5 ) THEN
          IF( POPBCK .EQ. 5 ) THEN
-            CALL PLAXVL( 'RA', 'DEC', 9, 10, 
+            CALL PLAXVL( 'RA', 'DEC', 10, 11, 
      1                   RXMIN, RXMAX, RYMIN, RYMAX )
             CALL PGPANL ( 2, 1 )
          END IF
@@ -237,7 +244,7 @@ C
                XAXIS = 'LST'
                KX    = 3
             END IF
-            CALL PLAXVL( XAXIS, YAXIS, KX, 8, 
+            CALL PLAXVL( XAXIS, YAXIS, KX, 9, 
      1                   RXMIN, RXMAX, RYMIN, RYMAX )
             CALL PGPANL ( 2, 2 )
          END IF

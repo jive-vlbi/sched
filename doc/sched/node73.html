@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>DAY</TITLE>
-<META NAME="description" CONTENT="DAY">
+<TITLE>DATAPATH</TITLE>
+<META NAME="description" CONTENT="DATAPATH">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,67 +29,101 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1445"
+<A NAME="tex2html1474"
   HREF="node74.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1441"
+<A NAME="tex2html1470"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1435"
+<A NAME="tex2html1464"
   HREF="node72.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1443"
+<A NAME="tex2html1472"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1446"
-  HREF="node74.html">DEBUG</A>
-<B> Up:</B> <A NAME="tex2html1442"
+<B> Next:</B> <A NAME="tex2html1475"
+  HREF="node74.html">DAY</A>
+<B> Up:</B> <A NAME="tex2html1471"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1436"
-  HREF="node72.html">DATAPATH</A>
- &nbsp <B>  <A NAME="tex2html1444"
+<B> Previous:</B> <A NAME="tex2html1465"
+  HREF="node72.html">CRDLINE</A>
+ &nbsp <B>  <A NAME="tex2html1473"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004122100000000000000"></A><A NAME="MP:DAY"></A>
+<H3><A NAME="SECTION004122100000000000000"></A><A NAME="MP:DATAPATH"></A>
 <BR>
-<TT>DAY</TT>
+<TT>DATAPATH</TT>
 </H3>
 
 <P>
-<TT>DAY</TT> is the day number of /em stop time of scan. Day 1
-is the first day of the month specified with the <TT>MONTH</TT>
-parameter, which defaults to 1 so that <TT>DAY</TT> is the day of
-year. If <TT>LST</TT> was specified, <TT>DAY</TT> must be the (modified?)
-local sidereal day number for the reference station. These numbers are
-printed on the right side of VLA monthly schedules and are near 56800
-in 1996.
+This is an eVLBI control parameter.  Be warned: eVLBI support is
+under development.
+The eVLBI parameters are <A HREF="node99.html#MP:GRABTO"><TT>GRABTO</TT></A>,
+<A HREF="node100.html#MP:GRABTIME"><TT>GRABTIME</TT></A>, <A HREF="node101.html#MP:GRABGAP"><TT>GRABGAP</TT></A>,
+and <A HREF="node73.html#MP:DATAPATH"><TT>DATAPATH</TT></A>.
+
+<P>
+<TT>DATAPATH</TT> determines where the main data flow goes.  It is meant to
+be used with systems like Mark5 that have an eVLBI (over the net)
+capability.  The data can either go to disk as in normal observing
+<TT>DATAPATH=IN2DISK</TT> or it can go directly to the network
+<TT>DATAPATH=IN2NET</TT>.
+
+<P>
+When the data are sent to disk, there is an option to send small amounts
+over the network later for fringe checks and the like.  That option is
+controlled by the <TT>GRAB...</TT> parameters.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Integer.
+<LI><B>Argument:</B>  Character string of up to 8 characters.
 </LI>
-<LI><B>Options:</B>  Any.
+<LI><B>Options:</B>    <TT>IN2DISK</TT> for normal recording to disk or tape - the default.
+<TT>'IN2NET'</TT> for real time eVLBI with correlation or recording
+at a remote location.
 </LI>
-<LI><B>Default:</B>  Required for first scan - no default.
+<LI><B>Default:</B>  <TT>IN2DISK</TT>
 </LI>
-<LI><B>Usage:</B>    Defaults to previous scan. Only need for first scan if using
-durations even if project crosses day boundary.
+<LI><B>Usage:</B>    A value for each scan.  Defaults to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>DAY=135</TT>
+<LI><B>Example:</B>  <TT>DATAPATH = 'IN2NET' </TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1474"
+  HREF="node74.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1470"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1464"
+  HREF="node72.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1472"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1475"
+  HREF="node74.html">DAY</A>
+<B> Up:</B> <A NAME="tex2html1471"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html1465"
+  HREF="node72.html">CRDLINE</A>
+ &nbsp <B>  <A NAME="tex2html1473"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

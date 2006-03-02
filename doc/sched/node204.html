@@ -1,96 +1,130 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>TPSTA</TITLE>
-<META NAME="description" CONTENT="TPSTA">
+<TITLE>VLATSYS and VLANTSYS</TITLE>
+<META NAME="description" CONTENT="VLATSYS and VLANTSYS">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node205.html">
 <LINK REL="previous" HREF="node203.html">
-<LINK REL="up" HREF="node199.html">
+<LINK REL="up" HREF="node52.html">
 <LINK REL="next" HREF="node205.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3036"
+<A NAME="tex2html3046"
   HREF="node205.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3032"
-  HREF="node199.html">
+<A NAME="tex2html3042"
+  HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3026"
+<A NAME="tex2html3036"
   HREF="node203.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3034"
+<A NAME="tex2html3044"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3037"
-  HREF="node205.html">TPDRIVE</A>
-<B> Up:</B> <A NAME="tex2html3033"
-  HREF="node199.html">Details of Tape Initialization</A>
-<B> Previous:</B> <A NAME="tex2html3027"
-  HREF="node203.html">OBSCODE</A>
- &nbsp <B>  <A NAME="tex2html3035"
+<B> Next:</B> <A NAME="tex2html3047"
+  HREF="node205.html">VLAPSRC</A>
+<B> Up:</B> <A NAME="tex2html3043"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html3037"
+  HREF="node203.html">VLAPEAK</A>
+ &nbsp <B>  <A NAME="tex2html3045"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00441500000000000000"></A><A NAME="TP:TPSTA"></A>
+<H3><A NAME="SECTION0041215200000000000000"></A><A NAME="MP:VLATSYS"></A>
 <BR>
-<TT>TPSTA</TT>
+<TT>VLATSYS and VLANTSYS</TT>
 </H3>
 
 <P>
-<TT>TPSTA</TT> is an array of up to 30 station names. One can be
-<TT>'DEFAULT'</TT> which means that the corresponding parameters will be
-used for stations not explicitly in the list.  A station <TT>VLBA</TT>
-will match any VLBA stations that are not specified explicitly.  Actually
-it matches any stations with the first four characters ``VLBA''.
-A station <TT>VLA</TT> matches any station with the first 3 characters
-``VLA'' that is not otherwise specified explicitly.  For example, it
-matches ``VLA1'' and ``VLA27''.
+The VLA on-line system normally applies a
+
+<P>
+Tsys-based amplitude correction to data from the VLA correlator.  In
+order to calibrate 3-antenna and phased VLA data taken with the VLA as
+a VLBI station, it is necessary to have raw correlation coefficients.
+If the Tsys correction is made, the raw correlation coefficients are
+lost. The old DEC10 scheme for obtaining the VLBI calibration data was
+based on the standard VLA correlator output as archived, so it was
+necessary to request that the Tsys correction be turned off. The new
+scheme for obtaining the VLBI calibration information involves
+extraction of the correlation coefficients by the on-line system
+before the Tsys corrections are made. Therefore it is no longer
+necessary to turn the corrections off and leaving them on makes it
+easier to use the VLA correlator data to make VLA images. The default
+action of SCHED&nbsp; is now to leave the corrections on and that
+should be correct for essentially all observations. However, <TT>VLATSYS</TT> and <TT>VLANTSYS</TT> can be used to turn the corrections on and
+off, respectively, on a scan basis just in case someone still wants to
+do so.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Character of length 8.
+<LI><B>Argument:</B> None
 </LI>
-<LI><B>Options:</B>  Any station name.
+<LI><B>Options:</B>  No value (a non-zero value turns has the effect of the opposite
+parameter)
 </LI>
-<LI><B>Default:</B>  Blank
+<LI><B>Default:</B>  Keep Tsys corrections on.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous value if none are specified. This is likely to
-be the normal mode of use with the station list only given for the
-first observation. If any stations are given, it is assumed that a
-complete new list is being given.
+<LI><B>Usage:</B>    Defaults to previous value.
 </LI>
-<LI><B>Example:</B>  <TT>TPSTA='VLBA_PT','VLBA_KP','VLA27'</TT>
+<LI><B>Example:</B>  <TT>VLANTSYS</TT> or <TT>VLATSYS</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3046"
+  HREF="node205.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3042"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3036"
+  HREF="node203.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3044"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3047"
+  HREF="node205.html">VLAPSRC</A>
+<B> Up:</B> <A NAME="tex2html3043"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html3037"
+  HREF="node203.html">VLAPEAK</A>
+ &nbsp <B>  <A NAME="tex2html3045"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

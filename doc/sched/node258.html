@@ -1,90 +1,130 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>STRING1, STRING2, STRING3, and STRING4</TITLE>
-<META NAME="description" CONTENT="STRING1, STRING2, STRING3, and STRING4">
+<TITLE>NETSIDE</TITLE>
+<META NAME="description" CONTENT="NETSIDE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node259.html">
 <LINK REL="previous" HREF="node257.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node259.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3791"
+<A NAME="tex2html3820"
   HREF="node259.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3787"
-  HREF="node217.html">
+<A NAME="tex2html3816"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3781"
+<A NAME="tex2html3810"
   HREF="node257.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3789"
+<A NAME="tex2html3818"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3792"
-  HREF="node259.html">SWTCHDUR</A>
-<B> Up:</B> <A NAME="tex2html3788"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3782"
-  HREF="node257.html">STATION</A>
- &nbsp <B>  <A NAME="tex2html3790"
+<B> Next:</B> <A NAME="tex2html3821"
+  HREF="node259.html">NOISE</A>
+<B> Up:</B> <A NAME="tex2html3817"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3811"
+  HREF="node257.html">NCHAN</A>
+ &nbsp <B>  <A NAME="tex2html3819"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004644100000000000000"></A><A NAME="SP:STRING1"></A>
+<H3><A NAME="SECTION004642800000000000000"></A><A NAME="SP:NETSIDE"></A>
 <BR>
-<TT>STRING1, STRING2, STRING3,</TT> and <TT>STRING4</TT>
+<TT>NETSIDE</TT>
 </H3>
 
 <P>
-<TT>STRING1, STRING2, STRING3,</TT> and <TT>STRING4</TT> are 80-character
-string that will be placed in the VLBA control file without
-modification. This allows for new scheduling parameters provided by
-the on-line group to be used before they get properly built into SCHED. Comments could be passed this way by preceeding them ``!*''
-and following them with ``*!''.
+<TT>NETSIDE</TT> gives the net sideband. Usually to be used in
+conjunction with <TT>FREQREF</TT> and <TT>FIRSTLO</TT>. If <TT>SIDEBAND</TT> is
+not set to <TT>U</TT> or <TT>L</TT>, it will be set based on <TT>NETSIDE</TT>
+and the frequency settings. Please see
+<A HREF="node248.html#SP:FREQREF"><TT>FREQREF</TT></A> for a discussion of required
+parameters.
+
+<P>
+If only one value is specified, it is used for all channels.
+
+<P>
+Sched will attempt to make a default for <TT>NETSIDE</TT> if it is
+not specified.  The default will depend on the number of channels
+in the setup file and the number of BBC's available at the station.
+All upper sideband will be specified if possible.  Upper/lower pairs
+will be specified otherwise (not in Mark&nbsp;III mode).  This defaulting
+will not be attempted if <A HREF="node269.html#SP:SIDEBAND"><TT>SIDEBAND</TT></A> is
+specified (might generate conflict) or if <A HREF="node248.html#SP:FREQREF"><TT>FREQREF</TT></A> is absent (frequency might end up inconsistent with
+defaults).
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Any 80 character string.
+<LI><B>Argument:</B> An array of up to 16 single characters.
 </LI>
-<LI><B>Options:</B>  It just needs to be understood by the on-line system.
+<LI><B>Options:</B>  <TT>U</TT> or <TT>L</TT>. Otherwise will not be used.
 </LI>
-<LI><B>Default:</B>  Blank - not passed to VLBA control file.
+<LI><B>Default:</B>  <TT>0</TT> - defaulted or determined from other parameters.  Any
+unspecified channels will be set the same as the first.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>STRING1=' !*  Special scan  *!'</TT>
+<LI><B>Example:</B>  <TT>NETSIDE=U,L,U,L,U,L,U,L</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3820"
+  HREF="node259.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3816"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3810"
+  HREF="node257.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3818"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3821"
+  HREF="node259.html">NOISE</A>
+<B> Up:</B> <A NAME="tex2html3817"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3811"
+  HREF="node257.html">NCHAN</A>
+ &nbsp <B>  <A NAME="tex2html3819"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

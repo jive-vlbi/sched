@@ -1,7 +1,7 @@
 !*  Schedule for VLA1      *!
 !*  Experiment BE002    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:   6.02  May 2005 *!
+!* Processed by SCHED version:   6.04  February 2006 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!
@@ -83,7 +83,7 @@ qual=  0
 tape=(1,+RUN)  write=(1,on)
 stop=01h46m15s   !NEXT!
 
-!* --- Scan from 01h46m15s to 01h49m30s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 01h46m15s to 01h49m31s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -92,19 +92,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=01h49m30s   !NEXT!
+stop=01h49m31s   !NEXT!
 
-!* --- Scan from 01h49m30s to 01h51m48s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 01h49m31s to 01h51m49s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=01h51m48s   !NEXT!
+stop=01h51m49s   !NEXT!
 
-!* --- Scan from 01h51m48s to 01h55m06s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 01h51m49s to 01h55m07s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=01h55m06s   !NEXT!
+stop=01h55m07s   !NEXT!
 
-!* --- Scan from 01h57m06s to 02h00m06s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 01h57m07s to 02h00m07s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -113,12 +113,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=01h57m06s   !NEXT!        
+stop=01h57m07s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=02h00m06s   !NEXT!
+stop=02h00m07s   !NEXT!
 
-!* --- Scan from 02h00m06s to 02h03m21s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h00m07s to 02h03m22s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -127,19 +127,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=02h03m21s   !NEXT!
+stop=02h03m22s   !NEXT!
 
-!* --- Scan from 02h03m21s to 02h05m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h03m22s to 02h05m40s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h05m39s   !NEXT!
+stop=02h05m40s   !NEXT!
 
-!* --- Scan from 02h05m39s to 02h08m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h05m40s to 02h08m58s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h08m57s   !NEXT!
+stop=02h08m58s   !NEXT!
 
-!* --- Scan from 02h10m57s to 02h13m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h10m58s to 02h13m58s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -148,12 +148,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=02h10m57s   !NEXT!        
+stop=02h10m58s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=02h13m57s   !NEXT!
+stop=02h13m58s   !NEXT!
 
-!* --- Scan from 02h13m57s to 02h17m13s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h13m58s to 02h17m14s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -162,19 +162,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=02h17m13s   !NEXT!
+stop=02h17m14s   !NEXT!
 
-!* --- Scan from 02h17m13s to 02h19m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h17m14s to 02h19m32s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h19m31s   !NEXT!
+stop=02h19m32s   !NEXT!
 
-!* --- Scan from 02h19m31s to 02h22m49s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h19m32s to 02h22m50s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h22m49s   !NEXT!
+stop=02h22m50s   !NEXT!
 
-!* --- Scan from 02h24m49s to 02h27m49s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h24m50s to 02h27m50s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -183,12 +183,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=02h24m49s   !NEXT!        
+stop=02h24m50s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=02h27m49s   !NEXT!
+stop=02h27m50s   !NEXT!
 
-!* --- Scan from 02h27m49s to 02h31m04s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h27m50s to 02h31m06s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -197,19 +197,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=02h31m04s   !NEXT!
+stop=02h31m06s   !NEXT!
 
-!* --- Scan from 02h31m04s to 02h33m22s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h31m06s to 02h33m24s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h33m22s   !NEXT!
+stop=02h33m24s   !NEXT!
 
-!* --- Scan from 02h33m22s to 02h36m40s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h33m24s to 02h36m42s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h36m40s   !NEXT!
+stop=02h36m42s   !NEXT!
 
-!* --- Scan from 02h38m40s to 02h41m40s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h38m42s to 02h41m42s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -218,12 +218,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=02h38m40s   !NEXT!        
+stop=02h38m42s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=02h41m40s   !NEXT!
+stop=02h41m42s   !NEXT!
 
-!* --- Scan from 02h41m40s to 02h44m55s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h41m42s to 02h44m57s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -232,19 +232,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=02h44m55s   !NEXT!
+stop=02h44m57s   !NEXT!
 
-!* --- Scan from 02h44m55s to 02h47m14s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h44m57s to 02h47m16s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h47m14s   !NEXT!
+stop=02h47m16s   !NEXT!
 
-!* --- Scan from 02h47m14s to 02h50m32s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h47m16s to 02h50m34s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=02h50m32s   !NEXT!
+stop=02h50m34s   !NEXT!
 
-!* --- Scan from 02h52m32s to 02h55m32s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h52m34s to 02h55m34s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -253,12 +253,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=02h52m32s   !NEXT!        
+stop=02h52m34s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=02h55m32s   !NEXT!
+stop=02h55m34s   !NEXT!
 
-!* --- Scan from 02h55m32s to 02h58m47s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h55m34s to 02h58m50s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -267,19 +267,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=02h58m47s   !NEXT!
+stop=02h58m50s   !NEXT!
 
-!* --- Scan from 02h58m47s to 03h01m05s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 02h58m50s to 03h01m08s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h01m05s   !NEXT!
+stop=03h01m08s   !NEXT!
 
-!* --- Scan from 03h01m05s to 03h04m24s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h01m08s to 03h04m26s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h04m24s   !NEXT!
+stop=03h04m26s   !NEXT!
 
-!* --- Scan from 03h06m24s to 03h09m24s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h06m26s to 03h09m26s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -288,12 +288,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=03h06m24s   !NEXT!        
+stop=03h06m26s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=03h09m24s   !NEXT!
+stop=03h09m26s   !NEXT!
 
-!* --- Scan from 03h09m24s to 03h12m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h09m26s to 03h12m42s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -302,19 +302,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=03h12m39s   !NEXT!
+stop=03h12m42s   !NEXT!
 
-!* --- Scan from 03h12m39s to 03h14m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h12m42s to 03h15m00s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h14m57s   !NEXT!
+stop=03h15m00s   !NEXT!
 
-!* --- Scan from 03h14m57s to 03h18m15s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h15m00s to 03h18m19s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h18m15s   !NEXT!
+stop=03h18m19s   !NEXT!
 
-!* --- Scan from 03h20m15s to 03h23m15s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h20m19s to 03h23m19s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -323,12 +323,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=03h20m15s   !NEXT!        
+stop=03h20m19s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=03h23m15s   !NEXT!
+stop=03h23m19s   !NEXT!
 
-!* --- Scan from 03h23m15s to 03h26m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h23m19s to 03h26m34s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -337,19 +337,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=03h26m31s   !NEXT!
+stop=03h26m34s   !NEXT!
 
-!* --- Scan from 03h26m31s to 03h28m49s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h26m34s to 03h28m53s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h28m49s   !NEXT!
+stop=03h28m53s   !NEXT!
 
-!* --- Scan from 03h28m49s to 03h32m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h28m53s to 03h32m11s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h32m07s   !NEXT!
+stop=03h32m11s   !NEXT!
 
-!* --- Scan from 03h34m07s to 03h37m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h34m11s to 03h37m11s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -358,12 +358,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=03h34m07s   !NEXT!        
+stop=03h34m11s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=03h37m07s   !NEXT!
+stop=03h37m11s   !NEXT!
 
-!* --- Scan from 03h37m07s to 03h40m23s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h37m11s to 03h40m27s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -372,19 +372,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=03h40m23s   !NEXT!
+stop=03h40m27s   !NEXT!
 
-!* --- Scan from 03h40m23s to 03h42m41s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h40m27s to 03h42m45s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h42m41s   !NEXT!
+stop=03h42m45s   !NEXT!
 
-!* --- Scan from 03h42m41s to 03h46m00s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h42m45s to 03h46m04s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h46m00s   !NEXT!
+stop=03h46m04s   !NEXT!
 
-!* --- Scan from 03h48m00s to 03h51m00s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h48m04s to 03h51m04s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -393,12 +393,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=03h48m00s   !NEXT!        
+stop=03h48m04s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=03h51m00s   !NEXT!
+stop=03h51m04s   !NEXT!
 
-!* --- Scan from 03h51m00s to 03h54m15s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h51m04s to 03h54m19s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -407,19 +407,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=03h54m15s   !NEXT!
+stop=03h54m19s   !NEXT!
 
-!* --- Scan from 03h54m15s to 03h56m33s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h54m19s to 03h56m38s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h56m33s   !NEXT!
+stop=03h56m38s   !NEXT!
 
-!* --- Scan from 03h56m33s to 03h59m52s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 03h56m38s to 03h59m56s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=03h59m52s   !NEXT!
+stop=03h59m56s   !NEXT!
 
-!* --- Scan from 04h01m52s to 04h04m52s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h01m56s to 04h04m56s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -428,12 +428,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=04h01m52s   !NEXT!        
+stop=04h01m56s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=04h04m52s   !NEXT!
+stop=04h04m56s   !NEXT!
 
-!* --- Scan from 04h04m52s to 04h08m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h04m56s to 04h08m12s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -442,19 +442,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=04h08m07s   !NEXT!
+stop=04h08m12s   !NEXT!
 
-!* --- Scan from 04h08m07s to 04h10m26s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h08m12s to 04h10m31s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h10m26s   !NEXT!
+stop=04h10m31s   !NEXT!
 
-!* --- Scan from 04h10m26s to 04h13m44s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h10m31s to 04h13m49s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h13m44s   !NEXT!
+stop=04h13m49s   !NEXT!
 
-!* --- Scan from 04h15m44s to 04h18m44s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h15m49s to 04h18m49s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -463,12 +463,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=04h15m44s   !NEXT!        
+stop=04h15m49s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=04h18m44s   !NEXT!
+stop=04h18m49s   !NEXT!
 
-!* --- Scan from 04h18m44s to 04h21m59s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h18m49s to 04h22m04s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -477,19 +477,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=04h21m59s   !NEXT!
+stop=04h22m04s   !NEXT!
 
-!* --- Scan from 04h21m59s to 04h24m18s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h22m04s to 04h24m23s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h24m18s   !NEXT!
+stop=04h24m23s   !NEXT!
 
-!* --- Scan from 04h24m18s to 04h27m36s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h24m23s to 04h27m42s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h27m36s   !NEXT!
+stop=04h27m42s   !NEXT!
 
-!* --- Scan from 04h29m36s to 04h32m36s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h29m42s to 04h32m42s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -498,12 +498,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=04h29m36s   !NEXT!        
+stop=04h29m42s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=04h32m36s   !NEXT!
+stop=04h32m42s   !NEXT!
 
-!* --- Scan from 04h32m36s to 04h35m52s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h32m42s to 04h35m57s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -512,19 +512,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=04h35m52s   !NEXT!
+stop=04h35m57s   !NEXT!
 
-!* --- Scan from 04h35m52s to 04h38m10s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h35m57s to 04h38m16s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h38m10s   !NEXT!
+stop=04h38m16s   !NEXT!
 
-!* --- Scan from 04h38m10s to 04h41m29s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h38m16s to 04h41m35s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h41m29s   !NEXT!
+stop=04h41m35s   !NEXT!
 
-!* --- Scan from 04h43m29s to 04h46m29s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h43m35s to 04h46m35s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -533,12 +533,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=04h43m29s   !NEXT!        
+stop=04h43m35s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=04h46m29s   !NEXT!
+stop=04h46m35s   !NEXT!
 
-!* --- Scan from 04h46m29s to 04h49m44s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h46m35s to 04h49m50s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -547,19 +547,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=04h49m44s   !NEXT!
+stop=04h49m50s   !NEXT!
 
-!* --- Scan from 04h49m44s to 04h52m03s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h49m50s to 04h52m09s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h52m03s   !NEXT!
+stop=04h52m09s   !NEXT!
 
-!* --- Scan from 04h52m03s to 04h55m21s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h52m09s to 04h55m28s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=04h55m21s   !NEXT!
+stop=04h55m28s   !NEXT!
 
-!* --- Scan from 04h57m21s to 05h00m21s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 04h57m28s to 05h00m28s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -568,12 +568,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=04h57m21s   !NEXT!        
+stop=04h57m28s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=05h00m21s   !NEXT!
+stop=05h00m28s   !NEXT!
 
-!* --- Scan from 05h00m21s to 05h03m36s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h00m28s to 05h03m43s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -582,19 +582,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=05h03m36s   !NEXT!
+stop=05h03m43s   !NEXT!
 
-!* --- Scan from 05h03m36s to 05h05m55s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h03m43s to 05h06m02s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h05m55s   !NEXT!
+stop=05h06m02s   !NEXT!
 
-!* --- Scan from 05h05m55s to 05h09m14s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h06m02s to 05h09m21s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h09m14s   !NEXT!
+stop=05h09m21s   !NEXT!
 
-!* --- Scan from 05h11m14s to 05h14m14s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h11m21s to 05h14m21s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -603,12 +603,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=05h11m14s   !NEXT!        
+stop=05h11m21s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=05h14m14s   !NEXT!
+stop=05h14m21s   !NEXT!
 
-!* --- Scan from 05h14m14s to 05h17m29s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h14m21s to 05h17m36s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -617,19 +617,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=05h17m29s   !NEXT!
+stop=05h17m36s   !NEXT!
 
-!* --- Scan from 05h17m29s to 05h19m48s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h17m36s to 05h19m55s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h19m48s   !NEXT!
+stop=05h19m55s   !NEXT!
 
-!* --- Scan from 05h19m48s to 05h23m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h19m55s to 05h23m14s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h23m07s   !NEXT!
+stop=05h23m14s   !NEXT!
 
-!* --- Scan from 05h25m07s to 05h28m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h25m14s to 05h28m14s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -638,12 +638,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=05h25m07s   !NEXT!        
+stop=05h25m14s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=05h28m07s   !NEXT!
+stop=05h28m14s   !NEXT!
 
-!* --- Scan from 05h28m07s to 05h31m22s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h28m14s to 05h31m29s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -652,19 +652,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=05h31m22s   !NEXT!
+stop=05h31m29s   !NEXT!
 
-!* --- Scan from 05h31m22s to 05h33m41s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h31m29s to 05h33m48s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h33m41s   !NEXT!
+stop=05h33m48s   !NEXT!
 
-!* --- Scan from 05h33m41s to 05h36m59s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h33m48s to 05h37m07s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h36m59s   !NEXT!
+stop=05h37m07s   !NEXT!
 
-!* --- Scan from 05h38m59s to 05h41m59s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h39m07s to 05h42m07s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -673,12 +673,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=05h38m59s   !NEXT!        
+stop=05h39m07s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=05h41m59s   !NEXT!
+stop=05h42m07s   !NEXT!
 
-!* --- Scan from 05h41m59s to 05h45m14s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h42m07s to 05h45m22s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -687,19 +687,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=05h45m14s   !NEXT!
+stop=05h45m22s   !NEXT!
 
-!* --- Scan from 05h45m14s to 05h47m33s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h45m22s to 05h47m42s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h47m33s   !NEXT!
+stop=05h47m42s   !NEXT!
 
-!* --- Scan from 05h47m33s to 05h50m52s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h47m42s to 05h51m00s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=05h50m52s   !NEXT!
+stop=05h51m00s   !NEXT!
 
-!* --- Scan from 05h52m52s to 05h55m52s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h53m00s to 05h56m00s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -708,12 +708,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=05h52m52s   !NEXT!        
+stop=05h53m00s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=05h55m52s   !NEXT!
+stop=05h56m00s   !NEXT!
 
-!* --- Scan from 05h55m52s to 05h59m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h56m00s to 05h59m16s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -722,25 +722,25 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=05h59m07s   !NEXT!
+stop=05h59m16s   !NEXT!
 
-!* --- Scan from 05h59m42s to 06h01m42s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 05h59m51s to 06h01m51s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=05h59m42s   !NEXT!        
+stop=05h59m51s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=06h01m42s   !NEXT!
+stop=06h01m51s   !NEXT!
 
-!* --- Scan from 06h02m16s to 06h05m16s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h02m24s to 06h05m24s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=06h02m16s   !NEXT!        
+stop=06h02m24s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=06h05m16s   !NEXT!
+stop=06h05m24s   !NEXT!
 
-!* --- Scan from 06h07m16s to 06h10m16s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h07m24s to 06h10m24s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -749,12 +749,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=06h07m16s   !NEXT!        
+stop=06h07m24s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=06h10m16s   !NEXT!
+stop=06h10m24s   !NEXT!
 
-!* --- Scan from 06h10m16s to 06h13m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h10m24s to 06h13m40s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -763,19 +763,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=06h13m31s   !NEXT!
+stop=06h13m40s   !NEXT!
 
-!* --- Scan from 06h13m31s to 06h15m50s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h13m40s to 06h15m59s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=06h15m50s   !NEXT!
+stop=06h15m59s   !NEXT!
 
-!* --- Scan from 06h15m50s to 06h19m08s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h15m59s to 06h19m18s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=06h19m08s   !NEXT!
+stop=06h19m18s   !NEXT!
 
-!* --- Scan from 06h21m08s to 06h24m08s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h21m18s to 06h24m18s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -784,12 +784,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=06h21m08s   !NEXT!        
+stop=06h21m18s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=06h24m08s   !NEXT!
+stop=06h24m18s   !NEXT!
 
-!* --- Scan from 06h24m08s to 06h27m24s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h24m18s to 06h27m33s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -798,19 +798,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=06h27m24s   !NEXT!
+stop=06h27m33s   !NEXT!
 
-!* --- Scan from 06h27m24s to 06h29m43s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h27m33s to 06h29m52s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=06h29m43s   !NEXT!
+stop=06h29m52s   !NEXT!
 
-!* --- Scan from 06h29m43s to 06h33m01s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h29m52s to 06h33m11s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=06h33m01s   !NEXT!
+stop=06h33m11s   !NEXT!
 
-!* --- Scan from 06h35m01s to 06h38m01s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h35m11s to 06h38m11s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -819,12 +819,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=06h35m01s   !NEXT!        
+stop=06h35m11s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=06h38m01s   !NEXT!
+stop=06h38m11s   !NEXT!
 
-!* --- Scan from 06h38m01s to 06h41m16s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h38m11s to 06h41m26s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -833,19 +833,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=06h41m16s   !NEXT!
+stop=06h41m26s   !NEXT!
 
-!* --- Scan from 06h41m16s to 06h43m35s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h41m26s to 06h43m45s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=06h43m35s   !NEXT!
+stop=06h43m45s   !NEXT!
 
-!* --- Scan from 06h43m35s to 06h46m54s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h43m45s to 06h47m04s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=06h46m54s   !NEXT!
+stop=06h47m04s   !NEXT!
 
-!* --- Scan from 06h48m54s to 06h51m54s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h49m04s to 06h52m04s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -854,12 +854,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=06h48m54s   !NEXT!        
+stop=06h49m04s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=06h51m54s   !NEXT!
+stop=06h52m04s   !NEXT!
 
-!* --- Scan from 06h51m54s to 06h55m09s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h52m04s to 06h55m20s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -868,19 +868,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=06h55m09s   !NEXT!
+stop=06h55m20s   !NEXT!
 
-!* --- Scan from 06h55m09s to 06h57m28s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h55m20s to 06h57m39s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=06h57m28s   !NEXT!
+stop=06h57m39s   !NEXT!
 
-!* --- Scan from 06h57m28s to 07h00m47s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 06h57m39s to 07h00m58s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=07h00m47s   !NEXT!
+stop=07h00m58s   !NEXT!
 
-!* --- Scan from 07h02m47s to 07h05m47s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h02m58s to 07h05m58s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -889,12 +889,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=07h02m47s   !NEXT!        
+stop=07h02m58s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=07h05m47s   !NEXT!
+stop=07h05m58s   !NEXT!
 
-!* --- Scan from 07h05m47s to 07h09m02s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h05m58s to 07h09m13s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -903,19 +903,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=07h09m02s   !NEXT!
+stop=07h09m13s   !NEXT!
 
-!* --- Scan from 07h09m02s to 07h11m21s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h09m13s to 07h11m32s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=07h11m21s   !NEXT!
+stop=07h11m32s   !NEXT!
 
-!* --- Scan from 07h11m21s to 07h14m40s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h11m32s to 07h14m51s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=07h14m40s   !NEXT!
+stop=07h14m51s   !NEXT!
 
-!* --- Scan from 07h16m40s to 07h19m40s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h16m51s to 07h19m51s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -924,12 +924,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=07h16m40s   !NEXT!        
+stop=07h16m51s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=07h19m40s   !NEXT!
+stop=07h19m51s   !NEXT!
 
-!* --- Scan from 07h19m40s to 07h22m55s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h19m51s to 07h23m06s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -938,25 +938,22 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=07h22m55s   !NEXT!
+stop=07h23m06s   !NEXT!
 
-!* --- Scan from 07h24m22s to 07h26m22s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h24m32s to 07h26m32s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=07h24m22s   !NEXT!        
+stop=07h24m32s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=07h26m22s   !NEXT!
+stop=07h26m32s   !NEXT!
 
-!* --- Scan from 07h26m42s to 07h29m42s   Sun, 1995 Oct 22 --- *!
-sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
-tape=(1,STOP) write=(1,off)
-stop=07h26m42s   !NEXT!        
-qual=  0
+!* --- Scan from 07h26m32s to 07h29m51s   Sun, 1995 Oct 22 --- *!
+sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=07h29m42s   !NEXT!
+stop=07h29m51s   !NEXT!
 
-!* --- Scan from 07h31m42s to 07h34m42s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h31m51s to 07h34m51s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -965,12 +962,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=07h31m42s   !NEXT!        
+stop=07h31m51s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=07h34m42s   !NEXT!
+stop=07h34m51s   !NEXT!
 
-!* --- Scan from 07h34m42s to 07h37m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h34m51s to 07h38m06s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -979,19 +976,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=07h37m57s   !NEXT!
+stop=07h38m06s   !NEXT!
 
-!* --- Scan from 07h37m57s to 07h40m17s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h38m06s to 07h40m26s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=07h40m17s   !NEXT!
+stop=07h40m26s   !NEXT!
 
-!* --- Scan from 07h40m17s to 07h43m36s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h40m26s to 07h43m45s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=07h43m36s   !NEXT!
+stop=07h43m45s   !NEXT!
 
-!* --- Scan from 07h45m36s to 07h48m36s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h45m45s to 07h48m45s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1000,12 +997,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=07h45m36s   !NEXT!        
+stop=07h45m45s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=07h48m36s   !NEXT!
+stop=07h48m45s   !NEXT!
 
-!* --- Scan from 07h48m36s to 07h51m51s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h48m45s to 07h52m01s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1014,25 +1011,25 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=07h51m51s   !NEXT!
+stop=07h52m01s   !NEXT!
 
-!* --- Scan from 07h52m13s to 07h54m13s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h52m24s to 07h54m24s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=07h52m13s   !NEXT!        
+stop=07h52m24s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=07h54m13s   !NEXT!
+stop=07h54m24s   !NEXT!
 
-!* --- Scan from 07h54m35s to 07h57m35s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h54m46s to 07h57m46s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=07h54m35s   !NEXT!        
+stop=07h54m46s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=07h57m35s   !NEXT!
+stop=07h57m46s   !NEXT!
 
-!* --- Scan from 07h59m35s to 08h02m35s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 07h59m46s to 08h02m46s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1041,12 +1038,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=07h59m35s   !NEXT!        
+stop=07h59m46s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h02m35s   !NEXT!
+stop=08h02m46s   !NEXT!
 
-!* --- Scan from 08h02m35s to 08h05m51s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h02m46s to 08h06m01s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1055,25 +1052,25 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=08h05m51s   !NEXT!
+stop=08h06m01s   !NEXT!
 
-!* --- Scan from 08h06m17s to 08h08m17s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h06m28s to 08h08m28s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h06m17s   !NEXT!        
+stop=08h06m28s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h08m17s   !NEXT!
+stop=08h08m28s   !NEXT!
 
-!* --- Scan from 08h08m43s to 08h11m43s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h08m54s to 08h11m54s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h08m43s   !NEXT!        
+stop=08h08m54s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h11m43s   !NEXT!
+stop=08h11m54s   !NEXT!
 
-!* --- Scan from 08h13m43s to 08h16m43s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h13m54s to 08h16m54s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1082,20 +1079,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=08h13m43s   !NEXT!        
+stop=08h13m54s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h16m43s   !NEXT!
+stop=08h16m54s   !NEXT!
 
-!* --- Scan from 08h18m45s to 08h21m45s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h18m57s to 08h21m57s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h18m45s   !NEXT!        
+stop=08h18m57s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h21m45s   !NEXT!
+stop=08h21m57s   !NEXT!
 
-!* --- Scan from 08h21m45s to 08h24m00s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h21m57s to 08h24m12s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1104,17 +1101,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=08h24m00s   !NEXT!
+stop=08h24m12s   !NEXT!
 
-!* --- Scan from 08h26m02s to 08h29m02s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h26m14s to 08h29m14s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h26m02s   !NEXT!        
+stop=08h26m14s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h29m02s   !NEXT!
+stop=08h29m14s   !NEXT!
 
-!* --- Scan from 08h31m02s to 08h34m02s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h31m14s to 08h34m14s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1123,12 +1120,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=08h31m02s   !NEXT!        
+stop=08h31m14s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h34m02s   !NEXT!
+stop=08h34m14s   !NEXT!
 
-!* --- Scan from 08h34m02s to 08h37m18s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h34m14s to 08h37m30s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1137,25 +1134,25 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=08h37m18s   !NEXT!
+stop=08h37m30s   !NEXT!
 
-!* --- Scan from 08h37m48s to 08h39m48s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h38m00s to 08h40m00s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h37m48s   !NEXT!        
+stop=08h38m00s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h39m48s   !NEXT!
+stop=08h40m00s   !NEXT!
 
-!* --- Scan from 08h40m16s to 08h43m16s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h40m28s to 08h43m28s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h40m16s   !NEXT!        
+stop=08h40m28s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h43m16s   !NEXT!
+stop=08h43m28s   !NEXT!
 
-!* --- Scan from 08h45m16s to 08h48m16s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h45m28s to 08h48m28s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1164,20 +1161,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=08h45m16s   !NEXT!        
+stop=08h45m28s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h48m16s   !NEXT!
+stop=08h48m28s   !NEXT!
 
-!* --- Scan from 08h50m51s to 08h53m51s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h51m05s to 08h54m05s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h50m51s   !NEXT!        
+stop=08h51m05s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=08h53m51s   !NEXT!
+stop=08h54m05s   !NEXT!
 
-!* --- Scan from 08h53m51s to 08h56m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h54m05s to 08h56m20s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1186,17 +1183,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=08h56m07s   !NEXT!
+stop=08h56m20s   !NEXT!
 
-!* --- Scan from 08h58m58s to 09h01m58s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 08h59m12s to 09h02m12s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=08h58m58s   !NEXT!        
+stop=08h59m12s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h01m58s   !NEXT!
+stop=09h02m12s   !NEXT!
 
-!* --- Scan from 09h03m58s to 09h06m58s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h04m12s to 09h07m12s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1205,12 +1202,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=09h03m58s   !NEXT!        
+stop=09h04m12s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h06m58s   !NEXT!
+stop=09h07m12s   !NEXT!
 
-!* --- Scan from 09h06m58s to 09h10m14s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h07m12s to 09h10m28s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1219,25 +1216,25 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=09h10m14s   !NEXT!
+stop=09h10m28s   !NEXT!
 
-!* --- Scan from 09h10m36s to 09h12m36s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h10m50s to 09h12m50s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=09h10m36s   !NEXT!        
+stop=09h10m50s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h12m36s   !NEXT!
+stop=09h12m50s   !NEXT!
 
-!* --- Scan from 09h12m57s to 09h15m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h13m11s to 09h16m11s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=09h12m57s   !NEXT!        
+stop=09h13m11s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h15m57s   !NEXT!
+stop=09h16m11s   !NEXT!
 
-!* --- Scan from 09h17m57s to 09h20m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h18m11s to 09h21m11s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1246,20 +1243,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=09h17m57s   !NEXT!        
+stop=09h18m11s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h20m57s   !NEXT!
+stop=09h21m11s   !NEXT!
 
-!* --- Scan from 09h24m07s to 09h27m07s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h24m22s to 09h27m22s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=09h24m07s   !NEXT!        
+stop=09h24m22s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h27m07s   !NEXT!
+stop=09h27m22s   !NEXT!
 
-!* --- Scan from 09h27m07s to 09h29m22s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h27m22s to 09h29m38s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1268,17 +1265,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=09h29m22s   !NEXT!
+stop=09h29m38s   !NEXT!
 
-!* --- Scan from 09h32m39s to 09h35m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h32m55s to 09h35m55s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=09h32m39s   !NEXT!        
+stop=09h32m55s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h35m39s   !NEXT!
+stop=09h35m55s   !NEXT!
 
-!* --- Scan from 09h37m39s to 09h40m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h37m55s to 09h40m55s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1287,12 +1284,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=09h37m39s   !NEXT!        
+stop=09h37m55s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h40m39s   !NEXT!
+stop=09h40m55s   !NEXT!
 
-!* --- Scan from 09h40m39s to 09h43m54s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h40m55s to 09h44m10s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1301,19 +1298,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=09h43m54s   !NEXT!
+stop=09h44m10s   !NEXT!
 
-!* --- Scan from 09h43m54s to 09h46m13s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h44m10s to 09h46m29s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=09h46m13s   !NEXT!
+stop=09h46m29s   !NEXT!
 
-!* --- Scan from 09h46m13s to 09h49m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h46m29s to 09h49m47s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=09h49m31s   !NEXT!
+stop=09h49m47s   !NEXT!
 
-!* --- Scan from 09h51m31s to 09h54m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h51m47s to 09h54m47s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1322,20 +1319,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=09h51m31s   !NEXT!        
+stop=09h51m47s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=09h54m31s   !NEXT!
+stop=09h54m47s   !NEXT!
 
-!* --- Scan from 09h57m49s to 10h00m49s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 09h58m05s to 10h01m05s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=09h57m49s   !NEXT!        
+stop=09h58m05s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=10h00m49s   !NEXT!
+stop=10h01m05s   !NEXT!
 
-!* --- Scan from 10h00m49s to 10h03m04s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h01m05s to 10h03m21s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1344,17 +1341,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=10h03m04s   !NEXT!
+stop=10h03m21s   !NEXT!
 
-!* --- Scan from 10h06m22s to 10h09m22s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h06m39s to 10h09m39s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=10h06m22s   !NEXT!        
+stop=10h06m39s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=10h09m22s   !NEXT!
+stop=10h09m39s   !NEXT!
 
-!* --- Scan from 10h11m22s to 10h14m22s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h11m39s to 10h14m39s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1363,12 +1360,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=10h11m22s   !NEXT!        
+stop=10h11m39s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=10h14m22s   !NEXT!
+stop=10h14m39s   !NEXT!
 
-!* --- Scan from 10h14m22s to 10h17m37s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h14m39s to 10h17m54s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1377,19 +1374,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=10h17m37s   !NEXT!
+stop=10h17m54s   !NEXT!
 
-!* --- Scan from 10h17m37s to 10h19m56s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h17m54s to 10h20m13s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=10h19m56s   !NEXT!
+stop=10h20m13s   !NEXT!
 
-!* --- Scan from 10h19m56s to 10h23m14s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h20m13s to 10h23m32s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=10h23m14s   !NEXT!
+stop=10h23m32s   !NEXT!
 
-!* --- Scan from 10h25m14s to 10h28m14s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h25m32s to 10h28m32s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1398,20 +1395,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=10h25m14s   !NEXT!        
+stop=10h25m32s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=10h28m14s   !NEXT!
+stop=10h28m32s   !NEXT!
 
-!* --- Scan from 10h31m15s to 10h34m15s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h31m32s to 10h34m32s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=10h31m15s   !NEXT!        
+stop=10h31m32s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=10h34m15s   !NEXT!
+stop=10h34m32s   !NEXT!
 
-!* --- Scan from 10h34m15s to 10h36m30s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h34m32s to 10h36m48s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1420,17 +1417,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=10h36m30s   !NEXT!
+stop=10h36m48s   !NEXT!
 
-!* --- Scan from 10h39m24s to 10h42m24s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h39m42s to 10h42m42s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=10h39m24s   !NEXT!        
+stop=10h39m42s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=10h42m24s   !NEXT!
+stop=10h42m42s   !NEXT!
 
-!* --- Scan from 10h44m24s to 10h47m24s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h44m42s to 10h47m42s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1439,12 +1436,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=10h44m24s   !NEXT!        
+stop=10h44m42s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=10h47m24s   !NEXT!
+stop=10h47m42s   !NEXT!
 
-!* --- Scan from 10h47m24s to 10h50m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h47m42s to 10h50m57s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1453,19 +1450,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=10h50m39s   !NEXT!
+stop=10h50m57s   !NEXT!
 
-!* --- Scan from 10h50m39s to 10h52m58s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h50m57s to 10h53m16s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=10h52m58s   !NEXT!
+stop=10h53m16s   !NEXT!
 
-!* --- Scan from 10h52m58s to 10h56m17s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h53m16s to 10h56m35s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=10h56m17s   !NEXT!
+stop=10h56m35s   !NEXT!
 
-!* --- Scan from 10h58m17s to 11h01m17s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 10h58m35s to 11h01m35s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1474,20 +1471,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=10h58m17s   !NEXT!        
+stop=10h58m35s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h01m17s   !NEXT!
+stop=11h01m35s   !NEXT!
 
-!* --- Scan from 11h03m11s to 11h06m11s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h03m29s to 11h06m29s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=11h03m11s   !NEXT!        
+stop=11h03m29s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h06m11s   !NEXT!
+stop=11h06m29s   !NEXT!
 
-!* --- Scan from 11h06m11s to 11h08m27s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h06m29s to 11h08m45s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1496,17 +1493,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=11h08m27s   !NEXT!
+stop=11h08m45s   !NEXT!
 
-!* --- Scan from 11h10m06s to 11h13m06s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h10m24s to 11h13m24s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=11h10m06s   !NEXT!        
+stop=11h10m24s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h13m06s   !NEXT!
+stop=11h13m24s   !NEXT!
 
-!* --- Scan from 11h15m06s to 11h18m06s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h15m24s to 11h18m24s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1515,12 +1512,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=11h15m06s   !NEXT!        
+stop=11h15m24s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h18m06s   !NEXT!
+stop=11h18m24s   !NEXT!
 
-!* --- Scan from 11h18m06s to 11h21m21s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h18m24s to 11h21m39s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1529,19 +1526,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=11h21m21s   !NEXT!
+stop=11h21m39s   !NEXT!
 
-!* --- Scan from 11h21m21s to 11h23m40s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h21m39s to 11h23m58s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=11h23m40s   !NEXT!
+stop=11h23m58s   !NEXT!
 
-!* --- Scan from 11h23m40s to 11h26m59s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h23m58s to 11h27m17s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=11h26m59s   !NEXT!
+stop=11h27m17s   !NEXT!
 
-!* --- Scan from 11h28m59s to 11h31m59s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h29m17s to 11h32m17s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1550,20 +1547,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=11h28m59s   !NEXT!        
+stop=11h29m17s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h31m59s   !NEXT!
+stop=11h32m17s   !NEXT!
 
-!* --- Scan from 11h33m39s to 11h36m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h33m57s to 11h36m57s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=11h33m39s   !NEXT!        
+stop=11h33m57s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h36m39s   !NEXT!
+stop=11h36m57s   !NEXT!
 
-!* --- Scan from 11h36m39s to 11h38m54s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h36m57s to 11h39m13s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1572,17 +1569,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=11h38m54s   !NEXT!
+stop=11h39m13s   !NEXT!
 
-!* --- Scan from 11h40m37s to 11h43m37s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h40m55s to 11h43m55s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=11h40m37s   !NEXT!        
+stop=11h40m55s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h43m37s   !NEXT!
+stop=11h43m55s   !NEXT!
 
-!* --- Scan from 11h45m37s to 11h48m37s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h45m55s to 11h48m55s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1591,12 +1588,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=11h45m37s   !NEXT!        
+stop=11h45m55s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=11h48m37s   !NEXT!
+stop=11h48m55s   !NEXT!
 
-!* --- Scan from 11h48m37s to 11h51m52s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h48m55s to 11h52m11s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1605,19 +1602,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=11h51m52s   !NEXT!
+stop=11h52m11s   !NEXT!
 
-!* --- Scan from 11h51m52s to 11h54m11s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h52m11s to 11h54m30s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=11h54m11s   !NEXT!
+stop=11h54m30s   !NEXT!
 
-!* --- Scan from 11h54m11s to 11h57m30s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h54m30s to 11h57m49s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=11h57m30s   !NEXT!
+stop=11h57m49s   !NEXT!
 
-!* --- Scan from 11h59m30s to 12h02m30s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 11h59m49s to 12h02m49s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1626,20 +1623,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=11h59m30s   !NEXT!        
+stop=11h59m49s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h02m30s   !NEXT!
+stop=12h02m49s   !NEXT!
 
-!* --- Scan from 12h04m12s to 12h07m12s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h04m31s to 12h07m31s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=12h04m12s   !NEXT!        
+stop=12h04m31s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h07m12s   !NEXT!
+stop=12h07m31s   !NEXT!
 
-!* --- Scan from 12h07m12s to 12h09m27s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h07m31s to 12h09m46s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1648,17 +1645,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=12h09m27s   !NEXT!
+stop=12h09m46s   !NEXT!
 
-!* --- Scan from 12h11m11s to 12h14m11s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h11m30s to 12h14m30s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=12h11m11s   !NEXT!        
+stop=12h11m30s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h14m11s   !NEXT!
+stop=12h14m30s   !NEXT!
 
-!* --- Scan from 12h16m11s to 12h19m11s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h16m30s to 12h19m30s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1667,12 +1664,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=12h16m11s   !NEXT!        
+stop=12h16m30s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h19m11s   !NEXT!
+stop=12h19m30s   !NEXT!
 
-!* --- Scan from 12h19m11s to 12h22m26s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h19m30s to 12h22m46s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1681,19 +1678,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=12h22m26s   !NEXT!
+stop=12h22m46s   !NEXT!
 
-!* --- Scan from 12h22m26s to 12h24m45s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h22m46s to 12h25m05s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=12h24m45s   !NEXT!
+stop=12h25m05s   !NEXT!
 
-!* --- Scan from 12h24m45s to 12h28m04s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h25m05s to 12h28m23s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=12h28m04s   !NEXT!
+stop=12h28m23s   !NEXT!
 
-!* --- Scan from 12h30m04s to 12h33m04s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h30m23s to 12h33m23s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1702,20 +1699,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=12h30m04s   !NEXT!        
+stop=12h30m23s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h33m04s   !NEXT!
+stop=12h33m23s   !NEXT!
 
-!* --- Scan from 12h34m45s to 12h37m45s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h35m05s to 12h38m05s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=12h34m45s   !NEXT!        
+stop=12h35m05s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h37m45s   !NEXT!
+stop=12h38m05s   !NEXT!
 
-!* --- Scan from 12h37m45s to 12h40m01s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h38m05s to 12h40m21s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1724,17 +1721,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=12h40m01s   !NEXT!
+stop=12h40m21s   !NEXT!
 
-!* --- Scan from 12h41m44s to 12h44m44s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h42m05s to 12h45m05s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=12h41m44s   !NEXT!        
+stop=12h42m05s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h44m44s   !NEXT!
+stop=12h45m05s   !NEXT!
 
-!* --- Scan from 12h46m44s to 12h49m44s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h47m05s to 12h50m05s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1743,12 +1740,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=12h46m44s   !NEXT!        
+stop=12h47m05s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=12h49m44s   !NEXT!
+stop=12h50m05s   !NEXT!
 
-!* --- Scan from 12h49m44s to 12h52m59s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h50m05s to 12h53m20s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1757,19 +1754,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=12h52m59s   !NEXT!
+stop=12h53m20s   !NEXT!
 
-!* --- Scan from 12h52m59s to 12h55m18s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h53m20s to 12h55m39s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=12h55m18s   !NEXT!
+stop=12h55m39s   !NEXT!
 
-!* --- Scan from 12h55m18s to 12h58m37s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 12h55m39s to 12h58m58s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=12h58m37s   !NEXT!
+stop=12h58m58s   !NEXT!
 
-!* --- Scan from 13h00m37s to 13h03m37s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h00m58s to 13h03m58s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1778,20 +1775,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=13h00m37s   !NEXT!        
+stop=13h00m58s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h03m37s   !NEXT!
+stop=13h03m58s   !NEXT!
 
-!* --- Scan from 13h05m18s to 13h08m18s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h05m39s to 13h08m39s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=13h05m18s   !NEXT!        
+stop=13h05m39s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h08m18s   !NEXT!
+stop=13h08m39s   !NEXT!
 
-!* --- Scan from 13h08m18s to 13h10m33s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h08m39s to 13h10m54s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1800,17 +1797,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=13h10m33s   !NEXT!
+stop=13h10m54s   !NEXT!
 
-!* --- Scan from 13h12m16s to 13h15m16s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h12m37s to 13h15m37s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=13h12m16s   !NEXT!        
+stop=13h12m37s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h15m16s   !NEXT!
+stop=13h15m37s   !NEXT!
 
-!* --- Scan from 13h17m16s to 13h20m16s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h17m37s to 13h20m37s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1819,12 +1816,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=13h17m16s   !NEXT!        
+stop=13h17m37s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h20m16s   !NEXT!
+stop=13h20m37s   !NEXT!
 
-!* --- Scan from 13h20m16s to 13h23m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h20m37s to 13h23m52s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1833,19 +1830,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=13h23m31s   !NEXT!
+stop=13h23m52s   !NEXT!
 
-!* --- Scan from 13h23m31s to 13h25m50s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h23m52s to 13h26m11s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=13h25m50s   !NEXT!
+stop=13h26m11s   !NEXT!
 
-!* --- Scan from 13h25m50s to 13h29m08s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h26m11s to 13h29m30s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=13h29m08s   !NEXT!
+stop=13h29m30s   !NEXT!
 
-!* --- Scan from 13h31m08s to 13h34m08s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h31m30s to 13h34m30s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1854,20 +1851,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=13h31m08s   !NEXT!        
+stop=13h31m30s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h34m08s   !NEXT!
+stop=13h34m30s   !NEXT!
 
-!* --- Scan from 13h35m48s to 13h38m48s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h36m10s to 13h39m10s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=13h35m48s   !NEXT!        
+stop=13h36m10s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h38m48s   !NEXT!
+stop=13h39m10s   !NEXT!
 
-!* --- Scan from 13h38m48s to 13h41m03s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h39m10s to 13h41m25s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1876,17 +1873,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=13h41m03s   !NEXT!
+stop=13h41m25s   !NEXT!
 
-!* --- Scan from 13h42m45s to 13h45m45s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h43m07s to 13h46m07s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=13h42m45s   !NEXT!        
+stop=13h43m07s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h45m45s   !NEXT!
+stop=13h46m07s   !NEXT!
 
-!* --- Scan from 13h47m45s to 13h50m45s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h48m07s to 13h51m07s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1895,12 +1892,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=13h47m45s   !NEXT!        
+stop=13h48m07s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=13h50m45s   !NEXT!
+stop=13h51m07s   !NEXT!
 
-!* --- Scan from 13h50m45s to 13h54m00s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h51m07s to 13h54m22s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1909,19 +1906,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=13h54m00s   !NEXT!
+stop=13h54m22s   !NEXT!
 
-!* --- Scan from 13h54m00s to 13h56m19s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h54m22s to 13h56m41s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=13h56m19s   !NEXT!
+stop=13h56m41s   !NEXT!
 
-!* --- Scan from 13h56m19s to 13h59m37s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 13h56m41s to 14h00m00s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=13h59m37s   !NEXT!
+stop=14h00m00s   !NEXT!
 
-!* --- Scan from 14h01m37s to 14h04m37s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h02m00s to 14h05m00s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1930,20 +1927,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=14h01m37s   !NEXT!        
+stop=14h02m00s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h04m37s   !NEXT!
+stop=14h05m00s   !NEXT!
 
-!* --- Scan from 14h06m15s to 14h09m15s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h06m38s to 14h09m38s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=14h06m15s   !NEXT!        
+stop=14h06m38s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h09m15s   !NEXT!
+stop=14h09m38s   !NEXT!
 
-!* --- Scan from 14h09m15s to 14h11m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h09m38s to 14h11m53s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1952,17 +1949,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=14h11m31s   !NEXT!
+stop=14h11m53s   !NEXT!
 
-!* --- Scan from 14h13m10s to 14h16m10s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h13m33s to 14h16m33s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=14h13m10s   !NEXT!        
+stop=14h13m33s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h16m10s   !NEXT!
+stop=14h16m33s   !NEXT!
 
-!* --- Scan from 14h18m10s to 14h21m10s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h18m33s to 14h21m33s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -1971,12 +1968,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=14h18m10s   !NEXT!        
+stop=14h18m33s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h21m10s   !NEXT!
+stop=14h21m33s   !NEXT!
 
-!* --- Scan from 14h21m10s to 14h24m25s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h21m33s to 14h24m48s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -1985,19 +1982,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=14h24m25s   !NEXT!
+stop=14h24m48s   !NEXT!
 
-!* --- Scan from 14h24m25s to 14h26m44s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h24m48s to 14h27m07s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=14h26m44s   !NEXT!
+stop=14h27m07s   !NEXT!
 
-!* --- Scan from 14h26m44s to 14h30m02s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h27m07s to 14h30m26s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=14h30m02s   !NEXT!
+stop=14h30m26s   !NEXT!
 
-!* --- Scan from 14h32m02s to 14h35m02s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h32m26s to 14h35m26s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -2006,20 +2003,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=14h32m02s   !NEXT!        
+stop=14h32m26s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h35m02s   !NEXT!
+stop=14h35m26s   !NEXT!
 
-!* --- Scan from 14h36m39s to 14h39m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h37m02s to 14h40m02s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=14h36m39s   !NEXT!        
+stop=14h37m02s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h39m39s   !NEXT!
+stop=14h40m02s   !NEXT!
 
-!* --- Scan from 14h39m39s to 14h41m54s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h40m02s to 14h42m17s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -2028,17 +2025,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=14h41m54s   !NEXT!
+stop=14h42m17s   !NEXT!
 
-!* --- Scan from 14h43m31s to 14h46m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h43m55s to 14h46m55s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=14h43m31s   !NEXT!        
+stop=14h43m55s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h46m31s   !NEXT!
+stop=14h46m55s   !NEXT!
 
-!* --- Scan from 14h48m31s to 14h51m31s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h48m55s to 14h51m55s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -2047,12 +2044,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=14h48m31s   !NEXT!        
+stop=14h48m55s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=14h51m31s   !NEXT!
+stop=14h51m55s   !NEXT!
 
-!* --- Scan from 14h51m31s to 14h54m46s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h51m55s to 14h55m10s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -2061,19 +2058,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=14h54m46s   !NEXT!
+stop=14h55m10s   !NEXT!
 
-!* --- Scan from 14h54m46s to 14h57m05s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h55m10s to 14h57m29s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=14h57m05s   !NEXT!
+stop=14h57m29s   !NEXT!
 
-!* --- Scan from 14h57m05s to 15h00m23s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 14h57m29s to 15h00m48s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=15h00m23s   !NEXT!
+stop=15h00m48s   !NEXT!
 
-!* --- Scan from 15h02m23s to 15h05m23s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h02m48s to 15h05m48s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -2082,20 +2079,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=15h02m23s   !NEXT!        
+stop=15h02m48s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h05m23s   !NEXT!
+stop=15h05m48s   !NEXT!
 
-!* --- Scan from 15h06m57s to 15h09m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h07m22s to 15h10m22s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=15h06m57s   !NEXT!        
+stop=15h07m22s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h09m57s   !NEXT!
+stop=15h10m22s   !NEXT!
 
-!* --- Scan from 15h09m57s to 15h12m12s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h10m22s to 15h12m37s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -2104,17 +2101,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=15h12m12s   !NEXT!
+stop=15h12m37s   !NEXT!
 
-!* --- Scan from 15h13m47s to 15h16m47s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h14m12s to 15h17m12s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=15h13m47s   !NEXT!        
+stop=15h14m12s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h16m47s   !NEXT!
+stop=15h17m12s   !NEXT!
 
-!* --- Scan from 15h18m47s to 15h21m47s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h19m12s to 15h22m12s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -2123,12 +2120,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=15h18m47s   !NEXT!        
+stop=15h19m12s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h21m47s   !NEXT!
+stop=15h22m12s   !NEXT!
 
-!* --- Scan from 15h21m47s to 15h25m02s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h22m12s to 15h25m27s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -2137,19 +2134,19 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=15h25m02s   !NEXT!
+stop=15h25m27s   !NEXT!
 
-!* --- Scan from 15h25m02s to 15h27m21s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h25m27s to 15h27m46s   Sun, 1995 Oct 22 --- *!
 sname='0309+411'  ra=03h13m01.962129s  dec= 41d20'01.18341"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=15h27m21s   !NEXT!
+stop=15h27m46s   !NEXT!
 
-!* --- Scan from 15h27m21s to 15h30m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h27m46s to 15h31m04s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 tape=(1,+RUN)  write=(1,on)
-stop=15h30m39s   !NEXT!
+stop=15h31m04s   !NEXT!
 
-!* --- Scan from 15h32m39s to 15h35m39s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h33m04s to 15h36m04s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -2158,20 +2155,20 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=15h32m39s   !NEXT!        
+stop=15h33m04s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h35m39s   !NEXT!
+stop=15h36m04s   !NEXT!
 
-!* --- Scan from 15h37m10s to 15h40m10s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h37m36s to 15h40m36s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=15h37m10s   !NEXT!        
+stop=15h37m36s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h40m10s   !NEXT!
+stop=15h40m36s   !NEXT!
 
-!* --- Scan from 15h40m10s to 15h42m25s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h40m36s to 15h42m51s   Sun, 1995 Oct 22 --- *!
 sname='0552+398'  ra=05h55m30.805614s  dec= 39d48'49.16500"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -2180,17 +2177,17 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=15h42m25s   !NEXT!
+stop=15h42m51s   !NEXT!
 
-!* --- Scan from 15h43m57s to 15h46m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h44m23s to 15h47m23s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
-stop=15h43m57s   !NEXT!        
+stop=15h44m23s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h46m57s   !NEXT!
+stop=15h47m23s   !NEXT!
 
-!* --- Scan from 15h48m57s to 15h51m57s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h49m23s to 15h52m23s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -2199,12 +2196,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=15h48m57s   !NEXT!        
+stop=15h49m23s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=15h51m57s   !NEXT!
+stop=15h52m23s   !NEXT!
 
-!* --- Scan from 15h51m57s to 15h55m13s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 15h52m23s to 15h55m28s   Sun, 1995 Oct 22 --- *!
 sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -2213,9 +2210,9 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=15h55m13s   !NEXT!
+stop=15h55m28s   !NEXT!
 
-!* --- Scan from 16h03m30s to 16h09m00s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 16h03m45s to 16h09m15s   Sun, 1995 Oct 22 --- *!
 sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59814"  qual=999  calib='V'
 extlo = (1,  4.3601000000)
 extlosideband = (1,U)
@@ -2224,12 +2221,12 @@ extlosideband = (3,U)
 sideband=(1,U),(2,U),(3,U),(4,U)
 bbsynth=( 1,622.39),( 2,622.39),( 3,630.39),( 4,630.39)
 tape=(1,STOP) write=(1,off)
-stop=16h03m30s   !NEXT!        
+stop=16h03m45s   !NEXT!        
 qual=  0
 tape=(1,+RUN)  write=(1,on)
-stop=16h09m00s   !NEXT!
+stop=16h09m15s   !NEXT!
 
-!* --- Scan from 16h09m00s to 16h14m45s   Sun, 1995 Oct 22 --- *!
+!* --- Scan from 16h09m15s to 16h15m00s   Sun, 1995 Oct 22 --- *!
 sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59814"  qual=  0  calib='V'
 extlo = (1,  9.0399000000)
 extlosideband = (1,L)
@@ -2238,8 +2235,8 @@ extlosideband = (3,L)
 sideband=(1,L),(2,L),(3,L),(4,L)
 bbsynth=( 1,626.41),( 2,626.41),( 3,618.41),( 4,618.41)
 tape=(1,+RUN)  write=(1,on)
-stop=16h14m45s   !NEXT!
+stop=16h15m00s   !NEXT!
 
 tape=(1,STOP)    write=(1,off)   dur=0s 
-stop=16h14m50s   !NEXT!
+stop=16h15m05s   !NEXT!
      !QUIT! 

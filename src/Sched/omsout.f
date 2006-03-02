@@ -27,11 +27,11 @@ C
       IF( EXISTS .AND. ( RESTART .OR. OVERWRIT ) ) THEN
          OPSTAT = 'OLD'
       ELSE IF( EXISTS ) THEN
-         WRITE( MSGTXT, '( A, A, A )' )  'SUMOPE: ', 
+         WRITE( MSGTXT, '( A, A, A )' )  'OMSOUT: ', 
      1       OMSFILE(1:LEN1(OMSFILE)), ' already exists.'
          CALL WLOG( 1, MSGTXT )
          CALL ERRLOG( 
-     1      'SUMOPE: You need to delete old output files '//
+     1      'OMSOUT: You need to delete old output files '//
      2      'or use OVERWRIT.')
       ELSE
          OPSTAT = 'NEW'

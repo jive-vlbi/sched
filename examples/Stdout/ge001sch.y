@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.02  May 2005                              
+Processed by SCHED version:   6.04  February 2006                         
 
 PI:       Craig Walker                                                    
 
@@ -46,6 +46,7 @@ to take the place of the separate files often provided by PI's.
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -81,10 +82,10 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 21 00 00  DA193        00 44 06  29.5  59.7 -5.2     -68.5   461   1  6  17600  21 00 00
 21 22 00  ---          01 06 09  33.5  61.4 -4.8     -71.2  1320   R  1      0  21 00 08
 
-21 30 00  DA193        01 14 11  35.0  62.0 -4.7     -72.1   461   1  7      0  21 30 00
+21 30 00  DA193        01 14 11  35.0  62.0 -4.7     -72.1   460   1  7      0  21 30 00
 21 52 00  ---          01 36 14  39.0  63.5 -4.3     -74.7  1320   F  1  17600  21 30 08
 
-22 00 00  DA193        01 44 16  40.5  64.0 -4.2     -75.7   461   1  8  17600  22 00 00
+22 00 00  DA193        01 44 16  40.5  64.0 -4.2     -75.7   460   1  8  17600  22 00 00
 22 22 00  ---          02 06 19  44.7  65.3 -3.8     -78.4  1320   R  1      0  22 00 08
 
 22 30 00  DA193        02 14 21  46.2  65.7 -3.7     -79.3   460   1  9      0  22 30 00
@@ -100,6 +101,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -151,13 +153,14 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 06 07 00  DA193        09 52 36  43.1 -64.8  4.0      77.4   460   2 10  17600  06 07 00
 06 29 00  ---          10 14 39  39.0 -63.5  4.3      74.7  1320   R  1      0  06 07 08
 
-06 37 00  DA193        10 22 41  37.5 -62.9  4.5      73.8   461   2 11      0  06 37 00
+06 37 00  DA193        10 22 41  37.5 -62.9  4.5      73.8   460   2 11      0  06 37 00
 06 59 00  ---          10 44 44  33.5 -61.4  4.8      71.1  1320   F  1  17600  06 37 08
 Schedule for VLA27     (Code Y  )                                   Page   4
                Global VLBI observations
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -168,7 +171,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 
  --- Thu   6 Mar 1997   Day  65 ---
 
-07 07 00  DA193        10 52 45  32.0 -60.7  5.0      70.2   461   2 12  17600  07 07 00
+07 07 00  DA193        10 52 45  32.0 -60.7  5.0      70.2   460   2 12  17600  07 07 00
 07 29 00  ---          11 14 49  28.1 -59.0  5.3      67.5  1320   R  1      0  07 07 08
 
 07 44 00  3C345        11 29 52  29.2  59.5 -5.2     -68.3   707   2 13      0  07 44 00
@@ -179,7 +182,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 
 -----------  Tape Change ------------
 
-08 32 30  DA193        12 18 29  17.1 -53.1  6.4      59.6    51   1  1      0  08 32 30
+08 32 30  DA193        12 18 29  17.1 -53.1  6.4      59.6    50   1  1      0  08 32 30
 08 54 30  ---          12 40 33  13.5 -50.8  6.8      56.7  1320   F  1  17600  08 32 38
 
 08 58 30  DA193        12 44 34  12.9 -50.3  6.8      56.1   223   1  2  17600  08 58 30
@@ -188,10 +191,10 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 09 24 30  DA193        13 10 38   8.8 -47.4  7.3      52.5   223   1  3      0  09 24 30
 09 46 30  ---          13 32 42   5.5 -44.7  7.6  D   49.3     0   F  1  17600  09 24 38
 
-12 52 30  3C273        16 39 12  23.7 255.6  4.2      53.4 10695   1  4  17600  12 52 30
+12 52 30  3C273        16 39 12  23.7 255.6  4.2      53.4 10694   1  4  17600  12 52 30
 13 14 30  ---          17 01 16  19.2 259.1  4.5      54.5  1320   R  1      0  12 52 38
 
-13 18 30  3C273        17 05 16  18.4 259.7  4.6      54.6   223   1  5      0  13 18 30
+13 18 30  3C273        17 05 16  18.4 259.7  4.6      54.6   222   1  5      0  13 18 30
 13 40 30  ---          17 27 20  13.9 263.0  5.0      55.3  1320   F  1  17600  13 18 38
 
 
@@ -199,8 +202,8 @@ SETUP FILE INFORMATION:
    NOTE: If DOPPLER, FREQ, or BW were used, see the individual scans for the final BBC settings.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/v6cm-256-8-2-UL.set
-   Matches group y_vc in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+ Setup file: /mnt/mach/mach/cwalker/code/sched/setups/v6cm-256-8-2-UL.set
+   Matches group y_vc in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   12         Station: VLA27             Total bit rate:  256
@@ -262,31 +265,31 @@ SETUP FILE INFORMATION:
 
    J0319+4130        03 16 29.567289   * 03 19 48.160119     03 19 36.653464       0.28
    0316+413          41 19 51.91675    * 41 30 42.10387      41 30 04.83221        0.41
- * 3C84              /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C84              /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J0319+41          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.367 scan hours,     38.500 baseline hours above horizon.
 
    J0555+3948        05 52 01.407172   * 05 55 30.805614     05 55 19.506253       0.26
    0552+398          39 48 21.94585    * 39 48 49.16500      39 48 44.89752        0.40
- * DA193             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * DA193             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J0555+39          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
-                       13.567 scan hours,   1345.566 baseline hours above horizon.
+                       13.567 scan hours,   1345.729 baseline hours above horizon.
 
    J1229+0203        12 26 33.245835   * 12 29 06.699731     12 28 59.222653       0.30
    1226+023          02 19 43.30564    * 02 03 08.59814      02 03 57.34916        0.20
- * 3C273             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C273             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    3C273B            VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
    J1229+02             0.733 scan hours,     23.467 baseline hours above horizon.
 
    J1640+3946        16 38 48.169686   * 16 40 29.632770     16 40 23.852909       0.26
    1638+398          39 52 30.08665    * 39 46 46.02846      39 46 55.18676        0.40
-   J1640+39          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+   J1640+39          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
  * NRAO512           VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.367 scan hours,     56.100 baseline hours above horizon.
 
    J1642+3948        16 41 17.606231   * 16 42 58.809968     16 42 53.031588       0.26
    1641+399          39 54 10.81493    * 39 48 36.99399      39 48 45.59797        0.40
- * 3C345             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C345             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J1642+39          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.367 scan hours,     56.100 baseline hours above horizon.
 

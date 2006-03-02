@@ -1,5 +1,5 @@
       SUBROUTINE OPTCSPT( ISCN1, ISCN2, NSTA, POINTS, ARPTS, SCNSTA, 
-     1                LSRC, MAXISC, MAXSTA, OPMIAN, 
+     1                LSRC, MAXISC, MAXSTA, MINANT1, MINANT2,
      2                SCN1, SCN2, NS1, NS2, NS3 )
 C
 C     Routine for SCHED subroutine OPTCSUB that calculates the
@@ -15,7 +15,7 @@ C     adjusts to conform to the required minimum number of antennas
 C     per subarray.  It may end up putting all stations on the same
 C     source in this process.  
 C
-      INTEGER      NSTA, MAXSTA, MAXISC, OPMIAN
+      INTEGER      NSTA, MAXSTA, MAXISC, MINANT1, MINANT2
       INTEGER      ISCN1, ISCN2, SCNSTA(MAXSTA), LSRC(MAXSTA)
       INTEGER      ISTA, N1, N2, N3, ISWITCH, NJ, NK
       INTEGER      SCN1, SCN2, NS1, NS2, NS3
@@ -56,7 +56,7 @@ C     minimum number of antenna constraints.  This is only
 C     possible if there are enough antennas up.
 C
   100 CONTINUE
-         IF( N1 .LT. OPMIAN .AND. N1 + N2 .GE. 2 * OPMIAN ) THEN
+         IF( N1 .LT. MINANT1 .AND. N1 + N2 .GE. MINANT1 + MINANT2 ) THEN
             MDIFF = PTSUM
             ISWITCH = 0
             DO ISTA = 1, NSTA
@@ -80,7 +80,8 @@ C
                N2 = N2 - 1
                GO TO 100
             END IF
-         ELSE IF( N2 .LT. OPMIAN .AND. N1 + N2 .GE. 2 * OPMIAN) THEN
+         ELSE IF( N2 .LT. MINANT2 .AND. N1 + N2 .GE. 
+     1              MINANT1 + MINANT2 ) THEN
             MDIFF = PTSUM
             ISWITCH = 0
             DO ISTA = 1, NSTA
@@ -105,7 +106,7 @@ C
 C     If either N1 or N2 is still too small, force 
 C     choice of a single source case.
 C
-      IF( N1 .LT. OPMIAN .OR. N2 .LT. OPMIAN ) THEN
+      IF( N1 .LT. MINANT1 .OR. N2 .LT. MINANT2 ) THEN
 C
          PTSUM = 0.0
          N1    = 0

@@ -180,6 +180,30 @@ C
          END DO
       END DO
 C
+C     Warn if SCNHR is zero for some station.  Abort if using VEX.
+C
+      DO ISTA = 1, NSTA
+         IF( SCNHR(ISTA) .LE. 0.0 .AND. CONTROL(STANUM(ISTA)) .EQ. 'VEX'
+     1           .AND. .NOT. DODOWN .AND. 
+     2           ( ( AUTOALOC(ISTA) .AND. AUTOREV(ISTA) ) .OR.
+     3             ( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) ) ) THEN
+            MSGTXT = 'SCHTIM:  ****** ERROR: Station ' // 
+     1          STANAME(ISTA) // ' is not in any scans.'
+            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 1, '      This can happen if the source is ' //
+     1                 'up in any of of the assigned scans.' )
+            MSGTXT = ' '
+            CALL ERROR( '      SCHED cannot make a Vex file.' )
+         ELSE IF( SCNHR(ISTA) .LE. 0.0 ) THEN
+            MSGTXT = 'SCHTIM:  ****** WARNING: Station ' // 
+     1          STANAME(ISTA) // ' is not in any scans.'
+            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 1, '      This can happen if the source is ' //
+     1                 'up in any of of the assigned scans.' )
+            MSGTXT = ' '
+         END IF
+      END DO
+C
 C     Warn if TFIRST .NE. FIRSTT (first time specified in input 
 C     schedule vs. first time in optimized schedule.  Actually
 C     allow a couple of seconds tolerance.

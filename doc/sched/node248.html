@@ -1,92 +1,139 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>PERIOD</TITLE>
-<META NAME="description" CONTENT="PERIOD">
+<TITLE>FREQREF</TITLE>
+<META NAME="description" CONTENT="FREQREF">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node249.html">
 <LINK REL="previous" HREF="node247.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node249.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3671"
+<A NAME="tex2html3700"
   HREF="node249.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3667"
-  HREF="node217.html">
+<A NAME="tex2html3696"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3661"
+<A NAME="tex2html3690"
   HREF="node247.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3669"
+<A NAME="tex2html3698"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3672"
-  HREF="node249.html">PCAL</A>
-<B> Up:</B> <A NAME="tex2html3668"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3662"
-  HREF="node247.html">NOISEFRQ</A>
- &nbsp <B>  <A NAME="tex2html3670"
+<B> Next:</B> <A NAME="tex2html3701"
+  HREF="node249.html">FRSWITCH</A>
+<B> Up:</B> <A NAME="tex2html3697"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3691"
+  HREF="node247.html">FREQOFF</A>
+ &nbsp <B>  <A NAME="tex2html3699"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643100000000000000"></A><A NAME="SP:PERIOD"></A>
+<H3><A NAME="SECTION004641800000000000000"></A><A NAME="SP:FREQREF"></A>
 <BR>
-<TT>PERIOD</TT>
+<TT>FREQREF</TT>
 </H3>
 
 <P>
-<TT>PERIOD</TT> gives the integration time for detected powers in the
-base band converters (BBCs). One value is accepted here although SCHED will write that value out separately for each baseband
-channel. It would be ideal to set this to 30 seconds or so, but this
-time is also used for the auto-leveling time constant so it should be
-significantly less, with values of <TT>1</TT> or <TT>2</TT> typical. A value
-of <TT>0</TT> implies do not integrate beyond the 1/80 sec cal cycle
-time.
+<TT>FREQREF</TT> is the LO sum to use for the baseband channel in MHz.
+<TT>FREQOFF</TT> will be added to it. The LO sum is the sum of the <TT>FIRSTLO</TT> plus or minus, depending on sideband, the BBC synthesizer
+setting <TT>BBSYN</TT>. A <TT>FREQ</TT> specification in the SCHED&nbsp; 
+keyin file will override <TT>FREQREF</TT> plus <TT>FREQOFF</TT>, as long as
+the BBC settings stay within range and there are no sideband changes.
+
+<P>
+To set pulse cals properly and to deal with non-VLBA stations
+correctly, it is best to know all of the LO sum, the first LO, and the
+BBC settings, along with all of the required sidebands. Strictly
+speaking, valid VLBA schedules can be written without knowing all
+these, but SCHED&nbsp; can be made significantly simpler and more
+reliable if all this information is required. Not all of these values
+need to be specified since they are related. There are four possible
+complete combinations, and if more values are specified than necessary
+then a consistency check will be done. These complete combinations
+are:
+<BLOCKQUOTE>
+1. <TT>FREQREF</TT> plus <TT>FREQOFF</TT>, <TT>FIRSTLO</TT>, <TT>NETSIDE</TT>  
+<BR>
+2. <TT>FREQREF</TT> plus <TT>FREQOFF</TT>, <TT>FIRSTLO</TT>, <TT>SIDEBAND</TT> 
+<BR>
+3. <TT>BBSYN</TT>, <TT>SIDEBAND</TT>, <TT>NETSIDE</TT>,
+   <TT>FREQREF</TT> plus <TT>FREQOFF</TT> 
+<BR>
+4. <TT>BBSYN</TT>, <TT>SIDEBAND</TT>, <TT>NETSIDE</TT>, <TT>FIRSTLO</TT> 
+<BR>
+</BLOCKQUOTE>
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An integer giving the integration time in seconds.
+<LI><B>Argument:</B> Up to 16 frequencies in MHz.
 </LI>
-<LI><B>Options:</B>  Any integer <TT>0</TT> or greater.
+<LI><B>Options:</B>  Any valid frequency.
 </LI>
-<LI><B>Default:</B>  1
+<LI><B>Default:</B>  <TT>0.0</TT> for <TT>FREQREF(1)</TT> which means don't use it. For baseband
+channels 2 and higher, will be set to <TT>FREQREF(1)</TT>.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>PERIOD=2</TT>
+<LI><B>Example:</B>  <TT>FREQREF = 1662.49</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3700"
+  HREF="node249.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3696"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3690"
+  HREF="node247.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3698"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3701"
+  HREF="node249.html">FRSWITCH</A>
+<B> Up:</B> <A NAME="tex2html3697"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3691"
+  HREF="node247.html">FREQOFF</A>
+ &nbsp <B>  <A NAME="tex2html3699"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

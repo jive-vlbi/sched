@@ -109,7 +109,7 @@ C
                STASCN(ISCN,ISTA) = UP1(ISCN,ISTA) .EQ. ' ' .AND.
      1             UP2(ISCN,ISTA) .EQ. ' ' .AND.
      2             ( EL1(ISCN,ISTA) + EL2(ISCN,ISTA) ) / 2.0 .GT. 
-     3              OPMINEL               
+     3              OPMINEL(ISCN)               
             END IF
          END DO
 C

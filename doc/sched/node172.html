@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>STATions</TITLE>
-<META NAME="description" CONTENT="STATions">
+<TITLE>ROTPAT</TITLE>
+<META NAME="description" CONTENT="ROTPAT">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,72 +29,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2633"
+<A NAME="tex2html2662"
   HREF="node173.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2629"
+<A NAME="tex2html2658"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2623"
+<A NAME="tex2html2652"
   HREF="node171.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2631"
+<A NAME="tex2html2660"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2634"
-  HREF="node173.html">STOP</A>
-<B> Up:</B> <A NAME="tex2html2630"
+<B> Next:</B> <A NAME="tex2html2663"
+  HREF="node173.html">ROTOFF</A>
+<B> Up:</B> <A NAME="tex2html2659"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2624"
-  HREF="node171.html">START</A>
- &nbsp <B>  <A NAME="tex2html2632"
+<B> Previous:</B> <A NAME="tex2html2653"
+  HREF="node171.html">ROTATION</A>
+ &nbsp <B>  <A NAME="tex2html2661"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041212000000000000000"></A><A NAME="MP:STATIONS"></A>
+<H3><A NAME="SECTION0041212000000000000000"></A><A NAME="MP:ROTPAT"></A>
 <BR>
-<TT>STATions</TT>
+<TT>ROTPAT</TT>
 </H3>
 
 <P>
-<TT>STATions</TT> is used to specify the list of stations to be included
-in this scan. If there is any change to the list, the whole list
-must be given again. The station names given must match ones
-available in the station catalogs. The scans for any specific station
-must be in time order.  Note that <TT>STATN</TT> is no longer an
-acceptable alternative.
+<TT>ROTPAT</TT> causes SCHED&nbsp; to expand pointing patterns to include
+a raster in focus and rotation.  The position offsets in this
+raster are specified by <A HREF="node93.html#MP:FOCOFF"><TT>FOCOFF</TT></A> and
+<A HREF="node173.html#MP:ROTOFF"><TT>ROTOFF</TT></A>.  <TT>ROTPAT</TT> is only expected
+to be used by VLBA testers.
 
 <P>
-The maximum number of stations that SCHED&nbsp; will handle is set
-in a parameter statement in an include file and can be varied according
-to the capabilities of the computer in use.  At the time this was
-written, it was 22, but that may change.
+<TT>ROTPAT</TT> have a value which is the number of positions in
+focus/rotation in the pattern.  It can only be used for 13cm, 6cm,
+4cm, 2cm, 1cm, 7mm, and 3mm.  Note that the overall scan must be <TT>ptslew</TT> plus <TT>rotpat</TT> times ( 2 times <TT>ptdur</TT> plus N times 10
+times <TT>ptdur</TT> ) long to fit a full pattern with N pointing loops
+at each focus/rotation position.
 
 <P>
-You may specify the station code for any or all stations instead of
-the name.  Sched will determine the station name from the catalog
-information and use it for the rest of scheduling.  This use of
-station codes is only offered for <A HREF="node172.html#MP:STATIONS"><TT>STATions</TT></A>,
-<A HREF="node90.html#MP:FASTFOR"><TT>FASTFOR</TT></A>, <A HREF="node158.html#MP:REWIND"><TT>REWIND</TT></A>,
-<A HREF="node177.html#MP:TAPE"><TT>TAPE</TT></A>, and <A HREF="node157.html#MP:REVERSE"><TT>REVERSE</TT></A>.
-All other inputs requiring station names must use the names as given
-in the station catalog.
+A typical set of offsets would be <TT>ROTOFF=-1.5, 0, 0, 0, 1.5</TT>
+and <TT>FOCOFF=0, -1, 0, 1, 0</TT> with <TT>FOCPAT=5</TT>.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A list of station names of up to 8 characters each.
+<LI><B>Argument:</B> A number of focus/rotation positions.  Up to 20.
 </LI>
-<LI><B>Options:</B>  Any stations in the station catalog.
+<LI><B>Options:</B>  Any number up to 20.
 </LI>
-<LI><B>Default:</B>  At least one must be given for first scan.
+<LI><B>Default:</B>  0 - Only do the central focus/rotation position.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous scan.
+<LI><B>Usage:</B>    Only one used for the experiment
 </LI>
-<LI><B>Example:</B>  <TT>STATION=EB_VLBA,GB_VLBA,VLBA_NL,VLA27,VLBA_MK</TT>
+<LI><B>Example:</B>  <TT>ROTPAT=5</TT>
   
 </LI>
 </UL>
@@ -100,31 +96,31 @@ in the station catalog.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2633"
+<A NAME="tex2html2662"
   HREF="node173.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2629"
+<A NAME="tex2html2658"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2623"
+<A NAME="tex2html2652"
   HREF="node171.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2631"
+<A NAME="tex2html2660"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2634"
-  HREF="node173.html">STOP</A>
-<B> Up:</B> <A NAME="tex2html2630"
+<B> Next:</B> <A NAME="tex2html2663"
+  HREF="node173.html">ROTOFF</A>
+<B> Up:</B> <A NAME="tex2html2659"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2624"
-  HREF="node171.html">START</A>
- &nbsp <B>  <A NAME="tex2html2632"
+<B> Previous:</B> <A NAME="tex2html2653"
+  HREF="node171.html">ROTATION</A>
+ &nbsp <B>  <A NAME="tex2html2661"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

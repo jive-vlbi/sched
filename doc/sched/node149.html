@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>PRESTART</TITLE>
-<META NAME="description" CONTENT="PRESTART">
+<TITLE>PCAL</TITLE>
+<META NAME="description" CONTENT="PCAL">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,89 +29,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2357"
+<A NAME="tex2html2386"
   HREF="node150.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2353"
+<A NAME="tex2html2382"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2347"
+<A NAME="tex2html2376"
   HREF="node148.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2355"
+<A NAME="tex2html2384"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2358"
-  HREF="node150.html">PTDUR</A>
-<B> Up:</B> <A NAME="tex2html2354"
+<B> Next:</B> <A NAME="tex2html2387"
+  HREF="node150.html">PEAK and NOPEAK</A>
+<B> Up:</B> <A NAME="tex2html2383"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2348"
-  HREF="node148.html">PRESCAN</A>
- &nbsp <B>  <A NAME="tex2html2356"
+<B> Previous:</B> <A NAME="tex2html2377"
+  HREF="node148.html">OVERwrit</A>
+ &nbsp <B>  <A NAME="tex2html2385"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004129700000000000000"></A><A NAME="MP:PRESTART"></A>
+<H3><A NAME="SECTION004129700000000000000"></A><A NAME="MP:PCAL"></A>
 <BR>
-<TT>PRESTART</TT>
+<TT>PCAL</TT>
 </H3>
 
 <P>
-<TT>PRESTART</TT> gives a time by which to start the recording at a
-site before the nominal start time as established by <A HREF="node171.html#MP:START"><TT>START</TT></A>, <A HREF="node97.html#MP:GAP"><TT>GAP</TT></A>, <A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A>, <A HREF="node148.html#MP:PRESCAN"><TT>PRESCAN</TT></A> etc.  Like <TT>PRESCAN</TT>, if the requested <TT>PRESTART</TT> moves the start of motion to
-before the stop time of the previous scan, the recording will just be kept
-moving.  But, unlike <TT>PRESCAN</TT>, this time shift is done on a
-per-station basis -- if a station was not participating in the
-previous scan, it's recording start will be shifted the full
-<TT>PRESTART</TT> time, even if that means starting while other stations
-are still recording the previous scan.  Also unlike <TT>PRESCAN</TT>,
-the shift due to <TT>PRESTART</TT> is not reflected in the scan
-times reported in the summary or sch files.
+<TT>PCAL</TT> sets the mode of the pulse cal generators on the VLBA. The
+generators can be off or can generate tones every 1&nbsp;MHz or every
+5&nbsp;MHz. The input here can be used to change the mode from scan to
+scan. A default can be established in the setup file.  Note that, if
+<TT>PCAL</TT> is specified in the schedule, it will override what is
+in the setup file, even if a new setup is invoked.
 
 <P>
-The amount of time by which the recording start is shifted before
-the nominal start time can be displayed using the <TT>TPSTART</TT> option
-in the <A HREF="node174.html#MP:SUMITEM"><TT>SUMITEM</TT></A> list.
-
-<P>
-See the <A HREF="node17.html#SSEC:SCANTIMES">section on scan times</A> for more
-information on controlling scan times.
-
-<P>
-For PCFS (VEX) controled stations, the user should bear in mind that
-all start times currently (Oct. 2001) must be equal. SCHED&nbsp; will issue
-a warning if this condition is violated.
-
-<P>
-Starting the recording early allows time for the correlator to
-synchronize the inputs from different stations before the start of
-good data.  Anytime the recording stops, the correlator takes time to
-resync.  On the VLBA correlator, that time is about 20 seconds times
-the speedup factor for tape and 5 seconds times the speedup factor for
-disk (Mark5).  In addition, any time that the formatter needs to be
-reconfigured (number of channels, BBC assignments, sidebands, pulse
-cal detector setups etc), the recording stops for about 20 seconds
-with VLBA systems.  That time is lost and the resync time so triggered
-is lost.  Formatter reconfigures happen at the start of the scan that
-needs them.  But if the recording is stopped with something like a gap
-command or dwell time scheduling, the formatter will be reconfigured
-during the during the interval between scans.
+Control over the phase cal detection is not implemented for telescopes
+controlled by means of the VEX file. See notes on <A HREF="node32.html#SSEC:MKIV">MkIV</A> and <A HREF="node34.html#SSEC:S2">S2</A> for details. In the EVN,
+standard practice is to use 1 MHz spaced tones at integer MHz
+values. Spectral line users that want to switch phase-cal insertion
+off should send special instructions to individual telescopes, as well
+as specifying it correctly in the schedule.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A time.
+<LI><B>Argument:</B> The pulse cal mode.
 </LI>
-<LI><B>Options:</B>  Any time.
+<LI><B>Options:</B>  <TT>' '</TT>, <TT>'off'</TT>, <TT>'1MHz'</TT>, or <TT>'5MHz'</TT>. A <TT>' '</TT>
+causes the setup file value to be used.
 </LI>
-<LI><B>Default:</B>  0.0
+<LI><B>Default:</B>  Use the setup file value. If none there, use <TT>'1MHz'</TT>.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous scan.
+<LI><B>Usage:</B>    Defaults to previous scan.  This applies even if there is a change
+of setup.
 </LI>
-<LI><B>Example:</B>  <TT>PRESTART=15</TT>, meaning start the recording 15 seconds early.
+<LI><B>Example:</B>  <TT>PCAL='off'</TT>
   
 </LI>
 </UL>
@@ -117,31 +96,31 @@ during the during the interval between scans.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2357"
+<A NAME="tex2html2386"
   HREF="node150.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2353"
+<A NAME="tex2html2382"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2347"
+<A NAME="tex2html2376"
   HREF="node148.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2355"
+<A NAME="tex2html2384"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2358"
-  HREF="node150.html">PTDUR</A>
-<B> Up:</B> <A NAME="tex2html2354"
+<B> Next:</B> <A NAME="tex2html2387"
+  HREF="node150.html">PEAK and NOPEAK</A>
+<B> Up:</B> <A NAME="tex2html2383"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2348"
-  HREF="node148.html">PRESCAN</A>
- &nbsp <B>  <A NAME="tex2html2356"
+<B> Previous:</B> <A NAME="tex2html2377"
+  HREF="node148.html">OVERwrit</A>
+ &nbsp <B>  <A NAME="tex2html2385"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

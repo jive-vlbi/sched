@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.02  May 2005                              
+Processed by SCHED version:   6.04  February 2006                         
 
 PI:       P.J.Diamond                                                     
 
@@ -32,6 +32,7 @@ Notes:    At VLA use antenna 27
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
 ----------------------------------------------------------------------------------------
@@ -60,7 +61,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 18 41 00  SPER         18 01 32  13.2  25.9 -8.4     -44.0   104   1  2   8800  18 41 00
 18 52 00  ---          18 12 34  14.2  27.0 -8.2     -46.1   660   R  1      0  18 41 08
 
-18 54 00  3C454.3      18 14 34  25.5  87.2 -4.7     -59.5    15   1  1      0  18 54 00
+18 54 00  3C454.3      18 14 34  25.5  87.2 -4.7     -59.5    14   1  1      0  18 54 00
 19 05 00  ---          18 25 36  27.8  88.7 -4.5     -59.5   660   F  2   8800  18 54 08
 
 19 07 00  SPER         18 27 36  15.7  28.3 -7.9     -49.0    14   1  1   8800  19 07 00
@@ -75,10 +76,10 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 19 46 00  SPER         19 06 43  19.7  31.6 -7.3     -56.3   104   1  1      0  19 46 00
 19 57 00  ---          19 17 45  20.9  32.4 -7.1     -58.4   660   F  3   8800  19 46 08
 
-19 59 00  3C454.3      19 19 45  39.0  96.6 -3.6     -58.9     9   1  1   8800  19 59 00
+19 59 00  3C454.3      19 19 45  39.0  96.6 -3.6     -58.9     8   1  1   8800  19 59 00
 20 10 00  ---          19 30 47  41.2  98.4 -3.4     -58.5   660   F  3  17600  19 59 08
 
-20 12 00  SPER         19 32 47  22.6  33.5 -6.8     -61.2     8   1  2  17600  20 12 00
+20 12 00  SPER         19 32 47  22.6  33.5 -6.8     -61.2     7   1  2  17600  20 12 00
 20 23 00  ---          19 43 49  23.9  34.2 -6.6     -63.3   660   R  3   8800  20 12 08
 
 20 25 00  SPER         19 45 49  24.1  34.3 -6.6     -63.6   104   1  2   8800  20 25 00
@@ -88,6 +89,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
 ----------------------------------------------------------------------------------------
@@ -108,7 +110,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 20 51 00  1749+096     20 11 53  49.6 241.1  2.3      47.4  -203   1  1   8800  20 51 00
 21 02 00  ---          20 22 55  47.6 243.9  2.5      49.0   457   F  4  17600  20 51 08
 
-21 04 00  UHER         20 24 56  35.1 270.1  4.0      61.1    66   1  2  17600  21 04 00
+21 04 00  UHER         20 24 56  35.1 270.1  4.0      61.1    65   1  2  17600  21 04 00
 21 15 00  ---          20 35 57  32.8 271.7  4.2      61.1   660   R  4   8800  21 04 08
 
 21 17 00  UHER         20 37 58  32.4 271.9  4.2      61.0   104   1  2   8800  21 17 00
@@ -141,7 +143,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: bd27a.set
-   Matches group y_vq in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vq in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   11         Station: VLA1              Total bit rate:   64
@@ -219,7 +221,7 @@ SETUP FILE INFORMATION:
                      09 39 42.82545    * 09 39 00.72800      09 39 11.05248        0.00
                      From catalog imbedded in main SCHED input file.
                      Doppler based on other sources.
-                        0.733 scan hours,     34.130 baseline hours above horizon.
+                        0.733 scan hours,     34.129 baseline hours above horizon.
 
  * UHER            * 16 23 35.000000     16 25 47.802614     16 25 36.186153       0.00
                    * 19 00 18.00000      18 53 33.24533      18 54 08.09040        0.00

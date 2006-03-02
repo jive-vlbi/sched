@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>MINPAUSE</TITLE>
-<META NAME="description" CONTENT="MINPAUSE">
+<TITLE>MAPLIM</TITLE>
+<META NAME="description" CONTENT="MAPLIM">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,123 +29,67 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1973"
+<A NAME="tex2html2002"
   HREF="node118.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1969"
+<A NAME="tex2html1998"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1963"
+<A NAME="tex2html1992"
   HREF="node116.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1971"
+<A NAME="tex2html2000"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1974"
-  HREF="node118.html">MONTH</A>
-<B> Up:</B> <A NAME="tex2html1970"
+<B> Next:</B> <A NAME="tex2html2003"
+  HREF="node118.html">MINPAUSE</A>
+<B> Up:</B> <A NAME="tex2html1999"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1964"
-  HREF="node116.html">MAPLIM</A>
- &nbsp <B>  <A NAME="tex2html1972"
+<B> Previous:</B> <A NAME="tex2html1993"
+  HREF="node116.html">LST</A>
+ &nbsp <B>  <A NAME="tex2html2001"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004126500000000000000"></A><A NAME="MP:MINPAUSE"></A>
+<H3><A NAME="SECTION004126500000000000000"></A><A NAME="MP:MAPLIM"></A>
 <BR>
-<TT>MINPAUSE</TT>
+<TT>MAPLIM</TT>
 </H3>
 
 <P>
-<TT>MINPAUSE</TT> is the minimum tape time a tape will be stopped between
-scans.  It can be specified for each scan, but usually will be set to
-one value for the whole schedule.  If the start of a scan is less than
-MINPAUSE (seconds) times the speedup factor from the end of the last
-tape motion scan, the tape will be left running between the scans.
-This action is station dependent -- different stations can have the
-tape motion started at different times except when writing a VEX file,
-in which case simultaneity is enforced .  The nominal start time of
-the scan as displayed in the summary is not affected by <TT>MINPAUSE</TT>.  You can use the option <TT>TPSTART</TT> in the <A HREF="node174.html#MP:SUMITEM"><TT>SUMITEM</TT></A> list to display in the summary how long before
-the scan start time the tape motion starts.  The tape motion start
-time is also given in the <I>sch</I> file.
-
-<P>
-Short tape stoppages can cause problems for playback.  Every time the
-tape stops, it must be resynced, which takes 10-20 seconds for the
-VLBA.  There also used to be a problem on the Socorro correlator that
-caused a tape move request to be ignored if it came before the tape
-had actually been stopped.  That is now fixed.
-
-<P>
-There are a variety of ways to prevent tapes from being stopped
-between scans.  The simplest is to schedule using <A HREF="node82.html#MP:DUR"><TT>DUR</TT></A> or explicit times with no specification of an interval
-between scans.  In such cases, SCHED&nbsp; will not schedule any sort of
-pause in scans or tape motion.  One can use <TT>MINPAUSE</TT> to keep the
-tape rolling through short gaps.  For longer gaps when using <TT>MINPAUSE</TT>, the tape start time will not be affected.  <A HREF="node149.html#MP:PRESTART"><TT>PRESTART</TT></A>, or a negative value for the obsolete
-parameter <A HREF="node148.html#MP:PRESCAN"><TT>PRESCAN</TT></A>, can be used to shift
-the scan start time forward from the time set by other criteria (such
-as antennas on-source when using <A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A>).
-The start time is moved by the same amount for all stations and is not
-moved past the stop time of the most recent scan at any station.
-
-<P>
-For PCFS (VEX) controled stations, the user should bear in mind that
-all start times currently (Oct. 2001) must be equal. SCHED&nbsp; will issue
-a warning if this condition is violated and will try to synchronize
-tape starts when using <TT>MINPAUSE</TT>.  It is possible for <TT>MINPAUSE</TT>
-to confound your attempts to leave gaps required by VEX files for
-tape reversals.  In such cases, you will need to adjust <TT>MINPAUSE</TT>
-on the offending scans.  The default should not cause this problem because
-it does not request continuous tape motion through scans long enough
-to keep the VEX check routines happy for a reversal.
+<TT>MAPLIM</TT> is used to provide the longitude and latitude limits for
+the plot that is made when (<A HREF="node125.html#MP:OBSTYPE"><TT>OBSTYPE</TT></A> is
+set to <TT>CONFIG</TT> and there are more than one source.  This is
+a special mode mainly for array configuration studies.  The 4
+values are the longitude minimum and maximum followed by the
+latitude minimum and maximum, all in degrees.  The system is such
+that North America is at poitive longitudes, which is backwards from
+some schemes.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A number giving the minimum tape stoppage in seconds.
+<LI><B>Argument:</B> Four numbers.
 </LI>
-<LI><B>Options:</B>  Any number.
+<LI><B>Options:</B>  Any.
 </LI>
-<LI><B>Default:</B>  8 seconds.
+<LI><B>Default:</B>  Use numbers appropriate for NMA configuration study.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous scan.
+<LI><B>Usage:</B>    Only one value used.
 </LI>
-<LI><B>Example:</B>  <TT>MINPAUSE=30</TT>
+<LI><B>Example:</B>  <TT>MAPLIM=80.0, 140.0, 15.0, 50.0</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1973"
-  HREF="node118.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1969"
-  HREF="node52.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1963"
-  HREF="node116.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1971"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html1974"
-  HREF="node118.html">MONTH</A>
-<B> Up:</B> <A NAME="tex2html1970"
-  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1964"
-  HREF="node116.html">MAPLIM</A>
- &nbsp <B>  <A NAME="tex2html1972"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

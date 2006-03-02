@@ -16,7 +16,7 @@ C
 C
       DATA XX/0.5/, YY/0.5/, PW/0/
 C -------------------------------------------------------------------
-      write(*,*) 'plotrd starting.'
+C      write(*,*) 'plotrd starting.'
 C
 C     Save original limits for Reset operation
 C

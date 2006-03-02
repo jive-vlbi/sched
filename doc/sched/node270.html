@@ -1,94 +1,141 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>VLAROT</TITLE>
-<META NAME="description" CONTENT="VLAROT">
+<TITLE>STATION</TITLE>
+<META NAME="description" CONTENT="STATION">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node271.html">
 <LINK REL="previous" HREF="node269.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node271.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3935"
+<A NAME="tex2html3964"
   HREF="node271.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3931"
-  HREF="node217.html">
+<A NAME="tex2html3960"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3925"
+<A NAME="tex2html3954"
   HREF="node269.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3933"
+<A NAME="tex2html3962"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3936"
-  HREF="node271.html">VLASYNA and VLASYNB</A>
-<B> Up:</B> <A NAME="tex2html3932"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3926"
-  HREF="node269.html">VLAIF</A>
- &nbsp <B>  <A NAME="tex2html3934"
+<B> Next:</B> <A NAME="tex2html3965"
+  HREF="node271.html">STRING1, STRING2, STRING3, and</A>
+<B> Up:</B> <A NAME="tex2html3961"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3955"
+  HREF="node269.html">SIDEBAND</A>
+ &nbsp <B>  <A NAME="tex2html3963"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004645300000000000000"></A><A NAME="SP:VLAROT"></A>
+<H3><A NAME="SECTION004644000000000000000"></A><A NAME="SP:STATION"></A>
 <BR>
-<TT>VLAROT</TT>
+<TT>STATION</TT>
 </H3>
 
 <P>
-<TT>VLAROT</TT> gives the name of the VLA ROT file that contains such
-things as control information for subreflector focus and rotation,
-collimation errors and control parameters for each frontend.
+<TT>STATION</TT> gives the names of the stations for which this group of
+setup parameters applies.  SCHED&nbsp; deals with multiple stations by
+expanding the input group out into a separate group for each
+station specified.  This allows the defaults picked up later, for
+example from the <A HREF="node224.html#SEC:FRQCAT">frequency catalog</A>, to be station
+dependent.  Therefore, if only using very generic inputs, one can
+lump the stations together even if their final parameters are
+different.
 
 <P>
-Note that, if any of <TT>FLUKEA</TT>, <TT>FLUKEB</TT>, <TT>VLAFEAB</TT>, <TT>VLAFECD</TT>, <TT>VLASYNA</TT>, <TT>VLASYNB</TT>, <TT>VLAIF</TT>, <TT>FEFILTER</TT>,
-or <TT>VLAROT</TT> are specified, both LO and FI cards will be made.  In
-such cases, any other parameters allowed to default will be set to the
-standard value for the specified <TT>VLABAND</TT>.
+There are two defaults allowed, <TT>VLBA</TT> and <TT>' '</TT> (or none
+specified).  If no stations are specified, the program goes through
+the schedule and finds all stations that are in scans that request
+that setup file and that have not been specified in other groups
+within the setup file.  Those stations (just <TT>VLBA</TT>) for any VLBA
+stations) are added to the setup station list.
+
+<P>
+Later, the program looks for a perfect match to the station.  If it
+finds one, it uses that setup group.  If not, it checks whether the
+station is a VLBA station (first 4 characters in the station name are
+<TT>VLBA</TT>) and whether there was a <TT>station=vlba</TT> specified.  If
+so, SCHED&nbsp; uses the parameters from the <TT>vlba</TT> group.
+
+<P>
+The old <TT>station=default</TT> option has been removed.
+
+<P>
+Note that you cannot specify no stations for one setup group and some
+specific ones for another within the same file and expect anything
+reasonable to happen.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Up to 10 character file name.
+<LI><B>Argument:</B> Up to 30 station names of up to 8 characters each.
 </LI>
-<LI><B>Options:</B>  Any string.
+<LI><B>Options:</B>  Any valid station names. <TT>'VLBA'</TT> will match any VLBA station.
 </LI>
-<LI><B>Default:</B>  Uses VLA default for the specified band.
+<LI><B>Default:</B>  All stations that request that setup file.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous station.
+<LI><B>Usage:</B>    ???. Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>VLAROT = 'VLBLROT'</TT>
+<LI><B>Example:</B>  <TT>STATION='VLBA_PT'</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3964"
+  HREF="node271.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3960"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3954"
+  HREF="node269.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3962"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3965"
+  HREF="node271.html">STRING1, STRING2, STRING3, and</A>
+<B> Up:</B> <A NAME="tex2html3961"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3955"
+  HREF="node269.html">SIDEBAND</A>
+ &nbsp <B>  <A NAME="tex2html3963"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

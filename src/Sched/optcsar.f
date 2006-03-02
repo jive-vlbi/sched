@@ -30,7 +30,7 @@ C
       INTEGER           IE, IA, I
       INTEGER           SCNSTA(MAXSTA), NS, LSRC(MAXSTA)
       DOUBLE PRECISION  TIMER
-      INTEGER           YEAR, DAY2
+      INTEGER           YEAR, DAY2, MINMIAN
       CHARACTER         TFORM*10, TIMSTR1*10, TIMSTR2*10
       REAL              ARPTS, POINTS(MAXISC,MAXSTA)
       REAL              PTS3, MPTS3
@@ -138,8 +138,8 @@ C              Set POINTS to zero if source is not up at the station.
 C
                IF( UP1(JSCN,ISTA) .EQ. ' ' .AND. 
      1             UP2(JSCN,ISTA) .EQ. ' ' .AND.
-     2             EL1(JSCN,ISTA) .GT. OPMINEL .AND.
-     3             EL2(JSCN,ISTA) .GT. OPMINEL ) THEN
+     2             EL1(JSCN,ISTA) .GT. OPMINEL(JSCN) .AND.
+     3             EL2(JSCN,ISTA) .GT. OPMINEL(JSCN) ) THEN
 C
 C                 Take out effect of cable wrap and add offset.
 C
@@ -251,9 +251,16 @@ C
       END DO
 C
 C     For each possible pair of sources, find the best subarrays.
-C     Skip this if there is no hope of making subarrays.
+C     Skip this if there is no hope of making subarrays based on the
+C     minimum OPMIAN.
 C
-      IF( OPMIAN .LT. NSTA / 2 .AND. .NOT. OPNOSUB ) THEN
+      MINMIAN = 100
+      DO JSCN = 1, NSCANS
+         MINMIAN = MIN( OPMIAN(JSCN), MINMIAN )
+      END DO
+C
+
+      IF( MINMIAN .LT. NSTA / 2 .AND. .NOT. OPNOSUB ) THEN
          DO ISCN1 = 1, NSCANS - 1
             DO ISCN2 = ISCN1 + 1, NSCANS
 C
@@ -264,8 +271,8 @@ C              configuration and SCNSTA will be that configuration.
 C              LSRC is in the call just to get its size right.
 C
                CALL OPTCSPT( ISCN1, ISCN2, NSTA, POINTS, ARPTS, 
-     1                 SCNSTA, LSRC, MAXISC, MAXSTA, OPMIAN, 
-     2                 SCN1, SCN2, NS1, NS2, NS3 )
+     1                 SCNSTA, LSRC, MAXISC, MAXSTA, OPMIAN(ISCN1), 
+     2                 OPMIAN(ISCN2), SCN1, SCN2, NS1, NS2, NS3 )
 C
             END DO
          END DO

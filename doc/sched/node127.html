@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>OPMISS</TITLE>
-<META NAME="description" CONTENT="OPMISS">
+<TITLE>OPELPRIO</TITLE>
+<META NAME="description" CONTENT="OPELPRIO">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,55 +29,61 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2093"
+<A NAME="tex2html2122"
   HREF="node128.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2089"
+<A NAME="tex2html2118"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2083"
+<A NAME="tex2html2112"
   HREF="node126.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2091"
+<A NAME="tex2html2120"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2094"
-  HREF="node128.html">OPMINEL</A>
-<B> Up:</B> <A NAME="tex2html2090"
+<B> Next:</B> <A NAME="tex2html2123"
+  HREF="node128.html">OPHA</A>
+<B> Up:</B> <A NAME="tex2html2119"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2084"
-  HREF="node126.html">OPELPRIO</A>
- &nbsp <B>  <A NAME="tex2html2092"
+<B> Previous:</B> <A NAME="tex2html2113"
+  HREF="node126.html">OPDUR</A>
+ &nbsp <B>  <A NAME="tex2html2121"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004127500000000000000"></A><A NAME="MP:OPMISS"></A>
+<H3><A NAME="SECTION004127500000000000000"></A><A NAME="MP:OPELPRIO"></A>
 <BR>
-<TT>OPMISS</TT>
+<TT>OPELPRIO</TT>
 </H3>
 
 <P>
-<TT>OPMISS</TT> is used to reduce the priority of some sources when
-using <TT>OPTMODE = 'SCANS'</TT>.  The current scan will only be
-accepted if the <TT>OPMISS</TT> scans have been skipped.  See
-<A HREF="node132.html#MP:OPTMODE"><TT>OPTMODE</TT></A> for more details.
+<TT>OPELPRIO</TT> is used to specify two elevation ranges (4 values) to
+give high priority when optimizing a schedule.  With <TT>OPTMODE=SCANS</TT>, scans on a source that falls within these elevation
+ranges will be taken every time while scans falling outside these
+ranges at all stations may be skipped depending on the setting of <TT>OPSKIP</TT> and on what happened on previous opportunities to observe the
+source.  For geodesy projects, for example, priority might be given to
+very low elevations (for atmospheric determination) and very high
+elevations (to get good leverage on the parameter fits).
+
+<P>
+Note that the optimizing modes are somewhat experimental.  If they are
+used, the output schedule should be checked carefully.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Any integer
+<LI><B>Argument:</B> Four real numbers to be interpreted as elevations in degrees.
 </LI>
-<LI><B>Options:</B>  Any
+<LI><B>Options:</B>  Any valid elevation (0 to 90 degrees)
 </LI>
-<LI><B>Default:</B>  Zero.  No scans will be skipped.
+<LI><B>Default:</B>  All zero.
 </LI>
-<LI><B>Usage:</B>    Uses the last value specified.  So if one scan is given a high
-number, be sure to drop the value for the next.
+<LI><B>Usage:</B>    Only one set of values, the last, used for the project.
 </LI>
-<LI><B>Example:</B>  <TT>OPMISS = 7</TT>
+<LI><B>Example:</B>  <TT>OPELPRIO = 2., 15., 75., 90.</TT>
   
 </LI>
 </UL>
@@ -84,7 +92,7 @@ number, be sure to drop the value for the next.
 <BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

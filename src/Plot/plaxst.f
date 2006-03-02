@@ -25,6 +25,14 @@ C     Set type pointer of the value matrix
 C
       K = PXYBCK(AP)
 C
+C     Set/unset Flag for Sec(z) axis selected
+C
+      IF( PXYTYP(K) .EQ. 'Sec' ) THEN
+         PXYONE = .TRUE.
+      ELSE
+         PXYONE = .FALSE.
+      END IF
+C
 C     Save PGPLOT calling attribute
 C
       CALL PGSAVE
@@ -69,6 +77,15 @@ C
      1                   PXLTXT(4,1), STRING, 1, .FALSE. )
             CALL PGNUMB( PXSVAL(K,2,1), 0, 1, STRING, J )
             CALL PLSTXT( PXRTXT(1,1), PXRTXT(2,3), PXRTXT(3,1),
+     1                   PXRTXT(4,1), STRING, 1, .FALSE. )
+C
+         ELSE IF( PXYONE ) THEN
+C
+            CALL PGNUMB( PXSVAL(K,1,1), 0, 1, STRING, J )
+            CALL PLSTXT( PXLTXT(1,3), PXLTXT(2,3), PXLTXT(3,1),
+     1                   PXLTXT(4,1), STRING, 1, .FALSE. )
+            CALL PGNUMB( PXSVAL(K,2,1), 0, 1, STRING, J )
+            CALL PLSTXT( PXRTXT(1,3), PXRTXT(2,3), PXRTXT(3,1),
      1                   PXRTXT(4,1), STRING, 1, .FALSE. )
 C
          ELSE
@@ -142,6 +159,15 @@ C
      1                   PYBTXT(4,1), STRING, 1, .FALSE. )
             CALL PGNUMB( PXSVAL(K,4,1), 0, 1, STRING, J )
             CALL PLSTXT( PYTTXT(1,1), PYTTXT(2,3), PYTTXT(3,1),
+     1                   PYTTXT(4,1), STRING, 1, .FALSE. )
+C
+         ELSE IF( PXYONE ) THEN
+C
+            CALL PGNUMB( PXSVAL(K,3,1), 0, 1, STRING, J )
+            CALL PLSTXT( PYBTXT(1,3), PYBTXT(2,3), PYBTXT(3,1),
+     1                   PYBTXT(4,1), STRING, 1, .FALSE. )
+            CALL PGNUMB( PXSVAL(K,4,1), 0, 1, STRING, J )
+            CALL PLSTXT( PYTTXT(1,3), PYTTXT(2,3), PYTTXT(3,1),
      1                   PYTTXT(4,1), STRING, 1, .FALSE. )
 C
          ELSE

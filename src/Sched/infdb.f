@@ -10,8 +10,10 @@ C
 C     GOTFREQ (from sched.inc) tests if there are any frequency 
 C     changes specified in the main schedule.  It only seems to 
 C     be used by SNAP and by this routine (also commented code in 
-C     GETSET).  GOTBW is used to help prevent use of BW when VEX
-C     or VSOP (DRUDG) is being written.
+C     GETSET).  
+C
+C     GOTBW was used to help prevent use of BW when VEX or VSOP 
+C     (DRUDG) is being written, but that is now ok so GOTBW is gone.
 C
       INCLUDE 'sched.inc'
 C
@@ -32,7 +34,6 @@ C
      1         BW(ICHAN,ISCN) .NE. 0.0 ) GOTFREQ = .TRUE.
          IF( BW(ICHAN,ISCN) .EQ. 0.0 ) 
      1         BW(ICHAN,ISCN) = BW(1,ISCN)
-         IF( BW(ICHAN,ISCN) .NE. 0.0 ) GOTBW = .TRUE.
       END DO
 C
 C     Source name for Doppler calibration and default to scan source.

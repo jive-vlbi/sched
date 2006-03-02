@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>VLAPEAK</TITLE>
-<META NAME="description" CONTENT="VLAPEAK">
+<TITLE>TAPE</TITLE>
+<META NAME="description" CONTENT="TAPE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,190 +29,74 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2849"
+<A NAME="tex2html2878"
   HREF="node191.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2845"
+<A NAME="tex2html2874"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2839"
+<A NAME="tex2html2868"
   HREF="node189.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2847"
+<A NAME="tex2html2876"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2850"
-  HREF="node191.html">VLATSYS and VLANTSYS</A>
-<B> Up:</B> <A NAME="tex2html2846"
+<B> Next:</B> <A NAME="tex2html2879"
+  HREF="node191.html">TAPEFILE</A>
+<B> Up:</B> <A NAME="tex2html2875"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2840"
-  HREF="node189.html">VLAMODE</A>
- &nbsp <B>  <A NAME="tex2html2848"
+<B> Previous:</B> <A NAME="tex2html2869"
+  HREF="node189.html">TANTSTA1 and TANTSTA2</A>
+ &nbsp <B>  <A NAME="tex2html2877"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041213800000000000000"></A><A NAME="MP:VLAPEAK"></A>
+<H3><A NAME="SECTION0041213800000000000000"></A><A NAME="MP:TAPE"></A>
 <BR>
-<TT>VLAPEAK</TT>
+<TT>TAPE</TT>
 </H3>
 
 <P>
-<TT>VLAPEAK</TT> sets the character to use in the VLA observing deck
-(<I>...obs.y</I> file) to control the use of pointing corrections
-determined during the observations.  The actual request to do a
-pointing observation is made by setting <A HREF="node189.html#MP:VLAMODE"><TT>VLAMODE</TT></A> <TT>= IR</TT> in a separate pointing scan on a
-calibrator.  The integration time must be set to 10 seconds, which is
-the default that SCHED&nbsp; does not yet have the ability to modify.
-<TT>VLAPEAK</TT> is used to specify whether or not a previous pointing
-solution should be used as the starting point for the new measurement,
-whether to save a previous solution for use as a future starting point,
-and, for normal scans, whether to use the corrections from pointing
-measurements to adjust the tracking position.
+<TT>TAPE</TT> requests that SCHED&nbsp; force a tape change at the start
+of the scan.  This will override any automatic tape changing that is
+going on and will reset the reference time for any following automatic
+tape changes. If no argument is given, the tape will be changed at all
+stations. If a list of stations is given, the tapes will only be
+changed at those stations; if a station is given that is not in the
+scan, an error message will be generated and SCHED&nbsp; will abort.
+Station codes my be used in place of station names.
 
 <P>
-A pointing pattern takes 140 seconds if the VLA correlator integration
-time equals the default 10 seconds, and some extra time should be
-added. Use 150 seconds (after arrival at source) for one pointing
-pattern and 4 minutes for two patterns. The on-line system will keep
-repeating pointing patterns until the scan is over.  The results will
-be averaged.  Two patterns are recommended.  Reference pointing is
-important at 7mm (Q band) and is useful, but not required, at 1cm (K
-band).  The pointing should be updated approximately every hour (some
-claim faster), and any time the antennas move to a significantly
-different part of the sky. At elevations above about 70 degrees, the
-azimuth changes rapidly in both time and calibrator/source position
-offset.  Reference pointing may be marginal at such elevations, and,
-if attempted, should be done more often than at lower elevations.  For
-pointing at X band, a calibrator (or target) source should be used
-that has a flux density in excess of about 200 mJy on all VLA
-baselines.  See the VLA documentation for more details and advice.
-
-<P>
-When observing at Q band (7 mm), it may be desirable to first
-determine initial pointing corrections at a lower frequency, such as X
-band (4 cm), and then, using those corrections as the starting point,
-determine residual pointing corrections at Q band.  The final pointing
-offset will then be the sum of the two.  Normally just the lower
-frequency determination should be adequate -- the relative offsets
-between bands are rather well known.  But the ultimate pointing
-accuracy requires the final determination at the high frequency,
-assuming, or course, that there is a source of adequate strength close
-to the target.  Pointing should not be done only at 7mm.  The a priori
-offsets can be bad enough that the pointing source will be on the edge
-of the beam and a valid pointing solution may not be obtained.
-
-<P>
-<TT>VLAPEAK</TT> provides the necessary options to manage the pointing
-corrections.  To understand the <TT>VLAPEAK</TT> options, consider that
-there are ``primary pointing corrections'' and ``total pointing
-corrections''.  The ``total pointing corrections'' are those that are
-applied when running a normal scan that uses the reference pointing
-results.  The ``primary pointing corrections'' are those used as the
-starting point for a pointing determination.  This description is not
-quite literally what the software does, but is correct in concept.
-The <TT>VLAPEAK</TT> options are:
-
-<P>
-<DL>
-<DT></DT>
-<DD><TT>" "</TT> (blank - the default).  Apply no previously determined
-pointing corrections.  If this is a pointing scan (If <TT>VLAMODE=IR</TT>), clear any corrections that have been previously saved,
-both primary and total.  Save any corrections that are determined in
-this scan as the total pointing corrections, leaving the primary
-corrections clear.  Blank should be used when not using
-reference pointing.  It is also be used for a pointing scan
-when no previously determined corrections are to be used as the
-starting point.
-
-<P>
-</DD>
-<DT></DT>
-<DD><TT>"T"</TT> Apply total pointing corrections.  Do not save any
-corrections determined in this scan.  Use <TT>T</TT> during
-normal observing scans when you wish to use the reference pointing
-results.
-
-<P>
-</DD>
-<DT></DT>
-<DD><TT>"S"</TT> This value should only be used for pointing scans
-(<TT>VLAMODE=IR</TT>).  It causes the current total pointing corrections
-to be saved as the primary pointing corrections.  The new primary
-corrections are then used as the starting point for a new pointing
-determination.  The result of that determination (primary plus
-secondary) are then saved as the new total pointing corrections.  Use
-<TT>S</TT> when doing double reference pointing any time you wish to
-set the primary pointing corrections, usually just after a lower
-frequency pointing determination.
-
-<P>
-</DD>
-<DT></DT>
-<DD><TT>"R"</TT> This setting is just like <TT>VLAPEAK=S</TT>, except that
-the values of the primary pointing corrections are not changed.  This
-is used to update the total corrections, based on primary corrections
-determined some time ago.  Use <TT>R</TT> to update the pointing at,
-for example, 7 mm, retaining the previously determined solution from X
-band.
-
-<P>
-</DD>
-<DT></DT>
-<DD><TT>"D"</TT> This is the default.  If <A HREF="node54.html#MP:AUTOPEAK"><TT>AUTOPEAK</TT></A> has not been requested, this is equivalent to blank.
-If AUTOPEAK was requested, SCHED&nbsp; usually manages <TT>VLAPEAK</TT>, but
-the user can override the automatic settings.  Once that has been
-done for a scan, SCHED&nbsp; would normally use the specified <TT>VLAPEAK</TT>
-for all remaining scans.  <TT>VLAPEAK='D'</TT> indicates to the program,
-that it should return to setting <TT>VLAPEAK</TT> itself.
-
-<P>
-</DD>
-</DL>
-
-<P>
-Usually, when reference pointing is used, there will be a short
-scan (see times above) with <TT>VLAMODE=IR</TT> and <TT>VLAPEAK=' '</TT>
-to determined the pointing followed by the observing scans with
-whatever <A HREF="node189.html#MP:VLAMODE"><TT>VLAMODE</TT></A> is needed and using
-<TT>VLAPEAK=T</TT>.  The pointing scan will usually be at X band (4cm).
-This is all that is needed in most circumstances.
-
-<P>
-When double reference pointing is desired, the pointing is first
-determined at a lower frequency, then tweaked at the higher observing
-frequency.  That is when <TT>VLAPEAK=S</TT> or <TT>R</TT> are used.  The
-sequence would be a scan with <TT>VLAMODE=IR</TT> and <TT>VLAPEAK=' '</TT>
-at the lower frequency, followed by a scan with <TT>VLAMODE=IR</TT> and
-<TT>VLAPEAK=S</TT> at the higher frequency, followed by observing scans
-with <TT>VLAPEAK=T</TT> and the desired <TT>VLAMODE</TT>, followed by
-another tweak of the pointing using a scan with <TT>VLAMODE=IR</TT> and
-<TT>VLAPEAK=R</TT>, followed by more observing scans.  The <TT>VLAPEAK=R</TT> - observing mode scans combination can be repeated several
-times.  Eventually the pattern should be restarted with a new low
-frequency scan.  Whether double reference pointing is actually better
-than just doing the pointing at X band and leaving it at that is
-somewhat controversial.
-
-<P>
-Tape may be stopped or left running during pointing observations.
-You cannot combine pointing scans with phasing scans because they
-require different <TT>VLAMODE</TT>s.
+For stations that only have one tape drive (all except the VLBA and
+VLA), be sure to allow enough idle time to complete the tape
+change.  This usually means 15 minutes and SCHED&nbsp; will issue
+warnings if it is less than this.  Some stations claim to be able
+to do it in 10.  If postpasses are required, and they are currently
+(Feb 1997) being done at thin tape stations, an additional up to
+33 minutes is required.  The station operators can override the
+postpass to save time, at the risk of damaging tapes which cost
+over $(US)1000 each.  An alternative is to schedule the last pass
+at such stations without stopping the tape.  If SCHED&nbsp; detects
+that this has been done, it will issue an UNLOAD command instead
+of POSTPASS.  Note that the automatic postpass will only be
+requested at sites using VLBA control files.  The VEX format does
+not (yet) include this concept.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Text of 1 character.
+<LI><B>Argument:</B> None or a list of up to 30 station names.
 </LI>
-<LI><B>Options:</B>  <TT>' ', 'T', 'S', 'R'</TT> or <TT>'D'</TT>
+<LI><B>Options:</B>  No argument or a list of any stations in the scan. Not case sensitive.
 </LI>
-<LI><B>Default:</B>  <TT>'d'</TT> -- Will put ' ' in the file.  Means do not use
-reference pointing.
+<LI><B>Default:</B>  Not used. Automatic tape changes by default.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous value.
+<LI><B>Usage:</B>    Must specify whenever needed.
 </LI>
-<LI><B>Example:</B>  <TT>VLAPEAK=T</TT>
+<LI><B>Example:</B>  <TT>TAPE</TT> or <TT>TAPE=VLBA_MK,VLBA_NL</TT>
   
 </LI>
 </UL>
@@ -218,31 +104,31 @@ reference pointing.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2849"
+<A NAME="tex2html2878"
   HREF="node191.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2845"
+<A NAME="tex2html2874"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2839"
+<A NAME="tex2html2868"
   HREF="node189.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2847"
+<A NAME="tex2html2876"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2850"
-  HREF="node191.html">VLATSYS and VLANTSYS</A>
-<B> Up:</B> <A NAME="tex2html2846"
+<B> Next:</B> <A NAME="tex2html2879"
+  HREF="node191.html">TAPEFILE</A>
+<B> Up:</B> <A NAME="tex2html2875"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2840"
-  HREF="node189.html">VLAMODE</A>
- &nbsp <B>  <A NAME="tex2html2848"
+<B> Previous:</B> <A NAME="tex2html2869"
+  HREF="node189.html">TANTSTA1 and TANTSTA2</A>
+ &nbsp <B>  <A NAME="tex2html2877"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>PCAL</TITLE>
-<META NAME="description" CONTENT="PCAL">
+<TITLE>OPMINEL</TITLE>
+<META NAME="description" CONTENT="OPMINEL">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,98 +29,70 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2213"
+<A NAME="tex2html2242"
   HREF="node138.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2209"
+<A NAME="tex2html2238"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2203"
+<A NAME="tex2html2232"
   HREF="node136.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2211"
+<A NAME="tex2html2240"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2214"
-  HREF="node138.html">PEAK and NOPEAK</A>
-<B> Up:</B> <A NAME="tex2html2210"
+<B> Next:</B> <A NAME="tex2html2243"
+  HREF="node138.html">OPMINANT</A>
+<B> Up:</B> <A NAME="tex2html2239"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2204"
-  HREF="node136.html">OVERwrit</A>
- &nbsp <B>  <A NAME="tex2html2212"
+<B> Previous:</B> <A NAME="tex2html2233"
+  HREF="node136.html">OPMISS</A>
+ &nbsp <B>  <A NAME="tex2html2241"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004128500000000000000"></A><A NAME="MP:PCAL"></A>
+<H3><A NAME="SECTION004128500000000000000"></A><A NAME="MP:OPMINEL"></A>
 <BR>
-<TT>PCAL</TT>
+<TT>OPMINEL</TT>
 </H3>
 
 <P>
-<TT>PCAL</TT> sets the mode of the pulse cal generators on the VLBA. The
-generators can be off or can generate tones every 1&nbsp;MHz or every
-5&nbsp;MHz. The input here can be used to change the mode from scan to
-scan. A default can be established in the setup file.  Note that, if
-<TT>PCAL</TT> is specified in the schedule, it will override what is
-in the setup file, even if a new setup is invoked.
+<TT>OPMINEL</TT> specifies the minimum elevation in degrees below which
+sources will be considered to be ``down''.  In all modes, if less than
+<A HREF="node138.html#MP:OPMINANT"><TT>OPMINANT</TT></A> antennas are up, the scan will
+be skipped.
 
 <P>
-Control over the phase cal detection is not implemented for telescopes
-controlled by means of the VEX file. See notes on <A HREF="node32.html#SSEC:MKIV">MkIV</A> and <A HREF="node34.html#SSEC:S2">S2</A> for details. In the EVN,
-standard practice is to use 1 MHz spaced tones at integer MHz
-values. Spectral line users that want to switch phase-cal insertion
-off should send special instructions to individual telescopes, as well
-as specifying it correctly in the schedule.
+This is used mainly for optimizing modes to help select scans, and
+for experiment planning in order to, for example, plot the uv
+coverage available if all low elevation data and all data with less
+than several antennas will be discarded.  The default will have no
+effect on schedules.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> The pulse cal mode.
+<LI><B>Argument:</B> A real number to be interpreted as an elevation.
 </LI>
-<LI><B>Options:</B>  <TT>' '</TT>, <TT>'off'</TT>, <TT>'1MHz'</TT>, or <TT>'5MHz'</TT>. A <TT>' '</TT>
-causes the setup file value to be used.
+<LI><B>Options:</B>  Any valid elevation.
 </LI>
-<LI><B>Default:</B>  Use the setup file value. If none there, use <TT>'1MHz'</TT>.
+<LI><B>Default:</B>  0.0
 </LI>
-<LI><B>Usage:</B>    Defaults to previous scan.  This applies even if there is a change
-of setup.
+<LI><B>Usage:</B>    On per scan.  Defaults to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>PCAL='off'</TT>
+<LI><B>Example:</B>  <TT>OPMINEL = 15.</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html2213"
-  HREF="node138.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2209"
-  HREF="node52.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2203"
-  HREF="node136.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2211"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html2214"
-  HREF="node138.html">PEAK and NOPEAK</A>
-<B> Up:</B> <A NAME="tex2html2210"
-  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2204"
-  HREF="node136.html">OVERwrit</A>
- &nbsp <B>  <A NAME="tex2html2212"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

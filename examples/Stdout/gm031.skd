@@ -1,7 +1,7 @@
 VEX_rev = 1.5;
-*    SCHED vers: May 2005
-*    VEX/SCHED:  1.5.84
-*    Other versions: Sched:   6.0  Plot: 1.05  JPL-ephem: 1.01
+*    SCHED vers: February 2006
+*    VEX/SCHED:  1.5.86
+*    Other versions: Sched:   6.0  Plot: 1.06  JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
      ref $EXPER = GM031;
@@ -76,10 +76,13 @@ def egiv;
      ref $BBC = 4BBCs#02:Nt:Tr;
      ref $BBC = 4BBCs#03:Hn:Sc:Gb;
      ref $TRACKS = MKIV.4Ch2bit1to1:Jb:Wb:Ef:On:Mc:Nt:Tr;
-     ref $TRACKS = VLBA.4Ch2bit1to1:Hn:Sc:Gb;
-     ref $HEAD_POS = Stnd14Pos:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
+     ref $TRACKS = VLBA.4Ch2bit1to1:Hn;
+     ref $TRACKS = VLBA.4Ch2bit1to1#02:Sc:Gb;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $HEAD_POS = Stnd14Pos:Sc:Gb;
      ref $ROLL = NoRoll:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
-     ref $PASS_ORDER = Stnd14x4passes:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PASS_ORDER = Stnd14x4passes:Sc:Gb;
      ref $PHASE_CAL_DETECT = NoDetect:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
 enddef;
 *
@@ -98,10 +101,13 @@ def Doppler@S_PER;
      ref $BBC = 4BBCs#02:Nt:Tr;
      ref $BBC = 4BBCs#03:Hn:Sc:Gb;
      ref $TRACKS = MKIV.4Ch2bit1to1:Jb:Wb:Ef:On:Mc:Nt:Tr;
-     ref $TRACKS = VLBA.4Ch2bit1to1:Hn:Sc:Gb;
-     ref $HEAD_POS = Stnd14Pos:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
+     ref $TRACKS = VLBA.4Ch2bit1to1:Hn;
+     ref $TRACKS = VLBA.4Ch2bit1to1#02:Sc:Gb;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $HEAD_POS = Stnd14Pos:Sc:Gb;
      ref $ROLL = NoRoll:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
-     ref $PASS_ORDER = Stnd14x4passes:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PASS_ORDER = Stnd14x4passes:Sc:Gb;
      ref $PHASE_CAL_DETECT = NoDetect:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
 enddef;
 *------------------------------------------------------------------------------
@@ -110,49 +116,49 @@ $STATION;
 def Jb;
      ref $SITE = JODRELL1;
      ref $ANTENNA = JODRELL1;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Wb;
      ref $SITE = WSTRBORK;
      ref $ANTENNA = WSTRBORK;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Ef;
      ref $SITE = EFLSBERG;
      ref $ANTENNA = EFLSBERG;
-     ref $DAS = 1MKIV+VLBA42h<Thin;
+     ref $DAS = 1MKIV+VLBA4<Mark5A;
 enddef;
 *
 def On;
      ref $SITE = ONSALA85;
      ref $ANTENNA = ONSALA85;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Mc;
      ref $SITE = MEDICINA;
      ref $ANTENNA = MEDICINA;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Nt;
      ref $SITE = NOTO;
      ref $ANTENNA = NOTO;
-     ref $DAS = 1VLBA42h<Thin;
+     ref $DAS = 1VLBA4<Mark5A;
 enddef;
 *
 def Tr;
      ref $SITE = TORUN;
      ref $ANTENNA = TORUN;
-     ref $DAS = 1VLBA42h<Thin;
+     ref $DAS = 1VLBA4<Mark5A;
 enddef;
 *
 def Hn;
      ref $SITE = VLBA_HN;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = 2VLBA<Thin;
+     ref $DAS = 2VLBA+NONE<Mark5A;
 enddef;
 *
 def Sc;
@@ -369,8 +375,8 @@ enddef;
 *
 def TORUN;
      axis_type = az : el;
-     antenna_motion = el :  16.0 deg/min : 20 sec;  *    0.030 deg/sec/sec
-     antenna_motion = az :  30.0 deg/min : 20 sec;  *    0.050 deg/sec/sec
+     antenna_motion = el :  16.0 deg/min :  5 sec;  *    0.030 deg/sec/sec
+     antenna_motion = az :  30.0 deg/min :  5 sec;  *    0.050 deg/sec/sec
      axis_offset =     0.000 m;
 enddef;
 *
@@ -397,36 +403,39 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def 1MKIV2h<Thin;
-     record_transport_type = Mark4;
+def 1MKIV<Mark5A;
+     record_transport_type = Mark5A;
      electronics_rack_type = Mark4;
      number_drives = 1;
-     headstack = 1 : read/write : 0 ;
-     headstack = 2 : read/write : 0 ;
-     record_density = 56250 bpi;
-     tape_length = 17600 ft;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 0 ;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *
-def 1MKIV+VLBA42h<Thin;
-     record_transport_type = VLBA4;
+def 1MKIV+VLBA4<Mark5A;
+     record_transport_type = Mark5A;
      electronics_rack_type = Mark4;
      number_drives = 1;
-     headstack = 1 : read/write : 0 ;
-     headstack = 2 : read/write : 0 ;
-     record_density = 56250 bpi;
-     tape_length = 17600 ft;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 0 ;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *
-def 1VLBA42h<Thin;
-     record_transport_type = VLBA4;
+def 1VLBA4<Mark5A;
+     record_transport_type = Mark5A;
      electronics_rack_type = VLBA4;
      number_drives = 1;
-     headstack = 1 : read/write : 0 ;
-     headstack = 2 : read/write : 0 ;
-     record_density = 56250 bpi;
-     tape_length = 17600 ft;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 0 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*
+def 2VLBA+NONE<Mark5A;
+     record_transport_type = Mark5A;
+     electronics_rack_type = VLBA;
+     number_drives = 2;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 1 ;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *
@@ -611,46 +620,39 @@ def MKIV.4Ch2bit1to1;
 * mode =  1    stations =Jb:Wb:Ef:On:Mc:Nt:Tr
 * mode =  2    stations =Jb:Wb:Ef:On:Mc:Nt:Tr
 *    format = MKIV1:1, and fan-out = 1
-*    mode requires  4.00Mb/s/tr; tape speed low dens: 135ips, high dens:  80ips
+*    mode requires  4.00Mb/s/tr; stations using disks
      track_frame_format = Mark4;
      data_modulation = off;
-     fanout_def = A : &CH01 : sign : 1:  2;
-     fanout_def = A : &CH01 :  mag : 1:  4;
-     fanout_def = A : &CH02 : sign : 1:  6;
-     fanout_def = A : &CH02 :  mag : 1:  8;
-     fanout_def = A : &CH03 : sign : 1: 10;
-     fanout_def = A : &CH03 :  mag : 1: 12;
-     fanout_def = A : &CH04 : sign : 1: 14;
-     fanout_def = A : &CH04 :  mag : 1: 16;
-     fanout_def = B : &CH01 : sign : 1: 18;
-     fanout_def = B : &CH01 :  mag : 1: 20;
-     fanout_def = B : &CH02 : sign : 1: 22;
-     fanout_def = B : &CH02 :  mag : 1: 24;
-     fanout_def = B : &CH03 : sign : 1: 26;
-     fanout_def = B : &CH03 :  mag : 1: 28;
-     fanout_def = B : &CH04 : sign : 1: 30;
-     fanout_def = B : &CH04 :  mag : 1: 32;
-     fanout_def = C : &CH01 : sign : 1:  3;
-     fanout_def = C : &CH01 :  mag : 1:  5;
-     fanout_def = C : &CH02 : sign : 1:  7;
-     fanout_def = C : &CH02 :  mag : 1:  9;
-     fanout_def = C : &CH03 : sign : 1: 11;
-     fanout_def = C : &CH03 :  mag : 1: 13;
-     fanout_def = C : &CH04 : sign : 1: 15;
-     fanout_def = C : &CH04 :  mag : 1: 17;
-     fanout_def = D : &CH01 : sign : 1: 19;
-     fanout_def = D : &CH01 :  mag : 1: 21;
-     fanout_def = D : &CH02 : sign : 1: 23;
-     fanout_def = D : &CH02 :  mag : 1: 25;
-     fanout_def = D : &CH03 : sign : 1: 27;
-     fanout_def = D : &CH03 :  mag : 1: 29;
-     fanout_def = D : &CH04 : sign : 1: 31;
-     fanout_def = D : &CH04 :  mag : 1: 33;
+     fanout_def =   : &CH01 : sign : 1:  2;
+     fanout_def =   : &CH01 :  mag : 1:  4;
+     fanout_def =   : &CH02 : sign : 1:  6;
+     fanout_def =   : &CH02 :  mag : 1:  8;
+     fanout_def =   : &CH03 : sign : 1: 10;
+     fanout_def =   : &CH03 :  mag : 1: 12;
+     fanout_def =   : &CH04 : sign : 1: 14;
+     fanout_def =   : &CH04 :  mag : 1: 16;
 enddef;
 *
 def VLBA.4Ch2bit1to1;
-* mode =  1    stations =Hn:Sc:Gb
-* mode =  2    stations =Hn:Sc:Gb
+* mode =  1    stations =Hn
+* mode =  2    stations =Hn
+*    format = VLBA1:1, and fan-out = 1
+*    mode requires  4.00Mb/s/tr; stations using disks
+     track_frame_format = VLBA;
+     data_modulation = on;
+     fanout_def =   : &CH01 : sign : 1:  2;
+     fanout_def =   : &CH01 :  mag : 1:  4;
+     fanout_def =   : &CH02 : sign : 1:  6;
+     fanout_def =   : &CH02 :  mag : 1:  8;
+     fanout_def =   : &CH03 : sign : 1: 10;
+     fanout_def =   : &CH03 :  mag : 1: 12;
+     fanout_def =   : &CH04 : sign : 1: 14;
+     fanout_def =   : &CH04 :  mag : 1: 16;
+enddef;
+*
+def VLBA.4Ch2bit1to1#02;
+* mode =  1    stations =Sc:Gb
+* mode =  2    stations =Sc:Gb
 *    format = VLBA1:1, and fan-out = 1
 *    mode requires  4.00Mb/s/tr; tape speed low dens: 133ips, high dens:  80ips
      track_frame_format = VLBA;
@@ -690,10 +692,15 @@ def VLBA.4Ch2bit1to1;
 enddef;
 *------------------------------------------------------------------------------
 $HEAD_POS;
+def DiskVoid;
+* mode =  1    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn
+* mode =  2    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn
+*     Head positions irrelevant for Disk: empty def
+enddef;
 *
 def Stnd14Pos;
-* mode =  1    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb
-* mode =  2    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb
+* mode =  1    stations =Sc:Gb
+* mode =  2    stations =Sc:Gb
      headstack_pos =  1 : -319 um;
      headstack_pos =  2 :   31 um;
      headstack_pos =  3 : -271 um;
@@ -712,9 +719,15 @@ enddef;
 *------------------------------------------------------------------------------
 $PASS_ORDER;
 *
+def DiskVoid;
+* mode =  1    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn
+* mode =  2    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn
+*     Pass orders irrelevant for Disk: empty def
+enddef;
+*
 def Stnd14x4passes;
-* mode =  1    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb
-* mode =  2    stations =Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb
+* mode =  1    stations =Sc:Gb
+* mode =  2    stations =Sc:Gb
      pass_order = 1A: 2A: 1B: 2B: 1C: 2C: 1D: 2D: 3A: 4A: 3B: 4B: 3C: 4C:
                   3D: 4D: 5A: 6A: 5B: 6B: 5C: 6C: 5D: 6D: 7A: 8A: 7B: 8B:
                   7C: 8C: 7D: 8D: 9A:10A: 9B:10B: 9C:10C: 9D:10D:11A:12A:
@@ -736,522 +749,522 @@ $SCHED;
 scan No0001;
      start=1997y063d12h00m00s; mode=Doppler@S_PER; source=3C454.3;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Wb:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:   0.000 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  1A :       : 1; * F@00000
 endscan;
 scan No0002;
      start=1997y063d12h30m36s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:   5.322 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  1A :       : 1; * F@08800
 endscan;
 scan No0003;
      start=1997y063d12h53m16s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Wb:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  10.644 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  2A :       : 1; * R@17600
 endscan;
 scan No0004;
      start=1997y063d13h15m56s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  15.967 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  2A :       : 1; * R@08800
 endscan;
 scan No0005;
      start=1997y063d13h38m36s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
-     station=Wb:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  21.289 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  1B :       : 1; * F@00000
 endscan;
 scan No0006;
      start=1997y063d14h18m38s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
-     station=Ef:    1 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec:  26.611 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  26.611 GB:   :       : 1;
+     station=Ef:    1 sec: 1320 sec:  26.611 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  26.611 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  26.611 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  26.611 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  26.611 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  26.611 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  1B :       : 1; * F@08800
 endscan;
 scan No0007;
      start=1997y063d14h41m18s; mode=Doppler@S_PER; source=S_PER;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
-     station=Wb:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  31.933 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  2B :       : 1; * R@17600
 endscan;
 scan No0008;
      start=1997y063d15h15m09s; mode=Doppler@S_PER; source=3C84;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
-     station=Ef:    1 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec:  37.256 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  37.256 GB:   :       : 1;
+     station=Ef:    1 sec: 1320 sec:  37.256 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  37.256 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  37.256 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  37.256 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  37.256 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
 endscan;
 scan No0009;
      start=1997y063d15h46m43s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
-     station=Wb:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  2B :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  37.256 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
 endscan;
 scan No0010;
      start=1997y063d16h09m23s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:     0 ft:  1C :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  42.578 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
 endscan;
 scan No0011;
      start=1997y063d16h32m03s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
-     station=Wb:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  1C :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  47.900 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
 endscan;
 scan No0012;
      start=1997y063d16h54m43s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  2C :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  53.222 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
 endscan;
 scan No0013;
      start=1997y063d17h17m23s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
-     station=Wb:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  2C :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  58.545 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
 endscan;
 scan No0014;
      start=1997y063d17h40m03s; mode=Doppler@S_PER; source=S_PER;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:     0 ft:  1D :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  63.867 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
 endscan;
 scan No0015;
      start=1997y063d18h22m51s; mode=Doppler@S_PER; source=3C84;
-     station=Jb:    1 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
-     station=Wb:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  1D :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
+     station=Jb:    1 sec: 1320 sec:  74.511 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  74.511 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  74.511 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  74.511 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  74.511 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  69.189 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  74.511 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  74.511 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
 endscan;
 scan No0016;
      start=1997y063d18h48m18s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  2D :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  74.511 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
 endscan;
 scan No0017;
      start=1997y063d19h10m58s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Wb:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  2D :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  79.834 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
 endscan;
 scan No0018;
      start=1997y063d19h33m38s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  85.156 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
 endscan;
 scan No0019;
      start=1997y063d19h56m18s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Wb:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  90.478 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
 endscan;
 scan No0020;
      start=1997y063d20h18m58s; mode=Doppler@S_PER; source=S_PER;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec:  95.800 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
 endscan;
 scan No0021;
      start=1997y063d20h41m38s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
-     station=Wb:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 101.123 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
 endscan;
 scan No0022;
      start=1997y063d21h06m07s; mode=Doppler@S_PER; source=3C84;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
-     station=Wb:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:     0 ft:  3B :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
+     station=Wb:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 106.445 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
 endscan;
 scan No0023;
      start=1997y063d21h30m26s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  3B :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec: 117.089 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 117.089 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 117.089 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 117.089 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 111.767 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 117.089 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 117.089 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
 endscan;
 scan No0024;
      start=1997y063d21h53m06s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  4B :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec: 122.412 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 122.412 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 122.412 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 122.412 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 117.089 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 122.412 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 122.412 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
 endscan;
 scan No0025;
      start=1997y063d22h15m46s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  4B :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec: 127.734 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 127.734 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 127.734 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 127.734 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 122.412 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 127.734 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 127.734 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
 endscan;
 scan No0026;
      start=1997y063d22h38m26s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:     0 ft:  3C :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec: 133.056 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 133.056 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 133.056 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 133.056 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 127.734 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 133.056 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 133.056 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
 endscan;
 scan No0027;
      start=1997y063d23h24m34s; mode=Doppler@S_PER; source=S_PER;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  3C :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec: 138.378 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 138.378 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 138.378 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 138.378 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 133.056 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 138.378 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 138.378 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
 endscan;
 scan No0028;
      start=1997y063d23h47m14s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  4C :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec: 143.701 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 143.701 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 143.701 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 143.701 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 138.378 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 143.701 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 143.701 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
 endscan;
 scan No0029;
      start=1997y064d00h10m49s; mode=Doppler@S_PER; source=3C84;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec: 149.023 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 149.023 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 149.023 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 149.023 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 149.023 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 149.023 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
 endscan;
 scan No0030;
      start=1997y064d00h34m22s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  4C :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec: 154.345 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 154.345 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 154.345 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 154.345 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 143.701 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 154.345 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 154.345 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
 endscan;
 scan No0031;
      start=1997y064d00h57m02s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec: 159.667 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 159.667 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 159.667 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 159.667 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 159.667 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 159.667 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
 endscan;
 scan No0032;
      start=1997y064d01h19m42s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec: 164.989 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 164.989 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 164.989 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 164.989 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 164.989 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 164.989 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
 endscan;
 scan No0033;
      start=1997y064d01h42m22s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec: 170.312 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 170.312 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 170.312 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 170.312 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 170.312 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 170.312 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
      station=Gb:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
 endscan;
 scan No0034;
      start=1997y064d02h05m02s; mode=Doppler@S_PER; source=S_PER;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec: 175.634 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 175.634 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 175.634 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 175.634 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 175.634 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 175.634 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  5A :       : 1; * F@08800
 endscan;
 scan No0035;
      start=1997y064d02h27m42s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec: 180.956 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 180.956 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 180.956 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 180.956 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 180.956 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 180.956 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
      station=Gb:    0 sec: 1320 sec: 17600 ft:  6A :       : 1; * R@17600
 endscan;
 scan No0036;
      start=1997y064d03h09m13s; mode=Doppler@S_PER; source=3C84;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec: 186.278 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 186.278 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 186.278 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 186.278 GB:   :       : 1;
      station=Sc:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
      station=Gb:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
 endscan;
 scan No0037;
      start=1997y064d03h50m11s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  5B :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:     0 ft:  5B :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:     0 ft:  5B :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  5B :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec: 191.601 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 186.278 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 191.601 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 186.278 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 191.601 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 191.601 GB:   :       : 1;
      station=Gb:    0 sec: 1320 sec:     0 ft:  5B :       : 1; * F@00000
 endscan;
 scan No0038;
      start=1997y064d04h12m51s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  5B :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:     0 ft:  5B :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:  8800 ft:  5B :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:     0 ft:  5B :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:     0 ft:  3D :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  5B :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  5B :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec: 196.923 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 191.601 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 196.923 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 191.601 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 149.023 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 196.923 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 196.923 GB:   :       : 1;
      station=Gb:    0 sec: 1320 sec:  8800 ft:  5B :       : 1; * F@08800
 endscan;
 scan No0039;
      start=1997y064d04h35m31s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  6B :       : 1; * R@17600
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  5B :       : 1; * F@08800
-     station=On:    0 sec: 1320 sec: 17600 ft:  6B :       : 1; * R@17600
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  5B :       : 1; * F@08800
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  3D :       : 1; * F@08800
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  6B :       : 1; * R@17600
-     station=Hn:    0 sec: 1320 sec: 17600 ft:  6B :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec: 202.245 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 196.923 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 202.245 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 196.923 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 154.345 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 202.245 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 202.245 GB:   :       : 1;
      station=Gb:    0 sec: 1320 sec: 17600 ft:  6B :       : 1; * R@17600
 endscan;
 scan No0040;
      start=1997y064d04h58m11s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  6B :       : 1; * R@08800
-     station=Ef:    0 sec: 1320 sec: 17600 ft:  6B :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec:  8800 ft:  6B :       : 1; * R@08800
-     station=Mc:    0 sec: 1320 sec: 17600 ft:  6B :       : 1; * R@17600
-     station=Nt:    0 sec: 1320 sec: 17600 ft:  4D :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  6B :       : 1; * R@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  6B :       : 1; * R@08800
+     station=Jb:    0 sec: 1320 sec: 207.567 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 202.245 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 207.567 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 202.245 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 159.667 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 207.567 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 207.567 GB:   :       : 1;
      station=Gb:    0 sec: 1320 sec:  8800 ft:  6B :       : 1; * R@08800
 endscan;
 scan No0041;
      start=1997y064d05h20m51s; mode=Doppler@S_PER; source=S_PER;
-     station=Jb:    0 sec: 1320 sec:     0 ft:  5C :       : 1; * F@00000
-     station=Ef:    0 sec: 1320 sec:  8800 ft:  6B :       : 1; * R@08800
-     station=On:    0 sec: 1320 sec:     0 ft:  5C :       : 1; * F@00000
-     station=Mc:    0 sec: 1320 sec:  8800 ft:  6B :       : 1; * R@08800
-     station=Nt:    0 sec: 1320 sec:  8800 ft:  4D :       : 1; * R@08800
-     station=Tr:    0 sec: 1320 sec:     0 ft:  5C :       : 1; * F@00000
-     station=Hn:    0 sec: 1320 sec:     0 ft:  5C :       : 1; * F@00000
+     station=Jb:    0 sec: 1320 sec: 212.890 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 207.567 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 212.890 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 207.567 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 164.989 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 212.890 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 212.890 GB:   :       : 1;
      station=Gb:    0 sec: 1320 sec:     0 ft:  5C :       : 1; * F@00000
 endscan;
 scan No0042;
      start=1997y064d05h43m31s; mode=Doppler@S_PER; source=S_PER;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec: 1320 sec:  8800 ft:  5C :       : 1; * F@08800
-     station=Ef:    0 sec: 1320 sec:     0 ft:  5C :       : 1; * F@00000
-     station=On:    0 sec: 1320 sec:  8800 ft:  5C :       : 1; * F@08800
-     station=Mc:    0 sec: 1320 sec:     0 ft:  5C :       : 1; * F@00000
-     station=Nt:    0 sec: 1320 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Tr:    0 sec: 1320 sec:  8800 ft:  5C :       : 1; * F@08800
-     station=Hn:    0 sec: 1320 sec:  8800 ft:  5C :       : 1; * F@08800
+     station=Jb:    0 sec: 1320 sec: 218.212 GB:   :       : 1;
+     station=Ef:    0 sec: 1320 sec: 212.890 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 218.212 GB:   :       : 1;
+     station=Mc:    0 sec: 1320 sec: 212.890 GB:   :       : 1;
+     station=Nt:    0 sec: 1320 sec: 170.312 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 218.212 GB:   :       : 1;
+     station=Hn:    0 sec: 1320 sec: 218.212 GB:   :       : 1;
      station=Gb:    0 sec: 1320 sec:  8800 ft:  5C :       : 1; * F@08800
 endscan;
 scan No0043;
      start=1997y064d06h07m42s; mode=Doppler@S_PER; source=3C84;
-     station=Jb:    0 sec: 1320 sec: 17600 ft:  6C :       : 1; * R@17600
-     station=On:    0 sec: 1320 sec: 17600 ft:  6C :       : 1; * R@17600
-     station=Tr:    0 sec: 1320 sec: 17600 ft:  6C :       : 1; * R@17600
+     station=Jb:    0 sec: 1320 sec: 223.534 GB:   :       : 1;
+     station=On:    0 sec: 1320 sec: 223.534 GB:   :       : 1;
+     station=Tr:    0 sec: 1320 sec: 223.534 GB:   :       : 1;
 endscan;
