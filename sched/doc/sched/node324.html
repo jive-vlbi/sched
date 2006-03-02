@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Scheduling Mark II Observations</TITLE>
+<META NAME="description" CONTENT="Scheduling Mark II Observations">
+<META NAME="keywords" CONTENT="sched">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sched.css">
+
+<LINK REL="next" HREF="node325.html">
+<LINK REL="previous" HREF="node323.html">
+<LINK REL="up" HREF="node322.html">
+<LINK REL="next" HREF="node325.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html4664"
+  HREF="node325.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html4660"
+  HREF="node322.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html4654"
+  HREF="node323.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html4662"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html4665"
+  HREF="node325.html">Head Positions and Track</A>
+<B> Up:</B> <A NAME="tex2html4661"
+  HREF="node322.html">APPENDICES</A>
+<B> Previous:</B> <A NAME="tex2html4655"
+  HREF="node323.html">Mark&nbsp;III Observations</A>
+ &nbsp <B>  <A NAME="tex2html4663"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00720000000000000000"></A><A NAME="SEC:MKII"></A>
+<BR>
+Scheduling Mark II Observations
+</H1>
+
+<P>
+SCHED&nbsp; was originally written in about 1978 as the Caltech
+Package scheduling program for Mark&nbsp;II VLBI.  Most Mark&nbsp;II
+observations done since then were scheduled with it.  But the
+program is outlasting the system that it was designed to
+support.  I began the process of removing Mark II from SCHED&nbsp; 
+when I learned that it is still in use in some parts of the
+world.  Therefore, it is being retained for now.
+
+<P>
+Mark&nbsp;II recording systems have been removed from most
+active VLBI stations and the main Mark&nbsp;II correlators are no longer
+operating.  However, the system is not completely gone.  An old
+Caltech correlator is being supported at Medicina and Mark&nbsp;II
+recording systems are being supported at a few places.  For these
+reasons, the Mark&nbsp;II specific features of SCHED&nbsp; have not
+yet been removed.
+
+<P>
+Mark&nbsp;II observations typically use one of the Mark&nbsp;III or VLBA data
+aquisition system baseband converters (called video converters in the
+Mark&nbsp;III world).  Therefore much of the setup information required
+for the wide band systems is also required for Mark&nbsp;II, although
+only for a single channel.  A very few parameters are available that
+are only for Mark&nbsp;II and the descriptions of those parameters should
+be consulted.  In the main program input, the only such parameter
+is <A HREF="node196.html#MP:TPREF"><TT>TPREF</TT></A> which helps get the tape changes
+synchronized.  In the tape initialization parameters, parameter
+<TT>TPTIME</TT> serves a similar purpose.  The main schedule parameter
+<A HREF="node55.html#MP:AUTOTAPE"><TT>AUTOTAPE</TT></A> has special meaning for
+Mark&nbsp;II observations.  Other than these special cases, the parameters
+used for a Mark&nbsp;II project are essentially the same as for a wide
+band experiment.  Of course, parameters related to control of the
+wide band tape systems are not needed.
+
+<P>
+Tape management for Mark&nbsp;II observations is simpler than for wide
+band observations.  Normally the tapes are run continuously for
+4 hours per tape and then changed, usually by hand.  Correlator
+operators normally prefer is all tapes are changed at the same
+time, which can be arranged using <A HREF="node196.html#MP:TPREF"><TT>TPREF</TT></A>
+or <TT>TPTIME</TT>.  The schedule should have scan breaks at the
+tape change times (this will be forced by SCHED, so tape
+changes might be requested at odd times if scan breaks don't occur
+at the nominal 4 hour intervals.
+
+<P>
+
+<P>
+Below is an example of a simple Mark II schedule.
+Be warned that this aspect of SCHED&nbsp; is not being maintained
+because Mark 2 is no longer available at most stations.  Also,
+this example is not being tested with each release.
+
+<P>
+<PRE>
+ SIMPLE EXAMPLE
+ --------------------------------------------------------------------
+     !   Cover information:
+ EXPT = 'Mark II, 3C345, May 1986'  ! Any description.
+ EXPCODE = 'C85G'                   ! Project code.
+ VERSION = 1                        ! Version 1 of schedule
+ PINAME = 'Craig Walker'            ! Principal Investigator's name.
+ ADDRESS1 = 'National Radio Astronomy Observatory'  ! Address
+ ADDRESS2 = 'P. O. Box O'                           ! Up to 4 lines.
+ ADDRESS3 = 'Socorro, New Mexico, 87801'
+ ADDRESS4 = ' U.S.A. '
+ PHONE    = '505 835 7247 '         ! Telephone number
+ OBSPHONE = '505 835 7247 '         ! Phone number during observations.
+ EMAIL    = 'Internet: cwalker@nrao.edu'   ! Electronic mail address.
+ FAX      = '505 835 7027 '         ! Phone number for FAX.
+ TELEX    = '910-988-1710 '         ! Telex number.
+ OBSMODE  = '6cm  Mark~II Standard Setup'  ! Observing mode.
+ CORREL   = 'Caltech'               ! Correlator to ship tapes to.
+ NOTE1    = 'You can put any comments you want to in these four lines.'
+ NOTE2    = ' More comments '
+ NOTE3    = ' More comments '
+ NOTE4    = ' Last of the comments'
+
+ !         Now the actual schedule information.
+ SRCFILE = sources.obs              ! Source catalog.
+ STAFILE = stations.dat             ! Station catalog.
+ SETUP   = nug6cm.set               ! Setup file.
+ YEAR = 1986  MONTH=5  DAY=11       ! Date of first stop time.
+ STATIONS=BONN,BOLOGNA,HSTK,NRAO,
+          VLA,VLBA_PT,OVRO          ! Stations list
+ VLAMODE='VS'                       ! Required information for VLA
+ START = 02:00:00                   ! Start time in UT.
+ TPREF = 1::                        ! Control tape change times.
+ SOURCE = '3C345'                   ! Source name.
+ DUR = 30:00   REP = 8              ! 8 scans of 30 minutes each
+ /                                  ! End of first group of scans.
+ SOURCE='NRAO512'  DUR=30:00  /     ! One scan on another source.
+ SOURCE='3C345'  DUR=30:00 REP 9 /  ! 9 more scans on main source.
+ --------------------------------------------------------------------
+</PRE>
+
+<P>
+
+<P>
+Below is an example setup file for Mark II observations.
+This is the standard setup file <I>nug6cm.set</I> and contains
+the correct information for the VLBA and VLA, which no longer have
+Mark II recording equipment.  For a real Mark II observations, the
+stations involved would have to be added.
+
+<P>
+<PRE>
+---------------------------------------------------------------------
+ EXAMPLE:   Setup file for Mark~II observations (1 channel) at 6cm.
+ --------------------------------------------------------------------
+! nug6cm.set
+!      Setup file produced by MAKESETUP.
+!      Modifications will be lost next time MAKESETUP is run.
+
+nchan = 1  bbfilter = 2.0 format = MARKII
+bbc = 1 netside = U
+ifchan = L
+!    Radio Astronomy allocation: 4990-5000
+!    Radio Astnomomy footnote:   4950-4990
+!    VLA 50MHz 4960.1 to 5010.1 with VC mode.
+!        VLA 6cm receiver falling off at high end.
+freqref  = 4990.99  !  Mark II network standard.
+fe(1) = '6cm'   fe(3) = '6cm'   synth(2) = 4.1
+firstlo  = 4100.00
+station  = VLBA   rchan = A  lchan = C   /
+firstlo  = 4360.10
+station  = VLA1   rchan = B  lchan = D   /
+station  = VLA27  rchan = A  lchan = C   /
+firstlo  = 4260.0
+station  = GB_VLBA  rchan = A  lchan = C  /
+station = 'EB_VLBA'
+fe(1)='6cm' fe(3)='6cm'
+firstlo = 4100.0  rchan=A lchan=C  /
+</PRE>
+
+<P>
+END OF OLD TEXT.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html4664"
+  HREF="node325.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html4660"
+  HREF="node322.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html4654"
+  HREF="node323.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html4662"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html4665"
+  HREF="node325.html">Head Positions and Track</A>
+<B> Up:</B> <A NAME="tex2html4661"
+  HREF="node322.html">APPENDICES</A>
+<B> Previous:</B> <A NAME="tex2html4655"
+  HREF="node323.html">Mark&nbsp;III Observations</A>
+ &nbsp <B>  <A NAME="tex2html4663"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Craig Walker
+2006-02-10
+</ADDRESS>
+</BODY>
+</HTML>
