@@ -554,8 +554,9 @@ C     Print warning about frequency of Tsys.
       END DO
       IF( TSYSMESS ) THEN
          CALL WLOG( 1,'VXSCH: Tsys calibration at MkIV stations is '//
-     1       'taken during every gap in recording, but these '//
-     2       'appear over 15 min apart for the stations listed above!')
+     1       'taken during every gap in recording, ')
+         CALL WLOG( 1, 'but these ' //
+     1       'appear over 15 min apart for the stations listed above!')
          CALL WLOG( 1,'       This can be improved by inserting'//
      1       ' gaps at regular intervals. ')
          CALL WRTMSG( 'VXSCH', 'tsysgap' )
@@ -588,12 +589,12 @@ C
       IF( WARNBANK ) THEN
           CALL WLOG( 1, ' ')
           CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
-          CALL WLOG( 1, 'VXSCH: WARNING: one or more of  ' //
-     1          'your stations has continuous recording ' //
-     2          'for more than 90 minutes. Disk packs can ' //
-     3          'only be changed during gaps in recording which ' //
-     4          'should be much more frequent than this. Please add ' //
-     5          'some gaps to your schedule!' )
+          CALL WLOG( 1, 'VXSCH: WARNING: one or more of your VEX ')
+          CALL WLOG( 1, 'stations has continuous recording for more ')
+          CALL WLOG( 1, 'than 90 minutes. At VEX stations disk packs ')
+          CALL WLOG( 1, 'can only be changed during gaps in recording ')
+          CALL WLOG( 1, 'which should be much more frequent than ')
+          CALL WLOG( 1, 'this. Please add some gaps to your schedule!' )
           CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
       END IF
 C
