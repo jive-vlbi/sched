@@ -7,6 +7,13 @@ C
 C     The PA equations for XY mounts are from Sovers, Fanselow, and 
 C     Jacobs.  The equat version agrees with that reference too.
 C
+C     Note that some approximations are made that make this routine
+C     inappropriate for accurate work.  First SLA_GMST delivers the
+C     Greenwich mean sidereal time when what is really wanted is the
+C     Greenwich apparent sidereal time.  The difference is typically
+C     under a second.  Refraction is not taken into account which 
+C     might affect when something actually goes behind a mountain.
+C
       INCLUDE 'sched.inc' 
 C
       INTEGER          ISCN, ISTA, KSTA

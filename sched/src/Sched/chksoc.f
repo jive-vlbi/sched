@@ -158,6 +158,24 @@ C
             END IF
          END DO
 C
+C        It is also impossible to do 2k FFT's when using 16X 
+C        oversampling and 1:1 fanout.
+C
+         DO KS = 1, NSET
+            IF( ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR.
+     1              FORMAT(KS)(1:4) .EQ. 'MARK' ) .AND.
+     2          ( CORCHAN * 2.0 * SAMPRATE(KS) / 
+     3             ( 2.0 * BBFILT(1,KS) * FANOUT(KS) ) 
+     4          .GE. 20000. ) ) THEN
+C
+               CALL WLOG( 1, 'CHKSOC:   The requested 2K FFTs (1024 ' //
+     1             'channel spectra) cannot be done on the Socorro' )
+               CALL ERRSET( KS )
+               CALL WLOG( 1, '          correlator when 16X ' //
+     1           'oversampling is in use.' )
+            END IF
+         END DO
+C
 C        For full polarization processing, the number of spectral
 C        channels must be 128 or fewer.
 C        This is not really a setup file problem, but it is 

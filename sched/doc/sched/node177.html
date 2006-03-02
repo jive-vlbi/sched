@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>TAPE</TITLE>
-<META NAME="description" CONTENT="TAPE">
+<TITLE>SETINIT</TITLE>
+<META NAME="description" CONTENT="SETINIT">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,106 +29,71 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2693"
+<A NAME="tex2html2722"
   HREF="node178.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2689"
+<A NAME="tex2html2718"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2683"
+<A NAME="tex2html2712"
   HREF="node176.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2691"
+<A NAME="tex2html2720"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2694"
-  HREF="node178.html">TAPEFILE</A>
-<B> Up:</B> <A NAME="tex2html2690"
+<B> Next:</B> <A NAME="tex2html2723"
+  HREF="node178.html">SETUP</A>
+<B> Up:</B> <A NAME="tex2html2719"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2684"
-  HREF="node176.html">TANTSTA1 and TANTSTA2</A>
- &nbsp <B>  <A NAME="tex2html2692"
+<B> Previous:</B> <A NAME="tex2html2713"
+  HREF="node176.html">SCHedule</A>
+ &nbsp <B>  <A NAME="tex2html2721"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041212500000000000000"></A><A NAME="MP:TAPE"></A>
+<H3><A NAME="SECTION0041212500000000000000"></A><A NAME="MP:SETINIT"></A>
 <BR>
-<TT>TAPE</TT>
+<TT>SETINIT</TT>
 </H3>
 
 <P>
-<TT>TAPE</TT> requests that SCHED&nbsp; force a tape change at the start
-of the scan.  This will override any automatic tape changing that is
-going on and will reset the reference time for any following automatic
-tape changes. If no argument is given, the tape will be changed at all
-stations. If a list of stations is given, the tapes will only be
-changed at those stations; if a station is given that is not in the
-scan, an error message will be generated and SCHED&nbsp; will abort.
-Station codes my be used in place of station names.
+Setup file information can be specified in the main input file.  If
+<TT>SETINIT</TT> is specified, the next groups (to <TT>ENDSET</TT>), are
+assumed to be setup file information.  The setup name will be the
+argument to <TT>SETINIT</TT>.  Multiple setup files can be specified
+this way.  An argument must be specified or the setup information
+will not be read.
 
 <P>
-For stations that only have one tape drive (all except the VLBA and
-VLA), be sure to allow enough idle time to complete the tape
-change.  This usually means 15 minutes and SCHED&nbsp; will issue
-warnings if it is less than this.  Some stations claim to be able
-to do it in 10.  If postpasses are required, and they are currently
-(Feb 1997) being done at thin tape stations, an additional up to
-33 minutes is required.  The station operators can override the
-postpass to save time, at the risk of damaging tapes which cost
-over $(US)1000 each.  An alternative is to schedule the last pass
-at such stations without stopping the tape.  If SCHED&nbsp; detects
-that this has been done, it will issue an UNLOAD command instead
-of POSTPASS.  Note that the automatic postpass will only be
-requested at sites using VLBA control files.  The VEX format does
-not (yet) include this concept.
+If <TT>SETINIT</TT> is found, the end of the input group (everything up
+to the ``/'') is not considered the end of inputs for this file.  The
+next inputs after the setup data are entered will continue to apply to
+the current file (usually the first).
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> None or a list of up to 30 station names.
+<LI><B>Argument:</B> A setup file name of up to 80 characters.
 </LI>
-<LI><B>Options:</B>  No argument or a list of any stations in the scan. Not case sensitive.
+<LI><B>Options:</B>  Any character string.  Must not be blank.
 </LI>
-<LI><B>Default:</B>  Not used. Automatic tape changes by default.
+<LI><B>Default:</B>  Will not assume that setup information will follow.
 </LI>
-<LI><B>Usage:</B>    Must specify whenever needed.
+<LI><B>Usage:</B>    Will revert to assuming no setup information will follow.
 </LI>
-<LI><B>Example:</B>  <TT>TAPE</TT> or <TT>TAPE=VLBA_MK,VLBA_NL</TT>
+<LI><B>Example:</B>  <TT>SETINIT=BW008.6CM.SET</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html2693"
-  HREF="node178.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2689"
-  HREF="node52.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2683"
-  HREF="node176.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2691"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html2694"
-  HREF="node178.html">TAPEFILE</A>
-<B> Up:</B> <A NAME="tex2html2690"
-  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2684"
-  HREF="node176.html">TANTSTA1 and TANTSTA2</A>
- &nbsp <B>  <A NAME="tex2html2692"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

@@ -132,6 +132,11 @@ C
          MAX = RMAX
          LABEL = ' '
 C
+      ELSE IF( TYPE .EQ. 'Sec' ) THEN
+         MIN = RMIN
+         MAX = RMAX
+         LABEL = 'Sec(z)'
+C
       ELSE
          CALL PUTOUT( 'PLOTDEF: Invalid request for ' // WHICH //
      1         ' axis type: ' // TYPE )

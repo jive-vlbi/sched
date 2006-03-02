@@ -1,6 +1,6 @@
 /.BV016   450
 //* *** 
-//* *** SCHED version:   6.02  May 2005
+//* *** SCHED version:   6.04  February 2006
 //* *** 
 //* *** Observation day 56,719 at 04 00 00 LST, 1995.10.20 02:17:01 MST.  
 //* *** 

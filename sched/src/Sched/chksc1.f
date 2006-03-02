@@ -9,7 +9,7 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    KSCN, KSTA, KS, LEN1
+      INTEGER    KSCN, LSCN, KSTA, KS, LEN1
       LOGICAL    GOTERR, AUTOWARN
 C ----------------------------------------------------------------------
       GOTERR = .FALSE.
@@ -191,6 +191,32 @@ C
 C
 C
       END IF
+C
+C     Warn users if they are setting FREQ and BW in the scans and
+C     they switch setup files without setting changing those
+C     parameters.  This is a fairly benign warning so don't worry
+C     about lots of complications such as what stations are in 
+C     what scans.  Issue the warning if there is a setup file change
+C     without a change in specified FREQ or BW.  Note that changing
+C     either to zero constitutes being a change so is ok as desired.
+C     Also only worry about the first channel even though there are
+C     scenarios that would get past this.  Only warn once.
+C
+      DO KSCN = 2, NSCANS
+         LSCN = KSCN - 1
+         IF( SETNUM(KSCN) .NE. SETNUM(LSCN) ) THEN
+            IF( ( FREQ(1,KSCN) .EQ. FREQ(1,LSCN) .AND. 
+     1            FREQ(1,LSCN) .NE. 0.0 ) .OR. 
+     2          ( BW(1,KSCN) .EQ. BW(1,LSCN) .AND. 
+     3            BW(1,LSCN) .NE. 0.0 ) ) THEN
+               CALL WLOG( 1, 'WARNING:  See note in sched.runlog ' //
+     1            'about frequency and bandwidth changes.' )
+               CALL WRTMSG( 'CHKSC1', 'freqbw' )
+               GO TO 200
+            END IF
+         END IF
+      END DO
+  200 CONTINUE
 C
       RETURN
       END

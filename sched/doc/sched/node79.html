@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>DOPSRC</TITLE>
-<META NAME="description" CONTENT="DOPSRC">
+<TITLE>DOPPLER and NODOP</TITLE>
+<META NAME="description" CONTENT="DOPPLER and NODOP">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,65 +29,74 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1517"
+<A NAME="tex2html1546"
   HREF="node80.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1513"
+<A NAME="tex2html1542"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1507"
+<A NAME="tex2html1536"
   HREF="node78.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1515"
+<A NAME="tex2html1544"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1518"
-  HREF="node80.html">DOSTA</A>
-<B> Up:</B> <A NAME="tex2html1514"
+<B> Next:</B> <A NAME="tex2html1547"
+  HREF="node80.html">DOPSRC</A>
+<B> Up:</B> <A NAME="tex2html1543"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1508"
-  HREF="node78.html">DOPPLER and NODOP</A>
- &nbsp <B>  <A NAME="tex2html1516"
+<B> Previous:</B> <A NAME="tex2html1537"
+  HREF="node78.html">DOPINCR</A>
+ &nbsp <B>  <A NAME="tex2html1545"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004122700000000000000"></A><A NAME="MP:DOPSRC"></A>
+<H3><A NAME="SECTION004122700000000000000"></A><A NAME="MP:DOPPLER"></A>
 <BR>
-<TT>DOPSRC</TT>
+<TT>DOPPLER</TT> and <TT>NODOP</TT>
 </H3>
 
 <P>
-<TT>DOPSRC</TT> is the name of the source for which the Doppler
-calculation should be done. This is allowed to be different from the
-source being observed to allow for observing continuum calibrators at
-the same frequency as the line source. If it is blank, the source
-being observed will be used. If it is not specified, the previous
-value will be used so it must be set to blank after use in earlier
-scans if it is desired to return to the original default.
+<TT>DOPPLER</TT> and <TT>NODOP</TT> control Doppler calculations for this
+scan.  <TT>DOPPLER</TT> turns them on, <TT>NODOP</TT> turns them off.
+See Section&nbsp;<A HREF="node36.html#SEC:LINE">2.5</A> for details.
 
 <P>
-A warning will be issued if <TT>SOURCE</TT> and <TT>DOPSRC</TT> are
-different and both have velocities specified (assumed to be line
-sources).   This is a valid but unlikely observing style so it
-is not blocked.  But too often it has been the result of ignoring
-the warning above about the defaulting behavior of <TT>DOPSRC</TT>.
+Note that channels assigned to the same BBC will be given the same
+frequency as the first channel on that BBC, no matter what velocities
+etc are given for the other channels.  This will be the case when
+there are upper/lower sideband pairs.  Their frequencies cannot
+be set independently.  Because of the different sidebands, they
+will, however, cover different velocity ranges.
+
+<P>
+WARNING -- if you are making extragalactic observations with high
+velocities (above about 1000 km/s), be sure to pay attention to the
+parameters <TT>VREF</TT> and <TT>VDEF</TT> in the source catalog.
+Extragalactic velocities are likely to be based on the ``optical
+definition'' which is not the SCHED&nbsp; default.  Also, they are likely
+to be heliocentric, which is also not the SCHED&nbsp; 
+default.  In such a case, you would want to specify <TT>VDEF=O
+VREF=H</TT>.  Note that you are also allowed to give z directly with
+<TT>VDEF=Z</TT>.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A source name.
+<LI><B>Argument:</B> None.
 </LI>
-<LI><B>Options:</B>  Any source in the source catalogs.
+<LI><B>Options:</B>  <TT>0</TT> or nothing to get Doppler calculations. A non-zero value will
+turn them off, but use of <TT>NODOP</TT> is a more convenient way to
+do the same thing.
 </LI>
-<LI><B>Default:</B>  Blank - use <TT>SOURCE</TT>.
+<LI><B>Default:</B>  Don't do Doppler calculations.
 </LI>
-<LI><B>Usage:</B>    Reverts to previous scan. Can set to <TT>' '</TT> to return to default
-behavior.
+<LI><B>Usage:</B>    Reverts to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>DOPSRC='W3OH'</TT>
+<LI><B>Example:</B>  <TT>DOPPLER</TT>
   
 </LI>
 </UL>
@@ -93,31 +104,31 @@ behavior.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1517"
+<A NAME="tex2html1546"
   HREF="node80.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1513"
+<A NAME="tex2html1542"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1507"
+<A NAME="tex2html1536"
   HREF="node78.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1515"
+<A NAME="tex2html1544"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1518"
-  HREF="node80.html">DOSTA</A>
-<B> Up:</B> <A NAME="tex2html1514"
+<B> Next:</B> <A NAME="tex2html1547"
+  HREF="node80.html">DOPSRC</A>
+<B> Up:</B> <A NAME="tex2html1543"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1508"
-  HREF="node78.html">DOPPLER and NODOP</A>
- &nbsp <B>  <A NAME="tex2html1516"
+<B> Previous:</B> <A NAME="tex2html1537"
+  HREF="node78.html">DOPINCR</A>
+ &nbsp <B>  <A NAME="tex2html1545"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

@@ -102,6 +102,10 @@ C
          XPOS(MSTA)     = STAX
          YPOS(MSTA)     = STAY
          ZPOS(MSTA)     = STAZ
+         DXPOS(MSTA)    = STADX
+         DYPOS(MSTA)    = STADY
+         DZPOS(MSTA)    = STADZ
+         MJDRATE(MSTA)  = STAEPO
 C
 C        VLBADAR flags sites that use the VLBA control computer and
 C        software to control the recorder and DAR, but not the antenna.

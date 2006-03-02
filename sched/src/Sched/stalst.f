@@ -1,4 +1,4 @@
-      SUBROUTINE STALST
+      SUBROUTINE STALST( MJD )
 C
 C     Subroutine for SCHED that writes a table of station information 
 C     to summary file.  Include the tape initialization stuff.
@@ -6,8 +6,8 @@ C
       INCLUDE  'sched.inc'
 C
       INTEGER    ISTA, ISCAT, IC1, IC2, BLENKM, LEN1, JSTA, JSCAT
-      INTEGER    NNSTA
-      REAL       BLENSQ
+      INTEGER    NNSTA, MJD
+      REAL       BLENSQ, YEARS
       CHARACTER  CDEN*4, CAA*3, CAR*3
       LOGICAL    ANYTAPE, ANYDISK, ANYELSE
 C ----------------------------------------------------------------------
@@ -15,16 +15,36 @@ C
       WRITE( ISUM, '( 1X, /, 1X, /, 1X, /, A, /, 1X, /, A,A, /, 1X )' )
      1      'STATIONS USED IN SCHEDULE:',
      2      '   Station  Code   Latitude Longitude Elevation ',
-     3      '       X           Y           Z '
+     3      '       X            Y            Z '
       DO ISTA = 1, NSTA
           ISCAT = STANUM(ISTA)
           WRITE( ISUM, '( 3X, A8, 2X, A3, 2F10.5, F10.0, 2X, ' //
-     1           ' 3F12.2 )' ) 
+     1           ' 3F13.3 )' ) 
      2        STATION(ISCAT), STCODE(ISCAT),
      3        LAT(ISCAT)/RADDEG,
      4        LONG(ISCAT)/RADDEG,
      5        ELEV(ISCAT),
      6        XPOS(ISCAT), YPOS(ISCAT), ZPOS(ISCAT)
+      END DO
+C
+C     Write the rates and adjusted positions.
+C
+      WRITE( ISUM, '(  1X, /, 1X, /, A, I6 )' )
+     1      '   Plate tectonic motion adjustments for MJD ', MJD
+      WRITE( ISUM, '( A,A, /, 15X, A, A )' )
+     1      '   Station  Code      Station motions (m/yr)  ',
+     2      '           Adjusted positions ',
+     3      '      X       Y       Z  ', 
+     4      '   MJD0        X            Y            Z '
+      YEARS = ( MJD - MJDRATE(ISCAT) ) / 365.25D0
+      DO ISTA = 1, NSTA
+          ISCAT = STANUM(ISTA)
+          WRITE( ISUM, '( 3X, A8, 2X, A3, 3F8.4, I7, 1X, 3F13.3 )' )
+     1        STATION(ISCAT), STCODE(ISCAT),
+     2        DXPOS(ISCAT), DYPOS(ISCAT), DZPOS(ISCAT), MJDRATE(ISCAT),
+     3        XPOS(ISCAT) + DXPOS(ISCAT) * YEARS, 
+     4        YPOS(ISCAT) + DYPOS(ISCAT) * YEARS, 
+     5        ZPOS(ISCAT) + DZPOS(ISCAT) * YEARS
       END DO
 C
 C     Make a matrix of baseline lengths, if there are any
@@ -142,12 +162,12 @@ C
          IF( ANYDISK ) THEN
             WRITE( ISUM, '( 1X, /, A, /, A )' )
      1          '  DISKS - Stations potentially recording on disks.',
-     2          '   Station    Drive type '
+     2          '   Station    Drive type   DAR'
             DO ISTA = 1, NSTA
                IF( USEDISK(ISTA) ) THEN
                   ISCAT = STANUM(ISTA)
-                  WRITE( ISUM, '( 3X, A8, 5X, A6 )' )
-     1               STATION(ISCAT), DISK(ISCAT)
+                  WRITE( ISUM, '( 3X, A8, 5X, A6, 5X, A5 )' )
+     1               STATION(ISCAT), DISK(ISCAT), DAR(ISCAT)
                END IF
             END DO              
          END IF

@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>OPMINANT</TITLE>
-<META NAME="description" CONTENT="OPMINANT">
+<TITLE>OPHMAXDT</TITLE>
+<META NAME="description" CONTENT="OPHMAXDT">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,70 +29,114 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2117"
+<A NAME="tex2html2146"
   HREF="node130.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2113"
+<A NAME="tex2html2142"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2107"
+<A NAME="tex2html2136"
   HREF="node128.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2115"
+<A NAME="tex2html2144"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2118"
-  HREF="node130.html">OPNOSUB</A>
-<B> Up:</B> <A NAME="tex2html2114"
+<B> Next:</B> <A NAME="tex2html2147"
+  HREF="node130.html">OPHAWID</A>
+<B> Up:</B> <A NAME="tex2html2143"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2108"
-  HREF="node128.html">OPMINEL</A>
- &nbsp <B>  <A NAME="tex2html2116"
+<B> Previous:</B> <A NAME="tex2html2137"
+  HREF="node128.html">OPHA</A>
+ &nbsp <B>  <A NAME="tex2html2145"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004127700000000000000"></A><A NAME="MP:OPMINANT"></A>
+<H3><A NAME="SECTION004127700000000000000"></A><A NAME="MP:OPHMAXDT"></A>
 <BR>
-<TT>OPMINANT</TT>
+<TT>OPHMAXDT</TT>
 </H3>
 
 <P>
-<TT>OPMINANT</TT> sets minimum number of antennas for which the
-source must be up for the scan to be accepted.  To be up, a source
-must be above the telescope slew limits, any specified horizon, and
-above <TT>OPMINEL</TT>.
+<TT>OPHMAXDT </TT> is the parameter for <TT>OPTMODE=HAS</TT> that sets
+the maximum deviation from the desired hour angle that a scan will
+be considered.  This helps limit the number of scans considered at
+any one time but, most importantly, prevents use of the scan at an
+inappropriate time, for example, because no appropriate scan was
+available at that time.  Because of this parameter and <TT>OPDUR</TT>
+is is possible to not use all input scans.  Users should watch for
+this and probably adjust scan parameters to fix the problem.
 
 <P>
-This is used mainly for optimizing modes to help select scans, and
-for experiment planning in order to, for example, plot the uv
-coverage available if all low elevation data and all data with less
-than several antennas will be discarded.  The default will have no
-effect on schedules.
+See the discussion of the possible optimization modes in the section
+on <A HREF="node144.html#MP:OPTMODE"><TT>OPTMODE</TT></A> for more information on
+<TT>OPTMODE=HAS</TT>
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An integer. 
+<LI><B>Argument:</B> Any real time
 </LI>
 <LI><B>Options:</B>  Any
 </LI>
-<LI><B>Default:</B>  0
+<LI><B>Default:</B>  2:0:0 (2 hours)
 </LI>
-<LI><B>Usage:</B>    Only one value used for the project -- the last.
+<LI><B>Usage:</B>    Uses the most recent value specified.
 </LI>
-<LI><B>Example:</B>  <TT>OPMINANT = 4</TT>
+<LI><B>Example:</B>  <TT>OPHMAXDT = 30:00 </TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+
+<UL>
+<LI><B>Argument:</B> Any real hour angle
+</LI>
+<LI><B>Options:</B>  Any
+</LI>
+<LI><B>Default:</B>  Zero.  SCHED&nbsp; will pick the values.  The default is usually what you
+will want.
+</LI>
+<LI><B>Usage:</B>    Uses the last value specified.  It is not a good idea to specify one
+and not the others as then all scans will have the same desired hour
+angle and the behavior will probably be a bit weird.
+</LI>
+<LI><B>Example:</B>  <TT>OPHA=PT </TT>
+  
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2146"
+  HREF="node130.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2142"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2136"
+  HREF="node128.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2144"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2147"
+  HREF="node130.html">OPHAWID</A>
+<B> Up:</B> <A NAME="tex2html2143"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2137"
+  HREF="node128.html">OPHA</A>
+ &nbsp <B>  <A NAME="tex2html2145"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

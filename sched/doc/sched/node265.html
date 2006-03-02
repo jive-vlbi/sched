@@ -1,106 +1,96 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>TRACK1, TRACK2, ... , TRACK7, and TRACK8</TITLE>
-<META NAME="description" CONTENT="TRACK1, TRACK2, ... , TRACK7, and TRACK8">
+<TITLE>POL</TITLE>
+<META NAME="description" CONTENT="POL">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node266.html">
 <LINK REL="previous" HREF="node264.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node266.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3875"
+<A NAME="tex2html3904"
   HREF="node266.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3871"
-  HREF="node217.html">
+<A NAME="tex2html3900"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3865"
+<A NAME="tex2html3894"
   HREF="node264.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3873"
+<A NAME="tex2html3902"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3876"
-  HREF="node266.html">VLABAND</A>
-<B> Up:</B> <A NAME="tex2html3872"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3866"
-  HREF="node264.html">TPSPEEDL</A>
- &nbsp <B>  <A NAME="tex2html3874"
+<B> Next:</B> <A NAME="tex2html3905"
+  HREF="node266.html">PTINCR</A>
+<B> Up:</B> <A NAME="tex2html3901"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3895"
+  HREF="node264.html">PCALXB1 and PCALXB2</A>
+ &nbsp <B>  <A NAME="tex2html3903"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004644800000000000000"></A><A NAME="SP:TRACK1"></A>
+<H3><A NAME="SECTION004643500000000000000"></A><A NAME="SP:POL"></A>
 <BR>
-<TT>TRACK1, TRACK2, ... , TRACK7,</TT> and <TT>TRACK8</TT>
+<TT>POL</TT>
 </H3>
 
 <P>
-The <TT>TRACKn</TT> parameters are arrays of track specifications for
-use during the <TT>n</TT>th pass at a head position. One track is given
-for each baseband channel. For Mark&nbsp;III, there is a one-to-one
-correspondence between baseband channels and tracks so this makes
-sense.  For Mark&nbsp;III observations, the VLBA track for a channel is
-just the Mark&nbsp;III track plus 3.  For many VLBA modes, several tracks
-are used for each channel. In these cases, the first track used for
-the baseband channel is specified and the on-line system determines
-the rest. A fanned out channel uses adjacent tracks within the odd or
-even groups and the lowest VLBA track used for data is 2. For example,
-a 1:4 fan out channel uses tracks 2, 4, 6, and 8 for the low order
-bit. If 2-bit samples are used, tracks 10, 12, 14, and 16 would be
-used for those bits.  In such a case, the only track mentioned in a
-<TT>TRACKn</TT> parameter is 2.  If a fan-in mode is used, more than one
-channel should be given the same track specification.  Fan-in modes
-are not yet tested or in use.
+<TT>POL</TT> is used to specify the polarization of a channel.  This
+may be used when asking SCHED&nbsp; to set a lot of defaults.  Or it
+may be used to tell SCHED&nbsp; the polarization in cases where it
+is not clear from other inputs.  Such cases arise when
+<A HREF="#SP:RCHAN"><TT>RCHAN</TT></A>, and <A HREF="node252.html#SP:LCHAN"><TT>LCHAN</TT></A>
+are not used AND the setup does not correspond to one in the
+<A HREF="node224.html#SEC:FRQCAT">frequency catalog.</A>.
 
 <P>
-For modes VLBA1:1, VLBA1:2, VLBA1:4, Mark&nbsp;III mode B with ascending
-frequency order (alternating sidebands), and Mark&nbsp;III mode E, <TT>TRACK1</TT> can be left out. All of the <TT>TRACKn</TT> commands will default
-to reasonable values. This is the recommended action for most users
-since track assignment is an easy area in which to make mistakes. SCHED will complain and stop if it does not know how to set the
-tracks for the requested mode. For the Mark&nbsp;III modes, extra baseband
-channels (2 for Mode B and 1 for Mode E) can be specified and will be
-put on the edge tracks that are not normally used for Mark&nbsp;III. For
-Mode B, they should follow the same alternating sideband pattern as
-the rest of the channels.
+<TT>POL</TT> should be <TT>RCP, LCP,</TT> or <TT>DUAL</TT>.  One value per
+channel can be given.  Any channels not set will default to the
+same value as the first so it is usually sufficient to just specify
+one value.  If <TT>POL = DUAL</TT> for the first channel,
+SCHED&nbsp; will set alternate channels to <TT>RCP</TT> and <TT>LCP</TT>.
+
+<P>
+Actually, <TT>POL</TT> can also be <TT>R</TT> or <TT>L</TT> (meaning <TT>RCP</TT>
+and <TT>LCP</TT> respectively), but don't tell anyone.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> One integer track specifications per channel.
+<LI><B>Argument:</B> An array of polarization specifications, one per channel.
 </LI>
-<LI><B>Options:</B>  Any integer between <TT>2</TT> and <TT>33</TT>.
+<LI><B>Options:</B>  <TT>RCP</TT>, <TT>LCP</TT>, or <TT>DUAL</TT>
 </LI>
-<LI><B>Default:</B>  <TT>0</TT> which will trigger automatic assignments for many modes.
+<LI><B>Default:</B>  Will try to set based on other inputs or frequency catalog.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>TRACK1=4,18,6,20,8,22,10,24,12,26,14,28,16,30</TT> 
-<BR> <TT>TRACK2=5,19,7,21,9,23,11,25,13,27,15,29,17,31</TT> 
-<BR>
-This example is Mark&nbsp;III Mode B.
+<LI><B>Example:</B>  <TT>POL=DUAL</TT>
   
 </LI>
 </UL>
@@ -108,31 +98,31 @@ This example is Mark&nbsp;III Mode B.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html3875"
+<A NAME="tex2html3904"
   HREF="node266.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3871"
-  HREF="node217.html">
+<A NAME="tex2html3900"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3865"
+<A NAME="tex2html3894"
   HREF="node264.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3873"
+<A NAME="tex2html3902"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3876"
-  HREF="node266.html">VLABAND</A>
-<B> Up:</B> <A NAME="tex2html3872"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3866"
-  HREF="node264.html">TPSPEEDL</A>
- &nbsp <B>  <A NAME="tex2html3874"
+<B> Next:</B> <A NAME="tex2html3905"
+  HREF="node266.html">PTINCR</A>
+<B> Up:</B> <A NAME="tex2html3901"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3895"
+  HREF="node264.html">PCALXB1 and PCALXB2</A>
+ &nbsp <B>  <A NAME="tex2html3903"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

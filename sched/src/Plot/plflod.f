@@ -74,10 +74,12 @@ C
          PSONUM = 0
          DO 22 I=1,N
             READ( LUN, 120, END=600, ERR=500 ) STRING, N1
-            IF( STRING .EQ. SRCNAME(I) ) THEN
-               PSOBCK(I) = N1
-               IF( N1 .EQ. 1 ) PSONUM = PSONUM + 1
-            END IF
+            DO J = 1, NSRC
+               IF( STRING .EQ. SRCNAME(J) ) THEN
+                  PSOBCK(J) = N1
+                  IF( N1 .EQ. 1 ) PSONUM = PSONUM + 1
+               END IF
+            END DO
  22      CONTINUE
 C
       ELSE IF( CLASS .EQ. 'SOURWIN' ) THEN

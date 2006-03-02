@@ -129,7 +129,7 @@ C
                DBDX(NDB)  = KD( KEYPTR( 'DXDT', KC, KI ) ) 
                DBDY(NDB)  = KD( KEYPTR( 'DYDT', KC, KI ) ) 
                DBDZ(NDB)  = KD( KEYPTR( 'DZDT', KC, KI ) ) 
-               DBEPO(MDB) = KD( KEYPTR( 'EPOCH', KC, KI ) )
+               DBEPO(NDB) = KD( KEYPTR( 'EPOCH', KC, KI ) )
                DBDBA(NDB) = KCHAR( 'AXISTYPE', 5, .FALSE., KD, KC, KI )
                DBOFF(NDB) = KD( KEYPTR( 'AXISOFF', KC, KI ) )
 C

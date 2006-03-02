@@ -96,6 +96,7 @@ C
       DOPSRC(TO)   = DOPSRC(FROM)
       LINES(TO)    = LINES(FROM)
       PCAL(TO)     = PCAL(FROM)
+      SCANTAG(TO)  = SCANTAG(FROM)
 C
       IVLAPHS(TO)  = IVLAPHS(FROM)
       VLATSYS(TO)  = VLATSYS(FROM)
@@ -112,7 +113,7 @@ C
       ROTATION(TO) = ROTATION(FROM)
       SAZCOL(TO)   = SAZCOL(FROM)
       SELCOL(TO)   = SELCOL(FROM)
-      OPMISS(TO)   = OPMISS(FROM)
+      CRDLINE(TO)  = CRDLINE(FROM)
 C
 C     Tape parameters.  Many should not be duplicated for some scans.
 C
@@ -136,6 +137,14 @@ C
          END DO
       END IF
 C
+C     eVLBI parameters.
+C
+      GRABTIME(1,TO) = GRABTIME(1,FROM)
+      GRABTIME(2,TO) = GRABTIME(2,FROM)
+      GRABGAP(TO) = GRABGAP(FROM)
+      DATAPATH(TO) = DATAPATH(FROM)
+      GRABTO(TO) = GRABTO(FROM)
+C
 C     Calculated parameters.  Usually these won't be available yet.
 C     But they might be if we are just shifting the order of scans
 C     later in the program.  Of course, some like slew times really
@@ -146,8 +155,10 @@ C
             TPDAT(1,TO,JST) = TPDAT(1,FROM,JST)
             TPDAT(2,TO,JST) = TPDAT(2,FROM,JST)
             TPSTART(TO,JST) = TPSTART(FROM,JST)
+            TCORR(TO,JST)   = TCORR(FROM,JST)
             TPFOOT1(TO,JST) = TPFOOT1(FROM,JST)
             TPFOOT2(TO,JST) = TPFOOT2(FROM,JST)
+            GBYTES(TO,JST)  = GBYTES(FROM,JST)
             LST1(TO,JST)    = LST1(FROM,JST)
             LST2(TO,JST)    = LST2(FROM,JST)
             TONSRC(TO,JST)  = TONSRC(FROM,JST)
@@ -164,6 +175,21 @@ C
             UP2(TO,JST) = UP2(FROM,JST)
          END DO
       END IF
+C
+C     Optimization stuff
+C
+      OPMISS(TO)   = OPMISS(FROM)
+      OPMINEL(TO)  = OPMINEL(FROM)
+      OPMIAN(TO)   = OPMIAN(FROM)
+      OPMINSEP(TO) = OPMINSEP(FROM)
+      OPSLEWWT(TO) = OPSLEWWT(FROM)
+      OPSLEWTI(TO) = OPSLEWTI(FROM)
+      OPHLIMWT(TO) = OPHLIMWT(FROM) 
+      OPHLIMTI(TO) = OPHLIMTI(FROM)
+      OPHMAXDT(TO) = OPHMAXDT(FROM)
+      OPHA(TO)     = OPHA(FROM)
+      OPHAWID(TO)  = OPHAWID(FROM)
+      OPHAWT(TO)   = OPHAWT(FROM)
 C
       RETURN
       END

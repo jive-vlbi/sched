@@ -231,9 +231,9 @@ C
 C                       Get the center frequency of the current channel.
 C	     
                         IF( SFSIDE(ICH,ISETF) .EQ. 'U' ) THEN
-                           CFREQ2 = FREQ(ICH,ISCN) + BW(ICH,ISCN)
+                           CFREQ2 = FREQ(ICH,ISCN) + 0.5 * BW(ICH,ISCN)
                         ELSE
-                           CFREQ2 = FREQ(ICH,ISCN) - BW(ICH,ISCN)
+                           CFREQ2 = FREQ(ICH,ISCN) - 0.5 * BW(ICH,ISCN)
                         END IF
 C	     
 C                       Compare with earlier channels of the same pol.
@@ -245,9 +245,11 @@ C
 C                             Get center frequency of earlier channel.
 C	     
                               IF( SFSIDE(JCH,ISETF) .EQ. 'U' ) THEN
-                                 CFREQ1 = FREQ(JCH,ISCN) + BW(JCH,ISCN)
+                                 CFREQ1 = FREQ(JCH,ISCN) + 
+     1                                    0.5 * BW(JCH,ISCN)
                               ELSE
-                                 CFREQ1 = FREQ(JCH,ISCN) - BW(JCH,ISCN)
+                                 CFREQ1 = FREQ(JCH,ISCN) - 
+     2                                    0.5 * BW(JCH,ISCN)
                               END IF
 C	     
 C                             Have a cow if the two are not separated

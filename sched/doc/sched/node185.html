@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>UVMFS</TITLE>
-<META NAME="description" CONTENT="UVMFS">
+<TITLE>STATions</TITLE>
+<META NAME="description" CONTENT="STATions">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,68 +29,72 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2789"
+<A NAME="tex2html2818"
   HREF="node186.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2785"
+<A NAME="tex2html2814"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2779"
+<A NAME="tex2html2808"
   HREF="node184.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2787"
+<A NAME="tex2html2816"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2790"
-  HREF="node186.html">VERSION</A>
-<B> Up:</B> <A NAME="tex2html2786"
+<B> Next:</B> <A NAME="tex2html2819"
+  HREF="node186.html">STOP</A>
+<B> Up:</B> <A NAME="tex2html2815"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2780"
-  HREF="node184.html">TSYS and NOTSYS</A>
- &nbsp <B>  <A NAME="tex2html2788"
+<B> Previous:</B> <A NAME="tex2html2809"
+  HREF="node184.html">START</A>
+ &nbsp <B>  <A NAME="tex2html2817"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041213300000000000000"></A><A NAME="MP:UVMFS"></A>
+<H3><A NAME="SECTION0041213300000000000000"></A><A NAME="MP:STATIONS"></A>
 <BR>
-<TT>UVMFS</TT>
+<TT>STATions</TT>
 </H3>
 
 <P>
-<TT>UVMFS</TT> affects UV plots, allowing the user to show the effect
-of using multi-frequency synthesis.  The first argument is the
-number of tracks to plot per baseline.  The default is to plot one
-with UV in km.  The second argument is the ratio of the highest
-to the lowest MFS frequency.  The UV values will be in km the
-middle of the frequency range.
+<TT>STATions</TT> is used to specify the list of stations to be included
+in this scan. If there is any change to the list, the whole list
+must be given again. The station names given must match ones
+available in the station catalogs. The scans for any specific station
+must be in time order.  Note that <TT>STATN</TT> is no longer an
+acceptable alternative.
 
 <P>
-This option could have been implemented by paying attention to
-the frequencies in the setup file, and that option should be
-added some day.  But that requires either fully specified setup
-files, or freq.dat entries for all stations.  When SCHED&nbsp; is being
-used for configuration studies, this is an undue burden.
+The maximum number of stations that SCHED&nbsp; will handle is set
+in a parameter statement in an include file and can be varied according
+to the capabilities of the computer in use.  At the time this was
+written, it was 22, but that may change.
 
 <P>
-Note that this is also used for the UV coverage based quality
-measures used for configuration studies.
+You may specify the station code for any or all stations instead of
+the name.  Sched will determine the station name from the catalog
+information and use it for the rest of scheduling.  This use of
+station codes is only offered for <A HREF="node185.html#MP:STATIONS"><TT>STATions</TT></A>,
+<A HREF="node91.html#MP:FASTFOR"><TT>FASTFOR</TT></A>, <A HREF="node170.html#MP:REWIND"><TT>REWIND</TT></A>,
+<A HREF="node190.html#MP:TAPE"><TT>TAPE</TT></A>, and <A HREF="node169.html#MP:REVERSE"><TT>REVERSE</TT></A>.
+All other inputs requiring station names must use the names as given
+in the station catalog.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Two numbers.
+<LI><B>Argument:</B> A list of station names of up to 8 characters each.
 </LI>
-<LI><B>Options:</B>  The first number is converted to an integer.  The second is a real
-and should be between 1.0 and about 2.0, although it is unrestricted
+<LI><B>Options:</B>  Any stations in the station catalog.
 </LI>
-<LI><B>Default:</B>  1 and 1.0 -- meaning only plot one track per baseline.
+<LI><B>Default:</B>  At least one must be given for first scan.
 </LI>
-<LI><B>Usage:</B>    One value used for schedule
+<LI><B>Usage:</B>    Defaults to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>UVMFS = 5, 1.3 </TT>
+<LI><B>Example:</B>  <TT>STATION=EB_VLBA,GB_VLBA,VLBA_NL,VLA27,VLBA_MK</TT>
   
 </LI>
 </UL>
@@ -96,31 +102,31 @@ and should be between 1.0 and about 2.0, although it is unrestricted
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2789"
+<A NAME="tex2html2818"
   HREF="node186.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2785"
+<A NAME="tex2html2814"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2779"
+<A NAME="tex2html2808"
   HREF="node184.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2787"
+<A NAME="tex2html2816"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2790"
-  HREF="node186.html">VERSION</A>
-<B> Up:</B> <A NAME="tex2html2786"
+<B> Next:</B> <A NAME="tex2html2819"
+  HREF="node186.html">STOP</A>
+<B> Up:</B> <A NAME="tex2html2815"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2780"
-  HREF="node184.html">TSYS and NOTSYS</A>
- &nbsp <B>  <A NAME="tex2html2788"
+<B> Previous:</B> <A NAME="tex2html2809"
+  HREF="node184.html">START</A>
+ &nbsp <B>  <A NAME="tex2html2817"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

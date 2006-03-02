@@ -99,7 +99,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2005Jun29-16:27:26"
+ VERSION = "2006Feb08-10:20:23"
 
 !  
 !  =====================================================================
@@ -192,10 +192,18 @@ Name = v20cm_2  Station = VLBA    Priority = 0
 !                Maximum range:     1920 - 2840 
 !                Good range:        2000 - 2440 
 !                Another OK range:  2490 - 2650 
-!                LA and NL filters: 2200 - 2400 -1db,  2150 - 2450 -60db
-!          The LA and NL filters were necessitated by RFI outside that
-!          range.  Note that Tcals are poor outside of nominal range so be
+!                S band filters:    2200 - 2400 -1db,  2150 - 2450 -60db
+!          The S band filters were necessitated by RFI outside that
+!          range.  As of Sept. 16, 2005, filters are at LA, NL, OV.
+!          That is just a date I checked, not when they were installed.
+!          Note that Tcals are poor outside of nominal range so be
 !          careful with calibration.
+!     
+!          Some of the most serious RFI in this band that affects all
+!          North American stations is from:
+!              Srius Satellite Radio  2320.0 to 2332.5 MHz
+!              XM Satellite Radio     2332.5 to 2345.0 MHz
+
 
 Name = v13cm_1  Station = VLBA    Priority = 0
   rf1 = 1920, 1920  ifname = A,    C
@@ -3511,6 +3519,10 @@ Name = arxbh5  Station = ARECIBO, AREC_S2   priority = 0
 !  040812: Update to Ur 6cm, 30cm
 !  040813: sorted all entries on (lowest) lo freq.
 !  040826: update Jb,Eb,Tr
+!  050927: new shanghai 18cm LO. JB1_VLBA had wrong IF names at 90cm.
+!  051115: added back 3mm setups for Mh, On, Ef/Eb and new PdB and PV
+!  051122: Shanghai updates (email from An Tao)
+!  051123: Urumqi updates (email from Liu Xiang)
 !  
 !  -----------------------------------------------------------------------
 !   Effelsberg
@@ -3676,7 +3688,7 @@ Name = eb2cm_d  Station = EB_VLBA   priority = 0
 
 Name = eb1cm_a  Station = EB_VLBA   priority = 1
   rf1 = 21700, 21700    ifname = A,    C
-  rf2 = 22400, 22400    fe  = '1cm', '1cm'
+  rf2 = 22200, 22200    fe  = '1cm', '1cm'
   pol =  RCP,  LCP      lo1 = 21200, 21200
   note = '1.3cm secondary focus'
 /
@@ -3766,13 +3778,13 @@ Name = eb7mm_e  Station = EB_VLBA   priority = 0
   note = '7mm secondary focus: affected by poor secondary reflector'
 /
 
-!3mm setup now maintained in freq_mm.dat by J. Attridge at Haystack (CR 2Oct00)
-!Name = eb3mm  Station = EB_VLBA   priority = 0
-!  rf1 = 86180, 86180    ifname = B,    D
-!  rf2 = 86340, 86340    fe  = '3mm', '3mm'
-!  pol =  LCP,  LCP      lo1 = 85688, 85688
-!  note = '3mm prime focus LCP: April and October for CMVA'
-!/
+Name = 3mm_eb_vlba Station = EB_VLBA  Priority = 0
+  rf1    = 86000, 86000   ifname = A,    C
+  rf2    = 86500, 86500   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1 = 85500, 85500
+  note = 'new 3mm RX: April 2001 for CMVA'
+/
+
 
 
 Name = ef30cm.EV8B Station = EFLSBERG   priority = 4
@@ -3958,6 +3970,21 @@ Name = ef1cm  Station = EFLSBERG   priority = 4
   note = 'LO from Graham 03Jan97; must be using Low patch'
   ! ranges guessed assuming 100 - 200 BBC range in low output
 /
+Name = 3mm_eflsbg Station = EFLSBERG  Priority = 0
+  rf1    = 86100, 86100   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   RCP   lo1    = 85900, 85900
+  note = 'new 3mm RX: April 2001 for CMVA'
+/
+Name = 3mm_eflsbg-l Station = EFLSBERG  Priority = 0
+!this is for high patching (200->500 MHz)
+  rf1    = 86100, 86100   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85900, 85900
+  note = 'new 3mm RX: April 2001 for CMVA'
+/
+
+
 
 !
 ! EVN data by Huib Jan van Langevelde
@@ -4012,11 +4039,20 @@ Name = cm1cm  Station = CAMBG32M   priority = 4
   pol =   RCP,  LCP     lo1    = 21680.0, 21680.0
   note = 'Confirmed by Alastair Gunn 210897 CHECK'   
 /
+
+
+
 Name = mh18cm  Station = METSAHOV   priority = 5
   note = 'No 18cm at MH'
 /
 Name = mh6cm  Station = METSAHOV   priority = 5
   note = 'No 6cm at MH'
+/
+Name = mh_sx  Station = METSAHOV   priority = 5
+  rf1 = 2210, 8150    ifname = C,     A
+  rf2 = 2350, 8630    fe     = '13cm', '4cm'
+  pol =   RCP, RCP    lo1    = 1530, 7650
+  note = 'From Mujunen 25/11/2005'
 /
 Name = mh1cm  Station = METSAHOV   priority = 4
   rf1 = 21980, 21980    ifname = C,     A
@@ -4027,22 +4063,22 @@ Name = mh1cm  Station = METSAHOV   priority = 4
   ! CR: ifname C, A instead of B, A (from Huib 17Oct01, confirmed Kononen)
 /
 Name = mh7mm_sio  Station = METSAHOV  priority = 4
-  rf1 =  42980, 42980    ifname =    B,     A  
+  rf1 =  42980, 42980    ifname =    C,     A  
   rf2 =  43480, 43480    fe     = '7mm',  '7mm'
   pol =   LCP, LCP       lo1    =  42480.0, 42480.0
   note = ' ** LCP only **, Values from E-mail K.Karlamaa (JFD 19jan99) '
  ! only single Pol LCP,  BBC range ~500-1000MHz
  ! ifname updated from Kononen (CR 2Dec00)
 /
-!3mm setup now maintained in freq_mm.dat by J. Attridge at Haystack (CR 2Oct00)
-!Name = mh3mm  Station = METSAHOV   priority = 4
-!  rf1 = 85872, 86872     ifname = B,     A
-!  rf2 = 86372, 86372     fe     = '3mm', '3mm'
-!  pol =  LCP,  LCP       lo1    = 85372, 85372
-!  note =  ' ** LCP only **´
-! ! only LCP,  BBC range ~500-1000MHz
-! ! CR: added 1Dec00 from P.Kononen.
-!/
+! METSAHOV at 3 mm for 256-16-1 dual pol
+!
+Name = 3mm_metsa Station = METSAHOV  Priority = 0
+  rf1 = 85872, 85872     ifname = A,     C
+  rf2 = 86372, 86372     fe     = '3mm', '3mm'
+! pol =  LCP,  RCP       lo1    = 85372, 85372
+  pol =  LCP,  RCP       lo1    = 85501, 85501
+/
+
 
 Name = nt90cm  Station = NOTO, NOTO_S2   priority = 3
   rf1 =  250, 250     ifname = C,    A
@@ -4134,6 +4170,9 @@ Name = nt7mm_sio  Station = NOTO      priority = 4
   ! email update Cassaro April 2003 (CR 1May03)
 /
 
+
+
+
 ! removed at request of H. Xinyong (CR 3Sep03)
 !Name = sh18cmo  Station = SHANGHAI, SHANG_S2   priority = 5
 !  rf1 = 1320, 1320    ifname = A
@@ -4157,24 +4196,16 @@ Name = shsx2  Station = SHANGHAI, SHANG_S2  priority = 6
   !added after email from Huang Xinyong (CR 9Jun01)
 /
 Name = sh18cm  Station = SHANGHAI, SHANG_S2   priority = 4
-  rf1 = 1620, 1620    ifname = C, A
-  rf2 = 1680, 1680    fe  = '18cm', '18cm'
-  pol =  RCP,  LCP    lo1 =  2200.00, 2200.00     
-  note = 'Huang Xinyong 170300, dual pol but narrow(?)'
+  rf1 = 1600, 1600    ifname = C, A
+  rf2 = 1740, 1740    fe  = '18cm', '18cm'
+  pol =  RCP,  LCP    lo1 =  2300.00, 2300.00     
+  note = 'Huang Xinyong 27Sept05'
 /
-Name = sh6cm  Station = SHANGHAI, SHANG_S2   priority = 4
-  rf1 =  4700     ifname = A
-  rf2 =  5110     fe     = '6cm'
-  pol =  LCP     lo1    = 4200.0
-  note = 'from Huang Xinyong 170300, change in LO'
-  ! ranges guessed assuming a 500 - 1000 MHz BBC
-  !CR: update from H.Xinyong, 3Sep03
-/
-Name = sh6cmd  Station = SHANGHAI, SHANG_S2   priority = 5
+Name = sh6cm  Station = SHANGHAI, SHANG_S2   priority = 5
   rf1 =  4700, 4700     ifname = C, A
-  rf2 =  5110, 5110     fe     = '6cm', '6cm'
+  rf2 =  5150, 5150     fe     = '6cm', '6cm'
   pol =  RCP, LCP     lo1    = 4200.0, 4200.0
-  note = 'Dummy dual-pol entry, only LCP available (CR 3Sep03).'
+  note = 'Dual-pol available since summer 2005 (CR 051122).'
 /
 Name = sh1cm  Station = SHANGHAI, SHANG_S2   priority = 5
   rf1 =  22100, 22100     ifname = C,  A
@@ -4183,6 +4214,7 @@ Name = sh1cm  Station = SHANGHAI, SHANG_S2   priority = 5
   note = 'From Porcas, from Huang Xinyong 231198'
   ! ranges guessed assuming a 500 - 1000 MHz BBC
 /
+
 
 Name = tr30cm.mid   Station = TORUN   priority = 4
   rf1 =  867.5,867.5   ifname = C,    A 
@@ -4271,7 +4303,7 @@ Name = ur18cm  Station = URUMQI
 Name = ursx  Station = URUMQI 
   rf1 = 2150, 8200    ifname = '2N', '1N'  fe = '13cm', '4cm'
   rf2 = 2450, 8600    altifn = '1A', '2A'
-  pol =  RCP,  RCP     lo1 =  2020, 8080
+  pol =  RCP,  RCP     lo1 =  2020, 8100
   note = 'From X.Hong 280300'
 /
 ! obsolete since new Urumqi receiver installed
@@ -4415,8 +4447,8 @@ Name = j1b6cm  Station = JODRELL1   priority = 3
 
 
 Name = j1v90cm  Station = JB1_VLBA   priority = 1
-  rf1 =  314, 314    ifname =    '2N',   '1N'   fe =  '90cm', '90cm' 
-  rf2 =  336, 336    altifn =    '1A',   '2A'   
+  rf1 =  314, 314    ifname =    'A',   'C'   fe =  '90cm', '90cm' 
+  rf2 =  336, 336    
   pol =   RCP,  LCP    lo1    =  844.0, 844.0
   note = 'from Burgess, 8 Aug 2004'
 /
@@ -4657,6 +4689,22 @@ Name = on7mm_sio2  Station = ONSALA60  priority = 5
   note = ' ** LCP only **, values from E-mail J.Conway (JFD 12jan99) '
   ! only single Pol LCP, BBC range ~100-500MHz
 /
+!
+! ONSALA at 3 mm
+Name = 3mm_onsala
+Station = ONSALA60  Priority = 0
+  rf1    = 86150, 86150   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86440, 86440   fe     = '3mm', '3mm'
+  pol    =   LCP,   RCP   lo1    = 85900, 85900
+/
+! ONSALA at 3 mm 256-16-1 no pol
+! added for Oct 2000, CMVA session, since other setup produces errors, TPK
+Name = 3mm_onsa-lcp STATION = ONSALA60  Priority = 0
+  rf1    = 86150, 86150   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86440, 86440   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85900, 85900
+/
+
 
 
 Name = on30cm.low  Station = ONSALA85  priority = 4
@@ -5016,11 +5064,10 @@ Name = hh6cm_S2  Station = HART, HART_S2   priority = 4
   ! LBA BBC fixed at 160 MHz but LO tunable, works with MkIV too
 /
 Name = hh6cm  Station = HART  priority = 3
-  rf1 = 4840, 4840    ifname = '2N',  '1N' fe  = '6cm', '6cm'
-  rf2 = 5160, 5160    altifn = '1A',  '2A 
-  pol =  RCP,  LCP    lo1 = 4840.0, 4840.0
-  note = 'Values confirmed by E-mail Jonathan Quick 291100 (CR)'
-  ! BBC ranges 100 - 200
+  rf1 = 4700, 4700    ifname = '2N',  '1N' fe  = '6cm', '6cm'
+  rf2 = 5100, 5100    altifn = '1A',  '2A 
+  pol =  RCP,  LCP    lo1 = 4600.0, 4600.0
+  note = 'Values confirmed by E-mail Jonathan Quick 221105 (CR)'
 /
 Name = hh5cm_S2  Station = HART, HART_S2   priority = 4
   rf1 = 6020, 6020    ifname = '2N',  '1N'  fe = '5cm', '5cm'
@@ -5051,10 +5098,10 @@ Name = hh4cm_S2  Station = HART, HART_S2   priority = 4
   ! LBA BBC fixed at 160 MHz but LO tunable, works with MkIV too
 /
 Name = hh3cm_S2  Station = HART, HART_S2   priority = 4
-  rf1 = 12070    ifname = '1N'  fe = '3cm'
-  rf2 = 12240    altifn = '2A'
-  pol =   LCP    lo1 = 12021.0
-  note = 'Values confirmed by E-mail Jonathan Quick 291100 (CR)'
+  rf1 = 12070, 12070    ifname = '1N', '2N'  fe = '3cm', '3cm'
+  rf2 = 12240, 12240    altifn = '2A', '1A'
+  pol = LCP,   RCP      lo1 = 12021.0, 12021.0
+  note = 'Values confirmed by E-mail Jonathan Quick 221105 (CR)'
   ! LBA BBC fixed at 160 MHz but LO tunable, works with MkIV too
 /
 Name = hh3cm_d  Station = HART, HART_S2   priority = 6
@@ -5100,6 +5147,46 @@ Name = hh7mm Station = HART, HART_S2    priority = 5
   note = 'Estimates from Lorant sjouwerman@jive.nl May 2000'
  !CR: updates from Lorant (1Dec00)
 /
+
+!  =====================================================================
+!  The following entries in the SCHED frequency catalog are for mm (GMVA)
+!  VLBI stations in Europe. 
+!  =====================================================================
+
+! Plateau de Bure (IRAM) at 3 mm, single pol
+Name = 3mm_pdbure-lcp  Station = PDBURE  Priority = 0
+  rf1    = 85800, 85800  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85919, 85919
+  note = '3-mm CMVA'
+/
+! Plateau de Bure (IRAM) at 3 mm
+Name = 3mm_pdbure  Station = PDBURE  Priority = 0
+  rf1    = 85800, 85800  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   RCP   lo1    = 85919, 85919
+  note = '3-mm CMVA'
+/
+
+! Pico Veleta (IRAM) at 3 mm
+!
+Name = 3mm_picovel
+Station = PICOVEL  Priority = 0
+  rf1    = 86007, 86007  ifname = C, A
+  rf2    = 86507, 86507   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 85507, 85507
+  note = '3-mm CMVA'
+/
+! Pico Veleta (IRAM) at 2 mm
+!
+Name = 2mm_pico-l
+Station = PICOVEL  Priority = 0
+  rf1    = 128000,128000  ifname = B, D
+  rf2    = 130000,130000  fe     = '2mm', '2mm'
+  pol    =   LCP,   LCP   lo1    = 128670,128670
+  note = '2-mm test'
+/
+
 !  
 !  =====================================================================
 !  The following entries in the SCHED frequency catalog are for stations
@@ -5511,12 +5598,104 @@ Name = pa1cm  Station = PARKES   priority = 0
   ! http://www.parkes.atnf.csiro.au/documentation/user_guide/node4.html
 /
 
-!  
+!
 !  =====================================================================
 !  The following entries in the SCHED frequency catalog are for mm
-!  VLBI stations only.  It's a bit thin so far!
+!  VLBI stations only.
 !  These stations are maintained in file freq_mm.dat.
 !  =====================================================================
+!  Initial entries from mm-stations.dat from Krichbaum, Sept. 26, 2005.
+!  Actually none of these stations are in common use now (2005).
+
+!  Haystack at 3 mm dual-pol
+!
+! Receiver B is LCP, A is RCP
+Name = 3mm_haystk
+Station = HAYSTACK  Priority = 0
+  rf1    = 86140, 86140  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86540, 86540   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 86040, 86040
+  note = '3-mm CMVA'
+/
+! Haystack at 3 mm single-pol
+!
+Name = 3mm_haystk-lcp
+Station = HAYSTACK  Priority = 0
+  rf1    = 86140, 86140  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86540, 86540   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 86040, 86040  !this works with 86210.99
+  note = '3-mm CMVA LCP only'
+/
+
+
+! Quabbin at 3 mm
+!
+Name = 3mm_quabn
+Station = QUAB  Priority = 0
+  rf1    = 86169, 86169  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86569, 86569   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 86069.1, 86069.1
+  note = '3-mm CMVA'
+/
+
+! Kitt Peak 12-m at 3 mm
+!
+Name = 3mm_KP12m
+Station = KITTPEAK  Priority = 0
+  rf1    = 86168, 86168   ifname = B, D
+  rf2    = 86668, 86668   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 85295, 85295
+  note = '3-mm CMVA'
+/
+
+!
+Name = 3mm_KP12m-l
+Station = KITTPEAK  Priority = 0
+  rf1    = 86168, 86168   ifname = B, D
+  rf2    = 86668, 86668   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85295, 85295
+  note = '3-mm CMVA'
+/
+
+! KITTPEAK v=2 SiO
+!
+Name = 3mm_v2SiO_12m
+Station = KITTPEAK  Priority = 0
+  rf1    = 85500, 85500   ifname = B,    D
+  rf2    = 86000, 86000   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 84686, 84686
+/
+
+! KITTPEAK 29 SiO
+!
+Name = 3mm_29SiO_12m
+Station = KITTPEAK  Priority = 0
+  rf1    = 85500, 85500   ifname = B,    D
+  rf2    = 86000, 86000   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 84808, 84808
+/
+
+! 2mm VLBI test KITTPEAK 12m - PICOVEL
+
+! Pico Veleta (IRAM) at 2 mm
+!
+Name = 2mm_pico-l
+Station = PICOVEL  Priority = 0
+  rf1    = 128000,128000  ifname = B, D  
+  rf2    = 130000,130000  fe     = '2mm', '2mm'
+  pol    =   LCP,   LCP   lo1    = 128670,128670
+  note = '2-mm test'
+/
+! Kitt Peak 12m at 2 mm
+!
+Name = 2mm_KP12m-l
+Station = KITTPEAK  Priority = 0
+  rf1    = 128000,128000  ifname = B, D
+  rf2    = 130000,130000  fe     = '2mm', '2mm'
+  pol    =   LCP,   LCP   lo1    = 128670,128670
+  note = '2-mm test'
+/
+
 !  
 !  =====================================================================
 !  The following entries in the SCHED frequency catalog are for geodetic

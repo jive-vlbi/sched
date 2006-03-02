@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>REVERSE</TITLE>
-<META NAME="description" CONTENT="REVERSE">
+<TITLE>POINT</TITLE>
+<META NAME="description" CONTENT="POINT">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,70 +29,101 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2453"
+<A NAME="tex2html2482"
   HREF="node158.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2449"
+<A NAME="tex2html2478"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2443"
+<A NAME="tex2html2472"
   HREF="node156.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2451"
+<A NAME="tex2html2480"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2454"
-  HREF="node158.html">REWIND</A>
-<B> Up:</B> <A NAME="tex2html2450"
+<B> Next:</B> <A NAME="tex2html2483"
+  HREF="node158.html">PN3DB and NOPN3DB</A>
+<B> Up:</B> <A NAME="tex2html2479"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2444"
-  HREF="node156.html">REPeat</A>
- &nbsp <B>  <A NAME="tex2html2452"
+<B> Previous:</B> <A NAME="tex2html2473"
+  HREF="node156.html">PLOT</A>
+ &nbsp <B>  <A NAME="tex2html2481"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041210500000000000000"></A><A NAME="MP:REVERSE"></A>
+<H3><A NAME="SECTION0041210500000000000000"></A><A NAME="MP:POINT"></A>
 <BR>
-<TT>REVERSE</TT>
+<TT>POINT</TT>
 </H3>
 
 <P>
-<TT>REVERSE</TT> requests that the direction of motion of the
-wide-band Mark&nbsp;III or VLBA tape be reversed at the start of the
-scan. No rewinds or fast forwards will be done if this is requested.
-<TT>REVERSE</TT> is not needed normally. SCHED&nbsp; checks each scan to
-see if it will fit in the current direction. If not, the tape will be
-reversed before the next scan begins.
-If <TT>REVERSE</TT> is specified with no argument, the tape will be
-reversed at all stations. If one or more station names are given, the
-tapes will be reversed at only those stations.  Station codes may
-be used instead of station names.
+<TT>POINT</TT> is used to tell SCHED&nbsp; to convert this scan to a
+<A HREF="node37.html#SEC:REFPOINT">reference pointing</A> scan.  If the argument
+is zero (which is the value it will get if <TT>POINT</TT> is specified
+without an argument), all stations that are in any group and have
+appropriate frequencies as specified in the <A HREF="node151.html#MP:PEAKFILE"><TT>PEAKFILE</TT></A> (see also <A HREF="node152.html#MP:PEAKINIT"><TT>PEAKINIT</TT></A>) will
+be used.  If <TT>POINT</TT> has a value, only stations in that group
+from the <A HREF="node151.html#MP:PEAKFILE"><TT>PEAKFILE</TT></A> will be used.  When
+<TT>POINT</TT> is specified for a scan, SCHED&nbsp; restricts the stations
+to those in the pointing group(s), switches to the pointing setup
+file, sets DOPPLER if the source velocity (first) is not zero, turns
+off recording, and sets other parameters needed to make a pointing
+scan.  The parameters of the main scan are not affected.  The object
+is to allow the user to explicitly set the times and source for
+pointing, but allow SCHED&nbsp; to take care of all the other messy
+details of converting the scan to a pointing scan.
+
+<P>
+<TT>POINT=-1</TT> means don't add a pointing scan even if you can.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> None or a list of stations.
+<LI><B>Argument:</B> None or a number.  None means zero.  The number specifies a pointing group.  -1 means don't add pointing here.
 </LI>
-<LI><B>Options:</B>  No argument or the name of any stations in the scan. Not case
-sensitive.
+<LI><B>Options:</B>  Any integer 0 or above, but should match a pointing group if not zero
 </LI>
-<LI><B>Default:</B>  No reverse.
+<LI><B>Default:</B>  Not set
 </LI>
-<LI><B>Usage:</B>    Reverts to no reverse on next scan.
+<LI><B>Usage:</B>    Set back to the unset state for each scan to avoid doing the
+whole schedule in pointing mode
 </LI>
-<LI><B>Example:</B>  <TT>REVERSE</TT> or <TT>REVERSE=VLBA_KP,VLBA_LA</TT>
+<LI><B>Example:</B>  <TT>POINT=2</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2482"
+  HREF="node158.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2478"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2472"
+  HREF="node156.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2480"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2483"
+  HREF="node158.html">PN3DB and NOPN3DB</A>
+<B> Up:</B> <A NAME="tex2html2479"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2473"
+  HREF="node156.html">PLOT</A>
+ &nbsp <B>  <A NAME="tex2html2481"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

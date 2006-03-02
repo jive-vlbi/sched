@@ -1,91 +1,397 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>TPTIME</TITLE>
-<META NAME="description" CONTENT="TPTIME">
+<TITLE>Source Catalog</TITLE>
+<META NAME="description" CONTENT="Source Catalog">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node210.html">
-<LINK REL="previous" HREF="node208.html">
-<LINK REL="up" HREF="node199.html">
+<LINK REL="previous" HREF="node50.html">
+<LINK REL="up" HREF="node49.html">
 <LINK REL="next" HREF="node210.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3096"
+<A NAME="tex2html3104"
   HREF="node210.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3092"
-  HREF="node199.html">
+<A NAME="tex2html3100"
+  HREF="node49.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3086"
+<A NAME="tex2html3094"
   HREF="node208.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3094"
+<A NAME="tex2html3102"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3097"
-  HREF="node210.html">HEADMODE</A>
-<B> Up:</B> <A NAME="tex2html3093"
-  HREF="node199.html">Details of Tape Initialization</A>
-<B> Previous:</B> <A NAME="tex2html3087"
-  HREF="node208.html">DENSITY</A>
- &nbsp <B>  <A NAME="tex2html3095"
+<B> Next:</B> <A NAME="tex2html3105"
+  HREF="node210.html">Station Catalog and Locations</A>
+<B> Up:</B> <A NAME="tex2html3101"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html3095"
+  HREF="node208.html">YEAR</A>
+ &nbsp <B>  <A NAME="tex2html3103"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004411000000000000000"></A><A NAME="TP:TPTIME"></A>
+<H1><A NAME="SECTION00420000000000000000"></A><A NAME="SEC:SRCCAT"></A>
 <BR>
-<TT>TPTIME</TT>
-</H3>
+Source Catalog
+</H1>
 
 <P>
-<TT>TPTIME.</TT> This is for Mark&nbsp;II. It specifies the reference
-time for tape changes at each  site. The tapes at the station will be
-changed an integral number of 4 hour intervals before or after this
-time. In effect, it is a station dependent <TT>TPREF</TT>. This value, if
-specified, will override <TT>TPREF</TT> for the corresponding station.
+SCHED&nbsp; uses a catalog to get source information such as names,
+positions, and velocities.  This catalog is in keyin format. Entries
+are terminated with a ``/''.  Some or all of the catalog may be
+included in a section in the SCHED input file.  SCHED will look
+there first for sources, and then go to an external catalog to find
+the rest (or all).  There is a standard catalog, <I>sources.vlba</I>,
+included with the SCHED&nbsp; distribution, which will probably have most,
+if not all, sources in a project.  The scheduler may just refer to
+this catalog, or may copy the desired entries into catalog sections in
+the main SCHED&nbsp; input.  The scheduler should consult the catalog to
+be sure that the right source names are being used in the schedule.
 
 <P>
-
-<UL>
-<LI><B>Argument:</B> An array of 30 times in <TT>hh:mm:ss</TT> format.
-</LI>
-<LI><B>Options:</B>  Any valid time between <TT>0</TT> and <TT>24</TT> hours.
-</LI>
-<LI><B>Default:</B>  <TT>-1</TT> which causes it not to be used. <TT>TPREF</TT> or the first
-scan of the project will be used instead.
-</LI>
-<LI><B>Usage:</B>    Defaults to previous value.
-</LI>
-<LI><B>Example:</B>  <TT>TPTIME=2:0:0,3:0:0,2:0:0</TT>
-  
-</LI>
-</UL>
+The a standard source catalog contains sources from a USNO geodetic
+VLBI list (very similar to the International Celestial Reference Frame
+or ICRF; these have <TT>CALCODE=N</TT>), from the VLA calibrator list
+(<TT>CALCODE=Y</TT>), and from the JVAS survey (<TT>CALCODE=M</TT>;Patnaik
+et al. 1992, mnras, 254, 655; Browne et al. 1998, mnras, 293, 257;
+Wilkinson et al. 1998, mnras, 300, 790).  The USNO sources have
+positions good to typically a milliarcsecond or better.  The JVAS
+sources are good to 12-55 mas.  The VLA calibrator positions are
+somewhat worse than the JVAS positions.  Eventually the JVAS positions
+will be determined to an accuracy of about a mas.  There are several
+thousand sources in the catalog.  This catalog is a direct reflection
+of what was in the Socorro correlator source data base at the time of
+its creation so the coordinates are likely to be those used by default
+for correlation.
 
 <P>
-<BR><HR>
+SCHED&nbsp; input parameter <TT>SRCFILE</TT> is used to point to any desired
+external catalog.  A file name of up to 80 characters can be
+specified. The default source file is: 
+<BR><TT>SRCFILE=$SCHED/catalogs/sources.vlba</TT>.  
+<BR>
+On unix systems with the
+environment variable SCHED properly defined, this is the standard
+catalog distributed with SCHED.  Users of the html version of the
+manual can read the catalog by clicking
+<A NAME="tex2html73"
+  HREF="catalogs/sources.vlba">here.</A>.
+
+<P>
+Source catalog information can be given in the main SCHED&nbsp; keyin
+file. If the keyword <TT>SRCCAT</TT> appears, all input after the next
+``/'' is assumed to consist of source catalog entries until a line
+containing the keyword <TT>ENDCAT</TT> and a ``/'' is encountered (don't
+combine this keyword with a catalog entry).  Such ``in-line'' catalogs
+may appear anywhere in a SCHED&nbsp; keyin file, although it is probably
+best to put them near the beginning.  SCHED will look in the
+external catalog for any source not found in an in-line catalog.  If
+you wish to prevent SCHED&nbsp; from looking in external catalogs, specify
+<TT>SRCFILE=NONE</TT>.  It is common to provide in-line source catalog
+entries for unique program sources, but let SCHED&nbsp; find the fringe
+finders and other calibrators in the standard catalog.
+
+<P>
+The parameters for each entry in the source catalog are below.  Lower
+case letters in this list are optional.  All catalog parameters except
+<TT>EQUINOX</TT> and <TT>EPOCH</TT> revert to a default unless specified
+for a source. <TT>EQUINOX</TT> and <TT>EPOCH</TT> default to the last specified.
+
+<P>
+Note that the <A HREF="node11.html#SEC:PLOT">plotting capabilities</A> of SCHED,
+specifically the RD plots, can be used to examine the distribution
+of sources in the catalog and to find catalog near any desired
+location.  This is useful, for example, for finding phase calibrators
+near target sources.
+
+<P>
+SCHED&nbsp; will use whichever equinox coordinates are provided in the
+catalog and determine J2000, B1950, and DATE coordinates.  All of these
+coordinates are listed in the <I>.sum</I> file.  Various stations require
+different equinox coordinates.  For example, the VLBA only understands
+J2000 coordinates while some other sites only understand B1950.  Sched
+uses the SLALIB routines to make the coordinate conversions.
+
+<P>
+The J2000 and B1950 coordinates systems move relative to each other so
+an ``observe'' date is needed to make an accurate conversion.  This is
+the date at which the coordinates of the reference sources were
+determined.  For example, the VLA calibrator list coordinates were
+determined in 1979.9 originally, and all subsequent updates, based
+mainly on J2000 positions, were precessed to B1950 using an assumed
+``observe'' date of 1979.9.  A similar situation exists at MERLIN,
+where observing is done in B1950 coordinates.  There, the calibrator
+positions (based again on positions provided originally in J2000) are
+precessed to B1950 using an ``observe'' date of 1950.0.  Any B1950
+source position determined on MERLIN should be precessed to other
+systems using that date.  The user can specify the ``observe'' date
+using the main schedule parameter <A HREF="node159.html#MP:PRECDATE"><TT>PRECDATE</TT></A> which defaults to 1979.9, the correct value for use with
+B1950 source positions determined on the VLA.  For purposes of
+pointing antennas, the value of this date that is used is not very
+important.  But if you are trying to phase reference, phase the VLA at
+a high frequency, or derive positions for correlation, this is an
+issue that should be dealt with properly.
+
+<P>
+The parameters of the source catalog are:
+
+<P>
+<DL>
+<DT><STRONG><TT>Source</TT>:</STRONG></DT>
+<DD>This is the name of the source.  Up to 5
+source names can be provided to handle aliases.  The names can have
+up to 12 characters each, although, as noted below, some downstream
+software may not like that much.  No software we know of requires less
+than 8 characters.
+
+<P>
+Be a bit careful about special characters included in source names.
+Some are benign.  But, for example, the * and ? characters are used as
+wild cards in many programs so, if either ends up in a file name (as
+it will after SPLIT in AIPS), it could cause problems.  The temptation
+to use * is high because of sources such as SgrA*.  But the
+conservative approach is to avoid it.  Also, do not include imbedded
+blanks in source names, as they cause problems at a variety of places
+in processing.
+
+<P>
+Note that the number of characters you can have may be limited by
+downstream software.  Snap files require source names of 10 characters
+or less, but are not normally written by SCHED&nbsp; any more.  VLA
+observe files have a total of 13 characters for the source name plus
+qualifier. If the qualifier is 0 (default), no characters are needed
+for it. Otherwise, the qualifier needs however many digits it uses
+(<EM>e.g.</EM>, 2 digits for qualifier ``33'') plus one for a blank to
+separate it from the source name. If either the VLA or a snap file
+needs shorter name, SCHED&nbsp; will use the first alias of 8 characters
+or less, so be sure to include such an alias if it will be needed.
+Finally, beware that the Mark&nbsp;III correlators and the geodetic
+software have 8 character source name limits.
+
+<P>
+</DD>
+<DT><STRONG><TT>Ra</TT>:</STRONG></DT>
+<DD>Right ascension. Remember that the VLA and
+Westerbork need sub-arcsecond positions for phasing.
+
+<P>
+</DD>
+<DT><STRONG><TT>RAERR</TT>:</STRONG></DT>
+<DD>The angular error in the RA direction in
+milliarcseconds.  Note that for RA, this is not the coordinate error.
+For that, one would need to divide RAERR by 15 to convert to time units
+and divide by cos(dec) to account for the convergence of lines of RA
+near the poles.
+
+<P>
+</DD>
+<DT><STRONG><TT>Dec</TT>:</STRONG></DT>
+<DD>Declination.
+
+<P>
+</DD>
+<DT><STRONG><TT>DECERR</TT>:</STRONG></DT>
+<DD>The angular error in the declination direction in
+milliarcseconds.  For dec, this is the same as the coordinate error.
+
+<P>
+</DD>
+<DT><STRONG><TT>EQuinox</TT>:</STRONG></DT>
+<DD>Epoch of the observations. Allowed values are
+<TT>B1950</TT>, <TT>J2000</TT>, and <TT>DATE</TT>.
+
+<P>
+</DD>
+<DT><STRONG><TT>Calcode</TT>:</STRONG></DT>
+<DD>Single-character calcode used for VLA and VLBA
+control files. It is used by postprocessing packages to identify types
+of sources, usually types of calibrators.  The <TT>CALCODE</TT> is
+optional for SCHED.  <TT>CALCODE='G'</TT> is reserved for pulsar
+observations.  This calcode will trigger the use of the pulsar gate on
+the VLBA correlator.  Think of <TT>G</TT> as ``Gate''.  <TT>CALCODE='L'</TT>
+triggers on-line/off-line channel differences to be used for pointing
+data analysis.  <TT>CALCODE='Z'</TT> indicates that the source is a
+satellite and that ephemeris data are needed for correlation (SCHED&nbsp; 
+will set this one for any satellite).
+
+<P>
+</DD>
+<DT><STRONG><TT>VElocity</TT>:</STRONG></DT>
+<DD>Velocity (km/s) of a spectral line
+source. Up to 8 (16?) values can be given, one per base band
+channel. The value for the first base band channel will be used for
+any other channels for which no velocity is specified.  The
+reference frame (eg LSR, Heliocentric...) and definition
+(radio, optical or redshift) are given by <TT>VREF</TT> and
+<TT>VDEF</TT>.
+
+<P>
+</DD>
+<DT><STRONG><TT>VRef</TT>:</STRONG></DT>
+<DD>The reference frame for velocity calculations.
+Supported options so far are <TT>'L'</TT> for LSR, <TT>'H'</TT>
+for heliocentric and <TT>'G'</TT> for geocentric.  LSR is the default.
+
+<P>
+</DD>
+<DT><STRONG><TT>VDef</TT>:</STRONG></DT>
+<DD>The definition of the velocity.  Supported options
+are <TT>'R'</TT> for radio definition (<!-- MATH
+ $V=c ( \nu_0 - \nu) / \nu_0$
+ -->
+<IMG
+ WIDTH="157" HEIGHT="68" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.gif"
+ ALT="$ V=c ( \nu_0 - \nu) / \nu_0$">),
+<TT>'O'</TT> for optical definition ( <!-- MATH
+ $V= c ( \nu_0 - \nu ) / \nu = c (
+\lambda - \lambda_0 ) / \lambda_0 = zc$
+ -->
+<IMG
+ WIDTH="311" HEIGHT="68" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.gif"
+ ALT="$ V= c ( \nu_0 - \nu ) / \nu = c (
+\lambda - \lambda_0 ) / \lambda_0 = zc $"> ), and <TT>'Z'</TT> if the
+redshift is given directly.  The default is the radio definition.
+
+<P>
+</DD>
+<DT><STRONG><TT>PMEPOCH</TT>:</STRONG></DT>
+<DD>For planetary motion, the offset
+from the <TT>RA</TT> and <TT>DEC</TT> are assumed to be zero at this time.
+The format is <TT>PMEPOCH = yyyy,mm,dd,hh:mm:ss</TT>; for example, <TT>PMEPOCH = 1995,12,7,15:0:0</TT> for 15 hours UT on 1995 December 7.
+I appologize for any confusion caused by <TT>PMEPOCH</TT> not being the
+zero time for <TT>PMRA</TT> and <TT>PMDEC</TT> instead of <TT>DRA</TT> and
+<TT>DDEC</TT>.  The SCHEDusage for planetary motion was established
+long before the proper motions were added to the program and I did
+not want to change the meaning of <TT>PMEPOCH</TT>.  Also <TT>EPOCH</TT>
+is the standard throughout astronomy for the zero time of proper motion,
+which is why it's meaning was changed from what is now <TT>EQUINOX</TT>.
+
+<P>
+</DD>
+<DT><STRONG><TT>DRA</TT>:</STRONG></DT>
+<DD>Rate of change of <TT>RA</TT> in seconds of time per
+UT day.  This acts in coordinates of date.  Note that this is the
+rate of change of the coordinate value, not the angular rate which
+would be larger by 1/cos(dec).  The zero offset time is given by
+<TT>PMEPOCH</TT>.  Use <TT>DRA</TT> and <TT>DDEC</TT> for fast moving objects
+like planets.  Use <TT>PMRA</TT> and <TT>PMDEC</TT> for slow moving
+objects like stars.
+
+<P>
+</DD>
+<DT><STRONG><TT>DDEC</TT>:</STRONG></DT>
+<DD>Rate of change of <TT>DEC</TT> in arcseconds per UT
+day. Note that the azimuth and elevation reported by SCHED&nbsp; will not
+take into account <TT>DRA</TT> and <TT>DDEC</TT>. This acts in coordinates
+of date.  The zero offset time is given by <TT>PMEPOCH</TT>.
+
+<P>
+</DD>
+<DT><STRONG><TT>PMRA</TT>:</STRONG></DT>
+<DD>The proper motion in RA in milli arcseconds per year.
+This is an angular value and is 1/cos(dec) times the change in
+coordinate value.  The zero offset time is given by <TT>EPOCH</TT>.  When
+<TT>PMRA</TT>, <TT>PMDEC</TT>, or <TT>PARALAX</TT> is used, the source
+coordinates are shifted from the time specified by <TT>EPOCH</TT> to a
+time that is the stop time of the first scan or, if it is given, <TT>PMEPOCH</TT>.  <TT>PMRA</TT>, <TT>PMDEC</TT> are added to <TT>DRA</TT> and <TT>DDEC</TT> respectively so that small motions during the observation of
+fast moving stars can be accomodated.  The proper motion and planetary
+motion parameters can both be used together, if one is mad enough
+to want to do so.
+
+<P>
+</DD>
+<DT><STRONG><TT>PMDEC</TT>:</STRONG></DT>
+<DD>The proper motion in Dec in milli arcseconds per year.
+The zero offset time is given by <TT>EPOCH</TT>.
+
+<P>
+</DD>
+<DT><STRONG><TT>EPoch</TT>:</STRONG></DT>
+<DD>The zero point for proper motion expressed as
+a fractional year such as 1993.6.
+
+<P>
+</DD>
+<DT><STRONG><TT>PARALAX</TT>:</STRONG></DT>
+<DD>The paralax in milli arcseconds.
+
+<P>
+</DD>
+</DL>
+
+<P>
+Below is a sample of a few sources from the March 2005 source catalog.
+
+<P>
+<PRE>
+SOURCE='J1629-2026'
+     RA=16:29:03.0298580 DEC= -20:26:55.100570 RAERR=  29.510 DECERR=  13.450 CALCODE='V'
+     REMARKS='VLBA Calib Survey - GSFC sols. - VCS2 - created 2004' /
+SOURCE='J1630+2131','1628+216'
+     RA=16:30:11.2308370 DEC=  21:31:34.310260 RAERR=   4.370 DECERR=   5.380 CALCODE='V'
+     REMARKS='VLBA Calib Survey - GSFC sols. - VCS2 - created 2004' /
+SOURCE='J1631+1052','1628+109'
+     RA=16:31:18.7777000 DEC=  10:52:02.460000 RAERR=   4.370 DECERR=   5.380 CALCODE='M'
+     REMARKS='JVAS - Browne et al. 1998, mnras, 293, 257;    S8.4GHz=    72 mJy' /
+SOURCE='J1631+4927','1629+495'
+     RA=16:31:16.5398860 DEC=  49:27:39.515680 RAERR=   0.520 DECERR=   0.630 CALCODE='V'
+     REMARKS='VLBA Calib Survey - GSFC sols. - VCS2 - created 2004' /
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3104"
+  HREF="node210.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3100"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3094"
+  HREF="node208.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3102"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3105"
+  HREF="node210.html">Station Catalog and Locations</A>
+<B> Up:</B> <A NAME="tex2html3101"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html3095"
+  HREF="node208.html">YEAR</A>
+ &nbsp <B>  <A NAME="tex2html3103"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

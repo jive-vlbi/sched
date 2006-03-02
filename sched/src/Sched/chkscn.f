@@ -9,7 +9,6 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC
-      INTEGER    NSSCAN
       REAL       NSRCCHG
       LOGICAL    DOPWARN
       DOUBLE PRECISION  TIME1, TIMEDUR

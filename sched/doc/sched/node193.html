@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>VLATYPE</TITLE>
-<META NAME="description" CONTENT="VLATYPE">
+<TITLE>TAPESYNC</TITLE>
+<META NAME="description" CONTENT="TAPESYNC">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,63 +29,109 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2885"
+<A NAME="tex2html2914"
   HREF="node194.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2881"
+<A NAME="tex2html2910"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2875"
+<A NAME="tex2html2904"
   HREF="node192.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2883"
+<A NAME="tex2html2912"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2886"
-  HREF="node194.html">VLAUSERN</A>
-<B> Up:</B> <A NAME="tex2html2882"
+<B> Next:</B> <A NAME="tex2html2915"
+  HREF="node194.html">TAVLBA and NOTAVLBA</A>
+<B> Up:</B> <A NAME="tex2html2911"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2876"
-  HREF="node192.html">VLAPSRC</A>
- &nbsp <B>  <A NAME="tex2html2884"
+<B> Previous:</B> <A NAME="tex2html2905"
+  HREF="node192.html">TAPEINI</A>
+ &nbsp <B>  <A NAME="tex2html2913"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041214100000000000000"></A><A NAME="MP:VLATYPE"></A>
+<H3><A NAME="SECTION0041214100000000000000"></A><A NAME="MP:TAPESYNC"></A>
 <BR>
-<TT>VLATYPE</TT>
+<TT>TAPESYNC</TT>
 </H3>
 
 <P>
-<TT>VLATYPE</TT> specifies the type of the observation
-for the VLA observe file.
+<TT>TAPESYNC</TT> requests that SCHED&nbsp; try to synchronize tape changes
+at the stations.  This is advisable to avoid slightly staggered tape
+changes that would naturally result from a subarrayed schedule.
+Such staggered tape changes can result in lost data because there
+is a minimum of about 3 minutes per correlator job and a new job
+is needed when a station changes tape.  This is a temporary
+restriction but was in effect in late 1996.
+
+<P>
+WARNING:  <TT>TAPESYNC</TT> could cause very strange behavior if used
+with a schedule in which some stations are being scheduled separately
+from others.  It should only be used when the scans as specified to
+SCHED&nbsp; are in roughly time order (for subarrays, there can be
+small deviations from time order and that will be ok).  It is only
+recommended for use in conjunction with the optimization options.
+For any schedules in which every scan is specified in the input, it
+would be best to use <A HREF="node190.html#MP:TAPE"><TT>TAPE</TT></A> to force the
+tape changes at reasonable times, if necessary.
+
+<P>
+Also, be sure that any automatically generated tape change requests
+occur at times with sufficient gaps at single tape stations (all
+except the VLBA and VLA).  See the discussion of <A HREF="node190.html#MP:TAPE"><TT>TAPE</TT></A> for details.
+
+<P>
+Note that, with automatic tape allocation, SCHED&nbsp; does not set the
+tape change times so <TT>TAPESYNC</TT> will have no effect.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Text of up to 9 characters.
+<LI><B>Argument:</B> None.
 </LI>
-<LI><B>Options:</B>  <TT>'VLBI'</TT>      - VLBI observation.
- <TT>'CONTINUUM'</TT> - normal VLA continuum observation.
- <TT>'LINE'</TT>      - VLA spectral line observation.
+<LI><B>Options:</B>  None.
 </LI>
-<LI><B>Default:</B>  <TT>'VLBI'</TT>
+<LI><B>Default:</B>  Not used.
 </LI>
-<LI><B>Usage:</B>    Use only once.
+<LI><B>Usage:</B>    Last value used.
 </LI>
-<LI><B>Example:</B>  <TT>VLATYPE='CONTINUUM'</TT>
+<LI><B>Example:</B>  <TT>TAPESYNC /</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2914"
+  HREF="node194.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2910"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2904"
+  HREF="node192.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2912"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2915"
+  HREF="node194.html">TAVLBA and NOTAVLBA</A>
+<B> Up:</B> <A NAME="tex2html2911"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2905"
+  HREF="node192.html">TAPEINI</A>
+ &nbsp <B>  <A NAME="tex2html2913"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

@@ -91,6 +91,7 @@ C
       CALL KEYADD( 'OVERRIDE', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'OVERwrit', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'SUMITEM', UNSET, 10, KD, KC, KI )
+      CALL KEYCHR( 'SCANTAG', ' ', 4, KD, KC, KI )
       CALL KEYADD( 'FREQLIST', UNSET, 2, KD, KC, KI )
       CALL KEYADD( 'PRECDATE', 1979.9D0, 1, KD, KC, KI )
       CALL KEYADD( 'PTLINK', UNSET, 1, KD, KC, KI )
@@ -173,6 +174,17 @@ C
       CALL KEYADD( 'OPELPRIO', 0.D0, 4, KD, KC, KI )
       CALL KEYADD( 'OPTSLEW', 1.D0, 1, KD, KC, KI )
       CALL KEYADD( 'OPTLOWT', 15.D0, 1, KD, KC, KI )
+      CALL KEYCHR( 'OPHASTA', 'PT', 8, KD, KC, KI )
+      CALL KEYADD( 'OPMINSEP', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPSLEWWT', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPSLEWTI', 360.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPHLIMWT', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPHLIMTI', 1800.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPHMAXDT', 7200.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPHA', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPHAWID', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPHAWT', 1.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'OPPRTLEV', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'TAPESYNC', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'MAPLIM', 0.D0, 4, KD, KC, KI )
       CALL KEYADD( 'GRIDNR', 20.D0, 1, KD, KC, KI )
@@ -203,6 +215,7 @@ C
       CALL KEYADD( 'ROTPAT', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'ROTOFF', 0.D0, 20, KD, KC, KI )
       CALL KEYADD( 'FOCOFF', 0.D0, 20, KD, KC, KI )
+      CALL KEYCHR( 'CRDLINE', ' ', 80, KD, KC, KI )
 C
 C     VLA Stuff.  'ZZ' defaults chosen to raise flags later.
 C     They are here for backward compatability.

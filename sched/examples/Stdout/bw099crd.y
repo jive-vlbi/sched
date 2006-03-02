@@ -1,7 +1,7 @@
 !*  Schedule for VLA27     *!
 !*  Experiment bw099    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:   6.02  May 2005 *!
+!* Processed by SCHED version:   6.04  February 2006 *!
 !* PI:       J.M. Wrobel *!
 !* Address:  NRAO, P.O. Box O *!
 !*           Socorro, NM 87801 *!

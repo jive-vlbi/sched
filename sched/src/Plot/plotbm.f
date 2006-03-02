@@ -343,6 +343,25 @@ C
          END DO
       END DO
 C
+C     Check Beam Matrix
+C
+      IF( BEMIN .EQ. 1000.0 ) THEN
+         CALL PGSCI( 1 )
+         CALL PGPOLY( 4, XSHADE, YSHADE )
+         CALL PGSCH( 2.0 )
+         CALL PGSCI( 2 )
+         CALL PGSLW( 6 )
+         CALL PGPTXT(0.25, -0.5, 0.0, 0.0, 'WARNING:')
+         CALL PGSCI( 0 )
+         CALL PGSLW( 5 )
+         CALL PGPTXT(0.98, -0.25, 0.0, 0.0,
+     1               'The setup file selected is wrong')
+         CALL PGPTXT(0.88, 0.0, 0.0, 0.0,
+     1               'or not used in the schedule')
+         CALL PGUNSA
+         RETURN
+      END IF
+C
 C     Set Negative Contours Limits and Coniugate
 C
       IF( BEMIN .LT. 0.0 ) THEN

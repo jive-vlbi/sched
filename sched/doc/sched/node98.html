@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>GRABTO</TITLE>
-<META NAME="description" CONTENT="GRABTO">
+<TITLE>GAP</TITLE>
+<META NAME="description" CONTENT="GAP">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,82 +29,77 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1745"
+<A NAME="tex2html1774"
   HREF="node99.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1741"
+<A NAME="tex2html1770"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1735"
+<A NAME="tex2html1764"
   HREF="node97.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1743"
+<A NAME="tex2html1772"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1746"
-  HREF="node99.html">GRABTIME</A>
-<B> Up:</B> <A NAME="tex2html1742"
+<B> Next:</B> <A NAME="tex2html1775"
+  HREF="node99.html">GRABTO</A>
+<B> Up:</B> <A NAME="tex2html1771"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1736"
-  HREF="node97.html">GAP</A>
- &nbsp <B>  <A NAME="tex2html1744"
+<B> Previous:</B> <A NAME="tex2html1765"
+  HREF="node97.html">FREQLIST</A>
+ &nbsp <B>  <A NAME="tex2html1773"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004124600000000000000"></A><A NAME="MP:GRABTO"></A>
+<H3><A NAME="SECTION004124600000000000000"></A><A NAME="MP:GAP"></A>
 <BR>
-<TT>GRABTO</TT>
+<TT>GAP</TT>
 </H3>
 
 <P>
-This is an eVLBI control parameter.  Be warned: eVLBI support is
-under development.
-The eVLBI parameters are <A HREF="node98.html#MP:GRABTO"><TT>GRABTO</TT></A>,
-<A HREF="node99.html#MP:GRABTIME"><TT>GRABTIME</TT></A>, <A HREF="node100.html#MP:GRABGAP"><TT>GRABGAP</TT></A>,
-and <A HREF="node72.html#MP:DATAPATH"><TT>DATAPATH</TT></A>.
+<TT>GAP</TT> is the minimum gap in time between the previous stop time
+and the current scan start time when scheduling with <A HREF="node83.html#MP:DUR"><TT>DURation</TT></A> or <A HREF="node84.html#MP:DWELL"><TT>DWELL</TT></A>.  For scheduling
+with <A HREF="node83.html#MP:DUR"><TT>DURation</TT></A>, it will be that time interval.
+For scheduling with <A HREF="node84.html#MP:DWELL"><TT>DWELL</TT></A>, the interval
+might be longer if required for slews, but it will not be shorter.
+Note that both <A HREF="node160.html#MP:PRESCAN"><TT>PRESCAN</TT></A> and <A HREF="node118.html#MP:MINPAUSE"><TT>MINPAUSE</TT></A> are applied after the scan times are
+established and a negative <TT>PRESCAN</TT> could make the period during
+which the tape is stopped shorter than <TT>GAP</TT>.  <TT>MINPAUSE</TT> is
+used to keep the tapes rolling through short gaps.  Note that, if
+<A HREF="node184.html#MP:START"><TT>START</TT></A> is specified, <A HREF="node98.html#MP:GAP"><TT>GAP</TT></A> will be ignored.
 
 <P>
-<TT>GRABTO</TT> is used to help control sending of small amounts of
-previously recorded data over the net.  That process happens after the
-scan of interest, which was recorded normally.  The data can either be
-copied first to the system disk, then transfered later by, for
-example, ftp or some other protocol <TT>GRABTO=FILE</TT>.  Or the data
-can be sent directly to the net <TT>GRABTO=NET</TT> from the VLBI disks.
-It seems that <TT>GRABTO=NET</TT> is not valid for systems controlled by
-the Field System (eg MarkIV and varients).
+If LST scheduling, GAP is a sidereal time, so it will be slightly
+shorter in UT (by about 1.0027).
 
 <P>
-This is different from the real time transfer controlled by
-<A HREF="node72.html#MP:DATAPATH"><TT>DATAPATH</TT></A>.
+For all types of scheduling, if the gap between scans is less than 10
+seconds, the tapes are left running.
 
 <P>
-If <TT>GRABTO</TT> is <TT>NONE</TT>, which is the default, no data will be
-written and the other <TT>GRAB..</TT> parameters will be ignored.
-
-<P>
-Note that <A HREF="node99.html#MP:GRABTIME"><TT>GRABTIME</TT></A> determines what
-segment of data is sent.  <A HREF="node100.html#MP:GRABGAP"><TT>GRABGAP</TT></A> determines
-what amount of time needs to be set aside to grab the data from the
-VLBI disk (ftp transfer can happen during the next scan).
+The current status of PCFS software requires an interval of 36 seconds
+at tape reversals to produce a valid VEX file. A 40 second gap is
+required to change setup.  Apart from these restrictions continuous
+recording is implied for gaps shorter than 10 seconds.  In addition,
+users should realize that during continuous
+tape motion no calibration data is taken. Starting and stopping the
+recording can be forced using <TT>GAP</TT> or <A HREF="node160.html#MP:PRESCAN"><TT>PRESCAN</TT></A>, or by using <A HREF="node184.html#MP:START"><TT>START times</TT></A>.  <TT>GAP</TT> is probably the prefered mechanism.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B>  Character string of up to 4 characters.
+<LI><B>Argument:</B> A time in any approved time format (hh:mm:ss, mm:ss, sss etc.)
 </LI>
-<LI><B>Options:</B>  <TT>NET</TT> for direct transfer to external network.
- <TT>FILE</TT> for transfer to the control computer system disk.
- <TT>NONE</TT> Do not transfer the data anywhere.
+<LI><B>Options:</B>  Any time
 </LI>
-<LI><B>Default:</B>  <TT>NONE</TT>
+<LI><B>Default:</B>  Zero.
 </LI>
-<LI><B>Usage:</B>    A value for each scan.  Defaults to previous scan.  Be sure to set
-back to <TT>'NONE'</TT> after a grab scan.
+<LI><B>Usage:</B>    Reverts to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>GRABTO = 'FILE' </TT>
+<LI><B>Example:</B>  <TT>GAP=2:00</TT> (which is equivalent to <TT>gap 120</TT>).
   
 </LI>
 </UL>
@@ -110,31 +107,31 @@ back to <TT>'NONE'</TT> after a grab scan.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1745"
+<A NAME="tex2html1774"
   HREF="node99.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1741"
+<A NAME="tex2html1770"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1735"
+<A NAME="tex2html1764"
   HREF="node97.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1743"
+<A NAME="tex2html1772"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1746"
-  HREF="node99.html">GRABTIME</A>
-<B> Up:</B> <A NAME="tex2html1742"
+<B> Next:</B> <A NAME="tex2html1775"
+  HREF="node99.html">GRABTO</A>
+<B> Up:</B> <A NAME="tex2html1771"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1736"
-  HREF="node97.html">GAP</A>
- &nbsp <B>  <A NAME="tex2html1744"
+<B> Previous:</B> <A NAME="tex2html1765"
+  HREF="node97.html">FREQLIST</A>
+ &nbsp <B>  <A NAME="tex2html1773"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

@@ -1,91 +1,127 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>NCHAN</TITLE>
-<META NAME="description" CONTENT="NCHAN">
+<TITLE>FLUKEA and FLUKEB</TITLE>
+<META NAME="description" CONTENT="FLUKEA and FLUKEB">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node245.html">
 <LINK REL="previous" HREF="node243.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node245.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3623"
+<A NAME="tex2html3652"
   HREF="node245.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3619"
-  HREF="node217.html">
+<A NAME="tex2html3648"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3613"
+<A NAME="tex2html3642"
   HREF="node243.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3621"
+<A NAME="tex2html3650"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3624"
-  HREF="node245.html">NETSIDE</A>
-<B> Up:</B> <A NAME="tex2html3620"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3614"
-  HREF="node243.html">MODETEST</A>
- &nbsp <B>  <A NAME="tex2html3622"
+<B> Next:</B> <A NAME="tex2html3653"
+  HREF="node245.html">FLUKESET</A>
+<B> Up:</B> <A NAME="tex2html3649"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3643"
+  HREF="node243.html">FIRSTLO</A>
+ &nbsp <B>  <A NAME="tex2html3651"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004642700000000000000"></A><A NAME="SP:NCHAN"></A>
+<H3><A NAME="SECTION004641400000000000000"></A><A NAME="SP:FLUKEA"></A>
 <BR>
-<TT>NCHAN</TT>
+<TT>FLUKEA</TT> and <TT>FLUKEB</TT>
 </H3>
 
 <P>
-<TT>NCHAN</TT> gives the number of baseband channels. A baseband channel
-is the smallest unit that was once an analog signal. One sideband from
-one BBC is a baseband channel. Nothing prevents the user from
-assigning several channels to the same BBC/sideband. In such cases,
-the data in the two channels will be identical.
+<TT>FLUKEA and FLUKEB</TT> are used to set the VLA fluke synthesizer
+frequencies.  See the discussion of <A HREF="node243.html#SP:FIRSTLO"><TT>FIRSTLO</TT></A>
+for more details on what this does to the observing frequency.  The
+numbers to give are the numbers for the ``//FI'' card in the VLA
+observe file, which is twice the actual synthesizer setting for <TT>FLUKEB</TT> but is the frequency mixed with the data.  To get the same
+frequency on the VLA's AC and BD IFs, make <TT>FLUKEB</TT> equal <TT>FLUKEA</TT> plus 100.00.
+
+<P>
+Note that, if any of <TT>FLUKEA</TT>, <TT>FLUKEB</TT>, <TT>VLAFEAB</TT>, <TT>VLAFECD</TT>, <TT>VLASYNA</TT>, <TT>VLASYNB</TT>, <TT>VLAIF</TT>, <TT>FEFILTER</TT>,
+or <TT>VLAROT</TT> are specified, both LO and FI cards will be made.  In
+such cases, any other parameters allowed to default will be set to the
+standard value for the specified <TT>VLABAND</TT>.
+
+<P>
+<TT>FLUKEA and FLUKEB</TT> can be provided in the <A HREF="node224.html#SEC:FRQCAT">frequency
+catalog</A>.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An integer.
+<LI><B>Argument:</B> A real number giving the frequency in MHz.
 </LI>
-<LI><B>Options:</B>  Any integer between <TT>1</TT> and the maximum number of channels which
-on the VLBA is <TT>16</TT>.
+<LI><B>Options:</B>  FLUKEA: Values between about <TT>100</TT> and <TT>150</TT>.
+FLUKEB: Values between about <TT>200</TT> and <TT>250</TT>.
 </LI>
-<LI><B>Default:</B>  <TT>0</TT> - it should be specified.
+<LI><B>Default:</B>  The VLA default for the band is used.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>NCHAN=14</TT>
+<LI><B>Example:</B>  <TT>FLUKEA=102.11  FLUKEB=202.11</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3652"
+  HREF="node245.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3648"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3642"
+  HREF="node243.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3650"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3653"
+  HREF="node245.html">FLUKESET</A>
+<B> Up:</B> <A NAME="tex2html3649"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3643"
+  HREF="node243.html">FIRSTLO</A>
+ &nbsp <B>  <A NAME="tex2html3651"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

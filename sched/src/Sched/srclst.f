@@ -8,10 +8,15 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schpeak.inc'
 C
-      INTEGER       ISRC, LEN1, IOUT, J, MODE, LENS, LENR, LEND
-      INTEGER       ICHN, NPAIRS
-      INTEGER       KSRC, JN, KN, MLINE, CLINE, ML, IL, NPCH
+      INTEGER       MSEP, ML
+      PARAMETER     ( MSEP = 7 )
       PARAMETER     ( ML = 20 )
+C
+      INTEGER       ISRC, LEN1, IOUT, J, K, MODE, LENS, LENR, LEND
+      INTEGER       ICHN, NPAIRS, ISEP
+      INTEGER       KSRC, JN, KN, MLINE, CLINE, IL, NPCH
+      INTEGER       HISTSEP(MSEP)
+      REAL          HISTLEV(MSEP)
       REAL          MAXSEP, SRCSEP
       DOUBLE PRECISION  SLA_DSEP, TSCAN, TBASE
       CHARACTER     FF*1
@@ -20,6 +25,7 @@ C
       CHARACTER     CVELREF*12, CVELDEF*18
       CHARACTER*132 LINE(ML)
       LOGICAL       PMUSED
+      DATA          HISTLEV / 3.0, 5.0, 7.5, 10.0, 15., 20., 30. /
 C ------------------------------------------------------------------
 C
       FF = CHAR( 12 )
@@ -328,51 +334,70 @@ C
      1  '      43.0 GHz    ', 60.0*(43.**(-0.6)), ' deg '
 C
 C     Make a list of source separations for pairs closer than some
-C     amount.  Set that limit to 30 degrees for now.  Only do in 
-C     in summary.  Limit the total number of pairs by dropping
-C     MAXSEP after some number.
+C     amount.  Make two passes through this part of the code.  For
+C     the first, make a cumulative histogram of the number of pairs
+C     of each separation.  Then determine the maximum separation to
+C     use and still give a finite list.  Then go through writing the
+C     list.  Never try going above 30 deg.
 C
       IF( IOUT .EQ. ISUM .AND. MSRC .GE. 2 ) THEN
-         MAXSEP = 30.0
-         WRITE( IOUT, '( 1X, /, A, F6.2, A, /, 1X )' )
-     1     ' Source separations in degrees for pairs closer than ',
-     2      MAXSEP,' degrees.'
+         DO ISEP = 1, MSEP
+            HISTSEP(ISEP) = 0
+         END DO
+         MAXSEP = 1.0
+         DO K = 1, 2
+            IF( K .EQ. 2 ) THEN
+               WRITE( IOUT, '( 1X, /, A, F6.2, A, /, 1X )' )
+     1          ' Source separations in degrees for pairs closer than ',
+     2            MAXSEP,' degrees.'
+            END IF
 C
-         NPAIRS = 0
-         DO ISRC = 1, MSRC - 1
-            IF( SUSED(ISRC) ) THEN
-               JN = 1
-               DO J = 1, 5
-                  IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
-                     JN = J
-                  END IF
-               END DO
-               DO KSRC = ISRC + 1, MSRC
-                  IF( SUSED(KSRC) ) THEN
-                     KN = 1
-                     DO J = 1, 5
-                        IF( CSUSED(J,KSRC) .NE. ' ' ) THEN
-                           KN = J
+            NPAIRS = 0
+            DO ISRC = 1, MSRC - 1
+               IF( SUSED(ISRC) ) THEN
+                  JN = 1
+                  DO J = 1, 5
+                     IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
+                        JN = J
+                     END IF
+                  END DO
+                  DO KSRC = ISRC + 1, MSRC
+                     IF( SUSED(KSRC) ) THEN
+                        KN = 1
+                        DO J = 1, 5
+                           IF( CSUSED(J,KSRC) .NE. ' ' ) THEN
+                              KN = J
+                           END IF
+                        END DO
+                        SRCSEP = SLA_DSEP( RAP(ISRC), DECP(ISRC),
+     1                       RAP(KSRC), DECP(KSRC) ) / RADDEG
+C
+C                       On first pass, fill out the histogram.
+C                       On the second, write the pair.
+C
+                        IF( K .EQ. 1 ) THEN
+                           DO ISEP = 1, MSEP
+                              IF( SRCSEP .LE. HISTLEV(ISEP) ) THEN
+                                 HISTSEP(ISEP) = HISTSEP(ISEP) + 1
+                              END IF
+                           END DO
+                        ELSE IF( SRCSEP .LE. MAXSEP ) THEN
+                           WRITE( IOUT, 
+     1                        '( 5X, A12, 2X, A12, 2X, F8.4 )' )
+     2                        SOURCE(JN,ISRC), SOURCE(KN, KSRC), SRCSEP
+                           NPAIRS = NPAIRS + 1
                         END IF
-                     END DO
-                     SRCSEP = SLA_DSEP( RAP(ISRC), DECP(ISRC),
-     1                    RAP(KSRC), DECP(KSRC) ) / RADDEG
-                     IF( SRCSEP .LE. MAXSEP ) THEN
-                        WRITE( IOUT, '( 5X, A12, 2X, A12, 2X, F8.4 )' )
-     1                   SOURCE(JN,ISRC), SOURCE(KN, KSRC), SRCSEP
                      END IF
-                     NPAIRS = NPAIRS + 1
+                  END DO
+               END IF
+            END DO
 C
-C                    Deal with too many.  Set NPAIRS so low this will
-C                    only happen once.
+C           On the first pass, determine MAXSEP
 C
-                     IF( NPAIRS .GT. 50 ) THEN
-                        MAXSEP = 5.0
-                        NPAIRS = -10000000
-                        WRITE( IOUT, '( 5X, A, F6.2, A )' ) 
-     1                    'Too many.  Drop maximum separation to ',
-     2                    MAXSEP, ' deg.'
-                     END IF
+            IF( K .EQ. 1 ) THEN
+               DO ISEP = 1, MSEP
+                  IF( HISTSEP(ISEP) .LE. 50 ) THEN
+                     MAXSEP = HISTLEV(ISEP)
                   END IF
                END DO
             END IF

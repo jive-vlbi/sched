@@ -1,91 +1,84 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>BBC</TITLE>
-<META NAME="description" CONTENT="BBC">
+<TITLE>TPTIME</TITLE>
+<META NAME="description" CONTENT="TPTIME">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node223.html">
 <LINK REL="previous" HREF="node221.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node212.html">
 <LINK REL="next" HREF="node223.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3359"
+<A NAME="tex2html3281"
   HREF="node223.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3355"
-  HREF="node217.html">
+<A NAME="tex2html3277"
+  HREF="node212.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3349"
+<A NAME="tex2html3271"
   HREF="node221.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3357"
+<A NAME="tex2html3279"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3360"
-  HREF="node223.html">BBSYN</A>
-<B> Up:</B> <A NAME="tex2html3356"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3350"
-  HREF="node221.html">BBFILTER</A>
- &nbsp <B>  <A NAME="tex2html3358"
+<B> Next:</B> <A NAME="tex2html3282"
+  HREF="node223.html">HEADMODE</A>
+<B> Up:</B> <A NAME="tex2html3278"
+  HREF="node212.html">Details of Tape Initialization</A>
+<B> Previous:</B> <A NAME="tex2html3272"
+  HREF="node221.html">DENSITY</A>
+ &nbsp <B>  <A NAME="tex2html3280"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00464500000000000000"></A><A NAME="SP:BBC"></A>
+<H3><A NAME="SECTION004411000000000000000"></A><A NAME="TP:TPTIME"></A>
 <BR>
-<TT>BBC</TT>
+<TT>TPTIME</TT>
 </H3>
 
 <P>
-<TT>BBC</TT> is used to specify the Base Band Converter (BBC) to
-which each baseband channel is assigned.  A value can be given
-for every channel.  If any or all values are missing, SCHED will
-try to set to reasonable default values for VLBA and MKIV format
-observations.
-
-<P>
-Note that BBC assignments are arbitrary for VLBA systems since all
-BBCs can see all input IFs.  However, for Mark III and Mark IV
-systems, there are strong constraints.  For ``astronomical patching'',
-which is the only one currently understood, the odd BBCs must be
-connected to IF1 (IFCHAN 1N or 1A where 1N is normally LCP and 1A
-is normally RCP).  Even BBCs must be connected to IF2 (IFCHAN 2N
-or 2A, where 2N is normally RCP and 2A is normally LCP).
+<TT>TPTIME.</TT> This is for Mark&nbsp;II. It specifies the reference
+time for tape changes at each  site. The tapes at the station will be
+changed an integral number of 4 hour intervals before or after this
+time. In effect, it is a station dependent <TT>TPREF</TT>. This value, if
+specified, will override <TT>TPREF</TT> for the corresponding station.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Up to one integer per baseband channel.
+<LI><B>Argument:</B> An array of 30 times in <TT>hh:mm:ss</TT> format.
 </LI>
-<LI><B>Options:</B>  Integers between <TT>1</TT> and <TT>8</TT> make sense on the VLBA.  Higher
-numbers make sense on some systems.
+<LI><B>Options:</B>  Any valid time between <TT>0</TT> and <TT>24</TT> hours.
 </LI>
-<LI><B>Default:</B>  <TT>0</TT>
+<LI><B>Default:</B>  <TT>-1</TT> which causes it not to be used. <TT>TPREF</TT> or the first
+scan of the project will be used instead.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous station.
+<LI><B>Usage:</B>    Defaults to previous value.
 </LI>
-<LI><B>Example:</B>  <TT>BBC=1,1,2,2,3,3,4,4,5,5,6,6,7,7</TT>
+<LI><B>Example:</B>  <TT>TPTIME=2:0:0,3:0:0,2:0:0</TT>
   
 </LI>
 </UL>
@@ -94,7 +87,7 @@ numbers make sense on some systems.
 <BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

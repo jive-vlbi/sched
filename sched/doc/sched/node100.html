@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>GRABGAP</TITLE>
-<META NAME="description" CONTENT="GRABGAP">
+<TITLE>GRABTIME</TITLE>
+<META NAME="description" CONTENT="GRABTIME">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,61 +29,64 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1769"
+<A NAME="tex2html1798"
   HREF="node101.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1765"
+<A NAME="tex2html1794"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1759"
+<A NAME="tex2html1788"
   HREF="node99.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1767"
+<A NAME="tex2html1796"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1770"
-  HREF="node101.html">GRIDMIN</A>
-<B> Up:</B> <A NAME="tex2html1766"
+<B> Next:</B> <A NAME="tex2html1799"
+  HREF="node101.html">GRABGAP</A>
+<B> Up:</B> <A NAME="tex2html1795"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1760"
-  HREF="node99.html">GRABTIME</A>
- &nbsp <B>  <A NAME="tex2html1768"
+<B> Previous:</B> <A NAME="tex2html1789"
+  HREF="node99.html">GRABTO</A>
+ &nbsp <B>  <A NAME="tex2html1797"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004124800000000000000"></A><A NAME="MP:GRABGAP"></A>
+<H3><A NAME="SECTION004124800000000000000"></A><A NAME="MP:GRABTIME"></A>
 <BR>
-<TT>GRABGAP</TT>
+<TT>GRABTIME</TT>
 </H3>
 
 <P>
 This is an eVLBI control parameter.  Be warned: eVLBI support is
 under development.
-The eVLBI parameters are <A HREF="node98.html#MP:GRABTO"><TT>GRABTO</TT></A>,
-<A HREF="node99.html#MP:GRABTIME"><TT>GRABTIME</TT></A>, <A HREF="node100.html#MP:GRABGAP"><TT>GRABGAP</TT></A>,
-and <A HREF="node72.html#MP:DATAPATH"><TT>DATAPATH</TT></A>.
+The eVLBI parameters are <A HREF="node99.html#MP:GRABTO"><TT>GRABTO</TT></A>,
+<A HREF="node100.html#MP:GRABTIME"><TT>GRABTIME</TT></A>, <A HREF="node101.html#MP:GRABGAP"><TT>GRABGAP</TT></A>,
+and <A HREF="node73.html#MP:DATAPATH"><TT>DATAPATH</TT></A>.
 
 <P>
-<TT>GRABGAP</TT> specifies how much time will be needed after the
-scan to transfer the data.  This will initially just be used for
-checking, and maybe for some optimization functions.  Eventually
-it may have other uses.
+<TT>GRABTIME</TT> determines which part of a scan will be used for
+eVLBI.  There are 2 arguments.  The first gives the duration in
+seconds of the data to be sent.  The second argument gives the
+seconds before the end of the current scan that the grabbed data
+will end.  Thus the data to be sent are from the interval from
+<TT>GRABTIME(1) + GRABTIME(2) </TT> to <TT>GRABTIME(2)</TT> seconds
+before the end of the scan.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B>  Two real number -- time in seconds.
+<LI><B>Argument:</B>  Two real numbers -- times in seconds.
 </LI>
-<LI><B>Options:</B>   Any time.
+<LI><B>Options:</B>   Any times.
 </LI>
-<LI><B>Default:</B>  5.0 + <TT>GRABTIME(1)</TT>*bitrate/110Mbps
+<LI><B>Default:</B>  <TT>30,0</TT>.  Which means transfer the last 30 seconds of the scan
 </LI>
-<LI><B>Usage:</B>    Value for each scan.  Defaults to previous scan.
+<LI><B>Usage:</B>    Values for each scan.  Defaults to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>GRABGAP = 90 </TT>
+<LI><B>Example:</B>  <TT>GRABTIME = 30,0 </TT>
   
 </LI>
 </UL>
@@ -90,7 +95,7 @@ it may have other uses.
 <BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

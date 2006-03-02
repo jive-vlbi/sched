@@ -175,7 +175,7 @@ C                        Note that STANAME(ISTA) = STATION(STANUM(ISTA))
 C                        and STCODEU is the upper case version of STCODE
 C
       INTEGER          MSTA
-      INTEGER          ISCHSTA(MAXCAT)
+      INTEGER          ISCHSTA(MAXCAT), MJDRATE(MAXCAT)
       CHARACTER        STAFILE*80
       CHARACTER        STVER*20
       CHARACTER        LOCAFILE*80
@@ -184,6 +184,7 @@ C
       CHARACTER        STCODE(MAXCAT)*3
       CHARACTER        STCODEU(MAXCAT)*3
       DOUBLE PRECISION XPOS(MAXCAT), YPOS(MAXCAT), ZPOS(MAXCAT)
+      DOUBLE PRECISION DXPOS(MAXCAT), DYPOS(MAXCAT), DZPOS(MAXCAT)
       DOUBLE PRECISION ELEV(MAXCAT), LAT(MAXCAT), LONG(MAXCAT)
       CHARACTER        POSREF(MAXCAT)*80
 C
@@ -204,12 +205,14 @@ C
       REAL             MAXSRCHR(MAXCAT)
       REAL             ZALIM(MAXCAT), AXOFF(MAXCAT)
 C
-      COMMON  /SCHSTA/ XPOS, YPOS, ZPOS, ELEV, LAT, LONG, 
-     1                 MSTA, ISCHSTA, NBBC, STNDRIV, NHEADS, VLBADAR,
-     2                 NHORIZ, HORAZ, HOREL,
-     3                 NAXLIM, AX1LIM, AX2LIM, AX1RATE, AX2RATE, 
-     4                 AX1ACC, AX2ACC, TSETTLE, MINSETUP, MAXSRCHR,
-     5                 ZALIM, AXOFF
+      COMMON  /SCHSTA/ XPOS, YPOS, ZPOS, DXPOS, DYPOS, DZPOS, 
+     1                 ELEV, LAT, LONG, 
+     2                 MSTA, ISCHSTA, MJDRATE, 
+     3                 NBBC, STNDRIV, NHEADS, VLBADAR,
+     4                 NHORIZ, HORAZ, HOREL,
+     5                 NAXLIM, AX1LIM, AX2LIM, AX1RATE, AX2RATE, 
+     6                 AX1ACC, AX2ACC, TSETTLE, MINSETUP, MAXSRCHR,
+     7                 ZALIM, AXOFF
       COMMON  /SCHCST/ STAFILE, STVER, LOCAFILE, LOCAVER, STATION, 
      1                 STCODE, STCODEU, POSREF, CONTROL, MOUNT, DAR, 
      2                 RECORDER, DISK, MEDIADEF
@@ -349,8 +352,16 @@ C                      Schedule optimization and plotting:
 C                      Also configuration optimization.
 C
       DOUBLE PRECISION OPDUR
-      REAL             OPMINEL, OPTSLEW, OPTLOWT
-      INTEGER          OPMIAN, OPSKIP, OPELPRIO(4), OPMISS(MAXSCN)
+      CHARACTER        OPHASTA*8
+      REAL             OPMINEL(MAXSCN), OPTSLEW, OPTLOWT
+      REAL             OPSLEWWT(MAXSCN), OPSLEWTI(MAXSCN)
+      REAL             OPHLIMWT(MAXSCN), OPHLIMTI(MAXSCN)
+      REAL             OPHMAXDT(MAXSCN)
+      REAL             OPMINSEP(MAXSCN), OPHA(MAXSCN)
+      REAL             OPHAWID(MAXSCN), OPHAWT(MAXSCN)
+      INTEGER          OPMIAN(MAXSCN), OPSKIP
+      INTEGER          OPELPRIO(4), OPMISS(MAXSCN)
+      INTEGER          OPPRTLEV
       LOGICAL          OPNOSUB, TAPESYNC
       CHARACTER        OPTMODE*8
       REAL             MAPLIM(4)
@@ -367,19 +378,21 @@ C
       LOGICAL          MOVED(MAXSTA)
 C
       COMMON  /SCHCON/ FREQLIST, PRECDATE, OPDUR, LINEPG, PLOT, 
-     1                 PUBPLOT, DEBUG, OVERWRIT, DOVEX, VEXTEST, DOVSOP, 
+     1                 PUBPLOT, DEBUG, OVERWRIT, DOVEX, VEXTEST, DOVSOP,
      2                 MISSING, NOSET, PTLINK, COVERLET, 
      3                 AUTOPEAK, PKWATCH, OVERRIDE, READLOG, DODOWN,
-     4                 OPMINEL, OPTSLEW, OPTLOWT, OPMIAN, OPSKIP, 
-     5                 OPELPRIO, OPMISS, OPNOSUB, TAPESYNC, MAPLIM,
-     6                 GRIDNR, GRIDNT, GRIDMIN, GRIDMAX, GRIDW0, 
-     7                 GRIDSTEP, GRIDUSED, GRIDVLA, NMFS, MFSRAT,
-     8                 DOTSIZE, RINGSIZE, LONMIN, LONMAX, 
-     9                 LATMIN, LATMAX, LATMID,
-     A                 NTICKS, LINESZ, LABELSZ, COLIND, MOVED
+     4                 OPMINEL, OPTSLEW, OPTLOWT, OPSLEWWT, OPSLEWTI,
+     5                 OPHLIMWT, OPHLIMTI, OPHMAXDT, OPMINSEP, OPHA, 
+     6                 OPHAWID, OPHAWT, OPMIAN, OPSKIP, OPELPRIO, 
+     7                 OPMISS, OPPRTLEV, OPNOSUB, TAPESYNC, MAPLIM,
+     8                 GRIDNR, GRIDNT, GRIDMIN, GRIDMAX, GRIDW0, 
+     9                 GRIDSTEP, GRIDUSED, GRIDVLA, NMFS, MFSRAT,
+     A                 DOTSIZE, RINGSIZE, LONMIN, LONMAX, 
+     B                 LATMIN, LATMAX, LATMID,
+     C                 NTICKS, LINESZ, LABELSZ, COLIND, MOVED
       COMMON  /SCHSCO/ MSGTXT, SUMITEM, DOSTA, EPHFILE, 
      1                 FREQFILE, FREQVER, PEAKFILE, LOGFILE, MSGFILE,
-     2                 OPTMODE, GRIDMEAS
+     2                 OPHASTA, OPTMODE, GRIDMEAS
 C
 C
 C     Setup information:  Setup information is provided in setup files
@@ -494,7 +507,7 @@ C                      Calculated items:
 C
       DOUBLE PRECISION TFIRST, TEND
       INTEGER          SCAN1, SCANL, NSCANS
-      LOGICAL          GOTFREQ, GOTBW, DWELLS
+      LOGICAL          GOTFREQ, DWELLS
 C
 C                      The list of stations used - the "schedule
 C                      sources".  See the notes for the station 
@@ -512,7 +525,7 @@ C
 C
       COMMON /SCHN1/   TFIRST, TEND, IATUTC, LSTSTA, LST, 
      1                 MARK2, VLBITP, VLAONLY, NOTAPE, CONFIG, TANTS1,
-     2                 TANTS2, SCAN1, SCANL, NSCANS, GOTFREQ, GOTBW, 
+     2                 TANTS2, SCAN1, SCANL, NSCANS, GOTFREQ, 
      3                 DWELLS, NSTA, STANUM, NSRC, SRCATN
       COMMON /SCHC1/   EXPT, EXPCODE, STANAME, SRCNAME
 C
@@ -551,7 +564,7 @@ C
       LOGICAL          DWELL(MAXSCN), TANT1(MAXSCN), TANT2(MAXSCN)
       CHARACTER        ANNOT(MAXSCN)*64, SCNSRC(MAXSCN)*12
       CHARACTER        DOPSRC(MAXSCN)*12, LINES(MAXSCN)*8
-      CHARACTER        PCAL(MAXSCN)*4
+      CHARACTER        PCAL(MAXSCN)*4, SCANTAG(MAXSCN)*4
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
      1                 DOPEAK, POINT, DURONLY, STASCN, NOTSYS, DOPCAL, 
@@ -559,7 +572,7 @@ C
       COMMON  /SCHN2B/ PRESCAN, DUR, GAP, FREQ, DOPINCR
       COMMON  /SCHN2C/ STARTJ, STOPJ, BW
       COMMON  /SCHC2A/ ANNOT
-      COMMON  /SCHC2B/ SCNSRC, DOPSRC, LINES, PCAL
+      COMMON  /SCHC2B/ SCNSRC, DOPSRC, LINES, PCAL, SCANTAG
 C
 C
 C     Specific items for VLA.
@@ -581,10 +594,12 @@ C
       REAL             FOCUS(MAXSCN), ROTATION(MAXSCN)
       REAL             FOC(20), ROT(20)
       REAL             SAZCOL(MAXSCN), SELCOL(MAXSCN)
+      CHARACTER        CRDLINE(MAXSCN)*80
 C
       COMMON  /SCHN4/  PTDUR, PTSLEW, CALTIME, ROTPAT, PNTVLBA, 
      1                 TANVLBA, DOPN3DB, FOCUS, ROTATION, FOC, ROT, 
      2                 SAZCOL, SELCOL
+      COMMON  /SCHC4/  CRDLINE
 C
 C
 C     Specific items for tape management.  

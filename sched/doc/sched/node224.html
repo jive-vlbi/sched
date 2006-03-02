@@ -1,94 +1,142 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>BBSYN2</TITLE>
-<META NAME="description" CONTENT="BBSYN2">
+<TITLE>Frequency Catalog</TITLE>
+<META NAME="description" CONTENT="Frequency Catalog">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
-<LINK REL="next" HREF="node225.html">
-<LINK REL="previous" HREF="node223.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="next" HREF="node226.html">
+<LINK REL="previous" HREF="node211.html">
+<LINK REL="up" HREF="node49.html">
 <LINK REL="next" HREF="node225.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3383"
+<A NAME="tex2html3303"
   HREF="node225.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3379"
-  HREF="node217.html">
+<A NAME="tex2html3299"
+  HREF="node49.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3373"
+<A NAME="tex2html3293"
   HREF="node223.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3381"
+<A NAME="tex2html3301"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3384"
-  HREF="node225.html">BITS</A>
-<B> Up:</B> <A NAME="tex2html3380"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3374"
-  HREF="node223.html">BBSYN</A>
- &nbsp <B>  <A NAME="tex2html3382"
+<B> Next:</B> <A NAME="tex2html3304"
+  HREF="node225.html">List of Frequency File</A>
+<B> Up:</B> <A NAME="tex2html3300"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html3294"
+  HREF="node223.html">HEADMODE</A>
+ &nbsp <B>  <A NAME="tex2html3302"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00464700000000000000"></A><A NAME="SP:BBSYN2"></A>
+<H1><A NAME="SECTION00450000000000000000"></A><A NAME="SEC:FRQCAT"></A>
 <BR>
-<TT>BBSYN2</TT>
-</H3>
+Frequency Catalog
+</H1>
 
 <P>
-If frequency switching is specified, <TT>BBSYN2</TT> is the
-set of frequencies for the second scan of the switching loop.
-Frequency setting using <TT>FREQREF</TT> and any pcal defaults are not
-used for the second frequency set. <TT>BBSYN2</TT> must be specified for
-this frequency set.
+SCHED&nbsp; is able to fill in many items in setup files based on
+knowledge of possible frequency setups at the stations as described in
+the frequency catalog.  This allows the user to only specify basic
+information.  A reasonable minimum set is: <A HREF="node257.html#SP:NCHAN"><TT>NCHAN</TT></A>, <A HREF="node234.html#SP:BBFILTER"><TT>BBFILTER</TT></A>,
+<A HREF="node238.html#SP:BITS"><TT>BITS</TT></A>, <A HREF="node265.html#SP:POL"><TT>POL</TT></A> (can be
+<TT>DUAL</TT>), and either <A HREF="node248.html#SP:FREQREF"><TT>FREQREF</TT></A> (and
+<A HREF="node247.html#SP:FREQOFF"><TT>FREQOFF</TT></A>) or <A HREF="node232.html#SP:BAND"><TT>BAND</TT></A>.
+The frequency catalog also allows SCHED&nbsp; to check user specified
+values against standard sets to warn of any oddities.
 
 <P>
-Frequency switching is not allowed when writing VEX files.
+Most users will not touch the frequency catalog.  If they need a setup
+that does not conform to what is in the catalog, they should just make
+the necessary <A HREF="node226.html#SEC:SETUPS"><TT>setup files</TT></A> and ignore the
+warnings after making sure that the special files are correct.  Be
+very careful doing this.  There are filters on many of the LO and IF
+cables, at least on the VLBA, that most users probably are not aware
+of.  Any special setup files that do not match one of the standards
+should be shown to Craig Walker for approval.  If it is a good one, it
+may be added to the standards.  However, the standard set is
+essentially complete for the VLBA.  If SCHED&nbsp; complains about your's,
+it is likely to be in error.
 
 <P>
-
-<UL>
-<LI><B>Argument:</B> Up to 16 frequencies in MHz.
-</LI>
-<LI><B>Options:</B>  Any multiple of 0.01&nbsp;MHz from 500.0 to 999.99&nbsp;MHz.
-</LI>
-<LI><B>Default:</B>  <TT>0</TT> - should be specified if frequency switching is requested
-but not needed otherwise.
-</LI>
-<LI><B>Usage:</B>    Defaults to previous station.
-</LI>
-<LI><B>Example:</B>  <TT>BBSYN2=728.99,728.99,732.99,732.99</TT>
-  
-</LI>
-</UL>
+There is a lot of information about available frequencies, receivers,
+frequency ranges, filters etc, especially at the VLBA, in the standard
+frequency catalog.  A table of information about possible setups for
+observations within a frequency range can be made by running SCHED&nbsp; 
+with <A HREF="node97.html#MP:FREQLIST"><TT>FREQLIST</TT></A> <TT>= lowfreq, highfreq</TT>
+(eg <TT>freqlist=4800,8900</TT>) as the only input.  The frequencies are
+in MHz.  If only one frequency is given, the second will be set equal
+to the first.  SCHED&nbsp; will produce a table in file <I>frequencies.list</I> containing details of the information available on
+how to set up these frequencies at all known sites.  SCHED&nbsp; will then
+quit.  Note that it is not necessary to transfer this information to
+your setup files -- SCHED&nbsp; will do that automatically based on your
+frequency and polarization requests in the setup file.  To examine the
+catalog itself, look at <TT>$SCHED/catalogs/freq.dat</TT> or, if reading
+the html version of the manual, click <A NAME="tex2html76"
+  HREF="catalogs/freq.dat">here.</A>.
 
 <P>
 <BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html3305"
+  HREF="node225.html">List of Frequency File Parameters</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3303"
+  HREF="node225.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3299"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3293"
+  HREF="node223.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3301"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3304"
+  HREF="node225.html">List of Frequency File</A>
+<B> Up:</B> <A NAME="tex2html3300"
+  HREF="node49.html">THE SCHED&nbsp; INPUT FILES</A>
+<B> Previous:</B> <A NAME="tex2html3294"
+  HREF="node223.html">HEADMODE</A>
+ &nbsp <B>  <A NAME="tex2html3302"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

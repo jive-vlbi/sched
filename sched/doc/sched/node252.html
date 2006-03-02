@@ -1,126 +1,94 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>POL</TITLE>
-<META NAME="description" CONTENT="POL">
+<TITLE>LCHAN and RCHAN</TITLE>
+<META NAME="description" CONTENT="LCHAN and RCHAN">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node253.html">
 <LINK REL="previous" HREF="node251.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node253.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3719"
+<A NAME="tex2html3748"
   HREF="node253.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3715"
-  HREF="node217.html">
+<A NAME="tex2html3744"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3709"
+<A NAME="tex2html3738"
   HREF="node251.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3717"
+<A NAME="tex2html3746"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3720"
-  HREF="node253.html">PTINCR</A>
-<B> Up:</B> <A NAME="tex2html3716"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3710"
-  HREF="node251.html">PCALXB1 and PCALXB2</A>
- &nbsp <B>  <A NAME="tex2html3718"
+<B> Next:</B> <A NAME="tex2html3749"
+  HREF="node253.html">LEVEL</A>
+<B> Up:</B> <A NAME="tex2html3745"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3739"
+  HREF="node251.html">IFDIST</A>
+ &nbsp <B>  <A NAME="tex2html3747"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643500000000000000"></A><A NAME="SP:POL"></A>
+<H3><A NAME="SECTION004642200000000000000"></A><A NAME="SP:LCHAN"></A>
 <BR>
-<TT>POL</TT>
+<TT>LCHAN</TT> and <TT>RCHAN</TT>
 </H3>
 
 <P>
-<TT>POL</TT> is used to specify the polarization of a channel.  This
-may be used when asking SCHED&nbsp; to set a lot of defaults.  Or it
-may be used to tell SCHED&nbsp; the polarization in cases where it
-is not clear from other inputs.  Such cases arise when
-<A HREF="#SP:RCHAN"><TT>RCHAN</TT></A>, and <A HREF="node239.html#SP:LCHAN"><TT>LCHAN</TT></A>
-are not used AND the setup does not correspond to one in the
-<A HREF="node211.html#SEC:FRQCAT">frequency catalog.</A>.
-
-<P>
-<TT>POL</TT> should be <TT>RCP, LCP,</TT> or <TT>DUAL</TT>.  One value per
-channel can be given.  Any channels not set will default to the
-same value as the first so it is usually sufficient to just specify
-one value.  If <TT>POL = DUAL</TT> for the first channel,
-SCHED&nbsp; will set alternate channels to <TT>RCP</TT> and <TT>LCP</TT>.
-
-<P>
-Actually, <TT>POL</TT> can also be <TT>R</TT> or <TT>L</TT> (meaning <TT>RCP</TT>
-and <TT>LCP</TT> respectively), but don't tell anyone.
+<TT>LCHAN</TT> specifies the <TT>IFCHAN</TT> to use if <TT>IFCHAN='L'</TT> as
+in LCP.  <TT>RCHAN</TT> serves the same purpose for RCP.  If an invalid
+argument is used, SCHED&nbsp; will complain that <TT>IFCHAN</TT> is bad.
+This allows IFCHAN to be specified by polarization which is more
+meaningful to the observer.  It also makes it easier to deal with
+antennas, such as the VLA, that might have different IF assignments
+than the VLBA.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An array of polarization specifications, one per channel.
+<LI><B>Argument:</B> A single character.
 </LI>
-<LI><B>Options:</B>  <TT>RCP</TT>, <TT>LCP</TT>, or <TT>DUAL</TT>
+<LI><B>Options:</B>  <TT>A</TT>, <TT>B</TT>, <TT>C</TT>, or <TT>D</TT>
 </LI>
-<LI><B>Default:</B>  Will try to set based on other inputs or frequency catalog.
+<LI><B>Default:</B>  None. Must specify if <TT>IFCHAN='L'</TT>.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>POL=DUAL</TT>
+<LI><B>Example:</B>  <TT>LCHAN=A  RCHAN=C</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html3719"
-  HREF="node253.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3715"
-  HREF="node217.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3709"
-  HREF="node251.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3717"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html3720"
-  HREF="node253.html">PTINCR</A>
-<B> Up:</B> <A NAME="tex2html3716"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3710"
-  HREF="node251.html">PCALXB1 and PCALXB2</A>
- &nbsp <B>  <A NAME="tex2html3718"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

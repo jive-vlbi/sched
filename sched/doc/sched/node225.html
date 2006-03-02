@@ -1,95 +1,311 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>BITS</TITLE>
-<META NAME="description" CONTENT="BITS">
+<TITLE>List of Frequency File Parameters</TITLE>
+<META NAME="description" CONTENT="List of Frequency File Parameters">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
-<LINK REL="next" HREF="node226.html">
 <LINK REL="previous" HREF="node224.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node224.html">
 <LINK REL="next" HREF="node226.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3395"
+<A NAME="tex2html3314"
   HREF="node226.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3391"
-  HREF="node217.html">
+<A NAME="tex2html3310"
+  HREF="node224.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3385"
+<A NAME="tex2html3306"
   HREF="node224.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3393"
+<A NAME="tex2html3312"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3396"
-  HREF="node226.html">DUALX</A>
-<B> Up:</B> <A NAME="tex2html3392"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3386"
-  HREF="node224.html">BBSYN2</A>
- &nbsp <B>  <A NAME="tex2html3394"
+<B> Next:</B> <A NAME="tex2html3315"
+  HREF="node226.html">Setup Files</A>
+<B> Up:</B> <A NAME="tex2html3311"
+  HREF="node224.html">Frequency Catalog</A>
+<B> Previous:</B> <A NAME="tex2html3307"
+  HREF="node224.html">Frequency Catalog</A>
+ &nbsp <B>  <A NAME="tex2html3313"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00464800000000000000"></A><A NAME="SP:BITS"></A>
+<H2><A NAME="SECTION00451000000000000000"></A><A NAME="SSEC:FREQLST"></A>
 <BR>
-<TT>BITS</TT>
-</H3>
+List of Frequency File Parameters
+</H2>
 
 <P>
-<TT>BITS</TT> sets the number of bits per sample for each baseband channel.
-If any channel is not specified, it will be set to the first.  Since
-an experiment will typically use the same number of bits per sample
-for all channels, it is usually only necessary to specify one value.
+The parameters of the frequency file tell SCHED&nbsp; over what frequency
+range the group if usable and on which stations.  Most of the parameters
+are the same as parameters in the setup file since they are meant
+for direct substitution once the correct frequency group has been
+identified.  There is no defaulting between groups of inputs -- all
+parameters are reset to zero, blank, or some equivalent value.
 
 <P>
-If <TT>BITS</TT> is <TT>2</TT>, the first magnitude bit is placed on assigned
-track plus 8 for <TT>FORMAT&nbsp;= VLBA1:4</TT>, on assigned track plus 4 for
-<TT>FORMAT&nbsp;= VLBA1:2</TT>, and on assigned track plus 2 for <TT>FORMAT&nbsp;= VLBA1:1</TT>.
+For the VLA, IF's A and C will be assumed to apply to VLA27 while
+IF's B and D will be assumed to apply to VLA1.  All standard
+frequency groups will have both VLA IF's on the same frequency.
+Anything more complicated requires a setup file from the user.
 
 <P>
-
-<UL>
-<LI><B>Argument:</B> An array of integers, one for each baseband channel.
-</LI>
-<LI><B>Options:</B>  <TT>1</TT> or <TT>2</TT>
-</LI>
-<LI><B>Default:</B>  <TT>1</TT> for all baseband channels if none are set. Same as baseband
-channel 1 if one or more are set.
-</LI>
-<LI><B>Usage:</B>    Defaults to previous station.
-</LI>
-<LI><B>Example:</B>  <TT>BITS=1</TT>
-  
-</LI>
-</UL>
+<DL>
+<DT><STRONG><TT>STATIONs</TT></STRONG></DT>
+<DD>Up to 10 stations with this setup.  This will
+be matched against the station name in the setup file.  The name
+<TT>VLBA</TT> will be a default for all VLBA stations.
 
 <P>
-<BR><HR>
+</DD>
+<DT><STRONG><TT>PRIOrity</TT></STRONG></DT>
+<DD>A ranking with low values prefered.  This
+allows preference of one setup over another if both match the
+required frequencies.  For example, the narrow band 50 cm receiver
+would be chosen over the wide band one for narrow band observations
+despite the fact that both would match the requested frequencies.
+
+<P>
+</DD>
+<DT><STRONG><TT>NAME</TT></STRONG></DT>
+<DD>A name for the frequency group.  It is used
+in listing and error notes to help the user find the right one.
+Up to 12 characters long.  Any string ok.
+
+<P>
+</DD>
+<DT><STRONG><TT>NOTE</TT></STRONG></DT>
+<DD>A comment about the setup that will go to
+various listings.  It is wise to note any limitations here that
+might not be obvious to a user.  Up to 80 characters.
+
+<P>
+</DD>
+<DT><STRONG><TT>IFNAME</TT></STRONG></DT>
+<DD>The name of the IF for up to 8 IF descriptions
+(eg. A, B, C, D).  There are a larger number than there are phsical IFs
+to allow description of such systems as the VLBA 50/90 cm system
+where there are more than one signal in each IF.
+
+<P>
+For antennas in the EVN that have VLBA(4) DARs, the codes in use are
+usually A and C (LCP and RCP). For MkIV antennas there are two IF
+distributors that can one can choose to connect to either IF channel.
+Each distributor is connected to a fixed subset of the BBC's, either
+the odds or the evens.  The normal situation has IF 1N on LCP and 2N
+on RCP, but alternate channels 1A or 2A can be connected if more than
+the first 7 BBC's need to be set to a single polarization.
+
+<P>
+</DD>
+<DT><STRONG><TT>ALTIFN</TT></STRONG></DT>
+<DD>An alternate IF name for this frequency setup.
+For the Mark IV systems, the odd BBC's are attached to IF's 1N and
+1A.  The even BBC's are attached to 2N and 2A.  Generally the
+same signal is put on 1N and 2A while another (other polarization)
+is put on 2N and 1A.  When assigning IF names using frequency table
+information, sched will pick <TT>IFNAME</TT> or <TT>ALTIFN</TT> depending
+on whether the BBC is even or odd and on the first digit of the
+names.
+
+<P>
+</DD>
+<DT><STRONG><TT>RF1</TT></STRONG></DT>
+<DD>The low edge of the RF frequency range covered by
+each IF.  SCHED&nbsp; will try to find the group with all the channels
+best centered in the IF.  However, some channels will allowed to be
+outside the range if necessary, as is common on the VLA.
+
+<P>
+</DD>
+<DT><STRONG><TT>RF2</TT></STRONG></DT>
+<DD>The high edge of the RF frequency range covered by
+each IF.
+
+<P>
+For Mark&nbsp;IV systems, the frequency ranges in the frequency catalog
+are calculated with the constraint that the complete range can be
+obtained with the station preferred patching, i.e. with consistently
+using high or low output on the IF distributor.  More frequency
+coverage can be obtained with detailed knowledge and requires a manual
+setup.
+
+<P>
+</DD>
+<DT><STRONG><TT>CH1RF1</TT></STRONG></DT>
+<DD>The lowest RF frequency for channel 1.  If
+non-zero, channel 1 will be required to fall in the range specified by
+<TT>CH1RF1</TT> and <TT>CH1RF2</TT>.  This is mainly to be sure that the
+right filter is used at 2cm on the VLBA.
+
+<P>
+</DD>
+<DT><STRONG><TT>CH1RF2</TT></STRONG></DT>
+<DD>The highest frequency for channel 1.  See
+<TT>CH1RF1</TT>
+
+<P>
+</DD>
+<DT><STRONG><TT>LO1</TT></STRONG></DT>
+<DD>The <A HREF="node243.html#SP:FIRSTLO"><TT>FIRSTLO</TT></A> for each IF
+channel.
+
+<P>
+</DD>
+<DT><STRONG><TT>FE</TT></STRONG></DT>
+<DD>The <A HREF="node241.html#SP:FE"><TT>FE</TT></A> (receiver
+specification) for each channel.  Use <TT>omit</TT> for unused channels.
+
+<P>
+</DD>
+<DT><STRONG><TT>POL</TT></STRONG></DT>
+<DD>The polarization of the channel (RCP or LCP).
+
+<P>
+</DD>
+<DT><STRONG><TT>SYN</TT></STRONG></DT>
+<DD>The <A HREF="#SYNTH"><TT>SYNTH</TT></A> setting for each
+of the three front end synthesizers on the VLBA.
+
+<P>
+</DD>
+<DT><STRONG><TT>DUALX</TT></STRONG></DT>
+<DD>Use the wideband scheme at 4 cm on the VLBA.  See
+the setup parameter <A HREF="node239.html#SP:DUALX"><TT>DUALX</TT></A>.
+
+<P>
+</DD>
+<DT><STRONG><TT>LCP50CM</TT></STRONG></DT>
+<DD>Setting for the 50 cm filter.  See setup file
+parameter <A HREF="node255.html#SP:LCP50CM"><TT>LCP50CM</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>RCP50CM</TT></STRONG></DT>
+<DD>Setting for the 50 cm filter.  See setup file
+parameter <A HREF="#SP:RCP50CM"><TT>RCP50CM</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>CHNSTA</TT></STRONG></DT>
+<DD>Only use this IF if <TT>CHNSTA</TT> matches the
+station name.  This allows the same groups to be used for VLA1 and
+VLA27, but to differ in the IFNAME.  Options are the station name
+or <TT>BOTH</TT>.  This facility has been disabled and may be removed.
+It has been made obsolete by the new digital patch panel at the VLA
+and the effort by SCHED&nbsp; to determine which IF's are to be used for
+the each setup depending on the specified modes in the schedule.
+Modes <TT>VA, VR</TT> and <TT>VL</TT> require different IF restrictions.
+
+<P>
+</DD>
+<DT><STRONG><TT>VLABAND</TT></STRONG></DT>
+<DD>The VLA frequency band.  See setup file parameter
+<A HREF="node279.html#SP:VLABAND"><TT>VLABAND</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>VLABW</TT></STRONG></DT>
+<DD>The VLA bandwidth codes.  See setup file parameter
+<A HREF="node280.html#SP:VLABW"><TT>VLABW</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>VLAFEAB</TT></STRONG></DT>
+<DD>The VLA first LO.  See setup file parameter
+<A HREF="node281.html#SP:VLAFEAB"><TT>VLAFEAB</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>VLAFECD</TT></STRONG></DT>
+<DD>The other VLA first LO.  See setup file parameter
+<A HREF="#SP:VLAFECD"><TT>VLAFECD</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>VLAIF</TT></STRONG></DT>
+<DD>The VLA gain file name.  See setup file parameter
+<A HREF="node282.html#SP:VLAIF"><TT>VLAIF</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>VLAROT</TT></STRONG></DT>
+<DD>The VLA first LO.  See setup file parameter
+<A HREF="node283.html#SP:VLAROT"><TT>VLAROT</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>VLASYNA</TT></STRONG></DT>
+<DD>The VLA AC F6 setting.  See setup file parameter
+<A HREF="node284.html#SP:VLASYNA"><TT>VLASYNA</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>VLASYNB</TT></STRONG></DT>
+<DD>The VLA BD F6 setting.  See setup file parameter
+<A HREF="#SP:VLAFECD"><TT>VLAFECD</TT></A>
+
+<P>
+</DD>
+<DT><STRONG><TT>FEFILTER</TT></STRONG></DT>
+<DD>The VLA BD F6 setting.  See setup file parameter
+<A HREF="node242.html#SP:FEFILTER"><TT>FEFILTER</TT></A>
+
+<P>
+</DD>
+</DL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3314"
+  HREF="node226.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3310"
+  HREF="node224.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3306"
+  HREF="node224.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3312"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3315"
+  HREF="node226.html">Setup Files</A>
+<B> Up:</B> <A NAME="tex2html3311"
+  HREF="node224.html">Frequency Catalog</A>
+<B> Previous:</B> <A NAME="tex2html3307"
+  HREF="node224.html">Frequency Catalog</A>
+ &nbsp <B>  <A NAME="tex2html3313"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

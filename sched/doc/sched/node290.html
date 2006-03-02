@@ -1,177 +1,86 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 12 February 2001.</TITLE>
-<META NAME="description" CONTENT="Release of 12 February 2001.">
+<TITLE>Running SCHED&nbsp; on a VAX</TITLE>
+<META NAME="description" CONTENT="Running SCHED&nbsp; on a VAX">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node291.html">
 <LINK REL="previous" HREF="node289.html">
-<LINK REL="up" HREF="node286.html">
+<LINK REL="up" HREF="node288.html">
 <LINK REL="next" HREF="node291.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4224"
+<A NAME="tex2html4210"
   HREF="node291.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4220"
-  HREF="node286.html">
+<A NAME="tex2html4206"
+  HREF="node288.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4214"
+<A NAME="tex2html4200"
   HREF="node289.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4222"
+<A NAME="tex2html4208"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4225"
-  HREF="node291.html">Release of 30 January</A>
-<B> Up:</B> <A NAME="tex2html4221"
-  HREF="node286.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4215"
-  HREF="node289.html">Release of 16 October</A>
- &nbsp <B>  <A NAME="tex2html4223"
+<B> Next:</B> <A NAME="tex2html4211"
+  HREF="node291.html">Running SCHED&nbsp; on an</A>
+<B> Up:</B> <A NAME="tex2html4207"
+  HREF="node288.html">Running SCHED</A>
+<B> Previous:</B> <A NAME="tex2html4201"
+  HREF="node289.html">Running SCHED&nbsp; under UNIX</A>
+ &nbsp <B>  <A NAME="tex2html4209"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00624000000000000000"></A><A NAME="SSSEC:09FEB2001"></A>
+<H2><A NAME="SECTION00522000000000000000"></A><A NAME="SSEC:RUNVAX"></A>
 <BR>
-Release of 12 February 2001.
+Running SCHED&nbsp; on a VAX
 </H2>
 
 <P>
-It seems that we are having teething problems with the new reference
-pointing capabilities.  This release makes available some important
-fixes required for 3mm VLBA projects.  But it does not have some fixes
-for VEX problems that will affect CMVA runs.  So there will be another
-release in a couple of weeks.  The changes here are not significant
-for users not attempting reference pointing with <TT>AUTOPEAK</TT> or
-other mechanism that invokes setup files with <TT>FORMAT=NONE</TT>.  If
-you don't need this one right now, it is recommended you wait for
-the VEX fixes.
+To run SCHED&nbsp; on a VAX, make a VMS command file, called <TT>INPUT.COM</TT> for example, which begins with a VMS command that causes
+SCHED&nbsp; to be executed. For systems with a fully installed Caltech
+package, the command ``$ SCHED'' should work. Otherwise use a
+command of the form ``$ RUN UMA3:[VPGM.CIT.VLB]SCHED'', where
+you will need to substitute the correct directory specification. The
+command file should end with ``$ EXIT'', although this is not
+necessary. The SCHED&nbsp; command file is run by typing, for example,
+<PRE>
+@INPUT.COM
+</PRE>
+The files output by SCHED&nbsp; will appear in the default directory.
 
 <P>
-
-<UL>
-<LI>SCHED&nbsp; did not behave gracefully when there was a station listed
-       in the peaking command file that is not in the stations catalog.
-       Make it die properly with an error message that might allow
-       users to understand what was wrong.  07 Feb 2001  RCW
+Note that SCHED&nbsp; has not been tested under VMS since the plotting
+capabilities were added.
 
 <P>
-</LI>
-<LI>Found another bug relating to looping over scans.  This time
-       a loop went from the first output scan to the last input scan,
-       which is over no scans if output is not the same as input.
-       As with the earlier bugs, this only affects <TT>AUTOPEAK</TT> users
-       or users of obscure optimizing modes.  And this time, it only
-       affects VEX users.  07 Feb 2001 RCW
-
-<P>
-</LI>
-<LI>Fix problem with initialization of track assignment output when
-       the first scan had FORMAT=NONE, such as a pointing scan.  With
-       this, only the first station got track assignments.  08 Feb 2001 RCW.
-
-<P>
-</LI>
-<LI>Improve the way readback tests are counted.  The main effects will
-       be on what happens at the start of a schedule.  Also, if <TT>DEBUG</TT>
-       is set, SCHED will write a line each time it finds a readback
-       test slot.  08 Feb 2001  RCW.
-
-<P>
-</LI>
-<LI>Add an <TT>OVERRIDE</TT> input parameter and internal logical that
-       can be used by programmers to allow them to exercise code in
-       ways now allowed for users.  For example, if users cannot be
-       allowed to use some feature because of known bugs, but programmers
-       need to test it to fix the bug, <TT>OVERRIDE</TT> can be used to
-       provide a ``back door'' in.  09 Feb 2001.  RCW.
-
-<P>
-</LI>
-<LI>Don't allow VEX and FORMAT=NONE.  There are bugs.  This should
-       be fixed soon, but we need to get a release out to fix some of
-       the above issues for 3mm VLBA observations.  09 Feb 2001  RCW.
-
-<P>
-</LI>
-<LI>Remove the ``*'' from a the names of many pointing sources in
-       <I>sources.pointing</I> and <I>peak.cmd</I>.  These were causing
-       problems for other software downstream.  This might cause some
-       editing to be needed in existing files in the dynamic scheduling
-       queue.  9 Feb 2001.  RCW.
-
-<P>
-</LI>
-<LI>In VEX code, change ``*'' to ``X'' rather than ``?'' in def names.
-       We would like to be able to use ``*'' in source names, but users
-       should be wary that they might encounter problems in post-processing.
-       12 Feb 2001. Huib.
-
-<P>
-</LI>
-<LI>Modify the source list in <I>peak.cmd</I> so that the ones
-       that are used for reference pointing if the user does not check
-       source quality are only those what we trust the most.  Names of
-       other possible sources are left in the file in comments.
-       12 Feb 2001. RCW.
-
-<P>
-</LI>
-<LI>Make the data rate limit warning sensitive to wide band observations
-       where 2 pass processing is required anyway.  In the process separate
-       dealing with Socorro correlator parameters from others.  15 Mar 2001 RCW.
-</LI>
-</UL>
-
-<P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html4224"
-  HREF="node291.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4220"
-  HREF="node286.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4214"
-  HREF="node289.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4222"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html4225"
-  HREF="node291.html">Release of 30 January</A>
-<B> Up:</B> <A NAME="tex2html4221"
-  HREF="node286.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4215"
-  HREF="node289.html">Release of 16 October</A>
- &nbsp <B>  <A NAME="tex2html4223"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>
