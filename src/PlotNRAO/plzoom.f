@@ -62,8 +62,8 @@ C
 C        Don't go outside original window, but allow zoomed
 C        windows to go sideways.
 C
-      write(*,*) 'plzoom x', zxmin, rxmin, zxmax, rxmax
-      write(*,*) 'plzoom y', zymin, rymin, zymax, rymax
+C      write(*,*) 'plzoom x', zxmin, rxmin, zxmax, rxmax
+C      write(*,*) 'plzoom y', zymin, rymin, zymax, rymax
 CFranco         IF( ZXMIN .LT. RXMIN ) ZXMIN = RXMIN
 CFranco         IF( ZXMAX .GT. RXMAX ) ZXMAX = RXMAX
 CFranco         IF( ZYMIN .LT. RYMIN ) ZYMIN = RYMIN

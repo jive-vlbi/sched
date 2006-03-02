@@ -8,11 +8,13 @@ C
       INCLUDE  'schfreq.inc'
 C
       INTEGER           KS, ICH, JCH, ISTA
-      INTEGER           LEN1, LNAME
+      INTEGER           LEN1, LNAME, ITOUT
       LOGICAL           ERRS, SAMPWARN, OVERWARN
       CHARACTER         UPPCAL*4
       REAL              BBWIDI, BBWIDJ
       DOUBLE PRECISION  FLOWI, FLOWJ, FHIGHI, FHIGHJ
+      SAVE              ITOUT
+      DATA              ITOUT / 1 /
 C ----------------------------------------------------------------------
 C     Get the schedule station number
 C
@@ -39,22 +41,23 @@ C
          WRITE( MSGTXT, '( 4A )' ) 
      1       'CHKSET: *** WARNING - OBSTYPE=', OBSTYP,
      2       ' but setup has FORMAT=', FORMAT(KS)
-         CALL WLOG( 0, MSGTXT )
+         CALL WLOG( ITOUT, MSGTXT )
          MSGTXT = ' '
          WRITE( MSGTXT, '( A )' )
      1       '        No tapes will be recorded with this OBSTYPE.'
-         CALL WLOG( 0, MSGTXT )
+         CALL WLOG( ITOUT, MSGTXT )
          MSGTXT = ' '
          IF( OBSTYP .EQ. 'NONE' ) THEN
-            CALL WLOG( 0, 
+            CALL WLOG( ITOUT, 
      1       '        NONE is the default OBSTYPE.  ' //
      2       'Did you forget to specify it?' )
          ELSE
             WRITE( MSGTXT, '( A )' )
      1       '        Was this intended?'
-            CALL WLOG( 0, MSGTXT )
+            CALL WLOG( ITOUT, MSGTXT )
          END IF
          MSGTXT = ' '
+         ITOUT = 0
       END IF
 C
 C     Don't check VLBI related parameters if this is VLA only.
@@ -129,7 +132,8 @@ C
                END IF
                IF( BBFILT(ICH,KS) .LT. 0.5*SAMPRATE(KS) .AND. 
      1             SAMPWARN ) THEN
-                  CALL WLOG( 0, 'CHKSET:  Oversampling specified. ' )
+                  CALL WLOG( 0, 
+     1                    'CHKSET note: Oversampling specified. ' )
                   SAMPWARN = .FALSE. 
                END IF
 C

@@ -15,12 +15,13 @@ C
       INTEGER           ISCN, ISTA, QUOUT
       INTEGER           LASTDY, DOY1, DOY2
       INTEGER           TPCINDX, PTADD, LLS, LSTA
-      INTEGER           LSCN
+      INTEGER           LSCN, LEN1
       DOUBLE PRECISION  ONESEC, LSTOP
       LOGICAL           FIRSTS, FRS, DOSET, LPTVLB
-      LOGICAL           WRTSET, POSTPASS
+      LOGICAL           WRTSET, POSTPASS, CRLWARN
       CHARACTER         VLBAD1*9, VLBAD2*9, REWSP*7
       CHARACTER         FRSDUR*17, TSTART*9, TSTOP*9
+      CHARACTER         LCRDLINE*80
       PARAMETER         (ONESEC = 1.D0 / 86400.D0)
       INTEGER           TPCDIR, TPCHEAD, TPCDRIV
       LOGICAL           DOTAPE, PASSOK
@@ -28,13 +29,14 @@ C
 C     Save variables.
 C
       SAVE              POSTPASS, LSTA, LLS, LASTDY, LPTVLB, LSCN
-      SAVE              LSTOP, TPCDRIV, PASSOK
+      SAVE              LSTOP, TPCDRIV, PASSOK, CRLWARN, LCRDLINE
 C
 C     Parameter to turn on or off the POSTPASS commands at the end of
 C     tapes.  This can be changed if operations changes its mind
 C     about the necessity of postpasses.
 C
       DATA          POSTPASS / .TRUE. /
+      DATA          CRLWARN  / .TRUE. /
 C
       DATA          LSTA, LLS / 0, 0 /
 C --------------------------------------------------------------------
@@ -102,6 +104,20 @@ C
             CALL VLBACHG( ISCN, ISTA, FIRSTS, DOTAPE, POSTPASS, 
      1                 LASTDY, LSTOP, TPCDRIV, PASSOK )
          END IF
+C
+C        Write the arbitrary line - used for developing new features 
+C        in the on-line system.
+C
+         IF( CRDLINE(ISCN) .NE. ' ' .AND. 
+     1       ( CRDLINE(ISCN) .NE. LCRDLINE .OR. FIRSTS ) ) THEN
+            WRITE( IUVBA, '(A)' ) CRDLINE(ISCN)(1:LEN1(CRDLINE(ISCN)))
+            IF( CRLWARN ) THEN
+               CALL WLOG( 1, 'WARNING: Test parameter CRDLINE being' //
+     1          ' used.  Be sure you know what you are doing.' )
+               CRLWARN = .FALSE.
+            END IF
+         END IF
+         LCRDLINE = CRDLINE(ISCN)
 C
 C        Do a setup scan for Mark III or VLBA observations when there
 C        is a gap between scans.  Also do one at the start of any

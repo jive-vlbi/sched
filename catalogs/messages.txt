@@ -274,6 +274,18 @@ lower sideband for the 20cm and 13cm systems.
 
 It should essentially never be necessary to provoke reconfigurations,
 even when switching between observing bands.
+
+
+++freqbw
+--Called by CHKSC1
+
+CAUTION: You have set FREQ and/or BW for some scans but have not
+changed them when switching to a new setup file.  These parameters do
+not change from scan to scan unless forced.  It is possible that you
+really did want them to change, perhaps to the value of the new setup
+file.  Check what you have done carefully.  To cause SCHED to use the
+setup file value, set FREQ=0 and/or BW=0.
+
    
 ++VXDISK
 --Called from VXWRT (obsolete)
@@ -327,6 +339,27 @@ amount of data you have requested to transfer, is given in the messages above.
 One or more of the channels in one or more of your setups uses oversampling.
 Experiments going to the EVN correlator at JIVE may use a maximum oversampling
 factor of 4. Higher oversampling factors cannot be correlated.
+
+++tsysgap
+--Called from VXSCH
+For MkIV stations (e.g. most of the EVN) the calibration diode is only fired
+during gaps in recording. Although the total power is monitored continuously
+during scans, the calibration diode must be fired regularly to allow these
+total power levels to be accurately converted to system temperatures. It is
+recommended that, where possible, you leave a gap in recording at least every
+15 minutes to allow the system temperature measurements. The gap should be at
+least 15 seconds, but you should also try to ensure that these gaps are long
+enough that all the antennas are on source before the next scan starts. Note
+that warnings about Westerbork can be safely ignored.
+
+++tsysoffsrc
+--Called from VXSCH
+Note that although you may have left gaps during which the system temperature
+can be measured at MkIV stations, one or more stations are still slewing at the
+scan starts. System temperatures measured when the antennas are slewing are
+unlikely to be useful. The time between useful Tsys measurements is therefore
+likely to be longer than the recommended 15 minutes at the stations listed
+above. Note that warnings about Westerbork can be safely ignored.
 
 ++end
 

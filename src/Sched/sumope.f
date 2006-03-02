@@ -1,4 +1,4 @@
-      SUBROUTINE SUMOPE( RESTART, PDATE )
+      SUBROUTINE SUMOPE( RESTART, PDATE, MJD )
 C
 C     Routine for SCHED that opens the summary file and writes the
 C     cover information and correlator information into it.  It also
@@ -8,7 +8,7 @@ C
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER        LEN1, VLBOPE, IOERR, NCH
+      INTEGER        LEN1, VLBOPE, IOERR, NCH, MJD
       CHARACTER      PRTFILE*80, OPTEXT*255, OPSTAT*4
       CHARACTER      PDATE*(*)
       LOGICAL        EXISTS, RESTART
@@ -81,7 +81,7 @@ C
 C
 C     List the stations.
 C
-      CALL STALST
+      CALL STALST( MJD )
 C
       RETURN
       END

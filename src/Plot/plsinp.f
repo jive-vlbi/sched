@@ -9,7 +9,7 @@ C     the options area panel
 C
       CHARACTER     CH, SG, STRING*4, MESSAG*8
       LOGICAL       PBTR
-      INTEGER       ID, I, J, K, N, IDOFS, REV, PL, LEN1
+      INTEGER       ID, I, J, K, Z, N, IDOFS, REV, PL, LEN1
       INTEGER       IS, INDEXR, II, JJ
       REAL          XX, YY, XL, CSIZ
 C ----------------------------------------------------------------------
@@ -247,22 +247,23 @@ C
               IF( POPBCK .NE. I ) THEN
                  POPBCK = I
                  PXYBIG = .FALSE.
+                 PXYONE = .FALSE.
                  IF( I .EQ. 1 ) THEN
-                    PXYBCK(1) = 11
-                    PXYBCK(2) = 11
+                    PXYBCK(1) = 12
+                    PXYBCK(2) = 12
                     PXYBIG    = .TRUE.
                  ELSE IF( I .EQ. 2 .OR. I .EQ. 5 ) THEN
                     PXYBCK(1) = 2
                     PXYBCK(2) = 5
                  ELSE IF( I .EQ. 3 ) THEN
-                    PXYBCK(1) = 9
-                    PXYBCK(2) = 10
+                    PXYBCK(1) = 10
+                    PXYBCK(2) = 11
                  ELSE IF( I .EQ. 4 ) THEN
                     PXYBCK(1) = 2
-                    PXYBCK(2) = 8
+                    PXYBCK(2) = 9
                  ELSE IF( I .EQ. 6 ) THEN
-                    PXYBCK(1) = 11
-                    PXYBCK(2) = 11
+                    PXYBCK(1) = 12
+                    PXYBCK(2) = 12
                  ENDIF
                  CALL PLAXIS( 1 )
 C
@@ -308,7 +309,7 @@ C
                  IF( SFFREQ(1,PSFBCK) .GT. 0.0 ) THEN
                     PBMFRQ = 30000.0 / SFFREQ(1,PSFBCK)
                  ELSE
-                    PBMFRQ = 6.0
+                    PBMFRQ = 0.0
                  END IF
                  J = PBMFRQ * 10
                  CALL PGNUMB( J, -1, 1, STRING, N )
@@ -622,14 +623,16 @@ C
 C        Find if YBottom Coordinate element selected
 C
          J = 3
-         IF( PXYBIG ) J = 1
+         IF( PXYBIG .OR. PXYONE ) J = 1
          DO 470 I=1,J
             K = I
-            IF( PXYBIG ) K = 3
-            IF( PYBTXT(1,I) .LE. XX .AND. PYBTXT(2,K) .GE. XX .AND.
+            Z = I
+            IF( PXYBIG .OR. PXYONE ) K = 3
+            IF( PXYONE ) Z = 3
+            IF( PYBTXT(1,Z) .LE. XX .AND. PYBTXT(2,K) .GE. XX .AND.
      1          PYBTXT(3,I) .LE. YY .AND. PYBTXT(4,I) .GE. YY ) THEN
 C
-               CALL PLAXCK( PYBTXT(1,I), PYBTXT(2,K), PYBTXT(3,I),
+               CALL PLAXCK( PYBTXT(1,Z), PYBTXT(2,K), PYBTXT(3,I),
      1                      PYBTXT(4,I), 3, I, CH )
 C
                RETURN
@@ -639,14 +642,16 @@ C
 C        Find if YTop Coordinate element selected
 C
          J = 3
-         IF( PXYBIG ) J = 1
+         IF( PXYBIG .OR. PXYONE ) J = 1
          DO 480 I=1,J
             K = I
-            IF( PXYBIG ) K = 3
-            IF( PYTTXT(1,I) .LE. XX .AND. PYTTXT(2,K) .GE. XX .AND.
+            Z = I
+            IF( PXYBIG .OR. PXYONE ) K = 3
+            IF( PXYONE ) Z = 3
+            IF( PYTTXT(1,Z) .LE. XX .AND. PYTTXT(2,K) .GE. XX .AND.
      1          PYTTXT(3,I) .LE. YY .AND. PYTTXT(4,I) .GE. YY ) THEN
 C
-               CALL PLAXCK( PYTTXT(1,I), PYTTXT(2,K), PYTTXT(3,I),
+               CALL PLAXCK( PYTTXT(1,Z), PYTTXT(2,K), PYTTXT(3,I),
      1                      PYTTXT(4,I), 4, I, CH )
 C
                RETURN
@@ -788,7 +793,7 @@ C
           IF( PSUDEF(1) .LE. XX .AND. PSUDEF(2) .GE. XX .AND.
      1        PSUDEF(3) .LE. YY .AND. PSUDEF(4) .GE. YY .AND.
      2        PXYSUN .AND. POPTYP(POPBCK) .NE. 'RD' ) THEN
-             PSUNEL = OPMINEL
+             PSUNEL = OPMINEL(1)
              PSUEXP = 0
              CALL PLSUN( ' ', 1 )
              RETURN

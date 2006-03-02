@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.02  May 2005                              
+Processed by SCHED version:   6.04  February 2006                         
 
 PI:       PI Name                                                         
 
@@ -32,6 +32,7 @@ Notes:    Special instructions
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
      Automatic tape allocation specified.  Tape positions are just estimates.
@@ -50,19 +51,19 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
                             0.25     0.25
 
 03 08 00  SRC1         15 04 29  24.3 112.8 -3.8     -42.5     0   1  1      0  03 08 00
-04 00 00  ---          15 56 38  32.7 124.2 -2.9     -37.3  3120   F  1  10400  03 08 25
+04 00 00  ---          15 56 38  32.7 124.2 -2.9     -37.3  3120   F  1     13  03 08 35
 
-04 08 00  SRC1         16 04 39  33.9 126.1 -2.8     -36.3   472   1  2  10400  04 08 00
-05 00 00  ---          16 56 48  40.9 140.0 -1.9     -28.1  3120   R  1  14400  04 08 25
+04 08 00  SRC1         16 04 39  33.9 126.1 -2.8     -36.3   472   1  1     13  04 08 00
+05 00 00  ---          16 56 48  40.9 140.0 -1.9     -28.1  3120   F  1     25  04 08 35
 
-05 02 00  CAL1         16 58 48  45.7 156.9 -1.1     -16.7   103   1  2  14400  05 02 00
-05 30 00  ---          17 26 53  47.3 166.9 -0.6      -9.6  1680   R  1   8800  05 02 25
+05 02 00  CAL1         16 58 48  45.7 156.9 -1.1     -16.7   103   1  1     25  05 02 00
+05 30 00  ---          17 26 53  47.3 166.9 -0.6      -9.6  1680   F  1     32  05 02 35
 
-05 30 00  SRC1         17 26 53  44.1 149.2 -1.4     -22.0   -18   1  2   8800  05 30 00
-05 54 00  ---          17 50 57  46.1 157.3 -1.0     -16.4  1422   R  1   4000  05 30 00
+05 30 00  SRC1         17 26 53  44.1 149.2 -1.4     -22.0   -18   1  1     32  05 30 00
+05 54 00  ---          17 50 57  46.1 157.3 -1.0     -16.4  1422   F  1     38  05 30 00
 
-06 02 00  SRC1         17 58 58  46.6 160.1 -0.9     -14.4   472   1  1   4000  06 02 00
-06 54 00  ---          18 51 06  48.3 179.2  0.0      -0.6  3120   F  2   6400  06 02 25
+06 02 00  SRC1         17 58 58  46.6 160.1 -0.9     -14.4   472   1  1     38  06 02 00
+06 54 00  ---          18 51 06  48.3 179.2  0.0      -0.6  3120   F  1     50  06 02 35
 
 
 SETUP FILE INFORMATION:
@@ -70,15 +71,14 @@ SETUP FILE INFORMATION:
 
 
  Setup file: egOH.set
-   Matches group v20cm_2 in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group v20cm_2 in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
     FD filtered above 1760.  SC filtered above 1740.
 
    Setup group:    2         Station: VLBA_HN           Total bit rate:   32
    Format: VLBA1:1           Bits per sample: 2         Sample rate:  2.000
-   Number of channels:  8    Passes/head pos:   2       Speedup factor:   4.00
+   Number of channels:  8                               Speedup factor:   4.00
 
-   Tape used at high density at  40.000 ips.  
-   Time per pass is   88.00 minutes.
+   Disk used to record data.
 
    1st LO=   2400.00   2400.00   2400.00   2400.00   2400.00   2400.00   2400.00   2400.00
    Net SB=         U         U         U         U         U         U         U         U
@@ -107,8 +107,7 @@ SETUP FILE INFORMATION:
 
    Track assignments are: 
     track1=   2,  6, 10, 14, 18, 22, 26, 30
-    track2=   3,  7, 11, 15, 19, 23, 27, 31
-    barrel=roll_auto
+    barrel=roll_off 
  SOURCE LIST -- Experiment title (include project code)
      Catalog positions marked with *. 
      Precession of date coordinates is based on stop time of first scan.

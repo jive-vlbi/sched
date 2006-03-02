@@ -143,8 +143,8 @@ C                 Only do anything if the station is up.
 C
                   IF( UP1(JSCN,ISTA) .EQ. ' ' .AND. 
      1                UP2(JSCN,ISTA) .EQ. ' ' .AND.
-     2                EL1(JSCN,ISTA) .GT. OPMINEL .AND.
-     3                EL2(JSCN,ISTA) .GT. OPMINEL ) THEN
+     2                EL1(JSCN,ISTA) .GT. OPMINEL(JSCN) .AND.
+     3                EL2(JSCN,ISTA) .GT. OPMINEL(JSCN) ) THEN
                      OKSTA(JSCN,ISTA) = .TRUE.
                      GOTSTA(JSCN) = GOTSTA(JSCN) + 1
 C
@@ -202,7 +202,7 @@ C           Detect this by looking for long times to last hit in cells.
 C
 C           Be sure this source ok, and then get points.
 C
-            IF( GOTSTA(JSCN) .GE. OPMIAN ) THEN
+            IF( GOTSTA(JSCN) .GE. OPMIAN(JSCN) ) THEN
                DO ISTA = 1, NSTA
                   IF( OKSTA(JSCN,ISTA) ) THEN
 C
@@ -268,7 +268,7 @@ C     favor a scan.
 C
       TIME1 = 1.D10
       DO JSCN = 1, NSCANS
-         IF( GOTSTA(JSCN) .GE. OPMIAN ) THEN
+         IF( GOTSTA(JSCN) .GE. OPMIAN(JSCN) ) THEN
             TIME1 = MIN( TIME1, TIMESRC(JSCN) )
          END IF
       END DO
@@ -276,7 +276,7 @@ C
 C     Get the multiplier and adjust the points.
 C
       DO JSCN = 1, NSCANS
-         IF( GOTSTA(JSCN) .GE. OPMIAN ) THEN
+         IF( GOTSTA(JSCN) .GE. OPMIAN(JSCN) ) THEN
             SL_ADJ = 1440.D0 * ( TIMESRC(JSCN) - TIME1 )
             WT_MUL = OPTSLEW**2 / ( SL_ADJ**2 + OPTSLEW**2 )
             POINTS(JSCN) = POINTS(JSCN) * WT_MUL

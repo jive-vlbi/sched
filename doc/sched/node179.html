@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>TAPEINI</TITLE>
-<META NAME="description" CONTENT="TAPEINI">
+<TITLE>SOURCE</TITLE>
+<META NAME="description" CONTENT="SOURCE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,65 +29,109 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2717"
+<A NAME="tex2html2746"
   HREF="node180.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2713"
+<A NAME="tex2html2742"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2707"
+<A NAME="tex2html2736"
   HREF="node178.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2715"
+<A NAME="tex2html2744"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2718"
-  HREF="node180.html">TAPESYNC</A>
-<B> Up:</B> <A NAME="tex2html2714"
+<B> Next:</B> <A NAME="tex2html2747"
+  HREF="node180.html">SRCCAT</A>
+<B> Up:</B> <A NAME="tex2html2743"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2708"
-  HREF="node178.html">TAPEFILE</A>
- &nbsp <B>  <A NAME="tex2html2716"
+<B> Previous:</B> <A NAME="tex2html2737"
+  HREF="node178.html">SETUP</A>
+ &nbsp <B>  <A NAME="tex2html2745"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041212700000000000000"></A><A NAME="MP:TAPEINI"></A>
+<H3><A NAME="SECTION0041212700000000000000"></A><A NAME="MP:SOURCE"></A>
 <BR>
-<TT>TAPEINI</TT>
+<TT>SOURCE</TT>
 </H3>
 
 <P>
-<TT>TAPEINI</TT> is a flag to inform SCHED&nbsp; that the next group
-of input parameters will be tape initialization information,
-equivalent to one line from the <A HREF="node178.html#MP:TAPEFILE"><TT>TAPEFILE</TT></A>.
-See Section&nbsp;<A HREF="node198.html#SEC:TPINI">3.4</A> for content details.  Once the tape
-initialization parameters have been read, SCHED&nbsp; will return
-to reading the inputs for the current scan, usually the first.
+<TT>SOURCE</TT> is used to specify the source name.  It is required for
+the first scan and whenever there is a change. The name must match, in
+a case-insensitive sense, one of the names of a source in the source
+catalogs (recall that 5 different names or aliases are allowed for
+each source).
+
+<P>
+<TT>SOURCE</TT> may be the name of a Solar System object.  If so, if
+an <A HREF="node87.html#MP:EPHFILE"><TT>EPHFILE:</TT></A> has been specified, and if the
+object is not in the source catalog, SCHED&nbsp; will determine the position
+and planetary motion of the object using a JPL ephemeris.  This position
+is very good -- certainly good enough for use for pointing which
+is the primary use envisioned (note that much work would be required
+on the correlator to correlate planetary observations).  There is
+a similar capability for pointing at satellites using orbital
+elements in <A HREF="node174.html#MP:SATFILE"><TT>SATFILE:</TT></A>.
+
+<P>
+The Solar System objects that SCHED&nbsp; understands are Mercury, Venus,
+Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, and Sun.
+Topocentric positions and rates will be provided for VLBA antennas if
+one of these is specified.  Geocentric positions along with rates and
+horizontal parallax are provided for the PM cards for the VLA.  Note
+that SCHED&nbsp; does not understand how to specify moving objects to
+antennas that don't use the VLA or VLBA control file types.
+Specifically, solar system sources are not currently supported
+for VEX output files.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> None.
+<LI><B>Argument:</B> Text of up to 12 characters.
 </LI>
-<LI><B>Options:</B>  None.
+<LI><B>Options:</B>  Any source in the catalogs.
 </LI>
-<LI><B>Default:</B>  Not used.
+<LI><B>Default:</B>  None.
 </LI>
-<LI><B>Usage:</B>    Should not be used more than once.
+<LI><B>Usage:</B>    Defaults to previous scan.
 </LI>
-<LI><B>Example:</B>  <TT>TAPEINI /</TT>
+<LI><B>Example:</B>  <TT>SOURCE='3C120'</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2746"
+  HREF="node180.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2742"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2736"
+  HREF="node178.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2744"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2747"
+  HREF="node180.html">SRCCAT</A>
+<B> Up:</B> <A NAME="tex2html2743"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2737"
+  HREF="node178.html">SETUP</A>
+ &nbsp <B>  <A NAME="tex2html2745"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

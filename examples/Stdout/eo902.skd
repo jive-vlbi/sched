@@ -1,7 +1,7 @@
 VEX_rev = 1.5;
-*    SCHED vers: May 2005
-*    VEX/SCHED:  1.5.84
-*    Other versions: Sched:   6.0  Plot: 1.05  JPL-ephem: 1.01
+*    SCHED vers: February 2006
+*    VEX/SCHED:  1.5.86
+*    Other versions: Sched:   6.0  Plot: 1.06  JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
      ref $EXPER = EO902;
@@ -57,15 +57,14 @@ def eo999.18cm;
      ref $IF = LO@1510MHzDPolTone/1:Jb:Wb:Ef;
      ref $IF = LO@1500MHzDPolTone/1:On;
      ref $IF = LO@1295MHzDPolTone/1:Mc;
-     ref $IF = LO@2300MHzDPolTone/1:Tr;
-     ref $IF = LO@2200MHzDPolTone/1:Sh;
+     ref $IF = LO@2300MHzDPolTone/1:Tr:Sh;
      ref $IF = LO@1300MHzDPolTone/1:Ur;
      ref $BBC = 8BBCs:Jb:Wb:Ef:On:Mc:Ur;
      ref $BBC = 8BBCs#02:Tr:Sh;
      ref $TRACKS = MKIV.8Ch1bit1to4:Jb:Wb:Ef:On:Mc:Tr:Sh:Ur;
-     ref $HEAD_POS = Stnd14Pos:Jb:Wb:Ef:On:Mc:Tr:Sh:Ur;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
      ref $ROLL = NoRoll:Jb:Wb:Ef:On:Mc:Tr:Sh:Ur;
-     ref $PASS_ORDER = Stnd14x1passes:Jb:Wb:Ef:On:Mc:Tr:Sh:Ur;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
      ref $PHASE_CAL_DETECT = UsbDetect:Jb:Wb:Ef:On:Mc:Tr:Sh:Ur;
 enddef;
 *------------------------------------------------------------------------------
@@ -74,49 +73,49 @@ $STATION;
 def Jb;
      ref $SITE = JODRELL1;
      ref $ANTENNA = JODRELL1;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Wb;
      ref $SITE = WSTRBORK;
      ref $ANTENNA = WSTRBORK;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Ef;
      ref $SITE = EFLSBERG;
      ref $ANTENNA = EFLSBERG;
-     ref $DAS = 1MKIV+VLBA42h<Thin;
+     ref $DAS = 1MKIV+VLBA4<Mark5A;
 enddef;
 *
 def On;
      ref $SITE = ONSALA85;
      ref $ANTENNA = ONSALA85;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Mc;
      ref $SITE = MEDICINA;
      ref $ANTENNA = MEDICINA;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *
 def Tr;
      ref $SITE = TORUN;
      ref $ANTENNA = TORUN;
-     ref $DAS = 1VLBA42h<Thin;
+     ref $DAS = 1VLBA4<Mark5A;
 enddef;
 *
 def Sh;
      ref $SITE = SHANGHAI;
      ref $ANTENNA = SHANGHAI;
-     ref $DAS = 1VLBA42h<Thin;
+     ref $DAS = 1VLBA4<Mark5A;
 enddef;
 *
 def Ur;
      ref $SITE = URUMQI;
      ref $ANTENNA = URUMQI;
-     ref $DAS = 1MKIV2h<Thin;
+     ref $DAS = 1MKIV<Mark5A;
 enddef;
 *------------------------------------------------------------------------------
 $PROCEDURES;
@@ -252,15 +251,15 @@ enddef;
 *
 def TORUN;
      axis_type = az : el;
-     antenna_motion = el :  16.0 deg/min : 20 sec;  *    0.030 deg/sec/sec
-     antenna_motion = az :  30.0 deg/min : 20 sec;  *    0.050 deg/sec/sec
+     antenna_motion = el :  16.0 deg/min :  5 sec;  *    0.030 deg/sec/sec
+     antenna_motion = az :  30.0 deg/min :  5 sec;  *    0.050 deg/sec/sec
      axis_offset =     0.000 m;
 enddef;
 *
 def SHANGHAI;
      axis_type = az : el;
-     antenna_motion = el :  18.0 deg/min :  2 sec;  * 1000.000 deg/sec/sec
-     antenna_motion = az :  30.0 deg/min :  2 sec;  * 1000.000 deg/sec/sec
+     antenna_motion = el :  36.0 deg/min :  2 sec;  * 1000.000 deg/sec/sec
+     antenna_motion = az :  60.0 deg/min :  2 sec;  * 1000.000 deg/sec/sec
      axis_offset =     0.004 m;
 enddef;
 *
@@ -273,36 +272,30 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def 1MKIV2h<Thin;
-     record_transport_type = Mark4;
+def 1MKIV<Mark5A;
+     record_transport_type = Mark5A;
      electronics_rack_type = Mark4;
      number_drives = 1;
-     headstack = 1 : read/write : 0 ;
-     headstack = 2 : read/write : 0 ;
-     record_density = 56250 bpi;
-     tape_length = 17600 ft;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 0 ;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *
-def 1MKIV+VLBA42h<Thin;
-     record_transport_type = VLBA4;
+def 1MKIV+VLBA4<Mark5A;
+     record_transport_type = Mark5A;
      electronics_rack_type = Mark4;
      number_drives = 1;
-     headstack = 1 : read/write : 0 ;
-     headstack = 2 : read/write : 0 ;
-     record_density = 56250 bpi;
-     tape_length = 17600 ft;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 0 ;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *
-def 1VLBA42h<Thin;
-     record_transport_type = VLBA4;
+def 1VLBA4<Mark5A;
+     record_transport_type = Mark5A;
      electronics_rack_type = VLBA4;
      number_drives = 1;
-     headstack = 1 : read/write : 0 ;
-     headstack = 2 : read/write : 0 ;
-     record_density = 56250 bpi;
-     tape_length = 17600 ft;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 0 ;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *------------------------------------------------------------------------------
@@ -433,15 +426,9 @@ def LO@1295MHzDPolTone/1;
 enddef;
 *
 def LO@2300MHzDPolTone/1;
-* mode =  1    stations =Tr
+* mode =  1    stations =Tr:Sh
      if_def = &IF_C : C : R :  2300.0 MHz : L : 1 MHz ;
      if_def = &IF_A : A : L :  2300.0 MHz : L : 1 MHz ;
-enddef;
-*
-def LO@2200MHzDPolTone/1;
-* mode =  1    stations =Sh
-     if_def = &IF_C : C : R :  2200.0 MHz : L : 1 MHz ;
-     if_def = &IF_A : A : L :  2200.0 MHz : L : 1 MHz ;
 enddef;
 *
 def LO@1300MHzDPolTone/1;
@@ -488,44 +475,30 @@ $TRACKS;
 def MKIV.8Ch1bit1to4;
 * mode =  1    stations =Jb:Wb:Ef:On:Mc:Tr:Sh:Ur
 *    format = MKIV1:4, and fan-out = 4
-*    mode requires  4.00Mb/s/tr; tape speed low dens: 135ips, high dens:  80ips
+*    mode requires  4.00Mb/s/tr; stations using disks
      track_frame_format = Mark4;
      data_modulation = off;
-     fanout_def = A : &CH01 : sign : 1:  2:  4:  6:  8;
-     fanout_def = A : &CH02 : sign : 1: 10: 12: 14: 16;
-     fanout_def = A : &CH03 : sign : 1: 18: 20: 22: 24;
-     fanout_def = A : &CH04 : sign : 1: 26: 28: 30: 32;
-     fanout_def = A : &CH05 : sign : 1:  3:  5:  7:  9;
-     fanout_def = A : &CH06 : sign : 1: 11: 13: 15: 17;
-     fanout_def = A : &CH07 : sign : 1: 19: 21: 23: 25;
-     fanout_def = A : &CH08 : sign : 1: 27: 29: 31: 33;
+     fanout_def =   : &CH01 : sign : 1:  2:  4:  6:  8;
+     fanout_def =   : &CH02 : sign : 1: 10: 12: 14: 16;
+     fanout_def =   : &CH03 : sign : 1: 18: 20: 22: 24;
+     fanout_def =   : &CH04 : sign : 1: 26: 28: 30: 32;
+     fanout_def =   : &CH05 : sign : 1:  3:  5:  7:  9;
+     fanout_def =   : &CH06 : sign : 1: 11: 13: 15: 17;
+     fanout_def =   : &CH07 : sign : 1: 19: 21: 23: 25;
+     fanout_def =   : &CH08 : sign : 1: 27: 29: 31: 33;
 enddef;
 *------------------------------------------------------------------------------
 $HEAD_POS;
-*
-def Stnd14Pos;
+def DiskVoid;
 * mode =  1    stations =Jb:Wb:Ef:On:Mc:Tr:Sh:Ur
-     headstack_pos =  1 : -319 um;
-     headstack_pos =  2 :   31 um;
-     headstack_pos =  3 : -271 um;
-     headstack_pos =  4 :   79 um;
-     headstack_pos =  5 : -223 um;
-     headstack_pos =  6 :  127 um;
-     headstack_pos =  7 : -175 um;
-     headstack_pos =  8 :  175 um;
-     headstack_pos =  9 : -127 um;
-     headstack_pos = 10 :  223 um;
-     headstack_pos = 11 :  -79 um;
-     headstack_pos = 12 :  271 um;
-     headstack_pos = 13 :  -31 um;
-     headstack_pos = 14 :  319 um;
+*     Head positions irrelevant for Disk: empty def
 enddef;
 *------------------------------------------------------------------------------
 $PASS_ORDER;
 *
-def Stnd14x1passes;
+def DiskVoid;
 * mode =  1    stations =Jb:Wb:Ef:On:Mc:Tr:Sh:Ur
-     pass_order = 1A: 2A: 3A: 4A: 5A: 6A: 7A: 8A: 9A:10A:11A:12A:13A:14A;
+*     Pass orders irrelevant for Disk: empty def
 enddef;
 *------------------------------------------------------------------------------
 $ROLL;
@@ -542,1224 +515,1165 @@ $SCHED;
 scan No0001;
      start=2002y359d11h30m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Wb:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Ef:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
-     station=On:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Mc:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Tr:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Sh:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
-     station=Ur:    0 sec:  120 sec:     0 ft:  1A :       : 1; * F@00000
+     station=Jb:    0 sec:  120 sec:   0.000 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec:   0.000 GB:   :       : 1;
+     station=On:    0 sec:  120 sec:   0.000 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec:   0.000 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec:   0.000 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec:   0.000 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec:   0.000 GB:   :       : 1;
 endscan;
 scan No0002;
      start=2002y359d11h32m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   31 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
-     station=Wb:   10 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
-     station=Ef:   32 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
-     station=On:   15 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
-     station=Mc:   10 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
-     station=Tr:   39 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
-     station=Sh:   52 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
-     station=Ur:   13 sec:  540 sec:   800 ft:  1A :       : 1; * F@00800
+     station=Jb:   31 sec:  540 sec:   1.935 GB:   :       : 1;
+     station=Ef:   32 sec:  540 sec:   1.935 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:   1.935 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:   1.935 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:   1.935 GB:   :       : 1;
+     station=Sh:   27 sec:  540 sec:   1.935 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:   1.935 GB:   :       : 1;
 endscan;
 scan No0003;
      start=2002y359d11h41m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   31 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
-     station=Wb:   10 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
-     station=Ef:   32 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
-     station=Mc:   10 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
-     station=Tr:   39 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
-     station=Sh:   65 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
-     station=Ur:   13 sec:  120 sec:  4400 ft:  1A :       : 1; * F@04400
+     station=Jb:   31 sec:  120 sec:  10.644 GB:   :       : 1;
+     station=Ef:   32 sec:  120 sec:  10.644 GB:   :       : 1;
+     station=On:   15 sec:  120 sec:  10.644 GB:   :       : 1;
+     station=Mc:   10 sec:  120 sec:  10.644 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  10.644 GB:   :       : 1;
+     station=Sh:   34 sec:  120 sec:  10.644 GB:   :       : 1;
+     station=Ur:   13 sec:  120 sec:  10.644 GB:   :       : 1;
 endscan;
 scan No0004;
      start=2002y359d11h43m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   31 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
-     station=Wb:   10 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
-     station=Ef:   32 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
-     station=On:   15 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
-     station=Mc:   10 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
-     station=Tr:   39 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
-     station=Sh:   67 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
-     station=Ur:   13 sec:  540 sec:  5200 ft:  1A :       : 1; * F@05200
+     station=Jb:   31 sec:  540 sec:  12.580 GB:   :       : 1;
+     station=Ef:   32 sec:  540 sec:  12.580 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  12.580 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:  12.580 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  12.580 GB:   :       : 1;
+     station=Sh:   35 sec:  540 sec:  12.580 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  12.580 GB:   :       : 1;
 endscan;
 scan No0005;
      start=2002y359d11h53m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Sh:   15 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  1A :       : 1; * F@08800
+     station=Jb:    0 sec:  120 sec:  21.289 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec:  21.289 GB:   :       : 1;
+     station=On:    0 sec:  120 sec:  21.289 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec:  21.289 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec:  21.289 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec:  21.289 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec:  21.289 GB:   :       : 1;
 endscan;
 scan No0006;
      start=2002y359d11h55m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   32 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
-     station=Wb:   10 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
-     station=Ef:   32 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
-     station=On:   15 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
-     station=Mc:   10 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
-     station=Tr:   39 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
-     station=Sh:   69 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
-     station=Ur:   13 sec:  540 sec:  9600 ft:  1A :       : 1; * F@09600
+     station=Jb:   32 sec:  540 sec:  23.224 GB:   :       : 1;
+     station=Ef:   32 sec:  540 sec:  23.224 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  23.224 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:  23.224 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  23.224 GB:   :       : 1;
+     station=Sh:   36 sec:  540 sec:  23.224 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  23.224 GB:   :       : 1;
 endscan;
 scan No0007;
      start=2002y359d12h04m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   32 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
-     station=Wb:   10 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
-     station=Ef:   32 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
-     station=Mc:   10 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
-     station=Tr:   39 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
-     station=Sh:   55 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
-     station=Ur:   13 sec:  120 sec: 13200 ft:  1A :       : 1; * F@13200
+     station=Jb:   32 sec:  120 sec:  31.933 GB:   :       : 1;
+     station=Ef:   32 sec:  120 sec:  31.933 GB:   :       : 1;
+     station=On:   15 sec:  120 sec:  31.933 GB:   :       : 1;
+     station=Mc:   10 sec:  120 sec:  31.933 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  31.933 GB:   :       : 1;
+     station=Sh:   28 sec:  120 sec:  31.933 GB:   :       : 1;
+     station=Ur:   13 sec:  120 sec:  31.933 GB:   :       : 1;
 endscan;
 scan No0008;
      start=2002y359d12h06m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   32 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
-     station=Wb:   10 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
-     station=Ef:   32 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
-     station=On:   15 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
-     station=Mc:   10 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
-     station=Tr:   39 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
-     station=Sh:   51 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
-     station=Ur:   13 sec:  540 sec: 14000 ft:  1A :       : 1; * F@14000
+     station=Jb:   32 sec:  540 sec:  33.869 GB:   :       : 1;
+     station=Ef:   32 sec:  540 sec:  33.869 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  33.869 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:  33.869 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  33.869 GB:   :       : 1;
+     station=Sh:   26 sec:  540 sec:  33.869 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  33.869 GB:   :       : 1;
 endscan;
 scan No0009;
      start=2002y359d12h16m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Wb:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Ef:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=On:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Mc:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Tr:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Sh:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
-     station=Ur:    0 sec:  120 sec: 17600 ft:  2A :       : 1; * R@17600
+     station=Jb:    0 sec:  120 sec:  42.578 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec:  42.578 GB:   :       : 1;
+     station=On:    0 sec:  120 sec:  42.578 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec:  42.578 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec:  42.578 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec:  42.578 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec:  42.578 GB:   :       : 1;
 endscan;
 scan No0010;
      start=2002y359d12h18m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   32 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
-     station=Wb:   10 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
-     station=Ef:   32 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
-     station=On:   15 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
-     station=Mc:   11 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
-     station=Tr:   39 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
-     station=Sh:   28 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
-     station=Ur:   13 sec:  540 sec: 16800 ft:  2A :       : 1; * R@16800
+     station=Jb:   32 sec:  540 sec:  44.513 GB:   :       : 1;
+     station=Ef:   32 sec:  540 sec:  44.513 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  44.513 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  44.513 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  44.513 GB:   :       : 1;
+     station=Sh:   15 sec:  540 sec:  44.513 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  44.513 GB:   :       : 1;
 endscan;
 scan No0011;
      start=2002y359d12h27m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   33 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
-     station=Wb:   10 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
-     station=Ef:   33 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
-     station=Mc:   11 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
-     station=Tr:   39 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
-     station=Sh:   17 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
-     station=Ur:   13 sec:  120 sec: 13200 ft:  2A :       : 1; * R@13200
+     station=Jb:   33 sec:  120 sec:  53.222 GB:   :       : 1;
+     station=Ef:   33 sec:  120 sec:  53.222 GB:   :       : 1;
+     station=On:   15 sec:  120 sec:  53.222 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  53.222 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  53.222 GB:   :       : 1;
+     station=Sh:    9 sec:  120 sec:  53.222 GB:   :       : 1;
+     station=Ur:   13 sec:  120 sec:  53.222 GB:   :       : 1;
 endscan;
 scan No0012;
      start=2002y359d12h29m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   33 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
-     station=Wb:   10 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
-     station=Ef:   33 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
-     station=On:   15 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
-     station=Mc:   11 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
-     station=Tr:   40 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
-     station=Sh:   15 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
-     station=Ur:   13 sec:  540 sec: 12400 ft:  2A :       : 1; * R@12400
+     station=Jb:   33 sec:  540 sec:  55.158 GB:   :       : 1;
+     station=Ef:   33 sec:  540 sec:  55.158 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  55.158 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  55.158 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  55.158 GB:   :       : 1;
+     station=Sh:    9 sec:  540 sec:  55.158 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  55.158 GB:   :       : 1;
 endscan;
 scan No0013;
      start=2002y359d12h40m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  2A :       : 1; * R@08800
+     station=Jb:    0 sec:  120 sec:  63.867 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec:  63.867 GB:   :       : 1;
+     station=On:    0 sec:  120 sec:  63.867 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec:  63.867 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec:  63.867 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec:  63.867 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec:  63.867 GB:   :       : 1;
 endscan;
 scan No0014;
      start=2002y359d12h42m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   33 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
-     station=Wb:   10 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
-     station=Ef:   33 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
-     station=On:   15 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
-     station=Mc:   11 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
-     station=Tr:   40 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
-     station=Sh:   13 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
-     station=Ur:   13 sec:  540 sec:  8000 ft:  2A :       : 1; * R@08000
+     station=Jb:   33 sec:  540 sec:  65.802 GB:   :       : 1;
+     station=Ef:   33 sec:  540 sec:  65.802 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  65.802 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  65.802 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  65.802 GB:   :       : 1;
+     station=Sh:    8 sec:  540 sec:  65.802 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  65.802 GB:   :       : 1;
 endscan;
 scan No0015;
      start=2002y359d12h51m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   33 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
-     station=Wb:   10 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
-     station=Ef:   33 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
-     station=Tr:   40 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
-     station=Sh:   13 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
-     station=Ur:   13 sec:  120 sec:  4400 ft:  2A :       : 1; * R@04400
+     station=Jb:   33 sec:  120 sec:  74.511 GB:   :       : 1;
+     station=Ef:   33 sec:  120 sec:  74.511 GB:   :       : 1;
+     station=On:   15 sec:  120 sec:  74.511 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  74.511 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  74.511 GB:   :       : 1;
+     station=Sh:    8 sec:  120 sec:  74.511 GB:   :       : 1;
+     station=Ur:   13 sec:  120 sec:  74.511 GB:   :       : 1;
 endscan;
 scan No0016;
      start=2002y359d12h53m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   33 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
-     station=Wb:   10 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
-     station=Ef:   33 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
-     station=On:   15 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
-     station=Mc:   11 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
-     station=Tr:   40 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
-     station=Sh:   13 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
-     station=Ur:   13 sec:  540 sec:  3600 ft:  2A :       : 1; * R@03600
+     station=Jb:   33 sec:  540 sec:  76.447 GB:   :       : 1;
+     station=Ef:   33 sec:  540 sec:  76.447 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  76.447 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  76.447 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  76.447 GB:   :       : 1;
+     station=Sh:    8 sec:  540 sec:  76.447 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  76.447 GB:   :       : 1;
 endscan;
 scan No0017;
      start=2002y359d13h03m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Wb:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Ef:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
-     station=On:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Mc:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Tr:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Sh:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
-     station=Ur:    0 sec:  120 sec:     0 ft:  3A :       : 1; * F@00000
+     station=Jb:    0 sec:  120 sec:  85.156 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec:  85.156 GB:   :       : 1;
+     station=On:    0 sec:  120 sec:  85.156 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec:  85.156 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec:  85.156 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec:  85.156 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec:  85.156 GB:   :       : 1;
 endscan;
 scan No0018;
      start=2002y359d13h05m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   33 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
-     station=Wb:   10 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
-     station=Ef:   33 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
-     station=On:   15 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
-     station=Mc:   11 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
-     station=Tr:   40 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
-     station=Sh:   13 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
-     station=Ur:   13 sec:  540 sec:   800 ft:  3A :       : 1; * F@00800
+     station=Jb:   33 sec:  540 sec:  87.091 GB:   :       : 1;
+     station=Ef:   33 sec:  540 sec:  87.091 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  87.091 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  87.091 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  87.091 GB:   :       : 1;
+     station=Sh:    8 sec:  540 sec:  87.091 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec:  87.091 GB:   :       : 1;
 endscan;
 scan No0019;
      start=2002y359d13h14m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   34 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
-     station=Wb:   10 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
-     station=Ef:   33 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
-     station=Tr:   40 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
-     station=Sh:   13 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
-     station=Ur:   14 sec:  120 sec:  4400 ft:  3A :       : 1; * F@04400
+     station=Jb:   34 sec:  120 sec:  95.800 GB:   :       : 1;
+     station=Ef:   33 sec:  120 sec:  95.800 GB:   :       : 1;
+     station=On:   15 sec:  120 sec:  95.800 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  95.800 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  95.800 GB:   :       : 1;
+     station=Sh:    8 sec:  120 sec:  95.800 GB:   :       : 1;
+     station=Ur:   14 sec:  120 sec:  95.800 GB:   :       : 1;
 endscan;
 scan No0020;
      start=2002y359d13h16m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   34 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
-     station=Wb:   10 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
-     station=Ef:   33 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
-     station=On:   15 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
-     station=Mc:   11 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
-     station=Tr:   40 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
-     station=Sh:   13 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
-     station=Ur:   15 sec:  540 sec:  5200 ft:  3A :       : 1; * F@05200
+     station=Jb:   34 sec:  540 sec:  97.736 GB:   :       : 1;
+     station=Ef:   33 sec:  540 sec:  97.736 GB:   :       : 1;
+     station=On:   15 sec:  540 sec:  97.736 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  97.736 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  97.736 GB:   :       : 1;
+     station=Sh:    8 sec:  540 sec:  97.736 GB:   :       : 1;
+     station=Ur:   15 sec:  540 sec:  97.736 GB:   :       : 1;
 endscan;
 scan No0021;
      start=2002y359d13h26m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Wb:  120 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  3A :       : 1; * F@08800
+     station=Jb:    0 sec:  120 sec: 106.445 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec:   0.000 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 106.445 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 106.445 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 106.445 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 106.445 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 106.445 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 106.445 GB:   :       : 1;
 endscan;
 scan No0022;
      start=2002y359d13h28m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   34 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
-     station=Wb:  190 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
-     station=Ef:   33 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
-     station=On:   15 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
-     station=Mc:   11 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
-     station=Tr:   40 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
-     station=Sh:   13 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
-     station=Ur:   21 sec:  540 sec:  9600 ft:  3A :       : 1; * F@09600
+     station=Jb:   34 sec:  540 sec: 108.380 GB:   :       : 1;
+     station=Ef:   33 sec:  540 sec: 108.380 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 108.380 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 108.380 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 108.380 GB:   :       : 1;
+     station=Sh:    8 sec:  540 sec: 108.380 GB:   :       : 1;
+     station=Ur:   21 sec:  540 sec: 108.380 GB:   :       : 1;
 endscan;
 scan No0023;
      start=2002y359d13h37m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   34 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
-     station=Wb:  120 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
-     station=Ef:   33 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
-     station=Mc:   11 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
-     station=Tr:   40 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
-     station=Sh:   13 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
-     station=Ur:   27 sec:  120 sec: 13200 ft:  3A :       : 1; * F@13200
+     station=Jb:   34 sec:  120 sec: 117.089 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec:   1.935 GB:   :       : 1;
+     station=Ef:   33 sec:  120 sec: 117.089 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 117.089 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 117.089 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 117.089 GB:   :       : 1;
+     station=Sh:    8 sec:  120 sec: 117.089 GB:   :       : 1;
+     station=Ur:   27 sec:  120 sec: 117.089 GB:   :       : 1;
 endscan;
 scan No0024;
      start=2002y359d13h39m00s; mode=eo999.18cm; source=3C84;
-     station=Jb:   82 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
-     station=Wb:  190 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
-     station=Ef:   71 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
-     station=On:   64 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
-     station=Mc:   23 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
-     station=Tr:   63 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
-     station=Sh:   70 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
-     station=Ur:  118 sec:  540 sec: 14000 ft:  3A :       : 1; * F@14000
+     station=Jb:   82 sec:  540 sec: 119.025 GB:   :       : 1;
+     station=Ef:   71 sec:  540 sec: 119.025 GB:   :       : 1;
+     station=On:   64 sec:  540 sec: 119.025 GB:   :       : 1;
+     station=Mc:   23 sec:  540 sec: 119.025 GB:   :       : 1;
+     station=Tr:   48 sec:  540 sec: 119.025 GB:   :       : 1;
+     station=Sh:   36 sec:  540 sec: 119.025 GB:   :       : 1;
+     station=Ur:  118 sec:  540 sec: 119.025 GB:   :       : 1;
 endscan;
 scan No0025;
      start=2002y359d13h49m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   22 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Wb:  120 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Ef:   12 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=On:    5 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Mc:    0 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Tr:    3 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Sh:    1 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
-     station=Ur:   84 sec:  120 sec: 17600 ft:  4A :       : 1; * R@17600
+     station=Jb:   22 sec:  120 sec: 127.734 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec:   3.871 GB:   :       : 1;
+     station=Ef:   12 sec:  120 sec: 127.734 GB:   :       : 1;
+     station=On:    5 sec:  120 sec: 127.734 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 127.734 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 127.734 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 127.734 GB:   :       : 1;
+     station=Ur:   84 sec:  120 sec: 127.734 GB:   :       : 1;
 endscan;
 scan No0026;
      start=2002y359d13h51m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   34 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
-     station=Wb:   26 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
-     station=Ef:   33 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
-     station=On:   15 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
-     station=Mc:   11 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
-     station=Tr:   40 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
-     station=Sh:   13 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
-     station=Ur:   40 sec:  540 sec: 16800 ft:  4A :       : 1; * R@16800
+     station=Jb:   34 sec:  540 sec: 129.669 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   5.806 GB:   :       : 1;
+     station=Ef:   33 sec:  540 sec: 129.669 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 129.669 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 129.669 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 129.669 GB:   :       : 1;
+     station=Sh:    8 sec:  540 sec: 129.669 GB:   :       : 1;
+     station=Ur:   40 sec:  540 sec: 129.669 GB:   :       : 1;
 endscan;
 scan No0027;
      start=2002y359d14h00m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   34 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
-     station=Ef:   34 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
-     station=Mc:   11 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
-     station=Tr:   40 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
-     station=Sh:   13 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
-     station=Ur:   49 sec:  120 sec: 13200 ft:  4A :       : 1; * R@13200
+     station=Jb:   34 sec:  120 sec: 138.378 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  14.515 GB:   :       : 1;
+     station=Ef:   34 sec:  120 sec: 138.378 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 138.378 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 138.378 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 138.378 GB:   :       : 1;
+     station=Sh:    7 sec:  120 sec: 138.378 GB:   :       : 1;
+     station=Ur:   49 sec:  120 sec: 138.378 GB:   :       : 1;
 endscan;
 scan No0028;
      start=2002y359d14h02m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   34 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
-     station=Wb:   26 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
-     station=Ef:   34 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
-     station=On:   15 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
-     station=Mc:   11 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
-     station=Tr:   40 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
-     station=Sh:   13 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
-     station=Ur:   51 sec:  540 sec: 12400 ft:  4A :       : 1; * R@12400
+     station=Jb:   34 sec:  540 sec: 140.314 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  16.451 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 140.314 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 140.314 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 140.314 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 140.314 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 140.314 GB:   :       : 1;
+     station=Ur:   51 sec:  540 sec: 140.314 GB:   :       : 1;
 endscan;
 scan No0029;
      start=2002y359d14h13m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  4A :       : 1; * R@08800
+     station=Jb:    0 sec:  120 sec: 149.023 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec:  25.160 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 149.023 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 149.023 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 149.023 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 149.023 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 149.023 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 149.023 GB:   :       : 1;
 endscan;
 scan No0030;
      start=2002y359d14h15m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
-     station=Wb:   26 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
-     station=Ef:   34 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
-     station=On:   15 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
-     station=Mc:   11 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
-     station=Tr:   40 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
-     station=Sh:   13 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
-     station=Ur:   55 sec:  540 sec:  8000 ft:  4A :       : 1; * R@08000
+     station=Jb:   35 sec:  540 sec: 150.958 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  27.095 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 150.958 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 150.958 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 150.958 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 150.958 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 150.958 GB:   :       : 1;
+     station=Ur:   55 sec:  540 sec: 150.958 GB:   :       : 1;
 endscan;
 scan No0031;
      start=2002y359d14h24m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   35 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
-     station=Ef:   34 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
-     station=Tr:   40 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
-     station=Sh:   13 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
-     station=Ur:   52 sec:  120 sec:  4400 ft:  4A :       : 1; * R@04400
+     station=Jb:   35 sec:  120 sec: 159.667 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  35.804 GB:   :       : 1;
+     station=Ef:   34 sec:  120 sec: 159.667 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 159.667 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 159.667 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 159.667 GB:   :       : 1;
+     station=Sh:    7 sec:  120 sec: 159.667 GB:   :       : 1;
+     station=Ur:   52 sec:  120 sec: 159.667 GB:   :       : 1;
 endscan;
 scan No0032;
      start=2002y359d14h26m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
-     station=Wb:   26 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
-     station=Ef:   34 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
-     station=On:   15 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
-     station=Mc:   11 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
-     station=Tr:   40 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
-     station=Sh:   13 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
-     station=Ur:   51 sec:  540 sec:  3600 ft:  4A :       : 1; * R@03600
+     station=Jb:   35 sec:  540 sec: 161.603 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  37.740 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 161.603 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 161.603 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 161.603 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 161.603 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 161.603 GB:   :       : 1;
+     station=Ur:   51 sec:  540 sec: 161.603 GB:   :       : 1;
 endscan;
 scan No0033;
      start=2002y359d14h36m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Wb:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Ef:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
-     station=On:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Mc:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Tr:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Sh:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
-     station=Ur:    0 sec:  120 sec:     0 ft:  5A :       : 1; * F@00000
+     station=Jb:    0 sec:  120 sec: 170.312 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec:  46.449 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 170.312 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 170.312 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 170.312 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 170.312 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 170.312 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 170.312 GB:   :       : 1;
 endscan;
 scan No0034;
      start=2002y359d14h38m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
-     station=Wb:   26 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
-     station=Ef:   34 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
-     station=On:   15 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
-     station=Mc:   11 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
-     station=Tr:   40 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
-     station=Sh:   13 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
-     station=Ur:   42 sec:  540 sec:   800 ft:  5A :       : 1; * F@00800
+     station=Jb:   35 sec:  540 sec: 172.247 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  48.384 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 172.247 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 172.247 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 172.247 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 172.247 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 172.247 GB:   :       : 1;
+     station=Ur:   42 sec:  540 sec: 172.247 GB:   :       : 1;
 endscan;
 scan No0035;
      start=2002y359d14h47m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   35 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
-     station=Ef:   34 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
-     station=Tr:   40 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
-     station=Sh:   13 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
-     station=Ur:   36 sec:  120 sec:  4400 ft:  5A :       : 1; * F@04400
+     station=Jb:   35 sec:  120 sec: 180.956 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  57.093 GB:   :       : 1;
+     station=Ef:   34 sec:  120 sec: 180.956 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 180.956 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 180.956 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 180.956 GB:   :       : 1;
+     station=Sh:    7 sec:  120 sec: 180.956 GB:   :       : 1;
+     station=Ur:   36 sec:  120 sec: 180.956 GB:   :       : 1;
 endscan;
 scan No0036;
      start=2002y359d14h49m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
-     station=Wb:   26 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
-     station=Ef:   34 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
-     station=On:   15 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
-     station=Mc:   11 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
-     station=Tr:   40 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
-     station=Sh:   13 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
-     station=Ur:   34 sec:  540 sec:  5200 ft:  5A :       : 1; * F@05200
+     station=Jb:   35 sec:  540 sec: 182.892 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  59.028 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 182.892 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 182.892 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 182.892 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 182.892 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 182.892 GB:   :       : 1;
+     station=Ur:   34 sec:  540 sec: 182.892 GB:   :       : 1;
 endscan;
 scan No0037;
      start=2002y359d14h59m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  5A :       : 1; * F@08800
+     station=Jb:    0 sec:  120 sec: 191.601 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec:  67.738 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 191.601 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 191.601 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 191.601 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 191.601 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 191.601 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 191.601 GB:   :       : 1;
 endscan;
 scan No0038;
      start=2002y359d15h01m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
-     station=Wb:   26 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
-     station=Ef:   34 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
-     station=On:   15 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
-     station=Mc:   11 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
-     station=Tr:   40 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
-     station=Sh:   12 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
-     station=Ur:   28 sec:  540 sec:  9600 ft:  5A :       : 1; * F@09600
+     station=Jb:   35 sec:  540 sec: 193.536 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  69.673 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 193.536 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 193.536 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 193.536 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 193.536 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 193.536 GB:   :       : 1;
+     station=Ur:   28 sec:  540 sec: 193.536 GB:   :       : 1;
 endscan;
 scan No0039;
      start=2002y359d15h10m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   35 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
-     station=Ef:   34 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
-     station=Mc:   11 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
-     station=Tr:   40 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
-     station=Sh:   12 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
-     station=Ur:   24 sec:  120 sec: 13200 ft:  5A :       : 1; * F@13200
+     station=Jb:   35 sec:  120 sec: 202.245 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  78.382 GB:   :       : 1;
+     station=Ef:   34 sec:  120 sec: 202.245 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 202.245 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 202.245 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 202.245 GB:   :       : 1;
+     station=Sh:    7 sec:  120 sec: 202.245 GB:   :       : 1;
+     station=Ur:   24 sec:  120 sec: 202.245 GB:   :       : 1;
 endscan;
 scan No0040;
      start=2002y359d15h12m00s; mode=eo999.18cm; source=3C84;
-     station=Jb:   86 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
-     station=Wb:   75 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
-     station=Ef:   75 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
-     station=On:   64 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
-     station=Mc:   25 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
-     station=Tr:   68 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
-     station=Sh:   50 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
-     station=Ur:  179 sec:  540 sec: 14000 ft:  5A :       : 1; * F@14000
+     station=Jb:   86 sec:  540 sec: 204.181 GB:   :       : 1;
+     station=Wb:   75 sec:  540 sec:  80.317 GB:   :       : 1;
+     station=Ef:   75 sec:  540 sec: 204.181 GB:   :       : 1;
+     station=On:   64 sec:  540 sec: 204.181 GB:   :       : 1;
+     station=Mc:   25 sec:  540 sec: 204.181 GB:   :       : 1;
+     station=Tr:   53 sec:  540 sec: 204.181 GB:   :       : 1;
+     station=Sh:   26 sec:  540 sec: 204.181 GB:   :       : 1;
+     station=Ur:  179 sec:  540 sec: 204.181 GB:   :       : 1;
 endscan;
 scan No0041;
      start=2002y359d15h23m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Wb:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Ef:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=On:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Mc:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Tr:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Sh:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
-     station=Ur:    0 sec:  120 sec: 17600 ft:  6A :       : 1; * R@17600
+     station=Jb:    0 sec:  120 sec: 212.890 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec:  89.027 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 212.890 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 212.890 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 212.890 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 212.890 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 212.890 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 212.890 GB:   :       : 1;
 endscan;
 scan No0042;
      start=2002y359d15h25m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
-     station=Wb:   26 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
-     station=Ef:   34 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
-     station=On:   15 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
-     station=Mc:   11 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
-     station=Tr:   40 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
-     station=Sh:   12 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
-     station=Ur:   20 sec:  540 sec: 16800 ft:  6A :       : 1; * R@16800
+     station=Jb:   35 sec:  540 sec: 214.825 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  90.962 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 214.825 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 214.825 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 214.825 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 214.825 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 214.825 GB:   :       : 1;
+     station=Ur:   20 sec:  540 sec: 214.825 GB:   :       : 1;
 endscan;
 scan No0043;
      start=2002y359d15h34m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   35 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
-     station=Ef:   34 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
-     station=Mc:   11 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
-     station=Tr:   40 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
-     station=Sh:   12 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
-     station=Ur:   18 sec:  120 sec: 13200 ft:  6A :       : 1; * R@13200
+     station=Jb:   35 sec:  120 sec: 223.534 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  99.671 GB:   :       : 1;
+     station=Ef:   34 sec:  120 sec: 223.534 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 223.534 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 223.534 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 223.534 GB:   :       : 1;
+     station=Sh:    7 sec:  120 sec: 223.534 GB:   :       : 1;
+     station=Ur:   18 sec:  120 sec: 223.534 GB:   :       : 1;
 endscan;
 scan No0044;
      start=2002y359d15h36m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
-     station=Wb:   26 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
-     station=Ef:   34 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
-     station=On:   15 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
-     station=Mc:   11 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
-     station=Tr:   40 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
-     station=Sh:   12 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
-     station=Ur:   17 sec:  540 sec: 12400 ft:  6A :       : 1; * R@12400
+     station=Jb:   35 sec:  540 sec: 225.470 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 101.606 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 225.470 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 225.470 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 225.470 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 225.470 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 225.470 GB:   :       : 1;
+     station=Ur:   17 sec:  540 sec: 225.470 GB:   :       : 1;
 endscan;
 scan No0045;
      start=2002y359d15h46m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  6A :       : 1; * R@08800
+     station=Jb:    0 sec:  120 sec: 234.179 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 110.316 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 234.179 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 234.179 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 234.179 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 234.179 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 234.179 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 234.179 GB:   :       : 1;
 endscan;
 scan No0046;
      start=2002y359d15h48m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
-     station=Wb:   26 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
-     station=Ef:   34 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
-     station=On:   15 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
-     station=Mc:   11 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
-     station=Tr:   40 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
-     station=Sh:   12 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
-     station=Ur:   15 sec:  540 sec:  8000 ft:  6A :       : 1; * R@08000
+     station=Jb:   35 sec:  540 sec: 236.114 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 112.251 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 236.114 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 236.114 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 236.114 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 236.114 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 236.114 GB:   :       : 1;
+     station=Ur:   15 sec:  540 sec: 236.114 GB:   :       : 1;
 endscan;
 scan No0047;
      start=2002y359d15h57m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   35 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
-     station=Ef:   34 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
-     station=Tr:   40 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
-     station=Sh:   12 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
-     station=Ur:   14 sec:  120 sec:  4400 ft:  6A :       : 1; * R@04400
+     station=Jb:   35 sec:  120 sec: 244.823 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 120.960 GB:   :       : 1;
+     station=Ef:   34 sec:  120 sec: 244.823 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 244.823 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 244.823 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 244.823 GB:   :       : 1;
+     station=Sh:    7 sec:  120 sec: 244.823 GB:   :       : 1;
+     station=Ur:   14 sec:  120 sec: 244.823 GB:   :       : 1;
 endscan;
 scan No0048;
      start=2002y359d15h59m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
-     station=Wb:   26 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
-     station=Ef:   34 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
-     station=On:   15 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
-     station=Mc:   11 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
-     station=Tr:   40 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
-     station=Sh:   12 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
-     station=Ur:   14 sec:  540 sec:  3600 ft:  6A :       : 1; * R@03600
+     station=Jb:   35 sec:  540 sec: 246.758 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 122.895 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 246.758 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 246.758 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 246.758 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 246.758 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 246.758 GB:   :       : 1;
+     station=Ur:   14 sec:  540 sec: 246.758 GB:   :       : 1;
 endscan;
 scan No0049;
      start=2002y359d16h09m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
-     station=Wb:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
-     station=Ef:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
-     station=On:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
-     station=Mc:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
-     station=Tr:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
-     station=Sh:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
-     station=Ur:    0 sec:  120 sec:     0 ft:  7A :       : 1; * F@00000
+     station=Jb:    0 sec:  120 sec: 255.468 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 131.605 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 255.468 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 255.468 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 255.468 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 255.468 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 255.468 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 255.468 GB:   :       : 1;
 endscan;
 scan No0050;
      start=2002y359d16h11m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
-     station=Wb:   26 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
-     station=Ef:   34 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
-     station=On:   15 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
-     station=Mc:   11 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
-     station=Tr:   40 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
-     station=Sh:   12 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
-     station=Ur:   13 sec:  540 sec:   800 ft:  7A :       : 1; * F@00800
+     station=Jb:   35 sec:  540 sec: 257.403 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 133.540 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 257.403 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 257.403 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 257.403 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 257.403 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 257.403 GB:   :       : 1;
+     station=Ur:   13 sec:  540 sec: 257.403 GB:   :       : 1;
 endscan;
 scan No0051;
      start=2002y359d16h20m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   35 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
-     station=Ef:   34 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
-     station=Tr:   40 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
-     station=Sh:   12 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
-     station=Ur:   12 sec:  120 sec:  4400 ft:  7A :       : 1; * F@04400
+     station=Jb:   35 sec:  120 sec: 266.112 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 142.249 GB:   :       : 1;
+     station=Ef:   34 sec:  120 sec: 266.112 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 266.112 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 266.112 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 266.112 GB:   :       : 1;
+     station=Sh:    7 sec:  120 sec: 266.112 GB:   :       : 1;
+     station=Ur:   12 sec:  120 sec: 266.112 GB:   :       : 1;
 endscan;
 scan No0052;
      start=2002y359d16h22m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
-     station=Wb:   26 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
-     station=Ef:   34 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
-     station=On:   15 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
-     station=Mc:   11 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
-     station=Tr:   40 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
-     station=Sh:   12 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
-     station=Ur:   12 sec:  540 sec:  5200 ft:  7A :       : 1; * F@05200
+     station=Jb:   35 sec:  540 sec: 268.047 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 144.184 GB:   :       : 1;
+     station=Ef:   34 sec:  540 sec: 268.047 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 268.047 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 268.047 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 268.047 GB:   :       : 1;
+     station=Sh:    7 sec:  540 sec: 268.047 GB:   :       : 1;
+     station=Ur:   12 sec:  540 sec: 268.047 GB:   :       : 1;
 endscan;
 scan No0053;
      start=2002y359d16h32m00s; mode=eo999.18cm; source=0234+285;
-     station=Jb:    2 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
-     station=Wb:    0 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
-     station=Ef:    0 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
-     station=On:    0 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
-     station=Mc:    0 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
-     station=Tr:    0 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
-     station=Sh:    0 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
-     station=Ur:    0 sec:  660 sec:  8800 ft:  7A :       : 1; * F@08800
+     station=Jb:    2 sec:  660 sec: 276.757 GB:   :       : 1;
+     station=Wb:    0 sec:  660 sec: 152.893 GB:   :       : 1;
+     station=Ef:    0 sec:  660 sec: 276.757 GB:   :       : 1;
+     station=On:    0 sec:  660 sec: 276.757 GB:   :       : 1;
+     station=Mc:    0 sec:  660 sec: 276.757 GB:   :       : 1;
+     station=Tr:    0 sec:  660 sec: 276.757 GB:   :       : 1;
+     station=Sh:    0 sec:  660 sec: 276.757 GB:   :       : 1;
+     station=Ur:    0 sec:  660 sec: 276.757 GB:   :       : 1;
 endscan;
 scan No0054;
      start=2002y359d16h44m00s; mode=eo999.18cm; source=J0205+3212;
-     station=Jb:    2 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
-     station=Wb:    0 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
-     station=Ef:    0 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
-     station=On:    0 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
-     station=Mc:    0 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
-     station=Tr:    0 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
-     station=Sh:    0 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
-     station=Ur:    0 sec:  360 sec: 13200 ft:  7A :       : 1; * F@13200
+     station=Jb:    2 sec:  360 sec: 287.401 GB:   :       : 1;
+     station=Wb:    0 sec:  360 sec: 163.538 GB:   :       : 1;
+     station=Ef:    0 sec:  360 sec: 287.401 GB:   :       : 1;
+     station=On:    0 sec:  360 sec: 287.401 GB:   :       : 1;
+     station=Mc:    0 sec:  360 sec: 287.401 GB:   :       : 1;
+     station=Tr:    0 sec:  360 sec: 287.401 GB:   :       : 1;
+     station=Sh:    0 sec:  360 sec: 287.401 GB:   :       : 1;
+     station=Ur:    0 sec:  360 sec: 287.401 GB:   :       : 1;
 endscan;
 scan No0055;
      start=2002y359d17h00m00s; mode=eo999.18cm; source=J0521+16;
-     station=Jb:    0 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
-     station=Wb:    0 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
-     station=Ef:    0 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
-     station=On:    0 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
-     station=Mc:    0 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
-     station=Tr:    0 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
-     station=Sh:   33 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
-     station=Ur:    0 sec:  300 sec: 15600 ft:  7A :       : 1; * F@15600
+     station=Jb:    0 sec:  300 sec: 293.207 GB:   :       : 1;
+     station=Wb:    0 sec:  300 sec: 169.344 GB:   :       : 1;
+     station=Ef:    0 sec:  300 sec: 293.207 GB:   :       : 1;
+     station=On:    0 sec:  300 sec: 293.207 GB:   :       : 1;
+     station=Mc:    0 sec:  300 sec: 293.207 GB:   :       : 1;
+     station=Tr:    0 sec:  300 sec: 293.207 GB:   :       : 1;
+     station=Sh:    0 sec:  300 sec: 293.207 GB:   :       : 1;
+     station=Ur:    0 sec:  300 sec: 293.207 GB:   :       : 1;
 endscan;
 scan No0056;
      start=2002y359d17h20m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
-     station=Wb:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
-     station=Ef:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
-     station=On:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
-     station=Mc:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
-     station=Tr:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
-     station=Sh:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
-     station=Ur:    0 sec:  120 sec: 17600 ft:  8A :       : 1; * R@17600
+     station=Jb:    0 sec:  120 sec: 298.046 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 174.182 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 298.046 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 298.046 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 298.046 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 298.046 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 298.046 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 298.046 GB:   :       : 1;
 endscan;
 scan No0057;
      start=2002y359d17h22m00s; mode=eo999.18cm; source=B0218+357;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   35 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
-     station=Wb:   26 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
-     station=Ef:   35 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
-     station=On:   15 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
-     station=Mc:   11 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
-     station=Tr:   42 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
-     station=Sh:   11 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
-     station=Ur:   10 sec:  540 sec: 16800 ft:  8A :       : 1; * R@16800
+     station=Jb:   35 sec:  540 sec: 299.981 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 176.118 GB:   :       : 1;
+     station=Ef:   35 sec:  540 sec: 299.981 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 299.981 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 299.981 GB:   :       : 1;
+     station=Tr:   27 sec:  540 sec: 299.981 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 299.981 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 299.981 GB:   :       : 1;
 endscan;
 scan No0058;
      start=2002y359d17h31m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   35 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
-     station=Ef:   36 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
-     station=Mc:   11 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
-     station=Tr:   43 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
-     station=Sh:   11 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
-     station=Ur:   10 sec:  120 sec: 13200 ft:  8A :       : 1; * R@13200
+     station=Jb:   35 sec:  120 sec: 308.690 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 184.827 GB:   :       : 1;
+     station=Ef:   36 sec:  120 sec: 308.690 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 308.690 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 308.690 GB:   :       : 1;
+     station=Tr:   28 sec:  120 sec: 308.690 GB:   :       : 1;
+     station=Sh:    6 sec:  120 sec: 308.690 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec: 308.690 GB:   :       : 1;
 endscan;
 scan No0059;
      start=2002y359d17h33m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
-     station=Wb:   26 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
-     station=Ef:   36 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
-     station=On:   15 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
-     station=Mc:   11 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
-     station=Tr:   43 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
-     station=Sh:   11 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
-     station=Ur:   10 sec:  540 sec: 12400 ft:  8A :       : 1; * R@12400
+     station=Jb:   35 sec:  540 sec: 310.625 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 186.762 GB:   :       : 1;
+     station=Ef:   36 sec:  540 sec: 310.625 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 310.625 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 310.625 GB:   :       : 1;
+     station=Tr:   28 sec:  540 sec: 310.625 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 310.625 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 310.625 GB:   :       : 1;
 endscan;
 scan No0060;
      start=2002y359d17h43m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  8A :       : 1; * R@08800
+     station=Jb:    0 sec:  120 sec: 319.334 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 195.471 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 319.334 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 319.334 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 319.334 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 319.334 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 319.334 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 319.334 GB:   :       : 1;
 endscan;
 scan No0061;
      start=2002y359d17h45m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
-     station=Wb:   26 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
-     station=Ef:   38 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
-     station=On:   15 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
-     station=Mc:   11 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
-     station=Tr:   45 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
-     station=Sh:   11 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
-     station=Ur:   10 sec:  540 sec:  8000 ft:  8A :       : 1; * R@08000
+     station=Jb:   35 sec:  540 sec: 321.270 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 197.407 GB:   :       : 1;
+     station=Ef:   38 sec:  540 sec: 321.270 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 321.270 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 321.270 GB:   :       : 1;
+     station=Tr:   30 sec:  540 sec: 321.270 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 321.270 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 321.270 GB:   :       : 1;
 endscan;
 scan No0062;
      start=2002y359d17h54m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   34 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
-     station=Ef:   40 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
-     station=Tr:   46 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
-     station=Sh:   10 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
-     station=Ur:   10 sec:  120 sec:  4400 ft:  8A :       : 1; * R@04400
+     station=Jb:   34 sec:  120 sec: 329.979 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 206.116 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec: 329.979 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 329.979 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 329.979 GB:   :       : 1;
+     station=Tr:   31 sec:  120 sec: 329.979 GB:   :       : 1;
+     station=Sh:    6 sec:  120 sec: 329.979 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec: 329.979 GB:   :       : 1;
 endscan;
 scan No0063;
      start=2002y359d17h56m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   35 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
-     station=Wb:   26 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
-     station=Ef:   40 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
-     station=On:   15 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
-     station=Mc:   11 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
-     station=Tr:   47 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
-     station=Sh:   10 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
-     station=Ur:   10 sec:  540 sec:  3600 ft:  8A :       : 1; * R@03600
+     station=Jb:   35 sec:  540 sec: 331.914 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 208.051 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec: 331.914 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 331.914 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 331.914 GB:   :       : 1;
+     station=Tr:   32 sec:  540 sec: 331.914 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 331.914 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 331.914 GB:   :       : 1;
 endscan;
 scan No0064;
      start=2002y359d18h06m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
-     station=Wb:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
-     station=Ef:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
-     station=On:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
-     station=Mc:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
-     station=Tr:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
-     station=Sh:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
-     station=Ur:    0 sec:  120 sec:     0 ft:  9A :       : 1; * F@00000
+     station=Jb:    0 sec:  120 sec: 340.623 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 216.760 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 340.623 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 340.623 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 340.623 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 340.623 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 340.623 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 340.623 GB:   :       : 1;
 endscan;
 scan No0065;
      start=2002y359d18h08m00s; mode=eo999.18cm; source=B0218+357;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   36 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
-     station=Wb:   26 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
-     station=Ef:   43 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
-     station=On:   15 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
-     station=Mc:   11 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
-     station=Tr:   49 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
-     station=Sh:   10 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
-     station=Ur:   10 sec:  540 sec:   800 ft:  9A :       : 1; * F@00800
+     station=Jb:   36 sec:  540 sec: 342.559 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 218.696 GB:   :       : 1;
+     station=Ef:   43 sec:  540 sec: 342.559 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 342.559 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 342.559 GB:   :       : 1;
+     station=Tr:   34 sec:  540 sec: 342.559 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 342.559 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 342.559 GB:   :       : 1;
 endscan;
 scan No0066;
      start=2002y359d18h17m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   38 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
-     station=Ef:   45 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
-     station=On:   15 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
-     station=Mc:   13 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
-     station=Tr:   50 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
-     station=Sh:   10 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
-     station=Ur:   10 sec:  120 sec:  4400 ft:  9A :       : 1; * F@04400
+     station=Jb:   38 sec:  120 sec: 351.268 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 227.405 GB:   :       : 1;
+     station=Ef:   45 sec:  120 sec: 351.268 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 351.268 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec: 351.268 GB:   :       : 1;
+     station=Tr:   35 sec:  120 sec: 351.268 GB:   :       : 1;
+     station=Sh:    6 sec:  120 sec: 351.268 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec: 351.268 GB:   :       : 1;
 endscan;
 scan No0067;
      start=2002y359d18h19m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   38 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
-     station=Wb:   26 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
-     station=Ef:   45 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
-     station=On:   15 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
-     station=Mc:   14 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
-     station=Tr:   50 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
-     station=Sh:   10 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
-     station=Ur:   10 sec:  540 sec:  5200 ft:  9A :       : 1; * F@05200
+     station=Jb:   38 sec:  540 sec: 353.203 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 229.340 GB:   :       : 1;
+     station=Ef:   45 sec:  540 sec: 353.203 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 353.203 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec: 353.203 GB:   :       : 1;
+     station=Tr:   35 sec:  540 sec: 353.203 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 353.203 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 353.203 GB:   :       : 1;
 endscan;
 scan No0068;
      start=2002y359d18h29m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
-     station=On:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft:  9A :       : 1; * F@08800
+     station=Jb:    0 sec:  120 sec: 361.912 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 238.049 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 361.912 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 361.912 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 361.912 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 361.912 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 361.912 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 361.912 GB:   :       : 1;
 endscan;
 scan No0069;
      start=2002y359d18h31m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   40 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
-     station=Wb:   26 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
-     station=Ef:   49 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
-     station=On:   15 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
-     station=Mc:   18 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
-     station=Tr:   52 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
-     station=Sh:   10 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
-     station=Ur:   10 sec:  540 sec:  9600 ft:  9A :       : 1; * F@09600
+     station=Jb:   40 sec:  540 sec: 363.848 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 239.985 GB:   :       : 1;
+     station=Ef:   49 sec:  540 sec: 363.848 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 363.848 GB:   :       : 1;
+     station=Mc:   18 sec:  540 sec: 363.848 GB:   :       : 1;
+     station=Tr:   37 sec:  540 sec: 363.848 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 363.848 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 363.848 GB:   :       : 1;
 endscan;
 scan No0070;
      start=2002y359d18h40m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   42 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
-     station=Ef:   51 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
-     station=On:   15 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
-     station=Mc:   22 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
-     station=Tr:   52 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
-     station=Sh:   10 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
-     station=Ur:   10 sec:  120 sec: 13200 ft:  9A :       : 1; * F@13200
+     station=Jb:   42 sec:  120 sec: 372.557 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 248.694 GB:   :       : 1;
+     station=Ef:   51 sec:  120 sec: 372.557 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 372.557 GB:   :       : 1;
+     station=Mc:   22 sec:  120 sec: 372.557 GB:   :       : 1;
+     station=Tr:   37 sec:  120 sec: 372.557 GB:   :       : 1;
+     station=Sh:    6 sec:  120 sec: 372.557 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec: 372.557 GB:   :       : 1;
 endscan;
 scan No0071;
      start=2002y359d18h42m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   43 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
-     station=Wb:   26 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
-     station=Ef:   52 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
-     station=On:   15 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
-     station=Mc:   22 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
-     station=Tr:   53 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
-     station=Sh:   10 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
-     station=Ur:   10 sec:  540 sec: 14000 ft:  9A :       : 1; * F@14000
+     station=Jb:   43 sec:  540 sec: 374.492 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 250.629 GB:   :       : 1;
+     station=Ef:   52 sec:  540 sec: 374.492 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 374.492 GB:   :       : 1;
+     station=Mc:   22 sec:  540 sec: 374.492 GB:   :       : 1;
+     station=Tr:   38 sec:  540 sec: 374.492 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 374.492 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 374.492 GB:   :       : 1;
 endscan;
 scan No0072;
      start=2002y359d18h53m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
-     station=Wb:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
-     station=Ef:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
-     station=On:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
-     station=Mc:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
-     station=Tr:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
-     station=Sh:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
-     station=Ur:    0 sec:  120 sec: 17600 ft: 10A :       : 1; * R@17600
+     station=Jb:    0 sec:  120 sec: 383.201 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 259.338 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 383.201 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 383.201 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 383.201 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 383.201 GB:   :       : 1;
+     station=Sh:    0 sec:  120 sec: 383.201 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 383.201 GB:   :       : 1;
 endscan;
 scan No0073;
      start=2002y359d18h55m00s; mode=eo999.18cm; source=B0218+357;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   46 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
-     station=Wb:   26 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
-     station=Ef:   57 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
-     station=On:   15 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
-     station=Mc:   29 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
-     station=Tr:   53 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
-     station=Sh:    9 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
-     station=Ur:   10 sec:  540 sec: 16800 ft: 10A :       : 1; * R@16800
+     station=Jb:   46 sec:  540 sec: 385.137 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 261.274 GB:   :       : 1;
+     station=Ef:   57 sec:  540 sec: 385.137 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 385.137 GB:   :       : 1;
+     station=Mc:   29 sec:  540 sec: 385.137 GB:   :       : 1;
+     station=Tr:   38 sec:  540 sec: 385.137 GB:   :       : 1;
+     station=Sh:    6 sec:  540 sec: 385.137 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 385.137 GB:   :       : 1;
 endscan;
 scan No0074;
      start=2002y359d19h04m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   48 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
-     station=Ef:   60 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
-     station=On:   15 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
-     station=Mc:   33 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
-     station=Tr:   53 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
-     station=Sh:    7 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
-     station=Ur:   10 sec:  120 sec: 13200 ft: 10A :       : 1; * R@13200
+     station=Jb:   48 sec:  120 sec: 393.846 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 269.983 GB:   :       : 1;
+     station=Ef:   60 sec:  120 sec: 393.846 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 393.846 GB:   :       : 1;
+     station=Mc:   33 sec:  120 sec: 393.846 GB:   :       : 1;
+     station=Tr:   38 sec:  120 sec: 393.846 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec: 393.846 GB:   :       : 1;
 endscan;
 scan No0075;
      start=2002y359d19h06m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   49 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
-     station=Wb:   26 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
-     station=Ef:   60 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
-     station=On:   15 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
-     station=Mc:   33 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
-     station=Tr:   53 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
-     station=Sh:    7 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
-     station=Ur:   10 sec:  540 sec: 12400 ft: 10A :       : 1; * R@12400
+     station=Jb:   49 sec:  540 sec: 395.781 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 271.918 GB:   :       : 1;
+     station=Ef:   60 sec:  540 sec: 395.781 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 395.781 GB:   :       : 1;
+     station=Mc:   33 sec:  540 sec: 395.781 GB:   :       : 1;
+     station=Tr:   38 sec:  540 sec: 395.781 GB:   :       : 1;
+     station=Sh:    0 sec:  540 sec: 393.846 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec: 395.781 GB:   :       : 1;
 endscan;
 scan No0076;
      start=2002y359d19h17m00s; mode=eo999.18cm; source=DA193;
-     station=Jb:  161 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
-     station=Wb:   70 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
-     station=Ef:  149 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
-     station=On:   59 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
-     station=Mc:   15 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
-     station=Tr:  116 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
-     station=Sh:   14 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
-     station=Ur:   14 sec:  660 sec:  8800 ft: 10A :       : 1; * R@08800
+     station=Jb:  161 sec:  660 sec: 404.490 GB:   :       : 1;
+     station=Wb:   70 sec:  660 sec: 280.627 GB:   :       : 1;
+     station=Ef:  149 sec:  660 sec: 404.490 GB:   :       : 1;
+     station=On:   59 sec:  660 sec: 404.490 GB:   :       : 1;
+     station=Mc:   15 sec:  660 sec: 404.490 GB:   :       : 1;
+     station=Tr:  101 sec:  660 sec: 404.490 GB:   :       : 1;
+     station=Sh:    0 sec:  660 sec: 402.555 GB:   :       : 1;
+     station=Ur:   14 sec:  660 sec: 404.490 GB:   :       : 1;
 endscan;
 scan No0077;
      start=2002y359d19h30m00s; mode=eo999.18cm; source=J0521+16;
-     station=Jb:   12 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
-     station=Wb:    0 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
-     station=Ef:    0 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
-     station=On:    0 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
-     station=Mc:    0 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
-     station=Tr:    0 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
-     station=Sh:    0 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
-     station=Ur:    0 sec:  300 sec:  4400 ft: 10A :       : 1; * R@04400
+     station=Jb:   12 sec:  300 sec: 415.135 GB:   :       : 1;
+     station=Wb:    0 sec:  300 sec: 291.272 GB:   :       : 1;
+     station=Ef:    0 sec:  300 sec: 415.135 GB:   :       : 1;
+     station=On:    0 sec:  300 sec: 415.135 GB:   :       : 1;
+     station=Mc:    0 sec:  300 sec: 415.135 GB:   :       : 1;
+     station=Tr:    0 sec:  300 sec: 415.135 GB:   :       : 1;
+     station=Sh:    0 sec:  300 sec: 413.199 GB:   :       : 1;
+     station=Ur:    0 sec:  300 sec: 415.135 GB:   :       : 1;
 endscan;
 scan No0078;
      start=2002y359d19h37m00s; mode=eo999.18cm; source=J0205+3212;
-     station=Jb:  134 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
-     station=Wb:   58 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
-     station=Ef:  129 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
-     station=On:   47 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
-     station=Mc:   12 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
-     station=Tr:   77 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
-     station=Sh:    0 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
-     station=Ur:    0 sec:  360 sec:  2400 ft: 10A :       : 1; * R@02400
+     station=Jb:  134 sec:  360 sec: 419.973 GB:   :       : 1;
+     station=Wb:   58 sec:  360 sec: 296.110 GB:   :       : 1;
+     station=Ef:  129 sec:  360 sec: 419.973 GB:   :       : 1;
+     station=On:   47 sec:  360 sec: 419.973 GB:   :       : 1;
+     station=Mc:   12 sec:  360 sec: 419.973 GB:   :       : 1;
+     station=Tr:   62 sec:  360 sec: 419.973 GB:   :       : 1;
+     station=Ur:    0 sec:  360 sec: 419.973 GB:   :       : 1;
 endscan;
 scan No0079;
      start=2002y359d19h44m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
-     station=Wb:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
-     station=Ef:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
-     station=On:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
-     station=Mc:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
-     station=Tr:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
-     station=Sh:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
-     station=Ur:    0 sec:  120 sec:     0 ft: 11A :       : 1; * F@00000
+     station=Jb:    0 sec:  120 sec: 425.779 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 301.916 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 425.779 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 425.779 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 425.779 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 425.779 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 425.779 GB:   :       : 1;
 endscan;
 scan No0080;
      start=2002y359d19h46m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   61 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
-     station=Wb:   26 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
-     station=Ef:   66 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
-     station=On:   15 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
-     station=Mc:   26 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
-     station=Tr:   49 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
-     station=Sh:    8 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
-     station=Ur:    9 sec:  540 sec:   800 ft: 11A :       : 1; * F@00800
+     station=Jb:   61 sec:  540 sec: 427.715 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 303.852 GB:   :       : 1;
+     station=Ef:   66 sec:  540 sec: 427.715 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 427.715 GB:   :       : 1;
+     station=Mc:   26 sec:  540 sec: 427.715 GB:   :       : 1;
+     station=Tr:   34 sec:  540 sec: 427.715 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec: 427.715 GB:   :       : 1;
 endscan;
 scan No0081;
      start=2002y359d19h55m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   63 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
-     station=Ef:   65 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
-     station=On:   15 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
-     station=Mc:   23 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
-     station=Tr:   48 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
-     station=Sh:    8 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
-     station=Ur:    9 sec:  120 sec:  4400 ft: 11A :       : 1; * F@04400
+     station=Jb:   63 sec:  120 sec: 436.424 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 312.561 GB:   :       : 1;
+     station=Ef:   65 sec:  120 sec: 436.424 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 436.424 GB:   :       : 1;
+     station=Mc:   23 sec:  120 sec: 436.424 GB:   :       : 1;
+     station=Tr:   33 sec:  120 sec: 436.424 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec: 436.424 GB:   :       : 1;
 endscan;
 scan No0082;
      start=2002y359d19h57m00s; mode=eo999.18cm; source=3C84;
-     station=Jb:  237 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
-     station=Wb:   75 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
-     station=Ef:  233 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
-     station=On:   64 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
-     station=Mc:  151 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
-     station=Tr:  115 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
-     station=Sh:   20 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
-     station=Ur:   51 sec:  540 sec:  5200 ft: 11A :       : 1; * F@05200
+     station=Jb:  237 sec:  540 sec: 438.359 GB:   :       : 1;
+     station=Wb:   75 sec:  540 sec: 314.496 GB:   :       : 1;
+     station=Ef:  233 sec:  540 sec: 438.359 GB:   :       : 1;
+     station=On:   64 sec:  540 sec: 438.359 GB:   :       : 1;
+     station=Mc:  151 sec:  540 sec: 438.359 GB:   :       : 1;
+     station=Tr:  100 sec:  540 sec: 438.359 GB:   :       : 1;
+     station=Sh:    0 sec:  540 sec: 418.038 GB:   :       : 1;
+     station=Ur:   51 sec:  540 sec: 438.359 GB:   :       : 1;
 endscan;
 scan No0083;
      start=2002y359d20h09m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   73 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
-     station=Ef:   54 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
-     station=On:    0 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft: 11A :       : 1; * F@08800
+     station=Jb:   73 sec:  120 sec: 447.068 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 323.205 GB:   :       : 1;
+     station=Ef:   54 sec:  120 sec: 447.068 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 447.068 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 447.068 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 447.068 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 447.068 GB:   :       : 1;
 endscan;
 scan No0084;
      start=2002y359d20h11m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   65 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
-     station=Wb:   26 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
-     station=Ef:   62 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
-     station=On:   15 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
-     station=Mc:   19 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
-     station=Tr:   46 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
-     station=Sh:    8 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
-     station=Ur:    9 sec:  540 sec:  9600 ft: 11A :       : 1; * F@09600
+     station=Jb:   65 sec:  540 sec: 449.004 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 325.141 GB:   :       : 1;
+     station=Ef:   62 sec:  540 sec: 449.004 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 449.004 GB:   :       : 1;
+     station=Mc:   19 sec:  540 sec: 449.004 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec: 449.004 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec: 449.004 GB:   :       : 1;
 endscan;
 scan No0085;
      start=2002y359d20h20m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   65 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
-     station=Ef:   60 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
-     station=On:   15 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
-     station=Mc:   17 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
-     station=Tr:   45 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
-     station=Sh:    8 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
-     station=Ur:    9 sec:  120 sec: 13200 ft: 11A :       : 1; * F@13200
+     station=Jb:   65 sec:  120 sec: 457.713 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 333.850 GB:   :       : 1;
+     station=Ef:   60 sec:  120 sec: 457.713 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 457.713 GB:   :       : 1;
+     station=Mc:   17 sec:  120 sec: 457.713 GB:   :       : 1;
+     station=Tr:   30 sec:  120 sec: 457.713 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec: 457.713 GB:   :       : 1;
 endscan;
 scan No0086;
      start=2002y359d20h22m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   65 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
-     station=Wb:   26 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
-     station=Ef:   59 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
-     station=On:   15 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
-     station=Mc:   17 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
-     station=Tr:   45 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
-     station=Sh:    8 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
-     station=Ur:    9 sec:  540 sec: 14000 ft: 11A :       : 1; * F@14000
+     station=Jb:   65 sec:  540 sec: 459.648 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 335.785 GB:   :       : 1;
+     station=Ef:   59 sec:  540 sec: 459.648 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 459.648 GB:   :       : 1;
+     station=Mc:   17 sec:  540 sec: 459.648 GB:   :       : 1;
+     station=Tr:   30 sec:  540 sec: 459.648 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec: 459.648 GB:   :       : 1;
 endscan;
 scan No0087;
      start=2002y359d20h32m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    7 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
-     station=Wb:    0 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
-     station=Ef:    0 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
-     station=On:    0 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
-     station=Mc:    0 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
-     station=Tr:    0 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
-     station=Sh:    0 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
-     station=Ur:    0 sec:  120 sec: 17600 ft: 12A :       : 1; * R@17600
+     station=Jb:    7 sec:  120 sec: 468.357 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 344.494 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 468.357 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 468.357 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 468.357 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 468.357 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 468.357 GB:   :       : 1;
 endscan;
 scan No0088;
      start=2002y359d20h34m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   64 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
-     station=Wb:   26 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
-     station=Ef:   56 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
-     station=On:   15 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
-     station=Mc:   15 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
-     station=Tr:   44 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
-     station=Sh:    8 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
-     station=Ur:    8 sec:  540 sec: 16800 ft: 12A :       : 1; * R@16800
+     station=Jb:   64 sec:  540 sec: 470.292 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 346.429 GB:   :       : 1;
+     station=Ef:   56 sec:  540 sec: 470.292 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 470.292 GB:   :       : 1;
+     station=Mc:   15 sec:  540 sec: 470.292 GB:   :       : 1;
+     station=Tr:   29 sec:  540 sec: 470.292 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 470.292 GB:   :       : 1;
 endscan;
 scan No0089;
      start=2002y359d20h43m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   63 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
-     station=Ef:   54 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
-     station=On:   15 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
-     station=Mc:   14 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
-     station=Tr:   43 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
-     station=Sh:    8 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
-     station=Ur:    8 sec:  120 sec: 13200 ft: 12A :       : 1; * R@13200
+     station=Jb:   63 sec:  120 sec: 479.002 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 355.139 GB:   :       : 1;
+     station=Ef:   54 sec:  120 sec: 479.002 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 479.002 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec: 479.002 GB:   :       : 1;
+     station=Tr:   28 sec:  120 sec: 479.002 GB:   :       : 1;
+     station=Ur:    8 sec:  120 sec: 479.002 GB:   :       : 1;
 endscan;
 scan No0090;
      start=2002y359d20h45m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   63 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
-     station=Wb:   26 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
-     station=Ef:   53 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
-     station=On:   15 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
-     station=Mc:   14 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
-     station=Tr:   43 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
-     station=Sh:    8 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
-     station=Ur:    8 sec:  540 sec: 12400 ft: 12A :       : 1; * R@12400
+     station=Jb:   63 sec:  540 sec: 480.937 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 357.074 GB:   :       : 1;
+     station=Ef:   53 sec:  540 sec: 480.937 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 480.937 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec: 480.937 GB:   :       : 1;
+     station=Tr:   28 sec:  540 sec: 480.937 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 480.937 GB:   :       : 1;
 endscan;
 scan No0091;
      start=2002y359d20h55m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    3 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
-     station=On:    0 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft: 12A :       : 1; * R@08800
+     station=Jb:    3 sec:  120 sec: 489.646 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 365.783 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 489.646 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 489.646 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 489.646 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 489.646 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 489.646 GB:   :       : 1;
 endscan;
 scan No0092;
      start=2002y359d20h57m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   60 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
-     station=Wb:   26 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
-     station=Ef:   51 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
-     station=On:   15 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
-     station=Mc:   13 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
-     station=Tr:   42 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
-     station=Sh:    8 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
-     station=Ur:    8 sec:  540 sec:  8000 ft: 12A :       : 1; * R@08000
+     station=Jb:   60 sec:  540 sec: 491.581 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 367.718 GB:   :       : 1;
+     station=Ef:   51 sec:  540 sec: 491.581 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 491.581 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec: 491.581 GB:   :       : 1;
+     station=Tr:   27 sec:  540 sec: 491.581 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 491.581 GB:   :       : 1;
 endscan;
 scan No0093;
      start=2002y359d21h06m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   58 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
-     station=Ef:   49 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
-     station=On:   15 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
-     station=Mc:   12 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
-     station=Tr:   42 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
-     station=Sh:    8 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
-     station=Ur:    8 sec:  120 sec:  4400 ft: 12A :       : 1; * R@04400
+     station=Jb:   58 sec:  120 sec: 500.290 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 376.428 GB:   :       : 1;
+     station=Ef:   49 sec:  120 sec: 500.290 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 500.290 GB:   :       : 1;
+     station=Mc:   12 sec:  120 sec: 500.290 GB:   :       : 1;
+     station=Tr:   27 sec:  120 sec: 500.290 GB:   :       : 1;
+     station=Ur:    8 sec:  120 sec: 500.290 GB:   :       : 1;
 endscan;
 scan No0094;
      start=2002y359d21h08m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   58 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
-     station=Wb:   26 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
-     station=Ef:   49 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
-     station=On:   15 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
-     station=Mc:   12 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
-     station=Tr:   42 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
-     station=Sh:    8 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
-     station=Ur:    8 sec:  540 sec:  3600 ft: 12A :       : 1; * R@03600
+     station=Jb:   58 sec:  540 sec: 502.226 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 378.363 GB:   :       : 1;
+     station=Ef:   49 sec:  540 sec: 502.226 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 502.226 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec: 502.226 GB:   :       : 1;
+     station=Tr:   27 sec:  540 sec: 502.226 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 502.226 GB:   :       : 1;
 endscan;
 scan No0095;
      start=2002y359d21h18m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
-     station=Wb:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
-     station=Ef:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
-     station=On:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
-     station=Mc:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
-     station=Tr:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
-     station=Sh:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
-     station=Ur:    0 sec:  120 sec:     0 ft: 13A :       : 1; * F@00000
+     station=Jb:    0 sec:  120 sec: 510.935 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 387.072 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 510.935 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 510.935 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 510.935 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 510.935 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 510.935 GB:   :       : 1;
 endscan;
 scan No0096;
      start=2002y359d21h20m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   55 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
-     station=Wb:   26 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
-     station=Ef:   47 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
-     station=On:   15 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
-     station=Mc:   11 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
-     station=Tr:   41 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
-     station=Sh:    9 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
-     station=Ur:    8 sec:  540 sec:   800 ft: 13A :       : 1; * F@00800
+     station=Jb:   55 sec:  540 sec: 512.870 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 389.007 GB:   :       : 1;
+     station=Ef:   47 sec:  540 sec: 512.870 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 512.870 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 512.870 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec: 512.870 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 512.870 GB:   :       : 1;
 endscan;
 scan No0097;
      start=2002y359d21h29m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   53 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
-     station=Ef:   45 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
-     station=On:   15 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
-     station=Mc:   11 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
-     station=Tr:   40 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
-     station=Sh:    9 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
-     station=Ur:    8 sec:  120 sec:  4400 ft: 13A :       : 1; * F@04400
+     station=Jb:   53 sec:  120 sec: 521.579 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 397.716 GB:   :       : 1;
+     station=Ef:   45 sec:  120 sec: 521.579 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 521.579 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec: 521.579 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec: 521.579 GB:   :       : 1;
+     station=Ur:    8 sec:  120 sec: 521.579 GB:   :       : 1;
 endscan;
 scan No0098;
      start=2002y359d21h31m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   53 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
-     station=Wb:   26 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
-     station=Ef:   45 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
-     station=On:   15 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
-     station=Mc:   11 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
-     station=Tr:   40 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
-     station=Sh:    9 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
-     station=Ur:    8 sec:  540 sec:  5200 ft: 13A :       : 1; * F@05200
+     station=Jb:   53 sec:  540 sec: 523.515 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 399.652 GB:   :       : 1;
+     station=Ef:   45 sec:  540 sec: 523.515 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 523.515 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec: 523.515 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 523.515 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 523.515 GB:   :       : 1;
 endscan;
 scan No0099;
      start=2002y359d21h42m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
-     station=On:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft: 13A :       : 1; * F@08800
+     station=Jb:    0 sec:  120 sec: 532.224 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 408.361 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 532.224 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 532.224 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 532.224 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 532.224 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 532.224 GB:   :       : 1;
 endscan;
 scan No0100;
      start=2002y359d21h44m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   50 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
-     station=Wb:   26 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
-     station=Ef:   44 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
-     station=On:   15 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
-     station=Mc:   10 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
-     station=Tr:   40 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
-     station=Sh:    9 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
-     station=Ur:    8 sec:  540 sec:  9600 ft: 13A :       : 1; * F@09600
+     station=Jb:   50 sec:  540 sec: 534.159 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 410.296 GB:   :       : 1;
+     station=Ef:   44 sec:  540 sec: 534.159 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 534.159 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec: 534.159 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec: 534.159 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 534.159 GB:   :       : 1;
 endscan;
 scan No0101;
      start=2002y359d21h53m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   49 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
-     station=Ef:   43 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
-     station=On:   15 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
-     station=Mc:   10 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
-     station=Tr:   39 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
-     station=Sh:    9 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
-     station=Ur:    8 sec:  120 sec: 13200 ft: 13A :       : 1; * F@13200
+     station=Jb:   49 sec:  120 sec: 542.868 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 419.005 GB:   :       : 1;
+     station=Ef:   43 sec:  120 sec: 542.868 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 542.868 GB:   :       : 1;
+     station=Mc:   10 sec:  120 sec: 542.868 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec: 542.868 GB:   :       : 1;
+     station=Ur:    8 sec:  120 sec: 542.868 GB:   :       : 1;
 endscan;
 scan No0102;
      start=2002y359d21h55m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   48 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
-     station=Wb:   26 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
-     station=Ef:   42 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
-     station=On:   15 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
-     station=Mc:   10 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
-     station=Tr:   39 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
-     station=Sh:    9 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
-     station=Ur:    8 sec:  540 sec: 14000 ft: 13A :       : 1; * F@14000
+     station=Jb:   48 sec:  540 sec: 544.804 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 420.941 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec: 544.804 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 544.804 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec: 544.804 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec: 544.804 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 544.804 GB:   :       : 1;
 endscan;
 scan No0103;
      start=2002y359d22h05m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
-     station=Wb:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
-     station=Ef:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
-     station=On:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
-     station=Mc:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
-     station=Tr:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
-     station=Sh:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
-     station=Ur:    0 sec:  120 sec: 17600 ft: 14A :       : 1; * R@17600
+     station=Jb:    0 sec:  120 sec: 553.513 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 429.650 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 553.513 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 553.513 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 553.513 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 553.513 GB:   :       : 1;
+     station=Ur:    0 sec:  120 sec: 553.513 GB:   :       : 1;
 endscan;
 scan No0104;
      start=2002y359d22h07m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   46 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
-     station=Wb:   26 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
-     station=Ef:   41 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
-     station=On:   15 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
-     station=Mc:   10 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
-     station=Tr:   39 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
-     station=Sh:    9 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
-     station=Ur:    8 sec:  540 sec: 16800 ft: 14A :       : 1; * R@16800
+     station=Jb:   46 sec:  540 sec: 555.448 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 431.585 GB:   :       : 1;
+     station=Ef:   41 sec:  540 sec: 555.448 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 555.448 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec: 555.448 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec: 555.448 GB:   :       : 1;
+     station=Ur:    8 sec:  540 sec: 555.448 GB:   :       : 1;
 endscan;
 scan No0105;
      start=2002y359d22h16m00s; mode=eo999.18cm; source=J0204+3649;
 *              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Jb:   45 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
-     station=Wb:   26 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
-     station=Ef:   41 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
-     station=On:   15 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
-     station=Mc:   10 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
-     station=Tr:   39 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
-     station=Sh:    9 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
-     station=Ur:    8 sec:  120 sec: 13200 ft: 14A :       : 1; * R@13200
+     station=Jb:   45 sec:  120 sec: 564.157 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 440.294 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec: 564.157 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 564.157 GB:   :       : 1;
+     station=Mc:   10 sec:  120 sec: 564.157 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec: 564.157 GB:   :       : 1;
 endscan;
 scan No0106;
      start=2002y359d22h18m00s; mode=eo999.18cm; source=3C84;
-     station=Jb:  101 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
-     station=Wb:   75 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
-     station=Ef:   79 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
-     station=On:   64 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
-     station=Mc:   35 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
-     station=Tr:   82 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
-     station=Sh:   24 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
-     station=Ur:   45 sec:  540 sec: 12400 ft: 14A :       : 1; * R@12400
+     station=Jb:  101 sec:  540 sec: 566.093 GB:   :       : 1;
+     station=Wb:   75 sec:  540 sec: 442.230 GB:   :       : 1;
+     station=Ef:   79 sec:  540 sec: 566.093 GB:   :       : 1;
+     station=On:   64 sec:  540 sec: 566.093 GB:   :       : 1;
+     station=Mc:   35 sec:  540 sec: 566.093 GB:   :       : 1;
+     station=Tr:   67 sec:  540 sec: 566.093 GB:   :       : 1;
+     station=Ur:    0 sec:  540 sec: 564.157 GB:   :       : 1;
 endscan;
 scan No0107;
      start=2002y359d22h30m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
-     station=Wb:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
-     station=Ef:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
-     station=On:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
-     station=Mc:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
-     station=Tr:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
-     station=Sh:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
-     station=Ur:    0 sec:  120 sec:  8800 ft: 14A :       : 1; * R@08800
+     station=Jb:    0 sec:  120 sec: 574.802 GB:   :       : 1;
+     station=Wb:    0 sec:  120 sec: 450.939 GB:   :       : 1;
+     station=Ef:    0 sec:  120 sec: 574.802 GB:   :       : 1;
+     station=On:    0 sec:  120 sec: 574.802 GB:   :       : 1;
+     station=Mc:    0 sec:  120 sec: 574.802 GB:   :       : 1;
+     station=Tr:    0 sec:  120 sec: 574.802 GB:   :       : 1;
 endscan;
 scan No0108;
      start=2002y359d22h32m00s; mode=eo999.18cm; source=B0218+357;
-     station=Jb:   43 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
-     station=Wb:   26 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
-     station=Ef:   40 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
-     station=On:   15 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
-     station=Mc:   10 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
-     station=Tr:   38 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
-     station=Sh:    9 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
-     station=Ur:    8 sec:  540 sec:  8000 ft: 14A :       : 1; * R@08000
+     station=Jb:   43 sec:  540 sec: 576.737 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec: 452.874 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec: 576.737 GB:   :       : 1;
+     station=On:   15 sec:  540 sec: 576.737 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec: 576.737 GB:   :       : 1;
+     station=Tr:   23 sec:  540 sec: 576.737 GB:   :       : 1;
 endscan;
 scan No0109;
      start=2002y359d22h41m00s; mode=eo999.18cm; source=J0204+3649;
-     station=Jb:   42 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
-     station=Wb:   26 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
-     station=Ef:   39 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
-     station=On:   15 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
-     station=Mc:    9 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
-     station=Tr:   38 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
-     station=Sh:    9 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
-     station=Ur:    8 sec:  120 sec:  4400 ft: 14A :       : 1; * R@04400
+     station=Jb:   42 sec:  120 sec: 585.446 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec: 461.583 GB:   :       : 1;
+     station=Ef:   39 sec:  120 sec: 585.446 GB:   :       : 1;
+     station=On:   15 sec:  120 sec: 585.446 GB:   :       : 1;
+     station=Mc:    9 sec:  120 sec: 585.446 GB:   :       : 1;
+     station=Tr:   23 sec:  120 sec: 585.446 GB:   :       : 1;
 endscan;
 scan No0110;
      start=2002y359d22h43m00s; mode=eo999.18cm; source=J0521+16;
-     station=Jb:  376 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
-     station=Wb:  177 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
-     station=Ef:  285 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
-     station=On:  166 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
-     station=Mc:  119 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
-     station=Tr:  178 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
-     station=Sh:  100 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
-     station=Ur:   94 sec:  540 sec:  3600 ft: 14A :       : 1; * R@03600
+     station=Jb:  376 sec:  540 sec: 587.382 GB:   :       : 1;
+     station=Wb:  177 sec:  540 sec: 463.519 GB:   :       : 1;
+     station=Ef:  285 sec:  540 sec: 587.382 GB:   :       : 1;
+     station=On:  166 sec:  540 sec: 587.382 GB:   :       : 1;
+     station=Mc:  119 sec:  540 sec: 587.382 GB:   :       : 1;
+     station=Tr:  163 sec:  540 sec: 587.382 GB:   :       : 1;
+     station=Ur:    0 sec:  540 sec: 572.866 GB:   :       : 1;
 endscan;

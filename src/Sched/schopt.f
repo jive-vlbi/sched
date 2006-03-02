@@ -208,6 +208,14 @@ C              input scan.  This is for planning.
 C   
                CALL OPTUPT( KSCN, ISCN, ADJUST, KEEP, DONE )
 C   
+            ELSE IF( OPTMODE .EQ. 'HAS' ) THEN
+C
+C              Create a schedule using the input scans as a source list
+C              with one input scan per output scan.  Try to optimize
+C              for hour angles.  This is a one pass operation.
+C
+               CALL OPTHAS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+C
             ELSE
 C   
 C              Invalid optimization mode.
@@ -230,10 +238,16 @@ C
                CALL OPTTIM( LASTISCN, ISCN, ADJUST )
 C        
 C              Now be sure that the experiment time boundaries have
-C              not been exceeded.
+C              not been exceeded.  Some optimization modes watch this
+C              themselves and miss some closeout stuff (like printing
+C              summaries if they aren't the ones that set DONE.  In
+C              close cases, they might not think a scan has gone over
+C              where the adjustments above cause it to do so.  So
+C              avoid this test for those modes.
 C        
                IF( OPDUR .NE. 0.D0 .AND. 
-     1             STOPJ(ISCN) .GT. STARTJ(1) + OPDUR ) THEN
+     1             STOPJ(ISCN) .GT. STARTJ(1) + OPDUR .AND.
+     2             OPTMODE .NE. 'HAS' ) THEN
                   DONE = .TRUE.
                END IF
 C
@@ -301,10 +315,13 @@ C           Make a special case for OPTMODE=CSUB since it will put
 C           small numbers of antennas into the 3ed subarray.
 C           Also don't complain about small subarrays for reference
 C           pointing.
+C           Also make an exception for OPTMODE=HAS for which the 
+C           optimizing routine makes this selection and small tweaks
+C           in scan times might upset those results.
 C
             KEEP = KEEP .AND.
-     1          ( NGOOD .GE. OPMIAN .OR. OPTMODE .EQ. 'CSUB' .OR.
-     2          POINT(ISCN) .GE. 0 )
+     1          ( NGOOD .GE. OPMIAN(ISCN) .OR. OPTMODE .EQ. 'CSUB' .OR.
+     2          OPTMODE .EQ. 'HAS' .OR. POINT(ISCN) .GE. 0 )
 C
             IF( .NOT. KEEP ) THEN
 C

@@ -1,5 +1,5 @@
 
-    Welcome to program SCHED.  Version:   6.02  May 2005
+    Welcome to program SCHED.  Version:   6.04  February 2006
 
 The manual is at http://www.aoc.nrao.edu/~cwalker/sched/sched/sched.html
 Unix users should set $SCHED to the base area where SCHED is installed.
@@ -15,10 +15,10 @@ Some useful commands to give now if running interactively:
 TPINI:   Reading tape initialization information from SCHED input file.
 RDSET:   Reading setup file: NME-MK5.18CM
 STREAD:  Reading station catalog: egmk5vex_stations.dat
-STREAD:  Will read locations file /users/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
+STREAD:  Will read locations file /mnt/mach/mach/cwalker/code/sched/catalogs/locations.dat
 SCHIN:   Found    14 input scans.
-SRREAD:  Reading source catalog: /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
-GETFREQ: Reading frequency file: /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+SRREAD:  Reading source catalog: /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+GETFREQ: Reading frequency file: /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
 SCHOPT:  First output scan will be number     1
 
 WRTMSG: Special message from routine AUTODOWN:
@@ -38,8 +38,38 @@ VXWRT: You have requested DISK for station Jb
 VXWRT: You have requested DISK for station Eb
 VXWRT: You have requested DISK for station Wb
 VXWRT: You have requested DISK for station Pt
-VXSCH: Tsys calibration is taken every new scan, but these appear over 15 min apart!
-       This can be improved by splitting up individual tape passes in multiple scans.
+MEDICINA has    14 Tsys measurements. Maximum interval =   22 minutes.
+NOTO     has    14 Tsys measurements. Maximum interval =   22 minutes.
+EFLSBERG has    14 Tsys measurements. Maximum interval =   22 minutes.
+JODRELL2 has    14 Tsys measurements. Maximum interval =   22 minutes.
+WSTRBORK has    14 Tsys measurements. Maximum interval =   22 minutes.
+VXSCH: Tsys calibration at MkIV stations is taken during every gap in recording, but these appear over 15 min apart for the stations listed above!
+       This can be improved by inserting gaps at regular intervals.
+
+WRTMSG: Special message from routine VXSCH:
+For MkIV stations (e.g. most of the EVN) the calibration diode is only fired
+during gaps in recording. Although the total power is monitored continuously
+during scans, the calibration diode must be fired regularly to allow these
+total power levels to be accurately converted to system temperatures. It is
+recommended that, where possible, you leave a gap in recording at least every
+15 minutes to allow the system temperature measurements. The gap should be at
+least 15 seconds, but you should also try to ensure that these gaps are long
+enough that all the antennas are on source before the next scan starts. Note
+that warnings about Westerbork can be safely ignored.
+
+EFLSBERG: only    10 out of    14 Tsys measurements are on-source
+JODRELL2: only    11 out of    14 Tsys measurements are on-source
+VXSCH: Stations listed above are affected by slewing during Tsys calibration
+VXSCH: Stations not listed above appear to have at least one on-source Tsys every 15 mins
+
+WRTMSG: Special message from routine VXSCH:
+Note that although you may have left gaps during which the system temperature
+can be measured at MkIV stations, one or more stations are still slewing at the
+scan starts. System temperatures measured when the antennas are slewing are
+unlikely to be useful. The time between useful Tsys measurements is therefore
+likely to be longer than the recommended 15 minutes at the stations listed
+above. Note that warnings about Westerbork can be safely ignored.
+
 FLAGS:   Writing apriori flagging file mk5vx.flag
  Processing MEDICINA
  Processing NOTO

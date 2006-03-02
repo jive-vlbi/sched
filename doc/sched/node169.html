@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>STACAT</TITLE>
-<META NAME="description" CONTENT="STACAT">
+<TITLE>REVERSE</TITLE>
+<META NAME="description" CONTENT="REVERSE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,60 +29,61 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2597"
+<A NAME="tex2html2626"
   HREF="node170.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2593"
+<A NAME="tex2html2622"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2587"
+<A NAME="tex2html2616"
   HREF="node168.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2595"
+<A NAME="tex2html2624"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2598"
-  HREF="node170.html">STAFILE</A>
-<B> Up:</B> <A NAME="tex2html2594"
+<B> Next:</B> <A NAME="tex2html2627"
+  HREF="node170.html">REWIND</A>
+<B> Up:</B> <A NAME="tex2html2623"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2588"
-  HREF="node168.html">SRCFILE</A>
- &nbsp <B>  <A NAME="tex2html2596"
+<B> Previous:</B> <A NAME="tex2html2617"
+  HREF="node168.html">REPeat</A>
+ &nbsp <B>  <A NAME="tex2html2625"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041211700000000000000"></A><A NAME="MP:STACAT"></A>
+<H3><A NAME="SECTION0041211700000000000000"></A><A NAME="MP:REVERSE"></A>
 <BR>
-<TT>STACAT</TT>
+<TT>REVERSE</TT>
 </H3>
 
 <P>
-<TT>STACAT</TT> is a flag to indicate that the following entries are part
-of the stations catalog. See Section&nbsp;<A HREF="node197.html#SEC:STACAT">3.3</A> for details of
-the format. In-line catalogs can occur more than once in the SCHED keyin file.  The station catalog input is terminated with a
-separate entry containing <TT>ENDCAT /</TT>.
-
-<P>
-If <TT>STACAT</TT> is found, the end of the input group (everything up to
-the ``/'') is not considered the end of inputs for this file.  The
-next inputs after the station data are entered will continue to apply
-to the current file (usually the first).
+<TT>REVERSE</TT> requests that the direction of motion of the
+wide-band Mark&nbsp;III or VLBA tape be reversed at the start of the
+scan. No rewinds or fast forwards will be done if this is requested.
+<TT>REVERSE</TT> is not needed normally. SCHED&nbsp; checks each scan to
+see if it will fit in the current direction. If not, the tape will be
+reversed before the next scan begins.
+If <TT>REVERSE</TT> is specified with no argument, the tape will be
+reversed at all stations. If one or more station names are given, the
+tapes will be reversed at only those stations.  Station codes may
+be used instead of station names.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> None.
+<LI><B>Argument:</B> None or a list of stations.
 </LI>
-<LI><B>Options:</B>  None.
+<LI><B>Options:</B>  No argument or the name of any stations in the scan. Not case
+sensitive.
 </LI>
-<LI><B>Default:</B>  Not used.
+<LI><B>Default:</B>  No reverse.
 </LI>
-<LI><B>Usage:</B>    Can occur as often as desired.
+<LI><B>Usage:</B>    Reverts to no reverse on next scan.
 </LI>
-<LI><B>Example:</B>  <TT>STACAT /</TT>
+<LI><B>Example:</B>  <TT>REVERSE</TT> or <TT>REVERSE=VLBA_KP,VLBA_LA</TT>
   
 </LI>
 </UL>
@@ -89,7 +92,7 @@ to the current file (usually the first).
 <BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

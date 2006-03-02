@@ -77,6 +77,10 @@ C
          PT(1) = EL1(ISCN,ISTA)
          PT(2) = EL2(ISCN,ISTA)
 C
+      ELSE IF( AXIS .EQ. 'Sec' ) THEN
+         PT(1) = 1.0/SIN( EL1(ISCN,ISTA) * RADDEG )
+         PT(2) = 1.0/SIN( EL2(ISCN,ISTA) * RADDEG )
+C
       ELSE IF( AXIS .EQ. 'HA' ) THEN
          PT(1) = HA1(ISCN,ISTA)
          PT(2) = HA2(ISCN,ISTA)

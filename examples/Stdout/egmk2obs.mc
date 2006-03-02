@@ -1,7 +1,7 @@
 "Schedule for MEDICINA"
 "Test of Mark 2 capability in SCHED"
 " Schedule Version:       1.00 "
-" Processed by SCHED version:   6.02  May 2005 "
+" Processed by SCHED version:   6.04  February 2006 "
 " PI:       R. C. Walker "
 " Address:  NRAO, P.O. Box O "
 "           Socorro, NM 87801 "

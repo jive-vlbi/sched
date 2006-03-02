@@ -95,11 +95,11 @@ C
                      LINE = LINE + 3
                      WRITE( ISUM, '( 2X )' )
 C
-                     LINE1 = 'DAY  START UT  SOURCE     TYPE  '//
+                     LINE1 = 'SCAN  DAY START UT  SOURCE     TYPE  '//
      1                       'STATIONS    t => tape change '
-                     LINE2 = '      STOP UT'
+                     LINE2 = '           STOP UT'
                      DO ISTA = ISTA1, ISTA2 
-                        ICH1 = 33 + 5 * ( ISTA - ISTA1 )
+                        ICH1 = 38 + 5 * ( ISTA - ISTA1 )
                         ICH2 = ICH1 + 2
                         LINE2(ICH1:ICH2) = STCODE(STANUM(ISTA))
                      END DO
@@ -136,11 +136,12 @@ C                    Get scan times.
 C
                      CALL TIMEJ( STARTJ(ISCN), YEAR, DAY1, START )
                      CALL TIMEJ( STOPJ(ISCN), YEAR, DAY2, STOP )
-                     WRITE( LINE1(1:3), '( I3 )' ) DAY1
-                     WRITE( LINE2(1:3), '( I3 )' ) DAY2
-                     LINE1(6:13) = TFORM( START, 'T', 0, 2, 2, '::@' )
-                     LINE2(6:13) = TFORM( STOP, 'T', 0, 2, 2, '::@' )
-                     LINE1(15:26) = SCNSRC(ISCN)
+                     WRITE( LINE1(1:9), '( I4, I5 )' ) ISCN, DAY1
+                     WRITE( LINE2(1:9), '( A4, I5 )' ) 
+     1                    SCANTAG(ISCN), DAY2
+                     LINE1(11:18) = TFORM( START, 'T', 0, 2, 2, '::@' )
+                     LINE2(11:18) = TFORM( STOP, 'T', 0, 2, 2, '::@' )
+                     LINE1(20:31) = SCNSRC(ISCN)
 C
 C                    Write setup name under source when it changes or at
 C                    first scan of page.  Don't write the .set.
@@ -155,9 +156,9 @@ C
                            ICH1 = ICH2 - 11
                            IF( ICH1 .LT. 1 ) ICH1 = 1
                         END IF
-                        LINE2(15:26) = SETFILE(SETNUM(ISCN))(ICH1:ICH2)
+                        LINE2(20:31) = SETFILE(SETNUM(ISCN))(ICH1:ICH2)
                      ELSE
-                        LINE2(15:26) = '-'
+                        LINE2(20:31) = '-'
                      END IF
                      LSETNUM = SETNUM(ISCN)
 C
@@ -167,20 +168,20 @@ C
      1                   TANVLBA(ISCN) .OR. DOPEAK(ISCN) .GT. 0 .OR.
      2                   DOPN3DB(ISCN) .OR.
      3                   VLAMODE(ISCN) .EQ. 'IR' ) THEN
-                        LINE1(29:29) = 'P'
+                        LINE1(34:34) = 'P'
                      ELSE
-                        LINE1(29:29) = '-'
+                        LINE1(34:34) = '-'
                      END IF
                      IF( NOREC(ISCN) .OR. .NOT. VLBITP ) THEN
-                        LINE2(29:29) = 'N'
+                        LINE2(34:34) = 'N'
                      ELSE
-                        LINE2(29:29) = '-'
+                        LINE2(34:34) = '-'
                      END IF
 C
 C                    Get the scan data.  
 C
                      DO ISTA = ISTA1, ISTA2
-                        ICH1 = 31 + 5 * ( ISTA - ISTA1 )
+                        ICH1 = 36 + 5 * ( ISTA - ISTA1 )
                         ICH2 = ICH1 + 4
 C
                         LINE1(ICH1:ICH2) = 

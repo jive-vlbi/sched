@@ -1,198 +1,133 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Standard Setup Files</TITLE>
-<META NAME="description" CONTENT="Standard Setup Files">
+<TITLE>NDRIVES</TITLE>
+<META NAME="description" CONTENT="NDRIVES">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node215.html">
 <LINK REL="previous" HREF="node213.html">
-<LINK REL="up" HREF="node213.html">
+<LINK REL="up" HREF="node212.html">
 <LINK REL="next" HREF="node215.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3211"
+<A NAME="tex2html3185"
   HREF="node215.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3207"
-  HREF="node213.html">
+<A NAME="tex2html3181"
+  HREF="node212.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3201"
+<A NAME="tex2html3175"
   HREF="node213.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3209"
+<A NAME="tex2html3183"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3212"
-  HREF="node215.html">Examples of Setup Files</A>
-<B> Up:</B> <A NAME="tex2html3208"
-  HREF="node213.html">Setup Files</A>
-<B> Previous:</B> <A NAME="tex2html3202"
-  HREF="node213.html">Setup Files</A>
- &nbsp <B>  <A NAME="tex2html3210"
+<B> Next:</B> <A NAME="tex2html3186"
+  HREF="node215.html">NHEADPOS</A>
+<B> Up:</B> <A NAME="tex2html3182"
+  HREF="node212.html">Details of Tape Initialization</A>
+<B> Previous:</B> <A NAME="tex2html3176"
+  HREF="node213.html">MEDIA</A>
+ &nbsp <B>  <A NAME="tex2html3184"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00461000000000000000"></A><A NAME="SSEC:SETSTD"></A>
+<H3><A NAME="SECTION00441200000000000000"></A><A NAME="TP:NDRIVES"></A>
 <BR>
-Standard Setup Files
-</H2>
+<TT>NDRIVES</TT>
+</H3>
 
 <P>
-Over 200 standard setup files have been created, covering many of the
-normal modes of observing.  They are available at the same place as
-the code for SCHED&nbsp; in a ``setups'' subdirectory.  Users may opt
-to use these standard setups.  However, now that <A HREF="node219.html#SP:BAND"><TT>BAND</TT></A> is available, it will make more sense for most users
-to make their own setups, imbedded in the SCHED&nbsp; input file.  See
-the example <I>egvlba.key</I> for a template.  The only parameters
-required in such a setup are <A HREF="node219.html#SP:BAND"><TT>BAND</TT></A>,
-<A HREF="node244.html#SP:NCHAN"><TT>NCHAN</TT></A>, <A HREF="node221.html#SP:BBFILTER"><TT>BBFILTER</TT></A>,
-<A HREF="node225.html#SP:BITS"><TT>BITS</TT></A>, and <A HREF="node252.html#SP:POL"><TT>POL</TT></A>.
-You need to know all of those just to pick the standard setup file
-to use so why not make your own?  In fact, as users get accustomed
-to doing this, many of the standard setups may be dropped.
+<TT>NDRIVES</TT> if the number of tape drives at each station. This
+parameter can also be given in the station catalog and only need
+be given here for abnormal configurations.  The value in the
+tape initialization information will override the number in the
+station catalog.
 
 <P>
-There are cases, however, when use of the standard files is
-recommended.  These especially include precisely defined, and somewhat
-complex cases like the Mark III standard modes.  Also, if none of the
-standard files matches the exact needs of a project, there is likely
-to be one that is close and can be modified as required.  This is
-generally safer than creating a setup file from scratch because it
-will be clear what parameters are required.
+The VLBA sites and the VLA normally have 2 drives.
+Other sites will usually have 1.
 
 <P>
-The standard setup files take advantage of the defaulting ability of
-SCHED.  If you are interested in what most of the setup parameters
-will actually be set to, the best way to do this is to run a simple
-dummy schedule that uses the setup and look at the details reported in
-the summary file.  A simple file like the <A HREF="node10.html#SSEC:EXAMPLE3">simple
-example</A> given earlier should do (with <A HREF="node124.html#MP:OBSTYPE"><TT>OBSTYPE</TT></A> set to <TT>VLBI</TT>), although cover and correlator
-information will be required.
+Note that the schedule can be forced to use a single tape drive other
+than number 1 by setting <TT>NDRIVES=1</TT> and <TT>TPDRIVE=N</TT> where
+<TT>N</TT> is the desired drive (usually 2). This is useful if, for
+example, tape drive 1 is out of service.
 
 <P>
-Standard setup files are named according to the following
-conventions:
+For S2 stations <TT>NDRIVES</TT> indicates the number of transports in the
+S2 recorder (usually 8).
 
 <P>
-<DL>
-<DT><STRONG>``<I>v</I>'' files:</STRONG></DT>
-<DD>These are setup files for VLBI observations
-using VLBA recording formats.  The VLBA system is very flexible so
-there are large numbers of options.  There is much more information in
-the name which might be best described with an example.  The file <I>v6cm-128-4-2-L.set</I> is for 6 cm observations in VLBA format.  The
-first number after a ``-'' gives the total bit rate in Mbits/s which
-is 128 in this case.  The next number is the number of channels (4).
-The last number is the number of bits per sample (2).  If the file
-only uses one polarization, there will be an ``L'' or an ``R'' at the
-end.  If the file uses upper and lower sidebands where all upper
-sidebands could be used on the VLBA, there will be a ``UL'' appended.
-These files can be used when observing with sites such as Effelsberg
-which have a limited number of BBCs.  All setup files, by convention,
-end in ``<I>.set</I>''.  Note that one can deduce the bandwidth and
-sample rate from the above information assuming Nyquist sampling.
-With 128 Mbits/s and 4 channels, the channel bit rate must be 32
-Mbits/s.  With 2 bits per channel, this means that the sample rate is
-16 Msamples/s.  Nyquist sampling implies 8 MHz bandwidth per channel,
-which, with 4 channels, gives 32 MHz overall bandwidth.
+<TT>NDRIVES</TT> will not be allowed to exceed the number specified in
+the station catalog.
 
 <P>
-</DD>
-<DT><STRONG>``<I>m3</I>'' files:</STRONG></DT>
-<DD>These are setup files for Mark&nbsp;III
-observations.  SCHED&nbsp; only supports Mark&nbsp;III observing for
-systems with VLBA control computers and data aquisition systems.
-These include the VLBA, the VLA, Green Bank, and, optionally,
-Effelsberg.  An example file would be <I>m3e18cmd.set</I>.  This means
-Mark&nbsp;III, mode E (4 passes per head position), 18 cm observing
-wavelength, double speed.  Here, double speed means recording at 8
-Mbits/s per track.  With Mark&nbsp;III, there is a one-to-one
-correspondence between tracks and channels and there are a total of 28
-possible tracks.  Also, all sampling is in one bit mode.  Mode E uses
-7 tracks (channels) at a time so this setup specifies a total bit rate
-of (7 * 8) = 56 Mbits/s and, with Nyquist sampling, 28
-MHz total bandwidth.
 
-<P>
-</DD>
-<DT><STRONG>``<I>vla</I>'' files:</STRONG></DT>
-<DD>These are setup files for VLA-only
-observations.  The don't specify any tape related information.
-
-<P>
-</DD>
-<DT><STRONG>``<I>pt</I>'' files:</STRONG></DT>
-<DD>These are setup files for VLBA pointing and
-antenna temperature measurements.
-
-<P>
-</DD>
-<DT><STRONG>``<I>pc</I>'' files:</STRONG></DT>
-<DD>These are setup files for VLBA pulse cal
-tests.
-
-<P>
-</DD>
-<DT><STRONG>``<I>nug</I>'' files:</STRONG></DT>
-<DD>These are setup files for Mark II
-observations.  The standard ``nug'' files are not being maintained any
-more and may will not have the stations in them that are doing Mark
-II.  They will need to be modified if anyone uses them.  If they are,
-please send examples to <B>cwalker@nrao.edu</B> so new standards can be
-established.  Mark II is no longer available on most antennas,
-including all that are operated by NRAO.
-
-<P>
-</DD>
-</DL>
+<UL>
+<LI><B>Argument:</B> An array of up to 30 integers, one for each station in the <TT>TPSTA</TT> list.
+</LI>
+<LI><B>Options:</B>  <TT>1</TT> or <TT>2</TT> are the likely choices.
+</LI>
+<LI><B>Default:</B>  <TT>2</TT> for the VLBA and VLA, <TT>1</TT> for others.
+</LI>
+<LI><B>Usage:</B>    Defaults to the previous group.
+</LI>
+<LI><B>Example:</B>  <TT>NDRIVES=1,1,2,2,1,2</TT>
+  
+</LI>
+</UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html3211"
+<A NAME="tex2html3185"
   HREF="node215.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3207"
-  HREF="node213.html">
+<A NAME="tex2html3181"
+  HREF="node212.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3201"
+<A NAME="tex2html3175"
   HREF="node213.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3209"
+<A NAME="tex2html3183"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3212"
-  HREF="node215.html">Examples of Setup Files</A>
-<B> Up:</B> <A NAME="tex2html3208"
-  HREF="node213.html">Setup Files</A>
-<B> Previous:</B> <A NAME="tex2html3202"
-  HREF="node213.html">Setup Files</A>
- &nbsp <B>  <A NAME="tex2html3210"
+<B> Next:</B> <A NAME="tex2html3186"
+  HREF="node215.html">NHEADPOS</A>
+<B> Up:</B> <A NAME="tex2html3182"
+  HREF="node212.html">Details of Tape Initialization</A>
+<B> Previous:</B> <A NAME="tex2html3176"
+  HREF="node213.html">MEDIA</A>
+ &nbsp <B>  <A NAME="tex2html3184"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

@@ -101,8 +101,8 @@ C
      1          LASTTIME, T_AVAIL )
             IF( UP1(ISCN,ISTA) .EQ. ' ' .AND. 
      1          UP2(ISCN,ISTA) .EQ. ' ' .AND. 
-     2          EL1(ISCN,ISTA) .GT. OPMINEL .AND.
-     3          EL2(ISCN,ISTA) .GT. OPMINEL ) THEN
+     2          EL1(ISCN,ISTA) .GT. OPMINEL(ISCN) .AND.
+     3          EL2(ISCN,ISTA) .GT. OPMINEL(ISCN) ) THEN
                OKSTA(ISTA) = .TRUE.
                NGOOD = NGOOD + 1
                IF( LASTISCN(ISTA) .NE. 0 ) THEN
@@ -137,7 +137,7 @@ C
 C     Determine whether to accept the scan.  If OPMIAN was not
 C     set, require at least one good antenna.
 C
-      KEEP = ( NGOOD .GE. MAX( OPMIAN, 1 ) .AND. 
+      KEEP = ( NGOOD .GE. MAX( OPMIAN(ISCN), 1 ) .AND. 
      1       ( SKIP(ISRC) .GE. OPSKIP .OR. NPRIO .GE. 1 ) )
 C
 C     The following deactivates the minimum number of antennas
@@ -178,7 +178,7 @@ C
 C
 C        Increment the skip counter if the scan is not kept.
 C
-         IF( NGOOD .GE. OPMIAN ) THEN
+         IF( NGOOD .GE. OPMIAN(ISCN) ) THEN
             SKIP(ISRC) = SKIP(ISRC) + 1
          END IF
 C

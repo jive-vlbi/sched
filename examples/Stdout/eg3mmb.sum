@@ -7,7 +7,7 @@ COVER INFORMATION:
   Start Day 187 is Wed   5 Jul 2000   MJD  51730          
 
   Schedule Version:       1.00                                              
-  Processed by SCHED version:   6.02  May 2005                              
+  Processed by SCHED version:   6.04  February 2006                         
 
   PI:       Craig Walker                                                    
 
@@ -73,13 +73,23 @@ DERIVED INFORMATION FOR CORRELATION:
 
 STATIONS USED IN SCHEDULE:
 
-   Station  Code   Latitude Longitude Elevation        X           Y           Z 
+   Station  Code   Latitude Longitude Elevation        X            Y            Z 
 
-   VLBA_FD   Fd   30.63503 103.94482     1606.   -1324009.13 -5332181.96  3231962.47
-   VLBA_PT   Pt   34.30102 108.11919     2365.   -1640953.71 -5014816.02  3575411.88
-   VLBA_LA   La   35.77512 106.24560     1962.   -1449752.36 -4975298.59  3709123.93
-   VLBA_KP   Kp   31.95630 111.61242     1902.   -1995678.63 -5037317.71  3357328.13
-   VLBA_MK   Mk   19.80138 155.45550     3763.   -5464074.96 -2495249.12  2148296.84
+   VLBA_FD   Fd   30.63503 103.94482     1606.   -1324009.126 -5332181.965  3231962.473
+   VLBA_PT   Pt   34.30102 108.11919     2365.   -1640953.711 -5014816.024  3575411.880
+   VLBA_LA   La   35.77512 106.24560     1962.   -1449752.359 -4975298.588  3709123.928
+   VLBA_KP   Kp   31.95630 111.61242     1902.   -1995678.626 -5037317.713  3357328.130
+   VLBA_MK   Mk   19.80138 155.45550     3763.   -5464074.960 -2495249.116  2148296.845
+
+
+   Plate tectonic motion adjustments for MJD  51730
+   Station  Code      Station motions (m/yr)             Adjusted positions 
+                     X       Y       Z     MJD0        X            Y            Z 
+   VLBA_FD   Fd  -0.0117  0.0005 -0.0060  50449  -1324009.167 -5332181.963  3231962.452
+   VLBA_PT   Pt  -0.0143  0.0000 -0.0082  50449  -1640953.761 -5014816.024  3575411.851
+   VLBA_LA   La  -0.0132  0.0013 -0.0065  50449  -1449752.405 -4975298.584  3709123.905
+   VLBA_KP   Kp  -0.0126  0.0011 -0.0079  50449  -1995678.671 -5037317.709  3357328.102
+   VLBA_MK   Mk  -0.0138  0.0624  0.0306  50449  -5464075.009 -2495248.897  2148296.952
 
 
 
@@ -101,14 +111,14 @@ RECORDING SYSTEM INFORMATION:
     (See setup details later for times per pass.)
    Station Drives Head pos  Tape len  Density  Start position  Auto   Auto   Recorder  DAR
                                 (ft)           Driv Head indx  Aloc  Reverse
-   VLBA_FD     2      14      17600    High      1      1       Yes    Yes    VLBA    VLBA 
    VLBA_PT     2      14      17600    High      1      1       Yes    Yes    VLBA    VLBA 
    VLBA_MK     2      14      17600    High      1      1       Yes    Yes    VLBA    VLBA 
 
   DISKS - Stations potentially recording on disks.
-   Station    Drive type 
-   VLBA_LA      MARK5A
-   VLBA_KP      MARK5A
+   Station    Drive type   DAR
+   VLBA_FD      MARK5A     VLBA 
+   VLBA_LA      MARK5A     VLBA 
+   VLBA_KP      MARK5A     VLBA 
 
 
 
@@ -123,22 +133,22 @@ EXPERIMENT SUMMARY:
  Station summaries (tape stations): 
   Station  Control   Scans   Scan   Tape   Tapes  Passes Readbacks  Formatter   Sync 
                             Hours   Hours                         Reconfigures  Hours  
-  VLBA_FD    VLBA      71    6.30    5.53    2      16       7      0/  0       0.04
-  VLBA_PT    VLBA      71    6.30    5.53    2      16       7      0/  0       0.04
-  VLBA_MK    VLBA      59    5.20    4.53    1      13      11      0/  0       0.03
+  VLBA_PT    VLBA      71    6.30    5.53    2      16       7      0/  0        0.04
+  VLBA_MK    VLBA      59    5.20    4.53    1      13      11      0/  0        0.03
 
  Station summaries (disk stations): 
   Station  Control   Scans  Scan Hours  Record hrs   Gbytes      Formatter     Sync 
                                                                Reconfigures    Hours  
-  VLBA_LA    VLBA      71      6.30        5.53        643.        0/  0       0.09
-  VLBA_KP    VLBA      71      6.30        5.53        643.        0/  0       0.09
+  VLBA_FD    VLBA      71      6.30        5.53        643.        0/  0        0.09
+  VLBA_LA    VLBA      71      6.30        5.53        643.        0/  0        0.09
+  VLBA_KP    VLBA      71      6.30        5.53        643.        0/  0        0.09
 
 Notes on the station summaries: 
 
     "Sync Hours" is on-source, in-scan time lost during correlation to resyncing
     recordings.  Resyncs follow tape stoppages and formatter reconfigures.
 
-    For VLBA stations, total reconfigures and reconfigures during recording are shown.
+    For VLBA DAR stations, total reconfigures and reconfigures during recording are shown.
     Reconfigures during recording can cause slow correlator sync.
     Any reconfigure can slow sync at JIVE.
 
@@ -147,18 +157,17 @@ Notes on the station summaries:
 
 
 The following setup groups are the same as group   1 below.
-   2:VLBA_PT   5:VLBA_MK
+   3:VLBA_LA   4:VLBA_KP
 
 
  Setup file: v3mm-256-8-2.set
-   Matches group v3mm_ff in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group v3mm_ff in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
 
    Setup group:    1         Station: VLBA_FD           Total bit rate:  256
    Format: VLBA1:2           Bits per sample: 2         Sample rate: 16.000
-   Number of channels:  8    Passes/head pos:   1       Speedup factor:   1.00
+   Number of channels:  8                               Speedup factor:   1.00
 
-   Tape used at high density at 160.000 ips.  
-   Time per pass is   22.00 minutes.
+   Disk used to record data.
 
    1st LO=  85500.00  85500.00  85500.00  85500.00  85500.00  85500.00  85500.00  85500.00
    Net SB=         U         U         U         U         U         U         U         U
@@ -192,21 +201,22 @@ The following setup groups are the same as group   1 below.
 
    Track assignments are: 
     track1=   2, 10, 18, 26,  3, 11, 19, 27
-    barrel=roll_auto
+    barrel=roll_off 
 
 
-The following setup groups are the same as group   3 below.
-   4:VLBA_KP
+The following setup groups are the same as group   2 below.
+   5:VLBA_MK
 
 
  Setup file: v3mm-256-8-2.set
-   Matches group v3mm_ff in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group v3mm_ff in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
 
-   Setup group:    3         Station: VLBA_LA           Total bit rate:  256
+   Setup group:    2         Station: VLBA_PT           Total bit rate:  256
    Format: VLBA1:2           Bits per sample: 2         Sample rate: 16.000
-   Number of channels:  8                               Speedup factor:   1.00
+   Number of channels:  8    Passes/head pos:   1       Speedup factor:   1.00
 
-   Disk used to record data.
+   Tape used at high density at 160.000 ips.  
+   Time per pass is   22.00 minutes.
 
    1st LO=  85500.00  85500.00  85500.00  85500.00  85500.00  85500.00  85500.00  85500.00
    Net SB=         U         U         U         U         U         U         U         U
@@ -220,12 +230,12 @@ The following setup groups are the same as group   3 below.
 
   The following frequency sets based on this setup were used.
 
-   Frequency Set:   8  Setup file default.  Used pcal sets:   2
+   Frequency Set:   7  Setup file default.  Used pcal sets:   2
    LO sum=   86233.49  86233.49  86241.49  86241.49  86249.49  86249.49  86257.49  86257.49
    BBC fr=     733.49    733.49    741.49    741.49    749.49    749.49    757.49    757.49
    Bandwd=      8.000     8.000     8.000     8.000     8.000     8.000     8.000     8.000
 
-  Frequency Set:  18  Based on FREQ, BW, and/or DOPPLER in schedule.  Used pcal sets:   2
+  Frequency Set:  17  Based on FREQ, BW, and/or DOPPLER in schedule.  Used pcal sets:   2
    LO sum=   86240.60  86240.60  86209.82  86209.82  86181.05  86181.05  86152.28  86152.28
    BBC fr=     740.60    740.60    709.82    709.82    681.05    681.05    652.28    652.28
    Bandwd=      8.000     8.000     8.000     8.000     8.000     8.000     8.000     8.000
@@ -240,15 +250,15 @@ The following setup groups are the same as group   3 below.
 
    Track assignments are: 
     track1=   2, 10, 18, 26,  3, 11, 19, 27
-    barrel=roll_off 
+    barrel=roll_auto
 
 
 The following setup groups are the same as group   6 below.
    7:VLBA_PT   8:VLBA_LA   9:VLBA_KP  10:VLBA_MK
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/pt7mm.set
-   Matches group v7mm_c8 in /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
+ Setup file: /mnt/mach/mach/cwalker/code/sched/setups/pt7mm.set
+   Matches group v7mm_c8 in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
 
    Setup group:    6         Station: VLBA_FD           Total bit rate:  256
    Format: NONE              Bits per sample: 2         Sample rate: 32.000
@@ -293,115 +303,56 @@ The following setup groups are the same as group   6 below.
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  02:30:00 3C273         P   50   50   48   54   62
-187  02:40:00 setups/pt7mm  N   48   49   46   52   64
+  36  187 02:30:00 3C273         P   50   50   48   54   62
+      187 02:40:00 setups/pt7mm  N   48   49   46   52   64
 
-187  02:40:00 3C273         -   48   49   46   52   64
-187  02:50:00 v3mm-256-8-2  -   46   47   45   51   66
+  37  187 02:40:00 3C273         -   48   49   46   52   64
+      187 02:50:00 v3mm-256-8-2  -   46   47   45   51   66
 
-187  02:51:48 P-VXSGR       P   19   14   14   13  ---
-187  02:52:48 setups/pt7mm  N   19   14   14   13  ---
+  38  187 02:51:48 P-VXSGR       P   19   14   14   13  ---
+      187 02:52:48 setups/pt7mm  N   19   14   14   13  ---
 
-187  02:52:48 P-VXSGR       P   19   14   14   13  ---
-187  02:53:48 -             N   19   14   14   13  ---
+  39  187 02:52:48 P-VXSGR       P   19   14   14   13  ---
+      187 02:53:48 -             N   19   14   14   13  ---
 
-187  02:54:00 SGRA          -   17   12   12   12  ---D
-187  03:04:00 v3mm-256-8-2  -   19   14   13   14  ---D
+  40  187 02:54:00 SGRA          -   17   12   12   12  ---D
+      187 03:04:00 v3mm-256-8-2  -   19   14   13   14  ---D
 
-187  03:04:00 SGRA          -   19   14   13   14  ---D
-187  03:14:00 -             -   20   15   15   15  ---D
+  41  187 03:04:00 SGRA          -   19   14   13   14  ---D
+      187 03:14:00 -             -   20   15   15   15  ---D
 
-187  03:15:48 P-VXSGR       P   23   18   18   17  ---
-187  03:16:48 setups/pt7mm  N   23   18   18   17  ---
+  42  187 03:15:48 P-VXSGR       P   23   18   18   17  ---
+      187 03:16:48 setups/pt7mm  N   23   18   18   17  ---
 
-187  03:16:48 P-VXSGR       P   23   18   18   17  ---
-187  03:17:48 -             N   23   18   18   17  ---
+  43  187 03:16:48 P-VXSGR       P   23   18   18   17  ---
+      187 03:17:48 -             N   23   18   18   17  ---
 
-187  03:18:00 SGRA          -   21   15   15   15  ---D
-187  03:28:00 v3mm-256-8-2  -   22   17   16   17  ---D
+  44  187 03:18:00 SGRA          -   21   15   15   15  ---D
+      187 03:28:00 v3mm-256-8-2  -   22   17   16   17  ---D
 
-187  03:28:00 SGRA          -   22   17   16   17  ---D
-187  03:38:00 -             -   23   18   17   18  ---D
+  45  187 03:28:00 SGRA          -   22   17   16   17  ---D
+      187 03:38:00 -             -   23   18   17   18  ---D
 
-187  03:39:48 P-VXSGR       P   26   21   21   21  ---
-187  03:40:48 setups/pt7mm  N   26   21   21   21  ---
+  46  187 03:39:48 P-VXSGR       P   26   21   21   21  ---
+      187 03:40:48 setups/pt7mm  N   26   21   21   21  ---
 
-187  03:40:48 P-VXSGR       P   26   21   21   21  ---
-187  03:41:48 -             N   26   21   21   21  ---
+  47  187 03:40:48 P-VXSGR       P   26   21   21   21  ---
+      187 03:41:48 -             N   26   21   21   21  ---
 
-187  03:42:00 SGRA          -   23   18   18   19  ---D
-187  03:52:00 v3mm-256-8-2  -   24   19   19   20  ---D
+  48  187 03:42:00 SGRA          -   23   18   18   19  ---D
+      187 03:52:00 v3mm-256-8-2  -   24   19   19   20  ---D
 
-187  03:52:00 SGRA          -   24   19   19   20  ---D
-187  04:02:00 -             -   25   20   20   21  ---D
+  49  187 03:52:00 SGRA          -   24   19   19   20  ---D
+      187 04:02:00 -             -   25   20   20   21  ---D
 
-187  04:03:46 P-VXSGR       P   29   24   24   24  ---
-187  04:04:46 setups/pt7mm  N   29   24   24   24  ---
+  50  187 04:03:46 P-VXSGR       P   29   24   24   24  ---
+      187 04:04:46 setups/pt7mm  N   29   24   24   24  ---
 
-187  04:04:46 P-VXSGR       P   29   24   24   24  ---
-187  04:05:46 -             N   29   24   24   24  ---
-
-
-
- SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
-     Top item is:    Start elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
-     Bottom item is: End elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
-     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
-     Day 187 is Wed   5 Jul 2000   MJD  51730          
-
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
-
-187  04:03:38 NRAO530       P  ---  ---  ---  ---   10
-187  04:04:38 setups/pt7mm  N  ---  ---  ---  ---   10
-
-187  04:04:38 NRAO530       P  ---  ---  ---  ---   10
-187  04:05:38 -             N  ---  ---  ---  ---   10
-
-187  04:06:00 SGRA          -   26   21   20   21    1D
-187  04:16:00 v3mm-256-8-2  -   26   22   21   22    3
-
-187  04:16:00 SGRA          -   26   22   21   22    3
-187  04:26:00 -             -   27   23   22   23    5
-
-187  04:27:45 P-VXSGR       P   32   27   26   27  ---
-187  04:28:45 setups/pt7mm  N   32   27   26   27  ---
-
-187  04:28:45 P-VXSGR       P   32   27   26   27  ---
-187  04:29:45 -             N   32   27   26   27  ---
-
-187  04:27:35 NRAO530       P  ---  ---  ---  ---   15
-187  04:28:35 -             N  ---  ---  ---  ---   15
-
-187  04:28:35 NRAO530       P  ---  ---  ---  ---   15
-187  04:29:35 -             N  ---  ---  ---  ---   16
-
-187  04:30:00 SGRA          -   28   23   22   24    6
-187  04:40:00 v3mm-256-8-2  -   28   24   23   25    8
-
-187  04:40:00 SGRA          -   28   24   23   25    8
-187  04:50:00 -             -   29   24   23   26   10
-
-187  04:57:39 P-VXSGR       P   34   30   29   30  ---
-187  04:58:39 setups/pt7mm  N   34   30   29   31  ---
-
-187  04:58:39 P-VXSGR       P   34   30   29   31  ---
-187  04:59:39 -             N   35   30   29   31  ---
-
-187  04:57:43 P-VXSGR       P  ---  ---  ---  ---   10
-187  04:58:43 -             N  ---  ---  ---  ---   10
-
-187  04:58:43 P-VXSGR       P  ---  ---  ---  ---   10
-187  04:59:43 -             N  ---  ---  ---  ---   11
-
-187  05:00:00 AHSCO         -   27   23   22   25   16
-187  05:02:00 v3mm-256-8-2  -   27   23   22   25   16
-
-187  05:03:43 P-VXSGR       P   35   30   29   31  ---
-187  05:04:43 setups/pt7mm  N   35   30   29   31  ---
+  51  187 04:04:46 P-VXSGR       P   29   24   24   24  ---
+      187 04:05:46 -             N   29   24   24   24  ---
 
 
 
@@ -411,115 +362,56 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  05:04:43 P-VXSGR       P   35   30   29   31  ---
-187  05:05:43 setups/pt7mm  N   35   30   29   31  ---
+  52  187 04:03:38 NRAO530       P  ---  ---  ---  ---   10
+      187 04:04:38 setups/pt7mm  N  ---  ---  ---  ---   10
 
-187  05:03:48 P-VXSGR       P  ---  ---  ---  ---   11
-187  05:04:48 -             N  ---  ---  ---  ---   12
+  53  187 04:04:38 NRAO530       P  ---  ---  ---  ---   10
+      187 04:05:38 -             N  ---  ---  ---  ---   10
 
-187  05:04:48 P-VXSGR       P  ---  ---  ---  ---   12
-187  05:05:48 -             N  ---  ---  ---  ---   12
+  54  187 04:06:00 SGRA          -   26   21   20   21    1D
+      187 04:16:00 v3mm-256-8-2  -   26   22   21   22    3
 
-187  05:06:00 SGRA          -   30   25   24   27   13
-187  05:16:00 v3mm-256-8-2  -   30   26   25   27   15
+  55  187 04:16:00 SGRA          -   26   22   21   22    3
+      187 04:26:00 -             -   27   23   22   23    5
 
-187  05:16:00 SGRA          -   30   26   25   27   15
-187  05:26:00 -             -   30   26   25   28   17
+  56  187 04:27:45 P-VXSGR       P   32   27   26   27  ---
+      187 04:28:45 setups/pt7mm  N   32   27   26   27  ---
 
-187  05:27:42 P-VXSGR       P   36   32   31   33  ---
-187  05:28:42 setups/pt7mm  N   36   32   31   33  ---
+  57  187 04:28:45 P-VXSGR       P   32   27   26   27  ---
+      187 04:29:45 -             N   32   27   26   27  ---
 
-187  05:28:42 P-VXSGR       P   36   32   31   33  ---
-187  05:29:42 -             N   36   32   31   33  ---
+  58  187 04:27:35 NRAO530       P  ---  ---  ---  ---   15
+      187 04:28:35 -             N  ---  ---  ---  ---   15
 
-187  05:27:48 P-VXSGR       P  ---  ---  ---  ---   16
-187  05:28:48 -             N  ---  ---  ---  ---   17
+  59  187 04:28:35 NRAO530       P  ---  ---  ---  ---   15
+      187 04:29:35 -             N  ---  ---  ---  ---   16
 
-187  05:28:48 P-VXSGR       P  ---  ---  ---  ---   17
-187  05:29:48 -             N  ---  ---  ---  ---   17
+  60  187 04:30:00 SGRA          -   28   23   22   24    6
+      187 04:40:00 v3mm-256-8-2  -   28   24   23   25    8
 
-187  05:30:00 SGRA          -   30   26   25   28   17
-187  05:40:00 v3mm-256-8-2  -   30   26   25   28   19
+  61  187 04:40:00 SGRA          -   28   24   23   25    8
+      187 04:50:00 -             -   29   24   23   26   10
 
-187  05:40:00 SGRA          -   30   26   25   28   19
-187  05:50:00 -             -   30   27   25   29   21
+  62  187 04:57:39 P-VXSGR       P   34   30   29   30  ---
+      187 04:58:39 setups/pt7mm  N   34   30   29   31  ---
 
-187  05:51:41 P-VXSGR       P   37   33   32   35  ---
-187  05:52:41 setups/pt7mm  N   37   33   32   35  ---
+  63  187 04:58:39 P-VXSGR       P   34   30   29   31  ---
+      187 04:59:39 -             N   35   30   29   31  ---
 
-187  05:52:41 P-VXSGR       P   37   33   32   35  ---
-187  05:53:41 -             N   37   33   32   35  ---
+  64  187 04:57:43 P-VXSGR       P  ---  ---  ---  ---   10
+      187 04:58:43 -             N  ---  ---  ---  ---   10
 
-187  05:51:48 P-VXSGR       P  ---  ---  ---  ---   21
-187  05:52:48 -             N  ---  ---  ---  ---   21
+  65  187 04:58:43 P-VXSGR       P  ---  ---  ---  ---   10
+      187 04:59:43 -             N  ---  ---  ---  ---   11
 
-187  05:52:48 P-VXSGR       P  ---  ---  ---  ---   21
-187  05:53:48 -             N  ---  ---  ---  ---   21
+  66  187 05:00:00 AHSCO         -   27   23   22   25   16
+      187 05:02:00 v3mm-256-8-2  -   27   23   22   25   16
 
-187  05:54:00 SGRA          -   30   27   25   29   21
-187  06:04:00 v3mm-256-8-2  -   30   27   25   29   23
-
-
-
- SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
-     Top item is:    Start elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
-     Bottom item is: End elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
-     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
-     Day 187 is Wed   5 Jul 2000   MJD  51730          
-
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
-
-187  06:04:00 SGRA          -   30   27   25   29   23
-187  06:14:00 v3mm-256-8-2  -   30   27   25   29   25
-
-187  06:15:40 P-VXSGR       P   37   33   32   36  ---
-187  06:16:40 setups/pt7mm  N   37   33   32   36  ---
-
-187  06:16:40 P-VXSGR       P   37   33   32   36  ---
-187  06:17:40 -             N   37   33   32   36  ---
-
-187  06:15:48 P-VXSGR       P  ---  ---  ---  ---   26
-187  06:16:48 -             N  ---  ---  ---  ---   26
-
-187  06:16:48 P-VXSGR       P  ---  ---  ---  ---   26
-187  06:17:48 -             N  ---  ---  ---  ---   26
-
-187  06:18:00 SGRA          -   30   27   25   29   25
-187  06:28:00 v3mm-256-8-2  -   30   26   25   29   27
-
-187  06:28:00 SGRA          -   30   26   25   29   27
-187  06:38:00 -             -   29   26   24   29   28
-
-187  06:39:39 P-VXSGR       P   37   33   32   36  ---
-187  06:40:39 setups/pt7mm  N   37   33   32   36  ---
-
-187  06:40:39 P-VXSGR       P   37   33   32   36  ---
-187  06:41:39 -             N   37   33   32   36  ---
-
-187  06:39:48 P-VXSGR       P  ---  ---  ---  ---   30
-187  06:40:48 -             N  ---  ---  ---  ---   30
-
-187  06:40:48 P-VXSGR       P  ---  ---  ---  ---   30
-187  06:41:48 -             N  ---  ---  ---  ---   30
-
-187  06:42:00 SGRA          -   29   26   24   29   29
-187  06:52:00 v3mm-256-8-2  -   28   26   24   28   30
-
-187  06:52:00 SGRA          -   28   26   24   28   30
-187  07:02:00 -             -   28   25   23   28   32
-
-187  07:05:55 3C345         P   60   65   64   66  ---
-187  07:06:55 setups/pt7mm  N   60   64   64   66  ---
-
-187  07:06:55 3C345         P   60   64   64   66  ---
-187  07:07:55 -             N   60   64   63   66  ---
-
-187  07:05:55 3C345         P  ---  ---  ---  ---   66
-187  07:06:55 -             N  ---  ---  ---  ---   66
+  67  187 05:03:43 P-VXSGR       P   35   30   29   31  ---
+      187 05:04:43 setups/pt7mm  N   35   30   29   31  ---
 
 
 
@@ -529,115 +421,56 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  07:06:55 3C345         P  ---  ---  ---  ---   66
-187  07:07:55 setups/pt7mm  N  ---  ---  ---  ---   66
+  68  187 05:04:43 P-VXSGR       P   35   30   29   31  ---
+      187 05:05:43 setups/pt7mm  N   35   30   29   31  ---
 
-187  07:08:00 3C345         -   60   64   63   66   66
-187  07:18:00 v3mm-256-8-2  -   58   62   61   64   67
+  69  187 05:03:48 P-VXSGR       P  ---  ---  ---  ---   11
+      187 05:04:48 -             N  ---  ---  ---  ---   12
 
-187  07:19:38 P-VXSGR       P   35   32   30   35  ---
-187  07:20:38 setups/pt7mm  N   34   32   30   35  ---
+  70  187 05:04:48 P-VXSGR       P  ---  ---  ---  ---   12
+      187 05:05:48 -             N  ---  ---  ---  ---   12
 
-187  07:20:38 P-VXSGR       P   34   32   30   35  ---
-187  07:21:38 -             N   34   32   30   35  ---
+  71  187 05:06:00 SGRA          -   30   25   24   27   13
+      187 05:16:00 v3mm-256-8-2  -   30   26   25   27   15
 
-187  07:19:47 P-VXSGR       P  ---  ---  ---  ---   36
-187  07:20:47 -             N  ---  ---  ---  ---   37
+  72  187 05:16:00 SGRA          -   30   26   25   27   15
+      187 05:26:00 -             -   30   26   25   28   17
 
-187  07:20:47 P-VXSGR       P  ---  ---  ---  ---   37
-187  07:21:47 -             N  ---  ---  ---  ---   37
+  73  187 05:27:42 P-VXSGR       P   36   32   31   33  ---
+      187 05:28:42 setups/pt7mm  N   36   32   31   33  ---
 
-187  07:22:00 SGRA          -   26   24   22   27   34
-187  07:32:00 v3mm-256-8-2  -   25   23   21   27   35
+  74  187 05:28:42 P-VXSGR       P   36   32   31   33  ---
+      187 05:29:42 -             N   36   32   31   33  ---
 
-187  07:32:00 SGRA          -   25   23   21   27   35
-187  07:42:00 -             -   24   23   21   26   36
+  75  187 05:27:48 P-VXSGR       P  ---  ---  ---  ---   16
+      187 05:28:48 -             N  ---  ---  ---  ---   17
 
-187  07:43:37 P-VXSGR       P   33   31   29   34  ---
-187  07:44:37 setups/pt7mm  N   32   30   29   34  ---
+  76  187 05:28:48 P-VXSGR       P  ---  ---  ---  ---   17
+      187 05:29:48 -             N  ---  ---  ---  ---   17
 
-187  07:44:37 P-VXSGR       P   32   30   29   34  ---
-187  07:45:37 -             N   32   30   28   34  ---
+  77  187 05:30:00 SGRA          -   30   26   25   28   17
+      187 05:40:00 v3mm-256-8-2  -   30   26   25   28   19
 
-187  07:43:47 P-VXSGR       P  ---  ---  ---  ---   40
-187  07:44:47 -             N  ---  ---  ---  ---   40
+  78  187 05:40:00 SGRA          -   30   26   25   28   19
+      187 05:50:00 -             -   30   27   25   29   21
 
-187  07:44:47 P-VXSGR       P  ---  ---  ---  ---   40
-187  07:45:47 -             N  ---  ---  ---  ---   40
+  79  187 05:51:41 P-VXSGR       P   37   33   32   35  ---
+      187 05:52:41 setups/pt7mm  N   37   33   32   35  ---
 
-187  07:46:00 SGRA          -   24   22   20   26   37
-187  07:56:00 v3mm-256-8-2  -   23   21   19   25   38
+  80  187 05:52:41 P-VXSGR       P   37   33   32   35  ---
+      187 05:53:41 -             N   37   33   32   35  ---
 
-187  07:56:00 SGRA          -   23   21   19   25   38
-187  08:06:00 -             -   22   20   18   24   39
+  81  187 05:51:48 P-VXSGR       P  ---  ---  ---  ---   21
+      187 05:52:48 -             N  ---  ---  ---  ---   21
 
-187  08:07:37 P-VXSGR       P   30   29   27   32  ---
-187  08:08:37 setups/pt7mm  N   30   28   26   32  ---
+  82  187 05:52:48 P-VXSGR       P  ---  ---  ---  ---   21
+      187 05:53:48 -             N  ---  ---  ---  ---   21
 
-187  08:08:37 P-VXSGR       P   30   28   26   32  ---
-187  08:09:37 -             N   30   28   26   32  ---
-
-
-
- SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
-     Top item is:    Start elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
-     Bottom item is: End elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
-     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
-     Day 187 is Wed   5 Jul 2000   MJD  51730          
-
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
-
-187  08:07:46 P-VXSGR       P  ---  ---  ---  ---   43
-187  08:08:46 setups/pt7mm  N  ---  ---  ---  ---   43
-
-187  08:08:46 P-VXSGR       P  ---  ---  ---  ---   43
-187  08:09:46 -             N  ---  ---  ---  ---   43
-
-187  08:10:00 SGRA          -   21   20   18   23   39
-187  08:20:00 v3mm-256-8-2  -   20   19   17   22   40
-
-187  08:20:00 SGRA          -   20   19   17   22   40
-187  08:30:00 -             -   19   18   16   21   40
-
-187  08:31:37 P-VXSGR       P   27   26   24   30  ---
-187  08:32:37 setups/pt7mm  N   27   26   24   29  ---
-
-187  08:32:37 P-VXSGR       P   27   26   24   29  ---
-187  08:33:37 -             N   27   26   24   29  ---
-
-187  08:31:44 P-VXSGR       P  ---  ---  ---  ---   45
-187  08:32:44 -             N  ---  ---  ---  ---   45
-
-187  08:32:44 P-VXSGR       P  ---  ---  ---  ---   45
-187  08:33:44 -             N  ---  ---  ---  ---   45
-
-187  08:34:00 SGRA          -   18   17   15   21   40
-187  08:44:00 v3mm-256-8-2  -   17   16   14   20   41
-
-187  08:44:00 SGRA          -   17   16   14   20   41
-187  08:54:00 -             -   16   15   13   19   41
-
-187  08:55:37 P-VXSGR       P   24   23   21   27  ---
-187  08:56:37 setups/pt7mm  N   24   23   21   27  ---
-
-187  08:56:37 P-VXSGR       P   24   23   21   27  ---
-187  08:57:37 -             N   23   23   21   27  ---
-
-187  08:55:42 P-VXSGR       P  ---  ---  ---  ---   47
-187  08:56:42 -             N  ---  ---  ---  ---   47
-
-187  08:56:42 P-VXSGR       P  ---  ---  ---  ---   47
-187  08:57:42 -             N  ---  ---  ---  ---   47
-
-187  08:58:00 SGRA          -   15t  14t  12   18   41
-187  09:08:00 v3mm-256-8-2  -   14t  13t  11   17   41
-
-187  09:08:00 SGRA          -   14   13   11   17   41
-187  09:18:00 -             -   12   12   10   15   41
+  83  187 05:54:00 SGRA          -   30   27   25   29   21
+      187 06:04:00 v3mm-256-8-2  -   30   27   25   29   23
 
 
 
@@ -647,23 +480,200 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  09:19:25 3C446         P   51   46   45   46  ---
-187  09:20:25 setups/pt7mm  N   51   46   46   46  ---
+  84  187 06:04:00 SGRA          -   30   27   25   29   23
+      187 06:14:00 v3mm-256-8-2  -   30   27   25   29   25
 
-187  09:20:25 3C446         P   51   46   46   46  ---
-187  09:21:25 -             N   51   46   46   47  ---
+  85  187 06:15:40 P-VXSGR       P   37   33   32   36  ---
+      187 06:16:40 setups/pt7mm  N   37   33   32   36  ---
 
-187  09:19:38 3C446         P  ---  ---  ---  ---   18
-187  09:20:38 -             N  ---  ---  ---  ---   19
+  86  187 06:16:40 P-VXSGR       P   37   33   32   36  ---
+      187 06:17:40 -             N   37   33   32   36  ---
 
-187  09:20:38 3C446         P  ---  ---  ---  ---   19
-187  09:21:38 -             N  ---  ---  ---  ---   19
+  87  187 06:15:48 P-VXSGR       P  ---  ---  ---  ---   26
+      187 06:16:48 -             N  ---  ---  ---  ---   26
 
-187  09:22:00 3C454.3       -   64   59   60   58   19
-187  09:32:00 v3mm-256-8-2  -   66   61   62   60   22
+  88  187 06:16:48 P-VXSGR       P  ---  ---  ---  ---   26
+      187 06:17:48 -             N  ---  ---  ---  ---   26
+
+  89  187 06:18:00 SGRA          -   30   27   25   29   25
+      187 06:28:00 v3mm-256-8-2  -   30   26   25   29   27
+
+  90  187 06:28:00 SGRA          -   30   26   25   29   27
+      187 06:38:00 -             -   29   26   24   29   28
+
+  91  187 06:39:39 P-VXSGR       P   37   33   32   36  ---
+      187 06:40:39 setups/pt7mm  N   37   33   32   36  ---
+
+  92  187 06:40:39 P-VXSGR       P   37   33   32   36  ---
+      187 06:41:39 -             N   37   33   32   36  ---
+
+  93  187 06:39:48 P-VXSGR       P  ---  ---  ---  ---   30
+      187 06:40:48 -             N  ---  ---  ---  ---   30
+
+  94  187 06:40:48 P-VXSGR       P  ---  ---  ---  ---   30
+      187 06:41:48 -             N  ---  ---  ---  ---   30
+
+  95  187 06:42:00 SGRA          -   29   26   24   29   29
+      187 06:52:00 v3mm-256-8-2  -   28   26   24   28   30
+
+  96  187 06:52:00 SGRA          -   28   26   24   28   30
+      187 07:02:00 -             -   28   25   23   28   32
+
+  97  187 07:05:55 3C345         P   60   65   64   66  ---
+      187 07:06:55 setups/pt7mm  N   60   64   64   66  ---
+
+  98  187 07:06:55 3C345         P   60   64   64   66  ---
+      187 07:07:55 -             N   60   64   63   66  ---
+
+  99  187 07:05:55 3C345         P  ---  ---  ---  ---   66
+      187 07:06:55 -             N  ---  ---  ---  ---   66
+
+
+
+ SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
+     Top item is:    Start elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
+     Bottom item is: End elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
+     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
+     Day 187 is Wed   5 Jul 2000   MJD  51730          
+
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
+
+ 100  187 07:06:55 3C345         P  ---  ---  ---  ---   66
+      187 07:07:55 setups/pt7mm  N  ---  ---  ---  ---   66
+
+ 101  187 07:08:00 3C345         -   60   64   63   66   66
+      187 07:18:00 v3mm-256-8-2  -   58   62   61   64   67
+
+ 102  187 07:19:38 P-VXSGR       P   35   32   30   35  ---
+      187 07:20:38 setups/pt7mm  N   34   32   30   35  ---
+
+ 103  187 07:20:38 P-VXSGR       P   34   32   30   35  ---
+      187 07:21:38 -             N   34   32   30   35  ---
+
+ 104  187 07:19:47 P-VXSGR       P  ---  ---  ---  ---   36
+      187 07:20:47 -             N  ---  ---  ---  ---   37
+
+ 105  187 07:20:47 P-VXSGR       P  ---  ---  ---  ---   37
+      187 07:21:47 -             N  ---  ---  ---  ---   37
+
+ 106  187 07:22:00 SGRA          -   26   24   22   27   34
+      187 07:32:00 v3mm-256-8-2  -   25   23   21   27   35
+
+ 107  187 07:32:00 SGRA          -   25   23   21   27   35
+      187 07:42:00 -             -   24   23   21   26   36
+
+ 108  187 07:43:37 P-VXSGR       P   33   31   29   34  ---
+      187 07:44:37 setups/pt7mm  N   32   30   29   34  ---
+
+ 109  187 07:44:37 P-VXSGR       P   32   30   29   34  ---
+      187 07:45:37 -             N   32   30   28   34  ---
+
+ 110  187 07:43:47 P-VXSGR       P  ---  ---  ---  ---   40
+      187 07:44:47 -             N  ---  ---  ---  ---   40
+
+ 111  187 07:44:47 P-VXSGR       P  ---  ---  ---  ---   40
+      187 07:45:47 -             N  ---  ---  ---  ---   40
+
+ 112  187 07:46:00 SGRA          -   24   22   20   26   37
+      187 07:56:00 v3mm-256-8-2  -   23   21   19   25   38
+
+ 113  187 07:56:00 SGRA          -   23   21   19   25   38
+      187 08:06:00 -             -   22   20   18   24   39
+
+ 114  187 08:07:37 P-VXSGR       P   30   29   27   32  ---
+      187 08:08:37 setups/pt7mm  N   30   28   26   32  ---
+
+ 115  187 08:08:37 P-VXSGR       P   30   28   26   32  ---
+      187 08:09:37 -             N   30   28   26   32  ---
+
+
+
+ SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
+     Top item is:    Start elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
+     Bottom item is: End elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
+     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
+     Day 187 is Wed   5 Jul 2000   MJD  51730          
+
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
+
+ 116  187 08:07:46 P-VXSGR       P  ---  ---  ---  ---   43
+      187 08:08:46 setups/pt7mm  N  ---  ---  ---  ---   43
+
+ 117  187 08:08:46 P-VXSGR       P  ---  ---  ---  ---   43
+      187 08:09:46 -             N  ---  ---  ---  ---   43
+
+ 118  187 08:10:00 SGRA          -   21   20   18   23   39
+      187 08:20:00 v3mm-256-8-2  -   20   19   17   22   40
+
+ 119  187 08:20:00 SGRA          -   20   19   17   22   40
+      187 08:30:00 -             -   19   18   16   21   40
+
+ 120  187 08:31:37 P-VXSGR       P   27   26   24   30  ---
+      187 08:32:37 setups/pt7mm  N   27   26   24   29  ---
+
+ 121  187 08:32:37 P-VXSGR       P   27   26   24   29  ---
+      187 08:33:37 -             N   27   26   24   29  ---
+
+ 122  187 08:31:44 P-VXSGR       P  ---  ---  ---  ---   45
+      187 08:32:44 -             N  ---  ---  ---  ---   45
+
+ 123  187 08:32:44 P-VXSGR       P  ---  ---  ---  ---   45
+      187 08:33:44 -             N  ---  ---  ---  ---   45
+
+ 124  187 08:34:00 SGRA          -   18   17   15   21   40
+      187 08:44:00 v3mm-256-8-2  -   17   16   14   20   41
+
+ 125  187 08:44:00 SGRA          -   17   16   14   20   41
+      187 08:54:00 -             -   16   15   13   19   41
+
+ 126  187 08:55:37 P-VXSGR       P   24   23   21   27  ---
+      187 08:56:37 setups/pt7mm  N   24   23   21   27  ---
+
+ 127  187 08:56:37 P-VXSGR       P   24   23   21   27  ---
+      187 08:57:37 -             N   23   23   21   27  ---
+
+ 128  187 08:55:42 P-VXSGR       P  ---  ---  ---  ---   47
+      187 08:56:42 -             N  ---  ---  ---  ---   47
+
+ 129  187 08:56:42 P-VXSGR       P  ---  ---  ---  ---   47
+      187 08:57:42 -             N  ---  ---  ---  ---   47
+
+ 130  187 08:58:00 SGRA          -   15   14t  12   18   41
+      187 09:08:00 v3mm-256-8-2  -   14   13t  11   17   41
+
+ 131  187 09:08:00 SGRA          -   14   13   11   17   41
+      187 09:18:00 -             -   12   12   10   15   41
+
+
+
+ SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
+     Top item is:    Start elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
+     Bottom item is: End elevation, flag (D=>Down, H=>Below Horizon, t=>Tape Change.)
+     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
+     Day 187 is Wed   5 Jul 2000   MJD  51730          
+
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
+
+ 132  187 09:19:25 3C446         P   51   46   45   46  ---
+      187 09:20:25 setups/pt7mm  N   51   46   46   46  ---
+
+ 133  187 09:20:25 3C446         P   51   46   46   46  ---
+      187 09:21:25 -             N   51   46   46   47  ---
+
+ 134  187 09:19:38 3C446         P  ---  ---  ---  ---   18
+      187 09:20:38 -             N  ---  ---  ---  ---   19
+
+ 135  187 09:20:38 3C446         P  ---  ---  ---  ---   19
+      187 09:21:38 -             N  ---  ---  ---  ---   19
+
+ 136  187 09:22:00 3C454.3       -   64   59   60   58   19
+      187 09:32:00 v3mm-256-8-2  -   66   61   62   60   22
 
 
 
@@ -674,116 +684,56 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  02:30:00 3C273         P Stop Stop Stop Stop Stop
-187  02:40:00 setups/pt7mm  N ---- ---- ---- ---- ----
+  36  187 02:30:00 3C273         P Stop Stop Stop Stop Stop
+      187 02:40:00 setups/pt7mm  N ---- ---- ---- ---- ----
 
-187  02:40:00 3C273         - 1F01 1F01   19   19 1F01
-187  02:50:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00 1/00
+  37  187 02:40:00 3C273         -   19 1F01   19   19 1F01
+      187 02:50:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00 1/00
 
-187  02:51:48 P-VXSGR       P Stop Stop Stop Stop  ---
-187  02:52:48 setups/pt7mm  N ---- ---- ---- ----  ---
+  38  187 02:51:48 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 02:52:48 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  02:52:48 P-VXSGR       P Stop Stop Stop Stop  ---
-187  02:53:48 -             N ---- ---- ---- ----  ---
+  39  187 02:52:48 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 02:53:48 -             N ---- ---- ---- ----  ---
 
-187  02:54:00 SGRA          - 1F01 1F01   38   38  ---
-187  03:04:00 v3mm-256-8-2  - 1/08 1/08 1/00 1/00  ---
+  40  187 02:54:00 SGRA          -   39 1F01   39   39  ---
+      187 03:04:00 v3mm-256-8-2  - 1/00 1/08 1/00 1/00  ---
 
-187  03:04:00 SGRA          - 1R02 1R02   58   58  ---
-187  03:14:00 -             - 1/16 1/16 1/00 1/00  ---
+  41  187 03:04:00 SGRA          -   58 1R02   58   58  ---
+      187 03:14:00 -             - 1/00 1/16 1/00 1/00  ---
 
-187  03:15:48 P-VXSGR       P Stop Stop Stop Stop  ---
-187  03:16:48 setups/pt7mm  N ---- ---- ---- ----  ---
+  42  187 03:15:48 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 03:16:48 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  03:16:48 P-VXSGR       P Stop Stop Stop Stop  ---
-187  03:17:48 -             N ---- ---- ---- ----  ---
+  43  187 03:16:48 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 03:17:48 -             N ---- ---- ---- ----  ---
 
-187  03:18:00 SGRA          - 1R02 1R02   77   77  ---
-187  03:28:00 v3mm-256-8-2  - 1/11 1/11 1/00 1/00  ---
+  44  187 03:18:00 SGRA          -   77 1R02   77   77  ---
+      187 03:28:00 v3mm-256-8-2  - 1/00 1/11 1/00 1/00  ---
 
-187  03:28:00 SGRA          - 1F03 1F03   96   96  ---
-187  03:38:00 -             - 1/03 1/03 1/00 1/00  ---
+  45  187 03:28:00 SGRA          -   97 1F03   97   97  ---
+      187 03:38:00 -             - 1/00 1/03 1/00 1/00  ---
 
-187  03:39:48 P-VXSGR       P Stop Stop Stop Stop  ---
-187  03:40:48 setups/pt7mm  N ---- ---- ---- ----  ---
+  46  187 03:39:48 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 03:40:48 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  03:40:48 P-VXSGR       P Stop Stop Stop Stop  ---
-187  03:41:48 -             N ---- ---- ---- ----  ---
+  47  187 03:40:48 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 03:41:48 -             N ---- ---- ---- ----  ---
 
-187  03:42:00 SGRA          - 1F03 1F03  116  116  ---
-187  03:52:00 v3mm-256-8-2  - 1/05 1/05 1/00 1/00  ---
+  48  187 03:42:00 SGRA          -  116 1F03  116  116  ---
+      187 03:52:00 v3mm-256-8-2  - 1/00 1/05 1/00 1/00  ---
 
-187  03:52:00 SGRA          - 1R04 1R04  135  135  ---
-187  04:02:00 -             - 1/13 1/13 1/00 1/00  ---
+  49  187 03:52:00 SGRA          -  135 1R04  135  135  ---
+      187 04:02:00 -             - 1/00 1/13 1/00 1/00  ---
 
-187  04:03:46 P-VXSGR       P Stop Stop Stop Stop  ---
-187  04:04:46 setups/pt7mm  N ---- ---- ---- ----  ---
+  50  187 04:03:46 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 04:04:46 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  04:04:46 P-VXSGR       P Stop Stop Stop Stop  ---
-187  04:05:46 -             N ---- ---- ---- ----  ---
-
-
-
- SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
-     Top item is:    Scan end: Tape drive, direction, and head index.  Disk Gbytes.
-     Bottom item is: Headset at scan end and tape footage (thousands) at scan start.
-     Tape parameters are only predictions for stations using automatic tape allocation.
-     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
-     Day 187 is Wed   5 Jul 2000   MJD  51730          
-
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
-
-187  04:03:38 NRAO530       P  ---  ---  ---  --- Stop
-187  04:04:38 setups/pt7mm  N  ---  ---  ---  --- ----
-
-187  04:04:38 NRAO530       P  ---  ---  ---  --- Stop
-187  04:05:38 -             N  ---  ---  ---  --- ----
-
-187  04:06:00 SGRA          - 1R04 1R04  154  154 1F01
-187  04:16:00 v3mm-256-8-2  - 1/14 1/14 1/00 1/00 1/08
-
-187  04:16:00 SGRA          - 1F05 1F05  174  174 1R02
-187  04:26:00 -             - 1/06 1/06 1/00 1/00 1/16
-
-187  04:27:45 P-VXSGR       P Stop Stop Stop Stop  ---
-187  04:28:45 setups/pt7mm  N ---- ---- ---- ----  ---
-
-187  04:28:45 P-VXSGR       P Stop Stop Stop Stop  ---
-187  04:29:45 -             N ---- ---- ---- ----  ---
-
-187  04:27:35 NRAO530       P  ---  ---  ---  --- Stop
-187  04:28:35 -             N  ---  ---  ---  --- ----
-
-187  04:28:35 NRAO530       P  ---  ---  ---  --- Stop
-187  04:29:35 -             N  ---  ---  ---  --- ----
-
-187  04:30:00 SGRA          - 1F05 1F05  193  193 1R02
-187  04:40:00 v3mm-256-8-2  - 1/02 1/02 1/00 1/00 1/11
-
-187  04:40:00 SGRA          - 1F05 1F05  212  212 1F03
-187  04:50:00 -             - 1/10 1/10 1/00 1/00 1/03
-
-187  04:57:39 P-VXSGR       P Stop Stop Stop Stop  ---
-187  04:58:39 setups/pt7mm  N ---- ---- ---- ----  ---
-
-187  04:58:39 P-VXSGR       P Stop Stop Stop Stop  ---
-187  04:59:39 -             N ---- ---- ---- ----  ---
-
-187  04:57:43 P-VXSGR       P  ---  ---  ---  --- Stop
-187  04:58:43 -             N  ---  ---  ---  --- ----
-
-187  04:58:43 P-VXSGR       P  ---  ---  ---  --- Stop
-187  04:59:43 -             N  ---  ---  ---  --- ----
-
-187  05:00:00 AHSCO         - 1R06 1R06  216  216 1F03
-187  05:02:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00 1/05
-
-187  05:03:43 P-VXSGR       P Stop Stop Stop Stop  ---
-187  05:04:43 setups/pt7mm  N ---- ---- ---- ----  ---
+  51  187 04:04:46 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 04:05:46 -             N ---- ---- ---- ----  ---
 
 
 
@@ -794,116 +744,56 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  05:04:43 P-VXSGR       P Stop Stop Stop Stop  ---
-187  05:05:43 setups/pt7mm  N ---- ---- ---- ----  ---
+  52  187 04:03:38 NRAO530       P  ---  ---  ---  --- Stop
+      187 04:04:38 setups/pt7mm  N  ---  ---  ---  --- ----
 
-187  05:03:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  05:04:48 -             N  ---  ---  ---  --- ----
+  53  187 04:04:38 NRAO530       P  ---  ---  ---  --- Stop
+      187 04:05:38 -             N  ---  ---  ---  --- ----
 
-187  05:04:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  05:05:48 -             N  ---  ---  ---  --- ----
+  54  187 04:06:00 SGRA          -  155 1R04  155  155 1F01
+      187 04:16:00 v3mm-256-8-2  - 1/00 1/14 1/00 1/00 1/08
 
-187  05:06:00 SGRA          - 1R06 1R06  236  236 1F03
-187  05:16:00 v3mm-256-8-2  - 1/16 1/16 1/00 1/00 1/06
+  55  187 04:16:00 SGRA          -  174 1F05  174  174 1R02
+      187 04:26:00 -             - 1/00 1/06 1/00 1/00 1/16
 
-187  05:16:00 SGRA          - 1R06 1R06  255  255 1R04
-187  05:26:00 -             - 1/08 1/08 1/00 1/00 1/14
+  56  187 04:27:45 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 04:28:45 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  05:27:42 P-VXSGR       P Stop Stop Stop Stop  ---
-187  05:28:42 setups/pt7mm  N ---- ---- ---- ----  ---
+  57  187 04:28:45 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 04:29:45 -             N ---- ---- ---- ----  ---
 
-187  05:28:42 P-VXSGR       P Stop Stop Stop Stop  ---
-187  05:29:42 -             N ---- ---- ---- ----  ---
+  58  187 04:27:35 NRAO530       P  ---  ---  ---  --- Stop
+      187 04:28:35 -             N  ---  ---  ---  --- ----
 
-187  05:27:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  05:28:48 -             N  ---  ---  ---  --- ----
+  59  187 04:28:35 NRAO530       P  ---  ---  ---  --- Stop
+      187 04:29:35 -             N  ---  ---  ---  --- ----
 
-187  05:28:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  05:29:48 -             N  ---  ---  ---  --- ----
+  60  187 04:30:00 SGRA          -  194 1F05  194  194 1R02
+      187 04:40:00 v3mm-256-8-2  - 1/00 1/02 1/00 1/00 1/11
 
-187  05:30:00 SGRA          - 1F07 1F07  274  274 1R04
-187  05:40:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00 1/13
+  61  187 04:40:00 SGRA          -  213 1F05  213  213 1F03
+      187 04:50:00 -             - 1/00 1/10 1/00 1/00 1/03
 
-187  05:40:00 SGRA          - 1F07 1F07  294  294 1F05
-187  05:50:00 -             - 1/08 1/08 1/00 1/00 1/05
+  62  187 04:57:39 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 04:58:39 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  05:51:41 P-VXSGR       P Stop Stop Stop Stop  ---
-187  05:52:41 setups/pt7mm  N ---- ---- ---- ----  ---
+  63  187 04:58:39 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 04:59:39 -             N ---- ---- ---- ----  ---
 
-187  05:52:41 P-VXSGR       P Stop Stop Stop Stop  ---
-187  05:53:41 -             N ---- ---- ---- ----  ---
+  64  187 04:57:43 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 04:58:43 -             N  ---  ---  ---  --- ----
 
-187  05:51:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  05:52:48 -             N  ---  ---  ---  --- ----
+  65  187 04:58:43 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 04:59:43 -             N  ---  ---  ---  --- ----
 
-187  05:52:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  05:53:48 -             N  ---  ---  ---  --- ----
+  66  187 05:00:00 AHSCO         -  217 1R06  217  217 1F03
+      187 05:02:00 v3mm-256-8-2  - 1/00 1/18 1/00 1/00 1/05
 
-187  05:54:00 SGRA          - 1R08 1R08  313  313 1F05
-187  06:04:00 v3mm-256-8-2  - 1/16 1/16 1/00 1/00 1/03
-
-
-
- SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
-     Top item is:    Scan end: Tape drive, direction, and head index.  Disk Gbytes.
-     Bottom item is: Headset at scan end and tape footage (thousands) at scan start.
-     Tape parameters are only predictions for stations using automatic tape allocation.
-     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
-     Day 187 is Wed   5 Jul 2000   MJD  51730          
-
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
-
-187  06:04:00 SGRA          - 1R08 1R08  332  332 1R06
-187  06:14:00 v3mm-256-8-2  - 1/11 1/11 1/00 1/00 1/11
-
-187  06:15:40 P-VXSGR       P Stop Stop Stop Stop  ---
-187  06:16:40 setups/pt7mm  N ---- ---- ---- ----  ---
-
-187  06:16:40 P-VXSGR       P Stop Stop Stop Stop  ---
-187  06:17:40 -             N ---- ---- ---- ----  ---
-
-187  06:15:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  06:16:48 -             N  ---  ---  ---  --- ----
-
-187  06:16:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  06:17:48 -             N  ---  ---  ---  --- ----
-
-187  06:18:00 SGRA          - 1F09 1F09  352  352 1R06
-187  06:28:00 v3mm-256-8-2  - 1/03 1/03 1/00 1/00 1/16
-
-187  06:28:00 SGRA          - 1F09 1F09  371  371 1R06
-187  06:38:00 -             - 1/05 1/05 1/00 1/00 1/08
-
-187  06:39:39 P-VXSGR       P Stop Stop Stop Stop  ---
-187  06:40:39 setups/pt7mm  N ---- ---- ---- ----  ---
-
-187  06:40:39 P-VXSGR       P Stop Stop Stop Stop  ---
-187  06:41:39 -             N ---- ---- ---- ----  ---
-
-187  06:39:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  06:40:48 -             N  ---  ---  ---  --- ----
-
-187  06:40:48 P-VXSGR       P  ---  ---  ---  --- Stop
-187  06:41:48 -             N  ---  ---  ---  --- ----
-
-187  06:42:00 SGRA          - 1R10 1R10  390  390 1F07
-187  06:52:00 v3mm-256-8-2  - 1/13 1/13 1/00 1/00 1/00
-
-187  06:52:00 SGRA          - 1R10 1R10  410  410 1F07
-187  07:02:00 -             - 1/14 1/14 1/00 1/00 1/08
-
-187  07:05:55 3C345         P Stop Stop Stop Stop  ---
-187  07:06:55 setups/pt7mm  N ---- ---- ---- ----  ---
-
-187  07:06:55 3C345         P Stop Stop Stop Stop  ---
-187  07:07:55 -             N ---- ---- ---- ----  ---
-
-187  07:05:55 3C345         P  ---  ---  ---  --- Stop
-187  07:06:55 -             N  ---  ---  ---  --- ----
+  67  187 05:03:43 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 05:04:43 setups/pt7mm  N ---- ---- ---- ----  ---
 
 
 
@@ -914,116 +804,56 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  07:06:55 3C345         P  ---  ---  ---  --- Stop
-187  07:07:55 setups/pt7mm  N  ---  ---  ---  --- ----
+  68  187 05:04:43 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 05:05:43 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  07:08:00 3C345         - 1F11 1F11  429  429 1R08
-187  07:18:00 v3mm-256-8-2  - 1/06 1/06 1/00 1/00 1/16
+  69  187 05:03:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 05:04:48 -             N  ---  ---  ---  --- ----
 
-187  07:19:38 P-VXSGR       P Stop Stop Stop Stop  ---
-187  07:20:38 setups/pt7mm  N ---- ---- ---- ----  ---
+  70  187 05:04:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 05:05:48 -             N  ---  ---  ---  --- ----
 
-187  07:20:38 P-VXSGR       P Stop Stop Stop Stop  ---
-187  07:21:38 -             N ---- ---- ---- ----  ---
+  71  187 05:06:00 SGRA          -  236 1R06  236  236 1F03
+      187 05:16:00 v3mm-256-8-2  - 1/00 1/16 1/00 1/00 1/06
 
-187  07:19:47 P-VXSGR       P  ---  ---  ---  --- Stop
-187  07:20:47 -             N  ---  ---  ---  --- ----
+  72  187 05:16:00 SGRA          -  255 1R06  255  255 1R04
+      187 05:26:00 -             - 1/00 1/08 1/00 1/00 1/14
 
-187  07:20:47 P-VXSGR       P  ---  ---  ---  --- Stop
-187  07:21:47 -             N  ---  ---  ---  --- ----
+  73  187 05:27:42 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 05:28:42 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  07:22:00 SGRA          - 1F11 1F11  449  449 1R08
-187  07:32:00 v3mm-256-8-2  - 1/02 1/02 1/00 1/00 1/11
+  74  187 05:28:42 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 05:29:42 -             N ---- ---- ---- ----  ---
 
-187  07:32:00 SGRA          - 1F11 1F11  468  468 1F09
-187  07:42:00 -             - 1/10 1/10 1/00 1/00 1/03
+  75  187 05:27:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 05:28:48 -             N  ---  ---  ---  --- ----
 
-187  07:43:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  07:44:37 setups/pt7mm  N ---- ---- ---- ----  ---
+  76  187 05:28:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 05:29:48 -             N  ---  ---  ---  --- ----
 
-187  07:44:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  07:45:37 -             N ---- ---- ---- ----  ---
+  77  187 05:30:00 SGRA          -  275 1F07  275  275 1R04
+      187 05:40:00 v3mm-256-8-2  - 1/00 1/00 1/00 1/00 1/13
 
-187  07:43:47 P-VXSGR       P  ---  ---  ---  --- Stop
-187  07:44:47 -             N  ---  ---  ---  --- ----
+  78  187 05:40:00 SGRA          -  294 1F07  294  294 1F05
+      187 05:50:00 -             - 1/00 1/08 1/00 1/00 1/05
 
-187  07:44:47 P-VXSGR       P  ---  ---  ---  --- Stop
-187  07:45:47 -             N  ---  ---  ---  --- ----
+  79  187 05:51:41 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 05:52:41 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  07:46:00 SGRA          - 1R12 1R12  487  487 1F09
-187  07:56:00 v3mm-256-8-2  - 1/18 1/18 1/00 1/00 1/05
+  80  187 05:52:41 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 05:53:41 -             N ---- ---- ---- ----  ---
 
-187  07:56:00 SGRA          - 1R12 1R12  507  507 1R10
-187  08:06:00 -             - 1/10 1/10 1/00 1/00 1/13
+  81  187 05:51:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 05:52:48 -             N  ---  ---  ---  --- ----
 
-187  08:07:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  08:08:37 setups/pt7mm  N ---- ---- ---- ----  ---
+  82  187 05:52:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 05:53:48 -             N  ---  ---  ---  --- ----
 
-187  08:08:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  08:09:37 -             N ---- ---- ---- ----  ---
-
-
-
- SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
-     Top item is:    Scan end: Tape drive, direction, and head index.  Disk Gbytes.
-     Bottom item is: Headset at scan end and tape footage (thousands) at scan start.
-     Tape parameters are only predictions for stations using automatic tape allocation.
-     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
-     Day 187 is Wed   5 Jul 2000   MJD  51730          
-
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
-
-187  08:07:46 P-VXSGR       P  ---  ---  ---  --- Stop
-187  08:08:46 setups/pt7mm  N  ---  ---  ---  --- ----
-
-187  08:08:46 P-VXSGR       P  ---  ---  ---  --- Stop
-187  08:09:46 -             N  ---  ---  ---  --- ----
-
-187  08:10:00 SGRA          - 1F13 1F13  526  526 1R10
-187  08:20:00 v3mm-256-8-2  - 1/02 1/02 1/00 1/00 1/14
-
-187  08:20:00 SGRA          - 1F13 1F13  545  545 1F11
-187  08:30:00 -             - 1/06 1/06 1/00 1/00 1/06
-
-187  08:31:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  08:32:37 setups/pt7mm  N ---- ---- ---- ----  ---
-
-187  08:32:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  08:33:37 -             N ---- ---- ---- ----  ---
-
-187  08:31:44 P-VXSGR       P  ---  ---  ---  --- Stop
-187  08:32:44 -             N  ---  ---  ---  --- ----
-
-187  08:32:44 P-VXSGR       P  ---  ---  ---  --- Stop
-187  08:33:44 -             N  ---  ---  ---  --- ----
-
-187  08:34:00 SGRA          - 1R14 1R14  565  565 1F11
-187  08:44:00 v3mm-256-8-2  - 1/14 1/14 1/00 1/00 1/02
-
-187  08:44:00 SGRA          - 1R14 1R14  584  584 1F11
-187  08:54:00 -             - 1/13 1/13 1/00 1/00 1/10
-
-187  08:55:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  08:56:37 setups/pt7mm  N ---- ---- ---- ----  ---
-
-187  08:56:37 P-VXSGR       P Stop Stop Stop Stop  ---
-187  08:57:37 -             N ---- ---- ---- ----  ---
-
-187  08:55:42 P-VXSGR       P  ---  ---  ---  --- Stop
-187  08:56:42 -             N  ---  ---  ---  --- ----
-
-187  08:56:42 P-VXSGR       P  ---  ---  ---  --- Stop
-187  08:57:42 -             N  ---  ---  ---  --- ----
-
-187  08:58:00 SGRA          - 2F01 2F01  603  603 1R12
-187  09:08:00 v3mm-256-8-2  - 1/05 1/05 1/00 1/00 1/18
-
-187  09:08:00 SGRA          - 2F01 2F01  623  623 1R12
-187  09:18:00 -             - 1/03 1/03 1/00 1/00 1/10
+  83  187 05:54:00 SGRA          -  314 1R08  314  314 1F05
+      187 06:04:00 v3mm-256-8-2  - 1/00 1/16 1/00 1/00 1/03
 
 
 
@@ -1034,23 +864,203 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
      TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
      Day 187 is Wed   5 Jul 2000   MJD  51730          
 
-DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
-      STOP UT                   Fd   Pt   La   Kp   Mk
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
 
-187  09:19:25 3C446         P Stop Stop Stop Stop  ---
-187  09:20:25 setups/pt7mm  N ---- ---- ---- ----  ---
+  84  187 06:04:00 SGRA          -  333 1R08  333  333 1R06
+      187 06:14:00 v3mm-256-8-2  - 1/00 1/11 1/00 1/00 1/11
 
-187  09:20:25 3C446         P Stop Stop Stop Stop  ---
-187  09:21:25 -             N ---- ---- ---- ----  ---
+  85  187 06:15:40 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 06:16:40 setups/pt7mm  N ---- ---- ---- ----  ---
 
-187  09:19:38 3C446         P  ---  ---  ---  --- Stop
-187  09:20:38 -             N  ---  ---  ---  --- ----
+  86  187 06:16:40 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 06:17:40 -             N ---- ---- ---- ----  ---
 
-187  09:20:38 3C446         P  ---  ---  ---  --- Stop
-187  09:21:38 -             N  ---  ---  ---  --- ----
+  87  187 06:15:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 06:16:48 -             N  ---  ---  ---  --- ----
 
-187  09:22:00 3C454.3       - 2R02 2R02  642  642 1F13
-187  09:32:00 v3mm-256-8-2  - 1/11 1/11 1/00 1/00 1/02
+  88  187 06:16:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 06:17:48 -             N  ---  ---  ---  --- ----
+
+  89  187 06:18:00 SGRA          -  352 1F09  352  352 1R06
+      187 06:28:00 v3mm-256-8-2  - 1/00 1/03 1/00 1/00 1/16
+
+  90  187 06:28:00 SGRA          -  372 1F09  372  372 1R06
+      187 06:38:00 -             - 1/00 1/05 1/00 1/00 1/08
+
+  91  187 06:39:39 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 06:40:39 setups/pt7mm  N ---- ---- ---- ----  ---
+
+  92  187 06:40:39 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 06:41:39 -             N ---- ---- ---- ----  ---
+
+  93  187 06:39:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 06:40:48 -             N  ---  ---  ---  --- ----
+
+  94  187 06:40:48 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 06:41:48 -             N  ---  ---  ---  --- ----
+
+  95  187 06:42:00 SGRA          -  391 1R10  391  391 1F07
+      187 06:52:00 v3mm-256-8-2  - 1/00 1/13 1/00 1/00 1/00
+
+  96  187 06:52:00 SGRA          -  410 1R10  410  410 1F07
+      187 07:02:00 -             - 1/00 1/14 1/00 1/00 1/08
+
+  97  187 07:05:55 3C345         P Stop Stop Stop Stop  ---
+      187 07:06:55 setups/pt7mm  N ---- ---- ---- ----  ---
+
+  98  187 07:06:55 3C345         P Stop Stop Stop Stop  ---
+      187 07:07:55 -             N ---- ---- ---- ----  ---
+
+  99  187 07:05:55 3C345         P  ---  ---  ---  --- Stop
+      187 07:06:55 -             N  ---  ---  ---  --- ----
+
+
+
+ SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
+     Top item is:    Scan end: Tape drive, direction, and head index.  Disk Gbytes.
+     Bottom item is: Headset at scan end and tape footage (thousands) at scan start.
+     Tape parameters are only predictions for stations using automatic tape allocation.
+     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
+     Day 187 is Wed   5 Jul 2000   MJD  51730          
+
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
+
+ 100  187 07:06:55 3C345         P  ---  ---  ---  --- Stop
+      187 07:07:55 setups/pt7mm  N  ---  ---  ---  --- ----
+
+ 101  187 07:08:00 3C345         -  430 1F11  430  430 1R08
+      187 07:18:00 v3mm-256-8-2  - 1/00 1/06 1/00 1/00 1/16
+
+ 102  187 07:19:38 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 07:20:38 setups/pt7mm  N ---- ---- ---- ----  ---
+
+ 103  187 07:20:38 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 07:21:38 -             N ---- ---- ---- ----  ---
+
+ 104  187 07:19:47 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 07:20:47 -             N  ---  ---  ---  --- ----
+
+ 105  187 07:20:47 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 07:21:47 -             N  ---  ---  ---  --- ----
+
+ 106  187 07:22:00 SGRA          -  449 1F11  449  449 1R08
+      187 07:32:00 v3mm-256-8-2  - 1/00 1/02 1/00 1/00 1/11
+
+ 107  187 07:32:00 SGRA          -  468 1F11  468  468 1F09
+      187 07:42:00 -             - 1/00 1/10 1/00 1/00 1/03
+
+ 108  187 07:43:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 07:44:37 setups/pt7mm  N ---- ---- ---- ----  ---
+
+ 109  187 07:44:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 07:45:37 -             N ---- ---- ---- ----  ---
+
+ 110  187 07:43:47 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 07:44:47 -             N  ---  ---  ---  --- ----
+
+ 111  187 07:44:47 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 07:45:47 -             N  ---  ---  ---  --- ----
+
+ 112  187 07:46:00 SGRA          -  488 1R12  488  488 1F09
+      187 07:56:00 v3mm-256-8-2  - 1/00 1/18 1/00 1/00 1/05
+
+ 113  187 07:56:00 SGRA          -  507 1R12  507  507 1R10
+      187 08:06:00 -             - 1/00 1/10 1/00 1/00 1/13
+
+ 114  187 08:07:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 08:08:37 setups/pt7mm  N ---- ---- ---- ----  ---
+
+ 115  187 08:08:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 08:09:37 -             N ---- ---- ---- ----  ---
+
+
+
+ SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
+     Top item is:    Scan end: Tape drive, direction, and head index.  Disk Gbytes.
+     Bottom item is: Headset at scan end and tape footage (thousands) at scan start.
+     Tape parameters are only predictions for stations using automatic tape allocation.
+     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
+     Day 187 is Wed   5 Jul 2000   MJD  51730          
+
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
+
+ 116  187 08:07:46 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 08:08:46 setups/pt7mm  N  ---  ---  ---  --- ----
+
+ 117  187 08:08:46 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 08:09:46 -             N  ---  ---  ---  --- ----
+
+ 118  187 08:10:00 SGRA          -  526 1F13  526  526 1R10
+      187 08:20:00 v3mm-256-8-2  - 1/00 1/02 1/00 1/00 1/14
+
+ 119  187 08:20:00 SGRA          -  546 1F13  546  546 1F11
+      187 08:30:00 -             - 1/00 1/06 1/00 1/00 1/06
+
+ 120  187 08:31:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 08:32:37 setups/pt7mm  N ---- ---- ---- ----  ---
+
+ 121  187 08:32:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 08:33:37 -             N ---- ---- ---- ----  ---
+
+ 122  187 08:31:44 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 08:32:44 -             N  ---  ---  ---  --- ----
+
+ 123  187 08:32:44 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 08:33:44 -             N  ---  ---  ---  --- ----
+
+ 124  187 08:34:00 SGRA          -  565 1R14  565  565 1F11
+      187 08:44:00 v3mm-256-8-2  - 1/00 1/14 1/00 1/00 1/02
+
+ 125  187 08:44:00 SGRA          -  584 1R14  584  584 1F11
+      187 08:54:00 -             - 1/00 1/13 1/00 1/00 1/10
+
+ 126  187 08:55:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 08:56:37 setups/pt7mm  N ---- ---- ---- ----  ---
+
+ 127  187 08:56:37 P-VXSGR       P Stop Stop Stop Stop  ---
+      187 08:57:37 -             N ---- ---- ---- ----  ---
+
+ 128  187 08:55:42 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 08:56:42 -             N  ---  ---  ---  --- ----
+
+ 129  187 08:56:42 P-VXSGR       P  ---  ---  ---  --- Stop
+      187 08:57:42 -             N  ---  ---  ---  --- ----
+
+ 130  187 08:58:00 SGRA          -  604 2F01  604  604 1R12
+      187 09:08:00 v3mm-256-8-2  - 1/00 1/05 1/00 1/00 1/18
+
+ 131  187 09:08:00 SGRA          -  623 2F01  623  623 1R12
+      187 09:18:00 -             - 1/00 1/03 1/00 1/00 1/10
+
+
+
+ SUMMARY for experiment eg3mmb  3mm observing with autopeak                                             
+     Top item is:    Scan end: Tape drive, direction, and head index.  Disk Gbytes.
+     Bottom item is: Headset at scan end and tape footage (thousands) at scan start.
+     Tape parameters are only predictions for stations using automatic tape allocation.
+     TYPE top: -=> normal scan, P=>Pointing or Ta;  bottom: -=>recording, N=>not recording.
+     Day 187 is Wed   5 Jul 2000   MJD  51730          
+
+SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
+           STOP UT                   Fd   Pt   La   Kp   Mk
+
+ 132  187 09:19:25 3C446         P Stop Stop Stop Stop  ---
+      187 09:20:25 setups/pt7mm  N ---- ---- ---- ----  ---
+
+ 133  187 09:20:25 3C446         P Stop Stop Stop Stop  ---
+      187 09:21:25 -             N ---- ---- ---- ----  ---
+
+ 134  187 09:19:38 3C446         P  ---  ---  ---  --- Stop
+      187 09:20:38 -             N  ---  ---  ---  --- ----
+
+ 135  187 09:20:38 3C446         P  ---  ---  ---  --- Stop
+      187 09:21:38 -             N  ---  ---  ---  --- ----
+
+ 136  187 09:22:00 3C454.3       -  643 2R02  643  643 1F13
+      187 09:32:00 v3mm-256-8-2  - 1/00 1/11 1/00 1/00 1/02
 
 
  Automatic tape allocation requested for sites using VLBA control files and having
@@ -1059,7 +1069,7 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
  Number of tapes or GBytes used at each autoaloc station:
     Includes all disk stations.
    Station      Tapes        GBytes
-   VLBA_FD       1.08
+   VLBA_FD                    642.5
    VLBA_PT       1.08
    VLBA_LA                    642.5
    VLBA_KP                    642.5
@@ -1074,8 +1084,7 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
  Station      Day    Time                Day    Time 
                  (UT)                        (UT)
 
-  VLBA_FD    187  02:40:00              187  08:54:00  
-  VLBA_FD    187  08:58:00              187  09:32:00  
+  VLBA_FD    187  02:40:00              187  09:32:00  
 
   VLBA_PT    187  02:40:00              187  08:54:00  
   VLBA_PT    187  08:58:00              187  09:32:00  
@@ -1114,37 +1123,37 @@ DAY  START UT  SOURCE     TYPE  STATIONS    t => tape change
 
    J1229+0203        12 26 33.245835   * 12 29 06.699731     12 29 07.225979       0.30
    1226+023          02 19 43.30564    * 02 03 08.59814      02 03 07.46780        0.20
- * 3C273             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C273             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    3C273B            VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
    J1229+02             0.167 scan hours,      1.656 baseline hours above horizon.
 
    J1642+3948        16 41 17.606231   * 16 42 58.809968     16 43 00.645883       0.26
    1641+399          39 54 10.81493    * 39 48 36.99399      39 48 47.83171        0.40
- * 3C345             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C345             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J1642+39          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.167 scan hours,      1.667 baseline hours above horizon.
 
    J1733-1304        17 30 13.535187   * 17 33 02.705785     17 33 04.733894       0.21
    1730-130         -13 02 45.83975    *-13 04 49.54823     -13 04 45.41832        0.30
-   J1733-13          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+   J1733-13          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
  * NRAO530           VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.000 scan hours,      0.000 baseline hours above horizon.
 
    J2225-0457        22 23 11.077768   * 22 25 47.259295     22 25 48.688706       0.20
    2223-052         -05 12 17.79947    *-04 57 01.39083     -04 56 52.47733        0.30
- * 3C446             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C446             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J2225-04          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.000 scan hours,      0.000 baseline hours above horizon.
 
    J2253+1608        22 51 29.519743   * 22 53 57.747942     22 53 59.131808       0.31
    2251+158          15 52 54.34803    * 16 08 53.56086      16 08 55.79047        0.20
- * 3C454.3           /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C454.3           /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J2253+16          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.167 scan hours,      1.667 baseline hours above horizon.
 
  * P-VXSGR           18 05 02.981516   * 18 08 04.062000     18 08 06.252536       0.00
    SIO-VXSGR        -22 13 54.77916    *-22 13 26.10000     -22 13 21.25292        0.00
-   VXSGRSIO          /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.pointing
+   VXSGRSIO          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.pointing
                       baudry pos, sest vel 2MHz BW
                      Doppler based on LSR frame and radio definition.  Velocities:
                           5.00     5.00     5.00     5.00
@@ -1206,20 +1215,20 @@ name = 'P-VXSGR'  ra = 18h08m04.062000s  dec = -22d13'26.10000"
 
 
 Catalogs: 
-  Station:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/stations.dat
-                 Version:  2005May23-14:53:23
-  Location:  /users/cwalker/mach/mach/cwalker/code/sched/catalogs/locations.dat
+  Station:   /mnt/mach/mach/cwalker/code/sched/catalogs/stations.dat
+                 Version:  2006Feb08-10:20:23
+  Location:  /mnt/mach/mach/cwalker/code/sched/catalogs/locations.dat
                  Version:  08 Mar 2005
-  Frequency: /users/cwalker/mach/mach/cwalker/code/sched/catalogs/freq.dat
-                 Version:  2005May23-14:53:23
-  Source:   /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+  Frequency: /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
+                 Version:  2006Feb08-10:20:23
+  Source:   /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
                  Version:  2005 March 1
 
 
 Code versions: 
-  Release version:            6.02  May 2005
+  Release version:            6.04  February 2006
   Version of VEX standard:   1.50
-  Version of VEX code:       0.84
-  Version of plot code:      1.05
+  Version of VEX code:       0.86
+  Version of plot code:      1.06
   Version of ephemeris code: 1.01
   Version of PGPLOT:        v5.2.0

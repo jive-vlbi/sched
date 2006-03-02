@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>DURation</TITLE>
-<META NAME="description" CONTENT="DURation">
+<TITLE>DOVEX</TITLE>
+<META NAME="description" CONTENT="DOVEX">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,90 +29,69 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1553"
+<A NAME="tex2html1582"
   HREF="node83.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1549"
+<A NAME="tex2html1578"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1543"
+<A NAME="tex2html1572"
   HREF="node81.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1551"
+<A NAME="tex2html1580"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1554"
-  HREF="node83.html">DWELL</A>
-<B> Up:</B> <A NAME="tex2html1550"
+<B> Next:</B> <A NAME="tex2html1583"
+  HREF="node83.html">DURation</A>
+<B> Up:</B> <A NAME="tex2html1579"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1544"
-  HREF="node81.html">DOVEX</A>
- &nbsp <B>  <A NAME="tex2html1552"
+<B> Previous:</B> <A NAME="tex2html1573"
+  HREF="node81.html">DOSTA</A>
+ &nbsp <B>  <A NAME="tex2html1581"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004123000000000000000"></A><A NAME="MP:DUR"></A>
+<H3><A NAME="SECTION004123000000000000000"></A><A NAME="MP:DOVEX"></A>
 <BR>
-<TT>DURation</TT>
+<TT>DOVEX</TT>
 </H3>
 
 <P>
-<TT>DURation</TT> specifies the length of the current scan. Usually this
-is used instead of <A HREF="node173.html#MP:STOP"><TT>STOP</TT></A>. It is assumed to be
-a UT time interval unless <A HREF="node115.html#MP:LST"><TT>LST</TT></A> was specified,
-in which case it was assumed to be an LST time interval.
-<A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A> is a very similar parameter except
-that, with <TT>DURation</TT>, the scan starts <A HREF="node97.html#MP:GAP"><TT>GAP</TT></A>
-seconds after the previous stop time while with dwell, the scan will
-start at least <A HREF="node97.html#MP:GAP"><TT>GAP</TT></A> seconds after the previous
-stop time, but, if necessary, will wait longer to allow all antennas to
-reach the source.
+<TT>DOVEX</TT> tells SCHED&nbsp; to write a VEX format output file.  VEX is
+the format used by PCFS, the NASA/Goddard field system that controls
+EVN, geodetic and other stations. It will also be used by MkIV correlators
+(under construction).  A VEX file is only required if a station
+controlled by PCFS is included or if the observation is to be
+processed on a correlator that requires a VEX file.  Pure VLBA or VLBA
+plus other stations that use VLBA control files (VLA, EB_VLBA,
+GB_VLBA) do not require a VEX file.
 
 <P>
-Note that <TT>DUR</TT> and <A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A>
-may be both be used in the same schedule, but cannot both be used
-for the same scan (that would not make sense).  If either is used,
-the time specified overrides any previous specification of the
-scan length made with either parameter.
-
-<P>
-Once the scan start time has been specified as above, it can be
-adjusted further with <A HREF="node148.html#MP:PRESCAN"><TT>PRESCAN</TT></A>.  Then the
-actual time that tapes start rolling is adjusted further with
-<A HREF="node117.html#MP:MINPAUSE"><TT>MINPAUSE</TT></A> and <A HREF="node149.html#MP:PRESTART"><TT>PRESTART</TT></A>.  <TT>PRESTART</TT>, <TT>MINPAUSE</TT>, and <TT>PRESTART</TT>
-allow the user to start tapes rolling early to give the correlator
-a chance to synchronize before the start of good data.  They also
-can help prevent short tape stoppages which can cause problems
-with playback.  See the descriptions of those parameters for more
-information.  The SCHED&nbsp; defaults are generally reasonable so, if
-you are not an experienced user who wants to exercise fine control
-of tape management, don't worry about these parameters.
-
-<P>
-The start and stop times reported in the summary and operator schedule
-files are the same for all stations.  They take into account any
-adjustments made as a result of specifying <A HREF="node148.html#MP:PRESCAN"><TT>PRESCAN</TT></A>, but do not take into account adjustments requested using
-<A HREF="node117.html#MP:MINPAUSE"><TT>MINPAUSE</TT></A> and <A HREF="node149.html#MP:PRESTART"><TT>PRESTART</TT></A>, since those can be station dependent.
-
-<P>
-See the <A HREF="node17.html#SSEC:SCANTIMES">Scan Times</A> section for more
-information on the specification of scans.
+If any station in the schedule requires a VEX file, as specified
+in the CONTROL input in the station catalog, DOVEX will be set
+automatically.  The only occasions in which DOVEX will need to
+be specified by the user are those when an observation with no
+VEX stations is to be correlated at a VEX driven correlator.  This
+is likely to be rare. Note that SCHED&nbsp; should
+not be used to prepare observations that are to be correlated at a
+MkIII correlator (e.g. Bonn), because it doesn't produce the proper
+Mark&nbsp;III ``.drg file''.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A time in format <TT>hh:mm:ss</TT>, <TT>mm:ss</TT>, or <TT>ss</TT>.
+<LI><B>Argument:</B> None.
 </LI>
-<LI><B>Options:</B>  Any.
+<LI><B>Options:</B>  No augument required.  If one given, DOVEX will be false.
 </LI>
-<LI><B>Default:</B>  Not used.
+<LI><B>Default:</B>  DOVEX will be false unless a VEX station is found.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous scan. Overridden by <TT>DWELL</TT>.
+<LI><B>Usage:</B>    Only one value used -- the last.
 </LI>
-<LI><B>Example:</B>  <TT>DUR=13:00</TT>
+<LI><B>Example:</B>  <TT>DOVEX</TT>
   
 </LI>
 </UL>
@@ -118,31 +99,31 @@ information on the specification of scans.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1553"
+<A NAME="tex2html1582"
   HREF="node83.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1549"
+<A NAME="tex2html1578"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1543"
+<A NAME="tex2html1572"
   HREF="node81.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1551"
+<A NAME="tex2html1580"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1554"
-  HREF="node83.html">DWELL</A>
-<B> Up:</B> <A NAME="tex2html1550"
+<B> Next:</B> <A NAME="tex2html1583"
+  HREF="node83.html">DURation</A>
+<B> Up:</B> <A NAME="tex2html1579"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1544"
-  HREF="node81.html">DOVEX</A>
- &nbsp <B>  <A NAME="tex2html1552"
+<B> Previous:</B> <A NAME="tex2html1573"
+  HREF="node81.html">DOSTA</A>
+ &nbsp <B>  <A NAME="tex2html1581"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

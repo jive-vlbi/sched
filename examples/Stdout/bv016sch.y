@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.02  May 2005                              
+Processed by SCHED version:   6.04  February 2006                         
 
 PI:       Craig Walker                                                    
 
@@ -32,6 +32,7 @@ Notes:
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
 ----------------------------------------------------------------------------------------
@@ -90,6 +91,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
   UP:  D => Below limits;  H => Below horizon mask.  blank => Up.
   Early: Seconds between end of slew and start.   Dwell: On source seconds. 
   Tapes: Drive, Index, Start footage / Direction, Head Group, End footage.
+         For disks, the footages are really the GBytes
   TPStart:  Tape motion start time.  Frequencies are LO sum (band edge).
   SYNC: Time correlator is expected to sync up.
 ----------------------------------------------------------------------------------------
@@ -140,7 +142,7 @@ SETUP FILE INFORMATION:
    NOTE: If DOPPLER, FREQ, or BW were used, see the individual scans for the final BBC settings.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/examples/manual_vla-cc.set
+ Setup file: /mnt/mach/mach/cwalker/code/sched/examples/manual_vla-cc.set
  --- WARNING ---  This group does not match an entry in the frequency catalog.
                   This might be ok because the catalog is not complete.
                   But be very careful to be sure that the setup is correct.
@@ -158,7 +160,7 @@ SETUP FILE INFORMATION:
      With new digital patch panel, VLA IF = VLB IF.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/vla-uu.set
+ Setup file: /mnt/mach/mach/cwalker/code/sched/setups/vla-uu.set
  --- WARNING ---  This group does not match an entry in the frequency catalog.
                   This might be ok because the catalog is not complete.
                   But be very careful to be sure that the setup is correct.
@@ -176,7 +178,7 @@ SETUP FILE INFORMATION:
      With new digital patch panel, VLA IF = VLB IF.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/vla-xx.set
+ Setup file: /mnt/mach/mach/cwalker/code/sched/setups/vla-xx.set
  --- WARNING ---  This group does not match an entry in the frequency catalog.
                   This might be ok because the catalog is not complete.
                   But be very careful to be sure that the setup is correct.
@@ -194,7 +196,7 @@ SETUP FILE INFORMATION:
      With new digital patch panel, VLA IF = VLB IF.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/examples/manual_vla-qq.set
+ Setup file: /mnt/mach/mach/cwalker/code/sched/examples/manual_vla-qq.set
  --- WARNING ---  This group does not match an entry in the frequency catalog.
                   This might be ok because the catalog is not complete.
                   But be very careful to be sure that the setup is correct.
@@ -212,7 +214,7 @@ SETUP FILE INFORMATION:
      With new digital patch panel, VLA IF = VLB IF.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/vla-kk.set
+ Setup file: /mnt/mach/mach/cwalker/code/sched/setups/vla-kk.set
  --- WARNING ---  This group does not match an entry in the frequency catalog.
                   This might be ok because the catalog is not complete.
                   But be very careful to be sure that the setup is correct.
@@ -230,7 +232,7 @@ SETUP FILE INFORMATION:
      With new digital patch panel, VLA IF = VLB IF.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/vla-pp.set
+ Setup file: /mnt/mach/mach/cwalker/code/sched/setups/vla-pp.set
  --- WARNING ---  This group does not match an entry in the frequency catalog.
                   This might be ok because the catalog is not complete.
                   But be very careful to be sure that the setup is correct.
@@ -248,7 +250,7 @@ SETUP FILE INFORMATION:
      With new digital patch panel, VLA IF = VLB IF.
 
 
- Setup file: /users/cwalker/mach/mach/cwalker/code/sched/setups/vla-ll.set
+ Setup file: /mnt/mach/mach/cwalker/code/sched/setups/vla-ll.set
  --- WARNING ---  This group does not match an entry in the frequency catalog.
                   This might be ok because the catalog is not complete.
                   But be very careful to be sure that the setup is correct.
@@ -284,19 +286,19 @@ SETUP FILE INFORMATION:
 
    J0137+3309        01 34 49.826428   * 01 37 41.299494     01 37 29.162606       0.90
    0134+329          32 54 20.25964    * 33 09 35.13382      33 08 24.63446        0.91
- * 3C48              /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C48              /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J0137+33          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.582 scan hours,      0.000 baseline hours above horizon.
 
    J0319+4130        03 16 29.567289   * 03 19 48.160119     03 19 33.875663       0.28
    0316+413          41 19 51.91675    * 41 30 42.10387      41 29 44.55779        0.41
- * 3C84              /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C84              /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J0319+41          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.449 scan hours,      0.000 baseline hours above horizon.
 
    J0555+3948        05 52 01.407172   * 05 55 30.805614     05 55 14.626610       0.26
    0552+398          39 48 21.94585    * 39 48 49.16500      39 48 34.60844        0.40
- * DA193             /users/cwalker/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * DA193             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
    J0555+39          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
                         0.731 scan hours,      0.000 baseline hours above horizon.
 

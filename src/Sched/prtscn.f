@@ -67,6 +67,11 @@ C
       END IF
       CALL WLOG( 0, MSGTXT )
 C
+      MSGTXT = ' '
+      MSGTXT = '  Scan Comment:  ' //  ANNOT(ISCN)
+      CALL WLOG( 0, MSGTXT )
+      MSGTXT = ' '
+C
       CALL WLOG( 1, 'PRTSCN: Scan information was '//
      1           'written to the log file.' )
       RETURN

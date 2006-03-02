@@ -81,8 +81,10 @@ C        Write the summary file.
 C
          CALL SCHSUM( RESTART )
 C
-C        Go to the interactive plotting.
+C        Go to the interactive plotting.  But first flush the buffers
+C        of the log file so it can be read properly while plotting.
 C
+         CALL FLUXH( ILOG, LOGFILE )
          CALL PLOTTER( MKFILES, RESTART )
 C
 C        If a restart was requested during plotting, do it.

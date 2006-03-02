@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>GAP</TITLE>
-<META NAME="description" CONTENT="GAP">
+<TITLE>FREQLIST</TITLE>
+<META NAME="description" CONTENT="FREQLIST">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,111 +29,57 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1733"
+<A NAME="tex2html1762"
   HREF="node98.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1729"
+<A NAME="tex2html1758"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1723"
+<A NAME="tex2html1752"
   HREF="node96.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1731"
+<A NAME="tex2html1760"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1734"
-  HREF="node98.html">GRABTO</A>
-<B> Up:</B> <A NAME="tex2html1730"
+<B> Next:</B> <A NAME="tex2html1763"
+  HREF="node98.html">GAP</A>
+<B> Up:</B> <A NAME="tex2html1759"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1724"
-  HREF="node96.html">FREQLIST</A>
- &nbsp <B>  <A NAME="tex2html1732"
+<B> Previous:</B> <A NAME="tex2html1753"
+  HREF="node96.html">FREQFILE</A>
+ &nbsp <B>  <A NAME="tex2html1761"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004124500000000000000"></A><A NAME="MP:GAP"></A>
+<H3><A NAME="SECTION004124500000000000000"></A><A NAME="MP:FREQLIST"></A>
 <BR>
-<TT>GAP</TT>
+<TT>FREQLIST</TT>
 </H3>
 
 <P>
-<TT>GAP</TT> is the minimum gap in time between the previous stop time
-and the current scan start time when scheduling with <A HREF="node82.html#MP:DUR"><TT>DURation</TT></A> or <A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A>.  For scheduling
-with <A HREF="node82.html#MP:DUR"><TT>DURation</TT></A>, it will be that time interval.
-For scheduling with <A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A>, the interval
-might be longer if required for slews, but it will not be shorter.
-Note that both <A HREF="node148.html#MP:PRESCAN"><TT>PRESCAN</TT></A> and <A HREF="node117.html#MP:MINPAUSE"><TT>MINPAUSE</TT></A> are applied after the scan times are
-established and a negative <TT>PRESCAN</TT> could make the period during
-which the tape is stopped shorter than <TT>GAP</TT>.  <TT>MINPAUSE</TT> is
-used to keep the tapes rolling through short gaps.  Note that, if
-<A HREF="node171.html#MP:START"><TT>START</TT></A> is specified, <A HREF="node97.html#MP:GAP"><TT>GAP</TT></A> will be ignored.
+<TT>FREQLIST</TT> is used to request a table of information from the
+<A HREF="node96.html#MP:FREQFILE"><TT>FREQFILE</TT></A> be written to <I>frequencies.list</I>.  It takes two arguments giving a frequency range to
+be covered in the list (in MHz).  If the second argument is omitted,
+it will be set equal to the first.  This may be the only parameter
+given to SCHED&nbsp; -- no others are needed.  SCHED&nbsp; will quit after
+the table is made.  This facility should be useful for determining
+which antennas can observe certain frequencies.
 
 <P>
-If LST scheduling, GAP is a sidereal time, so it will be slightly
-shorter in UT (by about 1.0027).
+2 real numbers which are frequencies in MHz
+Any.
+Not used.  No table written.
+Uses the last value specified.
+<TT>FREQLIST=4900,8600</TT>
 
 <P>
-For all types of scheduling, if the gap between scans is less than 10
-seconds, the tapes are left running.
-
-<P>
-The current status of PCFS software requires an interval of 36 seconds
-at tape reversals to produce a valid VEX file. A 40 second gap is
-required to change setup. Apart from these restrictions continuous
-tape motion is implied for gaps shorter than 10 seconds. However, this
-procedure is experimental at the moment and users should be aware that
-PCFS is not producing standard flagging information at these
-occasions. In addition, users should realize that during continuous
-tape motion no calibration data is taken. Starting and stopping the
-tape can be forced using <TT>GAP</TT> or <A HREF="node148.html#MP:PRESCAN"><TT>    PRESCAN</TT></A>, or by using <A HREF="node171.html#MP:START"><TT>START times</TT></A>.  <TT>GAP</TT> is probably the prefered mechanism.
-
-<P>
-
-<UL>
-<LI><B>Argument:</B> A time in any approved time format (hh:mm:ss, mm:ss, sss etc.)
-</LI>
-<LI><B>Options:</B>  Any time
-</LI>
-<LI><B>Default:</B>  Zero.
-</LI>
-<LI><B>Usage:</B>    Reverts to previous scan.
-</LI>
-<LI><B>Example:</B>  <TT>GAP=2:00</TT> (which is equivalent to <TT>gap 120</TT>).
-  
-</LI>
-</UL>
-
-<P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1733"
-  HREF="node98.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1729"
-  HREF="node52.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1723"
-  HREF="node96.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1731"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html1734"
-  HREF="node98.html">GRABTO</A>
-<B> Up:</B> <A NAME="tex2html1730"
-  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1724"
-  HREF="node96.html">FREQLIST</A>
- &nbsp <B>  <A NAME="tex2html1732"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

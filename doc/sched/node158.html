@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>REWIND</TITLE>
-<META NAME="description" CONTENT="REWIND">
+<TITLE>PN3DB and NOPN3DB</TITLE>
+<META NAME="description" CONTENT="PN3DB and NOPN3DB">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,66 +29,96 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2465"
+<A NAME="tex2html2494"
   HREF="node159.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2461"
+<A NAME="tex2html2490"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2455"
+<A NAME="tex2html2484"
   HREF="node157.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2463"
+<A NAME="tex2html2492"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2466"
-  HREF="node159.html">ROTATION</A>
-<B> Up:</B> <A NAME="tex2html2462"
+<B> Next:</B> <A NAME="tex2html2495"
+  HREF="node159.html">PRECDATE</A>
+<B> Up:</B> <A NAME="tex2html2491"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2456"
-  HREF="node157.html">REVERSE</A>
- &nbsp <B>  <A NAME="tex2html2464"
+<B> Previous:</B> <A NAME="tex2html2485"
+  HREF="node157.html">POINT</A>
+ &nbsp <B>  <A NAME="tex2html2493"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041210600000000000000"></A><A NAME="MP:REWIND"></A>
+<H3><A NAME="SECTION0041210600000000000000"></A><A NAME="MP:PN3DB"></A>
 <BR>
-<TT>REWIND</TT>
+<TT>PN3DB</TT> and <TT>NOPN3DB</TT>
 </H3>
 
 <P>
-<TT>REWIND</TT> requests that the wide-band Mark&nbsp;III or VLBA
-tape be rewound before the scan starts and during the prescan.  If
-<TT>REWIND</TT> is specified with no argument, the tape will be rewound
-at all stations. If one or more station names are given, the tapes
-will be rewound at only those stations.  Station codes may be used
-instead of station names.
+<TT>PN3DB</TT> tells SCHED&nbsp; to write a VLBA tracking test sequence in
+the VLBA control file for this scan. <TT>NOPN3DB</TT> tells SCHED&nbsp; 
+to stop writing such sequences.  This parameter should only be of
+interest to VLBA operations staff.  The sequence, which is not a
+loop, starts with a scan of length <TT>PTSLEW</TT> to set levels at
+the half power point, then does a 15 second scan at the same place
+to fix those levels, then does one scan each of length <TT>PTDUR</TT>
+at off source and on peak positions, then trackes the source at
+the azimuth half power point.  That is followed by an off source,
+on source, and half power in elevation tracking sequence.  <TT>PTINCR</TT>
+in the setup file is used to set the distance to the half power point.
+The periods of tracking are the full scan duration minus all the
+level fixing, off, and on scan durations, divided by two.  Scan
+durations of about an hour are appropriate.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> None or a list of station names.
+<LI><B>Argument:</B> None.
 </LI>
-<LI><B>Options:</B>  No argument or the names of any stations in the scan.
+<LI><B>Options:</B>  None to set. <TT>NOPN3DB</TT> to go back to non-pointing modes.
 </LI>
-<LI><B>Default:</B>  No rewind, unless there is insufficient room left during a backward
-pass to fit the next scan or a tape change is requested.
+<LI><B>Default:</B>  Not used.
 </LI>
-<LI><B>Usage:</B>    Reset to no rewind for next scan.
+<LI><B>Usage:</B>    Reverts to previous scan if not specified.
 </LI>
-<LI><B>Example:</B>  <TT>REWIND</TT> or <TT>REWIND='vlba_fd'</TT>
+<LI><B>Example:</B>  <TT>PN3DB</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2494"
+  HREF="node159.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2490"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2484"
+  HREF="node157.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2492"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2495"
+  HREF="node159.html">PRECDATE</A>
+<B> Up:</B> <A NAME="tex2html2491"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2485"
+  HREF="node157.html">POINT</A>
+ &nbsp <B>  <A NAME="tex2html2493"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

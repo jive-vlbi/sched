@@ -1,99 +1,182 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>MODETEST</TITLE>
-<META NAME="description" CONTENT="MODETEST">
+<TITLE>FIRSTLO</TITLE>
+<META NAME="description" CONTENT="FIRSTLO">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node244.html">
 <LINK REL="previous" HREF="node242.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node244.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3611"
+<A NAME="tex2html3640"
   HREF="node244.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3607"
-  HREF="node217.html">
+<A NAME="tex2html3636"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3601"
+<A NAME="tex2html3630"
   HREF="node242.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3609"
+<A NAME="tex2html3638"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3612"
-  HREF="node244.html">NCHAN</A>
-<B> Up:</B> <A NAME="tex2html3608"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3602"
-  HREF="node242.html">LCP50CM and RCP50CM</A>
- &nbsp <B>  <A NAME="tex2html3610"
+<B> Next:</B> <A NAME="tex2html3641"
+  HREF="node244.html">FLUKEA and FLUKEB</A>
+<B> Up:</B> <A NAME="tex2html3637"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3631"
+  HREF="node242.html">FEFILTER</A>
+ &nbsp <B>  <A NAME="tex2html3639"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004642600000000000000"></A><A NAME="SP:MODETEST"></A>
+<H3><A NAME="SECTION004641300000000000000"></A><A NAME="SP:FIRSTLO"></A>
 <BR>
-<TT>MODETEST</TT>
+<TT>FIRSTLO</TT>
 </H3>
 
 <P>
-SCHED&nbsp; will not normally allow schedules to be made that use
-untested VLBA or MarkIV recording modes.  The tested modes are
-listed in the document OK_modes.vlba accessible from the VLBA
-WWW home page.  This is to try to prevent the situation where
-the correlator group is forced to work on some modes that are
-not otherwise important at the moment just because some user
-decided, probably in ignorance, to use one that doesn't work.
-This test is done only for the VLBA correlator.
+<TT>FIRSTLO</TT> gives the LO sum for each baseband channel for all mixes
+other then the one that will be set if <TT>FREQ</TT> or <TT>DOPPLER</TT> is
+specified.  For most stations, this is for use by SCHED&nbsp; only; it
+is not written to the output file.  However for stations that use VLBA
+control files, but are not proper VLBA stations, it will be written in
+a parameter that passes the information to the logging and correlator
+systems so that they can figure out the observing frequency.  Please
+see <A HREF="node248.html#SP:FREQREF"><TT>FREQREF</TT></A> for a discussion of required
+parameters.  If a value is not specified for a channel, it will be
+set to the first.  Since most observations use the same firstlo
+for all channels, it is usually only necessary to specify one.
 
 <P>
-In order to test new modes, or in cases where the documentation
-is out of date, it is necessary to schedule untested modes.  To
-bypass the test in SCHED, specify <TT>MODETEST</TT> in the setup
-file.
+For the VLBA: For frequencies below 16&nbsp;GHz this is just the front end
+synthesizer as specified by <TT>SYNTH</TT>.  For 1 cm, it is the sum of
+synthesizers 2 and 3.  For 7 mm, it is the sum of synthesizer 1 and 3
+times synthesizer 3.  For 4 mm, it is the sum of synthesizer 1 and 6
+times synthesizer 3.  At 90cm the value should be -500.0&nbsp;MHz to make
+any frequency calculations come out right; that mix is an up-convert.
+
+<P>
+For the VLA, use the following equations:
+<DL>
+<DT><STRONG>20, 6, and 1 cm</STRONG></DT>
+<DD>-- FIRSTLO = F1 + F6 + 900 + FA - 600
+</DD>
+<DT><STRONG>4 and 2 cm</STRONG></DT>
+<DD>-- FIRSTLO = F1 - F6 - 900 - FA + 600
+</DD>
+<DT><STRONG>7mm</STRONG></DT>
+<DD>-- FIRSTLO = F1ab - F1cd + F6 + 900 + FA - 600
+</DD>
+</DL>
+For the BD VLA channels, substitute 800 + 2*FB for the 900 + FA
+where:
+<DL>
+<DT></DT>
+<DD>F1 = VLAFEAB(LS)*1000 for VLA A and B channels.
+</DD>
+<DT></DT>
+<DD>F1 = VLAFECD(LS)*1000 for VLA C and D channels.
+</DD>
+<DT></DT>
+<DD>F6 = VLASYNA(LS) for VLA A and C channels - not rounded.
+</DD>
+<DT></DT>
+<DD>F6 = VLASYNB(LS) for VLA B and D channels - not rounded.
+</DD>
+<DT></DT>
+<DD>FA = FLUKEA(LS)  AC Fluke setting.
+</DD>
+<DT></DT>
+<DD>2*FB = FLUKEB(LS)  BD Fluke setting (usually FA + 100).
+</DD>
+<DT></DT>
+<DD>F1ab = VLAFEAB(LS)*1000, F1cd = VLAFECD(LS)*1000
+</DD>
+</DL>
+
+<P>
+If the VLA frequency parameters are set, SCHED&nbsp; will calculate
+the <TT>FIRSTLO</TT> that will be provided by these frequencies and
+compare it with the <TT>FIRSTLO</TT> given by the user.  If the
+match fails, SCHED&nbsp; will complain and abort.  SCHED&nbsp; also checks
+that each synthesizer setting conforms to the rules required by
+that piece of hardware.
+
+<P>
+If <TT>FIRSTLO</TT> is not specified, SCHED&nbsp; will try to determine it
+from the <A HREF="node224.html#SEC:FRQCAT">frequency catalog</A>.  This should be
+the usual case.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> None.
+<LI><B>Argument:</B> An array of frequecies in MHz.
 </LI>
-<LI><B>Options:</B>  
+<LI><B>Options:</B>  Any valid LO sum.
 </LI>
-<LI><B>Default:</B>  Defaults to false which means don't allow untested modes.
+<LI><B>Default:</B>  Will set based on the frequency catalog.  If channel 1 is set and
+others are not, the others will be set equal to channel 1.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>MODETEST</TT>
+<LI><B>Example:</B>  <TT>FIRSTLO = 2400, 2400</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3640"
+  HREF="node244.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3636"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3630"
+  HREF="node242.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3638"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3641"
+  HREF="node244.html">FLUKEA and FLUKEB</A>
+<B> Up:</B> <A NAME="tex2html3637"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3631"
+  HREF="node242.html">FEFILTER</A>
+ &nbsp <B>  <A NAME="tex2html3639"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

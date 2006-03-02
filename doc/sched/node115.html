@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>LST</TITLE>
-<META NAME="description" CONTENT="LST">
+<TITLE>LOCFILE</TITLE>
+<META NAME="description" CONTENT="LOCFILE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,80 +29,67 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1949"
+<A NAME="tex2html1978"
   HREF="node116.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1945"
+<A NAME="tex2html1974"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1939"
+<A NAME="tex2html1968"
   HREF="node114.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1947"
+<A NAME="tex2html1976"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1950"
-  HREF="node116.html">MAPLIM</A>
-<B> Up:</B> <A NAME="tex2html1946"
+<B> Next:</B> <A NAME="tex2html1979"
+  HREF="node116.html">LST</A>
+<B> Up:</B> <A NAME="tex2html1975"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1940"
-  HREF="node114.html">LOCFILE</A>
- &nbsp <B>  <A NAME="tex2html1948"
+<B> Previous:</B> <A NAME="tex2html1969"
+  HREF="node114.html">LINEPG</A>
+ &nbsp <B>  <A NAME="tex2html1977"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004126300000000000000"></A><A NAME="MP:LST"></A>
+<H3><A NAME="SECTION004126300000000000000"></A><A NAME="MP:LOCFILE"></A>
 <BR>
-<TT>LST</TT>
+<TT>LOCFILE</TT>
 </H3>
 
 <P>
-<TT>LST</TT> causes SCHED&nbsp; to assume that all input times
-are in local sidereal time. If no argument is given, the ``local''
-refers to the VLA. Otherwise, a station name can be given to allow
-scheduling in lst for some other station.
+<TT>LOCFILE</TT> gives the name of an auxillary file to the stations
+catalog that can contain the station positions.  All parameters that
+can be specified in the LOCFILE can be specified directly in the
+<A HREF="node210.html#SEC:STACAT">station catalog</A> and are documented along with
+that catalog.  The station locations used in the default catalogs are
+from the VLBA correlator data base and are maintained in a very
+different way from the rest of the information in the station
+catalog, so it is convenient to have them in a separate file.  If
+a user is making their own catalog, they could put all the
+information in the station catalog as indeed they must if putting
+the information into the main schedule through <A HREF="node182.html#MP:STACAT">STACAT</A>.
 
 <P>
-When <TT>LST</TT> is specified, there are two ways to specify the date.
-<A HREF="node73.html#MP:DAY"><TT>DAY</TT></A> can be used to specify the (modified?)
-local sidereal day number as found on the VLA monthly schedules.  If
-this is done, <A HREF="node195.html#MP:YEAR"><TT>YEAR</TT></A> and <A HREF="node118.html#MP:MONTH"><TT>MONTH</TT></A> are ignored. SCHED&nbsp; senses this situation by
-testing for a day number larger than the length of a year.  The other
-option is to specify the calendar date in the usual way (<A HREF="node195.html#MP:YEAR"><TT>YEAR</TT></A>, <A HREF="node118.html#MP:MONTH"><TT>MONTH</TT></A>, <A HREF="node73.html#MP:DAY"><TT>DAY</TT></A>).  In this case, SCHED&nbsp; will figure out when on that
-calendar day the local sidereal time specified for a scan occurs.
-With this option there is a period of a bit less than 4 minutes each
-day when the specification is ambiguous (sidereal days are shorter than
-UT days).  If that situation is encountered, SCHED&nbsp; will abort with
-a request to choose the desired local sidereal day -- the options
-will be shown.
-
-<P>
-This parameter was originally indended mainly for VLA-only scheduling.
-But it is now also used for <A HREF="node18.html#SSEC:DYNAMIC">dynamic scheduling</A>
-on the VLBA.
-
-<P>
-When <TT>LST</TT> is selected, most times are sidereal times or
-intervals.  These include <A HREF="node171.html#MP:START"><TT>START</TT></A>,
-<A HREF="node173.html#MP:STOP"><TT>STOP</TT></A>, <A HREF="node82.html#MP:DUR"><TT>DURation</TT></A>, and
-<A HREF="node83.html#MP:DWELL"><TT>DWELL</TT></A>, but not <A HREF="node148.html#MP:PRESCAN"><TT>PRESCAN</TT></A>, <A HREF="node117.html#MP:MINPAUSE"><TT>MINPAUSE</TT></A>, or
-<A HREF="node149.html#MP:PRESTART"><TT>PRESTART</TT></A>.
+<TT>LOCFILE</TT> defaults to the standard file distributed with
+SCHED.  If the file is not found, a complaint will only be
+generated if a stations in the station catalog is missing
+a position.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Text of up to 8 characters giving the station name.
+<LI><B>Argument:</B> A file name of up to 80 characters.
 </LI>
-<LI><B>Options:</B>  Any.
+<LI><B>Options:</B>  Any valid file name or <TT>none</TT>.
 </LI>
-<LI><B>Default:</B>  Not used if not given. <TT>'VLA'</TT> if given without argument.
+<LI><B>Default:</B>  <TT>$SCHED/catalogs/locations.dat</TT>
 </LI>
-<LI><B>Usage:</B>    Only one value used.
+<LI><B>Usage:</B>    Only specify once.
 </LI>
-<LI><B>Example:</B>  <TT>LST='VLBA_PT'</TT>
+<LI><B>Example:</B>  <TT>LOCFILE='/users/cwalker/sched/locations.dat'</TT>
   
 </LI>
 </UL>
@@ -108,31 +97,31 @@ intervals.  These include <A HREF="node171.html#MP:START"><TT>START</TT></A>,
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1949"
+<A NAME="tex2html1978"
   HREF="node116.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1945"
+<A NAME="tex2html1974"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1939"
+<A NAME="tex2html1968"
   HREF="node114.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1947"
+<A NAME="tex2html1976"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1950"
-  HREF="node116.html">MAPLIM</A>
-<B> Up:</B> <A NAME="tex2html1946"
+<B> Next:</B> <A NAME="tex2html1979"
+  HREF="node116.html">LST</A>
+<B> Up:</B> <A NAME="tex2html1975"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html1940"
-  HREF="node114.html">LOCFILE</A>
- &nbsp <B>  <A NAME="tex2html1948"
+<B> Previous:</B> <A NAME="tex2html1969"
+  HREF="node114.html">LINEPG</A>
+ &nbsp <B>  <A NAME="tex2html1977"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

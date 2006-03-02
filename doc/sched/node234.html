@@ -1,93 +1,133 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>FREQOFF</TITLE>
-<META NAME="description" CONTENT="FREQOFF">
+<TITLE>BBFILTER</TITLE>
+<META NAME="description" CONTENT="BBFILTER">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
 <LINK REL="next" HREF="node235.html">
 <LINK REL="previous" HREF="node233.html">
-<LINK REL="up" HREF="node217.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node235.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3503"
+<A NAME="tex2html3532"
   HREF="node235.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3499"
-  HREF="node217.html">
+<A NAME="tex2html3528"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3493"
+<A NAME="tex2html3522"
   HREF="node233.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3501"
+<A NAME="tex2html3530"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3504"
-  HREF="node235.html">FREQREF</A>
-<B> Up:</B> <A NAME="tex2html3500"
-  HREF="node217.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3494"
-  HREF="node233.html">FORMAT</A>
- &nbsp <B>  <A NAME="tex2html3502"
+<B> Next:</B> <A NAME="tex2html3533"
+  HREF="node235.html">BBC</A>
+<B> Up:</B> <A NAME="tex2html3529"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3523"
+  HREF="node233.html">BARREL</A>
+ &nbsp <B>  <A NAME="tex2html3531"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004641700000000000000"></A><A NAME="SP:FREQOFF"></A>
+<H3><A NAME="SECTION00464400000000000000"></A><A NAME="SP:BBFILTER"></A>
 <BR>
-<TT>FREQOFF</TT>
+<TT>BBFILTER</TT>
 </H3>
 
 <P>
-<TT>FREQOFF</TT> gives the increment to the LO sum for the baseband
-channel in MHz. This will only be used if <TT>FREQREF</TT> is used. The
-LO sum for baseband channel <TT>i</TT> will be set to <TT>FREQREF(i)</TT>
-plus <TT>FREQOFF(i)</TT>, and <TT>BBSYN</TT> will be set to the absolute
-value of the difference between the LO sum and <TT>FIRSTLO</TT>. Please
-see <A HREF="node235.html#SP:FREQREF"><TT>FREQREF</TT></A> for a discussion of required
-parameters.
+<TT>BBFILTER</TT> sets the baseband channel bandwidth.  There is one
+value for each baseband channel.  Any that are not specified will be
+set equal to the first so in the usual case that all channels have the
+same bandwidth, only one needs to be set.  The value must be a
+multiple of 2 times 0.0625&nbsp;MHz up to a maximum of 16&nbsp;MHz. Up to 16
+values can be accepted. If two or more baseband channels are assigned
+to the same BBC/sideband, they should have the same <TT>BBFILTER</TT>
+assigned. If not the last will probably be used.
+
+<P>
+If not specified, one half of the <A HREF="node268.html#SP:SAMPRATE"><TT>SAMPRATE</TT></A>
+will be used for all channels, if <TT>SAMPRATE</TT> was specified.
+
+<P>
+For MkIV DARs in the EVN the 1 MHz, 250 kHz and 62.5 kHz filters
+are only available as plug-ins and should be avoided if possible.
+Although the 500kHz and 125kHz filters are standard they are generally
+only available on the USB of the first few BBCs. Most stations have 4,
+and are required to obtain up to 6.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Up to 16 frequencies in MHz.
+<LI><B>Argument:</B> Up to one real number for each channel giving bandwidths in MHz.
 </LI>
-<LI><B>Options:</B>  Any valid frequency offset that gives a <TT>BBSYN</TT> in the allowed
-range.
+<LI><B>Options:</B>  <TT>0.0625</TT>, <TT>0.125</TT>, <TT>0.250</TT>, <TT>0.5</TT>, <TT>1.0</TT>, <TT>2</TT>, <TT>4</TT>, <TT>8</TT>, <TT>16</TT>.
 </LI>
-<LI><B>Default:</B>  <TT>0.0</TT> - no offset.
+<LI><B>Default:</B>  <TT>0</TT> - If one is specified, it will be used for all channels.
+If none are specified, half the sample rate will be used.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous station.
+<LI><B>Usage:</B>    Defaults to revious station.
 </LI>
-<LI><B>Example:</B>  <TT>FREQOFF=-6.,-4.,-2.,0.,2.,4.,6.</TT>
+<LI><B>Example:</B>  <TT>BBFILTER = 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</TT> 
+<BR>
+which
+is same as <TT>BBFILTER = 2</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3532"
+  HREF="node235.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3528"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3522"
+  HREF="node233.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3530"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3533"
+  HREF="node235.html">BBC</A>
+<B> Up:</B> <A NAME="tex2html3529"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3523"
+  HREF="node233.html">BARREL</A>
+ &nbsp <B>  <A NAME="tex2html3531"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

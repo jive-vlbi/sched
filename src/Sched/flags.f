@@ -34,8 +34,8 @@ C
       IF( EXISTS .AND. OVERWRIT ) THEN
          OPSTAT = 'OLD'
       ELSE IF( EXISTS ) THEN
-C         CALL WLOG( 1, 'SUMOPE: '//PRTFILE//' already exists.' )
-C         CALL ERRLOG( 'SUMOPE: You need to delete old output files' )
+C         CALL WLOG( 1, 'FLAGS: '//PRTFILE//' already exists.' )
+C         CALL ERRLOG( 'FLAGS: You need to delete old output files' )
          OPSTAT = 'OLD'
       ELSE
          OPSTAT = 'NEW'
@@ -120,7 +120,7 @@ C
                      END IF
                   END DO
 C
-C                 If still here, source set right at end.  Flag scan.
+C                 If still here, source set near start.  Flag scan.
 C
                   CALL FLAGWRT( IFLAG, STCODE(STANUM(ISTA)),
      1                   STARTJ(ISCN) - TPSTART(ISCN,ISTA), 
@@ -145,12 +145,12 @@ C
                      END IF
                   END DO
 C
-C                 If still here, source rose right at start.  Flag scan.
+C                 If still here, source rose right at end.  Flag scan.
 C
                   CALL FLAGWRT( IFLAG, STCODE(STANUM(ISTA)),
      1                   STARTJ(ISCN) - TPSTART(ISCN,ISTA), 
      2                   STOPJ(ISCN),
-     3                   'Slew rise near end' )
+     3                   'Source rise near end' )
 
                END IF
 C

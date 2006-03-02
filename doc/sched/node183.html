@@ -1,20 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2K.1beta (1.50)
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>TPREF</TITLE>
-<META NAME="description" CONTENT="TPREF">
+<TITLE>STAFILE</TITLE>
+<META NAME="description" CONTENT="STAFILE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -27,65 +29,103 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2765"
+<A NAME="tex2html2794"
   HREF="node184.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2761"
+<A NAME="tex2html2790"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2755"
+<A NAME="tex2html2784"
   HREF="node182.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2763"
+<A NAME="tex2html2792"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2766"
-  HREF="node184.html">TSYS and NOTSYS</A>
-<B> Up:</B> <A NAME="tex2html2762"
+<B> Next:</B> <A NAME="tex2html2795"
+  HREF="node184.html">START</A>
+<B> Up:</B> <A NAME="tex2html2791"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2756"
-  HREF="node182.html">TELEX</A>
- &nbsp <B>  <A NAME="tex2html2764"
+<B> Previous:</B> <A NAME="tex2html2785"
+  HREF="node182.html">STACAT</A>
+ &nbsp <B>  <A NAME="tex2html2793"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION0041213100000000000000"></A><A NAME="MP:TPREF"></A>
+<H3><A NAME="SECTION0041213100000000000000"></A><A NAME="MP:STAFILE"></A>
 <BR>
-<TT>TPREF</TT>
+<TT>STAFILE</TT>
 </H3>
 
 <P>
-<TT>TPREF</TT> is the reference time for Mark&nbsp;II tape changes. When
-automatic tape changes are specified, as is done by default, they will
-occur at times that are an integral number of tapelengths (default 4
-hours) before or after this time.  Since the only really valid Mark&nbsp;II
-tape length of 4 hours divides a 24-hour day evenly, no provision is
-provided to specify a day.
+<TT>STAFILE</TT> is the name of the external stations file. See
+Section&nbsp;<A HREF="node210.html#SEC:STACAT">3.3</A> for the required formats. If <TT>STAFILE</TT> is
+not specified, it defaults to <TT>$SCHED/catalogs/stations.dat</TT>.  If
+<TT>STAFILE='none'</TT> is specified then no external catalog will be
+read.
+
+<P>
+This must be specified among the first scan inputs since SCHED&nbsp; 
+will read the station catalog while setting up the first scan.  If
+<TT>STAFILE</TT> is not specified with the first scan's inputs, SCHED&nbsp; 
+will read the default catalog.  This is done because, while reading
+the scans, SCHED needs to know some station information (like codes
+in case you choose to specify them for the STATIONS input).
+
+<P>
+Under unix, environment variables may be used.  For example, if
+<TT>SCHED</TT> is defined to mean <TT>/users/cwalker/sched</TT>, the
+base area under which all sched stuff is kept (substitute your
+local directory), then one can specify the station file with
+<TT>STAFILE = $SCHED/catalogs/stations.dat</TT>.  Use the <TT>setenv</TT>
+(c or t shell) or export (korn shell) to set environment variables.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A time.
+<LI><B>Argument:</B> A file name of up to 80 characters.
 </LI>
-<LI><B>Options:</B>  Any valid time between <TT>0</TT> and <TT>24</TT> hours.
+<LI><B>Options:</B>  Any valid file name or <TT>none</TT>.
 </LI>
-<LI><B>Default:</B>  Not used; rather start time of earliest scan of the schedule is used.
+<LI><B>Default:</B>  <TT>$SCHED/catalogs/stations.dat</TT>
 </LI>
-<LI><B>Usage:</B>    Only one value accepted.
+<LI><B>Usage:</B>    Only specify once.
 </LI>
-<LI><B>Example:</B>  <TT>TPREF=5:0:0</TT>
+<LI><B>Example:</B>  <TT>STAFILE='/users/cwalker/sched/stations.dat'</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html2794"
+  HREF="node184.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html2790"
+  HREF="node52.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html2784"
+  HREF="node182.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html2792"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html2795"
+  HREF="node184.html">START</A>
+<B> Up:</B> <A NAME="tex2html2791"
+  HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
+<B> Previous:</B> <A NAME="tex2html2785"
+  HREF="node182.html">STACAT</A>
+ &nbsp <B>  <A NAME="tex2html2793"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2005-06-29
+2006-02-10
 </ADDRESS>
 </BODY>
 </HTML>

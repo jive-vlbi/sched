@@ -56,7 +56,6 @@ C
       GOTINI = .FALSE.  !  Need tape initialization information.
       GOTSAT = .FALSE.  !  Need satellite info.
       GOTFREQ = .FALSE. !  Frequencies, Bandwidths, or Dopcals set.
-      GOTBW = .FALSE.   !  Bandwidths set.  Don't allow if DOVEX.
       DOINIT = .TRUE.   !  Do initializations before next read.
       DWELLS = .FALSE.  !  Got any dwell requests.
       DOSTWARN = .TRUE. !  Warn if DOSTA specified.
@@ -98,6 +97,7 @@ C
             KD( KEYPTR( 'DWELL', KC, KI ) ) = UNSET
             KD( KEYPTR( 'NOPEAK', KC, KI ) ) = UNSET
             KD( KEYPTR( 'POINT', KC, KI ) ) = UNSET
+            KD( KEYPTR( 'SCANTAG', KC, KI ) ) = BLANK
 C
 C           For toggle pairs.
 C
@@ -243,6 +243,8 @@ C
          SAZCOL(ISCN) = KD( KEYPTR( 'AZCOLIM', KC, KI ) )
          SELCOL(ISCN) = KD( KEYPTR( 'ELCOLIM', KC, KI ) )
          OPMISS(ISCN) = KD( KEYPTR( 'OPMISS', KC, KI ) )
+         SCANTAG(ISCN) = KCHAR( 'SCANTAG', 4, .FALSE., KD, KC, KI )
+         CRDLINE(ISCN) = KCHAR( 'CRDLINE', 80, .FALSE., KD, KC, KI )
 C
 C        The minimum tape pause time and the tape prestart time.
 C
@@ -315,9 +317,25 @@ C        VLA Parameters.  Assumes SETNUM(ISCN) is known.
 C
          CALL INVLA( 1, ISCN, KD, KC, KI )
 C
+C        Optimization parameters that are scan dependent.
+C
+         OPMINEL(ISCN)  = KD( KEYPTR( 'OPMINEL', KC, KI ) )
+         OPMIAN(ISCN)   = KD( KEYPTR( 'OPMINANT', KC, KI ) )
+         OPMINSEP(ISCN) = KD( KEYPTR( 'OPMINSEP', KC, KI ) )
+         OPSLEWWT(ISCN) = KD( KEYPTR( 'OPSLEWWT', KC, KI ) )
+         OPSLEWTI(ISCN) = KD( KEYPTR( 'OPSLEWTI', KC, KI ) )
+         OPHLIMWT(ISCN) = KD( KEYPTR( 'OPHLIMWT', KC, KI ) )
+         OPHLIMTI(ISCN) = KD( KEYPTR( 'OPHLIMTI', KC, KI ) )
+         OPHA(ISCN)     = KD( KEYPTR( 'OPHA', KC, KI ) )
+         OPHAWID(ISCN)  = KD( KEYPTR( 'OPHAWID', KC, KI ) )
+         OPHAWT(ISCN)   = KD( KEYPTR( 'OPHAWT', KC, KI ) )
+         OPHMAXDT(ISCN) = KD( KEYPTR( 'OPHMAXDT', KC, KI ) )
+C
+C        *****  End of scan dependent input.  
+C             All such inputs must preceed the call to SCHREP for loops.
+C
 C        Decode looping request.  Nesting of loops is not allowed.
-C        WARNING - ISCN is set to value for last of scan of loop.  Do
-C        not add items for the current scan after this call!
+C        ISCN is set to value for last of scan of loop.  
 C
          CALL SCHREP( ISCN, IREP, KD, KC, KI, START, STOP, 
      1                DAY, YEAR )
@@ -415,13 +433,13 @@ C     For the schedule optimization mode and some plotting stuff.
 C
       OPTMODE = KCHAR( 'OPTMODE', 8, .TRUE., KD, KC, KI )
       OPDUR   = KD( KEYPTR( 'OPDUR', KC, KI ) ) / 86400.D0
-      OPMINEL = KD( KEYPTR( 'OPMINEL', KC, KI ) )
-      OPMIAN  = KD( KEYPTR( 'OPMINANT', KC, KI ) )
       OPNOSUB = KD( KEYPTR( 'OPNOSUB', KC, KI ) ) .EQ. 0.D0
       OPSKIP  = KD( KEYPTR( 'OPSKIP', KC, KI ) )
       OPTSLEW = KD( KEYPTR( 'OPTSLEW', KC, KI ) )
       OPTLOWT = KD( KEYPTR( 'OPTLOWT', KC, KI ) )
+      OPHASTA = KCHAR( 'OPHASTA', 8, .TRUE., KD, KC, KI )
       TAPESYNC = KD( KEYPTR( 'TAPESYNC', KC, KI ) ) .EQ. 0.D0
+      OPPRTLEV = KD( KEYPTR( 'OPPRTLEV', KC, KI ) )
       I1 = KEYPTR( 'OPELPRIO', KC, KI ) - 1
       I2 = KEYPTR( 'MAPLIM', KC, KI ) - 1
       DO I = 1, 4

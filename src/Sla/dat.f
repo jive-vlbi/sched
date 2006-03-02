@@ -117,11 +117,20 @@
 *  1999 Jan 1
       IF (UTC.GE.51179D0) DT=32D0
 
+*  2006 Jan 1
+      IF (UTC.GE.53736D0) DT=33D0
+
+
 * - - - - - - - - - - - - - - - - - - - - - - - - - - *
 *  (Add a new pair of lines to the above set on each  *
 *      occasion that a leap second is announced)      *
 * - - - - - - - - - - - - - - - - - - - - - - - - - - *
 
+* SCHED!!!!!!
+*     Note for SCHED maintainer.  Be sure to update the
+*     same information in the naif kernel file.
+*     as of Feb 2006, that is $PLANET_DATA/naif0007.tls
+*
       sla_DAT=DT
 
       END
