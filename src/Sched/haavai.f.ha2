@@ -1,0 +1,100 @@
+      SUBROUTINE HAAVAI( HAMIN, HAMAX, HABEGIN, HAEND, TBEGIN,
+     1                   TEND, TAVAIL, 
+     1                   TUSE, NHA, IHA, SIDR )
+C
+C     Subroutine for OPTHAS that gets the total time the source is 
+C     available.  Allow 10s tolerance on some tests.
+C
+C     Also determine the default hour angles (TUSE) to use for even 
+C     spacing of NHA scans.
+C
+C     Note:  HA parameters are in hours, T parameter in days.
+C
+C     HAMIN is the lowest HA we wish to observe at.
+C     HAMAX is the highest HA we wish to observe at.
+C     HABEGIN is the HA at experiment start (may be down).
+C     HAEND is the HA at experiment stop (may be down).
+C     TBEGIN is the MJD at experiment start.
+C     TEND is the MJD at experiment end.
+C     TAVAIL is the total time the source is "up" (output)
+C     TUSE is the MJD at which to try to observe this scan.
+C     NHA is the number of times the source will be observed.
+C     IHA is which one of those we are dealing with.
+C     SIDR is the sidereal rate (1.0027...) dUT * SIDR = dHA
+C
+      INTEGER           NHA, IHA, I
+      REAL              HAMIN, HAMAX, HABEGIN, HAEND
+      REAL              HASTART
+      DOUBLE PRECISION  SIDR, TBEGIN, TEND, TUSE, TAVAIL
+      DOUBLE PRECISION  TADD, TADDN
+C ----------------------------------------------------------------------
+C     First the cases where the source is up at the start.
+C     Note that we know the source is up sometime or HALIM would
+C     have stopped.
+C
+      IF( HABEGIN .GT. HAMIN .AND. HABEGIN .LT. HAMAX ) THEN
+C
+C        Is it still up at the end?  The 10 second adjustment gives a   
+C        bit of tolerance in tight cases.
+C
+         IF( ( TEND - TBEGIN ) * 24.D0 * SIDR - 10.D0 / 3600.D0 .LE. 
+     1          HAMAX - HABEGIN ) THEN
+            TAVAIL = ( TEND - TBEGIN )
+            TUSE = TBEGIN + ( TAVAIL / NHA ) * ( IHA - 0.5 )
+         ELSE
+        write(*,*) 'haavai 1:' , tuse, tavail, nha, iha, tbegin,
+     1       HAEND, HAMIN
+C
+C           If not, add the up time at the start, and test 
+C           if it rises again.  If so, add that time.  This
+C           test only works properly if we know the source
+C           has not been up the whole time which it will not
+C           be in this branch of the above IF.
+C
+            TAVAIL =  ( HAMAX - HABEGIN ) / ( SIDR * 24.D0 )
+            IF( HAEND .GE. HAMIN ) THEN
+               TADD = TAVAIL
+               TAVAIL = TAVAIL + ( HAEND - HAMIN ) / ( SIDR * 24.D0 )
+               TADDN = NHA * ( TADD / TAVAIL )
+               IF( FLOAT( IHA ) .LE. TADDN ) THEN
+                  TUSE = TBEGIN + ( TAVAIL / NHA ) * ( IHA - 0.5 )
+               ELSE
+                  TUSE =  TEND - ( HAEND - HAMIN ) / ( SIDR  * 24.D0 )
+     1                 + ( TAVAIL / NHA ) * ( IHA - 0.5 - TADDN )
+               END IF
+            ELSE
+               TUSE = ( TAVAIL / NHA ) * ( IHA - 0.5 ) + TBEGIN
+        write(*,*) 'haavai 2: ', tuse, tavail, nha, iha, tbegin
+            END IF
+         END IF
+      ELSE
+C
+C        Now for the two cases where it rises during the obs.
+C        For the first, the source is still up at the end.
+C        For the other, it is down at the end.
+C
+         IF( HAEND .GE. HAMIN .AND.
+     1       HAEND .LE. HAMAX ) THEN
+            TAVAIL = ( HAEND - HAMIN ) / ( SIDR * 24.D0 )
+            TUSE =  TEND - ( HAEND - HAMIN ) / ( SIDR * 24.D0 ) +
+     1             ( TAVAIL / NHA ) * ( IHA - 0.5 )
+         ELSE
+            TAVAIL = ( HAMAX - HAMIN ) / ( SIDR * 24.D0 )
+C
+C           If HABEGIN is positive, then the calculation of the
+C           time to source rise could be messed up (TUSE<TBEGIN), 
+C           so make sure it is negative (but potentially large).  
+C           Still working on an assumption of observations of a 
+C           day or less.
+C
+            IF( HABEGIN .LT. 0.0 ) THEN
+               HASTART = HABEGIN
+            ELSE
+               HASTART = HABEGIN - 24.0
+            END IF
+            TUSE = TBEGIN + ( HAMIN - HASTART ) / ( SIDR * 24.D0 ) + 
+     1             TAVAIL * ( IHA - 0.5 ) / NHA
+         END IF
+      END IF
+      RETURN
+      END

@@ -1,0 +1,36 @@
+      SUBROUTINE PLSKY( MODE )
+C
+C     Routine for sched that plot the Sky Scale Box
+C     MODE: 1 = Draw Sky Scale Box
+C
+      INCLUDE 'sched.inc'
+      INCLUDE 'plot.inc'
+C
+      INTEGER          MODE, REV 
+      LOGICAL          PBTR
+      REAL             XL, CSIZ
+C ----------------------------------------------------------------------
+C
+      IF( POPBCK .EQ. 5 ) RETURN
+C
+C     Set Font, Radio Buttons Policy and Label offset
+C
+      CSIZ  = PPNDIM(3)
+      PBTR  = .TRUE.
+      XL    = 0.02
+C     
+C     Draw Sky Scale Controls
+C
+      IF( MODE .EQ. 1 ) THEN
+C
+C        Draw The Selection Box
+C
+         REV = 0
+         IF ( PXYSKY ) REV = 1
+         CALL PLBUTS( PBTR, PSKBOX(1), PSKBOX(2), PSKBOX(3), PSKBOX(4),
+     1                XL, CSIZ, 'Sky Scale', PPNCOL(7), REV)
+C
+      END IF
+C
+      RETURN
+      END
