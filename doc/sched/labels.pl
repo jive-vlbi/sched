@@ -1,4 +1,4 @@
-# LaTeX2HTML 2002 (1.62)
+# LaTeX2HTML 2002-2-1 (1.70)
 # Associate labels original text with physical files.
 
 
@@ -26,16 +26,16 @@ $key = q/MP:DEBUG/;
 $external_labels{$key} = "$URL/" . q|node75.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/SP:BARREL/;
-$external_labels{$key} = "$URL/" . q|node233.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/MP:CORPOL/;
 $external_labels{$key} = "$URL/" . q|node65.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPBBSYN2/;
 $external_labels{$key} = "$URL/" . q|node183.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/SP:BARREL/;
+$external_labels{$key} = "$URL/" . q|node233.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.01/;
@@ -2481,7 +2481,7 @@ $noresave{$key} = "$nosave";
 1;
 
 
-# LaTeX2HTML 2002 (1.62)
+# LaTeX2HTML 2002-2-1 (1.70)
 # labels from external_latex_labels array.
 
 
@@ -2545,16 +2545,16 @@ $key = q/SP:IFCHAN/;
 $external_latex_labels{$key} = q|3.6.4|; 
 $noresave{$key} = "$nosave";
 
-$key = q/SP:FEFILTER/;
-$external_latex_labels{$key} = q|3.6.4|; 
+$key = q/MP:SETINIT/;
+$external_latex_labels{$key} = q|3.1.2|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:YEAR/;
 $external_latex_labels{$key} = q|3.1.2|; 
 $noresave{$key} = "$nosave";
 
-$key = q/MP:SETINIT/;
-$external_latex_labels{$key} = q|3.1.2|; 
+$key = q/SP:FEFILTER/;
+$external_latex_labels{$key} = q|3.6.4|; 
 $noresave{$key} = "$nosave";
 
 $key = q/TP:OBSCODE/;
@@ -2613,12 +2613,12 @@ $key = q/SP:FORMAT/;
 $external_latex_labels{$key} = q|3.6.4|; 
 $noresave{$key} = "$nosave";
 
-$key = q/SP:NOISE/;
-$external_latex_labels{$key} = q|3.6.4|; 
-$noresave{$key} = "$nosave";
-
 $key = q/MP:DOPINCR/;
 $external_latex_labels{$key} = q|3.1.2|; 
+$noresave{$key} = "$nosave";
+
+$key = q/SP:NOISE/;
+$external_latex_labels{$key} = q|3.6.4|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:LINENAME/;

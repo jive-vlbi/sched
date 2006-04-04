@@ -1,7 +1,7 @@
 !*  Schedule for VLA27     *!
 !*  Experiment ge001    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:   6.04  February 2006 *!
+!* Processed by SCHED version:   6.04  March 2006 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!
@@ -149,7 +149,7 @@ tape=(1,+RUN)  write=(1,on)
 stop=00h22m00s   !NEXT!
 
 !* --- Scan from 00h37m00s to 00h59m00s   Thu, 1997 Mar 06 --- *!
-sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10387"  qual=999  calib='V'
+sname='3C84'  ra=03h19m48.160119s  dec= 41d30'42.10389"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
 stop=00h37m00s   !NEXT!        
 qual=  0
@@ -261,7 +261,7 @@ tape=(1,+RUN)  write=(1,on)
 stop=07h29m00s   !NEXT!
 
 !* --- Scan from 07h44m00s to 08h06m00s   Thu, 1997 Mar 06 --- *!
-sname='3C345'  ra=16h42m58.809968s  dec= 39d48'36.99399"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809968s  dec= 39d48'36.99400"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
 stop=07h44m00s   !NEXT!        
 qual=  0
@@ -269,7 +269,7 @@ tape=(1,+RUN)  write=(1,on)
 stop=08h06m00s   !NEXT!
 
 !* --- Scan from 08h06m30s to 08h28m30s   Thu, 1997 Mar 06 --- *!
-sname='NRAO512'  ra=16h40m29.632770s  dec= 39d46'46.02846"  qual=999  calib='V'
+sname='NRAO512'  ra=16h40m29.632770s  dec= 39d46'46.02848"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
 stop=08h06m30s   !NEXT!        
 qual=  0
@@ -301,7 +301,7 @@ tape=(1,+RUN)  write=(1,on)
 stop=09h46m30s   !NEXT!
 
 !* --- Scan from 12h52m30s to 13h14m30s   Thu, 1997 Mar 06 --- *!
-sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59814"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699732s  dec= 02d03'08.59815"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
 stop=12h52m30s   !NEXT!        
 qual=  0
@@ -309,7 +309,7 @@ tape=(1,+RUN)  write=(1,on)
 stop=13h14m30s   !NEXT!
 
 !* --- Scan from 13h18m30s to 13h40m30s   Thu, 1997 Mar 06 --- *!
-sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59814"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699732s  dec= 02d03'08.59815"  qual=999  calib='V'
 tape=(1,STOP) write=(1,off)
 stop=13h18m30s   !NEXT!        
 qual=  0

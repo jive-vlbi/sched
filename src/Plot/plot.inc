@@ -93,7 +93,7 @@ C
       INTEGER          PADAYS(3,3), PBMPIX, PBMCTF, PBMPAL, PBMWGT
       INTEGER          PSUEXP
       LOGICAL          PASIGN(2), PXYBIG, PYANTN, PBMEXE, PBMCON
-      LOGICAL          PXYSUN, PLOSGN, PLOVAL, PXYONE
+      LOGICAL          PXYSUN, PLOSGN, PLOVAL, PXYONE, PXYSEC
       REAL             POPBOX(4, POPBXM), PBMFRQ
       REAL             PXYTXT(4, 4), PXYBXM(4,4), PXYSBR(4,2)
       REAL             PBMTXT(4, 7), PBMBXM(4,14), PBMSBR(4,7)
@@ -111,7 +111,8 @@ C
      5                 PSUDEF, PANDAY, PXYBCK, PASIGN, POFVAL, PSUNEL,
      6                 PSUEXP, PXINI,  PXEND,  POPBCK, PBMPIX, PBMCTF,
      7                 PBMPAL, PBMFRQ, PBMWGT, PBMCEL, PXYBIG, PYANTN,
-     8                 PBMEXE, PBMCON, PXYSUN, PLOSGN, PLOVAL, PXYONE
+     8                 PBMEXE, PBMCON, PXYSUN, PLOSGN, PLOVAL, PXYONE,
+     9                 PXYSEC
 C
 C     Menu Options Area parameters    
 C

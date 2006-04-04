@@ -58,6 +58,9 @@ C
             END IF
  35      CONTINUE
 C
+      ELSE IF( PXYTYP(K) .EQ. 'Sec' ) THEN
+            PXYSEC = .TRUE.
+C
       ELSE
          PXSVAL(K,EL,1) = ABS( PXSLIM(K,( EL - J )) )
          DO 40 I = 2, 3

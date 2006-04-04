@@ -61,7 +61,7 @@ C
 C
 C     Big-array version (eg SKA configuration search)
 C
-C      PARAMETER     (MAXSCN=300)
+C      PARAMETER     (MAXSCN=400)
 C      PARAMETER     (MAXSTA=400)
 C
 C     For normal usage.  Phase referencing and pointing observations
@@ -72,7 +72,7 @@ C
 C
 C     Other parameters
 C
-      PARAMETER     (MAXSRC=500)
+      PARAMETER     (MAXSRC=1000)
       PARAMETER     (MAXCAT=1000) 
       PARAMETER     (MAXLGP=10)
       PARAMETER     (MAXSET=50)
