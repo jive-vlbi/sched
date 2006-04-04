@@ -7476,23 +7476,27 @@ considered to be up, a station must also be above the local horizon as
 specified in the station catalog.
 
 \htmlref{{\tt OPHASTA}}{MP:OPHASTA} sets the reference station for
-this mode.  Either the full name or the code, if unique, can be used.
-\htmlref{{\tt OPHA}}{MP:OPHA} sets
-the desired hour angle (at the reference station) for this scan.
-\htmlref{{\tt OPHAWID}}{MP:OPHAWID} sets a normalization time interval
-relative to the desired hour angle over which the scan weight
-increases.  \htmlref{{\tt OPHAWT}}{MP:OPHAWT} controls which the
-scaling of the weight related to conforming to the desired hour angle
-relative to weights related to slew times and limit proximity.
-\htmlref{{\tt OPHASTA}}{MP:OPHASTA} is used to set the station for
-which the desired hour angles apply.  \htmlref{{\tt
+this mode.  This is the station at which the hour angles will be
+measured.  Either the full name or the station code, if unique, can be
+used.  \htmlref{{\tt OPHA}}{MP:OPHA} sets the desired hour angle (at
+the reference station) for this scan.  \htmlref{{\tt
+OPHAWID}}{MP:OPHAWID} sets a normalization time interval relative to
+the desired hour angle over which the scan weight increases.
+\htmlref{{\tt OPHAWT}}{MP:OPHAWT} is a normalization factor for
+weights related to time offset from the desired hour angle.  This and
+other weight normalization factors mentioned below help adjust the
+relative importance of the different factors such as offset from the
+desired time, slew time, and proximity to other scans on the same
+source.  \htmlref{{\tt OPHASTA}}{MP:OPHASTA} is used to set the
+station for which the desired hour angles apply.  \htmlref{{\tt
 OPMINSEP}}{MP:OPMINSEP} sets the minimum separation of scans on a
 source as a fraction of the spacing of scans that would be used if
 they were spread evenly across the available time for that source.
 \htmlref{{\tt OPSLEWTI}}{MP:OPSLEWTI} and \htmlref{{\tt
-OPSLEWWT}}{MP:OPSLEWWT} set normalization slew time and the weighting
-(relative significance compared to other weighting factors) for the
-slew time base scan weight.  \htmlref{{\tt OPLIMTI}}{MP:OPLIMTI} and
+OPSLEWWT}}{MP:OPSLEWWT} set the reference time and the normalization
+factor for the weights related to slew time.  The slew weight is {\tt
+OPSLEWWT * ( 1 - (slew time))}/{\tt OPSLEWTI}).
+\htmlref{{\tt OPLIMTI}}{MP:OPLIMTI} and
 \htmlref{{\tt OPLIMWT}}{MP:OPLIMWT} set a similar normalization and
 weight for the proximity to the extreme times at which a source can be
 observed.  This latter is used to encourage a scan on the source, for
@@ -9272,12 +9276,13 @@ this catalog, or may copy the desired entries into catalog sections in
 the main \schedb input.  The scheduler should consult the catalog to
 be sure that the right source names are being used in the schedule.
 
-The a standard source catalog contains sources from a USNO geodetic
-VLBI list (very similar to the International Celestial Reference Frame
-or ICRF; these have {\tt CALCODE=N}), from the VLA calibrator list
-({\tt CALCODE=Y}), and from the JVAS survey ({\tt CALCODE=M};Patnaik
+The a standard source catalog contains sources from a geodetic
+VLBI solution (very similar to the International Celestial Reference Frame
+or ICRF (these have {\tt CALCODE=V}), from the VLA calibrator list
+({\tt CALCODE=Y}), and from the JVAS survey ({\tt CALCODE=M}; Patnaik
 et al. 1992, mnras, 254, 655; Browne et al. 1998, mnras, 293, 257;
-Wilkinson et al. 1998, mnras, 300, 790).  The USNO sources have
+Wilkinson et al. 1998, mnras, 300, 790).  The geodetic sources, which
+include the VLBA calibrator survey sources, have
 positions good to typically a milliarcsecond or better.  The JVAS
 sources are good to 12-55 mas.  The VLA calibrator positions are
 somewhat worse than the JVAS positions.  Eventually the JVAS positions
@@ -9285,7 +9290,14 @@ will be determined to an accuracy of about a mas.  There are several
 thousand sources in the catalog.  This catalog is a direct reflection
 of what was in the Socorro correlator source data base at the time of
 its creation so the coordinates are likely to be those used by default
-for correlation.
+for correlation.  Users of accurate positions from the geodetic catalog
+are encouraged to reference the original papers.
+Those references for the 2005f\_astro solution (The current one when this
+request was written), along with images and uv plots
+for many sources, can be found at \htmladdnormallink{
+http://vlbi.gsfc.nasa.gov/solutions/2005f\_astro/2005f\_astro\_cat.html}
+{at this link.}  For other solutions, try an internet search (eg Google).
+Web pages for solutions can usually be found that way.
 
 \schedb input parameter {\tt SRCFILE} is used to point to any desired
 external catalog.  A file name of up to 80 characters can be
@@ -12861,11 +12873,22 @@ in \sched.
 
 \subsection{\label{SSEC:VER_6.04}Version 6.04}
 
+The major enhancement in the 6.04 version is the addition of {\tt
+OPTMODE=HAS} which can be used to construct certain kinds of schedules
+automatically from an input schedule that is basically a source list.
+In this mode, \schedb tries to spread the scans on each source in
+hour angle subject to various constraints.  In its current form, it is most
+useful for scheduling survey type observations.  Future enhancements
+will make it more useful for phase referencing and other modes.  For
+more information, see the \htmlref{{\tt OPTMODE}}{MP:OPTMODE} description.
+
 This release includes everything that was in the 6.03 mini-releases
 that occurred since 6.02.  Those mini-releases were not sent to the
 broader community and were intended mainly to make available the
 new {\tt OPTMODE=HAS} for use by the VIPS survey, which started before
 we could do a proper SCHED release.
+
+Change log:
 
 \begin{itemize}
 
@@ -12873,14 +12896,14 @@ we could do a proper SCHED release.
 about unphased VX mode scans.  Change to recognize non-recording
 phasing scans.  8 Aug 2005.
 
-\item Add station motion adjustments to summary file.  5 Aug 2005 RCW.
+\item Add station motion adjustments to summary file.  5 Aug 2005 Craig.
 
 \item Fix bug that might cause reading beyond the end of a character
-string if {\tt CORREL} is specified as blank.  10 Aug RCW based on
+string if {\tt CORREL} is specified as blank.  10 Aug Craig based on
 information from Cormac.
 
 \item Update Sla/dat.f for the leap second announced for Jan. 1, 2006.
-11 Aug. 2005.  RCW.
+11 Aug. 2005.  Craig.
 
 \item Send first message warning of possible unspecified {\tt OBSTYPE}
 to the terminal when \schedb runs.  14 Sept. 2005.
@@ -12890,54 +12913,95 @@ routines.  This gave gfortran a problem.  16 Sept. 2005
 
 \item Change OPMINANT and OPMINEL to be scan dependent.  25 Oct. 2005
 
-\item Fix the sync time discussion in the PRESTART section.  1 Nov. 2005 RCW
+\item Fix the sync time discussion in the PRESTART section.  1 Nov. 2005 Craig
 
 \item Fix dealing with sources when loading a plot parms file when the
 source list has changed since the parms file was saved.  1 Nov. 2005.
 
 \item Add hour angle based optimization mode {\tt OPTMODE=HAS}.
 Initial application is the VLBA Imaging and Polarization Survey
-(VIPS).  03 Nov 2005 RCW
+(VIPS).  03 Nov 2005 Craig
 
 \item Add the scan comment to the scan information dumped when certain
-errors occur.  14 Nov 2005 RCW
+errors occur.  14 Nov 2005 Craig
 
 \item Add note to users of tapeini sections that they normally are not
-needed and such use betrays the use of ancient templates.  15 Nov 2005 RCW
+needed and such use betrays the use of ancient templates.  15 Nov 2005 Craig
 
 \item Improve the choice of the maximum separation for the list of
-source separations.  14 Nov 2005  RCW.
+source separations.  14 Nov 2005  Craig.
 
 \item Add scan number to summary listings.  Add optional scan name based
-on {\tt SCANTAG} input variable.  18 Nov 2005  RCW.
+on {\tt SCANTAG} input variable.  18 Nov 2005  Craig.
 
 \item Protect against having a Vex station with no observations after taking
 out scans where the source is not up.  This befuddles the Vex writer.  Warn
-the user if this happens for any other station.  18 Nov 2005 RCW.
+the user if this happens for any other station.  18 Nov 2005 Craig.
 
 \item Only require shipping address for correlator output if tape is
-requested.  08 Jan. 2006  RCW.
+requested.  08 Jan. 2006  Craig.
 
 \item Warn users when it looks like they might have forgotten to reset
-{\tt FREQ} or {\tt BW} when changing setup files.  24 Jan 2006 RCW.
+{\tt FREQ} or {\tt BW} when changing setup files.  24 Jan 2006 Craig.
 
 \item Fix bug in overlapped basebands warning when using Doppler calculations.
-25 Jan. 2006  RCW.
+25 Jan. 2006  Craig.
 
 \item Added {\tt CRDLINE} to aid development of VLBA on-line software.
-26 Jan. 2006  RCW.
+26 Jan. 2006  Craig.
 
-\item Improve documentation of reconfigure issues.  Jan 27, 2006. RCW.
+\item Improve documentation of reconfigure issues.  Jan 27, 2006. Craig.
 
 \item Warn when trying to use 1024 channels, fanout=1, and 16 times
-oversample on the VLBA correlator.  It won't work.  Feb. 2006.  RCW.
+oversample on the VLBA correlator.  It won't work.  Feb. 2006.  Craig.
 
 \item Fix selection of the frequency to use when plotting beams.  Fix
 dealing with the save file stations when the station list changes.  Other
-minor plot fixes.  Franco Tinarelli and RCW  Feb. 2006
+minor plot fixes.  Franco Tinarelli and Craig  Feb. 2006
 
 \item Add Sec(z) to the XY plot options.  Franco Tinarelli  Feb. 10, 2006.
 
+\item Fix bug in correlator resync accounting.  Make more visible
+warnings about scans lost to resyncs.  Craig  20 Feb. 2006
+
+\item Prevent short stoppages of recordings for scan boundaries at midnight.
+Craig  22 Feb. 2006.
+
+\item Added 11 seconds to TSETTLE for phased VLA (VLA27) as per
+recommendation from Jim Ulvestad. He actually recommended 12 sec, but
+since his schedule was made, acceleration parameters were changed for
+this station adding about a second.  Craig 23 Feb. 2006.
+
+\item Update source catalog to current VLBA correlator data base which
+John Benson just updated.  The main change was to the geodetic sources
+which are now from the 2005f\_astro solution from GSFC.  Users
+are encouraged to reference the original papers when they use sources
+from this catalog.  Those references, along with images and uv plots
+for many sources, can be found at \htmladdnormallink{at this link.}
+{http://vlbi.gsfc.nasa.gov/solutions/2005f\_astro/2005f\_astro\_cat.html}
+Craig  28 Feb. 2006.
+
+\item Increase maximum number of sources in a schedule to 1000 after
+user request.  Craig  2 Mar. 2006.
+
+\item Allow use of modes with FORMAT=NONE with VEX output. Must set parameter
+'OVERRIDE' for this to be allowed. Scans with FORMAT=NONE are skipped with a
+comment only written to the VEX file.  Cormac 2 Mar. 2006
+
+\item More rigorous testing for frequency of Tsys measurements at VEX
+stations with more informative warnings.  Cormac 2 Mar. 2006
+
+\item Add checks for long continuous motion with disks because bank
+switches can only occur during gaps at VEX stations.  Cormac  2 Mar. 2006
+
+\item Fixed bug which meant that spurious new modes could be created
+where none were required (reported in GB057).  Cormac  2 Mar 2006
+
+\item Updated most station positions to the 2005f\_astro
+solution from the GSFC.  March 2006, Craig.
+
+\item Applied update of ATNF freq.dat parameters from Chris Phillips
+March 22, 2006 Craig.
 
 
 \end{itemize}

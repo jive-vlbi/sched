@@ -406,6 +406,10 @@ C
       PXYONE = .FALSE.
       PYANTN = .FALSE.
 C
+C     Set Sec(z) plot to automatic limits calculation
+C
+      PXYSEC = .TRUE.
+C
 C     Set Plot Type Radio Boxes Dimensions
 C
       XYSIZ = 0.035

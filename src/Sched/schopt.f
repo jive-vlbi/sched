@@ -335,7 +335,9 @@ C
             ELSE
 C
 C              Accepted scan.
-C              Deal with the tape and disk handling for this scan.
+C              Deal with the tape and disk handling for this scan.  Also
+C              may tweak scan times to avoid actions very close to 
+C              midnight.
 C
                CALL SCHTAPE( ISCN, LASTISCN )
 C
@@ -423,7 +425,8 @@ C     scheduling, Doppler calculations, and Sun position).
 C
       CALL  SCHTIM
 C
-C     Avoid START and STOP times of 24:00:00
+C     Avoid day number confusions for start and stop times 
+C     near midnight.
 C
       CALL SCH24
 C

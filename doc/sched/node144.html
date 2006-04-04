@@ -1,8 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
 patched version by:  Kenshi Muto, Debian Project.
-LaTeX2HTML 2002 (1.62),
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
 original version by:  Nikos Drakos, CBLU, University of Leeds
 * revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
 * with significant contributions from:
@@ -15,8 +16,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sched.css">
@@ -29,26 +29,26 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html2326"
+<A NAME="tex2html2327"
   HREF="node145.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2322"
+<A NAME="tex2html2323"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2316"
+<A NAME="tex2html2317"
   HREF="node143.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2324"
+<A NAME="tex2html2325"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2327"
+<B> Next:</B> <A NAME="tex2html2328"
   HREF="node145.html">OPTLOWT</A>
-<B> Up:</B> <A NAME="tex2html2323"
+<B> Up:</B> <A NAME="tex2html2324"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2317"
+<B> Previous:</B> <A NAME="tex2html2318"
   HREF="node143.html">OPSLEWWT</A>
- &nbsp <B>  <A NAME="tex2html2325"
+ &nbsp; <B>  <A NAME="tex2html2326"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
@@ -214,21 +214,23 @@ specified in the station catalog.
 
 <P>
 <A HREF="node132.html#MP:OPHASTA"><TT>OPHASTA</TT></A> sets the reference station for
-this mode.  Either the full name or the code, if unique, can be used.
-<A HREF="node128.html#MP:OPHA"><TT>OPHA</TT></A> sets
-the desired hour angle (at the reference station) for this scan.
-<A HREF="node130.html#MP:OPHAWID"><TT>OPHAWID</TT></A> sets a normalization time interval
-relative to the desired hour angle over which the scan weight
-increases.  <A HREF="node131.html#MP:OPHAWT"><TT>OPHAWT</TT></A> controls which the
-scaling of the weight related to conforming to the desired hour angle
-relative to weights related to slew times and limit proximity.
-<A HREF="node132.html#MP:OPHASTA"><TT>OPHASTA</TT></A> is used to set the station for
-which the desired hour angles apply.  <A HREF="node135.html#MP:OPMINSEP"><TT>OPMINSEP</TT></A> sets the minimum separation of scans on a
+this mode.  This is the station at which the hour angles will be
+measured.  Either the full name or the station code, if unique, can be
+used.  <A HREF="node128.html#MP:OPHA"><TT>OPHA</TT></A> sets the desired hour angle (at
+the reference station) for this scan.  <A HREF="node130.html#MP:OPHAWID"><TT>OPHAWID</TT></A> sets a normalization time interval relative to
+the desired hour angle over which the scan weight increases.
+<A HREF="node131.html#MP:OPHAWT"><TT>OPHAWT</TT></A> is a normalization factor for
+weights related to time offset from the desired hour angle.  This and
+other weight normalization factors mentioned below help adjust the
+relative importance of the different factors such as offset from the
+desired time, slew time, and proximity to other scans on the same
+source.  <A HREF="node132.html#MP:OPHASTA"><TT>OPHASTA</TT></A> is used to set the
+station for which the desired hour angles apply.  <A HREF="node135.html#MP:OPMINSEP"><TT>OPMINSEP</TT></A> sets the minimum separation of scans on a
 source as a fraction of the spacing of scans that would be used if
 they were spread evenly across the available time for that source.
-<A HREF="node142.html#MP:OPSLEWTI"><TT>OPSLEWTI</TT></A> and <A HREF="node143.html#MP:OPSLEWWT"><TT>OPSLEWWT</TT></A> set normalization slew time and the weighting
-(relative significance compared to other weighting factors) for the
-slew time base scan weight.  <A HREF="node133.html#MP:OPLIMTI"><TT>OPLIMTI</TT></A> and
+<A HREF="node142.html#MP:OPSLEWTI"><TT>OPSLEWTI</TT></A> and <A HREF="node143.html#MP:OPSLEWWT"><TT>OPSLEWWT</TT></A> set the reference time and the normalization
+factor for the weights related to slew time.  The slew weight is <TT>OPSLEWWT * ( 1 - (slew time))</TT>/<TT>OPSLEWTI</TT>).
+<A HREF="node133.html#MP:OPLIMTI"><TT>OPLIMTI</TT></A> and
 <A HREF="node134.html#MP:OPLIMWT"><TT>OPLIMWT</TT></A> set a similar normalization and
 weight for the proximity to the extreme times at which a source can be
 observed.  This latter is used to encourage a scan on the source, for
@@ -307,31 +309,31 @@ they are used, the output schedule should be checked carefully.</I>
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html2326"
+<A NAME="tex2html2327"
   HREF="node145.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html2322"
+<A NAME="tex2html2323"
   HREF="node52.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html2316"
+<A NAME="tex2html2317"
   HREF="node143.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html2324"
+<A NAME="tex2html2325"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html2327"
+<B> Next:</B> <A NAME="tex2html2328"
   HREF="node145.html">OPTLOWT</A>
-<B> Up:</B> <A NAME="tex2html2323"
+<B> Up:</B> <A NAME="tex2html2324"
   HREF="node52.html">Details of SCHED&nbsp; Parameters</A>
-<B> Previous:</B> <A NAME="tex2html2317"
+<B> Previous:</B> <A NAME="tex2html2318"
   HREF="node143.html">OPSLEWWT</A>
- &nbsp <B>  <A NAME="tex2html2325"
+ &nbsp; <B>  <A NAME="tex2html2326"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-02-10
+2006-03-27
 </ADDRESS>
 </BODY>
 </HTML>
