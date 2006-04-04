@@ -110,7 +110,7 @@ C
      1                .AND. .NOT. TWOHEAD ) THEN
                      CALL WLOG( 0, ' ' )
                      CALL WLOG( 0, 
-     1                 'CHKSC1: *** Shouldn''t you be using' //
+     1                 'CHKSC1: *** Shouldn''t you be using ' //
      2                 'AUTOTAPE=2 (VLBA stations, VLBA correlator).' )
                      AUTOWARN = .FALSE.
                   END IF

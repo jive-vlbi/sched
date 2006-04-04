@@ -11,7 +11,7 @@ C
       DOUBLE PRECISION  RMIN, RMAX, DAY0, TBORDER
       CHARACTER         WHICH*1, TYPE*8, LABEL*(*)
       REAL              MIN, MAX
-      INTEGER           IER
+      INTEGER           IER, I
 C ----------------------------------------------------------------------
       IER = 0
 C
@@ -133,8 +133,14 @@ C
          LABEL = ' '
 C
       ELSE IF( TYPE .EQ. 'Sec' ) THEN
-         MIN = RMIN
-         MAX = RMAX
+         IF( PXYSEC ) THEN
+            I = 1
+         ELSE
+            I = 0
+            MIN = RMIN
+            MAX = RMAX
+         END IF
+         CALL PLMNMX( TYPE, MIN, MAX, I )
          LABEL = 'Sec(z)'
 C
       ELSE

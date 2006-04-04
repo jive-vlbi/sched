@@ -11,8 +11,12 @@ C     using the Starlink SLALIB precession routines. Date coordinates
 C     (where not given) are computed for the stop time of the first 
 C     scan.  The B1950/J2000 conversions assume that the coordinates 
 C     were determined from observations at epoch PRECDATE (User input)
-C     which defaults to 1997.0, which is not too far off for the USNO
-C     source solutions.
+C     which defaults to 1979.9, which is the value used to determine
+C     B1950 coordinates on the VLA.
+C
+C     Note that any use of B1950 coordinates can introduce a lot of
+C     uncertainty in source positions at milliarcsecond levels.  It
+C     is not recommended.
 C
 C     Proper motions and paralax added March 2003 RCW.  
 C

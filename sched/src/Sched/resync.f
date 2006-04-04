@@ -43,12 +43,14 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER    ISCN, ISTA, LSCN, LRSCN, KS
-      INTEGER    NSSCAN
+      INTEGER    NSSCAN, NRWARN
       LOGICAL    RECWARN, NEWCONF, NEWPCAL, CONFIGW
       LOGICAL    SCNRCF, NEWSYNC
       DOUBLE PRECISION  ONESEC
       DOUBLE PRECISION  TRECON, TSADD, TTADD
       PARAMETER  (ONESEC = 1.D0 / 86400.D0)
+      DATA       NRWARN / 0 /
+      SAVE       NRWARN
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'RESYNC starting' )
 C
@@ -129,12 +131,11 @@ C                       Count and flag reconfigures during recording.
 C         
                         IF( TRECON .GT. STARTJ(ISCN) - 
      1                       TPSTART(ISCN,ISTA) ) THEN
-                           NRECONF(2,ISTA) = NRECONF(2,ISTA)
+                           NRECONF(2,ISTA) = NRECONF(2,ISTA) + 1
                            SCNRCF = .TRUE.
                         END IF
 C                    
                      END IF
-                  
 C
 C                 MarkIV formatter.  There is a reconfigure every scan, but
 C                 they don't seem to knock the VLBA correlator out of sync.
@@ -255,6 +256,24 @@ C
                   TTADD = TCORR(ISCN,ISTA) - 
      1                 MAX( TONSRC(ISCN,ISTA), STARTJ(ISCN) ) 
                   TTSYNC(ISTA) = TTSYNC(ISTA) + MAX( 0.0, TTADD )
+C
+C                 Warn when a scan is expected to be lost to 
+C                 resync.
+C
+                  IF( TCORR(ISCN,ISTA) .EQ. STOPJ(ISCN) ) THEN
+                     NRWARN = NRWARN + 1
+                     IF( NRWARN .LE. 100 ) THEN
+                        WRITE( MSGTXT, '( A, I5, 3A, F6.2, A )' )
+     1                    'RESYNC:  Scan ', ISCN, ' at ', STANAME(ISTA),
+     2                    ' at ', MOD(STOPJ(ISCN), 1.D0) * 24.D0, 
+     3                    ' hr will be lost to correlator resync.'
+                        CALL WLOG( 1, MSGTXT )
+                        MSGTXT = ' '
+                     ELSE IF( NRWARN .EQ. 101 ) THEN
+                        CALL WLOG( 1, 
+     1                    'RESYNC:  --- More scans lost to resync.' )
+                     END IF
+                  END IF
 C
                   LRSCN = ISCN
                END IF                  

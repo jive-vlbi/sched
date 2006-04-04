@@ -5,10 +5,10 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'plot.inc'
 C
-      CHARACTER*(*)    AXIS
-      CHARACTER        STRING*6, CH, ANUM*2, SNUM*3, MESSAG*80
-      INTEGER          AP, EP, K, I, J, N
-      REAL             XL, XR, YT, YB
+      CHARACTER*(*)     AXIS
+      CHARACTER         STRING*6, CH, ANUM*2, SNUM*3, MESSAG*80
+      INTEGER           AP, EP, K, I, J, N
+      REAL              XL, XR, YT, YB, XYMIN, XYMAX
 C ----------------------------------------------------------------------
 C     
 C     Set Pointers to Axis Type
@@ -25,10 +25,21 @@ C     Set type pointer of the value matrix
 C
       K = PXYBCK(AP)
 C
-C     Set/unset Flag for Sec(z) axis selected
+C     Set/unset Flag for Sec(z) axis selected and auto/manual
 C
       IF( PXYTYP(K) .EQ. 'Sec' ) THEN
          PXYONE = .TRUE.
+         J = EP + 1
+         IF( PXYSEC ) THEN
+            I = 1
+         ELSE
+            I = 0
+            XYMIN = PXSVAL(K,EP,1)
+            XYMAX = PXSVAL(K,J,1)
+         END IF
+         CALL PLMNMX( PXYTYP(K), XYMIN, XYMAX, I )
+         PXSVAL(K,EP,1) = XYMIN
+         PXSVAL(K,J,1) = XYMAX
       ELSE
          PXYONE = .FALSE.
       END IF

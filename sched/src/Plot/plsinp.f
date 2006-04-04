@@ -115,6 +115,7 @@ C
                END IF
                PSFBCK = 0
             END IF
+            PXYSEC = .TRUE.
             RETURN
          END IF
 C
@@ -145,6 +146,7 @@ C
                CALL PLBUTX( PSFBXP(1,I), PSFBXP(2,I),
      1                      PSFBXP(3,I), PSFBXP(4,I), 0.,
      2                      0., ' ', 0, 1)
+               PXYSEC = .TRUE.
                RETURN
             END IF
  330     CONTINUE
@@ -913,6 +915,7 @@ C
               CALL PLBUTS( PBTR, PSTBXP(1,I), PSTBXP(2,I), PSTBXP(3,I),
      1                     PSTBXP(4,I), 0, 0, ' ', 0, REV )
               PSTBCK(J,1) = REV
+              PXYSEC = .TRUE.
               RETURN
            END IF
  510     CONTINUE
@@ -929,6 +932,7 @@ C
               CALL PLBUTS( PBTR, PSTBXH(1,I), PSTBXH(2,I), PSTBXH(3,I),
      1                     PSTBXH(4,I), 0, 0, ' ', 0, REV )
               PSTBCK(J,2) = REV
+              PXYSEC = .TRUE.
               RETURN
            END IF
  520     CONTINUE
@@ -955,6 +959,7 @@ C
                 END IF
                 PSTBCK(J,1) = REV
  530          CONTINUE
+              PXYSEC = .TRUE.
               RETURN
 C
            END IF
@@ -976,6 +981,7 @@ C
                 END IF
                 PSTBCK(J,2) = REV
  550          CONTINUE
+              PXYSEC = .TRUE.
               RETURN
 C
            END IF
@@ -1038,6 +1044,7 @@ C
               CALL PLBUTS( PBTR, PSOBXP(1,I), PSOBXP(2,I), PSOBXP(3,I),
      1                     PSOBXP(4,I), 0, 0, ' ', 0, REV )
               PSOBCK(J) = REV
+              PXYSEC = .TRUE.
               RETURN
            END IF
  570     CONTINUE
@@ -1064,6 +1071,7 @@ C
                 END IF
                 PSOBCK(J) = REV
  580          CONTINUE
+              PXYSEC = .TRUE.
               RETURN
 C
            END IF
