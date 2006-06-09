@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.04  March 2006                            
+Processed by SCHED version:   6.05  June 2006                             
 
 PI:       J.M. Wrobel                                                     
 
@@ -47,8 +47,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
  Next BBC frequencies:    618.39   626.39   618.39   626.39
  Next scan bandwidths:      8.00     8.00     8.00     8.00
 
-06 45 00  J0725-00     07 13 34  56.7 174.5 -0.2      -4.6     0   1  1      0  Stopped 
-06 57 00  ---          07 25 36  56.8 179.9  0.0       0.0   720   S  1      0          
+06 45 00  J0725-00     07 13 34  54.9 174.7 -0.2      -4.4     0   1  1      0  Stopped 
+06 57 00  ---          07 25 36  55.0 179.9  0.0       0.0   720   S  1      0          
 
 06 57 00  J1221+28     07 25 36  27.8  73.2 -4.9     -64.2  -186   1  1      0  Stopped 
 07 02 00  ---          07 30 37  28.8  73.8 -4.8     -64.5   114   S  1      0          
@@ -608,41 +608,41 @@ SETUP FILE INFORMATION:
  * NGC4278           From preliminary JVAS paper III
    UGC07386             7.200 scan hours,    352.815 baseline hours above horizon.
 
-   J0725-0054        07 23 15.846528   * 07 25 50.639962     07 25 42.950997       0.21
-   0723-008          01 00 57.90588    * 00 54 56.54433      00 55 05.55785        0.32
- * J0725-00          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
-   J0725-0054        VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
+   J0725-0054        07 23 17.838459   * 07 25 50.639962     07 25 43.074784       0.21
+   0723-008         -00 48 55.11326    *-00 54 56.54433     -00 54 47.55048        0.32
+ * J0725-00          /users/cwalker/files/sched_master/catalogs/sources.vlba
+                     VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
                         0.000 scan hours,      0.000 baseline hours above horizon.
 
    J1221+2813        12 19 01.115611   * 12 21 31.690531     12 21 23.024366       0.24
    1219+285          28 30 36.52557    * 28 13 58.50012      28 14 45.43493        0.41
- * J1221+28          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
-   J1221+2813        VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
+ * J1221+28          /users/cwalker/files/sched_master/catalogs/sources.vlba
+                     VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
                         2.700 scan hours,    127.154 baseline hours above horizon.
 
    J1224+0330        12 22 19.097169   * 12 24 52.421935     12 24 43.813396       0.31
    1222+037          03 47 27.06612    * 03 30 50.29297      03 31 44.91807        0.24
- * J1224+03          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
-   J1224+0330        VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J1224+0330           0.000 scan hours,      0.000 baseline hours above horizon.
+ * J1224+03          /users/cwalker/files/sched_master/catalogs/sources.vlba
+                     VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
+                        0.000 scan hours,      0.000 baseline hours above horizon.
 
    J1229+0203        12 26 33.245836   * 12 29 06.699732     12 28 58.074481       0.30
    1226+023          02 19 43.30565    * 02 03 08.59815      02 04 03.76476        0.20
- * 3C273             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C273             /users/cwalker/files/sched_master/catalogs/sources.vlba
    3C273B            VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
    J1229+02             0.183 scan hours,      9.690 baseline hours above horizon.
 
    J1310+3220        13 08 07.560131   * 13 10 28.663850     13 10 20.187961       0.24
    1308+326          32 36 40.23883    * 32 20 43.78290      32 21 28.67330        0.40
- * J1310+32          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
-   J1310+3220        VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J1310+3220           0.183 scan hours,      9.718 baseline hours above horizon.
+ * J1310+32          /users/cwalker/files/sched_master/catalogs/sources.vlba
+                     VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
+                        0.183 scan hours,      9.718 baseline hours above horizon.
 
    J1331+3030        13 28 49.657756   * 13 31 08.288048     13 30 59.847408       0.37
    1328+307          30 45 58.64060    * 30 30 32.95924      30 31 17.28928        0.47
- * 3C286             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C286             /users/cwalker/files/sched_master/catalogs/sources.vlba
    J1331+30          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J1331+3030           0.000 scan hours,      0.000 baseline hours above horizon.
+                        0.000 scan hours,      0.000 baseline hours above horizon.
 
 
 
@@ -651,7 +651,7 @@ SETUP FILE INFORMATION:
   The distance from the Sun to each source in this schedule is:
     Source         Sun distance (deg) 
    NGC4278            119.1
-   J0725-00           159.0
+   J0725-00           157.3
    J1221+28           118.6
    J1224+03           111.0
    3C273              109.5

@@ -1,6 +1,6 @@
 /.GE001   600
 //* *** 
-//* *** SCHED version:   6.04  March 2006
+//* *** SCHED version:   6.05  June 2006
 //* *** 
 //* *** Observation day 57,222 at 22 13 41 LST, 1997.03.05 11:30:00 MST.  
 //* *** 

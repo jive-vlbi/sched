@@ -79,12 +79,12 @@ C
 C     Check and Set the Setup File
 C
       KSET = PSFBCK
-      IF( KSET .EQ. 0 ) KSET = 1
-      IF( SFFREQ(1,KSET) .GT. 0.0 ) THEN
-         PBMFRQ = 30000.0 / SFFREQ(1,KSET)
-      ELSE
-         PBMFRQ = 0.0
-      END IF
+C      IF( KSET .EQ. 0 ) KSET = 1
+C      IF( SFFREQ(1,KSET) .GT. 0.0 ) THEN
+C         PBMFRQ = 30000.0 / SFFREQ(1,KSET)
+C      ELSE
+C         PBMFRQ = 0.0
+C      END IF
 
 C
 C     Set the XY Axis Type and pointers

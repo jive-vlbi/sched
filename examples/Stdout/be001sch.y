@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.04  March 2006                            
+Processed by SCHED version:   6.05  June 2006                             
 
 PI:       Craig Walker                                                    
 
@@ -1487,7 +1487,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: v6cm.set
-   Matches group y_vc in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vc in /users/cwalker/files/sched_master/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   11         Station: VLA1              Total bit rate:   64
@@ -1538,7 +1538,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: v4cm.set
-   Matches group y_vx in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vx in /users/cwalker/files/sched_master/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   22         Station: VLA1              Total bit rate:   64

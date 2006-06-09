@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Scheduling Mark II Observations</TITLE>
-<META NAME="description" CONTENT="Scheduling Mark II Observations">
+<TITLE>Mark&nbsp;III Observations</TITLE>
+<META NAME="description" CONTENT="Mark&nbsp;III Observations">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,209 +23,149 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node325.html">
 <LINK REL="previous" HREF="node323.html">
-<LINK REL="up" HREF="node322.html">
+<LINK REL="up" HREF="node323.html">
 <LINK REL="next" HREF="node325.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4665"
+<A NAME="tex2html4668"
   HREF="node325.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4661"
-  HREF="node322.html">
+<A NAME="tex2html4664"
+  HREF="node323.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4655"
+<A NAME="tex2html4658"
   HREF="node323.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4663"
+<A NAME="tex2html4666"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4666"
-  HREF="node325.html">Head Positions and Track</A>
-<B> Up:</B> <A NAME="tex2html4662"
-  HREF="node322.html">APPENDICES</A>
-<B> Previous:</B> <A NAME="tex2html4656"
-  HREF="node323.html">Mark&nbsp;III Observations</A>
- &nbsp; <B>  <A NAME="tex2html4664"
+<B> Next:</B> <A NAME="tex2html4669"
+  HREF="node325.html">Scheduling Mark II Observations</A>
+<B> Up:</B> <A NAME="tex2html4665"
+  HREF="node323.html">APPENDICES</A>
+<B> Previous:</B> <A NAME="tex2html4659"
+  HREF="node323.html">APPENDICES</A>
+ &nbsp; <B>  <A NAME="tex2html4667"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION00720000000000000000"></A><A NAME="SEC:MKII"></A>
+<H1><A NAME="SECTION00710000000000000000"></A><A NAME="SEC:MKIII"></A>
 <BR>
-Scheduling Mark II Observations
+Mark&nbsp;III Observations
 </H1>
 
 <P>
-SCHED&nbsp; was originally written in about 1978 as the Caltech
-Package scheduling program for Mark&nbsp;II VLBI.  Most Mark&nbsp;II
-observations done since then were scheduled with it.  But the
-program is outlasting the system that it was designed to
-support.  I began the process of removing Mark II from SCHED&nbsp; 
-when I learned that it is still in use in some parts of the
-world.  Therefore, it is being retained for now.
+To schedule Mark&nbsp;III projects using non-VLBA control file stations or
+a Mark&nbsp;III correlator, it is best to use PC-SCHED, written by
+Alan Rogers and Dave Schultz at Haystack (unrelated to SCHED), or
+SKED, written by Nancy Vandenberg at Goddard Space Flight
+Center.  PC-SCHED can read a very basic SCHED&nbsp; keyin file to
+get scan times and generate Mark&nbsp;III schedules.  This is mainly useful
+to help get the files needed by a Mark&nbsp;III correlator to process a
+Mark III observation on the VLBA that was scheduled with SCHED.  PC-SCHED and SKED produce a ``Standard Schedule File Format''
+file, which is also known as the ``sked file'', ``.skd file'', ``.drg
+file'', or ``drudg file''.  This single file contains a complete
+description of the experiment for all stations.
 
 <P>
-Mark&nbsp;II recording systems have been removed from most
-active VLBI stations and the main Mark&nbsp;II correlators are no longer
-operating.  However, the system is not completely gone.  An old
-Caltech correlator is being supported at Medicina and Mark&nbsp;II
-recording systems are being supported at a few places.  For these
-reasons, the Mark&nbsp;II specific features of SCHED&nbsp; have not
-yet been removed.
+There is a program called DRUDG, associated with the Mark&nbsp;III
+systems, that is used to convert the ``.drg file'' into snap files to
+control the antennas and tape systems.  DRUDG can produce VLBA
+control files and is used to do so regularily by the geodetic groups.
+It is rarely used to make schedules for non-geodetic projects.  PC-SCHED also is able to produce VLBA control files, but this
+capability has not been kept up-to-date and should not be used.
 
 <P>
-Mark&nbsp;II observations typically use one of the Mark&nbsp;III or VLBA data
-aquisition system baseband converters (called video converters in the
-Mark&nbsp;III world).  Therefore much of the setup information required
-for the wide band systems is also required for Mark&nbsp;II, although
-only for a single channel.  A very few parameters are available that
-are only for Mark&nbsp;II and the descriptions of those parameters should
-be consulted.  In the main program input, the only such parameter
-is <A HREF="node196.html#MP:TPREF"><TT>TPREF</TT></A> which helps get the tape changes
-synchronized.  In the tape initialization parameters, parameter
-<TT>TPTIME</TT> serves a similar purpose.  The main schedule parameter
-<A HREF="node55.html#MP:AUTOTAPE"><TT>AUTOTAPE</TT></A> has special meaning for
-Mark&nbsp;II observations.  Other than these special cases, the parameters
-used for a Mark&nbsp;II project are essentially the same as for a wide
-band experiment.  Of course, parameters related to control of the
-wide band tape systems are not needed.
+An NRAO program called SKEDCONV exists to convert ``.drg files''
+files into SCHED&nbsp; keyin files. It is recommended that most VLBA
+Mark&nbsp;III observers send their ``.drg files'' files to the AOC,
+where the staff will use SKEDCONV and SCHED, along with
+current setup files, to make the VLBA control files.  Instructions on
+how to submit schedules are provided to observers when they are
+allocated observing time.
 
 <P>
-Tape management for Mark&nbsp;II observations is simpler than for wide
-band observations.  Normally the tapes are run continuously for
-4 hours per tape and then changed, usually by hand.  Correlator
-operators normally prefer is all tapes are changed at the same
-time, which can be arranged using <A HREF="node196.html#MP:TPREF"><TT>TPREF</TT></A>
-or <TT>TPTIME</TT>.  The schedule should have scan breaks at the
-tape change times (this will be forced by SCHED, so tape
-changes might be requested at odd times if scan breaks don't occur
-at the nominal 4 hour intervals.
+There are no definite plans to support Mark&nbsp;III observations fully
+with SCHED&nbsp; because the system will soon be obsolete.  It will be
+replaced by the <A HREF="node32.html#SSEC:MKIV">Mark&nbsp;IV system</A>, which is basically
+an upgrade that uses the same tape recorders (upgraded) and heads, but
+a new formatter and wider bandwidths from the video converters.
+SCHED&nbsp; supports the Mark&nbsp;IV system through the VEX control files.
+However, as mentioned elsewhere, the Japanese systems related to VSOP
+have been designed around the ``.drg file''.  Hooks have been provided
+in SCHED&nbsp; where they can attach routines to write ``.drg file''
+output.  If this project is completed, SCHED&nbsp; may acquire at limited
+Mark&nbsp;III capability.
 
 <P>
+Mark&nbsp;III observations on stations that use VLBA control files (VLBA,
+VLA, and Green Bank) can be scheduled directly with SCHED.  The only
+difference between Mark&nbsp;III and VLBA format projects on these antennas
+is the data format on the tape (see the setup file input <A HREF="node246.html#SP:FORMAT"><TT>FORMAT</TT></A>) and various details in the setup files.  Mark&nbsp;III
+observations have a one-to-one correspondence between tracks and
+channels, use one bit samples, and do not barrel roll.  They typically
+use 7 or 14 channels, although Mark&nbsp;III format can be used on any
+project with no fan out.  Anyone scheduling Mark&nbsp;III observations
+should either use <A HREF="node227.html#SSEC:SETSTD">standard setup files</A> or, if
+making their own, should start with a standard file as a template.
+Such observations can be correlated on the VLBA correlator, but
+require production of a ``.drg file'' if sent to a Mark&nbsp;III correlator.
 
 <P>
-Below is an example of a simple Mark II schedule.
-Be warned that this aspect of SCHED&nbsp; is not being maintained
-because Mark 2 is no longer available at most stations.  Also,
-this example is not being tested with each release.
+The PCFS can control Mark&nbsp;III observations on Mark&nbsp;III, Mark&nbsp;IV, and
+VLBA hardware.  However, it will only do this with a Mark&nbsp;III type
+``.drg file'' for input.  Since SCHED&nbsp; does not produce such files,
+it cannot currently schedule Mark&nbsp;III format observations on systems
+that do not use the VLBA control files (e.g. the EVN).  The ``.drg
+file'' is also required to control Mark&nbsp;III correlators, and therefore
+SCHED&nbsp; cannot be used to control experiments that are destinated for
+such correlators without causing considerable extra effort to generate
+such a file later.  A possible future upgrade to the PCFS and SCHED&nbsp; 
+would allow the use of VEX files to control observations on Mark&nbsp;III
+hardware or configure Mark&nbsp;III modes on Mark&nbsp;IV hardware.
 
 <P>
-<PRE>
- SIMPLE EXAMPLE
- --------------------------------------------------------------------
-     !   Cover information:
- EXPT = 'Mark II, 3C345, May 1986'  ! Any description.
- EXPCODE = 'C85G'                   ! Project code.
- VERSION = 1                        ! Version 1 of schedule
- PINAME = 'Craig Walker'            ! Principal Investigator's name.
- ADDRESS1 = 'National Radio Astronomy Observatory'  ! Address
- ADDRESS2 = 'P. O. Box O'                           ! Up to 4 lines.
- ADDRESS3 = 'Socorro, New Mexico, 87801'
- ADDRESS4 = ' U.S.A. '
- PHONE    = '505 835 7247 '         ! Telephone number
- OBSPHONE = '505 835 7247 '         ! Phone number during observations.
- EMAIL    = 'Internet: cwalker@nrao.edu'   ! Electronic mail address.
- FAX      = '505 835 7027 '         ! Phone number for FAX.
- TELEX    = '910-988-1710 '         ! Telex number.
- OBSMODE  = '6cm  Mark~II Standard Setup'  ! Observing mode.
- CORREL   = 'Caltech'               ! Correlator to ship tapes to.
- NOTE1    = 'You can put any comments you want to in these four lines.'
- NOTE2    = ' More comments '
- NOTE3    = ' More comments '
- NOTE4    = ' Last of the comments'
-
- !         Now the actual schedule information.
- SRCFILE = sources.obs              ! Source catalog.
- STAFILE = stations.dat             ! Station catalog.
- SETUP   = nug6cm.set               ! Setup file.
- YEAR = 1986  MONTH=5  DAY=11       ! Date of first stop time.
- STATIONS=BONN,BOLOGNA,HSTK,NRAO,
-          VLA,VLBA_PT,OVRO          ! Stations list
- VLAMODE='VS'                       ! Required information for VLA
- START = 02:00:00                   ! Start time in UT.
- TPREF = 1::                        ! Control tape change times.
- SOURCE = '3C345'                   ! Source name.
- DUR = 30:00   REP = 8              ! 8 scans of 30 minutes each
- /                                  ! End of first group of scans.
- SOURCE='NRAO512'  DUR=30:00  /     ! One scan on another source.
- SOURCE='3C345'  DUR=30:00 REP 9 /  ! 9 more scans on main source.
- --------------------------------------------------------------------
-</PRE>
-
-<P>
-
-<P>
-Below is an example setup file for Mark II observations.
-This is the standard setup file <I>nug6cm.set</I> and contains
-the correct information for the VLBA and VLA, which no longer have
-Mark II recording equipment.  For a real Mark II observations, the
-stations involved would have to be added.
-
-<P>
-<PRE>
----------------------------------------------------------------------
- EXAMPLE:   Setup file for Mark~II observations (1 channel) at 6cm.
- --------------------------------------------------------------------
-! nug6cm.set
-!      Setup file produced by MAKESETUP.
-!      Modifications will be lost next time MAKESETUP is run.
-
-nchan = 1  bbfilter = 2.0 format = MARKII
-bbc = 1 netside = U
-ifchan = L
-!    Radio Astronomy allocation: 4990-5000
-!    Radio Astnomomy footnote:   4950-4990
-!    VLA 50MHz 4960.1 to 5010.1 with VC mode.
-!        VLA 6cm receiver falling off at high end.
-freqref  = 4990.99  !  Mark II network standard.
-fe(1) = '6cm'   fe(3) = '6cm'   synth(2) = 4.1
-firstlo  = 4100.00
-station  = VLBA   rchan = A  lchan = C   /
-firstlo  = 4360.10
-station  = VLA1   rchan = B  lchan = D   /
-station  = VLA27  rchan = A  lchan = C   /
-firstlo  = 4260.0
-station  = GB_VLBA  rchan = A  lchan = C  /
-station = 'EB_VLBA'
-fe(1)='6cm' fe(3)='6cm'
-firstlo = 4100.0  rchan=A lchan=C  /
-</PRE>
-
-<P>
-END OF OLD TEXT.
+The VLBA correlator is capable of correlating VLBA, Mark&nbsp;IV, and
+Mark&nbsp;III formats against each other as long as the sample rates and
+recording speeds were the same.  Therefore the VLBA and Mark&nbsp;IV
+stations of a global observation that also involves Mark&nbsp;III stations
+could be scheduled with SCHED&nbsp; if it were to be processed in Socorro.
+Of course, the Mark&nbsp;III stations would still have to be scheduled
+somehow, so one of the other programs would probably be used anyway.
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4665"
+<A NAME="tex2html4668"
   HREF="node325.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4661"
-  HREF="node322.html">
+<A NAME="tex2html4664"
+  HREF="node323.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4655"
+<A NAME="tex2html4658"
   HREF="node323.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4663"
+<A NAME="tex2html4666"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4666"
-  HREF="node325.html">Head Positions and Track</A>
-<B> Up:</B> <A NAME="tex2html4662"
-  HREF="node322.html">APPENDICES</A>
-<B> Previous:</B> <A NAME="tex2html4656"
-  HREF="node323.html">Mark&nbsp;III Observations</A>
- &nbsp; <B>  <A NAME="tex2html4664"
+<B> Next:</B> <A NAME="tex2html4669"
+  HREF="node325.html">Scheduling Mark II Observations</A>
+<B> Up:</B> <A NAME="tex2html4665"
+  HREF="node323.html">APPENDICES</A>
+<B> Previous:</B> <A NAME="tex2html4659"
+  HREF="node323.html">APPENDICES</A>
+ &nbsp; <B>  <A NAME="tex2html4667"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-03-27
+2006-06-08
 </ADDRESS>
 </BODY>
 </HTML>

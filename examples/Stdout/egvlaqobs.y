@@ -1,6 +1,6 @@
 /.EGVLAQ  450
 //* *** 
-//* *** SCHED version:   6.04  March 2006
+//* *** SCHED version:   6.05  June 2006
 //* *** 
 //* *** Observation day 58,041 at 00 00 01 LST, 1999.05.30 07:39:49 MST.  
 //* *** 
