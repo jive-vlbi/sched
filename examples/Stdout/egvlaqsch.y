@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.04  March 2006                            
+Processed by SCHED version:   6.05  June 2006                             
 
 PI:       Craig Walker                                                    
 
@@ -204,21 +204,21 @@ SETUP FILE INFORMATION:
 
    J0137+3309        01 34 49.826430   * 01 37 41.299496     01 37 37.547270       0.90
    0134+329          32 54 20.25964    * 33 09 35.13382      33 09 06.39492        0.91
- * 3C48              /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C48              /users/cwalker/files/sched_master/catalogs/sources.vlba
    J0137+33          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J0137+3309           0.211 scan hours,      0.000 baseline hours above horizon.
+                        0.211 scan hours,      0.000 baseline hours above horizon.
 
    J0319+4130        03 16 29.567289   * 03 19 48.160119     03 19 43.377393       0.28
    0316+413          41 19 51.91677    * 41 30 42.10389      41 30 18.94109        0.41
- * 3C84              /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C84              /users/cwalker/files/sched_master/catalogs/sources.vlba
    J0319+41          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J0319+4130           0.709 scan hours,      0.000 baseline hours above horizon.
+                        0.709 scan hours,      0.000 baseline hours above horizon.
 
    J0433+0521        04 30 31.602060   * 04 33 11.095529     04 33 07.063452       0.30
    0430+052          05 14 59.61640    * 05 21 15.61918      05 20 59.62159        0.20
- * 3C120             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C120             /users/cwalker/files/sched_master/catalogs/sources.vlba
    J0433+05          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J0433+0521           0.000 scan hours,      0.000 baseline hours above horizon.
+                        0.000 scan hours,      0.000 baseline hours above horizon.
 
 
 

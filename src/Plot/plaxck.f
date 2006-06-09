@@ -6,7 +6,7 @@ C
       INCLUDE 'plot.inc'
 C
       CHARACTER     CH, STRVAL*6
-      INTEGER       I, AX, EL, K, LMIN, LMAX, OFS, VAL
+      INTEGER       I, AX, EL, K, LMIN, LMAX, OFS
       REAL          X1, X2, Y1, Y2
 C ----------------------------------------------------------------------
 C
@@ -27,14 +27,13 @@ C
 C
 C     Set the new Value of Axis element selected
 C
-      VAL = PXSVAL(K,AX,EL)
       CALL PLVLCK( X1, X2, Y1, Y2, PXSBXM(1,AX), PXSBXM(2,AX),
-     1             PXSBXM(3,AX), PXSBXM(4,AX), VAL,
+     1             PXSBXM(3,AX), PXSBXM(4,AX), PXSVAL(K,AX,EL),
      2             PXSVAL(K,AX,1), LMIN, LMAX, PXSEXP(AX),
      3             1, OFS, EL, CH, STRVAL )
 C
       IF( PXYTYP(K) .EQ. 'Sec' ) THEN
-         PXSVAL(K,AX,1) = VAL
+         PXSVAL(K,AX,1) = PXSVAL(K,AX,EL)
          PXYSEC = .FALSE.
       END IF
 C

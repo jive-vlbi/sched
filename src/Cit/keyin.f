@@ -398,7 +398,8 @@ C     WRITE(P,410) BLANK,(ARROW,J=1,I)
       ELSE IF (IER.EQ.14) THEN
           WRITE(P,440) 'Attempt to divide by zero'
       ELSE IF (IER.EQ.17) THEN
-          WRITE(P,440) 'Syntax error'
+          WRITE(P,440) 'Syntax error - offending line:' 
+          WRITE(P,'( A )' ) REC(1:LEN1(REC))
       ELSE IF (IER.EQ.20) THEN
           WRITE(P,440) 'Unknown parameter: ',WORD
       ELSE IF (IER.EQ.21) THEN

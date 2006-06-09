@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.04  March 2006                            
+Processed by SCHED version:   6.05  June 2006                             
 
 PI:       P.J.Diamond                                                     
 
@@ -143,7 +143,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: bd27a.set
-   Matches group y_vq in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vq in /users/cwalker/files/sched_master/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   11         Station: VLA1              Total bit rate:   64
