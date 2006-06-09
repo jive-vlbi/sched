@@ -18,7 +18,7 @@ C
       INTEGER     YEAR, DAY1, DAY2
       DOUBLE PRECISION  START, STOP
       LOGICAL     SKIPPED, AUTOWARN
-      CHARACTER   LINE1*132, LINE2*132
+      CHARACTER   LINE1*140, LINE2*140
       CHARACTER   TFORM*8, SUMDAT*5
       CHARACTER   FF*1, PDATE*(*)
       CHARACTER   SUMTXT1*100, SUMTXT2*100, SUMDESC*100, EXTN*4
@@ -126,8 +126,9 @@ C
                      IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
                   END DO
                   IF( SKIPPED ) THEN
-                     WRITE( ISUM, '( 2A )' ) '  Skipping scan on ',
-     1                     SCNSRC(ISCN)(1:LEN1(SCNSRC(ISCN)))
+                     WRITE( ISUM, '( I4, 2A )' ) ISCN, 
+     1                     '  Skipping scan on ',
+     2                     SCNSRC(ISCN)(1:LEN1(SCNSRC(ISCN)))
                      LINE = LINE + 1
                   ELSE
 C  

@@ -77,7 +77,7 @@ C        TPSTART, could affect a scan transition somewhat earlier.
 C
          MINTPS = -1.D0 * UNSET
          DO ISTA = 1, NSTA
-            IF( STASCN(ISCN,ISTA) ) THEN
+            IF( STASCN(ISCN,ISTA) .AND. LSCN(ISTA) .GT. 0 ) THEN
                RECSTRT = STARTJ(ISCN) - TPSTART(ISCN,ISTA)
                IF( DABS( RECSTRT - STOPJ(LSCN(ISTA)) ) .LT. TWOSEC )
      1              THEN

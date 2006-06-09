@@ -1,7 +1,7 @@
 !*  Schedule for VLA27     *!
 !*  Experiment bw099    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:   6.04  March 2006 *!
+!* Processed by SCHED version:   6.05  June 2006 *!
 !* PI:       J.M. Wrobel *!
 !* Address:  NRAO, P.O. Box O *!
 !*           Socorro, NM 87801 *!
@@ -25,7 +25,7 @@ autoreverse=on
 !* that ends at the start time of the first scan  *!
 
 !* --- Scan from 06h45m00s to 06h57m00s   Wed, 1997 Jan 15 --- *!
-sname='J0725-00'  ra=07h25m50.639962s  dec= 00d54'56.54433"  qual=999  calib='V'
+sname='J0725-00'  ra=07h25m50.639962s  dec=-00d54'56.54433"  qual=999  calib='V'
 maxcaltime= 120
 extlo = (3, 21.4101000000)
 extlosideband = (3,U)

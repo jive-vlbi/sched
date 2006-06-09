@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 16 October 2001.</TITLE>
-<META NAME="description" CONTENT="Release of 16 October 2001.">
+<TITLE>Release of 02 July 2002.</TITLE>
+<META NAME="description" CONTENT="Release of 02 July 2002.">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,152 +23,148 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node304.html">
 <LINK REL="previous" HREF="node302.html">
-<LINK REL="up" HREF="node300.html">
+<LINK REL="up" HREF="node301.html">
 <LINK REL="next" HREF="node304.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4412"
+<A NAME="tex2html4415"
   HREF="node304.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4408"
-  HREF="node300.html">
+<A NAME="tex2html4411"
+  HREF="node301.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4402"
+<A NAME="tex2html4405"
   HREF="node302.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4410"
+<A NAME="tex2html4413"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4413"
-  HREF="node304.html">Release of 12 February</A>
-<B> Up:</B> <A NAME="tex2html4409"
-  HREF="node300.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4403"
-  HREF="node302.html">Release of 02 July</A>
- &nbsp; <B>  <A NAME="tex2html4411"
+<B> Next:</B> <A NAME="tex2html4416"
+  HREF="node304.html">Release of 16 October</A>
+<B> Up:</B> <A NAME="tex2html4412"
+  HREF="node301.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4406"
+  HREF="node302.html">Release of 18 September</A>
+ &nbsp; <B>  <A NAME="tex2html4414"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00623000000000000000"></A><A NAME="SSSEC:14OCT2001"></A>
+<H2><A NAME="SECTION00622000000000000000"></A><A NAME="SSSEC:15MAY2002"></A>
 <BR>
-Release of 16 October 2001.
+Release of 02 July 2002.
 </H2>
 
 <P>
 
 <UL>
-<LI>Change OK modes to include 512 Mbps modes for VLBA systems.
-       Note that such modes for Mark IV processed in Socorro will
-       still require <TT>MODETEST</TT> be specified.  This will be
-       changed once the modes have been checked out.  Also, there
-       are some two head (tape), 256 Mbps that are not yet approved
-       but will be.  26 Feb 2001 RCW.
+<LI>Die if no location given for a station.  18 Oct 2001 RCW.
 
 <P>
 </LI>
-<LI>Add the .oms output file type to pass information to the
-       VLBA correlator bookkeeping system.   1 March 2001 RCW.
+<LI>Fixed use of un-initialized variable in Vex stuff that caused
+problems occasionally on systems that do not automatically initialize
+variables.  This was detected by a user doing plots.  18 Oct 2001 RCW
+with fix found by Franco and agreed to by Huib.
 
 <P>
 </LI>
-<LI>Modify the warnings concerning autoallocation depending
-       on which correlator is specified.  There are now 4 cases;
-       VLBA where autoallocation is wanted, JIVE where is is
-       prohibited, Haystack where it is allowed, and others where
-       the user is asked to be sure.  Correlators can be moved
-       easily between the cases.
-       15 March 2001.
+<LI>Improve error message when <TT>OBSTYPE</TT> indicates recording
+will be done, but all scans are flagged <TT>NORECORD</TT>.  13 Dec 2001 RCW
 
 <P>
 </LI>
-<LI>When warning about the first output scan being before the
-       first input scan, note that this might be due to a pointing
-       scan if AUTOPEAK was requested.  19 Mar 2001  RCW.
+<LI>Default IATUTC to value from SLA_DAT.  27 Dec 2001 RCW
 
 <P>
 </LI>
-<LI>Make rotation/focus patterns possible at 13, 6, and 4 cm.
-       9 April 2001 RCW.
+<LI>Change TSETTLE to 6 for VLBA stations after experience with
+a 43 GHz phase referencing run that had 15 second scans.  28 Dec 2001 RCW
 
 <P>
 </LI>
-<LI>Clean up some logic in <TT>OPTMODE = SCANS</TT> so that the
-       experiment will start at the start time of the first scan
-       even if several scans are skipped at the start, as long
-       as scan times are allowed to vary.  19 April 2001  RCW.
+<LI>When there are between 2 and 24 sources and a UV plot is requested,
+make a separate panel for each source.  2 Jan 2002 RCW
 
 <P>
 </LI>
-<LI>Add PN3DB pointing, including the <TT>OPMISS</TT> optimization
-       parameter.  20 April 2001  RCW.
+<LI>Add <TT>OBSTYPE = CONFIG</TT> to trigger a UV plotting and
+optimizing mode useful for configuration studies.  A map of the
+station locations is plotted and stations can be clicked on and off
+(and highlighted) for plotting.  An optimizing mode is built in that
+tries combinations of available stations and rates them based on the
+number of cells filled in a uv grid.  Related parameters include <TT>MAPLIM</TT>, <TT>GRIDNR</TT>, <TT>GRIDNT</TT>, <TT>GRIDMIN</TT>, <TT>GRIDMAX</TT>, and
+<TT>GRIDW0</TT>.  Also added the configuration studies section of this
+manual.  Jan-Apr 2002 RCW.
 
 <P>
 </LI>
-<LI>Move warning about tape kept moving from each page of summary
-       to earlier station summary information section.  23 April 2001
-       RCW.
+<LI>Write <TT>extlo</TT> and <TT>extlosideband</TT> parameters to VLBA
+control files for non-VLBA antennas whenever that IF channel was
+not used in the previous scan in addition to whenever the value
+actually changes.  This was needed by Effelsberg.  14 Jan 2002. RCW.
 
 <P>
 </LI>
-<LI>Make warning about multiple stations with same code more clear.
-       Specifically suggest using station name.  30 April 2001. RCW.
+<LI>Alter 3mm examples to no longer claim that the peaking setup
+needs to be similar to the observing setup to avoid formatter
+reconfigure.  This is not true if <TT>FORMAT=NONE</TT>.  14 Jan 2002. RCW.
 
 <P>
 </LI>
-<LI>Restrict a Mark IV station to 8 VCs when 1:4 fanout is being
-       used because of a hardware restriction.  The BBC (VC) defaulting
-       code was changed.  22 May 2001 RCW.
+<LI>Checked the Lat/Long/Ht to XYZ conversion.  Altered the
+ellipsoid by 1 meter to conform to current values found on the web.
+The conversion now agrees with examples at geodetic sites at the cm
+level assuming that everything is in WGS84, which is closely tied to
+the ITRF.  29 Jan 2002 RCW.
 
 <P>
 </LI>
-<LI>Fix formatting of the two head version of HEAD_POS section in
-       VEX file and relaxed constraints on patching for MkIV
-       19 Sept 2001 Huib
+<LI>Check that each frequency set is within the IF's specified in
+the frequency catalog.  This gives a check after application of
+Doppler or schedule specified frequencies.  4 Feb 2002  RCW.
 
 <P>
 </LI>
-<LI>Fix problem in scan duplication routine that can prevent proper
-       action when explicit tape changes are requested.  4 Oct 2001 RCW.
+<LI>Improve the ability to change the maximum number of stations
+and some other parameters with only one change in sched.inc.  As a
+result, the sched.inc file must be invoked before schset.inc.
+2002may01  RCW.
 
 <P>
 </LI>
-<LI>Made sure a single source can be used with more than one of the
-       alias names in the VEX file. Longitudes now show sign part in
-       source comment. Fix error handling in CHK4DAR.
-       5 Oct 2001 Huib
+<LI>Some restrictions on processing 512 Mbps observations at
+JIVE have been lifted.  2002may  Huib
 
 <P>
 </LI>
-<LI>Fix head positions to use for Mark IV 2 head operation.
-       9 Oct 2001  RCW/Huib
+<LI>There have been a number of updates to the catalogs for the EVN
+stations, both in capabilities and positions.  Cormac Reynolds 2002may
 
 <P>
 </LI>
-<LI>Took out warnings on 40 and 66 ips on MkIV receorders 10 Oct
-       2001 Huib
+<LI>The ``settling time'' (<TT>TSETTLE</TT>) for the VLBA antennas was
+increased from 2 seconds to reflect better what is actually seen in
+phase referencing observations.  This will lengthen the gap between
+scans when using dwell time scheduling.  2001apr RCW.
 
 <P>
 </LI>
-<LI>Stopped spurious warning about overlapping frequencies when
-       doppler requested on sources with no velocities.  11 Oct 2001 RCW
+<LI>Change the default for <TT>RECORDER, DAR, and CONTROL</TT> to blank,
+which gets interpreted as <TT>NONE</TT>.  Should have no effect in
+practice because the catalogs have always specified these.  But
+with the advent of <TT>DISK</TT> for Mark5, this will change.
 
 <P>
 </LI>
-<LI>Fix problem with track assignments when using setup files with
-       different normal passes per head position.  Forced all setups
-       to use the same number of passes per head position.  This had
-       been done before, but in a different way that allowed bad track
-       assignments to be made that could overwrite data.  11 Oct 2001 RCW
-
-<P>
-</LI>
-<LI>Added SAVE statement in JPLEP2 to allow planet pointing observations
-       scheduled under Linux.  15 Oct 2001 RCW
+<LI>Add <TT>MINSETUP</TT> to the station catalog to deal with cases
+where there is a minimum scan change time regardless of the slew
+and settling times, but where this minimum time should not be
+added to scan changes with long slews.
 
 <P>
 </LI>
@@ -177,31 +173,31 @@ Release of 16 October 2001.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4412"
+<A NAME="tex2html4415"
   HREF="node304.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4408"
-  HREF="node300.html">
+<A NAME="tex2html4411"
+  HREF="node301.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4402"
+<A NAME="tex2html4405"
   HREF="node302.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4410"
+<A NAME="tex2html4413"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4413"
-  HREF="node304.html">Release of 12 February</A>
-<B> Up:</B> <A NAME="tex2html4409"
-  HREF="node300.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4403"
-  HREF="node302.html">Release of 02 July</A>
- &nbsp; <B>  <A NAME="tex2html4411"
+<B> Next:</B> <A NAME="tex2html4416"
+  HREF="node304.html">Release of 16 October</A>
+<B> Up:</B> <A NAME="tex2html4412"
+  HREF="node301.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4406"
+  HREF="node302.html">Release of 18 September</A>
+ &nbsp; <B>  <A NAME="tex2html4414"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-03-27
+2006-06-08
 </ADDRESS>
 </BODY>
 </HTML>

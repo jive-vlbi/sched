@@ -12,23 +12,29 @@
 
 #  Compare the .key files.
 
+if( $SCHED !~ */ ) then
+  setenv SCHED_SUB $SCHED_STD
+else
+  setenv SCHED_SUB "$SCHED_STD"/
+endif
+
 echo ' '
 echo '-------  diffs - local file vs file in ' $3 '-----------'
 echo '----------------------' $4 '-------------------------'
-sed -e s:"$SCHED":"$SCHED_STD"/:g $4 | \
+sed -e s:"$SCHED":"$SCHED_SUB":g $4 | \
   sed -f Check_sed | diff - $3/$4
 
 #  Check the .runlog file. 
 
 echo '----------------------' $1.runlog '-------------------------'
-sed -e s:"$SCHED":"$SCHED_STD":g $1.runlog | \
+sed -e s:"$SCHED":"$SCHED_SUB":g $1.runlog | \
   sed -f Check_sed | diff - $3/$1.runlog
 
 #   Check crd file of the requested station, if present.
 
 echo '----------------------' $1.sum '-------------------------'
 if( -e $1.sum ) then
-  sed -e s:"$SCHED":"$SCHED_STD"/:g $1.sum | \
+  sed -e s:"$SCHED":"$SCHED_SUB":g $1.sum | \
      sed -f Check_sed | diff - $3/$1.sum
 else
   echo '*************  SCHED did not run. ***************'
@@ -47,7 +53,7 @@ endif
 
 if( -e $1sch.$2 ) then
 echo '----------------------' $1sch.$2 '-----------------------'
-  sed -e s:"$SCHED":"$SCHED_STD"/:g $1sch.$2 | \
+  sed -e s:"$SCHED":"$SCHED_SUB":g $1sch.$2 | \
     sed -f Check_sed | diff - $3/$1sch.$2
 endif
 

@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 18 Nov. 1997.</TITLE>
-<META NAME="description" CONTENT="Release of 18 Nov. 1997.">
+<TITLE>Release of 30 March 1998.</TITLE>
+<META NAME="description" CONTENT="Release of 30 March 1998.">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,200 +23,185 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node312.html">
 <LINK REL="previous" HREF="node310.html">
-<LINK REL="up" HREF="node300.html">
+<LINK REL="up" HREF="node301.html">
 <LINK REL="next" HREF="node312.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4508"
+<A NAME="tex2html4511"
   HREF="node312.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4504"
-  HREF="node300.html">
+<A NAME="tex2html4507"
+  HREF="node301.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4498"
+<A NAME="tex2html4501"
   HREF="node310.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4506"
+<A NAME="tex2html4509"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4509"
-  HREF="node312.html">Release of 18 August</A>
-<B> Up:</B> <A NAME="tex2html4505"
-  HREF="node300.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4499"
-  HREF="node310.html">Release of 30 March</A>
- &nbsp; <B>  <A NAME="tex2html4507"
+<B> Next:</B> <A NAME="tex2html4512"
+  HREF="node312.html">Release of 18 Nov.</A>
+<B> Up:</B> <A NAME="tex2html4508"
+  HREF="node301.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4502"
+  HREF="node310.html">Release of 1 Dec.</A>
+ &nbsp; <B>  <A NAME="tex2html4510"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION006211000000000000000"></A><A NAME="SSSEC:18NOV97"></A>
+<H2><A NAME="SECTION006210000000000000000"></A><A NAME="SSSEC:06MAR98"></A>
 <BR>
-Release of 18 Nov. 1997.
+Release of 30 March 1998.
 </H2>
 
 <P>
 
 <UL>
-<LI>Fix bug in setting of formats that occurs when VLBA/MarkIV
-      modes are mixed with Mark III modes in a schedule.  This caused
-      a core dump.  21Aug1997 RCW.
+<LI>Prohibit use of 2 digit year.  Warn, but don't abort with
+      year outside 1900 to 2100.  Convert to 4 digit years in
+      VLBA control files.  20Nov97.  These are in response
+      to Richard Simon's y2k crusade.
 
 <P>
 </LI>
-<LI>Add Mitaka and Pentiction to the valid correlator list.
-      8sep97 RCW.
+<LI>Fix bug found by Norbert Bartel where a postpass warning goes
+      out even on VLBA sites using 1 drive.  5dec97 RCW.
 
 <P>
 </LI>
-<LI>Clarify that correlator shipping address is for output.
-      8sep97 RCW.
+<LI>Fix bug that appeared when some setups needed the frequency
+      catalog and others didn't.  10dec1997  RCW.
 
 <P>
 </LI>
-<LI>Avoid postpass even on last tape of experiment for 1 tape
-      stations.  Requested by Dave Graham but make sense to be
-      the default.  While at it, changed VLBA stations (2 tape
-      stations) to also avoid postpass when the last pass is
-      continuous.  9sep97 RCW.
+<LI>Add some more variables to SAVE parameters that were missed
+      before.  Thanks to Franco Tinarelli for finding them.  15Jan98.
 
 <P>
 </LI>
-<LI>Add check that sun distance of a VLA phasing source is greater
-      than the nominal limit before issuing a warning.  9sep97 RCW.
+<LI>From Franco on plot stuff (9Jan98):
+
+<P>
+Another problem exists with the PGPLOT libraries and the colours usage.
+  In Linux I've recompiled sched with f77 and in the plot window the
+  background color of graphics window is black and not gray and the yellow
+  border do not appears ( like in the Alpha WS). This is very strange
+  because in Linux the problem do not exist with the sched executables compiled
+  with g77 and the same pgplot libraries, and in the Alpha WS disappears with
+  the pgplot libraries compiled with the shared options.
 
 <P>
 </LI>
-<LI>Green Bank - Remove end of scan calibration.  Change default
-      to Ts only, no Ta.  Use the MARKIII proceedure rather than VSST
-      and VOBS for most cases.  9sep97 RCW.
+<LI>Add routine OPTUPT (<TT>OPTMODE='UPTIME')</TT> to create a long
+      sequence (OPDUR) of scans from each
+      input scan.  This is meant to be part of allowing SCHED features
+      to replace UPTIME.  This is used if OPTMODE=UPTIME is invoked.
+      20 Jan 1998  RCW.
 
 <P>
 </LI>
-<LI>Implement multiple slew limits for XY antennas.  This is needed
-      for Hobart.  10sep97  RCW.
+<LI>Franco's plotting stuff is getting pretty good.  I will probably
+      use it as the standard plotting section from now on.
+      First really useful version installed 21 Jan 98.
 
 <P>
 </LI>
-<LI>Fix a bug in overlapping channel warning.  12sep97 RCW.
+<LI>Added baseline length table to summary file.  10 Feb 98.
 
 <P>
 </LI>
-<LI>Make various changes to allow experiments with mixed setups.
-      This is mainly to allow some stations to have dual polarization
-      and others, that only have single channel receivers, to record
-      only those channels with the single polarization.  The concept
-      of ``logical'' channel for each setup file was introduced.
-      If not all channels match a logical channels, <TT>DOPPLER,
-      FREQ, and BW</TT> are not allowed.  Also, those parameters set
-      the frequency and bandwidth for the logical channels which
-      might not correspond 1-1 with the channels in an individual
-      setup group.  Checks of compatibility between stations are
-      done by logical channel.  12sep97.  RCW
+<LI>Fixed vsx-128-4-2.set to really be dual polarization rather
+      than RCP only.  17 Feb 98 RCW.
 
 <P>
 </LI>
-<LI>Add setup item PTOFF to allow independent setting of the
-      half power distance and the off source position.  This
-      is the result of problems notices with the 13cmsx gains that
-      were the result of not going far enough off source.
-      12sep97  RCW.
+<LI>Added routine SIDTIM.  Called in CRDVLA - no real change there.
+      Mainly this was to help the UPTIME style plotting stuff of
+      Franco's.  20 Feb 98  RCW.
 
 <P>
 </LI>
-<LI>Make tape autoallocation (AUTOTAPE) apply only to stations
-      using VLBA control files.  13sep97 RCW.
+<LI>Changing default format to be correct for S2.  S2's often have
+      DAR type of VLBA or MarkIV which triggered the wrong default.
+      20 Feb 98  RCW.
 
 <P>
 </LI>
-<LI>Add a !NEXT! before the final !QUIT! for the final postpass
-      scan.  This may be required to prevent the on-line system
-      from ignoring the postpass.  17sep97  RCW.
+<LI>Restructuring some of tape handling code to separate automatic
+      tape handling from other types and to completely separate S2.
+      Feb 98.  RCW.
 
 <P>
 </LI>
-<LI>Change documentation and user messages in VLBACHG to reflect
-      going to full rewind speed for postpasses. 15sep97 RCW.
+<LI>Tried to set up multiple line formats as concatenated character
+      variables to keep some compilers happy.  Feb 98 RCW
 
 <P>
 </LI>
-<LI>Update to latest VLA standard band frequencies.  21Oct97 RCW.
+<LI>Automatic tape allocation only applies to sites with VLBA
+      control systems and more than one tape drive.  AUTOALOC and
+      AUTOREV made site dependent.  24 Feb 1998. RCW.
 
 <P>
 </LI>
-<LI>Fix bug in roll group check for Wrobel mode in CHKSOC.  31Oct97 RCW.
+<LI>Fix bug where if POL=L, you actually got RCP.  POL=LCP was ok.
+      25 Feb 98  RCW.
 
 <P>
 </LI>
-<LI>Add SETGEO to pick BBCs for DAR=VLBAG stations (geodetic wiring
-      of a VLBA rack.  For those racks, pay attention to the
-      restrictions on which BBCs can see which IFs and the limits
-      on how many BBCs can be used in 2 bit mode.  Modified BBC
-      selection routine for MarkIV while at it (simplified).
-      4 Nov 1997  RCW.
+<LI>Do not allow ``!'' in cover information.  They mess up the
+      VLBA on-line parsing of the files.
 
 <P>
 </LI>
-<LI>Fix bug in CHKVLBA that caused it to only check the first
-      synthesizer frequency.  Unfortunately a couple of experiments
-      were lost because of a user error that was not caught and should
-      have been.  6 Nov 1997  RCW.
+<LI>Arrange to use position information from the VLBA correlator
+      data base in the standard stations.dat catalog.  A new program
+      that is very much like <I>MAKESETUP</I>, called <I>MAKESTA</I>
+      is used to merge the information from the correlator data
+      base into with the rest of the information about station
+      equipment.  25Nov98  RCW.
 
 <P>
 </LI>
-<LI>Add VLAMODE='VB'.  6 Nov 1997.
+<LI>Change tape move time at end of S2 scans from 0.5 min to 0.1 min.
+      27Feb98 RCW.  2Mar98 Huib in the Vex stuff.
 
 <P>
 </LI>
-<LI>Fix bug in accounting for logical channels.  10 Nov 1997.
+<LI>Fix ephemeris routine stub to match new name and call sequence
+      of the real one, which changed a few months ago.  2Mar98 RCW.
 
 <P>
 </LI>
-<LI>Make more obvious warning when a DAY forgotten at midnight.
-      10 Nov 1997.
+<LI>Multiple occurrences of $PROCEDURES VEX section is fixed.
+      2Mar97 Huib.
 
 <P>
 </LI>
-<LI>Remove many of the TAPEINI sections from the examples.  Leave
-      a couple - they might still be needed for EVN only observations.
-      10 Nov 1997
+<LI>Warning on FS setup times checks that station was actually in
+      previous scan.   2Mar97 Huib.
 
 <P>
 </LI>
-<LI>Remove unused and dangerous DEFAULT option for station in
-      setup files.  17 Nov 1997.
+<LI>Add NOSETUP item to aid in planning with hypothetical stations
+      and stations for which setup information is not present.
+      5Mar98. RCW.
 
 <P>
 </LI>
-<LI>Add CHKGDAR to check cable restrictions for ``geodetic'' VLBA
-      stations.
+<LI>Fix bug that appeared when in-line setup files were placed
+      at the end of the schedule.  17Mar98  RCW.
 
 <P>
 </LI>
-<LI>Support x:y mounts like Hobard in VEX.  Nov 97, Huib.
-
-<P>
-</LI>
-<LI>Disabled use of modes that would excite the Mark IV BBC 9
-      fan-out bug.  Nov 97, Huib
-
-<P>
-</LI>
-<LI>Warn against 0 recorders in S2 modes that stopped Hart from
-      observing.  Nov 97, Huib.
-
-<P>
-</LI>
-<LI>Introduce VLBAG DAR to VEX for stations with geodetic wiring.
-      Nov 97, Huib.
-
-<P>
-</LI>
-<LI>There have been many catalog updates by RCW, Huib ...
+<LI>Remove the long loops in the ROTPAT section.  The on-line
+      system can't do them.  Add warnings about durations of pointing
+      and rotpat scans.  25mar98 RCW.
 
 <P>
 </LI>
@@ -225,31 +210,31 @@ Release of 18 Nov. 1997.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4508"
+<A NAME="tex2html4511"
   HREF="node312.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4504"
-  HREF="node300.html">
+<A NAME="tex2html4507"
+  HREF="node301.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4498"
+<A NAME="tex2html4501"
   HREF="node310.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4506"
+<A NAME="tex2html4509"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4509"
-  HREF="node312.html">Release of 18 August</A>
-<B> Up:</B> <A NAME="tex2html4505"
-  HREF="node300.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4499"
-  HREF="node310.html">Release of 30 March</A>
- &nbsp; <B>  <A NAME="tex2html4507"
+<B> Next:</B> <A NAME="tex2html4512"
+  HREF="node312.html">Release of 18 Nov.</A>
+<B> Up:</B> <A NAME="tex2html4508"
+  HREF="node301.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4502"
+  HREF="node310.html">Release of 1 Dec.</A>
+ &nbsp; <B>  <A NAME="tex2html4510"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-03-27
+2006-06-08
 </ADDRESS>
 </BODY>
 </HTML>

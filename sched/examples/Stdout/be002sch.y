@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.04  March 2006                            
+Processed by SCHED version:   6.05  June 2006                             
 
 PI:       Craig Walker                                                    
 
@@ -1487,7 +1487,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: v6cm.set
-   Matches group y_vc in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vc in /users/cwalker/files/sched_master/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   11         Station: VLA1              Total bit rate:   64
@@ -1538,7 +1538,7 @@ SETUP FILE INFORMATION:
 
 
  Setup file: v4cm.set
-   Matches group y_vx in /mnt/mach/mach/cwalker/code/sched/catalogs/freq.dat
+   Matches group y_vx in /users/cwalker/files/sched_master/catalogs/freq.dat
     In VA mode, only IFs A and D are phased.
 
    Setup group:   22         Station: VLA1              Total bit rate:   64
@@ -1601,33 +1601,33 @@ SETUP FILE INFORMATION:
 
    J0313+4120        03 09 44.793512   * 03 13 01.962127     03 12 47.836954       0.28
  * 0309+411          41 08 48.80285    * 41 20 01.18344      41 19 02.62227        0.41
-   J0313+41          /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
-   J0313+4120        VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
+   J0313+41          /users/cwalker/files/sched_master/catalogs/sources.vlba
+                     VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
                         1.433 scan hours,     69.499 baseline hours above horizon.
 
    J0319+4130        03 16 29.567289   * 03 19 48.160119     03 19 33.899987       0.28
    0316+413          41 19 51.91677    * 41 30 42.10389      41 29 44.82145        0.41
- * 3C84              /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C84              /users/cwalker/files/sched_master/catalogs/sources.vlba
    J0319+41          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J0319+4130           7.950 scan hours,    387.369 baseline hours above horizon.
+                        7.950 scan hours,    387.369 baseline hours above horizon.
 
    J0555+3948        05 52 01.407172   * 05 55 30.805614     05 55 14.674172       0.26
  * 0552+398          39 48 21.94585    * 39 48 49.16500      39 48 34.67332        0.40
-   DA193             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+   DA193             /users/cwalker/files/sched_master/catalogs/sources.vlba
    J0555+39          VLBA Calib Srcs - GSFC sols. - catalog 2004f_astro
-   J0555+3948           1.250 scan hours,     67.082 baseline hours above horizon.
+                        1.250 scan hours,     67.082 baseline hours above horizon.
 
    J1229+0203        12 26 33.245836   * 12 29 06.699732     12 28 53.018270       0.30
    1226+023          02 19 43.30565    * 02 03 08.59815      02 04 37.36531        0.20
- * 3C273             /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C273             /users/cwalker/files/sched_master/catalogs/sources.vlba
    3C273B            VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
    J1229+02             0.183 scan hours,     10.083 baseline hours above horizon.
 
    J2253+1608        22 51 29.519744   * 22 53 57.747943     22 53 46.732681       0.31
    2251+158          15 52 54.34806    * 16 08 53.56089      16 07 48.49381        0.20
- * 3C454.3           /mnt/mach/mach/cwalker/code/sched/catalogs/sources.vlba
+ * 3C454.3           /users/cwalker/files/sched_master/catalogs/sources.vlba
    J2253+16          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
-   J2253+1608           0.183 scan hours,     10.083 baseline hours above horizon.
+                        0.183 scan hours,     10.083 baseline hours above horizon.
 
 
 
