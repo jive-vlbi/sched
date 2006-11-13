@@ -37,9 +37,9 @@ FC = /usr/local/gcc-3.4.4/bin/g77 -Wall -Wimplicit -fno-backslash -fbounds-check
 
 #XLD =                                         # Should work on many systems.
 #XLD = -lX11		                       # X11 libraries, if needed
-#XLD = -L/usr/X11R6/lib -lX11                  # If not in path.
+XLD = -L/usr/X11R6/lib -lX11                  # If not in path.
 #XLD = -Bstatic    # Sun; for portable executable (problems?)
-XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
+#XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
                    # Linux, portable executable (true at AOC with Redhat 9)
 #XLD = -static -L/usr/X11/lib -lX11            # Linux with X11 vs X11R6
 #XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -ldl 
