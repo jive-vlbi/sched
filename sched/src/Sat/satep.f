@@ -11,6 +11,8 @@ C     In the initial incarnation, the position is as seen from
 C     the Earth center.  The paralax effect should be added
 C     eventually.
 C
+C     March 2007:  I think paralax was added long ago.
+C
 C     The spice subroutines will die without passing back error
 C     messages if there is a problem.  Hence there is no point
 C     in passing an error indication to this routines calling 
@@ -167,10 +169,12 @@ C
 C
 C        Display the results of the state calculation.
 C
-         WRITE (*,'(2X,A20,2X,F15.3,2X,F15.3,2X,F15.3,/
-     +       18X, A, F15.5,2X,F15.5,2X,F15.5)') 
+         IF( SPDEBUG ) THEN
+            WRITE (*,'(A,2X,A20,2X,F15.3,2X,F15.3,2X,F15.3,/
+     +          18X, A, F15.5,2X,F15.5,2X,F15.5)') 'STATE:',
      +          UTC, STATE(1), STATE(2), STATE(3),
      +          'RATES:  ', STATE(4), STATE(5), STATE(6)
+         END IF
 C
       END IF
 C
@@ -207,6 +211,9 @@ C
          X = X - XT / 1000.D0
          Y = Y - YT / 1000.D0
          Z = Z - ZT / 1000.D0
+         R = SQRT( X*X + Y*Y )
+         DIST = SQRT( X*X + Y*Y + Z*Z )
+         DISTAU = DIST / 149.6D6
 C        
 C        Comparison with the planets section of SCHED shows agreement 
 C        of the paralax to within about an arc second.  I'm not sure

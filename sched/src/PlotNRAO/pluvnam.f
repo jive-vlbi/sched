@@ -134,10 +134,11 @@ C     Sources not needed because this routine only used if each has
 C     its own panel.
 C
 C     For CONFIG mode, write the time range and el limit.
+C     Give the el limit for the first station only.
 C
       IF( CONFIG ) THEN
          WRITE( POSLINE, '( F5.1, A, F4.0, A )' )
-     1      ( TEND - TFIRST ) * 24.0, ' hours,', OPMINEL,
+     1      ( TEND - TFIRST ) * 24.0, ' hours,', OPMINEL(1),
      2      ' deg min elevation.'
          CALL PGSCI(2)
          CALL PGMTXT( 'B', 1.3, 0.5, 0.5, POSLINE )
