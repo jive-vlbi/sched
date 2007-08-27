@@ -27,6 +27,7 @@ C
       REAL              MFSSC, MFS1, MFSINC
       DOUBLE PRECISION  RXMIN, RXMAX, RYMIN, RYMAX
 C -------------------------------------------------------------------
+C
 C     Set the plot limits.  U first.
 C
       IF( RXMIN .NE. UNSET .AND. RXMAX .NE. UNSET ) THEN
