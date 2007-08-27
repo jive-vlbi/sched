@@ -53,8 +53,13 @@ C
                   CALL WLOG( 1, 'SETEXPND: ' //
      1              'There are too many setup groups after '//
      2              'creating new ones ' )
-                  CALL WLOG( 2, '          ' //
+                  CALL WLOG( 1, '          ' //
      1              'for each station in the input setups.' )
+                  WRITE( MSGTXT, '( A, I5, A )' )
+     1              '          Maximum is ', MSET, 
+     2              ' which is setups times stations.'
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
                   CALL ERRLOG( 'SETEXPND: ' //
      1              'You need fewer setups or a bigger MSET in SCHED.' )
                END IF
@@ -98,7 +103,7 @@ C
 C     This used to be a bit tricky because of the possible
 C     defaulting.  As of Dec 2004, each station has a setup so
 C     it should no longer be a problem.  Keep the legacy code
-C     in case it is needed some day.
+C     (commented) in case it is needed some day.
 C
 C     Do it by looping through the schedule stations
 C     and then the scans looking for a match.  Allow NSETUP
@@ -115,32 +120,36 @@ C
             END IF
          END DO
 C
+C
+C        The following defaulting is no longer used.
+C
 C        Now look for a station to use for a default like VLBA.
 C        Use a VLBA station that is not explicitly specified in another
 C        group from the same setup file.
 C
-         IF( ISETSTA(KS) .EQ. 0 .AND. 
-     1       SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
+C         IF( ISETSTA(KS) .EQ. 0 .AND. 
+C     1       SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
 C
-            write(*,*) 'setexpnd:  Should not get here'
-            DO LSTA = 1, NSTA
-               IF( STANAME(LSTA)(1:4) .EQ. 'VLBA' ) THEN
-                  USEIT = .TRUE.
-                  DO JS = 1, NSET
-                     IF( JS .NE. KS .AND. 
-     1                   ISETNUM(JS) .EQ. ISETNUM(KS) .AND.
-     2                   SETSTA(1,JS) .EQ. STANAME(LSTA) ) THEN
-                        USEIT = .FALSE.
-                     END IF
-                  END DO
-                  IF( USEIT ) THEN
-                     ISETSTA(KS) = STANUM(LSTA)
-                     GO TO 50
-                  END IF
-               END IF
-            END DO
-         END IF
-   50    CONTINUE
+C            write(*,*) 'setexpnd:  Should not get here'
+C            DO LSTA = 1, NSTA
+C               IF( STANAME(LSTA)(1:4) .EQ. 'VLBA' ) THEN
+C                  USEIT = .TRUE.
+C                  DO JS = 1, NSET
+C                     IF( JS .NE. KS .AND. 
+C     1                   ISETNUM(JS) .EQ. ISETNUM(KS) .AND.
+C     2                   SETSTA(1,JS) .EQ. STANAME(LSTA) ) THEN
+C                        USEIT = .FALSE.
+C                     END IF
+C                  END DO
+C                  IF( USEIT ) THEN
+C                     ISETSTA(KS) = STANUM(LSTA)
+C                     GO TO 50
+C                  END IF
+C               END IF
+C            END DO
+C         END IF
+C   50    CONTINUE
+C
 C
 C        Complain if could not get a station number.  I think this
 C        is always a programming problem.  A station not in the

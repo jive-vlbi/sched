@@ -75,6 +75,7 @@ C
       TBPS(TO)     = TBPS(FROM)
       TOTBPS(TO)   = TOTBPS(FROM)
       VLBAMKIV(TO) = VLBAMKIV(FROM)
+      M4PATCH(TO)  = M4PATCH(FROM)
       FLUKESET(TO) = FLUKESET(FROM)           
       FLUKEA(TO)   = FLUKEA(FROM)             
       FLUKEB(TO)   = FLUKEB(FROM)             
