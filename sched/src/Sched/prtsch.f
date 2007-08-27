@@ -14,7 +14,7 @@ C
       INTEGER            KF, LKF, FOOT1, FOOT2, LFOOT
       REAL               LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
       DOUBLE PRECISION   LFREQ(MCHAN), SFREQ(MCHAN), START, STOP 
-      DOUBLE PRECISION   TSTART, RTCORR
+      DOUBLE PRECISION   TSTART, RTCORR, LSTOPJ
       LOGICAL            FIRSTS, DOWRTF, DOWRTB
       CHARACTER          TFORM*15, SHORTN*10
       CHARACTER          CLST1*9, CLST2*9, FF*1
@@ -29,6 +29,8 @@ C     Tape information from TPDAT.
 C
       INTEGER          TPPASS, TPDIR, TPINDX, TPHEAD, TPDRIV, ISETF
       LOGICAL          DOTAPE, DOFAST, DOREW
+C
+      SAVE             LSTOPJ
 C -----------------------------------------------------------------
       IF( DEBUG .AND. FIRSTS ) THEN
          CALL WLOG( 0, 'PRTSCH: Making operator schedule file for' //
@@ -46,6 +48,7 @@ C
          ILINE = 999
          IPAGE = 1
          LASTDY = -999
+         LSTOPJ = 0.D0
          LNCHL = 0
          LKF = 0
          DO IFREQ = 1, MCHAN
@@ -282,8 +285,15 @@ C
          CTSTART = 'Stopped '
          CTCORR  = ' '
       ELSE
-         CTSTART = TFORM( TSTART, 'T', 0, 2, 2, '  @' )
+         IF( ABS( LSTOPJ - ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) ) ) .LT.
+     1         1.D0 / 86400.D0 ) THEN
+            CTSTART = 'No stop'
+         ELSE
+            CTSTART = TFORM( TSTART, 'T', 0, 2, 2, '  @' )
+         END IF
          CTCORR = TFORM( RTCORR, 'T', 0, 2, 2, '  @' )
+C
+         LSTOPJ = STOPJ(ISCN)
       END IF
 C
 C     Use the GBYTE position for disks instead of the tape

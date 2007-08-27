@@ -4,6 +4,9 @@ C     Writes focus/rotation pattern, which consists of a
 C     at a number of focus and rotation positions pointing sequence.  
 C     Units are mm.
 C
+C     Feb 6, 2007  Account for rotation moving on curved path, not
+C     straight, in calculation of az and el collimation offsets. RCW.
+C
       INCLUDE           'sched.inc'
       INCLUDE           'schset.inc'
 C
@@ -125,7 +128,11 @@ C
 C
 C     Now do the offset forcus and rotation positions if that is
 C     desired.  For rotation, 40" (0.6666 arc min) per degree is
-C     expected.  Assume zero shift for focus offsets.
+C     expected.  A 1 degree rotation corresponds to FCR*sin(1) = 
+C     FCR*0.01745 where FCR is the radius of the feed circle (which
+C     I don't happen to know at the moment - but it is not needed).
+C
+C     Assume zero shift for focus offsets.
 C
 C     Divide the total time into ROTPAT segments.  Test if
 C     they are of appropriate length.  This allows for multiple
@@ -170,8 +177,10 @@ C
          DOFOC = FOCUS(ISCN) + FOCINC * FOC(IPAT)
          IF( DOFOC .LT. LOWLIM ) DOFOC = LOWLIM
          DOROT = ROTATION(ISCN) + ROTINC * ROT(IPAT)
-         DOAZPAT = DOAZ + DOROT * 0.6666 * SIN( FEEDPOS )
-         DOELPAT = DOEL + DOROT * 0.6666 * COS( FEEDPOS )
+         DOAZPAT = DOAZ - ( 0.6666 / 0.01745 ) * 
+     1       ( COS( DOROT * RADDEG + FEEDPOS ) - COS( FEEDPOS ) )
+         DOELPAT = DOEL + ( 0.6666 / 0.01745 ) *
+     1       ( SIN( DOROT * RADDEG + FEEDPOS ) - SIN( FEEDPOS ) )
          WRITE( IUVBA, '( A, F7.2, A, F7.2 )' ) 
      1      'focus = ', DOFOC, '  rotation = ', DOROT
          WRITE( IUVBA, '( A, F7.2, A, F7.2 )' )

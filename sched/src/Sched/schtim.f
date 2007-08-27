@@ -191,7 +191,7 @@ C
      1          STANAME(ISTA) // ' is not in any scans.'
             CALL WLOG( 1, MSGTXT )
             CALL WLOG( 1, '      This can happen if the source is ' //
-     1                 'up in any of of the assigned scans.' )
+     1                 'not up in any of of the assigned scans.' )
             MSGTXT = ' '
             CALL ERROR( '      SCHED cannot make a Vex file.' )
          ELSE IF( SCNHR(ISTA) .LE. 0.0 ) THEN
@@ -199,7 +199,7 @@ C
      1          STANAME(ISTA) // ' is not in any scans.'
             CALL WLOG( 1, MSGTXT )
             CALL WLOG( 1, '      This can happen if the source is ' //
-     1                 'up in any of of the assigned scans.' )
+     1                 'not up in any of of the assigned scans.' )
             MSGTXT = ' '
          END IF
       END DO

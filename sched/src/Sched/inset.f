@@ -116,6 +116,11 @@ C
       CALL KEYCHR( 'VLAIF', ' ', 10, KD, KC, KI )
       CALL KEYCHR( 'VLAROT', ' ', 10, KD, KC, KI )
 C
+C     Mark4 parameters.
+C
+      CALL KEYCHR( 'M4PATCH', 'ASTRO', 8, KD, KC, KI )
+C
+C
       IF( DEBUG ) THEN
          WRITE( MSGTXT, '( A, I5, A, I5, A, I5 )' )
      1        'INSET: MSETV: ', KI(1), '  NSETV: ', KI(2),

@@ -53,11 +53,13 @@ C
 C     Set up to get a number of these from parameters in sched.inc.
 C     2002may01  RCW.  This means sched.inc must be invoked before 
 C     schset.inc
+C     Change MSET=200+MAXSTA to MSET=200+5*MAXSTA to help with some test
+C     observations.  2007jun7.
 C
       INTEGER           MSET, MCHAN, MAXPC, MAXTON, MANT, MTPMOD, MFSET
       INTEGER           MPSET
       DOUBLE PRECISION  NOTSET
-      PARAMETER         (MSET=200+MAXSTA)
+      PARAMETER         (MSET=400+5*MAXSTA)
       PARAMETER         (MCHAN=MAXCHN)
       PARAMETER         (MAXPC=8)
       PARAMETER         (MAXTON=2*MAXPC)
@@ -162,6 +164,7 @@ C
       CHARACTER         LCP50CM(MSET)*6
       CHARACTER         RCP50CM(MSET)*6
       CHARACTER         BARREL(MSET)*9
+      CHARACTER         M4PATCH(MSET)*8
 C
 C     Some derived quantities.
 C
@@ -191,7 +194,7 @@ C
       COMMON  /SETC2/   SETSTA, BAND, SIDEBD, POL, NOISE, NOISEFRQ, FE, 
      1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, IFDIST,
      2                  SPCAL, PCALX1, PCALX2, NETSIDE, SIDE1, 
-     3                  RCHAN, LCHAN, LCP50CM, RCP50CM, BARREL
+     3                  RCHAN, LCHAN, LCP50CM, RCP50CM, BARREL, M4PATCH
 C
 C     VLA information.
 C     Included are the fluke set, the fluke frequencies, the F.E. LO

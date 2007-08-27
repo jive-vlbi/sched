@@ -16,7 +16,7 @@ C
       LOGICAL           UOPEN, ALLOMIT, JUSTVLA
       CHARACTER         RESULT*256, SETREQ*(*), SETRQ*80
       CHARACTER         LFE(4)*6
-      DOUBLE PRECISION  BLANK
+      DOUBLE PRECISION  BLANK, ASTRO
 C
 C     For KEYIN.
 C
@@ -52,6 +52,7 @@ C
          CALL KPACK( '/       ', ENDMARK )
          CALL KPACK( '        ', BLANK )
          CALL KPACK( 'ZZZZ    ', ZZZZ )
+         CALL KPACK( 'ASTRO   ', ASTRO )
          KI(1) = MSETV
          KI(2) = 0
          KI(3) = 3
@@ -131,6 +132,7 @@ C
       DO I = 1, 4
          LFE(I) = 'omit'
       END DO
+      KD( KEYPTR( 'M4PATCH', KC, KI ) ) = ASTRO
 C
 C     Read the groups from the setup file.
 C
@@ -548,6 +550,10 @@ C
             PCALFR1(IP,KS) = KD(I3+IP)
             PCALFR2(IP,KS) = KD(I4+IP)
          END DO
+C
+C        Get the Mark4 patch specifier.
+C
+         M4PATCH(KS) = KCHAR( 'M4PATCH', 8, .TRUE., KD, KC, KI )
 C
 C     Go back for next group.
 C
