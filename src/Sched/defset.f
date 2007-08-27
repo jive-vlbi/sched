@@ -11,10 +11,9 @@ C ---------------------------------------------------------------------
 C     Expand the setups, set defaults, and check.
 C
 C     Expand out the setup groups so there is one per input station.
-C     Note that 'VLBA' will remain one station.  Also fill in the
-C     station list if none was given (full default).  If stations
-C     were given, remove any that are not needed for this schedule.
-C     After this, all remaining setups are used.
+C     Also fill in the station list if none was given (full default).  
+C     If stations were given, remove any that are not needed for 
+C     this schedule.  After this, all remaining setups are used.
 C
       CALL SETEXPND
 C

@@ -23,8 +23,9 @@ C      VERNUM = 6.01    !  Released March 30, 2005.  Bug fixes.
 C      VERNUM = 6.02    !  Released July 29, 2005.
 C      VERNUM = 6.03    !  Mostly development versions
 C      VERNUM = 6.04    !  Mar. 2006
-      VERNUM = 6.05     !  June 2006
-      VERSION = 'June 2006'
+C      VERNUM = 6.05    !  June 2006
+      VERNUM = 7.0     !  Development > Dec 2006
+      VERSION = 'Development late 2006'
 C
       RETURN
       END

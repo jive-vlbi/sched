@@ -128,9 +128,13 @@ C
                   END IF
 C        
                ELSE
-                  IC = LEN1( MSGTXT ) + 1
-                  WRITE( MSGTXT(IC:LEN(MSGTXT)), '( A )' ) 
-     1                 '  No pcal detection.'
+C
+C                  Take out this statement.  It just worried users who
+C                  were expecting detection at the correlator.
+C
+C                  IC = LEN1( MSGTXT ) + 1
+C                  WRITE( MSGTXT(IC:LEN(MSGTXT)), '( A )' ) 
+C     1             '  No pcal detection.'
                END IF
 C        
 C              Write the header line and a warning if there is one.

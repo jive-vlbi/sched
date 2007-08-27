@@ -116,10 +116,10 @@ C
      1              SRCFILE(1:LEN1(SRCFILE))
             ELSE IF( WHICHCAT(ISRC) .EQ. 'P' ) THEN
                LINE(3) = LINE(3)(1:21) //
-     1              'Planet.  Position is for scan 1, station 1.'
+     1              'Planet.  Position is for scan 1, center Earth.'
             ELSE IF( WHICHCAT(ISRC) .EQ. 'S' ) THEN
                LINE(3) = LINE(3)(1:21) //
-     1              'Satellite. Position is for scan 1, station 1.'
+     1              'Satellite. Position is for scan 1, center Earth.'
             ELSE IF( WHICHCAT(ISRC) .EQ. '2' ) THEN
                LINE(3) = LINE(3)(1:21) //
      1              PSRCFILE(1:LEN1(PSRCFILE))
