@@ -1,8 +1,8 @@
       SUBROUTINE GETFREQ
 C
-C     Routine for SCHED, called by GETSET, that reads the catalog of
-C     known frequency setups (FREQFILE).  It stores the information
-C     in arrays in the schfreq include file.
+C     Routine for SCHED, called by GETSET and DIVERT, that reads the 
+C     catalog of known frequency setups (FREQFILE).  It stores the 
+C     information in arrays in the schfreq include file.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schfreq.inc'

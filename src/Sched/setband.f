@@ -15,7 +15,7 @@ C
 C
       INTEGER           KS, ICH, MBD, IB, I, ISETF, ICS, ICX, IBS, IBX
       INTEGER           ISTA
-      PARAMETER         (MBD=14)
+      PARAMETER         (MBD=15)
       DOUBLE PRECISION  CFREQ(MBD), FRQLOW(MCHAN), TEMP, TEMPS, TEMPX
       REAL              TOTBAND, CBW(MBD)
       CHARACTER         CBAND(MBD)*5
@@ -43,9 +43,15 @@ C
       DATA  CBAND(9), CFREQ(9), CBW(9)  /  '18cm', 1653.99, 0.0 /
       DATA  CBAND(10), CFREQ(10), CBW(10)  /  '6cm', 4990.49, 0.0 /
       DATA  CBAND(11), CFREQ(11), CBW(11)  /  '2cm', 15285.49, 0.0 /
+C
+C     The second 1cm band avoids much of the water line.  I didn't
+C     use a wavelength spec because 1cm is already too coarse (and
+C     really 30 GHz).
+C
       DATA  CBAND(12), CFREQ(12), CBW(12)  /  '1cm', 22235.49, 0.0 /
-      DATA  CBAND(13), CFREQ(13), CBW(13)  /  '7mm', 43135.49, 0.0 /
-      DATA  CBAND(14), CFREQ(14), CBW(14)  /  'sx', 0.0, 0.0 /
+      DATA  CBAND(13), CFREQ(13), CBW(13)  /  '24ghz', 23800.49, 0.0 /
+      DATA  CBAND(14), CFREQ(14), CBW(14)  /  '7mm', 43135.49, 0.0 /
+      DATA  CBAND(15), CFREQ(15), CBW(15)  /  'sx', 0.0, 0.0 /
 C
 C     Keep the indices for the X and S band frequencies used for SX.
 C

@@ -1,0 +1,120 @@
+! This is a hypothetical file for a STDSET routine for sched.
+!
+! For each "band", the freqref will be remembered.
+!
+! For each "mode", the 
+
+#vhead
+!
+!  VLBA recorders with VLBA control
+!
+#end
+
+#m4head
+!
+!  MkIV recorders with VEX control.
+!  Be careful about BBC asignments.
+!
+#end
+
+#fshead
+!
+!  VLBA recorders with VEX control.
+!
+#end
+
+#s2head
+!
+!  S2 recorders with VEX control.
+!
+#end
+
+#mode 18cm
+!      For the 18 cm band (near OH lines).
+!        Radio Astronomy allocation:  1660-1670
+  @vstation VLBA, VLA1, VLA27, GB_VLBA, EB_VLBA
+  @fstation NOTO, TORUN, JB2_VLBA, CAMBG32M, SHANGHAI
+  @4station MEDICINA, EFLSBERG, ONSALA85, WSTRBORK, JODRELL2
+  @sstation NOTO_S2, USUDA
+  freqref  = 1662.99        !  Mark II network standard.
+  freqoff  = $freqoff
+#end
+
+#mode lcp_1
+  @pol lcp
+  @4bbc = 1, 3, 5, 7, 9, 11, 13
+#end
+  
+#mode lcp_2
+  @pol lcp
+  @4bbc 1, 1, 3, 3, 5, 5, 7, 7, 9, 9, 11, 11, 13, 13, 15, 15
+#end
+  
+#mode rcp_1
+  @pol lcp
+  @4bbc 2, 4, 6, 8, 10, 12, 14
+#end
+  
+#mode rcp_2
+  @pol lcp
+  @4bbc 2, 2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12, 14, 14, 16, 16
+#end
+  
+#mode dual_1
+  @pol dual
+  @4bbc 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15
+#end
+
+#mode dual_2
+  @pol dual
+  @4bbc 2,1,2,1,4,3,4,3,6,5,6,5,8,7,8,7,10,9,10,9,12,11,12,11,14,13,14,13,16,15,16,15
+#end
+
+
+#mode VSOP
+  @mode spdv8
+!      128 Mbps - 2 pass/headpos
+  nchan    = 2 
+  bits     = 2 
+  bbfilter = 16.0
+  netside  = U, U
+  pol      = $pol
+
+  ?vstation
+  @vhead
+  station  = $vstation
+  format   = VLBA1:4
+  bbc      = 1, 2 
+  ?end
+
+  ?fstation
+  @fshead
+  station  = $fstation
+  ?end
+
+  ?4station
+  @m4head
+  station  = $4station
+  format   = MKIV1:4
+  bbc      = $4bbc
+  ?end
+
+  ?sstation
+  @s2head
+  station  = $sstation
+  bbc      = $4bbc
+  ?end
+#end
+
+#file vsop18cm.set   @mode 18cm  @mode lcp  @mode VSOP  #end
+
+#file
+ @try Why me.
+Hello Dolly $try Oh no.
+$try
+Hello Dolly $try
+ $try Oh no.
+$try Oh no.
+
+#end
+

@@ -1,0 +1,115 @@
+!  Primary Stations Catalog for SCHED.
+!
+!     Do not modify the standard copy of stations.dat directly.  It is 
+!     the combination of a number of "Master" files.  See proceedure 
+!     Update to see what is involved.  Users making a special version
+!     can modify stations.dat at will.
+!
+!  INPUT PARAMETERS:
+!      Parm   Note  Description
+!     STATION    3  Station name.
+!     STCODE        Station code.  Usually 2 letters.  Used for scheduling.
+!     DBNAME     1  Station name in VLBA correlator and geodetic station lists.
+!     DBCODE     1  Station code used in VLBA correlator data base.
+!     FRAME         Source of the solution providing station coordinates.
+!     CONTROL       Type of control file.
+!     DAR           Type of data aquisition rack.
+!     DISK          Type of disk system like MARK5A. Can have tape and disk.
+!     RECORDER      Type of tape recorder.
+!     NDRIVES       Number of recorders at the site.
+!     NHEADS        Number of recording head stacks on each recorder.
+!     ELEV       2  Site elevation above mean sea level or geocentric radius.
+!     LAT        2  Station latitude.
+!     LONG       2  Station longitude.
+!     ZALIM         Zenith angle limit.
+!     X          2  Station X coordinate.
+!     Y          2  Station Y coordinate.
+!     Z          2  Station X coordinate.
+!     DXDT          Rate of change of X coordinate (continental drift).
+!     DYDT          Ditto for Y coordinate.
+!     DZDT          Ditto for Z coordinate.
+!     EPOCH         Time of zero offset from X,Y,Z.
+!     DESCRIP       Any text.
+!     NDRIVES       The number of tape drives at the station.
+!     HOR_AZ        A list of azimuths at which the horizon is measured.
+!     HOR_EL        The horizon elevation at the above azimuths.
+!     MOUNT         The mount type as used by SCHED.
+!     AXISTYPE   1  The mount type according to the VLBA correlator database.
+!     AXISOFF       The offset between the axes.
+!     AX1LIM        Slew limits for first axis for several regions.
+!     AX2LIM        Slew limits for the second axis in the same regions.
+!     AX1RATE       The first axis slew rate.
+!     AX2RATE       The second axis slew rate.
+!     AX1ACC        Acceleration in deg/s/s, first axis
+!     AX2ACC        Acceleration in deg/s/s, second axis
+!     TSETTLE       Extra time required for source change beyond dist/rate.
+!     MINSETUP      Minimum time between scans when using DWELL.
+!  
+!   NOTES:
+!     1.  These items appear redundant with STCODE, STATION, and MOUNT, but
+!         reflect the contents of the VLBA correlator data base which can
+!         be, and often is, different from what is used in SCHED for 
+!         scheduling.  Often this difference reflects the refusal by the
+!         array schedulers to specify before observe time which specific 
+!         antenna is going to be used for single dish observations at places 
+!         like the VLA and Westerbork.  Therefore STCODE does not contain
+!         this information.  But the correlator must know and has separate
+!         database entries for each pad (gets which was used from the log).
+!         AXISTYPE is there as a consistency check.  SCHED users do not 
+!         need to specify DBCODE, DBNAME, or AXISTYPE if providing their 
+!         own catalog for SCHED.
+!     2.  At least one of (ELEV, LAT, LONG) or (X, Y, Z) must be provided.
+!         It is a bad idea to provide both.  SCHED will calculate the 
+!         missing one from the one provided.  Note if ELEV is large, 
+!         (ELEV, LAT, LONG) are treated as geocentric.  If it is small,
+!         they are treated as geodetic.
+!     3.  *** WARNING: SCHED uses the first 4 characters in many places 
+!         to detect a true VLBA station.  Those characters should only be VLBA
+!         if all the hardware all the way up the antenna is VLBA type.
+!
+!  ------------------------------------------------------------------
+!   HISTORY  (rather incomplete)
+!
+!  May. 12, 1989 - VLBA stations updated to VLBA Memo 644 (done later?)
+!  Feb.  3, 1994 - Update to Barry Clark station codes.
+!  Jan.  5, 1993 - New station codes and SN50 control.
+!                  Codes are the ones recommended by Porcas except for
+!                  a few single letter codes and a few 3 letter codes for DSN.
+!  Dec.  5, 1994 - Remove HCRK control type.  
+!  Jan. 17, 1995 - Added VLBA horizon information (150K limit). RCW 
+!  Nov. 18, 1995   Added VLBA mount information. RCW
+!  Feb. 15, 1996 - Add slew information for many sites. RCW
+!                - Make station names consistent with pc-sched and sked. RCW
+!                - pc-sched and sked catalogs don't agree on all parameters.
+!                - This whole area needs help.
+!  Dec.  2, 1996 - Add some Japanese stations.  Note in last months various
+!                  parameters like DAR, RECORDER etc were added.
+!  Mar. 14, 1997 - Merge with "huibstat.dat" to include VEX and 
+!                  Mark IV info. RCW.  Huibstat.dat from Huib vanLangevelde.
+!  Mar. 25, 1997 - Incorporate changes to EVN etc stations from Huib.
+!  Mar. 25, 1997 - Split into rcwstat.dat and huibstat.dat for maintenance.
+!                  From now on, stations.dat is the two catted together.
+!                  Do not modify it directly.
+!  Oct.     1997 - More splits - to stations_APT.dat, stations_DSN.dat,
+!                  stations_US.dat, stations_geodesy.dat, stations_EVN.dat,
+!                  and stations_mm.dat.
+!  Nov.  5, 1997 - Add some S2 entries for Green Bank, Arecibo ...
+!  Feb. 25, 1998 - Setting up to get station locations from correlator 
+!                  data base.
+!  --            - Probably did not document a bunch of changes.
+!  Jan. 23, 2001 - Point ARECIBO position to locations.dat.  RCW
+!  Apr. 23, 2001 - More Arecibo information prior to test.  RCW.
+!  Oct. 15,16 2001 - Fix some Arecibo stuff.
+!  Dec. 28, 2001 - Increase TSETTLE from 2 to 6 sec for VLBA based on
+!                  experience with 7mm Phase referencing.  RCW
+!  Apr. 26, 2002 - GBT slew rates.  Other GBT and Arec stuff changed
+!                  earlier.  RCW
+!  Feb. 22, 2003 - Accelerations.  Start Mark 5.
+!  Apr. 03, 2003 - MINSETUP added.
+!  Apr. 04, 2003 - VLBA TSETTLE reduced to 4 compensating for 
+!                  acceleration time.
+!  May. 04, 2004 - GBT TSETTLE set to 20 after BK100 experience.
+!  Nov. 08, 2006 - Switching most stations to Mark5.
+!  Dec. 04, 2006 - Add Westford.
+!
+!
