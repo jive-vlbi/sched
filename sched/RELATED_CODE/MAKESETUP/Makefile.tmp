@@ -1,0 +1,28 @@
+#  Makefile for makesetup.  Use gmake.
+
+SRCS = $(wildcard *.f)
+OBJS = $(SRCS:.f=.o)
+
+MAKESET_SRCS = $(shell grep -l makeset.inc *.f)
+MAKESET_OBJS = $(MAKESET_SRCS:.f=.o)
+
+RM = /bin/rm -f
+
+FC= f77 -C -g -u
+ 
+all: makesetup
+ 
+makesetup:  makesetup.o $(OBJS)
+	$(FC) -o makesetup $(OBJS) \
+        /home/eolus/cwalker/code/Lib_linux/sublib/getline.o \
+        /home/eolus/cwalker/code/Lib_linux/sublib/nxtwrd.o \
+        ../../src/Cit/len1.o ../../src/Cit/upcase.o \
+          -lX11
+
+.f.o:
+	$(FC) -c $<
+
+$(MAKESET_OBJS): makeset.inc
+
+clean:
+	$(RM) $(OBJS)

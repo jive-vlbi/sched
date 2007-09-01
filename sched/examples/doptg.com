@@ -9,8 +9,8 @@
 #  set stalist_3mm="HN NL FD LA PT KP OV MK"
 #  set stalist_no3mm="BR SC"
 #  set stalist_no3mm=""      eg use blank if no stations of this type.
-set stalist_3mm="HN FD PT"
-set stalist_no3mm="BR SC"
+set stalist_3mm="BR FD PT"
+set stalist_no3mm="HN SC"
 
 #
 #  Set times and experiment code
@@ -101,7 +101,7 @@ endlines /
 !  if the slew takes longer than 40 seconds.  That is partly why
 !  there is a second peak scan.
 
-group=(9*3+8*3) rep=50
+group=(10*3+8*3) rep=50
 setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
 setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
@@ -109,6 +109,7 @@ setup='$SETDIR/pt6cm.set'   source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source 'DR21'    nodop   bw=0,0   /
+setup='$SETDIR/pt24ghz.set' source 'DR21'    nodop   bw=0,0   /
 setup='$SETDIR/pt2cm.set'   source 'DR21'    nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source 'DR21'    nodop   bw=0,0   /
 
@@ -132,6 +133,7 @@ setup='$SETDIR/pt6cm.set'   source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source '3C84'    nodop   bw=0,0   /
+setup='$SETDIR/pt24ghz.set' source '3C84'    nodop   bw=0,0   /
 setup='$SETDIR/pt2cm.set'   source '3C84'    nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source '3C84'    nodop   bw=0,0   /
 
@@ -154,6 +156,7 @@ setup='$SETDIR/pt6cm.set'   source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt24ghz.set' source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt2cm.set'   source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source '3C273'   nodop   bw=0,0   /
 

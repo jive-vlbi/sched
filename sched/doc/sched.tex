@@ -4712,7 +4712,7 @@ ones to include in the uv plots can be selected from the sources menu
 or interactively from the map.  This allows rapid trials of many
 options.  As and alternative, or in addition, any station can be moved
 interactively.  Note that you can use \htmlref{{\tt
-OPTMODE=PLAN}}{MP:OPTMODE} to get continuous tracks on each source, or
+OPTMODE=UPTIME}}{MP:OPTMODE} to get continuous tracks on each source, or
 you can give an actual schedule.  The author has found it useful to
 invoke two instances of \schedb and carefully align the plot windows
 (most easily by expanding them to full screen).  Then the window
@@ -10818,6 +10818,7 @@ confused about what signal is in each baseband channel.
 \htls{LEVEL}{~~~} Attenuator setting for BBCs.
 \htls{LOGGING}{~} Type of logging to be done.
 \htls{LCP50CM}{~} Controls narrow band filter at 50 cm for LCP.
+\htls{M4PATCH}{~} Controls which MarkIV patching to use.
 \htls{MODETEST}{} Allow untested recording modes.
 \htls{NCHAN}{~~~} Number of baseband channels.
 \htls{NETSIDE}{~} Net sideband of baseband channel.
@@ -10924,6 +10925,7 @@ of the tuning range for the preferred IF at the VLBA.
       '4cm'        8415.49          0.0
       '2cm'       15285.49          0.0
       '1cm'       22235.49          0.0
+     '24ghz'      23800.49          0.0
       '7mm'       43135.49          0.0
        'sx'   2295.49 and 8415.49   0.0
 ----------------------------------------------
@@ -11627,6 +11629,33 @@ used if at all possible.
 {{\tt NARROW}}
 {Defaults to previous station.}
 {{\tt LCP50CM = BROAD  RCP50CM = BROAD}}
+
+
+\subsubsection{\label{SP:M4PATCH}{\tt M4PATCH}}
+
+{\tt M4PATCH} allows specification of the patching at MarkIV stations.
+There are limited options so far - ASTRO and GEO1.  
+
+ASTRO is the default and has the odd numbered VCs on IF 1 (IFCHAN 1N
+and 1A) and even numbered VCs on IF 2 (IFCHAN 2N and 2A).  Note that
+1N and 2A are often connected to the same thing.  Same for 2N and 1A.
+IF 3 is not used.
+
+GEO1 is for a geodetic style patching. The pattern is:
+\begin{verbatim}
+        VCs 1-2    IF1 low  = 8180-8300 MHz
+         "  3-4    IF1 high = 8300-8580 MHz
+         "  5-8    IF3      = 8680-8980 or 8280-8580 MHz
+         "  9-10   IF2 low  = 2120-2240 MHz
+         "  11-14  IF2 high = 2240-2520 MHz
+\end{verbatim}
+
+\rcwbox
+{Character string of length up to 8.}
+{{\tt ''ASTRO'' or ''GEO1''}
+{{\tt ''ASTRO''}}
+{Defaults to previous station.}
+{{\tt M4PATCH = GEO1}}
 
 
 \subsubsection{\label{SP:MODETEST}{\tt MODETEST}}
@@ -12868,7 +12897,36 @@ in \sched.
 
 \chapter{\label{CHP:CHANG}RELEASE NOTES}
 
+
+
 \section{\label{SEC:CURRENT}Current Release}
+
+\subsection{\label{SSEC:VER_6.06}Version 6.06
+
+This is the current development version.
+
+\begin{itemize}
+
+\item  Convert all stations to Mark5 in the station catalog.  Nov. 8, 2006 RCW
+
+\item  Found and fixed bug in the calculation of station parallax for
+satellite positions.  March 26, 2007. RCW.
+
+\item  Put indicator of continuous recording in .sch file.  May 8, 2007.
+
+\item  Increase maximum number of setups.  June 8, 2007  RCW.
+
+\item  Add setup parameter M4PATCH and subroutine chk4geo.f to support
+geodetic type setups.  This is incomplete, but is at least making a 
+polarization study of the geodetic stations (VLBA providing both polarizations)
+possible.  June 2007  RCW.
+
+\item  Add 24GHz band.  Aug 28, 2007
+
+
+
+\end{itemize}
+
 
 \subsection{\label{SSEC:VER_6.05}Version 6.05}
 
@@ -15187,6 +15245,43 @@ This is a list of desired program changes, fixes or enhancements.
 
 
 \begin{itemize}
+
+\item Warn if DOPPLER is not used when it looks like it should be.
+      From Leonia (as contact) Aug 1, 2007.  RCW.
+
+\item Do something about DWELL scheduling when phase referencing too close
+      to the zenith.  One station can cause big problems for the array.
+      Based on bk135 experience May 2007  RCW.
+
+\item Try to name runlog after the observation.  Maybe a rename.  It
+      is opened before the input is read so the code is not yet known.
+      but could it be renamed later - or a new file opened and the
+      contents copied over.  From Amy.  25 Jan 2007.  RCW.
+
+\item Change default sumitems away from tape.  From Amy.   25 Jan 2007  RCW
+
+\item Have DWELL allow one or more slow antennas to not hold up a scan start.
+      From Amy.  25 Jan 2007  RCW.
+
+\item Improve optimization when switching bands.  emails from Greg Taylor and
+      Steven Tremblay, early October 2006.
+
+\item Don't allow less than 8 tracks for Mark5A.  The extra tracks get filled
+      by the on line system, but the predictions of disk usage etc are messed
+      up.  email from Jon Romney May 31, 2006.
+
+\item Write to screen the typing instructions in config mode.  Now uses
+      WRTMSG and only goes to runlog.  Nov 29, 2006.
+
+\item Franco Mantovani, speaking for the EVN, says it is ok to remove the
+      tape based constraints from SCHED, such as the restriction on holding
+      the number of tracks constant.  Email Oct 15, 2006.  RCW.
+
+\item Test against the 2048 channel limit from the correlator.
+      Add correlator passes to the correlation request - maybe even have 
+      some items specified per pass.
+      Do the correlator rate calculations etc on a per-pass basis.
+      Based on request by Vincint Fish, Oct 3, 2006.
 
 \item Change SUMITEM defaults now that tapes are no longer (soon) in use.
       Request by Amy Mioduszewski  June 7, 2006.  RCW.

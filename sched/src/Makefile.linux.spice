@@ -33,18 +33,22 @@ FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 #FC = fort77 -C -u -bs	              # f2c->gcc (Alternate switch) (OLD)
 
 #----- Architecture/site-specific link options - Choose one ------
+#  Note that users probably don't need the "static" specifications as those
+#  are being used to make portable binaries.  With modern systems, they
+#  seem to cause problems.
 
 #XLD =                                         # Should work on many systems.
 #XLD = -lX11		                       # X11 libraries, if needed
 #XLD = -L/usr/X11R6/lib -lX11                  # If not in path.
+#XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11 # Mac OS X
+#XLD = -lgl -lX11                              # SGI
+
 #XLD = -Bstatic    # Sun; for portable executable (problems?)
 XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
                    # Linux, portable executable (true at AOC with Redhat 9)
 #XLD = -static -L/usr/X11/lib -lX11            # Linux with X11 vs X11R6
 #XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -ldl 
                    # RedHat 7.3
-#XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11 # Mac OS X
-#XLD = -lgl -lX11                              # SGI
 
 
 #----- Plot code.  If you don't have PGPLOT, select the stub. ------

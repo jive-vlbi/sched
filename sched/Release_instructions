@@ -19,7 +19,7 @@ Before a release:
     Also check a couple of places below (other machines) where the
     version number is also needed.
 
-setenv NEWVER 6.04
+setenv NEWVER 6.05
 setenv DIST /users/cwalker/files/sched_{$NEWVER}
 setenv SCHTEST /users/cwalker/files/sched_test
 
@@ -161,12 +161,13 @@ tar -xvf $SCHED/TARFILES/sched.Linux.{$NEWVER}.tar.gz --gunzip
 mkdir bin/LINUX
 mv bin/* bin/LINUX
 
-#  Later copy in the sun and MacOSX versions of the binaries with
-#  the sun version in /bin for historical reasons.
+#  Later copy in the SUN and MacOSX versions of the binaries with
+#  the sun version in /bin for historical reasons.  The analysts might
+#  get tripped up if I do anything diffent
 
 
 
-#  Copy documentation to the web server master files on the mach disk
+#  Copy documentation to the web server master files on noatak.
 #  My cron jobs will move them to the main web server or run 
 #  /home/eolus/cwalker/backups/rsync_mach_cwalker afterwards.
 #  Careful with the big delete (rm) below (that's why the cd ~ first)
@@ -188,10 +189,12 @@ cd $SCHED
 cp -r doc/sched $WEBDIR/sched_{$NEWVER}
 /bin/rm $WEBDIR/sched_{$NEWVER}/sched/catalogs
 /bin/rm $WEBDIR/sched_{$NEWVER}/sched/examples
+/bin/rm $WEBDIR/sched_{$NEWVER}/sched/setups
 mkdir $WEBDIR/sched_{$NEWVER}/sched/catalogs
 cp catalogs/sources.vlba  $WEBDIR/sched_{$NEWVER}/sched/catalogs
 cp catalogs/freq.dat      $WEBDIR/sched_{$NEWVER}/sched/catalogs
 cp catalogs/stations.dat  $WEBDIR/sched_{$NEWVER}/sched/catalogs
+cp catalogs/peak.cmd      $WEBDIR/sched_{$NEWVER}/sched/catalogs
 mkdir $WEBDIR/sched_{$NEWVER}/sched/examples
 cp examples/*.key $WEBDIR/sched_{$NEWVER}/sched/examples
 cp examples/*.com $WEBDIR/sched_{$NEWVER}/sched/examples
@@ -201,8 +204,10 @@ cp setups/*.set  $WEBDIR/sched_{$NEWVER}/sched/setups
 
 # Point to this new version.  Consider cleaning up old ones.
 
-/bin/rm $WEBDIR/sched
-ln -s $WEBDIR/sched_{$NEWVER} $WEBDIR/sched
+cd $WEBDIR
+/bin/rm sched
+ln -s sched_{$NEWVER} sched
+cd $SCHED
 
 #  Copy to ftp  (FTP=/var/spool/ftp/pub)
 #  No longer update skedconv or uptime.  In fact get rid of any seen.
@@ -225,7 +230,7 @@ Other architectures:
 #  Install the release in /users/cwalker/sched_sun
 #  and compile using one of the sun machines.  Then distribute
 
-cd ~
+cd ~/files
 mkdir sched_sun_{$NEWVER}
 cd sched_sun_{$NEWVER}
 tar -xvf $SCHED/TARFILES/sched.aux.{$NEWVER}.tar.gz --gunzip
@@ -234,11 +239,11 @@ tar -xvf $SCHED/TARFILES/sched.stdout.{$NEWVER}.tar.gz --gunzip
 
 #  Log into a Solaris box and run:
 
-slogin paso
+slogin paso  (or shire, which might be faster)
 
-setenv NEWVER 6.02
-setenv SCHED ~/sched_sun_{$NEWVER}
-cd ~/sched_sun_{$NEWVER}/src
+setenv NEWVER 6.05
+setenv SCHED ~/files/sched_sun_{$NEWVER}
+cd ~/files/sched_sun_{$NEWVER}/src
 MakeSun
 cd ../examples
 Verify
@@ -252,12 +257,12 @@ exit
 #  it is needed on the Linux distribution.
 #  Keep $SCHED pointing at the Linux version.
 
-cd ~/sched_sun_{$NEWVER}
+cd ~/files/sched_sun_{$NEWVER}
 source ./package2 Sun $NEWVER
 mv TARFILES/sched.Sun.{$NEWVER}.tar.gz $SCHED/TARFILES
 cp $SCHED/TARFILES/sched.Sun.{$NEWVER}.tar.gz $FTP/sched
-cp bin/sched ~/sched_{$NEWVER}/bin
-cp bin/schclean ~/sched_{$NEWVER}/bin
+cp bin/sched ~/files/sched_{$NEWVER}/bin
+cp bin/schclean ~/files/sched_{$NEWVER}/bin
 
 
 
