@@ -1,0 +1,965 @@
+! 3mm FREQUENCY CATALOG for SCHED.
+! Edited March 2005, TPK 
+!
+!  The full frequency catalog (freq.dat) is maintained in subset files.
+!  All changes should be made in those files, not in freq.dat itself.
+!  Any changes made directly to freq.dat will be lost at the next update.
+!
+!  This file contains the leading comments only.
+!
+!
+!  Before 25mar97 - merge the NRAO and EVN versions Huib-03/97
+!  25mar97 split freq.dat into rcwfreq.dat and huibfreq.dat.
+!  28Jul97 Various changes including VLA digital patch panel.
+!  08Aug97 Some changes to EVN stations and GB 6cm.
+!  09Oct97 Split rcwfreq.dat and huibfreq.dat into freq_VLBA.dat etc.
+!
+!  The goal is to have all valid frequency setups in this file.
+!  SCHED will use it to set defaults when requested and to check
+!  for valid setups in all cases.  When a setup does not match an
+!  entry in this catalog, warnings will be issued, although the
+!  schedule will still be written.
+
+!  The input parameters are:
+!     STATION   Stations covered by this group.
+!     PRIOrity  Lower values are favored groups.
+!     RF1       Lower limit of RF frequencies covered by this group.
+!     RF2       Upper RF limit.
+!     POL       Polarization of this IF.
+!     LO1       The sum of all LOs other than the BBC.
+!     IFNAME    The name of the IF as used by control software.
+!     FE        The front end name (mainly VLBA).
+!     SYN       The 3 VLBA front end synthesizer settings.
+!     DUALX     Use the wide band X band system on the VLBA.
+!     CH1RF1    Lower hard RF limit for channel 1.  Mainly for 2cm VLBA.
+!     CH1RF2    Upper hard RF limit for channel 1.  These select filter.
+!     RCP50CM, LCP50CM  50 cm VLBA filter (NARROW or BROAD)
+!
+!  VLA specific items.  For most, see the manual.
+!     CHNSTA    Used to show if IF is phased array or single dish. (obsolete)
+!     VLABAND, VLABW, VLAFEAB, VLAFECD, VLASYNA, VLASYNB, FLUKEA, FLUKEB
+!
+!  For each of the VLBA bands, a summary of significant filters and 
+!  LO's is given.
+
+!  Receiver and filter ranges are to nominal 1/2 power points.
+!  The "maximum range" and "good range" are taken from examination of
+!  plots of measured data in VLBA Test Memo 51.  These are subjective, 
+!  eyeball estimates.  Anyone attempting to schedule near the limits 
+!  should look at Memo 51.
+
+!  The protected bands in the U.S., that are within VLA or VLBA 
+!  bands, are (from VLA-VLBA Interference Memo No 3):
+!       73.00 - 74.60 MHz  Primary
+!      322.00 - 328.60     Footnote (Primary is fixed and mobile)
+!      608.00 - 614.00     Primary
+!     1330.00 - 1350.00    Footnote (Primary is Aero navigation)
+!     1350.00 - 1400.00    Footnotes for redshifted HI.
+!     1400.00 - 1427.00    Primary
+!     1610.60 - 1613.80    Secondary for OH.
+!     1660.00 - 1670.00    Primary
+!     1718.80 - 1722.20    Footnote
+!     2290    - 2300       Space Research (DSN)
+!     2640.00 - 2655.00    Space Research secondary
+!     2655.00 - 2690.00    Secondary (Primary is broadcast satellite!)
+!     2690.00 - 2700.00    Primary
+!     4825.00 - 4835.00    Footnote
+!     4950.00 - 4990.00    Footnote
+!     4990.00 - 5000.00    Primary
+!     8400    - 8450       Space Research (DSN)
+!       14.47 - 14.50 GHz  Footnotes
+!       15.20 - 15.35      EES, Space Research secondary
+!       15.35 - 15.40      Primary
+!       21.20 - 21.40      EES, SR primary
+!       22.01 - 22.21      Footnote
+!       22.21 - 22.50      Primary
+!       22.81 - 22.86      Footnote
+!       23.07 - 23.12      Footnote
+!       23.60 - 24.00      Primary
+!       42.50 - 43.50      Primary
+!       48.94 - 49.04      Primary
+!       86.00 - 92.00      Primary
+!
+! ----------------------------------------------------------------------
+!  =====================================================================
+!  The following entries in the SCHED frequency catalog are for mm
+!  VLBI stations only. 
+!  These stations are maintained in file freq_mm.dat.
+!  =====================================================================
+! VLBA at 3mm
+!               Options for syn(3) are 11.9 and 12.1
+!               This gives first mix at 71.4 and 72.6 GHz
+!               The first IF can be in Bands 3 & 4 of the 2 cm sys.
+!
+!Name = 3mm_vlba
+!Station = VLBA_PT, VLBA_LA, VLBA_FD, VLBA_NL, VLBA_OV, VLBA_KP  Priority = 0
+!  rf1    = 86000, 86000   ifname = B,    D
+!  rf2    = 86500, 86500   fe     = '3mm', '3mm'   syn(1) = 14.1
+!  pol    =   RCP,   LCP   lo1    = 85500, 85500   syn(3) = 11.9
+!/
+
+
+! new Mar. 05
+! VLBA at 3mm
+!     The nominal band for the 86 GHz receiver is 80-96 GHz.  The
+!     RF is mixed in the receiver with an LO that is synthesizer 3
+!     multiplied by 6.  The intermediate IF thus generated is sent
+!     to the 2 cm IF converter where it can pass through any of the
+!     4 filters (Clark, 2004mar01).  Care should be taken to not 
+!     be on the boundaries between those filters.
+!
+!     Keep Synthesizer 3 in range 10.9 to 13.6 (Hayward, Mar. 1, 
+!     2004).  Hayward suggests picking a first IF close to 14.2 GHz.
+!
+!     The 2 cm IF converter filter is chosen based on the intermediate
+!     IF frequency of the first channel in the same manner as for 2 cm.  
+!     See the description of the 2 cm system above for details.
+!
+!     By leaving out the second LO (synthesizer 1) settings that 
+!     have IF's that cross the filter boundaries, we avoid 
+!     confusion and insure full 500 MHz bands all the time.  This 
+!     means leaving out the N.1 (where N is 12, 13, or 14) MHz LO 
+!     settings.  We are left with a good set of allowed settings 
+!     that allow any frequency to be reached.  The set below has
+!     had the duplicates removed, favoring sets with the IF near
+!     14.2 GHz.  Also the RF ranges are restricted to fall in the
+!     range 79.7 to 96.2 GHz.
+!
+!     Bob Hayward (Mar 1, 2004) suggests be
+!
+!
+!  Here is the old "standard" setup (Pre 2004mar01).  It turns out 
+!  not to be very good because the IF is at the edge of a 2cm IF 
+!  converter filter.  The 500 MHz IF was in 14600-15100 which should
+!  work for most cases, but could lose the top 100 MHz in a spread
+!  IF case.
+! Name = v3mm_a  Station = VLBA  Priority = 0
+!   rf1    = 86000, 86000   ifname = B,    D
+!   rf2    = 86500, 86500   fe     = '3mm', '3mm'   syn(1) = 14.1
+!   pol    =   RCP,   LCP   lo1    = 85500, 85500   syn(3) = 11.9
+! /
+!
+!  The following setups were calculated by MAKEFREQ, a program kept
+!  with the development version of SCHED in the RELATED_CODE subdirectory
+!  The names are derived based on the LO settings, but they have been
+!  sorted here in order of RF frequency.
+!
+Name = v3mm_be  Station = VLBA   Priority = 0
+  rf1    = 79700., 79700.   ifname = B,    D
+  rf2    = 80200., 80200.   fe    = '3mm', '3mm'    syn(1) = 12.6
+  pol    =   RCP,   LCP    lo1    = 79200., 79200.  syn(3) = 11.1
+  !  First IF = 13100. to 13600.
+ /
+Name = v3mm_ai  Station = VLBA   Priority = 0
+  rf1    = 79800., 79800.   ifname = B,    D
+  rf2    = 80300., 80300.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 79300., 79300.  syn(3) = 10.9
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_bf  Station = VLBA   Priority = 0
+  rf1    = 80000., 80000.   ifname = B,    D
+  rf2    = 80500., 80500.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 79500., 79500.  syn(3) = 11.1
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_aj  Station = VLBA   Priority = 0
+  rf1    = 80300., 80300.   ifname = B,    D
+  rf2    = 80800., 80800.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 79800., 79800.  syn(3) = 10.9
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_bg  Station = VLBA   Priority = 0
+  rf1    = 80500., 80500.   ifname = B,    D
+  rf2    = 81000., 81000.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 80000., 80000.  syn(3) = 11.1
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_bh  Station = VLBA   Priority = 0
+  rf1    = 80700., 80700.   ifname = B,    D
+  rf2    = 81200., 81200.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 80200., 80200.  syn(3) = 11.1
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_cc  Station = VLBA   Priority = 0
+  rf1    = 80800., 80800.   ifname = B,    D
+  rf2    = 81300., 81300.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 80300., 80300.  syn(3) = 11.4
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_bi  Station = VLBA   Priority = 0
+  rf1    = 81000., 81000.   ifname = B,    D
+  rf2    = 81500., 81500.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 80500., 80500.  syn(3) = 11.1
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_cd  Station = VLBA   Priority = 0
+  rf1    = 81300., 81300.   ifname = B,    D
+  rf2    = 81800., 81800.   fe    = '3mm', '3mm'    syn(1) = 12.4
+  pol    =   RCP,   LCP    lo1    = 80800., 80800.  syn(3) = 11.4
+  !  First IF = 12900. to 13400.
+ /
+Name = v3mm_bj  Station = VLBA   Priority = 0
+  rf1    = 81500., 81500.   ifname = B,    D
+  rf2    = 82000., 82000.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 81000., 81000.  syn(3) = 11.1
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_bk  Station = VLBA   Priority = 0
+  rf1    = 81700., 81700.   ifname = B,    D
+  rf2    = 82200., 82200.   fe    = '3mm', '3mm'    syn(1) = 14.6
+  pol    =   RCP,   LCP    lo1    = 81200., 81200.  syn(3) = 11.1
+  !  First IF = 15100. to 15600.
+ /
+Name = v3mm_cf  Station = VLBA   Priority = 0
+  rf1    = 81800., 81800.   ifname = B,    D
+  rf2    = 82300., 82300.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 81300., 81300.  syn(3) = 11.4
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_dc  Station = VLBA   Priority = 0
+  rf1    = 82000., 82000.   ifname = B,    D
+  rf2    = 82500., 82500.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 81500., 81500.  syn(3) = 11.6
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_cg  Station = VLBA   Priority = 0
+  rf1    = 82300., 82300.   ifname = B,    D
+  rf2    = 82800., 82800.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 81800., 81800.  syn(3) = 11.4
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_ch  Station = VLBA   Priority = 0
+  rf1    = 82500., 82500.   ifname = B,    D
+  rf2    = 83000., 83000.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 82000., 82000.  syn(3) = 11.4
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_de  Station = VLBA   Priority = 0
+  rf1    = 82700., 82700.   ifname = B,    D
+  rf2    = 83200., 83200.   fe    = '3mm', '3mm'    syn(1) = 12.6
+  pol    =   RCP,   LCP    lo1    = 82200., 82200.  syn(3) = 11.6
+  !  First IF = 13100. to 13600.
+ /
+Name = v3mm_ci  Station = VLBA   Priority = 0
+  rf1    = 82800., 82800.   ifname = B,    D
+  rf2    = 83300., 83300.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 82300., 82300.  syn(3) = 11.4
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_df  Station = VLBA   Priority = 0
+  rf1    = 83000., 83000.   ifname = B,    D
+  rf2    = 83500., 83500.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 82500., 82500.  syn(3) = 11.6
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_cj  Station = VLBA   Priority = 0
+  rf1    = 83300., 83300.   ifname = B,    D
+  rf2    = 83800., 83800.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 82800., 82800.  syn(3) = 11.4
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_dg  Station = VLBA   Priority = 0
+  rf1    = 83500., 83500.   ifname = B,    D
+  rf2    = 84000., 84000.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 83000., 83000.  syn(3) = 11.6
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_dh  Station = VLBA   Priority = 0
+  rf1    = 83700., 83700.   ifname = B,    D
+  rf2    = 84200., 84200.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 83200., 83200.  syn(3) = 11.6
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_ec  Station = VLBA   Priority = 0
+  rf1    = 83800., 83800.   ifname = B,    D
+  rf2    = 84300., 84300.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 83300., 83300.  syn(3) = 11.9
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_di  Station = VLBA   Priority = 0
+  rf1    = 84000., 84000.   ifname = B,    D
+  rf2    = 84500., 84500.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 83500., 83500.  syn(3) = 11.6
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_ed  Station = VLBA   Priority = 0
+  rf1    = 84300., 84300.   ifname = B,    D
+  rf2    = 84800., 84800.   fe    = '3mm', '3mm'    syn(1) = 12.4
+  pol    =   RCP,   LCP    lo1    = 83800., 83800.  syn(3) = 11.9
+  !  First IF = 12900. to 13400.
+ /
+Name = v3mm_dj  Station = VLBA   Priority = 0
+  rf1    = 84500., 84500.   ifname = B,    D
+  rf2    = 85000., 85000.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 84000., 84000.  syn(3) = 11.6
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_dk  Station = VLBA   Priority = 0
+  rf1    = 84700., 84700.   ifname = B,    D
+  rf2    = 85200., 85200.   fe    = '3mm', '3mm'    syn(1) = 14.6
+  pol    =   RCP,   LCP    lo1    = 84200., 84200.  syn(3) = 11.6
+  !  First IF = 15100. to 15600.
+ /
+Name = v3mm_ef  Station = VLBA   Priority = 0
+  rf1    = 84800., 84800.   ifname = B,    D
+  rf2    = 85300., 85300.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 84300., 84300.  syn(3) = 11.9
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_fc  Station = VLBA   Priority = 0
+  rf1    = 85000., 85000.   ifname = B,    D
+  rf2    = 85500., 85500.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 84500., 84500.  syn(3) = 12.1
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_eg  Station = VLBA   Priority = 0
+  rf1    = 85300., 85300.   ifname = B,    D
+  rf2    = 85800., 85800.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 84800., 84800.  syn(3) = 11.9
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_eh  Station = VLBA   Priority = 0
+  rf1    = 85500., 85500.   ifname = B,    D
+  rf2    = 86000., 86000.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 85000., 85000.  syn(3) = 11.9
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_fe  Station = VLBA   Priority = 0
+  rf1    = 85700., 85700.   ifname = B,    D
+  rf2    = 86200., 86200.   fe    = '3mm', '3mm'    syn(1) = 12.6
+  pol    =   RCP,   LCP    lo1    = 85200., 85200.  syn(3) = 12.1
+  !  First IF = 13100. to 13600.
+ /
+Name = v3mm_ei  Station = VLBA   Priority = 0
+  rf1    = 85800., 85800.   ifname = B,    D
+  rf2    = 86300., 86300.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 85300., 85300.  syn(3) = 11.9
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_ff  Station = VLBA   Priority = 0
+  rf1    = 86000., 86000.   ifname = B,    D
+  rf2    = 86500., 86500.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 85500., 85500.  syn(3) = 12.1
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_ej  Station = VLBA   Priority = 0
+  rf1    = 86300., 86300.   ifname = B,    D
+  rf2    = 86800., 86800.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 85800., 85800.  syn(3) = 11.9
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_fg  Station = VLBA   Priority = 0
+  rf1    = 86500., 86500.   ifname = B,    D
+  rf2    = 87000., 87000.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 86000., 86000.  syn(3) = 12.1
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_fh  Station = VLBA   Priority = 0
+  rf1    = 86700., 86700.   ifname = B,    D
+  rf2    = 87200., 87200.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 86200., 86200.  syn(3) = 12.1
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_gc  Station = VLBA   Priority = 0
+  rf1    = 86800., 86800.   ifname = B,    D
+  rf2    = 87300., 87300.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 86300., 86300.  syn(3) = 12.4
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_fi  Station = VLBA   Priority = 0
+  rf1    = 87000., 87000.   ifname = B,    D
+  rf2    = 87500., 87500.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 86500., 86500.  syn(3) = 12.1
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_gd  Station = VLBA   Priority = 0
+  rf1    = 87300., 87300.   ifname = B,    D
+  rf2    = 87800., 87800.   fe    = '3mm', '3mm'    syn(1) = 12.4
+  pol    =   RCP,   LCP    lo1    = 86800., 86800.  syn(3) = 12.4
+  !  First IF = 12900. to 13400.
+ /
+Name = v3mm_fj  Station = VLBA   Priority = 0
+  rf1    = 87500., 87500.   ifname = B,    D
+  rf2    = 88000., 88000.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 87000., 87000.  syn(3) = 12.1
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_fk  Station = VLBA   Priority = 0
+  rf1    = 87700., 87700.   ifname = B,    D
+  rf2    = 88200., 88200.   fe    = '3mm', '3mm'    syn(1) = 14.6
+  pol    =   RCP,   LCP    lo1    = 87200., 87200.  syn(3) = 12.1
+  !  First IF = 15100. to 15600.
+ /
+Name = v3mm_gf  Station = VLBA   Priority = 0
+  rf1    = 87800., 87800.   ifname = B,    D
+  rf2    = 88300., 88300.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 87300., 87300.  syn(3) = 12.4
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_hc  Station = VLBA   Priority = 0
+  rf1    = 88000., 88000.   ifname = B,    D
+  rf2    = 88500., 88500.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 87500., 87500.  syn(3) = 12.6
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_gg  Station = VLBA   Priority = 0
+  rf1    = 88300., 88300.   ifname = B,    D
+  rf2    = 88800., 88800.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 87800., 87800.  syn(3) = 12.4
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_gh  Station = VLBA   Priority = 0
+  rf1    = 88500., 88500.   ifname = B,    D
+  rf2    = 89000., 89000.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 88000., 88000.  syn(3) = 12.4
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_he  Station = VLBA   Priority = 0
+  rf1    = 88700., 88700.   ifname = B,    D
+  rf2    = 89200., 89200.   fe    = '3mm', '3mm'    syn(1) = 12.6
+  pol    =   RCP,   LCP    lo1    = 88200., 88200.  syn(3) = 12.6
+  !  First IF = 13100. to 13600.
+ /
+Name = v3mm_gi  Station = VLBA   Priority = 0
+  rf1    = 88800., 88800.   ifname = B,    D
+  rf2    = 89300., 89300.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 88300., 88300.  syn(3) = 12.4
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_hf  Station = VLBA   Priority = 0
+  rf1    = 89000., 89000.   ifname = B,    D
+  rf2    = 89500., 89500.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 88500., 88500.  syn(3) = 12.6
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_gj  Station = VLBA   Priority = 0
+  rf1    = 89300., 89300.   ifname = B,    D
+  rf2    = 89800., 89800.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 88800., 88800.  syn(3) = 12.4
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_hg  Station = VLBA   Priority = 0
+  rf1    = 89500., 89500.   ifname = B,    D
+  rf2    = 90000., 90000.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 89000., 89000.  syn(3) = 12.6
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_hh  Station = VLBA   Priority = 0
+  rf1    = 89700., 89700.   ifname = B,    D
+  rf2    = 90200., 90200.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 89200., 89200.  syn(3) = 12.6
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_ic  Station = VLBA   Priority = 0
+  rf1    = 89800., 89800.   ifname = B,    D
+  rf2    = 90300., 90300.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 89300., 89300.  syn(3) = 12.9
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_hi  Station = VLBA   Priority = 0
+  rf1    = 90000., 90000.   ifname = B,    D
+  rf2    = 90500., 90500.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 89500., 89500.  syn(3) = 12.6
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_id  Station = VLBA   Priority = 0
+  rf1    = 90300., 90300.   ifname = B,    D
+  rf2    = 90800., 90800.   fe    = '3mm', '3mm'    syn(1) = 12.4
+  pol    =   RCP,   LCP    lo1    = 89800., 89800.  syn(3) = 12.9
+  !  First IF = 12900. to 13400.
+ /
+Name = v3mm_hj  Station = VLBA   Priority = 0
+  rf1    = 90500., 90500.   ifname = B,    D
+  rf2    = 91000., 91000.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 90000., 90000.  syn(3) = 12.6
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_hk  Station = VLBA   Priority = 0
+  rf1    = 90700., 90700.   ifname = B,    D
+  rf2    = 91200., 91200.   fe    = '3mm', '3mm'    syn(1) = 14.6
+  pol    =   RCP,   LCP    lo1    = 90200., 90200.  syn(3) = 12.6
+  !  First IF = 15100. to 15600.
+ /
+Name = v3mm_if  Station = VLBA   Priority = 0
+  rf1    = 90800., 90800.   ifname = B,    D
+  rf2    = 91300., 91300.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 90300., 90300.  syn(3) = 12.9
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_jc  Station = VLBA   Priority = 0
+  rf1    = 91000., 91000.   ifname = B,    D
+  rf2    = 91500., 91500.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 90500., 90500.  syn(3) = 13.1
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_ig  Station = VLBA   Priority = 0
+  rf1    = 91300., 91300.   ifname = B,    D
+  rf2    = 91800., 91800.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 90800., 90800.  syn(3) = 12.9
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_ih  Station = VLBA   Priority = 0
+  rf1    = 91500., 91500.   ifname = B,    D
+  rf2    = 92000., 92000.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 91000., 91000.  syn(3) = 12.9
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_je  Station = VLBA   Priority = 0
+  rf1    = 91700., 91700.   ifname = B,    D
+  rf2    = 92200., 92200.   fe    = '3mm', '3mm'    syn(1) = 12.6
+  pol    =   RCP,   LCP    lo1    = 91200., 91200.  syn(3) = 13.1
+  !  First IF = 13100. to 13600.
+ /
+Name = v3mm_ii  Station = VLBA   Priority = 0
+  rf1    = 91800., 91800.   ifname = B,    D
+  rf2    = 92300., 92300.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 91300., 91300.  syn(3) = 12.9
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_jf  Station = VLBA   Priority = 0
+  rf1    = 92000., 92000.   ifname = B,    D
+  rf2    = 92500., 92500.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 91500., 91500.  syn(3) = 13.1
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_ij  Station = VLBA   Priority = 0
+  rf1    = 92300., 92300.   ifname = B,    D
+  rf2    = 92800., 92800.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 91800., 91800.  syn(3) = 12.9
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_jg  Station = VLBA   Priority = 0
+  rf1    = 92500., 92500.   ifname = B,    D
+  rf2    = 93000., 93000.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 92000., 92000.  syn(3) = 13.1
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_jh  Station = VLBA   Priority = 0
+  rf1    = 92700., 92700.   ifname = B,    D
+  rf2    = 93200., 93200.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 92200., 92200.  syn(3) = 13.1
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_kc  Station = VLBA   Priority = 0
+  rf1    = 92800., 92800.   ifname = B,    D
+  rf2    = 93300., 93300.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 92300., 92300.  syn(3) = 13.4
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_ji  Station = VLBA   Priority = 0
+  rf1    = 93000., 93000.   ifname = B,    D
+  rf2    = 93500., 93500.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 92500., 92500.  syn(3) = 13.1
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_kd  Station = VLBA   Priority = 0
+  rf1    = 93300., 93300.   ifname = B,    D
+  rf2    = 93800., 93800.   fe    = '3mm', '3mm'    syn(1) = 12.4
+  pol    =   RCP,   LCP    lo1    = 92800., 92800.  syn(3) = 13.4
+  !  First IF = 12900. to 13400.
+ /
+Name = v3mm_jj  Station = VLBA   Priority = 0
+  rf1    = 93500., 93500.   ifname = B,    D
+  rf2    = 94000., 94000.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 93000., 93000.  syn(3) = 13.1
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_jk  Station = VLBA   Priority = 0
+  rf1    = 93700., 93700.   ifname = B,    D
+  rf2    = 94200., 94200.   fe    = '3mm', '3mm'    syn(1) = 14.6
+  pol    =   RCP,   LCP    lo1    = 93200., 93200.  syn(3) = 13.1
+  !  First IF = 15100. to 15600.
+ /
+Name = v3mm_kf  Station = VLBA   Priority = 0
+  rf1    = 93800., 93800.   ifname = B,    D
+  rf2    = 94300., 94300.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 93300., 93300.  syn(3) = 13.4
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_lc  Station = VLBA   Priority = 0
+  rf1    = 94000., 94000.   ifname = B,    D
+  rf2    = 94500., 94500.   fe    = '3mm', '3mm'    syn(1) = 11.9
+  pol    =   RCP,   LCP    lo1    = 93500., 93500.  syn(3) = 13.6
+  !  First IF = 12400. to 12900.
+ /
+Name = v3mm_kg  Station = VLBA   Priority = 0
+  rf1    = 94300., 94300.   ifname = B,    D
+  rf2    = 94800., 94800.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 93800., 93800.  syn(3) = 13.4
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_kh  Station = VLBA   Priority = 0
+  rf1    = 94500., 94500.   ifname = B,    D
+  rf2    = 95000., 95000.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 94000., 94000.  syn(3) = 13.4
+  !  First IF = 14100. to 14600.
+ /
+Name = v3mm_le  Station = VLBA   Priority = 0
+  rf1    = 94700., 94700.   ifname = B,    D
+  rf2    = 95200., 95200.   fe    = '3mm', '3mm'    syn(1) = 12.6
+  pol    =   RCP,   LCP    lo1    = 94200., 94200.  syn(3) = 13.6
+  !  First IF = 13100. to 13600.
+ /
+Name = v3mm_ki  Station = VLBA   Priority = 0
+  rf1    = 94800., 94800.   ifname = B,    D
+  rf2    = 95300., 95300.   fe    = '3mm', '3mm'    syn(1) = 13.9
+  pol    =   RCP,   LCP    lo1    = 94300., 94300.  syn(3) = 13.4
+  !  First IF = 14400. to 14900.
+ /
+Name = v3mm_lf  Station = VLBA   Priority = 0
+  rf1    = 95000., 95000.   ifname = B,    D
+  rf2    = 95500., 95500.   fe    = '3mm', '3mm'    syn(1) = 12.9
+  pol    =   RCP,   LCP    lo1    = 94500., 94500.  syn(3) = 13.6
+  !  First IF = 13400. to 13900.
+ /
+Name = v3mm_kj  Station = VLBA   Priority = 0
+  rf1    = 95300., 95300.   ifname = B,    D
+  rf2    = 95800., 95800.   fe    = '3mm', '3mm'    syn(1) = 14.4
+  pol    =   RCP,   LCP    lo1    = 94800., 94800.  syn(3) = 13.4
+  !  First IF = 14900. to 15400.
+ /
+Name = v3mm_lg  Station = VLBA   Priority = 0
+  rf1    = 95500., 95500.   ifname = B,    D
+  rf2    = 96000., 96000.   fe    = '3mm', '3mm'    syn(1) = 13.4
+  pol    =   RCP,   LCP    lo1    = 95000., 95000.  syn(3) = 13.6
+  !  First IF = 13900. to 14400.
+ /
+Name = v3mm_lh  Station = VLBA   Priority = 0
+  rf1    = 95700., 95700.   ifname = B,    D
+  rf2    = 96200., 96200.   fe    = '3mm', '3mm'    syn(1) = 13.6
+  pol    =   RCP,   LCP    lo1    = 95200., 95200.  syn(3) = 13.6
+  !  First IF = 14100. to 14600.
+ /
+
+! --------------- END OF VLBA SECTION ----------------------------
+
+Name = 3mm_vlba-hco
+Station = VLBA_PT, VLBA_LA, VLBA_FD, VLBA_NL, VLBA_OV, VLBA_KP  Priority = 0
+  rf1    = 89000, 89000   ifname = B,    D
+  rf2    = 89500, 89500   fe     = '3mm', '3mm'   syn(1) = 15.9
+  pol    =   RCP,   LCP   lo1    = 88500, 88500   syn(3) = 12.1
+/
+
+! VLBA v=2 SiO
+!
+Name = 3mm_v2SiO
+Station = VLBA_PT, VLBA_LA, VLBA_FD, VLBA_NL, VLBA_OV, VLBA_KP  Priority = 0
+  rf1    = 85500, 85500   ifname = B,    D
+  rf2    = 86000, 86000   fe     = '3mm', '3mm'   syn(1) = 13.6
+  pol    =   RCP,   LCP   lo1    = 85000, 85000   syn(3) = 11.9
+/
+
+! VLBA 29 SiO
+!
+Name = 3mm_29SiO
+Station = VLBA_PT, VLBA_LA, VLBA_FD, VLBA_NL, VLBA_OV, VLBA_KP  Priority = 0
+  rf1    = 85500, 85500   ifname = B,    D
+  rf2    = 86000, 86000   fe     = '3mm', '3mm'   syn(1) = 13.6
+  pol    =   RCP,   LCP   lo1    = 85000, 85000   syn(3) = 11.9
+/
+
+! Effelsberg at 3 mm, old receiver
+!
+!Name = 3mm_eflsbg
+!Station = EFLSBERG  Priority = 0
+!  rf1    = 86188, 86188   ifname = '1N', '2N'  altifn = '1A', '2A'
+!  rf2    = 86588, 86588   fe     = '3mm', '3mm'
+!  pol    =   RCP,   LCP   lo1    = 86088, 86088
+!/
+
+! Effelsberg at 3 mm, MKIV, new receiver, dual
+!
+Name = 3mm_eflsbg
+Station = EFLSBERG  Priority = 0
+  rf1    = 86100, 86100   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   RCP   lo1    = 85900, 85900
+  note = 'new 3mm RX: April 2001 for CMVA'
+/
+
+! Effelsberg at 3 mm, MKIV, new receiver, single pol
+!
+Name = 3mm_eflsbg-l
+Station = EFLSBERG  Priority = 0
+!this is for high patching (200->500 MHz)
+  rf1    = 86100, 86100   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85900, 85900
+  note = 'new 3mm RX: April 2001 for CMVA'
+/
+
+
+! Effelsberg at 3 mm, VLBA, new receiver 
+!
+Name = 3mm_eb_vlba
+Station = EB_VLBA  Priority = 0
+  rf1    = 86000, 86000   ifname = A,    C 
+  rf2    = 86500, 86500   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1 = 85500, 85500
+  note = 'new 3mm RX: April 2001 for CMVA'
+/
+
+! Haystack at 3 mm dual-pol
+!
+! Receiver B is LCP, A is RCP
+Name = 3mm_haystk
+Station = HAYSTACK  Priority = 0
+  rf1    = 86140, 86140  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86540, 86540   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 86040, 86040
+  note = '3-mm CMVA'
+/
+! Haystack at 3 mm single-pol
+!
+Name = 3mm_haystk-lcp
+Station = HAYSTACK  Priority = 0
+  rf1    = 86140, 86140  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86540, 86540   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 86040, 86040  !this works with 86210.99
+  note = '3-mm CMVA LCP only'
+/
+
+
+! Hat Creek at 3 mm
+!
+Name = 3mm_hatcrk
+Station = HC-MM  Priority = 0
+  rf1    = 86079, 86079  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86579, 86579   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 86079, 86079
+  note = '3-mm CMVA'
+/
+
+! Hat Creek at 3 mm
+!
+Name = 3mm_hc_29SiO
+Station = HC-MM  Priority = 0
+  rf1    = 85695, 85695  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86095, 86095   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 85595, 85595
+  note = '3-mm CMVA'
+/
+
+! METSAHOV at 3 mm
+!
+!Name = 3mm_metsh
+!Station = METSAHOV  Priority = 0
+!  rf1    = 86188, 86188   ifname = '1N', '2N'  altifn = '1A', '2A'
+!  rf2    = 86588, 86588   fe     = '3mm', '3mm'
+!  pol    =   RCP,   LCP   lo1    = 85372, 85372
+!/
+
+! METSAHOV at 3 mm for 256-16-1 LCP only
+! works also for 256-8-2
+Name = 3mm_metsa-lcp
+Station = METSAHOV  Priority = 0
+  rf1 = 85872, 85872     ifname = A,     C
+  rf2 = 86372, 86372     fe     = '3mm', '3mm'
+! pol =  LCP,  LCP       lo1    = 85372, 85372
+  pol =  LCP,  LCP       lo1    = 85501, 85501
+/
+
+! METSAHOV at 3 mm for 256-16-1 dual pol
+!
+Name = 3mm_metsa
+Station = METSAHOV  Priority = 0 
+  rf1 = 85872, 85872     ifname = A,     C
+  rf2 = 86372, 86372     fe     = '3mm', '3mm'
+! pol =  LCP,  RCP       lo1    = 85372, 85372
+  pol =  LCP,  RCP       lo1    = 85501, 85501
+/
+
+
+!
+! ONSALA at 3 mm
+Name = 3mm_onsala
+Station = ONSALA60  Priority = 0
+  rf1    = 86150, 86150   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86440, 86440   fe     = '3mm', '3mm'
+  pol    =   LCP,   RCP   lo1    = 85900, 85900
+/
+
+! ONSALA at 3 mm 256-16-1 no pol
+! added for Oct 2000, CMVA session, since other setup produces errors, TPK
+Name = 3mm_onsa-lcp STATION = ONSALA60  Priority = 0
+  rf1    = 86150, 86150   ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86440, 86440   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85900, 85900
+/
+
+
+! OVRO at 3 mm
+!
+
+Name = 3mm_ovro
+Station = OVRO-MM  Priority = 0
+  rf1    = 86076, 86076   ifname = B, D
+  rf2    = 86576, 86576   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 85576, 85576
+  note = '3-mm CMVA.  RCP may not be available. '
+/
+
+Name = ovro-mm-l
+Station = OVRO-MM  Priority = 0
+  rf1    = 86076, 86076   ifname = B, D
+  rf2    = 86576, 86576   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85576, 85576
+  note = '3-mm CMVA.'
+/
+
+
+! Quabbin at 3 mm
+!
+Name = 3mm_quabn
+Station = QUAB  Priority = 0
+  rf1    = 86169, 86169  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86569, 86569   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 86069.1, 86069.1
+  note = '3-mm CMVA'
+/
+
+! Kitt Peak 12-m at 3 mm
+!
+Name = 3mm_KP12m
+Station = KITTPEAK  Priority = 0
+  rf1    = 86168, 86168   ifname = B, D
+  rf2    = 86668, 86668   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 85295, 85295
+  note = '3-mm CMVA'
+/
+
+!
+Name = 3mm_KP12m-l
+Station = KITTPEAK  Priority = 0
+  rf1    = 86168, 86168   ifname = B, D
+  rf2    = 86668, 86668   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85295, 85295
+  note = '3-mm CMVA'
+/
+
+! KITTPEAK v=2 SiO
+!
+Name = 3mm_v2SiO_12m
+Station = KITTPEAK  Priority = 0
+  rf1    = 85500, 85500   ifname = B,    D
+  rf2    = 86000, 86000   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 84686, 84686
+/
+
+! KITTPEAK 29 SiO
+!
+Name = 3mm_29SiO_12m
+Station = KITTPEAK  Priority = 0
+  rf1    = 85500, 85500   ifname = B,    D
+  rf2    = 86000, 86000   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 84808, 84808
+/
+
+! SEST at 3 mm
+!
+Name = 3mm_sest
+Station = SEST  Priority = 0
+  rf1    = 86050, 86050  ifname = B, D
+  rf2    = 86650, 86650   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 85600, 85600
+  note = '3-mm CMVA'
+/
+
+! SEST at 3 mm single pol
+!
+Name = 3mm_sest-lcp
+Station = SEST  Priority = 0
+  rf1    = 86050, 86050  ifname = B, D
+  rf2    = 86650, 86650   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85600, 85600
+  note = '3-mm CMVA'
+/
+
+! Pico Veleta (IRAM) at 3 mm
+!
+Name = 3mm_picovel
+Station = PICOVEL  Priority = 0
+  rf1    = 86007, 86007  ifname = C, A
+  rf2    = 86507, 86507   fe     = '3mm', '3mm'
+  pol    =   RCP,   LCP   lo1    = 85507, 85507
+  note = '3-mm CMVA'
+/
+
+! Plateau de Bure (IRAM) at 3 mm, single pol
+Name = 3mm_pdbure-lcp  Station = PDBURE  Priority = 0
+  rf1    = 85800, 85800  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   LCP   lo1    = 85919, 85919
+  note = '3-mm CMVA'
+/
+
+! Plateau de Bure (IRAM) at 3 mm
+Name = 3mm_pdbure  Station = PDBURE  Priority = 0
+  rf1    = 85800, 85800  ifname = '1N', '2N'  altifn = '1A', '2A'
+  rf2    = 86400, 86400   fe     = '3mm', '3mm'
+  pol    =   LCP,   RCP   lo1    = 85919, 85919
+  note = '3-mm CMVA'
+/
+
+
+! 2mm VLBI test KITTPEAK 12m - PICOVEL
+
+! Pico Veleta (IRAM) at 2 mm
+!
+Name = 2mm_pico-l
+Station = PICOVEL  Priority = 0
+  rf1    = 128000,128000  ifname = B, D  
+  rf2    = 130000,130000  fe     = '2mm', '2mm'
+  pol    =   LCP,   LCP   lo1    = 128670,128670
+  note = '2-mm test'
+/
+! Kitt Peak 12m at 2 mm
+!
+Name = 2mm_KP12m-l
+Station = KITTPEAK  Priority = 0
+  rf1    = 128000,128000  ifname = B, D
+  rf2    = 130000,130000  fe     = '2mm', '2mm'
+  pol    =   LCP,   LCP   lo1    = 128670,128670
+  note = '2-mm test'
+/
+
+! 7mm pointing frequencies for VLBA
+
+!  VLBA  7mm   The first LO is Syn(3) * 3.  The second is Syn(2)
+!          Receiver nominal:              40.0 - 45.0  GHz
+!          LO filter before 3X multiply: 10.75 - 12.25
+!          First IF filter:               7.70 - 9.10
+!          First IF filter:               7.90 - 8.90  (KP, FD)
+!          Second LO filter:              7.15 - 9.65
+!          Maximum range:                 37.6 - 46.2
+!          Good range:                    39.2 - 45.2
+!     Upper and lower sidebands at the second mix could be used.
+!     The on-line system did not originally support lower sidebands,
+!     but supposedly it does now.
+!     Possible second synthesizer settings:
+!          7.1 GHz        IF will cut off below 600 MHz.
+!          7.4, 7.6       Good.
+!          7.9            Probably good.  LO in IF band.
+!          8.1            Risk getting some lower sideband.
+!          9.4, 9.6       Would be good if on-line understood.
+!
+!     Give the 9.4 and 9.6 second LO options lower priority
+!     because they give lower sideband mixes.  This should be ok
+!     now (wasn't for a while), but is not all that well tested.
+!
+!     Naming conventions:  eg v7mm_b3
+!        syn(2) = 7.1 (a), 7.4 (b), 7.6 (c), 7.9 (d), 8.1 (e),
+!                 9.1 (f), 9.4 (g), 9.6 (h), 9.9 (i)
+!        syn(3) = 9.9 (1), 10.1 (2), 10.4 (3), 10.6 (4), 10.9 (5),
+!                11.1 (6), 11.4 (7), 11.6 (8), 11.9 (9), 12.1 (10),
+!                12.4 (11), 12.6 (12)
+
+Name = v7mm_c8  Station = VLBA    Priority = 0
+  rf1    = 42900, 42900   ifname = A,    C
+  rf2    = 43400, 43400   fe     = '7mm', '7mm'   syn(2) = 7.6
+  pol    =   RCP,   LCP   lo1    = 42400, 42400   syn(3) = 11.6
+/
+
+! End of added for CMVA
+
+
