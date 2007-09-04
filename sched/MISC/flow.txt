@@ -1,0 +1,157 @@
+         SCHED Outline.
+
+This file shows the logical flow of SCHED as of Oct 2003.  
+I'm starting with the parts related to setup files.
+Trying to do more Aug 29, 2007.
+
+
+
+-------------------------------------------------------------------
+Top level:
+
+SCHED:      Main routine
+  VERSCHED:  Set the version number.
+  STMSG:     Open log.  Write screen info.  Cross check includes.
+  Start of restart loop - mainly for plotting.
+    INPUT:     Get user and catalog input
+    DEFAULTS:  Fill in the defaults for items not set.
+    SCHPRE:    Do precessions etc.
+    CHKSC1:    Some scan checks
+    SCHOPT:    Determine the actual scans.  Optimize etc.
+    DOPFQ:     Set frequencies for line sources.
+    GETSUN:    Get sun distance.
+    CHKSCN:    More scan checks.     
+    SCHSUM:    Write the summary file.
+    PLOTTER:   Make plots.
+  End of restart loop
+  VXWRT:     Write VEX file.
+  FLAGS:     Write flagging table.
+  STAFILES:  Write antenna files.
+  DELSCR:    Delete scratch files etc.
+
+-------------------------------------------------------------------
+Get the input information:
+
+INPUT:
+  SCHIN:    Read main user input file (.key file)
+    INMAIN:   Define the input parameters (KEYADD and KEYCHR calls)
+    SCHOPEN:  Open the input file on a restart.
+    Initialize many parameter values, counters etc.
+    Start scan loop
+      Reset parameters which need it (not many).
+      KEYIN:    Read input parameters for scan.
+      DIVERT:   Dead end actions.  Only one - list frequencies.
+        GETFREQ:  List available LO setups. (details later)
+
+
+  RDPEAK:   Get reference pointing instructions.
+  ACCSRC:   Get all sources used in schedule.
+  SRREAD:   Read source catalog.
+  SRREAD:   Used again to get sources from pointing catalog.
+  GETSET:   Get the setup files.
+  GETFREQ:  Read the frequency setups catalog (station LO settings).
+
+Expand some of the above routines.
+
+DEFAULTS:  Fill in defaults.
+  SRFINISH:  Tie up loose ends from inputs.
+    SRCFLG     Associate sources with catalog entries
+    JPLGOT     Look for planets among input sources
+      JPLEP2     Get planet information
+    Don't allow planets with VEX
+    SATGOT     Look for a satellite.
+      SATEP      Get satellite details
+  PKFINISH:  Tie up loose ends related to reference pointing.
+  DEFSET:    Set defaults and check setups.
+    SETEXPND:  Expand to one station per setup.
+      SETSTDEF:  Expand default setups and eliminate unused stations.
+      GNSET:     Associate scan/station with setup.
+    SETDEFS:   Set a lot of defaults.
+      VLAPMODE:  VLA phasing modes
+      SETCHAN:   Apply defaults for pol, sample rate, sidebands.
+      SETFREQ:   Set frequencies
+        SETBAND:   Set frequencies based on BAND.
+      SETHW1:    Set hardware items like IFCHAN.
+      SETFCAT:   Get frequency catalog data.
+      SETBBC:    Assign BBC's.
+      SETREC:    Set recorder information
+        SETFORM    Set recording format, Initializes TAPEMODE! *********
+          TWOHDSET
+            SETFMT
+            FSPREAD
+              SETFMT
+            FMTPICK    Pick the format.
+              SETFMT     Set tape format stuff.
+                FMTS2      S2 format
+                FMTMKIII   Mark III format
+                FMTVLBA    VLBA format
+                FMTMKIV    Mark IV format
+            SETNOREC
+              SETFMT
+          SETSPD:    Set the tape speed
+          TPMFIX:    Prevent changes in TAPEMODE
+      SETTRK:    Set track assignments
+
+***  maybe move checking to a separate checking routine at the same
+ level as DEFAULTS.  I think I can then fold DEFSET and SETDEFS back
+into one routine.
+
+
+    CHKSET:     Check setups.
+    OKMODES:    Check allowed modes.
+    CHKSFIL:    Check things that shouldn't vary between setup groups.
+    SFINFO:     Get logical channels etc.
+    SBPAIR:     Detect signals assigned to same BBC to force same freq.
+    CHKSOC:     Checks for Socorro correlator.
+    CHKJIVE:    Checks for JIVE correlator
+  Default the "grab" controls for data capture.
+
+
+
+
+
+Determine actual scans:
+
+   SCHOPT
+      Output scan loop.
+         Optimization options:
+            OPTNONE:   No optimization
+            OPTDWELL:  Dwell time scheduling.
+            OPTCELLS:  Geodesy type optimization.
+            OPTCSUB:   Like OPTCELLS but with subarrays.
+            OPTUPT:    String of scans for UPTIME plots.
+         OPTTIM:    Get slew times, exact start times etc.
+         SCNGEO:    Get geometry info.
+         ADDPEAK:   Add pointing scans.
+         MAKEPTG:   Convert added scans, or user scans, to pointing.
+         SCNGEO:    Redo the geometry info.
+         AUTODOWN:  Eliminate stations too low and with autotape.
+         SCHTAPE:   Deal with tape.
+            SETTPS:   Set tape start time.
+            TPTAPE:   Get tape information
+               TPMK2:    Deal with Mark 2.
+               PTS2:     Deal with S2
+               TPSCH:    Deal with VLBA and Mark IV.
+                            Deals with not too many passes per head position.
+            DISKPOS:  Get disk information
+            TSYNC:    Deal with station-station tape coordination.
+         OPTSCH:    Write a SCHED input file with optimized schedule.
+      End scan loop.
+
+
+-------------------------------------------------------------------
+Utility routines:
+
+KEYIN:   Read free format input (has numerous subroutines)
+KEYPTR:  Get the pointer to specific input in the KEYIN arrays.
+KCHAR:   Extract a character string from KEYIN arrays.
+KEYADD:  Add an input variable to the KEYIN arrays.
+KEYCHR:  Add an input character string to the KEYIN arrays.
+
+WLOG:    Write information to screen and log file.
+UPCASE:  Make string upper case.
+DWCASE:  Make string lower case.
+KPACK:   Put a character string into holerith.
+VLBOPE:  OS specific routine to open a file.
+ERRLOG:  Write message to screen and log, then quit
+ENVIR:   Expand unix environment variables in file names.
