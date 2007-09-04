@@ -30,7 +30,7 @@ SCHED:      Main routine
   DELSCR:    Delete scratch files etc.
 
 -------------------------------------------------------------------
-Get the input information:
+Details:  Get the input information:
 
 INPUT:
   SCHIN:    Read main user input file (.key file)
@@ -51,7 +51,8 @@ INPUT:
   GETSET:   Get the setup files.
   GETFREQ:  Read the frequency setups catalog (station LO settings).
 
-Expand some of the above routines.
+-------------------------------------------------------------------
+Details:  Fill in defaults and check inputs.
 
 DEFAULTS:  Fill in defaults.
   SRFINISH:  Tie up loose ends from inputs.
@@ -98,6 +99,18 @@ into one routine.
 
 
     CHKSET:     Check setups.
+      Many checks at this level.
+      CHKVDAR:    DAR specific checks - VLBA systems
+      CHKV4DAR:   DAR specific checks - VLBA systems with MKIV formatter
+      CHKGDAR:    DAR specific checks - VLBA geodetic systems
+      CHK4DAR:    DAR specific checks - MKIV systems
+      CHK4GEO:    DAR specific checks - Geodetic patched MKIV systems
+      CHKDISK:    Recorder checks - disk
+      CHKVRREC:   Recorder checks - VLBA recorder on MkIV formatter
+      CHKSREC:    Recorder checks - S2 system
+      CHKSPD:     Bit rate per track and tape speeds.
+      CHKVLBA:    Some VLBA specific items.
+      CHKVLA:     Some VLA specific items.
     OKMODES:    Check allowed modes.
     CHKSFIL:    Check things that shouldn't vary between setup groups.
     SFINFO:     Get logical channels etc.
@@ -106,11 +119,8 @@ into one routine.
     CHKJIVE:    Checks for JIVE correlator
   Default the "grab" controls for data capture.
 
-
-
-
-
-Determine actual scans:
+-------------------------------------------------------------------
+Details:  Determine actual scans:
 
    SCHOPT
       Output scan loop.
