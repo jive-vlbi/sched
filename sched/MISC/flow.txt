@@ -122,35 +122,79 @@ into one routine.
 -------------------------------------------------------------------
 Details:  Determine actual scans:
 
-   SCHOPT
-      Output scan loop.
-         Optimization options:
-            OPTNONE:   No optimization
-            OPTDWELL:  Dwell time scheduling.
-            OPTCELLS:  Geodesy type optimization.
-            OPTCSUB:   Like OPTCELLS but with subarrays.
-            OPTUPT:    String of scans for UPTIME plots.
-         OPTTIM:    Get slew times, exact start times etc.
-         SCNGEO:    Get geometry info.
-         ADDPEAK:   Add pointing scans.
-         MAKEPTG:   Convert added scans, or user scans, to pointing.
-         SCNGEO:    Redo the geometry info.
-         AUTODOWN:  Eliminate stations too low and with autotape.
-         SCHTAPE:   Deal with tape.
-            SETTPS:   Set tape start time.
-            TPTAPE:   Get tape information
-               TPMK2:    Deal with Mark 2.
-               PTS2:     Deal with S2
-               TPSCH:    Deal with VLBA and Mark IV.
-                            Deals with not too many passes per head position.
-            DISKPOS:  Get disk information
-            TSYNC:    Deal with station-station tape coordination.
-         OPTSCH:    Write a SCHED input file with optimized schedule.
-      End scan loop.
+SCHOPT
+  Output scan loop.
+    Optimization options:
+      OPTNONE:   No optimization
+        SCNDUP:    Copy scan if necessary.
+      OPTDWELL:  Dwell time scheduling.
+        SCNDUP:    Copy scan if necessary.
+        OPTGEO:      Get scan geometry, slew times etc.
+      OPTSKD:    Select by number up and some other criteria.
+        SCNDUP:    Copy scan if necessary.
+        OPTGEO:      Get scan geometry, slew times etc.
+      OPTCELLS:  Geodesy type optimization.
+        SCNDUP:    Copy scan if necessary.
+        OPTGEO:      Get scan geometry, slew times etc.
+      OPTCSUB:   Like OPTCELLS but with subarrays.
+        OPTCSAR:   Try to determine optimal subarrays.
+          OPTGEO:    Get scan geometry, slew times etc.
+          OPTCSPT    Get subarray quality factor.
+        SCNDUP:    Copy scan if necessary.
+      OPTUPT:    String of scans for UPTIME plots.
+        SCNDUP:    Copy scan if necessary.
+        OPTGEO:      Get scan geometry, slew times etc.
+      OPTHAS:    Automated survey scheduling.
+        HALIM:     Get hour angle limits.
+          SCHGEO:    Get geometry for a scan. (several calls).
+        SCHGEO:    Get geometry for a start and stop times
+        HAAVAI:    Get time source available and desired obs time.
+        SCHGEO:    Get geometry for a scan. 
+        OPTGEO:    Get geometry.
+        SCNDUP:    Copy scan if necessary.
+    OPTTIM:    Get slew times, exact start times etc.
+      OPTGEO:    Get geometry.
+    SCNGEO:    Get geometry info.
+      SCHSRC:    Get geometry details - See under OPTGEO.
+      SLEW:      Determine slew times.
+    ADDPEAK:   Add pointing scans.
+      VLAFREQ:   Get VLA frequency
+      SCNDUP:    Copy scan if necessary.
+      SRINSERT:  Insert pointing source.
+      SCNGEO:  Get geometry.  See above.
 
+quitting here.
+
+
+
+
+    MAKEPTG:   Convert added scans, or user scans, to pointing.
+    SCNGEO:    Redo the geometry info.
+    AUTODOWN:  Eliminate stations too low and with autotape.
+    SCHTAPE:   Deal with tape.
+      SETTPS:   Set tape start time.
+      TPTAPE:   Get tape information
+        TPMK2:    Deal with Mark 2.
+        PTS2:     Deal with S2
+        TPSCH:    Deal with VLBA and Mark IV.
+                     Deals with not too many passes per head position.
+      DISKPOS:  Get disk information
+      TSYNC:    Deal with station-station tape coordination.
+    OPTSCH:    Write a SCHED input file with optimized schedule.
+  End scan loop.
+
+------------------------------------------------------------------------
+Subroutine details:  OPTGEO used in optimization routines.
+
+OPTGEO:
+  SCHSRC:       Get geometric details
+    SCHGEO:       Get geometry at a time.
+    WRAP:         Determine if a cable wrap will be done.
+    HORCHK:       Function to determine if up or down.
+  SLEW:         Get slew times.  
 
 -------------------------------------------------------------------
-Utility routines:
+Utility routines (most not noted in above outline):
 
 KEYIN:   Read free format input (has numerous subroutines)
 KEYPTR:  Get the pointer to specific input in the KEYIN arrays.
@@ -165,3 +209,11 @@ KPACK:   Put a character string into holerith.
 VLBOPE:  OS specific routine to open a file.
 ERRLOG:  Write message to screen and log, then quit
 ENVIR:   Expand unix environment variables in file names.
+TIMEJ:   Get year, day, and time of day from MJD.
+STANO:   Get station number for named antenna.
+PRTSCN:  Print scan details.
+
+
+Spotted deficiencies:
+
+OPTMODE modes list in starting comments not complete.
