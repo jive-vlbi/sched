@@ -7,13 +7,13 @@ Trying to do more Aug 29, 2007.
 
 
 -------------------------------------------------------------------
-Top level:
+Top level (see later for details of each called routine):
 
 SCHED:      Main routine
   VERSCHED:  Set the version number.
   STMSG:     Open log.  Write screen info.  Cross check includes.
   Start of restart loop - mainly for plotting.
-    INPUT:     Get user and catalog input
+    INPUT:     Get user and catalog input.
     DEFAULTS:  Fill in the defaults for items not set.
     SCHPRE:    Do precessions etc.
     CHKSC1:    Some scan checks
@@ -120,6 +120,9 @@ into one routine.
   Default the "grab" controls for data capture.
 
 -------------------------------------------------------------------
+Details:  Check scan parameters.  Put in generic check routine?
+CHKSC1 - no calls so no details.
+-------------------------------------------------------------------
 Details:  Determine actual scans:
 
 SCHOPT
@@ -129,31 +132,31 @@ SCHOPT
         SCNDUP:    Copy scan if necessary.
       OPTDWELL:  Dwell time scheduling.
         SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc.
+        OPTGEO:      Get scan geometry, slew times etc. Details later.
       OPTSKD:    Select by number up and some other criteria.
         SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc.
+        OPTGEO:      Get scan geometry, slew times etc. Details later.
       OPTCELLS:  Geodesy type optimization.
         SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc.
+        OPTGEO:      Get scan geometry, slew times etc. Details later.
       OPTCSUB:   Like OPTCELLS but with subarrays.
         OPTCSAR:   Try to determine optimal subarrays.
-          OPTGEO:    Get scan geometry, slew times etc.
+          OPTGEO:    Get scan geometry, slew times etc. Details later.
           OPTCSPT    Get subarray quality factor.
         SCNDUP:    Copy scan if necessary.
       OPTUPT:    String of scans for UPTIME plots.
         SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc.
+        OPTGEO:      Get scan geometry, slew times etc. Details later.
       OPTHAS:    Automated survey scheduling.
         HALIM:     Get hour angle limits.
           SCHGEO:    Get geometry for a scan. (several calls).
         SCHGEO:    Get geometry for a start and stop times
         HAAVAI:    Get time source available and desired obs time.
         SCHGEO:    Get geometry for a scan. 
-        OPTGEO:    Get geometry.
+        OPTGEO:    Get geometry. Details later.
         SCNDUP:    Copy scan if necessary.
     OPTTIM:    Get slew times, exact start times etc.
-      OPTGEO:    Get geometry.
+      OPTGEO:    Get geometry. Details later.
     SCNGEO:    Get geometry info.
       SCHSRC:    Get geometry details - See under OPTGEO.
       SLEW:      Determine slew times.
@@ -161,27 +164,35 @@ SCHOPT
       VLAFREQ:   Get VLA frequency
       SCNDUP:    Copy scan if necessary.
       SRINSERT:  Insert pointing source.
-      SCNGEO:  Get geometry.  See above.
-
-quitting here.
-
-
-
-
+      SCNGEO:  Get geometry.  See above for calls.
     MAKEPTG:   Convert added scans, or user scans, to pointing.
-    SCNGEO:    Redo the geometry info.
+    SCNGEO:    Redo the geometry info.  See above for calls.
     AUTODOWN:  Eliminate stations too low and with autotape.
     SCHTAPE:   Deal with tape.
       SETTPS:   Set tape start time.
-      TPTAPE:   Get tape information
+      TPTAPE:   Get tape information.  Dummy values for disk.
         TPMK2:    Deal with Mark 2.
-        PTS2:     Deal with S2
+          TPPACK:   Fill in TPDAT info with tape bookkeeping.
+        TPS2:     Deal with S2
+          TPPACK:   Fill in TPDAT info with tape bookkeeping.
         TPSCH:    Deal with VLBA and Mark IV.
-                     Deals with not too many passes per head position.
+                            Deals with not too many passes per head position.
+          TPPACK:   Fill in TPDAT info with tape bookkeeping.
+          TPAUTO:   Automatic tape handling.
+          TPREV:  Reverse tape when not using automatic tape allocation.
+        TPPACK:   Fill in TPDAT info with tape bookkeeping.
       DISKPOS:  Get disk information
       TSYNC:    Deal with station-station tape coordination.
+        TPTAPE:   See above - used here for synchronized tape change.
     OPTSCH:    Write a SCHED input file with optimized schedule.
   End scan loop.
+  ACCSRC:    Accumulate list of sources actually used.
+  SRCFLG:    Set pointers between schedule and catalog sources.
+* SCHTIM:    Check monotonic time, gaps, and get extreme times.
+             A lot of readback bookkeeping and other tape stuff.
+  SCH24:     Avoid 24:00:00.
+  TPMK2:     Mark 2 tape changes.  Ancient, but still used?
+    TPPACK:    Load the tape accounting (not just MK2).
 
 ------------------------------------------------------------------------
 Subroutine details:  OPTGEO used in optimization routines.
@@ -194,6 +205,56 @@ OPTGEO:
   SLEW:         Get slew times.  
 
 -------------------------------------------------------------------
+Details:  Do the doppler calculations.
+
+DOPFQ:     Do the Doppler calculations - mostly self contained.
+  SLA_ECOR:  Earth ephemeris.
+
+-------------------------------------------------------------------
+Details:  Get sun distance.
+
+GETSUN:   
+  SUNPOS:    Get the position of the sun.
+    SLA_EARTH:  Get the required positions.
+  SLA_DSEP:  Get angle between two sources.
+-------------------------------------------------------------------
+Details:  Second scan check routine.
+   The fset and pset stuff maybe should be in a default setting 
+   routine rather than a check routine.  Don't move before DOPFQ.
+
+CHKSCN:    Check scans again, after SCHOPT etc have mucked with them.
+  GETFSET:   Get the frequency sets.
+  GETPSET:   Get the pcal sets.
+*   PCALFQ:    Get the pulse cal settings. (Oops this doesn't belong in 
+                a checking routine).
+  RESYNC:    Check for possible data loss during corr. resyncs etc.
+  VLASCHK:   Check VLA specific items.
+-------------------------------------------------------------------
+Details:  Summarize the scans (write .sum file):
+
+SCHSUM:    Write .sum file. (long routine).
+  TDATECW:   Get date in desired format.
+  SUMOPE:    Open the summary file.
+    WRTCOV:    Write cover letter.
+    CORLST:    Write correlator information.
+    STALST:    List the stations.
+  SUMSCN:    Write the scan summaries.
+    SUNWARN:   Warn if near the sun.
+  TPSUM:     Write tape time estimates.
+  VXVERS:    Get Vex version.
+  PLVER:     Get Plot code version.
+  JPLVER:    Get JPL code version.
+  PGQINF:    Get PGPLOT version.
+
+-------------------------------------------------------------------
+Details:  Plotting.  Franco's part.
+
+PLOTTER:   Beginning of plot stuff.  This will be big.
+
+**********  Fill this in.
+
+
+-------------------------------------------------------------------
 Utility routines (most not noted in above outline):
 
 KEYIN:   Read free format input (has numerous subroutines)
@@ -203,13 +264,14 @@ KEYADD:  Add an input variable to the KEYIN arrays.
 KEYCHR:  Add an input character string to the KEYIN arrays.
 
 WLOG:    Write information to screen and log file.
+WRTMSG:  Write a message from $SCHED/catalogs/messages.txt
 UPCASE:  Make string upper case.
 DWCASE:  Make string lower case.
 KPACK:   Put a character string into holerith.
 VLBOPE:  OS specific routine to open a file.
 ERRLOG:  Write message to screen and log, then quit
 ENVIR:   Expand unix environment variables in file names.
-TIMEJ:   Get year, day, and time of day from MJD.
+TIMEJ:   Get year, day, and time of day from MJD, often for printing.
 STANO:   Get station number for named antenna.
 PRTSCN:  Print scan details.
 
@@ -217,3 +279,21 @@ PRTSCN:  Print scan details.
 Spotted deficiencies:
 
 OPTMODE modes list in starting comments not complete.
+
+
+
+Mostly I found routines by looking for CALL statements.
+That will miss function calls.  Find them by searching 
+for FUNCTION   Do that later.
+
+[cwalker Sched]$ grep FUNCTION *.f
+badlo.f:      LOGICAL FUNCTION BADLO( PARM, FREQ, FMULT, NADD, 
+gnset.f:      INTEGER FUNCTION GNSET( ISCN, ISTA )
+headpos.f:      INTEGER FUNCTION HEADPOS( TPINDX, SYSTEM, IHEAD )
+horchk.f:      CHARACTER*1 FUNCTION HORCHK( KSTA, HA, AZ, EL, KSRC )
+pseti.f:      INTEGER FUNCTION PSETI( ISCN, ISTA )
+sameset.f:      LOGICAL FUNCTION SAMESET( KS, JS )
+sumdat.f:      CHARACTER*5 FUNCTION SUMDAT( ITEM, ISCN, ISTA )
+sumdesc.f:      CHARACTER*100 FUNCTION SUMDESC( ITEM, LENGTH )
+vlbastop.f:      CHARACTER*9 FUNCTION VLBASTOP( STOPJ, ADDSEC, LASTDY, TWOPI,
+[cwalker Sched]$ 
