@@ -2,7 +2,9 @@
 C
 C     Routine for SCHED called by SRREAD and SRFINISH that compares 
 C     catalog entries with sources requested in the schedule and sets
-C     the appropriate pointers.  
+C     the appropriate pointers.  It is called again later by SCHOPT
+C     after the optimization routines are run and after pointing 
+C     sources are added.
 C
 C     It marks catalog sources as used, including which alias.  
 C
