@@ -19,17 +19,11 @@ C
          BEGSCN = .FALSE.
       END IF
 C
-C     Set TPSTART for all stations.  Done here so stations
-C     can know about each other.  If DOVEX, don't adjust
-C     later.
-C     
-      CALL SETTPS( ISCN, LASTISCN )
-C     
       TAPCHG = .FALSE.
       DO ISTA = 1, NSTA
          IF( STASCN(ISCN,ISTA) ) THEN
 C     
-            IF( .NOT. NOSET ) THEN
+            IF( .NOT. NOSET .AND. ( USETAPE(ISTA) .OR. MARK2 ) ) THEN
 C     
 C              Get the tape information for VLBA and Mark III.
 C     
@@ -41,11 +35,6 @@ C
      1             MOD( TPDAT(1,ISCN,ISTA), 10 ) .GT. 0 .AND.
      2             .NOT. DOINGCHG ) TAPCHG = .TRUE.
 C
-C              Get the disk information.
-C
-               IF( VLBITP .AND. USEDISK(ISTA) ) THEN
-                  CALL DISKPOS( ISCN, ISTA, LASTISCN )
-               END IF
             END IF
          END IF
       END DO
