@@ -26,7 +26,7 @@ C
       DOUBLE PRECISION  KD(2*MSETV), ENDMARK
       CHARACTER         KC(MSETV)*8, KCHAR*80
       SAVE              KI, KD, KC, ENDMARK, BLANK
-      SAVE              ZZZZ
+      SAVE              ZZZZ, ASTRO
 C ---------------------------------------------------------------
 C     Facilitate debugging of routines that don't have sched.inc.
 C

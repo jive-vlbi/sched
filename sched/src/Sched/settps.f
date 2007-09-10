@@ -1,9 +1,9 @@
       SUBROUTINE SETTPS( ISCN, LASTISCN )
 C
 C     Routine for SCHED to set TPSTART - how long before the scan
-C     start time to start the tapes moving.  Tapes may be started
+C     start time to start the recording.  Recorders may be started
 C     early to help the correlator sync up and/or to prevent the
-C     tape from stopping for too short a time between scans.
+C     recorder from stopping for too short a time between scans.
 C
 C     For now, if VEX is used, all stations should start their tapes
 C     at the same time.  That is why this code was moved out of
@@ -38,7 +38,7 @@ C
      1       RECORDER(STANUM(ISTA)) .NE. 'S2' ) THEN
 C
 C           Flag first scan for station.  Get setup.  Get last stop.
-C           Note that we will not try to keep tape going through
+C           Note that we will not try to keep recorder going through
 C           NORECORD scans, even if short.
 C
             FIRSTS = LASTISCN(ISTA) .EQ. 0
@@ -89,7 +89,7 @@ C     the scan gap.
 C
       IF( TPMIN .EQ. 1.D0 ) TPMIN = PRESTART(ISCN)
 C
-C     Now have TPSTART.  If necessary, synchronize the tape starts.
+C     Now have TPSTART.  If necessary, synchronize the recorder starts.
 C     VEX requires this for now.
 C
       IF( DOVEX ) THEN
@@ -97,14 +97,14 @@ C
             IF( STASCN(ISCN,ISTA) .AND. .NOT. NOSET .AND. 
      1          RECORDER(STANUM(ISTA)) .NE. 'S2' ) THEN
 C
-C              Actually set the time to prestart the tapes.  This
+C              Actually set the time to prestart the recorders.  This
 C              will set TPSTART to the same value for all stations
 C              in the scan.
 C
                TPSTART(ISCN,ISTA) = TPMIN
 C
 C              Warn if synchronizing the starts will cause some
-C              short tape stoppages that could be a problem on the
+C              short recorder stoppages that could be a problem on the
 C              correlator.  This can only happen if the 
 C              stop times of the previous scan are
 C              staggered (probably implies subarraying in use).
@@ -119,8 +119,8 @@ C
 C
                   SGWARN = .FALSE.
                   CALL WLOG( 0, 'SETTPS: **** WARNING ****' )
-                  CALL WLOG( 0, '    Synchronized tape '//
-     1              'starts for VEX have left some short tape stops.' )
+                  CALL WLOG( 0, '    Synchronized recorder starts '//
+     1              'for VEX have left some short recording stops.' )
                   CALL WLOG( 0, '    This may cause problems at ' //
      1              'the correlator.' )
                   CALL TIMEJ( STARTJ(ISCN), YEAR, DAY, TIMED )

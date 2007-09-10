@@ -38,28 +38,16 @@ C
 C
          END IF
 C
-      ELSE IF( VLBITP ) THEN
-C
-C        Wide band recording, but without tape in the mix at
-C        this station.  But some track information etc may 
-C        still be needed, at least for MARK5A.  Pretend we 
-C        are always on the first tape pass.
-C
-         CALL TPPACK( 'PACK', TPDAT(1,ISCN,ISTA),
-     1             .FALSE., .FALSE., .FALSE., 1, 1, 1, 1, 1 )
-C
-
       ELSE
 C
 C        Not a tape handling experiment.  Set defaults for the
-C        tape information.
+C        tape information.  Probably won't get here because of 
+C        controls on the call.
 C
          CALL TPPACK( 'PACK', TPDAT(1,ISCN,ISTA),
      1             .FALSE., .FALSE., .FALSE., 1, 1, 1, 1, 1 )
 C
       END IF
-C
-C     Disk system byte counts handled in SCHTAPE.
 C
       RETURN
       END

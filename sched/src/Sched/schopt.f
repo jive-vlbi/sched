@@ -225,7 +225,6 @@ C
             END IF
 C
 C           KSCN not used below this point.
-C
 C           Some of the optimization routines only give approximate
 C           scan times and so now get the final ones.  Note that
 C           inserted pointing scans are not yet in the picture, but
@@ -335,9 +334,28 @@ C
             ELSE
 C
 C              Accepted scan.
-C              Deal with the tape and disk handling for this scan.  Also
-C              may tweak scan times to avoid actions very close to 
-C              midnight.
+C
+C              Set the start time for data recording.
+C              If DOVEX, do not adjust later.
+C
+               CALL SETTPS( ISCN, LASTISCN )
+C
+C              If using disk, get the amount of disk used and 
+C              add to total.  Also set tape info to default while
+C              in a station loop.
+C
+               DO ISTA = 1, NSTA
+                  IF( STASCN(ISCN,ISTA) .AND. 
+     1                VLBITP .AND. USEDISK(ISTA) .AND. 
+     2                .NOT. NOSET ) THEN
+                     CALL DISKPOS( ISCN, ISTA, LASTISCN )
+                  END IF
+                  CALL TPPACK( 'PACK', TPDAT(1,ISCN,ISTA),
+     1                .FALSE., .FALSE., .FALSE., 1, 1, 1, 1, 1 )
+               END DO
+C
+C              Tape vestige: Deal with the tape handling for this scan.
+C              The station loop is in SCHTAPE.
 C
                CALL SCHTAPE( ISCN, LASTISCN )
 C
