@@ -99,7 +99,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2006Jun08-14:55:16"
+ VERSION = "2007Sep10-16:22:39"
 
 !  
 !  =====================================================================
@@ -194,8 +194,9 @@ Name = v20cm_2  Station = VLBA    Priority = 0
 !                Another OK range:  2490 - 2650 
 !                S band filters:    2200 - 2400 -1db,  2150 - 2450 -60db
 !          The S band filters were necessitated by RFI outside that
-!          range.  As of Sept. 16, 2005, filters are at LA, NL, OV.
-!          That is just a date I checked, not when they were installed.
+!          range.  As of October 2006, filters are at HN, NL, LA, OV, and 
+!          BR.  Status is tracked among the VLBA Modifications and 
+!          Retrofits for the Monday morning meetings.
 !          Note that Tcals are poor outside of nominal range so be
 !          careful with calibration.
 !     
@@ -3706,6 +3707,11 @@ Name = arxbha  Station = ARECIBO, AREC_S2   priority = 0
 !  051122: Shanghai updates (email from An Tao)
 !  051123: Urumqi updates (email from Liu Xiang)
 !  060126: Onsala dummy dual pol, Nt 5cm,
+!  060518: New Shanghai S/X receiver
+!  061012: Removed 43GHz entries for Mc (email from A. Orlati)
+!  061102: Put back Nt X-band dummy dual-pol 
+!  061128: Changed Nt X-band dummy dual-pol to have RCP in the correct IF.
+!  070221: Added Hh at 1cm.
 !  
 !  -----------------------------------------------------------------------
 !   Effelsberg
@@ -4328,14 +4334,13 @@ Name = nt5cm  Station = NOTO, NOTO_S2   priority = 5
 !  ! ranges from assuming BBC can do 500 - 1000 MHz 
 !  ! removed after email from Cassaro (CR 1May03)
 !/
-!Name = nt_xd  Station = NOTO   priority = 6
-!  rf1 = 8100, 8100    ifname = C,     A
-!  rf2 = 8600, 8600    fe  = '4cm', '4cm'
-!  pol =  RCP,  LCP    lo1 = 7600.1, 7600.1
-!  note = 'Dummy dual-pol entry, only RCP available (CR 2Jul02).'
-!  ! ranges from assuming BBC can do 500 - 1000 MHz 
-!!  ! removed after email from Cassaro (CR 1May03)
-!/
+Name = nt_xd  Station = NOTO   priority = 6
+  rf1 = 8100, 8100    ifname = A,     C
+  rf2 = 8600, 8600    fe  = '4cm', '4cm'
+  pol =  RCP,  LCP    lo1 = 7600.1, 7600.1
+  note = 'Dummy dual-pol entry, only RCP available (CR 28Nov06).'
+  ! ranges from assuming BBC can do 500 - 1000 MHz 
+/
 Name = nt1cm  Station = NOTO, NOTO_S2   priority = 4
   rf1 = 21950, 21950    ifname = C,     A
   rf2 = 22325, 22325    fe     = '1cm', '1cm'
@@ -4364,20 +4369,6 @@ Name = nt7mm_sio  Station = NOTO      priority = 4
 !  note = 'Huang Xinyong 231198, old (obsolete?) configuration'
 !  ! ranges from assuming BBC can do 500 - 1000 MHz 
 !/
-Name = shsx  Station = SHANGHAI, SHANG_S2  priority = 5
-  rf1 = 2150, 8100    ifname = C, A
-  rf2 = 2450, 8600    
-  pol =  RCP,  RCP     lo1 =  1600, 7600
-  note = 'From Porcas, from Huang Xinyong 231198'
-  !calculated with 500 - 1000
-/
-Name = shsx2  Station = SHANGHAI, SHANG_S2  priority = 6
-  rf1 = 2150, 8600    ifname = C, A
-  rf2 = 2450, 9000
-  pol =  RCP,  RCP     lo1 =  1600, 8000
-  note = 'X-band setup for Geodetic 3rd IF (CR 9Jun01)'
-  !added after email from Huang Xinyong (CR 9Jun01)
-/
 Name = sh18cm  Station = SHANGHAI, SHANG_S2   priority = 4
   rf1 = 1600, 1600    ifname = C, A
   rf2 = 1740, 1740    fe  = '18cm', '18cm'
@@ -4389,6 +4380,42 @@ Name = sh6cm  Station = SHANGHAI, SHANG_S2   priority = 5
   rf2 =  5150, 5150     fe     = '6cm', '6cm'
   pol =  RCP, LCP     lo1    = 4200.0, 4200.0
   note = 'Dual-pol available since summer 2005 (CR 051122).'
+/
+Name = shsx  Station = SHANGHAI, SHANG_S2  priority = 5
+  rf1 = 2150, 8200    ifname = C, A
+  rf2 = 2450, 8600    
+  pol =  RCP,  RCP     lo1 =  1600, 9100
+  note = 'From An Tao 18May2006'
+/
+Name = shsx2  Station = SHANGHAI, SHANG_S2  priority = 6
+  rf1 = 2150, 8600    ifname = C, A
+  rf2 = 2450, 9000    
+  pol =  RCP,  RCP     lo1 =  1600, 8100
+  note = 'From An Tao 18May2006'
+/
+Name = shx  Station = SHANGHAI, SHANG_S2  priority = 5
+  rf1 = 8200, 8200    ifname = C, A
+  rf2 = 8600, 8600    
+  pol =  RCP,  RCP     lo1 =  9100, 9100
+  note = 'From An Tao 18May2006. Normal X-band'
+/
+Name = shxd  Station = SHANGHAI, SHANG_S2  priority = 5
+  rf1 = 8200, 8200    ifname = C, A
+  rf2 = 8600, 8600    
+  pol =  RCP,  LCP     lo1 =  9100, 9100
+  note = 'From An Tao 18May2006. Dummy dual pol - only RCP available'
+/
+Name = shxd2  Station = SHANGHAI, SHANG_S2  priority = 6
+  rf1 = 8600, 8600    ifname = C, A
+  rf2 = 9000, 9000    
+  pol =  RCP,  LCP     lo1 =  8100, 8100
+  note = 'From An Tao 18May2006. Dummy dual pol - only RCP available'
+/
+Name = shx  Station = SHANGHAI, SHANG_S2  priority = 6
+  rf1 = 8200, 8600    ifname = C, A
+  rf2 = 2450, 9000
+  pol =  RCP,  RCP     lo1 =  1600, 8000
+  note = 'From An Tao 18May2006 '
 /
 Name = sh1cm  Station = SHANGHAI, SHANG_S2   priority = 5
   rf1 =  22100, 22100     ifname = C,  A
@@ -4816,19 +4843,19 @@ Name = mc13mm  Station = MEDICINA   priority = 4
   note = 'values confirmed Maccaferri (CR 30Nov00)'
   ! typo on rf2 corrected and Name changed from mc1cm (CR 29Jan01)
 /
-Name = mc7mm_sio  Station = MEDICINA  priority = 4
-  rf1 = 42850     ifname =    '1N'   fe = '7mm'
-  rf2 = 43250     altifn =    '2A'    
-  pol =   LCP     lo1    =  42750.0 
-  note = ' ** LCP only **, values from E-mail A.Orfei (JFD 18jan99) '
-  ! only single Pol LCP, the receiver is shared with Noto
-/
-Name = mc7mm_d  Station = MEDICINA  priority = 5
-  rf1 = 42850, 42850  ifname =  '2N', '1N'   fe = '7mm'
-  rf2 = 43250, 43250  altifn =  '1A', '2A'    
-  pol =   RCP, LCP     lo1    =  42750.0, 42750.0  
-  note = 'Dummy dual-pol entry, only LCP available (CR 2Jul02).'
-/
+!Name = mc7mm_sio  Station = MEDICINA  priority = 4
+!  rf1 = 42850     ifname =    '1N'   fe = '7mm'
+!  rf2 = 43250     altifn =    '2A'    
+!  pol =   LCP     lo1    =  42750.0 
+!  note = ' ** LCP only **, values from E-mail A.Orfei (JFD 18jan99) '
+!  ! only single Pol LCP, the receiver is shared with Noto
+!/
+!Name = mc7mm_d  Station = MEDICINA  priority = 5
+!  rf1 = 42850, 42850  ifname =  '2N', '1N'   fe = '7mm'
+!  rf2 = 43250, 43250  altifn =  '1A', '2A'    
+!  pol =   RCP, LCP     lo1    =  42750.0, 42750.0  
+!  note = 'Dummy dual-pol entry, only LCP available (CR 2Jul02).'
+!/
 
 Name = ons18cm  Station = ONSALA60   priority = 5
   note = 'No 18cm on smaller On dish'
@@ -5255,7 +5282,7 @@ Name = hh6cm_S2  Station = HART, HART_S2   priority = 4
 /
 Name = hh6cm  Station = HART  priority = 3
   rf1 = 4700, 4700    ifname = '2N',  '1N' fe  = '6cm', '6cm'
-  rf2 = 5100, 5100    altifn = '1A',  '2A 
+  rf2 = 5100, 5100    altifn = '1A',  '2A'
   pol =  RCP,  LCP    lo1 = 4600.0, 4600.0
   note = 'Values confirmed by E-mail Jonathan Quick 221105 (CR)'
 /
@@ -5304,8 +5331,11 @@ Name = hh3cm_d  Station = HART, HART_S2   priority = 6
 Name = hh2cm Station = HART, HART_S2    priority = 5
   note = 'No 2cm at HartRAO'
 /
-Name = hh1cm Station = HART, HART_S2    priority = 5
-  note = 'No 1cm at HartRAO'
+Name = hh1cm Station = HART, HART_S2    priority = 3
+  rf1 = 21400,21400    ifname =    '2N',   '1N'   fe =  '1cm',  '1cm'
+  rf2 = 24100,24100    altifn =    '1A',   '2A'
+  pol =   RCP,  LCP    lo1    = 22000.0,22000.0
+  note = 'LO tunable, other arbitrary values possible (CR 21Feb07)'
 /
 Name = hh7mm Station = HART, HART_S2    priority = 5
   note = 'No 7mm at HartRAO'
@@ -5937,3 +5967,20 @@ Name = ap_x  Station = ALGOPARK   priority = 4
   note = 'Based on Norbert Bartel info 20 Jan 2003.'
   ! ranges from assuming BBC can do 500 - 1000 MHz
 /
+
+! From Haystack via Walter Brisken just before the real time test
+! of May 7, 2007
+
+! Name = westx
+! Station = WESTFORD  Priority = 0
+!  rf1    = 8180, 8180  ifname = '1N', '2N'  altifn = '1A', '2A'
+!  rf2    = 8580, 8580   fe     = '2cm', '2cm'
+!  pol    =   RCP,   LCP   lo1    = 8080, 8080
+!  note = 'Westford - xband'/ 
+ Name = westx
+ Station = WESTFORD  Priority = 0
+  rf1    = 8180  ifname = '1N'  altifn = '1A'
+  rf2    = 8580  fe     = '4cm'
+  pol    =   RCP   lo1    = 8080
+  note = 'Westford - xband'/ 
+
