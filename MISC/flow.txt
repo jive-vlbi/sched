@@ -3,7 +3,8 @@
 This file shows the logical flow of SCHED as of Oct 2003.  
 I'm starting with the parts related to setup files.
 Trying to do more Aug 29, 2007.
-
+I'm mainly emphasizing where the different subroutines fit 
+into the overall picture.
 
 
 -------------------------------------------------------------------
@@ -251,9 +252,96 @@ Details:  Plotting.  Franco's part.
 
 PLOTTER:   Beginning of plot stuff.  This will be big.
 
-**********  Fill this in.
+**********  Fill this in eventually.
 
+-------------------------------------------------------------------
+Details:  Write the Vex file.  Cormac's part.
 
+VXWRT:
+
+**********  Fill this in eventually.
+
+-------------------------------------------------------------------
+Details:  Write the flagging table.
+
+FLAGS:     Open and write the flag table.
+  FLAGWRT:   Actually write the flag line.
+  SCHGEO:    Inside a loop to get the rise time.
+
+-------------------------------------------------------------------
+Details:  Write the files for the antennas.
+
+STAFILES:  Control the writing of the crd and sch files.
+  FILEOPEN:  Open the sch and crd files.
+    VLBOPE:    Open a text file.
+  PRTSCH:    Write the operator schedule - this routines does most.
+    WRTCOV:    Write the cover letter to the file.
+    TPPACK:    Use to get tape actions.
+    FSFREQ:    Get frequency and bandwidth.
+    TDATECW:   Get day and date information.
+    SUNWARN:   Print a sun warning if needed.
+  CRDWRT:    Call appropriate routine to write output files.
+*   SNAP:      Write a snap (Mark III) schedule.  (still used?)
+    VLBA:      Write a VLBA telescope control file.
+      VLBAEND:   Wrap up schedule on last call (postpass etc).
+      VLBAINI:   Get the file started.
+      VLBAST:    Get a scan started.
+        JPLEP2:    Deal with planets - position changes.
+          CONST:     Get some constants from the ephemeris file.
+            STATE:     Spice routine.
+          JPLPO2:    Do the work - from Bryan Butler.
+            SLA_EPJ:   SLA routines
+            SLA_GMST:
+            SLA_EQEQX:
+            SLA_PRECL:
+            SLA_NUT:
+            SLA_DMXV:
+            SLA_DCC2S:
+            SLA_DRANRM:
+            PLEPH:      JPL routine
+            PVOBS:      Bryan's routine.
+            FINDT:      Bryan's routine.
+            TRANSP:     Bryan's routine.
+        SATEP:     Deal with satellites - position changes.  NAIF
+          FURNSH:    
+          STR2ET:
+          SPKEZR:
+          ET2UTC:
+      VLBATI:    Deal with tape information.
+        TPPACK:    Get tape direction etc.
+        VLBACHG:   Do a tape change.  Worry about postpass.
+      VLBASU:    Write most of the setup information.
+        VLBATP:    Write tape motion commands.
+        VLBADK:    Write disk motion commands.
+        VLBAINT:   Write an integer parameter and values.
+        VLBACHAR:  Write a character parameter and values.
+        VLBABWS:   Write frequency/bandwidth type parameters.
+        VLBAREAL:  Write real parameters.
+
+      VLBACHG:   Do a tape change.  Turn off unused drive.
+      VLBATP:    Write tape motion commands.
+      VLBADK:    Write disk motion commands.
+      PTVLBA:    Write special single dish pointing scans.
+        PTPAT:     Write the 12 scan pattern.
+      ROTLVBA:   Make a focus/rotation pattern.
+        VLBAINT:   Write an integer parameter and values.
+        PTPAT:     Write the 12 scan pattern.
+      TAVLBA:    Make an on/off pattern.
+        VLBAINT:   Write an integer parameter and values.
+      PN3DB:     Make a half power tracking scan.
+        VLBAINT:   Write an integer parameter and values.
+      FSVLBA:    Frequency switching loop.
+        VLBAREAL:  Write real parameters.
+    CRDVLA:    Write an Observ deck for the VLA.
+      SIDTIM:    Get sidereal day and time.
+      SLA_DJCL:    Julian conversions.
+      CHARS:       Determine first and last non-blank characters.
+      JPLEP2:      Planet position (see above).
+      GETPTLO:     First LO at Pie Town for PT link.
+*   CRDNRAO:   Write an old 140' control file.    (still used?)
+  PRTSET:    Write setup information into the sch file.
+  SRCLST:    Write source information into the sch file.
+  
 -------------------------------------------------------------------
 Utility routines (most not noted in above outline):
 
@@ -272,6 +360,7 @@ VLBOPE:  OS specific routine to open a file.
 ERRLOG:  Write message to screen and log, then quit
 ENVIR:   Expand unix environment variables in file names.
 TIMEJ:   Get year, day, and time of day from MJD, often for printing.
+SCHDAY:  Get time (start etc) in special formats need for control files.
 STANO:   Get station number for named antenna.
 PRTSCN:  Print scan details.
 
