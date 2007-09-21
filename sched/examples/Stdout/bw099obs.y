@@ -1,6 +1,6 @@
 /.BW099   600
 //* *** 
-//* *** SCHED version:   6.05  June 2006
+//* *** SCHED version:   7.00  Development late 2006
 //* *** 
 //* *** Observation day 57,173 at 07 13 34 LST, 1997.01.14 23:45:00 MST.  
 //* *** 
