@@ -49,7 +49,7 @@ C     use a wavelength spec because 1cm is already too coarse (and
 C     really 30 GHz).
 C
       DATA  CBAND(12), CFREQ(12), CBW(12)  /  '1cm', 22235.49, 0.0 /
-      DATA  CBAND(13), CFREQ(13), CBW(13)  /  '24ghz', 23800.49, 0.0 /
+      DATA  CBAND(13), CFREQ(13), CBW(13)  /  '24ghz', 23799.49, 0.0 /
       DATA  CBAND(14), CFREQ(14), CBW(14)  /  '7mm', 43135.49, 0.0 /
       DATA  CBAND(15), CFREQ(15), CBW(15)  /  'sx', 0.0, 0.0 /
 C

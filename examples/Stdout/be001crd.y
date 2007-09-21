@@ -1,7 +1,7 @@
 !*  Schedule for VLA1      *!
 !*  Experiment BE001    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:   6.05  June 2006 *!
+!* Processed by SCHED version:   7.00  Development late 2006 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!

@@ -1,7 +1,7 @@
 !*  Schedule for VLA27     *!
 !*  Experiment CE001    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:   6.05  June 2006 *!
+!* Processed by SCHED version:   7.00  Development late 2006 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!
@@ -18,6 +18,7 @@
 !*  *!
 !*  Start at 01h30m00s     Sun, 1995 Oct 22  Day of year  295   *!
 program=CE001   
+media=(1,none)
 
 !* The first scan is preceeded by a setup scan *!
 !* that ends at the start time of the first scan  *!

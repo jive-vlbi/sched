@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00                                              
-Processed by SCHED version:   6.05  June 2006                             
+Processed by SCHED version:   7.00  Development late 2006                 
 
 PI:       Craig Walker                                                    
 
@@ -48,13 +48,13 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell  (see above)  
 14 54 30  3C48         00 14 45  72.7  87.3 -1.4     -81.2     0   1  1      0  14 54 30
 14 57 09  ---          00 17 25  73.3  87.6 -1.3     -81.3   160   F  1      0  14 54 30
 
-14 57 09  3C48         00 17 25  73.3  87.6 -1.3     -81.3   -15   1  1      0  14 57 09
+14 57 09  3C48         00 17 25  73.3  87.6 -1.3     -81.3   -15   1  1      0  No stop 
 15 02 09  ---          00 22 25  74.3  88.1 -1.3     -81.4   284   F  1      0  14 57 09
 
 15 03 22  3C84         00 23 38  54.8  64.6 -2.9     -87.5     0   1  1      0  15 03 22
 15 06 02  ---          00 26 18  55.3  64.6 -2.9     -87.9   160   F  1      0  15 03 22
 
-15 06 02  3C84         00 26 18  55.3  64.6 -2.9     -87.9   -15   1  1      0  15 06 02
+15 06 02  3C84         00 26 18  55.3  64.6 -2.9     -87.9   -15   1  1      0  No stop 
 15 14 00  ---          00 34 18  56.8  64.7 -2.8     -89.2   464   F  1      0  15 06 02
 
 15 15 41  3C120        00 36 00  28.3 103.6 -4.0     -53.9     0   1  1      0  Stopped 
@@ -204,19 +204,19 @@ SETUP FILE INFORMATION:
 
    J0137+3309        01 34 49.826430   * 01 37 41.299496     01 37 37.547270       0.90
    0134+329          32 54 20.25964    * 33 09 35.13382      33 09 06.39492        0.91
- * 3C48              /users/cwalker/files/sched_master/catalogs/sources.vlba
+ * 3C48              /users/cwalker/files/sched_work/catalogs/sources.vlba
    J0137+33          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
                         0.211 scan hours,      0.000 baseline hours above horizon.
 
    J0319+4130        03 16 29.567289   * 03 19 48.160119     03 19 43.377393       0.28
    0316+413          41 19 51.91677    * 41 30 42.10389      41 30 18.94109        0.41
- * 3C84              /users/cwalker/files/sched_master/catalogs/sources.vlba
+ * 3C84              /users/cwalker/files/sched_work/catalogs/sources.vlba
    J0319+41          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
                         0.709 scan hours,      0.000 baseline hours above horizon.
 
    J0433+0521        04 30 31.602060   * 04 33 11.095529     04 33 07.063452       0.30
    0430+052          05 14 59.61640    * 05 21 15.61918      05 20 59.62159        0.20
- * 3C120             /users/cwalker/files/sched_master/catalogs/sources.vlba
+ * 3C120             /users/cwalker/files/sched_work/catalogs/sources.vlba
    J0433+05          VLBA Calib Survey - GSFC sols. - created L.Petrov 2005f_astro
                         0.000 scan hours,      0.000 baseline hours above horizon.
 
