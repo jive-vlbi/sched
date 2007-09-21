@@ -124,7 +124,7 @@
  SOURCE='0552+398'      START=22:58:30                  STATIONS=VLBA_HN,VLBA_NL /
   bw=  0.000,  0.000
  SOURCE='0552+398'      START=00:00:30 DAY=169          /
- setup='vsop6cm.set'   dopcal   bw=  0.000,  0.000
+ setup='vsop6cm.set'   dopcal 
  SOURCE='3C84'          START=13:30:00 DAY=168 DUR= 390 STATIONS=METSAHOV,VLBA_LA,VLBA_KP,VLBA_OV,VLBA_BR,GOLD70 /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=13:41:30                  /

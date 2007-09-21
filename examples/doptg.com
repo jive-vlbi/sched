@@ -200,7 +200,7 @@ endlines /
 
 linename='SiO431' 
 
-group=(11*3) rep=60
+group=(12*3) rep=60
 setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
 setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
@@ -208,6 +208,7 @@ setup='$SETDIR/pt6cm.set'   source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source 'DR21'    nodop   bw=0,0   /
+setup='$SETDIR/pt24ghz.set' source 'DR21'   nodop   bw=0,0   /
 setup='$SETDIR/pt2cm.set'   source 'DR21'    nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source 'DR21'    nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source 'RCAS'    doppler bw=2,2 qual=0 /
@@ -220,6 +221,7 @@ setup='$SETDIR/pt6cm.set'   source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source '3C84'    nodop   bw=0,0   /
+setup='$SETDIR/pt24ghz.set' source '3C84'   nodop   bw=0,0   /
 setup='$SETDIR/pt2cm.set'   source '3C84'    nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source '3C84'    nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source 'RLEO'    doppler bw=2,2 qual=0 /
@@ -232,6 +234,7 @@ setup='$SETDIR/pt6cm.set'   source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt24ghz.set' source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt2cm.set'   source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source '3C273'   nodop   bw=0,0   /
 setup='$SETDIR/pt7mm.set'   source 'WHYA'    doppler bw=2,2 qual=0 /
