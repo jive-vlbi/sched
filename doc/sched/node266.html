@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>PTINCR</TITLE>
-<META NAME="description" CONTENT="PTINCR">
+<TITLE>PCALXB1 and PCALXB2</TITLE>
+<META NAME="description" CONTENT="PCALXB1 and PCALXB2">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,69 +29,106 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3918"
+<A NAME="tex2html3923"
   HREF="node267.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3914"
+<A NAME="tex2html3919"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3908"
+<A NAME="tex2html3913"
   HREF="node265.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3916"
+<A NAME="tex2html3921"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3919"
-  HREF="node267.html">PTOFF</A>
-<B> Up:</B> <A NAME="tex2html3915"
+<B> Next:</B> <A NAME="tex2html3924"
+  HREF="node267.html">POL</A>
+<B> Up:</B> <A NAME="tex2html3920"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3909"
-  HREF="node265.html">POL</A>
- &nbsp; <B>  <A NAME="tex2html3917"
+<B> Previous:</B> <A NAME="tex2html3914"
+  HREF="node265.html">PCALFR1 and PCALFR2</A>
+ &nbsp; <B>  <A NAME="tex2html3922"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643600000000000000"></A><A NAME="SP:PTINCR"></A>
+<H3><A NAME="SECTION004643600000000000000"></A><A NAME="SP:PCALXB1"></A>
 <BR>
-<TT>PTINCR</TT>
+<TT>PCALXB1</TT> and <TT>PCALXB2</TT>
 </H3>
 
 <P>
-<TT>PTINCR</TT> is used to set the step size for pointing patterns on the
-VLBA in arc minutes. A 10-point pattern is used with off, half-power,
-on, half-power, and off positions in azimuth, and then in the same in
-elevation.  <TT>PTINCR</TT> gives the offset between the on and the
-half-power positions. <A HREF="node267.html#SP:PTOFF"><TT>PTOFF</TT></A> gives the
-distance to the off source positions.  Note that the off source
-positions in elevation are <TT>PTOFF</TT> arcminutes off in azimuth
-and two times <TT>PTINCR</TT> off in elevation.  This gives a smooth
-sequence in elevation which, at low elevation, significantly
-improves the baseline removal.
+<TT>PCALXB1</TT> and <TT>PCALXB2</TT> determine what the pulse cal detectors
+measure. There are 16 pulse cal detectors in each formatter and 1
+formatter at each VLBA station. (<EM>FOR NOW, THERE ARE ONLY 8
+DETECTORS AT EACH STATION</EM>) Each detector can process two bit
+streams. In each bit stream, either counts of bits can be determined
+(<TT>PCALFR1=0</TT>) or a pulse cal tone can be detected. If the two bit
+streams are from the same (2 bit) channel, and
+the frequency is the same for both detectors (<TT>PCALFR1</TT> and <TT>PCALFR2</TT> the same), the results will be combined for a single measured
+amplitude and phase. The arguments are treated as character
+strings. They begin with a letter indicating whether to look at the
+sign (S) or the magnitude (M) bit. The letter is followed by a number
+to indicate the channel from which the bits are to come. <TT>PCALXB1</TT>
+specifies the source of the first bit stream for each detector, while
+<TT>PCALXB2</TT> specifies the source of the second bit stream. ``Channel
+number'' means the same quantity that is used as the index for most
+setup parameters. A detector can be turned off by specifying <TT>'off'</TT>.
+
+<P>
+Most users should not need to worry about setting the pcal detection
+parameters.  SCHED&nbsp; defaults to a reasonable set which is
+described in the section on <A HREF="node265.html#SP:PCALFR1"><TT>PCALFR1</TT> and <TT>PCALFR2</TT></A>.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A real number giving the offset in arcmin.
+<LI><B>Argument:</B> An array of up to 16 character strings specifying Sign or
+Magnitude bit and the channel number.
 </LI>
-<LI><B>Options:</B>  Any number but it should be near 1/2 of the FWHM of the beam.
+<LI><B>Options:</B>  <TT>S1</TT>, <TT>S2</TT>, ... <TT>S16</TT>, <TT>M1</TT>, <TT>M2</TT>, ...
+<TT>M16</TT>, or <TT>off</TT>
 </LI>
-<LI><B>Default:</B>  <TT>0</TT> - not too useful.
+<LI><B>Default:</B>  See <A HREF="node265.html#SP:PCALFR1"><TT>PCALFR1</TT> and <TT>PCALFR2</TT></A>.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>PTINCR=4.0</TT>
+<LI><B>Example:</B>  <TT>PCALXB1=S1,S2,S3,S4,S5,S6,S7,off</TT>, which could be used to
+measure 1 tone in each channel of a Mark&nbsp;III mode E observation.
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3923"
+  HREF="node267.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3919"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3913"
+  HREF="node265.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3921"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3924"
+  HREF="node267.html">POL</A>
+<B> Up:</B> <A NAME="tex2html3920"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3914"
+  HREF="node265.html">PCALFR1 and PCALFR2</A>
+ &nbsp; <B>  <A NAME="tex2html3922"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

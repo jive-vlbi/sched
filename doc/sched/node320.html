@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 22 Feb 1996</TITLE>
-<META NAME="description" CONTENT="Release of 22 Feb 1996">
+<TITLE>Release of 4 Dec. 1996</TITLE>
+<META NAME="description" CONTENT="Release of 4 Dec. 1996">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,334 +23,360 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node321.html">
 <LINK REL="previous" HREF="node319.html">
-<LINK REL="up" HREF="node301.html">
+<LINK REL="up" HREF="node304.html">
 <LINK REL="next" HREF="node321.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4619"
+<A NAME="tex2html4626"
   HREF="node321.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4615"
-  HREF="node301.html">
+<A NAME="tex2html4622"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4609"
+<A NAME="tex2html4616"
   HREF="node319.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4617"
+<A NAME="tex2html4624"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4620"
-  HREF="node321.html">Release of 16 May</A>
-<B> Up:</B> <A NAME="tex2html4616"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4610"
-  HREF="node319.html">Release of 13 Apr</A>
- &nbsp; <B>  <A NAME="tex2html4618"
+<B> Next:</B> <A NAME="tex2html4627"
+  HREF="node321.html">Release of 26 June</A>
+<B> Up:</B> <A NAME="tex2html4623"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4617"
+  HREF="node319.html">Release of 14 Jan.</A>
+ &nbsp; <B>  <A NAME="tex2html4625"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION006219000000000000000"></A><A NAME="SSSEC:FEB96"></A>
+<H2><A NAME="SECTION006216000000000000000"></A><A NAME="SSSEC:DEC96"></A>
 <BR>
-Release of 22 Feb 1996
+Release of 4 Dec. 1996
 </H2>
 
 <P>
-This is a slightly modified version of the SCHED&nbsp; that was
-released within NRAO in December 1995.
-
-<P>
-This version included a number of evolutionary changes made up to
-November 1995.  In that month, the VLBA OBSERVE (GNOMES) project
-was cancelled and it became clear that SCHED&nbsp; had much more of a future
-than expected.  Many changes, including addition of plotting and dwell time
-scheduling, along with massive changes in internal structure for both
-maintainability and for eventual Mark IV support, were made.  Also
-the help file was renamed the manual, formated for LaTeX and html, and
-to a large degree, rewritten.  It is now this document.
-
-<P>
-The evolutionary changes before November 1995 were:
-
-<P>
 
 <UL>
-<LI>Add <TT>REMARK</TT> to valid parameters in source catalog. Someday,
-      print it in the summary file. (1995 May 31)
+<LI>Discourage picking successive scans on same source when using the
+      subarrayed sky coverage optimizer (OPTCSUB).  11Sep96 RCW.
 
 <P>
 </LI>
-<LI>First parallactic angle was PA2, not PA1, in PRTSCH. Fixed.
-      (1995 June 4)
+<LI>No longer attempt to space to the end of tape between scans
+      when there is going to be a turn-around.  With speed-up on
+      the correlator, this can put the correlator badly out of sync.
+      12Sep96  RCW
 
 <P>
 </LI>
-<LI>Added horizons. (1995 June 17)
+<LI>Add TAPESYNC to try to force synchronized tape changes.  This
+      is especially useful in optimized schedules with subarraying.
+      Sep 96 RCW.
 
 <P>
 </LI>
-<LI>Warn if automatic tape allocation requested. (1995 June 26)
+<LI>Made cosmetic changes to sched.inc and some clean up of source
+      namehandling, including a bug fix in the planets code.
+      1 Oct 96 RCW
 
 <P>
 </LI>
-<LI>Rewrite optimization mode routines for easier modification.
-      (1995 June)
+<LI>Added new routine STMSG for startup messages.  1 Oct 96 RCW
 
 <P>
 </LI>
-<LI>Increase maximum number of setup files to 50. (1995 June 25)
+<LI>Added a new routine SHORTN for getting the short source name.
+      1 Oct 96 RCW
 
 <P>
 </LI>
-<LI>Make cover-like info in VLA observe file look like what
-     VLA OBSERVE observe makes so observe will read it.
-     (1995 July)
+<LI>Add ability to use station codes in place of station names
+      for the input parameters STATIONS, REWIND, FASTFOR, TAPE, and
+      REVERSE.  This had the side effect of requiring that the
+      station catalog be read by the time the first scan is
+      processed.   4 Oct 1996 RCW
 
 <P>
 </LI>
-<LI>Fix rounding of F6 numbers for VLA, since did wrong thing when
-      negative. (1995 October 3)
+<LI>Fix calls for planet positions. 4 Oct 1996
 
 <P>
 </LI>
-<LI>Change reference pointing at VLA from <TT>IA</TT> to <TT>IR</TT>
-      mode. Also, only put pointing request in VLBA control files if
-      this is not a DAR-only station (1995 October 4)
+<LI>Print 0 for dwell time if source is down.  4 Oct 96 RCW.
 
 <P>
 </LI>
-<LI>Update some bits of VLA info in help file. A major review of the
-      help file should be done soon. Also put the help file in HTML.
-      (1995 October 4)
+<LI>Increase the maximum number of channels to 32.  This required
+      quite a bit of work as 16 was built in in several places.
+      9 Oct 96  RCW.
 
 <P>
 </LI>
-<LI>SCHIN had <TT>FASTF</TT> instead of <TT>FASTFOR</TT> as per the
-      documentation. Change to <TT>FASTFOR</TT>. (1995 October 30)
-</LI>
-</UL>
-
-<P>
-The big rewrite included:
-
-<P>
-
-<UL>
-<LI>Added plotting.
+<LI>Made various changes to help the Mark IV and VEX support.
+      Set the default low density Mark IV tape speeds to the
+      same as Mark&nbsp;III.
 
 <P>
 </LI>
-<LI>Added dwell time scheduling.
+<LI>Set the maximum correlator data rate to 350 kbps.  14Oct96 RCW.
 
 <P>
 </LI>
-<LI>Added new subroutines for setting up and reading KEYIN variables.
-      It is now much easier to add and remove parameters.  Also,
-      the number of inputs for arrays is now sensitive to the parameter
-      statements.
+<LI>Don't allow BW to be specified in the main schedule if VEX
+      output is to be written.  This significantly simplifies the
+      generation of setups in the VEX file.  15 Oct 96 RCW.
 
 <P>
 </LI>
-<LI>Much restructuring of code.
+<LI>Add DOPINCR to allow doppler frequency setting for systems
+      with different frequency setting capabilities from VLBA and
+      Mark&nbsp;III/IV.  For example, VSOP only hits the nearest MHz.
+      15 Oct 96 RCW.
 
 <P>
 </LI>
-<LI>Can now write telescope output files when optimization used.
-      Optimization much better integrated into program.
+<LI>Require that the user provide many of the cover and correlation
+      parameters to give the observatories and correlators the
+      information they need.   Internally, put all
+      parameters in variables to reduce dependence on the print format.
+      Eliminate the parameter TELEX since as far as I know, this
+      system is no longer used.  16 Oct 96  RCW.
 
 <P>
 </LI>
-<LI>Help file made into a manual and formated for LaTeX.
+<LI>Add a mechanism, and a program, for easy including of examples
+      in this manual.  This should make keeping the examples up to
+      date and tested easier.  17 Oct 96.
 
 <P>
 </LI>
-<LI>Manual made convertable to html by latex2html.
+<LI>Add SLEW to the allowed summary items (SUMITEM).
 
 <P>
 </LI>
-<LI>Reduced maximum stations and scans parameters.  Some variables
-      with both dimensions were added so this keeps the size down.
+<LI>Allow MKIV dar and S2 recorder at the same site.
 
 <P>
 </LI>
-<LI>Convert many time parameters to fractional days from radians
-      inside program.  Not visible to user.
+<LI>Add the ability to use environment variables in UNIX file names.
+      This simplifies specification of catalogs names.  Also adjust
+      the default catalog names to work on a UNIX system with the
+      standard SCHED directory substructure and with $SCHED defined
+      to point to the SCHED base area.   21 Oct 96  RCW.
 
 <P>
 </LI>
-<LI>Allow in-line setup files much like the source and station
-      catalogs.
+<LI>Add FREQREF to schset.inc to make it easier for other routines
+      to get the observing frequency.  Set FREQREF in RDSET and/or
+      SETFREQ.
 
 <P>
 </LI>
-<LI>Setup files are now required for all projects.
+<LI>Add POL to schset.inc to make it easier to keep track of
+      polarization.  Add POL to setup input variables.
 
 <P>
 </LI>
-<LI>Allow a ``default'' station in setup files (eg for Mark II or
-      experiment planning).
+<LI>Changed SPEEDUP in sched.inc to RSPEED and added SPEEDUP to
+      schset.inc.  This improved bookkeeping.
 
 <P>
 </LI>
-<LI>Relative order of ``VLBA'' default station and any specific
-      stations in a setup file no longer matters.
+<LI>Prohibit frequency switching when writing VEX.  24 Oct 96.
 
 <P>
 </LI>
-<LI>SCHED no longer takes the number of channels from the main input
-      file.  This is set only in the setup file.
+<LI>Add MJD to summary output.
 
 <P>
 </LI>
-<LI>The bandwidth is no longer required in the main file for
-      observations using Doppler calculations -- it is obtained
-      from the setup file.  It can still be changed in the main
-      file.
+<LI>Restructure writing of summary file and add number of passes,
+      tapes, and readback tests.  24 Oct 1996.
 
 <P>
 </LI>
-<LI>The formats of the summary and sch files were changed somewhat.
+<LI>Extend the leveling scan for pointing observations to twice
+      PTDUR to make it long enough to get pcx tests.  24 Oct 1996.
 
 <P>
 </LI>
-<LI>SUN proximity warnings no longer overwrite other comments.
+<LI>Force the doppler calculations to give the same LO frequency for
+      channels sharing a BBC.  This is mainly for Upper/Lower
+      sideband pairs.  Added subroutine SBSIDE. 25 Oct 1996 RCW.
 
 <P>
 </LI>
-<LI>For dwell time scheduling, more general axis limits and slew
-      rates were put in the station catalog.  Parameter HALIM was
-      removed.
+<LI>Add consistency checks across channels and setup groups in
+      a setup file in the area of frequency and sideband assignments.
+      25 Oct 1996.
 
 <P>
 </LI>
-<LI>In the summary and sch files, scans below the horizon but
-      above the slew limits are marked differently from scans below
-      the slew limits
+<LI>Protect against scans shorter than one second.  25 Oct 1996.
 
 <P>
 </LI>
-<LI>Scan timing specification was enhanced.  GAP was added to
-      take the place of the usual use of PRESCAN.  PRESCAN is now
-      just a tape start offset.  It can be negative for prestarting
-      tapes.  The changes are backward compatible
+<LI>Remove tape stuff from VLAONLY and NOTAPE observations. 28 Oct 96.
 
 <P>
 </LI>
-<LI>SCHED&nbsp; internally calculates XYZ for stations if they are
-      needed.  Mainly used in u-v plotting.
+<LI>Set up for defaulting many SETUP parameters based on input from
+      a frequency catalog.  This was a major change involving
+      considerable additional code and a new input file which is
+      called <I>freq.dat</I> in the catalogs subdirectory.  If users
+      are observing a frequency covered by the frequency catalog, they
+      only need to specify generic information like observing
+      frequency, polarization, number of bits per sample etc.  SCHED&nbsp; 
+      can then fill in all the site dependent parameters like
+      firstlo, synthesizer settings, channel names etc.  This
+      should greatly simplify the process of making setup files.
+      See <A HREF="node224.html#SEC:FRQCAT">the frequency catalog section</A> for a lot more information.  SCHED&nbsp; also uses
+      the frequency catalog information to check any setups provided.
+      If it does not recognize the setup, it will complain.  For
+      VLBA observations, this probably means there is a problem.
+      For other sites with less complete information in the frequency
+      catalog, it is just a flag to be careful with what you are
+      doing.
+
+<P>
+In the process of making these changes, it became possible to
+      specify multiple stations for a setup group (SETSTA now has two
+      indices).  With only the generic parameters specified, this
+      can be useful.  Internally, SCHED&nbsp; expands such a case to
+      have a separate group for each input station before adding
+      all the LO values etc.  After that, only the first station
+      of the list is used.      29 Oct 96.  RCW.
 
 <P>
 </LI>
-<LI>Put summary file output early enough in program that it is
-      done and closed before plotting begins.  It can then be
-      examined during plotting.
+<LI>Set up defaulting of parameters like NETSIDE and BBC in
+      SETCHAN.  This can be a bit risky since different defaults
+      require different frequency settings, which aren't defaulted.
+      2 Nov 96. RCW.
 
 <P>
 </LI>
-<LI>Now, when there is in-stream input such as tape initialization,
-      source and station catalogs, line frequencies, or setup information,
-      SCHED reads that input and then returns to reading input for
-      the current scan.  No scan initialization is done.  Thus these
-      in-stream inputs can go anywhere.  The main use of this will
-      probably be to put the cover information at the top of the file.
-      Another use is to put in-stream setup information in the main
-      file at the scan where it is first used.  This is useful
-      especially for test observations.
+<LI>Did some cosmetic reformatting of the summary file.  4 Nov 96 RCW.
 
 <P>
 </LI>
-<LI>Let OPMINANT and OPMINEL apply regardless of optimization.  They
-      are useful especially in planning.
+<LI>Clarify VLA vs VLB IF's in sum file.  Warn of special patching.
 
 <P>
 </LI>
-<LI>The TPRATE parameter was removed.
+<LI>Allow POL=DUAL in setup.  Will cause R/L pairs to be specified.
 
 <P>
 </LI>
-<LI>Allow program restart from plotting input.
+<LI>Adding FREQFILE and FREQLIST for frequency defaulting and
+      display.  FREQLIST can be used to get a list of possible
+      frequency setups from the frequency catalog for a desired
+      sky frequency.  SCHED&nbsp; will generate the list, writing it
+      to the screen and to a file called <I>frequencies.list</I>.
+      6 Nov 96 RCW.
 
 <P>
 </LI>
-<LI>Allow setups with different numbers of tracks.  This can waste
-      tape because the tape management will be done as if all scans
-      used the maximum number of channels.
+<LI>Put catalog of origen into summary file source list.  Also move
+      SRCFILE and STAFILE to sched.inc.  8Nov96 RCW.
 
 <P>
 </LI>
-<LI>Allow specification of schedule input file name from main input.
-      This allows one-time inputs, such as the request to plot, to be
-      made before sending SCHED off to get the schedule input.
+<LI>Allow the setup file to specify generic FORMAT=VLBA or
+      FORMAT=MKIV.  SCHED&nbsp; will figure out the appropriate fanout,
+      usually trying to obtain a speed up factor on the VLBA
+      correlator of two, if possible.  12Nov1996 RCW.
 
 <P>
 </LI>
-<LI>Add DEBUG which turns on some extra printing.
+<LI>Default TPMODE to the actual one so that the user does not
+      need to specify it in the setup file.
 
 <P>
 </LI>
-<LI>VLABAND and VLABW were moved to the setup file.
+<LI>Put FE, SYNTH, and pcal stuff in the setup summary in the
+      summary file for VLBA stations.
 
 <P>
 </LI>
-<LI>Added a toggle concept for many variables such as RECORD, TSYS,
-      DOPPLER, etc.  Now they are paired with a NO... (eg NORECORD)
-      that turns them off.
+<LI>Allow plotting without cover information.  This helps keep
+      schedules used for planning purposes simple.  18 Nov 1996.
 
 <P>
 </LI>
-<LI>Added OPSTYPE=VLA for pure VLA observations.  This helps tell
-      SCHED not to worry about tape related stuff.
+<LI>Fix bug that caused OPTMODE='SCANS' to start at input start
+      time of first good source (perhaps involving big delay from
+      the experiment start time). 18 Nov 1996 RCW.
 
 <P>
 </LI>
-<LI>Changed DOPCAL to DOPPLER to avoid the confusion with DO PCAL.
-      Added NODOP to turn it off.
+<LI>Increase number of scans and number of setup files allowed.
+      The program size is now about 15 Mbytes.  The size is
+      sensitive to these two parameters which can be altered
+      easily in the include files.  18 Nov 96.
 
 <P>
 </LI>
-<LI>Got latest SLALIB and updated a couple of places where there were
-      changes.  Also got email permission to use it.
+<LI>Allow VSOP control, dar, and recorder types.  Add a stub for
+      writing VSOP drudg files.  18 Nov. 96.
 
 <P>
 </LI>
-<LI>Add OVERWRIT to allow sched to overwrite old files if desired.
-      This is not the default as a safety measure.
+<LI>Activate axis type XYEW (Hobart).  Rewrite XYNS routines while
+      at it. 19 Nov 1996.  RCW.
 
 <P>
 </LI>
-<LI>Adding CSUB optimization mode.  The optimizes sky coverage.
-      It includes subarrays.
+<LI>Modify all of the standard setup files for new defaulting
+      capabilities.  20 Nov 1996
 
 <P>
 </LI>
-<LI>Adding SUMITEM input to allow specification of what is in the
-      summary file.
+<LI>Add FOCUS, ROTATION, AZCOLIM, and ELCOLIM as scan inputs.
+      These are for VLBA testing only.  20 Nov 1996  RCW
 
 <P>
 </LI>
-<LI>Changed <TT>XY</TT> mount type to <TT>XYNS</TT>.  Should add
-      <TT>XYEW</TT>.
+<LI>Add ROTPAT, FOCOFF, and ROTOFF for focus/rotation test patterns.
+      Again these are for VLBA testing (the 3mm receiver has arrived
+      at Pie Town!).   25 Nov 1996  RCW
 
 <P>
 </LI>
-<LI>When the station catalog is read, the position both in geodetic
-      longitude, latitude, and elevation and in geocentric X,Y,Z
-      are determined from the information provided.  The catalog
-      should contain one or both of the above coordinates.  The
-      conversion is accurate at the cm level for coordinates in
-      WGS84.
+<LI>Add speedup factor to summary.  27 Nov 1996
 
 <P>
 </LI>
-<LI>Added Station XYZ to summary listing.
+<LI>Add warnings if baseband channels overlap in frequency. 27 Nov 1996.
 
 <P>
 </LI>
-<LI>Allow vlba and vla defaults in <TT>TAPEINI</TT> section.
+<LI>Use the setup frequency for a source for which no velocity was
+      specified even if DOPPLER was specified.  27 Nov 1996.
+
+<P>
+</LI>
+<LI>Fix data set size calculation -- data rate was ok, but it did not
+      allow for the fact that processing happens faster with a
+      speed up greater than 1. 3 Dec 1996.
+
+<P>
+</LI>
+<LI>Tested and works under Linux.  4 Dec 1996.
+
+<P>
+</LI>
+<LI>Added VLBI at the VLA example provided by Joan Wrobel.  4 Dec 1996.
+
+<P>
+</LI>
+<LI>Allow norecord scans to count for readback tests and don't
+      include them in the tape time calculation.  4 Dec 1996
 
 <P>
 </LI>
@@ -359,31 +385,31 @@ The big rewrite included:
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4619"
+<A NAME="tex2html4626"
   HREF="node321.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4615"
-  HREF="node301.html">
+<A NAME="tex2html4622"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4609"
+<A NAME="tex2html4616"
   HREF="node319.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4617"
+<A NAME="tex2html4624"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4620"
-  HREF="node321.html">Release of 16 May</A>
-<B> Up:</B> <A NAME="tex2html4616"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4610"
-  HREF="node319.html">Release of 13 Apr</A>
- &nbsp; <B>  <A NAME="tex2html4618"
+<B> Next:</B> <A NAME="tex2html4627"
+  HREF="node321.html">Release of 26 June</A>
+<B> Up:</B> <A NAME="tex2html4623"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4617"
+  HREF="node319.html">Release of 14 Jan.</A>
+ &nbsp; <B>  <A NAME="tex2html4625"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

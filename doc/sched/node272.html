@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>SWTCHDUR</TITLE>
-<META NAME="description" CONTENT="SWTCHDUR">
+<TITLE>STATION</TITLE>
+<META NAME="description" CONTENT="STATION">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,65 +29,113 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3990"
+<A NAME="tex2html3995"
   HREF="node273.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3986"
+<A NAME="tex2html3991"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3980"
+<A NAME="tex2html3985"
   HREF="node271.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3988"
+<A NAME="tex2html3993"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3991"
-  HREF="node273.html">SYNTH</A>
-<B> Up:</B> <A NAME="tex2html3987"
+<B> Next:</B> <A NAME="tex2html3996"
+  HREF="node273.html">STRING1, STRING2, STRING3, and</A>
+<B> Up:</B> <A NAME="tex2html3992"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3981"
-  HREF="node271.html">STRING1, STRING2, STRING3, and</A>
- &nbsp; <B>  <A NAME="tex2html3989"
+<B> Previous:</B> <A NAME="tex2html3986"
+  HREF="node271.html">SIDEBAND</A>
+ &nbsp; <B>  <A NAME="tex2html3994"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004644200000000000000"></A><A NAME="SP:SWTCHDUR"></A>
+<H3><A NAME="SECTION004644200000000000000"></A><A NAME="SP:STATION"></A>
 <BR>
-<TT>SWTCHDUR</TT>
+<TT>STATION</TT>
 </H3>
 
 <P>
-For frequency switched observations, with <TT>FRSWITCH</TT> set, <TT>SWTCHDUR</TT> gives the time spent on each switch cycle.  The scan must be
-long enough to allow a full scan setup.  15 seconds is probably the
-minimum reasonable switch time.  For observations to be processed on
-Mark&nbsp;III correlators, there are additional restrictions on the
-possible integration times; multiples of 5 seconds are OK, as are some
-other times.
+<TT>STATION</TT> gives the names of the stations for which this group of
+setup parameters applies.  SCHED&nbsp; deals with multiple stations by
+expanding the input group out into a separate group for each
+station specified.  This allows the defaults picked up later, for
+example from the <A HREF="node224.html#SEC:FRQCAT">frequency catalog</A>, to be station
+dependent.  Therefore, if only using very generic inputs, one can
+lump the stations together even if their final parameters are
+different.
+
+<P>
+There are two defaults allowed, <TT>VLBA</TT> and <TT>' '</TT> (or none
+specified).  If no stations are specified, the program goes through
+the schedule and finds all stations that are in scans that request
+that setup file and that have not been specified in other groups
+within the setup file.  Those stations (just <TT>VLBA</TT>) for any VLBA
+stations) are added to the setup station list.
+
+<P>
+Later, the program looks for a perfect match to the station.  If it
+finds one, it uses that setup group.  If not, it checks whether the
+station is a VLBA station (first 4 characters in the station name are
+<TT>VLBA</TT>) and whether there was a <TT>station=vlba</TT> specified.  If
+so, SCHED&nbsp; uses the parameters from the <TT>vlba</TT> group.
+
+<P>
+The old <TT>station=default</TT> option has been removed.
+
+<P>
+Note that you cannot specify no stations for one setup group and some
+specific ones for another within the same file and expect anything
+reasonable to happen.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An integer number of seconds.
+<LI><B>Argument:</B> Up to 30 station names of up to 8 characters each.
 </LI>
-<LI><B>Options:</B>  Any integer. <TT>15</TT> is typical.
+<LI><B>Options:</B>  Any valid station names. <TT>'VLBA'</TT> will match any VLBA station.
 </LI>
-<LI><B>Default:</B>  <TT>0</TT> - specify it if <TT>FRSWITCH</TT> set.
+<LI><B>Default:</B>  All stations that request that setup file.
 </LI>
-<LI><B>Usage:</B>    Defaults to previous station.
+<LI><B>Usage:</B>    ???. Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>SWTCHDUR=15</TT>
+<LI><B>Example:</B>  <TT>STATION='VLBA_PT'</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3995"
+  HREF="node273.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3991"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3985"
+  HREF="node271.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3993"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3996"
+  HREF="node273.html">STRING1, STRING2, STRING3, and</A>
+<B> Up:</B> <A NAME="tex2html3992"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3986"
+  HREF="node271.html">SIDEBAND</A>
+ &nbsp; <B>  <A NAME="tex2html3994"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

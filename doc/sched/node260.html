@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>NOISEFRQ</TITLE>
-<META NAME="description" CONTENT="NOISEFRQ">
+<TITLE>NETSIDE</TITLE>
+<META NAME="description" CONTENT="NETSIDE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,68 +29,102 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3846"
+<A NAME="tex2html3851"
   HREF="node261.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3842"
+<A NAME="tex2html3847"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3836"
+<A NAME="tex2html3841"
   HREF="node259.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3844"
+<A NAME="tex2html3849"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3847"
-  HREF="node261.html">PERIOD</A>
-<B> Up:</B> <A NAME="tex2html3843"
+<B> Next:</B> <A NAME="tex2html3852"
+  HREF="node261.html">NOISE</A>
+<B> Up:</B> <A NAME="tex2html3848"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3837"
-  HREF="node259.html">NOISE</A>
- &nbsp; <B>  <A NAME="tex2html3845"
+<B> Previous:</B> <A NAME="tex2html3842"
+  HREF="node259.html">NCHAN</A>
+ &nbsp; <B>  <A NAME="tex2html3850"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643000000000000000"></A><A NAME="SP:NOISEFRQ"></A>
+<H3><A NAME="SECTION004643000000000000000"></A><A NAME="SP:NETSIDE"></A>
 <BR>
-<TT>NOISEFRQ</TT>
+<TT>NETSIDE</TT>
 </H3>
 
 <P>
-<TT>NOISEFRQ</TT> is used to tell the system to use either the VLBA or
-VLA noise tube switching frequency.  This is for VLBA antennas only
-and actually only applies to Pie Town for when the Pie Town-VLA link
-is working.  Note that the VLA switching frequency is 9.6 Hz and the
-VLBA frequency is 80 Hz.  This means, for example, that there will be
-80 on and 80 off states per second on the VLBA.
+<TT>NETSIDE</TT> gives the net sideband. Usually to be used in
+conjunction with <TT>FREQREF</TT> and <TT>FIRSTLO</TT>. If <TT>SIDEBAND</TT> is
+not set to <TT>U</TT> or <TT>L</TT>, it will be set based on <TT>NETSIDE</TT>
+and the frequency settings. Please see
+<A HREF="node249.html#SP:FREQREF"><TT>FREQREF</TT></A> for a discussion of required
+parameters.
 
 <P>
-This has no effect on the VEX file.
+If only one value is specified, it is used for all channels.
+
+<P>
+Sched will attempt to make a default for <TT>NETSIDE</TT> if it is
+not specified.  The default will depend on the number of channels
+in the setup file and the number of BBC's available at the station.
+All upper sideband will be specified if possible.  Upper/lower pairs
+will be specified otherwise (not in Mark&nbsp;III mode).  This defaulting
+will not be attempted if <A HREF="node271.html#SP:SIDEBAND"><TT>SIDEBAND</TT></A> is
+specified (might generate conflict) or if <A HREF="node249.html#SP:FREQREF"><TT>FREQREF</TT></A> is absent (frequency might end up inconsistent with
+defaults).
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> 1 character string of up to 4 characters.
+<LI><B>Argument:</B> An array of up to 16 single characters.
 </LI>
-<LI><B>Options:</B>  <TT>'VLBA'</TT>, <TT>'VLA'</TT>
+<LI><B>Options:</B>  <TT>U</TT> or <TT>L</TT>. Otherwise will not be used.
 </LI>
-<LI><B>Default:</B>  <TT>'VLBA'</TT>
+<LI><B>Default:</B>  <TT>0</TT> - defaulted or determined from other parameters.  Any
+unspecified channels will be set the same as the first.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>NOISEFRQ='VLA'</TT>
+<LI><B>Example:</B>  <TT>NETSIDE=U,L,U,L,U,L,U,L</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3851"
+  HREF="node261.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3847"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3841"
+  HREF="node259.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3849"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3852"
+  HREF="node261.html">NOISE</A>
+<B> Up:</B> <A NAME="tex2html3848"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3842"
+  HREF="node259.html">NCHAN</A>
+ &nbsp; <B>  <A NAME="tex2html3850"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

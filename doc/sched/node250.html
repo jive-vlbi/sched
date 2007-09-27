@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>IFCHAN</TITLE>
-<META NAME="description" CONTENT="IFCHAN">
+<TITLE>FRSWITCH</TITLE>
+<META NAME="description" CONTENT="FRSWITCH">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,130 +29,68 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3726"
+<A NAME="tex2html3731"
   HREF="node251.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3722"
+<A NAME="tex2html3727"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3716"
+<A NAME="tex2html3721"
   HREF="node249.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3724"
+<A NAME="tex2html3729"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3727"
-  HREF="node251.html">IFDIST</A>
-<B> Up:</B> <A NAME="tex2html3723"
+<B> Next:</B> <A NAME="tex2html3732"
+  HREF="node251.html">IFCHAN</A>
+<B> Up:</B> <A NAME="tex2html3728"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3717"
-  HREF="node249.html">FRSWITCH</A>
- &nbsp; <B>  <A NAME="tex2html3725"
+<B> Previous:</B> <A NAME="tex2html3722"
+  HREF="node249.html">FREQREF</A>
+ &nbsp; <B>  <A NAME="tex2html3730"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004642000000000000000"></A><A NAME="SP:IFCHAN"></A>
+<H3><A NAME="SECTION004642000000000000000"></A><A NAME="SP:FRSWITCH"></A>
 <BR>
-<TT>IFCHAN</TT>
+<TT>FRSWITCH</TT>
 </H3>
 
 <P>
-<TT>IFCHAN</TT> is used to specify the IF channel attached to each
-baseband channel for VLBA observations using VLBA data aquisition
-systems.  For the VLBA, it should be <TT>A</TT> or <TT>C</TT> for 20, 13, or
-6cm.  For 90, 50, 4, 3, 2, or 1.3cm, it should be <TT>B</TT> or <TT>D</TT>.
-<TT>A</TT> and <TT>B</TT> are RCP; <TT>C</TT> and <TT>D</TT> are LCP. If <TT>DUALX</TT> is specified, both <TT>B</TT> and <TT>D</TT> are RCP. As an
-alternative, <TT>R</TT> or <TT>L</TT> can be specified. Then if <TT>RCHAN</TT>
-and <TT>LCHAN</TT> are specified in the setup files, <TT>IFCHAN='R'</TT>
-will be replaced with <TT>RCHAN</TT> and <TT>IFCHAN='L'</TT> will be
-replaced with <TT>LCHAN</TT>.  If a bad <TT>RCHAN</TT> or <TT>LCHAN</TT> value
-is specified, SCHED&nbsp; will then complain about a bad <TT>IFCHAN</TT>
-specification.
+<TT>FRSWITCH</TT> is a switch that turns on frequency switching. If
+specified, a second group of synthesizer settings should be given in
+<TT>BBSYN2</TT>. This is used for VLBA files only.  In fact, the program
+will die if frequency switching is attempted when a VEX output
+file is required.
 
 <P>
-1N, 1A, 2N, 2A are allowed values for MkIV telescopes.
-See <A HREF="node235.html#SP:BBC"><TT>BBC</TT></A> and the <A HREF="node224.html#SEC:FRQCAT">frequency catalog</A> parameter <TT>IFNAME</TT> for more details.
-
-<P>
-The ``geodetic'' wired VLBA systems (all not controlled by VLBA
-software) have restrictions on their IF assignments because the IF
-distributors only provide enough signals from each IF to feed 8 BBCs
-while these systems typically have 14 BBCs.  The systems are wired so
-that BBCs 1 and 2 can see all 4 IFs, BBCs 3-8 can see A and C, and
-BBCs 9-14 can see B and D.  In addition, the racks can be switched so
-that they provide one bit samples from all 14 BBCs or 2 bit samples
-from the first 8.  SCHED understands all this and should give the
-right default assignments.  This is one of many reasons why, as noted
-below, it is best to let SCHED set many parameters including <TT>IFCHAN</TT>.
-
-<P>
-It should now be normal not to specify IFCHAN.  SCHED&nbsp; will use the
-requested <A HREF="node265.html#SP:POL"><TT>POL</TT></A> and the <A HREF="node224.html#SEC:FRQCAT">frequency
-catalog</A> to determine the correct <TT>IFCHAN</TT>.  If <TT>IFCHAN</TT> is specified as ``<TT>R</TT>'' or ``<TT>L</TT>'', and <TT>RCHAN</TT>,
-<TT>LCHAN</TT>, and <TT>POL</TT> are not specified, SCHED&nbsp; will get the
-obvious polarization channels, although use of <TT>POL</TT> is
-recommended.
-
-<P>
-At the VLA, there is now (as of July 97) a computer controlled patch
-pannel that routes the VLA IFs from the correlator sum ports or any
-of several single antennas to the VLB rack IFs.  The mapping is now
-different than it used to be.  Now VLA IF A goes to VLB IF A, B-&gt;B,
-C-&gt;C, and D-&gt;D.  The VLA computer selects which antenna or sum port
-to use depending on the mode and on the reference antenna given by
-the operators.  Nothing is required in the schedule files to specify
-the mapping explicitly.  The switch is very general so other mappings
-are possible, but the above will be the normal setup.
+In general, frequency switching is probably better handled with a
+scan loop.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An array of up to 16 characters of length 2.
+<LI><B>Argument:</B> None.
 </LI>
-<LI><B>Options:</B>  <TT>A</TT>, <TT>B</TT>, <TT>C</TT>, <TT>D</TT>, <TT>R</TT>, <TT>L</TT>,
-<TT>'1N'</TT>, <TT>'1A'</TT>, <TT>'2N'</TT>, or <TT>'2A'</TT> (quotes required
-on those that start with a number).
+<LI><B>Options:</B>  Do or don't specify it.
 </LI>
-<LI><B>Default:</B>  Will determine from the frequency catalog.
+<LI><B>Default:</B>  Not set.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>IFCHAN=A,C,A,C,A,C,A,C,A,C,A,C</TT>
+<LI><B>Example:</B>  <TT>FRSWITCH</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html3726"
-  HREF="node251.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3722"
-  HREF="node230.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3716"
-  HREF="node249.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3724"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html3727"
-  HREF="node251.html">IFDIST</A>
-<B> Up:</B> <A NAME="tex2html3723"
-  HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3717"
-  HREF="node249.html">FRSWITCH</A>
- &nbsp; <B>  <A NAME="tex2html3725"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

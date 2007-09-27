@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 12 February 2001.</TITLE>
-<META NAME="description" CONTENT="Release of 12 February 2001.">
+<TITLE>Release of 18 September 2003.</TITLE>
+<META NAME="description" CONTENT="Release of 18 September 2003.">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,157 +23,182 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node306.html">
 <LINK REL="previous" HREF="node304.html">
-<LINK REL="up" HREF="node301.html">
+<LINK REL="up" HREF="node304.html">
 <LINK REL="next" HREF="node306.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4439"
+<A NAME="tex2html4446"
   HREF="node306.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4435"
-  HREF="node301.html">
+<A NAME="tex2html4442"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4429"
+<A NAME="tex2html4436"
   HREF="node304.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4437"
+<A NAME="tex2html4444"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4440"
-  HREF="node306.html">Release of 30 January</A>
-<B> Up:</B> <A NAME="tex2html4436"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4430"
-  HREF="node304.html">Release of 16 October</A>
- &nbsp; <B>  <A NAME="tex2html4438"
+<B> Next:</B> <A NAME="tex2html4447"
+  HREF="node306.html">Release of 02 July</A>
+<B> Up:</B> <A NAME="tex2html4443"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4437"
+  HREF="node304.html">Old Releases</A>
+ &nbsp; <B>  <A NAME="tex2html4445"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00624000000000000000"></A><A NAME="SSSEC:09FEB2001"></A>
+<H2><A NAME="SECTION00621000000000000000"></A><A NAME="SSSEC:18SEP2003"></A>
 <BR>
-Release of 12 February 2001.
+Release of 18 September 2003.
 </H2>
-
-<P>
-It seems that we are having teething problems with the new reference
-pointing capabilities.  This release makes available some important
-fixes required for 3mm VLBA projects.  But it does not have some fixes
-for VEX problems that will affect CMVA runs.  So there will be another
-release in a couple of weeks.  The changes here are not significant
-for users not attempting reference pointing with <TT>AUTOPEAK</TT> or
-other mechanism that invokes setup files with <TT>FORMAT=NONE</TT>.  If
-you don't need this one right now, it is recommended you wait for
-the VEX fixes.
 
 <P>
 
 <UL>
-<LI>SCHED&nbsp; did not behave gracefully when there was a station listed
-       in the peaking command file that is not in the stations catalog.
-       Make it die properly with an error message that might allow
-       users to understand what was wrong.  07 Feb 2001  RCW
+<LI>Add output of velocities for sources in the summary file.
+2002aug29 RCW.
 
 <P>
 </LI>
-<LI>Found another bug relating to looping over scans.  This time
-       a loop went from the first output scan to the last input scan,
-       which is over no scans if output is not the same as input.
-       As with the earlier bugs, this only affects <TT>AUTOPEAK</TT> users
-       or users of obscure optimizing modes.  And this time, it only
-       affects VEX users.  07 Feb 2001 RCW
+<LI>Change from assuming that altaz antennas start at the midpoing
+of their azimuth range to start at the low end.  This should deal
+with some problems seen by Effelsberg.  RCW  24 Jan 2003.
 
 <P>
 </LI>
-<LI>Fix problem with initialization of track assignment output when
-       the first scan had FORMAT=NONE, such as a pointing scan.  With
-       this, only the first station got track assignments.  08 Feb 2001 RCW.
+<LI>Adding Mark5 for VLBA  RCW Jan 2003.
 
 <P>
 </LI>
-<LI>Improve the way readback tests are counted.  The main effects will
-       be on what happens at the start of a schedule.  Also, if <TT>DEBUG</TT>
-       is set, SCHED will write a line each time it finds a readback
-       test slot.  08 Feb 2001  RCW.
+<LI>Removed Mark2 RCW 6 Feb 2003.  The end of an era - I thought.
+Put it back 14 Feb 2003.  I have been informed by Igor Molotov that
+Mark II is still used occasionally in Russia (4 sites), Ukraine,
+Latvia, Poland, India, and China and still exists at Noto and
+Medicina!  It is used for radar observations that don't need much
+bandwidth.  When I tested the reinstallation, I found and fixed a
+problem with old and new versions that caused a core dump.
+Just before the 18 Sept release I found another problem with the
+tape change request handling.
 
 <P>
 </LI>
-<LI>Add an <TT>OVERRIDE</TT> input parameter and internal logical that
-       can be used by programmers to allow them to exercise code in
-       ways now allowed for users.  For example, if users cannot be
-       allowed to use some feature because of known bugs, but programmers
-       need to test it to fix the bug, <TT>OVERRIDE</TT> can be used to
-       provide a ``back door'' in.  09 Feb 2001.  RCW.
+<LI>Added the runlog.  This will take most of the output that used
+to go to the terminal and put it to a file, where it should be easier
+to examine, and to send to someone else when needed.  It will take
+a while to convert all the write statements in the code.  Also a
+messages.txt file has been added to the catalog with text messages
+that can be sent to the runlog by routine WRTMSG.  This makes more
+extended explanations of problems much easier to code.  6 Feb. 2003
 
 <P>
 </LI>
-<LI>Don't allow VEX and FORMAT=NONE.  There are bugs.  This should
-       be fixed soon, but we need to get a release out to fix some of
-       the above issues for 3mm VLBA observations.  09 Feb 2001  RCW.
+<LI>Added 1024 Mbps capability for MarkIV, 2 head observations.
+Basically this means adding the option for 16 Mbps per track.
+20 Feb 2003.
 
 <P>
 </LI>
-<LI>Remove the ``*'' from a the names of many pointing sources in
-       <I>sources.pointing</I> and <I>peak.cmd</I>.  These were causing
-       problems for other software downstream.  This might cause some
-       editing to be needed in existing files in the dynamic scheduling
-       queue.  9 Feb 2001.  RCW.
+<LI>Add a plot map option to the configuration search mode.  Activate
+by typing ``<TT>p</TT>'' (bw) or ``<TT>P</TT>'' (color) while the map
+of station locations is on the screen.  26 Feb 2003  RCW
 
 <P>
 </LI>
-<LI>In VEX code, change ``*'' to ``X'' rather than ``?'' in def names.
-       We would like to be able to use ``*'' in source names, but users
-       should be wary that they might encounter problems in post-processing.
-       12 Feb 2001. Huib.
+<LI>Restructure the sections that set the fan out modes.  This was
+a code maintenance issue.  Users should not see a change.  13 Mar 2003 RCW
 
 <P>
 </LI>
-<LI>Modify the source list in <I>peak.cmd</I> so that the ones
-       that are used for reference pointing if the user does not check
-       source quality are only those what we trust the most.  Names of
-       other possible sources are left in the file in comments.
-       12 Feb 2001. RCW.
+<LI>Proper motion and paralax added.  This is much different from the
+planetary motion that was already in place.  Note the source catalog
+should now use EQUINOX rather than EPOCH.  20 Mar 2002 RCW.
 
 <P>
 </LI>
-<LI>Make the data rate limit warning sensitive to wide band observations
-       where 2 pass processing is required anyway.  In the process separate
-       dealing with Socorro correlator parameters from others.  15 Mar 2001 RCW.
+<LI>Socorro correlator maximum output data rate increased to
+1000 kbytes/sec as per announcement from Jon Romney.  9 May 2003 RCW.
+
+<P>
+</LI>
+<LI>Added acceleration to the slew calcualations. Sometime early 2003,
+RCW.
+
+<P>
+</LI>
+<LI>Add warning about possible phase jumps when setting flukes to
+frequencies that are not multiples of 10 MHz.  15 May 2003. RCW.
+
+<P>
+</LI>
+<LI>Add more information about frequencies etc to the OMS file.  This
+was requested by Lorant to aid in automatically assigning calibration
+information to channels.  19 May 2003.  RCW.
+
+<P>
+</LI>
+<LI>Warn for VLA schedules over 1 day.  This can cause problems with
+restarts since the obs file has no day number on each scan.  22 May 2003
+RCW.
+
+<P>
+</LI>
+<LI>Warn for Socorro correlator requests for more than 1024 spectral
+channels.   22 May 2003  RCW.
+
+<P>
+</LI>
+<LI>Make tests for which correlator is used consistent.  Sched will
+ignore any characters following the recognized correlator specification
+which must start in column 1.  4 June 2003 RCW.
+
+<P>
+</LI>
+<LI>Add source separations for sources closer than 15 degrees to the
+summary.  17 July 2003 RCW.
+
+<P>
+</LI>
+<LI>New Vex code with Mark 5 support.  9 Sept 2003 CR.
+
+<P>
 </LI>
 </UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4439"
+<A NAME="tex2html4446"
   HREF="node306.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4435"
-  HREF="node301.html">
+<A NAME="tex2html4442"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4429"
+<A NAME="tex2html4436"
   HREF="node304.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4437"
+<A NAME="tex2html4444"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4440"
-  HREF="node306.html">Release of 30 January</A>
-<B> Up:</B> <A NAME="tex2html4436"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4430"
-  HREF="node304.html">Release of 16 October</A>
- &nbsp; <B>  <A NAME="tex2html4438"
+<B> Next:</B> <A NAME="tex2html4447"
+  HREF="node306.html">Release of 02 July</A>
+<B> Up:</B> <A NAME="tex2html4443"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4437"
+  HREF="node304.html">Old Releases</A>
+ &nbsp; <B>  <A NAME="tex2html4445"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

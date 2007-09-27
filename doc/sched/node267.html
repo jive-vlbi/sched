@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>PTOFF</TITLE>
-<META NAME="description" CONTENT="PTOFF">
+<TITLE>POL</TITLE>
+<META NAME="description" CONTENT="POL">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,63 +29,100 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3930"
+<A NAME="tex2html3935"
   HREF="node268.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3926"
+<A NAME="tex2html3931"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3920"
+<A NAME="tex2html3925"
   HREF="node266.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3928"
+<A NAME="tex2html3933"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3931"
-  HREF="node268.html">SAMPRATE</A>
-<B> Up:</B> <A NAME="tex2html3927"
+<B> Next:</B> <A NAME="tex2html3936"
+  HREF="node268.html">PTINCR</A>
+<B> Up:</B> <A NAME="tex2html3932"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3921"
-  HREF="node266.html">PTINCR</A>
- &nbsp; <B>  <A NAME="tex2html3929"
+<B> Previous:</B> <A NAME="tex2html3926"
+  HREF="node266.html">PCALXB1 and PCALXB2</A>
+ &nbsp; <B>  <A NAME="tex2html3934"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643700000000000000"></A><A NAME="SP:PTOFF"></A>
+<H3><A NAME="SECTION004643700000000000000"></A><A NAME="SP:POL"></A>
 <BR>
-<TT>PTOFF</TT>
+<TT>POL</TT>
 </H3>
 
 <P>
-<TT>PTOFF</TT> is used to set the distance to the off source position
-for pointing patterns on the
-VLBA in arc minutes. See <A HREF="node266.html#SP:PTINCR"><TT>PTINCR</TT></A> for more
-information.
+<TT>POL</TT> is used to specify the polarization of a channel.  This
+may be used when asking SCHED&nbsp; to set a lot of defaults.  Or it
+may be used to tell SCHED&nbsp; the polarization in cases where it
+is not clear from other inputs.  Such cases arise when
+<A HREF="#SP:RCHAN"><TT>RCHAN</TT></A>, and <A HREF="node253.html#SP:LCHAN"><TT>LCHAN</TT></A>
+are not used AND the setup does not correspond to one in the
+<A HREF="node224.html#SEC:FRQCAT">frequency catalog.</A>.
+
+<P>
+<TT>POL</TT> should be <TT>RCP, LCP,</TT> or <TT>DUAL</TT>.  One value per
+channel can be given.  Any channels not set will default to the
+same value as the first so it is usually sufficient to just specify
+one value.  If <TT>POL = DUAL</TT> for the first channel,
+SCHED&nbsp; will set alternate channels to <TT>RCP</TT> and <TT>LCP</TT>.
+
+<P>
+Actually, <TT>POL</TT> can also be <TT>R</TT> or <TT>L</TT> (meaning <TT>RCP</TT>
+and <TT>LCP</TT> respectively), but don't tell anyone.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> A real number giving the offset in arcmin.
+<LI><B>Argument:</B> An array of polarization specifications, one per channel.
 </LI>
-<LI><B>Options:</B>  Any number but it should be about 3 times the FWHM of the beam.
+<LI><B>Options:</B>  <TT>RCP</TT>, <TT>LCP</TT>, or <TT>DUAL</TT>
 </LI>
-<LI><B>Default:</B>  <TT>6.0*PTINCR</TT>
+<LI><B>Default:</B>  Will try to set based on other inputs or frequency catalog.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>PTOFF=36.0</TT>
+<LI><B>Example:</B>  <TT>POL=DUAL</TT>
   
 </LI>
 </UL>
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html3935"
+  HREF="node268.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html3931"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html3925"
+  HREF="node266.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html3933"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html3936"
+  HREF="node268.html">PTINCR</A>
+<B> Up:</B> <A NAME="tex2html3932"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html3926"
+  HREF="node266.html">PCALXB1 and PCALXB2</A>
+ &nbsp; <B>  <A NAME="tex2html3934"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

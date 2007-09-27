@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 1 July 1999.</TITLE>
-<META NAME="description" CONTENT="Release of 1 July 1999.">
+<TITLE>Release of 30 January 2001.</TITLE>
+<META NAME="description" CONTENT="Release of 30 January 2001.">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,283 +23,139 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node310.html">
 <LINK REL="previous" HREF="node308.html">
-<LINK REL="up" HREF="node301.html">
+<LINK REL="up" HREF="node304.html">
 <LINK REL="next" HREF="node310.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4487"
+<A NAME="tex2html4494"
   HREF="node310.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4483"
-  HREF="node301.html">
+<A NAME="tex2html4490"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4477"
+<A NAME="tex2html4484"
   HREF="node308.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4485"
+<A NAME="tex2html4492"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4488"
-  HREF="node310.html">Release of 1 Dec.</A>
-<B> Up:</B> <A NAME="tex2html4484"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4478"
-  HREF="node308.html">Release of 28 April</A>
- &nbsp; <B>  <A NAME="tex2html4486"
+<B> Next:</B> <A NAME="tex2html4495"
+  HREF="node310.html">Release of 12 January</A>
+<B> Up:</B> <A NAME="tex2html4491"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4485"
+  HREF="node308.html">Release of 12 February</A>
+ &nbsp; <B>  <A NAME="tex2html4493"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00628000000000000000"></A><A NAME="SSSEC:1JUL99"></A>
+<H2><A NAME="SECTION00625000000000000000"></A><A NAME="SSSEC:30JAN2001"></A>
 <BR>
-Release of 1 July 1999.
+Release of 30 January 2001.
 </H2>
+
+<P>
+This was an emergency release to fix the problem with the Doppler
+calculations when using the automatic reference pointing scan
+insertion.  This problem would be fatal for schedules using spectral
+line sources and <TT>AUTOPEAK</TT>.  Given that most reference pointing
+sources are line sources, this means most 86 GHz projects on the VLBA.
+Other types of projects are not affected.
 
 <P>
 
 <UL>
-<LI>CRDVLA temporarily stored FLUKEA and FLUKEB in single precision
-       which led to round off problems in some special cases.  Fixed
-       04Jan98  RCW.
+<LI>Specify in the <I>sch</I> files that frequencies are LO sum.
 
 <P>
 </LI>
-<LI>Fix translation of VLA bandwidth code into an actual bandwidth.
-       Was BW=50/(n+1).  Should be BW=50/2**n.  15jan99 RCW.
+<LI>Make SKEDCONV available to users in a separate tar
+       file.  It seems there are some who still like to use the
+       interactive PC-SCHED to set up scans.  22 Jan 2001  RCW.
 
 <P>
 </LI>
-<LI>Franco fixed a bug that caused improper reinitialization of
-       LST plot limits when a RESTART is done.  26jan99.
+<LI>Replace tape start time with ``Stopped'' in sch file for
+       scans with no tape motion.  29 Jan 2001 RCW.
 
 <P>
 </LI>
-<LI>Got rid of special Plot_Tinarelli directory.  Franco's stuff
-       is now in the Plot directory.  The old, pre GUI, plot stuff
-       was tarred and put in the $SCHED/OLD directory.  26jan99 RCW.
+<LI>Fix bug where the routine that calculates Doppler frequencies
+       was looping over input, not output scans.
+       This is an old bug, but would only be noticed in line observations
+       using the more obscure OPTMODEs.  But it now affects most users
+       of the new <TT>AUTOPEAK</TT> facility.  This will require a SCHED
+       update.  29 Jan 2001 RCW
 
 <P>
 </LI>
-<LI>Fixed bug in SETFCAT, the routine that chooses the frequency
-       catalog entry to use.  In choosing between two entries with
-       good frequencies, it would choose the lower priority (higher
-       numerical value of PRIORITY) one if the observing frequency
-       was better centered.  28jan99 RCW.
+<LI>Fix bug in counting of tape stoppages when there are non-recording
+       scans.  A variable was indexed to station number, not scan
+       number.  30 Jan 2001 RCW
 
 <P>
 </LI>
-<LI>Changed gap required for a readback to 1:45.  For the on-line
-       system, it is really 1 minute plus 1 second per track and
-       it can't be too close to the start of a pass (SCHEDdoes not
-       test that).  This change was triggered because the old 2:00
-       test, combined with LST scheduling, was causing lots of
-       readback warnings that were not needed.  8feb99 RCW.
+<LI>Change the line names in peak.cmd to avoid possible conflict
+       with user defined names and make 4 reference frequencies for
+       the 4 channels in the pointing setup files.  Two of those
+       channels are meant to be off the line so difference power
+       can be used for reference pointing some day (it already is
+       in pointing test runs).  30 Jan 2001. RCW
 
 <P>
 </LI>
-<LI>Blocked the warning about scans crossing 0 hr UT.  This is
-       no longer a concern, as far as I can tell.  The Socorro
-       correlator will put a job boundary there, but this should be
-       benign.  16feb99 RCW.
+<LI>Update comments on reference pointing in the 3mm example files.
+       Due to an oversite, these were not updated for the 12Jan2001
+       release and some of the information was out of date or
+       incomplete.  30 Jan 2001. RCW
 
 <P>
 </LI>
-<LI>Allow the use of UT dates (YEAR, MONTH, DAY) for an LST
-       schedule.  This might make dynamic scheduling easier.
-       Cleaning up code relating to setting scan times (before
-       optimization).  17feb99 RCW.
+<LI>Accumulate and report both total time in scans and total time
+       in recording scans.  30 Jan 2001.  RCW.
 
 <P>
 </LI>
-<LI>Count the number of times the tape stops.  If it is more
-       than 10 times per hour, warn the user about excessive stops
-       and point out new parameter MINPAUSE.  17feb99 RCW.
+<LI>Make a number of corrections to the eg3mm examples.  30 Jan 2001
+       RCW.
 
 <P>
-</LI>
-<LI>Add parameters MINPAUSE and PRESTART.  PRESTART causes the
-       start of tape motion to be moved forward to allow for
-       synchronization at playback time.  MINPAUSE causes the
-       use of continuous tape motion if the tape stop time would
-       between 2 scans would be less than MINPAUSE times the speed
-       up factor.  Related to this, there are significant updates
-       to the manual, especially the sections on scan times.
-       24feb99 RCW.
-
-<P>
-</LI>
-<LI>Add warning for VLBA correlator projects going to the VLBA
-       correlator if <TT>AUTOTAPE=2</TT> is not being used.  22feb99 RCW.
-
-<P>
-</LI>
-<LI>Add warning when DOPPLER set freuqencies overlap more than
-       20
-</LI>
-<LI>Update OK modes.  Now almost all are allowed.  26Feb99 RCW
-
-<P>
-</LI>
-<LI>Remove <I>UPTIME</I> from the SCHED&nbsp; distribution.  01Mar99 RCW.
-
-<P>
-</LI>
-<LI>Add concept of frequency sets.  This is to aid bookkeeping
-       when the deviations from the setup file frequencies are altered
-       with FREQ, BW, or DOPPLER.  Now in the summary file, all
-       frequency sets are listed along with the setup file summary.
-       2mar99 RCW.
-
-<P>
-</LI>
-<LI>Altered VLBI at VLA example in manual to show full specification
-       of VLA parameters.  3Mar99 RCW.
-
-<P>
-</LI>
-<LI>Adding BAND for setups.  This should allow elimination of
-       most standard setup files.  4Mar99 RCW
-
-<P>
-</LI>
-<LI>Added pcal sets to organize the pulse cal detector specifications.
-       This is mainly to simplify bookkeeping, especially for Vex.
-       13Mar99  RCW.
-
-<P>
-</LI>
-<LI>Added a .flag file output that can be used to flag predicted slew
-       times with UVFLG.  13Mar99 RCW.
-
-<P>
-</LI>
-<LI>Remove stations from a scan when they are both using autotape=2
-       and the source is not up.  This is to help reduce tape
-       consumption, especially for MK.  It is only done for automatic
-       tape allocation because of the risk of messing up tape
-       management in other cases.   18mar99.  RCW.
-
-<P>
-</LI>
-<LI>Add VLBA4 to the DAR options.  Started 24mar99.
-
-<P>
-</LI>
-<LI>Add VLAPEAK parameter.  Could not keep united peakup options
-       and allow the various VLA reference pointing options.
-       30mar99 RCW.
-
-<P>
-</LI>
-<LI>Don't make a crd.y file when scheduling pure VLA observations.
-       31mar99 RCW.
-
-<P>
-</LI>
-<LI>When dwell time scheduling was in use, SCHED&nbsp; would not make
-       scans that cross midnight UT.  Don't bother any more -- allow
-       scans to cross midnight.  31mar99 RCW.
-
-<P>
-</LI>
-<LI>Stop tape at end of autoallocation projects.  12May1999 RCW.
-
-<P>
-</LI>
-<LI>Updates of the <TT>DUR</TT> and <TT>DWELL</TT> sections of the manual.
-       17may99 RCW.
-
-<P>
-</LI>
-<LI>Add a cross check for reasonableness of the tape length and
-       density specification for VLBA tapes.  Huib may add same for
-       Mark IV.  17may99 RCW.
-
-<P>
-</LI>
-<LI>Prevent missing samplerate in VLBA schedules when first scan
-       is pointing.  7jun99 RCW.
-
-<P>
-</LI>
-<LI>While SCHED&nbsp; is running, write out the full time range to help
-       when fine tuning to fill a time allocation.  This from Ketan.
-       13Jan99.
-
-<P>
-</LI>
-<LI>VEX section upgraded to 1.5.60 21Jun99, Huib
-<BR>
-S2 tape changes corrected
-<BR>
-Checks use narrow filters in MkIV DAR
-<BR>
-Upgraded to much more robust freq change scheme
-<BR>
-BW changes now allowed in VEX
-<BR>
-Freq/Dop changes in modes with different BBC assignment allowed
-<BR>
-Reduced memory use VEX section
-<BR>
-Check tape starts synchronous for VEX
-<BR>
-Axis offsets, negative Vlsr now reported
-<BR>
-Check against high density recording on thick tapes
-<BR>
-<P>
-</LI>
-<LI>Prevent different tape start times for a scan when a VEX output
-       is requested.  RCW 20jun99
-
-<P>
-</LI>
-<LI>Improve the count of scans (remove bug).  RCW 20jun99
-
-<P>
-</LI>
-<LI>Put experiment code in upper case on VLA observe deck.  RCW 20jun99.
-
-<P>
-</LI>
-<LI>Don't die if S2 or other format requested for processing in
-       Socorro - allows translators.  29June1999 RCW.
 </LI>
 </UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4487"
+<A NAME="tex2html4494"
   HREF="node310.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4483"
-  HREF="node301.html">
+<A NAME="tex2html4490"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4477"
+<A NAME="tex2html4484"
   HREF="node308.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4485"
+<A NAME="tex2html4492"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4488"
-  HREF="node310.html">Release of 1 Dec.</A>
-<B> Up:</B> <A NAME="tex2html4484"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4478"
-  HREF="node308.html">Release of 28 April</A>
- &nbsp; <B>  <A NAME="tex2html4486"
+<B> Next:</B> <A NAME="tex2html4495"
+  HREF="node310.html">Release of 12 January</A>
+<B> Up:</B> <A NAME="tex2html4491"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4485"
+  HREF="node308.html">Release of 12 February</A>
+ &nbsp; <B>  <A NAME="tex2html4493"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

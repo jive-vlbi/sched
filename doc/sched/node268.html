@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>SAMPRATE</TITLE>
-<META NAME="description" CONTENT="SAMPRATE">
+<TITLE>PTINCR</TITLE>
+<META NAME="description" CONTENT="PTINCR">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,65 +29,60 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3942"
+<A NAME="tex2html3947"
   HREF="node269.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3938"
+<A NAME="tex2html3943"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3932"
+<A NAME="tex2html3937"
   HREF="node267.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3940"
+<A NAME="tex2html3945"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3943"
-  HREF="node269.html">SIDEBAND</A>
-<B> Up:</B> <A NAME="tex2html3939"
+<B> Next:</B> <A NAME="tex2html3948"
+  HREF="node269.html">PTOFF</A>
+<B> Up:</B> <A NAME="tex2html3944"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3933"
-  HREF="node267.html">PTOFF</A>
- &nbsp; <B>  <A NAME="tex2html3941"
+<B> Previous:</B> <A NAME="tex2html3938"
+  HREF="node267.html">POL</A>
+ &nbsp; <B>  <A NAME="tex2html3946"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643800000000000000"></A><A NAME="SP:SAMPRATE"></A>
+<H3><A NAME="SECTION004643800000000000000"></A><A NAME="SP:PTINCR"></A>
 <BR>
-<TT>SAMPRATE</TT>
+<TT>PTINCR</TT>
 </H3>
 
 <P>
-<TT>SAMPRATE</TT> is used to set the sample rate in million samples per
-second.  Only one value is used for all baseband channels. This is
-usually, but not always, twice the baseband bandwidth specified with
-<A HREF="node234.html#SP:BBFILTER"><TT>BBFILTER</TT></A>. Not used for Mark&nbsp;II.
-
-<P>
-If not specified, twice the maximum bandwidth will be used, if
-<A HREF="node234.html#SP:BBFILTER"><TT>BBFILTER</TT></A> was specified.
-
-<P>
-Note that the <TT>SAMPRATE</TT> should not be less than 2 Mbps for the
-VLBA (may change with Mark5B).  That is the minimum track bit rate
-and the fan-in capability was never activated so lower sample rates
-cannot be recorded.
+<TT>PTINCR</TT> is used to set the step size for pointing patterns on the
+VLBA in arc minutes. A 10-point pattern is used with off, half-power,
+on, half-power, and off positions in azimuth, and then in the same in
+elevation.  <TT>PTINCR</TT> gives the offset between the on and the
+half-power positions. <A HREF="node269.html#SP:PTOFF"><TT>PTOFF</TT></A> gives the
+distance to the off source positions.  Note that the off source
+positions in elevation are <TT>PTOFF</TT> arcminutes off in azimuth
+and two times <TT>PTINCR</TT> off in elevation.  This gives a smooth
+sequence in elevation which, at low elevation, significantly
+improves the baseline removal.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Sample rate in million samples per second.
+<LI><B>Argument:</B> A real number giving the offset in arcmin.
 </LI>
-<LI><B>Options:</B>  <TT>0.25</TT>, <TT>0.5</TT>, <TT>1</TT>, <TT>2</TT>, <TT>4</TT>, <TT>8</TT>, <TT>16</TT>,
-or <TT>32</TT>
+<LI><B>Options:</B>  Any number but it should be near 1/2 of the FWHM of the beam.
 </LI>
-<LI><B>Default:</B>  <TT>0</TT> - Default from <A HREF="node234.html#SP:BBFILTER"><TT>BBFILTER</TT></A> 
+<LI><B>Default:</B>  <TT>0</TT> - not too useful.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>SAMPRATE=4</TT>
+<LI><B>Example:</B>  <TT>PTINCR=4.0</TT>
   
 </LI>
 </UL>
@@ -96,7 +91,7 @@ or <TT>32</TT>
 <BR><HR>
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>
