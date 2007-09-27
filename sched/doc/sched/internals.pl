@@ -26,6 +26,10 @@ $key = q/MP:DEBUG/;
 $ref_files{$key} = "$dir".q|node75.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/SP:BARREL/;
+$ref_files{$key} = "$dir".q|node233.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/MP:CORPOL/;
 $ref_files{$key} = "$dir".q|node65.html|; 
 $noresave{$key} = "$nosave";
@@ -34,12 +38,8 @@ $key = q/SPBBSYN2/;
 $ref_files{$key} = "$dir".q|node183.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/SP:BARREL/;
-$ref_files{$key} = "$dir".q|node233.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/SSEC:VER_6.01/;
-$ref_files{$key} = "$dir".q|node299.html|; 
+$ref_files{$key} = "$dir".q|node302.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:GRIDNR/;
@@ -51,7 +51,7 @@ $ref_files{$key} = "$dir".q|node222.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NCHAN/;
-$ref_files{$key} = "$dir".q|node257.html|; 
+$ref_files{$key} = "$dir".q|node259.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:MAPLIM/;
@@ -99,7 +99,7 @@ $ref_files{$key} = "$dir".q|node21.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:JUN96/;
-$ref_files{$key} = "$dir".q|node318.html|; 
+$ref_files{$key} = "$dir".q|node321.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPVLAPEAK/;
@@ -107,7 +107,7 @@ $ref_files{$key} = "$dir".q|node150.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FREQOFF/;
-$ref_files{$key} = "$dir".q|node247.html|; 
+$ref_files{$key} = "$dir".q|node248.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPAUTOTAPE/;
@@ -115,11 +115,11 @@ $ref_files{$key} = "$dir".q|node41.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FORMAT/;
-$ref_files{$key} = "$dir".q|node246.html|; 
+$ref_files{$key} = "$dir".q|node247.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NOISE/;
-$ref_files{$key} = "$dir".q|node259.html|; 
+$ref_files{$key} = "$dir".q|node261.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:LINENAME/;
@@ -127,11 +127,11 @@ $ref_files{$key} = "$dir".q|node113.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:MKIII/;
-$ref_files{$key} = "$dir".q|node324.html|; 
+$ref_files{$key} = "$dir".q|node327.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLAFEAB/;
-$ref_files{$key} = "$dir".q|node281.html|; 
+$ref_files{$key} = "$dir".q|node283.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPDOPSRC/;
@@ -183,7 +183,7 @@ $ref_files{$key} = "$dir".q|node151.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPSPEEDH/;
-$ref_files{$key} = "$dir".q|node276.html|; 
+$ref_files{$key} = "$dir".q|node278.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:RECSYS/;
@@ -191,7 +191,7 @@ $ref_files{$key} = "$dir".q|node28.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.04/;
-$ref_files{$key} = "$dir".q|node297.html|; 
+$ref_files{$key} = "$dir".q|node300.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPDWELL/;
@@ -223,7 +223,7 @@ $ref_files{$key} = "$dir".q|node13.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/APP:STACODES/;
-$ref_files{$key} = "$dir".q|node327.html|; 
+$ref_files{$key} = "$dir".q|node330.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPQUAL/;
@@ -263,7 +263,7 @@ $ref_files{$key} = "$dir".q|node255.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PTOFF/;
-$ref_files{$key} = "$dir".q|node267.html|; 
+$ref_files{$key} = "$dir".q|node269.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSECNUMPASSES/;
@@ -343,7 +343,7 @@ $ref_files{$key} = "$dir".q|node281.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PCALXB1/;
-$ref_files{$key} = "$dir".q|node264.html|; 
+$ref_files{$key} = "$dir".q|node266.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:S2/;
@@ -359,11 +359,11 @@ $ref_files{$key} = "$dir".q|node26.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:IFDIST/;
-$ref_files{$key} = "$dir".q|node251.html|; 
+$ref_files{$key} = "$dir".q|node252.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PERIOD/;
-$ref_files{$key} = "$dir".q|node261.html|; 
+$ref_files{$key} = "$dir".q|node263.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPLIMTI/;
@@ -375,7 +375,7 @@ $ref_files{$key} = "$dir".q|node228.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FRSWITCH/;
-$ref_files{$key} = "$dir".q|node249.html|; 
+$ref_files{$key} = "$dir".q|node250.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:POINT/;
@@ -383,7 +383,7 @@ $ref_files{$key} = "$dir".q|node157.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:SATINIT/;
-$ref_files{$key} = "$dir".q|node285.html|; 
+$ref_files{$key} = "$dir".q|node287.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/TP:NDRIVES/;
@@ -399,11 +399,11 @@ $ref_files{$key} = "$dir".q|node156.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLAROT/;
-$ref_files{$key} = "$dir".q|node283.html|; 
+$ref_files{$key} = "$dir".q|node285.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:OLDRELEASE/;
-$ref_files{$key} = "$dir".q|node301.html|; 
+$ref_files{$key} = "$dir".q|node304.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECEXAMPLE1/;
@@ -475,7 +475,7 @@ $ref_files{$key} = "$dir".q|node132.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPSPEED/;
-$ref_files{$key} = "$dir".q|node275.html|; 
+$ref_files{$key} = "$dir".q|node277.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:GRIDMIN/;
@@ -511,7 +511,7 @@ $ref_files{$key} = "$dir".q|node55.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:RUNVAX/;
-$ref_files{$key} = "$dir".q|node290.html|; 
+$ref_files{$key} = "$dir".q|node292.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/PLEXIT/;
@@ -535,7 +535,7 @@ $ref_files{$key} = "$dir".q|node52.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/CHP:CHANG/;
-$ref_files{$key} = "$dir".q|node294.html|; 
+$ref_files{$key} = "$dir".q|node296.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC1DEC98/;
@@ -543,7 +543,7 @@ $ref_files{$key} = "$dir".q|node252.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:1JUL99/;
-$ref_files{$key} = "$dir".q|node309.html|; 
+$ref_files{$key} = "$dir".q|node312.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/PLPLOTFILE/;
@@ -555,7 +555,7 @@ $ref_files{$key} = "$dir".q|node251.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FREQREF/;
-$ref_files{$key} = "$dir".q|node248.html|; 
+$ref_files{$key} = "$dir".q|node249.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPFAX/;
@@ -563,7 +563,7 @@ $ref_files{$key} = "$dir".q|node74.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/APP:CHANGES/;
-$ref_files{$key} = "$dir".q|node323.html|; 
+$ref_files{$key} = "$dir".q|node326.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECKEYIN/;
@@ -631,7 +631,7 @@ $ref_files{$key} = "$dir".q|node15.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/CHP:SYSTEM/;
-$ref_files{$key} = "$dir".q|node286.html|; 
+$ref_files{$key} = "$dir".q|node288.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPCORAVG/;
@@ -639,7 +639,7 @@ $ref_files{$key} = "$dir".q|node46.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SWTCHDUR/;
-$ref_files{$key} = "$dir".q|node272.html|; 
+$ref_files{$key} = "$dir".q|node274.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:INDIV/;
@@ -671,7 +671,7 @@ $ref_files{$key} = "$dir".q|node71.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:30JAN2001/;
-$ref_files{$key} = "$dir".q|node306.html|; 
+$ref_files{$key} = "$dir".q|node309.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPSETUP/;
@@ -691,7 +691,7 @@ $ref_files{$key} = "$dir".q|node168.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:AUG97/;
-$ref_files{$key} = "$dir".q|node314.html|; 
+$ref_files{$key} = "$dir".q|node317.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:SOURCE/;
@@ -719,7 +719,7 @@ $ref_files{$key} = "$dir".q|node223.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SYNTH/;
-$ref_files{$key} = "$dir".q|node273.html|; 
+$ref_files{$key} = "$dir".q|node275.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPSLEWTI/;
@@ -755,15 +755,15 @@ $ref_files{$key} = "$dir".q|node147.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LCHAN/;
-$ref_files{$key} = "$dir".q|node252.html|; 
+$ref_files{$key} = "$dir".q|node253.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:HIST/;
-$ref_files{$key} = "$dir".q|node328.html|; 
+$ref_files{$key} = "$dir".q|node331.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FIRSTLO/;
-$ref_files{$key} = "$dir".q|node243.html|; 
+$ref_files{$key} = "$dir".q|node244.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:APR96/;
@@ -791,7 +791,7 @@ $ref_files{$key} = "$dir".q|node29.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NETSIDE/;
-$ref_files{$key} = "$dir".q|node258.html|; 
+$ref_files{$key} = "$dir".q|node260.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:CORCHAN/;
@@ -799,7 +799,7 @@ $ref_files{$key} = "$dir".q|node62.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:RUNDOS/;
-$ref_files{$key} = "$dir".q|node291.html|; 
+$ref_files{$key} = "$dir".q|node293.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECFEB97/;
@@ -823,7 +823,7 @@ $ref_files{$key} = "$dir".q|node175.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLABW/;
-$ref_files{$key} = "$dir".q|node280.html|; 
+$ref_files{$key} = "$dir".q|node282.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPBITS/;
@@ -835,7 +835,7 @@ $ref_files{$key} = "$dir".q|node129.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PCALFR1/;
-$ref_files{$key} = "$dir".q|node263.html|; 
+$ref_files{$key} = "$dir".q|node265.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:TPINI/;
@@ -843,7 +843,7 @@ $ref_files{$key} = "$dir".q|node211.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:16MAY95/;
-$ref_files{$key} = "$dir".q|node321.html|; 
+$ref_files{$key} = "$dir".q|node324.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECRELATEDPROGRAMS/;
@@ -851,7 +851,7 @@ $ref_files{$key} = "$dir".q|node236.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:FEB96/;
-$ref_files{$key} = "$dir".q|node320.html|; 
+$ref_files{$key} = "$dir".q|node323.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:VLA/;
@@ -907,7 +907,7 @@ $ref_files{$key} = "$dir".q|node243.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:1DEC98/;
-$ref_files{$key} = "$dir".q|node310.html|; 
+$ref_files{$key} = "$dir".q|node313.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECRUNUNIX/;
@@ -935,7 +935,7 @@ $ref_files{$key} = "$dir".q|node47.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:MODETEST/;
-$ref_files{$key} = "$dir".q|node256.html|; 
+$ref_files{$key} = "$dir".q|node258.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPFOCUS/;
@@ -963,7 +963,7 @@ $ref_files{$key} = "$dir".q|node237.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:MKII/;
-$ref_files{$key} = "$dir".q|node325.html|; 
+$ref_files{$key} = "$dir".q|node328.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPMINANT/;
@@ -1003,7 +1003,7 @@ $ref_files{$key} = "$dir".q|node184.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:18SEP2003/;
-$ref_files{$key} = "$dir".q|node302.html|; 
+$ref_files{$key} = "$dir".q|node305.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:20APR2000/;
@@ -1015,7 +1015,7 @@ $ref_files{$key} = "$dir".q|node27.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SAMPRATE/;
-$ref_files{$key} = "$dir".q|node268.html|; 
+$ref_files{$key} = "$dir".q|node270.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPVLATYPE/;
@@ -1023,7 +1023,7 @@ $ref_files{$key} = "$dir".q|node153.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SIDEBAND/;
-$ref_files{$key} = "$dir".q|node269.html|; 
+$ref_files{$key} = "$dir".q|node271.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECVLASTDBD/;
@@ -1035,7 +1035,7 @@ $ref_files{$key} = "$dir".q|node215.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FLUKEA/;
-$ref_files{$key} = "$dir".q|node244.html|; 
+$ref_files{$key} = "$dir".q|node245.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:TSYS/;
@@ -1047,7 +1047,7 @@ $ref_files{$key} = "$dir".q|node44.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:STATION/;
-$ref_files{$key} = "$dir".q|node270.html|; 
+$ref_files{$key} = "$dir".q|node272.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPNOSUB/;
@@ -1068,6 +1068,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/MPPCAL/;
 $ref_files{$key} = "$dir".q|node105.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/SSEC:VER_7.0/;
+$ref_files{$key} = "$dir".q|node298.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/PLTYPE/;
@@ -1111,7 +1115,7 @@ $ref_files{$key} = "$dir".q|node139.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:09FEB2001/;
-$ref_files{$key} = "$dir".q|node305.html|; 
+$ref_files{$key} = "$dir".q|node308.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPFLUKESET/;
@@ -1155,7 +1159,7 @@ $ref_files{$key} = "$dir".q|node122.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:DEC96/;
-$ref_files{$key} = "$dir".q|node317.html|; 
+$ref_files{$key} = "$dir".q|node320.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPSTACAT/;
@@ -1171,7 +1175,7 @@ $ref_files{$key} = "$dir".q|node63.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLASYNA/;
-$ref_files{$key} = "$dir".q|node284.html|; 
+$ref_files{$key} = "$dir".q|node286.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VLAPAR/;
@@ -1215,7 +1219,7 @@ $ref_files{$key} = "$dir".q|node217.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:FEB97/;
-$ref_files{$key} = "$dir".q|node315.html|; 
+$ref_files{$key} = "$dir".q|node318.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPELCOLIM/;
@@ -1243,7 +1247,7 @@ $ref_files{$key} = "$dir".q|node126.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:CURRENT/;
-$ref_files{$key} = "$dir".q|node295.html|; 
+$ref_files{$key} = "$dir".q|node297.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:CALTIME/;
@@ -1303,7 +1307,7 @@ $ref_files{$key} = "$dir".q|node112.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:14OCT2001/;
-$ref_files{$key} = "$dir".q|node304.html|; 
+$ref_files{$key} = "$dir".q|node307.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSECVLBIEG/;
@@ -1315,11 +1319,11 @@ $ref_files{$key} = "$dir".q|node219.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PCAL/;
-$ref_files{$key} = "$dir".q|node262.html|; 
+$ref_files{$key} = "$dir".q|node264.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:JAN97/;
-$ref_files{$key} = "$dir".q|node316.html|; 
+$ref_files{$key} = "$dir".q|node319.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:DYNAMIC/;
@@ -1367,11 +1371,11 @@ $ref_files{$key} = "$dir".q|node176.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NOISEFRQ/;
-$ref_files{$key} = "$dir".q|node260.html|; 
+$ref_files{$key} = "$dir".q|node262.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:MAR2005/;
-$ref_files{$key} = "$dir".q|node300.html|; 
+$ref_files{$key} = "$dir".q|node303.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPSTRING1/;
@@ -1427,7 +1431,7 @@ $ref_files{$key} = "$dir".q|node244.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:IFCHAN/;
-$ref_files{$key} = "$dir".q|node250.html|; 
+$ref_files{$key} = "$dir".q|node251.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPPTSLEW/;
@@ -1439,7 +1443,7 @@ $ref_files{$key} = "$dir".q|node208.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FEFILTER/;
-$ref_files{$key} = "$dir".q|node242.html|; 
+$ref_files{$key} = "$dir".q|node243.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/TP:OBSCODE/;
@@ -1471,7 +1475,7 @@ $ref_files{$key} = "$dir".q|node22.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PTINCR/;
-$ref_files{$key} = "$dir".q|node266.html|; 
+$ref_files{$key} = "$dir".q|node268.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:READBACK/;
@@ -1539,7 +1543,7 @@ $ref_files{$key} = "$dir".q|node165.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:BUGS/;
-$ref_files{$key} = "$dir".q|node322.html|; 
+$ref_files{$key} = "$dir".q|node325.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECSTACAT/;
@@ -1579,7 +1583,7 @@ $ref_files{$key} = "$dir".q|node51.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:12JAN2001/;
-$ref_files{$key} = "$dir".q|node307.html|; 
+$ref_files{$key} = "$dir".q|node310.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPIFCHAN/;
@@ -1595,7 +1599,7 @@ $ref_files{$key} = "$dir".q|node199.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLABAND/;
-$ref_files{$key} = "$dir".q|node279.html|; 
+$ref_files{$key} = "$dir".q|node281.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:SPECIALVLBA/;
@@ -1631,7 +1635,7 @@ $ref_files{$key} = "$dir".q|node64.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPSPEEDL/;
-$ref_files{$key} = "$dir".q|node277.html|; 
+$ref_files{$key} = "$dir".q|node279.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECEXAMPLE3/;
@@ -1707,7 +1711,7 @@ $ref_files{$key} = "$dir".q|node165.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:APR96/;
-$ref_files{$key} = "$dir".q|node319.html|; 
+$ref_files{$key} = "$dir".q|node322.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:GRABGAP/;
@@ -1723,7 +1727,7 @@ $ref_files{$key} = "$dir".q|node73.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:RUNUNIX/;
-$ref_files{$key} = "$dir".q|node289.html|; 
+$ref_files{$key} = "$dir".q|node291.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPAZCOLIM/;
@@ -1775,7 +1779,7 @@ $ref_files{$key} = "$dir".q|node75.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TRACK1/;
-$ref_files{$key} = "$dir".q|node278.html|; 
+$ref_files{$key} = "$dir".q|node280.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:FEB96/;
@@ -1803,11 +1807,11 @@ $ref_files{$key} = "$dir".q|node220.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:RUNSCHED/;
-$ref_files{$key} = "$dir".q|node288.html|; 
+$ref_files{$key} = "$dir".q|node290.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:POL/;
-$ref_files{$key} = "$dir".q|node265.html|; 
+$ref_files{$key} = "$dir".q|node267.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECSETUPS/;
@@ -1819,7 +1823,7 @@ $ref_files{$key} = "$dir".q|node120.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:18NOV97/;
-$ref_files{$key} = "$dir".q|node312.html|; 
+$ref_files{$key} = "$dir".q|node315.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:UVMFS/;
@@ -1831,7 +1835,7 @@ $ref_files{$key} = "$dir".q|node61.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:18AUG97/;
-$ref_files{$key} = "$dir".q|node313.html|; 
+$ref_files{$key} = "$dir".q|node316.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:VLATSYS/;
@@ -1927,7 +1931,7 @@ $ref_files{$key} = "$dir".q|node152.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FLUKESET/;
-$ref_files{$key} = "$dir".q|node245.html|; 
+$ref_files{$key} = "$dir".q|node246.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPLCP50CM/;
@@ -1951,7 +1955,7 @@ $ref_files{$key} = "$dir".q|node212.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LOGGING/;
-$ref_files{$key} = "$dir".q|node254.html|; 
+$ref_files{$key} = "$dir".q|node255.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:DUALX/;
@@ -1983,7 +1987,7 @@ $ref_files{$key} = "$dir".q|node147.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLAIF/;
-$ref_files{$key} = "$dir".q|node282.html|; 
+$ref_files{$key} = "$dir".q|node284.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:NOV2004/;
@@ -2055,7 +2059,7 @@ $ref_files{$key} = "$dir".q|node83.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.05/;
-$ref_files{$key} = "$dir".q|node296.html|; 
+$ref_files{$key} = "$dir".q|node299.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:SETLST/;
@@ -2063,7 +2067,7 @@ $ref_files{$key} = "$dir".q|node229.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:INSTALL/;
-$ref_files{$key} = "$dir".q|node287.html|; 
+$ref_files{$key} = "$dir".q|node289.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPPINAME/;
@@ -2071,11 +2075,11 @@ $ref_files{$key} = "$dir".q|node108.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:RELATEDPROGRAMS/;
-$ref_files{$key} = "$dir".q|node293.html|; 
+$ref_files{$key} = "$dir".q|node295.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:20APR2000/;
-$ref_files{$key} = "$dir".q|node308.html|; 
+$ref_files{$key} = "$dir".q|node311.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSECTAPELEN/;
@@ -2147,7 +2151,7 @@ $ref_files{$key} = "$dir".q|node119.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPMODE/;
-$ref_files{$key} = "$dir".q|node274.html|; 
+$ref_files{$key} = "$dir".q|node276.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:LINE/;
@@ -2175,7 +2179,7 @@ $ref_files{$key} = "$dir".q|node67.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:STRING1/;
-$ref_files{$key} = "$dir".q|node271.html|; 
+$ref_files{$key} = "$dir".q|node273.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECLINE/;
@@ -2198,12 +2202,16 @@ $key = q/MP:OPSLEWWT/;
 $ref_files{$key} = "$dir".q|node143.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/SP:M4PATCH/;
+$ref_files{$key} = "$dir".q|node257.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/SEC:SETUPS/;
 $ref_files{$key} = "$dir".q|node226.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:06MAR98/;
-$ref_files{$key} = "$dir".q|node311.html|; 
+$ref_files{$key} = "$dir".q|node314.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPCORTAPE/;
@@ -2235,11 +2243,11 @@ $ref_files{$key} = "$dir".q|node92.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:DISFIL/;
-$ref_files{$key} = "$dir".q|node292.html|; 
+$ref_files{$key} = "$dir".q|node294.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LCP50CM/;
-$ref_files{$key} = "$dir".q|node255.html|; 
+$ref_files{$key} = "$dir".q|node256.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECDEC96/;
@@ -2303,7 +2311,7 @@ $ref_files{$key} = "$dir".q|node121.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.02/;
-$ref_files{$key} = "$dir".q|node298.html|; 
+$ref_files{$key} = "$dir".q|node301.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPTPSPEED/;
@@ -2315,11 +2323,11 @@ $ref_files{$key} = "$dir".q|node134.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FE/;
-$ref_files{$key} = "$dir".q|node241.html|; 
+$ref_files{$key} = "$dir".q|node242.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LEVEL/;
-$ref_files{$key} = "$dir".q|node253.html|; 
+$ref_files{$key} = "$dir".q|node254.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:STACAT/;
@@ -2371,7 +2379,7 @@ $ref_files{$key} = "$dir".q|node106.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/APP:HEAD/;
-$ref_files{$key} = "$dir".q|node326.html|; 
+$ref_files{$key} = "$dir".q|node329.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:06MAR98/;
@@ -2387,7 +2395,7 @@ $ref_files{$key} = "$dir".q|node43.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:15MAY2002/;
-$ref_files{$key} = "$dir".q|node303.html|; 
+$ref_files{$key} = "$dir".q|node306.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECDEVVER/;
@@ -2404,6 +2412,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/MPTELEX/;
 $ref_files{$key} = "$dir".q|node144.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/SP:EVLA/;
+$ref_files{$key} = "$dir".q|node241.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPLEVEL/;

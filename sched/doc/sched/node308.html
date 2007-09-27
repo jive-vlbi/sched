@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 28 April 2000.</TITLE>
-<META NAME="description" CONTENT="Release of 28 April 2000.">
+<TITLE>Release of 12 February 2001.</TITLE>
+<META NAME="description" CONTENT="Release of 12 February 2001.">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,215 +23,157 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node309.html">
 <LINK REL="previous" HREF="node307.html">
-<LINK REL="up" HREF="node301.html">
+<LINK REL="up" HREF="node304.html">
 <LINK REL="next" HREF="node309.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4475"
+<A NAME="tex2html4482"
   HREF="node309.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4471"
-  HREF="node301.html">
+<A NAME="tex2html4478"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4465"
+<A NAME="tex2html4472"
   HREF="node307.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4473"
+<A NAME="tex2html4480"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4476"
-  HREF="node309.html">Release of 1 July</A>
-<B> Up:</B> <A NAME="tex2html4472"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4466"
-  HREF="node307.html">Release of 12 January</A>
- &nbsp; <B>  <A NAME="tex2html4474"
+<B> Next:</B> <A NAME="tex2html4483"
+  HREF="node309.html">Release of 30 January</A>
+<B> Up:</B> <A NAME="tex2html4479"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4473"
+  HREF="node307.html">Release of 16 October</A>
+ &nbsp; <B>  <A NAME="tex2html4481"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00627000000000000000"></A><A NAME="SSSEC:20APR2000"></A>
+<H2><A NAME="SECTION00624000000000000000"></A><A NAME="SSSEC:09FEB2001"></A>
 <BR>
-Release of 28 April 2000.
+Release of 12 February 2001.
 </H2>
+
+<P>
+It seems that we are having teething problems with the new reference
+pointing capabilities.  This release makes available some important
+fixes required for 3mm VLBA projects.  But it does not have some fixes
+for VEX problems that will affect CMVA runs.  So there will be another
+release in a couple of weeks.  The changes here are not significant
+for users not attempting reference pointing with <TT>AUTOPEAK</TT> or
+other mechanism that invokes setup files with <TT>FORMAT=NONE</TT>.  If
+you don't need this one right now, it is recommended you wait for
+the VEX fixes.
 
 <P>
 
 <UL>
-<LI>Fixed test of second station in scan in UV plotting routine.  Before
-       fix, extra spurious points would be plotted when the first station
-       and not the second was in the scan.  14Sep1999 RCW.
+<LI>SCHED&nbsp; did not behave gracefully when there was a station listed
+       in the peaking command file that is not in the stations catalog.
+       Make it die properly with an error message that might allow
+       users to understand what was wrong.  07 Feb 2001  RCW
 
 <P>
 </LI>
-<LI>When getting the polarization from pol and RCHAN and LCHAN are
-       specified, use them to set IFCHAN.  Before RCHAN and LCHAN were
-       only used when IFCHAN=R or L.  15Sep1999.
+<LI>Found another bug relating to looping over scans.  This time
+       a loop went from the first output scan to the last input scan,
+       which is over no scans if output is not the same as input.
+       As with the earlier bugs, this only affects <TT>AUTOPEAK</TT> users
+       or users of obscure optimizing modes.  And this time, it only
+       affects VEX users.  07 Feb 2001 RCW
 
 <P>
 </LI>
-<LI>Protect against no scans scheduled.  27sep1999 RCW.
+<LI>Fix problem with initialization of track assignment output when
+       the first scan had FORMAT=NONE, such as a pointing scan.  With
+       this, only the first station got track assignments.  08 Feb 2001 RCW.
 
 <P>
 </LI>
-<LI>Added catalog plotting capability  Franco and RCW  sep99.
+<LI>Improve the way readback tests are counted.  The main effects will
+       be on what happens at the start of a schedule.  Also, if <TT>DEBUG</TT>
+       is set, SCHED will write a line each time it finds a readback
+       test slot.  08 Feb 2001  RCW.
 
 <P>
 </LI>
-<LI>Some tweaks to the tape handling section of the manual.  19oct99.
+<LI>Add an <TT>OVERRIDE</TT> input parameter and internal logical that
+       can be used by programmers to allow them to exercise code in
+       ways now allowed for users.  For example, if users cannot be
+       allowed to use some feature because of known bugs, but programmers
+       need to test it to fix the bug, <TT>OVERRIDE</TT> can be used to
+       provide a ``back door'' in.  09 Feb 2001.  RCW.
 
 <P>
 </LI>
-<LI>Check for duplicate channels came before all channel info was
-       known in some cases.  Moved SFINFO call to after setup
-       parameters are derived.  25oct99 RCW.
+<LI>Don't allow VEX and FORMAT=NONE.  There are bugs.  This should
+       be fixed soon, but we need to get a release out to fix some of
+       the above issues for 3mm VLBA observations.  09 Feb 2001  RCW.
 
 <P>
 </LI>
-<LI>Issue warning if there are DOPPLER scans scans with SOURCE
-       not the same as DOPSRC and both are line sources.  This
-       is probably not wanted.  2 Nov 1999.  RCW.
+<LI>Remove the ``*'' from a the names of many pointing sources in
+       <I>sources.pointing</I> and <I>peak.cmd</I>.  These were causing
+       problems for other software downstream.  This might cause some
+       editing to be needed in existing files in the dynamic scheduling
+       queue.  9 Feb 2001.  RCW.
 
 <P>
 </LI>
-<LI>Change www.nrao.edu/... links to www.aoc.nrao.edu.  9dec99 RCW.
+<LI>In VEX code, change ``*'' to ``X'' rather than ``?'' in def names.
+       We would like to be able to use ``*'' in source names, but users
+       should be wary that they might encounter problems in post-processing.
+       12 Feb 2001. Huib.
 
 <P>
 </LI>
-<LI>Issue warnings about the output data rate through the FIR.
-      The limit is 44236-2048 (41188) spectral channels per 0.131 second
-      correlator tic (can be longer observing time with speedup).
-      The correlator always transfers 2048 spectral channels divided
-      by the spectral averaging, even if it is going to throw most
-      of them away.  This limit is higher than the output data rate
-      limit for 2 or more baseband channels, but can be the limiting
-      factor with 1 channel.   Wish list: 13dec99 RCW.
-      Warning added 19Jan2000 RCW.
+<LI>Modify the source list in <I>peak.cmd</I> so that the ones
+       that are used for reference pointing if the user does not check
+       source quality are only those what we trust the most.  Names of
+       other possible sources are left in the file in comments.
+       12 Feb 2001. RCW.
 
 <P>
 </LI>
-<LI>Improve warnings when synchronizing tape starts causes short
-      tape stoppages.  26Jan2000 RCW.
-
-<P>
-</LI>
-<LI>Fix handling of tabs by keyin under Linux.  27Jan2000 RCW.
-
-<P>
-</LI>
-<LI>Modify warning when doppler or freq in schedule move frequency
-      outside IF specified in freq.dat.  30Jan2000 RCW.
-
-<P>
-</LI>
-<LI>Added subroutine (SCANID) to help warning and error messages
-      identify the offending scan.  A few such messages modified.
-      Many more needed. 3 feb 2000. RCW.
-
-<P>
-</LI>
-<LI>At the requist of Ralph Marson who is writing AIPS++ fillers,
-      I have restricted CALCODE to be a letter (which is capitalized
-      by SCHED) or a number.  10 Feb 2000  RCW.
-
-<P>
-</LI>
-<LI>Added / at end of flag lines in flag file.  22 Mar 2000 RCW.
-
-<P>
-</LI>
-<LI>Added USED and VLAVB to SETCOP - were missing. 24 Mar 2000 RCW.
-
-<P>
-</LI>
-<LI>Added setup parameter <TT>NOISEFRQ</TT> to control Pie Town noise
-      cal switching rate.  It wants to use the VLA rate when the
-      Pie Town link is being used.  4 April 2000  RCW.
-
-<P>
-</LI>
-<LI>For 512 bit mode, don't complain when autoallocate is not used.
-      10 April 2000.  RCW.
-
-<P>
-</LI>
-<LI>Add a text capability to pass a cover letter from the schedule
-      to the sch and summary files.  11Apr2000 RCW
-
-<P>
-</LI>
-<LI>Set time for a readback test in 512 Mbps mode to 4 minutes.
-      12 April 2000.  RCW.
-
-<P>
-</LI>
-<LI>Beef up the description of CORWTFN in the manual and add a
-      warning if 1:4 fan out is requested with the ZEROPAD option.
-      19 April 2000.  RCW.
-
-<P>
-</LI>
-<LI>Add various enhancements to the interactive RD plotting option.
-      19 April 2000.  Franco.
-
-<P>
-</LI>
-<LI>Added note for observations with large output data set sizes to
-      consider requesting high density output tapes.  19 April 2000 RCW.
-
-<P>
-</LI>
-<LI>Added machine readable correlator parameters to end of .sum file
-      for observations to be correlated in Socorro.  19 April 2000 RCW.
-
-<P>
-</LI>
-<LI>Added support for VLBA4 systems in Vex and in the setup defaulting
-      routines.  24 Apr. 2000  RCW and Huib.
-
-<P>
-</LI>
-<LI>Vex debugs, changes, and additions from Huib Apr 2000.  Bug fixes
-      or enhancements in the logic dealing with narrow filters, the JIVE
-      checker and some rounding issues.  Added the cover letter to the
-      VEX file.  Added digits to source coordinates.
-
-<P>
+<LI>Make the data rate limit warning sensitive to wide band observations
+       where 2 pass processing is required anyway.  In the process separate
+       dealing with Socorro correlator parameters from others.  15 Mar 2001 RCW.
 </LI>
 </UL>
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4475"
+<A NAME="tex2html4482"
   HREF="node309.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4471"
-  HREF="node301.html">
+<A NAME="tex2html4478"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4465"
+<A NAME="tex2html4472"
   HREF="node307.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4473"
+<A NAME="tex2html4480"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4476"
-  HREF="node309.html">Release of 1 July</A>
-<B> Up:</B> <A NAME="tex2html4472"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4466"
-  HREF="node307.html">Release of 12 January</A>
- &nbsp; <B>  <A NAME="tex2html4474"
+<B> Next:</B> <A NAME="tex2html4483"
+  HREF="node309.html">Release of 30 January</A>
+<B> Up:</B> <A NAME="tex2html4479"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4473"
+  HREF="node307.html">Release of 16 October</A>
+ &nbsp; <B>  <A NAME="tex2html4481"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

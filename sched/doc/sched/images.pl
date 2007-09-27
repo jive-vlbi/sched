@@ -11,13 +11,13 @@ $cached_env_img{$key} = q|<IMG
 
 $key = q/<;MSF=1.6;LFS=11;AAT/;
 $cached_env_img{$key} = q|<IMG
- WIDTH="20" HEIGHT="33" ALIGN="MIDDLE" BORDER="0"
+ WIDTH="18" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
  SRC="|."$dir".q|img1.png"
  ALT="$&lt;$">|; 
 
 $key = q/NtimesDOPINCR(1)+DOPINCR(2);MSF=1.6;LFS=11;AAT/;
 $cached_env_img{$key} = q|<IMG
- WIDTH="298" HEIGHT="37" ALIGN="MIDDLE" BORDER="0"
+ WIDTH="296" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
  SRC="|."$dir".q|img2.png"
  ALT="$N \times DOPINCR(1) + DOPINCR(2)$">|; 
 

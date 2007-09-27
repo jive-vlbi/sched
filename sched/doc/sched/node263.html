@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>PCALFR1 and PCALFR2</TITLE>
-<META NAME="description" CONTENT="PCALFR1 and PCALFR2">
+<TITLE>PERIOD</TITLE>
+<META NAME="description" CONTENT="PERIOD">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,128 +29,66 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3882"
+<A NAME="tex2html3887"
   HREF="node264.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3878"
+<A NAME="tex2html3883"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3872"
+<A NAME="tex2html3877"
   HREF="node262.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3880"
+<A NAME="tex2html3885"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3883"
-  HREF="node264.html">PCALXB1 and PCALXB2</A>
-<B> Up:</B> <A NAME="tex2html3879"
+<B> Next:</B> <A NAME="tex2html3888"
+  HREF="node264.html">PCAL</A>
+<B> Up:</B> <A NAME="tex2html3884"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3873"
-  HREF="node262.html">PCAL</A>
- &nbsp; <B>  <A NAME="tex2html3881"
+<B> Previous:</B> <A NAME="tex2html3878"
+  HREF="node262.html">NOISEFRQ</A>
+ &nbsp; <B>  <A NAME="tex2html3886"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643300000000000000"></A><A NAME="SP:PCALFR1"></A>
+<H3><A NAME="SECTION004643300000000000000"></A><A NAME="SP:PERIOD"></A>
 <BR>
-<TT>PCALFR1</TT> and <TT>PCALFR2</TT>
+<TT>PERIOD</TT>
 </H3>
 
 <P>
-There are 16 pulse cal detectors in the VLBA formatters, each with the
-ability to detect signals from 2 bit streams. Each can be set to
-detect a tone at a different frequency at any multiple of 10&nbsp;kHz in
-the baseband. <TT>PCALFR1</TT> and <TT>PCALFR2</TT> are arrays of 16
-frequencies in kHz for the 16 detectors. <EM>ACTUALLY, UNTIL A
-FORMATTER UPGRADE IS COMPLETE, THERE ARE ONLY 8 DETECTORS.</EM> If a
-frequency of <TT>0</TT> is given, the detector will be used to count bits
-in each state. <TT>PCALFR1</TT> applies to the first channel of the
-detector, while <TT>PCALFR2</TT> applies to the second; they need not be
-the same. SCHED&nbsp; is capable of setting <TT>PCALFR1</TT>, <TT>PCALFR2</TT>, <TT>PCALXB1</TT>, and <TT>PCALXB2</TT> automatically, and this is
-probably the option that most users should take. SCHED&nbsp; will use
-the automatic settings if <TT>PCALXB1(1)</TT> is not set.  If the <TT>PCALFR</TT> and <TT>PCALXB</TT> values are defaulted, they will be adjusted
-on a scan by scan basis for any changes in observing frequency,
-including those requested by <TT>FREQ</TT> or <TT>DOPPLER</TT> in the SCHED keyin file.
-
-<P>
-The default will be to set up all available channels to detect, using
-sign bits only, first the tone near the lower edge of the band in each
-channel, then a second tone near the high edge of the band in each
-channel, and then state counts (sign and magnitude for 2 bit data) for
-each channel, then a third tone which is (usually) 1 MHz away from the
-first tone being detected.  As many of these tones will be detected as
-possible up to a total number of detected signals that does not exceed
-the number of available detectors.
-
-<P>
-There is usually no problem with setting the <TT>PCALFR</TT> and <TT>PCALXB</TT> parameters when <TT>PCAL</TT> is off, so there is usually no need
-to turn off this default. The one exception would be if the
-frequencies are being switched rapidly in such a way that the <TT>PCALFR</TT> frequencies are changing. Each time they are changed, the
-formatter is reconfigured, which blocks data to the recording for
-about 8 seconds and throws the VLBA correlator out of sync.  Total
-data loss is at least 16 seconds and can be more if there is a speedup
-factor greater than one or if the correlator has a hard time
-resyncing, which happens maybe 10-20either specify the pulse cal detector parameters and they will be kept
-constant or make sure the default pulse cal setup doesn't change (keep
-constant the number of baseband channels, the channel bandwidth, and
-the pulse cal tone frequencies in the basebands (don't change the kHz
-part of the frequency).
-
-<P>
-Detection of Phase cal is not currently (Oct 2001) implemented on the
-PCFS, although the VEX file has a way of specifying the desired
-detection.  On MkIV telescopes this requires the installation of
-additional hardware, but even on PCFS controlled telescopes with VLBA
-hardware this is not yet supported.
+<TT>PERIOD</TT> gives the integration time for detected powers in the
+base band converters (BBCs). One value is accepted here although SCHED will write that value out separately for each baseband
+channel. It would be ideal to set this to 30 seconds or so, but this
+time is also used for the auto-leveling time constant so it should be
+significantly less, with values of <TT>1</TT> or <TT>2</TT> typical. A value
+of <TT>0</TT> implies do not integrate beyond the 1/80 sec cal cycle
+time.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An array of 16 integers, each giving a frequency in kHz.
+<LI><B>Argument:</B> An integer giving the integration time in seconds.
 </LI>
-<LI><B>Options:</B>  Any multiple of <TT>10</TT> from <TT>0</TT> to <TT>16000</TT>.
+<LI><B>Options:</B>  Any integer <TT>0</TT> or greater.
 </LI>
-<LI><B>Default:</B>  See above. Note that defaulting depends on whether or not <TT>PCALXB1(1)</TT>
-is set, not whether any <TT>PCALFR</TT>s are set.
+<LI><B>Default:</B>  1
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>PCALFR1=10,10,10,10,7010,7010,7010,7010</TT>
+<LI><B>Example:</B>  <TT>PERIOD=2</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html3882"
-  HREF="node264.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3878"
-  HREF="node230.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3872"
-  HREF="node262.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3880"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html3883"
-  HREF="node264.html">PCALXB1 and PCALXB2</A>
-<B> Up:</B> <A NAME="tex2html3879"
-  HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3873"
-  HREF="node262.html">PCAL</A>
- &nbsp; <B>  <A NAME="tex2html3881"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>
