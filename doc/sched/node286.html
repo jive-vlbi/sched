@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>INSTALLING, AND RUNNING SCHED</TITLE>
-<META NAME="description" CONTENT="INSTALLING, AND RUNNING SCHED">
+<TITLE>VLASYNA and VLASYNB</TITLE>
+<META NAME="description" CONTENT="VLASYNA and VLASYNB">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -21,73 +21,126 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="STYLESHEET" HREF="sched.css">
 
-<LINK REL="next" HREF="node294.html">
-<LINK REL="previous" HREF="node49.html">
-<LINK REL="up" HREF="sched.html">
+<LINK REL="previous" HREF="node285.html">
+<LINK REL="up" HREF="node230.html">
 <LINK REL="next" HREF="node287.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4154"
+<A NAME="tex2html4161"
   HREF="node287.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4150"
-  HREF="sched.html">
+<A NAME="tex2html4157"
+  HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4144"
+<A NAME="tex2html4153"
   HREF="node285.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4152"
+<A NAME="tex2html4159"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4155"
-  HREF="node287.html">Installing SCHED</A>
-<B> Up:</B> <A NAME="tex2html4151"
-  HREF="sched.html">THE SCHED&nbsp; USER MANUAL</A>
-<B> Previous:</B> <A NAME="tex2html4145"
-  HREF="node285.html">Satellite Initialization.</A>
- &nbsp; <B>  <A NAME="tex2html4153"
+<B> Next:</B> <A NAME="tex2html4162"
+  HREF="node287.html">Satellite Initialization.</A>
+<B> Up:</B> <A NAME="tex2html4158"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html4154"
+  HREF="node285.html">VLAROT</A>
+ &nbsp; <B>  <A NAME="tex2html4160"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION00500000000000000000"></A><A NAME="CHP:SYSTEM"></A>
+<H3><A NAME="SECTION004645600000000000000"></A><A NAME="SP:VLASYNA"></A>
 <BR>
-INSTALLING, AND RUNNING SCHED
-</H1>
+<TT>VLASYNA</TT> and <TT>VLASYNB</TT>
+</H3>
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+<TT>VLASYNA</TT> and <TT>VLASYNB</TT> give the VLA F6 synthesizer settings
+for the A and C IFs <TT>VLASYNA</TT> and for the B and D IFs <TT>VLASYNB</TT>.  The value will be near 3900&nbsp;MHz and must be N*50 +-
+10.1&nbsp;MHz.  It will be rounded to the nearest MHz for the ``//LO''
+card but should be given to full precision here to facilitate
+frequency calculations.  The LO is passed through a filter
+that has the range 3435 - 4065 MHz.  Allowed settings, some of
+which will not pass through this filter, are:
+
+<P>
+<PRE>
+  3310.1, 3339.9, 3360.1, 3389.9,   3410.1, 3439.9, 3460.1, 3489.9,
+  3510.1, 3539.9, 3560.1, 3589.9,   3610.1, 3639.9, 3660.1, 3689.9,
+  3710.1, 3739.9, 3760.1, 3789.9,   3810.1, 3839.9, 3860.1, 3889.9,
+  3910.1, 3939.9, 3960.1, 3989.9,   4010.1, 4039.9, 4060.1
+</PRE>
+
+<P>
+There are actually even more allowed values at the low end, but
+it is not clear that it is possible to use them.
+
+<P>
+If the parameter <A HREF="node241.html#SP:EVLA"><TT>EVLA</TT></A> is set, <TT>VLASYNA</TT> and
+<TT>VLASYNB</TT> must still conform to N*50 +- 10.1 MHz, but there is no
+limit on the range.  The EVLA LO system is entirely different, and the
+program that converts the VLA style file to an EVLA file will do the
+necessary conversions.
+
+<P>
+SCHED can determine the value of this parameter from the
+<A HREF="node224.html#SEC:FRQCAT">frequency catalog</A> if that file includes
+an entry that covers the desired VLA setup.
+
+<P>
+Note that, if any of <TT>FLUKEA</TT>, <TT>FLUKEB</TT>, <TT>VLAFEAB</TT>, <TT>VLAFECD</TT>, <TT>VLASYNA</TT>, <TT>VLASYNB</TT>, <TT>VLAIF</TT>, <TT>FEFILTER</TT>,
+or <TT>VLAROT</TT> are specified, both LO and FI cards will be made.  In
+such cases, any other parameters allowed to default will be set to the
+standard value for the specified <TT>VLABAND</TT>.
+
+<P>
 
 <UL>
-<LI><A NAME="tex2html4156"
-  HREF="node287.html">Installing SCHED</A>
-<LI><A NAME="tex2html4157"
-  HREF="node288.html">Running SCHED</A>
-<UL>
-<LI><A NAME="tex2html4158"
-  HREF="node289.html">Running SCHED&nbsp; under UNIX or LINUX</A>
-<LI><A NAME="tex2html4159"
-  HREF="node290.html">Running SCHED&nbsp; on a VAX</A>
-<LI><A NAME="tex2html4160"
-  HREF="node291.html">Running SCHED&nbsp; on an MS-DOS PC</A>
+<LI><B>Argument:</B> A frequency in MHz.
+</LI>
+<LI><B>Options:</B>  N*50+-10.1
+</LI>
+<LI><B>Default:</B>  Uses the VLA default for the specified band.
+</LI>
+<LI><B>Usage:</B>    Defaults to previous station.
+</LI>
+<LI><B>Example:</B>  <TT>VLASYNA = 3889.9</TT>
+  
+</LI>
 </UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html4161"
+  HREF="node287.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html4157"
+  HREF="node230.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html4153"
+  HREF="node285.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html4159"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<LI><A NAME="tex2html4161"
-  HREF="node292.html">Distribution of Schedule Files</A>
-<LI><A NAME="tex2html4162"
-  HREF="node293.html">Related Programs</A>
-</UL>
-<!--End of Table of Child-Links-->
-<BR><HR>
+<B> Next:</B> <A NAME="tex2html4162"
+  HREF="node287.html">Satellite Initialization.</A>
+<B> Up:</B> <A NAME="tex2html4158"
+  HREF="node230.html">Details of Setup File</A>
+<B> Previous:</B> <A NAME="tex2html4154"
+  HREF="node285.html">VLAROT</A>
+ &nbsp; <B>  <A NAME="tex2html4160"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>FREQREF</TITLE>
-<META NAME="description" CONTENT="FREQREF">
+<TITLE>FREQOFF</TITLE>
+<META NAME="description" CONTENT="FREQOFF">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,111 +29,67 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3702"
+<A NAME="tex2html3707"
   HREF="node249.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3698"
+<A NAME="tex2html3703"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3692"
+<A NAME="tex2html3697"
   HREF="node247.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3700"
+<A NAME="tex2html3705"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3703"
-  HREF="node249.html">FRSWITCH</A>
-<B> Up:</B> <A NAME="tex2html3699"
+<B> Next:</B> <A NAME="tex2html3708"
+  HREF="node249.html">FREQREF</A>
+<B> Up:</B> <A NAME="tex2html3704"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3693"
-  HREF="node247.html">FREQOFF</A>
- &nbsp; <B>  <A NAME="tex2html3701"
+<B> Previous:</B> <A NAME="tex2html3698"
+  HREF="node247.html">FORMAT</A>
+ &nbsp; <B>  <A NAME="tex2html3706"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004641800000000000000"></A><A NAME="SP:FREQREF"></A>
+<H3><A NAME="SECTION004641800000000000000"></A><A NAME="SP:FREQOFF"></A>
 <BR>
-<TT>FREQREF</TT>
+<TT>FREQOFF</TT>
 </H3>
 
 <P>
-<TT>FREQREF</TT> is the LO sum to use for the baseband channel in MHz.
-<TT>FREQOFF</TT> will be added to it. The LO sum is the sum of the <TT>FIRSTLO</TT> plus or minus, depending on sideband, the BBC synthesizer
-setting <TT>BBSYN</TT>. A <TT>FREQ</TT> specification in the SCHED&nbsp; 
-keyin file will override <TT>FREQREF</TT> plus <TT>FREQOFF</TT>, as long as
-the BBC settings stay within range and there are no sideband changes.
-
-<P>
-To set pulse cals properly and to deal with non-VLBA stations
-correctly, it is best to know all of the LO sum, the first LO, and the
-BBC settings, along with all of the required sidebands. Strictly
-speaking, valid VLBA schedules can be written without knowing all
-these, but SCHED&nbsp; can be made significantly simpler and more
-reliable if all this information is required. Not all of these values
-need to be specified since they are related. There are four possible
-complete combinations, and if more values are specified than necessary
-then a consistency check will be done. These complete combinations
-are:
-<BLOCKQUOTE>
-1. <TT>FREQREF</TT> plus <TT>FREQOFF</TT>, <TT>FIRSTLO</TT>, <TT>NETSIDE</TT>  
-<BR>
-2. <TT>FREQREF</TT> plus <TT>FREQOFF</TT>, <TT>FIRSTLO</TT>, <TT>SIDEBAND</TT> 
-<BR>
-3. <TT>BBSYN</TT>, <TT>SIDEBAND</TT>, <TT>NETSIDE</TT>,
-   <TT>FREQREF</TT> plus <TT>FREQOFF</TT> 
-<BR>
-4. <TT>BBSYN</TT>, <TT>SIDEBAND</TT>, <TT>NETSIDE</TT>, <TT>FIRSTLO</TT> 
-<BR>
-</BLOCKQUOTE>
+<TT>FREQOFF</TT> gives the increment to the LO sum for the baseband
+channel in MHz. This will only be used if <TT>FREQREF</TT> is used. The
+LO sum for baseband channel <TT>i</TT> will be set to <TT>FREQREF(i)</TT>
+plus <TT>FREQOFF(i)</TT>, and <TT>BBSYN</TT> will be set to the absolute
+value of the difference between the LO sum and <TT>FIRSTLO</TT>. Please
+see <A HREF="node249.html#SP:FREQREF"><TT>FREQREF</TT></A> for a discussion of required
+parameters.
 
 <P>
 
 <UL>
 <LI><B>Argument:</B> Up to 16 frequencies in MHz.
 </LI>
-<LI><B>Options:</B>  Any valid frequency.
+<LI><B>Options:</B>  Any valid frequency offset that gives a <TT>BBSYN</TT> in the allowed
+range.
 </LI>
-<LI><B>Default:</B>  <TT>0.0</TT> for <TT>FREQREF(1)</TT> which means don't use it. For baseband
-channels 2 and higher, will be set to <TT>FREQREF(1)</TT>.
+<LI><B>Default:</B>  <TT>0.0</TT> - no offset.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>FREQREF = 1662.49</TT>
+<LI><B>Example:</B>  <TT>FREQOFF=-6.,-4.,-2.,0.,2.,4.,6.</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html3702"
-  HREF="node249.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3698"
-  HREF="node230.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3692"
-  HREF="node247.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3700"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html3703"
-  HREF="node249.html">FRSWITCH</A>
-<B> Up:</B> <A NAME="tex2html3699"
-  HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3693"
-  HREF="node247.html">FREQOFF</A>
- &nbsp; <B>  <A NAME="tex2html3701"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

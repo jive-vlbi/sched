@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Release of 30 January 2001.</TITLE>
-<META NAME="description" CONTENT="Release of 30 January 2001.">
+<TITLE>Release of 02 July 2002.</TITLE>
+<META NAME="description" CONTENT="Release of 02 July 2002.">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -23,106 +23,148 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <LINK REL="next" HREF="node307.html">
 <LINK REL="previous" HREF="node305.html">
-<LINK REL="up" HREF="node301.html">
+<LINK REL="up" HREF="node304.html">
 <LINK REL="next" HREF="node307.html">
 </HEAD>
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4451"
+<A NAME="tex2html4458"
   HREF="node307.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4447"
-  HREF="node301.html">
+<A NAME="tex2html4454"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4441"
+<A NAME="tex2html4448"
   HREF="node305.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4449"
+<A NAME="tex2html4456"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4452"
-  HREF="node307.html">Release of 12 January</A>
-<B> Up:</B> <A NAME="tex2html4448"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4442"
-  HREF="node305.html">Release of 12 February</A>
- &nbsp; <B>  <A NAME="tex2html4450"
+<B> Next:</B> <A NAME="tex2html4459"
+  HREF="node307.html">Release of 16 October</A>
+<B> Up:</B> <A NAME="tex2html4455"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4449"
+  HREF="node305.html">Release of 18 September</A>
+ &nbsp; <B>  <A NAME="tex2html4457"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00625000000000000000"></A><A NAME="SSSEC:30JAN2001"></A>
+<H2><A NAME="SECTION00622000000000000000"></A><A NAME="SSSEC:15MAY2002"></A>
 <BR>
-Release of 30 January 2001.
+Release of 02 July 2002.
 </H2>
-
-<P>
-This was an emergency release to fix the problem with the Doppler
-calculations when using the automatic reference pointing scan
-insertion.  This problem would be fatal for schedules using spectral
-line sources and <TT>AUTOPEAK</TT>.  Given that most reference pointing
-sources are line sources, this means most 86 GHz projects on the VLBA.
-Other types of projects are not affected.
 
 <P>
 
 <UL>
-<LI>Specify in the <I>sch</I> files that frequencies are LO sum.
+<LI>Die if no location given for a station.  18 Oct 2001 RCW.
 
 <P>
 </LI>
-<LI>Make SKEDCONV available to users in a separate tar
-       file.  It seems there are some who still like to use the
-       interactive PC-SCHED to set up scans.  22 Jan 2001  RCW.
+<LI>Fixed use of un-initialized variable in Vex stuff that caused
+problems occasionally on systems that do not automatically initialize
+variables.  This was detected by a user doing plots.  18 Oct 2001 RCW
+with fix found by Franco and agreed to by Huib.
 
 <P>
 </LI>
-<LI>Replace tape start time with ``Stopped'' in sch file for
-       scans with no tape motion.  29 Jan 2001 RCW.
+<LI>Improve error message when <TT>OBSTYPE</TT> indicates recording
+will be done, but all scans are flagged <TT>NORECORD</TT>.  13 Dec 2001 RCW
 
 <P>
 </LI>
-<LI>Fix bug where the routine that calculates Doppler frequencies
-       was looping over input, not output scans.
-       This is an old bug, but would only be noticed in line observations
-       using the more obscure OPTMODEs.  But it now affects most users
-       of the new <TT>AUTOPEAK</TT> facility.  This will require a SCHED
-       update.  29 Jan 2001 RCW
+<LI>Default IATUTC to value from SLA_DAT.  27 Dec 2001 RCW
 
 <P>
 </LI>
-<LI>Fix bug in counting of tape stoppages when there are non-recording
-       scans.  A variable was indexed to station number, not scan
-       number.  30 Jan 2001 RCW
+<LI>Change TSETTLE to 6 for VLBA stations after experience with
+a 43 GHz phase referencing run that had 15 second scans.  28 Dec 2001 RCW
 
 <P>
 </LI>
-<LI>Change the line names in peak.cmd to avoid possible conflict
-       with user defined names and make 4 reference frequencies for
-       the 4 channels in the pointing setup files.  Two of those
-       channels are meant to be off the line so difference power
-       can be used for reference pointing some day (it already is
-       in pointing test runs).  30 Jan 2001. RCW
+<LI>When there are between 2 and 24 sources and a UV plot is requested,
+make a separate panel for each source.  2 Jan 2002 RCW
 
 <P>
 </LI>
-<LI>Update comments on reference pointing in the 3mm example files.
-       Due to an oversite, these were not updated for the 12Jan2001
-       release and some of the information was out of date or
-       incomplete.  30 Jan 2001. RCW
+<LI>Add <TT>OBSTYPE = CONFIG</TT> to trigger a UV plotting and
+optimizing mode useful for configuration studies.  A map of the
+station locations is plotted and stations can be clicked on and off
+(and highlighted) for plotting.  An optimizing mode is built in that
+tries combinations of available stations and rates them based on the
+number of cells filled in a uv grid.  Related parameters include <TT>MAPLIM</TT>, <TT>GRIDNR</TT>, <TT>GRIDNT</TT>, <TT>GRIDMIN</TT>, <TT>GRIDMAX</TT>, and
+<TT>GRIDW0</TT>.  Also added the configuration studies section of this
+manual.  Jan-Apr 2002 RCW.
 
 <P>
 </LI>
-<LI>Accumulate and report both total time in scans and total time
-       in recording scans.  30 Jan 2001.  RCW.
+<LI>Write <TT>extlo</TT> and <TT>extlosideband</TT> parameters to VLBA
+control files for non-VLBA antennas whenever that IF channel was
+not used in the previous scan in addition to whenever the value
+actually changes.  This was needed by Effelsberg.  14 Jan 2002. RCW.
 
 <P>
 </LI>
-<LI>Make a number of corrections to the eg3mm examples.  30 Jan 2001
-       RCW.
+<LI>Alter 3mm examples to no longer claim that the peaking setup
+needs to be similar to the observing setup to avoid formatter
+reconfigure.  This is not true if <TT>FORMAT=NONE</TT>.  14 Jan 2002. RCW.
+
+<P>
+</LI>
+<LI>Checked the Lat/Long/Ht to XYZ conversion.  Altered the
+ellipsoid by 1 meter to conform to current values found on the web.
+The conversion now agrees with examples at geodetic sites at the cm
+level assuming that everything is in WGS84, which is closely tied to
+the ITRF.  29 Jan 2002 RCW.
+
+<P>
+</LI>
+<LI>Check that each frequency set is within the IF's specified in
+the frequency catalog.  This gives a check after application of
+Doppler or schedule specified frequencies.  4 Feb 2002  RCW.
+
+<P>
+</LI>
+<LI>Improve the ability to change the maximum number of stations
+and some other parameters with only one change in sched.inc.  As a
+result, the sched.inc file must be invoked before schset.inc.
+2002may01  RCW.
+
+<P>
+</LI>
+<LI>Some restrictions on processing 512 Mbps observations at
+JIVE have been lifted.  2002may  Huib
+
+<P>
+</LI>
+<LI>There have been a number of updates to the catalogs for the EVN
+stations, both in capabilities and positions.  Cormac Reynolds 2002may
+
+<P>
+</LI>
+<LI>The ``settling time'' (<TT>TSETTLE</TT>) for the VLBA antennas was
+increased from 2 seconds to reflect better what is actually seen in
+phase referencing observations.  This will lengthen the gap between
+scans when using dwell time scheduling.  2001apr RCW.
+
+<P>
+</LI>
+<LI>Change the default for <TT>RECORDER, DAR, and CONTROL</TT> to blank,
+which gets interpreted as <TT>NONE</TT>.  Should have no effect in
+practice because the catalogs have always specified these.  But
+with the advent of <TT>DISK</TT> for Mark5, this will change.
+
+<P>
+</LI>
+<LI>Add <TT>MINSETUP</TT> to the station catalog to deal with cases
+where there is a minimum scan change time regardless of the slew
+and settling times, but where this minimum time should not be
+added to scan changes with long slews.
 
 <P>
 </LI>
@@ -131,31 +173,31 @@ Other types of projects are not affected.
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4451"
+<A NAME="tex2html4458"
   HREF="node307.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4447"
-  HREF="node301.html">
+<A NAME="tex2html4454"
+  HREF="node304.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4441"
+<A NAME="tex2html4448"
   HREF="node305.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4449"
+<A NAME="tex2html4456"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4452"
-  HREF="node307.html">Release of 12 January</A>
-<B> Up:</B> <A NAME="tex2html4448"
-  HREF="node301.html">Old Releases</A>
-<B> Previous:</B> <A NAME="tex2html4442"
-  HREF="node305.html">Release of 12 February</A>
- &nbsp; <B>  <A NAME="tex2html4450"
+<B> Next:</B> <A NAME="tex2html4459"
+  HREF="node307.html">Release of 16 October</A>
+<B> Up:</B> <A NAME="tex2html4455"
+  HREF="node304.html">Old Releases</A>
+<B> Previous:</B> <A NAME="tex2html4449"
+  HREF="node305.html">Release of 18 September</A>
+ &nbsp; <B>  <A NAME="tex2html4457"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

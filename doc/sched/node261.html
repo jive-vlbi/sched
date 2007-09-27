@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>PERIOD</TITLE>
-<META NAME="description" CONTENT="PERIOD">
+<TITLE>NOISE</TITLE>
+<META NAME="description" CONTENT="NOISE">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,57 +29,60 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3858"
+<A NAME="tex2html3863"
   HREF="node262.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3854"
+<A NAME="tex2html3859"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3848"
+<A NAME="tex2html3853"
   HREF="node260.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3856"
+<A NAME="tex2html3861"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3859"
-  HREF="node262.html">PCAL</A>
-<B> Up:</B> <A NAME="tex2html3855"
+<B> Next:</B> <A NAME="tex2html3864"
+  HREF="node262.html">NOISEFRQ</A>
+<B> Up:</B> <A NAME="tex2html3860"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3849"
-  HREF="node260.html">NOISEFRQ</A>
- &nbsp; <B>  <A NAME="tex2html3857"
+<B> Previous:</B> <A NAME="tex2html3854"
+  HREF="node260.html">NETSIDE</A>
+ &nbsp; <B>  <A NAME="tex2html3862"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004643100000000000000"></A><A NAME="SP:PERIOD"></A>
+<H3><A NAME="SECTION004643100000000000000"></A><A NAME="SP:NOISE"></A>
 <BR>
-<TT>PERIOD</TT>
+<TT>NOISE</TT>
 </H3>
 
 <P>
-<TT>PERIOD</TT> gives the integration time for detected powers in the
-base band converters (BBCs). One value is accepted here although SCHED will write that value out separately for each baseband
-channel. It would be ideal to set this to 30 seconds or so, but this
-time is also used for the auto-leveling time constant so it should be
-significantly less, with values of <TT>1</TT> or <TT>2</TT> typical. A value
-of <TT>0</TT> implies do not integrate beyond the 1/80 sec cal cycle
-time.
+<TT>NOISE</TT> is the specification for each IF of the switching mode of
+the noise cals on the VLBA. The usual for VLBI is <TT>'low-s'</TT> which
+means that the low noise cal, about 3&nbsp;K, is switching continuously at
+80&nbsp;Hz for continuous system temperature measurements, while <TT>'low-c'</TT> means low continuous. <TT>'high-s'</TT> and <TT>'high-c'</TT> are
+the same requests for the high (solar) cals; beware that most
+receivers do not have solar cals.
+
+<P>
+This has no effect on the VEX file.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> An integer giving the integration time in seconds.
+<LI><B>Argument:</B> 4 character strings of up to 6 characters each, one for each IF.
 </LI>
-<LI><B>Options:</B>  Any integer <TT>0</TT> or greater.
+<LI><B>Options:</B>  <TT>'off'</TT>, <TT>'low-s'</TT>, <TT>'low-c'</TT>, <TT>'high-s'</TT>,
+<TT>'high-c'</TT>
 </LI>
-<LI><B>Default:</B>  1
+<LI><B>Default:</B>  <TT>0</TT> - should be specified.
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>PERIOD=2</TT>
+<LI><B>Example:</B>  <TT>NOISE='low-s','low-s','low-s','low-s'</TT>
   
 </LI>
 </UL>
@@ -88,7 +91,7 @@ time.
 <BR><HR>
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

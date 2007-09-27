@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>LOGGING</TITLE>
-<META NAME="description" CONTENT="LOGGING">
+<TITLE>LEVEL</TITLE>
+<META NAME="description" CONTENT="LEVEL">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,105 +29,69 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html3774"
+<A NAME="tex2html3779"
   HREF="node255.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3770"
+<A NAME="tex2html3775"
   HREF="node230.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3764"
+<A NAME="tex2html3769"
   HREF="node253.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3772"
+<A NAME="tex2html3777"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html3775"
-  HREF="node255.html">LCP50CM and RCP50CM</A>
-<B> Up:</B> <A NAME="tex2html3771"
+<B> Next:</B> <A NAME="tex2html3780"
+  HREF="node255.html">LOGGING</A>
+<B> Up:</B> <A NAME="tex2html3776"
   HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3765"
-  HREF="node253.html">LEVEL</A>
- &nbsp; <B>  <A NAME="tex2html3773"
+<B> Previous:</B> <A NAME="tex2html3770"
+  HREF="node253.html">LCHAN and RCHAN</A>
+ &nbsp; <B>  <A NAME="tex2html3778"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION004642400000000000000"></A><A NAME="SP:LOGGING"></A>
+<H3><A NAME="SECTION004642400000000000000"></A><A NAME="SP:LEVEL"></A>
 <BR>
-<TT>LOGGING</TT>
+<TT>LEVEL</TT>
 </H3>
 
 <P>
-<TT>LOGGING</TT> specifies the type of logging to be done on the
-VLBA. <TT>STANDARD</TT> is appropriate for normal observations of almost
-any kind.  <TT>POINTING</TT> is for pointing observations, although
-current pointing observations actually use <TT>STANDARD</TT>.  <TT>NONE</TT>
-causes the system to do only the same background monitoring that is
-done when the antenna is idle.  <TT>SPECIAL</TT> or a specific file name
-uses a special list of monitor points and logging intervals provided
-by the VLBA operators.  If one of these special files is used, it is
-wise to put a comment in the experiment cover information that the
-special logging file is needed.  Someone (PI or analyst) should add
-this to the operators questionnaire. <TT>STANDARD</TT>, <TT>NONE</TT>, and <TT>POINTING</TT> are not case sensitive.  Any special file name must match
-in case the name of the file loaded at the sites.  Contact the chief
-VLBA operator to get special files made.
+<TT>LEVEL</TT> specifies the setting of the attenuators in the base band
+converters (BBCs). Values between <TT>-1</TT> and <TT>256</TT> can be
+used. If <TT>-1</TT> is set, the autoleveling will be activated. If <TT>256</TT> is set, the value from the previous scan will be used, thereby
+locking in an autolevel value for, for example, pointing. Any value in
+between sets a specific attenuation, but such values are rarely
+used. Only one value is accepted but SCHED&nbsp; writes that value out
+separately for each baseband channel.
 
 <P>
-One of the uses of this system is to allow monitoring of system
-temperatures at very short intervals.  Monitoring at 5 second intervals
-is ok with the <TT>STANDARD</TT> logging.  For 2 second points, a special
-file is available called <TT>dblog2</TT>.
-
-<P>
-This has no effect on the VEX file.
+This currently (Oct. 2001) has no effect on the VEX file.
 
 <P>
 
 <UL>
-<LI><B>Argument:</B> Character string - special file names are case sensitive.
+<LI><B>Argument:</B> An integer giving the level setting.
 </LI>
-<LI><B>Options:</B>  <TT>STANDARD</TT>, <TT>NONE</TT>, <TT>POINTING</TT>, or the name of a special
-logging file that the operators have put at the stations.
+<LI><B>Options:</B>  <TT>-1</TT> to <TT>256</TT>. See above.
 </LI>
-<LI><B>Default:</B>  <TT>STANDARD</TT>
+<LI><B>Default:</B>  <TT>-1</TT>
 </LI>
 <LI><B>Usage:</B>    Defaults to previous station.
 </LI>
-<LI><B>Example:</B>  <TT>LOGGING = 'dblog2'</TT>
+<LI><B>Example:</B>  <TT>LEVEL=-1</TT>
   
 </LI>
 </UL>
 
 <P>
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html3774"
-  HREF="node255.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html3770"
-  HREF="node230.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html3764"
-  HREF="node253.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html3772"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
-<BR>
-<B> Next:</B> <A NAME="tex2html3775"
-  HREF="node255.html">LCP50CM and RCP50CM</A>
-<B> Up:</B> <A NAME="tex2html3771"
-  HREF="node230.html">Details of Setup File</A>
-<B> Previous:</B> <A NAME="tex2html3765"
-  HREF="node253.html">LEVEL</A>
- &nbsp; <B>  <A NAME="tex2html3773"
-  HREF="node1.html">Contents</A></B> 
-<!--End of Navigation Panel-->
+<BR><HR>
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

@@ -10,8 +10,8 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>Running SCHED&nbsp; under UNIX or LINUX</TITLE>
-<META NAME="description" CONTENT="Running SCHED&nbsp; under UNIX or LINUX">
+<TITLE>Installing SCHED</TITLE>
+<META NAME="description" CONTENT="Installing SCHED">
 <META NAME="keywords" CONTENT="sched">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -29,97 +29,358 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html4200"
+<A NAME="tex2html4202"
   HREF="node290.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4196"
+<A NAME="tex2html4198"
   HREF="node288.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4190"
+<A NAME="tex2html4192"
   HREF="node288.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4198"
+<A NAME="tex2html4200"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4201"
-  HREF="node290.html">Running SCHED&nbsp; on a</A>
-<B> Up:</B> <A NAME="tex2html4197"
-  HREF="node288.html">Running SCHED</A>
-<B> Previous:</B> <A NAME="tex2html4191"
-  HREF="node288.html">Running SCHED</A>
- &nbsp; <B>  <A NAME="tex2html4199"
+<B> Next:</B> <A NAME="tex2html4203"
+  HREF="node290.html">Running SCHED</A>
+<B> Up:</B> <A NAME="tex2html4199"
+  HREF="node288.html">INSTALLING, AND RUNNING SCHED</A>
+<B> Previous:</B> <A NAME="tex2html4193"
+  HREF="node288.html">INSTALLING, AND RUNNING SCHED</A>
+ &nbsp; <B>  <A NAME="tex2html4201"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H2><A NAME="SECTION00521000000000000000"></A><A NAME="SSEC:RUNUNIX"></A>
+<H1><A NAME="SECTION00510000000000000000"></A><A NAME="SEC:INSTALL"></A>
 <BR>
-Running SCHED&nbsp; under UNIX or LINUX
-</H2>
+Installing SCHED
+</H1>
 
 <P>
-To run SCHED&nbsp; on a UNIX machine such as a SUN or a PC under LINUX,
-prepare the keyin file without system level commands.  Then type, for
-example,
-<PRE>
-sched &lt; input.key
-</PRE>
-Alternatively, if plotting is wanted, for example, type:
-<PRE>
-sched
-&lt;SCHED will write a number of instructive lines&gt;
-* plot schedule=input.key /
-</PRE>
-where the SCHED&nbsp; executable file is assumed to be in the default
-directory or path and the SCHED&nbsp; input commands are in <I>input.key</I>
-in the default directory. The ``<TT>&lt;</TT>'' pipes the information in
-<I>input.key</I> to SCHED.  The ``*'' is the prompt from SCHED.
-Remember that, in UNIX, file names and
-commands are case sensitive.  Also, there is a complication for users
-of the tc shell for versions after mid 1995: there is a built-in shell
-command ``sched'' that the shell takes instead of running SCHED. So to use SCHED, either alias ``sched'' to mean this
-program or else specify the full path name of the execute module. The
-files output by SCHED&nbsp; will appear in the default directory.
+This section is only needed if you do not have access to an installed
+copy of SCHED.
 
 <P>
-If your version of SCHED&nbsp; is linked with the PGPLOT libraries
-(has plotting capability), you will need
-to set the environoment variables <TT>PGPLOT_DIR</TT> to the location of
-the PGPLOT libraries and <TT>PGPLOT_FONT</TT> to the location of
-the PGPLOT font files.  If you use PGPLOT for other
-reasons (programming, DIFFMAP etc), then this is likely to be part
-of your standard setup.
+It is important that users obtain and use the latest version of
+SCHED&nbsp; when scheduling observations.  SCHED&nbsp; is evolving with time
+to add new features, to correct bugs, and to enhance its ability to
+prevent errors from being made in schedules, based on experience.
+There are typically one or two releases each year and they are
+announced on the VLBI email exploder.  At institutions where there are
+several VLBI users, someone should be in charge of making sure that
+the latest version is available.  When that option is not available,
+the user should check that he/she has the latest version before
+attempting to schedule a project.
+
+<P>
+The sched software, catalogs, auxiliary files, and documentation all
+reside in subdirectories under a parent directory.  At the AOC, the
+parent directory is <I>/users/cwalker/sched</I>.  Installing
+SCHED&nbsp; involves unpacking the tar files of the distribution into
+these directories.  If a canned executable is available for your type
+of computer, it can be copied and, hopefully, used as is.  Otherwise
+it will be necessary to compile the program.  This may involve
+installing the PGPLOT subroutine library if it is not already
+available.  On unix systems, the installation also involves setting up
+the useful environment variables and path.  The installation can be
+tested using the <I>Verify</I> script in the <I>examples</I>
+subdirectory.  That script runs all the examples and compares the
+results with results obtained at the time the release was created.
+
+<P>
+SCHED&nbsp; is written in FORTRAN 77 using only a few common extensions
+from the standard.  Development has occurred on a variety of machines
+including VAXes, PCs, and SUNs.  Current development is done on a
+Linux PC.  Reasonably recent versions have mainly been tested on Linux
+(g77), Solaris, and Mac OS X.  Older versions were tested on Hp, SGI,
+IBM (AIX), and DEC Alpha.  A big ``thank you'' to Franco Tinarelli at
+Bologna for performing many of these tests.  Machine dependent code
+has been isolated in special subdirectories under the <I>src/Cit</I>
+code directory.  All other FORTRAN files should compile without
+changes on a wide variety of machines.  Note, however, that all
+current testing is under one or another flavor of unix.  There has
+been no recent testing under other operating systems.  This will only
+change if there is pressure to do so.  Please inform Craig Walker at
+cwalker@nrao.edu if you install it on something else, including VMS or
+Windows - it has been many years since the last port to VMS or DOS,
+although both have served as the primary development environment for
+SCHED&nbsp; in the past.
+
+<P>
+If you plan to support SCHED&nbsp; under more than one computer
+architecture, you may wish to have subdirectories under bin and point
+to the appropriate one in the PATH environment variable.  Or you may
+wish to have entirely separate installations.
+
+<P>
+To install SCHED, the following steps can be followed.  Users of
+anything but unix or linux (who don't exist as far as we know) will
+have to make some modifications.
+
+<P>
+Users of Mac OS X will need to have X windows and the compiler installed.
+Also for full functionallity, pgplot should be installed.  There are some
+more details at the end of this section.
+
+<P>
+<DL>
+<DT><STRONG>Environment and PATH (unix systems):</STRONG></DT>
+<DD>Set the environment
+variable SCHED to the base directory under which SCHED&nbsp; will be
+installed.  To do this type, for example, either
+<PRE>
+setenv SCHED /users/cwalker/sched
+</PRE>
+or
+<PRE>
+export SCHED=/users/cwalker/sched
+</PRE>
+depending on the shell you use.  Add the bin subdirectory to your
+PATH, or be prepared to specify the full path name when you run the
+program.  If the plotting capabilities are used, which is highly
+recommended, <I>PGPLOT</I> will need to have been installed and the
+environoment variables <TT>PGPLOT_DIR</TT> and <TT>PGPLOT_FONT</TT> will
+need to be set.  In Socorro, the path and environment variables can be
+established by adding <TT>setup_vlba</TT> to your <I>.tcshrc.SunOS5</I>
+(or equivalent file for other shells).
+
+<P>
+</DD>
+<DT><STRONG>ftp the tar file:</STRONG></DT>
+<DD>Use anonymous ftp to ftp.aoc.nrao.edu (user
+"anonymous", password should be your full email address).  <TT>cd</TT> to
+pub/sched.  Tell ftp to do binary file transfers (type <TT>binary</TT>).
+List the tar files present and copy the latest version of <I>sched.aux.&lt;date&gt;.tar.gz</I> to your <I>$SCHED</I> directory.  If you will
+recompile, copy <I>sched.src.&lt;date&gt;.tar.gz</I>.  If you can use one of
+the precompiled excutables, find the appropriate one in a subdirectory
+and copy it to your <I>bin</I> subdirectory.  You probably want to
+rename any such executable to <I>sched</I> from the longer name
+including the release date that is used on the ftp site.  If you want
+to test the program, copy <I>sched.stdout.&lt;date&gt;.tar.gz</I> which
+contains the comparison output files created at the aoc.  The
+executables are around a Mbyte compressed although the size varies
+with architecture.  The other files are a bit over 500 kbytes
+compressed.
+
+<P>
+</DD>
+<DT><STRONG>Uncompress:</STRONG></DT>
+<DD>You will need the GNU zip utility to uncompress
+the tar file.  This should be available on most systems.  To
+uncompress the file, type <TT>gunzip &lt;filename&gt;</TT> or <TT>unzip
+&lt;filename&gt;</TT>.  GNU software is available by ftp from prep.ai.mit.edu.
+
+<P>
+</DD>
+<DT><STRONG>Unpack the tar files:</STRONG></DT>
+<DD>For each tar file, type <TT>tar -xvf
+&lt;filename&gt;</TT>.  This will unload all files from the tar file, creating
+the necessary subdirectory structure in the process.  A <I>README</I>
+file will appear in the top level directory which contains useful
+information on the directory structure and on installing SCHED.
+
+<P>
+Note that, after this step, a local html version of this manual will
+be available in the doc/sched/sched.html under the parent SCHED&nbsp; 
+directory (<I>$SCHED</I>).  Your browser will probably run much faster
+pointing at that version than at the version at NRAO.  Links inside
+the manual to examples depend on the presence of some logical links
+to other sched directories.  If these are not there after unpacking
+the tar files, they can be established by running the script
+<I>$SCHED/doc/makelinks</I>, assuming you are using unix or linux
+(just type <TT>makelinks</TT> while <I>$SCHED/doc</I> is your
+default directory).
+
+<P>
+</DD>
+<DT><STRONG>Compiling the programs:</STRONG></DT>
+<DD>If executables are not available for
+your machine, or they don't work (library problems or whatever), you
+will need to compile the program.  To do so, cd to the <I>$SCHED/src</I>
+subdirectory.  Examine the <I>Makefile</I> with an editor and,
+following the instructions in it, make any necessary changes.  Note
+that versions preconfigured for Sun and Linux are provided.  In fact,
+<I>Makefile</I> may just be a link to one of them.  The changes
+select computer type, library locations, compiler etc.  They are
+usually made by just altering which of several lines are not commented
+out.  Once the <I>Makefile</I> is ready, invoke the GNU <SMALL>MAKE</SMALL>
+utility by typing <TT>make</TT> or <TT>gmake</TT>.  There are a large number
+of routines that are compiled so this will take a few minutes and will
+produce quite a bit of output.  Once make has finished, you are ready
+to run the program.
+
+<P>
+Note that the current version of the Makefile requires the use of GNU
+make.  Check for GNU make on your system.  It is installed on many if
+not most and is the standard make under Linux.  If you don't have it,
+it can be obtained from prep.ai.mit.edu.  Also a version (probably not
+current) is available in the same ftp area as SCHED.
+
+<P>
+SCHED&nbsp; can be compiled with or without the plotting capabilities.  It
+is highly recommended that you compile with those capabilites.  To do
+so, you will need PGPLOT (version 5.2 or later) installed on
+your system.  See below for more information on getting PGPLOT
+if you don't already have it.  It is commonly available at astronomy
+sites and is used in AIPS++, so it is likely that you already
+have it installed.  There are stubs that can be used to bypass PGPLOT if necessary and the instructions on how to do so are in the
+Makefile.  SCHED&nbsp; will still be able to make schedules if the stubs
+are used, but it will not be able to make any plots.
+
+<P>
+There is also a stub for the routines related to use of the JPL
+emphemeris, in case that code causes problems.  The JPL routines are
+used for observations of planets, which are probably only of interest
+for single-dish testing of the VLBA by staff.  Using the stub requires
+changing some comments in the <I>Makefile</I>.  Similarily, there is
+a stub to avoid using the NAIF software related to satellite tracking.
+The normal user will use that stub because the NAIF libraries are not
+normally distributed with SCHED.
+
+<P>
+</DD>
+<DT><STRONG>Testing:</STRONG></DT>
+<DD>The examples in the <I>examples</I> subdirectory can
+be used to test the code once it has been installed.  A few outputs
+from each example are stored in the <I>Stdout</I> subdirectory which
+is packed in the <I>sched.stdout.&lt;date&gt;.tar.gz</I> tar file. For
+unix systems, the routine <I>Verify</I> can be used to run all of the
+examples and compare results with those in <I>Stdout</I>.  The output
+from <I>Verify</I> will be in the file <I>testruns.out</I>.  Any
+differences are in the output from diff.  It is common to have
+differences in items such as source positions in the last significant
+figure.  Different machines handle rounding differently.  Such
+differences can be ignored.  Any more serious differences are cause
+for concern.
+
+<P>
+</DD>
+</DL>
+
+<P>
+As noted above, SCHED&nbsp; has plotting capabilities that utilize the
+PGPLOT graphics subroutine library.  You must have version 5.2
+or later.  PGPLOT is not distributed with SCHED&nbsp; and will have
+to be obtained independently by anyone who wants to do plotting and
+who does not already have it available.  There is extensive
+information on PGPLOT available from the WWW page at
+<A NAME="tex2html78"
+  HREF="http://astro.caltech.edu/~tjp/pgplot/">http://www.astro.caltech.edu/~tjp/pgplot/</A>.
+
+<P>
+Some VAX FORTRAN features that are commonly supported by other FORTRAN
+compilers remain in the code.  These features are supported by all of
+the compilers that we are aware of that are being used for SCHED&nbsp; 
+currently.  But if you have problems, some of the non-standard
+features (in line comments, <TT>END DO</TT> etc) can be removed using the
+(very old) [program <I>vaxms</I> (contact cwalker@nrao.edu) or with
+``fct'' on a CONVEX or ``f77cvt'' on a SUN (beware of bugs in
+f77cvt!).  Note that <I>vaxms</I> has not been exercised in a very long
+time.
+
+<P>
+Some non-standard features, including long variable names, remain in
+the program after processing with <I>vaxms</I>.  All of the compilers
+used so far allow these features but they might cause trouble for
+other ports. Considerable use was made of the SLALIB (STARLINK)
+routines for precession, etc.  These routines use long variable names
+so removing this non-standard feature would not be easy. (email
+permission to use the FORTRAN SLALIB routines has been obtained from
+P. Wallace).
+
+<P>
+If the code or any other files are moved from a unix or VMS machine to
+a machine using DOS or Windows, beware that the end of line characters are
+different.  At least on a SUN (others?), a pair of utilities unix2dos
+and dos2unix can be used to fix the files.  Under Linux, the mcopy
+command can be used (from the mtools, which allow manipulation of DOS
+files from Linux).  If DOS format input files or catalogs are given to
+a unix SCHED, it will abort.
+
+<P>
+We are always interested in hearing about people's experiences
+installing SCHED&nbsp; on various machines.  If you have problems, or even
+success on machines other than those listed earlier, please let us
+know (email to cwalker@nrao.edu).  We would be especially interested
+if someone ports SCHED&nbsp; to a non-unix, or unix-like (eg Linux)
+operating system.  SCHED&nbsp; was supported under VMS and DOS in the
+past and the coding style hasn't changed, so a port to such operating
+systems would probably not be difficult.
+
+<P>
+Here are a few details for Mac OS X users.  SCHED&nbsp; was installed on
+a Mac iBook G4 system in Dec 2003 with OS X version 10.3 (Panther).
+Before installing SCHED, the code tools had to be installed (the
+installation package was already on disk, but not yet installed) and
+X windows had to be installed from the OS X installation CD 3 (not
+CD 2 as some documentation stated).  The code tools include gcc, but
+not g77 (why?).  A binary version of g77 compatible with Panther
+was obtained from hpc.sourceforge.net.  It installed itself on download
+and simply worked.  PGPLOT was installed.  There was no provided
+<I>.conf</I> file for OS X.  I made a <I>local.conf</I> file starting
+with the one from <I>../src/sys_bsd/g77_gcc.conf</I>. The following
+two lines were different:
+<PRE>
+    FFLAGD="-fno-backslash"
+ LIBS="-L/usr/lib -lgcc -L/usr/X11R6/lib -lX11"
+</PRE>
+The routine that makes the font file (pgpack) caused some trouble
+while I was messing with various variants on the above, but eventually
+worked.  I suspect problems with big vs little endian byte orders, but
+I'm not sure. Note that pgplot version 5.3 has OS X as a standard OS
+type.  This version was not released as of Oct 2004, but might be
+available if you ask nicely.
+
+<P>
+Once the X windows environment, gcc/g77, and PGPLOT were ready, SCHED
+compiled and ran with the Makefile set up for Linux/g77 and the
+and the following two modified lines (one just depends on the location
+of PGPLOT and the other helps it find the gcc libraries):
+XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11 # Mac OS X (ie DARWIN)
+LPGPLOT = /usr/local/pgplot
+The architecture still claimed to be LINUX and the g77 compiler flags
+were the same.  That's all it took!  It compiled and passed the
+verification tests.  If you are using FINK, some details may be different.
+
+<P>
+If you run into problems with some missing .h files, you might have a
+mismatched OS version and XCODE version, as I did.
+
+<P>
+I now have SCHED&nbsp; on a Powerbook and that may soon be the primary
+SCHED&nbsp; development platform.
 
 <P>
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html4200"
+<A NAME="tex2html4202"
   HREF="node290.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html4196"
+<A NAME="tex2html4198"
   HREF="node288.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html4190"
+<A NAME="tex2html4192"
   HREF="node288.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html4198"
+<A NAME="tex2html4200"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html4201"
-  HREF="node290.html">Running SCHED&nbsp; on a</A>
-<B> Up:</B> <A NAME="tex2html4197"
-  HREF="node288.html">Running SCHED</A>
-<B> Previous:</B> <A NAME="tex2html4191"
-  HREF="node288.html">Running SCHED</A>
- &nbsp; <B>  <A NAME="tex2html4199"
+<B> Next:</B> <A NAME="tex2html4203"
+  HREF="node290.html">Running SCHED</A>
+<B> Up:</B> <A NAME="tex2html4199"
+  HREF="node288.html">INSTALLING, AND RUNNING SCHED</A>
+<B> Previous:</B> <A NAME="tex2html4193"
+  HREF="node288.html">INSTALLING, AND RUNNING SCHED</A>
+ &nbsp; <B>  <A NAME="tex2html4201"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 Craig Walker
-2006-06-08
+2007-09-27
 </ADDRESS>
 </BODY>
 </HTML>

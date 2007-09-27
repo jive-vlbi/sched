@@ -26,10 +26,6 @@ $key = q/MP:DEBUG/;
 $external_labels{$key} = "$URL/" . q|node75.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/SPBBSYN2/;
-$external_labels{$key} = "$URL/" . q|node183.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/SP:BARREL/;
 $external_labels{$key} = "$URL/" . q|node233.html|; 
 $noresave{$key} = "$nosave";
@@ -38,8 +34,12 @@ $key = q/MP:CORPOL/;
 $external_labels{$key} = "$URL/" . q|node65.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/SPBBSYN2/;
+$external_labels{$key} = "$URL/" . q|node183.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/SSEC:VER_6.01/;
-$external_labels{$key} = "$URL/" . q|node299.html|; 
+$external_labels{$key} = "$URL/" . q|node302.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:GRIDNR/;
@@ -51,7 +51,7 @@ $external_labels{$key} = "$URL/" . q|node222.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NCHAN/;
-$external_labels{$key} = "$URL/" . q|node257.html|; 
+$external_labels{$key} = "$URL/" . q|node259.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:MAPLIM/;
@@ -99,7 +99,7 @@ $external_labels{$key} = "$URL/" . q|node21.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:JUN96/;
-$external_labels{$key} = "$URL/" . q|node318.html|; 
+$external_labels{$key} = "$URL/" . q|node321.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPVLAPEAK/;
@@ -107,7 +107,7 @@ $external_labels{$key} = "$URL/" . q|node150.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FREQOFF/;
-$external_labels{$key} = "$URL/" . q|node247.html|; 
+$external_labels{$key} = "$URL/" . q|node248.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPAUTOTAPE/;
@@ -115,11 +115,11 @@ $external_labels{$key} = "$URL/" . q|node41.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FORMAT/;
-$external_labels{$key} = "$URL/" . q|node246.html|; 
+$external_labels{$key} = "$URL/" . q|node247.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NOISE/;
-$external_labels{$key} = "$URL/" . q|node259.html|; 
+$external_labels{$key} = "$URL/" . q|node261.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:LINENAME/;
@@ -127,11 +127,11 @@ $external_labels{$key} = "$URL/" . q|node113.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:MKIII/;
-$external_labels{$key} = "$URL/" . q|node324.html|; 
+$external_labels{$key} = "$URL/" . q|node327.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLAFEAB/;
-$external_labels{$key} = "$URL/" . q|node281.html|; 
+$external_labels{$key} = "$URL/" . q|node283.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPDOPSRC/;
@@ -183,7 +183,7 @@ $external_labels{$key} = "$URL/" . q|node151.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPSPEEDH/;
-$external_labels{$key} = "$URL/" . q|node276.html|; 
+$external_labels{$key} = "$URL/" . q|node278.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:RECSYS/;
@@ -191,7 +191,7 @@ $external_labels{$key} = "$URL/" . q|node28.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.04/;
-$external_labels{$key} = "$URL/" . q|node297.html|; 
+$external_labels{$key} = "$URL/" . q|node300.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPDWELL/;
@@ -223,7 +223,7 @@ $external_labels{$key} = "$URL/" . q|node13.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/APP:STACODES/;
-$external_labels{$key} = "$URL/" . q|node327.html|; 
+$external_labels{$key} = "$URL/" . q|node330.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPQUAL/;
@@ -263,7 +263,7 @@ $external_labels{$key} = "$URL/" . q|node255.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PTOFF/;
-$external_labels{$key} = "$URL/" . q|node267.html|; 
+$external_labels{$key} = "$URL/" . q|node269.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSECNUMPASSES/;
@@ -343,7 +343,7 @@ $external_labels{$key} = "$URL/" . q|node281.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PCALXB1/;
-$external_labels{$key} = "$URL/" . q|node264.html|; 
+$external_labels{$key} = "$URL/" . q|node266.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:S2/;
@@ -359,11 +359,11 @@ $external_labels{$key} = "$URL/" . q|node26.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:IFDIST/;
-$external_labels{$key} = "$URL/" . q|node251.html|; 
+$external_labels{$key} = "$URL/" . q|node252.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PERIOD/;
-$external_labels{$key} = "$URL/" . q|node261.html|; 
+$external_labels{$key} = "$URL/" . q|node263.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPLIMTI/;
@@ -375,7 +375,7 @@ $external_labels{$key} = "$URL/" . q|node228.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FRSWITCH/;
-$external_labels{$key} = "$URL/" . q|node249.html|; 
+$external_labels{$key} = "$URL/" . q|node250.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:POINT/;
@@ -383,7 +383,7 @@ $external_labels{$key} = "$URL/" . q|node157.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:SATINIT/;
-$external_labels{$key} = "$URL/" . q|node285.html|; 
+$external_labels{$key} = "$URL/" . q|node287.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/TP:NDRIVES/;
@@ -399,11 +399,11 @@ $external_labels{$key} = "$URL/" . q|node156.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLAROT/;
-$external_labels{$key} = "$URL/" . q|node283.html|; 
+$external_labels{$key} = "$URL/" . q|node285.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:OLDRELEASE/;
-$external_labels{$key} = "$URL/" . q|node301.html|; 
+$external_labels{$key} = "$URL/" . q|node304.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECEXAMPLE1/;
@@ -475,7 +475,7 @@ $external_labels{$key} = "$URL/" . q|node132.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPSPEED/;
-$external_labels{$key} = "$URL/" . q|node275.html|; 
+$external_labels{$key} = "$URL/" . q|node277.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:GRIDMIN/;
@@ -511,7 +511,7 @@ $external_labels{$key} = "$URL/" . q|node55.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:RUNVAX/;
-$external_labels{$key} = "$URL/" . q|node290.html|; 
+$external_labels{$key} = "$URL/" . q|node292.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/PLEXIT/;
@@ -535,7 +535,7 @@ $external_labels{$key} = "$URL/" . q|node52.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/CHP:CHANG/;
-$external_labels{$key} = "$URL/" . q|node294.html|; 
+$external_labels{$key} = "$URL/" . q|node296.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC1DEC98/;
@@ -543,7 +543,7 @@ $external_labels{$key} = "$URL/" . q|node252.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:1JUL99/;
-$external_labels{$key} = "$URL/" . q|node309.html|; 
+$external_labels{$key} = "$URL/" . q|node312.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/PLPLOTFILE/;
@@ -555,7 +555,7 @@ $external_labels{$key} = "$URL/" . q|node251.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FREQREF/;
-$external_labels{$key} = "$URL/" . q|node248.html|; 
+$external_labels{$key} = "$URL/" . q|node249.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPFAX/;
@@ -563,7 +563,7 @@ $external_labels{$key} = "$URL/" . q|node74.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/APP:CHANGES/;
-$external_labels{$key} = "$URL/" . q|node323.html|; 
+$external_labels{$key} = "$URL/" . q|node326.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECKEYIN/;
@@ -631,7 +631,7 @@ $external_labels{$key} = "$URL/" . q|node15.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/CHP:SYSTEM/;
-$external_labels{$key} = "$URL/" . q|node286.html|; 
+$external_labels{$key} = "$URL/" . q|node288.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPCORAVG/;
@@ -639,7 +639,7 @@ $external_labels{$key} = "$URL/" . q|node46.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SWTCHDUR/;
-$external_labels{$key} = "$URL/" . q|node272.html|; 
+$external_labels{$key} = "$URL/" . q|node274.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:INDIV/;
@@ -671,7 +671,7 @@ $external_labels{$key} = "$URL/" . q|node71.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:30JAN2001/;
-$external_labels{$key} = "$URL/" . q|node306.html|; 
+$external_labels{$key} = "$URL/" . q|node309.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPSETUP/;
@@ -691,7 +691,7 @@ $external_labels{$key} = "$URL/" . q|node168.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:AUG97/;
-$external_labels{$key} = "$URL/" . q|node314.html|; 
+$external_labels{$key} = "$URL/" . q|node317.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:SOURCE/;
@@ -719,7 +719,7 @@ $external_labels{$key} = "$URL/" . q|node223.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SYNTH/;
-$external_labels{$key} = "$URL/" . q|node273.html|; 
+$external_labels{$key} = "$URL/" . q|node275.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPSLEWTI/;
@@ -755,15 +755,15 @@ $external_labels{$key} = "$URL/" . q|node147.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LCHAN/;
-$external_labels{$key} = "$URL/" . q|node252.html|; 
+$external_labels{$key} = "$URL/" . q|node253.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:HIST/;
-$external_labels{$key} = "$URL/" . q|node328.html|; 
+$external_labels{$key} = "$URL/" . q|node331.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FIRSTLO/;
-$external_labels{$key} = "$URL/" . q|node243.html|; 
+$external_labels{$key} = "$URL/" . q|node244.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:APR96/;
@@ -791,7 +791,7 @@ $external_labels{$key} = "$URL/" . q|node29.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NETSIDE/;
-$external_labels{$key} = "$URL/" . q|node258.html|; 
+$external_labels{$key} = "$URL/" . q|node260.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:CORCHAN/;
@@ -799,7 +799,7 @@ $external_labels{$key} = "$URL/" . q|node62.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:RUNDOS/;
-$external_labels{$key} = "$URL/" . q|node291.html|; 
+$external_labels{$key} = "$URL/" . q|node293.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECFEB97/;
@@ -823,7 +823,7 @@ $external_labels{$key} = "$URL/" . q|node175.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLABW/;
-$external_labels{$key} = "$URL/" . q|node280.html|; 
+$external_labels{$key} = "$URL/" . q|node282.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPBITS/;
@@ -835,7 +835,7 @@ $external_labels{$key} = "$URL/" . q|node129.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PCALFR1/;
-$external_labels{$key} = "$URL/" . q|node263.html|; 
+$external_labels{$key} = "$URL/" . q|node265.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:TPINI/;
@@ -843,7 +843,7 @@ $external_labels{$key} = "$URL/" . q|node211.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:16MAY95/;
-$external_labels{$key} = "$URL/" . q|node321.html|; 
+$external_labels{$key} = "$URL/" . q|node324.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECRELATEDPROGRAMS/;
@@ -851,7 +851,7 @@ $external_labels{$key} = "$URL/" . q|node236.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:FEB96/;
-$external_labels{$key} = "$URL/" . q|node320.html|; 
+$external_labels{$key} = "$URL/" . q|node323.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:VLA/;
@@ -907,7 +907,7 @@ $external_labels{$key} = "$URL/" . q|node243.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:1DEC98/;
-$external_labels{$key} = "$URL/" . q|node310.html|; 
+$external_labels{$key} = "$URL/" . q|node313.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECRUNUNIX/;
@@ -935,7 +935,7 @@ $external_labels{$key} = "$URL/" . q|node47.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:MODETEST/;
-$external_labels{$key} = "$URL/" . q|node256.html|; 
+$external_labels{$key} = "$URL/" . q|node258.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPFOCUS/;
@@ -963,7 +963,7 @@ $external_labels{$key} = "$URL/" . q|node237.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:MKII/;
-$external_labels{$key} = "$URL/" . q|node325.html|; 
+$external_labels{$key} = "$URL/" . q|node328.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPMINANT/;
@@ -1003,7 +1003,7 @@ $external_labels{$key} = "$URL/" . q|node184.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:18SEP2003/;
-$external_labels{$key} = "$URL/" . q|node302.html|; 
+$external_labels{$key} = "$URL/" . q|node305.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:20APR2000/;
@@ -1015,7 +1015,7 @@ $external_labels{$key} = "$URL/" . q|node27.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SAMPRATE/;
-$external_labels{$key} = "$URL/" . q|node268.html|; 
+$external_labels{$key} = "$URL/" . q|node270.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPVLATYPE/;
@@ -1023,7 +1023,7 @@ $external_labels{$key} = "$URL/" . q|node153.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:SIDEBAND/;
-$external_labels{$key} = "$URL/" . q|node269.html|; 
+$external_labels{$key} = "$URL/" . q|node271.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECVLASTDBD/;
@@ -1035,7 +1035,7 @@ $external_labels{$key} = "$URL/" . q|node215.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FLUKEA/;
-$external_labels{$key} = "$URL/" . q|node244.html|; 
+$external_labels{$key} = "$URL/" . q|node245.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:TSYS/;
@@ -1047,7 +1047,7 @@ $external_labels{$key} = "$URL/" . q|node44.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:STATION/;
-$external_labels{$key} = "$URL/" . q|node270.html|; 
+$external_labels{$key} = "$URL/" . q|node272.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPNOSUB/;
@@ -1068,6 +1068,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/MPPCAL/;
 $external_labels{$key} = "$URL/" . q|node105.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/SSEC:VER_7.0/;
+$external_labels{$key} = "$URL/" . q|node298.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/PLTYPE/;
@@ -1111,7 +1115,7 @@ $external_labels{$key} = "$URL/" . q|node139.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:09FEB2001/;
-$external_labels{$key} = "$URL/" . q|node305.html|; 
+$external_labels{$key} = "$URL/" . q|node308.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPFLUKESET/;
@@ -1155,7 +1159,7 @@ $external_labels{$key} = "$URL/" . q|node122.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:DEC96/;
-$external_labels{$key} = "$URL/" . q|node317.html|; 
+$external_labels{$key} = "$URL/" . q|node320.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPSTACAT/;
@@ -1171,7 +1175,7 @@ $external_labels{$key} = "$URL/" . q|node63.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLASYNA/;
-$external_labels{$key} = "$URL/" . q|node284.html|; 
+$external_labels{$key} = "$URL/" . q|node286.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VLAPAR/;
@@ -1215,7 +1219,7 @@ $external_labels{$key} = "$URL/" . q|node217.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:FEB97/;
-$external_labels{$key} = "$URL/" . q|node315.html|; 
+$external_labels{$key} = "$URL/" . q|node318.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPELCOLIM/;
@@ -1243,7 +1247,7 @@ $external_labels{$key} = "$URL/" . q|node126.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:CURRENT/;
-$external_labels{$key} = "$URL/" . q|node295.html|; 
+$external_labels{$key} = "$URL/" . q|node297.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:CALTIME/;
@@ -1303,7 +1307,7 @@ $external_labels{$key} = "$URL/" . q|node112.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:14OCT2001/;
-$external_labels{$key} = "$URL/" . q|node304.html|; 
+$external_labels{$key} = "$URL/" . q|node307.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSECVLBIEG/;
@@ -1315,11 +1319,11 @@ $external_labels{$key} = "$URL/" . q|node219.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PCAL/;
-$external_labels{$key} = "$URL/" . q|node262.html|; 
+$external_labels{$key} = "$URL/" . q|node264.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:JAN97/;
-$external_labels{$key} = "$URL/" . q|node316.html|; 
+$external_labels{$key} = "$URL/" . q|node319.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:DYNAMIC/;
@@ -1367,11 +1371,11 @@ $external_labels{$key} = "$URL/" . q|node176.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:NOISEFRQ/;
-$external_labels{$key} = "$URL/" . q|node260.html|; 
+$external_labels{$key} = "$URL/" . q|node262.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:MAR2005/;
-$external_labels{$key} = "$URL/" . q|node300.html|; 
+$external_labels{$key} = "$URL/" . q|node303.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPSTRING1/;
@@ -1427,7 +1431,7 @@ $external_labels{$key} = "$URL/" . q|node244.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:IFCHAN/;
-$external_labels{$key} = "$URL/" . q|node250.html|; 
+$external_labels{$key} = "$URL/" . q|node251.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPPTSLEW/;
@@ -1439,7 +1443,7 @@ $external_labels{$key} = "$URL/" . q|node208.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FEFILTER/;
-$external_labels{$key} = "$URL/" . q|node242.html|; 
+$external_labels{$key} = "$URL/" . q|node243.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/TP:OBSCODE/;
@@ -1471,7 +1475,7 @@ $external_labels{$key} = "$URL/" . q|node22.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:PTINCR/;
-$external_labels{$key} = "$URL/" . q|node266.html|; 
+$external_labels{$key} = "$URL/" . q|node268.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:READBACK/;
@@ -1539,7 +1543,7 @@ $external_labels{$key} = "$URL/" . q|node165.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:BUGS/;
-$external_labels{$key} = "$URL/" . q|node322.html|; 
+$external_labels{$key} = "$URL/" . q|node325.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECSTACAT/;
@@ -1579,7 +1583,7 @@ $external_labels{$key} = "$URL/" . q|node51.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:12JAN2001/;
-$external_labels{$key} = "$URL/" . q|node307.html|; 
+$external_labels{$key} = "$URL/" . q|node310.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPIFCHAN/;
@@ -1595,7 +1599,7 @@ $external_labels{$key} = "$URL/" . q|node199.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLABAND/;
-$external_labels{$key} = "$URL/" . q|node279.html|; 
+$external_labels{$key} = "$URL/" . q|node281.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:SPECIALVLBA/;
@@ -1631,7 +1635,7 @@ $external_labels{$key} = "$URL/" . q|node64.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPSPEEDL/;
-$external_labels{$key} = "$URL/" . q|node277.html|; 
+$external_labels{$key} = "$URL/" . q|node279.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECEXAMPLE3/;
@@ -1707,7 +1711,7 @@ $external_labels{$key} = "$URL/" . q|node165.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:APR96/;
-$external_labels{$key} = "$URL/" . q|node319.html|; 
+$external_labels{$key} = "$URL/" . q|node322.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:GRABGAP/;
@@ -1723,7 +1727,7 @@ $external_labels{$key} = "$URL/" . q|node73.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:RUNUNIX/;
-$external_labels{$key} = "$URL/" . q|node289.html|; 
+$external_labels{$key} = "$URL/" . q|node291.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPAZCOLIM/;
@@ -1775,7 +1779,7 @@ $external_labels{$key} = "$URL/" . q|node75.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TRACK1/;
-$external_labels{$key} = "$URL/" . q|node278.html|; 
+$external_labels{$key} = "$URL/" . q|node280.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:FEB96/;
@@ -1803,11 +1807,11 @@ $external_labels{$key} = "$URL/" . q|node220.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:RUNSCHED/;
-$external_labels{$key} = "$URL/" . q|node288.html|; 
+$external_labels{$key} = "$URL/" . q|node290.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:POL/;
-$external_labels{$key} = "$URL/" . q|node265.html|; 
+$external_labels{$key} = "$URL/" . q|node267.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECSETUPS/;
@@ -1819,7 +1823,7 @@ $external_labels{$key} = "$URL/" . q|node120.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:18NOV97/;
-$external_labels{$key} = "$URL/" . q|node312.html|; 
+$external_labels{$key} = "$URL/" . q|node315.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:UVMFS/;
@@ -1831,7 +1835,7 @@ $external_labels{$key} = "$URL/" . q|node61.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:18AUG97/;
-$external_labels{$key} = "$URL/" . q|node313.html|; 
+$external_labels{$key} = "$URL/" . q|node316.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:VLATSYS/;
@@ -1927,7 +1931,7 @@ $external_labels{$key} = "$URL/" . q|node152.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FLUKESET/;
-$external_labels{$key} = "$URL/" . q|node245.html|; 
+$external_labels{$key} = "$URL/" . q|node246.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPLCP50CM/;
@@ -1951,7 +1955,7 @@ $external_labels{$key} = "$URL/" . q|node212.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LOGGING/;
-$external_labels{$key} = "$URL/" . q|node254.html|; 
+$external_labels{$key} = "$URL/" . q|node255.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:DUALX/;
@@ -1983,7 +1987,7 @@ $external_labels{$key} = "$URL/" . q|node147.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:VLAIF/;
-$external_labels{$key} = "$URL/" . q|node282.html|; 
+$external_labels{$key} = "$URL/" . q|node284.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:NOV2004/;
@@ -2055,7 +2059,7 @@ $external_labels{$key} = "$URL/" . q|node83.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.05/;
-$external_labels{$key} = "$URL/" . q|node296.html|; 
+$external_labels{$key} = "$URL/" . q|node299.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:SETLST/;
@@ -2063,7 +2067,7 @@ $external_labels{$key} = "$URL/" . q|node229.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:INSTALL/;
-$external_labels{$key} = "$URL/" . q|node287.html|; 
+$external_labels{$key} = "$URL/" . q|node289.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPPINAME/;
@@ -2071,11 +2075,11 @@ $external_labels{$key} = "$URL/" . q|node108.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:RELATEDPROGRAMS/;
-$external_labels{$key} = "$URL/" . q|node293.html|; 
+$external_labels{$key} = "$URL/" . q|node295.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:20APR2000/;
-$external_labels{$key} = "$URL/" . q|node308.html|; 
+$external_labels{$key} = "$URL/" . q|node311.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSECTAPELEN/;
@@ -2147,7 +2151,7 @@ $external_labels{$key} = "$URL/" . q|node119.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:TPMODE/;
-$external_labels{$key} = "$URL/" . q|node274.html|; 
+$external_labels{$key} = "$URL/" . q|node276.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:LINE/;
@@ -2175,7 +2179,7 @@ $external_labels{$key} = "$URL/" . q|node67.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:STRING1/;
-$external_labels{$key} = "$URL/" . q|node271.html|; 
+$external_labels{$key} = "$URL/" . q|node273.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SECLINE/;
@@ -2198,12 +2202,16 @@ $key = q/MP:OPSLEWWT/;
 $external_labels{$key} = "$URL/" . q|node143.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/SP:M4PATCH/;
+$external_labels{$key} = "$URL/" . q|node257.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/SEC:SETUPS/;
 $external_labels{$key} = "$URL/" . q|node226.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:06MAR98/;
-$external_labels{$key} = "$URL/" . q|node311.html|; 
+$external_labels{$key} = "$URL/" . q|node314.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MPCORTAPE/;
@@ -2235,11 +2243,11 @@ $external_labels{$key} = "$URL/" . q|node92.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:DISFIL/;
-$external_labels{$key} = "$URL/" . q|node292.html|; 
+$external_labels{$key} = "$URL/" . q|node294.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LCP50CM/;
-$external_labels{$key} = "$URL/" . q|node255.html|; 
+$external_labels{$key} = "$URL/" . q|node256.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECDEC96/;
@@ -2303,7 +2311,7 @@ $external_labels{$key} = "$URL/" . q|node121.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.02/;
-$external_labels{$key} = "$URL/" . q|node298.html|; 
+$external_labels{$key} = "$URL/" . q|node301.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPTPSPEED/;
@@ -2315,11 +2323,11 @@ $external_labels{$key} = "$URL/" . q|node134.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SP:FE/;
-$external_labels{$key} = "$URL/" . q|node241.html|; 
+$external_labels{$key} = "$URL/" . q|node242.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SP:LEVEL/;
-$external_labels{$key} = "$URL/" . q|node253.html|; 
+$external_labels{$key} = "$URL/" . q|node254.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:STACAT/;
@@ -2371,7 +2379,7 @@ $external_labels{$key} = "$URL/" . q|node106.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/APP:HEAD/;
-$external_labels{$key} = "$URL/" . q|node326.html|; 
+$external_labels{$key} = "$URL/" . q|node329.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:06MAR98/;
@@ -2387,7 +2395,7 @@ $external_labels{$key} = "$URL/" . q|node43.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:15MAY2002/;
-$external_labels{$key} = "$URL/" . q|node303.html|; 
+$external_labels{$key} = "$URL/" . q|node306.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSECDEVVER/;
@@ -2404,6 +2412,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/MPTELEX/;
 $external_labels{$key} = "$URL/" . q|node144.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/SP:EVLA/;
+$external_labels{$key} = "$URL/" . q|node241.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SPLEVEL/;
@@ -2518,7 +2530,7 @@ $external_latex_labels{$key} = q|3.1.2|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.01/;
-$external_latex_labels{$key} = q|5.1.4|; 
+$external_latex_labels{$key} = q|5.1.5|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:PTSLEW/;
@@ -2674,7 +2686,7 @@ $external_latex_labels{$key} = q|5.3|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.04/;
-$external_latex_labels{$key} = q|5.1.2|; 
+$external_latex_labels{$key} = q|5.1.3|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:CORTAPE/;
@@ -3306,7 +3318,7 @@ $external_latex_labels{$key} = q|3.1.2|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.05/;
-$external_latex_labels{$key} = q|5.1.1|; 
+$external_latex_labels{$key} = q|5.1.2|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:SETLST/;
@@ -3477,6 +3489,10 @@ $key = q/SP:STRING1/;
 $external_latex_labels{$key} = q|3.6.4|; 
 $noresave{$key} = "$nosave";
 
+$key = q/SSEC:VER_7.0/;
+$external_latex_labels{$key} = q|5.1.1|; 
+$noresave{$key} = "$nosave";
+
 $key = q/CHP:INPUT/;
 $external_latex_labels{$key} = q|3|; 
 $noresave{$key} = "$nosave";
@@ -3495,6 +3511,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/MP:PTDUR/;
 $external_latex_labels{$key} = q|3.1.2|; 
+$noresave{$key} = "$nosave";
+
+$key = q/SP:M4PATCH/;
+$external_latex_labels{$key} = q|3.6.4|; 
 $noresave{$key} = "$nosave";
 
 $key = q/SEC:SETUPS/;
@@ -3598,7 +3618,7 @@ $external_latex_labels{$key} = q|3.6.4|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSEC:VER_6.02/;
-$external_latex_labels{$key} = q|5.1.3|; 
+$external_latex_labels{$key} = q|5.1.4|; 
 $noresave{$key} = "$nosave";
 
 $key = q/MP:OPLIMWT/;
@@ -3717,6 +3737,10 @@ $key = q/MP:DUR/;
 $external_latex_labels{$key} = q|3.1.2|; 
 $noresave{$key} = "$nosave";
 
+$key = q/SP:EVLA/;
+$external_latex_labels{$key} = q|3.6.4|; 
+$noresave{$key} = "$nosave";
+
 $key = q/SP:BBFILTER/;
 $external_latex_labels{$key} = q|3.6.4|; 
 $noresave{$key} = "$nosave";
@@ -3782,7 +3806,7 @@ $external_latex_labels{$key} = q|3.6.4|;
 $noresave{$key} = "$nosave";
 
 $key = q/SSSEC:MAR2005/;
-$external_latex_labels{$key} = q|5.1.5|; 
+$external_latex_labels{$key} = q|5.1.6|; 
 $noresave{$key} = "$nosave";
 
 1;
