@@ -130,6 +130,12 @@ C     the upper sideband from that mix is kept.  For X and U bands,
 C     the first mix at RF was lower sideband so the second mix keeps
 C     it at lower sideband. 
 C
+C     The EVLA system is quite different, and for now frequencies
+C     are being set by sticking in values that conform to the N*50+-10.1
+C     but are not necessarily within the old VLA bands.  Check against
+C     the old bands, but only abort if EVLA is not >0.
+C
+      write(*,*) 'CHKVLA', ks, evla(ks), vlasyna(ks)
       IF( VLABAND(KS)(1:1) .EQ. '4' ) THEN
          IF( BADLO( 'VLASYNA', VLASYNA(KS), 50.0D0, 1, 10.1D0, 0.D0,
      1              -961.D0, -939.D0, SETMSG ) ) ERRS = .TRUE.
@@ -138,8 +144,13 @@ C
          IF( BADLO( 'VLASYNA', VLASYNA(KS), 50.0D0, 1, 10.1D0, 0.D0, 
      1              -711.D0, -689.D0, SETMSG ) ) ERRS = .TRUE.
       ELSE
-         IF( BADLO( 'VLASYNA', VLASYNA(KS), 50.0D0, 1, 10.1D0, 0.D0, 
+         IF( EVLA(KS) .NE. 0 ) THEN
+            IF( BADLO( 'VLASYNA', VLASYNA(KS), 50.0D0, 1, 10.1D0, 0.D0, 
+     1              0.0D0, 60000.0D0, SETMSG ) ) ERRS = .TRUE.
+         ELSE
+            IF( BADLO( 'VLASYNA', VLASYNA(KS), 50.0D0, 1, 10.1D0, 0.D0, 
      1              3300.0D0, 4075.0D0, SETMSG ) ) ERRS = .TRUE.
+         END IF
       END IF
 C
       IF( VLABAND(KS)(2:2) .EQ. '4' ) THEN
@@ -149,8 +160,13 @@ C
          IF( BADLO( 'VLASYNB', VLASYNB(KS), 50.0D0, 1, 10.1D0, 0.D0, 
      1              -711.D0, -689.D0, SETMSG ) ) ERRS = .TRUE.
       ELSE
-         IF( BADLO( 'VLASYNB', VLASYNB(KS), 50.0D0, 1, 10.1D0, 0.D0, 
+         IF( EVLA(KS) .NE. 0 ) THEN
+            IF( BADLO( 'VLASYNB', VLASYNB(KS), 50.0D0, 1, 10.1D0, 0.D0, 
+     1              0.0D0, 60000.0D0, SETMSG ) ) ERRS = .TRUE.
+         ELSE
+            IF( BADLO( 'VLASYNB', VLASYNB(KS), 50.0D0, 1, 10.1D0, 0.D0, 
      1              3300.0D0, 4075.0D0, SETMSG ) ) ERRS = .TRUE.
+         END IF
       END IF
 C
 C     Check FLUKEA and FLUKEB
