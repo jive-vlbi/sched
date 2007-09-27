@@ -123,6 +123,7 @@ C
       KD( KEYPTR( 'FEFILTER', KC, KI ) ) = ZZZZ
       KD( KEYPTR( 'VLABW', KC, KI ) ) = ZZZZ
       KD( KEYPTR( 'VLABAND', KC, KI ) ) = ZZZZ
+      KD( KEYPTR( 'EVLA', KC, KI ) ) = 0.D0
       I1 = KEYPTR( 'VLAIF', KC, KI ) - 1
       I2 = KEYPTR( 'VLAROT', KC, KI ) - 1
       DO I = 1, 2
@@ -506,6 +507,7 @@ C
 C
 C        Get the VLA specific parameters.
 C
+         EVLA(KS)     = KD( KEYPTR( 'EVLA', KC, KI ) )
          FLUKESET(KS) = KD( KEYPTR( 'FLUKESET', KC, KI ) )
          FLUKEA(KS)   = KD( KEYPTR( 'FLUKEA', KC, KI ) )
          FLUKEB(KS)   = KD( KEYPTR( 'FLUKEB', KC, KI ) )

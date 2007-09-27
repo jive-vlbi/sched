@@ -57,7 +57,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\ VERSION 6.05}
+\title{THE \schedb USER MANUAL \\ VERSION 7.0}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -297,8 +297,8 @@ link observations on VLA and you are given a VLA antenna instead of
 VLBA\_PT.
 
 \item \htmladdnormallink{VLBI on the GBT:}
-{http://www.gb.nrao.edu/~gbtguide/fghigo/vlbinfo.html} Some
-information for scheduling the GBT for VLBI.
+{http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html#hifreq}
+Some information for scheduling the GBT for VLBI.
 
 \item \htmladdnormallink{VLBA Terminal at Effelsberg 100m.}
 {http://www.mpifr-bonn.mpg.de/EVN/VLBAeff.html}  Information on using
@@ -3431,7 +3431,9 @@ order of parameters within a group (between ``/''s) is not significant.
 observations on the VLA.  It can also be used instead of {\sc OBSERVE}
 to schedule pure VLA observations involving a limited subset of the
 special cards that can be in VLA schedules.  This includes most
-continuum observations.  For more information on the VLA, check out
+continuum observations.  This situation is likely to evolve as the EVLA
+upgrade, which includes a new control system, comes on line, so stay
+tuned.  For more information on the VLA, check out
 the VLA from the NRAO home page at \htmladdnormallink{{\sl
 http://www.nrao.edu}} {http://www.nrao.edu}.  For much detailed
 information on VLBI at the VLA, follow the links to
@@ -3483,14 +3485,28 @@ used or they must be edited in by hand. Beware of the fixed formats:
 if values are put in the wrong columns, the VLA on-line system will
 not behave as expected!
 
-Support for the Pie Town link is being added.  Parameter \htmlref{{\tt
-PTLINK}}{MP:PTLINK} tells \schedb that the link is to be used.  This
-causes {\tt //LO} cards to be written to the VLA OBS file and causes
-\schedb to put the Pie Town first LO value on those cards.  A setup
-parameter, {\tt NOISEFRQ} has been added to control the noise cal
-switching frequency.  This is a new project and features will be added
-as necessary.  The example file {\sl ptlink.key} shows how to
-construct a file for an observation using the link.
+\schedb checks the ranges of the frequency settings given for the
+``//LO'' cards.  But the EVLA has made it possible to reach
+frequencies far outside the range of the original VLA hardware.  Such
+frequencies can be requested using frequency settings in the style of
+the VLA, but outside the allowed VLA ranges.  In addition, the
+parrameter \htmlref{{\tt EVLA}}{SP:EVLA} should be given in the setup 
+file to turn off some of the checks of frequency ranges.  This is all
+at a primitive state as of Fall 2007 and will be updated as the EVLA
+matures.
+
+Support for the Pie Town link was being added although, in practice,
+Pie Town link observations were not generally scheduled with \sched.
+Parameter \htmlref{{\tt PTLINK}}{MP:PTLINK} tells \schedb that the
+link is to be used.  This causes {\tt //LO} cards to be written to the
+VLA OBS file and causes \schedb to put the Pie Town first LO value on
+those cards.  A setup parameter, {\tt NOISEFRQ} has been added to
+control the noise cal switching frequency.  This is a new project and
+features will be added as necessary.  The example file {\sl
+ptlink.key} shows how to construct a file for an observation using the
+link.  The Pie Town link is not currently active as of mid 2007, and
+when it returns it will be based on the new VLBA digital backend and
+on the EVLA correlator.  So control is likely to be different.
 
 
 \subsection{\label{SSEC:VLAVLBI}VLBI at the VLA}
@@ -10800,6 +10816,7 @@ confused about what signal is in each baseband channel.
 \htls{BITS}{~~~~} Number of bits per sample.
 \htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
 \htls{ELCOLIM}{~} Colimation offset in elevation.
+\htls{EVLA}{~~~~} Allow EVLA frequencies the old VLA could not reach.
 \htls{FE}{~~~~~~} Receivers to be used.
 \htls{FEFILTER}{} VLA front end filter specification for `` //LO'' card.
 \htls{FIRSTLO}{~} Sum of all LOs except the one set if {\tt FREQ} used.
@@ -11140,6 +11157,24 @@ the VLBA pointing.
 {{\tt 0.0}}
 {Defaults to previous station.}
 {{\tt ELCOLIM=1.2}}
+
+\subsubsection{\label{SP:EVLA}{\tt EVLA}}
+
+The EVLA can reach many frequencies that the VLA cannot.  Such frequencies
+can be specified to the VLA using the same {\tt VLASYNA} etc parameters
+as before, but with values that would be outside the range that would be
+allowed for the VLA.  Since \schedb checks the ranges of these settings, that
+checking has to be overridden.  Setting {\tt EVLA} to a non-zero value 
+will cause such checking.  It is an integer to allow for possible future
+varients with different values.  Note that the frequencies must still conform
+to the patterns like 50*N +- 10.1 MHz.
+
+\rcwbox
+{Override VLA frequency checking.}
+{Any integer.}
+{{\tt 0}}
+{Defaults to previous station, but only affects the VLA.}
+{{\tt EVLA=1}}
 
 
 \subsubsection{\label{SP:FE}{\tt FE}}
@@ -11652,7 +11687,7 @@ GEO1 is for a geodetic style patching. The pattern is:
 
 \rcwbox
 {Character string of length up to 8.}
-{{\tt ''ASTRO'' or ''GEO1''}
+{{\tt ''ASTRO'' or ''GEO1''}}
 {{\tt ''ASTRO''}}
 {Defaults to previous station.}
 {{\tt M4PATCH = GEO1}}
@@ -12480,6 +12515,12 @@ which will not pass through this filter, are:
 There are actually even more allowed values at the low end, but
 it is not clear that it is possible to use them.
 
+If the parameter \htmlref{\tt EVLA}{SP:EVLA} is set, {\tt VLASYNA} and
+{\tt VLASYNB} must still conform to N*50 +- 10.1 MHz, but there is no
+limit on the range.  The EVLA LO system is entirely different, and the
+program that converts the VLA style file to an EVLA file will do the
+necessary conversions.
+
 SCHED can determine the value of this parameter from the
 \htmlref{frequency catalog}{SEC:FRQCAT} if that file includes
 an entry that covers the desired VLA setup.
@@ -12898,14 +12939,16 @@ in \sched.
 \chapter{\label{CHP:CHANG}RELEASE NOTES}
 
 
-
 \section{\label{SEC:CURRENT}Current Release}
 
-\subsection{\label{SSEC:VER_6.06}Version 6.06
+\subsection{\label{SSEC:VER_7.0}Version 7.0}
 
 This is the current development version.
 
 \begin{itemize}
+
+\item  Add parameter {\tt EVLA} to allow the VLA to reach frequencies allowed
+       by the EVLA but not the VLA.  Sept. 26, 2007.  RCW.
 
 \item  Convert all stations to Mark5 in the station catalog.  Nov. 8, 2006 RCW
 
@@ -12922,6 +12965,11 @@ polarization study of the geodetic stations (VLBA providing both polarizations)
 possible.  June 2007  RCW.
 
 \item  Add 24GHz band.  Aug 28, 2007
+
+\item  Put \schedb under revision control with SVN.  Adapted Cormac Reynolds
+version that had about a 2 year history.  Aug 31, 2007.  RCW.
+
+
 
 
 
@@ -15246,8 +15294,14 @@ This is a list of desired program changes, fixes or enhancements.
 
 \begin{itemize}
 
+\item Make {\tt EVLA} apply to the FE settings.  Or better yet, somehow
+      describe the EVLA frequency setup.  Sept. 27, 2007.  RCW.
+
+\item Update all Green Bank references (eg in PEAK) from 140' to GBT.
+      Sep. 24, 2007
+
 \item Add the peakfile to the list of sched input files.  
-      Sep. 29. 2007 RCW
+      Sep. 20. 2007 RCW
 
 \item Break very long scans to prevent mid scan disk change problems.
       Sep. 19, 2007.  RCW.

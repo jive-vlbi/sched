@@ -219,6 +219,14 @@ C
      1        'information: (LO and FI cards not needed.  '//
      2        'Defaults shown.)'
          END IF
+         IF( EVLA(KS) .EQ. 0 ) THEN
+            WRITE( IUNIT, '( A )' )
+     1      '     Parameter EVLA not set. '
+         ELSE
+            WRITE( IUNIT, '( A, I3, A, A )' )
+     1      '     Parameter EVLA set to', EVLA(KS), '.  VLASYNA and ',
+     2      'VLASYNB may be outside old VLA range.'
+         END IF
          WRITE( IUNIT, '( A, A, T26, A, A, T49, 2A )' )
      1      '     VLABAND:       ', VLABAND(KS), 'VLABW:       ', 
      2      VLABW(KS), 'FEFILTER: ', FEFILTER(KS)

@@ -79,6 +79,7 @@ C
       FLUKESET(TO) = FLUKESET(FROM)           
       FLUKEA(TO)   = FLUKEA(FROM)             
       FLUKEB(TO)   = FLUKEB(FROM)             
+      EVLA(TO)     = EVLA(FROM)
       VLAFEAB(TO)  = VLAFEAB(FROM)            
       VLAFECD(TO)  = VLAFECD(FROM)            
       VLASYNA(TO)  = VLASYNA(FROM)            
