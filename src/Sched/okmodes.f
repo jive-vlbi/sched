@@ -255,8 +255,9 @@ C
 C
 C           Deal with a likely problem.
 C
-            IF( NCHAN(KS) .NE. 1 .AND. NCHAN(KS) .NE. 2 .AND. 
-     1          NCHAN(KS) .NE. 8 .AND. NCHAN(KS) .NE. 16 ) THEN
+            IF( NCHAN(KS) .NE. 1 .AND. NCHAN(KS) .NE. 2 .AND.
+     1          NCHAN(KS) .NE. 4 .AND.
+     2          NCHAN(KS) .NE. 8 .AND. NCHAN(KS) .NE. 16 ) THEN
                CALL WLOG( 1, '        The number of channels is '//
      1                'not a power of 2.' )
                CALL WLOG( 1, '            This may be ok but the '//

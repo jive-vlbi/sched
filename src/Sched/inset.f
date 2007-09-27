@@ -103,6 +103,7 @@ C
 C
 C     VLA parameters. 'ZZ' will cause error.
 C
+      CALL KEYADD( 'EVLA', 0.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'VLABAND', 'ZZ', 2, KD, KC, KI )
       CALL KEYCHR( 'VLABW', 'ZZZZ', 4, KD, KC, KI )
       CALL KEYADD( 'FLUKESET', 0.D0, 1, KD, KC, KI )

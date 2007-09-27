@@ -201,8 +201,11 @@ C     Included are the fluke set, the fluke frequencies, the F.E. LO
 C     frequencies and the 2-4 GHz synthesizer frequencies (MHz)
 C     The 2-4 GHz synthesizer frequencies are the true frequency.  The
 C     value sent to the LO card is rounded to the nearest MHz.
+C     EVLA, if not 0, allows setting frequencies outside old VLA ranges.
+C     It is integer rather than logical to allow for possible varients.
 C
       INTEGER           FLUKESET(MSET)   
+      INTEGER           EVLA(MSET)
       DOUBLE PRECISION  FLUKEA(MSET)     
       DOUBLE PRECISION  FLUKEB(MSET)     
       DOUBLE PRECISION  VLAFEAB(MSET)    
@@ -221,7 +224,7 @@ C
       LOGICAL           VLAVL(MSET)
 C
       COMMON  /SETN3/   FLUKEA, FLUKEB, VLAFEAB, VLAFECD,
-     1                  VLASYNA, VLASYNB, FLUKESET, VLALOFI,
+     1                  VLASYNA, VLASYNB, FLUKESET, EVLA, VLALOFI,
      2                  VLAVA, VLAVB, VLAVR, VLAVL
       COMMON  /SETC3/   FEFILTER, VLAIF, VLAROT, VLABAND, VLABW
 C
