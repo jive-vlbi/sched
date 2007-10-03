@@ -1,7 +1,8 @@
 C    schfreq.inc
 C
 C    Include file for SCHED to hold station frequency setups as read 
-C    from the frequency table.
+C    from the frequency catalog.  The default frequency catalog is in
+C    the file $SCHED/catalogs/freq.dat
 C
 C     Parameters:
 C           MFREQ    - Max number of frequency setups.

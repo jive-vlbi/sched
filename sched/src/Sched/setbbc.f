@@ -34,10 +34,16 @@ C
             END IF
          END DO
 C
+C     If there is no corresponding frequency catalog entry, require
+C     that the IFCHANS have been set.
+C
       ELSE
          DO ICH = 1, NCHAN(KS)
             IF( IFCHAN(ICH,KS) .EQ. ' ' ) THEN
-               CALL WLOG( 1, 'SETBBC: Cannot set IFCHANs.' )
+               WRITE( MSGTXT, '( A, I3, A, I3, A )' )
+     1             'SETBBC: Cannot set IFCHANs.  First bad channel: ',
+     2             ICH, ' of ', NCHAN(KS), ' total.'
+               CALL WLOG( 1, MSGTXT )
                CALL ERRSET( KS )
             END IF
          END DO
