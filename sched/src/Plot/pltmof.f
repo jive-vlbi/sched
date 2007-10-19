@@ -23,7 +23,7 @@ C
 C
 C     If type was changed clear offset area
 C
-      IF( TYPE .NE. OTYPE ) THEN
+      IF( TYPE .NE. OTYPE .AND. PXYTYP(PXYBCK(1)) .NE. 'Wv' ) THEN
           OTYPE = TYPE
           CALL PGSCI( PPNCOL(1) )
           CALL PGRECT( PXYTXT(1,4), PXYTXT(2,4),

@@ -9,7 +9,7 @@ C
       CHARACTER        PFLNAM*(*)
       CHARACTER*16     STRING, CLASS
       CHARACTER*80     STRIN1, ERRSTR*80
-      INTEGER          STAT, I, J, N, N1, N2, IER, LUN, NT
+      INTEGER          STAT, I, J, K, W, N, N1, N2, IER, LUN, NT
 C ----------------------------------------------------------------------
 C
       LUN  = 92
@@ -86,14 +86,21 @@ C
          PSOCNT = N
 C
       ELSE IF( CLASS .EQ. 'SETUPS' ) THEN
+         K = 0
+         W = 0 
          DO 30 I=1,N
             READ( LUN, 120, END=600, ERR=500 ) STRIN1, N1
-            IF( STRIN1 .EQ. SETFILE(I) .AND. N1 .EQ. 1) THEN
-               PSFBCK = I
-               PSFCNT = I / 5
-               IF( MOD( I, 5 ) .GT. 0 ) PSFCNT = PSFCNT + 1
+            IF( STRIN1 .EQ. SETFILE(I) ) THEN
+               PSFPOI(I) = N1
+               IF( N1 .EQ. 1 ) K = K + 1
+               IF( W  .EQ. 0 ) W = I
             END IF
  30      CONTINUE
+C
+         PSFCNT = W / 5
+         IF( MOD( W, 5 ) .GT. 0 ) PSFCNT = PSFCNT + 1
+         PSFBCK = 0
+         IF( K .EQ. NSETF ) PSFBCK = 1
 C
       ELSE IF( CLASS .EQ. 'PLOTTYPE' ) THEN
          POPBCK = N

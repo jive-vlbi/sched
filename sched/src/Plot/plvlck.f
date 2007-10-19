@@ -5,8 +5,9 @@ C
 C     Routine for sched that compute or edit an element of
 C     a value object
 C
-      CHARACTER     CH, STRVAL*6
-      INTEGER       J, EL, VAL, VAL1, LMIN, LMAX, OFS, EXP, SGN
+      CHARACTER     CH, STRVAL*14
+      INTEGER*8     VAL, VAL1, LMIN, LMAX
+      INTEGER       J, EL, OFS, EXP, SGN, IEXP
       REAL          XV1, XV2, YV1, YV2, XE1, XE2, YE1, YE2
 C ----------------------------------------------------------------------
 C
@@ -19,10 +20,10 @@ C
       IF( CH .EQ. '+' .OR. CH .EQ. '-') THEN
          IF( CH .EQ. '+' ) THEN
             EXP = EXP + 1
-            IF( EXP .GT. 4 ) EXP = 0
+            IF( EXP .GT. PXYEXP ) EXP = 0
          ELSE 
             EXP = EXP - 1
-            IF( EXP .LT. 0 ) EXP = 4
+            IF( EXP .LT. 0 ) EXP = PXYEXP
          END IF
 C
 C        Update Exponent Button
@@ -68,7 +69,12 @@ C
 C
 C        Replot a Coordinate element
 C
-         CALL PGNUMB( VAL, 0, 1, STRVAL, J )
+         IF( VAL .GT. (10**8) ) THEN
+            CALL PLNUMB( VAL, STRVAL )
+         ELSE
+            CALL PGNUMB( VAL, 0, 1, STRVAL, J )
+         END IF
+C
          CALL PLSTXT( XV1, XV2, YV1, YV2, STRVAL, 1, .FALSE. )
 C
 C        Set the new Value of Axis element selected

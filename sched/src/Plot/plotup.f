@@ -1,5 +1,5 @@
-      SUBROUTINE PLOTUP( KSET, KSRC, JSRC, KSTA, XAXIS, YAXIS,
-     1                   SCREEN, COLOR, RXMIN, RXMAX, RYMIN, RYMAX )
+      SUBROUTINE PLOTUP( KSET, XAXIS, YAXIS, SCREEN, COLOR,
+     1                   RXMIN, RXMAX, RYMIN, RYMAX )
 C
 C     Routine for SCHED that plots sky coverage according to requests
 C     from user gathered by plotter.f
@@ -9,8 +9,8 @@ C
 C
       INTEGER           ISCN, ISTA, KSET, IER
       INTEGER           NPTX, NPTY, ICOLOR, ITICKS
-      INTEGER           ISRC, KSRC, JSRC, KSTA, NPSRC, NSUN
-      INTEGER           I, NPSTA, LINSIZ, LABSIZ, CIND
+      INTEGER           ISRC, NPSRC, NSUN
+      INTEGER           I, NPSTA, LINSIZ, LABSIZ, CIND, ISET
       LOGICAL           SCREEN, COLOR
       REAL              XPT(4), YPT(4), XSHADE(4), YSHADE(4)
       REAL              XMIN, XMAX, YMIN, YMAX, XM, YM, YOF
@@ -131,7 +131,7 @@ C
 C
 C     Give Experiment code and setup file if one was specified.
 C
-      IF( KSET .EQ. 0 ) THEN
+      IF( KSET .LE. 0 ) THEN
          CALL PGMTXT( 'T', 3.0, 0.5, 0.5,
      1                'Experiment code: '//EXPCODE )
       ELSE
@@ -219,6 +219,9 @@ C
 C           Draw data.
 C
             DO ISCN = SCAN1, SCANL
+             DO ISET = 1, NSETF
+              IF(PSFPOI(ISET) .EQ. 1 .AND. 
+     1           SETNUM(ISCN) .EQ. ISET) THEN
 C
 C              Get Sun Elevation
 C
@@ -251,6 +254,8 @@ C
                   IF( NPTX .EQ. 4 .AND. NPTY .EQ. 4 ) 
      1                CALL PGLINE( 2, XPT(3), YPT(3) )
                END IF
+              END IF
+             END DO
             END DO
 C
            END IF
@@ -289,8 +294,10 @@ C
 C        Draw data.
 C
          DO ISCN = SCAN1, SCANL
-            IF( ( SETNUM(ISCN) .EQ. KSET .OR. KSET .EQ. 0 ) .AND.
-     1              SRLSTN(SRCNUM(ISCN)) .EQ. ISRC ) THEN
+          DO ISET = 1, NSETF
+
+            IF((PSFPOI(ISET) .EQ. 1 .AND. SETNUM(ISCN) .EQ. ISET)
+     1          .AND. SRLSTN(SRCNUM(ISCN)) .EQ. ISRC ) THEN
                IF( STASCN(ISCN,ISTA) .AND. 
      1             UP1(ISCN,ISTA) .EQ. ' ' .AND.
      2             UP2(ISCN,ISTA) .EQ. ' ' ) THEN
@@ -319,6 +326,7 @@ C              END Scan Loop
 C  
                END IF
             END IF
+           END DO
          END DO
 C
 C     END Stations Loop

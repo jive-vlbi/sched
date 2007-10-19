@@ -5,8 +5,9 @@ C     a coordinate object
 C
       INCLUDE 'plot.inc'
 C
-      CHARACTER     CH, STRVAL*6
-      INTEGER       I, AX, EL, K, LMIN, LMAX, OFS
+      CHARACTER     CH, STRVAL*14
+      INTEGER*8     LMIN, LMAX
+      INTEGER       I, AX, EL, K, OFS
       REAL          X1, X2, Y1, Y2
 C ----------------------------------------------------------------------
 C
@@ -16,6 +17,9 @@ C
       IF( AX .GT. 2 ) K = PXYBCK(2)
       LMIN = 0
       LMAX = ABS( PXSLIM(K,2) )
+      IF( PXYTYP(K) .EQ. 'Wv' ) THEN
+         LMAX = ( LMAX * 10**3 ) / 10**PXYWLE
+      END IF
 C
 C     Set Value Dependency
 C

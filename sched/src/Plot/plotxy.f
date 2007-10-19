@@ -12,7 +12,7 @@ C
 C
       INTEGER           ISCN, ISTA, KSTA1, KSTAN, KSET, IER
       INTEGER           J, NPTX, NPTY, ICOLOR, ITICKS
-      INTEGER           LINSIZ, LABSIZ, CIND
+      INTEGER           LINSIZ, LABSIZ, CIND, ISET
       INTEGER           ISRC, KSRC, LSRC, KSTA, CSTA, NPSRC
       LOGICAL           SCREEN, COLOR
       REAL              XPT(4), YPT(4), XSHADE(4), YSHADE(4)
@@ -125,7 +125,7 @@ C
 C
 C     Give Experiment code and setup file if one was specified.
 C
-      IF( KSET .EQ. 0 ) THEN
+      IF( KSET .LE. 0 ) THEN
          CALL PGMTXT( 'T', 3.0, 0.5, 0.5,
      1                'Experiment code: '//EXPCODE )
       ELSE
@@ -191,14 +191,17 @@ C
 C        Draw data.  (LSRC prevents problems on Sun's when KSRC=0)
 C
          DO ISCN = SCAN1, SCANL
-            IF( KSRC .EQ. 0 ) THEN
-               LSRC = 0
-            ELSE
-               LSRC = SRCATN(KSRC)
-            END IF
-            IF( ( ( SETNUM(ISCN) .EQ. KSET .OR. KSET .EQ. 0 ) .AND.
-     1            ( SRCNUM(ISCN) .EQ. LSRC .OR. KSRC .EQ. 0 ) ) .AND.
-     3              PSOBCK(SRLSTN(SRCNUM(ISCN))) .EQ. 1 ) THEN
+           IF( KSRC .EQ. 0 ) THEN
+              LSRC = 0
+           ELSE
+              LSRC = SRCATN(KSRC)
+           END IF
+C          Set the setup files if multiple selected
+           DO ISET = 1, NSETF
+C
+            IF(((PSFPOI(ISET) .EQ. 1 .AND. SETNUM(ISCN) .EQ. ISET)
+     1         .AND. (SRCNUM(ISCN) .EQ. LSRC .OR. KSRC .EQ. 0))
+     3         .AND.  PSOBCK(SRLSTN(SRCNUM(ISCN))) .EQ. 1 ) THEN
                IF( STASCN(ISCN,ISTA) .AND. 
      1             UP1(ISCN,ISTA) .EQ. ' ' .AND.
      2             UP2(ISCN,ISTA) .EQ. ' ' ) THEN
@@ -219,6 +222,7 @@ C
 C
                END IF
             END IF
+           END DO
          END DO
        END IF
       END DO
