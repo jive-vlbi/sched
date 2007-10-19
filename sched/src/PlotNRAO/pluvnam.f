@@ -146,7 +146,7 @@ C
 C
 C     Give setup.
 C
-      IF( KSET .NE. 0 ) THEN
+      IF( KSET .GT. 0 ) THEN
          CALL PGSCI( 2 )
          CALL PGMTXT( 'T', 0.3, 0.5, 0.5, 'Setup: '//SETFILE(KSET) )
       END IF
