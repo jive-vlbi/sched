@@ -98,24 +98,33 @@ C
          IF( PSFBXP(1,6) .LE. XX .AND. PSFBXP(2,6) .GE. XX .AND.
      1       PSFBXP(3,6) .LE. YY .AND. PSFBXP(4,6) .GE. YY ) THEN
 C
-C           Select All Setup only if not already selected
+C           Select/Deselect All Setup Files
 C
-            IF( PSFBCK .GT. 0 ) THEN
-               CALL PLBUTX( PSFBXP(1,6), PSFBXP(2,6),
-     1                      PSFBXP(3,6), PSFBXP(4,6), 0.,
-     2                      0., ' ', 0, 1 )
-C
-C              Deselect Old Setup if visible
-C
-               J = PSFBCK - ((PSFCNT - 1) * 5)
-               IF( J .GE. 1 .AND. J .LE. 5 ) THEN
-                  CALL PLBUTX( PSFBXP(1,J), PSFBXP(2,J),
-     1                         PSFBXP(3,J), PSFBXP(4,J), 0.,
-     2                         0., ' ', 0, 0 )
-               END IF
+            IF( PSFBCK .EQ. 0 ) THEN
+               PSFBCK = 1
+               PXYSEC = .TRUE.
+            ELSE
                PSFBCK = 0
             END IF
-            PXYSEC = .TRUE.
+            DO 322 I=1,NSETF
+               PSFPOI(I) = PSFBCK
+ 322        CONTINUE
+
+            CALL PLBUTX( PSFBXP(1,6), PSFBXP(2,6),
+     1                   PSFBXP(3,6), PSFBXP(4,6), 0.,
+     2                   0., ' ', 0, PSFBCK )
+C
+C          Select/Deselect visible setups
+C
+            
+            DO 324 J=1,5
+               I = ((PSFCNT - 1) * 5) + J
+               IF( I .LE. NSETF ) THEN
+                  CALL PLBUTX( PSFBXP(1,J), PSFBXP(2,J),
+     1                         PSFBXP(3,J), PSFBXP(4,J), 0.,
+     2                         0., ' ', 0, PSFBCK )
+               END IF
+ 324        CONTINUE
             RETURN
          END IF
 C
@@ -127,26 +136,33 @@ C
             IF( PSFBXP(1,I) .LE. XX .AND. PSFBXP(2,I) .GE. XX .AND.
      1          PSFBXP(3,I) .LE. YY .AND. PSFBXP(4,I) .GE. YY ) THEN
 C
-C              Deselect Old Setup if visible
+C              Select/Deselect Setup if visible
 C
-               IF( PSFBCK .GT. 0 ) THEN
-                  J = PSFBCK - ((PSFCNT - 1) * 5)
+               J = I + ((PSFCNT - 1) * 5)
+               IF( PSFPOI(J) .EQ. 0 ) THEN
+                  PSFPOI(J) = 1
                ELSE
-                  J = 6
+                  PSFPOI(J) = 0
                END IF
-               IF( J .GE. 1 .AND. J .LE. 6 ) THEN
-                  CALL PLBUTX( PSFBXP(1,J), PSFBXP(2,J),
-     1                         PSFBXP(3,J), PSFBXP(4,J), 0.,
-     2                         0., ' ', 0, 0)
-               END IF
-C
-C              Select New Setup
-C
-               PSFBCK = ((PSFCNT - 1) * 5) + I
                CALL PLBUTX( PSFBXP(1,I), PSFBXP(2,I),
      1                      PSFBXP(3,I), PSFBXP(4,I), 0.,
-     2                      0., ' ', 0, 1)
-               PXYSEC = .TRUE.
+     2                      0., ' ', 0,  PSFPOI(J) )
+C
+C              Select/Deselect ALL Setups
+C
+               J = 0
+               DO 326 II=1,NSETF
+                  IF( PSFPOI(II) .EQ. 1 ) J = J + 1
+ 326           CONTINUE
+               IF( J .EQ. NSETF ) THEN
+                  PSFBCK = 1
+                  PXYSEC = .TRUE.
+               ELSE
+                  PSFBCK = 0
+               END IF
+               CALL PLBUTX( PSFBXP(1,6), PSFBXP(2,6),
+     1                      PSFBXP(3,6), PSFBXP(4,6), 0.,
+     2                      0., ' ', 0, PSFBCK )
                RETURN
             END IF
  330     CONTINUE
@@ -175,11 +191,9 @@ C
                   J = ((PSFCNT - 1) * 5) + I
                   IS  = INDEXR( SETFILE(J), '/' ) + 1
                   IF( IS .EQ. 0 ) IS = 1
-                  REV = 0
-                  IF( PSFBCK .EQ. J ) REV = 1
                   CALL PLBUTX( PSFBXP(1,I), PSFBXP(2,I), PSFBXP(3,I),
-     1                      PSFBXP(4,I), XL, CSIZ, SETFILE(J)(IS:),
-     2                      0, REV)
+     1                         PSFBXP(4,I), XL, CSIZ, SETFILE(J)(IS:),
+     2                         0, PSFPOI(J) )
  340           CONTINUE
             END IF
             RETURN
@@ -199,6 +213,9 @@ C
 C
 C              Clear text area
 C
+               XL = (PPSDIM(2) - PPSDIM(1) - (0.035 * 4)) * (-1)
+               CSIZ  = PPNDIM(3)
+C
                CALL PLSTXT( PSFTXT(1,2), PSFTXT(2,2), PSFTXT(3,2),
      1                      PSFTXT(4,2), ' ', 0, .TRUE. )
 C
@@ -210,11 +227,9 @@ C
                   J = ((PSFCNT - 1) * 5) + I
                   IS  = INDEXR( SETFILE(J), '/' ) + 1
                   IF( IS .EQ. 0 ) IS = 1
-                  REV = 0
-                  IF( PSFBCK .EQ. J ) REV = 1
                   CALL PLBUTX( PSFBXP(1,I), PSFBXP(2,I), PSFBXP(3,I),
      1                      PSFBXP(4,I), XL, CSIZ, SETFILE(J)(IS:),
-     2                      0, REV)
+     2                      0, PSFPOI(J) )
  350           CONTINUE
             END IF
             RETURN
@@ -499,6 +514,7 @@ C
               END IF
               CALL PLSTXT( PXYTXT(1,1), PXYTXT(2,1), PXYTXT(3,1),
      1                     PXYTXT(4,1), PXYTYP(PXYBCK(1)), 0, .TRUE. )
+              CALL PLWLSC( CH, 0, 1 )
               CALL PLTMOF( CH, 0 )
               CALL PLAXST( 'X' )
               RETURN
@@ -525,6 +541,16 @@ C
             RETURN
          END IF
 C
+C        Find if Wavelength Scale Box selected
+C
+         IF( PXYTXT(1,5) .LE. XX .AND. PXYTXT(2,5) .GE. XX .AND.
+     1       PXYTXT(3,5) .LE. YY .AND. PXYTXT(4,5) .GE. YY .AND.
+     2       PXYTYP(PXYBCK(1)) .EQ. 'Wv' ) THEN
+C
+            CALL PLWLSC( CH, 1, 1 )
+            RETURN
+         END IF
+C
 C        Find if Y Type selected
 C
          DO 430 I=3,4
@@ -543,6 +569,7 @@ C
               END IF
               CALL PLSTXT( PXYTXT(1,2), PXYTXT(2,2), PXYTXT(3,2),
      1                     PXYTXT(4,2), PXYTYP(PXYBCK(2)), 0, .TRUE. )
+              CALL PLWLSC( CH, 0, 2 )
               CALL PLAXST( 'Y' )
               RETURN
            END IF
@@ -559,10 +586,10 @@ C
 C
              IF( CH .EQ. 'A' .OR. CH .EQ. '+' ) THEN
                 PXSEXP(I) = PXSEXP(I) + 1
-                IF( PXSEXP(I) .GT. 4) PXSEXP(I) = 0
+                IF( PXSEXP(I) .GT. PXYEXP ) PXSEXP(I) = 0
              ELSE
                 PXSEXP(I) = PXSEXP(I) - 1
-                IF( PXSEXP(I) .LT. 0) PXSEXP(I) = 4
+                IF( PXSEXP(I) .LT. 0) PXSEXP(I) = PXYEXP 
              END IF
              CALL PLBUTC( PXSBXM(1,I), PXSBXM(2,I), PXSBXM(3,I),
      1                    PXSBXM(4,I), ' ', PXSEXP(I), 1 )

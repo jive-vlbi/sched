@@ -1,4 +1,4 @@
-      SUBROUTINE PLOTBG( SCREEN, COLOR, MODE, COL )
+      SUBROUTINE PLOTBG( MODE, COL )
 C
       INCLUDE 'plot.inc'
 C
@@ -6,7 +6,6 @@ C     Routine for SCHED that set the palette for the Plot Window.
 C
 C
       INTEGER           MODE, COL
-      LOGICAL           SCREEN, COLOR
       REAL              RGB
 C -------------------------------------------------------------------
 C

@@ -12,7 +12,7 @@ C
       CHARACTER   PLDEV*(*), XAXIS*8, YAXIS*8
       CHARACTER   ANSWER*3
       LOGICAL     POPEN, COLOR, SCREEN
-      INTEGER     KX, KY, KSRC, JSRC, KSTA, KSET
+      INTEGER     KX, KY, KSRC, JSRC, KSTA, KSET, I, KSFN
       INTEGER     WID, WCL, IC1, IC2, LANSW, PGOPEN
       DOUBLE PRECISION  RXMIN, RXMAX, RYMIN, RYMAX
 CRCW  For multiple UV plots:
@@ -58,7 +58,7 @@ C
       SCREEN = ANSWER(1:3) .EQ. 'NO'
       CALL PGQCOL( IC1, IC2 )
       COLOR = IC2 .GT. 1
-      CALL PLOTBG( SCREEN, COLOR, 0, 0 )
+      CALL PLOTBG( 0, 0 )
 C
 C     Set the view surface for the Portrait format of Plots
 C
@@ -78,7 +78,16 @@ C
 C
 C     Check and Set the Setup File
 C
-      KSET = PSFBCK
+      KSET = 0
+      IF( PSFBCK .EQ. 0 ) THEN
+         KSFN = 0
+         DO 10 I=1,NSETF
+            IF( KSET .EQ. 0 .AND. PSFPOI(I) .EQ. 1 ) KSET = I
+            IF( PSFPOI(I) .EQ. 1 ) KSFN = KSFN + 1
+ 10      CONTINUE
+         IF( KSFN .GT. 1 ) KSET = KSFN * -1
+      END IF
+C
 C      IF( KSET .EQ. 0 ) KSET = 1
 C      IF( SFFREQ(1,KSET) .GT. 0.0 ) THEN
 C         PBMFRQ = 30000.0 / SFFREQ(1,KSET)
@@ -136,7 +145,7 @@ C           This is the original version.  But I have changed the
 C           meaning of KSRC in PLOTUV and eliminated JSRC from
 C           the call.
 C
-            CALL PLOTUV( KSET, KSRC, KSTA, SCREEN, COLOR,
+            CALL PLOTUV( KX, KSET, KSRC, KSTA, SCREEN, COLOR,
      1                RXMAX, RXMIN, RYMIN, RYMAX )
          ELSE
             IF( NSRCPLT .LE. 4 ) THEN
@@ -194,7 +203,7 @@ C
 C                  IPX = MOD( IPSRC - 1, NPX ) + 1
 C                  IPY = ( IPSRC - 1 ) / NPX + 1
 C                  CALL PGPANL ( IPX, IPY )
-                  CALL PLOTUV( KSET, ISRC, KSTA, 
+                  CALL PLOTUV( KX, KSET, ISRC, KSTA, 
      1                SCREEN, COLOR, RXMAX, RXMIN, RYMIN, RYMAX )
                END IF
             END DO
@@ -248,14 +257,14 @@ C
      1                   RXMIN, RXMAX, RYMIN, RYMAX )
             CALL PGPANL ( 2, 2 )
          END IF
-         CALL PLOTUP( KSET, KSRC, JSRC, KSTA, XAXIS, YAXIS,
-     1                SCREEN, COLOR, RXMIN, RXMAX, RYMIN, RYMAX )
+         CALL PLOTUP( KSET, XAXIS, YAXIS,  SCREEN, COLOR,
+     1                RXMIN, RXMAX, RYMIN, RYMAX )
       END IF
 C
 C     Plots BM ( Beam )
 C
       IF( POPBCK .EQ. 6 ) THEN
-         CALL PLOTBM( KSET, JSRC, KSTA, SCREEN, COLOR )
+         CALL PLOTBM( KSET, KSTA, SCREEN, COLOR )
       END IF
 C
 C     If selected close the window else restore panel

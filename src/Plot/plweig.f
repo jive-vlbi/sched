@@ -1,4 +1,4 @@
-      SUBROUTINE PLWEIG( IVZ, U, V, W, IUVMAX, NPTS,
+      SUBROUTINE PLWEIG( IVZ, U, V, W, NPTS,
      1                   KLDIMU, KLDIMV, UINT, VINT ) 
 C
 C     Routine for sched that calculate the Weights array to
@@ -9,7 +9,7 @@ C     the program "INVERT" ( AUG. 23,1982 )
 C
       INCLUDE 'beam.inc'
 C
-      INTEGER          IUVMAX, NPTS(1), NPNTS
+      INTEGER          NPTS(1), NPNTS
       INTEGER          ENORM, ER0, I, J, Q, IU, IV, KLO, KHI
       INTEGER          JLO, JHI, K, M, N
       INTEGER          KLDIMU, KLDIMV, KLDTU, KLDTV

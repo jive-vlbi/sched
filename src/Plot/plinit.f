@@ -69,25 +69,25 @@ C
 C     XY Axis Type
 C
       DATA PXYTYP / 'UT', 'GST', 'LST', 'AZ', 'EL', 'HA', 'PA',
-     1              'Sec', 'Ant', 'RA', 'DEC', 'Km' /
+     1              'Sec', 'Ant', 'RA', 'DEC', 'Km', 'Wv' /
 C
 C     Time Ofset Pointers
 C
-      DATA POFPOI /  1, -1, 2, 0, 0, 0 ,0 ,0, 0, 0, 0, 0 /
+      DATA POFPOI /  1, -1, 2, 0, 0, 0 ,0 ,0, 0, 0, 0, 0, 0 /
 C
 C     XY Axis Data Types
 C
       DATA PXSTYP / 'dHH MM SS',  'dHH MM SS', 'dHH MM SS', 
      1              ' DDD MM SS', ' DD MM SS', 'sHH MM SS',
      2              'sDDD MM SS', 'Value',       'Num',
-     3              ' HH MM SS' , 'sDD MM SS', 'sKm' /
+     3              ' HH MM SS' , 'sDD MM SS', 'sKm', 'sWv' /
 C
 C     XY Axis Data Limits
 C
       DATA PXSLIM /   0,  0,  0,   0,   0, -12, 
-     1             -180,  0,  1,   0, -90, -100000,
+     1             -180,  0,  1,   0, -90, -100000, -10000000,
      2               24, 24, 24, 360,  90, +12,
-     3             +180, 30, 22,  24,  90,  100000 /
+     3             +180, 30, 22,  24,  90,  100000,  10000000 /
 C
 C     XY Axis Add/Subtract Pointers
 C
@@ -410,6 +410,14 @@ C     Set Sec(z) plot to automatic limits calculation
 C
       PXYSEC = .TRUE.
 C
+C     Set Wavelength scale to Kilo lamda
+C
+      PXYWLE = 3
+C
+C     Set XY Axis Values Exponent
+C
+      PXYEXP = 4
+C
 C     Set Plot Type Radio Boxes Dimensions
 C
       XYSIZ = 0.035
@@ -440,9 +448,9 @@ C
 C     UV Xaxis to Km
 C
       POPLIM(1,1) = 12
-      POPLIM(1,2) = 12
+      POPLIM(1,2) = 13
       POPLIM(1,3) = 12
-      POPLIM(1,4) = 12
+      POPLIM(1,4) = 13
 C
 C     XY Xaxis from UT to PA and Yaxis from AZ to PA
 C
@@ -468,9 +476,9 @@ C
 C     ALL not defined and set to all
 C
       POPLIM(5,1) = 1
-      POPLIM(5,2) = 12
+      POPLIM(5,2) = 13
       POPLIM(5,3) = 1
-      POPLIM(5,4) = 12
+      POPLIM(5,4) = 13
 C
 C     BM XYaxis to Km ( dummy )
 C
@@ -519,6 +527,13 @@ C
       PXYTXT(2,4) = PXYTXT(1,4) + 0.2
       PXYTXT(3,4) = PXYTXT(3,1)
       PXYTXT(4,4) = PXYTXT(4,1)
+C
+C     Set  Wavelength scale Text Areas
+C
+      PXYTXT(1,5) = PXYTXT(1,4)
+      PXYTXT(2,5) = PXYTXT(1,5) + 0.08
+      PXYTXT(3,5) = PXYTXT(3,1)
+      PXYTXT(4,5) = PXYTXT(4,1)
 C
 C     Set Y Axis Type Text Areas
 C
@@ -837,6 +852,13 @@ C
       PKMVAL(3) = -XYSIZ
       PKMVAL(4) = XYSIZ
 C
+C     Limits in Kilo Lamda
+C
+      PWLVAL(1) = PKMVAL(1) * 10**2
+      PWLVAL(2) = PKMVAL(2) * 10**2
+      PWLVAL(3) = PKMVAL(3) * 10**2
+      PWLVAL(4) = PKMVAL(4) * 10**2
+C
 C     Set Schedule Axis Value for UT Axis Type
 C
       CALL PLTIME( 'UT', 0.D0, TFIRST, TEND, TWOPI, RADHR,
@@ -920,9 +942,12 @@ C
       PFLBUT(4,3) = PFLBUT(4,2)
 C
 C     Set Setup Files Select box (PSFBCK)
-C     to all selected.
+C     to all selected and fill the pointer array.
 C
-      PSFBCK = 0
+      PSFBCK = 1
+      DO 82 I=1,NSETF
+         PSFPOI(I) = PSFBCK
+82    CONTINUE 
 C
 C     Set Setup Files Select box group (PSFCNT)
 C     to the first group of five Files.
@@ -1177,7 +1202,7 @@ C     Set the default background color to LIGHT GREY
 C     to do this invert the position of color 0 (BLACK) and 15
 C     Alloc and set backgound colors.
 C
-       CALL PLOTBG( .TRUE., .TRUE., 1, 0 )
+       CALL PLOTBG( 1, 0 )
 C
 C     Make the Pannel area and define Viewport and window coordinate.
 C     Set the ask page and clipping to false.

@@ -81,7 +81,7 @@ C        Return to column
 C
          DO 70 N = NL, NH
             JJ      = 2 * N - 1
-            VZ(M,N) = DBLE( CMPLX( TT(JJ), TT(JJ+1) ) * CSV(N) ) * FNM    
+            VZ(M,N) = DBLE( CMPLX( TT(JJ), TT(JJ+1) ) * CSV(N) ) * FNM
  70      CONTINUE
 C
  80   CONTINUE

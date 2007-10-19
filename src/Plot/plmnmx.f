@@ -6,17 +6,20 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'plot.inc'
 C
-      INTEGER           MODE, ISCN, ISTA, KSET, LSRC, KSRC
+      INTEGER           MODE, ISCN, ISTA, KSET, LSRC, KSRC, I
       REAL              PT1, PT2, XYMIN, XYMAX
       CHARACTER         XYAXIS*(*)
 C -------------------------------------------------------------------
 C
       LSRC = 0
       KSRC = 0
-      IF( PSFBCK .EQ. 0 ) THEN
+      KSET = 0
+      IF( PSFBCK .EQ. 1 ) THEN
          KSET = 1
       ELSE
-         KSET = PSFBCK
+         DO 10 I=1,NSETF
+            IF( KSET .EQ. 0 .AND. PSFPOI(I) .EQ. 1 ) KSET = I
+ 10      CONTINUE
       END IF
 C
 C     Make min/max if selected

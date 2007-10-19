@@ -37,15 +37,17 @@ C
 C     Menu Stations Area parameters:    
 C     The constant PSTMAX is >= MAXSTA
 C     The constant PSOMAX is >= MAXSRC
+C     The constant PSFMAX is >= MAXSET
 C     Both of these are set rather high to avoid problems when
 C     MAXSTA and MAXSRC are fiddled.  If the limit is violated,
 C     STMSG will catch it.
 C
-      INTEGER          PSTMAX, PSTPLT, PSOMAX, PSOPLT 
+      INTEGER          PSTMAX, PSTPLT, PSOMAX, PSOPLT, PSFMAX 
       PARAMETER        (PSTMAX=1000)
       PARAMETER        (PSTPLT=20)
       PARAMETER        (PSOMAX=2000)
       PARAMETER        (PSOPLT=10)
+      PARAMETER        (PSFMAX=100)
       CHARACTER*24     PSTLAB(4)
       LOGICAL          PSTBAS, PSOSCR, PSTSCR
       INTEGER          PSTBCK(PSTMAX, 2), PSOBCK(PSOMAX)
@@ -68,34 +70,35 @@ C
       CHARACTER*12     PFLLAB(PFLBTM), PFLEXT(PFLBXM)
       CHARACTER*20     PFLVAL(PFLBXM)
       CHARACTER*40     PFLFIL(3)
-      INTEGER          PFLBCK, PSFBCK, PSFCNT
+      INTEGER          PFLBCK, PSFBCK, PSFPOI(PSFMAX), PSFCNT
       REAL             PFLBUT(4,PFLBTM), PFLBOX(4,PFLBXM)
       REAL             PFLTXT(4,2)
       REAL             PSFBXP(4, 6), PSFTXT(4, 2)
       REAL             PSFBXM(4,2), PSFSBR(4)
       COMMON /PAFILC/  PFLVAL, PFLLAB, PFLEXT, PFLFIL
-      COMMON /PAFILN/  PFLBOX, PSFBXP, PFLBUT, PFLTXT, PSFTXT,
-     1                 PSFBXM, PSFSBR, PFLBCK, PSFBCK, PSFCNT
+      COMMON /PAFILN/  PSFPOI, PFLBOX, PSFBXP, PFLBUT, PFLTXT,
+     1                 PSFTXT, PSFBXM, PSFSBR, PSFBCK, PFLBCK,
+     1                 PSFCNT
 C
 C     Menu Axis Area parameters    
 C
       INTEGER          POPBXM, PXYMAX
       PARAMETER        (POPBXM=6)
-      PARAMETER        (PXYMAX=12)
+      PARAMETER        (PXYMAX=13)
       CHARACTER*2      POPTYP(POPBXM)
       CHARACTER*3      PXYTYP(PXYMAX)
       CHARACTER*12     POPVAL(POPBXM), PXSTYP(PXYMAX)
       INTEGER          POPBCK, PXYBCK(2), PXSEXP(4), POPLIM(POPBXM,4)
-      INTEGER          PXSLIM(PXYMAX,2), PXSVAL(PXYMAX,4,3)
-      INTEGER          PXSSGN(PXYMAX,4)
+      INTEGER*8        PXSLIM(PXYMAX,2), PXSVAL(PXYMAX,4,3)
+      INTEGER          PXSSGN(PXYMAX,4), PWLVAL(4)
       INTEGER          POFPOI(PXYMAX), POFVAL(2), PANDAY(3), PKMVAL(4)
       INTEGER          PUTVAL(2,3), PLSVAL(2,3), PSGVAL(2,3), PBMCEL
       INTEGER          PADAYS(3,3), PBMPIX, PBMCTF, PBMPAL, PBMWGT
-      INTEGER          PSUEXP
+      INTEGER          PSUEXP, PXYWLE, PXYEXP
       LOGICAL          PASIGN(2), PXYBIG, PYANTN, PBMEXE, PBMCON
       LOGICAL          PXYSUN, PLOSGN, PLOVAL, PXYONE, PXYSEC
       REAL             POPBOX(4, POPBXM), PBMFRQ
-      REAL             PXYTXT(4, 4), PXYBXM(4,4), PXYSBR(4,2)
+      REAL             PXYTXT(4, 5), PXYBXM(4,4), PXYSBR(4,2)
       REAL             PBMTXT(4, 7), PBMBXM(4,14), PBMSBR(4,7)
       REAL             PXLTXT(4, 3), PYBTXT(4,3), PXSDEF(4,4)
       REAL             PXRTXT(4, 3), PYTTXT(4,3), PSUBOX(4), PSUNEL
@@ -107,12 +110,12 @@ C
      1                 PXSBXM, PSGTXT, PXYBXM, PXYTXT, PBMTXT, PBMSBR,
      2                 PXSDEF, PXLTXT, PXRTXT, PYBTXT, PYTTXT, POFPOI,
      3                 PXYSBR, PLOBOX, PADAYS, PUTVAL, PLSVAL, PSGVAL,
-     4                 PXSEXP, PKMVAL, PSUBOX, PSUTXT, PSUSGN, PSUBXM, 
-     5                 PSUDEF, PANDAY, PXYBCK, PASIGN, POFVAL, PSUNEL,
-     6                 PSUEXP, PXINI,  PXEND,  POPBCK, PBMPIX, PBMCTF,
-     7                 PBMPAL, PBMFRQ, PBMWGT, PBMCEL, PXYBIG, PYANTN,
-     8                 PBMEXE, PBMCON, PXYSUN, PLOSGN, PLOVAL, PXYONE,
-     9                 PXYSEC
+     4                 PXSEXP, PKMVAL, PWLVAL, PSUBOX, PSUTXT, PSUSGN, 
+     5                 PSUBXM, PSUDEF, PANDAY, PXYBCK, PASIGN, POFVAL,
+     6                 PSUNEL, PSUEXP, PXINI,  PXEND,  POPBCK, PBMPIX,
+     7                 PBMCTF, PBMPAL, PBMFRQ, PBMWGT, PBMCEL, PXYBIG,
+     8                 PYANTN, PBMEXE, PBMCON, PXYSUN, PLOSGN, PLOVAL,
+     9                 PXYONE, PXYSEC, PXYWLE, PXYEXP
 C
 C     Menu Options Area parameters    
 C

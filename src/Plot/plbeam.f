@@ -1,4 +1,4 @@
-      SUBROUTINE PLBEAM( BEAM, U, V, IUVMAX, UVMAX, XYBEAM, PBMWGT,
+      SUBROUTINE PLBEAM( BEAM, U, V, IUVMAX, UVMAX, PBMWGT,
      1                   PBMCEL, XYINT )
 C
 C     Routine for sched that regrid the two vectors of U and V,
@@ -19,7 +19,7 @@ C
       INCLUDE 'beam.inc'
 C
       INTEGER           NPTS(NBASE), IUVMAX, PBMCEL
-      INTEGER           KLDIMU, KLDIMV, XYBEAM, PBMWGT
+      INTEGER           KLDIMU, KLDIMV, PBMWGT
       INTEGER           IDIMU, IUU, IUUM
       INTEGER           IDIMV, IVV, IVVM
       INTEGER           KLMAXU, KLMAXV
@@ -95,7 +95,7 @@ C
 C     Compute Uniform or Natural Weights
 C
       IF( PBMWGT .EQ. 1 ) THEN
-         CALL PLWEIG( VZ, U, V, W, IUVMAX, NPTS, KLDIMU,
+         CALL PLWEIG( VZ, U, V, W, NPTS, KLDIMU,
      1                KLDIMV, UINT, VINT )
       ELSE
          DO 4 INDX = 1, NBASE
@@ -163,7 +163,7 @@ C
       WSUM = 0.0
 C
       DO 110 INDX = 1, NBASE
-         IMAX = NPTS(INDX)	
+         IMAX = NPTS(INDX)
 C
 C        Set V=-V because DHR and MHC use different definitions of V
 C
@@ -233,7 +233,7 @@ C
 C
 C     Rescale Visibility Array
 C
- 120  AMAX  = 2.0E + 4
+      AMAX  = 2.0E + 4
       SCALE = 10.0**( UNIT - 2.0 ) / ( 2.0 * WSUM )
       VMX   = 0.0
       DO 125 L = KLLOV, KLHIV

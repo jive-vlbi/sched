@@ -110,6 +110,10 @@ C
      1                      PXYSBR(4,I), 1, 1, PXYBXM(1,J) )
 30          CONTINUE
 C
+C           Plot Wavelength Scale
+C
+            CALL PLWLSC( ' ', 0, 1 )
+C
 C           Plot Time Offset if requested else clean area
 C
             CALL PLTMOF( ' ', 0 )

@@ -73,8 +73,7 @@ C
       STRING = 'SETUPS'
       WRITE( LUNSAV, 100) STRING, NSETF     
       DO 30 I=1,NSETF
-         N = 0
-         IF( PSFBCK .EQ. I ) N = 1
+         N = PSFPOI(I)
          STRIN1 = SETFILE(I)
          WRITE( LUNSAV, 120) STRIN1, N
  30   CONTINUE

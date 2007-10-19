@@ -168,7 +168,7 @@ C
             RXMAX = KD( KEYPTR( 'XRight', KC, KI ) )
             RYMIN = KD( KEYPTR( 'YBottom', KC, KI ) )
             RYMAX = KD( KEYPTR( 'YTop', KC, KI ) )
-            KSET = KD( KEYPTR( 'SEtnum', KC, KI ) )
+            KSET  = KD( KEYPTR( 'SEtnum', KC, KI ) )
             PLSRC = KCHAR( 'SOurce', 12, .TRUE., KD, KC, KI )
             PLSTA = KCHAR( 'STation', 8, .TRUE., KD, KC, KI )
 C
@@ -235,7 +235,7 @@ C
 C           Go to the active subroutines.
 C
             IF( TYPE .EQ. 'UV' ) THEN
-               CALL PLOTUV( KSET, KSRC, KSTA, SCREEN, COLOR,
+               CALL PLOTUV( 12, KSET, KSRC, KSTA, SCREEN, COLOR,
      1                      RXMIN, RXMAX, RYMIN, RYMAX )
             ELSE IF( TYPE .EQ. 'XY' ) THEN
                IF( PLSTA .EQ. 'NONE' ) THEN
