@@ -40,7 +40,8 @@ C
             PXSVAL(K,EL,I) = PSGVAL(EL,I)
  30      CONTINUE
 C
-      ELSE IF( PXYTYP(K) .EQ. 'Km' ) THEN
+      ELSE IF( PXYTYP(K) .EQ. 'Km' .OR. 
+     1         PXYTYP(K) .EQ. 'Wv' ) THEN
          IF( POPTYP(POPBCK) .EQ. 'UV' .AND. PLOVAL ) THEN
             KI = 1
             KE = 4
@@ -50,12 +51,23 @@ C
          ENDIF
 C
          DO 35 I=KI,KE
-            PXSVAL(K,I,1) = ABS( PKMVAL(I) )
-            IF( PKMVAL(I) .GE. 0 ) THEN
-               PXSSGN(K,I) = 1
+            IF( PXYTYP(K) .EQ. 'Km' ) THEN
+               PXSVAL(K,I,1) = ABS( PKMVAL(I) )
+               IF( PKMVAL(I) .GE. 0 ) THEN
+                  PXSSGN(K,I) = 1
+               ELSE
+                  PXSSGN(K,I) = -1
+               END IF
             ELSE
-               PXSSGN(K,I) = -1
-            END IF
+               PXSVAL(K,I,1) = ABS( PWLVAL(I) )
+               PXYWLE = 3
+               IF( PWLVAL(I) .GE. 0 ) THEN
+                  PXSSGN(K,I) = 1
+               ELSE
+                  PXSSGN(K,I) = -1
+               END IF
+               CALL PLWLSC( ' ', 0, 1 )
+            END IF   
  35      CONTINUE
 C
       ELSE IF( PXYTYP(K) .EQ. 'Sec' ) THEN

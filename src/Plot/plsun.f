@@ -9,7 +9,8 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'plot.inc'
 C
-      CHARACTER        CHSEL, CH, STRING*6
+      CHARACTER        CHSEL, CH, STRING*14
+      INTEGER*8        DVAL
       INTEGER          MODE, REV, J, N
       LOGICAL          PBTR
       REAL             XL, XR, YT, YB, CSIZ
@@ -111,9 +112,10 @@ C
           N = 1
           IF( PSUNEL .LT. 0.0 ) N = -1
           J = PSUNEL
+          DVAL = PSUNEL
           CALL PLVLCK( PSUTXT(1), PSUTXT(2), PSUTXT(3), PSUTXT(4),
-     1                 PSUBXM(1), PSUBXM(2), PSUBXM(3), PSUBXM(4),
-     2                 J, 0, 0, 90, PSUEXP, N, 0, 1, CHSEL, STRING )
+     1              PSUBXM(1), PSUBXM(2), PSUBXM(3), PSUBXM(4),
+     2              DVAL, 0, 0, 90, PSUEXP, N, 0, 1, CHSEL, STRING )
           PSUNEL = J
 C
       END IF

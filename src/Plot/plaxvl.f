@@ -26,7 +26,7 @@ C
             CALL PLTMCK( XAXIS, XMIN, XMAX )
          END IF
 C
-      ELSE IF( XAXIS .EQ. 'Km' ) THEN
+      ELSE IF( XAXIS .EQ. 'Km' .OR. XAXIS .EQ. 'Wv' ) THEN
          XMIN = PXSVAL(KX,1,1) * PXSSGN(KX,1)
          XMAX = PXSVAL(KX,2,1) * PXSSGN(KX,2)
 C
@@ -50,7 +50,7 @@ C
      1            ( 60.D0 * PXSVAL(KY,4,2) ) + PXSVAL(KY,4,3) ) *
      2          PXSSGN(KY,4)
 C
-      ELSE IF( XAXIS .EQ. 'Km' ) THEN
+      ELSE IF( YAXIS .EQ. 'Km' .OR. YAXIS .EQ. 'Wv' ) THEN
          YMIN = PXSVAL(KY,3,1) * PXSSGN(KY,3)
          YMAX = PXSVAL(KY,4,1) * PXSSGN(KY,4)
 C

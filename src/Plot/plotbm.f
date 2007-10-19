@@ -1,4 +1,4 @@
-      SUBROUTINE PLOTBM( KSET, JSRC, KSTA, SCREEN, COLOR )
+      SUBROUTINE PLOTBM( KSET, KSTA, SCREEN, COLOR )
 C
 C     Routine for SCHED that makes BEAM plots.
 C
@@ -15,7 +15,7 @@ C
 C
       CHARACTER         STRING*24, CW*2
       INTEGER           ISCN, ISTA, KSTA, JSTA, LINSIZ, NPSTA
-      INTEGER           KSET, JSRC, ITICKS, LABSIZ, ISRC, NPSRC
+      INTEGER           KSET, ITICKS, LABSIZ, ISRC, NPSRC
       INTEGER           LBMAX, LBCL, LBLC, LBMR, ICOL, NLBCOL, AUVI
       INTEGER           KSRC, I, J, N, K, CPP, CPN, CPH, LEN1
       INTEGER           IRI, IRF, JCL, JCR, NCOL, CIND
@@ -143,7 +143,11 @@ C
 C
 C     Set only the first setup file selected
 C
-      IF( KSET .EQ. 0 .AND. NSETF .GT. 0 ) KSET = 1
+      IF( KSET .LE. 0 ) THEN
+         DO I = 1, NSETF
+            IF( KSET .LE. 0 .AND. PSFPOI(I) .EQ. 1 ) KSET = I
+         END DO
+      END IF
 C
 C     Draw the borders etc.
 C
@@ -306,7 +310,7 @@ C
 C        Give Beam Matrix.
 C
          XYINT  = 0.0
-         CALL PLBEAM( BEAM, U12, V12, AUVI, UVMAX, PBMPIX, PBMWGT,
+         CALL PLBEAM( BEAM, U12, V12, AUVI, UVMAX, PBMWGT,
      1                PBMCEL, XYINT )
          XYINT  = XYINT / 10
 C

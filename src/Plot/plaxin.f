@@ -59,6 +59,18 @@ C
                END IF
  28         CONTINUE
 C
+C        If XY axis equal Wv set to the schedule limits
+C
+         ELSE IF( PXYTYP(K) .EQ. 'Wv' ) THEN
+            DO 29 I=1,4
+               PXSVAL(K,I,1) = ABS( PWLVAL(I) )
+               IF( PWLVAL(I) .GE. 0 ) THEN
+                  PXSSGN(K,I) = 1
+               ELSE
+                  PXSSGN(K,I) = -1
+               END IF
+ 29         CONTINUE
+C
          ELSE
 C
             PXSVAL(K,1,1) = ABS( PXSLIM(K,1) )

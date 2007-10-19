@@ -79,11 +79,9 @@ C
       CALL PLSTXT( PSFTXT(1,1), PSFTXT(2,1), PSFTXT(3,1),
      1             PSFTXT(4,1), ' ', 0, .TRUE. )
 C
-      REV = 0
-      IF( PSFBCK .EQ. 0 ) REV = 1
       CALL PLBUTX( PSFBXP(1,6), PSFBXP(2,6), PSFBXP(3,6),
      1             PSFBXP(4,6), XL, CSIZ, 'Plot All Setup File',
-     2             PPNCOL(7), REV)
+     2             PPNCOL(7), PSFBCK )
 C
 C     Setup File Text Scroll Area and Select boxes
 C
@@ -99,11 +97,9 @@ C
          J   = ((PSFCNT - 1) * 5) + I
          IS  = INDEXR( SETFILE(J), '/' ) + 1
          IF( IS .EQ. 0 ) IS = 1
-         REV = 0
-         IF( PSFBCK .EQ. J ) REV = 1
          CALL PLBUTX( PSFBXP(1,I), PSFBXP(2,I), PSFBXP(3,I),
      1                PSFBXP(4,I), XL, CSIZ, SETFILE(J)(IS:),
-     2                0, REV)
+     2                0, PSFPOI(J) )
  60   CONTINUE
 C
 C     Restore PGPLOT calling attributes
