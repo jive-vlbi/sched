@@ -1,4 +1,4 @@
-      SUBROUTINE PLOTUV( KSET, KSRC, KSTA, SCREEN, COLOR,
+      SUBROUTINE PLOTUV( TYP, KSET, KSRC, KSTA, SCREEN, COLOR,
      1                   RXMIN, RXMAX, RYMIN, RYMAX )
 C
 C     Routine for SCHED that makes UV plots.
@@ -10,12 +10,14 @@ C     the schdule, not the catalog.  SRCATN(KSRC) is the source
 C     in the catalog.  SRCNAME(KSRC) is the source name used.
 C
       INCLUDE 'sched.inc'
+      INCLUDE 'schset.inc'
       INCLUDE 'plot.inc'
 C
+      CHARACTER         ULAB*20, VLAB*20
       INTEGER           ISCN, ISTA, KSTA, ISRC, JSTA, LINSIZ, NPSTA
       INTEGER           KSET, KSRC, NPSRC, ITICKS, LABSIZ, LSRC
       INTEGER           LBMAX, LBCL, LBLC, ICOL, NLBCOL, CIND
-      INTEGER           IB
+      INTEGER           IB, TYP, ISET
       LOGICAL           SCREEN, COLOR
       REAL              AU1, AU2, AV1, AV2
       REAL              BU1, BU2, BV1, BV2
@@ -24,7 +26,7 @@ C
       REAL              X1, X2, Y1, Y2, XWID, YWID, PLTWID
       REAL              XL, XR, YB, YT, XSHADE(4), YSHADE(4)
       REAL              LBXY, LBYS, LBXS, LBYR, LBXR, LBCH
-      REAL              MFSSC, MFS1, MFSINC
+      REAL              MFSSC, MFS1, MFSINC, WVFRQ
       DOUBLE PRECISION  RXMIN, RXMAX, RYMIN, RYMAX
 C -------------------------------------------------------------------
 C
@@ -204,14 +206,35 @@ C
 C
 C     Label the axes.
 C
+      ULAB = 'U ('
+      VLAB = 'V ('
+      ICOL = 4
+      IF( PXYTYP(TYP) .EQ. 'Wv' ) THEN
+         LMSC = 10**PXYWLE
+         IF( PXYWLE .EQ. 3 ) THEN
+             ULAB(ICOL:) = 'Kilo '
+             VLAB(ICOL:) = 'Kilo '
+             ICOL = 9
+         ELSE IF( PXYWLE .EQ. 6 ) THEN
+                 ULAB(ICOL:) = 'Mega '
+                 VLAB(ICOL:) = 'Mega '
+                 ICOL = 9
+         END IF
+         ULAB(ICOL:) = 'Wavelength)'
+         VLAB(ICOL:) = 'Wavelength)'
+      ELSE
+         ULAB(ICOL:) = 'Km)'
+         VLAB(ICOL:) = 'Km)'
+      END IF
+C
       CALL PGSCI( 2 )
       CALL PGSCH( 1.2 )
       IF( PUBPLOT ) THEN
-         CALL PGLAB( 'U (km)', 'V (km)', ' ' )
+         CALL PGLAB( ULAB, VLAB, ' ' )
       ELSE IF( KSRC .EQ. 0 ) THEN
-         CALL PGLAB( 'U (km)', 'V (km)', 'UV Coverage for '// EXPCODE )
+         CALL PGLAB( ULAB, VLAB, 'UV Coverage for '// EXPCODE )
       ELSE
-         CALL PGLAB( 'U (km)', 'V (km)', 'UV Coverage for '// 
+         CALL PGLAB( ULAB, VLAB, 'UV Coverage for '// 
      1         SRCNAME(KSRC)//' in '//EXPCODE )
       END IF
       CALL PGSCH( LBCH )
@@ -311,7 +334,7 @@ C
 C
 C        Give setup.
 C
-         IF( KSET .NE. 0 ) THEN
+         IF( KSET .GT. 0 ) THEN
             CALL PGMTXT( 'T', 0.3, 0.5, 0.5, 'Setup: '//SETFILE(KSET) )
          END IF
       END IF
@@ -337,10 +360,18 @@ C
          LSRC = SRCATN(KSRC)
       END IF
       DO ISCN = SCAN1, SCANL
-         IF( ( ( SRCNUM(ISCN) .EQ. LSRC .OR. KSRC .EQ. 0 ) .AND. 
-     1       ( SETNUM(ISCN) .EQ. KSET .OR. KSET .EQ. 0 ) ) .AND.
+       DO ISET = 1, NSETF
+C
+         IF((PSFPOI(ISET) .EQ. 1 .AND. SETNUM(ISCN) .EQ. ISET) .AND. 
+     1      (SRCNUM(ISCN) .EQ. LSRC .OR. KSRC .EQ. 0) .AND. 
      2       PSOBCK(SRLSTN(SRCNUM(ISCN))) .EQ. 1 ) THEN
             CALL PGBBUF
+C
+C           Wavelength (Km)
+C
+            IF( PXYTYP(TYP) .EQ. 'Wv' ) THEN
+               WVFRQ = (30000.0 / SFFREQ(1,SETNUM(ISCN))) / 10**5
+            END IF
 C
 C           Loop over station A.
 C
@@ -392,6 +423,15 @@ C
                               U12(2) = ( BU2 - AU2 ) * MFSSC
                               V12(1) = ( BV1 - AV1 ) * MFSSC
                               V12(2) = ( BV2 - AV2 ) * MFSSC
+                              IF( PXYTYP(TYP) .EQ. 'Wv' ) THEN
+                                U12(1) = (U12(1) / WVFRQ) / LMSC 
+                                U12(2) = (U12(2) / WVFRQ) / LMSC
+                                V12(1) = (V12(1) / WVFRQ) / LMSC
+                                V12(2) = (V12(2) / WVFRQ) / LMSC
+                              END IF
+                              CALL PGLINE( 2, U12, V12 )
+                              CALL PGLINE( 2, U12, V12 )
+                              CALL PGLINE( 2, U12, V12 )
                               CALL PGLINE( 2, U12, V12 )
 C
 C                             And the conjugate
@@ -412,9 +452,10 @@ C
             END DO
             CALL PGEBUF
          END IF
+       END DO
       END DO
 C
-  990 CONTINUE
+C  990 CONTINUE
       CALL PGUNSA
       RETURN
       END
