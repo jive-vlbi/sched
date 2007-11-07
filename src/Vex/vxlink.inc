@@ -2,7 +2,7 @@ C
 C     Set VEX version and version of VX routines
 C      
       CHARACTER VEXVER*3, VXSOFT*3
-      PARAMETER (VEXVER = '1.5', VXSOFT = '.86')
+      PARAMETER (VEXVER = '1.5', VXSOFT = '.87')
 C
 C     Store number of different def in sections
 C     this sturcture defines the referncing of different defs
