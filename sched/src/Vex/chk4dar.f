@@ -4,20 +4,38 @@ C     Routine for SCHED called by CHKSET that checks items related
 C     to the MARK IV DAR's.  It will only be called if the DAR is
 C     of the MARK IV type.
 C     By H.J. van Langevelde, JIVE, 281196 
-C     Currently only supports astronomical patching irresp High or Low
+C
+C     2007-10-18 Modified by Cormac to know a little bit about GEO
+C     patching. Previously could only handle ASTRO patching. Also added
+C     a 'FREE' patch to allow blackbelts to do crazy things.
+C
+C     Rules for astro patching: Odd numbered VCs go on IF1N (and 2A),
+C     even numbered on IF2N (and 1A). At least one of IF1N or IF2N must
+C     be used. High/low patch should be the same for all VCs if
+C     possible.
+C
+C     Rules for geo patching:
+C        VCs 1-2    IF1N low
+C        VC  3      IF1N high/low
+C        VC  4      IF1N high
+C        VCs 5-8    IF1N high or IF3N high or IF3O high
+C        VC  9      IF2N low
+C        VC  10     IF2N high/low
+C        VCs 11-14  IF2N high
+C     Geo patching doesn't typically have anything on the alt input.
+C
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
       INTEGER        SNBBC, KS, ICH, I, LNAME, LEN1, JCH
       LOGICAL        ERRS, ALDONE, IFISLO, IFISHI, SPLPATCH
-      LOGICAL        USENOR, PATERR
+      LOGICAL        USENOR, PATERR, GEOPATER, GEOSPLPA
+      REAL           LOWEDGE, HIEDGE
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'CHK4DAR: starting.' )
 C
 C
-C
-      PATERR = .FALSE.
 C
       LNAME = LEN1( SETNAME(KS) )
 C
@@ -77,6 +95,9 @@ C
 C
 C     Check channel parameters, here is the fun for MkIV
 C
+      PATERR = .FALSE.
+      GEOSPLPA = .FALSE.
+      GEOPATER = .FALSE.
       USENOR = .FALSE.
       IFISLO = .FALSE.
       IFISHI = .FALSE.
@@ -149,36 +170,104 @@ C
             ERRS = .TRUE.
          END IF
 C
-C        Now check patching, for now allow astronomical only:
+C        Now check patching
 C
-         IF( MOD(BBC(ICH,KS),2) .EQ. 0 ) THEN
-            IF( IFCHAN(ICH,KS) .NE. '2A' 
-     1          .AND. IFCHAN(ICH,KS) .NE. '2N' ) THEN
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I2, A, A3, A, A )' )
-     1             'CHK4DAR: MkIV astronomical patching '//
-     2             'has even numbered BBCs on IF2 not: BBC= ',
-     3             BBC(ICH,KS), ' with IF= ',
-     4             IFCHAN(ICH,KS), ' in setup ',
-     5             SETNAME(KS)(1:LEN1(SETNAME(KS)))
-               CALL WLOG( 1, MSGTXT )
-               ERRS = .TRUE.
-               PATERR = .TRUE.
+         IF( M4PATCH(KS) .EQ. 'FREE' ) THEN
+C           This switches off all patching checks. Should only be used by 
+C           blackbelts
+            WRITE( MSGTXT, '(A, A, A)' )
+     1         'You have specified FREE patching in setup ',
+     2         SETNAME(KS)(1:LEN1(SETNAME(KS))),
+     3         '. This schedule will almost certainly *not* work. Be'//
+     4         ' very sure that you know what you are doing!'
+            CALL WLOG( 1, MSGTXT )
+         ELSE IF( M4PATCH(KS) .EQ. 'GEO1' ) THEN
+C           Check for consistency with standard geodetic patching
+            IF( BBC(ICH,KS) .LE. 4 .AND. 
+     1           IFCHAN(ICH,KS) .NE. '1N' ) THEN
+
+                MSGTXT = ' '
+                WRITE( MSGTXT, '( A, I2, A, A3, A, A )' )
+     1              'CHK4DAR: MkIV geodetic patching '//
+     2              'has BBCs 1-4 on IF 1N, not BBC = ',
+     3              BBC(ICH,KS), ' with IF= ',
+     4              IFCHAN(ICH,KS), ' in setup ',
+     5              SETNAME(KS)(1:LEN1(SETNAME(KS)))
+                CALL WLOG( 1, MSGTXT )
+                ERRS = .TRUE.
+                GEOPATER = .TRUE.
+            ELSE IF( ( BBC(ICH,KS) .GE. 5 .AND. BBC(ICH,KS) .LE. 8 ) 
+     1          .AND. ( IFCHAN(ICH,KS) .NE. '3N' .AND. 
+     2                  IFCHAN(ICH,KS) .NE. '3O' .AND.
+     3                  IFCHAN(ICH,KS) .NE. '1N' ) ) THEN
+                MSGTXT = ' '
+                WRITE( MSGTXT, '( A, I2, A, A3, A, A )' )
+     1              'CHK4DAR: MkIV geodetic patching '//
+     2              'has BBCs 5-8 on IF 3N or 3O or 1N, not BBC = ',
+     3              BBC(ICH,KS), ' with IF= ',
+     4              IFCHAN(ICH,KS), ' in setup ',
+     5              SETNAME(KS)(1:LEN1(SETNAME(KS)))
+                CALL WLOG( 1, MSGTXT )
+                ERRS = .TRUE.
+                GEOPATER = .TRUE.
+            ELSE IF( BBC(ICH,KS) .GE. 9 .AND. 
+     1                IFCHAN(ICH,KS) .NE. '2N' ) THEN
+                MSGTXT = ' '
+                WRITE( MSGTXT, '( A, I2, A, A3, A, A )' )
+     1              'CHK4DAR: MkIV geodetic patching '//
+     2              'has BBCs 9-14 on IF 2, not BBC = ',
+     3              BBC(ICH,KS), ' with IF= ',
+     4              IFCHAN(ICH,KS), ' in setup ',
+     5              SETNAME(KS)(1:LEN1(SETNAME(KS)))
+                CALL WLOG( 1, MSGTXT )
+                ERRS = .TRUE.
+                GEOPATER = .TRUE.
+            END IF
+         ELSE IF( M4PATCH(KS) .EQ. 'ASTRO' ) THEN
+C           This means we have astro patching
+            IF( MOD(BBC(ICH,KS),2) .EQ. 0 ) THEN
+               IF( IFCHAN(ICH,KS) .NE. '2A' 
+     1             .AND. IFCHAN(ICH,KS) .NE. '2N' ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I2, A, A3, A, A )' )
+     1                'CHK4DAR: MkIV astronomical patching '//
+     2                'has even numbered BBCs on IF2 not: BBC= ',
+     3                BBC(ICH,KS), ' with IF= ',
+     4                IFCHAN(ICH,KS), ' in setup ',
+     5                SETNAME(KS)(1:LEN1(SETNAME(KS)))
+                  CALL WLOG( 1, MSGTXT )
+                  ERRS = .TRUE.
+                  PATERR = .TRUE.
+               END IF
+            ELSE
+               IF( IFCHAN(ICH,KS) .NE. '1N' 
+     1             .AND. IFCHAN(ICH,KS) .NE. '1A' ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I2, A, A3, A, A )' )
+     1                'CHK4DAR: MkIV astronomical patching '//
+     2                'has odd numbered BBCs on IF1 not: BBC= ',
+     3                BBC(ICH,KS), ' with IF= ',
+     4                IFCHAN(ICH,KS), ' in setup ',
+     5                SETNAME(KS)(1:LEN1(SETNAME(KS)))
+                  CALL WLOG( 1, MSGTXT )
+                  ERRS = .TRUE.
+                  PATERR = .TRUE.
+               END IF
             END IF
          ELSE
-            IF( IFCHAN(ICH,KS) .NE. '1N' 
-     1          .AND. IFCHAN(ICH,KS) .NE. '1A' ) THEN
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I2, A, A3, A, A )' )
-     1             'CHK4DAR: MkIV astronomical patching '//
-     2             'has odd numbered BBCs on IF1 not: BBC= ',
-     3             BBC(ICH,KS), ' with IF= ',
-     4             IFCHAN(ICH,KS), ' in setup ',
-     5             SETNAME(KS)(1:LEN1(SETNAME(KS)))
-               CALL WLOG( 1, MSGTXT )
-               ERRS = .TRUE.
-               PATERR = .TRUE.
-            END IF
+            ERRS = .TRUE.
+            MSGTXT = ' Unrecognized M4PATCH: ' // M4PATCH(KS)
+            CALL WLOG( 1, MSGTXT )
+         END IF
+
+C        Get the edge of the baseband filters, because this is what
+C        Drudg uses to determine whether to patch to high or low.
+         LOWEDGE = BBSYN(ICH, KS)
+         HIEDGE = BBSYN(ICH, KS)
+         IF (NETSIDE(ICH,KS) .EQ. 'L') THEN
+            LOWEDGE = LOWEDGE - BBFILT(ICH,KS)
+         ELSE IF (NETSIDE(ICH,KS) .EQ. 'U') THEN
+            HIEDGE = HIEDGE + BBFILT(ICH,KS)
          END IF
 C
 C        BBC synthesizer setting, must be between 100 and 500
@@ -196,56 +285,92 @@ C
             CALL WLOG( 1, MSGTXT )
             ERRS = .TRUE.
 C
-C        We can also check whether High/Low IF output is used
-C        consistently.  It cannot be checked whether it is conform the
-C        stations preferred patching. But usually they should all be on
-C        low or all on high. I am assuming Drudge picks low below 220
-C        and high above Formally low can do up to 224 and high down to
-C        216
+C           We can also check whether High/Low IF output used conforms
+C           with standards. 
 C
-         ELSE IF( BBSYN(ICH,KS) .GT. 96 .AND. 
-     1       BBSYN(ICH,KS) .LT. 220 ) THEN 
+C           For ASTRO patching, usually prefer that VCs are all on low
+C           or all on high. There is some overlap between the high and
+C           low patches and Drudg will try to keep all VCs on the same
+C           patch if possible, so ignore VCs that lie in this range
+C           (email from Himwich). 
+C
+C           For GEO patching the preference for high or low patch
+C           depends on the VC number, and again Drudg will try to put
+C           VCs in the overlap region on the right patch.
+C
+         ELSE IF( M4PATCH(KS) .EQ. 'GEO1' ) THEN
+            IF( ( BBC(ICH,KS) .LE. 2 .OR.
+     1            BBC(ICH,KS) .EQ. 9 ) 
+     2         .AND. ( HIEDGE .GT. 230 ) )  THEN
+C
+C              These VCs should be on low
+C
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I2.2, A )' )
+     1           'CHK4DAR: Improper patching BBC#',
+     2            BBC(ICH,KS), 
+     3            ' is not on Low.'
+                  CALL WLOG( 1, MSGTXT )
+               GEOSPLPA = .TRUE.
+            ELSE IF( ( ( BBC(ICH,KS) .GE. 4 .AND. BBC(ICH,KS) .LE. 8 ) 
+     1        .OR. ( BBC(ICH,KS) .GE. 11 .AND. BBC(ICH,KS) .LE. 14 ) ) 
+     2        .AND. ( LOWEDGE .LT. 210 ) )  THEN
+C
+C              These VCs should be on high
+C
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I2.2, A )' )
+     1             'CHK4DAR: Inconsistent patching BBC#',
+     2             BBC(ICH,KS), 
+     3             ' is not on High.'
+               CALL WLOG( 1, MSGTXT )
+               GEOSPLPA = .TRUE.
+            ELSE
+C              Will get here for VCs 3 and 10 where either patch is o.k.
+            END IF
+
+         ELSE IF( M4PATCH(KS) .EQ. 'ASTRO' ) THEN
+C
+C           This must be astro patching. Patches can be high or low, but
+C           should be the same for all VCs if possible.
+C            
+            IF( LOWEDGE .LT. 210 ) THEN 
 C     
-C           must be low
+C              must be low
 C
-            IFISLO = .TRUE.
-            IF( IFISHI ) THEN
-C              must issue error
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I2.2, A )' )
-     1             'CHK4DAR: Inconsistent patching VC#',
-     2             BBC(ICH,KS), ' is not on High '
-               CALL WLOG( 1, MSGTXT )
-               SPLPATCH = .TRUE.
+               IFISLO = .TRUE.
+               IF( IFISHI ) THEN
+C                 must issue warning
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I2.2, A )' )
+     1                'CHK4DAR: Inconsistent patching BBC#',
+     2                BBC(ICH,KS), ' is not on High '
+                  CALL WLOG( 1, MSGTXT )
+                  SPLPATCH = .TRUE.
+               END IF
+            ELSE IF( HIEDGE .GT. 230 ) THEN 
+C
+C              must be high
+C
+               IFISHI = .TRUE.
+               IF( IFISLO ) THEN
+C                 must issue warning
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I2.2, A )' )
+     1                'CHK4DAR: Inconsistent patching BBC#',
+     2                BBC(ICH,KS), ' is not on Low '
+                  CALL WLOG( 1, MSGTXT )
+                  SPLPATCH = .TRUE.
+               END IF
+C
             END IF
-         ELSE IF( BBSYN(ICH,KS) .GT. 220 .AND. 
-     1          BBSYN(ICH,KS) .LT. 504 ) THEN 
-C
-C           must be high
-C
-            IFISHI = .TRUE.
-            IF( IFISLO ) THEN
-C              must issue error
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I2.2, A )' )
-     1             'CHK4DAR: Inconsistent patching VC#',
-     2             BBC(ICH,KS), ' is not on Low '
-               CALL WLOG( 1, MSGTXT )
-               SPLPATCH = .TRUE.
-            END IF
-C
-C           current version should not reach grey area below, but keep logic
-C
-         ELSE IF( BBSYN(ICH,KS) .GT. 216 .AND. 
-     1          BBSYN(ICH,KS) .LT. 224 ) THEN 
-C              must issue warning
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I2.2, A )' )
-     1          'CHK4DAR: Dangerous patching VC#',
-     2          BBC(ICH,KS), ' could possibly go either way Hi/Lo '
+         ELSE IF( M4PATCH(KS) .EQ. 'FREE') THEN
+C           Anything goes. This is the 'blackbelt' mode for people like
+C           Dave Graham.
+         ELSE
+            ERRS = .TRUE.
+            MSGTXT = ' Unrecognized M4PATCH: ' // M4PATCH(KS)
             CALL WLOG( 1, MSGTXT )
-         ELSE 
-            CALL ERRLOG(' CHK4DAR: This Error is impossible ')
          END IF
 C
 C        BBC filter bandwidth, the following set exists
@@ -313,7 +438,7 @@ C        stop use of VC's above 8 in 1:4 fan-out, Graham 22/1/01
 C
          IF( BBC(ICH,KS) .GT. 8 .AND. FANOUT(KS) .EQ. 4.0 ) THEN 
             WRITE( MSGTXT, '( A, A )' ) 
-     1          'CHK4DAR: VC9 and above cannot be used in 1:4',
+     1          'CHK4DAR: BBC9 and above cannot be used in 1:4',
      2          ' fan-out choose another setup '
             CALL WLOG( 1, MSGTXT )
             ERRS = .TRUE.
@@ -323,6 +448,19 @@ C
 C
       IF( PATERR ) THEN
         CALL WRTMSG( 'CHK4DAR', 'astropatch' )
+      END IF
+C
+      IF( GEOPATER .OR. GEOSPLPA ) THEN
+        CALL WRTMSG( 'CHK4DAR', 'geopatch' )
+      END IF
+C
+      IF( M4PATCH(KS) .EQ. 'FREE' ) THEN
+        CALL WRTMSG( 'CHK4DAR', 'freepatch' )
+      ELSE IF( M4PATCH(KS) .EQ. 'GEO1' ) THEN
+         WRITE( MSGTXT, '(A)' )
+     1      'You have specified geodetic patching (M4PATCH=GEO1).'//
+     2      ' This is experimental - check results carefully!'
+         CALL WLOG( 1, MSGTXT )
       END IF
 C
       IF( .NOT. USENOR ) THEN
@@ -349,6 +487,21 @@ C
          CALL WLOG( 1, MSGTXT )
 C
       END IF 
+C
+      IF (GEOSPLPA) THEN
+         WRITE(MSGTXT, '( A, A, A, A)' )
+     1       'CHk4DAR: Requested non-standard geodetic patching for ',
+     2       SETSTA(1,KS), ' in setup ',
+     3       SETNAME(KS)(1:LEN1(SETNAME(KS)) )
+         CALL WLOG( 1, MSGTXT )
+         WRITE(MSGTXT, '( A, A )' )
+     1       '         Change frequency or LO, ', 
+     2       'or verify with station that this is OK! ' //
+     3       'See sched.runlog for more details.'
+         CALL WLOG( 1, MSGTXT )
+C
+      END IF 
+
       RETURN
       END
 C
