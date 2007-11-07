@@ -446,7 +446,7 @@ C                    that station ISTA is in scan ISCN.
                      ELSE 
                         STGB = 0.0
                      END IF
-                     WRITE( LINE(LPOS:LPOS+11), '( F8.3, A3, A1 )' ) 
+                     WRITE( LINE(LPOS:LPOS+12), '( F9.3, A3, A1 )' ) 
      1                      STGB,' GB', COL
                      
                   END IF
