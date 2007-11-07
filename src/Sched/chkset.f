@@ -206,17 +206,8 @@ C
      3         CALL CHKVDAR( KS, NBBC(ISETSTA(KS)), ERRS )
          IF( DAR(ISETSTA(KS)) .EQ. 'VLBA4' ) CALL CHKV4DAR( KS, ERRS )
          IF( DAR(ISETSTA(KS)) .EQ. 'VLBAG' ) CALL CHKGDAR( KS, ERRS )
-         IF( DAR(ISETSTA(KS)) .EQ. 'MKIV'  ) THEN
-            IF( M4PATCH(KS) .EQ. 'ASTRO' ) THEN
-               CALL CHK4DAR( KS, NBBC(ISETSTA(KS)), ERRS )
-            ELSE IF( M4PATCH(KS) .EQ. 'GEO1' ) THEN
-               CALL CHK4GEO( KS, NBBC(ISETSTA(KS)), ERRS )
-            ELSE
-               ERRS = .TRUE.
-               MSGTXT = ' Unrecognized M4PATCH: ' // M4PATCH(KS)
-               CALL WLOG( 1, MSGTXT )
-            END IF
-         END IF
+         IF( DAR(ISETSTA(KS)) .EQ. 'MKIV'  ) 
+     1         CALL CHK4DAR( KS, NBBC(ISETSTA(KS)), ERRS )
 C
 C        Check various recorder related parameters.
 C
