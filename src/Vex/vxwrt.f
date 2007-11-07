@@ -10,7 +10,7 @@ C
 C
       INTEGER    VLBOPE, LEN1, IOERR, IXX, ISTA, JSTA
       CHARACTER  VEXFILE*80, OPTEXT*255, OPSTAT*4, VXNMPR*32
-      LOGICAL    EXISTS, VIOLFS, DISKER
+      LOGICAL    EXISTS, VIOLFS
       REAL       PLTVER, VERJPL
 C ----------------------------------------------------------------------
 C
@@ -106,23 +106,6 @@ C
      1    CALL WLOG( 1,'VXWRT: WARNING Violating the limits '//
      2    'of PCFS, this VEX will NOT run!!!!')
 C
-C     CR 4 Oct 2004 - warn when disk requested
-C      
-      DISKER = .FALSE.
-      DO ISTA = 1, NSTA
-         IF( .NOT. USETAPE(ISTA) .AND. USEDISK(ISTA) ) THEN
-            DISKER = .TRUE.
-            WRITE( MSGTXT, '(A, A2)' )
-     1           'VXWRT: You have requested DISK for station ', 
-     2                 STCODE(STANUM(ISTA))
-            CALL WLOG( 1, MSGTXT )
-         END IF
-      END DO
-C      IF( DISKER ) THEN
-C         CALL WRTMSG( 'VXWRT', 'VXDISK' )
-C         CALL WLOG( 1, 'VXWRT: You have requested DISK for one ' //
-C     1               'or more stations.') 
-C      END IF
 C     
 C     Find out if any of the VLBAs are doing something different to the
 C     other VLBAs, so we can treat these as special cases later.
