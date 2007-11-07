@@ -20,6 +20,36 @@ one of either 1N or 2N). Probably you have specified an 'IFCHAN', or you have
 specified a 'BBC' and 'POL' combination that is incompatible with this. Try
 using SCHED defaults instead of explicit setting of 'IFCHAN' or 'BBC'.
 
+++freepatch
+--Called from CHK4DAR
+
+You have specified 'free' patching for a telescope with a Mk4 rack. This means
+that you have bypassed all checks on the patching of the Mk4 rack. This mode is
+intended for testing by MkIV experts only. The resulting schedule will almost
+certainly not run on any standard telescope. Do not do this unless you are
+absolutely sure of what you are doing.
+
+++geopatch
+--Called from CHK4DAR
+You have specified geodetic patching (M4PATCH='GEO1') for one or more
+telescopes. SCHED does not have a comprehensive model for geodetic patching,
+but it appears that your requested frequency setup does not conform to the
+normal geodetic station setup which has the following patching for each BBC
+(VC):
+
+BBC 1-2    IF1N low
+BBC 3      IF1N high/low
+BBC 4      IF1N high
+BBC 5-8    IF1N high or IF3N high or IF3O high
+BBC 9      IF2N low
+BBC 10     IF2N high/low
+BBC 11-14  IF2N high
+
+low means that the top frequency of the BBC must be below 230 MHz, high means
+that the bottom frequency of the BBC must be above 210 MHz.
+
+Please check your settings for 'IFCHAN' and 'BBC' and your BBC frequencies.
+Note that use of geodetic patching in SCHED is experimental.
 
 ++slowdatarate
 --Called from CHK4REC
