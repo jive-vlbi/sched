@@ -1,6 +1,6 @@
       SUBROUTINE PLVLCK( XV1, XV2, YV1, YV2, XE1, XE2, YE1, YE2,
-     1                   VAL, VAL1, LMIN, LMAX, EXP, SGN, OFS, EL,
-     2                   CH, STRVAL )
+     1                   VAL, VAL1, LMIN, LMAX, EXP, IEXP, SGN,
+     2                   OFS, EL, CH, STRVAL )
 C
 C     Routine for sched that compute or edit an element of
 C     a value object
@@ -20,10 +20,10 @@ C
       IF( CH .EQ. '+' .OR. CH .EQ. '-') THEN
          IF( CH .EQ. '+' ) THEN
             EXP = EXP + 1
-            IF( EXP .GT. PXYEXP ) EXP = 0
+            IF( EXP .GT. IEXP ) EXP = 0
          ELSE 
             EXP = EXP - 1
-            IF( EXP .LT. 0 ) EXP = PXYEXP
+            IF( EXP .LT. 0 ) EXP = IEXP
          END IF
 C
 C        Update Exponent Button

@@ -6,6 +6,7 @@ C
       INCLUDE 'plot.inc'
 C
       CHARACTER         STRING*14, ANUM*2, SNUM*3, MESSAG*80
+      INTEGER*8         DNUM
       INTEGER           AP, EP, K, I, J, N
       REAL              XL, XR, YT, YB
 C ----------------------------------------------------------------------
@@ -42,8 +43,10 @@ C
 C
          PYANTN = .TRUE.
          YT = PYBTXT(3,1)
-         CALL PGNUMB( PSTNUM, 0, 1, ANUM, N )
-         CALL PGNUMB( PSONUM, 0, 1, SNUM, N )
+         DNUM = PSTNUM
+         CALL PGNUMB( DNUM, 0, 1, ANUM, N )
+         DNUM = PSONUM
+         CALL PGNUMB( DNUM, 0, 1, SNUM, N )
          MESSAG = ANUM//' Antennas and  '//SNUM//' Sources'
          CALL PGPTXT( XL, YT, 0.0, 0.0, MESSAG )
          YT = YT - 0.05
