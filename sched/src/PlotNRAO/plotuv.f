@@ -17,7 +17,7 @@ C
       INTEGER           ISCN, ISTA, KSTA, ISRC, JSTA, LINSIZ, NPSTA
       INTEGER           KSET, KSRC, NPSRC, ITICKS, LABSIZ, LSRC
       INTEGER           LBMAX, LBCL, LBLC, ICOL, NLBCOL, CIND
-      INTEGER           IB, TYP, ISET
+      INTEGER           IB, TYP, ISET, LMSC
       LOGICAL           SCREEN, COLOR
       REAL              AU1, AU2, AV1, AV2
       REAL              BU1, BU2, BV1, BV2
