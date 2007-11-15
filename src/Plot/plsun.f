@@ -115,7 +115,8 @@ C
           DVAL = PSUNEL
           CALL PLVLCK( PSUTXT(1), PSUTXT(2), PSUTXT(3), PSUTXT(4),
      1              PSUBXM(1), PSUBXM(2), PSUBXM(3), PSUBXM(4),
-     2              DVAL, 0, 0, 90, PSUEXP, N, 0, 1, CHSEL, STRING )
+     2              DVAL, 0, 0, 90, PSUEXP, PXYEXP, N, 0, 1,
+     3              CHSEL, STRING )
           PSUNEL = J
 C
       END IF
