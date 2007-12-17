@@ -125,7 +125,7 @@ C      IF( BARREL(KS) .NE. 'roll_off' .AND.
 C     $    .NOT. MODETEST(KS) ) THEN
 CC         CALL WLOG( 1, 'CHK4REC: Barrel-rolling currently not in MkIV')
 CC         CALL WLOG( 1, '         Can be tested by setting MODETEST')
-C         CALL WRTMSG ( 'CHK4REC', 'barrelroll')
+C         CALL WRTMSG (0, 'CHK4REC', 'barrelroll')
 C         IF ( CORREL(1:4) .EQ. 'JIVE') THEN
 C           WRITE ( MSGTXT, '(A, A, A)')
 C     1          'CHK4REC: You have requested barrel-rolling ', 
@@ -179,7 +179,7 @@ C
       IF( SAMPRATE(KS)/FANOUT(KS) .LE. 2.01 ) THEN
 C         WRITE(*, '( A, A )' ) 'CHK4REC: using tape speeds below', 
 C     1       ' 135ips (L) or 80ips (H) not often exercised... '
-         CALL WRTMSG ( 'CHK4REC', 'slowdatarate')
+         CALL WRTMSG (0, 'CHK4REC', 'slowdatarate')
          IF (CORREL(1:4) .EQ. 'JIVE' .AND. .NOT. MODETEST(KS) ) THEN
             WRITE ( MSGTXT, '(A, A, A)')
      1          'CHK4REC: You have requested an invalid track rate ', 

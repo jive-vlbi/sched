@@ -447,15 +447,15 @@ C
       END DO
 C
       IF( PATERR ) THEN
-        CALL WRTMSG( 'CHK4DAR', 'astropatch' )
+        CALL WRTMSG(0, 'CHK4DAR', 'astropatch' )
       END IF
 C
       IF( GEOPATER .OR. GEOSPLPA ) THEN
-        CALL WRTMSG( 'CHK4DAR', 'geopatch' )
+        CALL WRTMSG(0, 'CHK4DAR', 'geopatch' )
       END IF
 C
       IF( M4PATCH(KS) .EQ. 'FREE' ) THEN
-        CALL WRTMSG( 'CHK4DAR', 'freepatch' )
+        CALL WRTMSG(0, 'CHK4DAR', 'freepatch' )
       ELSE IF( M4PATCH(KS) .EQ. 'GEO1' ) THEN
          WRITE( MSGTXT, '(A)' )
      1      'You have specified geodetic patching (M4PATCH=GEO1).'//

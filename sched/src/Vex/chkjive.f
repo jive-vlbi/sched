@@ -41,7 +41,7 @@ C
          IF( ROLLERR .NE. 0 ) THEN
             CALL WLOG( 1, 'CHKJIVE:  JIVE Correlator does '//
      1           'not do barrel rolling. Please set barrel="roll_off"' )
-            CALL WRTMSG ( 'CHKJIVE', 'barrelroll')
+            CALL WRTMSG( 0, 'CHKJIVE', 'barrelroll')
             CALL ERRSET( ROLLERR )
          END IF
 C
@@ -85,7 +85,7 @@ C
             CALL WLOG( 1, 'CHKJIVE:  JIVE Correlator does not '//
      1          'currently do speed-up correlation (Oct 2004)' )
             CALL WLOG( 1, '         or testers set MODETEST ')
-            CALL WRTMSG ( 'CHKJIVE', 'slowdatarate')
+            CALL WRTMSG( 0, 'CHKJIVE', 'slowdatarate')
             CALL ERRSET( SPUPERR )
          END IF
 C
@@ -110,7 +110,7 @@ C
             CALL WLOG( 1, 'This is exceeded in setup ' // 
      1                  SETNAME(SAMPERR) )
             CALL WLOG( 1, '         Testers *only* may set MODETEST ')
-            CALL WRTMSG ( 'CHKJIVE', 'oversamp')
+            CALL WRTMSG( 0, 'CHKJIVE', 'oversamp')
             CALL ERRSET( SAMPERR )
          END IF
 
