@@ -589,12 +589,15 @@ C
       IF( WARNBANK ) THEN
           CALL WLOG( 1, ' ')
           CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
+          CALL WLOG( 1, 'WARNING              ')
           CALL WLOG( 1, 'VXSCH: WARNING: one or more of your VEX ')
-          CALL WLOG( 1, 'stations has continuous recording for more ')
-          CALL WLOG( 1, 'than 90 minutes. At VEX stations disk packs ')
-          CALL WLOG( 1, 'can only be changed during gaps in recording ')
-          CALL WLOG( 1, 'which should be much more frequent than ')
-          CALL WLOG( 1, 'this. Please add some gaps to your schedule!' )
+          CALL WLOG( 1, 'stations has continuous recording for longer ')
+          CALL WLOG( 1, 'than recommended. At VEX stations disk packs ')
+          CALL WLOG( 1, 'can only be changed during gaps in ')
+          CALL WLOG( 1, 'recording. Gaps should be inserted every 22 ')
+          CALL WLOG( 1, 'mins at 1 Gbps (less often at lower rates). ')
+          CALL WLOG( 1, 'Please add some gaps to your schedule!' )
+          CALL WLOG( 1, 'See sched.runlog for advice.' )
           CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
       END IF
 C
