@@ -51,11 +51,15 @@ C
       SAVE PASSOK
       INTEGER LASTTSYS(MAXSTA), LASTTSON(MAXSTA), DATLAT, I 
       INTEGER NTSYSON(MAXSTA), NTSYS(MAXSTA), TSYSGAP(MAXSTA), THISGAP
-      INTEGER LASTGAP(MAXSTA)
-      SAVE LASTTSYS, LASTTSON, LASTGAP
+      REAL LASTBYTE(MAXSTA)
+      REAL MAXDISKU
+      SAVE LASTTSYS, LASTTSON, LASTBYTE
       DATA LASTTSYS /MAXSTA*0/
       DATA LASTTSON /MAXSTA*0/
-      DATA LASTGAP /MAXSTA*0/
+      DATA LASTBYTE /MAXSTA*0.0/
+C     MAXDISKU is 22 mins of 1 Gbps recording (allow factor 1.008 for
+C     headers).
+      PARAMETER (MAXDISKU = 22.*60. * 1.008 * (1024./1000.) / 8.)
 C
       IF ( DEBUG .AND. ISCN .LE. 2) 
      .    CALL WLOG( 1,'VXSCHK:  Checking VEX tapes ')
@@ -121,10 +125,10 @@ C
                WARNFS = .TRUE.
             END IF
 C 
-C           continuous motion longer than 90 min should cause a *MAJOR* 
+C           continuous motion for long periods should cause a *MAJOR*
 C           warning because bank switches can only occur during gaps in
-C           recording. 
-C
+C           recording.  The definition of 'long' depends on the datarate
+C           (we worry about disk consumption, not time).
 C
 C           Find the last scan that this station participated in (will
 C           be ISCN if this is the first scan for this station).
@@ -132,22 +136,19 @@ C           be ISCN if this is the first scan for this station).
             DO I = SCAN1, ISCN-1
               IF( STASCN(I, ISTA) ) LASTSCN = I
             END DO
-            IF( LASTSCN .EQ. 0 ) LASTSCN = ISCN
 C
-C           Only need to check for long passes at disk stations
+C           Only need to check for long passes at disk stations.
 C
             IF( USEDISK(ISTA) ) THEN
-C              Default the last gap in recording to be at start of scan 1
-               IF( LASTGAP(ISTA) .EQ. 0 ) THEN
-                  LASTGAP(ISTA) = SCAN1
-               END IF
-               IF( NINT( ( (STARTJ(ISCN)-TAPOFF) - STOPJ(LASTSCN) ) 
-     1             * 86400d0) .GT. 10 .OR. LASTSCN .EQ. ISCN ) THEN
+               IF (LASTSCN .EQ. 0) THEN
+                  LASTBYTE(ISTA) = 0
+               ELSE IF( NINT( ( (STARTJ(ISCN)-TAPOFF) - 
+     1               STOPJ(LASTSCN) ) * 86400d0) .GT. 10)  THEN
 C                 This means there is a gap before this scan 
-                  LASTGAP(ISTA) = ISCN
+                  LASTBYTE(ISTA) = GBYTES(LASTSCN, ISTA)
                END IF
-               IF( NINT( ( (STOPJ(ISCN)) - STARTJ(LASTGAP(ISTA)) ) 
-     1             * 1440d0) .GT. 90 ) THEN
+               IF( (GBYTES(ISCN,ISTA) - LASTBYTE(ISTA))  
+     1               .GT. MAXDISKU ) THEN
 C                 This means there was no recent gap - issue a warning
                   WARNBANK = .TRUE.
                END IF
@@ -427,6 +428,15 @@ C
          END IF
          
       END DO
+
+      IF (WARNBANK) THEN
+         CALL PRTSCN( ISCN )
+         WRITE( MSGTXT, '(A)' )
+     1      'The scan above has exceeded the limit for continuous ' //
+     2      'recording. Insert a gap before this scan, or reduce ' //
+     3      'its length if necessary. '
+         CALL WLOG(1, MSGTXT )
+      END IF
       RETURN
       END
 
