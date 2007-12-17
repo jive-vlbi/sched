@@ -429,14 +429,6 @@ C
          
       END DO
 
-      IF (WARNBANK) THEN
-         CALL PRTSCN( ISCN )
-         WRITE( MSGTXT, '(A)' )
-     1      'The scan above has exceeded the limit for continuous ' //
-     2      'recording. Insert a gap before this scan, or reduce ' //
-     3      'its length if necessary. '
-         CALL WLOG(1, MSGTXT )
-      END IF
       RETURN
       END
 
