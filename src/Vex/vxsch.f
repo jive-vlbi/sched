@@ -231,7 +231,7 @@ C              default TRANEND should be 10 seconds from end of scan
 C              check the transfer time is consistent with the scan length
                IF (TRANSTAR .LT. 0 .OR. TRANEND .LT. 0 .OR. 
      1                  TRANSTAR .GT. TRANEND) THEN
-                 CALL WRTMSG ('VXSCH', 'vexgrabtime')
+                 CALL WRTMSG( 0, 'VXSCH', 'vexgrabtime')
                  CALL PRTSCN( ISCN )
                  WRITE( MSGTXT, '( A, A, A, A )' )
      1              'VXSCH:   WARNING: You have scheduled a GRABTO ',
@@ -572,7 +572,7 @@ C     Print warning about frequency of Tsys.
      1       'appear over 15 min apart for the stations listed above!')
          CALL WLOG( 1,'       This can be improved by inserting'//
      1       ' gaps at regular intervals. ')
-         CALL WRTMSG( 'VXSCH', 'tsysgap' )
+         CALL WRTMSG( 0, 'VXSCH', 'tsysgap' )
       END IF
 C
       TSYSMESS = .FALSE.
@@ -589,14 +589,14 @@ C
       IF( TSYSMESS ) THEN
          CALL WLOG( 1, 'VXSCH: Stations listed above are affected ' //
      1        'by slewing during Tsys calibration')
-         CALL WRTMSG( 'VXSCH', 'tsysoffsrc' )
+         CALL WRTMSG( 0, 'VXSCH', 'tsysoffsrc' )
       END IF
 C
       IF( WARNFS ) 
      1    CALL WLOG( 1,'VXSCH: WARNING: Scan timing problem '//
      2    'for PCFS, this VEX will NOT run!!!!')
       IF( WARNGP ) THEN
-         CALL WRTMSG( 'VXSCH', 'ftpgap' )
+         CALL WRTMSG( 0, 'VXSCH', 'ftpgap' )
       END IF
 C
       IF( WARNBANK ) THEN
@@ -610,7 +610,7 @@ C
          CALL WLOG( 1, MSGTXT )
          CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
          CALL WLOG( 1, '' )
-         CALL WRTMSG( 'VXSCH', 'warnbank' )
+         CALL WRTMSG( 1, 'VXSCH', 'warnbank' )
       END IF
 C
       RETURN
