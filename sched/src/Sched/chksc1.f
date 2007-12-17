@@ -9,8 +9,8 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    KSCN, LSCN, KSTA, KS, LEN1
-      LOGICAL    GOTERR, AUTOWARN
+      INTEGER    KSCN, LSCN, KSTA, KS
+      LOGICAL    GOTERR
 C ----------------------------------------------------------------------
       GOTERR = .FALSE.
 C
@@ -94,107 +94,6 @@ C
       END IF
   100 CONTINUE
 C
-C     Check for improper use of automatic tape allocation.
-C
-      IF( .NOT. ( NOTAPE .OR. MARK2 ) ) THEN
-C
-C        Warn against non-use of AUTOTAPE=2 (autoallocation) for 
-C        observations with VLBA antennas to be correlated in Socorro.
-C
-         IF( CORREL(1:4) .EQ. 'VLBA' .OR. CORREL(1:7) .EQ. 'SOCORRO' )
-     1       THEN
-            AUTOWARN = .TRUE.
-            DO KSTA = 1, NSTA
-               IF( STANAME(KSTA)(1:4) .EQ. 'VLBA' .AND. AUTOWARN ) THEN
-                  IF( ( .NOT. AUTOALOC(KSTA) .OR. .NOT. AUTOREV(KSTA) )
-     1                .AND. .NOT. TWOHEAD ) THEN
-                     CALL WLOG( 0, ' ' )
-                     CALL WLOG( 0, 
-     1                 'CHKSC1: *** Shouldn''t you be using ' //
-     2                 'AUTOTAPE=2 (VLBA stations, VLBA correlator).' )
-                     AUTOWARN = .FALSE.
-                  END IF
-               END IF
-            END DO
-C
-C        Don't use automatic allocation for correlators that don't
-C        want it.  Make this a fatal error.
-C
-         ELSE IF( CORREL(1:4) .EQ. 'JIVE' ) THEN
-            DO KSTA = 1, NSTA
-               IF( AUTOALOC(KSTA) .OR. AUTOREV(KSTA) ) THEN
-                  CALL WLOG( 1, ' ' )
-                  CALL WLOG( 1, 'CHKSC1: *** Automatic tape ' //
-     1                   'allocation cannot be used for ***' )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 3A )' ) 
-     1               '        *** observations to be processed at ',
-     2               CORREL(1:LEN1(CORREL)), '  *** '
-                  CALL WLOG( 1, MSGTXT )
-                  CALL ERRLOG( 'CHKSC1: Change AUTOTAPE or CORREL' )
-               END IF
-            END DO
-C
-C        Some correlators will take it, but it is not a real natural
-C        for them. 
-C
-         ELSE IF( CORREL(1:8) .EQ. 'HAYSTACK' ) THEN
-            AUTOWARN = .TRUE.
-            DO KSTA = 1, NSTA
-               IF( ( AUTOALOC(KSTA) .OR. AUTOREV(KSTA) ) .AND. 
-     1                    AUTOWARN ) THEN
-                  CALL WLOG( 1, ' ' )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 3A )' ) 
-     1               'CHKSC1: *** Autoallocate requested with ',
-     2               'processing at ', CORREL(1:LEN1(CORREL))
-                  CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 2A )' ) 
-     1               '            This is allowed, but will ',
-     2               'cause cause some complications'
-                  CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 2A )' ) 
-     1               '            for correlation.  ',
-     2               'It does help VLBA operations.'
-                  CALL WLOG( 1, MSGTXT )
-                  AUTOWARN = .FALSE. 
-               END IF
-            END DO
-C
-C        For others correlators, don't prohibit it, but warn that it
-C        might cause problems.  For one example, Haystack is willing
-C        to deal with autoallocation, but has to jump through some 
-C        hoops to do it.
-C
-         ELSE 
-            AUTOWARN = .TRUE.
-            DO KSTA = 1, NSTA
-               IF( ( AUTOALOC(KSTA) .OR. AUTOREV(KSTA) ) .AND. 
-     1                    AUTOWARN ) THEN
-                  CALL WLOG( 0, ' ' )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 3A )' ) 
-     1               'CHKSC1: *** Autoallocate requested with ',
-     2               'processing at ', CORREL(1:LEN1(CORREL))
-                  CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 2A )' ) 
-     1               '            Please be sure that this is ',
-     2               'allowed.'
-                  CALL WLOG( 1, MSGTXT )
-                  AUTOWARN = .FALSE. 
-               END IF
-            END DO
-         END IF
-C
-C
-      END IF
-C
-C     Warn users if they are setting FREQ and BW in the scans and
-C     they switch setup files without setting changing those
-C     parameters.  This is a fairly benign warning so don't worry
 C     about lots of complications such as what stations are in 
 C     what scans.  Issue the warning if there is a setup file change
 C     without a change in specified FREQ or BW.  Note that changing
@@ -211,7 +110,7 @@ C
      3            BW(1,LSCN) .NE. 0.0 ) ) THEN
                CALL WLOG( 1, 'WARNING:  See note in sched.runlog ' //
      1            'about frequency and bandwidth changes.' )
-               CALL WRTMSG( 'CHKSC1', 'freqbw' )
+               CALL WRTMSG( 0, 'CHKSC1', 'freqbw' )
                GO TO 200
             END IF
          END IF

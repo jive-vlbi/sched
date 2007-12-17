@@ -151,7 +151,7 @@ C
      2       PRESWARN .AND. SGWARN ) THEN
             IF( TPSTART(ISCN,ISTA) .GT. PRESTART(ISCN) .AND.
      1          TPSTART(ISCN,ISTA) .GT. 0.D0 ) THEN
-               CALL WRTMSG( 'SETTPS', 'taperunning' )
+               CALL WRTMSG( 0, 'SETTPS', 'taperunning' )
                PRESWARN = .FALSE.
             END IF
          END IF

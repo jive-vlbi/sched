@@ -197,7 +197,7 @@ C     Write a frightening message to those using MODETEST. I've
 C     found it being abused.
 C
       IF( MODETEST(KS) .AND. .NOT. MWARNED ) THEN
-         CALL WRTMSG( 'OKMODES', 'modtst' )
+         CALL WRTMSG( 0, 'OKMODES', 'modtst' )
          MWARNED = .TRUE.
       END IF
 C

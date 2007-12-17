@@ -91,7 +91,7 @@ C
      1          '         ICHAN=', ICH, '  IFNAME=', IFCHAN(ICH,KS), 
      2          '  ALTIFN=', ALTIFC(ICH,KS), '  NNBBC=', NNBBC
             CALL WLOG( 0, MSGTXT )
-            CALL WRTMSG( 'BBCALT', 'noassignbbc' )
+            CALL WRTMSG( 0, 'BBCALT', 'noassignbbc' )
 C
 C           A number of special cases need more explanation.
 C

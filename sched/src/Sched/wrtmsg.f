@@ -1,4 +1,4 @@
-      SUBROUTINE WRTMSG( CALLER, MSGNAM )
+      SUBROUTINE WRTMSG( TERM, CALLER, MSGNAM )
 C
 C     Subroutine for SCHED for writing messages to the log file.
 C     The messages are found in the MSGFILE which is kept in 
@@ -11,10 +11,13 @@ C     it finds a line that matches ++MSGNAM.  It then writes
 C     everything it finds to the log file until it finds another 
 C     line that starts with ++.
 C
+C     TERM is the WLOG input of that name.  0=> write to log file
+C     only.  1=> Write to log file and terminal.
+C
       INCLUDE  'sched.inc'
 C
       CHARACTER   CALLER*(*), MSGNAM*(*), INLINE*256, OPTEXT*256
-      INTEGER     VLBOPE, IERR, LEN1, NCH
+      INTEGER     VLBOPE, IERR, LEN1, NCH, TERM
       LOGICAL     INMSG
 C ---------------------------------------------------------------------
       INMSG = .FALSE.
@@ -23,8 +26,8 @@ C     Put request information
 C
       MSGTXT = 'WRTMSG: Special message from routine ' //
      1      CALLER(1:LEN1(CALLER)) // ':'
-      CALL WLOG( 0, ' ' )
-      CALL WLOG( 0, MSGTXT )
+      CALL WLOG( TERM, ' ' )
+      CALL WLOG( TERM, MSGTXT )
 C
 C     Open the message file:
 C
@@ -68,7 +71,7 @@ C              Set to ask user to read the log file.  This will
 C              happen for each line, but that is not a big
 C              burden.
 C
-               CALL WLOG( 0, INLINE )
+               CALL WLOG( TERM, INLINE )
                READLOG = .TRUE.
 C
             END IF
@@ -94,7 +97,7 @@ C
 C     Problem reading the file.
 C
   990 CONTINUE
-      CALL WLOG( 1, 'WRTMST:  Error reading the messages file.' )
+      CALL WLOG( 1, 'WRTMSG:  Error reading the messages file.' )
 C
 C     End of program.  Close the message file.
 C

@@ -36,7 +36,7 @@ C
       IF( DIDPLA .AND. DIDSAT .AND. .NOT. WARNED ) THEN
          CALL WLOG( 1, 'PLRDPL: See warning in sched.runlog about '//
      1         'plotting planets AND satellites.' )
-         CALL WRTMSG( 'PLRDPL', 'aberration' )
+         CALL WRTMSG( 0, 'PLRDPL', 'aberration' )
          
          WARNED = .TRUE.
       END IF

@@ -121,12 +121,12 @@ C
 C        Write the error messages.
 C
          IF( POLERR .NE. 0 ) THEN
-            CALL WRTMSG( 'CHKSOC', 'polerr' )
+            CALL WRTMSG( 0, 'CHKSOC', 'polerr' )
             CALL ERRSET( POLERR )
          END IF
 C
          IF( ROLLERR .NE. 0 ) THEN
-            CALL WRTMSG( 'CHKSOC', 'rollerr' )
+            CALL WRTMSG( 0, 'CHKSOC', 'rollerr' )
             CALL ERRSET( ROLLERR )
          END IF
 C
@@ -209,7 +209,7 @@ C
             ENDIF
          END DO
          IF( PADLOSS ) THEN
-            CALL WRTMSG( 'CHKSOC', 'padloss' )
+            CALL WRTMSG( 0, 'CHKSOC', 'padloss' )
          END IF
 C
 C        Check some of the correlation FFT size and averaging requests.
