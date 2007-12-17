@@ -22,7 +22,8 @@ C
       CHARACTER   DISKFILE*30, STNLC*2
       DOUBLE PRECISION  STARTT, STOPT, TAPOFF
       LOGICAL     SKIPPED, WARNFS, WARNTS(MAXSTA), DATATRAN, WARNGP
-      LOGICAL     GAPERR, FMTNONE, TSYSMESS, WARNTSOF(MAXSTA), WARNBANK
+      LOGICAL     GAPERR, FMTNONE, TSYSMESS, WARNTSOF(MAXSTA)
+      LOGICAL     WARNBANK, OLDWARNB
       REAL        STGB, SCNGAP, MINGAP
 C
 C     Tape information from TPDAT.
@@ -35,6 +36,7 @@ C -------------------------------------------------------------
       WARNFS = .FALSE.
       WARNGP = .FALSE.
       WARNBANK = .FALSE.
+      OLDWARNB = .FALSE.
       DO ISTA = 1,NSTA
         WARNTSOF(ISTA) = .FALSE.
         NTSYSON(ISTA) = 0
@@ -93,7 +95,18 @@ C        Check various tape issues, return a common tape offset
 C
          CALL VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS, WARNTSOF, NTSYS,
      1                  NTSYSON, TSYSGAP, WARNBANK)
-
+C        Let the user know which was the first scan to raise warnbank
+         IF (.NOT. OLDWARNB .AND. WARNBANK) THEN
+            CALL WLOG(0, '' )
+            WRITE( MSGTXT, '(A)' )
+     1         'VXSCH: The scan detailed below has exceeded the ' //
+     2         'limit for continuous recording. Insert a gap ' //
+     3         'before this scan, or reduce its length if necessary:'
+            CALL WLOG(0, MSGTXT )
+            CALL PRTSCN( ISCN )
+            CALL WLOG(0, '' )
+         END IF
+         OLDWARNB = WARNBANK
 C
 C
          IF( SKIPPED ) THEN
@@ -587,18 +600,17 @@ C
       END IF
 C
       IF( WARNBANK ) THEN
-          CALL WLOG( 1, ' ')
-          CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
-          CALL WLOG( 1, 'WARNING              ')
-          CALL WLOG( 1, 'VXSCH: WARNING: one or more of your VEX ')
-          CALL WLOG( 1, 'stations has continuous recording for longer ')
-          CALL WLOG( 1, 'than recommended. At VEX stations disk packs ')
-          CALL WLOG( 1, 'can only be changed during gaps in ')
-          CALL WLOG( 1, 'recording. Gaps should be inserted every 22 ')
-          CALL WLOG( 1, 'mins at 1 Gbps (less often at lower rates). ')
-          CALL WLOG( 1, 'Please add some gaps to your schedule!' )
-          CALL WLOG( 1, 'See sched.runlog for advice.' )
-          CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!')
+         CALL WLOG( 1, '' )
+         CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
+         WRITE( MSGTXT, '(A)' ) 
+     1      'VXSCH: SEVERE WARNING. You have insufficient gaps '//
+     2      'in your schedule for disk changes. Please see '//
+     3      'sched.runlog for more information. Do NOT ignore this '//
+     4      'message! '
+         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
+         CALL WLOG( 1, '' )
+         CALL WRTMSG( 'VXSCH', 'warnbank' )
       END IF
 C
       RETURN
