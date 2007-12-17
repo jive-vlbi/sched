@@ -127,7 +127,7 @@ C      IF( BARREL(KS) .NE. 'roll_off' .AND.
 C     $    .NOT. MODETEST(KS) ) THEN
 CC         CALL WLOG( 1, 'CHK4REC: Barrel-rolling currently not in MkIV')
 CC         CALL WLOG( 1, '         Can be tested by setting MODETEST')
-C         CALL WRTMSG ( 'CHKV4REC', 'barrelroll')
+C         CALL WRTMSG( 0, 'CHKV4REC', 'barrelroll')
 C         IF ( CORREL(1:4) .EQ. 'JIVE') THEN
 C           WRITE ( MSGTXT, '(A, A, A)')
 C     1          'CHKV4REC: You have requested barrel-rolling ', 
