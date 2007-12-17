@@ -6,10 +6,24 @@ C
       INCLUDE      'sched.inc'
 C
       INTEGER      ISCN, LASTISCN(MAXSTA), ISTA
-      LOGICAL      DOINGCHG, TAPCHG, BEGSCN
-      SAVE         DOINGCHG, BEGSCN
+      LOGICAL      DOINGCHG, TAPCHG, BEGSCN, USEWARN
+      SAVE         DOINGCHG, BEGSCN, USEWARN
       DATA         DOINGCHG  / .FALSE. /
       DATA         BEGSCN / .TRUE. /
+      DATA         USEWARN / .TRUE. /
+C ----------------------------------------------------------------------
+C ----------------------------------------------------------------------
+C     This routine and everything it calls should eventually be removed.
+C     Meanwhile, get a warning if anyone uses it.
+C
+      IF( USEWARN ) THEN
+         CALL WLOG(1,'Subroutine SCHTAPE: This part of SCHED will be')
+         CALL WLOG( 1, '   removed some day.  Please report to Craig' )
+         CALL WLOG( 1, '   Walker if you see this message.' )
+         USEWARN = .FALSE.
+      END IF
+C
+C ----------------------------------------------------------------------
 C ----------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LT. SCAN1 + 5 ) 
      1      CALL WLOG( 0, 'SCHTAPE starting' )

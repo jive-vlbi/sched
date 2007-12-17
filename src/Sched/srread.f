@@ -209,7 +209,7 @@ C
 C
 C                    Abort if both equinox and epoch used.
 C
-                     CALL WRTMSG( 'SRREAD', 'eqep' )
+                     CALL WRTMSG( 0, 'SRREAD', 'eqep' )
                      CALL ERRLOG( 'SRREAD: See sched.runlog. ' //
      1                   'Convert source lists to use EQUINOX.' )
                   ELSE
@@ -231,7 +231,7 @@ C
                         CALL WLOG( 1, MSGTXT )
                         CALL WLOG( 1, 
      1                    '                Please read sched.runlog.' )
-                        CALL WRTMSG( 'SRREAD', 'goofyepoch' )
+                        CALL WRTMSG( 0, 'SRREAD', 'goofyepoch' )
                      END IF
                   END IF
                END IF

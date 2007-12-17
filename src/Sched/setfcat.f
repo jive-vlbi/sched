@@ -137,7 +137,7 @@ C
          NBAD = 99
          CALL WLOG( 0, 'SETFCAT: In setup: ' // SETNAME(KS) )
          CALL WLOG( 0, '         Station '//SETSTA(1,KS) )
-         CALL WRTMSG( 'SETFCAT', 'freqnomatch' )
+         CALL WRTMSG( 0, 'SETFCAT', 'freqnomatch' )
          DO KF = 1, NFREQ
             CALL FCOMPARE( KS, KF, MATCH, OKIF, NBAD, .TRUE. )
          END DO
@@ -147,7 +147,7 @@ C
          IF( NEEDCAT ) THEN
             CALL WLOG( 1, 'SETFCAT:  Inadequate frequency information.'
      1           // '  See the log file for details.' )
-            CALL WRTMSG( 'SETFCAT', 'freqcatwarning' )
+            CALL WRTMSG( 0, 'SETFCAT', 'freqcatwarning' )
             CALL ERRSET( KS )
 C
 C        Otherwise issue a warning.

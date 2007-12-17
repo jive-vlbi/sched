@@ -58,7 +58,7 @@ C
          IF( .NOT. OK ) THEN
             PRCODE = CODE
             CALL WLOG( 0, 'CHKCODE:  EXPCODE = ' // PRCODE )
-            CALL WRTMSG( 'CHKCODE', 'expcode' )
+            CALL WRTMSG( 0, 'CHKCODE', 'expcode' )
          END IF
 C
       END IF

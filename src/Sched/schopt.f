@@ -82,10 +82,10 @@ C
       INTEGER           ISCN, KSCN, ISTA, LASTISCN(MAXSTA), NGSCANS
       INTEGER           NGOOD, YEAR, DAY1, DAY2
       INTEGER           PEAKOPT
-      LOGICAL           ADJUST, KEEP, DONE, GOTALL
+      LOGICAL           ADJUST, KEEP, DONE, GOTALL, ANYTAPE
       DOUBLE PRECISION  START, STOP
       CHARACTER         TFORM*8, TIME1*8, TIME2*8
-      SAVE              LASTISCN
+      SAVE              LASTISCN, ANYTAPE
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHOPT: Starting.' )
 C
@@ -98,6 +98,7 @@ C
       DO ISTA = 1, NSTA
          LASTISCN(ISTA) = 0
       END DO
+      ANYTAPE = .FALSE.
 C
 C     PEAKOPT is related to reference pointing which is triggered by 
 C     the user setting AUTOPEAK.  PEAKOPT tells how many more 
@@ -346,9 +347,13 @@ C              in a station loop.
 C
                DO ISTA = 1, NSTA
                   IF( STASCN(ISCN,ISTA) .AND. 
-     1                VLBITP .AND. USEDISK(ISTA) .AND. 
-     2                .NOT. NOSET ) THEN
-                     CALL DISKPOS( ISCN, ISTA, LASTISCN )
+     1                VLBITP .AND. .NOT. NOSET ) THEN
+                     IF( USEDISK(ISTA) ) THEN
+                        CALL DISKPOS( ISCN, ISTA, LASTISCN )
+                     END IF
+                     IF( USETAPE(ISTA) ) THEN
+                        ANYTAPE = .TRUE.
+                     END IF
                   END IF
                   CALL TPPACK( 'PACK', TPDAT(1,ISCN,ISTA),
      1                .FALSE., .FALSE., .FALSE., 1, 1, 1, 1, 1 )
@@ -357,7 +362,9 @@ C
 C              Tape vestige: Deal with the tape handling for this scan.
 C              The station loop is in SCHTAPE.
 C
-               CALL SCHTAPE( ISCN, LASTISCN )
+               IF( ANYTAPE ) THEN
+                  CALL SCHTAPE( ISCN, LASTISCN )
+               END IF
 C
 C              Write the new KEYIN input for another run of SCHED
 C              in case the user wants to do some edits.

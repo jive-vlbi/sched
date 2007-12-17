@@ -73,7 +73,7 @@ C        Get tape information.  Deal with tape changes including
 C        postpasses etc. VLBITP just implies wide band recording.
 C        Some "tape" stuff is needed for Mark 5A too.
 C
-         IF( VLBITP )
+         IF( VLBITP .AND. USETAPE(ISTA) )
      1      CALL VLBATI( ISCN, ISTA, FIRSTS, DOTAPE, POSTPASS, REWSP, 
      2                DOSET, TPCDRIV, TPCDIR, TPCHEAD, TPCINDX, PASSOK, 
      3                LASTDY, LSTOP )

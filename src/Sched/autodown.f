@@ -24,7 +24,7 @@ C ---------------------------------------------------------------------
      6           ) ) THEN
                STASCN(ISCN,ISTA) = .FALSE.
                IF( DOWNWARN ) THEN
-                  CALL WRTMSG( 'AUTODOWN', 'scanremoval' )
+                  CALL WRTMSG( 0, 'AUTODOWN', 'scanremoval' )
                   DOWNWARN = .FALSE.
                END IF
             END IF

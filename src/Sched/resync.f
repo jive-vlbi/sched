@@ -293,7 +293,7 @@ C
      1      'correlator resyncs.' )
          CALL WLOG( 1, '    See sched.runlog for '//
      1      'more details.' )
-         CALL WRTMSG( 'chkscn', 'resync' )
+         CALL WRTMSG( 0, 'chkscn', 'resync' )
       END IF
 C
       RETURN
