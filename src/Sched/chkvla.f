@@ -45,7 +45,7 @@ C     There is no day number on the scans so, if there is a restart,
 C     they can end up on the wrong day.
 C
       IF( TEND - TFIRST .GT. 1.D0 ) THEN
-         CALL WRTMSG( 'CHKVLA', 'vlaover24' )
+         CALL WRTMSG( 0, 'CHKVLA', 'vlaover24' )
       END IF
 C
 C     Check VLABAND (someday check against all valid modes).
@@ -190,7 +190,7 @@ C
      4         ( MOD( FLUKEA(KS), 10.D0 ) .NE. 0.D0  .OR.
      5           MOD( LFLUKEA, 10.D0 ) .NE. 0.D0 ) ) ) THEN
 C
-            CALL WRTMSG( 'CHKVLA', 'vlaflukephase' )
+            CALL WRTMSG( 0, 'CHKVLA', 'vlaflukephase' )
             CALL WLOG( 1, ' ' )
             CALL WLOG( 1, 'CHKVLA:  **** See warning about ' //
      1           'VLA Fluke freqencies in sched.runlog' )

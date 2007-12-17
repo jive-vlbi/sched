@@ -300,7 +300,7 @@ C
          SPEEDL(KS)    = KD( KEYPTR( 'TPSPEEDL', KC, KI ) )
          I1 = KEYPTR( 'TPSPEED', KC, KI )
          IF( KD(I1) .NE. 0.D0 ) THEN
-            CALL WRTMSG( 'RDSET', 'oldspeed' )
+            CALL WRTMSG( 0, 'RDSET', 'oldspeed' )
             IF( SPEEDL(KS) .EQ. 0.0 ) THEN
                CALL WLOG( 0, 'RDSET: TPSPEED used for TPSPEEDL' )
                SPEEDL(KS) = KD(I1)

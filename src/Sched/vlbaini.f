@@ -42,21 +42,6 @@ C
      2     ESTART, HUMAND1, DOY1
       WRITE( IUVBA, '( A, A )' ) 'program=', EXPCODE
 C
-C     Ask for automatic tape allocation if desired.
-C
-      IF( VLBITP .AND. USETAPE(ISTA) ) THEN
-         IF( AUTOALOC(ISTA) ) THEN
-            WRITE( IUVBA, '( A )' ) 'autoallocate=on'
-         ELSE
-            WRITE( IUVBA, '( A )' ) 'autoallocate=off'
-         END IF
-         IF( AUTOREV(ISTA) ) THEN
-            WRITE( IUVBA, '( A )' ) 'autoreverse=on'
-         ELSE
-            WRITE( IUVBA, '( A )' ) 'autoreverse=off'
-         END IF
-      END IF
-C
 C     Specify the disk format.  Presume that it will be the
 C     format of the drive that is at the station and that it
 C     will not change.
