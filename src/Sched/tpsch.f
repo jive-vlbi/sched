@@ -1,5 +1,8 @@
       SUBROUTINE TPSCH( ISCN, ISTA, LASTISCN )
 C
+C     Obsolete - only called if tapes in use.
+C
+C
 C     Routine for SCHED called by TPTAPE that schedules VLBA and
 C     Mark IV tapes.  This routine gets things started and does
 C     most of the work for the non-automatic tape handling case.

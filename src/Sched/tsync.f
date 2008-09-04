@@ -1,5 +1,7 @@
       SUBROUTINE TSYNC( ISCN, LASTISCN, TAPCHG, DOINGCHG )
 C
+C     Obsolete - only called if tapes in use.
+C
 C     Routine for SCHED, called by SCHOPT, that deals with situations
 C     when tape handling must be synchronized between stations.  This
 C     does not match well with the model mostly used by SCHED where

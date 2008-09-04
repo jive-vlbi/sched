@@ -48,7 +48,7 @@ C
          END DO
 C
 C        Warn of possible programming error.
-C	 
+C
          IF( .NOT. GOTSET ) THEN
             WRITE( MSGTXT, '( A, A, A )' ) 
      1         'GNSET: Setup file not in list of files - ',

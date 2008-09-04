@@ -1,5 +1,7 @@
       SUBROUTINE SCHTAPE( ISCN, LASTISCN )
 C
+C     Obsolete - only called if tapes in use.
+C
 C     Subroutine for SCHED, called by SCHOPT, that deals with tape
 C     handling issues for a scan.
 C

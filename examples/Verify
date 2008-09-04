@@ -42,6 +42,18 @@ date > testruns.out
 
 echo All output will be in testruns.out
 
+#  eg1024.key not done
+
+echo Processing eg1024.key | tee -a testruns.out
+$SCHBIN/sched < eg1024.key >> testruns.out
+mv sched.runlog eg1024.runlog
+./Check_results eg1024 mc $SCH_STDOUT eg1024.key >> testruns.out
+
+echo Processing eg2head.key | tee -a testruns.out
+$SCHBIN/sched < eg2head.key >> testruns.out
+mv sched.runlog n02l1.runlog
+./Check_results n02l1 ef $SCH_STDOUT eg2head.key >> testruns.out
+
 echo Processing eg3mma.key | tee -a testruns.out
 $SCHBIN/sched < eg3mma.key >> testruns.out
 mv sched.runlog eg3mma.runlog
@@ -57,35 +69,27 @@ $SCHBIN/sched < eg3mmc.key >> testruns.out
 mv sched.runlog eg3mmc.runlog
 ./Check_results eg3mmc pt $SCH_STDOUT eg3mmc.key >> testruns.out
 
-echo Processing eg512.key | tee -a testruns.out
-$SCHBIN/sched < eg512.key >> testruns.out
-mv sched.runlog eg512.runlog
-./Check_results eg512 hn $SCH_STDOUT eg512.key >> testruns.out
-
 echo Processing eg512g.key | tee -a testruns.out
 $SCHBIN/sched < eg512g.key >> testruns.out
 mv sched.runlog eg512g.runlog
 ./Check_results eg512g hn $SCH_STDOUT eg512g.key >> testruns.out
 
-echo Processing eg2head.key | tee -a testruns.out
-$SCHBIN/sched < eg2head.key >> testruns.out
-mv sched.runlog n02l1.runlog
-./Check_results n02l1 ef $SCH_STDOUT eg2head.key >> testruns.out
-
-echo Processing egglobal.key | tee -a testruns.out
-$SCHBIN/sched < egglobal.key >> testruns.out
-mv sched.runlog ge001.runlog
-./Check_results ge001 hn $SCH_STDOUT egglobal.key >> testruns.out
+echo Processing eg512.key | tee -a testruns.out
+$SCHBIN/sched < eg512.key >> testruns.out
+mv sched.runlog eg512.runlog
+./Check_results eg512 hn $SCH_STDOUT eg512.key >> testruns.out
 
 echo Processing eg5cm.key | tee -a testruns.out
 $SCHBIN/sched < eg5cm.key >> testruns.out
 mv sched.runlog eg5cm.runlog
 ./Check_results eg5cm y $SCH_STDOUT eg5cm.key >> testruns.out
 
-echo Processing egiii.key | tee -a testruns.out
-$SCHBIN/sched < egiii.key >> testruns.out
-mv sched.runlog egiii.runlog
-./Check_results egiii hn $SCH_STDOUT egiii.key >> testruns.out
+echo Processing egglobal.key | tee -a testruns.out
+$SCHBIN/sched < egglobal.key >> testruns.out
+mv sched.runlog ge001.runlog
+./Check_results ge001 hn $SCH_STDOUT egglobal.key >> testruns.out
+
+# egiii.key not done
 
 echo Processing egiv.key | tee -a testruns.out
 $SCHBIN/sched < egiv.key >> testruns.out
@@ -96,6 +100,16 @@ echo Processing eglst.key | tee -a testruns.out
 $SCHBIN/sched < eglst.key >> testruns.out
 mv sched.runlog eglst.runlog
 ./Check_results eglst hn $SCH_STDOUT eglst.key >> testruns.out
+
+echo Processing egmk2.key | tee -a testruns.out
+$SCHBIN/sched < egmk2.key >> testruns.out
+mv sched.runlog egmk2.runlog
+./Check_results egmk2 hn $SCH_STDOUT egmk2.key >> testruns.out
+
+echo Processing egmk5vex.key | tee -a testruns.out
+$SCHBIN/sched < egmk5vex.key >> testruns.out
+mv sched.runlog mk5vxg.runlog
+./Check_results mk5vxg ef $SCH_STDOUT egmk5vex.key >> testruns.out
 
 echo Processing egOH.key | tee -a testruns.out
 $SCHBIN/sched < egOH.key >> testruns.out
@@ -126,32 +140,6 @@ echo Processing egvsop.key | tee -a testruns.out
 $SCHBIN/sched < egvsop.key >> testruns.out
 mv sched.runlog vt002.runlog
 ./Check_results vt002 hn $SCH_STDOUT egvsop.key >> testruns.out
-
-echo Processing manual_1.key | tee -a testruns.out
-$SCHBIN/sched < manual_1.key >> testruns.out
-mv sched.runlog be001.runlog
-./Check_results be001 hn $SCH_STDOUT manual_1.key >> testruns.out
-
-echo Processing manual_2.key | tee -a testruns.out
-$SCHBIN/sched < manual_2.key >> testruns.out
-mv sched.runlog be002.runlog
-./Check_results be002 hn $SCH_STDOUT manual_2.key >> testruns.out
-
-echo Processing manual_line.key | tee -a testruns.out
-$SCHBIN/sched < manual_line.key >> testruns.out
-mv sched.runlog bd027.runlog
-./Check_results bd027 hn $SCH_STDOUT manual_line.key >> testruns.out
-
-echo Processing manual_simp.key | tee -a testruns.out
-$SCHBIN/sched < manual_simp.key >> testruns.out
-mv sched.runlog uvcov.runlog
-./Check_results uvcov hn $SCH_STDOUT manual_simp.key >> testruns.out
-
-echo Processing vips11.key | tee -a testruns.out
-$SCHBIN/sched < vips11.key >> testruns.out
-mv sched.runlog vips11.runlog
-./Check_results vips11 hn $SCH_STDOUT vips11.key >> testruns.out
-
 
 #  EVN examples
 
@@ -190,18 +178,37 @@ $SCHBIN/sched < evn_line_meth.key >> testruns.out
 mv sched.runlog eo907.runlog
 ./Check_results eo907 ef $SCH_STDOUT manual_simp.key >> testruns.out
 
+#  Back to other examples.
 
-#  Misc examples
+echo Processing manual_1.key | tee -a testruns.out
+$SCHBIN/sched < manual_1.key >> testruns.out
+mv sched.runlog be001.runlog
+./Check_results be001 hn $SCH_STDOUT manual_1.key >> testruns.out
 
-echo Processing egmk2.key | tee -a testruns.out
-$SCHBIN/sched < egmk2.key >> testruns.out
-mv sched.runlog egmk2.runlog
-./Check_results egmk2 hn $SCH_STDOUT egmk2.key >> testruns.out
+echo Processing manual_2.key | tee -a testruns.out
+$SCHBIN/sched < manual_2.key >> testruns.out
+mv sched.runlog be002.runlog
+./Check_results be002 hn $SCH_STDOUT manual_2.key >> testruns.out
+
+echo Processing manual_line.key | tee -a testruns.out
+$SCHBIN/sched < manual_line.key >> testruns.out
+mv sched.runlog bd027.runlog
+./Check_results bd027 hn $SCH_STDOUT manual_line.key >> testruns.out
+
+echo Processing manual_simp.key | tee -a testruns.out
+$SCHBIN/sched < manual_simp.key >> testruns.out
+mv sched.runlog uvcov.runlog
+./Check_results uvcov hn $SCH_STDOUT manual_simp.key >> testruns.out
 
 echo Processing manual_vla.key | tee -a testruns.out
 $SCHBIN/sched < manual_vla.key >> testruns.out
 mv sched.runlog bv016.runlog
 ./Check_results bv016 y $SCH_STDOUT manual_vla.key >> testruns.out
+
+echo Processing mt506.key | tee -a testruns.out
+$SCHBIN/sched < mt506.key >> testruns.out
+mv sched.runlog mt506.runlog
+./Check_results mt506 hn $SCH_STDOUT mt506.key >> testruns.out
 
 echo Processing planvla.key | tee -a testruns.out
 $SCHBIN/sched < planvla.key >> testruns.out
@@ -213,25 +220,15 @@ $SCHBIN/sched < ptlink.key >> testruns.out
 mv sched.runlog ce001.runlog
 ./Check_results ce001 pt $SCH_STDOUT ptlink.key >> testruns.out
 
+echo Processing vips11.key | tee -a testruns.out
+$SCHBIN/sched < vips11.key >> testruns.out
+mv sched.runlog vips11.runlog
+./Check_results vips11 hn $SCH_STDOUT vips11.key >> testruns.out
+
 echo Processing vla_vlbi.key | tee -a testruns.out
 $SCHBIN/sched < vla_vlbi.key >> testruns.out
 mv sched.runlog bw099.runlog
 ./Check_results bw099 hn $SCH_STDOUT vla_vlbi.key >> testruns.out
-
-echo Processing egmk5vlba.key | tee -a testruns.out
-$SCHBIN/sched < egmk5vlba.key >> testruns.out
-mv sched.runlog egmk5.runlog
-./Check_results egmk5 pt $SCH_STDOUT egmk5vlba.key >> testruns.out
-
-echo Processing mt506.key | tee -a testruns.out
-$SCHBIN/sched < mt506.key >> testruns.out
-mv sched.runlog mt506.runlog
-./Check_results mt506 hn $SCH_STDOUT mt506.key >> testruns.out
-
-echo Processing egmk5vex.key | tee -a testruns.out
-$SCHBIN/sched < egmk5vex.key >> testruns.out
-mv sched.runlog mk5vx.runlog
-./Check_results mk5vx ef $SCH_STDOUT egmk5vex.key >> testruns.out
 
 #  Check planet and satellite pointing, and creation of pointing
 #  schedules.  The required ephemeris files and spice files are

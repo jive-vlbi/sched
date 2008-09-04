@@ -8,7 +8,7 @@ C
       INCLUDE    'sched.inc'
 C
       INTEGER    ISCN, ISTA, LEN1, IOERR, VLBOPE
-      INTEGER    YEAR, DOY, MONTH, DAY, JD
+      INTEGER    YEAR, DOY, MONTH, DAY, JD, IL, NL
       DOUBLE PRECISION  ONESEC, STOP, TLOOP, TINC, HLST
       REAL       HHA, HEL, HAZ, HPA
       CHARACTER  FLAGFILE*40, OPTEXT*255, OPSTAT*4
@@ -106,10 +106,14 @@ C
                ELSE IF( UP2(ISCN,ISTA) .NE. ' ' ) THEN
 C
 C                 If setting, get set time to nearest 30 seconds.
+C                 It seems non-integer loop indices are being eliminated
+C                 in future fortrans so try to get rid of them.
+C                 The loop will end at or before TSTOP.
 C
                   TINC = 30.D0 / 86400.D0
-                  DO TLOOP = STOPJ(ISCN) - TINC, STARTJ(ISCN),
-     1                 -1.D0 * TINC
+                  NL = ( STOPJ(ISCN) - STARTJ(ISCN) ) / TINC
+                  DO IL = 1, NL
+                     TLOOP = STOPJ(ISCN) - IL * TINC
                      CALL SCHGEO( ISCN, ISTA, TLOOP, 
      1                      HHA, HEL, HAZ, HLST, HPA )
                      IF( HORCHK( STANUM(ISTA), HHA, HAZ, HEL, 
@@ -132,8 +136,11 @@ C
 C                 If rising, get rise time to nearest 30 seconds.
 C
                   TINC = 30.D0 / 86400.D0
-                  DO TLOOP = STARTJ(ISCN) - TPSTART(ISCN,ISTA) + TINC, 
-     1                STOPJ(ISCN), TINC
+                  NL = ( STOPJ(ISCN) - STARTJ(ISCN) ) / TINC
+                  DO IL = 1, NL
+C                  DO TLOOP = STARTJ(ISCN) - TPSTART(ISCN,ISTA) + TINC, 
+C     1                STOPJ(ISCN), TINC
+                     TLOOP = STARTJ(ISCN) + IL * TINC
                      CALL SCHGEO( ISCN, ISTA, TLOOP, 
      1                      HHA, HEL, HAZ, HLST, HPA )
                      IF( HORCHK( STANUM(ISTA), HHA, HAZ, HEL, 

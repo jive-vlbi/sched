@@ -50,12 +50,12 @@ C
       IF( CURAZ1 - CURAZ2 .GT. 180.0 ) CURAZ2 = CURAZ2 + 360.0
 C
 C     Find the range of possible wraps assuming that CURAZ1 is in 0-360.
-C       Note:  For AX1LIM(1,KSTA) > 0 or AX1LIM(2,KSTA) < 360, an extra
+C       Note:  For AX1LIM(1,KSTA) > 0 or AX1LIM(2,KSTA) < 360,
 C       more wraps than necessary are checked, but these will be rare
 C       cases and it is better to keep the code simple.
 C
-      NWRAP1 = AX1LIM(1,KSTA) / 360.0 - 1
-      NWRAP2 = AX1LIM(2,KSTA) / 360.0
+      NWRAP1 = INT( AX1LIM(1,KSTA) / 360.0 ) - 1
+      NWRAP2 = INT( AX1LIM(2,KSTA) / 360.0 )
 C
 C     Now find the shortest slew consistent with the AZ limits.
 C     Initialize IMSLEW so that, if no acceptable slew found, 

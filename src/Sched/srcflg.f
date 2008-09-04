@@ -40,12 +40,12 @@ C
 C
 C        Loop over catalog sources we have at this point and loop
 C        over the aliases.
-C	 
+C
          DO ISRC = 1, MSRC
             DO INAME = 1, 5
-C	 
+C 
 C              Check for match between schedule and catalog sources.
-C	 
+C 
                IF( SRCNAME(KSRC) .EQ. SOURCE(INAME,ISRC) ) THEN
 C
 C                 Get used flags and pointer to schedule source for
