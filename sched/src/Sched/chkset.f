@@ -9,12 +9,13 @@ C
 C
       INTEGER           KS, ICH, JCH, ISTA
       INTEGER           LEN1, LNAME, ITOUT
-      LOGICAL           ERRS, SAMPWARN, OVERWARN
+      LOGICAL           ERRS, SAMPWARN, OVERWARN, WARN2CM
       CHARACTER         UPPCAL*4
       REAL              BBWIDI, BBWIDJ
       DOUBLE PRECISION  FLOWI, FLOWJ, FHIGHI, FHIGHJ
-      SAVE              ITOUT
+      SAVE              ITOUT, WARN2CM
       DATA              ITOUT / 1 /
+      DATA              WARN2CM / .TRUE. /
 C ----------------------------------------------------------------------
 C     Get the schedule station number
 C
@@ -274,6 +275,18 @@ C
          END IF
 C
       END IF   ! not VLAONLY
+C
+C     Warn 2cm users about different standard frequencies.
+C
+      IF( FREQREF(1,KS) .GT. 15100.D0 .AND. 
+     1    FREQREF(1,KS) .LT. 15500.D0 .AND. WARN2CM ) THEN
+         MSGTXT = 'See sched.runlog for information on 2cm frequencies.'
+         CALL WLOG( 1, MSGTXT )
+         MSGTXT = ' '
+         CALL WRTMSG( 0, 'CHKSET', 'warn2cm' )
+         WARN2CM = .FALSE.
+      END IF
+
 C
 C     Check some more VLBA specific parameters.
 C

@@ -218,32 +218,32 @@ C                    Round it to the required DOPINCR.  Note that
 C                    the LO equation is assumed to be 
 C                    FREQ = N * DOPINCR(ISCN,1) + DOPINCR(ISCN,2)
 C                    The ATCA needs the offset.
-C	     
+C            
                      FREQ(ICH,ISCN) = 1.0D-3 * ( DOPINCR(ISCN,2) +
      1                   DOPINCR(ISCN,1) * DNINT( 
      2                   ( FREQ(ICH,ISCN) * 1.0D3 - DOPINCR(ISCN,2) )
      3                      / DOPINCR(ISCN,1) ) )
-C	     
+C            
 C                    Check for excessive overlap with previous channels.
-C	     
+C            
                      IF( ICH .GE. 2 .AND. FWARN ) THEN
-C	     
+C            
 C                       Get the center frequency of the current channel.
-C	     
+C            
                         IF( SFSIDE(ICH,ISETF) .EQ. 'U' ) THEN
                            CFREQ2 = FREQ(ICH,ISCN) + 0.5 * BW(ICH,ISCN)
                         ELSE
                            CFREQ2 = FREQ(ICH,ISCN) - 0.5 * BW(ICH,ISCN)
                         END IF
-C	     
+C            
 C                       Compare with earlier channels of the same pol.
-C	     
+C            
                         DO JCH = 1, ICH - 1
                            IF( SFPOL(ICH,ISETF) .EQ. SFPOL(JCH,ISETF) ) 
      1                        THEN
-C	     
+C            
 C                             Get center frequency of earlier channel.
-C	     
+C            
                               IF( SFSIDE(JCH,ISETF) .EQ. 'U' ) THEN
                                  CFREQ1 = FREQ(JCH,ISCN) + 
      1                                    0.5 * BW(JCH,ISCN)
@@ -251,10 +251,10 @@ C
                                  CFREQ1 = FREQ(JCH,ISCN) - 
      2                                    0.5 * BW(JCH,ISCN)
                               END IF
-C	     
+C            
 C                             Have a cow if the two are not separated
 C                             by 0.8 of bandwidth.
-C	     
+C            
                               IF( ABS( CFREQ2 - CFREQ1 ) .LT. 0.8 * 0.5
      1                         * ( BW(JCH,ISCN) + BW(ICH,ISCN) ) ) THEN
                                  MSGTXT = ' ' 
@@ -322,4 +322,3 @@ C
 C
       RETURN
       END
-

@@ -37,6 +37,8 @@
 *  P.T.Wallace   Starlink   14 November 1995
 *
 *  Updated for July 1 1997 leapsecond by RC Walker.
+*  Many updates not recorded.
+*  Updated for Jan 1 2008 leapsecond by RC Walker.
 *
 *  Copyright (C) 1995 Rutherford Appleton Laboratory
 *-
@@ -119,6 +121,9 @@
 
 *  2006 Jan 1
       IF (UTC.GE.53736D0) DT=33D0
+
+*  2009 Jan 1
+      IF (UTC.GE.54832D0) DT=34D0
 
 
 * - - - - - - - - - - - - - - - - - - - - - - - - - - *

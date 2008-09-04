@@ -266,62 +266,13 @@ C     Write the main scan listings.
 C
       CALL SUMSCN( PDATE )
 C
-C     Produce a summary of tape change times.  If AUTOALLOCATE was
-C     requested, just give the number of tapes requested at the
-C     sites that are using it.
+C     Produce a summary of the range of times and total bytes
+C     at each station.  Versions before Feb. 2008 made a summary
+C     of tape change times here, but that has been removed/modified.
 C
       IF( VLBITP ) WRITE( ISUM, '( A )' ) FF
-      ALLDONE = .FALSE.
-      IF( AUTOTAPE .AND. VLBITP .AND. .NOT. NOSET ) THEN
-         WRITE( ISUM, '( 2A, /, A, /, 2X, /, A, /, A, /, A )' )
-     1     ' Automatic tape allocation requested for sites',
-     2     ' using VLBA control files and having',
-     3     ' 2 or more drives.  SCHED cannot predict tape changes.',
-     4     ' Number of tapes or GBytes used at each autoaloc station:',
-     5     '    Includes all disk stations.',
-     6     '   Station      Tapes        GBytes'
-C
-         ALLDONE = .TRUE.
-         DO ISTA = 1, NSTA
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( 3X, A8 )' ) STANAME(ISTA)
-C
-C           Deal with tape stations.
-C
-            IF( USETAPE(ISTA) .AND. AUTOALOC(ISTA) ) THEN
-               WRITE( MSGTXT(16:21), '( F6.2 )' ) EXPTAPE(ISTA)
-            ELSE IF( USETAPE(ISTA) ) THEN
-               WRITE( MSGTXT(15:22), '( A8 )' ) 'Not Auto'
-               ALLDONE = .FALSE.
-            END IF
-C
-C           Deal with disk stations.
-C
-            IF( USEDISK(ISTA) ) THEN
-               WRITE( MSGTXT(28:36), '( F8.1 )' ) TGBYTES(ISTA)
-            END IF
-C
-C           Write the result.
-C
-            WRITE( ISUM, '( A )' ) MSGTXT(:LEN1(MSGTXT))
-         END DO
-      END IF
-C
-C     Write tape time estimates for autoalloc stations.
-C
-      IF( AUTOTAPE .AND. VLBITP .AND. .NOT. NOSET ) THEN
-C
+      IF( VLBITP .AND. .NOT. NOSET ) THEN
          CALL TPSUM( .TRUE. )
-C
-      END IF
-C
-C     Now write the tape times for stations for which SCHED is doing
-C     the allocation.
-C
-      IF( VLBITP .AND. .NOT. ALLDONE .AND. .NOT. NOSET ) THEN
-C
-         CALL TPSUM( .FALSE. )
-C
       END IF
 C
 C     Add a source list includeing one in a format for addition to

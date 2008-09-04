@@ -240,7 +240,6 @@ C
          GO TO 999 
       END IF
 
-	   
 C     Don't forget to deal with frequency sets and pcal sets
 C     separately.  They are not compared here.  Think about what
 C     to do.

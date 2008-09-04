@@ -12,10 +12,23 @@ C     Tape information from TPDAT.
 C
       INTEGER          TPPASS, TPDIR, TPINDX, TPHEAD, TPDRIV, IGB
       LOGICAL          DOTAPE, DOFAST, DOREW
+      CHARACTER        UPA*1, UPC*2
 C -------------------------------------------------------------------
 C     First detect if the station is to be used.
 C
       IF( STASCN(ISCN,ISTA) ) THEN 
+C
+C        Get the average rise state.  Not needed in most, but 
+C        easier to just get it without fussing about whether
+C        it's needed.
+C
+         UPA = ' '
+         UPC = UP1(ISCN,ISTA)//UP2(ISCN,ISTA)
+         IF( UPC .EQ. 'HH' ) UPA = 'H'
+         IF( UPC .EQ. 'DD' ) UPA = 'D'
+         IF( UPC .EQ. ' D' .OR. UPC .EQ. ' H' ) UPA = 'S'
+         IF( UPC .EQ. 'D ' .OR. UPC .EQ. 'H ' ) UPA = 'R'
+         IF( UPC .EQ. 'HD' .OR. UPC .EQ. 'DH' ) UPA = 'D'
 C
 C        Get the desired item.
 C
@@ -27,6 +40,11 @@ C
             WRITE( SUMDAT, '( I4, A1 )' ) 
      1           NINT( EL2(ISCN,ISTA) ), UP2(ISCN,ISTA)
 C
+         ELSE IF( ITEM .EQ. 'ELA' ) THEN
+            WRITE( SUMDAT, '( I4, A1 )' ) 
+     1           NINT( ( EL1(ISCN,ISTA) + EL2(ISCN,ISTA) ) / 2 ), 
+     2           UPA
+C
          ELSE IF( ITEM .EQ. 'AZ1' ) THEN
             WRITE( SUMDAT, '( I4, A1 )' ) 
      1           NINT( AZ1(ISCN,ISTA) ), UP1(ISCN,ISTA)
@@ -34,6 +52,11 @@ C
          ELSE IF( ITEM .EQ. 'AZ2' ) THEN
             WRITE( SUMDAT, '( I4, A1 )' ) 
      1           NINT( AZ2(ISCN,ISTA) ), UP2(ISCN,ISTA)
+C
+         ELSE IF( ITEM .EQ. 'AZA' ) THEN
+            WRITE( SUMDAT, '( I4, A1 )' ) 
+     1           NINT( ( AZ1(ISCN,ISTA) + AZ2(ISCN,ISTA) ) / 2 ), 
+     2           UPA
 C
          ELSE IF( ITEM .EQ. 'PA1' ) THEN
             WRITE( SUMDAT, '( I4, 1X )' ) NINT( PA1(ISCN,ISTA) )

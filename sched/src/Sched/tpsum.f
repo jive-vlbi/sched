@@ -1,97 +1,71 @@
-      SUBROUTINE TPSUM( DOAUTO )
+      SUBROUTINE TPSUM
 C
 C     Routine for SCHED called by SCHSUM that writes out a summary
-C     of tape usage by station.  When autoallocation is in effect,
-C     the results represent a guess.  Otherwise they are real times.
+C     of the time span and data output for each station.
+C
+C     The name is a holdover from before Feb. 2008 when it gave a
+C     summary of tape usage and tape changes.
 C
       INCLUDE  'sched.inc'
 C
-      LOGICAL     DOAUTO, FIRSTS, DOTAPE, GOTSTRT 
+      LOGICAL     FIRSTS
       INTEGER     ISTA, ISCN, YEAR, DAY1, DAY2
       DOUBLE PRECISION  START, STOP
       CHARACTER   TFORM*8
       CHARACTER   LSTOP*10, LSTART*10, LDAY1*3, LDAY2*3
 C
 C ------------------------------------------------------------------
-      IF( DOAUTO ) THEN
-         WRITE( ISUM, '( 1X, 2( /, A, /, 2A), /, 2X, 3(/,A) )' )
-     1     ' ESTIMATED TAPE TIMES (With autoallocation):',
-     2     '        Times are approximate and assume project ',
-     3     'starts at the beginning of a tape.',
-     4     '        Times can be affected by actual tape length.',
-     5     '        Tape change may occur during scan preceeding ',
-     6     'indicated time.',
-     6     '            Tape start time.            Tape end time. ',
-     7     ' Station      Day    Time                Day    Time ',
-     8     '                 (UT)                        (UT)'
-      ELSE
-         WRITE( ISUM, '( 1X, /, A, /, 2X, /, A, /, A, /, A )' )
-     1     ' TAPE TIMES (Without autoallocation):',
-     2     '            Tape start time.            Tape end time. ',
-     3     ' Station      Day    Time                Day    Time ',
-     4     '                 (UT)                        (UT)'
-      END IF
+      WRITE( ISUM, '( 1X, /, A, /, 2X, /, 2A, /, 2A, /, A )' )
+     1     ' TIME RANGE OF RECORDINGS and TOTAL BYTES:',
+     2     '                Obs. start time.     Obs. end time. ',
+     3      '     Total ', 
+     4     ' Station          Day    Time         Day    Time   ',
+     5      '     GBytes',
+     6     '                     (UT)                 (UT)'
 C
       DO ISTA = 1, NSTA
-         IF( DOAUTO .EQV. AUTOALOC(ISTA) ) THEN
-            WRITE( ISUM, '( 2X )' )
-            FIRSTS = .TRUE.
-            DO ISCN = SCAN1, SCANL
+
+C         WRITE( ISUM, '( 2X )' )
+         FIRSTS = .TRUE.
+         DO ISCN = SCAN1, SCANL
 C     
-C              Is this station involved in this scan?
+C           Is this station involved in this scan?
 C     
-               IF( STASCN(ISCN,ISTA) ) THEN
+            IF( STASCN(ISCN,ISTA) .AND. .NOT. NOREC(ISCN) ) THEN
 C     
-C                 Get first start time.  Don't write tape info if
-C                 the first scan is flagged for a tape change.
+C              Get first start time.
 C     
-                  DOTAPE = MOD( TPDAT(1,ISCN,ISTA), 10 ) .GT. 0
-                  IF( FIRSTS ) THEN
-                     GOTSTRT = .FALSE.
-                     FIRSTS  = .FALSE.
-C     
-C                 Is there a tape change this scan?
-C     
-                  ELSE IF( DOTAPE ) THEN
-C     
-C                    Write out the data for the previous tape.
-C     
-                     WRITE(ISUM,'( 2X, A, T14, A,2X,A,12X,A,2X,A )')
-     1                  STANAME(ISTA), LDAY1, LSTART, LDAY2, 
-     2                  LSTOP
-C     
-                     GOTSTRT = .FALSE.
-                  END IF
-C     
-C                 Collect start time of next tape.
-C     
-                  IF( .NOT. GOTSTRT .AND. .NOT. NOREC(ISCN) ) THEN
-                     CALL TIMEJ( STARTJ(ISCN), YEAR, DAY1, START )
-                     LSTART = TFORM( START, 'T', 0, 2, 2, '::@' )
-                     LSTART(9:10) = '  '
-                     WRITE( LDAY1, '(I3)' ) DAY1
-                     GOTSTRT = .TRUE.
-                  END IF
-C     
-C                 Collect latest scan stop time.
-C     
-                  IF( .NOT. NOREC(ISCN) ) THEN
-                     CALL TIMEJ( STOPJ(ISCN), YEAR, DAY2, STOP )
-                     LSTOP = TFORM( STOP, 'T', 0, 2, 2, '::@' )
-                     LSTOP(9:10) = '  '
-                     WRITE( LDAY2, '(I3)' ) DAY2
-                  END IF
+               IF( FIRSTS .AND. .NOT. NOREC(ISCN) ) THEN
+                  CALL TIMEJ( STARTJ(ISCN), YEAR, DAY1, START )
+                  LSTART = TFORM( START, 'T', 0, 2, 2, '::@' )
+                  LSTART(9:10) = '  '
+                  WRITE( LDAY1, '(I3)' ) DAY1
+                  FIRSTS  = .FALSE.
                END IF
 C     
-            END DO
+C              Collect last scan stop time.  Treat each scan as the
+C              last, and when the loop runs out, the parameters from
+C              the last scan in which the station participated will
+C              be left.
 C     
-C           Write data for last tape.
+               IF( .NOT. NOREC(ISCN) ) THEN
+                  CALL TIMEJ( STOPJ(ISCN), YEAR, DAY2, STOP )
+                  LSTOP = TFORM( STOP, 'T', 0, 2, 2, '::@' )
+                  LSTOP(9:10) = '  '
+                  WRITE( LDAY2, '(I3)' ) DAY2
+               END IF
+            END IF
 C     
-            WRITE(ISUM,'( 2X, A, T14, A,2X,A, 12X, A,2X,A )')
-     1         STANAME(ISTA), LDAY1, LSTART, LDAY2, LSTOP
+         END DO
 C     
-         END IF
+C        Write data for last tape.
+C     
+         WRITE(ISUM,'( 2X, A, T18, A,2X,A, 5X, A,2X,A, 3X, F8.1 )')
+     1         STANAME(ISTA), LDAY1, LSTART, LDAY2, LSTOP,
+     2         TGBYTES(ISTA)
+C     
       END DO
+      WRITE( ISUM,'(2X)' )
 C
       RETURN
       END

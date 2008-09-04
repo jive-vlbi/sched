@@ -1,5 +1,8 @@
       SUBROUTINE TPTAPE( ISCN, ISTA, LASTISCN )
 C
+C     Obsolete - only called if tapes in use.
+C
+C
 C     Routine for SCHED called by SCHTAPE and TSYNC that deals with tape
 C     handling.  Actually this routine just selects which tape
 C     handling routine to call based on the recording system type.

@@ -64,7 +64,7 @@ C
          END IF
 C
 C        Detremine if a setup scan will be needed - true if writing tape
-C        and there is more than a 10 second gap between scans.
+C        and there is more than a 1 second gap between scans.
 C
          DOSET =  VLBITP .AND. ( FIRSTS .OR. 
      1      ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) - LSTOP ) .GT. ONESEC )

@@ -3,9 +3,11 @@ C
 C     A VLBI scheduling program.  It can also be used to
 C     schedule some VLA projects.
 C
-C     Sched is written and maintained by R. Craig Walker.
-C     VEX format output sections written and maintained by 
-C     Huib vanLangevelde.
+C     Sched is written and maintained by primarily by R. Craig Walker.
+C     VEX format output sections were written originally by Huib 
+C     vanLangevelde, were maintained by Cormac Reynolds and are now 
+C     maintained by Antonios Politides.  Most of the interactive plot
+C     section was written by Franco Tinarelli of Bologna.
 C
 C     See the manual for information and history.
 C

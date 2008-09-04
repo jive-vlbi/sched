@@ -37,9 +37,9 @@ C --------------------------------------------------------------------
 C
       CALL TIMEJ( STOPJ(1), YEAR, DAY, STOP )      
       DO ISRC = 1, MSRC
-C	 
+C
 C        Check if some sort of coordinates were provided.
-C	 
+C
          IF(C1950(ISRC).EQ.' ' .AND. C2000(ISRC).EQ.' ' 
      1        .AND. CDATE(ISRC).EQ.' ' ) THEN
             CALL ERRLOG( ' No coordinates for '//SOURCE(1,ISRC) )
@@ -120,7 +120,7 @@ C
 C        Get the missing coordinates.
 C
 C        If 1950 coordinates were not given, get them.
-C	 
+C
          IF( C1950(ISRC).EQ.' ' ) THEN
             IF( C2000(ISRC).EQ.'*' ) THEN
                CALL SLA_FK54Z( RA2000(ISRC), D2000(ISRC),
@@ -132,9 +132,9 @@ C
      1            PRECDATE, RA1950(ISRC), D1950(ISRC), DR, DD )
             END IF
          END IF
-C	 
+C
 C        If 2000 coordinates were not given, get them.
-C	 
+C
          IF( C2000(ISRC).EQ.' ' ) THEN
             IF( C1950(ISRC).EQ.'*' ) THEN
                CALL SLA_FK45Z( RA1950(ISRC), D1950(ISRC),
@@ -144,9 +144,9 @@ C
      1            2000.D0, RA2000(ISRC), D2000(ISRC) )
             END IF
          END IF
-C	 
+C
 C        If coordinates of date were not given, get them.
-C	 
+C
          IF( CDATE(ISRC).EQ.' ' ) THEN
             CALL SLA_MAP( RA2000(ISRC), D2000(ISRC),
      1         0.D0, 0.D0, 0.D0, 0.D0, 2000.D0, STOPJ(1),

@@ -180,7 +180,7 @@ CHKSOC:  Channels to be processed in Socorro as a polarization pair
 ++taperunning
 --Called from SETTPS
 
-  Tape is being kept running through short gaps between scans.
+  Recording is being continued through short gaps between scans.
 Add TPSTART to the SUMITEM list to see details.
 MINPAUSE and PRESTART may be used to adjust.
 Remember MINPAUSE is multiplied by the speed up factor.
@@ -203,7 +203,7 @@ when certain reconfigurations happen.  The details vary according to
 the recording system and the correlator.
 
 You can easily have excessive sync losses at the VLBA correlator if
-you stop the tape too often, such as between every scan in a phase
+you stop the recording too often, such as between every scan in a phase
 referencing observation.  If this is happening, investigate the
 parameters PRESTART and MINPAUSE to try to keep the recordings moving
 between scans, or at least to start them before the nominal scan start
@@ -280,9 +280,32 @@ even when switching between observing bands.
 --Called by CHKSC1
 
 CAUTION: You have set FREQ and/or BW for some scans but have not
-changed them when switching to a new setup file.  These parameters do
-not change from scan to scan unless forced.  It is possible that you
-really did want them to change, perhaps to the value of the new setup
-file.  Check what you have done carefully.  To cause SCHED to use the
-setup file value, set FREQ=0 and/or BW=0.
+changed them when switching to a new setup file.  This might be
+exactly what you intended, it would be wise to check to be sure.
+These parameters do not change from scan to scan unless forced.  It is
+possible that you really did want them to change, perhaps to the value
+of the new setup file.  To cause SCHED to use the setup file value,
+set FREQ=0 and/or BW=0.
+
+
+++warn2cm
+--Called by CHKSET
+
+NOTE ABOUT 2CM FREQUENCIES: This message was triggered by your
+observation near 15.3 GHz.  There is an inconsistency between the
+frequencies specified in the standard setup files and by a
+specification of BAND='2cm' in SCHED.  The standard setup files use a
+center frequency of 15360.99.  This is also the frequency at which the
+VLBA gains are measured.  The center frequency used by SCHED for
+BAND='2cm' is 15285.49.  These frequencies are near the edge of the
+"U" band at the VLA so it is likely that the lower frequency was
+chosen for better VLA performance.  On the other hand, the higher
+frequency is in a shared radio astronomy band (15.35-15.4 GHz) so is
+more protected.  One or the other could be changed so that they match,
+but that has not been done in order to avoid a glitch in on-going
+projects.  For most purposes, these two frequency settings should be
+equivalent, but this message is provided to clarify the situation, and
+to explain why the calibration gains might be for a slightly different
+frequency than your observations.
+
 

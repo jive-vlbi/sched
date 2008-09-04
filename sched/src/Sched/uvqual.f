@@ -163,7 +163,7 @@ C
                               VV(1) = VX * ( V1(ISTA) - V1(JSTA) )
                               UU(2) = U2(ISTA) - U2(JSTA)
                               VV(2) = VX * ( V2(ISTA) - V2(JSTA) )
-C		    
+C                   
 C                             Do some bandwidth synthesis as specified
 C                             by the user with UVMFS
 C
@@ -173,7 +173,7 @@ C
 C                                Increment the cell counts.
 C                                Don't forget the conjugate points.
 C                                If R is out of range, don't count.
-C	          	    
+C                           
                                  DO IE = 1, 2
                                     RCELL2 = ( FBW * UU(IE) )**2 + 
      1                                       ( FBW * VV(IE) )**2
@@ -200,9 +200,9 @@ C
                                           CELLALL(IR,IT,NSR) = 
      1                                      CELLALL(IR,IT,NSR) + 1
                                        END IF
-C	          	    
+C                           
 C                                      Get the hermitian point.
-C	          	    
+C                           
                                        IT = IT + NT / 2
                                        IF( IT .GT. NT ) IT = IT - NT
                                        IF( NEWBAS ) THEN
@@ -214,9 +214,9 @@ C
                                        END IF
                                     END IF
                                  END DO
-C	          	    
+C                           
 C                                This UV point accumulated.
-C 		    
+C                   
                               END DO
                            END IF
                         END DO
@@ -333,9 +333,3 @@ C
 C
       RETURN
       END
-
-
-
-
-
-

@@ -1,6 +1,9 @@
       SUBROUTINE TPAUTO( ISCN, ISTA, FIRSTS, IPASS, 
      1       TPMODMIN, SCNFOOT, TPCFOOT, TPCDIR ) 
 C
+C     Obsolete - only called if tapes in use.
+C
+C
 C     Routine for SCHED called by TPSCH to deal with automatic tape
 C     handling
 C

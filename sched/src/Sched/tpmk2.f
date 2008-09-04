@@ -1,5 +1,8 @@
       SUBROUTINE TPMK2( ISCN, ISTA, LASTISCN )
 C
+C     Obsolete - only called if tapes in use (Mark II no less)
+C
+C
 C     Routine for SCHED called by TPTAPE that triggers Mark II tape
 C     changes.
 C

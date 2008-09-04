@@ -99,7 +99,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2007Sep10-16:22:39"
+ VERSION = "2008Sep03-21:03:58"
 
 !  
 !  =====================================================================
@@ -411,6 +411,9 @@ Name = vsx_8w  Station = VLBA    Priority = 3
 !           channel one for the given filter.
 !           The on-line system always assumes an upper sideband first
 !           mix
+!
+!           There is a Radio Astronomy band from 15.35 to 15.4 GHz
+!           that is shared with other passive services.
 !
 ! Receiver   Nominal      Channel 1      Max range     Good range
 ! filter  filter range      range
@@ -3712,6 +3715,9 @@ Name = arxbha  Station = ARECIBO, AREC_S2   priority = 0
 !  061102: Put back Nt X-band dummy dual-pol 
 !  061128: Changed Nt X-band dummy dual-pol to have RCP in the correct IF.
 !  070221: Added Hh at 1cm.
+!  070525: Changed On at 6cm to avoid high patch at 1Gbps
+!  070618: mc_s had the wrong 'fe' - fixed
+!  070903: fixed LO and rf1, rf2 for mc5cm 
 !  
 !  -----------------------------------------------------------------------
 !   Effelsberg
@@ -4229,6 +4235,49 @@ Name = cm1cm  Station = CAMBG32M   priority = 4
   note = 'Confirmed by Alastair Gunn 210897 CHECK'   
 /
 
+! Da has the same setups as cambg32m
+Name = da21cm  Station = DARNHALL   priority = 4
+  rf1 =  1400, 1400     ifname = C,    A
+  rf2 =  1430, 1430     fe     = '21cm', '21cm'
+  pol =   RCP,  LCP     lo1    =  830.0,  830.0
+  note = 'same as cambg32m'
+/
+Name = da18cm  Station = DARNHALL   priority = 4
+  rf1 =  1610, 1610     ifname = C,    A
+  rf2 =  1730, 1730     fe     = '18cm', '18cm'
+  pol =   RCP,  LCP     lo1    =  1110.0,  1110.0
+  note = 'same as cambg32m'   
+/
+ Name = da6cmOH  Station = DARNHALL   priority = 5
+   rf1 =  4640, 4640     ifname = C,    A
+   rf2 =  5100, 5100     fe     = '6cm', '6cm'
+   pol =   RCP,  LCP     lo1    = 4140.0, 4140.0
+   note = 'same as cambg32m'
+/
+Name = da6cm  Station = DARNHALL   priority = 4
+  rf1 =  4940, 4940     ifname = C,    A
+  rf2 =  5400, 5400     fe     = '6cm', '6cm'
+  pol =   RCP,  LCP     lo1    = 4440.0, 4440.0
+  note = 'same as cambg32m'
+/
+ Name = da5cmOH  Station = DARNHALL   priority = 4
+   rf1 =  6000, 6000     ifname = C,     A
+   rf2 =  6100, 6100     fe     = '5cm', '5cm'
+   pol =   RCP,  LCP     lo1    = 5512, 5512
+   note = 'Same as cambg32m'
+/
+ Name = da5cm  Station = DARNHALL   priority = 4
+   rf1 =  6600, 6600     ifname = C,     A
+   rf2 =  6700, 6700     fe     = '5cm', '5cm'
+   pol =   RCP,  LCP     lo1    = 6120, 6120 
+   note = 'same as cambg32m'
+/
+Name = da1cm  Station = DARNHALL   priority = 4
+  rf1 = 22200,22200     ifname = C,    A
+  rf2 = 22600,22600     fe     = '1cm', '1cm'
+  pol =   RCP,  LCP     lo1    = 21680.0, 21680.0
+  note = 'same as cambg32m'
+/
 
 
 Name = mh18cm  Station = METSAHOV   priority = 5
@@ -4784,7 +4833,7 @@ Name = mc18cm  Station = MEDICINA   priority = 3
   note = 'updated from Maccaferri (CR 2Dec00)'
 /
 Name = mc_s  Station = MEDICINA   priority = 4
-  rf1 = 2200, 2200    ifname = '2N', '1N'  fe = '4cm', '4cm'
+  rf1 = 2200, 2200    ifname = '2N', '1N'  fe = '13cm', '13cm'
   rf2 = 2360, 2360    altifn = '1A', '2A'
   pol =  RCP,  LCP     lo1 =  2020, 2020
   note = 'added from Maccaferri (CR 30Nov00)'
@@ -4817,10 +4866,10 @@ Name = mc5cmOH  Station = MEDICINA   priority = 5
   note = 'Updated by E-mail Orlati (CR 15Nov2004)'
 /
 Name = mc5cm  Station = MEDICINA  priority = 5
-  rf1 =  6400, 6400    ifname =    '2N',   '1N'   fe = '5cm',  '5cm'
-  rf2 =  6800, 6800    altifn =    '1A',   '2A'    
-  pol =   RCP,  LCP    lo1    =  6300.0, 6300.0
-  note = 'Updated by E-mail Orlati (CR 15Nov2004)'
+  rf1 =  6500, 6500    ifname =    '2N',   '1N'   fe = '5cm',  '5cm'
+  rf2 =  6900, 6900    altifn =    '1A',   '2A'    
+  pol =   RCP,  LCP    lo1    =  6400.0, 6400.0
+  note = 'Updated by e-mail Orlati (13Feb2006)'
 /
 Name = mc_x  Station = MEDICINA   priority = 4
   rf1 = 8180, 8180    ifname = '1N', '2N'  fe = '4cm', '4cm'
@@ -5007,12 +5056,10 @@ Name = onb6cmOH  Station = ONSALA85   priority = 3
  ! update from JFD (CR 17Oct01)
 /
 Name = onb6cm  Station = ONSALA85   priority = 3
-  rf1 =  4900, 4900    ifname =    '2N',   '1N'   fe =  '6cm',  '6cm'
-  rf2 =  5100, 5100    altifn =    '1A',   '2A'    
-  pol =   RCP,  LCP    lo1    =  4800.0, 4800.0
-  note = 'Conway in my office 28Nov96, must be Low patch'
-  ! rf2 increased (restriction on Low patch eased) - email 
-  ! from J. Conway (CR 16May01)
+  rf1 =  4930, 4930    ifname =    '2N',   '1N'   fe =  '6cm',  '6cm'
+  rf2 =  5050, 5050    altifn =    '1A',   '2A'    
+  pol =   RCP,  LCP    lo1    =  4830.0, 4830.0
+  note = 'email from Lindqvist (25May2007), must be Low patch'
 /
 Name = onb5cmOH  Station = ONSALA85  priority = 5
   rf1 =  6000, 6000    ifname =    '2N',   '1N'   fe = '5cm',  '5cm'

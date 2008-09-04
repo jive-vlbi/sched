@@ -21,6 +21,8 @@ C       97Sep19 After FT002.  (again no alternates for Mark IV).
 C       99Feb26 After more tests.  99mar22 ditto.
 C       03May13 Allow 256 Mbps/2 drive modes - I guess I overlooked 
 C           this when I allowed 512 Mbps.
+C       08Jan24 Allow the 2-8-32-1  512 mode on MKIV.  I don't know
+C           why it was blocked.
 C
 C
       INCLUDE    'sched.inc'
@@ -166,7 +168,7 @@ C
      3          2,  4,   8.,  4.,  .TRUE.,  .TRUE.,
      4          2,  4,   4.,  4.,  .TRUE.,  .TRUE.,
      5          2,  4,   2.,  4.,  .TRUE.,  .TRUE.,
-     5          2,  8,  32.,  1.,  .TRUE.,  .FALSE.,
+     5          2,  8,  32.,  1.,  .TRUE.,  .TRUE.,
      7          2,  8,  16.,  1.,  .TRUE.,  .TRUE.,
      8          2,  8,   8.,  2.,  .TRUE.,  .TRUE.,
      9          2,  8,   4.,  4.,  .TRUE.,  .TRUE.,

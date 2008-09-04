@@ -42,6 +42,13 @@ C
       DATA  CBAND(8), CFREQ(8), CBW(8)  /  '18cm', 1658.49, 0.0 /
       DATA  CBAND(9), CFREQ(9), CBW(9)  /  '18cm', 1653.99, 0.0 /
       DATA  CBAND(10), CFREQ(10), CBW(10)  /  '6cm', 4990.49, 0.0 /
+C
+C     The original 2cm band here is centered at 15285.49. 
+C     The standard setup files and pointing files are centered at 
+C     15360.99.  The VLA band is 14650-15325 for 0.9 sensitivity.
+C     But the default VU band is 15339.90-15389.90.  Confusing.
+C     Will have CHKSET write an informational note to 2cm user.
+C
       DATA  CBAND(11), CFREQ(11), CBW(11)  /  '2cm', 15285.49, 0.0 /
 C
 C     The second 1cm band avoids much of the water line.  I didn't

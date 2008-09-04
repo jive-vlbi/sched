@@ -10,17 +10,26 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER    KSCN, LSCN, KSTA, KS
-      LOGICAL    GOTERR
+      LOGICAL    GOTERR, HAVEPL, HAVESA
 C ----------------------------------------------------------------------
       GOTERR = .FALSE.
 C
 C     Loop over scans.
 C
+      HAVEPL = .FALSE.
+      HAVESA = .FALSE.
       DO KSCN = 1, NSCANS
 C
 C        Look for attempts to use ephemeris or satellite at stations
 C        where this shouldn't be done.  Usually this is for stations
 C        for which we don't know how to specify position rates.
+C
+C        Also look for attempts to look for both planets and
+C        satellites in the same schedule.  This doesn't seem to work
+C        for unknown reasons.  By planets here, I mean something using
+C        the ephemeris.  If doing satellites, you can also do a planet
+C        by treating it like a satellite and getting the info from the
+C        bsp file.
 C
          DO KSTA = 1, NSTA
             IF( STASCN(KSCN,KSTA) ) THEN
@@ -35,10 +44,20 @@ C
      1                    //' but SCHED doesn''t know how.' )
                   END IF
                END IF
+               IF( PLANET(SRCNUM(KSCN)) ) HAVEPL = .TRUE.
+               IF( SATEL(SRCNUM(KSCN)) ) HAVESA = .TRUE.
+C
             END IF
          END DO
 C
       END DO
+C
+      IF( HAVEPL .AND. HAVESA ) THEN
+         CALL WLOG( 1, 'CHKSC1:  Trying to use ephmeris and '//
+     1     'satellites in the same schedule' )
+         CALL WLOG( 1, 'CHKSC1:  That might cause a crash that '//
+     1     'looks like an inability to read a bsp file.' )
+      END IF
 C
 C     If got an error, quit.
 C
@@ -94,6 +113,9 @@ C
       END IF
   100 CONTINUE
 C
+C     Warn users if they are setting FREQ and BW in the scans and
+C     they switch setup files without setting changing those
+C     parameters.  This is a fairly benign warning so don't worry
 C     about lots of complications such as what stations are in 
 C     what scans.  Issue the warning if there is a setup file change
 C     without a change in specified FREQ or BW.  Note that changing

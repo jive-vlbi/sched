@@ -42,11 +42,11 @@ C
      1                  SRA, SDEC, SDRA, SDDEC, T0, DIST, GEOVEL )
 C
 C                 Add the satellite to the source catalog.
-C	  	  
+C
                   MSRC = MSRC + 1
                   SATEL(MSRC) = .TRUE.
                   SATN(MSRC) = ISSAT
-C	  	  
+C
                   SUSED(MSRC) = .TRUE.
                   SRCATN(KSRC) = MSRC
                   SRLSTN(MSRC) = KSRC
@@ -82,7 +82,7 @@ C                 Give this source a special calcode to mark it
 C                 as a satellite.  This helps run the correlator.
 C
                   CALCODE(MSRC) = 'Z'
-C	  	  
+C
 C                 Check later if this is for an allowed station.
 C                 We don't have enough information yet.
 C

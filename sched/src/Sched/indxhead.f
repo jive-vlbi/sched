@@ -1,5 +1,7 @@
       SUBROUTINE INDXHEAD( TAPEMD, IPASS, SYSTEM, INDX, HEAD, SETN )
 C
+C     Obsolete - only called if tapes in use.
+C
 C     Routine for SCHED called by TPSCH and perhaps others that
 C     returns the head index position and head group (which N
 C     to use for TRACKN) for a given TAPEMD (passes per head
