@@ -161,7 +161,7 @@ C
      2                STAFRM, STACTL, STAMNT, STADBA, STADAR, STAREC,
      3                STADSK, STAMD, LOCFILE, DBNAME, DBCODE, 
      4                DBFRM, DBDBA, DBVER
-C 		     
+C
       COMMON /RDCATN/ SRCPMRA, SRCPMDEC, SRCPARA, SRCRA, SRCDEC, 
      1                SRCPMT, SRCEPOT, STALON, STALAT, STAEL, 
      2                STAX, STAY, STAZ, STADX,  STADY,  STADZ, 
@@ -175,5 +175,3 @@ C
      A                STAMSH, DBEPO, NDB, DBOFF
 C
 C   --------  End of RDCAT.INC ------------
-
-

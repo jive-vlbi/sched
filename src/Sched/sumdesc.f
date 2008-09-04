@@ -22,6 +22,11 @@ C
          SUMDESC = 'End elevation, flag '//
      1      '(D=>Down, H=>Below Horizon, t=>Tape Change.)'
 C
+      ELSE IF( ITEM .EQ. 'ELA' ) THEN
+         SUMDESC = 'Average elevation, flag '//
+     1      '(D=>Down, H=>Below Horizon,'//
+     2      'R=>Rises, S=>Sets, t=>Tape Change.)'
+C
       ELSE IF( ITEM .EQ. 'AZ1' ) THEN
          SUMDESC = 'Start azimuth, flag '//
      1      '(D=>Down, H=>Below Horizon, t=>Tape Change.)'
@@ -29,6 +34,11 @@ C
       ELSE IF( ITEM .EQ. 'AZ2' ) THEN
          SUMDESC = 'End azimuth, flag '//
      1      '(D=>Down, H=>Below Horizon, t=>Tape Change.)'
+C
+      ELSE IF( ITEM .EQ. 'AZA' ) THEN
+         SUMDESC = 'Average azimuth, flag '//
+     1      '(D=>Down, H=>Below Horizon,'//
+     2      'R=>Rises, S=>Sets, t=>Tape Change.)'
 C
       ELSE IF( ITEM .EQ. 'PA1' ) THEN
          SUMDESC = 'Start paralactic angle.'

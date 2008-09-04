@@ -2,6 +2,8 @@
      1                  TOOLONG, DOTAPE, DOREW, DOFAST,
      2                  IPASS, TPCDIR, TPCFOOT, SCNFOOT, SLOP, TPTOL )
 C
+C     Obsolete - only called if tapes in use.
+C
 C     Deal with requests or situations that require a tape to change
 C     direction when automatic tape allocation is not in use.  
 C

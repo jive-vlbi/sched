@@ -19,11 +19,11 @@ C
 C               JD number at 12 hrs UT on Jan 0 of year Y
 C               (Gregorian calendar)
 C
-	IF(M.GE.1 .AND. M.LE.12) GOTO 1
-		Y = Y + (M-1)/12
-		M = MOD(M-1,12)+1
-		IF(M.LT.0) Y=Y-1
-		IF(M.LT.0) M=M+12
+        IF(M.GE.1 .AND. M.LE.12) GOTO 1
+           Y = Y + (M-1)/12
+           M = MOD(M-1,12)+1
+           IF(M.LT.0) Y=Y-1
+           IF(M.LT.0) M=M+12
     1   NYRM1=Y-1
         IC=NYRM1/100
         JD=1721425 + 365*NYRM1 + NYRM1/4 - IC + IC/4

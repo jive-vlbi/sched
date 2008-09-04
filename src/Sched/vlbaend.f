@@ -58,7 +58,7 @@ C
          IF( USETAPE(ISTA) .AND. .NOT. AUTOALOC(ISTA) ) THEN
 C
 C           Determine what action to take - UNLOAD or POSTPASS.
-C	    
+C           
             IF( ( PASSOK .AND. TPFOOT2(LSCN,ISTA) .LT. 300.0 ) .OR.
      1          ( TPLENG(ISTA) .LT. 12000 ) .OR.
      2          ( .NOT. POSTPASS ) ) THEN
@@ -67,15 +67,15 @@ C
                ACTION = 'POSTPASS'
             END IF
             LA = LEN1( ACTION )
-C	    
+C           
 C           Now do it and tell the operator.
 C           Before the most recent changes (Sep97) UNLOADS were not
 C           issued.  Neither I nor Peggy could remember a reason so
 C           they are in now.  But don't be surprised if someone complains.
-C	    
-C	    
+C           
+C           
 C           Tell the operator.
-C	    
+C           
             WRITE( IUVBA, '( 1X )' )
             WRITE( IUVBA,'(''!* ===== '', 3A, I1, '' ==== *!'')') 
      1              ' ', ACTION(1:LA), 'ING DRIVE ', NDR
@@ -83,10 +83,10 @@ C
                WRITE( IUVBA,'(''!* ===== '', 3A, I1, '' ==== *!'')') 
      1              ' ', ACTION(1:LA), 'ING DRIVE ', NDR + 1
             END IF
-C	    
+C           
 C           Stop the tape using the previously determined stop time
 C           offset.
-C	    
+C           
             WRITE( IUVBA, '( A, I1, A, I1, A )' )
      1              'tape=(', NDR, ',STOP)    write=(', NDR, 
      2              ',off)   dur=0s '
@@ -100,19 +100,19 @@ C
      1              IUVBA )
             WRITE( IUVBA, '( A, A9, A  )' )
      1          'stop=', TSTOP, '  !NEXT! '
-C	    
+C           
 C           Now request the postpass or unload.
-C	    
+C           
             OFFSET = OFFSET + 2.D0
             TSTOP = VLBASTOP( STOPJ(LSCN), OFFSET, LASTDY, TWOPI, 
      1              IUVBA )
             WRITE( IUVBA, '( A, I1, 3A, A9  )' )
      1          'tape=(', NDR, ',', ACTION(1:LA), ')  stop=', TSTOP
             WRITE( IUVBA, '( A  )' ) '  !NEXT! '
-C	    
+C           
 C           Postpass the second tape too if needed.  This must be
 C           a separate scan.
-C	    
+C           
             IF( DOTWO ) THEN
                OFFSET = OFFSET + 2.D0
                TSTOP = VLBASTOP( STOPJ(LSCN), OFFSET, LASTDY, TWOPI, 
@@ -154,4 +154,3 @@ C
 C
       RETURN
       END
-

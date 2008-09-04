@@ -118,32 +118,32 @@ C
             END IF
 C
 C           Require a source name.
-C	    
+C           
             DO INAME = 1, 5
                CALL UPCASE( SRCNAM(INAME) )
             END DO
             IF( SRCNAM(1) .NE. 'NONAME' ) THEN
-C	    
+C           
 C              If this is an in-line catalog, include the source in
 C              the internal source list regardless.
 C              If this is an external catalog, only include the 
 C              source if it appears in the schedule.
 C              Do not include a source from the external catalog that
 C              was already in an in-line catalog.
-C	    
+C           
                SRUSED = .FALSE.
                KEEPIT = .FALSE.
                IF( SELECT ) THEN
-C	    
+C           
 C                 Look for this source among the schedule sources
 C                 that have not already been found.  Complain later
 C                 if there are too many.
-C	    
+C           
                   DO KSRC = 1, NSRC
                      DO INAME = 1, 5
                         IF( SRCATN(KSRC) .EQ. 0 .AND. 
      1                      SRCNAM(INAME) .EQ. SRCNAME(KSRC) ) THEN
-C	    
+C           
                            KEEPIT = .TRUE.
                            SRUSED = .TRUE.
                         END IF
@@ -162,7 +162,7 @@ C              can't tell which to use.
 C
 C              This is done before the KEEPIT IF block so that 
 C              sources acquired by SRLIST will be happy.
-C	       
+C              
 C              Read EPOCH to test if it is one of the standard values
 C              for EQUINOX.
 C
@@ -174,16 +174,16 @@ C
 C
                IF( SRCEQ .NE. 'J2000' .AND. SRCEQ .NE. 'B1950' .AND.
      1             SRCEQ .NE. 'DATE' )  THEN
-C	       
+C              
 C                 EQUINOX was not properly set.  
 C                 See if they used EPOCH.
-C	       
+C              
                   IF( EPEQ ) THEN
-C	       
+C              
 C                    EPOCH did make a good equinox so use it.
 C                    and set the EPOCH to 0.D0 which will not be 
 C                    accepted for proper motion work later.
-C	       
+C              
                      IF( EQWARN ) THEN
                         CALL WLOG( 1, 'SRREAD:  Please convert '
      1                  // 'source catalog from use of EPOCH to '
@@ -194,9 +194,9 @@ C
                      SRCEPOT = 0.D0
 C
                   ELSE
-C	       
+C              
 C                    EPOCH was not a good alternate for EQUINOX.
-C	       
+C              
                      CALL WLOG( 1, 'SRREAD:  Source catalog ' //
      1                   'contains invalid equinox: '// SRCEQ )
                      CALL WLOG( 1, '         EPOCH also could ' //
@@ -213,9 +213,9 @@ C
                      CALL ERRLOG( 'SRREAD: See sched.runlog. ' //
      1                   'Convert source lists to use EQUINOX.' )
                   ELSE
-C	       
+C              
 C                    Get the epoch date when equinox was used properly.
-C	       
+C              
                      IF( ABS( SRCEPOT ) .NE. 0.0 .AND. 
      1                   ( SRCEPOT .LT. 1900.D0 .OR. 
      2                     SRCEPOT .GT. 2100.D0 ) ) THEN
@@ -235,12 +235,12 @@ C
                      END IF
                   END IF
                END IF
-C	    
+C           
 C              This source is to be kept (in-line or a used one from
-C              an external catalog.
-C	    
+C              an external catalog).
+C           
                IF( KEEPIT ) THEN
-C	    
+C           
                   MSRC = MSRC + 1
                   IF( MSRC .GT. MAXSRC ) THEN
                      WRITE( MSGTXT, '( A, I6 )' )
@@ -248,20 +248,36 @@ C
      2                   MAXSRC
                      CALL ERRLOG( MSGTXT )
                   END IF
-C	    
+C           
 C                 Put source in internal catalog.
-C	    
+C           
                   DO INAME = 1, 5
                      SOURCE(INAME,MSRC) = SRCNAM(INAME)
                   END DO
-C	    
+C
+C                 Check if the default RA or DEC is being used.  This
+C                 is not necessarily a problem, especially for 
+C                 configuration testing, but might indicate that there
+C                 was a problem reading the source list.  As you might
+C                 guess, this test is the result of a request from a 
+C                 user who got burned.
+C
+                  IF( SRCRA .EQ. 0.D0 .OR. 
+     1                SRCDEC .LE. -1.57079632D0 ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( 3A )' ) 
+     1                  'SRREAD:  Default RA or Dec used for ',
+     2                   SRCNAM(1), '.  Was that intended?'
+                     CALL WLOG( 1, MSGTXT )
+                  END IF
+C           
 C                 Flag where it came from.
-C	    
+C           
                   WHICHCAT(MSRC) = THISCAT
-C	    
+C           
 C                 Get position information.  We won't get this far if
 C                 the equinox is not one of the options below.
-C	    
+C           
                   C1950(MSRC) = ' '
                   C2000(MSRC) = ' '
                   CDATE(MSRC) = ' '
@@ -291,13 +307,13 @@ C
                   DECCAT(MSRC) = SRCDEC
 C
 C                 Get the catalog source comment.
-C	    
+C           
                   REMARK(MSRC) = SRCRMK
-C	    
+C           
 C                 Get calcode and be sure it is a number or capital
 C                 letter (ASCII code 48 to 57 or 65 to 90).  Note it
 C                 was upcased in RDSRC.
-C	    
+C           
                   CALCODE(MSRC) = SRCCAL
                   ICH = ICHAR( CALCODE(MSRC) )
                   IF( ICH .EQ. 32 .OR. 
@@ -309,11 +325,11 @@ C                    OK
      1                  //SRCCAL//' in CALCODE for '
      2                  //SOURCE(1,MSRC) )
                   END IF
-C	    
+C           
 C                 Get LSR velocities.  If some not given, set them
 C                 equal to the first.  If first not given, set very
 C                 big negative velocity.  DOPFQ will sense this.
-C	    
+C           
                   DO IV = 1, MAXLCH
                      VLSR(IV,MSRC) = SRCVEL(IV)
                      IF( SRCVEL(IV) .EQ. CONT ) THEN
@@ -326,9 +342,9 @@ C
                   END DO
                   VELREF(MSRC) = SRCVREF
                   VELDEF(MSRC) = SRCVDEF
-C	    
+C           
 C                 Planetary motion parameters.
-C	    
+C           
                   DRA(MSRC) = SRCDRA
                   DDEC(MSRC) = SRCDDEC
                   IF( DRA(MSRC) .NE. 0.0 .OR. DDEC(MSRC) .NE. 0.0 )
@@ -361,15 +377,15 @@ C
                      CALL WLOG( 1, MSGTXT )
                   END IF
                      
-C	    
+C           
                END IF  !  KEEPIT
-C	    
+C           
 C              Save low precision version of all sources for
 C              plotting purposes.
-C	    
+C           
                CALL SRLIST( SRCNAM(1), SRCRA, SRCDEC, 
      1                      SRCRAE, SRCDECE, SRCEQ, SRCCAL, SRUSED )
-C	    
+C           
             ELSE
 C
 C              Warn of an unnamed source.
@@ -380,11 +396,11 @@ C
                CALL WLOG( 1, '           There may be an extra ' //
      1            '''/'' somewhere.' )
             END IF  !  SRCNAM not NONAME
-C	    
+C           
 C           Return for next source
-C	    
+C           
          GO TO 100
-C	    
+C           
 C        End of source reading loop.  
 C
       END IF  !  READIT 

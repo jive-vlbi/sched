@@ -1,4 +1,7 @@
       SUBROUTINE TPS2( ISCN, ISTA, LASTISCN )
+C
+C     Obsolete - only called if tapes in use.
+C
 C     version with small change by Huib 21/12/00
 C
 C     Routine for SCHED called by TPTAPE that schedules S2 tapes.

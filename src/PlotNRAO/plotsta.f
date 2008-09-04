@@ -224,11 +224,11 @@ C              For modes that need to know the station that was
 C              clicked, find it.
 C
                IF( CH .EQ. 'M' .OR. CH .EQ. 'D' .OR. CH .EQ. 'A' ) THEN
-C	   
+C          
 C                 Do X + Y rather than SQRT( X^2 + Y^2 ) for speed.
 C                 Note that XPLT and YPLT are also obtained, which
 C                 are used to erase the old position later.
-C	   
+C          
                   CURDM = 1.E15
                   IMARK = 0
                   DO ISTA = 1, NSTA
@@ -313,9 +313,9 @@ C                 Deal with toggling a station off and on.  This happens
 C                 if you left click (giving an 'A')
 C
                   ELSE IF( CH .EQ. 'A' ) THEN
-C	   
+C          
 C                    Toggle flags.
-C	   
+C          
                      CALL PGSCH( DOTSIZE ) 
                      IF( PSTBCK(IMARK,1) .EQ. 0 .AND.
      1                   PSTBCK(IMARK,2) .EQ. 1 ) THEN
@@ -433,4 +433,3 @@ C
 C
       RETURN
       END
-

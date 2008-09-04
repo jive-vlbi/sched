@@ -36,7 +36,7 @@ C
 C
             WRITE( IOMS, '( 1X, /, A, /, 1X )' )
      1          'BEGIN = STATION_INFO'
-C	    
+C
             WRITE( IOMS, '( A, A )' )  '    STATION_ID         = ',
      1          STCODEU(KSTA)
             WRITE( IOMS, '( A, A )' )  '    STATION_NAME       = ',
@@ -61,9 +61,9 @@ C
      1         PASSES(ISTA)
             WRITE( IOMS, '( A, F7.1 )' ) '    DISK               = ',
      1         TGBYTES(ISTA)
-C	    
+C
 C           Get the first and last times.
-C	    
+C
             START1 = 1.0D10
             STOPL = 0.D0
             DO ISCN = SCAN1, SCANL
@@ -82,7 +82,7 @@ C
             WRITE( IOMS, '( A, I4, A, I3.3, A, A )' ) 
      1             '    STOP               = ', YEAR2, '-', DAY2, 
      2             '/', TIME2
-C	    
+C
             WRITE( IOMS, '( 1X, /, A, /, 1X )' )
      1          'END = STATION_INFO'
 C

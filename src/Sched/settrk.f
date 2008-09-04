@@ -1,17 +1,25 @@
       SUBROUTINE SETTRK( NCHAN, TAPEMODE, FORMAT, BITS, TRACK, MCHAN,
-     1                   SIDEBAND, KS, TWOHEAD, DEBUG, ILOG )
+     1                   KBBC, SIDEBAND, KS, TWOHEAD, DEBUG, ILOG )
 C
 C     Routine for SCHED, called by SETDEFS, that sets the track 
 C     assignments, if needed.  It will only be called if
 C     TRACK1(1) is 0 which is the trigger to use this routine.
 C
       INTEGER    MCHAN, KS, ILOG
-      INTEGER    NCHAN, TAPEMODE, BITS, TRACK(MCHAN,8)
+      INTEGER    NCHAN, TAPEMODE, BITS, TRACK(MCHAN,8), KBBC(MCHAN)
       CHARACTER  FORMAT*8, SIDEBAND(MCHAN)*1, MSG*80
       LOGICAL    TWOHEAD, DEBUG
 C
       INTEGER    ICH, ICH1, IP, MAXCHN, CHPASS
       CHARACTER  TEXT*80
+C
+C     For Mark5B
+C
+      INTEGER    MK5BCH(MCHAN), M5BBBC, IM5, ICHMK5B(MCHAN)
+C
+C     M5BCH is the sequence number of this SCHED channel in the
+C     Mark5B channels, which go by BBC number with upper sidebands
+C     first, then lower sidebands.
 C
 C     Specify the track patterns in DATA statements in order to
 C     make it totally clear what is going on.  They could be
@@ -234,6 +242,58 @@ C
                ICH1 = ( IP - 1 ) * CHPASS
                TRACK(ICH,IP) = AN(ICH1+ICH)
             END DO
+         END DO
+C
+      ELSE IF( FORMAT .EQ. 'MARK5B' ) THEN
+C
+C        The wiring is fixed between the BBC's and the "tracks".  
+C        We need the channels in order of BBC number upper sideband
+C        followed by BBC number, lower sideband.  I'll be crude and 
+C        just loop through the channels finding the order.  MK5BCH
+C        is the sequence number of this sched channel in the Mark5B
+C        channels.  It is basically the index of the appropriate 
+C        track assignment array to use.
+C        IM5 Index for looping over the Mark5B channels
+C        ICHM5B  SCHED channel of Mark5B channel
+C        MK5BCH  Mark5B channel of SCHED channel
+C
+         DO ICH = 1, NCHAN
+            MK5BCH(ICH) = 0
+         END DO
+         DO IM5 = 1, NCHAN
+            M5BBBC = 100000
+            DO ICH = 1, NCHAN
+               IF( SIDEBAND(ICH) .EQ. 'U' .AND. 
+     1             KBBC(ICH) .LT. M5BBBC .AND. 
+     2             MK5BCH(ICH) .EQ. 0 ) THEN
+                  ICHMK5B(IM5) = ICH
+                  M5BBBC = KBBC(ICH)
+               END IF
+            END DO
+C
+C           Process lower sidebands only when uppers are done.
+C
+            IF( ICHMK5B(IM5) .EQ. 0 ) THEN
+               M5BBBC = 100000
+               DO ICH = 1, NCHAN
+                  IF( SIDEBAND(ICH) .EQ. 'L' .AND. 
+     1                KBBC(ICH) .LT. M5BBBC .AND. 
+     2                MK5BCH(ICH) .EQ. 0 ) THEN
+                     ICHMK5B(IM5) = ICH
+                     M5BBBC = KBBC(ICH)
+                  END IF
+               END DO
+            END IF
+         END DO
+C
+C        Now assign the tracks
+C
+         DO ICH = 1, NCHAN
+            IF( BITS .EQ. 1 ) THEN
+               TRACK(ICH,1) = A1(MK5BCH(ICH))
+            ELSE IF ( BITS .EQ. 2 ) THEN
+               TRACK(ICH,1) = A2(MK5BCH(ICH))
+            END IF
          END DO
 C
       ELSE IF( FORMAT .EQ. 'MARKIII' ) THEN

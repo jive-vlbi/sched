@@ -143,7 +143,7 @@ C
          ID = 0
 C
          DO ICH = 1, NCHAN(KS)
-            IF( NTONES(ICH) .GE. 1 .AND. ID .LT. MAXTON ) THEN            
+            IF( NTONES(ICH) .GE. 1 .AND. ID .LT. MAXTON ) THEN
                ID = ID + 1
                IP = ( ID + 1 ) / 2
                ICT = 1 + MOD( ID + 1, 2 )
@@ -162,7 +162,7 @@ C
 C        Now do the high frequency tones (tone2).
 C
          DO ICH = 1, NCHAN(KS)
-            IF( NTONES(ICH) .GE. 2 .AND. ID .LT. MAXTON ) THEN            
+            IF( NTONES(ICH) .GE. 2 .AND. ID .LT. MAXTON ) THEN
                ID = ID + 1
                IP = ( ID + 1 ) / 2
                ICT = 1 + MOD( ID + 1, 2 )
@@ -215,7 +215,7 @@ C
 C        Finally do the middle frequency tones (tone3).
 C
          DO ICH = 1, NCHAN(KS)
-            IF( NTONES(ICH) .GE. 3 .AND. ID .LT. MAXTON ) THEN            
+            IF( NTONES(ICH) .GE. 3 .AND. ID .LT. MAXTON ) THEN
                ID = ID + 1
                IP = ( ID + 1 ) / 2
                ICT = 1 + MOD( ID + 1, 2 )

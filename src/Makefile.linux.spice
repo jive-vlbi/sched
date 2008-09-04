@@ -44,8 +44,10 @@ FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 #XLD = -lgl -lX11                              # SGI
 
 #XLD = -Bstatic    # Sun; for portable executable (problems?)
-XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
+#XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
                    # Linux, portable executable (true at AOC with Redhat 9)
+XLD = -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
+                   # Linux, non-static (true at AOC with Redhat 9)
 #XLD = -static -L/usr/X11/lib -lX11            # Linux with X11 vs X11R6
 #XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -ldl 
                    # RedHat 7.3
@@ -70,12 +72,12 @@ PLOT_SRCS = $(wildcard Plot/*.f) $(wildcard PlotNRAO/*.f) # With PGPLOT
 #LPGPLOT = /usr/local/lib        # Typical location
 #LPGPLOT = /usr/local/pgplot     # Alternate location.
 #LPGPLOT = /usr/lib              # Installed in system wide location.
-LDPGPLOT =                       # No library needed with stub or installed
+#LDPGPLOT =                        # No library needed with stub or installed
                                  # in default load path.
 
 # For linker:
 #LDPGPLOT = -L$(LPGPLOT) -lpgplot                # Most
-LDPGPLOT =    -lpgplot  -lpng -lz                # If png lib separate and 
+LDPGPLOT =    -lpgplot  -lpng12 -lz                # If png lib separate and 
                                            # pgplot is in the standard load path.
 #LDPGPLOT = -L$(LPGPLOT) -lpgplot -R$(LPGPLOT)   # Alternate
 #LDPGPLOT = -Wl,-L$(LPGPLOT) -lpgplot            # Hp - link lib

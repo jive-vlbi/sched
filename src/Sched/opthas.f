@@ -422,7 +422,7 @@ C
      5                   ( TAPPROX - OPHAT(JSCN) ) * 24.D0, 
      6                   OPHAWIDT(JSCN) * 24.D0, OPSLEW
                      CALL WLOG( 0, MSGTXT )
-                     MSGTXT = ' '			
+                     MSGTXT = ' '
                   END IF
                END IF
             END IF

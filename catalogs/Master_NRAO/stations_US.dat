@@ -192,16 +192,6 @@
     DISK=MARK5A   MEDIADEF=DISK
 !     For Tsys measurement, allow an extra minute.
    / 
-!  Green Bank S2:  Copied and adapted from the existing GB entry 01-jul-97 pge
-  STATION=N140_S2   STCODE=Gb  CONTROL=VEX   ZALIM=88.000  
-	    DBNAME = NRAO140
-    MOUNT = EQUAT AX1RATE=20  AX2RATE=20  ! From bvance email 16nov95.
-    AX1LIM= -3.296,3.296, -4.958,4.958, -7.092,7.092
-    AX2LIM=    -45,  -36,    -36,  -16,    -16,   86
-    TSETTLE=20   DAR=VLBA  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=8
-    DISK=NONE   MEDIADEF=TAPE
-!     For Tsys measurement, allow an extra minute.
-   / 
   STATION=GBT_VLBA   STCODE=Gb  CONTROL=VLBA
     DBNAME = GBT
     MOUNT = ALTAZ AX1RATE=36  AX2RATE=18  AX1ACC=0.05  AX2ACC=0.05
@@ -211,13 +201,17 @@
     DISK=MARK5A   MEDIADEF=DISK
     DAR=VLBA NBBC=8 ! RECORDER=VLBA  NDRIVES=2  NHEADS=1 
    / 
-  STATION=GBT_S2   STCODE=Gb  CONTROL=VEX
+  STATION=GBT_COLD   STCODE=Gb  CONTROL=VLBA
+!   Special version of GBT entry with slow azimuth slew to use when 
+!   the temperature is below 17 F (-8.3C).  This happens mainly in
+!   Dec, Jan, and Feb and mainly at night.  
     DBNAME = GBT
-    MOUNT = ALTAZ AX1RATE=36  AX2RATE=18  AX1ACC=0.05  AX2ACC=0.05
+    MOUNT = ALTAZ AX1RATE=17  AX2RATE=18  AX1ACC=0.05  AX2ACC=0.05
     AX1LIM= -90, 450    AX2LIM= 5, 90 
+!     TSETTLE based on BK110 experience.  This should be monitored.
     TSETTLE = 20.0   MINSETUP = 10
-    DISK=NONE   MEDIADEF=TAPE
-    DAR=VLBA  NBBC=8 RECORDER=S2  NDRIVES=8  NHEADS=1 
+    DISK=MARK5A   MEDIADEF=DISK
+    DAR=VLBA NBBC=8 ! RECORDER=VLBA  NDRIVES=2  NHEADS=1 
    / 
 !
 !   Other stations.
@@ -229,13 +223,6 @@
     DISK=MARK5A   MEDIADEF=DISK
     DAR=VLBA4  NBBC=8 !  RECORDER=VLBA4  NDRIVES=1  NHEADS=2  
     DISK=MARK5A   MEDIADEF=DISK
-   / 
-  STATION=AREC_S2   STCODE=Ar  CONTROL=VEX
-    DBNAME = ARECIBO
-    MOUNT=ALTAZ AX1RATE=25 AX2RATE=2.5 AX1LIM=0,720 AX2LIM=70.3,88.8
-    TSETTLE = 7  AX1ACC = 0.1  AX2ACC = 0.025
-    DISK=NONE   MEDIADEF=TAPE
-    DAR=NONE NBBC=2  RECORDER=S2  NDRIVES=8  NHEADS=1 
    / 
 !
 !  Inactive stations.  Keep in case they get active again.  Much of

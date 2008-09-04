@@ -135,7 +135,7 @@ C     are being set by sticking in values that conform to the N*50+-10.1
 C     but are not necessarily within the old VLA bands.  Check against
 C     the old bands, but only abort if EVLA is not >0.
 C
-      write(*,*) 'CHKVLA', ks, evla(ks), vlasyna(ks)
+C       write(*,*) 'CHKVLA', ks, evla(ks), vlasyna(ks)
       IF( VLABAND(KS)(1:1) .EQ. '4' ) THEN
          IF( BADLO( 'VLASYNA', VLASYNA(KS), 50.0D0, 1, 10.1D0, 0.D0,
      1              -961.D0, -939.D0, SETMSG ) ) ERRS = .TRUE.

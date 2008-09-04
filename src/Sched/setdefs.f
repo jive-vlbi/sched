@@ -115,8 +115,8 @@ C
      3          FORMAT(KS) .EQ. 'MARKIII' ) ) THEN
 C
                CALL SETTRK( NCHAN(KS), TAPEMODE(KS), FORMAT(KS), 
-     1               BITS(1,KS), TRACK(1,1,KS), MCHAN, SIDEBD(1,KS),
-     2               KS, TWOHEAD, DEBUG, ILOG )
+     1               BITS(1,KS), TRACK(1,1,KS), MCHAN, BBC(1,KS), 
+     2               SIDEBD(1,KS), KS, TWOHEAD, DEBUG, ILOG )
 C
             END IF
          END DO
