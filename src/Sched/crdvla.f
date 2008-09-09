@@ -15,6 +15,7 @@ C
       INTEGER          ISCN, ISTA, LEN1, SIDDAY, DAY, YEAR, USERN
       INTEGER          NCHAR, MCHAR, ISDAY, ISTDAY, IER, KS, ICH
       INTEGER          IY, IM, ID, JSTAT, IC1, IC2, JC1, JC2
+      INTEGER          LVINTEG
       REAL             PDRA, PDDEC
       DOUBLE PRECISION PRA, PDEC, PPMTIME, DDRA, DDDEC, DIST, HPARAL
       DOUBLE PRECISION LLST, LSTOP, STOP, PMT, PMIAT, FD
@@ -22,20 +23,22 @@ C
       DOUBLE PRECISION PLST, ONEMIN, ONEMINJ
       DOUBLE PRECISION LSTOPJ, PSTOPJ1, PSTOPJ2
       LOGICAL          FIRSTS, GOTLO, GOTFI ! WARN, GOTFQ (dar)
-      LOGICAL          PADDED, WPS, WLO, WFI, PWARN, DOTAPE
+      LOGICAL          PADDED, WPS, WLO, WFI, WDS, PWARN, DOTAPE
       LOGICAL          GOTLCP, GOTRCP
       CHARACTER        TFORM*15, PRCODE*6, UANNOT*64, TLST*15, TSTOP*15
       CHARACTER        VLASTR*50, RASCH*15, DECSCH*15, EPOCH*1
       CHARACTER        PMFT*9, FLKSETC*1
       CHARACTER        PRTSRC*13, CC*8, TMST*15
       CHARACTER        SSLINE*80, PSLINE*80, LOLINE*80, FILINE*80
+      CHARACTER        DSLINE*80
       CHARACTER        PTLO*9, RPK*1, PHMODE*2
-      SAVE             PADDED, PWARN, LLST, LSTOP, LSTOPJ
+      SAVE             PADDED, PWARN, LLST, LSTOP, LSTOPJ, LVINTEG
 C
       PARAMETER        (ONEMIN=RADHR/60.D0)            ! Rad/min
       PARAMETER        (ONEMINJ=1.D0/1440.D0)          ! Day/min
 C
       DATA             CC / '//* *** ' /
+      DATA             LVINTEG / -999 /
 C
 Cdar      DATA             WARN / .TRUE. /
 C ---------------------------------------------------------------------
@@ -46,6 +49,7 @@ C
       WPS = .FALSE.
       WLO = .FALSE.
       WFI = .FALSE.
+      WDS = .FALSE.
 C
 C     Save some long subscripts later and get DOTAPE
 C
@@ -445,6 +449,16 @@ C
 C
          END IF
 C
+C        Make a //DS line for correlator integration time.
+C
+         IF( LVINTEG .NE. -999 .OR. VLAINTEG(ISCN) .NE. 0 ) THEN
+            IF( VLAINTEG(ISCN) .EQ. 0 ) VLAINTEG(ISCN) = 10
+            LVINTEG = VLAINTEG(ISCN)
+            DSLINE = ' '
+            WRITE( DSLINE, '( A4, 11X, I3 )' ) '//DS', VLAINTEG(ISCN)
+            WDS = .TRUE.
+         END IF
+C
 C        Now actually write out the lines.  This delay was required
 C        in order to do the phasing scans.
 C
@@ -456,6 +470,7 @@ C
          WRITE( IULOC, '(A)' ) SSLINE
          IF( WLO ) WRITE( IULOC, '(A)' ) LOLINE
          IF( WFI ) WRITE( IULOC, '(A)' ) FILINE
+         IF( WDS ) WRITE( IULOC, '(A)' ) DSLINE
 C
 C        Add proper motion card if parameters were provided.
 C        Note that the time is supposed to be IAT, not UT.

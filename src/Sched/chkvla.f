@@ -13,6 +13,7 @@ C
 C     Possible future additions:
 C       Check that requested frequencies fit through the filters.
 C       Check VLAIF and VLAROT file names (how?)
+C         No longer needed (2007 or earlier).  They're no longer used.
 C
 C     2004 Aug. 27.  Got some new frequency options from Ken 
 C     Sowinski.  It seems that the front end synthesizers can tune

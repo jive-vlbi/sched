@@ -229,6 +229,7 @@ C
       CALL KEYADD( 'VLATSYS', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'VLANTSYS', UNSET, 1, KD, KC, KI )
       CALL KEYCHR( 'VLAPEAK', 'd', 1, KD, KC, KI )
+      CALL KEYADD( 'VLAINTEG', 0.D0, 1, KD, KC, KI )
 C
 C     Retired parameters kept for backwards compatability.
 C

@@ -79,6 +79,10 @@ C
             WARN = .FALSE.
          END IF
 C
+C        Get the integration time.  Can speed phasing.
+C
+         VLAINTEG(ISCN) = VALUE( KEYPTR( 'VLAINTEG', KC, KI ) )
+C
       ELSE IF( CASE .EQ. 2 ) THEN
 C
 C        Schedule wide parameters and a check that VLBI is being done
