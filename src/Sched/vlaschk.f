@@ -214,6 +214,20 @@ C
          END IF
       END DO
 C
+C     Check the integration time.
+C
+      DO ISCN = 1, NSCANS
+         IF( STASCN(ISCN,VSTA) ) THEN
+            IF( VLAINTEG(ISCN) .LT. 0 .OR. VLAINTEG(ISCN) .GT. 999 )
+     1         THEN
+               WRITE( MSGTXT, '( A, I5, A, I5 )' ) 'VLASCHK: VLAINTEG ',
+     1            VLAINTEG(ISCN), ' outside range 0 to 999 in scan ',
+     2            ISCN
+               CALL ERRLOG( MSGTXT )
+            END IF
+         END IF
+      END DO
+C
   999 CONTINUE
 C
       RETURN

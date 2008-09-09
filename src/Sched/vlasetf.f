@@ -71,6 +71,10 @@ C
      8 'VK',17.5D0,17.5D0,3710.1D0,3710.1D0,100.00000D0,200.00000D0,
      9 'VQ',51.6D0,13.0D0,3510.1D0,3510.1D0,100.00000D0,200.00000D0 /
 C 
+C  VLAROT and VLAIF are no longer used by the VLA system and should be
+C  left blank.  Leave this here for historical interest (which is to
+C  say, in case it comes back somehow).
+C
        DATA (BD2(I), VBW(I), VFE(I), IF(I), RO(I), I=1,10) /
      1 'CC', '0000', '0000', 'SYSCIF', 'SYSCROT',
      2 'UU', '0000', '0000', 'SYSUIF', 'SYSUROT',
@@ -138,9 +142,18 @@ C
       DO I = 1, MSTD
          IF( VLABAND .EQ. BD2(I) ) THEN
             IF( FEFILTER .EQ. 'ZZZZ' ) FEFILTER = VFE(I)
-            IF( VLAIF .EQ. ' ' ) VLAIF = IF(I)
-            IF( VLAROT .EQ. ' ' ) VLAROT = RO(I)
             IF( VLABW .EQ. 'ZZZZ' ) VLABW = VBW(I)
+            IF (VLAIF .NE. ' ' .OR. VLAROT .NE. ' ' ) THEN
+               TEXT = ' '
+               WRITE( TEXT, '( 2A )' ) 'VLASETF: Do not use VLAROT',
+     1           ' or VLAIF.  They are obsolete and not used.'
+               CALL WLOG( 1, TEXT )
+               TEXT = ' '
+               VLAROT = ' '
+               VLAIF = ' '
+            END IF
+C            IF( VLAIF .EQ. ' ' ) VLAIF = IF(I)
+C            IF( VLAROT .EQ. ' ' ) VLAROT = RO(I)
             GOT2 = .TRUE.
          END IF
       END DO
@@ -170,8 +183,9 @@ C
      3         LOFI = .TRUE.
          END IF
          IF( VLABAND .EQ. BD2(I) ) THEN
-            IF( FEFILTER .NE. VFE(I) .OR. VLAIF .NE. IF(I) .OR.
-     1          VLAROT .NE. RO(I) ) LOFI = .TRUE.
+C            IF( FEFILTER .NE. VFE(I) .OR. VLAIF .NE. IF(I) .OR.
+C     1          VLAROT .NE. RO(I) ) LOFI = .TRUE.
+            IF( FEFILTER .NE. VFE(I) ) LOFI = .TRUE.
          END IF      
       END DO
 C

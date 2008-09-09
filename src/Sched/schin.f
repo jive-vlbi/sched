@@ -65,6 +65,7 @@ C
           SRCNUM(I) = 0
           IDOPSRC(I) = 0
           IVLAPHS(I) = 0
+          VLAINTEG(I) = 0
       END DO
       DO I = 1, MAXSRC
          SUSED(I) = .FALSE.

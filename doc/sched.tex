@@ -3026,7 +3026,11 @@ that might confuse the phasing algorithm.  The position accuracy is
 especially important if a calibrator is being used to phase the array
 for observations of another source.  Adding phasing sources is tricky,
 because it is desirable to spend a minimum amount of time on them, but
-if they are missed, the rest of the data will be bad.
+if they are missed, the rest of the data will be bad.  It is possible
+to try to influence the speed of phasing by using \htmlref{{\tt VLAINTEG}}
+{MP:VLAINTEG} to adjust the correlator integration time.  The default
+is 10 seconds.  Use of a shorter time may speed phasing but is done at
+the expense of added noise.
 
 There are two ways to deal with VLBI observations that require
 phasing on a source different from the target source.  The best
@@ -3523,6 +3527,10 @@ before a VX mode scan.  This is a convenient way to insert VLA phasing
 scans without having to explicitly include extra scans in a VLBI
 schedule.
 
+\item \htmlref{{\tt VLAINTEG:}}{MP:VLAINTEG} This parameter gives the
+correlator integration time.  It would normally be used to give a 
+value less than 10 seconds to encourage faster phasing.
+
 \item \htmlref{{\tt PTLINK:}}{MP:PTLINK} The Pie Town link is to be
 used so the VLA on-line system needs to be told about the Pie Town
 first LO through the VLA observe file.
@@ -3588,12 +3596,6 @@ documentation for details of other alternatives.
 
 \item \htmlref{{\tt VLAFECD:}}{SP:VLAFEAB} Same as {\tt VLAFEAB} but for
 the VLA's C and D (LCP) IFs.
-
-\item \htmlref{{\tt VLAIF:}}{SP:VLAIF} Name of the IF file that contains
-gain and efficiency data. This goes on the ``//LO'' card.
-
-\item \htmlref{{\tt VLAROT:}}{SP:VLAROT} Name of the file that contains
-subreflector, pointing and receiver information. It goes on the ``//LO'' card.
 
 \item \htmlref{{\tt VLASYNA:}}{SP:VLASYNA} 2nd LO for the VLA A and C IFs.
 On the ``//LO card'' this number is rounded to the nearest MHz, but it
@@ -4739,6 +4741,7 @@ SPECIAL VLA PARAMETERS:
 \htlm{PTLINK}{~~} Set up for the Pie Town link.
 \htlm{VLABAND}{~} Obsolete - put in setup file.
 \htlm{VLABW}{~~~} Obsolete - put in setup file.
+\htlm{VLAINTEG}{} VLA correlator integration time.
 \htlm{VLAMODE}{~} VLA observing mode.
 \htlm{VLAPEAK}{~} Control reference pointing.
 \htlm{VLANTSYS}{} Turn off VLA system temperature corrections.
@@ -8530,6 +8533,22 @@ the setup file.  Any values specified in the main input will be
 ignored.
 
 
+\subsubsection{\label{MP:VLAINTEG}{\tt VLAINTEG}}
+
+{\tt VLAINTEG} is used to set non-standard integration times in VLA
+schedules.  This would be useful mainly to influence the speed with
+which the system phases up.  The argument is in seconds.  The default
+is 10 seconds.  \schedb generates {\tt //DS} cards for all scans
+after a {\tt VLAINTEG} is specified.
+
+\rcwbox
+{Integer between 0 and 999.}
+{See list above.}
+{10 seconds.}
+{Defaults to previous scan.}
+{{\tt VLAINTEG=3}}
+
+
 \subsubsection{\label{MP:VLAMODE}{\tt VLAMODE}}
 
 {\tt VLAMODE} gives the VLA observing mode.  The valid options are:
@@ -9961,11 +9980,11 @@ Modes {\tt VA, VR} and {\tt VL} require different IF restrictions.
 \item [{\tt VLAFECD}] The other VLA first LO.  See setup file parameter
 \htmlref{{\tt VLAFECD}}{SP:VLAFECD}
 
-\item [{\tt VLAIF}] The VLA gain file name.  See setup file parameter
-\htmlref{{\tt VLAIF}}{SP:VLAIF}
+\item [{\tt VLAIF}] Obsolete.  The VLA gain file name.  
+See setup file parameter \htmlref{{\tt VLAIF}}{SP:VLAIF}
 
-\item [{\tt VLAROT}] The VLA first LO.  See setup file parameter
-\htmlref{{\tt VLAROT}}{SP:VLAROT}
+\item [{\tt VLAROT}] Obsolete.  The VLA ROT file name.  
+See setup file parameter \htmlref{{\tt VLAROT}}{SP:VLAROT}
 
 \item [{\tt VLASYNA}] The VLA AC F6 setting.  See setup file parameter
 \htmlref{{\tt VLASYNA}}{SP:VLASYNA}
@@ -10420,8 +10439,8 @@ confused about what signal is in each baseband channel.
 \htls{VLABW}{~~~} Bandwidth code for VLA.
 \htls{VLAFEAB}{~} VLA first LO frequency for ``//LO'' card.
 \htlt{VLAFECD}{VLAFEAB}{~} VLA first LO frequency for ``//LO'' card.
-\htls{VLAIF}{~~~} VLA gain file name for ``//LO'' card.
-\htls{VLAROT}{~~} VLA rot file name for ``//LO'' card.
+\htls{VLAIF}{~~~} VLA gain file name for ``//LO'' card (Obsolete).
+\htls{VLAROT}{~~} VLA rot file name for ``//LO'' card (Obsolete).
 \htls{VLASYNA}{~} VLA AC F6 frequency for ``//LO'' card (not rounded).
 \htlt{VLASYNB}{VLASYNA}{~} VLA BD F6 frequency for ``//LO'' card
                  (not rounded).
@@ -12025,6 +12044,12 @@ catalog}{SEC:FRQCAT}.
 
 \subsubsection{\label{SP:VLAIF}{\tt VLAIF}}
 
+The VLA parameters generated using this command are apparently are no
+longer used as of 2007 or earlier.  The capability to specify the
+parameter has been left in place, but should not be used.
+
+Description for historical interest:
+
 {\tt VLAIF} gives the name of the VLA IF file that contains gain
 calibration and efficiency information.
 
@@ -12043,6 +12068,12 @@ standard value for the specified {\tt VLABAND}.
 
 
 \subsubsection{\label{SP:VLAROT}{\tt VLAROT}}
+
+The VLA parameters generated using this command are apparently are no
+longer used as of 2007 or earlier.  The capability to specify the
+parameter has been left in place, but should not be used.
+
+Description for historical interest:
 
 {\tt VLAROT} gives the name of the VLA ROT file that contains such
 things as control information for subreflector focus and rotation,
@@ -12470,7 +12501,10 @@ This is the current development version.
 \begin{itemize}
 
 
-\item  Add HSA examples  Aug. 14, 2008
+\item  Add VLA integration time (//DS line).  Also remove VLAROT and
+       VLAIF names from //LO card.  Sept. 8, 2008  RCW.
+
+\item  Add HSA examples  Aug. 14, 2008.  RCW.
 
 \item  Add note about 2cm frequencies being different in standard
        setups and when {\tt BAND='2cm'}  Aug. 13, 2008
@@ -14851,10 +14885,6 @@ This is a list of desired program changes, fixes or enhancements.
 \item Allow phased array and single dish in same VLA file (like for DELZN
 sections with single dish and phased array on target).  Amy Mioduszewski
 May 9 2008 email - copy on Aug 22, 2008.
-
-\item Allow different correlator integration times on VLA correlator
-(old one) for faster phasing.  Amy Mioduszewski May 9 2008 email -
-copy on Aug 22, 2008.
 
 \item Add aperture array axis type and whatever is needed to support it
 to the station catalog.  July 1, 2008 email request from James Anderson.

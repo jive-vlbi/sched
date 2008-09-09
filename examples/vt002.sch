@@ -124,59 +124,41 @@
  SOURCE='0552+398'      START=22:58:30                  STATIONS=VLBA_HN,VLBA_NL /
   bw=  0.000,  0.000
  SOURCE='0552+398'      START=00:00:30 DAY=169          /
- setup='vsop6cm.set'   dopcal 
+ setup='vsop6cm.set'   dopcal   bw=  0.000,  0.000
  SOURCE='3C84'          START=13:30:00 DAY=168 DUR= 390 STATIONS=METSAHOV,VLBA_LA,VLBA_KP,VLBA_OV,VLBA_BR,GOLD70 /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=13:41:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=13:48:50                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=13:56:10                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:03:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:10:50                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:18:10                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:25:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:32:50                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:40:10                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:47:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=14:54:50                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=15:02:10                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=15:09:30                  /
-  bw=  0.000,  0.000
  SOURCE='0212+735'      START=15:21:00                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=15:29:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=15:38:00                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=15:46:30                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=15:55:00                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=16:03:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=16:12:00                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=16:20:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=16:29:00                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=16:37:30                  /
   bw=  0.000,  0.000
  SOURCE='W3OH'          START=16:46:00                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=16:54:30                  /
-  bw=  0.000,  0.000
  SOURCE='W3OH'          START=17:03:00                  /
   bw=  0.000,  0.000
  SOURCE='0212+735'      START=17:14:30                  /
