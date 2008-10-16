@@ -2999,23 +2999,33 @@ to go toward zero.  The system can phase up on a calibrator and then
 freeze the phases on a target source when the target source is either
 too weak, resolved, or confused for successful phasing.
 
-The type of VLA observation is distinguished by the \htmlref
-{{\tt VLAMODE}}{MP:VLAMODE}.  {\tt VLAMODE = VS} indicates single
-dish observing.  {\tt VLAMODE = VX} indicates phased array observing,
-but using the phases from a previous phasing scan.
-{\tt VLAMODE = VA} indicates phased array observing with phasing
-on the VLA {\tt A} and {\tt D} IFs and is the usual active phasing
-mode.  {\tt VLAMODE = VB} is similar, but with phasing
-on the VLA {\tt B} and {\tt C} IFs.  {\tt VLAMODE = VR} or {\tt VL}
-indicates phased array observing using, respectively, the VLA
-{\tt A} and {\tt B} or {\tt C} and {\tt D} IFs.  As might be deduced
-by this, because of hardware limitations, the VLA can only phase
-one of the {\tt A} and {\tt C} IFs and one of the {\tt B} and {\tt D}
-IFs.  The {\tt VLAMODE} can be changed on a scan-by-scan basis, although
-{\tt VS} mode (single dish) should not be mixed with the phased
-array modes.  See the description of the setup parameter
+The type of VLA observation is distinguished by the \htmlref {{\tt
+VLAMODE}}{MP:VLAMODE}.  {\tt VLAMODE = VS} indicates single dish
+observing.  {\tt VLAMODE = VX} indicates phased array observing, but
+using the phases from a previous phasing scan.  {\tt VLAMODE = VA}
+indicates phased array observing with phasing on the VLA {\tt A} and
+{\tt D} IFs and is the usual active phasing mode.  {\tt VLAMODE = VB}
+is similar, but with phasing on the VLA {\tt B} and {\tt C} IFs.  {\tt
+VLAMODE = VR} or {\tt VL} indicates phased array observing using,
+respectively, the VLA {\tt A} and {\tt B} or {\tt C} and {\tt D} IFs.
+As might be deduced by this, because of hardware limitations, the VLA
+can only phase one of the {\tt A} and {\tt C} IFs and one of the {\tt
+B} and {\tt D} IFs.  The {\tt VLAMODE} can be changed on a
+scan-by-scan basis.  See the description of the setup parameter
 \htmlref{{\tt IFCHAN}}{SP:IFCHAN} for more information on routing VLA
-IFs to VLB IFs.
+IFs to VLB IFs.  {\tt VS} mode (single dish) can be mixed with the
+phased array modes, but the number of changes back and forth should be
+limited.  Normally this would only be done when atmospheric
+calibration, geodetic-like (DELZN) sections are included in a phase
+referencing project.
+
+The reference antenna can be controlled with parameter \htmlref{{\tt
+VLARFANT}}{MP:VLARFANT}.  That will be the antenna from which data are 
+recorded in single dish mode and the reference antenna (whose phases
+are not changed) for the phased array modes.  Normally users should not
+worry about setting {\tt VLARFANT} because the default is usually 
+good, and if not, you will not know in time and the change needs to be
+made by operations.
 
 For successful phasing of the array, a source must be greater than
 about 0.1 Jy (see the guide referenced above for details) and have a
@@ -3042,7 +3052,7 @@ insert calibration scans into the VLA's schedule file (the OBSERVE
 file), but not the VLBI control file, for the phasing operation.
 \schedb provides some tools to simplify this operation.  It can
 also be done using the {\sc VLA OBSERVE} program.  This is done
-by the VLA analysts for some programs, especially Mark~III programs.
+by the VLA analysts for some programs.
 
 For VLBI observations at the VLA, both an OBSERVE file and a VLBA
 style control file are needed and can be created by \sched.  All of
@@ -3526,6 +3536,12 @@ should not be.
 before a VX mode scan.  This is a convenient way to insert VLA phasing
 scans without having to explicitly include extra scans in a VLBI
 schedule.
+
+\item \htmlref{{\tt VLARFANT:}}{MP:VLARFANT} Reference antenna to use
+for single dish data source or as phasing reference for phased array.
+The default should be good, and, if not, operations is likely to need
+a last minute change, so it is unlikely that users should use this
+parameter.
 
 \item \htmlref{{\tt VLAINTEG:}}{MP:VLAINTEG} This parameter gives the
 correlator integration time.  It would normally be used to give a 
@@ -4746,6 +4762,7 @@ SPECIAL VLA PARAMETERS:
 \htlm{VLAPEAK}{~} Control reference pointing.
 \htlm{VLANTSYS}{} Turn off VLA system temperature corrections.
 \htlm{VLAPSRC}{~} Phasing source for VLA observations.
+\htlm{VLARFANT}{} Reference antenna for single dish or phasing.
 \htlm{VLATSYS}{~} Turn on VLA system temperature corrections.
 \htlm{VLATYPE}{~} Type of VLA observations.
 \htlm{VLAUSERN}{} VLA user number.
@@ -6801,7 +6818,10 @@ the section on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for details.
 
 In optimizing mode ``{\tt SCANS}'', skip each source {\tt OPSKIP}
 times after it is last seen, unless it is in the {\tt OPELPRIO}
-elevation range.
+elevation range.  This parameter is not applied to pointing (and Ta 
+and PN3DB) observations when they are mixed with other types of
+scheduling.  It is always applied when {\tt OBSTYPE} is {\tt NONE}
+or {\tt PTVLBA}.
 
 Note that the optimizing modes are somewhat experimental, especially
 this one!  If they are used, the output schedule should be checked
@@ -8189,7 +8209,7 @@ inspect the listing for telescopes that arrive late on source.
 \rcwbox
 {Up to 10 character strings.}
 {See the description above for valid parameters.}
-{{\tt EL1, EL2, TAPE1, TAPE2}}
+{{\tt ELA, DWELL}}
 {Only one value used, the last.}
 {{\tt sumitem=el1, az1}}
 
@@ -8779,6 +8799,34 @@ turns off the special phasing scan.}
 {Uses {\tt SOURCE}, which causes no phasing scan to be written.}
 {Defaults to previous scan.}
 {{\tt VLAPSRC='0255+164'}}
+
+
+\subsubsection{\label{MP:VLARFANT}{\tt VLARFANT}}
+
+{\tt VLARFANT} can be used to specify the reference antenna for the
+VLA.  This will be the antenna used as the source of data in single
+dish VLBI.  For the phased array, it will be the reference antenna
+for the calibration solution for phasing.  Note that, in phased array
+mode, the phase center is always at the normal VLA phase center.  In
+single dish mode, if there are multiple antennas available to the
+VLA correlator, they will be correlated with the phase center at the
+reference antenna.  This is needed so for the old VLA system so that 
+the fringe rotators do not affect the single dish VLBI data.
+
+Normally the reference antenna is number 10, which is the default.
+If that needs to change, it is unlikely that users will be aware of
+that fact in time to change their schedule, so either SCHED needs to
+be rerun by operations with the new value, or the observe deck needs
+to be edited.  Users in the vast majority should not worry about this
+parameter.
+
+\rcwbox
+{An integer between 1 and 28}
+{Any intger, specifying an antenna, between 1 and 28}
+{10}
+{Use only once.}
+{{\tt VLARFANT=15}}
+
 
 
 \subsubsection{\label{MP:VLATYPE}{\tt VLATYPE}}
@@ -12500,6 +12548,38 @@ This is the current development version.
 
 \begin{itemize}
 
+\item  Update sources.vlba and locations.dat to current correlator values
+       that are based on solution 2008a_astro from GSFC.  The VLA pad positions
+       were note updated from the ones based on 2005f, but the changes would
+       have been less than the likely errors.  Oct. 8, 2008  RCW.
+
+\item  Change SUMITEM defaults to {\tt ELA} (average elevation) and 
+       {\tt DWELL}  Oct. 2, 2008  RCW.
+
+\item  Add more of the input file names to the list in the summary file,
+       including the satellite Spice files.  Sept 20, 2008  RCW
+
+\item  Add a line in the VLA Observe deck (\sl xxxxobs.y) file giving
+       the reference antenna - which is also the single dish antenna.
+       New variable VLARFANT supports this.  Most users should not 
+       worry about it.  Sept. 20, 2008  RCW
+
+\item  Fix error in elapsed time calculation that caused non-recording
+       scans not to be included.  Sept. 10, 2008  RCW
+
+\item  Removed VLAxIF and VLAxROT file specifications.  They are no longer
+       used.  The input variables are still read, but not passed to the
+       obs.y file.  Sept. 8, 2008 RCW
+
+\item  A wish list item was to allow mixing of VS and VA/VX mode observing,
+       for example to do DELZN sections in VS mode.  We believe that this
+       is simply a matter of specifying the right mode.  Complications
+       will arise at the correlator when the delay needs to change.  Email
+       was exchanged about this around May 16-20, 2008.
+       RCW  Sept. 10, 2008.
+
+\item  Make {\tt OPSKIP} function during pointing observations.  It was
+       blocked for such observations.  Sept. 11, 2008  RCW.
 
 \item  Add VLA integration time (//DS line).  Also remove VLAROT and
        VLAIF names from //LO card.  Sept. 8, 2008  RCW.
@@ -12513,6 +12593,8 @@ This is the current development version.
 
 \item  Add warning suggested by Yuri Kovalev is the default RA or Dec
        were used, generally indicating a typo in the catalog.  May 1, 2008 RCW
+
+\item  Remove requirement for autotape for disk. RCW
 
 \item  Remove the Arecibo, GBT, and N140 entries for the S2 recording
        system from the stations catalog.  Add GBT\_COLD.  Mar. 4, 2008. RCW.
@@ -12555,6 +12637,7 @@ possible.  June 2007  RCW.
 
 \item  Put \schedb under revision control with SVN.  Adapted Cormac Reynolds
 version that had about a 2 year history.  Aug 31, 2007.  RCW.
+
 
 
 
@@ -12615,6 +12698,8 @@ Version 6.04.1:
 
 \item Remove duplicate aliases from some sources in the source catalog.  Correct
 missing aliases in a small number of sources.   RCW April 2006
+
+\item  Add Sec(z) to the XY plot options.  Franco Tinarelli  Feb. 10, 2006.
 
 \end{itemize}
 
@@ -12688,8 +12773,6 @@ oversample on the VLBA correlator.  It won't work.  Feb. 2006.  Craig.
 \item Fix selection of the frequency to use when plotting beams.  Fix
 dealing with the save file stations when the station list changes.  Other
 minor plot fixes.  Franco Tinarelli and Craig  Feb. 2006
-
-\item Add Sec(z) to the XY plot options.  Franco Tinarelli  Feb. 10, 2006.
 
 \item Fix bug in correlator resync accounting.  Make more visible
 warnings about scans lost to resyncs.  Craig  20 Feb. 2006
@@ -14882,9 +14965,8 @@ This is a list of desired program changes, fixes or enhancements.
 \begin{itemize}
 
 
-\item Allow phased array and single dish in same VLA file (like for DELZN
-sections with single dish and phased array on target).  Amy Mioduszewski
-May 9 2008 email - copy on Aug 22, 2008.
+\item Have plot option to distinguish sources in XY plots by color.
+RCW  Sept. 11, 2008.
 
 \item Add aperture array axis type and whatever is needed to support it
 to the station catalog.  July 1, 2008 email request from James Anderson.
@@ -14893,22 +14975,15 @@ to the station catalog.  July 1, 2008 email request from James Anderson.
 
 \item Add geodetic blocks provided by Mark Reid.  Apr 9, 2008 RCW.
 
-\item Check elapsed time calculation when there are no-record scans.  They
-may not be included.  Apr 9, 2008  RCW
-
 \item Add HSA 512 Mbps setups.  Apr 8, 2008 RCW
 
-\item Make sure leap seconds are updated in SPICE software. Apr 8, 2008 RCW
+\item Make sure leap seconds are updated.
+      For SLALIB, update dat.f.  (That takes care of planets too).
+      For the satellite tracking, update the kerfile (naifnnnn.tls) in the 
+         ephemeris area ($PLANET_DATA). 
+      Keep this entry in the Wish List permanently.  Apr 8, 2008 RCW
 
 \item Put information about frequency agility into SCHED. Dec 06 EVN TOG.
-
-\item Remove VLAxIF and VLAxROT file specifications.  They are no longer
-      used according to Bryan Butler.  Oct 22, 2007.
-
-\item Remove requirement for autotape for disk.  autoreverse and autoallocate
-      are no longer sent to VLBA units, but AUTOTAPE is use for control
-      in SCHED.  Be sure it is not needed.  Request from Amy
-      Miouduszewski Oct 8, 2007. RCW.
 
 \item Make {\tt EVLA} apply to the FE settings.  Or better yet, somehow
       describe the EVLA frequency setup.  Sept. 27, 2007.  RCW.
@@ -14917,6 +14992,7 @@ may not be included.  Apr 9, 2008  RCW
       Sep. 24, 2007
 
 \item Add the peakfile to the list of sched input files.
+      Actually add several files not listed - working on it Sept. 10. 2008
       Sep. 20. 2007 RCW
 
 \item Break very long scans to prevent mid scan disk change problems.
@@ -14939,8 +15015,6 @@ may not be included.  Apr 9, 2008  RCW
       is opened before the input is read so the code is not yet known.
       but could it be renamed later - or a new file opened and the
       contents copied over.  From Amy.  25 Jan 2007.  RCW.
-
-\item Change default sumitems away from tape.  From Amy.   25 Jan 2007  RCW
 
 \item Have DWELL allow one or more slow antennas to not hold up a scan start.
       From Amy.  25 Jan 2007  RCW.
@@ -14979,16 +15053,8 @@ may not be included.  Apr 9, 2008  RCW
 
 \item Need new OBSTYPE or get rid of OBSTYPE.  Old note  Jan 26, 2006.
 
-\item Add Sec(Z) to the plot options.  From George Moellenbrock.  Nov. 14,
-      2005.
-
-\item Supersimple setup parameters (band and bit rate).  From Jodrell
-      discussions in Nov 2004 Dec 29, 2004
-
 \item VLBA takes about 1s to respond to commands.  Use prestart=1
       for Mark5?  Noted by Walter B.  Dec 19, 2004.
-
-\item Change autoallocate default?
 
 \item Source dependent elevation limits for configuration studies.
       Request by Pat Crane.  Aug 2. 2004 RCW
@@ -14999,13 +15065,9 @@ may not be included.  Apr 9, 2008  RCW
       Discussed at Jodrell in Nov 2004.  This will probably take a
       matrix input for each agile station.
 
-
 \item Get FIFMIN and MAX for user setups VLA and VLBA.  From note, Jul
       2004 RCW.  This has to do with sensing when you get outside the
       IF.
-
-\item OPTMINANT and OPTMINEL don't work with MODE UPTIME.  From note,
-      Jul 2004 RCW.
 
 \item Do more for VLBA4 DAR;  Add SiO to VLA freq.dat; Turn off pcal
       at VLA.  From note, Jul 2004 RCW
@@ -15016,14 +15078,6 @@ may not be included.  Apr 9, 2008  RCW
 
 \item Calculate range of acceptable dates based on solar distance for
       dynamically scheduled projects.  From Mat Lister 6/17/2004.
-
-\item Make S2 default tape length appropriate. Now it is for VLBA/MarkIV.
-      See May 2004 email from Chris Phillips.  30 Jul 2004 RCW.
-
-
-\item Make tape and disk the default for VLBA if catalog says they have
-      both.  From note Jul 2004 RCW.  Check with Walter.  May not be
-      current desire.
 
 \item If PCALs are turned off, then back on, warn that they do not
       return to the same phase.  24 Nov 2003 RCW.
@@ -15039,13 +15093,7 @@ may not be included.  Apr 9, 2008  RCW
 
 \item Survey optimizer
 
-\item Plotting options:
-
-      Add UV plot scale option in wavelengths.  Allow channel
-      selection for plot.
-
-      For beam, get beam size and some sidelobe statistics.
-
+\item Plotting:  For beam, get beam size and some sidelobe statistics.
       21 Feb 2002 RCW.
 
 \item Allow control of peakup channel when using autopeak.  21nov2001
@@ -15128,9 +15176,6 @@ may not be included.  Apr 9, 2008  RCW
 \item MarkIV:  Calcodes and Qualifiers need to get to correlator either
       directly or through all station logs.  The field system
       stations don't do it now.  They probably should.  Nov97.
-
-\item MarkIV:  Get MarkIV two head track and head position assignments
-      right.  I'm sure they aren't now.  July97.
 
 \item VLA:  Have a better model of slew times.  Probably need to account
       for actions happening on 10s LST boundaries.  Also know setup times.

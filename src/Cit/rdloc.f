@@ -121,7 +121,7 @@ C              Extract the data.
 C
                DBVER = KCHAR( 'VERSION', 20, .FALSE., KD, KC, KI )
                DBNAME(NDB) = KCHAR( 'DBNAME', 10, .FALSE., KD, KC, KI )
-               DBCODE(NDB) = KCHAR( 'DBCODE', 8, .FALSE., KD, KC, KI )
+               DBCODE(NDB) = KCHAR( 'DBCODE', 4, .FALSE., KD, KC, KI )
                DBFRM(NDB) = KCHAR( 'FRAME', 80, .FALSE., KD, KC, KI )
                DBX(NDB)   = KD( KEYPTR( 'X', KC, KI ) )    
                DBY(NDB)   = KD( KEYPTR( 'Y', KC, KI ) )    

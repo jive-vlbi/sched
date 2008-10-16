@@ -319,5 +319,15 @@ C
          END DO
       END IF
 C
+C     Check VLARFANT
+C
+      IF( VLARFANT .LT. 1 .OR. VLARFANT .GT. 28 ) THEN
+         SETMSG = ' '
+         WRITE( SETMSG, '( A, I7, A )' ) 'CHKVLA: VLARFANT ', 
+     1      VLARFANT, ' out of range 1 to 28.'
+         CALL WLOG( 1, SETMSG )
+         ERRS = .TRUE.
+      END IF
+C
       RETURN
       END

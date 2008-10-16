@@ -5,7 +5,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER     ISCN, ISTA, KSTA, JSTA, KS, JS, ICH, LEN1
+      INTEGER     I, ISCN, ISTA, KSTA, JSTA, KS, JS, ICH, LEN1
       INTEGER     YEAR, DAY, DOY, JD, MONTH, NTPS
       INTEGER     NSCHED, MJD
       LOGICAL     RESTART, ALLDONE, GOTTPS, GOTSCN
@@ -303,6 +303,31 @@ C
       WRITE( ISUM, '( A, A / A, A )' )
      1   '  Source:   ', SRCFILE(1:LEN1(SRCFILE)),
      2   '                 Version:  ', SRVER(1:LEN1(SRVER))
+C
+C     Other external files.
+C
+      WRITE( ISUM, '( 1X, /, 1X, /, A )' )
+     1   'Other external files: '  
+C
+      WRITE( ISUM, '( A, A )' )
+     1   '  Ephemeris: ', EPHFILE(1:LEN1(EPHFILE))
+C
+      WRITE( ISUM, '( A, A )' )
+     1   '  PEAKFILE:  ', PEAKFILE(1:LEN1(PEAKFILE))
+C
+      WRITE( ISUM, '( A, A )' )
+     1   '  MSGFILE:   ', MSGFILE(1:LEN1(MSGFILE))
+C
+      IF( NSAT .GT. 0 ) THEN
+         DO I = 1, NSAT
+            WRITE( ISUM, '( A, A )' )
+     1      '  SATNAME:   ', SATNAME(I)(1:LEN1(SATNAME(I)))
+            WRITE( ISUM, '( A, A )' )
+     1      '     SATFILE:   ', SATFILE(I)(1:LEN1(SATFILE(I)))
+            WRITE( ISUM, '( A, A )' )
+     1      '     KERFILE:   ', KERFILE(I)(1:LEN1(KERFILE(I)))
+         END DO
+      END IF
 C
 C     Finish off with the code versions.
 C
