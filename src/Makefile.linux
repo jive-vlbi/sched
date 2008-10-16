@@ -15,6 +15,7 @@
 ARCH = LINUX
 #ARCH = SUN
 
+#  Most of these are probably history.
 #ARCH = ALLIANT
 #ARCH = CONVEX
 #ARCH = DECALPHA
@@ -28,15 +29,17 @@ ARCH = LINUX
 #  Note about the GNU compilers:
 #    g77 goes with gcc 3 and earlier
 #    gfortran goes with gcc 4 and up. 
-#    Don't mix them.  And be sure your pgplot is compiled with the same 
-#      that you use.
+#    Don't mix them.  And be sure your pgplot and satellite tracking 
+#       libraries (if using those) are compiled with the same that you use.
 #    With gfortran you will get lots of warnings.  Most are about string
 #    truncation and unused call arguments.  They should be benign.
 
 FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
-#FC = gfortran -Wall -fimplicit-none -fno-backslash  # gfortran (OSX, others)
 #FC = f77 -C -u                       # SUN  IBM/AIX
+#FC = gfortran -Wall -fimplicit-none -fno-backslash  # gfortran 
+#                                 (OS X with gfortran.  Other gfortran?)
 
+#  Most of these are probably history.
 #FC = f77 -u -fpe3 -warn noinformational -assume backslash   # DEC ALPHA
 #FC = f77 -u -fpe3 -O0	              # alternate for DEC ALPHA.
 #FC = f77 -K +e -O +es +U77           # HP
@@ -51,14 +54,19 @@ FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 
 #XLD =                                         # Should work on many systems.
 #XLD = -lX11		                       # X11 libraries, if needed
-XLD = -L/usr/X11R6/lib -lX11                   # If not in path.
+#XLD = -L/usr/X11R6/lib -lX11                  # If not in path.  32 bit
+XLD = -L/usr/lib64 -lX11     # Linux, non-static (AOC 64 bit RHEL 5.2 machines)
 #XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11 # Mac OS X
 #   Chris Phillips Sep 18, 2007, reports needing -O2 in some cases.
-#XLD = -lgl -lX11                              # SGI
 
+
+#  The following are less likely to be appropriate.
+#XLD = -lgl -lX11                              # SGI
 #XLD = -Bstatic    # Sun; for portable executable (problems?)
 #XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
                    # Linux, portable executable (true at AOC with Redhat 9)
+#XLD = -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
+                   # Linux, non-static (true at AOC with Redhat 9)
 #XLD = -static -L/usr/X11/lib -lX11            # Linux with X11 vs X11R6
 #XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -ldl 
                    # RedHat 7.3
@@ -124,8 +132,9 @@ JPL_SRCS = $(wildcard Jpl/*.f)          #  Include planet tracking
 #      using Linux on a PC with g77, take the stub.
 
 # SAT_SRCS = $(wildcard Sat/*.f)         # Include satellite tracking
-# SATLD = ../lib/LINUX/spicelib.a ../lib/LINUX/support.a -lm
-                                       # Link for satellite tracking
+# Links for satellite tracking, depending on 32 vs 64 bit g77
+#SATLD = ../lib/LINUX/spicelib.a ../lib/LINUX/support.a -lm
+#SATLD = ../lib/LINUX64/spicelib.a ../lib/LINUX64/support.a -lm
 
 SAT_SRCS = $(wildcard Satstub/*.f)   # Stub
 SATLD =                              # Link option for stub

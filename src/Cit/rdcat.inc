@@ -93,10 +93,12 @@ C     word boundary problems.
 C
 C     For locations catalog.  Generally other than RDSTA should 
 C     not use these parameters other than to set the file name.
+C     There are 4 letter station codes in the VLBA data base so
+C     I had to bump up the size of DBCODE  Sept 2008. RCW.
 C
 C     LOCFILE C80    -  Name of locations file.
 C     DBNAME  C10     -  Station name.
-C     DBCODE  C3     -  Station code in data base.
+C     DBCODE  C4     -  Station code in data base.
 C     DBX     R8     -  Station coordinate X (m)
 C     DBY     R8     -     "        "      Y (m)
 C     DBZ     R8     -     "        "      Z (m)
@@ -151,7 +153,7 @@ C
       DOUBLE PRECISION  DBDX(MDB), DBDY(MDB), DBDZ(MDB)
       INTEGER           DBEPO(MDB), NDB
       REAL              DBOFF(MDB)
-      CHARACTER         LOCFILE*80, DBNAME(MDB)*10, DBCODE(MDB)*3
+      CHARACTER         LOCFILE*80, DBNAME(MDB)*10, DBCODE(MDB)*4
       CHARACTER         DBFRM(MDB)*80, DBDBA(MDB)*5, DBVER*20
 C
 C     The COMMONS

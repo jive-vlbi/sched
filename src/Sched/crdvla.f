@@ -155,6 +155,18 @@ C
      1        WRITE( IULOC, '( A )' )
      2         '//* ------- MOUNT TAPE BEFORE RUN STARTS  ----------'
 C
+C        Write an escaper (EVLA control system) that sets the reference
+C        antenna.  Note that this will be turned off locally for 
+C        pointing scans.  See toward the end of this routine.
+C
+         IF( VLARFANT .LE. 9 ) THEN
+            WRITE( IULOC, '( A, I1, A )' ) '//* & Grefant = [', 
+     1         VLARFANT, ']'
+         ELSE
+            WRITE( IULOC, '( A, I2, A )' ) '//* & Grefant = [', 
+     1         VLARFANT, ']'
+         END IF
+C
 C        Initialize
 C
          PADDED = .FALSE.
@@ -450,9 +462,12 @@ C
          END IF
 C
 C        Make a //DS line for correlator integration time.
+C        Recall it must be 10 seconds for pointing scans so enforce
+C        that (VLAMODE='IR')
 C
          IF( LVINTEG .NE. -999 .OR. VLAINTEG(ISCN) .NE. 0 ) THEN
-            IF( VLAINTEG(ISCN) .EQ. 0 ) VLAINTEG(ISCN) = 10
+            IF( VLAINTEG(ISCN) .EQ. 0 .OR. VLAMODE(ISCN) .EQ. 'IR' ) 
+     1         VLAINTEG(ISCN) = 10
             LVINTEG = VLAINTEG(ISCN)
             DSLINE = ' '
             WRITE( DSLINE, '( A4, 11X, I3 )' ) '//DS', VLAINTEG(ISCN)
@@ -494,6 +509,14 @@ C
      1        '//PM', PDRA, PDDEC, PMFT, HPARAL
 C
          END IF
+C
+C        Turn off the reference antenna for peaking scans.
+C        Otherwise a specified reference antenna will not be pointed.
+C
+         IF( VLAMODE(ISCN) .EQ. 'IR' ) THEN
+            WRITE( IULOC, '( A )' ) '//* & Refant = []'
+         END IF
+C        
 C
       END IF   !  Not scan -999
 C

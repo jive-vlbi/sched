@@ -1,4 +1,4 @@
-      SUBROUTINE GETSTA( ISCN, VALUE, KC, KI )
+      SUBROUTINE GETSTA( ISCN, VALUE, KC, KI, GOTVEX )
 C
 C     Subroutine for SCHED, called by SCHIN, that deals with station
 C     information.
@@ -18,7 +18,7 @@ C
       INTEGER          ISCN, ISTA, KSTA, INSTA, KI(*), I1, LEN1
       INTEGER          KEYPTR
       DOUBLE PRECISION VALUE(*)
-      LOGICAL          ERRS, FLAG(MAXSTA), DOIT
+      LOGICAL          ERRS, FLAG(MAXSTA), DOIT, GOTVEX
       CHARACTER        NAMEST*8, KC(*)*(*)
       CHARACTER        KCHAR*80, FILEUP*80
       CHARACTER        LSTAFIL*80
@@ -121,7 +121,7 @@ C
 C                    Record if a VEX file will be needed.
 C
                      IF( CONTROL(STANUM(ISTA)) .EQ. 'VEX' ) 
-     1                    DOVEX = .TRUE.
+     1                    GOTVEX = .TRUE.
 C
 C                    Record if a DRUDG file is needed for VSOP.
 C
