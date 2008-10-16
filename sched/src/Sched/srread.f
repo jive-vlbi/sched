@@ -266,7 +266,7 @@ C
      1                SRCDEC .LE. -1.57079632D0 ) THEN
                      MSGTXT = ' '
                      WRITE( MSGTXT, '( 3A )' ) 
-     1                  'SRREAD:  Default RA or Dec used for ',
+     1                  'SRREAD: WARNING: Default RA or Dec used for ',
      2                   SRCNAM(1), '.  Was that intended?'
                      CALL WLOG( 1, MSGTXT )
                   END IF

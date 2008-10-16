@@ -80,7 +80,7 @@ C
          CALL KEYCHR( 'STAtion', ' ', 8, KD, KC, KI )
          CALL KEYCHR( 'STCode', ' ', 3, KD, KC, KI )
          CALL KEYCHR( 'DBNAME', ' ', 10, KD, KC, KI )
-         CALL KEYCHR( 'DBCODE', ' ', 3, KD, KC, KI )
+         CALL KEYCHR( 'DBCODE', ' ', 4, KD, KC, KI )
          CALL KEYCHR( 'FRAME', ' ', 80, KD, KC, KI )
          CALL KEYADD( 'ELev', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'LAT', 0.D0, 1, KD, KC, KI )
@@ -336,6 +336,8 @@ C              Note that the mount type is given in both the
 C              stations catalog and the locations catalog.  For now,
 C              ignore the one in the locations catalog.  Someday,
 C              perhaps check for consistency.
+C              Also note that the locations catalog, and the VLBA
+C              data base, has 4 character station codes.
 C
                IF( STADBN .EQ. DBNAME(IDB) ) THEN
                   STADBC = DBCODE(IDB)

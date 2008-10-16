@@ -70,6 +70,7 @@ dwell   = 5:45
 ptslew  = 15 
 optmode = SCANS    ! Select scans that are above minimum elevation.
 opminel = 20.      ! Minimum elevation.
+dovex=-1           ! Turn off VEX so it will do planets.
 
 eofs
 

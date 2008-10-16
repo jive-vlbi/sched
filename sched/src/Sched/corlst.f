@@ -49,6 +49,11 @@ C        Loop through scans.
 C
          DO LSCN = SCAN1, SCANL
 C
+C           Start and end times of experiment to determine elapsed time.
+C
+            TIMEB = MIN( TIMEB, STARTJ(LSCN) )
+            TIMEL = MAX( TIMEL, STOPJ(LSCN) )
+C
 C           Get number of stations in the scan.
 C
             NSANT = 0
@@ -74,11 +79,6 @@ C
                NBAS = NSANT * ( NSANT - 1 ) / 2 + NSANT
                TRTIME = TRTIME + STIME
                TBTIME = TBTIME + STIME * NBAS
-C
-C              Start and end times of experiment.
-C
-               TIMEB = MIN( TIMEB, STARTJ(LSCN) )
-               TIMEL = MAX( TIMEL, STOPJ(LSCN) )
 C
 C              Test for backward time jumps.
 C

@@ -95,5 +95,9 @@ C
          CALL ERRLOG( 'INVLA: Bad case.' )
       END IF
 C
+C     Get the reference antenna.
+C
+      VLARFANT = VALUE( KEYPTR( 'VLARFANT', KC, KI ) )
+C
       RETURN
       END

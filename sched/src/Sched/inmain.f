@@ -79,7 +79,7 @@ C
       CALL KEYADD( 'PEAKINIT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'SATINIT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'COVERLET', UNSET, 1, KD, KC, KI )
-      CALL KEYADD( 'DOVEX', UNSET, 1, KD, KC, KI )
+      CALL KEYADD( 'DOVEX', 0.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'DOSTA', 'ALL', 8, KD, KC, KI )
       CALL KEYADD( 'LST', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'DODOWN', UNSET, 1, KD, KC, KI )
@@ -230,6 +230,7 @@ C
       CALL KEYADD( 'VLANTSYS', UNSET, 1, KD, KC, KI )
       CALL KEYCHR( 'VLAPEAK', 'd', 1, KD, KC, KI )
       CALL KEYADD( 'VLAINTEG', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'VLARFANT', 10.D0, 1, KD, KC, KI )
 C
 C     Retired parameters kept for backwards compatability.
 C

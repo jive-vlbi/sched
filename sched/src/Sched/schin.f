@@ -8,7 +8,7 @@ C
 C
       INTEGER           MODE, I, LEN1, ISCN, ISTA, IREP, INAME
       INTEGER           I1, I2, I3, I4, I5, KEYPTR
-      LOGICAL           GOTINI, GOTSAT, DOINIT, DOSTWARN
+      LOGICAL           GOTINI, GOTSAT, DOINIT, DOSTWARN, GOTVEX
       CHARACTER         TPFILE*80
       CHARACTER         CSFILE*80
       INTEGER           YEAR(MAXSCN), DAY(MAXSCN)
@@ -59,7 +59,8 @@ C
       DOINIT = .TRUE.   !  Do initializations before next read.
       DWELLS = .FALSE.  !  Got any dwell requests.
       DOSTWARN = .TRUE. !  Warn if DOSTA specified.
-      DOVEX = .FALSE.   !  Will a VEX file be needed?
+      DOVEX = .TRUE.    !  Will a VEX file be needed?
+      GOTVEX = .FALSE.  !  Found a VEX station.
       COVERLET = .FALSE. ! Is there a cover letter?
       DO I = 1, MAXSCN
           SRCNUM(I) = 0
@@ -210,7 +211,7 @@ C        Process the station request for this scan.
 C        Read the station catalog if haven't already.
 C        Also get station dependent tape motion requests in GETSTA.
 C
-         CALL GETSTA( ISCN, KD, KC, KI )
+         CALL GETSTA( ISCN, KD, KC, KI, GOTVEX )
 C
 C        Get the eVLBI input parameters.
 C
@@ -390,14 +391,20 @@ C
       PRECDATE = KD( KEYPTR( 'PRECDATE', KC, KI ) )
       PTLINK = KD( KEYPTR( 'PTLINK', KC, KI ) ) .EQ. 0.D0
 C
-C     Allow DOVEX to be set to TRUE if a VEX station is found - don't
-C     override that here.  Don't allow bandwidths to be set when
-C     writing a VEX or VSOP (DRUDG ) file.  Note that BW and Station 
-C     catalog both read by this point.
+C     The default of DOVEX was set to true on Oct. 14, 2008 in preparation
+C     for the use of VEX for the VLBA software correlator.  Now setting
+C     DOVEX to a non-zero value will turn it off.  Later it will be set
+C     back to true if a VEX station is found.
+C
+C     The original claimed that we could not allow bandwidths to be set
+C     when writing a VEX or VSOP (DRUDG ) file.  I'm not sure this is
+C     still true - check.  Note that BW input and Station 
+C     catalog both have been read by this point.
 C     Also set the VEXTEST flag, which allows testing of features
 C     that have not been publically released.
 C
-      IF( KD( KEYPTR( 'DOVEX', KC, KI ) ) .EQ. 0.D0 ) DOVEX = .TRUE.
+      IF( KD( KEYPTR( 'DOVEX', KC, KI ) ) .NE. 0.D0 ) DOVEX = .FALSE.
+      IF( GOTVEX ) DOVEX = .TRUE.
       VEXTEST =  KD( KEYPTR( 'VEXTEST', KC, KI ) ) .EQ. 0.D0
 C
 C     Get ephemeris file name.
@@ -554,12 +561,12 @@ C
          END IF
       END DO
       IF( SUMITEM(1) .EQ. ' ' ) THEN
-         SUMITEM(1) = 'EL1'
-         SUMITEM(2) = 'EL2'
-         IF( .NOT. NOTAPE .AND. .NOT. NOSET ) THEN
-            SUMITEM(3) = 'TAPE1'
-            SUMITEM(4) = 'TAPE2'
-         END IF
+         SUMITEM(1) = 'ELA'
+         SUMITEM(2) = 'DWELL'
+C         IF( .NOT. NOTAPE .AND. .NOT. NOSET ) THEN
+C            SUMITEM(3) = 'TAPE1'
+C            SUMITEM(4) = 'TAPE2'
+C         END IF
       END IF
 C
 C     Some schedule wide VLA items (called with MODE=2):  

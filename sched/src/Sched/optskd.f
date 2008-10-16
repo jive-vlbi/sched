@@ -146,8 +146,14 @@ C     observations.  This allows a single antenna (eg MK) to be
 C     doing pointing while the rest of the array is doing 
 C     regular observing with OPMIAN set or skipping turned on.
 C
-      KEEP = KEEP .OR. ( NGOOD .GE. 1 .AND. 
+C     The deactivation is not done if the OBSTYPE indicates that
+C     this is single dish observing.
+C
+C
+      IF( OBSTYP .NE. 'NONE' .AND. OBSTYP .NE. 'PTVLBA' ) THEN
+         KEEP = KEEP .OR. ( NGOOD .GE. 1 .AND. 
      1       ( PNTVLBA(ISCN) .OR. TANVLBA(ISCN) .OR. DOPN3DB(ISCN) ) )
+      END IF
 C
 C     Only keep the scan if a sufficient number of preceeding scans
 C     have been missed.  This allows for low priority sources.
@@ -195,6 +201,3 @@ C
 C
       RETURN
       END
-
-
-
