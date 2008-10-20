@@ -23,6 +23,7 @@ C       03May13 Allow 256 Mbps/2 drive modes - I guess I overlooked
 C           this when I allowed 512 Mbps.
 C       08Jan24 Allow the 2-8-32-1  512 mode on MKIV.  I don't know
 C           why it was blocked.
+C       08Oct18 Allow the other 512 modes on MKIV.
 C
 C
       INCLUDE    'sched.inc'
@@ -103,13 +104,13 @@ C     double pass processing.
 C     The one un-allowed mode is 1 Gbps.  The EVN may allow this soon.
 C
       DATA  (BIT(I), NCH(I), SAM(I), SPD(I), OKV(I), OK4(I), I=21,30)
-     1       / 1, 16,  32.,  1.,  .TRUE.,  .FALSE.,
+     1       / 1, 16,  32.,  1.,  .TRUE.,  .TRUE.,
      2         1, 16,  16.,  1.,  .TRUE.,  .TRUE.,
      3         1, 16,   8.,  2.,  .TRUE.,  .TRUE.,
      4         1, 16,   4.,  4.,  .TRUE.,  .TRUE.,
      5         1, 16,   2.,  4.,  .TRUE.,  .TRUE.,
      5         2, 16,  32.,  1.,  .FALSE., .FALSE.,
-     7         2, 16,  16.,  1.,  .TRUE.,  .FALSE.,
+     7         2, 16,  16.,  1.,  .TRUE.,  .TRUE.,
      8         2, 16,   8.,  1.,  .TRUE.,  .TRUE.,
      9         2, 16,   4.,  2.,  .TRUE.,  .TRUE.,
      A         2, 16,   2.,  4.,  .TRUE.,  .TRUE.  /
