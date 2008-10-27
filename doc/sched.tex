@@ -7181,12 +7181,6 @@ of setup.}
 some antennas to peak up their pointing.  {\tt NOPEAK} causes
 \schedb to stop issuing those commands.
 
-For Green Bank (NRAO type files), ``cards'' will be issued that
-request that the antenna peak up on source. This will happen for any
-{\tt PEAK} argument greater than or equal to zero. It can be turned
-off by setting a negative argument or by specifying {\tt NOPEAK}.
-The peak takes about 5 minutes in addition to slew time on the 140'.
-
 As of March 1999, {\tt PEAK} is no longer used to control VLA
 pointing.  Please see parameter \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.
 
@@ -7223,6 +7217,16 @@ much more information on easy ways to insert pointing scans.
 
 This command has no effect on the VEX file, there is currently no
 means to peak up telescopes that are controlled through the PCFS.
+
+The following paragraph is obsolete as the 140' is no longer in use 
+for VLBI.  But SCHED can still make the cards, so the description is
+retained.
+For the Green Bank 140' (NRAO type files), ``cards'' will be issued that
+request that the antenna peak up on source. This will happen for any
+{\tt PEAK} argument greater than or equal to zero. It can be turned
+off by setting a negative argument or by specifying {\tt NOPEAK}.
+The peak takes about 5 minutes in addition to slew time on the 140'.
+
 
 \rcwbox
 {A digit that for the VLBA is a baseband channel number.}
@@ -12548,6 +12552,9 @@ This is the current development version.
 
 \begin{itemize}
 
+\item  Warn of scans longer than 40 minutes --- they can cause problems.
+       Oct. 25, 2008  RCW.
+
 \item  Update sources.vlba and locations.dat to current correlator values
        that are based on solution 2008a_astro from GSFC.  The VLA pad positions
        were note updated from the ones based on 2005f, but the changes would
@@ -14988,21 +14995,8 @@ to the station catalog.  July 1, 2008 email request from James Anderson.
 \item Make {\tt EVLA} apply to the FE settings.  Or better yet, somehow
       describe the EVLA frequency setup.  Sept. 27, 2007.  RCW.
 
-\item Update all Green Bank references (eg in PEAK) from 140' to GBT.
-      Sep. 24, 2007
-
-\item Add the peakfile to the list of sched input files.
-      Actually add several files not listed - working on it Sept. 10. 2008
-      Sep. 20. 2007 RCW
-
-\item Break very long scans to prevent mid scan disk change problems.
-      Sep. 19, 2007.  RCW.
-
 \item Check for broken links in external references.  There are some
       as of Sep. 19, 2007.  RCW
-
-\item Add and HSA example.  Also maybe add an example that exercises
-      reference pointing everywhere that can do it. Sep. 19, 2007  RCW
 
 \item Warn if DOPPLER is not used when it looks like it should be.
       From Leonia (as contact) Aug 1, 2007.  RCW.
@@ -15052,6 +15046,8 @@ to the station catalog.  July 1, 2008 email request from James Anderson.
 \item Put the grab time stuff in for Walter.  See \$SCHED/vlbagrab.txt
 
 \item Need new OBSTYPE or get rid of OBSTYPE.  Old note  Jan 26, 2006.
+      As of Oct 2008, I've forgotten the reason for this so I don't
+      know what should be added.
 
 \item VLBA takes about 1s to respond to commands.  Use prestart=1
       for Mark5?  Noted by Walter B.  Dec 19, 2004.
