@@ -10,7 +10,7 @@ C
 C
       INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC
       REAL       NSRCCHG
-      LOGICAL    DOPWARN
+      LOGICAL    DOPWARN, WARNLONG
       DOUBLE PRECISION  TIME1, TIMEDUR
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKSCN starting' )
@@ -120,6 +120,21 @@ C
          CALL RESYNC
 C
       END IF
+C
+C     Check for scans that are excessively long.  Setting 40min as
+C     the standard for now.  Such scans put a lot of data at risk if
+C     there are issues such as some that we've had with mid-scan disk
+C     changes.
+C
+      WARNLONG = .TRUE.
+      DO ISCN = SCAN1, SCANL
+         IF( STOPJ(ISCN) - STARTJ(ISCN) .GT. 40.0 / 1440.D0 .AND. 
+     1       WARNLONG ) THEN
+            CALL WLOG( 1, 'See sched.runlog for warning on long scans.')
+            CALL WRTMSG( 0, 'CHKSCN', 'warnlong' )
+            WARNLONG = .FALSE.
+         END IF
+      END DO
 C
 C     Check some VLA issues.
 C
