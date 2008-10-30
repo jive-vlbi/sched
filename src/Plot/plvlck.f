@@ -6,7 +6,7 @@ C     Routine for sched that compute or edit an element of
 C     a value object
 C
       CHARACTER     CH, STRVAL*14
-      INTEGER*8     VAL, VAL1, LMIN, LMAX
+      INTEGER       VAL, VAL1, LMIN, LMAX
       INTEGER       J, EL, OFS, EXP, SGN, IEXP
       REAL          XV1, XV2, YV1, YV2, XE1, XE2, YE1, YE2
 C ----------------------------------------------------------------------

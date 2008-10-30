@@ -1,6 +1,16 @@
 # Makefile for SCHED
 #
-# Use GNU make.  Other makes will not work.
+# Makefile.master is the template makefile.  It is not viable as it stands
+# but can be made viable by uncommenting various lines as described in
+# the comments.  It is also set up for easy building of standard makefiles
+# using sed scripts.  The lines of the form "#ARCHSED" are meant to be
+# replaced by scripts.  See MakeLinux for an example.  If you are 
+# using this file to construct a working copy without using a script, just 
+# uncomment the line you need.
+#
+# Modifications for the sed scripting done Oct. 30, 2008 RCW.
+#
+# Use GNU make.  Other makes probably will not work.
 # Make the selections described below, then type "make" or "gmake"
 # The selected option is the one without a # at the start of the line.
 #
@@ -9,9 +19,11 @@
 #      This helps grab the right machine dependent routines.
 #      LINUX is ok for many g77 systems, including Mac OSX
 
+#ARCHSED
 #ARCH = LINUX
-ARCH = SUN
+#ARCH = SUN
 
+#  Most of these are probably history.
 #ARCH = ALLIANT
 #ARCH = CONVEX
 #ARCH = DECALPHA
@@ -22,9 +34,22 @@ ARCH = SUN
 
 #----- Architecture-specific compiler and options -  Choose one ------
 
-#FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
-FC = f77 -C -u                       # SUN  IBM/AIX
+#  Note about the GNU compilers:
+#    g77 goes with gcc 3 and earlier
+#    gfortran goes with gcc 4 and up. 
+#    Don't mix them.  And be sure your pgplot and satellite tracking 
+#       libraries (if using those) are compiled with the same that you use.
+#    With gfortran you will get lots of warnings.  Most are about string
+#    truncation and unused call arguments.  They should be benign.
 
+#FCSED
+#FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
+#FC = f77 -C -u                       # SUN  IBM/AIX
+#FC = ifort -u -c -warn unused -warn declarations # Linux with Intel compiler.
+#FC = gfortran -Wall -fimplicit-none -fno-backslash  # gfortran 
+#                                 (OS X with gfortran.  Other gfortran?)
+
+#  Most of these are probably history.
 #FC = f77 -u -fpe3 -warn noinformational -assume backslash   # DEC ALPHA
 #FC = f77 -u -fpe3 -O0	              # alternate for DEC ALPHA.
 #FC = f77 -K +e -O +es +U77           # HP
@@ -37,44 +62,65 @@ FC = f77 -C -u                       # SUN  IBM/AIX
 #  are being used to make portable binaries.  With modern systems, they
 #  seem to cause problems.
 
+#XLDSED
 #XLD =                                         # Should work on many systems.
 #XLD = -lX11		                       # X11 libraries, if needed
-#XLD = -L/usr/X11R6/lib -lX11                  # If not in path.
+#XLD = -L/usr/X11R6/lib -lX11                  # If not in path.  32 bit
+#XLD = -L/usr/lib64 -lX11     # Linux, non-static (AOC 64 bit RHEL 5.2 machines)
 #XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11 # Mac OS X
-#XLD = -lgl -lX11                              # SGI
+#   Chris Phillips Sep 18, 2007, reports needing -O2 in some cases.
 
+
+#  The following are less likely to be appropriate.
+#XLD = -lgl -lX11                              # SGI
 #XLD = -Bstatic    # Sun; for portable executable (problems?)
-XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
+#XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
                    # Linux, portable executable (true at AOC with Redhat 9)
+#XLD = -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread 
+                   # Linux, non-static (true at AOC with Redhat 9)
 #XLD = -static -L/usr/X11/lib -lX11            # Linux with X11 vs X11R6
 #XLD = -static -L/usr/X11R6/lib -lX11 -L/usr/lib -ldl 
                    # RedHat 7.3
 
+
 #----- Plot code.  If you don't have PGPLOT, select the stub. ------
 #  But you will loose a lot of useful functionality.
 
-PLOT_SRCS = $(wildcard Plot/*.f) $(wildcard PlotNRAO/*.f) # With PGPLOT
+#PLOT_SRCS_SED
+#PLOT_SRCS = $(wildcard Plot/*.f) $(wildcard PlotNRAO/*.f) # With PGPLOT
 #PLOT_SRCS = $(wildcard Plotstub/*.f)        # Stub - no PGPLOT calls.
 
 
 #----- Path to PGPLOT library - likely to be site specific. ------
 #    Note that PGPLOT version 5.2 or later is required.
-
+#      For more on PGPLOT, see http://www.astro.caltech.edu/~tjp/pgplot/
+#    For MacOSX, PGPLOT is available from the Fink.
+#    It looks like it is available as a package for some Linux distrubitions.
+#
 #    To run SCHED, on unix systems anyway, environment variable PGPLOT_DIR
 #    needs to be set to the same place as LPGPLOT and PGPLOT_FONT needs 
 #    to be set to the location of the font files.
 #    None needed if using the plot stub.
 
 # Location:
-LPGPLOT = /usr/local/lib           # Typical location
+#LPGPLOTSED
+#LPGPLOT = /usr/local/lib           # Typical location
 #LPGPLOT = /usr/local/pgplot        # Alternate location.
-#LDPGPLOT =                         # No library needed with stub.
+#LPGPLOT = /sw/lib/pgplot           # PGPLOT from the fink - MacOSX
 
-# For linker:
-LDPGPLOT = -L$(LPGPLOT) -lpgplot                 # Most
+# For linker:  (LPGPLOT not needed for first and second).
+#   If there are missing items, consider adding -lz
+
+#LDPGPLOTSED
+#LDPGPLOT = -lpgplot -lpng         # pgplot, png, z in the standard load path.
+#LDPGPLOT =                       # No library needed with stub.
+#LDPGPLOT =    -lpgplot  -lpng -lz                # If png lib separate and 
+             # pgplot is in the standard load path.  Used with Intel compiler
+#LDPGPLOT = -L$(LPGPLOT) -lpgplot -lpng          # Many
 #LDPGPLOT = -L$(LPGPLOT) -lpgplot -R$(LPGPLOT)   # Alternate
 #LDPGPLOT = -Wl,-L$(LPGPLOT) -lpgplot            # Hp - link lib
-
+#  The following is for pgplot from the Fink and using gfortran on MacOSX.
+#LDPGPLOT = -L$(LPGPLOT) -lpgplot -L/sw/lib -lpng -lz -laquaterm -framework Foundation -framework AppKit
 
 
 #----- Jpl planetary ephemeris routines  -------
@@ -90,7 +136,8 @@ LDPGPLOT = -L$(LPGPLOT) -lpgplot                 # Most
 #      unless you include a planet in your schedule so it usually
 #      won't hurt to just leave it activated.
 
-JPL_SRCS = $(wildcard Jpl/*.f)          #  Include planet tracking
+#JPL_SRCS_SED
+#JPL_SRCS = $(wildcard Jpl/*.f)          #  Include planet tracking
 #JPL_SRCS = $(wildcard Jplstub/*.f)     #  Stub
 
 #----- Satellite tracking.  -------
@@ -102,12 +149,16 @@ JPL_SRCS = $(wildcard Jpl/*.f)          #  Include planet tracking
 #      there are any problems or you don't need it, or you aren't
 #      using Linux on a PC with g77, take the stub.
 
-#SAT_SRCS = $(wildcard Sat/*.f)         # Include satellite tracking
-#SATLD = ../lib/LINUX/spicelib.a ../lib/LINUX/support.a -lm
-                                       # Link for satellite tracking
 
-SAT_SRCS = $(wildcard Satstub/*.f)   # Stub
-SATLD =                              # Link option for stub
+#SAT_SRCS_SED
+# SAT_SRCS = $(wildcard Sat/*.f)         # Include satellite tracking
+# Links for satellite tracking, depending on 32 vs 64 bit g77
+#SATLDSED
+#SATLD = ../lib/LINUX/spicelib.a ../lib/LINUX/support.a -lm
+#SATLD = ../lib/LINUX64/spicelib.a ../lib/LINUX64/support.a -lm
+
+#SAT_SRCS = $(wildcard Satstub/*.f)   # Stub
+#SATLD =                              # Link option for stub
 
 #-----  Note  ------
 

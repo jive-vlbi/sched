@@ -10,7 +10,7 @@ C
       INCLUDE 'plot.inc'
 C
       CHARACTER        CHSEL, CH, STRING*14
-      INTEGER*8        DVAL
+      INTEGER          DVAL
       INTEGER          MODE, REV, J, N
       LOGICAL          PBTR
       REAL             XL, XR, YT, YB, CSIZ

@@ -6,7 +6,7 @@ C
       INCLUDE 'plot.inc'
 C
       CHARACTER     CH, STRVAL*14
-      INTEGER*8     LMIN, LMAX
+      INTEGER       LMIN, LMAX
       INTEGER       I, AX, EL, K, OFS
       REAL          X1, X2, Y1, Y2
 C ----------------------------------------------------------------------

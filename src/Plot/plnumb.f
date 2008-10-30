@@ -4,7 +4,7 @@ C     Routine that converts a integer number into a decimal character
 C     representation for a value greater than 10**8
 C
       CHARACTER     STRVAL*14, TMPSTR*14
-      INTEGER*8     VAL
+      INTEGER       VAL
       INTEGER       I, J
 C ----------------------------------------------------------------------
 C
