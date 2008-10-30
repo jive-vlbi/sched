@@ -6,7 +6,7 @@ C
       INCLUDE 'plot.inc'
 C
       CHARACTER         STRING*14, ANUM*2, SNUM*3, MESSAG*80
-      INTEGER*8         DNUM
+      INTEGER           DNUM
       INTEGER           AP, EP, K, I, J, N
       REAL              XL, XR, YT, YB
 C ----------------------------------------------------------------------

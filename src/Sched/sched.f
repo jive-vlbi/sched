@@ -20,7 +20,7 @@ C
 C
       LOGICAL   MKFILES, RESTART
       INTEGER   ISET
-      LOGICAL   FMTNONE
+      LOGICAL   FMTNONE, ALLNONE
 C --------------------------------------------------------------------
 C     Current version (up to 40 characters).
 C
@@ -113,18 +113,27 @@ C
 C        For the moment (9feb2001), the VEX writer cannot deal with
 C        FORMAT=NONE.  Therefore block it, but give Huib a back
 C        door for testing.
+C        Modified Oct 27, 2008 to pass schedules that only have some
+C        format NONE scans.  Those scans will simply be left out of
+C        the Vex file.  Don't pass schedules that are all format NONE
+C        but want VEX.  This will change more in the near future as we
+C        figure out how to do pointing runs with VEX.
 C
          IF( DOVEX ) THEN
             FMTNONE = .FALSE.
+            ALLNONE = .TRUE.
             DO ISET = 1, NSET
                IF( USED(ISET) .AND. FORMAT(ISET) .EQ. 'NONE' ) 
      1              FMTNONE = .TRUE.
+               IF( USED(ISET) .AND. FORMAT(ISET) .NE. 'NONE' ) 
+     1              ALLNONE = .FALSE.
             END DO
-            IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
+C            IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
+            IF( OVERRIDE .OR. .NOT. ALLNONE ) THEN
                CALL VXWRT
             ELSE
                CALL ERRLOG( 'SCHED: Cannot mix VEX and FORMAT=NONE'//
-     1              ' in this release.' )
+     1              ' for all scans in this release.' )
             END IF
          END IF
 C

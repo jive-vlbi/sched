@@ -28,7 +28,7 @@ C     last station is (LASTISCN in SCHOPT) I think however, that
 C     is not urgent
 C
       INTEGER ISCN, LASTSCN
-      DOUBLE PRECISION TAPOFF
+      DOUBLE PRECISION TAPOFF, LASTSTOP
       LOGICAL WARNFS
 
       INCLUDE 'sched.inc'      
@@ -131,7 +131,7 @@ C           recording.  The definition of 'long' depends on the datarate
 C           (we worry about disk consumption, not time).
 C
 C           Find the last scan that this station participated in (will
-C           be ISCN if this is the first scan for this station).
+C           be zero if this is the first scan for this station).
             LASTSCN = 0
             DO I = SCAN1, ISCN-1
               IF( STASCN(I, ISTA) ) LASTSCN = I
@@ -202,10 +202,17 @@ C
               LASTTSYS(ISTA) = SCAN1
             END IF
 C
-C           check if there was a Tsys gap this scan
+C           check if there was a Tsys gap this scan.  Avoid a zero
+C           index by setting the last stop time to a day earlier for
+C           the first scan.
 C
-            IF( NINT( ( (STARTJ(ISCN)-TAPOFF) - STOPJ(LASTSCN) ) 
-     1          * 86400d0) .GT. 10 .OR. LASTSCN .EQ. ISCN ) THEN
+            IF( LASTSCN .EQ. 0 ) THEN
+               LASTSTOP = (STARTJ(ISCN)-TAPOFF) - 1.D0
+            ELSE
+               LASTSTOP = STOPJ(LASTSCN)
+            END IF
+            IF( NINT( ( (STARTJ(ISCN)-TAPOFF) - LASTSTOP ) 
+     1          * 86400d0) .GT. 10 ) THEN
 C              This means there is a TSYS in this scan 
                LASTTSYS(ISTA) = ISCN
                NTSYS(ISTA) = NTSYS(ISTA) + 1
