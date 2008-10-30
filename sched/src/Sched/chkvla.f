@@ -216,7 +216,12 @@ C     Check the VLAFEAB and VLAFECD
 C     Bands forced to have 0.0 or -3.2 checked in VLASETF.
 C     This is 4, P, L, and C bands and some mixtures.
 C
-      IF( GOTBD ) THEN
+C     For the moment do not do this check when EVLA is specified.
+C     There might be some useful checking to do, but I don't know
+C     what it is as of Oct. 27, 2008  RCW.
+C     
+C
+      IF( GOTBD .AND. EVLA(KS) .EQ. 0 ) THEN
 C
 C        Go through the distinct cases.
 C
@@ -273,6 +278,10 @@ C
             END IF
 C
          END IF
+      ELSE IF( GOTBD .AND. EVLA(KS) .NE. 0 ) THEN
+C
+C        Don't do anything until I find out more about the restrictions.
+C
       END IF
 C
 C     Get the observing frequencies.

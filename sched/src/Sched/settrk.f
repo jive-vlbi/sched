@@ -14,8 +14,13 @@ C
       CHARACTER  TEXT*80
 C
 C     For Mark5B
+C     Cannot use a call argument as a dimension in f77 on Sun (g77 
+C     and gfortran didn't complain).  Set the dimension higher than
+C     any likely channel setting, and check it later.
 C
-      INTEGER    MK5BCH(MCHAN), M5BBBC, IM5, ICHMK5B(MCHAN)
+      INTEGER    MMCH
+      PARAMETER  (MMCH=32)
+      INTEGER    MK5BCH(MMCH), M5BBBC, IM5, ICHMK5B(MMCH)
 C
 C     M5BCH is the sequence number of this SCHED channel in the
 C     Mark5B channels, which go by BBC number with upper sidebands
@@ -100,8 +105,17 @@ C
 C----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0,'SETTRK: Starting.  Format: ' // FORMAT )
 C
-C     Check for too many channels.
+C     Check for inappropriate MMCH parameter and for too many channels
+C     in the requested data.
 C
+      IF( MCHAN .GT. MMCH ) THEN
+         WRITE( TEXT, '( A, I4, A, I4 )' )
+     1          'SETTRK: Programming problem: local PARAMETER MMCH=',
+     2          MMCH, ' too small for MCHAN = ', MCHAN
+         CALL WLOG( 1, TEXT )
+         CALL ERRSET( KS )
+      END IF
+C  
       IF( NCHAN .GT. MCHAN ) THEN
          WRITE( TEXT, '( A, I4, A, I4 )' )
      1          'SETTRK: Too many channels:', NCHAN, '  Max:', MCHAN

@@ -1,0 +1,33 @@
+#! /bin/csh
+#
+# Use sed and the template Makefile.master to build a Makefile
+# for a Sun machine without satellite tracking.
+#
+# RCW  Oct 30, 2008
+#
+# If anyone knows how to make proper configure scripts and would like
+# to help by building one for SCHED, that would be much appreciated.
+#
+/bin/rm Makefile
+/bin/rm -f makesun.sedscript
+echo  "Remember to use gmake (GNU make)"
+
+# Make a file for sed with all the required changes to Makefile.master
+
+cat <<EOF >! makesun_sedscript
+s:Makefile for SCHED:Temporary makefile for SCHED made by configureSun:
+s:#ARCHSED: ARCH = SUN:
+s:#FCSED: FC = f77 -C -u:
+s:#XLDSED: XLD = -L/usr/X11R6/lib -lX11 -L/usr/lib -lpthread:
+s:#PLOT_SRCS_SED: PLOT_SRCS = \$(wildcard Plot/*.f) \$(wildcard PlotNRAO/*.f):
+s:#LPGPLOTSED: LPGPLOT = /usr/local/lib:
+s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot :
+s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
+s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
+s:#SATLDSED: SATLD = :
+EOF
+
+#  Run sed with the above file.
+
+sed -f makesun_sedscript Makefile.master > Makefile
+/bin/rm makesun_sedscript
