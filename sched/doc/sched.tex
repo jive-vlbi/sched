@@ -4410,7 +4410,11 @@ for planets etc.
 as leap seconds.  It is likely to have the extension {\sl .tls}.
 
 \item {\tt SATFILE:} The {\sl spice} file for the satellite.  It is likely
-to have the extension {\sl .bsp}.
+to have the extension {\sl .bsp}.  Note that it must contain the satellite
+(or asteroid or whatever) you want to observe AND any other bodies needed
+to calcualate the vector from the antenna to the body.  That will usually
+mean that the Earth should be included and might require others, especially
+if the satellite is orbiting around some other body.
 
 \end{enumerate}
 
@@ -10775,14 +10779,16 @@ the VLBA pointing.
 
 \subsubsection{\label{SP:EVLA}{\tt EVLA}}
 
-The EVLA can reach many frequencies that the VLA cannot.  Such frequencies
-can be specified to the VLA using the same {\tt VLASYNA} etc parameters
-as before, but with values that would be outside the range that would be
-allowed for the VLA.  Since \schedb checks the ranges of these settings, that
-checking has to be overridden.  Setting {\tt EVLA} to a non-zero value
-will cause such checking.  It is an integer to allow for possible future
-varients with different values.  Note that the frequencies must still conform
-to the patterns like 50*N +- 10.1 MHz.
+The EVLA can reach many frequencies that the VLA cannot.  Such
+frequencies can be specified to the VLA using the same {\tt VLASYNA}
+etc parameters as before, but with values that would be outside the
+range that would be allowed for the VLA.  Since \schedb checks the
+ranges of these settings, that checking has to be overridden.  Setting
+{\tt EVLA} to a non-zero value will cause such checking.  It is an
+integer to allow for possible future varients with different values.
+Note that the {\tt VLASYNA} etc frequencies must still conform to the
+patterns like 50*N +- 10.1 MHz.  When {\tt EVLA} is set, the {\tt VLAFEAB}
+and {\tt VLAFECD} parmeters are not checked at all.
 
 \rcwbox
 {Override VLA frequency checking.}
@@ -12170,7 +12176,8 @@ If the parameter \htmlref{{\tt EVLA}}{SP:EVLA} is set, {\tt VLASYNA} and
 {\tt VLASYNB} must still conform to N*50 +- 10.1 MHz, but there is no
 limit on the range.  The EVLA LO system is entirely different, and the
 program that converts the VLA style file to an EVLA file will do the
-necessary conversions.
+necessary conversions.  Also when \htmlref{{\tt EVLA}}{SP:EVLA}, the
+{\tt VLAFEAB} and {\tt VLAFECD} parameters are not checked.
 
 SCHED can determine the value of this parameter from the
 \htmlref{frequency catalog}{SEC:FRQCAT} if that file includes
@@ -12552,7 +12559,11 @@ This is the current development version.
 
 \begin{itemize}
 
-\item  Warn of scans longer than 40 minutes --- they can cause problems.
+\item  Add VLA {\sl freq.dat} entries for Methanol at 6668 MHz and OH at
+       6030 and 6035 MHz.  Oct. 29, 2008  RCW.
+
+\item  Warn of scans longer than 40 minutes --- they can cause problems when
+       there are mid-scan pack changes or other mid-scan difficulties.
        Oct. 25, 2008  RCW.
 
 \item  Update sources.vlba and locations.dat to current correlator values
