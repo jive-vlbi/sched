@@ -95,6 +95,7 @@ C
          NHEADS(MSTA)   = STANHD
          DISK(MSTA)     = STADSK
          MEDIADEF(MSTA) = STAMD
+         TSCAL(MSTA)    = STATSC
          NBBC(MSTA)     = STANBC
          ELEV(MSTA)     = STAEL
          LAT(MSTA)      = STALAT
@@ -216,6 +217,14 @@ C
      2       ZPOS(MSTA) .EQ. 0.D0 ) THEN
             CALL ERRLOG( 'STREAD: Location required for ' //
      1          STATION(MSTA) )
+         END IF
+C
+C        Be sure the TSCAL is an allowed value.
+C
+         IF( TSCAL(MSTA) .NE. 'CONT' .AND. 
+     1       TSCAL(MSTA) .NE. 'GAP' ) THEN
+            CALL ERRLOG( 'STREAD: Unknown TSCAL for ' //
+     1          STATION(MSTA) // ':  ' // TSCAL(MSTA) )
          END IF
 C
          GO TO 100

@@ -45,11 +45,11 @@ C     Internal variables.
 C
       INTEGER        MODE, IER, VLBOPE, LEN1, IDB
       LOGICAL        FOPEN, NOLOC, LOCWARN, LOCNONE, GOTLOC
-      REAL*8         NONAME, XX, NONE, ALTAZ, CVLBA, BLANK
+      REAL*8         NONAME, XX, NONE, ALTAZ, CVLBA, BLANK, CCONT
       CHARACTER      CNAME*50, LOCTST*80
       CHARACTER      RESULT*255
       SAVE           FOPEN, NONAME, XX, NONE, ALTAZ, CVLBA, BLANK
-      SAVE           NOLOC, LOCWARN
+      SAVE           NOLOC, LOCWARN, CCONT
 C
 C     Catalog input parameters.
 C
@@ -75,6 +75,7 @@ C
          CALL KPACK( 'NONE    ', NONE )
          CALL KPACK( 'ALTAZ   ', ALTAZ )
          CALL KPACK( 'VLBA    ', CVLBA )
+         CALL KPACK( 'CONT    ', CCONT )
          CALL KPACK( '        ', BLANK )
          CALL KEYCHR( 'VERSION', ' ', 20, KD, KC, KI )
          CALL KEYCHR( 'STAtion', ' ', 8, KD, KC, KI )
@@ -117,6 +118,7 @@ C
          CALL KEYADD( 'TSETTLE', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'MINSETUP', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'MAXSRCHR', 1.D6, 1, KD, KC, KI )
+         CALL KEYCHR( 'TSCAL', 'CONT', 4, KD, KC, KI )
          CALL KEYADD( 'ENDCAT', 0.D0, 1, KD, KC, KI )
          GOTKEYS = .TRUE.
          WARNXYZ = .TRUE.
@@ -200,8 +202,8 @@ C
       KD( KEYPTR( 'TSETTLE', KC, KI ) ) = 0.0D0
       KD( KEYPTR( 'MINSETUP', KC, KI ) ) = 0.0D0
       KD( KEYPTR( 'MAXSRCHR', KC, KI ) ) = 1.0D6
+      KD( KEYPTR( 'TSCAL', KC, KI ) ) = CCONT
       KD( KEYPTR( 'ENDCAT', KC, KI ) ) = UNSET
-
 C
 C     Reset the horizon mask.
 C
@@ -402,6 +404,10 @@ C
       STASTL = KD( KEYPTR( 'TSETTLE', KC, KI ) )
       STAMSU = KD( KEYPTR( 'MINSETUP', KC, KI ) )
       STAMSH = KD( KEYPTR( 'MAXSRCHR', KC, KI ) )
+C
+C     An indicator of how the Tsys measrurements are done.
+C
+      STATSC = KCHAR( 'TSCAL', 4, .TRUE., KD, KC, KI )
 C
 C     For backward compatibility, extract an hour angle limit from
 C     the more general limits above.  This is not used in SCHED.
