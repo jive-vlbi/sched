@@ -103,7 +103,7 @@ C
      1                   USEDISK(ISTA) )
          END DO
          WRITE( ISUM, '( 1X, /, 1X, /, A )' )
-     1      'RECORDING SYSTEM INFORMATION:'
+     1      'RECORDING SYSTEM AND CALIBRATION INFORMATION:'
          IF( ANYTAPE .AND. ANYDISK ) WRITE( ISUM, '( 5X, A )' )
      1      'Some stations may be scheduled for both tape and disk.'
 C
@@ -162,12 +162,13 @@ C
          IF( ANYDISK ) THEN
             WRITE( ISUM, '( 1X, /, A, /, A )' )
      1          '  DISKS - Stations potentially recording on disks.',
-     2          '   Station    Drive type   DAR'
+     2          '   Station    Drive type   DAR     NBBC    Tsys'
             DO ISTA = 1, NSTA
                IF( USEDISK(ISTA) ) THEN
                   ISCAT = STANUM(ISTA)
-                  WRITE( ISUM, '( 3X, A8, 5X, A6, 5X, A5 )' )
-     1               STATION(ISCAT), DISK(ISCAT), DAR(ISCAT)
+                  WRITE( ISUM, '( 3X, A8, 5X, A6, 5X, A5, I6,5X,A4 )' )
+     1               STATION(ISCAT), DISK(ISCAT), DAR(ISCAT), 
+     2               NBBC(ISCAT), TSCAL(ISCAT)
                END IF
             END DO              
          END IF

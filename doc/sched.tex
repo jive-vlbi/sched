@@ -12,7 +12,10 @@
 % inside the manual to access files in those directories.  The 'makelinks'
 % script will establish the links.
 
-\documentstyle[11pt,html]{report}
+\documentclass{report}
+\usepackage{html}
+
+% \documentstyle[11pt,html]{report}
 % \special{psfile=logo.ps hoffset=0 voffset=-30}
 \renewcommand{\textfraction}{0.0}
 \renewcommand{\topfraction}{1.0}
@@ -59,7 +62,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\ VERSION 7.0}
+\title{THE \schedb USER MANUAL \\ VERSION 8.0}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -288,7 +291,7 @@ Pie Town with the VLA will not resume until a digital link has been
 developed and activated so this is not currently (late 2007) a concern.
 
 \item \htmladdnormallink{VLBI on the GBT:}
-{http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html#hifreq}
+{http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html\#hifreq}
 Information about using the GBT for VLBI.  Please consult this
 if you are using the GBT.  There are special concerns, such as temperature
 dependent slew rates and many others, that can significantly affect
@@ -540,8 +543,7 @@ the scan, which is 15 seconds long, should be repeated 20 times.
 By using the {\tt (4*5)}, it makes it clear that the repetition
 lasts for 5 minutes since there are 4 scans per minute.
 
-
-\section{\label{SEC:FILES} \schedb Input and Output Files}
+\section{\label{SEC:FILES} SCHED Input and Output Files}
 
 \schedb takes input from several types of files in addition to any
 interactive input.  All of these files can be separate, as long as
@@ -1448,7 +1450,7 @@ specific files will not be produced.
 
 \chapter{\label{CHP:ADVICE}INFORMATION AND ADVICE ON SPECIFIC TOPICS}
 
-\section{\label{SEC:PLANNING}Using \schedb for Project Planning}
+\section{\label{SEC:PLANNING}Using SCHED for Project Planning}
 
 The plotting and summary capabilities of \schedb make it useful for
 experiment planning.  When writing a proposal, it can be used to
@@ -1470,8 +1472,8 @@ of listing tool, such as {\sc more} or {\sc less} in unix, which can
 be used to examine the summary file.
 
 The schedule to use for planning can be very simple.  In fact the
-\htmlref{simple example}{SSEC:EXAMPLE3} at the end of the \htmlref{getting
-started}{SEC:EXAMPLES} section is designed exactly for this purpose.
+\htmlref{simple example}{SSEC:EXAMPLE3} at the end of the \htmlref{Examples}
+{SEC:EXAMPLES} section is designed exactly for this purpose.
 One of the other examples, {\sl egplan.key} is also well set up for this.
 Multiple sources can be specified, or a {\tt REstart}
 can be done after editing in each source that is to be examined.  The
@@ -1536,7 +1538,7 @@ One is to try to obtain the flux density of a compact calibrator at a
 close enough time to the VLBI observations that variations will not be
 significant.  At the time of the VLBI observations, some of the larger
 antennas can be asked to measure flux densities of sources being
-observed (see the \htmlref{{\tt TANT}}{MP:TANT} command.  Better yet,
+observed (see the \htmlref{{\tt TANT}}{MP:TANT1} command.  Better yet,
 if you have the phased array at the VLA or can get an hour or so of
 VLA test time, accurate flux densities of your VLBI calibrators can be
 measured.  In order to do this, be sure to include a VLA flux calibrator
@@ -2753,7 +2755,7 @@ Information on masers can be found at the \htmladdnormallink{SEST web
 site}{http://www.ls.eso.org/lasilla/Telescopes/SEST/html/telescope-calibration/index.html}.
 Some information on continuum sources at mm wavelengths can be found
 at the
-\htmladdnormallink{OVRO}{http://www.ovro.caltech.edu/mm/preobs/sched97.html#phasecal}.
+\htmladdnormallink{OVRO}{http://www.ovro.caltech.edu/mm/preobs/sched97.html\#phasecal}.
 
 Reference pointing is commonly used for 7mm observations on the VLA.
 It is done interferometer mode at X band (4cm) and so can only be done
@@ -3020,10 +3022,10 @@ calibration, geodetic-like (DELZN) sections are included in a phase
 referencing project.
 
 The reference antenna can be controlled with parameter \htmlref{{\tt
-VLARFANT}}{MP:VLARFANT}.  That will be the antenna from which data are 
+VLARFANT}}{MP:VLARFANT}.  That will be the antenna from which data are
 recorded in single dish mode and the reference antenna (whose phases
 are not changed) for the phased array modes.  Normally users should not
-worry about setting {\tt VLARFANT} because the default is usually 
+worry about setting {\tt VLARFANT} because the default is usually
 good, and if not, you will not know in time and the change needs to be
 made by operations.
 
@@ -3107,7 +3109,7 @@ phasing scans.  This is an area of future construction.
 
 \schedb is also able to deal with reference pointing using the
 \htmlref{{\tt PEAK}}{MP:PEAK} command.  Refer to the description
-of {\tt PEAK} for details.  The \htmlref{VLA-only example}{SSSEC:VLAONLY}
+of {\tt PEAK} for details.  The \htmlref{VLA-only example}{SSEC:VLAONLY}
 below uses this capability.
 
 \subsubsection{\label{SSSEC:VLBIEG}An Example}
@@ -3121,7 +3123,7 @@ parameter could also have been used if non-recording scans with only
 the VLA on the calibrator had been desired.
 
 Note that the \htmlref{main example} {SSEC:EXAMPLE1} in the
-\htmlref{Getting Started}{GETSTART} section has a single VLA antenna
+\htmlref{Examples}{SEC:EXAMPLES} section has a single VLA antenna
 in it and serves as an example of that type of observing.
 
 % RCWINCLUDE ../examples/vla_vlbi.key
@@ -3130,6 +3132,7 @@ in it and serves as an example of that type of observing.
 !                        VLA as a phased array.
 !                        Original file by J. Wrobel.
 !                        Modified for the SCHED manual by C. Walker.
+!                        VLAINTEG added Sep. 8, 2008 RCW.
 !
 ! ==========================================================
 ! =================  Cover Information  ====================
@@ -3261,6 +3264,10 @@ comment = '**** End   1st calibration sequence.'
 ! Swing vla27 to ngc4278's phase ref source.
 source  = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL' norecord /
 
+! As a demonstration, change the on-line integration time to 3 sec.
+! This might allow faster phasing.
+vlainteg = 3
+
 ! Finish pass 5.
 group   2 repeat 3
  source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
@@ -3308,8 +3315,8 @@ version of an actual schedule used to make the VLA observations
 described.  The modifications were required by changes in the way in
 which \schedb handles setup files and the parameters \htmlref{{\tt
 VLABAND}}{SP:VLABAND}, \htmlref{{\tt VLABW}}{SP:VLABW}, \htmlref{{\tt
-PEAK}}{SP:PEAK}, \htmlref{{\tt VLAMODE}}{SP:VLAMODE} (for pointing
-scans), and \htmlref{{\tt VLAPEAK}}{SP:VLAPEAK}.  Some of these
+PEAK}}{MP:PEAK}, \htmlref{{\tt VLAMODE}}{MP:VLAMODE} (for pointing
+scans), and \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.  Some of these
 parameters are now read from the setup files, not the main schedule
 input.
 
@@ -3347,6 +3354,8 @@ stations  = VLA
 vlatype   = CONTINUUM
 vlausern  = 450
 vlamode   = '  '
+
+dovex=-1 ! No VEX file
 
 lst                       ! Schedule in LST.
 
@@ -3544,7 +3553,7 @@ a last minute change, so it is unlikely that users should use this
 parameter.
 
 \item \htmlref{{\tt VLAINTEG:}}{MP:VLAINTEG} This parameter gives the
-correlator integration time.  It would normally be used to give a 
+correlator integration time.  It would normally be used to give a
 value less than 10 seconds to encourage faster phasing.
 
 \item \htmlref{{\tt PTLINK:}}{MP:PTLINK} The Pie Town link is to be
@@ -3559,7 +3568,7 @@ for setting up the ``//FI'' and ``//LO''  cards.
 
 The values for all of these parameters, except {\tt FLUKESET, VLAIF,
 and VLAROT,}, which are not normally needed, can be determined by
-\schedb from the \htmlref{frequency catalog}{SEC:FRECAT}.  Therefore
+\schedb from the \htmlref{frequency catalog}{SSEC:FREQLST}.  Therefore
 most projects do not require VLA specific parameters in the setup
 files.
 
@@ -3618,7 +3627,7 @@ On the ``//LO card'' this number is rounded to the nearest MHz, but it
 should be given here exactly. It is usually near 3900~MHz. It must be
 a value of {\tt N * 50 +- 10.1}~MHz.
 
-\item \htmlref{{\tt VLASYNB:}}{SP:VLASYNB} Same as {\tt VLASYNA} but for
+\item \htmlref{{\tt VLASYNB:}}{SP:VLASYNA} Same as {\tt VLASYNA} but for
 the VLA B and D IFs.
 
 \end{list}
@@ -3731,7 +3740,7 @@ done on it yet.
 There are a variety of concerns for scheduling the GBT.  Documentation
 is maintained at Green Bank and can be accessed at the link:
 \htmladdnormallink{VLBI on the GBT:}
-{http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html#hifreq}
+{http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html\#hifreq}
 
 More information may be added here eventually, but for now, use the
 above link.
@@ -3929,6 +3938,7 @@ dwell   = 5:45
 ptslew  = 15
 optmode = SCANS    ! Select scans that are above minimum elevation.
 opminel = 20.      ! Minimum elevation.
+dovex=-1           ! Turn off VEX so it will do planets.
 
 eofs
 
@@ -4444,7 +4454,7 @@ example.
 
 
 
-\chapter{\label{CHP:INPUT}THE \schedb INPUT FILES (Includes parameter lists)}
+\chapter{\label{CHP:INPUT}THE SCHED INPUT FILES (Includes parameter lists)}
 
 This chapter covers the main input files that \schedb reads.
 However note that there are a couple of special purpose files
@@ -4511,7 +4521,7 @@ FASTFOR}, {\tt REVERSE}, are not obsolete because they were specific
 to tape, which is no longer in use.
 
 
-\subsection{\label{SSEC:PARLST}Summary List of \schedb Parameters}
+\subsection{\label{SSEC:PARLST}Summary List of SCHED Parameters}
 
 COVER INFORMATION:
 
@@ -4575,7 +4585,7 @@ PROGRAM CONTROL:
 \htlm{DOVEX}{~~~} Write a VEX file.
 \htlm{VEXTEST}{~} Allow use of unreleased VEX features.
 \htlm{EXIT}{~~~~} Finish interactive input.
-\htlm{OVERwrit}{} Overwrite files from previous run of
+\htln{OVERwrit}{OVERWRIT}{} Overwrite files from previous run of
                         \sched.
 \htlm{PLOT}{~~~~} Invoke plotting part of \sched.
 \htln{SCHedule}{SCHEDULE}{} Name of file containing rest of schedule.
@@ -4613,7 +4623,7 @@ GENERAL CONTROL PARAMETERS:
 \htlm{PRECDATE}{} ``Observe'' date for coordinate conversions.
 \htlm{SUMITEM}{~} Items to show in the summary file.
 \htlm{TANTSTA1}{} List 1 of stations for Ta measurement requests.
-\htlm{TANTSTA2}{} List 2 of stations for Ta measurement requests.
+\htln{TANTSTA2}{TANTSTA1}{} List 2 of stations for Ta measurement requests.
 \end{list}
 
 BASIC SCAN TIMING and CONFIGURATION:
@@ -4661,7 +4671,7 @@ SCAN PROPERTIES:
 \htlm{PKWATCH}{~} Extra output when {\tt AUTOPEAK} selected.
 \htlm{TANT1}{~~~} Turn on Ta measurement at the {\tt TANTSTA1}
                          stations.
-\htlm{TANT2}{~~~} Turn on Ta measurement at the {\tt TANTSTA2}
+\htln{TANT2}{TANT1}{~~~} Turn on Ta measurement at the {\tt TANTSTA2}
                         stations.
 \htlm{TSYS}{~~~~} Turn on Tsys measurements.
 \htln{NOTSYS}{TSYS}{~~} Do not measure system temperature.
@@ -4759,21 +4769,21 @@ SPECIAL VLA PARAMETERS:
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \htlm{PTLINK}{~~} Set up for the Pie Town link.
-\htlm{VLABAND}{~} Obsolete - put in setup file.
-\htlm{VLABW}{~~~} Obsolete - put in setup file.
+\htls{VLABAND}{~} Obsolete - put in setup file.
+\htls{VLABW}{~~~} Obsolete - put in setup file.
 \htlm{VLAINTEG}{} VLA correlator integration time.
 \htlm{VLAMODE}{~} VLA observing mode.
 \htlm{VLAPEAK}{~} Control reference pointing.
-\htlm{VLANTSYS}{} Turn off VLA system temperature corrections.
+\htln{VLANTSYS}{VLATSYS}{} Turn off VLA system temperature corrections.
 \htlm{VLAPSRC}{~} Phasing source for VLA observations.
 \htlm{VLARFANT}{} Reference antenna for single dish or phasing.
-\htlm{VLATSYS}{~} Turn on VLA system temperature corrections.
+\htlm{VLATSYS}{~} Turn on VLA system temperature corrections. Also {\tt VLANTSYS}.
 \htlm{VLATYPE}{~} Type of VLA observations.
 \htlm{VLAUSERN}{} VLA user number.
 \end{list}
 
 
-\subsection{\label{SSEC:PARDET}Details of \schedb Parameters}
+\subsection{\label{SSEC:PARDET}Details of SCHED Parameters}
 
 
 \subsubsection{\label{MP:ADDRESS1}
@@ -6659,9 +6669,9 @@ on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
 {Uses the one value for the experiment - the last specified.}
 {{\tt OPHASTA = VLBA\_LA}}
 
-\subsubsection{\label{MP:OPLIMTI}{\tt OPLIMTI}}
+\subsubsection{\label{MP:OPHLIMTI}{\tt OPHLIMTI}}
 
-{\tt OPLIMTI } is the parameter for {\tt OPTMODE=HAS} that sets the
+{\tt OPHLIMTI } is the parameter for {\tt OPTMODE=HAS} that sets the
 normalization for the time offset from the limits of when a source
 is up.   The equations for the weights for rise and set are:
 \begin{verbatim}
@@ -6680,18 +6690,18 @@ on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
 {\tt OPTMODE=HAS}
 
 \rcwbox
-{Any real hour angle}
+{Any real hour angle - in seconds.}
 {Any}
-{Zero.}
+{1800.0}
 {Uses the most recent value specified.}
-{{\tt OP = }}
+{{\tt OPHLIMTI = 1200.D0}}
 
-\subsubsection{\label{MP:OPLIMWT}{\tt OPLIMWT}}
+\subsubsection{\label{MP:OPHLIMWT}{\tt OPHLIMWT}}
 
-{\tt OPLIMWT } is the parameter for {\tt OPTMODE=HAS} that sets the
+{\tt OPHLIMWT } is the parameter for {\tt OPTMODE=HAS} that sets the
 relative importance of the weighting based on being near the
 rise or set time of a source.  For the equations
-for these weights, see \htmlref{{\tt OPLIMTI}}{MP:OPLIMTI}.
+for these weights, see \htmlref{{\tt OPHLIMTI}}{MP:OPHLIMTI}.
 
 See the discussion of the possible optimization modes in the section
 on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
@@ -6702,7 +6712,7 @@ on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for more information on
 {Any}
 {Zero.}
 {Uses the most recent value specified.}
-{{\tt OPLIMWT = 1.0 }}
+{{\tt OPHLIMWT = 1.0 }}
 
 \subsubsection{\label{MP:OPMINSEP}{\tt OPMINSEP}}
 
@@ -6822,7 +6832,7 @@ the section on \htmlref{{\tt OPTMODE}}{MP:OPTMODE} for details.
 
 In optimizing mode ``{\tt SCANS}'', skip each source {\tt OPSKIP}
 times after it is last seen, unless it is in the {\tt OPELPRIO}
-elevation range.  This parameter is not applied to pointing (and Ta 
+elevation range.  This parameter is not applied to pointing (and Ta
 and PN3DB) observations when they are mixed with other types of
 scheduling.  It is always applied when {\tt OBSTYPE} is {\tt NONE}
 or {\tt PTVLBA}.
@@ -7036,8 +7046,8 @@ they were spread evenly across the available time for that source.
 OPSLEWWT}}{MP:OPSLEWWT} set the reference time and the normalization
 factor for the weights related to slew time.  The slew weight is {\tt
 OPSLEWWT * ( 1 - (slew time))}/{\tt OPSLEWTI}).
-\htmlref{{\tt OPLIMTI}}{MP:OPLIMTI} and
-\htmlref{{\tt OPLIMWT}}{MP:OPLIMWT} set a similar normalization and
+\htmlref{{\tt OPHLIMTI}}{MP:OPHLIMTI} and
+\htmlref{{\tt OPHLIMWT}}{MP:OPHLIMWT} set a similar normalization and
 weight for the proximity to the extreme times at which a source can be
 observed.  This latter is used to encourage a scan on the source, for
 example, before it sets.  \htmlref{{\tt OPHMAXDT}}{MP:OPHMAXDT} sets
@@ -7048,7 +7058,7 @@ different values for different scans.
 
 The equations for the various weights are given in the descriptions
 for the parameters \htmlref{{\tt OPHA}}{MP:OPHA}, \htmlref{{\tt
-OPSLEWTI}}{MP:OPSLEWTI}, and \htmlref{{\tt OPLIMTI}}{MP:OPLIMTI}.  For
+OPSLEWTI}}{MP:OPSLEWTI}, and \htmlref{{\tt OPHLIMTI}}{MP:OPHLIMTI}.  For
 the most accurate information on how weights are set, look at the code
 in {\sl \$SCHED/src/Sched/opthas.f}.
 
@@ -7222,7 +7232,7 @@ much more information on easy ways to insert pointing scans.
 This command has no effect on the VEX file, there is currently no
 means to peak up telescopes that are controlled through the PCFS.
 
-The following paragraph is obsolete as the 140' is no longer in use 
+The following paragraph is obsolete as the 140' is no longer in use
 for VLBI.  But SCHED can still make the cards, so the description is
 retained.
 For the Green Bank 140' (NRAO type files), ``cards'' will be issued that
@@ -8818,7 +8828,7 @@ for the calibration solution for phasing.  Note that, in phased array
 mode, the phase center is always at the normal VLA phase center.  In
 single dish mode, if there are multiple antennas available to the
 VLA correlator, they will be correlated with the phase center at the
-reference antenna.  This is needed so for the old VLA system so that 
+reference antenna.  This is needed so for the old VLA system so that
 the fringe rotators do not affect the single dish VLBI data.
 
 Normally the reference antenna is number 10, which is the default.
@@ -9289,6 +9299,18 @@ can be overridden by {\tt MEDIA} in the \htmlref{{\tt
 TAPEINI}}{MP:TAPEINI} section.  The options are {\tt TAPE} and {\tt
 DISK}.  This is meant to facilitate VLBA operations during the
 transition from tape to disk.
+
+\item [{\tt TSCAL}:] Lets \schedb know when the station measures
+system temperatures.  Arguments are text of 4 characters.  The viable
+options so far are ``gap'' and ``cont'' that inidicate the system temperature
+measurements, or at least cal measurements, are done in the gap between
+scans or continuously during observing.  The VLBA uses an 80Hz cal switch
+and measures cal-on and cal-off powers from which, using a known cal
+temperature, the system temperature can be derived.  Typical field system
+controlled stations fire the cal once at the start of a scan and measure
+the on and off power.  {\sc SCHED} will warn if there is inadequate time to
+do this if TSCAL=GAP, but not when TSCAL=CONT.  This facility is still
+not fully installed as of Nov. 5, 2008.
 
 \item [{\tt ELev}:] Station elevation in meters above (mean?) sea
 level for geodetic coordinates or meters from the center of the Earth
@@ -9804,7 +9826,7 @@ observations).
 
 Note that changing the length of the tape is not sufficient to switch
 from thick to thin tape. In that case one usually also needs to modify
-\htmlref{the recording density}{SSSEC:DENSITY}
+\htmlref{the recording density}{TP:DENSITY}
 
 S2 tape length should be given in seconds, corresponding to Standard
 Play in a US VCR. A tape with label ST-120 (or SE-180) should be
@@ -10003,7 +10025,7 @@ specification) for each channel.  Use {\tt omit} for unused channels.
 
 \item [{\tt POL}] The polarization of the channel (RCP or LCP).
 
-\item [{\tt SYN}] The \htmlref{{\tt SYNTH}}{SYNTH} setting for each
+\item [{\tt SYN}] The \htmlref{{\tt SYNTH}}{SP:SYNTH} setting for each
 of the three front end synthesizers on the VLBA.
 
 \item [{\tt DUALX}] Use the wideband scheme at 4 cm on the VLBA.  See
@@ -10013,7 +10035,7 @@ the setup parameter \htmlref{{\tt DUALX}}{SP:DUALX}.
 parameter \htmlref{{\tt LCP50CM}}{SP:LCP50CM}
 
 \item [{\tt RCP50CM}] Setting for the 50 cm filter.  See setup file
-parameter \htmlref{{\tt RCP50CM}}{SP:RCP50CM}
+parameter \htmlref{{\tt RCP50CM}}{SP:LCP50CM}
 
 \item [{\tt CHNSTA}]  Only use this IF if {\tt CHNSTA} matches the
 station name.  This allows the same groups to be used for VLA1 and
@@ -10034,19 +10056,19 @@ Modes {\tt VA, VR} and {\tt VL} require different IF restrictions.
 \htmlref{{\tt VLAFEAB}}{SP:VLAFEAB}
 
 \item [{\tt VLAFECD}] The other VLA first LO.  See setup file parameter
-\htmlref{{\tt VLAFECD}}{SP:VLAFECD}
+\htmlref{{\tt VLAFECD}}{SP:VLAFEAB}
 
-\item [{\tt VLAIF}] Obsolete.  The VLA gain file name.  
+\item [{\tt VLAIF}] Obsolete.  The VLA gain file name.
 See setup file parameter \htmlref{{\tt VLAIF}}{SP:VLAIF}
 
-\item [{\tt VLAROT}] Obsolete.  The VLA ROT file name.  
+\item [{\tt VLAROT}] Obsolete.  The VLA ROT file name.
 See setup file parameter \htmlref{{\tt VLAROT}}{SP:VLAROT}
 
 \item [{\tt VLASYNA}] The VLA AC F6 setting.  See setup file parameter
 \htmlref{{\tt VLASYNA}}{SP:VLASYNA}
 
 \item [{\tt VLASYNB}]The VLA BD F6 setting.  See setup file parameter
-\htmlref{{\tt VLAFECD}}{SP:VLAFECD}
+\htmlref{{\tt VLAFECD}}{SP:VLAFEAB}
 
 \item [{\tt FEFILTER}]The VLA BD F6 setting.  See setup file parameter
 \htmlref{{\tt FEFILTER}}{SP:FEFILTER}
@@ -11581,7 +11603,7 @@ measure 1 tone in each channel of a Mark~III mode E observation.}
 may be used when asking \schedb to set a lot of defaults.  Or it
 may be used to tell \schedb the polarization in cases where it
 is not clear from other inputs.  Such cases arise when
-\htmlref{{\tt RCHAN}}{SP:RCHAN}, and \htmlref{{\tt LCHAN}}{SP:LCHAN}
+\htmlref{{\tt RCHAN}}{SP:LCHAN}, and \htmlref{{\tt LCHAN}}{SP:LCHAN}
 are not used AND the setup does not correspond to one in the
 \htmlref{frequency catalog.}{SEC:FRQCAT}.
 
@@ -12204,9 +12226,9 @@ SATINIT} section imbedded in the main schedule input.  See the
 information on this.
 
 
-\chapter{\label{CHP:SYSTEM}INSTALLING, AND RUNNING \sched}
+\chapter{\label{CHP:SYSTEM}INSTALLING, AND RUNNING SCHED}
 
-\section{\label{SEC:INSTALL}Installing \sched}
+\section{\label{SEC:INSTALL}Installing SCHED}
 
 This section is only needed if you do not have access to an installed
 copy of \sched.
@@ -12225,9 +12247,9 @@ attempting to schedule a project.
 The sched software, catalogs, auxiliary files, and documentation all
 reside in subdirectories under a parent directory.  At the AOC, the
 parent directory is {\sl /users/cwalker/sched}.  Installing
-\schedb involves unpacking the tar files of the distribution into
+\schedb involves unpacking the tar file of the distribution into
 these directories.  If a canned executable is available for your type
-of computer, it can be copied and, hopefully, used as is.  Otherwise
+of computer, it can hopefully, used as is.  Otherwise
 it will be necessary to compile the program.  This may involve
 installing the {\sc PGPLOT} subroutine library if it is not already
 available.  On unix systems, the installation also involves setting up
@@ -12239,20 +12261,20 @@ results with results obtained at the time the release was created.
 \schedb is written in FORTRAN 77 using only a few common extensions
 from the standard.  Development has occurred on a variety of machines
 including VAXes, PCs, and SUNs.  Current development is done under
-Linux and Mac OSX..  Reasonably recent versions have mainly been
-tested on Linux (g77), Solaris, and Mac OSX (g77 and gfortran).  Older
-versions were tested on Hp, SGI, IBM (AIX), and DEC Alpha.  A big
-``thank you'' to Franco Tinarelli at Bologna for performing many of
-these tests.  Machine dependent code has been isolated in special
-subdirectories under the {\sl src/Cit} code directory.  All other
-FORTRAN files should compile without changes on a wide variety of
-machines.  Note, however, that all current testing is under one or
-another flavor of unix.  There has been no recent testing under other
-operating systems.  This will only change if there is pressure to do
-so.  Please inform Craig Walker at cwalker@nrao.edu if you install it
-on something else, including VMS or Windows - it has been many years
-since the last port to VMS or DOS, although both have served as the
-primary development environment for \schedb in the past.
+Linux and Mac OSX.  Reasonably recent versions have mainly been tested
+on Linux (g77), Solaris, and a Mac OSX (PPC machine using g77 and
+gfortran).  Older versions were tested on Hp, SGI, IBM (AIX), and DEC
+Alpha.  A big ``thank you'' to Franco Tinarelli at Bologna for
+performing many of these tests.  Machine dependent code has been
+isolated in special subdirectories under the {\sl src/Cit} code
+directory.  All other FORTRAN files should compile without changes on
+a wide variety of machines.  Note, however, that all current testing
+is under one or another flavor of unix.  There has been no recent
+testing under other operating systems.  This will only change if there
+is pressure to do so.  Please inform Craig Walker at cwalker@nrao.edu
+if you install it on something else, including VMS or Windows - it has
+been many years since the last port to VMS or DOS, although both have
+served as the primary development environment for \schedb in the past.
 
 If you plan to support \schedb under more than one computer
 architecture, you may wish to have subdirectories under bin and point
@@ -12288,28 +12310,17 @@ established by adding {\tt setup\_vlba} and {\tt setup\_pgplot} to your
 "anonymous", password should be your full email address).  {\tt cd} to
 pub/sched.  Tell ftp to do binary file transfers (type {\tt binary}).
 List the tar files present and copy the latest version of {\sl
-sched.aux.<date>.tar.gz} to your {\sl \$SCHED} directory.  If you will
-recompile, copy {\sl sched.src.<date>.tar.gz}.  If you can use one of
-the precompiled excutables, find the appropriate one in a subdirectory
-and copy it to your {\sl bin} subdirectory.  You probably want to
-rename any such executable to {\sl sched} from the longer name
-including the release date that is used on the ftp site.  If you want
-to test the program, copy {\sl sched.stdout.<date>.tar.gz} which
-contains the comparison output files created at the aoc.  The
-executables are around a Mbyte compressed although the size varies
-with architecture.  The other files are a bit over 500 kbytes
-compressed.
+sched.<version>.tar.gz} to your {\sl \$SCHED} directory.  As of
+Version 8.0, that tar file contains everything including binaries for
+the common architectures.  It is much larger than the older split tar
+files, but is still smaller than most software updates these days.
 
-\item [Uncompress:] You will need the GNU zip utility to uncompress
-the tar file.  This should be available on most systems.  To
-uncompress the file, type {\tt gunzip <filename>} or {\tt unzip
-<filename>}.  GNU software is available by ftp from prep.ai.mit.edu.
-
-\item [Unpack the tar files:] For each tar file, type {\tt tar -xvf
-<filename>}.  This will unload all files from the tar file, creating
-the necessary subdirectory structure in the process.  A {\sl README}
-file will appear in the top level directory which contains useful
-information on the directory structure and on installing \sched.
+\item [Unpack the tar file:] To unpack the tar file, type {\tt tar
+-xvf <filename> --gunzip} while in the {\sl \$SCHED} directory.  This
+will unload all files from the tar file, creating the necessary
+subdirectory structure in the process.  A {\sl README} file will
+appear in the top level directory which contains useful information on
+the directory structure and on installing \sched.
 
 Note that, after this step, a local html version of this manual will
 be available in the doc/sched/sched.html under the parent \schedb
@@ -12322,39 +12333,56 @@ the tar files, they can be established by running the script
 (just type {\tt makelinks} while {\sl \$SCHED/doc} is your
 default directory).
 
-\item [Compiling the programs:] If executables are not available for
-your machine, or they don't work (library problems or whatever), you
-will need to compile the program.  To do so, cd to the {\sl \$SCHED/src}
-subdirectory.  Examine the {\sl Makefile} with an editor and,
-following the instructions in it, make any necessary changes.  Note
-that versions preconfigured for some systems are provided.  In fact,
-{\sl Makefile} may just be a link to one of them.  The changes
-select computer type, library locations, compiler etc.  They are
-usually made by just altering which of several lines are not commented
-out.  Once the {\sl Makefile} is ready, invoke the GNU {\sc make}
-utility by typing {\tt make} or {\tt gmake}.  There are a large number
-of routines that are compiled so this will take a few minutes and will
-produce quite a bit of output.  Once make has finished, you are ready
-to run the program.
+\item [Try the binary for your system:] There are executable binary
+files in subdirectories of the bin directory.  The directory names
+indicate the target architecture.  We are at a time of change in the
+computer world so there are a lot of options, not all of which are
+covered.  Intel and equivalent machines are changing from 32 to 64
+bit.  GNU fortran is switching from g77 (with gcc version 3.x and
+below) to gfortran (with gcc version 4+).  Macs have moved from PPC
+chips to Intel chips.  And some versions of \schedb are set up to do
+satellite tracking with extra software not normally distributed with
+the package.  The architectures covered are what are immediately
+available to the developers.  The subdirectories are LINUX (32 bit
+Intel based Linux using g77), LINUX64 (64 bit Intel based Linux using
+g77), LINUX64SPICE (like LINUX64 but enabled for spacecraft tracking),
+OSXPPC (PPC based Mac using gfortran), and SUN (SUN workstation running
+Solaris using f77).  If one of the binaries works for you, use it.
+If not, you will need to recompile.
+
+
+\item [Compiling the program:] If you need to compile \schedb, you
+will need to construct an appropriate Makefile and run make.  There is
+a template Makefile ({\sl Makefile.master}) showing lots of possible
+options and a number of simple scripts that edit the template to build
+Makefiles for specific cases using the line editor sed.  You can
+either modify the template Makefile or one of the scripts to match
+your system configuration.  Basically what you need to do with the
+required edits is tell make what FORTRAN compiler you use and where
+various required libraries reside.  There are lots of comments in the
+template Makefile to guide the process.  Once ready, run make.  Many
+routines are compiled so it will take a few minutes.  Under gfortran,
+there will be some warnings that can be ignored, especially about
+character variables being truncated.
 
 There is some oddity that has been seen on Mac OSX (May 2008) where it
 is not equivalent to just type {\tt make} when the Makefile is what
-you want and typing {\tt make -f Makefile.MacOSX}.  The latter doesn't
-seem to work with what look to be problems finding libraries.  We are
-looking into it.
+you want and typing, for example, {\tt make -f Makefile.MacOSX}.  The
+latter doesn't seem to work with what look to be problems finding
+libraries.  We don't understand it.
 
-Note that the current version of the Makefile requires the use of GNU
-make.  Check for GNU make on your system.  It is installed on many if
-not most and is the standard make under Linux.  If you don't have it,
-it can be obtained from prep.ai.mit.edu.  Also a version (probably not
-current) is available in the same ftp area as \sched.
+Note that the Makefile requires the use of GNU make.  Check for GNU
+make on your system.  It is installed on many if not most and is the
+standard make under Linux and OSX.  If you don't have it, it can be
+obtained from prep.ai.mit.edu.  Also a version (probably not current)
+is available in the same ftp area as \sched.
 
 \schedb can be compiled with or without the plotting capabilities.  It
 is highly recommended that you compile with those capabilites.  To do
 so, you will need {\sc PGPLOT} (version 5.2 or later) installed on
 your system.  See below for more information on getting {\sc PGPLOT}
 if you don't already have it.  It is commonly available at astronomy
-sites and is used in {\sc AIPS++}, so it is likely that you already
+sites and is used in other packages, so it is likely that you already
 have it installed.  There are stubs that can be used to bypass {\sc
 PGPLOT} if necessary and the instructions on how to do so are in the
 Makefile.  \schedb will still be able to make schedules if the stubs
@@ -12371,8 +12399,7 @@ normally distributed with \sched.
 
 \item [Testing:] The examples in the {\sl examples} subdirectory can
 be used to test the code once it has been installed.  A few outputs
-from each example are stored in the {\sl Stdout} subdirectory which
-is packed in the {\sl sched.stdout.<date>.tar.gz} tar file. For
+from each example are stored in the {\sl Stdout} subdirectory.  For
 unix systems, the routine {\sl Verify} can be used to run all of the
 examples and compare results with those in {\sl Stdout}.  The output
 from {\sl Verify} will be in the file {\sl testruns.out}.  Any
@@ -12395,29 +12422,28 @@ information on {\sc PGPLOT} available from the WWW page at
 in packaged form from the Fink for MacOSX and from standard package
 libraries for some Linux distributions including Ubuntu and Debian.
 Be careful about what compiler was used to build the packages and use
-the same to build SCHED or there may be problems.
+the same to build SCHED or there may be problems.  You may need to 
+download some other libraries including those for PNG.
 
 Some VAX FORTRAN features that are commonly supported by other FORTRAN
 compilers remain in the code.  These features are supported by all of
 the compilers that we are aware of that are being used for \schedb
 currently.  They include long variable names, in-line comments, and
 {\tt END DO}.  If you have problems with these features, please email
-{\sl cwalker@nrao.edu}.  There used to be routines for removing some
-of these on various machines, but it has been so long since we have
-tried them that we no longer mention them.  Considerable use was made
-of the SLALIB (STARLINK) routines for precession, etc.  These routines
-use long variable names so removing this non-standard feature would
-not be easy. (email permission to use the FORTRAN SLALIB routines has
-been obtained from P. Wallace).
+{\sl cwalker@nrao.edu}.  Considerable use was made of the SLALIB
+(STARLINK) routines for precession, etc.  These routines use long
+variable names so removing this non-standard feature would not be
+easy. (email permission to use the FORTRAN SLALIB routines has been
+obtained from P. Wallace).
 
 If the code or any other files are moved from a unix or VMS machine to
-a machine using DOS or Windows, beware that the end-of-line characters are
-different.  At least on SUN and Linux, a pair of utilities unix2dos
-and dos2unix can be used to fix the files.  Under Linux, the mcopy
-command can be used (from the mtools, which allow manipulation of DOS
-files from Linux).  If DOS format input files or catalogs are given to
-a unix \sched, it will abort.  That is the first thing to check when
-having problems testing a file received by email.
+a machine using DOS or Windows, beware that the end-of-line characters
+are different.  At least on SUN and Linux, a pair of utilities
+unix2dos and dos2unix can be used to fix the files.  If DOS format
+input files or catalogs are given to a unix \sched, it will abort.
+That is the first thing to check when having problems testing a file
+received by email since many email tools seem to insist on adding the
+DOS end-of-line characters.
 
 We are always interested in hearing about people's experiences
 installing \schedb on various machines.  If you have problems, or even
@@ -12428,21 +12454,21 @@ operating system.  \schedb was supported under VMS and DOS in the
 past and the coding style hasn't changed, so a port to such operating
 systems would probably not be difficult.
 
-A recent experience installing \schedb on a MacOSX 10.5.4 system showed
-the need to be careful about compiler versions.  That version of OSX uses
-version 4.0.1 of the gcc compiler.  As I understand it, you have to use
+A recent experience installing \schedb on a MacOSX 10.5.4 system
+showed the need to be careful about compiler versions.  That version
+of OSX uses version 4.0.1 of the gcc compiler.  You have to use
 gfortran, a Fortran 95 compiler, with gcc versions above 4.0 and g77
-with lower gcc versions.  PGPLOT was loaded from the Fink, as were both
-g77 and gfortran, and the PGPLOT was built with gfortran.  The build
-of SCHED only went smoothly after switching to gfortran for \sched.
-I hazard a guess that there will be similar issues wherever the switch
-from gcc 3 to 4 occurs.  For some details of my first install of \schedb
-on a Mac in 2003, see Appendix~\ref{APP:Mac2003}.
+with lower gcc versions.  PGPLOT was loaded from the Fink, as were
+both g77 and gfortran, and the PGPLOT was first built with gfortran.
+The build of SCHED only went smoothly after switching to gfortran for
+\sched.  There will be similar issues wherever the switch from gcc 3
+to 4 occurs.  For some details of my first install of \schedb on a Mac
+in 2003, see Appendix~\ref{APP:Mac2003}.
 
 
-\section{\label{SEC:RUNSCHED}Running \sched}
+\section{\label{SEC:RUNSCHED}Running SCHED}
 
-\subsection{\label{SSEC:RUNUNIX}Running \schedb under UNIX or LINUX}
+\subsection{\label{SSEC:RUNUNIX}Running SCHED under UNIX or LINUX}
 
 To run \schedb on a UNIX machine such as a SUN or a PC under LINUX,
 prepare the keyin file without system level commands.  Then type, for
@@ -12476,7 +12502,7 @@ the {\sc PGPLOT} font files.  If you use {\sc PGPLOT} for other
 reasons (programming, DIFFMAP etc), then this is likely to be part
 of your standard setup.
 
-\subsection{\label{SSEC:RUNVAX}Running \schedb on a VAX with VMS}
+\subsection{\label{SSEC:RUNVAX}Running SCHED on a VAX with VMS}
 
 Note that I am not aware of anyone using \schedb on VAXes any more.
 
@@ -12496,7 +12522,7 @@ The files output by \schedb will appear in the default directory.
 \schedb has not been tested under VMS since the plotting
 capabilities were added.
 
-\subsection{\label{SSEC:RUNDOS}Running \schedb on an MS-DOS PC}
+% \subsection{\label{SSEC:RUNDOS}Running SCHED on an MS-DOS PC}
 
 It has been a very long time since I was aware of anyone running
 \schedb on an MS-DOS machine, or a Windows machine for that matter.
@@ -12553,11 +12579,44 @@ more information.
 
 \section{\label{SEC:CURRENT}Current Release}
 
-\subsection{\label{SSEC:VER_7.0}Version 7.0}
 
-This is the current development version.
+
+
+\subsection{\label{SSEC:VER_9.0}Version 9.0}
+
+This is the current development version.  Note that development 
+versions will have odd version numbers, released versions will
+have even version numbers.  The development version section in 
+this chapter will be converted into the next released versions 
+section at the time of the release.
 
 \begin{itemize}
+
+\item  Not started yet.
+
+\end{itemize}
+
+
+
+\subsection{\label{SSEC:VER_8.0}Version 8.0}
+
+Released in November 2008.
+
+\begin{itemize}
+
+\item  Started adding an indicator of when the Tsys measurements are done
+       at each station.  This will eventually control whether to give 
+       warnings of inadequate gaps when TSCAL=GAP.  Nov. 5, 2008 RCW
+
+\item  Change the distribution tar files.  A 1MB file used to be a problem
+       so various schemes were used to keep the tar files small.  That is
+       no longer an issue, so the distribution tar file contains everything
+       a user should need, including binaries for several architectures.
+       Nov. 3, 2008  RCW.
+
+\item  Change the scheme for building makefiles for different architectures.
+       There is now one master makefile and some simple scripts that use
+       sed to configure that makefile for each target.  Nov. 1, 2008  RCW
 
 \item  Add VLA {\sl freq.dat} entries for Methanol at 6668 MHz and OH at
        6030 and 6035 MHz.  Oct. 29, 2008  RCW.
@@ -12567,11 +12626,11 @@ This is the current development version.
        Oct. 25, 2008  RCW.
 
 \item  Update sources.vlba and locations.dat to current correlator values
-       that are based on solution 2008a_astro from GSFC.  The VLA pad positions
+       that are based on solution 2008a\_astro from GSFC.  The VLA pad positions
        were note updated from the ones based on 2005f, but the changes would
        have been less than the likely errors.  Oct. 8, 2008  RCW.
 
-\item  Change SUMITEM defaults to {\tt ELA} (average elevation) and 
+\item  Change SUMITEM defaults to {\tt ELA} (average elevation) and
        {\tt DWELL}  Oct. 2, 2008  RCW.
 
 \item  Add more of the input file names to the list in the summary file,
@@ -12579,7 +12638,7 @@ This is the current development version.
 
 \item  Add a line in the VLA Observe deck (\sl xxxxobs.y) file giving
        the reference antenna - which is also the single dish antenna.
-       New variable VLARFANT supports this.  Most users should not 
+       New variable VLARFANT supports this.  Most users should not
        worry about it.  Sept. 20, 2008  RCW
 
 \item  Fix error in elapsed time calculation that caused non-recording
@@ -12639,7 +12698,7 @@ This is the current development version.
 
 \item  Convert all stations to Mark5 in the station catalog.  Nov. 8, 2006 RCW
 
-\item  Found and fixed bug in the calculation of station parallax for
+\item  Found and fixed a bug in the calculation of station parallax for
 satellite positions.  March 26, 2007. RCW.
 
 \item  Put indicator of continuous recording in .sch file.  May 8, 2007.
@@ -12657,11 +12716,12 @@ possible.  June 2007  RCW.
 version that had about a 2 year history.  Aug 31, 2007.  RCW.
 
 
-
-
-
-
 \end{itemize}
+
+
+
+
+
 
 
 \subsection{\label{SSEC:VER_6.05}Version 6.05}
@@ -14983,11 +15043,15 @@ This is a list of desired program changes, fixes or enhancements.
 \begin{itemize}
 
 
+\item With dwell, don't necessarily wait for last antenna.  Think about
+      what to do.  Oct. 31, 2008  RCW.
+
 \item Have plot option to distinguish sources in XY plots by color.
-RCW  Sept. 11, 2008.
+      RCW  Sept. 11, 2008.
 
 \item Add aperture array axis type and whatever is needed to support it
-to the station catalog.  July 1, 2008 email request from James Anderson.
+      to the station catalog.  July 1, 2008 email request from
+      James Anderson.
 
 \item Add 6 GHz frequency setups for EVLA etc.  May 2 2008 RCW.
 
@@ -14997,8 +15061,8 @@ to the station catalog.  July 1, 2008 email request from James Anderson.
 
 \item Make sure leap seconds are updated.
       For SLALIB, update dat.f.  (That takes care of planets too).
-      For the satellite tracking, update the kerfile (naifnnnn.tls) in the 
-         ephemeris area ($PLANET_DATA). 
+      For the satellite tracking, update the kerfile (naifnnnn.tls) in the
+         ephemeris area (\$PLANET\_DATA).
       Keep this entry in the Wish List permanently.  Apr 8, 2008 RCW
 
 \item Put information about frequency agility into SCHED. Dec 06 EVN TOG.
@@ -16434,8 +16498,6 @@ mismatched OS version and XCODE version, as I did.
 
 I now have \schedb on a Powerbook G4 (OSX 10.3 still) and that is now
 one of the \schedb development platforms.
-
-
 
 
 \end{document}

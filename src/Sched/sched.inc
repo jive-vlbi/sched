@@ -191,6 +191,7 @@ C
       CHARACTER        CONTROL(MAXCAT)*4, MOUNT(MAXCAT)*5
       CHARACTER        DAR(MAXCAT)*5, RECORDER(MAXCAT)*6
       CHARACTER        DISK(MAXCAT)*6, MEDIADEF(MAXCAT)*6
+      CHARACTER        TSCAL(MAXCAT)*4
       INTEGER          NBBC(MAXCAT), STNDRIV(MAXCAT), NHEADS(MAXCAT)
       LOGICAL          VLBADAR(MAXCAT)
 C
@@ -215,7 +216,7 @@ C
      7                 ZALIM, AXOFF
       COMMON  /SCHCST/ STAFILE, STVER, LOCAFILE, LOCAVER, STATION, 
      1                 STCODE, STCODEU, POSREF, CONTROL, MOUNT, DAR, 
-     2                 RECORDER, DISK, MEDIADEF
+     2                 RECORDER, DISK, MEDIADEF, TSCAL
 C
 C
 C     Source catalog.  There are 3 source lists!  

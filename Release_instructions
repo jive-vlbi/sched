@@ -1,15 +1,9 @@
-
-**********************  Get PLFLOD into Franco's system!
-  Copy in src as plflod.f.rcw
- I sent it to him
-
-
 Instructions for making a release of SCHED
 
 Before a release:
 
 1.  Get the latest versions of the Vex and plot code from 
-    Cormac and Franco.
+    Antonios and Franco (and maybe Cormac)
 
 2.  Make sure VERSION and VERNUM in versched.f are up to date.
     Make sure the version on the manual first page are current.
@@ -19,22 +13,22 @@ Before a release:
     Also check a couple of places below (other machines) where the
     version number is also needed.
 
-setenv NEWVER 6.05
+setenv NEWVER 8.0
 setenv DIST /users/cwalker/files/sched_{$NEWVER}
 setenv SCHTEST /users/cwalker/files/sched_test
+setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
 
-3.  Compile and link SCHED on the development machine.
-
-    Use one of the scripts to invoke make with the premade makefiles.
-    MakeSpice to include satellite stuff.  Leaves Makefile pointing
-          to the non-satellite version.
-    MakeLinux omits satellite stuff
-    MakeSun makes the sun version
-    MakeMacOSX makes the OSX version.
-    
-    Do not use the form "make -f Makefile.linux.spice".  During 
-    execution of make, make is again invoked without -f and you 
-    will get whatever "Makefile" points to for the final link.
+3.  Compile and link SCHED for each target architecture.
+    Architectures are (with local usable machines):
+      LINUX     32 bit Intel linux machine without satellite tracking. (falcon)
+      LINUX64   64 bit Intel linux machine without satellite tracking. (noatak)
+      LINUX64SPICE  Like LINUX64 but with satellite tracking (noatak)
+      OSXPPC    PowerPC Mac. (horton)
+      SUN       Sun Solaris machine  (shire)
+    Go to sched_work while logged into a machine of the right type.
+      invoke the appropriate configure file
+      run make
+      move the binary to the right subdirectory in bin.
 
 4.  Update the manual and the web version:
 
@@ -108,20 +102,12 @@ Test the plot functions on egplan.key.  Verify does not make plots.
 
 
 
-Make the tar files.
+Make the release directory and tar file.
+Run package3 with the version number.  That should do all of the above.
+First it runs rsync to the release, creating it if it is not already 
+there.  Then it tar the whole thing.  The tar file ends up in $TARDIR
 
-1.  First, move any files from TARFILES that should be archived to 
-    $SCHED/ARCHIVE.
-
-2.  Run "package" and "package2" for the current version using the
-    lines below.
-      The use of "source" seems to be needed on the Mac to get the 
-      right SCHED environment variable.
-
-source ./package {$NEWVER}
-source ./package2 Linux {$NEWVER}
-
-
+source ./package3 {NEWVER}
 
 
 
@@ -140,30 +126,15 @@ cd $SCHTEST
 chmod u+w $SCHTEST/catalogs/*
 /bin/rm -r *
 # ----
-tar -xvf $SCHED/TARFILES/sched.aux.{$NEWVER}.tar.gz --gunzip
-tar -xvf $SCHED/TARFILES/sched.src.{$NEWVER}.tar.gz --gunzip
-tar -xvf $SCHED/TARFILES/sched.stdout.{$NEWVER}.tar.gz --gunzip
+tar -xvf $TARDIR/sched.{$NEWVER}.tar.gz --gunzip
 cd src
-MakeLinux
+configureLinux
+make
 cd ../examples
 setenv SCHEDSAVE $SCHED
 setenv SCHED $SCHTEST
 Verify
 setenv SCHED $SCHEDSAVE
-
-
-
-#  Make the release directory using the binary tar file.
-
-mkdir /users/cwalker/files/sched_{$NEWVER}
-cd /users/cwalker/files/sched_{$NEWVER}
-tar -xvf $SCHED/TARFILES/sched.Linux.{$NEWVER}.tar.gz --gunzip
-mkdir bin/LINUX
-mv bin/* bin/LINUX
-
-#  Later copy in the SUN and MacOSX versions of the binaries with
-#  the sun version in /bin for historical reasons.  The analysts might
-#  get tripped up if I do anything diffent
 
 
 
@@ -182,37 +153,44 @@ cd ~
 chmod u+w $WEBDIR/sched_{$NEWVER}/sched/catalogs/*
 /bin/rm -r $WEBDIR/sched_{$NEWVER}
 mkdir $WEBDIR/sched_$NEWVER
+cd $WEBDIR/sched_$NEWVER
+
+#  Check you are where you want to be
+
+pwd
 
 #  Copy the manual, catalogs, examples, and setups to the web directory.
+#  First need to delete the symlinks in left in the doc/sched area.
 
-cd $SCHED
-cp -r doc/sched $WEBDIR/sched_{$NEWVER}
-/bin/rm $WEBDIR/sched_{$NEWVER}/sched/catalogs
-/bin/rm $WEBDIR/sched_{$NEWVER}/sched/examples
-/bin/rm $WEBDIR/sched_{$NEWVER}/sched/setups
-mkdir $WEBDIR/sched_{$NEWVER}/sched/catalogs
-cp catalogs/sources.vlba  $WEBDIR/sched_{$NEWVER}/sched/catalogs
-cp catalogs/freq.dat      $WEBDIR/sched_{$NEWVER}/sched/catalogs
-cp catalogs/stations.dat  $WEBDIR/sched_{$NEWVER}/sched/catalogs
-cp catalogs/locations.dat $WEBDIR/sched_{$NEWVER}/sched/catalogs
-cp catalogs/peak.cmd      $WEBDIR/sched_{$NEWVER}/sched/catalogs
-cp catalogs/linefreqs.dat $WEBDIR/sched_{$NEWVER}/sched/catalogs
-mkdir $WEBDIR/sched_{$NEWVER}/sched/examples
-cp examples/*.key $WEBDIR/sched_{$NEWVER}/sched/examples
-cp examples/*.com $WEBDIR/sched_{$NEWVER}/sched/examples
-cp examples/*.set $WEBDIR/sched_{$NEWVER}/sched/examples
-mkdir $WEBDIR/sched_{$NEWVER}/sched/setups
-cp setups/*.set  $WEBDIR/sched_{$NEWVER}/sched/setups
+cp -r $SCHED/doc/sched .
+/bin/rm sched/catalogs
+/bin/rm sched/examples
+/bin/rm sched/setups
+mkdir sched/catalogs
+cp $SCHED/catalogs/sources.vlba  sched/catalogs
+cp $SCHED/catalogs/freq.dat      sched/catalogs
+cp $SCHED/catalogs/stations.dat  sched/catalogs
+cp $SCHED/catalogs/locations.dat sched/catalogs
+cp $SCHED/catalogs/peak.cmd      sched/catalogs
+cp $SCHED/catalogs/linefreqs.dat sched/catalogs
+mkdir sched/examples
+cp $SCHED/examples/*.key sched/examples
+cp $SCHED/examples/*.com sched/examples
+cp $SCHED/examples/*.set sched/examples
+mkdir sched/setups
+cp $SCHED/setups/*.set  sched/setups
 
-# Point to this new version.  Consider cleaning up old ones.
+# Remake the sched link at the top level web directory to point to 
+# the new version.  Consider cleaning out some old versions.
 
 cd $WEBDIR
 /bin/rm sched
 ln -s sched_{$NEWVER} sched
 cd $SCHED
 
+
+
 #  Copy to ftp  (FTP=/var/spool/ftp/pub)
-#  No longer update skedconv or uptime.  In fact get rid of any seen.
 
 cd $SCHED
 /bin/rm $FTP/sched/README
@@ -220,107 +198,13 @@ cd $SCHED
 /bin/rm $FTP/staff/cwalker/Sched/*{$NEWVER}.tar.gz
 
 cp $SCHED/README.ftp $FTP/sched/README
-cp $SCHED/TARFILES/*{$NEWVER}.tar.gz     $FTP/sched
-cp $FTP/sched/rcwsrc.{$NEWVER}.tar.gz $FTP/staff/cwalker/Sched
-
-
+cp $TARDIR/sched_{$NEWVER}.tar.gz     $FTP/sched
 
 
 Other architectures:
 
-There will need to be executables for 32 and 64 bit machines in
-the release directory.  See bin/LINUX and bin/LINUX64
-The 32 bit binary from a RHEL5.2 machine seems to work in the older
-RHEL so hopefully we don't need a third.
+All that is needed was done back at the compilation step.
 
-
-#  Install the release in /users/cwalker/sched_sun
-#  and compile using one of the sun machines.  Then distribute
-
-cd ~/files
-mkdir sched_sun_{$NEWVER}
-cd sched_sun_{$NEWVER}
-tar -xvf $SCHED/TARFILES/sched.aux.{$NEWVER}.tar.gz --gunzip
-tar -xvf $SCHED/TARFILES/sched.src.{$NEWVER}.tar.gz --gunzip
-tar -xvf $SCHED/TARFILES/sched.stdout.{$NEWVER}.tar.gz --gunzip
-
-#  Log into a Solaris box and run:
-
-slogin paso  (or shire, which might be faster)
-
-setenv NEWVER 6.05
-setenv SCHED ~/files/sched_sun_{$NEWVER}
-cd ~/files/sched_sun_{$NEWVER}/src
-MakeSun
-cd ../examples
-Verify
-
-#  Check testruns.out, then exit from the Sun.
-
-less testruns.out
-exit
-
-#  Make the binary Sun distribution and put the executable where
-#  it is needed on the Linux distribution.
-#  Keep $SCHED pointing at the Linux version.
-
-cd ~/files/sched_sun_{$NEWVER}
-source ./package2 Sun $NEWVER
-mv TARFILES/sched.Sun.{$NEWVER}.tar.gz $SCHED/TARFILES
-cp $SCHED/TARFILES/sched.Sun.{$NEWVER}.tar.gz $FTP/sched
-cp bin/sched ~/files/sched_{$NEWVER}/bin
-cp bin/schclean ~/files/sched_{$NEWVER}/bin
-
-
-
-#  Install the release on a Mac and compile.  Then distribute.
-  
-cd $SCHED
-scp TARFILES/sched.aux.{$NEWVER}.tar.gz \
-    horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}
-scp TARFILES/sched.src.{$NEWVER}.tar.gz \
-    horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}
-scp TARFILES/sched.stdout.{$NEWVER}.tar.gz \
-    horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}
-
-# Go to horton
-# Note will need to approve deletion of Makefile when running MakeMacOSX.
-# This can be done from pingora if horton is on the net.
-
-slogin horton
-
-setenv NEWVER 6.02
-setenv SCHED /Users/cwalker/code/sched_MacOSX_{$NEWVER}
-cd $SCHED
-tar -xvf sched.aux.{$NEWVER}.tar.gz --gunzip
-tar -xvf sched.src.{$NEWVER}.tar.gz --gunzip
-tar -xvf sched.stdout.{$NEWVER}.tar.gz --gunzip
-cd src
-MakeMacOSX
-cd ../examples
-Verify
-cd ..
-mkdir TARFILES
-mv *.tar.gz TARFILES
-source ./package2 MacOSX $NEWVER
-exit
-
-scp horton:/Users/cwalker/code/sched_MacOSX_{$NEWVER}/TARFILES/sched.MacOSX.{$NEWVER}.tar.gz \
-    TARFILES
-cp TARFILES/sched.MacOSX.{$NEWVER}.tar.gz $FTP/sched
-
-
-#  Activate the new version.
-#  Be sure the webversion link was also changed as per above.
-
-cd /users/cwalker
-/bin/rm sched
-ln -s files/sched_{$NEWVER} sched
-/bin/rm $WEBDIR/sched
-ln -s sched_{$NEWVER} $WEBDIR/sched
-Then distribute the web version.  The easy way is to run
-the /home/eolus/cwalker/backups/rsync_mach_cwalker cron job.
-Then fix the logical for sched in public_html if needed.
 
 
 #  Send the email announcement to:
