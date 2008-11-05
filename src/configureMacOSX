@@ -16,11 +16,11 @@
 cat <<EOF >! makemacosx_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureMacOSX:
 s:#ARCHSED: ARCH = LINUX:
-s:#FCSED: gfortran -Wall -fimplicit-none -fno-backslash:
+s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11:
 s:#PLOT_SRCS_SED: PLOT_SRCS = \$(wildcard Plot/*.f) \$(wildcard PlotNRAO/*.f):
 s:#LPGPLOTSED: LPGPLOT = /sw/lib/pgplot:
-s:#LDPGPLOTSED: LDPGPLOT = -L$(LPGPLOT) -lpgplot -L/sw/lib -lpng -lz -laquaterm -framework Foundation -framework AppKit:
+s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -L/sw/lib -lpng -lz -laquaterm -framework Foundation -framework AppKit:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
@@ -30,3 +30,8 @@ EOF
 
 sed -f makemacosx_sedscript Makefile.master > Makefile
 /bin/rm makemacosx_sedscript
+
+
+#  When running make, you will a variety of benign warnings that can be 
+#  ignored.  The main one concerns character variables being truncated when
+#  a variable of one length is set to equal a variable of another length.

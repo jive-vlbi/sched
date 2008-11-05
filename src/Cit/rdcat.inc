@@ -87,6 +87,7 @@ C     STAOFF  R4     -  Axis offset (m)
 C     STASTL  R4     -  "Settling time" in seconds (time to add to slew)
 C     STAMSU  R4     -  Minimum time to start new scan.
 C     STAMSH  R4     -  Maximum number of slews per hour (for Jodrell).
+C     STATSC  C4     -  Method of Tsys measurement (GAP, CONT).
 C     
 C     Note double precisions are at front of commons to prevent 
 C     word boundary problems.
@@ -134,6 +135,7 @@ C
       CHARACTER         STANAM*8, STACOD*3, STADBN*10, STADBC*4
       CHARACTER         STAFRM*80, STACTL*5, STAMNT*5, STADBA*5
       CHARACTER         STADAR*5, STAREC*6, STADSK*6, STAMD*6
+      CHARACTER         STATSC*4
       REAL              STAHAZ(MHOR), STAHEL(MHOR)
       REAL              STAAX1(6), STAAX2(6)
       REAL              STARA1, STARA2, STAAC1, STAAC2
@@ -161,7 +163,7 @@ C
       COMMON /RDCATC/ SRCVER, SRCNAM, SRCCAL, SRCEQ, SRCRMK, SRCVREF, 
      1                SRCVDEF, STAVER, STANAM, STACOD, STADBN, STADBC, 
      2                STAFRM, STACTL, STAMNT, STADBA, STADAR, STAREC,
-     3                STADSK, STAMD, LOCFILE, DBNAME, DBCODE, 
+     3                STADSK, STAMD, STATSC, LOCFILE, DBNAME, DBCODE, 
      4                DBFRM, DBDBA, DBVER
 C
       COMMON /RDCATN/ SRCPMRA, SRCPMDEC, SRCPARA, SRCRA, SRCDEC, 
