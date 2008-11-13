@@ -24,8 +24,12 @@ C      VERNUM = 6.02    !  Released July 29, 2005.
 C      VERNUM = 6.03    !  Mostly development versions
 C      VERNUM = 6.04    !  Mar. 2006
 C      VERNUM = 6.05    !  June 2006
-      VERNUM = 7.0     !  Development > Dec 2006
-      VERSION = 'Development late 2006'
+C      VERNUM = 7.0     !  Development > Dec 2006
+C
+C      Now even versions are releases, odd versions are development.
+C
+      VERNUM = 8.0      !  Release Nov. 2008
+      VERSION = '2008 November Release'
 C
       RETURN
       END
