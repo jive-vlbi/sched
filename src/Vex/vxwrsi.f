@@ -68,7 +68,19 @@ C
      2        'site_position =', XPOS(ISCAT), 'm', COL, YPOS(ISCAT),
      3        'm', COL, ZPOS(ISCAT), 'm', SEP
 C
-C        No info on site_velocity, zen_atmos or ocean load,
+C        Write out site_velocity (Nov 2008)
+C
+         WRITE( IVEX, '( 5X, A, F8.4, 1X, A6, A1, F8.4, 1X, A6, A1,
+     1        F8.4, 1X, A5, A1 )' )
+     2        'site_velocity =', DXPOS(ISCAT), 'm/yr', COL, 
+     3        DYPOS(ISCAT), 'm/yr', COL, DZPOS(ISCAT), 'm/yr', SEP
+C
+C        Write out site_position_epoch (Nov 2008)
+C
+         WRITE( IVEX, '(5X, A, 1X, I7, A1)' )
+     1        'site_position_epoch =', MJDRATE(ISCAT), SEP
+C
+C        No info on zen_atmos or ocean load,
 C        so next write horizon, fill lines to 80 columns
 C
          IF( NHORIZ(ISCAT) .GT. 1 ) THEN
