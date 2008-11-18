@@ -13,8 +13,9 @@ C     Huib's local variables
 C      
       INTEGER YEAR, DAY, DOY, MONTH, JD
       INTEGER   LEN1, I
-      CHARACTER VEXVAL*32, MNAME*3, DNAME*3, TMPEXP*32
-      DOUBLE PRECISION STOPT
+      CHARACTER VEXVAL*32, MNAME*3, DNAME*3, TMPEXP*32, TFORM*9, TTIME*9
+      DOUBLE PRECISION STOPT,STARTT
+
 C ----------------------------------------------------------------------
 C     
       WRITE( IVEX, '( A, A1 )' ) '$EXPER', SEP
@@ -92,6 +93,19 @@ C
       WRITE( IVEX, '( A1, 4X, A, I5 )' ) COM, 'MJD      : ', 
      1    INT( JD - 2400000.5 )
 
+C
+C     Write experiment nominal start and end time
+C
+      CALL TIMEJ( STARTJ(1), YEAR, DOY, STRARTT )
+      TTIME = TFORM( STARTT, 'T', 0, 2, 2, 'hms' )
+      WRITE( IVEX, '( 5X, A, I4, A, I3,A, A, A)' )  
+     1      'exper_nominal_start=', YEAR,'y',DOY,'d', 
+     2      TTIME, SEP
+      CALL TIMEJ( STOPJ(SCANL), YEAR, DOY, STOPT )
+      TTIME = TFORM( STOPT, 'T', 0, 2, 2, 'hms' )
+      WRITE( IVEX, '( 5X, A, I4, A, I3,A, A, A)' )  
+     1      'exper_nominal_stop=', YEAR,'y',DOY,'d', 
+     2      TTIME, SEP
 C
 C     Include cover letter
 C
