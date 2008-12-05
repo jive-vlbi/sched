@@ -117,7 +117,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2008Nov13-10:16:38"
+ VERSION = "2008Dec05-09:50:17"
 
 !
 !  =====================================================================
@@ -380,6 +380,7 @@
 !
 !  Stations below are maintained by Huib van Langevelde.
 !  Stations below are maintained by Cormac Reynolds from 30Nov00.
+!  Stations below are maintained by Antonis Polatidis+ from Mar08
 !
 !    Do not modify stations.dat directly.  It is a combination of
 !    rcwstat.dat and huibstat.dat and any changes would be lost at the
@@ -416,6 +417,15 @@
 !  070228: PV and PdB now have disk as default medium
 !  070820: Added Darnhall
 !  070822: Removed tape info (RECORDER, NDRIVES, NHEADS) from most stations.
+!  080510: Added new telescope YEBES40M, code YS, Mark5B but listed Mark5A
+!          Moved YEBES Yb to "Stations no longer used" and comment it out
+!  080610: Sh back to 14BBCs
+!  081105: Added MERLIN telescopes from JIVE database 
+!          Kept old info of Defford on "Stations no longer used" TSETTLE=2
+!          Await confirmation from JB people
+!  081105: Comment out NOTO_S2, no S2 in Noto
+!  081105: Added QUASAR stations - Sv Ba Zc
+!  
 !  ------------------------------------------------------------------
 !  *************  WARNING  *******************
 !   SCHED uses the first 4 characters in many places to detect
@@ -428,7 +438,7 @@
     !   Note use "EFLSBERG" for the Mark III/IV system.
     DBNAME = EFLSBERG
     MOUNT=ALTAZ AX1RATE=25 AX2RATE=15 AX1LIM=34,480 AX2LIM=9,89
-    TSETTLE=9  DAR=VLBA  ! RECORDER=VLBA  NDRIVES=2  NHEADS=1 
+    TSETTLE=9  DAR=VLBA  ! RECORDER=VLBA  NDRIVES=2  NHEADS=2 
     NBBC=8 AX1ACC=0.02 AX2ACC=0.02
     DISK=MARK5A MEDIADEF=DISK
     !   Horizon of April 1979, trees in az 230-260 have grown since then..
@@ -461,6 +471,34 @@
     TSETTLE=10 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
     NBBC=8 DISK=MARK5A MEDIADEF=DISK
    /
+ STATION=DEFFORD   STCODE=De  CONTROL=VEX
+!   added by RMC 2008/08/26.
+!   slew rates assumed to be same as Darnhall until we hear from JB folk
+    DBNAME = DEFFORD
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+    TSETTLE=10 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    NBBC=8 DISK=MARK5A MEDIADEF=DISK
+   /
+  STATION=KNOCKIN   STCODE=Kn  CONTROL=VEX
+!   added by RMC 2008/08/26.
+!   knockin = VLA (E-system) dish like darnhall
+    DBNAME = KNOCKIN
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+    TSETTLE=10 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    NBBC=8 DISK=MARK5A MEDIADEF=DISK
+   /
+  STATION=TABLEY    STCODE=Ta  CONTROL=VEX
+!   added by RMC 2008/08/26.
+!   tabley (==pickmere) = VLA (E-system) dish like darnhall
+    DBNAME = TABLEY
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+    TSETTLE=10 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    NBBC=8 DISK=MARK5A MEDIADEF=DISK
+   /
+!
   STATION=SIMEIZ    STCODE=Sm  CONTROL=SN50
 !   huib 12/9/96 used to be called Crimea
     DBNAME = CRIMEA
@@ -552,15 +590,16 @@
     HOR_EL = 8,   7,  6,  9, 6.5,   5,   6,   5,    5, 6.5, 7.5
 ! email update Cassaro April 2003 (CR 1May03)
    / 
-  STATION=NOTO_S2   STCODE=Nt  CONTROL=VEX 
-    DBNAME = NOTO
-    MOUNT=ALTAZ AX1RATE=43 AX2RATE=30 AX1LIM=-87,450 AX2LIM=5,85.0
-    TSETTLE=2 DAR=VLBAG  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=14
-    ! added horizon limits April 2003
-    HOR_AZ = 0,  10, 30, 70, 100, 120, 150, 180, 300, 310, 360
-    HOR_EL = 8,   7,  6,  9, 6.5,   5,   6,   5,    5, 6.5, 7.5
+!  AGP: 20/09/08 No S2 terminal in Noto 
+!  STATION=NOTO_S2   STCODE=Nt  CONTROL=VEX 
+!    DBNAME = NOTO
+!    MOUNT=ALTAZ AX1RATE=43 AX2RATE=30 AX1LIM=-87,450 AX2LIM=5,85.0
+!    TSETTLE=2 DAR=VLBAG  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=14
+!    ! added horizon limits April 2003
+!    HOR_AZ = 0,  10, 30, 70, 100, 120, 150, 180, 300, 310, 360
+!    HOR_EL = 8,   7,  6,  9, 6.5,   5,   6,   5,    5, 6.5, 7.5
 ! email update Cassaro April 2003 (CR 1May03)
-   / 
+!   / 
   STATION=ONSALA60    STCODE=On  CONTROL=VEX 
     DBNAME = ONSALA60
     MOUNT=ALTAZ AX1RATE=144 AX2RATE=60 AX1LIM=270,810 AX2LIM=5,88
@@ -584,7 +623,8 @@
     DBNAME = SESHAN25
     MOUNT=ALTAZ AX1RATE=60 AX2RATE=36 AX1LIM=-78,430 AX2LIM=5,88.5
     TSETTLE=2 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
-    NBBC=8 DISK=MARK5A MEDIADEF=DISK
+    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+! AGP: Jun08 Back to 14 BBCs
    / 
   STATION=SHANG_S2    STCODE=Sh  CONTROL=VEX 
 !   huib 21/10/97 inserted S2 recorder. 23/10 elev limits
@@ -627,23 +667,16 @@
     MOUNT=EQUAT AX1RATE=18 AX2RATE=18 AX1ACC=0.1 AX2ACC=0.1
     AX1LIM=-6.0,6.0 AX2LIM=-38,90
     TSETTLE=10  DAR=MKIV   ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
-    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+    NBBC=14 DISK=MARK5A MEDIADEF=DISK ! Actually Mark5B
    / 
-  STATION=YEBES       STCODE=Yb   CONTROL=VEX
-!   Recorder and NHEADs updated from Pablo Vicente, Feb 2002 (CR 3Apr02)
-    DBNAME = YEBES
-    MOUNT=ALTAZ  AX1LIM=-354,354 AX2LIM=10,89.9 AX1RATE=60 AX2RATE=60
+  STATION=YEBES40M       STCODE=Ys   CONTROL=VEX
+! AGP: May 2008 - New station YEBES40M
+! New Azimuth limits from P.de Vicente   (AGP 31Oct08)
+    DBNAME = YEBES40M
+    MOUNT=ALTAZ  AX1LIM=-60,420 AX2LIM=5,88 AX1RATE=60 AX2RATE=60
     TSETTLE=15 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
-    NBBC=14 DISK=MARK5A MEDIADEF=DISK
-   /
-!
-!   Other stations.
-!
-  STATION=DEFFORD   STCODE=De  CONTROL=SN50  ZALIM=88.0  
-!   Not in correlator data base.
-    ELEV=      41.0   LONG=02:08:35         LAT=52:06:01    
-    TSETTLE=2  DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=1 
-    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+    NBBC=14 DISK=MARK5A MEDIADEF=DISK ! Actually Mark5B
+!   Station has 14 BBCs on VLBA4 rack + VSI-H + Mark5B
    /
   STATION=HART      STCODE=Hh  CONTROL=VEX  ZALIM=82.000 
 ! CR: update from J.Quick (13 Aug 2003)
@@ -661,6 +694,9 @@
     TSETTLE=20  DAR=NONE   RECORDER=S2     NDRIVES=8  NHEADS=1 NBBC=4 
 !   Will have an S2 with a "aussie" DAR, will have FS9
    /   
+!
+!   Other stations.
+!
 !
 !  STATION=USSURISK   STCODE=Us  CONTROL=SNAP
 ! mode USSURIYSK
@@ -695,7 +731,17 @@
 !  Stations no longer in use.  Keep data in case useful some day.
 !  Beware that there are some (eg OV) with the same station codes
 !  as some others in the active list.
-! 
+!
+!  AGP 05112008: Moved here the infor on the YEBES 14m dish STCODE=Yb
+!  so that it is not cunfused with the YEBES40m 
+!  STATION=YEBES       STCODE=Yb   CONTROL=VEX
+!!   Recorder and NHEADs updated from Pablo Vicente, Feb 2002 (CR 3Apr02)
+!    DBNAME = YEBES
+!    MOUNT=ALTAZ  AX1LIM=-354,354 AX2LIM=10,89.9 AX1RATE=60 AX2RATE=60
+!    TSETTLE=15 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+!    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+!   /
+!
 !  STATION=DWINGELO  STCODE=Dw CONTROL=SNAP  ZALIM=85.000 
 !    ELEV= 6364624.00  LONG=-006:23:48.12    LAT= 52:37:39.36  
 !    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
@@ -707,6 +753,16 @@
 !   Changed to S2 by Huib and updated name after e-mail Novikov 20/03/97
 !    TSETTLE=2  DAR=NONE  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=14
 !   / 
+!  AGP 051108: Kept previous information for Defford
+!  The only difference is TSETTLE=2 cf TSETTLE=10 in the entires above
+!  Waiting to hear from JB people
+!  STATION=DEFFORD   STCODE=De  CONTROL=SN50  ZALIM=88.0  
+!   Not in correlator data base.
+!    ELEV=      41.0   LONG=02:08:35         LAT=52:06:01    
+!    TSETTLE=2  DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=1 
+!    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+!   /
+
 
 ! ================================================
 ! The following are mm stations added 15 Nov 2005 
@@ -726,6 +782,32 @@
     MOUNT=ALTAZ AX1RATE=30 AX2RATE=30 AX1LIM=-90,450 AX2LIM=9,89
     TSETTLE=2    DAR=MKIV  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
     NBBC=8 DISK=MARK5A   MEDIADEF=DISK
+   /
+!====================================================
+!The following are QUASAR stations (Russia)
+! Should they go to geodecy stations ?
+! Positions from D. Graham (Sep 2008)
+!====================================================
+!
+   STATION=SVETLOE STCODE=Sv CONTROL=VEX ZALIM=88.0 
+DBNAME=SVETLOE
+     MOUNT=ALTAZ  AX1LIM=278,802 AX2LIM=10,80 AX1RATE=72 AX2RATE=48 AX1ACC=0.05 AX2ACC=0.05
+TSETTLE=5 DAR=MKIV ! RECORDER=VLBA4 NDRIVES=1 NHEADS=2 
+NBBC=14  DISK=MARK5A  MEDIADEF=DISK
+   /
+   STATION=ZELENCHK STCODE=Zc CONTROL=VEX ZALIM=88.0 
+   DBNAME=ZELENCHK
+     MOUNT=ALTAZ  AX1LIM=278,802 AX2LIM=10,80 AX1RATE=72 AX2RATE=48
+     AX1ACC=0.05 AX2ACC=0.05 
+     TSETTLE=5      DAR=VLBA4 ! RECORDER=VLBA4 NDRIVES=1 NHEADS=2 
+     NBBC=14 DISK=MARK5A   MEDIADEF=DISK
+   /
+   STATION=BADARY STCODE=Bd CONTROL=VEX ZALIM=88.0 
+     DBNAME=BADARY
+     MOUNT=ALTAZ  AX1LIM=278,802 AX2LIM=10,80 AX1RATE=72 AX2RATE=48
+     AX1ACC=0.05 AX2ACC=0.05 
+     TSETTLE=5 DAR=VLBA4 ! RECORDER=VLBA4  NDRIVES=1 NHEADS=2 
+     NBBC=14 DISK=MARK5A  MEDIADEF=DISK ! Actually Mark5B
    /
 
 !  
