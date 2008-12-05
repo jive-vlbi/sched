@@ -28,8 +28,8 @@ C      VERNUM = 7.0     !  Development > Dec 2006
 C
 C      Now even versions are releases, odd versions are development.
 C
-      VERNUM = 8.0      !  Release Nov. 2008
-      VERSION = '2008 November Release'
+      VERNUM = 8.0      !  Release Dec. 2008
+      VERSION = '2008 December Release'
 C
       RETURN
       END
