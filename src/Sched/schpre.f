@@ -46,7 +46,10 @@ C
          END IF
 C
 C        First check if we need to deal with proper motions or
-C        paralax.
+C        paralax.  Recall that PMRA and PMDEC are in arcsec/yr
+C        (converted in RDSRC from input mas values),
+C        DRA is in change of time seconds/UT day, and DDEC is in
+C        change of arcseconds/UT day.
 C
          IF( PMRA(ISRC) .NE. 0.D0 .OR.
      1       PMDEC(ISRC) .NE. 0.D0 .OR.
