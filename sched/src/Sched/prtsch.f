@@ -23,7 +23,7 @@ C
       CHARACTER          PRTSRC*12, DIRECT*1, OUTBBC(MCHAN)*9
       CHARACTER          MNAME1*3, MNAME2*3, DNAME1*3, DNAME2*3
       SAVE               ILINE, IPAGE, LASTDY, LNCHL, LFREQ, LBW
-      SAVE               LFOOT
+      SAVE               LFOOT, LKF
 C
 C     Tape information from TPDAT.
 C
