@@ -99,8 +99,8 @@ C
      1                       'STATIONS    t => tape change '
                      LINE2 = '           STOP UT'
                      DO ISTA = ISTA1, ISTA2 
-                        ICH1 = 38 + 5 * ( ISTA - ISTA1 )
-                        ICH2 = ICH1 + 2
+                        ICH1 = 38 + 6 * ( ISTA - ISTA1 )
+                        ICH2 = ICH1 + 12
                         LINE2(ICH1:ICH2) = STCODE(STANUM(ISTA))
                      END DO
 C
@@ -182,8 +182,8 @@ C
 C                    Get the scan data.  
 C
                      DO ISTA = ISTA1, ISTA2
-                        ICH1 = 36 + 5 * ( ISTA - ISTA1 )
-                        ICH2 = ICH1 + 4
+                        ICH1 = 36 + 6 * ( ISTA - ISTA1 )
+                        ICH2 = ICH1 + 5
 C
                         LINE1(ICH1:ICH2) = 
      1                        SUMDAT( SUMITEM(IT1), ISCN, ISTA )
