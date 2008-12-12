@@ -33,36 +33,36 @@ C
 C        Get the desired item.
 C
          IF( ITEM .EQ. 'EL1' ) THEN
-            WRITE( SUMDAT, '( I4, A1 )' ) 
+            WRITE( SUMDAT, '( I5, A1 )' ) 
      1           NINT( EL1(ISCN,ISTA) ), UP1(ISCN,ISTA)
 C
          ELSE IF( ITEM .EQ. 'EL2' ) THEN
-            WRITE( SUMDAT, '( I4, A1 )' ) 
+            WRITE( SUMDAT, '( I5, A1 )' ) 
      1           NINT( EL2(ISCN,ISTA) ), UP2(ISCN,ISTA)
 C
          ELSE IF( ITEM .EQ. 'ELA' ) THEN
-            WRITE( SUMDAT, '( I4, A1 )' ) 
+            WRITE( SUMDAT, '( I5, A1 )' ) 
      1           NINT( ( EL1(ISCN,ISTA) + EL2(ISCN,ISTA) ) / 2 ), 
      2           UPA
 C
          ELSE IF( ITEM .EQ. 'AZ1' ) THEN
-            WRITE( SUMDAT, '( I4, A1 )' ) 
+            WRITE( SUMDAT, '( I5, A1 )' ) 
      1           NINT( AZ1(ISCN,ISTA) ), UP1(ISCN,ISTA)
 C
          ELSE IF( ITEM .EQ. 'AZ2' ) THEN
-            WRITE( SUMDAT, '( I4, A1 )' ) 
+            WRITE( SUMDAT, '( I5, A1 )' ) 
      1           NINT( AZ2(ISCN,ISTA) ), UP2(ISCN,ISTA)
 C
          ELSE IF( ITEM .EQ. 'AZA' ) THEN
-            WRITE( SUMDAT, '( I4, A1 )' ) 
+            WRITE( SUMDAT, '( I5, A1 )' ) 
      1           NINT( ( AZ1(ISCN,ISTA) + AZ2(ISCN,ISTA) ) / 2 ), 
      2           UPA
 C
          ELSE IF( ITEM .EQ. 'PA1' ) THEN
-            WRITE( SUMDAT, '( I4, 1X )' ) NINT( PA1(ISCN,ISTA) )
+            WRITE( SUMDAT, '( I5, 1X )' ) NINT( PA1(ISCN,ISTA) )
 C
          ELSE IF( ITEM .EQ. 'PA2' ) THEN
-            WRITE( SUMDAT, '( I4, 1X )' ) NINT( PA2(ISCN,ISTA) )
+            WRITE( SUMDAT, '( I5, 1X )' ) NINT( PA2(ISCN,ISTA) )
 C
          ELSE IF( ITEM .EQ. 'HA1' ) THEN
             WRITE( SUMDAT, '( F5.1 )' ) HA1(ISCN,ISTA) 
@@ -92,7 +92,7 @@ C
      1                    TPDRIV, DIRECT, TPINDX
                ELSE IF( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) THEN
                   IGB = NINT( GBYTES(ISCN,ISTA) )
-                  WRITE( SUMDAT, '( I4 )' ) IGB
+                  WRITE( SUMDAT, '( I5 )' ) IGB
                END IF
 C
             ELSE IF( ITEM .EQ. 'TAPE2' ) THEN
@@ -114,7 +114,7 @@ C
                   SUMDAT = 'Stop '
             ELSE IF( USEDISK(ISTA) ) THEN
                IGB = NINT( GBYTES(ISCN,ISTA) )
-               WRITE( SUMDAT, '( I4 )' ) IGB
+               WRITE( SUMDAT, '( I5 )' ) IGB
             ELSE IF( USETAPE(ISTA) ) THEN
                SUMDAT = 'Tape'
             ELSE
