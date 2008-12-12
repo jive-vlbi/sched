@@ -92,13 +92,15 @@ C
      4    SEP, 'ref_coord_frame = ', 'Date', SEP
 C
 C     proper motions, not clear what units and if epoch is needed?
-C     
+C     Corrected 12/12/2008 DRA-DDEC is in (arc)sec per day      
+C     and should be mlutiplied by 365.25 to give 'per year'; 
+C     not divided 
       IF( DRA(ISRC) .NE. 0.0 .OR. 
      1    DDEC(ISRC) .NE. 0.0  ) THEN
-         RARATE = 15 * DRA(ISRC) / 365.25
-         DECRAT = DDEC(ISRC) /365.25
-         WRITE( IVEX, '( 5X, A, G7.2, 1X, A, A1, 
-     1       1X, A, G7.2, 1X, A, A1 )' ) 'ra_rate = ', RARATE,
+         RARATE = 15 * DRA(ISRC) * 365.25
+         DECRAT = DDEC(ISRC) * 365.25
+         WRITE( IVEX, '( 5X, A, G8.2, 1X, A, A1, 
+     1       1X, A, G8.2, 1X, A, A1 )' ) 'ra_rate = ', RARATE,
      2       'asec/yr', SEP, 'dec_rate = ', DECRAT,
      3       'asec/yr', SEP
       ENDIF
