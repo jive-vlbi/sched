@@ -14,7 +14,7 @@ C
       INTEGER   LEN1
       INTEGER   I
       REAL      RARATE, DECRAT
-      CHARACTER TFORM*16, STRRA*16, STRDEC*16, CH1*1
+      CHARACTER TFORM*17, STRRA*17, STRDEC*17, CH1*1
 
       WRITE( IVEX, '( 5X, A, A, A1 )' )
      1    'source_name = ', 
@@ -54,11 +54,13 @@ C
 C
 C        Print the used coordinates, put others in comments,
 C        first J2000
+C        Dec. 12, 2008  RCW - changed to leave J2000 coordinate
+C        uncommented.
 C
-      STRRA = TFORM( RA2000(ISRC), 'T', 0, 2, 9, 'hms' ) 
-      STRDEC = TFORM( D2000(ISRC),  ' ', 1, 2, 8,  'd''"' )
-      CH1 = '*'
-      IF( C2000(ISRC) .NE. ' ' ) CH1 = ' '
+      STRRA = TFORM( RA2000(ISRC), 'T', 0, 2, 10, 'hms' ) 
+      STRDEC = TFORM( D2000(ISRC),  ' ', 1, 2, 9,  'd''"' )
+      CH1 = ' '
+C      IF( C2000(ISRC) .NE. ' ' ) CH1 = ' '
       WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
      1    A, A, A1 )' )
      2    CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
@@ -68,10 +70,10 @@ C
 C
 C        next 1950....
 C
-      STRRA = TFORM( RA1950(ISRC), 'T', 0, 2, 9, 'hms' ) 
-      STRDEC = TFORM( D1950(ISRC),  ' ', 1, 2, 8, 'd''"' )
+      STRRA = TFORM( RA1950(ISRC), 'T', 0, 2, 10, 'hms' ) 
+      STRDEC = TFORM( D1950(ISRC),  ' ', 1, 2, 9, 'd''"' )
       CH1 = '*'
-      IF( C1950(ISRC) .NE. ' ' ) CH1 = ' '
+C       IF( C1950(ISRC) .NE. ' ' ) CH1 = ' '
       WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
      1    A, A, A1 )' )
      2    CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
@@ -80,8 +82,8 @@ C
 C
 C           and last coordinates of DATE
 C
-      STRRA = TFORM( RAP(ISRC), 'T', 0, 2, 9, 'hms' ) 
-      STRDEC = TFORM( DECP(ISRC),  ' ', 1, 2, 8, 'd''"' )
+      STRRA = TFORM( RAP(ISRC), 'T', 0, 2, 10, 'hms' ) 
+      STRDEC = TFORM( DECP(ISRC),  ' ', 1, 2, 9, 'd''"' )
       CH1 = '*'
       IF( CDATE(ISRC) .NE. ' ' ) 
      1    CALL ERRLOG('VXWRSU: coordinates of date not supported')
@@ -91,18 +93,70 @@ C
      3    SEP, 'dec = ', STRDEC(1:LEN1(STRDEC)),
      4    SEP, 'ref_coord_frame = ', 'Date', SEP
 C
-C     proper motions, not clear what units and if epoch is needed?
-C     Corrected 12/12/2008 DRA-DDEC is in (arc)sec per day      
-C     and should be mlutiplied by 365.25 to give 'per year'; 
-C     not divided 
-      IF( DRA(ISRC) .NE. 0.0 .OR. 
-     1    DDEC(ISRC) .NE. 0.0  ) THEN
-         RARATE = 15 * DRA(ISRC) * 365.25
-         DECRAT = DDEC(ISRC) * 365.25
-         WRITE( IVEX, '( 5X, A, G8.2, 1X, A, A1, 
-     1       1X, A, G8.2, 1X, A, A1 )' ) 'ra_rate = ', RARATE,
-     2       'asec/yr', SEP, 'dec_rate = ', DECRAT,
-     3       'asec/yr', SEP
+C     Worked on this Dec. 13, 2008.  RCW
+C     SCHED shifts the positions of sources subject to proper motion
+C     to close to the time of the observation (default is stop time 
+C     of the first scan).  This is because the precision available
+C     at some antennas (eg VLA) for rates is not adequate to 
+C     describe proper motions over years.  But SCHED can also 
+C     handle planetary motions (seconds per day) which are typically
+C     much faster than proper motions (arcsec/yr).  When shifting
+C     a source position to a current epoch, SCHED also puts the
+C     rates into the planetary motion terms even though they 
+C     will typically be small.
+C
+C     DRA and DDEC are the planetary motions.  The units are s/day 
+C     and arcsec/dsy (coordinate change per day).  I would prefer
+C     to use these units, but the Vex definition seem to want
+C     rates more apropriate for proper motion - arcsec/yr.  I
+C     fear users may also only update the coordinate once rather
+C     than tracking the position.
+C
+C     Thinking about this, I don't want do activate it until we
+C     have a better understanding all around about what should
+C     be done.  Don't panic for values too low to matter (like
+C     actual stellar proper motions), but, for now, refuse to
+C     deal with things moving fast enough to go more than 10
+C     arcsec in a day, and warn about correlation if it is 
+C     going more than 0.1 mas/day.
+C     
+      IF( DRA(ISRC) .GE. 0.0001/15.0 .OR. 
+     1    DDEC(ISRC) .GE. 0.0001  ) THEN
+         CALL WLOG( 1, '++++ VXSUDT: WARNING Planetary motion'//
+     1      ' over 0.01 mas/day used.' )
+         CALL WLOG( 1, '             VEX file does not describe it.' )
+         CALL WLOG( 1, '             Do not use for correlation.' )
+         IF( DRA(ISRC) .GE. 10.0/15.0 .OR. 
+     1       DDEC(ISRC) .GE. 10.0  ) THEN
+            CALL WLOG( 1, 
+     1          '++++ VXSUDT: Planetary motion over 10 arcsec/day'//
+     2          ' specified for source ' )
+            CALL WLOG( 1, 
+     1          '             ' // 
+     2          SOURCE(INAME,ISRC)(1:LEN1(SOURCE(INAME,ISRC))) )
+            CALL WLOG( 1, 
+     1          '             Planetary motion is not implemented' //
+     2          ' in VEX output, but this is too large for pointing')
+            CALL WLOG( 1,
+     1          '             for more than a short time.' )
+            CALL WLOG( 1,
+     1          '             Be sure to update position adequately' //
+     2          ' often.' )
+         END IF
+C
+C         The following is what was there after the last update.
+C         It has a few problems.  DRA is a change of coordinate
+C         value per day.  To get to arcsec, it would need to be
+C         divided by cos(dec) in addition to the multiply by 15
+C         to get from time to arc units.  Also the epoch is 
+C         required to do anything useful with the rates.
+C
+C         RARATE = 15 * DRA(ISRC) * 365.25
+C         DECRAT = DDEC(ISRC) * 365.25
+C         WRITE( IVEX, '( 5X, A, G7.2, 1X, A, A1, 
+C     1       1X, A, G7.2, 1X, A, A1 )' ) 'ra_rate = ', RARATE,
+C     2       'asec/yr', SEP, 'dec_rate = ', DECRAT,
+C     3       'asec/yr', SEP
       ENDIF
 C
 C     and vlsr when needed, not actually used, but others may need it

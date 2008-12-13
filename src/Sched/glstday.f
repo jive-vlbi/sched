@@ -12,6 +12,8 @@ C
       INTEGER            YEAR, DAY, RDAY, SIDDAY, ISCN, ERR
       DOUBLE PRECISION   TIME, RJDAY, LSTMID, LSTDAY
 C  --------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 0, 'GLSTDAY starting' )
+C
       IF( DAY .LE. 366 ) THEN
 C
 C        Deal with a UT day.

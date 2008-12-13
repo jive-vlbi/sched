@@ -63,15 +63,15 @@ C
 C
 C        x,y,z next:
 C
-         WRITE( IVEX, '( 5X, A, F12.3, 1X, A, A1, F12.3, 1X, A, A1,
-     1        F12.3, 1X, A, A1 )' )
+         WRITE( IVEX, '( 5X, A, F14.5, 1X, A, A1, F14.5, 1X, A, A1,
+     1        F14.5, 1X, A, A1 )' )
      2        'site_position =', XPOS(ISCAT), 'm', COL, YPOS(ISCAT),
      3        'm', COL, ZPOS(ISCAT), 'm', SEP
 C
 C        Write out site_velocity (Nov 2008)
 C
-         WRITE( IVEX, '( 5X, A, F8.4, 1X, A6, A1, F8.4, 1X, A6, A1,
-     1        F8.4, 1X, A5, A1 )' )
+         WRITE( IVEX, '( 5X, A, F10.6, 1X, A6, A1, F10.6, 1X, A6, A1,
+     1        F10.6, 1X, A5, A1 )' )
      2        'site_velocity =', DXPOS(ISCAT), 'm/yr', COL, 
      3        DYPOS(ISCAT), 'm/yr', COL, DZPOS(ISCAT), 'm/yr', SEP
 C

@@ -36,6 +36,14 @@ C
      2      '           Adjusted positions ',
      3      '      X       Y       Z  ', 
      4      '   MJD0        X            Y            Z '
+C
+C     Not using the real value of 365.24... here because 365.25 is 
+C     the number used when deriving the rates in SOLVE according 
+C     to John Gipson of GSFC in email on Dec. 11, 2008.  That 
+C     number is based on the defined value of 36525 for the 
+C     Julian century that is the time unit for many astronomical 
+C     calculations.
+C
       YEARS = ( MJD - MJDRATE(ISCAT) ) / 365.25D0
       DO ISTA = 1, NSTA
           ISCAT = STANUM(ISTA)

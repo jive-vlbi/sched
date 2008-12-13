@@ -15,6 +15,8 @@ C
       CHARACTER         TFORM*8, CSTART*8, CSTOP*8
       DOUBLE PRECISION  START, STOP
 C -------------------------------------------------------------------      
+      IF( DEBUG ) CALL WLOG( 0, 'SCANID starting' )
+C
 C     Get the scan times.
 C
       CALL TIMEJ( STARTJ(ISCN), YEAR, DAY1, START )

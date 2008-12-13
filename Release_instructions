@@ -1,47 +1,58 @@
+NOT DONE
+
 Instructions for making a release of SCHED
 
-Before a release:
+==================  Before a release:  ===========================
 
-1.  Get the latest versions of the Vex and plot code from 
+    Get the latest versions of the Vex and plot code from 
     Antonios and Franco (and maybe Cormac)
 
-2.  Make sure VERSION and VERNUM in versched.f are up to date.
+    Make sure VERSION and VERNUM in versched.f are up to date.
     Make sure the version on the manual first page are current.
+
+    Make sure sched_work is synced with the svn repository.
+
+    Make sure that the leap seconds in $SCHED/src/Sla/dat.f and
+    in $PLANET_DATA/naif0007.tls (or equivalent) are up to date.
+
+==================  Set environment variables  ====================
 
     Set the NEWVER in the window where this work is being done so
     that script segments below can be used with a cut-and-paste
     Also check a couple of places below (other machines) where the
     version number is also needed.
 
+
 setenv NEWVER 8.0
-setenv DIST /users/cwalker/files/sched_{$NEWVER}
-setenv SCHTEST /users/cwalker/files/sched_test
 setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
 
-3.  Compile and link SCHED for each target architecture.
+==================  Compile  ======================================
+
+    Compile and link SCHED for each target architecture.
+    Run Verify after each compile to make sure it works.
     Architectures are (with local usable machines):
-      LINUX     32 bit Intel linux machine without satellite tracking. (falcon)
+      LINUX     32 bit Intel linux machine without satellite tracking. (dave)
       LINUX64   64 bit Intel linux machine without satellite tracking. (noatak)
       LINUX64SPICE  Like LINUX64 but with satellite tracking (noatak)
       OSXPPC    PowerPC Mac. (horton)
       SUN       Sun Solaris machine  (shire)
-    Go to sched_work while logged into a machine of the right type.
-      invoke the appropriate configure file
-      run make
-      move the binary to the right subdirectory in bin.
 
-4.  Update the manual and the web version:
+    Go to sched_work/src while logged into a machine of the right type.
+      Invoke the appropriate configure file
+      Run make clean   (gmake clean on the Sun)
+      Run make         (gmake on the Sun)
+      Move the binary to the right subdirectory in bin.
 
-5.  Write a release note.  This will be mainly a link to the manual
+=================  Document the release  ===========================
+
+    Write a release note.  This will be mainly a link to the manual
     update section.
 
-6.  Check the README and README.ftp files in $SCHED.
+    Check the README and README.ftp files in $SCHED.
 
+=================  Manual  =========================================
 
-
-Prepare the manual:
-
-1.  Update the examples embedded in the manual.  You can use the 
+    Update the examples embedded in the manual.  You can use the 
     following lines as a script.
     inserttex is in $SCHED/RELATED_CODE/INSERTTEX if it is not in path.
 
@@ -52,136 +63,118 @@ inserttex
 sched.tex.tmp
 sched.tex
  
-2.  Process the manual.  latex will probably need to be run up to
+    Process the manual.  latex will probably need to be run up to
     3 times to get all the links right.
     The local icons switch keeps users from having to go to
     NRAO for the up etc buttons.
     The -link option controls how deep the automatic contents pages
     go at each level.  Without it, the contents on the top level
-    page are long enought to frighten off users.
+    page are long enough to frighten off users.
 
 latex sched.tex
 latex2html -local_icons -link 2 sched.tex
 
+=================  Setup files and catalogs  ======================
 
-
-Update the setup files:
+    Update the setup files from the master:
 
 cd $SCHED/setups
 makesetup
 
-
-
-Update the catalogs from the masters.
-Update updates the stations, freq, and messages files for which
-the masters are in subdirectories.
+    Update updates the stations, freq, and messages files for which
+    the masters are in subdirectories.
 
 cd $SCHED/catalogs
 Update
 
-Hand update source and locations files if there has been an
-update to the correlator data base.  Update the VERSIONs in 
-those catalogs.
+    Hand update source and locations files if there has been an
+    update to the correlator data base.  Update the VERSIONs in 
+    those catalogs.
 
+=================  Examples  ======================================
 
-
-Update the examples and clean up the area.
+   Update the examples, run Verify, and clean up the area.
    Check that testruns.out shows a clean comparison after Verify.
+   Do this for all architectures.  Occasionally a problem only shows
+   up on one.
 
 cd $SCHED/examples
 Verify
 Newstd
 schclean "*"
 
+=================  Test plotting  =================================
 
-
-Test the plot functions on egplan.key.  Verify does not make plots.
+    Test the plot functions on egplan.key.  Verify does not make plots.
     Do this at some point on a different machine (like a Sun).
     For 2002Jul02, there was a bug in plotxy and plotuv that 
     only showed up on a Sun.
 
+=================  Make the release version =======================
 
-
-Make the release directory and tar file.
-Run package3 with the version number.  That should do all of the above.
-First it runs rsync to the release, creating it if it is not already 
-there.  Then it tar the whole thing.  The tar file ends up in $TARDIR
+    Make the release directory and tar file.
+    Run package3 with the version number.  That should do all of the above.
+    First it runs rsync to the release, creating it if it is not already 
+    there.  Then it tar the whole thing.  The tar file ends up in $TARDIR
 
 source ./package3 {NEWVER}
 
+=================  Test the release  ==============================
 
+    This will not use the spice stuff so it will not be the internal release.
+    Clean out sched_temp first if needed.
+    Unpack the source distribution into /users/cwalker/sched_temp and
+    test the compilation without the satellite stuff
+    Use the makefile that does not use the spice package (run configureLinux)
+    Check testruns.out at the end.
+    This is best done in a sacrificial window so the changed environment
+    variables don't haunt you later.
 
-Test the release.
-
-   This will not use the spice stuff so it will not be the internal release.
-   Unpack the source distribution into /users/cwalker/sched_test and
-   test the compilation without the satellite stuff (clean out 
-   sched_test first if needed).
-   Use the makefile that does not use the spice package
-   Check testruns.out at the end.
-
-mkdir $SCHTEST
+setenv SCHTEST /users/cwalker/files/sched_temp
+setenv SCHED $SCHTEST
 cd $SCHTEST
-# ----  If the directory existed:
 chmod u+w $SCHTEST/catalogs/*
 /bin/rm -r *
-# ----
 tar -xvf $TARDIR/sched.{$NEWVER}.tar.gz --gunzip
 cd src
 configureLinux
 make
 cd ../examples
-setenv SCHEDSAVE $SCHED
-setenv SCHED $SCHTEST
 Verify
-setenv SCHED $SCHEDSAVE
 
+     Kill the window to dump the unwanted $SCHED etc.
 
+==================  Put the documentation on the web  =============
 
-#  Copy documentation to the web server master files on noatak.
-#  My cron jobs will move them to the main web server or run 
-#  /home/eolus/cwalker/backups/rsync_mach_cwalker afterwards.
-#  Careful with the big delete (rm) below (that's why the cd ~ first)
-#  The initial removal of the catalogs etc directories is because the
-#  cp -r copied too much into those places.
+    Copy documentation to the web server master files on noatak.
+    My cron jobs will move them to the main web server or run 
+    /users/cwalker/bin/backup_noatak afterwards.
+    Careful with the big delete (rm) below (that's why the cd ~ first)
+    The initial removal of the catalogs etc directories is because the
+    cp -r copied too much into those places.
+    
+    Create the release area, then copy the html documentation without
+    the symlinks to the catalogs etc.  Then copy the catalogs etc.
+    Some catalog files are write protected.
+    The chmod and /bin/rm steps are only needed if getting rid of an
+    old attempt.
 
 setenv WEBDIR /home/noatak/cwalker/webnrao
-
-#  Clean out any previous attempts and make the directory.
-
 cd ~
-chmod u+w $WEBDIR/sched_{$NEWVER}/sched/catalogs/*
+chmod -R u+w $WEBDIR/sched_{$NEWVER}/sched/catalogs/*
 /bin/rm -r $WEBDIR/sched_{$NEWVER}
 mkdir $WEBDIR/sched_$NEWVER
-cd $WEBDIR/sched_$NEWVER
+rsync -au --exclude "catalogs"  --exclude "examples" \
+          --exclude "setups" --exclude ".svn" \
+         $SCHED/doc/sched $WEBDIR/sched_$NEWVER
+cd $SCHED
+tar cf - catalogs/sources.vlba  catalogs/freq.dat  catalogs/stations.dat \
+         catalogs/locations.dat catalogs/peak.cmd  catalogs/linefreqs.dat \
+         examples/*.key         examples/*.com     examples/*.set \
+         setups/*.set    | (cd $WEBDIR/sched_$NEWVER/sched; tar xfp -)
 
-#  Check you are where you want to be
-
-pwd
-
-#  Copy the manual, catalogs, examples, and setups to the web directory.
-#  First need to delete the symlinks in left in the doc/sched area.
-
-cp -r $SCHED/doc/sched .
-/bin/rm sched/catalogs
-/bin/rm sched/examples
-/bin/rm sched/setups
-mkdir sched/catalogs
-cp $SCHED/catalogs/sources.vlba  sched/catalogs
-cp $SCHED/catalogs/freq.dat      sched/catalogs
-cp $SCHED/catalogs/stations.dat  sched/catalogs
-cp $SCHED/catalogs/locations.dat sched/catalogs
-cp $SCHED/catalogs/peak.cmd      sched/catalogs
-cp $SCHED/catalogs/linefreqs.dat sched/catalogs
-mkdir sched/examples
-cp $SCHED/examples/*.key sched/examples
-cp $SCHED/examples/*.com sched/examples
-cp $SCHED/examples/*.set sched/examples
-mkdir sched/setups
-cp $SCHED/setups/*.set  sched/setups
-
-# Remake the sched link at the top level web directory to point to 
-# the new version.  Consider cleaning out some old versions.
+    When actually doing the release, update the link from generic sched 
+    to the version directory.
 
 cd $WEBDIR
 /bin/rm sched
@@ -189,26 +182,33 @@ ln -s sched_{$NEWVER} sched
 cd $SCHED
 
 
+===================  Put the release on the ftp site  ===============
 
 #  Copy to ftp  (FTP=/var/spool/ftp/pub)
 
 cd $SCHED
+cd ../sched_{$NEWVER}/
 /bin/rm $FTP/sched/README
-/bin/rm $FTP/sched/*{$NEWVER}.tar.gz
+/bin/rm $FTP/sched_{$NEWVER}/*{$NEWVER}.tar.gz
 /bin/rm $FTP/staff/cwalker/Sched/*{$NEWVER}.tar.gz
 
+mkdir $FTP/sched/sched_{$NEWVER}
+mkdir $FTP/sched/sched_{$NEWVER}/binaries
 cp $SCHED/README.ftp $FTP/sched/README
-cp $TARDIR/sched_{$NEWVER}.tar.gz     $FTP/sched
+cp $TARDIR/sched.{$NEWVER}.tar.gz    $FTP/sched/sched_{$NEWVER}/
+rsync -auv bin/* $FTP/sched/sched_{$NEWVER}/binaries/
 
+    During testing:
+cd $FTP/sched
+mv sched_{$NEWVER} sched_{$NEWVER}_test
+    Put it back when the release happens.
 
-Other architectures:
-
-All that is needed was done back at the compilation step.
-
-
+==================  Announce the release ===========================
 
 #  Send the email announcement to:
 #  vlbi@nrao.edu,scistaff,analysts,pperley,vlbaops.
+
+
 
 #  I think that is all.  It's still too much.
 

@@ -24,9 +24,15 @@ C
       INTEGER           SIDDAY
       DOUBLE PRECISION  TU, S2R, GMSTD
 C --------------------------------------------------------------------
+C      call wlog( 0, 'sidtim starting' )
+C
       S2R = TWOPI / 86400.D0
 C     
 C     Julian centuries from fundamental epoch J2000 to this UT
+C     Note that a Julian century is defined as 36525 days rather than
+C     the more realistic 365.242198781.  The Julian century is what
+C     is used in the time axis for these calculations, as I understand
+C     it.
 C     
       TU = (JULTIM-51544.5D0)/36525.D0
 C     

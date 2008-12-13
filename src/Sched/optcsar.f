@@ -54,6 +54,8 @@ C
       DATA      ELCELL  / 15., 70. /
       DATA      AZCELL  / 120., 240. /  
 C ---------------------------------------------------------------------
+      IF( DEBUG ) WRITE(*,*) 'OPTCSAR starting '
+C
       IF( KSCN .EQ. 1 ) THEN
 C
 C        Make sure that there aren't too many input scans.
