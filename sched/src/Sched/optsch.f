@@ -1,3 +1,4 @@
+
       SUBROUTINE OPTSCH( ISCN )
 C
 C     Routine for optimization mode that writes the keyin input for 
@@ -22,6 +23,7 @@ C
       SAVE        LDOPCAL, LNOREC, LASTDAY
       DATA        FIRSTPT / .TRUE. /
 C --------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 0, 'OPTSCH starting' )
 C
 C     Some initializations.
 C

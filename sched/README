@@ -47,7 +47,9 @@ The subdirectories here are:
 
 ./examples/Stdout:  Versions of outputs from the Verify script.  Will 
                 be used as comparison with local output when 
-                Verify is run.
+                Verify is run.  There is considerable disk space here
+                and it is only used when testing SCHED with Verify,
+                so this area can be emptied if space is tight.
 
 ./setups:       Setup files.  Look here for what you need or 
                 something close that can be modified.
@@ -90,36 +92,45 @@ Any subdirectories in all capital letters are associated with code
 management and testing and should be ignored (should not be in the
 export version).
 
-For certain types of computers, full binary releases are provided.
-As of May 2005, those are Linux on Intel, Solaris, and Mac OSX.  If 
-one of those is what you have, your simplest installation scheme is
-to download the binary distribution tar file and unpack it.  You will
-need to set the environment varialble SCHED to the base area where
-you put the sched directory tree.
+For all use of SCHED, you should unpack the tar file.  It has the
+catalogs, examples, standard setups etc.  It also has the code in
+case you need to recompile.
 
-If you need or want to compile SCHED, unpack the src tar file, set
-the SCHED environment variable to the base SCHED directory, and cd
-to the src subdirectory.  There for one of the architectures mentioned
-above, you may be able to use one of the very short scripts, such as
-MakeLinux, that will point to a make file that is appropriate for that
-type of machine as set up at NRAO.  If there are problems, edit the 
-makefile to reflect your local conditions.  The makefile is heavily 
-commented to try to make this easy.  Once you have the makefile ready,
-run gnu make (the default on Linux and Mac), and SCHED should compile 
-and the executable should be put in the $SCHED/bin directory.  For 
-more information, see the manual.
+For certain types of computers, binary executables are provided.  As
+of Dec 2008, those are Linux on Intel, Solaris, and Mac OSX (PPC).
+The Linux comes in 32 (LINUX) and 64 (LINUX64) bit versions and the
+latter comes with (LINUX64SPICE) and without (LINUX64) the code needed
+for spacecraft tracking. If one of those is what you need, your
+simplest installation scheme is to download the binary file and put
+it in the bin area.
+
+In all cases, you will need to set the environment varialble SCHED to
+the base area where you put the sched directory tree.
+
+If you need or want to compile SCHED, unpack the ar file, set the
+SCHED environment variable to the base SCHED directory, and cd to the
+src subdirectory.  There for one of the architectures mentioned above,
+you may be able to use one of the very short scripts, such as
+configureLinux, that construct a Makefile based on Makefile.master (if
+someone can contribute a proper configure script, it would be
+appreciated).  If there are problems, edit the Makefile.master to
+reflect your local conditions.  Makefile.master is heavily commented
+to try to make this easy.  Once you have the makefile ready, run gnu
+make (the default on Linux and Mac - gmake on Sun), and SCHED should
+compile and the executable should be put in the $SCHED/bin directory.
+For more information, see the manual.
 
 SCHED uses the PGPLOT routines from Caltech for plotting.  SCHED
 requires PGPLOT Version 5.2 or later.  These routines are not included
 in this area and will have to be installed from the Caltech
 distribution.  There is exensive documenation, including instructions
 on how to get it, on the World Wide Web at
-http://astro.caltech.edu/~tjp/pgplot.
-Version 5.2 does not explicitly support OSX, but it is not hard to 
-make a working version starting with the bsd options.  There is a
-version 5.3 that Tim Pearson has not released yet as of mid 2005 that 
-does support OSX and that was used to make the SCHED MacOSX binary
-release.
+http://astro.caltech.edu/~tjp/pgplot.  I have found the pgplot is
+often available as a package for apt-get, fink and the like so check
+your repositories.  Note that you may run into trouble with the 32-64
+bit transition and the g77-gfortran transition when trying to use
+pgplot.  Your pgplot and sched should be compiled for the same 
+combination.
 
 If you cannot get pgplot, stubs are available and the comments in
 the Makefile show how to use them instead of the real pgplot.  In
@@ -129,20 +140,20 @@ tasks.  But as of the 6 Mar 98 version, the plotting capabilities
 are quite nice and it is well worth the effort of getting pgplot
 installed.
 
-SCHED also understands how to get positions for the planets, the
-Moon and the Sun.  For this it uses a JPL ephemeris.  It is expected
-that, at least for now, this will only be used for testing and 
-will probably only be used at the AOC.  The emphemeris file is
-not included in the distribution because of its large size.  If you
-need it, contact cwalker@nrao.edu.  Also, the subroutines do not
-isolate machine dependencies so they could cause problems in the
-installation.  If they do, follow the directions in the Makefile
-to use the available stub.  The ephemeris file (input parameter
-EPHFILE) is kept in a separate directory tree.  On unix systems,
-the environment variable {\tt PLANET_DATA} can be used to set the
-directory in which the ephemeris is located.  Note that the emphemeris
-is binary so it cannot be shared between machines that use different
-binary formats, such as Sun workstations and i86 Linux boxes.
+SCHED understands how to get positions for the planets, the Moon and
+the Sun.  For this it uses a JPL ephemeris.  It is expected that, at
+least for now, this will only be used for testing and will probably
+only be used at the AOC.  The emphemeris file is not included in the
+distribution because of its large size.  If you need it, contact
+cwalker@nrao.edu.  Also, the subroutines do not isolate machine
+dependencies so they could cause problems in the installation.  If
+they do, follow the directions in the Makefile to use the available
+stub.  The ephemeris file (input parameter EPHFILE) is kept in a
+separate directory tree.  On unix systems, the environment variable
+{\tt PLANET_DATA} can be used to set the directory in which the
+ephemeris is located.  Note that the emphemeris is binary so it cannot
+be shared between machines that use different binary formats, such as
+Sun workstations and i86 Linux boxes.
 
 SCHED can now deal with satellites via SPICE files.  This is meant
 for tracking deep space missions, not near Earth satellites.  Again
@@ -173,9 +184,10 @@ SCHED has been tested on:
 Recently tested at NRAO (Apr. 2005)
   Intel PC with LINUX using g77  (current development environment)
   SUN Sparc stations under Solaris  (actively supported at the AOC)
-  Mac OS X v10.3 with g77 (First on a Mac iBook G4, Dec 2003).
+  Mac OS X v10.3 with g77 on PPC (First on a Mac iBook G4, Dec 2003).
+  Mac OS X v10.5 with gfortran on PPC (Powerbook)
 
-Tested in last few years:
+Tested not too many years ago:
   Intel PC with LINUX using fort77 (f2c and gcc).
   DEC Alpha
   HP

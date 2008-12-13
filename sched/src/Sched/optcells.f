@@ -67,6 +67,7 @@ C
       DATA      ELCELL  / 15., 70. /
       DATA      AZCELL  / 120., 240. /  
 C ---------------------------------------------------------------------
+      IF( DEBUG ) WRITE(*,*) 'Starting OPTCELLS'
       DONE = .FALSE.
       KEEP = .TRUE.
       ADJUST = .TRUE.

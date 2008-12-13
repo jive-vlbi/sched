@@ -116,8 +116,8 @@ C           a day.  This is no problem for pointing, but
 C           to be pedantic, here we go.
 C
             DRA(ISRC) = DRA(ISRC) + PMRA(ISRC)
-     1                 / ( 365.25 * 15.D0 * COS( DECOUT ) )
-            DDEC(ISRC) = DDEC(ISRC) + PMDEC(ISRC) / 365.25
+     1                 / ( 365.25D0 * 15.D0 * COS( DECOUT ) )
+            DDEC(ISRC) = DDEC(ISRC) + PMDEC(ISRC) / 365.25D0
          END IF
 C
 C        Get the missing coordinates.

@@ -23,6 +23,8 @@ C
       PARAMETER         ( TOL = 0.1D0 / 86400.D0 )
       DATA              PRESWARN, SGWARN / .TRUE., .TRUE. /
 C  -------------------------------------------------------------------
+      IF( DEBUG ) WRITE(*,*) 'SETTPS starting'
+C
 C     Initialize.
 C
       DO ISTA = 1, NSTA

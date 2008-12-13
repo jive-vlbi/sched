@@ -2083,13 +2083,14 @@ all other examples have been, or will soon be, switched to disk.
 
 % *****************  Update the EVLBI stuff.
 
-Eventually \schedb will support VLBI over networks.  This can involve
+\schedb supports VLBI over networks.  This can involve
 real time correlation in which case the data are routed
-directly to the Network.  Perhaps more likely for a while is what
+directly to the Network.  An alternative
 might be called ftp VLBI.  In this case, the data are recorded at
 the station, then read back through the Network.  There are a few
-new parameters meant to help control eVLBI observation, but they
-don't yet do much {\tt DATAPATH, GRABTO, GRABTIME, GRABGAP}.
+parameters meant to help control eVLBI observation
+{\tt DATAPATH, GRABTO, GRABTIME, GRABGAP}.  This documentation needs
+to be updated more on how eVLBI is actually controlled.
 
 
 \subsection{\label{SSEC:VLBA}VLBA}
@@ -12309,11 +12310,19 @@ established by adding {\tt setup\_vlba} and {\tt setup\_pgplot} to your
 \item [ftp the tar file:] Use anonymous ftp to ftp.aoc.nrao.edu (user
 "anonymous", password should be your full email address).  {\tt cd} to
 pub/sched.  Tell ftp to do binary file transfers (type {\tt binary}).
-List the tar files present and copy the latest version of {\sl
-sched.<version>.tar.gz} to your {\sl \$SCHED} directory.  As of
-Version 8.0, that tar file contains everything including binaries for
-the common architectures.  It is much larger than the older split tar
-files, but is still smaller than most software updates these days.
+List the tar files and subdirectories present.  The latest version
+will be in a subdirectory with the highest version number.  Go to that
+subdirectory and copy the {\sl sched.<version>.tar.gz} to your {\sl
+\$SCHED} directory.  As of Version 8.0, that tar file contains
+everything except the binaries for the common architectures.  It is
+larger than the older split tar files, but is still smaller than most
+software updates these days.  There will also be a binaries
+subdirectory which has subdirectories for several architectures which
+are obvious from their names ("spice" in the name implies a version
+with satellite tracking enabled, which may only work at the AOC).
+Inside the architecture subdirectory is an executable version of
+sched.  If one of these works for you, you can skip compiling the
+program and just use it.
 
 \item [Unpack the tar file:] To unpack the tar file, type {\tt tar
 -xvf <filename> --gunzip} while in the {\sl \$SCHED} directory.  This
@@ -12333,23 +12342,21 @@ the tar files, they can be established by running the script
 (just type {\tt makelinks} while {\sl \$SCHED/doc} is your
 default directory).
 
-\item [Try the binary for your system:] There are executable binary
-files in subdirectories of the bin directory.  The directory names
-indicate the target architecture.  We are at a time of change in the
-computer world so there are a lot of options, not all of which are
-covered.  Intel and equivalent machines are changing from 32 to 64
-bit.  GNU fortran is switching from g77 (with gcc version 3.x and
-below) to gfortran (with gcc version 4+).  Macs have moved from PPC
-chips to Intel chips.  And some versions of \schedb are set up to do
-satellite tracking with extra software not normally distributed with
-the package.  The architectures covered are what are immediately
-available to the developers.  The subdirectories are LINUX (32 bit
-Intel based Linux using g77), LINUX64 (64 bit Intel based Linux using
-g77), LINUX64SPICE (like LINUX64 but enabled for spacecraft tracking),
-OSXPPC (PPC based Mac using gfortran), and SUN (SUN workstation running
-Solaris using f77).  If one of the binaries works for you, use it.
-If not, you will need to recompile.
-
+\item [Try the binary for your system:] If you downloaded an
+executable file, put it in the {\sl \$SCHED/bin} directory.  Note that
+we are at a time of change in the computer world so there are a lot of
+options, not all of which are covered.  Intel and equivalent machines
+are changing from 32 to 64 bit.  GNU fortran is switching from g77
+(with gcc version 3.x and below) to gfortran (with gcc version 4+).
+Macs have moved from PPC chips to Intel chips.  And some versions of
+\schedb are set up to do satellite tracking with extra software not
+normally distributed with the package.  The architectures covered are
+what are immediately available to the developers.  The subdirectories
+are LINUX (32 bit Intel based Linux using g77), LINUX64 (64 bit Intel
+based Linux using g77), LINUX64SPICE (like LINUX64 but enabled for
+spacecraft tracking), OSXPPC (PPC based Mac using gfortran), and SUN
+(SUN workstation running Solaris using f77).  If one of the binaries
+works for you, use it.  If not, you will need to recompile.
 
 \item [Compiling the program:] If you need to compile \schedb, you
 will need to construct an appropriate Makefile and run make.  There is
@@ -12600,9 +12607,23 @@ section at the time of the release.
 
 \subsection{\label{SSEC:VER_8.0}Version 8.0}
 
-Released in November 2008.
+Released on Dec. 13, 2008.
 
 \begin{itemize}
+
+
+\item  Warnings issued if source motions are significant when writing Vex
+       files.  Vex output does not yet support motions.  Dec. 13, 2008 
+       RCW
+
+\item  Increase digits in the Vex file specification of station positions,
+       station velocities, and axis offsets.  Dec. 12, 2008  RCW.
+
+\item  Increase digits available for items in the summary table.  This
+       was driven by some large disk byte counts.  Dec. 12, 2008  AP and
+       RCW.
+
+\item  Various catalog updates.
 
 \item  Started adding an indicator of when the Tsys measurements are done
        at each station.  This will eventually control whether to give 
@@ -12626,9 +12647,10 @@ Released in November 2008.
        Oct. 25, 2008  RCW.
 
 \item  Update sources.vlba and locations.dat to current correlator values
-       that are based on solution 2008a\_astro from GSFC.  The VLA pad positions
-       were note updated from the ones based on 2005f, but the changes would
-       have been less than the likely errors.  Oct. 8, 2008  RCW.
+       that are based on solution 2008a\_astro from GSFC.  The VLA pad 
+       positions were note updated from the ones based on 2005f, but the 
+       changes would have been less than the likely errors.  
+       Oct. 8, 2008  RCW.
 
 \item  Change SUMITEM defaults to {\tt ELA} (average elevation) and
        {\tt DWELL}  Oct. 2, 2008  RCW.
