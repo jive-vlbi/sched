@@ -57,8 +57,8 @@ C
             CALL ERRLOG( 'SUMDESC:  Cannot use SUMITEM=TAPE1 and ' //
      1           'NOSETUP together. ' )
          END IF
-         SUMDESC = 'Scan end: Tape drive, direction, and head ' //
-     1          'index.  Disk Gbytes.'
+         SUMDESC = 'Disk: Gbytes at scan end.  Tape: Tape drive, ' //
+     1           'direction, and head index.'
 C
       ELSE IF( ITEM .EQ. 'TAPE2' ) THEN
          IF( NOSET ) THEN
@@ -66,17 +66,18 @@ C
      1           'NOSETUP together. ' )
          END IF
          IF( AUTOTAPE ) THEN
-            SUMDESC = 'Headset at scan end and tape footage ' //
+            SUMDESC = 'Tape: Headset at scan end and tape footage ' //
      1           '(thousands) at scan start.'
          ELSE
-            SUMDESC = 'Headset and start tape footage (thousands).' 
+            SUMDESC = 'Tape: Headset and start tape footage ' //
+     1           '(thousands).' 
          END IF
 C
       ELSE IF( ITEM .EQ. 'DISK' .OR. ITEM .EQ. 'DISC' ) THEN
          SUMDESC = 'Disk total GBytes at end of scan.'
 C
       ELSE IF( ITEM .EQ. 'TPSTART' ) THEN
-         SUMDESC = 'Seconds tape starts before scan start time.'
+         SUMDESC = 'Seconds recording starts before scan start time.'
 C
       ELSE IF( ITEM .EQ. 'EARLY' ) THEN
          SUMDESC = 'Seconds antenna is on source before scan start.'

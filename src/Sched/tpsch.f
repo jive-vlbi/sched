@@ -88,6 +88,7 @@ C
       INTEGER          TPCDIR, TPCINDX, TPCHEAD, IPASS, TPCDRIV
       LOGICAL          DOTAPE, DOREW, DOFAST
 C  ---------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 0, 'TPSCH starting ' )
       DOTAPE = .FALSE.
       FIRSTS = LASTISCN(ISTA) .EQ. 0
       IF( DEBUG .AND. FIRSTS ) CALL WLOG( 0, 'TPSCH: Station start: '

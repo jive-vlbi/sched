@@ -14,6 +14,7 @@ C
       DOUBLE PRECISION  JTIME, RAS, DECS, RADDAY, TWOPI
       PARAMETER         (TWOPI=3.141592653589793238D0*2.0D0)
 C --------------------------------------------------------------------
+      write(*,*) 'sunpos: '
 C     Convert TIME to the units wanted by SLA_EARTH
 C
       CALL TIMEJ( JTIME, YEAR, DAY, RADDAY )

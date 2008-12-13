@@ -27,7 +27,8 @@ C
 C
 C     Iterate to the julian time using the equation for sidereal time
 C     from SLA_GMST.  There must be a direct equation but I don't have
-C     it. 
+C     it.  The Julian century of 36525 days exactly is what is wanted
+C     for the time axis, not something closer to reality (36524....)
 C
 100      CONTINUE
          TU = (JULTIM - 51544.5D0) / 36525D0

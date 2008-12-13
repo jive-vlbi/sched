@@ -108,7 +108,7 @@ C
 C
 C           axis offset now available
 C
-         WRITE( IVEX, '( 5X, A, F9.3, 1X, A, A1 )' ) 
+         WRITE( IVEX, '( 5X, A, F10.5, 1X, A, A1 )' ) 
      1       'axis_offset = ',AXOFF(ISCAT),'m', SEP         
 C
 C        no cable wraps etc

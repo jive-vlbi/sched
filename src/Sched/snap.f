@@ -20,6 +20,7 @@ C
       CHARACTER         OUTFRQ(MAXCHN)*9, OUTBW(MAXCHN)*9
       SAVE              LFREQ, LBW
 C  ------------------------------------------------------------------
+      IF( DEBUG ) WRITE(*,*) 'SNAP starting'
 C
 C     Write header for experiment. 
 C
@@ -77,7 +78,7 @@ C
             DECSCH = TFORM( D2000(SRCNUM(ISCN)), ' ', 1, 2, 5, '@@@' )
             EPOCH = ',2000.0'
          ELSE
-            REPOCH = YEAR + DAY/365.25
+            REPOCH = YEAR + DAY/365.25D0
             RASCH = TFORM( RAP(SRCNUM(ISCN)), 'T', 0, 2, 6, '@@@' )
             DECSCH = TFORM( DECP(SRCNUM(ISCN)), ' ', 1, 2, 5, '@@@' )
             WRITE( EPOCH, '('','',F7.2)' ) REPOCH

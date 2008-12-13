@@ -568,7 +568,7 @@ C     Print warning about frequency of Tsys.
       IF( TSYSMESS ) THEN
          CALL WLOG( 1,'VXSCH: Tsys calibration at MkIV stations is '//
      1       'taken during every gap in recording, ')
-         CALL WLOG( 1, 'but these ' //
+         CALL WLOG( 1,'       but these ' //
      1       'appear over 15 min apart for the stations listed above!')
          CALL WLOG( 1,'       This can be improved by inserting'//
      1       ' gaps at regular intervals. ')

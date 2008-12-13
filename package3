@@ -42,6 +42,7 @@ cd ..
 # /bin/rm -r ../$releasedir
 mkdir ../$releasedir
 
+echo 
 rsync -au \
   --exclude "*~" \
   --exclude "core*" \
@@ -61,7 +62,7 @@ rsync -au \
 cd $releasedir
 echo Current directory $PWD
 echo Write $instaltar 
-tar -cf  $instaltar .
+tar --exclude bin -cf $instaltar . bin/schclean
 
 echo ' '
 echo Compressing the tar file.

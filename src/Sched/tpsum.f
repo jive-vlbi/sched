@@ -15,6 +15,8 @@ C
       CHARACTER   LSTOP*10, LSTART*10, LDAY1*3, LDAY2*3
 C
 C ------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 0, 'TPSUM starting' )
+C
       WRITE( ISUM, '( 1X, /, A, /, 2X, /, 2A, /, 2A, /, A )' )
      1     ' TIME RANGE OF RECORDINGS and TOTAL BYTES:',
      2     '                Obs. start time.     Obs. end time. ',

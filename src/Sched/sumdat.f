@@ -88,7 +88,7 @@ C
                   ELSE
                      DIRECT = 'R'
                   END IF
-                  WRITE( SUMDAT, '( I1, A1, I2.2 )' )
+                  WRITE( SUMDAT, '( 1X, I1, A1, I2.2 )' )
      1                    TPDRIV, DIRECT, TPINDX
                ELSE IF( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) THEN
                   IGB = NINT( GBYTES(ISCN,ISTA) )
@@ -100,7 +100,7 @@ C
                   SUMDAT = '---- '
                ELSE
                   IF( TPHEAD .LT. 10 ) THEN
-                     WRITE( SUMDAT, '( I1, A1, I2.2, A1 )' ) TPHEAD, 
+                     WRITE( SUMDAT, '( 1X, I1, A1, I2.2, A1 )' ) TPHEAD,
      1                  '/', NINT( TPFOOT1(ISCN,ISTA) / 1000. ), ' '
                   ELSE
                      WRITE( SUMDAT, '( I2, A1, I2.2 )' ) TPHEAD, 
@@ -111,7 +111,7 @@ C
 C
          ELSE IF( ITEM .EQ. 'DISK' .OR. ITEM .EQ. 'DISC' ) THEN
             IF( NOREC(ISCN) ) THEN
-                  SUMDAT = 'Stop '
+                  SUMDAT = ' Stop '
             ELSE IF( USEDISK(ISTA) ) THEN
                IGB = NINT( GBYTES(ISCN,ISTA) )
                WRITE( SUMDAT, '( I5 )' ) IGB
@@ -122,13 +122,13 @@ C
             END IF
 C
          ELSE IF( ITEM .EQ. 'TPSTART' ) THEN
-            WRITE( SUMDAT, '( I4, 1X )' ) IDNINT( TPSTART(ISCN,ISTA) * 
+            WRITE( SUMDAT, '( I5, 1X )' ) IDNINT( TPSTART(ISCN,ISTA) * 
      1            86400.D0 )
 C
          ELSE IF( ITEM .EQ. 'EARLY' ) THEN
             TEARLY = IDNINT( ( STARTJ(ISCN) - TONSRC(ISCN,ISTA) ) * 
      1               86400.D0 )
-            WRITE( SUMDAT, '( I4, 1X )' ) TEARLY
+            WRITE( SUMDAT, '( I5, 1X )' ) TEARLY
 C
          ELSE IF( ITEM .EQ. 'DWELL' ) THEN
             TEARLY = IDNINT( ( STARTJ(ISCN) - TONSRC(ISCN,ISTA) ) * 
@@ -145,16 +145,16 @@ C
             ELSE
                TDWELL = 0
             END IF
-            WRITE( SUMDAT, '( I4, 1X )' ) TDWELL
+            WRITE( SUMDAT, '( I5, 1X )' ) TDWELL
 C
          ELSE IF( ITEM .EQ. 'SLEW' ) THEN
             ITSLEW = IDNINT( TSLEW(ISCN,ISTA) * 86400.D0 )
-            WRITE( SUMDAT, '( I4, 1X )' ) ITSLEW
+            WRITE( SUMDAT, '( I5, 1X )' ) ITSLEW
 C
          ELSE IF( ITEM .EQ. 'SYNC' ) THEN
             ISYNC = IDNINT( ( STOPJ(ISCN) - TCORR(ISCN,ISTA) ) *
      1              86400.D0 )
-            WRITE( SUMDAT, '( I4, 1X )' ) ISYNC
+            WRITE( SUMDAT, '( I5, 1X )' ) ISYNC
 C
          ELSE IF( ITEM .EQ. ' ' ) THEN
             SUMDAT = '     '
@@ -175,11 +175,11 @@ C
 C        Station not in scan.
 C
          IF( ITEM .EQ. 'EL1' .OR. ITEM .EQ. 'AZ1' ) THEN
-            WRITE( SUMDAT, '( A4, A1 )' ) ' ---', UP1(ISCN,ISTA)
+            WRITE( SUMDAT, '( A5, A1 )' ) '  ---', UP1(ISCN,ISTA)
          ELSE IF( ITEM .EQ. 'EL2' .OR. ITEM .EQ. 'AZ2' ) THEN
-            WRITE( SUMDAT, '( A4, A1 )' ) ' ---', UP2(ISCN,ISTA)
+            WRITE( SUMDAT, '( A5, A1 )' ) '  ---', UP2(ISCN,ISTA)
          ELSE
-            SUMDAT = ' --- '
+            SUMDAT = '  --- '
          END IF
 C
       END IF
