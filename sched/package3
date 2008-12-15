@@ -5,14 +5,17 @@
 #  Usage:  package vernum      DON'T FORGET THE VERSION
 set schver=$1
 # ==============================================================
+echo Constructing release directory and tar files for release: $schver
+
+cd $SCHED
 
 echo 'Be sure you are in the base SCHED directory for this distribution'
 if( ! -e TARFILES ) then
    mkdir TARFILES
 endif
 
-set instaltar=../sched_ARCHIVE_nonSVN/TARFILES/sched.$schver.tar
-set releasedir=../sched_$schver
+set instaltar=/users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$schver.tar
+set releasedir=/users/cwalker/files/sched_$schver
 
 echo ' '
 echo Deleting files with same names as this routine\'s output files.
@@ -39,8 +42,7 @@ cd examples
 ../bin/schclean "*"
 cd ..
 
-# /bin/rm -r ../$releasedir
-mkdir ../$releasedir
+mkdir $releasedir
 
 echo 
 rsync -au \
@@ -62,7 +64,7 @@ rsync -au \
 cd $releasedir
 echo Current directory $PWD
 echo Write $instaltar 
-tar --exclude bin -cf $instaltar . bin/schclean
+tar --exclude sched -cf $instaltar . bin/schclean
 
 echo ' '
 echo Compressing the tar file.
