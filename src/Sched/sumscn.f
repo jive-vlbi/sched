@@ -18,8 +18,8 @@ C
       INTEGER     YEAR, DAY1, DAY2
       DOUBLE PRECISION  START, STOP
       LOGICAL     SKIPPED, AUTOWARN
-      CHARACTER   LINE1*140, LINE2*140
-      CHARACTER   TFORM*8, SUMDAT*5
+      CHARACTER   LINE1*160, LINE2*160
+      CHARACTER   TFORM*8, SUMDAT*6
       CHARACTER   FF*1, PDATE*(*)
       CHARACTER   SUMTXT1*100, SUMTXT2*100, SUMDESC*100, EXTN*4
 C-----------------------------------------------------------------------
@@ -100,7 +100,7 @@ C
                      LINE2 = '           STOP UT'
                      DO ISTA = ISTA1, ISTA2 
                         ICH1 = 39 + 6 * ( ISTA - ISTA1 )
-                        ICH2 = ICH1 + 12
+                        ICH2 = ICH1 + 2
                         LINE2(ICH1:ICH2) = STCODE(STANUM(ISTA))
                      END DO
 C
