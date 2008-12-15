@@ -1,4 +1,4 @@
-      CHARACTER*5 FUNCTION SUMDAT( ITEM, ISCN, ISTA )
+      CHARACTER*6 FUNCTION SUMDAT( ITEM, ISCN, ISTA )
 C
 C     A function to generate the character string for an individual
 C     item in a the summary file.
