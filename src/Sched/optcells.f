@@ -36,7 +36,7 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER     MAXISC
-      PARAMETER   (MAXISC=100)       ! Number of input scans.
+      PARAMETER   (MAXISC=1000)       ! Number of input scans.
 C
       INTEGER           LASTISCN(MAXSTA), KSCN, ISCN, JSCN, ISTA
       INTEGER           GOTSTA(MAXISC), IE, IA, YR, DY, MXSCN
@@ -63,8 +63,10 @@ C     The cell boundaries.  Make input some day?
 C     AZCOFF is added to the azimuth to get the "test" azimuth
 C     so that I can have a cell that crosses 0.
 C
+C ***********  ELCELL modified for DELZN maker - temporary.
+C              If this works, take the limits out to user.
       DATA      AZCOFF  / 60. /
-      DATA      ELCELL  / 15., 70. /
+      DATA      ELCELL  / 15., 25. /
       DATA      AZCELL  / 120., 240. /  
 C ---------------------------------------------------------------------
       IF( DEBUG ) WRITE(*,*) 'Starting OPTCELLS'
