@@ -23,7 +23,7 @@ C ----------------------------------------------------------------------
             SRLDEC(I) = DECJ
             SRLEPO(I) = 'J'
          END IF
-C       write(*,*) SRLNAME(I), SRLRA(I), SRLDEC(I), ' ', SRLEPO(I)
+C
       END DO
 C
       RETURN

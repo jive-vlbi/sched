@@ -17,7 +17,7 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER     MAXISC
-      PARAMETER   (MAXISC=100)       ! Number of input scans.
+      PARAMETER   (MAXISC=1000)       ! Number of input scans.
 C
       INTEGER           LASTISCN(MAXSTA), ISCN, JSCN, KSCN, ISTA
       INTEGER           SCNSTA(MAXSTA), NS1, NS2, NS3, SCN1, SCN2, SCN3

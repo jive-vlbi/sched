@@ -32,6 +32,13 @@ C
       LOGICAL        READIT, KEEPIT, EPEQ
       CHARACTER      FILEUP*4, INFILE*80, CEQUINOX*5
       SAVE           CONT, EQWARN
+C
+C     Temporary stuff for looking at low error data.
+C
+C      integer        nlim
+C      real           elim
+C      data           nlim / 0 /
+C
       DATA           EQWARN  / .TRUE. /
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SRREAD starting' )
@@ -122,6 +129,19 @@ C
             DO INAME = 1, 5
                CALL UPCASE( SRCNAM(INAME) )
             END DO
+C
+C           Temporary hook to look for the sources with low errors.
+C
+C            elim = 0.4
+C            if( ( srcrae .le. elim .and. srcdece .le. elim ) .and.
+C     1          ( srcrae .gt. 0.0 .and. srcdece .gt. 0.0 ) ) then
+C               nlim = nlim + 1
+C               write(*,'( A, 2F7.3, 10A )' ) 
+C     1              srcnam(1), srcrae, srcdece, ' ', 
+C     2              srceq(1:1), '  ', srcnam(2), '  ', srcnam(3),  '  ', 
+C     3              srcnam(4), '  ', srcnam(5)
+C            end if
+C           
             IF( SRCNAM(1) .NE. 'NONAME' ) THEN
 C           
 C              If this is an in-line catalog, include the source in
@@ -406,6 +426,10 @@ C
       END IF  !  READIT 
 C
   999 CONTINUE
+C
+C     Part of temporary sources with low error bars list.
+C
+C      write(*,*) 'Number below ', elim, ' is ', nlim
 C
       RETURN
       END
