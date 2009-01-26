@@ -12,6 +12,10 @@ C
 C     Do not change TPSTART later if DOVEX.  If not DOVEX, TPSTART
 C     may be reduced later at tape turnarounds or changes.
 C
+C     Jan 09:  The disk systems don't mind very short stops so don't
+C     worry about that aspect any more.  That was an issue related
+C     to spin up and spin down of the tapes.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
@@ -111,34 +115,36 @@ C              correlator.  This can only happen if the
 C              stop times of the previous scan are
 C              staggered (probably implies subarraying in use).
 C              
+C              Jan 09.  Disks don't mind, so don't worry about this.
+C              Keep the code available in case it is needed again.
 C
-               IF( SGWARN .AND.
-     1             SCNGAP(ISTA) .GT. TPMIN .AND.
-     2             SCNGAP(ISTA) .LT. TPMIN +
-     3                   MINPAUSE(ISCN) * SPEEDUP(KS) .AND.
-     4             .NOT. NOREC(LASTISCN(ISTA)) .AND. 
-     5             .NOT. NOREC(ISCN) ) THEN
+C               IF( SGWARN .AND.
+C     1             SCNGAP(ISTA) .GT. TPMIN .AND.
+C     2             SCNGAP(ISTA) .LT. TPMIN +
+C     3                   MINPAUSE(ISCN) * SPEEDUP(KS) .AND.
+C     4             .NOT. NOREC(LASTISCN(ISTA)) .AND. 
+C     5             .NOT. NOREC(ISCN) ) THEN
 C
-                  SGWARN = .FALSE.
-                  CALL WLOG( 0, 'SETTPS: **** WARNING ****' )
-                  CALL WLOG( 0, '    Synchronized recorder starts '//
-     1              'for VEX have left some short recording stops.' )
-                  CALL WLOG( 0, '    This may cause problems at ' //
-     1              'the correlator.' )
-                  CALL TIMEJ( STARTJ(ISCN), YEAR, DAY, TIMED )
-                  TIMECH = TFORM( TIMED, 'T', 0, 2, 2, '::@' )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, I3, A, A, A, A )' )
-     1               '    Problem first encountered at ', DAY,
-     2               '/', TIMECH, ' at ', STCODE(STANUM(ISTA))
-                  CALL WLOG( 0, MSGTXT )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 2A )' ) 
-     1               '    Note VEX file contains all ',
-     2               'stations, not just VEX stations.'
-                  CALL WLOG( 0, MSGTXT )
+C                  SGWARN = .FALSE.
+C                  CALL WLOG( 0, 'SETTPS: **** WARNING ****' )
+C                  CALL WLOG( 0, '    Synchronized recorder starts '//
+C     1              'for VEX have left some short recording stops.' )
+C                  CALL WLOG( 0, '    This may cause problems at ' //
+C     1              'the correlator.' )
+C                  CALL TIMEJ( STARTJ(ISCN), YEAR, DAY, TIMED )
+C                  TIMECH = TFORM( TIMED, 'T', 0, 2, 2, '::@' )
+C                  MSGTXT = ' '
+C                  WRITE( MSGTXT, '( A, I3, A, A, A, A )' )
+C     1               '    Problem first encountered at ', DAY,
+C     2               '/', TIMECH, ' at ', STCODE(STANUM(ISTA))
+C                  CALL WLOG( 0, MSGTXT )
+C                  MSGTXT = ' '
+C                  WRITE( MSGTXT, '( 2A )' ) 
+C     1               '    Note VEX file contains all ',
+C     2               'stations, not just VEX stations.'
+C                  CALL WLOG( 0, MSGTXT )
 C
-               END IF
+C               END IF
             END IF
          END DO
       END IF

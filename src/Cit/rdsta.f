@@ -370,7 +370,7 @@ C
      2             'conversions for '// STANAM )
             ELSE
                CALL PUTOUT( 'RDSTA: No coordinates in stations or' //
-     1                'locations file for '//STANAM )
+     1                ' locations file for '//STANAM )
             END IF
          END IF
       END IF

@@ -251,10 +251,19 @@ C
 C     Complain about too many tape stoppages.  Complain if more
 C     than 10 per hour.  Don't worry if tapes are not being used.
 C
-      MAXSTOP = ( TEND - TFIRST ) * 24.0 * 10.0
+C     Jan. 2009.  For Mark5A and Mark5B there is a maximum of 1000
+C     recording scans (blocks between stoppages) per module.  So
+C     a warning is needed, although it can be for much more than
+C     10 per hour.  This will go away with Mark5C.  For now, warn
+C     if the rate is enough to fill the 1000 in 24 hr.
+C
+      IF( USETAPE(ISTA) ) THEN
+         MAXSTOP = ( TEND - TFIRST ) * 24.0 * 10.0
+      ELSE
+         MAXSTOP = ( TEND - TFIRST ) * 1000.0
+      END IF
       DO ISTA = 1, NSTA
-         IF( NSTOP(ISTA) .GT. MAXSTOP .AND. VLBITP .AND. 
-     1       USETAPE(ISTA) ) THEN
+         IF( NSTOP(ISTA) .GT. MAXSTOP .AND. VLBITP ) THEN
             CALL WLOG( 1,
      1        'SCHTIM:  ' // STANAME(ISTA) // 
      2        ' averages more than 10 tape stops per hour.' )
