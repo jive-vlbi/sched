@@ -98,12 +98,12 @@ C     Write experiment nominal start and end time
 C
       CALL TIMEJ( STARTJ(1), YEAR, DOY, STARTT )
       TTIME = TFORM( STARTT, 'T', 0, 2, 2, 'hms' )
-      WRITE( IVEX, '( 5X, A, I4, A, I3,A, A, A)' )  
+      WRITE( IVEX, '( 5X, A, I4, A, I3.3, A, A, A)' )  
      1      'exper_nominal_start=', YEAR,'y',DOY,'d', 
      2      TTIME, SEP
       CALL TIMEJ( STOPJ(SCANL), YEAR, DOY, STOPT )
       TTIME = TFORM( STOPT, 'T', 0, 2, 2, 'hms' )
-      WRITE( IVEX, '( 5X, A, I4, A, I3,A, A, A)' )  
+      WRITE( IVEX, '( 5X, A, I4, A, I3.3, A, A, A)' )  
      1      'exper_nominal_stop=', YEAR,'y',DOY,'d', 
      2      TTIME, SEP
 C
