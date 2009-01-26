@@ -50,10 +50,8 @@ C     The cell boundaries.  Make input some day?
 C     AZCOFF is added to the azimuth to get the "test" azimuth
 C     so that I can have a cell that crosses 0.
 C
-C   ***********   Temporary change for making DELZN segments  ELCELL
-C                 upper value used to be 70 deg.
       DATA      AZCOFF  / 60. /
-      DATA      ELCELL  / 15., 25. /
+      DATA      ELCELL  / 15., 70. /
       DATA      AZCELL  / 120., 240. /  
 C ---------------------------------------------------------------------
       IF( DEBUG ) WRITE(*,*) 'OPTCSAR starting '

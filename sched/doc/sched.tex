@@ -62,7 +62,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\ VERSION 8.0}
+\title{THE \schedb USER MANUAL \\ DEVELOPMENT VERSION 9.0}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -12599,7 +12599,34 @@ section at the time of the release.
 
 \begin{itemize}
 
-\item  Not started yet.
+\item Make an svn branch for version 8 support.  Jan. 26, 2009
+
+\item Fix spurious blank in time for exper_nominal_start and stop in
+the Vex output.  Jan. 26, 2009
+
+\item Warn if the rate of creation of record files (blocks of data
+between record stoppages - can be several scans) is more than
+1000/day.  The actual limit is 1000 per disk module for Mark5A and
+Mark5B, but we don't know ahead of time how big the modules will be
+and what other observations will be on the module so we can't use that
+actual limit.  The limit used is an average of one every 86 seconds so
+is unlikely to be reached unless someone is stopping recording every
+scan in a fast switching phase referencing observation, which would be
+unwise while there are still sync times at the correlator.  All of
+this will go away with Mark5C and the software correlator.  Jan. 21,
+2009 RCW.
+
+\item No longer warn about short record stops when synchronizing 
+starts as needed by the current use of Vex.  Disks don't care
+Jan. 21, 2009  RCW.
+
+\item Change the number of sources that can be used for optimization
+runs from 100 to 1000 (CSUB and CELLS).  Jan. 5 RCW
+
+Note:  I think CSUB is not working - check more.
+
+Note:  There are temporary settings for the cell boundaries in
+the code.  These should be made external input.
 
 \end{itemize}
 
@@ -12658,7 +12685,7 @@ Released on Dec. 13, 2008.
 \item  Add more of the input file names to the list in the summary file,
        including the satellite Spice files.  Sept 20, 2008  RCW
 
-\item  Add a line in the VLA Observe deck (\sl xxxxobs.y) file giving
+\item  Add a line in the VLA Observe deck ({\sl xxxxobs.y}) file giving
        the reference antenna - which is also the single dish antenna.
        New variable VLARFANT supports this.  Most users should not
        worry about it.  Sept. 20, 2008  RCW
@@ -15064,6 +15091,14 @@ This is a list of desired program changes, fixes or enhancements.
 
 \begin{itemize}
 
+
+\item Warn about PCCOR not able to run when only 1 tone per band.  RCW
+      Jan 13, 2009.  Requested by Kogan.
+
+\item The rates for satellites don't appear to be right.  This might be
+      the effect of station motion.  See bb264.  Perhaps switch to 
+      calculations at 2 times and differencing them.  RCW Dec. 23, 2008
+      based on oddities noticed by Frank Ghigo.
 
 \item With dwell, don't necessarily wait for last antenna.  Think about
       what to do.  Oct. 31, 2008  RCW.

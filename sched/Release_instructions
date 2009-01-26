@@ -37,6 +37,8 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
       LINUX64SPICE  Like LINUX64 but with satellite tracking (noatak)
       OSXPPC    PowerPC Mac. (horton)
       SUN       Sun Solaris machine  (shire)
+            Note some Sun's have too little memory for the default
+            parameter settings.
 
     Go to sched_work/src while logged into a machine of the right type.
       Invoke the appropriate configure file
@@ -112,6 +114,10 @@ schclean "*"
     only showed up on a Sun.
 
 =================  Make the release version =======================
+
+   *********  Next time, make the svn tag here, and use that as base
+    for the release directory.
+
 
     Make the release directory and tar file.
     Run package3 with the version number.  That should do all of the above.
@@ -206,11 +212,37 @@ mv sched_{$NEWVER} sched_{$NEWVER}_test
 
 ==================  Announce the release ===========================
 
-#  Send the email announcement to:
-#  vlbi@nrao.edu,scistaff,analysts,pperley,vlbaops.
+Send the email announcement to:
+vlbi@nrao.edu,scistaff,analysts,pperley,vlbaops.
 
+Tell the computer people here so they can put the executables in the
+system areas (/usr/local/bin)
 
 
 #  I think that is all.  It's still too much.
 
 
+==================  Make an SVN tag of the release =================
+
+Use a command similar to:
+
+svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
+         https://svn.aoc.nrao.edu/repos/sched/branches/SCHED-8.0 \
+         -m "Branching SCHED 8.0 for maintenance"
+
+If this is the first of a series, it could also be useful to make
+a branch for modified versions of that series, separate from the 
+new development stuff.
+
+svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
+         https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-8.0 \
+         -m "Tagging the 8.0 release of SCHED"
+
+
+In order to ignore some files in svn status etc.
+Note the "." on the end of the second one.  And ignore.txt is needed.
+cd examples
+svn propset svn:ignore "*" Stdout
+svn propset svn:ignore -F ignore.txt .
+cd ../doc
+svn propset svn:ignore "*" sched
