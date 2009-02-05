@@ -16,7 +16,7 @@ C
       INTEGER           SY, SD, TY, TD, MINRDB, MAXSTOP
       LOGICAL           RDBWARN, TSWARN, RECLAST(MAXSTA)
       DOUBLE PRECISION  ST, TL, FIRSTT, NRSEC, RECTIME
-      DOUBLE PRECISION  ONESEC, ONEMIN, ONEHR, TLAST(MAXSTA)
+      DOUBLE PRECISION  ONEMIN, ONEHR, TLAST(MAXSTA)
       CHARACTER         TFORM*8, CSTART*8, CSTOP*8
 C  -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHTIM: Starting.' )
@@ -24,7 +24,6 @@ C
 C     Initialize.  Prevent counting start of expt as a readback.
 C     NRDBCK and NSTOP set to -1 to ignore the break before obs start.
 C
-      ONESEC = 1.D0 / 86400.D0
       ONEMIN = 60.D0 * ONESEC
       ONEHR = 3600.D0 * ONESEC
       FIRSTT = 999.D9

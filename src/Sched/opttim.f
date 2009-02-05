@@ -14,9 +14,8 @@ C
 C
       INTEGER          LASTISCN(MAXSTA), ISCN, ISTA, LSCN
       DOUBLE PRECISION LASTTIME, TIME1J, TIME2J, T_AVAIL
-      DOUBLE PRECISION MAXLASTT, ONESEC, TOLER
+      DOUBLE PRECISION MAXLASTT, TOLER
       LOGICAL          ADJUST, ALL0
-      PARAMETER        (ONESEC=1.D0/86400.D0)
       PARAMETER        (TOLER=ONESEC/1000.D0)
 C --------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'OPTTIM: Starting.' )

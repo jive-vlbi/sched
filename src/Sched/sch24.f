@@ -24,9 +24,8 @@ C
       INTEGER           ISCN, ISTA, LSCN(MAXSTA)
       INTEGER           SY, SD, TY, TD
       DOUBLE PRECISION  ST, TL
-      DOUBLE PRECISION  TDIFF, ONESEC, TWOSEC
+      DOUBLE PRECISION  TDIFF, TWOSEC
       DOUBLE PRECISION  JDAY, RECSTRT, MINTPS
-      PARAMETER         (ONESEC = 1.D0 / 86400.D0)
       PARAMETER         (TWOSEC = 2.D0 * ONESEC )
       CHARACTER         TFORM*8, CSTART*8, CSTOP*8
 C---------------------------------------------------------------------

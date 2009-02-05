@@ -46,9 +46,7 @@ C
       INTEGER    NSSCAN, NRWARN
       LOGICAL    RECWARN, NEWCONF, NEWPCAL, CONFIGW
       LOGICAL    SCNRCF, NEWSYNC
-      DOUBLE PRECISION  ONESEC
       DOUBLE PRECISION  TRECON, TSADD, TTADD
-      PARAMETER  (ONESEC = 1.D0 / 86400.D0)
       DATA       NRWARN / 0 /
       SAVE       NRWARN
 C ---------------------------------------------------------------------

@@ -48,7 +48,7 @@ C
       INTEGER            TPMODMIN(MAXSTA), JSCN, JS, LTSCN(MAXSTA)
       INTEGER            YEAR, DAY
       DOUBLE PRECISION   LSTOPJ, LTSTOP(MAXSTA), TAVAIL, TCHGMIN, TIME
-      DOUBLE PRECISION   ONESEC, TBEFORE, TAFTER
+      DOUBLE PRECISION   TBEFORE, TAFTER
       LOGICAL            FIRSTS, TOOLONG, TWARN, REQTAPE
       CHARACTER          TTIME*9, TFORM*15
 C
@@ -57,7 +57,6 @@ C     change.  3 minutes for the 2.5 min prestart and 0.1 min trailer
 C     plus a minute to change all the tapes.
 C
       PARAMETER          (TCHGMIN = 4.D0/(24.D0*60.D0))
-      PARAMETER          (ONESEC = 1.D0 / 86400.D0 )
       PARAMETER          (TBEFORE = 2.5D0/(24.D0*60.D0))
       PARAMETER          (TAFTER = 0.1D0/(24.D0*60.D0))
       SAVE               LTPMODE, TPMODMIN, TWARN, LTSCN, LTSTOP
