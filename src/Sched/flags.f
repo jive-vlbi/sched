@@ -9,12 +9,11 @@ C
 C
       INTEGER    ISCN, ISTA, LEN1, IOERR, VLBOPE
       INTEGER    YEAR, DOY, MONTH, DAY, JD, IL, NL
-      DOUBLE PRECISION  ONESEC, STOP, TLOOP, TINC, HLST
+      DOUBLE PRECISION  STOP, TLOOP, TINC, HLST
       REAL       HHA, HEL, HAZ, HPA
       CHARACTER  FLAGFILE*40, OPTEXT*255, OPSTAT*4
       CHARACTER  PDATE*80, MNAME*3, DNAME*3, HORCHK*1
       LOGICAL    EXISTS
-      PARAMETER  (ONESEC=1.D0/86400.D0)
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'FLAGS starting' )
 C

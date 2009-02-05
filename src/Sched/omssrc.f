@@ -30,6 +30,8 @@ C
                   WRITE( IOMS, '( 2A )' )
      1              '    SOURCE_NAME       = ', SOURCE(J,ISRC)(1:LENS)
                   WRITE( IOMS, '( 2A )' )
+     1              '    CAL_CODE          = ', CALCODE(ISRC)
+                  WRITE( IOMS, '( 2A )' )
      1              '    SOURCE_RA         = ', TRA20(1:LENR)
                   WRITE( IOMS, '( 2A )' )
      1              '    SOURCE_DEC        = ', TDEC20(1:LEND)
