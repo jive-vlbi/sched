@@ -20,7 +20,7 @@ C
       CHARACTER   DNAME*3, MNAME*3, DIRECT*1 
       CHARACTER   LINE*132, TFORM*9, TRANTYPE*10, SCANNAME*10
       CHARACTER   DISKFILE*30, STNLC*2
-      DOUBLE PRECISION  STARTT, STOPT, TAPOFF
+      DOUBLE PRECISION  STARTT, STOPT, TAPOFF, IDAY
       LOGICAL     SKIPPED, WARNFS, WARNTS(MAXSTA), DATATRAN, WARNGP
       LOGICAL     GAPERR, FMTNONE, TSYSMESS, WARNTSOF(MAXSTA)
       LOGICAL     WARNBANK, OLDWARNB
@@ -391,10 +391,16 @@ C
                   IF( DATLAT .LE. 0 ) DATLAT = 0
 C
 C                 Write INTSTOP, last bit af good data 
+C                 Use a difference of integers to avoid round off 
+C                 situations giving a duration one second too large.
+C                 This gets a bit tricky because the numbers for
+C                 the Julian days are too big to be held in a normal
+C                 integer, so the high order digits need to be 
+C                 subtracted first.
 C
-                  INTSTOP = NINT( ( STOPJ(ISCN) - 
-     .                (STARTJ(ISCN)-TAPOFF) ) 
-     1                * 86400d0)
+                  IDAY = DINT( STARTJ(ISCN) )
+                  INTSTOP = NINT( ( STOPJ(ISCN) - IDAY ) * 86400.D0 ) - 
+     1              NINT( ( STARTJ(ISCN) - IDAY - TAPOFF ) * 86400.D0 )
                   DATLAT = MIN( DATLAT, INTSTOP )
                   WRITE( LINE(LPOS:LPOS+9), '( I5, A4, A1 )' ) DATLAT,
      1                ' sec', COL

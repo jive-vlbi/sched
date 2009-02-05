@@ -275,10 +275,14 @@ C
          CALL TPSUM( .TRUE. )
       END IF
 C
-C     Add a source list includeing one in a format for addition to
+C     Add a source list including one in a format for addition to
 C     the correlator data base.
 C
       CALL SRCLST( ISUM, 2 )
+C
+C     Note the configuration breaks for generating correlator blocks.
+C
+      CALL CORBLK
 C
 C     Add correlator parameters in format for OMS.
 C
