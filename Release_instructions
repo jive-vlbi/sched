@@ -26,13 +26,14 @@ Instructions for making a release of SCHED
     version number is also needed.
 
 
-setenv NEWVER 8.0
+setenv NEWVER 8.1
 setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
 
 ==================  Compile  ======================================
+    Go to the base directory for the release (trunk or branch)
 
     Compile and link SCHED for each target architecture.
-    Run Verify after each compile to make sure it works.
+    Run source ./Verify after each compile to make sure it works.
     Architectures are (with local usable machines):
       LINUX     32 bit Intel linux machine without satellite tracking. (dave)
       LINUX64   64 bit Intel linux machine without satellite tracking. (noatak)
@@ -43,11 +44,11 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
             parameter settings.
 
     Go to sched_work/src while logged into a machine of the right type.
-      Invoke the appropriate configure file
-      Run make clean   (gmake clean on the Sun)
-      Run make         (gmake on the Sun)
+      Invoke the appropriate configure file  eg configureLinux
+      make clean   (gmake clean on the Sun)
+      make         (gmake on the Sun)
       Move the binary to the right subdirectory in bin.
-
+      
 =================  Document the release  ===========================
 
     Write a release note.  This will be mainly a link to the manual
@@ -101,10 +102,11 @@ Update
    Update the examples, run Verify, and clean up the area.
    Check that testruns.out shows a clean comparison after Verify.
    Do this for all architectures.  Occasionally a problem only shows
-   up on one.
+   up on one.  Use "source ./Verify" to pass the redefined $SCHED if
+   this is not the trunk version (sched_work).
 
 cd $SCHED/examples
-Verify
+source ./Verify
 Newstd
 schclean "*"
 
@@ -117,16 +119,41 @@ schclean "*"
 
 =================  Make the release version =======================
 
-   *********  Next time, make the svn tag here, and use that as base
-    for the release directory.
+    Make a tagged version.
+    To do so from trunk ( There is a slight variation for a branch origen)
 
+svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
+         https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER \
+         -m "Tagging SCHED $NEWVER for maintenance"
 
-    Make the release directory and tar file.
-    Run package3 with the version number.  That should do all of the above.
-    First it runs rsync to the release, creating it if it is not already 
-    there.  Then it tar the whole thing.  The tar file ends up in $TARDIR
+setenv SCHEDNEW ~/files/sched_$NEWVER
+setenv SCHEDBASE ~/files/sched_branch8
+mkdir $SCHEDNEW
+cd $SCHEDNEW
+svn checkout https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER .
 
-source ./package3 {NEWVER}
+#  Copy over the examples/Stdout files and the execute modules.
+
+cd $SCHEDBASE
+rsync -auv --exclude ".svn" bin  $SCHEDNEW
+rsync -auv --exclude ".svn" examples/Stdout $SCHEDNEW/examples
+rsync -auv --exclude ".svn" doc/sched $SCHEDNEW/doc
+
+#  Make the tar file.  Don't include the binaries.
+#  First be sure there are not old copies in the archive and ftp areas.
+#  Populate the ftp area.
+
+cd $SCHEDNEW
+tar --exclude sched --exclued ".svn" --exclude "*.o" --exclude "*~" \
+     -cf ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar .
+gzip ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar
+
+mkdir $FTP/sched/sched_$NEWVER
+mkdir $FTP/sched/sched_$NEWVER/binaries
+cp ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar.gz $FTP/sched/sched_$NEWVER/
+rsync -auv bin/*  $FTP/sched/sched_$NEWVER/binaries
+
+#  Copy over README.ftp if it has changed.
 
 =================  Test the release  ==============================
 
@@ -191,27 +218,6 @@ ln -s sched_{$NEWVER} sched
 cd $SCHED
 
 
-===================  Put the release on the ftp site  ===============
-
-#  Copy to ftp  (FTP=/var/spool/ftp/pub)
-
-cd $SCHED
-cd ../sched_{$NEWVER}/
-/bin/rm $FTP/sched/README
-/bin/rm $FTP/sched_{$NEWVER}/*{$NEWVER}.tar.gz
-/bin/rm $FTP/staff/cwalker/Sched/*{$NEWVER}.tar.gz
-
-mkdir $FTP/sched/sched_{$NEWVER}
-mkdir $FTP/sched/sched_{$NEWVER}/binaries
-cp $SCHED/README.ftp $FTP/sched/README
-cp $TARDIR/sched_{$NEWVER}.tar.gz    $FTP/sched/sched_{$NEWVER}/
-rsync -auv bin/* $FTP/sched/sched_{$NEWVER}/binaries/
-
-    During testing:
-cd $FTP/sched
-mv sched_{$NEWVER} sched_{$NEWVER}_test
-    Put it back when the release happens.
-
 ==================  Announce the release ===========================
 
 Send the email announcement to:
@@ -224,24 +230,19 @@ system areas (/usr/local/bin)
 #  I think that is all.  It's still too much.
 
 
-==================  Make an SVN tag of the release =================
-
-Use a command similar to:
-
-svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
-         https://svn.aoc.nrao.edu/repos/sched/branches/SCHED-8.0 \
-         -m "Branching SCHED 8.0 for maintenance"
+==================  SVN branch and other SVN info  ======================
+OPTIONAL
 
 If this is the first of a series, it could also be useful to make
 a branch for modified versions of that series, separate from the 
-new development stuff.
+new development stuff (I'm souring on this - too much work (Feb 18, 2009).
 
 svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
          https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-8.0 \
          -m "Tagging the 8.0 release of SCHED"
 
 
-In order to ignore some files in svn status etc.
+SVN:  In order to ignore some files in svn status etc.
 Note the "." on the end of the second one.  And ignore.txt is needed.
 cd examples
 svn propset svn:ignore "*" Stdout
