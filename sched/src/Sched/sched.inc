@@ -38,6 +38,9 @@ C                   MAXCHN - Number of channels - see also SCHSET.INC
 C                   MAXLCH - Dopset channels.   
 C                   MAXSAT - Number of satellites.
 C
+C                   MSET   - Number of setup groups - used in schset.inc
+C                   MAXMOD - Number of modes - used in vxlink.inc
+C
 C     If you change a parameter here, you may need to make related
 C     changes elsewhere.  Generally if the other parameters are higher
 C     than you want to set the local one, that is ok.
@@ -46,8 +49,12 @@ C     The biggest arrays are dimensioned (MAXSCN,MAXSTA) and there are
 C     a considerable number of them.  Therefore those are the two
 C     parameters to be most careful about to keep the size down.
 C     There are also some (MAXCHN,MAXSCN) arrays, so be careful of them.
-C     Also in the Vex section, there are (MAXMOD,MAXMOD) and even
-C     a number of (MAXSTA,MAXMOD,MAXMOD) arrays where MAXMOD=MAXSET.
+C     Actually the largest arrays are in the Vex section where there are 
+C     (MAXMOD,MAXMOD) and even a number of (MAXSTA,MAXMOD,MAXMOD) 
+C     arrays where MAXMOD=MSET.  Those can go above the 32 bit limit 
+C     when setting up for SKA configuration testing.
+C     I have moved the setting of MSET and MAXMOD here to facilitate
+C     changes.  I will also not allow Vex
 C
 C      Parameter    Related parameters
 C       MAXCHN       rdcat.inc:MVEL
@@ -58,18 +65,30 @@ C       MAXCAT       rdcat.inc:MDB (set at 1000 - may not need change)
 C
 C
       INTEGER       MAXCAT, MAXSRC, MAXSCN, MAXSTA, MAXLCH, MAXLGP
-      INTEGER       MAXSET, MAXCHN, MAXSAT
-C
-C     Big-array version (eg SKA configuration search)
-C
-C      PARAMETER     (MAXSCN=400)
-C      PARAMETER     (MAXSTA=400)
+      INTEGER       MAXSET, MAXCHN, MAXSAT, MSET, MAXMOD
 C
 C     For normal usage.  Phase referencing and pointing observations
 C     need lots of scans, but the number of stations is limited.
+C     MSET needs to be large enough for one setup group per frequency
+C     group per station.  The number is driven by wideband VLBA 
+C     single dish testing.
 C
       PARAMETER     (MAXSCN=4000)
       PARAMETER     (MAXSTA=40)
+      PARAMETER     (MSET  =400+5*MAXSTA)
+      PARAMETER     (MAXMOD = MSET)
+C
+C     Big-array (eg SKA) configuration test version
+C     Note that there are arrays in the Vex code dimensioned 
+C     (MAXSTA,MAXMOD,MAXMOD).  Those can easily overflow 32 bit
+C     integers.  It will be safe to set MAXMOD small if the binary
+C     is only for use with OBSTYPE='CONFIG' because the Vex code
+C     will not be called.
+C
+C      PARAMETER     (MAXSCN=400)
+C      PARAMETER     (MAXSTA=400)
+C      PARAMETER     (MSET  =MAXSTA)
+C      PARAMETER     (MAXMOD=MSET)
 C
 C     Other parameters
 C

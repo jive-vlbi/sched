@@ -45,8 +45,13 @@ C
 C     NPRVEX
 C     PRLINK
 C
-      INTEGER MAXMOD
-      PARAMETER ( MAXMOD = MSET )
+C     Moved setting of MAXMOD to sched.inc to facilitate making 
+C     SKA configuration test version.  When MSET is more than MAXSTA
+C     and MAXSTA is several hundred, the arrays below dimensioned 
+C     (MAXSTA,MAXMOD,MAXMOD) get too big for 32 bit machines.
+C     Some day find a way to get rid of those arrays.
+C      INTEGER MAXMOD
+C      PARAMETER ( MAXMOD = MSET )
 C
       INTEGER NMDVEX, NFQVEX, NTRVEX, NIFVEX, NBBVEX, NHPVEX, NPOVEX
       INTEGER NRLVEX, NPHVEX, NDAVEX, NSIVEX, NANVEX, NPRVEX
