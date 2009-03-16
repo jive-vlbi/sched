@@ -56,10 +56,14 @@ C     schset.inc
 C     Change MSET=200+MAXSTA to MSET=200+5*MAXSTA to help with some test
 C     observations.  2007jun7.
 C
-      INTEGER           MSET, MCHAN, MAXPC, MAXTON, MANT, MTPMOD, MFSET
+C     Move setting of MSET to sched.inc to facilitate making large 
+C     configuration testing version.
+C      INTEGER           MSET
+C      PARAMETER         (MSET=400+5*MAXSTA)
+C
+      INTEGER           MCHAN, MAXPC, MAXTON, MANT, MTPMOD, MFSET
       INTEGER           MPSET
       DOUBLE PRECISION  NOTSET
-      PARAMETER         (MSET=400+5*MAXSTA)
       PARAMETER         (MCHAN=MAXCHN)
       PARAMETER         (MAXPC=8)
       PARAMETER         (MAXTON=2*MAXPC)
