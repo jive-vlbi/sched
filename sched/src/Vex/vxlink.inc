@@ -22,13 +22,28 @@ C
 C     NXXVEX              total number of defs in block XX
 C     NMODXX(IMODE)       number of XX defs referenced in mode IMODE
 C     IMODXX(I,IMODE)     list (I-NMODXX) of defs XX referenced in mode IMODE
-C     XXISSET(IXX)         the original SCHED set (KS) that has the parameters
-C                         block XX def number IXX 
+C     XXISSET(IXX)        the original SCHED setup group (KS) that has the 
+C                         parameters block XX def number IXX 
 C     NSTAXX(IXX,IMODE)   number of stations that use block XX def #IXX, 
 C                         used for mode imode
 C     ISTAXX(I,IXX,IMODE) list (1-NSTAXX) of stations that use block 
 C                         IXX in IMODE
 C     XXLINK(IXX)         name of IXX block def
+C
+C
+CRCW  The arrays of 2 and 3 dimensions described above, which were declared
+C     (MAXMOD,MAXMOD) and (MAXSTA,MAXMOD,MAXMOD), were extremely large since
+C     MAXSTA can be in the hundreds in configuration search versions and
+C     MAXMOD=MSET=400*5*MAXSTA (Apr 09) can be in the thousands.  Some 
+C     compilers won't allow them (overflowed INTEGER*8, I think).  But 
+C     most cells are empty since MSET allows for a setup group for every
+C     station for every frequency, where the modes consolidate much of that.
+C     Try getting away, instead, with MAXMOD = 5*MAXSET where MAXSET is
+C     the maximum number of SCHED input setup files, which is much smaller
+C     than the number of setup groups.  It's currently set to 50.  The 2D
+C     and 3D arrays will still be uncomfortably large, but not overwhelming.
+C     Some day it would be nice to use some indexing scheme that doesn't
+C     try to break the memory.    R. C. Walker, April 9, 2009
 C
 C     the DA, SI, AN section is STATION based
 C     XX = DA data_acquisition
@@ -45,13 +60,9 @@ C
 C     NPRVEX
 C     PRLINK
 C
-C     Moved setting of MAXMOD to sched.inc to facilitate making 
-C     SKA configuration test version.  When MSET is more than MAXSTA
-C     and MAXSTA is several hundred, the arrays below dimensioned 
-C     (MAXSTA,MAXMOD,MAXMOD) get too big for 32 bit machines.
-C     Some day find a way to get rid of those arrays.
-C      INTEGER MAXMOD
-C      PARAMETER ( MAXMOD = MSET )
+      INTEGER MAXMOD
+CRCW      PARAMETER ( MAXMOD = MSET )
+      PARAMETER ( MAXMOD = 5*MAXSET )
 C
       INTEGER NMDVEX, NFQVEX, NTRVEX, NIFVEX, NBBVEX, NHPVEX, NPOVEX
       INTEGER NRLVEX, NPHVEX, NDAVEX, NSIVEX, NANVEX, NPRVEX
