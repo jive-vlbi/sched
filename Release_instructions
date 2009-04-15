@@ -130,7 +130,7 @@ setenv SCHEDNEW ~/files/sched_$NEWVER
 setenv SCHEDBASE ~/files/sched_branch8
 mkdir $SCHEDNEW
 cd $SCHEDNEW
-svn checkout https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER .
+svn checkout https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER/ .
 
 #  Copy over the examples/Stdout files and the execute modules.
 
@@ -144,7 +144,8 @@ rsync -auv --exclude ".svn" doc/sched $SCHEDNEW/doc
 #  Populate the ftp area.
 
 cd $SCHEDNEW
-tar --exclude sched --exclued ".svn" --exclude "*.o" --exclude "*~" \
+tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
+    --exclude "lib" \
      -cf ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar .
 gzip ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar
 
@@ -183,6 +184,7 @@ Verify
 ==================  Put the documentation on the web  =============
 
     Copy documentation to the web server master files on noatak.
+    May need to be from the branch if there is one.
     My cron jobs will move them to the main web server or run 
     /users/cwalker/bin/backup_noatak afterwards.
     Careful with the big delete (rm) below (that's why the cd ~ first)
@@ -202,8 +204,8 @@ chmod -R u+w $WEBDIR/sched_{$NEWVER}/sched/catalogs/*
 mkdir $WEBDIR/sched_$NEWVER
 rsync -au --exclude "catalogs"  --exclude "examples" \
           --exclude "setups" --exclude ".svn" \
-         $SCHED/doc/sched $WEBDIR/sched_$NEWVER
-cd $SCHED
+         $SCHEDBASE/doc/sched $WEBDIR/sched_$NEWVER
+cd $SCHEDBASE
 tar cf - catalogs/sources.vlba  catalogs/freq.dat  catalogs/stations.dat \
          catalogs/locations.dat catalogs/peak.cmd  catalogs/linefreqs.dat \
          examples/*.key         examples/*.com     examples/*.set \
