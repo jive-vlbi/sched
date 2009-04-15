@@ -39,7 +39,6 @@ C                   MAXLCH - Dopset channels.
 C                   MAXSAT - Number of satellites.
 C
 C                   MSET   - Number of setup groups - used in schset.inc
-C                   MAXMOD - Number of modes - used in vxlink.inc
 C
 C     If you change a parameter here, you may need to make related
 C     changes elsewhere.  Generally if the other parameters are higher
@@ -51,10 +50,9 @@ C     parameters to be most careful about to keep the size down.
 C     There are also some (MAXCHN,MAXSCN) arrays, so be careful of them.
 C     Actually the largest arrays are in the Vex section where there are 
 C     (MAXMOD,MAXMOD) and even a number of (MAXSTA,MAXMOD,MAXMOD) 
-C     arrays where MAXMOD=MSET.  Those can go above the 32 bit limit 
-C     when setting up for SKA configuration testing.
-C     I have moved the setting of MSET and MAXMOD here to facilitate
-C     changes.  I will also not allow Vex
+C     arrays where is now MAXMOD=5*MAXSTA (It used to be set equal to
+C     MSET and those arrays got too big for 32 bit machines when setting 
+C     up for SKA configuration testing).
 C
 C      Parameter    Related parameters
 C       MAXCHN       rdcat.inc:MVEL
@@ -65,7 +63,7 @@ C       MAXCAT       rdcat.inc:MDB (set at 1000 - may not need change)
 C
 C
       INTEGER       MAXCAT, MAXSRC, MAXSCN, MAXSTA, MAXLCH, MAXLGP
-      INTEGER       MAXSET, MAXCHN, MAXSAT, MSET, MAXMOD
+      INTEGER       MAXSET, MAXCHN, MAXSAT, MSET
 C
 C     For normal usage.  Phase referencing and pointing observations
 C     need lots of scans, but the number of stations is limited.
@@ -76,19 +74,15 @@ C
       PARAMETER     (MAXSCN=4000)
       PARAMETER     (MAXSTA=40)
       PARAMETER     (MSET  =400+5*MAXSTA)
-      PARAMETER     (MAXMOD = MSET)
 C
 C     Big-array (eg SKA) configuration test version
-C     Note that there are arrays in the Vex code dimensioned 
-C     (MAXSTA,MAXMOD,MAXMOD).  Those can easily overflow 32 bit
-C     integers.  It will be safe to set MAXMOD small if the binary
-C     is only for use with OBSTYPE='CONFIG' because the Vex code
-C     will not be called.
+C     Note that it will be safe to set MAXMOD (in vxlink.inc) small 
+C     if the executable is only for use with OBSTYPE='CONFIG' because 
+C     the Vex code will not be called.
 C
 C      PARAMETER     (MAXSCN=400)
 C      PARAMETER     (MAXSTA=400)
 C      PARAMETER     (MSET  =MAXSTA)
-C      PARAMETER     (MAXMOD=MSET)
 C
 C     Other parameters
 C
