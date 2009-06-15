@@ -14,7 +14,7 @@ C
       REAL              BBBF(MCHAN), BBBW(MCHAN)
       REAL              LBW(MCHAN), LSAMPR, LSPDUP, LSPEED
       INTEGER           LNCHAN, LEN1
-      LOGICAL           FIRSTS, WRTLAST
+      LOGICAL           FIRSTS
       LOGICAL           NEWNCH, NEWBW, NEWSAMPR, NEWSPD, NEWPOL
       INTEGER           YEAR1, YEAR2, DAY1, DAY2, DOY1, DOY2, JD, IM
       CHARACTER         MONTH1*3, MONTH2*3, DNAME1*3, DNAME2*3
@@ -36,7 +36,6 @@ C
 C     Initialize the relevant parameters to the first recording scan.
 C
       FIRSTS = .TRUE.
-      WRTLAST = .FALSE.
       DO ISCN = SCAN1, SCANL
 C
 C        Initialize the flags.
@@ -52,11 +51,6 @@ C        so changes are not double counted.
 
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) .AND. .NOT. NOREC(ISCN) ) THEN
-C
-C              Flag that a scan has been read to be sure a final
-C              record is written.
-C
-               WRTLAST = .TRUE.
 C
 C              Initialize the string to give the reason for a break.
 C
@@ -167,7 +161,6 @@ C
                      LBW(ICH) = BBBW(ICH) 
                      LPOL(ICH) = POL(ICH,KS)
                   END DO
-                  WRTLAST = .FALSE.
                END IF
 C
 C              Save the stop time of the scan as the possible end time
@@ -192,29 +185,29 @@ C     End the scan loop.
 C
       END DO
 C
-C     Write the last line if needed.
+C     Write the last line.  This is always needed because any
+C     previous lines written are for preceeding scans.  With 
+C     old code, this was skipped if the last scan was the only
+C     one in the block, which was not good.
 C
-      IF( WRTLAST ) THEN
-         CALL TIMEJ( LSTART, YEAR1, DOY1, START )
-         DAY1 = DOY1
-         IM = 1
-         CALL TDATECW( YEAR1, IM, DAY1, JD, MONTH1, DNAME1 )
-         CALL UPCASE( MONTH1 )
-         TCHAR1 = TFORM( START, 'T', 0, 2, 2, '::@' )
-C		
-         CALL TIMEJ( LSTOP, YEAR2, DOY2, STOP )
-         DAY2 = DOY2
-         IM = 1
-         CALL TDATECW( YEAR2, IM, DAY2, JD, MONTH2, DNAME2 )
-         CALL UPCASE( MONTH2 )
-         TCHAR2 = TFORM( STOP, 'T', 0, 2, 2, '::@' )
-C		
-         WRITE( ISUM, 
-     1     '( A, I4, A3, I2.2, 3A, I4, A3, I2.2, 2A )' )
-     2     'UTTIMERANGE ', YEAR1, MONTH1, DAY1, ' at ', TCHAR1,
-     3     ' to ', YEAR2, MONTH2, DAY2, ' at ', TCHAR2
-
-      END IF
+      CALL TIMEJ( LSTART, YEAR1, DOY1, START )
+      DAY1 = DOY1
+      IM = 1
+      CALL TDATECW( YEAR1, IM, DAY1, JD, MONTH1, DNAME1 )
+      CALL UPCASE( MONTH1 )
+      TCHAR1 = TFORM( START, 'T', 0, 2, 2, '::@' )
+C     	
+      CALL TIMEJ( LSTOP, YEAR2, DOY2, STOP )
+      DAY2 = DOY2
+      IM = 1
+      CALL TDATECW( YEAR2, IM, DAY2, JD, MONTH2, DNAME2 )
+      CALL UPCASE( MONTH2 )
+      TCHAR2 = TFORM( STOP, 'T', 0, 2, 2, '::@' )
+C     	
+      WRITE( ISUM, 
+     1  '( A, I4, A3, I2.2, 3A, I4, A3, I2.2, 2A )' )
+     2  'UTTIMERANGE ', YEAR1, MONTH1, DAY1, ' at ', TCHAR1,
+     3  ' to ', YEAR2, MONTH2, DAY2, ' at ', TCHAR2
 C
       RETURN
       END
