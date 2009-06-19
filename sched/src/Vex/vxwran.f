@@ -45,12 +45,12 @@ C
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'el', COL, AX2RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX2ACC(ISCAT), 'deg/sec/sec'
+     4           AX2ACC(1,ISCAT), 'deg/sec/sec'
             WRITE( IVEX, '( 5X, A, A, 1X, A1, F6.1, 1X, A, 1X, A1, 
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'az', COL, AX1RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX1ACC(ISCAT), 'deg/sec/sec'
+     4           AX1ACC(1,ISCAT), 'deg/sec/sec'
          ELSE IF( MOUNT(ISCAT) .EQ. 'EQUAT' ) THEN
             WRITE( IVEX, '( 5X, A, A, 1X, A1, 1X, A, A1 )' )
      1           'axis_type = ', 'ha', COL, 'dec', SEP
@@ -61,12 +61,12 @@ C
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'dec', COL, AX2RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX2ACC(ISCAT), 'deg/sec/sec'
+     4           AX2ACC(1,ISCAT), 'deg/sec/sec'
             WRITE( IVEX, '( 5X, A, A, 1X, A1, F6.1, 1X, A, 1X, A1, 
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'ha', COL, AX1RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX1ACC(ISCAT), 'deg/sec/sec'
+     4           AX1ACC(1,ISCAT), 'deg/sec/sec'
          ELSE IF( MOUNT(ISCAT) .EQ. 'XYNS' ) THEN
             WRITE( IVEX, '( 5X, A, A, 1X, A1, 1X, A, A1 )' )
      1           'axis_type = ', 'x', COL, 'yns', SEP
@@ -77,12 +77,12 @@ C
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'x', COL, AX1RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX1ACC(ISCAT), 'deg/sec/sec'
+     4           AX1ACC(1,ISCAT), 'deg/sec/sec'
             WRITE( IVEX, '( 5X, A, A, 1X, A1, F6.1, 1X, A, 1X, A1, 
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'y', COL, AX2RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX2ACC(ISCAT), 'deg/sec/sec'
+     4           AX2ACC(1,ISCAT), 'deg/sec/sec'
          ELSE IF( MOUNT(ISCAT) .EQ. 'XYEW' ) THEN
             WRITE( IVEX, '( 5X, A, A, 1X, A1, 1X, A, A1 )' )
      1           'axis_type = ', 'x', COL, 'yew', SEP
@@ -93,12 +93,12 @@ C
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'x', COL, AX1RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX1ACC(ISCAT), 'deg/sec/sec'
+     4           AX1ACC(1,ISCAT), 'deg/sec/sec'
             WRITE( IVEX, '( 5X, A, A, 1X, A1, F6.1, 1X, A, 1X, A1, 
      1           I3, 1X, A, A1, 2X, A1, 1X, F8.3, 1X, A )' )
      2           'antenna_motion = ', 'y', COL, AX2RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
-     4           AX2ACC(ISCAT), 'deg/sec/sec'
+     4           AX2ACC(1,ISCAT), 'deg/sec/sec'
          ELSE
             WRITE( IVEX, '( 5X, A, A, 1X, A1, 1X, A, A1 )' )
      1           'axis_type = ', 'un-', COL, 'known', SEP

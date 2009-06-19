@@ -42,7 +42,7 @@ C
                END IF
             ELSE
                WRITE( MSGTXT, '( A, A1 )' ) 
-     1             'VXWRSU: unclear CSUSED character: ',
+     1             'VXWRDT: unclear CSUSED character: ',
      1             CSUSED(INAME,ISRC)
                CALL ERRLOG( MSGTXT )
             END IF
@@ -86,7 +86,7 @@ C
       STRDEC = TFORM( DECP(ISRC),  ' ', 1, 2, 9, 'd''"' )
       CH1 = '*'
       IF( CDATE(ISRC) .NE. ' ' ) 
-     1    CALL ERRLOG('VXWRSU: coordinates of date not supported')
+     1    CALL ERRLOG('VXWRDT: coordinates of date not supported')
       WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
      1    A, A, A1 )' )
      2    CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 

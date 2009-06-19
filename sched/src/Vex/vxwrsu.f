@@ -36,7 +36,7 @@ C
                   NVXSRC = NVXSRC + 1
                   IF ( NVXSRC .GT. 300 ) THEN
                      WRITE( MSGTXT, '( A )' ) 
-     1                   'VXWRT: WARNING: More than 300 sources'// 
+     1                   'VXWRSU: WARNING: More than 300 sources'// 
      2                   ' in this schedule. This VEX will NOT run!'
                      CALL WLOG( 1,MSGTXT)
                   END IF
