@@ -6,6 +6,9 @@ C     avoid a reconfigure.
 C     Don't worry about keeping the bit rates constant across
 C     stations - that doesn't matter for non-recording scans.
 C
+C     Called by SETFORM, which has already checked that all 
+C     recording scans have formats already set.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C

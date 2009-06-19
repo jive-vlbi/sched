@@ -9,6 +9,9 @@ C     Assume that the file only needs to be opened if IUPEAK=IUPK.
 C     Also assume that if IUPEAK.NE.IUPK, that we really must read
 C     the peaking input (in-line).
 C
+C     Code maintenance June 2009 - move the input setup to after 
+C     deciding whether to skip the routine.  RCW
+C
       INCLUDE      'sched.inc'
       INCLUDE      'schpeak.inc'
 C
@@ -29,31 +32,11 @@ C
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'RDPEAK starting' )
 C
-C     Set up the input parameters.
+C     On first call, initialize group counter and PKGROUP.  Good to 
+C     do even if not reading information.  At least NPKGRP is used 
+C     to tell other routines not to look for information.
 C
       IF( .NOT. GOTKEYS ) THEN
-         CALL KPACK( '/       ', ENDMRK )
-         CALL KPACK( '        ', BLANK )
-         CALL SCHDEFS( 'refpointing', FILENAME )
-         CALL KEYCHR( 'SRCFILE', FILENAME, 80, KD, KC, KI )
-         CALL KEYCHR( 'SETUP', ' ', 80, KD, KC, KI )
-         CALL KEYADD( 'LINEINIT', UNSET, 1, KD, KC, KI )
-         CALL KEYADD( 'MINFREQ', 60.D3, 1, KD, KC, KI )
-         CALL KEYADD( 'MINEL', 30.D0, 1, KD, KC, KI )
-         CALL KEYADD( 'DWELL', 60.D0, 1, KD, KC, KI )
-         CALL KEYADD( 'STATIONS', BLANK, MPKSTA, KD, KC, KI )
-         CALL KEYCHR( 'LINENAME', ' ', 8, KD, KC, KI )
-         CALL KEYCHR( 'VLAMODE', ' ', 2, KD, KC, KI )
-         CALL KEYCHR( 'ENDPEAK', ' ', 2, KD, KC, KI )
-         DO I = 1, MPKSRC
-            CALL KEYCHR( 'SOURCES', ' ', 12, KD, KC, KI )
-         END DO
-         GOTKEYS = .TRUE.
-C
-C        Initialize group counter and PKGROUP.  Good to do even if
-C        not reading information.  At least NPKGRP is used to tell
-C        other routines not to look for information.
-C
          NPKGRP = 0
          DO ISTA = 1, NSTA
             PKGROUP(ISTA) = 0
@@ -85,6 +68,30 @@ C
 C
       IF( ( IUPK .EQ. IUPEAK .AND. FILEUP .EQ. 'NONE' ) .OR. 
      1      .NOT. DOPOINT ) GO TO 999
+C
+C     Need to worry about peaking.
+C
+C     Set up the input parameters.  
+C
+      IF( .NOT. GOTKEYS ) THEN
+         CALL KPACK( '/       ', ENDMRK )
+         CALL KPACK( '        ', BLANK )
+         CALL SCHDEFS( 'refpointing', FILENAME )
+         CALL KEYCHR( 'SRCFILE', FILENAME, 80, KD, KC, KI )
+         CALL KEYCHR( 'SETUP', ' ', 80, KD, KC, KI )
+         CALL KEYADD( 'LINEINIT', UNSET, 1, KD, KC, KI )
+         CALL KEYADD( 'MINFREQ', 60.D3, 1, KD, KC, KI )
+         CALL KEYADD( 'MINEL', 30.D0, 1, KD, KC, KI )
+         CALL KEYADD( 'DWELL', 60.D0, 1, KD, KC, KI )
+         CALL KEYADD( 'STATIONS', BLANK, MPKSTA, KD, KC, KI )
+         CALL KEYCHR( 'LINENAME', ' ', 8, KD, KC, KI )
+         CALL KEYCHR( 'VLAMODE', ' ', 2, KD, KC, KI )
+         CALL KEYCHR( 'ENDPEAK', ' ', 2, KD, KC, KI )
+         DO I = 1, MPKSRC
+            CALL KEYCHR( 'SOURCES', ' ', 12, KD, KC, KI )
+         END DO
+         GOTKEYS = .TRUE.
+      END IF
 C
 C     Open the peak file.
 C

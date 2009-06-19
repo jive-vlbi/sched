@@ -130,8 +130,10 @@ C
          NAXLIM(MSTA)   = STANAX
          AX1RATE(MSTA)  = STARA1
          AX2RATE(MSTA)  = STARA2
-         AX1ACC(MSTA)   = STAAC1
-         AX2ACC(MSTA)   = STAAC2
+         AX1ACC(1,MSTA) = STAAC1(1)
+         AX1ACC(2,MSTA) = STAAC1(2)
+         AX2ACC(1,MSTA) = STAAC2(1)
+         AX2ACC(2,MSTA) = STAAC2(2)
          ZALIM(MSTA)    = STAZAL
          TSETTLE(MSTA)  = STASTL
          MINSETUP(MSTA) = STAMSU

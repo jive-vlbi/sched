@@ -187,7 +187,7 @@ C
      6          2,  8,   8.,  1.,  .TRUE.,  .TRUE.,
      7          2,  8,   4.,  2.,  .TRUE.,  .TRUE.,
      8          2,  8,  16.,  2.,  .TRUE.,  .TRUE., 
-     9          0,  0,   0.,  0.,  .FALSE., .FALSE., 
+     9          2,  8,   8.,  4.,  .TRUE.,  .TRUE., 
      A          0,  0,   0.,  0.,  .FALSE., .FALSE.   /
 C
       DATA  LFORMAT, MIXED  / '    ', .FALSE. /
@@ -242,6 +242,9 @@ C
             CALL WLOG( 1, MSGTXT )
             WRITE( MSGTXT, '( 8X, A, F6.1 )' ) 'Sample rate: ', 
      1             SAMPRATE(KS)
+            CALL WLOG( 1, MSGTXT )
+            WRITE( MSGTXT, '( 8X, A, F6.1 )' ) 'Bits per sample: ', 
+     1             BITS(1,KS)
             CALL WLOG( 1, MSGTXT )
             WRITE( MSGTXT, '( 8X, A, F7.2 )' ) 'Speedup factor: ', 
      1             SPEEDUP(KS)
