@@ -176,6 +176,8 @@ C
      1         'required for VLBI' )
             CALL WLOG( 1, '         observations to be processed in '//
      1             'Socorro.' )
+            CALL WLOG( 1, '         The defaults are only used for '//
+     1             'projects to be processed elsewhere.' )
 C
 C           Allow plotting, but not output files.
 C

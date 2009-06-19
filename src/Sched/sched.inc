@@ -215,7 +215,7 @@ C
       INTEGER          NAXLIM(MAXCAT)
       REAL             AX1LIM(6,MAXCAT), AX2LIM(6,MAXCAT)
       REAL             AX1RATE(MAXCAT), AX2RATE(MAXCAT)
-      REAL             AX1ACC(MAXCAT), AX2ACC(MAXCAT)
+      REAL             AX1ACC(2,MAXCAT), AX2ACC(2,MAXCAT)
       REAL             TSETTLE(MAXCAT), MINSETUP(MAXCAT) 
       REAL             MAXSRCHR(MAXCAT)
       REAL             ZALIM(MAXCAT), AXOFF(MAXCAT)
@@ -639,7 +639,7 @@ C
       INTEGER          TPSDRIV(MAXSTA), TPSINDX(MAXSTA), TPLENG(MAXSTA)
       INTEGER          NDRIVE(MAXSTA), NHDPOS(MAXSTA)
       CHARACTER        TPOBS*8, DENSITY(MAXSTA)*1, HEADMODE(MAXSTA)*8
-      LOGICAL          USETAPE(MAXSTA), USEDISK(MAXSTA)
+      LOGICAL          USETAPE(MAXSTA), USEDISK(MAXSTA), ANYTAPE
       CHARACTER        MEDIA(MAXSTA)*8
 C
 C                      Calculated items.  Mostly in TPSCH.  Some for
@@ -660,7 +660,7 @@ C
      1                 TPSTART, DATASIZE, TCORR, 
      2                 AUTOTAPE, AUTOALOC, AUTOREV, 
      3                 NTPSTA, TPSDRIV, TPSINDX, TPLENG, 
-     4                 NDRIVE, NHDPOS, USETAPE, USEDISK, 
+     4                 NDRIVE, NHDPOS, USETAPE, USEDISK, ANYTAPE,
      5                 TPDAT, NRDBCK, NSTOP, NRECONF, NSTSC,
      6                 TAPES, PASSES, EXPTAPE, TPHR, SCNHR, TPFOOT1, 
      7                 TPFOOT2, MAXDR, GBYTES, TGBYTES, TTSYNC, 

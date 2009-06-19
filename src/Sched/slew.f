@@ -21,7 +21,7 @@ C
       REAL               LASTAX1, LASTAX2, CURAX1, CURAX2, LASTAZ
       DOUBLE PRECISION   AX1SLEW, AX2SLEW, DMINSU 
       REAL               TACC1, TACC2, DACC1, DACC2, TSLW1, TSLW2
-      REAL               RATE1, RATE2
+      REAL               RATE1, RATE2, AX1ADU, AX2ADU
       REAL               LDEC4, DEC4
 C --------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'SLEW: Starting.' )
@@ -75,6 +75,10 @@ C     full speed is really T = 2sqrt(2(D/2)/a).
 C     TACC1 and TACC2 are in seconds.
 C     RATE1 and RATE2 are deg/sec  (trying to use seconds for all).
 C
+C     The above was for the original implementation of acceleration.
+C     It assumed acceleration and deceleration were the same.  But some
+C     antennas, including the DSN, have different rates.
+C
 C     First the slew distance.
 C
       AX1SLEW = ABS( CURAX1 - LASTAX1 )
@@ -85,21 +89,23 @@ C     full speed.
 C
       RATE1 = AX1RATE(KSTA) / 60.0
       RATE2 = AX2RATE(KSTA) / 60.0
-      TACC1 = 2.0 * RATE1 / AX1ACC(KSTA)
-      TACC2 = 2.0 * RATE2 / AX2ACC(KSTA)
-      DACC1 = RATE1**2 / AX1ACC(KSTA)
-      DACC2 = RATE2**2 / AX2ACC(KSTA)
+      AX1ADU = 1.0 / AX1ACC(1,KSTA) + 1.0 / AX1ACC(2,KSTA)
+      AX2ADU = 1.0 / AX2ACC(1,KSTA) + 1.0 / AX2ACC(2,KSTA)
+      TACC1 = RATE1 * AX1ADU
+      TACC2 = RATE2 * AX2ADU
+      DACC1 = RATE1**2 * AX1ADU * 0.5
+      DACC2 = RATE2**2 * AX2ADU * 0.5
 C
 C     Then get the actual time, with the method depending on whether
 C     full speed was reached.
 C
       IF( AX1SLEW .LT. DACC1 ) THEN
-         TSLW1 = 2.0 * SQRT( AX1SLEW / AX1ACC(KSTA) )
+         TSLW1 = SQRT( 2.0 * AX1SLEW * AX1ADU )
       ELSE
          TSLW1 = TACC1 + ( AX1SLEW - DACC1 ) / RATE1
       END IF
       IF( AX2SLEW .LT. DACC2 ) THEN
-         TSLW2 = 2.0 * SQRT( AX2SLEW / AX2ACC(KSTA) )
+         TSLW2 = SQRT( 2.0 * AX2SLEW * AX2ADU )
       ELSE
          TSLW2 = TACC2 + ( AX2SLEW - DACC2 ) / RATE2
       END IF

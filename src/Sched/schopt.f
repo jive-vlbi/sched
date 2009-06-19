@@ -82,10 +82,10 @@ C
       INTEGER           ISCN, KSCN, ISTA, LASTISCN(MAXSTA), NGSCANS
       INTEGER           NGOOD, YEAR, DAY1, DAY2
       INTEGER           PEAKOPT
-      LOGICAL           ADJUST, KEEP, DONE, GOTALL, ANYTAPE
+      LOGICAL           ADJUST, KEEP, DONE, GOTALL
       DOUBLE PRECISION  START, STOP
       CHARACTER         TFORM*8, TIME1*8, TIME2*8
-      SAVE              LASTISCN, ANYTAPE
+      SAVE              LASTISCN
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHOPT: Starting.' )
 C
@@ -98,7 +98,6 @@ C
       DO ISTA = 1, NSTA
          LASTISCN(ISTA) = 0
       END DO
-      ANYTAPE = .FALSE.
 C
 C     PEAKOPT is related to reference pointing which is triggered by 
 C     the user setting AUTOPEAK.  PEAKOPT tells how many more 
@@ -350,9 +349,6 @@ C
      1                VLBITP .AND. .NOT. NOSET ) THEN
                      IF( USEDISK(ISTA) ) THEN
                         CALL DISKPOS( ISCN, ISTA, LASTISCN )
-                     END IF
-                     IF( USETAPE(ISTA) ) THEN
-                        ANYTAPE = .TRUE.
                      END IF
                   END IF
                   CALL TPPACK( 'PACK', TPDAT(1,ISCN,ISTA),
