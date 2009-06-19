@@ -82,11 +82,14 @@ C       IF( C1950(ISRC) .NE. ' ' ) CH1 = ' '
 C
 C           and last coordinates of DATE
 C
+C           June 19, 2009. RCW  Allow coordinates of date from user.
+C           J2000 version will be used internally and in the Vex file.
+C
       STRRA = TFORM( RAP(ISRC), 'T', 0, 2, 10, 'hms' ) 
       STRDEC = TFORM( DECP(ISRC),  ' ', 1, 2, 9, 'd''"' )
       CH1 = '*'
-      IF( CDATE(ISRC) .NE. ' ' ) 
-     1    CALL ERRLOG('VXWRDT: coordinates of date not supported')
+C      IF( CDATE(ISRC) .NE. ' ' ) 
+C     1    CALL ERRLOG('VXWRDT: coordinates of date not supported')
       WRITE( IVEX, '( A1, 4X, A, A, A1, 1X, A, A, A1, 1X, 
      1    A, A, A1 )' )
      2    CH1, 'ra = ', STRRA(1:LEN1(STRRA)), 
