@@ -16,6 +16,14 @@ C     been set based on the bit rate, as has the FASTTRK flag for
 C     bit rates above 512 Mbps.  For VLBA, FASTTRK is not allowed 
 C     because the electronics don't do 16 Mbps/track.
 C
+C     With tape, it was desirable to keep the number of tracks the 
+C     same for all setups.  Specifically, for TWOHEAD observations,
+C     scans with narrower bandwidths would still use 64 tracks.
+C     With the disk systems, there is no need to keep the number
+C     of tracks constant as it no longer complicates media managment.
+C     Therefore relax any attempt to preserve the number of tracks
+C     when there are no tapes.
+C
       INCLUDE        'sched.inc'
       INCLUDE        'schset.inc'
 C
@@ -30,21 +38,28 @@ C
 C
 C     Set the maximum bit rate per track and the maximum number of
 C     tracks MAXTRAK available for use.  Assume all stations can do 
-C     TWOHEAD (2 drives or 2 heads).  It is later in SETFORM that 
-C     the number of channels will be decreased for stations that 
-C     don't have enough resources for TWOHEAD.
+C     TWOHEAD (2 drives or 2 heads - or simply 64 tracks).  It is 
+C     later in SETFORM that the number of channels will be decreased 
+C     for stations that don't have enough resources for TWOHEAD.
 C
 C     The meaning of some variables:
 C     NSTREAM  - The number of bit streams.
 C     TOTBPS   - The total bit rate.  Derived in SETFORM.
 C     MINTBPS  - The minimum track bit rate that can be used.
 C     MAXTBPS  - The maximum track bit rate that can be used.
-C     MINTRAK   - The minimum number of tracks required.
-C     MAXTRAK   - The maximum number of tracks that can be used.
+C     MINTRAK  - The minimum number of tracks required.
+C     MAXTRAK  - The maximum number of tracks that can be used.
+C     MAXBR    - Maximum track bit rate.
+C
+C     Set number of tracks.  64 for more than 256 Mbps, 32 otherwise.
 C
       MAXBR = 8.0
-      ALLTRK = 32
-      IF( TWOHEAD ) ALLTRK = 64
+      IF( ( ANYTAPE .AND. TWOHEAD ) .OR. TOTBPS(KS) .GT. 257.0 ) THEN
+         ALLTRK = 64
+      ELSE
+         ALLTRK = 32
+      END IF
+C
       NSTREAM = NCHAN(KS) * BITS(1,KS)
       MINTBPS(KS) = MAX( 2.0, SAMPRATE(KS) / 4.0 )
       MAXTBPS(KS) = MIN( SAMPRATE(KS), MAXBR )
@@ -160,14 +175,15 @@ C
 C     Set the format in some cases where there is no choice.
 C     First if all available tracks are being used, the mode is
 C     forced.  This happens with anything above 128 Mbps.
-C     Also assume that all two head observations all 64 tracks 
-C     (even if some  setups have narrower bandwidths).  Note we 
+C     Also assume that all TWOHEAD tape observations use all 64 tracks 
+C     (even if some setups have narrower bandwidths).  Note we 
 C     have not yet docked channels from the single drive stations.  
 C     We'll do that later to avoid logic complications now.
+C     Use 129 as something a bit larger than 128.
 C
       IF( FANOUT(KS) .EQ. 0.0 ) THEN
-         IF( TWOHEAD .OR. ( .NOT. TWOHEAD .AND. 
-     1          TOTBPS(KS) .GT. 128 ) ) THEN
+         IF( ( ANYTAPE .AND. TWOHEAD  ) .OR. TOTBPS(KS) .GT. 129.0 ) 
+     1        THEN
             FANOUT(KS) = MAXTRAK(KS) * SAMPRATE(KS) / TOTBPS(KS)
          END IF
       END IF

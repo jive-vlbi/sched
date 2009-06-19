@@ -13,18 +13,20 @@ C --------------------------------------------------------------------
 C
 C     Let the user know that 2 head mode is being used.
 C     Warn the user if any stations can't do it.  Those sations will
-C     only record half the data.
+C     only record half the data.  Such stations should not now exist
+C     after the switch to Mark5.  This will need further modification
+C     soon for Mark5C (comment June 2009).
 C
       IF( TWOHEAD ) THEN
-         CALL WLOG( 1, 'TWOHDSET: Using 2 head (MkIV) or 2 ' //
-     1       'tape (VLBA) wide band mode.' )
+         CALL WLOG( 1, 'TWOHDSET: Using 64 track mode for wide ' //
+     1       'bandwidth.' )
          DO ISTA = 1, NSTA
             IF( NHEADS(STANUM(ISTA)) .LE. 1 .AND.
-     1          STNDRIV(STANUM(ISTA)) .LE. 1 ) THEN
+     1          STNDRIV(STANUM(ISTA)) .LE. 1 .AND. USETAPE(ISTA) ) THEN
                CALL WLOG( 1, 'TWOHDSET: ** ' // STANAME(ISTA) //
      1             ' cannot do 2 head mode.' )
                CALL WLOG( 1, '            It will record half the '//
-     3             'bandwidth used at stations that can.' )
+     1             'bandwidth used at stations that can.' )
             END IF
          END DO
       END IF
@@ -46,6 +48,9 @@ C     the default which is normally 14.  The tape initialization
 C     parameters were rearranged to have a set for every station
 C     in order to make this possible without messing up other
 C     stations.
+C
+C     This is not relevant to disk recordings, but it doesn't hurt
+C     to set it.
 C
       DO ISTA = 1, NSTA
          IF( HEADMODE(ISTA) .EQ. ' ' ) THEN

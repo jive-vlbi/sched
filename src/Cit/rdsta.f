@@ -110,8 +110,8 @@ C
          CALL KEYADD( 'AX2LIM', 0.D0, 6, KD, KC, KI )
          CALL KEYADD( 'AX1RATE', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'AX2RATE', 0.D0, 1, KD, KC, KI )
-         CALL KEYADD( 'AX1ACC', 0.D0, 1, KD, KC, KI )
-         CALL KEYADD( 'AX2ACC', 0.D0, 1, KD, KC, KI )
+         CALL KEYADD( 'AX1ACC', 0.D0, 2, KD, KC, KI )
+         CALL KEYADD( 'AX2ACC', 0.D0, 2, KD, KC, KI )
          CALL KEYADD( 'MOUNT', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'AXISTYPE', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'AXISOFF', 0.D0, 1, KD, KC, KI )
@@ -232,6 +232,8 @@ C
       KD( KEYPTR( 'AX2RATE', KC, KI ) ) = 1000.0D0
       KD( KEYPTR( 'AX1ACC', KC, KI ) ) = 1000.0D0
       KD( KEYPTR( 'AX2ACC', KC, KI ) ) = 1000.0D0
+      KD( 1 + KEYPTR( 'AX1ACC', KC, KI ) ) = 0.0D0
+      KD( 1 + KEYPTR( 'AX2ACC', KC, KI ) ) = 0.0D0
       KD( KEYPTR( 'MOUNT', KC, KI ) ) = ALTAZ
 C
 C     Get the input data for the next line.
@@ -376,12 +378,18 @@ C
       END IF
 C
 C     Slew and limit information.
+C     Assume that, if the deceleration (element 2 of STAAC1 and STAAC2)
+C     is not set that it is the same as the acceleration.
 C
       STAZAL = KD( KEYPTR( 'ZALim', KC, KI ) )
       STARA1 = KD( KEYPTR( 'AX1RATE', KC, KI ) )
       STARA2 = KD( KEYPTR( 'AX2RATE', KC, KI ) )
-      STAAC1 = KD( KEYPTR( 'AX1ACC', KC, KI ) )
-      STAAC2 = KD( KEYPTR( 'AX2ACC', KC, KI ) )
+      STAAC1(1) = KD( KEYPTR( 'AX1ACC', KC, KI ) )
+      STAAC1(2) = KD( 1 + KEYPTR( 'AX1ACC', KC, KI ) )
+      IF( STAAC1(2) .EQ. 0.0 ) STAAC1(2) = STAAC1(1)
+      STAAC2(1) = KD( KEYPTR( 'AX2ACC', KC, KI ) )
+      STAAC2(2) = KD( 1 + KEYPTR( 'AX2ACC', KC, KI ) )
+      IF( STAAC2(2) .EQ. 0.0 ) STAAC2(2) = STAAC2(1)
       STAMNT = KCHAR( 'MOUNT', 5, .FALSE., KD, KC, KI )
 C
       STANAX = 3

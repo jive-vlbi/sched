@@ -21,10 +21,15 @@
 !   because I don't have a position.  But could be put back when XYZ is
 !   available.
 !
+! Adjusted slew speeds and added accelerations based on 810-005 document
+! on "Antenna Positioning" from the DSN web site.  June 15, 2009.  RCW
+! Also really removed S2
+
   STATION=GOLD70   STCODE=Go  CONTROL=VEX
-    !  DSS14 - Goldstone 70m  Goldmars.x
+    !  DSS14 - Goldstone 70m  Goldmars.
     DBNAME = DSS14
-    MOUNT=ALTAZ AX1RATE=12 AX2RATE=12  AX1LIM=135,675 AX2LIM=6,86
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15  AX1LIM=135,675 AX2LIM=6,86
+    AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
     TSETTLE=2 DAR=MKIV   RECORDER=MKIV   NDRIVES=2  NHEADS=1 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
@@ -32,11 +37,16 @@
     !  DSS15 - Goldstone 34m HEF
     DBNAME = DSS15
     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=270,720 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
     TSETTLE=2  DAR=MKIV   RECORDER=MKIV   NDRIVES=2  NHEADS=1 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
   STATION=GOLDVENU  STCODE=Go  CONTROL=VEX
     !  DSS13 - 34m BWG, replaced old 26m
+    !  Not listed in 810-005 document June 09.  Retired?
+    !     Goldstone BWG antennas are DSS-24, DSS-25, and DSS-26
+    !     Also DSS-27 is a HSB (high speed) 34m antenna
+    !     and DSS-16 is a 26m antenna.
     ELEV= 6370000.00  LONG= 116:47:40.04    LAT= 35:14:49.79
     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=270,810 AX2LIM=6,88
     TSETTLE=2  DAR=MKIV   RECORDER=MKIV   NDRIVES=1  NHEADS=1 NBBC=14
@@ -45,7 +55,8 @@
   STATION=TID70   STCODE=Ti  CONTROL=VEX
     !  DSS43 - Australia 70m
     DBNAME = DSS43
-    MOUNT=ALTAZ AX1RATE=12 AX2RATE=12 AX1LIM=230,759.8 AX2LIM=6,86
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=230,759.8 AX2LIM=6,86
+    AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
     TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
@@ -53,42 +64,31 @@
     !  DSS45 - Australia 34m HEF
     DBNAME = DSS45
     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
     TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
 !
 ! Cannot use until a position is found.
 !  STATION=DSS34   STCODE=Ti  CONTROL=VEX
-    !  DSS34 - Australia 34m antenna similar to DSS45
+    !  DSS34 - Australia 34m BWG antenna similar to DSS45
     !  Temporary azimuth slew limit temporarily low (June 2009 RCW -
-    !  From email from Shinji Horiuchi.
-!     DBNAME = DSS45
+    !  From email from Shinji Horiuchi.)
+!     DBNAME = DSS34
 !    MOUNT=ALTAZ AX1RATE=24 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+!    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
 !    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
 !    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
 !
-!    I'm assuming that S2 is no longer available  Nov 2008  RCW.
-!  STATION=TID70_S2 STCODE=Ti  CONTROL=VEX
-!    !  DSS43 - Australia 70m, S2 recorder
-!    DBNAME = DSS43
-!    MOUNT=ALTAZ AX1RATE=12 AX2RATE=12 AX1LIM=230,760 AX2LIM=6,86
-!    TSETTLE=2  DAR=NONE  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=14
-!   / 
-!  STATION=TID34_S2 STCODE=Ti  CONTROL=VEX
-!    !  DSS45 - Australia 34m HEF, S2 recorder
-!    DBNAME = DSS45
-!    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
-!    TSETTLE=2  DAR=NONE  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=14
-!   / 
   STATION=ROB70    STCODE=Ro  CONTROL=VEX
     !  DSS63 - Madrid 70m
     DBNAME = DSS63
     !  Update from Esther Mol, 17 May 2005 via Cormac:
     !    Changes were addition of acceleration, change to 1 drive
-    !    and new tsettle.   Also no S2 available.
-    MOUNT=ALTAZ AX1RATE=12 AX2RATE=12 AX1LIM=140,669 AX2LIM=6,86
-    AX1ACC=0.20 AX2ACC=0.20
+    !    and new tsettle.
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=140,669 AX2LIM=6,86
+    AX1ACC=0.20,2.5   AX2ACC=0.20, 2.5
     TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
@@ -97,8 +97,10 @@
     DBNAME = DSS65
     !  Update from Esther Mol, 17 May 2005 via Cormac:
     !    Change was change to 1 drive and new tsettle.
-    !    Also no S2 available
-    MOUNT=ALTAZ AX1RATE=12 AX2RATE=48 AX1LIM=-88,358 AX2LIM=6,88
+    !    Note DSS-54 and DSS-55 are BWG 34m antennas at Madrid.
+    !    Original version had AX1RATE=12.  Almost certainly wrong.
+  MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=-88,358 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
     TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 

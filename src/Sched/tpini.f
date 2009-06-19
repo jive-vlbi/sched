@@ -33,7 +33,7 @@ C
       INCLUDE 'tpinit.inc'
 C
       LOGICAL           GOTDEF, GOTEXP
-      INTEGER           VLBOPE, IER, JSTA, I, IUTP
+      INTEGER           VLBOPE, IER, JSTA, ISTA, I, IUTP
       CHARACTER         TPFILE*80, RESULT*255, CNAME*50
       INTEGER           KEYPTR, IS, IR, IP, ID, II, IL, IN, IH, IB, IM
       SAVE              IS, IP, ID, II, IL, IN, IH, IB, IM
@@ -117,9 +117,12 @@ C
       IF( TPFILE .EQ. 'NONE' ) THEN
 C
 C        No tape initialization given.  Set defaults.
+C        Since this whole tape initialization is basically obsolete
+C        in the disk era, don't both users about using the defults.
 C
-         IF( MARK2 .OR. VLBITP ) CALL WLOG( 0, 'TPINI:   '//
-     1      'Using default tape initialization information.' )
+C         IF( MARK2 .OR. VLBITP ) 
+C     1       CALL WLOG( 0, 'TPINI:   '//
+C     2         'Using default tape initialization information.' )
 C
          RTPOBS  = 'DEFAULT'
          RNTPSTA = MDEF

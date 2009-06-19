@@ -9,7 +9,7 @@ C
       INTEGER    NNSTA, MJD
       REAL       BLENSQ, YEARS
       CHARACTER  CDEN*4, CAA*3, CAR*3
-      LOGICAL    ANYTAPE, ANYDISK, ANYELSE
+      LOGICAL    ANYDISK, ANYELSE
 C ----------------------------------------------------------------------
 C
       WRITE( ISUM, '( 1X, /, 1X, /, 1X, /, A, /, 1X, /, A,A, /, 1X )' )
@@ -101,11 +101,9 @@ C
 C
 C        First find out what we have.
 C
-         ANYTAPE = .FALSE.
          ANYDISK = .FALSE.
          ANYELSE = .FALSE.
          DO ISTA = 1, NSTA      
-            ANYTAPE = ANYTAPE .OR. USETAPE(ISTA)
             ANYDISK = ANYDISK .OR. USEDISK(ISTA)
             ANYELSE = ANYELSE .OR. .NOT. ( USETAPE(ISTA) .OR.
      1                   USEDISK(ISTA) )

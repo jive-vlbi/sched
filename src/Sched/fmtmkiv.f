@@ -31,9 +31,18 @@ C ---------------------------------------------------------------------
 C
 C     Set the maximum bit rate per track and the maximum number of
 C     tracks MAXTRAK available for use.  Assume all stations can do 
-C     TWOHEAD (2 drives or 2 heads).  It is later in SETFORM that 
-C     the number of channels will be decreased for stations that 
-C     don't have enough resources for TWOHEAD.
+C     TWOHEAD (2 drives or 2 heads - or 64 tracks).  It is later 
+C     in SETFORM that the number of channels will be decreased for 
+C     stations that don't have enough resources for TWOHEAD.
+
+C     With tape, it was desirable to keep the number of tracks the 
+C     same for all setups.  Specifically, for TWOHEAD observations,
+C     scans with narrower bandwidths would still use 64 tracks.
+C     With the disk systems, there is no need to keep the number
+C     of tracks constant as it no longer complicates media managment.
+C     Therefore relax any attempt to preserve the number of tracks
+C     when there are no tapes.
+C
 C
 C     The meaning of some variables:
 C     NSTREAM  - The number of bit streams.
@@ -42,10 +51,15 @@ C     MINTBPS  - The minimum track bit rate that can be used.
 C     MAXTBPS  - The maximum track bit rate that can be used.
 C     MINTRAK   - The minimum number of tracks required.
 C     MAXTRAK   - The maximum number of tracks that can be used.
-C
+C     MAXBR    - Maximum track bit rate.C
       MAXBR = 8.0
-      ALLTRK = 32
-      IF( TWOHEAD ) ALLTRK = 64
+C
+      IF( ( ANYTAPE .AND. TWOHEAD ) .OR. TOTBPS(KS) .GT. 257.0 ) THEN
+         ALLTRK = 64
+      ELSE
+         ALLTRK = 32
+      END IF
+C
       IF( FASTTRK ) MAXBR = 16.0
       NSTREAM = NCHAN(KS) * BITS(1,KS)
       MINTBPS(KS) = MAX( 2.0, SAMPRATE(KS) / 4.0 )
@@ -172,18 +186,19 @@ C
 C     Set the format in some cases where there is no choice.
 C     First if the bit rate is above 128 Mbps, the number of
 C     tracks is forced because all available tracks will be in
-C     use.  In two head mode all setups will use all tracks even 
+C     use.  In TWOHEAD tape modes all setups will use all tracks even 
 C     though setups with less than 512 Mbps won't be
 C     using the full possible bit rate per track.  This is because
 C     we wouldn't be in that mode unless some other setup did use all, 
-C     and we want all setups to use the same number of tracks.
+C     and we want all setups to use the same number of tracks.  This
+C     is for tape modes only - for disks the number of tracks can vary.
 C
 C     Note we have not yet docked channels from the single drive 
 C     stations.  We'll do that later to avoid logic complications now.
 C
       IF( FANOUT(KS) .EQ. 0.0 ) THEN
-         IF( TWOHEAD .OR. ( .NOT. TWOHEAD .AND. 
-     1          TOTBPS(KS) .GT. 128 ) ) THEN
+         IF( ( ANYTAPE .AND. TWOHEAD ) .OR. TOTBPS(KS) .GT. 129.0 ) 
+     1        THEN
             FANOUT(KS) = MAXTRAK(KS) * SAMPRATE(KS) / TOTBPS(KS)
          END IF
       END IF

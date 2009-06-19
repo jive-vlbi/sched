@@ -110,6 +110,8 @@ C
 C
 C     Deal with MEDIA defaults etc.
 C
+      ANYTAPE = .FALSE.
+C
       DO ISTA = 1, NSTA
 C
 C        Set USETAPE and USEDISK based on RMEDIA and RECORDER.
@@ -134,6 +136,7 @@ C
      3          DISK(STANUM(ISTA)) .EQ. 'NONE' .OR.
      4          (  MEDIA(ISTA) .EQ. ' ' .AND. 
      5           MEDIADEF(STANUM(ISTA)) .EQ. 'TAPE' ) )
+         IF( USETAPE(ISTA) ) ANYTAPE = .TRUE.
 C
 C        Determine whether to use disk.
 C

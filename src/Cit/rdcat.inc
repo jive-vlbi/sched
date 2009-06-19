@@ -75,8 +75,8 @@ C     STAAX2  R4*6   -  Second axis (El, Dec, Y) limits (deg).
 C     STANAX  I4     -  Number of sets of axis limits.
 C     STARA1  R4     -  First axis slew rate (deg/min).
 C     STARA2  R4     -  Second axis slew rate (deg/min).
-C     STAAC1  R4     -  First axis slew acceleration (deg/s/s)
-C     STAAC2  R4     -  Second axis slew acceleration (deg/s/s)
+C     STAAC1  R4*2   -  First axis slew acceleration, deceleration (deg/s/s)
+C     STAAC2  R4*2   -  Second axis slew acceleration, deceleration (deg/s/s)
 C     STAZAL  R4     -  Zenith angle limit (mainly useful for EQUAT
 C                         antennas at low dec.
 C     STAHAL  R4     -  Hour angle limit (don't use for new code - 
@@ -138,7 +138,7 @@ C
       CHARACTER         STATSC*4
       REAL              STAHAZ(MHOR), STAHEL(MHOR)
       REAL              STAAX1(6), STAAX2(6)
-      REAL              STARA1, STARA2, STAAC1, STAAC2
+      REAL              STARA1, STARA2, STAAC1(2), STAAC2(2)
       REAL              STAZAL, STAHAL, STASTL, STAMSU, STAOFF
       REAL              STAMSH
       DOUBLE PRECISION  STALON, STALAT, STAEL, STAX, STAY, STAZ
