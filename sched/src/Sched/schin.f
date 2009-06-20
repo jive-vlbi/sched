@@ -62,6 +62,7 @@ C
       DOVEX = .TRUE.    !  Will a VEX file be needed?
       GOTVEX = .FALSE.  !  Found a VEX station.
       COVERLET = .FALSE. ! Is there a cover letter?
+      ALLVLBA = .TRUE.  !  All stations have VLBA control systems.
       DO I = 1, MAXSCN
           SRCNUM(I) = 0
           IDOPSRC(I) = 0

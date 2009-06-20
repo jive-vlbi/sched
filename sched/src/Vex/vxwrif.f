@@ -78,13 +78,14 @@ C
 C
 C     warn in case of none standard PCAL
 C
-      IF( DOWARN ) THEN
+      IF( DOWARN .AND. .NOT. ALLVLBA ) THEN
          CALL WLOG( 1,'VXWRIF: WARNING, Phase cal not under '//
      2       'computer control for some stations.' ) 
          CALL WLOG( 1,'        Contact stations by e-mail to '//
      1       'make sure phase cal is switched off ')
+         CALL WLOG( 1,'        Phase cal is under computer '//
+     1       'control for CONTROL=VLBA stations. ')
       END IF
 
       RETURN
       END
-   
