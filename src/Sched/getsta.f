@@ -128,6 +128,13 @@ C
                      IF( CONTROL(STANUM(ISTA)) .EQ. 'VSOP' ) 
      1                    DOVSOP = .TRUE.
 C
+C                    Record if all stations use VLBA control.
+C                    Actually we're mainly interested in whether
+C                    there are non-vex stations.
+C
+                     IF( CONTROL(STANUM(ISTA)) .NE. 'VLBA' )
+     1                  ALLVLBA = .FALSE.
+C
                   END IF
 C
 C                 Add the station to the scan.
