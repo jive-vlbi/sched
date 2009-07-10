@@ -38,7 +38,7 @@ C
          END IF
 C
 C        Loop over the frequency catalog IF channels looking for
-C        a match.  Default to USEIF(ICH) = 1 it there is no match.
+C        a match.  Default to USEIF(ICH) = 1 if there is no match.
 C
          USEIF(ICH) = 1
          DO IIF = 1, MFIF

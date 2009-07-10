@@ -34,7 +34,8 @@ C        frequency group can be used for each channel (OKIF).
 C
          CALL FCOMPARE( KS, KF, MATCH, OKIF, NBAD, .FALSE. )
 C
-C        Determine which of the frequency groups is compatible is best.
+C        Determine which of the frequency groups that are compatible 
+C        is best.
 C
          IF( MATCH ) THEN
 C
