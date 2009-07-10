@@ -138,27 +138,31 @@ C
 C           However, for the VLA, we should check that an error
 C           has not been made with the IF assignments.
 C
-            IF( (STANAME(ISTA) .EQ. 'VLA' .OR.
-     1           STANAME(ISTA) .EQ. 'VLA27') .AND.
-     2           VLAMODE(ISCN) .EQ. 'VS' ) THEN
-               CALL WLOG( 1, 'VLBASU: VS mode specified for station '//
-     1            'VLA or VLA27.' )
-               CALL WLOG( 1, 'VLBASU: That is for single dish '//
-     1            '(VLA1), not phased array.' )
-               CALL WLOG( 1, 'VLBASU: The patch panel will probably '//
-     1            'be set wrong.' )
-            ELSE IF( STANAME(ISTA) .EQ. 'VLA1' .AND.
-     1           ( VLAMODE(ISCN) .EQ. 'VA' .OR.
-     2             VLAMODE(ISCN) .EQ. 'VB' .OR.
-     3             VLAMODE(ISCN) .EQ. 'VR' .OR.
-     4             VLAMODE(ISCN) .EQ. 'VL' .OR.
-     5             VLAMODE(ISCN) .EQ. 'VX' ) ) THEN
-               CALL WLOG( 1, 'VLBASU: '//VLAMODE(ISCN)//
-     1            ' mode specified for station VLA1.' )
-               CALL WLOG( 1, 'VLBASU: The patch panel will probably '//
-     1            'be set wrong.' )
-               CALL WLOG( 1, 'VLBASU: Use VS for single dish mode.' )
-            END IF
+C           The distinctions between the three VLA "stations" are being
+C           removed as mixed modes are now allowed.  Comment out for 
+C           now in case problems are encountered.
+C
+C            IF( (STANAME(ISTA) .EQ. 'VLA' .OR.
+C     1           STANAME(ISTA) .EQ. 'VLA27') .AND.
+C     2           VLAMODE(ISCN) .EQ. 'VS' ) THEN
+C               CALL WLOG( 1, 'VLBASU: VS mode specified for station '//
+C     1            'VLA or VLA27.' )
+C               CALL WLOG( 1, 'VLBASU: That is for single dish '//
+C     1            '(VLA1), not phased array.' )
+C               CALL WLOG( 1, 'VLBASU: The patch panel will probably '//
+C     1            'be set wrong.' )
+C            ELSE IF( STANAME(ISTA) .EQ. 'VLA1' .AND.
+C     1           ( VLAMODE(ISCN) .EQ. 'VA' .OR.
+C     2             VLAMODE(ISCN) .EQ. 'VB' .OR.
+C     3             VLAMODE(ISCN) .EQ. 'VR' .OR.
+C     4             VLAMODE(ISCN) .EQ. 'VL' .OR.
+C     5             VLAMODE(ISCN) .EQ. 'VX' ) ) THEN
+C               CALL WLOG( 1, 'VLBASU: '//VLAMODE(ISCN)//
+C     1            ' mode specified for station VLA1.' )
+C               CALL WLOG( 1, 'VLBASU: The patch panel will probably '//
+C     1            'be set wrong.' )
+C               CALL WLOG( 1, 'VLBASU: Use VS for single dish mode.' )
+C            END IF
 C
          END IF
 C

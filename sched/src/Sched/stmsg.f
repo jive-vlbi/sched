@@ -39,11 +39,9 @@ C
       CALL WLOG( 1, ' ' )
 C
       CALL WLOG( 1, 'The manual is at ' //
-     1    'http://www.aoc.nrao.edu/~cwalker/sched/sched/sched.html' )
+     1    'http://www.aoc.nrao.edu/software/sched/index.html' )
       CALL WLOG( 1, 'Unix users should set $SCHED to the base ' //
      1    'area where SCHED is installed.' )
-C      CALL WLOG( 1, 'Note: Make continuous last passes or leave ' //
-C     1    'time for postpasses at single drive stations.' )
 C
 C     Announce the run log.
 C
