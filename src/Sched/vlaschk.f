@@ -24,10 +24,8 @@ C     number.
 C
       IF( VLAONLY ) GO TO 999
       VSTA = 0
-      PHASING = .FALSE.
       DO ISTA = 1, NSTA
          IF( STANAME(ISTA)(1:3) .EQ. 'VLA' ) VSTA = ISTA
-         IF( STANAME(ISTA) .EQ. 'VLA27' ) PHASING = .TRUE.
       END DO
       VLAUSED = VSTA .NE. 0
       IF( .NOT. VLAUSED ) GO TO 999
@@ -38,6 +36,7 @@ C     normal manner as the fringe rotators etc will be on.  Allow
 C     pointing to occur during reference pointing scans (mode IR).
 C
       OKVLB = .TRUE.
+      PHASING = .FALSE.
       DO ISCN = 1, NSCANS
          IF( VLBITP .AND. .NOT. NOREC(ISCN) .AND. 
      1       STASCN(ISCN,VSTA) ) THEN
@@ -49,6 +48,15 @@ C
      5          VLAMODE(ISCN) .NE. 'VR' .AND.
      6          VLAMODE(ISCN) .NE. 'IR' ) THEN
                OKVLB = .FALSE.
+            END IF
+C
+C           Detect phasing being used.
+C
+            IF( VLAMODE(ISCN) .EQ. 'VA' .OR. 
+     3          VLAMODE(ISCN) .EQ. 'VB' .OR.
+     4          VLAMODE(ISCN) .EQ. 'VL' .OR.
+     5          VLAMODE(ISCN) .EQ. 'VR' ) THEN
+               PHASING = .TRUE.
             END IF
          END IF
       END DO
@@ -80,10 +88,12 @@ C
                END IF
             END IF
 C
-C           Now check the recording scans.
+C           Now check the recording scans.  Don't worry about non-recording
+C           scans and single dish scans.  Also only worry if the VLA is
+C           in the scan.
 C
             IF( VLBITP .AND. .NOT. NOREC(ISCN) .AND. 
-     1          STASCN(ISCN,VSTA) ) THEN
+     1          STASCN(ISCN,VSTA) .AND. VLAMODE(ISCN) .NE. 'VS' ) THEN
                KS = NSETUP(ISCN,VSTA)
 C        
 C              Look for a VX scan before any phasing scans.
@@ -93,7 +103,9 @@ C
                END IF
 C        
 C              Check for correspondence between the IF's used and the
-C              phasing mode of the last phasing scan.
+C              phasing mode of the last phasing scan.  Note that the
+C              "last phasing scan" can be this scan if in active 
+C              phasing mode.
 C        
                DO ICH = 1, NCHAN(KS)
                   IF( IFCHAN(ICH,KS) .EQ. 'A' .AND. 

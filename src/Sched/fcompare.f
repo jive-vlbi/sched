@@ -27,7 +27,7 @@ C
       LOGICAL          MATCH, CHMATCH, IFMATCH, OKIF(MCHAN,MFIF)
       LOGICAL          CFRQOK, FREQOK, GOTAFR, PRTMISS, DEBUGPRT
       LOGICAL          RFCLOSE
-      LOGICAL          FCSTA, FCIFCH, FCFLO1, FCPOL, FCCH1, FCVLAS
+      LOGICAL          FCSTA, FCIFCH, FCFLO1, FCPOL, FCCH1
       LOGICAL          FCFE, FC50, FCVLAIF
       LOGICAL          MFLKA, MFLKB, MFEAB, MFECD, MSYNA, MSYNB
       LOGICAL          MFEF, MVBND, MVBW
@@ -144,23 +144,15 @@ C
      2                 ( FCH1RF2(IIF,KF) .EQ. 0.D0 .OR.
      3                   FCH1RF2(IIF,KF) .GT. FREQREF(1,KS) )
 C
-C              Make sure this is an allowed IF for this VLA station.
-C              NOTE: the VLAVA, VLAVR, VLAVL test superceeds this one
-C                    and is more general.
-C
-C               FCVLAS =  SETSTA(1,KS)(1:3) .NE. 'VLA' .OR.
-C     1                 ( FVCHNSTA(IIF,KF) .EQ. ' ' .OR.
-C     2                   FVCHNSTA(IIF,KF) .EQ. 'BOTH' .OR.
-C     3                   FVCHNSTA(IIF,KF) .EQ. SETSTA(1,KS) )
-               FCVLAS = .TRUE.
-C
 C              For the VLA phased array, try to limit choice of IF.
 C              Allow for possible different phasing modes using the
 C              same setup (ok for RR only, for example - could use
-C              VR or VA)
+C              VR or VA).  Actually mixing modes would flagged 
+C              elsewhere.  Do this test for any VLA "station" since
+C              mixed phasing and non-phasing modes are allowed.
 C
-               IF( SETSTA(1,KS) .EQ. 'VLA27' ) THEN
-                  FCVLAIF = .TRUE.
+               FCVLAIF = .TRUE.
+               IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' ) THEN
                   IF( VLAVA(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'B'
      1              .OR. FIFNAM(IIF,KF) .EQ. 'C' ) ) FCVLAIF = .FALSE.
                   IF( VLAVB(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'A'
@@ -169,8 +161,6 @@ C
      1              .OR. FIFNAM(IIF,KF) .EQ. 'D' ) ) FCVLAIF = .FALSE.
                   IF( VLAVL(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'A'
      1              .OR. FIFNAM(IIF,KF) .EQ. 'B' ) ) FCVLAIF = .FALSE.
-               ELSE
-                  FCVLAIF = .TRUE.
                END IF
 C
 C              If it is the VLBA, be sure of the front end spec.
@@ -185,7 +175,7 @@ C
 C              Add up all the tests.
 C
                IFMATCH = FCIFCH .AND. FCFLO1 .AND. FCPOL .AND. FCCH1
-     1              .AND. FCVLAS .AND. FCVLAIF .AND. FCFE .AND. RFCLOSE
+     1              .AND. FCVLAIF .AND. FCFE .AND. RFCLOSE
 C
 C              If the channel matches, record that fact.
 C
@@ -210,7 +200,6 @@ C
                IF( .NOT. FCFLO1 )  IIFBAD = IIFBAD + 1
                IF( .NOT. FCPOL )   IIFBAD = IIFBAD + 1
                IF( .NOT. FCCH1 )   IIFBAD = IIFBAD + 1
-               IF( .NOT. FCVLAS )  IIFBAD = IIFBAD + 1
                IF( .NOT. FCVLAIF ) IIFBAD = IIFBAD + 1
                IF( .NOT. FCFE )    IIFBAD = IIFBAD + 1
                IF( .NOT. FREQOK )  IIFBAD = IIFBAD + 1

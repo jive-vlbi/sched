@@ -13,7 +13,7 @@ C
       INCLUDE 'schset.inc'
 C
       DOUBLE PRECISION  VALUE(*)
-      INTEGER           CASE, ISCN, KI(*), KEYPTR, NGET
+      INTEGER           CASE, ISCN, KI(*), KEYPTR, NGET, NVLA, ISTA
       LOGICAL           WARN, VNTSY(2)
       CHARACTER         KC(*)*(*), KCHAR*80, INBW*4, INBND*2
       SAVE              WARN, VNTSY
@@ -85,12 +85,22 @@ C
 C
       ELSE IF( CASE .EQ. 2 ) THEN
 C
-C        Schedule wide parameters and a check that VLBI is being done
-C        with a VLBI mode.
+C        Schedule wide parameters.
 C
          VLATYPE  = KCHAR( 'VLATYPE', 9, .TRUE., VALUE, KC, KI )
          VLAUSERN = VALUE( KEYPTR( 'VLAUSERN', KC, KI ) ) 
          IATUTC   = VALUE( KEYPTR( 'IATUTC', KC, KI ) )
+C
+C        Check that there aren't more than one VLA station for 
+C        regular scheduling.
+C
+         IF( .NOT. NOSET ) THEN
+            NVLA = 0
+            DO ISTA = 1, NSTA
+               IF( STANAME(ISTA)(1:3) .EQ. 'VLA' ) NVLA = NVLA + 1
+            END DO
+            IF( NVLA .GE. 2 ) CALL WRTMSG( 1, 'INVLA', 'multipleVLA' )
+         END IF
       ELSE
          CALL ERRLOG( 'INVLA: Bad case.' )
       END IF
