@@ -146,7 +146,7 @@ C
                      CALL WLOG( 1, 
      1                  'VLASCHK:  **** WARNING ****' )
                      CALL WLOG( 1, 
-     1                  '    One or more scans at VLA27 uses an ' //
+     1                  '    One or more scans at the VLA uses an ' //
      2                  'unphased IF.' )
                      CALL WLOG( 1, 
      1                  '    This might be ok for VLA only ' //

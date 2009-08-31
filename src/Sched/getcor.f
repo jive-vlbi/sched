@@ -118,74 +118,11 @@ C
             MISCOR = .TRUE.
          END IF
 C
-         IF( CORAVG .EQ. 0.0 ) THEN
-            MISCOR = .TRUE.
-            CALL WLOG( 1, '        Correlator average time missing.' )
-         END IF
-C
-         IF( CORCHAN .EQ. 0 ) THEN
-            MISCOR = .TRUE.
-            CALL WLOG( 1, '        Number of correlator spectral '//
-     1           'channels not specified' )
-         END IF
-C
-         IF( CORNANT .EQ. 0 ) THEN
-            MISCOR = .TRUE.
-            CORNANT = NSTA
-            CALL WLOG( 1, '        Number of antennas to be '//
-     1         'correlated missing.' )
-         END IF
-C
-         IF( CHPOL(1:2) .NE. 'ON ' .AND. CHPOL(1:3) .NE. 'OFF' ) THEN
-            MISCOR = .TRUE.
-            CALL WLOG( 1, '        Invalid polarization spec: ' // 
-     1            CHPOL )
-         END IF
-C
-         IF( CORWTFN .NE. 'UNIFORM' .AND. CORWTFN .NE. 'HANNING' .AND.
-     1       CORWTFN .NE. 'QANNING' .AND. CORWTFN .NE. 'ZEROPAD' ) THEN
-            CALL WLOG( 1, '        Unrecognized correlator weighting'//
-     1         ' function: ' // CORWTFN )
-         END IF
-C
-         IF( CORTAPE(1:3) .NE. 'DAT' .AND. 
-     1       CORTAPE(1:7) .NE. 'EXABYTE' .AND.
-     2       CORTAPE(1:4) .NE. 'NONE' .AND.
-     3       CORTAPE(1:3) .NE. 'FTP' ) THEN
-            MISCOR = .TRUE.
-            CALL WLOG( 1, '        Unrecognized correlator distribution'
-     1       //' media: '// CORTAPE )
-         END IF
-C
-C        Check that a shipping address was provided for the media that 
-C        need to be shipped.
-C
-         IF( LEN1( CORSHIP(1) ) .EQ. 0 .AND. ( 
-     1             CORTAPE(1:3) .EQ. 'DAT' .OR.
-     2             CORTAPE(1:7) .EQ. 'EXABYTE' ) ) THEN
-            MISCOR = .TRUE.
-            CALL WLOG( 1, '        Missing distribution tape shipping'//
-     1            ' address.' )
-         END IF
-C
-C        Deal with case where parameters weren't provided.
-C
-         IF( MISCOR .AND.  ( CORREL(1:4) .EQ. 'VLBA' 
-     1       .OR. CORREL(1:7) .EQ. 'SOCORRO' ) ) THEN
-            CALL WLOG( 1, 'GETCOR:  Correlator parameters are '//
-     1         'required for VLBI' )
-            CALL WLOG( 1, '         observations to be processed in '//
-     1             'Socorro.' )
-            CALL WLOG( 1, '         The defaults are only used for '//
-     1             'projects to be processed elsewhere.' )
-C
-C           Allow plotting, but not output files.
-C
-            IF( PLOT ) THEN
-               MISSING = .TRUE.
-            ELSE
-               CALL ERRLOG( 'Add correlator info and try again.' )   
-            END IF
+         IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
+     1        CORREL(1:4) .EQ. 'VLBA' ) THEN
+             CALL SOCDEF( CHPOL )
+         ELSE
+             CALL CORDEF( CHPOL )
          END IF
 C
       END IF

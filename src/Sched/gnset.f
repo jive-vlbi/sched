@@ -66,15 +66,16 @@ C
 C
   100    CONTINUE
 C
-C        If still don't have something, die.  Add special warning
-C        if the problem was at the VLA
+C        If still don't have something, die.  Comment ou the special 
+C        warning if the problem was at the VLA as I am trying to make
+C        the various VLA names equivalent.
 C
          IF( GNSET .EQ. 0 ) THEN
-            IF( STANAME(ISTA) .EQ. 'VLA' .AND. GOTVLA ) THEN
-               CALL WLOG( 1, ' ' )
-               CALL WLOG( 1, 'GNSET: For VLBI observations at the '//
-     1             'VLA, use VLA1 or VLA27 in the schedule.' )
-            END IF
+C            IF( STANAME(ISTA) .EQ. 'VLA' .AND. GOTVLA ) THEN
+C               CALL WLOG( 1, ' ' )
+C               CALL WLOG( 1, 'GNSET: For VLBI observations at the '//
+C     1             'VLA, use VLA1 or VLA27 in the schedule.' )
+C            END IF
             LN1 = 1
             LNAME = LEN1( SETFILE(SETNUM(ISCN)) )
             IF( LNAME .GT. 45 ) LN1 = LNAME - 45

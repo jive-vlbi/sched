@@ -40,8 +40,7 @@ C
 C        Now for VLA setups, set the flags.
 C
          IF( JSTA .NE. 0 ) THEN         
-            IF( SETSTA(1,KS) .EQ. 'VLA27' .OR.
-     1          SETSTA(1,KS) .EQ. 'VLA'  ) THEN
+            IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' ) THEN
                DO ISCN = 1, NSCANS
                   IF( SETNUM(ISCN) .EQ. ISETNUM(KS) .AND. 
      1                STASCN(ISCN,JSTA) ) THEN

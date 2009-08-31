@@ -36,7 +36,7 @@ C
       DATA  CBAND(6), CFREQ(6), CBW(6)  /  '21cm', 1435.49, 64.0 /
       DATA  CBAND(7), CFREQ(7), CBW(7)  /  '21cm', 1416.49, 0.0 /
 C
-C     The second 18cm band will be used when Jodrell, but not VLA27,
+C     The second 18cm band will be used when Jodrell, but not the VLA,
 C     is present to avoid RFI.
 C
       DATA  CBAND(8), CFREQ(8), CBW(8)  /  '18cm', 1658.49, 0.0 /
@@ -113,7 +113,7 @@ C              incompatibility between the VLA 50 MHz band that
 C              should be used (1640-1690) and some bad RFI at
 C              Jodrell just below 1670.  For this band, detect the
 C              use of either station.  If Jodrell is there, but
-C              VLA27 is not, change to the special frequency
+C              the VLA is not, change to the special frequency
 C              set for 18 cm - which would not otherwise have
 C              been selected.  I don't plan to be fussy about 
 C              whether the stations are used in this setup.  That
@@ -125,7 +125,7 @@ C
      1                STCODE(STANUM(ISTA)) .EQ. 'Jv' ) USEJOD = .TRUE.
                END DO
                DO ISTA = 1, NSTA
-                  IF( STATION(STANUM(ISTA)) .EQ. 'VLA27' ) 
+                  IF( STATION(STANUM(ISTA))(1:3) .EQ. 'VLA' ) 
      1                USEJOD = .FALSE.
                END DO
                IF( USEJOD ) IB = IB + 1
