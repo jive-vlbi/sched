@@ -140,7 +140,7 @@ C           has not been made with the IF assignments.
 C
 C           The distinctions between the three VLA "stations" are being
 C           removed as mixed modes are now allowed.  Comment out for 
-C           now in case problems are encountered.
+C           now, but don't remove in case problems are encountered.
 C
 C            IF( (STANAME(ISTA) .EQ. 'VLA' .OR.
 C     1           STANAME(ISTA) .EQ. 'VLA27') .AND.

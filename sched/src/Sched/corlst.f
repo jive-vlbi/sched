@@ -6,7 +6,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER           LSTA, LSCN, I, NSANT, NBAS, NPOL
+      INTEGER           ISTA, ISCN, I, NSANT, NBAS, NPOL
       REAL              DATARATE
       DOUBLE PRECISION  TTIME, TRTIME, TBTIME, STIME
       DOUBLE PRECISION  TIMEB, TIMEL, TLAST
@@ -47,18 +47,18 @@ C
 C
 C        Loop through scans.
 C
-         DO LSCN = SCAN1, SCANL
+         DO ISCN = SCAN1, SCANL
 C
 C           Start and end times of experiment to determine elapsed time.
 C
-            TIMEB = MIN( TIMEB, STARTJ(LSCN) )
-            TIMEL = MAX( TIMEL, STOPJ(LSCN) )
+            TIMEB = MIN( TIMEB, STARTJ(ISCN) )
+            TIMEL = MAX( TIMEL, STOPJ(ISCN) )
 C
 C           Get number of stations in the scan.
 C
             NSANT = 0
-            DO LSTA = 1, NSTA
-               IF( STASCN(LSCN,LSTA) ) THEN
+            DO ISTA = 1, NSTA
+               IF( STASCN(ISCN,ISTA) ) THEN
                   NSANT = NSANT + 1            
                END IF
             END DO
@@ -66,7 +66,7 @@ C
 C           Get time in all scans, including non-recording scans.
 C
             IF( NSANT .GT. 0 ) THEN
-               STIME = ( STOPJ(LSCN) - STARTJ(LSCN) ) * 86400.D0
+               STIME = ( STOPJ(ISCN) - STARTJ(ISCN) ) * 86400.D0
                TTIME = TTIME + STIME
             END IF
 C
@@ -74,16 +74,16 @@ C           For scans recording data, get the time and the time
 C           multiplied by the number of baselines.  Look for signs
 C           that the derived data volume will be wrong.
 C
-            IF( NSANT .GT. 0 .AND. .NOT. NOREC(LSCN) ) THEN
-               STIME = ( STOPJ(LSCN) - STARTJ(LSCN) ) * 86400.D0
+            IF( NSANT .GT. 0 .AND. .NOT. NOREC(ISCN) ) THEN
+               STIME = ( STOPJ(ISCN) - STARTJ(ISCN) ) * 86400.D0
                NBAS = NSANT * ( NSANT - 1 ) / 2 + NSANT
                TRTIME = TRTIME + STIME
                TBTIME = TBTIME + STIME * NBAS
 C
 C              Test for backward time jumps.
 C
-               IF( STARTJ(LSCN) .LT. TLAST ) OVERLAP = .TRUE.
-               TLAST = STOPJ(LSCN)
+               IF( STARTJ(ISCN) .LT. TLAST ) OVERLAP = .TRUE.
+               TLAST = STOPJ(ISCN)
 C
 C              Get the data rate based on a Romney formula.
 C              The data rate in bytes/sec is given APPROXIMATELY as
@@ -101,8 +101,8 @@ C                    Tavg = time average in seconds
 C
                IF( CORAVG .GT. 0.0 .AND. .NOT. NOSET ) THEN
                   DATARATE = 4.0 * NSANT * (NSANT+1) * 
-     1                       MSCHN(SETNUM(LSCN)) * CORCHAN *
-     2                       NPOL * FSPEED(SETNUM(LSCN)) / CORAVG
+     1                       MSCHN(SETNUM(ISCN)) * CORCHAN *
+     2                       NPOL * FSPEED(SETNUM(ISCN)) / CORAVG
                ELSE
                   DATARATE = 0.0
                END IF
@@ -112,9 +112,9 @@ C              Accumulate the data size.  Note double precision - for
 C              multiple Gbytes, small numbers being added to large 
 C              numbers might stop accumulating.
 C
-               IF( FSPEED(SETNUM(LSCN)) .NE. 0.0 ) THEN
+               IF( FSPEED(SETNUM(ISCN)) .NE. 0.0 ) THEN
                   DATASIZE = DATASIZE + DATARATE * STIME / 
-     1                       FSPEED(SETNUM(LSCN))
+     1                       FSPEED(SETNUM(ISCN))
                END IF
 C
             END IF
@@ -168,13 +168,19 @@ C
      5            'others.',
      6      '      If the latter, the output data rates and volume '//
      7            'are underestimated',
-     8      '      because the number of baselines was underestimated.'
-            IF( AUTOPEAK ) THEN
-               WRITE( ISUM, '( A, /, A )' )
-     1         '      This might be do to inserted pointing scans '//
-     2               'in which case', 
-     3         '      there is no impact on data estimates.'
-            END IF
+     8      '      because the number of baselines is underestimated.'
+C
+C           I think any pointing scans should have NOREC set and so 
+C           shouldn't trigger this warning.  But I'm leaving the code
+C           here in case I'm missing something.
+C
+C            IF( AUTOPEAK ) THEN
+C               WRITE( ISUM, '( A, /, A )' )
+C     1         '      This might be due to inserted pointing scans '//
+C     2               'in which case', 
+C     3         '      there is no impact on data estimates.'
+C            END IF
+C
             WRITE( ISUM, '( 1X, / )' )
          END IF
       END IF

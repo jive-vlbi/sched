@@ -4,6 +4,8 @@ C     Routine specific for the VEX extension of SCHED.
 C     Writes a specific section of the VEX file 
 C     In this case the FQ = $FREQ section 
 C     By H.J. van Langevelde, JIVE, 300496 
+C     Increased digits for channel bandwidth.  Not enough
+C     for 62.5 kHz.  RCW Aug. 31, 2009.
 C 
       INCLUDE 'sched.inc' 
       INCLUDE 'schset.inc' 
@@ -67,8 +69,13 @@ C
 C           the channel width
 C
             LPOS = LEN1(LINE)+1
-            WRITE( LINE(LPOS:LPOS+11), '( F6.3, 1X, A3, 1X, A1 )')
-     1           VXBBFILT(ICH,IFQ), 'MHz', COL
+            IF( VXBBFILT(ICH,IFQ) .GE. 1.0 ) THEN
+               WRITE( LINE(LPOS:LPOS+12), '( F7.2, 1X, A3, 1X, A1 )')
+     1             VXBBFILT(ICH,IFQ), 'MHz', COL
+            ELSE
+               WRITE( LINE(LPOS:LPOS+12), '( F7.3, 1X, A3, 1X, A1 )')
+     1             VXBBFILT(ICH,IFQ) * 1000.0, 'kHz', COL
+            END IF
 C     
 C           and channel and BBC links
 C
