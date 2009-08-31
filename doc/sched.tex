@@ -5022,14 +5022,15 @@ default is 2 seconds but, at most frequencies, more is probably ok
 most of the time.  The longer the on-line averaging, the smaller the
 output data rates and the smaller the output data set.
 
-Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN, 
-CORNANT, CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
-the project will be correlated in Socorro.
+Note the correlation parameters {\tt CORAVG, CORCHAN, 
+CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
+the project will be correlated in Socorro and data
+are being recorded.
 
 \rcwbox
 {A real or integer number.}
 {Any, but see above for useful numbers.}
-{2.0}
+{Must be given for processing in Socorro.  Otherwise 2.0}
 {Only one value used --- the last.}
 {{\tt CORAVG = 4}}
 
@@ -5086,15 +5087,15 @@ The data rate in bytes/sec is given APPROXIMATELY as
        Su   = speed up factor (1, 2, 4)
        Tavg = time average in seconds
 
-
-Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN, 
-CORNANT, CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
-the project will be correlated in Socorro.
+Note the correlation parameters {\tt CORAVG, CORCHAN, 
+CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
+the project will be correlated in Socorro and data
+are being recorded.
 
 \rcwbox
 {An integer number, usually a power of 2}
 {Any, but see above for useful numbers.}
-{16}
+{Must be sepecified for VLBA corelator.  Otherwise 16}
 {Only one value used --- the last.}
 {{\tt CORCHAN = 32}}
 
@@ -5127,11 +5128,6 @@ This can be used to alert correlator operations to special
 requirements such as multiple phase centers, special positions,
 non-constant processing parameters etc.
 
-
-Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN, 
-CORNANT, CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
-the project will be correlated in Socorro.
-
 \rcwbox
 {Each parameter is a string of up to 64 characters}
 {An address}
@@ -5152,14 +5148,15 @@ average times and 16 or 32 channels, neither of these is of much
 concern and there is little harm in asking for full polarization
 processing.  Perhaps the data will even be useful eventually.
 
-Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN, 
-CORNANT, CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
-the project will be correlated in Socorro.
+Note the correlation parameters {\tt CORAVG, CORCHAN, 
+CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
+the project will be correlated in Socorro and data
+are being recorded.
 
 \rcwbox
 {Any 3 characters.}
 {``on'' or ``off'' are the useful values.}
-{`` '' --- which is not useful.}
+{Required for VLBA correlator, otherwise ``on''.}
 {Only one value used --- the last.}
 {{\tt CORPOL = 'on'}}
 
@@ -5173,9 +5170,10 @@ Socorro, VLBA, Haystack, Bonn, JIVE, Washington, USNO, Jpl, Bologna,
 Mitaka, Penticton, and Other (which should be followed by the name).
 The name is not case sensitive.
 
-Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN, 
-CORNANT, CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
-the project will be correlated in Socorro.
+Note the correlation parameters {\tt CORAVG, CORCHAN, 
+CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
+the project will be correlated in Socorro and data
+are being recorded.
 
 \rcwbox
 {Text up to 62 characters.}
@@ -5216,14 +5214,15 @@ used.}
 character strings in which to specify the place to ship the
 correlator distribution .
 
-Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN, 
-CORNANT, CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
-the project will be correlated in Socorro.
+Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN,
+CORPOL,} and {\tt CORSHIPn} (if {\tt CORTAPE = DAT} or {\tt EXABYTE}) must
+be specified when the project will be correlated in Socorro and data
+are being recorded.
 
 \rcwbox
 {Each parameter is a string of up to 64 characters}
 {An address}
-{Blank --- And I bet you really do want your data!}
+{Blank --- Which causes and abort if you requested shipable media.}
 {Only one of each used --- the last.}
 {{\tt CORSHIP1 = 'Phil Diamond' }\\
 {\tt CORSHIP2 = 'NRAO'} \\
@@ -5232,21 +5231,18 @@ the project will be correlated in Socorro.
 
 \subsubsection{\label{MP:CORTAPE}{\tt CORTAPE}}
 
-{\tt CORTAPE} specifies the type of media that should be used for
-the data distribution from the correlator.  This must be
-{\tt DAT}, {\tt EXABYTE}, {\tt FTP} or {\tt NONE}.  The latter two
-basically mean that the PI will pick up a disk copy of the data by
-means of a network copy (there is no effective difference between
-the two).
-
-Note the correlation parameters {\tt CORREL, CORAVG, CORCHAN, 
-CORNANT, CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
-the project will be correlated in Socorro.
+{\tt CORTAPE} specifies the type of media that should be used for the
+data distribution from the correlator.  This must be {\tt FTP}, {\tt
+DAT}, or {\tt NONE}.  {\tt FTP} and {\tt NONE} basically mean that the
+PI will pick up a disk copy of the data by means of a network copy
+(there is no effective difference between the two).  EXABYTE was recently
+removed for lack of use, as 9TRACK was long ago.  FLASH or DISK may get
+added some day, but not yet.
 
 \rcwbox
 {A string of up to 16 characters}
 {DAT, EXABYTE, or FTP}
-{Blank  --- Not too useful.}
+{Blank, which causes and abort if data are being recorded.}
 {Only one used --- the last.}
 {{\tt CORTAPE = 'DAT'}}
 
@@ -12634,7 +12630,16 @@ too much work).
 
 \begin{itemize}
 
+\item Don't issue warning about poorly estimated data set sizes when
+overlapping scans are pointing scans.  RCW Aug. 21, 2009.
 
+\item Change the documentation and the actual behavior of the
+correlator parameters to match.  Basically, for the VLBA correlator,
+many parameters are required to force the user to think about them.
+For other correlators, they have reasonable defaults.  Changed the
+default CORTAPE to FTP for non-VLBA correlators.  It is required for
+the VLBA.  Removed EXABYTE as a CORTAPE option after learning that it
+hasn't been used for a long time.  RCW Aug. 20, 2009
 
 \item Various VLA checking adjustments.  Give warning if two VLA 
 stations are invoked, like VLA1 and VLA27, because they won't both
@@ -15175,6 +15180,9 @@ This is a list of desired program changes, fixes or enhancements.
 
 \begin{itemize}
 
+\item Use the satellite calls when calculating geometry everywhere, not
+      just for the crd files.  Confused the MAGI group badly with 
+      geostationary satellites that set!  Beware VEX.  RCW July 22, 2009
 
 \item Add deceleration to ANTENNAS section of Vex file.  RCW June 16, 2009
 

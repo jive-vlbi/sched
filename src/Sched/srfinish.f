@@ -25,23 +25,30 @@ C
       VEXWARN = .NOT. GOTALL
       CALL JPLGOT( GOTALL )
 C      
-C     Don't allow planets with VEX output.
+C     Warn if there are planets with VEX output.  Block later if
+C     they are in recording scans.
 C     
       IF( DOVEX .AND. GOTALL .AND. VEXWARN ) THEN
-         CALL WLOG( 1, 'SRFINISH: VEX requested for a planet. ' )
-         CALL ERRLOG( 'SRFINISH: That is not allowed.' )
+         CALL WLOG( 1, 'SRFINISH: VEX requested for a schedule '//
+     1       'with planets. ' )
+         CALL WLOG( 1, 'SRFINISH: That is only allowed if all ' // 
+     1       'planet scans are non-recording (eg pointing) scans.' )
       END IF
 C     
 C     If still don't have all, check for satellite for which we
 C     have orbital elements.
 C     
+      VEXWARN = .NOT. GOTALL
       CALL SATGOT( GOTALL )
 C      
-C     Don't allow satellites with VEX output.
+C     Warn about satellites with VEX output.  Block later if they are
+C     recording scans (in VEXOUT).
 C     
       IF( DOVEX .AND. GOTALL .AND. VEXWARN ) THEN
-         CALL WLOG( 1, 'SRFINISH: VEX requested for a satellite. ' )
-         CALL ERRLOG( 'SRFINISH: That is not allowed.' )
+         CALL WLOG( 1, 'SRFINISH: VEX requested for a schedule '//
+     1       'with satellites. ' )
+         CALL WLOG( 1, 'SRFINISH: That is only allowed if all ' // 
+     1       'satellite scans are non-recording (eg pointing) scans.' )
       END IF
 C     
 C     Complain about missing sources if still don't have all.
