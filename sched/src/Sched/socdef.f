@@ -4,10 +4,12 @@ C     A routine for SCHED, called by GETCOR, that checks that the
 C     required correlator parameters have been specified for the
 C     VLBA correlator in Socorro.  SCHED intentionally forces the
 C     user to think about the values of these parameters rather than
-C     just setting reasonable defaults.
+C     just setting reasonable defaults.  This is for both the original
+C     hardward correlator and the DiFX software correlator.
 C
       INCLUDE 'sched.inc'
 C
+      INTEGER    LEN1
       LOGICAL    MISCOR
       CHARACTER  CHPOL*(*), PRTPOL*3
 C ---------------------------------------------------------------------

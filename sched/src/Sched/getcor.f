@@ -9,7 +9,7 @@ C
       INTEGER            KI(*), KEYPTR, LEN1, SPLEN, ICH, MCH
       LOGICAL            MISCOR
       DOUBLE PRECISION   VALUE(*)
-      CHARACTER          KC(*)*8, KCHAR*80, CHPOL*3
+      CHARACTER          KC(*)*8, KCHAR*80, CHPOL*3, CAEX*8
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'GETCOR starting.' )
       MISCOR = .FALSE.
@@ -35,6 +35,9 @@ C     Decode other parameters.
 C
       CORAVG     = VALUE( KEYPTR( 'CORAVG',  KC, KI ) )
       CORAV2     = VALUE( KEYPTR( 'CORAVG2',  KC, KI ) )
+      WRITE( CAEX, '(A8)' ) VALUE( KEYPTR( 'CORAVG',  KC, KI ) + 1 )
+      CALL UPCASE( CAEX )
+      CAEXACT = CAEX(1:5) .EQ. 'EXACT'
       CORCHAN    = VALUE( KEYPTR( 'CORCHAN', KC, KI ) )
       CORNANT    = VALUE( KEYPTR( 'CORNANT', KC, KI ) )
       CHPOL      = KCHAR( 'CORPOL', 3, .TRUE., VALUE, KC, KI )
@@ -101,28 +104,30 @@ C     Check the data for validity and completeness.
 C
       IF( .NOT. NOTAPE ) THEN
          IF( CORREL(1:7) .NE. 'SOCORRO' .AND. 
-     1       CORREL(1:4) .NE. 'VLBA' .AND. 
-     2       CORREL(1:8) .NE. 'HAYSTACK' .AND. 
-     3       CORREL(1:4) .NE. 'BONN' .AND. 
-     4       CORREL(1:4) .NE. 'JIVE' .AND. 
-     5       CORREL(1:10) .NE. 'WASHINGTON' .AND. 
-     6       CORREL(1:4) .NE. 'USNO' .AND. 
-     7       CORREL(1:3) .NE. 'JPL' .AND. 
-     8       CORREL(1:7) .NE. 'BOLOGNA' .AND. 
-     9       CORREL(1:6) .NE. 'MITAKA' .AND.
+     1       CORREL(1:8) .NE. 'VLBADIFX' .AND.
+     2       CORREL(1:4) .NE. 'VLBA' .AND. 
+     3       CORREL(1:8) .NE. 'HAYSTACK' .AND. 
+     4       CORREL(1:4) .NE. 'BONN' .AND. 
+     5       CORREL(1:4) .NE. 'JIVE' .AND. 
+     6       CORREL(1:10) .NE. 'WASHINGTON' .AND. 
+     7       CORREL(1:4) .NE. 'USNO' .AND. 
+     8       CORREL(1:3) .NE. 'JPL' .AND. 
+     9       CORREL(1:7) .NE. 'BOLOGNA' .AND. 
+     A       CORREL(1:6) .NE. 'MITAKA' .AND.
      A       CORREL(1:9) .NE. 'PENTICTON' .AND.
-     A       CORREL(1:3) .NE. 'LBA' .AND.
-     B       CORREL(1:4) .NE. 'OTHER' ) THEN
+     B       CORREL(1:3) .NE. 'LBA' .AND.
+     C       CORREL(1:4) .NE. 'OTHER' ) THEN
             CALL WLOG( 1, '        ' // CORREL(1:LEN1(CORREL)) //
      1        ' is not a recognized correlator.' )
             MISCOR = .TRUE.
          END IF
 C
          IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1        CORREL(1:4) .EQ. 'VLBA' ) THEN
-             CALL SOCDEF( CHPOL )
+     1       CORREL(1:4) .EQ. 'VLBA' .OR.
+     2       CORREL(1:7) .EQ. 'VLBADIFX' ) THEN
+            CALL SOCDEF( CHPOL )
          ELSE
-             CALL CORDEF( CHPOL )
+            CALL CORDEF( CHPOL )
          END IF
 C
       END IF

@@ -493,6 +493,7 @@ C
       REAL             CORAVG
       REAL             CORAV2
       LOGICAL          CORPOL
+      LOGICAL          CAEXACT
       CHARACTER        CORREL*64, CORTAPE*16, CORWTFN*16
       CHARACTER        CORSRCS*64, CORSHIP(4)*64, CORNOTE(4)*(64)
 C

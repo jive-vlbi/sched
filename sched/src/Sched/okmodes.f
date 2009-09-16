@@ -205,8 +205,8 @@ C
       END IF
 C
 C     Skip if not VLBA or MKIV format, if the project is not to
-C     be correlated on the VLBA correlator, or if the override
-C     was requested.
+C     be correlated on the VLBA hardware correlator, or if the 
+C     override was requested.
 C
       IF( ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
      1      FORMAT(KS)(1:4) .EQ. 'MKIV' ) .AND.

@@ -145,7 +145,7 @@ C
 C     Correlator information.
 C
       CALL KEYCHR( 'CORREL', ' ', 64, KD, KC, KI )
-      CALL KEYADD( 'CORAVG', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'CORAVG', 0.D0, 2, KD, KC, KI )
       CALL KEYADD( 'CORAVG2', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'CORCHAN', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'CORNANT', 0.D0, 1, KD, KC, KI )

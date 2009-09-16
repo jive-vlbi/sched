@@ -5177,6 +5177,22 @@ Socorro, VLBA, Haystack, Bonn, JIVE, Washington, USNO, Jpl, Bologna,
 Mitaka, Penticton, and Other (which should be followed by the name).
 The name is not case sensitive.
 
+The first word of {\tt CORREL} must be one of: 
+\begin{list}{}{\parsep 0em  \itemsep 0em }
+\item {\tt Socorro} or {\tt VLBA} (Original VLBA hardware correlator)
+\item {\tt VLBADIFX} (VLBA software correlator) 
+\item {\tt Haystack}, 
+\item {\tt Bonn}, 
+\item {\tt JIVE},
+\item {\tt Washington} or {\tt USNO},
+\item {\tt LBA},
+\item {\tt JPL}, 
+\item {\tt Bologna}, 
+\item {\tt Mitaka},
+\item {\tt Penticton}, or 
+\item {\tt Other}
+\end{list}
+
 Note the correlation parameters {\tt CORAVG, CORCHAN, 
 CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
 the project will be correlated in Socorro and data
@@ -5184,13 +5200,10 @@ are being recorded.
 
 \rcwbox
 {Text up to 62 characters.}
-{The first word must be one of: {\tt Socorro}, {\tt VLBA},
-{\tt Haystack}, {\tt Bonn}, {\tt JIVE},
-{\tt Washington}, {\tt USNO}, {\tt JPL}, {\tt Bologna}, {\tt Mitaka},
-{\tt Penticton}, or {\tt Other} }
+{See list above for valid options.}
 {Blank which causes \schedb to abort.}
 {Only one value used, the last.}
-{{\tt CORREL=Socorro}}
+{{\tt CORREL=VLBADIFX}}
 
 
 \subsubsection{\label{MP:CORSRCS}{\tt CORSRCS}}
@@ -12461,7 +12474,7 @@ to be obtained independently by anyone who wants to do plotting and
 who does not already have it available.  There is extensive
 information on {\sc PGPLOT} available from the WWW page at
 \htmladdnormallink {http://www.astro.caltech.edu/\~{}tjp/pgplot/}
-{http://astro.caltech.edu/\~{}tjp/pgplot/}.  \sc PGPLOT can be obtained
+{http://astro.caltech.edu/\~{}tjp/pgplot/}.  {\sc PGPLOT} can be obtained
 in packaged form from the Fink for MacOSX and from standard package
 libraries for some Linux distributions including Ubuntu and Debian.
 Be careful about what compiler was used to build the packages and use
@@ -12636,6 +12649,10 @@ not sure I like this and may change it again --- releases are still
 too much work).
 
 \begin{itemize}
+
+\item Try to make the warnings from the Vex code about the need for
+gaps for media changes and for Tsys less confusing to Arecibo users who
+might be able to ignore them.  Sept. 15, 2009.
 
 \item Allow more digits for the bandwidth in the Vex channel definition.
 RCW Aug. 31, 2009.
@@ -15195,9 +15212,14 @@ This is a list of desired program changes, fixes or enhancements.
 
 \begin{itemize}
 
+\item Warn if too many antennas don't make it to a source for a scan.
+      This can put confusing information in the VEX file.  RCW  
+      Sept. 14, 2009.
+
 \item Use the satellite calls when calculating geometry everywhere, not
       just for the crd files.  Confused the MAGI group badly with 
-      geostationary satellites that set!  Beware VEX.  RCW July 22, 2009
+      geostationary satellites that set!  Beware VEX in this case.
+      RCW July 22, 2009
 
 \item Add deceleration to ANTENNAS section of Vex file.  RCW June 16, 2009
 

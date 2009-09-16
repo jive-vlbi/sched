@@ -572,12 +572,14 @@ C     Print warning about frequency of Tsys.
          END IF
       END DO
       IF( TSYSMESS ) THEN
-         CALL WLOG( 1,'VXSCH: Tsys calibration at MkIV stations is '//
-     1       'taken during every gap in recording, ')
+         CALL WLOG( 1,'VXSCH: Tsys calibration at most MkIV stations '//
+     1       'is taken during every gap in recording, ')
          CALL WLOG( 1,'       but these ' //
      1       'appear over 15 min apart for the stations listed above!')
          CALL WLOG( 1,'       This can be improved by inserting'//
      1       ' gaps at regular intervals. ')
+         CALL WLOG( 1,'       Note this is not an issue for '//
+     1       ' Westerbork or Arecibo' )
          CALL WRTMSG( 0, 'VXSCH', 'tsysgap' )
       END IF
 C
@@ -606,16 +608,10 @@ C
       END IF
 C
       IF( WARNBANK ) THEN
-         CALL WLOG( 1, '' )
-         CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
-         WRITE( MSGTXT, '(A)' ) 
-     1      'VXSCH: SEVERE WARNING. You have insufficient gaps '//
-     2      'in your schedule for disk changes. Please see '//
-     3      'sched.runlog for more information. Do NOT ignore this '//
-     4      'message! '
-         CALL WLOG( 1, MSGTXT )
-         CALL WLOG( 1, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
-         CALL WLOG( 1, '' )
+C
+C        Use the WRTMSG call to give the full warning about insufficient
+C        gaps for media changes.
+C        
          CALL WRTMSG( 1, 'VXSCH', 'warnbank' )
       END IF
 C
