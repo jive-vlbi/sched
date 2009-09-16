@@ -47,10 +47,11 @@ C     Do some consistency on these issues.
 C
       CALL SBPAIR
 C
-C     Check that some Socorro correlator restrictions have not been
+C     Check that some correlator restrictions have not been
 C     violated.
 C
       CALL CHKSOC
+      CALL CHKVDIFX
       CALL CHKJIVE
 C
 C     Finished.

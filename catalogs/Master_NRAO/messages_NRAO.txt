@@ -344,3 +344,19 @@ one because they all have the same station code.  In most cases,
 you only need to use one "station", such as "VLA" for the VLA even
 if you are mixing phased array and single dish observations.
 
+++CORAVGsetting
+--Called by CHKVDIFX
+
+For at least one of your setup files the requested DiFX average time
+is not an integer number FFTs for the requested spectral resolution.
+If you specify "EXACT" as an second argument to CORAVG, SCHED will
+pass the requested time to the correlator unmodified.  The correlator
+will use bins of that length for averaging but those bins will
+sometimes contain results from N FFTs and sometimes from N+1 FFTs,
+where N is given below for this case.  The time tag of the record will
+be the middle of the bin, not the true mean of the data points.  If
+you don't specify "EXACT" as the second argument, SCHED will modify
+your CORAVG request to be the closest value that is an integer number
+of FFTs. The requested average time and the nearest average time that
+is an integer number of FFTs are given below.  The correlator average
+time that SCHED will pass to the correlator is also shown below.

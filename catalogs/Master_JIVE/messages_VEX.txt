@@ -81,17 +81,19 @@ One or more of the channels in one or more of your setups uses oversampling.
 Experiments going to the EVN correlator at JIVE may use a maximum oversampling
 factor of 4. Higher oversampling factors cannot be correlated.
 
-++tsysgap
---Called from VXSCH
-For MkIV stations (e.g. most of the EVN) the calibration diode is only fired
-during gaps in recording. Although the total power is monitored continuously
-during scans, the calibration diode must be fired regularly to allow these
-total power levels to be accurately converted to system temperatures. It is
-recommended that, where possible, you leave a gap in recording at least every
-15 minutes to allow the system temperature measurements. The gap should be at
-least 15 seconds, but you should also try to ensure that these gaps are long
-enough that all the antennas are on source before the next scan starts. Note
-that warnings about Westerbork and Arecibo can be safely ignored.
+++tsysgap 
+--Called from VXSCH 
+For most MkIV stations (e.g. most of the EVN) the calibration diode is
+only fired during gaps in recording. Although the total power is
+monitored continuously during scans, the calibration diode must be
+fired regularly to allow these total power levels to be accurately
+converted to system temperatures. It is recommended that, where
+possible, you leave a gap in recording at least every 15 minutes to
+allow the system temperature measurements. The gap should be at least
+15 seconds, but you should also try to ensure that these gaps are long
+enough that all the antennas are on source before the next scan
+starts. Note that warnings about Westerbork and Arecibo can be safely
+ignored because they have continuous system temperature measurements.
 
 ++tsysoffsrc
 --Called from VXSCH
@@ -106,14 +108,18 @@ above. Note that warnings about Westerbork and Arecibo can be safely ignored.
 -- Called from VXSCH
 !!!!!!!!!!!!!!!!!!!!!
 SEVERE WARNING
-VXSCH: WARNING: one or more of your VEX controlled stations has continuous
-recording for longer than recommended. At VEX stations disk packs can only be
-changed during gaps in recording. Gaps should be inserted every 22 mins at 1
-Gbps (less often at lower  rates).
-Please add some gaps to your schedule!
-See sched.runlog for a list of affected scans.
-!!!!!!!!!!!!!!!!!!!!!
+You have insufficient gaps in your schedule for disk changes.  Do NOT
+ignore this message unless you are sure there will be no media changes
+(eg short total time at Arecibo).
 
+The problem is that one or more of your VEX controlled stations has
+continuous recording for longer than recommended. At VEX stations disk
+packs can only be changed during gaps in recording. Gaps of more than
+10 seconds should be inserted every 22 mins at 1 Gbps (less often at
+lower rates).  Please add some gaps to your schedule!  See
+sched.runlog for a list of affected scans (may appear well before this
+message.  
+!!!!!!!!!!!!!!!!!!!!!
 
 ++end
 
