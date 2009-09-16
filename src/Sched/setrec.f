@@ -35,6 +35,8 @@ C
 C         
 C        Set the barrel roll default.  This is correlator and
 C        format dependent.  Do not use it with disk systems.
+C        Probably drive a stake through BARREL some day as I don't
+C        think it is used anywhere.
 C         
          ISTA = ISCHSTA(ISETSTA(KS))
          IF( BARREL(KS) .EQ. 'not_set' ) THEN

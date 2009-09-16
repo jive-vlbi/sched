@@ -12,10 +12,12 @@ C
 C     Assumed sync times:
 C         VLBA correlator with tape (time/speedup): 8s/1   13s/2   25s/4
 C         VLBA correlator with disk:  tape resync + 10s (improve soon?)
+C         VLBADIFX - instant sync.
 C         Others (JIVE, Bonn, Haystack) with disk: 1s
 C     Assumed reconfigure times (need confirmation):
 C         VLBA Formatter: 8 sec.
 C         MarkIV Formatter: 3 sec.  But no big effect on resync.
+C         RDBE - not yet known.
 C     A reconfigure slows sync on the correlator. 
 C         VLBA:  Add 7s to reconfigure+resync 
 C            Much longer sync times occur on 10-20% of stations
@@ -233,6 +235,8 @@ C
                   ELSE
                      IF( USETAPE(ISTA) ) THEN
                         TSADD = 10.D0 / 86400.D0
+                     ELSE IF( CORREL(1:8) .EQ. 'VLBADIFX' ) THEN
+                        TSADD = 0.D0
                      ELSE
                         TSADD = 1.D0 / 86400.D0
                      END IF

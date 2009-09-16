@@ -17,7 +17,7 @@ C
       WRITE( IOMS, '( A, A )' )  '    POLARIZATION      = ', CPOL
       WRITE( IOMS, '( A, F8.3 )' ) '    TIME_AVERAGE      = ', CORAVG
 C
-C     Only do some parameters only for the Socorro correlator
+C     Only do some parameters only for the Socorro hardware correlator
 C
       IF( ( CORREL(1:4) .EQ. 'VLBA' .OR. CORREL(1:7) .EQ. 'SOCORRO' ) 
      1     .AND. .NOT. NOTAPE ) THEN
@@ -31,6 +31,33 @@ C
          ELSE
             MINFFT = 512
          END IF
+         IF( 2 * CORCHAN .GE. MINFFT ) THEN
+            IFFT = 2 * CORCHAN
+            IAVG = 1
+         ELSE
+            IFFT = MINFFT
+            IAVG = MINFFT / ( 2 * CORCHAN )
+         END IF
+C   
+C        Write the desired information
+C   
+         WRITE( IOMS, '( A, I4 )' ) '    FFT_SIZE          = ', IFFT
+         WRITE( IOMS, '( A, I4 )' ) '    SPECTRAL_AVERAGE  = ', IAVG
+         WRITE( IOMS, '( A, A )' )  '    WINDOW            = ', CORWTFN
+         IF( CORAV2 .NE. 0.0 .AND. CORAV2 .NE. CORAVG ) THEN
+            WRITE( IOMS, '( A, F8.3 )' ) '    ALT_AVERAGE_TIME  = ', 
+     1           CORAV2
+         END IF
+C
+      ELSE IF( CORREL(1:8) .EQ. 'VLBADIFX' .AND. .NOT. NOTAPE ) THEN
+C
+C        Get the FFT size and spectral averaging for VLBADIFX.  This 
+C        correlator can, in principle, do any size FFT, but is more
+C        efficient with 256 or so so it seems like a reasonable 
+C        value for the minimum.  If someone later wants smaller ones,
+C        we can provide a mechanism for specifying them.
+C
+         MINFFT = 256
          IF( 2 * CORCHAN .GE. MINFFT ) THEN
             IFFT = 2 * CORCHAN
             IAVG = 1
