@@ -4,7 +4,8 @@
 !  The following entries in the SCHED frequency catalog are for EVN
 !  stations.
 !  These stations are maintained in file freq_EVN.dat which is maintained
-!  by C. Reynolds (up tp 2007) and A.Polatidis (JIVE).
+!  by C. Reynolds (up tp 2007), A.Polatidis (JIVE), and Friso Olnon
+!  (since sep 2009).
 !  =====================================================================
 !    Any changes directly to freq.dat will be lost at the next update.
 !
@@ -73,6 +74,11 @@
 !  081121: Refined Ys X and S/X band entries - S to IFB deVicente email 081015
 !  081212: Added entries for MERLIN outstations (Da, Ta, Kn, De) to the Cm setups
 !  090219: Added Yebes 5cm entries.  RCW based on AP email of today.
+!  090400: Modified Yebes 5cm and added 6cm
+!  090511: Added Kunming
+!  090706: Added Beijing (Miyun50 to be?)
+!  090924: Added Robledo 34m
+!  090924: Renamed Beijing to Miyun50
 !
 !  -----------------------------------------------------------------------
 !   Effelsberg
@@ -1723,10 +1729,15 @@ Name = ys40_5cmOH  Station = YEBES40M   priority = 4
 Name = ys40_5cm  Station = YEBES40M   priority = 4
  rf1 = 6420,6420   ifname = C,     A
  rf2 = 6900,6900   fe     = '5cm', '5cm'
- pol =   LCP,RCP         lo1    = 5900, 5900
+ pol =   LCP,RCP         lo1    = 5910, 5910 ! 'P. de Vicente (apr09)
  note ='RF and LO values by de Vicente (FEB09), BBC 500-1000MHz'
 /
-
+Name = ys40_6cm  Station = YEBES40M   priority = 4
+ rf1 =  4658, 4658   ifname = C,     A
+ rf2 =  5158, 5158   fe     = '6cm', '6cm'
+ pol =   LCP,RCP         lo1    = 4158, 4158
+ note = 'P. de Vicente (apr09)'
+/
 
 !
 ! stations with S2 or MkIII
@@ -1925,3 +1936,33 @@ Station = PICOVEL  Priority = 0
   note = '2-mm test'
 /
 
+!  =====================================================================
+!  Chinese stations added sep 2009
+!  =====================================================================
+
+Name = kmsx  Station = KUNMING
+  rf1 = 2150, 8200    ifname = B, A
+  rf2 = 2450, 8600    fe     = '13cm', '4cm'
+  pol =  RCP,  RCP     lo1 =  1600, 9100
+  note = 'From Hao Longfei 11 may 2009'
+/
+Name = mysx Station = MIYUN50
+  rf1 = 2150, 8200	ifname = B, A
+  rf2 = 2450, 8600      fe     = '13cm', '4cm'
+  pol = RCP, RCP        lo1    = 1600, 9100
+  note = 'From ZHU Xinying 6 July 2009'
+/
+
+!  =====================================================================
+!  Robledo 7mm added 2009 Sep 24 (Bob Campbell)
+!           (an example Cristina worked out for GB065B -- the LO is
+!  tunable; the Q-band LNA works from 39-49 GHz, and the max recording
+!  bandwidth is 70 MHz within that)
+!  =====================================================================
+
+Name = ro7mm  Station = ROB34BWG   priority = 5
+   rf1 =   43156  ,  43156    ifname = '2N',  '1N'  fe = '7mm', '7mm'
+   rf2 =   43226  ,  43226    altifn = '1A',  '2A'
+   pol =  RCP,  LCP      lo1 = 42870.00  , 42870.00
+   note = 'new 7mm RX, configuration appropriate for GB065B'
+/
