@@ -280,7 +280,9 @@ C     Warn 2cm users about different standard frequencies.
 C
       IF( FREQREF(1,KS) .GT. 15100.D0 .AND. 
      1    FREQREF(1,KS) .LT. 15500.D0 .AND. WARN2CM ) THEN
-         MSGTXT = 'See sched.runlog for information on 2cm frequencies.'
+         MSGTXT = 'CHKSET:  See sched.runlog for information' //
+     1        ' on 2cm frequencies.'
+         CALL WLOG( 1, ' ' )
          CALL WLOG( 1, MSGTXT )
          MSGTXT = ' '
          CALL WRTMSG( 0, 'CHKSET', 'warn2cm' )

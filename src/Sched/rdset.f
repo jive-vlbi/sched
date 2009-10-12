@@ -80,7 +80,7 @@ C
             CALL ERRLOG( 'RDSET: Problem opening setup file' )
          END IF
       END IF
-      CALL WLOG( 0, 'RDSET:   Reading setup file: '//
+      CALL WLOG( 0, 'RDSET:   Reading setup file:      '//
      1              SETRQ(1:LEN1(SETRQ) ) )
 C
 C     Set defaults of some individual parameters. First set all to 0.D0,

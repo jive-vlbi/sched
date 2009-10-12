@@ -14,23 +14,50 @@ C     Greenwich apparent sidereal time.  The difference is typically
 C     under a second.  Refraction is not taken into account which 
 C     might affect when something actually goes behind a mountain.
 C
+C     Oct. 9, 2010.  For planets and satellites, get the current 
+C     scan/station position.  RCW.
+C
       INCLUDE 'sched.inc' 
 C
-      INTEGER          ISCN, ISTA, KSTA
+      INTEGER          ISCN, ISRC, ISTA, KSTA
       REAL             HA, ZA, EL, AZ, PA
+      REAL             PDRA, PDDEC
       DOUBLE PRECISION JTIME, LSTTIM
       DOUBLE PRECISION GAST, CD, SD, SL, CL, CH, SH, SLA_GMST
+      DOUBLE PRECISION PRA, PDEC, PPMTIME, DATERA, DATEDEC
 C --------------------------------------------------------------------
       IF( ISCN .EQ. 0 ) CALL ERRLOG( 'SCHGEO called for scan 0.' //
      1    '  Programming problem.' )
       IF( ISTA .EQ. 0 ) CALL ERRLOG( 'SCHGEO called for station 0.' //
      1    '  Programming problem.' )
+C
+C     Get the source position to use.  For moving sources, this can 
+C     be station and scan dependent.  Note that SRCLOC returns
+C     J2000 coordinates where the geometry calculation needs to be
+C     based on coordinates of date.  Use the same precession as in
+C     SCHPRE which is for the first stop time.
+C     Bypass these calls if the source is not moving because they are
+C     a bit slow, causing problems for some optimization routines.
+C
+      ISRC = SRCNUM(ISCN)
+      IF( PLANET(ISRC) .OR. SATEL(ISRC) .OR. 
+     1      DRA(ISRC) .NE. 0.0 .OR. DDEC(ISRC) .NE. 0.0 ) THEN
+         CALL SRCLOC( ISCN, ISTA, PRA, PDEC, PPMTIME, PDRA, PDDEC )
+         CALL SLA_MAP( PRA, PDEC, 0.D0, 0.D0, 0.D0, 0.D0, 2000.D0, 
+     1              STOPJ(1), DATERA, DATEDEC )
+      ELSE
+         DATERA = RAP(ISRC)
+         DATEDEC = DECP(ISRC)
+      END IF
+C
+C     Now get the geometry.
+C
       GAST = SLA_GMST( JTIME )
-      HA = MOD( GAST - RAP(SRCNUM(ISCN)) - LONG(STANUM(ISTA)), TWOPI )
+      HA = MOD(  GAST - DATERA - LONG(STANUM(ISTA)), TWOPI )
       LSTTIM = MOD( GAST - LONG(STANUM(ISTA)), TWOPI )
       IF( LSTTIM. LT. 0.D0 ) LSTTIM = LSTTIM + TWOPI
-      CD = COS(DECP(SRCNUM(ISCN)))
-      SD = SIN(DECP(SRCNUM(ISCN)))
+      CD = COS(DATEDEC)
+      SD = SIN(DATEDEC)
       CL = COS(LAT(STANUM(ISTA)))
       SL = SIN(LAT(STANUM(ISTA)))
       CH = COS(HA)

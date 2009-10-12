@@ -15,7 +15,12 @@ C
       CPOL = 'NO '
       IF( CORPOL ) CPOL = 'YES'
       WRITE( IOMS, '( A, A )' )  '    POLARIZATION      = ', CPOL
-      WRITE( IOMS, '( A, F8.3 )' ) '    TIME_AVERAGE      = ', CORAVG
+      WRITE( IOMS, '( A, F11.6 )' ) '    TIME_AVERAGE      = ', CORAVG
+      IF( CAEXACT ) THEN
+         WRITE( IOMS, '( A )' ) '    TWEAK_INT_TIME    = NO '
+      ELSE
+         WRITE( IOMS, '( A )' ) '    TWEAK_INT_TIME    = YES '
+      END IF
 C
 C     Only do some parameters only for the Socorro hardware correlator
 C
@@ -45,8 +50,14 @@ C
          WRITE( IOMS, '( A, I4 )' ) '    SPECTRAL_AVERAGE  = ', IAVG
          WRITE( IOMS, '( A, A )' )  '    WINDOW            = ', CORWTFN
          IF( CORAV2 .NE. 0.0 .AND. CORAV2 .NE. CORAVG ) THEN
-            WRITE( IOMS, '( A, F8.3 )' ) '    ALT_AVERAGE_TIME  = ', 
+            WRITE( IOMS, '( A, F11.6 )' ) '    ALT_AVERAGE_TIME  = ', 
      1           CORAV2
+            IF( CAEXACT2 ) THEN
+               WRITE( IOMS, '( A )' ) '    TWEAK_ALT_INT_TIME = NO '
+            ELSE
+               WRITE( IOMS, '( A )' ) '    TWEAK_ALT_INT_TIME = YES '
+            END IF
+
          END IF
 C
       ELSE IF( CORREL(1:8) .EQ. 'VLBADIFX' .AND. .NOT. NOTAPE ) THEN

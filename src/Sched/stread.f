@@ -36,7 +36,7 @@ C
       END IF
       MSGTXT = 'STREAD:  Reading station catalog: ' // INFILE(I1:I2)
       CALL WLOG( 0, MSGTXT )
-      CALL WLOG( 0, 'STREAD:  Will read locations file '//
+      CALL WLOG( 0, 'STREAD:  Reading locations file:  '//
      1        LOCFILE(1:LEN1(LOCFILE)) )
 C
 C     Loop through input records.

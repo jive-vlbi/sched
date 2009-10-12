@@ -344,19 +344,29 @@ one because they all have the same station code.  In most cases,
 you only need to use one "station", such as "VLA" for the VLA even
 if you are mixing phased array and single dish observations.
 
-++CORAVGsetting
+++CORAVGsetting1
 --Called by CHKVDIFX
 
-For at least one of your setup files the requested DiFX average time
-is not an integer number FFTs for the requested spectral resolution.
-If you specify "EXACT" as an second argument to CORAVG, SCHED will
-pass the requested time to the correlator unmodified.  The correlator
-will use bins of that length for averaging but those bins will
-sometimes contain results from N FFTs and sometimes from N+1 FFTs,
-where N is given below for this case.  The time tag of the record will
-be the middle of the bin, not the true mean of the data points.  If
-you don't specify "EXACT" as the second argument, SCHED will modify
-your CORAVG request to be the closest value that is an integer number
-of FFTs. The requested average time and the nearest average time that
-is an integer number of FFTs are given below.  The correlator average
-time that SCHED will pass to the correlator is also shown below.
+You have chosen to use the exact averaging time that you have
+specified.  In that case, the DiFX software correlator will divide the
+scan into bins of the exact length you have specified and average all
+short term accumulations that fall within each bin, regardless of the
+length of each short term accumulation which must be an integral times
+the length of each input FFT.  The result is that each of your
+integrations could have slightly different amounts of accumulated data
+and a true mean time slightly offset from the nominal center recorded
+as the time for the data point.  These effects only amount to a few
+percent or less for normal data, but in extreme cases of narrow
+bandwidths and many channels, can be more significant.
+
+++CORAVGsetting2
+--Called by CHKVDIFX
+
+You have allowed the DiFX software correlator to adjust your average
+time to be an integral number of input FFT intervals (and an integral
+number of short-term accumulator intervals).  You did this by
+specifying CORAVG without a second argument set to "EXACT".  This is
+the default, and recommended, option.  The adjustment will be a few
+percent or less in most cases, although it can get as high as sqrt(2)
+for an extreme narrow bandwidth case with a large number of spectral
+channels.

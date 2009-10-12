@@ -6,7 +6,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER           LSTA, LSCN, NSANT, MOSTCH
+      INTEGER           LSTA, LSCN, NSANT, MOSTCH, LEN1
       REAL              FIRRATE, MAXFIRR, RCORCH
       LOGICAL           WARN
 C ----------------------------------------------------------------------
@@ -16,7 +16,7 @@ C
 C     This routine is only for the SOCORRO VLBA correlator
 C
       IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1    CORREL(1:4) .EQ. 'VLBA' ) THEN
+     1   ( CORREL(1:4) .EQ. 'VLBA' .AND. LEN1( CORREL ) .EQ. 4 ) ) THEN
 C
 C        Do some initializations.
 C
@@ -38,32 +38,28 @@ C
             IF( NSANT .GT. 0 .AND. .NOT. NOREC(LSCN) ) THEN
 C
 C              Deal with a special internal limitation in the 
-C              SOCORRO correlator.
+C              SOCORRO hardware correlator.
 C
-               IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1             CORREL(1:4) .EQ. 'VLBA' ) THEN
+C              Get the rate that channels are transferred through
+C              the FIR filter in the correlator.  This cannot be
+C              more than 44236-2048=41188 spectral channels per
+C              0.131 sec tic.  The correlator always transfers
+C              2048 spectral channels divided by the spectral
+C              averaging, regardless of how many are kept.
+C              Usually, the correlator does 512 point FFTs producing
+C              256 point spectra, which are then averaged to 16 
+C              or 32 for continuum projects.  
+C              Use a real version of CORCHAN to avoid getting zero
+C              out of one of the ratios while it is still integer.
 C
-C                 Get the rate that channels are transferred through
-C                 the FIR filter in the correlator.  This cannot be
-C                 more than 44236-2048=41188 spectral channels per
-C                 0.131 sec tic.  The correlator always transfers
-C                 2048 spectral channels divided by the spectral
-C                 averaging, regardless of how many are kept.
-C                 Usually, the correlator does 512 point FFTs producing
-C                 256 point spectra, which are then averaged to 16 
-C                 or 32 for continuum projects.  
-C                 Use a real version of CORCHAN to avoid getting zero
-C                 out of one of the ratios while it is still integer.
+               RCORCH = CORCHAN
+               FIRRATE = ( 0.131 / CORAVG ) * 
+     1                   ( NSANT * ( NSANT + 1.0 ) / 2.0 ) *
+     2                   2048.0 * ( RCORCH / MAX( 256.0, RCORCH ) )
+     3                   * FSPEED(SETNUM(LSCN))
+               MOSTCH = MAX( MSCHN(SETNUM(LSCN)), MOSTCH )
 C
-                  RCORCH = CORCHAN
-                  FIRRATE = ( 0.131 / CORAVG ) * 
-     1                      ( NSANT * ( NSANT + 1.0 ) / 2.0 ) *
-     2                      2048.0 * ( RCORCH / MAX( 256.0, RCORCH ) )
-     3                      * FSPEED(SETNUM(LSCN))
-                  MOSTCH = MAX( MSCHN(SETNUM(LSCN)), MOSTCH )
-C
-                  MAXFIRR = MAX( MAXFIRR, FIRRATE )
-               END IF
+               MAXFIRR = MAX( MAXFIRR, FIRRATE )
             END IF
          END DO
 
