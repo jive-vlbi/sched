@@ -12679,14 +12679,36 @@ too much work).
 
 \begin{itemize}
 
-\item Make geometry calculation pay attention to moving sources, 
-especially planets and satellites.  Oct. 9, 2009.  RCW
+\item Make geometry calculation pay attention to moving sources,
+especially planets and satellites.  This became an issue with
+geostationary satellites for which \schedb assumed a constant RA/Dec
+position and so predicted would set.  Oct. 9, 2009.  RCW
 
-\item ******  FIGURE OUT WHAT ALL I DID ON OCT 9.  I'm being dragged off.
+\item Further isolation of AUTOTAPE (autoallocate and autoreverse plus
+MarkII tape length) to tape observations, which shouldn't still happen
+but which I haven't had the nerve to remove from SCHED yet. Oct. 2009.RCW.
 
 \item Add the ability to choose between exact and adjusted average
-times as specified by CORAVG.  This is for the DiFX correlator. 
-Oct. 5, 2009 RCW.
+times as specified by CORAVG.  This is for the DiFX correlator. Also
+add more digits to the average time in the OMS file.  Oct. 5, 2009 RCW.
+
+\item Be more careful about the correlator parameters, both in the code
+and the documentation.  Many parameters default to sensible values for
+non-VLBA correlators but must be set by the user for the VLBA correlators.
+Make this clear in the documentation and the code.  Sep. 2009 RCW.
+
+\item Move the decision on whether to write Vex files to a subroutine
+from the main sched routine.  It's getting fairly complicated and was
+cluttering the main routine.  Vex is not allowed with non-recording
+schedules, with configuration tests, and with recording scans on
+planets or satellites (VLBA pointing scans are ok - they simply won't
+appear in the Vex file). Oct. 2009 RCW
+
+\item Start adding items related to the new VLBA DiFX software
+correlator.  Set up to distinguish between the new and old
+correlators.  Assume instant correlator synchronization time for DiFX.
+Set the minimum FFT size for DiFX to 256 (for smaller spectra, will
+channel average) Jul-Oct 2009 RCW
 
 \item Try to make the warnings from the Vex code about the need for
 gaps for media changes and for Tsys less confusing to Arecibo users who
