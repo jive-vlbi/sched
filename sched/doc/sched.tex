@@ -62,7 +62,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\ DEVELOPMENT VERSION 9.0}
+\title{THE \schedb USER MANUAL \\ DEVEOPMENT VERSION 9.0}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -5020,14 +5020,39 @@ operator and telescope files just before the scan.
 
 \subsubsection{\label{MP:CORAVG}{\tt CORAVG}}
 
-{\tt CORAVG} specifies the correlator averaging time in seconds.  For
-the Socorro VLBA correlator, valid values are an integer N times the
-speed up factor times 0.131072 seconds.  Round values such as 2, 4, 8
-seconds etc may be specified and the nearest possible value will be
-used.  This is what is expected from most users.  The correlator
-default is 2 seconds but, at most frequencies, more is probably ok
-most of the time.  The longer the on-line averaging, the smaller the
-output data rates and the smaller the output data set.
+{\tt CORAVG} specifies the correlator averaging time in seconds.  
+
+For the DiFX software correlator on the VLBA, there are two options
+for how the specified average time is treated.  If all average times
+are to contain exactly the same amount of data and the time tags are
+to match exactly the mean time of the data, the interval must be
+an integer number of FFTs and of short-term accumulator intervals.
+The default behavior of the correlator is to adjust the average time
+to the nearest option that fulfills these criteria.  That may well not
+be a very ``round'' looking number.  The adjusted time will usually
+deviate from the requested time by only a few percent, although in some
+extremes of narrow bandwidth and many spectral channels, it can be as
+high as a factor of SQRT(2).  An alternative behavior is
+offered where the correlator takes the exact value specified.  It then
+bins the scan into intervals of that length and averages any short
+term integrations that fall in a bin.  The data are given the time
+tag of the center of the bin.  This allows the user to choose any
+desired integration time exactly.  But the amount of data contributing
+to each integration will vary, typically by one short-term
+accumulation. Also the true mean time of a data point will be offset
+from the time tag by a variable fraction of a short-term accumulation
+period.  To invoke this behavior, put the word {\tt EXACT} as a second
+argument to {\tt CORAVG} (not case sensitive).
+
+For the original Socorro VLBA hardware correlator, valid values are an
+integer N times the speed up factor times 0.131072 seconds.  Round
+values such as 2, 4, 8 seconds etc may be specified and the nearest
+possible value will be used.  This is what is expected from most
+users.
+
+The correlator default is 2 seconds but, at most frequencies, more is
+probably ok most of the time.  The longer the on-line averaging, the
+smaller the output data rates and the smaller the output data set.
 
 Note the correlation parameters {\tt CORAVG, CORCHAN, 
 CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
@@ -5035,11 +5060,13 @@ the project will be correlated in Socorro and data
 are being recorded.
 
 \rcwbox
-{A real or integer number.}
-{Any, but see above for useful numbers.}
-{Must be given for processing in Socorro.  Otherwise 2.0}
+{A real or integer number followed by a string of up to 8 characters}
+{Any, but see above for useful numbers. The string can be anything but
+only "EXACT" will mean to do something different from the default.}
+{Must be given for processing in Socorro.  Otherwise 2.0.  The string 
+can, and usually will, be omitted.}
 {Only one value used --- the last.}
-{{\tt CORAVG = 4}}
+{{\tt CORAVG = 4, exact}}
 
 \subsubsection{\label{MP:CORAVG2}{\tt CORAVG2}}
 
@@ -5050,11 +5077,13 @@ on baselines to spacecraft (eg HALCA) processed on the VLBA correlator.
 It will typically be smaller than {\tt CORAVG}.
 
 \rcwbox
-{A real or integer number.}
-{Any, but see above for useful numbers.}
-{0.0 - not used}
+{A real or integer number followed by a string of up to 8 characters}
+{Any, but see \htmlref
+{{\tt CORAVG}}{MP:CORAVG} for useful numbers. The string can be anything, but
+only "EXACT" will mean to do something different from the default.}
+{0.0 --- not used.  The string can, and usually will, be omitted.}
 {Only one value used --- the last.}
-{{\tt CORAVG2 = 0.262}}
+{{\tt CORAVG2 = 1}}
 
 \subsubsection{\label{MP:CORCHAN}{\tt CORCHAN}}
 
@@ -12649,6 +12678,15 @@ not sure I like this and may change it again --- releases are still
 too much work).
 
 \begin{itemize}
+
+\item Make geometry calculation pay attention to moving sources, 
+especially planets and satellites.  Oct. 9, 2009.  RCW
+
+\item ******  FIGURE OUT WHAT ALL I DID ON OCT 9.  I'm being dragged off.
+
+\item Add the ability to choose between exact and adjusted average
+times as specified by CORAVG.  This is for the DiFX correlator. 
+Oct. 5, 2009 RCW.
 
 \item Try to make the warnings from the Vex code about the need for
 gaps for media changes and for Tsys less confusing to Arecibo users who

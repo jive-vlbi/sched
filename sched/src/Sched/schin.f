@@ -375,10 +375,6 @@ C
       SCANL = NSCANS
       IF( ISCN .LE. 0 ) THEN
          CALL ERRLOG('SCHIN: No input scans')
-      ELSE
-         WRITE( MSGTXT, '( A, I5, A )' ) 'SCHIN:   Found ', NSCANS, 
-     1   ' input scans. '
-         CALL WLOG( 0, MSGTXT )
       END IF
 C 
 C     Get items for which only the last input given is used.
@@ -503,6 +499,8 @@ C
       END IF
 C
 C     Set up any automatic tape handling.
+C       This whole segment can probably be removed when I get the nerve
+C       to actually take out tape.
 C
 C     TPLEN is only used for Mark2.
 C     Actually, the sequence below requires Mark2 users to set a
@@ -530,17 +528,18 @@ C
          IF( KD(I1).EQ.0.D0 ) TPLEN = 4.D0 / 24.D0
          IF( KD(I1).GT.0.D0 ) TPLEN = KD(I1) / 86400.D0
       END IF
+C
       AWARN = .FALSE.
       MSGTXT = 'SCHIN:   * Automatic tape allocation requested at:'
       DO ISTA = 1, NSTA
          AUTOALOC(ISTA) =  KD(I1) .GT. 0.5 
-     1         .AND. ( CONTROL(STANUM(ISTA)) .EQ. 'VLBA' .OR. 
-     2                 VLBADAR(STANUM(ISTA)) )
-     3         .AND. STNDRIV(STANUM(ISTA)) .GE. 2
+     1      .AND. ( CONTROL(STANUM(ISTA)) .EQ. 'VLBA' .OR. 
+     2              VLBADAR(STANUM(ISTA)) )
+     3      .AND. STNDRIV(STANUM(ISTA)) .GE. 2
          AUTOREV(ISTA) = ( KD(I1) .GT. 1.5D0 ) .AND. AUTOALOC(ISTA)
-         IF( VLBITP .AND. AUTOALOC(ISTA) ) THEN
+         IF( VLBITP .AND. AUTOALOC(ISTA) .AND. ANYTAPE ) THEN
             MSGTXT = MSGTXT(1:LEN1(MSGTXT)) // ' ' // 
-     1               STCODE(STANUM(ISTA))
+     1            STCODE(STANUM(ISTA))
             AWARN = .TRUE.
          END IF
       END DO

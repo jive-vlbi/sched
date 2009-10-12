@@ -70,6 +70,8 @@ C
          ELSE IF( ITEM .EQ. 'HA2' ) THEN
             WRITE( SUMDAT, '( F5.1 )' ) HA2(ISCN,ISTA)
 C
+C        The following section is tape items.  Remove some day.
+C
          ELSE IF( ITEM(1:4) .EQ. 'TAPE' ) THEN
 C
 C           Extract the tape commands from PTDAT.
@@ -96,7 +98,7 @@ C
                END IF
 C
             ELSE IF( ITEM .EQ. 'TAPE2' ) THEN
-               IF( NOREC(ISCN) ) THEN 
+               IF( NOREC(ISCN) .OR. .NOT. USETAPE(ISTA) ) THEN 
                   SUMDAT = '---- '
                ELSE
                   IF( TPHEAD .LT. 10 ) THEN

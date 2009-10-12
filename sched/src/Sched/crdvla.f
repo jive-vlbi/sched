@@ -151,9 +151,8 @@ C
      7      CC, NOTE(4),
      8      CC
 C
-         IF( ( AUTOTAPE .OR. DOTAPE ) .AND. .NOT. VLAONLY )
-     1        WRITE( IULOC, '( A )' )
-     2         '//* ------- MOUNT TAPE BEFORE RUN STARTS  ----------'
+         IF( .NOT. NOTAPE ) WRITE( IULOC, '( A )' )
+     1         '//* ------ MOUNT VLBI MEDIA BEFORE RUN STARTS  -------'
 C
 C        Write an escaper (EVLA control system) that sets the reference
 C        antenna.  Note that this will be turned off locally for 

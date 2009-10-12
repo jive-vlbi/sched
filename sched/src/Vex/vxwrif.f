@@ -84,7 +84,7 @@ C
          CALL WLOG( 1,'        Contact stations by e-mail to '//
      1       'make sure phase cal is switched off ')
          CALL WLOG( 1,'        Phase cal is under computer '//
-     1       'control for CONTROL=VLBA stations. ')
+     1       'control for VLBA stations and many others. ')
       END IF
 
       RETURN

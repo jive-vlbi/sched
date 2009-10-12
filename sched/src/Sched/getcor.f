@@ -33,11 +33,20 @@ C
 C
 C     Decode other parameters.
 C
+C     Average requests, including an alternate request (was mainly for
+C     space baselines that might want a shorter integration than the
+C     ground baselines.  Also extract the "exact" request.
+C
       CORAVG     = VALUE( KEYPTR( 'CORAVG',  KC, KI ) )
       CORAV2     = VALUE( KEYPTR( 'CORAVG2',  KC, KI ) )
       WRITE( CAEX, '(A8)' ) VALUE( KEYPTR( 'CORAVG',  KC, KI ) + 1 )
       CALL UPCASE( CAEX )
       CAEXACT = CAEX(1:5) .EQ. 'EXACT'
+      WRITE( CAEX, '(A8)' ) VALUE( KEYPTR( 'CORAVG2',  KC, KI ) + 1 )
+      CALL UPCASE( CAEX )
+      CAEXACT2 = CAEX(1:5) .EQ. 'EXACT'
+C
+C
       CORCHAN    = VALUE( KEYPTR( 'CORCHAN', KC, KI ) )
       CORNANT    = VALUE( KEYPTR( 'CORNANT', KC, KI ) )
       CHPOL      = KCHAR( 'CORPOL', 3, .TRUE., VALUE, KC, KI )

@@ -52,6 +52,8 @@ C
       ELSE IF( ITEM .EQ. 'HA2' ) THEN
          SUMDESC = 'Stop hour angle.'
 C
+C     The following sections are tape items.  Remove some day.
+C
       ELSE IF( ITEM .EQ. 'TAPE1' ) THEN
          IF( NOSET ) THEN
             CALL ERRLOG( 'SUMDESC:  Cannot use SUMITEM=TAPE1 and ' //
@@ -65,12 +67,14 @@ C
             CALL ERRLOG( 'SUMDESC:  Cannot use SUMITEM=TAPE2 and ' //
      1           'NOSETUP together. ' )
          END IF
-         IF( AUTOTAPE ) THEN
+         IF( AUTOTAPE .AND. ANYTAPE ) THEN
             SUMDESC = 'Tape: Headset at scan end and tape footage ' //
      1           '(thousands) at scan start.'
-         ELSE
+         ELSE IF( ANYTAPE ) THEN
             SUMDESC = 'Tape: Headset and start tape footage ' //
      1           '(thousands).' 
+         ELSE
+            SUMDESC = 'Not used - no tapes used in this observation.'
          END IF
 C
       ELSE IF( ITEM .EQ. 'DISK' .OR. ITEM .EQ. 'DISC' ) THEN

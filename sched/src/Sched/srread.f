@@ -100,7 +100,7 @@ C
          ELSE
             I1 = 1
          END IF
-         MSGTXT = 'SRREAD:  Reading source catalog: ' // INFILE(I1:I2)
+         MSGTXT = 'SRREAD:  Reading source catalog:  ' // INFILE(I1:I2)
          CALL WLOG( 0, MSGTXT )
 C
 C        Source reading loop begins.
