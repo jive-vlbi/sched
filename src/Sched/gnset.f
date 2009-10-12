@@ -66,7 +66,7 @@ C
 C
   100    CONTINUE
 C
-C        If still don't have something, die.  Comment ou the special 
+C        If still don't have something, die.  Comment out the special 
 C        warning if the problem was at the VLA as I am trying to make
 C        the various VLA names equivalent.
 C
