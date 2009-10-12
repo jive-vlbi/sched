@@ -49,7 +49,7 @@ C
          CALL WLOG( 1, RESULT )
          CALL ERRLOG( 'GETFREQ: Problem opening frequency file' )
       END IF
-      CALL WLOG( 0, 'GETFREQ: Reading frequency file: '//
+      CALL WLOG( 0, 'GETFREQ: Reading frequency file:  '//
      1              FREQFILE(1:LEN1(FREQFILE) ) )
 C
 C     Set some dummy parameters to avoid triggering checks in VLASETF

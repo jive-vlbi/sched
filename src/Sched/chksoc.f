@@ -9,7 +9,7 @@ C
       INCLUDE     'schset.inc'
 C
       INTEGER        KS, I, J, IP, POLERR, ROLLERR, IGRP, JGRP
-      INTEGER        IFFT, IAVG, MINFFT
+      INTEGER        IFFT, IAVG, MINFFT, LEN1
       LOGICAL        SPMOD2, PADLOSS
       CHARACTER      CPOL*3
 C ----------------------------------------------------------------------
@@ -18,8 +18,9 @@ C
 C     First, only do this if the experiment is to be processed
 C     on the VLBA correlator.
 C
-      IF( ( CORREL(1:7) .EQ. 'SOCORRO' .OR. CORREL(1:4) .EQ. 'VLBA' ) 
-     1      .AND. .NOT. NOTAPE ) THEN
+      IF( ( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
+     1      ( CORREL(1:4) .EQ. 'VLBA' .AND. LEN1( CORREL ) .EQ. 4 ) )
+     2      .AND. .NOT. NOTAPE ) THEN
 C
 C        The ith tracks from each VLBA track group cannot be routed
 C        to the same delay center.  This restricts where channels

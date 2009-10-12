@@ -50,5 +50,13 @@ C     Get the frequency catalog if needed.
 C
       IF( .NOT. NOSET ) CALL GETFREQ
 C
+C     Now write the number of input scans to get beyond all
+C     the user feedback about catalog reads.
+C
+      MSGTXT = ' '
+      WRITE( MSGTXT, '( A, I5, A )' ) 'INPUT:   Found ', NSCANS, 
+     1   ' input scans. '
+      CALL WLOG( 0, MSGTXT )
+C
       RETURN
       END

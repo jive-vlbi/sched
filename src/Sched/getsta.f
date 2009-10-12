@@ -128,11 +128,11 @@ C
                      IF( CONTROL(STANUM(ISTA)) .EQ. 'VSOP' ) 
      1                    DOVSOP = .TRUE.
 C
-C                    Record if all stations use VLBA control.
-C                    Actually we're mainly interested in whether
-C                    there are non-vex stations.
+C                    Record if all stations are VLBA stations.
+C                    If so, we can assume some things are done
+C                    that might not be done elsewhere.
 C
-                     IF( CONTROL(STANUM(ISTA)) .NE. 'VLBA' )
+                     IF( STANAME(ISTA)(1:4) .NE. 'VLBA' )
      1                  ALLVLBA = .FALSE.
 C
                   END IF

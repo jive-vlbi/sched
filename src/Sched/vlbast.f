@@ -8,16 +8,15 @@ C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
 C
-      INTEGER           ISCN, ISRC, ISTA, KSTA, LCALTIME, ISAT
+      INTEGER           ISCN, ISRC, ISTA, LCALTIME, ISAT
       REAL              PDRA, PDDEC
-      INTEGER           IER, PMDOY, QUOUT, NCHAR, LEN1, I
+      INTEGER           PMDOY, QUOUT, NCHAR, LEN1, I
       INTEGER           DOY1, DOY2
       LOGICAL           DOSET, PMSET, FIRSTS
       CHARACTER         TSTART*9, TSTOP*9, TRA*16, TDEC*16, TFORM*16
       CHARACTER         PMFT*9, PMVLBAD*9, PMHUMAND*16
       CHARACTER         HUMAND1*16, HUMAND2*16, VLBAD1*9, VLBAD2*9
-      DOUBLE PRECISION  LSTOP, PRA, PDEC, PPMTIME, DDRA, DDDEC, DIST
-      DOUBLE PRECISION  GEOVEL
+      DOUBLE PRECISION  LSTOP, PRA, PDEC, PPMTIME
       DOUBLE PRECISION  PMFRACD, FRACD1, FRACD2
       SAVE              PMSET, LCALTIME
 C --------------------------------------------------------------------
@@ -26,7 +25,6 @@ C
 C     Some initializations.
 C
       ISRC   = SRCNUM(ISCN)
-      KSTA   = STANUM(ISTA)
       IF( FIRSTS ) THEN
          PMSET = .FALSE.
          LCALTIME = -999
@@ -62,46 +60,10 @@ C
          WRITE(IUVBA,'(''!*  '',A,''  *!'')') MSGTXT(1:NCHAR)
       END IF
 C
-C     Source information:
+C     Source information.  Do in subroutine to get satellite
+C     and planet positions for specific scan.
 C
-C     Get the position information to use.  For planets, this can
-C     be both station and time dependent.  Double precision needed
-C     in call for some items that should be single precision later.
-C     Also do satellites here as they are essentially the same.
-C
-      IF( PLANET(ISRC) .OR. SATEL(ISRC) ) THEN
-         IF( PLANET(ISRC) ) THEN
-            PPMTIME = STARTJ(ISCN)
-            CALL JPLEP2( EPHFILE, SCNSRC(ISCN), PPMTIME, 
-     1         (-1.D0)*LONG(KSTA), LAT(KSTA), ELEV(KSTA), 'VLBA',
-     2                PRA, PDEC, DDRA, DDDEC, DIST, IER )
-            IF( IER .NE. 0 ) THEN
-               IF( IER .EQ. 2 ) THEN
-                  WRITE( MSGTXT, '( A, I5, 3F15.7 )' )
-     1             'VLBAST:  Possible time problem: ', 
-     2             ISCN, STARTJ(1), STARTJ(ISCN), PPMTIME
-                  CALL WLOG( 1, MSGTXT )
-               END IF
-               WRITE( MSGTXT, '( A, A, A, I4 )' )
-     1            'VLBAST: Problem with ephemeris for ',
-     2             SCNSRC(ISCN), '  Error:', IER
-               CALL ERRLOG( MSGTXT )
-            END IF
-         ELSE IF( SATEL(ISRC) ) THEN
-            ISAT = SATN(ISRC)
-            CALL SATEP( ISAT, ISCN, ISTA, 'VLBA', PRA, PDEC, 
-     1                  DDRA, DDDEC, PPMTIME, DIST, GEOVEL )
-         END IF
-C
-         PDRA    = DDRA
-         PDDEC   = DDDEC
-      ELSE
-         PRA     = RA2000(ISRC)
-         PDEC    = D2000(ISRC)
-         PPMTIME = PMTIME(ISRC)
-         PDRA    = DRA(ISRC)
-         PDDEC   = DDEC(ISRC)
-      END IF
+      CALL SRCLOC( ISCN, ISTA, PRA, PDEC, PPMTIME, PDRA, PDDEC )
 C
 C     Get character form of RA and DEC that will be 
 C     needed several times.

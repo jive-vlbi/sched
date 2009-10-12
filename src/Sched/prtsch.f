@@ -182,7 +182,7 @@ C
      9      '  Frequencies are LO sum (band edge).',
      A      '  SYNC: Time correlator is expected to sync up.'
 C
-         IF( AUTOALOC(ISTA) ) THEN
+         IF( AUTOALOC(ISTA) .AND. ANYTAPE ) THEN
             WRITE( IPRT, '( A, A )' )
      1         '     Automatic tape allocation specified.  Tape ' //
      2         'positions are just estimates.'
