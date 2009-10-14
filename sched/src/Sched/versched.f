@@ -29,9 +29,11 @@ C
 C      Now even versions are releases, odd versions are development.
 C
 C      VERNUM = 8.0     !  Release Dec. 2008
-C      version 8.1 is in and svn branch.  Taken from this on Feb 18, 2009
-      VERNUM = 9.0      !  Development version
-      VERSION = 'Development version after Dec. 2008'
+C      version 8.1 is in an svn branch.  Taken from this on Feb 18, 2009
+      VERNUM = 9.0      !  Beta version of Oct 14, 2009
+      VERSION = 'Beta version released Oct. 14, 2009'
+C     VERNUM  = 9.1
+C     VERSION = 'Development version after Oct. 14, 2009'
 C
       RETURN
       END
