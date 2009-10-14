@@ -117,7 +117,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2009Oct05-17:20:20"
+ VERSION = "2009Oct14-10:06:51"
 
 !
 !  =====================================================================
@@ -383,6 +383,7 @@
 !  Stations below are maintained by Huib van Langevelde.
 !  Stations below are maintained by Cormac Reynolds from 30Nov00.
 !  Stations below are maintained by Antonis Polatidis+ from Mar08
+!  Stations below are maintained by Friso Olnon (schedsvn) from Sep09
 !
 !    Do not modify stations.dat directly.  It is a combination of
 !    rcwstat.dat and huibstat.dat and any changes would be lost at the
@@ -427,7 +428,11 @@
 !          Await confirmation from JB people
 !  081105: Comment out NOTO_S2, no S2 in Noto
 !  081105: Added QUASAR stations - Sv Ba Zc
-!  
+!  090511: Added KUNMING station
+!  090706: Added BEIJING station (MIYUN50 to be?)
+!  090708: Modified AX* for SHANGHAI, URUMQI, KUNMING and BEIJING
+!  090924: Added Robledo 34m
+!  090924: Renamed BEIJING to MIYUN
 !  ------------------------------------------------------------------
 !  *************  WARNING  *******************
 !   SCHED uses the first 4 characters in many places to detect
@@ -624,6 +629,7 @@
 !
     DBNAME = SESHAN25
     MOUNT=ALTAZ AX1RATE=60 AX2RATE=36 AX1LIM=-78,430 AX2LIM=5,88.5
+    AX1ACC=0.5 AX2ACC=0.28 ! Li Bing 8jul2009
     TSETTLE=2 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
     NBBC=14 DISK=MARK5A MEDIADEF=DISK
 ! AGP: Jun08 Back to 14 BBCs
@@ -712,7 +718,9 @@
 !  X = 228310.726       Y = 4631922.805         Z = 4367063.964
   DBNAME = URUMQI
 !  other parameters taken to be the same as Shanghai, except MkIV.
-   MOUNT= ALTAZ AX1RATE=30 AX2RATE=18 AX1LIM=-80,450 AX2LIM=5,88
+!  MOUNT= ALTAZ AX1RATE=30 AX2RATE=18 AX1LIM=-80,450 AX2LIM=5,88
+   MOUNT= ALTAZ AX1RATE=60 AX2RATE=30 AX1LIM=-80,450 AX2LIM=5,88 ! Yusup Ali  8jul2009
+   AX1ACC=0.5 AX2ACC=0.5 ! Yusup Ali  8jul2009
    TSETTLE=2  DAR=MKIV  ! RECORDER=MKIV  NDRIVES=1  NHEADS=2 
    NBBC=14 DISK=MARK5A MEDIADEF=DISK
    /
@@ -810,6 +818,40 @@ NBBC=14  DISK=MARK5A  MEDIADEF=DISK
      AX1ACC=0.05 AX2ACC=0.05 
      TSETTLE=5 DAR=VLBA4 ! RECORDER=VLBA4  NDRIVES=1 NHEADS=2 
      NBBC=14 DISK=MARK5A  MEDIADEF=DISK ! Actually Mark5B
+   /
+
+! ===================================================
+! The following are Chinese stations added 2 Sep 2009
+! ===================================================
+!
+  STATION=KUNMING    STCODE=Km  CONTROL=VEX
+!  info from Hao Longfei  11may2009
+  DBNAME = KUNMING
+   MOUNT= ALTAZ AX1RATE=60 AX2RATE=30 AX1LIM=-88,447 AX2LIM=5,90
+   AX1ACC=0.5 AX2ACC=0.3 ! Hao Longfei  8jul2009
+   TSETTLE=2  DAR=VLBA4  ! RECORDER=MKIV  NDRIVES=1  NHEADS=2 
+   NBBC=8 DISK=MARK5A MEDIADEF=DISK
+   /
+
+ STATION=MIYUN50   DBNAME=MIYUN50   STCODE=My  CONTROL=VEX
+!  From ZHU Xinying 6 July 2009.
+   MOUNT= ALTAZ AX1RATE=60 AX2RATE=30 AX1LIM=-270,270 AX2LIM=7,89
+   AX1ACC=0.5 AX2ACC=0.3 ! Zhu Xinying 8jul2009
+   TSETTLE=2  DAR=VLBA4
+   NBBC=8 DISK=MARK5A MEDIADEF=DISK
+   /
+
+! ================================================
+! added 2009 Sep 24
+! ================================================
+  STATION=ROB34BWG   STCODE=Ro  CONTROL=VEX
+    !  DSS54 - Madrid 34m BWG
+    DBNAME = DSS54
+    !  Update from Cristina Garcia, 16 Feb 2009 via Campbell:
+    !    New antenna available for 7mm
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=-90,359 AX2LIM=6,88
+    TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    /
 
 !  
