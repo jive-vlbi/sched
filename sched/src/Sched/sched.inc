@@ -480,7 +480,7 @@ C     Cover and correlator information:
 C
       INTEGER          MCOVER
       PARAMETER        (MCOVER=16)
-      CHARACTER        COVER(MCOVER)*74
+      CHARACTER        COVER(MCOVER)*76
       CHARACTER        PINAME*64, PHONE*64, OBSPHONE*64, EMAIL*64
       CHARACTER        ADDRESS(4)*64, FAX*64, OBSMODE*64, NOTE(4)*64
       CHARACTER        OBSTYP*8

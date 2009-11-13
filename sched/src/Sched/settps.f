@@ -19,11 +19,13 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           ISCN, ISTA, LASTISCN(MAXSTA), KS, DAY, YEAR
+      INTEGER           ISCN, ISTA, LASTISCN(MAXSTA), KS
+C        INTEGER           DAY, YEAR
       LOGICAL           FIRSTS, PRESWARN, SGWARN
       DOUBLE PRECISION  LSTOPJ(MAXSTA), SCNGAP(MAXSTA)
-      DOUBLE PRECISION  TPMIN, TOL, TIMED
-      CHARACTER         TIMECH*8, TFORM*8
+      DOUBLE PRECISION  TPMIN, TOL
+C        DOUBLE PRECISION  TIMED
+C        CHARACTER         TIMECH*8, TFORM*8
       PARAMETER         ( TOL = 0.1D0 / 86400.D0 )
       DATA              PRESWARN, SGWARN / .TRUE., .TRUE. /
 C  -------------------------------------------------------------------

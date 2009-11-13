@@ -6,6 +6,7 @@ C     values have not been set.
 C
       INCLUDE 'sched.inc'
 C
+      INTEGER       LEN1
       LOGICAL       MISCOR
       CHARACTER     CHPOL*(*)
 C --------------------------------------------------------------------      
