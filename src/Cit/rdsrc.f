@@ -79,7 +79,7 @@ C
       SAVE             PTSO, PTRA, PTDEC, PTRAE, PTDECE
       SAVE             PTC, PTV, PTVR, PTVD
       SAVE             PTEN, PTPM, PTDRA, PTDDEC, PTPRA, PTPDEC
-      SAVE             PTPAR, PTRE
+      SAVE             PTPAR, PTPARL, PTRE
 C
       DATA   FOPEN         / .FALSE. /
       DATA   GOTKEYS       / .FALSE. /
@@ -113,7 +113,12 @@ C
          CALL KEYADD( 'DDEC', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'PMRA', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'PMDEC', 0.D0, 1, KD, KC, KI )
+C
+C              Oops, had a spelling problem and don't want to 
+C              kill old files while correcting it.
+C
          CALL KEYADD( 'PARALAX', 0.D0, 1, KD, KC, KI )
+         CALL KEYADD( 'PARALLAX', 0.D0, 1, KD, KC, KI )
          CALL KEYCHR( 'REmarks', ' ', 80, KD, KC, KI )
          CALL KEYCHR( 'VERSION', 'Not given', 20, KD, KC, KI )
          GOTKEYS = .TRUE.
@@ -136,6 +141,7 @@ C
          PTPRA  = KEYPTR( 'PMRA', KC, KI )
          PTPDEC = KEYPTR( 'PMDEC', KC, KI )
          PTPAR  = KEYPTR( 'PARALAX', KC, KI )
+         PTPARL = KEYPTR( 'PARALLAX', KC, KI )
          PTRE   = KEYPTR( 'REmarks', KC, KI )
       END IF
 C
@@ -180,6 +186,7 @@ C
       KD(PTPRA)  = 0.D0
       KD(PTPDEC) = 0.D0
       KD(PTPAR)  = 0.D0
+      KD(PTPARL) = 0.D0
 C
       DO I = 1, 10
         KD(PTRE-1+I) = BLANK8
@@ -248,7 +255,12 @@ C
       SRCDDEC  = KD(PTDDEC)
       SRCPMRA  = KD(PTPRA) / 1000.D0
       SRCPMDEC = KD(PTPDEC)/ 1000.D0
-      SRCPARA  = KD(PTPAR) / 1000.D0 
+C         Deal with that spelling problem.  Give the correct spelling
+C         priority, but take the other if that is used.
+      SRCPARA  = KD(PTPARL) / 1000.D0 
+      IF( KD(PTPARL) .EQ. 0.D0 .AND. KD(PTPAR) .NE. 0.D0 ) THEN
+         SRCPARA = KD(PTPAR) / 1000.D0
+      END IF
 C
 C     Comment.
 C

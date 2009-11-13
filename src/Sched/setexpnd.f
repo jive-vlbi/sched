@@ -18,9 +18,10 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER      KS, IS, KSO, JS
+      INTEGER      KS, IS, KSO 
+C     INTEGER      JS
       INTEGER      LSTA, LSCN, KSI, GNSET
-      LOGICAL      USEIT
+C      LOGICAL      USEIT
 C  --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SETEXPND: Starting.' )
 C

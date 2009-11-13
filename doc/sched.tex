@@ -5723,7 +5723,7 @@ The objects that \schedb understands are Mercury, Venus, Moon, Mars,
 Jupiter, Saturn, Uranus, Neptune, Pluto, and Sun.  Topocentric
 positions and rates will be provided for VLBA antennas if one of
 these is specified.  Geocentric positions along with rates and
-horizontal paralax are provided for the PM cards for the VLA.
+horizontal parallax are provided for the PM cards for the VLA.
 Note that \schedb does not understand how to specify moving objects
 to antennas that don't use the VLA or VLBA control file types.
 
@@ -9173,7 +9173,7 @@ of date.  The zero offset time is given by {\tt PMEPOCH}.
 \item [{\tt PMRA}:] The proper motion in RA in milli arcseconds per year.
 This is an angular value and is 1/cos(dec) times the change in
 coordinate value.  The zero offset time is given by {\tt EPOCH}.  When
-{\tt PMRA}, {\tt PMDEC}, or {\tt PARALAX} is used, the source
+{\tt PMRA}, {\tt PMDEC}, or {\tt PARALLAX} is used, the source
 coordinates are shifted from the time specified by {\tt EPOCH} to a
 time that is the stop time of the first scan or, if it is given, {\tt
 PMEPOCH}.  {\tt PMRA}, {\tt PMDEC} are added to {\tt DRA} and {\tt
@@ -9188,7 +9188,9 @@ The zero offset time is given by {\tt EPOCH}.
 \item [{\tt EPoch}:] The zero point for proper motion expressed as
 a fractional year such as 1993.6.
 
-\item [{\tt PARALAX}:] The paralax in milli arcseconds.
+\item [{\tt PARALLAX}:] The parallax in milli arcseconds.  Synonym 
+{\tt PARALAX} for backward compatability (yes, I misspelled it the first
+time so backwards compatability is an issue).
 
 \end{description}
 
@@ -12665,9 +12667,29 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_9.1}Version 9.1}
+\subsection{\label{SSEC:VER_9.1}Development Version 9.1}
 
-This is the active development version after the current release.
+\begin{itemize}
+
+\item Install the JPLEPH.421 ephemeris in the \$PLANET\_DATA area for
+the AOC version for 64 bit Linux.  Test against 405 to be sure there
+are no big changes.  Nov. 12, 2009 RCW.
+
+\item Add code from Bill Junor to the satellite tracking to get the 
+station dependent rates right (or close enough).  Nov. 02, 2009.  RCW
+
+\item Change spelling of {\tt PARALAX} to {\tt PARALLAX}.  Add {\tt PARALAX}
+for backward compatability.  This is being used fairly heavily by some 
+current projects.  Oct. 20, 2009
+
+\item Add warnings for scans with less than half of the antennas reaching
+source before the stop time.  Also give a count of scans with less than
+half of the antennas on-source at the start time.  Oct. 15, 2009  RCW.
+
+\item Move DSS54 (Robledo 34mBWG) from stations\_JIVE.dat to stations\_EVN.dat.
+Oct. 15, 2009  RCW.
+
+\end{itemize}
 
 
 \subsection{\label{SSEC:VER_9.0}Version 9.0}
@@ -13265,7 +13287,7 @@ incorporation of the NAIF software from JPL.  However it is not expected
 to be of general interest and there is a stub available in the makefile
 to avoid needing NAIF.  With this change, \schedb can calculate the
 position of spacecraft if a SPICE file is available.  Note that there
-is an inconsistency in the handling of diurnal paralax that makes SPICE
+is an inconsistency in the handling of diurnal parallax that makes SPICE
 planet positions come out somewhat different from positions based on
 the JPL ephemeris. 24 Mar 2004 RCW.
 
@@ -13431,7 +13453,7 @@ of station locations is on the screen.  26 Feb 2003  RCW
 \item Restructure the sections that set the fan out modes.  This was
 a code maintenance issue.  Users should not see a change.  13 Mar 2003 RCW
 
-\item Proper motion and paralax added.  This is much different from the
+\item Proper motion and parallax added.  This is much different from the
 planetary motion that was already in place.  Note the source catalog
 should now use EQUINOX rather than EPOCH.  20 Mar 2002 RCW.
 
@@ -15395,7 +15417,7 @@ This is a list of desired program changes, fixes or enhancements.
       at VLA.  From note, Jul 2004 RCW
 
 \item High resolution RD plots of Mars vs orbiters affected by
-      diurnal paralax.  Also planet not plotted if start point not on
+      diurnal parallax.  Also planet not plotted if start point not on
       field.  From note, Jul 2004  RCW.
 
 \item Calculate range of acceptable dates based on solar distance for
@@ -15512,7 +15534,7 @@ This is a list of desired program changes, fixes or enhancements.
 
 \item VLA:  Support fast switching.  Early97
 
-\item VLA:  Need horzontal paralax for PM card.  Can get from
+\item VLA:  Need horzontal parallax for PM card.  Can get from
       distance.  Early97
 
 \item VLA:  Add all other VLA cards for fully capable VLA scheduling.
