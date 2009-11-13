@@ -19,8 +19,6 @@ C
       INCLUDE   'srlist.inc'
 C
       LOGICAL   MKFILES, RESTART
-      INTEGER   ISET
-      LOGICAL   FMTNONE, ALLNONE
 C --------------------------------------------------------------------
 C     Current version (up to 40 characters).
 C

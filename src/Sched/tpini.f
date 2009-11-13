@@ -33,7 +33,7 @@ C
       INCLUDE 'tpinit.inc'
 C
       LOGICAL           GOTDEF, GOTEXP
-      INTEGER           VLBOPE, IER, JSTA, ISTA, I, IUTP
+      INTEGER           VLBOPE, IER, JSTA, I, IUTP
       CHARACTER         TPFILE*80, RESULT*255, CNAME*50
       INTEGER           KEYPTR, IS, IR, IP, ID, II, IL, IN, IH, IB, IM
       SAVE              IS, IP, ID, II, IL, IN, IH, IB, IM

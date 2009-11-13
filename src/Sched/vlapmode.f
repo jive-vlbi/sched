@@ -17,7 +17,6 @@ C
       INCLUDE   'schset.inc'
 C
       INTEGER    KS, ISCN, ISTA, JSTA, NPMODE
-      LOGICAL    DOTEST
 C ---------------------------------------------------------------------
       IF( SDEBUG ) CALL WLOG( 0, 'SETDEFS: Starting' )
 C

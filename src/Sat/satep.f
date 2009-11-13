@@ -80,6 +80,12 @@ C
       INTEGER               PREC
       LOGICAL               SPDEBUG, KERLOAD(MAXSAT)
 C
+C     For the station dependent rate calculation:
+C
+      DOUBLE PRECISION  RHOE, SXDOT, SYDOT, SZDOT, OMEGAE
+      DOUBLE PRECISION  XS, YS, ZS
+      PARAMETER  (OMEGAE=2.D0*PI*SIDR/86400.D0)
+C
       DATA             KERLOAD / MAXSAT*.TRUE. /
       SAVE                  KERLOAD
 C -------------------------------------------------------------------- 
@@ -256,13 +262,60 @@ C
          WRITE(*,*) ' RA, DEC hr, deg:   ', RAC, '   ', DECC
       END IF
 C
-C     Get the rates in the right format.  Don't attempt to
-C     adjust for station motion - that is a 1 km/s approximation
-C     that maybe should be adjusted some day.
+C     Get the rates in the right format.  
+C
+C     Original did not attempt to adjust for station motion.
+C     The code for doing the adjustment was provided by Bill Junor,
+C     Oct. 28, 2009
 C
       DX = STATE(4)
       DY = STATE(5)
       DZ = STATE(6)
+C
+C     Beginning of code for station dependent rates
+C
+C     Do an explicit correction for the station motion. See
+C     "Explanatory Supplement to the Astronomical Almanac" 2006, P.K.
+C     Seidelmann (ed.), University Science Books, p.133.
+C     [Equation 3.254-4 is what we need.]
+C     *** Do the correction ONLY if there is a station!
+C
+      IF (ISTA .NE. 0) THEN
+C
+C     Take care with units. These are in meters.
+C
+         XS = XPOS(KSTA)
+         YS = YPOS(KSTA)
+         ZS = ZPOS(KSTA)
+C
+C     But DX, DY, DZ are in km/s.
+C
+         RHOE = SQRT(XS*XS + YS*YS + ZS*ZS) / 1000.0D0
+C
+C     *** Care with sense of longitude! LA is retrieved from catalog
+C     as 1.854 radians but it is 106.24560 degrees W.
+C
+         SXDOT = -1.0D0 * OMEGAE *
+     1           RHOE * COS(LAT(KSTA)) * SIN(GMST - LONG(KSTA))
+
+         SYDOT =          OMEGAE *
+     1           RHOE * COS(LAT(KSTA)) * COS(GMST - LONG(KSTA))
+
+         SZDOT = 0.0D0
+C
+C     Make the correction. Get the sense correct.
+C     For geosynch satellite this is the correct sense.
+C
+         DX = DX - SXDOT
+         DY = DY - SYDOT
+         DZ = DZ - SZDOT
+C
+      ENDIF
+C
+C     A good reference for this is "Explanatory Supplement to the
+C     Astronomical Almanac" 2006, P.K. Seidelmann (ed.), University
+C     Science Books, p.335. [Equations 6.15-8 are what we need.]
+C
       MDRA = -1.0 * DX * SIN( SRA ) + DY * COS( SRA )
       MDDEC = DZ * COS( SDEC ) - 
      1     ( DX * COS( SRA ) + DY * SIN( SRA ) ) * SIN( SDEC )

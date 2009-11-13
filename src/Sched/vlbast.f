@@ -8,7 +8,7 @@ C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
 C
-      INTEGER           ISCN, ISRC, ISTA, LCALTIME, ISAT
+      INTEGER           ISCN, ISRC, ISTA, LCALTIME
       REAL              PDRA, PDDEC
       INTEGER           PMDOY, QUOUT, NCHAR, LEN1, I
       INTEGER           DOY1, DOY2

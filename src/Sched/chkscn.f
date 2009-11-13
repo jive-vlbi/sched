@@ -9,6 +9,7 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC
+      INTEGER    NEXPECT, NLATE, NNEVER, NSLATE
       REAL       NSRCCHG
       LOGICAL    DOPWARN, WARNLONG
       DOUBLE PRECISION  TIME1, TIMEDUR
@@ -135,6 +136,57 @@ C
             WARNLONG = .FALSE.
          END IF
       END DO
+C
+C     Look for scans that start or, worse, end before very many antennas
+C     are on-source.  
+C
+      NSLATE = 0
+      DO ISCN = SCAN1, SCANL
+         NEXPECT = 0
+         NLATE   = 0
+         NNEVER  = 0
+         DO ISTA = 1, NSTA
+            IF( STASCN(ISCN,ISTA) ) THEN
+               NEXPECT = NEXPECT + 1
+               IF( TONSRC(ISCN, ISTA) .GT. STARTJ(ISCN) ) 
+      1             NLATE = NLATE + 1
+               IF( TONSRC(ISCN, ISTA) .GT. STOPJ(ISCN) )
+      1             NNEVER = NNEVER + 1
+            END IF
+         END DO
+C
+C        Warn of an individual scan with few antennas ever reaching the 
+C        source.
+C
+         IF( NNEVER .GT. NEXPECT/2 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5, 2A )' )
+     1         'CHKSCN:  WARNING - Scan ', ISCN, ' had fewer than ', 
+     2         'half the antennas on source by the stop time!'
+            CALL WLOG( 1, MSGTXT )
+         END IF
+C
+C        Accumulate the number of scans with most antennas not on source
+C        at the start.
+C
+         IF( NLATE .GT. NEXPECT/2 ) NSLATE = NSLATE + 1
+      END DO
+C
+C     Tell the user about the number of scans with late arrival by most
+C     antennas.
+C
+         IF( NSLATE .GT. 0 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5, 2A )' )
+     1         'CHKSCN: ',  NSLATE, ' scans had more than half the ',
+     2         'antennas arrive on-source after the start time.'
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( 2A )' )
+     1         '              This could be normal if using duration ',
+     2         'scheduling with small gaps.'
+            CALL WLOG( 1, MSGTXT )
+         END IF
 C
 C     Check some VLA issues.
 C
