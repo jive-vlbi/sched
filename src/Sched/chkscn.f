@@ -149,9 +149,9 @@ C
             IF( STASCN(ISCN,ISTA) ) THEN
                NEXPECT = NEXPECT + 1
                IF( TONSRC(ISCN, ISTA) .GT. STARTJ(ISCN) ) 
-      1             NLATE = NLATE + 1
+     1             NLATE = NLATE + 1
                IF( TONSRC(ISCN, ISTA) .GT. STOPJ(ISCN) )
-      1             NNEVER = NNEVER + 1
+     1             NNEVER = NNEVER + 1
             END IF
          END DO
 C
