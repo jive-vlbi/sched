@@ -75,7 +75,7 @@ C
       INTEGER          PTSO, PTRA, PTDEC, PTRAE, PTDECE
       INTEGER          PTC, PTV, PTVR, PTVD
       INTEGER          PTEN, PTPM, PTDRA, PTDDEC, PTPRA, PTPDEC 
-      INTEGER          PTPAR, PTRE
+      INTEGER          PTPAR, PTPARL, PTRE
       SAVE             PTSO, PTRA, PTDEC, PTRAE, PTDECE
       SAVE             PTC, PTV, PTVR, PTVD
       SAVE             PTEN, PTPM, PTDRA, PTDDEC, PTPRA, PTPDEC
