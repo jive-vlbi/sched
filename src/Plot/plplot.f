@@ -85,7 +85,7 @@ C
             IF( KSET .EQ. 0 .AND. PSFPOI(I) .EQ. 1 ) KSET = I
             IF( PSFPOI(I) .EQ. 1 ) KSFN = KSFN + 1
  10      CONTINUE
-         IF( KSFN .GT. 1 ) KSET = KSFN * -1
+         IF( KSFN .GT. 1 ) KSET = KSFN * (-1)
       END IF
 C
 C      IF( KSET .EQ. 0 ) KSET = 1

@@ -1,4 +1,4 @@
-      SUBROUTINE PLFLOD	( PFLNAM, STAT )
+      SUBROUTINE PLFLOD ( PFLNAM, STAT )
 C
 C     Routine for sched that load the information saved in the
 C     parameters file

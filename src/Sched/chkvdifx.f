@@ -7,8 +7,6 @@ C
       INCLUDE     'sched.inc'
       INCLUDE     'schset.inc'
 C
-      INTEGER    KS, OVERSAMP, NFFTS, NPFFTS
-      REAL       TAVG, RNFFTS
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKVDIFX: starting.' )
 C

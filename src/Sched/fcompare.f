@@ -4,6 +4,7 @@ C     Routine for SCHED called by setfcat that compares a setup file KS
 C     with a frequency catalog entry to KF see if they are compatible.
 C     The purpose is to narrow the range of those that will be
 C     used to search for a source of defaults or error checks.
+C     MATCH is returned .true. if 
 C
 C     Require that every channel in the setup file match, in all ways
 C     that have already been set in the setup file, an IF in the
@@ -35,7 +36,8 @@ C
 C ---------------------------------------------------------------------
 C
 C     Check frequency match.  Only do debug printout if some 
-C     channel matches.
+C     channel matches.  GOTAFT set true if any channel is in
+C     the frequency rainge for any IF in the setup.
 C
       GOTAFR = .FALSE.
       DO ICH = 1, NCHAN(KS)
@@ -72,6 +74,10 @@ C
             FCSTA = .TRUE.
          END IF
       END DO
+C
+C     Print something if debug print is requested and there is a
+C     frequency match (both in DEBUGPRT), and the stations match.
+C
       IF( DEBUGPRT .AND. FCSTA ) THEN
          SETMSG = ' '
          WRITE( SETMSG, '( A, I4, A, I4 )' )
@@ -83,6 +89,7 @@ C
       END IF
 C
 C     Check for IFs that match the input channel parameters.
+C     MATCH after the next line just implies the station matches.
 C
       MATCH = FCSTA
       IF( MATCH ) THEN
@@ -186,6 +193,13 @@ C
 C
 C              Check for frequency in range.  Only require one channel
 C              to be ok - allows for overflow at places like the VLA.
+C
+C  *********      I'm confused.  This is in the middle of the ICH loop
+C                 and so is its use below making up IIFBAD.  So IIFBAD
+C                 will be different for channels before and after 
+C                 the first good one.  Shouldn't it have a separate
+C                 loop somewhere, maybe with FREQOK being IF dependent.
+C
 C
                CFRQOK = FREQREF(ICH,KS) .GE. FRF1(IIF,KF) .AND.
      1                  FREQREF(ICH,KS) .LE. FRF2(IIF,KF)
