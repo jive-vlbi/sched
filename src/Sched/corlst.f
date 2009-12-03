@@ -7,7 +7,7 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER           ISTA, ISCN, I, NSANT, NBAS, NPOL
-      REAL              DATARATE
+      REAL              DATARATE, MAXSPD
       DOUBLE PRECISION  TTIME, TRTIME, TBTIME, STIME
       DOUBLE PRECISION  TIMEB, TIMEL, TLAST
       LOGICAL           OVERLAP
@@ -107,6 +107,7 @@ C
                   DATARATE = 0.0
                END IF
                MAXDR = MAX( MAXDR, DATARATE )
+               MAXSPD = MAX( MAXSPD, FSPEED(SETNUM(ISCN)))
 C
 C              Accumulate the data size.  Note double precision - for 
 C              multiple Gbytes, small numbers being added to large 
@@ -136,10 +137,11 @@ C
          WRITE( ISUM, '( A, F8.2, A )' )
      1       '  Total number of baseline hours:', TBTIME/3600.D0, 
      2       '    (Recording scans only)'
-         WRITE( ISUM, '( A, F8.1, A, /, T15, A )' )
+         WRITE( ISUM, '( A, F8.1, A, /, T10, A, F6.1 )' )
      1     '  Projected maximum data output rate from the correlator:',
      2       MAXDR/1000.0, ' kbytes/sec',
-     3     ' if processed in one pass.'
+     3     ' if processed in one pass at a maximum speed up factor of',
+     4     MAXSPD
          WRITE( ISUM, '( A, F9.1, A )' )
      1       '  Projected correlator output data set size:', 
      2       DATASIZE/1.D6, ' Mbytes'

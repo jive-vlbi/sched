@@ -105,7 +105,7 @@ C        First cases that need BBSYN
 C
          IF( GOTNETF .AND. GOTLO1 .AND. ( GOTNETS .OR. GOTBBS ) ) THEN
             IF( FREQREF(ICH,KS) .GT. FIRSTLO(ICH,KS) ) THEN
-  1            ISIDE1 = 1
+               ISIDE1 = 1
             ELSE
                ISIDE1 = -1
             END IF

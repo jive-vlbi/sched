@@ -88,7 +88,7 @@ C
              PSUNEL = ABS( PSUNEL )
          ELSE
              CH = '-'
-             PSUNEL = PSUNEL * -1.0
+             PSUNEL = PSUNEL * (-1.0)
          END IF
          CALL PLSTXT( PSUSGN(1), PSUSGN(2), PSUSGN(3),
      1                PSUSGN(4), CH, 1, .TRUE. )
