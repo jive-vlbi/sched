@@ -99,7 +99,7 @@ C
      1                KLDIMV, UINT, VINT )
       ELSE
          DO 4 INDX = 1, NBASE
-            IMAX = NPTS(INDX)	
+            IMAX = NPTS(INDX)
             DO 4 I= 1, IMAX
                W(I,INDX) = 1.0
  4       CONTINUE
@@ -244,7 +244,7 @@ C
 C
       VMX = VMX * SCALE
       FNORMS = MIN( AMAX / VMX,( AMAX / ( VMX *2.0 * KLMAXU ) )**2,
-     1 	       ( AMAX / ( VMX * 2.0 * KLMAXV ) )**2 )
+     1            ( AMAX / ( VMX * 2.0 * KLMAXV ) )**2 )
       FNORM  = 1.0 / DSQRT( FNORMS )
       SCALE  = SCALE * FNORMS
 C
