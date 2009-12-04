@@ -18,7 +18,7 @@ C     Create a VEX output file
 C
       VIOLFS = .FALSE.
       IF( DEBUG ) CALL WLOG( 1, 'VXWRT: Starting VEX section' )
-      WRITE( VEXFILE, '( A, A )' )  EXPCODE(1:LEN1(EXPCODE)), '.SKD'
+      WRITE( VEXFILE, '( A, A )' )  EXPCODE(1:LEN1(EXPCODE)), '.VEX'
       CALL DWCASE( VEXFILE )
 C     
 C     Find out if the .skd file already exists.
