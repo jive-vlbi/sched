@@ -5,7 +5,8 @@ C     defaulting routines when there is an error.  It writes the
 C     name of the offending setup file and the first station name
 C     to the screen, and then aborts the program.
 C
-C     Someday, add more output?
+C     It also writes the setup file details as far as they are known
+C     to this poine.
 C
 C     This used to be called SETERR, but there is a routine by that 
 C     name in the NAIF software so I had to change it when spacecraft

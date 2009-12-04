@@ -34,9 +34,28 @@ C
       LOGICAL          MFEF, MVBND, MVBW
       CHARACTER        CHFLAGS*12
 C ---------------------------------------------------------------------
+C     Initialize MATCH in case a top level item is no good.
+C
+      MATCH = .FALSE.
+C
+C     Check that the first setup file station uses this frequency
+C     catalog entry.  Allow VLBA defaults.
+C
+      FCSTA = .FALSE.
+      DO KSTA = 1, MFSTA
+         IF( SETSTA(1,KS) .EQ. FSTNAM(KSTA,KF) .OR. 
+     1       ( SETSTA(1,KS)(1:4) .EQ. 'VLBA' .AND.
+     2         FSTNAM(KSTA,KF)(1:4) .EQ. 'VLBA' ) ) THEN
+            FCSTA = .TRUE.
+         END IF
+      END DO
+C
+C     Don't waste more time if the station doesn't match
+C
+      IF( .NOT. FCSTA ) GO TO 1000
 C
 C     Check frequency match.  Only do debug printout if some 
-C     channel matches.  GOTAFT set true if any channel is in
+C     channel matches.  GOTAFR set true if any channel is in
 C     the frequency rainge for any IF in the setup.
 C
       GOTAFR = .FALSE.
@@ -48,6 +67,14 @@ C
             END IF
          END DO
       END DO
+C
+C     Don't waste more time if no frequency matches
+C     Only a few frequency sets should survive past here.
+C
+      IF( .NOT. GOTAFR ) GO TO 1000
+C
+C     Should there be any debug print?
+C
       DEBUGPRT = SDEBUG .AND. GOTAFR
 C
 C     Initialize OKIF.
@@ -62,18 +89,6 @@ C     FREQOK will sense if any channels are in the right frequency
 C     range.
 C
       FREQOK = .FALSE.
-C
-C     Check that the first setup file station uses this frequency
-C     catalog entry.  Allow VLBA defaults.
-C
-      FCSTA = .FALSE.
-      DO KSTA = 1, MFSTA
-         IF( SETSTA(1,KS) .EQ. FSTNAM(KSTA,KF) .OR. 
-     1       ( SETSTA(1,KS)(1:4) .EQ. 'VLBA' .AND.
-     2         FSTNAM(KSTA,KF)(1:4) .EQ. 'VLBA' ) ) THEN
-            FCSTA = .TRUE.
-         END IF
-      END DO
 C
 C     Print something if debug print is requested and there is a
 C     frequency match (both in DEBUGPRT), and the stations match.
@@ -369,6 +384,10 @@ C     Now we are done and MATCH = .TRUE. means that this frequency
 C     group is compatible with the setup file in every way except
 C     possibly the RF frequency of some channels.  
 C
+C     Jump here if no frequencies match to minimize time spent on
+C     useless frequency sets.      
+C
+ 1000 CONTINUE
       RETURN
       END
 

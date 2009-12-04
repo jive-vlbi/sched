@@ -25,20 +25,18 @@ C
 C     Assign the IF channels based on the frequency catalog
 C     if they were not in the setup file.
 C
-      IF( IFREQNUM(KS) .GE. 1 ) THEN
-         KF = IFREQNUM(KS)
-         DO ICH = 1, NCHAN(KS)
+      DO ICH = 1, NCHAN(KS)
+         IF( IFREQNUM(ICH,KS) .GE. 1 ) THEN
+            KF = IFREQNUM(ICH,KS)
             KIF = IFREQIF(ICH,KS)
             IF( IFCHAN(ICH,KS) .EQ. ' ' ) THEN
                IFCHAN(ICH,KS) = FIFNAM(KIF,KF)
             END IF
-         END DO
+         ELSE
 C
-C     If there is no corresponding frequency catalog entry, require
-C     that the IFCHANS have been set.
+C           If there is no corresponding frequency catalog entry, 
+C           require that the IFCHANS have been set.
 C
-      ELSE
-         DO ICH = 1, NCHAN(KS)
             IF( IFCHAN(ICH,KS) .EQ. ' ' ) THEN
                WRITE( MSGTXT, '( A, I3, A, I3, A )' )
      1             'SETBBC: Cannot set IFCHANs.  First bad channel: ',
@@ -46,8 +44,9 @@ C
                CALL WLOG( 1, MSGTXT )
                CALL ERRSET( KS )
             END IF
-         END DO
-      END IF
+
+         END IF
+      END DO
 C
 C
 C     Try assigning BBC's.  Each of these IF's, except the 
