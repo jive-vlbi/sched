@@ -85,6 +85,8 @@ C     Relate the setup to file names and other catalogs.
 C     ISETNUM and SETNAME are the number and name of the input setup
 C     file.  Such a file may contain several setup groups.
 C     IFREQNUM is the frequency catalog entry that applies to the group.
+C     It has been made channel dependent so that multiple groups can
+C     be used.
 C     IFREQIF is the IF from the freq. catalog to use for the channel.
 C     SDEBUG is set equal to DEBUG in sched.inc.
 C     SFCHAN is a pointer from the setup group channel to the setup
@@ -94,7 +96,7 @@ C      channel to the setup group channel (one per logical channel -
 C      0 implies no correspondence).
 C
       INTEGER           ISETNUM(MSET)
-      INTEGER           IFREQNUM(MSET)
+      INTEGER           IFREQNUM(MCHAN,MSET)
       INTEGER           IFREQIF(MCHAN,MSET)
       CHARACTER         SETNAME(MSET)*80
       LOGICAL           SDEBUG

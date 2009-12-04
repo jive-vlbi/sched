@@ -303,9 +303,16 @@ C
 C     Abort if problems were found.
 C
       IF( ERRS ) THEN
-         IF( IFREQNUM(KS) .GT. 0 )
-     1      CALL WLOG( 1, 'CHKSET:  Freq group used or checked: ' //
-     2       FRNAME(IFREQNUM(KS)) )
+         CALL WLOG( 1, 'CHKSET:  Freq groups used or checked: ' )
+         DO ICH = 1, NCHAN(KS)
+            IF( IFREQNUM(ICH,KS) .GT. 0 ) THEN
+               WRITE( MSGTXT, '( A, I3, 2X, A, A )' ) ' Channel: ', 
+     1             ICH, '  Frequency Group: ', 
+     2              FRNAME(IFREQNUM(ICH,KS))
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+            END IF
+         END DO
          CALL ERRSET( KS )
       END IF
 C

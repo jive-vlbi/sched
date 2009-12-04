@@ -110,10 +110,17 @@ C
       END IF
 C
 C     If got a match, process it.
+C     For the moment, keep all channels using the same IFREQNUM
 C
       IF( GOT ) THEN
 C
-         IFREQNUM(KS) = USEKF
+         DO ICH = 1, NCHAN(KS)
+            IFREQNUM(ICH,KS) = USEKF
+         END DO
+
+***************  be sure to set something for all channels.
+
+
 C
 C        Check if any of the received band is outside the RF bands.
 C
@@ -166,9 +173,11 @@ C
             CALL WLOG( 0, '--------------------------------------- ' )
             CALL WLOG( 0, ' ' )
 C
-C           Don't have a value for IFREQNUM(KS)
+C           Don't have a value for IFREQNUM(ICH,KS)
 C
-            IFREQNUM(KS) = -1
+            DO ICH = 1, NCHAN(KS)
+               IFREQNUM(ICH,KS) = -1
+            END DO
          END IF
       END IF
 C
@@ -182,8 +191,11 @@ C
          ALTIFC(ICH,KS) = '  '
       END DO
 C
-      IF( IFREQNUM(KS) .GE. 1 ) THEN
-         KF = IFREQNUM(KS)
+C ***********************  Allow for multiple IFREQNUMs.
+      write(*,*) 'setfcat: Allow multiple IFREQNUMs.'
+C
+      IF( IFREQNUM(1,KS) .GE. 1 ) THEN
+         KF = IFREQNUM(1,KS)
          DO ICH = 1, NCHAN(KS)
             KIF = IFREQIF(ICH,KS)
 C
