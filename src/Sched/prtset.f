@@ -18,10 +18,10 @@ C     that possibility.
       INCLUDE 'schset.inc'
       INCLUDE 'schfreq.inc'
 C
-      INTEGER           LEN1, KS, KF, IP, ICH, BITRATE, IUNIT, ICHR
-      INTEGER           ISTA
+      INTEGER           LEN1, KS, KF, IP, ICH, JCH 
+      INTEGER           BITRATE, IUNIT, ICHR, ISTA
       CHARACTER         FMT*80, IFNAME(4)*9
-      LOGICAL           ERRS, SPATCH
+      LOGICAL           ERRS, SPATCH, GOTFRQ, NEWFRQ
       DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4)
       SAVE              IFNAME
       DATA              IFNAME / 'VLA IF A:', 'VLA IF B:', 
@@ -40,16 +40,36 @@ C
       WRITE( IUNIT, '( 1X, /, 1X, /, 2A )' )
      1       ' Setup file: ', SETNAME(KS)(1:LEN1(SETNAME(KS))) 
 C
-C     Give matching entry in frequency catalog.
+C     Give matching entry in frequency catalog.  Can be more than
+C     one entry since differents channels can use different ones
+C     in some special cases.
 C
-      IF( IFREQNUM(KS) .GE. 1 ) THEN
-         KF = IFREQNUM(KS)
-         WRITE( IUNIT, '( A, A, A, A )' )
-     1     '   Matches group ', FRNAME(KF)(1:LEN1(FRNAME(KF))),
-     2     ' in ', FREQFILE(1:LEN1(FREQFILE))
-         IF( FRNOTE(KF) .NE. ' ' ) THEN
-            WRITE( IUNIT, '( 4X, A )' ) FRNOTE(KF)(1:LEN1(FRNOTE(KF)))
-         END IF
+      GOTFRQ = .FALSE.
+      DO ICH = 1, NCHAN(KS)
+         GOTFRQ = GOTFRQ .OR. IFREQNUM(ICH,KS) .GE. 1
+      END DO
+      IF( GOTFRQ ) THEN
+         WRITE( IUNIT, '( A, A, A )' )
+     1     '   Matching groups in ',  FREQFILE(1:LEN1(FREQFILE)), ':'
+         DO ICH = 1, NCHAN(KS)
+            KF = IFREQNUM(ICH,KS)
+            NEWFRQ = .TRUE.
+            IF( ICH .GE. 2 ) THEN
+               DO JCH = 1, ICH - 1
+                  IF( KF .EQ. IFREQNUM(JCH,KS) ) NEWFRQ = .FALSE.
+               END DO
+            END IF
+            MSGTXT = ' '
+            IF( NEWFRQ ) THEN
+               WRITE( MSGTXT(1:18), '( 5X, A )' )
+     1            FRNAME(KF)(1:LEN1(FRNAME(KF)))
+               IF( FRNOTE(KF) .NE. ' ' ) THEN
+                  WRITE( MSGTXT(22:256), '( A )' ) 
+     1                FRNOTE(KF)(1:LEN1(FRNOTE(KF)))
+               END IF
+               WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+            END IF
+         END DO
 C
 C        Warn if incomplete overlap.
 C

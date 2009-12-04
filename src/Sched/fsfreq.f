@@ -95,15 +95,16 @@ C
 C
 C           Check that FREQ is in the RF range for the current
 C           frequency catalog group, if a frequency catalog group
-C           was used.  The frequency catalog group is IFREQNUM, as 
-C           determined in SETFCAT).  This check only needed when a 
-C           frequency is specified in the schedule, which it is 
-C           if you got through the last IF statement.  The check has 
-C           already been checked for setup file freqs.
+C           was used.  The frequency catalog group is IFREQNUM, which
+C           can be channel dependent, as determined in SETFCAT).  
+C           This check only needed when a frequency is specified in 
+C           the schedule, which it is if you got through the last 
+C           IF statement.  The check has already been checked for 
+C           setup file freqs.
 C
-            IF( IFREQNUM(KS) .GE. 1 .AND. FWARN ) THEN
+            IF( IFREQNUM(I,KS) .GE. 1 .AND. FWARN ) THEN
                IFIF = IFREQIF(I,KS)
-               IFCAT = IFREQNUM(KS)
+               IFCAT = IFREQNUM(I,KS)
                IF( ( FREQ(ILC,KSCN) .LT. FRF1(IFIF,IFCAT) .OR. 
      1               FREQ(ILC,KSCN) .GT. FRF2(IFIF,IFCAT) ) ) THEN
                   CALL WLOG( 1, 'FSFREQ: -- WARNING -- Frequency ' //
