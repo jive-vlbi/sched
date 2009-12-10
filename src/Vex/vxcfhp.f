@@ -21,6 +21,11 @@ C
       IF( (FORMAT(ISET) .EQ. 'S2' .OR. FORMAT(JSET) .EQ. 'S2')
      1    .AND. FORMAT(ISET) .NE. FORMAT(JSET) ) IDENT = .FALSE.
 C
+C     Check if one is LBA, then it is different
+C
+      IF( (FORMAT(ISET) .EQ. 'LBA' .OR. FORMAT(JSET) .EQ. 'LBA')
+     1    .AND. FORMAT(ISET) .NE. FORMAT(JSET) ) IDENT = .FALSE.
+C
 C     Need to check the number of head positions
 C
       DO ISTA = 1, NSTA
@@ -61,7 +66,7 @@ C
          END IF
       END DO
 
-      IDENT = ( NHDPOS(STAI) .EQ. NHDPOS(STAJ) )
+      IF( IDENT ) IDENT = ( NHDPOS(STAI) .EQ. NHDPOS(STAJ) )
 C
 C     compare MEDIA - no headpos for disks
 C
@@ -73,6 +78,7 @@ C
          IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) )
      3       JSCAT = ISTA
       END DO
+
       IF( USETAPE(ISCAT) .NEQV. USETAPE(JSCAT) ) IDENT = .FALSE.
 C
       VXCFHP = IDENT 

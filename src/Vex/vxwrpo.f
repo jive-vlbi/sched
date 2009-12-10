@@ -38,7 +38,7 @@ C
 C
          LINE = ' ' 
 C
-         IF( FORMAT(KS) .NE. 'S2' ) THEN 
+         IF( FORMAT(KS) .NE. 'S2' .AND. FORMAT(KS) .NE. 'LBA' ) THEN 
 C
 C        Check if PCFS can do
 C
@@ -95,6 +95,11 @@ C
                   WRITE( IVEX, '( A1, 4X, A )' ) COM,
      1                ' Pass orders irrelevant for Disk: empty def'
             END IF
+         ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
+C        
+            WRITE( IVEX, '( A1, A )' )  COM,
+     1         ' LBA masquerading as S2 needs a dummy value'
+            WRITE( IVEX, '( 5X, A )' )  'S2_group_order = 0;'
          ELSE
 C
 C           Quite different

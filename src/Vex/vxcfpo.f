@@ -24,6 +24,8 @@ C       with the adoption of disks, I want try to fix this now.
 C
       IF( (FORMAT(ISET) .EQ. 'S2' .OR. FORMAT(JSET) .EQ. 'S2')
      1    .AND. FORMAT(ISET) .NE. FORMAT(JSET) ) IDENT = .FALSE.
+      IF( (FORMAT(ISET) .EQ. 'LBA' .OR. FORMAT(JSET) .EQ. 'LBA')
+     1    .AND. FORMAT(ISET) .NE. FORMAT(JSET) ) IDENT = .FALSE.
       IF( TAPEMODE(ISET) .NE. TAPEMODE(JSET) ) IDENT = .FALSE.
 C
 C     Need to check the number of head positions
@@ -66,7 +68,8 @@ C
             END IF
          END IF
       END DO
-      IDENT = ( NHDPOS(STAI) .EQ. NHDPOS(STAJ) )
+
+      IF ( IDENT ) IDENT = ( NHDPOS(STAI) .EQ. NHDPOS(STAJ) )
 C
 C     compare MEDIA - no passorder for disks
 C
@@ -78,6 +81,7 @@ C
          IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) ) 
      4       JSCAT = ISTA
       END DO
+
       IF( USETAPE(ISCAT) .NEQV. USETAPE(JSCAT) ) IDENT = .FALSE.
 C
       VXCFPO = IDENT 

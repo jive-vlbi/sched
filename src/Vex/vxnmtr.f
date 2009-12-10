@@ -22,8 +22,9 @@ C     no fan in's, mode depends on TAPEMODE too, but not used for name
 C
       IF( .NOT. (FORMAT(ISET)(1:6) .EQ. 'VLBA1:' .OR. 
      1    FORMAT(ISET)(1:7) .EQ. 'MARKIII' .OR.
-     1    FORMAT(ISET)(1:2) .EQ. 'S2' .OR.
-     2    FORMAT(ISET)(1:6) .EQ. 'MKIV1:' ) ) THEN
+     2    FORMAT(ISET)(1:2) .EQ. 'S2' .OR.
+     3    FORMAT(ISET)(1:3) .EQ. 'LBA' .OR.
+     4    FORMAT(ISET)(1:6) .EQ. 'MKIV1:' ) ) THEN
          MSGTXT = 'VXNMTR: unsupported recording mode: ' // FORMAT(ISET)
          CALL ERRLOG( MSGTXT )
       END IF
@@ -67,7 +68,7 @@ C
          WRITE( NAME, '( A, A )' ) 'S2.', S2MDNM(1:LEN1(S2MDNM))
       ELSE
 C
-C        either MkIV or VLBA:
+C        either MkIV or VLBA or LBA:
 C
          IF( NCHAN(ISET) .GT. 9 ) THEN
             WRITE( NAME, '( A4, A1, I2, A2, I1, A3, A3, I1 )' )  
