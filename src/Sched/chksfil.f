@@ -54,6 +54,8 @@ C
      1          FSPEED(ISETF) .NE. 0.0 ) THEN
                CALL WLOG( 1, 'CHKSFIL: Two setup groups in the same ' //
      1          'setup file have different speedup factors.' )
+               CALL WLOG( 1, '         This cannot be correlated on ' //
+     1          'the '// CORREL // ' correlator.' )
                CALL ERRSET( KS )
             END IF
             FSPEED(ISETF) = SPEEDUP(KS)
