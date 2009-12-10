@@ -476,6 +476,9 @@ C
                   IF ( RECORDER(STANUM(ISTA)) .EQ. 'S2' ) THEN
                      WRITE( LINE(LPOS:LPOS+5), '( 3X, I1, 1X, A1 )' ) 
      1                   (TPINDX - 1),  COL
+                  ELSE IF ( DISK(STANUM(ISTA)) .EQ. 'LBADR' ) THEN
+                     WRITE( LINE(LPOS:LPOS+5), '( 3X, I1, 1X, A1 )' ) 
+     1                   0,  COL
                   ELSE
                      TPSUBP = 'X'
                      IF( TPHEAD .EQ. 1) TPSUBP = 'A'

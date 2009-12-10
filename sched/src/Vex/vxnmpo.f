@@ -22,6 +22,8 @@ C
             WRITE( VXNMPO, '( A, I2, A )' ) 'S2with',
      1          TAPEMODE(KS), 'Groups'
          END IF
+      ELSE IF( FORMAT(KS) .EQ. 'LBA' ) THEN
+         WRITE( VXNMPO, '( A )' ) 'LBADummy'
       ELSE
 C
 C     Check if two heads applies

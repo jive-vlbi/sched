@@ -246,7 +246,9 @@ C             Count the number of stations in this mode that are using
 C             tapes. HEADPOS is irrelevant if there are none.
               NTAPEST = 0
               DO ISTA = 1, NSTAHP(IXX,IMODE)
-                 IF( USETAPE((ISTAHP(ISTA,IXX,IMODE))) ) THEN
+                 IF( USETAPE((ISTAHP(ISTA,IXX,IMODE))) .OR. 
+     1             DISK(STANUM(ISTAHP(ISTA,IXX,IMODE)))
+     2               .EQ. 'LBADR' ) THEN
                     NTAPEST = NTAPEST + 1
                  END IF
               END DO
@@ -269,7 +271,9 @@ C
                     LPOS = LEN1(LINE)
                     WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) COL
                     DO ISTA = 1, NSTAHP(IXX,IMODE)
-                       IF( USETAPE((ISTAHP(ISTA,IXX,IMODE))) ) THEN
+                       IF( USETAPE((ISTAHP(ISTA,IXX,IMODE))) .OR.
+     1                     DISK((STANUM(ISTAHP(ISTA,IXX,IMODE)))) 
+     2                     .EQ. 'LBADR' ) THEN
                           DEL = COL
                           IF( ISTA .EQ. NSTAHP(IXX,IMODE)) DEL = SEP
                           WRITE( LINE(LPOS+2:LPOS+4), '( A )' )
@@ -345,7 +349,9 @@ C             Count the number of stations in this mode that are using
 C             tapes. PASS_ORDER is irrelevant if there are none.
               NTAPEST = 0
               DO ISTA = 1, NSTAHP(IXX,IMODE)
-                 IF( USETAPE((ISTAHP(ISTA,IXX,IMODE))) ) THEN
+                 IF( USETAPE((ISTAHP(ISTA,IXX,IMODE))) .OR.
+     1              DISK((STANUM(ISTAHP(ISTA,IXX,IMODE)))) 
+     2                  .EQ. 'LBADR' ) THEN
                     NTAPEST = NTAPEST + 1
                  END IF
               END DO
@@ -368,7 +374,9 @@ C
                     LPOS = LEN1(LINE)
                     WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) COL
                     DO ISTA = 1, NSTAPO(IXX,IMODE)
-                       IF( USETAPE((ISTAPO(ISTA,IXX,IMODE))) ) THEN
+                       IF( USETAPE((ISTAPO(ISTA,IXX,IMODE))) .OR.
+     1                     DISK((STANUM(ISTAPO(ISTA,IXX,IMODE)))) 
+     2                     .EQ. 'LBADR' ) THEN
                           DEL = COL
                           IF( ISTA .EQ. NSTAPO(IXX,IMODE)) DEL = SEP
                           WRITE( LINE(LPOS+2:LPOS+4), '( A )' )

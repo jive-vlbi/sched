@@ -5,6 +5,12 @@ C     returns a name for an BBC block definition,
 C     currently only writes simple consecutive numbering
 C     By H.J. van Langevelde, JIVE, 140596 
 C
+C     Note by Cormac Reynolds (20090826): the logic in this routine does
+C     not work for the LBA where the DC edge does not have to be the
+C     same for both sidebands from a single BBC (e.g. you can get 2
+C     USBs from a single BBC - they do not even have to be contiguous).
+C     Digital systems! Anyway, it's just a name, so no dramas.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'

@@ -53,12 +53,29 @@ C
      1                   DAR(ISETSTA(KS)) .NE. 'NONE' ) THEN
 C
 C                       Balk at setting them to different frequencies.
+C                       (LBA is different)
 C
-                        IF( BBSYN(ICHN,KS) .NE. BBSYN(KCHN,KS) ) THEN
+                        IF( BBSYN(ICHN,KS) .NE. BBSYN(KCHN,KS) .AND.
+     1                      DAR(ISETSTA(KS)) .NE. 'LBA' ) THEN
                            WRITE( MSGTXT, '( A, I3, A, A, 2I3 )' )
      1                         'SBPAIR: Attempting to set BBC ',
      2                         BBC(ICHN,KS), ' to two frequencies,',
      3                         ' channels: ', ICHN, KCHN
+                           CALL WLOG( 1, MSGTXT )
+                           ERRS = .TRUE.
+C                           
+C                         For LBA just make sure they are selected from the
+C                         same 64 MHz band (there are more constraints,
+C                         but for now...)
+C
+                        ELSE IF( ABS(BBSYN(ICHN,KS) - BBSYN(KCHN,KS)) 
+     1                           .GT. 64 .AND.
+     2                           DAR(ISETSTA(KS)) .EQ. 'LBA' ) THEN
+                           WRITE( MSGTXT, '( A, I3, A, A, 2I3 )' )
+     1                         'SBPAIR: Attempting to set LBA BBC ',
+     2                         BBC(ICHN,KS), 
+     3                      ' to frequencies more than 64 MHz apart,',
+     4                         ' channels: ', ICHN, KCHN
                            CALL WLOG( 1, MSGTXT )
                            ERRS = .TRUE.
                         END IF

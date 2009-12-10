@@ -171,7 +171,8 @@ C
      5       DAR(MSTA) .NE. 'K4'    .AND. 
      6       DAR(MSTA) .NE. 'VSOP'  .AND. 
      7       DAR(MSTA) .NE. 'VLBA4' .AND. 
-     8       DAR(MSTA) .NE. 'NONE' ) THEN
+     8       DAR(MSTA) .NE. 'LBA' .AND. 
+     9       DAR(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF
@@ -197,6 +198,7 @@ C        Be sure the DISK is an allowed type.
 C
          IF( DISK(MSTA) .EQ. ' ' ) DISK(MSTA) = 'NONE'
          IF( DISK(MSTA) .NE. 'MARK5A' .AND.
+     2       DISK(MSTA) .NE. 'LBADR' .AND.
      3       DISK(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DISK type ' //
      1          DISK(MSTA) // ' for ' // STATION(MSTA) )

@@ -99,7 +99,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2009Nov12-17:20:12"
+ VERSION = "2009Dec08-18:44:00"
 
 !  
 !  =====================================================================
@@ -773,11 +773,14 @@ Name = v1cm_c13  Station = VLBA    Priority = 2
 !     The on-line system did not originally support lower sidebands,
 !     but supposedly it does now.
 !     Possible second synthesizer settings:
-!          7.1 GHz        IF will cut off below 600 MHz.
 !          7.4, 7.6       Good.
+!          9.4, 9.6       Good.
+!
+!     The following are possible, but are not used in the setups.
+!          7.1 GHz        IF will cut off below 600 MHz.  Is used
+!                           in some projects.
 !          7.9            Probably good.  LO in IF band.
 !          8.1            Risk getting some lower sideband.
-!          9.4, 9.6       Would be good if on-line understood.
 !
 !     Give the 9.4 and 9.6 second LO options lower priority
 !     because they give lower sideband mixes.  This should be ok
@@ -1040,7 +1043,16 @@ Name = v7mm_c12  Station = VLBA    Priority = 1
 !     14.2 GHz.  Also the RF ranges are restricted to fall in the
 !     range 79.7 to 96.2 GHz.
 !
-!     Bob Hayward (Mar 1, 2004) suggests be
+!     The 2cm converter covers:
+!          Max range:   11800 - 15700
+!          Good range:  12100 - 15500
+!          Allowed LO settings:   11.1 - 14.9
+!          Used settings: 11.9, 12.4, 12.6, 12.9, 
+!                         13.4, 13.6, 13.9, 14.4
+!     Recommended values of syn(3):
+!         10.9, 11.1, 11.4, 11.6, 11.9, 12.1,
+!         12.4, 12.6, 12.9, 13.1, 13.4, 13.6
+!     After 6X multiple, the 0.3 GHz gaps become 1.8 GHz.
 !
 !
 !  Here is the old "standard" setup (Pre 2004mar01).  It turns out 
@@ -3163,14 +3175,43 @@ Name = gbt12cm  Station = GBT_VLBA, GBT_COLD priority = 0
 !			     4.55-5.25 GHz, 5.15-5.85 GHz
 !   Note: C-band extends from 3.9 to 6.18 GHz; more setups could be added.
 !---------------------------------------------------------
-Name = gbt6cm  Station = GBT_VLBA, GBT_COLD priority = 0
+! New versions provided on Jan 25 2008 by Frank Ghigo in email.
+! Not put in this file until Jan 6, 2009  RCW  Reconfirmed with
+! Frank Ghigo at that time.
+Name = gbt6cma  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 3900, 3900    ifname = A,    C
+  rf2 = 4400, 4400    fe  = '6cm', '6cm'
+  pol =  RCP,  LCP    lo1 = 4900.0, 4900.0
+  note = 'LO1=7.150, LO2=12.75, LO3=10.5 '
+/
+Name = gbt6cmb  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 4300, 4300    ifname = A,    C
+  rf2 = 4800, 4800    fe  = '6cm', '6cm'
+  pol =  RCP,  LCP    lo1 = 5300.0, 5300.0
+  note = 'LO1=7.550, LO2=12.75, LO3=10.5 '
+/
+Name = gbt6cmc  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 4600, 4600    ifname = A,    C
   rf2 = 5100, 5100    fe  = '6cm', '6cm'
   pol =  RCP,  LCP    lo1 = 5600.0, 5600.0
   note = 'LO1=7.850, LO2=12.75, LO3=10.5 '
 /
+Name = gbt6cmd Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 5000, 5000    ifname = A,    C
+  rf2 = 5500, 5500    fe  = '6cm', '6cm'
+  pol =  RCP,  LCP    lo1 = 6000.0, 6000.0
+  note = 'LO1=8.250, LO2=12.75, LO3=10.5 '
+/
+! Performance will be degraded above 5850
+Name = gbt6cme Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 5400, 5400    ifname = A,    C
+  rf2 = 5900, 5900    fe  = '6cm', '6cm'
+  pol =  RCP,  LCP    lo1 = 6400.0, 6400.0
+  note = 'LO1=8.650, LO2=12.75, LO3=10.5 '
+/
 ! High range of C-band
-Name = gbt6cmb Station = GBT_VLBA,  GBT_COLD  priority = 0
+! Performance will be degraded above 5850
+Name = gbt6cmf Station = GBT_VLBA, GBT_COLD priority = 0
  rf1 = 5750, 5750    ifname = A,    C
  rf2 = 6180, 6180    fe  = '6cm', '6cm'
  pol =  RCP,  LCP    lo1 = 6700.0, 6700.0
@@ -3181,7 +3222,6 @@ Name = gbt6cmb Station = GBT_VLBA,  GBT_COLD  priority = 0
 !   arbitrarily set the ranges to match the VLBA settings.
 !   That simplifies matters for anyone trying to maximize
 !   their instantaneous bandwidth.
-
 !---------------------------------------------------------
 ! Note: X-band range is 7.9 - 11.6 GHz
 !      more setups could be added
@@ -5719,7 +5759,7 @@ Name = ti18cm  Station = TID70, TID70_S2   priority = 5
   ! rf and lo from Naudet, 20 Nov 1997 (jsu)
 /
 
-Name = ti13cm  Station = TID70, TID70_S2   priority = 5
+Name = ti13cm  Station = TID70, TID70_S2, TID34_S2   priority = 5
   rf1 = 2265, 2265    ifname = '2N',  '1N'  fe = '13cm', '13cm'
   rf2 = 2305, 2305    altifn = '1A',  '2A'
   pol =  RCP,  LCP    lo1 = 2000.00, 2000.00
@@ -5730,7 +5770,7 @@ Name = ti13cm  Station = TID70, TID70_S2   priority = 5
   ! rf and LO confirmed by Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = ti4cm  Station = TID70, TID_S2, DSS34   priority = 5
+Name = ti4cm  Station = TID70, TID_S2, DSS34, TID70_S2   priority = 5
   rf1 = 8200, 8200    ifname = '2N',  '1N'  fe = '4cm', '4cm'
   rf2 = 8600, 8600    altifn = '1A',  '2A'
   pol =  RCP,  LCP    lo1 = 8100.00, 8100.00
@@ -5822,16 +5862,16 @@ Name = ho5cm  Station = HOBART   priority = 0
   note = 'Confirmed 11/06/2003 email from Brett Reid'
   ! lo1 is dummy value: lo is not controlled by VEX
 /
-Name = ho3cm  Station = HOBART   priority = 0
+Name = ho3cm  Station = HOBART, HOB_MK5   priority = 0
   rf1 = 8150, 8150    ifname = '2N',    '1N'
-  rf2 = 8650, 8650    fe  = '3cm', '3cm'
-  pol =  RCP,  LCP    lo1 = 4500.0, 4500.0
+  rf2 = 8700, 8700    fe  = '3cm', '3cm' altifn = '1A', '2A'
+  pol =  RCP,  LCP    lo1 = 8080.0, 8080.0
   note = 'Confirmed 11/06/2003 email from Brett Reid'
   ! lo1 is dummy value: lo is not controlled by VEX
 /
-Name = ho3cm  Station = HOBART   priority = 0
+Name = ho2cm  Station = HOBART   priority = 0
   rf1 = 12150, 12150    ifname = '2N',    '1N'
-  rf2 = 12650, 12650    fe  = '3cm', '3cm'
+  rf2 = 12650, 12650    fe  = '2cm', '2cm'
   pol =  RCP,  LCP    lo1 = 1000.0, 1000.0
   note = 'Confirmed 11/06/2003 email from Brett Reid'
   ! lo1 is dummy value: lo is not controlled by VEX
@@ -5843,12 +5883,24 @@ Name = ho1cm  Station = HOBART   priority = 0
   note = 'Confirmed 11/06/2003 email from Brett Reid'
   ! lo1 is dummy value: lo is not controlled by VEX
 /
-Name = hosx  Station = HOBART   priority = 1
+Name = ho1cm  Station = HOB_MK5   priority = 5
+  rf1 = 22300, 22300   ifname = '2N', '1N'  fe = '1cm', '1cm'
+  rf2 = 22700, 22700    altifn = '1A', '2A'
+  pol =  RCP,  LCP      lo1 = 22100.00, 22100.00
+  note = 'Dummy setup'
+/
+Name = hosx  Station = HOBART, HOB_MK5   priority = 1
   rf1 = 2190, 8180    ifname = '2N', '1N'
   rf2 = 2470, 8980    fe = '13cm', '4cm'
   pol =  RCP,  RCP    lo1 =  2020, 8080
   note = 'Confirmed 11/06/2003 email from Brett Reid'
   ! lo1 is dummy value: lo is not controlled by VEX
+/
+Name = cd20cm Station = CEDUNA    priority = 0
+  rf1 =  1350, 1350     ifname = '2N',  '1N'  
+  rf2 =  1750, 1750     fe = '20cm', '20cm'
+  pol =  RCP, LCP       lo1 = 1800, 1800
+  note = 'Dummy entry for Tests'
 /
 Name = cd13cm  Station = CEDUNA   priority = 0
   rf1 = 2200, 2200    ifname = '2N',    '1N'
@@ -5889,7 +5941,7 @@ Name = cd1cm  Station = CEDUNA   priority = 0
  Name = at20cm  Station = ATCA   priority = 0
   rf1 = 1250, 1250    ifname = '2N',    '1N'
   rf2 = 1780, 1780    fe  = '20cm', '20cm'
-  pol =  RCP,  LCP    lo1 = 1200.0, 1200.0
+  pol =  RCP,  LCP    lo1 = 700.0, 700.0
   ! updated june 2003 Chris Phillips, ATCA observers guide
   ! lo1 is dummy value: lo is not controlled by VEX
 /
@@ -5984,10 +6036,10 @@ Name = pa13cm  Station = PARKES   priority = 0
   ! lo1 is dummy value: lo is not controlled by VEX
   ! http://www.parkes.atnf.csiro.au/documentation/user_guide/node4.html
 /
-Name = pasx  Station = PARKES   priority = 1
+Name = pasx  Station = PARKES, PARK_MK5   priority = 1
   rf1 = 2200, 8100    ifname = '2N',    '1N'
   rf2 = 2250, 8700    fe  = '13cm', '4cm'
-  pol =  RCP,  LCP    lo1 = 2020, 8080.0
+  pol =  RCP,  RCP    lo1 = 2020, 8080.0
   ! lo1 is dummy value: lo is not controlled by VEX
   ! http://www.parkes.atnf.csiro.au/documentation/user_guide/node4.html
 /
@@ -5999,10 +6051,10 @@ Name = pa6cm  Station = PARKES   priority = 0
   ! lo1 is dummy value: lo is not controlled by VEX
   ! http://www.parkes.atnf.csiro.au/documentation/user_guide/node4.html
 /
-Name = pa3cm  Station = PARKES   priority = 0
-  rf1 = 8100, 8100    ifname = '2N',    '1N'
+Name = pa3cm  Station = PARKES, PARK_MK5   priority = 0
+  rf1 = 8100, 8100    ifname = '2N',    '1N'   altifn = '1A', '2A'
   rf2 = 8700, 8700    fe  = '3cm', '3cm'
-  pol =  RCP,  LCP    lo1 = 4500.0, 4500.0
+  pol =  RCP,  LCP    lo1 = 8080.0, 8080.0
   ! updated may 1999 with information from T Tzioumis.
   ! lo1 is dummy value: lo is not controlled by VEX
   ! http://www.parkes.atnf.csiro.au/documentation/user_guide/node4.html
