@@ -25,8 +25,8 @@ C
 C
       INTEGER          KS, KSTA, KF, IFINDX, ICH, IIF, I
       INTEGER          NBAD, CHBAD, IIFBAD, KFBAD
-      LOGICAL          MATCH, CHMATCH, IFMATCH, OKIF(MCHAN,MFIF)
-      LOGICAL          CFRQOK, FREQOK, GOTAFR, PRTMISS, DEBUGPRT
+      LOGICAL          MATCH, IFMATCH, OKIF(MCHAN,MFIF)
+      LOGICAL          FREQOK(MCHAN), GOTAFR, PRTMISS
       LOGICAL          RFCLOSE
       LOGICAL          FCSTA, FCIFCH, FCFLO1, FCPOL, FCCH1
       LOGICAL          FCFE, FC50, FCVLAIF
@@ -34,7 +34,8 @@ C
       LOGICAL          MFEF, MVBND, MVBW
       CHARACTER        CHFLAGS*12
 C ---------------------------------------------------------------------
-C     Initialize MATCH in case a top level item is no good.
+C     Initialize MATCH for the return in case a top level item 
+C     is no good.
 C
       MATCH = .FALSE.
 C
@@ -73,10 +74,6 @@ C     Only a few frequency sets should survive past here.
 C
       IF( .NOT. GOTAFR ) GO TO 1000
 C
-C     Should there be any debug print?
-C
-      DEBUGPRT = SDEBUG .AND. GOTAFR
-C
 C     Initialize OKIF.
 C
       DO ICH = 1, NCHAN(KS)
@@ -85,234 +82,233 @@ C
          END DO
       END DO
 C
-C     FREQOK will sense if any channels are in the right frequency
-C     range.
+C     Print something if debug print is requested.
 C
-      FREQOK = .FALSE.
-C
-C     Print something if debug print is requested and there is a
-C     frequency match (both in DEBUGPRT), and the stations match.
-C
-      IF( DEBUGPRT .AND. FCSTA ) THEN
+      IF( SDEBUG ) THEN
          SETMSG = ' '
          WRITE( SETMSG, '( A, I4, A, I4 )' )
      1       'FCOMPARE: Got station and frequency match. KS:', KS,
      2       '  KF:', KF
          CALL WLOG( 0, SETMSG )
-      ELSE
-         DEBUGPRT = .FALSE.         
       END IF
 C
 C     Check for IFs that match the input channel parameters.
-C     MATCH after the next line just implies the station matches.
 C
-      MATCH = FCSTA
-      IF( MATCH ) THEN
-         KFBAD = 0
-         DO ICH = 1, NCHAN(KS)         
-            CHMATCH = .FALSE.
-            CHBAD = 99
-            DO IIF = 1, FNIF(KF)
+      KFBAD = 0
+      DO ICH = 1, NCHAN(KS)         
+         CHBAD = 99
+         DO IIF = 1, FNIF(KF)
 C
-C              Get the index of the IF that would be used in setup parms
-C              This is for FE only at the moment and that applies
-C              only to certain stations (VLBA).
+C           Require any specified IFCHAN match.
 C
-               IFINDX = 0
-               IF( FIFNAM(IIF,KF) .EQ. 'A' ) IFINDX = 1
-               IF( FIFNAM(IIF,KF) .EQ. 'B' ) IFINDX = 2
-               IF( FIFNAM(IIF,KF) .EQ. 'C' ) IFINDX = 3
-               IF( FIFNAM(IIF,KF) .EQ. 'D' ) IFINDX = 4
-               IF( IFINDX .EQ. 0 ) THEN
-                  IF( INDEX( SETSTA(1,KS), 'VLBA' ) .NE. 0 ) THEN
+            FCIFCH = IFCHAN(ICH,KS) .EQ. ' ' .OR.
+     1               IFCHAN(ICH,KS) .EQ. FIFNAM(IIF,KF) .OR.
+     2               IFCHAN(ICH,KS) .EQ. FALTIF(IIF,KF)
 C
-C                    Die for stations that need FE.
+C           Require any specified FIRSTLO match
 C
-                     CALL ERRLOG( 'FCOMPARE: Unrecognized IF name for '
-     1                  // SETSTA(1,KS) // ' in frequency catalog.' )
-                  ELSE
+            FCFLO1 = FIRSTLO(ICH,KS) .EQ. NOTSET .OR. 
+     1               FIRSTLO(ICH,KS) .EQ. FLO1(IIF,KF)
 C
-C                    Take a (hopefully) benign default.
+C           RF - require be in same general part of RF.  Will
+C           check actual RF later.  This is completely require.
+C           The other is a precise, but optional (for a subset
+C           of channels only) check
 C
-                     IFINDX = 1
-                  END IF
-               END IF
+            RFCLOSE = FREQREF(ICH,KS) .GE. 0.8D0 * FRF1(IIF,KF) .AND.
+     1               FREQREF(ICH,KS) .LE. 1.2D0 * FRF2(IIF,KF)
 C
-               FCIFCH = IFCHAN(ICH,KS) .EQ. ' ' .OR.
-     1                  IFCHAN(ICH,KS) .EQ. FIFNAM(IIF,KF) .OR.
-     2                  IFCHAN(ICH,KS) .EQ. FALTIF(IIF,KF)
-
+C           Require any specified polarization match
 C
-               FCFLO1 = FIRSTLO(ICH,KS) .EQ. NOTSET .OR. 
-     1                  FIRSTLO(ICH,KS) .EQ. FLO1(IIF,KF)
+            FCPOL = POL(ICH,KS) .EQ. ' ' .OR.
+     1              POL(ICH,KS)(1:1) .EQ. FPOL(IIF,KF)(1:1)
 C
-C              RF - require be in same general part of RF.  Will
-C              check actual RF later.
+C           For 2 cm, be sure filter will be right.  Depends on
+C           frequency of channel 1.  This will work for other bands 
+C           too if that should become an issue.
 C
-               RFCLOSE = FREQREF(ICH,KS) .GE. 0.8D0 * FRF1(IIF,KF) .AND.
-     1                  FREQREF(ICH,KS) .LE. 1.2D0 * FRF2(IIF,KF)
+            FCCH1 = ( FCH1RF1(IIF,KF) .EQ. 0.D0 .OR.
+     1                FCH1RF1(IIF,KF) .LT. FREQREF(1,KS) ) .AND.
+     2              ( FCH1RF2(IIF,KF) .EQ. 0.D0 .OR.
+     3                FCH1RF2(IIF,KF) .GT. FREQREF(1,KS) )
 C
-C              Polarization.
+C           For the VLA phased array, try to limit choice of IF.
+C           Allow for possible different phasing modes using the
+C           same setup (ok for RR only, for example - could use
+C           VR or VA).  Actually mixing modes would flagged 
+C           elsewhere (true?).  Do this test for any VLA "station" since
+C           mixed phasing and non-phasing modes are allowed.
+C           All of this will be obsolete soon so I'm not going to
+C           worry about it (Dec. 2009)
 C
-               FCPOL = POL(ICH,KS) .EQ. ' ' .OR.
-     1                 POL(ICH,KS)(1:1) .EQ. FPOL(IIF,KF)(1:1)
+            FCVLAIF = .TRUE.
+            IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' ) THEN
+               IF( VLAVA(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'B'
+     1           .OR. FIFNAM(IIF,KF) .EQ. 'C' ) ) FCVLAIF = .FALSE.
+               IF( VLAVB(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'A'
+     1           .OR. FIFNAM(IIF,KF) .EQ. 'D' ) ) FCVLAIF = .FALSE.
+               IF( VLAVR(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'C'
+     1           .OR. FIFNAM(IIF,KF) .EQ. 'D' ) ) FCVLAIF = .FALSE.
+               IF( VLAVL(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'A'
+     1           .OR. FIFNAM(IIF,KF) .EQ. 'B' ) ) FCVLAIF = .FALSE.
+            END IF
 C
-C              For 2 cm, be sure filter will be right.  Depends on
-C              frequency of channel 1.  This will work for other bands 
-C              to if that should become an issue.
+C           If it is the VLBA, be sure of the front end spec.  This 
+C           is a bit complicated because we need to detect the
+C           index number of the IF, as used in setup parameters, 
+C           based on the name.
 C
-               FCCH1 = ( FCH1RF1(IIF,KF) .EQ. 0.D0 .OR.
-     1                   FCH1RF1(IIF,KF) .LT. FREQREF(1,KS) ) .AND.
-     2                 ( FCH1RF2(IIF,KF) .EQ. 0.D0 .OR.
-     3                   FCH1RF2(IIF,KF) .GT. FREQREF(1,KS) )
+C           This is for FE only at the moment and that applies
+C           only to certain stations (VLBA).  Hence we don't have to
+C           test against MarkIV or other IF names.
 C
-C              For the VLA phased array, try to limit choice of IF.
-C              Allow for possible different phasing modes using the
-C              same setup (ok for RR only, for example - could use
-C              VR or VA).  Actually mixing modes would flagged 
-C              elsewhere.  Do this test for any VLA "station" since
-C              mixed phasing and non-phasing modes are allowed.
+            IFINDX = 0
+            IF( FIFNAM(IIF,KF) .EQ. 'A' ) IFINDX = 1
+            IF( FIFNAM(IIF,KF) .EQ. 'B' ) IFINDX = 2
+            IF( FIFNAM(IIF,KF) .EQ. 'C' ) IFINDX = 3
+            IF( FIFNAM(IIF,KF) .EQ. 'D' ) IFINDX = 4
 C
-               FCVLAIF = .TRUE.
-               IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' ) THEN
-                  IF( VLAVA(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'B'
-     1              .OR. FIFNAM(IIF,KF) .EQ. 'C' ) ) FCVLAIF = .FALSE.
-                  IF( VLAVB(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'A'
-     1              .OR. FIFNAM(IIF,KF) .EQ. 'D' ) ) FCVLAIF = .FALSE.
-                  IF( VLAVR(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'C'
-     1              .OR. FIFNAM(IIF,KF) .EQ. 'D' ) ) FCVLAIF = .FALSE.
-                  IF( VLAVL(KS) .AND. ( FIFNAM(IIF,KF) .EQ. 'A'
-     1              .OR. FIFNAM(IIF,KF) .EQ. 'B' ) ) FCVLAIF = .FALSE.
-               END IF
+C           If not found for stations that need it, die.  Otherwise
+C           set a benign default.
 C
-C              If it is the VLBA, be sure of the front end spec.
-C
-               IF( INDEX( SETSTA(1,KS), 'VLBA' ) .NE. 0 ) THEN 
-                  FCFE =  ( FE(IFINDX,KS) .EQ. 'omit' .OR.
-     2                FE(IFINDX,KS) .EQ. FFE(IIF,KF) )
+            IF( IFINDX .EQ. 0 ) THEN
+               IF( INDEX( SETSTA(1,KS), 'VLBA' ) .NE. 0 ) THEN
+                  CALL ERRLOG( 'FCOMPARE: Unrecognized IF name for '
+     1               // SETSTA(1,KS) // ' in frequency catalog.' )
                ELSE
-                  FCFE = .TRUE.
+                  IFINDX = 1
                END IF
-C
-C              Add up all the tests.
-C
-               IFMATCH = FCIFCH .AND. FCFLO1 .AND. FCPOL .AND. FCCH1
-     1              .AND. FCVLAIF .AND. FCFE .AND. RFCLOSE
-C
-C              If the channel matches, record that fact.
-C
-               IF( IFMATCH ) THEN
-                  CHMATCH = .TRUE.
-                  OKIF(ICH,IIF) = .TRUE.
-               END IF
-C
-C              Check for frequency in range.  Only require one channel
-C              to be ok - allows for overflow at places like the VLA.
-C
-C  *********      I'm confused.  This is in the middle of the ICH loop
-C                 and so is its use below making up IIFBAD.  So IIFBAD
-C                 will be different for channels before and after 
-C                 the first good one.  Shouldn't it have a separate
-C                 loop somewhere, maybe with FREQOK being IF dependent.
-C
-C
-               CFRQOK = FREQREF(ICH,KS) .GE. FRF1(IIF,KF) .AND.
-     1                  FREQREF(ICH,KS) .LE. FRF2(IIF,KF)
-               IF( CFRQOK ) FREQOK = .TRUE.
-C
-C              Determine just how bad the match was.
-C
-               IIFBAD = 0
-               IF( .NOT. FCSTA )   IIFBAD = IIFBAD + 1
-               IF( .NOT. RFCLOSE ) IIFBAD = IIFBAD + 1
-               IF( .NOT. FCIFCH )  IIFBAD = IIFBAD + 1
-               IF( .NOT. FCFLO1 )  IIFBAD = IIFBAD + 1
-               IF( .NOT. FCPOL )   IIFBAD = IIFBAD + 1
-               IF( .NOT. FCCH1 )   IIFBAD = IIFBAD + 1
-               IF( .NOT. FCVLAIF ) IIFBAD = IIFBAD + 1
-               IF( .NOT. FCFE )    IIFBAD = IIFBAD + 1
-               IF( .NOT. FREQOK )  IIFBAD = IIFBAD + 1
-C
-C              See if this was the best IF for this channel, save
-C              number of mismatches and flags for printout.
-C
-               IF( IIFBAD .LT. CHBAD ) THEN
-                  CHBAD = IIFBAD
-                  WRITE( CHFLAGS, '( I2, 8L1 )' ) IIF, 
-     1               FCIFCH, FCFLO1, FCPOL, FCCH1, FCVLAIF, FCFE, 
-     2               CFRQOK, RFCLOSE
-               END IF
-C
-            END DO
-C
-C           Require that some IF matches the channel.
-C
-            IF( .NOT. CHMATCH ) MATCH = .FALSE.
-            IF( DEBUGPRT ) THEN
-               SETMSG = ' '
-               WRITE( SETMSG, '( A, 3I4, 2X, 2L1 )' ) 
-     1              'FCOMPARE: CHMATCH: ', KS, KF, ICH, CHMATCH, MATCH
-               CALL WLOG( 0, SETMSG )
             END IF
 C
-C           Get the degree by which the worst channel missed.
+C           Now finally test against the FE specification on VLBA
+C           stations.
 C
-            KFBAD = MAX( KFBAD, CHBAD )
-C
-C           Some output if debugging or trying to explain why no
-C           match was found (call with PRTMISS set true).
-C
-            IF( DEBUGPRT .OR. ( GOTAFR .AND. PRTMISS .AND.
-     1             CHBAD .LE. NBAD + 1) ) THEN
-               SETMSG = ' '
-               WRITE( SETMSG, '( 3X, A12, I8, 6X, A2, 1X, ' //
-     1            ' 8( 5X, A1 ) )' )
-     2            FRNAME(KF), ICH, CHFLAGS(1:2),(CHFLAGS(I:I),I=3,10)
-               CALL WLOG( 0, SETMSG )
+            IF( INDEX( SETSTA(1,KS), 'VLBA' ) .NE. 0 ) THEN 
+               FCFE =  ( FE(IFINDX,KS) .EQ. 'omit' .OR.
+     1             FE(IFINDX,KS) .EQ. FFE(IIF,KF) )
+            ELSE
+               FCFE = .TRUE.
             END IF
+C
+C           Add up all the tests.
+C
+            IFMATCH = FCIFCH .AND. FCFLO1 .AND. FCPOL .AND. FCCH1
+     1           .AND. FCVLAIF .AND. FCFE .AND. RFCLOSE
+C
+C           If the channel matches, other than in the precise frequency,
+C           record that fact.  OKIF means all except maybe the exact
+C           frequency matches.
+C
+            IF( IFMATCH ) THEN
+               OKIF(ICH,IIF) = .TRUE.
+            END IF
+C
+C           Check for exact frequency in range.  Only require one 
+C           channel to be ok - allows for overflow at places like 
+C           the VLA.
+C           If the routine got past the top few statements, at least
+C           one channel is in the frequency range.  Check this specific
+C           channel here, but don't let a mismatch prevent an overall
+C           match.  Just try to downgrade this option so if a better
+C           one exists, it will be used.
+C
+            FREQOK(ICH) = FREQREF(ICH,KS) .GE. FRF1(IIF,KF) .AND.
+     1                    FREQREF(ICH,KS) .LE. FRF2(IIF,KF)
+C
+C           Record if there are any matching channels.  This means that
+C           the freq.dat record can be used.
+C
+            IF( IFMATCH .AND. FREQOK(ICH) ) MATCH = .TRUE.
+C
+C           Determine just how bad the match was.
+C
+            IIFBAD = 0
+            IF( .NOT. FCSTA )   IIFBAD = IIFBAD + 1
+            IF( .NOT. RFCLOSE ) IIFBAD = IIFBAD + 1
+            IF( .NOT. FCIFCH )  IIFBAD = IIFBAD + 1
+            IF( .NOT. FCFLO1 )  IIFBAD = IIFBAD + 1
+            IF( .NOT. FCPOL )   IIFBAD = IIFBAD + 1
+            IF( .NOT. FCCH1 )   IIFBAD = IIFBAD + 1
+            IF( .NOT. FCVLAIF ) IIFBAD = IIFBAD + 1
+            IF( .NOT. FCFE )    IIFBAD = IIFBAD + 1
+            IF( .NOT. FREQOK(ICH) )  IIFBAD = IIFBAD + 1
+C
+C           See if this was the best IF for this channel, save
+C           number of mismatches and flags for printout.
+C
+            IF( IIFBAD .LT. CHBAD ) THEN
+               CHBAD = IIFBAD
+               WRITE( CHFLAGS, '( I2, 8L1 )' ) IIF, FCIFCH, 
+     1            FCFLO1, FCPOL, FCCH1, FCVLAIF, FCFE, 
+     2            FREQOK(ICH), RFCLOSE
+            END IF
+C
+C           End of frequency group IF loop.
 C
          END DO
 C
-C        Separate frequency sets in the table.
+C        Pring some current results if in debug mode.
 C
-         IF( DEBUGPRT .OR. ( GOTAFR .AND. PRTMISS ) ) THEN
-            CALL WLOG( 0, ' ' )
-         END IF
-C
-C        Some more debug printout.
-C
-         IF( DEBUGPRT ) THEN
+         IF( SDEBUG ) THEN
             SETMSG = ' '
-            WRITE( SETMSG, '( A, L1 )' ) 'FCOMPARE: Out of loop: ', 
-     1           MATCH
+            WRITE( SETMSG, '( A, 3I4, 2X, 2L1 )' ) 
+     1           'FCOMPARE: Channel checked: ', 
+     2           KS, KF, ICH, MATCH
             CALL WLOG( 0, SETMSG )
          END IF
 C
-C        Check FREQOK.
+C        Get the degree by which the worst channel missed.
 C
-         MATCH = MATCH .AND. FREQOK
-         IF( DEBUGPRT ) write(*,*) ' fmatch', match, freqok
+         KFBAD = MAX( KFBAD, CHBAD )
 C
-C        Check 50 cm filter.  Maybe use FC50 some day related NBAD.
+C        Some output if debugging or trying to explain why no
+C        match was found (call with PRTMISS set true).
 C
-         FC50 =  SETSTA(1,KS)(1:4) .NE. 'VLBA' .OR. (
-     1           ( RCP50CM(KS) .EQ. 'DEF' .OR.
-     2           RCP50CM(KS) .EQ. FRCP50CM(KF) )  .AND.
-     3           ( LCP50CM(KS) .EQ. 'DEF' .OR.
-     4           LCP50CM(KS) .EQ. FLCP50CM(KF) ) )
-C
-         IF( ( MATCH .AND. .NOT. FC50 ) .AND. ( DEBUGPRT .OR. 
-     1       ( GOTAFR .AND. PRTMISS .AND. KFBAD .LE. NBAD + 1) ) ) THEN
-            CALL WLOG( 0, '          50cm filter doesn''t match.' )
+         IF( SDEBUG .OR. ( PRTMISS .AND. CHBAD .LE. NBAD + 1) ) THEN
+            SETMSG = ' '
+            WRITE( SETMSG, '( 3X, A12, I8, 6X, A2, 1X, ' //
+     1         ' 8( 5X, A1 ) )' )
+     2         FRNAME(KF), ICH, CHFLAGS(1:2),(CHFLAGS(I:I),I=3,10)
+            CALL WLOG( 0, SETMSG )
          END IF
 C
-         MATCH = MATCH .AND. FC50
+C        End of channel loop.
 C
-C        Record how bad the miss was.
+      END DO
 C
-         NBAD = MIN( NBAD, KFBAD )
+C     Separate frequency sets in the table (print cosmetics).
 C
+      IF( SDEBUG .OR. PRTMISS ) THEN
+         CALL WLOG( 0, ' ' )
       END IF
+C
+C     Some more debug printout.
+C
+      IF( SDEBUG ) THEN
+         SETMSG = ' '
+         WRITE( SETMSG, '( A, L1 )' ) 'FCOMPARE: Out of loop: ', 
+     1        MATCH
+         CALL WLOG( 0, SETMSG )
+      END IF
+C
+C     Check 50 cm filter.  Maybe use FC50 some day related NBAD.
+C
+      FC50 =  SETSTA(1,KS)(1:4) .NE. 'VLBA' .OR. (
+     1        ( RCP50CM(KS) .EQ. 'DEF' .OR.
+     2        RCP50CM(KS) .EQ. FRCP50CM(KF) )  .AND.
+     3        ( LCP50CM(KS) .EQ. 'DEF' .OR.
+     4        LCP50CM(KS) .EQ. FLCP50CM(KF) ) )
+C
+      IF( ( MATCH .AND. .NOT. FC50 ) .AND. ( SDEBUG .OR. 
+     1    (  PRTMISS .AND. KFBAD .LE. NBAD + 1) ) ) THEN
+         CALL WLOG( 0, '          50cm filter doesn''t match.' )
+      END IF
+C
+      MATCH = MATCH .AND. FC50
+C
+C     Record how bad the miss was.
+C
+      NBAD = MIN( NBAD, KFBAD )
 C
 C     Check the synthesizer settings for VLBA sites.  Allow the user
 C     to set a synthesizer the frequency catalog doesn't care about
@@ -327,7 +323,7 @@ C
      4           ( SYNTH(3,KS) .EQ. 0.0 .OR. FSYN(3,KF) .EQ. 0.0 .OR.
      5             SYNTH(3,KS) .EQ. FSYN(3,KF) )
 C
-         IF( DEBUGPRT ) THEN
+         IF( SDEBUG ) THEN
             IF( MATCH ) THEN
                CALL WLOG( 0, 'FCOMPARE: Synth matches.' )
             ELSE
@@ -356,7 +352,7 @@ C
          MATCH =  MFLKA .AND. MFLKB .AND. MFEAB .AND. MFECD .AND. 
      1            MSYNA .AND. MSYNB .AND. MFEF .AND. MVBND .AND. MVBW
 C
-         IF( PRTMISS .OR. DEBUGPRT ) THEN
+         IF( PRTMISS .OR. SDEBUG ) THEN
             IF( MATCH ) THEN
                CALL WLOG( 0, 'FCOMPARE: VLA stuff matches.' )
             ELSE
@@ -368,11 +364,19 @@ C
                WRITE( SETMSG, '( 9( 8X, L1 ) )' ) 
      1             MFLKA, MFLKB, MFEAB, MFECD, MSYNA, MSYNB,
      2             MFEF, MVBND, MVBW
+C
+C              For ptlink.key, this bit of code is reached and it sees
+C              the difference between XX and VX VLAMODE.  In older 
+C              versions, it didn't get here because some IFs didn't
+C              match.  Now that is allowed and MATCH is still true,
+C              so it gets here.  This comment can probably be deleted 
+C              once the new programming is done.
+C
                CALL WLOG( 0, SETMSG )
             END IF
          END IF
       END IF
-      IF( DEBUGPRT ) THEN
+      IF( SDEBUG ) THEN
          IF( MATCH ) THEN
             CALL WLOG( 0, 'FCOMPARE: Got overall match.' )
          ELSE
