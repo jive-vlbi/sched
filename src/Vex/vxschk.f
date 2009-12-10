@@ -109,7 +109,8 @@ C        Close the STASCN loop
 C
          END IF
          IF( STASCN(ISCN,ISTA) .AND.
-     1       CONTROL(STANUM(ISTA)) .EQ. 'VEX') THEN
+     1       CONTROL(STANUM(ISTA)) .EQ. 'VEX'
+     2      .AND. DISK(STANUM(ISTA)) .NE. 'LBADR' ) THEN
 C
 C        scans should be longer than 15s, according to NRV
 C        

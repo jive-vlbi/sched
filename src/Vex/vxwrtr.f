@@ -54,6 +54,7 @@ C
          IF( .NOT. (FORMAT(KS)(1:6) .EQ. 'VLBA1:' .OR. 
      1        FORMAT(KS)(1:7) .EQ. 'MARKIII' .OR.
      1        FORMAT(KS)(1:2) .EQ. 'S2' .OR.
+     1        FORMAT(KS)(1:3) .EQ. 'LBA' .OR.
      2        FORMAT(KS)(1:6) .EQ. 'MKIV1:' ) .OR. 
      3       ( FANOUT(KS) .LT. 0.9 .AND.
      4       FORMAT(KS)(1:2) .NE. 'S2' )) THEN
@@ -69,12 +70,12 @@ C        write a comment about the tpspeed and data rate
 C
          IF( FORMAT(KS)(1:2) .NE. 'S2' ) THEN
             IF( USETAPE(ISCAT) ) THEN
-               WRITE( IVEX, '( A1, 4X, A, F5.2, A, I4, A, I4, A )' ) 
+               WRITE( IVEX, '( A1, 4X, A, F6.2, A, I4, A, I4, A )' ) 
      1             COM, 'mode requires ', SAMPRATE(KS)/FANOUT(KS), 
      2             'Mb/s/tr; tape speed low dens:', NINT(SPEEDL(KS)),
      3             'ips, high dens:', NINT(SPEEDH(KS)), 'ips'
             ELSE IF( USEDISK(ISCAT) ) THEN
-               WRITE( IVEX, '( A1, 4X, A, F5.2, A )' ) 
+               WRITE( IVEX, '( A1, 4X, A, F6.2, A )' ) 
      1             COM, 'mode requires ', SAMPRATE(KS)/FANOUT(KS), 
      2             'Mb/s/tr; stations using disks'
             END IF
@@ -99,6 +100,15 @@ C              and awaiting a MkIV firmware upgrade it is off
 C
                WRITE( IVEX, '( 5X, A, A, A1 )' )
      1             'data_modulation = ','off', SEP
+            ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
+C               WRITE( IVEX, '( 5X, A, A, A1 )' )
+C     1            'S2_recording_mode = ', 'LBA', SEP
+               WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1             'S2_data_source = ','AT', SEP
+C               WRITE( IVEX, '( 5X, A, A, A1 )' )
+C     1            'track_frame_format = ', 'LBA', SEP
+C               WRITE( IVEX, '( 5X, A, A, A1 )' )
+C     1             'data_modulation = ','off', SEP
             ELSE
                WRITE( MSGTXT, '( A, A )' )
      1             'VXWRTR: unsupported recording mode: ', FORMAT(KS)
@@ -322,17 +332,25 @@ C
      2                   1X, I1.1, 1X )' ) 
      3                   'fanout_def =', TPSUBP, COL, LNK, 'CH', ICH, 
      4                   COL, THEBIT, COL, HEDSTK
-                     DO IFAN = 1, NINT(FANOUT(KS))
+                     IF( FORMAT(KS)(1:3) .NE. 'LBA' ) THEN
+                        DO IFAN = 1, NINT(FANOUT(KS))
 C
-C                    here are some implicit assumptions made, about VLBA
-C                    (and MkIV!) standard modes, see MkIV Memo 230
+C                       here are some implicit assumptions made, about VLBA
+C                       (and MkIV!) standard modes, see MkIV Memo 230
 C
+                           LPOS = LEN1(LINE)+1
+                           WRITE( LINE(LPOS:LPOS+4), '(
+     1                         A1, 1X, I2, 1X )' ) COL, 
+     2                         TRACK1+(IFAN-1)*2+
+     3                         (IBIT-1)*2*NINT(FANOUT(KS))
+                        END DO
+                     ELSE 
+C                       For LBA is simpler - no fanout and simple
+C                       mapping of track to channel.
                         LPOS = LEN1(LINE)+1
-                        WRITE( LINE(LPOS:LPOS+4), '(
-     1                      A1, 1X, I2, 1X )' ) COL, 
-     2                      TRACK1+(IFAN-1)*2+
-     3                      (IBIT-1)*2*NINT(FANOUT(KS))
-                     END DO
+                        WRITE( LINE(LPOS:LPOS+4), '(A1, 1X, I2)') 
+     1                     COL, (ICH-1)*BITS(1,KS)+IBIT-1
+                     END IF
                      WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE)), SEP
                   END DO
                END DO

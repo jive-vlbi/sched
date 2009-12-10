@@ -93,6 +93,11 @@ C
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',
      2              'Mark5A', SEP
+             ELSE IF( DISK(STANUM(ISTA)) .EQ. 'LBADR' ) THEN
+                WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1              'record_transport_type = ',
+     2              'S2', SEP
+C     2              'Mark5A', SEP
              END IF
          END IF
 C
@@ -114,6 +119,10 @@ C
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',
      2          'Mark4', SEP
+         ELSE IF( DAR(ISCAT) .EQ. 'LBA' ) THEN
+            WRITE( IVEX, '( 5X, A, A, A1 )' ) 
+     1          'electronics_rack_type = ',
+     2          'LBA', SEP
          ELSE IF( DAR(ISCAT) .EQ. 'NONE' ) THEN
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',

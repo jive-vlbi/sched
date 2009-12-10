@@ -41,8 +41,8 @@ C
                WRITE( IVEX, '( 5X, A, 1X, A1, A, I2.2, 1X, A1, I3, 
      1             1X, A1, 1X, A1, A, A, A1  )' ) 
      2             'BBC_assign =', 
-     2             LNK, 'BBC', BBC(ICH,KS), COL, BBC(ICH,KS), COL, LNK, 
-     3             'IF_', IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), SEP
+     3             LNK, 'BBC', BBC(ICH,KS), COL, BBC(ICH,KS), COL, LNK, 
+     4             'IF_', IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), SEP
             END IF
          END DO
 C

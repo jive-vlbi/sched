@@ -76,6 +76,9 @@ C
       ELSE IF ( USEDISK(ISTA) .AND. DISK(STANUM(ISTA)) .EQ. 'MARK5A' )
      1     THEN
          NAME(LPOS:LPOS+5) = 'Mark5A'
+      ELSE IF ( USEDISK(ISTA) .AND. DISK(STANUM(ISTA)) .EQ. 'LBADR' )
+     1     THEN
+         NAME(LPOS:LPOS+4) = 'LBADR'
       END IF
 C
       VXNMDA = NAME

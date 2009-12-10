@@ -19,6 +19,8 @@ C
       KS = HPISSET(IXX)
       IF( FORMAT(KS) .EQ. 'S2' ) THEN
          VXNMHP = 'S2Void'
+      ELSE IF( FORMAT(KS) .EQ. 'LBA' ) THEN
+         VXNMHP = 'LBAVoid'
       ELSE
 C
 C     Check if two heads applies

@@ -130,7 +130,7 @@ C
       END IF
 C
       IF( CORCHAN .NE. 0 ) 
-     1     WRITE( IVEX, '( A1, 4X, A, I4 )' ) COM, 'number_channels:',
+     1     WRITE( IVEX, '( A1, 4X, A, I6 )' ) COM, 'number_channels:',
      2     CORCHAN
 C
       IF( CORNANT .NE. 0 ) 
