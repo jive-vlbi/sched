@@ -46,9 +46,10 @@ C        correlator, especially DiFX aren't subject to them.
 C
          DOCHKSU = FORMAT(KS) .NE. 'S2' .AND. FORMAT(KS) .NE. 'NONE' 
      1       .AND. FORMAT(KS) .NE. 'MARKII' 
-         DOCHKSU = DOCHKSU .AND. ( 
-     1       CORREL .EQ. 'SOCORRO' .OR.
-     2       CORREL .EQ. 'VLBA' )
+C         DOCHKSU = DOCHKSU .AND. ( 
+C     1       CORREL .EQ. 'SOCORRO' .OR.
+C     2       CORREL .EQ. 'VLBA' )
+         DOCHKSU = DOCHKSU .AND. CORREL .EQ. 'FXCORR' 
          IF( DOCHKSU ) THEN
             IF( SPEEDUP(KS) .NE. FSPEED(ISETF) .AND. 
      1          FSPEED(ISETF) .NE. 0.0 ) THEN

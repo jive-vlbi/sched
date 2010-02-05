@@ -141,14 +141,15 @@ C
      4      CC, 'E-Mail address',
      5      CC, EMAIL,
      6      CC
+C
          WRITE( IULOC, '( 3A, /, A, /, 2A, /, 4( 2A, / ), A )' )
      1      CC, 'Observing mode(s): ', VLATYPE(1:LEN1(VLATYPE)),
      2      CC,
      3      CC, 'Special Instructions',
-     4      CC, NOTE(1),
-     5      CC, NOTE(2),
-     6      CC, NOTE(3),
-     7      CC, NOTE(4),
+     4      CC, NOTE(1)(1:LEN1(NOTE(1))),
+     5      CC, NOTE(2)(1:LEN1(NOTE(2))),
+     6      CC, NOTE(3)(1:LEN1(NOTE(3))),
+     7      CC, NOTE(4)(1:LEN1(NOTE(4))),
      8      CC
 C
          IF( .NOT. NOTAPE ) WRITE( IULOC, '( A )' )

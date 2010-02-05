@@ -27,6 +27,9 @@ C     Note 29/12/00 Craig suggested to make sure one knows what
 C     last station is (LASTISCN in SCHOPT) I think however, that
 C     is not urgent
 C
+C     Moved the PARAMETER statement in front of the DATA statements
+C     as required by the standard and a user's compiler.  Feb. 4, 2010 RCW.
+C
       INTEGER ISCN, LASTSCN
       DOUBLE PRECISION TAPOFF, LASTSTOP
       LOGICAL WARNFS
@@ -53,13 +56,13 @@ C
       INTEGER NTSYSON(MAXSTA), NTSYS(MAXSTA), TSYSGAP(MAXSTA), THISGAP
       REAL LASTBYTE(MAXSTA)
       REAL MAXDISKU
+      PARAMETER (MAXDISKU = 22.*60. * 1.008 * (1024./1000.) / 8.)
       SAVE LASTTSYS, LASTTSON, LASTBYTE
       DATA LASTTSYS /MAXSTA*0/
       DATA LASTTSON /MAXSTA*0/
       DATA LASTBYTE /MAXSTA*0.0/
 C     MAXDISKU is 22 mins of 1 Gbps recording (allow factor 1.008 for
 C     headers).
-      PARAMETER (MAXDISKU = 22.*60. * 1.008 * (1024./1000.) / 8.)
 C
       IF ( DEBUG .AND. ISCN .LE. 2) 
      .    CALL WLOG( 1,'VXSCHK:  Checking VEX tapes ')

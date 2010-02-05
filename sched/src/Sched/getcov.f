@@ -8,7 +8,7 @@ C
 C
       INTEGER            KI(*), KEYPTR, I, LEN1
       DOUBLE PRECISION   VALUE(*)
-      CHARACTER          KC(*)*8, KCHAR*80
+      CHARACTER          KC(*)*8, KCHAR*256
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'GETCOV starting.' )
 C
@@ -23,10 +23,10 @@ C
       FAX        = KCHAR( 'FAX',      64, .FALSE., VALUE, KC, KI )
       OBSPHONE   = KCHAR( 'OBSPHONE', 49, .FALSE., VALUE, KC, KI )
       OBSMODE    = KCHAR( 'OBSMODE',  58, .FALSE., VALUE, KC, KI )
-      NOTE(1)    = KCHAR( 'NOTE1',    64, .FALSE., VALUE, KC, KI )
-      NOTE(2)    = KCHAR( 'NOTE2',    64, .FALSE., VALUE, KC, KI )
-      NOTE(3)    = KCHAR( 'NOTE3',    64, .FALSE., VALUE, KC, KI )
-      NOTE(4)    = KCHAR( 'NOTE4',    64, .FALSE., VALUE, KC, KI )
+      NOTE(1)    = KCHAR( 'NOTE1',    128, .FALSE., VALUE, KC, KI )
+      NOTE(2)    = KCHAR( 'NOTE2',    128, .FALSE., VALUE, KC, KI )
+      NOTE(3)    = KCHAR( 'NOTE3',    128, .FALSE., VALUE, KC, KI )
+      NOTE(4)    = KCHAR( 'NOTE4',    128, .FALSE., VALUE, KC, KI )
 C
 C     Make up the cover message for printouts.  Done with arrays to
 C     help enclose in location specific comment indicators etc.

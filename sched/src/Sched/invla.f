@@ -15,7 +15,7 @@ C
       DOUBLE PRECISION  VALUE(*)
       INTEGER           CASE, ISCN, KI(*), KEYPTR, NGET, NVLA, ISTA
       LOGICAL           WARN, VNTSY(2)
-      CHARACTER         KC(*)*(*), KCHAR*80, INBW*4, INBND*2
+      CHARACTER         KC(*)*(*), KCHAR*256, INBW*4, INBND*2
       SAVE              WARN, VNTSY
       DATA              WARN  / .TRUE. /
 C -------------------------------------------------------------------

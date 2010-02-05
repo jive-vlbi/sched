@@ -9,7 +9,7 @@ C
       INTEGER            KY, KM, JD
       INTEGER            LTEST, KD1, KD2, NCHL, LNCHL
       INTEGER            DAY1, DAY2, DAY3, YEAR1, YEAR2, YEAR3
-      INTEGER            IFREQ
+      INTEGER            IFREQ, I
       INTEGER            TEARLY, TDWELL, NFLINES
       INTEGER            KF, LKF, FOOT1, FOOT2, LFOOT
       REAL               LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
@@ -66,7 +66,7 @@ C
      5      ' Exp. Code:  ', EXPCODE            
          WRITE( IPRT, '( 1X, /, 2(A,/), 1X,/, A, /, 1X,/, 4(A,/), ' //
      1      '1X,/, 4(A,/), 1X,/, A,/, 1X,/, 4(A,/) )' )
-     2      COVER
+     2      (COVER(I)(1:MAX(1,LEN1(COVER(I)))), I=1,MCOVER)
 C
 C        Write cover letter if one was given.
 C
@@ -227,9 +227,10 @@ C
 C
 C     Add comment
 C
+C      write(*,*) 'prtsch ', annot(iscn)(1:70), annot(iscn)(71:128)
       IF( ANNOT(ISCN) .NE. ' ' ) THEN
          WRITE (IPRT,'(2X,/,'' ---------- '',A,'' ----------'')')
-     1      ANNOT(ISCN)(1:LEN1(ANNOT(ISCN)))
+     1      ANNOT(ISCN)(1:MAX(1,LEN1(ANNOT(ISCN))))
          ILINE = ILINE + 2
       END IF
 C

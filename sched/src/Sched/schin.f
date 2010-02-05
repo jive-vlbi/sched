@@ -20,7 +20,7 @@ C
       INTEGER           MK, INSCH
       PARAMETER         (MK=650 + 7*MAXSTA + 2*MAXCHN)
       INTEGER           KI(MK)
-      CHARACTER         KC(MK)*8, KCHAR*80
+      CHARACTER         KC(MK)*8, KCHAR*256, TEMP*256
       DOUBLE PRECISION  KD(2*MK), ENDMARK, BLANK
       LOGICAL           SETKEYS, AWARN
       SAVE              KI, KD, KC, ENDMARK, BLANK, INSCH, SETKEYS
@@ -132,7 +132,7 @@ C
                KD(I5+I) = UNSET
             END DO
             I1 = KEYPTR( 'COMMENT', KC, KI ) - 1
-            DO I = 1, 8
+            DO I = 1, 128/8
                KD(I1+I) = BLANK
             END DO
          END IF
@@ -235,7 +235,8 @@ C
 C
 C        Some observing instructions.
 C
-         ANNOT(ISCN) = KCHAR( 'COMMENT', 64, .FALSE., KD, KC, KI )
+         TEMP = KCHAR( 'COMMENT', 128, .FALSE., KD, KC, KI )
+         ANNOT(ISCN) = KCHAR( 'COMMENT', 128, .FALSE., KD, KC, KI )
          TANT1(ISCN)  = KD( KEYPTR( 'TANT1', KC, KI ) ) .EQ. 0.D0
          TANT2(ISCN)  = KD( KEYPTR( 'TANT2', KC, KI ) ) .EQ. 0.D0
          CALTIME(ISCN) = KD( KEYPTR( 'CALTIME', KC, KI ) )

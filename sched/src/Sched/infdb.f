@@ -19,7 +19,7 @@ C
 C
       DOUBLE PRECISION  VALUE(*), DOPC
       INTEGER           I1, I2, KEYPTR, KI(*), ICHAN, ISCN
-      CHARACTER         KC(*)*(*), KCHAR*80
+      CHARACTER         KC(*)*(*), KCHAR*256
 C ------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LT. 3 ) CALL WLOG( 0, 'INFDB: Starting' )
 C

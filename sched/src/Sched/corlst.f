@@ -6,7 +6,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER           ISTA, ISCN, I, NSANT, NBAS, NPOL
+      INTEGER           ISTA, ISCN, I, NSANT, NBAS, NPOL, LEN1
       REAL              DATARATE, MAXSPD
       DOUBLE PRECISION  TTIME, TRTIME, TBTIME, STIME
       DOUBLE PRECISION  TIMEB, TIMEL, TLAST
@@ -23,7 +23,8 @@ C
      1      'No tapes recorded.  Correlation requests ignored.'
       ELSE
          WRITE( ISUM, '( 1X, /, A, /, 1X, /,  9(A,/), 1X, /, ' // 
-     1        ' 5(A,/), 1X, /, 5(A,/) )' ) ( CORSTUFF(I), I = 1, MCOR )
+     1        ' 5(A,/), 1X, /, 5(A,/) )' ) 
+     2      ( CORSTUFF(I)(1:LEN1(CORSTUFF(I))), I = 1, MCOR )
 C
 C        Get the parameters of the observation that are needed to get 
 C        the data rates and volume.
@@ -138,17 +139,17 @@ C
      1       '  Total number of baseline hours:', TBTIME/3600.D0, 
      2       '    (Recording scans only)'
          IF( MAXSPD .NE. 1.0 ) THEN
-            WRITE( ISUM, '( A, F8.1, A, /, T10, A, A, F6.1  )' )
+            WRITE( ISUM, '( A, F10.1, A, /, T10, A, A, F6.1  )' )
      1     '  Projected maximum data output rate from the correlator:',
      2       MAXDR/1000.0, ' kbytes/sec',
      3        ' if processed in one pass at a maximum speed ',
      4        'up factor of', MAXSPD
          ELSE
-            WRITE( ISUM, '( A, F8.1, A )' )
+            WRITE( ISUM, '( A, F10.1, A )' )
      1     '  Projected maximum data output rate from the correlator:',
      2       MAXDR/1000.0, ' kbytes/sec of observe time.'
          END IF            
-         WRITE( ISUM, '( A, F9.1, A )' )
+         WRITE( ISUM, '( A, F14.1, A )' )
      1       '  Projected correlator output data set size:', 
      2       DATASIZE/1.D6, ' Mbytes'
          WRITE( ISUM, '( A )' )
@@ -160,8 +161,8 @@ C
      2       'Consider requesting high density tapes.'
          END IF
 C
-C        Deal with correlator specific situations.  Only Socorro
-C        for now.
+C        Deal with correlator specific situations.  Only Socorro 
+C        hardware correlator for now (and that has been shut down).
 C
          CALL CORSOC
 C

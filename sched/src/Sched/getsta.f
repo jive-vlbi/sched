@@ -20,7 +20,7 @@ C
       DOUBLE PRECISION VALUE(*)
       LOGICAL          ERRS, FLAG(MAXSTA), DOIT, GOTVEX
       CHARACTER        NAMEST*8, KC(*)*(*)
-      CHARACTER        KCHAR*80, FILEUP*80
+      CHARACTER        KCHAR*256, FILEUP*80
       CHARACTER        LSTAFIL*80
       SAVE             LSTAFIL
 C -------------------------------------------------------------------
