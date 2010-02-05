@@ -24,6 +24,7 @@ C           this when I allowed 512 Mbps.
 C       08Jan24 Allow the 2-8-32-1  512 mode on MKIV.  I don't know
 C           why it was blocked.
 C       08Oct18 Allow the other 512 modes on MKIV.
+C       10Feb02 Restrict to FXCORR
 C
 C
       INCLUDE    'sched.inc'
@@ -210,8 +211,7 @@ C     override was requested.
 C
       IF( ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
      1      FORMAT(KS)(1:4) .EQ. 'MKIV' ) .AND.
-     2    ( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     3      CORREL(1:4) .EQ. 'VLBA' ) .AND.
+     2    ( CORREL(1:7) .EQ. 'FXCORR' ) .AND.
      4      .NOT. MODETEST(KS) ) THEN
 C
          OKMODE = .FALSE.

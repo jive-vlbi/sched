@@ -17,7 +17,7 @@ C
       INTEGER           MPLK, MODE
       PARAMETER         (MPLK=50)
       INTEGER           KI(MPLK), KEYPTR
-      CHARACTER         KC(MPLK)*8, KCHAR*80
+      CHARACTER         KC(MPLK)*8, KCHAR*256
       DOUBLE PRECISION  KD(2*MPLK), ENDMARK, BLANK
       LOGICAL           GOTKEYS, DIDRST
 C

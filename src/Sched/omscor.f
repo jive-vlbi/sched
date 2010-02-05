@@ -24,8 +24,7 @@ C
 C
 C     Only do some parameters only for the Socorro hardware correlator
 C
-      IF( ( CORREL(1:4) .EQ. 'VLBA' .OR. CORREL(1:7) .EQ. 'SOCORRO' ) 
-     1     .AND. .NOT. NOTAPE ) THEN
+      IF( CORREL(1:4) .EQ. 'FXCORR' .AND. .NOT. NOTAPE ) THEN
 C
 C        Get the FFT size and spectral averaging.  This is also done
 C        in CHKSOC where the results are checked against allowed
@@ -60,7 +59,10 @@ C
 
          END IF
 C
-      ELSE IF( CORREL(1:8) .EQ. 'VLBADIFX' .AND. .NOT. NOTAPE ) THEN
+      ELSE IF( ( CORREL(1:4) .EQ. 'VLBA' .OR. 
+     1     CORREL(1:7) .EQ. 'SOCORRO' .OR.
+     2     CORREL(1:8) .EQ. 'VLBADIFX' ) .AND. 
+     3     .NOT. NOTAPE ) THEN
 C
 C        Get the FFT size and spectral averaging for VLBADIFX.  This 
 C        correlator can, in principle, do any size FFT, but is more

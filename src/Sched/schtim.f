@@ -269,20 +269,15 @@ C
             TSWARN = .TRUE.     
          END IF
       END DO
-      IF( TSWARN .AND. 
-     1    ( CORREL(1:7) .EQ. 'SOCORRO' .OR. CORREL(1:4) .EQ. 'VLBA') ) 
-     2    THEN
+      IF( TSWARN .AND. CORREL(1:7) .EQ. 'FXCORR' ) THEN
          CALL WLOG( 0, 
-     1    '   Tape synchronization on the  VLBA correlator is better' )
+     1    '   Tape synchronization on the  VLBA hardware correlator ' )
          CALL WLOG( 0, 
-     1    '   when the tape does not stop often.  Parameters MINPAUSE' )
+     1    '   is better when the tape does not stop often. ' )
          CALL WLOG( 0,
-     1    '   and PRESTART may be used to encourage continuous tape'
-     2    // ' motion.' )
+     1    '   Parameters  MINPAUSE and PRESTART may be used to '
+     2    // ' encourage continuous tape motion.' )
       END IF
 C
       RETURN
       END
-
-
-

@@ -1023,7 +1023,6 @@ note1    = ' '
 correl   = 'Socorro'
 coravg   = 4
 corchan  = 16
-cornant  = 10
 corpol   = 'on'
 corwtfn  = 'uniform'
 corsrcs  = 'VLBA Data Base'
@@ -1706,81 +1705,6 @@ achieve the desired results. Note that any intervals specified with
 
 \end{list}
 
-The above schemes set the times of the scans as reported in the output
-files meant for human consumption.  But the telescope control files
-actually give the times for the recording to start and stop.  There
-are two additional parameters that can affect the recording start
-time.  They are \htmlref{{\tt PRESTART}}{MP:PRESTART}, and
-\htmlref{{\tt MINPAUSE}} {MP:MINPAUSE}.  You may want the recording
-start time to differ from the scan start time to make correlation
-proceed more robustly.  If the recordings are started somewhat before
-the scan start time, the chances that they will be synced up on
-playback by the time of the scan start time are enhanced.
-\htmlref{{\tt PRESTART}}{MP:PRESTART} can be used to request that the
-recording be started the requested amount of time (record time) before
-the scan start time.  If that time is earlier than the previous stop
-time, the recorder will be left running.
-
-The time required to sync playback on the VLBA hardware correlator is
-empirically about 8, 13, and 25 seconds for speedup factors 1, 2 and 4
-respectively (ie, about 8 seconds in correlator wall clock time).
-These times were determined for tape.  For some time, disks (Mark5a)
-were slower by about 10 seconds, but a quick check in Dec. 2007
-suggests that the times are now about the same for disk.  The sync
-time for disk at JIVE, Bonn, Haystack and USNO is around 1 second or
-less and can be ignored.  It is expected that the software correlator
-being developed for the VLBA (expected in 2008) and other instruments
-will not have a delayed sync, at which time attempts to adjust the
-recording start time relative to the scan start time can be abandoned.
-
-The extreme, and often useful, case of a pre-start is to not stop
-recording between scans.  This is especially useful if you have many
-short scans with short intervals between them, such as when phase
-referencing.  \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE} sets the smallest
-gap between scans for which the recording will be stopped.  If the gap
-is smaller, the recorder will be left running.  {\tt MINPAUSE} is in
-units of playback time, so it is multiplied by the speed up factor to
-get the effect at record time.
-
-{\tt PRESTART} is applied before {\tt MINPAUSE}.  First the recording
-start time is shifted earlier, then the interval from the last
-stop time is examined to determine if the recording should be left
-running.  The defaults of {\tt PRESTART=0, MINPAUSE=10} should
-be ok in most situations.  Users should not need to worry about
-these parameters most of the time.  The offset of the recording start
-time from the scan start time can be displayed in the summary
-file by adding {\tt PTSTART} to the arguments of \htmlref{{\tt
-SUMITEM}}{MP:SUMITEM}.  The recording start time is also available in
-the {\sl sch.} files.
-
-A factor to consider when planning scan times is formatter
-reconfigurations.  These happen when the internal switching and setup
-of the formatter at the station has to be changed.  Such changes
-happen when any of a number of parameters, including the number of
-channels, the sample rate, the BBC assignments, the BBC sidebands, and
-the pulse cal detector setup, are modified.  A formatter
-reconfiguration takes about 8 seconds on the VLBA and during that time
-the formatter is not sending valid time codes to the recorder.  If
-this happens during recording, it knocks the correlator out of sync
-for both the duration of the reconfigure plus the time to resync.  In
-practice, it also seems to confuse the VLBA correlator somehow for
-maybe one or two stations and they can take over a minute to resync.
-It is best to avoid reconfigurations if possible.  In the rare cases
-where that is not possible, try to provide a gap between scans of
-sufficient length to do the reconfiguration.  The formatter
-configuration requested during a gap is the same as that during the
-following scan, so this only requires using the \htmlref{{\tt
-GAP}}{MP:GAP} command (or any other mechanism for having one scan
-start a while after another ends).  Common reasons that
-reconfigurations occur in schedules are changes in the sample rate,
-changes in the BBC sideband (remember for net upper sideband, the 20cm
-and 13cm systems on the VLBA use lower sideband at the BBC), and
-changes in the kHz part of the frequency which changes the pcal
-detector frequency (changes in the MHz part will not change the pcal
-setup and will not trigger a reconfigure).
-
-Concerns about reconfigurations will likely change when the digital
-backends under development in 2008 are deployed.
 
 % ***************  How long do reconfigurations take on MarkIV systems.?
 
@@ -1845,6 +1769,104 @@ assumed to be in sidereal units.  Some exceptions are {\tt PRESCAN} and
 It is a very good idea, when using LST scheduling, to check the
 final output schedules, which are all in UT, to be sure that they
 are for the right day.
+
+\subsubsection{\label{SSSEC:Reconfigurations}Dealing with Formatter 
+Reconfigurations}
+
+NOTE: Concerns about reconfigurations will likely change and hopefully
+disappear when the digital backends take over, which should happen in
+2010.
+
+A factor to consider when planning scan times is formatter
+reconfigurations.  These happen when the internal switching and setup
+of the formatter at the station has to be changed.  Such changes
+happen when any of a number of parameters, including the number of
+channels, the sample rate, the BBC assignments, the BBC sidebands, and
+the pulse cal detector setup, are modified.  A formatter
+reconfiguration takes about 8 seconds on the VLBA and during that time
+the formatter is not sending valid time codes to the recorder.  If
+this happens during recording, it knocks the correlator out of sync
+for both the duration of the reconfigure plus the time to resync.  In
+practice, it also seemed to confuse the old VLBA hardware correlator
+somehow for maybe one or two stations and they can take over a minute
+to resync.  This is not likely to be the case for the software
+correlator. 
+
+It is best to avoid reconfigurations if possible.  In the rare cases
+where that is not possible, try to provide a gap between scans of
+sufficient length to do the reconfiguration.  The formatter
+configuration requested during a gap is the same as that during the
+following scan, so this only requires using the \htmlref{{\tt
+GAP}}{MP:GAP} command (or any other mechanism for having one scan
+start a while after another ends).  Common reasons that
+reconfigurations occur in schedules are changes in the sample rate,
+changes in the BBC sideband (remember for net upper sideband, the 20cm
+and 13cm systems on the VLBA use lower sideband at the BBC), and
+changes in the kHz part of the frequency which changes the pcal
+detector frequency (changes in the MHz part will not change the pcal
+setup and will not trigger a reconfigure).
+
+\subsubsection{\label{SSSEC:Starttime}Adjusting the Scan or Recording
+Start Time}
+
+The VLBA hardware correlator, retired at the end of 2009, synchronizing 
+playback took a finite amount of time.  Therefore it was useful to
+start recordings before good data was expected.  This section describes
+the tools in \schedb to do that.  The new VLBA software correlator (DiFX)
+and the Mark IV correlators do not take a significant amount of time 
+to synchronize the data streams.  Therefore, early starts of the recordings 
+are no longer advised.
+
+The schemes described in \htmlref{scan times section}{SSEC:SCANTIMES}
+set the times of the scans as reported in the output files meant for
+human consumption.  But the telescope control files actually give the
+times for the recording to start and stop.  There are two additional
+parameters that can affect the recording start time.  They are
+\htmlref{{\tt PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}}
+{MP:MINPAUSE}.  You may want the recording start time to differ from
+the scan start time to make correlation proceed more robustly.  If the
+recordings are started somewhat before the scan start time, the
+chances that they will be synced up on playback by the time of the
+scan start time are enhanced.  \htmlref{{\tt PRESTART}}{MP:PRESTART}
+can be used to request that the recording be started the requested
+amount of time (record time) before the scan start time.  If that time
+is earlier than the previous stop time, the recorder will be left
+running.
+
+The time required to sync playback on the VLBA hardware correlator (no
+longer in use) was empirically about 8, 13, and 25 seconds for speedup
+factors 1, 2 and 4 respectively (ie, about 8 seconds in correlator
+wall clock time).  These times were determined for tape.  For some
+time, disks (Mark5a) were slower by about 10 seconds, but a quick
+check in Dec. 2007 suggests that the times are now about the same for
+disk.  The sync time for disk at JIVE, Bonn, Haystack and USNO is
+around 1 second or less and can be ignored.  It is expected that the
+software correlator being developed for the VLBA (expected in 2008)
+and other instruments will not have a delayed sync, at which time
+attempts to adjust the recording start time relative to the scan start
+time can be abandoned.
+
+The extreme, and often useful, case of a pre-start is to not stop
+recording between scans.  This is especially useful if you have many
+short scans with short intervals between them, such as when phase
+referencing.  \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE} sets the smallest
+gap between scans for which the recording will be stopped.  If the gap
+is smaller, the recorder will be left running.  {\tt MINPAUSE} is in
+units of playback time, so it is multiplied by the speed up factor to
+get the effect at record time.
+
+{\tt PRESTART} is applied before {\tt MINPAUSE}.  First the recording
+start time is shifted earlier, then the interval from the last
+stop time is examined to determine if the recording should be left
+running.  The defaults of {\tt PRESTART=0, MINPAUSE=10} should
+be ok in most situations.  Users should not need to worry about
+these parameters most of the time.  The offset of the recording start
+time from the scan start time can be displayed in the summary
+file by adding {\tt PTSTART} to the arguments of \htmlref{{\tt
+SUMITEM}}{MP:SUMITEM}.  The recording start time is also available in
+the {\sl sch.} files.
+
+
 
 \subsection{\label{SSEC:DYNAMIC}Dynamic Scheduling}
 
@@ -2531,7 +2553,6 @@ NOTE2 = 'its the standard VLBI antenna and has good Q band performance'
 correl   = 'Socorro'
 coravg   = 4
 corchan  = 256
-cornant  = 10
 corpol   = 'off'
 corwtfn  = 'uniform'
 corsrcs  = 'standard'
@@ -5007,11 +5028,11 @@ This is currently ignored for PCFS (VEX) systems.
 
 \subsubsection{\label{MP:COMMENT}{\tt COMMENT}}
 
-{\tt COMMENT} is a string of up to 64 characters to be written on
+{\tt COMMENT} is a string of up to 128 characters to be written on
 operator and telescope files just before the scan.
 
 \rcwbox
-{Text up to 64 characters.}
+{Text up to 128 characters.}
 {Any.}
 {Blank}
 {Reverts to no comment if not specified for each scan.}
@@ -5145,6 +5166,11 @@ needed and output data rate, will be.  See the discussion of
 \htmlref{{\tt CORCHAN}}{MP:CORCHAN} for a formula to calculate
 the output data rate.
 
+The default value for {\tt CORNANT} is the number of antennas scheduled
+which will nearly always be correct.  There should be no need to specify
+a number other than in some special, very strange cases such as when more
+antennas are scheduled than will be correlated.
+
 \rcwbox
 {An integer number.}
 {Any, but it should be the expected number of antennas.}
@@ -5165,7 +5191,7 @@ requirements such as multiple phase centers, special positions,
 non-constant processing parameters etc.
 
 \rcwbox
-{Each parameter is a string of up to 64 characters}
+{Each parameter is a string of up to 128 characters}
 {An address}
 {Blank}
 {Only one of each used --- the last.}
@@ -6478,7 +6504,7 @@ If {\tt NOSETUP} is specified, do not give {\tt SUMITEM=TAPE1} or
 
 \subsubsection{\label{MP:NOTE1}{\tt NOTE1, NOTE2, NOTE3, and NOTE4}}
 
-{\tt NOTE1, NOTE2, NOTE3,} and {\tt NOTE4} are 64-character text strings that
+{\tt NOTE1, NOTE2, NOTE3,} and {\tt NOTE4} are 128-character text strings that
 can be used to pass any information in the cover section. Instructions
 regarding pointing, Tsys measurement, and where to send logs are typically
 provided this way.  Do not use exclamation marks (``!'').  They mess up
@@ -6486,7 +6512,7 @@ the VLBA system's ability to parse the control files.  \schedb will die
 if you try.
 
 \rcwbox
-{Each of the 4 parameters takes a character string of up to 64
+{Each of the 4 parameters takes a character string of up to 128
 characters.}
 {Any text.}
 {Blank}
@@ -11753,10 +11779,12 @@ If not specified, twice the maximum bandwidth will be used, if
 \htmlref{{\tt BBFILTER}}{SP:BBFILTER} was specified.
 
 Note that the {\tt SAMPRATE} should not be less than 2 Mbps for the
-VLBA (may change with Mark5B).  That is the minimum track bit rate
-and the fan-in capability was never activated so lower sample rates
-cannot be recorded.
-
+VLBA (may change with Mark5C).  That is the minimum track bit rate for
+the old tape systems and for the Mark5A and the fan-in capability was
+never activated so lower sample rates cannot be recorded.  The user
+will need to specify the {SP: SAMPRATE} in such cases because the
+defaulting doesn't deal with this restriction.  It would be fixed, but
+the restriction will likely go away soon.
 
 \rcwbox
 {Sample rate in million samples per second.}
@@ -12668,6 +12696,24 @@ more information.
 \subsection{\label{SSEC:VER_9.1}Development Version 9.1}
 
 \begin{itemize}
+
+%  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
+
+\item Only print lines as long as needed in listing correlator parameters.
+Before trailing blanks were also written out and that became a problem 
+after lengthening the allowed number of characters for various notes.
+Feb. 3, 2010  RCW
+
+\item Change various format specifications to allow printing of 
+larger numbers for such items as the number of spectral channels.
+Feb. 2, 2010  RCW
+
+\item Change the meaning of CORREL=VLBA or SOCORRO to be the DiFX software
+correlator.  Add CORREL=FXCORR to mean the old hardware correlator, although
+that is about to be shut off for good.  Feb. 2, 2010  RCW
+
+\item Change length of NOTEn, COMMENT and CORNOTEn to 128 from 64.  Users
+were going over causing confusion.  Jan. 20, 2010  RCW.
 
 \item Change the VEX file name from xxxx.skd to xxxx.vex.  Dec. 4, 2009 RCW
 

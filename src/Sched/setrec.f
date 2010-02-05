@@ -42,8 +42,7 @@ C
          IF( BARREL(KS) .EQ. 'not_set' ) THEN
             IF( USEDISK(ISTA) ) THEN
                BARREL(KS) = 'roll_off'
-            ELSE IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1          CORREL(1:4) .EQ. 'VLBA' ) THEN
+            ELSE IF( CORREL(1:7) .EQ. 'FXCORR' ) THEN
                IF( FORMAT(KS)(1:4) .NE. 'VLBA' .OR. 
      1             CONTROL(ISETSTA(KS)) .EQ. 'VEX' ) THEN
                   BARREL(KS) = 'roll_off'

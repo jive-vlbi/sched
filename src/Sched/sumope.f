@@ -8,7 +8,7 @@ C
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER        LEN1, VLBOPE, IOERR, NCH, MJD
+      INTEGER        LEN1, VLBOPE, IOERR, NCH, MJD, I
       CHARACTER      PRTFILE*80, OPTEXT*255, OPSTAT*4
       CHARACTER      PDATE*(*)
       LOGICAL        EXISTS, RESTART
@@ -62,7 +62,7 @@ C     Give the rest of the cover information.
 C
       WRITE( ISUM, '( 1X, /, 2(2X,A,/), 1X,/, 2X,A, /, 1X,/, 4(2X,A,/),'
      1      //'1X,/, 4(2X,A,/), 1X,/, 2X,A,/, 1X,/, 4(2X,A,/) )' )
-     2      COVER
+     2      (COVER(I)(1:MAX(1,LEN1(COVER(I)))), I=1,MCOVER)
 C
 C     Write the cover letter if there is one.
 C

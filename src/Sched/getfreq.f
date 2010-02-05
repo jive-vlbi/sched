@@ -20,7 +20,7 @@ C
       LOGICAL           GOTKEYS
       PARAMETER         (MFRQV=150)
       INTEGER           KI(MFRQV)
-      CHARACTER         KC(MFRQV)*8, KCHAR*80
+      CHARACTER         KC(MFRQV)*8, KCHAR*256
       DOUBLE PRECISION  KD(2*MFRQV), ENDMARK
       SAVE              GOTKEYS, KI, KC, KD, ENDMARK, BLANK, ZZZZ
 C

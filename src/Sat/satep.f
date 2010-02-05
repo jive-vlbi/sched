@@ -8,10 +8,10 @@ C     The geocentric velocity is also returned to help with
 C     Doppler setting.
 C
 C     In the initial incarnation, the position is as seen from
-C     the Earth center.  The paralax effect should be added
+C     the Earth center.  The parallax effect should be added
 C     eventually.
 C
-C     March 2007:  I think paralax was added long ago.
+C     March 2007:  I think parallax was added long ago.
 C
 C     The spice subroutines will die without passing back error
 C     messages if there is a problem.  Hence there is no point
@@ -27,7 +27,10 @@ C     probably why it is not in the on-line system).  I don't
 C     actually know it is not in the on-line system, but comments
 C     in jplpo2.f say so.
 C
-
+C     The original version did not attempt to adjust for station motion.
+C     The code for doing the adjustment was provided by Bill Junor,
+C     Oct. 28, 2009.  Some rewriting, mostly to put in Bill's debug
+C     statements, was done Feb. 01, 2010. RCW.
 C
 C
 C     Initial version 2004 March 18.  R. C. Walker
@@ -39,7 +42,7 @@ C     rates and is taken to be the same as the scan start time.
 C     ISAT is the satellite number (as per SATINI).
 C     INSTRU is the instrument, probably 'VLBA'.  Not used for now.
 C     ISTA is the station number.  If 0, do geocentric.  If not,
-C     do paralax correction for this station.
+C     do parallax correction for this station.
 C
 C     Returned arguments are:
 C       SRA, SDEC are J2000 in radians.
@@ -84,6 +87,8 @@ C     For the station dependent rate calculation:
 C
       DOUBLE PRECISION  RHOE, SXDOT, SYDOT, SZDOT, OMEGAE
       DOUBLE PRECISION  XS, YS, ZS
+      DOUBLE PRECISION LSTIME, STHA, SRCEL, SRCAZ, STLATD, STLOND
+C
       PARAMETER  (OMEGAE=2.D0*PI*SIDR/86400.D0)
 C
       DATA             KERLOAD / MAXSAT*.TRUE. /
@@ -222,7 +227,7 @@ C
          DISTAU = DIST / 149.6D6
 C        
 C        Comparison with the planets section of SCHED shows agreement 
-C        of the paralax to within about an arc second.  I'm not sure
+C        of the parallax to within about an arc second.  I'm not sure
 C        what level of accuracy to expect from this calculation, but
 C        that does seem adequate for pointing.  But the derived 
 C        positions should not be used for correlation.  It is possible
@@ -245,14 +250,17 @@ C
          SDEC = ATAN2(Z,R)
       END IF
 C
-C     Write the results in various formats if in debug mode.
+C     Complain if the distance is clearly wrong.
 C
       IF( DIST .EQ. 0.D0 ) THEN
          CALL ERRLOG( 'SATEP: Zero distance to satellite?' )
       END IF
+C
+C     Write the results in various formats if in debug mode.
+C
       IF( SPDEBUG ) THEN
          WRITE(*,*) ' Distance km, au ', DIST, DISTAU
-         WRITE(*,*) ' Max paralax (arcsec): ', 
+         WRITE(*,*) ' Max parallax (arcsec): ', 
      1            6000.D0 * 3600.D0 / ( DIST * RADDEG )
          WRITE(*,*) ' RA, DEC radians:   ', SRA, '   ', SDEC
          WRITE(*,*) ' RA, DEC hr, deg:   ', 
@@ -260,6 +268,46 @@ C
          RAC = TFORM( SRA, 'T', 0, 2, 10, 'hms' )
          DECC = TFORM( SDEC, ' ', 1, 2, 10, 'd''"' )
          WRITE(*,*) ' RA, DEC hr, deg:   ', RAC, '   ', DECC
+C
+C        Add some debugging stuff from Bill Junor's version.
+C        None of the geometry calculations here are used in the
+C        calculations that follow for source positions etc.
+C
+C        Get the latitude, longitude of the station.
+C
+         STLATD = LAT(KSTA) 
+         STLOND = LONG(KSTA)
+C
+         WRITE(*,'( A, 2F10.4 )' )  '  STLATD, STLOND:', STLATD, STLOND
+C
+C        Calculate the Local Sidereal Time. 
+C        Remember W is negative longitude.
+C
+         LSTIME = GMST - LONG(KSTA)
+C
+C        Calculate the source Hour Angle.
+C
+         STHA = LSTIME - SRA
+C
+         WRITE(*,'( A, 2F10.4 )' )  '  LSTIME, STHA:', LSTIME, STHA
+C
+C        Calculate the elevation and azimuth of the source.
+C
+         SRCEL = ASIN( SIN(SDEC) * SIN(LAT(KSTA)) 
+     1                + COS(SDEC) * COS(LAT(KSTA)) * COS(STHA) )
+
+         SRCAZ = ACOS( SIN(SDEC) / (COS(SRCEL) * COS(LAT(KSTA)))
+     1                - TAN(SRCEL) * TAN(LAT(KSTA)) ) 
+C
+C        Write some results if in debug mode.
+C
+         WRITE(*,'( A, I4 )' ) 'Station # ', KSTA
+         WRITE(*,'( A, 2F10.4 )' )  '  STLAT, STLONG:', 
+     1                                 LAT(KSTA), LONG(KSTA)
+         WRITE(*,'( A, 3F14.4 )' )  
+     1                     '  ET, SRCAZ (deg), SRCEL (deg):  ', 
+     2                        ET, SRCAZ/RADDEG, SRCEL/RADDEG
+C
       END IF
 C
 C     Get the rates in the right format.  
@@ -292,15 +340,15 @@ C     But DX, DY, DZ are in km/s.
 C
          RHOE = SQRT(XS*XS + YS*YS + ZS*ZS) / 1000.0D0
 C
-C     *** Care with sense of longitude! LA is retrieved from catalog
-C     as 1.854 radians but it is 106.24560 degrees W.
+C        *** Care with sense of longitude! LA is retrieved from 
+C        catalog as 1.854 radians but it is 106.24560 degrees W.
 C
          SXDOT = -1.0D0 * OMEGAE *
      1           RHOE * COS(LAT(KSTA)) * SIN(GMST - LONG(KSTA))
-
+C
          SYDOT =          OMEGAE *
      1           RHOE * COS(LAT(KSTA)) * COS(GMST - LONG(KSTA))
-
+C
          SZDOT = 0.0D0
 C
 C     Make the correction. Get the sense correct.
@@ -346,8 +394,9 @@ C
 C     Write some results if in debug mode.
 C
       IF( SPDEBUG ) THEN
-         WRITE(*,'( A, 2F10.4 )' )  '  DRA, DDEC:', MDRA, MDDEC
-         WRITE(*,'( A, 2F10.4 )' )  '  SDRA SDDEC:', SDRA, SDDEC
+         WRITE(*,'( A, 3F15.4 )' ) '  ET, DRA, DDEC:', ET, MDRA, MDDEC
+         WRITE(*,'( A, 3F15.4 )' ) '  ET, SDRA, SDDEC:', 
+     1                                                  ET, SDRA, SDDEC
       END IF
 C
       RETURN
