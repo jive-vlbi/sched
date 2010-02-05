@@ -24,7 +24,7 @@ C
       PARAMETER         (MSETV=150 + MANT + 21*MCHAN)
       INTEGER           KI(MSETV)
       DOUBLE PRECISION  KD(2*MSETV), ENDMARK
-      CHARACTER         KC(MSETV)*8, KCHAR*80
+      CHARACTER         KC(MSETV)*8, KCHAR*256
       SAVE              KI, KD, KC, ENDMARK, BLANK
       SAVE              ZZZZ, ASTRO
 C ---------------------------------------------------------------

@@ -22,7 +22,6 @@ C
       REAL              XCHNEW, YCHNEW
       LOGICAL           FIRST, PLOTCONT, INTERACT
       CHARACTER         CH*1, CHN*1
-      DATA              FIRST / .TRUE. /
       SAVE              FIRST, PLOTCONT
 C
 C     For the station grid quality contour plot (when S typed)
@@ -37,6 +36,8 @@ C
       CHARACTER  GHLAT(NLAT)*9, GHLONG(NLONG)*10
       CHARACTER  MAPOUT*40
       SAVE       QUALITY, QLIMS
+C                                        DATA needs to be last.
+      DATA              FIRST / .TRUE. /
 C -------------------------------------------------------------------
 C     Set some parameters (now in common so don't use parameter
 C     or data statements).

@@ -33,7 +33,7 @@ C
       INTEGER           MLO, I, IPTR, MODE
       PARAMETER         (MLO = 25)
       INTEGER           KI(MLO), KEYPTR, VLBOPE
-      CHARACTER         KC(MLO)*8, KCHAR*80, TEXT*80, RESULT*256
+      CHARACTER         KC(MLO)*8, KCHAR*256, TEXT*80, RESULT*256
       DOUBLE PRECISION  KD(MLO*2), ENDMRK, BLANK
       LOGICAL           EXISTS
 C for commented out statement      INTEGER           LEN1

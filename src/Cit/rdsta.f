@@ -56,7 +56,7 @@ C
       INTEGER           MSP, I, I1, I2
       PARAMETER         (MSP = 500)
       INTEGER           KI(MSP), KEYPTR
-      CHARACTER         KC(MSP)*8, KCHAR*80
+      CHARACTER         KC(MSP)*8, KCHAR*256
       DOUBLE PRECISION  KD(MSP*2), ENDMRK
       LOGICAL           GOTKEYS, GOTXYZ, GOTLLH, WARNXYZ
       SAVE              KI, KC, KD, GOTKEYS, ENDMRK, WARNXYZ, LOCTST

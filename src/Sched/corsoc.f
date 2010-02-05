@@ -1,7 +1,11 @@
       SUBROUTINE CORSOC
 C
 C     Subroutine for SCHED, called by CORLST, that deals with correlator
-C     constraints specific to the Socorro VLBA correlator.
+C     constraints specific to the Socorro VLBA hardware correlator.  This
+C     is now out of date because that correlator is shut down as of late
+C     December 2009.  Changed the meaning of CORREL=SOCORRO or VLBA to
+C     be DIFX and added FXCORR to mean the hardware correlator, just in
+C     case someone wants it.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
@@ -15,8 +19,9 @@ C ----------------------------------------------------------------------
 C
 C     This routine is only for the SOCORRO VLBA correlator
 C
-      IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1   ( CORREL(1:4) .EQ. 'VLBA' .AND. LEN1( CORREL ) .EQ. 4 ) ) THEN
+C      IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
+C     1   ( CORREL(1:4) .EQ. 'VLBA' .AND. LEN1( CORREL ) .EQ. 4 ) ) THEN
+      IF( CORREL(1:6) .EQ. 'FXCORR' ) THEN
 C
 C        Do some initializations.
 C

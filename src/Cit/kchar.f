@@ -1,4 +1,4 @@
-      CHARACTER*80 FUNCTION KCHAR( NAME, NCH, UP, VALUE, KC, KI )
+      CHARACTER*256 FUNCTION KCHAR( NAME, NCH, UP, VALUE, KC, KI )
 C
 C     Function for SCHED to recover a character string from the KEYIN
 C     values array.  
@@ -13,14 +13,16 @@ C     Note:  Do not put this function within write statements.  At
 C     least on a SUN, you cannot have a write (the internal below)
 C     within a write.
 C
-      CHARACTER     NAME*(*), TEMP*80, KC(*)*(*)
+      INTEGER       MAXCHR
+      PARAMETER     (MAXCHR=256)
+      CHARACTER     NAME*(*), TEMP*(MAXCHR), KC(*)*(*)
       INTEGER       NCH, KI(*), I, I1, I2, KEYPTR
       DOUBLE PRECISION  VALUE(*)
       LOGICAL       UP
 C -----------------------------------------------------------------
 C     Protect against too long strings.
 C      
-      IF( NCH .GT. 80 ) THEN
+      IF( NCH .GT. MAXCHR ) THEN
          TEMP = 'KCHAR: Too many characters requested. '// NAME
          CALL ERROR( TEMP )
       END IF
@@ -35,7 +37,7 @@ C
 C
 C     Extract the string.
 C
-      WRITE( TEMP, '( 10A8 )' ) (VALUE(I),I=I1,I2)
+      WRITE( TEMP, '( 32A8 )' ) (VALUE(I),I=I1,I2)
 C
 C     Upcase, if requested.
 C

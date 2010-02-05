@@ -10,7 +10,7 @@ C     In all cases, this will not be the very first read (that got
 C     SCHEDULE) so the input KEYS should already be established.
 C
       DOUBLE PRECISION  KD(*)
-      CHARACTER         KC(*)*(*), SCHEDULE*80, KCHAR*80
+      CHARACTER         KC(*)*(*), SCHEDULE*80, KCHAR*256
       CHARACTER         RESULT*256
       INTEGER           KI(*), INSCH, IER, VLBOPE, IUSCH
 C --------------------------------------------------------------------

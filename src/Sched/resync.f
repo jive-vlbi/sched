@@ -173,7 +173,7 @@ C                 to get the sync time.
 C
                   TSADD = 0.D0
 C
-C                 Start with the VLBA correlator.
+C                 Start with the VLBA hardware correlator.
 C
                   IF( LSCN .EQ. 0 ) THEN
                      NEWSYNC = .TRUE.
@@ -183,8 +183,7 @@ C
      2                         NOREC(LSCN) .OR. 
      3                         SCNRCF
                   END IF
-                  IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1                CORREL(1:4) .EQ. 'VLBA' ) THEN
+                  IF( CORREL(1:7) .EQ. 'FXCORR' ) THEN
 C
 C                    Recording stopped or reconfigure happened while
 C                    recording.
@@ -235,7 +234,9 @@ C
                   ELSE
                      IF( USETAPE(ISTA) ) THEN
                         TSADD = 10.D0 / 86400.D0
-                     ELSE IF( CORREL(1:8) .EQ. 'VLBADIFX' ) THEN
+                     ELSE IF( CORREL(1:7) .EQ. 'SOCORRO' .OR.
+     1                        CORREL(1:4) .EQ. 'VLBA' .OR.
+     2                        CORREL(1:8) .EQ. 'VLBADIFX' ) THEN
                         TSADD = 0.D0
                      ELSE
                         TSADD = 1.D0 / 86400.D0

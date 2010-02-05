@@ -42,7 +42,7 @@ C
       CALL KEYADD( 'TANT2', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'FREQ', 0.D0, MAXCHN, KD, KC, KI )
       CALL KEYADD( 'BW', 0.D0, MAXCHN, KD, KC, KI )
-      CALL KEYCHR( 'COMMENT', ' ', 64, KD, KC, KI )
+      CALL KEYCHR( 'COMMENT', ' ', 128, KD, KC, KI )
       CALL KEYCHR( 'LINENAME', ' ', 8, KD, KC, KI )
       CALL KEYADD( 'DOPCAL', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'DOPPLER', UNSET, 1, KD, KC, KI )
@@ -137,10 +137,10 @@ C
       CALL KEYCHR( 'FAX', ' ', 64, KD, KC, KI )
       CALL KEYCHR( 'OBSPHONE', ' ', 64, KD, KC, KI )
       CALL KEYCHR( 'OBSMODE', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'NOTE1', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'NOTE2', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'NOTE3', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'NOTE4', ' ', 64, KD, KC, KI )
+      CALL KEYCHR( 'NOTE1', ' ', 128, KD, KC, KI )
+      CALL KEYCHR( 'NOTE2', ' ', 128, KD, KC, KI )
+      CALL KEYCHR( 'NOTE3', ' ', 128, KD, KC, KI )
+      CALL KEYCHR( 'NOTE4', ' ', 128, KD, KC, KI )
 C
 C     Correlator information.
 C
@@ -157,10 +157,10 @@ C
       CALL KEYCHR( 'CORSHIP2', ' ', 64, KD, KC, KI )
       CALL KEYCHR( 'CORSHIP3', ' ', 64, KD, KC, KI )
       CALL KEYCHR( 'CORSHIP4', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'CORNOTE1', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'CORNOTE2', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'CORNOTE3', ' ', 64, KD, KC, KI )
-      CALL KEYCHR( 'CORNOTE4', ' ', 64, KD, KC, KI )
+      CALL KEYCHR( 'CORNOTE1', ' ', 128, KD, KC, KI )
+      CALL KEYCHR( 'CORNOTE2', ' ', 128, KD, KC, KI )
+      CALL KEYCHR( 'CORNOTE3', ' ', 128, KD, KC, KI )
+      CALL KEYCHR( 'CORNOTE4', ' ', 128, KD, KC, KI )
 C
 C     Optimization and plotting.
 C

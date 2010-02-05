@@ -11,7 +11,7 @@ C
       INTEGER           MSKEY, MODE, INSCH, KEYPTR, I
       PARAMETER         (MSKEY= 300)
       INTEGER           KI(MSKEY)
-      CHARACTER         KC(MSKEY)*8, KCHAR*80
+      CHARACTER         KC(MSKEY)*8, KCHAR*256
       DOUBLE PRECISION  KD(2*MSKEY), ENDMARK
       LOGICAL           GOTKEYS
       SAVE              KI, KD, KC, ENDMARK, GOTKEYS

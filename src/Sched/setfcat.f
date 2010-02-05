@@ -118,7 +118,8 @@ C
             IFREQNUM(ICH,KS) = USEKF
          END DO
 
-***************  be sure to set something for all channels.
+C  partially complete coding here.
+C ***************  be sure to set something for all channels.
 
 
 C
@@ -192,7 +193,7 @@ C
       END DO
 C
 C ***********************  Allow for multiple IFREQNUMs.
-      write(*,*) 'setfcat: Allow multiple IFREQNUMs.'
+C      write(*,*) 'setfcat: Allow multiple IFREQNUMs.'
 C
       IF( IFREQNUM(1,KS) .GE. 1 ) THEN
          KF = IFREQNUM(1,KS)

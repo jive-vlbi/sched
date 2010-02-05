@@ -18,7 +18,7 @@ C
 C
       DOUBLE PRECISION  VALUE(*)
       INTEGER           KI(*), I1, KEYPTR, ISCN
-      CHARACTER         KC(*)*8, KCHAR*80
+      CHARACTER         KC(*)*8, KCHAR*256
 C ----------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'DIVERT: Starting' )
 C
