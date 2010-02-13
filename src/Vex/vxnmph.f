@@ -35,6 +35,9 @@ C
             IF( NETSIDE(ICH,KS) .EQ. 'L' ) LOSIDE = .TRUE.
          END IF
       END DO
+      write(*,*) 'vxnmph ', iph, ks, ' ''', vxnetsid(1,iph), 
+     1  ''',  ''', netside(1,ks),
+     1  ''', ''', upside, ''',  ''', loside, ''' '
       IF( UPSIDE .AND. LOSIDE ) THEN
          NAME(1:3) = 'Dsb'
       ELSE
@@ -43,7 +46,7 @@ C
          ELSE IF( LOSIDE ) THEN 
             NAME(1:3) = 'Lsb'
          ELSE
-            CALL ERRLOG('NAME: No sideband set ')
+            CALL ERRLOG('VXNMPH: No sideband set ')
          END IF
       END IF
 C

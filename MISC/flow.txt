@@ -6,6 +6,9 @@ Trying to do more Aug 29, 2007.
 I'm mainly emphasizing where the different subroutines fit 
 into the overall picture.
 
+Feb. 8, 2010 filling in Vex part in preparation for having to 
+spend more effort on that.  Warning other parts may now be 
+a bit out of date as they haven't been updated for a long time.
 
 -------------------------------------------------------------------
 Top level (see later for details of each called routine):
@@ -255,11 +258,99 @@ PLOTTER:   Beginning of plot stuff.  This will be big.
 **********  Fill this in eventually.
 
 -------------------------------------------------------------------
-Details:  Write the Vex file.  Cormac's part.
+Details:  Write the Vex file.  Cormac's part.  There are 77 .f files
+          in the vex section at one subroutine per .f.  Of those, 25
+          are functions so won't be found by a grep CALL *.f
+          The functions are:  vxcfan  vxcfbb  vxcfda  vxcffq  vxcfhp
+              vxcfif  vxcfph  vxcfpo  vxcfrl  vxcfsi  vxcftr  vxgtst
+              vxnhds  vxnman  vxnmbb  vxnmda  vxnmfq  vxnmhp  vxnmif
+              vxnmph  vxnmpo  vxnmpr  vxnmrl  vxnmsi  vxnmtr  
+          Seeking on " VX" can find most of these and subroutine calls.
 
-VXWRT:
+VXWRT:     Write the VEX file.
+  VXVLBS:    Obsolete: Find if setups different between VLBA stations.
+  VXMODE:    Count the different modes.  Store setups used in each mode.
+             Finds the different $BLOCKS per antenna for each mode.
+  VXSORT:    Go through setup groups and find how many sections of 
+             each type (et FQ) are needed.  (Could frequency groups 
+             simplify this?  They came later.)
+             Called once per type (FQ, IF, BB, TR, HP, PO, PL PH)
+    VXCFFQ:
+    VXDFIF:
+    VXCFBB:
+    VXCFTR:
+    VXCFHP:
+    VXCFPH:
+    VXCFPO:
+    VXCFRL:
+    VXNMXX:    Set up a name for a block.
+    VXGTST:    Returns sched setup corresponding to VEX mode.
+  VXTELS:   Finds number of sections of type XX (eg DA) where def 
+            sections are refernced by station, not mode.  Called
+            for DA, SI, AN.
+    VXCFDA:    Compares DA blocks
+    VXCFSI:    Compares SI blocks
+    VXCFAN:    Compares AN blocks
+    VXNMXX:    Provides a unique name.
+      VXNMHP:    Name HP block (head position)
+        VXNHDS:    Return number of heads used.
+      VXNMRL:    Name roll block
+      VXNMPO:    Name the PO block (pass order)
+        VXNHDS:    Return number of heads used.
+      VXNMPH:    Name the PH (says HP) block (pulse cal).
+      VXNMFQ:    Name a frequiency block
+      VXNMIF:    Name an IF block.   
+      VXNMBB:    Name a BBC block
+      VXNMTR:    Returns name of tracks block.
+        VXS2MD:    Figures out S2 mode name.
+          VXS2VL:    Figures out S2 mode name.
+          VXS2DF:    Sets default S2 mode name.
+      VXNMDA:    Name a DA (data aquisition) block
+      VXNMSI:    Name an SI block (what is it?).  Name = station name.
+      VXNMAN:    Name an AN block.
+      VXUNQL:     Make names unique, and check for illegal characters.
+  VXFQVX:   Setting up refernces to allow for scan dependent frequency
+            and phase cal (could be simplified now?).
+  VXTONE:   Sets up names and values of tones needed. (simplify now?).
+    VXGTST:   Returns sched setup corresponding to VEX mode.
+  VXSCNS:   More for "main hurdle" of dealing with scan dependent
+            frequencies and pcal.  But now have frequency and pcal 
+            groups so might simplify.
+  VXTONE:   Called again after VXSCNS.
+  VXNMPR:   Make name for PR (procedures) block IXX.
+  VXUNQL:   Make names unique, and check for illegal characters.
+    VXSTNM:   Check for valid Vex string.
+  VXDEFS:   Write the setups.
+    VXWRGL:   Write GL def. (Global section)
+    VXWREX:   Write EX def. (Experiment section)
+      VXSTNM:   Check string is valid VEX string for def/ref name.
+      VXSTKY:   Check string if valid VEX string for a key value
+      VXCOVR:   Write cover letter
+    VXWRMD:   Write MD def. (Mode)
+      VXGTST:   Returns sched setup corresponding to VEX mode.
 
-**********  Fill this in eventually.
+*********  need to check for called routines below here.
+
+    VXWRST:   Write ST def. (Station)
+    VXWRPR:   Write PR def. (Procedures)
+    VXWRSI:   Write SI def. (Site)
+      VXSTKY:
+    VXWRAN:   Write AN def. (Antenna)
+    VXWRDA:   Write DA def. (DAR)
+    VXWRSU:   Write SU def. (Source)
+    VXWRFQ:   Write FQ def. (Frequency)
+    VXWRIF:   Write IF def. (IF)
+    VXWRBB:   Write BB def. (BBC)
+    VXWRPH:   Write PH def. (Pulse cal)
+    VXWRTR:   Write TR def. (Track)
+    VXWRHP:   Write HP def. (?)  NOTE, there are both PH and HP
+    VXWREX:   Write EX def.
+    VXWREX:   Write EX def.
+    
+
+  VXSCH:    Write the schedule.
+
+
 
 -------------------------------------------------------------------
 Details:  Write the flagging table.

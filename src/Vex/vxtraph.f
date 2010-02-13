@@ -81,6 +81,7 @@ C
 C        IF names can be obtained from VXNMPH
 C        Again 2nd par set .TRUE. to use VXLINK frequencies
 C
+         write(*,*) 'vxtraph ', nphvex, iscn, ixtra
          PHLINK(NPHVEX) = VXNMPH( NPHVEX, .TRUE. )
          CALL VXUNQL( NPHVEX, PHLINK )
 C     
