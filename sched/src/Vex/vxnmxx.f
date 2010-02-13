@@ -26,6 +26,7 @@ C
       ELSE IF( BLOCK .EQ. 'PO' ) THEN
          XXLINK(NXX) = VXNMPO( NXX )
       ELSE IF( BLOCK .EQ. 'PH' ) THEN
+       write(*,*) 'vxnmxx ', block, nxx
          XXLINK(NXX) = VXNMPH( NXX, .FALSE. )
       ELSE IF( BLOCK .EQ. 'FQ' ) THEN
          XXLINK(NXX) = VXNMFQ( NXX, .FALSE. )
