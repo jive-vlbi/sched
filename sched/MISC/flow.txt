@@ -258,9 +258,13 @@ PLOTTER:   Beginning of plot stuff.  This will be big.
 **********  Fill this in eventually.
 
 -------------------------------------------------------------------
-Details:  Write the Vex file.  Cormac's part.  There are 77 .f files
-          in the vex section at one subroutine per .f.  Of those, 25
-          are functions so won't be found by a grep CALL *.f
+Details:  Write the Vex file.  Originally written by Huib 
+          vanLangevelde, then supported by Cormac Reynolds and
+          Friso Olnon..  
+
+          There are 77 .f files in the vex section at one 
+          subroutine per .f.  Of those, 25 are functions so won't 
+          be found by a grep CALL *.f
           The functions are:  vxcfan  vxcfbb  vxcfda  vxcffq  vxcfhp
               vxcfif  vxcfph  vxcfpo  vxcfrl  vxcfsi  vxcftr  vxgtst
               vxnhds  vxnman  vxnmbb  vxnmda  vxnmfq  vxnmhp  vxnmif
@@ -272,7 +276,7 @@ VXWRT:     Write the VEX file.
   VXMODE:    Count the different modes.  Store setups used in each mode.
              Finds the different $BLOCKS per antenna for each mode.
   VXSORT:    Go through setup groups and find how many sections of 
-             each type (et FQ) are needed.  (Could frequency groups 
+             each type (eg FQ) are needed.  (Could frequency groups 
              simplify this?  They came later.)
              Called once per type (FQ, IF, BB, TR, HP, PO, PL PH)
     VXCFFQ:
@@ -316,6 +320,20 @@ VXWRT:     Write the VEX file.
   VXSCNS:   More for "main hurdle" of dealing with scan dependent
             frequencies and pcal.  But now have frequency and pcal 
             groups so might simplify.
+    VXGTST:   Returns sched setup corresponding to VEX mode.
+    VXTRAMD:  Make a new mode.
+      VXUNQL:   Make names unique, and check for illegal characters.
+      VXTRAFQ:  Adds new FQ defs when new freq. detected.
+      VXTON2:   Number of tones in each channel.
+      VXTRAPH:  Adds definitions because new freq give new pcal
+        VXUNQL:   Make names unique, and check for illegal characters.
+        VXCFPH:   Tests if ph block in 2 SCHED sets are identical.	
+          VXTON2:   Number of tones in each channel.
+        VXNMPH:    Name the PH (says HP) block (pulse cal).
+      VXTRAIF:    Adds extra IF defs because of change in pcal.
+        VXCFIF:     Check of 2 IF blocks are the same.
+        VXUNQL:     Make names unique, and check for illegal characters.
+        VXNMIF:     Name an IF block.   
   VXTONE:   Called again after VXSCNS.
   VXNMPR:   Make name for PR (procedures) block IXX.
   VXUNQL:   Make names unique, and check for illegal characters.
@@ -328,30 +346,39 @@ VXWRT:     Write the VEX file.
       VXCOVR:   Write cover letter
     VXWRMD:   Write MD def. (Mode)
       VXGTST:   Returns sched setup corresponding to VEX mode.
-
-*********  need to check for called routines below here.
-
     VXWRST:   Write ST def. (Station)
     VXWRPR:   Write PR def. (Procedures)
+      VXGTST:   Returns sched setup corresponding to VEX mode.
     VXWRSI:   Write SI def. (Site)
-      VXSTKY:
+      VXSTKY:   Check string if valid VEX string for a key value
     VXWRAN:   Write AN def. (Antenna)
     VXWRDA:   Write DA def. (DAR)
     VXWRSU:   Write SU def. (Source)
+      VXSTNM:   Check string is valid VEX string for def/ref name.
+      VXSUDT:   Write detailed source parameters.
     VXWRFQ:   Write FQ def. (Frequency)
+      VXSTLI:   Write comment about stations used by a def.
     VXWRIF:   Write IF def. (IF)
+      VXSTLI:   Write comment about stations used by a def.
     VXWRBB:   Write BB def. (BBC)
+      VXSTLI:   Write comment about stations used by a def.
     VXWRPH:   Write PH def. (Pulse cal)
+      VXSTLI:   Write comment about stations used by a def.
     VXWRTR:   Write TR def. (Track)
+      VXSTLI:   Write comment about stations used by a def.
+        VXS2MD:    Figures out S2 mode name.
+          VXS2VL:    Figures out S2 mode name.
+          VXS2DF:    Sets default S2 mode name.
     VXWRHP:   Write HP def. (?)  NOTE, there are both PH and HP
-    VXWREX:   Write EX def.
-    VXWREX:   Write EX def.
-    
-
+      VXNHDS:   Return number of heads.
+      VXSTLI:   Write comment about stations used by a def.
+    VXWRPO:   Writes the pass order PO section.
+      VXSTLI:   Write comment about stations used by a def.
   VXSCH:    Write the schedule.
-
-
-
+    VXGTST:   Returns sched setup corresponding to VEX mode.
+    VXSCHK:   Checks scan related timing issues.
+    VXSTNM:   Check string is valid VEX string for def/ref name.
+    VXTRAN:   Get time to copy from MK5 to linux disk (grab related)
 -------------------------------------------------------------------
 Details:  Write the flagging table.
 
