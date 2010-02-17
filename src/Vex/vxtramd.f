@@ -40,16 +40,12 @@ C
 C     Need first of the ISET SETUPS that is valid for this scan
 C
       ISET = -1
-      write(*,*) 'vxtramd 1', imode, ifs, ips, iscn, isetfl
       DO ISTA = 1, NSTA
-        write(*,*) 'vxtramd 2', ista, stascn(iscn,ista), 
-     1        nsetup(iscn,ista)
          IF( STASCN(ISCN,ISTA) ) THEN
             ISET = NSETUP(ISCN,ISTA)
             GOTO 100
          END IF
       END DO
-      write(*,*) 'vxtramd 3', iset
       IF( ISET .LT. 0 ) CALL ERRLOG('VXTRAMD: Scan not observed')
   100 CONTINUE
 C     
@@ -229,8 +225,6 @@ C
 C     
 C        carefully setup new modes
 C
-       write(*,*) 'vxtramd calling vxtraph', iscn',
-     1      'LOOK FOR A PLACE WHERE AN EMPTY SCAN IS A PROBLEM'
          CALL VXTRAPH( ISCN, NMDVEX, IMODE, PHTONE,
      1       NTMP, NTONTMP, ITONTMP )
 C     

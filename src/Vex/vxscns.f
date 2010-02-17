@@ -24,6 +24,7 @@ C
 C      INTEGER JSCN, RECSCN
       INTEGER ISTA, NMDORI, VXGTST, ISET
       CHARACTER CALSET*4, CALSCN*4
+      LOGICAL SKIPPED
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'VXSCNS: Starting.' )
 C
@@ -57,9 +58,15 @@ C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
 C        mode can later be replaced with the mode of the previous 
 C        recording scan, or can simply be skipped when writing the
 C        scans.
+C        Also do nothing if this scan is skipped (like if all antennas
+C        are down.
 C
+         SKIPPED = .TRUE.
+         DO ISTA = 1, NSTA
+            IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
+         END DO
          ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
+         IF( .NOT. SKIPPED .AND. FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
 C
 C          The VEX modes are the same across antennas, but some
 C          antennas may join later, so find the "oldest" freq mode
@@ -96,7 +103,8 @@ C                 END IF
               ENDIF
            END DO
 C
-C          In case no station is recording this could have resulted in IFS=0, IPS=0
+C          In case no station is recording this could have 
+C          resulted in IFS=0, IPS=0
 C
            IF( IPS .EQ. 0 ) IPS = 1
            IF( IFS .EQ. 0 ) THEN

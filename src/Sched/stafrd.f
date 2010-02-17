@@ -1,5 +1,10 @@
       SUBROUTINE STAFRD( ISCN, ISTA, IE, DFRDX, DFRDY, DDELDX, DDELDY )
 C
+C     This looks like "projectus interruptus".  It is not called from
+C     anywhere that I found in a quick look in Feb. 2010 and was last
+C     modified in 2008.  So keep it here in case I remember what was
+C     up, but don't worry about it.
+C
 C     Subroutine for to give the numbers for plotting the residual
 C     fringe rates and delays from 1 arcsecond offsets in X and Y.
 C
