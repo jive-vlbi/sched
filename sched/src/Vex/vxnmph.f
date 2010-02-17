@@ -35,9 +35,6 @@ C
             IF( NETSIDE(ICH,KS) .EQ. 'L' ) LOSIDE = .TRUE.
          END IF
       END DO
-      write(*,*) 'vxnmph ', iph, ks, ' ''', vxnetsid(1,iph), 
-     1  ''',  ''', netside(1,ks),
-     1  ''', ''', upside, ''',  ''', loside, ''' '
       IF( UPSIDE .AND. LOSIDE ) THEN
          NAME(1:3) = 'Dsb'
       ELSE
