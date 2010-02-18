@@ -62,7 +62,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\ DEVELOPMENT VERSION 9.1}
+\title{THE \schedb USER MANUAL \\  VERSION 9.1}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -103,9 +103,9 @@ anonymous ftp at \htmladdnormallink{{\sl ftp.aoc.nrao.edu}}
 For comments and questions, contact Craig Walker at cwalker@nrao.edu
 or, for EVN, Mark IV and VEX format issues, Antonios Polatidis at
 polatidis@jive.nl.  \schedb is written and supported by Craig Walker
-of NRAO, Huib van Langevelde (originally), Cormac Reynolds, and
-Antonios Polatidis (now) of JIVE, and Franco Tinarelli of CNR in
-Bologna.
+of NRAO, Huib van Langevelde (originally), Cormac Reynolds, Antonios
+Polatidis, and Friso Olnon (now) of JIVE, and Franco Tinarelli of CNR
+in Bologna.
 
 \tableofcontents
 % \listoftables
@@ -620,7 +620,8 @@ recording systems.  Note that many old files, often used as templates,
 contain tape initialization sections.  These should be removed.
 
 \item[\htmlref{Reference Pointing Control File}{SEC:REFPOINT}:]
-\schedb can insert scans for reference pointing at high frequencies on
+\schedb ca
+n insert scans for reference pointing at high frequencies on
 the VLBA and VLA.  This file contains information needed to control
 that function.  It will only be of interest for observations at 43 GHz
 on the VLA and at 86 GHz on the VLBA.  The standard reference pointing
@@ -2024,22 +2025,25 @@ written for the VLBA.  A few other sites (VLA, Green Bank, and one of
 the systems at Effelsberg) have such systems to control their VLBI
 hardware.  Systems controlled by the VLBA software always consist of
 VLBA data aquisition racks (DAR --- BBCs, formatter etc) and VLBA tape
-recorder(s) or Mark5 disks.  During 2008, new Digital Backends (DBE) will
-be introduced on the VLBA, but the implications for \schedb are not yet
-clear.
+recorder(s) or Mark5 disks.  During 2010, new Digital Backends (RDBE)
+will be introduced on the VLBA, but the implications for \schedb are
+not yet clear.
 
 The VEX option for {\tt CONTROL} causes \schedb to generate a schedule
 file in the VEX format, as does the \htmlref{{\tt DOVEX}}{MP:DOVEX}
-main schedule input parameter.  This is the schedule distribution file
-format developed mainly for the PC Field System (PCFS) and the Mark~IV
-correlators, although it could be used by other systems.  The PCFS,
-running on Linux PCs, is used to control VLBA, VLBA4, Mark~IV, S2, and
-MARK5 VLBI hardware at many non-VLBA stations including all of the
-EVN.  It is the descendent of, and replacement for, the control system
-for Mark~III systems.  Sometimes this system is refered to as FS9, for
-``Field System 9'', refering to the earliest version that could handle
-VEX input.  Use of the VEX file to control the new VLBA software
-correlator is being considered.
+main schedule input parameter (now the default).  This is the schedule
+distribution file format developed mainly for the PC Field System
+(PCFS) and the Mark~IV correlators.  It is now used by the DiFX 
+software correlator in use at the VLBA and other places, so it is
+now needed by most if not all projects.  Eventually it will also
+be used by the VLBA stations.
+
+The PCFS, running on Linux PCs, is used to control VLBA,
+VLBA4, Mark~IV, S2, and MARK5 VLBI hardware at many non-VLBA stations
+including all of the EVN.  It is the descendent of, and replacement
+for, the control system for Mark~III systems.  Sometimes this system
+is refered to as FS9, for ``Field System 9'', refering to the earliest
+version that could handle VEX input.
 
 Systems controlled by the PCFS can consist of a VLBA, VLBA4 or Mark~IV
 DAR connected to a VLBA4, VLBA, Mark~IV, S2, or Mark5 recorder.  Each
@@ -2135,16 +2139,14 @@ for the telescope, data acquisition system and recorder.
 
 \schedb produces VEX files with ``adaptive'' recorder control that enables
 continuous recording on PCFS controled telescopes, but can only
-be correctly interpreted by FS9.3.11 (and higher).
+be correctly interpreted by FS9.3.11 (and higher).  This aided the 
+VLBA hardware correlator in synchronizing playback, but is no longer
+of much interest as the sync time with Mark5 disk systems and current
+correlators, including the DiFX software correlator on the VLBA, do not
+take more than a second to sync.
 
-In order to cause \schedb to write VEX files, the user must either
-include in the schedule one telescope for which {\tt CONTROL = VEX} is
-specified in the \htmlref{station catalog}{SEC:STACAT} or must specify
+\schedb now writes VEX files by default.  It can be prevented using
 the input parameter \htmlref{{\tt DOVEX}}{MP:DOVEX}.
-Some example schedules that produce VEX files are included with the
-\schedb distribution and are located in the {\sl \$SCHED/examples}
-subdirectory.  They are called {\sl egiv.key}, {\sl egvsop.key}, and
-{\sl evn\_*.key}.
 
 Mark~IV (MkIV) telescopes are characterized by {\tt DAR = MKIV} in the
 \htmlref{station catalog}{SEC:STACAT} and can only be requested to
@@ -2917,6 +2919,13 @@ order of parameters within a group (between ``/''s) is not significant.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
+Note that much of what is below applies to the old VLA system.  VLBI
+on the EVLA with the WIDAR correlator has not yet been implemented and
+\schedb does not have the ability to write EVLA control files.
+Most likely, control of VLBI at the VLA will be based on the VEX files
+and a translator that makes the VLA specific files.  This section will
+be updated when this appears. 
+
 \schedb can be used to schedule essentially all types of VLBI
 observations on the VLA.  It can also be used instead of {\sc OBSERVE}
 to schedule pure VLA observations involving a limited subset of the
@@ -2999,6 +3008,14 @@ on the EVLA correlator.  So control is likely to be different.
 
 
 \subsection{\label{SSEC:VLAVLBI}VLBI at the VLA}
+
+Note that many of the details of what is below applies to the old VLA
+system which is no longer in use.  VLBI on the EVLA with the WIDAR
+correlator has not yet been implemented and \schedb does not have the
+ability to write EVLA control files.  Most likely, control of VLBI at
+the VLA will be based on the VEX files and a translator that makes the
+VLA specific files.  This section will be updated when this appears.
+
 
 For much detailed information on VLBI at the VLA, follow the links to
 the \htmladdnormallink{VLBI at the VLA guide}
@@ -3328,6 +3345,11 @@ group   2 repeat 16
 
 \subsection{\label{SSEC:VLAONLY}VLA-Only Project Example}
 
+\schedb cannot be used for scheduling the EVLA (yet anyway) and the 
+old VLA system has been turned off.  So the following section is not
+of much use now.  Once VLBI at the EVLA has been established, the 
+capabilities to schedule EVLA runs with \schedb will be revisited.
+
 This second VLA example demonstrates the use of \schedb to schedule a
 pure VLA project.  The \schedb input for VLA observations is very much
 like that for VLBI observations.  There are some parameters provided,
@@ -3497,6 +3519,10 @@ station  = 'VLA'  /
 
 \subsection{\label{SSEC:VLAPAR}Parameters Specific to the VLA}
 
+The VLA capabilities in SCHED are for the old VLA system that has
+been shut down.  Stay tuned for instructions related to running
+the EVLA.
+
 This sections gives a brief description of each of the parameters
 available to \schedb that are specifically for VLA observations or
 are especially useful for VLA observations.  More general purpose
@@ -3655,6 +3681,9 @@ the VLA B and D IFs.
 \end{list}
 
 \subsection{\label{SSEC:VLASTDBD}VLA Standard Bands.}
+
+All of the below will change with the EVLA, which can reach just about
+any frequency.  The following is basically obsolete.
 
 A total of 19 standard observing bands are defined at the VLA.  All
 projects should specify one of these bands, even when frequencies will
@@ -5108,40 +5137,44 @@ only "EXACT" will mean to do something different from the default.}
 
 \subsubsection{\label{MP:CORCHAN}{\tt CORCHAN}}
 
-{\tt CORCHAN} specifies the number of spectral channels per
-baseband channel (one polarization component) that the correlator
-will write.  The VLBA correlator will typically make 128 channel
+{\tt CORCHAN} specifies the number of spectral channels per baseband
+channel (one polarization component) that the correlator will write.
+The VLBA correlator (both old and new) will typically make 128 channel
 spectra which are then channel averaged on-line for continuum
 observations.  The typical number of output channels for continuum
-data is 16 per baseband.  Over averaging can cause loss of amplitude
-due to ``delay smearing'' --- the effect of large phase slopes
-across the channels going into an average.  Corrections for this
-effect are made in AIPS, but the corrections are probably not
+data is 16 per baseband.  Over averaging can cause loss of
+amplitude due to ``delay smearing'' --- the effect of large phase
+slopes across the channels going into an average.  Corrections for
+this effect are made in AIPS, but the corrections are probably not
 perfect.  Over averaging also can lead to SNR loss when bandpass
-calibration is done.  This is because edge channels are discarded
-as part of bandpass calibration because of the frequency shifts
-required to adjust for the effects of the fringe rotators (doppler
-effect, essentially).  It is probably wise to keep a minimum of
-16 channels and keep the channel bandwidth less than 0.5 MHz.  The
-latter constraint, due to possible delay errors, suggests that
-observations with 16 MHz BBC bands should use 32 output channels.
+calibration is done.  This is because edge channels are discarded as
+part of bandpass calibration because of the frequency shifts required
+to adjust for the effects of the fringe rotators (doppler effect,
+essentially).  It is wise to keep a minimum of 16 channels
+and keep the channel bandwidth less than 0.5 MHz.  The latter
+constraint, due to possible delay errors, suggests that observations
+with 16 MHz BBC bands should use 32 output channels.
 
-For spectral line observations, up to 1024 spectral channels per
-baseband channel can be provided in parallel-hand-only correlation mode
-and up to 128 channels in full polarization mode.  Requesting too
+For spectral line observations, the DiFX correlator can do a vary large
+number of channels - "it's just software".  But excessive numbers
+of channels lead to excessive output data rates and data set sizes.
+Up to 4096 channels per baseband channel are supported normally and 
+up to 32768 channels can be supported if needed and justified.  There
+are no special restrictions in full polarization mode.  The 32768 limit
+is set by the AIPS postprocessing path.  Requesting too
 many channels can cause the data sets to be so large as to be
 difficult to impossible to manage.  Also, the combination of the
-average time, the number of channels, and the number of baselines
-must be such that the output data rate is less than 0.5 Mbyte/sec.
-The data rate in bytes/sec is given APPROXIMATELY as
+average time, the number of channels, and the number of baselines must
+be such that the output data rate is less than 10 Mbyte/sec.  That is
+per second of observe time.  The
+data rate in bytes/sec is given APPROXIMATELY as
 
-    4 * Ns * (Ns + 1) * Nc * Nsp * P * Su / Tavg
+    4 * Ns * (Ns + 1) * Nc * Nsp * P / Tavg
 
  where Ns   = number of stations
        Nc   = number of (BaseBand) channels (1, 2, ... 16)
        Nsp  = spectral resolution (8, 16, 32 ... 512)
        P    = 2 for polarization, 1 for none
-       Su   = speed up factor (1, 2, 4)
        Tavg = time average in seconds
 
 Note the correlation parameters {\tt CORAVG, CORCHAN, 
@@ -5587,31 +5620,23 @@ affect the whole schedule.
 
 \subsubsection{\label{MP:DOVEX}{\tt DOVEX}}
 
-{\tt DOVEX} tells \schedb to write a VEX format output file.  VEX is
-the format used by PCFS, the NASA/Goddard field system that controls
-EVN, geodetic and other stations. It will also be used by MkIV correlators
-(under construction).  A VEX file is only required if a station
-controlled by PCFS is included or if the observation is to be
-processed on a correlator that requires a VEX file.  Pure VLBA or VLBA
-plus other stations that use VLBA control files (VLA, EB\_VLBA,
-GB\_VLBA) do not require a VEX file.
+{\tt DOVEX} tells \schedb to write a VEX format output file. It is now
+the default so the parameter can be used to turn off writing of the
+VEX file.  VEX is the format originally used by PCFS, the NASA/Goddard
+field system that controls EVN, geodetic and other stations. It is now
+used to control most correlators including the VLBA and other DifX
+correlators, the JIVE correlator and the geodetic correlators based on
+the Haystack design.  VEX files will also eventually be used for
+control of the VLBA stations and the EVLA for VLBI.  So a VEX file is
+required for essentially all VLBI observations now.
 
-If any station in the schedule requires a VEX file, as specified
-in the CONTROL input in the station catalog, DOVEX will be set
-automatically.  The only occasions in which DOVEX will need to
-be specified by the user are those when an observation with no
-VEX stations is to be correlated at a VEX driven correlator.  This
-is likely to be rare. Note that \schedb should
-not be used to prepare observations that are to be correlated at a
-MkIII correlator (e.g.\ Bonn), because it doesn't produce the proper
-Mark~III ``.drg file''.
 
 \rcwbox
 {None.}
 {No augument required.  If one given, DOVEX will be false.}
-{DOVEX will be false unless a VEX station is found.}
+{DOVEX will be true unless given a non-zero argument.}
 {Only one value used --- the last.}
-{{\tt DOVEX}}
+{{\tt DOVEX=-1 --- to turn VEX outputoff}}
 
 
 \subsubsection{\label{MP:DUR}{\tt DURation}}
@@ -5639,9 +5664,11 @@ actual time that recording starts is adjusted further with
 \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} and \htmlref{{\tt PRESTART}}
 {MP:PRESTART}.  {\tt PRESTART}, {\tt MINPAUSE}, and {\tt PRESTART}
 allow the user to start recording early to give the correlator
-a chance to synchronize before the start of good data.  They also
+a chance to synchronize before the start of good data.  This should no
+longer be needed for correlators currently in use.  These parameters also
 can help prevent short stoppages which can cause problems
-with playback.  See the descriptions of those parameters for more
+with playback. Again, this is not really a problem with the disk
+systems like Mark5.   See the descriptions of those parameters for more
 information.  The \schedb defaults are generally reasonable so, if
 you are not an experienced user who wants to exercise fine control
 of recording management, don't worry about these parameters.
@@ -7586,7 +7613,10 @@ parameters \htmlref{{\tt GAP}}{MP:GAP}, \htmlref{{\tt
 PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE}
 are really better suited to achieve the desired results.  Because this
 is an outdated parameter, the discussion below has not been changed to
-reflect the change from tapes to disk and eVLBI.
+reflect the change from tapes to disk and eVLBI.  In fact, with the
+advent of the VLBA DiFX correlator (other correlators already synced
+quickly) and Mark5 recording systems, the need to prevent short stops
+and to allow the correlators time to sync is basically gone.
 
 {\tt PRESCAN} specifies a time by which to offset the start of VLBI
 tape motion from what would otherwise have been the start of the scan
@@ -7642,6 +7672,10 @@ on tape stop time given in the section on parameter \htmlref{{\tt GAP.}}
 
 \subsubsection{\label{MP:PRESTART}{\tt PRESTART}}
 
+Note that with all correlators now able to sync quickly,
+the need to adjust start times to allow for synchronization is
+basically gone.
+
 {\tt PRESTART} gives a time by which to start the recording at a
 site before the nominal start time as established by \htmlref{{\tt
 START}}{MP:START}, \htmlref{{\tt GAP}}{MP:GAP}, \htmlref{{\tt
@@ -7670,11 +7704,12 @@ a warning if this condition is violated.
 Starting the recording early allows time for the correlator to
 synchronize the inputs from different stations before the start of
 good data.  Anytime the recording stops, the correlator takes time to
-resync.  On the VLBA correlator, that time is empirically about 8, 13,
-and 25 seconds for speedup factors 1, 2 and 4 respectively.  Therefore
-it is best to keep recording through short gaps.  On other correlators
-playing Mark5 media, sync is rapid (10s at JIVE and of order 1 second at
-the MarkIV correlators) so these concerns are not so great.
+resync.  On the old hardware VLBA correlator, that time is empirically
+about 8, 13, and 25 seconds for speedup factors 1, 2 and 4
+respectively.  Therefore it is best to keep recording through short
+gaps.  On other correlators playing Mark5 media, sync is rapid (10s at
+JIVE and of order 1 second at the MarkIV correlators) so these
+concerns are not so great.
 
 One exception when it may be a good idea to stop recording is when
 there will be a formatter reconfigure.  These happen when the internal
@@ -8675,6 +8710,10 @@ ignored.
 
 \subsubsection{\label{MP:VLAINTEG}{\tt VLAINTEG}}
 
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
+
 {\tt VLAINTEG} is used to set non-standard integration times in VLA
 schedules.  This would be useful mainly to influence the speed with
 which the system phases up.  The argument is in seconds.  The default
@@ -8690,6 +8729,10 @@ after a {\tt VLAINTEG} is specified.
 
 
 \subsubsection{\label{MP:VLAMODE}{\tt VLAMODE}}
+
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
 
 {\tt VLAMODE} gives the VLA observing mode.  The valid options are:
 
@@ -8729,6 +8772,10 @@ Consult VLA documentation for details.
 {{\tt VLAMODE='VX'}}
 
 \subsubsection{\label{MP:VLAPEAK}{\tt VLAPEAK}}
+
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
 
 {\tt VLAPEAK} sets the character to use in the VLA observing deck
 ({\sl ...obs.y} file) to control the use of pointing corrections
@@ -8864,8 +8911,11 @@ reference pointing.}
 
 \subsubsection{\label{MP:VLATSYS}{\tt VLATSYS and VLANTSYS}}
 
-The VLA on-line system normally applies a
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
 
+The VLA on-line system normally applies a
 Tsys-based amplitude correction to data from the VLA correlator.  In
 order to calibrate 3-antenna and phased VLA data taken with the VLA as
 a VLBI station, it is necessary to have raw correlation coefficients.
@@ -8895,6 +8945,10 @@ parameter)}
 
 \subsubsection{\label{MP:VLAPSRC}{\tt VLAPSRC}}
 
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
+
 {\tt VLAPSRC} can be used to specify the source to use for phasing the
 VLA. If the scan is mode {\tt VX} and {\tt VLAPSRC} differs from {\tt
 SOURCE}, then a scan will be inserted in the VLA observe file in {\tt
@@ -8922,6 +8976,10 @@ turns off the special phasing scan.}
 
 
 \subsubsection{\label{MP:VLARFANT}{\tt VLARFANT}}
+
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
 
 {\tt VLARFANT} can be used to specify the reference antenna for the
 VLA.  This will be the antenna used as the source of data in single
@@ -8951,6 +9009,10 @@ parameter.
 
 \subsubsection{\label{MP:VLATYPE}{\tt VLATYPE}}
 
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
+
 {\tt VLATYPE} specifies the type of the observation
 for the VLA observe file.
 
@@ -8965,6 +9027,10 @@ for the VLA observe file.
 
 
 \subsubsection{\label{MP:VLAUSERN}{\tt VLAUSERN}}
+
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
 
 {\tt VLAUSERN} is the VLA user number. Provide the PI's VLA number
 (same as the Socorro AIPS number) if desired. For VLBI runs the
@@ -10716,6 +10782,9 @@ this will generate an error when the setups are checked.
 
 \subsubsection{\label{SP:BARREL}{\tt BARREL}}
 
+Barrel roll is not used on the disk based system so can be
+ignored in essentially all cases.
+
 {\tt BARREL} sets the mode of the barrel roll.  The barrel roll is
 designed to protect data against bad recording tracks.  Within each
 head group of 8 tracks, or in some modes, within a pair of head
@@ -12109,6 +12178,10 @@ This example is Mark~III Mode B.}
 
 \subsubsection{\label{SP:VLABAND}{\tt VLABAND}}
 
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
+
 {\tt VLABAND} is the band code for VLA projects, whether VLBI or
 VLA-only.  For complete information on the standard bands, see
 the \htmlref{VLA Standard Bands section}{SSEC:VLASTDBD}.
@@ -12146,6 +12219,10 @@ an entry that covers the desired VLA setup.
 
 \subsubsection{\label{SP:VLABW}{\tt VLABW}}
 
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
+
 {\tt VLABW} specifies the bandwidth of each of the VLA's 4
 IFs (ABCD). This is done with coded digits such that the bandwidth is
 {\tt 50/2**n} MHz where {\tt n} is the digit used. For example, {\tt
@@ -12169,6 +12246,10 @@ an entry that covers the desired VLA setup.
 
 
 \subsubsection{\label{SP:VLAFEAB}{\tt VLAFEAB} and {\tt VLAFECD}}
+
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
 
 {\tt VLAFEAB} is the VLA front end synthesizer for the A and B IFs
 (RCP).  {\tt VLAFECD} is the VLA front end synthesizer for the C and D
@@ -12259,6 +12340,10 @@ standard value for the specified {\tt VLABAND}.
 
 \subsubsection{\label{SP:VLAROT}{\tt VLAROT}}
 
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
+
 The VLA parameters generated using this command are apparently are no
 longer used as of 2007 or earlier.  The capability to specify the
 parameter has been left in place, but should not be used.
@@ -12284,6 +12369,10 @@ standard value for the specified {\tt VLABAND}.
 
 
 \subsubsection{\label{SP:VLASYNA}{\tt VLASYNA} and {\tt VLASYNB}}
+
+All of the VLA parameters are, at temporarily, out of use.  The old
+VLA system has been turned off and the EVLA is not yet doing VLBI.
+The control scheme may change with the EVLA.
 
 {\tt VLASYNA} and {\tt VLASYNB} give the VLA F6 synthesizer settings
 for the A and C IFs {\tt VLASYNA} and for the B and D IFs {\tt
