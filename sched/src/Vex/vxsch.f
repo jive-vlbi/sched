@@ -97,14 +97,14 @@ C
      1                  NTSYSON, TSYSGAP, WARNBANK)
 C        Let the user know which was the first scan to raise warnbank
          IF (.NOT. OLDWARNB .AND. WARNBANK) THEN
-            CALL WLOG(0, '' )
+            CALL WLOG(0, ' ' )
             WRITE( MSGTXT, '(A)' )
      1         'VXSCH: The scan detailed below has exceeded the ' //
      2         'limit for continuous recording. Insert a gap ' //
      3         'before this scan, or reduce its length if necessary:'
             CALL WLOG(0, MSGTXT )
             CALL PRTSCN( ISCN )
-            CALL WLOG(0, '' )
+            CALL WLOG(0, ' ' )
          END IF
          OLDWARNB = WARNBANK
 C
@@ -142,6 +142,7 @@ C
 C
 C           May move scan time fwd for tapestart: then write comment
 C
+C            print*, 'tapoff=',ABS(TAPOFF*86400d0) 
             IF ( ABS(TAPOFF*86400d0) .GT. 1 ) THEN 
                CALL TIMEJ( STARTJ(ISCN), YEAR, DAY1, STARTT )
                WRITE( FULTIM(1:5), '( I4, A1 )' ) YEAR,'y'
