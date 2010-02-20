@@ -994,7 +994,6 @@ catalogs here, can be specified in the schedule file.
 !
 !
 overwrit
-autotape=2
 ! ==========================================================
 ! =================  Cover Information  ====================
 ! ==========================================================
@@ -1024,6 +1023,7 @@ note1    = ' '
 correl   = 'Socorro'
 coravg   = 4
 corchan  = 16
+cornant  = 10
 corpol   = 'on'
 corwtfn  = 'uniform'
 corsrcs  = 'VLBA Data Base'
@@ -1771,7 +1771,7 @@ It is a very good idea, when using LST scheduling, to check the
 final output schedules, which are all in UT, to be sure that they
 are for the right day.
 
-\subsubsection{\label{SSSEC:Reconfigurations}Dealing with Formatter 
+\subsubsection{\label{SSSEC:Reconfigurations}Dealing with Formatter
 Reconfigurations}
 
 NOTE: Concerns about reconfigurations will likely change and hopefully
@@ -1791,7 +1791,7 @@ for both the duration of the reconfigure plus the time to resync.  In
 practice, it also seemed to confuse the old VLBA hardware correlator
 somehow for maybe one or two stations and they can take over a minute
 to resync.  This is not likely to be the case for the software
-correlator. 
+correlator.
 
 It is best to avoid reconfigurations if possible.  In the rare cases
 where that is not possible, try to provide a gap between scans of
@@ -1810,12 +1810,12 @@ setup and will not trigger a reconfigure).
 \subsubsection{\label{SSSEC:Starttime}Adjusting the Scan or Recording
 Start Time}
 
-The VLBA hardware correlator, retired at the end of 2009, synchronizing 
+The VLBA hardware correlator, retired at the end of 2009, synchronizing
 playback took a finite amount of time.  Therefore it was useful to
 start recordings before good data was expected.  This section describes
 the tools in \schedb to do that.  The new VLBA software correlator (DiFX)
-and the Mark IV correlators do not take a significant amount of time 
-to synchronize the data streams.  Therefore, early starts of the recordings 
+and the Mark IV correlators do not take a significant amount of time
+to synchronize the data streams.  Therefore, early starts of the recordings
 are no longer advised.
 
 The schemes described in \htmlref{scan times section}{SSEC:SCANTIMES}
@@ -2033,7 +2033,7 @@ The VEX option for {\tt CONTROL} causes \schedb to generate a schedule
 file in the VEX format, as does the \htmlref{{\tt DOVEX}}{MP:DOVEX}
 main schedule input parameter (now the default).  This is the schedule
 distribution file format developed mainly for the PC Field System
-(PCFS) and the Mark~IV correlators.  It is now used by the DiFX 
+(PCFS) and the Mark~IV correlators.  It is now used by the DiFX
 software correlator in use at the VLBA and other places, so it is
 now needed by most if not all projects.  Eventually it will also
 be used by the VLBA stations.
@@ -2139,7 +2139,7 @@ for the telescope, data acquisition system and recorder.
 
 \schedb produces VEX files with ``adaptive'' recorder control that enables
 continuous recording on PCFS controled telescopes, but can only
-be correctly interpreted by FS9.3.11 (and higher).  This aided the 
+be correctly interpreted by FS9.3.11 (and higher).  This aided the
 VLBA hardware correlator in synchronizing playback, but is no longer
 of much interest as the sync time with Mark5 disk systems and current
 correlators, including the DiFX software correlator on the VLBA, do not
@@ -2555,6 +2555,7 @@ NOTE2 = 'its the standard VLBI antenna and has good Q band performance'
 correl   = 'Socorro'
 coravg   = 4
 corchan  = 256
+cornant  = 10
 corpol   = 'off'
 corwtfn  = 'uniform'
 corsrcs  = 'standard'
@@ -2924,7 +2925,7 @@ on the EVLA with the WIDAR correlator has not yet been implemented and
 \schedb does not have the ability to write EVLA control files.
 Most likely, control of VLBI at the VLA will be based on the VEX files
 and a translator that makes the VLA specific files.  This section will
-be updated when this appears. 
+be updated when this appears.
 
 \schedb can be used to schedule essentially all types of VLBI
 observations on the VLA.  It can also be used instead of {\sc OBSERVE}
@@ -3173,6 +3174,7 @@ in it and serves as an example of that type of observing.
 !                        Modified for the SCHED manual by C. Walker.
 !                        VLAINTEG added Sep. 8, 2008 RCW.
 !
+!  Much of this will change in 2010
 ! ==========================================================
 ! =================  Cover Information  ====================
 ! ==========================================================
@@ -3262,7 +3264,6 @@ year     = 1997
 month    = 1
 day      = 15
 start    = 06:45:00
-autotape = 2
 stations = vlba_sc, vlba_hn, vlba_nl, vlba_fd, vlba_la,
            vla27,
            vlba_pt, vlba_kp, vlba_ov, vlba_br, vlba_mk
@@ -3345,9 +3346,9 @@ group   2 repeat 16
 
 \subsection{\label{SSEC:VLAONLY}VLA-Only Project Example}
 
-\schedb cannot be used for scheduling the EVLA (yet anyway) and the 
+\schedb cannot be used for scheduling the EVLA (yet anyway) and the
 old VLA system has been turned off.  So the following section is not
-of much use now.  Once VLBI at the EVLA has been established, the 
+of much use now.  Once VLBI at the EVLA has been established, the
 capabilities to schedule EVLA runs with \schedb will be revisited.
 
 This second VLA example demonstrates the use of \schedb to schedule a
@@ -3420,8 +3421,10 @@ start = 4:00:00           ! LST start time.
 source = 'DA193'
 
  ! No reference pointing at the lower frequencies
+ ! Note the manual_vla setup files should be in the current
+ ! directory.
  vlamode = ' '  vlapeak = ' '
- dur = 8:00  setup = $SCHED/examples/manual_vla-cc.set  /
+ dur = 8:00  setup = manual_vla-cc.set  /
  dur = 3:00  setup = $SCHED/setups/vla-uu.set  /
  dur = 3:00  setup = $SCHED/setups/vla-xx.set  /
 
@@ -3429,21 +3432,21 @@ source = 'DA193'
  vlamode = IR  vlapeak = ' '
  dur = 5:00  setup = $SCHED/setups/vla-xx.set  /
  vlamode = ' '  vlapeak = T
- dur = 4:00  setup = $SCHED/examples/manual_vla-qq.set  /
+ dur = 4:00  setup = manual_vla-qq.set  /
              setup = $SCHED/setups/vla-kk.set  /
 
 source = '3C48'
  vlamode = IR  vlapeak = ' '
  dur = 8:00  setup = $SCHED/setups/vla-xx.set  /
  vlamode = ' '  vlapeak = T
- dur = 4:00  setup = $SCHED/examples/manual_vla-qq.set  /
+ dur = 4:00  setup = manual_vla-qq.set  /
              setup = $SCHED/setups/vla-kk.set  /
 
 source = '3C84'
  vlamode = IR  vlapeak = ' '
  dur = 6:00  setup = $SCHED/setups/vla-xx.set  /
  vlamode = ' '  vlapeak = T
- dur = 3:00  setup = $SCHED/examples/manual_vla-qq.set  /
+ dur = 3:00  setup = manual_vla-qq.set  /
              setup = $SCHED/setups/vla-kk.set  /
 
  ! Do not use reference pointing for the rest of the session.
@@ -3451,21 +3454,21 @@ source = '3C84'
  vlamode = ' '  vlapeak = ' '
              setup = $SCHED/setups/vla-uu.set  /
              setup = $SCHED/setups/vla-xx.set  /
-             setup = $SCHED/examples/manual_vla-cc.set  /
-             setup = $SCHED/examples/manual_vla-cc.set  /
+             setup = manual_vla-cc.set  /
+             setup = manual_vla-cc.set  /
              setup = $SCHED/setups/vla-pp.set  /
 
 source = '3C48'
  dur=6:00    setup = $SCHED/setups/vla-uu.set  /
  dur=3:00    setup = $SCHED/setups/vla-xx.set  /
-             setup = $SCHED/examples/manual_vla-cc.set  /
-             setup = $SCHED/examples/manual_vla-cc.set  /
+             setup = manual_vla-cc.set  /
+             setup = manual_vla-cc.set  /
  dur=4:00    setup = $SCHED/setups/vla-pp.set  /
 
 source = 'DA193'
  dur=9:00    setup = $SCHED/setups/vla-uu.set  /
  dur=4:00    setup = $SCHED/setups/vla-xx.set  /
-             setup = $SCHED/examples/manual_vla-cc.set  /
+             setup = manual_vla-cc.set  /
 
 source = 'CTA21'
  dur=10:00   setup = $SCHED/setups/vla-ll.set  /
@@ -4504,10 +4507,10 @@ capability.  Interested users are recommended to start with that
 example.
 
 The scheme for handling moving sources in VEX files is not yet established,
-so satellite observations will be blocked if a VEX file is being written, 
+so satellite observations will be blocked if a VEX file is being written,
 unless all of the satellite scans are non-recording.  In that case,
 the scans will be skipped in the VEX file.  The same goes for planets.
-There is an intent to change this as VEX files for all observations 
+There is an intent to change this as VEX files for all observations
 that get correlated will be needed by the software correlator.
 
 
@@ -5070,7 +5073,7 @@ operator and telescope files just before the scan.
 
 \subsubsection{\label{MP:CORAVG}{\tt CORAVG}}
 
-{\tt CORAVG} specifies the correlator averaging time in seconds.  
+{\tt CORAVG} specifies the correlator averaging time in seconds.
 
 For the DiFX software correlator on the VLBA, there are two options
 for how the specified average time is treated.  If all average times
@@ -5104,7 +5107,7 @@ The correlator default is 2 seconds but, at most frequencies, more is
 probably ok most of the time.  The longer the on-line averaging, the
 smaller the output data rates and the smaller the output data set.
 
-Note the correlation parameters {\tt CORAVG, CORCHAN, 
+Note the correlation parameters {\tt CORAVG, CORCHAN,
 CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
 the project will be correlated in Socorro and data
 are being recorded.
@@ -5113,7 +5116,7 @@ are being recorded.
 {A real or integer number followed by a string of up to 8 characters}
 {Any, but see above for useful numbers. The string can be anything but
 only "EXACT" will mean to do something different from the default.}
-{Must be given for processing in Socorro.  Otherwise 2.0.  The string 
+{Must be given for processing in Socorro.  Otherwise 2.0.  The string
 can, and usually will, be omitted.}
 {Only one value used --- the last.}
 {{\tt CORAVG = 4, exact}}
@@ -5158,7 +5161,7 @@ with 16 MHz BBC bands should use 32 output channels.
 For spectral line observations, the DiFX correlator can do a vary large
 number of channels - "it's just software".  But excessive numbers
 of channels lead to excessive output data rates and data set sizes.
-Up to 4096 channels per baseband channel are supported normally and 
+Up to 4096 channels per baseband channel are supported normally and
 up to 32768 channels can be supported if needed and justified.  There
 are no special restrictions in full polarization mode.  The 32768 limit
 is set by the AIPS postprocessing path.  Requesting too
@@ -5177,7 +5180,7 @@ data rate in bytes/sec is given APPROXIMATELY as
        P    = 2 for polarization, 1 for none
        Tavg = time average in seconds
 
-Note the correlation parameters {\tt CORAVG, CORCHAN, 
+Note the correlation parameters {\tt CORAVG, CORCHAN,
 CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
 the project will be correlated in Socorro and data
 are being recorded.
@@ -5243,7 +5246,7 @@ average times and 16 or 32 channels, neither of these is of much
 concern and there is little harm in asking for full polarization
 processing.  Perhaps the data will even be useful eventually.
 
-Note the correlation parameters {\tt CORAVG, CORCHAN, 
+Note the correlation parameters {\tt CORAVG, CORCHAN,
 CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
 the project will be correlated in Socorro and data
 are being recorded.
@@ -5265,24 +5268,24 @@ Socorro, VLBA, Haystack, Bonn, JIVE, Washington, USNO, Jpl, Bologna,
 Mitaka, Penticton, and Other (which should be followed by the name).
 The name is not case sensitive.
 
-The first word of {\tt CORREL} must be one of: 
+The first word of {\tt CORREL} must be one of:
 \begin{list}{}{\parsep 0em  \itemsep 0em }
-\item {\tt Socorro}, {\tt VLBA}, or {\tt VLBADIFX} 
+\item {\tt Socorro}, {\tt VLBA}, or {\tt VLBADIFX}
 (VLBA DiFX software correlator)
 \item {\tt FXCORR} (Original VLBA hardware correlator)
-\item {\tt Haystack}, 
-\item {\tt Bonn}, 
+\item {\tt Haystack},
+\item {\tt Bonn},
 \item {\tt JIVE},
 \item {\tt Washington} or {\tt USNO},
 \item {\tt LBA},
-\item {\tt JPL}, 
-\item {\tt Bologna}, 
+\item {\tt JPL},
+\item {\tt Bologna},
 \item {\tt Mitaka},
-\item {\tt Penticton}, or 
+\item {\tt Penticton}, or
 \item {\tt Other}
 \end{list}
 
-Note the correlation parameters {\tt CORAVG, CORCHAN, 
+Note the correlation parameters {\tt CORAVG, CORCHAN,
 CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
 the project will be correlated in Socorro and data
 are being recorded.
@@ -9281,7 +9284,7 @@ The zero offset time is given by {\tt EPOCH}.
 \item [{\tt EPoch}:] The zero point for proper motion expressed as
 a fractional year such as 1993.6.
 
-\item [{\tt PARALLAX}:] The parallax in milli arcseconds.  Synonym 
+\item [{\tt PARALLAX}:] The parallax in milli arcseconds.  Synonym
 {\tt PARALAX} for backward compatability (yes, I misspelled it the first
 time so backwards compatability is an issue).
 
@@ -9579,7 +9582,7 @@ per minute.
 
 \item [{\tt AX1ACC}:] The acceleration for the first axis in degrees
 per second squared for all mount types.  If one value is given, it is
-assumed to apply to both acceleration and deceleration.  If two 
+assumed to apply to both acceleration and deceleration.  If two
 values are given, the first is for acceleration and the second for
 deceleration (although for the calculations, they are interchangeable).
 
@@ -12627,7 +12630,7 @@ information on {\sc PGPLOT} available from the WWW page at
 in packaged form from the Fink for MacOSX and from standard package
 libraries for some Linux distributions including Ubuntu and Debian.
 Be careful about what compiler was used to build the packages and use
-the same to build SCHED or there may be problems.  You may need to 
+the same to build SCHED or there may be problems.  You may need to
 download some other libraries including those for PNG.
 
 Some VAX FORTRAN features that are commonly supported by other FORTRAN
@@ -12644,8 +12647,8 @@ obtained from P. Wallace).
 If the code or any other files are moved from a unix or VMS machine to
 a machine using DOS or Windows, beware that the end-of-line characters
 are different.  At least on SUN and Linux, a pair of utilities
-unix2dos and dos2unix can be used to fix the files.  As of Dec. 2009, 
-SCHED under Unix and Unix-like operating systems can read DOS format 
+unix2dos and dos2unix can be used to fix the files.  As of Dec. 2009,
+SCHED under Unix and Unix-like operating systems can read DOS format
 files.
 
 We are always interested in hearing about people's experiences
@@ -12783,22 +12786,33 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_9.1}Development Version 9.1}
+\subsection{\label{SSEC:VER_9.2}Development Version 9.2}
 
 \begin{itemize}
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
 
-\item Prevent the Vex section from trying to invent new modes for 
+\item  Nothing yet.
+
+\end{itemize}
+
+\subsection{\label{SSEC:VER_9.1}Version 9.1}
+
+\begin{itemize}
+
+\item Various updates of examples and manual for changes related to
+change to the DiFX software correlator on the VLBA.  Feb. 18, 2010. RCW
+
+\item Prevent the Vex section from trying to invent new modes for
 skipped scans, which caused a error termination.  Changes are in
 routine VXSCNS.  Feb. 17, 2010 RCW.
 
 \item Only print lines as long as needed in listing correlator parameters.
-Before trailing blanks were also written out and that became a problem 
+Before trailing blanks were also written out and that became a problem
 after lengthening the allowed number of characters for various notes.
 Feb. 3, 2010  RCW
 
-\item Change various format specifications to allow printing of 
+\item Change various format specifications to allow printing of
 larger numbers for such items as the number of spectral channels.
 Feb. 2, 2010  RCW
 
@@ -12824,11 +12838,11 @@ is no longer a need to convert input to Unix format.  Dec. 1, 2009 RCW.
 the AOC version for 64 bit Linux.  Test against 405 to be sure there
 are no big changes.  Nov. 12, 2009 RCW.
 
-\item Add code from Bill Junor to the satellite tracking to get the 
+\item Add code from Bill Junor to the satellite tracking to get the
 station dependent rates right (or close enough).  Nov. 02, 2009.  RCW
 
 \item Change spelling of {\tt PARALAX} to {\tt PARALLAX}.  Add {\tt PARALAX}
-for backward compatability.  This is being used fairly heavily by some 
+for backward compatability.  This is being used fairly heavily by some
 current projects.  Oct. 20, 2009
 
 \item Add warnings for scans with less than half of the antennas reaching
@@ -12908,7 +12922,7 @@ default CORTAPE to FTP for non-VLBA correlators.  It is required for
 the VLBA.  Removed EXABYTE as a CORTAPE option after learning that it
 hasn't been used for a long time.  RCW Aug. 20, 2009
 
-\item Various VLA checking adjustments.  Give warning if two VLA 
+\item Various VLA checking adjustments.  Give warning if two VLA
 stations are invoked, like VLA1 and VLA27, because they won't both
 get output files.  Warn against using 2 phasing modes (eg VA and VL)
 with the same setup files - IFs won't be right.  Allow VS mode scans
@@ -12923,9 +12937,9 @@ for the DSN.  June 16, 2009  RCW.
 \item Changed a few more messages about "dual tape" modes etc to not
 refer to tape.  June 15, 2009  RCW.
 
-\item Change the maximum number of modes in the Vex code to a 
+\item Change the maximum number of modes in the Vex code to a
 lower, but still realistic, value.  Without this, \schedb versions
-set up for SKA configuration studies (more than 300 stations) would 
+set up for SKA configuration studies (more than 300 stations) would
 not compile on some systems.  Mar. 13, 2009  RCW.
 
 \end{itemize}
@@ -12939,13 +12953,13 @@ into the wild.
 \begin{itemize}
 
 \item Change the way the durations of scans in the Vex file are
-calculated to avoid having scans overlap by a second due to 
+calculated to avoid having scans overlap by a second due to
 round off of the duration to even seconds.  Feb. 4, 2009  RCW.
 
 \item  Add VLA to VLA1 and VLA27 in freq.dat to support mixed mode
 observations.  Feb. 20, 2009 RCW.
 
-\item Add a section to the summary file of correlator blocks to 
+\item Add a section to the summary file of correlator blocks to
 help the analysts make jobs.  Feb. 4, 2009  RCW.
 
 \item Add calcode to the oms file.  Jan. 26, 2009  RCW.
@@ -12972,7 +12986,7 @@ unwise while there are still sync times at the correlator.  All of
 this will go away with Mark5C and the software correlator.  Jan. 21,
 2009 RCW.
 
-\item No longer warn about short record stops when synchronizing 
+\item No longer warn about short record stops when synchronizing
 starts as needed by the current use of Vex.  Disks don't care
 Jan. 21, 2009  RCW.
 
@@ -12996,7 +13010,7 @@ Released on Dec. 13, 2008.
 
 
 \item  Warnings issued if source motions are significant when writing Vex
-       files.  Vex output does not yet support motions.  Dec. 13, 2008 
+       files.  Vex output does not yet support motions.  Dec. 13, 2008
        RCW
 
 \item  Increase digits in the Vex file specification of station positions,
@@ -13009,7 +13023,7 @@ Released on Dec. 13, 2008.
 \item  Various catalog updates.
 
 \item  Started adding an indicator of when the Tsys measurements are done
-       at each station.  This will eventually control whether to give 
+       at each station.  This will eventually control whether to give
        warnings of inadequate gaps when TSCAL=GAP.  Nov. 5, 2008 RCW
 
 \item  Change the distribution tar files.  A 1MB file used to be a problem
@@ -13030,9 +13044,9 @@ Released on Dec. 13, 2008.
        Oct. 25, 2008  RCW.
 
 \item  Update sources.vlba and locations.dat to current correlator values
-       that are based on solution 2008a\_astro from GSFC.  The VLA pad 
-       positions were note updated from the ones based on 2005f, but the 
-       changes would have been less than the likely errors.  
+       that are based on solution 2008a\_astro from GSFC.  The VLA pad
+       positions were note updated from the ones based on 2005f, but the
+       changes would have been less than the likely errors.
        Oct. 8, 2008  RCW.
 
 \item  Change SUMITEM defaults to {\tt ELA} (average elevation) and
@@ -15452,10 +15466,10 @@ This is a list of desired program changes, fixes or enhancements.
       2009 RCW.
 
 \item Warn if too many antennas don't make it to a source for a scan.
-      This can put confusing information in the VEX file.  RCW  
+      This can put confusing information in the VEX file.  RCW
       Sept. 14, 2009.
 
-\item Deal with VEX source positions when using satellite position 
+\item Deal with VEX source positions when using satellite position
       calls for every scan/station.     RCW July 22, 2009
 
 \item Warn about PCCOR not able to run when only 1 tone per band.  RCW
