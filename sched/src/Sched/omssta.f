@@ -41,20 +41,24 @@ C
      1          STCODEU(KSTA)
             WRITE( IOMS, '( A, A )' )  '    STATION_NAME       = ',
      1          STATION(KSTA)
-            IF( AUTOALOC(ISTA) ) THEN 
-               WRITE( IOMS, '( A, A )' )  
-     1           '    AUTO_ALLOCATE      = ON'
-            ELSE 
-               WRITE( IOMS, '( A, A )' )  
-     1           '    AUTO_ALLOCATE      = OFF'
-            END IF
-            IF( AUTOREV(ISTA) ) THEN 
-               WRITE( IOMS, '( A, A )' )  
-     1           '    AUTO_REVERSE       = ON'
-            ELSE 
-               WRITE( IOMS, '( A, A )' )  
-     1           '    AUTO_REVERSE       = OFF'
-            END IF
+C
+C     These no longer needed
+C
+C            IF( AUTOALOC(ISTA) ) THEN 
+C               WRITE( IOMS, '( A, A )' )  
+C     1           '    AUTO_ALLOCATE      = ON'
+C            ELSE 
+C               WRITE( IOMS, '( A, A )' )  
+C     1           '    AUTO_ALLOCATE      = OFF'
+C            END IF
+C            IF( AUTOREV(ISTA) ) THEN 
+C               WRITE( IOMS, '( A, A )' )  
+C     1           '    AUTO_REVERSE       = ON'
+C            ELSE 
+C               WRITE( IOMS, '( A, A )' )  
+C     1           '    AUTO_REVERSE       = OFF'
+C            END IF
+C
             WRITE( IOMS, '( A, I3 )' ) '    TAPES              = ',
      1         TAPES(ISTA)
             WRITE( IOMS, '( A, I4 )' ) '    PASSES             = ',
