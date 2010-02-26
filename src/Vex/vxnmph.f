@@ -1,6 +1,7 @@
       CHARACTER*32 FUNCTION VXNMPH( IPH, XTRAFQ )
 C
-C     function generates a name for HP block IPH
+C     function generates a name for PH block IPH (phase cal)
+C            (HP corrected to PH  RCW Feb. 9, 2010)
 C     By H.J. van Langevelde, JIVE, 300496
 C     IPH, is number of LINK, necessary to find SET
 C     XTRAFQ = .TRUE. used for extra frequencies detected
