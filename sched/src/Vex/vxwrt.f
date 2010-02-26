@@ -21,7 +21,7 @@ C
       WRITE( VEXFILE, '( A, A )' )  EXPCODE(1:LEN1(EXPCODE)), '.VEX'
       CALL DWCASE( VEXFILE )
 C     
-C     Find out if the .skd file already exists.
+C     Find out if the .vex file already exists.
 C
       INQUIRE( FILE=VEXFILE, EXIST=EXISTS )
       IF( EXISTS .AND. ( OVERWRIT ) ) THEN
