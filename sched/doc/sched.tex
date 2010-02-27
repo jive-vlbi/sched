@@ -1810,13 +1810,20 @@ setup and will not trigger a reconfigure).
 \subsubsection{\label{SSSEC:Starttime}Adjusting the Scan or Recording
 Start Time}
 
-The VLBA hardware correlator, retired at the end of 2009, synchronizing
-playback took a finite amount of time.  Therefore it was useful to
-start recordings before good data was expected.  This section describes
-the tools in \schedb to do that.  The new VLBA software correlator (DiFX)
-and the Mark IV correlators do not take a significant amount of time
-to synchronize the data streams.  Therefore, early starts of the recordings
-are no longer advised.
+The VLBA hardware correlator, retired at the end of 2009,
+synchronizing playback took a finite amount of time.  Therefore it was
+useful to start recordings before good data was expected.  This
+section describes the tools in \schedb to do that.  The new VLBA
+software correlator (DiFX) and the Mark IV correlators do not take a
+significant amount of time to synchronize the data streams.
+Therefore, early starts of the recordings are no longer needed for the
+correlator.  However there is a limitation of 1024 recording scans on
+a disk module with the Mark5A disks.  A recording scan is the time
+between stops of the recording media.  There might be several source
+scans in a recording scan.  Fast-switching, phase-referencing
+observations could run into this issue so the default \htmlref{{\tt
+MINPAUSE}}{MP:MINPAUSE} (see below) has been set to prevent
+recording gaps during the fast-switching in most cases.
 
 The schemes described in \htmlref{scan times section}{SSEC:SCANTIMES}
 set the times of the scans as reported in the output files meant for
@@ -6451,9 +6458,19 @@ display in the summary how long before the scan start time the
 recording starts.  The recording start time is also given in the {\sl
 sch} file.
 
-Short recorder stoppages can cause problems for playback.  Every time the
-recording stops, it must be resynced, which takes 10-20 seconds for the
-VLBA.
+{\tt MINPAUSE} is mainly used now to prevent excessive recording scans
+on the Mark5A system.  The system does now allow more than 1024 
+data scans on the disks.  There is one scan for each period during which
+the recording does not stop, regardless of the number of source scans
+during that period.  This limitation can be an issue with large disk
+packs and fast-switching phase-referencing projects.  The default
+value is meant to prevent recording stops during fast switching.
+
+Short recorder stoppages could cause problems for playback in the era
+of tapes.  Every time the recording stoped, it must be resynced, which
+takes 10-20 seconds for the old VLBA hardware correlator.  This is not
+much of an issue for the DiFX software correlator or the MarkIV
+correlators.
 
 There are a variety of ways to prevent recordings from being stopped
 between scans.  The simplest is to schedule using \htmlref{{\tt
@@ -6485,7 +6502,7 @@ VEX check routines happy for a reversal.
 {A number giving the minimum recording stoppage in seconds times the
 speedup factor.}
 {Any number.}
-{10 seconds.}
+{20 seconds.}
 {Defaults to previous scan.}{
 {\tt MINPAUSE=30}}
 
@@ -7677,7 +7694,9 @@ on tape stop time given in the section on parameter \htmlref{{\tt GAP.}}
 
 Note that with all correlators now able to sync quickly,
 the need to adjust start times to allow for synchronization is
-basically gone.
+basically gone.  The default {\tt PRESTART} is now 1 second to 
+give the correlators just a bit of time, but that should not have
+much impact on scheduling.
 
 {\tt PRESTART} gives a time by which to start the recording at a
 site before the nominal start time as established by \htmlref{{\tt
@@ -7711,8 +7730,9 @@ resync.  On the old hardware VLBA correlator, that time is empirically
 about 8, 13, and 25 seconds for speedup factors 1, 2 and 4
 respectively.  Therefore it is best to keep recording through short
 gaps.  On other correlators playing Mark5 media, sync is rapid (10s at
-JIVE and of order 1 second at the MarkIV correlators) so these
-concerns are not so great.
+JIVE and of order 1 second or less at the MarkIV correlators and the
+DiFX software correlator (current VLBA)) so these concerns are not so
+great.
 
 One exception when it may be a good idea to stop recording is when
 there will be a formatter reconfigure.  These happen when the internal
@@ -7728,7 +7748,7 @@ reconfigure, a resync will be done normally.
 \rcwbox
 {A time.}
 {Any time.}
-{0.0}
+{1.0}
 {Defaults to previous scan.}
 {{\tt PRESTART=15}, meaning start the recording 15 seconds early.}
 
@@ -11611,7 +11631,7 @@ This has no effect on the VEX file.
 {4 character strings of up to 6 characters each, one for each IF.}
 {{\tt 'off'}, {\tt 'low-s'}, {\tt 'low-c'}, {\tt 'high-s'},
 {\tt 'high-c'}}
-{{\tt 0} - should be specified.}
+{{\tt 0} - which is interpreted to mean 'low-s'}
 {Defaults to previous station.}
 {{\tt NOISE='low-s','low-s','low-s','low-s'}}
 
@@ -12799,6 +12819,15 @@ more information.
 \subsection{\label{SSEC:VER_9.1}Version 9.1}
 
 \begin{itemize}
+
+\item Set the default for {\tt PRESTART} to 1 second as it seems that
+DiFX does not synchronize instantly.  Feb. 26, 2010.  RCW.
+
+\item Increase the default value of {\tt MINPAUSE} from 10 to 20 seconds
+so that media stoppages are less likely during phase referencing 
+observations.  This helps prevent attempts to record more than 1024 
+scans on a disk pack, the maximum allowed by the Mark5A system.
+Feb. 26, 2010.  RCW.
 
 \item Various updates of examples and manual for changes related to
 change to the DiFX software correlator on the VLBA.  Feb. 18, 2010. RCW

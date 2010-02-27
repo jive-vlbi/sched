@@ -16,6 +16,8 @@ C     Jan 09:  The disk systems don't mind very short stops so don't
 C     worry about that aspect any more.  That was an issue related
 C     to spin up and spin down of the tapes.
 C
+C     Try to prevent excessively long recording scans. Feb. 26, 2010 RCW
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
@@ -96,6 +98,14 @@ C     Set TPMIN for case where no TPSTARTS were forced by
 C     the scan gap.
 C
       IF( TPMIN .EQ. 1.D0 ) TPMIN = PRESTART(ISCN)
+C
+C     Check how long it has been since a gap in recording.  If more than
+C     an hour, then force a gap to make a new disk file.
+C
+
+C  *******************************
+      write(*,*) 'settps - deal with excessive recording scan lengths'
+
 C
 C     Now have TPSTART.  If necessary, synchronize the recorder starts.
 C     VEX requires this for now.
