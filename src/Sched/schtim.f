@@ -36,6 +36,7 @@ C
          NRDBCK(ISTA) = 0
          SCNHR(ISTA) = 0.0
          TPHR(ISTA) = 0.0
+         TPSCN(ISTA) = 0
          TGBYTES(ISTA) = 0.0
          NSTOP(ISTA) = -1
          RECLAST(ISTA) = .TRUE.
@@ -84,7 +85,8 @@ C
      1               STATION(STANUM(ISTA))//' overlap in time.' )
                END IF
 C
-C              Count scans and total time.
+C              Count scans and total time.  Also count disk scans
+C              (TPSCN) which are blocks of recording without a break.
 C
                NSTSC(ISTA) = NSTSC(ISTA) + 1
                SCNHR(ISTA) = SCNHR(ISTA) + 
@@ -94,6 +96,10 @@ C
                   RECTIME = ( STOPJ(ISCN) - STARTJ(ISCN) + 
      1                        TPSTART(ISCN,ISTA) )
                   TPHR(ISTA) = TPHR(ISTA) + RECTIME / ONEHR
+                  IF( STARTJ(ISCN) - TPSTART(ISCN,ISTA) - ONESEC .GT. 
+     1                TLAST(ISTA) .OR. .NOT. RECLAST(ISTA) ) THEN
+                     TPSCN(ISTA) = TPSCN(ISTA) + 1
+                  END IF
 C
 C                 Get the total bytes recorded.  This will be the
 C                 same as the bytes at the end of the last scan
