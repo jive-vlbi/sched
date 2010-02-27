@@ -11,7 +11,7 @@ C
       STRVAL = ' '
       TMPSTR = ' '
 C
-      WRITE( TMPSTR, 10 ), VAL
+      WRITE( TMPSTR, 10 ) VAL
 10    FORMAT( I14 )
 C
       J = 1

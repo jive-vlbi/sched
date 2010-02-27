@@ -106,25 +106,25 @@ C        Now do disk stations.
 C
          WRITE( ISUM, '( 1X, /, A, /, A )' )  
      1       ' Station summaries (disk stations): ',
-     2       '  Station  Control   Scans  Scan Hours  Record hrs' //
-     3       '   Gbytes      Formatter     Sync '
-         WRITE( ISUM, '( T64, A )' )
-     1       'Reconfigures    Hours  '
+     2       '  Station  Control   Scans   Scan   Record  Record' //
+     3       '   Gbytes     Formatter       Sync '
+         WRITE( ISUM, '( T29, A, T64, A )' )
+     1       'Hours   Hours   Scans', 'Reconfigures    Hours  '
 
          DO ISTA = 1, NSTA
             IF( USEDISK(ISTA) ) THEN
                IF( DAR(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
-                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F10.2, F12.2,
-     1              2X, F10.0, I9, A, I3, F12.2 )' )
+                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2,
+     1              I8, 2X, F8.0, I9, A, I3, F12.2 )' )
      2              STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     3              SCNHR(ISTA), TPHR(ISTA), TGBYTES(ISTA),
+     3              SCNHR(ISTA), TPHR(ISTA), TPSCN(ISTA), TGBYTES(ISTA),
      4              NRECONF(1,ISTA),  '/', NRECONF(2,ISTA),
      5              TTSYNC(ISTA) * 24.0
                ELSE
-                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F10.2, F12.2,
-     1              2X, F10.0, I13, F12.2 )' )
+                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2,
+     1              I8, 2X, F8.0, I13, F12.2 )' )
      2              STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     3              SCNHR(ISTA), TPHR(ISTA), TGBYTES(ISTA),
+     3              SCNHR(ISTA), TPHR(ISTA), TPSCN(ISTA), TGBYTES(ISTA),
      4              NRECONF(1,ISTA), TTSYNC(ISTA) * 24.0
                END IF
             END IF
@@ -145,11 +145,20 @@ C
       WRITE( ISUM, '( A )' )
      1      'Notes on the station summaries: '
       WRITE( ISUM, '( 1X )' )
+      WRITE( ISUM, '( A, /, A, /, A, /, A )' )
+     1      '    "Record Scans" are periods of recording with no '//
+     2      'gap.  The Mark5A disk systems ', 
+     3      '    have a limit of 1024 such scans.  There are often '//
+     4      'multiple projects on a disk pack.',
+     5      '    Try to keep above about 6 GB per record scan by '//
+     6      'using MINPAUSE and PRESTART ',
+     7      '    to prevent short gaps.'
+      WRITE( ISUM, '( 1X )' )
       WRITE( ISUM, '( A, /, A)' )
-     2      '    "Sync Hours" is on-source, in-scan time ' //
-     3      'lost during correlation to resyncing',
-     4      '    recordings.  Resyncs follow tape stoppages '//
-     5      'and formatter reconfigures.'
+     1      '    "Sync Hours" is on-source, in-scan time ' //
+     2      'lost during correlation to resyncing',
+     3      '    recordings.  Resyncs follow tape stoppages '//
+     4      'and formatter reconfigures.'
       WRITE( ISUM, '( 1X )' )
       WRITE( ISUM, '( A, /, A, /, A )' )
      1      '    For VLBA DAR stations, total reconfigures and ' //
