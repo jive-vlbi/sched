@@ -68,6 +68,19 @@ C      CALL VERSCHED(VERSCH)
      4    VERJPL
       WRITE( IVEX, '( A )' ) COMLIN
 C
+C     Warn if there are moving sources and the Vex file positions
+C     should not be used for correlation.
+C
+      IF( MOVING ) THEN
+         WRITE( IVEX, '( A, / A, /, A, /, A, /, A )' )
+     1      '*',
+     2      '*   ++++  WARNING:  File contains moving sources ',
+     3      '*          Do no use positions for correlation.',
+     4      '*          Moving coordinates not described in VEX.',
+     5      '*'
+         WRITE( IVEX, '( A )' ) COMLIN
+      END IF
+C
 C     first issue warnings if violates PCFS constraints
 C      
       IF( NSTA .GT. 35 ) THEN

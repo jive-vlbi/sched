@@ -355,7 +355,7 @@ C                      MISSING implies can plot, but not make files.
 C
       INTEGER          LINEPG
       LOGICAL          PLOT, PUBPLOT, DEBUG, OVERWRIT 
-      LOGICAL          DOVEX, VEXTEST, DOVSOP, MISSING
+      LOGICAL          DOVEX, VEXTEST, DOVSOP, MISSING, MOVING
       LOGICAL          NOSET, PTLINK, COVERLET, AUTOPEAK, PKWATCH
       LOGICAL          OVERRIDE, READLOG, DODOWN
       CHARACTER        MSGTXT*256, SUMITEM(10)*8, DOSTA*8
@@ -394,7 +394,7 @@ C
 C
       COMMON  /SCHCON/ FREQLIST, PRECDATE, OPDUR, LINEPG, PLOT, 
      1                 PUBPLOT, DEBUG, OVERWRIT, DOVEX, VEXTEST, DOVSOP,
-     2                 MISSING, NOSET, PTLINK, COVERLET, 
+     2                 MISSING, MOVING, NOSET, PTLINK, COVERLET, 
      3                 AUTOPEAK, PKWATCH, OVERRIDE, READLOG, DODOWN,
      4                 OPMINEL, OPTSLEW, OPTLOWT, OPSLEWWT, OPSLEWTI,
      5                 OPHLIMWT, OPHLIMTI, OPHMAXDT, OPMINSEP, OPHA, 
@@ -643,6 +643,7 @@ C
       INTEGER          NDRIVE(MAXSTA), NHDPOS(MAXSTA)
       CHARACTER        TPOBS*8, DENSITY(MAXSTA)*1, HEADMODE(MAXSTA)*8
       LOGICAL          USETAPE(MAXSTA), USEDISK(MAXSTA), ANYTAPE
+      LOGICAL          ALLDISK
       CHARACTER        MEDIA(MAXSTA)*8
 C
 C                      Calculated items.  Mostly in TPSCH.  Some for
@@ -665,7 +666,7 @@ C
      2                 AUTOTAPE, AUTOALOC, AUTOREV, 
      3                 NTPSTA, TPSDRIV, TPSINDX, TPLENG, 
      4                 NDRIVE, NHDPOS, USETAPE, USEDISK, ANYTAPE,
-     5                 TPDAT, NRDBCK, NSTOP, NRECONF, NSTSC,
+     5                 ALLDISK, TPDAT, NRDBCK, NSTOP, NRECONF, NSTSC,
      6                 TAPES, PASSES, TPSCN, EXPTAPE, TPHR, SCNHR, 
      7                 TPFOOT1, TPFOOT2, MAXDR, GBYTES, TGBYTES, TTSYNC,
      8                 TWOHEAD, FASTTRK, ALLVLBA, NOREC, TAPE, REWIND, 
