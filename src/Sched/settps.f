@@ -21,15 +21,16 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           ISCN, ISTA, LASTISCN(MAXSTA), KS
+      INTEGER           ISCN, ISTA, KSTA, LASTISCN(MAXSTA), KS
 C        INTEGER           DAY, YEAR
       LOGICAL           FIRSTS, PRESWARN, SGWARN
       DOUBLE PRECISION  LSTOPJ(MAXSTA), SCNGAP(MAXSTA)
-      DOUBLE PRECISION  TPMIN, TOL
+      DOUBLE PRECISION  TPMIN, TOL, LASTGAP(MAXSTA)
 C        DOUBLE PRECISION  TIMED
 C        CHARACTER         TIMECH*8, TFORM*8
       PARAMETER         ( TOL = 0.1D0 / 86400.D0 )
       DATA              PRESWARN, SGWARN / .TRUE., .TRUE. /
+      SAVE              LASTGAP
 C  -------------------------------------------------------------------
       IF( DEBUG ) WRITE(*,*) 'SETTPS starting'
 C
@@ -55,6 +56,7 @@ C
             KS = NSETUP( ISCN, ISTA )
             IF( FIRSTS ) THEN
                LSTOPJ(ISTA) = STOPJ(ISCN) - 0.5
+               LASTGAP(ISTA) = STARTJ(ISCN)
             ELSE
                LSTOPJ(ISTA) = STOPJ(LASTISCN(ISTA)) 
             END IF
@@ -80,13 +82,56 @@ C
                   TPSTART(ISCN,ISTA) = SCNGAP(ISTA)
 C
                END IF
+C
+C              Do a station dependent break if the record scan
+C              has been too long.  This will propagate to all
+C              stations in the VEX case when starts are aligned.
+C              Only do this if all stations are using disk to
+C              prevent short stoppages for other systems that might
+C              not like it.  Make the inserted stoppage 3 seconds
+C              to prevent it being zeroed in SCH24.
+C
+C              The maximum record scan is a bit arbitrary, but
+C              set the limit at 1.1 hours for now.
+C
+               IF( ALLDISK ) THEN
+                  IF( TPSTART(ISCN,ISTA) .EQ. SCNGAP(ISTA) ) THEN
+                     IF( STARTJ(ISCN) - LASTGAP(ISTA) .GT. 
+     1                   1.1D0 / 24.D0 ) THEN
+                        TPSTART(ISCN,ISTA) = TPSTART(ISCN,ISTA) -
+     1                     3.0D0 * ONESEC
+C
+C                       If one station gets a forced gap, update 
+C                       the LASTGAP for all as they will all get
+C                       one when the start times are aligned.
+C
+                        DO KSTA = 1, NSTA
+                           LASTGAP(KSTA) = STARTJ(ISCN)
+                        END DO
+C
+C                       Tell the user about it.
+C
+                        MSGTXT = ' '
+                        WRITE( MSGTXT, '( A, I5, A, A, A )' )
+     1                    'SETTPS: Three second gap inserted for scan ',
+     2                      ISCN, ' for ', STANAME(ISTA),
+     3                     ' to prevent excessively long recording scan'
+                        CALL WLOG( 1, MSGTXT )
+                        MSGTXT = ' '
+                     END IF
+                  ELSE
+                     LASTGAP(ISTA) = STARTJ(ISCN)
+                  END IF
+               END IF
             END IF
 C
 C           Record the smallest TPSTART for this scan that was 
-C           forced by the preceeding stop time.
+C           forced by the preceeding stop time.  Allow for the
+C           cases where a short stoppage was inserted.
 C
-            IF( TPSTART(ISCN,ISTA) .EQ. SCNGAP(ISTA) )
-     1          THEN
+            IF( TPSTART(ISCN,ISTA) .EQ. SCNGAP(ISTA) .OR.
+     1          TPSTART(ISCN,ISTA) + 3.0 * ONESEC .EQ. 
+     2          SCNGAP(ISTA) )  THEN
                TPMIN = MIN( TPMIN, TPSTART(ISCN,ISTA) )
             END IF
 C
@@ -98,14 +143,6 @@ C     Set TPMIN for case where no TPSTARTS were forced by
 C     the scan gap.
 C
       IF( TPMIN .EQ. 1.D0 ) TPMIN = PRESTART(ISCN)
-C
-C     Check how long it has been since a gap in recording.  If more than
-C     an hour, then force a gap to make a new disk file.
-C
-
-C  *******************************
-      write(*,*) 'settps - deal with excessive recording scan lengths'
-
 C
 C     Now have TPSTART.  If necessary, synchronize the recorder starts.
 C     VEX requires this for now.

@@ -8,7 +8,7 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER   ISET, ISCN, ISRC
-      LOGICAL   FMTNONE, ALLNONE, MOVING
+      LOGICAL   FMTNONE, ALLNONE
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VEXOUT starting.' )
 C
@@ -26,6 +26,10 @@ C     observations will use VEX.  But block VEX output when doing
 C     OBSTYPE='CONFIG' where there may be a special binary with MSET
 C     = MAXMOD set too small to actually use.
 C
+C     Allow VEX files to be written for moving sources, but warn that
+C     the positions should be obtained elsewhere for correlation.
+C     (Feb 27, 2010 RCW)
+C
       IF( DOVEX ) THEN
 C
 C        Look for recording scans on planets or satellites.  We don't
@@ -35,10 +39,23 @@ C
          DO ISCN = SCAN1, SCANL
             ISRC = SRCNUM(ISCN)
             IF( SUSED(ISRC) .AND. .NOT. NOREC(ISCN) .AND.
-     1         ( PLANET(ISRC) .OR. SATEL(ISRC) ) ) THEN
+     1         ( PLANET(ISRC) .OR. SATEL(ISRC) .OR.
+     2          DRA(ISRC) .GE. 0.0001/15.0 .OR. 
+     3          DDEC(ISRC) .GE. 0.0001  ) ) THEN
                MOVING = .TRUE.
             END IF
          END DO
+         IF( MOVING ) THEN
+            WRITE( MSGTXT, '(A,A)' )
+     1        '++++ VEXOUT: Cannot pass accurate positions for ',
+     2        'planets or satellites in the VEX file.'
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '(A,A)' )
+     1        '        For correlation, get the source positions ',
+     2        'elsewhere - like from ephemeris.'
+            CALL WLOG( 1, MSGTXT )
+         END IF
 C
 C        Check for any FORMAT 'NONE' and all FORMAT 'NONE'.  Don't
 C        write VEX for all FORMAT 'NONE'
@@ -56,7 +73,7 @@ C        Actually write the VEX file, or explain why not.
 C
 C         IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
          IF( ( OVERRIDE .OR. .NOT. ALLNONE ) .AND. 
-     1         OBSTYP .NE. 'CONFIG' .AND. .NOT. MOVING ) THEN
+     1         OBSTYP .NE. 'CONFIG' ) THEN
             CALL VXWRT
          ELSE IF( ALLNONE ) THEN
             WRITE( MSGTXT, '(A,A)' )
@@ -67,13 +84,6 @@ C         IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
             WRITE( MSGTXT, '(A,A)' )
      1        'VEXOUT: Do not mix VEX with Configuration tests. ',
      2        'Set DOVEX=-1'
-            CALL ERRLOG( MSGTXT )
-         ELSE IF( MOVING ) THEN
-            WRITE( MSGTXT, '(A,A/,A,A)' )
-     1        'VEXOUT: Not set up to use VEX with planets or ',
-     2        'satellites in recording scans.',
-     3        '        They are ok in non-recording scans like',
-     4        ' pointing.'
             CALL ERRLOG( MSGTXT )
          ELSE
             WRITE( MSGTXT, '(A,A)' )

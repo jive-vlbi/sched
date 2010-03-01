@@ -703,9 +703,9 @@ the SNAP or Green Bank card types.
 for stations under control of the Goddard ``Field System'', e.g.\ MkIV
 telescopes.  Writing of such files is available in \schedb.  They are
 named, for example, {\sl bv016.vex}.  A single such file describes the
-observations for all antennas.  It is likely that these files will
-be needed for setting up the VLBA software correlator that is expected
-to start being used for user projects in 2008.
+observations for all antennas.  These files are also
+needed for setting up the VLBA software correlator that replaced
+the original hardware correlator at the end of 2009.
 
 \item[Flag file:] \schedb writes a file with the {\sl .flag} extension
 that can be helpful in data processing.  It contains flag entries, in
@@ -1733,7 +1733,7 @@ antennas in the same scan.  The estimates of data volumes and rates
 from the correlator, given in the summary file, are yet another
 because they depend on counts of baselines.  Finally, any VEX file
 produced in such a way is likely to cause problems at a correlator
-that depends on it (not the VLBA correlator).
+that depends on it.
 
 \schedb allows sidereal time scheduling by means of the \htmlref{{\tt
 LST}} {MP:LST} parameter.  For VLBI, the concept of LST needs a bit more
@@ -2414,9 +2414,12 @@ named with {\tt LINESET} in the {\tt LINEINIT} input.
 overrides the setup file value.  This is useful for switching between
 wideband observations on calibrators and narrow band observations on
 line sources.  The value in the setup file will be used if it is
-not specified.  This parameter is not allowed if VEX files are being
-written.  In general, it is a good idea to use a new setup file when
-changing bandwidths because quite a few other parameters also change.
+not specified.  In general, it is a good idea to use a new
+setup file when changing bandwidths because quite a few other
+parameters also change.
+
+% (This is out of date) The {\tt BW} parameter is not allowed if VEX
+% files are being written.  
 
 \item \htmlref{{\tt LINEINIT}}{MP:LINEINIT} indicates that after the
 next ``/'', information on the rest frequencies of spectral lines will
@@ -4513,13 +4516,16 @@ There is a \schedb example, \htmladdnormallink{{\sl egsat.com}}
 capability.  Interested users are recommended to start with that
 example.
 
-The scheme for handling moving sources in VEX files is not yet established,
-so satellite observations will be blocked if a VEX file is being written,
-unless all of the satellite scans are non-recording.  In that case,
-the scans will be skipped in the VEX file.  The same goes for planets.
-There is an intent to change this as VEX files for all observations
-that get correlated will be needed by the software correlator.
-
+The scheme for handling moving sources in VEX files is not yet established.
+However, to correlate such observations on the VLBA DiFX correlator,
+a Vex file is needed for all the information other than the positions.
+Thus VEX files can be written when there are moving positions, but several
+warnings will be written about the use of such files.  The positions
+of the moving sources should be obtained from ephemeris information at
+correlation time, separately from the VEX file.  For pointing, positions
+may or may not be good enough depending on the rates.  Also note that 
+solar system objects may require offset pointing positions between
+different stations and that is not described in the VEX file.
 
 
 \chapter{\label{CHP:INPUT}THE SCHED INPUT FILES (Includes parameter lists)}
@@ -5803,8 +5809,9 @@ At the AOC, for now, the ephemeris file is on Brian Butler's
 computer in the location shown in the example below.  There is
 also a copy in the \schedb catalogs subdirectory.
 
-Note that planetary observations cannot be specified to stations
-that use the VEX file.
+Note that if planetary observations specified to stations
+that use the VEX file, the positions passed will not be
+of adequate quality for correlation and maybe not for pointing.
 
 \rcwbox
 {Text of up to 80 characters - a file name.}
@@ -6459,12 +6466,23 @@ recording starts.  The recording start time is also given in the {\sl
 sch} file.
 
 {\tt MINPAUSE} is mainly used now to prevent excessive recording scans
-on the Mark5A system.  The system does now allow more than 1024 
+on the Mark5A system.  The system does not allow more than 1024 
 data scans on the disks.  There is one scan for each period during which
 the recording does not stop, regardless of the number of source scans
 during that period.  This limitation can be an issue with large disk
 packs and fast-switching phase-referencing projects.  The default
 value is meant to prevent recording stops during fast switching.
+
+While too many recording scans are a problem, so are too few.  If
+something goes wrong with playback, the correlators cannot recover
+until the start of the next recording scan.  Thus it is not wise to 
+have recording scans more than about an hour long.  For projects
+that use only disks, \schedb will automatically insert a short (3 
+second) gap at the start of the next scan after there has not been
+any break in recording for a bit over an hour.  The nominal scan
+times will not change, but there will be a short delay in the start
+of recording.  That break should be shorter than what is needed
+for other scan boundary actions like slewing to a calibrator.
 
 Short recorder stoppages could cause problems for playback in the era
 of tapes.  Every time the recording stoped, it must be resynced, which
@@ -9439,7 +9457,7 @@ something else, both the other type of file and the reduced VLBA file
 will be produced.  This is the default when {\tt CONTROL = VLA}.
 Option {\tt SN50} is also available for snap files with forced B1950
 coordinates.  The {\tt VEX} option for even one station triggers
-production of a VEX format .vex file (once this software is ready) for
+production of a VEX format .vex file for
 all stations in addition to any antenna specific files requested.
 
 \item [{\tt DAR}:] Gives the type of Data Acquisition Rack present.
@@ -12819,6 +12837,23 @@ more information.
 \subsection{\label{SSEC:VER_9.1}Version 9.1}
 
 \begin{itemize}
+
+\item 
+
+\item Allow writing of Vex files when there are moving sources in the
+project.  Such Vex files were blocked before because the necessary
+information for accurate positions cannot be passed through Vex with
+the current definition.  But such files are now needed for correlation
+so they can now be written, but there will be several warnings that
+the positions used in correlation, and in pointing if the motion is
+fast, should be obtained elsewhere.  Feb. 28, 2010.  RCW.
+
+\item With disk recordings, when there is a recording scan (period with
+no recording gap between source scans) of more than a bit over an hour,
+insert a 3 second recording gap.  This limits the size of recording 
+files.  If there is a problem with the recording, a whole file is lost
+so excessively long scans put large amounts of data at risk.  Feb. 28,
+2010, RCW.
 
 \item Set the default for {\tt PRESTART} to 1 second as it seems that
 DiFX does not synchronize instantly.  Feb. 26, 2010.  RCW.

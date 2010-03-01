@@ -305,7 +305,7 @@ C
 C        First LO sideband.
 C
          IF( FREQREF(ICH,KS) .GT. FIRSTLO(ICH,KS) ) THEN
-  1         SIDE1(ICH,KS)   = 'U'
+            SIDE1(ICH,KS)   = 'U'
          ELSE
             SIDE1(ICH,KS)   = 'L'
          END IF

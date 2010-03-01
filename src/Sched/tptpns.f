@@ -111,6 +111,7 @@ C
 C     Deal with MEDIA defaults etc.
 C
       ANYTAPE = .FALSE.
+      ALLDISK = .TRUE.
 C
       DO ISTA = 1, NSTA
 C
@@ -147,7 +148,7 @@ C
      4          (  MEDIA(ISTA) .EQ. ' ' .AND. 
      5          ( MEDIADEF(STANUM(ISTA)) .EQ. 'DISK' .OR. 
      6            MEDIADEF(STANUM(ISTA)) .EQ. 'NONE' ) ) )
-     
+         ALLDISK = ALLDISK .AND. USEDISK(ISTA)
 C       write(*,*) 'tptpns ', ista, usetape(ista), usedisk(ista),
 C     1  vlbitp, recorder(stanum(ista)), media(ista), 
 C     2  disk(stanum(ista)), mediadef(stanum(ista)), staname(ista)

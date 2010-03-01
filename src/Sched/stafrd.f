@@ -90,8 +90,8 @@ C
 C
 C     debug printout.
 C
-      write(*,'(A,3I6,E10.3,4F10.3)') ' stafrd ', ista, iscn, kf, uxy,
-     1     dfrdx, dfrdy, ddeldx, ddeldy
+C      write(*,'(A,3I6,E10.3,4F10.3)') ' stafrd ', ista, iscn, kf, uxy,
+C     1     dfrdx, dfrdy, ddeldx, ddeldy
 C
       RETURN
       END
