@@ -74,6 +74,11 @@ C        time range.  Don't just restrict this to stop times near
 C        midnight because the possible STARTJ change, combined with 
 C        TPSTART, could affect a scan transition somewhat earlier.
 C
+C        This tangled with the effort in settps to prevent long
+C        recording scans where 2 second gaps are introduced.  Change
+C        settps to a 3 second gap.  This comment here so this 
+C        connection is not forgotten.
+C
          MINTPS = -1.D0 * UNSET
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) .AND. LSCN(ISTA) .GT. 0 ) THEN
