@@ -74,6 +74,7 @@ C          or an IPS change, set IFS and IPS to A valid number
 C
            FRSTSCN = MAXSCN + 1
            IPS = 0
+           IFS = 0
            DO ISTA = 1, NSTA
               IF( STASCN(ISCN,ISTA) ) THEN
                  IF (FSETSCN(FSETI(ISCN,ISTA)).LT.FRSTSCN) THEN
