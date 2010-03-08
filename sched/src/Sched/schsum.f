@@ -147,14 +147,17 @@ C
       WRITE( ISUM, '( A )' )
      1      'Notes on the station summaries: '
       WRITE( ISUM, '( 1X )' )
-      WRITE( ISUM, '( A, /, A, /, A, /, A )' )
+      WRITE( ISUM, '( A, /, A, /, A, /, A, /, A )' )
      1      '    "Record Scans" are periods of recording with no '//
      2      'gap.  The Mark5A disk systems ', 
      3      '    have a limit of 1024 such scans.  There are often '//
      4      'multiple projects on a disk pack.',
      5      '    Try to keep above about 6 GB per record scan by '//
      6      'using MINPAUSE and PRESTART ',
-     7      '    to prevent short gaps.'
+     7      '    to prevent short gaps.  However, also try to '//
+     8      'prevent record scans of more than', 
+     9      '    an hour to minimize risk to data from playback '//
+     A      'problems.'
       WRITE( ISUM, '( 1X )' )
       WRITE( ISUM, '( A, /, A)' )
      1      '    "Sync Hours" is on-source, in-scan time ' //
@@ -183,14 +186,14 @@ C
       END DO
       IF( GOTTPS ) THEN
          WRITE( ISUM, '( 1X )' )
-         WRITE( ISUM, '( 2A, I5, A )' ) '        Recording started',
+         WRITE( ISUM, '( 2A, I5, A )' ) '    Recording started',
      1         ' before scan start time ', NTPS, 
      2         ' times.  See PRESTART and MINPAUSE.'
          WRITE( ISUM, '( 2A )' )
-     1         '        They may have been kept running through ',
+     1         '    They may have been kept running through ',
      2         'short scan gaps.'
          WRITE( ISUM, '( 2A )' )
-     1         '        The number can be large because each ',
+     1         '    The number can be large because each ',
      2         'station/scan combination counts.'
       END IF
       WRITE( ISUM, '( 1X, /, 1X, / )' )
