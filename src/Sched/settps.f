@@ -17,6 +17,9 @@ C     worry about that aspect any more.  That was an issue related
 C     to spin up and spin down of the tapes.
 C
 C     Try to prevent excessively long recording scans. Feb. 26, 2010 RCW
+C     Code was added to insert gaps, but that was a can of worms.
+C     Dummy that code (we may want it again later), but keep a stern
+C     warning if a scan longer than an hour is encountered.  Mar. 7, 2010.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
@@ -84,6 +87,10 @@ C
 C
                END IF
 C
+C              Stub the following break insertion, but keep one 
+C              strong warning.  The break insertion opened to big
+C              a can of worms, especially with non-NRAO systems.
+C              
 C              Do a station dependent break if the record scan
 C              has been too long.  This will propagate to all
 C              stations in the VEX case when starts are aligned.
@@ -98,13 +105,19 @@ C
                IF( ALLDISK ) THEN
                   IF( TPSTART(ISCN,ISTA) .EQ. SCNGAP(ISTA) ) THEN
                      IF( STARTJ(ISCN) - LASTGAP(ISTA) .GT. 
-     1                   1.1D0 / 24.D0 ) THEN
-                        TPSTART(ISCN,ISTA) = TPSTART(ISCN,ISTA) -
-     1                     3.0D0 * ONESEC
+     1                   1.01D0 / 24.D0 ) THEN
+C
+C                        Don't actually do it.
+C
+C                        TPSTART(ISCN,ISTA) = TPSTART(ISCN,ISTA) -
+C     1                     3.0D0 * ONESEC
 C
 C                       If one station gets a forced gap, update 
 C                       the LASTGAP for all as they will all get
-C                       one when the start times are aligned.
+C                       one when the start times are aligned.  With
+C                       the stub, keep this to trigger additional
+C                       warnings if the long scans keep up, but to
+C                       not trigger too many warnings.
 C
                         DO KSTA = 1, NSTA
                            LASTGAP(KSTA) = STARTJ(ISCN)
@@ -115,12 +128,18 @@ C
                         MSGTXT = ' '
                         CALL TIMEJ( STARTJ(ISCN), YEAR, DAY, TIMED )
                         CSTART = TFORM( TIMED, 'T', 0, 2, 2, '::@' )
-                        WRITE( MSGTXT, '( A, I5, A, A, A )' )
-     1                   'SETTPS: Three second gap inserted for scan ',
-     2                     ISCN, ' at ', CSTART, 
-     3                   ' to prevent excessively long recording scans.'
+                        WRITE( MSGTXT, '( A, I5, 4A )' )
+     1                   'SETTPS: By scan ', ISCN, ' at ', CSTART, 
+     2                   ' there has been over an hour of continuous',
+     3                   ' recording.'
                         CALL WLOG( 1, MSGTXT )
                         MSGTXT = ' '
+                        CALL WLOG( 1,
+     1                   '        This puts excessive amounts of '//
+     2                   'data at risk if there are playback problems.')
+                        CALL WLOG( 1,
+     1                   '        Use GAP, or reduce PRESTART or '//
+     2                   'MINPAUSE to add a gap.' )
                      END IF
                   ELSE
                      LASTGAP(ISTA) = STARTJ(ISCN)
@@ -129,12 +148,15 @@ C
             END IF
 C
 C           Record the smallest TPSTART for this scan that was 
-C           forced by the preceeding stop time.  Allow for the
-C           cases where a short stoppage was inserted.
+C           forced by the preceeding stop time.  Comment out the
+C           allowance for the cases where a short stoppage was inserted.
+C           Put that back if gap insertion is resumed.
 C
-            IF( TPSTART(ISCN,ISTA) .EQ. SCNGAP(ISTA) .OR.
-     1          TPSTART(ISCN,ISTA) + 3.0 * ONESEC .EQ. 
-     2          SCNGAP(ISTA) )  THEN
+            IF( TPSTART(ISCN,ISTA) .EQ. SCNGAP(ISTA) ) THEN
+C
+C     1          TPSTART(ISCN,ISTA) + 3.0 * ONESEC .EQ. 
+C     2          SCNGAP(ISTA) )  THEN
+C
                TPMIN = MIN( TPMIN, TPSTART(ISCN,ISTA) )
             END IF
 C

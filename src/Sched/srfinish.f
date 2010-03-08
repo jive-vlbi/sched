@@ -63,6 +63,8 @@ C
      2           ' specified.' )
                IF( NSAT .EQ. 0 ) CALL WLOG( 1, '         '//
      1        '              No satellite info specified.' )
+               CALL WLOG( 1, '      Note some source names have '//
+     1               'changed.  Look for close matches.' )
             END IF
          END DO
          CALL ERRLOG( 'SRFINISH: Missing sources.' )
