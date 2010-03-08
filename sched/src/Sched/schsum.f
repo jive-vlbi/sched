@@ -72,7 +72,8 @@ C     in SCHTIM.  Note NOTAPE really means no recordings.
 C
 C     Do tape stations first.
 C
-      IF( .NOT. NOTAPE ) THEN
+      IF( ANYTAPE .AND. .NOT. NOTAPE ) THEN
+         
          WRITE( ISUM, '( A )' )  
      1       ' Station summaries (tape stations): '
          WRITE( ISUM, '( A )' )  
@@ -104,6 +105,7 @@ C
 C
 C        Now do disk stations.
 C
+      ELSE IF( .NOT. NOTAPE ) THEN
          WRITE( ISUM, '( 1X, /, A, /, A )' )  
      1       ' Station summaries (disk stations): ',
      2       '  Station  Control   Scans   Scan   Record  Record' //
@@ -181,8 +183,8 @@ C
       END DO
       IF( GOTTPS ) THEN
          WRITE( ISUM, '( 1X )' )
-         WRITE( ISUM, '( 2A, I5, A )' ) '        Tapes started before',
-     1         ' scan start time ', NTPS, 
+         WRITE( ISUM, '( 2A, I5, A )' ) '        Recording started',
+     1         ' before scan start time ', NTPS, 
      2         ' times.  See PRESTART and MINPAUSE.'
          WRITE( ISUM, '( 2A )' )
      1         '        They may have been kept running through ',
