@@ -22,12 +22,13 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           ISCN, ISTA, KSTA, LASTISCN(MAXSTA), KS
-C        INTEGER           DAY, YEAR
+      INTEGER           DAY, YEAR
       LOGICAL           FIRSTS, PRESWARN, SGWARN
       DOUBLE PRECISION  LSTOPJ(MAXSTA), SCNGAP(MAXSTA)
       DOUBLE PRECISION  TPMIN, TOL, LASTGAP(MAXSTA)
-C        DOUBLE PRECISION  TIMED
-C        CHARACTER         TIMECH*8, TFORM*8
+      DOUBLE PRECISION  TIMED
+C      CHARACTER         TIMECH*8
+      CHARACTER          TFORM*8, CSTART*8
       PARAMETER         ( TOL = 0.1D0 / 86400.D0 )
       DATA              PRESWARN, SGWARN / .TRUE., .TRUE. /
       SAVE              LASTGAP
@@ -112,10 +113,12 @@ C
 C                       Tell the user about it.
 C
                         MSGTXT = ' '
+                        CALL TIMEJ( STARTJ(ISCN), YEAR, DAY, TIMED )
+                        CSTART = TFORM( TIMED, 'T', 0, 2, 2, '::@' )
                         WRITE( MSGTXT, '( A, I5, A, A, A )' )
-     1                    'SETTPS: Three second gap inserted for scan ',
-     2                      ISCN, ' for ', STANAME(ISTA),
-     3                     ' to prevent excessively long recording scan'
+     1                   'SETTPS: Three second gap inserted for scan ',
+     2                     ISCN, ' at ', CSTART, 
+     3                   ' to prevent excessively long recording scans.'
                         CALL WLOG( 1, MSGTXT )
                         MSGTXT = ' '
                      END IF
