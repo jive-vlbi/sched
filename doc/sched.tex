@@ -1848,11 +1848,10 @@ wall clock time).  These times were determined for tape.  For some
 time, disks (Mark5a) were slower by about 10 seconds, but a quick
 check in Dec. 2007 suggests that the times are now about the same for
 disk.  The sync time for disk at JIVE, Bonn, Haystack and USNO is
-around 1 second or less and can be ignored.  It is expected that the
-software correlator being developed for the VLBA (expected in 2008)
-and other instruments will not have a delayed sync, at which time
-attempts to adjust the recording start time relative to the scan start
-time can be abandoned.
+around 1 second or less and can be ignored.  The software correlator
+now in use on the VLBA and other instruments do not have a delayed
+sync so attempts to adjust the recording start time relative to the
+scan start time are no longer especially important.
 
 The extreme, and often useful, case of a pre-start is to not stop
 recording between scans.  This is especially useful if you have many
@@ -1866,7 +1865,7 @@ get the effect at record time.
 {\tt PRESTART} is applied before {\tt MINPAUSE}.  First the recording
 start time is shifted earlier, then the interval from the last
 stop time is examined to determine if the recording should be left
-running.  The defaults of {\tt PRESTART=0, MINPAUSE=10} should
+running.  The defaults of {\tt PRESTART=1, MINPAUSE=20} should
 be ok in most situations.  Users should not need to worry about
 these parameters most of the time.  The offset of the recording start
 time from the scan start time can be displayed in the summary
@@ -7710,11 +7709,11 @@ on tape stop time given in the section on parameter \htmlref{{\tt GAP.}}
 
 \subsubsection{\label{MP:PRESTART}{\tt PRESTART}}
 
-Note that with all correlators now able to sync quickly,
-the need to adjust start times to allow for synchronization is
-basically gone.  The default {\tt PRESTART} is now 1 second to 
-give the correlators just a bit of time, but that should not have
-much impact on scheduling.
+Note that with all correlators now able to sync quickly, the need to
+adjust start times to allow for synchronization is basically gone.
+The default {\tt PRESTART} is now 1 second to give the Mark5A units
+just a bit of time to get going, but that should not have much impact
+on scheduling.
 
 {\tt PRESTART} gives a time by which to start the recording at a
 site before the nominal start time as established by \htmlref{{\tt
@@ -10133,7 +10132,9 @@ of.  Any special setup files that do not match one of the standards
 should be shown to Craig Walker for approval.  If it is a good one, it
 may be added to the standards.  However, the standard set is
 essentially complete for the VLBA.  If \schedb complains about your's,
-it is likely to be in error.
+it is likely to be in error.  If a user really wants his/her own 
+frequency catalog, use the input parameter
+\htmlref{{\tt FREQFILE}}{MP:FREQFILE} to specify the file name.
 
 There is a lot of information about available frequencies, receivers,
 frequency ranges, filters etc, especially at the VLBA, in the standard
@@ -12857,7 +12858,7 @@ so excessively long scans put large amounts of data at risk.  Feb. 28,
 2010, RCW.
 
 \item Set the default for {\tt PRESTART} to 1 second as it seems that
-DiFX does not synchronize instantly.  Feb. 26, 2010.  RCW.
+the Mark5A systems do not start recording instantly.  Feb. 26, 2010.  RCW.
 
 \item Increase the default value of {\tt MINPAUSE} from 10 to 20 seconds
 so that media stoppages are less likely during phase referencing 
