@@ -95,9 +95,6 @@ C
                   IF( KSTA .EQ. 0 ) THEN
                      CALL WLOG( 1, 'GETSTA: Station '//NAMEST//' 
      1                   not found in catalogs' )
-                     CALL WLOG( 1,
-     1                   '      Note some source names have changed.'//
-     2                   ' Look for close matches.' )
                      CALL ERRLOG( 'GETSTA: Note -- specify station '//
      1                   'catalog before end of first scan input.' )
                   END IF
