@@ -24,6 +24,8 @@
 \topmargin -0.5in
 \textheight 8.5in
 \textwidth 5.8in
+\sloppy
+
 %
 %  This file is set up for insertion of examples using C. Walker
 %  program inserttex.  If that program is run, the included
@@ -6452,7 +6454,7 @@ some schemes.
 {\tt MINPAUSE} is used to specify the minimum time a recording will be
 stopped between scans.  It can be specified for each scan, but usually
 will be set to one value for the whole schedule.  If the start of a
-scan is less than MINPAUSE (seconds) {/sl times the speedup factor}
+scan is less than MINPAUSE (seconds) {\sl times the speedup factor}
 from the end of the last recording scan, the recording will be left
 running between the scans.  This action is station dependent ---
 different stations can have the recording started at different times
@@ -6519,7 +6521,7 @@ VEX check routines happy for a reversal.
 {A number giving the minimum recording stoppage in seconds times the
 speedup factor.}
 {Any number.}
-{10 seconds.}
+{10 seconds times the speedup factor.}
 {Defaults to previous scan.}{
 {\tt MINPAUSE=30}}
 
@@ -7709,11 +7711,16 @@ on tape stop time given in the section on parameter \htmlref{{\tt GAP.}}
 
 \subsubsection{\label{MP:PRESTART}{\tt PRESTART}}
 
-Note that with all correlators now able to sync quickly, the need to
-adjust start times to allow for synchronization is basically gone.
-The default {\tt PRESTART} is now 1 second to give the Mark5A units
-just a bit of time to get going, but that should not have much impact
-on scheduling.
+{\tt PRESTART} allows the recording to be started before good data is
+expected.  It was used to give time for earlier correlators to
+synchronize playback.  All correlators now in use are able to sync
+quickly so the need to adjust start times to allow for synchronization
+is basically gone.  The default {\tt PRESTART} is now set to zero
+seconds.  In practice, the the Mark5A units may take a fraction of a
+second to get going on record, but we are not trying to compensate for
+that by default.  The following discussion is kept to describe the
+function of {\tt PRESTART} while the parameter is available, but can
+be ignored by most current (2010+) users.
 
 {\tt PRESTART} gives a time by which to start the recording at a
 site before the nominal start time as established by \htmlref{{\tt
@@ -7745,10 +7752,10 @@ synchronize the inputs from different stations before the start of
 good data.  Anytime the recording stops, the correlator takes time to
 resync.  On the old hardware VLBA correlator, that time is empirically
 about 8, 13, and 25 seconds for speedup factors 1, 2 and 4
-respectively.  Therefore it is best to keep recording through short
-gaps.  On other correlators playing Mark5 media, sync is rapid (10s at
-JIVE and of order 1 second or less at the MarkIV correlators and the
-DiFX software correlator (current VLBA)) so these concerns are not so
+respectively.  Therefore it was best to keep recording through short
+gaps.  On other correlators playing Mark5 media, sync is rapid ---
+on the order 1 second or less at the JIVE and MarkIV correlators and the
+DiFX software correlator (current VLBA), so these concerns are not so
 great.
 
 One exception when it may be a good idea to stop recording is when
@@ -7765,7 +7772,7 @@ reconfigure, a resync will be done normally.
 \rcwbox
 {A time.}
 {Any time.}
-{1.0}
+{0.0}
 {Defaults to previous scan.}
 {{\tt PRESTART=15}, meaning start the recording 15 seconds early.}
 
