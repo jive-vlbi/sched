@@ -66,6 +66,8 @@ C
      1          ( ( ( 60.D0 * PXSVAL(KY,4,2) ) + PXSVAL(KY,4,3) ) *
      2                10.D0**(-4) ) ) * PXSSGN(KY,4)
       END IF
+      write(*,*) 'plaxvl ', ky, ymax, pxsval(ky,4,1), pxsval(ky,4,2),
+     1    pxsval(ky,4,3), ' ', yaxis
 C
       RETURN
       END
