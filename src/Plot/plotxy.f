@@ -6,6 +6,10 @@ C     from user gathered by plotter.f
 C
 C     Changed meaning of KSRC to schedule source, not catalog source.
 C     Removed JSRC.  28 Dec 2001. RCW.
+C     PLOTXY is called by PLOTTY, which selects plot type from terminal
+C     input.  There KSRC can be non-zero if a source is selected.
+C     PLOTXY is also called from PLPLOT.  There KSRC seems to always
+C     be zero.  That will be the usual call.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'plot.inc'

@@ -142,7 +142,6 @@ C
          END IF
          CALL PLMNMX( TYPE, MIN, MAX, I )
          LABEL = 'Sec(z)'
-       write(*,*) 'plotdef ', i, min, max, rmin, rmax
 C
       ELSE
          CALL PUTOUT( 'PLOTDEF: Invalid request for ' // WHICH //
