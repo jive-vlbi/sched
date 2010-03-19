@@ -1,6 +1,8 @@
       SUBROUTINE OPTCELLS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
 C
-C  ****************  CSUB may have replaced this completely.
+C     **  CSUB may have replaced this completely.
+C            But last I tried, CSUB was not working.  Also AIPS is not
+C            overly fond of subarrays.
 C
 C
 C     Routine for SCHED that trys to optimize sky coverage over each   
@@ -14,7 +16,7 @@ C     will be in at TAPPROX and looks at the time since the last
 C     sample.  These time differences are weighted and summed over all
 C     stations.  The source with the highest weight is chosen.
 C
-C     This routine will create always create new scans after NSCANS
+C     This routine will always create new scans after NSCANS
 C     (equivalent of NEWSCANS=.TRUE.).
 C
 C     *********   Do something reasonable if there are no sources up.
@@ -57,7 +59,7 @@ C
       INTEGER           IEL, IAZ
       REAL              CELLTIME(3,3,MAXSTA)
       REAL              ELCELL(2),  AZCELL(2), AZTEST, AZCOFF
-      SAVE              AZCOFF, ELCELL, AZCELL
+      SAVE              AZCOFF, ELCELL, AZCELL, CELLTIME
 C
 C     The cell boundaries.  Make input some day?
 C     AZCOFF is added to the azimuth to get the "test" azimuth
@@ -203,7 +205,8 @@ C           Add a little extra emphasis for low elevation cells on
 C           stations where not all low elevation cells can be hit.
 C           Detect this by looking for long times to last hit in cells.
 C
-C           Be sure this source ok, and then get points.
+C           Be sure this source ok (enough stations up) , and 
+C           then get points.
 C
             IF( GOTSTA(JSCN) .GE. OPMIAN(JSCN) ) THEN
                DO ISTA = 1, NSTA

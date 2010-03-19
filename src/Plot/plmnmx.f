@@ -18,13 +18,20 @@ C
       INTEGER           MODE, ISCN, ISTA
 C      INTEGER           LSRC, KSRC, KSET, I
       REAL              PT1, PT2, XYMIN, XYMAX
-      CHARACTER         XYAXIS*(*)
+      CHARACTER         XYAXIS*(*), TAXIS*5
 C -------------------------------------------------------------------
       IF( XYAXIS .NE. 'Sec' ) THEN
+C
+C        Don't try to use this routine for other than SECZ operations.
+C
+C        Some compilers don't like concatenation with variable of 
+C        indeterminent length in a call argument.
+C
+         TAXIS = XYAXIS
          CALL WLOG(1, 'PLMNMX:  Programming error - this routine '//
      1       'should only be called for XYAXIS=Sec' )
          CALL WLOG(1, 'PLMNMX:  It was called with XYAXIS = '//
-     1       XYAXIS )
+     1       TAXIS )
          CALL WLOG(1, 'PLMNMX:  Returning without doing anything.' )
          return
       END IF
