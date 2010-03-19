@@ -8,7 +8,7 @@ C
       INTEGER     ISRC, J, LENR, LEN1, LEND, LENS
       CHARACTER   TDEC20*16, TRA20*16, TFORM*16
 C -------------------------------------------------------------------
-      IF( DEBUG ) CALL WLOG( 0, 'OMSCOR starting' )
+      IF( DEBUG ) CALL WLOG( 0, 'OMSSRC starting' )
 C
       DO ISRC = 1, MSRC
          IF( SUSED(ISRC) ) THEN

@@ -37,6 +37,7 @@ C
       REAL              PT_ADD, WT_MUL, SL_ADJ
       DOUBLE PRECISION  TAPPROX, TIME1, TIME2, TIME3, TIMEC, DURC
       DOUBLE PRECISION  LASTTIME, LASTSTOP
+      SAVE              LASTTIME, LASTSTOP, LSRC
 C
 C     Cell stuff.
 C
@@ -44,7 +45,7 @@ C
       INTEGER           IEL, IAZ
       DOUBLE PRECISION  CELLTIME(3,3,MAXSTA)
       REAL              ELCELL(2),  AZCELL(2), AZTEST, AZCOFF
-      SAVE              AZCOFF, ELCELL, AZCELL
+      SAVE              AZCOFF, ELCELL, AZCELL, CELLTIME
 C
 C     The cell boundaries.  Make input some day?
 C     AZCOFF is added to the azimuth to get the "test" azimuth

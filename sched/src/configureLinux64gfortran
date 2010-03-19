@@ -1,0 +1,37 @@
+#! /bin/csh
+#
+# Use sed and the template Makefile.master to build a Makefile
+# for a MacOSX machine using gfortran (gcc4+) without satellite tracking.
+#
+# RCW  Oct 30, 2008
+#
+# If anyone knows how to make proper configure scripts and would like
+# to help by building one for SCHED, that would be much appreciated.
+#
+/bin/rm Makefile
+/bin/rm -f makelinux64gf_sedscript
+
+# Make a file for sed with all the required changes to Makefile.master
+
+cat <<EOF >! makelinux64gf_sedscript
+s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux64gfortran:
+s:#ARCHSED: ARCH = LINUX:
+s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
+s:#XLDSED: XLD = -L/usr/lib64 -lX11:
+s:#PLOT_SRCS_SED: PLOT_SRCS = \$(wildcard Plot/*.f) \$(wildcard PlotNRAO/*.f):
+s:#LPGPLOTSED: LPGPLOT =  -L/usr/lib64 -lpgplot -lpng:
+s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT):
+s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
+s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
+s:#SATLDSED: SATLD = :
+EOF
+
+#  Run sed with the above file.
+
+sed -f makelinux64gf_sedscript Makefile.master > Makefile
+/bin/rm makelinux64gf_sedscript
+
+
+#  When running make, you will see a variety of benign warnings that can be 
+#  ignored.  The main one concerns character variables being truncated when
+#  a variable of one length is set to equal a variable of another length.
