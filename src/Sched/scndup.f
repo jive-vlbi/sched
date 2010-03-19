@@ -38,8 +38,9 @@ C     Protect against overflowed arrays.
 C
       IF( TO .GT. MAXSCN ) THEN
          MSGTXT = ' '
-         WRITE( MSGTXT, '(A,I5)')  
-     1       'SCHDUP: Too many scans, maximum ',MAXSCN
+         WRITE( MSGTXT, '( A, I15, A, I15 )')  
+     1       'SCHDUP: Output scan number ', TO, 
+     2       ' too big for arrays of dimension: ',MAXSCN
          CALL ERRLOG( MSGTXT )
       END IF
 C
