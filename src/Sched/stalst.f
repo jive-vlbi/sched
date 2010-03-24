@@ -44,9 +44,9 @@ C     number is based on the defined value of 36525 for the
 C     Julian century that is the time unit for many astronomical 
 C     calculations.
 C
-      YEARS = ( MJD - MJDRATE(ISCAT) ) / 365.25D0
       DO ISTA = 1, NSTA
           ISCAT = STANUM(ISTA)
+          YEARS = ( MJD - MJDRATE(ISCAT) ) / 365.25D0
           WRITE( ISUM, '( 3X, A8, 2X, A3, 3F8.4, I7, 1X, 3F13.3 )' )
      1        STATION(ISCAT), STCODE(ISCAT),
      2        DXPOS(ISCAT), DYPOS(ISCAT), DZPOS(ISCAT), MJDRATE(ISCAT),

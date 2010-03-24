@@ -64,7 +64,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  VERSION 9.2}
+\title{THE \schedb USER MANUAL \\  VERSION 9.3}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -300,7 +300,7 @@ dependent slew rates and many others, that can significantly affect
 scheduling.
 
 \item \htmladdnormallink{VLBI at Arecibo:}
-{http://http://www.naic.edu/science/generalinfo_set.htm}
+{http://www.naic.edu/science/generalinfo_set.htm}
 Information about VLBI at Arecibo.  You will need to follow a couple
 of links from the above page - somehow the URL doesn't change going
 down the links.
@@ -5288,7 +5288,7 @@ The first word of {\tt CORREL} must be one of:
 (VLBA DiFX software correlator)
 \item {\tt FXCORR} (Original VLBA hardware correlator)
 \item {\tt Haystack},
-\item {\tt Bonn},
+\item {\tt Bonn (MPIfR DiFX correlator)},
 \item {\tt JIVE},
 \item {\tt Washington} or {\tt USNO},
 \item {\tt LBA},
@@ -9138,13 +9138,13 @@ Patnaik et al. 1992, mnras, 254, 655; Browne et al. 1998, mnras, 293,
 which include sources from the VLBA calibrator survey, the Australian
 LBA survey, and various sources observed in the RDV project on the
 VLBA, have positions good to typically a milliarcsecond or better.
-The JVAS sources are good to 12-55 mas.  The VLA calibrator positions
+The JVAS sources are good to $12-55$ mas.  The VLA calibrator positions
 are somewhat worse than the JVAS positions.  Users of accurate
 positions from the geodetic catalog are encouraged to reference the
 original papers.  Information about, and data from, the GSFC solutions
 can be found at
-\htmladdnormallink{http://vlbi.gsfc.nasa.gov/dataresults_main.htm}
-{http://vlbi.gsfc.nasa.gov/dataresults_main.htm}.  Catalogs and much
+\htmladdnormallink{http://vlbi.gsfc.nasa.gov/dataresults\_main.htm}
+{http://vlbi.gsfc.nasa.gov/dataresults\_main.htm}.  Catalogs and much
 other useful information provided by Leonid Petrov can be found at
 \htmladdnormallink{http://astrogeo.org/} {http://astrogeo.org/}.
 Comments in {\sl sources.vlba} will let you know which solution the
@@ -10474,7 +10474,7 @@ including all that are operated by NRAO.
 
 \subsection{\label{SSEC:SETEGS}Examples of Setup Files}
 
-The standard setup files described above (Section~/ref{SSEC:SETSTD})
+The standard setup files described above (Section~\ref{SSEC:SETSTD})
 can be used as examples.  However a few of them are shown here
 to show what they are like to someone who does not have easy access
 to the machine readable files.
@@ -12836,13 +12836,9 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_9.3}Development Version 9.3}
+\subsection{\label{SSEC:VER_9.4}Development Version 9.4}
 
 \begin{itemize}
-
-%  Request:  Move to, or add, gfortran on Linux
-
-%  Request:  Make BONN correlator mean DiFX.
 
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
@@ -12851,10 +12847,51 @@ more information.
 
 \end{itemize}
 
+\subsection{\label{SSEC:VER_9.3}Version 9.3}
+
+This version corrects an error in the reference dates in the
+locations.dat file.  There are also some code updates and more
+configure scripts for gfortran on Linux.
+Version 9.3 was released on March 23, 2010.
+
+\begin{itemize}
+
+\item Fixed bug apparent when not all stations have the same epoch for
+their station position rates.  When building the table of adjusted positions,
+it was using the reference date from the last station.  RCW Mar 23, 2010.
+
+\item Add stations Mizusawa (VERA) \& Yamaguchi to the stations, locations,
+and freq files.  RCW Mar. 22, 2010.
+
+\item The GSFC 2009a geodetic solution is based on a different
+position reference date from previous solutions.  When the new {\sl
+locations.dat} was created, the new date was used for all stations.
+But many stations do not have updates from the GSFC solution, so they
+then contained incorrect reference dates.  This creates station
+position errors when plate techtonics are taken into account.  {\sl
+locations.dat} has now been corrected to keep the old reference dates
+when the positions are not updated. Also fix typo in Petrov's name in the
+{\sl locations.dat} file.  March 18, 2010.  RCW.
+
+\item Scripts to create makefiles for use with gfortran on Linux have
+been created for 32 and 64 bit machines.  These do not support satellite
+tracking and won't until I obtain a gfortran version of the SPICE code.
+March 18, 2010.  RCW
+
+\item The use of gfortran revealed some problems with unSAVEd variables
+in some optimization routines.  Apparently g77 retains variable values
+between calls and gfortran does not.  Fixed for the CELLS and CSUB
+routines.  Note that the CSUB option seems to be broken for now for
+reasons that I have not yet tried to chase down.
+March 18, 2010  RCW.
+
+\end{itemize}
+
+
 \subsection{\label{SSEC:VER_9.2}Version 9.2}
 
 This was version 9.1 during development.  Version 9.2 was released
-on March 8, 2010.
+on March 10, 2010.
 
 \begin{itemize}
 
@@ -12875,6 +12912,9 @@ inserted a gap, but this opened a can of worms so I backtracked.  If
 there is a problem with the recording, a whole file is lost so
 excessively long scans put large amounts of data at risk.  March 7,
 2010, RCW.
+
+\item Support for the Australian LBA was improved and an example was
+added.  Cormac Reynolds.  March 2, 2010.
 
 \item Set the default for {\tt PRESTART} to 1 second as it seems that
 the Mark5A systems do not start recording instantly.  Feb. 26, 2010.  RCW.
