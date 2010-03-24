@@ -14,6 +14,7 @@ C
 C
       INTEGER       ITPSTA, IDEF, VLADEF, VLBADEF, ISTA, LEN1
       INTEGER       IDK
+      LOGICAL       ISLBA
 C --------------------------------------------------------------
 C     A station called 'DEFAULT' may be included with default settings.
 C
@@ -148,7 +149,10 @@ C
      4          (  MEDIA(ISTA) .EQ. ' ' .AND. 
      5          ( MEDIADEF(STANUM(ISTA)) .EQ. 'DISK' .OR. 
      6            MEDIADEF(STANUM(ISTA)) .EQ. 'NONE' ) ) )
-         ALLDISK = ALLDISK .AND. USEDISK(ISTA)
+C        LBA recorders use disks but have different constraints to Mk5
+         ISLBA = .FALSE.
+         IF (DISK(STANUM(ISTA))(1:5) .EQ. 'LBADR') ISLBA = .TRUE.
+         ALLDISK = ALLDISK .AND. USEDISK(ISTA) .AND. .NOT. ISLBA
 C       write(*,*) 'tptpns ', ista, usetape(ista), usedisk(ista),
 C     1  vlbitp, recorder(stanum(ista)), media(ista), 
 C     2  disk(stanum(ista)), mediadef(stanum(ista)), staname(ista)
