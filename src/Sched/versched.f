@@ -33,8 +33,10 @@ C      Version 8.1 is in an svn branch.  Taken from this on Feb 18, 2009
 C      VERNUM = 9.0      !  Beta version of Oct 14, 2009
 C      VERSION = 'Beta version released Oct. 14, 2009'
 C      VERSION = 9.1    !  Development version before 9.2
-      VERNUM  = 9.2
-      VERSION = 'Release of March 8, 2010'
+C      VERNUM  = 9.2
+C      VERSION = 'Release of March 8, 2010'
+      VERNUM  = 9.3
+      VERSION = 'Release near March 23, 2010'
 C
       RETURN
       END
