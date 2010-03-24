@@ -37,8 +37,10 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
     Architectures are (with local usable machines):
       LINUX     32 bit Intel linux machine without satellite tracking. (dave)
       LINUX64   64 bit Intel linux machine without satellite tracking. (noatak)
+      LINUX64GFORTRAN  Like LINUX64 but compiled with gfortran. (noatak)
       LINUX64SPICE  Like LINUX64 but with satellite tracking (noatak)
       OSXPPC    PowerPC Mac. (horton)
+      OSX_INTEL Intel Mac (stikine)
       SUN       Sun Solaris machine  (shire)
             Note some Sun's have too little memory for the default
             parameter settings.
@@ -49,37 +51,6 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
       make         (gmake on the Sun)
       Move the binary to the right subdirectory in bin.
       
-=================  Document the release  ===========================
-
-    Write a release note.  This will be mainly a link to the manual
-    update section.
-
-    Check the README and README.ftp files in $SCHED.
-
-=================  Manual  =========================================
-
-    Update the examples embedded in the manual.  You can use the 
-    following lines as a script.
-    inserttex is in $SCHED/RELATED_CODE/INSERTTEX if it is not in path.
-
-cd $SCHED/doc
-/bin/rm sched.tex.tmp
-mv sched.tex sched.tex.tmp
-inserttex 
-sched.tex.tmp
-sched.tex
- 
-    Process the manual.  latex will probably need to be run up to
-    3 times to get all the links right.
-    The local icons switch keeps users from having to go to
-    NRAO for the up etc buttons.
-    The -link option controls how deep the automatic contents pages
-    go at each level.  Without it, the contents on the top level
-    page are long enough to frighten off users.
-
-latex sched.tex
-latex2html -local_icons -link 2 sched.tex
-
 =================  Setup files and catalogs  ======================
 
     Update the setup files from the master:
@@ -114,6 +85,52 @@ source ./Verify
 Newstd
 schclean "*"
 
+=================  Document the release  ===========================
+
+    Write a release note.  This will be mainly a link to the manual
+    update section.
+
+    Check the README and README.ftp files in $SCHED.
+
+=================  Manual  =========================================
+
+    Update the examples embedded in the manual.  You can use the 
+    following lines as a script.
+    inserttex is in $SCHED/RELATED_CODE/INSERTTEX if it is not in path.
+
+cd $SCHED/doc
+/bin/rm sched.tex.tmp
+mv sched.tex sched.tex.tmp
+inserttex 
+sched.tex.tmp
+sched.tex
+ 
+    Process the manual.  latex will probably need to be run up to
+    3 times to get all the links right.
+    The local icons switch keeps users from having to go to
+    NRAO for the up etc buttons.
+    The -link option controls how deep the automatic contents pages
+    go at each level.  Without it, the contents on the top level
+    page are long enough to frighten off users.
+
+latex sched.tex
+latex2html -local_icons -link 2 sched.tex
+
+    Put copies of the examples and catalogs in appropriate subdirectories
+    in the directory with the html files to allow simple links.
+    Don't worry about setups here for now.
+    Give user write privileges to make other maintenance easier.
+
+/bin/rm -r sched/catalogs/*
+/bin/rm -r sched/examples/*
+tar cf - ../catalogs/sources.vlba  ../catalogs/freq.dat \
+         ../catalogs/stations.dat  ../catalogs/locations.dat \
+         ../catalogs/peak.cmd      ../catalogs/linefreqs.dat \
+         ../examples/*.key         ../examples/*.com     ../examples/*.set \
+            | (cd sched; tar xfp -)
+chmod  u+w sched/catalogs/*
+
+
 =================  Test plotting  =================================
 
     Test the plot functions on egplan.key.  Verify does not make plots.
@@ -123,39 +140,40 @@ schclean "*"
 
 =================  Make the release version =======================
 
-    Make a tagged version.
-    To do so from trunk ( There is a slight variation for a branch origen)
+  I'm no longer convinced making a tagged version is that good an idea.
+  If making a tagged version, see instructions at end of this file.
 
-svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
-         https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER \
-         -m "Tagging SCHED $NEWVER for maintenance"
+  Make a directory for the new version.
 
 setenv SCHEDNEW ~/files/sched_$NEWVER
-setenv SCHEDBASE ~/files/sched_branch8
 mkdir $SCHEDNEW
 cd $SCHEDNEW
-svn checkout https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER/ .
 
-#  Copy over the examples/Stdout files and the execute modules.
+svn checkout https://svn.aoc.nrao.edu/repos/sched/trunk/sched/*
 
-cd $SCHEDBASE
-rsync -auv --exclude ".svn" bin  $SCHEDNEW
-rsync -auv --exclude ".svn" examples/Stdout $SCHEDNEW/examples
-rsync -auv --exclude ".svn" doc/sched $SCHEDNEW/doc
+#  Copy over the examples/Stdout files, the execute modules, and 
+#  the html manual, none of which are under svn (they are fast changing
+#  and can be derived from files that are in svn.
+
+rsync -auv --exclude ".svn" $SCHED/bin  $SCHEDNEW
+rsync -auv --exclude ".svn" $SCHED/examples/Stdout $SCHEDNEW/examples
+rsync -auv --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
 
 #  Make the tar file.  Don't include the binaries.
 #  First be sure there are not old copies in the archive and ftp areas.
 #  Populate the ftp area.
 
-cd $SCHEDNEW
 tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
-    --exclude "lib" \
+    --exclude "lib" --exclude "core*" \
      -cf ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar .
 gzip ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar
 
+==================  Put files on the ftp site  =======================
+
 mkdir $FTP/sched/sched_$NEWVER
 mkdir $FTP/sched/sched_$NEWVER/binaries
-cp ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar.gz $FTP/sched/sched_$NEWVER/
+cp ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar.gz \
+     $FTP/sched/sched_$NEWVER/
 rsync -auv bin/*  $FTP/sched/sched_$NEWVER/binaries
 
 #  Copy over README.ftp if it has changed.
@@ -178,12 +196,15 @@ chmod u+w $SCHTEST/catalogs/*
 /bin/rm -r *
 tar -xvf $TARDIR/sched_{$NEWVER}.tar.gz --gunzip
 cd src
-configureLinux
+configureLinux64
 make
 cd ../examples
 Verify
 
+
      Kill the window to dump the unwanted $SCHED etc.
+     or at least:
+setenv SCHED /users/cwalker/files/sched_work
 
 ==================  Put the documentation on the web  =============
 
@@ -191,6 +212,8 @@ Verify
     May need to be from the branch if there is one.
     My cron jobs will move them to the main web server or run 
     /users/cwalker/bin/backup_noatak afterwards.
+    What is $SCHED/doc/sched should be all that is needed.
+
     Careful with the big delete (rm) below (that's why the cd ~ first)
     The initial removal of the catalogs etc directories is because the
     cp -r copied too much into those places.
@@ -203,17 +226,8 @@ Verify
 
 setenv WEBDIR /home/noatak/cwalker/webnrao
 cd ~
-chmod -R u+w $WEBDIR/sched_{$NEWVER}/sched/catalogs/*
-/bin/rm -r $WEBDIR/sched_{$NEWVER}
 mkdir $WEBDIR/sched_$NEWVER
-rsync -au --exclude "catalogs"  --exclude "examples" \
-          --exclude "setups" --exclude ".svn" \
-         $SCHEDBASE/doc/sched $WEBDIR/sched_$NEWVER
-cd $SCHEDBASE
-tar cf - catalogs/sources.vlba  catalogs/freq.dat  catalogs/stations.dat \
-         catalogs/locations.dat catalogs/peak.cmd  catalogs/linefreqs.dat \
-         examples/*.key         examples/*.com     examples/*.set \
-         setups/*.set    | (cd $WEBDIR/sched_$NEWVER/sched; tar xfp -)
+cp -R $SCHEDNEW/doc/sched/* $WEBDIR/sched_$NEWVER/
 
     When actually doing the release, update the link from generic sched 
     to the version directory.
@@ -255,3 +269,26 @@ svn propset svn:ignore "*" Stdout
 svn propset svn:ignore -F ignore.txt .
 cd ../doc
 svn propset svn:ignore "*" sched
+
+
+==================  If a tagged version is wanted ===================
+
+I'm no longer convinced I want to do this, so stash the instructions here.
+
+    Make a tagged version.
+    To do so from trunk ( There is a slight variation for a branch origen)
+
+svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
+         https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER \
+         -m "Tagging SCHED $NEWVER for maintenance"
+
+setenv SCHEDBASE ~/files/sched_branch8
+cd $SCHEDNEW
+svn checkout https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER/ .
+
+#  Copy over the examples/Stdout files and the execute modules.
+
+cd $SCHEDBASE
+rsync -auv --exclude ".svn" bin  $SCHEDNEW
+rsync -auv --exclude ".svn" examples/Stdout $SCHEDNEW/examples
+rsync -auv --exclude ".svn" doc/sched $SCHEDNEW/doc
