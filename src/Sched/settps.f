@@ -87,9 +87,11 @@ C
 C
                END IF
 C
-C              Stub the following break insertion, but keep one 
+C              Stub the following break insertion, but keep a
 C              strong warning.  The break insertion opened to big
 C              a can of worms, especially with non-NRAO systems.
+C              In fact, change from doing it if ALLDISK set to only
+C              doing it for stations with MARK5A systems.
 C              
 C              Do a station dependent break if the record scan
 C              has been too long.  This will propagate to all
@@ -102,7 +104,8 @@ C
 C              The maximum record scan is a bit arbitrary, but
 C              set the limit at 1.1 hours for now.
 C
-               IF( ALLDISK ) THEN
+               IF( ALLDISK .AND. DISK(STANUM(ISTA)) .EQ. 'MARK5A' ) 
+     1               THEN
                   IF( TPSTART(ISCN,ISTA) .EQ. SCNGAP(ISTA) ) THEN
                      IF( STARTJ(ISCN) - LASTGAP(ISTA) .GT. 
      1                   1.01D0 / 24.D0 ) THEN
@@ -131,7 +134,7 @@ C
                         WRITE( MSGTXT, '( A, I5, 4A )' )
      1                   'SETTPS: By scan ', ISCN, ' at ', CSTART, 
      2                   ' there has been over an hour of continuous',
-     3                   ' recording.'
+     3                   ' recording on a Mark5A system.'
                         CALL WLOG( 1, MSGTXT )
                         MSGTXT = ' '
                         CALL WLOG( 1,

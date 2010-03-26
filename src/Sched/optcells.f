@@ -40,16 +40,18 @@ C
       INTEGER     MAXISC
       PARAMETER   (MAXISC=1000)       ! Number of input scans.
 C
-      INTEGER           LASTISCN(MAXSTA), KSCN, ISCN, JSCN, ISTA
+      INTEGER           LASTISCN(MAXSTA), KSCN, ISCN, JSCN, LSCN
+      INTEGER           ISTA, JSTA, ISCAT, JSCAT
       INTEGER           GOTSTA(MAXISC), IE, IA, YR, DY, MXSCN
-      INTEGER           LASTJSCN
+      INTEGER           LASTJSCN, MAXSKIP, STSKIP(MAXSTA), ISK1
+      INTEGER           LOOKBACK, NBAS, NBASE
       REAL              POINTS(MAXISC), MAXPTS, MAXAPT, SL_ADJ
-      REAL              PT_ADD, WT_MUL
+      REAL              PT_ADD, WT_MUL, WTBAS(MAXSTA)
       LOGICAL           KEEP, ADJUST, DONE, ALL0
       LOGICAL           OKSTA(MAXISC,MAXSTA)
       DOUBLE PRECISION  TIMESRC(MAXISC), TAPPROX, TIME1
       DOUBLE PRECISION  LCTIME, LASTTIME 
-      DOUBLE PRECISION  TIMERAD
+      DOUBLE PRECISION  TIMERAD, MEANBAS(MAXSTA), MEANBASE, BASELINE
       CHARACTER         TIMECH*8, TFORM*8
       SAVE              LASTJSCN
 C
@@ -67,8 +69,11 @@ C     so that I can have a cell that crosses 0.
 C
 C ***********  ELCELL modified for DELZN maker - temporary.
 C              If this works, take the limits out to user.
+C              Also, treat all azimuths in the upper elcell as
+C              the same.  Do later.
+C
       DATA      AZCOFF  / 60. /
-      DATA      ELCELL  / 15., 25. /
+      DATA      ELCELL  / 20., 30. /
       DATA      AZCELL  / 120., 240. /  
 C ---------------------------------------------------------------------
       IF( DEBUG ) WRITE(*,*) 'Starting OPTCELLS'
@@ -107,13 +112,42 @@ C
          LASTJSCN = 0
 C
 C        Initialize times to about some nominal time before the start. 
+C        Also get antenna weighting factors by considering the mean
+C        baseline to each station.  I want to downweight antennas that
+C        are clustered.  Without something like that, it is not doing
+C        as well for MK and SC in the VLBA as it is for PT, LA etc.
 C
+         NBASE = 0
+         MEANBASE = 0.D0
          DO ISTA = 1, NSTA
             DO IEL = 1, 3
                DO IAZ = 1, 3
                   CELLTIME(IEL,IAZ,ISTA) = STARTJ(1) - 0.5D0/24.D0
                END DO
             END DO
+            NBAS = 0
+            MEANBAS(ISTA) = 0.D0
+            ISCAT = STANUM(ISTA)
+            DO JSTA = 1, NSTA
+               JSCAT = STANUM(JSTA)
+               IF( ISTA .NE. JSTA ) THEN
+                  BASELINE = SQRT(
+     1                ( XPOS(JSCAT) - XPOS(ISCAT) )**2 +
+     2                ( YPOS(JSCAT) - YPOS(ISCAT) )**2 +
+     3                ( ZPOS(JSCAT) - ZPOS(ISCAT) )**2 )
+                  NBAS = NBAS + 1
+                  MEANBAS(ISTA) = MEANBAS(ISTA) + BASELINE
+                  NBASE = NBASE + 1
+                  MEANBASE = MEANBASE + BASELINE
+               END IF
+            END DO
+            MEANBAS(ISTA) = MEANBAS(ISTA) / NBAS
+         END DO
+         MEANBASE = MEANBASE / NBASE
+         DO ISTA = 1, NSTA
+            WTBAS(ISTA) = ( MEANBAS(ISTA)/ MEANBASE )**2
+C            write(*,*) 'optcells wt ', ista, wtbas(ista), 
+C     1          meanbas(ista), meanbase
          END DO
 C
       ELSE
@@ -170,12 +204,16 @@ C
 C
 C                    Az:
 C
-                     IF( AZTEST .LT. AZCELL(1) ) THEN
+                     IF( ELI(JSCN,ISTA) .EQ. 3 ) THEN
                         AZI(JSCN,ISTA) = 1
-                     ELSE IF( AZTEST .LT. AZCELL(2) ) THEN
-                        AZI(JSCN,ISTA) = 2
                      ELSE
-                        AZI(JSCN,ISTA) = 3
+                        IF( AZTEST .LT. AZCELL(1) ) THEN
+                           AZI(JSCN,ISTA) = 1
+                        ELSE IF( AZTEST .LT. AZCELL(2) ) THEN
+                           AZI(JSCN,ISTA) = 2
+                        ELSE
+                           AZI(JSCN,ISTA) = 3
+                        END IF
                      END IF
                   END IF
                END IF
@@ -183,6 +221,8 @@ C
             END DO
 C
 C           Now get earliest time for this source.
+C           If OPNOSUB, do now allow scans to overlap.  They can abut
+C           if they don't share antennas.
 C
             TIMESRC(JSCN) = 1.D10
             ALL0 = .TRUE.
@@ -190,6 +230,9 @@ C
                IF( OKSTA(JSCN,ISTA) .AND. LASTISCN(ISTA) .NE. 0 ) THEN
                   ALL0 = .FALSE.
                   TIMESRC(JSCN) = MIN(TIMESRC(JSCN), TONSRC(JSCN,ISTA))
+                  IF( OPNOSUB .AND. ISCN .GT. SCAN1 ) THEN
+                     TIMESRC(JSCN) = MAX( TIMESRC(JSCN), STOPJ(ISCN-1) )
+                  END IF
                END IF
             END DO
             IF( ALL0 ) TIMESRC(JSCN) = STARTJ(1)
@@ -244,7 +287,14 @@ C
 C
 C                    Increment the points for this source, weighted.
 C
-                     POINTS(JSCN) = POINTS(JSCN) + PT_ADD * WT_MUL
+C                    Try an experiment and use the points for the
+C                    most beneficial antenna, not summed.  With
+C                    summed, the groups of nearby antennas may 
+C                    be favored.  Or try weights.
+C
+                     POINTS(JSCN) = POINTS(JSCN) + 
+     1                   WTBAS(ISTA) * PT_ADD * WT_MUL
+C                     POINTS(JSCN) = MAX( POINTS(JSCN), PT_ADD * WT_MUL )
 C
                   END IF
                END DO
@@ -289,6 +339,46 @@ C
          END IF
       END DO
 C
+C     Downweight a scan if it does not include a station that
+C     has had too few scans recently.  Hardwire the parameters
+C     for now - maybe make inputs some day.
+C
+      LOOKBACK = 6
+      DO ISTA = 1, NSTA
+         STSKIP(ISTA) = 0
+      END DO
+      IF( ISCN .GT. SCAN1 + 2 ) THEN
+         ISK1 = MAX( ISCN - LOOKBACK , SCAN1 )
+         DO LSCN = ISK1, ISCN - 1
+            DO ISTA = 1, NSTA
+C
+C              Test if station is in scan and above minimim
+C              elevation limit.  Note with OPNOSUB, there could
+C              be stations in the scan that have too low elevation.
+C
+               IF( .NOT. ( STASCN(LSCN,ISTA) .AND. 
+     1             EL1(LSCN,ISTA) .GT. OPMINEL(LSCN) ) ) THEN
+                  STSKIP(ISTA) = STSKIP(ISTA) + 1
+               END IF
+            END DO
+         END DO
+      END IF
+      DO JSCN = 1, NSCANS
+         MAXSKIP = 0
+         DO ISTA = 1, NSTA
+            IF( .NOT. ( STASCN(JSCN,ISTA) .AND. 
+     1          EL1(JSCN,ISTA) .GT. OPMINEL(JSCN) ) ) THEN
+               MAXSKIP = MAX( MAXSKIP, STSKIP(ISTA) )
+            END IF
+         END DO
+C
+C        Now do the downweight.
+C
+         IF( MAXSKIP .GT. LOOKBACK / 3 ) THEN
+            POINTS(JSCN) = 0.2 * POINTS(JSCN)
+         END IF
+      END DO
+C
 C     Choose the next JSCN - the input scan number.
 C
       MAXAPT = -1.D10
@@ -329,15 +419,18 @@ C
       CALL WLOG( 0, MSGTXT )
 C
 C     Refill the CELLTIME array.  JSCN has been chosen.  Also set
-C     STASCN to give stations to include, taking into account 
-C     a possible request for no subarrays.
+C     STASCN to give stations to include.  The request for avoiding
+C     subarrays was taken into account earlier when setting the 
+C     start time.
 C
       DO ISTA = 1, NSTA
-         STASCN(ISCN,ISTA) = OPNOSUB
+C         STASCN(ISCN,ISTA) = OPNOSUB
          IF( OKSTA(JSCN,ISTA) ) THEN
             CELLTIME(ELI(JSCN,ISTA),AZI(JSCN,ISTA),ISTA) = 
      1               STARTJ(ISCN)
             STASCN(ISCN,ISTA) = .TRUE.
+         ELSE
+            STASCN(ISCN,ISTA) = .FALSE.
          END IF
       END DO 
 C
