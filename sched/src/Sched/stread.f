@@ -169,10 +169,12 @@ C
      3       DAR(MSTA) .NE. 'MKIII' .AND. 
      4       DAR(MSTA) .NE. 'S2'    .AND. 
      5       DAR(MSTA) .NE. 'K4'    .AND. 
-     6       DAR(MSTA) .NE. 'VSOP'  .AND. 
-     7       DAR(MSTA) .NE. 'VLBA4' .AND. 
-     8       DAR(MSTA) .NE. 'LBA' .AND. 
-     9       DAR(MSTA) .NE. 'NONE' ) THEN
+     6       DAR(MSTA) .NE. 'K5'    .AND. 
+     7       DAR(MSTA) .NE. 'VERA'  .AND. 
+     8       DAR(MSTA) .NE. 'VSOP'  .AND. 
+     9       DAR(MSTA) .NE. 'VLBA4' .AND. 
+     A       DAR(MSTA) .NE. 'LBA' .AND. 
+     B       DAR(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF
@@ -186,10 +188,12 @@ C
      2       RECORDER(MSTA) .NE. 'MKIII'  .AND. 
      3       RECORDER(MSTA) .NE. 'S2'     .AND. 
      4       RECORDER(MSTA) .NE. 'K4'     .AND. 
-     5       RECORDER(MSTA) .NE. 'VSOP'   .AND. 
-     6       RECORDER(MSTA) .NE. 'MARK5A' .AND. 
-     7       RECORDER(MSTA) .NE. 'MARK5B' .AND. 
-     8       RECORDER(MSTA) .NE. 'NONE' ) THEN
+     5       RECORDER(MSTA) .NE. 'K5'     .AND. 
+     6       RECORDER(MSTA) .NE. 'VERA'   .AND. 
+     7       RECORDER(MSTA) .NE. 'VSOP'   .AND. 
+     8       RECORDER(MSTA) .NE. 'MARK5A' .AND. 
+     9       RECORDER(MSTA) .NE. 'MARK5B' .AND. 
+     A       RECORDER(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid recorder type ' //
      1          RECORDER(MSTA) // ' for ' // STATION(MSTA) )
          END IF
@@ -198,6 +202,7 @@ C        Be sure the DISK is an allowed type.
 C
          IF( DISK(MSTA) .EQ. ' ' ) DISK(MSTA) = 'NONE'
          IF( DISK(MSTA) .NE. 'MARK5A' .AND.
+     1       DISK(MSTA) .NE. 'MARK5B' .AND.
      2       DISK(MSTA) .NE. 'LBADR' .AND.
      3       DISK(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DISK type ' //

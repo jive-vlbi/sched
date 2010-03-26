@@ -9473,7 +9473,8 @@ all stations in addition to any antenna specific files requested.
 This is mainly to identify the type of formatter is at the station
 which will let the program know about the capabilities available.
 Valid types are: {\tt VLBA}, {\tt MKIV}, {\tt VLBA4}, {\tt MKIII},
-{\tt S2}, {\tt K4}, {\tt VSOP}, {\tt LBA} and {\tt NONE} (the
+{\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt VSOP}, {\tt LBA} 
+and {\tt NONE} (the
 default).  Note that for Mark II scheduling (basically obsolete), any
 site scheduled will be assumed to have Mark II equipment.  The main
 non-obvious option above is {\tt VLBA4}, which is a VLBA DAR but with
@@ -9482,7 +9483,8 @@ switching, but Mark IV formatting characteristics.
 
 \item [{\tt RECORDER}:] Gives the type of tape recorder(s) present
 Valid options are: {\tt VLBA}, {\tt MKIV}, {\tt VLBA4}, {\tt MKIII},
-{\tt S2}, {\tt K4}, {\tt VSOP}, and {\tt NONE} (the default).  The
+{\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt VSOP}, 
+and {\tt NONE} (the default).  The
 {\tt VLBA4} option is for VLBA recorders which have been modified
 for 16 Mbps per track operation and can be equiped with 2 recording
 heads.  They are usually associated with {\tt MKIV} or {\tt VLBA4} DARs.
@@ -9511,8 +9513,8 @@ of the \htmlref{{\tt MEDIA}}{TP:MEDIA} parameter in the
 \htmlref{tape initialization information}{SEC:TPINI}.  For VLBA
 systems, commands for both {\tt RECORDER} and {\tt DISK} can be
 included in the control file.  Valid arguments to {\tt DISK} for
-now are restricted to {\tt MARK5A}, {\tt LBADR} and {\tt NONE} (the
-default). {\tt MARK5B} will be valid later.
+now are restricted to {\tt MARK5A}, {\tt MARK5B}, {\tt LBADR} 
+and {\tt NONE} (the default).
 
 \item [{\tt MEDIADEF}:] Gives the default recording system to use.  It
 can be overridden by {\tt MEDIA} in the \htmlref{{\tt
@@ -12855,6 +12857,11 @@ configure scripts for gfortran on Linux.
 Version 9.3 was released on March 23, 2010.
 
 \begin{itemize}
+
+\item Add K5 and VERA as allow values for DAR and RECORDER in the
+stations catalog.  Add MARK5B as an allowed value for DISK.  \schedb
+doesn't actually do anything with these yet.  It just doesn't die
+if they are there.  March 25, 2010  RCW.
 
 \item Restrict the cases where the warning for excessive recording
 scans is issued to cases where the MARK5A recording system is in use.
