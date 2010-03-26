@@ -149,10 +149,19 @@ C
      4          (  MEDIA(ISTA) .EQ. ' ' .AND. 
      5          ( MEDIADEF(STANUM(ISTA)) .EQ. 'DISK' .OR. 
      6            MEDIADEF(STANUM(ISTA)) .EQ. 'NONE' ) ) )
+C
 C        LBA recorders use disks but have different constraints to Mk5
+C        This change added by Cormac.  I'm (Craig) not sure I like it
+C        as I was planning to use ALLDISK to say not to worry about 
+C        tape.  But in practice, as of Version 9.3, ALLDISK is only
+C        used in SETTPS for long recording scan warnings (not wanted
+C        for the LBA) and I test against MARK5A there.  So I'll
+C        leave it for now.  Reconsider if used for something else.
+C
          ISLBA = .FALSE.
          IF (DISK(STANUM(ISTA))(1:5) .EQ. 'LBADR') ISLBA = .TRUE.
          ALLDISK = ALLDISK .AND. USEDISK(ISTA) .AND. .NOT. ISLBA
+C
 C       write(*,*) 'tptpns ', ista, usetape(ista), usedisk(ista),
 C     1  vlbitp, recorder(stanum(ista)), media(ista), 
 C     2  disk(stanum(ista)), mediadef(stanum(ista)), staname(ista)
