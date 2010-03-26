@@ -14,13 +14,13 @@ C
       INTEGER     ISCN, ISTA, LEN1, I, ISCH, LSCH, ISTN, IDUR
       INTEGER     IOERR, VLBOPE, YEAR, DAY1, DAY2, KSCH
       INTEGER     LSET, PTCHAR, LASTDAY, LASTDUR
-      INTEGER     I1, I2, IEL, MISCH
+      INTEGER     I1, I2, IEL, MISCH, MISTN
       REAL        LASTBW(MAXCHN)
       CHARACTER   LINESC*256, SCHFILE*80, LINEPT*132, LASTLINE*256
       CHARACTER   TFORM*8, OPTEXT*256, OPSTAT*4, USENAME*8, CEL*3
       LOGICAL     NEWBW, FIRSTPT, EXISTS, NEEDPAR
       LOGICAL     LDOPCAL, LNOREC
-      DOUBLE PRECISION  LSTDAY
+      DOUBLE PRECISION  LSTDAY, PTLONG, GAST, PTLST, SLA_GMST
       SAVE        FIRSTPT, LASTLINE, LSCH, LSET, LASTDUR
       SAVE        LDOPCAL, LNOREC, LASTDAY, LASTBW, MISCH
       DATA        FIRSTPT / .TRUE. /
@@ -174,25 +174,37 @@ C
      1       SCNSRC(ISCN)(1:LEN1(SCNSRC(ISCN))),''''
 C
 C     Write out scan time.  Based on TIMEJ calls earlier.
+C     Use the LST at Pie Town for the time.  But don't assume
+C     that Pie town is present.
+C
+      PTLONG = 108.11919D0 * RADDEG
+      GAST = SLA_GMST( STARTJ(ISCN) )
+      PTLST = DMOD( GAST - PTLONG, TWOPI )
+      IF( PTLST .LT. 0.0D0 ) PTLST = PTLST + TWOPI
 C
 C
 C
-      LINESC(25:38) = 'START=' // TFORM( START, 'T', 0, 2, 2, '::@' )
+C      LINESC(25:38) = 'START=' // TFORM( START, 'T', 0, 2, 2, '::@' )
+      LINESC(25:38) = 'PTLST=' // TFORM( PTLST, 'T', 0, 2, 2, '::@' )
 C
 C     Set up stations list.
-C     Use codes for VLBA
+C     Use codes for VLBA.
+C     Also keep track of length if all stations are present.
+C     The initial value for MISTN is for the 'STATIONS='
 C
       ISCH = 42
       KSCH = ISCH
+      MISTN = 9 + ISCH
       NEEDPAR = .TRUE.
       DO ISTA = 1, NSTA
+         IF( STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
+            USENAME = STCODE(STANUM(ISTA))
+         ELSE
+            USENAME = STATION(STANUM(ISTA))
+         END IF
+         ISTN = LEN1( USENAME )
+         MISTN = MISTN + ISTN + 1
          IF( STASCN(ISCN,ISTA) ) THEN
-            IF( STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
-               USENAME = STCODE(STANUM(ISTA))
-            ELSE
-               USENAME = STATION(STANUM(ISTA))
-            END IF
-            ISTN = LEN1( USENAME )
             IF( NEEDPAR ) THEN
                WRITE( LINESC(ISCH:ISCH+8), '(A)' ) 'STATIONS='
                ISCH = ISCH + 9
@@ -222,10 +234,14 @@ C
       LASTLINE = LINESC
       ISCH = ISCH + 2
       MISCH = MAX( ISCH, MISCH )
+      MISTN = MISTN + 2
+      IF( MISCH .GT. MISTN ) THEN
+         CALL WLOG( 1, 'OPTSCH:  Programming error - MISTN wrong ' )
+      END IF
 C
 C     Add a list of elevations to the end of the line.
 C
-      I1 = MISCH
+      I1 = MISTN
       DO ISTA = 1, NSTA
          I1 = I1 + 3
          I2 = I1 + 2
