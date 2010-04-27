@@ -104,7 +104,9 @@ C
 C               WRITE( IVEX, '( 5X, A, A, A1 )' )
 C     1            'S2_recording_mode = ', 'LBA', SEP
                WRITE( IVEX, '( 5X, A, A, A1 )' )
-     1             'S2_data_source = ','AT', SEP
+     1             'S2_data_source = ','VLBA', SEP
+               WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1             'S2_recording_mode = ','none', SEP
 C               WRITE( IVEX, '( 5X, A, A, A1 )' )
 C     1            'track_frame_format = ', 'LBA', SEP
 C               WRITE( IVEX, '( 5X, A, A, A1 )' )
