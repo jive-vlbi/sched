@@ -9,7 +9,7 @@ C
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
 C
-      INTEGER     ISCN, ISTA, LEN1
+      INTEGER     ISCN, ISTA, LEN1, NCHR
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
       INTEGER     YEAR, DAY, DOY, JD, MONTH, FTMIN, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
@@ -132,12 +132,23 @@ C
      1           'scan', SCANNAME(1:LEN1(SCANNAME)), SEP
             INPAGE = INPAGE + 1
 C
-C           Maybe there's a comment
+C           Maybe there's a comment.  DRUDG has a maximum line length
+C           of 128 including the comment character.  ANNOT is 128
+C           characters long.
 C
             IF (ANNOT(ISCN) .NE. ' ' ) THEN
+               NCHR = LEN1( ANNOT(ISCN) )
                WRITE( IVEX, '( A1, 5X, A )' ) COM, 
      1             'Note a COMMENT was inserted during scheduling: '
-               WRITE( IVEX, '( A1, 7X, A )' ) COM, ANNOT(ISCN)
+               IF( NCHR .LE. 120 ) THEN
+                  WRITE( IVEX, '( A1, 7X, A )' ) COM, 
+     1               ANNOT(ISCN)(1:NCHR)
+               ELSE
+                  WRITE( IVEX, '( A1, 7X, A )' ) COM,
+     1               ANNOT(ISCN)(1:118)
+                  WRITE( IVEX, '( A1, 7X, A )' ) COM,
+     1               ANNOT(ISCN)(119:NCHR)
+               END IF
             END IF
 C
 C           May move scan time fwd for tapestart: then write comment
