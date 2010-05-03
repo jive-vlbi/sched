@@ -9,7 +9,7 @@ C
       INCLUDE 'vxlink.inc'
 C
       INTEGER    VLBOPE, LEN1, IOERR, IXX, ISTA, JSTA
-      CHARACTER  VEXFILE*80, OPTEXT*255, OPSTAT*4, VXNMPR*32
+      CHARACTER  OPTEXT*255, OPSTAT*4, VXNMPR*32
       LOGICAL    EXISTS, VIOLFS
       REAL       PLTVER, VERJPL
 C ----------------------------------------------------------------------

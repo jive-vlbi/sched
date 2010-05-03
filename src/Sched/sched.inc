@@ -111,6 +111,7 @@ C                      IFRQ  - Frequency catalog
 C                      IFLAG - Flag file.
 C                      IUPK  - Reference pointing inputs.
 C                      IOMS  - Output file for OMS
+C                      IV2D  - Output v2d file.
 C                      IMAP  - Map files for uv plots.
 C                      IOPT  - Configuration optimization output
 C                      ILOG  - Run log file.
@@ -119,8 +120,8 @@ C                      IORB  - Spacecraft table for VLBA correlator
 C                      
       INTEGER          IUSCH, IUSRC, IUSTA, IUTAP, IUSET
       INTEGER          IPRT, IULOC, IUVBA, ISUM, IUOPT, IVEX, IFRQ
-      INTEGER          IFRQLST, IFLAG, ICOV, IUPK, IOMS, IMAP, IOPT
-      INTEGER          ILOG, IMSG, IORB
+      INTEGER          IFRQLST, IFLAG, ICOV, IUPK, IOMS, IV2D, IMAP
+      INTEGER          IOPT, ILOG, IMSG, IORB
 C
       PARAMETER        (IUSCH=8)
       PARAMETER        (IUSRC=9)
@@ -146,6 +147,7 @@ C     Unit 24 is used by RDLOC.
       PARAMETER        (ILOG=29)
       PARAMETER        (IMSG=30)
       PARAMETER        (IORB=31)
+      PARAMETER        (IV2D=32)
 C
 C
 C     Station catalog.   Contains MSTA stations.
