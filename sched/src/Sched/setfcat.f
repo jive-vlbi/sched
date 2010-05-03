@@ -40,7 +40,7 @@ C
          IF( MATCH ) THEN
 C
 C           Determine the amount of bandwidth overlap and the worst
-C           offset from the center of a band.
+C           offset of a channel from the center of a band.
 C
             CALL FMATCH( KS, KF, OVERLAP, CENTER, OKIF, USEIF )
             IF( SDEBUG ) THEN
@@ -80,7 +80,8 @@ C
 C
 C              Actually take it and set this one up as the standard.
 C              Get the IF limits for later comparison with doppler
-C              and schedule set frequencies.
+C              and schedule set frequencies.  For channels that
+C              don't match, set the frequency limits to zero.
 C
                IF( TAKEIT ) THEN
                   GOT = .TRUE.
@@ -89,9 +90,16 @@ C
                   BESTPRIO = PRIO(KF)
                   BESTCENT = CENTER
                   DO ICH = 1, NCHAN(KS)
-                     IFREQIF(ICH,KS) = USEIF(ICH)
-                     FIFMIN(ICH,KS) = FRF1(USEIF(ICH),KF)
-                     FIFMAX(ICH,KS) = FRF2(USEIF(ICH),KF)
+                     IIF = USEIF(ICH)
+                     IF( IIF .GT. 0 ) THEN
+                        IFREQIF(ICH,KS) = IIF
+                        FIFMIN(ICH,KS) = FRF1(IIF,KF)
+                        FIFMAX(ICH,KS) = FRF2(IIF,KF)
+                     ELSE
+                        IFREQIF(ICH,KS) = IIF
+                        FIFMIN(ICH,KS) = 0.0D0
+                        FIFMAX(ICH,KS) = 0.0D0
+                     END IF
                   END DO
                END IF
             END IF
@@ -120,6 +128,12 @@ C
 
 C  partially complete coding here.
 C ***************  be sure to set something for all channels.
+C      This turned into a very bad case of projectus interruptus.
+C      I was trying to put in the infrastructure for using more 
+C      than 1 freq.dat entry, but now I'm not sure I remember 
+C      what I was planning.  At least a lot of the test results
+C      are now by channel.  But the second KF has not been 
+C      introduced.
 
 
 C

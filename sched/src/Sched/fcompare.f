@@ -10,6 +10,13 @@ C     Require that every channel in the setup file match, in all ways
 C     that have already been set in the setup file, an IF in the
 C     frequency catalog.  However allow the FREQREF of some, but
 C     not all, channels to fall outside the RF ranges.
+C     OKIF tells if the setup file channel is compatible with the
+C     frequency catalog group channel except for the frequency, which
+C     can be off by up to 20%.
+C
+C     MATCH means that at least one channel completely matches between
+C     the setup file and the frequency catalog group, including in 
+C     frequency (without allowing a tolerance).
 C
 C     Keep track of the best matches.  NBAD is the minimum number
 C     of items that did not match for the worst channel.
