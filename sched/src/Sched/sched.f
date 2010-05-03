@@ -116,6 +116,10 @@ C        The VSOP group never provided the subroutines.
 C
          IF( DOVSOP ) CALL VSOPWRT
 C
+C        Write a template v2d file for DiFX correlation.
+C
+         CALL V2DOUT( RESTART )
+C
 C        Make the flagging file.
 C
          CALL FLAGS

@@ -4,6 +4,10 @@ C
       CHARACTER VEXVER*3, VXSOFT*3
       PARAMETER (VEXVER = '1.5', VXSOFT = '.87')
 C
+C     The Vex file name.  Wanted by some non-vex routines.
+C
+      CHARACTER   VEXFILE*80
+C
 C     Store number of different def in sections
 C     this sturcture defines the referncing of different defs
 C     in different blocks.
@@ -131,7 +135,7 @@ C
      1     ISTADA, ISTASI, ISTAAN,
      2     FQLINK, TRLINK, IFLINK, BBLINK, HPLINK, POLINK,
      3     RLLINK, PHLINK, MDLINK, DALINK, SILINK, ANLINK,
-     4     PRLINK
+     4     PRLINK, VEXFILE
 C
 C     the tones are the first to be stored not constructed on the fly
 C     and so are a few frequency settings
