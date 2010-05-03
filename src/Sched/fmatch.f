@@ -7,8 +7,8 @@ C
 C     KS is the setup group.
 C     KF is the frequency catalog group.
 C     OVERLAP is the amount of bandwidth overlap.
-C     CENTER is offset of the center of the channel from the center
-C            of the IF band.
+C     CENTER is maximum offset of the center of the any channel from 
+C            the center of the IF band.
 C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
@@ -38,10 +38,17 @@ C
          END IF
 C
 C        Loop over the frequency catalog IF channels looking for
-C        a match.  Default to USEIF(ICH) = 1 if there is no match.
+C        a match.  Default to USEIF(ICH) = 0 if there is no match for now.
+C        Recall that OKIF means the channel matches except that the 
+C        frequency might be off by some tolerance set in FCOMPARE. 
+C        That tolerance was 20% when this was written.
+C        Set the default CHOVER and CHCENT to discourage a channel with
+C        false OKIF.
 C
-         USEIF(ICH) = 1
-         DO IIF = 1, MFIF
+         USEIF(ICH) = 0
+         DO IIF = 1, FNIF(KF)
+            CHOVER(ICH,IIF) = 0.0
+            CHCENT(ICH,IIF) = 1.E5
 C
 C           Be sure this is an ok match according to FCOMPARE.
 C
@@ -79,7 +86,7 @@ C        Try for best frequency match (best centered with all other
 C        parameters right (OKIF true).
 C
          BESTCN = 1.E5
-         DO IIF = 1, MFIF
+         DO IIF = 1, FNIF(KF)
             IF( OKIF(ICH,IIF) ) THEN
                IF( CHCENT(ICH,IIF) .LT. BESTCN ) THEN
                   BESTCN = CHCENT(ICH,IIF)
@@ -92,14 +99,18 @@ C
 C
 C     Loop over the channels and get the total overlap bandwidth
 C     and the worst center.  These will be used to select the best
-C     frequency catalog group.
+C     frequency catalog group.  If a channel did not fit all, even
+C     with the frequency tolerance USEIF(ICH) will be zero.
+C     Allow for that possibility in the calling routine.
 C
       OVERLAP = 0.0
       CENTER = 0.0
       DO ICH = 1, NCHAN(KS)
          IIF = USEIF(ICH)
-         OVERLAP = OVERLAP + CHOVER(ICH,IIF)
-         CENTER = MAX( CENTER, CHCENT(ICH,IIF) )
+         IF( IIF .GT. 0 ) THEN
+            OVERLAP = OVERLAP + CHOVER(ICH,IIF)
+            CENTER = MAX( CENTER, CHCENT(ICH,IIF) )
+         END IF
       END DO
 C
       RETURN

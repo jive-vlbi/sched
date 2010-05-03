@@ -138,7 +138,8 @@ C
       END DO
 C
 C     Look for scans that start or, worse, end before very many antennas
-C     are on-source.  
+C     are on-source.  Allow a one second tolerance on the start to 
+C     avoid round off problems.
 C
       NSLATE = 0
       DO ISCN = SCAN1, SCANL
@@ -148,7 +149,7 @@ C
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) ) THEN
                NEXPECT = NEXPECT + 1
-               IF( TONSRC(ISCN, ISTA) .GT. STARTJ(ISCN) ) 
+               IF( TONSRC(ISCN, ISTA) .GT. STARTJ(ISCN) + ONESEC ) 
      1             NLATE = NLATE + 1
                IF( TONSRC(ISCN, ISTA) .GT. STOPJ(ISCN) )
      1             NNEVER = NNEVER + 1

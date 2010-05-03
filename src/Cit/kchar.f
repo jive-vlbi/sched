@@ -1,4 +1,4 @@
-      CHARACTER*256 FUNCTION KCHAR( NAME, NCH, UP, VALUE, KC, KI )
+      CHARACTER*(*) FUNCTION KCHAR( NAME, NCH, UP, VALUE, KC, KI )
 C
 C     Function for SCHED to recover a character string from the KEYIN
 C     values array.  
@@ -13,7 +13,7 @@ C     Note:  Do not put this function within write statements.  At
 C     least on a SUN, you cannot have a write (the internal below)
 C     within a write.
 C
-      INTEGER       MAXCHR
+      INTEGER       MAXCHR, KCLEN
       PARAMETER     (MAXCHR=256)
       CHARACTER     NAME*(*), TEMP*(MAXCHR), KC(*)*(*)
       INTEGER       NCH, KI(*), I, I1, I2, KEYPTR
@@ -22,7 +22,8 @@ C
 C -----------------------------------------------------------------
 C     Protect against too long strings.
 C      
-      IF( NCH .GT. MAXCHR ) THEN
+      KCLEN = LEN(KCHAR)
+      IF( NCH .GT. KCLEN ) THEN
          TEMP = 'KCHAR: Too many characters requested. '// NAME
          CALL ERROR( TEMP )
       END IF

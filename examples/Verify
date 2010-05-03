@@ -27,7 +27,14 @@ setenv SCHBIN $SCHED/bin/$1
 echo Running SCHED from $SCHBIN
 
 # Set location of "standard" results.
-setenv SCH_STDOUT $SCHED/examples/Stdout
+if( -e $SCHED/examples/Stdout ) then
+   setenv SCH_STDOUT $SCHED/examples/Stdout
+else if( -e Stdout ) then
+   setenv SCH_STDOUT Stdout
+else
+   echo Standard output file directory not found.
+   exit
+endif
 
 # Set the location of the current $SCHED so that Verify can ignore
 # differences in file paths on future comparisons.

@@ -36,7 +36,7 @@ C      VERSION = 9.1    !  Development version before 9.2
 C      VERNUM  = 9.2
 C      VERSION = 'Release of March 8, 2010'
       VERNUM  = 9.3
-      VERSION = 'Release near March 23, 2010'
+      VERSION = 'Release March 23, 2010 with Apr. 8 bug fix.'
 C
       RETURN
       END
