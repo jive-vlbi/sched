@@ -30,7 +30,7 @@ echo '----------------------' $1.runlog '-------------------------'
 sed -e s:"$SCHED":"$SCHED_SUB":g $1.runlog | \
   sed -f Check_sed | diff - $3/$1.runlog
 
-#   Check crd file of the requested station, if present.
+#   Check the summary file.
 
 echo '----------------------' $1.sum '-------------------------'
 if( -e $1.sum ) then
@@ -40,6 +40,14 @@ else
   echo '*************  SCHED did not run. ***************'
   echo 'This might be ok if the example tried to use an unsupported'
   echo 'feature for this installation, like satellite tracking.'
+endif
+
+#   Check the v2d file.
+
+echo '----------------------' $1.v2d '-------------------------'
+if( -e $1.v2d ) then
+  sed -e s:"$SCHED":"$SCHED_SUB":g $1.v2d | \
+     sed -f Check_sed | diff - $3/$1.v2d
 endif
 
 #   Check crd file of the requested station, if present.

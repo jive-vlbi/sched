@@ -1,11 +1,19 @@
       SUBROUTINE SRFINISH
 C
-C     Subroutine for SCHED that wraps up the loose ends for source
-C     information.  It checks that all sources are available in
-C     the catalog and adds planets, satellites etc if needed.
+C     Subroutine for SCHED, called at the start of DEFAULTS, that 
+C     wraps up the loose ends for source information.  DEFAULTS
+C     is called in SCHED right after SCHIN, which reads the source
+C     catalogs as one of its last acts.  SRFINISH checks that all 
+C     sources are available in the catalog and adds planets, 
+C     satellites etc to the main source catalog if needed.
 C
 C     The scan times in Julian days should be available before the
 C     call as they are needed in the ephemeris routines.
+C
+C     Note that the list of schedule sources (SRCNAME, SRCATN) gets
+C     built by SRCFLG here, but gets rebuilt later in SCHOPT after
+C     optimization modes, automatic pointing insertions etc have
+C     happened, since those processes can add or subtract sources.
 C
       INCLUDE     'sched.inc'
       INCLUDE     'schpeak.inc'
@@ -15,12 +23,16 @@ C
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SRFINISH starting' )
 C
-C     Associate sources in SRCNAME with catalog entries.
+C     Associate sources in SRCNAME with main catalog entries.
+C     Note this gets done again later in SCHOPT after any possible
+C     schedule adjustments.
 C     
       CALL SRCFLG( GOTALL )
 C     
 C     If don't have all, check for planets for which we have
-C     ephemeris data.
+C     ephemeris data.  If one of the requested sources is a 
+C     planet, add that planet to the main source catalog and
+C     set the pointers to and from the schedule sources list.
 C     
       VEXWARN = .NOT. GOTALL
       CALL JPLGOT( GOTALL )
@@ -36,7 +48,9 @@ C
       END IF
 C     
 C     If still don't have all, check for satellite for which we
-C     have orbital elements.
+C     have orbital elements.  If one is found, add it to the main
+C     source catalog and set the pointers to and from the schedule
+C     source list.
 C     
       VEXWARN = .NOT. GOTALL
       CALL SATGOT( GOTALL )
@@ -75,11 +89,24 @@ C     names.
 C     
       CALL SHORTN
 C     
-C     Loop through scans and get the source catalog numbers for
+C     Loop through scans and get the main source catalog numbers for
 C     all specified sources.  Note that we are not picking up
 C     the automatic reference pointing sources here since those
-C     scans have not been generated yet.  
-C     
+C     scans have not been generated yet.
+C
+C     Note that, while SRCNAME and SRCATN are used in this process
+C     the pointer is not saved so it doesn't matter if that list
+C     changes later.  The pointers into the main catalog will still
+C     be valid.
+C
+C     Initialize phase center sources pointers.  SRCNUM, IDOPSRC, and
+C     IVLAPHS are initialized in SCHIN.
+C
+      DO JCENT = 1, NCENT
+         DO ICSRC = 1, NCSRC(JCENT)
+            CTRSRCI(ICSRC,JCENT) = 0
+         END DO
+      END DO
       DO ISCN = 1, NSCANS
          DO KSRC = 1, NSRC
             IF( SCNSRC(ISCN) .EQ. SRCNAME(KSRC) ) THEN
@@ -91,11 +118,18 @@ C
             IF( VLAPHS(ISCN) .EQ. SRCNAME(KSRC) ) THEN
                IVLAPHS(ISCN) = SRCATN(KSRC)
             END IF
+            IF( ICENT(ISCN) .NE. 0 ) THEN
+               DO ISRC = 1, NCSRC(ICENT(ISCN))
+                  IF( CTRSRCN(ISRC,ICENT(ISCN)) .EQ. SRCNAME(KSRC)) THEN
+                     CTRSRCI(ISRC,ICENT(ISCN)) = SRCATN(KSRC)
+                  END IF
+               END DO
+            END IF
          END DO
       END DO
 C
-C     Get the source numbers for the possible reference pointing
-C     sources.
+C     Get the main catalog source numbers for the possible 
+C     reference pointing sources.
 C
       DO IGRP = 1, NPKGRP
          DO IPSRC = 1, NPKSRC(IGRP)

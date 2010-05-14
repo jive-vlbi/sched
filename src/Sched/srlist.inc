@@ -15,7 +15,7 @@ C
 C     SRLRAE and SRLDECE are the errors on the RA and Dec.
 C
       INTEGER      MAXSRL
-      PARAMETER    (MAXSRL=6000)
+      PARAMETER    (MAXSRL=10000)
 C
       INTEGER      SRLN
       CHARACTER    SRLNAME(MAXSRL)*12, SRLCALC(MAXSRL)*1

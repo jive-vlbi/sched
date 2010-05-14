@@ -13,7 +13,7 @@ C
 
       INTEGER   LEN1
       INTEGER   I
-      REAL      RARATE, DECRAT
+C      REAL      RARATE, DECRAT
       CHARACTER TFORM*17, STRRA*17, STRDEC*17, CH1*1
 
       WRITE( IVEX, '( 5X, A, A, A1 )' )

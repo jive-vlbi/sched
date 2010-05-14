@@ -86,7 +86,7 @@ C      PARAMETER     (MSET  =MAXSTA)
 C
 C     Other parameters
 C
-      PARAMETER     (MAXSRC=1000)
+      PARAMETER     (MAXSRC=5000)
       PARAMETER     (MAXCAT=1000) 
       PARAMETER     (MAXLGP=10)
       PARAMETER     (MAXSET=50)
@@ -236,21 +236,27 @@ C
 C
 C
 C     Source catalog.  There are 3 source lists!  
-C                      1.  Schedule sources.  NSRC entries.
+C                      1.  Main source catalog.  MSRC entries.
+C                            All sources from imbedded catalogs and
+C                            used sources from the external catalog.
+C                            ISRC from a scan refers to this list.
+C                            Nearly all source pointers should aim
+C                            at this list.
+C                      2.  List of all sources read with minimal
+C                            low precision information.  Used for
+C                            plotting.  The variables are kept in
+C                            srlist.inc.
+C                      3.  Schedule sources.  NSRC entries.
 C                            Includes name SRCNAME(KSRC) and 
 C                            pointer SRCATN(KSRC) that points to 
 C                            the corresponding catalog source.
 C                            This list used mainly for plotting.
 C                            The variables are near the bottom
 C                            of this file (seek SRCNAME).
-C                      2.  Main source catalog.  MSRC entries.
-C                            All sources from imbedded catalogs and
-C                            used sources from the external catalog.
-C                            ISRC from a scan refers to this list.
-C                      3.  List of all sources read with minimal
-C                            low precision information.  Used for
-C                            plotting.  The variables are kept in
-C                            srlist.inc.
+C                            This list gets built more than once,
+C                            so do not create and use pointers
+C                            to it except in isolated parts of the
+C                            code.
 C
 C                      For each scan, SRCNUM(ISCN), IDOPSRC(ISCN), and
 C                      IVLAPHS(ISCN) refer to entries in the main 
@@ -262,6 +268,8 @@ C                          source KSRC.
 C                        SRLSTN(ISRC) is the schedule source entry for
 C                          main catalog source ISRC.
 C                          Note KSRC = SRLSTN(SRCATN(KSRC))
+C                          SRLSTN gets rebult whenever the schedule
+C                          sources list gets rebuilt.
 C
 C                      C1950, C2000, and CDATE  record which 
 C                      epoch was in the catalog.  
@@ -280,8 +288,13 @@ C                      WHICHCAT indicates which source catalog type
 C                      the source was read from  (in-line, main file, 
 C                      pointing file, planet, satellite).
 C
+C     The main source catalog:
+C     Some day, add another name, which is the alias actually used,
+C     to simplify usage.  Meanwhile, consider adding more aliases
+C     and more characters per name as we have hit both limits.
+C         
       INTEGER          MSRC
-      CHARACTER        SRCFILE*80, SRVER*20
+      CHARACTER        SRCFILE*80, SRVER*20, SRCFILE2*80, SRVER2*20
       CHARACTER        SOURCE(5,MAXSRC)*12, SOUR8(MAXSRC)*8
       CHARACTER        CALCODE(MAXSRC)*1, REMARK(MAXSRC)*80
       DOUBLE PRECISION RACAT(MAXSRC),  DECCAT(MAXSRC)
@@ -298,6 +311,12 @@ C
 C
 C                      The following are calculated by SCHED.
 C                       SUSED indicates the source was used.
+C                       USEDREC indicates data were recording on src.
+C                       USEDPHS indicates source used as a phase
+C                              center in a multiple center scan(s).
+C                       USEDCENT indicates the source was a pointing
+C                              center for multiple phase center
+C                              observations.
 C                       SRLSTN pointer to SRCNAME (see above).
 C                       SUNDIS is the distance from the sun.
 C                       PLANET means the source is a planet and the
@@ -314,19 +333,50 @@ C                              for a scan with this source.  It might
 C                              not have been the dopsrc.
 C
       LOGICAL          SUSED(MAXSRC), DOPPED(MAXSRC)
+      LOGICAL          USEDREC(MAXSRC), USEDPHS(MAXSRC)
+      LOGICAL          USEDCENT(MAXSRC)
       INTEGER          SRLSTN(MAXSRC), DIDNDOP(MAXSRC), SATN(MAXSRC)
       REAL             SUNDIS(MAXSRC)
       LOGICAL          PLANET(MAXSRC), SATEL(MAXSRC)
       CHARACTER        CSUSED(5,MAXSRC)*1
 C
+C     Items for the multiple phase center capability.
+C     MCENT is the maximum number of groups of phase centers.
+C     CTRSRCN is the list of source names in each center.  
+C     CTRSRCI is pointers into the main source catalog.
+C     Both are needed because the catalogs are not loaded until
+C     after the lists of phase centers are read.
+C     ICENT is the index of the centers group for the scan in the 
+C     centers list
+C     USEDPHS above flags sources used in centers.
+C
+      INTEGER          MCENT, MCSRC
+      PARAMETER        ( MCENT = 100 )
+      PARAMETER        ( MCSRC = 1000 )
+      CHARACTER        CTRNAME(MCENT)*12
+      CHARACTER        CTRSRCN(MCSRC,MCENT)*12
+      CHARACTER        CENTERS(MAXSCN)*12
+      INTEGER          CTRSRCI(MCSRC,MCENT), ICENT(MAXSCN)
+      INTEGER          NCENT, NCSRC(MCENT)
+C
+C     Keep a list of pairings of pointing centers with groups
+C     of phase centers.  This avoids lots of hoop jumping when
+C     making various lists and displays.
+C
+      INTEGER          NPAIR
+      INTEGER          PAIRSRC(MCENT*2), PAIRCENT(MCENT*2)
+C
       COMMON  /SCHSOU/ RACAT, DECCAT, RA1950, D1950, RA2000, D2000, 
      1                 RAP, DECP, PMTIME, EPOCHT, PMRA, PMDEC, 
      2                 PARALAX, MSRC, RAERR, DECERR, DRA, DDEC, 
-     3                 VLSR, SUSED, DOPPED, SRLSTN, DIDNDOP, 
-     4                 SATN, SUNDIS, PLANET, SATEL
-      COMMON  /SCHCSC/ SRCFILE, SRVER, SOURCE, SOUR8, CALCODE, REMARK, 
-     1                 C1950, C2000, CDATE, WHICHCAT, CSUSED,
-     2                 VELREF, VELDEF
+     3                 VLSR, SUSED, DOPPED, USEDREC, USEDPHS, USEDCENT,
+     4                 SRLSTN, DIDNDOP, SATN, SUNDIS, PLANET, SATEL,
+     5                 CTRSRCI, ICENT, NCENT, NCSRC, 
+     6                 NPAIR, PAIRSRC, PAIRCENT
+      COMMON  /SCHCSC/ SRCFILE, SRVER, SRCFILE2, SRVER2, 
+     1                 SOURCE, SOUR8, CALCODE, REMARK, 
+     2                 C1950, C2000, CDATE, WHICHCAT, CSUSED,
+     3                 VELREF, VELDEF, CTRNAME, CTRSRCN, CENTERS
 C
 C     Satellite information from SATINI section.
 C     SATFILE is the satellite spice file.
@@ -489,9 +539,9 @@ C
       REAL             SCHVER
 C
       INTEGER          MCOR
-      PARAMETER        (MCOR=21)
+      PARAMETER        (MCOR=22)
       CHARACTER        CORSTUFF(MCOR)*150
-      INTEGER          CORCHAN, CORNANT
+      INTEGER          CORCHAN, CORFFT, CORNANT
       REAL             CORAVG
       REAL             CORAV2
       LOGICAL          CORPOL
@@ -500,8 +550,8 @@ C
       CHARACTER        CORREL*64, CORTAPE*16, CORWTFN*16
       CHARACTER        CORSRCS*64, CORSHIP(4)*64, CORNOTE(4)*(128)
 C
-      COMMON  /SCHCO/  SCHVER, CORCHAN, CORNANT, CORAVG, CORAV2, CORPOL,
-     1                 CAEXACT, CAEXACT2
+      COMMON  /SCHCO/  SCHVER, CORCHAN, CORFFT, CORNANT, CORAVG, CORAV2, 
+     1                 CORPOL, CAEXACT, CAEXACT2
       COMMON  /SCHSCO/ COVER, PINAME, PHONE, OBSPHONE, EMAIL, ADDRESS,
      1                 FAX, OBSMODE, NOTE, OBSTYP,
      2                 CORSTUFF, CORREL, CORTAPE,
@@ -538,7 +588,9 @@ C
 C
 C                      The list of sources used - the "schedule 
 C                      sources".  See the notes for the source 
-C                      catalog for more information.
+C                      catalog for more information.  Caution, 
+C                      these can change.  When they do, SRLSTN
+C                      should too.
 C
       INTEGER          NSRC, SRCATN(MAXSRC)
       CHARACTER        SRCNAME(MAXSRC)*12

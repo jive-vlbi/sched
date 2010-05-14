@@ -51,6 +51,10 @@ C
      D       CORREL(1:4) .NE. 'OTHER' ) THEN
             CALL WLOG( 1, ' ** WARNING: ' // CORREL(1:LEN1(CORREL)) //
      1        ' is not a recognized correlator.' )
+            CALL WLOG( 1, '     Recognized correlators are: '//
+     1        'SOCORRO, VLBADIFX, VLBA, HAYSTACK, BONN, JIVE,' )
+            CALL WLOG( 1, '       USNO, JPL, BOLOGNA, MITAKA, '//
+     1             'PENTICTON, LBA, FXCORR, and OTHER' )
             MISCOR = .TRUE.
          END IF
       END IF
@@ -72,6 +76,8 @@ C
 C
 C
       CORCHAN    = VALUE( KEYPTR( 'CORCHAN', KC, KI ) )
+      CORFFT     = VALUE( KEYPTR( 'CORCHAN', KC, KI ) + 1 )
+      IF( CORFFT .EQ. 0 ) CORFFT = MAX( 128, CORCHAN )
       CORNANT    = VALUE( KEYPTR( 'CORNANT', KC, KI ) )
       CHPOL      = KCHAR( 'CORPOL', 3, .TRUE., VALUE, KC, KI )
       CALL UPCASE( CHPOL )
@@ -119,35 +125,37 @@ C
      1   '    Alternate average time (for spacecraft).  ',
      2   CORAV2, ' sec.'
       WRITE( CORSTUFF(5), '( A, I8 )' ) 
-     1  '  Spectral channels per baseband (16):           ', CORCHAN
+     1  '  Output spectral channels per baseband (16):    ', CORCHAN
       WRITE( CORSTUFF(6), '( A, I8 )' ) 
+     1  '     Correlator FFT size (128):                  ', CORFFT
+      WRITE( CORSTUFF(7), '( A, I8 )' ) 
      1  '  Number of antennas to be correlated:           ', CORNANT
-      CORSTUFF(7) = 
-     1  '  Polarization (ON):                           ' // CHPOL
       CORSTUFF(8) = 
-     1  '  Correlator weighting function (UNIFORM):     ' // CORWTFN
+     1  '  Polarization (ON):                           ' // CHPOL
       CORSTUFF(9) = 
+     1  '  Correlator weighting function (UNIFORM):     ' // CORWTFN
+      CORSTUFF(10) = 
      1  '  Distribution tape (DAT):                     ' // CORTAPE
 C
       SPLEN = LEN1( CORSRCS )      
       IF( SPLEN .LE. 12 ) THEN
-         CORSTUFF(10) = 
+         CORSTUFF(11) = 
      1      '  Source positions from:             '// CORSRCS(1:SPLEN)
-         CORSTUFF(11) = '   '
+         CORSTUFF(12) = '   '
       ELSE
-         CORSTUFF(10) = '  Source positions from:'
-         CORSTUFF(11) = '  '//CORSRCS
+         CORSTUFF(11) = '  Source positions from:'
+         CORSTUFF(12) = '  '//CORSRCS
       END IF
-      CORSTUFF(12) = '  Shipping address for correlator output: ' 
-      CORSTUFF(13) = '      ' // CORSHIP(1)
-      CORSTUFF(14) = '      ' // CORSHIP(2)
-      CORSTUFF(15) = '      ' // CORSHIP(3)
-      CORSTUFF(16) = '      ' // CORSHIP(4)
-      CORSTUFF(17) = '  Correlator Notes: ' // CORNOTE(1)
-      CORSTUFF(18) = '      ' // CORNOTE(2)
-      CORSTUFF(19) = '      ' // CORNOTE(3)
-      CORSTUFF(20) = '      ' // CORNOTE(4)
-      CORSTUFF(21) = ' '
+      CORSTUFF(13) = '  Shipping address for correlator output: ' 
+      CORSTUFF(14) = '      ' // CORSHIP(1)
+      CORSTUFF(15) = '      ' // CORSHIP(2)
+      CORSTUFF(16) = '      ' // CORSHIP(3)
+      CORSTUFF(17) = '      ' // CORSHIP(4)
+      CORSTUFF(18) = '  Correlator Notes: ' // CORNOTE(1)
+      CORSTUFF(19) = '      ' // CORNOTE(2)
+      CORSTUFF(20) = '      ' // CORNOTE(3)
+      CORSTUFF(21) = '      ' // CORNOTE(4)
+      CORSTUFF(22) = ' '
 C
 C     Check required parameters.
 C
