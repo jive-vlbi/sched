@@ -70,6 +70,8 @@ C
       IDOPSRC(TO)  = IDOPSRC(FROM)
       QUAL(TO)     = QUAL(FROM)
       SETNUM(TO)   = SETNUM(FROM)
+      CENTERS(TO)  = CENTERS(FROM)
+      ICENT(TO)    = ICENT(FROM)
 C
       DO JST = 1,MAXSTA
          NSETUP(TO,JST) = NSETUP(FROM,JST)

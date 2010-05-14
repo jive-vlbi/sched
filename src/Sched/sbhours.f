@@ -1,11 +1,12 @@
-      SUBROUTINE SBHOURS( ISRC, TSCAN, TBASE )
+      SUBROUTINE SBHOURS( ISRC, TSCAN, TBASE, ISET )
 C
 C     Routine for sched, called by srclst, that gets the number 
-C     of hours in scans and in baselines for each source.
+C     of hours in scans and in baselines for each source using a
+C     setup file.
 C
       INCLUDE     'sched.inc'
 C
-      INTEGER     ISCN, ISTA, JSTA, ISRC
+      INTEGER     ISCN, ISTA, JSTA, ISRC, ISET
       DOUBLE PRECISION   TBASE, TSCAN, TBSTRT
 C -----------------------------------------------------------------
       TSCAN = 0.D0
@@ -17,7 +18,8 @@ C
 C
 C        Select recording scans on the current source.
 C
-         IF( SRCNUM(ISCN) .EQ. ISRC .AND. .NOT. NOREC(ISCN) ) THEN
+         IF( SRCNUM(ISCN) .EQ. ISRC .AND. .NOT. NOREC(ISCN) .AND.
+     1       SETNUM(ISCN) .EQ. ISET ) THEN
 C
 C           Add the scan time.
 C

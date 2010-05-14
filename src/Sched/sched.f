@@ -107,7 +107,8 @@ C     of these cases typically occur when plotting.
 C
       IF( MKFILES .AND. OPTMODE .NE. 'UPTIME' .AND. .NOT. NOSET ) THEN
 C
-C        Make the VEX file if needed and allowed.
+C        Make the VEX and V2D files if needed and allowed.  There are 
+C        somewhat complicated criteria so put the calls in a subroutine.
 C
          CALL VEXOUT
 C
@@ -115,10 +116,6 @@ C        Make the DRUDG file for VSOP.  This is still just a stub.
 C        The VSOP group never provided the subroutines.
 C
          IF( DOVSOP ) CALL VSOPWRT
-C
-C        Write a template v2d file for DiFX correlation.
-C
-         CALL V2DOUT( RESTART )
 C
 C        Make the flagging file.
 C

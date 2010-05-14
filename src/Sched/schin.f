@@ -71,6 +71,9 @@ C
       END DO
       DO I = 1, MAXSRC
          SUSED(I) = .FALSE.
+         USEDREC(I) = .FALSE.
+         USEDPHS(I) = .FALSE.
+         USEDCENT(I) = .FALSE.
          SRCATN(I) = 0
          SRLSTN(I) = 0
          DIDNDOP(I) = 0
@@ -228,6 +231,10 @@ C
          QUAL(ISCN) = KD( KEYPTR( 'QUAL', KC, KI ) )
          IF( SCNSRC(ISCN) .EQ. ' ' ) CALL ERRLOG( 'SCHIN: Need source'//
      1         ' name - blank specified.' )
+C
+C        Get pointer to phase center list.
+C
+         CENTERS(ISCN) = KCHAR( 'CENTERS', 12, .TRUE., KD, KC, KI )
 C
 C        Set scan times etc.
 C
@@ -581,10 +588,13 @@ C     Get scan timing.
 C
       CALL TIMES( KD, KC, KI, START, STOP, DAY, YEAR )
 C
-C     Get the source catalog file name.  The catalog will be read later.
+C     Get the source catalog file names.  The catalogs will be 
+C     read later.
 C
       SRCFILE = KCHAR( 'SRCFILE', 80, .FALSE., KD, KC, KI )
       CALL ENVIR( SRCFILE )
+      SRCFILE2 = KCHAR( 'SRCFILE2', 80, .FALSE., KD, KC, KI )
+      CALL ENVIR( SRCFILE2 )
 C
 C     Decode TANT stations lists.  Must have station catalog by here.
 C
