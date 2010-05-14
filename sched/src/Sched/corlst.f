@@ -10,7 +10,7 @@ C
       REAL              DATARATE, MAXSPD
       DOUBLE PRECISION  TTIME, TRTIME, TBTIME, STIME
       DOUBLE PRECISION  TIMEB, TIMEL, TLAST
-      LOGICAL           OVERLAP
+      LOGICAL           OVERLAP, GOTCENT
 C
 C     Note that MAXDR and DATASIZE are passed through the include
 C     to the correlator specific routines and the OMS routines 
@@ -20,7 +20,7 @@ C     Only do this if tapes are being used.
 C
       IF( NOTAPE ) THEN
          WRITE( ISUM, '( 1X, /, A )' )
-     1      'No tapes recorded.  Correlation requests ignored.'
+     1      'No recordings.  Correlation requests ignored.'
       ELSE
          WRITE( ISUM, '( 1X, /, A, /, 1X, /,  9(A,/), 1X, /, ' // 
      1        ' 5(A,/), 1X, /, 5(A,/) )' ) 
@@ -45,6 +45,7 @@ C
          TLAST = 0.D0
          DATASIZE = 0.D0
          OVERLAP = .FALSE.
+         GOTCENT = .FALSE.
 C
 C        Loop through scans.
 C
@@ -119,6 +120,8 @@ C
      1                       FSPEED(SETNUM(ISCN))
                END IF
 C
+               IF( ICENT(ISCN) .NE. 0 ) GOTCENT = .TRUE.
+C
             END IF
          END DO
 C
@@ -152,9 +155,13 @@ C
          WRITE( ISUM, '( A, F14.1, A )' )
      1       '  Projected correlator output data set size:', 
      2       DATASIZE/1.D6, ' Mbytes'
+         IF( GOTCENT ) WRITE( ISUM, '( A, /, A )' ) 
+     1       '  Multiple phase center processing requested.',
+     2       '     Correlator output numbers are for first file only.'
          WRITE( ISUM, '( A )' )
-     1       '    NOTE:  Above numbers assume the same correlator'//
+     1       '  NOTE:  Above numbers assume the same correlator'//
      2       ' parameters are used for all data.'
+
          IF( DATASIZE .GT. 4.0E9 ) THEN
             WRITE( ISUM, '( A, A )' )
      1       '    NOTE:  Output data set size large.  ',

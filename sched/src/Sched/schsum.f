@@ -321,6 +321,9 @@ C
       WRITE( ISUM, '( A, A / A, A )' )
      1   '  Source:   ', SRCFILE(1:LEN1(SRCFILE)),
      2   '                 Version:  ', SRVER(1:LEN1(SRVER))
+      WRITE( ISUM, '( A, A / A, A )' )
+     1   '  Source2:  ', SRCFILE2(1:LEN1(SRCFILE2)),
+     2   '                 Version:  ', SRVER2(1:LEN1(SRVER2))
 C
 C     Other external files.
 C

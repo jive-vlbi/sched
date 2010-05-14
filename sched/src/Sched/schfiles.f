@@ -227,6 +227,20 @@ C
          CLOSE( UNIT=ICOV )
       END IF
 C
+C     Get lists of sources for multiple phase centers.
+C
+      I1 = KEYPTR( 'PCENTERS', KC, KI )
+      IF( VALUE(I1) .NE. UNSET ) THEN
+         IF( DEBUG ) CALL WLOG( 1, 'SCHFILES: Phase center lists.')
+         IF( GOTONE ) CALL ERRLOG( 'SCHFILES: Cannot do 2 in-stream'//
+     1           ' files at the same time. ' )
+         CALL PCREAD( INSCH )
+         VALUE(I1) = UNSET
+         DOINIT = .FALSE.
+         GOTONE = .TRUE.
+      END IF
+C
+C
       RETURN
       END
 

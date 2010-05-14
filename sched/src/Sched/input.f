@@ -32,15 +32,25 @@ C     determines which sources to keep from the catalogs.
 C
       CALL ACCSRC( .TRUE. )
 C
-C     Get the sources needed from the main catalog.
+C     Get the sources needed from the main catalog and the 
+C     second catalog.  Initialize the VERSIONs before going
+C     into the routine to keep the logic relatively simple.
 C
+      SRVER = ' --- '
+      SRVER2 = ' --- '
       CALL SRREAD( IUSRC, SRCFILE, .TRUE., .TRUE., '1' )
+      IF( SRCFILE2 .NE. 'NONE' ) THEN
+         CALL SRREAD( IUSRC, SRCFILE2, .TRUE., .TRUE., '3' )
+      END IF
 C
 C     Get the pointing catalog sources.
 C
       IF( DOPOINT ) THEN
          CALL SRREAD( IUSRC, PSRCFILE, .TRUE., .TRUE., '2' )
       END IF
+C
+C     Note that the schedule sources list (srcname) will not
+C     get built until SRFINISH is run.
 C
 C     Get the setup files if needed.
 C

@@ -80,7 +80,7 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER           ISCN, KSCN, ISTA, LASTISCN(MAXSTA), NGSCANS
-      INTEGER           NGOOD, YEAR, DAY1, DAY2
+      INTEGER           NGOOD, YEAR, DAY1, DAY2, ICSRC
       INTEGER           PEAKOPT
       LOGICAL           ADJUST, KEEP, DONE, GOTALL
       DOUBLE PRECISION  START, STOP
@@ -378,8 +378,15 @@ C              Flag sources that have been used.  Here so that sources
 C              inserted for pointing will be included.
 C
                SUSED(SRCNUM(ISCN)) = .TRUE.
+               IF( .NOT. NOREC(ISCN) ) USEDREC(SRCNUM(ISCN)) = .TRUE.
                IF( IDOPSRC(ISCN) .NE. 0 ) SUSED(IDOPSRC(ISCN)) = .TRUE.
                IF( IVLAPHS(ISCN) .NE. 0 ) SUSED(IVLAPHS(ISCN)) = .TRUE.
+               IF( ICENT(ISCN) .NE. 0 ) THEN
+                  USEDCENT(SRCNUM(ISCN)) = .TRUE.
+                  DO ICSRC = 1, NCSRC(ICENT(ISCN))
+                     USEDPHS(CTRSRCI(ICSRC,ICENT(ISCN))) = .TRUE.
+                  END DO
+               END IF
 C
             END IF
 C
@@ -413,17 +420,27 @@ C
          CALL ERRLOG( ' Abort' )
       END IF
 C
-C     Rebuild the source pointers, used source flags etc since some 
-C     of the optimization modes and pointing modes add scans and 
-C     sources and some scans may have been eliminated.  Rebuild the
-C     list of sources with ACCSRC, ignoring potential pointing 
-C     sources this time (the ones we care about are in scans now).
-C     Then rebuild the pointers and flags with SRFINISH.
+C     Rebuild the list of sources actually used in the schedule,
+C     the "schedule sources" in the include file.  The only
+C     variables affected are NSRC, SRCATN(ISRC), and SRCNAME(ISRC).
+C     The rebuild is needed because some of the optimization modes 
+C     and pointing modes add scans and sources and some scans may 
+C     have been eliminated.  Rebuild the list of schedule sources 
+C     with ACCSRC, ignoring potential pointing sources, planets,
+C     satellites etc this time because they are already in scans.
+C     They weren't when SRFINISH was run earlier.
+C     Then rebuild the pointers and flags with SRCFLG.
 C
       CALL ACCSRC( .FALSE.)
       CALL SRCFLG( GOTALL )
+C
       IF( .NOT. GOTALL ) CALL ERRLOG( 
      1  'SCHOPT: Not all sources found; programming problem.' )
+C
+C     Take the opportunity to construct a list of pointing center
+C     sources paired with lists of offset phase centers.
+C
+      CALL GETPAIRS
 C
 C     Write the scan and time range.
 C

@@ -64,7 +64,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  VERSION 9.3}
+\title{THE \schedb USER MANUAL \\  DEVELOPMENT VERSION 9.4}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -568,13 +568,15 @@ for project BV016.  See \htmladdnormallink{the /schedb examples}
 
 
 
-\item[\htmlref{Source Catalog}{SEC:SRCCAT}:] This file contains the
+\item[\htmlref{Source Catalog}{SEC:SRCCAT}:] These files contain the
 information about the sources, especially names, positions, and, for
 line sources, velocities.  There are standard source catalogs,
 although the user may need to add non-standard sources.  Source
 catalog entries can be included in the \htmlref{Main Schedule Input
 File}{SEC:SCHPAR}.  The standard catalog is \htmladdnormallink{{\sl
-\$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}.
+\$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}.  Two external
+catalogs can be specified if one wishes, for example, to use the 
+standard one for calibrators and another for multiple phase centers.
 
 \item[\htmlref{Station Catalog}{SEC:STACAT}:] This file contains
 information about the antennas including names, positions, slew
@@ -699,15 +701,21 @@ format, or SNAP (Mark III style, but \schedb can make them
 for Mark II only).  Some antennas, such as the VLA, require both
 crd. and obs. files.  The files are named, for example, {\sl
 bv016obs.y} for the VLA file.  No currently active telescopes use
-the SNAP or Green Bank card types.
+the SNAP or Green Bank card types and they will be removed shortly.
 
-\item[Mark IV .vex Files in VEX format:] These are the files needed
-for stations under control of the Goddard ``Field System'', e.g.\ MkIV
-telescopes.  Writing of such files is available in \schedb.  They are
-named, for example, {\sl bv016.vex}.  A single such file describes the
-observations for all antennas.  These files are also
-needed for setting up the VLBA software correlator that replaced
-the original hardware correlator at the end of 2009.
+\item[VEX file:] This is the file needed for stations under control of
+the Goddard ``Field System'', e.g.\ MkIV telescopes.  It is also used
+to control correlation on many systems including the VLBA, JIVE, and
+MarkIV correlators.  As new hardware is added, it will also be used
+for station control on the VLBA.  The VEX files are named, for
+example, {\sl bv016.vex}.  A single such file describes the
+observations for all antennas.
+
+\item[V2D file:] This is a template correlator setup file for the 
+(VLBA) DiFX correlator.  Information that needs to be modified from what
+is in the VEX file can be specified by the analysts in this file.  
+It is also the path to transmit information about multiple phase 
+centers per pointing to the correlator.
 
 \item[Flag file:] \schedb writes a file with the {\sl .flag} extension
 that can be helpful in data processing.  It contains flag entries, in
@@ -729,6 +737,13 @@ factors can be calculated and plotted with contours over a map of the
 stations.  There is interactive control over the plotting, the only
 interactive part of SCHED.  Much of this capability is mainly useful
 in experiment planning.
+
+\item[DiFX configuration file:]  When making jobs for the DiFX 
+correlator, especially as used for the VLBA, a {\sl .v2d} file is
+used to give information not readily deduced from the {\sl .vex}
+file.  \schedb now writes a template for that file.  That file is
+also be used to pass lists of phase centers when utilizing the DiFX
+multiple phase center capability.
 
 \item[Optimized Schedule:]  When one of \sched's optimization modes
 is turned on, the program writes out a file, such as {\sl bv016.sch}
@@ -821,6 +836,10 @@ manual\_2.key}}{examples/manual\_2.key}
 sample spectral line file for VLBA
 observations of several OH masers transitions.
 
+\item[\htmladdnormallink{{\sl egcent.key}}{examples/egcent.key}] is
+a sample showing how to specify multiple phase centers for a pointing
+center for the DiFX correlator.
+
 \item[\htmladdnormallink{{\sl
 manual\_line.key}}{examples/manual\_line.key}] is the example that is
 included in the \htmlref{spectral line section}{SEC:LINE} of this
@@ -832,6 +851,12 @@ in {\sl egOH.key}.
 
 \item[\htmladdnormallink{{\sl eg512.key}}{examples/eg512.key}] is a
 sample schedule for the VLBA that uses the 512 Mbps mode.
+
+\item[\htmladdnormallink{{\sl eg512g.key}}{examples/eg512g.key}] is a
+sample schedule for the a global observation that uses the 512 Mbps mode.
+
+\item[\htmladdnormallink{{\sl eg1024.key}}{examples/eg1024.key}] is a
+sample schedule for the EVN that uses the 1024 Mbps mode.
 
 \item[\htmladdnormallink{{\sl eg2head.key}}{examples/eg2head.key}] is a
 sample schedule for an EVN observation that uses the 512 Mbps mode.
@@ -917,8 +942,25 @@ observations of multiple snapshots using phase referencing.
 21-cm HI source.
 
 \item[\htmladdnormallink{{\sl evn\_line\_meth.key}}
-{examples/evn\_line\_meth.key}] is for EVN observations of the 6.7 GHz line
-of methanol in a glactic source.
+{examples/evn\_line\_meth.key}] is for EVN only observations of the 
+6.7 GHz line of methanol in a glactic source.
+
+\item[\htmladdnormallink{{\sl eg5cm.key}}{examples/eg5cm.key}] is a
+sample schedule for the EVN and EVLA that observes near 6.7 GHz.  It
+is the same as {\sl evn\_line\_meth.key}, but with the EVLA added.
+
+\item[\htmladdnormallink{{\sl hsa1cm.key}}{examples/hsa1cm.key}] is a
+sample schedule for the High Sensitivity Array (HSA - VLBA + GBT + 
+Effelsberg + Arecibo + VLA) at 1cm.  This file does not include the
+VLA and Arecibo.
+
+\item[\htmladdnormallink{{\sl hsa21cm.key}}{examples/hsa21cm.key}] is a
+sample schedule for the High Sensitivity Array (HSA - VLBA + GBT + 
+Effelsberg + Arecibo + VLA) at 21cm (this does include Arecibo, but also
+does not include the VLA).
+
+\item[\htmladdnormallink{{\sl lba.key}}{examples/lba.key}] is a
+sample schedule for the Long Baseline Array in Australia.
 
 \item[\htmladdnormallink{{\sl vla\_vlbi.key}}{examples/vla\_vlbi.key}]
 is an example of VLBI observations that include the VLA and show some
@@ -934,9 +976,14 @@ manual\_vla.key}}{examples/manual\_vla.key}] is a file for VLA continuum
 observations that don't involve VLBI or special pointing problems.
 This is the template for simple VLA continuum projects.
 
+\item[\htmladdnormallink{{\sl egvla.key}}{examples/egvla.key}] is a
+basic file for a VLA observations.  With the advent of
+the EVLA, this is all likely to be out of date.
+
 \item[\htmladdnormallink{{\sl egvla7mm.key}}{examples/egvla7mm.key}] is a
 file for a VLA observation at 7mm.  It demonstrates both explicit and
-automatic insertion of reference pointing scans.
+automatic insertion of reference pointing scans.  With the advent of
+the EVLA, this is all likely to be out of date.
 
 \item[\htmladdnormallink{{\sl ptlink.key}}{examples/ptlink.key}] is a
 file for VLA continuum observations involving the Pie Town link.  This
@@ -965,9 +1012,19 @@ unlikely to be of interest outside of the AOC.  In fact, the required
 NAIF software libraries would hugely increase the size of the SCHED
 distribution and are not normally included.
 
+\item[\htmladdnormallink{{\sl egmk5vex.key}}{examples/mt506.key}] was
+originally a file for testing Mark5A recording at the stations.  It
+uses a special stations catalog.  It is basically out of date now
+that Mark5 is the standard.
+
 \item[\htmladdnormallink{{\sl mt506.key}}{examples/mt506.key}] is
 one of the weekly VLBA integrity check observations.  It is here mainly
 to exercize SCHED in a mode that uses lots of setup files.
+
+\item[\htmladdnormallink{{\sl vla\_vlbi.key}}{examples/vla\_vlbi.key}] is
+and example covering use of the VLA as a phased array for VLBI.  It
+is likely to be out of date now with the switch to the EVLA.
+
 
 \end{description}
 
@@ -2928,6 +2985,77 @@ no other parameters specified with it will be parsed.
 As with all types of \schedb input, end each group with a ``/''.  The
 order of parameters within a group (between ``/''s) is not significant.
 
+\section{\label{SEC:MULTIPLE_CENTERS}Multiple Phase Centers}
+
+The DiFX correlator has a capability to process many phase centers
+within a primary beam in one pass.  It does this by cross correlating
+with high spectral resolution and short time integration, then
+splitting the data paths out for each desired phase center, shifting
+the delay and phase for the new center, and integrating in time and
+frequency.  There is a price of about a factor of 2.5 to do the
+large transforms involved, but there is very little additional burden
+for each phase center.  The difference in processing time between 20
+phase centers and 200 is about 20\%.  Up to about 500 phase centers in
+a field have been tested.  This mode is expected to be popular for
+surveys and for in-beam calibration at lower frequencies.
+
+\schedb supports the multiple phase center mode by providing the
+details of all the desired phase centers to use for a given pointing
+center in the output {\sl .v2d} file, which is used in correlator
+setup.  In the future, this information could also go to the VEX file
+when the standard and the readers can receive the information.
+
+To invoke multiple phase center processing, and specify the centers,
+the user should provide a list of all the sources to use with each
+pointing center.  To do this a \htmlref{{\tt PCENTERS}}{MP:PCENTERS}
+section should be added to the main \schedb input file.  Within that
+section, each group of centers is given a name and a list of source
+names.  The sources need to correspond to sources in the source
+catalogs.  It is likely that the user would create a catalog of the
+offset pointing centers and invoke it, along with the standard
+catalog, using the new ability to use two source catalogs using
+\htmlref{{\tt SRCFILE}}{MP:SRCFILE} and \htmlref{{\tt
+SRCFILE2}}{MP:SRCFILE2}.
+
+To tell \schedb to use one of the named lists of pointing centers,
+specify the name of the group from \htmlref{{\tt
+PCENTERS}}{MP:PCENTERS} using the input \htmlref{{\tt
+CENTERS}}{MP:CENTERS} for each scan.  For now, the same list must be
+used for all scans on a pointing center and all scans on that pointing
+center must use the list.  The internal structure of \schedb will
+allow that one-to-one correspondence between pointing centers and
+phase center lists to be relaxed if and when the information can
+be transmitted to the correlator.
+
+When using this capability, the user should specify the size of the
+FFTs to do on each baseband channel before spliting the data for each
+phase center.  This is done with the (new) second argument to \schedb
+input parameter \htmlref{{\tt CORCHAN}}{MP:CORCHAN}.  Normally that
+argument can be ignored and the FFT size will be set to the larger of
+128 or the first argument.  The FFT size needs to be large enough that
+there is is insignificant delay smearing in a single channel.  The
+required size depends on the baseband bandwidth (B MHz) and the
+maximum distance between the pointing and phase centers (x arcsec).
+For the VLBA for a 5\% loss of amplitude on an offset source, the
+number of channels should be near B*x/2.35.  A somewhat more
+conservative criterion is to limit phase winding to 5 spectral points
+per turn of phase in the spectrum.  By that, given that the maximum delay
+change for a 1 arcsecond shift is 139 ns on the longest VLBA baseline
+(8600 km), the number of channels should be near 5*0.139*B*x.  The
+full width, half maximum beamwidth of a VLBA antenna (25m) is very
+close to 30 and 1 arcminutes at 1.4 and 43 GHz, respectively.  For the
+1.4 GHz case, the above two criteria give 3063 and 5004 channels.  A
+specification of 4096 channels would likely be reasonable.
+
+See the Wide-Field Imaging section of the
+\htmladdnormallink{Observational Status
+Summary}{http://www.vlba.nrao.edu/astro/obstatus/current/} for more
+information on delay and fringe rate smearing.
+
+
+There is an example, {\sl egcent.key}, with an associated catalog
+{\sl egcentsrc.dat}, with the \schedb examples to demonstrate the
+use of this mode.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
@@ -4673,6 +4801,7 @@ CATALOGS and other other ``external'' input.
 \htlm{SETINIT}{~} Name and flag for in-line setup data.
 \htlm{SRCCAT}{~~} Flag for start of in-line source catalog.
 \htlm{SRCFILE}{~} Name of external source file.
+\htlm{SRCFILE2}{} Name of second external source file.
 \htlm{STACAT}{~~} Flag for start of in-line station catalog.
 \htlm{STAFILE}{~} Name of external station file.
 \htlm{TAPEFILE}{} File name for tape initialization information.
@@ -4683,6 +4812,7 @@ CATALOGS and other other ``external'' input.
 \htlm{PEAKFILE}{} File with reference pointing parameters.
 \htlm{PEAKINIT}{} Following inputs are for reference pointing.
 \htlm{SATFILE}{~} File containing satellite orbital elements.
+\htlm{PCENTERS}{} Flag for start of lists of multiple phase centers
 
 \end{list}
 
@@ -4740,6 +4870,7 @@ SCAN PROPERTIES:
                         VLBA.
 \htlm{BW}{~~~~~~}       Baseband channel bandwidths.
 \htlm{PCAL}{~~~~} Mode for pulse cal generators.
+\htlm{CENTERS}{~} Use multiple phase centers in processing.
 \htlm{PEAK}{~~~~} Peak up on source.
 \htln{NOPEAK}{PEAK}{~~} Turn off peak up request.
 \htlm{POINT}{~~~} Convert the scan to a reference pointing scan.
@@ -5072,6 +5203,36 @@ This is currently ignored for PCFS (VEX) systems.
 {{\tt CALTIME=60}}
 
 
+\subsubsection{\label{MP:CENTERS}{\tt CENTERS}}
+
+Triggers the use of multiple phase center processing on the 
+DiFX correlator at least at the VLBA.  In practice, this puts
+the list of phase centers in the {\sl .v2d} file used in 
+setting up correlation.  Some day, it may put the list in
+the {\sl .vex} file, if there is a standard for how to do that.
+
+The argument of {\tt CENTERS} must correspond to a list of
+names in the phase center groups listed after a 
+\htmlref{{\tt PCENTERS}}{MP:PCENTERS} command.
+
+For now, there is no clear way to make the phase center list
+scan dependent, so specify the same name for each scan on the
+same source.  This may not always be true, which is why the
+association of a phase center group with a pointing 
+source is not done in the {\tt PCENTERS} specifications.
+
+For more information on multiple phase center processing, see
+that \htmlref{section about that topic}{SEC:MULTIPLE_CENTERS}.
+
+\rcwbox
+{A name of a group of phase centers.  For now, must be the
+same for every scan on a given source.}
+{Any name of a group provided through \htmlref{{\tt PCENTERS}}
+{MP:PCENTERS}}
+{None - don't use multiple phase centers}
+{Keeps value of previous scan.}
+{\tt CENTERS=P1305}
+
 \subsubsection{\label{MP:COMMENT}{\tt COMMENT}}
 
 {\tt COMMENT} is a string of up to 128 characters to be written on
@@ -5154,21 +5315,24 @@ only "EXACT" will mean to do something different from the default.}
 
 \subsubsection{\label{MP:CORCHAN}{\tt CORCHAN}}
 
-{\tt CORCHAN} specifies the number of spectral channels per baseband
+{\tt CORCHAN(1)} specifies the number of spectral channels per baseband
 channel (one polarization component) that the correlator will write.
-The VLBA correlator (both old and new) will typically make 128 channel
-spectra which are then channel averaged on-line for continuum
+{\tt CORCHAN(2)} specifies the number of channels to use in the internal
+FFT in the correlator.  
+
+The VLBA correlator (both old and new) will, by default, make 128
+channel spectra which are then channel averaged on-line for continuum
 observations.  The typical number of output channels for continuum
-data is 16 per baseband.  Over averaging can cause loss of
-amplitude due to ``delay smearing'' --- the effect of large phase
-slopes across the channels going into an average.  Corrections for
-this effect are made in AIPS, but the corrections are probably not
-perfect.  Over averaging also can lead to SNR loss when bandpass
-calibration is done.  This is because edge channels are discarded as
-part of bandpass calibration because of the frequency shifts required
-to adjust for the effects of the fringe rotators (doppler effect,
-essentially).  It is wise to keep a minimum of 16 channels
-and keep the channel bandwidth less than 0.5 MHz.  The latter
+data is 16 per baseband (32 for 16 MHz basebands).  Over averaging can
+cause loss of amplitude due to ``delay smearing'' --- the effect of
+large phase slopes across the channels going into an average.
+Corrections for this effect are made in AIPS, but the corrections are
+probably not perfect.  Over averaging also can lead to SNR loss when
+bandpass calibration is done.  This is because edge channels are
+discarded as part of bandpass calibration because of the frequency
+shifts required to adjust for the effects of the fringe rotators
+(doppler effect, essentially).  It is wise to keep a minimum of 16
+channels and keep the channel bandwidth less than 0.5 MHz.  The latter
 constraint, due to possible delay errors, suggests that observations
 with 16 MHz BBC bands should use 32 output channels.
 
@@ -5194,17 +5358,30 @@ data rate in bytes/sec is given APPROXIMATELY as
        P    = 2 for polarization, 1 for none
        Tavg = time average in seconds
 
+The second argument can be used to specify the size of the FFT used in
+correlators such as DiFX.  Normally that argument can be ignored and
+the FFT size will be set to the larger of 128 or the first argument.
+The ability to set that argument is provided in support of the muliple
+phase center capability added to DiFX in 2010.  When using that
+option, the spectral resolution of the transforms done before the
+different phase centers are split must be high enough that the 
+differential delays, which show up in the data as a phase slope in
+frequency, do not cause smearing.  See the discussion of 
+\htmlref{multiple phase center processing}{SEC:MULTIPLE_CENTERS} for
+more details advice.
+
 Note the correlation parameters {\tt CORAVG, CORCHAN,
 CORPOL, CORTAPE,} and {\tt CORSHIPn} must be specified when
 the project will be correlated in Socorro and data
 are being recorded.
 
 \rcwbox
-{An integer number, usually a power of 2}
+{Two integer numbers, usually a power of 2.}
 {Any, but see above for useful numbers.}
-{Must be sepecified for VLBA corelator.  Otherwise 16}
-{Only one value used --- the last.}
-{{\tt CORCHAN = 32}}
+{The first argument must be sepecified for the VLBA corelator.  
+Otherwise it defaults to 16.  The second argument defaults 128}
+{Only one pair of values is used --- the last.}
+{{\tt CORCHAN = 32} or {\tt CORCHAN=16,2048}}
 
 
 \subsubsection{\label{MP:CORNANT}{\tt CORNANT}}
@@ -6477,13 +6654,10 @@ value is meant to prevent recording stops during fast switching.
 While too many recording scans are a problem, so are too few.  If
 something goes wrong with playback, the correlators cannot recover
 until the start of the next recording scan.  Thus it is not wise to 
-have recording scans more than about an hour long.  For projects
-that use only disks, \schedb will automatically insert a short (3 
-second) gap at the start of the next scan after there has not been
-any break in recording for a bit over an hour.  The nominal scan
-times will not change, but there will be a short delay in the start
-of recording.  That break should be shorter than what is needed
-for other scan boundary actions like slewing to a calibrator.
+have recording scans more than about an hour long.  Note that the MarkIV
+systems will not stop the recording for gaps of less than 10 seconds
+so a gap inserted to break a recording scan should be longer than
+that.
 
 Short recorder stoppages could cause problems for playback in the era
 of tapes.  Every time the recording stoped, it must be resynced, which
@@ -7357,6 +7531,32 @@ of setup.}
 {{\tt PCAL='off'}}
 
 
+\subsubsection{\label{MP:PCENTERS}{\tt PCENTERS}}
+
+Specifying {\tt PCENTERS} followed by a "/" causes \schedb to read
+groups of phase centers for use with multiple-phase center processing
+on the DiFX correlator.  This is much like the reading of in-line
+catalogs with {\tt SRCCAT} or {\tt STACAT}.  Each specified group has
+a name specified with {\tt NAME} and a list of source names specified
+with {\tt SOURCES}.  All of these sources should be in the source
+catalogs.  It will be common to use a file, specified with
+\htmlref{{\tt SRCFILE2}}{MP:SRCFILE2} to specify all the ``sources''
+used as phase centers.  
+
+After the last phase center group, a line with
+{\tt ENDCENT /} should be given to return \schedb to reading normal
+program input.  There is an example {\sl egcent.key} that demonstrates
+the capability.  The main effect will be the listing of the phase
+centers
+
+\rcwbox
+{Just the word {\tt PCENTERS} followed by a "/"}
+{None}
+{Not used}
+{Use only once per schedule file.}
+{{\tt PCENTERS /}}
+
+
 \subsubsection{\label{MP:PEAK}{\tt PEAK} and {\tt NOPEAK}}
 
 {\tt PEAK}, if specified, will cause commands to be issued to tell
@@ -8192,12 +8392,34 @@ local directory), then one can specify the source file with
 the default).  Use the {\tt setenv}
 (c or t shell) or export (korn shell) to set environment variables.
 
+There is an option to use a second source catalog file using 
+\htmlref{{\tt SRCFILE2}}{MP:SRCFILE2}.  This could be useful if one 
+wishes to get calibrator information from the \schedb standard
+catalog, but also have a catalog of program sources.  It is also
+useful when using the ability to specify many phase centers per
+pointing center.
+
 \rcwbox
 {A file name of up to 80 characters.}
 {Any file name or {\tt none}.}
 {{\tt '\$SCHED/catalogs/sources.vlba'}}
 {Use only once.}
-{{\tt SRCFILE='/users/cwalker/sched/sources.obs'}}
+{{\tt SRCFILE='/users/cwalker/sched/sources.dat'}}
+
+\subsubsection{\label{MP:SRCFILE2}{\tt SRCFILE2}}
+
+{\tt SRCFILE2} is a second source file, treated identically to
+\htmlref{{\tt SRCFILE}}{MP:SRCFILE}.  This allows one to supplement
+the main \schedb catalog with a local, but still not embedded,
+catalog.  It is likely to be especially useful for observations
+wanting multiple phase centers in each pointing center.
+
+\rcwbox
+{A file name of up to 80 characters.}
+{Any file name or {\tt none}.}
+{Not used}
+{Use only once.}
+{{\tt SRCFILE2='centers.dat'}}
 
 
 \subsubsection{\label{MP:STACAT}{\tt STACAT}}
@@ -9114,17 +9336,18 @@ Also, SCHED will complain about an unreasonable year if it is not between
 
 \section{\label{SEC:SRCCAT}Source Catalog}
 
-\schedb uses a catalog to get source information such as names,
-positions, and velocities.  This catalog is in keyin format. Entries
-are terminated with a ``/''.  Some or all of the catalog may be
-included in a section in the \sched\ input file.  \sched\ will look
-there first for sources, and then go to an external catalog to find
-the rest (or all).  There is a standard catalog, {\sl sources.vlba},
-included with the \schedb distribution, which will probably have most,
-if not all, sources in a project.  The scheduler may just refer to
-this catalog, or may copy the desired entries into catalog sections in
-the main \schedb input.  The scheduler should consult the catalog to
-be sure that the right source names are being used in the schedule.
+\schedb uses catalogs to get source information such as names,
+positions, and velocities.  These catalogs are in keyin
+format. Entries are terminated with a ``/''.  Some or all of the
+catalog may be included in a section in the \sched\ input file.
+\sched\ will look there first for sources, and then go to the two
+possible external catalogs to find the rest (or all).  There is a
+standard catalog, {\sl sources.vlba}, included with the \schedb
+distribution, which will probably have most, if not all, sources in a
+project.  The scheduler may just refer to this catalog, or may copy
+the desired entries into catalog sections in the main \schedb input.
+The scheduler should consult the catalog to be sure that the right
+source names are being used in the schedule.
 
 The a standard source catalog contains over 5000 sources, mostly from
 one or more geodetic VLBI solutions.  These are based on the
@@ -9150,8 +9373,9 @@ other useful information provided by Leonid Petrov can be found at
 Comments in {\sl sources.vlba} will let you know which solution the
 source positions are based on.
 
-\schedb input parameter {\tt SRCFILE} is used to point to any desired
-external catalog.  A file name of up to 80 characters can be
+\schedb input parameters \htmlref{{\tt SRCFILE}}{MP:SRCFILE} and
+\htmlref{{\tt SRCFILE2}}{MP:SRCFILE2} are used to point to any desired
+external catalogs.  A file name of up to 80 characters can be
 specified. The default source file is: \\ {\tt
 SRCFILE=\$SCHED/catalogs/sources.vlba}.  \\ On unix systems with the
 environment variable SCHED properly defined, this is the standard
@@ -9168,9 +9392,10 @@ may appear anywhere in a \schedb keyin file, although it is probably
 best to put them near the beginning.  {\sc SCHED} will look in the
 external catalog for any source not found in an in-line catalog.  If
 you wish to prevent \schedb from looking in external catalogs, specify
-{\tt SRCFILE=NONE}.  It is common to provide in-line source catalog
-entries for unique program sources, but let \schedb find the fringe
-finders and other calibrators in the standard catalog.
+{\tt SRCFILE=NONE} ({\tt SRCFILE2} is not used at all unless
+specified.).  It is common to provide in-line source catalog entries
+for unique program sources, but let \schedb find the fringe finders
+and other calibrators in the standard catalog.
 
 The parameters for each entry in the source catalog are below.  Lower
 case letters in this list are optional.  All catalog parameters except
@@ -12845,9 +13070,30 @@ more information.
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
 
+
+\item Give CORCHAN a second argument to use for the FFT size.
+May 14, 2010.
+
+\item Implement and document multiple phase center specification
+for use of that capability on the DiFX correlator.  May 12, 2010. RCW.
+
+\item Update the list in the manual of examples.  May 12, 2010  RCW
+
+\item Make the accounting of scan and baseline time for each
+source in the summary file separate for each setup file.
+May 5, 2010  RCW.
+
+\item Added {\tt SRCFILE2} to allow a second external source 
+catalog. This is a step toward supporting multiple phase centers.
+May 4, 2010  RCW.
+
+\item Write a template {\sl .v2d} output file to aid in setup for DiFX
+correlation.  This is also a step toward support for multiple phase
+centers.  May 4, 2010 RCW.
+
 \item  Install the results of measurements of slew rates of VLBA
 antennas.  See VLBA Test Memo 70.  They are somewhat slower than
-the previously advertised values.  April 30, 2010.
+the previously advertised values.  April 30, 2010. RCW
 
 \item  Change default prestart to 5 seconds.  The correlator doesn't
 need time to sync up now, but the Mark5A units need about that long

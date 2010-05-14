@@ -75,11 +75,11 @@ C
       INTEGER          PTSO, PTRA, PTDEC, PTRAE, PTDECE
       INTEGER          PTC, PTV, PTVR, PTVD
       INTEGER          PTEN, PTPM, PTDRA, PTDDEC, PTPRA, PTPDEC 
-      INTEGER          PTPAR, PTPARL, PTRE
+      INTEGER          PTPAR, PTPARL, PTRE, PTVER
       SAVE             PTSO, PTRA, PTDEC, PTRAE, PTDECE
       SAVE             PTC, PTV, PTVR, PTVD
       SAVE             PTEN, PTPM, PTDRA, PTDDEC, PTPRA, PTPDEC
-      SAVE             PTPAR, PTPARL, PTRE
+      SAVE             PTPAR, PTPARL, PTRE, PTVER
 C
       DATA   FOPEN         / .FALSE. /
       DATA   GOTKEYS       / .FALSE. /
@@ -143,6 +143,7 @@ C
          PTPAR  = KEYPTR( 'PARALAX', KC, KI )
          PTPARL = KEYPTR( 'PARALLAX', KC, KI )
          PTRE   = KEYPTR( 'REmarks', KC, KI )
+         PTVER  = KEYPTR( 'VERSION', KC, KI )
       END IF
 C
 C     Open the file if requested.
@@ -196,11 +197,15 @@ C     EPOCH and EQUINOX default to the previous value so they need
 C     not be given for every source, although that is safer in 
 C     case a source of different equinox is inserted into the catalog.
 C     But reset EPOCH and EQUINOX if starting a new file.
+C     Also reset VERSION.
 C
       IF( FILE .NE. LASTFILE ) THEN    
          KD( KEYPTR( 'EPoch', KC, KI ) ) = 0.D0
          KD( KEYPTR( 'EQuinox', KC, KI ) ) = BLANK8
          LASTFILE = FILE
+         CALL KPACK( 'Not give', KD(PTVER) )
+         CALL KPACK( 'n       ', KD(PTVER+1) )
+         CALL KPACK( '        ', KD(PTVER+2) )
       END IF
 C
 C

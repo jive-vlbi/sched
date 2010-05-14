@@ -118,10 +118,10 @@ C
 C
 C           Get the version of an external catalog.
 C
-            IF( OPENIT ) THEN
+            IF( OPENIT .AND. THISCAT .EQ. '1' ) THEN
                SRVER = SRCVER
-            ELSE
-               SRVER = '---'
+            ELSE IF( OPENIT .AND. THISCAT .EQ. '3' ) THEN
+               SRVER2 = SRCVER
             END IF
 C
 C           Require a source name.
