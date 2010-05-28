@@ -9,6 +9,7 @@ C     Putting more often read parameters early to speed parsing.
 C
       INCLUDE 'sched.inc'
 C
+      INTEGER           IG
       DOUBLE PRECISION  KD(*), BLANK
       CHARACTER         KC(*)*(*), FILENAME*80
       INTEGER           KI(*)
@@ -81,6 +82,10 @@ C
       CALL KEYADD( 'COVERLET', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'PCENTERS', UNSET, 1, KD, KC, KI )
       CALL KEYCHR( 'CENTERS', ' ', 12, KD, KC, KI )
+      CALL KEYCHRA( 'GEOSRCS', ' ', 12, MGEO, KD, KC, KI )
+C      DO IG = 1, MGEO
+C         CALL KEYCHR( 'GEOSRCS', ' ', 12, KD, KC, KI )
+C      END DO
       CALL KEYADD( 'DOVEX', 0.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'DOSTA', 'ALL', 8, KD, KC, KI )
       CALL KEYADD( 'LST', UNSET, 1, KD, KC, KI )
@@ -167,6 +172,7 @@ C
 C
 C     Optimization and plotting.
 C
+      CALL KEYADD( 'GEOSEG', 0.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'OPTMODE', 'NONE', 8, KD, KC, KI )
       CALL KEYADD( 'OPMINANT', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'OPDUR', 0.D0, 1, KD, KC, KI )

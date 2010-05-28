@@ -366,17 +366,40 @@ C
       INTEGER          NPAIR
       INTEGER          PAIRSRC(MCENT*2), PAIRCENT(MCENT*2)
 C
+C     Items for use by the routines that can automatically generate
+C     a geodetic segment for atmospheric calibration (DELZN segment
+C     or geosegment).  
+C     GEOSRC is the list of sources to use
+C     GEOSRCI is the main source catalog source number
+C     GEOLEN gives the length of the geo segment (0 => no segment)
+C     GEOISCN records the original scan number to serve as a pointer
+C       to the original scan when scans insertions are happening
+C       into cells beyond NSCANS.
+C     ANYGEO says whether there is any geo insertion in this schedule.
+C     MSEG is not used here, but is in some subroutines.  It is the
+C       maximum number of scans in an inserted geodetic segment.
+C
+      INTEGER          MGEO, NGEO, MSEG
+      PARAMETER        ( MGEO = 400 )
+      PARAMETER        ( MSEG = 100 )
+      CHARACTER        GEOSRC(MGEO)*12
+      INTEGER          GEOSRCI(MGEO), GEOISCN(MGEO)
+      LOGICAL          ANYGEO
+      DOUBLE PRECISION GEOLEN(MAXSCN)
+C
       COMMON  /SCHSOU/ RACAT, DECCAT, RA1950, D1950, RA2000, D2000, 
      1                 RAP, DECP, PMTIME, EPOCHT, PMRA, PMDEC, 
      2                 PARALAX, MSRC, RAERR, DECERR, DRA, DDEC, 
      3                 VLSR, SUSED, DOPPED, USEDREC, USEDPHS, USEDCENT,
      4                 SRLSTN, DIDNDOP, SATN, SUNDIS, PLANET, SATEL,
      5                 CTRSRCI, ICENT, NCENT, NCSRC, 
-     6                 NPAIR, PAIRSRC, PAIRCENT
+     6                 NPAIR, PAIRSRC, PAIRCENT, NGEO, GEOSRCI,
+     7                 GEOLEN, GEOISCN, ANYGEO
       COMMON  /SCHCSC/ SRCFILE, SRVER, SRCFILE2, SRVER2, 
      1                 SOURCE, SOUR8, CALCODE, REMARK, 
      2                 C1950, C2000, CDATE, WHICHCAT, CSUSED,
-     3                 VELREF, VELDEF, CTRNAME, CTRSRCN, CENTERS
+     3                 VELREF, VELDEF, CTRNAME, CTRSRCN, CENTERS,
+     4                 GEOSRC
 C
 C     Satellite information from SATINI section.
 C     SATFILE is the satellite spice file.

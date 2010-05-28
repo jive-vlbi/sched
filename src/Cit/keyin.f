@@ -30,7 +30,7 @@ C        (output) 1 = eof found, 0 = endmrk found
 C  IN: input unit number
 C  PR: printer unit number for reflection and messages
 C
-C This routine does stores character strings in DOUBLE PRECISION
+C This routine stores character strings in DOUBLE PRECISION
 C variables, which is not compatible with standard portable Fortran.
 C The input array KEYS contains character strings, not numeric values.
 C The elements of the array VALUES may contain either character strings
