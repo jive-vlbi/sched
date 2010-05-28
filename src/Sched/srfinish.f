@@ -18,7 +18,7 @@ C
       INCLUDE     'sched.inc'
       INCLUDE     'schpeak.inc'
 C
-      INTEGER     KSRC, ISCN, IPSRC, IGRP, ISRC, INAME
+      INTEGER     KSRC, ISCN, IPSRC, IGRP, ISRC, INAME, JCENT, IGEO
       LOGICAL     GOTALL, VEXWARN
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SRFINISH starting' )
@@ -142,6 +142,23 @@ C
             END DO
          END DO
       END DO
+C
+C     geo segment sources.
+C
+      DO IGEO = 1, NGEO
+         GEOSRCI(IGEO) = 0
+      END DO
+      IF( ANYGEO ) THEN
+         DO IGEO = 1, NGEO
+            DO ISRC = 1, MSRC
+               DO INAME = 1, 5
+                  IF( GEOSRC(IGEO) .EQ. SOURCE(INAME,ISRC) ) THEN
+                     GEOSRCI(IGEO) = ISRC
+                  END IF
+               END DO
+            END DO
+         END DO
+      END IF
 C
       RETURN
       END

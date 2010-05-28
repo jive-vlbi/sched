@@ -36,6 +36,16 @@ C
 C
 C     Set start and stop times (in Julian days) and check inputs.
 C     But before setting them, determine which are adjustable.
+C     Here are the meanings of DURONLY.  This was added long after the
+C     coding so this is what I deduce.  Fix if wrong.
+C     DURONLY(ISCN) = 0     Default -- probably means an error.
+C     DURONLY(ISCN) = 1     Duration (or dwell) only set.
+C     DURONLY(ISCN) = 2     Start time only set (how to stop?).
+C     DURONLY(ISCN) = 3     Start and duration set.
+C     DURONLY(ISCN) = 4     Stop time only set.
+C     DURONLY(ISCN) = 5     Duration and stop time set.
+C     DURONLY(ISCN) = 6     Start and Stop set.
+C     DURONLY(ISCN) = 7     Start, Stop, and duration set.
 C
       DO ISCN = 1, NSCANS
          DURONLY(ISCN) = 0

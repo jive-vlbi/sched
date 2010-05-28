@@ -81,7 +81,7 @@ C
 C
       INTEGER           ISCN, KSCN, ISTA, LASTISCN(MAXSTA), NGSCANS
       INTEGER           NGOOD, YEAR, DAY1, DAY2, ICSRC
-      INTEGER           PEAKOPT
+      INTEGER           PEAKOPT, GEOOPT
       LOGICAL           ADJUST, KEEP, DONE, GOTALL
       DOUBLE PRECISION  START, STOP
       CHARACTER         TFORM*8, TIME1*8, TIME2*8
@@ -102,7 +102,8 @@ C
 C     PEAKOPT is related to reference pointing which is triggered by 
 C     the user setting AUTOPEAK.  PEAKOPT tells how many more 
 C     peaking scans are needed at the moment.  If zero, get the 
-C     next target scan.
+C     next target scan.  GEOOPT is a similar variable for insertion
+C     of geodetic segments.
 C
 C     The output scans can be the input scans for OPTMODE 'NONE'
 C     and 'SCANS' without automatic insertion of reference pointing.
@@ -110,8 +111,9 @@ C     Otherwise, new scans should be created and the output schedule
 C     should start at scan SCAN1=NSCANS+1.
 C
       PEAKOPT = 0
+      GEOOPT = 0
       IF( ( OPTMODE .NE. 'NONE' .AND. OPTMODE .NE. 'SCANS' ) .OR.
-     1      AUTOPEAK ) THEN
+     1      AUTOPEAK .OR. ANYGEO ) THEN
          ISCN = NSCANS
          SCAN1 = NSCANS + 1
       ELSE
@@ -134,13 +136,24 @@ C
      1       'SCHOPT:  Trying to generate too many scans. Max:', MAXSCN
             CALL ERRLOG( MSGTXT )
          END IF
+
+         IF( PEAKOPT .NE. 0 .OR. GEOOPT .NE. 0 ) THEN
 C
-C        Get a new main scan if all peaking scan insertions are done.
+C           If peaking or geodetic insertions are in progress, skip
+C           generation of new scans, but be sure to enter the sections
+C           of the code that generate the new scans.
 C
-         IF( PEAKOPT .EQ. 0 ) THEN
+            KEEP = .TRUE.
+            DONE = .FALSE.
+         ELSE
+C
+C           Get a new main scan if all peaking scan insertions and geodetic
+C           scan insertions are done.
 C
 C           Increment the input pass counter (for many, but not all
-C           modes, this is the input scan number).
+C           modes, this is the input scan number).  Note that it does
+C           not get incremented while peaking or geoseg scans are
+C           being added.
 C
             KSCN = KSCN + 1
 C
@@ -167,13 +180,15 @@ C           used (if the user specified start, ADJUST will be false).
 C   
             IF( OPTMODE .EQ. 'NONE' .AND. .NOT. DWELLS ) THEN
 C   
-C              Non-optimizing mode:  Just use next input scan.
+C              Non-optimizing mode:  Just use next input scan.  If
+C              KSCN ne ISCN, then KSCN scan info will be copied to
+C              ISCN.
 C   
                CALL OPTNONE( KSCN, ISCN, ADJUST, KEEP, DONE )
 C   
             ELSE IF( OPTMODE .EQ. 'NONE' .AND. DWELLS ) THEN
 C   
-C              Dwell time scheduling.
+C              Dwell time scheduling.  This one also copies KSCN to ISCN.
 C   
                CALL OPTDWELL( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
 C   
@@ -263,6 +278,16 @@ C        Only keep the scan if told to do so by optimization routine.
 C
          IF( KEEP .AND. .NOT. DONE ) THEN
 C
+C           Insert geodetic segment scans if requested.
+C           Only do it if not in the middle of inserting pointing.
+C           Mixing pointing and geo insertion might work, but it
+C           sounds both dangerous and unnecessary.
+C
+            IF( PEAKOPT .EQ. 0 .AND. ( GEOLEN(ISCN) .GT. 0.D0 .OR. 
+     1            GEOOPT .GE. 1 ) ) THEN
+               CALL ADDGEO( LASTISCN, ISCN, GEOOPT, KEEP )
+            END IF
+C
 C           Insert reference pointing scans if requested.  
 C           It is possible that several scans will be inserted (NADDED 
 C           in ADDPEAK).  The primary observing scan will be moved 
@@ -274,15 +299,13 @@ C           ADDPEAK will also set PEAKOPT so that the optimization
 C           routines will be skipped until all the peaking scans and
 C           the main scan have been processed.
 C      
+            CALL ADDPEAK( LASTISCN, ISCN, PEAKOPT )
+C      
 C           The scans added by ADDPEAK will have the right times and 
 C           source but the main scan's setup.  POINT will be set.  
 C           MAKEPTG will convert it, or any other scan with POINT 
 C           set, into a reference pointing scan.
 C           
-            CALL ADDPEAK( LASTISCN, ISCN, PEAKOPT )
-C      
-C           If POINT is set, change the scan to a pointing scan.
-C      
             CALL MAKEPTG( LASTISCN, ISCN, KEEP )
 C      
          END IF
