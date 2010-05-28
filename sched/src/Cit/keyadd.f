@@ -9,7 +9,7 @@ C     of equivalences - tickled a bug in a new SUN compiler).
 C
 C     The first three elements of KI are the counters needed by
 C     the KEYIN related routine.  They are:
-C      2)  MK       The declared size of the arrays (KD is twice this).
+C      1)  MK       The declared size of the arrays (KD is twice this).
 C      2)  NPARS    The number of parameters for KEYIN (one for each
 C                   element of any arrays).
 C      3)  NKEY     Number of distinct keys (one for each array)

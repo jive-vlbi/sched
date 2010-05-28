@@ -18,9 +18,9 @@ C     Keyin input parameters.  Key names are in second half of KD.
 C     KI(2) contains number of parameters.
 C
       INTEGER           MK, INSCH
-      PARAMETER         (MK=650 + 7*MAXSTA + 2*MAXCHN)
+      PARAMETER         (MK=650 + 7*MAXSTA + 2*MAXCHN + 2*MGEO )
       INTEGER           KI(MK)
-      CHARACTER         KC(MK)*8, KCHAR*256, TEMP*256
+      CHARACTER         KC(MK)*8, KCHAR*256, KCHARA*256, TEMP*256
       DOUBLE PRECISION  KD(2*MK), ENDMARK, BLANK
       LOGICAL           SETKEYS, AWARN
       SAVE              KI, KD, KC, ENDMARK, BLANK, INSCH, SETKEYS
@@ -53,6 +53,7 @@ C
       MSRC = 0    !  Total entries in main Source catalog.
       NSETF = 0   !  Number of setup files.
       SCAN1 = 1   !  First scan actually used.  SCHOPT may change.
+      NGEO = 0    !  Number of sources for possible geodetic sections.
       GOTINI = .FALSE.  !  Need tape initialization information.
       GOTSAT = .FALSE.  !  Need satellite info.
       GOTFREQ = .FALSE. !  Frequencies, Bandwidths, or Dopcals set.
@@ -63,6 +64,7 @@ C
       GOTVEX = .FALSE.  !  Found a VEX station.
       COVERLET = .FALSE. ! Is there a cover letter?
       ALLVLBA = .TRUE.  !  All stations have VLBA control systems.
+      ANYGEO = .FALSE.  !  Will any geodetic segments be inserted?
       DO I = 1, MAXSCN
           SRCNUM(I) = 0
           IDOPSRC(I) = 0
@@ -104,6 +106,7 @@ C
             KD( KEYPTR( 'NOPEAK', KC, KI ) ) = UNSET
             KD( KEYPTR( 'POINT', KC, KI ) ) = UNSET
             KD( KEYPTR( 'SCANTAG', KC, KI ) ) = BLANK
+            KD( KEYPTR( 'GEOSEG', KC, KI ) ) = 0.D0
 C
 C           For toggle pairs.
 C
@@ -225,12 +228,17 @@ C
          GRABTIME(2,ISCN) = KD( KEYPTR( 'GRABTIME', KC, KI ) + 1 )
          GRABGAP(ISCN) = KD( KEYPTR( 'GRABGAP', KC, KI ) )
 C
-C        Get source.
+C        Get source.  Deal with a request for a geodetic segment.
 C
          SCNSRC(ISCN) = KCHAR( 'SOURCE', 12, .TRUE., KD, KC, KI )
          QUAL(ISCN) = KD( KEYPTR( 'QUAL', KC, KI ) )
          IF( SCNSRC(ISCN) .EQ. ' ' ) CALL ERRLOG( 'SCHIN: Need source'//
      1         ' name - blank specified.' )
+         GEOLEN(ISCN) = KD( KEYPTR( 'GEOSEG', KC, KI ) ) * ONESEC
+         IF( GEOLEN(ISCN) .GT. 0.D0 ) THEN
+            ANYGEO = .TRUE.
+            GEOISCN(ISCN) = ISCN
+         END IF
 C
 C        Get pointer to phase center list.
 C
@@ -471,6 +479,33 @@ C
       I1 = KEYPTR( 'UVMFS', KC, KI )
       NMFS     = KD(I1)
       MFSRAT   = KD(I1+1)
+C
+C     Get the sources to use for geodetic segments.  Also insert
+C     the first such source as a dummy in the scans where the
+C     segments will be inserted to keep some later routines 
+C     happy.  The scan came in with a special source name (GEOSEG)
+C     which will not be in the catalogs, which causes trouble.
+C
+      I1 = KEYPTR( 'GEOSRCS', KC, KI )
+      NGEO = 0
+      DO I = 1, MGEO
+         NGEO = NGEO + 1
+         GEOSRC(I) = KCHARA( 'GEOSRCS', 12, 12, I, .TRUE., KD, KC, KI )
+         IF( GEOSRC(I) .EQ. ' ' ) THEN
+            NGEO = I - 1
+            GO TO 993
+         END IF
+      END DO
+  993 CONTINUE
+      IF( ANYGEO .AND. NGEO .EQ. 0 ) THEN
+         CALL ERRLOG( 'Geodetic segments requested, but no '//
+     1                'GEOSRCS given.' )
+      END IF
+      DO ISCN = 1, NSCANS
+         IF( SCNSRC(ISCN) .EQ. 'GEOSEG' .AND. ANYGEO ) THEN
+            SCNSRC(ISCN) = GEOSRC(1)
+         END IF
+      END DO
 C
 C     Process Cover Letter and Correlator input.
 C

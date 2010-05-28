@@ -2,22 +2,24 @@
 C
 C     Subroutine for SCHED that accumulates a list of all sources
 C     that have been used in the schedule.  It looks for the main
-C     sources in scans, doppler sources, and vla phasing sources.
+C     sources in scans, doppler sources, vla phasing sources, and
+C     multiple phase center sources.
 C
 C     Optionally, it can look for sources that might get used for
-C     reference pointing.  These need to be counted when reading
-C     the catalogs so they won't get left out.  But after the schedule
-C     optimization and reference insertion is done, only the ones
-C     that made it to scans are needed, and they are counted anyway.
+C     reference pointing or for insertion of geodetic segments.  
+C     These need to be counted when reading the catalogs so they 
+C     won't get left out.  But after the schedule optimization and 
+C     reference insertion is done, only the ones that made it to 
+C     scans are needed, and they are counted anyway.
 C
 C     The name of any source found is put in SRCNAME and counted with
 C     NSRC.  
 C
 C     This routine is run at various points in SCHED when the current 
-C     list of sources is needed.  It is run before the main source 
-C     catalog is read so that the catalog reading routine can limit 
-C     which sources it keeps (the catalog can be very large).  It 
-C     is also run late in SCHOPT after the final scans list is known.
+C     list of sources is needed.  It is run by INPUT before the main 
+C     source catalog is read so that the catalog reading routine 
+C     can limit which sources it keeps (the catalog can be very large).
+C     It is also run late in SCHOPT after the final scans list is known.
 C     Each time it is run, it rebuilds all the lists and pointers.
 C
 C     Eventually the array SRCATN will be used to associate these
@@ -30,8 +32,8 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schpeak.inc'
 C
-      INTEGER    ISCN, KSRC, PSRC, IGRP, JCENT, ICSRC
-      LOGICAL    GOTSS, GOTSD, GOTSP, GOTPTG, INCLPTG, GOTPHS
+      INTEGER    ISCN, KSRC, PSRC, IGRP, JCENT, ICSRC, IGEO
+      LOGICAL    GOTSS, GOTSD, GOTSP, GOTPTG, INCLPTG, GOTPHS, GOTGEO
 C ---------------------------------------------------------------------
 C     Initialize counters etc.  Recall that this routine is called
 C     more than once.
@@ -140,6 +142,27 @@ C
                END IF
             END DO
          END IF
+C
+C        Also look for sources that might be involved in insertion
+C        of geodetic segments.  They are in GEOSRC.
+C
+         IF( ANYGEO ) THEN
+            DO IGEO = 1, NGEO
+               GOTGEO = .FALSE.
+               IF( NSRC .GE. 1 ) THEN
+                  DO KSRC = 1, NSRC 
+                     IF( GEOSRC(IGEO) .EQ. SRCNAME(KSRC) ) 
+     1                    GOTGEO = .TRUE.
+                  END DO
+               END IF
+               IF( .NOT. GOTGEO ) THEN
+                  IF( NSRC .EQ. MAXSRC ) GO TO 900
+                  NSRC = NSRC + 1
+                  SRCNAME(NSRC) = GEOSRC(IGEO)
+               END IF
+            END DO
+         END IF
+C
       END IF
 C
       RETURN
