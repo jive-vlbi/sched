@@ -32,7 +32,8 @@ C
       INTEGER           LASTLSCN(MAXSTA)
       INTEGER           ISEG, ITRIAL, LSCN, I, IDUM, ISTA, NSTSCN
       INTEGER           NTSEG, IGEO, TSRC(MSEG), NGOOD, NREJECT
-      INTEGER           YR, DY, CHANCE(MSEG10), NCHANCE, MINKEEP
+      INTEGER           YR, DY, CHANCE(MSEG10), NCHANCE
+      INTEGER           MINSPS, HALFSCNS
       REAL              BESTQUAL, TESTQUAL
       REAL              RAN5, DUMMY
       LOGICAL           OKGEO(MGEO), OKSTA(MAXSTA), NOREP, MKGDEBUG
@@ -65,6 +66,9 @@ C
       END DO
 C
 C     Save some parameters related to the block of scans.
+C     This is mainly the start and stop times.  Take as the
+C     beginning of the block the latest end of the previous
+C     scan at any station. 
 C
       TGEO1 = 0.D0
       DO ISTA = 1, NSTA
@@ -135,7 +139,7 @@ C
       CALL WLOG( 1, 'Elevations at center for sources considered are: ')
       IF( NSTA .GT. 20 ) CALL WLOG( 1, '(Only first 20 stations)' )
       MSGTXT = ' '
-      WRITE( MSGTXT, '( 12X, 20A5 )' ) 
+      WRITE( MSGTXT, '( 25X, 20A5 )' ) 
      1        (STCODE(STANUM(ISTA)),ISTA=1,NSTA)
       CALL WLOG( 1, MSGTXT )
       MSGTXT = ' '
@@ -326,10 +330,12 @@ C
 C        Have a sequence
 C
 C        Make sure each antenna is in at least half the scans.
-C        Only test stations that are in JSCN
+C        There is some hoop jumping because the number of scans can
+C        vary.   Only test stations that are in the template JSCN.
+C        MINSPS is "Minimum Scans Per Station".
 C
-         RETAIN = .TRUE.
-         MINKEEP = MSEG10
+         HALFSCNS = INT( ( LSCN - ISCN + 1.0 ) / 2.0 + 0.6 )
+         MINSPS = 9999
          DO ISTA = 1, NSTA
             IF( STASCN(JSCN,ISTA) ) THEN
                NSTSCN = 0
@@ -338,12 +344,18 @@ C
                      NSTSCN = NSTSCN + 1
                   END IF
                END DO
-               MINKEEP = MIN( MINKEEP, NSTSCN )
+               MINSPS = MIN( MINSPS, NSTSCN )
             END IF
          END DO
-         RETAIN = MINKEEP .GE. INT( ( LSCN - ISCN + 1.0 ) / 2.0 + 0.51 )
-C         write(*,*) 'makegeo retain:', retain, minkeep, itrial, 
-C     1        iscn, lscn, INT( ( LSCN - ISCN + 1.0 ) / 2.0 + 0.51 )
+         RETAIN = MINSPS .GE. HALFSCNS
+C         write(*,*) ' makegeo jscn', (stascn(jscn,i),i=1,nsta)
+C         if( .not. retain ) then
+C              write(*,*) 'makegeo not retain:', itrial, retain, minsps,
+C     1         halfscns, lscn-iscn+1, iscn, lscn
+C         else
+C              write(*,*) 'makegeo keep:      ', itrial, retain, minsps, 
+C     1         halfscns, lscn-iscn+1, iscn, lscn
+C         end if
 C
 C        For kept sequences, test the quality.
 C
@@ -369,9 +381,10 @@ C
             IF( TESTQUAL .GT. BESTQUAL ) THEN
 C               IF( MKGDEBUG ) THEN
                   MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, I5, A, I3, A, F7.3, 20I3 )' )
+                  WRITE( MSGTXT, '( A, I5, A, 2I3, A, F7.3, 20I3 )' )
      1                'MAKEGEO: New Best - Trial: ', ITRIAL, 
-     2                ' Number of scans: ', NTSEG, '  Quality: ', 
+     2                ' Number of scans & fewest scans/sta: ', 
+     3                NTSEG, MINSPS, '  Quality: ', 
      3                TESTQUAL, (TSRC(ISEG),ISEG=1,NTSEG)
                   CALL WLOG( 1, MSGTXT )
                   MSGTXT = ' '
