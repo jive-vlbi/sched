@@ -1,4 +1,17 @@
       SUBROUTINE SCHOPT
+
+
+
+
+***********   I think the handling of the invoking scan of a 
+              geodetic segment is not right.  Think about it.
+
+              Then look at segment start time.  Two back-to-back
+              short segments seem to end awfully early.
+
+
+
+
 C
 C     Routine for the optimization of a schedule.  This will always
 C     be called.  In the simplest mode, it just sets SCAN1 and SCANL,
