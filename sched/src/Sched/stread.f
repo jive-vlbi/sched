@@ -164,17 +164,18 @@ C        Be sure the DAR type is known.
 C
          IF( DAR(MSTA) .EQ. ' ' ) DAR(MSTA) = 'NONE'
          IF( DAR(MSTA) .NE. 'VLBA'  .AND. 
-     1       DAR(MSTA) .NE. 'VLBAG' .AND.
-     2       DAR(MSTA) .NE. 'MKIV'  .AND.
-     3       DAR(MSTA) .NE. 'MKIII' .AND. 
-     4       DAR(MSTA) .NE. 'S2'    .AND. 
-     5       DAR(MSTA) .NE. 'K4'    .AND. 
-     6       DAR(MSTA) .NE. 'K5'    .AND. 
-     7       DAR(MSTA) .NE. 'VERA'  .AND. 
-     8       DAR(MSTA) .NE. 'VSOP'  .AND. 
-     9       DAR(MSTA) .NE. 'VLBA4' .AND. 
-     A       DAR(MSTA) .NE. 'LBA' .AND. 
-     B       DAR(MSTA) .NE. 'NONE' ) THEN
+     1       DAR(MSTA) .NE. 'RDBE' .AND.
+     2       DAR(MSTA) .NE. 'VLBAG' .AND.
+     3       DAR(MSTA) .NE. 'MKIV'  .AND.
+     4       DAR(MSTA) .NE. 'MKIII' .AND. 
+     5       DAR(MSTA) .NE. 'S2'    .AND. 
+     6       DAR(MSTA) .NE. 'K4'    .AND. 
+     7       DAR(MSTA) .NE. 'K5'    .AND. 
+     8       DAR(MSTA) .NE. 'VERA'  .AND. 
+     9       DAR(MSTA) .NE. 'VSOP'  .AND. 
+     A       DAR(MSTA) .NE. 'VLBA4' .AND. 
+     B       DAR(MSTA) .NE. 'LBA' .AND. 
+     C       DAR(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF
@@ -203,8 +204,9 @@ C
          IF( DISK(MSTA) .EQ. ' ' ) DISK(MSTA) = 'NONE'
          IF( DISK(MSTA) .NE. 'MARK5A' .AND.
      1       DISK(MSTA) .NE. 'MARK5B' .AND.
-     2       DISK(MSTA) .NE. 'LBADR' .AND.
-     3       DISK(MSTA) .NE. 'NONE' ) THEN
+     2       DISK(MSTA) .NE. 'MARK5C' .AND.
+     3       DISK(MSTA) .NE. 'LBADR' .AND.
+     4       DISK(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DISK type ' //
      1          DISK(MSTA) // ' for ' // STATION(MSTA) )
          END IF

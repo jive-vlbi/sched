@@ -9,7 +9,7 @@ C
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
 C
-      INTEGER    KS, ISETF, I
+      INTEGER    KS, ISETF, I, ICH
       LOGICAL    NEEDCAT(MSET)
 C ---------------------------------------------------------------------
       IF( SDEBUG ) CALL WLOG( 0, 'SETDEFS: Starting' )
@@ -118,6 +118,17 @@ C
      1               BITS(1,KS), TRACK(1,1,KS), MCHAN, BBC(1,KS), 
      2               SIDEBD(1,KS), KS, TWOHEAD, DEBUG, ILOG )
 C
+            ELSE IF( TRACK(1,1,KS) .EQ. 0 .AND.
+     1        FORMAT(KS)(1:6) .EQ. 'MARK5B' ) THEN
+               IF( BITS(1,KS) .EQ. 2 ) THEN
+                  DO ICH = 1, NCHAN(KS)
+                     TRACK(ICH,1,KS) = 2*ICH
+                  END DO
+               ELSE
+                  DO ICH = 1, NCHAN(KS)
+                     TRACK(ICH,1,KS) = ICH + 1
+                  END DO
+               END IF
             END IF
          END DO
 C

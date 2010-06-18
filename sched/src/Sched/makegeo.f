@@ -32,12 +32,14 @@ C
       INTEGER           LASTLSCN(MAXSTA)
       INTEGER           ISEG, ITRIAL, LSCN, I, IDUM, ISTA, NSTSCN
       INTEGER           NTSEG, IGEO, TSRC(MSEG), NGOOD, NREJECT
-      INTEGER           YR, DY, CHANCE(MSEG10), NCHANCE
+      INTEGER           YR, DY, CHANCE(MSEG10), NCHANCE, ICHANCE
       INTEGER           MINSPS, HALFSCNS
+      INTEGER           LOWS(3,MAXSTA), HIGHS(2,MAXSTA)
+      REAL              LOWE(3,MAXSTA), HIGHE(2,MAXSTA)
       REAL              BESTQUAL, TESTQUAL
       REAL              RAN5, DUMMY
       LOGICAL           OKGEO(MGEO), OKSTA(MAXSTA), NOREP, MKGDEBUG
-      LOGICAL           RETAIN
+      LOGICAL           RETAIN, GOTIT
       DOUBLE PRECISION  TGEO1, TGEOEND, TAPPROX, STARTB, OKGTIM(MGEO)
       DOUBLE PRECISION  TIMRAD
       CHARACTER         WHY*60, TFORM*8, CTIME*8
@@ -116,7 +118,15 @@ C
 C     Allow elevations to 7 degrees below the specified minimum elevation
 C     so sources can be rising or setting during the segment.
 C
-C     While at it, use the CHANCE array to give more promising sources
+C     Try to provide a list that will optimize the chances of getting
+C     a good set.  When there are a lot of sources, it is very easy 
+C     to never see the right combinations.
+C
+C     First scheme tried - give sources with low elevation scans an
+C     extra chance of being scheduled for each low antenna.  This didn't
+C     work too well.
+C
+C     Use the CHANCE array to give more promising sources
 C     higher probability of selection - like a weighted lottery.  CHANCE
 C     will include a pointer to the input geo sources list.  Every source
 C     that is OK will get one CHANCE.  Ones then there will be an 
@@ -124,12 +134,30 @@ C     additional chance for each station below 20 degrees.  Note that
 C     the OKGEO scheme could be eliminated because of this, but don't
 C     do that yet.
 C
+C     Next scheme tried is to keep a source only if it is one of the 3 
+C     lowest (but above 11 deg) for some station or one of the 2 highest.
+C     Use LOWS(I,STAS) and HIGHS(I,STAS)
+C
+C
       DO ISTA = 1, NSTA
          LASTLSCN(ISTA) = 0
+         LOWS(1,ISTA) = 0
+         LOWS(2,ISTA) = 0
+         LOWS(3,ISTA) = 0
+         HIGHS(1,ISTA) = 0
+         HIGHS(2,ISTA) = 0
+         LOWE(1,ISTA) = 99.0
+         LOWE(2,ISTA) = 99.0
+         LOWE(3,ISTA) = 99.0
+         HIGHE(1,ISTA) = 0
+         HIGHE(2,ISTA) = 0
       END DO
       NREJECT = 0
       NCHANCE = 0
       TAPPROX = ( TGEOEND + STARTB ) / 2.D0
+C
+C     Write some messages to the user.
+C
       MSGTXT = ' '
       CALL TIMEJ( TAPPROX, YR, DY, TIMRAD )
       CTIME = TFORM( TIMRAD, 'T', 0, 2, 2, '::@' )
@@ -143,39 +171,115 @@ C
      1        (STCODE(STANUM(ISTA)),ISTA=1,NSTA)
       CALL WLOG( 1, MSGTXT )
       MSGTXT = ' '
+C
+C     Loop through the sources getting the geometry.
+C
       DO IGEO = 1, NGEO
          LSCN = ISCN + 1
          CALL MAKESCN( LASTLSCN, LSCN, JSCN, GEOSRCI(IGEO),
      1        GEOSRC(IGEO), TAPPROX, OPMINEL(JSCN) - 7.0,
      2        NGOOD, OKSTA )
 C
-C           Make sure enough antennas are good.  Record the time
-C           when the source was marked as bad.  
+C        Make sure enough antennas are good for this source.  
 C
          OKGEO(IGEO) = NGOOD .GE. OPMIAN(JSCN)
          IF( .NOT. OKGEO(IGEO) ) THEN
             NREJECT = NREJECT + 1
          ELSE
-            NCHANCE = NCHANCE + 1
-            IF( NCHANCE .GT. MSEG10 ) CALL ERRLOG( 
-     1          'MAKEGEO: Too many chances -- programming error' )
-            CHANCE(NCHANCE) = IGEO
+C
+C           Accumulate the NCHANCE and CHANCE values for the method
+C           based on adding copies of sources when they have good
+C           elevations.  This bloats the number of sources and might
+C           be inhibiting good solutions.
+C
+C            NCHANCE = NCHANCE + 1
+C            IF( NCHANCE .GT. MSEG10 ) CALL ERRLOG( 
+C     1          'MAKEGEO: Too many chances -- programming error' )
+C            CHANCE(NCHANCE) = IGEO
+C            DO ISTA = 1, NSTA
+C               IF( EL1(LSCN,ISTA) .LT. 20.0 .AND. STASCN(LSCN,ISTA) ) 
+C     1               THEN
+C                  NCHANCE = NCHANCE + 1
+C                  IF( NCHANCE .GT. MSEG10 ) CALL ERRLOG( 
+C     1                'MAKEGEO: Too many chances - programming error' )
+C                  CHANCE(NCHANCE) = IGEO
+C               END IF
+C            END DO
+C
+C           Calculate NCHANCE and CHANCE for the method that only keeps
+C           sources that contribute to the extreme elevations somewhere.
+C
             DO ISTA = 1, NSTA
-               IF( EL1(LSCN,ISTA) .LT. 20.0 .AND. STASCN(LSCN,ISTA) ) 
-     1               THEN
-                  NCHANCE = NCHANCE + 1
-                  IF( NCHANCE .GT. MSEG10 ) CALL ERRLOG( 
-     1                'MAKEGEO: Too many chances - programming error' )
-                  CHANCE(NCHANCE) = IGEO
+               IF( EL1(LSCN,ISTA) .LT. LOWE(3,ISTA) ) THEN
+                  LOWS(3,ISTA) = IGEO
+                  LOWE(3,ISTA) = EL1(LSCN,ISTA)
+               END IF
+               IF( EL1(LSCN,ISTA) .LT. LOWE(2,ISTA) ) THEN
+                  LOWS(3,ISTA) = LOWS(2,ISTA)
+                  LOWE(3,ISTA) = LOWE(2,ISTA)
+                  LOWS(2,ISTA) = IGEO
+                  LOWE(2,ISTA) = EL1(LSCN,ISTA)
+               END IF
+               IF( EL1(LSCN,ISTA) .LT. LOWE(2,ISTA) ) THEN
+                  LOWS(3,ISTA) = LOWS(2,ISTA)
+                  LOWE(3,ISTA) = LOWE(2,ISTA)
+                  LOWS(2,ISTA) = LOWS(1,ISTA)
+                  LOWE(2,ISTA) = LOWE(1,ISTA)
+                  LOWS(1,ISTA) = IGEO
+                  LOWE(1,ISTA) = EL1(LSCN,ISTA)
+               END IF
+               IF( EL1(LSCN,ISTA) .GT. HIGHE(1,ISTA) ) THEN
+                  HIGHS(2,ISTA) = IGEO
+                  HIGHE(2,ISTA) = EL1(LSCN,ISTA)
+               END IF
+               IF( EL1(LSCN,ISTA) .GT. HIGHE(1,ISTA) ) THEN
+                  HIGHS(2,ISTA) = HIGHS(1,ISTA)
+                  HIGHE(2,ISTA) = HIGHE(1,ISTA)
+                  HIGHS(1,ISTA) = IGEO
+                  HIGHE(1,ISTA) = EL1(LSCN,ISTA)
                END IF
             END DO
          END IF
-C         IF( MKGDEBUG ) THEN
-            IF( OKGEO(IGEO) ) THEN
-               WRITE(*,'( 2I5, 2X, A, 20F5.0)' ) IGEO, NCHANCE,
-     1             GEOSRC(IGEO), (EL1(LSCN,I),I=1,NSTA)
+C
+C        Write a line with information about each source, if desired.
+C	 	 
+C        IF( MKGDEBUG ) THEN
+           WRITE(*,'( I5, 2X, A, 20F5.0)' ) IGEO,
+     1           GEOSRC(IGEO), (EL1(LSCN,I),I=1,NSTA)
+C        END IF
+      END DO
+C
+      NCHANCE = 0
+C      IF( MKGDEBUG ) THEN
+         WRITE(*,*) 'Sources used in optimization:'
+C       END IF
+      DO IGEO = 1, NGEO
+         GOTIT = .FALSE.
+         DO ISTA = 1, NSTA
+            IF( IGEO .EQ. LOWS(3,ISTA) .OR. 
+     1          IGEO .EQ. LOWS(2,ISTA) .OR. 
+     2          IGEO .EQ. LOWS(1,ISTA) .OR. 
+     3          IGEO .EQ. HIGHS(2,ISTA) .OR. 
+     4          IGEO .EQ. HIGHS(1,ISTA) ) THEN
+               GOTIT = .TRUE.
             END IF
-C         END IF
+         END DO
+C
+C        Add IGEO to the chance array if it
+C        was one of the favored ones.
+C
+         IF( GOTIT ) THEN
+            NCHANCE = NCHANCE + 1
+            CHANCE(NCHANCE) = IGEO
+C
+C           Write a line with information about each source, if desired.
+C	 	 
+C            IF( MKGDEBUG ) THEN
+            WRITE(*,'( 2I5, 2X, A )' ) IGEO,
+     1             NCHANCE, GEOSRC(IGEO)
+C            END IF
+         END IF
+C	 	 
       END DO
 C
 C     Prevent an opportunity for an infinite loop.  There is still
@@ -191,7 +295,7 @@ C
          WRITE(*,*) 'MAKEGEO GOING ', TGEO1, TGEOEND, ISCN
       END IF
 C
-C     Loop over teh trials.  For now, the number is hardwired.  That
+C     Loop over the trials.  For now, the number is hardwired.  That
 C     will likely be pulled out as a user parameter some day.
 C
       DO ITRIAL = 1, 4000
@@ -251,7 +355,8 @@ C
                TAPPROX = STOPJ(LSCN-1) + 60.D0 * ONESEC
             END IF
 C
-C           There are NGEO sources.  Pick one.
+C           There are NCHANCE sources being considered.  Some may
+C           be duplicates.  Pick one.
 C
             TSRC(ISEG) = CHANCE( 1 + RAN5(IDUM) * NCHANCE )
             IF( MKGDEBUG ) THEN

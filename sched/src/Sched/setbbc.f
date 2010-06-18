@@ -73,6 +73,12 @@ C        Normal VLBA systems.
 C
          CALL BBCVLBA( KS )
 C
+      ELSE IF( DAR(ISETSTA(KS)) .EQ. 'RDBE' ) THEN
+C
+C        RDBE digital backend, including VLBA
+C
+         CALL BBCRDBE( KS )
+C
       ELSE IF( DAR(ISETSTA(KS)) .EQ. 'VLBAG' ) THEN
 C
 C        VLBA systems with "geodetic wiring".
