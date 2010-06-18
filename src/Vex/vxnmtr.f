@@ -8,7 +8,7 @@ C
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
 C
-      INTEGER IXX, ISET, ICH, NDUMMY
+      INTEGER IXX, ISET, ICH, NDUMMY, NCH
       CHARACTER NAME*32, MODE*1, S2MDNM*7, CDUMMY(16)*4
       LOGICAL DUBLSB, DUALPL, S2OK
       INTEGER LEN1
@@ -24,7 +24,8 @@ C
      1    FORMAT(ISET)(1:7) .EQ. 'MARKIII' .OR.
      2    FORMAT(ISET)(1:2) .EQ. 'S2' .OR.
      3    FORMAT(ISET)(1:3) .EQ. 'LBA' .OR.
-     4    FORMAT(ISET)(1:6) .EQ. 'MKIV1:' ) ) THEN
+     4    FORMAT(ISET)(1:6) .EQ. 'MKIV1:' .OR.
+     5    FORMAT(ISET)(1:6) .EQ. 'MARK5B') ) THEN
          MSGTXT = 'VXNMTR: unsupported recording mode: ' // FORMAT(ISET)
          CALL ERRLOG( MSGTXT )
       END IF
@@ -68,16 +69,21 @@ C
          WRITE( NAME, '( A, A )' ) 'S2.', S2MDNM(1:LEN1(S2MDNM))
       ELSE
 C
-C        either MkIV or VLBA or LBA:
+C        either MkIV or VLBA or LBA or MARK5B:
 C
-         IF( NCHAN(ISET) .GT. 9 ) THEN
-            WRITE( NAME, '( A4, A1, I2, A2, I1, A3, A3, I1 )' )  
-     1          FORMAT(ISET)(1:4), '.', NCHAN(ISET),'Ch', BITS(1,ISET),
-     2          'bit','1to', NINT(FANOUT(ISET))
+         IF( FORMAT(ISET) .EQ. 'MARK5B' ) THEN
+            NCH = 6
          ELSE
-            WRITE( NAME, '( A4, A1, I1, A2, I1, A3, A3, I1 )' )  
-     1          FORMAT(ISET)(1:4), '.', NCHAN(ISET),'Ch', BITS(1,ISET),
-     2          'bit','1to', NINT(FANOUT(ISET))
+            NCH = 4
+         END IF
+         IF( NCHAN(ISET) .GT. 9 ) THEN
+            WRITE( NAME, '( A, A1, I2, A2, I1, A3, A3, I1 )' )  
+     1          FORMAT(ISET)(1:NCH), '.', NCHAN(ISET),'Ch', 
+     2          BITS(1,ISET),'bit','1to', NINT(FANOUT(ISET))
+         ELSE
+            WRITE( NAME, '( A, A1, I1, A2, I1, A3, A3, I1 )' )  
+     1          FORMAT(ISET)(1:NCH), '.', NCHAN(ISET),'Ch', 
+     2          BITS(1,ISET), 'bit','1to', NINT(FANOUT(ISET))
          ENDIF
       ENDIF
 C

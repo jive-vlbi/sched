@@ -211,6 +211,8 @@ C
      1         CALL CHK4DAR( KS, NBBC(ISETSTA(KS)), ERRS )
 C
 C        Check various recorder related parameters.
+C        Note that recorders means tape drives, not disks.  This whole
+C        section is likely to be obsolete.
 C
          IF( VLBITP ) THEN
 C
@@ -238,6 +240,7 @@ C
             IF( RECORDER(ISETSTA(KS)) .EQ. 'MKIV' ) 
      1           CALL CHK4REC( KS, ERRS )
             IF( RECORDER(ISETSTA(KS)) .EQ. 'S2' ) 
+
      1           CALL CHKSREC( KS, ERRS )
 C
 C           Check the bit rate per track and the tape speeds.    

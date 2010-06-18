@@ -16,11 +16,11 @@ C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKSOC: starting.' )
 C
 C     First, only do this if the experiment is to be processed
-C     on the VLBA correlator.
+C     on the VLBA hardware correlator.
+C     DiFX is not subject to these restrictions and is handled in
+C     CHKVDIFX
 C
-      IF( ( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1      ( CORREL(1:4) .EQ. 'VLBA' .AND. LEN1( CORREL ) .EQ. 4 ) )
-     2      .AND. .NOT. NOTAPE ) THEN
+      IF( CORREL(1:6) .EQ. 'FXCORR' .AND. .NOT. NOTAPE ) THEN
 C
 C        The ith tracks from each VLBA track group cannot be routed
 C        to the same delay center.  This restricts where channels

@@ -10,7 +10,7 @@ C
       INCLUDE 'vxlink.inc' 
 C      
       INTEGER   ITR, KS, ICH, IBIT, IFAN, IP, HEDSTK, NS2USD
-      INTEGER   LPOS, I, ISTA, TRACK1
+      INTEGER   LPOS, I, ISTA, TRACK1, ITRK
       INTEGER   LEN1
       INTEGER   ISCAT
       CHARACTER LINE*132, THEBIT*4, TPSUBP, S2MDNM*7, IS2USD(16)*4
@@ -53,13 +53,15 @@ C        ignore fan in's for now, do fan-outs, figure out what it is
 C
          IF( .NOT. (FORMAT(KS)(1:6) .EQ. 'VLBA1:' .OR. 
      1        FORMAT(KS)(1:7) .EQ. 'MARKIII' .OR.
-     1        FORMAT(KS)(1:2) .EQ. 'S2' .OR.
-     1        FORMAT(KS)(1:3) .EQ. 'LBA' .OR.
-     2        FORMAT(KS)(1:6) .EQ. 'MKIV1:' ) .OR. 
-     3       ( FANOUT(KS) .LT. 0.9 .AND.
-     4       FORMAT(KS)(1:2) .NE. 'S2' )) THEN
-            WRITE( MSGTXT, '( A, A )' )
-     1          'VXWRTR: unsupported recording mode/fan: ', FORMAT(KS)
+     2        FORMAT(KS)(1:2) .EQ. 'S2' .OR.
+     3        FORMAT(KS)(1:3) .EQ. 'LBA' .OR.
+     4        FORMAT(KS)(1:6) .EQ. 'MKIV1:' .OR.
+     5        FORMAT(KS)(1:6) .EQ. 'MARK5B' ) .OR. 
+     6       ( FANOUT(KS) .LT. 0.9 .AND.
+     7       FORMAT(KS)(1:2) .NE. 'S2' )) THEN
+            WRITE( MSGTXT, '( A, A, F6.2 )' )
+     1          'VXWRTR: unsupported recording mode/fan: ', FORMAT(KS),
+     2          FANOUT(KS)
             CALL ERRLOG( MSGTXT )
          END IF
          WRITE( IVEX, '( A1, 4X, A, A, A, I1.1 )' ) COM,
@@ -100,6 +102,10 @@ C              and awaiting a MkIV firmware upgrade it is off
 C
                WRITE( IVEX, '( 5X, A, A, A1 )' )
      1             'data_modulation = ','off', SEP
+            ELSE IF( FORMAT(KS)(1:6) .EQ. 'MARK5B' ) THEN
+               WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1             'track_frame_format = ','MARK5B', SEP
+
             ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
 C               WRITE( IVEX, '( 5X, A, A, A1 )' )
 C     1            'S2_recording_mode = ', 'LBA', SEP
@@ -334,7 +340,8 @@ C
      2                   1X, I1.1, 1X )' ) 
      3                   'fanout_def =', TPSUBP, COL, LNK, 'CH', ICH, 
      4                   COL, THEBIT, COL, HEDSTK
-                     IF( FORMAT(KS)(1:3) .NE. 'LBA' ) THEN
+                     IF( FORMAT(KS)(1:3) .NE. 'LBA' .AND. 
+     1                   FORMAT(KS)(1:6) .NE. 'MARK5B' ) THEN
                         DO IFAN = 1, NINT(FANOUT(KS))
 C
 C                       here are some implicit assumptions made, about VLBA
@@ -347,11 +354,15 @@ C
      3                         (IBIT-1)*2*NINT(FANOUT(KS))
                         END DO
                      ELSE 
-C                       For LBA is simpler - no fanout and simple
-C                       mapping of track to channel.
+C                       For LBA and Mark5B, the layout is simpler - There
+C                       no fanout and simple mapping of track to channel.
+C
                         LPOS = LEN1(LINE)+1
+                        ITRK = ( ICH - 1 ) * BITS(1,KS) + IBIT - 1
+                        IF( FORMAT(KS)(1:6) .EQ. 'MARK5B' )
+     1                     ITRK = ITRK + 2
                         WRITE( LINE(LPOS:LPOS+4), '(A1, 1X, I2)') 
-     1                     COL, (ICH-1)*BITS(1,KS)+IBIT-1
+     1                     COL, ITRK
                      END IF
                      WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE)), SEP
                   END DO

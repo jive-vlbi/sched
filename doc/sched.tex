@@ -417,10 +417,6 @@ that will be expanded significantly in the future.  All of these
 sections are worth reading through on some slow day for those serious
 about scheduling.
 
-\schedb is not the same program as {\sc PC-SCHED}.  PC-SCHED, which
-was written at Haystack, was the primary program for scheduling of
-Mark~III observations.  Mark~III is no longer in use, having been
-replaced by the Mark~IV, and, more recently, but the Mark5 system.
 VLBI projects can also be produced using the NASA Goddard program {\sc
 SKED} and VLBA control files can be produced using {\sc DRUDG}.  That
 is the standard path used by the geodesy community, but is rare among
@@ -576,7 +572,7 @@ catalog entries can be included in the \htmlref{Main Schedule Input
 File}{SEC:SCHPAR}.  The standard catalog is \htmladdnormallink{{\sl
 \$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}.  Two external
 catalogs can be specified if one wishes, for example, to use the 
-standard one for calibrators and another for multiple phase centers.
+standard one for calibrators and another for multiple phase centers
 
 \item[\htmlref{Station Catalog}{SEC:STACAT}:] This file contains
 information about the antennas including names, positions, slew
@@ -3053,9 +3049,108 @@ Summary}{http://www.vlba.nrao.edu/astro/obstatus/current/} for more
 information on delay and fringe rate smearing.
 
 
-There is an example, {\sl egcent.key}, with an associated catalog
-{\sl egcentsrc.dat}, with the \schedb examples to demonstrate the
-use of this mode.
+There is an example, \htmladdnormallink{{\sl
+egcent.key}}{examples/egcent.key}, with an
+associated catalog \htmladdnormallink{{\sl egcentsrc.dat}}
+{examples/egcentsrc.dat}, with the \schedb examples to
+demonstrate the use of this mode.
+
+\section{\label{SEC:GEOSEG}Automatic Insertion of Geodetic Segments}
+
+Phase referencing for weak source detection and astrometry depends on
+the ability to transfer interferometer phase from a calibrator to a
+target.  The largest source of error in that transfer is the
+atmosphere.  The ionospheric component of the atmosphere can be
+calibrated using multiple observing bands or modeled with the help of
+GPS based ionospheric models.  The non-dispersive tropospheric
+component needs to be calibrated, either by measuring gradients using
+multiple calibrators near the target, or deriving the zenith delay
+from observations and using a mapping function to get the elevation
+dependence.  The latter method is generally accomplished by inserting
+occasional clusters of observations of calibrators around the sky from
+which the clock offset and the zenith delay can be derived.  AIPS task
+DELZN is typically used to make the solutions, although some users
+have their own programs for the purpose.  These clusters of calibrator
+observations are called geodetic segments or DELZN segments.
+
+Constructing a geodetic segment can be tedious given that one wants
+low elevation observations at all stations.  The tropospheric effect
+scales roughly as secant(zenith angle) (hereafter SecZ).  The
+elevations at each VLBI station are different and change rapidly with
+time.  External programs have been written to construct such segments
+for insertion into SCHED and libraries of segments are available,
+mostly from Mark Reid of CfA.  But any schedule with such segments is
+tightly constrained in time --- any time shift will cause what were
+low elevation scans to become either high elevation scans or scans
+where the source is down.  Plus gathering the required segments can be
+tedious.
+
+/schedb can now build and insert geodetic segements automatically into
+schedules.  This should drastically reduce the overhead in
+constructing such segments, and allows such segments to be made easily
+when the station list is not just the VLBA.  Also the schedule can be
+time shifted easily, a possible benefit for dynamic scheduling.  When
+there is a time shift, a different list of sources, optimized for the
+new time, will be built.
+
+To request that a geodetic segment be built, the user should specify a scan
+with the parameter \htmlref{{\tt GEOSEG}}{MP:GEOSEG} given with an
+argument that is the total duration of the segment (typical values are 20
+to 45 minutes).  A list of sources from the normal \schedb catalogs to
+consider for the geodetic segements is given with the input parameter
+\htmlref{{\tt GEOSRCS}}{MP:GEOSRCS}.  Other parameters to consider to
+influence the source selection are \htmlref{{\tt DWELL}}{MP:DWELL}
+(the length of the individual scans within the segment), \htmlref{{\tt
+OPMINEL}}{MP:OPMINEL} (the minimum elevation to consider --- 10
+degrees is a reasonable choice), \htmlref{{\tt OPMINANT}}{MP:OPMINANT}
+(the minimum number of stations in a scan} and \htmlref{{\tt
+SETUP}}{MP:SETUP} (the setup file --- typically one with a wide
+spanned bandwidth and maybe not at the same band as the main
+observations).  Be sure to these parameters back to their
+desired values for the main observations ({\tt GEOSEG} will revert to
+zero by default}.  In addition, for the scan that is being turned into
+a geodetic segment a source needs to be
+specified.  It will be ignored in constructing the segments, but without
+it some of the \schedb checking that comes earlier will not be happy.
+
+There is an example among the \schedb examples called
+\htmladdnormallink{{\sl egdelzn.key}}{examples/egdelzn.key} that shows
+how to construct a file with automatic geodetic segment insertion.
+The \htmlref{{\tt GEOSRCS}}{MP:GEOSRCS} in that example are the set
+provided by Mark Reid for his packaged geodetic segments, but with source
+names corresponding to those used in the normal \schedb catalog.
+Users are likely to just cut and paste that list into their schedules.
+
+Note that the \schedb run time will be significantly extended by the use
+of this feature because many possible segments are being tested.
+
+As long as \schedb is producing good geodetic segments, the details of
+the algorithm shouldn't matter too much to users.  But some may wish
+to know, so it is described here.  When starting to work on a segment,
+\schedb calculates the elevations at the middle of the segment for all
+of the specified sources.  It then constructs a list.  That list has
+one entry for each source that might be up during the segment (note
+that it is not wise to use this facility to construct long geodetic
+observations, at least as a single {\tt GEOSEG} block).  It then adds
+another entry in the list for the source for each station that is between
+the minimum elevation and 20 degrees.  This is setting up what you
+might call a weighted lottery.  Then \schedb loops through many
+possible geodetic segments, each constructed by picking sources from
+the list using a random number generator.  Individual sources can only
+be used once.  Sources are picked until the requested segment duration
+is reached.  The slew times and geometry are taken into account using
+the normal \schedb tools for that purpose.
+
+For each segment, a quality measure is generated.  As of this writing,
+\schedb trys 5000 such possible segments (different selected sources).
+That number may change with experience - and howls from users on slow
+computers --- or it may be made user settable.  \schedb picks the best
+segment according to the quality measure, and inserts that into the
+schedule.  The quality measure (subject to future tweaks) for a given
+segment is the number of scans times the RMS scatter in SecZ of the
+station with the lowest such number in the trial segment.  This tries
+to optimize the range of SecZ schedule, along with favoring segments
+that squeeze the most scans into the alotted time.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
@@ -6226,6 +6321,78 @@ prefered mechanism.
 {Zero.}
 {Reverts to previous scan.}
 {{\tt GAP=2:00} (which is equivalent to {\tt gap 120}).}
+
+
+
+\subsubsection{\label{MP:GEOSEG}{\tt GEOSEG}
+
+Specifying {\tt GEOSEG} flags a scan to be converted into a geodetic
+segment.  See \hmtlref{the section on insertion of geodetic segments}
+{SEC:GEOSEG} for more details about this capability.  The argument
+of {\tt GEOSEG} is the total time for the geodetic segment.  The duration
+of each scan in the segment is specified with \htmlref{{\tt DWELL}}
+{MP:DWELL}.  The scan to be converted should have a source specified
+to keep various checking routines happy, but it is not important what
+that source is, or even whether it is up.  In the construction of the
+segment, it will be ignored.
+
+Geodetic segments will likely need to be 30 to 40 minutes long to have
+good coverage at all antennas with multiple low elevation scans.  They
+could be even longer if slow antennas are included.  Note that not all
+antennas will be in all scans. 
+
+The sources used for the geodetic segments are specified with 
+\htmlref{{\tt GEOSRCS}}{MP:GEOSRCS}.
+
+\rcwbox
+{Any time in seconds in the usual formats (hh:mm:ss, mm:ss, sss etc.)}
+{Any time}
+{zero - no geodetic segment to be constructed}
+{Reverts to zero to avoid building successive segments.}
+{{\tt geoseg=30:00} for a 30 minute segment}
+
+\subsubsection{\label{MP:GEOSRCS}{\tt GEOSRCS}
+
+{\tt GEOSRCS} is used to list the sources to consider for
+automatically inserted geodetic segments.  It is array of source
+names, where the sources need to be in the \schedb source catalogs.
+Since the geodetic segments are best done with strong, compact
+calibrators with well known positions, all sources of interest are
+likely to be in the standard \schedb catalog \htmladdnormallink{{\sl
+\$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}.  For more
+information about automatic insertion of geodetic segments, see
+\hmtlref{the section on insertion of geodetic segments}{SEC:GEOSEG}
+and the description of the parameter \htmlref{{\tt
+GEOSEG}}{MP:GEOSEG}.
+
+The list in the sample below is the standard set used by Mark Reid
+to generate the segments he provides, but with the names changed
+to match the names in {\sl sources.vlba}.  This would be a good list
+to use.
+
+{Up to 400 source names.  That can be adjusted if more are needed}
+{Any valid source names.}
+{No sources}
+{One list used, the last}
+{
+\begin{verbatim}
+! ==========================================================
+! =============  Sources for geodetic segments  ============
+! ==========================================================
+geosrcs = J0017+81, J0019+73, J0050-09, J0102+58, J0121+11, 
+          J0121+04, J0136+47, J0203+11, J0204+15, J0217+73, 
+          J0231+13, J0238+16, J0303+47, J0339-01, J0501-01, 
+          J0530+13, J0555+39, J0646+44, J0700+17, J0726+79, 
+          J0730-11, J0753+53, J0808+49, J0808+40, J0818+42, 
+          J0824+55, J0825+03, J0854+20, J0927+39, J0956+25, 
+          J0958+47, J0958+65, J1048+71, J1058+81, J1104+38, 
+          J1127-18, J1130+38, J1146+39, J1153+80, J1159+29, 
+          J1222+04, J1302+57, J1310+32, J1354-02, J1357+76, 
+          J1419+54, J1550+05, J1557-00, J1608+10, J1638+57, 
+          J1640+39, J1727+45, J1740+52, J1743-03, J1746+62, 
+          J1751+09, J1800+78, J2148+06, J2225-04, J2236+28
+
+\begin{verbatim}
 
 
 
@@ -13070,6 +13237,9 @@ more information.
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
 
+
+\item Implement automatic insertion of geodetic segments, including
+parameters {\tt GEOSEG} and {\tt GEOSRCS}.  June 1, 2010.
 
 \item Give CORCHAN a second argument to use for the FFT size.
 May 14, 2010.
