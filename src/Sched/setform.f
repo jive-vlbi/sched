@@ -3,6 +3,9 @@ C
 C     Routine for SCHED, called by SETREC, to set the recording
 C     formats for the setup groups.
 C
+C     The following applies to MarkIV and VLBA tape or Mark5A systems.
+C     The fan out is not a concept for the digital backends.
+C
 C     The nastiest recording parameter choice is deciding on the
 C     format to use, which amounts to choosing the fan out.  This
 C     cannot be done individually per setup group because of
@@ -102,6 +105,9 @@ C
          IF( FORMAT(KS) .EQ. ' ' ) THEN
             IF( RECORDER(ISETSTA(KS)) .EQ. 'S2' ) THEN
                FORMAT(KS) = 'S2'
+            ELSE IF( RECORDER(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
+     1          DAR(ISETSTA(KS)) .EQ. 'RDBE' ) THEN
+               FORMAT(KS) = 'MARK5B'
             ELSE
                FORMAT(KS) = DAR(ISETSTA(KS))
             END IF
@@ -257,6 +263,7 @@ C
 C
 C     This is by no means done.
 C
+  999 CONTINUE
       RETURN
       END
 

@@ -31,13 +31,16 @@ C
       INTEGER     NCHAN, OLDCHAN, KCHAR, NCHAR, LEN1, NCL
       INTEGER     I, ICHADD, IDAADD, IUVBA, NBWS
       LOGICAL     FIRSTS, WRTLAB
-      CHARACTER*7   SPECBWS(10), PRTBWS(MCHAN)
+      INTEGER     MBWS
+      PARAMETER   ( MBWS = 13 )
+      CHARACTER*7   SPECBWS(MBWS), PRTBWS(MCHAN)
 C
       SAVE        LOG2, SPECBWS, FMT1, FMT2
 C
       DATA          LOG2         / 0.693147181 /
       DATA  SPECBWS / '62.5K', '125K', '250K', '500K',
-     1               '1M', '2M', '4M', '8M', '16M', '32M' /
+     1               '1M', '2M', '4M', '8M', '16M', '32M',
+     2               '64M', '128M', '256M' /
 C
       DATA        FMT1, FMT2  / '(I1)', '(I2)' /
 C----------------------------------------------------------------------
@@ -67,7 +70,7 @@ C
 C           Determine the ASCII version of the number to be printed.
 C
             NBWS = LOG( (ARRAY(I)+0.02) / 0.0625 ) / LOG2  +  1
-            IF( NBWS .LT. 1 .OR. NBWS .GT. 10 ) CALL ERRLOG ( 
+            IF( NBWS .LT. 1 .OR. NBWS .GT. MBWS ) CALL ERRLOG ( 
      1           'Bad bandwidth or sample rate specification ' )
             PRTBWS(I) = SPECBWS(NBWS)
 C

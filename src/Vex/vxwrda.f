@@ -89,25 +89,31 @@ C
      1              RECORDER(ISCAT) )
              END IF
          ELSE IF( USEDISK(ISTA) ) THEN
-             IF( DISK(STANUM(ISTA)) .EQ. 'MARK5A' ) THEN
+             IF( DISK(STANUM(ISTA)) .EQ. 'MARK5A' .OR.
+     1           DISK(STANUM(ISTA)) .EQ. 'MARK5B' .OR.
+     2           DISK(STANUM(ISTA)) .EQ. 'MARK5C'    ) THEN
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',
-     2              'Mark5A', SEP
+     2              DISK(STANUM(ISTA))(1:LEN1(DISK(STANUM(ISTA)))), SEP
              ELSE IF( DISK(STANUM(ISTA)) .EQ. 'LBADR' ) THEN
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',
      2              'S2', SEP
 C     2              'Mark5A', SEP
+             ELSE
+                CALL ERRLOG(' VXWRDA: Unknown recorder of type: '//
+     1              RECORDER(ISCAT) )
              END IF
          END IF
 C
 C        Next electronic rack
 C
          IF( DAR(ISCAT) .EQ. 'VLBA' .OR. 
-     1       DAR(ISCAT) .EQ. 'S2' .OR. 
-     1       DAR(ISCAT) .EQ. 'VLBAG' .OR.
-     1       DAR(ISCAT) .EQ. 'VLBA4' .OR. 
-     2       DAR(ISCAT) .EQ. 'K4' ) THEN
+     1       DAR(ISCAT) .EQ. 'RDBE' .OR. 
+     2       DAR(ISCAT) .EQ. 'S2' .OR. 
+     3       DAR(ISCAT) .EQ. 'VLBAG' .OR.
+     4       DAR(ISCAT) .EQ. 'VLBA4' .OR. 
+     5       DAR(ISCAT) .EQ. 'K4' ) THEN
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',
      2          DAR(ISCAT)(1:LEN1(DAR(ISCAT))), SEP

@@ -33,7 +33,8 @@ C
          CALL FMTVLBA( KS, TRKBPS, OK )
       ELSE IF( FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
          CALL FMTMKIV( KS, TRKBPS, OK )
-      ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
+      ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' .OR. 
+     1         FORMAT(KS)(1:6) .EQ. 'MARK5B' ) THEN
          FANOUT(KS) = 1.0
          SPEEDUP(KS) = 1.0
          TAPEMODE(KS) = 1
@@ -63,10 +64,3 @@ C
 C
       RETURN
       END
-
-
-
-
-
-
-
