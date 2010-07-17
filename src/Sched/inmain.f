@@ -86,6 +86,7 @@ C
 C      DO IG = 1, MGEO
 C         CALL KEYCHR( 'GEOSRCS', ' ', 12, KD, KC, KI )
 C      END DO
+      CALL KEYADD( 'GEOPRT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'DOVEX', 0.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'DOSTA', 'ALL', 8, KD, KC, KI )
       CALL KEYADD( 'LST', UNSET, 1, KD, KC, KI )

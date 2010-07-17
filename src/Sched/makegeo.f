@@ -26,23 +26,21 @@ C
       INCLUDE   'sched.inc'
 C
       INTEGER           JSCN, ISCN, SEGSRCS(*), LASTISCN(*), NSEG
-      INTEGER           MSEG10
-      PARAMETER         (MSEG10=10*MSEG)
+      INTEGER           MAXPAR
+      PARAMETER         (MAXPAR=MAXSTA*2)
 C
       INTEGER           LASTLSCN(MAXSTA)
-      INTEGER           ISEG, ITRIAL, LSCN, I, IDUM, ISTA, NSTSCN
-      INTEGER           NTSEG, IGEO, TSRC(MSEG), NGOOD, NREJECT
-      INTEGER           YR, DY, CHANCE(MSEG10), NCHANCE, ICHANCE
-      INTEGER           MINSPS, HALFSCNS
-      INTEGER           LOWS(3,MAXSTA), HIGHS(2,MAXSTA)
-      REAL              LOWE(3,MAXSTA), HIGHE(2,MAXSTA)
+      INTEGER           ISEG, ITRIAL, LSCN, I, J, IDUM, ISTA, NSTSCN
+      INTEGER           NTSEG, TSRC(MSEG), NREJECT
+      INTEGER           MINSPS, HALFSCNS, NPRT, ICH, LEN1
       REAL              BESTQUAL, TESTQUAL
-      REAL              RAN5, DUMMY
-      LOGICAL           OKGEO(MGEO), OKSTA(MAXSTA), NOREP, MKGDEBUG
-      LOGICAL           RETAIN, GOTIT
-      DOUBLE PRECISION  TGEO1, TGEOEND, TAPPROX, STARTB, OKGTIM(MGEO)
-      DOUBLE PRECISION  TIMRAD
-      CHARACTER         WHY*60, TFORM*8, CTIME*8
+      REAL              RAN5, DUMMY, SEGELEV(MAXSTA,MGEO)
+      LOGICAL           OKGEO(MGEO), USEGEO(MGEO)
+      LOGICAL           MKGDEBUG
+      LOGICAL           RETAIN
+      DOUBLE PRECISION  TGEO1, TGEOEND, TAPPROX, STARTB
+      DOUBLE PRECISION  SIGMA(MAXPAR)
+      CHARACTER         WHY*60
 C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
@@ -50,13 +48,9 @@ C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'MAKEGEO starting.' )
       MKGDEBUG = .FALSE.
 C
-      BESTQUAL = 0
+      BESTQUAL = 1.E10
       DO ISEG = 1, MSEG
          SEGSRCS(ISEG) = 0
-      END DO
-      DO IGEO = 1, MGEO
-         OKGEO(IGEO) = .TRUE.
-         OKGTIM(IGEO) = 0.D0
       END DO
 C
 C     Prime the random number generator a bit.  I don't know
@@ -82,7 +76,8 @@ C
             END IF
          END IF
       END DO
-      STARTB = STARTJ(ISCN)
+C      STARTB = STARTJ(ISCN)
+      STARTB = TGEO1
       TGEOEND = TGEO1 + GEOLEN(ISCN)
 C
       IF( MKGDEBUG ) THEN
@@ -105,341 +100,39 @@ C
          MSGTXT = ' '
       END IF
 C
-C     Make a pass through all sources looking at the midpoint of
-C     the block to see if enough stations are up.  Set OKGEO 
-C     accordingly.  Doing this during the loops below can cause sources
-C     that are bad only at an extreme part of the block to be kept
-C     out of the final result.  Given that we are trying for low 
-C     elevation scans, even this scheme won't be perfect, but it is
-C     faster than always allowing all sources.
-C     Use a dummy ISCN that should be an empty slot for this test.
-C     Initialize the LASTLSCN values so that TAPPROX is used.
+C     Look at all sources to see if they can be used and if they
+C     seem useful enough to be favored.  Get a list of elevations.
 C
-C     Allow elevations to 7 degrees below the specified minimum elevation
-C     so sources can be rising or setting during the segment.
+      CALL CHKGEO( JSCN, ISCN, STARTB, TGEOEND, OKGEO, USEGEO,
+     1             SEGELEV )
 C
-C     Try to provide a list that will optimize the chances of getting
-C     a good set.  When there are a lot of sources, it is very easy 
-C     to never see the right combinations.
-C
-C     First scheme tried - give sources with low elevation scans an
-C     extra chance of being scheduled for each low antenna.  This didn't
-C     work too well.
-C
-C     Use the CHANCE array to give more promising sources
-C     higher probability of selection - like a weighted lottery.  CHANCE
-C     will include a pointer to the input geo sources list.  Every source
-C     that is OK will get one CHANCE.  Ones then there will be an 
-C     additional chance for each station below 20 degrees.  Note that 
-C     the OKGEO scheme could be eliminated because of this, but don't
-C     do that yet.
-C
-C     Next scheme tried is to keep a source only if it is one of the 3 
-C     lowest (but above 11 deg) for some station or one of the 2 highest.
-C     Use LOWS(I,STAS) and HIGHS(I,STAS)
-C
-C
-      DO ISTA = 1, NSTA
-         LASTLSCN(ISTA) = 0
-         LOWS(1,ISTA) = 0
-         LOWS(2,ISTA) = 0
-         LOWS(3,ISTA) = 0
-         HIGHS(1,ISTA) = 0
-         HIGHS(2,ISTA) = 0
-         LOWE(1,ISTA) = 99.0
-         LOWE(2,ISTA) = 99.0
-         LOWE(3,ISTA) = 99.0
-         HIGHE(1,ISTA) = 0
-         HIGHE(2,ISTA) = 0
-      END DO
-      NREJECT = 0
-      NCHANCE = 0
-      TAPPROX = ( TGEOEND + STARTB ) / 2.D0
-C
-C     Write some messages to the user.
-C
-      MSGTXT = ' '
-      CALL TIMEJ( TAPPROX, YR, DY, TIMRAD )
-      CTIME = TFORM( TIMRAD, 'T', 0, 2, 2, '::@' )
-      WRITE( MSGTXT, '( A, I4, I4, 1X, A )' ) 
-     1    'Building geodetic segment centered at ', YR, DY, CTIME
-      CALL WLOG( 1, MSGTXT )
-      CALL WLOG( 1, 'Elevations at center for sources considered are: ')
-      IF( NSTA .GT. 20 ) CALL WLOG( 1, '(Only first 20 stations)' )
-      MSGTXT = ' '
-      WRITE( MSGTXT, '( 25X, 20A5 )' ) 
-     1        (STCODE(STANUM(ISTA)),ISTA=1,NSTA)
-      CALL WLOG( 1, MSGTXT )
-      MSGTXT = ' '
-C
-C     Loop through the sources getting the geometry.
-C
-      DO IGEO = 1, NGEO
-         LSCN = ISCN + 1
-         CALL MAKESCN( LASTLSCN, LSCN, JSCN, GEOSRCI(IGEO),
-     1        GEOSRC(IGEO), TAPPROX, OPMINEL(JSCN) - 7.0,
-     2        NGOOD, OKSTA )
-C
-C        Make sure enough antennas are good for this source.  
-C
-         OKGEO(IGEO) = NGOOD .GE. OPMIAN(JSCN)
-         IF( .NOT. OKGEO(IGEO) ) THEN
-            NREJECT = NREJECT + 1
-         ELSE
-C
-C           Accumulate the NCHANCE and CHANCE values for the method
-C           based on adding copies of sources when they have good
-C           elevations.  This bloats the number of sources and might
-C           be inhibiting good solutions.
-C
-C            NCHANCE = NCHANCE + 1
-C            IF( NCHANCE .GT. MSEG10 ) CALL ERRLOG( 
-C     1          'MAKEGEO: Too many chances -- programming error' )
-C            CHANCE(NCHANCE) = IGEO
-C            DO ISTA = 1, NSTA
-C               IF( EL1(LSCN,ISTA) .LT. 20.0 .AND. STASCN(LSCN,ISTA) ) 
-C     1               THEN
-C                  NCHANCE = NCHANCE + 1
-C                  IF( NCHANCE .GT. MSEG10 ) CALL ERRLOG( 
-C     1                'MAKEGEO: Too many chances - programming error' )
-C                  CHANCE(NCHANCE) = IGEO
-C               END IF
-C            END DO
-C
-C           Calculate NCHANCE and CHANCE for the method that only keeps
-C           sources that contribute to the extreme elevations somewhere.
-C
-            DO ISTA = 1, NSTA
-               IF( EL1(LSCN,ISTA) .LT. LOWE(3,ISTA) ) THEN
-                  LOWS(3,ISTA) = IGEO
-                  LOWE(3,ISTA) = EL1(LSCN,ISTA)
-               END IF
-               IF( EL1(LSCN,ISTA) .LT. LOWE(2,ISTA) ) THEN
-                  LOWS(3,ISTA) = LOWS(2,ISTA)
-                  LOWE(3,ISTA) = LOWE(2,ISTA)
-                  LOWS(2,ISTA) = IGEO
-                  LOWE(2,ISTA) = EL1(LSCN,ISTA)
-               END IF
-               IF( EL1(LSCN,ISTA) .LT. LOWE(2,ISTA) ) THEN
-                  LOWS(3,ISTA) = LOWS(2,ISTA)
-                  LOWE(3,ISTA) = LOWE(2,ISTA)
-                  LOWS(2,ISTA) = LOWS(1,ISTA)
-                  LOWE(2,ISTA) = LOWE(1,ISTA)
-                  LOWS(1,ISTA) = IGEO
-                  LOWE(1,ISTA) = EL1(LSCN,ISTA)
-               END IF
-               IF( EL1(LSCN,ISTA) .GT. HIGHE(1,ISTA) ) THEN
-                  HIGHS(2,ISTA) = IGEO
-                  HIGHE(2,ISTA) = EL1(LSCN,ISTA)
-               END IF
-               IF( EL1(LSCN,ISTA) .GT. HIGHE(1,ISTA) ) THEN
-                  HIGHS(2,ISTA) = HIGHS(1,ISTA)
-                  HIGHE(2,ISTA) = HIGHE(1,ISTA)
-                  HIGHS(1,ISTA) = IGEO
-                  HIGHE(1,ISTA) = EL1(LSCN,ISTA)
-               END IF
-            END DO
-         END IF
-C
-C        Write a line with information about each source, if desired.
-C	 	 
-C        IF( MKGDEBUG ) THEN
-           WRITE(*,'( I5, 2X, A, 20F5.0)' ) IGEO,
-     1           GEOSRC(IGEO), (EL1(LSCN,I),I=1,NSTA)
-C        END IF
-      END DO
-C
-      NCHANCE = 0
-C      IF( MKGDEBUG ) THEN
-         WRITE(*,*) 'Sources used in optimization:'
-C       END IF
-      DO IGEO = 1, NGEO
-         GOTIT = .FALSE.
-         DO ISTA = 1, NSTA
-            IF( IGEO .EQ. LOWS(3,ISTA) .OR. 
-     1          IGEO .EQ. LOWS(2,ISTA) .OR. 
-     2          IGEO .EQ. LOWS(1,ISTA) .OR. 
-     3          IGEO .EQ. HIGHS(2,ISTA) .OR. 
-     4          IGEO .EQ. HIGHS(1,ISTA) ) THEN
-               GOTIT = .TRUE.
-            END IF
-         END DO
-C
-C        Add IGEO to the chance array if it
-C        was one of the favored ones.
-C
-         IF( GOTIT ) THEN
-            NCHANCE = NCHANCE + 1
-            CHANCE(NCHANCE) = IGEO
-C
-C           Write a line with information about each source, if desired.
-C	 	 
-C            IF( MKGDEBUG ) THEN
-            WRITE(*,'( 2I5, 2X, A )' ) IGEO,
-     1             NCHANCE, GEOSRC(IGEO)
-C            END IF
-         END IF
-C	 	 
-      END DO
-C
-C     Prevent an opportunity for an infinite loop.  There is still
-C     a small chance if there is a source up at the middle of the
-C     segment, but there is nothing at the beginning.
-C
-      IF( NREJECT .EQ. NGEO ) THEN
-         CALL ERRLOG( 'MAKEGEO:  None of the sources specified '//
-     1        'for a geodetic segment are up at OPMINANT antennas. ' )
-      END IF
-      IF( MKGDEBUG ) THEN
-         WRITE(*,*) 'MAKEGEO OKGEO', NGEO, (OKGEO(I),I=1,NGEO)
-         WRITE(*,*) 'MAKEGEO GOING ', TGEO1, TGEOEND, ISCN
-      END IF
+C     The idea now is to make a bunch of possible sequences and test
+C     their quality using the algorithm in geoqual.  There are two
+C     parts of this process that are a bit tricky.  The first is 
+C     selecting the sequences to try.  The second is the quality 
+C     measure.  See GEOQUAL for details the quality measure in use.
 C
 C     Loop over the trials.  For now, the number is hardwired.  That
 C     will likely be pulled out as a user parameter some day.
 C
-      DO ITRIAL = 1, 4000
-         IF( MKGDEBUG ) THEN
-            WRITE(*,*) '++++++++++++ MAKEGEO TRIAL ', ITRIAL
-         END IF
+      DO ITRIAL = 1, 100
+         IF( GEOPRT ) WRITE(*,*) ' '
 C
-C        Make a source list.  Use a GO TO loop for logical simplicity.
-C        Could jump through hoops and use a DO loop, but it's a bit more
-C        awkward.
+C        Make a sequence of scans for the geodetic block.
 C
-C        Move LASTISCN to LASTLSCAN where 
-C        it can keep getting remade.         
-C
-         ISEG = 0
-         NOREP = .TRUE.
-         DO ISTA = 1, NSTA
-            LASTLSCN(ISTA) = LASTISCN(ISTA)
-         END DO
-C
-C        Set start time of the first new scan.  This is mainly
-C        for the case when the segment is at the start of the
-C        experiment and all LASTISCN entries are zero.
-C
-         STARTJ(ISCN) = STARTB
-C
-         NREJECT = 0
-  100    CONTINUE
-            IF( MKGDEBUG ) THEN
-               WRITE(*,*) 'MAKEGEO NEW SOURCE TRY ', ISEG, TSRC(ISEG),
-     1              NREJECT, ' ', WHY
-            END IF
-C
-C           Deal with a situation where all sources are being
-C           rejected.  This can get the program in an infinite
-C           loop.
-C
-            IF( NREJECT .GT. NGEO * 3 ) THEN
-               CALL WLOG( 1, 'MAKEGEO: Rejecting all, or nearly all' //
-     1             ' sources while constructing a geodetic segement' )
-               CALL WLOG( 1, '         Will stop preventing repeats.' )
-               NOREP = .FALSE.
-               NREJECT = 0
-            END IF
-C
-C           Work on adding the next scan.
-C           Initializations.  
-C
-            ISEG = ISEG + 1
-            LSCN = ISEG + ISCN - 1
-C
-C           Get the approximate start time.
-C
-            IF( ISEG .EQ. 1 ) THEN
-               TAPPROX = STARTB
-            ELSE
-               TAPPROX = STOPJ(LSCN-1) + 60.D0 * ONESEC
-            END IF
-C
-C           There are NCHANCE sources being considered.  Some may
-C           be duplicates.  Pick one.
-C
-            TSRC(ISEG) = CHANCE( 1 + RAN5(IDUM) * NCHANCE )
-            IF( MKGDEBUG ) THEN
-C               write(*,*) '=== makegeo next source ', iseg, lscn, ngeo,
-C     1           '  Try: ', tsrc(iseg), '  ', geosrc(tsrc(iseg)), idum,
-C     2           opminel(jscn), jscn
-            END IF
-C
-C           If known to be bad, get another.
-C
-            IF( .NOT. OKGEO(TSRC(ISEG)) ) THEN
-               ISEG = ISEG - 1
-               WHY = 'Source flagged as not up at enough stations.'
-               NREJECT = NREJECT + 1
-               GO TO 100
-            END IF
-C
-C           Don't repeat a source.
-C
-            IF( ISEG .GT. 1 .AND. NOREP ) THEN
-               DO I = 1, ISEG - 1
-                  IF( TSRC(ISEG) .EQ. TSRC(I) ) THEN
-                     ISEG = ISEG - 1
-                     NREJECT = NREJECT + 1
-                     WHY = 'Source repeated.'
-                     GO TO 100
-                  END IF
-               END DO
-            END IF
-C
-C           Try to insert the source.  Get the geometry.
-C
-            CALL MAKESCN( LASTLSCN, LSCN, JSCN, GEOSRCI(TSRC(ISEG)),
-     1           GEOSRC(TSRC(ISEG)), TAPPROX, OPMINEL(JSCN),
-     2           NGOOD, OKSTA )
-C
-C           Make sure enough antennas are good.  Record the time
-C           when the source was marked as bad.  
-C
-            IF( NGOOD .LT. OPMIAN(JSCN) ) THEN
-               ISEG = ISEG - 1
-               NREJECT = NREJECT + 1
-               WHY = 'Source not up for this scan at enough stations.'
-               GO TO 100
-            END IF
-C
-C           Make sure the stop time is before the last allowed
-C
-            IF( STOPJ(LSCN) .GT. TGEOEND ) THEN
-               ISEG = ISEG - 1
-               GO TO 200
-            END IF
-C
-C           Keep this one.  Set LASTLSCN as appropriate.
-C
-            IF( MKGDEBUG ) THEN
-C               WRITE(*,*) 'MAKEGEO KEEP SOURCE ', TSRC(ISEG), ' SCAN ',
-C     1              LSCN, STARTJ(LSCN), STOPJ(LSCN), TGEOEND, DUR(LSCN)
-            END IF
-            NTSEG = ISEG
-            DO ISTA = 1, NSTA
-               IF( STASCN(LSCN,ISTA) ) THEN
-                  LASTLSCN(ISTA) = LSCN
-               END IF
-            END DO
-C
-C           Get another scan if there is likely to be time.  
-C           Leave some room for slews.
-C
-            WHY = 'Finished last source insertion.'
-            IF( STOPJ(LSCN) .LT. TGEOEND - DUR(LSCN) - 60.*ONESEC )
-     1         GO TO 100
-C
-  200    CONTINUE
-C
-C        Have a sequence
+         CALL MAKESEG( MKGDEBUG, JSCN, ISCN, LASTISCN, 
+     1                 OKGEO, USEGEO, SEGELEV, STARTB, TGEOEND, 
+     2                 LSCN, NTSEG, TSRC, IDUM )
 C
 C        Make sure each antenna is in at least half the scans.
 C        There is some hoop jumping because the number of scans can
 C        vary.   Only test stations that are in the template JSCN.
-C        MINSPS is "Minimum Scans Per Station".
+C        MINSPS is "Minimum Scans Per Station".  Meanwhile, protect
+C        against any station with only one scan (A short geoseg 
+C        combined with long slews might create such a case).
 C
-         HALFSCNS = INT( ( LSCN - ISCN + 1.0 ) / 2.0 + 0.6 )
+         HALFSCNS = MAX( INT( ( LSCN - ISCN + 1.0 ) / 2.0 + 0.6 ),
+     1                   2 )
          MINSPS = 9999
          DO ISTA = 1, NSTA
             IF( STASCN(JSCN,ISTA) ) THEN
@@ -453,6 +146,7 @@ C
             END IF
          END DO
          RETAIN = MINSPS .GE. HALFSCNS
+
 C         write(*,*) ' makegeo jscn', (stascn(jscn,i),i=1,nsta)
 C         if( .not. retain ) then
 C              write(*,*) 'makegeo not retain:', itrial, retain, minsps,
@@ -475,7 +169,8 @@ C
 C           Get the quality measure of scans ISCN to LSCN.  Isolate this
 C           to a subroutine in case someone wants to brew their own measure.
 C        
-            CALL GEOQUAL( ISCN, LSCN, JSCN, TESTQUAL, MKGDEBUG )
+            CALL GEOQUAL( ISCN, LSCN, JSCN, TESTQUAL, MKGDEBUG, IDUM,
+     1                    SIGMA )
 C        
 C           See whether to save this one source set.
 C        
@@ -483,17 +178,23 @@ C
                WRITE(*,*) 'MAKEGEO - QUALITY PREVIOUS BEST ', BESTQUAL,
      1                 '  CURRENT SET: ', TESTQUAL, ' SCANS: ', NTSEG
             END IF
-            IF( TESTQUAL .GT. BESTQUAL ) THEN
-C               IF( MKGDEBUG ) THEN
+            IF( TESTQUAL .LT. BESTQUAL ) THEN
+C
+C              Annouce that a new best was found.
+C
+               IF( GEOPRT ) THEN
                   MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, I5, A, 2I3, A, F7.3, 20I3 )' )
-     1                'MAKEGEO: New Best - Trial: ', ITRIAL, 
-     2                ' Number of scans & fewest scans/sta: ', 
-     3                NTSEG, MINSPS, '  Quality: ', 
-     3                TESTQUAL, (TSRC(ISEG),ISEG=1,NTSEG)
+                  NPRT = MIN( 30, NTSEG )
+                  WRITE( MSGTXT, '( A, I5, A, 2I3, A, F7.3 )' )
+     1             '*** MAKEGEO: New Best - Trial: ', ITRIAL, 
+     2             ' Number of scans & fewest scans/sta: ', 
+     3             NTSEG, MINSPS, '  Quality: ', 
+     4             TESTQUAL
                   CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
-C               END IF
+               END IF
+C
+C              Save the new sequence.
+C
                BESTQUAL = TESTQUAL
                DO ISEG = 1, NTSEG
                   SEGSRCS(ISEG) = TSRC(ISEG)
@@ -501,14 +202,58 @@ C               END IF
                NSEG = NTSEG
             END IF
          END IF
+C
+C        If requested, write details about each trial sequence.
+C
+         IF( GEOPRT ) THEN
+            MSGTXT = ' '
+            WRITE(MSGTXT, * ) 'MAKEGEO TRIAL ', ITRIAL, '  Quality:', 
+     1            TESTQUAL, ' sources: ', (TSRC(I),I=1,NTSEG)
+            CALL WLOG( 1, MSGTXT )
+            NPRT = MIN( 20, NSTA )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, 20( 4X, A2, 1X) )' ) 
+     1           '                      ', 
+     2           (STCODE(STANUM(ISTA)),ISTA=1,NPRT)
+            CALL WLOG( 1, MSGTXT )
+            IF( RETAIN ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, 20F7.2 )' ) 
+     1              '   Sigmas by station: ', 
+     2              (SIGMA(ISTA),ISTA=1,NPRT)
+               CALL WLOG( 1, MSGTXT )
+            ELSE
+               CALL WLOG( 1, '  Rejected without testing.' )
+            END IF
+            DO I = 1, NTSEG
+               J = ISCN + I - 1
+               MSGTXT = ' '
+               WRITE( MSGTXT,'( I4, 2X, A12, 20F5.0 )' ) TSRC(I), 
+     1              GEOSRC(TSRC(I))
+               ICH = 25
+               DO ISTA = 1, NPRT
+                  IF( STASCN(J,ISTA) ) THEN
+                     WRITE( MSGTXT(ICH:ICH+10), '( F5.0, 1X )' )
+     1                       EL1(J,ISTA)
+                  ELSE
+                     WRITE( MSGTXT(ICH:ICH+10), '( A, F4.0, A )' )
+     1                       '(', EL1(J,ISTA), ')'
+                  END IF
+                  ICH = ICH + 7
+               END DO
+               CALL WLOG( 1, MSGTXT )
+            END DO
+
+         END IF
+
       END DO
 C
 C     Write result
 C
-C      IF( MKGDEBUG ) THEN
+      IF( GEOPRT ) THEN
          WRITE(*,*) 'MAKEGEO: SEGMENT SOURCES', 
      1         (SEGSRCS(ISEG), ISEG=1,NSEG)
-C      END IF
+      END IF
 C
       RETURN
       END

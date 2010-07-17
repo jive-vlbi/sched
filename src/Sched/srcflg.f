@@ -72,7 +72,9 @@ C     be checked separately.
 C
       GOTALL = .TRUE.
       DO KSRC = 1, NSRC
-         IF( SRCATN(KSRC) .EQ. 0 ) GOTALL = .FALSE.
+         IF( SRCATN(KSRC) .EQ. 0 ) THEN
+            GOTALL = .FALSE.
+         END IF
       END DO
 C
       RETURN

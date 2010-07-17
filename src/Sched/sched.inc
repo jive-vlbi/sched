@@ -383,8 +383,8 @@ C
       PARAMETER        ( MGEO = 400 )
       PARAMETER        ( MSEG = 100 )
       CHARACTER        GEOSRC(MGEO)*12
-      INTEGER          GEOSRCI(MGEO), GEOISCN(MGEO)
-      LOGICAL          ANYGEO
+      INTEGER          GEOSRCI(MGEO), GEOISCN(MAXSCN)
+      LOGICAL          ANYGEO, GEOPRT
       DOUBLE PRECISION GEOLEN(MAXSCN)
 C
       COMMON  /SCHSOU/ RACAT, DECCAT, RA1950, D1950, RA2000, D2000, 
@@ -394,7 +394,7 @@ C
      4                 SRLSTN, DIDNDOP, SATN, SUNDIS, PLANET, SATEL,
      5                 CTRSRCI, ICENT, NCENT, NCSRC, 
      6                 NPAIR, PAIRSRC, PAIRCENT, NGEO, GEOSRCI,
-     7                 GEOLEN, GEOISCN, ANYGEO
+     7                 GEOLEN, GEOISCN, ANYGEO, GEOPRT
       COMMON  /SCHCSC/ SRCFILE, SRVER, SRCFILE2, SRVER2, 
      1                 SOURCE, SOUR8, CALCODE, REMARK, 
      2                 C1950, C2000, CDATE, WHICHCAT, CSUSED,
@@ -603,7 +603,7 @@ C
       LOGICAL          GOTFREQ, DWELLS
 C
 C                      The list of stations used - the "schedule
-C                      sources".  See the notes for the station 
+C                      stations".  See the notes for the station 
 C                      catalog for more information.
 C
       INTEGER          NSTA, STANUM(MAXSTA)

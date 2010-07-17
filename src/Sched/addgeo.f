@@ -62,8 +62,6 @@ C        Pick the geo sources to use.
 C
          CALL MAKEGEO( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG )
 C
-         write(*,*) 'addgeo makegeo: ', iscn, nseg, 
-     1             (segsrcs(i), i=1,nseg)
          GEOOPT = NSEG
       END IF
 C
