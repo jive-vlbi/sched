@@ -78,9 +78,12 @@ C
                   CALL TIMEJ( TLAST(ISTA), TY, TD, TL )
                   CSTART = TFORM( ST, 'T', 0, 2, 2, '::@' )
                   CSTOP = TFORM( TL, 'T', 0, 2, 2, '::@' )
-                  WRITE(6, '( A, I4, 1X, 2A, I4, 1X, A )' )
-     1               'SCHTIM:  Start: ', SD, CSTART, ' Last stop: ', 
-     2               TD, CSTOP
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I5, A, I4, 1X, 2A, I4, 1X, A )' )
+     1               'SCHTIM:  Scan overlap details - Scan: ', ISCN, 
+     2               '  Start: ', SD, CSTART, ' Last stop: ', TD, CSTOP
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
                   CALL ERRLOG ( 'SCHTIM: Two scans for '//
      1               STATION(STANUM(ISTA))//' overlap in time.' )
                END IF

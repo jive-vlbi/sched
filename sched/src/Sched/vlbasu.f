@@ -56,7 +56,23 @@ C ----------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBASU: Starting.' )
 C
       NNCHAN = NCHAN(LS)
+C
+C     Need pointer to entries in the station catalog for this 
+C     schedule station ISTA.
+C
       KSTA = STANUM(ISTA)
+C
+C     When using the RDBE, we need to be sure the crd file doesn't 
+C     contain items that will cause the on-line system to die.  First
+C     protect against too many channels.  The RDBE will have a separate
+C     "BBC" for each channel, so limit the total to 8.  Note that the
+C     NBBC parameter for the station will apply to the RDBE so don't 
+C     use that.  Later I need to protect against invalid BBC frequencies,
+C     bandwidths, formats, and pcal detection information (yuk).
+C
+      IF( DAR(KSTA) .EQ. 'RDBE' ) THEN
+         NNCHAN = MIN( NNCHAN, 8 )
+      END IF
 C
 C     Protect against requesting too many BBC's.
 C
@@ -226,10 +242,23 @@ C
          END IF
 C
 C        Various parameters in standard formats. 
+C        For the format, make it "NONE" if using the RDBE.
 C
          IF( FIRSTS .OR. FORMAT(LS) .NE. LFORMAT ) THEN
-            WRITE( IUVBA, '( 2A )' )
-     1          'format=', FORMAT(LS)(1:LEN1(FORMAT(LS)))
+            IF( DAR(KSTA) .NE. 'RDBE' ) THEN
+               WRITE( IUVBA, '( 2A )' )
+     1             'format=', FORMAT(LS)(1:LEN1(FORMAT(LS)))
+            ELSE
+               CALL WLOG( 1, 'VLBASU: crd files for RDBE stations '//
+     1                'have format NONE and may have ' )
+               CALL WLOG( 1, '        reduced channels and '// 
+     1                'adjusted samplerate, frequencies and '//
+     2                'bandwidths.' )
+               CALL WLOG( 1, '        These only affect the old ' //
+     1                'backend and recorder, not the new hardware.' )
+               WRITE( IUVBA, '( 2A )' )
+     1             'format=NONE'
+            END IF
             LFORMAT = FORMAT(LS)
          END IF
 C
@@ -357,9 +386,14 @@ C     like reference pointing are done.
 C     When I first tried this, omitting the samplerate, cksched 
 C     complained about incompatible samplerate and format.  So I
 C     moved the NOREC check to cover only the track specification.
+C     Also protect against too high samplerate when using the RDBE.
 C
       IF( VLBITP .AND. FORMAT(LS) .NE. 'NONE' ) THEN
-         SMPR = SAMPRATE(LS)
+         IF( DAR(KSTA) .NE. 'RDBE' ) THEN
+            SMPR = SAMPRATE(LS)
+         ELSE
+            SMPR = MIN( SAMPRATE(LS), 32.0 )
+         END IF
          CALL VLBABWS( 'samplerate', 10, 1, SMPR, LSAMPR, 
      1       MSAMPR, FIRSTS, IUVBA )
          IF( .NOT. AUTOALOC(ISTA) .AND. .NOT. NOREC(ISCN) .AND.
