@@ -3113,6 +3113,10 @@ a geodetic segment a source needs to be
 specified.  It will be ignored in constructing the segments, but without
 it some of the \schedb checking that comes earlier will not be happy.
 
+The switch parameter \htmlref{{\tt GEOPRT}}{MP:GEOPRT}, if specified
+will cause some details about each trial source sequence tested to be
+printed to the screen and to {\sl sched.runlog}.
+
 There is an example among the \schedb examples called
 \htmladdnormallink{{\sl egdelzn.key}}{examples/egdelzn.key} that shows
 how to construct a file with automatic geodetic segment insertion.
@@ -3128,29 +3132,41 @@ As long as \schedb is producing good geodetic segments, the details of
 the algorithm shouldn't matter too much to users.  But some may wish
 to know, so it is described here.  When starting to work on a segment,
 \schedb calculates the elevations at the middle of the segment for all
-of the specified sources.  It then constructs a list.  That list has
-one entry for each source that might be up during the segment (note
-that it is not wise to use this facility to construct long geodetic
-observations, at least as a single {\tt GEOSEG} block).  It then adds
-another entry in the list for the source for each station that is between
-the minimum elevation and 20 degrees.  This is setting up what you
-might call a weighted lottery.  Then \schedb loops through many
-possible geodetic segments, each constructed by picking sources from
-the list using a random number generator.  Individual sources can only
-be used once.  Sources are picked until the requested segment duration
-is reached.  The slew times and geometry are taken into account using
-the normal \schedb tools for that purpose.
+of the specified sources.  It then tries many possible sequences and
+picks the best based on a quality measure.  For each sequence, it
+generates a list of the stations in random order.  That list is
+different for each trial sequence.  It goes through that list and for
+each station, collects a list of sources that are at low elevation at
+that station.  There is also a dummy station in the list for which it
+collects sources that are at high elevations at most actual stations.
+It then randomly selects a source from the accumulated list.  That
+becomes the source for the next scan assuming it passes a few tests
+such as actually being up (the selection is based on the center time
+of the segment, not the actual scan time, so elevations can vary a
+bit), and not extending beyond the end of the requested geodetic
+segment thanks to a long slew.  A station is skipped if a source
+selected for a previous station is also at low elevation at the
+current station.  If the process gets all the way through the station
+list (it should), it will start over, trying to add a second low
+elevation scan.  If \htmlref{{\tt GEOPRT}}{MP:GEOPRT} is specified,
+the elevations at all stations for the selected sources in each
+sequence, along with the quality measure, are printed.  This can be
+quite a lot of print if many sequences are being tried.  This scheme
+for generating sequences seems to come up with a good sequence 
+fairly quickly so very roughly 100 are tried (that number will evolve
+as we gain experience and may become a user parameter if that seems
+justified).
 
-For each segment, a quality measure is generated.  As of this writing,
-\schedb trys 5000 such possible segments (different selected sources).
-That number may change with experience - and howls from users on slow
-computers --- or it may be made user settable.  \schedb picks the best
+For each segment, a quality measure is generated.  \schedb picks the best
 segment according to the quality measure, and inserts that into the
-schedule.  The quality measure (subject to future tweaks) for a given
-segment is the number of scans times the RMS scatter in SecZ of the
-station with the lowest such number in the trial segment.  This tries
-to optimize the range of SecZ schedule, along with favoring segments
-that squeeze the most scans into the alotted time.
+schedule.  The quality measure is based on the expected errors of
+a fit for the zenith delay and clock for all stations.  Standard
+errors of 20ps are set for all observations (the value doesn't really
+matter here) and the highest reported sigma across the stations is
+used as the quality measure.  This process is similar to what is done
+when the data are used and encourages both a high range of elevations
+at each site and a significant range of elevations across antennas 
+for each scan.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
@@ -6322,6 +6338,21 @@ prefered mechanism.
 {Reverts to previous scan.}
 {{\tt GAP=2:00} (which is equivalent to {\tt gap 120}).}
 
+
+\subsubsection{\label{MP:GEOPRT}{\tt GEOPRT}
+
+Specifying {\tt GEOPRT} (no argument) will cause the quality measure
+and the elevations at all sites for all scans in each trial geodetic
+sequence to be printed while trying to specify a new sequence.  This
+can be a considerable amount of print and is only recommended when
+trying to understand what the algorithm is doing.
+
+\rcwbox
+{No argument - it's a logical switch}
+{No argument}
+{A non-zero number that means don't do it}
+{One value used from the schedule (the last)}
+{{\tt GEOPRT}}
 
 
 \subsubsection{\label{MP:GEOSEG}{\tt GEOSEG}
@@ -13237,9 +13268,18 @@ more information.
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
 
+\item Allow DAR=RDBE for stations using the new RDBE digital backend.
+When doing so, the crd file instructions for number of channels,
+frequencies, bandwidths etc are basically dummies.  The RDBE channels
+can be more numerous and at values for frequency and bandwidth that
+are not legal for the old system.  Therefore the crd files, which are
+only used for the old system, are adjusted, where necessary, to keep
+them legal.  This does not affect the summary or any files other than
+the crd files.  June 30, 2010 RCW.
 
 \item Implement automatic insertion of geodetic segments, including
-parameters {\tt GEOSEG} and {\tt GEOSRCS}.  June 1, 2010.
+parameters {\tt GEOSEG} and {\tt GEOSRCS}.  The quality algorithm
+is still being tweaked.  June 1, 2010.
 
 \item Give CORCHAN a second argument to use for the FFT size.
 May 14, 2010.

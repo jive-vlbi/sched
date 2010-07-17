@@ -485,6 +485,8 @@ C     the first such source as a dummy in the scans where the
 C     segments will be inserted to keep some later routines 
 C     happy.  The scan came in with a special source name (GEOSEG)
 C     which will not be in the catalogs, which causes trouble.
+C     Finally, get GEOPRT which can turn on print of some details from
+C     the guts of the geodetic source adding software.
 C
       I1 = KEYPTR( 'GEOSRCS', KC, KI )
       NGEO = 0
@@ -506,6 +508,7 @@ C
             SCNSRC(ISCN) = GEOSRC(1)
          END IF
       END DO
+      GEOPRT = KD( KEYPTR( 'GEOPRT', KC, KI ) ) .EQ. 0.D0
 C
 C     Process Cover Letter and Correlator input.
 C

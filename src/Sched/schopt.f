@@ -260,7 +260,7 @@ C              where the adjustments above cause it to do so.  So
 C              avoid this test for those modes.
 C        
                IF( OPDUR .NE. 0.D0 .AND. 
-     1             STOPJ(ISCN) .GT. STARTJ(1) + OPDUR .AND.
+     1             STOPJ(ISCN) .GT. STARTJ(SCAN1) + OPDUR .AND.
      2             OPTMODE .NE. 'HAS' ) THEN
                   DONE = .TRUE.
                END IF

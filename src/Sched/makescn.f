@@ -19,9 +19,9 @@ C     MINEL is the required minimum elevation for the source to
 C         be counted as up (SCNSRC will be set according to 
 C         being above the antenna horizons).
 C     NGOOD (output) is the nubmer of antennas for which the 
-C         source is above MINEL.
+C         source is above MINEL and the station horizon
 C     OKSTA is an output array of logicals indicating the station is
-C         up for this scan.
+C         up for this scan, including above the horizon.
 C         
 C
       INCLUDE 'sched.inc'
