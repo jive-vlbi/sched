@@ -19,6 +19,7 @@ C
       INCLUDE     'schpeak.inc'
 C
       INTEGER     KSRC, ISCN, IPSRC, IGRP, ISRC, INAME, JCENT, IGEO
+      INTEGER     ICSRC
       LOGICAL     GOTALL, VEXWARN
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SRFINISH starting' )
