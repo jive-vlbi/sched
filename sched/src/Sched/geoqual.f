@@ -189,7 +189,7 @@ C
 C
 C           Some printout if the programmer is trying to watch
 C           the process in detail.  MKGDEBUG is hard wired in 
-C           MAKEGEO.
+C           GEOMAKE.
 C
             IF( MKGDEBUG ) THEN
                MSGTXT = ' '

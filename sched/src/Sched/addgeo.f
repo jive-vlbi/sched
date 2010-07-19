@@ -60,7 +60,7 @@ C
 C
 C        Pick the geo sources to use.
 C
-         CALL MAKEGEO( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG )
+         CALL GEOMAKE( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG )
 C
          GEOOPT = NSEG
       END IF
