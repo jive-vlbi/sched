@@ -13268,18 +13268,38 @@ more information.
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
 
-\item Allow DAR=RDBE for stations using the new RDBE digital backend.
-When doing so, the crd file instructions for number of channels,
-frequencies, bandwidths etc are basically dummies.  The RDBE channels
-can be more numerous and at values for frequency and bandwidth that
-are not legal for the old system.  Therefore the crd files, which are
-only used for the old system, are adjusted, where necessary, to keep
-them legal.  This does not affect the summary or any files other than
-the crd files.  June 30, 2010 RCW.
+\item Prevent recording on the Mark5A when FORMAT=NONE for equipment
+controlled by the crd files.  Part of the transition to the digital
+backends. July 19, 2010. RCW.
+
+\item Write VEX files that describe observations with the RDBE and
+Mark5C.  These files are usable for correlation and for the parts of
+the telescope system that control the new hardware when running with
+the RDBE and Mark5C.  Track assignments are given for Mark5B format
+which is what is now used.  Checking is still minimal.  The number of
+channels, and properties of the channels should be set appropriate for
+the RDBE including frequency settings above 1000 that are not allowed
+with the BBCs, but occur with the RDBE.  High channel bandwidths and
+sample rates are allowed.
+
+When writing files for the RDBE, the crd files, which control the old
+formatter and BBCs, are using FORMAT=NONE so they cannot be used for
+recording on the old system.  The internal structure of \schedb would
+make it difficult to write both crd files appropriate for the old
+backend and Mark5A and RDBE/Mark5C files at the same time.  If
+parallel recording is desired, a Mark5A schedule should be written to
+control the old hardware and a RDBE/Mark5C schdule should be written
+to control that hardware.  Both VEX files will be needed for
+correlation.  When writing RDBE/Mark5C schedules, the crd files are
+adjusted to set the BBC's to match the RDBE baseband channels as well
+as can be done (max freq 1000, max bandwidth 16 MHz, max samplerate 32
+MHz).  These BBC settings may be useful for monitor data such as Tsys.
+about July 7, 2010.  RCW
 
 \item Implement automatic insertion of geodetic segments, including
-parameters {\tt GEOSEG} and {\tt GEOSRCS}.  The quality algorithm
-is still being tweaked.  June 1, 2010.
+parameters {\tt GEOSEG}, {\tt GEOSRCS}, and {\tt GEOPRT}.  There is a
+sample schedule egdelzn.key in the examples area.  Infrastructure by
+June 1, 2010.  Tweaking algorithm until at least July 19, 2010.  RCW.
 
 \item Give CORCHAN a second argument to use for the FFT size.
 May 14, 2010.
