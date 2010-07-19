@@ -3103,12 +3103,12 @@ influence the source selection are \htmlref{{\tt DWELL}}{MP:DWELL}
 (the length of the individual scans within the segment), \htmlref{{\tt
 OPMINEL}}{MP:OPMINEL} (the minimum elevation to consider --- 10
 degrees is a reasonable choice), \htmlref{{\tt OPMINANT}}{MP:OPMINANT}
-(the minimum number of stations in a scan} and \htmlref{{\tt
+(the minimum number of stations in a scan) and \htmlref{{\tt
 SETUP}}{MP:SETUP} (the setup file --- typically one with a wide
 spanned bandwidth and maybe not at the same band as the main
 observations).  Be sure to these parameters back to their
 desired values for the main observations ({\tt GEOSEG} will revert to
-zero by default}.  In addition, for the scan that is being turned into
+zero by default).  In addition, for the scan that is being turned into
 a geodetic segment a source needs to be
 specified.  It will be ignored in constructing the segments, but without
 it some of the \schedb checking that comes earlier will not be happy.
@@ -4992,7 +4992,10 @@ SCAN PROPERTIES:
                         stations.
 \htlm{TSYS}{~~~~} Turn on Tsys measurements.
 \htln{NOTSYS}{TSYS}{~~} Do not measure system temperature.
-\htlm{PN3DB}{~~} Do VLBA half power tracking tests.
+\htlm{GEOSEG}{~~} Insert a geodetic (DELZN) segment.
+\htlm{GEOSRCS}{~} Gives a list of sources for geodetic segments.
+\htlm{GEOPRT}{~~} Turn on debugging print from geodetic insertion.
+\htlm{PN3DB}{~~}  Do VLBA half power tracking tests.
 \htln{NOPN3DB}{PTVLBA}{} Turn off VLBA tracking tests.
 \htlm{PTVLBA}{~~} Do VLBA pointing sequence.
 \htln{NOPTVLBA}{PTVLBA}{} Turn off VLBA pointing measurements.
@@ -6339,7 +6342,7 @@ prefered mechanism.
 {{\tt GAP=2:00} (which is equivalent to {\tt gap 120}).}
 
 
-\subsubsection{\label{MP:GEOPRT}{\tt GEOPRT}
+\subsubsection{\label{MP:GEOPRT}{\tt GEOPRT}}
 
 Specifying {\tt GEOPRT} (no argument) will cause the quality measure
 and the elevations at all sites for all scans in each trial geodetic
@@ -6355,10 +6358,10 @@ trying to understand what the algorithm is doing.
 {{\tt GEOPRT}}
 
 
-\subsubsection{\label{MP:GEOSEG}{\tt GEOSEG}
+\subsubsection{\label{MP:GEOSEG}{\tt GEOSEG}}
 
 Specifying {\tt GEOSEG} flags a scan to be converted into a geodetic
-segment.  See \hmtlref{the section on insertion of geodetic segments}
+segment.  See \htmlref{the section on insertion of geodetic segments}
 {SEC:GEOSEG} for more details about this capability.  The argument
 of {\tt GEOSEG} is the total time for the geodetic segment.  The duration
 of each scan in the segment is specified with \htmlref{{\tt DWELL}}
@@ -6382,7 +6385,7 @@ The sources used for the geodetic segments are specified with
 {Reverts to zero to avoid building successive segments.}
 {{\tt geoseg=30:00} for a 30 minute segment}
 
-\subsubsection{\label{MP:GEOSRCS}{\tt GEOSRCS}
+\subsubsection{\label{MP:GEOSRCS}{\tt GEOSRCS}}
 
 {\tt GEOSRCS} is used to list the sources to consider for
 automatically inserted geodetic segments.  It is array of source
@@ -6392,7 +6395,7 @@ calibrators with well known positions, all sources of interest are
 likely to be in the standard \schedb catalog \htmladdnormallink{{\sl
 \$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}.  For more
 information about automatic insertion of geodetic segments, see
-\hmtlref{the section on insertion of geodetic segments}{SEC:GEOSEG}
+\htmlref{the section on insertion of geodetic segments}{SEC:GEOSEG}
 and the description of the parameter \htmlref{{\tt
 GEOSEG}}{MP:GEOSEG}.
 
@@ -6401,11 +6404,8 @@ to generate the segments he provides, but with the names changed
 to match the names in {\sl sources.vlba}.  This would be a good list
 to use.
 
-{Up to 400 source names.  That can be adjusted if more are needed}
-{Any valid source names.}
-{No sources}
-{One list used, the last}
-{
+Sample input to \sched:
+
 \begin{verbatim}
 ! ==========================================================
 ! =============  Sources for geodetic segments  ============
@@ -6423,9 +6423,14 @@ geosrcs = J0017+81, J0019+73, J0050-09, J0102+58, J0121+11,
           J1640+39, J1727+45, J1740+52, J1743-03, J1746+62, 
           J1751+09, J1800+78, J2148+06, J2225-04, J2236+28
 
-\begin{verbatim}
+\end{verbatim}
 
-
+\rcwbox
+{Up to 400 source names.  That can be adjusted if more are needed}
+{Any valid source names.}
+{No sources}
+{One list used, the last}
+{See above text}
 
 \subsubsection{\label{MP:GRABTO}{\tt GRABTO}}
 
