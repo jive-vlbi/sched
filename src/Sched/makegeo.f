@@ -1,4 +1,4 @@
-      SUBROUTINE MAKEGEO( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG )
+      SUBROUTINE GEOMAKE( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG )
 C
 C     Routine for SCHED called by ADDGEO that makes a list
 C     of sources from the list of geo sources to fit into a
@@ -45,7 +45,7 @@ C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
 C ---------------------------------------------------------------------
-      IF( DEBUG ) CALL WLOG( 0, 'MAKEGEO starting.' )
+      IF( DEBUG ) CALL WLOG( 0, 'GEOMAKE starting.' )
       MKGDEBUG = .FALSE.
 C
       BESTQUAL = 1.E10
@@ -81,7 +81,7 @@ C      STARTB = STARTJ(ISCN)
       TGEOEND = TGEO1 + GEOLEN(ISCN)
 C
       IF( MKGDEBUG ) THEN
-         WRITE(*,*) 'MAKEGEO START TIMES', STARTB, STARTJ(ISCN), TGEOEND
+         WRITE(*,*) 'GEOMAKE START TIMES', STARTB, STARTJ(ISCN), TGEOEND
       END IF
 C
 C     Warn about inappropriate OPMIAN, then set one.
@@ -89,7 +89,7 @@ C
       IF( OPMIAN(JSCN) .LT. 2 ) THEN
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, I4, A )' ) 
-     1     'MAKEGEO:  OPMINANT of ', OPMIAN(JSCN), 
+     1     'GEOMAKE:  OPMINANT of ', OPMIAN(JSCN), 
      2     ' too small for automatic insertion of geodetic sections.'
          CALL WLOG( 1, MSGTXT ) 
          MSGTXT = ' '
@@ -103,7 +103,7 @@ C
 C     Look at all sources to see if they can be used and if they
 C     seem useful enough to be favored.  Get a list of elevations.
 C
-      CALL CHKGEO( JSCN, ISCN, STARTB, TGEOEND, OKGEO, USEGEO,
+      CALL GEOCHK( JSCN, ISCN, STARTB, TGEOEND, OKGEO, USEGEO,
      1             SEGELEV )
 C
 C     The idea now is to make a bunch of possible sequences and test
@@ -147,12 +147,12 @@ C
          END DO
          RETAIN = MINSPS .GE. HALFSCNS
 
-C         write(*,*) ' makegeo jscn', (stascn(jscn,i),i=1,nsta)
+C         write(*,*) ' geomake jscn', (stascn(jscn,i),i=1,nsta)
 C         if( .not. retain ) then
-C              write(*,*) 'makegeo not retain:', itrial, retain, minsps,
+C              write(*,*) 'geomake not retain:', itrial, retain, minsps,
 C     1         halfscns, lscn-iscn+1, iscn, lscn
 C         else
-C              write(*,*) 'makegeo keep:      ', itrial, retain, minsps, 
+C              write(*,*) 'geomake keep:      ', itrial, retain, minsps, 
 C     1         halfscns, lscn-iscn+1, iscn, lscn
 C         end if
 C
@@ -161,8 +161,8 @@ C
          IF( RETAIN ) THEN
 C
             IF( MKGDEBUG ) THEN
-               WRITE(*,*) 'MAKEGEO ---------------------------------- '
-               WRITE(*,*) 'MAKEGEO    FINISHED ONE SEQUENCE.', 
+               WRITE(*,*) 'GEOMAKE ---------------------------------- '
+               WRITE(*,*) 'GEOMAKE    FINISHED ONE SEQUENCE.', 
      1               ITRIAL, (TSRC(ISEG), ISEG=1,NTSEG)
             END IF
 C
@@ -175,7 +175,7 @@ C
 C           See whether to save this one source set.
 C        
             IF( MKGDEBUG ) THEN
-               WRITE(*,*) 'MAKEGEO - QUALITY PREVIOUS BEST ', BESTQUAL,
+               WRITE(*,*) 'GEOMAKE - QUALITY PREVIOUS BEST ', BESTQUAL,
      1                 '  CURRENT SET: ', TESTQUAL, ' SCANS: ', NTSEG
             END IF
             IF( TESTQUAL .LT. BESTQUAL ) THEN
@@ -186,7 +186,7 @@ C
                   MSGTXT = ' '
                   NPRT = MIN( 30, NTSEG )
                   WRITE( MSGTXT, '( A, I5, A, 2I3, A, F7.3 )' )
-     1             '*** MAKEGEO: New Best - Trial: ', ITRIAL, 
+     1             '*** GEOMAKE: New Best - Trial: ', ITRIAL, 
      2             ' Number of scans & fewest scans/sta: ', 
      3             NTSEG, MINSPS, '  Quality: ', 
      4             TESTQUAL
@@ -207,7 +207,7 @@ C        If requested, write details about each trial sequence.
 C
          IF( GEOPRT ) THEN
             MSGTXT = ' '
-            WRITE(MSGTXT, * ) 'MAKEGEO TRIAL ', ITRIAL, '  Quality:', 
+            WRITE(MSGTXT, * ) 'GEOMAKE TRIAL ', ITRIAL, '  Quality:', 
      1            TESTQUAL, ' sources: ', (TSRC(I),I=1,NTSEG)
             CALL WLOG( 1, MSGTXT )
             NPRT = MIN( 20, NSTA )
@@ -251,7 +251,7 @@ C
 C     Write result
 C
       IF( GEOPRT ) THEN
-         WRITE(*,*) 'MAKEGEO: SEGMENT SOURCES', 
+         WRITE(*,*) 'GEOMAKE: SEGMENT SOURCES', 
      1         (SEGSRCS(ISEG), ISEG=1,NSEG)
       END IF
 C

@@ -2,7 +2,7 @@
      1                    OKGEO, USEGEO, SEGELEV, STARTB, TGEOEND, 
      2                    LSCN, NTSEG, TSRC, IDUM )
 C
-C     Routine for SCHED called by MAKEGEO that invents a 
+C     Routine for SCHED called by GEOMAKE that invents a 
 C     series of sources to try as a geodetic sequence.
 C
 C     This particular version goes through the stations in
@@ -59,7 +59,7 @@ C     observed.
 C
 C     NREJECT is part of protecting against not enough sources
 C     available which can put the program in a loop.  This was
-C     tested for the middle of the segment in MAKEGEO, but is
+C     tested for the middle of the segment in GEOMAKE, but is
 C     tested here again with real times.
 C
 C     NLATE prevents the routine from quitting because of 
@@ -71,10 +71,10 @@ C     station we are trying to get in this pass through the
 C     selection loop.
 C
 C     ELCUT is the elevation cutoff for low elevation scans.
-C            Same as LOWLIM in CHKGEO.   Pass some day?
+C            Same as LOWLIM in GEOCHK.   Pass some day?
 C
 C     ELHIGH is the elevation cutoff for high elevation scans.
-C            Same as HIGHLIM2 in CHKGEO.  Pass some day?
+C            Same as HIGHLIM2 in GEOCHK.  Pass some day?
 C
 C     DOWN is a flag for an intividual scan slot to help with
 C     eliminating sources that were up enough for a positive
@@ -282,7 +282,7 @@ C
 C        Keep this source/scan.  Set LASTLSCN as appropriate.
 C
          IF( MKGDEBUG ) THEN
-            WRITE(*,*) 'MAKEGEO KEEP SOURCE ', TSRC(ISEG), ' SCAN ',
+            WRITE(*,*) 'MAKESEG: KEEP SOURCE ', TSRC(ISEG), ' SCAN ',
      1         LSCN, STARTJ(LSCN), STOPJ(LSCN), TGEOEND, DUR(LSCN)
          END IF
          NTSEG = ISEG

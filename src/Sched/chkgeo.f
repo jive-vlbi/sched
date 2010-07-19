@@ -1,4 +1,4 @@
-      SUBROUTINE CHKGEO( JSCN, ISCN, STARTB, TGEOEND, OKGEO, USEGEO,
+      SUBROUTINE GEOCHK( JSCN, ISCN, STARTB, TGEOEND, OKGEO, USEGEO,
      1                   SEGELEV )
 C
 C     Make a pass through all the geodetic sources looking at the 
@@ -208,7 +208,7 @@ C     a small chance if there is a source up at the middle of the
 C     segment, but there is nothing at the beginning.
 C
       IF( NREJECT .EQ. NGEO ) THEN
-         CALL ERRLOG( 'MAKEGEO:  None of the sources specified '//
+         CALL ERRLOG( 'GEOCHK:  None of the sources specified '//
      1        'for a geodetic segment are up at OPMINANT antennas. ' )
       END IF
 C
