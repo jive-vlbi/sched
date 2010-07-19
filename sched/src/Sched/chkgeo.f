@@ -170,16 +170,16 @@ C           that have USEGEO true will be used in test schedules, at
 C           least until they run out.
 C
             USEGEO(IGEO) = ( NLOW .GE. RNLOW .AND. NHIGH1 .GE. RNHIGH )
-      1          .OR. ( NHIGH2 .GE. NSTA - 2 )
-      2          .OR. ( NLOW .GE. 1 .AND. NHIGH1 .GE. NSTA / 2 )
-      3          .OR. ( NLOW .GE. NSTA / 3 .AND. NHIGH1 .GE. 1 )
+     1          .OR. ( NHIGH2 .GE. NSTA - 2 )
+     2          .OR. ( NLOW .GE. 1 .AND. NHIGH1 .GE. NSTA / 2 )
+     3          .OR. ( NLOW .GE. NSTA / 3 .AND. NHIGH1 .GE. 1 )
          ELSE
             USEGEO(IGEO) = .FALSE.
          END IF
 C
 C        Write a line with information about each source.
 C        Don't show elevations when more than 3 deg below OPMINEL
-C	 	 
+C
          IF( GEOPRT ) THEN
             MSGTXT = ' ' 
             IF( USEGEO(IGEO) ) THEN
