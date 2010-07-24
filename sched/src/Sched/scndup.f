@@ -15,8 +15,6 @@ C
 C       STARTJ and STOPJ are not copied.
 C       DURONLY is set to 1
 C       ANNOT is set to ' '
-C       TAPE, REWIND, FASTF, REVERSE are all set .FALSE. (all stations)
-C       The calculated parameters are not copied.
 C       
 C     Note that with COPYALL true, the calculated parameters are 
 C     copied but many should be recalculated after the call.  In most
@@ -127,22 +125,6 @@ C
       PRESTART(TO) = PRESTART(FROM)
       NOREC(TO)    = NOREC(FROM)
 C
-      IF( COPYALL ) THEN
-         DO JST = 1, MAXSTA
-            TAPE(TO,JST)    = TAPE(FROM,JST)    
-            REWIND(TO,JST)  = REWIND(FROM,JST) 
-            FASTF(TO,JST)   = FASTF(FROM,JST)  
-            REVERSE(TO,JST) = REVERSE(FROM,JST)
-         END DO
-      ELSE
-         DO JST = 1, MAXSTA
-            TAPE(TO,JST)    = .FALSE.
-            REWIND(TO,JST)  = .FALSE.
-            FASTF(TO,JST)   = .FALSE.
-            REVERSE(TO,JST) = .FALSE.
-         END DO
-      END IF
-C
 C     eVLBI parameters.
 C
       GRABTIME(1,TO) = GRABTIME(1,FROM)
@@ -158,12 +140,8 @@ C     should be recalculated.
 C
       IF( COPYALL ) THEN
          DO JST = 1, MAXSTA
-            TPDAT(1,TO,JST) = TPDAT(1,FROM,JST)
-            TPDAT(2,TO,JST) = TPDAT(2,FROM,JST)
             TPSTART(TO,JST) = TPSTART(FROM,JST)
             TCORR(TO,JST)   = TCORR(FROM,JST)
-            TPFOOT1(TO,JST) = TPFOOT1(FROM,JST)
-            TPFOOT2(TO,JST) = TPFOOT2(FROM,JST)
             GBYTES(TO,JST)  = GBYTES(FROM,JST)
             LST1(TO,JST)    = LST1(FROM,JST)
             LST2(TO,JST)    = LST2(FROM,JST)

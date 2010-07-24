@@ -34,8 +34,8 @@ C     catalog source numbers (GEOSRCI(SEGSRCS(I))) because getting
 C     the desired source name out of the source catalog is a bit
 C     messy.
 C
-      INTEGER            SEGSRCS(MSEG), i
-      INTEGER            ISEG, NSEG, JSCN, IOUT, NGOOD, ISTA
+      INTEGER            SEGSRCS(MSEG)
+      INTEGER            NSEG, JSCN, IOUT, NGOOD, ISTA
       LOGICAL            OKSTA(MAXSTA), KEEP, ALL0
       DOUBLE PRECISION   TAPPROX
 C

@@ -13,8 +13,8 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER           ISCN, ISTA, NCNT
-      INTEGER           SY, SD, TY, TD, MINRDB, MAXSTOP
-      LOGICAL           RDBWARN, TSWARN, RECLAST(MAXSTA)
+      INTEGER           SY, SD, TY, TD, MAXSTOP
+      LOGICAL           TSWARN, RECLAST(MAXSTA)
       DOUBLE PRECISION  ST, TL, FIRSTT, NRSEC, RECTIME
       DOUBLE PRECISION  ONEMIN, ONEHR, TLAST(MAXSTA)
       CHARACTER         TFORM*8, CSTART*8, CSTOP*8
@@ -28,7 +28,6 @@ C
       ONEHR = 3600.D0 * ONESEC
       FIRSTT = 999.D9
       TEND   = -999.D9
-      RDBWARN = .FALSE.
       TSWARN = .FALSE.
       DO ISTA = 1, NSTA
          TLAST(ISTA) = UNSET
@@ -192,9 +191,7 @@ C     Warn if SCNHR is zero for some station.  Abort if using VEX.
 C
       DO ISTA = 1, NSTA
          IF( SCNHR(ISTA) .LE. 0.0 .AND. CONTROL(STANUM(ISTA)) .EQ. 'VEX'
-     1           .AND. .NOT. DODOWN .AND. 
-     2           ( ( AUTOALOC(ISTA) .AND. AUTOREV(ISTA) ) .OR.
-     3             ( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) ) ) THEN
+     1           .AND. .NOT. DODOWN .AND. USEDISK(ISTA) ) THEN
             MSGTXT = 'SCHTIM:  ****** ERROR: Station ' // 
      1          STANAME(ISTA) // ' is not in any scans.'
             CALL WLOG( 1, MSGTXT )
@@ -224,37 +221,7 @@ C
      2       'reference pointing scan.' )
       END IF
 C
-C     Complain about too few readback tests for stations with a
-C     VLBA control system.  Ask for one each 2 hours min.
-C     Don't worry unless tapes are being used.
-C
-      MINRDB = ( TEND - TFIRST ) / ( 120.D0 * ONEMIN )
-      DO ISTA = 1, NSTA
-         IF( ( RECORDER(STANUM(ISTA)) .EQ. 'VLBA' .OR.
-     1         RECORDER(STANUM(ISTA)) .EQ. 'MKIV' .OR.
-     2         RECORDER(STANUM(ISTA)) .EQ. 'MKIII' ) .AND. 
-     3         VLBITP .AND. USETAPE(ISTA) ) THEN
-            IF( NRDBCK(ISTA) .LT. MINRDB ) THEN
-               MSGTXT = ' '
-               IF( TWOHEAD ) THEN
-                  WRITE( MSGTXT, '( A, I5, A, A )' )
-     1               'SCHTIM: Caution: Only ', NRDBCK(ISTA), 
-     2               ' readback tests (4 min gaps for 2 tape mode) at ',
-     3               STANAME(ISTA)
-               ELSE
-                  WRITE( MSGTXT, '( A, I5, A, A )' )
-     1               'SCHTIM: Caution: Only ', NRDBCK(ISTA), 
-     2               ' readback tests (2 min gaps) at ', STANAME(ISTA)
-               END IF
-               CALL WLOG( 1, MSGTXT )
-               RDBWARN = .TRUE.
-            END IF
-         END IF       
-      END DO
-      IF( RDBWARN ) THEN
-         CALL WLOG( 1, '        Please try for at least one readback'
-     1       // ' each two hours.' )
-      END IF
+C     Readback test opportunity warning removed July 23, 2010 - tape only.
 C
 C     Complain about too many tape stoppages.  Complain if more
 C     than 10 per hour.  Don't worry if tapes are not being used.
@@ -265,11 +232,7 @@ C     a warning is needed, although it can be for much more than
 C     10 per hour.  This will go away with Mark5C.  For now, warn
 C     if the rate is enough to fill the 1000 in 24 hr.
 C
-      IF( USETAPE(ISTA) ) THEN
-         MAXSTOP = ( TEND - TFIRST ) * 24.0 * 10.0
-      ELSE
-         MAXSTOP = ( TEND - TFIRST ) * 1000.0
-      END IF
+      MAXSTOP = ( TEND - TFIRST ) * 1000.0
       DO ISTA = 1, NSTA
          IF( NSTOP(ISTA) .GT. MAXSTOP .AND. VLBITP ) THEN
             CALL WLOG( 1,

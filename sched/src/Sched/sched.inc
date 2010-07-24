@@ -706,8 +706,6 @@ C
       DOUBLE PRECISION MINPAUSE(MAXSCN), PRESTART(MAXSCN)
       LOGICAL          AUTOTAPE, AUTOALOC(MAXSTA), AUTOREV(MAXSTA)
       LOGICAL          NOREC(MAXSCN)
-      LOGICAL          TAPE(MAXSCN,MAXSTA), REWIND(MAXSCN,MAXSTA)
-      LOGICAL          FASTF(MAXSCN,MAXSTA), REVERSE(MAXSCN,MAXSTA)
       REAL             GRABTIME(2,MAXSCN), GRABGAP(MAXSCN)
       CHARACTER        DATAPATH(MAXSCN)*8, GRABTO(MAXSCN)*4
 C
@@ -723,17 +721,14 @@ C
       LOGICAL          ALLDISK
       CHARACTER        MEDIA(MAXSTA)*8
 C
-C                      Calculated items.  Mostly in TPSCH.  Some for
-C                      summaries.
+C                      Calculated items. Some for summaries.
 C
-      INTEGER          TPDAT(2,MAXSCN,MAXSTA)
       INTEGER          NRDBCK(MAXSTA), NSTOP(MAXSTA), NRECONF(2,MAXSTA)
-      INTEGER          NSTSC(MAXSTA), TAPES(MAXSTA), PASSES(MAXSTA)
+      INTEGER          NSTSC(MAXSTA)
       INTEGER          TPSCN(MAXSTA)
       DOUBLE PRECISION TPSTART(MAXSCN,MAXSTA), DATASIZE
       DOUBLE PRECISION TCORR(MAXSCN,MAXSTA)
-      REAL             EXPTAPE(MAXSTA), TPHR(MAXSTA), SCNHR(MAXSTA)
-      REAL             TPFOOT1(MAXSCN,MAXSTA), TPFOOT2(MAXSCN,MAXSTA)
+      REAL             TPHR(MAXSTA), SCNHR(MAXSTA)
       REAL             MAXDR, GBYTES(MAXSCN,MAXSTA), TGBYTES(MAXSTA)
       REAL             TTSYNC(MAXSTA)
       LOGICAL          TWOHEAD, FASTTRK, ALLVLBA
@@ -743,11 +738,11 @@ C
      2                 AUTOTAPE, AUTOALOC, AUTOREV, 
      3                 NTPSTA, TPSDRIV, TPSINDX, TPLENG, 
      4                 NDRIVE, NHDPOS, USETAPE, USEDISK, ANYTAPE,
-     5                 ALLDISK, TPDAT, NRDBCK, NSTOP, NRECONF, NSTSC,
-     6                 TAPES, PASSES, TPSCN, EXPTAPE, TPHR, SCNHR, 
-     7                 TPFOOT1, TPFOOT2, MAXDR, GBYTES, TGBYTES, TTSYNC,
-     8                 TWOHEAD, FASTTRK, ALLVLBA, NOREC, TAPE, REWIND, 
-     9                 FASTF, REVERSE, GRABTIME, GRABGAP
+     5                 ALLDISK, NRDBCK, NSTOP, NRECONF, NSTSC,
+     6                 TPSCN, TPHR, SCNHR, 
+     7                 MAXDR, GBYTES, TGBYTES, TTSYNC,
+     8                 TWOHEAD, FASTTRK, ALLVLBA, NOREC,
+     9                 GRABTIME, GRABGAP
       COMMON  /SCHC5/  DATAPATH, GRABTO, TPOBS, DENSITY, HEADMODE, 
      1                 MEDIA
 C

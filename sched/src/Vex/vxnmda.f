@@ -5,6 +5,10 @@ C     By H.J. van Langevelde, JIVE, 020596
 C     function generates a name for DA block IXX
 C     for VLBA & 1 drive only density and poss tapelength
 C
+C     Some tape stuff removed July 22, 2010 RCW.  It is possible
+C     this whole routine isn't needed any more, but I didn't chase
+C     that.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
@@ -44,14 +48,7 @@ C
       END IF
       LPOS = LEN1(NAME)+1
 C
-      IF ( USETAPE(ISTA) ) THEN
-        IF( NHEADS(STANUM(ISTA)) .NE. 1 .AND.
-     1       NHEADS(STANUM(ISTA)) .LT. 10 ) THEN
-           LPOS = LEN1(NAME)+1
-           WRITE( NAME(LPOS:LPOS+1), '( I1, A1 )' ) 
-     1          NHEADS(STANUM(ISTA)), 'h'
-        END IF
-      END IF
+C     Deleted check of NHEADS that only went if USETAPE.
 C
 C     density & length
 C
@@ -59,21 +56,9 @@ C
       NAME(LPOS:LPOS) = '<'
       LPOS = LPOS+1
 C
-      IF( RECORDER(ISCAT) .EQ. 'S2' ) THEN
-         IF( DENSITY(ISTA) .EQ. 'H' ) THEN
-            WRITE(NAME(LPOS:LPOS+2), '( A3 )') 'SLP'
-         ELSE IF( DENSITY(ISTA) .EQ. 'L' ) THEN 
-            WRITE(NAME(LPOS:LPOS+1), '( A2 )') 'LP'
-         ELSE
-            CALL WLOG( 1, 'VXNMDA: WARNING unknown density ')
-         ENDIF
-      ELSE IF ( USETAPE(ISTA) ) THEN
-         IF( TPLENG(ISTA) .GE. 10000 ) THEN 
-            NAME(LPOS:LPOS+3) = 'Thin'
-         ELSE
-            NAME(LPOS:LPOS+4) = 'Thick'
-         END IF
-      ELSE IF ( USEDISK(ISTA) .AND. DISK(STANUM(ISTA)) .EQ. 'MARK5A' )
+C     Deleted S2 stuff and USETAPE stuff.
+C
+      IF ( USEDISK(ISTA) .AND. DISK(STANUM(ISTA)) .EQ. 'MARK5A' )
      1     THEN
          NAME(LPOS:LPOS+5) = 'Mark5A'
       ELSE IF ( USEDISK(ISTA) .AND. DISK(STANUM(ISTA)) .EQ. 'LBADR' )

@@ -1,4 +1,4 @@
-      SUBROUTINE VLBASU(ISCN, ISTA, FIRSTS, FRS, WRTSET, TPCHEAD )
+      SUBROUTINE VLBASU(ISCN, ISTA, FIRSTS, FRS, WRTSET )
 C
 C     Subroutine for SCHED that writes setup parameters for VLBA 
 C     systems.  The setup files are read in GETSET.  For each 
@@ -16,11 +16,10 @@ C
 C     Parameters to hold previous values to avoid duplication.
 C     Each one needs a counter for the number of channels.
 C
-      INTEGER       MTRACK, MBBC, MPERIOD, MBITS, MIFDIST
+      INTEGER       MBBC, MPERIOD, MBITS, MIFDIST
       INTEGER       MSYNTH, MSIDEBD, MNOISE, MFE, MIFCHAN, MSAMPR 
-      INTEGER       TPCHEAD
 C
-      INTEGER       LTRACK(MCHAN), LBBC(MCHAN), LNCHAN
+      INTEGER       LBBC(MCHAN), LNCHAN
       INTEGER       RPERIOD(MCHAN), LPERIOD(MCHAN), LBITS(MCHAN)
       INTEGER       RLEVEL(MCHAN)
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
@@ -29,20 +28,20 @@ C
       LOGICAL       LDUALX, LUSEDIF(4)
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
-      CHARACTER     LFORMAT*8, LIFDIST(4)*3, LBARREL*9
+      CHARACTER     LFORMAT*8, LIFDIST(4)*3
       CHARACTER     LLCP50CM*6, LRCP50CM*6, LNOISEF*4
 C
 C     Save all the numbers that we need to keep between calls.
 C
       SAVE          LPNTVLBA, LTANVLBA, LDOPN3DB
-      SAVE          MTRACK, MBBC, MPERIOD, MBITS, MIFDIST
+      SAVE          MBBC, MPERIOD, MBITS, MIFDIST
       SAVE          MSYNTH, MSIDEBD, MNOISE, MFE, MIFCHAN, MSAMPR 
-      SAVE          LTRACK, LBBC, LNCHAN, LPERIOD, LBITS
+      SAVE          LBBC, LNCHAN, LPERIOD, LBITS
       SAVE          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
       SAVE          LSAMPR, LSYNTH
       SAVE          LDUALX, LUSEDIF, LSIDEBD, LNOISE, LFE
       SAVE          LIFCHAN, LLOGGING, LSTRING, LFORMAT, LIFDIST
-      SAVE          LBARREL, LLCP50CM, LRCP50CM, LNOISEF
+      SAVE          LLCP50CM, LRCP50CM, LNOISEF
 C
 C     External L.O. stuff.
 C
@@ -262,12 +261,9 @@ C
             LFORMAT = FORMAT(LS)
          END IF
 C
-         IF( ( FIRSTS .OR. BARREL(LS) .NE. LBARREL ) .AND. 
-     1        USETAPE(ISTA) ) THEN
-            WRITE( IUVBA, '( 2A )' ) 'barrel=', 
-     1           BARREL(LS)(1:LEN1(BARREL(LS)))
-            LBARREL = BARREL(LS)
-         END IF
+C        Removed barrel roll spec for tape.
+C
+C        Signal routing and properties information.
 C
          CALL VLBACHAR( 'ifdistr', 7, 4, IFDIST(1,LS), LIFDIST, 
      1          MIFDIST, FIRSTS, IUVBA )
@@ -375,9 +371,6 @@ C     up with no track assignments.
 C
       IF( FIRSTS ) THEN
          LSAMPR = 0
-         DO ICH = 1, MCHAN
-            LTRACK(ICH) = 0
-         END DO
       END IF
 C
 C     Don't write formatter type commands for non-recording scans.
@@ -396,17 +389,9 @@ C
          END IF
          CALL VLBABWS( 'samplerate', 10, 1, SMPR, LSAMPR, 
      1       MSAMPR, FIRSTS, IUVBA )
-         IF( .NOT. AUTOALOC(ISTA) .AND. .NOT. NOREC(ISCN) .AND.
-     1       USETAPE(ISTA) ) THEN
-            IF( TRACK(1,TPCHEAD,LS) .EQ. 0 ) THEN
-               CALL WLOG( 1, ' ' )
-               CALL WLOG( 1, 'VLBASU: Track specifications needed. ' )
-               CALL PRTSCN( ISCN )
-               CALL ERRLOG( 'VLBASU: Fix setups.' )
-            END IF
-            CALL VLBAINT( 'track', 5, NNCHAN, TRACK(1,TPCHEAD,LS),
-     1          LTRACK, MTRACK, FIRSTS, IUVBA )
-         END IF
+C
+C        Removed track assignments that were used for tape.
+C
       END IF
 C
 C     Set frequency switching request.

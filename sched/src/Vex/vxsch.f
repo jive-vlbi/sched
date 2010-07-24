@@ -5,19 +5,23 @@ C     By H.J. van Langevelde, JIVE, 020596
 C     This routine generates a VEX format description
 C     of the experiment $SCHED section only
 C
+C     Deleting tape stuff, including S2.  July 20, 2010  RCW.
+C     Copy of original kept in sched_ARCHIVE_nonSVN/obsolete_routines/
+C     and also in SVN versions 294 and earlier.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
 C
       INTEGER     ISCN, ISTA, LEN1, NCHR
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
-      INTEGER     YEAR, DAY, DOY, JD, MONTH, FTMIN, DATLAT
+      INTEGER     YEAR, DAY, DOY, JD, MONTH, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
       INTEGER     I, LASTSCN, ISET, VXGTST, NTSYS(MAXSTA)
-      INTEGER     NTSYSON(MAXSTA), TSYSGAP(MAXSTA)
+      INTEGER     NTSYSON(MAXSTA), TSYSGAP(MAXSTA), TPDRIV
       REAL        STASPD(MANT) 
-      CHARACTER   FULTIM*18, TPSUBP*1, TMPSRC*32
-      CHARACTER   DNAME*3, MNAME*3, DIRECT*1 
+      CHARACTER   FULTIM*18, TMPSRC*32
+      CHARACTER   DNAME*3, MNAME*3
       CHARACTER   LINE*132, TFORM*9, TRANTYPE*10, SCANNAME*10
       CHARACTER   DISKFILE*30, STNLC*2
       DOUBLE PRECISION  STARTT, STOPT, TAPOFF, IDAY
@@ -25,11 +29,6 @@ C
       LOGICAL     GAPERR, FMTNONE, TSYSMESS, WARNTSOF(MAXSTA)
       LOGICAL     WARNBANK, OLDWARNB
       REAL        STGB, SCNGAP, MINGAP
-C
-C     Tape information from TPDAT.
-C
-      INTEGER          TPPASS, TPDIR, TPINDX, TPHEAD, TPDRIV
-      LOGICAL          DOTAPE, DOFAST, DOREW
 C -------------------------------------------------------------
       IF (DEBUG) CALL WLOG( 1,'VXSCH: Start VEX SCHED section ')
       LINE = ' '      
@@ -420,50 +419,15 @@ C
                   WRITE( LINE(LPOS:LPOS+9), '( I5, A4, A1 )' ) INTSTOP,
      1                ' sec', COL
 C
-C                 Extract the tape commands from PTDAT.
-C
-                  CALL TPPACK( 'UNPACK', TPDAT(1,ISCN,ISTA), DOTAPE, 
-     1                DOFAST, DOREW, TPPASS, TPDRIV, TPDIR, 
-     2                TPINDX, TPHEAD )
-C
                   LPOS = LEN1(LINE) + 1
 C
-C                 Assumes tape speed does not change for S2!
+                  IF( USEDISK(ISTA) ) THEN
 C
-                  IF ( RECORDER(STANUM(ISTA)) .EQ. 'S2' ) THEN 
-C
-C                    use STASPD to get usage, is it set? 
-C
-                     IF( STASPD(ISTA) .LT. 0. ) THEN
-C
-C                    determine density and then speed
-C
-                        IF( DENSITY(ISTA) .EQ. 'H' ) THEN
-                           STASPD(ISTA) = SPEEDH(NSETUP(ISCN,ISTA))
-                        ELSE
-                           STASPD(ISTA) = SPEEDL(NSETUP(ISCN,ISTA))
-                        END IF
-                     END IF
-C
-C                    multiple with 1 feet/min in units of ips
-C
-                     FTMIN = NINT( TPFOOT1(ISCN,ISTA)/
-     1                   (5.0 * STASPD(ISTA)) )
-C
-C                    Communicate tape change to FS: 
-C
-                     IF ( DOTAPE ) FTMIN = 0
-C
-                     WRITE( LINE(LPOS:LPOS+9), '( I5, A4, A1 )' )
-     1                   FTMIN,' min', COL 
-                  ELSE IF( USETAPE(ISTA) ) THEN
-                     WRITE( LINE(LPOS:LPOS+9), '( I6, A3, A1 )' ) 
-     1                      NINT(TPFOOT1(ISCN,ISTA)),' ft', COL
-                  ELSE IF( USEDISK(ISTA) ) THEN
 C                    Find the last scan that this station participated
 C                    in and print the GB at the end of that scan.
 C                    Note, STASCN(ISCN,ISTA) is a flag that indicates
 C                    that station ISTA is in scan ISCN.  
+C
                      IF( ISCN .GT. 1 ) THEN
                         LASTSCN = 0
                         DO I = SCAN1, ISCN-1
@@ -482,83 +446,35 @@ C                    that station ISTA is in scan ISCN.
                      
                   END IF
 C
-C                 next is pass and subpass
+C                 Next is pass and subpass
 C
                   LPOS = LEN1(LINE) + 1
-                  IF ( RECORDER(STANUM(ISTA)) .EQ. 'S2' ) THEN
-                     WRITE( LINE(LPOS:LPOS+5), '( 3X, I1, 1X, A1 )' ) 
-     1                   (TPINDX - 1),  COL
-                  ELSE IF ( DISK(STANUM(ISTA)) .EQ. 'LBADR' ) THEN
+                  IF ( DISK(STANUM(ISTA)) .EQ. 'LBADR' ) THEN
                      WRITE( LINE(LPOS:LPOS+5), '( 3X, I1, 1X, A1 )' ) 
      1                   0,  COL
                   ELSE
-                     TPSUBP = 'X'
-                     IF( TPHEAD .EQ. 1) TPSUBP = 'A'
-                     IF( TPHEAD .EQ. 2) TPSUBP = 'B'
-                     IF( TPHEAD .EQ. 3) TPSUBP = 'C'
-                     IF( TPHEAD .EQ. 4) TPSUBP = 'D'
-                     IF( TPHEAD .EQ. 5) TPSUBP = 'E'
-                     IF( TPHEAD .EQ. 6) TPSUBP = 'F'
-                     IF( TPHEAD .EQ. 7) TPSUBP = 'G'
-                     IF( TPHEAD .EQ. 8) TPSUBP = 'H'
-C
-                     IF( USETAPE(ISTA) ) THEN
-                       WRITE( LINE(LPOS:LPOS+5), 
-     1                     '( 1X, I2, A1, 1X, A1 )' ) TPINDX, TPSUBP,  
-     2                     COL
-                     ELSE IF( USEDISK(ISTA) ) THEN
-                       WRITE( LINE(LPOS:LPOS+3), 
+                     IF( USEDISK(ISTA) ) THEN
+                        WRITE( LINE(LPOS:LPOS+3), 
      1                     '( 3X, A1 )' ) COL
                      END IF
                   END IF
 C
-C                 pointscr not implemented leave blank
+C                 Pointscr not implemented leave blank
 C
                   LPOS = LEN1(LINE) + 1
                   WRITE( LINE(LPOS:LPOS+7), '( A6, 1X, A1 )' ) ' ',
      1                    COL
 C
 C                 Write tapedrive in last column, should be head 1 day
-C                 S2 is a bit special...
-C                 Now set the drive correctly:
-C
-                  IF (RECORDER(STANUM(ISTA)) .EQ. 'S2' .AND. 
-     1                TPDRIV .GT. STNDRIV(STANUM(ISTA))/8  ) THEN
-C
-C                    Following expr yields drive 1 for most cases
-C
-                     TPDRIV = ( STNDRIV(STANUM(ISTA)) + 7 ) /8 
-C
-C                    But let's check anyway
-C
-                     IF( TPDRIV .EQ. 0 .OR. TPDRIV .GT. 1 ) THEN
-                        CALL PRTSCN( ISCN )
-                        WRITE( MSGTXT, '( A, I2, A, A )' )
-     2                      'VXSCH:   WARNING: Requesting drive No',
-     3                      TPDRIV, ' for station ',
-     4                      STATION(STANUM(ISTA))
-                        CALL WLOG( 1, MSGTXT )
-                     END IF
-                  END IF 
-C
 C                 agreed with NRV that norec can be drive 0
+C                 With removal of tape stuff, this is 1 if recording, 
+C                 0 if not.
 C
+                  TPDRIV = 1
                   IF( NOREC(ISCN) ) TPDRIV = 0
                   LPOS = LEN1(LINE) + 1
                   WRITE( LINE(LPOS:LPOS+2), '( 1X, I1, A1 )' ) TPDRIV,
      1                 SEP
-C
-C                 write direction and footage
-C
-                  IF( USETAPE(ISTA) ) THEN
-                     DIRECT = 'R'
-                     IF( TPDIR .EQ. 1) DIRECT = 'F'
-                     LPOS = LEN1(LINE) + 1
-                     WRITE( LINE(LPOS:LPOS+10), 
-     1                   '( 1X, A1, 1X, A1, A1, I5.5 )' )
-     2                   COM, DIRECT, '@', 
-     3                   NINT(TPFOOT1(ISCN,ISTA))
-                  END IF
 C
 C                 flush line
 C

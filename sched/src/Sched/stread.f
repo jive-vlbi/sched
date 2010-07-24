@@ -146,6 +146,8 @@ C
 C
 C        Be sure the control type is known.  Let blank be the same
 C        as none for CONTROL, DAR, RECORDER, DISK, and MEDIADEF
+C        Note a number of stations use CONTROL='VSOP' which will
+C        give a VEX file, but not other types of control.
 C
          IF( CONTROL(MSTA)(1:3) .EQ. ' ' ) CONTROL(MSTA) = 'NONE'
          IF( CONTROL(MSTA)(1:3) .NE. 'VLA'  .AND. 
@@ -158,6 +160,13 @@ C
      7       CONTROL(MSTA)      .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid control type '//CONTROL(MSTA)
      1          //' for '// STATION(MSTA) )
+         END IF
+         IF( CONTROL(MSTA)(1:3) .EQ. 'NRAO' .OR. 
+     1       CONTROL(MSTA)(1:4) .EQ. 'SNAP' .OR. 
+     2       CONTROL(MSTA)(1:4) .EQ. 'SN50' ) THEN
+            CALL ERRLOG( 'STREAD: Control type '//CONTROL(MSTA)
+     1          //' no longer supported by SCHED.  Station: '// 
+     2          STATION(MSTA) )
          END IF
 C
 C        Be sure the DAR type is known.
@@ -179,6 +188,12 @@ C
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF
+         IF( DAR(MSTA) .EQ. 'MKIII' .OR. 
+     1       DAR(MSTA) .EQ. 'S2' ) THEN
+            CALL ERRLOG( 'STREAD: DAR type ' // DAR(MSTA) //
+     1          ' no longer supported by SCHED:  Station: ' // 
+     2          STATION(MSTA) )
+         END IF
 C
 C        Be sure the recordertype is known.
 C
@@ -197,6 +212,13 @@ C
      A       RECORDER(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid recorder type ' //
      1          RECORDER(MSTA) // ' for ' // STATION(MSTA) )
+         END IF
+         IF( RECORDER(MSTA) .EQ. 'MKIII'  .OR. 
+     1       RECORDER(MSTA) .EQ. 'S2' ) THEN
+            CALL ERRLOG( 'STREAD: Recorder type ' //
+     1          RECORDER(MSTA) // 
+     2          ' no longer supported by SCHED.  Station: ' // 
+     3          STATION(MSTA) )
          END IF
 C
 C        Be sure the DISK is an allowed type.

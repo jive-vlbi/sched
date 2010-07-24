@@ -59,23 +59,14 @@ C
             CALL ERRLOG( 'SUMDESC:  Cannot use SUMITEM=TAPE1 and ' //
      1           'NOSETUP together. ' )
          END IF
-         SUMDESC = 'Disk: Gbytes at scan end.  Tape: Tape drive, ' //
-     1           'direction, and head index.'
+         SUMDESC = 'Gbytes at scan end.  Better to use DISK in SUMITEM.'
 C
       ELSE IF( ITEM .EQ. 'TAPE2' ) THEN
          IF( NOSET ) THEN
             CALL ERRLOG( 'SUMDESC:  Cannot use SUMITEM=TAPE2 and ' //
      1           'NOSETUP together. ' )
          END IF
-         IF( AUTOTAPE .AND. ANYTAPE ) THEN
-            SUMDESC = 'Tape: Headset at scan end and tape footage ' //
-     1           '(thousands) at scan start.'
-         ELSE IF( ANYTAPE ) THEN
-            SUMDESC = 'Tape: Headset and start tape footage ' //
-     1           '(thousands).' 
-         ELSE
-            SUMDESC = 'Not used - no tapes used in this observation.'
-         END IF
+         SUMDESC = 'Not used - no tapes used in this observation.'
 C
       ELSE IF( ITEM .EQ. 'DISK' .OR. ITEM .EQ. 'DISC' ) THEN
          SUMDESC = 'Disk total GBytes at end of scan.'

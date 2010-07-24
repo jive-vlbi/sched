@@ -3,6 +3,8 @@ C
 C     Routine to check the validity of inputs from the SETUP file.  
 C     This is called for setup group KS
 C
+C     Remove checks of tape recorders.  July 22, 2010  RCW.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
       INCLUDE  'schfreq.inc'
@@ -210,9 +212,8 @@ C
          IF( DAR(ISETSTA(KS)) .EQ. 'MKIV'  ) 
      1         CALL CHK4DAR( KS, NBBC(ISETSTA(KS)), ERRS )
 C
-C        Check various recorder related parameters.
-C        Note that recorders means tape drives, not disks.  This whole
-C        section is likely to be obsolete.
+C        Check various recorder related parameters.  Stripped of 
+C        tape stuff July 22, 2010.  RCW
 C
          IF( VLBITP ) THEN
 C
@@ -221,27 +222,6 @@ C
             IF( USEDISK(ISTA) ) THEN
                CALL CHKDISK( KS, ERRS )
             END IF
-C
-C           Items specific to certain recorder types.
-C
-            IF( RECORDER(ISETSTA(KS)) .EQ. 'VLBA' ) THEN 
-C
-C              Special cases are EVN VLBA recorders and dar with
-C              formatter upgraded, but the transport still not upgraded.
-C
-               IF( DAR(ISETSTA(KS)) .EQ. 'VLBA4' ) THEN 
-                  CALL CHKV4REC( KS, ERRS, RECORDER(ISETSTA(KS)) )
-               ELSE
-                  CALL CHKVREC( KS, ERRS )
-               ENDIF
-            ENDIF
-            IF( RECORDER(ISETSTA(KS)) .EQ. 'VLBA4' ) 
-     1          CALL CHKV4REC( KS, ERRS, RECORDER(ISETSTA(KS)) )
-            IF( RECORDER(ISETSTA(KS)) .EQ. 'MKIV' ) 
-     1           CALL CHK4REC( KS, ERRS )
-            IF( RECORDER(ISETSTA(KS)) .EQ. 'S2' ) 
-
-     1           CALL CHKSREC( KS, ERRS )
 C
 C           Check the bit rate per track and the tape speeds.    
 C

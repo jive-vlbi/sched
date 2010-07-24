@@ -374,16 +374,7 @@ C
                         CALL DISKPOS( ISCN, ISTA, LASTISCN )
                      END IF
                   END IF
-                  CALL TPPACK( 'PACK', TPDAT(1,ISCN,ISTA),
-     1                .FALSE., .FALSE., .FALSE., 1, 1, 1, 1, 1 )
                END DO
-C
-C              Tape vestige: Deal with the tape handling for this scan.
-C              The station loop is in SCHTAPE.
-C
-               IF( ANYTAPE ) THEN
-                  CALL SCHTAPE( ISCN, LASTISCN )
-               END IF
 C
 C              Write the new KEYIN input for another run of SCHED
 C              in case the user wants to do some edits.
@@ -490,24 +481,6 @@ C     Avoid day number confusions for start and stop times
 C     near midnight.
 C
       CALL SCH24
-C
-C     Get the Mark II tape changes.  Here because TPMK2 needs TFIRST
-C     which is found by SCHTIM.
-C
-      IF( MARK2 ) THEN
-         IF( DEBUG ) CALL WLOG( 0, 'SCHOPT: Starting Mark2 ' )
-         DO ISTA = 1, NSTA
-            LASTISCN(ISTA) = 0
-         END DO
-         DO ISCN = SCAN1, SCANL
-            DO ISTA = 1, NSTA
-               IF( STASCN(ISCN,ISTA) ) THEN
-                  CALL TPMK2( ISCN, ISTA, LASTISCN )
-                  LASTISCN(ISTA) = ISCN
-               END IF
-            END DO
-         END DO
-      END IF
 C
       IF( DEBUG ) CALL WLOG( 0, 'SCHOPT: Done.' )
 C

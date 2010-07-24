@@ -46,6 +46,8 @@ C     for every station.  See the archive of obsolete code for the
 C     version that understands multiple stations per setup.  The
 C     changes were an immense simplification.  RCW.
 C
+C     Removed the tape section (most of the routine) July 23, 2010.
+C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
 C
@@ -69,55 +71,14 @@ C
                   TAPEMODE(KS) = 1
                END IF
             END DO
-         ELSE IF( USETAPE(ISTA) ) THEN
-C
-C           Find the minumum TAPEMODE for this station.
-C
-            MINTPM = 100
-            DO KS = 1, NSET
-               IF( ISCHSTA(ISETSTA(KS)) .EQ. ISTA .AND.
-     1             RECUSED(KS) .AND. (
-     2             FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
-     3             FORMAT(KS)(1:4) .EQ. 'MARK' .OR.
-     4             FORMAT(KS)(1:4) .EQ. 'MKIV' ) ) THEN
-                  MINTPM =  MIN( MINTPM, TAPEMODE(KS) )
-               END IF
-            END DO
-C
-C           Now set all setups for this station to MINTPM.
-C
-            DO KS = 1, NSET
-               IF( ISCHSTA(ISETSTA(KS)) .EQ. ISTA .AND.
-     1             RECUSED(KS) .AND. (
-     2             FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
-     3             FORMAT(KS)(1:4) .EQ. 'MARK' .OR.
-     4             FORMAT(KS)(1:4) .EQ. 'MKIV' ) ) THEN
-C
-                  IF( TAPEMODE(KS) .NE. MINTPM ) THEN
-C
-                     WRITE( MSGTXT, '( A, I2, A, I2, 4A )' )
-     1                  '          Changing TPMODE from ', 
-     2                  TAPEMODE(KS), ' to ', MINTPM,
-     3                  ' in setup: ',
-     4                  SETNAME(KS)(1:LEN1(SETNAME(KS))),
-     5                  ', station: ', 
-     6                  SETSTA(1,KS)(1:LEN1(SETSTA(1,KS)))
-                     CALL WLOG( 1, MSGTXT )
-                     MSGTXT = ' '
-                     CALL WLOG( 1, 'to match other setups.'//
-     1                 '  This will waste some tape space.' )
-C
-C                    Do it.
-C
-                     TAPEMODE(KS) =  MINTPM
-                  END IF
-               END IF
-            END DO
          END IF
       END DO
 C
 C     We're done.  If you look at the archive version of this
-C     routine, you'll see just how much easier this was!
+C     routine, you'll see just how much easier this was!  And this
+C     comment was written before the tape stuff was taken out!
+C     I can probably remove the routine entirely, but worry about
+C     that later.
 C
       RETURN
       END
