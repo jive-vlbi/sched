@@ -35,10 +35,10 @@ C     The tests are only done for stations in the template scan (JSCN)
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER               SC1, SC2, JSCN, ISCN, ISTA, JSTA, ICH, i,j
+      INTEGER               SC1, SC2, JSCN, ISCN, ISTA, JSTA, ICH
       INTEGER               IBAS, NBAS, IPAR, IDUM, IERR
       REAL                  TESTQUAL, SECZ
-      REAL                  TRIQUAL, RELEV, RAN5
+      REAL                  TRIQUAL, RELEV  !  , RAN5
       LOGICAL               MKGDEBUG
 C
 C     For fit:
@@ -58,6 +58,9 @@ C     baselines.  I need actual dummy measured values (zero),
 C     sigmas (arbitrary 20ps), and the partial derivatives
 C     (secZ for the two stations of a baseline with an appropriate
 C     sign).  
+C
+C     Try setting the sigmas to 100ps to match what Mark did.  July 23
+C     2010
 C
 C     Require that the station be in the template scan and in
 C     the individual scans.  Actually, that is inforced when STASCN
@@ -100,7 +103,7 @@ C
      1                    'baselines in making geodetic segment.' )
                      END IF
                      RESDEL(NBAS) = 0.D0 ! 2.D-4 * RAN5( IDUM )
-                     DELERR(NBAS) = 20.D0
+                     DELERR(NBAS) = 100.D0
 C	   	   
 C                    Partial for first station (is secZ).
 C	   	   

@@ -4,14 +4,17 @@ C     Routine specific for the VEX extension of SCHED.
 C     Writes a specific section of the VEX file 
 C     In this case the PO = $PASS_ORDER section 
 C     By H.J. van Langevelde, JIVE, 300496 
+C
+C     Removed tape handling July 20, 2010  RCW.  It used a subroutine
+C     that was removed from the main Sched area.
 C 
       INCLUDE 'sched.inc' 
       INCLUDE 'schset.inc' 
       INCLUDE 'vxlink.inc' 
 C 
-      INTEGER   IPO, KS, I, IP, IPASS, HDINDX, SPINDX
+      INTEGER   IPO, KS, IP
       INTEGER   LEN1, ASTAT, IMODE
-      CHARACTER LINE*132, DEL*1, TPSUBP*1
+      CHARACTER LINE*132, DEL*1
       LOGICAL   VIOLFS
 C ----------------------------------------------------------------------
 C
@@ -50,45 +53,8 @@ C
      3             POLINK(IPO)(1:LEN1(POLINK(IPO)))
                CALL WLOG( 1, MSGTXT )
             END IF            
-
-            IF( USETAPE( ASTAT )) THEN
-               DO IP = 1, TAPEMODE( KS )
-                  IF( IP .EQ. 1 ) THEN 
-                     WRITE( LINE(1:17) , '( 5X, A )' ) 'pass_order ='
-                  ELSE
-                     WRITE( LINE(1:17) , '( 17X )' )
-                  ENDIF
-                  DO I = 1, NHDPOS(ASTAT)
 C
-C                 find the right index
-C
-                     IPASS = ( IP-1 )*NHDPOS(ASTAT) + I
-C
-C                    get the standard VLBA order from indxhead, 
-C
-                     CALL INDXHEAD( TAPEMODE(KS), IPASS, 
-     1                   HEADMODE(ASTAT), HDINDX, SPINDX, KS )
-                     TPSUBP = 'X'
-                     IF( SPINDX .EQ. 1) TPSUBP = 'A'
-                     IF( SPINDX .EQ. 2) TPSUBP = 'B'
-                     IF( SPINDX .EQ. 3) TPSUBP = 'C'
-                     IF( SPINDX .EQ. 4) TPSUBP = 'D'
-                     IF( SPINDX .EQ. 5) TPSUBP = 'E'
-                     IF( SPINDX .EQ. 6) TPSUBP = 'F'
-                     IF( SPINDX .EQ. 7) TPSUBP = 'G'
-                     IF( SPINDX .EQ. 8) TPSUBP = 'H'
-C
-C                    all separared by colon, except last
-C         
-                     DEL = COL
-                     IF( I .EQ. NHDPOS(ASTAT)  
-     1                   .AND. IP .EQ. TAPEMODE(KS) ) DEL = SEP
-                     WRITE(LINE(18+(I-1)*4:17+I*4), '( I2, A1, A1 )' )
-     1                   HDINDX, TPSUBP, DEL               
-                  END DO
-                  WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
-               END DO
-            ELSE IF( USEDISK(ASTAT) ) THEN
+            IF( USEDISK(ASTAT) ) THEN
 C
 C                 No passorder for disks
 C

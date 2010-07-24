@@ -59,10 +59,10 @@ C
                BARREL(KS) = 'roll_off'
             END IF
          ELSE IF( BARREL(KS) .NE. 'roll_off' .AND. 
-     1       ( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) ) THEN
+     1            USEDISK(ISTA) ) THEN
             IF( BWARN ) THEN
-               CALL WLOG( 1, 'SETREC:  Barrel roll request will be'//
-     1              'ignored for stations using disk' )
+               CALL WLOG( 1, 'SETREC:  Barrel roll is obsolete - '//
+     1              'not used for disk' )
                BWARN = .FALSE.
             END IF
             BARREL(KS) = 'roll_off'

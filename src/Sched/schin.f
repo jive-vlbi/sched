@@ -6,9 +6,9 @@ C     file.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER           MODE, I, LEN1, ISCN, ISTA, IREP, INAME
-      INTEGER           I1, I2, I3, I4, I5, KEYPTR
-      LOGICAL           GOTINI, GOTSAT, DOINIT, DOSTWARN, GOTVEX
+      INTEGER           MODE, I, LEN1, ISCN, IREP, INAME
+      INTEGER           I1, I2, KEYPTR
+      LOGICAL           GOTSAT, DOINIT, DOSTWARN, GOTVEX
       CHARACTER         TPFILE*80
       CHARACTER         CSFILE*80
       INTEGER           YEAR(MAXSCN), DAY(MAXSCN)
@@ -22,7 +22,7 @@ C
       INTEGER           KI(MK)
       CHARACTER         KC(MK)*8, KCHAR*256, KCHARA*256, TEMP*256
       DOUBLE PRECISION  KD(2*MK), ENDMARK, BLANK
-      LOGICAL           SETKEYS, AWARN
+      LOGICAL           SETKEYS
       SAVE              KI, KD, KC, ENDMARK, BLANK, INSCH, SETKEYS
 C
       DATA   (KI(I),I=1,3)  / MK, 0, 3 /
@@ -54,7 +54,6 @@ C
       NSETF = 0   !  Number of setup files.
       SCAN1 = 1   !  First scan actually used.  SCHOPT may change.
       NGEO = 0    !  Number of sources for possible geodetic sections.
-      GOTINI = .FALSE.  !  Need tape initialization information.
       GOTSAT = .FALSE.  !  Need satellite info.
       GOTFREQ = .FALSE. !  Frequencies, Bandwidths, or Dopcals set.
       DOINIT = .TRUE.   !  Do initializations before next read.
@@ -124,18 +123,13 @@ C
             KD( KEYPTR( 'VLANTSYS', KC, KI ) ) = UNSET
 C
 C           For some arrays.
+C           No longer reset TAPE, REWIND, FASTFOR, or REVERSE so
+C           they will have value zero if used so the user can be
+C           warned of obsolete parameters.
 C
             I1 = KEYPTR( 'STATions', KC, KI ) - 1
-            I2 = KEYPTR( 'TAPE', KC, KI ) - 1
-            I3 = KEYPTR( 'REWIND', KC, KI ) - 1
-            I4 = KEYPTR( 'FASTFOR', KC, KI ) - 1
-            I5 = KEYPTR( 'REVERSE', KC, KI ) - 1
             DO I = 1, MAXSTA
                KD(I1+I) = 0.D0
-               KD(I2+I) = UNSET
-               KD(I3+I) = UNSET
-               KD(I4+I) = UNSET
-               KD(I5+I) = UNSET
             END DO
             I1 = KEYPTR( 'COMMENT', KC, KI ) - 1
             DO I = 1, 128/8
@@ -187,7 +181,7 @@ C        schedule input should come from IUSCH - an external file
 C        specified with SCHEDULE.  Also detect a cover letter and
 C        read past it.
 C
-         CALL SCHFILES( DOINIT, GOTINI, GOTSAT, 
+         CALL SCHFILES( DOINIT, GOTSAT, 
      1                  KD, KC, KI, INSCH, BLANK )
          IF( .NOT. DOINIT ) GO TO 1
 C
@@ -525,71 +519,14 @@ C
          ROT(I) = KD(I2+I)
       END DO
 C
-C     Get the tape initialization information if don't have it already.
-C     The station catalog must have been read before TPTPNS is called.
+C     Abort if the user is trying to give tape initialization info.
+C     This is an obsolete concept and has been removed from SCHED.
+C     But keep TPTPNS to set various items to defaults.
 C
-      IF( .NOT. GOTINI ) THEN
-         TPFILE = KCHAR( 'TAPEFILE', 80, .FALSE., KD, KC, KI )
-         CALL ENVIR( TPFILE )
-         CALL TPINI( IUTAP, TPFILE )
-      END IF
+      TPFILE = KCHAR( 'TAPEFILE', 80, .FALSE., KD, KC, KI )
+      IF( TPFILE .NE. 'NONE' ) CALL ERRLOG( 'TAPEFILE given but '//
+     1    'tape initialization no longer supported by SCHED' )
       CALL TPTPNS
-C
-C     Check the tape initialization OBSCODE for default of match.
-C     Done here because don't have EXPCODE at time of in-stream
-C     tapeini input.
-C
-      IF( TPOBS .NE. 'DEFAULT' .AND. TPOBS .NE. EXPCODE ) THEN
-         CALL ERRLOG( 'SCHIN: Tape initialization OBSCODE ('//
-     1        TPOBS//') does not match EXPCODE ('//EXPCODE//')' )
-      END IF
-C
-C     Set up any automatic tape handling.
-C       This whole segment can probably be removed when I get the nerve
-C       to actually take out tape.
-C
-C     TPLEN is only used for Mark2.
-C     Actually, the sequence below requires Mark2 users to set a
-C     time to get automatic tape handling.  I'd fix this if there really
-C     were any Mark II's any more (actually there seem to be based in 
-C     Russia with Italy involved - some narrow band application).
-C
-C     For Mark III and VLBA formats, AUTOTAPE triggers the automatic
-C     tape handling.  It also triggers leaving stations out of scans when
-C     when the source is down.  
-C        AUTOTAPE=0 is the default, which will be to not use the 
-C           automatic handling.  
-C        AUTOTAPE=1 will set AUTOALLOCATE.  It doesn't make much sense
-C           and is not recommended.
-C        AUTOTAPE=2 will set AUTOALLOCATE and AUTOREVERSE.
-C
-C     Must have stations catalog by here.
-C     Must also have USETAPE and USEDISK from TPTPNS.
-C     Automatic tape allocation, if requested, will be used at VLBA
-C     stations and at stations using Mark5 recording systems.
-C
-      I1 = KEYPTR( 'AUTOTAPE', KC, KI )
-      AUTOTAPE = KD(I1) .GT. 0.1D0
-      IF( AUTOTAPE ) THEN
-         IF( KD(I1).EQ.0.D0 ) TPLEN = 4.D0 / 24.D0
-         IF( KD(I1).GT.0.D0 ) TPLEN = KD(I1) / 86400.D0
-      END IF
-C
-      AWARN = .FALSE.
-      MSGTXT = 'SCHIN:   * Automatic tape allocation requested at:'
-      DO ISTA = 1, NSTA
-         AUTOALOC(ISTA) =  KD(I1) .GT. 0.5 
-     1      .AND. ( CONTROL(STANUM(ISTA)) .EQ. 'VLBA' .OR. 
-     2              VLBADAR(STANUM(ISTA)) )
-     3      .AND. STNDRIV(STANUM(ISTA)) .GE. 2
-         AUTOREV(ISTA) = ( KD(I1) .GT. 1.5D0 ) .AND. AUTOALOC(ISTA)
-         IF( VLBITP .AND. AUTOALOC(ISTA) .AND. ANYTAPE ) THEN
-            MSGTXT = MSGTXT(1:LEN1(MSGTXT)) // ' ' // 
-     1            STCODE(STANUM(ISTA))
-            AWARN = .TRUE.
-         END IF
-      END DO
-      IF( AWARN ) CALL WLOG( 0, MSGTXT )
 C
 C     Get command to observe scans even if the source is down.
 C
@@ -609,10 +546,6 @@ C
       IF( SUMITEM(1) .EQ. ' ' ) THEN
          SUMITEM(1) = 'ELA'
          SUMITEM(2) = 'DWELL'
-C         IF( .NOT. NOTAPE .AND. .NOT. NOSET ) THEN
-C            SUMITEM(3) = 'TAPE1'
-C            SUMITEM(4) = 'TAPE2'
-C         END IF
       END IF
 C
 C     Some schedule wide VLA items (called with MODE=2):  
@@ -652,6 +585,17 @@ C
      2        '  NKEYS: ', KI(3)
          CALL WLOG( 0, MSGTXT )
       END IF
+C
+C     Warn of use of obsolete parameters that are now ignored.
+C
+      IF( KEYPTR( 'AUTOTAPE', KC, KI ) .GT. 0.1D0 ) CALL WLOG( 1, 
+     1    'SCHIN:  Obsolete parameter AUTOTAPE given.  Ignored.' )
+      IF( KEYPTR( 'TAPE', KC, KI ) .EQ. 0.D0 ) CALL WLOG( 1, 
+     1    'SCHIN:  Obsolete parameter TAPE given.  Ignored.' )
+      IF( KEYPTR( 'FASTFOR', KC, KI ) .EQ. 0.D0 ) CALL WLOG( 1, 
+     1    'SCHIN:  Obsolete parameter FASTFOR given.  Ignored.' )
+      IF( KEYPTR( 'REVERSE', KC, KI ) .EQ. 0.D0 ) CALL WLOG( 1, 
+     1    'SCHIN:  Obsolete parameter REVERSE given.  Ignored.' )
 C
       RETURN
       END

@@ -20,15 +20,6 @@ C
       IF( TWOHEAD ) THEN
          CALL WLOG( 1, 'TWOHDSET: Using 64 track mode for wide ' //
      1       'bandwidth.' )
-         DO ISTA = 1, NSTA
-            IF( NHEADS(STANUM(ISTA)) .LE. 1 .AND.
-     1          STNDRIV(STANUM(ISTA)) .LE. 1 .AND. USETAPE(ISTA) ) THEN
-               CALL WLOG( 1, 'TWOHDSET: ** ' // STANAME(ISTA) //
-     1             ' cannot do 2 head mode.' )
-               CALL WLOG( 1, '            It will record half the '//
-     1             'bandwidth used at stations that can.' )
-            END IF
-         END DO
       END IF
       IF( FASTTRK ) THEN
          CALL WLOG( 1, 'TWOHDSET:  Using 16 Mbps per track record '//

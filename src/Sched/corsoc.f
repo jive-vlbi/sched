@@ -10,7 +10,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER           LSTA, LSCN, NSANT, MOSTCH, LEN1
+      INTEGER           LSTA, LSCN, NSANT, MOSTCH
       REAL              FIRRATE, MAXFIRR, RCORCH
       LOGICAL           WARN
 C ----------------------------------------------------------------------

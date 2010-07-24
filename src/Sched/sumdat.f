@@ -6,12 +6,8 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER     ISCN, ISTA, TEARLY, TDWELL, ITSLEW, ISYNC
-      CHARACTER   ITEM*(*), DIRECT*1
-C
-C     Tape information from TPDAT.
-C
-      INTEGER          TPPASS, TPDIR, TPINDX, TPHEAD, TPDRIV, IGB
-      LOGICAL          DOTAPE, DOFAST, DOREW
+      CHARACTER   ITEM*(*)
+      INTEGER          IGB
       CHARACTER        UPA*1, UPC*2
 C -------------------------------------------------------------------
 C     First detect if the station is to be used.
@@ -74,41 +70,19 @@ C        The following section is tape items.  Remove some day.
 C
          ELSE IF( ITEM(1:4) .EQ. 'TAPE' ) THEN
 C
-C           Extract the tape commands from PTDAT.
-C
-            CALL TPPACK( 'UNPACK', TPDAT(1,ISCN,ISTA), DOTAPE, DOFAST,
-     1                   DOREW, TPPASS, TPDRIV, TPDIR, TPINDX, TPHEAD )
-C
-C           Now deal with first or second line.
+C           No longer supporting tape.  Put the disk bytes in 
+C           for TAPE1 and nothing for TAPE2
 C
             IF( ITEM .EQ. 'TAPE1' ) THEN
                IF( NOREC(ISCN) ) THEN 
                   SUMDAT = 'Stop '
-               ELSE IF( USETAPE(ISTA) ) THEN
-                  IF( TPDIR .EQ. 1 ) THEN
-                     DIRECT = 'F'
-                  ELSE
-                     DIRECT = 'R'
-                  END IF
-                  WRITE( SUMDAT, '( 1X, I1, A1, I2.2 )' )
-     1                    TPDRIV, DIRECT, TPINDX
-               ELSE IF( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) THEN
+               ELSE IF( USEDISK(ISTA)  ) THEN
                   IGB = NINT( GBYTES(ISCN,ISTA) )
                   WRITE( SUMDAT, '( I5 )' ) IGB
                END IF
 C
             ELSE IF( ITEM .EQ. 'TAPE2' ) THEN
-               IF( NOREC(ISCN) .OR. .NOT. USETAPE(ISTA) ) THEN 
-                  SUMDAT = '---- '
-               ELSE
-                  IF( TPHEAD .LT. 10 ) THEN
-                     WRITE( SUMDAT, '( 1X, I1, A1, I2.2, A1 )' ) TPHEAD,
-     1                  '/', NINT( TPFOOT1(ISCN,ISTA) / 1000. ), ' '
-                  ELSE
-                     WRITE( SUMDAT, '( I2, A1, I2.2 )' ) TPHEAD, 
-     1                  '/', NINT( TPFOOT1(ISCN,ISTA) / 1000. )
-                  END IF
-               END IF
+               SUMDAT = '---- '
             END IF
 C
          ELSE IF( ITEM .EQ. 'DISK' .OR. ITEM .EQ. 'DISC' ) THEN
@@ -117,8 +91,6 @@ C
             ELSE IF( USEDISK(ISTA) ) THEN
                IGB = NINT( GBYTES(ISCN,ISTA) )
                WRITE( SUMDAT, '( I5 )' ) IGB
-            ELSE IF( USETAPE(ISTA) ) THEN
-               SUMDAT = 'Tape'
             ELSE
                SUMDAT = '----'
             END IF
@@ -165,13 +137,6 @@ C        Test for understood items is in SUMDESC.
 C
          END IF
 C
-C        Mark tape changes.  Don't cover UP unless needed.
-C
-         DOTAPE = MOD( TPDAT(1,ISCN,ISTA), 10 ) .GT. 0
-         IF( DOTAPE .AND. ITEM(1:4) .NE. 'TAPE' ) THEN
-            SUMDAT(5:5) = 't'
-         END IF
-
       ELSE
 C
 C        Station not in scan.

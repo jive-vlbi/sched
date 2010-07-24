@@ -19,9 +19,6 @@ SCHSRL_OBJS = $(SCHSRL_SRCS:.f=.o)
 SCHPTG_SRCS = $(shell grep -l schpeak.inc *.f)
 SCHPTG_OBJS = $(SCHPTG_SRCS:.f=.o)
 
-TPINI_SRCS = $(shell grep -l tpinit.inc *.f)
-TPINI_OBJS = $(TPINI_SRCS:.f=.o)
-
 PLOT_SRCS = $(shell grep -l plot.inc *.f)
 PLOT_OBJS = $(PLOT_SRCS:.f=.o)
 
@@ -36,7 +33,6 @@ $(SCHFREQ_OBJS): schfreq.inc
 $(SCHSRL_OBJS): srlist.inc
 $(PLOT_OBJS): plot.inc
 $(SCHPTG_OBJS): schpeak.inc
-$(TPINI_OBJS): tpinit.inc
 
 clean:
 	$(RM) $(OBJS)

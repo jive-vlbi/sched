@@ -17,16 +17,17 @@ C         be ok with disk systems.  This constraint is driven by
 C         the tape usage accounting nightmare that variations in 
 C         head use would cause.
 C
-C     2.  For some correlators (Socorro and JIVE), the track bit rate
+C     2.  For some correlators (JIVE, old Socorro), the track bit rate
 C         should be the same for all stations in a scan - which here
 C         means for all setup groups in a setup file.  This has the
 C         additional impact of insuring a constant speedup factor.
 C         Treat all correlators as if they have this constraint.
+C         This does not affect the DiFX correlators.
 C
 C     3.  Don't use more than one drive or head unless necessary.
 C         But if any scan at a station uses more than one, do so
 C         for all scans (basically the same as the constant heads
-C         constraint).  
+C         constraint).  This should not affect disk recordings.
 C
 C     4.  For multiple drive/head observations, allow stations 
 C         without full resources to record reduced bandwidth by 
@@ -35,6 +36,8 @@ C         be done for any setup where a station has inadequate
 C         resources.  Just cut NCHAN for the setup group.  Do this
 C         after setting all the formats to reduce confusion.  But
 C         during the setting, try hard to stay on one drive or head.
+C         The recording resources should not longer cause this, but
+C         DAR's might.
 C
 C     5.  Eventually there will be systems (eg MARK5B) that don't
 C         care about speed up factors and number of tracks.  I think
@@ -98,14 +101,11 @@ C     information provided in the setup file and catalogs.
 C
 C     If the format was not specified at all, set the default
 C     general type based on the type of DAR at the station.
-C     Actually, this is not always right.  If the recorder
-C     is an S2, that needs to be the format.
+C     Actually, this is not always right.
 C
       DO KS = 1, NSET
          IF( FORMAT(KS) .EQ. ' ' ) THEN
-            IF( RECORDER(ISETSTA(KS)) .EQ. 'S2' ) THEN
-               FORMAT(KS) = 'S2'
-            ELSE IF( RECORDER(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
+            IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
      1          DAR(ISETSTA(KS)) .EQ. 'RDBE' ) THEN
                FORMAT(KS) = 'MARK5B'
             ELSE
@@ -121,7 +121,7 @@ C
 C
 C     Flag VLBA and MKIV format setup groups.  This is used by
 C     various other routines besides this one.  Get the total
-C     bit rate nice and early.
+C     bit rate nice and early.  Initialize RECUSED.
 C
       DO KS = 1, NSET
          VLBAMKIV(KS) = FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
@@ -235,23 +235,10 @@ C
                CALL ERRSET( KS )
             END IF
 C
-C           Look for too much bandwidth for stations of reduced
-C           capability.
+C           Test to look for too much bandwidth for stations of reduced
+C           capability (single drive) removed.  Was a tape only test.
+C           July 23, 2010  RCW.
 C
-            IF( TOTBPS(KS) / TBPS(KS) .GT. 32 .AND. 
-     1          STNDRIV(ISETSTA(KS)) * NHEADS(ISETSTA(KS)) .LE. 1 ) THEN
-C
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( 4A )' )
-     1            'SETFORM: Reducing bandwidth for ', SETSTA(1,KS), 
-     2            ' in setup file: ', SETFILE(ISETNUM(KS))
-               CALL WLOG( 1, MSGTXT )
-               CALL WLOG( 1, '        Not enough drives or heads.' )
-C
-               NCHAN(KS) = NCHAN(KS) / 2
-               TOTBPS(KS) = TOTBPS(KS) / 2
-               TOTBW(KS) = TOTBW(KS) / 2
-            END IF
          END IF
       END DO
 C

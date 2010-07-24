@@ -17,7 +17,7 @@ C
       INTEGER     LSETNUM, NPASS, IT1, IT2, LTXT1, LTXT2
       INTEGER     YEAR, DAY1, DAY2
       DOUBLE PRECISION  START, STOP
-      LOGICAL     SKIPPED, AUTOWARN
+      LOGICAL     SKIPPED
       CHARACTER   LINE1*160, LINE2*160
       CHARACTER   TFORM*8, SUMDAT*6
       CHARACTER   FF*1, PDATE*(*)
@@ -51,8 +51,6 @@ C
             IT2 = 2 * IPASS
             SUMTXT1 = SUMDESC( SUMITEM(IT1), LTXT1 )
             SUMTXT2 = SUMDESC( SUMITEM(IT2), LTXT2 )
-            AUTOWARN = AUTOTAPE .AND. ( SUMITEM(IT1)(1:4) .EQ. 'TAPE' 
-     1                 .OR. SUMITEM(IT2)(1:4) .EQ. 'TAPE' )
 C
 C           Loop through the passes if many stations.
 C
@@ -76,13 +74,6 @@ C
      3                 'Top item is:    ', SUMTXT1(1:LTXT1),
      4                 'Bottom item is: ', SUMTXT2(1:LTXT2)
                      LINE = 5
-C
-                     IF( AUTOWARN ) THEN
-                        WRITE( ISUM, '( 5X, A )' ) 'Tape parameters ' //
-     1                      'are only predictions for stations using' //
-     2                      ' automatic tape allocation.'
-                        LINE = LINE + 1
-                     END IF
 C
 C                    "Type" entry.
 C                    

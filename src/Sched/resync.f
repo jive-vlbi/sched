@@ -210,33 +210,21 @@ C
 C
 C                 JIVE correlator.  Recall that TCORR going into
 C                 this is the recording medium start time.
+C                 Tape case removed.
 C
                   ELSE IF( CORREL(1:7) .EQ. 'JIVE' ) THEN
                      IF( NEWCONF ) THEN
                         TSADD = 25.D0 / 86400.D0
                      ELSE
-                        IF( USETAPE(ISTA) ) THEN
-                           IF( LRSCN .EQ. 0 ) THEN
-                              TSADD = 20.D0 / 86400.D0
-                           ELSE IF( TCORR(ISCN,ISTA) - STOPJ(LRSCN) 
-     1                           .LE. 20.D0 / 86400.D0 ) THEN
-                              TSADD = 10.D0 / 86400.D0
-                           ELSE
-                              TSADD = 20.D0 / 86400.D0
-                           END IF
-                        ELSE
-                           TSADD = 1.0D0 / 86400.D0
-                        END IF
+                        TSADD = 1.0D0 / 86400.D0
                      END IF
 C
 C                 Other correlators
 C
                   ELSE
-                     IF( USETAPE(ISTA) ) THEN
-                        TSADD = 10.D0 / 86400.D0
-                     ELSE IF( CORREL(1:7) .EQ. 'SOCORRO' .OR.
-     1                        CORREL(1:4) .EQ. 'VLBA' .OR.
-     2                        CORREL(1:8) .EQ. 'VLBADIFX' ) THEN
+                     IF( CORREL(1:7) .EQ. 'SOCORRO' .OR.
+     1                   CORREL(1:4) .EQ. 'VLBA' .OR.
+     2                   CORREL(1:8) .EQ. 'VLBADIFX' ) THEN
                         TSADD = 0.D0
                      ELSE
                         TSADD = 1.D0 / 86400.D0

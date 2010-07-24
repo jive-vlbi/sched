@@ -10,15 +10,14 @@ C     ISTA in the internal stations arrays is used in scan ISCN.
 C
 C     It filters stations based on the DOSTA request.
 C
-C     It also gets the station dependent requests for tape 
-C     motions such as changes, rewinds etc.
+C     Tape stuff removed July 21, 2010.  RCW.
 C
       INCLUDE 'sched.inc'
 C
       INTEGER          ISCN, ISTA, KSTA, INSTA, KI(*), I1, LEN1
       INTEGER          KEYPTR
       DOUBLE PRECISION VALUE(*)
-      LOGICAL          ERRS, FLAG(MAXSTA), DOIT, GOTVEX
+      LOGICAL          DOIT, GOTVEX
       CHARACTER        NAMEST*8, KC(*)*(*)
       CHARACTER        KCHAR*256, FILEUP*80
       CHARACTER        LSTAFIL*80
@@ -146,46 +145,6 @@ C
             END IF
          END DO
       END IF
-C
-C
-C     Now deal with the station dependent tape requests.
-C     Note cannot put TAPE in the call because of subscript order.
-C
-C     First: Tape change.
-C
-      ERRS = .FALSE.
-C
-      I1 = KEYPTR( 'TAPE', KC, KI )
-      CALL TAPEFLAG( ISCN, 'Tape change', FLAG, VALUE(I1), ERRS )
-      DO ISTA = 1, NSTA
-         TAPE(ISCN,ISTA) = FLAG(ISTA)
-      END DO
-C
-C     Rewind:
-C
-      I1 = KEYPTR( 'REWIND', KC, KI )
-      CALL TAPEFLAG( ISCN, 'Rewind', FLAG, VALUE(I1), ERRS )
-      DO ISTA = 1, NSTA
-         REWIND(ISCN,ISTA) = FLAG(ISTA)
-      END DO
-C
-C     Fast forward
-C
-      I1 = KEYPTR( 'FASTFOR', KC, KI )
-      CALL TAPEFLAG( ISCN, 'Fast forward', FLAG, VALUE(I1), ERRS )
-      DO ISTA = 1, NSTA
-         FASTF(ISCN,ISTA) = FLAG(ISTA)
-      END DO
-C
-C     Reverse
-C
-      I1 = KEYPTR( 'REVERSE', KC, KI )
-      CALL TAPEFLAG( ISCN, 'Reverse', FLAG, VALUE(I1), ERRS )
-      DO ISTA = 1, NSTA
-         REVERSE(ISCN,ISTA) = FLAG(ISTA)
-      END DO
-C
-      IF( ERRS ) CALL ERRLOG( 'GETSTA: Error in tape motion requests ' )
 C
       RETURN
       END
