@@ -8,7 +8,6 @@ C
       INTEGER    ISTA, ISCAT, IC1, IC2, BLENKM, LEN1, JSTA, JSCAT
       INTEGER    NNSTA, MJD
       REAL       BLENSQ, YEARS
-      CHARACTER  CDEN*4, CAA*3, CAR*3
       LOGICAL    ANYDISK, ANYELSE
 C ----------------------------------------------------------------------
 C
@@ -105,63 +104,10 @@ C
          ANYELSE = .FALSE.
          DO ISTA = 1, NSTA      
             ANYDISK = ANYDISK .OR. USEDISK(ISTA)
-            ANYELSE = ANYELSE .OR. .NOT. ( USETAPE(ISTA) .OR.
-     1                   USEDISK(ISTA) )
+            ANYELSE = ANYELSE .OR. .NOT. USEDISK(ISTA)
          END DO
          WRITE( ISUM, '( 1X, /, 1X, /, A )' )
      1      'RECORDING SYSTEM AND CALIBRATION INFORMATION:'
-         IF( ANYTAPE .AND. ANYDISK ) WRITE( ISUM, '( 5X, A )' )
-     1      'Some stations may be scheduled for both tape and disk.'
-C
-C        Tape initialization stuff.  Throw in a check of the density
-C        since it's easy.
-C
-         IF( ANYTAPE ) THEN
-            WRITE( ISUM, '( 1X, /, A, /, A, /, 2A, /,'//
-     1             '2A )' )
-     2         '  TAPES - Stations potentially recording on tape.',
-     3         '    (See setup details later for times per pass.)',
-     4         '   Station Drives Head pos  Tape len  Density',
-     5         '  Start position  Auto   Auto   Recorder  DAR',
-     6         '                                (ft)           ',
-     7         'Driv Head indx  Aloc  Reverse'
-C	   
-C           Loop over stations.
-C	   
-            DO ISTA = 1, NSTA
-               IF( USETAPE(ISTA) ) THEN
-                  ISCAT = STANUM(ISTA)
-                  IF( DENSITY(ISTA) .EQ. 'H' ) THEN
-                     CDEN = 'High'
-                  ELSE IF( DENSITY(ISTA) .EQ. 'L' ) THEN
-                     CDEN = 'Low '
-                  ELSE
-                     CALL ERRLOG( 'STALST: Bad density (' //
-     1                 DENSITY(ISTA)// ') at '//STATION(ISCAT) )
-                  END IF
-C	        
-                  IF( AUTOALOC(ISTA) ) THEN
-                     CAA = 'Yes'
-                  ELSE
-                     CAA = ' No'
-                  END IF
-C	        
-                  IF( AUTOREV(ISTA) ) THEN
-                     CAR = 'Yes'
-                  ELSE
-                     CAR = ' No'
-                  END IF
-C	        
-C                 Write the line.
-C	        
-                  WRITE( ISUM, '( 3X, A8, I5, I8, I11, 4X, A4, '//
-     1                   'I7, I7, 7X, A, 4X, A, 4X, A6, 2X, A5 )' )
-     2                 STATION(ISCAT), STNDRIV(ISCAT), NHDPOS(ISTA),
-     3                 TPLENG(ISTA), CDEN, TPSDRIV(ISTA), TPSINDX(ISTA),
-     4                 CAA, CAR, RECORDER(ISCAT), DAR(ISCAT)
-               END IF
-            END DO
-         END IF
 C
 C        Deal with disk stations.
 C
@@ -186,7 +132,7 @@ C
      1          '  OTHER - Stations with other recording systems.',
      2          '   Station    Drive type '
             DO ISTA = 1, NSTA
-               IF( .NOT. ( USEDISK(ISTA) .OR. USETAPE(ISTA) ) ) THEN
+               IF( .NOT. ( USEDISK(ISTA) ) ) THEN
                   ISCAT = STANUM(ISTA)
                   WRITE( ISUM, '( 3X, A8, 5X, A6 )' )
      1               STATION(ISCAT),  RECORDER(ISCAT)

@@ -8,6 +8,8 @@ C     cards are read there.  They will be checked here.
 C     We now have the VLBA DAR at the VLA.  Now any small frequency
 C     adjustments will be made there.  (29jun93)
 C
+C     Removed tape change comment July 20, 2010  RCW.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
@@ -23,9 +25,9 @@ C
       DOUBLE PRECISION PLST, ONEMIN, ONEMINJ
       DOUBLE PRECISION LSTOPJ, PSTOPJ1, PSTOPJ2
       LOGICAL          FIRSTS, GOTLO, GOTFI ! WARN, GOTFQ (dar)
-      LOGICAL          PADDED, WPS, WLO, WFI, WDS, PWARN, DOTAPE
+      LOGICAL          PADDED, WPS, WLO, WFI, WDS, PWARN
       LOGICAL          GOTLCP, GOTRCP
-      CHARACTER        TFORM*15, PRCODE*6, UANNOT*64, TLST*15, TSTOP*15
+      CHARACTER        TFORM*15, PRCODE*6, UANNOT*64, TLST*15
       CHARACTER        VLASTR*50, RASCH*15, DECSCH*15, EPOCH*1
       CHARACTER        PMFT*9, FLKSETC*1
       CHARACTER        PRTSRC*13, CC*8, TMST*15
@@ -51,12 +53,11 @@ C
       WFI = .FALSE.
       WDS = .FALSE.
 C
-C     Save some long subscripts later and get DOTAPE
+C     Save some long subscripts later
 C
       IF( ISCN .GE. 1 ) THEN
          ISRC = SRCNUM(ISCN)
          KSTA = STANUM(ISTA)
-         DOTAPE = MOD( TPDAT(1,ISCN,ISTA), 10 ) .GT. 0
       END IF
 C
       IF  (FIRSTS .AND. ISCN .NE. -999 ) THEN
@@ -216,16 +217,6 @@ C
             CALL WLOG( 1, 'CRDVLA: '//MSGTXT )
             CALL WLOG( 1, '        Setup file: '//SETNAME(LS) )
             CALL ERRLOG(  '        VLAMODE must be specified.' )
-         END IF
-C
-C        Put in comments requesting tape changes.
-C
-         IF( DOTAPE .AND. .NOT. FIRSTS ) THEN
-            TSTOP = TFORM( LSTOP, 'T', 0, 2, 2, '  @' )
-            TLST  = TFORM( LLST,  'T', 0, 2, 2, '  @' )
-            WRITE(IULOC,'( A, A8, A, A8, A )')
-     1            '//* ------- TAPE CHANGE AT ', TSTOP, 
-     2            ' UT  ( = ', TLST, ' LST )  -------'
          END IF
 C
 C        Prepare for phasing scan if the mode is VX and a source not the

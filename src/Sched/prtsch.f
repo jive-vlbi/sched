@@ -11,7 +11,7 @@ C
       INTEGER            DAY1, DAY2, DAY3, YEAR1, YEAR2, YEAR3
       INTEGER            IFREQ, I
       INTEGER            TEARLY, TDWELL, NFLINES
-      INTEGER            KF, LKF, FOOT1, FOOT2, LFOOT
+      INTEGER            KF, LKF, GBY1, GBY2, LGBY
       REAL               LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
       DOUBLE PRECISION   LFREQ(MCHAN), SFREQ(MCHAN), START, STOP 
       DOUBLE PRECISION   TSTART, RTCORR, LSTOPJ
@@ -20,17 +20,11 @@ C
       CHARACTER          CLST1*9, CLST2*9, FF*1
       CHARACTER          CSTART*15, CSTOP*15, CTSTART*15, CTCORR*15
       CHARACTER          OUTFRQ(MCHAN)*9, OUTBW(MCHAN)*9
-      CHARACTER          PRTSRC*12, DIRECT*1, OUTBBC(MCHAN)*9
+      CHARACTER          PRTSRC*12, OUTBBC(MCHAN)*9
       CHARACTER          MNAME1*3, MNAME2*3, DNAME1*3, DNAME2*3
       SAVE               ILINE, IPAGE, LASTDY, LNCHL, LFREQ, LBW
-      SAVE               LFOOT, LKF
-C
-C     Tape information from TPDAT.
-C
-      INTEGER          TPPASS, TPDIR, TPINDX, TPHEAD, TPDRIV, ISETF
-      LOGICAL          DOTAPE, DOFAST, DOREW
-C
-      SAVE             LSTOPJ
+      SAVE               LGBY, LKF
+      SAVE               LSTOPJ
 C -----------------------------------------------------------------
       IF( DEBUG .AND. FIRSTS ) THEN
          CALL WLOG( 0, 'PRTSCH: Making operator schedule file for' //
@@ -38,13 +32,12 @@ C -----------------------------------------------------------------
       END IF
 C
       NCHL = NCHAN(LS)
-      ISETF = ISETNUM(LS)
 C
 C     Reset line (ILINE) and page (IPAGE) counters on first scan.
 C
       FF = CHAR(12)       !  Form feed.
       IF( FIRSTS ) THEN
-         LFOOT = 0
+         LGBY = 0
          ILINE = 999
          IPAGE = 1
          LASTDY = -999
@@ -99,17 +92,6 @@ C
          TDWELL = 0
       END IF
 C
-C     Extract the tape commands from PTDAT.
-C
-      CALL TPPACK( 'UNPACK', TPDAT(1,ISCN,ISTA), DOTAPE, DOFAST,
-     1             DOREW, TPPASS, TPDRIV, TPDIR, TPINDX, TPHEAD )
-      IF( TPDIR .EQ. 1 ) THEN
-         DIRECT = 'F'
-      ELSE IF( TPDIR .EQ. -1 ) THEN
-         DIRECT = 'R'
-      END IF
-      IF( NOREC(ISCN) ) DIRECT = 'S'
-C
 C     Test if there are any new frequencies or bandwidths.
 C
       KF = FSETI(ISCN,ISTA)
@@ -154,13 +136,12 @@ C
       LTEST = ILINE + 2
       IF( DAY2 .NE. LASTDY )     LTEST = LTEST + 2
       IF( ANNOT(ISCN) .NE. ' ' ) LTEST = LTEST + 2
-      IF( DOTAPE )               LTEST = LTEST + 2
       IF( DOWRTF .OR. DOWRTB )   LTEST = LTEST + 1
       IF( DOWRTF )               LTEST = LTEST + 2 * NFLINES
       IF( DOWRTB )               LTEST = LTEST + NFLINES
 C
       IF( LTEST .GT. LINEPG ) THEN
-         ILINE = 9
+         ILINE = 8
          IPAGE = IPAGE + 1
 C
 C        Write page header.
@@ -170,30 +151,21 @@ C
      2      '  (Code ', STCODE(STANUM(ISTA)), ') ', 
      3      'Page ', IPAGE,     EXPT(1:LEN1(EXPT))
 C
-         WRITE( IPRT, '( 2A, /, 2A, /, 2A, /, A, /, 2A, /, A )' )
+         WRITE( IPRT, '( 2A, /, 2A, /, A, /, 2A, /, A )' )
      1      '  UP:  D => Below limits;  H => Below horizon mask.',
      2      '  blank => Up.',
      3      '  Early: Seconds between end of slew and start. ',
      4      '  Dwell: On source seconds. ',
-     5      '  Tapes: Drive, Index, Start footage ',
-     6      '/ Direction, Head Group, End footage.',
-     7      '         For disks, the footages are really the GBytes',
-     8      '  TPStart:  Tape motion start time.',
-     9      '  Frequencies are LO sum (band edge).',
-     A      '  SYNC: Time correlator is expected to sync up.'
-C
-         IF( AUTOALOC(ISTA) .AND. ANYTAPE ) THEN
-            WRITE( IPRT, '( A, A )' )
-     1         '     Automatic tape allocation specified.  Tape ' //
-     2         'positions are just estimates.'
-            ILINE = ILINE + 1
-         END IF
+     5      '  Disk: GBytes recorded to this point.',
+     6      '  TPStart:  Recording start time.',
+     7          '  Frequencies are LO sum (band edge).',
+     8      '  SYNC: Time correlator is expected to sync up.'
 C
          WRITE( IPRT, '( 88(''-''), /, 2A, /, 2A, /, 88(''-'') )' )
      1      'Start UT  Source               Start / Stop           ',
-     2      '      Early    Tapes      TPStart',
+     2      '      Early    Disk   TPStart',
      3      'Stop UT                  LST      EL    AZ   HA  UP   ',
-     4      'ParA  Dwell  (see above)   SYNC'
+     4      'ParA  Dwell   GBytes    SYNC'
 C                         
          LASTDY = -999
       END IF
@@ -234,13 +206,6 @@ C      write(*,*) 'prtsch ', annot(iscn)(1:70), annot(iscn)(71:128)
          ILINE = ILINE + 2
       END IF
 C
-C     Tape changes
-C
-      IF( DOTAPE ) THEN 
-         WRITE (IPRT,'(2X,/,''-----------  Tape Change ------------'')')
-         ILINE = ILINE + 2
-      END IF
-C
 C     Write new frequencies and bandwidths.  Assume less than 36 chan.
 C
       IF( DOWRTF .OR. DOWRTB ) THEN
@@ -264,7 +229,7 @@ C
       CLST1 = TFORM( LST1(ISCN,ISTA), 'T', 0, 2, 2, '  @' )
       CLST2 = TFORM( LST2(ISCN,ISTA), 'T', 0, 2, 2, '  @' )
 C
-C     Short name, Up-Down comment, and tape stuff.
+C     Short name, Up-Down comment, and disk stuff.
 C
       IF( LEN1(SCNSRC(ISCN)) .GT. 8 .AND. 
      1    SOUR8(SRCNUM(ISCN)) .NE. ' ' ) THEN
@@ -300,30 +265,30 @@ C
 C     Use the GBYTE position for disks instead of the tape
 C     footage.
 C
-      IF( USEDISK(ISTA) .AND. .NOT. USETAPE(ISTA) ) THEN
-         FOOT1 = LFOOT
-         FOOT2 = NINT( GBYTES(ISCN,ISTA) )
+      IF( USEDISK(ISTA) ) THEN
+         GBY1 = LGBY
+         GBY2 = NINT( GBYTES(ISCN,ISTA) )
       ELSE
-         FOOT1 = NINT( TPFOOT1(ISCN,ISTA) )
-         FOOT2 = NINT( TPFOOT2(ISCN,ISTA) )
+         GBY1 = 0.0
+         GBY2 = 0.0
       END IF
-      LFOOT = FOOT2
+      LGBY = GBY2
 C
 C     Write the scan lines.
 C
       WRITE( IPRT, '( 2X, /, A8, 1X, A, T24, A8, 2F6.1, F5.1, 2X,  ' //
-     1     ' A, F7.1, I6, 3X, I1, I3, I7, 2X, A8 )' )
+     1     ' A, F7.1, I6, 1X, I8, 3X, A8 )' )
      2     CSTART, PRTSRC, CLST1, 
      3     EL1(ISCN,ISTA), AZ1(ISCN,ISTA), HA1(ISCN,ISTA), 
      4     UP1(ISCN,ISTA), PA1(ISCN,ISTA), TEARLY, 
-     5     TPDRIV, TPINDX, FOOT1, CTSTART
+     5     GBY1, CTSTART
 C
       WRITE( IPRT, '( A8, 2X, A, T24, A8, 2F6.1, F5.1, 2X, ' // 
-     1     ' A, F7.1, I6, 3X, A, I3, I7, 2X, A8 )' ) 
+     1     ' A, F7.1, I6, 1X, I8, 3X, A8 )' ) 
      2     CSTOP, SHORTN, CLST2, 
      3     EL2(ISCN,ISTA), AZ2(ISCN,ISTA), HA2(ISCN,ISTA), 
      4     UP2(ISCN,ISTA), PA2(ISCN,ISTA), TDWELL,
-     5     DIRECT, TPHEAD, FOOT2, CTCORR
+     5     GBY2, CTCORR
 C
       ILINE = ILINE + 3
 C

@@ -201,12 +201,6 @@ C
          IF( DOPEAK(ISCN) .LE. 0 ) DOPEAK(ISCN) = 1
          LINES(ISCN) = PKLINES( MAX( 1, POINT(ISCN) ) )
          NOREC(ISCN) = .TRUE.
-         DO ISTA = 1, NSTA
-            TAPE(ISCN,ISTA)    = .FALSE.
-            REWIND(ISCN,ISTA)  = .FALSE.
-            FASTF(ISCN,ISTA)   = .FALSE.
-            REVERSE(ISCN,ISTA) = .FALSE.
-         END DO
 C   
 C        Store the last time and position of a pointing scan for use 
 C        in determining whether to use these results in future scans.  

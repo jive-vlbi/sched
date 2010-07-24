@@ -52,26 +52,19 @@ C
          WRITE( IUVBA, '( 2A )' ) 'diskformat=', DISKD
       END IF
 C
-C     Tell operations what can be used.
-C     The media command was not at the stations as of 15 Sept 2003.
-C     Don't use it unless a disk type is specified in the station
-C     catalog.
+C     Tell operations what can be used.  This used to distinguish
+C     tape and disk, but tape has been removed.  Keep in case
+C     there are other distinctions later.
 C
       IF( .NOT. DISK(STANUM(ISTA)) .EQ. 'NONE' ) THEN
          IF( .NOT. VLBITP ) THEN
             WRITE( IUVBA, '( A )' ) 'media=(1,none)'
          ELSE
-            IF( USETAPE(ISTA) ) THEN
-               IF( USEDISK(ISTA) ) THEN
-                  WRITE( IUVBA, '( A )' ) 'media=(1,tape),(2,disk)'
-               ELSE
-                  WRITE( IUVBA, '( A )' ) 'media=(1,tape)'
-               END IF
-            ELSE IF( USEDISK(ISTA) ) THEN
+            IF( USEDISK(ISTA) ) THEN
                WRITE( IUVBA, '( A )' ) 'media=(1,disk)'
             ELSE
                CALL ERRLOG( 'VLBAINI: VLBI schedule without '//
-     1             'tape or disk?' )
+     1             'disk specified?' )
             END IF            
          END IF
       END IF

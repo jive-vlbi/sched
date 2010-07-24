@@ -1,4 +1,4 @@
-      SUBROUTINE SCHFILES( DOINIT, GOTINI, GOTSAT, 
+      SUBROUTINE SCHFILES( DOINIT, GOTSAT, 
      1                     VALUE, KC, KI, INSCH, BLANK )
 C
 C     Routine for SCHED called by SCHIN that reads any in-stream
@@ -13,7 +13,7 @@ C
       INTEGER           INSCH, VLBOPE, IER, ISETF
       CHARACTER         KC(*)*(*), KCHAR*256, RESULT*256, OPSTAT*3
       CHARACTER         SCHEDULE*80, LASTSCH*80, TPFILE*80, NEWSET*80
-      LOGICAL           DOINIT, GOTINI, GOTSAT, GOTONE, ADDIT, DONECOV
+      LOGICAL           DOINIT, GOTSAT, GOTONE, ADDIT, DONECOV
       LOGICAL           EXISTS
       SAVE              LASTSCH
       DATA              LASTSCH  / 'DUMMY' /
@@ -97,17 +97,7 @@ C     Get tape initialization information.
 C
       I1 = KEYPTR( 'TAPEINI', KC, KI )
       IF( VALUE(I1) .NE. UNSET ) THEN
-         IF( DEBUG ) CALL WLOG( 0, 'SCHFILES: Imbedded tapeini.' )
-         IF( GOTONE ) CALL ERRLOG( 'SCHFILES: Cannot do 2 in-stream'//
-     1           ' files at the same time. ' )
-         IF( GOTINI ) CALL ERRLOG( 'SCHFILES: Can only read one ' //
-     1        'TAPEINI section.' )
-         TPFILE = 'NEXTLINE'
-         CALL TPINI( INSCH, TPFILE )
-         VALUE(I1) = UNSET
-         GOTINI = .TRUE.
-         DOINIT = .FALSE.
-         GOTONE = .TRUE.
+         CALL ERRLOG( 'TAPEINI sections no longer supported in SCHED' )
       END IF
 C
 C     Get line rest frequencies if available.

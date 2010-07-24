@@ -4,6 +4,9 @@ C     Routine for SCHED to write disk commands into telescope
 C     schedule.  This is pretty simple so far.  Let's hope it 
 C     stays that way, but put it here to keep it isolated.
 C
+C     SETSC indicates this is a setup scan.  It is hardwired in
+C     the calling routine vlba.f in each of the 2 calls.
+C
       INCLUDE  'sched.inc'
       INCLUDE   'schset.inc'
       INTEGER  ISCN, ISTA

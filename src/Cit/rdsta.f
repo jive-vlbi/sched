@@ -30,6 +30,9 @@ C    Use ENDCAT to terminate catalog input in such cases.
 C
 C    R. C. Walker, Dec. 19, 1988.
 C
+C    Changed default NDRIVES to 1, July 22, 2010.  Then changed
+C    it back to 2 to keep various wideband code happy.  RCW.
+C
 C    Include file. 
 C
       INCLUDE 'rdcat.inc'

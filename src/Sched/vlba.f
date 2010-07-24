@@ -14,27 +14,20 @@ C
 C
       INTEGER           ISCN, ISTA, QUOUT
       INTEGER           LASTDY, DOY1, DOY2
-      INTEGER           TPCINDX, PTADD, LLS, LSTA
+      INTEGER           PTADD, LLS, LSTA
       INTEGER           LSCN, LEN1
       DOUBLE PRECISION  LSTOP
       LOGICAL           FIRSTS, FRS, DOSET, LPTVLB
-      LOGICAL           WRTSET, POSTPASS, CRLWARN
-      CHARACTER         VLBAD1*9, VLBAD2*9, REWSP*7
+      LOGICAL           WRTSET, CRLWARN
+      CHARACTER         VLBAD1*9, VLBAD2*9
       CHARACTER         FRSDUR*17, TSTART*9, TSTOP*9
       CHARACTER         LCRDLINE*80
-      INTEGER           TPCDIR, TPCHEAD, TPCDRIV
-      LOGICAL           DOTAPE, PASSOK
 C
 C     Save variables.
 C
-      SAVE              POSTPASS, LSTA, LLS, LASTDY, LPTVLB, LSCN
-      SAVE              LSTOP, TPCDRIV, PASSOK, CRLWARN, LCRDLINE
+      SAVE              LSTA, LLS, LASTDY, LPTVLB, LSCN
+      SAVE              LSTOP, CRLWARN, LCRDLINE
 C
-C     Parameter to turn on or off the POSTPASS commands at the end of
-C     tapes.  This can be changed if operations changes its mind
-C     about the necessity of postpasses.
-C
-      DATA          POSTPASS / .TRUE. /
       DATA          CRLWARN  / .TRUE. /
 C
       DATA          LSTA, LLS / 0, 0 /
@@ -44,7 +37,7 @@ C
 C     Wrap up the schedule on the last call.
 C
       IF( ISCN .EQ. -999 ) THEN
-         CALL VLBAEND( ISTA, POSTPASS, LASTDY, TPCDRIV, LSCN, PASSOK )
+         CALL VLBAEND( ISTA, LASTDY, LSCN )
       ELSE
 C
 C        Deal with a regular scan.
@@ -68,15 +61,6 @@ C
          DOSET =  VLBITP .AND. ( FIRSTS .OR. 
      1      ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) - LSTOP ) .GT. ONESEC )
 C
-C        Get tape information.  Deal with tape changes including
-C        postpasses etc. VLBITP just implies wide band recording.
-C        Some "tape" stuff is needed for Mark 5A too.
-C
-         IF( VLBITP .AND. USETAPE(ISTA) )
-     1      CALL VLBATI( ISCN, ISTA, FIRSTS, DOTAPE, POSTPASS, REWSP, 
-     2                DOSET, TPCDRIV, TPCDIR, TPCHEAD, TPCINDX, PASSOK, 
-     3                LASTDY, LSTOP )
-C
 C        Get the scan started.  VLBAST deals with scan times, source
 C        information, caltime, and pointing requests.
 C
@@ -92,17 +76,7 @@ C
 C        Write most of setup information.  Call every scan since
 C        some parameters can be changed by the main schedule.
 C
-         CALL VLBASU( ISCN, ISTA, FIRSTS, FRS, WRTSET, TPCHEAD )
-C
-C        Turn off the unused tape drive.  This is in the same routine
-C        used earlier for tape changes, but it is better to issue
-C        this first command after the setups are established.
-C
-         IF( VLBITP .AND. USETAPE(ISTA) .AND.
-     1       FIRSTS .AND. .NOT. AUTOALOC(ISTA) ) THEN
-            CALL VLBACHG( ISCN, ISTA, FIRSTS, DOTAPE, POSTPASS, 
-     1                 LASTDY, LSTOP, TPCDRIV, PASSOK )
-         END IF
+         CALL VLBASU( ISCN, ISTA, FIRSTS, FRS, WRTSET )
 C
 C        Write the arbitrary line - used for developing new features 
 C        in the on-line system.
@@ -118,19 +92,15 @@ C
          END IF
          LCRDLINE = CRDLINE(ISCN)
 C
-C        Do a setup scan for Mark III or VLBA observations when there
+C        Do a setup scan for VLBA observations when there
 C        is a gap between scans.  Also do one at the start of any
 C        experiment to force a scan header in the monitor data at the
 C        experiment start time.
 C
          IF( DOSET .OR. FIRSTS ) THEN
 C
-C           Write tape motion commands for Mark III or VLBA.
-C           If AUTOALLOCATE requested, give only tape and write 
-C           command.
+C           Turn recording off for the setup scan.
 C
-            CALL VLBATP( ISCN, ISTA, REWSP, TPCDRIV, 
-     2                      TPCINDX, TPCDIR, .TRUE. )
             CALL VLBADK( ISCN, ISTA, .TRUE. )
 C
 C           Stop time and !NEXT! for setup scan.
@@ -181,10 +151,8 @@ C
             END IF
          END IF
 C
-C        Tape controls for wide band tapes.  
+C        Turn recording on or off.
 C
-         CALL VLBATP( ISCN, ISTA, REWSP, TPCDRIV, TPCINDX, TPCDIR,
-     1                   .FALSE. )
          CALL VLBADK( ISCN, ISTA, .FALSE. )
 C  
 C        Change day number if necessary.

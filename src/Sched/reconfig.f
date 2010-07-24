@@ -56,19 +56,6 @@ C
      3          FORMAT(KS)   .EQ. FORMAT(JS)   .AND.
      4          BARREL(KS)   .EQ. BARREL(JS) 
 C
-C     Test tracks for tape projects.  Mark5 ignores this.  If there
-C     are changes for Mark5, they will be triggered by other items
-C     that are tested elsewhere.
-C
-      IF( USETAPE(ISTA) ) THEN
-         DO ICH = 1, NCHAN(KS)
-            DO ITP = 1, TAPEMODE(KS)
-               SAMECONF = SAMECONF .AND.
-     1             TRACK(ICH,ITP,KS) .EQ. TRACK(ICH,ITP,JS)
-            END DO
-         END DO
-      END IF
-C
 C     Test some channel dependent values.
 C
       DO ICH = 1, NCHAN(KS)

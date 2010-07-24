@@ -19,7 +19,7 @@ C     that possibility.
       INCLUDE 'schfreq.inc'
 C
       INTEGER           LEN1, KS, KF, IP, ICH, JCH 
-      INTEGER           BITRATE, IUNIT, ICHR, ISTA
+      INTEGER           BITRATE, IUNIT, ISTA
       CHARACTER         FMT*80, IFNAME(4)*9
       LOGICAL           ERRS, SPATCH, GOTFRQ, NEWFRQ
       DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4)
@@ -118,11 +118,6 @@ C
          IF( NOTAPE .OR. .NOT. RECUSED(KS) ) THEN
             WRITE( IUNIT, '( A, I3 )' )
      1           '   Number of channels:', NCHAN(KS)   
-         ELSE IF( USETAPE(ISTA) ) THEN
-            WRITE( IUNIT, '( A, I3, A, I3, A, F6.2 )' )
-     1          '   Number of channels:', NCHAN(KS),   
-     2          '    Passes/head pos: ', TAPEMODE(KS),
-     3          '       Speedup factor: ', SPEEDUP(KS)
          ELSE
             WRITE( IUNIT, '( A, I3, 24X, A, F6.2 )' )
      1          '   Number of channels:', NCHAN(KS),   
@@ -138,60 +133,9 @@ C           and old subroutine PRTTPP has been relegated to the
 C           archive.
 C
             IF( FORMAT(KS) .NE. 'NONE' .AND. ISTA .NE. 0 ) THEN
-               IF( USETAPE(ISTA) .AND. DENSITY(ISTA) .EQ. 'H' ) THEN
-                  WRITE( IUNIT, '( 1X, /, A, F7.3, A, F6.2, A )' )
-     1               '   Tape used at high density at ', 
-     2                SPEEDH(KS), ' ips.  '
-                  IF( SPEEDH(KS) .NE. 0.0 ) THEN
-                     WRITE( IUNIT, '( A, F7.2, A )' )
-     1                   '   Time per pass is ', 
-     2                   TPLENG(ISTA) * 12.0 / ( SPEEDH(KS) * 60.0 ),
-     3                   ' minutes.'
-                  END IF
-               ELSE IF( USETAPE(ISTA) .AND. DENSITY(ISTA) .EQ. 'L' ) 
-     1             THEN
-C
-C                 I don't think low density tape is still in the 
-C                 system, but I'll leave this just in case.
-C
-                  WRITE( IUNIT, '( 1X, /, A, F7.3, A, F6.2, A )' )
-     1               '   Tape used at low density at ', 
-     2                SPEEDL(KS), ' ips.  '
-                  IF( SPEEDL(KS) .NE. 0.0 ) THEN
-                     WRITE( IUNIT, '( A, F7.2, A )' )
-     1                   '   Time per pass is ', 
-     2                   TPLENG(ISTA) * 12.0 / ( SPEEDL(KS) * 60.0 ),
-     3                   ' minutes.'
-                  END IF
-C
-               ELSE IF( USEDISK(ISTA) ) THEN
+               IF( USEDISK(ISTA) ) THEN
                   WRITE( IUNIT, '( 1X, /, A, F7.3, A, F6.2, A )' )
      1               '   Disk used to record data.'
-               END IF
-C	     
-C              Add warning about two tapes.
-C	     
-               IF( USETAPE(ISTA) .AND. TWOHEAD .AND. 
-     1             NHEADS(ISETSTA(KS)) * STNDRIV(ISETSTA(KS)) .GE. 2 ) 
-     2             THEN
-C
-                  IF( STNDRIV(ISETSTA(KS)) .GE. 2 .AND.
-     1                FORMAT(KS)(1:4) .EQ. 'VLBA' ) THEN
-                     MSGTXT = '   Two tape drives will be used.'
-                  ELSE IF( NHEADS(ISETSTA(KS)) .GE. 2 .AND.
-     1                FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
-                     MSGTXT = '   Two heads will be used.'
-                  END IF
-                  ICHR = LEN1( MSGTXT ) + 1
-                  IF( NCHAN(KS)*BITS(1,KS)*SAMPRATE(KS) .GT. 256.0 )
-     1                THEN
-                     MSGTXT(ICHR:) = '  Required by this setup.'
-                  ELSE
-                     MSGTXT(ICHR:) = 
-     1                 '  Required by some other setup.'
-                  END IF
-                  ICHR = LEN1( MSGTXT )
-                  WRITE( IUNIT, '( A )' ) MSGTXT(1:ICHR)
                END IF
             END IF
 C

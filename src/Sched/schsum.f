@@ -70,42 +70,9 @@ C
 C     Write some information about each station.  Much was gathered
 C     in SCHTIM.  Note NOTAPE really means no recordings.
 C
-C     Do tape stations first.
+C     Do disk stations.  (Tape station summary removed.)
 C
-      IF( ANYTAPE .AND. .NOT. NOTAPE ) THEN
-         
-         WRITE( ISUM, '( A )' )  
-     1       ' Station summaries (tape stations): '
-         WRITE( ISUM, '( A )' )  
-     2       '  Station  Control   Scans   Scan   Tape  ' //
-     3       ' Tapes  Passes Readbacks  Formatter   Sync '
-         WRITE( ISUM, '( A )' )  
-     1       '                            Hours   Hours ' //
-     2       '                        Reconfigures  Hours  '
-         DO ISTA = 1, NSTA
-            IF( USETAPE(ISTA) ) THEN
-               IF( DAR(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
-                  WRITE( ISUM, 
-     1             '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2, I5, 2I8, 
-     2                I7, A, I3, F12.2 )' ) 
-     3             STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     4             SCNHR(ISTA), TPHR(ISTA), TAPES(ISTA), PASSES(ISTA), 
-     5             NRDBCK(ISTA), NRECONF(1,ISTA), '/', NRECONF(2,ISTA),
-     6             TTSYNC(ISTA) * 24.0
-               ELSE
-                  WRITE( ISUM, 
-     1             '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2, I5, 2I8, 
-     2                I10, F12.2 )' ) 
-     3             STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     4             SCNHR(ISTA), TPHR(ISTA), TAPES(ISTA), PASSES(ISTA), 
-     5             NRDBCK(ISTA), NRECONF(1,ISTA), TTSYNC(ISTA) * 24.0
-               END IF
-            END IF
-         END DO
-C
-C        Now do disk stations.
-C
-      ELSE IF( .NOT. NOTAPE ) THEN
+      IF( .NOT. NOTAPE ) THEN
          WRITE( ISUM, '( 1X, /, A, /, A )' )  
      1       ' Station summaries (disk stations): ',
      2       '  Station  Control   Scans   Scan   Record  Record' //
@@ -226,9 +193,7 @@ C
                         JSTA = ISCHSTA(ISETSTA(JS))
                         DUPSET = SAMESET( KS, JS ) .AND.
      1                   ( ( .NOT. RECUSED(KS) .AND. .NOT. RECUSED(JS) )
-     2                      .OR. 
-     3                   ( ( USEDISK(KSTA) .EQV. USEDISK(JSTA) ) .AND.
-     4                   ( USETAPE(KSTA) .EQV. USETAPE(JSTA) ) ) )
+     2                   .OR. USEDISK(KSTA) .EQV. USEDISK(JSTA) )
 C
                         IF( DUPSET ) THEN
 C

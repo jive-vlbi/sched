@@ -22,10 +22,14 @@ C
 C     Note the CONTOL = 'NONE' will just flush through without 
 C     writing anything.
 C
-      IF( CONTROL(STANUM(ISTA)) .EQ. 'SNAP' .OR. 
-     1    CONTROL(STANUM(ISTA)) .EQ. 'SN50' ) THEN
-         CALL SNAP( ISCN, ISTA, FIRSTS )
-      END IF
+C     Remove SNAP and NRAO output formats.  VLA will go soon too.
+C     Keep the hooks here.  The routines got put in 
+C     sched_ARCHIVE_nonSVN/obsolete_routines/
+C
+C      IF( CONTROL(STANUM(ISTA)) .EQ. 'SNAP' .OR. 
+C     1    CONTROL(STANUM(ISTA)) .EQ. 'SN50' ) THEN
+C         CALL SNAP( ISCN, ISTA, FIRSTS )
+C      END IF
 C
       IF( ( CONTROL(STANUM(ISTA)) .EQ. 'VLBA' .OR. 
      1      VLBADAR(STANUM(ISTA)) ) .AND. .NOT. VLAONLY ) THEN
@@ -36,9 +40,9 @@ C
          CALL CRDVLA ( ISCN, ISTA, FIRSTS )
       END IF
 C
-      IF( CONTROL(STANUM(ISTA)) .EQ. 'NRAO' ) THEN
-         CALL CRDNRAO( ISCN, ISTA, FIRSTS )
-      END IF
+C      IF( CONTROL(STANUM(ISTA)) .EQ. 'NRAO' ) THEN
+C         CALL CRDNRAO( ISCN, ISTA, FIRSTS )
+C      END IF
 C
       RETURN
       END

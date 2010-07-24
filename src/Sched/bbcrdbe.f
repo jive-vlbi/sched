@@ -15,7 +15,7 @@ C
       INCLUDE    'schset.inc'
       INCLUDE    'schfreq.inc'
 C
-      INTEGER    ICH, JCH, KS, MMBBC
+      INTEGER    ICH, JCH, KS ! , MMBBC
 C --------------------------------------------------------------
 C
 C     Use the hard wired freqeuncies.
