@@ -41,7 +41,7 @@ C
 C
 C           Warn about possible problems when using long names.
 C
-            IF( CSUSED(INAME,MSRC) .EQ. '*' .AND.
+            IF( CSUSED(INAME,ISRC) .EQ. '*' .AND.
      1          NCHAR .GT. 8 .AND. SLWARN ) THEN
                CALL WLOG( 1, 'SHORTN: WARNING - Source '//
      1            'names longer than 8 characters used. ' )

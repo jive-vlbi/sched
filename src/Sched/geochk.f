@@ -14,9 +14,8 @@ C
 C     Try to provide a list (in USEGEO) that will optimize the 
 C     chances of getting a good set.  When there are a lot of 
 C     sources, it is very easy  to never see the right combinations.  
-C     USEGEO will flag the sources to try to use.  OKGEO means a 
-C     source can be used at all and is a superset of those with 
-C     USEGEO true.
+C     USEGEO will prioritize the sources to try to use.  OKGEO means a 
+C     source can be used at all.
 C
 C     First scheme tried - give sources with low elevation scans an
 C     extra chance of being scheduled for each low antenna.  This didn't
@@ -34,18 +33,18 @@ C        STARTB:    Geodetic sequence start time.
 C        TGEOEND:   Geodetic sequence end time.
 C     Outputs:
 C        OKGEO:     Logical flag for source is usable.
-C        USEGEO:    Logical flag for favored source.
+C        USEGEO:    Integer priority for each source.
 C
       INCLUDE  'sched.inc'
 C
       DOUBLE PRECISION  STARTB, TGEOEND
-      INTEGER           JSCN, ISCN
-      LOGICAL           OKGEO(*), USEGEO(*)
+      INTEGER           JSCN, ISCN, USEGEO(*)
+      LOGICAL           OKGEO(*)
       REAL              SEGELEV(MAXSTA,MGEO)
 C
       DOUBLE PRECISION  TAPPROX, TIMRAD
-      REAL              LOWLIM, HIGHLIM1, HIGHLIM2, ELTOL
-      INTEGER           RNLOW, RNHIGH, NLOW, NHIGH1, NHIGH2
+      REAL              LOWLIM, HIGHLIM, ELTOL
+      INTEGER           NLOW, NHIGH
       INTEGER           ISTA, ICH, IGEO, LSCN 
       INTEGER           NREJECT, LASTLSCN(MAXSTA)
       INTEGER           YR, DY, NGOOD, OKSTA(MAXSTA)
@@ -72,7 +71,7 @@ C
       WRITE( MSGTXT, '( A, I4, I4, 1X, A )' ) 
      1      'Building geodetic segment centered at ', YR, DY, CTIME
       CALL WLOG( 1, MSGTXT )
-      IF( GEOPRT ) THEN
+      IF( GEOPRT .GE. 0 ) THEN
          CALL WLOG( 1, 
      1       'Elevations at center for sources considered are: ' )
          IF( NSTA .GT. 20 ) CALL WLOG( 1, '(Only first 20 stations)' )
@@ -85,27 +84,18 @@ C
 C
 C     Set the limits and required numbers for finding sources
 C     that contribute both high and low elevation data.
-C     Note that it may be necessary to use sources that are 
-C     low at only one antenna if that antenna is near the edge
-C     of the array.  The HIGH2 variables allow a scan to be accepted
-C     if it contributes lots of high elevation data.  I think that 
-C     could be useful for isolating the clock terms.
+C     The ELTOL allows us to look at sources that are below the
+C     elevation cutoff in the center of the segment, but not the 
+C     edges.
 C
       LOWLIM = 23.5
-      HIGHLIM1 = 40.0
-      HIGHLIM2 = 55.0
-      RNLOW = 1
-      RNHIGH = 1
-      IF( NSTA .GE. 6 ) THEN
-         RNLOW = 2
-         RNHIGH = 2
-      END IF
+      HIGHLIM = 40.0
       ELTOL = 3.0
 C
 C     Loop through the sources getting the geometry and determining
 C     which sources are useful for this segment.  Those that can be
-C     used at all will have OKGEO set and those chosen as better will
-C     have USEGEO set positive.
+C     used at all will have OKGEO set true and have an assigned
+C     USEGEO priority.
 C
 C     For testing against OPMINEL, allow the source to be a bit
 C     lower than the limit because the final use may be at
@@ -133,61 +123,59 @@ C
          OKGEO(IGEO) = NGOOD .GE. OPMIAN(JSCN)
 C
 C        Count those turned down.  This will be tested later to 
-C        determine if there will be a problem.
+C        determine if there will be a problem.  Set USEGEO out of
+C        range.
 C
          IF( .NOT. OKGEO(IGEO) ) THEN
             NREJECT = NREJECT + 1
+            USEGEO(IGEO) = 9
          END IF        
 C
-C        For sources that are usable, pick out the most useful ones.
+C        For sources that are usable, assign priorities.
+C        Note that we will work from low priority critera to high
+C        priority criteria.
+C
+C        For normal observations (.GE. 6 stations), the USEGEO priority
+C        settings are:
+C          5:  Meets OKGEO constraints, but otherwise not interesting.
+C          4:  More than one station below LOWLIM+10 
+C          3:  More than one low station.
+C          2:  More than one low and one high stations.
+C          1:  More than two low and two high stations.
 C
          IF( OKGEO(IGEO) ) THEN
+            USEGEO(IGEO) = 5
+            DO ISTA = 1, NSTA
+               IF( SEGELEV(ISTA,IGEO) .LE. LOWLIM + 10.0 ) 
+     1            USEGEO(IGEO) = 4
+            END DO
+            DO ISTA = 1, NSTA
+               IF( SEGELEV(ISTA,IGEO) .LE. LOWLIM  ) 
+     1            USEGEO(IGEO) = 3
+            END DO
 C
-C           Detect the sources that have a good range of elevations.
-C           They are the ones of interest.
-C
-C           Try asking for sources that can really contribute to
-C           the solutions by providing both low and high elevation
-C           data from different stations.
-C
-C           There is an issue
+C           Now the multi-station criteria.
 C
             NLOW = 0
-            NHIGH1 = 0
-            NHIGH2 = 0
+            NHIGH = 0
             DO ISTA = 1, NSTA
                IF( SEGELEV(ISTA,IGEO) .GT. OPMINEL(JSCN) - ELTOL .AND. 
      1             SEGELEV(ISTA,IGEO) .LE. LOWLIM )
      2             NLOW = NLOW + 1
-               IF( SEGELEV(ISTA,IGEO) .GE. HIGHLIM1 )
-     1             NHIGH1 = NHIGH1 + 1
-               IF( SEGELEV(ISTA,IGEO) .GE. HIGHLIM2 )
-     1             NHIGH2 = NHIGH2 + 1
+               IF( SEGELEV(ISTA,IGEO) .GE. HIGHLIM )
+     1             NHIGH = NHIGH + 1
             END DO
-C
-C           Test the number of low and high stations.  Only sources
-C           that have USEGEO true will be used in test schedules, at
-C           least until they run out.
-C
-            USEGEO(IGEO) = ( NLOW .GE. RNLOW .AND. NHIGH1 .GE. RNHIGH )
-     1          .OR. ( NHIGH2 .GE. NSTA - 2 )
-     2          .OR. ( NLOW .GE. 1 .AND. NHIGH1 .GE. NSTA / 2 )
-     3          .OR. ( NLOW .GE. NSTA / 3 .AND. NHIGH1 .GE. 1 )
-         ELSE
-            USEGEO(IGEO) = .FALSE.
+            IF( NLOW .GE. 1 .AND. NHIGH .GE. 1 ) USEGEO(IGEO) = 2
+            IF( NLOW .GE. 2 .AND. NHIGH .GE. 2 ) USEGEO(IGEO) = 1
          END IF
 C
 C        Write a line with information about each source.
 C        Don't show elevations when more than 3 deg below OPMINEL
 C
-         IF( GEOPRT ) THEN
+         IF( GEOPRT .GE. 0) THEN
             MSGTXT = ' ' 
-            IF( USEGEO(IGEO) ) THEN
-               WRITE(MSGTXT,'( I5, 2X, A, 1X, A1 )' ) IGEO, 
-     1           GEOSRC(IGEO), '*'
-            ELSE
-               WRITE(MSGTXT,'( I5, 2X, A )' ) IGEO, GEOSRC(IGEO)
-            END IF
+            WRITE(MSGTXT,'( I5, 2X, A, 1X, I1 )' ) IGEO, 
+     1           GEOSRC(IGEO), USEGEO(IGEO)
             ICH = 17
             DO ISTA = 1, NSTA
                ICH = ICH + 5
@@ -198,6 +186,7 @@ C
                   WRITE( MSGTXT(ICH:ICH+4), '(A5)' ) '  -- '
                END IF
             END DO
+C           write(*,*) 'geochk, writing line of data ', ich, nsta
             CALL WLOG(1,MSGTXT)
          END IF
 C

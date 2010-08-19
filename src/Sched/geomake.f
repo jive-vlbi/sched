@@ -31,25 +31,25 @@ C
 C
       INTEGER           ISEG, ITRIAL, LSCN, I, J, IDUM, ISTA, NSTSCN
       INTEGER           NTSEG, TSRC(MSEG)
-      INTEGER           MINSPS, HALFSCNS, NPRT, ICH
+      INTEGER           MINSPS, HALFSCNS, NPRT, ICH,  USEGEO(MGEO)
       REAL              BESTQUAL, TESTQUAL
       REAL              RAN5, DUMMY, SEGELEV(MAXSTA,MGEO)
-      LOGICAL           OKGEO(MGEO), USEGEO(MGEO)
-      LOGICAL           MKGDEBUG
-      LOGICAL           RETAIN
+      LOGICAL           OKGEO(MGEO)
+      LOGICAL           PRDEBUG
+      LOGICAL           RETAIN, KEPT
       DOUBLE PRECISION  TGEO1, TGEOEND, STARTB
       DOUBLE PRECISION  SIGMA(MAXPAR)
 C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
 C ---------------------------------------------------------------------
-      IF( DEBUG ) CALL WLOG( 0, 'GEOMAKE starting.' )
-      MKGDEBUG = .FALSE.
+      IF( DEBUG .OR. GEOPRT .GE. 1 ) CALL WLOG( 1, 'GEOMAKE starting.' )
 C
-      BESTQUAL = 1.E10
+      BESTQUAL = 9999.
       DO ISEG = 1, MSEG
          SEGSRCS(ISEG) = 0
       END DO
+      KEPT = .FALSE.
 C
 C     Prime the random number generator a bit.  I don't know
 C     if this is needed, but without it, the first antenna choices
@@ -74,11 +74,11 @@ C
             END IF
          END IF
       END DO
-C      STARTB = STARTJ(ISCN)
+C
       STARTB = TGEO1
       TGEOEND = TGEO1 + GEOLEN(ISCN)
 C
-      IF( MKGDEBUG ) THEN
+      IF( GEOPRT .GE. 1 ) THEN
          WRITE(*,*) 'GEOMAKE START TIMES', STARTB, STARTJ(ISCN), TGEOEND
       END IF
 C
@@ -113,14 +113,21 @@ C
 C     Loop over the trials.  For now, the number is hardwired.  That
 C     will likely be pulled out as a user parameter some day.
 C
-      DO ITRIAL = 1, 100
-         IF( GEOPRT ) WRITE(*,*) ' '
+      DO ITRIAL = 1, GEOTRIES
+         IF( GEOPRT .GE. 1 ) WRITE(*,*) ' '
+         IF( GEOPRT .GE. 0 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5 )' ) 
+     1           'GEOMAKE starting go construct trial segment', 
+     2           ITRIAL
+            CALL WLOG( 1, MSGTXT )
+         END IF
 C
 C        Make a sequence of scans for the geodetic block.
 C
-         CALL MAKESEG( MKGDEBUG, JSCN, ISCN, LASTISCN, 
+         CALL MAKESEG( JSCN, ISCN, LASTISCN, 
      1                 OKGEO, USEGEO, SEGELEV, STARTB, TGEOEND, 
-     2                 LSCN, NTSEG, TSRC, IDUM )
+     2                 LSCN, NTSEG, TSRC, IDUM, SIGMA )
 C
 C        Make sure each antenna is in at least half the scans.
 C        There is some hoop jumping because the number of scans can
@@ -144,21 +151,12 @@ C
             END IF
          END DO
          RETAIN = MINSPS .GE. HALFSCNS
-
-C         write(*,*) ' geomake jscn', (stascn(jscn,i),i=1,nsta)
-C         if( .not. retain ) then
-C              write(*,*) 'geomake not retain:', itrial, retain, minsps,
-C     1         halfscns, lscn-iscn+1, iscn, lscn
-C         else
-C              write(*,*) 'geomake keep:      ', itrial, retain, minsps, 
-C     1         halfscns, lscn-iscn+1, iscn, lscn
-C         end if
 C
 C        For kept sequences, test the quality.
 C
          IF( RETAIN ) THEN
 C
-            IF( MKGDEBUG ) THEN
+            IF( GEOPRT .GE. 1 ) THEN
                WRITE(*,*) 'GEOMAKE ---------------------------------- '
                WRITE(*,*) 'GEOMAKE    FINISHED ONE SEQUENCE.', 
      1               ITRIAL, (TSRC(ISEG), ISEG=1,NTSEG)
@@ -167,29 +165,46 @@ C
 C           Get the quality measure of scans ISCN to LSCN.  Isolate this
 C           to a subroutine in case someone wants to brew their own measure.
 C        
-            CALL GEOQUAL( ISCN, LSCN, JSCN, TESTQUAL, MKGDEBUG, IDUM,
+            PRDEBUG = GEOPRT .GE. 1
+            CALL GEOQUAL( ISCN, ISCN, LSCN, JSCN, TESTQUAL, PRDEBUG, 
      1                    SIGMA )
+C
+C           Provide some feedback on the current segment.
+C
+            IF( GEOPRT .GE. 0 ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, A, I5, A, F7.2, A, F7.2 )') 
+     1                'Finished making a segment. ',
+     2                ' Number of scans:', iseg, '  Quality:', 
+     3                TESTQUAL, '  Previous best:', BESTQUAL
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT,'( A, 20I3 )' )  '     Sources:   ', 
+     1               (TSRC(ISEG),ISEG=1,NTSEG)
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT,'( A, 20I3 )' )  '     Priority:  ', 
+     1               (USEGEO(TSRC(ISEG)),ISEG=1,NTSEG)
+               CALL WLOG( 1, MSGTXT )
+            END IF
 C        
 C           See whether to save this one source set.
 C        
-            IF( MKGDEBUG ) THEN
-               WRITE(*,*) 'GEOMAKE - QUALITY PREVIOUS BEST ', BESTQUAL,
-     1                 '  CURRENT SET: ', TESTQUAL, ' SCANS: ', NTSEG
-            END IF
             IF( TESTQUAL .LT. BESTQUAL ) THEN
 C
 C              Annouce that a new best was found.
 C
-               IF( GEOPRT ) THEN
+C               IF( GEOPRT .GE. 0 ) THEN
+                  IF( GEOPRT .EQ. 0 ) WRITE(*,*) ' '
                   MSGTXT = ' '
                   NPRT = MIN( 30, NTSEG )
                   WRITE( MSGTXT, '( A, I5, A, 2I3, A, F7.3 )' )
-     1             '*** GEOMAKE: New Best - Trial: ', ITRIAL, 
+     1             'New best geodetic segment - Trial: ', ITRIAL, 
      2             ' Number of scans & fewest scans/sta: ', 
      3             NTSEG, MINSPS, '  Quality: ', 
      4             TESTQUAL
                   CALL WLOG( 1, MSGTXT )
-               END IF
+C               END IF
 C
 C              Save the new sequence.
 C
@@ -198,15 +213,22 @@ C
                   SEGSRCS(ISEG) = TSRC(ISEG)
                END DO
                NSEG = NTSEG
+               KEPT = .TRUE.
+            END IF
+         ELSE
+            IF( GEOPRT .GE. 0 ) THEN
+               CALL WLOG( 1, 'Segment not kept.' //
+     1           '  Not enough scans at some stations.' )
             END IF
          END IF
 C
 C        If requested, write details about each trial sequence.
 C
-         IF( GEOPRT ) THEN
+         IF( ( GEOPRT .GE. 0 .AND. KEPT ) .OR. GEOPRT .GE. 1 ) THEN
             MSGTXT = ' '
-            WRITE(MSGTXT, * ) 'GEOMAKE TRIAL ', ITRIAL, '  Quality:', 
-     1            TESTQUAL, ' sources: ', (TSRC(I),I=1,NTSEG)
+            WRITE(MSGTXT, '( A, I5, A, F7.2, A, 23I3 )' ) 
+     1            'Trial ', ITRIAL, '  Quality:', 
+     2            TESTQUAL, ' sources: ', (TSRC(I),I=1,NTSEG)
             CALL WLOG( 1, MSGTXT )
             NPRT = MIN( 20, NSTA )
             MSGTXT = ' '
@@ -221,7 +243,8 @@ C
      2              (SIGMA(ISTA),ISTA=1,NPRT)
                CALL WLOG( 1, MSGTXT )
             ELSE
-               CALL WLOG( 1, '  Rejected without testing.' )
+               CALL WLOG( 1, '  Rejected without testing.'//
+     1            '  Some station(s) with too few scans.' )
             END IF
             DO I = 1, NTSEG
                J = ISCN + I - 1
@@ -243,14 +266,25 @@ C
             END DO
 
          END IF
-
+         KEPT = .FALSE.
+         IF( MOD( ITRIAL, 10 ) .EQ. 0 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5 )' ) 
+     1           'Finished trial geodetic segment number ',
+     2           ITRIAL
+            CALL WLOG( 1, MSGTXT )
+         END IF
       END DO
 C
 C     Write result
 C
-      IF( GEOPRT ) THEN
-         WRITE(*,*) 'GEOMAKE: SEGMENT SOURCES', 
-     1         (SEGSRCS(ISEG), ISEG=1,NSEG)
+      IF( GEOPRT .GE. 0) THEN
+         CALL WLOG( 1, '   ' )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, 30I3 )' ) 
+     1          'GEOMAKE finished: Selected sources: ', 
+     2         (SEGSRCS(ISEG), ISEG=1,NSEG)
+         CALL WLOG( 1, MSGTXT )
       END IF
 C
       RETURN

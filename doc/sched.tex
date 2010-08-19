@@ -3085,7 +3085,7 @@ low elevation scans to become either high elevation scans or scans
 where the source is down.  Plus gathering the required segments can be
 tedious.
 
-/schedb can now build and insert geodetic segements automatically into
+/schedb can build and insert geodetic segements automatically into
 schedules.  This should drastically reduce the overhead in
 constructing such segments, and allows such segments to be made easily
 when the station list is not just the VLBA.  Also the schedule can be
@@ -3093,80 +3093,96 @@ time shifted easily, a possible benefit for dynamic scheduling.  When
 there is a time shift, a different list of sources, optimized for the
 new time, will be built.
 
-To request that a geodetic segment be built, the user should specify a scan
-with the parameter \htmlref{{\tt GEOSEG}}{MP:GEOSEG} given with an
-argument that is the total duration of the segment (typical values are 20
-to 45 minutes).  A list of sources from the normal \schedb catalogs to
-consider for the geodetic segements is given with the input parameter
-\htmlref{{\tt GEOSRCS}}{MP:GEOSRCS}.  Other parameters to consider to
-influence the source selection are \htmlref{{\tt DWELL}}{MP:DWELL}
-(the length of the individual scans within the segment), \htmlref{{\tt
-OPMINEL}}{MP:OPMINEL} (the minimum elevation to consider --- 10
-degrees is a reasonable choice), \htmlref{{\tt OPMINANT}}{MP:OPMINANT}
-(the minimum number of stations in a scan) and \htmlref{{\tt
-SETUP}}{MP:SETUP} (the setup file --- typically one with a wide
-spanned bandwidth and maybe not at the same band as the main
-observations).  Be sure to these parameters back to their
-desired values for the main observations ({\tt GEOSEG} will revert to
-zero by default).  In addition, for the scan that is being turned into
-a geodetic segment a source needs to be
-specified.  It will be ignored in constructing the segments, but without
-it some of the \schedb checking that comes earlier will not be happy.
+To request that a geodetic segment be built, the user should specify a
+scan with the parameter \htmlref{{\tt GEOSEG}}{MP:GEOSEG} given with
+an argument that is the total duration of the segment (typical values
+are 20 to 45 minutes).  A list of sources from the normal \schedb
+catalogs to consider for the geodetic segements is given with the
+input parameter \htmlref{{\tt GEOSRCS}}{MP:GEOSRCS}.  Other parameters
+to consider to influence the source selection are \htmlref{{\tt
+DWELL}}{MP:DWELL} (the length of the individual scans within the
+segment), \htmlref{{\tt OPMINEL}}{MP:OPMINEL} (the minimum elevation
+to consider --- 10 degrees is a reasonable choice), \htmlref{{\tt
+OPMINANT}}{MP:OPMINANT} (the minimum number of stations in a scan) and
+\htmlref{{\tt SETUP}}{MP:SETUP} (the setup file --- typically one with
+a wide spanned bandwidth and maybe not at the same band as the main
+observations).  Be sure to these parameters back to their desired
+values for the main observations ({\tt GEOSEG} will revert to zero by
+default).  In addition, for the scan that is being turned into a
+geodetic segment a source needs to be specified.  It will be ignored
+in constructing the segments, but without it some of the \schedb
+checking that comes earlier will not be happy.
 
-The switch parameter \htmlref{{\tt GEOPRT}}{MP:GEOPRT}, if specified
-will cause some details about each trial source sequence tested to be
-printed to the screen and to {\sl sched.runlog}.
+The parameter \htmlref{{\tt GEOPRT}}{MP:GEOPRT} can be used to cause
+some details about each trial source sequence tested to be printed to
+the screen and to {\sl sched.runlog}.  There are various levels of
+print possible.  The algorithm used and described in more detail below
+involves constructing a number of trial segments and selecting the
+best.  The parameter \htmlref{{\tt GEOTRIES}}{MP:GEOTRIES} controls
+the number of trial segments to test.  The default value should work
+in most instances.  Larger numbers will likely produce a slightly
+better solution at the cost of high run times for \sched.  The
+algorithm for picking sources is reasonably good so the best of the
+early tested segments is likely to be nearly as good as anything
+found later.
 
 There is an example among the \schedb examples called
 \htmladdnormallink{{\sl egdelzn.key}}{examples/egdelzn.key} that shows
 how to construct a file with automatic geodetic segment insertion.
 The \htmlref{{\tt GEOSRCS}}{MP:GEOSRCS} in that example are the set
-provided by Mark Reid for his packaged geodetic segments, but with source
-names corresponding to those used in the normal \schedb catalog.
-Users are likely to just cut and paste that list into their schedules.
-
-Note that the \schedb run time will be significantly extended by the use
-of this feature because many possible segments are being tested.
+provided by Mark Reid for his packaged geodetic segments, but with
+source names corresponding to those used in the normal \schedb
+catalog.  Users are likely to just cut and paste that list into their
+schedules.
 
 As long as \schedb is producing good geodetic segments, the details of
 the algorithm shouldn't matter too much to users.  But some may wish
 to know, so it is described here.  When starting to work on a segment,
 \schedb calculates the elevations at the middle of the segment for all
-of the specified sources.  It then tries many possible sequences and
-picks the best based on a quality measure.  For each sequence, it
-generates a list of the stations in random order.  That list is
-different for each trial sequence.  It goes through that list and for
-each station, collects a list of sources that are at low elevation at
-that station.  There is also a dummy station in the list for which it
-collects sources that are at high elevations at most actual stations.
-It then randomly selects a source from the accumulated list.  That
-becomes the source for the next scan assuming it passes a few tests
-such as actually being up (the selection is based on the center time
-of the segment, not the actual scan time, so elevations can vary a
-bit), and not extending beyond the end of the requested geodetic
-segment thanks to a long slew.  A station is skipped if a source
-selected for a previous station is also at low elevation at the
-current station.  If the process gets all the way through the station
-list (it should), it will start over, trying to add a second low
-elevation scan.  If \htmlref{{\tt GEOPRT}}{MP:GEOPRT} is specified,
-the elevations at all stations for the selected sources in each
-sequence, along with the quality measure, are printed.  This can be
-quite a lot of print if many sequences are being tried.  This scheme
-for generating sequences seems to come up with a good sequence 
-fairly quickly so very roughly 100 are tried (that number will evolve
-as we gain experience and may become a user parameter if that seems
-justified).
+of the specified sources.  It assigns a priority for each source 
+depending on how many stations see it at low and high elevation.  The
+best sources are low at at least two stations and high at at least
+two.  The next priority sources have one low and one high station.
+The mix of low an high stations helps with the eventual least squares
+fit to sec(Z) terms.  Higher priority numbers (worse sources) are 
+assigned to less optimal sources.  With the help of the calculated
+information and priorities, \schedb constructs a number of trial
+geodetic segments.  A quality measure for each segment is determined
+by setting up a least squares fit for sec(Z) and clock terms.  The
+formal error on the fitted sec(Z) term for the station with the 
+highest such error is the quality measure.
 
-For each segment, a quality measure is generated.  \schedb picks the best
-segment according to the quality measure, and inserts that into the
-schedule.  The quality measure is based on the expected errors of
-a fit for the zenith delay and clock for all stations.  Standard
-errors of 20ps are set for all observations (the value doesn't really
-matter here) and the highest reported sigma across the stations is
-used as the quality measure.  This process is similar to what is done
-when the data are used and encourages both a high range of elevations
-at each site and a significant range of elevations across antennas 
-for each scan.
+An algorithm is used to construct each tested segment that tries to
+come up with a source set that works reasonably well.  This makes
+constructing each segment slow, but means that not many need to be
+tested.  The algorithm starts by locating the 5 closest sources in the
+top two priority bins to the preceeding source in the schedule.
+``Close'' here means in terms of slew time for the array.  One of
+those sources is picked at random.  Then the next source is picked at
+random from the 5 closest good sources to the first chosen source.
+That scheme continues for 4 sources.  After that, all sources given in
+\htmlref{{\tt GEOSRCS}}{MP:GEOSRCS} that are up at enough stations
+(set by \htmlref{{\tt OPMINANT}}{MP:OPMINANT}) are tried, one at a
+time.  A least squares fit it tried with the sources in the segment so
+far.  A quality measure that is the RMS of the errors on the sec(Z)
+parameter plus a linear penalty for long slews is calculated.  The
+source with the best such quality measure is added.  This process is
+repeated, adding more sources, until the designated duration for the
+segment is exhausted.  The deranged may wish to use \htmlref{{\tt 
+GEOPRT}}{MP:GEOPRT} to watch in detail what is going on in the 
+algorithm.
+
+For each segment, a quality measure is generated.  \schedb picks the
+best segment according to the quality measure, and inserts that into
+the schedule.  The quality measure slightly different from the one
+used inside the segment construction algorithm.  It is also based on
+the expected errors of a fit for the zenith delay and clock for all
+stations.  Standard errors of 20ps are set for all observations (the
+value doesn't really matter here) and the highest reported sigma
+across the stations is used as the quality measure.  This process is
+similar to what is done when the data are used and encourages both a
+high range of elevations at each site and a significant range of
+elevations across antennas for each scan.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
@@ -4995,6 +5011,7 @@ SCAN PROPERTIES:
 \htlm{GEOSEG}{~~} Insert a geodetic (DELZN) segment.
 \htlm{GEOSRCS}{~} Gives a list of sources for geodetic segments.
 \htlm{GEOPRT}{~~} Turn on debugging print from geodetic insertion.
+\htlm{GEOTRIES}{} Number of trial geodetic segments to test.
 \htlm{PN3DB}{~~}  Do VLBA half power tracking tests.
 \htln{NOPN3DB}{PTVLBA}{} Turn off VLBA tracking tests.
 \htlm{PTVLBA}{~~} Do VLBA pointing sequence.
@@ -6344,18 +6361,23 @@ prefered mechanism.
 
 \subsubsection{\label{MP:GEOPRT}{\tt GEOPRT}}
 
-Specifying {\tt GEOPRT} (no argument) will cause the quality measure
-and the elevations at all sites for all scans in each trial geodetic
-sequence to be printed while trying to specify a new sequence.  This
-can be a considerable amount of print and is only recommended when
-trying to understand what the algorithm is doing.
+Specifying {\tt GEOPRT} (no argument) or {\tt GEOPRT = 0}
+will cause the quality measure and the elevations at all sites for all
+scans in each trial geodetic sequence to be printed while trying to
+specify a new sequence.  This can be a considerable amount of print
+and is only recommended when trying to understand what the algorithm
+is doing.  If you are a glutton for punishment, use {\tt GEOPRT = 1}
+or even {\tt GEOPRT = 2} to cause a lot of information from the source
+choosing process to be spewed out.  This is likely only useful when
+debugging the software and won't make much sense without looking at
+the code to see what all the numbers are.
 
 \rcwbox
-{No argument - it's a logical switch}
-{No argument}
-{A non-zero number that means don't do it}
+{Either none, or a number of which 0, 1, 2 are the only useful ones}
+{No argument, 0, 1, 2}
+{-1 which, like anything below 0 means don't do it}
 {One value used from the schedule (the last)}
-{{\tt GEOPRT}}
+{{\tt GEOPRT = 0} or simply {\tt GEOPRT}}
 
 
 \subsubsection{\label{MP:GEOSEG}{\tt GEOSEG}}
@@ -6431,6 +6453,38 @@ geosrcs = J0017+81, J0019+73, J0050-09, J0102+58, J0121+11,
 {No sources}
 {One list used, the last}
 {See above text}
+
+\subsubsection{\label{MP:GEOTRIES}{\tt GEOTRIES}}
+
+The selection of sources for a geodetic segment is based on
+constructing several possible geodetic sequences and choosing the
+best.  The first few selected sources for each tested segment are
+chosen randomly from among those that can contribute to the low
+elevation scans at at least one station.  After those, the program
+chooses the source that best complements those chosen so far in
+terms of improving the quality measure without excessive slewing.
+Parameter {\tt GEOTRIES} sets the number of trial segments to
+construct and test.  The algorithm for making segments comes up
+with reasonable ones most of the time, so it is not generally 
+necessary to test very many.  The algorithm is also moderately
+slow which will encourage not testing too many.  The default is
+10 which seems reasonable.
+
+\rcwbox
+{Any integer 1 or above.}
+{Any}
+{10}
+{One value used, the last}
+{{\tt GEOTRIES=25}}
+
+
+\rcwbox
+{Either none, or a number of which 0 and 1 are the only useful ones}
+{No argument, 0, or 1}
+{-1 which, like anything besides 0 or 1, means don't do it}
+{One value used from the schedule (the last)}
+{{\tt GEOPRT = 0} or simply {\tt GEOPRT}}
+
 
 \subsubsection{\label{MP:GRABTO}{\tt GRABTO}}
 
@@ -13273,6 +13327,11 @@ more information.
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
 
+\item Add the time and date that SCHED was run to the very end of
+the summary file.  Note that this will cause there to always
+be a two line difference when the Verify script runs the examples
+and compares them to standard output.  July 29, 2010  RCW.
+
 \item Removing some tape stuff, including full routines CHKV4REC,
 CHKVREC, CHK4REC, CRDNRAO, EGMK2, INDXHEAD, SCHTAPE, SNAP, TAPELFAG,
 TPAUTO, TPINI, tpinit.inc, TPMK2, TPPACK, TPREV, TPS2, TPSCH, TPTAPE,
@@ -13284,7 +13343,7 @@ being eliminated.  Remove the Mark 2 example.  The tapeini section
 concept is also removed.  Any TAPEINI section in an input file will
 cause \schedb to die.  The end of an era!  But residual tape stuff,
 like tracks, cannot be completely removed until Mark5A is gone as
-it is a tape emulator.  July 20, 2010.  RCW
+it is a tape emulator.  July 20-23, 2010.  RCW
 
 \item Released a beta version July 19, 2010.  RCW
 
