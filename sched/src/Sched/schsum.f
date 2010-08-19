@@ -15,7 +15,7 @@ C
       CHARACTER   FF*1, PDATE*50
       INTEGER     LENGTH
       REAL        VEXVER, VXVER, PLTVER, JPVER
-      CHARACTER   PGVER*8, LINE*128
+      CHARACTER   PGVER*8, LINE*128, EXTIME*24
 C-----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHSUM: Starting.' )
       FF = CHAR(12)
@@ -346,6 +346,12 @@ C
       CALL PGQINF( 'VERSION', PGVER, LENGTH ) 
       WRITE( ISUM, '( A, A )' )
      1   '  Version of PGPLOT:        ', PGVER(1:LENGTH)
+C
+C     Write the time of execution.
+C
+      CALL FDATE( EXTIME )
+      WRITE( ISUM, '( 1X, /, A, A )' ) 'This schedule produced on: ',
+     1    EXTIME
 C
 C     Close the summary file.
 C

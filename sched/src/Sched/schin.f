@@ -502,7 +502,8 @@ C
             SCNSRC(ISCN) = GEOSRC(1)
          END IF
       END DO
-      GEOPRT = KD( KEYPTR( 'GEOPRT', KC, KI ) ) .EQ. 0.D0
+      GEOPRT = KD( KEYPTR( 'GEOPRT', KC, KI ) )
+      GEOTRIES = KD( KEYPTR( 'GEOTRIES', KC, KI ) )
 C
 C     Process Cover Letter and Correlator input.
 C
@@ -588,13 +589,13 @@ C
 C
 C     Warn of use of obsolete parameters that are now ignored.
 C
-      IF( KEYPTR( 'AUTOTAPE', KC, KI ) .GT. 0.1D0 ) CALL WLOG( 1, 
+      IF( KD(KEYPTR( 'AUTOTAPE', KC, KI )) .GT. 0.1D0 ) CALL WLOG( 1, 
      1    'SCHIN:  Obsolete parameter AUTOTAPE given.  Ignored.' )
-      IF( KEYPTR( 'TAPE', KC, KI ) .EQ. 0.D0 ) CALL WLOG( 1, 
+      IF( KD(KEYPTR( 'TAPE', KC, KI )) .EQ. 0.D0 ) CALL WLOG( 1, 
      1    'SCHIN:  Obsolete parameter TAPE given.  Ignored.' )
-      IF( KEYPTR( 'FASTFOR', KC, KI ) .EQ. 0.D0 ) CALL WLOG( 1, 
+      IF( KD(KEYPTR( 'FASTFOR', KC, KI )) .EQ. 0.D0 ) CALL WLOG( 1, 
      1    'SCHIN:  Obsolete parameter FASTFOR given.  Ignored.' )
-      IF( KEYPTR( 'REVERSE', KC, KI ) .EQ. 0.D0 ) CALL WLOG( 1, 
+      IF( KD(KEYPTR( 'REVERSE', KC, KI )) .EQ. 0.D0 ) CALL WLOG( 1, 
      1    'SCHIN:  Obsolete parameter REVERSE given.  Ignored.' )
 C
       RETURN
