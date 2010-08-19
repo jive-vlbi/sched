@@ -44,7 +44,9 @@ C
       SCNSRC(ISCN) = SRCN
 C
 C     Loop through stations to see which ones are up at TAPPROX.
-C     Also see how many are in prefered elevation ranges.
+C     Also see how many are above the minimum elevation.
+C     This pass determines the approximate geometry - enough to 
+C     edit stations and count the good ones.
 C
       NGOOD = 0
       DO ISTA = 1, NSTA
@@ -79,8 +81,19 @@ C     will be done elsewhere.
 C
       IF( NGOOD .GE. 1 ) THEN
          STARTJ(ISCN) = TAPPROX
+C
+C        Adjust the scan times based on a geometry calculation.
+C        This reruns the above OPTGEO so it could possibly be made
+C        more efficient some day.
+C
          CALL OPTTIM( LASTISCN, ISCN, .TRUE. )
+C
+C        Determine the geometry, slew times, and time of arrival 
+C        on source based on the final times.  NGOOD is 
+C        redetermined based on the final times.
+C
          CALL SCNGEO( LASTISCN, NGOOD, ISCN )
+C
       END IF
 C
       RETURN

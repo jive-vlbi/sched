@@ -69,17 +69,18 @@ C
 C
 C     Give the station codes.
 C
+      MSGTXT = ' '
       WRITE( MSGTXT, '( A, A )' ) 'antennas = ', STCODE(STANUM(1))
-      ICH = LEN1( MSGTXT )
       NCH = LEN( MSGTXT )
       IF( NSTA .GT. 1 ) THEN
          DO ISTA = 2, NSTA 
+            ICH = LEN1( MSGTXT) 
             WRITE( MSGTXT(ICH+1:NCH), '( A, A )' ) ', ', 
      1           STCODE(STANUM(ISTA))
-            ICH = LEN1( MSGTXT) 
          END DO
       END IF
-      WRITE( MSGTXT(ICH+1:NCH), '( A )' ) ' ', STCODE(STANUM(NSTA))
+      ICH = LEN1( MSGTXT) 
+      WRITE( MSGTXT(ICH+1:NCH), '( A, A )' ) ' ', STCODE(STANUM(NSTA))
       ICH = LEN1( MSGTXT) 
       WRITE( IV2D, '( A )' ) MSGTXT(1:ICH)      
 C

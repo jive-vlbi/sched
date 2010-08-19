@@ -1,10 +1,15 @@
-      SUBROUTINE GEOQUAL( SC1, SC2, JSCN, TESTQUAL, MKGDEBUG, IDUM,
-     1    ZATMERR   )
+      SUBROUTINE GEOQUAL( SC1, SC1A, SC2, JSCN, TESTQUAL, PRDEBUG, 
+     1                    ZATMERR   )
 C
 C     Get the quality measure of scans SC1 to SC2.  This gets the
 C     quality measure for this particular choice of soruces.  The calling
 C     program will then pick the highest set with the highest quality
-C     measure.
+C     measure.  
+C
+C     If SC1A is not equal to SC1, it is assumed that the
+C     previous call accumulated data for SC1 to SC1A-1 and that only
+C     SC1A to SC2 need to be accumulated here.  This is an attempt to
+C     reduce the run time in the MAKESEG process.
 C
 C     Isolate this to a subroutine in case someone wants to brew 
 C     their own measure.  If someone has a quality measure that should
@@ -35,23 +40,33 @@ C     The tests are only done for stations in the template scan (JSCN)
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER               SC1, SC2, JSCN, ISCN, ISTA, JSTA, ICH
-      INTEGER               IBAS, NBAS, IPAR, IDUM, IERR
+      INTEGER               SC1, SC1A, SC2, JSCN, ISCN
+      INTEGER               ISTA, JSTA, ICH
+      INTEGER               IBAS, NBAS, IERR
       REAL                  TESTQUAL, SECZ
       REAL                  TRIQUAL, RELEV  !  , RAN5
-      LOGICAL               MKGDEBUG
+      LOGICAL               PRDEBUG
 C
 C     For fit:
 C
       INTEGER               MAXDAT, MAXPAR
       PARAMETER             ( MAXDAT = 10000 )
       PARAMETER             ( MAXPAR = MAXSTA*2 )
-      INTEGER               SOLVE(MAXPAR)
+      INTEGER               SOLVE(MAXPAR), NNBAS(MAXSCN)
       DOUBLE PRECISION      RESDEL(MAXDAT), DELERR(MAXDAT)
       DOUBLE PRECISION      GUESS(MAXPAR)
       DOUBLE PRECISION      PARTIAL(MAXDAT,MAXPAR)
+      DOUBLE PRECISION      PPARTIAL(MAXDAT,MAXPAR)
       DOUBLE PRECISION      ZATM(MAXPAR), ZATMERR(*)
-      
+C
+      DATA   SOLVE  / MAXPAR * 1 /
+      DATA   GUESS  / MAXPAR * 0.D0 /
+      DATA   RESDEL / MAXDAT * 0.D0 /
+      DATA   DELERR / MAXDAT * 100.D0 /
+C
+C     Save some numbers for incremental calls.
+C
+      SAVE                  NNBAS, PARTIAL
 C -----------------------------------------------------------------------
 C     The least squares fit will be done on dummy data for all 
 C     baselines.  I need actual dummy measured values (zero), 
@@ -71,17 +86,27 @@ C
      1           'single station observations.' )
       END IF
 C
-C     Initializations.
+C     Initializations.  Set NBAS to use the values previously
+C     calculated for scans SC1 to SC1A.
 C
-      NBAS = 0
-      DO ISTA = 1, MAXPAR
-         RESDEL(ISTA) = 0.0D0
-         DELERR(ISTA) = 0.0D0
-         DO IBAS = 1, MAXDAT
+      IF( SC1 .EQ. SC1A ) THEN
+         NBAS = 0
+         DO ISCN = SC1, SC2
+            NNBAS(ISCN) = 0
+         END DO
+      ELSE
+         NBAS = NNBAS(SC1A-1)
+         DO ISCN = SC1A, SC2
+            NNBAS(ISCN) = 0
+         END DO
+      END IF
+C
+      DO ISTA = 1, 2 * NSTA
+         DO IBAS = NBAS+1, MAXDAT
             PARTIAL(IBAS,ISTA) = 0.D0
          END DO
       END DO
-      DO ISCN = SC1, SC2
+      DO ISCN = SC1A, SC2
 C
 C        Station 1 loop.
 C
@@ -98,20 +123,24 @@ C
 C                    Get the baseline data for the fit.
 C	   	   
                      NBAS = NBAS + 1
+C
                      IF( NBAS .GT. MAXDAT ) THEN
                         CALL ERRLOG( 'GEOQUAL: Too many scan/'//
      1                    'baselines in making geodetic segment.' )
                      END IF
-                     RESDEL(NBAS) = 0.D0 ! 2.D-4 * RAN5( IDUM )
-                     DELERR(NBAS) = 100.D0
+C
+C                    Accumulate the highest number baseline for
+C                    each scan for use in incremental calls.
+C
+                     NNBAS(ISCN) = NBAS
 C	   	   
-C                    Partial for first station (is secZ).
+C                    SecZ partial for first station.
 C	   	   
                      RELEV = EL1(ISCN,ISTA)
                      SECZ = 1.0 / SIN( RELEV * RADDEG )
                      PARTIAL(NBAS,ISTA) = SECZ
 C	   	   
-C                    Partial for second station (is negative of secZ).
+C                    SecZ partial for second station (is negative of secZ).
 C	   	   
                      RELEV = EL1(ISCN,JSTA)
                      SECZ = 1.0 / SIN( RELEV * RADDEG )
@@ -133,9 +162,15 @@ C
          END DO
       END DO
 C
-      DO IPAR = 1, NSTA*2-1
-         SOLVE(IPAR) = 1
-         GUESS(IPAR) = 0.D0
+C     Move the partials for all baselines to an array to pass
+C     to LSQFIT.  LSQFIT modifies them, so this step is needed
+C     when trying to save computations above by not redoing
+C     the ones for scans SC1 to SC1A-1.  
+C
+      DO ISTA = 1, NSTA*2-1
+         DO IBAS = 1, NBAS
+            PPARTIAL(IBAS,ISTA) = PARTIAL(IBAS,ISTA)
+         END DO
       END DO
 C
 C     Do the fit.  Note that ZATM and ZATMERR will run through
@@ -143,7 +178,7 @@ C     the stations giving what they appear to be, then go through
 C     all but the last station again with clock offsets.
 C
       CALL LSQFIT( 0, .FALSE., .FALSE., MAXDAT, NSTA*2-1, NBAS,
-     1      STANAME, GUESS, SOLVE, RESDEL, PARTIAL, DELERR,
+     1      STANAME, GUESS, SOLVE, RESDEL, PPARTIAL, DELERR,
      2      ZATM, ZATMERR, IERR )
 C
 C     Initialize the quality measure.  Use zero since the final
@@ -175,11 +210,12 @@ C     Set TESTQUAL to the highest (worst) ZATMERR seen across
 C     stations.  Later the set with the lowest TESTQUAL will
 C     be chosen.
 C
-C     Set it to zero if the station was not used.
-C     This prevents this set from being used, which is the 
-C     desired outcome if a station is missed completely.
-C
-C
+      IF( PRDEBUG ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A )' )
+     1        'GEOQUAL:   Sta  Zatm RMS      El by scan. '
+         CALL WLOG( 1, MSGTXT )
+      END IF
       DO ISTA = 1, NSTA
          IF( STASCN(JSCN,ISTA) ) THEN
 C
@@ -194,12 +230,12 @@ C           Some printout if the programmer is trying to watch
 C           the process in detail.  MKGDEBUG is hard wired in 
 C           GEOMAKE.
 C
-            IF( MKGDEBUG ) THEN
+            IF( PRDEBUG ) THEN
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I5, 2F8.3 )' ) 
-     1               'GEOQUAL:  ', ISTA, ZATM(ISTA), 
+               WRITE( MSGTXT, '( A, 2X, A3, F8.3 )' ) 
+     1               'GEOQUAL:  ', STCODE(STANUM(ISTA)), 
      2               ZATMERR(ISTA)
-               ICH = 35
+               ICH = 26
                DO ISCN = SC1, SC2
                   IF( STASCN(ISCN,ISTA) ) THEN
                      WRITE( MSGTXT(ICH:ICH+5), '( F6.1 )' ) 
