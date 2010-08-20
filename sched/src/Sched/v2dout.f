@@ -67,20 +67,18 @@ C
       WRITE( IV2D, '( 1X, /, A, A )' ) 'vex = ', 
      1     VEXFILE(1:LEN1(VEXFILE))
 C
-C     Give the station codes.
+C     Give the station codes.  
 C
       MSGTXT = ' '
       WRITE( MSGTXT, '( A, A )' ) 'antennas = ', STCODE(STANUM(1))
       NCH = LEN( MSGTXT )
-      IF( NSTA .GT. 1 ) THEN
-         DO ISTA = 2, NSTA 
+      IF( NSTA .GE. 2 ) THEN
+         DO ISTA = 2, NSTA
             ICH = LEN1( MSGTXT) 
             WRITE( MSGTXT(ICH+1:NCH), '( A, A )' ) ', ', 
      1           STCODE(STANUM(ISTA))
          END DO
       END IF
-      ICH = LEN1( MSGTXT) 
-      WRITE( MSGTXT(ICH+1:NCH), '( A, A )' ) ' ', STCODE(STANUM(NSTA))
       ICH = LEN1( MSGTXT) 
       WRITE( IV2D, '( A )' ) MSGTXT(1:ICH)      
 C

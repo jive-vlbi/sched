@@ -38,6 +38,7 @@ C        Determine which of the frequency groups that are compatible
 C        is best.
 C
          IF( MATCH ) THEN
+C      write(*,*) 'setfcat got match:', ks, kf, ' ', frname(kf)
 C
 C           Determine the amount of bandwidth overlap and the worst
 C           offset of a channel from the center of a band.
@@ -60,6 +61,9 @@ C           centering.
 C
 
             IF( OVERLAP .GT. 0.0 ) THEN
+C      write(*,*) 'setfcat got overlap:', ks, kf, ' ', frname(kf)
+C      write(*,*) '                    ', overlap, bestover(ks),
+C     1  prio(kf), bestprio, center, bestcent
 C
 C              Clearly best:
 C
@@ -84,6 +88,7 @@ C              and schedule set frequencies.  For channels that
 C              don't match, set the frequency limits to zero.
 C
                IF( TAKEIT ) THEN
+C      write(*,*) 'setfcat taking it:', ks, kf, ' ', frname(kf)
                   GOT = .TRUE.
                   USEKF = KF
                   BESTOVER(KS) = OVERLAP
@@ -121,6 +126,7 @@ C     If got a match, process it.
 C     For the moment, keep all channels using the same IFREQNUM
 C
       IF( GOT ) THEN
+C      write(*,*) 'setfcat got one:', ks, usekf, ' ', frname(usekf)
 C
          DO ICH = 1, NCHAN(KS)
             IFREQNUM(ICH,KS) = USEKF
@@ -140,6 +146,7 @@ C
 C        Check if any of the received band is outside the RF bands.
 C
          IF( BESTOVER(KS) .LT. TOTBW(KS) ) THEN
+C      write(*,*) 'setfcat some lack of overlap:', ks
             CALL WLOG( 1, 'SETFCAT: In setup: ' // SETNAME(KS) )
             CALL WLOG( 1, '         Station '//SETSTA(1,KS) )
             SETMSG = ' '
@@ -153,6 +160,7 @@ C
          END IF
 C
       ELSE
+C         write(*,*) 'setfcat:  No match '
 C
 C        If there is not a match, write some details about 
 C        any near misses.
@@ -209,6 +217,7 @@ C
 C ***********************  Allow for multiple IFREQNUMs.
 C      write(*,*) 'setfcat: Allow multiple IFREQNUMs.'
 C
+C       write(*,*) 'setfcat ifreqnum', ifreqnum(1,ks)
       IF( IFREQNUM(1,KS) .GE. 1 ) THEN
          KF = IFREQNUM(1,KS)
          DO ICH = 1, NCHAN(KS)
