@@ -8,23 +8,41 @@ C
       INTEGER    ISTA, ISCAT, IC1, IC2, BLENKM, LEN1, JSTA, JSCAT
       INTEGER    NNSTA, MJD
       REAL       BLENSQ, YEARS
-      LOGICAL    ANYDISK, ANYELSE
+      LOGICAL    ANYDISK, ANYELSE, AXWARN
 C ----------------------------------------------------------------------
 C
-      WRITE( ISUM, '( 1X, /, 1X, /, 1X, /, A, /, 1X, /, A,A, /, 1X )' )
+      WRITE( ISUM, '( 1X, /, 1X, /, 1X, /, A, /, 1X, /, A,A, /, '//
+     1         ' 87X, A /, 1X )' )
      1      'STATIONS USED IN SCHEDULE:',
      2      '   Station  Code   Latitude Longitude Elevation ',
-     3      '       X            Y            Z '
+     3      '      X            Y            Z       Axis',
+     4      'Offset'
+      AXWARN = .FALSE.
       DO ISTA = 1, NSTA
           ISCAT = STANUM(ISTA)
-          WRITE( ISUM, '( 3X, A8, 2X, A3, 2F10.5, F10.0, 2X, ' //
-     1           ' 3F13.3 )' ) 
+          WRITE( ISUM, '( 3X, A8, 2X, A3, 2F10.5, F9.0, 2X, ' //
+     1           ' 3F13.3, F7.3 )' ) 
      2        STATION(ISCAT), STCODE(ISCAT),
      3        LAT(ISCAT)/RADDEG,
      4        LONG(ISCAT)/RADDEG,
      5        ELEV(ISCAT),
-     6        XPOS(ISCAT), YPOS(ISCAT), ZPOS(ISCAT)
+     6        XPOS(ISCAT), YPOS(ISCAT), ZPOS(ISCAT), AXOFF(ISCAT)
+         IF( AXOFF(ISCAT) .EQ. 0.0 ) AXWARN = .TRUE.
       END DO
+C
+C     While we're poking at geometry data, issue a warning if
+C     the axis offset is zero for one or more stations.
+C
+      IF( AXWARN ) THEN
+         CALL WLOG( 1, 'STALST:  WARNING - A station has zero '//
+     1      'axis offset, which is unlikely. ' )
+         CALL WLOG( 1, '         Accurate positions, including '//
+     1      'axis offsets are needed for correlation.' )
+         CALL WLOG( 1, '         Is your station location '//
+     1      'information adequate?' )
+         CALL WLOG( 1, '         See the summary file station '// 
+     1      'list to see which stations are suspect.' )
+      END IF
 C
 C     Write the rates and adjusted positions.
 C
