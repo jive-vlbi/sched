@@ -84,6 +84,8 @@ C
       CALL KEYCHRA( 'GEOSRCS', ' ', 12, MGEO, KD, KC, KI )
       CALL KEYADD( 'GEOPRT', -1.D0, 1, KD, KC, KI )
       CALL KEYADD( 'GEOTRIES', 15.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'GEOBACK', 6.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'GEOSLEW', 1.D0, 1, KD, KC, KI )
       CALL KEYADD( 'DOVEX', 0.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'DOSTA', 'ALL', 8, KD, KC, KI )
       CALL KEYADD( 'LST', UNSET, 1, KD, KC, KI )

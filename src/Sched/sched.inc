@@ -378,13 +378,17 @@ C       into cells beyond NSCANS.
 C     ANYGEO says whether there is any geo insertion in this schedule.
 C     MSEG is not used here, but is in some subroutines.  It is the
 C       maximum number of scans in an inserted geodetic segment.
+C     GEOLOWEL and GEOHIEL are the top of the "low" elevation region,
+C       and the bottom of the "high" elevation region.  They are set
+C       in GEOCHK
 C
       INTEGER          MGEO, NGEO, MSEG
       PARAMETER        ( MGEO = 400 )
       PARAMETER        ( MSEG = 100 )
       CHARACTER        GEOSRC(MGEO)*12
       INTEGER          GEOSRCI(MGEO), GEOISCN(MAXSCN), GEOPRT
-      INTEGER          GEOTRIES
+      INTEGER          GEOTRIES, GEOBACK
+      REAL             GEOSLEW, GEOLOWEL, GEOHIEL
       LOGICAL          ANYGEO
       DOUBLE PRECISION GEOLEN(MAXSCN)
 C
@@ -395,7 +399,8 @@ C
      4                 SRLSTN, DIDNDOP, SATN, SUNDIS, PLANET, SATEL,
      5                 CTRSRCI, ICENT, NCENT, NCSRC, 
      6                 NPAIR, PAIRSRC, PAIRCENT, NGEO, GEOSRCI,
-     7                 GEOISCN, GEOPRT, GEOTRIES, ANYGEO 
+     7                 GEOISCN, GEOPRT, GEOTRIES, GEOBACK, GEOSLEW, 
+     8                 GEOLOWEL, GEOHIEL, ANYGEO 
       COMMON  /SCHCSC/ SRCFILE, SRVER, SRCFILE2, SRVER2, 
      1                 SOURCE, SOUR8, CALCODE, REMARK, 
      2                 C1950, C2000, CDATE, WHICHCAT, CSUSED,

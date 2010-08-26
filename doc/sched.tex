@@ -3116,15 +3116,29 @@ checking that comes earlier will not be happy.
 The parameter \htmlref{{\tt GEOPRT}}{MP:GEOPRT} can be used to cause
 some details about each trial source sequence tested to be printed to
 the screen and to {\sl sched.runlog}.  There are various levels of
-print possible.  The algorithm used and described in more detail below
-involves constructing a number of trial segments and selecting the
-best.  The parameter \htmlref{{\tt GEOTRIES}}{MP:GEOTRIES} controls
-the number of trial segments to test.  The default value should work
-in most instances.  Larger numbers will likely produce a slightly
-better solution at the cost of high run times for \sched.  The
-algorithm for picking sources is reasonably good so the best of the
-early tested segments is likely to be nearly as good as anything
-found later.
+print possible.  
+
+The algorithm used to construct geo segments is described in more
+detail below.  It involves constructing a number of trial segments and
+selecting the best.  There are a number of control knobs sticking out
+that the user might want to play with although the defaults are
+reasonable.  The parameter \htmlref{{\tt GEOTRIES}}{MP:GEOTRIES}
+controls the number of trial segments to test.  Setting {\tt GEOTRIES}
+large will likely produce a slightly better solution at the cost of
+high run times for \sched.  The algorithm for picking sources is
+reasonably good so the best of the early tested segments is likely to
+be nearly as good as anything found later.  Inside the algorithm, when
+picking the next source to add to the segment, \schedb does a trial
+solution using the sources picked so far and examines for each source,
+the improvement in the rms errors of a fit for sec(Z).  It was found
+that, once a reasonable set of sources had been selected, after around
+8 scans for the VLBA, the algorithm started selecting sources that
+didn't seem too useful.  Parameter \htmlref{{\tt GEOBACK}}{MP:GEOBACK}
+is now used to only look back some number of scans for the trial
+solutions.  Setting that to near 6 (the default) seems to result in
+more robust sequences.  \schedb also allows sources to repeat after
+\htmlref{{\tt GEOBACK}}{MP:GEOBACK} scans in a segment.  In selecting
+a source to add, the slew time is considered through
 
 There is an example among the \schedb examples called
 \htmladdnormallink{{\sl egdelzn.key}}{examples/egdelzn.key} that shows
@@ -3139,18 +3153,18 @@ As long as \schedb is producing good geodetic segments, the details of
 the algorithm shouldn't matter too much to users.  But some may wish
 to know, so it is described here.  When starting to work on a segment,
 \schedb calculates the elevations at the middle of the segment for all
-of the specified sources.  It assigns a priority for each source 
+of the specified sources.  It assigns a priority for each source
 depending on how many stations see it at low and high elevation.  The
 best sources are low at at least two stations and high at at least
 two.  The next priority sources have one low and one high station.
 The mix of low an high stations helps with the eventual least squares
-fit to sec(Z) terms.  Higher priority numbers (worse sources) are 
+fit to sec(Z) terms.  Higher priority numbers (worse sources) are
 assigned to less optimal sources.  With the help of the calculated
-information and priorities, \schedb constructs a number of trial
-geodetic segments.  A quality measure for each segment is determined
-by setting up a least squares fit for sec(Z) and clock terms.  The
-formal error on the fitted sec(Z) term for the station with the 
-highest such error is the quality measure.
+information and priorities, \schedb constructs a number (\htmlref{{\tt
+GEOTRIES}}{MP:GEOTRIES} of trial geodetic segments.  A quality measure
+for each segment is determined by setting up a least squares fit for
+sec(Z) and clock terms.  The formal error on the fitted sec(Z) term
+for the station with the highest such error is the quality measure.
 
 An algorithm is used to construct each tested segment that tries to
 come up with a source set that works reasonably well.  This makes
@@ -3163,26 +3177,33 @@ random from the 5 closest good sources to the first chosen source.
 That scheme continues for 4 sources.  After that, all sources given in
 \htmlref{{\tt GEOSRCS}}{MP:GEOSRCS} that are up at enough stations
 (set by \htmlref{{\tt OPMINANT}}{MP:OPMINANT}) are tried, one at a
-time.  A least squares fit it tried with the sources in the segment so
-far.  A quality measure that is the RMS of the errors on the sec(Z)
-parameter plus a linear penalty for long slews is calculated.  The
-source with the best such quality measure is added.  This process is
-repeated, adding more sources, until the designated duration for the
-segment is exhausted.  The deranged may wish to use \htmlref{{\tt 
-GEOPRT}}{MP:GEOPRT} to watch in detail what is going on in the 
-algorithm.
+time.  A dummy least squares fit for sec(Z) and clock is tried with
+the sources in the segment so far, up to a maximum of the preceding
+\htmlref{{\tt GEOBACK}}{MP:GEOBACK} sources.  Restricting the number
+in the look-back seems to prevent the program from choosing too many
+sources that are at high elevations at all stations after a reasonable
+set is selected early in the segment.  A quality measure that is the
+RMS of the errors on the sec(Z) parameter plus \htmlref{{\tt
+GEOSLEW}}{MP:GEOSLEW} times a linear penalty for long slews is
+calculated.  The default {\tt GEOSLEW = 1.0} is reasonable and tries
+to keep slew from exceeding about a minute.  The source with the best
+such quality measure is added.  This process is repeated, adding more
+sources, until the designated duration for the segment is exhausted.
+The deranged may wish to use \htmlref{{\tt GEOPRT}}{MP:GEOPRT} to
+watch in detail what is going on in the algorithm.
 
-For each segment, a quality measure is generated.  \schedb picks the
-best segment according to the quality measure, and inserts that into
-the schedule.  The quality measure slightly different from the one
-used inside the segment construction algorithm.  It is also based on
-the expected errors of a fit for the zenith delay and clock for all
-stations.  Standard errors of 20ps are set for all observations (the
-value doesn't really matter here) and the highest reported sigma
-across the stations is used as the quality measure.  This process is
-similar to what is done when the data are used and encourages both a
-high range of elevations at each site and a significant range of
-elevations across antennas for each scan.
+For each of the (\htmlref{{\tt GEOTRIES}}{MP:GEOTRIES} trial segments,
+a quality measure is generated.  \schedb picks the best segment
+according to the quality measure, and inserts that into the schedule.
+The quality measure is different from the one used inside the
+segment construction algorithm.  It is also based on the expected
+errors of a fit for the zenith delay and clock for all stations.
+Standard errors of 100ps are set for all observations (the value
+doesn't really matter here) and the highest reported sigma across the
+stations is used as the quality measure.  This process is similar to
+what is done when the data are used and encourages both a high range
+of elevations at each site and a significant range of elevations
+across antennas for each scan.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
@@ -5012,6 +5033,10 @@ SCAN PROPERTIES:
 \htlm{GEOSRCS}{~} Gives a list of sources for geodetic segments.
 \htlm{GEOPRT}{~~} Turn on debugging print from geodetic insertion.
 \htlm{GEOTRIES}{} Number of trial geodetic segments to test.
+\htlm{GEOBACK}{~} Number of look-back scans while selecting geodetic
+                     segment sources.
+\htlm{GEOSLEW}{~} Relative weight of slew time in selecting geodetic
+                     segment sources.
 \htlm{PN3DB}{~~}  Do VLBA half power tracking tests.
 \htln{NOPN3DB}{PTVLBA}{} Turn off VLBA tracking tests.
 \htlm{PTVLBA}{~~} Do VLBA pointing sequence.
@@ -5030,7 +5055,6 @@ SCAN PROPERTIES:
 \htlm{ROTOFF}{~~} Rotation offsets for ROTPAT pattern.
 \htlm{FOCOFF}{~~} Focus offsets for ROTPAT pattern.
 \htlm{CRDLINE}{~} Arbitrary line for VLBA files for on-line testing.
-
 \end{list}
 
 RECORDER CONTROL (Obsolete parameters after switch to disk):
@@ -6359,6 +6383,36 @@ prefered mechanism.
 {{\tt GAP=2:00} (which is equivalent to {\tt gap 120}).}
 
 
+\subsubsection{\label{MP:GEOBACK}{\tt GEOBACK}}
+
+{\tt GEOBACK} is a knob sticking out of the algorithm that selects 
+sources for use in a geodetic segment.  For each new source, \schedb
+looks for which sources of those available would conribute the most
+to improving the rms of the sez(z) parameters in a dummy fit.  That
+dummy fit does not use all the sources in the segment so far, but rather
+is restricted to the last {\tt GEOBACK} sources.  Without that 
+restriction, once all antennas are giving reasonable sec(Z) fits, no
+new source improves things much and the bias to short slews can lead
+to selection of sources that don't really contribute much to the 
+segment.  By restricting the look-back, each new source must contribute
+to a fit.  The default of 8 seems to work moderately well for the 
+VLBA, where a total of 15 sources might be selected for a segment (maybe
+we can use shorter segments).
+
+{\tt GEOBACK} is also used to inhibit repeated use of any given source
+in a segment.  Rather than prohibit repeats entirely, \schedb only 
+prohibits repeats within each {\tt GEOBACK} scans.
+
+\rcwbox
+{A number of scans to examine to help determine the best source to add
+to a geodetic block}
+{Any integer, but values above around 6 are highly recommended}
+{6}
+{Only one value used for the whole observation}
+{{\tt geoback=10}}
+
+
+
 \subsubsection{\label{MP:GEOPRT}{\tt GEOPRT}}
 
 Specifying {\tt GEOPRT} (no argument) or {\tt GEOPRT = 0}
@@ -6406,6 +6460,22 @@ The sources used for the geodetic segments are specified with
 {zero - no geodetic segment to be constructed}
 {Reverts to zero to avoid building successive segments.}
 {{\tt geoseg=30:00} for a 30 minute segment}
+
+\subsubsection{\label{MP:GEOSLEW}{\tt GEOSLEW}}
+
+When selecting sources for a geodetic segment, \schedb takes into
+account both the contribution to a fit for sec(Z) and the slew time.
+{\tt GEOSLEW} controls the relative weight.  A value of 1.0 means
+encourage slews shorter than about 1 minute.  A larger value would
+encourage shorter slews.  A larger value introduces a larger penalty
+for a long source and would encourage shorter slews.
+
+\rcwbox
+{Any real number}
+{Any number}
+{1.0 - favors slews of around a minute}
+{Only one value used for the schedule - the last}
+{{\tt geoslew=2.0}}
 
 \subsubsection{\label{MP:GEOSRCS}{\tt GEOSRCS}}
 
