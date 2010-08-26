@@ -43,11 +43,12 @@ C
       REAL              SEGELEV(MAXSTA,MGEO)
 C
       DOUBLE PRECISION  TAPPROX, TIMRAD
-      REAL              LOWLIM, HIGHLIM, ELTOL
+      REAL              ELTOL
       INTEGER           NLOW, NHIGH
       INTEGER           ISTA, ICH, IGEO, LSCN 
       INTEGER           NREJECT, LASTLSCN(MAXSTA)
-      INTEGER           YR, DY, NGOOD, OKSTA(MAXSTA)
+      INTEGER           YR, DY, NGOOD
+      LOGICAL           OKSTA(MAXSTA)
       CHARACTER         TFORM*8, CTIME*8
 C
 C------------------------------------------------------------------
@@ -88,8 +89,8 @@ C     The ELTOL allows us to look at sources that are below the
 C     elevation cutoff in the center of the segment, but not the 
 C     edges.
 C
-      LOWLIM = 23.5
-      HIGHLIM = 40.0
+      GEOLOWEL = 23.5
+      GEOHIEL = 40.0
       ELTOL = 3.0
 C
 C     Loop through the sources getting the geometry and determining
@@ -138,7 +139,7 @@ C
 C        For normal observations (.GE. 6 stations), the USEGEO priority
 C        settings are:
 C          5:  Meets OKGEO constraints, but otherwise not interesting.
-C          4:  More than one station below LOWLIM+10 
+C          4:  More than one station below GEOLOWEL+10 
 C          3:  More than one low station.
 C          2:  More than one low and one high stations.
 C          1:  More than two low and two high stations.
@@ -146,11 +147,11 @@ C
          IF( OKGEO(IGEO) ) THEN
             USEGEO(IGEO) = 5
             DO ISTA = 1, NSTA
-               IF( SEGELEV(ISTA,IGEO) .LE. LOWLIM + 10.0 ) 
+               IF( SEGELEV(ISTA,IGEO) .LE. GEOLOWEL + 10.0 ) 
      1            USEGEO(IGEO) = 4
             END DO
             DO ISTA = 1, NSTA
-               IF( SEGELEV(ISTA,IGEO) .LE. LOWLIM  ) 
+               IF( SEGELEV(ISTA,IGEO) .LE. GEOLOWEL  ) 
      1            USEGEO(IGEO) = 3
             END DO
 C
@@ -160,9 +161,9 @@ C
             NHIGH = 0
             DO ISTA = 1, NSTA
                IF( SEGELEV(ISTA,IGEO) .GT. OPMINEL(JSCN) - ELTOL .AND. 
-     1             SEGELEV(ISTA,IGEO) .LE. LOWLIM )
+     1             SEGELEV(ISTA,IGEO) .LE. GEOLOWEL )
      2             NLOW = NLOW + 1
-               IF( SEGELEV(ISTA,IGEO) .GE. HIGHLIM )
+               IF( SEGELEV(ISTA,IGEO) .GE. GEOHIEL )
      1             NHIGH = NHIGH + 1
             END DO
             IF( NLOW .GE. 1 .AND. NHIGH .GE. 1 ) USEGEO(IGEO) = 2

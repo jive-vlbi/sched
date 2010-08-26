@@ -502,8 +502,10 @@ C
             SCNSRC(ISCN) = GEOSRC(1)
          END IF
       END DO
-      GEOPRT = KD( KEYPTR( 'GEOPRT', KC, KI ) )
+      GEOPRT   = KD( KEYPTR( 'GEOPRT', KC, KI ) )
       GEOTRIES = KD( KEYPTR( 'GEOTRIES', KC, KI ) )
+      GEOBACK  = KD( KEYPTR( 'GEOBACK', KC, KI ) )
+      GEOSLEW  = KD( KEYPTR( 'GEOSLEW', KC, KI ) )
 C
 C     Process Cover Letter and Correlator input.
 C

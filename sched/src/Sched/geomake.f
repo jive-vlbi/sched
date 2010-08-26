@@ -1,4 +1,5 @@
-      SUBROUTINE GEOMAKE( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG )
+      SUBROUTINE GEOMAKE( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG,
+     1                    GSTASCN, GSTARTJ )
 C
 C     Routine for SCHED called by ADDGEO that makes a list
 C     of sources from the list of geo sources to fit into a
@@ -34,11 +35,11 @@ C
       INTEGER           MINSPS, HALFSCNS, NPRT, ICH,  USEGEO(MGEO)
       REAL              BESTQUAL, TESTQUAL
       REAL              RAN5, DUMMY, SEGELEV(MAXSTA,MGEO)
-      LOGICAL           OKGEO(MGEO)
+      LOGICAL           OKGEO(MGEO), GSTASCN(MSEG,MAXSTA)
       LOGICAL           PRDEBUG
       LOGICAL           RETAIN, KEPT
       DOUBLE PRECISION  TGEO1, TGEOEND, STARTB
-      DOUBLE PRECISION  SIGMA(MAXPAR)
+      DOUBLE PRECISION  SIGMA(MAXPAR), GSTARTJ(MSEG)
 C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
@@ -150,7 +151,12 @@ C
                MINSPS = MIN( MINSPS, NSTSCN )
             END IF
          END DO
-         RETAIN = MINSPS .GE. HALFSCNS
+C
+C  *******************   This needs modification if slow stations
+C           get left out of scans intentionally
+C
+C         RETAIN = MINSPS .GE. HALFSCNS
+         RETAIN = MINSPS .GE. 3
 C
 C        For kept sequences, test the quality.
 C
@@ -158,8 +164,9 @@ C
 C
             IF( GEOPRT .GE. 1 ) THEN
                WRITE(*,*) 'GEOMAKE ---------------------------------- '
-               WRITE(*,*) 'GEOMAKE    FINISHED ONE SEQUENCE.', 
-     1               ITRIAL, (TSRC(ISEG), ISEG=1,NTSEG)
+               WRITE(*,'( A, I4, A, 30I3 )' ) 
+     1              'GEOMAKE    FINISHED ONE SEQUENCE - Trial:', 
+     2               ITRIAL, ' Geosrcs:', (TSRC(ISEG), ISEG=1,NTSEG)
             END IF
 C
 C           Get the quality measure of scans ISCN to LSCN.  Isolate this
@@ -206,18 +213,27 @@ C               IF( GEOPRT .GE. 0 ) THEN
                   CALL WLOG( 1, MSGTXT )
 C               END IF
 C
-C              Save the new sequence.
+C              Save the new sequence.  Note that STASCN will have
+C              been set in ways to allow leaving slow antennas
+C              out.  It should not be regenerated in a call to 
+C              MAKESCN or whatever.  It is saved here because,
+C              as more segments are tried, it will change.
 C
                BESTQUAL = TESTQUAL
                DO ISEG = 1, NTSEG
+                  I = ISCN + ISEG - 1
                   SEGSRCS(ISEG) = TSRC(ISEG)
+                  GSTARTJ(ISEG) = STARTJ(I)
+                  DO ISTA = 1, NSTA
+                     GSTASCN(ISEG,ISTA) = STASCN(I,ISTA)
+                  END DO
                END DO
                NSEG = NTSEG
                KEPT = .TRUE.
             END IF
          ELSE
             IF( GEOPRT .GE. 0 ) THEN
-               CALL WLOG( 1, 'Segment not kept.' //
+               CALL WLOG( 1, 'GEOMAKE: Segment not kept.' //
      1           '  Not enough scans at some stations.' )
             END IF
          END IF
