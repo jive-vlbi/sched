@@ -36,8 +36,9 @@ C     messy.
 C
       INTEGER            SEGSRCS(MSEG)
       INTEGER            NSEG, JSCN, IOUT, NGOOD, ISTA
-      LOGICAL            OKSTA(MAXSTA), KEEP, ALL0
-      DOUBLE PRECISION   TAPPROX
+      LOGICAL            OKSTA(MAXSTA), KEEP
+      LOGICAL            GSTASCN(MSEG,MAXSTA), SSTASCN(MAXSTA)
+      DOUBLE PRECISION   TAPPROX, GSTARTJ(MSEG)
 C
 C     Want to keep some values between calls.
 C
@@ -60,7 +61,8 @@ C
 C
 C        Pick the geo sources to use.
 C
-         CALL GEOMAKE( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG )
+         CALL GEOMAKE( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG, GSTASCN,
+     1                 GSTARTJ )
 C
          GEOOPT = NSEG
       END IF
@@ -75,33 +77,26 @@ C
       IF( GEOOPT .NE. 0 ) THEN
 C
 C        Get the index for this source in the SEGSRCS array.
+C        This is ISEG in the routines that make the segments.
 C
          IOUT = NSEG - GEOOPT + 1         
 C
 C        Make the next scan.
-C        Copy all scan parameters from the demplate.  Assume that 
-C        the stop time of the preceeding scan plus one minute is 
-C        a reasonable approximation of the start time for selecting
-C        which sources are up.  But also deal with the first scan where
-C        TAPPROX will be used as the start.  Finish by getting accurate 
-C        times and geometry.
+C        Copy all scan parameters from the template but get the source,
+C        the antennas to use, and the start time from what came 
+C        from MAKEGEO. 
 C
-         ALL0 = .TRUE.
          DO ISTA = 1, NSTA
-            IF( STASCN(JSCN,ISTA) ) THEN
-               IF( LASTISCN(ISTA) .NE. 0 ) THEN
-                  ALL0 = .FALSE.
-               END IF
-            END IF
+            SSTASCN(ISTA) = GSTASCN(IOUT,ISTA)
          END DO
-         IF( ALL0 ) THEN
-            TAPPROX = TFIRST
-         ELSE
-            TAPPROX = STOPJ(ISCN-1) + 60.D0 * ONESEC
-         END IF
-         CALL MAKESCN( LASTISCN, ISCN, JSCN, GEOSRCI(SEGSRCS(IOUT)),
+         TAPPROX = GSTARTJ(IOUT)
+         CALL GMKSCN( LASTISCN, ISCN, JSCN, GEOSRCI(SEGSRCS(IOUT)),
      1        GEOSRC(SEGSRCS(IOUT)), TAPPROX, OPMINEL(JSCN), 
-     2        NGOOD, OKSTA )
+     2        NGOOD, OKSTA, SSTASCN, 'FORCE' )
+C
+C        Get the number of scans left to do and tell SCHED to keep 
+C        this scan.
+C
          GEOOPT = GEOOPT - 1
          KEEP = .TRUE.
       END IF

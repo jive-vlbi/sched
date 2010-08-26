@@ -130,8 +130,21 @@ C
                DBDY(NDB)  = KD( KEYPTR( 'DYDT', KC, KI ) ) 
                DBDZ(NDB)  = KD( KEYPTR( 'DZDT', KC, KI ) ) 
                DBEPO(NDB) = KD( KEYPTR( 'EPOCH', KC, KI ) )
-               DBDBA(NDB) = KCHAR( 'AXISTYPE', 5, .FALSE., KD, KC, KI )
+               DBDBA(NDB) = KCHAR( 'AXISTYPE', 5, .TRUE., KD, KC, KI )
                DBOFF(NDB) = KD( KEYPTR( 'AXISOFF', KC, KI ) )
+C
+C              Adjust for various varients on the axis type spec,
+C              especially for altaz mounts.
+C              Note also that some mount types in locations.dat of
+C              mid 2010 are simply wrong - like Hobart.
+C              As far as I know, DBDBA is not used anywhere.  The
+C              axis type is also in stations.dat and that is the one
+C              that is used.
+C
+               IF( DBDBA(NDB) .EQ. 'ALTZ' .OR. 
+     1             DBDBA(NDB) .EQ. 'ALTA' ) THEN
+                  DBDBA(NDB) = 'ALTAZ'
+               END IF
 C
 C              Go back for next record.
 C
