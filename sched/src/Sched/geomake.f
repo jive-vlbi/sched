@@ -26,7 +26,10 @@ C     Some day, inhibit getting too close to the Sun.
 C
       INCLUDE   'sched.inc'
 C
-      INTEGER           JSCN, ISCN, SEGSRCS(*), LASTISCN(*), NSEG
+      INTEGER           LASTISCN(*), JSCN, ISCN, SEGSRCS(*), NSEG
+      LOGICAL           GSTASCN(MSEG,MAXSTA)
+      DOUBLE PRECISION  GSTARTJ(*)
+C
       INTEGER           MAXPAR
       PARAMETER         (MAXPAR=MAXSTA*2)
 C
@@ -35,11 +38,8 @@ C
       INTEGER           MINSPS, HALFSCNS, NPRT, ICH,  USEGEO(MGEO)
       REAL              BESTQUAL, TESTQUAL
       REAL              RAN5, DUMMY, SEGELEV(MAXSTA,MGEO)
-      LOGICAL           OKGEO(MGEO), GSTASCN(MSEG,MAXSTA)
-      LOGICAL           PRDEBUG
-      LOGICAL           RETAIN, KEPT
-      DOUBLE PRECISION  TGEO1, TGEOEND, STARTB
-      DOUBLE PRECISION  SIGMA(MAXPAR), GSTARTJ(MSEG)
+      LOGICAL           OKGEO(MGEO), PRDEBUG, RETAIN, KEPT
+      DOUBLE PRECISION  TGEO1, TGEOEND, STARTB, SIGMA(MAXPAR)
 C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
@@ -130,7 +130,7 @@ C
      1                 OKGEO, USEGEO, SEGELEV, STARTB, TGEOEND, 
      2                 LSCN, NTSEG, TSRC, IDUM, SIGMA )
 C
-C        Make sure each antenna is in at least half the scans.
+C        Make sure each antenna is in a reasonable number of scans.
 C        There is some hoop jumping because the number of scans can
 C        vary.   Only test stations that are in the template JSCN.
 C        MINSPS is "Minimum Scans Per Station".  Meanwhile, protect
@@ -152,8 +152,13 @@ C
             END IF
          END DO
 C
-C  *******************   This needs modification if slow stations
-C           get left out of scans intentionally
+C  *******************  This is a potential source of trouble if
+C                       slow stations are getting left out.
+C                       It used to test against being in half of the
+C                       scans, but that could be a problem when
+C                       slow stations are being left out of scans.
+C                       So for now, just test against a minimum number
+C                       to get a solution.
 C
 C         RETAIN = MINSPS .GE. HALFSCNS
          RETAIN = MINSPS .GE. 3
@@ -181,8 +186,8 @@ C
             IF( GEOPRT .GE. 0 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, I5, A, F7.2, A, F7.2 )') 
-     1                'Finished making a segment. ',
-     2                ' Number of scans:', iseg, '  Quality:', 
+     1                'GEOMAKE: Finished making a segment. ',
+     2                ' Number of scans:', ntseg, '  Quality:', 
      3                TESTQUAL, '  Previous best:', BESTQUAL
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
