@@ -26,7 +26,8 @@ C
 
       INCLUDE 'sched.inc'
 C
-      INTEGER  LASTISCN(*), ISCN, GEOOPT
+      INTEGER            LASTISCN(*), ISCN, GEOOPT
+      LOGICAL            KEEP
 C
 C     SEGSRCS are the source numbers in the geodetic source list of
 C     sources we want to observe.  It is used rather than the main
@@ -36,13 +37,13 @@ C     messy.
 C
       INTEGER            SEGSRCS(MSEG)
       INTEGER            NSEG, JSCN, IOUT, NGOOD, ISTA
-      LOGICAL            OKSTA(MAXSTA), KEEP
+      LOGICAL            OKSTA(MAXSTA)
       LOGICAL            GSTASCN(MSEG,MAXSTA), SSTASCN(MAXSTA)
       DOUBLE PRECISION   TAPPROX, GSTARTJ(MSEG)
 C
 C     Want to keep some values between calls.
 C
-      SAVE               JSCN, SEGSRCS, NSEG
+      SAVE               JSCN, SEGSRCS, NSEG, GSTASCN, GSTARTJ
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'ADDGEO starting.' )
 C

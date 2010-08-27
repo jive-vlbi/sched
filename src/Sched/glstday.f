@@ -34,7 +34,7 @@ C
             CALL WLOG( 1, 'GLSTDAY:  This is your lucky day!' )
             MSGTXT = ' '
             WRITE( MSGTXT, '( 2A, I8 )' )
-     1           1, '          You have specified an LST ',
+     1                 '          You have specified an LST ',
      2                 'time and a UT date for scan ', ISCN
             CALL WLOG( 1, MSGTXT )
             CALL WLOG( 1, '          There are about 3.9 minutes '
