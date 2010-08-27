@@ -38,15 +38,15 @@ C
 C
       INTEGER            MSEG10
       PARAMETER          (MSEG10=10*MSEG)
-      INTEGER            JSCN, ISCN, LASTISCN(*)
-      INTEGER            TSRC(*), NTSEG, USEGEO(*)
+      INTEGER            JSCN, ISCN, LSCN, LASTISCN(*)
+      INTEGER            TSRC(*), NTSEG, USEGEO(*), IDUM
       LOGICAL            OKGEO(*)
       REAL               SEGELEV(MAXSTA,MGEO)
       DOUBLE PRECISION   STARTB, TGEOEND, SIGMA(*)
 C
       INTEGER            ISTA, IS, ISEG, IGEO, IC
       INTEGER            LASTLSCN(MAXSTA), NNEAR, NRAND, CTSC
-      INTEGER            IDUM, KSCN, LSCN, MAXPRIO, IISCN
+      INTEGER            KSCN, MAXPRIO, IISCN
       INTEGER            NGOOD, NCHANCE, CHANCE(MSEG10), TEMPCH 
       INTEGER            INSCN(MAXSTA), INSCT, SELECTED(MGEO)
       LOGICAL            OKSTA(MAXSTA), LSTAS
