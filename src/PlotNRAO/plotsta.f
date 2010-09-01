@@ -206,7 +206,7 @@ C
                CALL UPCASE( CH )
 C
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I5 )' ) 'PLOTSTA: Got key: ', CH
+               WRITE( MSGTXT, '( 2A )' ) 'PLOTSTA: Got key: ', CH
                CALL WLOG( 1, MSGTXT )
 C
 C              An X return means proceed with the UV plots.
