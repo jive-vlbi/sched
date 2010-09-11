@@ -1,5 +1,5 @@
-      SUBROUTINE GEOQUAL( SC1, SC1A, SC2, JSCN, TESTQUAL, PRDEBUG, 
-     1                    ZATMERR   )
+      SUBROUTINE GEOQUAL( SC1, SC1A, SC2, JSCN, MINSEL, TESTQUAL, 
+     1                    PRDEBUG, ZATMERR   )
 C
 C     Get the quality measure of scans SC1 to SC2.  This gets the
 C     quality measure for this particular choice of soruces.  The calling
@@ -36,6 +36,9 @@ C     very little SecZ range.  This might be because the fit does not
 C     include a constant term so even one observation constrains SecZ.
 C     Add a clock offset.
 C
+C     MINSEL allows minimizing the reward for really low elevation
+C     scans.  The secZ will not be allowed to go above sec(90-minsel)
+C
 C     The tests are only done for stations in the template scan (JSCN)
 C
       INCLUDE 'sched.inc'
@@ -45,6 +48,7 @@ C
       INTEGER               IBAS, NBAS, IERR
       REAL                  TESTQUAL, SECZ
       REAL                  TRIQUAL, RELEV  !  , RAN5
+      REAL                  MINSEL, SMINSEL
       LOGICAL               PRDEBUG
 C
 C     For fit:
@@ -52,7 +56,7 @@ C
       INTEGER               MAXDAT, MAXPAR
       PARAMETER             ( MAXDAT = 10000 )
       PARAMETER             ( MAXPAR = MAXSTA*2 )
-      INTEGER               SOLVE(MAXPAR), NNBAS(MAXSCN)
+      INTEGER               SOLVE(MAXPAR), NNBAS(MAXSCN), LSC2
       DOUBLE PRECISION      RESDEL(MAXDAT), DELERR(MAXDAT)
       DOUBLE PRECISION      GUESS(MAXPAR)
       DOUBLE PRECISION      PARTIAL(MAXDAT,MAXPAR)
@@ -63,10 +67,11 @@ C
       DATA   GUESS  / MAXPAR * 0.D0 /
       DATA   RESDEL / MAXDAT * 0.D0 /
       DATA   DELERR / MAXDAT * 100.D0 /
+      DATA   LSC2   / 0 /
 C
 C     Save some numbers for incremental calls.
 C
-      SAVE                  NNBAS, PARTIAL
+      SAVE                  NNBAS, PARTIAL, LSC2
 C -----------------------------------------------------------------------
 C     The least squares fit will be done on dummy data for all 
 C     baselines.  I need actual dummy measured values (zero), 
@@ -106,6 +111,8 @@ C
             PARTIAL(IBAS,ISTA) = 0.D0
          END DO
       END DO
+C
+      SMINSEL = 1.0 / SIN( MINSEL * RADDEG )
       DO ISCN = SC1A, SC2
 C
 C        Station 1 loop.
@@ -135,15 +142,20 @@ C
                      NNBAS(ISCN) = NBAS
 C	   	   
 C                    SecZ partial for first station.
+C                    Don't reward excessively low elevation scans.
+C                    Try a max secz for the fit corresponding to
+C                    MINSEL.  Make a parameter so that it can be
+C                    used differently in MAKESEG and in the final
+C                    selection.
 C	   	   
                      RELEV = EL1(ISCN,ISTA)
-                     SECZ = 1.0 / SIN( RELEV * RADDEG )
+                     SECZ = MIN( 1.0 / SIN( RELEV * RADDEG ), SMINSEL )
                      PARTIAL(NBAS,ISTA) = SECZ
 C	   	   
 C                    SecZ partial for second station (is negative of secZ).
 C	   	   
                      RELEV = EL1(ISCN,JSTA)
-                     SECZ = 1.0 / SIN( RELEV * RADDEG )
+                     SECZ = MIN( 1.0 / SIN( RELEV * RADDEG ), SMINSEL )
                      PARTIAL(NBAS,JSTA) = -1.0 * SECZ
 C	   	   
 C                    Add the partials for the clock terms.  Put those 
@@ -176,7 +188,14 @@ C
 C     Do the fit.  Note that ZATM and ZATMERR will run through
 C     the stations giving what they appear to be, then go through
 C     all but the last station again with clock offsets.
+C     Jump throughsome hoops to prevent spewing excessive error
+C     messages.
 C
+      IF( LSC2 .NE. SC2 ) THEN
+         IERR = GEOPRT
+      ELSE
+         IF( IERR .GE. 1 ) IERR = 0
+      END IF
       CALL LSQFIT( 0, .FALSE., .FALSE., MAXDAT, NSTA*2-1, NBAS,
      1      STANAME, GUESS, SOLVE, RESDEL, PPARTIAL, DELERR,
      2      ZATM, ZATMERR, IERR )
@@ -193,12 +212,31 @@ C     cause some day.
 C
       IF( IERR .NE. 0 ) THEN
          TESTQUAL = 1.E6
-         DO ISCN = SC1, SC2
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I5, A, 20L2  )' ) ' Scan: ', ISCN, 
+         IF( GEOPRT .GE. 2 ) THEN
+            DO ISCN = SC1, SC2
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I5, A, 20L2  )' ) ' Scan: ', ISCN, 
      1          '  Stations in scan: ', (STASCN(ISCN,ISTA),ISTA=1,NSTA)
-            CALL WLOG( 1, MSGTXT )
-         END DO
+               CALL WLOG( 1, MSGTXT )
+            END DO
+         END IF
+         IF( GEOPRT .GE. 1 ) THEN
+            IF( SC2 .NE. LSC2 ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( 3A, 2I5, 3A )' ) 
+     1            ' GEOQUAL: Fit error when testing ', SCNSRC(SC2), 
+     2            ' to scans:', SC1, SC2, ' Skip source this scan.' 
+               CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 1, '        This message can usually be'//
+     1            ' ignored safely when inserting geodetic segments.' )
+               LSC2 = SC2
+            ELSE
+               CALL WLOG( 1, ' GEOQUAL: Similar error testing '//
+     1             SCNSRC(SC2) )
+            END IF
+C              
+         END IF
+C         
 C         WRITE(*,*) 'GEOQUAL: Partials matrix: '
 C         DO J = 1, NBAS
 C            WRITE(*,'( I5, 40F8.3 )' ) J, 

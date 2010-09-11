@@ -44,7 +44,8 @@ C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
 C ---------------------------------------------------------------------
-      IF( DEBUG .OR. GEOPRT .GE. 1 ) CALL WLOG( 1, 'GEOMAKE starting.' )
+      IF( DEBUG .OR. GEOPRT .GE. 2 ) CALL WLOG( 1, 'GEOMAKE starting.' )
+      NPRT = MIN( 20, NSTA )
 C
       BESTQUAL = 9999.
       DO ISEG = 1, MSEG
@@ -79,7 +80,7 @@ C
       STARTB = TGEO1
       TGEOEND = TGEO1 + GEOLEN(ISCN)
 C
-      IF( GEOPRT .GE. 1 ) THEN
+      IF( GEOPRT .GE. 2 ) THEN
          WRITE(*,*) 'GEOMAKE START TIMES', STARTB, STARTJ(ISCN), TGEOEND
       END IF
 C
@@ -115,12 +116,12 @@ C     Loop over the trials.  For now, the number is hardwired.  That
 C     will likely be pulled out as a user parameter some day.
 C
       DO ITRIAL = 1, GEOTRIES
-         IF( GEOPRT .GE. 1 ) WRITE(*,*) ' '
+         IF( GEOPRT .GE. 1 ) CALL WLOG( 1, ' ' )
          IF( GEOPRT .GE. 0 ) THEN
             MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I5 )' ) 
-     1           'GEOMAKE starting go construct trial segment', 
-     2           ITRIAL
+            WRITE( MSGTXT, '( A, I5, A, I5 )' ) 
+     1           'GEOMAKE starting to construct trial segment', 
+     2           ITRIAL, '.  First scan: ', ISCN
             CALL WLOG( 1, MSGTXT )
          END IF
 C
@@ -152,7 +153,9 @@ C
             END IF
          END DO
 C
-C  *******************  This is a potential source of trouble if
+C                       Programming warning:
+C
+C                       This is a potential source of trouble if
 C                       slow stations are getting left out.
 C                       It used to test against being in half of the
 C                       scans, but that could be a problem when
@@ -167,7 +170,7 @@ C        For kept sequences, test the quality.
 C
          IF( RETAIN ) THEN
 C
-            IF( GEOPRT .GE. 1 ) THEN
+            IF( GEOPRT .GE. 2 ) THEN
                WRITE(*,*) 'GEOMAKE ---------------------------------- '
                WRITE(*,'( A, I4, A, 30I3 )' ) 
      1              'GEOMAKE    FINISHED ONE SEQUENCE - Trial:', 
@@ -176,10 +179,12 @@ C
 C
 C           Get the quality measure of scans ISCN to LSCN.  Isolate this
 C           to a subroutine in case someone wants to brew their own measure.
+C           Here continue to reward arbitrarily low elevation scans (0.0
+C           after JSCN).
 C        
-            PRDEBUG = GEOPRT .GE. 1
-            CALL GEOQUAL( ISCN, ISCN, LSCN, JSCN, TESTQUAL, PRDEBUG, 
-     1                    SIGMA )
+            PRDEBUG = GEOPRT .GE. 2
+            CALL GEOQUAL( ISCN, ISCN, LSCN, JSCN, 0.0, 
+     1                    TESTQUAL, PRDEBUG, SIGMA )
 C
 C           Provide some feedback on the current segment.
 C
@@ -198,6 +203,11 @@ C
                WRITE( MSGTXT,'( A, 20I3 )' )  '     Priority:  ', 
      1               (USEGEO(TSRC(ISEG)),ISEG=1,NTSEG)
                CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, 20F5.1 )' ) 
+     1              '     Sigmas by station: ', 
+     2              (SIGMA(ISTA),ISTA=1,NPRT)
+               CALL WLOG( 1, MSGTXT )
             END IF
 C        
 C           See whether to save this one source set.
@@ -209,7 +219,6 @@ C
 C               IF( GEOPRT .GE. 0 ) THEN
                   IF( GEOPRT .EQ. 0 ) WRITE(*,*) ' '
                   MSGTXT = ' '
-                  NPRT = MIN( 30, NTSEG )
                   WRITE( MSGTXT, '( A, I5, A, 2I3, A, F7.3 )' )
      1             'New best geodetic segment - Trial: ', ITRIAL, 
      2             ' Number of scans & fewest scans/sta: ', 
@@ -251,7 +260,6 @@ C
      1            'Trial ', ITRIAL, '  Quality:', 
      2            TESTQUAL, ' sources: ', (TSRC(I),I=1,NTSEG)
             CALL WLOG( 1, MSGTXT )
-            NPRT = MIN( 20, NSTA )
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, 20( 4X, A2, 1X) )' ) 
      1           '                      ', 

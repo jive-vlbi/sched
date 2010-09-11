@@ -506,6 +506,7 @@ C
       GEOTRIES = KD( KEYPTR( 'GEOTRIES', KC, KI ) )
       GEOBACK  = KD( KEYPTR( 'GEOBACK', KC, KI ) )
       GEOSLEW  = KD( KEYPTR( 'GEOSLEW', KC, KI ) )
+      GEOSLOW  = KD( KEYPTR( 'GEOSLOW', KC, KI ) )
 C
 C     Process Cover Letter and Correlator input.
 C

@@ -85,6 +85,12 @@ C
       LOGICAL           ADJUST, KEEP, DONE, GOTALL
       DOUBLE PRECISION  START, STOP
       CHARACTER         TFORM*8, TIME1*8, TIME2*8
+C
+C     For test only.
+C
+      double precision      SIGMA(20)
+      real                   DUM1
+C
       SAVE              LASTISCN
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHOPT: Starting.' )
@@ -287,6 +293,19 @@ C
      1            GEOOPT .GE. 1 ) ) THEN
                CALL ADDGEO( LASTISCN, ISCN, GEOOPT, KEEP )
             END IF
+C
+C           Get the geodetic quality measure for some scans.  This
+C           is for testing a premade sequence.  GEOQUAL does the 
+C           printing.  Keep the code here in case I want to make it
+C           a feature with a switch like GEOTEST = 13 on the last 
+C           scan of the group.  The fourth parameter shoud be a scan
+C           that includes all sources (may need to test to find one).
+C
+C            IF( GEOTEST(ISCN) .GT. 0 ) THEN
+C               CALL GEOQUAL( ISCN - GEOTEST + 1, ISCN - GEOTEST + 1, 
+C     1              ISCN, ISCN - GEOTEST + 1,
+C     2              0.0, DUM1, .TRUE., SIGMA )
+C            END IF
 C
 C           Insert reference pointing scans if requested.  
 C           It is possible that several scans will be inserted (NADDED 
