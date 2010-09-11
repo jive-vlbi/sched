@@ -41,6 +41,7 @@ C        C         = 2-D ARRAY OF PARTIAL DERIVATIVES OF MODEL
 C                    First dimension is maximum number of data points.
 C                    That has a maximum of 20000
 C        E         = 1-D ARRAY OF ERRORS ON DATA POINTS
+C        IERR      = 0 - Don't print some of error messages.  1 - Do
 C
 C     THE OUTPUT INCLUDES:
 C        XHAT2     = 1-D ARRAY OF FINAL LEAST SQUARE VALUES FOR ALL 
@@ -59,6 +60,7 @@ C      IMPLICIT REAL*8 (A-H,O-Z)
       character*8       VNAME(1),QUEST(2)
 C
       INTEGER           I, J, L, M, IN, JNEW, ITEST2, INOTE
+      INTEGER           PRTERR
       DOUBLE PRECISION  B(40,40),BSTORE(40,40),XIDENT(40,40),
      +                  COR(40,40),STDEV(40),PR(40),
      +                  XHAT(40),SNEW(20000),PRODCT(20000)
@@ -73,6 +75,7 @@ C
       DATA QUEST/'YES     ','NO      '/
 
 C ---------------------------------------------------------------------
+      PRTERR = IERR
       IERR = 0
  9999 FORMAT (1X,10(1PD13.5))
  9998 FORMAT (1X,20F6.2)
@@ -361,15 +364,17 @@ c 2061               FORMAT (10X,A8,2X,F10.5)
        else
 
 c         Print out warning... and set error flag.
-          WRITE (6,2095)  ITEST2
- 2095     FORMAT (////'  ***** ITEST2 =',I2,' ***** '
-     +               /'       MATRIX INVERSION FAILED.')
-          IF( ITEST2 .EQ. 1 ) 
-     1      WRITE( 6, '( A )' ) ' Off-diagonal elements after '//
-     2          'multiplication by inverse too large. '
-          IF( ITEST2 .EQ. -1 )
-     1      WRITE( 6, '( A )' ) ' Diagonal elements not near unity '//
-     2          'after multiplication by inverse. '
+
+          IF( ITEST2 .EQ. 1 .AND. PRTERR .GE. 1 ) 
+     1      WRITE( 6, '( A, I2, A )' ) 
+     2          ' LSQFIT * ITEST2 =', ITEST2,
+     3          '  MATRIX INVERSION FAILED. Off-diagonal elements '//
+     4          'after multiplication by inverse too large. '
+          IF( ITEST2 .EQ. -1 .AND. PRTERR .GE. 1  )
+     1      WRITE( 6, '( A, I2, A )' ) 
+     2          ' LSQFIT * ITEST2 =', ITEST2,
+     3          '  MATRIX INVERSION FAILED. Diagonal elements not '//
+     4          'near unity after multiplication by inverse. '
           IERR = 1
 
       endif

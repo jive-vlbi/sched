@@ -72,6 +72,12 @@ C
       WRITE( MSGTXT, '( A, I4, I4, 1X, A )' ) 
      1      'Building geodetic segment centered at ', YR, DY, CTIME
       CALL WLOG( 1, MSGTXT )
+      MSGTXT = ' '
+      WRITE( MSGTXT, '( A, I2, A, I4, A, I3, A, F6.2, A, F6.1 )' )
+     1  '   Using GEOPRT=', GEOPRT, '  GEOTRIES=', GEOTRIES, 
+     2  '  GEOBACK=', GEOBACK, '  GEOSLEW=', GEOSLEW,
+     3  '  GEOSLOW=', GEOSLOW
+      CALL WLOG( 1, MSGTXT )
       IF( GEOPRT .GE. 0 ) THEN
          CALL WLOG( 1, 
      1       'Elevations at center for sources considered are: ' )
@@ -89,7 +95,7 @@ C     The ELTOL allows us to look at sources that are below the
 C     elevation cutoff in the center of the segment, but not the 
 C     edges.
 C
-      GEOLOWEL = 23.5
+      GEOLOWEL = 20.0
       GEOHIEL = 40.0
       ELTOL = 3.0
 C
