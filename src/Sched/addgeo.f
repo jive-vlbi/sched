@@ -92,7 +92,7 @@ C
          END DO
          TAPPROX = GSTARTJ(IOUT)
          CALL GMKSCN( LASTISCN, ISCN, JSCN, GEOSRCI(SEGSRCS(IOUT)),
-     1        GEOSRC(SEGSRCS(IOUT)), TAPPROX, OPMINEL(JSCN), 
+     1        GEOSRC(SEGSRCS(IOUT)), TAPPROX, OPMINEL(JSCN), 0,
      2        NGOOD, OKSTA, SSTASCN, 'FORCE' )
 C
 C        Get the number of scans left to do and tell SCHED to keep 

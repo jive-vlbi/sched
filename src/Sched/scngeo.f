@@ -17,24 +17,32 @@ C
       NGOOD = 0
       DO ISTA = 1, NSTA
 C
-C        Only bother with stations that are in the scan.
+C        Get the geometry for all scans.  Occasionally tables
+C        are printed that show the elevations, for example, of stations
+C        including those that are down.  So calculate that for all
+C        stations, but then only use the stations in the scan to 
+C        calculate things like slews.
+C
+C
+C        Get the geometry at each antenna for this source, whether or not
+C        it will observe.
+C
+         CALL SCHSRC( LASTISCN(ISTA), ISCN, ISTA, 
+     1                   STARTJ(ISCN), STOPJ(ISCN) )
+C
+C        Get the time the antenna got to source, or would get there if sent.
+C     
+         IF( LASTISCN(ISTA) .EQ. 0 ) THEN
+            TONSRC(ISCN,ISTA) = STARTJ(ISCN)
+         ELSE
+            CALL SLEW( ISCN, LASTISCN(ISTA), ISTA )
+            TONSRC(ISCN,ISTA) = STOPJ(LASTISCN(ISTA)) + 
+     1           TSLEW(ISCN,ISTA)
+         END IF
+C
+C        Now restrict counts etc to stations scheduled in the scan.
 C
          IF( STASCN(ISCN,ISTA) ) THEN
-C
-C           Get the geometry at each antenna.
-C
-            CALL SCHSRC( LASTISCN(ISTA), ISCN, ISTA, 
-     1                   STARTJ(ISCN), STOPJ(ISCN) )
-C     
-C           Get the time the antenna got to source.
-C     
-            IF( LASTISCN(ISTA) .EQ. 0 ) THEN
-               TONSRC(ISCN,ISTA) = STARTJ(ISCN)
-            ELSE
-               CALL SLEW( ISCN, LASTISCN(ISTA), ISTA )
-               TONSRC(ISCN,ISTA) = STOPJ(LASTISCN(ISTA)) + 
-     1              TSLEW(ISCN,ISTA)
-            END IF
 C     
 C           Count the number of antennas that are up.  Will use later
 C           to decide whether to keep the scan.   For this
@@ -61,8 +69,3 @@ C
 C
       RETURN
       END
-
-
-
-
-
