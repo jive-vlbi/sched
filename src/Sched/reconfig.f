@@ -13,7 +13,7 @@ C     Note that this time, frequencies must be considered, hence
 C     the scan numbers.
 C
       INTEGER   ISCN, LSCN, ISTA
-      INTEGER   KS, JS, KP, JP, ICH, ITP
+      INTEGER   KS, JS, KP, JP, ICH
       INTEGER   PSETI
       LOGICAL   LOCDBG, NEWCONF, NEWPCAL, SAMECONF
 C

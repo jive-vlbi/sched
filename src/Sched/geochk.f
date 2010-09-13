@@ -26,6 +26,13 @@ C     Next scheme tried is to keep a source only if it is one of the 3
 C     lowest (but above 11 deg) for some station or one of the 2 highest.
 C     Use LOWS(I,STAS) and HIGHS(I,STAS)
 C
+C     The latest scheme, as of this writing, uses the priority 1 or 2 
+C     sources that are closest to the previous source (whether or not it
+C     is in the geodetic sequence).  From the 5 closest, it randomly picks
+C     one.  Then repeats that until 4 sources are selected.  After that,
+C     it does trial fits for SecZ and picks the source that helps the
+C     most (see MAKESEG for details).
+C
 C     Inputs:
 C        JSCN:      Template scan (<ISCN usually)
 C        ISCN:      First scan of the sequence.
