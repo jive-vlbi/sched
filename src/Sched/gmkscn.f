@@ -131,10 +131,6 @@ C
          IF( NGOOD .GE. OPMIAN(JSCN) .AND. 
      1       ISCN .GT. SCAN1 ) THEN
 C
-C
-
-********************************
-
 C           Get the time to compare with TONSRC to determine if an
 C           antenna gets there late.  Naively this could be the 
 C           average time of arrival of the antennas that were in 
