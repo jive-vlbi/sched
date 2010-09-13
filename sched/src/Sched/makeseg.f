@@ -50,10 +50,10 @@ C
       INTEGER            NGOOD, NCHANCE, CHANCE(MSEG10), TEMPCH 
       INTEGER            INSCN(MAXSTA), INSCT, SELECTED(MGEO)
       INTEGER            HIGHSTA, HIGHSTA1, HIGHSTA2, HIGHSTA3
-      INTEGER            LHIGHSTA
+      INTEGER            LHIGHSTA, NLOW
       INTEGER            TSRC1, TSRC2, TSRC3
-      LOGICAL            OKSTA(MAXSTA), LSTAS, TEST
-      LOGICAL            STAOK, NEWC, PRDEBUG
+      LOGICAL            OKSTA(MAXSTA), LSTAS
+      LOGICAL            STAOK, SRCOK, NEWC, PRDEBUG
       LOGICAL            SSTASCN(MAXSTA), KSTASCN(MGEO,MAXSTA)
       REAL               RAN5, TESTQUAL, PENALTY
       REAL               SLQUAL, BSLQUAL
@@ -192,6 +192,26 @@ C
                      KSTASCN(IGEO,ISTA) = SSTASCN(ISTA)
                   END DO
 C
+C                 Check that the source really qualifies as a priority 1 or 2
+C                 source.  Since there was some tolerance at the horizon when
+C                 sources were selected, it might be down somewhere where it
+C                 is counted as up.  Assume that MAXPRIO is 2, but trap the
+C                 case where it isn't.
+C
+                  IF( MAXPRIO .NE. 2 ) CALL ERRLOG( 
+     1               'MAKESEG unexpected MAXPRIO - '//
+     2               'Fix test for down sources.' )
+                  NLOW = 0
+                  DO ISTA = 1, NSTA
+                     IF( SSTASCN(ISTA) ) THEN
+                        IF( ( EL1(LSCN,ISTA) + EL2(LSCN,ISTA) ) / 2.0 
+     1                      .LE. GEOLOWEL ) THEN
+                           NLOW = NLOW + 1
+                        END IF
+                     END IF
+                  END DO
+                  SRCOK = NLOW .GE. 1 
+C
 C                 Check that every station has been in enough scans
 C                 by now.  That means they have been in half.  Recall
 C                 that integer division gives the next lowest integer.
@@ -204,7 +224,8 @@ C
                      IF( STASCN(LSCN,ISTA) ) INSCT = INSCT + 1
                      IF( INSCT .LT. ISEG / 2 ) STAOK = .FALSE.
                   END DO
-                  IF( STAOK .AND. NGOOD .GE. OPMIAN(JSCN) ) THEN
+                  IF( SRCOK .AND. STAOK .AND. NGOOD .GE. OPMIAN(JSCN) )
+     1                 THEN
 C
 C                    Add to the CHANCE array if we're just starting.
 C                    Also for the first source of the experiment, 
