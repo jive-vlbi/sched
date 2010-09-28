@@ -185,9 +185,10 @@ C
          END DO
       END DO
 C
-C     Do the fit.  Note that ZATM and ZATMERR will run through
-C     the stations giving what they appear to be, then go through
-C     all but the last station again with clock offsets.
+C     Do the fit.  Note that the first half of the ZATM and ZATMERR 
+C     arrays will be the items apparent from the names for all
+C     stations.  The second half of the arrays, minus one, will be
+C     for the clocks at the stations.  One clock is held fixed.
 C     Jump throughsome hoops to prevent spewing excessive error
 C     messages.
 C

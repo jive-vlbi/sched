@@ -45,14 +45,15 @@ C
       INCLUDE  'sched.inc'
 C
       DOUBLE PRECISION  STARTB, TGEOEND
+      DOUBLE PRECISION  SRCSEP, REQSEP
       INTEGER           JSCN, ISCN, USEGEO(*)
       LOGICAL           OKGEO(*)
       REAL              SEGELEV(MAXSTA,MGEO)
 C
-      DOUBLE PRECISION  TAPPROX, TIMRAD
+      DOUBLE PRECISION  TAPPROX, TIMRAD, RAS, DECS, SLA_DSEP
       REAL              ELTOL
       INTEGER           NLOW, NHIGH
-      INTEGER           ISTA, ICH, IGEO, LSCN 
+      INTEGER           ISTA, ICH, IGEO, LSCN, MSPRT
       INTEGER           NREJECT, LASTLSCN(MAXSTA)
       INTEGER           YR, DY, NGOOD
       LOGICAL           OKSTA(MAXSTA)
@@ -68,6 +69,14 @@ C
       TAPPROX = ( TGEOEND + STARTB ) / 2.D0
       NREJECT = 0
 C
+      IF( NSTA .GT. 20 ) THEN
+         CALL WLOG( 1, 'GEOCHK:  Printing only first 20 stations '
+     1        // 'information' )
+         MSPRT = 20
+      ELSE
+         MSPRT = NSTA
+      END IF
+C
 C     Write some messages to the user about the source list to
 C     follow.
 C
@@ -80,18 +89,27 @@ C
      1      'Building geodetic segment centered at ', YR, DY, CTIME
       CALL WLOG( 1, MSGTXT )
       MSGTXT = ' '
-      WRITE( MSGTXT, '( A, I2, A, I4, A, I3, A, F6.2, A, F6.1 )' )
-     1  '   Using GEOPRT=', GEOPRT, '  GEOTRIES=', GEOTRIES, 
-     2  '  GEOBACK=', GEOBACK, '  GEOSLEW=', GEOSLEW,
-     3  '  GEOSLOW=', GEOSLOW
+      WRITE( MSGTXT, 
+     1      '( A, I2, 4X, A, I4, 2X, A, I3, 3X, A, I3 )' )
+     2  '   Using GEOPRT= ', GEOPRT,  '  GEOTRIES=', GEOTRIES, 
+     3  '  GEOBACK=', GEOBACK, '  GEOSREP=', GEOSREP
+      CALL WLOG( 1, MSGTXT )
+      MSGTXT = ' '
+      WRITE( MSGTXT, '( A, F6.2, A, F6.1, A, F6.2, A, F6.2 )' )
+     1  '         GEOSLEW=', GEOSLEW, '  GEOSLOW= ', GEOSLOW,
+     3  '  GELOWEL=', GEOLOWEL,'  GEOHIEL=', GEOHIEL
       CALL WLOG( 1, MSGTXT )
       IF( GEOPRT .GE. 0 ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A )' ),'       Note in fit, SecZ < 4 '
+     1     // 'treated as 4 to avoid favoring'
+     2     // ' extreme low elevations.'
+         CALL WLOG( 1, MSGTXT )
          CALL WLOG( 1, 
      1       'Elevations at center for sources considered are: ' )
-         IF( NSTA .GT. 20 ) CALL WLOG( 1, '(Only first 20 stations)' )
          MSGTXT = ' '
          WRITE( MSGTXT, '( 21X, 20A5 )' ) 
-     1        (STCODE(STANUM(ISTA)),ISTA=1,NSTA)
+     1        (STCODE(STANUM(ISTA)),ISTA=1,MSPRT)
          CALL WLOG( 1, MSGTXT )
          MSGTXT = ' '
       END IF
@@ -100,11 +118,24 @@ C     Set the limits and required numbers for finding sources
 C     that contribute both high and low elevation data.
 C     The ELTOL allows us to look at sources that are below the
 C     elevation cutoff in the center of the segment, but not the 
-C     edges.
+C     edges.  But the usage here is only to set the priorities. 
+C     At the time sources are picked, the actual geometry will be
+C     picked, so for now, set ELTOL to zero.
+C     The default GEOLOWEL = 23 corresponds to SecZ of 2.55 while 
+C     the default GEOHIEL of 40 corresponds to 1.55, giving a 
+C     spread of 1.  These parameters are user adjustable. Again, 
+C     this is used for selecting the initial sources in a segment.
 C
-      GEOLOWEL = 20.0
-      GEOHIEL = 40.0
-      ELTOL = 3.0
+      ELTOL = 0.0
+C
+C     Set up to test the sun distance.  Sources too close to 
+C     the sun were selected uncomfortably often during testing of 
+C     the geo segment insertion.  I considered moving the call to 
+C     GETSUN to before this routine, but it needs TFIRST and
+C     TLAST which are calculated in SCHOPT.
+C
+      CALL SUNPOS( TAPPROX, RAS, DECS )
+      REQSEP = 60.D0 * ( SFFREQ(1,SETNUM(JSCN)) / 1000.D0 )**(-0.6)
 C
 C     Loop through the sources getting the geometry and determining
 C     which sources are useful for this segment.  Those that can be
@@ -123,7 +154,7 @@ C        Make a scan with the geodetic source IGEO.  This gets all
 C        the geometric information.
 C
          CALL MAKESCN( LASTLSCN, LSCN, JSCN, GEOSRCI(IGEO),
-     1        GEOSRC(IGEO), TAPPROX, OPMINEL(JSCN) - 4.0,
+     1        GEOSRC(IGEO), TAPPROX, OPMINEL(JSCN) - ELTOL,
      2        NGOOD, OKSTA )
 C
 C        Save the elevations.
@@ -135,6 +166,12 @@ C
 C        Make sure enough antennas are good for this source.  
 C
          OKGEO(IGEO) = NGOOD .GE. OPMIAN(JSCN)
+C
+C        Check the sun distance.
+C
+         SRCSEP = SLA_DSEP( RAP(GEOSRCI(IGEO)), DECP(GEOSRCI(IGEO)),
+     1         RAS, DECS ) / RADDEG
+         OKGEO(IGEO) = OKGEO(IGEO) .AND. SRCSEP .GT. REQSEP 
 C
 C        Count those turned down.  This will be tested later to 
 C        determine if there will be a problem.  Set USEGEO out of
@@ -152,20 +189,23 @@ C
 C        For normal observations (.GE. 6 stations), the USEGEO priority
 C        settings are:
 C          5:  Meets OKGEO constraints, but otherwise not interesting.
-C          4:  More than one station below GEOLOWEL+10 
-C          3:  More than one low station.
-C          2:  More than one low and one high stations.
-C          1:  More than two low and two high stations.
+C          4:  One or more station below GEOLOWEL+10 
+C          3:  One or more low station.
+C          2:  One or more low and three or more high stations or
+C                  three or more low el stations.
+C          1:  Two or more low and two or more high stations.
 C
          IF( OKGEO(IGEO) ) THEN
             USEGEO(IGEO) = 5
             DO ISTA = 1, NSTA
-               IF( SEGELEV(ISTA,IGEO) .LE. GEOLOWEL + 10.0 ) 
-     1            USEGEO(IGEO) = 4
+               IF( STASCN(LSCN,ISTA) .AND.
+     1            SEGELEV(ISTA,IGEO) .LE. GEOLOWEL + 10.0 ) 
+     2            USEGEO(IGEO) = 4
             END DO
             DO ISTA = 1, NSTA
-               IF( SEGELEV(ISTA,IGEO) .LE. GEOLOWEL  ) 
-     1            USEGEO(IGEO) = 3
+               IF( STASCN(LSCN,ISTA) .AND.
+     1            SEGELEV(ISTA,IGEO) .LE. GEOLOWEL  ) 
+     2            USEGEO(IGEO) = 3
             END DO
 C
 C           Now the multi-station criteria.
@@ -173,13 +213,16 @@ C
             NLOW = 0
             NHIGH = 0
             DO ISTA = 1, NSTA
-               IF( SEGELEV(ISTA,IGEO) .GT. OPMINEL(JSCN) - ELTOL .AND. 
-     1             SEGELEV(ISTA,IGEO) .LE. GEOLOWEL )
-     2             NLOW = NLOW + 1
-               IF( SEGELEV(ISTA,IGEO) .GE. GEOHIEL )
-     1             NHIGH = NHIGH + 1
+               IF( STASCN(LSCN,ISTA) .AND.
+     1             SEGELEV(ISTA,IGEO) .GT. OPMINEL(JSCN) - ELTOL .AND. 
+     2             SEGELEV(ISTA,IGEO) .LE. GEOLOWEL )
+     3             NLOW = NLOW + 1
+               IF( STASCN(LSCN,ISTA) .AND.
+     1             SEGELEV(ISTA,IGEO) .GE. GEOHIEL )
+     2             NHIGH = NHIGH + 1
             END DO
-            IF( NLOW .GE. 1 .AND. NHIGH .GE. 1 ) USEGEO(IGEO) = 2
+            IF( ( NLOW .GE. 1 .AND. NHIGH .GE. 3 ) .OR. 
+     1          NLOW .GE. 3 ) USEGEO(IGEO) = 2
             IF( NLOW .GE. 2 .AND. NHIGH .GE. 2 ) USEGEO(IGEO) = 1
          END IF
 C
@@ -200,7 +243,11 @@ C
                   WRITE( MSGTXT(ICH:ICH+4), '(A5)' ) '  -- '
                END IF
             END DO
-C           write(*,*) 'geochk, writing line of data ', ich, nsta
+            ICH = ICH + 5
+            IF( SRCSEP .LE. REQSEP ) THEN
+               WRITE( MSGTXT(ICH:ICH+30), '( A, F5.0, A )' )
+     1              '  Too near sun:', SRCSEP, ' deg.'
+            END IF
             CALL WLOG(1,MSGTXT)
          END IF
 C

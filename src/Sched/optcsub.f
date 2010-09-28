@@ -105,8 +105,8 @@ C
       DO ISTA = 1, NSTA
          STASCN(ISCN,ISTA) = JSCN .EQ. SCNSTA(ISTA)
       END DO
-      write(*,*) 'optcsub: ', iscn, (stascn(iscn,ista),ista=1,nsta),
-     1    jscn, scn1, scn2, scn3
+C      write(*,*) 'optcsub: ', iscn, (stascn(iscn,ista),ista=1,nsta),
+C     1    jscn, scn1, scn2, scn3
 C
       RETURN
       END

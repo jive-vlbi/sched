@@ -25,8 +25,8 @@ C
       END IF
       IERR = VLBOPE( ILOG, LOGFILE, 'TEXT', OPSTAT, OPTEXT )
       IF( IERR .NE. 1 ) THEN 
-         WRITE(*,*) 'STMSG: CANNOT OPEN LOG FILE ' // LOGFILE
-         WRITE(*,*) '       Error text: ' // OPTEXT 
+         CALL WLOG( 1, 'STMSG: CANNOT OPEN LOG FILE ' // LOGFILE )
+         CALL WLOG( 1, '       Error text: ' // OPTEXT )
          CALL ERROR( ' Check why log file cannot be opened' )
       END IF
 C
