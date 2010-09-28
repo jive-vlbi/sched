@@ -35,17 +35,18 @@ C
 C
       INTEGER           ISEG, ITRIAL, LSCN, I, J, IDUM, ISTA, NSTSCN
       INTEGER           NTSEG, TSRC(MSEG)
-      INTEGER           MINSPS, HALFSCNS, NPRT, ICH,  USEGEO(MGEO)
-      REAL              BESTQUAL, TESTQUAL
-      REAL              RAN5, DUMMY, SEGELEV(MAXSTA,MGEO)
+      INTEGER           MINSPS, HALFSCNS, NPRST, NPRT, ICH, USEGEO(MGEO)
+      REAL              BESTQUAL, TESTQUAL, BESTSIG(MAXSTA)
+      REAL              RAN5, DUMMY, SEGELEV(MAXSTA,MGEO), SGAP
       LOGICAL           OKGEO(MGEO), PRDEBUG, RETAIN, KEPT
       DOUBLE PRECISION  TGEO1, TGEOEND, STARTB, SIGMA(MAXPAR)
+      CHARACTER         SELTYPE(MSEG)*3, WSTA(MSEG)*2
 C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
 C ---------------------------------------------------------------------
       IF( DEBUG .OR. GEOPRT .GE. 2 ) CALL WLOG( 1, 'GEOMAKE starting.' )
-      NPRT = MIN( 20, NSTA )
+      NPRST = MIN( 20, NSTA )
 C
       BESTQUAL = 9999.
       DO ISEG = 1, MSEG
@@ -116,8 +117,8 @@ C     Loop over the trials.  For now, the number is hardwired.  That
 C     will likely be pulled out as a user parameter some day.
 C
       DO ITRIAL = 1, GEOTRIES
-         IF( GEOPRT .GE. 1 ) CALL WLOG( 1, ' ' )
-         IF( GEOPRT .GE. 0 ) THEN
+         IF( GEOPRT .GE. 1 ) THEN
+            CALL WLOG( 1, ' ' )
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, I5, A, I5 )' ) 
      1           'GEOMAKE starting to construct trial segment', 
@@ -129,7 +130,8 @@ C        Make a sequence of scans for the geodetic block.
 C
          CALL MAKESEG( JSCN, ISCN, LASTISCN, 
      1                 OKGEO, USEGEO, SEGELEV, STARTB, TGEOEND, 
-     2                 LSCN, NTSEG, TSRC, IDUM, SIGMA )
+     2                 LSCN, NTSEG, TSRC, IDUM, SIGMA, SELTYPE,
+     3                 WSTA )
 C
 C        Make sure each antenna is in a reasonable number of scans.
 C        There is some hoop jumping because the number of scans can
@@ -180,33 +182,40 @@ C
 C           Get the quality measure of scans ISCN to LSCN.  Isolate this
 C           to a subroutine in case someone wants to brew their own measure.
 C           Here continue to reward arbitrarily low elevation scans (0.0
-C           after JSCN).
+C           after JSCN).  Note that SecZ(90-14.48) is close to 4.0.
 C        
             PRDEBUG = GEOPRT .GE. 2
-            CALL GEOQUAL( ISCN, ISCN, LSCN, JSCN, 0.0, 
+            CALL GEOQUAL( ISCN, ISCN, LSCN, JSCN, 14.48, 
      1                    TESTQUAL, PRDEBUG, SIGMA )
 C
 C           Provide some feedback on the current segment.
 C
             IF( GEOPRT .GE. 0 ) THEN
+               CALL WLOG( 1, ' ' )
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, A, I5, A, F7.2, A, F7.2 )') 
-     1                'GEOMAKE: Finished making a segment. ',
-     2                ' Number of scans:', ntseg, '  Quality:', 
+               WRITE( MSGTXT, '( A, I5, A, I5, A, F7.2, A, F7.2 )') 
+     1                'GEOMAKE: Finished making trial segment. ',
+     2                ITRIAL, ' Number of scans:', ntseg, '  Quality:', 
      3                TESTQUAL, '  Previous best:', BESTQUAL
                CALL WLOG( 1, MSGTXT )
+               IF( NTSEG .GT. 70 ) THEN
+                  CALL WLOG( 1, '  Only first 70 scans printed' )
+                  NPRT = 50 
+               ELSE
+                  NPRT = NTSEG
+               END IF
                MSGTXT = ' '
-               WRITE( MSGTXT,'( A, 20I3 )' )  '     Sources:   ', 
-     1               (TSRC(ISEG),ISEG=1,NTSEG)
+               WRITE( MSGTXT,'( A, 50I4 )' )  '     Sources:   ', 
+     1               (TSRC(ISEG),ISEG=1,NPRT)
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
-               WRITE( MSGTXT,'( A, 20I3 )' )  '     Priority:  ', 
-     1               (USEGEO(TSRC(ISEG)),ISEG=1,NTSEG)
+               WRITE( MSGTXT,'( A, 50I4 )' )  '     Priority:  ', 
+     1               (USEGEO(TSRC(ISEG)),ISEG=1,NPRT)
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, 20F5.1 )' ) 
      1              '     Sigmas by station: ', 
-     2              (SIGMA(ISTA),ISTA=1,NPRT)
+     2              (SIGMA(ISTA),ISTA=1,NPRST)
                CALL WLOG( 1, MSGTXT )
             END IF
 C        
@@ -217,7 +226,7 @@ C
 C              Annouce that a new best was found.
 C
 C               IF( GEOPRT .GE. 0 ) THEN
-                  IF( GEOPRT .EQ. 0 ) WRITE(*,*) ' '
+                  IF( GEOPRT .EQ. 0 ) CALL WLOG( 1, ' ' )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, I5, A, 2I3, A, F7.3 )' )
      1             'New best geodetic segment - Trial: ', ITRIAL, 
@@ -240,6 +249,7 @@ C
                   GSTARTJ(ISEG) = STARTJ(I)
                   DO ISTA = 1, NSTA
                      GSTASCN(ISEG,ISTA) = STASCN(I,ISTA)
+                     BESTSIG(ISTA) = SIGMA(ISTA)
                   END DO
                END DO
                NSEG = NTSEG
@@ -256,32 +266,33 @@ C        If requested, write details about each trial sequence.
 C
          IF( ( GEOPRT .GE. 0 .AND. KEPT ) .OR. GEOPRT .GE. 1 ) THEN
             MSGTXT = ' '
-            WRITE(MSGTXT, '( A, I5, A, F7.2, A, 23I3 )' ) 
-     1            'Trial ', ITRIAL, '  Quality:', 
-     2            TESTQUAL, ' sources: ', (TSRC(I),I=1,NTSEG)
-            CALL WLOG( 1, MSGTXT )
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, 20( 4X, A2, 1X) )' ) 
-     1           '                      ', 
-     2           (STCODE(STANUM(ISTA)),ISTA=1,NPRT)
-            CALL WLOG( 1, MSGTXT )
             IF( RETAIN ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, 20F7.2 )' ) 
-     1              '   Sigmas by station: ', 
-     2              (SIGMA(ISTA),ISTA=1,NPRT)
+     1              '   Sigmas by station:                ', 
+     2              (SIGMA(ISTA),ISTA=1,NPRST)
                CALL WLOG( 1, MSGTXT )
             ELSE
                CALL WLOG( 1, '  Rejected without testing.'//
      1            '  Some station(s) with too few scans.' )
             END IF
+            WRITE( MSGTXT, '( A, 20( 4X, A2, 1X) )' ) 
+     1           ' Num  Gap(s) Sel Source      Worst   ', 
+     2           (STCODE(STANUM(ISTA)),ISTA=1,NPRST)
+            CALL WLOG( 1, MSGTXT )
             DO I = 1, NTSEG
                J = ISCN + I - 1
+               IF(  I .EQ. 1 .AND. ISCN .EQ. SCAN1 ) THEN
+                  SGAP = 0.0
+               ELSE
+                  SGAP = ( STARTJ(J) - STOPJ(J-1) ) / ONESEC
+               END IF
                MSGTXT = ' '
-               WRITE( MSGTXT,'( I4, 2X, A12, 20F5.0 )' ) TSRC(I), 
-     1              GEOSRC(TSRC(I))
-               ICH = 25
-               DO ISTA = 1, NPRT
+               WRITE( MSGTXT,'( I4, F8.0, 1X, A, 1X, A12, 2X, A2 )' ) 
+     1              TSRC(I), SGAP, SELTYPE(I), 
+     2              GEOSRC(TSRC(I)), WSTA(I)
+               ICH = 40
+               DO ISTA = 1, NPRST
                   IF( STASCN(J,ISTA) ) THEN
                      WRITE( MSGTXT(ICH:ICH+10), '( F5.0, 1X )' )
      1                       EL1(J,ISTA)
@@ -310,10 +321,26 @@ C
       IF( GEOPRT .GE. 0) THEN
          CALL WLOG( 1, '   ' )
          MSGTXT = ' '
-         WRITE( MSGTXT, '( A, 30I3 )' ) 
-     1          'GEOMAKE finished: Selected sources: ', 
-     2         (SEGSRCS(ISEG), ISEG=1,NSEG)
+         WRITE( MSGTXT, '( A, I3, A, 30I4 )' ) 
+     1          'GEOMAKE FINISHED:', NSEG, 
+     2          ' Selected geodetic sources: ', 
+     3         (SEGSRCS(ISEG), ISEG=1,NSEG)
          CALL WLOG( 1, MSGTXT )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, F7.2, A, 20F7.2 )' ) 
+     1        ' Quality: ', BESTQUAL, 
+     2        '  Sigmas by station: ', 
+     3        (BESTSIG(ISTA),ISTA=1,NPRST)
+         CALL WLOG( 1, MSGTXT )
+         WRITE( MSGTXT, '( A, 20( 4X, A2, 1X) )' ) 
+     1        ' Num   Gap(s)  Source                ', 
+     2        (STCODE(STANUM(ISTA)),ISTA=1,NPRST)
+         CALL WLOG( 1, MSGTXT )
+C
+C        To write the actual output lines, the segment need to be
+C        transferred to the scans arrays. That is done in ADDGEO.
+C        So put the output there.
+C
       END IF
 C
       RETURN

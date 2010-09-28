@@ -199,7 +199,6 @@ C
 C
 C     Add comment
 C
-C      write(*,*) 'prtsch ', annot(iscn)(1:70), annot(iscn)(71:128)
       IF( ANNOT(ISCN) .NE. ' ' ) THEN
          WRITE (IPRT,'(2X,/,'' ---------- '',A,'' ----------'')')
      1      ANNOT(ISCN)(1:MAX(1,LEN1(ANNOT(ISCN))))

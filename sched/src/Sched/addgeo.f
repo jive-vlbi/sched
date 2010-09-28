@@ -36,7 +36,8 @@ C     the desired source name out of the source catalog is a bit
 C     messy.
 C
       INTEGER            SEGSRCS(MSEG)
-      INTEGER            NSEG, JSCN, IOUT, NGOOD, ISTA
+      INTEGER            NSEG, JSCN, IOUT, NGOOD, ISTA, ICH, NPRST
+      REAL               SGAP
       LOGICAL            OKSTA(MAXSTA)
       LOGICAL            GSTASCN(MSEG,MAXSTA), SSTASCN(MAXSTA)
       DOUBLE PRECISION   TAPPROX, GSTARTJ(MSEG)
@@ -100,6 +101,37 @@ C        this scan.
 C
          GEOOPT = GEOOPT - 1
          KEEP = .TRUE.
+C
+         IF( GEOPRT .GE. 0 ) THEN
+C
+C           Write the lines of the table of sources and elevations.
+C           Do them one by one as they are prepared for output by
+C           ADDGEO.  The table headers are constructed at the
+C           end of MAKEGEO.
+C        
+            IF(  ISCN .EQ. SCAN1 ) THEN
+               SGAP = 0.0
+            ELSE
+               SGAP = ( STARTJ(ISCN) - STOPJ(ISCN-1) ) / ONESEC
+            END IF
+            MSGTXT = ' '
+            WRITE( MSGTXT,'( I4, F8.0, 1X, 1X, A12 )' ) 
+     1          SEGSRCS(IOUT), SGAP, GEOSRC(SEGSRCS(IOUT))
+            ICH = 40
+            NPRST = MIN( 20, NSTA )
+            DO ISTA = 1, NPRST
+               IF( STASCN(ISCN,ISTA) ) THEN
+                  WRITE( MSGTXT(ICH:ICH+10), '( F5.0, 1X )' )
+     1                    EL1(ISCN,ISTA)
+               ELSE
+                  WRITE( MSGTXT(ICH:ICH+10), '( A, F4.0, A )' )
+     1                    '(', EL1(ISCN,ISTA), ')'
+               END IF
+               ICH = ICH + 7
+            END DO
+            CALL WLOG( 1, MSGTXT )
+         END IF
+C
       END IF
 C
 C     At end, GEOOPT will be zero on the last output scan.
