@@ -67,16 +67,11 @@ C     The cell boundaries.  Make input some day?
 C     AZCOFF is added to the azimuth to get the "test" azimuth
 C     so that I can have a cell that crosses 0.
 C
-C ***********  ELCELL modified for DELZN maker - temporary.
-C              If this works, take the limits out to user.
-C              Also, treat all azimuths in the upper elcell as
-C              the same.  Do later.
-C
       DATA      AZCOFF  / 60. /
-      DATA      ELCELL  / 20., 30. /
+      DATA      ELCELL  / 20., 45. /
       DATA      AZCELL  / 120., 240. /  
 C ---------------------------------------------------------------------
-      IF( DEBUG ) WRITE(*,*) 'Starting OPTCELLS'
+      IF( DEBUG ) CALL WLOG( 1, 'Starting OPTCELLS' )
       DONE = .FALSE.
       KEEP = .TRUE.
       ADJUST = .TRUE.

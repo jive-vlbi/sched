@@ -17,7 +17,7 @@ C
       LOGICAL     OKVLB, PHSWARN, PHASING, VLAUSED
       LOGICAL     WRTHEAD
 C -----------------------------------------------------------------
-      IF( DEBUG ) WRITE(*,*) 'VLASCHK starting'
+      IF( DEBUG ) CALL WLOG( 1, 'VLASCHK starting' )
 C
 C     Determine if the VLA was used and, if so, get its station
 C     number.

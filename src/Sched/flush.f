@@ -25,8 +25,8 @@ C     Now open it again.
 C
       IERR = VLBOPE( IUNIT, FFILE, 'TEXT', 'OLD', OPTEXT )
       IF( IERR .NE. 1 ) THEN 
-         WRITE(*,*) 'FLUSH: CANNOT REOPEN FILE ' // LOCFILE
-         WRITE(*,*) '       Error text: ' // OPTEXT 
+         CALL WLOG( 1, 'FLUSH: CANNOT REOPEN FILE ' // LOCFILE )
+         CALL WLOG( 1, '       Error text: ' // OPTEXT )
          CALL ERROR( ' Check why file cannot be opened' )
       END IF
 C

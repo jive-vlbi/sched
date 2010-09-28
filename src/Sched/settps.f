@@ -36,7 +36,7 @@ C      CHARACTER         TIMECH*8
       DATA              PRESWARN, SGWARN / .TRUE., .TRUE. /
       SAVE              LASTGAP
 C  -------------------------------------------------------------------
-      IF( DEBUG ) WRITE(*,*) 'SETTPS starting'
+      IF( DEBUG ) CALL WLOG( 1, 'SETTPS starting' )
 C
 C     Initialize.
 C

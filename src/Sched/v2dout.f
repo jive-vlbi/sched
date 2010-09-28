@@ -35,7 +35,6 @@ C
       IF( EXISTS .AND. OVERWRIT ) THEN
          OPSTAT = 'OLD'
       ELSE IF( EXISTS ) THEN
-       write(*,*) 'v2dout 2' 
          WRITE( MSGTXT, '( A, A, A )' )  'V2DOUT: ', 
      1       V2DFILE(1:LEN1(V2DFILE)), ' already exists.'
          CALL WLOG( 1, MSGTXT )

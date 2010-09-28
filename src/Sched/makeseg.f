@@ -1,6 +1,7 @@
       SUBROUTINE MAKESEG( JSCN, ISCN, LASTISCN, 
      1                    OKGEO, USEGEO, SEGELEV, STARTB, TGEOEND, 
-     2                    LSCN, NTSEG, TSRC, IDUM, SIGMA )
+     2                    LSCN, NTSEG, TSRC, IDUM, SIGMA, SELTYPE,
+     3                    WSTA )
 C
 C     Routine for SCHED called by GEOMAKE that invents a 
 C     series of sources to try as a geodetic sequence.
@@ -31,6 +32,10 @@ C        LSCN:      The last scan of the sequence
 C        NTSEG:     Number of scans in the geodetic sequence.
 C        TSRC:      The sequence of geodetic source numbers for the
 C                   geodetic sequence.
+C        SELTYPE:   Selection type used:  SP=sigma+slew penalty, 
+C                        S=sigma, no penalty, RMS=rms sigma.
+C                        NR=nearby random.
+C        WSTA:      Worst station.
 C
 C     The chosen output scans will be deposited in scans ISCN to LSCN.
 C
@@ -43,19 +48,22 @@ C
       LOGICAL            OKGEO(*)
       REAL               SEGELEV(MAXSTA,MGEO)
       DOUBLE PRECISION   STARTB, TGEOEND, SIGMA(*)
+      CHARACTER          SELTYPE(*)*3, WSTA(*)*2
 C
-      INTEGER            ISTA, IS, ISEG, IGEO, IC
+      INTEGER            ISTA, IS, ISEG, IGEO, IC, LSEG
       INTEGER            LASTLSCN(MAXSTA), NNEAR, NRAND, CTSC
-      INTEGER            KSCN, MAXPRIO, IISCN, NPRT
+      INTEGER            KSCN, MAXPRIO, IISCN, SSCN1, NPRT, MAXIC
       INTEGER            NGOOD, NCHANCE, CHANCE(MSEG10), TEMPCH 
       INTEGER            INSCN(MAXSTA), INSCT, SELECTED(MGEO)
       INTEGER            HIGHSTA, HIGHSTA1, HIGHSTA2, HIGHSTA3
-      INTEGER            LHIGHSTA, NLOW
+      INTEGER            LHIGHSTA, NEEDLOW, NEEDHIGH, LHGOAL
+      INTEGER            STALOW(MAXSTA), NSTALOW, NNEWLOW
+      INTEGER            STAHIGH(MAXSTA), NSTAHIGH, NNEWHIGH
       INTEGER            TSRC1, TSRC2, TSRC3
       LOGICAL            OKSTA(MAXSTA), LSTAS
-      LOGICAL            STAOK, SRCOK, NEWC, PRDEBUG
+      LOGICAL            STAOK, SRCOK, NEWC, PRDEBUG, DORAND
       LOGICAL            SSTASCN(MAXSTA), KSTASCN(MGEO,MAXSTA)
-      REAL               RAN5, TESTQUAL, PENALTY
+      REAL               RAN5, TESTQUAL, PENALTY, ELA
       REAL               SLQUAL, BSLQUAL
       REAL               FQUAL, BFQUAL, FQUALSL, BFQUALSL
       REAL               PKSIG
@@ -64,8 +72,8 @@ C
       REAL               HIGHSIG, HIGHSIG1, HIGHSIG2, HIGHSIG3
       REAL               LHIGHSIG
       DOUBLE PRECISION   TAPPROX, TESTTIME(MSEG10), TEMPTIME
-      DOUBLE PRECISION   SLEWTIME, TSEP
-      CHARACTER          LSRCNAME*12
+      DOUBLE PRECISION   SLEWTIME, TSEP, T0
+      CHARACTER          LSRCNAME*12, LASTTYPE*5, METHOD*4
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'MAKESEG starting' )
       NPRT = MIN( 20, NSTA )
@@ -73,16 +81,27 @@ C
 C     Initializations
 C
       ISEG = 0
+      LSEG = 0
+      NRAND = 0
+      DORAND = .TRUE.
       NTSEG = 0
       DO IGEO = 1, NGEO
          SELECTED(IGEO) = 0
       END DO
       DO IS = 1, MSEG
          TSRC(ISEG) = 0
+         SELTYPE(ISEG) = '   '
       END DO
-      MAXPRIO = 2
+      MAXPRIO = 6   !  **************************************  test.
       LHIGHSTA = 0
       LHIGHSIG = 0.0
+      LASTTYPE = ' '
+C
+C     Start the initial search for low and high stations from 
+C     sources close to previous ones looking for one of each.
+C     Later this gets raised to 2
+C
+      LHGOAL = 1
 C
 C     Move LASTISCN to LASTLSCAN where 
 C     it can keep getting remade with each call to this routine.
@@ -100,10 +119,17 @@ C
 C     Keep track of the number of scans each station is in.
 C     Mainly use this to try to avoid too few for the quality
 C     measure least square fit.  Initialize the counter here.
+C     Also keep track of the number of low elevation scans
+C     a station has, at least for before each station has minimal
+C     low and high elevation sources.
 C
       DO ISTA = 1, NSTA
         INSCN(ISTA) = 0
+        STALOW(ISTA) = 0
+        STAHIGH(ISTA) = 0
       END DO
+      NSTALOW = 0
+      NSTAHIGH = 0
 C
 C     Write column headers if going to print the sigmas.
 C
@@ -123,35 +149,57 @@ C
          ISEG = ISEG + 1
          LSCN = ISEG + ISCN - 1
 C
+C        Initialize these or they get remembered to next trial
+C        sequence.
+C
+         HIGHSTA = 0
+         HIGHSIG = 0
+C
          IF( GEOPRT .GE. 2 ) THEN
             WRITE(*,*) ' '
             WRITE(*,*) '----MAKESEG:  Starting to work on source:',
      1                  ISEG
             END IF
 C
-C        Set the first scan to use for quality measures and 
-C        avoiding repeats.  Doing this here avoids haveing to do
-C        it multiple times below.
+C        Set the first scan to use for quality measures using GEOBACK.
+C        That is the "look back" distance if you want the quality measure
+C        determined only over the more recent scans.
+C        Set a separate first scan for avoiding repeats of individual 
+C        sources.  In some cases where there are limited options, a 
+C        sequence might benefit from using the same source twice. But they
+C        shouldn't be adjacent scans.  Use GEOSREP for this function.
+C        Setting these first scans saves repeats below.
 C
-         IISCN = MAX( ISCN , LSCN - GEOBACK + 1 ) 
+         IISCN = MAX( ISCN, LSCN - GEOBACK + 1 ) 
+         SSCN1 = MAX( ISCN, LSCN - GEOSREP + 1 )
+C
+C        At first, using psuedo fits to select the best source won't be
+C        very productive because there are too few scans.  So start by
+C        selecting sources such that there is at least one high and
+C        one low elevation scan for each antenna.  After that, use the
+C        test fits.  Use NRAND to keep track of the number of sources
+C        picked this way.
 C
 C        Set the number of sources to pick before starting to 
 C        measure the quality measure.  For these, restrict to
 C        better sources using USEGEO and take ones that involve
 C        short slews.
 C
-         NRAND = 4
+C        ====  First sources - get low and high el for each station  =====
 C
-C        ==========  First NRAND sources  ==========
+         IF( ( NSTALOW .LT. NSTA .OR. NSTAHIGH .LT. NSTA ) .AND. 
+     1       DORAND ) THEN
+            NRAND = NRAND + 1
+            METHOD = 'RAND'
 C
-         IF( ISEG .LE. NRAND ) THEN
-C
-C           For the first NRAND sources, just try for short slews but with
-C           enough ramdom choices to make the final sequence random.  Try
-C           inserting each source with USEGEO LE 2.  Check the stop
-C           times (they are sensitive to where the antenna was in the
-C           last scan) and select the first 5 possibilities.  Then pick
-C           one of those at random.
+C           Find all of the sources with USEGEO LE MAXPRIO below the limit 
+C           that can contribute to the number stations with low or high
+C           elevation data.  MAXPRIO starts as 2, but is raised to 3 
+C           (> 5, the highest for useful sources) if there are no more
+C           prio 1 or 2 sources available.
+C           Of the sources that qualify, find the closest 5 and choose one
+C           at random.  For the first scan of the experiment, choose
+C           from all with USEGEO low enough.
 C
 C           Note that the NGOOD test should be passed if USEGEO is 
 C           acceptable, but the geo segments are of finite length so
@@ -160,14 +208,22 @@ C
 C           SELECTED is the last scan in which this source
 C           was selected.  It is used to help prevent rapid repeats.
 C
+C           With STALOW and STAHIGH, keep track of the number of stations 
+C           with low or high elevation scans.  Insist that any new 
+C           source increase one of those numbers.  Once both reach NSTA,
+C           switch to doing test fits.
+C
+C           This selection process is much faster than the scheme used 
+C           below based on a psuedo LSQ fit for SecZ.  Try to use is as
+C           much as possible.  That means trying to find 2 low and 2 high
+C           sources for each station.
+C
             NNEAR = 5
             NCHANCE = 0
 C
-C           To test fixed sequence.
-C
             DO IGEO = 1, NGEO
                IF( USEGEO(IGEO) .LE. MAXPRIO  .AND. 
-     1             SELECTED(IGEO) .LT. IISCN ) THEN
+     1             SELECTED(IGEO) .LT. SSCN1 ) THEN
                   IF( ISEG .EQ. 1 ) THEN
                      TAPPROX = STARTB
                   ELSE
@@ -192,25 +248,47 @@ C
                      KSTASCN(IGEO,ISTA) = SSTASCN(ISTA)
                   END DO
 C
-C                 Check that the source really qualifies as a priority 1 or 2
-C                 source.  Since there was some tolerance at the horizon when
-C                 sources were selected, it might be down somewhere where it
-C                 is counted as up.  Assume that MAXPRIO is 2, but trap the
-C                 case where it isn't.
+C                 Count then number of new stations for which this source
+C                 adds the first low elevation data.  Do the same for
+C                 high elevation data.  Then count the number of such
+C                 stations.  Accept sources that add significant numbers
+C                 of stations with low and high el scans.  See the code
+C                 for what "significant" means.
 C
-                  IF( MAXPRIO .NE. 2 ) CALL ERRLOG( 
-     1               'MAKESEG unexpected MAXPRIO - '//
-     2               'Fix test for down sources.' )
-                  NLOW = 0
+                  NNEWLOW = 0
+                  NNEWHIGH = 0
+                  NEEDLOW = 0
+                  NEEDHIGH = 0
                   DO ISTA = 1, NSTA
+                     IF( STALOW(ISTA) .LT. LHGOAL ) 
+     1                     NEEDLOW = NEEDLOW + 1
+                     IF( STAHIGH(ISTA) .LT. LHGOAL ) 
+     1                     NEEDHIGH = NEEDHIGH + 1
                      IF( SSTASCN(ISTA) ) THEN
-                        IF( ( EL1(LSCN,ISTA) + EL2(LSCN,ISTA) ) / 2.0 
-     1                      .LE. GEOLOWEL ) THEN
-                           NLOW = NLOW + 1
+                        ELA = ( EL1(LSCN,ISTA) + EL2(LSCN,ISTA) ) / 2.0
+                        IF( ELA .LE. GEOLOWEL ) THEN
+                           IF( STALOW(ISTA) .LT. LHGOAL ) THEN
+                              NNEWLOW = NNEWLOW + 1
+                           END IF
+                        END IF
+                        IF( ELA .GE. GEOHIEL ) THEN
+                           IF( STAHIGH(ISTA) .LT. LHGOAL ) THEN
+                              NNEWHIGH = NNEWHIGH + 1
+                           END IF
                         END IF
                      END IF
                   END DO
-                  SRCOK = NLOW .GE. 1 
+                  SRCOK = ( NNEWLOW + NNEWHIGH .GT. NSTA / 3 ) .OR. 
+     1                    NNEWLOW + NNEWHIGH .GE. 
+     2                    MAX( 1, ( NEEDLOW + NEEDHIGH ) / 3 )
+C
+C                  SRCOK = ( NNEWLOW .GE. 1 .AND. NSTALOW .LT. NSTA ) 
+C     1               .OR. ( NNEWHIGH .GE. 1 .AND. NSTAHIGH .LT. NSTA ) 
+
+C      write(*,*) 'makeseg iseg nrand ', iseg, nrand, igeo, nstalow, 
+C     1    nstahigh, nnewlow, nnewhigh, ' ', srcok, needlow, needhigh,
+C     2    lhgoal
+
 C
 C                 Check that every station has been in enough scans
 C                 by now.  That means they have been in half.  Recall
@@ -222,7 +300,9 @@ C
                   DO ISTA = 1, NSTA
                      INSCT = INSCN(ISTA)
                      IF( STASCN(LSCN,ISTA) ) INSCT = INSCT + 1
-                     IF( INSCT .LT. ISEG / 2 ) STAOK = .FALSE.
+                     IF( INSCT .LT. ISEG / 2 ) THEN
+                        STAOK = .FALSE.
+                     END IF
                   END DO
                   IF( SRCOK .AND. STAOK .AND. NGOOD .GE. OPMIAN(JSCN) )
      1                 THEN
@@ -298,38 +378,78 @@ C
             END DO
 C
 C           Make sure there are some sources.  If not, adjust MAXPRIO
-C           With a good list, this should this should not happen.
+C           With a good list, this should this should not happen.  But
+C           it does sometimes with Mark's original list.  Exit to the
+C           fitting part if we get here twice on the same ISEG.
 C
             IF( NCHANCE .EQ. 0 ) THEN
                IF( GEOPRT .GE. 1 ) THEN
-                  CALL WLOG( 1, 'MAKESEG: Having to reduce '//
-     1               ' standards for initial sources for geodedetic '//
-     2               ' sequence.' )
-                  CALL WLOG( 1, '         Are you using an '//
-     1               ' adequate source list?' )
+                  CALL WLOG( 1, 'MAKESEG: No options found to finish '
+     1               // 'adding low and high elevation data for ' 
+     2               // 'all stations.' )
+                  CALL WLOG( 1, '         Perhaps no '
+     1               // 'sources are available or ones that are '
+     2               // 'are not up at a station that needs scans.' )
                END IF
-               MAXPRIO = 9
+               IF( MAXPRIO .GE. 3 ) THEN
+                  DORAND = .FALSE.
+                  IF (GEOPRT .GE. 1 ) THEN
+                     CALL WLOG( 1, 
+     1                  '         Select a source using a SecZ fit.' )
+                  END IF
+               ELSE
+                  MAXPRIO = 3
+                  IF( GEOPRT .GE. 1 ) THEN
+                     CALL WLOG( 1, 
+     1                  '         Allow scans with low stations but '
+     2                  // 'no very high elevation stations.' )
+                  END IF
+               END IF
                ISEG = ISEG - 1
+               NRAND = NRAND - 1
                GO TO 100
             END IF               
 C
-C           Pick one of the top choices randomly.
+C           Pick one of the top choices randomly.  Don't take one that
+C           for which the scan is more than one minute after the first.
+C           Ok, the first DO loop is trivial for IC = 1, but keeps the 
+C           code simpler.  Note if NCHANCE is zero, we won't get here.
 C
-            IF( NCHANCE .GE. 1 ) THEN
-               IC = INT( 1 + RAN5(IDUM) * NCHANCE )
-               IF( GEOPRT .GE. 2 ) WRITE(*,*) 
-     1               'makeseg 7.5 ', IC, CHANCE(IC)
-               TSRC(ISEG) = CHANCE(IC)
-               DO ISTA = 1, NSTA
-                  SSTASCN(ISTA) = KSTASCN(TSRC(ISEG),ISTA)
+            DO IC = 1, NCHANCE
+               IF( TESTTIME(IC) .LE. TESTTIME(1) + 60.D0 * ONESEC )
+     1             THEN
+                  MAXIC = IC
+               END IF
+            END DO
+            IC = INT( 1 + RAN5(IDUM) * MAXIC )
+            IF( GEOPRT .GE. 2 ) WRITE(*,*) 
+     1            'makeseg 7.5 ', IC, CHANCE(IC)
+            TSRC(ISEG) = CHANCE(IC)
+            DO ISTA = 1, NSTA
+               SSTASCN(ISTA) = KSTASCN(TSRC(ISEG),ISTA)
+            END DO
+            SELTYPE(ISEG) = 'NR'
+            WSTA(ISEG) = '--'
+C
+C           Write some slew time information if requested.
+C
+            IF( GEOPRT .GE. 2 ) THEN
+               T0 = DINT( STOPJ(LSCN) )
+               WRITE(*,'( A, 2I4, F10.2, 2I4 )' )
+     1             'MAKESEQ TESTTIME', TSRC(ISEG), IC, 
+     2             (STOPJ(LSCN-1)-T0)*24.D0*60.D0, NCHANCE, MAXIC
+               DO IS = 1, NCHANCE
+                  WRITE( *, '( 10X, A, I3, I4, A, A12, 2F10.2 )' )
+     1             '   ', IS, CHANCE(IS), ' ', GEOSRC(CHANCE(IS)), 
+     2             (TESTTIME(IS)-T0)*24.D0*60.D0, 
+     3             (TESTTIME(IS)-STOPJ(LSCN-1))*24.D0*60.D0
                END DO
-C
             END IF
-            IF( GEOPRT .GE. 2 ) WRITE(*,*) 'makeseg 8', TSRC(ISEG)
 C
 C        ==============  Rest of sources based on fit  =============
 C
          ELSE
+            METHOD = 'FIT'
 C
 C           For the rest of the sources, pick the one from the whole 
 C           list that gives the lowest quality measure (highest 
@@ -350,7 +470,7 @@ C
             TSRC2 = 0
             TSRC3 = 0
             DO IGEO = 1, NGEO
-               IF( OKGEO(IGEO) .AND. SELECTED(IGEO) .LT. IISCN ) THEN
+               IF( OKGEO(IGEO) .AND. SELECTED(IGEO) .LT. SSCN1 ) THEN
 C
 C                 Insert the source as the next scan to get all the
 C                 required geometric parameters in a simple way.
@@ -377,34 +497,44 @@ C
 C
 C                 Decide if this is usable.
 C
+                  STAOK = .TRUE.
+C
+C                 Insist that the last high station (highest Sigma)
+C                 be in the scan.
+C
+                  IF( LHIGHSTA .NE. 0 ) THEN
+                     IF( .NOT. SSTASCN(LHIGHSTA) ) STAOK = .FALSE.
+                  END IF
+C
 C                 First get the numbers needed and protect against
 C                 a source choice that leaves some station with too
 C                 few scans.  Additionally try to prevent having too
 C                 few scans with this station in the GEOBACK look
 C                 back set to do a fit.
 C
-                  STAOK = .TRUE.
-                  DO ISTA = 1, NSTA
+                  IF( STAOK ) THEN
+                     DO ISTA = 1, NSTA
 C
-C                    Require that a station be in half of scans.
+C                       Require that a station be in half of scans.
 C
-                     INSCT = INSCN(ISTA)
-                     IF( STASCN(LSCN,ISTA) ) INSCT = INSCT + 1
-                     IF( INSCT .LT. ISEG / 2 ) STAOK = .FALSE.
+                        INSCT = INSCN(ISTA)
+                        IF( STASCN(LSCN,ISTA) ) INSCT = INSCT + 1
+                        IF( INSCT .LT. ISEG / 2 ) STAOK = .FALSE.
 C
-C                    Require a station have 2 scans in the lookback
-C                    set.  Only need to worry if the station is not
-C                    in this scan.
+C                       Require a station have 2 scans in the lookback
+C                       set.  Only need to worry if the station is not
+C                       in this scan.
 C
-                     IF( .NOT. STASCN(LSCN,ISTA) ) THEN
-                        CTSC = 0
-                        DO IS = IISCN, LSCN - 1
-                           IF( STASCN(IS,ISTA) ) CTSC = CTSC + 1
-                        END DO
-                        IF( CTSC .LT. 2 ) STAOK = .FALSE.
-                     END IF
+                        IF( .NOT. STASCN(LSCN,ISTA) ) THEN
+                           CTSC = 0
+                           DO IS = IISCN, LSCN - 1
+                              IF( STASCN(IS,ISTA) ) CTSC = CTSC + 1
+                           END DO
+                           IF( CTSC .LT. 2 ) STAOK = .FALSE.
+                        END IF
 C
-                  END DO
+                     END DO
+                  END IF
 C
                   IF( NGOOD .GE. OPMIAN(JSCN) .AND. STAOK .AND.
      1                STOPJ(LSCN) .LE. TGEOEND ) THEN
@@ -432,10 +562,7 @@ C                    Also set the minimum elevation that will be
 C                    rewarded in the fit so that not too much
 C                    emphasis is placed on scans very close to
 C                    the horizon.  The number is after JSCN
-C                    in the GEOQUAL call.  This is done only for
-C                    the process of selecting sources within the
-C                    segment.  Later for choosing a segment, that
-C                    minimum elevation will be set to zero.
+C                    in the GEOQUAL call and is set for SecZ=4.  
 C
                      IF( TSRC(ISEG) .EQ. 0 ) THEN
                         KSCN = IISCN
@@ -452,7 +579,7 @@ C
      3                   '  geosrc:', IGEO, ' ', GEOSRC(IGEO)
                      END IF
 C
-                     CALL GEOQUAL( IISCN, KSCN, LSCN, JSCN, 16.0,
+                     CALL GEOQUAL( IISCN, KSCN, LSCN, JSCN, 14.48,
      1                    TESTQUAL, PRDEBUG, SIGMA )
 C
 C                    Construct the quality measures we want to use
@@ -480,7 +607,7 @@ C                    3.)  SLQUAL: The rms of all the sigmas across all
 C                         stations plus a slew penalty.
 C
 C                    Note that LHIGHSTA is the station with the highest
-C                    sigma, LHIGHSIG, in the last sequence.  HIGHSTA
+C                    sigma, LHIGHSIG, in the previous scan.  HIGHSTA
 C                    is the station with the highest sigma HIGHSIG
 C                    in the current sequence - being accumulated for
 C                    use in setting up the next sequence.  SAVSIG
@@ -621,6 +748,8 @@ C
      2             ( LHIGHSIG - SAVSIG2(LHIGHSTA) ) * 0.7 .AND. 
      3             LHIGHSIG / SAVSIG1(LHIGHSTA) .GT. 1.10 ) THEN
                   TSRC(ISEG) = TSRC1
+                  SELTYPE(ISEG) = 'SP'
+                  WSTA(ISEG) = STCODE(STANUM(HIGHSTA1))
 C
 C                 Deal with the information for the next pass.
 C
@@ -629,23 +758,40 @@ C
                   DO ISTA = 1, NSTA
                      SAVSIG(ISTA) = SAVSIG1(ISTA)
                   END DO
+                  LASTTYPE = 'SIGP'
 C
 C                 Optional print.
 C
-                  IF( GEOPRT .GE. 1 )
-     1              WRITE(*,'( A, I4, A, F8.2, 3(F8.2,''/'',I3) )' )
-     2              'makeseg:', 
-     3              ISEG, ' Use slew penalty.', 
-     4              LHIGHSIG, SAVSIG1(LHIGHSTA), TSRC1,
-     5              SAVSIG2(LHIGHSTA), TSRC2, SAVSIG3(LHIGHSTA), TSRC3
+                  IF( GEOPRT .GE. 1 ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, I4, A, F8.2, A, 3(F8.2,''/'',
+     1                  I2, ''/'', I3 ) )' ) 'MAKESEG:', 
+     2                  ISEG, ' Choice used slew penalty. Last:', 
+     3                  LHIGHSIG, '  Options (sig/sta/src):', 
+     4                  SAVSIG1(LHIGHSTA), HIGHSTA1, TSRC1, 
+     5                  SAVSIG2(LHIGHSTA), HIGHSTA2, TSRC2, 
+     6                  SAVSIG3(LHIGHSTA), HIGHSTA3, TSRC3
+                     CALL WLOG( 1, MSGTXT )
+                  END IF
 C
 C              Use the version without the slew penalty if the one
 C              with the penalty wasn't so good, and the absolute
-C              improvement is good.
+C              improvement is good.  Require it to be significantly better
+C              to justify the long slew.
+C
+C              If the RMS was used in the last iteration, the same 
+C              station is worst for the RMS, and the sigma is better 
+C              with this option, take it without requiring the 
+C              especially big improvement.
 C
                ELSE IF( TSRC2 .NE. 0 .AND. 
-     1             LHIGHSIG / SAVSIG2(LHIGHSTA) .GT. 1.10  ) THEN
+     1             ( LHIGHSIG / SAVSIG2(LHIGHSTA) .GT. 1.25 ) .OR.
+     2             ( LASTTYPE .EQ. 'RMS' .AND. 
+     3               HIGHSTA3 .EQ. LHIGHSTA .AND. 
+     3               HIGHSIG3 .GT. HIGHSIG2 ) ) THEN
                   TSRC(ISEG) = TSRC2
+                  SELTYPE(ISEG) = 'S'
+                  WSTA(ISEG) = STCODE(STANUM(HIGHSTA2))
 C
 C                 Deal with the information for the next pass.
 C
@@ -654,15 +800,21 @@ C
                   DO ISTA = 1, NSTA
                      SAVSIG(ISTA) = SAVSIG2(ISTA)
                   END DO
+                  LASTTYPE = 'SIG'
 C
 C                 Optional print.
 C
-                  IF( GEOPRT .GE. 1 ) 
-     1              WRITE(*,'( A, I4, A, F8.2, 3(F8.2,''/'',I3) )' )
-     2              'makeseg:', 
-     3              ISEG, ' Use sigma only.  ',
-     4              LHIGHSIG, SAVSIG1(LHIGHSTA), TSRC1, 
-     5              SAVSIG2(LHIGHSTA), TSRC2, SAVSIG3(LHIGHSTA), TSRC3
+                  IF( GEOPRT .GE. 1 ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, I4, A, F8.2, A, 3(F8.2,''/'',
+     1                  I2, ''/'', I3 ) )' ) 'MAKESEG:', 
+     2                  ISEG, ' Choice used sigma only.   Last:',
+     3                  LHIGHSIG, '  Options (sig/sta/src):', 
+     4                  SAVSIG1(LHIGHSTA), HIGHSTA1, TSRC1, 
+     5                  SAVSIG2(LHIGHSTA), HIGHSTA2, TSRC2, 
+     6                  SAVSIG3(LHIGHSTA), HIGHSTA3, TSRC3
+                     CALL WLOG( 1, MSGTXT )
+                  END IF
                END IF
             END IF
 C
@@ -674,23 +826,31 @@ C           improvements required above were not met.
 C
             IF( TSRC3 .NE. 0 .AND. TSRC(ISEG) .EQ. 0 ) THEN
                TSRC(ISEG) = TSRC3
+               SELTYPE(ISEG) = 'RMS'
+               WSTA(ISEG) = STCODE(STANUM(HIGHSTA3))
 C
 C              Deal with the information for the next pass.
 C
                HIGHSTA = HIGHSTA3
                HIGHSIG = HIGHSIG3
                DO ISTA = 1, NSTA
-                  SAVSIG(ISTA) = SAVSIG1(ISTA)
+                  SAVSIG(ISTA) = SAVSIG3(ISTA)
                END DO
+               LASTTYPE = 'RMS'
 C
 C              Optional print.
 C
-               IF( GEOPRT .GE. 1 ) 
-     1           WRITE(*,'( A, I4, A, F8.2, 3(F8.2,''/'',I3) )' )
-     2           'makeseg:', 
-     3           ISEG, ' Use RMS sigma.   ',
-     4           LHIGHSIG, SAVSIG1(LHIGHSTA), TSRC1, 
-     5           SAVSIG3(LHIGHSTA), TSRC2, SAVSIG3(LHIGHSTA), TSRC3
+               IF( GEOPRT .GE. 1 ) THEN
+                  MSGTXT = ' '
+                  WRITE(*,'( A, I4, A, F8.2, A, 3(F8.2,''/'',I2,
+     1               ''/'', I3 ) )' ) 'MAKESEG:', 
+     2              ISEG, ' Choice used RMS sigma.    Last:',
+     3              LHIGHSIG, '  Options (sig/sta/src):', 
+     4              SAVSIG1(LHIGHSTA), HIGHSTA1, TSRC1, 
+     5              SAVSIG2(LHIGHSTA), HIGHSTA2, TSRC2, 
+     6              SAVSIG3(LHIGHSTA), HIGHSTA3, TSRC3
+                  CALL WLOG( 1, MSGTXT )
+               END IF
 C
             END IF
 C
@@ -729,14 +889,49 @@ C
      1           GEOSRC(TSRC(ISEG)), TAPPROX, OPMINEL(JSCN), 0,
      2           NGOOD, OKSTA, SSTASCN, 'FORCE' )
 C
-C           Accumulate INSCN(ISTA) and SELECTED and LASTLSCN
+C           Accumulate INSCN(ISTA), SELECTED, LASTLSCN, STALOW, and
+C           STAHIGH.
 C
             DO ISTA = 1, NSTA
                IF( STASCN(LSCN,ISTA) ) THEN
                   INSCN(ISTA) = INSCN(ISTA) + 1
                   LASTLSCN(ISTA) = LSCN
+                  ELA = ( EL1(LSCN,ISTA) + EL2(LSCN,ISTA) ) / 2.0
+                  IF( ELA .LE. GEOLOWEL ) THEN
+                     STALOW(ISTA) = STALOW(ISTA) + 1
+                  END IF
+                  IF( ELA .GE. GEOHIEL ) THEN
+                     STAHIGH(ISTA) = STAHIGH(ISTA) + 1
+                  END IF
                END IF
             END DO
+C
+C           Get NSTALOW and NSTAHIGH
+C
+            NSTALOW = 0
+            NSTAHIGH = 0
+            DO ISTA = 1, NSTA
+               IF( STALOW(ISTA) .GE. LHGOAL ) NSTALOW = NSTALOW + 1
+               IF( STAHIGH(ISTA) .GE. LHGOAL ) NSTAHIGH = NSTAHIGH + 1
+            END DO
+C
+C           After there is one high and one low, go back for the
+C           second.
+C      ***  Deactivated for now by asking LHGOAL to be below 0.
+C                  Normally that would be below 1.
+C
+            IF( NSTALOW .GE. NSTA .AND. NSTAHIGH .GE. NSTA .AND. 
+     1          LHGOAL .LE. 0 ) THEN
+               LHGOAL = 2
+               NSTALOW = 0
+               NSTAHIGH = 0
+               DO ISTA = 1, NSTA
+                  IF( STALOW(ISTA) .GE. LHGOAL ) NSTALOW = NSTALOW + 1
+                  IF( STAHIGH(ISTA) .GE. LHGOAL ) NSTAHIGH = NSTAHIGH+1
+               END DO
+            END IF
+
+
             SELECTED(TSRC(ISEG)) = LSCN
 C
 C           If requested, give feedback on the fit quality.
@@ -744,9 +939,10 @@ C
             IF( GEOPRT .GE. 1 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, 2I4, 1X, A )' ) 
-     1            'MAKESEG:', ISEG, TSRC(ISEG), GEOSRC(TSRC(ISEG))
-               IF( ISEG .GT. NRAND ) THEN
-                  WRITE( MSGTXT(26:256), '( A, I3, A, 20F5.1 )' ) 
+     1          'Makeseg source:',
+     2           ISEG, TSRC(ISEG), GEOSRC(TSRC(ISEG))
+               IF( METHOD .EQ. 'FIT' ) THEN
+                  WRITE( MSGTXT(33:256), '( A, I3, A, 20F5.1 )' ) 
      1               ' High:', HIGHSTA, '  Sigmas: ', 
      3                (SAVSIG(ISTA),ISTA=1,NPRT)
                END IF
@@ -758,11 +954,26 @@ C
             LHIGHSTA = HIGHSTA
             LHIGHSIG = HIGHSIG
 C
-C           Go back for the next source.
-C           Reset MAXPRIO in case it had been adjusted when getting
-C           the first 4 sources.
+C           Reset DORAND to give a chance of filling out low and
+C           high el scans.  We might have done a fit iteration because
+C           some source couldn't be used because it was not up at a
+C           station with too few scans so far.  Also use this opportunity
+C           to force going to using psuedo fits for the last few scans
+C           of the segment.
 C
+C           Reset MAXPRIO in case it had been adjusted when getting
+C           the last source.
+C
+            IF( STOPJ(LSCN) .GT. STARTB + 
+     1          0.7D0 * ( TGEOEND - STARTB ) ) THEN
+               DORAND = .FALSE.
+            ELSE
+               DORAND = .TRUE.
+            END IF
             MAXPRIO = 2
+C
+C           Go back for the next source.
+C
             GO TO 100
 C
          ELSE
@@ -782,6 +993,7 @@ C
 C
 C     Now we are out of the GO TO loop and basically done.
 C     There used to be some feed back here, but moved to GEOMAKE.
+C     Indention above is for the GO TO 100 loop.
 C
       RETURN
       END
