@@ -55,9 +55,9 @@ C      IMPLICIT REAL*8 (A-H,O-Z)
 
       INTEGER           IDEBUG, MAXDAT, N, NUMXES, IERR
       DOUBLE PRECISION  C(MAXDAT,1)
-      DOUBLE PRECISION  S(1),E(1),X(1),XHAT2(1), ERROR(1)
-      INTEGER           ID(1)
-      character*8       VNAME(1),QUEST(2)
+      DOUBLE PRECISION  S(*),E(*),X(*),XHAT2(*), ERROR(*)
+      INTEGER           ID(*)
+      character*8       VNAME(*),QUEST(2)
 C
       INTEGER           I, J, L, M, IN, JNEW, ITEST2, INOTE
       INTEGER           PRTERR
@@ -410,8 +410,8 @@ C
 C     Explicit declarations for SCHED.  SCHED is compiled with a switch
 C     that requires these.
 C
-      DOUBLE PRECISION A(1), D
-      INTEGER          N, L(1),M(1), MSIZE
+      DOUBLE PRECISION A(*), D
+      INTEGER          N, L(*),M(*), MSIZE
 C
       INTEGER          NI, IJ, NM, K, LL
       INTEGER          IK, NK, KK, KI, JI, J, I, JK, KJ, IZ, JP
