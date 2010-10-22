@@ -26,7 +26,7 @@ C     Initialize the pointers and flags.
 C
       DO ISRC = 1, MSRC
          SRLSTN(ISRC) = 0
-         DO INAME = 1, 5
+         DO INAME = 1, MALIAS
             CSUSED(INAME,ISRC) = ' '
          END DO
       END DO
@@ -42,7 +42,7 @@ C        Loop over catalog sources we have at this point and loop
 C        over the aliases.
 C
          DO ISRC = 1, MSRC
-            DO INAME = 1, 5
+            DO INAME = 1, MALIAS
 C 
 C              Check for match between schedule and catalog sources.
 C 

@@ -25,7 +25,7 @@ C
 
             FOUND = .FALSE.
 
-            DO I = 1, 5
+            DO I = 1, MALIAS
 C
 C           denoted by '*'
 C

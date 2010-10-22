@@ -20,7 +20,7 @@ C     Loop over catalog sources.
 C
       DO ISRC = 1, MSRC
          SOUR8(ISRC) = ' '
-         DO INAME = 1, 5
+         DO INAME = 1, MALIAS
 C
 C           Use the name used in the schedule for the short name
 C           if it is short enough.
@@ -55,7 +55,7 @@ C        Now if the schedule source name was long, look for a short
 C        alias.
 C
          IF( SOUR8(ISRC) .EQ. ' ' ) THEN
-            DO INAME = 1, 5
+            DO INAME = 1, MALIAS
                NCHAR = LEN1( SOURCE(INAME,ISRC) )
                IF( NCHAR .LE. 8 .AND. NCHAR .GE. 1 ) THEN
                   SOUR8(ISRC) = SOURCE(INAME,ISRC)

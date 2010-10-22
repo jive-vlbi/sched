@@ -3,10 +3,13 @@ C
 C     Note that unit 24 is used by RDLOC so the calling program should
 C     not use that unit number.
 C
+C     Read source names as Character*16 with up to 10 aliases.  Worry
+C     downstream if these need to be restricted.
+C
 C     For source catalog.
 C
 C     SRCVER  C20   -  Version (date) for catalog
-C     SRCNAM  C12*5 -  Source name
+C     SRCNAM  C16*10-  Source name
 C     SRCRA   R8    -  Right Ascension (rad)
 C     SRCDEC  R8    -  Declination (rad)
 C     SRCRAE  R4    -  Error on RA (mas)
@@ -114,9 +117,10 @@ C---------------------------------------------------------------------
 C
 C     For source catalog.
 C
-      INTEGER           MVEL
+      INTEGER           MVEL, MAL
       PARAMETER         (MVEL=32)
-      CHARACTER         SRCVER*20, SRCNAM(5)*12
+      PARAMETER         (MAL=10)
+      CHARACTER         SRCVER*20, SRCNAM(MAL)*16
       INTEGER           SRCPMY, SRCPMM, SRCPMD
       REAL              SRCVEL(MVEL), SRCDRA, SRCDDEC
       REAL              SRCRAE, SRCDECE

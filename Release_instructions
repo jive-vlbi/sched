@@ -170,8 +170,15 @@ rsync -auv --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
 #  First be sure there are not old copies in the archive and ftp areas.
 #  Populate the ftp area.
 
+#  Note the excludes include the lib directory which has the NAIF software.
+#  Without that, the satellite version cannot be linked.
+#  Also the RELATED_CODE directory is excluded.
+
+#  cd $SCHED
+
 tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
-    --exclude "lib" --exclude "core*" \
+    --exclude "lib" --exclude "core*" --exclude "TEST"  \
+    --exclude "RELATED_CODE" \
      -cf ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar .
 gzip ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar
 

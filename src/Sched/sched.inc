@@ -62,8 +62,8 @@ C       MAXSRC       plot.inc:PSOMAX (set at 2000 - may not need change)
 C       MAXCAT       rdcat.inc:MDB (set at 1000 - may not need change)
 C
 C
-      INTEGER       MAXCAT, MAXSRC, MAXSCN, MAXSTA, MAXLCH, MAXLGP
-      INTEGER       MAXSET, MAXCHN, MAXSAT, MSET
+      INTEGER       MAXCAT, MAXSRC, MALIAS, MAXSCN, MAXSTA, MAXLCH
+      INTEGER       MAXLGP, MAXSET, MAXCHN, MAXSAT, MSET
 C
 C     For normal usage.  Phase referencing and pointing observations
 C     need lots of scans, but the number of stations is limited.
@@ -87,6 +87,7 @@ C
 C     Other parameters
 C
       PARAMETER     (MAXSRC=5000)
+      PARAMETER     (MALIAS=10)
       PARAMETER     (MAXCAT=1000) 
       PARAMETER     (MAXLGP=10)
       PARAMETER     (MAXSET=50)
@@ -117,6 +118,7 @@ C                      IOPT  - Configuration optimization output
 C                      ILOG  - Run log file.
 C                      IMSG  - File with text messages.
 C                      IORB  - Spacecraft table for VLBA correlator
+C                      
 C                      
       INTEGER          IUSCH, IUSRC, IUSTA, IUTAP, IUSET
       INTEGER          IPRT, IULOC, IUVBA, ISUM, IUOPT, IVEX, IFRQ
@@ -295,7 +297,7 @@ C     and more characters per name as we have hit both limits.
 C         
       INTEGER          MSRC
       CHARACTER        SRCFILE*80, SRVER*20, SRCFILE2*80, SRVER2*20
-      CHARACTER        SOURCE(5,MAXSRC)*12, SOUR8(MAXSRC)*8
+      CHARACTER        SOURCE(MALIAS,MAXSRC)*12, SOUR8(MAXSRC)*8
       CHARACTER        CALCODE(MAXSRC)*1, REMARK(MAXSRC)*80
       DOUBLE PRECISION RACAT(MAXSRC),  DECCAT(MAXSRC)
       DOUBLE PRECISION RA1950(MAXSRC), D1950(MAXSRC)
@@ -338,7 +340,7 @@ C
       INTEGER          SRLSTN(MAXSRC), DIDNDOP(MAXSRC), SATN(MAXSRC)
       REAL             SUNDIS(MAXSRC)
       LOGICAL          PLANET(MAXSRC), SATEL(MAXSRC)
-      CHARACTER        CSUSED(5,MAXSRC)*1
+      CHARACTER        CSUSED(MALIAS,MAXSRC)*1
 C
 C     Items for the multiple phase center capability.
 C     MCENT is the maximum number of groups of phase centers.
@@ -660,7 +662,7 @@ C
       INTEGER          SRCNUM(MAXSCN), IDOPSRC(MAXSCN), QUAL(MAXSCN)
       INTEGER          SETNUM(MAXSCN), NSETUP(MAXSCN,MAXSTA)
       INTEGER          FSETI(MAXSCN,MAXSTA), DOPEAK(MAXSCN)
-      INTEGER          POINT(MAXSCN), DURONLY(MAXSCN)
+      INTEGER          POINT(MAXSCN), DURONLY(MAXSCN), NOWAIT(MAXSCN)
       LOGICAL          STASCN(MAXSCN,MAXSTA)
       LOGICAL          NOTSYS(MAXSCN), DOPCAL(MAXSCN)
       LOGICAL          DWELL(MAXSCN), TANT1(MAXSCN), TANT2(MAXSCN)
@@ -669,8 +671,8 @@ C
       CHARACTER        PCAL(MAXSCN)*4, SCANTAG(MAXSCN)*4
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
-     1                 DOPEAK, POINT, DURONLY, STASCN, NOTSYS, DOPCAL, 
-     2                 DWELL, TANT1, TANT2
+     1                 DOPEAK, POINT, DURONLY, NOWAIT, STASCN, 
+     2                 NOTSYS, DOPCAL, DWELL, TANT1, TANT2
       COMMON  /SCHN2B/ PRESCAN, DUR, GAP, FREQ, DOPINCR
       COMMON  /SCHN2C/ STARTJ, STOPJ, BW
       COMMON  /SCHC2A/ ANNOT

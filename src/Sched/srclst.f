@@ -58,7 +58,7 @@ C
      3    '    Source         Sun distance (deg) '
       DO ISRC = 1, MSRC
          IF( SUSED(ISRC) ) THEN
-            DO J = 1, 5
+            DO J = 1, MALIAS
                IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
                   WRITE( IOUT, '( 3X, A12, 4X, F8.1 )' )
      1                 SOURCE(J,ISRC), SUNDIS(ISRC)
@@ -109,7 +109,7 @@ C
             DO ISRC = 1, MSRC - 1
                IF( SUSED(ISRC) ) THEN
                   JN = 1
-                  DO J = 1, 5
+                  DO J = 1, MALIAS
                      IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
                         JN = J
                      END IF
@@ -117,7 +117,7 @@ C
                   DO KSRC = ISRC + 1, MSRC
                      IF( SUSED(KSRC) ) THEN
                         KN = 1
-                        DO J = 1, 5
+                        DO J = 1, MALIAS
                            IF( CSUSED(J,KSRC) .NE. ' ' ) THEN
                               KN = J
                            END IF
@@ -175,7 +175,7 @@ C
                END IF
                LEND = LEN1( TDEC20 )
 C
-               DO J = 1, 5
+               DO J = 1, MALIAS
                   IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
                      LENS = LEN1( SOURCE(J,ISRC) )
                      
