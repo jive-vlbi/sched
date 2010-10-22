@@ -26,7 +26,7 @@ C
      1          COM, 'this source had calibrator code: ', 
      2          CALCODE(ISRC)
 C
-      DO I = 1, 5
+      DO I = 1, MALIAS
          IF( I .NE. INAME ) THEN
 C
 C                 source name is not sufficient, alternate source 

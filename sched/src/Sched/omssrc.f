@@ -21,7 +21,7 @@ C
             END IF
             LEND = LEN1( TDEC20 )
 C     
-            DO J = 1, 5
+            DO J = 1, MALIAS
                IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
                   LENS = LEN1( SOURCE(J,ISRC) )
 C                  

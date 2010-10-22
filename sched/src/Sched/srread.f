@@ -126,7 +126,7 @@ C
 C
 C           Require a source name.
 C           
-            DO INAME = 1, 5
+            DO INAME = 1, MALIAS
                CALL UPCASE( SRCNAM(INAME) )
             END DO
 C
@@ -160,7 +160,7 @@ C                 that have not already been found.  Complain later
 C                 if there are too many.
 C           
                   DO KSRC = 1, NSRC
-                     DO INAME = 1, 5
+                     DO INAME = 1, MALIAS
                         IF( SRCATN(KSRC) .EQ. 0 .AND. 
      1                      SRCNAM(INAME) .EQ. SRCNAME(KSRC) ) THEN
 C           
@@ -269,9 +269,12 @@ C
                      CALL ERRLOG( MSGTXT )
                   END IF
 C           
-C                 Put source in internal catalog.
+C                 Put source in internal catalog.  Make sure two
+C                 parameters that need to be the same are the same.
 C           
-                  DO INAME = 1, 5
+                  IF( MAL .NE. MALIAS ) CALL ERROR( 
+     1                 'SRREAD Programming error:  MAL NE MALIAS' )
+                  DO INAME = 1, MALIAS
                      SOURCE(INAME,MSRC) = SRCNAM(INAME)
                   END DO
 C

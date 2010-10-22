@@ -93,6 +93,7 @@ C
       NOTSYS(TO)   = NOTSYS(FROM)
       DOPCAL(TO)   = DOPCAL(FROM)
       DWELL(TO)    = DWELL(FROM)
+      NOWAIT(TO)   = NOWAIT(FROM)
       TANT1(TO)    = TANT1(FROM)
       TANT2(TO)    = TANT2(FROM)
       SCNSRC(TO)   = SCNSRC(FROM) 

@@ -79,7 +79,7 @@ C
          SRLSTN(I) = 0
          DIDNDOP(I) = 0
          DOPPED(I) = .FALSE.
-         DO INAME = 1, 5
+         DO INAME = 1, MALIAS
             CSUSED(INAME,I) = ' '
          END DO
          PLANET(I) = .FALSE.
