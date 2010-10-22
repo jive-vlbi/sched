@@ -52,7 +52,7 @@ C
                   SRLSTN(MSRC) = KSRC
                   SOURCE(1,MSRC) = SRCNAME(KSRC)
                   CSUSED(1,MSRC) = '*'
-                  DO NAM = 2, 5
+                  DO NAM = 2, MALIAS
                      SOURCE(NAM,MSRC) = ' '
                      CSUSED(NAM,MSRC) = ' '
                   END DO

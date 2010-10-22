@@ -327,19 +327,37 @@ C
      3         (SEGSRCS(ISEG), ISEG=1,NSEG)
          CALL WLOG( 1, MSGTXT )
          MSGTXT = ' '
-         WRITE( MSGTXT, '( A, F7.2, A, 20F7.2 )' ) 
-     1        ' Quality: ', BESTQUAL, 
-     2        '  Sigmas by station: ', 
-     3        (BESTSIG(ISTA),ISTA=1,NPRST)
+      END IF
+C
+C     Write the station quality summary regardless of GEOPRT.
+C     Only write the index line if it won't be written below.
+C
+      IF( GEOPRT .LT. 0 ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, 20( 4X, A2, 1X) )' ) 
+     1        '                                     ', 
+     2        (STCODE(STANUM(ISTA)),ISTA=1,NPRST)
          CALL WLOG( 1, MSGTXT )
+      END IF
+      WRITE( MSGTXT, '( A, F7.2, A, 20F7.2 )' ) 
+     1     ' Quality: ', BESTQUAL, 
+     2     '  Sigmas by station: ', 
+     3     (BESTSIG(ISTA),ISTA=1,NPRST)
+      CALL WLOG( 1, MSGTXT )
+C
+C     Back to special printouts.
+C
+      IF( GEOPRT .GE. 0) THEN
+         MSGTXT = ' '
          WRITE( MSGTXT, '( A, 20( 4X, A2, 1X) )' ) 
      1        ' Num   Gap(s)  Source                ', 
      2        (STCODE(STANUM(ISTA)),ISTA=1,NPRST)
          CALL WLOG( 1, MSGTXT )
 C
-C        To write the actual output lines, the segment need to be
+C        The above was the column headers.
+C        To write the actual output lines, the segment needs to be
 C        transferred to the scans arrays. That is done in ADDGEO.
-C        So put the output there.
+C        So put the writing of the output lines there.
 C
       END IF
 C

@@ -63,7 +63,7 @@ C     than calls to KEYPTR every time for efficiency (source catalogs
 C     are big and take a while to read).
 C
       INTEGER          MSRP, MODE, KEYPTR
-      PARAMETER        (MSRP=80)
+      PARAMETER        (MSRP=100)
       INTEGER          KI(MSRP)
       CHARACTER        KC(MSRP)*8, KCHAR*256, LASTFILE*80
       DOUBLE PRECISION KD(MSRP*2), ENDMRK
@@ -94,8 +94,8 @@ C
          CALL KPACK( '        ', BLANK8 )
          CALL KPACK( ' ', BLANK1 )
          CALL KPACK( 'CONT', CONT )
-         DO I = 1, 5
-            CALL KEYCHR( 'SOURCE', ' ', 12, KD, KC, KI )
+         DO I = 1, 10
+            CALL KEYCHR( 'SOURCE', ' ', 16, KD, KC, KI )
          END DO
          CALL KEYADD( 'RA', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'DEc', 0.D0, 1, KD, KC, KI )
@@ -163,8 +163,10 @@ C     Set parameters defaults before reading new line.
 C
       MODE = 0
 C
+C     Source.  There are two cells in KD for each source.
+C
       KD(PTSO) = NONAME
-      DO I = 2, 10
+      DO I = 2, 2*MAL
         KD(PTSO-1+I) = BLANK8
       END DO
 C
@@ -232,9 +234,9 @@ C
 C     Get the source names.
 C
       RDSRC = 0
-      DO I = 1, 5
+      DO I = 1, MAL
          I1 = PTSO + 2 * ( I - 1 )
-         WRITE( SRCNAM(I), '(A8,A4)' ) KD(I1), KD(I1+1)
+         WRITE( SRCNAM(I), '(2A8)' ) KD(I1), KD(I1+1)
       END DO
 C
 C     Get the source velocities

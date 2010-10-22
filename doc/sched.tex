@@ -9843,7 +9843,7 @@ manual can read the catalog by clicking
 Source catalog information can be given in the main \schedb keyin
 file. If the keyword {\tt SRCCAT} appears, all input after the next
 ``/'' is assumed to consist of source catalog entries until a line
-containing the keyword {\tt ENDCAT} and a ``/'' is encountered (don't
+ containing the keyword {\tt ENDCAT} and a ``/'' is encountered (don't
 combine this keyword with a catalog entry).  Such ``in-line'' catalogs
 may appear anywhere in a \schedb keyin file, although it is probably
 best to put them near the beginning.  {\sc SCHED} will look in the
@@ -9866,11 +9866,12 @@ location.  This is useful, for example, for finding phase calibrators
 near target sources.
 
 \schedb will use whichever equinox coordinates are provided in the
-catalog and determine J2000, B1950, and DATE coordinates.  All of these
-coordinates are listed in the {\sl .sum} file.  Various stations require
-different equinox coordinates.  For example, the VLBA only understands
-J2000 coordinates while some other sites only understand B1950.  Sched
-uses the SLALIB routines to make the coordinate conversions.
+catalog and determine J2000, B1950, and DATE coordinates.  All of
+these coordinates are listed in the {\sl .sum} file.  Various stations
+require different equinox coordinates.  For example, the VLBA only
+understands J2000 coordinates while some other sites only understand
+B1950, although those may all be gone by now.  Sched uses the SLALIB
+routines to make the coordinate conversions.
 
 The J2000 and B1950 coordinates systems move relative to each other so
 an ``observe'' date is needed to make an accurate conversion.  This is
@@ -9896,11 +9897,11 @@ The parameters of the source catalog are:
 
 \begin{description}
 
-\item [{\tt Source}:]  This is the name of the source.  Up to 5
-source names can be provided to handle aliases.  The names can have
-up to 12 characters each, although, as noted below, some downstream
-software may not like that much.  No software we know of requires less
-than 8 characters.
+\item [{\tt Source}:] This is the name of the source.  Up to 10 source
+names (increased from 5 on Sept. 2010) can be provided to handle
+aliases.  The names can have up to 12 characters each, although, as
+noted below, some downstream software may not like that much.  No
+software we know of requires less than 8 characters.
 
 Be a bit careful about special characters included in source names.
 Some are benign.  But, for example, the * and ? characters are used as
@@ -9909,7 +9910,9 @@ it will after SPLIT in AIPS), it could cause problems.  The temptation
 to use * is high because of sources such as SgrA*.  But the
 conservative approach is to avoid it.  Also, do not include imbedded
 blanks in source names, as they cause problems at a variety of places
-in processing.
+in processing.  Minus signs (dashes), plus signs, underscores, and
+parentheses should not cause problems and are the commonly desired
+characters.
 
 Note that the number of characters you can have may be limited by
 downstream software.  Snap files require source names of 10 characters
@@ -13527,6 +13530,11 @@ more information.
 
 %  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
 
+\item Increase the number of allowed aliases for source names from
+5 to 10.  Sept. 30, 2010.  RCW.
+
+\item Released a beta version on Sept. 27, 2010.  RCW
+
 \item Add axis offsets to the station location parameters shown
 in the summary file.  Also add warning if the axis offset is zero
 as that is a likely indication that the station locations come
@@ -13584,7 +13592,7 @@ about July 7, 2010.  RCW
 \item Implement automatic insertion of geodetic segments, including
 parameters {\tt GEOSEG}, {\tt GEOSRCS}, and {\tt GEOPRT}.  There is a
 sample schedule egdelzn.key in the examples area.  Infrastructure by
-June 1, 2010.  Tweaking algorithm until at least Aug 19, 2010.  RCW.
+June 1, 2010.  Tweaking algorithm until at least Sept. 27, 2010. RCW.
 
 \item Give CORCHAN a second argument to use for the FFT size.
 May 14, 2010.

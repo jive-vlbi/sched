@@ -47,9 +47,11 @@ C
 C
 C     Process the duration/dwell request.  Here the input has been
 C     reset before the scan so that we can detect any changes.
+C     However DWELL(2) (will go to NOWAIT) has not been reset.
 C
       TDUR   = VALUE( KEYPTR( 'DURation', KC, KI ) )
       TDWELL = VALUE( KEYPTR( 'DWELL', KC, KI ) )
+      NOWAIT(ISCN) = VALUE( KEYPTR( 'DWELL', KC, KI ) + 1 )
       IF( TDWELL .NE. UNSET .AND. TDUR .NE. UNSET ) THEN
          CALL ERRLOG( 'GETTIM: Don''t specify both DUR and DWELL! ' )
       ELSE IF( TDWELL .NE. UNSET ) THEN

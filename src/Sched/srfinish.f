@@ -135,7 +135,7 @@ C
       DO IGRP = 1, NPKGRP
          DO IPSRC = 1, NPKSRC(IGRP)
             DO ISRC = 1, MSRC
-               DO INAME = 1, 5
+               DO INAME = 1, MALIAS
                   IF( PKSRC(IPSRC,IGRP) .EQ. SOURCE(INAME,ISRC) ) THEN
                      PKSRNUM(IPSRC,IGRP) = ISRC
                   END IF
@@ -152,7 +152,7 @@ C
       IF( ANYGEO ) THEN
          DO IGEO = 1, NGEO
             DO ISRC = 1, MSRC
-               DO INAME = 1, 5
+               DO INAME = 1, MALIAS
                   IF( GEOSRC(IGEO) .EQ. SOURCE(INAME,ISRC) ) THEN
                      GEOSRCI(IGEO) = ISRC
                   END IF

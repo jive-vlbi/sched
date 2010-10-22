@@ -10,7 +10,7 @@ C
       PARAMETER     ( MSEP = 7 )
       PARAMETER     ( ML = 20 )
 C
-      INTEGER       IP, ISRC, LEN1, IOUT
+      INTEGER       IP, ISRC, LEN1, IOUT, INAME
       INTEGER       ICHN
       INTEGER       MLINE, CLINE, IL, NPCH
       INTEGER       ISET, NCHSET, CH1SET, IPAIR, ICSRC
@@ -67,32 +67,15 @@ C
             MLINE = 3
 C
 C           Write the names into the first columns for up to 
-C           5 lines if there are multiple names.
+C           MALIAS lines if there are multiple names.
 C
-            WRITE( LINE(1), '( T2, A1, 1X, A12 )' ) 
-     1          CSUSED(1,ISRC), SOURCE(1,ISRC)
-C
-            IF( SOURCE(2,ISRC) .NE. ' ' ) THEN
-               WRITE( LINE(2), '( T2, A1, 1X, A12 )' ) 
-     1             CSUSED(2,ISRC), SOURCE(2,ISRC)
-            END IF
-C
-            IF( SOURCE(3,ISRC) .NE. ' ' ) THEN
-               WRITE( LINE(3), '( T2, A1, 1X, A12 )' ) 
-     1             CSUSED(3,ISRC), SOURCE(3,ISRC)
-            END IF
-C
-            IF( SOURCE(4,ISRC) .NE. ' ' ) THEN
-               WRITE( LINE(4), '( T2, A1, 1X, A12 )' ) 
-     1             CSUSED(4,ISRC), SOURCE(4,ISRC)
-               MLINE = 4
-            END IF
-C
-            IF( SOURCE(5,ISRC) .NE. ' ' ) THEN
-               WRITE( LINE(5), '( T2, A1, 1X, A12 )' ) 
-     1             CSUSED(5,ISRC), SOURCE(5,ISRC)
-               MLINE = 5
-            END IF
+            DO INAME = 1, MALIAS
+               IF( SOURCE(INAME,ISRC) .NE. ' ' ) THEN
+                  WRITE( LINE(INAME), '( T2, A1, 1X, A12 )' ) 
+     1                CSUSED(INAME,ISRC), SOURCE(INAME,ISRC)
+                  MLINE = INAME
+               END IF
+            END DO
 C
 C           Write the source positions on the first 2 lines.
 C
