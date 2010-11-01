@@ -2,7 +2,7 @@
 C
 C     Routine for the optimization of a schedule.  This will always
 C     be called.  In the simplest mode, it just sets SCAN1 and SCANL,
-C     calculates the geometric and tape parameters, checks time 
+C     calculates the geometric and media parameters, checks time 
 C     sequences, avoids bad scan times, and returns.  The next 
 C     simplest mode involves dwell time scheduling.  There are also 
 C     more complicated modes that use the input scans as essentially 
@@ -10,24 +10,25 @@ C     a source list and generate an entirely new schedule that will
 C     be put in scans beyond NSCANS.  After such a use, SCAN1 will
 C     be NSCANS + 1 and SCANL will be something higher.
 C
-C     The sophisticated options are used mainly for geodetic or 
-C     pointing scheduling, although this would be the place to 
-C     insert the code for useful astronomical optimizations.  Some
-C     that would be good to add some day would be:
-C           Create a long-track observation complete with calibrators
-C              from basic information like experiment duration.  
-C              Useful for dynamic scheduling.
-C           Create a survey schedule with optimized slews and uv
-C              distribution, given a list of sources.
-C           Create a phase reference schedule, given constraints. 
+C     In addition, SCHOPT can pick it's own sources to either create
+C     pointing scans, or to create geodetic (DELZN) sequences.  These
+C     scan insertion options are handled with somewhat different logic
+C     from the other optimazations.
 C
-C     The automatic insertion of reference pointing scans has also
-C     been implemented here as an independent function from the 
-C     optimization functions.  Both can be done on the same schedule.
+C     The more sophisticated options are used mainly for geodetic or 
+C     pointing scheduling, or for scheduling surveys.  This would be 
+C     the place to insert the code for other useful optimizations.
+C     that would be good to add some day would be:
 C
 C     An output file that can be used for the scans input of another   
 C     sched input can be written if hand editing of the optimized
 C     schedule is desired.
+C
+C     Note that the scan times up to this point are only meaningful 
+C     for fixed or duration scheduling.  For dwell scheduling, they
+C     are generally well before the actual time after accounting for
+C     slews.  For other optimization modes where the input scans are
+C     more of a source list, the times are meaningless.
 C
 C     OPDUR is the experiment total duration.  No scans will be 
 C     scheduled after that time.
@@ -47,10 +48,15 @@ C               into a number of cells and tries to optimize the
 C               coverage of those cells.  The input file should contain
 C               one scan for each source.  They will not be used in
 C               order and each may get used several times.
+C      "CSUB"   Like "CELLS" with subarraying.  May not be working.
 C      "UPTIME" Makes a series of scans of total length OPDUR for each
 C               input scan.  This is meant to help the UPTIME 
 C               replacement.
-C
+C      "HAS"    Create a schedule using the input scans as a source list
+C               with one input scan per output scan.  Try to optimize
+C               for hour angles.  This is a one pass operation.  This
+C               was used to schedule the VIPS survey project and should
+C               be good for other surveys.
 C
 C
 C     In the loop through output scans:
@@ -88,8 +94,8 @@ C
 C
 C     For test only.
 C
-      double precision      SIGMA(20)
-      real                   DUM1
+C      double precision      SIGMA(20)
+C      real                   DUM1
 C
       SAVE              LASTISCN
 C ---------------------------------------------------------------------
@@ -153,8 +159,8 @@ C
             DONE = .FALSE.
          ELSE
 C
-C           Get a new main scan if all peaking scan insertions and geodetic
-C           scan insertions are done.
+C           Get a new main scan if no peaking or geodetic scan insertions 
+C           are in progress.
 C
 C           Increment the input pass counter (for many, but not all
 C           modes, this is the input scan number).  Note that it does
@@ -179,24 +185,21 @@ C           They specify the the next output scan, with source,
 C           stations, and times.  If ADJUST is true, the start time
 C           is assumed to be approximate and can be adjusted for 
 C           slews etc later.  If false, the times are fixed.  Note
-C           that the stop time will also be adjusted if ADJUST if
+C           that the stop time will also be adjusted if ADJUST is
 C           true if only a duration (or dwell) was specified by the user
 C           for the scan.  Otherwise the user specified time will be
 C           used (if the user specified start, ADJUST will be false).
 C   
-            IF( OPTMODE .EQ. 'NONE' .AND. .NOT. DWELLS ) THEN
+            IF( OPTMODE .EQ. 'NONE' ) THEN
 C   
 C              Non-optimizing mode:  Just use next input scan.  If
 C              KSCN ne ISCN, then KSCN scan info will be copied to
-C              ISCN.
+C              ISCN.  Note that timing from DWELL scheduling will be
+C              handled in the OPTTIM call later.  ADJUST will be set
+C              appropriately here.  The DWELL case used to be separate
+C              but there was no need.  OPTDWELL was deleted.
 C   
                CALL OPTNONE( KSCN, ISCN, ADJUST, KEEP, DONE )
-C   
-            ELSE IF( OPTMODE .EQ. 'NONE' .AND. DWELLS ) THEN
-C   
-C              Dwell time scheduling.  This one also copies KSCN to ISCN.
-C   
-               CALL OPTDWELL( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
 C   
             ELSE IF( OPTMODE .EQ. 'SCANS' ) THEN
 C   
@@ -246,14 +249,18 @@ C
             END IF
 C
 C           KSCN not used below this point.
+C
 C           Some of the optimization routines only give approximate
-C           scan times and so now get the final ones.  Note that
-C           inserted pointing scans are not yet in the picture, but
-C           they won't be allowed to adjust the main scan times.
+C           scan times.  Get better, final, ones now.  Inserted 
+C           pointing scans have not been added yet, but they won't 
+C           be allowed to adjust the main scan times.  Also the 
+C           geodedic scans have not been added. ADDGEO will call 
+C           OPTTIM and SCNGEO (in GMKSCN) for the geodetic scans.
 C
             IF( KEEP .AND. .NOT. DONE ) THEN
 C        
-C              Get slew times and exact start time of next scan.
+C              Get slew times and exact start time of next scan.  The
+C              adjustments for DWELL scheduling are done here.
 C        
                CALL OPTTIM( LASTISCN, ISCN, ADJUST )
 C        
@@ -281,10 +288,18 @@ C
          END IF
 C
 C        Only keep the scan if told to do so by optimization routine.  
+C        Also enter this section if in the middle of adding pointing
+C        or geodetic scans.
 C
          IF( KEEP .AND. .NOT. DONE ) THEN
 C
+C           This is the section where additional scans can be inserted 
+C           at specific places in the schedule, not as the result of
+C           any global optimization.  For now, this means geodetic
+C           segments or pointing scans.
+C
 C           Insert geodetic segment scans if requested.
+C
 C           Only do it if not in the middle of inserting pointing.
 C           Mixing pointing and geo insertion might work, but it
 C           sounds both dangerous and unnecessary.
@@ -295,10 +310,10 @@ C
             END IF
 C
 C           Get the geodetic quality measure for some scans.  This
-C           is for testing a premade sequence.  GEOQUAL does the 
+C           was written for testing a premade sequence.  GEOQUAL does the 
 C           printing.  Keep the code here in case I want to make it
 C           a feature with a switch like GEOTEST = 13 on the last 
-C           scan of the group.  The fourth parameter shoud be a scan
+C           scan of the group.  The fourth parameter should be a scan
 C           that includes all sources (may need to test to find one).
 C
 C            IF( GEOTEST(ISCN) .GT. 0 ) THEN
@@ -329,10 +344,13 @@ C
 C      
          END IF
 C
-C        Now process the current scan which may be reference pointing
-C        or the main target scan.  Allow KEEP and DONE
-C        to be reset by the above routines (MAKEPTG may discover no
-C        stations that can do reference pointing are in the scan).
+C        All possible scan insertions etc are now done.  The details 
+C        of the current scan can be finalized.
+C
+C        Redo the IF statement to allow KEEP and DONE to be reset by 
+C        the above insertion routines routines.  The main case is that 
+C        MAKEPTG may discover no stations that can do reference 
+C        pointing are in the scan.
 C
          IF( KEEP .AND. .NOT. DONE ) THEN
 C
@@ -340,8 +358,10 @@ C           Get the geometry at the stations and count the stations
 C           that are consitered UP.  It is almost certain that this 
 C           has already been done for all scans, but with the pointing
 C           scan insertions etc, there is room for confusion and 
-C           this makes sure that all is ok.
+C           this makes sure that all is ok.  This does not adjust
+C           any scan timings, just recalculates the geometry.
 C
+            CALL OPTTIM( LASTISCN, ISCN, ADJUST )
             CALL SCNGEO( LASTISCN, NGOOD, ISCN )
 C
 C           Eliminate stations using automatic tape allocation

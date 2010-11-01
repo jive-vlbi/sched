@@ -4,6 +4,11 @@ C     Routine to test input times and process them to form Julian
 C     start and stop times which will be used throughout the rest of
 C     the SCHED.  All times are fractional days.
 C
+C     Note that this routine is not where dwell time scheduling, or other
+C     optimization is done and the times can be quite far off.  Scan 
+C     times should not be used for anything that matters until after
+C     SCHOPT is called.
+C     
 C     This was called SETTIM, but the MicroSoft fortran library also has
 C     a routine of that name.
 C
