@@ -27,40 +27,49 @@ C --------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'SLEW: Starting.' )
       KSTA = STANUM(ISTA)
 C
+C     Do the calculation for an actual move.
+C
 C     First get the previous position. 
-C
+C     
       IF( LSCN .EQ. 0 ) THEN
-C
+C     
 C        First scan.  Some nominal position. 
-C
+C     
          IF( MOUNT(KSTA) .EQ. 'ALTAZ' ) THEN
             LASTAZ = ( AX1LIM(2,KSTA) - AX1LIM(1,KSTA) ) / 2.0
          ELSE
             LASTAZ = 180.0
          END IF
-C
+C     
          LDEC4 = LAT(KSTA) / RADDEG
+C     
+C        Changed SHA argument (3ed to last) from LDEC4 to 0.0, which
+C        seems to make more sense, on 26oct2010.  But the routines
+C        that call SLEW either don't do so when LSCN is zero, or don't
+C        use the results so it probably doesn't matter.
+C     
          CALL ANTPOS( KSTA, ' ', LDEC4,
-     1           LASTAZ, 90.0, LDEC4, LASTAX1, LASTAX2 )
+     1           LASTAZ, 90.0, 0.0, LASTAX1, LASTAX2 )
+C     
       ELSE
-C
+C     
 C        Get position at end of scan LSCN.  Note wrap position in Az
 C        should have been established already by routine WRAP.
-C
+C     
          LDEC4 = DECP(SRCNUM(LSCN)) / RADDEG
          CALL ANTPOS( KSTA, UP2(LSCN,ISTA), LDEC4,
      1           AZ2(LSCN,ISTA), EL2(LSCN,ISTA), HA2(LSCN,ISTA),
      2           LASTAX1, LASTAX2 )
-C
+C     
       END IF
-C
+C     
 C     Get the current antenna position.
-C
+C     
       DEC4 = DECP(SRCNUM(ISCN)) / RADDEG
       CALL ANTPOS( KSTA, UP1(ISCN,ISTA), DEC4,
      1        AZ1(ISCN,ISTA), EL1(ISCN,ISTA), HA1(ISCN,ISTA),
      2        CURAX1, CURAX2 )
-C
+C     
 C     Get the slew time in minutes.  All rates assumed to be deg/min.
 C     Acceleration is assumed to be in deg/s/s.
 C     Consider the two cases of when the antenna reaches full speed
@@ -74,19 +83,19 @@ C     Likewise, the equation for TSLEW in the case of not reaching
 C     full speed is really T = 2sqrt(2(D/2)/a).
 C     TACC1 and TACC2 are in seconds.
 C     RATE1 and RATE2 are deg/sec  (trying to use seconds for all).
-C
+C     
 C     The above was for the original implementation of acceleration.
 C     It assumed acceleration and deceleration were the same.  But some
 C     antennas, including the DSN, have different rates.
-C
+C     
 C     First the slew distance.
-C
+C     
       AX1SLEW = ABS( CURAX1 - LASTAX1 )
       AX2SLEW = ABS( CURAX2 - LASTAX2 )
-C
+C     
 C     Then how long does it take and how far does it go to get to
 C     full speed.
-C
+C     
       RATE1 = AX1RATE(KSTA) / 60.0
       RATE2 = AX2RATE(KSTA) / 60.0
       AX1ADU = 1.0 / AX1ACC(1,KSTA) + 1.0 / AX1ACC(2,KSTA)
@@ -95,10 +104,10 @@ C
       TACC2 = RATE2 * AX2ADU
       DACC1 = RATE1**2 * AX1ADU * 0.5
       DACC2 = RATE2**2 * AX2ADU * 0.5
-C
+C     
 C     Then get the actual time, with the method depending on whether
 C     full speed was reached.
-C
+C     
       IF( AX1SLEW .LT. DACC1 ) THEN
          TSLW1 = SQRT( 2.0 * AX1SLEW * AX1ADU )
       ELSE
@@ -109,11 +118,28 @@ C
       ELSE
          TSLW2 = TACC2 + ( AX2SLEW - DACC2 ) / RATE2
       END IF
-C
+C     
 C     Use the largest.
-C
+C     
       TSLEW(ISCN,ISTA) = MAX( TSLW1, TSLW2 )
 C
+C     When there is no source change, there can be confusion.
+C     Presumably the slew time is zero, assuming tracking continues.  
+C     But when there is a gap between scans, the sky rotates a bit, 
+C     and this routine used to come up with a non-zero slew time 
+C     (second or two, typically, maybe more if there are GAPs scheduled).
+C     That can be pretty confusing in the printouts.  So, set the 
+C     actual slew time, before TSETTLE etc, to zero in this case.  But
+C     don't always set it to zero.  If a wrap is needed, a long slew
+C     may be required and would be reflected in the above calculations.
+C     So only set TSLEW to zero if it is already small - implying no wrap.
+C
+      IF( SRCNUM(LSCN) .EQ. SRCNUM(ISCN) .AND.
+     1     TSLEW(ISCN,ISTA) .LT. 20.D0 * ONESEC ) THEN
+         TSLEW(ISCN,ISTA) = 0.D0
+      END IF
+C
+C   
 C     Add the settling time for the station.  
 C
       TSLEW(ISCN,ISTA) = TSLEW(ISCN,ISTA) + TSETTLE(KSTA)

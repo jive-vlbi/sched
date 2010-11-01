@@ -4,7 +4,8 @@ C     Routine for optimization mode of sched that decides what to
 C     do with the next input scan.  It is used for OPTMODE=SCANS.
 C     It will not decide to leave it out of the list, so it is
 C     not necessary to create a new scan list.  But it may flag the
-C     scan not to be used, which the rest of SCHED understands.
+C     scan not to be used, which the rest of SCHED understands.  It
+C     does that by setting all STASCN entries .FALSE.
 C
 C
       INCLUDE 'sched.inc'

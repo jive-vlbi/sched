@@ -17,12 +17,11 @@ C
       NGOOD = 0
       DO ISTA = 1, NSTA
 C
-C        Get the geometry for all scans.  Occasionally tables
+C        Get the geometry for all stations.  Occasionally tables
 C        are printed that show the elevations, for example, of stations
 C        including those that are down.  So calculate that for all
 C        stations, but then only use the stations in the scan to 
 C        calculate things like slews.
-C
 C
 C        Get the geometry at each antenna for this source, whether or not
 C        it will observe.

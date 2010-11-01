@@ -5,9 +5,10 @@ C     case of no optimization.  This just returns the current input
 C     scan with appropriate flags set.  It copies it to a new slot
 C     if requested, which might be needed when inserting peaking scans.
 C
-C     In the case where some scans have dwell time scheduling, the 
-C     fixed scans will use this routine and the dwell scans will 
-C     use OPTSKD.
+C     Dwell scans used to be handled in OPTDWELL, but that was mostly
+C     redundant with OPTTIM that is called later, so was removed.
+C     In the process, the setting of ADJUST got a little more 
+C     complicated here.
 C
       INCLUDE 'sched.inc'
 C
@@ -18,7 +19,6 @@ C ---------------------------------------------------------------------
 C
 C     Set output flags so no adjustments will be made later.
 C
-      ADJUST = .FALSE.
       KEEP   = .TRUE.
       DONE   = KSCN .GT. NSCANS
       IF( .NOT. DONE ) THEN
@@ -30,6 +30,11 @@ C
          END IF
 C
       END IF
+C
+C     Set whether to allow time adjustments.
+C
+      ADJUST = ( DWELLS .AND. ISCN .GT. SCAN1 ) .AND. 
+     1         ( DURONLY(ISCN) .EQ. 1 .OR. DURONLY(ISCN) .EQ. 4 ) 
 C
       RETURN
       END
