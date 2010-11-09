@@ -45,7 +45,7 @@ C
 C   
 C        Write the desired information
 C   
-         WRITE( IOMS, '( A, I4 )' ) '    FFT_SIZE          = ', IFFT
+         WRITE( IOMS, '( A, I8 )' ) '    FFT_SIZE          = ', IFFT
          WRITE( IOMS, '( A, I4 )' ) '    SPECTRAL_AVERAGE  = ', IAVG
          WRITE( IOMS, '( A, A )' )  '    WINDOW            = ', CORWTFN
          IF( CORAV2 .NE. 0.0 .AND. CORAV2 .NE. CORAVG ) THEN
@@ -81,7 +81,7 @@ C
 C   
 C        Write the desired information
 C   
-         WRITE( IOMS, '( A, I4 )' ) '    FFT_SIZE          = ', IFFT
+         WRITE( IOMS, '( A, I8 )' ) '    FFT_SIZE          = ', IFFT
          WRITE( IOMS, '( A, I4 )' ) '    SPECTRAL_AVERAGE  = ', IAVG
          WRITE( IOMS, '( A, A )' )  '    WINDOW            = ', CORWTFN
          IF( CORAV2 .NE. 0.0 .AND. CORAV2 .NE. CORAVG ) THEN
