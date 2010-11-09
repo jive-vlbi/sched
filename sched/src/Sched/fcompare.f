@@ -93,9 +93,9 @@ C     Print something if debug print is requested.
 C
       IF( SDEBUG ) THEN
          SETMSG = ' '
-         WRITE( SETMSG, '( A, I4, A, I4 )' )
+         WRITE( SETMSG, '( A, I4, A, I4, 1X, A )' )
      1       'FCOMPARE: Got station and frequency match. KS:', KS,
-     2       '  KF:', KF
+     2       '  KF:', KF, FRNAME(KF)
          CALL WLOG( 0, SETMSG )
       END IF
 C
