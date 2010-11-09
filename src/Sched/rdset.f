@@ -28,7 +28,8 @@ C
       SAVE              KI, KD, KC, ENDMARK, BLANK
       SAVE              ZZZZ, ASTRO
 C ---------------------------------------------------------------
-C     Facilitate debugging of routines that don't have sched.inc.
+C     Facilitate debugging of routines that don't have sched.inc,
+C     or, by setting SDEBUG true, debugging the frequency setting.
 C
       SDEBUG = DEBUG
 C
