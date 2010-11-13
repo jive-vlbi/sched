@@ -34,6 +34,8 @@ C     SRCVREF C1    -  Velocity reference (L, H, or G for LSR,
 C                          Heliocentric, or Geocentric.
 C     SRCVDEF C1    -  Velocity definition (R, O, Z for radio, 
 C                          optical, or z)
+C     SRCFLUX R4*30 -  Freq. total flux, compact flux for 10 freqs.
+C     SRCFREF C15   -  Reference for fluxes.
 C                
 C
 C     For station catalog.
@@ -123,11 +125,11 @@ C
       CHARACTER         SRCVER*20, SRCNAM(MAL)*16
       INTEGER           SRCPMY, SRCPMM, SRCPMD
       REAL              SRCVEL(MVEL), SRCDRA, SRCDDEC
-      REAL              SRCRAE, SRCDECE
+      REAL              SRCRAE, SRCDECE, SRCFLUX(30)
       DOUBLE PRECISION  SRCPMRA, SRCPMDEC, SRCPARA
       DOUBLE PRECISION  SRCRA, SRCDEC, SRCPMT, SRCEPOT
       CHARACTER         SRCCAL*1, SRCEQ*5, SRCRMK*80
-      CHARACTER         SRCVREF*1, SRCVDEF*1
+      CHARACTER         SRCVREF*1, SRCVDEF*1, SRCFREF*15
 C
 C     For station catalog.
 C
@@ -165,17 +167,18 @@ C
 C     The COMMONS
 C
       COMMON /RDCATC/ SRCVER, SRCNAM, SRCCAL, SRCEQ, SRCRMK, SRCVREF, 
-     1                SRCVDEF, STAVER, STANAM, STACOD, STADBN, STADBC, 
-     2                STAFRM, STACTL, STAMNT, STADBA, STADAR, STAREC,
-     3                STADSK, STAMD, STATSC, LOCFILE, DBNAME, DBCODE, 
-     4                DBFRM, DBDBA, DBVER
+     1                SRCVDEF, SRCFREF, STAVER, STANAM, STACOD, 
+     2                STADBN, STADBC, 
+     3                STAFRM, STACTL, STAMNT, STADBA, STADAR, STAREC,
+     4                STADSK, STAMD, STATSC, LOCFILE, DBNAME, DBCODE, 
+     5                DBFRM, DBDBA, DBVER
 C
       COMMON /RDCATN/ SRCPMRA, SRCPMDEC, SRCPARA, SRCRA, SRCDEC, 
      1                SRCPMT, SRCEPOT, STALON, STALAT, STAEL, 
      2                STAX, STAY, STAZ, STADX,  STADY,  STADZ, 
      3                DBX, DBY, DBZ, DBDX, DBDY, DBDZ,
      4                STAEPO, SRCPMY, SRCPMM, SRCPMD, SRCVEL, 
-     5                SRCDRA, SRCDDEC, SRCRAE, SRCDECE,
+     5                SRCDRA, SRCDDEC, SRCRAE, SRCDECE, SRCFLUX,
      6                STANHO, STANAX, STANBC, STANDR, STANHD,
      7                STAHAZ, STAHEL, STAAX1, STAAX2, 
      8                STARA1, STARA2, STAAC1, STAAC2,
