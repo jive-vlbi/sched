@@ -8880,6 +8880,10 @@ catalog, but also have a catalog of program sources.  It is also
 useful when using the ability to specify many phase centers per
 pointing center.
 
+\schedb will use the data for a source from the first catalog it
+reads that includes that source.  It reads the in-line catalog first,
+then {\tt SRCFILE} and then {\tt SRCFILE2}.
+
 \rcwbox
 {A file name of up to 80 characters.}
 {Any file name or {\tt none}.}
@@ -8894,6 +8898,10 @@ pointing center.
 the main \schedb catalog with a local, but still not embedded,
 catalog.  It is likely to be especially useful for observations
 wanting multiple phase centers in each pointing center.
+
+\schedb will use the data for a source from the first catalog it
+reads that includes that source.  It reads the in-line catalog first,
+then {\tt SRCFILE} and then {\tt SRCFILE2}.
 
 \rcwbox
 {A file name of up to 80 characters.}
@@ -9876,7 +9884,9 @@ you wish to prevent \schedb from looking in external catalogs, specify
 {\tt SRCFILE=NONE} ({\tt SRCFILE2} is not used at all unless
 specified.).  It is common to provide in-line source catalog entries
 for unique program sources, but let \schedb find the fringe finders
-and other calibrators in the standard catalog.
+and other calibrators in the standard catalog.  \schedb will look in
+the in-line catalog first, then in {\tt SRCFILE}, then in {\tt SRCFILE2}.
+It will use data from the first place a source is found.
 
 The parameters for each entry in the source catalog are below.  Lower
 case letters in this list are optional.  All catalog parameters except
@@ -10369,6 +10379,26 @@ the number of slews per hour on the Mark1 telescope at Jodrell.  They
 are very worried about fatigue and will refuse to run fast switching
 schedules.  The default is 1.E6 which should be more than anyone
 would try to schedule.
+
+\item [{\tt FLUX}:] Flux densities at up to 10 frequencies for the
+source.  The arguments (up to 30) are in triplets with the first being
+the frequency in GHz, the second is the total flux density in some
+image, and the third is the unresolved (peak) flux density --- what
+you are likely to see on long baselines.  These values are typically
+taken as a byproduct of geodetic observations and should be taken as
+approximate.  All compact source vary to some degree --- most by a lot
+--- so the source may well prove to have a different strength when
+used than is shown.  But these flux densities should help distinguish
+the strong from the weak calibrators.
+
+\item [{\tt FLUXREF}:] A text string that indicated where the flux
+density information came from.  It is likely to match one of the
+catalog names from which positions of some sources were obtained.
+It may not match the position catalog for an individual source.  A
+typical case, at the time this parameter was added, is that the flux
+densities come from one of Petrov's catalogs while many of the sources
+use positions from a GSFC solution.
+
 
 \end{description}
 
@@ -13551,9 +13581,23 @@ more information.
 
 \begin{itemize}
 
+\item Update source and station location tables.  The standard
+sources.vlba now has the sources from the GSFC 2010a_astro solution
+plus additional sources from the Petrov rfc2010c solution and a few
+JVAS, VLA and other sources for a total of 5731.  There is also a file
+with just the Petrov solution sources - 5198 of them.  The station
+locations are based on the GSFC 2010a solution.  Many of the old
+mobile VLBI sites have been removed.  Nov. 20, 2010.  RCW.
 
-%  WORK ON SETFCAT AND MULTIPLE ENTRIES FOR DIFFERENT IFS.
-%  Fix the related bug that causes the wrong freq.dat entry to be chosen.
+\item Add flux density data (inputs {\tt FLUX} and {\tt FLUXREF}) to
+the source catalog.  Rebuild the catalog to include such information
+obtained with the Petrov 2010c release.  Nov. 10, 2010.  RCW.
+
+\item Tweak the way scan timing is handled.  This will provide slightly
+improved slew calculations.  One impact is that new schedules can have
+scan times that differ from old ones made from the same input file
+by and amount that accumulate at a rate of a second or two per scan.
+Oct. 2010  RCW.
 
 \item Added a second argument to \htmlref{{\tt DWELL}}{MP:DWELL} to
 instruct \schedb not to wait for some number of antennas.  Oct. 24, 
