@@ -63,7 +63,7 @@ C     than calls to KEYPTR every time for efficiency (source catalogs
 C     are big and take a while to read).
 C
       INTEGER          MSRP, MODE, KEYPTR
-      PARAMETER        (MSRP=100)
+      PARAMETER        (MSRP=130)
       INTEGER          KI(MSRP)
       CHARACTER        KC(MSRP)*8, KCHAR*256, LASTFILE*80
       DOUBLE PRECISION KD(MSRP*2), ENDMRK
@@ -75,11 +75,11 @@ C
       INTEGER          PTSO, PTRA, PTDEC, PTRAE, PTDECE
       INTEGER          PTC, PTV, PTVR, PTVD
       INTEGER          PTEN, PTPM, PTDRA, PTDDEC, PTPRA, PTPDEC 
-      INTEGER          PTPAR, PTPARL, PTRE, PTVER
+      INTEGER          PTPAR, PTPARL, PTRE, PTVER, PTFLX, PTFREF
       SAVE             PTSO, PTRA, PTDEC, PTRAE, PTDECE
       SAVE             PTC, PTV, PTVR, PTVD
       SAVE             PTEN, PTPM, PTDRA, PTDDEC, PTPRA, PTPDEC
-      SAVE             PTPAR, PTPARL, PTRE, PTVER
+      SAVE             PTPAR, PTPARL, PTRE, PTVER, PTFLX, PTFREF
 C
       DATA   FOPEN         / .FALSE. /
       DATA   GOTKEYS       / .FALSE. /
@@ -121,6 +121,8 @@ C
          CALL KEYADD( 'PARALLAX', 0.D0, 1, KD, KC, KI )
          CALL KEYCHR( 'REmarks', ' ', 80, KD, KC, KI )
          CALL KEYCHR( 'VERSION', 'Not given', 20, KD, KC, KI )
+         CALL KEYADD( 'FLUX', 0.D0, 30, KD, KC, KI )
+         CALL KEYCHR( 'FLUXREF', ' ', 15, KD, KC, KI )
          GOTKEYS = .TRUE.
 C
 C        Get the pointers.
@@ -144,6 +146,8 @@ C
          PTPARL = KEYPTR( 'PARALLAX', KC, KI )
          PTRE   = KEYPTR( 'REmarks', KC, KI )
          PTVER  = KEYPTR( 'VERSION', KC, KI )
+         PTFLX  = KEYPTR( 'FLUX', KC, KI )
+         PTFREF = KEYPTR( 'FLUXREF', KC, KI )
       END IF
 C
 C     Open the file if requested.
@@ -209,6 +213,13 @@ C
          CALL KPACK( 'n       ', KD(PTVER+1) )
          CALL KPACK( '        ', KD(PTVER+2) )
       END IF
+C
+      DO I = 1, 30
+         KD(PTFLX-1+I) = 0.D0
+      END DO
+      DO I = 1, 2
+         KD(PTFREF-1+I) = BLANK8
+      END DO      
 C
 C
 C
@@ -293,6 +304,13 @@ C     Cal code.
 C
       WRITE( SRCCAL, '(A1)' ) KD(PTC)
       CALL UPCASE( SRCCAL )
+C
+C     Fluxes
+C
+      DO I = 1, 30
+         SRCFLUX(I) = KD(PTFLX-1+I)
+      END DO
+      SRCFREF = KCHAR( 'FLUXREF', 15, .FALSE., KD, KC, KI )
 C
   990 RETURN
       END

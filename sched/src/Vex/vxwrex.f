@@ -11,7 +11,8 @@ C
 C 
 C     Huib's local variables 
 C      
-      INTEGER YEAR, DAY, DOY, MONTH, JD
+      INTEGER   YEAR, DAY, DOY, MONTH, JD
+      INTEGER   ICH, JCH1(4), JCH2(4), NCH(4), MCH(4)
       INTEGER   LEN1, I
       CHARACTER VEXVAL*32, MNAME*3, DNAME*3, TMPEXP*32, TFORM*9, TTIME*9
       DOUBLE PRECISION STOPT,STARTT
@@ -67,13 +68,52 @@ C
      1     OBSPHONE(1:MAX(1,LEN1(OBSPHONE)))
       WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'fax:       ', 
      1     FAX(1:MAX(1,LEN1(FAX)))
-      IF( NOTE(1) .NE. ' ' ) 
-     1     WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'notes:     ', 
-     2     NOTE(1)(1:MAX(1,LEN1(NOTE(1))))
-      DO I = 2,4
-         IF( NOTE(I) .NE. ' ' ) 
-     1       WRITE( IVEX, '( A1, 4X, A, A )' ) COM, '           ', 
-     2       NOTE(I)(1:MAX(1,LEN1(NOTE(I))))
+C
+C     Write the notes.  The NOTE variables can be 128 characters
+C     long, but VEX output lines can only be 128 characters.  
+C     between the comment indicator COM and the blanks, there
+C     are 16 characters before the start of the comment.  So there
+C     is some hoop jumping to break a note into two lines if 
+C     needed (more than 112 characters).  RCW Nov. 11, 2010.
+C
+      DO I = 1, 4
+         JCH1(I) = -1
+         NCH(I) = LEN1( NOTE(I) )
+         IF( NCH(I) .LE. 112 ) THEN
+            MCH(I) = NCH(I)
+            JCH1(I) = 0
+            JCH2(I) = 0
+         ELSE
+            DO ICH = 112, NCH(I) - 112 + 1, -1
+               IF( NOTE(I)(ICH:ICH) .EQ. ' ' ) THEN
+                  MCH(I) = ICH
+                  JCH1(I) = ICH + 1
+                  JCH2(I) = NCH(I)
+                  GO TO 100
+               END IF
+            END DO
+  100       CONTINUE
+            IF( JCH1(I) .EQ. -1 ) THEN
+               MCH(I) = 112
+               JCH1(I) = 113
+               JCH2(I) = NCH(I)
+            END IF
+         END IF
+      END DO
+      DO I = 1,4
+         IF( NOTE(I) .NE. ' ' ) THEN
+            IF( I .EQ. 1 ) THEN
+               WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'notes:     ', 
+     1                NOTE(I)(1:MCH(I))
+            ELSE
+               WRITE( IVEX, '( A1, 4X, A, A )' ) COM, '           ', 
+     1                NOTE(I)(1:MCH(I))
+            END IF
+            IF( JCH1(I) .GT. 1 ) THEN
+               WRITE( IVEX, '( A1, 4X, A, A )' ) COM, '           ', 
+     1                NOTE(I)(JCH1(I):JCH2(I))
+            END IF
+         END IF
       END DO
 C
 C     good idea to write some dates, computers should read $SCHED
