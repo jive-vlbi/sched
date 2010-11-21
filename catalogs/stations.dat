@@ -117,7 +117,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2010Sep27-14:34:17"
+ VERSION = "2010Nov20-12:22:54"
 
 !
 !  =====================================================================
@@ -327,10 +327,11 @@
 !     For Tsys measurement, allow an extra minute.
    / 
 ! Change DBNAME to match appropriate entry in locations.dat  Sep. 23, 2009
+! Change el limit based on Ghigo email of Aug 16, 2010.
   STATION=GBT_VLBA   STCODE=Gb  CONTROL=VLBA
     DBNAME = GBT-VLBA
     MOUNT = ALTAZ AX1RATE=36  AX2RATE=18  AX1ACC=0.05  AX2ACC=0.05
-    AX1LIM= -90, 450    AX2LIM= 5, 90 
+    AX1LIM= -90, 450    AX2LIM= 6, 88 
 !     TSETTLE based on BK110 experience.  This should be monitored.
     TSETTLE = 20.0   MINSETUP = 10
     DISK=MARK5A   MEDIADEF=DISK    TSCAL=CONT
@@ -341,9 +342,10 @@
 !   the temperature is below 17 F (-8.3C).  This happens mainly in
 !   Dec, Jan, and Feb and mainly at night.  
 ! Change DBNAME to match appropriate entry in locations.dat  Jan. 23, 2009
+! Change el limit based on Ghigo email of Aug 16, 2010.
     DBNAME = GBT-VLBA
     MOUNT = ALTAZ AX1RATE=17  AX2RATE=18  AX1ACC=0.05  AX2ACC=0.05
-    AX1LIM= -90, 450    AX2LIM= 5, 90 
+    AX1LIM= -90, 450    AX2LIM= 6, 88 
 !     TSETTLE based on BK110 experience.  This should be monitored.
     TSETTLE = 20.0   MINSETUP = 10
     DISK=MARK5A   MEDIADEF=DISK    TSCAL=CONT
@@ -904,24 +906,10 @@ NBBC=14  DISK=MARK5A  MEDIADEF=DISK
 !   / 
 !  Usuda info from Phil Edwards 15jun99.  
 !  Based on email from Kenta Fujisawa.
+!  DBNAME changed Nov. 2010 to match GSFC solutions
 
-!  STATION=USUDAS2   STCODE=Ud  CONTROL=VEX
-!    DBNAME = USUDA_64
-!    DAR=NONE  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=4
-!    MOUNT=ALTAZ  AX1RATE=18  AX2RATE=18   AX1LIM=-90,450  AX2LIM=7.6,85
-!    TSETTLE=20
-!
-!    HOR_AZ =   0,  5, 10, 15, 20,120,125,130,135,140,145,150,155,160,
-!             165,170,175,185,190,195,200,205,210,215,220,255,260,270,
-!             275,280,285,290,295,300,305,310,315,320,325,330,335,340,
-!             345,350,355,360
-!    HOR_EL = 7.6,7.6,7.6,7.6,7.6,7.6,7.6,7.6,  8,  9, 10, 10, 10, 10,
-!              10, 10, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
-!              12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
-!              12, 11, 10, 10
-! /
   STATION=USUDAVS   STCODE=Ud  CONTROL=VSOP
-    DBNAME = USUDA_64
+    DBNAME = USUDA64
     DAR=VSOP  RECORDER=VSOP NDRIVES=1 NHEADS=1
     MOUNT=ALTAZ  AX1RATE=18  AX2RATE=18   AX1LIM=-90,450  AX2LIM=7.6,85
     TSETTLE=20
@@ -936,7 +924,7 @@ NBBC=14  DISK=MARK5A  MEDIADEF=DISK
               12, 11, 10, 10
   /
   STATION=USUDAVL STCODE=Ud  CONTROL=VEX
-    DBNAME = USUDA_64
+    DBNAME = USUDA64
     DAR=VLBAG  RECORDER=VLBA  NDRIVES=1  NHEADS=1 NBBC=14
     MOUNT=ALTAZ  AX1RATE=18  AX2RATE=18   AX1LIM=-90,450  AX2LIM=7.6,85
     TSETTLE=20
@@ -970,6 +958,18 @@ NBBC=14  DISK=MARK5A  MEDIADEF=DISK
     MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1ACC=0.25 AX2ACC=0.25   
    ! rate in deg/min, acceralation in deg/s/s
     AX1LIM=2,358 AX2LIM=5,85
+    TSETTLE=10 DAR=VERA  RECORDER=VERA  NDRIVES=1  NHEADS=1 NBBC=16
+    DISK=MARK5B MEDIADEF=DISK
+/
+!
+! This vera station appears in the 2010a stations solutions. 
+! Parameters set same as VERAMZSW in ignorance of any differences.
+!
+  STATION=VERAISGK  STCODE=Vs  CONTROL=VEX
+    DBNAME = VERAISGK
+    MOUNT=ALTAZ AX1RATE=126 AX2RATE=126 AX1ACC=2.10 AX2ACC=2.10   
+   ! rate in deg/min, acceralation in deg/s/s
+    AX1LIM=-90,450 AX2LIM=5,85
     TSETTLE=10 DAR=VERA  RECORDER=VERA  NDRIVES=1  NHEADS=1 NBBC=16
     DISK=MARK5B MEDIADEF=DISK
 /
