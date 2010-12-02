@@ -14,6 +14,7 @@ C
       INCLUDE 'vxlink.inc'
 C
       INTEGER     ISCN, ISTA, LEN1, NCHR
+      INTEGER     MCH, ICH, JCH1, JCH2
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
       INTEGER     YEAR, DAY, DOY, JD, MONTH, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
@@ -133,20 +134,42 @@ C
 C
 C           Maybe there's a comment.  DRUDG has a maximum line length
 C           of 128 including the comment character.  ANNOT is 128
-C           characters long.
+C           characters long and it is printed in the vex file with
+C           8 other characters in front.  If needed, break the line.
+C           Try to break at a word.
 C
             IF (ANNOT(ISCN) .NE. ' ' ) THEN
+               JCH1 = -1
                NCHR = LEN1( ANNOT(ISCN) )
-               WRITE( IVEX, '( A1, 5X, A )' ) COM, 
-     1             'Note a COMMENT was inserted during scheduling: '
                IF( NCHR .LE. 120 ) THEN
-                  WRITE( IVEX, '( A1, 7X, A )' ) COM, 
-     1               ANNOT(ISCN)(1:NCHR)
+                  MCH = NCHR
+                  JCH1 = 0
+                  JCH2 = 0
                ELSE
+                  DO ICH = 120, NCHR - 120 + 1, -1
+                     IF( ANNOT(ISCN)(ICH:ICH) .EQ. ' ' ) THEN
+                        MCH = ICH
+                        JCH1 = ICH + 1
+                        JCH2 = NCHR
+                        GO TO 200
+                     END IF
+                  END DO
+  200             CONTINUE
+                  IF( JCH1 .EQ. -1 ) THEN
+                     MCH = 120
+                     JCH1 = 121
+                     JCH2 = NCHR
+                  END IF
+               END IF
+               IF( ANNOT(ISCN) .NE. ' ' ) THEN
+                  WRITE( IVEX, '( A1, 5X, A )' ) COM, 
+     1               'Note a COMMENT was inserted during scheduling: '
                   WRITE( IVEX, '( A1, 7X, A )' ) COM,
-     1               ANNOT(ISCN)(1:118)
-                  WRITE( IVEX, '( A1, 7X, A )' ) COM,
-     1               ANNOT(ISCN)(119:NCHR)
+     1                      ANNOT(ISCN)(1:MCH)
+                  IF( JCH1 .GT. 1 ) THEN
+                     WRITE( IVEX, '( A1, 10X, A )' ) COM, 
+     1                      ANNOT(ISCN)(JCH1:JCH2)
+                  END IF
                END IF
             END IF
 C
