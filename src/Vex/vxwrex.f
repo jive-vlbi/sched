@@ -106,11 +106,11 @@ C
                WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'notes:     ', 
      1                NOTE(I)(1:MCH(I))
             ELSE
-               WRITE( IVEX, '( A1, 4X, A, A )' ) COM, '           ', 
+               WRITE( IVEX, '( A1, 15X, A )' ) COM, 
      1                NOTE(I)(1:MCH(I))
             END IF
             IF( JCH1(I) .GT. 1 ) THEN
-               WRITE( IVEX, '( A1, 4X, A, A )' ) COM, '           ', 
+               WRITE( IVEX, '( A1, 18X, A )' ) COM,
      1                NOTE(I)(JCH1(I):JCH2(I))
             END IF
          END IF
@@ -207,10 +207,49 @@ C
 C
       IF( CORNOTE(1) .NE. ' ' ) 
      1    WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'corr_notes : '
+C
+C     Like the NOTES above, write the CORNOTES without overflowing
+C     the 128 character limit for VEX lines even though CORNOTES
+C     input can be up to 128 characters and the output does not
+C     start in column 1.  Try to break on word boundaries.
+C     long, but VEX output lines can only be 128 characters.  
+C     Between the comment indicator COM and the blanks, there
+C     are 16 characters before the start of the comment.
+C     RCW Nov. 21, 2010
+C
       DO I = 1, 4
-         IF( CORNOTE(I) .NE. ' ' ) 
-     1       WRITE( IVEX, '( A1, 4X, A, A )' ) COM, '             ',
-     2       CORNOTE(I)(1:MAX(1,LEN1(CORNOTE(I))))
+         JCH1(I) = -1
+         NCH(I) = LEN1( CORNOTE(I) )
+         IF( NCH(I) .LE. 112 ) THEN
+            MCH(I) = NCH(I)
+            JCH1(I) = 0
+            JCH2(I) = 0
+         ELSE
+            DO ICH = 112, NCH(I) - 112 + 1, -1
+               IF( CORNOTE(I)(ICH:ICH) .EQ. ' ' ) THEN
+                  MCH(I) = ICH
+                  JCH1(I) = ICH + 1
+                  JCH2(I) = NCH(I)
+                  GO TO 200
+               END IF
+            END DO
+  200       CONTINUE
+            IF( JCH1(I) .EQ. -1 ) THEN
+               MCH(I) = 112
+               JCH1(I) = 113
+               JCH2(I) = NCH(I)
+            END IF
+         END IF
+      END DO
+      DO I = 1,4
+         IF( CORNOTE(I) .NE. ' ' ) THEN
+            WRITE( IVEX, '( A1, 15X, A )' ) COM,
+     1                CORNOTE(I)(1:MCH(I))
+            IF( JCH1(I) .GT. 1 ) THEN
+               WRITE( IVEX, '( A1, 18X, A )' ) COM, 
+     1                CORNOTE(I)(JCH1(I):JCH2(I))
+            END IF
+         END IF
       END DO
 C
 C     done for the day

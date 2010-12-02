@@ -1705,10 +1705,18 @@ couple of times to get the calibration data.
 
 \subsection{\label{SSEC:SCANTIMES}Scan Times}
 
-There are a variety of ways to set the time of a scan.  A \htmlref{{\tt
+Scans have a start time and a stop time.  In addition, they have a
+time that the recording is started, which may differ from the start
+time.  Throughout most of \schedb, the scan times presented are the
+nominal start and stop times.  But often, it will be the recording
+start time that is used in files sent to the antennas.  Both types of
+start times can be seen in the operator schedule files - the {\sl sch}
+files.
+
+There are a variety of ways to set the times of a scan.  A \htmlref{{\tt
 START}}{MP:START} time must always be set for the first scan of a
 schedule --- \schedb obviously has to know when to start.  After that,
-the ways to set the scan times are:
+the ways to set the nominal scan times are:
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 
@@ -1727,14 +1735,14 @@ will set the start time to the previous scan's stop time and the
 stop time to the start time plus the duration.
 
 \item Set a duration using \htmlref{{\tt DWELL}}{MP:DWELL}.  \schedb
-will set the start time to the previous scan's stop time plus the
-time it takes to get all antennas on source.  Then it will set the
-stop time to the start time plus the requested dwell time.  Note that
-this option does not yet take into account correlator resync times, if
-any, or time to switch between frequency bands (say 7mm to 2cm).  There
-is an option, with a second argument, to now wait for the last, or last
-few antennas.  This can be useful when there is a slow antenna involved
-or when some antenna is too close to the zenith.
+will set the start time to the previous scan's stop time plus the time
+it takes to get the antennas on source.  Then it will set the stop
+time to the start time plus the requested dwell time.  Note that this
+option does not yet take into account correlator resync times, if any,
+or time to switch between frequency bands (say 7mm to 2cm).  There is
+an option, with a second argument, to not wait for the last, or last
+few antennas.  This can be useful when there is a slow antenna
+involved or when some antenna is too close to the zenith.
 
 \item Set a duration using either \htmlref{{\tt DURation}}{MP:DUR} or
 \htmlref{{\tt DWELL}}{MP:DWELL} and set a minimum interval since the
@@ -1764,6 +1772,10 @@ achieve the desired results. Note that any intervals specified with
 
 \end{list}
 
+After the nominal times are determined, the recording start time is
+derived as described in the \htmlref{Adjusting the Scan or Recording
+Start Time section}{SSSEC:Starttime} below using \htmlref{{\tt
+PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE}.
 
 % ***************  How long do reconfigurations take on MarkIV systems.?
 
@@ -6410,17 +6422,18 @@ which antennas can observe certain frequencies.
 \subsubsection{\label{MP:GAP}{\tt GAP}}
 
 {\tt GAP} is the minimum gap in time between the previous stop time
-and the current scan start time when scheduling with \htmlref{{\tt
-DURation}}{MP:DUR} or \htmlref{{\tt DWELL}}{MP:DWELL}.  For scheduling
-with \htmlref{{\tt DURation}}{MP:DUR}, it will be that time interval.
-For scheduling with \htmlref{{\tt DWELL}}{MP:DWELL}, the interval
-might be longer if required for slews, but it will not be shorter.
-Note that both \htmlref{{\tt PRESCAN}}{MP:PRESCAN} and \htmlref{{\tt
-MINPAUSE}}{MP:MINPAUSE} are applied after the scan times are
-established and a negative {\tt PRESCAN} could make the period during
-which the recording is stopped shorter than {\tt GAP}.  {\tt MINPAUSE}
-is used to keep the recordings going through short gaps.  Note that,
-if \htmlref{{\tt START}}{MP:START} is specified, \htmlref{{\tt
+and the current nominal scan start time when scheduling with
+\htmlref{{\tt DURation}}{MP:DUR} or \htmlref{{\tt DWELL}}{MP:DWELL}.
+For scheduling with \htmlref{{\tt DURation}}{MP:DUR}, it will be that
+time interval.  For scheduling with \htmlref{{\tt DWELL}}{MP:DWELL},
+the interval might be longer if required for slews, but it will not be
+shorter.  Note that \htmlref{{\tt PRESTART}}{MP:PRESTART},
+\htmlref{{\tt PRESCAN}}{MP:PRESCAN} (obsolete parameter) and
+\htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} are applied after the nominal
+scan times are established and could make the period during which the
+recording is stopped shorter than {\tt GAP}.  {\tt MINPAUSE} is used
+to keep the recordings going through short gaps.  Note that, if
+\htmlref{{\tt START}}{MP:START} is specified, \htmlref{{\tt
 GAP}}{MP:GAP} will be ignored.
 
 If LST scheduling, GAP is a sidereal time, so it will be slightly
@@ -13580,6 +13593,9 @@ more information.
 \subsection{\label{SSEC:VER_9.4}Development Version 9.4}
 
 \begin{itemize}
+
+\item Wrap {\tt NOTES}, {\tt CORNOTES}, and {\tt COMMENTS} that
+overflow the 128 character limit in the Vex file.  Nov. 21, 2010 RCW.
 
 \item Update source and station location tables.  The standard
 sources.vlba now has the sources from the GSFC 2010a_astro solution

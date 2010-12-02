@@ -37,7 +37,7 @@ C
       LNAME = LEN1( SETNAME(KS) )
       SAMPWARN = .TRUE.
 C
-C     Warn if OBSTYP requests no tape while format suggests otherwise.
+C     Warn if OBSTYP requests no recording while format suggests otherwise.
 C     This might be legitimate for certain tests, so don't crash.
 C
       IF( NOTAPE .AND. FORMAT(KS) .NE. 'NONE' ) THEN
