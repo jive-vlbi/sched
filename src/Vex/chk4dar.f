@@ -110,12 +110,14 @@ C
      1       IFCHAN(ICH,KS) .NE. '1A' .AND.
      2       IFCHAN(ICH,KS) .NE. '2N' .AND. 
      3       IFCHAN(ICH,KS) .NE. '2A' .AND.
-     4       IFCHAN(ICH,KS) .NE. '3' ) THEN
+     4       IFCHAN(ICH,KS) .NE. '3N' .AND.
+     5       IFCHAN(ICH,KS) .NE. '3O' ) THEN
             CALL WLOG ( 1, 'CHK4DAR: IFCHAN ''' // IFCHAN(ICH,KS) //
-     1          ''' not 1N,1A,2A, or 2N' )
+     1          ''' not 1N,1A,2A,2N,3N or 3O' )
             ERRS = .TRUE.
-            IF( IFCHAN(ICH,KS) .EQ. '3' ) 
-     1          CALL WLOG ( 1, 'CHK4DAR: Not many astronomical ' //
+         END IF
+         IF( IFCHAN(ICH,KS)(1:1) .EQ. '3' ) THEN
+                CALL WLOG ( 1, 'CHK4DAR: Not many astronomical ' //
      2          'stations support IF=3, do I?' )
          END IF
 C        
