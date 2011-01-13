@@ -23,11 +23,13 @@ C
       CHARACTER         LPOL(MCHAN)*4
 C
 C ----------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'CORBLK starting. ' )
+C
 C     May need to protect against subarray conditions.
 C
 C     Don't do this for pointing etc.
 C
-      IF( .NOT. VLBITP ) RETURN
+      IF( .NOT. VLBITP .OR. NOSET ) RETURN
 C
 C     Put a title line in the sum file.
 C

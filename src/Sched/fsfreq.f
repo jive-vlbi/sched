@@ -24,6 +24,16 @@ C
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'FSFREQ starting.' )
 C
+C     Make sure this wasn't mistakenly called with KF = 0, perhaps 
+C     when NOSETUP was specified.  I had a complaint from JIVE about
+C     this happening.  It is probably ok to just not take action.
+C
+      IF( KF .EQ. 0 ) THEN
+         CALL WLOG( 1, 'FSFREQ: Called for frequency set zero.  '//
+     1        'Non-fatal (?) programming issue.' )
+         GO TO 999
+      END IF
+C
 C     Get the setup group, the defining scan of the frequency set,
 C     and the setup file.
 C
@@ -245,5 +255,6 @@ C
 C
 C     END
 C
+  999 CONTINUE
       RETURN
       END
