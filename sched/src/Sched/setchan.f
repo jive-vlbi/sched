@@ -17,7 +17,8 @@ C
 C
       INTEGER           ICH, ISETF, LEN1, KS
       LOGICAL           NEEDSB, DUALIF, GOTPOL
-      REAL              MAXBW, BITRATE
+      DOUBLE PRECISION  MAXBW 
+      REAL              BITRATE
 C --------------------------------------------------------------------
       IF( KS .LE. 3 .AND. SDEBUG ) CALL WLOG( 0, 'SETCHAN: Starting' )
 C
@@ -124,7 +125,7 @@ C
 C
 C     Get the total bandwidth and bitrate.  Useful later.
 C
-      TOTBW(KS) = 0.0
+      TOTBW(KS) = 0.0D0
       DO ICH = 1, NCHAN(KS)
          TOTBW(KS) = TOTBW(KS) + BBFILT(ICH,KS)
          BITRATE = NCHAN(KS) * SAMPRATE(KS) * BITS(1,KS)
@@ -134,8 +135,9 @@ C     Deal with sidebands.
 C
 C     If neither NETSIDE nor SIDEBD have been set, we have freedom
 C     to set NETSIDE as we please.  Choose upper unless there are
-C     too few BBC's.  If we must use upper and lower, then we need
-C     to be sure that the frequencies specified so far don't 
+C     too few BBC's, or the RDBE is in use, in which case lower 
+C     is required for SIDEDB.  If we must use upper and lower, then 
+C     we need to be sure that the frequencies specified so far don't 
 C     preclude the option.  Do this as a check, because if we can't
 C     use upper and lower, then we can't do the setup.  Also there
 C     is a potential problem with BBC assignments when using both
@@ -161,6 +163,29 @@ C
      2        'available at some site: ', MINBBC(ISETF)
          CALL ERRSET(KS)
       END IF
+C
+C     The RDBE channels are lower sideband in all circumstances.
+C     That means we could set SIDEBD.  But we cannot set NETSIDE
+C     to its final value because we don't know the LO setup yet,
+C     necessarily (ie we don't know the IF sideband).  If we set
+C     SIDEBD and not NETSIDE, the user is forced to provide NETSIDE
+C     even when using BAND.  But if set NETSIDE, it might be wrong
+C     later.  But if it is, the frequency can be moved by the 
+C     baseband bandwidth, and the NETSIDE flipped.  So we'll do
+C     it that way.  Set to NETSIDE lower as that is right most of
+C     the time.
+C
+C  ************************  Don't activate this yet.  
+C                            RDBE frequency setting from band is
+C                            going to be a small can of worms
+C                            and I don't want to do it now.
+C      IF( NEEDSB .AND. DBE(KS) .EQ. 'RDBE_PFB' .OR. 
+C     1    DBE(KS) .EQ. 'RDBE_DDC' ) THEN
+C         DO ICH = 1, NCHAN(KS)
+C            NETSIDE(ICH,KS) = 'L'
+C         END DO
+C         NEEDSB = .FALSE.
+C      END IF
 C
 C     Deal with defaulting when need upper/lower sidebands.  Only
 C     do when there are too few BBC's to do otherwise.

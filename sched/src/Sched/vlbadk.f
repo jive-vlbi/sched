@@ -18,7 +18,8 @@ C     RDBE schedules where the recording is happening outside the
 C     control of the crd files.
 C
       IF( USEDISK(ISTA) ) THEN
-         IF( NOREC(ISCN) .OR. SETSC .OR. FORMAT(LS) .EQ. 'NONE' ) THEN
+         IF( NOREC(ISCN) .OR. SETSC .OR. FORMAT(LS) .EQ. 'NONE' .OR.
+     1       ( DAR(STANUM(ISTA)) .EQ. 'RDBE' .AND. .NOT. DOMKA ) ) THEN
             WRITE( IUVBA, '( A )' ) 'disk=off'
          ELSE
             WRITE( IUVBA, '( A )' ) 'disk=on'

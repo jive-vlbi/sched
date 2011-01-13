@@ -59,7 +59,6 @@ C
       INTEGER            INETSD, ISIDE1, ISIDEBD
       LOGICAL            GOTNETS, GOTNETF, GOTBBS, GOTBBF, GOTLO1
       LOGICAL            NEEDCAT
-      REAL               TEMP4
       DOUBLE PRECISION   TEMP8
       CHARACTER          STDMSG*70
 C-------------------------------------------------------------------
@@ -96,7 +95,7 @@ C        Sky frequency, First LO, and Baseband frequency.
 C
          GOTNETF = FREQREF(ICH,KS) .GT. 0.D0
          GOTLO1  = FIRSTLO(ICH,KS) .NE. NOTSET
-         GOTBBF  = BBSYN(ICH,KS) .NE. 0.0
+         GOTBBF  = BBSYN(ICH,KS) .NE. 0.0D0
 C
 C        Now go through the 4 possible combinations that work - see
 C        comments at top of routine.
@@ -109,9 +108,8 @@ C
             ELSE
                ISIDE1 = -1
             END IF
-            TEMP8 = FREQREF(ICH,KS) - FIRSTLO(ICH,KS)
-            TEMP4 = ISIDE1 * TEMP8
-            IF( GOTBBF .AND. ABS(TEMP4-BBSYN(ICH,KS)) .GT. 0.001 ) THEN
+            TEMP8 = ISIDE1 * ( FREQREF(ICH,KS) - FIRSTLO(ICH,KS) )
+            IF( GOTBBF .AND. ABS(TEMP8-BBSYN(ICH,KS)) .GT. 1.D-3 ) THEN
                CALL WLOG( 1, 'SETFREQ: Frequencies do not sum.' )
                CALL ERRLOG( STDMSG )
             ELSE IF( GOTNETS .AND. GOTBBS .AND. 
@@ -119,7 +117,7 @@ C
                CALL WLOG( 1, 'SETFREQ: Inconsistent sidebands.' )
                CALL ERRLOG( STDMSG )
             END IF
-            BBSYN(ICH,KS) = TEMP4
+            BBSYN(ICH,KS) = TEMP8
             IF( GOTNETS ) ISIDEBD = ISIDE1 * INETSD
             IF( GOTBBS )  INETSD  = ISIDE1 * ISIDEBD
 C

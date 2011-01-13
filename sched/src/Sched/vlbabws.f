@@ -26,11 +26,11 @@ C
       PARAMETER   (MCHAN=128)
       CHARACTER   LABEL*(*), OUTLINE*80, FMT1*4, FMT2*4
       CHARACTER   FMTCH*4
-      REAL        ARRAY(*), OLDARRAY(*)
-      REAL        LOG2
+      DOUBLE PRECISION  ARRAY(*), OLDARRAY(*)
+      DOUBLE PRECISION  LOG2
       INTEGER     NCHAN, OLDCHAN, KCHAR, NCHAR, LEN1, NCL
       INTEGER     I, ICHADD, IDAADD, IUVBA, NBWS
-      LOGICAL     FIRSTS, WRTLAB
+      LOGICAL     FIRSTS, WRTLAB, DEQUAL
       INTEGER     MBWS
       PARAMETER   ( MBWS = 13 )
       CHARACTER*7   SPECBWS(MBWS), PRTBWS(MCHAN)
@@ -53,7 +53,7 @@ C----------------------------------------------------------------------
 C
 C        Does this channel need to be processed?
 C
-         IF( FIRSTS .OR. ARRAY(I) .NE. OLDARRAY(I) .OR. 
+         IF( FIRSTS .OR. .NOT. DEQUAL( ARRAY(I), OLDARRAY(I) ) .OR. 
      1       I .GT. OLDCHAN ) THEN
 C
 C           Get the format and number of digits needed for the channel 
@@ -69,9 +69,9 @@ C
 C
 C           Determine the ASCII version of the number to be printed.
 C
-            NBWS = LOG( (ARRAY(I)+0.02) / 0.0625 ) / LOG2  +  1
+            NBWS = LOG( (ARRAY(I) + 0.02D0 ) / 0.0625D0 ) / LOG2  +  1
             IF( NBWS .LT. 1 .OR. NBWS .GT. MBWS ) CALL ERRLOG ( 
-     1           'Bad bandwidth or sample rate specification ' )
+     1           'VLBABWS: Bad bandwidth or sample rate specification ')
             PRTBWS(I) = SPECBWS(NBWS)
 C
 C           Get the format and number of digits needed for the array 

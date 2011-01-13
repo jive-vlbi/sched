@@ -52,7 +52,7 @@ C
       DO ISTA = 1, NSTA
          OKSTA(ISTA) = .FALSE.
          IF( STASCN(JSCN,ISTA) ) THEN
-            CALL OPTGEO( ISCN, ISTA, TAPPROX, LASTISCN(ISTA),  
+            CALL STAGEO( ISCN, ISTA, TAPPROX, LASTISCN(ISTA),  
      1          LASTTIME, T_AVAIL )
             IF( UP1(ISCN,ISTA) .EQ. ' ' .AND. 
      1          UP2(ISCN,ISTA) .EQ. ' ' .AND. 
@@ -64,7 +64,7 @@ C
          END IF
       END DO
 C
-C     Set the scan stations list based on the results from OPTGEO.
+C     Set the scan stations list based on the results from STAGEO.
 C
       DO ISTA = 1, NSTA
          STASCN(ISCN,ISTA) = STASCN(JSCN,ISTA) .AND. OKSTA(ISTA)
@@ -83,7 +83,7 @@ C
          STARTJ(ISCN) = TAPPROX
 C
 C        Adjust the scan times based on a geometry calculation.
-C        This reruns the above OPTGEO so it could possibly be made
+C        This reruns the above STAGEO so it could possibly be made
 C        more efficient some day.
 C
          CALL OPTTIM( LASTISCN, ISCN, .TRUE. )

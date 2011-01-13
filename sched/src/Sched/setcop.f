@@ -31,10 +31,14 @@ C
 C --------------------------------------------------------------------
       IF( TO .GT. NSET ) NSET = TO
 C
-C     Go copy.
+C     Go copy.  Variables are in the order that they appear in 
+C     schset.inc, other than that multidimension arrays are in
+C     loops below.
 C
       ISETNUM(TO)  = ISETNUM(FROM)            
       SETNAME(TO)  = SETNAME(FROM)
+C
+C     Reals
 C
       AZCOLIM(TO)  = AZCOLIM(FROM)  
       ELCOLIM(TO)  = ELCOLIM(FROM)  
@@ -47,27 +51,41 @@ C
       SPEEDUP(TO)  = SPEEDUP(FROM)            
       BESTOVER(TO) = BESTOVER(FROM)
       TOTBW(TO)    = TOTBW(FROM)
-      DUALPOL(TO)  = DUALPOL(FROM)
-      BAND(TO)     = BAND(FROM)
-      NOISEFRQ(TO) = NOISEFRQ(FROM)     
+C
+C     Integers
+C
       NCHAN(TO)    = NCHAN(FROM)              
       PERIOD(TO)   = PERIOD(FROM)             
       LEVEL(TO)    = LEVEL(FROM)              
       TAPEMODE(TO) = TAPEMODE(FROM)           
       TPMODE(TO)   = TPMODE(FROM)           
       SWTCHDUR(TO) = SWTCHDUR(FROM)           
+C
+C     Logicals
+C
+      DUALPOL(TO)  = DUALPOL(FROM)
       FRSWITCH(TO) = FRSWITCH(FROM)           
       DUALX(TO)    = DUALX(FROM)              
       MODETEST(TO) = MODETEST(FROM)
       USED(TO)     = USED(FROM)
+C
+C     Characters
+C
+      BAND(TO)     = BAND(FROM)
+      NOISEFRQ(TO) = NOISEFRQ(FROM)     
       LOGGING(TO)  = LOGGING(FROM)          
       FORMAT(TO)   = FORMAT(FROM)           
+      DBE(TO)      = DBE(FROM)
       SPCAL(TO)    = SPCAL(FROM)            
       RCHAN(TO)    = RCHAN(FROM)            
       LCHAN(TO)    = LCHAN(FROM)            
       LCP50CM(TO)  = LCP50CM(FROM)          
       RCP50CM(TO)  = RCP50CM(FROM)          
       BARREL(TO)   = BARREL(FROM)           
+      M4PATCH(TO)  = M4PATCH(FROM)
+C
+C     Derived quantities.
+C
       MINTRAK(TO)  = MINTRAK(FROM)
       MAXTRAK(TO)  = MAXTRAK(FROM)
       MINTBPS(TO)  = MINTBPS(FROM)
@@ -75,11 +93,14 @@ C
       TBPS(TO)     = TBPS(FROM)
       TOTBPS(TO)   = TOTBPS(FROM)
       VLBAMKIV(TO) = VLBAMKIV(FROM)
-      M4PATCH(TO)  = M4PATCH(FROM)
+      RECUSED(TO)  = RECUSED(FROM)
+C
+C     VLA parameters
+C
       FLUKESET(TO) = FLUKESET(FROM)           
+      EVLA(TO)     = EVLA(FROM)
       FLUKEA(TO)   = FLUKEA(FROM)             
       FLUKEB(TO)   = FLUKEB(FROM)             
-      EVLA(TO)     = EVLA(FROM)
       VLAFEAB(TO)  = VLAFEAB(FROM)            
       VLAFECD(TO)  = VLAFECD(FROM)            
       VLASYNA(TO)  = VLASYNA(FROM)            
@@ -94,6 +115,9 @@ C
       VLAVB(TO)    = VLAVB(FROM)
       VLAVR(TO)    = VLAVR(FROM)
       VLAVL(TO)    = VLAVL(FROM)
+C
+C     Multi-dimension arrays that need loops.
+C
       DO IF = 1, 4
          IFDIST(IF,TO) = IFDIST(IF,FROM)         
          NOISE(IF,TO)  = NOISE(IF,FROM)          

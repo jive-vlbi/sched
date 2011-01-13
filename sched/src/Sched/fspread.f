@@ -1,9 +1,15 @@
       SUBROUTINE FSPREAD( NEEDFMT )
 C
+C     This routine is likely to be obsolete thanks to disk 
+C     systems that don't end up in management nightmares when
+C     the number of tracks change and to correlators that don't
+C     care when different stations have different track bit 
+C     rates.
+C
 C     Routine for SCHED, called by SETFORM, that propagates
 C     track bit rates across setup files and numbers of track
 C     through time for each station.  It is part of the format
-C   	  setting mechanism.  Such behavior is confined to formats
+C     setting mechanism.  Such behavior is confined to formats
 C     for such systems as require these constrains, mainly 
 C     VLBA and MKIV, although Mark III formats are checked, 
 C     but not set (they were already forced by the first SETFMT
@@ -21,6 +27,14 @@ C
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'FSPREAD starting' )
 C
+C     Ask for feedback if the routine is called.
+C
+      CALL WLOG( 1, 'FSPREAD:  Please inform Craig Walker at '//
+     1  'cwalker@nrao.edu if you see this message.' )
+      CALL WLOG( 1, '          It means you reached a part of SCHED '//
+     1  'not thought to still be active.' )
+      CALL WLOG( 1, '          Please include your input file.' )
+C
 C     Get some information about the parameters in the setup files.
 C
       MAXTOT = 0.0
@@ -29,7 +43,7 @@ C
          BTBPS(ISETF)   = 0.0
          FSAMPR(ISETF)  = 0.0
          MAXFTOT(ISETF) = 0.0
-         SETTBPS(ISETF) = 0.0
+C         SETTBPS(ISETF) = 0.0
       END DO
       DO KS = 1, NSET
          ISETF = ISETNUM(KS)
@@ -63,21 +77,24 @@ C
                FSAMPR(ISETF) = SAMPRATE(KS)
             END IF
 C
+C           With the disk systems, the following is not needed so
+C           don't do it (RCW  Jan. 11, 2011).
+C 
 C           Enforce constant track bit rate in a setup file.
 C           This is also done later, but again we need it here.
 C           This is only for groups whose format has already been set.
 C
-            IF( .NOT. NEEDFMT(KS) ) THEN
-               IF( SETTBPS(ISETF) .NE. 0.0 .AND. 
-     1             SETTBPS(ISETF) .NE. TBPS(KS) ) THEN
-                  CALL WLOG( 1, 'FSPREAD: Track bit rate not ' //
-     1            'constant across setup groups in setup file:' )
-                  CALL WLOG( 1, '       ' // SETFILE(ISETF) )
-                  CALL ERRLOG( 'Fix the unequal rates.' )
-               ELSE IF( SETTBPS(ISETF) .EQ. 0.0 ) THEN
-                  SETTBPS(ISETF) = TBPS(KS)
-               END IF
-            END IF
+C            IF( .NOT. NEEDFMT(KS) ) THEN
+C               IF( SETTBPS(ISETF) .NE. 0.0 .AND. 
+C     1             SETTBPS(ISETF) .NE. TBPS(KS) ) THEN
+C                  CALL WLOG( 1, 'FSPREAD: Track bit rate not ' //
+C     1            'constant across setup groups in setup file:' )
+C                  CALL WLOG( 1, '       ' // SETFILE(ISETF) )
+C                  CALL ERRLOG( 'Fix the unequal rates.' )
+C               ELSE IF( SETTBPS(ISETF) .EQ. 0.0 ) THEN
+C                  SETTBPS(ISETF) = TBPS(KS)
+C               END IF
+C            END IF
 C
 C           Get the maximum total bit rate for the setup file and 
 C           overall.

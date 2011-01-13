@@ -188,10 +188,13 @@ C
       END DO
 C
 C     Warn if SCNHR is zero for some station.  Abort if using VEX.
+C     (Removed ".NOT. DODOWN" from first IF statement below.  Not
+C     sure why it was there, and now DODOWN is scan dependent and
+C     this is not a scan dependent place in the code.  Dec 2010 RCW).
 C
       DO ISTA = 1, NSTA
          IF( SCNHR(ISTA) .LE. 0.0 .AND. CONTROL(STANUM(ISTA)) .EQ. 'VEX'
-     1           .AND. .NOT. DODOWN .AND. USEDISK(ISTA) ) THEN
+     1           .AND. USEDISK(ISTA) ) THEN
             MSGTXT = 'SCHTIM:  ****** ERROR: Station ' // 
      1          STANAME(ISTA) // ' is not in any scans.'
             CALL WLOG( 1, MSGTXT )

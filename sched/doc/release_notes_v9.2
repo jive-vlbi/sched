@@ -1,0 +1,80 @@
+Version 9.2 of SCHED was released on March 10, 2010. It has been in
+use at NRAO since then.  It can be downloaded from anonymous ftp at
+ftp.aoc.nrao.edu from directory pub/sched.  The files are:
+
+sched_9.2.tar.gz             Tar file with code, examples, 
+                             catalogs, setups, and documentation.
+binaries/LINUX/sched         Binary for 32bit Linux machine.
+binaries/LINUX64/sched       Binary for 64bit Linux machine without
+                             satellite tracking capability
+binaries/LINUX64SPICE/sched  Binary for 64 bit Linux machine with 
+                             satellite tracking capability
+binaries/OSX_INTEL/sched     Binary for Mac OSX on an Intel chip.
+binaries/OSXPPC/sched        Binary for Mac OSX on a PPC chip (older).
+binaries/SUN/sched           Binary for Solaris
+
+Each of the binaries directories also contains schclean which is a
+script for deleting all SCHED output - sometimes useful for cleaning
+up directories.
+      
+The manual can be read on the net (the recommended way) at 
+http://www.aoc.nrao.edu/software/sched/index.html
+
+The changes are listed in the Current Release section of the manual.
+
+Version 9.0 was not widely announced so upgrades in it will also be
+new to some.  Note that Version 9.2 has been in partial use, as 9.1,
+for several months.
+
+Some highlights of the changes are:
+
+There have been a number of changes to facilitate use of the DiFX
+software correlator on the VLBA.  This includes production of VEX
+files for all observations by default since VEX files are now used for
+setting up correlation on DiFX and many other correlators.  The VLBA
+and VLA will eventually move to the use of VEX for antenna control
+of VLBI observations, so this transition has just begun.  Vex files
+now have the extension ".vex" rather than ".skd"
+
+Now when specifying the SOCORRO or VLBA correlator, SCHED assumes
+DiFX.  This affects the checking of a number of parameters.  For those
+who haven't heard, DiFX is now the standard correlator on the VLBA and
+the old hardware correlator has been shut off.  It may yet get used
+for some final tests, but not for astronomy projects.
+
+Warnings are issued when excessively long recording scans are
+encountered and when there might be an excessive number of recording
+scans.  These are Mark5 issues that hopefully won't be with us
+too much longer.
+
+SCHED can now handle DOS end of line sequences.  This has been an
+on-going cause of obscure errors after transfering key files by
+email.  Some email tools insist on changing the format.
+
+There have been improvements in the satellite tracking area.
+
+The source and station catalogs have been updated based on the
+GSFC 2009a and Petrov 2009c catalogs.  The old 2008a catalogs
+are also available.
+
+Different antennas can now have different "speed up factors".  
+Eventually that concept will go away as it doesn't make much sense
+with the newer correlators.
+
+Note that the default for PRESTART was reverted from the 1.0sec
+mentioned in the release notes to zero seconds after the manual was
+finalized.
+
+For the VLA, mixing VLA1 and VLA27 is allowed.
+
+For the slew calculations, different acceleration and decelaration 
+rates are handled.
+
+For satellites, adjust the printed geometry information for the rates.
+The assumption of slow motions was violated in some recent
+observations.
+
+There were many changes of a detailed nature. See the notes in the
+manual.  Most will not be mentioned here.
+
+

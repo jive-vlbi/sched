@@ -1,5 +1,8 @@
       SUBROUTINE FMTPICK( NEEDFMT )
 C
+C     I don't think this routine will ever be called in the era of
+C     disk.  I'm leaving it around for now just in case.
+C
 C     Routine for SCHED, called by SETFORM, that deals with picking
 C     formats for VLBA/MKIV stations when not all are forced by 
 C     user input or constraints.  We would like to pick the set that
@@ -31,6 +34,14 @@ C
       DOUBLE PRECISION  TOTIME, SETTIME(MAXSET)
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'FMTPICK starting' )
+C
+C     Ask for feedback if the routine is called.
+C
+      CALL WLOG( 1, 'FMTPICK:  Please inform Craig Walker at '//
+     1  'cwalker@nrao.edu if you see this message.' )
+      CALL WLOG( 1, '          It means you reached a part of SCHED '//
+     1  'not thought to still be active.' )
+      CALL WLOG( 1, '          Please include your input file.' )
 C
 C     Get the total observing time that each setup file (not group) is 
 C     used.

@@ -16,8 +16,8 @@ C
       INTEGER            IFIF, IFCAT, LEN1
       CHARACTER          SDAR*5
       DOUBLE PRECISION   LOSUM(*)
-      REAL               BBCFREQ(*), BBCBW(*)
-      LOGICAL            FWARN, VLAWARN
+      DOUBLE PRECISION   BBCFREQ(*), BBCBW(*), FRAD1, FRAD2
+      LOGICAL            FWARN, VLAWARN, ERRS, DEQUAL
 C
       DATA               FWARN, VLAWARN / .TRUE., .TRUE. /
       SAVE               FWARN, VLAWARN
@@ -73,9 +73,11 @@ C
 C
          IF( OKXC(ISETF) .AND. FREQ(ILC,KSCN) .GT. 0.0D0 ) THEN
 C
-C           Use the frequency from the main schedule.
+C           Use the frequency from the main schedule.  Avoid spurious
+C           low significant digits.
 C
             BBCFREQ(I) = ABS( FREQ(ILC,KSCN) - FIRSTLO(I,KS) )
+            BBCFREQ(I) =  DNINT( BBCFREQ(I) * 1000.D0 ) / 1000.D0
 C
 C           Check that the assumed sideband is correct.
 C
@@ -105,8 +107,9 @@ C
             IF( IFREQNUM(I,KS) .GE. 1 .AND. FWARN ) THEN
                IFIF = IFREQIF(I,KS)
                IFCAT = IFREQNUM(I,KS)
-               IF( ( FREQ(ILC,KSCN) .LT. FRF1(IFIF,IFCAT) .OR. 
-     1               FREQ(ILC,KSCN) .GT. FRF2(IFIF,IFCAT) ) ) THEN
+               CALL FRFADJ( KS, IFIF, IFCAT, FRAD1, FRAD2 )
+               IF( ( FREQ(ILC,KSCN) .LT. FRAD1 .OR. 
+     1               FREQ(ILC,KSCN) .GT. FRAD2 ) ) THEN
                   CALL WLOG( 1, 'FSFREQ: -- WARNING -- Frequency ' //
      1                 'specified in  schedule (or by Doppler) is ' )
                   CALL WLOG( 1, '          outside limits for IF.' )
@@ -123,8 +126,8 @@ C
                   CALL WLOG( 1, MSGTXT )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F9.2, A, F9.2 )' )
-     1              '        Freq catalog limits: ', FRF1(IFIF,IFCAT),
-     2              ' to ', FRF2(IFIF,IFCAT)
+     1              '        Freq catalog limits: ', FRAD1,
+     2              ' to ', FRAD2
                   CALL WLOG( 1, MSGTXT )
                   FWARN = .FALSE.
                END IF
@@ -141,8 +144,8 @@ C
 C        Warn if outside of VLA 50 MHz window at VLA
 C
          IF( CONTROL(ISETSTA(KS)) .EQ. 'VLA' .AND. VLAWARN) THEN
-            IF( BBCFREQ(I) .LT. 600.0 .OR.
-     1          BBCFREQ(I) .GT. 650.0 ) THEN
+            IF( BBCFREQ(I) .LT. 600.0D0 .OR.
+     1          BBCFREQ(I) .GT. 650.0D0 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F10.2, A )' )
      1           'FSFREQ: **** VLA BBC frequency (',
@@ -155,7 +158,7 @@ C
 C
 C        Get the bandwidth specification.
 C
-         IF( OKXC(ISETF) .AND. BW(ILC,KSCN) .NE. 0.0 ) THEN
+         IF( OKXC(ISETF) .AND. BW(ILC,KSCN) .NE. 0.0D0 ) THEN
 C
 C           Set the bandwidth from the BW command and check 
 C           against sample rate.  ABS in case of old files with
@@ -163,7 +166,7 @@ C           sign of BW indicating sideband.
 C
             BBCBW(I) = ABS( BW(ILC,KSCN) )
 C
-            IF( BBCBW(I) .GT. 0.5 * SAMPRATE(KS) ) THEN
+            IF( BBCBW(I) .GT. 0.5D0 * SAMPRATE(KS) ) THEN
                CALL WLOG( 1, 'FSFREQ: **** Bandwidth from schedule more'
      1                  // ' than half of sample rate.' )
                CALL WLOG( 1, ' Setup file: ' //
@@ -182,6 +185,7 @@ C
 C        Get the LO sum.  
 C
          LOSUM(I) = FIRSTLO(I,KS) + ISIDE1 * BBCFREQ(I)
+         LOSUM(I) =  DNINT( LOSUM(I) * 1000.D0 ) / 1000.D0
 C
       END DO
 C
@@ -198,8 +202,8 @@ C        Check that the BBC frequency is in range for VLBA BBCs and
 C        that the requested bandwidth is valid.
 C
          DO I = 1, NCHAN(KS)
-            IF( BBCFREQ(I) .LT. 500.0 .OR.
-     1          BBCFREQ(I) .GE. 1000.0 ) THEN
+            IF( BBCFREQ(I) .LT. 500.0D0 .OR.
+     1          BBCFREQ(I) .GE. 1000.0D0 ) THEN
                WRITE( MSGTXT, '( A, I3, F10.2, I5, F10.2, I5 )' )
      1            'FSFREQ: chan, firstLO, setup, freq, freq set: ', 
      2            I, FIRSTLO(I,KS), KS, LOSUM(I), KF
@@ -212,11 +216,15 @@ C
                CALL ERRLOG( ' Fix frequencies ' )
             END IF
 C
-            IF( BBCBW(I).NE.0.0625 .AND. BBCBW(I).NE.0.125 .AND.
-     1          BBCBW(I).NE.0.250 .AND. BBCBW(I).NE.0.5 .AND.
-     2          BBCBW(I).NE.1.0   .AND. BBCBW(I).NE.2.0 .AND.
-     3          BBCBW(I).NE.4.0   .AND. BBCBW(I).NE.8.0 .AND.  
-     4          BBCBW(I).NE.16. ) THEN
+            IF( .NOT. ( DEQUAL( BBCBW(I), 0.0625D0 ) .OR. 
+     1                  DEQUAL( BBCBW(I), 0.125D0 ) .OR.
+     2                  DEQUAL( BBCBW(I), 0.250D0 ) .OR. 
+     3                  DEQUAL( BBCBW(I), 0.5D0 ) .OR.
+     4                  DEQUAL( BBCBW(I), 1.0D0 ) .OR. 
+     5                  DEQUAL( BBCBW(I), 2.0D0 ) .OR.
+     6                  DEQUAL( BBCBW(I), 4.0D0 ) .OR. 
+     7                  DEQUAL( BBCBW(I), 8.0D0 ) .OR.  
+     8                  DEQUAL( BBCBW(I), 16.D0 ) ) ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F8.2 )' )
      1            'FSFREQ: Invalid bandwidth request (in scan?): ',
@@ -228,6 +236,12 @@ C
 C
 C     Similar checks for Mark 4?
 C
+C     Add similar checks for the RDBE.
+C
+      ERRS = .FALSE.
+      CALL CHKRDFQ( KS, BBCBW, BBCFREQ, ERRS )
+      IF( ERRS ) CALL ERRLOG( 'FSFREQ:  Fix problem with in-line '//
+     1    'or Doppler derived frequencies or bandwidths.' )
 C
 C     END
 C

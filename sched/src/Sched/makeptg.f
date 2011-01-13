@@ -184,14 +184,14 @@ C
          IF( VLSR(1,SRCNUM(ISCN)) .GT. -1.E8 ) THEN
             DOPCAL(ISCN) = .TRUE.
             DO ICHN = 1, MAXCHN
-               BW(ICHN,ISCN) = 2.0
+               BW(ICHN,ISCN) = 2.0D0
                FREQ(ICHN,ISCN) = 0.0D0
             END DO
             PCAL(ISCN) = 'off'
          ELSE
             DOPCAL(ISCN) = .FALSE.
             DO ICHN = 1, MAXCHN
-               BW(ICHN,ISCN) = 0.0
+               BW(ICHN,ISCN) = 0.0D0
             END DO
          END IF
 C   

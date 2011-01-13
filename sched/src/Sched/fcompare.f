@@ -32,6 +32,7 @@ C
 C
       INTEGER          KS, KSTA, KF, IFINDX, ICH, IIF, I
       INTEGER          NBAD, CHBAD, IIFBAD, KFBAD
+      DOUBLE PRECISION FRAD1, FRAD2
       LOGICAL          MATCH, IFMATCH, OKIF(MCHAN,MFIF)
       LOGICAL          FREQOK(MCHAN), GOTAFR, PRTMISS
       LOGICAL          RFCLOSE
@@ -118,9 +119,12 @@ C
      1               FIRSTLO(ICH,KS) .EQ. FLO1(IIF,KF)
 C
 C           RF - require be in same general part of RF.  Will
-C           check actual RF later.  This is completely require.
+C           check actual RF later.  This is completely required.
 C           The other is a precise, but optional (for a subset
-C           of channels only) check
+C           of channels only) check.  There is no need to
+C           differentiate between old DAR (500-1000 MHz IF) and
+C           RDBE (512-1024 MHz IF) here as there is in the more
+C           precise comparisons.
 C
             RFCLOSE = FREQREF(ICH,KS) .GE. 0.8D0 * FRF1(IIF,KF) .AND.
      1               FREQREF(ICH,KS) .LE. 1.2D0 * FRF2(IIF,KF)
@@ -217,10 +221,16 @@ C           If the routine got past the top few statements, at least
 C           one channel is in the frequency range.  Check this specific
 C           channel here, but don't let a mismatch prevent an overall
 C           match.  Just try to downgrade this option so if a better
-C           one exists, it will be used.
+C           one exists, it will be used.  Here we do need to worry
+C           about the slight offset of the RDBE vs VLBA DAR.
 C
-            FREQOK(ICH) = FREQREF(ICH,KS) .GE. FRF1(IIF,KF) .AND.
-     1                    FREQREF(ICH,KS) .LE. FRF2(IIF,KF)
+            CALL FRFADJ( KS, IIF, KF, FRAD1, FRAD2 )
+            FREQOK(ICH) = FREQREF(ICH,KS) .GE. FRAD1 .AND.
+     1                    FREQREF(ICH,KS) .LE. FRAD2
+C          msgtxt = ' '
+C          write(msgtxt, *) 'fcompare: ', ks, ich, iif, kf, frf1(iif,kf),
+C     1         frf2(iif,kf), frad1, frad2, ' ', freqok(ich)
+C          call wlog(0,msgtxt)
 C
 C           Record if there are any matching channels.  This means that
 C           the freq.dat record can be used.

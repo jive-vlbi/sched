@@ -3,10 +3,13 @@ C
 C     Make a grid around a station and get the quality factor
 C     on points on the grid.
 C
-C     When this is run, only one station should be red.  That
+C     When this is run, only one station should be color red.  That
 C     is the one for which the grid will be made.
 C
 C     The same quality factor will be used as for UVOPT.
+C
+C     Dec. 14, 2010.  Changed calls to SCHSRC to calls to STAGEO
+C     as SCHSRC will be part of STAGEO soon.
 C
       INCLUDE    'sched.inc'
       INCLUDE    'plot.inc'
@@ -28,7 +31,7 @@ C
       REAL       TOP5(5,MAXSRC)
       CHARACTER  OPTFILE*80, INFOLINE*128
       CHARACTER  OPSTAT*4, OPTEXT*256
-      DOUBLE PRECISION   SLAT, SLONG
+      DOUBLE PRECISION   SLAT, SLONG, LASTTIME, T_AVAIL
       REAL       QLATMIN, QLATMAX, QLONMIN, QLONMAX
 C
       CHARACTER  GHLAT(NLAT)*9, GHLONG(NLONG)*10, TFORM*15
@@ -144,15 +147,13 @@ C
             LASTJSCN = 0
             DO ISCN = SCAN1, SCANL
                IF( STASCN(ISCN,KSTA) ) THEN
-                  CALL SCHSRC( LASTJSCN, ISCN, KSTA,
-     1                 STARTJ(ISCN), STOPJ(ISCN) )
-                  IF( LASTJSCN .EQ. 0 ) THEN
-                     TONSRC(ISCN,KSTA) = STARTJ(ISCN)
-                  ELSE
-                     CALL SLEW( ISCN, LASTJSCN, KSTA )
-                     TONSRC(ISCN,KSTA) = STOPJ(LASTJSCN) +
-     1               TSLEW(ISCN,KSTA)
-                  END IF
+C
+C                 Call STAGEO.  Prior to Dec. 14, 2010, this was
+C                 calls to SCHSRC and SLEW plus setting TONSRC.
+C                 I want to absorb SCHSRC into STAGEO.
+C
+                  CALL STAGEO( ISCN, ISTA, STARTJ(ISCN), LASTJSCN,
+     1                 LASTTIME, T_AVAIL )
                   LASTJSCN = ISCN
                END IF
             END DO
@@ -195,15 +196,8 @@ C
       LASTJSCN = 0
       DO ISCN = SCAN1, SCANL
          IF( STASCN(ISCN,KSTA) ) THEN
-            CALL SCHSRC( LASTJSCN, ISCN, KSTA,
-     1           STARTJ(ISCN), STOPJ(ISCN) )
-            IF( LASTJSCN .EQ. 0 ) THEN
-               TONSRC(ISCN,KSTA) = STARTJ(ISCN)
-            ELSE
-               CALL SLEW( ISCN, LASTJSCN, KSTA )
-               TONSRC(ISCN,KSTA) = STOPJ(LASTJSCN) +
-     1         TSLEW(ISCN,KSTA)
-            END IF
+            CALL STAGEO( ISCN, ISTA, STARTJ(ISCN), LASTJSCN,
+     1                   LASTTIME, T_AVAIL )
             LASTJSCN = ISCN
          END IF
       END DO

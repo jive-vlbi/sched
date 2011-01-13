@@ -20,7 +20,7 @@ C
       REAL        U
 C use commented out     REAL        V
       REAL        HAR, CH, SH, CD, SD, UXY
-      REAL        BBCFREQ(MAXCHN), BBCBW(MAXCHN), FRQ
+      DOUBLE PRECISION  BBCFREQ(MAXCHN), BBCBW(MAXCHN), FRQ
       REAL        DFRDX, DFRDY, DDELDX, DDELDY
       LOGICAL     WARNFQ
       DOUBLE PRECISION  LOSUM(MAXCHN)

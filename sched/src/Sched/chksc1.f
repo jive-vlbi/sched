@@ -127,9 +127,9 @@ C
          LSCN = KSCN - 1
          IF( SETNUM(KSCN) .NE. SETNUM(LSCN) ) THEN
             IF( ( FREQ(1,KSCN) .EQ. FREQ(1,LSCN) .AND. 
-     1            FREQ(1,LSCN) .NE. 0.0 ) .OR. 
+     1            FREQ(1,LSCN) .NE. 0.D0 ) .OR. 
      2          ( BW(1,KSCN) .EQ. BW(1,LSCN) .AND. 
-     3            BW(1,LSCN) .NE. 0.0 ) ) THEN
+     3            BW(1,LSCN) .NE. 0.D0 ) ) THEN
                CALL WLOG( 1, 'WARNING:  See note in sched.runlog ' //
      1            'about frequency and bandwidth changes.' )
                CALL WRTMSG( 0, 'CHKSC1', 'freqbw' )

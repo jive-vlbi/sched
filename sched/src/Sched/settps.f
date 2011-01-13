@@ -79,7 +79,7 @@ C
             IF( .NOT. FIRSTS ) THEN
                IF( SCNGAP(ISTA) + TOL .GT. TPSTART(ISCN,ISTA) .AND.
      1             SCNGAP(ISTA) + TOL .LT. TPSTART(ISCN,ISTA) +
-     2                MINPAUSE(ISCN) * SPEEDUP(KS) .AND. 
+     2                MINPAUSE(ISCN) .AND. 
      3             .NOT. NOREC(LASTISCN(ISTA)) .AND.
      4             .NOT. NOREC(ISCN) ) THEN
 C
@@ -198,7 +198,7 @@ C
 C               IF( SGWARN .AND.
 C     1             SCNGAP(ISTA) .GT. TPMIN .AND.
 C     2             SCNGAP(ISTA) .LT. TPMIN +
-C     3                   MINPAUSE(ISCN) * SPEEDUP(KS) .AND.
+C     3                   MINPAUSE(ISCN) .AND.
 C     4             .NOT. NOREC(LASTISCN(ISTA)) .AND. 
 C     5             .NOT. NOREC(ISCN) ) THEN
 C

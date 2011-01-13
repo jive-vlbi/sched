@@ -22,7 +22,7 @@ C
       INTEGER          ISETF, SBW, JCH, KS
       REAL             RA4, DEC4, SLA_RVLSRK, VELC, TIME4
       REAL             VSUN, VEARTH, TL
-      REAL             MSBW(MAXCHN,MAXSET)
+      DOUBLE PRECISION MSBW(MAXCHN,MAXSET)
       LOGICAL          WARN(MAXCHN), FWARN
       DOUBLE PRECISION TMID, TIME, VELTOT, VELSRC, CFREQ1, CFREQ2
       SAVE             WARN
@@ -42,7 +42,7 @@ C     be for each logical channel.
 C
       DO ISETF = 1, NSETF
          DO ICH = 1, MAXCHN
-            MSBW(ICH,ISETF) = 9999.0
+            MSBW(ICH,ISETF) = 9999.0D0
          END DO
       END DO
       DO KS = 1, NSET

@@ -258,6 +258,7 @@ C
          OPMISS(ISCN) = KD( KEYPTR( 'OPMISS', KC, KI ) )
          SCANTAG(ISCN) = KCHAR( 'SCANTAG', 4, .FALSE., KD, KC, KI )
          CRDLINE(ISCN) = KCHAR( 'CRDLINE', 80, .FALSE., KD, KC, KI )
+         DODOWN(ISCN) =  KD( KEYPTR( 'DODOWN', KC, KI ) ) .EQ. 0.D0 
 C
 C        The minimum tape pause time and the tape prestart time.
 C
@@ -414,6 +415,10 @@ C
       IF( GOTVEX ) DOVEX = .TRUE.
       VEXTEST =  KD( KEYPTR( 'VEXTEST', KC, KI ) ) .EQ. 0.D0
 C
+C     Trigger writing of Mark5A disks while running the RDBE.
+C
+      DOMKA = KD( KEYPTR( 'DOMKA', KC, KI ) ) .EQ. 0.D0
+C
 C     Get ephemeris file name.
 C
       EPHFILE = KCHAR( 'EPHFILE', 80, .FALSE., KD, KC, KI )
@@ -534,10 +539,6 @@ C
       IF( TPFILE .NE. 'NONE' ) CALL ERRLOG( 'TAPEFILE given but '//
      1    'tape initialization no longer supported by SCHED' )
       CALL TPTPNS
-C
-C     Get command to observe scans even if the source is down.
-C
-      DODOWN =  KD( KEYPTR( 'DODOWN', KC, KI ) ) .EQ. 0.D0 
 C
 C     Items wanted in summary file.  Need NOTAPE by here.
 C

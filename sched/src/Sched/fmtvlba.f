@@ -22,7 +22,11 @@ C     scans with narrower bandwidths would still use 64 tracks.
 C     With the disk systems, there is no need to keep the number
 C     of tracks constant as it no longer complicates media managment.
 C     Therefore relax any attempt to preserve the number of tracks
-C     when there are no tapes.
+C     when there are no tapes.  Basically this routine is setting
+C     the fanout as that, along with the sample rate essentially 
+C     determines everything.  For disk, set the fanout to the
+C     smallest allowed value as determined by the maximum track 
+C     bit rate the formatter can handle.  On the VLBA, that is 8 Mbps.
 C
       INCLUDE        'sched.inc'
       INCLUDE        'schset.inc'
@@ -35,6 +39,13 @@ C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'FMTVLBA: starting.' )
 C
       OK = .FALSE.
+C
+C     We're not going to get anywhere without the sample rate.  I
+C     don't think this should happen, but just in case.
+C
+      IF( SAMPRATE(KS) .EQ. 0.0 ) THEN
+         GO TO 999
+      END IF
 C
 C     Set the maximum bit rate per track and the maximum number of
 C     tracks MAXTRAK available for use.  Assume all stations can do 
@@ -211,10 +222,22 @@ C
          FANOUT(KS) = SAMPRATE(KS) / TRKBPS
       END IF
 C
+C     --------------------
+C     The following may actually be all that is needed of this 
+C     routine in the disk era unless there is a need to conform
+C     to setup file input.  Set the fanout to the minumum
+C     possible that the formatter can handle.  This is fine since
+C     is no longer necessary to match the track bit rates at 
+C     stations.
+C
+      IF( FANOUT(KS) .EQ. 0.0 ) THEN
+         FANOUT(KS) = SAMPRATE(KS) / MAXTBPS(KS)
+      END IF
+C     ---------------------
+C
       IF( FANOUT(KS) .EQ. 0.0 ) THEN
 C
-C        If got here, we just couldn't do it.  Return.  Presumably
-C        we'll get called again with a TRKBPS.
+C        If got here, something was wrong with the last statments.
 C
          OK = .FALSE.
 C
@@ -303,7 +326,9 @@ C
          END IF
 C
 C        Set SPEEDUP and OK before exiting.  Record the track bit rate
-C        used.
+C        used.   SPEEDUP is not really a proper concept in the disk
+C        world, but calculate it anyway.  Places where it is used
+C        are being removed.
 C
          SPEEDUP(KS) = 8.0 * FANOUT(KS) / SAMPRATE(KS)
          TBPS(KS) = SAMPRATE(KS) / FANOUT(KS)
@@ -317,8 +342,3 @@ C
   999 CONTINUE
       RETURN
       END
-
-
-
-
-

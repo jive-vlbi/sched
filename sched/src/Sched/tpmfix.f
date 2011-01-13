@@ -1,5 +1,8 @@
       SUBROUTINE TPMFIX
 C
+C     Removed the tape section (most of the routine) July 23, 2010.
+C     Comments below mainly relate to what it used to do.
+C  
 C     Deal with cases were tape stations have varying TAPEMODE
 C     during an observation.  While varying TAPEMODE  might be 
 C     possible, it would introduce very serious complications 
@@ -46,13 +49,11 @@ C     for every station.  See the archive of obsolete code for the
 C     version that understands multiple stations per setup.  The
 C     changes were an immense simplification.  RCW.
 C
-C     Removed the tape section (most of the routine) July 23, 2010.
 C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
 C
-      INTEGER    KS, ISTA, MINTPM
-      INTEGER    LEN1
+      INTEGER    KS, ISTA
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'TPMFIX starting' )
 C

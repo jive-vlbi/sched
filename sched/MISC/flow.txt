@@ -26,11 +26,16 @@ SCHED:      Main routine
     GETSUN:    Get sun distance.
     CHKSCN:    More scan checks.     
     SCHSUM:    Write the summary file.
+      OMSOUT:    Write OMS file.
     PLOTTER:   Make plots.
   End of restart loop
-  VXWRT:     Write VEX file.
+  VEXOUT     Write VEX related stuff.
+    VXWRT:     Write VEX file.
+    V2DOUT:    Write v2d file
   FLAGS:     Write flagging table.
   STAFILES:  Write antenna files.
+    PRTSCH:    Write operator schedules.
+    CRDWRT:    Write telescope control files.
   DELSCR:    Delete scratch files etc.
 
 -------------------------------------------------------------------
@@ -71,6 +76,7 @@ DEFAULTS:  Fill in defaults.
     SETEXPND:  Expand to one station per setup.
       SETSTDEF:  Expand default setups and eliminate unused stations.
       GNSET:     Associate scan/station with setup.
+    CHKFIRM:   Check and set default FPGA firmware options.
     SETDEFS:   Set a lot of defaults.
       VLAPMODE:  VLA phasing modes
       SETCHAN:   Apply defaults for pol, sample rate, sidebands.
@@ -132,81 +138,82 @@ Details:  Determine actual scans:
 SCHOPT
   Output scan loop.
     Optimization options:
-      OPTNONE:   No optimization
+      OPTNONE:   No optimization.  Includes dwell.
         SCNDUP:    Copy scan if necessary.
-      OPTDWELL:  Dwell time scheduling.
-        SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc. Details later.
       OPTSKD:    Select by number up and some other criteria.
         SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc. Details later.
+        STAGEO:      Get scan geometry, slew times etc. Details later.
       OPTCELLS:  Geodesy type optimization.
         SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc. Details later.
+        STAGEO:      Get scan geometry, slew times etc. Details later.
       OPTCSUB:   Like OPTCELLS but with subarrays.
         OPTCSAR:   Try to determine optimal subarrays.
-          OPTGEO:    Get scan geometry, slew times etc. Details later.
+          STAGEO:    Get scan geometry, slew times etc. Details later.
           OPTCSPT    Get subarray quality factor.
         SCNDUP:    Copy scan if necessary.
       OPTUPT:    String of scans for UPTIME plots.
         SCNDUP:    Copy scan if necessary.
-        OPTGEO:      Get scan geometry, slew times etc. Details later.
+        STAGEO:      Get scan geometry, slew times etc. Details later.
       OPTHAS:    Automated survey scheduling.
         HALIM:     Get hour angle limits.
           SCHGEO:    Get geometry for a scan. (several calls).
         SCHGEO:    Get geometry for a start and stop times
         HAAVAI:    Get time source available and desired obs time.
         SCHGEO:    Get geometry for a scan. 
-        OPTGEO:    Get geometry. Details later.
+        STAGEO:    Get geometry. Details later.
         SCNDUP:    Copy scan if necessary.
-    OPTTIM:    Get slew times, exact start times etc.
-      OPTGEO:    Get geometry. Details later.
-    SCNGEO:    Get geometry info.
-      SCHSRC:    Get geometry details - See under OPTGEO.
-      SLEW:      Determine slew times.
+    OPTTIM:    Get slew times, exact start times etc.  
+               Includes deal with dwell (3 arguments) after STAGEO.
+      STAGEO:    Get preliminary geometry for a scan/station to be
+                 used for DWELL type adjustments. Details later.
+    SCNGEO:    Get actual geometry info for whole scan.  
+               There are no time or station changes.
+               Subject to changes with insertions.
+      STAGEO:    Get geometry details for a station in the scan. Details later.
+      SLEW:      Determine slew times without making changes..
+    ADDGEO     Add DELZN type scans.  details below
     ADDPEAK:   Add pointing scans.
       VLAFREQ:   Get VLA frequency
       SCNDUP:    Copy scan if necessary.
       SRINSERT:  Insert pointing source.
       SCNGEO:  Get geometry.  See above for calls.
     MAKEPTG:   Convert added scans, or user scans, to pointing.
-    SCNGEO:    Redo the geometry info.  See above for calls.
+    OPTTIM:    Final tweak of scan timing.
+    SCNGEO:    Final scan geometry.  See above for calls.
     AUTODOWN:  Eliminate stations too low and with autotape.
+    SETTPS:    Set the start time for data recording 
     DISKPOS:  Get disk information
-    SCHTAPE:   Deal with tape.  (considered vestigal after 2007)
-      SETTPS:   Set tape start time.
-      TPTAPE:   Get tape information.  Dummy values for disk.
-        TPMK2:    Deal with Mark 2.
-          TPPACK:   Fill in TPDAT info with tape bookkeeping.
-        TPS2:     Deal with S2
-          TPPACK:   Fill in TPDAT info with tape bookkeeping.
-        TPSCH:    Deal with VLBA and Mark IV.
-                            Deals with not too many passes per head position.
-          TPPACK:   Fill in TPDAT info with tape bookkeeping.
-          TPAUTO:   Automatic tape handling.
-          TPREV:  Reverse tape when not using automatic tape allocation.
-        TPPACK:   Fill in TPDAT info with tape bookkeeping.
-      TSYNC:    Deal with station-station tape coordination.
-        TPTAPE:   See above - used here for synchronized tape change.
     OPTSCH:    Write a SCHED input file with optimized schedule.
   End scan loop.
   ACCSRC:    Accumulate list of sources actually used.
   SRCFLG:    Set pointers between schedule and catalog sources.
+  GETPAIRS:  Make list of pointing center sources with offset phase ctrs.
 * SCHTIM:    Check monotonic time, gaps, and get extreme times.
              A lot of readback bookkeeping and other tape stuff.
   SCH24:     Avoid 24:00:00.
-  TPMK2:     Mark 2 tape changes.  Ancient, but still used?
-    TPPACK:    Load the tape accounting (not just MK2).
 
 ------------------------------------------------------------------------
-Subroutine details:  OPTGEO used in optimization routines.
+Subroutine details:  Geometry calculations.
+  Main routines are
+     SCNGEO  Calculate geometry for all stations in a scan.
+     STAGEO  Calculate geometry for one station in a scan.
+                 Calls SCHGEO for start and stop.
+                 Determines wraps, slews, and checks horizon
+     SCHGEO  Calculate geometry for a station/source at a time.
 
-OPTGEO:
-  SCHSRC:       Get geometric details
-    SCHGEO:       Get geometry at a time.
-    WRAP:         Determine if a cable wrap will be done.
-    HORCHK:       Function to determine if up or down.
+STAGEO is used in optimization routines.
+   Called by GMKSCN, MAKESCN, OPTCELLS, OPTCSAR, OPTHAS, OPTSKD
+             OPTTIM (2), OPTUPT.
+
+STAGEO:
+  SCHGEO:       Get geometry at a time.
+  WRAP:         Determine if a cable wrap will be done.
+  HORCHK:       Function to determine if up or down.
   SLEW:         Get slew times.  
+
+-------------------------------------------------------------------
+Details:  ADDGEO  Add DELZN sections.
+   Fill this in some day.
 
 -------------------------------------------------------------------
 Details:  Do the doppler calculations.
