@@ -10,21 +10,24 @@ C
       INTEGER          IGB
       CHARACTER        UPA*1, UPC*2
 C -------------------------------------------------------------------
-C     First detect if the station is to be used.
+C     Get the average rise state.  Not needed in most, but 
+C     easier to just get it without fussing about whether
+C     it's needed.  Also, keep out of the STASCN IF because
+C     it may be wanted for sources that have been removed
+C     because of being down.
+C
+      UPA = ' '
+      UPC = UP1(ISCN,ISTA)//UP2(ISCN,ISTA)
+      IF( UPC .EQ. 'HH' ) UPA = 'H'
+      IF( UPC .EQ. 'DD' ) UPA = 'D'
+      IF( UPC .EQ. ' D' .OR. UPC .EQ. ' H' ) UPA = 'S'
+      IF( UPC .EQ. 'D ' .OR. UPC .EQ. 'H ' ) UPA = 'R'
+      IF( UPC .EQ. 'HD' .OR. UPC .EQ. 'DH' ) UPA = 'H'
+      IF( UPC .EQ. 'WW' ) UPA = 'W'
+C
+C     Detect if the station is to be used.
 C
       IF( STASCN(ISCN,ISTA) ) THEN 
-C
-C        Get the average rise state.  Not needed in most, but 
-C        easier to just get it without fussing about whether
-C        it's needed.
-C
-         UPA = ' '
-         UPC = UP1(ISCN,ISTA)//UP2(ISCN,ISTA)
-         IF( UPC .EQ. 'HH' ) UPA = 'H'
-         IF( UPC .EQ. 'DD' ) UPA = 'D'
-         IF( UPC .EQ. ' D' .OR. UPC .EQ. ' H' ) UPA = 'S'
-         IF( UPC .EQ. 'D ' .OR. UPC .EQ. 'H ' ) UPA = 'R'
-         IF( UPC .EQ. 'HD' .OR. UPC .EQ. 'DH' ) UPA = 'D'
 C
 C        Get the desired item.
 C
@@ -102,7 +105,7 @@ C
          ELSE IF( ITEM .EQ. 'EARLY' ) THEN
             TEARLY = IDNINT( ( STARTJ(ISCN) - TONSRC(ISCN,ISTA) ) * 
      1               86400.D0 )
-            WRITE( SUMDAT, '( I5, 1X )' ) TEARLY
+            WRITE( SUMDAT, '( I5, A1 )' ) TEARLY, UPA
 C
          ELSE IF( ITEM .EQ. 'DWELL' ) THEN
             TEARLY = IDNINT( ( STARTJ(ISCN) - TONSRC(ISCN,ISTA) ) * 
@@ -119,7 +122,7 @@ C
             ELSE
                TDWELL = 0
             END IF
-            WRITE( SUMDAT, '( I5, 1X )' ) TDWELL
+            WRITE( SUMDAT, '( I5, A1 )' ) TDWELL, UPA
 C
          ELSE IF( ITEM .EQ. 'SLEW' ) THEN
             ITSLEW = IDNINT( TSLEW(ISCN,ISTA) * 86400.D0 )
@@ -139,12 +142,16 @@ C
 C
       ELSE
 C
-C        Station not in scan.
+C        Station not in scan.  But still give the UP indicators
+C        in case the station was removed by SCHED to show why.
 C
          IF( ITEM .EQ. 'EL1' .OR. ITEM .EQ. 'AZ1' ) THEN
             WRITE( SUMDAT, '( A5, A1 )' ) '  ---', UP1(ISCN,ISTA)
          ELSE IF( ITEM .EQ. 'EL2' .OR. ITEM .EQ. 'AZ2' ) THEN
             WRITE( SUMDAT, '( A5, A1 )' ) '  ---', UP2(ISCN,ISTA)
+         ELSE IF( ITEM .EQ. 'ELA' .OR. ITEM .EQ. 'AZA' .OR.
+     1            ITEM .EQ. 'DWELL' .OR. ITEM .EQ. 'EARLY' ) THEN
+            WRITE( SUMDAT, '( A5, A1 )' ) '  ---', UPA
          ELSE
             SUMDAT = '  --- '
          END IF

@@ -11,7 +11,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER            I, IUNIT, KS, KF, NNCHAN
-      REAL               BBCFREQ(MCHAN), BBCBW(MCHAN)
+      DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
 C----------------------------------------------------------------------
       NNCHAN = NCHAN(KS)

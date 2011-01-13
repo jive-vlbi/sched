@@ -10,7 +10,6 @@ C
       INCLUDE   'schset.inc'
 C
       INTEGER           KS, ISTA
-      INTEGER           NEEDDR
       LOGICAL           BWARN
       SAVE              BWARN
       DATA              BWARN / .TRUE. /
@@ -25,14 +24,9 @@ C
 C     Set some more parameters related to VLBA/MKIV/MARKIII systems.
 C
       DO KS = 1, NSET
-         IF( VLBAMKIV(KS) .OR. FORMAT(KS) .EQ. 'MARKIII' ) THEN
-C         
-C           Set tape speed.
-C         
-            CALL SETSPD( KS )
 C
-         END IF
-C         
+C        Remove the setting of tape speeds - obsolete.  Jan. 7, 2011
+C
 C        Set the barrel roll default.  This is correlator and
 C        format dependent.  Do not use it with disk systems.
 C        Probably drive a stake through BARREL some day as I don't
@@ -77,26 +71,13 @@ C     what they do.  This should only affect "track" assignments
 C     downstream from here.  Earlier it might affect mode 
 C     assignments.
 C
-C     For tape stations, prevent changes in TAPEMODE which can
+C     Obsolete, and removed from routine.  But it used to, for 
+C     tape stations, prevent changes in TAPEMODE which can
 C     make tape management a nightmare.
 C
       CALL TPMFIX
 C
-C     Deal with S2
-C
-      DO KS = 1, NSET
-         IF( FORMAT(KS) .EQ. 'S2' ) THEN
-            IF( SPEEDL(KS) .EQ. 0.0 ) SPEEDL(KS) = 6.3
-            IF( SPEEDH(KS) .EQ. 0.0 ) SPEEDH(KS) = 4.2
-            FANOUT(KS) = MIN( 1.0, SAMPRATE(KS) / 16.0 )
-            IF( TAPEMODE(KS) .EQ. 0  ) THEN
-               NEEDDR = STNDRIV(ISETSTA(KS)) * 16.0 / 
-     1                 ( NCHAN(KS) * BITS(1,KS) * SAMPRATE(KS) )
-               TAPEMODE(KS) = MIN( NEEDDR, STNDRIV(ISETSTA(KS)) )
-            END IF
-            SPEEDUP(KS) = 1.0
-         END IF
-      END DO
+C     Tape speed stuff for S2 removed Jan. 7, 2011.  RCW.
 C
       RETURN
       END

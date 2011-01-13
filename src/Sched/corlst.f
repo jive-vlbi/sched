@@ -101,6 +101,9 @@ C                     P    = 2 for polarization, 1 for none
 C                     Su   = speed up factor (1, 2, 4)
 C                    Tavg = time average in seconds
 C
+C              Note that FSPEED will now always be 1.0.  It is somewhat
+C              of a meaningless parameter any more with disk recordings.
+C
                IF( CORAVG .GT. 0.0 .AND. .NOT. NOSET ) THEN
                   DATARATE = 4.0 * NSANT * (NSANT+1) * 
      1                       MSCHN(SETNUM(ISCN)) * CORCHAN *

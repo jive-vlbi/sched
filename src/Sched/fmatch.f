@@ -15,6 +15,7 @@ C
       INCLUDE   'schfreq.inc'
 C
       INTEGER           KS, KF, IIF, ICH, USEIF(MCHAN)
+      DOUBLE PRECISION  FRAD1, FRAD2
       REAL              OVERLAP, CENTER
       REAL              BESTCN
       REAL              CHOVER(MCHAN,MFIF), CHCENT(MCHAN,MFIF)
@@ -49,6 +50,7 @@ C
          DO IIF = 1, FNIF(KF)
             CHOVER(ICH,IIF) = 0.0
             CHCENT(ICH,IIF) = 1.E5
+            CALL FRFADJ( KS, IIF, KF, FRAD1, FRAD2 )
 C
 C           Be sure this is an ok match according to FCOMPARE.
 C
@@ -56,10 +58,10 @@ C
 C
 C              Check how much bandwidth overlaps.  
 C
-               IF( FRQ2(ICH) .GT. FRF1(IIF,KF) .AND. 
-     1             FRQ1(ICH) .LT. FRF2(IIF,KF) ) THEN
-                  CHOVER(ICH,IIF) = MIN( FRQ2(ICH), FRF2(IIF,KF) ) - 
-     1                              MAX( FRQ1(ICH), FRF1(IIF,KF) )
+               IF( FRQ2(ICH) .GT. FRAD1 .AND. 
+     1             FRQ1(ICH) .LT. FRAD2 ) THEN
+                  CHOVER(ICH,IIF) = MIN( FRQ2(ICH), FRAD2 ) - 
+     1                              MAX( FRQ1(ICH), FRAD1 )
                ELSE
                   CHOVER(ICH,IIF) = 0.0
                END IF
@@ -67,7 +69,7 @@ C
 C              Get centering - the offset between the middle of the IF
 C              and the middle of the baseband.
 C
-               CHCENT(ICH,IIF) = ABS( ( FRF1(IIF,KF)+FRF2(IIF,KF) )/2.0
+               CHCENT(ICH,IIF) = ABS( ( FRAD1 + FRAD2 )/2.0
      1                - ( FRQ1(ICH) + FRQ2(ICH) ) / 2.0 )
 C
                IF( SDEBUG ) THEN

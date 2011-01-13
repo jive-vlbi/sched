@@ -18,7 +18,7 @@ C
       INTEGER            KS, ICH
       DOUBLE PRECISION   BWTOT, OVERLAP, OVERCH
       CHARACTER          RESULT*(*)
-      REAL               BBCBW(MCHAN)
+      DOUBLE PRECISION   BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
 C ---------------------------------------------------------------------
 C     Check for how much frequency overlap exists with the IFs.
@@ -44,9 +44,9 @@ C
          BWTOT = BWTOT + BBCBW(ICH)
       END DO
 C
-C     Check how the overlap did.
+C     Check how the overlap did.  Protect against bit rounding.
 C
-      IF( OVERLAP .GE. BWTOT ) THEN
+      IF( OVERLAP .GE. BWTOT * 0.99999D0 ) THEN
          RESULT = 'OK'
       ELSE
          WRITE( RESULT, '( A, F8.2, A, F8.2, A )' )

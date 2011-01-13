@@ -23,6 +23,7 @@ C
       LOGICAL           FIRST, PLOTCONT, INTERACT
       CHARACTER         CH*1, CHN*1
       SAVE              FIRST, PLOTCONT
+      DOUBLE PRECISION  LASTTIME, T_AVAIL
 C
 C     For the station grid quality contour plot (when S typed)
 C     GHLAT and GHLONG are declared here to take advantage of
@@ -284,19 +285,14 @@ C
      1                      'conversions for '// STANAME(IMARK) )
 C
 C                       Now update the scan geometry parameters.
+C                       Use STAGEO, not SCHSRC which will be absorbed
+C                       into STAGEO.
 C                        
                         LASTJSCN = 0
                         DO ISCN = SCAN1, SCANL
                            IF( STASCN(ISCN,IMARK) ) THEN
-                              CALL SCHSRC( LASTJSCN, ISCN, IMARK,
-     1                             STARTJ(ISCN), STOPJ(ISCN) )
-                              IF( LASTJSCN .EQ. 0 ) THEN
-                                 TONSRC(ISCN,IMARK) = STARTJ(ISCN)
-                              ELSE
-                                 CALL SLEW( ISCN, LASTJSCN, IMARK )
-                                 TONSRC(ISCN,IMARK) = STOPJ(LASTJSCN) +
-     1                           TSLEW(ISCN,IMARK)
-                              END IF
+                              CALL STAGEO( ISCN, IMARK, STARTJ(ISCN),
+     1                              LASTJSCN, LASTTIME, T_AVAIL )
                               LASTJSCN = ISCN
                            END IF
                         END DO

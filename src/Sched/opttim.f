@@ -1,6 +1,13 @@
       SUBROUTINE OPTTIM( LASTISCN, ISCN, ADJUST )
 C
-C     Routine that adjust the time of optimized scans
+C     Routine that adjust the time of optimized scans.  
+C
+C     This is not meant to be the routine that gets the scan 
+C     geometry - in fact it does not calculate geometry for DUR 
+C     type scheduling (ie when ADJUST is false).  The scan geometry
+C     should be calculated after OPTTIM is run because, if adjusting
+C     times, it will fill the arrays with numbers meant mainly for
+C     its internal use.
 C
 C     Note that, even with optimization, if an explicit start or
 C     stop time was specified, it will be used.  ADJUST refers to
@@ -21,8 +28,8 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER          LASTISCN(MAXSTA), ISCN, ISTA, LSCN, I
-      DOUBLE PRECISION LASTTIME, TIME1J, TIME2J, T_AVAIL
-      DOUBLE PRECISION MAXLASTT, TOLER, TBEGSRT(MAXSTA), DTEMP
+      DOUBLE PRECISION LASTTIME, TIME1J, TIME2J, T_AVAIL, TIME1K
+      DOUBLE PRECISION MAXLASTT, TOLER, TBEGSRT(MAXSTA+1), DTEMP
       DOUBLE PRECISION SSTIME
       LOGICAL          ADJUST, ALL0
       PARAMETER        (TOLER=ONESEC/1000.D0)
@@ -34,22 +41,30 @@ C
       IF( ADJUST ) THEN
 C
 C        Get the start time based on previous scans and on slews.  This
-C        can use dwell or dur.
+C        can use dwell or dur.  Note that user input DWELL(1) (now in DUR 
+C        logical DWELL set to whether or not it was used) was given to 
+C        be the on-source time for input DWELL(2) (internal variable 
+C        NOWAIT) antennas to get on source.  Input DWELL(3) (internal
+C        variable MINDW) is the minimum on source time for all antennas.  
+C        TIME1K collects the last antenna arrival time when worrying 
+C        about allowing some to be late.
 C
          TIME1J = -99.D9
+         TIME1K = -99.D9
          ALL0 = .TRUE.
 C
 C        Initialize the sorted stop times array used when not waiting
 C        for NOWAIT antennas.
 C
-         DO I = 1, NOWAIT(ISCN) + 1
+         DO I = 1, MAXSTA+1
             TBEGSRT(I) = 0.D0
          END DO
 C
-C        Loop through the stations getting the most recent stop time.
-C        Use the schedule time if there are no LASTISCN's.  That would
-C        normally be the first scan which will trigger ALL0 and be handled
-C        separately anyway.  Allow for GAP.
+C        Loop through the stations getting the most recent stop time
+C        of a previous scan for the antennas in this scan.
+C        Use the schedule scan time if there are no LASTISCN's.  That 
+C        would normally be the first scan which will trigger ALL0 and 
+C        be handled separately anyway.  Allow for GAP.
 C
          SSTIME = 0.D0
          DO ISTA = 1, NSTA
@@ -64,17 +79,20 @@ C
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) .AND. LASTISCN(ISTA) .NE. 0) THEN
 C
-C              Note that OPTGEO does or does not take into account 
-C              slews, depending on scheduling type (DUR or DWELL), 
-C              when setting T_AVAIL
+C              Get the geometry for the earliest possible start time
+C              which is SSTIME.
+C              Note that, when setting T_AVAIL, STAGEO takes into 
+C              account slews for DWELL type scheduling, but not 
+C              when using DUR.  T_AVAIL is meant to be the earliest 
+C              that this station can start the scan given the scheduling type.
 C
-               CALL OPTGEO( ISCN, ISTA, SSTIME, 
+               CALL STAGEO( ISCN, ISTA, SSTIME, 
      1                      LASTISCN(ISTA), LASTTIME, T_AVAIL )
 C
 C              With dwell scheduling, you can specify to wait for all
-C              but the last NOWAIT antennas.  This help deal with slow,
+C              but the last NOWAIT antennas.  This helps deal with slow,
 C              but sensitive antennas and with sources near zenith.
-C              Only do the math if NOWAIT is zero.
+C              Only do the math if NOWAIT is one or more.
 C
                IF( DWELL(ISCN) .AND. NOWAIT(ISCN) .GE. 1 ) THEN
                   IF( UP1(ISCN,ISTA) .EQ. ' ' .AND. 
@@ -94,19 +112,25 @@ C
                      IF( T_AVAIL .GT. TBEGSRT(NOWAIT(ISCN)+1) ) THEN
                         TBEGSRT(NOWAIT(ISCN)+1) = T_AVAIL
 C
-C                       Now, if NOWAIT is more than zero, push the new 
+C                       NOWAIT assured to be .GE. 1 above.  Push the new 
 C                       time up the stack to put in it's proper place.
+C                       The stack needs to be NOWAIT(ISCN) + 1 deep 
+C                       because ultimately we will use that element.
+C                       For simplicity, the new time is loaded into
+C                       element NOWAIT(ISCN) + 2, then pushed up.
 C
-                        IF( NOWAIT(ISCN) .GE. 1 ) THEN
-                           DO I = NOWAIT(ISCN), 1, -1
-                              IF( TBEGSRT(I+1) .GT. TBEGSRT(I) ) THEN
-                                 DTEMP = TBEGSRT(I)
-                                 TBEGSRT(I) = TBEGSRT(I+1)
-                                 TBEGSRT(I+1) = DTEMP
-                              END IF
-                           END DO
-                        END IF
+                        DO I = NOWAIT(ISCN), 1, -1
+                           IF( TBEGSRT(I+1) .GT. TBEGSRT(I) ) THEN
+                              DTEMP = TBEGSRT(I)
+                              TBEGSRT(I) = TBEGSRT(I+1)
+                              TBEGSRT(I+1) = DTEMP
+                           END IF
+                        END DO
                      END IF
+C
+C                    Also save the last time any station gets there.
+C
+                     TIME1K = MAX( TIME1K, T_AVAIL )
 C
                   END IF
 C
@@ -126,9 +150,9 @@ C
 C
                END IF
 C
-C              Save the last stop time seen at any station in the scan.
-C              This will be used in applying GAP or dealing with non-dwell
-C              scheduling.
+C              Save the last stop time of the previous scan seen at any 
+C              station in the scan.  This will be used in applying GAP 
+C              or dealing with non-dwell scheduling.
 C
                IF( LASTTIME .GT. MAXLASTT ) THEN
                   MAXLASTT = LASTTIME
@@ -138,16 +162,20 @@ C
             END IF
          END DO
 C
-C        We're not done yet for the case with DWELL and NOWAIT as we needed
-C        the sorted list of start times.  No pick the one we want.
-C        Note that TBEGSRT(1) will be non-zero if and only if we want to be
-C        doing this so we don't need to test DWELL etc.
+C        We're not done yet for the case with DWELL and NOWAIT as we 
+C        needed the sorted list of start times.  Now pick the one we want.
+C        Note that TBEGSRT(1) will be non-zero if and only if we want 
+C        to be doing this (or there were no stations in the scan) so 
+C        we don't need to test DWELL etc.
 C
          IF( TBEGSRT(1) .NE. 0.D0 ) THEN
             TIME1J = TBEGSRT(NOWAIT(ISCN)+1)
 C
-C           See if any other start times work (like the number of 
-C           stations in the scan was less than NOWAIT).
+C           If that didn't produce a viable result, see if any other 
+C           start times work (a possible cause would be that the number 
+C           of stations in the scan was less than NOWAIT).  This will
+C           be a rare case anyway so don't worry about the corner case 
+C           where there ends up being only one station in the scan.
 C        
             IF( TIME1J .EQ. 0.D0 ) THEN
                DO I = 1, NOWAIT(ISCN)
@@ -160,17 +188,31 @@ C
 C
 C        Set time if this is the first scan for all antennas.
 C        I think this covers any remaining possible cases.
+C        Recall that this need not be the first scan of the
+C        experiment if all the included stations were not in
+C        earlier scans.
+C        This will also give a number for the case where no 
+C        stations are up.
 C
          IF( ALL0 ) THEN
             TIME1J = STARTJ(ISCN)
             MAXLASTT = STARTJ(ISCN) - GAP(ISCN)
          END IF
 C
+C        If TIME1K did not get set, set it the same as TIME1J
+C
+         IF( TIME1K .LE. 0.D0 ) THEN
+            TIME1K = TIME1J
+         END IF
+C
 C        So far, the time has been set based on slew time.  Now treat
 C        GAP as the minimum interval to the next scan, which may require
-C        moving the start to later.
+C        moving the start to later.  This also deals with a case where
+C        TIME1J has not been set - like all antennas in the scan were
+C        down.  Do the same for TIME1K
 C
          TIME1J = MAX( TIME1J, MAXLASTT + GAP(ISCN) )
+         TIME1K = MAX( TIME1K, MAXLASTT + GAP(ISCN) )
 C    
 C        Set the scan stop time based on the input scan duration.
 C        But there are circumstances when the stop time is fixed
@@ -178,8 +220,14 @@ C        when the start time is not (STOP specified).  STOP is
 C        also implicitly fixed with START+DUR, so the only case
 C        when STOP can float is when START and STOP are not specified.
 C
+C        At this point, also take into account MINDW - the minimum 
+C        dwell time for all antennas.
+C
          IF( DURONLY(ISCN) .LE. 1 ) THEN
             TIME2J = TIME1J + DUR(ISCN)
+            IF( NOWAIT(ISCN) .GE. 1 .AND. MINDW(ISCN) .GT. 0.D0 ) THEN
+               TIME2J = MAX( TIME2J, TIME1K + MINDW(ISCN) ) 
+            END IF
          ELSE
             TIME2J = STOPJ(ISCN)
          END IF

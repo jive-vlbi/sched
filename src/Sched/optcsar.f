@@ -125,7 +125,7 @@ C
 C
 C              Get geometry and time available.
 C
-               CALL OPTGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
+               CALL STAGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
      1                      LASTTIME, TONSRC(JSCN,ISTA) )
 C
 C              For first scan at the station, set TONSRC to the

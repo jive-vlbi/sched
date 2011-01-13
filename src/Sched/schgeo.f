@@ -17,6 +17,11 @@ C
 C     Oct. 9, 2010.  For planets and satellites, get the current 
 C     scan/station position.  RCW.
 C
+C     This routine does not modify any of the scan data from the
+C     COMMONs in the include file, so it can be used to calculate
+C     hypothetical cases without corrupting scan calculations that
+C     were made before.  WRAP will do that.
+C
       INCLUDE 'sched.inc' 
 C
       INTEGER          ISCN, ISRC, ISTA, KSTA
@@ -63,13 +68,13 @@ C
       CH = COS(HA)
       SH = SIN(HA)
       HA = HA / RADHR
-      IF( HA.LT.-12.0 ) HA = HA + 24.0
+      IF( HA.LE.-12.0 ) HA = HA + 24.0
       IF( HA.GT. 12.0 ) HA = HA - 24.0
       ZA = ACOS(CD*CL*CH + SD*SL) / RADDEG
       EL = 90.0 - ZA
       AZ = ATAN2(SD*CL - CD*SL*CH, CD*SH) / RADDEG
       AZ = AMOD( AZ - 90.0, 360.0 )
-      IF( AZ.LT.0. ) AZ = AZ + 360.0
+      IF( AZ .LT. 0.0 ) AZ = AZ + 360.0
 C
 C     Get paralactic angle depending on mount type.
 C

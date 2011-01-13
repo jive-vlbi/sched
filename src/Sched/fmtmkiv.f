@@ -29,6 +29,13 @@ C
 C ---------------------------------------------------------------------
       OK = .FALSE.
 C
+C     We're not going to get anywhere without the sample rate.  I
+C     don't think this should happen, but just in case.
+C
+      IF( SAMPRATE(KS) .EQ. 0.0 ) THEN
+         GO TO 999
+      END IF
+C
 C     Set the maximum bit rate per track and the maximum number of
 C     tracks MAXTRAK available for use.  Assume all stations can do 
 C     TWOHEAD (2 drives or 2 heads - or 64 tracks).  It is later 
@@ -45,13 +52,14 @@ C     when there are no tapes.
 C
 C
 C     The meaning of some variables:
-C     NSTREAM  - The number of bit streams.
-C     TOTBPS   - The total bit rate.  Derived in SETFORM.
-C     MINTBPS  - The minimum track bit rate that can be used.
-C     MAXTBPS  - The maximum track bit rate that can be used.
+C     NSTREAM   - The number of bit streams.
+C     TOTBPS    - The total bit rate.  Derived in SETFORM.
+C     MINTBPS   - The minimum track bit rate that can be used.
+C     MAXTBPS   - The maximum track bit rate that can be used.
 C     MINTRAK   - The minimum number of tracks required.
 C     MAXTRAK   - The maximum number of tracks that can be used.
-C     MAXBR    - Maximum track bit rate.C
+C     MAXBR     - Maximum track bit rate.
+C
       MAXBR = 8.0
 C
       IF( ( ANYTAPE .AND. TWOHEAD ) .OR. TOTBPS(KS) .GT. 257.0 ) THEN
@@ -232,9 +240,22 @@ C
          FANOUT(KS) = SAMPRATE(KS) / TRKBPS
       END IF
 C
+C     --------------------
+C     The following may actually be all that is needed of this 
+C     routine in the disk era unless there is a need to conform
+C     to setup file input.  Set the fanout to the minumum
+C     possible that the formatter can handle.  This is fine since
+C     is no longer necessary to match the track bit rates at 
+C     stations.
+C
+      IF( FANOUT(KS) .EQ. 0.0 ) THEN
+         FANOUT(KS) = SAMPRATE(KS) / MAXTBPS(KS)
+      END IF
+C     ---------------------
+C
       IF( FANOUT(KS) .EQ. 0.0 ) THEN
 C
-C        If got here, we just couldn't do it.  Return.  Presumably
+C        If got here, the setting above failed.  Return.  Presumably
 C        we'll get called again with a TRKBPS.
 C
          OK = .FALSE.

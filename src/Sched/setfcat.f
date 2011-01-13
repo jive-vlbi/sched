@@ -366,7 +366,7 @@ C
 C
 C        Set the nominal BBC frequencies if they are needed.
 C
-         IF( BBSYN(ICH,KS) .EQ. 0.0 ) THEN
+         IF( BBSYN(ICH,KS) .EQ. 0.0D0 ) THEN
             BBSYN(ICH,KS) = ABS( FREQREF(ICH,KS) - FIRSTLO(ICH,KS) )
          END IF
 C

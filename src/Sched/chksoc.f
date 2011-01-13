@@ -1,5 +1,9 @@
       SUBROUTINE CHKSOC
 C
+C     The VLBA hardware correlator (FXCORR) was turned off in 2010 
+C     so this routine no longer does anything.  Some day get up the 
+C     nerve to remove it.  Comment added Jan. 11, 2011.
+C
 C     Routine for SCHED that checks some parameters if the Socorro
 C     correlator is to be used.  This includes that some of the cabling 
 C     restrictions on the Socorro VLBA correlator are not violated.
@@ -9,7 +13,8 @@ C
       INCLUDE     'schset.inc'
 C
       INTEGER        KS, I, J, IP, POLERR, ROLLERR, IGRP, JGRP
-      INTEGER        IFFT, IAVG, MINFFT, LEN1
+      INTEGER        IFFT, IAVG, MINFFT
+C      INTEGER        LEN1
       LOGICAL        SPMOD2, PADLOSS
       CHARACTER      CPOL*3
 C ----------------------------------------------------------------------
@@ -165,9 +170,9 @@ C
          DO KS = 1, NSET
             IF( ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR.
      1              FORMAT(KS)(1:4) .EQ. 'MARK' ) .AND.
-     2          ( CORCHAN * 2.0 * SAMPRATE(KS) / 
-     3             ( 2.0 * BBFILT(1,KS) * FANOUT(KS) ) 
-     4          .GE. 20000. ) ) THEN
+     2          ( ( CORCHAN * 2.0D0 * SAMPRATE(KS) ) / 
+     3             ( 2.0D0 * BBFILT(1,KS) * FANOUT(KS) ) 
+     4          .GE. 20000.D0 ) ) THEN
 C
                CALL WLOG( 1, 'CHKSOC:   The requested 2K FFTs (1024 ' //
      1             'channel spectra) cannot be done on the Socorro' )

@@ -10,7 +10,6 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER       I, NNCHAN, LEN1, LENS, ISTA, ISCN, ICH, KSTA
-      REAL          SMPR
       LOGICAL       FIRSTS, FRS, LPNTVLBA, LTANVLBA, LDOPN3DB, WRTSET
 C
 C     Parameters to hold previous values to avoid duplication.
@@ -23,9 +22,9 @@ C
       INTEGER       RPERIOD(MCHAN), LPERIOD(MCHAN), LBITS(MCHAN)
       INTEGER       RLEVEL(MCHAN)
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
-      REAL          LSAMPR, LSYNTH(3)
       REAL          DOAZ, DOEL
-      LOGICAL       LDUALX, LUSEDIF(4)
+      DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR
+      LOGICAL       LDUALX, LUSEDIF(4), WARNCRD
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
       CHARACTER     LFORMAT*8, LIFDIST(4)*3
@@ -41,7 +40,7 @@ C
       SAVE          LSAMPR, LSYNTH
       SAVE          LDUALX, LUSEDIF, LSIDEBD, LNOISE, LFE
       SAVE          LIFCHAN, LLOGGING, LSTRING, LFORMAT, LIFDIST
-      SAVE          LLCP50CM, LRCP50CM, LNOISEF
+      SAVE          LLCP50CM, LRCP50CM, LNOISEF, WARNCRD
 C
 C     External L.O. stuff.
 C
@@ -49,7 +48,9 @@ C
       LOGICAL       USEDIF(4)
       CHARACTER     IFLABEL(4)*1, SIDEX(4)*1, LSIDEX(4)*1
       SAVE          LEXTLO, LSIDEX
+C
       DATA          IFLABEL / 'A', 'B', 'C', 'D' /
+      DATA          WARNCRD / .TRUE. /
 C
 C ----------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBASU: Starting.' )
@@ -133,7 +134,15 @@ C           Various parameters in standard formats not wanted for VLA.
 C
             CALL VLBACHAR( 'noise', 5, 4, NOISE(1,LS), LNOISE, 
      1             MNOISE, FIRSTS, IUVBA )
-            CALL VLBAREAL( 'synth', 5, 3, SYNTH(1,LS), LSYNTH, 
+C
+C           Prep synth to use in double precision.  The rounding is
+C           to prevent issues comparing with the previous result.
+C
+            DO I = 1, 3
+               DSYNTH(I) = SYNTH(I,LS)
+               DSYNTH(I) = DNINT( DSYNTH(I) * 1000.0D0 ) / 1000.D0
+            END DO
+            CALL VLBAREAL( 'synth', 5, 3, DSYNTH, LSYNTH, 
      1             MSYNTH, '(F4.1)', 4, FIRSTS, IUVBA )
 C
 C           For Pie Town link experiments, tell PT to switch to the
@@ -248,15 +257,24 @@ C
                WRITE( IUVBA, '( 2A )' )
      1             'format=', FORMAT(LS)(1:LEN1(FORMAT(LS)))
             ELSE
-               CALL WLOG( 1, 'VLBASU: crd files for RDBE stations '//
-     1                'have format NONE and may have ' )
-               CALL WLOG( 1, '        reduced channels and '// 
-     1                'adjusted samplerate, frequencies and '//
-     2                'bandwidths.' )
-               CALL WLOG( 1, '        These only affect the old ' //
-     1                'backend and recorder, not the new hardware.' )
-               WRITE( IUVBA, '( 2A )' )
-     1             'format=NONE'
+               IF( DOMKA ) THEN
+C
+C                 Write disk.  Need a format.  Be simple.
+C
+                  IF( SAMPRATE(LS) .GE. 32.0 ) THEN
+                      WRITE( IUVBA, '( A )' ) 'format=VLBA1:4'
+                  ELSE IF( SAMPRATE(LS) .EQ. 16.0 ) THEN
+                      WRITE( IUVBA, '( A )' ) 'format=VLBA1:2'
+                  ELSE IF( SAMPRATE(LS) .EQ. 16.0 ) THEN
+                      WRITE( IUVBA, '( A )' ) 'format=VLBA1:1'
+                  END IF
+               ELSE
+                  IF( WARNCRD ) THEN
+                     CALL WRTMSG( 0, 'VLBASU', 'CRD_RDBE_Warning' )
+                     WARNCRD = .FALSE.
+                  END IF
+                  WRITE( IUVBA, '( A )' ) 'format=NONE'
+               END IF
             END IF
             LFORMAT = FORMAT(LS)
          END IF
@@ -370,7 +388,7 @@ C     pointing with format NONE.  Without this, the station can wind
 C     up with no track assignments.
 C
       IF( FIRSTS ) THEN
-         LSAMPR = 0
+         LSAMPR = 0.0
       END IF
 C
 C     Don't write formatter type commands for non-recording scans.
@@ -383,11 +401,11 @@ C     Also protect against too high samplerate when using the RDBE.
 C
       IF( VLBITP .AND. FORMAT(LS) .NE. 'NONE' ) THEN
          IF( DAR(KSTA) .NE. 'RDBE' ) THEN
-            SMPR = SAMPRATE(LS)
+            DSAMPR = SAMPRATE(LS)
          ELSE
-            SMPR = MIN( SAMPRATE(LS), 32.0 )
+            DSAMPR = MIN( SAMPRATE(LS), 32.0 )
          END IF
-         CALL VLBABWS( 'samplerate', 10, 1, SMPR, LSAMPR, 
+         CALL VLBABWS( 'samplerate', 10, 1, DSAMPR, LSAMPR, 
      1       MSAMPR, FIRSTS, IUVBA )
 C
 C        Removed track assignments that were used for tape.

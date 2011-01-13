@@ -116,12 +116,14 @@ C
 C        Various items, especilly related to tapes.
 C
          IF( NOTAPE .OR. .NOT. RECUSED(KS) ) THEN
-            WRITE( IUNIT, '( A, I3 )' )
-     1           '   Number of channels:', NCHAN(KS)   
+            WRITE( IUNIT, '( A, I3, A, A )' )
+     1           '   Number of channels:', NCHAN(KS),
+     2           '    DBE type: ', DBE(KS)
          ELSE
-            WRITE( IUNIT, '( A, I3, 24X, A, F6.2 )' )
-     1          '   Number of channels:', NCHAN(KS),   
-     2          '       Speedup factor: ', SPEEDUP(KS)
+            WRITE( IUNIT, '( A, I3, A, A, T54, A, F6.2 )' )
+     1           '   Number of channels:', NCHAN(KS),   
+     2           '    DBE type: ', DBE(KS),
+     3           '   Speedup factor: ', SPEEDUP(KS)
          END IF
 C
          IF( .NOT. NOTAPE ) THEN

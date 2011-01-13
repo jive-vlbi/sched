@@ -1,4 +1,4 @@
-      CHARACTER*100 FUNCTION SUMDESC( ITEM, LENGTH )
+      CHARACTER*100 FUNCTION SUMDESC( ITEM, LENGTH, LABFLAG )
 C
 C     Make the summary file descriptions for the line items.
 C
@@ -6,39 +6,39 @@ C
 C
       CHARACTER      ITEM*(*), SITEM*20
       INTEGER        LEN1, LENGTH
+      LOGICAL        LABFLAG
 C --------------------------------------------------------------------
 C     Make copy of ITEM so it can be concatenated (g77 won't 
 C     concatinate variables of unknown length).
 C
       SITEM = ITEM
+      LABFLAG = .FALSE.
 C
 C     Make the summary line.
 C
       IF( ITEM .EQ. 'EL1' ) THEN
-         SUMDESC = 'Start elevation, flag '//
-     1      '(D=>Down, H=>Below Horizon, t=>Tape Change.)'
+         SUMDESC = 'Start elevation.'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'EL2' ) THEN
-         SUMDESC = 'End elevation, flag '//
-     1      '(D=>Down, H=>Below Horizon, t=>Tape Change.)'
+         SUMDESC = 'End elevation.'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'ELA' ) THEN
-         SUMDESC = 'Average elevation, flag '//
-     1      '(D=>Down, H=>Below Horizon,'//
-     2      'R=>Rises, S=>Sets, t=>Tape Change.)'
+         SUMDESC = 'Average elevation.'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'AZ1' ) THEN
-         SUMDESC = 'Start azimuth, flag '//
-     1      '(D=>Down, H=>Below Horizon, t=>Tape Change.)'
+         SUMDESC = 'Start azimuth.'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'AZ2' ) THEN
-         SUMDESC = 'End azimuth, flag '//
-     1      '(D=>Down, H=>Below Horizon, t=>Tape Change.)'
+         SUMDESC = 'End azimuth.'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'AZA' ) THEN
-         SUMDESC = 'Average azimuth, flag '//
-     1      '(D=>Down, H=>Below Horizon,'//
-     2      'R=>Rises, S=>Sets, t=>Tape Change.)'
+         SUMDESC = 'Average azimuth.'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'PA1' ) THEN
          SUMDESC = 'Start paralactic angle.'
@@ -76,9 +76,12 @@ C
 C
       ELSE IF( ITEM .EQ. 'EARLY' ) THEN
          SUMDESC = 'Seconds antenna is on source before scan start.'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'DWELL ' ) THEN
-         SUMDESC = 'Seconds antenna is on source during scan.'
+         SUMDESC = 'Seconds antenna is on source during scan. '//
+     1      '0 shown if down, rise, or set'
+         LABFLAG = .TRUE.
 C
       ELSE IF( ITEM .EQ. 'SLEW' ) THEN
          SUMDESC = 'Slew time in seconds from previous source.'

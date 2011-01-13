@@ -3,19 +3,22 @@
 C
 C     Routine to put an array of setup parameters into a VLBA style
 C     control file.  This one is for real numbers.
+C     It turns out that when this routine is wanted, the arrays
+C     are now double precision, so just change the declares here rather
+C     than creating a VLBADBL.
 C
 C     Only NCHAN channels will be written.  The current array will be
 C     tested against the most recent one and only channels that have
 C     changed will be written.  LABEL*NCL is the keyword for the output
-C     record (eg BBSYNTH) and IUVBA is the output unit number.  OLDARRAY
+C     record (eg BBSYN) and IUVBA is the output unit number.  OLDARRAY
 C     should be dimensioned the same as ARRAY.  If the number of 
 C     channels increases, write out the new ones.
 C
       CHARACTER   LABEL*12, OUTLINE*80, FMT*6
-      REAL        ARRAY(*), OLDARRAY(*)
+      DOUBLE PRECISION  ARRAY(*), OLDARRAY(*)
       INTEGER     NCHAN, OLDCHAN, KCHAR, NCHAR, NCL
       INTEGER     I, IUVBA, NDIG
-      LOGICAL     FIRSTS, WRTLAB
+      LOGICAL     FIRSTS, WRTLAB, DEQUAL
 C----------------------------------------------------------------------
       NCHAR = 0
       WRTLAB = .TRUE.
@@ -24,8 +27,8 @@ C----------------------------------------------------------------------
 C
 C        Does this channel need to be processed?
 C
-         IF( FIRSTS .OR. ARRAY(I) .NE. OLDARRAY(I) .OR.
-     1       I .GT. OLDCHAN ) THEN
+         IF( FIRSTS .OR. I .GT. OLDCHAN .OR.
+     1       .NOT. DEQUAL( ARRAY(I), OLDARRAY(I) ) ) THEN
 C
 C           Get the number of characters for this point.
 C

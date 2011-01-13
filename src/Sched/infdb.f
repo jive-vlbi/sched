@@ -30,10 +30,18 @@ C
       DO ICHAN = 1, MAXCHN
          FREQ(ICHAN,ISCN) = VALUE(I1+ICHAN)
          BW(ICHAN,ISCN)   = VALUE(I2+ICHAN)
-         IF( GOTFREQ .OR. FREQ(ICHAN,ISCN) .NE. 0.0 .OR. 
-     1         BW(ICHAN,ISCN) .NE. 0.0 ) GOTFREQ = .TRUE.
-         IF( BW(ICHAN,ISCN) .EQ. 0.0 ) 
+         IF( GOTFREQ .OR. FREQ(ICHAN,ISCN) .NE. 0.0D0 .OR. 
+     1         BW(ICHAN,ISCN) .NE. 0.0D0 ) GOTFREQ = .TRUE.
+         IF( BW(ICHAN,ISCN) .EQ. 0.0D0 ) 
      1         BW(ICHAN,ISCN) = BW(1,ISCN)
+C
+C        When BBSYN, BBFILT, BW etc were made double precision, they 
+C        ended up with some spurious digits at insignificant levels that 
+C        confounded some value tests.  Try to prevent that.
+C
+         FREQ(ICHAN,ISCN) = DNINT( FREQ(ICHAN,ISCN)*1000.D0 ) / 1000.D0
+         BW(ICHAN,ISCN) = DNINT( BW(ICHAN,ISCN)*1000.D0 ) / 1000.D0
+C
       END DO
 C
 C     Source name for Doppler calibration and default to scan source.
