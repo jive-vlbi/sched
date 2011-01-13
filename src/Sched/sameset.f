@@ -76,8 +76,6 @@ C
      2     SYNTH(1,KS)  .EQ. SYNTH(1,JS)  .AND.
      3     SYNTH(2,KS)  .EQ. SYNTH(2,JS)  .AND.
      4     SYNTH(3,KS)  .EQ. SYNTH(3,JS)  .AND.
-     5     SPEEDH(KS)   .EQ. SPEEDH(JS)   .AND.
-     6     SPEEDL(KS)   .EQ. SPEEDL(JS)   .AND.
      7     FANOUT(KS)   .EQ. FANOUT(JS)
 C
       SA = SA .AND.

@@ -19,8 +19,8 @@ C
       INTEGER       TONE1(MCHAN), TONE2(MCHAN), TONE3(MCHAN)
       INTEGER       INTBW, NTPB
       INTEGER       PCFR1(MAXPC), PCFR2(MAXPC)
-      REAL          RTONE1
-      REAL          BBCFREQ(MCHAN), BBCBW(MCHAN)
+      DOUBLE PRECISION  RTONE1
+      DOUBLE PRECISION  BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION  TONEINT, LOSUM(MCHAN)
       CHARACTER     PCX1(MAXPC)*3, PCX2(MAXPC)*3
       CHARACTER     PCALC1*3, UPCAL*4, PCOPT*4
@@ -90,14 +90,14 @@ C
                   IF( TONE1(ICH) .EQ. 0 ) 
      1                   TONE1(ICH) = DNINT( TONEINT * 1000.D0 )
                   IF( TONE1(ICH) .LT. INTBW ) NTONES(ICH) = 1
-                  RTONE1 = TONE1(ICH) / 1000.0
+                  RTONE1 = TONE1(ICH) / 1000.0D0
                ELSE IF(NETSIDE(ICH,KS).EQ.'L' .AND. LOSUM(ICH).NE.0.D0) 
      1              THEN
                   TONE1(ICH) = DNINT( 1.D3 * MOD( LOSUM(ICH), TONEINT ))
                   IF( TONE1(ICH) .EQ. 0 ) 
      1                   TONE1(ICH) = DNINT( TONEINT * 1000.D0 )
                   IF( TONE1(ICH) .LT. INTBW ) NTONES(ICH) = 1
-                  RTONE1 = TONE1(ICH) / 1000.0
+                  RTONE1 = TONE1(ICH) / 1000.0D0
                ELSE
                   CALL ERRLOG( 'PCALFQ: Invalid sideband or no LO sum' )
                END IF
@@ -107,13 +107,13 @@ C              ending up right on the band edge.
 C
                IF( NTONES(ICH) .EQ. 1 .AND. 
      1             BBCBW(ICH) - RTONE1 .GT. TONEINT ) THEN
-                  NTPB = ( BBCBW(ICH) - RTONE1 - 0.005 ) / TONEINT
+                  NTPB = ( BBCBW(ICH) - RTONE1 - 0.005D0 ) / TONEINT
 C
 C                 Try to prevent getting too close to the upper edge 
 C                 of the band where there is a strong filter roll off.
 C
-                  IF( TONE1(ICH) / 1000.0 + NTPB * TONEINT .GT.
-     1                  0.85 * BBCBW(ICH) ) THEN
+                  IF( TONE1(ICH) / 1000.0D0 + NTPB * TONEINT .GT.
+     1                  0.85D0 * BBCBW(ICH) ) THEN
                      IF( NTPB .LE. 8 .AND. NTPB .GE. 3 ) THEN
                         NTPB = NTPB - 1
                      ELSE IF( NTPB .GT. 8 ) THEN
@@ -122,14 +122,14 @@ C
                   END IF
 C
                   TONE2(ICH) = TONE1(ICH) + 
-     1               NINT( NTPB * TONEINT * 1000.0 )
+     1               NINT( NTPB * TONEINT * 1000.0D0 )
                   NTONES(ICH) = 2
 C
 C                 Get the third tone if there is room.
 C
                   IF( NTPB .GT. 1 ) THEN
                      NTONES(ICH) = 3
-                     TONE3(ICH) = TONE1(ICH) + NINT( TONEINT * 1000.0 )
+                     TONE3(ICH) = TONE1(ICH) + NINT( TONEINT * 1.0D3 )
                   END IF                  
 C
                END IF

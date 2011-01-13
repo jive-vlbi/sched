@@ -101,6 +101,7 @@ C
       KD( KEYPTR( 'MODETEST', KC, KI ) ) = UNSET
       KD( KEYPTR( 'FRSWITCH', KC, KI ) ) = UNSET
       KD( KEYPTR( 'FORMAT', KC, KI ) ) = BLANK
+      KD( KEYPTR( 'DBE', KC, KI ) ) = BLANK
       KD( KEYPTR( 'SWTCHDUR', KC, KI ) ) = 15.0
       KD( KEYPTR( 'BAND', KC, KI ) ) = BLANK
       I1 = KEYPTR( 'FIRSTLO', KC, KI ) - 1
@@ -284,6 +285,7 @@ C
          SWTCHDUR(KS) = KD( KEYPTR( 'SWTCHDUR', KC, KI ) )
          TPMODE(KS)   = KD( KEYPTR( 'TPMODE', KC, KI ) )
          FORMAT(KS)   = KCHAR( 'FORMAT', 8, .TRUE., KD, KC, KI )
+         DBE(KS)      = KCHAR( 'DBE', 8, .TRUE., KD, KC, KI )
          MODETEST(KS) = KD( KEYPTR( 'MODETEST', KC, KI ) ) .EQ. 0.D0
 C
          I1 = KEYPTR( 'BARREL', KC, KI )
@@ -294,16 +296,17 @@ C
          END IF
          CALL DWCASE( BARREL(KS) )
 C
-C        Tape speed.  Warn user if using outdated TPSPEED and then
-C        set SPEEDL(KS) to the input.
+C        Tape speed.  This is obsolete stuff and is not used in
+C        SCHED.  Only keep in case of encountering files where
+C        the parameters get set.
 C
          SPEEDH(KS)    = KD( KEYPTR( 'TPSPEEDH', KC, KI ) )
          SPEEDL(KS)    = KD( KEYPTR( 'TPSPEEDL', KC, KI ) )
          I1 = KEYPTR( 'TPSPEED', KC, KI )
          IF( KD(I1) .NE. 0.D0 ) THEN
-            CALL WRTMSG( 0, 'RDSET', 'oldspeed' )
+C             be silent            CALL WRTMSG( 0, 'RDSET', 'oldspeed' )
             IF( SPEEDL(KS) .EQ. 0.0 ) THEN
-               CALL WLOG( 0, 'RDSET: TPSPEED used for TPSPEEDL' )
+C             be silent       CALL WLOG( 0, 'RDSET: TPSPEED used for TPSPEEDL' )
                SPEEDL(KS) = KD(I1)
             END IF
          END IF
@@ -377,8 +380,8 @@ C        users does not set them.  Note that this just sets them all to
 C        zero if the user does not set any.  To test for this, test
 C        KD, not the parameter.  Then the user can change all
 C        elements by only changing the first.
-C        The parameters set this way are FIRSTLO, BBFILT, BITS, and 
-C        FREQREF.
+C        The parameters set this way are FIRSTLO, BBFILT, BITS,
+C        FREQREF, SIDEBAND, and NETSIDE
 C
          IF( .NOT. JUSTVLA ) THEN
             WRITE( BAND(KS), '(A5)' ) KD( KEYPTR( 'BAND', KC, KI ) )
@@ -413,6 +416,8 @@ C
             DO ICHAN = 1, NCHAN(KS)
                WRITE( SIDEBD(ICHAN,KS), '(A1)' ) KD(ICHAN+I1)
                CALL UPCASE( SIDEBD(ICHAN,KS) )
+               IF( KD(ICHAN+I1) .EQ. 0.D0 ) 
+     1              SIDEBD(ICHAN,KS) = SIDEBD(1,KS)
                WRITE( NETSIDE(ICHAN,KS),'(A1)' ) KD(ICHAN+I2)
                CALL UPCASE( NETSIDE(ICHAN,KS) )
                IF( KD(ICHAN+I2) .EQ. 0.D0 ) 

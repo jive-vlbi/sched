@@ -17,7 +17,7 @@ C
       INTEGER     LSETNUM, NPASS, IT1, IT2, LTXT1, LTXT2
       INTEGER     YEAR, DAY1, DAY2
       DOUBLE PRECISION  START, STOP
-      LOGICAL     SKIPPED
+      LOGICAL     SKIPPED, LABFLG1, LABFLG2
       CHARACTER   LINE1*160, LINE2*160
       CHARACTER   TFORM*8, SUMDAT*6
       CHARACTER   FF*1, PDATE*(*)
@@ -49,8 +49,8 @@ C
          DO IPASS = 1, NPASS
             IT1 = 2 * IPASS - 1
             IT2 = 2 * IPASS
-            SUMTXT1 = SUMDESC( SUMITEM(IT1), LTXT1 )
-            SUMTXT2 = SUMDESC( SUMITEM(IT2), LTXT2 )
+            SUMTXT1 = SUMDESC( SUMITEM(IT1), LTXT1, LABFLG1 )
+            SUMTXT2 = SUMDESC( SUMITEM(IT2), LTXT2, LABFLG2 )
 C
 C           Loop through the passes if many stations.
 C
@@ -68,12 +68,22 @@ C
                   IF( LINE .GT. LINEPG ) LINE = 0
                   IF( LINE .EQ. 0 ) THEN
 C
-                     WRITE( ISUM, '( 1X, /, 1X, /, A1, A, A, A, /, ' //
-     1                 ' 5X, A, A, / 5X, A, A )' ) FF, 
-     2                 ' SUMMARY for experiment ', EXPCODE, EXPT,
+                     WRITE( ISUM, '( 1X, /, 1X, /, A1, A, A, A ) ' )
+     1                 FF, ' SUMMARY for experiment ', EXPCODE, EXPT
+                     LINE = 2
+C
+                     IF( LABFLG1 .OR. LABFLG2 ) THEN
+                        WRITE( ISUM, '( 5X, A, A, A )' )
+     1                     'Flags: ',
+     2                     'D=>Down, H=>Below Horizon, R=>Rises, ',
+     3                     'S=>Sets, W=>Slew too long, t=>Tape Chg.'
+                        LINE = LINE + 1
+                     END IF
+C
+                     WRITE( ISUM, '( 5X, A, A, / 5X, A, A )' ) 
      3                 'Top item is:    ', SUMTXT1(1:LTXT1),
      4                 'Bottom item is: ', SUMTXT2(1:LTXT2)
-                     LINE = 5
+                     LINE = LINE + 2
 C
 C                    "Type" entry.
 C                    

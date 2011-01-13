@@ -12,7 +12,8 @@ C
 C     Huib's local variables 
 C      
       INTEGER   IXX, NLINES, I, J, ISTA, ISCAT
-      INTEGER   LEN1
+      INTEGER   LEN1, EPYEAR, EPDAY
+      DOUBLE PRECISION  EPTIME, DEPMJD
       CHARACTER LINE*132, TFORM*15, CHRLON*11, CHRLAT*11, DEL*1
       CHARACTER TMPSTA*32
       LOGICAL   VIOLFS
@@ -77,7 +78,21 @@ C
 C
 C        Write out site_position_epoch (Nov 2008)
 C
-         WRITE( IVEX, '(5X, A, 1X, I7, A1)' )
+C        The epoch format used the MJD, which is actually not 
+C        according to the VEX standard.  The following line is in 
+C        the correct format, but it is a comment until the 
+C        reading programs are ready.  The line after is what has
+C        been in use.
+C
+         DEPMJD = DBLE( MJDRATE(ISCAT) )
+         CALL TIMEJ( DEPMJD, EPYEAR, EPDAY, EPTIME )
+         WRITE( IVEX, '( A1, 4X, A, A )' )  COM,
+     1        'First line below is VEX standard format.  ',
+     2        'Use only when readers are ready.'
+         WRITE( IVEX, '( A1, 4X, A, 1X, I4, A1, I3.3, 2A1 )' )  COM, 
+     1        'site_position_epoch =', EPYEAR, 'y', EPDAY, 'd', SEP
+C
+         WRITE( IVEX, '( 5X, A, 1X, I7, A1 )' )
      1        'site_position_epoch =', MJDRATE(ISCAT), SEP
 C
 C        No info on zen_atmos or ocean load,

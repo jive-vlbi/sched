@@ -12,7 +12,7 @@ C
       INTEGER            IFREQ, I
       INTEGER            TEARLY, TDWELL, NFLINES
       INTEGER            KF, LKF, GBY1, GBY2, LGBY
-      REAL               LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
+      DOUBLE PRECISION   LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
       DOUBLE PRECISION   LFREQ(MCHAN), SFREQ(MCHAN), START, STOP 
       DOUBLE PRECISION   TSTART, RTCORR, LSTOPJ
       LOGICAL            FIRSTS, DOWRTF, DOWRTB
@@ -152,8 +152,8 @@ C
      3      'Page ', IPAGE,     EXPT(1:LEN1(EXPT))
 C
          WRITE( IPRT, '( 2A, /, 2A, /, A, /, 2A, /, A )' )
-     1      '  UP:  D => Below limits;  H => Below horizon mask.',
-     2      '  blank => Up.',
+     1      '  UP:  D => Below limits;  H => Below horizon mask;',
+     2      '  W => still slewing at end;  blank => Up.',
      3      '  Early: Seconds between end of slew and start. ',
      4      '  Dwell: On source seconds. ',
      5      '  Disk: GBytes recorded to this point.',

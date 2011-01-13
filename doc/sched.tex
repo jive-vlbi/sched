@@ -83,7 +83,7 @@ Scheduling with \schedb involves creating an input file with a text
 editor, and then running the program on that file.  \schedb creates a
 variety of \htmlref{output files}{SEC:FILES} that provide summary and
 detailed information to the scheduler and telescope control
-information for the VLBI stations.  The easiest way to create an input
+information for the VLBI station.  The easiest way to create an input
 file is to copy one of the \htmlref{examples}{SEC:EXAMPLES} and
 modify it for your particular project.  All of the examples are
 complete, working files.  \schedb is not interactive unless
@@ -571,7 +571,7 @@ although the user may need to add non-standard sources.  Source
 catalog entries can be included in the \htmlref{Main Schedule Input
 File}{SEC:SCHPAR}.  The standard catalog is \htmladdnormallink{{\sl
 \$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}.  Two external
-catalogs can be specified if one wishes, for example, to use the 
+catalogs can be specified if one wishes, for example, to use the
 standard one for calibrators and another for multiple phase centers
 
 \item[\htmlref{Station Catalog}{SEC:STACAT}:] This file contains
@@ -707,10 +707,10 @@ for station control on the VLBA.  The VEX files are named, for
 example, {\sl bv016.vex}.  A single such file describes the
 observations for all antennas.
 
-\item[V2D file:] This is a template correlator setup file for the 
+\item[V2D file:] This is a template correlator setup file for the
 (VLBA) DiFX correlator.  Information that needs to be modified from what
-is in the VEX file can be specified by the analysts in this file.  
-It is also the path to transmit information about multiple phase 
+is in the VEX file can be specified by the analysts in this file.
+It is also the path to transmit information about multiple phase
 centers per pointing to the correlator.
 
 \item[Flag file:] \schedb writes a file with the {\sl .flag} extension
@@ -734,7 +734,7 @@ stations.  There is interactive control over the plotting, the only
 interactive part of SCHED.  Much of this capability is mainly useful
 in experiment planning.
 
-\item[DiFX configuration file:]  When making jobs for the DiFX 
+\item[DiFX configuration file:]  When making jobs for the DiFX
 correlator, especially as used for the VLBA, a {\sl .v2d} file is
 used to give information not readily deduced from the {\sl .vex}
 file.  \schedb now writes a template for that file.  That file is
@@ -763,18 +763,27 @@ for planning and for information while making setup files.
 
 \section{\label{SEC:EXAMPLES}Examples}
 
-There are several example \schedb input files distributed with the
+There are a number of example \schedb input files distributed with the
 program.  They are in the {\sl examples} subdirectory ({\sl
 \$SCHED/examples} if the environment variable is set on unix systems).
 Any can be consulted for information on how to run \schedb or for use
 as templates from which to create your own schedule.  All should
-produce valid schedules if run as is.  In fact, all are used in
-the {\sl Verify} script that is used to check new installations and
-new versions of \sched.  All of the examples are described and linked here.
-The two subsections show a typical, reasonably simple, schedule and a
-minimal schedule of the type one might use for experiment planning.  The
-latter is likely to be useful when writing proposals or doing other
-conceptual work.
+produce valid schedules if run as is.  In fact, all are used in the
+{\sl Verify} script that is used to check new installations and new
+versions of \sched.  All of the examples are described briefly and
+linked here.  The two in subsections show a typical, reasonably simple,
+schedule and a minimal schedule of the type one might use for
+experiment planning.  The latter is likely to be useful when writing
+proposals or doing other conceptual work.
+
+Note that the example suite has grown up over many years and is in
+some considerable need up updating.  All are valid schedules that run
+and could be used.  But many features used are dated and new features
+and currently preferred styles are still only seen in a few.  Some
+with recent (Late 2010) modifications that are especially current are
+{\sl manual\_1.key}, {\sl egdelzn.key}, {\sl egrdbe.key}, {\sl
+egddc.key}, and {\sl egcent.key} which target certain new features,
+but also show decent scheduling style.
 
 See the section of this manual on
 \hyperref{installation}{installation (Section }{)}{SEC:INSTALL} if
@@ -835,6 +844,24 @@ observations of several OH masers transitions.
 \item[\htmladdnormallink{{\sl egcent.key}}{examples/egcent.key}] is
 a sample showing how to specify multiple phase centers for a pointing
 center for the DiFX correlator.
+
+\item[\htmladdnormallink{{\sl egdelzn.key}}{examples/egdelzn.key}]
+demonstrates how to use the capability in \schedb to add automatically
+short geodetic segments for the purpose of atmospheric calibration
+delay.  Note that similar segments, with very short scans, can be added
+for tropospheric opacity calibration.
+
+\item[\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}]
+demonstrates a \schedb file for use with the new digital backend
+and Mark5C recorders being deployed on the VLBA and elsewhere.  This
+one uses the PFB personality which gives many channels of fixed frequency
+and bandwidth.
+
+\item[\htmladdnormallink{{\sl egddc.key}}{examples/egddc.key}]
+demonstrates a \schedb file for use with the new digital backend
+and Mark5C recorders being deployed on the VLBA and elsewhere.
+This one allows flexible baseband frequencies and bandwidths, but provides
+fewer channels than the PFB personality.
 
 \item[\htmladdnormallink{{\sl
 manual\_line.key}}{examples/manual\_line.key}] is the example that is
@@ -938,7 +965,7 @@ observations of multiple snapshots using phase referencing.
 21-cm HI source.
 
 \item[\htmladdnormallink{{\sl evn\_line\_meth.key}}
-{examples/evn\_line\_meth.key}] is for EVN only observations of the 
+{examples/evn\_line\_meth.key}] is for EVN only observations of the
 6.7 GHz line of methanol in a glactic source.
 
 \item[\htmladdnormallink{{\sl eg5cm.key}}{examples/eg5cm.key}] is a
@@ -946,12 +973,12 @@ sample schedule for the EVN and EVLA that observes near 6.7 GHz.  It
 is the same as {\sl evn\_line\_meth.key}, but with the EVLA added.
 
 \item[\htmladdnormallink{{\sl hsa1cm.key}}{examples/hsa1cm.key}] is a
-sample schedule for the High Sensitivity Array (HSA - VLBA + GBT + 
+sample schedule for the High Sensitivity Array (HSA - VLBA + GBT +
 Effelsberg + Arecibo + VLA) at 1cm.  This file does not include the
 VLA and Arecibo.
 
 \item[\htmladdnormallink{{\sl hsa21cm.key}}{examples/hsa21cm.key}] is a
-sample schedule for the High Sensitivity Array (HSA - VLBA + GBT + 
+sample schedule for the High Sensitivity Array (HSA - VLBA + GBT +
 Effelsberg + Arecibo + VLA) at 21cm (this does include Arecibo, but also
 does not include the VLA).
 
@@ -1581,6 +1608,9 @@ calibrator and applying the results to all data.  For this purpose, it
 helps to have a scan with all antennas at reasonably high elevations
 simultaneously.
 
+Finally the fringe finders typically make good bandpass calibrators
+because then have good SNR in each spectral channel.
+
 \item {\bf Setting the flux scale:} Setting the flux scale of VLBI
 images is not trivial.  Idealy, one would have a compact source of
 known flux density that could be used, as 3C286 and 3C48 are on the
@@ -1650,8 +1680,8 @@ calibration, short of self-cal.
 
 \item {\bf ``Readback tests'' and module-swap gaps:} The recording
 media should be stopped occasionally to help prevent major amounts of
-data loss if something should go wrong and, on Vex controlled stations
-(non-VLBA), to allow disk bank changes.  Two minute gaps every hour or
+data loss if something should go wrong and, on non-VLBA controlled
+stations, to allow disk bank changes.  Two minute gaps every hour or
 two used to be used for readback tests with the tape systems.  Tape is
 no longer used, but an equivalent data integrity test is likely to be
 built into the disk based systems in the future.  Also, if the disks
@@ -1742,7 +1772,9 @@ option does not yet take into account correlator resync times, if any,
 or time to switch between frequency bands (say 7mm to 2cm).  There is
 an option, with a second argument, to not wait for the last, or last
 few antennas.  This can be useful when there is a slow antenna
-involved or when some antenna is too close to the zenith.
+involved or when some antenna is too close to the zenith.  A third
+argument can be used to insure that the slow antennas get some time
+on source.
 
 \item Set a duration using either \htmlref{{\tt DURation}}{MP:DUR} or
 \htmlref{{\tt DWELL}}{MP:DWELL} and set a minimum interval since the
@@ -1766,7 +1798,7 @@ stations by the same amount, and is reflected in the start times in
 the summary and sch files.  {\tt PRESCAN} is retained mainly for
 backwards compatibility.  The separate parameters \htmlref{{\tt
 GAP}}{MP:GAP}, \htmlref{{\tt PRESTART}}{MP:PRESTART}, and
-\htmlref{{\tt MINPAUSE}} {MP:MINPAUSE} are really better suited to
+ \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE} are really better suited to
 achieve the desired results. Note that any intervals specified with
 {\tt PRESCAN} and the newer parameters will be added.
 
@@ -1880,63 +1912,57 @@ setup and will not trigger a reconfigure).
 \subsubsection{\label{SSSEC:Starttime}Adjusting the Scan or Recording
 Start Time}
 
-The VLBA hardware correlator, retired at the end of 2009,
-synchronizing playback took a finite amount of time.  Therefore it was
-useful to start recordings before good data was expected.  This
-section describes the tools in \schedb to do that.  The new VLBA
-software correlator (DiFX) and the Mark IV correlators do not take a
-significant amount of time to synchronize the data streams.
-Therefore, early starts of the recordings are no longer needed for the
-correlator.  However there is a limitation of 1024 recording scans on
-a disk module with the Mark5A disks.  A recording scan is the time
-between stops of the recording media.  There might be several source
-scans in a recording scan.  Fast-switching, phase-referencing
-observations could run into this issue so the default \htmlref{{\tt
-MINPAUSE}}{MP:MINPAUSE} (see below) has been set to prevent
-recording gaps during the fast-switching in most cases.
+The nominal scan start time, if set using \htmlref{{\tt
+DWELL}}{MP:DWELL}, is the time good data is expected to be available.
+If recording and correlation could start instantly, that would also be
+a good time to start the recorders.  However in the real world, it can
+take a small amount of time to the the recording going at the stations
+and the correlation fully synced up.  With previous generation
+correlators, this was a serious issue and it was advisable to start
+the recordings at least 20 seconds before good data.  Modern (2010)
+correlators are faster so the total time needed for both starting
+recording and synchronizing is only a few seconds, or less.  Another
+reason for possibly starting recordings early, or even recording
+continuously between scans is that the Mark5A disk system can only
+handle up to 1024 recording.  A recording scan is the time between
+stops of the recording media.  There might be several source scans in
+a recording scan.  Fast-switching, phase-referencing observations
+could run into this issue so the default \htmlref{{\tt
+MINPAUSE}}{MP:MINPAUSE} (see below) has been set to prevent recording
+gaps during the fast-switching in most cases.  This section describes
+the tools in \schedb to allow the recordings to be started early.
 
 The schemes described in \htmlref{scan times section}{SSEC:SCANTIMES}
-set the times of the scans as reported in the output files meant for
-human consumption.  But the telescope control files actually give the
-times for the recording to start and stop.  There are two additional
-parameters that can affect the recording start time.  They are
+(parent of this section) are used to set the times of the scans as
+reported in the output files meant for human consumption.  But the
+telescope control files actually give the times for the recording to
+start and stop.  There are two primary parameters that can affect the
+recording start time (ignoring the obsolete {\tt PRESCAN}).  They are
 \htmlref{{\tt PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}}
-{MP:MINPAUSE}.  You may want the recording start time to differ from
-the scan start time to make correlation proceed more robustly.  If the
-recordings are started somewhat before the scan start time, the
-chances that they will be synced up on playback by the time of the
-scan start time are enhanced.  \htmlref{{\tt PRESTART}}{MP:PRESTART}
-can be used to request that the recording be started the requested
+{MP:MINPAUSE}.  \htmlref{{\tt PRESTART}}{MP:PRESTART}
+is used to request that the recording be started the requested
 amount of time (record time) before the scan start time.  If that time
 is earlier than the previous stop time, the recorder will be left
 running.
-
-The time required to sync playback on the VLBA hardware correlator (no
-longer in use) was empirically about 8, 13, and 25 seconds for speedup
-factors 1, 2 and 4 respectively (ie, about 8 seconds in correlator
-wall clock time).  These times were determined for tape.  For some
-time, disks (Mark5a) were slower by about 10 seconds, but a quick
-check in Dec. 2007 suggests that the times are now about the same for
-disk.  The sync time for disk at JIVE, Bonn, Haystack and USNO is
-around 1 second or less and can be ignored.  The software correlator
-now in use on the VLBA and other instruments do not have a delayed
-sync so attempts to adjust the recording start time relative to the
-scan start time are no longer especially important.
 
 The extreme, and often useful, case of a pre-start is to not stop
 recording between scans.  This is especially useful if you have many
 short scans with short intervals between them, such as when phase
 referencing.  \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE} sets the smallest
 gap between scans for which the recording will be stopped.  If the gap
-is smaller, the recorder will be left running.  {\tt MINPAUSE} is in
-units of playback time, so it is multiplied by the speed up factor to
-get the effect at record time.
+is smaller, the recorder will be left running.  {\tt MINPAUSE} used to
+be in units of playback time, so it was multiplied by the speed up
+factor to get the effect at record time.  The speedup factor is no
+longer a simple concept so that adjustment has been remove and now
+{\tt MINPAUSE} applies to the record time.
 
 {\tt PRESTART} is applied before {\tt MINPAUSE}.  First the recording
 start time is shifted earlier, then the interval from the last
 stop time is examined to determine if the recording should be left
-running.  The defaults of {\tt PRESTART=1, MINPAUSE=20} should
-be ok in most situations.  Users should not need to worry about
+running.  The defaults of {\tt PRESTART=5, MINPAUSE=10} should
+be ok in most situations (they are also in a state of flux as of the
+end of 2010, so it is possible they have changed since this was
+written).  Users should not need to worry about
 these parameters most of the time.  The offset of the recording start
 time from the scan start time can be displayed in the summary
 file by adding {\tt PTSTART} to the arguments of \htmlref{{\tt
@@ -1944,15 +1970,31 @@ SUMITEM}}{MP:SUMITEM}.  The recording start time is also available in
 the {\sl sch.} files.
 
 
+(Obsolete information kept for historical interest:) The time required
+to sync playback on the VLBA hardware correlator (no longer in use)
+was empirically about 8, 13, and 25 seconds for speedup factors 1, 2
+and 4 respectively (ie, about 8 seconds in correlator wall clock
+time).  These times were determined for tape.  For some time, disks
+(Mark5a) were slower by about 10 seconds, but a quick check in
+Dec. 2007 suggests that the times are now about the same for disk.
+The sync time for disk at JIVE, Bonn, Haystack and USNO is around 1
+second or less and can be ignored.  The software correlator now in use
+on the VLBA and other instruments do not have a delayed sync so
+attempts to adjust the recording start time relative to the scan start
+time are no longer especially important.
+
 
 \subsection{\label{SSEC:DYNAMIC}Dynamic Scheduling}
 
-Some portion of projects on the VLBA are now being scheduled dynamically.
+All of projects on the VLBA that do not involve other antennas or special
+constraints are scheduled dynamically.
 That means that they are put into a special queue, along with information
 about their minimum requirements, and then are run at an appropriate
-time given the weather and condition of the equipment.  The hope is to
-increase the overall quality of VLBA output by avoiding observations
-at times when it is clear that the results will be poor.  For example,
+time given the weather and condition of the equipment.  This
+increases the overall quality of VLBA output by avoiding observations
+at times when it is clear that the results will be poor, even if it
+also introduces inefficiencies in scheduling that mean that there is
+some idle time (projects don't mesh together perfectly).  For example,
 there is not much point in observing at 43 GHz when there is bad weather
 at many sites.  But a 1.6 GHz observation at the same time might be fine.
 Dynamic scheduling also allows more flexible response to targets of
@@ -1961,15 +2003,12 @@ periods of enhanced activity so it is best to be able to observe when
 they are high.  Of course, it is possible that some projects in the
 dynamic scheduling queue will never be scheduled.
 
-The PI for a dynamically scheduled project will be given a window
-in LST at the VLBA\_PT (Pie Town) that will be scheduled, if the
-observation is done.  In addition, there will be a wider window that
-might be scheduled.  The PI should prepare a schedule using the
-\htmlref{LST}{MP:LST} parameter with Pie Town as an argument
-({\tt LST=VLBA\_PT}).  It should cover the entire time over which
-observations might be scheduled.  All critical scans, especially
-calibrators, should be scheduled in the guaranteed time as the
-extensions to that might not be observed.
+The PI for a dynamically scheduled project will be given a window in
+LST at the VLBA\_PT (Pie Town) that will be scheduled, if the
+observation is done.  It is useful slotting projects together if the
+PI allows some flexibility in the actual start time.  The PI should
+prepare a schedule using the \htmlref{LST}{MP:LST} parameter with Pie
+Town as an argument ({\tt LST=VLBA\_PT}).  
 
 When a program is selected for a dynamically scheduled time slot,
 VLBA operations personel will modify the date (calendar or lst day
@@ -1982,43 +2021,42 @@ actually in the schedules.  Because of this last minute modification
 of the date, it is best to minimize the use of dates in the
 \schedb input.  Use durations instead.
 
+To provide flexibility in the start time, it is useful to schedule
+using \htmlref{DWELL}{MP:DWELL} to set the scan lengths.  Then \schedb
+can adjust the gaps between scans to allow for the slew times that
+will be experienced by the actual observations.  If doing an
+astrometric project with ``DELZN'' segments (geodetic type observing
+all over the sky to solve for the zenith atmospheric delay), it is
+useful to use the ability of \schedb to \htmlref{construct such
+segments automatically} {SEC:GEOSEG}.  Since such segments depend on
+observing sources near rise and set, they cannot be moved around, so
+without the automatic construction of the segments, the start time
+cannot be changed.
+
 
 \subsection{\label{SSEC:RECMANAGEMENT}Management of Data Recordings}
 
 For most VLBI observations, the data are recorded at the stations and
-played back later at the correlator.  Management of the recording
-process imposed significant constraints on the observing schedule in
-the days when the recordings were made on tape.  The newer disk-based
-systems have reduced the complexity and severity of the constraints,
-but have not eliminated them entirely, especially where the
-constraints were really imposed by the operation of the correlator.
-Future systems, currently (Feb. 2008) under development will reduce
-the constraints yet further.  The current concerns are discussed
-here.  Many were also discussed in the \htmlref{Observing Strategy}
-{SSEC:STRATEGY} and \htmlref{Scan Times}{SSEC:SCANTIMES} sections
-earlier in this manual.
+played back later at the correlator.  It is not yet possible for the
+recording process to be totally transparent to the user, but dealing
+with it is now much less of a burden than it was in the tape era. 
+A top level issue is that a user is typically allocated a total amount
+of recording media that he/she is allowed to use.  This number may
+be less than the total that could be recorded during the observation.
+It is required because the overall media supply may not be large
+enough to allow full time recording at the maximum bit rate and the
+scheduling committees need to apportion the resources according to
+the project needs and priorities.  
 
-The most important constraint imposed by the use of data recordings is
-on the total amount of data recorded in an observation.  The total
-supply of recording media, combined with the cycle time through the
-system, sets the average sustained bit rate that can be recorded.
-Many projects are allowed to exceed that average rate, but the
-consequence is that the instrument has to sit idle, or do
-non-recording observations, for enough time to bring the average rate
-down to the sustainable level.  When a project is allocated time, it
-is also allocated an average bit rate that it is allowed to use
-depending on it's needs and the resources available.  Any schedule
-made for the project should not exceed the allowed bit rate.
-
-The disk-based systems, such as the various flavors of Mark5, are not
-yet totally transparent to the user.  Attention still needs to be paid
-to allowing for module changes, for readback tests and maximum
-reasonable recording scan lengths, and to not causing problems for
-synchronization of the recordings on playback.  All of these topics
-are discussed in the \htmlref{Observing Strategy} {SSEC:STRATEGY} and
-\htmlref{Scan Times section}{SSEC:SCANTIMES} and will not be discussed
-in detail here.
-
+Beyond the overall amount of data recorded, the disk-based systems
+still require the user to pay attention to the need for data quality
+checks, to maximum reasonable recording scan lengths, to the need for
+time at non-VLBA stations for module swaps, and to dealing with the
+fact that the correlatable data is not provided starting at the exact
+time specified for starting the recording.  These topics are discussed
+in the \htmlref{Observing Strategy} {SSEC:STRATEGY} and \htmlref{Scan
+Times section}{SSEC:SCANTIMES} and will not be discussed in detail
+here.
 
 \section{\label{SEC:RECSYS}Recording Systems.}
 
@@ -2026,11 +2064,10 @@ in detail here.
 
 \schedb was originally written as the scheduling program for global
 VLBI observations using the Mark II recording system.  That was a
-system capable of recording 4 Mbps on video tape recorders.  As of Feb
-2003, I learned that Mark II is still in occasional use in some
-parts of the world, so it is not yet removed from \sched.  However
-any users should be warned that the Mark II capabilities are no longer
-maintained and tested.
+system capable of recording 4 Mbps on video tape recorders.  It was
+in use in some parts of the world much longer than expected (at least
+to 2003), but is now gone as far as we know.  \schedb version 9.4 and
+later does not support Mark II.
 
 The wide band recording system in use for VLBI for many years was
 the Mark~III system.  \schedb was never a general purpose scheduling
@@ -2041,9 +2078,7 @@ Green Bank).  In fact, the output of {\sc SKED} and {\sc PC-SCHED} was
 normally processed through \schedb to produce the telescope control files
 for these antennas for all except geodetic projects.  Mark~III is also
 obsolete, although one Mark~III schedule is still in the \schedb test
-suite.  I am not aware of any Mark~III systems remaining in use, although,
-after what happened when I tried to remove Mark II, I don't plan on
-trying to remove the option.
+suite.  I am not aware of any Mark~III systems remaining in use.
 
 The Mark~III system was replaced by several other systems with greater
 capabilities.  These include the VLBA, VLBA4, Mark~IV, S2, and K4 tape
@@ -2058,21 +2093,22 @@ have a wide range of compatible recording modes that can be correlated
 together on the VLBA, JIVE, and other correlators.
 
 By 2007, the tape systems were replaced by disk based recording
-systems nearly everywhere.  Most widespread is the Mark5 system
+systems nearly everywhere.  Most widespread is the Mark5A system
 developed by Haystack Observatory and Conduant Corporation.  The
 Mark5A system is a plug replacement for the old tape drives and still
-has the concept of tracks.  That is the most common system as of
-early 2008.  The Mark5B system uses the VSI standard interface to
-record the data channels without all the formatting baggage left over
-from the tape systems.  The Mark5A+ system allows Mark5B recordings to
-be played on Mark5A playback units, but a minor glitch that nobody is
-in a position to fix is preventing its use on the VLBA.  The Mark5B+
+has the concept of tracks.  That is the most common system as of early
+2008.  The Mark5B system uses the VSI standard interface to record the
+data channels without all the formatting baggage left over from the
+tape systems.  The Mark5A+ system allows Mark5B recordings to be
+played on Mark5A playback units, but a minor glitch that nobody is in
+a position to fix is preventing its use on the VLBA.  The Mark5B+
 system uses a faster interface and can handle up to 2 Gbps.  The
-Mark5C system is under development (early 2008) and will record up to
-4 Gbps.  The Mark5C- system is a scheme for allowing lesser Mark5
-hardware to pretend to be a Mark5C system for system development.
-Confused yet?  The VLBA is using (early 2008) the Mark5A system and
-is planning to jump straight to Mark5C in late 2008/early 2009.
+Mark5C system is being deployed in 2011 and records up to 4 Gbps.  The
+Mark5C- system is a scheme for allowing lesser Mark5 hardware to
+pretend to be a Mark5C system for system development.  Confused yet?
+The VLBA is using (early 2011) the Mark5A system and is beginning to
+test the Mark5C system, in an initial 2 Gbps mode, at the telescopes.
+Mark5A will likely be supplanted by Mark5C on the VLBA during 2011.
 
 There are other recording systems in use.  The Japanese have a K5
 system.  The Australians are using a variant on the PCEVN system.
@@ -2096,14 +2132,24 @@ type currently implies a specific computer and software system.  Note
 that the {\tt CONTROL} variable has other options, but they imply one
 of the above two, plus some specific other telescope control files.
 
-The VLBA control system runs on VME computers using software mainly
-written for the VLBA.  A few other sites (VLA, Green Bank, and one of
-the systems at Effelsberg) have such systems to control their VLBI
-hardware.  Systems controlled by the VLBA software always consist of
-VLBA data aquisition racks (DAR --- BBCs, formatter etc) and VLBA tape
-recorder(s) or Mark5 disks.  During 2010, new Digital Backends (RDBE)
-will be introduced on the VLBA, but the implications for \schedb are
-not yet clear.
+The original VLBA control system runs on VME computers using software
+mainly written for the VLBA.  A few other sites (VLA, Green Bank, and
+one of the systems at Effelsberg) have such systems to control their
+VLBI hardware.  Systems controlled by the VLBA software always consist
+of VLBA data aquisition racks (DAR --- BBCs, formatter etc) and Mark5
+disks.  During 2010, new Digital Backends (RDBE) and Mark5C recorders
+began to be introduced on the VLBA.  These major changes are being
+used as an opportunity to upgrade the telescope control systems.  The
+new system is based on the EVLA Executor control system and runs on a
+standard Linux computer.  Information is passed to this system from
+\schedb via the VEX file.  \schedb now writes VEX files for all
+observations as a result.  The new control system will initially just
+control the new data aquisition system and recorder.  A new C-band
+(6cm) receiver is under construction and it, along with all of the
+LO/IF switching will be placed under control of the new computer.
+Over the course of the next few years, all VLBA systems will be moved
+to the new control.  In the meantime, both crd files for the old
+system and VEX files for the new system will be required.
 
 The VEX option for {\tt CONTROL} causes \schedb to generate a schedule
 file in the VEX format, as does the \htmlref{{\tt DOVEX}}{MP:DOVEX}
@@ -2111,8 +2157,8 @@ main schedule input parameter (now the default).  This is the schedule
 distribution file format developed mainly for the PC Field System
 (PCFS) and the Mark~IV correlators.  It is now used by the DiFX
 software correlator in use at the VLBA and other places, so it is
-now needed by most if not all projects.  Eventually it will also
-be used by the VLBA stations.
+now needed by most if not all projects.  It also is needed to control
+all new hardware being installed on the VLBA.
 
 The PCFS, running on Linux PCs, is used to control VLBA,
 VLBA4, Mark~IV, S2, and MARK5 VLBI hardware at many non-VLBA stations
@@ -2141,10 +2187,11 @@ has a disk system and schedules can be made for it.  There is another
 new parameter, {\tt MEDIADEF}, which can be {\tt TAPE} or {\tt DISK},
 that can be used to set the default medium for the station while both
 are available.  The {\tt MEDIA} parameter in the \htmlref{{\tt
-TAPEINI}}{MP:TAPEINI} section can be used to override the default.  From
-this description, it is clear that this scheme was designed for the
-transition from tape to disk.  As new varieties of disk or real-time
-systems are implemented, changes are likely.
+TAPEINI}}{MP:TAPEINI} section can be used to override the default.
+From this description, it is clear that this scheme was designed for
+the transition from tape to disk which was finished a few years ago.
+As new varieties of disk or real-time systems are implemented, changes
+are likely.
 
 \subsection{\label{SSEC:MK5}MARK5 and EVLBI}
 
@@ -2185,14 +2232,17 @@ all other examples have been, or will soon be, switched to disk.
 
 % *****************  Update the EVLBI stuff.
 
-\schedb supports VLBI over networks.  This can involve
-real time correlation in which case the data are routed
-directly to the Network.  An alternative
-might be called ftp VLBI.  In this case, the data are recorded at
-the station, then read back through the Network.  There are a few
-parameters meant to help control eVLBI observation
-{\tt DATAPATH, GRABTO, GRABTIME, GRABGAP}.  This documentation needs
-to be updated more on how eVLBI is actually controlled.
+\schedb supports VLBI over networks.  This can involve real time
+correlation in which case the data are routed directly to the Network.
+An alternative might be called ftp VLBI.  In this case, the data are
+recorded at the station, then read back through the Network, or
+alternatively, sent over the Network and recorded at the correlator,
+or both.  There are a few parameters meant to help control eVLBI
+observation {\tt DATAPATH, GRABTO, GRABTIME, GRABGAP}.  This
+documentation needs to be updated more on how eVLBI is actually
+controlled.  eVLBI is in regular use in Europe, but not on the VLBA,
+mainly because of differences in the availability of affordable network
+connections of adequate bandwidth.
 
 
 \subsection{\label{SSEC:VLBA}VLBA}
@@ -2263,6 +2313,7 @@ are:
 
 \item Phase Cal detection at the telescopes is not implemented.
   This will likely become available with the new digital backends.
+  Also, DiFX is acquiring the ability to detect phase cal tones.
 
 \item For MkIV (VLBA4) telescopes there is flexibility for controling
   when Tsys measurements will be made. Tsys measurements will typically
@@ -2272,13 +2323,10 @@ are:
 
 \end{list}
 
-\sched\ has the ability to discourage recording modes that are not
-supported by one or the other of the VLBA or Mark~IV (VLBA4) systems.
-Currently (Oct.\ 2001.  Also true in Feb. 2008, but was not at some
-times between.) the supported modes on both systems are the same
-so this facility has no effect, except for some Mark~IV (and VLBA4)
-features that are experimental. An override (\htmlref{{\tt
-MODETEST}}{SP:MODETEST}) is available but should be used with caution.
+
+% \asdf  l*****************  do I need to still avoid changing rates.
+% That was in okmodes.f (jan2011)
+
 
 In addition to requiring use of tested modes, \schedb will not
 allow speedup factor changes during mixed VLBA and Mark~IV mode
@@ -2328,18 +2376,13 @@ in the setup file.
 
 
 
-\section{\label{SEC:WIDE}Wide Band VLBA and Mark IV Modes}
+\section{\label{SEC:WIDE}Wide Band Observing: RDBE, DBBC, VLBA and 
+Mark IV Modes}
 
-The maximum bit rate that can be normally be recorded on a Mark IV or
-VLBA system is 256 Mbps.  But both systems have the capability to
-record wider bandwidths by using more tracks.  In the tape era, the
-VLBA used two recorders at once while the MarkIV systems used two
-heads on a single system.  With Mark5A, both systems simply record 64
-tracks on one unit and it is not really such a special mode, although
-correlation on the VLBA hardware correlator requires two passes.  The
-VLBA formatter has a maximum bit rate per track of 8 Mbps, so the
-maximum overall bit rate is 512 Mbps.  The MarkIV systems, and the
-Mark5A recorders, can handle 16 Mbps per track for a total of 1 Gbps.
+With the Mark5A recording system, the maximum bit rate that can be
+normally be recorded is 1024 Mbps on a Mark IV system and 512 Mbps 
+on a VLBA system.  These rates are recorded on a single module, unlike
+in the tape era when 2 drives or 2 heads were required.
 
 \schedb can make schedules for the 512 Mbps and 1Gbps modes.  See the
 examples \htmladdnormallink{{\sl eg512.key}}{examples/eg512.key} for a
@@ -2351,9 +2394,136 @@ through the specification of track numbers above 64.  Note that the
 two examples do either only VLBA or only Mark IV, but it is ok to mix
 them.
 
-Eventually, as digital backends and wider band recorders come into
-use, \schedb will require a number of upgrades to reflect the new
-capabilities.
+New digital backends and a new recording system are starting to be
+tested as of this January 2011 writing.  These will increase the
+available bit rate to significantly higher values.  The RDBE/Mark5C
+system under development at Haystack and NRAO will initially record
+2048 Mbps which will increase to 4096 Mbps soon afterward, assuming
+funds can be found.  The DBBC system, also using the Mark5C recording,
+system is being deployed on a similar time scale and should have
+similar bandwidths.
+
+The RDBE (Roach Digital Backend, where ROACH is the core board
+containing a large FPGA) is a module that takes in 2 analog IF
+signals, applies an anti-alias filter that passes 512 to 1024 MHz,
+sets the power levels, samples the signals at a 1024 MHz sample rate
+(8 bit samples at this stage), digitally filters the data to the final
+basebands, resamples the data to 2 bits, and formats it for recording.
+It takes the place of the IF distributers, baseband converters,
+samplers, and formatter (including pulse cal detectors) in the old
+VLBA system.  
+
+Control of the RDBE and Mark5C recorders is handled by a
+new VLBA control system running on a standard Linux computer.  The new
+system is based on the EVLA Executor.  Schedule information it given
+to this computer by way of the VEX file, which is converted by
+operations to a Python script that is read by the Executor.  All new
+hardware installed at the VLBA for the next few years will use this
+control system and, probably slowly, the old hardware will be switched
+over to it.  In the meantime, both crd files and VEX files will be
+needed to control the VLBA sites.
+
+Note that what are called basebands in the new system, for backward
+compatibility, are known as subbands in the terminology used on the
+somewhat similar EVLA system and the two terms can be used
+interchangeably for the VLBI systems.  However, for the EVLA, the word
+``baseband'' is used for the final analog signal sent to the samplers
+and is equivalent to the ``IF'' used here.  We have opted not to use
+that terminology because of the massive confusion it might create by
+swapping terms used for different signals compared to previous
+practice.  
+
+The FPGA in the RDBE supports multiple personalities that can be
+swapped as needed.  The first developed uses a polyphase filter to
+break the 512 MHz band into 16 basebands of 32 MHz each, all lower
+sideband.  This personality is selected using the \htmlref{{\tt
+DBE}}{SP:DBE} parameter set to {\tt RDBE\_PFB} in the setup file.
+Actually, there are 15 bands of 32 MHz and one 16 MHz half band at
+each end because the end filters are centered on the band edges.  In
+the initial implementation, every other one of the full 32 MHz bands
+was taken from each of the 2 IFs, creating 16 basebands total for a
+total bit rate of 2 Gbps.  An enhancement expected shortly (early
+2011) is to allow any 16 of the 30 full 32 MHz bands to be selected.
+This personality can only provide 32 MHz basebands at fixed
+frequencies for a total of 2 Gbps.  No variations on those parameters
+are supported.  Note that eventually there will be 2 RDBE modules at
+each station to support 4 Gbps.
+
+The second personality that will be available is the DDC (Digital Down
+Converter).  It is selected using the \htmlref{{\tt DBE}}{SP:DBE}
+parameter set to {\tt RDBE\_DDC} in the setup file. This personality
+will provide 8 filters per RDBE (typically 4 on each IF) that can
+provide arbitrary offset frequencies and can provide any bandwidth at
+the factor of 2 steps between 0.125 and 64 MHz.  There is a
+complication forced by the use of a polyphase filter first step of
+filtration to get the clock rate down to values the FPGA can support.
+Such filters do not have flexible frequency ranges.  This one splits
+the band into 3 segments, 512 to 640 MHz, 640 to 896 MHz, and 896 to
+1024 MHz.  Each baseband must be confined to one of those ranges.  The
+``crossover'' frequencies at the filter edges have a range of
+something like 4-10 MHz (to be determined) that is not really usable.
+\schedb will issue a warning if an attempt is made to have a baseband
+cross one of these boundaries.
+
+The frequencies for the band edges in the DDC personality can be set
+to any multiple of 1 Hz in principle.  But, for now, the set points
+are being limited to 10 kHz intervals as with the BBCs.  This is 
+because throughout SCHED these numbers are stored in single precision
+variables that cannot support more precision and in the various output
+files, including those used to control the telescope hardware, not
+enough digits are printed.  At some point, if there is demand, these
+issues will be addressed.
+
+The overall LO/IF/RDBE system on the VLBA will have some significant
+tuning flexibility issues.  The RDBE is an addon to the older system
+where the baseband converters, which could take only a small portion
+of the 500 MHz IF, provided the necessary flexibility.  The LO/IF 
+system that creates those IFs is based on synthesizers that have 
+set points at N*500+-100 MHz.  Now, with the ability to take all of
+an IF, that restricted tuning ability will become an issue, especially
+in conjunction with the lack of tuning ability for the PFB personality
+and the crossover points for the DDC.  Essentially all frequencies
+can be reached using more than one LO setting, so no cases have been
+identified where a particular spectral line cannot be observed.  But
+full tuning flexibility that might be desired is not there.  Eventually
+we hope to upgrade the front end synthesizers to designs with more
+tuning options, but that is not yet funded.
+
+Note that, for the initial /schedb implementation in place (Jan 2011,
+version 9.4) the code to provide default channel frequencies based on
+the band has not yet been written.  It is necessary to give the
+frequencies in the setup file.  See the examples.  The defaulting
+capability will be added eventually.
+
+During testing of the RDBE/MARK5C system, it is useful to have a
+parallel Mark5A recording.  That can be requested with parameter 
+switch /htmlref{{\tt DOMKA}}{MP:DOMKA}.
+
+The DBBC being developed for the EVN is also a system that samples
+at 1024 MHz and digitally filters the signals to the desired bandwidths.
+But it has a different design where, like with the old BBCs, the frequency
+can be set flexibly anywhere in the IF band without concern about
+crossover frequencies etc.  The DBBC design has a module for each output
+baseband, so they are more directly comparable to BBCs.  More information
+is needed abou the system to flesh out this discussion.
+
+There is a varient on the RDBE being developed at Haystack for mm VLBI
+that has 4 input IFs and does not attempt any filtration.  It simply
+samples and formats the data and sends it to the recorders.  It can
+put out 8 Gbps.  This device is not yet supported by SCHED.
+
+When the DAR is the RDBE, the output channels and all the input channel
+information given to \schedb are written to the VEX file.  But the crd
+files that control the old VLBA hardware also has to be told something.  
+\schedb does not have a separate set of variables for all those configuration
+parameters, so it just does something reasonable.  It sets the number of
+channels to the maximum of the number requested and 8.  It sets the
+frequencies and sidebands to match the RDBE requests.  It sets the 
+sample rate to the maximum of that requested and 32 Ms/s.  It sets the
+channel bandwidth to the lesser of the request and 16 MHz.  It only
+writes the first 4 pcal extraction requests (avoiding going into
+channel numbers that are too high).
+
 
 
 \section{\label{SEC:LINE}Spectral Line Observations}
@@ -2488,7 +2658,7 @@ setup file when changing bandwidths because quite a few other
 parameters also change.
 
 % (This is out of date) The {\tt BW} parameter is not allowed if VEX
-% files are being written.  
+% files are being written.
 
 \item \htmlref{{\tt LINEINIT}}{MP:LINEINIT} indicates that after the
 next ``/'', information on the rest frequencies of spectral lines will
@@ -3135,7 +3305,7 @@ happy.
 The parameter \htmlref{{\tt GEOPRT}}{MP:GEOPRT} can be used to cause
 some details about each trial source sequence tested to be printed to
 the screen and to {\sl sched.runlog}.  There are various levels of
-print possible.  
+print possible.
 
 The algorithm used to construct geo segments is described in more
 detail below.  It involves constructing a number of trial segments and
@@ -3174,7 +3344,7 @@ One is Mark Reid's original 60 sources.  In testing, this list was found
 to be too sparse in some parts of the sky.  The second list is the
 295 defining sources of the ICRF2.  This should be a good list, especially
 at frequencies not too far from the 2.3 and 8.4 GHz bands in which it
-was derived.  The third list is based on the USNO 1cm survey and is 
+was derived.  The third list is based on the USNO 1cm survey and is
 should be the right one to use at 22 GHz and up.  It also has over 200
 sources.
 
@@ -4860,7 +5030,7 @@ Thus VEX files can be written when there are moving positions, but several
 warnings will be written about the use of such files.  The positions
 of the moving sources should be obtained from ephemeris information at
 correlation time, separately from the VEX file.  For pointing, positions
-may or may not be good enough depending on the rates.  Also note that 
+may or may not be good enough depending on the rates.  Also note that
 solar system objects may require offset pointing positions between
 different stations and that is not described in the VEX file.
 
@@ -5071,9 +5241,9 @@ SCAN PROPERTIES:
 \htlm{DOPPLER}{~} Set frequency based on velocity for
                         spectral line.
 \htln{NODOP}{DOPPLER}{~~~} Turn off doppler calculations.
-\htlm{DOPSRC}{~~} Set frequency based on velocity of this
-                        source.
+\htlm{DOMKA}{~~~} Record on Mark5A during Mark5C observations.
 \htlm{DOPCAL}{~~} Obsolete form of {\tt DOPPLER}.
+\htlm{DOPSRC}{~~} Set frequency based on velocity of this source.
 \htlm{FREQ}{~~~~} Up to 16 baseband channel sky frequencies for
                         VLBA.
 \htlm{BW}{~~~~~~}       Baseband channel bandwidths.
@@ -5426,20 +5596,20 @@ This is currently ignored for PCFS (VEX) systems.
 
 \subsubsection{\label{MP:CENTERS}{\tt CENTERS}}
 
-Triggers the use of multiple phase center processing on the 
+Triggers the use of multiple phase center processing on the
 DiFX correlator at least at the VLBA.  In practice, this puts
-the list of phase centers in the {\sl .v2d} file used in 
+the list of phase centers in the {\sl .v2d} file used in
 setting up correlation.  Some day, it may put the list in
 the {\sl .vex} file, if there is a standard for how to do that.
 
 The argument of {\tt CENTERS} must correspond to a list of
-names in the phase center groups listed after a 
+names in the phase center groups listed after a
 \htmlref{{\tt PCENTERS}}{MP:PCENTERS} command.
 
 For now, there is no clear way to make the phase center list
 scan dependent, so specify the same name for each scan on the
 same source.  This may not always be true, which is why the
-association of a phase center group with a pointing 
+association of a phase center group with a pointing
 source is not done in the {\tt PCENTERS} specifications.
 
 For more information on multiple phase center processing, see
@@ -5539,7 +5709,7 @@ only "EXACT" will mean to do something different from the default.}
 {\tt CORCHAN(1)} specifies the number of spectral channels per baseband
 channel (one polarization component) that the correlator will write.
 {\tt CORCHAN(2)} specifies the number of channels to use in the internal
-FFT in the correlator.  
+FFT in the correlator.
 
 The VLBA correlator (both old and new) will, by default, make 128
 channel spectra which are then channel averaged on-line for continuum
@@ -5585,9 +5755,9 @@ the FFT size will be set to the larger of 128 or the first argument.
 The ability to set that argument is provided in support of the muliple
 phase center capability added to DiFX in 2010.  When using that
 option, the spectral resolution of the transforms done before the
-different phase centers are split must be high enough that the 
+different phase centers are split must be high enough that the
 differential delays, which show up in the data as a phase slope in
-frequency, do not cause smearing.  See the discussion of 
+frequency, do not cause smearing.  See the discussion of
 \htmlref{multiple phase center processing}{SEC:MULTIPLE_CENTERS} for
 more details advice.
 
@@ -5599,7 +5769,7 @@ are being recorded.
 \rcwbox
 {Two integer numbers, usually a power of 2.}
 {Any, but see above for useful numbers.}
-{The first argument must be sepecified for the VLBA corelator.  
+{The first argument must be sepecified for the VLBA corelator.
 Otherwise it defaults to 16.  The second argument defaults 128}
 {Only one pair of values is used --- the last.}
 {{\tt CORCHAN = 32} or {\tt CORCHAN=16,2048}}
@@ -5917,17 +6087,57 @@ unlikely to be useful to users, only to programmers.
 Normally, \schedb eliminates stations for which the source is not up
 if they are using a disk recording system.  {\tt DODOWN} with no
 argument overrides that behavior and keeps stations in scans
-regardless.
+regardless.  DODOWN can be set differently for each scan.  Setting
+it to any non-zero value sets it to false (ie - go ahead and remove
+stations).
 
 In the tape era, only VLBA stations were eliminated and only if
 \htmlref{{\tt AUTOTAPE}}{MP:AUTOTAPE} was set to 2.
+
+Without {\tt DODOWN}, \schedb will also take a station out of a scan
+if the predicted slew time is such that the antenna will not reach the
+source before the scan end.  However, it was found that this can
+prevent wraps from occuring in a timely manner during fast switching
+operations such as phase referencing, when one source needs the wrap a
+while before the other.  Therefore, \schedb will not remove a station
+from a scan if mount type is ALTAZ and the requested azimuth slew is
+greater then 315 degrees.  Such long azimuth slews would normally mean
+that a wrap is needed so getting it started is useful.  There is no
+perfect algorithm to always do the right thing here so some though may
+be required by the PI if the behavior is odd.  {\tt DODOWN} is now
+scan dependent to help with dealing with odd behavior.  Also
+explicitly including or excluding stations from the scan can be a
+strong tool for dealing with problems.  Beware of special instructions
+when there is a chance that a program will be time shifted for dynamic
+scheduling.  That will change when things like wraps need to happen.
+
+Note that \schedb does not presume to tell the antenna what wrap to be
+on, mainly because there is no mechanism to do so with the VLBA.  Some
+day this may change in which case \schedb can be more intelligent
+about what to do.  For now all \schedb can do is control what scans
+are present and guess what the antenna will do.
 
 \rcwbox
 {None}
 {No argument}
 {Stations taken out of scans ({\tt DODOWN} not zero)}
-{Only one value, the last, used for schedule.}
-{{\tt DODOWN}}
+{One per scan.  Defaults to previous value.}
+{{\tt DODOWN} or {\tt DODOWN=-1}}
+
+
+\subsubsection{\label{MP:DOMKA}{\tt DOMKA}}
+
+{\tt DOMKA} (read DO-MKA) is a switch to request that, when observing
+with the RDBE and MARK5C, that a parallel MARK5A recording be made.
+It is expected to be used mainly for testing.
+
+\rcwbox
+{None}
+{No argument}
+{No Mark5A)}
+{Only last used.}
+{{\tt DOMKA}}
+
 
 
 \subsubsection{\label{MP:DOPCAL}{\tt DOPCAL}}
@@ -6124,19 +6334,28 @@ more complete discussion of the actions of these two parameters and
 their interactions with other parameters that influence scan times and
 recording activity.
 
-As of Oct. 2010, {\tt DWELL} has acquired a second argument.  That
-is the number of antennas to not wait for.  Typically it will be a small
-integer like 1 or 2, but can be up to the number of antennas (not sure
-what that would do!).  This should be useful if the there is a problem
-with long slews between pairs of sources near the zenith at one antenna.
-It would also be useful if you wish to let the less sensitive, but faster,
-antennas start observing once they are on source on the assumption that
-large, slow antennas might not need as much integration time.  This
-is an issue with global observations or HSA.  \htmlref{{\tt SUMITEM}}
-{MP:SUMITEM} {\tt = EARLY} can be used to inspect the results of the
-use of the second {\tt DWELL} argument.  For example, with that argument set
-to one, one antenna should have {\tt EARLY} negative (got there after
-the start).
+As of Oct. 2010, {\tt DWELL} has acquired second and third arguments.
+Argument 2 is the number of antennas to not wait for.  Typically it
+will be a small integer like 1 or 2, but can be up to the number of
+antennas (not sure what that would do!).  This should be useful if the
+there is a problem with long slews between pairs of sources near the
+zenith at one antenna.  It would also be useful if you wish to let the
+less sensitive, but faster, antennas start observing once they are on
+source on the assumption that large, slow antennas might not need as
+much integration time.  This is an issue with global observations or
+HSA.  \htmlref{{\tt SUMITEM}} {MP:SUMITEM} {\tt = EARLY} can be used
+to inspect the results of the use of the second {\tt DWELL} argument.
+For example, with that argument set to one, one antenna should have
+{\tt EARLY} negative (got there after the start).
+
+The third argument is a minimum time on source for the antennas that
+are not being waited for thanks to argument 2.  The default zero for
+this argument allows the scan to end before the slow antenna(s) get to
+source.  If a time is specified, then the scan will be extended until
+the last antenna gets that much time.  In such a circumstances, the
+scan will still start when first group of antennas (other than those
+the second argument says not to wait for) get to source, so those
+antennas will get a longer scan than specified.
 
 Please note that the model \schedb uses to calculate slew times is
 not especially sophisticated, especially in regard to the excess
@@ -6160,7 +6379,7 @@ by an integer.}
 {\tt START, STOP, DURation,} and {\tt DWELL}.  The number of antennas to
 not wait for defaults to zero.}
 {Reverts to previous scan.  Overridden by {\tt DUR}.}
-{{\tt DWELL=110,1} (which is equivalent to {\tt DWELL=1:50,1}). 
+{{\tt DWELL=110,1} (which is equivalent to {\tt DWELL=1:50,1}).
 {\tt DWELL=110} is equivalent to {\tt DWELL=110,0} except that the
 latter will reset the second argument to zero if it had been something
 else.}
@@ -6440,9 +6659,8 @@ If LST scheduling, GAP is a sidereal time, so it will be slightly
 shorter in UT (by about 1.0027).
 
 For all types of scheduling, if the gap between scans is less than the
-value of \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} times the speedup
-factor, the recordings are left running.  The default {\tt MINPAUSE}
-is 10 seconds.
+value of \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE}, the recordings are
+left running.  The default {\tt MINPAUSE} is 10 seconds.
 
 For Vex stations (most non-VLBA stations), gaps should be inserted to
 allow bank changes.  The VLBA can switch between mounted disk banks
@@ -6489,7 +6707,7 @@ after the previous source was added, rather than the RMS improvement,
 this restricted look-back capability has not been especially useful.
 
 {\tt GEOBACK} is also used to inhibit repeated use of any given source
-in a segment.  Rather than prohibit repeats entirely, \schedb only 
+in a segment.  Rather than prohibit repeats entirely, \schedb only
 prohibits repeats within each {\tt GEOBACK} scans.
 
 \rcwbox
@@ -6502,12 +6720,12 @@ to a geodetic block}
 
 \subsubsection{\label{MP:GEOHIEL}{\tt GEOHIEL}}
 
-When selecting the initial sources (up to about 3/4 of the total) 
+When selecting the initial sources (up to about 3/4 of the total)
 in a geodetic sequence, \schedb tries to find one that are especially
 low or high at some stations.  {\tt GEOHIEL} sets the lower bound
 of the region considered to be high.  The related parameter
 \htmlref{{\tt GEOLOWEL}}{MP:GEOLOWEL} sets the upper bound to the
-``low'' region.  The default {\tt GEOHIEL} of 40 degrees has a 
+``low'' region.  The default {\tt GEOHIEL} of 40 degrees has a
 SecZ of 1.55.  Going higher increases slew times without all that
 much gain in SecZ.
 
@@ -6520,13 +6738,13 @@ much gain in SecZ.
 
 \subsubsection{\label{MP:GEOLOWEL}{\tt GEOLOWEL}}
 
-When selecting the initial sources (up to about 3/4 of the total) 
+When selecting the initial sources (up to about 3/4 of the total)
 in a geodetic sequence, \schedb tries to find one that are especially
 low or high at some stations.  {\tt GEOLOWEL} sets the upper bound
 of the region considered to be low.  \htmlref{{\tt OPMINEL}}{MP:OPMINEL}
 sets the lower bound.  The related parameter
 \htmlref{{\tt GEOHIEL}}{MP:GEOHIEL} sets the lower bound to the
-``high'' region.  The default {\tt GEOLOWEL} of 23 degrees has a 
+``high'' region.  The default {\tt GEOLOWEL} of 23 degrees has a
 SecZ of 2.55 which differs by 1.0 from the SecZ of 40 degrees, the
 default for {\tt GEOHIEL}.
 
@@ -6573,9 +6791,9 @@ segment, it will be ignored.
 Geodetic segments will likely need to be 30 to 40 minutes long to have
 good coverage at all antennas with multiple low elevation scans.  They
 could be even longer if slow antennas are included.  Note that not all
-antennas will be in all scans. 
+antennas will be in all scans.
 
-The sources used for the geodetic segments are specified with 
+The sources used for the geodetic segments are specified with
 \htmlref{{\tt GEOSRCS}}{MP:GEOSRCS}.
 
 \rcwbox
@@ -6610,7 +6828,7 @@ a geodetic sequence.  If the source being checked is important for
 the slow station, it can be blocked from being selected at this pass
 so that it can be selected later when the slow station can get there in
 a more timely manner.  The effect of doing this tends to be that the
-slow antennas get used in roughly every other scan (the slew calculation 
+slow antennas get used in roughly every other scan (the slew calculation
 knows if an antenna has the full time of the previous scan to get where
 it is going).  In the current algorithm, if the station arrives more
 than {\tt GEOSLOW} seconds after the third to last antenna to get there,
@@ -6650,17 +6868,17 @@ Sample input to \sched:
 ! ==========================================================
 ! =============  Sources for geodetic segments  ============
 ! ==========================================================
-geosrcs = J0017+81, J0019+73, J0050-09, J0102+58, J0121+11, 
-          J0121+04, J0136+47, J0203+11, J0204+15, J0217+73, 
-          J0231+13, J0238+16, J0303+47, J0339-01, J0501-01, 
-          J0530+13, J0555+39, J0646+44, J0700+17, J0726+79, 
-          J0730-11, J0753+53, J0808+49, J0808+40, J0818+42, 
-          J0824+55, J0825+03, J0854+20, J0927+39, J0956+25, 
-          J0958+47, J0958+65, J1048+71, J1058+81, J1104+38, 
-          J1127-18, J1130+38, J1146+39, J1153+80, J1159+29, 
-          J1222+04, J1302+57, J1310+32, J1354-02, J1357+76, 
-          J1419+54, J1550+05, J1557-00, J1608+10, J1638+57, 
-          J1640+39, J1727+45, J1740+52, J1743-03, J1746+62, 
+geosrcs = J0017+81, J0019+73, J0050-09, J0102+58, J0121+11,
+          J0121+04, J0136+47, J0203+11, J0204+15, J0217+73,
+          J0231+13, J0238+16, J0303+47, J0339-01, J0501-01,
+          J0530+13, J0555+39, J0646+44, J0700+17, J0726+79,
+          J0730-11, J0753+53, J0808+49, J0808+40, J0818+42,
+          J0824+55, J0825+03, J0854+20, J0927+39, J0956+25,
+          J0958+47, J0958+65, J1048+71, J1058+81, J1104+38,
+          J1127-18, J1130+38, J1146+39, J1153+80, J1159+29,
+          J1222+04, J1302+57, J1310+32, J1354-02, J1357+76,
+          J1419+54, J1550+05, J1557-00, J1608+10, J1638+57,
+          J1640+39, J1727+45, J1740+52, J1743-03, J1746+62,
           J1751+09, J1800+78, J2148+06, J2225-04, J2236+28
 
 \end{verbatim}
@@ -6674,7 +6892,7 @@ geosrcs = J0017+81, J0019+73, J0050-09, J0102+58, J0121+11,
 
 \subsubsection{\label{MP:GEOSREP}{\tt GEOSREP}}
 
-\schedb resists scheduling a given source more than once in a 
+\schedb resists scheduling a given source more than once in a
 geodetic sequence.  But sometimes it is worth doing that when there
 are limited low elevation options.  {\tt GEOSREP} can be used to
 set the minimum number of scans after an observation in a geodetic
@@ -6700,7 +6918,7 @@ chooses the source that best complements those chosen so far in
 terms of improving the quality measure without excessive slewing.
 Parameter {\tt GEOTRIES} sets the number of trial segments to
 construct and test.  The algorithm for making segments comes up
-with reasonable ones most of the time, so it is not generally 
+with reasonable ones most of the time, so it is not generally
 necessary to test very many.  The algorithm is also moderately
 slow which will encourage not testing too many.  The default is
 10 which seems reasonable.
@@ -7136,7 +7354,7 @@ recording starts.  The recording start time is also given in the {\sl
 sch} file.
 
 {\tt MINPAUSE} is mainly used now to prevent excessive recording scans
-on the Mark5A system.  The system does not allow more than 1024 
+on the Mark5A system.  The system does not allow more than 1024
 data scans on the disks.  There is one scan for each period during which
 the recording does not stop, regardless of the number of source scans
 during that period.  This limitation can be an issue with large disk
@@ -7145,7 +7363,7 @@ value is meant to prevent recording stops during fast switching.
 
 While too many recording scans are a problem, so are too few.  If
 something goes wrong with playback, the correlators cannot recover
-until the start of the next recording scan.  Thus it is not wise to 
+until the start of the next recording scan.  Thus it is not wise to
 have recording scans more than about an hour long.  Note that the MarkIV
 systems will not stop the recording for gaps of less than 10 seconds
 so a gap inserted to break a recording scan should be longer than
@@ -7183,12 +7401,17 @@ scans.  The default should not cause this problem because it does not
 request continuous tape motion through scans long enough to keep the
 VEX check routines happy for a reversal.
 
+Note that {\tt MINPAUSE} used to be multiplied by the speedup factor
+to determine the actual length of a pause at record time.  That made 
+it actually a time of the pause at playback time on the old VLBA 
+correlator.  That concept is no long relevant so the multiplication
+by the speedup factor has been removed.
+
 \rcwbox
-{A number giving the minimum recording stoppage in seconds times the
-speedup factor.}
+{A number giving the minimum recording stoppage in seconds.}
 {Any number.}
-{10 seconds times the speedup factor.}
-{Defaults to previous scan.}{
+{10 seconds.}
+{Defaults to previous scan.}
 {\tt MINPAUSE=30}}
 
 
@@ -8035,7 +8258,7 @@ a name specified with {\tt NAME} and a list of source names specified
 with {\tt SOURCES}.  All of these sources should be in the source
 catalogs.  It will be common to use a file, specified with
 \htmlref{{\tt SRCFILE2}}{MP:SRCFILE2} to specify all the ``sources''
-used as phase centers.  
+used as phase centers.
 
 After the last phase center group, a line with
 {\tt ENDCENT /} should be given to return \schedb to reading normal
@@ -8886,8 +9109,8 @@ local directory), then one can specify the source file with
 the default).  Use the {\tt setenv}
 (c or t shell) or export (korn shell) to set environment variables.
 
-There is an option to use a second source catalog file using 
-\htmlref{{\tt SRCFILE2}}{MP:SRCFILE2}.  This could be useful if one 
+There is an option to use a second source catalog file using
+\htmlref{{\tt SRCFILE2}}{MP:SRCFILE2}.  This could be useful if one
 wishes to get calibrator information from the \schedb standard
 catalog, but also have a catalog of program sources.  It is also
 useful when using the ability to specify many phase centers per
@@ -10067,6 +10290,26 @@ a fractional year such as 1993.6.
 {\tt PARALAX} for backward compatability (yes, I misspelled it the first
 time so backwards compatability is an issue).
 
+\item [{\tt FLUX}:] Flux densities at up to 10 frequencies for the
+source.  The arguments (up to 30) are in triplets with the first being
+the frequency in GHz, the second is the total flux density in some
+image, and the third is the unresolved (peak) flux density --- what
+you are likely to see on long baselines.  These values are typically
+taken as a byproduct of geodetic observations and should be taken as
+approximate.  All compact source vary to some degree --- most by a lot
+--- so the source may well prove to have a different strength when
+used than is shown.  But these flux densities should help distinguish
+the strong from the weak calibrators.
+
+\item [{\tt FLUXREF}:] A text string that indicated where the flux
+density information came from.  It is likely to match one of the
+catalog names from which positions of some sources were obtained.
+It may not match the position catalog for an individual source.  A
+typical case, at the time this parameter was added, is that the flux
+densities come from one of Petrov's catalogs while many of the sources
+use positions from a GSFC solution.
+
+
 \end{description}
 
 Below is a sample of a few sources from the March 2005 source catalog.
@@ -10180,46 +10423,48 @@ locations catalog.
 of the station location information.  Can be put in the locations
 catalog.
 
-\item [{\tt CONtrol}:] Telescope control file type. Valid options are
+\item [{\tt CONtrol}:] Telescope control file type. {\tt VEX} files
+are produced for all projects because most antennas are converting
+to using them for telescope control (including the VLBA) and most
+of the correlators (DiFX, JIVE, MarkIV) need such files to control
+correlation.  Other {\tt CONTROL} options imply that other format
+files are written in addition to the {\tt VEX} file.  Valid option are
 {\tt VLBA} for VLBA control files,
-{\tt VEX} for Mark IV stations and any other stations with that
-understand the VEX format,
-{\tt SNAP} for most stations (Mark II only --- does not handle
-Mark~III or Mark IV),
-{\tt NRAO} for 140-ft type control files,
-{\tt VLA} for VLA observe files,
-{\tt VSOP} for VSOP type DRUDG files (Japanese version only), and
+{\tt VEX} for stations that don't need any other formats,
+{\tt VLA} for VLA observe files (soon to be retired),
 {\tt NONE} for no control file - the default.
-A {\tt V} in the 5th character will cause a VLBA
-control file to be produced without non-DAS (Data Aquisition System
---- BBC's, formatter, recorder etc) to be produced.  If the first
-4 characters were VLBA, this will be the only file.  If they were
+A {\tt 'V'} in the 5th character will cause a VLBA
+control file to be produced with only the DAS (Data Aquisition System
+--- BBC's, formatter, recorder etc) parameters.  It is meant for
+cases with a VLBA style VLBI backend, but something else for telescope
+control.  If the first
+4 characters are VLBA, this will be the only file.  If they are
 something else, both the other type of file and the reduced VLBA file
 will be produced.  This is the default when {\tt CONTROL = VLA}.
-Option {\tt SN50} is also available for snap files with forced B1950
-coordinates.  The {\tt VEX} option for even one station triggers
-production of a VEX format .vex file for
-all stations in addition to any antenna specific files requested.
 
 \item [{\tt DAR}:] Gives the type of Data Acquisition Rack present.
 This is mainly to identify the type of formatter is at the station
 which will let the program know about the capabilities available.
-Valid types are: {\tt VLBA}, {\tt MKIV}, {\tt VLBA4}, {\tt MKIII},
-{\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt VSOP}, {\tt LBA} 
-and {\tt NONE} (the
-default).  Note that for Mark II scheduling (basically obsolete), any
-site scheduled will be assumed to have Mark II equipment.  The main
-non-obvious option above is {\tt VLBA4}, which is a VLBA DAR but with
-a Mark IV formatter installed. This will have VLBA BBC's and IF
-switching, but Mark IV formatting characteristics.
+Valid types are: {\tt VLBA}, {\tt RDBE}, {\tt DBBC}, {\tt MKIV}, {\tt
+VLBA4}, {\tt MKIII}, {\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt
+VSOP}, {\tt LBA} and {\tt NONE} (the default).  Note that for Mark II
+scheduling (now obsolete), any site scheduled will be assumed to have
+Mark II equipment.  The main non-obvious option above is {\tt VLBA4},
+which is a VLBA DAR but with a Mark IV formatter installed. This will
+have VLBA BBC's and IF switching, but Mark IV formatting
+characteristics.  The {\tt RDBE} and {\tt DBBC} are digital systems
+containing FPGA chips that can support multiple personalities.  Those
+personalities are specified in the setup file since they can change
+between schedules, or even scans.  The personalities are specified
+with \htmlref{{\tt DBE}}{SP:DBE} setup file parameter.
 
 \item [{\tt RECORDER}:] Gives the type of tape recorder(s) present
 Valid options are: {\tt VLBA}, {\tt MKIV}, {\tt VLBA4}, {\tt MKIII},
-{\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt VSOP}, 
-and {\tt NONE} (the default).  The
-{\tt VLBA4} option is for VLBA recorders which have been modified
-for 16 Mbps per track operation and can be equiped with 2 recording
-heads.  They are usually associated with {\tt MKIV} or {\tt VLBA4} DARs.
+{\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt VSOP}, {\tt MARK5A},
+{\tt MARK5B}, {\tt MARK5C}, and {\tt NONE} (the default).  The {\tt
+VLBA4} option is for VLBA recorders which have been modified for 16
+Mbps per track operation and can be equiped with 2 recording heads.
+They are usually associated with {\tt MKIV} or {\tt VLBA4} DARs.
 
 \item[{\tt NBBC}:] Tells \schedb how many BBC's or VC's are at the
 site.
@@ -10245,7 +10490,7 @@ of the \htmlref{{\tt MEDIA}}{TP:MEDIA} parameter in the
 \htmlref{tape initialization information}{SEC:TPINI}.  For VLBA
 systems, commands for both {\tt RECORDER} and {\tt DISK} can be
 included in the control file.  Valid arguments to {\tt DISK} for
-now are restricted to {\tt MARK5A}, {\tt MARK5B}, {\tt LBADR} 
+now are restricted to {\tt MARK5A}, {\tt MARK5B}, {\tt LBADR}
 and {\tt NONE} (the default).
 
 \item [{\tt MEDIADEF}:] Gives the default recording system to use.  It
@@ -10392,25 +10637,6 @@ the number of slews per hour on the Mark1 telescope at Jodrell.  They
 are very worried about fatigue and will refuse to run fast switching
 schedules.  The default is 1.E6 which should be more than anyone
 would try to schedule.
-
-\item [{\tt FLUX}:] Flux densities at up to 10 frequencies for the
-source.  The arguments (up to 30) are in triplets with the first being
-the frequency in GHz, the second is the total flux density in some
-image, and the third is the unresolved (peak) flux density --- what
-you are likely to see on long baselines.  These values are typically
-taken as a byproduct of geodetic observations and should be taken as
-approximate.  All compact source vary to some degree --- most by a lot
---- so the source may well prove to have a different strength when
-used than is shown.  But these flux densities should help distinguish
-the strong from the weak calibrators.
-
-\item [{\tt FLUXREF}:] A text string that indicated where the flux
-density information came from.  It is likely to match one of the
-catalog names from which positions of some sources were obtained.
-It may not match the position catalog for an individual source.  A
-typical case, at the time this parameter was added, is that the flux
-densities come from one of Petrov's catalogs while many of the sources
-use positions from a GSFC solution.
 
 
 \end{description}
@@ -10896,7 +11122,7 @@ of.  Any special setup files that do not match one of the standards
 should be shown to Craig Walker for approval.  If it is a good one, it
 may be added to the standards.  However, the standard set is
 essentially complete for the VLBA.  If \schedb complains about your's,
-it is likely to be in error.  If a user really wants his/her own 
+it is likely to be in error.  If a user really wants his/her own
 frequency catalog, use the input parameter
 \htmlref{{\tt FREQFILE}}{MP:FREQFILE} to specify the file name.
 
@@ -11434,6 +11660,7 @@ confused about what signal is in each baseband channel.
 \htls{BBSYN2}{~~} Second set of BBC frequencies for frequency switching.
 \htls{BITS}{~~~~} Number of bits per sample.
 \htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
+\htls{DBE}{~~~~~} The personality to use in a digital backend.
 \htls{ELCOLIM}{~} Colimation offset in elevation.
 \htls{EVLA}{~~~~} Allow EVLA frequencies the old VLA could not reach.
 \htls{FE}{~~~~~~} Receivers to be used.
@@ -11636,7 +11863,16 @@ rolls should be forced.
 {\tt BBFILTER} sets the baseband channel bandwidth.  There is one
 value for each baseband channel.  Any that are not specified will be
 set equal to the first so in the usual case that all channels have the
-same bandwidth, only one needs to be set.  The value must be a
+same bandwidth, only one needs to be set.  
+
+For the RDBE systems with the PFB personality ({\tt DBE = RDBE\_PFB}),
+the bandwidth must be 32 MHz.  There are no options.  For the DDC
+personality ({\tt DBE = RDBE\_DDC}), the baseband channel
+bandwidth can be anywhere between 0.125 and 64 MHz in factor of 2
+steps.  For the DBBC, the options are the factors of 2 between 0.5 
+and 16 MHz, with additional options at 32 and 512 MHz.
+
+For the original VLBA system and for MarkIV, the value must be a
 multiple of 2 times 0.0625~MHz up to a maximum of 16~MHz. Up to 16
 values can be accepted. If two or more baseband channels are assigned
 to the same BBC/sideband, they should have the same {\tt BBFILTER}
@@ -11654,29 +11890,31 @@ and are required to obtain up to 6.
 \rcwbox
 {Up to one real number for each channel giving bandwidths in MHz.}
 {{\tt 0.0625}, {\tt 0.125}, {\tt 0.250}, {\tt 0.5}, {\tt 1.0}, {\tt
-2}, {\tt 4}, {\tt 8}, {\tt 16}.}
+2}, {\tt 4}, {\tt 8}, {\tt 16}, {\tt 32}, {\tt 64}, {\tt 512}, 
+depending on system.}
 {{\tt 0} - If one is specified, it will be used for all channels.
 If none are specified, half the sample rate will be used.}
 {Defaults to revious station.}
 {{\tt BBFILTER = 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2} \\ which
 is same as {\tt BBFILTER = 2}}
 
-
 \subsubsection{\label{SP:BBC}{\tt BBC}}
 
 {\tt BBC} is used to specify the Base Band Converter (BBC) to
 which each baseband channel is assigned.  A value can be given
 for every channel.  If any or all values are missing, SCHED will
-try to set to reasonable default values for VLBA and MKIV format
-observations.
+try to set to reasonable default values for the digital backends
+and VLBA and MKIV format observations.  This is the option most
+users should take.
 
-Note that BBC assignments are arbitrary for VLBA systems since all
-BBCs can see all input IFs.  However, for Mark III and Mark IV
-systems, there are strong constraints.  For ``astronomical patching'',
-which is the only one currently understood, the odd BBCs must be
-connected to IF1 (IFCHAN 1N or 1A where 1N is normally LCP and 1A
-is normally RCP).  Even BBCs must be connected to IF2 (IFCHAN 2N
-or 2A, where 2N is normally RCP and 2A is normally LCP).
+Note that BBC assignments are arbitrary for the digital systems (RDBE
+and DBBC) and the old VLBA systems since all BBCs can see all input
+IFs.  However, for Mark III and Mark IV systems, there are strong
+constraints.  For ``astronomical patching'', which is the only one
+currently understood, the odd BBCs must be connected to IF1 (IFCHAN 1N
+or 1A where 1N is normally LCP and 1A is normally RCP).  Even BBCs
+must be connected to IF2 (IFCHAN 2N or 2A, where 2N is normally RCP
+and 2A is normally LCP).
 
 \rcwbox
 {Up to one integer per baseband channel.}
@@ -11689,19 +11927,85 @@ numbers make sense on some systems.}
 
 \subsubsection{\label{SP:BBSYN}{\tt BBSYN}}
 
-{\tt BBSYN} is used to set the frequency for the BBC assigned to each
-baseband channel. This number will be overridden if \htmlref{{\tt FREQ}}
+{\tt BBSYN} is used to set the frequency for the BBC or digital filter
+assigned to each baseband channel (subband channel in EVLA
+terminology). This number will be overridden if \htmlref{{\tt FREQ}}
 {MP:FREQ} or \htmlref{{\tt DOPPLER}}{MP:DOPPLER} is specified in the
 \schedb keyin file. Even if {\tt DOPPLER} is specified, this value
 serves as the default for continuum sources for which no velocity or
 {\tt DOPSRC} is specified. All baseband channels assigned to the same
-BBC should be assigned the same frequency. If not, the last will
-probably be used and the monitor system will get confused about what
-signals are present. Please see \htmlref{{\tt FREQREF}}{SP:FREQREF}
-for a discussion of required parameters.
+physical BBC should be assigned the same frequency.  This only applies
+to hardware for which the BBCs can provide upper and lower sidebands.
+For the digital backends where the ``BBC'' is just part of the FPGA
+firmware, there will only be one baseband channel per BBC.  When a BBC
+can provide more than one channel and different frequencies are given
+for such paired channels, the last specified frequency will probably
+be used and the monitor system will get confused about what signals
+are present. Actually, first \schedb will complain.  Please see
+\htmlref{{\tt FREQREF}}{SP:FREQREF} for a discussion of required
+parameters.
 
 For MkIV all BBCs at a given station should fall in the range 100 -
 220 (the ``Low patch'') or 220 - 500 the ``High patch'').
+
+For the VLBA DAR and MkIV systems, the baseband frequency must be set
+on even 10 kHz frequencies.
+
+The future is with the digital backends - the RDBE for the system
+being developed in the U.S. and the DBBC system from Noto being deployed
+in Europe.  There are also systems in other parts of the world but
+more information is needed before those can be described.
+
+The RDBE DDC personality ({\tt DBE = RDBE\_DDC}) will support
+frequencies set to any even Hertz.  But the infrastructure in many
+places is not set up to handle frequencies with that many significant
+digits.  Four byte numbers are used and print formats, including in
+control files such as the vex file, do not have enough digits.  Thus
+for now, RDBE frequencies must be set to even 10 kHz as with the older
+systems.  Finer tuning may be provided in the future, but will require
+and end-to-end search through SCHED and various other places for
+places where the precision can be lost.
+
+With the RDBE DDC personality, there are some IF frequencies to avoid.
+After sampling at 1024 GHz (the usable IF frequencies are between 512
+and 1024 MHz), the firmware does a polyphase filter to narrow the
+bandwidth to match what the FPGA clock rate can handle (256 MHz in
+this case.  A complex filter is used which allows output bandpasses of
+256 MHz width.  But the edge bands are centered at the sample rate and
+at half that so only half of each of those bands can be used.  Thus
+the accessible IF is divided into 3 bands: 512-640 MHz, 640-896 MHz,
+and 896-1024 MHz.  Baseband channels can be placed anywhere in any one
+of those 3 filter bands, but one should not attempt to cross the
+boundary between two.  That won't work and \schedb will issue a warning.
+
+The DDC personality can provide 8 basebands per RDBE.  Those basebands
+can have bandwidths of the factors of 2 between 0.125 and 64.0 MHz.  The
+total output bit rate has a maximum of 2048 Mbps.
+
+The PFB personality of the RDBE, ({\tt DBE = RDBE\_PFB}) has rather rigid
+baseband frequency options.  A polyphase filter divides the 512-1024
+band into 17 baseband channels, 15 of which have 32 MHz bandwidth.
+The other 2 are half bands on the ends (actually full bands, but
+centered on the sample rate and half that).  Those edge channels
+cannot be used.  In the initial implementation, only every other
+channel could be used, starting with the one topping at 1008 MHz.
+Each RDBE has 2 IF inputs and puts out 2048 Mbps (512 MHz total
+bandwidth with 2 bit samples and Nyquist sampling) in 16 total
+baseband channels.  There is not yet any ability to vary the bit rate.
+With the original PFB personality, there are 8 basebands from each
+input IF in the pattern mentioned above.  An early modification
+(almost available at this writing) is to allow any 16 total channels
+to be chosen from the 30 usable channels generated.
+
+The allowed {\tt BBSYN} frequencies for the PFB personality are
+1008.0, 976.0, 944.0, 912.0, 880.0, 848.0, 816.0, 784.0, 752.0, 720.0,
+688.0, 656.0, 624.0, 592.0, and 560.0 and the bands must be lower
+sideband.  The freqeuncies listed are at the top of the 32 MHz
+channel.
+
+The DBBC system is more of a plug replacement for the MarkIV.
+More of a description will be provided eventually, along with support
+in \sched.
 
 \rcwbox
 {Up to 16 frequencies in MHz.}
@@ -11721,7 +12025,7 @@ this frequency set.
 
 Frequency switching is not allowed when writing VEX files.  Also, it
 is a little known and probably nearly unused option so it is not
-well tested.
+well tested and may well go away some day.
 
 \rcwbox
 {Up to 16 frequencies in MHz.}
@@ -11751,6 +12055,75 @@ FORMAT~= VLBA1:1}.
 channel 1 if one or more are set.}
 {Defaults to previous station.}
 {{\tt BITS=1}}
+
+\subsubsection{\label{SP:DBE}{\tt DBE}}
+
+{\tt DBE} is used to specify the personality to use in a digital
+backend that is based on an FPGA.  Such personalities can be changed
+quickly, so this parameter is not appropriate for the station catalog.
+The personality determines much about the capabilities of the hardware.
+In particular, it determines what baseband frequencies can be set.
+
+The possible options are:
+
+\begin{description}
+
+\item {\tt RDBE\_PFB} is the original polyphase filter personality
+developed by Haystack for the RDBE digital backend ({\tt DAR=RDBE}).
+It is restricted to 16 baseband channels of 32 MHz bandwidth each,
+lower sideband, with frequencies of 1024-16-N*32 MHz, where N is an
+integer between 0 and 15.  The initial version is restricted to N even
+and there are no choices.  In that version, channels come in pairs,
+one on each input IF, which are usually polarization pairs.  Switching
+is being added to allow general selection.
+
+\item {\tt RDBE\_DDC} is the digital downconverter personality being
+developed for the RDBE digital backend at NRAO.  It has a high degree
+of flexibility of tuning frequency and bandwidth.  The restrictions
+will be given here once they are known in detail.  For this personality,
+the input IF (512-1024 MHz) is split into three signals by a complex
+polyphase filter into three bands (512-640, 640-896, and 896-1024 MHz).
+Note that the central one is 256 MHz wide while the other two are 128
+MHz wide.  The few MHz around the transition between these bands should
+be avoided as signal will be degraded, and any one baseband can only
+access one side of such a ``crossover'' frequency.  \schedb will warn
+of attempts use degraded frequencies (eventually).  The RDBE\_DDC can
+provide 4 baseband channels from each of the two input IFs.  Those
+baseband channels can be as wide as 128 MHz so the full input bandwidth
+can be covered.
+
+\item {\tt DBBC} This is for the DBBC digital backend being built in
+Noto for the EVN.  It is meant to have the flexibility of the old
+MarkIV and VLBA backends.  Many more details need to be added here and
+in the code concerning its capabilities.
+
+\end{description}
+
+{\tt DBE} should not be specified for {\tt DAR}'s other than the RDBE
+and DBBC.  Note that it may be necessary to explicitly set {\tt DAR}
+to {\tt ' '} (blank) if there are multiple segments to the setup file
+and an earlier one has it set to something else.
+
+When the DAR is the RDBE, the output channels and all the input channel
+information given to \schedb are written to the VEX file.  But the crd
+files that control the old VLBA hardware also has to be told something.  
+\schedb does not have a separate set of variables for all those configuration
+parameters, so it just does something reasonable.  It sets the number of
+channels to the maximum of the number requested and 8.  It sets the
+frequencies and sidebands to match the RDBE requests.  It sets the 
+sample rate to the maximum of that requested and 32 Ms/s.  It sets the
+channel bandwidth to the lesser of the request and 16 MHz.  It only
+writes the first 4 pcal extraction requests (avoiding going into
+channel numbers that are too high).
+
+\rcwbox
+{A character string of up to 8 characters}
+{One of ' ', '{\tt RDBE\_PFB}', '{\tt RDBE\_DDC}', or '{\tt DBBC}'. It
+is not case sensitive}
+{'{\tt RDBE\_PFB}' for the RDBE, '{\tt DBBC}' for the DBBC, and
+blank for anything else.}
+{Defaults to previous segment.  See note above about setting blank}
+{{\tt DBE='RDBE\_DDC'}}
 
 
 \subsubsection{\label{SP:DUALX}{\tt DUALX}}
@@ -12324,6 +12697,13 @@ GEO1 is for a geodetic style patching. The pattern is:
 
 \subsubsection{\label{SP:MODETEST}{\tt MODETEST}}
 
+This parameter is obsolete and no longer does anything.  It
+used to bypass the checks in a routine that kept track of supported
+modes, but that routine became obsolete and has been removed.  The
+parameter is still present to avoid breaking old files.
+
+Old text:
+
 \schedb will not normally allow schedules to be made that use
 untested VLBA or MarkIV recording modes.  The tested modes are
 listed in the document OK\_modes.vlba accessible from the VLBA
@@ -12679,6 +13059,8 @@ sideband if the first mix is lower sideband, as for the VLBA it always
 is at 20cm and 13cm and can be at other bands. Please see
 \htmlref{{\tt FREQREF}}{SP:FREQREF} for a discussion of required
 parameters.
+
+If only one value is specified, it is used for all channels.
 
 \rcwbox
 {A single character for each baseband channel.}
@@ -13594,30 +13976,78 @@ more information.
 
 \begin{itemize}
 
+\item When using the RDBE/MARK5C, make it optional to have the crd
+files provide the commands needed for parallel VLBA DAR/MARK5A recordings.
+The switch is DOMKA (read DO-MARK5A).  This is expected to be of use
+mainly for testing.  A tricky part of this was making the pulse cal
+tone detection commands come out right when recording only the center
+RDBE channels and only the center part of the bandwidth of each RDBE
+channel.  Jan. 11, 2011.  RCW.
+
+\item Doing more to remove the need to match formats, and specifically
+track bit rates, at different stations.  Now, for VLBA (non RDBE) and
+MKIV formats, the smallest possible fan out will be chosen consistent
+with the formatter track bit rate limitations.  This will mean that
+many projects will see a reduction in the fan out used.  This should
+not be an issue in the disk/DiFX era.  Jan. 7, 2010  RCW.
+
+\item Removing more bits of residual code related to tape.  SETSPD is
+gone.  Also removing some items related to the VLBA hardware
+correlator, which is now off.  OKMODES is gone.  Jan. 7, 2011 RCW.
+
+\item Change MINPAUSE usage so that it does not get multiplied by the
+speedup factor.  The speedup factor concept is mainly for the old
+VLBA hardware correlator and no longer makes much sense so it will be
+removed soon.  Jan. 7, 2011  RCW.
+
+\item Add examples for use of the RDBE/MARK5C wideband system.  They are
+{\sl egrdbe.key} for the PFB personality and {\sl egddc} for the DDC
+personality.  Jan. 6, 2011 RCW.
+
+\item Add checking of setup parameters for RDBE PFB and DDC personalities.
+Dec. 30, 2010  RCW
+
+\item Make a few changes to the {\sl v2d} file to make them more
+useful for operations.  Dec. 22, 2010  RCW.
+
 \item Wrap {\tt NOTES}, {\tt CORNOTES}, and {\tt COMMENTS} that
-overflow the 128 character limit in the Vex file.  Nov. 21, 2010 RCW.
+overflow the 128 character limit in the Vex file.  They were capable of
+generating lines long enough to crash the parsers.  Nov. 21, 2010 RCW.
 
 \item Update source and station location tables.  The standard
-sources.vlba now has the sources from the GSFC 2010a_astro solution
+sources.vlba now has the sources from the GSFC 2010a\_astro solution
 plus additional sources from the Petrov rfc2010c solution and a few
-JVAS, VLA and other sources for a total of 5731.  There is also a file
+JVAS, VLA and other sources for a total of 5776.  There is also a file
 with just the Petrov solution sources - 5198 of them.  The station
 locations are based on the GSFC 2010a solution.  Many of the old
-mobile VLBI sites have been removed.  Nov. 20, 2010.  RCW.
+mobile VLBI sites have been removed.  Dec. 5, 2010.  RCW.
 
 \item Add flux density data (inputs {\tt FLUX} and {\tt FLUXREF}) to
 the source catalog.  Rebuild the catalog to include such information
-obtained with the Petrov 2010c release.  Nov. 10, 2010.  RCW.
+obtained with the Petrov 2010c release.  So far \schedb does not use
+that information, but the option to do so in the future is now there.
+Nov. 10, 2010.  RCW.
 
 \item Tweak the way scan timing is handled.  This will provide slightly
 improved slew calculations.  One impact is that new schedules can have
 scan times that differ from old ones made from the same input file
-by and amount that accumulate at a rate of a second or two per scan.
+by and amount that accumulates at a rate of a second or two per scan.
 Oct. 2010  RCW.
 
-\item Added a second argument to \htmlref{{\tt DWELL}}{MP:DWELL} to
-instruct \schedb not to wait for some number of antennas.  Oct. 24, 
-2010.  RCW.
+\item Added second and third arguments to \htmlref{
+{\tt DWELL}}{MP:DWELL} to instruct \schedb not to wait for some number of
+antennas.  The second argument says how many antennas to not wait for
+while the third gives a minimum integration time for those last antennas.
+Adding this capability triggered a considerable reworking of the code
+related to scan timing and geometric calculations.  The code is somewhat
+cleaner now.  \schedb now removes a station from a scan if the slew is
+so long it will not get there before the end.  An exception is for
+scans that trigger an azimuth wrap for ALTAZ antennas.  It was found
+that, if those scans were dropped, the antenna could get stuck observing
+only one source for a while in a phase referencing situation when one
+source needs the wrap before the other.  A ``W'' flag was added to the
+``UP'' flags to indicate a scan where the antenna will not get to the
+source.  Oct-Dec, 2010.  RCW.
 
 \item Increase the number of allowed aliases for source names from
 5 to 10.  Sept. 30, 2010.  RCW.
@@ -13695,7 +14125,7 @@ for use of that capability on the DiFX correlator.  May 12, 2010. RCW.
 source in the summary file separate for each setup file.
 May 5, 2010  RCW.
 
-\item Added {\tt SRCFILE2} to allow a second external source 
+\item Added {\tt SRCFILE2} to allow a second external source
 catalog. This is a step toward supporting multiple phase centers.
 May 4, 2010  RCW.
 
@@ -13747,7 +14177,7 @@ The LBA explicitly does not want it.  March 25, 2010.  Cormac Reynolds
 and RCW.
 
 \item The CELLS optimization routine is in a state of development so
-use at your own risk.  I don't think anyone else is using it so I don't 
+use at your own risk.  I don't think anyone else is using it so I don't
 think this should cause trouble, but I'm leaving this note just in case.
 March 25, 2010  RCW.
 
@@ -13790,7 +14220,7 @@ on March 10, 2010.
 
 \begin{itemize}
 
-\item 
+\item
 
 \item Allow writing of Vex files when there are moving sources in the
 project.  Such Vex files were blocked before because the necessary

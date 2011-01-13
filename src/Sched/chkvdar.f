@@ -8,7 +8,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH, I, SNBBC
-      LOGICAL           ERRS, BADLO
+      LOGICAL           ERRS, BADLO, DEQUAL
       DOUBLE PRECISION  TSTFRQ
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKVDAR: Starting.')
@@ -81,8 +81,10 @@ C
 C
 C        BBC synthesizer setting.  Getting a good double precision
 C        is a bit tricky.  Round at a level below what we are testing.
+C        Later SCHED modified so BBSYN is double to start with
 C
-         TSTFRQ = DNINT ( DBLE( BBSYN(ICH,KS) ) * 1.D4 ) / 1.D4
+C            TSTFRQ = DNINT ( DBLE( BBSYN(ICH,KS) ) * 1.D4 ) / 1.D4
+         TSTFRQ = BBSYN(ICH,KS)
          IF( BADLO( 'BBSYN', TSTFRQ, 0.01D0, 0, 0.D0, 0.D0,
      1       500.D0, 1000.D0, MSGTXT ) ) THEN
             ERRS = .TRUE.
@@ -96,23 +98,29 @@ C
 C
 C        BBC filter bandwidth.
 C
-         IF( BBFILT(ICH,KS).NE.0.0625 .AND. BBFILT(ICH,KS).NE.0.125
-     1     .AND. BBFILT(ICH,KS).NE.0.250 .AND. BBFILT(ICH,KS).NE.0.5 
-     2     .AND. BBFILT(ICH,KS).NE.1.0   .AND. BBFILT(ICH,KS).NE.2.0 
-     3     .AND. BBFILT(ICH,KS).NE.4.0   .AND. BBFILT(ICH,KS).NE.8.0   
-     4     .AND. BBFILT(ICH,KS).NE.16. ) THEN
+         IF( .NOT. (
+     1         DEQUAL( BBFILT(ICH,KS), 0.0625D0 ) .OR. 
+     2         DEQUAL( BBFILT(ICH,KS), 0.125D0 ) .OR. 
+     3         DEQUAL( BBFILT(ICH,KS), 0.25D0 ) .OR. 
+     4         DEQUAL( BBFILT(ICH,KS), 0.5D0 ) .OR. 
+     5         DEQUAL( BBFILT(ICH,KS), 1.0D0 ) .OR. 
+     6         DEQUAL( BBFILT(ICH,KS), 2.0D0 ) .OR. 
+     7         DEQUAL( BBFILT(ICH,KS), 4.0D0 ) .OR. 
+     8         DEQUAL( BBFILT(ICH,KS), 8.0D0 ) .OR. 
+     9         DEQUAL( BBFILT(ICH,KS), 16.D0 ) ) ) THEN
             MSGTXT = ' '
-            WRITE( MSGTXT, '( A, F8.2 )' )
-     1         'CHDVDAR: Invalid BBFILTER specified: ',
-     2         BBFILT(ICH,KS)
+            WRITE( MSGTXT, '( A, 2F9.3 )' )
+     1         'CHDVDAR: Invalid BBFILTER specified: ', BBFILT(ICH,KS)
             CALL WLOG( 1, MSGTXT )
             ERRS = .TRUE.
          END IF
 C
 C        Check the frequency request if there is frequency switching.
+C        Modified when BBSYN2 made double in the include file.
 C
          IF( FRSWITCH(KS) ) THEN
-            TSTFRQ = DNINT ( DBLE( BBSYN2(ICH,KS) ) * 1.D4 ) / 1.D4
+C            TSTFRQ = DNINT ( DBLE( BBSYN2(ICH,KS) ) * 1.D4 ) / 1.D4
+            TSTFRQ = BBSYN2(ICH,KS)
             IF( BADLO( 'BBSYN2', TSTFRQ, 0.01D0, 0, 0.D0, 0.D0,
      1          500.D0, 1000.D0, MSGTXT ) ) THEN
                ERRS = .TRUE.

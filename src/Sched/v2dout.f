@@ -17,7 +17,7 @@ C
       INTEGER           IPAIR, CCHAN
       CHARACTER         V2DFILE*80, OPSTAT*4, OPTEXT*255
       INTEGER           JSRC
-      CHARACTER         TRA*13, TDEC*13, TFORM*13
+      CHARACTER         TRA*13, TDEC*13, TFORM*13, UPCODE*3
 C
 C----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'V2DOUT starting' )
@@ -63,39 +63,37 @@ C
 C
 C     Fill in vex file name and antennas.
 C
-      WRITE( IV2D, '( 1X, /, A, A )' ) 'vex = ', 
-     1     VEXFILE(1:LEN1(VEXFILE))
+      WRITE( IV2D, '( 1X, /, A, A, A )' ) 'vex = ', 
+     1     VEXFILE(1:LEN1(VEXFILE)), '.obs'
 C
 C     Give the station codes.  
 C
       MSGTXT = ' '
-      WRITE( MSGTXT, '( A, A )' ) 'antennas = ', STCODE(STANUM(1))
+      UPCODE = STCODE(STANUM(1))
+      CALL UPCASE( UPCODE )
+      WRITE( MSGTXT, '( A, A )' ) 'antennas = ', UPCODE
       NCH = LEN( MSGTXT )
       IF( NSTA .GE. 2 ) THEN
          DO ISTA = 2, NSTA
             ICH = LEN1( MSGTXT) 
+            UPCODE = STCODE(STANUM(ISTA))
+            CALL UPCASE( UPCODE )
             WRITE( MSGTXT(ICH+1:NCH), '( A, A )' ) ', ', 
-     1           STCODE(STANUM(ISTA))
+     1           UPCODE
          END DO
       END IF
       ICH = LEN1( MSGTXT) 
       WRITE( IV2D, '( A )' ) MSGTXT(1:ICH)      
 C
-C     Write sources.  Use the SRCNAME in the schedule source list
-C     to get the name actually used.  That is element KSRC.  That
-C     avoids searching through for the right alias.
+C     Make antenna stub blocks:
 C
-      WRITE( IV2D, '( 1X, /, A )' )
-     1  '# Sources (pointing centers) with recorded data but no ' //
-     2  'offset pointing centers:'
-      DO ISRC = 1, MSRC
-         IF( USEDREC(ISRC) .AND. .NOT. USEDCENT(ISRC) ) THEN
-            KSRC = SRLSTN(ISRC)
-            WRITE( IV2D, '( 5A )' ) 'SOURCE ', 
-     1         SRCNAME(KSRC)(1:LEN1(SRCNAME(KSRC))), ' { calcode = ',
-     3         CALCODE(ISRC)(1:LEN1(CALCODE(ISRC))), ' }'
-         END IF
-      END DO
+         DO ISTA = 1, NSTA
+            ICH = LEN1( MSGTXT) 
+            UPCODE = STCODE(STANUM(ISTA))
+            CALL UPCASE( UPCODE )
+            WRITE( IV2D, '( A, A, A )' ) 'ANTENNA ', 
+     1           UPCODE(1:LEN1(UPCODE)), ' { }'
+         END DO
 C
 C     Write channel setup.
 C     Include some hints for anyone modifying the file.
@@ -114,9 +112,9 @@ C
       END IF
 C
       WRITE( IV2D, '( A, I4 )' ) '  specAvg =', CORFFT / CCHAN
-      WRITE( IV2D, '( 2A )' )
-     1     'numBufferedFFTs = 10 #This is a DiFX parameter, ', 
-     2     'defaulting to 10 is good'
+C      WRITE( IV2D, '( 2A )' )
+C     1     'numBufferedFFTs = 10 #This is a DiFX parameter, ', 
+C     2     'defaulting to 10 is good'
 C
       IF( CORPOL ) THEN         
          WRITE( IV2D, '( 2A )' ) '  doPolar = True ',
@@ -157,9 +155,14 @@ C
       DO ISRC = 1, MSRC
          IF( USEDREC(ISRC) .AND. .NOT. USEDCENT(ISRC) ) THEN
             KSRC = SRLSTN(ISRC)
-            WRITE( IV2D, '( 5A )' ) 'SOURCE ', 
-     1         SRCNAME(KSRC)(1:LEN1(SRCNAME(KSRC))), ' { calcode = ',
-     3         CALCODE(ISRC)(1:LEN1(CALCODE(ISRC))), ' }'
+            IF( CALCODE(ISRC) .EQ. ' ' ) THEN
+               WRITE( IV2D, '( 5A )' ) 'SOURCE ', 
+     1            SRCNAME(KSRC)(1:LEN1(SRCNAME(KSRC))), ' { }'
+            ELSE
+               WRITE( IV2D, '( 5A )' ) 'SOURCE ', 
+     1            SRCNAME(KSRC)(1:LEN1(SRCNAME(KSRC))), ' { calCode = ',
+     2            CALCODE(ISRC)(1:LEN1(CALCODE(ISRC))), ' }'
+            END IF
          END IF
       END DO
 C

@@ -116,12 +116,12 @@ C
       DOUBLE PRECISION  FIRSTLO(MCHAN,MSET)
       DOUBLE PRECISION  FIFMIN(MCHAN,MSET)
       DOUBLE PRECISION  FIFMAX(MCHAN,MSET)
+      DOUBLE PRECISION  BBSYN(MCHAN,MSET)
+      DOUBLE PRECISION  BBSYN2(MCHAN,MSET)
+      DOUBLE PRECISION  BBFILT(MCHAN,MSET)
       REAL              AZCOLIM(MSET), ELCOLIM(MSET)
       REAL              PTINCR(MSET)
       REAL              PTOFF(MSET)
-      REAL              BBSYN(MCHAN,MSET)
-      REAL              BBSYN2(MCHAN,MSET)
-      REAL              BBFILT(MCHAN,MSET)
       REAL              SAMPRATE(MSET)
       REAL              SYNTH(3,MSET)
       REAL              SPEEDH(MSET)
@@ -160,6 +160,7 @@ C
       CHARACTER         LOGGING(MSET)*8
       CHARACTER         STRING(4,MSET)*80
       CHARACTER         FORMAT(MSET)*8
+      CHARACTER         DBE(MSET)*8
       CHARACTER         SPCAL(MSET)*4
       CHARACTER         PCALX1(MAXPC,MSET)*3
       CHARACTER         PCALX2(MAXPC,MSET)*3
@@ -188,8 +189,8 @@ C
       INTEGER           MLEVEL, LLEVEL(MCHAN)
 C
       COMMON  /SETN2A/  FREQREF, FIRSTLO, FIFMIN, FIFMAX,
-     1                  AZCOLIM, ELCOLIM, 
-     2                  PTINCR,  PTOFF, BBSYN, BBSYN2, BBFILT, 
+     1                  BBSYN, BBSYN2, BBFILT, AZCOLIM, ELCOLIM, 
+     2                  PTINCR,  PTOFF, 
      3                  SAMPRATE, SYNTH, SPEEDH, SPEEDL, FANOUT,
      4                  SPEEDUP, BESTOVER, TOTBW
       COMMON  /SETN2B/  NCHAN, ISETSTA, TRACK, PERIOD, BITS, MLEVEL,
@@ -198,8 +199,8 @@ C
      3                  MODETEST, USED, MINTRAK, MAXTRAK, MINTBPS, 
      4                  MAXTBPS, TBPS, TOTBPS, VLBAMKIV, RECUSED
       COMMON  /SETC2/   SETSTA, BAND, SIDEBD, POL, NOISE, NOISEFRQ, FE, 
-     1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, IFDIST,
-     2                  SPCAL, PCALX1, PCALX2, NETSIDE, SIDE1, 
+     1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, DBE, 
+     2                  IFDIST, SPCAL, PCALX1, PCALX2, NETSIDE, SIDE1, 
      3                  RCHAN, LCHAN, LCP50CM, RCP50CM, BARREL, M4PATCH
 C
 C     VLA information.

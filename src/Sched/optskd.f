@@ -98,7 +98,7 @@ C
       DO ISTA = 1, NSTA
          OKSTA(ISTA) = .FALSE.
          IF( STASCN(ISCN,ISTA) ) THEN
-            CALL OPTGEO( ISCN, ISTA, TAPPROX, LASTISCN(ISTA),  
+            CALL STAGEO( ISCN, ISTA, TAPPROX, LASTISCN(ISTA),  
      1          LASTTIME, T_AVAIL )
             IF( UP1(ISCN,ISTA) .EQ. ' ' .AND. 
      1          UP2(ISCN,ISTA) .EQ. ' ' .AND. 

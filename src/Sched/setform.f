@@ -3,6 +3,16 @@ C
 C     Routine for SCHED, called by SETREC, to set the recording
 C     formats for the setup groups.
 C
+C     Conform to the modern disk world.  Jan. 11, 2011. RCW.  This
+C     mainly means stop worrying about matching many recording
+C     parameters across stations.
+
+
+C     ************  Have not actually done the modifications yet.
+C                   but that is next up.
+
+
+C
 C     The following applies to MarkIV and VLBA tape or Mark5A systems.
 C     The fan out is not a concept for the digital backends.
 C
@@ -11,20 +21,22 @@ C     format to use, which amounts to choosing the fan out.  This
 C     cannot be done individually per setup group because of
 C     the following global constraints.
 C
-C     1.  Try to avoid changing the number of heads in use at a station
-C         between scans with VLBA and Mark IV systems.  This would
+C     1.  Obsolete: Try to avoid changing the number of heads in use at a 
+C         station between scans with VLBA and Mark IV systems.  This would
 C         be ok with disk systems.  This constraint is driven by
 C         the tape usage accounting nightmare that variations in 
 C         head use would cause.
 C
-C     2.  For some correlators (JIVE, old Socorro), the track bit rate
+C     2.  Obsolete (don't think it ever was true for JIVE): 
+C         For some correlators (JIVE, old Socorro), the track bit rate
 C         should be the same for all stations in a scan - which here
 C         means for all setup groups in a setup file.  This has the
 C         additional impact of insuring a constant speedup factor.
 C         Treat all correlators as if they have this constraint.
 C         This does not affect the DiFX correlators.
 C
-C     3.  Don't use more than one drive or head unless necessary.
+C     3.  Obsolete.  It's not necessarly to worry about this with disk.
+C         Don't use more than one drive or head unless necessary.
 C         But if any scan at a station uses more than one, do so
 C         for all scans (basically the same as the constant heads
 C         constraint).  This should not affect disk recordings.
@@ -36,12 +48,13 @@ C         be done for any setup where a station has inadequate
 C         resources.  Just cut NCHAN for the setup group.  Do this
 C         after setting all the formats to reduce confusion.  But
 C         during the setting, try hard to stay on one drive or head.
-C         The recording resources should not longer cause this, but
+C         The recording resources should no longer cause this, but
 C         DAR's might.
 C
 C     5.  Eventually there will be systems (eg MARK5B) that don't
 C         care about speed up factors and number of tracks.  I think
-C         they will be easier.
+C         they will be easier.  Actually the disk systems and 
+C         correlators remaining after FXCORR was turned off qualify.
 C
 C     Trying to conform to the above constraints is a messy problem.
 C     Here is the scheme that will be used:
@@ -183,21 +196,39 @@ C     be set because of these constraints.  FSPREAD does one pass
 C     of spreading the track bit rate across setup files, and then
 C     spreading the number of tracks across setup files by station.
 C
+C     When making some disk related updates, I found that the 
+C     last statement now in the IF was actually outside.  That set
+C     ANYLEFT to the undefined ANYLFT2 and could go into FMTPICK
+C     even when things were already set.  Not sure how often that
+C     caused a problem.
+C
+
+C  **********  Do I need to avoid changing bit rates in some cases.
+C     see end of old okmodes.f (in older versions only now.)
+C     I've got emails out to ask.
+
+
       IF( ANYLEFT ) THEN
+        write(*,*) 'setform got to anyleft ', (needfmt(ks), ks=1,nset)
          CALL FSPREAD( NEEDFMT )
          ANYLFT2 = .FALSE.
          DO KS = 1, NSET
             IF( NEEDFMT(KS) ) ANYLFT2 = .TRUE.
          END DO
+         ANYLEFT = ANYLFT2
       END IF
-      ANYLEFT = ANYLFT2
 C
 C     If the above still did not force the outcome for all setups,
 C     try to pick an option that gives a speedup factor averaging
 C     about 2.  This was painful to program and I hope I got it ok,
-C     but keep an eye on it.
+C     but keep an eye on it.  
+C
+C     In the era of disk, this is not needed and, in fact, it is
+C     not likely that the program will enter this call.  I should
+C     confirm that, and maybe ditch FMTPICK.
 C
       IF( ANYLEFT ) THEN
+        write(*,*) 'setform got to anyleft2 ', (needfmt(ks), ks=1,nset)
          CALL FMTPICK( NEEDFMT )
       END IF
 C

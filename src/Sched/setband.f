@@ -3,6 +3,11 @@ C
 C     Routine for SCHED that sets the reference frequencies based on a
 C     band specification.
 C
+C     For now, this routine does not know how to set frequencies
+C     for the RDBE based systems.  That should change before long but
+C     it will be a bit tricky because of the polyphase filters and 
+C     I need to get a release out soon.
+C
 C     This will work if most other parameters are also defaulting or
 C     using values similar to the defaults.  But I imagine that
 C     the user could easily concoct a setup file with things like
@@ -17,7 +22,7 @@ C
       INTEGER           ISTA
       PARAMETER         (MBD=15)
       DOUBLE PRECISION  CFREQ(MBD), FRQLOW(MCHAN), TEMP, TEMPS, TEMPX
-      REAL              TOTBAND, CBW(MBD)
+      DOUBLE PRECISION  TOTBAND, CBW(MBD)
       CHARACTER         CBAND(MBD)*5
       LOGICAL           GOTNETF, GOTNETS, GOTBBF, GOTBBS, GOTLO1
       LOGICAL           USEJOD
@@ -27,21 +32,21 @@ C     default.  IBS and IBX are the index for S and X bands.  Put
 C     them at 1 and 2 so I don't risk forgetting to change them if
 C     bands are added.
 C
-      DATA  CBAND(1), CFREQ(1), CBW(1)  /  '13cm', 2295.49, 0.0 /
-      DATA  CBAND(2), CFREQ(2), CBW(2)  /  '4cm', 8415.49, 0.0 /
+      DATA  CBAND(1), CFREQ(1), CBW(1)  /  '13cm', 2295.49D0, 0.D0 /
+      DATA  CBAND(2), CFREQ(2), CBW(2)  /  '4cm', 8415.49D0, 0.D0 /
 C
-      DATA  CBAND(3), CFREQ(3), CBW(3)  /  '90cm', 330.49, 0.0 /
-      DATA  CBAND(4), CFREQ(4), CBW(4)  /  '50cm', 610.98, 0.0 /
-      DATA  CBAND(5), CFREQ(5), CBW(5)  /  '21cm', 1465.49, 128.0 /
-      DATA  CBAND(6), CFREQ(6), CBW(6)  /  '21cm', 1435.49, 64.0 /
-      DATA  CBAND(7), CFREQ(7), CBW(7)  /  '21cm', 1416.49, 0.0 /
+      DATA  CBAND(3), CFREQ(3), CBW(3)  /  '90cm', 330.49D0, 0.D0 /
+      DATA  CBAND(4), CFREQ(4), CBW(4)  /  '50cm', 610.98D0, 0.D0 /
+      DATA  CBAND(5), CFREQ(5), CBW(5)  /  '21cm', 1465.49D0, 128.D0 /
+      DATA  CBAND(6), CFREQ(6), CBW(6)  /  '21cm', 1435.49D0, 64.D0 /
+      DATA  CBAND(7), CFREQ(7), CBW(7)  /  '21cm', 1416.49D0, 0.D0 /
 C
 C     The second 18cm band will be used when Jodrell, but not the VLA,
 C     is present to avoid RFI.
 C
-      DATA  CBAND(8), CFREQ(8), CBW(8)  /  '18cm', 1658.49, 0.0 /
-      DATA  CBAND(9), CFREQ(9), CBW(9)  /  '18cm', 1653.99, 0.0 /
-      DATA  CBAND(10), CFREQ(10), CBW(10)  /  '6cm', 4990.49, 0.0 /
+      DATA  CBAND(8), CFREQ(8), CBW(8)  /  '18cm', 1658.49D0, 0.D0 /
+      DATA  CBAND(9), CFREQ(9), CBW(9)  /  '18cm', 1653.99D0, 0.D0 /
+      DATA  CBAND(10), CFREQ(10), CBW(10)  /  '6cm', 4990.49D0, 0.D0 /
 C
 C     The original 2cm band here is centered at 15285.49. 
 C     The standard setup files and pointing files are centered at 
@@ -49,16 +54,16 @@ C     15360.99.  The VLA band is 14650-15325 for 0.9 sensitivity.
 C     But the default VU band is 15339.90-15389.90.  Confusing.
 C     Will have CHKSET write an informational note to 2cm user.
 C
-      DATA  CBAND(11), CFREQ(11), CBW(11)  /  '2cm', 15285.49, 0.0 /
+      DATA  CBAND(11), CFREQ(11), CBW(11)  /  '2cm', 15285.49D0, 0.D0 /
 C
 C     The second 1cm band avoids much of the water line.  I didn't
 C     use a wavelength spec because 1cm is already too coarse (and
 C     really 30 GHz).
 C
-      DATA  CBAND(12), CFREQ(12), CBW(12)  /  '1cm', 22235.49, 0.0 /
-      DATA  CBAND(13), CFREQ(13), CBW(13)  /  '24ghz', 23799.49, 0.0 /
-      DATA  CBAND(14), CFREQ(14), CBW(14)  /  '7mm', 43135.49, 0.0 /
-      DATA  CBAND(15), CFREQ(15), CBW(15)  /  'sx', 0.0, 0.0 /
+      DATA  CBAND(12), CFREQ(12), CBW(12) / '1cm', 22235.49D0, 0.D0 /
+      DATA  CBAND(13), CFREQ(13), CBW(13) / '24ghz', 23799.49D0, 0.D0 /
+      DATA  CBAND(14), CFREQ(14), CBW(14) / '7mm', 43135.49D0, 0.D0 /
+      DATA  CBAND(15), CFREQ(15), CBW(15) / 'sx', 0.D0, 0.D0 /
 C
 C     Keep the indices for the X and S band frequencies used for SX.
 C
@@ -72,7 +77,7 @@ C
       GOTNETF = FREQREF(ICH,KS) .GT. 0.D0
       GOTNETS = NETSIDE(ICH,KS) .EQ. 'U' .OR. NETSIDE(ICH,KS) .EQ. 'L'
       GOTLO1  = FIRSTLO(ICH,KS) .NE. NOTSET
-      GOTBBF  = BBSYN(ICH,KS) .NE. 0.0
+      GOTBBF  = BBSYN(ICH,KS) .NE. 0.0D0
       GOTBBS  = SIDEBD(ICH,KS) .EQ. 'U' .OR. SIDEBD(ICH,KS) .EQ. 'L'
       IF( .NOT. GOTNETF .AND. .NOT. (
      1     GOTBBF .AND. GOTBBS .AND. GOTNETS .AND. GOTLO1 ) ) THEN
@@ -81,6 +86,15 @@ C        Need to set the frequencies.  Only do if can.  Let SETFREQ
 C        worry about it if we can't.
 C
          IF( BAND(KS) .NE. ' ' ) THEN
+C
+C           Abort if this is an RDBE.
+C
+            IF( DBE(KS) .EQ. 'RDBE_PFB' .OR. DBE(KS) .EQ. 'RDBE_DDC' )
+     1          THEN
+               CALL ERRLOG( 
+     1            'SETBAND: SCHED cannot yet set frequencies ' //
+     2            'from just a BAND specification for RDBE systems.' )
+            END IF
 C
 C           Now to get down to business.
 C
@@ -140,8 +154,8 @@ C
                   IF( NCHAN(KS) .LT. 4 ) 
      1               CALL ERRLOG( 'Too few channels for dual pol, ' //
      2                    'dual band observing - need 4.' )
-                  TEMPS = CFREQ(IBS) - TOTBAND / 4.0
-                  TEMPX = CFREQ(IBX) - TOTBAND / 4.0
+                  TEMPS = CFREQ(IBS) - TOTBAND / 4.0D0
+                  TEMPX = CFREQ(IBX) - TOTBAND / 4.0D0
                   FRQLOW(1) = TEMPS
                   ICX = 1 + NCHAN(KS) / 2
                   FRQLOW(ICX) = TEMPX
@@ -167,8 +181,8 @@ C
                   IF( NCHAN(KS) .LT. 2 ) 
      1               CALL ERRLOG( 'Too few channels for, ' //
      2                    'dual band observing - need 2.' )
-                  TEMPS = CFREQ(IBS) - TOTBAND / 4.0
-                  TEMPX = CFREQ(IBX) - TOTBAND / 4.0
+                  TEMPS = CFREQ(IBS) - TOTBAND / 4.0D0
+                  TEMPX = CFREQ(IBX) - TOTBAND / 4.0D0
                   DO ICS = 1, NCHAN(KS)/2
 C
 C                    S band
@@ -192,7 +206,7 @@ C              Do things slightly differently for the single and
 C              dual polarization cases.
 C
                IF( DUALPOL(KS) ) THEN
-                  TEMP = CFREQ(IB) - TOTBAND / 2.0
+                  TEMP = CFREQ(IB) - TOTBAND / 2.0D0
                   FRQLOW(1) = TEMP
                   DO ICH = 2, NCHAN(KS)
                      IF( POL(ICH,KS) .EQ. POL(1,KS) .OR. 
@@ -201,7 +215,7 @@ C
                      FRQLOW(ICH) = TEMP
                   END DO
                ELSE
-                  TEMP = CFREQ(IB) - TOTBAND / 2.0
+                  TEMP = CFREQ(IB) - TOTBAND / 2.0D0
                   DO ICH = 1, NCHAN(KS)
                      FRQLOW(ICH) = TEMP
                      TEMP = TEMP + BBFILT(ICH,KS)

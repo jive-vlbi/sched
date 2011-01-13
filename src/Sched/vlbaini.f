@@ -4,7 +4,7 @@ C     Routine for SCHED called by VLBA that starts a vlba control file.
 C
       INCLUDE   'sched.inc'
 C
-      INTEGER           ISCN, ISTA
+      INTEGER           ISCN, ISTA, KSTA
       INTEGER           I, J, LEN1, DOY1
       CHARACTER         HUMAND1*16, VLBAD1*9, ESTART*9, TFORM*15
       CHARACTER         DISKD*6
@@ -12,11 +12,16 @@ C
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VLBAINI: Starting.' )
 C
+C     Get the pointer to entries in the station catalog for this 
+C     schedule station ISTA.
+C
+      KSTA = STANUM(ISTA)
+C
 C     Write identifying information and program name 
 C     at top of schedule.
 C
       WRITE( IUVBA, '(''!*  Schedule for '', A8,''  *!'')')
-     1      STATION(STANUM(ISTA))
+     1      STATION(KSTA)
       WRITE( IUVBA, '(''!*  Experiment '', A, '' *!'' )' ) 
      1      EXPCODE
 C
@@ -42,21 +47,40 @@ C
      2     ESTART, HUMAND1, DOY1
       WRITE( IUVBA, '( A, A )' ) 'program=', EXPCODE
 C
-C     Specify the disk format.  Presume that it will be the
+C     Specify the disk format, even though this line is ignored
+C     by the on-line system.  Presume that it will be the
 C     format of the drive that is at the station and that it
-C     will not change.
+C     will not change.  But for the RDBE/MARK5C, claim it is 
+C     mark5a because that is all the crd file can control.
+C     Also write a warning that the VEX file probably cannot be
+C     used for correlation.
 C
       IF( VLBITP .AND. USEDISK(ISTA) ) THEN
-         DISKD = DISK(STANUM(ISTA))
+         IF( DAR(KSTA) .EQ. 'RDBE' .AND. DOMKA ) THEN
+            DISKD = 'mark5a'
+            WRITE( IUVBA, '( 1X, /, 2A )' ) 
+     1         '!*  WARNING:  This crd file ',
+     2         'can be used to record data on the Mark5a system.*!'
+            WRITE( IUVBA, '( 3A )' ) '!*  WARNING:  But the VEX ',
+     1         'file is for the RDBE/MARK5C data and will most ', 
+     2         'likely *!'
+            WRITE( IUVBA, '( 2A )' ) '!*  WARNING:  ',
+     1         'not work as is for correlation. *!'
+            WRITE( IUVBA, '( 3A )' ) '!*  WARNING:  The channel ',
+     1         'number, frequency, and bandwidth are probably ',
+     2         'different. *!'
+         ELSE
+            DISKD = DISK(KSTA)
+         END IF
          CALL DWCASE( DISKD )
-         WRITE( IUVBA, '( 2A )' ) 'diskformat=', DISKD
+         WRITE( IUVBA, '( 1X, /, 2A )' ) 'diskformat=', DISKD
       END IF
 C
 C     Tell operations what can be used.  This used to distinguish
 C     tape and disk, but tape has been removed.  Keep in case
 C     there are other distinctions later.
 C
-      IF( .NOT. DISK(STANUM(ISTA)) .EQ. 'NONE' ) THEN
+      IF( .NOT. DISK(KSTA) .EQ. 'NONE' ) THEN
          IF( .NOT. VLBITP ) THEN
             WRITE( IUVBA, '( A )' ) 'media=(1,none)'
          ELSE

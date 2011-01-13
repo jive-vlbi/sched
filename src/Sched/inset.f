@@ -49,14 +49,11 @@ C
       CALL KEYADD( 'SWTCHDUR', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'BBSYN2', 0.D0, MCHAN, KD, KC, KI )
 C
-C         Tapes
+C         Recordings
 C
-      CALL KEYADD( 'TPMODE', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'DBE',    0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'FORMAT', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'MODETEST', NOTSET, 1, KD, KC, KI )
-      CALL KEYADD( 'TPSPEED', 0.D0, 1, KD, KC, KI )
-      CALL KEYADD( 'TPSPEEDH', 0.D0, 1, KD, KC, KI )
-      CALL KEYADD( 'TPSPEEDL', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'TRACK1', 0.D0, MCHAN, KD, KC, KI )
       CALL KEYADD( 'TRACK2', 0.D0, MCHAN, KD, KC, KI )
       CALL KEYADD( 'TRACK3', 0.D0, MCHAN, KD, KC, KI )
@@ -65,6 +62,13 @@ C
       CALL KEYADD( 'TRACK6', 0.D0, MCHAN, KD, KC, KI )
       CALL KEYADD( 'TRACK7', 0.D0, MCHAN, KD, KC, KI )
       CALL KEYADD( 'TRACK8', 0.D0, MCHAN, KD, KC, KI )
+C
+C         Tapes (Obsolete)
+C
+      CALL KEYADD( 'TPMODE', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'TPSPEED', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'TPSPEEDH', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'TPSPEEDL', 0.D0, 1, KD, KC, KI )
 C
 C        Phase cal
 C

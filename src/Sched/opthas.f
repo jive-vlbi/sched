@@ -310,7 +310,7 @@ C
                ATSRC = 0.D0
                DO ISTA = 1, NSTA
                   IF( STASCN(JSCN,ISTA) ) THEN
-                     CALL OPTGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
+                     CALL STAGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
      1                      LASTTIME, TONSRC(JSCN,ISTA) )
                      IF( KSCN .GT. 1 .AND. 
      1                      UP1(JSCN,ISTA) .EQ. ' ' ) THEN

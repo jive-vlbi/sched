@@ -230,7 +230,7 @@ C
 C              Creates a string of scans of total length OPDUR for each
 C              input scan.  This is for planning.
 C   
-               CALL OPTUPT( KSCN, ISCN, ADJUST, KEEP, DONE )
+               CALL OPTUPT( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
 C   
             ELSE IF( OPTMODE .EQ. 'HAS' ) THEN
 C
@@ -260,7 +260,10 @@ C
             IF( KEEP .AND. .NOT. DONE ) THEN
 C        
 C              Get slew times and exact start time of next scan.  The
-C              adjustments for DWELL scheduling are done here.
+C              adjustments for DWELL scheduling are done here.  Note
+C              that OPTTIM does not calculate geometry for all scans
+C              and, even when it does, it may be for the wrong time - 
+C              like for a guessed start time.
 C        
                CALL OPTTIM( LASTISCN, ISCN, ADJUST )
 C        
@@ -278,9 +281,9 @@ C
                   DONE = .TRUE.
                END IF
 C
-C              Update the geometry for the scan.  OPTTIM doesn't do
-C              a complete job of this.  The pointing insertion scans
-C              assume that this has been done.
+C              Update the real geometry for the scan.  OPTTIM doesn't
+C              really do this.  The pointing insertion system below
+C              assumes that this has been done.
 C
                CALL SCNGEO( LASTISCN, NGOOD, ISCN )
 C        
@@ -322,7 +325,7 @@ C     1              ISCN, ISCN - GEOTEST + 1,
 C     2              0.0, DUM1, .TRUE., SIGMA )
 C            END IF
 C
-C           Insert reference pointing scans if requested.  
+C           Insert reference pointing scans if requested.
 C           It is possible that several scans will be inserted (NADDED 
 C           in ADDPEAK).  The primary observing scan will be moved 
 C           to scan ISCN+NADDED and the reference pointing scans 
@@ -355,21 +358,26 @@ C
          IF( KEEP .AND. .NOT. DONE ) THEN
 C
 C           Get the geometry at the stations and count the stations
-C           that are consitered UP.  It is almost certain that this 
+C           that are considered UP.  It is almost certain that this 
 C           has already been done for all scans, but with the pointing
-C           scan insertions etc, there is room for confusion and 
-C           this makes sure that all is ok.  This does not adjust
-C           any scan timings, just recalculates the geometry.
+C           scan and DELZN scan insertions etc, there is room for 
+C           confusion and this makes sure that all is ok.  OPTTIM
+C           tweaks the scan timing if needed while SCNGEO updates the
+C           geometry and expected arrival time at the source without 
+C           making any changes to the scan.  Note NGOOD is not needed
+C           here (also determined by AUTODOWN) but SCNGEO is used 
+C           elsewhere where it is needed.
 C
             CALL OPTTIM( LASTISCN, ISCN, ADJUST )
             CALL SCNGEO( LASTISCN, NGOOD, ISCN )
 C
-C           Eliminate stations using automatic tape allocation
-C           and having the source down.  This should not affect
-C           the above count of good antennas because these would
-C           not have been counted.
+C           Eliminate stations using disk recorders
+C           for which the source is down. Also eliminate antennas
+C           that don't reach the source until the scan is over.
+C           Don't attempt any scan timing adjustments, but do
+C           recalculate NGOOD to reflect new truths.
 C
-            CALL AUTODOWN( ISCN )
+            CALL AUTODOWN( LASTISCN, ISCN, NGOOD )
 C
 C           Only accept scans with enough antennas up.
 C           Make a special case for OPTMODE=CSUB since it will put
@@ -416,7 +424,8 @@ C
                END DO
 C
 C              Write the new KEYIN input for another run of SCHED
-C              in case the user wants to do some edits.
+C              in case the user wants to do some edits.  This is
+C              most likely to be useful for optimized schedules.
 C
                IF( OPTMODE .NE. 'NONE' .AND. OPTMODE .NE. 'UPTIME') THEN
                   CALL OPTSCH( ISCN ) 

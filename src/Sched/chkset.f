@@ -13,7 +13,7 @@ C
       INTEGER           LEN1, LNAME, ITOUT
       LOGICAL           ERRS, SAMPWARN, OVERWARN, WARN2CM
       CHARACTER         UPPCAL*4
-      REAL              BBWIDI, BBWIDJ
+      DOUBLE PRECISION  BBWIDI, BBWIDJ
       DOUBLE PRECISION  FLOWI, FLOWJ, FHIGHI, FHIGHJ
       SAVE              ITOUT, WARN2CM
       DATA              ITOUT / 1 /
@@ -128,12 +128,12 @@ C
 C           Be sure bandwidth is not more than half the sample rate.
 C
             IF( VLBITP ) THEN
-               IF( BBFILT(ICH,KS) .GT. 0.5*SAMPRATE(KS) ) THEN
+               IF( BBFILT(ICH,KS) .GT. 0.5D0 * SAMPRATE(KS) ) THEN
                   CALL WLOG( 1, 'CHKSET: Bandwidth more than half of '//
      1              'sample rate' )
                   ERRS = .TRUE.
                END IF
-               IF( BBFILT(ICH,KS) .LT. 0.5*SAMPRATE(KS) .AND. 
+               IF( BBFILT(ICH,KS) .LT. 0.5D0 * SAMPRATE(KS) .AND. 
      1             SAMPWARN ) THEN
                   CALL WLOG( 0, 
      1                    'CHKSET note: Oversampling specified. ' )
@@ -150,7 +150,7 @@ C
 C
 C              Get frequency range of channel ICH.
 C
-               BBWIDI = AINT( BBFILT(ICH,KS) / 10.0 ) * 10.0 
+               BBWIDI = AINT( BBFILT(ICH,KS) / 10.0D0 ) * 10.0D0
                IF( NETSIDE(ICH,KS) .EQ. 'L' ) THEN
                   FLOWI  = FREQREF(ICH,KS) - BBWIDI
                   FHIGHI = FREQREF(ICH,KS)
@@ -203,6 +203,8 @@ C        Note that the "geodetic" VLBA systems need some extra checks
 C        beyond what the normal VLBA systems get thanks to incomplete
 C        wiring.
 C
+         IF( DAR(ISETSTA(KS)) .EQ. 'RDBE' ) 
+     1         CALL CHKRDBE( KS, ERRS )
          IF( DAR(ISETSTA(KS)) .EQ. 'VLBA' .OR. 
      1       DAR(ISETSTA(KS)) .EQ. 'VLBAG'  .OR.
      2       DAR(ISETSTA(KS)) .EQ. 'VLBA4' )  

@@ -1,4 +1,4 @@
-      SUBROUTINE OPTUPT( KSCN, ISCN, ADJUST, KEEP, DONE )
+      SUBROUTINE OPTUPT( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
 C
 C     Routine for SCHED that creates a schedule useful for planning.
 C     Each scan (source) is expanded to a series of scans, each of
@@ -7,9 +7,12 @@ C
 C     This routine, along with new plotting capabilities, should make
 C     it possible to stop supporting UPTIME.
 C
+C     Reset LASTISCN when changing source to prevent unrealistic slew
+C     worries.
+C
       INCLUDE  'sched.inc'
 C
-      INTEGER           ISCN, INSCN, KSCN, JSCN, LSCN
+      INTEGER           ISCN, INSCN, KSCN, JSCN, LSCN, LASTISCN(*)
       INTEGER           ISTA
       LOGICAL           KEEP, ADJUST, DONE, DUP
       DOUBLE PRECISION  LASTTIME, T_AVAIL
@@ -78,6 +81,7 @@ C
       STOPJ(ISCN) = STARTJ(ISCN) + DUR(INSCN)
 C
 C     See if it is time to start the next source.
+C     If it is, start new sequence and reset LASTISCN
 C
       IF( STOPJ(ISCN) .GT. STARTJ(1) + OPDUR ) THEN
 C
@@ -88,6 +92,9 @@ C
             INSCN = INSCN + 1
             STARTJ(ISCN) = STARTJ(1)
             STOPJ(ISCN) = STARTJ(ISCN) + DUR(INSCN)
+            DO ISTA = 1, NSTA
+               LASTISCN(ISTA) = 0
+            END DO
          END IF
 C
       END IF
@@ -98,18 +105,17 @@ C        Fill in the required information for the scan.
 C
          CALL SCNDUP( ISCN, INSCN, .FALSE. )
 C
-C        Only keep stations that are up.  Set LASTISCN=0
-C        for all calls because we aren't concerned about
-C        slews etc.
+C        Only keep stations that are up.
 C
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) ) THEN
-               CALL OPTGEO( ISCN, ISTA, STARTJ(ISCN), 
+               CALL STAGEO( ISCN, ISTA, STARTJ(ISCN), 
      1             0, LASTTIME, T_AVAIL )
                STASCN(ISCN,ISTA) = UP1(ISCN,ISTA) .EQ. ' ' .AND.
      1             UP2(ISCN,ISTA) .EQ. ' ' .AND.
      2             ( EL1(ISCN,ISTA) + EL2(ISCN,ISTA) ) / 2.0 .GT. 
      3              OPMINEL(ISCN)               
+C
             END IF
          END DO
 C

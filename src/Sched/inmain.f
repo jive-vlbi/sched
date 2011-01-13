@@ -28,7 +28,7 @@ C
       CALL KEYADD( 'DAY', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'DURation', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'PRESCAN', 0.D0, 1, KD, KC, KI )
-      CALL KEYADD( 'DWELL', 0.D0, 2, KD, KC, KI )
+      CALL KEYADD( 'DWELL', 0.D0, 3, KD, KC, KI )
       CALL KEYADD( 'GAP', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'REPeat', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'GROUP', 0.D0, 1, KD, KC, KI )
@@ -101,6 +101,7 @@ C
       CALL KEYADD( 'POINT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'PUBPLOT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'VEXTEST', UNSET, 1, KD, KC, KI )
+      CALL KEYADD( 'DOMKA', UNSET, 1, KD, KC, KI )
 C
 C     Files.
 C

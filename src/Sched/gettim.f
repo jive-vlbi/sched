@@ -14,10 +14,10 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER           ISCN, KI(*), MONTH, DOY, YR, JERR
-      INTEGER           I1, I2, KEYPTR
+      INTEGER           I1, I2, KEYPTR, TNOWAIT
       INTEGER           YEAR(*), DAY(*)
       DOUBLE PRECISION  STOP(*), START(*)
-      DOUBLE PRECISION  VALUE(*), TDWELL, TDUR
+      DOUBLE PRECISION  VALUE(*), TDWELL, TDUR, TMINDW
       CHARACTER         KC(*)*(*)
 C -------------------------------------------------------------------
 C     Month defaults to 1 for day = day of year.
@@ -51,22 +51,33 @@ C     However DWELL(2) (will go to NOWAIT) has not been reset.
 C
       TDUR   = VALUE( KEYPTR( 'DURation', KC, KI ) )
       TDWELL = VALUE( KEYPTR( 'DWELL', KC, KI ) )
-      NOWAIT(ISCN) = VALUE( KEYPTR( 'DWELL', KC, KI ) + 1 )
+C
+      TNOWAIT = VALUE( KEYPTR( 'DWELL', KC, KI ) + 1 )
+      TMINDW  = VALUE( KEYPTR( 'DWELL', KC, KI ) + 2 ) / 86400.D0
+C
       IF( TDWELL .NE. UNSET .AND. TDUR .NE. UNSET ) THEN
          CALL ERRLOG( 'GETTIM: Don''t specify both DUR and DWELL! ' )
       ELSE IF( TDWELL .NE. UNSET ) THEN
          DWELL(ISCN) = .TRUE.
          DUR(ISCN) = TDWELL / 86400.D0
+         NOWAIT(ISCN) = TNOWAIT
+         MINDW(ISCN) = TMINDW
       ELSE IF( TDUR .NE. UNSET ) THEN
          DWELL(ISCN) = .FALSE.
          DUR(ISCN) = TDUR / 86400.D0
+         NOWAIT(ISCN) = 0
+         MINDW(ISCN) = 0.D0
       ELSE
          IF( ISCN .LE. 1 ) THEN
             DWELL(ISCN) = .FALSE.
             DUR(ISCN) = 0.D0
+            NOWAIT(ISCN) = 0
+            MINDW(ISCN) = 0.D0
          ELSE
             DWELL(ISCN) = DWELL(ISCN-1)
             DUR(ISCN) = DUR(ISCN-1)
+            NOWAIT(ISCN) = NOWAIT(ISCN-1)
+            MINDW(ISCN) = MINDW(ISCN-1) 
          END IF
       END IF
       DWELLS = DWELLS .OR. DWELL(ISCN)

@@ -11,7 +11,7 @@ C
 C     Common for communication with VLBASU.
 C
       INTEGER  MBBCFREQ
-      REAL     LBBCFREQ(MCHAN)
+      DOUBLE PRECISION  LBBCFREQ(MCHAN)
       COMMON  / CVLBA /  LBBCFREQ, MBBCFREQ
       SAVE    /CVLBA/
 C ----------------------------------------------------------------------
