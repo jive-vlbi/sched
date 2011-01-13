@@ -23,6 +23,8 @@ C
       LOGICAL       ANYS(3)
       DATA          HISTLEV / 3.0, 5.0, 7.5, 10.0, 15., 20., 30. /
 C ------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'SRCLST starting.' )
+C
 C     Detect if there are sources in any of the 3 categories.  Those
 C     are 1) used in recording, 2) used in non-recoreding scans, and
 C     3) used in multiple phase center lists.
