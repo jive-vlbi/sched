@@ -1,0 +1,140 @@
+SCHED version 9.4 is now available as of January 14, 2011.  In
+Socorro, it can be accessed at /users/cwalker/files/sched_9.4.  The
+tar files with the code and the binary executables can be found at
+ftp.aoc.nrao.edu in pub/sched (and the binaries subdirectory).
+
+There will be about a week for feedback locally and from the
+developers in Europe and Australia before it is transferred into the
+standard version in Socorro and announced on the vlbi email exploder.
+Those of you who can, please try your schedules and provide feedback.
+
+Major features in this release are listed below.  Some have been
+available to the community through the beta releases, but all are new
+since 9.3.  A more complete listing can be found in the release notes
+which are included at the back of the manual available at
+http://www.aoc.nrao.edu/~cwalker/sched/sched/sched.html
+(http://www.aoc.nrao.edu/software/sched/index.html after this version
+is made standard).
+
+1.  Prevent excessively long comments in Vex files that were causing
+problems at the stations.  Actually they are wrapped so nothing is
+lost, but the maximum line length of VEX is not exceeded.
+
+2.  Install more realistic slew rates for the VLBA antennas.  These
+were overestimated by the nominal rate, causing some loss of data
+after long slews with DWELL scheduling.  The new rates may need
+another update soon as this triggered some work on the control system,
+but they should now be conservative.
+
+3.  Support the ability of the DiFX correlator to use multiple phase
+centers (up to hundreds) in one pass.  The coordinates of all the
+phase centers can be provided to SCHED and passed through the new .v2d
+file to the correlator.  There is a new section in the manual
+describing this capability.
+
+4.  Give CORCHAN a second argument to hold the FFT size.
+
+5.  Add the capability to automatically generate geodetic segments for
+atmospheric calibration.  These are the segments used by the AIPS task
+DELZN.  Automatic generation allows the overall schedule to be time
+shifted for dynamic scheduling so will be preferred for VLBA
+observations.  It also can generate an optimized schedule for whatever
+antennas are present, not just VLBA antennas.  Such segments can be
+used with very short scans for a psuedo tipping scan (someday SCHED
+should learn how to do tipping scans) to get atmospheric opacity.  The
+scheme for requesting these segments, and a description of the
+algorithm is included in a special section in the manual.
+
+6.  Support observations with the new wide bandwidth hardware for the
+VLBA and other systems - the RDBE digital backend and the Mark5C
+recording system.  This will also simplify support for the DBBC,
+although that is not explicitly there yet.  The support is not yet
+complete in the sense that SCHED does not use the BAND mechanism to
+set all the frequencies, but the amount of setup information required
+is not large.  SCHED does check that setup parameters are reasonable.
+Both the PFB and the not-yet-deployed DDC personalities of the RDBE
+are supported, although some tweaks to the DDC support will be
+required eventually.  The new hardware is controlled at the VLBA
+stations by a new control program on a new computer.  That system gets
+schedule information from the VEX file.  The old control system is
+also present and will be required for control of old hardware including
+receivers and the antenna.  The crd files from SCHED are still used for
+that.  The VLBA DAR and Mark5A are also still present and can be used
+in special cases in parallel with the Mark5C.  There are new examples
+egrdbe.key and egddc.key showing how to use the wideband equipment.
+The "Wide Band Observing: RDBE, DBBC, VLBA, and Mark IV Modes"
+section of the manual covers this capability.
+
+7.  Most of the tape support, including many subroutines, has been 
+removed from SCHED.  Tapes are history everywhere as far as we were
+able to learn.
+
+8.  The number of allowed aliases for source names was increased from
+5 to 10.  Yes, there are sources that needed more than 5.
+
+9.  Optional second and third arguments were added to the DWELL
+parameter.  The second is an integer indicating that the scan can
+start while that many antennas are still slewing.  This is to help
+avoid having most of the array sitting on source doing nothing while a
+slow antenna, or an antenna near the zenith where long azimuth slews
+are needed to go short distances, is getting to source.  If an antenna
+cannot get to source, it is removed from the scan.  But some effort is
+made to prevent the antenna from getting stuck on one source during a
+phase referencing operation when it would be better to lose a couple
+of cases and do the slew (wrap or zenith passage usually).  The third
+argument is a minimum dwell time for the slow antennas.  That can be
+used to insure that all antennas get some on-source time even if the
+scan has to be extended past the requested duration for those antennas
+that got there quickly.
+
+10.  The scan timing calculations, especially for long slews and wraps,
+were tweaked to try to be more accurate.  It turns out, for long slews
+on slow antennas, it actually matters that the Earth rotates during 
+the slew.
+
+11.  The location and source catalogs were updated to the latest from
+Goddard and from Leonid Petrov.  There are now 5777 sources in the
+source catalog, most with astrometric (few milli-arcsecond or better)
+positions.  There are still a few hundred residual VLA calibrator list
+and JVAS sources whose positions aren't as good.  For sources.vlba,
+the positions from GSFC gsf2010a_astro solution were used where
+available.  Additional sources in Petorv's RFC_2010C solution were
+added.  Then any sources from the old sources.vlba that were not
+replaced by the new data were kept, although sources from Petrov's
+2009 catalog that did not appear in the 2010 catalog were assumed to
+be bad and discarded.  The other sources that were retained were the
+VLA and JVAS sources mostly.  The locations file was updated with 
+station positions from the gsf2010a_astro solution.  Note that now 
+the station and source positions in the VEX files from SCHED are used
+in corration, at least on the VLBA, so they need to be good.
+
+12.  Add flux densities for the large majority of the sources in the
+source catalog.  Many thanks to Leonid Petrov for providing his
+geodetic catalog with this information attached.  SCHED now has access
+to the flux information, but does not do anything with it yet.  This
+does provide a major step toward eventual automatic selection of
+calibrators.
+
+13.  The MINPAUSE parameter, which prevents short stoppages of the
+recording media, is no longer multiplied by the "speedup factor".
+The speedup factor has become somewhat meaningless with the new 
+correlators and recording systems.
+
+14.  Remove much of the effort to keep the same format (fan out) 
+at different stations and to avoid changes in the "track" bit rate
+with time.  This allows each station and each scan to use whatever 
+is a reasonable data format.  This simplifies the logic in SCHED that
+used to have to be aware of what was needed for all scans/stations
+before it could start picking formats.
+
+
+With this many changes, please be alert to possible problems.  The
+43 examples are all run as part of testing so the program gets shaken
+out pretty well, but there's nothing like actual use to find hidden
+problems.
+
+Cheers,
+
+Craig Walker
+
+
