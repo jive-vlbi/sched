@@ -16,7 +16,7 @@ C     Huib's local variables
 C      
       INTEGER   IXX, ISTA, I, ISCAT, KS, IDRIV, JHEAD
       INTEGER   LEN1
-      CHARACTER HEAD*10
+      CHARACTER HEAD*10, WRDISK*6
       LOGICAL   VIOLFS
 C ----------------------------------------------------------------------
 C     write $DAS section 
@@ -68,9 +68,10 @@ C
              IF( DISK(STANUM(ISTA)) .EQ. 'MARK5A' .OR.
      1           DISK(STANUM(ISTA)) .EQ. 'MARK5B' .OR.
      2           DISK(STANUM(ISTA)) .EQ. 'MARK5C'    ) THEN
+                WRDISK = 'Mark5'//DISK(STANUM(ISTA))(6:6)//' '
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',
-     2              DISK(STANUM(ISTA))(1:LEN1(DISK(STANUM(ISTA)))), SEP
+     2              WRDISK(1:LEN1(WRDISK)), SEP
              ELSE IF( DISK(STANUM(ISTA)) .EQ. 'LBADR' ) THEN
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',
