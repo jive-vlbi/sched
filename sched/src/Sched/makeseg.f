@@ -92,10 +92,15 @@ C
          TSRC(ISEG) = 0
          SELTYPE(ISEG) = '   '
       END DO
-      MAXPRIO = 6   !  **************************************  test.
       LHIGHSTA = 0
       LHIGHSIG = 0.0
       LASTTYPE = ' '
+C
+C     For the first source, be relaxed about what is chosen.  This
+C     was flagged as a test in the 9.4 release, but that release
+C     seems to be working, to keep it.
+C
+      MAXPRIO = 6
 C
 C     Start the initial search for low and high stations from 
 C     sources close to previous ones looking for one of each.
@@ -185,7 +190,8 @@ C        measure the quality measure.  For these, restrict to
 C        better sources using USEGEO and take ones that involve
 C        short slews.
 C
-C        ====  First sources - get low and high el for each station  =====
+C        ====  First sources - get something low el and something high 
+C        ====  el for each station 
 C
          IF( ( NSTALOW .LT. NSTA .OR. NSTAHIGH .LT. NSTA ) .AND. 
      1       DORAND ) THEN
@@ -635,8 +641,10 @@ C                    Add in the slew penalty where needed.
 C
                      SLEWTIME = STARTJ(LSCN) - STOPJ(LSCN-1)
                      PENALTY = GEOSLEW * SLEWTIME / ( 30.0 * ONESEC)
+C
 C       write(*,*) 'makeseg qual', lscn, igeo, slqual, fqual, penalty,
 C     1     (sigma(ista),ista=1,nsta)
+C
                      SLQUAL = SLQUAL + PENALTY
                      IF( FQUAL .NE. 0.0 ) THEN
                         FQUALSL = FQUAL + PENALTY
@@ -692,11 +700,11 @@ C
                            SAVSIG2(ISTA) = SIGMA(ISTA)
                         END DO
                         IF( GEOPRT .GE. 2 )
-     1                    WRITE(*, '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
-     2                    'makesig: Got new best sigma without ',
-     3                    'slew penalty: ',
-     4                     igeo, ' ', geosrc(igeo), fqual, highsta2, 
-     5                     highsig2
+     1                      WRITE(*, '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
+     2                         'makesig: Got new best sigma without ',
+     3                         'slew penalty: ',
+     4                         igeo, ' ', geosrc(igeo), fqual, highsta2, 
+     5                         highsig2
                      END IF
 C
                      IF( SLQUAL .LT. BSLQUAL ) THEN
@@ -726,7 +734,7 @@ C           Choose the next source based on the quality measures.
 C           If the best using the rms of the worst station last time
 C           with a slew penalty gives a good improvement for that
 C           station, use it.  If not, use the one with the best rms
-C           without a penalty.  It even that doesn't give much
+C           without a penalty.  If even that doesn't give much
 C           improvement, take the best based on the improvement of
 C           the rms errors.  Don't use the schemes based on the
 C           previous worst, when that has not been determined.  Use
@@ -785,10 +793,10 @@ C              with this option, take it without requiring the
 C              especially big improvement.
 C
                ELSE IF( TSRC2 .NE. 0 .AND. 
-     1             ( LHIGHSIG / SAVSIG2(LHIGHSTA) .GT. 1.25 ) .OR.
+     1             ( ( LHIGHSIG / SAVSIG2(LHIGHSTA) .GT. 1.25 ) .OR.
      2             ( LASTTYPE .EQ. 'RMS' .AND. 
      3               HIGHSTA3 .EQ. LHIGHSTA .AND. 
-     3               HIGHSIG3 .GT. HIGHSIG2 ) ) THEN
+     3               HIGHSIG3 .GT. HIGHSIG2 ) ) ) THEN
                   TSRC(ISEG) = TSRC2
                   SELTYPE(ISEG) = 'S'
                   WSTA(ISEG) = STCODE(STANUM(HIGHSTA2))
