@@ -262,6 +262,5 @@ C
       ELSE
          CALL ERRLOG( 'GMKSCN: Bad GMODE.  Programming error.' )
       END IF
-
       RETURN
       END
