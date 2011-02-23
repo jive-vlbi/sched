@@ -344,6 +344,17 @@ C
      1             'SETFCAT: Specified BBC sideband for channel ', ICH,
      2             ' not consistent with value deduced from other data'
                CALL WLOG( 1, SETMSG )
+               SETMSG = ' '
+               WRITE( SETMSG, '( 8X, 6A )' )
+     1            '   Netside=', NETSIDE(ICH,KS), 
+     2            '   IF sideband=', SIDE1(ICH,KS),
+     3            '   BBC sideband=', SIDEBD(ICH,KS)
+               CALL WLOG( 1, SETMSG )
+               SETMSG = ' '
+               WRITE( SETMSG, '( 8X, A, F10.3, A, F10.3 )' )
+     1            '   FREQREF=', FREQREF(ICH,KS), 
+     2            '   FIRSTLO=', FIRSTLO(ICH,KS)
+               CALL WLOG( 1, SETMSG )
                CALL ERRLOG( 'SETFCAT: Setup file: '// SETNAME(KS) )
             END IF
             SIDEBD(ICH,KS) = 'U'
@@ -355,6 +366,16 @@ C
                WRITE( SETMSG, '( A, I2, A )' )  
      1             'SETFCAT: Specified BBC sideband for channel ', ICH,
      2             ' not consistent with value deduced from other data'
+               CALL WLOG( 1, SETMSG )
+               WRITE( SETMSG, '( 8X, 6A )' )
+     1            '   Netside=', NETSIDE(ICH,KS), 
+     2            '   IF sideband=', SIDE1(ICH,KS),
+     3            '   BBC sideband=', SIDEBD(ICH,KS)
+               CALL WLOG( 1, SETMSG )
+               SETMSG = ' '
+               WRITE( SETMSG, '( 8X, A, F10.3, A, F10.3 )' )
+     1            '   FREQREF=', FREQREF(ICH,KS), 
+     2            '   FIRSTLO=', FIRSTLO(ICH,KS)
                CALL WLOG( 1, SETMSG )
                CALL ERRLOG( 'SETFCAT: Setup file: '// SETNAME(KS) )
             END IF

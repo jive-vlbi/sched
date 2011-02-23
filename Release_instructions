@@ -154,8 +154,12 @@ setenv SCHEDNEW ~/files/sched_$NEWVER
 mkdir $SCHEDNEW
 cd $SCHEDNEW
 
+  Check out the current SCHED.  It lands in a subdirectory, so move
+  it up, including the .svn files.
+
 svn checkout https://svn.aoc.nrao.edu/repos/sched/trunk/sched
 mv sched/* .
+mv sched/.* .
 
 
 #  Copy over the examples/Stdout files, the execute modules, and 
@@ -179,8 +183,8 @@ rsync -auv --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
 tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
     --exclude "lib" --exclude "core*" --exclude "TEST"  \
     --exclude "RELATED_CODE" \
-     -cf ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar .
-gzip ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar
+     -cf $TARDIR/sched_$NEWVER.tar .
+gzip $TARDIR/sched_$NEWVER.tar
 
 ==================  Put files on the ftp site  =======================
 
@@ -195,8 +199,7 @@ rsync -auv bin/*  $FTP/sched/sched_$NEWVER/binaries
 =================  Test the release  ==============================
 
     This will not use the spice stuff so it will not be the internal release.
-    Clean out sched_temp first if needed.
-    Unpack the source distribution into /users/cwalker/sched_temp and
+    Clean out sched_temp first if needed.    Unpack the source distribution into /users/cwalker/sched_temp and
     test the compilation without the satellite stuff
     Use the makefile that does not use the spice package (run configureLinux)
     Check testruns.out at the end.
