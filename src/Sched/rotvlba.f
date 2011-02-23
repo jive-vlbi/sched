@@ -7,6 +7,17 @@ C
 C     Feb 6, 2007  Account for rotation moving on curved path, not
 C     straight, in calculation of az and el collimation offsets. RCW.
 C
+C     Feb. 22, 2011.  The rotation numbers actually used on the VLBA
+C     (or at least reported) have a different zero point and different
+C     sign convention (direction corresponding to a positive rotation)
+C     from the numbers on the chart I used to get the FEEDPOS 
+C     values below.  The actual numbers have an arbitrary zero, so don't
+C     use them for the curvature calculations.  But do change curvature
+C     calculation to recognize that a positive rotation is clockwise
+C     looking down on the feed circle.  Do that by subtracting the
+C     original values of FEEDPOS from 360 deg and changing the equations
+C     for the collimation offsets.
+C     
       INCLUDE           'sched.inc'
       INCLUDE           'schset.inc'
 C
@@ -38,20 +49,20 @@ C
       IF( FE(2,LS) .EQ. '2cm' .OR. FE(4,LS) .EQ. '2cm' ) THEN
          ROTINC = 8.0                !  Expect 12 GHz (masers)
          FOCINC = 17.0
-         FEEDPOS = 138.0 * RADDEG
+         FEEDPOS = ( 360. - 138.0 ) * RADDEG
       ELSE IF( FE(2,LS) .EQ. '1.3cm' .OR. FE(4,LS) .EQ. '1.3cm' .OR. 
      1         FE(2,LS) .EQ. '1cm' .OR. FE(4,LS) .EQ. '1cm') THEN
          ROTINC = 4.5
          FOCINC = 10.0
-         FEEDPOS = 78.0 * RADDEG
+         FEEDPOS = ( 360. - 78.0 ) * RADDEG
       ELSE IF( FE(1,LS) .EQ. '7mm' .OR. FE(3,LS) .EQ. '7mm' ) THEN
          ROTINC = 2.2
          FOCINC = 5.0
-         FEEDPOS = 155.0 * RADDEG
+         FEEDPOS = ( 360. - 155.0 ) * RADDEG
       ELSE IF( FE(2,LS) .EQ. '3mm' .OR. FE(4,LS) .EQ. '3mm' ) THEN
          ROTINC = 1.1
          FOCINC = 2.5
-         FEEDPOS = 180.0 * RADDEG
+         FEEDPOS = ( 360. - 180.0 ) * RADDEG
       ELSE IF( FE(2,LS) .EQ. '90cm' .OR. FE(4,LS) .EQ. '90cm' .OR.
      1         FE(2,LS) .EQ. '50cm' .OR. FE(4,LS) .EQ. '50cm' .OR.
      2         FE(1,LS) .EQ. '20cm' .OR. FE(3,LS) .EQ. '20cm' ) THEN
@@ -59,15 +70,15 @@ C
       ELSE IF( FE(1,LS) .EQ. '6cm' .OR. FE(3,LS) .EQ. '6cm' ) THEN
          ROTINC = 20.0
          FOCINC = 30.0
-         FEEDPOS = 108.0 * RADDEG
+         FEEDPOS = ( 360. - 108.0 ) * RADDEG
          IF( STCODE(STANUM(ISTA)) .EQ. 'Nl' ) LOWLIM = -25.0
       ELSE IF( FE(2,LS) .EQ. '4cm' .OR. FE(4,LS) .EQ. '4cm' ) THEN
          ROTINC = 12.0
          FOCINC = 26.0
          IF( FE(1,LS) .EQ. '13cm' .OR. FE(3,LS) .EQ. '13cm' ) THEN
-            FEEDPOS = 32.0 * RADDEG
+            FEEDPOS = ( 360. - 32.0 ) * RADDEG
          ELSE
-            FEEDPOS = 323.0 * RADDEG
+            FEEDPOS = ( 360. - 323.0 ) * RADDEG
          END IF
 C
 C     Put 13 cm after the 4cm so the sx is right.
@@ -75,7 +86,7 @@ C
       ELSE IF( FE(1,LS) .EQ. '13cm' .OR. FE(3,LS) .EQ. '13cm' ) THEN
          ROTINC = 45.0
          FOCINC = 30.0
-         FEEDPOS = 32.0 * RADDEG
+         FEEDPOS = ( 360. - 32.0 ) * RADDEG
          IF( STCODE(STANUM(ISTA)) .EQ. 'Nl' ) LOWLIM = -10.0
       ELSE
          WRITE( MSGTXT, '( A, 4( 1X, A ) )' )
@@ -173,11 +184,13 @@ C
          WRITE( IUVBA, '( A, A )' ) 'stop = ', TSTOP
 C
 C        Get the focus and rotation values.
+C        Change the sign on DOAZPAT's addition to go with the
+C        change in the FEEDPOS convention.
 C
          DOFOC = FOCUS(ISCN) + FOCINC * FOC(IPAT)
          IF( DOFOC .LT. LOWLIM ) DOFOC = LOWLIM
          DOROT = ROTATION(ISCN) + ROTINC * ROT(IPAT)
-         DOAZPAT = DOAZ - ( 0.6666 / 0.01745 ) * 
+         DOAZPAT = DOAZ + ( 0.6666 / 0.01745 ) * 
      1       ( COS( DOROT * RADDEG + FEEDPOS ) - COS( FEEDPOS ) )
          DOELPAT = DOEL + ( 0.6666 / 0.01745 ) *
      1       ( SIN( DOROT * RADDEG + FEEDPOS ) - SIN( FEEDPOS ) )
