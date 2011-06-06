@@ -5,6 +5,9 @@
 !     Revised, Jan 21, 2009 : GBT_S2 is obsolete: removed them.
 !        added: GBT_COLD for cold weather az motion restriction.
 !        added entries for prime focus 2 (910-1230 MHZ)
+!     Some additions to get same LOs as VLBA as needed by the RDBE.
+!     Later changed priority to use the original LOs by default, 
+!     not the new RDBE ones.  Force the RDBE user to set FIRSTLO.
 !  -----------------------------------------------------------------
 !  GBT based on web site on 8Dec2000 RCW.
 !  Revised 27Apr2002 FDG
@@ -50,17 +53,37 @@ Name = gbt28cm  Station = GBT_VLBA, GBT_COLD priority = 0
 
 !----------------------------------------------------
 ! L-band: Range is 1.10 - 1.75 GHz
+! Ghigo email of 04/19/2011 indicates 1.1-1.8
 ! note there is an optional notch filter 1230-1340 MHz
 !	to cut out a nearby radar
 ! RF bandpass filters: 1.10-1.80 GHz, 1.10-1.45 GHz,
 !	               1.30-1.45 GHz, 1.60-1.75 GHz
 !----------------------------------------------------
+!  Added to match VLBA when using the RDBE:
+!  Put firstlo in setup file.
+Name = g20cm_1  Station = GBT_VLBA, GBT_COLD priority = 1
+  rf1 = 1100, 1100    ifname = A,    C
+  rf2 = 1600, 1600    fe  = '20cm', '20cm'
+  pol =  RCP,  LCP    lo1 = 2100.0, 2100.0
+  note = 'LO1=4.350, LO2=12.75, LO3=10.5 '
+/
+!  Older version:
 Name = gbt21cm  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 1100, 1100    ifname = A,    C
   rf2 = 1500, 1500    fe  = '20cm', '20cm'
   pol =  RCP,  LCP    lo1 = 2050.0, 2050.0
   note = 'LO1=4.300, LO2=12.75, LO3=10.5 '
 /
+
+!  Added to match VLBA when using the RDBE:
+!  Need firstlo in setup file.
+Name = g20cm_2  Station = GBT_VLBA, GBT_COLD priority = 1
+  rf1 = 1400, 1400    ifname = A,    C
+  rf2 = 1800, 1800    fe  = '20cm', '20cm'
+  pol =  RCP,  LCP    lo1 = 2400.0, 2400.0
+  note = 'LO1=4.650, LO2=12.75, LO3=10.5 '
+/
+!  Older version:
 Name = gbt18cm  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 1350, 1350    ifname = A,    C
   rf2 = 1750, 1750    fe  = '20cm', '20cm'
@@ -85,6 +108,14 @@ Name = gbt13cm  Station = GBT_VLBA, GBT_COLD priority = 0
   pol =  RCP,  LCP    lo1 = 2950.0, 2950.0
   note = 'LO1=8.200, LO2=15.75, LO3=10.5 '
 /
+!  This one matches the VLBA so use it when possible. (May 2, 2011)
+!  Must set FIRSTLO or will likely get the one below.
+Name = g13cm_2  Station = GBT_VLBA, GBT_COLD priority = 1
+  rf1 = 2100, 2100    ifname = B,    D
+  rf2 = 2600, 2600    fe  = '13cm', '13cm'
+  pol =  RCP,  LCP    lo1 = 3100.0, 3100.0
+  note = 'LO1=8.350, LO2=15.75, LO3=10.5 '
+/
 Name = gbt12cm  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 2200, 2200    ifname = B,    D
   rf2 = 2650, 2650    fe  = '13cm', '13cm'
@@ -100,23 +131,41 @@ Name = gbt12cm  Station = GBT_VLBA, GBT_COLD priority = 0
 ! New versions provided on Jan 25 2008 by Frank Ghigo in email.
 ! Not put in this file until Jan 6, 2009  RCW  Reconfirmed with
 ! Frank Ghigo at that time.
-Name = gbt6cma  Station = GBT_VLBA, GBT_COLD priority = 0
+Name = gbt6cma  Station = GBT_VLBA, GBT_COLD priority = 1
   rf1 = 3900, 3900    ifname = A,    C
   rf2 = 4400, 4400    fe  = '6cm', '6cm'
   pol =  RCP,  LCP    lo1 = 4900.0, 4900.0
   note = 'LO1=7.150, LO2=12.75, LO3=10.5 '
 /
-Name = gbt6cmb  Station = GBT_VLBA, GBT_COLD priority = 0
+Name = gbt6cmb  Station = GBT_VLBA, GBT_COLD priority = 1
   rf1 = 4300, 4300    ifname = A,    C
   rf2 = 4800, 4800    fe  = '6cm', '6cm'
   pol =  RCP,  LCP    lo1 = 5300.0, 5300.0
   note = 'LO1=7.550, LO2=12.75, LO3=10.5 '
+/
+!  Setting to match first VLBA 6cm band for the RDBE.
+!  Note that it will have the opposite sideband from the VLBA.
+!  To match the 512-1024 IF band when the VLBA LO is at 3900,
+!  the GBT will need to be at 4924+512=5436
+!  Put in the RDBE frequency ranges.
+Name = g6cm_1  Station = GBT_VLBA, GBT_COLD priority = 1
+  rf1 = 4412, 4412    ifname = A,    C
+  rf2 = 4924, 4924    fe  = '6cm', '6cm'
+  pol =  RCP,  LCP    lo1 = 5436.0, 5436.0
+  note = 'LO1=7.686, LO2=12.75, LO3=10.5 '
 /
 Name = gbt6cmc  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 4600, 4600    ifname = A,    C
   rf2 = 5100, 5100    fe  = '6cm', '6cm'
   pol =  RCP,  LCP    lo1 = 5600.0, 5600.0
   note = 'LO1=7.850, LO2=12.75, LO3=10.5 '
+/
+!  Like g6cm_1 - this matches v6cm_2 for RDBE settings.
+Name = g6cm_2  Station = GBT_VLBA, GBT_COLD priority = 1
+  rf1 = 4612, 4612    ifname = A,    C
+  rf2 = 5124, 5124    fe  = '6cm', '6cm'
+  pol =  RCP,  LCP    lo1 = 5636.0, 5636.0
+  note = 'LO1=7.886, LO2=12.75, LO3=10.5 '
 /
 Name = gbt6cmd Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 5000, 5000    ifname = A,    C
