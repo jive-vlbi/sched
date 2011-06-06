@@ -108,7 +108,7 @@ C
          CALL WLOG( 1, 
      1       'Elevations at center for sources considered are: ' )
          MSGTXT = ' '
-         WRITE( MSGTXT, '( 21X, 20A5 )' ) 
+         WRITE( MSGTXT, '( 18X, A, 20( A3, 2X ) )' ) 'Prio ',
      1        (STCODE(STANUM(ISTA)),ISTA=1,MSPRT)
          CALL WLOG( 1, MSGTXT )
          MSGTXT = ' '

@@ -1,5 +1,5 @@
-      SUBROUTINE GEOQUAL( SC1, SC1A, SC2, JSCN, MINSEL, TESTQUAL, 
-     1                    PRDEBUG, ZATMERR   )
+      SUBROUTINE GEOQUAL( SC1, SC1A, SC2, JSCN, MINSEL, TESTQUAL,
+     1                    PRDEBUG, ZATMERR )
 C
 C     Get the quality measure of scans SC1 to SC2.  This gets the
 C     quality measure for this particular choice of soruces.  The calling
@@ -57,6 +57,7 @@ C
       PARAMETER             ( MAXDAT = 10000 )
       PARAMETER             ( MAXPAR = MAXSTA*2 )
       INTEGER               SOLVE(MAXPAR), NNBAS(MAXSCN), LSC2
+      INTEGER               NSTASCN(MAXSTA), MINNSS
       DOUBLE PRECISION      RESDEL(MAXDAT), DELERR(MAXDAT)
       DOUBLE PRECISION      GUESS(MAXPAR)
       DOUBLE PRECISION      PARTIAL(MAXDAT,MAXPAR)
@@ -128,7 +129,7 @@ C
      1                .AND. UP2(ISCN,JSTA) .EQ. ' ' ) THEN
 C
 C                    Get the baseline data for the fit.
-C	   	   
+C
                      NBAS = NBAS + 1
 C
                      IF( NBAS .GT. MAXDAT ) THEN
@@ -140,29 +141,29 @@ C                    Accumulate the highest number baseline for
 C                    each scan for use in incremental calls.
 C
                      NNBAS(ISCN) = NBAS
-C	   	   
+C
 C                    SecZ partial for first station.
 C                    Don't reward excessively low elevation scans.
 C                    Try a max secz for the fit corresponding to
 C                    MINSEL.  Make a parameter so that it can be
 C                    used differently in MAKESEG and in the final
 C                    selection.
-C	   	   
+C
                      RELEV = EL1(ISCN,ISTA)
                      SECZ = MIN( 1.0 / SIN( RELEV * RADDEG ), SMINSEL )
                      PARTIAL(NBAS,ISTA) = SECZ
-C	   	   
+C
 C                    SecZ partial for second station (is negative of secZ).
-C	   	   
+C
                      RELEV = EL1(ISCN,JSTA)
                      SECZ = MIN( 1.0 / SIN( RELEV * RADDEG ), SMINSEL )
                      PARTIAL(NBAS,JSTA) = -1.0 * SECZ
-C	   	   
+C
 C                    Add the partials for the clock terms.  Put those 
 C                    in NSTA+1 to NSTA*2-1.  Do not fit for station 
 C                    NSTA (one has to be fixed) and making it the last
 C                    simplifies some bookkeeping.
-C	   	   
+C
                      IF( ISTA .NE. NSTA) THEN
                         PARTIAL(NBAS,ISTA+NSTA) = 1.0
                      END IF
@@ -197,14 +198,48 @@ C
       ELSE
          IF( IERR .GE. 1 ) IERR = 0
       END IF
-      CALL LSQFIT( 0, .FALSE., .FALSE., MAXDAT, NSTA*2-1, NBAS,
-     1      STANAME, GUESS, SOLVE, RESDEL, PPARTIAL, DELERR,
-     2      ZATM, ZATMERR, IERR )
 C
-C     Initialize the quality measure.  Use zero since the final
-C     derived quality measure will be the highest across stations.
+C     Sometimes there might be too little data to fit for all the
+C     parameters.  In fact, we are counting baselines, but many are
+C     actually redundant in terms of giving useful information.  So
+C     don't do the fit unless each station participates in 3 scans.
+C     That is one more than strictly needed, but should be ok.
 C
-      TESTQUAL = 0.0
+      DO ISTA = 1, NSTA
+         NSTASCN(ISTA) = 0
+         DO ISCN = SC1, SC2
+            IF( STASCN(ISCN,ISTA) .AND. UP1(ISCN,ISTA) .EQ. ' ' .AND.
+     1          UP2(ISCN,ISTA) .EQ. ' ' ) THEN
+               NSTASCN(ISTA) = NSTASCN(ISTA) + 1
+            END IF
+         END DO
+      END DO
+      MINNSS=999
+      DO ISTA = 1, NSTA
+         MINNSS = MIN( NSTASCN(ISTA), MINNSS )
+      END DO
+C
+C     If there aren't enough delays to each station, skip the fit.  
+C     Set IERR = 1 so the rest of the routine thinks the fit failed.
+C
+      IF( MINNSS .LT. 3 ) THEN
+         IERR = 1
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, 5A5 )' ) 
+     1      'GEOQUAL skipping fit - inadequate data ', 
+     2      NSTA, NBAS, SC1, SC1A, SC2
+         CALL WLOG( MSGTXT )
+         MSGTXT = ' '
+      ELSE
+         CALL LSQFIT( 0, .FALSE., .FALSE., MAXDAT, NSTA*2-1, NBAS,
+     1         STANAME, GUESS, SOLVE, RESDEL, PPARTIAL, DELERR,
+     2         ZATM, ZATMERR, IERR )
+C
+C        Initialize the quality measure.  Use zero since the final
+C        derived quality measure will be the highest across stations.
+C
+         TESTQUAL = 0.0
+      END IF
 C
 C     Deal with failure to invert the matrix.  Cause the scan to be 
 C     skipped by setting a very high quality measure.  Also write
@@ -276,6 +311,11 @@ C
      2               ZATMERR(ISTA)
                ICH = 26
                DO ISCN = SC1, SC2
+                  IF( ICH .GT. 250 ) THEN
+                     CALL WLOG( 1, MSGTXT ) 
+                     MSGTXT = ' '
+                     ICH = 26
+                  END IF
                   IF( STASCN(ISCN,ISTA) ) THEN
                      WRITE( MSGTXT(ICH:ICH+5), '( F6.1 )' ) 
      1                       EL1(ISCN,ISTA)
