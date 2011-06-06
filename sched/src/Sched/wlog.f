@@ -25,9 +25,10 @@ C
       END IF
 C
 C
-C     Get the length of the character string.
+C     Get the length of the character string.  Don't get into trouble
+C     with blanks.
 C
-      NCH = LEN1( MESSAGE )
+      NCH = MAX( LEN1( MESSAGE ), 1 )
 C
 C     Write the string to the terminal if in DEBUG mode.  If there
 C     is a crash, the log file doesn't necessarily get written.
