@@ -40,7 +40,7 @@ C
       REAL              RAN5, DUMMY, SEGELEV(MAXSTA,MGEO), SGAP
       LOGICAL           OKGEO(MGEO), PRDEBUG, RETAIN, KEPT
       DOUBLE PRECISION  TGEO1, TGEOEND, STARTB, SIGMA(MAXPAR)
-      CHARACTER         SELTYPE(MSEG)*3, WSTA(MSEG)*2
+      CHARACTER         SELTYPE(MSEG)*3, WSTA(MSEG)*3
 C
       DATA              IDUM   / -12345 /
       SAVE              IDUM
@@ -173,10 +173,13 @@ C
          IF( RETAIN ) THEN
 C
             IF( GEOPRT .GE. 2 ) THEN
+               NPRT = MIN( NTSEG, 30 )
+               IF( NTSEG .GT. NPRT ) WRITE(*,*) 
+     1            ' Showing first ', NPRT, ' scans of ', NTSEG
                WRITE(*,*) 'GEOMAKE ---------------------------------- '
                WRITE(*,'( A, I4, A, 30I3 )' ) 
      1              'GEOMAKE    FINISHED ONE SEQUENCE - Trial:', 
-     2               ITRIAL, ' Geosrcs:', (TSRC(ISEG), ISEG=1,NTSEG)
+     2               ITRIAL, ' Geosrcs:', (TSRC(ISEG), ISEG=1,NPRT)
             END IF
 C
 C           Get the quality measure of scans ISCN to LSCN.  Isolate this
@@ -288,6 +291,10 @@ C
                   SGAP = ( STARTJ(J) - STOPJ(J-1) ) / ONESEC
                END IF
                MSGTXT = ' '
+C
+C              Cut off the WSTA station code at 2 characters for 
+C              historical reasons.  Could be put back.
+C
                WRITE( MSGTXT,'( I4, F8.0, 1X, A, 1X, A12, 2X, A2 )' ) 
      1              TSRC(I), SGAP, SELTYPE(I), 
      2              GEOSRC(TSRC(I)), WSTA(I)
@@ -304,7 +311,7 @@ C
                END DO
                CALL WLOG( 1, MSGTXT )
             END DO
-
+C
          END IF
          KEPT = .FALSE.
          IF( MOD( ITRIAL, 10 ) .EQ. 0 ) THEN
@@ -314,17 +321,24 @@ C
      2           ITRIAL
             CALL WLOG( 1, MSGTXT )
          END IF
+
       END DO
+
 C
 C     Write result
 C
       IF( GEOPRT .GE. 0) THEN
+         NPRT = MIN( NTSEG, 30 )
+         MSGTXT = ' '
+         IF( NTSEG .GT. NPRT ) WRITE( MSGTXT, '( A, I5, A, I5 )' ) 
+     1      ' Showing first ', NPRT, ' scans of ', NTSEG
          CALL WLOG( 1, '   ' )
+         CALL WLOG( 1, MSGTXT )
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, I3, A, 30I4 )' ) 
      1          'GEOMAKE FINISHED:', NSEG, 
      2          ' Selected geodetic sources: ', 
-     3         (SEGSRCS(ISEG), ISEG=1,NSEG)
+     3         (SEGSRCS(ISEG), ISEG=1,NPRT)
          CALL WLOG( 1, MSGTXT )
          MSGTXT = ' '
       END IF
@@ -353,6 +367,7 @@ C
      1        ' Num   Gap(s)  Source                ', 
      2        (STCODE(STANUM(ISTA)),ISTA=1,NPRST)
          CALL WLOG( 1, MSGTXT )
+         MSGTXT = ' '
 C
 C        The above was the column headers.
 C        To write the actual output lines, the segment needs to be

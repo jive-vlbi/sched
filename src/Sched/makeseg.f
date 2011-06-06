@@ -48,9 +48,9 @@ C
       LOGICAL            OKGEO(*)
       REAL               SEGELEV(MAXSTA,MGEO)
       DOUBLE PRECISION   STARTB, TGEOEND, SIGMA(*)
-      CHARACTER          SELTYPE(*)*3, WSTA(*)*2
+      CHARACTER          SELTYPE(*)*3, WSTA(*)*3
 C
-      INTEGER            ISTA, IS, ISEG, IGEO, IC, LSEG
+      INTEGER            ISTA, IS, ISEG, IGEO, IC, LSEG, JJSCN 
       INTEGER            LASTLSCN(MAXSTA), NNEAR, NRAND, CTSC
       INTEGER            KSCN, MAXPRIO, IISCN, SSCN1, NPRT, MAXIC
       INTEGER            NGOOD, NCHANCE, CHANCE(MSEG10), TEMPCH 
@@ -59,7 +59,7 @@ C
       INTEGER            LHIGHSTA, NEEDLOW, NEEDHIGH, LHGOAL
       INTEGER            STALOW(MAXSTA), NSTALOW, NNEWLOW
       INTEGER            STAHIGH(MAXSTA), NSTAHIGH, NNEWHIGH
-      INTEGER            TSRC1, TSRC2, TSRC3
+      INTEGER            TSRC1, TSRC2, TSRC3, NSTASCN(MAXSTA), MINNSS
       LOGICAL            OKSTA(MAXSTA), LSTAS
       LOGICAL            STAOK, SRCOK, NEWC, PRDEBUG, DORAND
       LOGICAL            SSTASCN(MAXSTA), KSTASCN(MGEO,MAXSTA)
@@ -89,8 +89,8 @@ C
          SELECTED(IGEO) = 0
       END DO
       DO IS = 1, MSEG
-         TSRC(ISEG) = 0
-         SELTYPE(ISEG) = '   '
+         TSRC(IS) = 0
+         SELTYPE(IS) = '   '
       END DO
       LHIGHSTA = 0
       LHIGHSIG = 0.0
@@ -160,12 +160,43 @@ C
          HIGHSTA = 0
          HIGHSIG = 0
 C
-         IF( GEOPRT .GE. 2 ) THEN
-            WRITE(*,*) ' '
-            WRITE(*,*) '----MAKESEG:  Starting to work on source:',
-     1                  ISEG
+C        Sometimes there might be too little data to fit for all the
+C        parameters.  This happens when any antenna is in less than
+C        3 scans (actually one can have 2, but ignore that), although 
+C        it might be disguised by using all the baselines.  Get the 
+C        minimum number of scans so far per station and don't allow
+C        the use of the least squares fit until there are 3 per station.
+C        
+         DO ISTA = 1, NSTA
+            NSTASCN(ISTA) = 0
+            IF( LSCN .GT. ISCN ) THEN
+               DO JJSCN = ISCN, LSCN - 1 
+                  IF( STASCN(JJSCN,ISTA) .AND. UP1(JJSCN,ISTA) .EQ. ' ' 
+     1                .AND. UP2(JJSCN,ISTA) .EQ. ' ' ) THEN
+                     NSTASCN(ISTA) = NSTASCN(ISTA) + 1
+                  END IF
+               END DO
             END IF
+         END DO
+         MINNSS=999
+         DO ISTA = 1, NSTA
+            MINNSS = MIN( NSTASCN(ISTA), MINNSS )
+         END DO
 C
+C        Note start of new source attempt if putting out debug print.
+C
+         IF( GEOPRT .GE. 2 ) THEN
+            CALL WLOG( 1, ' ' )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I3, A, L1, A, I3, A, I2 )' ) 
+     1         '----MAKESEG:  Starting to work on next source: ISEG: ',
+     2         ISEG, '   DORAND:', DORAND, '   MINNSS:', MINNSS, 
+     3         '   MAXPRIO: ', MAXPRIO
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+         END IF
+C
+C        
 C        Set the first scan to use for quality measures using GEOBACK.
 C        That is the "look back" distance if you want the quality measure
 C        determined only over the more recent scans.
@@ -193,8 +224,11 @@ C
 C        ====  First sources - get something low el and something high 
 C        ====  el for each station 
 C
-         IF( ( NSTALOW .LT. NSTA .OR. NSTAHIGH .LT. NSTA ) .AND. 
-     1       DORAND ) THEN
+C        Also force this selection scheme if any station has has one scan
+C        as it cannot reach the required 3 with one additional scan.
+C
+         IF( ( ( NSTALOW .LT. NSTA .OR. NSTAHIGH .LT. NSTA ) .AND. 
+     1       DORAND ) .OR. MINNSS .LE. 1 ) THEN
             NRAND = NRAND + 1
             METHOD = 'RAND'
 C
@@ -202,6 +236,7 @@ C           Find all of the sources with USEGEO LE MAXPRIO below the limit
 C           that can contribute to the number stations with low or high
 C           elevation data.  MAXPRIO starts as 2, but is raised to 3 
 C           (> 5, the highest for useful sources) if there are no more
+C  RCW  Should that be <5?
 C           prio 1 or 2 sources available.
 C           Of the sources that qualify, find the closest 5 and choose one
 C           at random.  For the first scan of the experiment, choose
@@ -235,9 +270,19 @@ C
                   ELSE
                      TAPPROX = STOPJ(LSCN-1) + 60.D0 * ONESEC
                   END IF
-                  IF( GEOPRT .GE. 2 ) WRITE(*,*)
-     1               'MAKESEG looking for nearby source. Considering ',
-     2               iseg, igeo, ' ', GEOSRC(igeo), ' at ', tapprox
+C
+C                 For debug print, mark attempt for this source.
+                  IF( GEOPRT .GE. 2 ) THEN
+                     MSGTXT = ' ' 
+                     WRITE( MSGTXT, 
+     1                 '( 2A, I4, A, I4, 3A, I4, A, F13.6 )' )
+     2                 'MAKESEG random section - looking for nearby ',
+     3                 'source.  Considering:', iseg, ' SRC: ', igeo,
+     4                  ' ',  GEOSRC(igeo), '  USEGEO: ', USEGEO(IGEO), 
+     5                  ' at ', TAPPROX
+                     CALL WLOG( 1, MSGTXT )
+                     MSGTXT = ' ' 
+                  END IF
 C
 C                 Insert the new scan.  GMKSCN is like MAKESCN
 C                 but also is capable of removing stations based
@@ -290,11 +335,11 @@ C
 C
 C                  SRCOK = ( NNEWLOW .GE. 1 .AND. NSTALOW .LT. NSTA ) 
 C     1               .OR. ( NNEWHIGH .GE. 1 .AND. NSTAHIGH .LT. NSTA ) 
-
+C
+C      Save another set of currently unused debug printout.
 C      write(*,*) 'makeseg iseg nrand ', iseg, nrand, igeo, nstalow, 
 C     1    nstahigh, nnewlow, nnewhigh, ' ', srcok, needlow, needhigh,
 C     2    lhgoal
-
 C
 C                 Check that every station has been in enough scans
 C                 by now.  That means they have been in half.  Recall
@@ -386,31 +431,56 @@ C
 C           Make sure there are some sources.  If not, adjust MAXPRIO
 C           With a good list, this should this should not happen.  But
 C           it does sometimes with Mark's original list.  Exit to the
-C           fitting part if we get here twice on the same ISEG.
+C           fitting part if we get here twice on the same ISEG and there
+C           are enough scans for a fit.  If there aren't enough for
+C           a fit, increase MAXPRIO again.  If get past all acceptable
+C           sources, complain about too few sources to choose from and
+C           quit.
 C
             IF( NCHANCE .EQ. 0 ) THEN
+C
+C              Debug print.
+C
                IF( GEOPRT .GE. 1 ) THEN
-                  CALL WLOG( 1, 'MAKESEG: No options found to finish '
-     1               // 'adding low and high elevation data for ' 
-     2               // 'all stations.' )
-                  CALL WLOG( 1, '         Perhaps no '
-     1               // 'sources are available or ones that are '
-     2               // 'are not up at a station that needs scans.' )
+                  MSGTXT =  ' '
+                  WRITE( MSGTXT, '( A, I2, A )' )
+     1               'MAKESEG: No priority <= ', MAXPRIO, 
+     2               ' sources found for random source additions.'
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
                END IF
-               IF( MAXPRIO .GE. 3 ) THEN
-                  DORAND = .FALSE.
-                  IF (GEOPRT .GE. 1 ) THEN
-                     CALL WLOG( 1, 
+C
+C              Take action depending on MAXPRIO.
+C              Only resort to priority 4 and 5 sources when we won't have
+C              enough scans for a LSQ fit when adding one more.  In other
+C              words, require each station have at least 2 scans (MINNSS>=2).
+C
+               IF( MAXPRIO .GE. 3 .AND. MAXPRIO .LT. 5 ) THEN
+                  IF( MINNSS .GE. 2 ) THEN
+                     DORAND = .FALSE.
+                     IF (GEOPRT .GE. 1 ) THEN
+                        CALL WLOG( 1, 
      1                  '         Select a source using a SecZ fit.' )
+                     END IF
+                  ELSE
+                     MAXPRIO = MAXPRIO + 1
+                     DORAND = .TRUE.
                   END IF
+               ELSE IF( MAXPRIO .GE. 5 ) THEN
+                  MSGTXT = 'Too few sources to choose from to ' //
+     1                'construct a geodetic segment.  Add more. '
+                  CALL ERRLOG( MSGTXT )
                ELSE
-                  MAXPRIO = 3
+                  MAXPRIO = MAXPRIO + 1
                   IF( GEOPRT .GE. 1 ) THEN
                      CALL WLOG( 1, 
      1                  '         Allow scans with low stations but '
      2                  // 'no very high elevation stations.' )
                   END IF
                END IF
+C
+C              Reset counters from this attempt and go back to try again.
+C
                ISEG = ISEG - 1
                NRAND = NRAND - 1
                GO TO 100
@@ -420,6 +490,10 @@ C           Pick one of the top choices randomly.  Don't take one that
 C           for which the scan is more than one minute after the first.
 C           Ok, the first DO loop is trivial for IC = 1, but keeps the 
 C           code simpler.  Note if NCHANCE is zero, we won't get here.
+
+C ***********************  is this causing the infinite loop?
+
+
 C
             DO IC = 1, NCHANCE
                IF( TESTTIME(IC) .LE. TESTTIME(1) + 60.D0 * ONESEC )
@@ -428,27 +502,41 @@ C
                END IF
             END DO
             IC = INT( 1 + RAN5(IDUM) * MAXIC )
-            IF( GEOPRT .GE. 2 ) WRITE(*,*) 
-     1            'makeseg 7.5 ', IC, CHANCE(IC)
+            IF( GEOPRT .GE. 2 ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, 2I4 )' ) 
+     1            'MAKESEG picked random source: ', IC, CHANCE(IC)
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+            END IF
             TSRC(ISEG) = CHANCE(IC)
             DO ISTA = 1, NSTA
                SSTASCN(ISTA) = KSTASCN(TSRC(ISEG),ISTA)
             END DO
             SELTYPE(ISEG) = 'NR'
-            WSTA(ISEG) = '--'
+            WSTA(ISEG) = '-- '
 C
 C           Write some slew time information if requested.
 C
             IF( GEOPRT .GE. 2 ) THEN
                T0 = DINT( STOPJ(LSCN) )
-               WRITE(*,'( A, 2I4, F10.2, 2I4 )' )
-     1             'MAKESEQ TESTTIME', TSRC(ISEG), IC, 
+               MSGTXT = ' '
+               WRITE( MSGTXT,'( A, 2I4, F10.2, 2I4 )' )
+     1             'MAKESEQ slew times: ', TSRC(ISEG), IC, 
      2             (STOPJ(LSCN-1)-T0)*24.D0*60.D0, NCHANCE, MAXIC
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               CALL WLOG( 1, ' Time below is minutes in day ' )
+               CALL WLOG( 1, 
+     1             '                    Src    Time  Since Last stop' )
                DO IS = 1, NCHANCE
-                  WRITE( *, '( 10X, A, I3, I4, A, A12, 2F10.2 )' )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( 10X, A, I3, I4, A, A12, 2F10.2 )' )
      1             '   ', IS, CHANCE(IS), ' ', GEOSRC(CHANCE(IS)), 
      2             (TESTTIME(IS)-T0)*24.D0*60.D0, 
      3             (TESTTIME(IS)-STOPJ(LSCN-1))*24.D0*60.D0
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
                END DO
             END IF
 C
