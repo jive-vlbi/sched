@@ -228,7 +228,7 @@ C
          WRITE( MSGTXT, '( A, 5A5 )' ) 
      1      'GEOQUAL skipping fit - inadequate data ', 
      2      NSTA, NBAS, SC1, SC1A, SC2
-         CALL WLOG( MSGTXT )
+         CALL WLOG( 1, MSGTXT )
          MSGTXT = ' '
       ELSE
          CALL LSQFIT( 0, .FALSE., .FALSE., MAXDAT, NSTA*2-1, NBAS,
