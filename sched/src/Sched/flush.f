@@ -37,6 +37,13 @@ C
          GO TO 100
   200 CONTINUE
 C
+C     The GFORTRAN 4.6 compilers don't want to write after an EOF
+C     and the above sequence puts one at the end of the file, then
+C     positions to just beyond it.  Put in a backspace to back up
+C     over the EOF.
+C
+      BACKSPACE( UNIT = IUNIT )
+C
       RETURN
       END
 
