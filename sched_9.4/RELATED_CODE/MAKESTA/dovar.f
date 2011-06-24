@@ -1,1 +1,0 @@
-../makesetup/dovar.f
