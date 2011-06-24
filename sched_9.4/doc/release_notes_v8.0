@@ -1,0 +1,67 @@
+Version 8.0 of SCHED was released on Dec. 14, 2008.
+
+This release contains many updates made over the more than two years
+since the last release.  Most changes are relatively minor.  More
+changes are expected soon as we move to digital backends and Mark5B
+and Mark5C so expect additional updates in the next few months.
+
+For details, see the release notes in the manual
+(http://www.aoc.nrao.edu/~cwalker/sched/sched/sched.html).
+Some sample items in the release are:
+
+Many changes in code and documentation reflect the switch from tape to
+disk.  This especially affects the manual as many of the code changes
+were in the previous version.
+
+Changes to support the EVLA have started to appear including the
+ability to set frequencies outside the old VLA bands, the ability to
+mix phased array and single dish observations, the ability to specify
+the correlator integration time, the ability to specify the reference
+antenna (you shouldn't need this), and freq.dat entries for 5cm
+methanol and OH lines.  Some unused features were removed.  There will
+be much more in this area as the project progresses.
+
+Examples for HSA observations have been added.
+
+A 24GHz band was added for observations at 23.8 GHz  - away from 
+the atmospheric water line.  At least on the VLBA where the receivers
+were upgraded recently, this can be noticably more sensitive than
+the usual 22.2 GHz default (which is still available).
+
+It is now the default to produce VEX output files.  This is in
+preparation for their use on the VLBA software correlator.  A few
+types of observations are not supported in the SCHED VEX code and, for
+them, DOVEX=-1 must be specified to turn off the VEX output.  These
+mostly involve observations of moving objects like satellites.
+
+The station and source catalogs are now based on the 2008a_astro
+solution from GSFC.
+
+SCHED is now distributed in a single gzipped tar file containing all
+code, examples, and catalogs.  The binaries are available separately.
+The release is available from anonymous ftp at ftp.aoc.nrao.edu in
+subdirectory pub/sched/sched_8.0.  The tar file is there.  The
+binaries subdirectory contains machine specific subdirectories
+containing the provided executables.  Note that the LINUX version is
+for 32 bit machines.  The LINUX64SPICE version contains spacecraft
+tracking code that will not be of interest to most people.  Many users
+should find that one of the binaries works for them.  If not, it is
+not difficult to recompile based on what is in the tar file.  You will
+need to recompile using the makefile.  Edit Makefile.master to
+configure for your machine based on the comments in the file.  Call it
+Makefile and run make.
+
+Note that there are transitions going on between 32 and 64 bit
+machines, between g77 and gfortran compilers in the GNU world, and
+between PPC and Intel chips on the Mac side, so there is a
+proliferation of binaries that might be needed.  We have not tried to
+provide an exhaustive set.
+
+Planetary motions are not supported in VEX in this version.  We hope
+to change that soon.
+
+SCHED is now under revision control with SVN.
+
+
+
+

@@ -1,0 +1,61 @@
+The 2003 September 18 release of Sched is now available at the AOC and
+on ftp.aoc.nrao.edu anonymous ftp site in directory pub/sched.
+
+There have been various bug fixes and enhancements.  Most are
+described in the manual section on the release.
+
+Some of the more significant changes are:
+
+Proper motion and paralax were added.  This addition required some
+terminology changes and one variable name change to conform to proper
+astronomical usage.  First, the station catalog parameter EPOCH was
+changed to EQUINOX.  This is the variable that gives J2000, B1950, or
+DATE.  EPOCH was changed to mean the zero point of proper motion,
+which is usually a date.  For backwards compatibility, if the argument
+of EPOCH starts with a letter, and EQUINOX is not specified, EPOCH is
+not set and EQUINOX is set to the argument given to EPOCH.
+
+The other terminology issue concerns proper motion and planetary
+motion.  What SCHED has had for a long time, and called proper motion,
+is actually planetary motion.  These two are not fundamentally
+different, but the magnitude of the motions can be very different.  If
+the object motions are of order arcseconds per year and the zero time
+is different from the observe time by years, use proper motion.
+Usually such motions, along with paralax, come from the Hipparcos
+catalog or some equivalent.  SCHED will take such motions and adjust
+the source position accordingly, and then feed that modified position
+to the stations.  It will also feed the rates as planetary motion
+rates, but for some stations there are too few digits in fixed formats
+to allow such rates to appear as anything but zero.  If you have much
+faster rates, like for a planet or satellite, and a zero point during
+or close to the observation time, use the planetary motion parameters.
+In that case, SCHED does not adjust the source positions from what you
+give it, but passes on the rates to the stations.
+
+The slew time calculations now take into account the acceleration rate
+of the antenna.  This can be especially important for the larger
+antennas that don't necessarily get up to full speed during phase
+referencing observations.
+
+Much of what used to appear on the screen when running SCHED now
+appears in a file called sched.runlog.  This both cleans up the
+appearance when running the program and provides a record, which may
+be especially useful when there are errors.
+
+The high bandwidth, 1024 Mbps option for MarkIV was added.
+
+Support of Mark5 obserations was added to the code, although much is
+blocked except for test observations because the on-line systems are
+not ready for the modified files.
+
+The Socorro correlator maximum output data rate was increased to
+1 Mbyte/s. 
+
+The summary file now gives source separations for sources within
+15 degrees of each other.
+
+The 2002jul02 version of SCHED (yes it has been over a year) is
+still available in the aoc under /users/cwalker/sched_2002jul02
+and on the ftp site in files of the appropriate names.  Please 
+use it only if you have problems with the new version.
+

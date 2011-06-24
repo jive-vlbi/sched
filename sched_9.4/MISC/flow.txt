@@ -1,0 +1,513 @@
+         SCHED Outline.
+
+This file shows the logical flow of SCHED as of Oct 2003.  
+I'm starting with the parts related to setup files.
+Trying to do more Aug 29, 2007.
+I'm mainly emphasizing where the different subroutines fit 
+into the overall picture.
+
+Feb. 8, 2010 filling in Vex part in preparation for having to 
+spend more effort on that.  Warning other parts may now be 
+a bit out of date as they haven't been updated for a long time.
+
+-------------------------------------------------------------------
+Top level (see later for details of each called routine):
+
+SCHED:      Main routine
+  VERSCHED:  Set the version number.
+  STMSG:     Open log.  Write screen info.  Cross check includes.
+  Start of restart loop - mainly for plotting.
+    INPUT:     Get user and catalog input.
+    DEFAULTS:  Fill in the defaults for items not set.
+    SCHPRE:    Do precessions etc.
+    CHKSC1:    Some scan checks
+    SCHOPT:    Determine the actual scans.  Optimize etc.
+    DOPFQ:     Set frequencies for line sources.
+    GETSUN:    Get sun distance.
+    CHKSCN:    More scan checks.     
+    SCHSUM:    Write the summary file.
+      OMSOUT:    Write OMS file.
+    PLOTTER:   Make plots.
+  End of restart loop
+  VEXOUT     Write VEX related stuff.
+    VXWRT:     Write VEX file.
+    V2DOUT:    Write v2d file
+  FLAGS:     Write flagging table.
+  STAFILES:  Write antenna files.
+    PRTSCH:    Write operator schedules.
+    CRDWRT:    Write telescope control files.
+  DELSCR:    Delete scratch files etc.
+
+-------------------------------------------------------------------
+Details:  Get the input information:
+
+INPUT:
+  SCHIN:    Read main user input file (.key file)
+    INMAIN:   Define the input parameters (KEYADD and KEYCHR calls)
+    SCHOPEN:  Open the input file on a restart.
+    Initialize many parameter values, counters etc.
+    Start scan loop
+      Reset parameters which need it (not many).
+      KEYIN:    Read input parameters for scan.
+      DIVERT:   Dead end actions.  Only one - list frequencies.
+        GETFREQ:  List available LO setups. (details later)
+
+
+  RDPEAK:   Get reference pointing instructions.
+  ACCSRC:   Get all sources used in schedule.
+  SRREAD:   Read source catalog.
+  SRREAD:   Used again to get sources from pointing catalog.
+  GETSET:   Get the setup files.
+  GETFREQ:  Read the frequency setups catalog (station LO settings).
+
+-------------------------------------------------------------------
+Details:  Fill in defaults and check inputs.
+
+DEFAULTS:  Fill in defaults.
+  SRFINISH:  Tie up loose ends from inputs.
+    SRCFLG     Associate sources with catalog entries
+    JPLGOT     Look for planets among input sources
+      JPLEP2     Get planet information
+    Don't allow planets with VEX
+    SATGOT     Look for a satellite.
+      SATEP      Get satellite details
+  PKFINISH:  Tie up loose ends related to reference pointing.
+  DEFSET:    Set defaults and check setups.
+    SETEXPND:  Expand to one station per setup.
+      SETSTDEF:  Expand default setups and eliminate unused stations.
+      GNSET:     Associate scan/station with setup.
+    CHKFIRM:   Check and set default FPGA firmware options.
+    SETDEFS:   Set a lot of defaults.
+      VLAPMODE:  VLA phasing modes
+      SETCHAN:   Apply defaults for pol, sample rate, sidebands.
+      SETFREQ:   Set frequencies
+        SETBAND:   Set frequencies based on BAND.
+      SETHW1:    Set hardware items like IFCHAN.
+      SETFCAT:   Get frequency catalog data.
+      SETBBC:    Assign BBC's.
+      SETREC:    Set recorder information
+        SETFORM    Set recording format, Initializes TAPEMODE! *********
+          TWOHDSET
+            SETFMT
+            FSPREAD
+              SETFMT
+            FMTPICK    Pick the format.
+              SETFMT     Set tape format stuff.
+                FMTS2      S2 format
+                FMTMKIII   Mark III format
+                FMTVLBA    VLBA format
+                FMTMKIV    Mark IV format
+            SETNOREC
+              SETFMT
+          SETSPD:    Set the tape speed
+          TPMFIX:    Prevent changes in TAPEMODE
+      SETTRK:    Set track assignments
+
+***  maybe move checking to a separate checking routine at the same
+ level as DEFAULTS.  I think I can then fold DEFSET and SETDEFS back
+into one routine.
+
+
+    CHKSET:     Check setups.
+      Many checks at this level.
+      CHKVDAR:    DAR specific checks - VLBA systems
+      CHKV4DAR:   DAR specific checks - VLBA systems with MKIV formatter
+      CHKGDAR:    DAR specific checks - VLBA geodetic systems
+      CHK4DAR:    DAR specific checks - MKIV systems
+      CHK4GEO:    DAR specific checks - Geodetic patched MKIV systems
+      CHKDISK:    Recorder checks - disk
+      CHKVRREC:   Recorder checks - VLBA recorder on MkIV formatter
+      CHKSREC:    Recorder checks - S2 system
+      CHKSPD:     Bit rate per track and tape speeds.
+      CHKVLBA:    Some VLBA specific items.
+      CHKVLA:     Some VLA specific items.
+    OKMODES:    Check allowed modes.
+    CHKSFIL:    Check things that shouldn't vary between setup groups.
+    SFINFO:     Get logical channels etc.
+    SBPAIR:     Detect signals assigned to same BBC to force same freq.
+    CHKSOC:     Checks for Socorro correlator.
+    CHKJIVE:    Checks for JIVE correlator
+  Default the "grab" controls for data capture.
+
+-------------------------------------------------------------------
+Details:  Check scan parameters.  Put in generic check routine?
+CHKSC1 - no calls so no details.
+-------------------------------------------------------------------
+Details:  Determine actual scans:
+
+SCHOPT
+  Output scan loop.
+    Optimization options:
+      OPTNONE:   No optimization.  Includes dwell.
+        SCNDUP:    Copy scan if necessary.
+      OPTSKD:    Select by number up and some other criteria.
+        SCNDUP:    Copy scan if necessary.
+        STAGEO:      Get scan geometry, slew times etc. Details later.
+      OPTCELLS:  Geodesy type optimization.
+        SCNDUP:    Copy scan if necessary.
+        STAGEO:      Get scan geometry, slew times etc. Details later.
+      OPTCSUB:   Like OPTCELLS but with subarrays.
+        OPTCSAR:   Try to determine optimal subarrays.
+          STAGEO:    Get scan geometry, slew times etc. Details later.
+          OPTCSPT    Get subarray quality factor.
+        SCNDUP:    Copy scan if necessary.
+      OPTUPT:    String of scans for UPTIME plots.
+        SCNDUP:    Copy scan if necessary.
+        STAGEO:      Get scan geometry, slew times etc. Details later.
+      OPTHAS:    Automated survey scheduling.
+        HALIM:     Get hour angle limits.
+          SCHGEO:    Get geometry for a scan. (several calls).
+        SCHGEO:    Get geometry for a start and stop times
+        HAAVAI:    Get time source available and desired obs time.
+        SCHGEO:    Get geometry for a scan. 
+        STAGEO:    Get geometry. Details later.
+        SCNDUP:    Copy scan if necessary.
+    OPTTIM:    Get slew times, exact start times etc.  
+               Includes deal with dwell (3 arguments) after STAGEO.
+      STAGEO:    Get preliminary geometry for a scan/station to be
+                 used for DWELL type adjustments. Details later.
+    SCNGEO:    Get actual geometry info for whole scan.  
+               There are no time or station changes.
+               Subject to changes with insertions.
+      STAGEO:    Get geometry details for a station in the scan. Details later.
+      SLEW:      Determine slew times without making changes..
+    ADDGEO     Add DELZN type scans.  details below
+    ADDPEAK:   Add pointing scans.
+      VLAFREQ:   Get VLA frequency
+      SCNDUP:    Copy scan if necessary.
+      SRINSERT:  Insert pointing source.
+      SCNGEO:  Get geometry.  See above for calls.
+    MAKEPTG:   Convert added scans, or user scans, to pointing.
+    OPTTIM:    Final tweak of scan timing.
+    SCNGEO:    Final scan geometry.  See above for calls.
+    AUTODOWN:  Eliminate stations too low and with autotape.
+    SETTPS:    Set the start time for data recording 
+    DISKPOS:  Get disk information
+    OPTSCH:    Write a SCHED input file with optimized schedule.
+  End scan loop.
+  ACCSRC:    Accumulate list of sources actually used.
+  SRCFLG:    Set pointers between schedule and catalog sources.
+  GETPAIRS:  Make list of pointing center sources with offset phase ctrs.
+* SCHTIM:    Check monotonic time, gaps, and get extreme times.
+             A lot of readback bookkeeping and other tape stuff.
+  SCH24:     Avoid 24:00:00.
+
+------------------------------------------------------------------------
+Subroutine details:  Geometry calculations.
+  Main routines are
+     SCNGEO  Calculate geometry for all stations in a scan.
+     STAGEO  Calculate geometry for one station in a scan.
+                 Calls SCHGEO for start and stop.
+                 Determines wraps, slews, and checks horizon
+     SCHGEO  Calculate geometry for a station/source at a time.
+
+STAGEO is used in optimization routines.
+   Called by GMKSCN, MAKESCN, OPTCELLS, OPTCSAR, OPTHAS, OPTSKD
+             OPTTIM (2), OPTUPT.
+
+STAGEO:
+  SCHGEO:       Get geometry at a time.
+  WRAP:         Determine if a cable wrap will be done.
+  HORCHK:       Function to determine if up or down.
+  SLEW:         Get slew times.  
+
+-------------------------------------------------------------------
+Details:  ADDGEO  Add DELZN sections.
+   Fill this in some day.
+
+-------------------------------------------------------------------
+Details:  Do the doppler calculations.
+
+DOPFQ:     Do the Doppler calculations - mostly self contained.
+  SLA_ECOR:  Earth ephemeris.
+
+-------------------------------------------------------------------
+Details:  Get sun distance.
+
+GETSUN:   
+  SUNPOS:    Get the position of the sun.
+    SLA_EARTH:  Get the required positions.
+  SLA_DSEP:  Get angle between two sources.
+-------------------------------------------------------------------
+Details:  Second scan check routine.
+   The fset and pset stuff maybe should be in a default setting 
+   routine rather than a check routine.  Don't move before DOPFQ.
+
+CHKSCN:    Check scans again, after SCHOPT etc have mucked with them.
+  GETFSET:   Get the frequency sets.
+  GETPSET:   Get the pcal sets.
+*   PCALFQ:    Get the pulse cal settings. (Oops this doesn't belong in 
+                a checking routine).
+  RESYNC:    Check for possible data loss during corr. resyncs etc.
+  VLASCHK:   Check VLA specific items.
+-------------------------------------------------------------------
+Details:  Summarize the scans (write .sum file):
+
+SCHSUM:    Write .sum file. (long routine).
+  TDATECW:   Get date in desired format.
+  SUMOPE:    Open the summary file.
+    WRTCOV:    Write cover letter.
+    CORLST:    Write correlator information.
+    STALST:    List the stations.
+  SUMSCN:    Write the scan summaries.
+    SUNWARN:   Warn if near the sun.
+  TPSUM:     Write tape time estimates.
+  VXVERS:    Get Vex version.
+  PLVER:     Get Plot code version.
+  JPLVER:    Get JPL code version.
+  PGQINF:    Get PGPLOT version.
+
+-------------------------------------------------------------------
+Details:  Plotting.  Franco's part.
+
+PLOTTER:   Beginning of plot stuff.  This will be big.
+
+**********  Fill this in eventually.
+
+-------------------------------------------------------------------
+Details:  Write the Vex file.  Originally written by Huib 
+          vanLangevelde, then supported by Cormac Reynolds and
+          Friso Olnon..  
+
+          There are 77 .f files in the vex section at one 
+          subroutine per .f.  Of those, 25 are functions so won't 
+          be found by a grep CALL *.f
+          The functions are:  vxcfan  vxcfbb  vxcfda  vxcffq  vxcfhp
+              vxcfif  vxcfph  vxcfpo  vxcfrl  vxcfsi  vxcftr  vxgtst
+              vxnhds  vxnman  vxnmbb  vxnmda  vxnmfq  vxnmhp  vxnmif
+              vxnmph  vxnmpo  vxnmpr  vxnmrl  vxnmsi  vxnmtr  
+          Seeking on " VX" can find most of these and subroutine calls.
+
+VXWRT:     Write the VEX file.
+  VXVLBS:    Obsolete: Find if setups different between VLBA stations.
+  VXMODE:    Count the different modes.  Store setups used in each mode.
+             Finds the different $BLOCKS per antenna for each mode.
+  VXSORT:    Go through setup groups and find how many sections of 
+             each type (eg FQ) are needed.  (Could frequency groups 
+             simplify this?  They came later.)
+             Called once per type (FQ, IF, BB, TR, HP, PO, PL PH)
+    VXCFFQ:
+    VXDFIF:
+    VXCFBB:
+    VXCFTR:
+    VXCFHP:
+    VXCFPH:
+    VXCFPO:
+    VXCFRL:
+    VXNMXX:    Set up a name for a block.
+    VXGTST:    Returns sched setup corresponding to VEX mode.
+  VXTELS:   Finds number of sections of type XX (eg DA) where def 
+            sections are refernced by station, not mode.  Called
+            for DA, SI, AN.
+    VXCFDA:    Compares DA blocks
+    VXCFSI:    Compares SI blocks
+    VXCFAN:    Compares AN blocks
+    VXNMXX:    Provides a unique name.
+      VXNMHP:    Name HP block (head position)
+        VXNHDS:    Return number of heads used.
+      VXNMRL:    Name roll block
+      VXNMPO:    Name the PO block (pass order)
+        VXNHDS:    Return number of heads used.
+      VXNMPH:    Name the PH (says HP) block (pulse cal).
+      VXNMFQ:    Name a frequiency block
+      VXNMIF:    Name an IF block.   
+      VXNMBB:    Name a BBC block
+      VXNMTR:    Returns name of tracks block.
+        VXS2MD:    Figures out S2 mode name.
+          VXS2VL:    Figures out S2 mode name.
+          VXS2DF:    Sets default S2 mode name.
+      VXNMDA:    Name a DA (data aquisition) block
+      VXNMSI:    Name an SI block (what is it?).  Name = station name.
+      VXNMAN:    Name an AN block.
+      VXUNQL:     Make names unique, and check for illegal characters.
+  VXFQVX:   Setting up refernces to allow for scan dependent frequency
+            and phase cal (could be simplified now?).
+  VXTONE:   Sets up names and values of tones needed. (simplify now?).
+    VXGTST:   Returns sched setup corresponding to VEX mode.
+  VXSCNS:   More for "main hurdle" of dealing with scan dependent
+            frequencies and pcal.  But now have frequency and pcal 
+            groups so might simplify.
+    VXGTST:   Returns sched setup corresponding to VEX mode.
+    VXTRAMD:  Make a new mode.
+      VXUNQL:   Make names unique, and check for illegal characters.
+      VXTRAFQ:  Adds new FQ defs when new freq. detected.
+      VXTON2:   Number of tones in each channel.
+      VXTRAPH:  Adds definitions because new freq give new pcal
+        VXUNQL:   Make names unique, and check for illegal characters.
+        VXCFPH:   Tests if ph block in 2 SCHED sets are identical.	
+          VXTON2:   Number of tones in each channel.
+        VXNMPH:    Name the PH (says HP) block (pulse cal).
+      VXTRAIF:    Adds extra IF defs because of change in pcal.
+        VXCFIF:     Check of 2 IF blocks are the same.
+        VXUNQL:     Make names unique, and check for illegal characters.
+        VXNMIF:     Name an IF block.   
+  VXTONE:   Called again after VXSCNS.
+  VXNMPR:   Make name for PR (procedures) block IXX.
+  VXUNQL:   Make names unique, and check for illegal characters.
+    VXSTNM:   Check for valid Vex string.
+  VXDEFS:   Write the setups.
+    VXWRGL:   Write GL def. (Global section)
+    VXWREX:   Write EX def. (Experiment section)
+      VXSTNM:   Check string is valid VEX string for def/ref name.
+      VXSTKY:   Check string if valid VEX string for a key value
+      VXCOVR:   Write cover letter
+    VXWRMD:   Write MD def. (Mode)
+      VXGTST:   Returns sched setup corresponding to VEX mode.
+    VXWRST:   Write ST def. (Station)
+    VXWRPR:   Write PR def. (Procedures)
+      VXGTST:   Returns sched setup corresponding to VEX mode.
+    VXWRSI:   Write SI def. (Site)
+      VXSTKY:   Check string if valid VEX string for a key value
+    VXWRAN:   Write AN def. (Antenna)
+    VXWRDA:   Write DA def. (DAR)
+    VXWRSU:   Write SU def. (Source)
+      VXSTNM:   Check string is valid VEX string for def/ref name.
+      VXSUDT:   Write detailed source parameters.
+    VXWRFQ:   Write FQ def. (Frequency)
+      VXSTLI:   Write comment about stations used by a def.
+    VXWRIF:   Write IF def. (IF)
+      VXSTLI:   Write comment about stations used by a def.
+    VXWRBB:   Write BB def. (BBC)
+      VXSTLI:   Write comment about stations used by a def.
+    VXWRPH:   Write PH def. (Pulse cal)
+      VXSTLI:   Write comment about stations used by a def.
+    VXWRTR:   Write TR def. (Track)
+      VXSTLI:   Write comment about stations used by a def.
+        VXS2MD:    Figures out S2 mode name.
+          VXS2VL:    Figures out S2 mode name.
+          VXS2DF:    Sets default S2 mode name.
+    VXWRHP:   Write HP def. (?)  NOTE, there are both PH and HP
+      VXNHDS:   Return number of heads.
+      VXSTLI:   Write comment about stations used by a def.
+    VXWRPO:   Writes the pass order PO section.
+      VXSTLI:   Write comment about stations used by a def.
+  VXSCH:    Write the schedule.
+    VXGTST:   Returns sched setup corresponding to VEX mode.
+    VXSCHK:   Checks scan related timing issues.
+    VXSTNM:   Check string is valid VEX string for def/ref name.
+    VXTRAN:   Get time to copy from MK5 to linux disk (grab related)
+-------------------------------------------------------------------
+Details:  Write the flagging table.
+
+FLAGS:     Open and write the flag table.
+  FLAGWRT:   Actually write the flag line.
+  SCHGEO:    Inside a loop to get the rise time.
+
+-------------------------------------------------------------------
+Details:  Write the files for the antennas.
+
+STAFILES:  Control the writing of the crd and sch files.
+  FILEOPEN:  Open the sch and crd files.
+    VLBOPE:    Open a text file.
+  PRTSCH:    Write the operator schedule - this routines does most.
+    WRTCOV:    Write the cover letter to the file.
+    TPPACK:    Use to get tape actions.
+    FSFREQ:    Get frequency and bandwidth.
+    TDATECW:   Get day and date information.
+    SUNWARN:   Print a sun warning if needed.
+  CRDWRT:    Call appropriate routine to write output files.
+*   SNAP:      Write a snap (Mark III) schedule.  (still used?)
+    VLBA:      Write a VLBA telescope control file.
+      VLBAEND:   Wrap up schedule on last call (postpass etc).
+      VLBAINI:   Get the file started.
+      VLBAST:    Get a scan started.
+        JPLEP2:    Deal with planets - position changes.
+          CONST:     Get some constants from the ephemeris file.
+            STATE:     Spice routine.
+          JPLPO2:    Do the work - from Bryan Butler.
+            SLA_EPJ:   SLA routines
+            SLA_GMST:
+            SLA_EQEQX:
+            SLA_PRECL:
+            SLA_NUT:
+            SLA_DMXV:
+            SLA_DCC2S:
+            SLA_DRANRM:
+            PLEPH:      JPL routine
+            PVOBS:      Bryan's routine.
+            FINDT:      Bryan's routine.
+            TRANSP:     Bryan's routine.
+        SATEP:     Deal with satellites - position changes.  NAIF
+          FURNSH:    
+          STR2ET:
+          SPKEZR:
+          ET2UTC:
+      VLBATI:    Deal with tape information.
+        TPPACK:    Get tape direction etc.
+        VLBACHG:   Do a tape change.  Worry about postpass.
+      VLBASU:    Write most of the setup information.
+        VLBATP:    Write tape motion commands.
+        VLBADK:    Write disk motion commands.
+        VLBAINT:   Write an integer parameter and values.
+        VLBACHAR:  Write a character parameter and values.
+        VLBABWS:   Write frequency/bandwidth type parameters.
+        VLBAREAL:  Write real parameters.
+
+      VLBACHG:   Do a tape change.  Turn off unused drive.
+      VLBATP:    Write tape motion commands.
+      VLBADK:    Write disk motion commands.
+      PTVLBA:    Write special single dish pointing scans.
+        PTPAT:     Write the 12 scan pattern.
+      ROTLVBA:   Make a focus/rotation pattern.
+        VLBAINT:   Write an integer parameter and values.
+        PTPAT:     Write the 12 scan pattern.
+      TAVLBA:    Make an on/off pattern.
+        VLBAINT:   Write an integer parameter and values.
+      PN3DB:     Make a half power tracking scan.
+        VLBAINT:   Write an integer parameter and values.
+      FSVLBA:    Frequency switching loop.
+        VLBAREAL:  Write real parameters.
+    CRDVLA:    Write an Observ deck for the VLA.
+      SIDTIM:    Get sidereal day and time.
+      SLA_DJCL:    Julian conversions.
+      CHARS:       Determine first and last non-blank characters.
+      JPLEP2:      Planet position (see above).
+      GETPTLO:     First LO at Pie Town for PT link.
+*   CRDNRAO:   Write an old 140' control file.    (still used?)
+  PRTSET:    Write setup information into the sch file.
+  SRCLST:    Write source information into the sch file.
+  
+-------------------------------------------------------------------
+Utility routines (most not noted in above outline):
+
+KEYIN:   Read free format input (has numerous subroutines)
+KEYPTR:  Get the pointer to specific input in the KEYIN arrays.
+KCHAR:   Extract a character string from KEYIN arrays.
+KEYADD:  Add an input variable to the KEYIN arrays.
+KEYCHR:  Add an input character string to the KEYIN arrays.
+
+WLOG:    Write information to screen and log file.
+WRTMSG:  Write a message from $SCHED/catalogs/messages.txt
+UPCASE:  Make string upper case.
+DWCASE:  Make string lower case.
+KPACK:   Put a character string into holerith.
+VLBOPE:  OS specific routine to open a file.
+ERRLOG:  Write message to screen and log, then quit
+ENVIR:   Expand unix environment variables in file names.
+TIMEJ:   Get year, day, and time of day from MJD, often for printing.
+SCHDAY:  Get time (start etc) in special formats need for control files.
+STANO:   Get station number for named antenna.
+PRTSCN:  Print scan details.
+
+
+Spotted deficiencies:
+
+OPTMODE modes list in starting comments not complete.
+
+
+
+Mostly I found routines by looking for CALL statements.
+That will miss function calls.  Find them by searching 
+for FUNCTION   Do that later.
+
+[cwalker Sched]$ grep FUNCTION *.f
+badlo.f:      LOGICAL FUNCTION BADLO( PARM, FREQ, FMULT, NADD, 
+gnset.f:      INTEGER FUNCTION GNSET( ISCN, ISTA )
+headpos.f:      INTEGER FUNCTION HEADPOS( TPINDX, SYSTEM, IHEAD )
+horchk.f:      CHARACTER*1 FUNCTION HORCHK( KSTA, HA, AZ, EL, KSRC )
+pseti.f:      INTEGER FUNCTION PSETI( ISCN, ISTA )
+sameset.f:      LOGICAL FUNCTION SAMESET( KS, JS )
+sumdat.f:      CHARACTER*5 FUNCTION SUMDAT( ITEM, ISCN, ISTA )
+sumdesc.f:      CHARACTER*100 FUNCTION SUMDESC( ITEM, LENGTH )
+vlbastop.f:      CHARACTER*9 FUNCTION VLBASTOP( STOPJ, ADDSEC, LASTDY, TWOPI,
+[cwalker Sched]$ 

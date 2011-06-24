@@ -1,0 +1,36 @@
+There is one master makefile called Makefile.master.  The first part
+of that file has a number of choices that need to be made to produce a
+usable Makefile.  Options are offered and appropriate ones can be
+uncommented.  Most of these options have to do what compiler to use
+and where various libraries are located.  There are also options to
+not use certain aspects of the program for which libraries might be a
+problem to obtain.  These include plotting, which uses pgplot, and
+satellite navigation.  I strongly recommend that you get pgplot and
+set up the plotting.  It is very useful.  Only very rare users will
+need the satellite tracking.
+
+As an alternative to modifying Makefile.master, one can construct a
+file to configure it as desired.  For each normally used option, there
+is one alternative line that is just a place holder ending with the
+letters "SED".  One can construct a script that uses the unix utility 
+sed to replace those lines with the desired commands.  There are several
+such scripts, called, for example, configureLinux, that do this.  For
+standard setups, there may well be a script of that sort.  If the 
+script is executed, it will use sed to make the desired subsititutions
+and construct a Makefile.  Note any file called Makefile should be 
+considered volatile.  These scripts delete the old one and make a new
+one.  Don't put our critical changes there.  You can construct your own
+script for your particular setup if you wish to use this mechanism.
+
+The Makefile.master scheme was set up to get away from the previous
+scheme where there were a number of full makefiles, each set up for a
+particular environment.  That scheme just had too much risk of
+parallel development and divergence.
+
+The best way to do all this would probably be to make a proper
+configure script that would probe the system and figure out what is
+needed.  If someone has expertise making such scripts and is willing
+to make one, we would be grateful.  I make no pretensions to being a
+systems programmer.
+
+The new scheme with Makefile.master was set up on Oct. 30, 2008 RCW.

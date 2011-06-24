@@ -1,0 +1,447 @@
+                   SCHED MESSAGE FILE
+
+This file contains messages that SCHED may wish to write to the
+log file if something needs explanation.  Each message is preceeded
+by a line starting with ++ and giving the message name.  A line 
+starting with -- is not passed by SCHED to the log file.  It is
+useful to record which subroutine requests the message.  The routine
+WRTMSG reads this file and writes the message.
+
+++eqep
+--Called by SRREAD
+
+You have used both EQUINOX and EPOCH in your source lists to set the
+EQUINOX for precession.  EPOCH used to be used for this purpose, but
+that is not really correct as became apparent when stellar proper
+motions were introduced.  EQUINOX is now the proper veriable to use
+for the purpose and the valid arguments are 'J2000', 'B1950', and
+'DATE'.  SCHED tolerates the use of EPOCH for this purpose for 
+backwards compatibility.  But if both are used, SCHED does not know
+which to believe.  This can happen when you have some sources in a
+SRCCAT section in the keyin input file and still use EPOCH while the
+main source catalogs distributed with SCHED use EQUINOX.  Please
+convert all source lists you are using to EQUINOX.
+
+++expcode
+--Called by CHKCODE
+
+======================================================================
+  WARNING   The project code (EXPCODE) for this observation has a 
+            non-standard format.  Valid codes start with one or two 
+            letters followed by 3 digits.  Any leading zeros should 
+            be included.  A couple of valid examples are bt068 
+            and v003.
+
+            Note that some SCHED examples use non-valid codes, as do
+            VLBA test observations.
+======================================================================
+
+
+++vlaflukephase
+--Called by CHKVLA
+
+======================================================================
+  WARNING   The Fluke synthesizers at the VLA (pre EVLA) are used to 
+            fine tune the VLA frequency.  They have the property that
+            they do not necessarily return to the same phase if the
+            frequency is set to something other than a multiple of
+            10 MHz.  This is ok for the VLA because all antennas use
+            the same Fluke signals.  But it will spoil phase coherence
+            between scans for frequency switched VLBI (or EVLA) 
+            observations.
+
+            This schedule has setups with different VLA Fluke settings
+            and at least one is not a multiple of 10 MHz.  Therefore
+            you are at risk of random phase changes between scans for
+            the VLA.  This may or may not be a problem depending on 
+            the nature of the observations.  If you don't plan to carry
+            phase between scans separated by scans at other frequencies,
+            then there should not be a problem.  If you are doing some
+            sort of combined frequency switching and phase referencing,
+            then it won't work.
+======================================================================
+
+++freqcatwarning
+--Called by SETFCAT
+
+  There is inadequate information to specify a setup without
+  information from the frequency catalog.
+  If there is a frequency catalog entry for what you want, the
+  setup file must contain at least:
+  STATION, FREQREF, POL, BBFILTER, BITS, and NCHAN.
+  If there is no appropriate entry in the catalog, you will 
+  need more.    See the manual.' )
+
+++freqnomatch
+--Called by SETFCAT
+
+                    -----------  WARNING  -----------
+SCHED could not find a frequency catalog group that matched the setup file
+and station mentioned above.  Below are the closest matches with at least 
+some overlap in RF frequency.  You can use FREQLIST (a main program input) 
+to get the frequency catalog group and IF numbers that are available.  Or
+you can look in freq.dat in the catalogs area.
+
+Since SCHED cannot confirm the validity of your setup, check and be very 
+sure it is correct!
+
+In the table below, a match is indicated by a T.  A mismatch is indicated by F.
+
+   FreqCat        Baseband FreqCat  IF   First  Pol   RF    VLA   FE    RF    RF
+    Group         Channel    IF    Name   LO        Chan 1   IF       Freq   Band
+
+++goofyepoch
+--Called by SRREAD
+
+You have specified an EPOCH that is unlikely to be correct.  It
+cannot be interpreted as what used to be called EPOCH but is
+now EQUINOX (valid options are J2000, B1950, and DATE) and it
+is not a date between 1900 and 2100.  It is likely that you
+specified something like J1991.25 as may be apparent from the
+character form shown above.  Sched will proceed using what you
+specified as the reference date for proper motions, but it is
+very likely that this is not what you really want.
+
+++modtst
+--Called by OKMODES
+
+                -------------  WARNING  ---------------
+You have specified MODETEST in a setup file.  This makes it possible
+to record observations that cannot be correlated.  Please do not use
+this parameter unless you absolutely have to.  If you do, it is best
+to communicate with correlator support personnel to be sure that the
+data will be usable.
+
+
+++noassignbbc
+--Called by BBCALT
+
+BBCALT could not assign a BBC to channel ICHAN (see above) in the
+setup file given above.  The allowed IF channels from the frequency
+catalog are given above as IFNAME and alternate ALTIFC.  The number of
+BBCs assumed to be available at station is given above as NNBBC
+The setup information already available will be shown below.
+
+++oldspeed
+--Called from RDSET.
+
+You have specified the tape speed using the setup file parameter
+TPSPEED.  This is an obsolete way of specifying this parameter.
+You should use TPSPEEDH and TPSPEEDL here in the setup file, or 
+better yet, let SCHED use its defaults, which are good for almost
+all circumstances.
+
+++padloss
+--Called from CHKSOC.
+
+CHKSOC: *** WARNING ***  You have requested a fanout of 4 and
+        the ZEROPAD correlator weighting function.  That will 
+        cause half the data not to be used (cannot overlap the FFTs).
+        The automatic setting of FORMAT does not understand this.  
+        You may need to force FORMAT in the setup.
+
+++plstainstructions
+--Called by PLOTSTA
+   Left click on station to toggle station plotting.
+   Middle click or type M on station to mark to move. 
+      Then left click new position
+   Right click to finish plots.
+   Type O to run an optimization.
+   Type G to toggle plotting of optimization grid.
+   Type S to get a contour plot of quality around first red station.
+   Type Z to zoom in, z to zoom out - centered at cursor.
+   Type p for a bw postscript version of the map.
+   Type P for a color postscript version of the map.
+   Type K for SKA specific postscript files.
+
+++polerr
+--Called from CHKSOC.
+
+CHKSOC:  Track assignments were specified that cannot be polarization 
+         processed in Socorro. It is safest to assign polarization
+         pairs to adjacent channels.  Try that, let SCHED make the
+         track assignments, or contact an expert for help.
+
+++rollerr
+--Called from CHKSOC.
+
+CHKSOC:  Channels to be processed in Socorro as a polarization pair
+         must be assigned to the same roll group when barrel rolling 
+         is on. It is safest to assign polarization pairs to adjacent 
+         channels.
+
+++scanremoval
+--Called from AUTODOWN
+
+  * Stations using automatic tape allocation or disk recording systems
+    are being removed from scans when the source is below the antenna 
+    pointing limits.  This behavior can be overridden using DODOWN.
+
+++slewremoval
+--Called from AUTODOWN
+
+  * Some stations are unable to reach a scheduled source before the
+    scan end time.  In most cases, those stations, if using disk 
+    recordings, are being removed from the affected scans.  This 
+    behavior can be overridden using DODOWN.  Also using DWELL time 
+    scheduling can prevent such cases.  With DWELL with a second, 
+    but not a third argument, this may still happen if there are 
+    slow antennas.
+
+    Note that, if using DWELL with a second argument, the antenna
+    that does not make it to source is counted as one of the ones
+    not to wait for.  So don't be surprised if, for example, you
+    specified not to wait for 2 and there is only one that gets there
+    late.  There is likely to be another that was scheduled for the
+    scan that has been removed for too long a slew.
+
+    In cases where an antenna is removed from a scan for too long a
+    slew, a "W" will be placed as the UP indicator.  That appears
+    as a flag (along with "D", "H", "R", and "S") on some lines in
+    the summary file scan listings.  It also appears in some cases
+    in the sch file.
+
+    Removing scans with too long slews is capable of creating an
+    undesired situation when phase referencing.  When a wrap is
+    needed, it is usually needed for one source before the other of
+    a referencing pair.  With scan removal, this causes one of the
+    sources to get skipped repeatedly until the second source needs
+    the wrap, even though both sources would have been ok after 
+    a wrap.  To try to avoid this syndrome, SCHED will not remove
+    a station from a scan for too long slew if it is an ALTAZ 
+    antenna and the slew is more than 315 degrees - ie it is a
+    wrap.  
+
+    Removing scans with too longs slews can have another bad effect
+    when scheduling with DURATION.  If a long slew preceeds a series
+    of short scans, it is possible to reject all of those short scans
+    as each is rejected, causing the next to move up to where
+    it will be rejected in turn.  Therefore SCHED detects when it
+    it has emptied a scan of stations because of slews and, instead
+    of skipping the scan as it would one with all antennas down, it
+    reinstates all of the long-slew stations.  Those stations won't
+    get to the source, but at least the next scan will be pushed out
+    to where they will get to it.
+
+    Be warned that, if your project can be time shifted as part of
+    dynamic scheduling, incidents of problems with long slews 
+    can affect different scans than those for which you tested the
+    schedule.
+
+++taperunning
+--Called from SETTPS
+
+  Recording is being continued through short gaps between scans.
+Add TPSTART to the SUMITEM list to see details.
+MINPAUSE and PRESTART may be used to adjust.
+Remember MINPAUSE is multiplied by the speed up factor.
+
+++vlaover24
+--Called from CHKVLA
+
+This schedule is over 24 hours and contains the VLA.  That is not
+wise.  VLA telescope files do not have a day associated with each
+scan, so, if there is a restart after the first 24 hours are up,
+observing may resume on the wrong (previous day's) scan.
+
+++resync
+--Called by CHKSCN
+
+WARNING: More than 10% of the on-source, in-scan time in this schedule
+will be lost to correlator resyncs at at least one station.
+Correlator resyncs happen when the recordings stop and restart and
+when certain reconfigurations happen.  The details vary according to
+the recording system and the correlator.
+
+You can easily have excessive sync losses at the VLBA correlator if
+you stop the recording too often, such as between every scan in a phase
+referencing observation.  If this is happening, investigate the
+parameters PRESTART and MINPAUSE to try to keep the recordings moving
+between scans, or at least to start them before the nominal scan start
+time to allow for correlator sync.  MarkIV correlators are less
+sensitive to recording stoppages and JIVE is somewhere in between.
+
+For the VLBA recording system, a formatter reconfiguration causes a
+constant time code to be sent to the recording for about 8 seconds.
+This is treated as bad data at the correlator and delays
+synchronization.  In fact, on the VLBA correlator, it seems to be
+worse than having stopped the recording during the reconfigure.  It
+typically adds 15 seconds to the resync - 8 for the period of bad time
+and 7 more added to the typical resync time.  But for 10-20% of cases,
+the resync takes much longer - up to about 80 seconds.  If you must
+have a formatter reconfiguration, it is much better to do it while the
+recording is stopped.  Just adding a GAP of 20 seconds or more should
+do it.
+
+On the VLBA correlator, a resync takes about 8, 13, or 25 seconds of
+record time for speedup factors of 1, 2, or 4 for tape (about 8
+seconds of playback time).  For disk, it is currently about 10 seconds
+of record time longer than that, although we hope to bring that down
+to much shorter values.  
+
+At JIVE there is no speedup.  Tape resyncs take about 20 seconds and
+disk about 1 second.  The tape value is reduced to about 10 seconds if
+the scan gap is less than about 20 seconds.  Resyncs take longer,
+20-30 seconds if there is a new configuration that requires a new
+subjob.  The causes are basically the same as the causes of formatter
+reconfigurations (see below), except there is no sensitivity to pcal
+setups.
+
+The MarkIV correlators take about 10s to sync with tape and of order a
+second with disk.  Since each scan is handled independently, there is
+no sensitivity to configuration, other than that they could not
+correlate the period of bad time code produced during a
+reconfiguration.
+
+A common reason for excessive resyncs on the VLBA is unintended
+formatter reconfigures.  Reconfigures are caused by changes in the
+number of channels, the sample rate, the fanout, the format, the
+barrel roll, the track assignments, the BBC sideband, the number of
+bits, the BBC assignments, and the pcal detector setup.  Basically
+they happen whenever the switching in the formatter must change.
+
+One subtle cause of unintended reconfigures on VLBA systems is changes
+to the pcal setup forced by frequency changes.  If the kHz digits of
+the baseband frequency settings change, the tone detector frequencies
+have to change which triggers a reconfigure.  If the MHz digits
+change, no pcal change is needed because there is a tone every MHz.
+For example, if a baseband is set to 635.49 in one setup and 862.99 in
+another, a reconfigure will be triggered when switching between them.
+If one is 635.49 and the other is 862.49, the pcal tone frequency will
+be the same and there will not be a reconfigure despite the large
+difference in the MHz part.  When band switching, always try to keep
+the basic setup (number of channels, bits etc) the same and keep the
+kHz digits of the frequencies the same.  
+
+Another not-so-obvious cause for formatter reconfigures is changes to
+the BBC sideband.  Recall on the VLBA that the IF is net upper
+sideband for 6 cm and up but is lower sideband for the 20cm and 13cm
+(S and L bands) systems.  Typical standard setups use net upper
+sidebands.  For 20cm and 13cm, this requires a lower sideband mix at
+the BBC. Different BBC sidebands are sent to different samplers and
+hence require the formatter to reconfigure its input switches when
+there is a change.  This issue can be avoided by switching to net
+lower sideband for the 20cm and 13cm systems.
+
+It should essentially never be necessary to provoke reconfigurations,
+even when switching between observing bands.
+
+
+++freqbw
+--Called by CHKSC1
+
+CAUTION: You have set FREQ and/or BW for some scans but have not
+changed them when switching to a new setup file.  This might be
+exactly what you intended, it would be wise to check to be sure.
+These parameters do not change from scan to scan unless forced.  It is
+possible that you really did want them to change, perhaps to the value
+of the new setup file.  To cause SCHED to use the setup file value,
+set FREQ=0 and/or BW=0.
+
+
+++warn2cm
+--Called by CHKSET
+
+NOTE ABOUT 2CM FREQUENCIES: This message was triggered by your
+observation near 15.3 GHz.  There is an inconsistency between the
+frequencies specified in the standard setup files and by a
+specification of BAND='2cm' in SCHED.  The standard setup files use a
+center frequency of 15360.99.  This is also the frequency at which the
+VLBA gains are measured.  The center frequency used by SCHED for
+BAND='2cm' is 15285.49.  These frequencies are near the edge of the
+"U" band at the VLA so it is likely that the lower frequency was
+chosen for better VLA performance.  On the other hand, the higher
+frequency is in a shared radio astronomy band (15.35-15.4 GHz) so is
+more protected.  One or the other could be changed so that they match,
+but that has not been done in order to avoid a glitch in on-going
+projects.  For most purposes, these two frequency settings should be
+equivalent, but this message is provided to clarify the situation, and
+to explain why the calibration gains might be for a slightly different
+frequency than your observations.
+
+
+++warnlong
+--Called by CHKSCN
+
+WARNING ABOUT LONG SCANS:  This schedule has some scans of more than
+40 minutes duration.  Long scans have on occasion led to significant
+data loss under various circumstances that shouldn't happen, but do.
+For example, when a VLBA station has to change disk packs in the 
+middle of a scan, there have been problems either getting all of that
+station, or getting any calibration data for all other stations for
+that scan.  We recommend keeping scans shorter than around 30 minutes.
+If you want to stay on-source longer than that, multiple back-to-back
+scans are likely to be safer than one long scan.  The final output
+data will not be any different, at least on the VLBA.
+
+
+++warn2phasemode
+--Called by VLAPMODE
+
+WARNING:  You have requested at least 2 VLA phasing modes (VA, VB,
+VL, VR) for scans that use the same setup files.  This is unlikely
+to be valid.  To change the IFs in use, different setup files are
+needed and the different phasing modes phase different IFs.  SCHED
+will also likely be prevented from being able to automatically set
+the VLA setup parameters.
+
+
+++multipleVLA
+--Called by INVLA
+
+WARNING:  You have more than one station that is the VLA (such as
+VLA1 and VLA27).  You will only get crd, sch, and obs files for
+one because they all have the same station code.  In most cases,
+you only need to use one "station", such as "VLA" for the VLA even
+if you are mixing phased array and single dish observations.
+
+++CORAVGsetting1
+--Called by CHKVDIFX
+
+You have chosen to use the exact averaging time that you have
+specified.  In that case, the DiFX software correlator will divide the
+scan into bins of the exact length you have specified and average all
+short term accumulations that fall within each bin, regardless of the
+length of each short term accumulation which must be an integral times
+the length of each input FFT.  The result is that each of your
+integrations could have slightly different amounts of accumulated data
+and a true mean time slightly offset from the nominal center recorded
+as the time for the data point.  These effects only amount to a few
+percent or less for normal data, but in extreme cases of narrow
+bandwidths and many channels, can be more significant.
+
+++CORAVGsetting2
+--Called by CHKVDIFX
+
+You have allowed the DiFX software correlator to adjust your average
+time to be an integral number of input FFT intervals (and an integral
+number of short-term accumulator intervals).  You did this by
+specifying CORAVG without a second argument set to "EXACT".  This is
+the default, and recommended, option.  The adjustment will be a few
+percent or less in most cases, although it can get as high as sqrt(2)
+for an extreme narrow bandwidth case with a large number of spectral
+channels.
+
+++FRADJWARN
+--Called by FRFADJ
+
+You are using one of the RDBE forms of the DBE.  The frequency ranges
+for entries in freq.dat that are either 500 or 1000 MHz from the 
+first LO are being adjusted to be 512 or 1024 MHz from the first LO
+respectively.  This is to account for the small shift in the IF range
+between the old VLBA style systems and the new RDBE systems.  The
+requirements that the offsets be exactly 500 or 1000 MHz and that 
+the DBE is the RDBE should prevent any shifts being made where they
+are not appropriate.
+
+++CRD_RDBE_Warning
+--Called by VLBASU
+
+VLBASU: For stations using the RDBE, but also having old VLBA style
+control systems (eg VLBA), crd files will have format NONE and may 
+have reduced channels and adjusted samplerate, frequencies and
+bandwidths.  These only affect the old backend and recorder, not 
+the new hardware.  They only affect observations in that they
+will be used for reference pointing until the new control system
+can point the antenna.
+

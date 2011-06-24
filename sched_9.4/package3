@@ -1,0 +1,76 @@
+#! /bin/csh
+
+# See Release_instructions.  I'm not using this any more.
+
+
+
+#  Make a tar file of a complete SCHED installation.
+# ==============================================================
+#  Usage:  package vernum      DON'T FORGET THE VERSION
+set schver=$1
+# ==============================================================
+echo Constructing release directory and tar files for release: $schver
+
+cd $SCHED
+
+echo 'Be sure you are in the base SCHED directory for this distribution'
+if( ! -e TARFILES ) then
+   mkdir TARFILES
+endif
+
+set instaltar=/users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$schver.tar
+set releasedir=/users/cwalker/files/sched_$schver
+
+echo ' '
+echo Deleting files with same names as this routine\'s output files.
+/bin/rm $instaltar.gz
+
+echo ' '
+echo Comparing versions in packagedev with versions in code:
+echo Release version number:
+grep "VERNUM=" src/Sched/versched.f | grep -v "C   "
+echo SCHED version in package: $schver
+echo Vex and Plot versions:
+grep "VEXVER =" src/Vex/vxlink.inc
+grep "PLTVER =" src/Plot/plver.f
+grep VERSION doc/sched.tex | grep USER
+
+echo ' '
+
+#  Getting tar to be selective is proving to be rather problematic.
+
+# Instead create a release directory and fill it with rsync.  Then
+# tar that.  First clean out the examples directory of temporary stuff.
+
+cd examples
+../bin/schclean "*"
+cd ..
+
+mkdir $releasedir
+
+echo 
+rsync -au \
+  --exclude "*~" \
+  --exclude "core*" \
+  --exclude "*.o" \
+  --exclude ".svn" \
+  --exclude "catalogs/Master*" \
+  --exclude "doc/sched.aux" \
+  --exclude "doc/sched.dvi" \
+  --exclude "doc/sched.ps" \
+  --exclude "doc/sched.tex.tmp" \
+  --exclude "doc/sched.toc" \
+  --exclude "doc/texput.log" \
+  bin catalogs doc examples setups src \
+  README  Release_instructions   $releasedir
+
+
+cd $releasedir
+echo Current directory $PWD
+echo Write $instaltar 
+tar --exclude sched -cf $instaltar . bin/schclean
+
+echo ' '
+echo Compressing the tar file.
+gzip $instaltar
+

@@ -1,0 +1,32 @@
+#! /bin/csh
+#
+# Use sed and the template Makefile.master to build a Makefile
+# for 32-bit Linux machines without satellite tracking.
+#
+# RCW  Oct 30, 2008
+#
+# If anyone knows how to make proper configure scripts and would like
+# to help by building one for SCHED, that would be much appreciated.
+#
+/bin/rm Makefile
+/bin/rm -f makelinux.sedscript
+
+# Make a file for sed with all the required changes to Makefile.master
+# Note that LPGPLOT is not needed for this case.
+
+cat <<EOF >! makelinux_sedscript
+s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux:
+s:#ARCHSED: ARCH = LINUX:
+s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash:
+s:#XLDSED: XLD = -L/usr/X11R6/lib -lX11:
+s:#PLOT_SRCS_SED: PLOT_SRCS = \$(wildcard Plot/*.f) \$(wildcard PlotNRAO/*.f):
+s:#LDPGPLOTSED: LDPGPLOT = -lpgplot -lpng:
+s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
+s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
+s:#SATLDSED: SATLD = :
+EOF
+
+#  Run sed with the above file.
+
+sed -f makelinux_sedscript Makefile.master > Makefile
+/bin/rm makelinux_sedscript

@@ -1,0 +1,51 @@
+This is an announcement that SCHED can be run on Mac OS X systems.
+
+I recently installed SCHED on a Mac OS X 10.3 (Panther) system (iBook
+G4).  To do so, you need a fortran compiler and, for the plot stuff,
+pgplot.  I got gcc by installing the Xcode package that was already on
+disk but not installed (see installers under applications).  The X
+windows package is not on disk, but is on the third OS X installation
+disk (not the second as it says in some documentation).  The FORTRAN
+compiler, g77, is not included with gcc for some reason so you have to
+get it elsewhere.  A binary based on the gcc that comes with OS X 10.3
+is available at http://hpc.sourceforge.net (g77 3.4).  It unpacked
+itself on download and basically just worked.  I understand from the
+AIPS group that the IBM compiler mentioned at the same site probably
+would provide significantly better performance, but that is not much
+of an issue for SCHED.  Note that earlier versions of OS X might 
+require more work to set up the compiler.
+
+I see that PGPLOT is one of the packages available through fink 
+(http://fink.sourceforge.net), although I downloaded it from Caltech
+and built it.  I started with the bsd g77_gcc .conf file with the 
+following changes:
+ FFLAGD="-fno-backslash"
+ LIBS="-L/usr/lib -lgcc -L/usr/X11R6/lib -lX11"
+I had some problems with the fonts, but reruns of pgpack eventually
+cleared them up.
+
+Once f77 and pgplot were available, installing SCHED was a matter
+of getting the right set of compiler switches in the Makefile.
+No code changes were required.  You could easily do this with the
+current (2003sep18) released version of Sched.
+
+In the makefile, set (yes, mostly the LINUX settings work!):
+ARCH = LINUX
+FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X and others)
+XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11 # Mac OS X (ie DARWIN)
+LPGPLOT = /usr/local/pgplot
+LDPGPLOT = -L$(LPGPLOT) -lpgplot                 # Not Hp - link lib.
+
+The location of the libraries may vary if you install them differently
+from what I did - like if you use fink.
+
+I discovered while doing this that the plot stub option does not
+work.  Without thinking about it, I had put some plot routines related
+to configuration searches outside the stubbed directory so it still
+wanted PGPLOT.  That has been fixed in the development version.
+From the lack of complaints, I take it that no one is installing without 
+pgplot, which is good.
+
+Cheers,
+
+Craig Walker
