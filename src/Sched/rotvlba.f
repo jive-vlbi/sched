@@ -17,7 +17,43 @@ C     calculation to recognize that a positive rotation is clockwise
 C     looking down on the feed circle.  Do that by subtracting the
 C     original values of FEEDPOS from 360 deg and changing the equations
 C     for the collimation offsets.
+C
+C     June 27, 2011.  I'm getting a lot of failed rotation patterns so
+C     something went wrong in the above logic.
+C
+C     In tjun26u, we had the following pattern:
+C
+C       Schedule     tsm FRM rec    Schedule      a priori    Measured  a pr. beta
+C      foc    rot    foc     rot    azc   elc    azc    elc   azc  elc    azc  elc
+C    -17.0    0.0   4.73  245.89    0.0   0.0   4.26  -4.10   4.2 -4.0    0.0  0.0
+C      0.0  -12.0   6.42  233.89  -5.93  5.34  -1.67   1.24  -1.1  2.1  -4.69  6.46
+C      0.0    0.0   6.43  245.90    0.0   0.0   4.26  -4.10   4.2 -4.0   0.0   0.0
+C      0.0   12.0   6.43  257.89   4.69 -6.46   8.95 -10.56   9.1 -9.8   5.93 -5.34
+C     17.0    0.0   8.13  245.88    0.0   0.0   4.26  -4.10   4.2 -4.0    0.0  0.0
+C
+C     So all is good in the focus pattern.
+C
+C     The scheduled rotation offsets have the same sign convention as 
+C     the reported positions.  
 C     
+C     Reported rotation of 1cm is 303 so convention is clockwise looking
+C     down (confirmed by looking at a photograph of Pie Town).
+C     At the position of the 2cm receiver, one would expect that the 
+C     Az collimation change would be larger for an increase in rotation
+C     than for a decrease of the same amount.  That seems to be the 
+C     opposite from what the a priori numbers request.  The Measured data 
+C     for the positive move are from one point and are marginal.  But it looks
+C     sort of like there isn't much effect in reality.  Certainly the
+C     a priori numbers don't seem right.
+C
+C     Aarg - the focrot files have been using SCHED 9.4 and the Feb 2011 fixes
+C     were not in that.  They are only in the beta.  But even so, I think
+C     I'm not getting it quite right.  Get Jim to get some more data using
+C     the beta version.
+C
+C     July 6, 2011.  Got more 2cm data.  Much improved, but not perfect.
+C     Try to get a fit from rotanal using the second order versions.
+C
       INCLUDE           'sched.inc'
       INCLUDE           'schset.inc'
 C
@@ -44,6 +80,10 @@ C     Use a maximum FOCINC of 30 and treat Nl specially
 C     by not letting focus get below -10 at 13 cm and 
 C     -25 at 6 cm.  Note normally FOCINC would be 100 for 13 cm
 C     and 44cm for 6 cm.
+C
+C     FEEDPOS is the position measured clockwise when looking 
+C     down on the feed circle.  The zero point is on the
+C     E/W axis that goes between the 13cm and 4cm feeds.
 C
       LOWLIM = -30.0
       IF( FE(2,LS) .EQ. '2cm' .OR. FE(4,LS) .EQ. '2cm' ) THEN
@@ -134,21 +174,26 @@ C
          RLEVEL(I) = 256
       END DO
       CALL VLBAINT( 'level', 5, NCHAN(LS), RLEVEL, LLEVEL, MLEVEL,
-     1           .FALSE., IUVBA )
-C
-C
+     1 .FALSE., IUVBA ) 
+C 
 C     Now do the offset forcus and rotation positions if that is
-C     desired.  For rotation, 40" (0.6666 arc min) per degree is
-C     expected.  A 1 degree rotation corresponds to FCR*sin(1) = 
-C     FCR*0.01745 where FCR is the radius of the feed circle (which
-C     I don't happen to know at the moment - but it is not needed).
-C
+C     desired.  For rotation, 40" (0.6666 arc min) collimation
+C     change per degree is expected.  A 1 degree rotation
+C     corresponds to a shift of the beam on the feed circle of
+C     FCR*sin(1) = FCR*0.01745 where FCR is the radius of the feed
+C     circle (which I don't happen to know at the moment - but it
+C     is not needed - it divides out).  For large rotations, 
+C     the beam shifts on a circle so you cannot just multiply the 
+C     1 degree number by the rotation shift.  Instead, calculate 
+C     the beam shift in the az and el axes and use that to get the 
+C     pointing shift.  See the math in the code.
+C     
 C     Assume zero shift for focus offsets.
-C
-C     Divide the total time into ROTPAT segments.  Test if
-C     they are of appropriate length.  This allows for multiple
-C     pointing patterns at each focus/rotation position, if
-C     desired.
+C 
+C     Divide the total time into ROTPAT segments.  Test if 
+C     they are of appropriate length. This allows for multiple 
+C     pointing patterns at each focus/rotation position, if 
+C     desired.  
 C
       ISDUR = NINT( DUR(ISCN) * 86400.D0 ) 
       IDUR = ( ISDUR - PTSLEW(ISCN) - ROTPAT * 2 * PTDUR ) / ROTPAT

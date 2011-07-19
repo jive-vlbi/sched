@@ -128,12 +128,12 @@ C
 C           Be sure bandwidth is not more than half the sample rate.
 C
             IF( VLBITP ) THEN
-               IF( BBFILT(ICH,KS) .GT. 0.5D0 * SAMPRATE(KS) ) THEN
+               IF( BBFILT(ICH,KS) .GT. 0.5001D0 * SAMPRATE(KS) ) THEN
                   CALL WLOG( 1, 'CHKSET: Bandwidth more than half of '//
      1              'sample rate' )
                   ERRS = .TRUE.
                END IF
-               IF( BBFILT(ICH,KS) .LT. 0.5D0 * SAMPRATE(KS) .AND. 
+               IF( BBFILT(ICH,KS) .LT. 0.4999D0 * SAMPRATE(KS) .AND. 
      1             SAMPWARN ) THEN
                   CALL WLOG( 0, 
      1                    'CHKSET note: Oversampling specified. ' )

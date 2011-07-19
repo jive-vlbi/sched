@@ -78,6 +78,7 @@ C
 C        Extract the phase center information.
 C
          WRITE( CTRNAME(NCENT), '( A8, A4 )' ) PVAL(2), PVAL(3)
+         CALL UPCASE( CTRNAME(NCENT) )
          IK = 4
          DO ISRC = 1, MCSRC
             WRITE( CTRSRCN(ISRC,NCENT), '( A8, A4 )' ) 

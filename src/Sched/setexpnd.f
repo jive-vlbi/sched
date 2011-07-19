@@ -99,6 +99,15 @@ C
          END DO
       END DO
 C
+C     Initialize LISTKS to KS.  This will eventually be the setup
+C     group that is actually printed in the SUM file for the collection
+C     of groups that are basically the same, just for different 
+C     stations.
+C
+      DO KS = 1, NSET
+         LISTKS(KS) = KS
+      END DO
+C
 C     Get ISETSTA.  
 C
 C     This used to be a bit tricky because of the possible

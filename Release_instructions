@@ -146,6 +146,8 @@ chmod  u+w sched/catalogs/*
 =================  Make the release version =======================
 
   I'm no longer convinced making a tagged version is that good an idea.
+  But Des Small has found he wants them, so I should try for a while.
+  Perhaps just treat them as a marker for the release.
   If making a tagged version, see instructions at end of this file.
 
   Make a directory for the new version.
@@ -317,3 +319,17 @@ cd $SCHEDBASE
 rsync -auv --exclude ".svn" bin  $SCHEDNEW
 rsync -auv --exclude ".svn" examples/Stdout $SCHEDNEW/examples
 rsync -auv --exclude ".svn" doc/sched $SCHEDNEW/doc
+
+
+#  Des Small does want tagged versions.  But I think mainly he
+#  wants to have a way to find the version that was the release.
+#  I think my problem related to having to maintain the tagged
+#  version separately when fixes were needed.  I'd rather come off
+#  the main version.  But perhaps I can still do it that way.
+
+#  Below taken from Des Small's email when he set 9.3 and 9.4
+#  It shows how to backfit a tag.
+svn copy -r 276 https://svn.aoc.nrao.edu/repos/sched/trunk/sched \
+https://svn.aoc.nrao.edu/repos/sched/tags/sched_9.3 \
+-m "Tagging release 9.3 of sched."
+

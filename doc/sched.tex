@@ -64,7 +64,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  RELEASE 9.4}
+\title{THE \schedb USER MANUAL \\  BETA RELEASE 10.0}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -741,13 +741,16 @@ file.  \schedb now writes a template for that file.  That file is
 also be used to pass lists of phase centers when utilizing the DiFX
 multiple phase center capability.
 
-\item[Optimized Schedule:]  When one of \sched's optimization modes
-is turned on, the program writes out a file, such as {\sl bv016.sch}
-containing the basic scan inputs for a new main schedule file.  If
-desired, the user can use this to construct, and perhaps modify,
-a new optimized main schedule input.  This used to be the way all
-optimized schedules were constructed, but now that \schedb fully
-processes an optimized schedule, it is rarely used or needed.
+\item[Optimized Schedule:] When one of \sched's optimization modes is
+turned on, or geodetic segments are requested, the program writes out
+a file, such as {\sl bv016.sch} containing the basic scan inputs for a
+new main schedule file.  If desired, the user can use this to
+construct, and perhaps modify, a new optimized main schedule input.
+This used to be the way all optimized schedules were constructed, but
+now that \schedb fully processes an optimized schedule, it is rarely
+used or needed.  The newer use is to make it easy to reproduce 
+geodetic segments when something else is changed that would otherwise
+change the results of the optimization.
 
 \item[{\sl frequencies.list}:]  If the user specifies the parameter
 \htmlref{{\tt FREQLIST}}{MP:FREQLIST}, \schedb will read the
@@ -6373,16 +6376,19 @@ even if full speed is not reached.
 
 \rcwbox
 {A time in any allowed time format (hh:mm:ss, mm:ss, sss etc.), followed
-by an integer.}
-{Any time.  The integer should be smaller than the number of antennas.}
+by an integer, and then another time.}
+{Any time.  The integer should be smaller than the number of antennas.  The
+second time is normally smaller than the first}
 {The duration of the scan must be specified with some combination of
 {\tt START, STOP, DURation,} and {\tt DWELL}.  The number of antennas to
-not wait for defaults to zero.}
-{Reverts to previous scan.  Overridden by {\tt DUR}.}
-{{\tt DWELL=110,1} (which is equivalent to {\tt DWELL=1:50,1}).
+not wait for defaults to zero as does the minimum time.}
+{Reverts to previous scan.  Overridden by {\tt DUR}.  The second and 
+third arguments use the last setting in a {\tt DWELL} command (not
+overridden by {\tt DUR})}
+{{\tt DWELL=110,1,60} (which is equivalent to {\tt DWELL=1:50,1,1:00}).
 {\tt DWELL=110} is equivalent to {\tt DWELL=110,0} except that the
 latter will reset the second argument to zero if it had been something
-else.}
+else while the former will not.}
 
 
 \subsubsection{\label{MP:ELCOLIM}\tt ELCOLIM}
@@ -8689,7 +8695,7 @@ reconfigure, a resync will be done normally.
 \rcwbox
 {A time.}
 {Any time.}
-{0.0}
+{5.0}
 {Defaults to previous scan.}
 {{\tt PRESTART=15}, meaning start the recording 15 seconds early.}
 
@@ -13972,9 +13978,51 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_9.5}Development Version 9.5}
+\subsection{\label{SSEC:VER_10.0}Development Version 10.0}
 
-Nothing yet.
+\begin{itemize}
+
+
+\item REMINDER TO RCW: Need to fix frequency selection to allow
+inverted sidebands for the RDBE.
+
+\item Fix flush.f (FLUXH) to backup over the EOF once it has read to the
+end of file.  GFORTRAN 4.6 was getting a run time crash.  Reported by
+Leonid Petrov.  June 16, 2011.  RCW.
+
+\item Make various changes to the code that generates the DELZN segments 
+to work better when there are only 2 stations and when there are a large
+number of scans.  mid June, 2011. RCW.
+
+\item Add pointers in the frequency sets and source summaries in the {\sl .sum}
+file so that it is possible to relate a source to a frequency.  Useful when
+trying to see what {\tt DOPPLER} has selected for frequencies when there are 
+several sources.  May 17, 2011 RCW.
+
+\item Add some GBT setups that match the IF range (possibly with inverted
+sideband) with the VLBA to facilitate RDBE PFB runs.  May 2, 2011  RCW
+
+\item Change manual to correct the default PRESTART from 0 to 5 seconds 
+reflecting recent code changes.
+April 1, 2011.  RCW.
+
+\item Working on DDC frequency checks.  ********
+
+\item Upcase the name of a pointing center group so there aren't 
+case sensitivities in the selection of such groups.  Mar. 18, 2011  RCW.
+
+\item Cause the .sch file to be written when geodetic segments are
+requested.  This makes it easy to reproduce segments created when
+they are desired in another segement, such as when making files to
+test new backends.  The change in frequencies can cause freshly 
+created segments to be different due to the frequency dependent flagging
+of sources close to the Sun.  March 16, 2011  RCW.
+
+\item  Modify the calculations of the pointing offsets due to rotation
+changes for ROT patterns.  Those calculations had been based on
+incorrect rotation positions.  Feb. 22, 2011  RCW.
+
+\end{itemize}
 
 \subsection{\label{SSEC:VER_9.4}Version 9.4}
 
@@ -16924,6 +16972,10 @@ been addressed, but not taken out here.
 
 
 \begin{itemize}
+
+\item Add a SUNAVOID parameter sort of like DODOWN that avoids pointing
+      and antenna too close to the Sun.  Request for the CMVA from 
+      Krischbaum  Mar. 22, 2011.
 
 \item Somehow provide for different VLA positions for single dish
       and phased array in the VEX file when mixing the two.  Dec. 8,
