@@ -10,12 +10,12 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER            I, IUNIT, KS, KF, NNCHAN, KSCN, LEN1, IC
-      INTEGER            IP, IPC, ISSTA
+      INTEGER            I, IUNIT, KS, JS, KF, NNCHAN, KSCN, LEN1, IC
+      INTEGER            IP, IPC, ISSTA, JF, ICH
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
-      LOGICAL            GOTIT
-      CHARACTER          RESULT*100
+      LOGICAL            GOTIT, FSDUP, FSMATCH
+      CHARACTER          RESULT*100, FSMATSTR*132
 C----------------------------------------------------------------------
       NNCHAN = NCHAN(KS)
       IF( DEBUG ) THEN
@@ -60,13 +60,24 @@ C
      1           ' VLBA Synth=', (SYNTH(I,KS),I=1,3)
       END IF
 C
-C     List the frequency sets.
+C     List the frequency sets.  Try to catch all sets that use this
+C     basic setup, even if not used by the station of this setup.
+C     LISTKS was set in SCHSUM to record which setup of those that
+C     are similar got fully listed.  FSETKS records which setup a
+C     frequency set comes from.  Require that LISTKS be the same 
+C     for the current setup KS and the one a frequency set is from
+C     to be sure they are basically the same.  Meanwhile, actually
+C     list the frequency set information for the lowest numbered
+C     frequency set of those that are the same, as recorded in
+C     FSSAME which was set in GETFSET.
 C
       IF( NFSET .GT. 0 ) THEN
          WRITE( IUNIT, '( 1X, /, A, A )' ) '  The following ',
-     1         'frequency sets based on this setup were used.'
+     1         'frequency sets based on these setups were used.'
          DO KF = 1, NFSET
-            IF( FSETKS(KF) .EQ. KS ) THEN
+            JS = FSETKS(KF)
+            IF( LISTKS(JS) .EQ. LISTKS(KS) .AND. 
+     1          FSSAME(KF) .EQ. KF ) THEN
                KSCN = FSETSCN(KF)
 C
 C              Get the frequencies to be used for this frequency set.
@@ -157,8 +168,22 @@ C
                ELSE
                   CALL WLOG( 0, 'PRTFREQ:  Still no channels' )
                END IF
+C
+C              Write the matching frequency sets.
+C
+               WRITE( FSMATSTR, '( A )' )  
+     1              '    Matching frequency sets:'
+               ICH = LEN1( FSMATSTR ) + 1
+               DO JF = 1, NFSET
+                  IF( FSSAME(JF) .EQ. KF .AND. ICH .LE. 129 ) THEN
+                     WRITE( FSMATSTR(ICH:ICH+4), '( I4 )' ) JF
+                     ICH = ICH + 4
+                  END IF
+               END DO    
+               WRITE( IUNIT, '( A )' ) FSMATSTR(1:LEN1(FSMATSTR))
             END IF
          END DO
+C
       ELSE
          IF( IUNIT .NE. 6 .AND. IUNIT .NE. ILOG ) THEN
             MSGTXT = 'PRTFREQ:  No frequency sets!  Program problem.'

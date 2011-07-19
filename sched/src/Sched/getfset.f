@@ -7,8 +7,8 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    ISCN, ISTA, IFS, KS, ICH
-      LOGICAL    MATCH 
+      INTEGER    ISCN, ISTA, IFS, KS, ICH, JF
+      LOGICAL    MATCH, FSMATCH
 C ----------------------------------------------------------------------
       NFSET = 0
 C
@@ -25,6 +25,7 @@ C
                   FSETI(ISCN,ISTA) = 1
                   FSETKS(NFSET) = NSETUP(ISCN,ISTA)
                   FSETSCN(NFSET) = ISCN
+                  FSSAME(NFSET) = NFSET
                ELSE
 C
 C                 No longer first, look for a previous match.
@@ -72,6 +73,20 @@ C
                      FSETI(ISCN,ISTA) = NFSET
                      FSETKS(NFSET) = KS
                      FSETSCN(NFSET) = ISCN
+C
+C                    Also set the pointer to the lowest numbered
+C                    setup that has the same frequency parameters.
+C                    Loop backwards so FSSAME is the smallest match.
+C
+                     FSSAME(NFSET) = NFSET
+                     IF( NFSET .GE. 2 ) THEN
+                        DO JF = NFSET - 1, 1, -1
+                          IF( FSMATCH( NFSET, JF ) ) THEN
+                              FSSAME(NFSET) = JF
+                           END IF
+                        END DO
+                     END IF     
+C
                   END IF
 C
                END IF

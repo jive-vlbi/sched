@@ -1,6 +1,6 @@
       SUBROUTINE SRCWRT( IOUT, IP )
 C
-C     Subroutine for SCHED that writes the actual soruce lines for
+C     Subroutine for SCHED that writes the actual source lines for
 C     SRCLST.
 C
       INCLUDE  'sched.inc'
@@ -8,17 +8,17 @@ C
 C
       INTEGER       MSEP, ML
       PARAMETER     ( MSEP = 7 )
-      PARAMETER     ( ML = 20 )
+      PARAMETER     ( ML = 10 + MAXSET )
 C
       INTEGER       IP, ISRC, LEN1, IOUT, INAME
       INTEGER       ICHN
       INTEGER       MLINE, CLINE, IL, NPCH
-      INTEGER       ISET, NCHSET, CH1SET, IPAIR, ICSRC
+      INTEGER       ISET, NFC, NCHSET, CH1SET, IPAIR, ICSRC
       DOUBLE PRECISION  TSCAN, TBASE
       CHARACTER     FF*1
       CHARACTER*16  TFORM, TRA50, TRA20, TRAP, TDEC50, TDEC20, TDECP
       CHARACTER*16  TRAPM, TDECPM
-      CHARACTER     CVELREF*12, CVELDEF*18, HEADLINE*60
+      CHARACTER     CVELREF*12, CVELDEF*18, HEADLINE*60, KFSETS*78
       CHARACTER*132 LINE(ML)
       LOGICAL       PMUSED
 C ------------------------------------------------------------------
@@ -191,7 +191,7 @@ C           can have TONSRC way past STARTJ so protect against that.
 C           Break down by setup file.
 C
             DO ISET = 1, NSETF
-               CALL SBHOURS( ISRC, TSCAN, TBASE, ISET )
+               CALL SBHOURS( ISRC, TSCAN, TBASE, ISET, KFSETS )
                IF( TSCAN .GT. 0.D0 ) THEN
                   CLINE = CLINE + 1
                   MLINE = MAX( MLINE, CLINE )
@@ -202,6 +202,15 @@ C
      2                 TSCAN * 24.D0, ' scan and ', 
      3                 TBASE * 24.D0, ' baseline hours in setup: ',
      4                 SETFILE(ISET)(CH1SET:NCHSET)
+C
+C                 List the FSETS involved.  Compiled in SBHOURS.
+C
+                  CLINE = CLINE + 1
+                  MLINE = MAX( MLINE, CLINE )
+                  NFC = LEN1( KFSETS )
+                  WRITE( LINE(CLINE)(22:132), '( 2A )' )
+     1                  'Frequency sets (dups not shown): ', 
+     2                  KFSETS(1:NFC)
                END IF
             END DO
 C

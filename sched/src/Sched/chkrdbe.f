@@ -11,7 +11,9 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH
-      LOGICAL           ERRS
+      LOGICAL           ERRS, DDWARN
+      DATA              DDWARN / .TRUE. /
+      SAVE              DDWARN
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDBE: Starting' )
 C
@@ -88,8 +90,11 @@ C        ===  Now check the DDC personality. ===
 C
          IF( DBE(KS) .EQ. 'RDBE_DDC' ) THEN
 C
-            CALL WLOG( 1, 
+            IF( DDWARN ) THEN
+               CALL WLOG( 1, 
      1           '***** WARNING:  DBE=RDBE_DDC is not yet available. ' )
+            END IF
+            DDWARN = .FALSE.
 C
 C           Set the code for testing the DDC.
 C
@@ -109,14 +114,14 @@ C           Sample rate can have many values.  (Not yet confirmed)
 C
             IF( SAMPRATE(KS) .NE. 128.0 .AND. 
      1          SAMPRATE(KS) .NE. 64.0 .AND.
-     1          SAMPRATE(KS) .NE. 32.0 .AND.
-     1          SAMPRATE(KS) .NE. 16.0 .AND.
-     1          SAMPRATE(KS) .NE. 8.0 .AND.
-     1          SAMPRATE(KS) .NE. 4.0 .AND.
-     1          SAMPRATE(KS) .NE. 2.0 .AND.
-     1          SAMPRATE(KS) .NE. 1.0 .AND.
-     1          SAMPRATE(KS) .NE. 0.5 .AND.
-     1          SAMPRATE(KS) .NE. 0.25 ) THEN
+     2          SAMPRATE(KS) .NE. 32.0 .AND.
+     3          SAMPRATE(KS) .NE. 16.0 .AND.
+     4          SAMPRATE(KS) .NE. 8.0 .AND.
+     5          SAMPRATE(KS) .NE. 4.0 .AND.
+     6          SAMPRATE(KS) .NE. 2.0 .AND.
+     7          SAMPRATE(KS) .NE. 1.0 .AND.
+     8          SAMPRATE(KS) .NE. 0.5 .AND.
+     9          SAMPRATE(KS) .NE. 0.25 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKRDBE: Invalid SAMPRATE specified: ', SAMPRATE(KS),
@@ -133,19 +138,6 @@ C
                   WRITE( MSGTXT, '( A, A, I3 )' )
      1               'CHKRDBE: BITS must be 2 for DBE=RDBE_DDC. ',
      2               '  Value specified is: ', BITS(ICH,KS)
-                  CALL WLOG( 1, MSGTXT )
-                  ERRS = .TRUE.
-               END IF
-            END DO
-C
-C           All sidebands must be lower.   TRUE?????
-C
-            DO ICH = 1, NCHAN(KS)
-               IF( SIDEBD(ICH,KS) .NE. 'L' ) THEN
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, A, A )' )
-     1               'CHKRDBE: SIDEBAND must be LSB for DBE=RDBE_DDC. ',
-     2               '  Value specified is: ', SIDEBD(ICH,KS)
                   CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
                END IF

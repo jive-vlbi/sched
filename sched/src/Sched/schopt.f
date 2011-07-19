@@ -427,7 +427,8 @@ C              Write the new KEYIN input for another run of SCHED
 C              in case the user wants to do some edits.  This is
 C              most likely to be useful for optimized schedules.
 C
-               IF( OPTMODE .NE. 'NONE' .AND. OPTMODE .NE. 'UPTIME') THEN
+               IF( ( OPTMODE .NE. 'NONE' .AND. OPTMODE .NE. 'UPTIME' ) 
+     1             .OR. ANYGEO ) THEN
                   CALL OPTSCH( ISCN ) 
                END IF
 C

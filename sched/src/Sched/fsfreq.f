@@ -176,7 +176,7 @@ C           sign of BW indicating sideband.
 C
             BBCBW(I) = ABS( BW(ILC,KSCN) )
 C
-            IF( BBCBW(I) .GT. 0.5D0 * SAMPRATE(KS) ) THEN
+            IF( BBCBW(I) .GT. 0.50001D0 * SAMPRATE(KS) ) THEN
                CALL WLOG( 1, 'FSFREQ: **** Bandwidth from schedule more'
      1                  // ' than half of sample rate.' )
                CALL WLOG( 1, ' Setup file: ' //

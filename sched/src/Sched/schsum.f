@@ -199,6 +199,13 @@ C
 C
                            PRTED(JS) = .TRUE.
 C
+C                          Keep track of which got a full listing.
+C                          To this point, LISTKS(KS) was set to KS.
+C                          For the printed one (KS here maybe), this
+C                          doesn't change.  For JS, set to KS if dup.
+C
+                           LISTKS(JS) = KS
+C
                            IF( PRTHEAD ) THEN
                               WRITE( ISUM, '( 1X,/,1X,/, A, A, I4, A )')
      1                          'The following setup groups ',

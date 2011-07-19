@@ -77,8 +77,11 @@ C     Bookkeeping, etc. LS    - The current setup for this scan/station.
 C                       NSET  - The number of setup groups read.
 C                       SETMSG - Just useful to have a character string
 C                           handy and avoid new ones in every routine.
+C                       LISTKS - points to another setup group that is
+C                           deemed to be the same and is the only one
+C                           listed in the summary.
 C
-      INTEGER           LS, NSET
+      INTEGER           LS, NSET, LISTKS(MSET)
       CHARACTER         SETMSG*120
 C
 C     Relate the setup to file names and other catalogs.
@@ -104,7 +107,7 @@ C
 C
 C     The COMMONs for bookkeeping parameters.
 C
-      COMMON  /SETN1/   LS, NSET, ISETNUM, IFREQNUM, IFREQIF, 
+      COMMON  /SETN1/   LS, NSET, LISTKS, ISETNUM, IFREQNUM, IFREQIF, 
      1                  SDEBUG, SFCHAN, SGCHAN
       COMMON  /SETC1/   SETMSG, SETNAME
 C
@@ -236,11 +239,14 @@ C
       COMMON  /SETC3/   FEFILTER, VLAIF, VLAROT, VLABAND, VLABW
 C
 C     Frequency sets and pcal sets.
+C     FSSAME is the lowest numbered set that has the same frequencies,
+C     bandwidths, BBC frequencies, and input setup file.
 C
       INTEGER           NFSET
       INTEGER           FSETKS(MFSET)
       INTEGER           FSETSCN(MFSET)
       INTEGER           FSETPS(3,MFSET)
+      INTEGER           FSSAME(MFSET)  
 C
       INTEGER           NPSET
       CHARACTER         PSPCAL(MPSET)*4
@@ -250,7 +256,7 @@ C
       INTEGER           PSFR2(MAXPC,MPSET)
       
 C
-      COMMON  /FSETN/   NFSET, FSETKS, FSETSCN, FSETPS,
+      COMMON  /FSETN/   NFSET, FSETKS, FSETSCN, FSETPS, FSSAME,
      1                  NPSET, PSFR1, PSFR2
       COMMON  /FSETC/   PSPCAL, PSX1, PSX2
 C
