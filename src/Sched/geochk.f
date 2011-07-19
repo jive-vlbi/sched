@@ -45,7 +45,7 @@ C
       INCLUDE  'sched.inc'
 C
       DOUBLE PRECISION  STARTB, TGEOEND
-      DOUBLE PRECISION  SRCSEP, REQSEP
+      DOUBLE PRECISION  SRCSEP, REQSEP, TFREQ
       INTEGER           JSCN, ISCN, USEGEO(*)
       LOGICAL           OKGEO(*)
       REAL              SEGELEV(MAXSTA,MGEO)
@@ -134,8 +134,15 @@ C     the geo segment insertion.  I considered moving the call to
 C     GETSUN to before this routine, but it needs TFIRST and
 C     TLAST which are calculated in SCHOPT.
 C
+C     For parallel schedules with the RDBE and old system, I have
+C     found that small changes in frequency between the setups
+C     can cause a source to be flagged for one and not the other.
+C     That can completely change the results of the geodetic 
+C     segment optimization.  
+
       CALL SUNPOS( TAPPROX, RAS, DECS )
-      REQSEP = 60.D0 * ( SFFREQ(1,SETNUM(JSCN)) / 1000.D0 )**(-0.6)
+      TFREQ = ( SFFREQ(1,SETNUM(JSCN)) / 1000.D0 )
+      REQSEP = 60.D0 * TFREQ**(-0.6)
 C
 C     Loop through the sources getting the geometry and determining
 C     which sources are useful for this segment.  Those that can be

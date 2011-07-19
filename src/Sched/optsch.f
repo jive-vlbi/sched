@@ -67,6 +67,11 @@ C           Write introductory lines
 C
             WRITE( IUOPT, '( A )' ) '!  LST schedule '
             WRITE( IUOPT, '( A, A )' ) ' LST = ', STATION(LSTSTA)
+         ELSE
+            WRITE( IUOPT, '( A )' ) '!  PTLST given for start times.'//
+     1          '  Those are Pie Town LST.'
+            WRITE( IUOPT, '( A )' ) '!  PTLST is not understood by '//
+     1          'SCHED so it will need to be edited.'
          END IF
 C
       END IF

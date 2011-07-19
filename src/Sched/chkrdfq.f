@@ -9,10 +9,12 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH, ISIDEBD
+      INTEGER           KS, ICH, ISIDEBD, nwarn
       DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*)
       LOGICAL           ERRS, DEQUAL
+      DATA              nwarn / 0 /
+      SAVE              nwarn
 C -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Starting' )
 C
@@ -110,13 +112,47 @@ C
             END DO
 C
 C           Baseband frequencies must be between 512 and 1024 MHz.
-C           They can be set to within 1 Hz, but the BBSYN variable
-C           is only REAL*4 which is inadequate to store that level
-C           of precision.  Therefore, until the infrastructure is
-C           improved, force the use of even 10 kHz.
-C           Finally prevent basebands crossing the crossover points.
+C           They can be set to within 1 Hz or less, but must be 
+C           a multiple of 256E6/2**32 MHz =0.0596046 Hz. (I don't absolutely
+C           guarantee that that isn't 256/2**31, but it doesn't really
+C           matter here).  Values that are not integer Hz are a problem
+C           because the phase doesn't repeat each second so it is difficult
+C           to return to phase after going to another frequency.  Therefore
+C           we are going to restrict the tuning increment to the smallest
+C           value that is an even number of Hz, namely 15.625 kHz ( which
+C           is 256E6/2**14.  That means the allowed values are N*125 kHz plus
+C           0, 15.625, 31.250, 46.875, 62.500, 78.125, 93.750, or 109.375
+C           *******  Care needs to be taken to print enough digits 
+C                    everywhere required.  Currently we're only ok at the
+C                    10 kHz level, which means restricting the settings
+C                    to increments of 250 kHz.
+C
+
+
+C *********************  not finished.  Bad, long duration, 
+C                        projectus interruptus.
+
+            nwarn = nwarn + 1
+            if( nwarn .le. 5 ) then
+            WRITE(*,*)  '****** UNFINISHED CODE IN chkrdefq.f ******'
+            end if
+
+C           Check any rounding of BBCFREQ that might happen in other
+C           routines.  Check validity of the check below.
+C
+
+C
+C           Once all frequencies are set, prevent basebands crossing 
+C           the crossover points.
+C           We have decided for now (Feb. 2011) to restrict tuning
+C           to multiples of 15.625 kHz.
 C
             DO ICH = 1, NCHAN(KS)
+C
+C              Check that it is in the IF.
+C              **********  Add other end of band check, or start thinking
+C                          center frequency.
+C
                IF( BBCFREQ(ICH) .LT. 512.0D0 .OR.
      1             BBCFREQ(ICH) .GT. 1024.0D0 ) THEN
                   MSGTXT = ' '
@@ -127,7 +163,10 @@ C
                   CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
                END IF
-               IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.01D0 ) .GT. 1.D-6 ) 
+C
+C              Check for multiple of 15.625 kHz.
+C
+               IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.015625D0 ) .GT. 1.D-6 ) 
      1             THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
@@ -162,10 +201,17 @@ C
      1               'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
      2               ' at ', BBCFREQ(ICH), ' MHz spans a crossover.'
                   CALL WLOG( 1, MSGTXT )
+                  write(*,*) 'chkrdfq: bb: ', bb1, bb2
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A )' )
      1               '         This will produce corrupted data.'
                   CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, F10.2, A, F10.2, A )' )
+     1               '         The crossovers are at ', CR1, ' and ',
+     2               CR2, ' MHz in the IF.'
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
                END IF
             END DO
 C
