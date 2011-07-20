@@ -1,0 +1,1165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT TKDRIV driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:mcs@astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR="#dddddd">
+
+<H2>X-Window Tk widget driver</H2>
+<DL>
+<DT><B>Author</B>
+<DD>M. C. Shepherd, 1997.
+
+<P>
+<DT><b>Supported device</b>
+<DD>Restricted to Tcl/Tk (Tk4.0 and above) applications on
+    workstations running the X Window System.
+<P>
+<DT><b>Device type code</b>
+<DD><CODE>/XTK</CODE>
+
+<P>
+<DT><b>Compatibility</b>
+<DD>So far, the driver has been tested by the author on a Sparc
+    running Solaris 2.5.1 and the following combinations of Tcl and
+    Tk:
+
+    <UL>
+    <LI>Tcl7.5b3 and Tk4.1b3
+    <LI>Tcl8.0a2 and Tk8.0a2
+    <LI>Tcl8.0 and Tk8.0
+    </UL>
+
+    No changes were needed to upgrade between the above versions, so
+    it is probably safe to assume that all intervening versions will
+    work as well. Future incompatibilities will be accommodated as
+    needed and distributed with later versions of PGPLOT.
+<P>
+    The driver is unlikely to work fully with versions of Tk prior to
+    Tk4.0. At the very least, the changed definitions of the
+    <a href="#XVIEW"><code>xview</code></a> and
+    <a href="#YVIEW"><code>yview</code></a> commands will prevent the
+    use of scrollbars with the widget.
+
+<P>
+<DT><b>Device name specification</b>
+<DD>Tk PGPLOT widgets are created with a Tcl command called
+    <CODE>pgplot</CODE>. The first argument of this command is the Tk
+    path-name to give the new widget. This doubles as the PGPLOT
+    device name of the widget.
+
+<P>
+<DT><b>Default view surface dimensions</b>
+<DD><code>pgplot</code> widgets adopt a default size of 256×256 pixels. This
+    can be changed via the <a href="#WIDTH"><code>-width</code></a>
+    and <a href="#HEIGHT"><code>-height</code></a> configuration
+    options during or after creation of the widget.
+
+<P>
+<DT><b>Resolution</b>
+<DD>Depends on monitor.
+
+<P>
+<DT><b>Multiple device capability</b>
+<DD>Applications are allowed to create multiple PGPLOT Tk widgets and
+    open them simultaneously to PGPLOT. If you do this, be sure to
+    reduce the default number of colors allocated by each widget by
+    using the <a href="#MAXCOLORS"><code>-maxcolors</code></a>
+    configuration option. Otherwise you will run out of colors very
+    quickly and some of your widgets will be forced to use monochrome
+    colors.  Also be sure that all asynchronous callbacks call
+    <a href="subroutines.html#PGSLCT"><code>cpgslct()</code></a> to
+    select the appropriate widget for PGPLOT output.
+
+<P>
+<DT><b>Color capability</b>
+<DD>Colors are allocated from the colormap of the top-level window of
+    the application. Colormaps of types <CODE>PseudoColor</CODE>,
+    <CODE>StaticColor</CODE>, <CODE>GrayScale</CODE>,
+    <CODE>StaticGray</CODE>, and <CODE>TrueColor</CODE> are supported.
+    For <CODE>PseudoColor</CODE> and <CODE>GrayScale</CODE> colormaps,
+    colors can be allocated either readonly or read/write. The other
+    colormaps only support readonly colors.
+
+<P>
+
+    The value of the <a href="#MAXCOLORS"><code>-maxcolors</code></a>
+    configuration option specifies the number of colors that each
+    widget should attempt to allocate. This defaults to 100. To reduce
+    the likelihood of depleting the colormap you should reduce this
+    number to what you actually need. For read/write colors the actual
+    number allocated will be less than this if there are fewer color
+    cells left in the application's colormap.
+
+<P>
+
+    If your application needs to dynamically change the colors of
+    existing graphics, you will need read/write colors allocated from
+    PseudoColor or GrayScale colormaps. If the default colormap is not
+    one of these, or contains insufficient free colors then you will
+    either have to cope with readonly colors as described below, or
+    allocate a <a href="#COLORMAPS">private colormap</a> for the
+    application, as described later. If there are insufficient
+    read/write colors in the colormap (this can happen even with a
+    private colormap if your application contains too many
+    color-hungry widgets), then the widget will quietly allocate
+    readonly colors instead.  You can control the point at which this
+    happens with the <a href="#MINCOLORS"><code>-mincolors</code></a>
+    configuration attribute when the widget is created, and test
+    whether readonly colors were allocated by querying the <a
+    href="#SHARE"><code>-share</code></a> attribute.
+
+<P>
+
+    If your application either doesn't need to change colors
+    dynamically or can cope with colors not changing until the next
+    page-clearing call to <a
+    href="subroutines.html#PGPAGE"><CODE>cpgpage()</CODE></a>, then
+    you should allocate readonly colors by including the <a
+    href="#SHARE"><code>-share true</code></a> option when you create
+    the PGPLOT widget. On readonly colormaps this has no effect, but
+    on PseudoColor and GrayScale colormaps it results in colors
+    potentially being shared with other applications that allocate
+    readonly colors. If there are no read/write colors available in
+    the color map when the widget tries to allocate a color that no
+    other application has allocated shared, then the widget will
+    search out the closest colors to those required, by sorting
+    through the pool of readonly colors that other applications
+    (including other PGPLOT widgets) have allocated. Thus the colors
+    may not always precisely match those requested.
+
+<P>
+<DT><b>Input capability</b>
+<DD>The standard Tk event binding mechanism can be used to select for
+    any combination of keyboard and button press events received by a
+    PGPLOT Tk widget. To facilitate combining this with PGPLOT,
+    PGPLOT Tk widgets provide Tcl commands for converting between
+    widget X coordinates and PGPLOT world coordinates. They also
+    provide facilities for augmenting the X cursor with rubber-band
+    cursors. These facilities are described <a href="#CURSOR">later</a>.
+<P>
+    Cursor input can also be acquired via
+    <a href="subroutines.html#PGBAND"><CODE>cpgband()</CODE></a> and
+    <a href="subroutines.html#PGCURS"><CODE>cpgcurs()</CODE></a>,
+    but these functions are not recommended because they block the Tk
+    event loop.
+
+<P>
+<DT><b>Scroll capability</b>
+<DD>There are two types of scrolling available.
+<P>
+  <DL>
+   <DT> <b>Tk window scrolling.</b>
+   <DD> The widget window will be smaller than the PGPLOT view surface if:
+	<UL>
+	<LI> <a	href="subroutines.html#PGPAGE"><CODE>cpgpage()</CODE></a>
+             has not been called since the user resized the window to
+	     a smaller size.
+	<LI> <a href="subroutines.html#PGPAP"><CODE>cpgpap()</CODE></a>
+             has been used to request a larger physical size than that
+	     of the widget.
+	</UL>
+<P>
+	In such cases a Tk scrollbar could be used to scroll the visible
+	area of the view surface. For this purpose the widget provides the
+	conventional <a href="#XVIEW"><code>xview</code></a> and
+	<a href="#YVIEW"><code>yview</code></a> commands and
+	the <a href="#XSCROLL"><code>-xscrollcommand</code></a> and
+	<a href="#YSCROLL"><code>-yscrollcommand</code></a>
+	configuration options.
+<P>
+   <DT> <b>PGPLOT Scroll area</b>
+   <DD> The PGPLOT scroll-area option is supported. See the PGPLOT
+        documentation on
+        <a href="subroutines.html#PGSCRL"><CODE>cpgscrl()</CODE></a>
+        for details.
+  </DL>
+
+<P>
+<DT><b>Associated files</b>
+    <DD><DL>
+    <DT><b><CODE>tkpgplot.h</CODE></b>
+    <DD>This header file is intended for use by the C part of a Tcl/Tk
+        application. It includes prototypes of the
+        package-initialization function of the PGPLOT Tk widget and
+        a few optional convenience functions for communicating with
+        the widget directly via C.
+    <DT><b><CODE>libtkpgplot.a</CODE></b>
+    <DD>This library file contains the Tk PGPLOT widget and its PGPLOT
+        driver. The main PGPLOT library only contains a stub version
+        of the driver, so it is essential to present
+        <CODE>libtkpgplot.a</CODE> to the linker <em>before</em> the 
+        main PGPLOT library. For example, a snapshot of the link line
+        under Solaris would look something like:
+<P>
+
+<PRE>
+  -ltkpgplot -lcpgplot -lpgplot -lTk4.1 -ltcl7.5 -lX11 -ldl
+</PRE>
+
+    <DT><b><CODE>cpgplot.h</CODE></b>
+    <DD>The include file for the C PGPLOT wrapper library should also
+        be included in all files that make calls to the PGPLOT
+        library from C.
+    <DT><b><CODE>libcpgplot.a</CODE></b> and <b><CODE>libpgplot.a</CODE></b>
+    <DD> The PGPLOT C wrapper library and the FORTRAN PGPLOT library.
+    </DL>
+    
+<P>
+<DT><a name="CONFIGURATION"><b>Configuration</b></a>
+<DD>As is customary in Tk, PGPLOT widgets can be configured both when
+    they are created, and thereafter by using the path name of the
+    widget as a command. For example, the following Tcl command
+    creates a PGPLOT widget called <code>.plot</code>, and gives it an
+    initial size of 10x10 cm, up to 16 colors and a 3D border width of
+    2 pixels.
+
+<PRE>
+  pgplot .plot -width 10c -height 10c -maxcolors 16 -bd 2
+</PRE>
+
+    Having done this the following command would change the
+    X-window cursor of the widget to a small cyan crosshair cursor.
+
+<PRE>
+  .plot configure -cursor {crosshair black cyan}
+</PRE>
+<P>
+    The following is a list of the configurable options of PGPLOT
+    widgets:
+<P>
+    <DL>
+
+    <DT><b>-background</b> color
+    <DT><b>-bg</b> color
+    <DD>Set or change the background color of the widget. Note that
+        this also changes the color associated with PGPLOT color index
+        0. This command takes a standard Tk color specification as its
+        only argument. The default foreground color is black.
+
+    <DT><b>-foreground</b> color
+    <DT><b>-fg</b> color
+    <DD>Set or change the color that is associated with PGPLOT color
+        index 1. This command takes a standard Tk color specification
+        as its only argument. The default foreground color is white.
+
+    <DT><b>-cursor</b> tk-cursor-specification
+    <DD>This changes the cursor image that will be displayed when the
+        cursor is within the PGPLOT widget. It takes a standard Tk
+        cursor specification as its only argument. The default cursor
+        is the cursor of the parent widget. This does not affect any
+        rubber-band cursor that has been established.
+
+    <DT><b>-borderwidth</b> width
+    <DT><b>-bd</b> width
+    <DD>This sets the width of the 3D border that is drawn around
+        the widget. The single argument is a standard Tk width
+        specification. The default width is zero, which
+        results in no border being drawn.
+
+    <DT><b>-padx</b> width
+    <DD>This sets the width of the optional blank margin that is left
+        on either side of the drawable part of the widget. The single
+        argument is a standard Tk width specification. For
+	historical reasons its default value is 20 pixels (typically
+        1/4"). Changes made to this attribute do not take effect until
+	a new page is started.
+
+    <DT><b>-pady</b> width
+    <DD>This sets the height of the optional blank margin that is left
+        above and below the drawable part of the widget. The single
+        argument is a standard Tk width specification. For
+	historical reasons its default value is 20 pixels (typically
+        1/4"). Changes made to this attribute do not take effect until
+	a new page is started.
+
+    <DT><b>-relief</b> raised|sunken|flat|ridge|groove
+    <DD>This specifies how the 3D border is to appear.
+        It takes a single argument naming one of the standard
+        Tk reliefs. The default is <CODE>raised</CODE>.
+
+    <DT><a name="HEIGHT"><b>-height</b></A> height
+    <DD>This specifies the height of the PGPLOT window
+        displayed in the widget. It takes a standard Tk width
+        specification as its only argument. The default is 256
+        pixels.
+
+    <DT><a name="WIDTH"><b>-width</b></a> width
+    <DD>This specifies the width of the PGPLOT window
+        displayed in the widget. It takes a standard Tk width
+        specification as its only argument. The default is 256
+        pixels.
+
+    <DT><b>-highlightbackground</b> color
+    <DD>This sets the color of the widget's highlight border when
+        the widget does not have the keyboard input focus.
+        It takes a standard Tk color specification as its sole
+        argument. The default color is grey, chosen to match the
+        default background color of most standard Tk widgets.
+
+    <DT><b>-highlightcolor</b> color
+    <DD>This sets the color of the widget's highlight border when
+        the widget has the keyboard input focus.
+        It takes a standard Tk color specification as its sole
+        argument. The default color is white, such that it stands
+        out against the default black background of the PGPLOT
+        window.
+
+    <DT><b>-highlightthickness</b> width
+    <DD>This sets the width of the widget's highlight border. The
+        single argument is a standard Tk width specification. By
+        default the highlight thickness is zero. If you intend to
+        adopt Tk's default click-to-focus input model and you intend
+        to select for keypress events in the widget then be sure to
+        set this thickness to a finite width, such as 2. Otherwise
+        users will not be able to tell when the widget has the
+        keyboard input focus.
+
+    <DT><b>-takefocus</b>
+    <DD>This selects whether the widget will be given the keyboard
+        input focus when Tab or Shift-Tab is pressed in a neighboring
+        widget. The default is 0, which means that the widget will not
+        receive the input focus unless it is explicitly set using the
+        Tk <code>focus</code> command. If you intend to select for
+	keyboard input in the widget (as opposed to mouse button
+	input), then be sure to reconfigure this to 1. You should then
+	also establish event bindings such that once the widget has
+	the keyboard input focus, Tab and Shift-Tab will move the
+	input focus in the conventional manner. For example:
+
+        <PRE>
+  pgplot .plot -takefocus 1
+  bind .plot &lt;Tab&gt; {focus [tk_focusNext %W]}
+  bind .plot &lt;Shift-Tab&gt; {focus [tk_focusPrev %W]}
+        </PRE>
+
+    <DT><a name="XSCROLL"><b>-xscrollcommand</b></a> prefix
+    <DD>Whenever the visible part of the PGPLOT view surface
+        underlying a PGPLOT widget is changed, either by resizing the
+        widget or by scrolling horizontally with the
+        <CODE>xview</CODE> widget command, the specified command
+        prefix is augmented with two extra arguments and evaluated.
+        The two arguments are floating point numbers which denote the
+        left and right edges of the visible part of the view surface. 0
+        refers to the leftmost edge of the view surface, and 1 refers
+        to the rightmost edge. This is designed for use with Tk
+        scrollbar widgets. For example, given a horizontal scroll bar
+        called <CODE>.hscroll</CODE> and a PGPLOT widget called
+        <CODE>.plot</CODE>, the following commands would connect the
+        scrollbar and the PGPLOT widget.
+
+        <PRE>
+  .plot configure -xscrollcommand {.hscroll set}
+  .hscroll configure -command {.plot xview}
+        </PRE>
+
+    <DT><a name="YSCROLL"><b>-yscrollcommand</b></a> prefix
+    <DD>This is the Y-axis equivalent of the
+        <a href="#XSCROLL"><CODE>-xscrollcommand</CODE></a>
+        configuration option.
+
+    <DT><a name="MINCOLORS"><b>-mincolors</b></a>
+    <DD>This specifies the smallest acceptable number of colors before
+        a widget switches to monochrome. The default is 2. If fewer
+        colors than this number are available, a black and white
+        colormap will be adopted and grey-scale images will be
+        dithered. This option is only consulted when a widget
+        is created. Changes made thereafter using the
+        <a href="#CONFIGURE">configure</a> command will be ignored.
+
+    
+    <DT><a name="MAXCOLORS"><b>-maxcolors</b></a>
+    <DD>This specifies the number of colors that the widget
+        will attempt to allocate for itself. The default is 100. On
+        computers with 8-bit frame-buffers, colors are a scarce
+        resource so be sure to set this number as low as possible. 
+        For example, if you don't intend to use
+        <a href="subroutines.html#PGIMAG"><CODE>cpgimag()</CODE></a>
+        or
+       <a href="subroutines.html#PGGRAY"><CODE>cpggray()</CODE></a>
+        to draw images, then the default of 100 colors is likely to be
+	much more than you need. In this case setting
+	<b>-maxcolors</b> to 16 will give access to all 16 of PGPLOT's
+	pre-defined line colors, while reducing the likelihood that
+	either your application or somebody else's will run out of
+	colors. This is especially important if you intend to use more
+	than one PGPLOT widget within your application. This option is
+	only consulted when a widget is created. Changes made
+	thereafter using the <a href="#CONFIGURE">configure</a>
+	command will be ignored.
+
+    
+    <DT><a name="SHARE"><b>-share</b> boolean</a>
+    <DD>Select whether shared readonly colors (true) or private
+        read/write colors (false) should be allocated from PseudoColor
+        and GrayScale colormaps. The default is &quot;false&quot;.
+        This option is only consulted when a widget is created, but
+        after creation it can be queried to determine what type of
+        colors were actually allocated.
+    </DL>
+
+<P>
+<DT><b>Other widget commands.</b>
+<DD>After a PGPLOT widget has been created, the following commands
+    can be applied to that widget, using the normal Tk syntax of:
+
+    <PRE>
+  <em>widget_path_name command_name arguments...</em>
+    </PRE>
+
+    <DL>
+    <DT><a name="CONFIGURE"><b>configure</b></a> option arguments...
+    <DD>This allows widget configuration options to be changed after
+        a PGPLOT widget has been created. The supported options and
+        their arguments have already been described in the
+        <a href="#CONFIGURATION">Configuration</a> section.
+    <DT><b>cget</b> option
+    <DD>This allows the current value of the specified configuration
+        option to be queried. The return string is formatted in the
+	same fashion as the arguments of the corresponding
+        &quot;pathName <b>configure</b> option&quot; command.
+    <DT><a name="XVIEW"><b>xview</b></a> ...
+    <DD>This is used to scroll the widget horizontally. It can take
+        any of the following forms, as used by Tk scrollbar widgets.
+        <DL>
+        <DT><b>xview moveto</b> fraction
+        <DD> Where fraction is the fractional width of the PGPLOT
+   	    view surface that lies to the left of the left edge of the
+	    widget.
+	<DT><b>xview</b> scroll increment <b>units</b>
+        <DD> Move the view surface <em>increment</em> pixels to the
+	     right. Negative values move the view surface to the left.
+	<DT><b>xview</b> scroll increment <b>pages</b>
+        <DD> Move the view surface <em>increment</em> widget-widths to
+   	     the right. Negative values move the view surface to the left.
+        </DL>
+
+    <DT><a name="YVIEW"><b>yview</b></a> ...
+    <DD>This is used to scroll the widget vertically. It takes the
+        same forms as described for the <b>xview</b> command except
+	that positive increments are defined as moving the widget
+	downwards instead of to the right.
+
+    <DT><a name="SETCURSOR"><b>setcursor</b></a> mode x y ci
+    <DD>This is used to augment the normal X-window cursor of a PGPLOT
+        widget with one of a selection of rubber-band cursors. The
+        mode argument selects the type of cursor to use and the x and
+        y arguments are used to set the origin of cursors that have
+        anchor points. The ci argument is a PGPLOT color index, and is
+        used to specify the color used to draw the cursor. The mode
+        argument must be one of the following names:
+
+        <UL>
+        <LI><b>norm</b>
+            <BR> No cursor augmentation.
+        <LI><b>line</b>
+            <BR> A line drawn between the specified anchor point and
+                 the position of the cursor.
+        <LI><b>rect</b>
+            <BR> An open rectangle with vertices at the specified
+                 anchor point and the position of the cursor.
+        <LI><b>yrng</b>
+            <BR> Two horizontal lines extending the width of the
+                 view surface, one passes through the Y coordinate of
+                 the specified anchor point and the other passes
+                 through the cursor. This was designed for selecting
+                 the end of a Y-axis range whose start has already
+                 been selected.
+        <LI><b>xrng</b>
+            <BR> Two vertical lines extending the height of the
+                 view surface, one passes through the x coordinate of
+                 the specified anchor point and the other passes
+                 through the cursor.
+        <LI><b>hline</b>
+            <BR> A horizontal line that passes through the cursor and
+                 extends the width of the view surface. This was
+                 designed for selecting the start of a Y-axis range.
+        <LI><b>vline</b>
+            <BR> A vertical line that passes through the cursor and
+                 extends the height of the view surface. This was
+                 designed for selecting the start of an X-axis range.
+        <LI><b>cross</b>
+            <BR> A crosshair cursor that passes through the cursor
+                 and extends the width and height of the
+                 view surface.
+	</UL>
+
+        Note that this command will have no effect if the widget has
+        not been opened to PGPLOT.
+<P>
+        Also note that when the cursor is augmented, the rubber band
+        is redrawn every time that the PGPLOT buffer is flushed. This
+        happens after every call to PGPLOT functions unless sensible
+        use is made of
+        <a href="subroutines.html#PGBBUF"><code>cpgbuf()</code></a> and 
+        <a href="subroutines.html#PGEBUF"><code>cpgebuf()</code></a> to
+        buffer sequential calls. Be sure to use these functions
+        properly if you don't want your PGPLOT code to be slow.
+
+<P>
+    <DT><a name="CLRCURSOR"><b>clrcursor</b></a>
+    <DD>This is used to remove any cursor augmentation that was
+        previously established with the <b>setcursor</b> command.
+
+    <DT><a name="WORLD"><b>world ...</b></a>
+    <DD>This returns the floating point PGPLOT world coordinates that
+        correspond to specified integer X-window coordinates (such as
+        those reported in the <code>%x</code> and <code>%y</code>
+        fields of Tk event bindings). It can take any of the following
+        forms:
+
+        <DL>
+        <DT><b>world x</b> xoffset
+        <DD>This returns the X-axis PGPLOT world coordinate that
+            corresponds to an offset of <em>xoffset</em> pixels in
+            from the left edge of the PGPLOT window.
+        <DT><b>world y</b> yoffset
+        <DD>This returns the Y-axis PGPLOT world coordinate that
+            corresponds to an offset of <em>yoffset</em> pixels in
+            from the top edge of the PGPLOT window.
+        <DT><b>world xy</b> xoffset yoffset
+        <DD>This returns the PGPLOT X and Y-axis world coordinate pair
+            that corresponds to an offset of <em>xoffset</em> pixels in
+            from the left edge of the PGPLOT window and an offset of
+            <em>yoffset</em> pixels in from the top edge of the PGPLOT
+            window.
+        </DL>
+
+        Note that if the widget is not open to PGPLOT, 0.0 will be
+        returned for all pixel coordinates.
+
+    <DT><b>pixel ...</b>
+    <DD>This returns the integer X-window coordinates that correspond
+        to specified floating point PGPLOT world coordinates. It can take
+        any of the following forms:
+
+        <DL>
+        <DT><b>pixel x</b> worldx
+        <DD>This returns the horizontal X-window pixel coordinate that
+            corresponds to the given X-axis world coordinate.
+        <DT><b>pixel y</b> worldy
+        <DD>This returns the vertical X-window pixel coordinate that
+            corresponds to a given Y-axis world coordinate.
+        <DT><b>pixel xy</b> worldx worldy
+        <DD>This returns the X-window pixel-coordinate pair that
+            corresponds to the given world coordinates.
+        </DL>
+
+        Note that if the widget is not open to PGPLOT, 0 will be
+        returned for all world coordinates.
+
+    <DT><a name="PGSLCT_ID"><b>id</b></a>
+    <DD>This returns the integer id that was returned by
+        <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>
+        when the widget was last connected to
+        PGPLOT. This can then be used with
+        <a href="subroutines.html#PGSLCT"><code>cpgslct()</code></a>
+        to select the widget to be the target for subsequent PGPLOT
+        output. If the widget has not been opened, 0 is returned.
+
+    <DT><a name="DEVICE"><b>device</b></a>
+    <DD>This returns the pgplot device specification string to
+        pass to
+        <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>
+        to open the widget. This is simply the name of the widget
+        with /xtk appended to it.
+    </DL>
+
+<P>
+
+<DT><a name="RESIZE"><b>Handling widget resizes.</b></a>
+<DD>When an application is resized by the user, some or all of its
+    nested widgets are resized to fit the new area. This means that a
+    PGPLOT widget can get resized at unpredictable times, whereas
+    PGPLOT assumes that the size of its view surface remains unchanged
+    between the start of one page and the start of the next. To cope
+    with this, <code>pgplot</code> widgets draw to an off screen
+    pixmap which is kept fixed in size for the duration of each page,
+    and is only resized to fit the window when
+    <a href="subroutines.html#PGPAGE"><CODE>cpgpage()</CODE></a>
+    is called. Thus when the widget is smaller than the pixmap, only
+    part of the PGPLOT view surface will be visible.  There are two
+    ways to deal with this:
+
+    <P>
+      <OL>
+      <LI> One way is to provide the widget with scrollbars, so that
+           the user can interactively change which part of the PGPLOT
+	   window is visible. For example:
+
+ <PRE>
+  pgplot .plot -maxcolors 16
+  scrollbar .xscroll -command {.plot xview} -orient horizontal
+  scrollbar .yscroll -command {.plot yview} -orient vertical
+  .plot configure -xscrollcommand {.xscroll set}
+  .plot configure -yscrollcommand {.yscroll set}
+ </PRE>
+
+      <LI> The other is to establish a Tk event binding to redraw the plot
+	   whenever the user resizes the window. Provided that your redraw
+	   command calls
+           <a href="subroutines.html#PGPAGE"><code>cpgpage()</code></a>,
+           the new view surface will then match the current size of the
+	   widget.
+
+<PRE>
+  pgplot .plot -maxcolors 16 -bd 2 -relief sunken
+  bind .plot &lt;Configure&gt; {your_redraw_command}
+</PRE>
+
+      </OL>
+<P>
+<DT><a name="CURSOR"><b>Cursor facilities</b></a>
+<DD>The standard PGPLOT cursor functions
+    (<a href="subroutines.html#PGBAND"><code>cpgband()</code></a> and
+    <a href="subroutines.html#PGCURS"><code>cpgcurs()</code></a>)
+    were not designed with event-driven programs
+    in mind, and they are not appropriate for use in Tk because they
+    block the Tk event loop. This section describes how to display
+    rubber-band cursors using <code>pgplot</code> widget commands and
+    how to asynchronously respond to user input via the Tk bind command.
+
+     <P>
+
+    The Tk <code>bind</code> command arranges for user-specified Tcl
+    code to be executed whenever a given X-window event occurs. Events
+    such as <code>ButtonPress</code>, <code>KeyPress</code> and
+    <code>Motion</code> events have associated X and Y X-Window
+    coordinates at which the event occurred. These can be converted to
+    PGPLOT world coordinates with the <a href="#WORLD">world</a>
+    command provided by <code>pgplot</code> widgets. For example the
+    following code arranges that whenever any mouse button is pressed
+    when the pointer is in the given PGPLOT widget, a procedure
+    called <code>report_button_press</code> is invoked. This
+    procedure then converts the X-window pixel coordinates to world
+    coordinates and reports them to stdout.<P>
+
+<center>
+<table border>
+<caption><b><i>Tcl button-press example</i></b></caption>
+<tr><td><PRE>
+  pgplot .plot -maxcolors 16
+  ...
+  bind .plot &lt;ButtonPress&gt; {report_button_press %W %b %x %y}
+  ...
+  proc report_button_press {plot button xpixel ypixel} {
+    set x [$plot world x $xpixel]
+    set y [$plot world y $ypixel]
+    puts stdout &quot;You pressed mouse-button $button at X=$x Y=$y&quot;
+  }
+</pre>
+</td></tr>
+</table>
+</center>
+<P>
+
+    The rubber-band cursors that would normally be provided by the
+    <a href="subroutines.html#PGBAND"><code>cpgband()</code></a>
+    PGPLOT function, are also available via
+    the <a href="#SETCURSOR"><code>setcursor</code></a> command of
+    <code>pgplot</code> widgets. These augment the normal X Window
+    cursor of the widget, and remain attached to the cursor until the
+    <a href="#CLRCURSOR"><code>clrcursor</code></a> command is
+    next invoked on the widget.
+<P>
+    <a name="XRANGE_EXAMPLE">
+    The following is a complex example</a> that shows how one might
+    arrange for the user to select an X-axis range using rubber-band
+    cursors and Tk bindings. The code acts as
+    follows. <code>xrange_step1</code> takes a PGPLOT widget and a
+    callback-command as its arguments. It displays a vertical line
+    cursor in this widget and arranges that when the user next presses
+    mouse-button 1, <code>xrange_step2</code> will be
+    called. <code>xrange_step2</code> changes the cursor to an X-axis
+    range cursor with one of its two vertical lines anchored where
+    the user pressed button 1. It then rebinds button 1 to invoke
+    <code>xrange_finish</code> when the user selects the other
+    end of the range. <code>xrange_finish</code> deletes the cursor
+    and the associated event binding by calling on
+    <code>xrange_cancel</code>, then it evaluates the command
+    that was originally passed to <code>xrange_step1</code> via its
+    <code>cmd</code> argument and tacks on the two selected
+    world-coordinate limits as trailing arguments.<P>
+
+<center>
+<table border>
+<caption><b><i>Tcl range-selection example</i></b></caption>
+<tr><td><PRE>
+
+  proc xrange_step1 {plot cmd} {
+    $plot setcursor vline 0 0 3
+    bind $plot &lt;1&gt; &quot;xrange_step2 %W cmd %x&quot;
+  }
+
+  proc xrange_step2 {plot cmd x} {
+    set xa [$plot world x $x]
+    $plot setcursor xrng $xa 0 3
+    bind $plot &lt;1&gt; &quot;xrange_finish %W $cmd $xa %x&quot;
+  }
+
+  proc xrange_finish {plot xa x} {
+    set xb [$plot world x $x]
+    xrange_cancel $plot
+    eval $cmd $plot $xa $xb
+  }
+
+  proc xrange_cancel {plot} {
+    bind $plot &lt;1&gt; {}
+    $plot clrcursor
+  }
+</PRE>
+</td></tr>
+</table>
+</center>
+<P>
+
+    The following is an example of how this could be used. A more
+    complete example is provided later.
+
+    <PRE>
+  pgplot .plot -maxcolors 16
+  ...
+
+  proc report_xrange {plot xa xb} {
+    puts &quot;You selected X-axis range $xa -> $xb&quot;
+  }
+
+  xrange_step1 $plot report_xrange
+    </PRE>
+<P>
+    Finally, the following example shows how one can provide a
+    continuous readout of the world coordinates of the cursor whenever
+    the cursor is in the target PGPLOT widget. It creates two label
+    widgets in which to display the X and Y coordinates, places them
+    left to right above a PGPLOT widget and then arranges for the
+    positions reported by <code>Motion</code> events to be translated
+    to world coordinates and placed in the labels.<P>
+
+<center>
+<table border>
+<caption><b><i>Tcl cursor-readout example</i></b></caption>
+<tr><td><pre>
+  # Create two labels side-by-side in a frame.
+
+  frame .f
+  label .f.x -width 12 -anchor w
+  label .f.y -width 12 -anchor w
+  pack .f.x .f.y -side left -anchor w
+
+  # Create the PGPLOT widget and place it below the labels.
+
+  pgplot .plot -maxcolors 16
+  pack .f .plot -side top
+
+  # Arrange to update the labels whenever the cursor moves
+  # in the PGPLOT window.
+
+  bind .plot &lt;Motion&gt; {
+     .f.x configure -text &quot;X=[.plot world x %x]&quot;
+     .f.y configure -text &quot;Y=[.plot world y %y]&quot;
+  }
+</pre>
+</td></tr>
+</table>
+</center>
+<P>
+
+     Note that this example will display X=0.0 and Y=0.0 until the
+     widget is opened to PGPLOT. Up to that point no world coordinates
+     exist so the <code>world</code> command returns 0.0 for all input
+     coordinates.
+
+<P>
+<DT><a name="COLORMAPS"><b>Private colormaps</b></a>
+<DD>The Tk <code>pgplot</code> widget allocates colors from the
+    colormap of the top level widget that encloses it. By default
+    this is also the default colormap of the screen, which is being
+    competed for by most of the other X-window programs that are being
+    displayed. To avoid running out of colors you can do three things:
+
+    <OL>
+    <LI> Set the value of the <code>pgplot</code>
+         <a href="#MAXCOLORS"><code>-maxcolors</code></a>
+         configuration option to as small a value as you actually
+	 need.
+    <LI> Allocate shared readonly colors.
+    <LI> Allocate a private colormap for the top level widget of your
+         application.
+    </OL>
+
+<P>
+    The last of these options is easily available via the
+    <code>-colormap</code> configuration argument of the Tcl/Tk
+    <code>toplevel</code> command. This means that you can either
+    create your own separate top level widget with its own colormap, or
+    you can request a private colormap for the main window when the
+    application starts. For example, using the standard Tcl/Tk window
+    shell:
+
+<P>
+<PRE>
+ wish -colormap new
+</PRE>
+<P>
+    will allocate <code>wish</code> its own private colormap. If you
+    start your application via the standard <code>Tk_Main()</code>
+    function and pass it the command-line arguments of your program
+    then it too will accept the <code>-colormap</code> option from
+    the command-line.
+
+<P>
+<DT><b>How to use the driver from C</b>
+<DD>The most efficient way to use the Tk PGPLOT driver is to handle
+    user-interaction using a Tcl/Tk script and delegate drawing
+    operations to Tcl-callable C functions. This section gives
+    a complete example to illustrate how this is done.
+    If you want to try this code, extract the following C-code
+    fragments (eg. using cut and paste), assemble them into a
+    <code>.c</code> file and compile the result as described later. 
+<P>
+    The <code>main()</code> function of the example program delegates
+    starting up Tcl/Tk to the standard Tk main function. This in
+    turn calls the example customization function
+    <code>Demo_AppInit()</code>. The customization function calls
+    <code>Tkpgplot_init()</code> to create the Tcl
+    <code>pgplot</code> command, then creates two other new Tcl
+    commands. The first is simply a wrapper around
+    <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>.
+    The second is a wrapper around an example
+    drawing function that draws a plot of x² versus x.
+<P>
+<center>
+<table border>
+<caption><b><i>C example program</i></b></caption>
+<tr><td><PRE>
+  #include &lt;tk.h&gt;
+  #include &lt;stddef.h&gt;
+  #include &lt;stdlib.h&gt;
+  #include &quot;tkpgplot.h&quot; /* Needed solely for tkpgplot_Init() */
+  #include &quot;cpgplot.h&quot;  /* Needed for cpg*() pgplot functions */
+
+  /* Prototype local functions. */
+
+  static int Demo_AppInit(Tcl_Interp *interp);
+  static int usage_error(Tcl_Interp *interp, char *usage);
+  static int tcl_pgopen(ClientData data, Tcl_Interp *interp,
+			int argc, char *argv[]);
+  static int tcl_draw_plot(ClientData data, Tcl_Interp *interp,
+			   int argc, char *argv[]);
+
+  int main(int argc, char *argv[])
+  {
+    Tk_Main(argc, argv, Demo_AppInit);
+    return 0;
+  }
+
+  static int Demo_AppInit(Tcl_Interp *interp)
+  {
+    if(Tcl_Init(interp)    == TCL_ERROR ||
+       Tk_Init(interp)     == TCL_ERROR ||
+       Tkpgplot_Init(interp) == TCL_ERROR)
+      return TCL_ERROR;
+    Tcl_CreateCommand(interp, &quot;pgopen&quot;, tcl_pgopen, NULL, 0);
+    Tcl_CreateCommand(interp, &quot;draw_plot&quot;, tcl_draw_plot, NULL, 0);
+    return TCL_OK;
+  }
+
+  /*
+   * Implement the example pgopen Tcl command. This takes a single
+   * PGPLOT device specification argument and returns the
+   * corresponding PGPLOT id for use with cpgslct().
+   */
+  static int tcl_pgopen(ClientData data, Tcl_Interp *interp,
+			int argc, char *argv[])
+  {
+    char result[20];
+    int id;
+  /*
+   * Make sure that the right number of arguments have been provided.
+   */
+    if(argc != 2)
+      return usage_error(interp, &quot;pgopen device&quot;);
+  /*
+   * Attempt to open the PGPLOT device specified in argv[1].
+   */
+    id = cpgopen(argv[1]);
+    if(id &lt;= 0) {
+      Tcl_AppendResult(interp, &quot;Unable to open device: &quot;, argv[1], NULL);
+      return TCL_ERROR;
+    };
+  /*
+   * Turn off new-page prompting.
+   */
+    cpgask(0);
+  /*
+   * Return the PGPLOT id of the device via the Tcl result string.
+   */
+    sprintf(result, &quot;%d&quot;, id);
+    Tcl_AppendResult(interp, result, NULL);
+    return TCL_OK;
+  }
+
+  /*
+   * Implement the example Tcl draw_plot command. This takes three
+   * arguments. The id of the PGPLOT device to plot to, the leftmost
+   * X-axis value to display and the rightmost X-axis value to
+   * display.
+   */
+  static int tcl_draw_plot(ClientData data, Tcl_Interp *interp,
+			   int argc, char *argv[])
+  {
+    double xa, xb;  /* The X-axis range to plot */
+    int id;         /* The PGPLOT id of the target device */
+    int i;
+  /*
+   * Make sure that the right number of arguments have been provided
+   * and that the PGPLOT id makes sense.
+   */
+    if(argc != 4 || (id=atoi(argv[1])) &lt;= 0)
+      return usage_error(interp, &quot;draw_plot id xmin xmax&quot;);
+  /*
+   * Decode the two X-axis world-coordinate limits.
+   */
+    if(Tcl_GetDouble(interp, argv[2], &amp;xa) == TCL_ERROR ||
+       Tcl_GetDouble(interp, argv[3], &amp;xb) == TCL_ERROR)
+      return TCL_ERROR;
+  /*
+   * Select the PGPLOT device and draw the plot.
+   */
+    cpgslct(id);
+    cpgpage();
+    cpgswin(xa, xb, 0.0, 1.0);
+    cpgsci(1);
+    cpgbox(&quot;BCNST&quot;, 0, 0, &quot;BCNST&quot;, 0, 0);
+    cpgsci(2);
+    cpgmove(0.0, 0.0);
+    for(i=1; i&lt;100; i++) {
+      float x = i/100.0;
+      cpgdraw(x, x*x);
+    }
+    return TCL_OK;
+  }
+
+  /*
+   * The final function is just a utility function for reporting
+   * command-usage errors and returning the standard Tcl error code.
+   */
+  static int usage_error(Tcl_Interp *interp, char *usage)
+  {
+    Tcl_AppendResult(interp, &quot;Usage: &quot;, usage, NULL);
+    return TCL_ERROR;
+  }
+</PRE>
+</td></tr>
+</table>
+</center>
+<P>
+
+    Having assembled the above C fragments into a single file called
+    <code>demo.c</code> the file can be compiled and linked (on
+    a Sun running Solaris 2.5.1) as follows:
+
+<PRE>
+  cc -c -O demo.c -I/usr/local/pgplot -I/usr/local/include
+
+  f77 -o demo demo.o -ltkpgplot -lcpgplot -lpgplot -ltk4.1 -ltcl7.5 -lX11 -lnsl -lsocket -ldl
+</PRE>
+
+    The actual compilation and linking steps will differ from machine to
+    machine. However note that the main PGPLOT library is written in
+    FORTRAN. For this reason it is usually easiest to link the program
+    using a fortran compiler as shown above. This is easier than having to
+    figure out what FORTRAN support libraries to cite when linking with
+    a C compiler.
+
+<P>
+
+    Having compiled and linked the example program, we now need a Tcl
+    script to show how to use the commands that it implements. The
+    following script creates a PGPLOT widget, opens it to PGPLOT and
+    draws the example plot in it. It also arranges that whenever the user
+    resizes the application, the plot will be redrawn to take advantage of
+    the new size.<P>
+
+<table border>
+<caption><b><i>Tcl example script</i></b></caption>
+<tr><td><PRE>
+
+# Give the application window a title.
+
+wm title . {Example plot}
+
+# Show a usage label.
+
+label .usage -text {Mouse-button 1 selects range, 2 cancels, 3 unzooms}
+.usage configure -bd 2 -relief groove -bg yellow
+pack .usage -side top -anchor c -fill x
+
+# Create a PGPLOT widget.
+
+pgplot .plot -maxcolors 4 -width 500 -height 500
+pack .plot -side top -expand true -fill both
+
+# Open the widget to PGPLOT.
+
+pgopen [.plot device]
+
+# Arrange for the plot to be redrawn whenever the user resizes it.
+
+bind .plot &lt;Configure&gt; {draw_plot [%W id] 0.0 1.0}
+
+# Reproduce the <a href="#XRANGE_EXAMPLE">previously</a> explained range-selection functions.
+
+proc xrange_step1 {plot cmd} {
+  $plot setcursor vline 0 0 3
+  bind $plot &lt;1&gt; &quot;xrange_step2 %W $cmd %x&quot;
+}
+
+proc xrange_step2 {plot cmd x} {
+  set xa [$plot world x $x]
+  $plot setcursor xrng $xa 0 3
+  bind $plot &lt;1&gt; &quot;xrange_finish %W $cmd $xa %x&quot;
+}
+
+proc xrange_finish {plot cmd xa x} {
+  set xb [$plot world x $x]
+  xrange_cancel $plot
+  eval $cmd $plot $xa $xb
+}
+
+proc xrange_cancel {plot} {
+  bind $plot &lt;1&gt; {}
+  $plot clrcursor
+}
+
+# This function is called to draw a zoomed version of the plot.
+
+proc zoom_plot {plot xa xb} {
+  draw_plot [$plot id] $xa $xb
+  start_zoom $plot
+}
+
+# This procedure sets up the cursor to allow users to zoom
+# in on the plot.
+
+proc start_zoom {plot} {
+  xrange_step1 $plot zoom_plot
+  bind $plot &lt;2&gt; &quot;start_zoom $plot&quot;
+  bind $plot &lt;3&gt; {draw_plot [%W id] 0.0 1.0}
+}
+
+# Start the ball rolling.
+
+start_zoom .plot
+
+</PRE>
+
+</td></tr>
+</table>
+<P>
+
+    To try the above script, cut and paste it into a file called
+    demo.tcl and run it by typing:
+
+<pre>
+  demo demo.tcl
+</pre>
+
+    If the <code>pgplot</code> widget complains that there aren't
+    sufficient colors left in the default colormap, then rerun the
+    demo with a private colormap as follows:
+
+<pre>
+  demo demo.tcl -colormap new
+</pre>
+
+    In addition, if you just run the program without specifying
+    a script file:
+
+<pre>
+  demo
+</pre>
+
+    then you will be given a <code>wish</code> shell prompt at which
+    you can type Tcl/Tk commands, including those defined by the
+    example program.
+<P>
+    A more complicated demonstration program comes with the PGPLOT
+    distribution and is automatically compiled if the Tk driver
+    is selected. To run it, change to the pgplot installation
+    directory and type:
+<P>
+<PRE>
+  pgtkdemo pgtkdemo.tcl
+</PRE>
+or
+<PRE>
+  pgtkdemo pgtkdemo.tcl -colormap new
+</PRE>
+if it complains about there being insufficient colors. Note that this
+demo uses different <a href="#RESIZE">resize</a> strategies for its
+two PGPLOT widgets. The topmost <code>pgplot</code> widget displays a
+grey-scale image and is slow to redraw, so this has been given
+scrollbars. If you resize the application to a smaller size, then you
+will be able to use the scroll bars to see any part of the partially
+obscured image. If you want to replot the image with the same size as
+the shrunk widget, simply select an image function from the option
+menu. The other <code>pgplot</code> widget displays a line graph which
+is quick to redraw, so when the application is resized by the user,
+the graph is redrawn to take advantage of the new size.
+<P>
+
+<DT><b>Frequently asked questions and answers</b>
+<DD>The following is a collection of problems that you might initially
+    encounter and suggestions for how to resolve them.
+
+<P>
+    <DL>
+    <DT><b>Why does the first plot that I draw appear to have the
+        wrong size?</b>
+    <DD>You probably attempted to plot in the widget before it had
+        been displayed for the first time, so the <code>pgplot</code>
+        widget created a view surface that had the default, or
+        specified size of the widget rather than the size that the
+        widget was subsequently given by the Tk geometry manager. To
+        ensure that the widget has been displayed and given its final
+        size before drawing into it, place the following Tcl command
+        before your first plotting command:
+<PRE>
+  update idletasks
+</PRE>
+    </DL>
+
+<DT><b>Version history.</b>
+<DD><P>
+    <DL><DT><b>Unrealeased changes.</b>
+        <DD> <UL>
+             <LI> The -share attribute was added to support the
+                  allocation of shared colors from read/write
+                  colormaps.
+             <LI> The -padx and -pady attributes were added to allow
+                  one to control the previously hardwired size of the
+                  blank margin that is left around the drawable area
+                  of the widget. This was the result of discussions
+                  with Brian Glendenning and Bob Garwood at NRAO.
+             <LI> Internally an integer was incorrectly used to record
+                  pixels-per-inch instead of floating point. This
+                  resulted in the widget being a bit smaller than it
+                  ought to be. Thanks to Bob Garwood at NRAO for
+                  finding this. It is now fixed.
+             <LI> Although I had documented that the widget would use
+                  the colormap of toplevel enclosing widget, it
+		  actually always used that of the main (.) window.
+                  Thanks to Micah Johnson for pointing this out. I
+                  have now modified the widget to use the colormap
+                  of the top-level widget.
+             </UL>
+    </DL>
+
+</DL>
+<HR>
+Martin Shepherd (<a href="mailto:mcs@astro.caltech.edu">mcs@astro.caltech.edu</a>).
+</BODY></HTML>
+

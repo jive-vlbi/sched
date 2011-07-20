@@ -1,0 +1,165 @@
+<HTML>
+<HEAD>
+<TITLE>TXDRIV</TITLE>
+</HEAD>
+<BODY>
+
+<H2>TeX PK Font file</H2>
+<DL>
+                                                             
+<DT>Supported device
+<DD>PK Font files for TeX.
+                                                          
+<DT>Device type code
+<DD><CODE>/TX</CODE>
+                                                         
+<DT>Default file names
+<DD><CODE>pgplot.RESpk</CODE>, <CODE>pgplot.tfm</CODE> where the 
+<CODE>RES</CODE> is a default value of 300 but may be set to something
+else.  If <CODE>RES</CODE>=300, then the default file names would be
+<CODE>pgplot.300pk</CODE> and <CODE>pgplot.tfm</CODE>.
+If more than 15 font characters are produced, then the file
+names become <CODE>pgplot_2.300pk</CODE> and <CODE>pgplot_2.tfm</CODE>, etc., 
+for each set of 15 characters output (i.e., for each PK
+font produced).
+                                                            
+<DT>Default view surface dimensions
+<DD>2.8  x  2.8 inches.
+May be overridden by the environment variables <CODE>PGPLOT_TX_YINCHES</CODE>,
+and <CODE>PGPLOT_TX_XINCHES</CODE>
+<PRE>
+$DEFINE PGPLOT_TX_XINCHES &quot;5.0&quot;   
+$DEFINE PGPLOT_TX_YINCHES &quot;4.5&quot;
+</PRE>
+would provide a view surface of 5.0 inches horizontally
+by 4.5 inches vertically.
+                     
+<DT>Resolution
+<DD>300 dots per inch.
+May be overridden by the logicals
+<CODE>PGPLOT_TX_XRESOL</CODE> and <CODE>PGPLOT_TX_YRESOL</CODE>:
+<PRE>
+$DEFINE PGPLOT_TX_XRESOL &quot;78.0&quot; 
+$DEFINE PGPLOT_TX_YRESOL &quot;78.0&quot;
+</PRE>
+will produce a font at 78 dots per inch
+resolution.  This would be good for a
+Vaxstation 2000 workstation.
+The default 300 dots per inch is good for a
+laser printer such as a QMS1200 LaserGrafix 
+or an HP2000 LaserJet.
+                                                
+<DT>Color capability
+<DD>Color indices 0 (erase, white) and 1 (black) are
+supported. It is not possible to change color representation.
+                                                
+<DT>Output Orientation
+<DD>Portrait.  (Can be overridden by setting the
+environment variable <CODE>PGPLOT_TX_ORIENT</CODE> = <CODE>LANDSCAPE</CODE>.)
+                                                   
+<DT>Input capability
+<DD>None.
+                                                        
+<DT>File formats
+<DD>TeX PK Font file format, and TeX
+TFM file format.  The files are output as
+FORTRAN, DIRECT ACCESS, UNFORMATTED, 
+512 BYTE RECORDS so that we can have
+compatability with the VAX and our
+UNIX machine.  A raw bitmap copy is
+also possible if you define the logical
+<CODE>PGPLOT_TX_BITFILE</CODE>:
+<PRE>
+$ DEFINE PGPLOT_TX_BITFILE &quot;MINIMAL&quot;
+</PRE>
+will produce a file copy of the portion
+of the bitmap which is within the minimal
+bounding box of the character.
+<PRE>
+$ DEFINE PGPLOT_TX_BITFILE &quot;ALL&quot; 
+</PRE>
+will produce
+a file copy of the complete bitmap of the
+graphics character.
+                                                      
+<DT>Obtaining hardcopy
+<DD>Use the command DUMP to view the
+output files, or run TeX and include the
+character of this new font and DVI the output
+and print the resulting  binary file to the
+correct printer (with PASSALL, NOFEED, or
+whatever is required for printing binary
+output to your specific printer). Also, the
+PKTYPE and TFTOPL TeX debugging programs will
+allow you to view your output font
+characteristics.
+
+<DT>TeX Example
+<DD> Assume you have produced a graph into a
+PK Font and that the output file names are <CODE>pgplot.300pk</CODE> 
+and <CODE>pgplot.tfm</CODE> then the following lines in your TeX code
+would include the graph corresponding to the letter A
+of the TeX PK font &quot;PGPLOT&quot; in the middle of your paper:
+<PRE>                                                                
+      \font\myfntname=pgplot
+       This is sentence one of the TeX file.
+       Now I will include the character.
+      \centerline{\myfntname A }
+       This is the last sentence.
+      \bye
+</PRE>                                                        
+The above example for LaTeX would be: 
+<PRE>                                                    
+    This is the first sentence.
+    Now I will include the character as a figure.
+    \begin{figure}
+     \newfont{\myfntname}{pgplot}
+     \centerline{\myfntname A}
+     \caption{Letter A of PGPLOT font}
+    \end{figure}
+    This is the last sentence.
+</PRE>
+Of course, you must tell TeX and the DVI driver where to find your
+fonts.  On our VAX, we have defined a search list so that if you define
+the logical <CODE>TEX_USER_FONTS</CODE> to be your directory where you keep your
+fonts, then TeX and the DVI driver will find the <CODE>pgplot.tfm</CODE> file and
+the <CODE>pgplot.300pk</CODE> file.  So, 
+<PRE>
+  $DEFINE TEX_USER_FONTS  SYS$USERDISK:[USERNAME.FONTS]
+</PRE>
+  would cause TeX and the DVI driver to search the normal
+  search path and also the directory 
+  <CODE>SYS$USERDISK:[USERNAME.FONTS]</CODE> for any fonts that you
+  specified in your TeX file.  (Here is an exception for
+  UNIX. Our UNIX TeX and DVI programs will look in your
+  current directory automatically for the fonts and then
+  will check the system library if it cannot find the
+  fonts in your directory.)
+                                                   
+<DT>Notes
+<DD>    You must change the resolution for different output
+  devices (our DVI driver, DVIHP, for our HP2000 LaserJet
+  would use a resolution of 300 dots per inch; while our
+  DVI driver for the Vaxstation 2000 workstation would
+  need a resolution of 78 dots per inch.  The <CODE>pgplot.tfm</CODE>
+  file would of course be the same in both cases, but the  
+  DVI drivers would look for <CODE>pgplot.300pk</CODE> and <CODE>pgplot.78pk</CODE>
+  respectively).  If you produce an image which is too large
+  (by defining logicals <CODE>PGPLOT_TX_XINCHES</CODE> and <CODE>PGPLOT_TX_YINCHES</CODE>)
+  then some DVI drivers will leave the page blank where the
+  graph of the character belongs (can sometimes use <CODE>\hsize</CODE> and
+  <CODE>\vsize</CODE> to help with this).  Finally,  if your device driver
+  only works with PXL files (like our PRINTRONIX DVI driver),
+  then you may want to run the   PKTOPX  program to convert
+  the PK Font into a PXL Font which your device driver needs.
+
+<DT>Author
+<DD>Bob Forrest, Electrical Engineering Dept.,
+Texas A&amp;M University; College Station,Texas 77843
+(forrest@ee.tamu.edu).
+</DL>
+
+
+<HR>
+</BODY>
+</HTML>
