@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>PGPLOT changes in Version 5.0.2</title>
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body bgcolor="WHITE">
+<h2>PGPLOT version 5.0.2</h2>
+
+This version implements <i>fill-area styles 3 and 4</i> (hatching
+and cross-hatching). This affects polygons drawn with PGPOLY,
+PGCIRC, and PGRECT. Hatching is selected by CALL <a href=
+"subroutines.html#PGSFS">PGSFS</a>(3), and cross-hatching is
+selected by CALL PGSFS(4); see also <a href=
+"subroutines.html#PGQFS">PGQFS</a>. There is a new user-callable
+routine (<a href="subroutines.html#PGSHS">PGSHS</a>) to control the
+angle and spacing of hatch lines, and a corresponding new inquiry
+routine (<a href="subroutines.html#PGQHS">PGQHS</a>). There is also
+one new internal routine (PGHTCH). Drivers have been modified so
+that they all interpret self-intersecting polygons the same way: a
+point is inside the polygon if an infinite ray with the point as
+origin crosses an odd number of polygon edges (``EvenOddRule'' in
+X-window terminology). Example program PGDEMO1 has been revised to
+show the new fill-area styles. 
+
+<p>Routine <a href="subroutines.html#PGERRB">PGERRB</a> has
+acquired new options that allow symmetric, two-sided error bars to
+be drawn with one call instead of two.</p>
+
+<p>There are two new drivers, <a href="lxdriv.html">LXDRIV</a>, to
+create a LaTeX picture environment (this is only useful for very
+simple plots), and <a href="hgdriv.html">HGDRIV</a>, to create a
+plot in HPGL2 format. The PostScript driver has been updated to
+record a correct bounding box for each page, and optionally include
+comments describing text strings. Note that the bounding-box is now
+written at the <i>end</i> of the file, i.e., after PGPLOT has
+figured out what it should be. Some programs that import PostScript
+require the bounding-box in the file header. The script <code>
+pgplot/pscaps.sh</code> can be used to move the bounding-box
+information into the header.</p>
+
+<p>There are four bug-fixes: (1) in routine PGSUBP which was not
+setting the viewport correctly; (2) in routine PGCONL (actually
+PGCL) which was writing contour labels at the wrong angle; (3) in
+routine GRPARS which was incorrectly attempting to overwrite the
+supplied device spec when doing logical-name translation [VMS
+only]; (4) in routine GRFA which would sometimes incorrectly fill a
+re-entrant polygon.</p>
+
+<p>Support is added for the FreeBSD operating system and for PCs
+running MS-DOS with Salford Software Fortran
+(<code>pgplot/sys_salford</code>) or Microsoft PowerStation Fortran
+(<code>pgplot/sys_msdos</code>).</p>
+
+<p>All the UNIX configuration files have been modified to add a
+CFLAGD parameter that controls linking of C programs that call
+PGPLOT.</p>
+
+<hr>
+<dl>
+<dt>pgplot</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Updated for version 5.0.2.</dd>
+
+<dt>ver500.txt, ver501.txt</dt>
+
+<dd>Earlier release notes (renamed and reformatted).</dd>
+
+<dt>ver502.txt</dt>
+
+<dd>Release notes for this release (this file).</dd>
+
+<dt>copyright.notice</dt>
+
+<dd>Updated.</dd>
+
+<dt>drivers.list</dt>
+
+<dd>Updated for new drivers.</dd>
+
+<dt>install.txt</dt>
+
+<dd>Updated.</dd>
+
+<dt>makemake</dt>
+
+<dd>Add PGHTCH, PGSHS, PGQHS to routine list; remove GRSFS. Modify
+to avoid use of shell functions that are not supported by some old
+versions of the Bourne shell.</dd>
+
+<dt>pscaps.sh</dt>
+
+<dd>(New file.) Script to modify a PostScript file by moving the
+BoundingBox comment from trailer to header. This will convert a
+single-page PGPLOT PostScript file into valid Encapsulated
+PostScript.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/cpg</dt>
+
+<dd>
+<dl>
+<dt>cpgplot.doc</dt>
+
+<dd>Added further instructions on linking C and Fortran.</dd>
+
+<dt>libgcc_path.sh</dt>
+
+<dd>A new script that tries to generate the correct linking
+commands for use with mixed Fortran and gcc.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/drivers</dt>
+
+<dd>
+<dl>
+<dt>ccdriv.f, ladriv.f, lndriv.f</dt>
+
+<dd>Remove backslashes and PDP-11 octal constants from code to
+improve portability (but these drivers are probably still specific
+to VMS).</dd>
+
+<dt>epdriv.f</dt>
+
+<dd>Remove some VMS dependencies; has not been tested under UNIX,
+however.</dd>
+
+<dt>hgdriv.f</dt>
+
+<dd>(New file.) Driver for HPGL2 graphics, from Colin
+Lonsdale.</dd>
+
+<dt>ljdriv.f</dt>
+
+<dd>(Bug fix.) Add a SAVE statement for non-static compilers.</dd>
+
+<dt>lxdriv.f</dt>
+
+<dd>(New file.) Driver for LaTeX picture environment, from Grant
+McIntosh.</dd>
+
+<dt>pgxwin_server.c</dt>
+
+<dd>Add omitted include: X11/Xos.h.</dd>
+
+<dt>psdriv.f</dt>
+
+<dd>(New feature.) If the supplied file name is '-', the driver
+send the PostScript output to standard output. (Note: this will
+only work when Fortran unit 6 is connected to standard output.) A
+correct <code>PageBoundingBox</code> comment is now included for
+each page. Plotted text can be included in the PostScript file as
+comments if environment variable PGPLOT_PS_VERBOSE_TEXT is
+set.</dd>
+
+<dt>tfdriv.f</dt>
+
+<dd>Improved optimization [David R. Chang]. Note that this driver
+is for VMS systems where the regular Tektronix driver (ttdriv.f)
+can send output to a terminal but cannot create a disk file.</dd>
+
+<dt>xwdriv.c</dt>
+
+<dd>Change polygon fill rule from ``WindingRule'' to
+``EvenOddRule'' to match other drivers. Suppress message about
+starting server (when it starts successfully). Update
+comments.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/examples</dt>
+
+<dd>
+<dl>
+<dt>pgdemo1.f</dt>
+
+<dd>Revise example 6 to show all four fill-area styles, and example
+7 to use the new options in PGERRB.</dd>
+
+<dt>pgdemo2.f</dt>
+
+<dd>Revise to exercise hatching styles.</dd>
+
+<dt>pgdemo3.f</dt>
+
+<dd>Change internal subroutine name <code>PLOT</code> to avoid
+possible conflicts with other libraries.</dd>
+
+<dt>pgdemo12.f</dt>
+
+<dd>Call <code>PGBEG</code> as a function rather than a
+subroutine.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/pgdisp</dt>
+
+<dd>
+<dl>
+<dt>initlgwin.c</dt>
+
+<dd>Change polygon fill rule from ``WindingRule'' to
+``EvenOddRule'' to match other drivers.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/src</dt>
+
+<dd>
+<dl>
+<dt>grfa.f</dt>
+
+<dd>(Bug fix.) Fixed bug in filling re-entrant polygons (thanks to
+Andrew Carman).</dd>
+
+<dt>grlin3.f</dt>
+
+<dd>Prevent a possible `sqrt of negative number' error.</dd>
+
+<dt>gropen.f</dt>
+
+<dd>(Bug fix.) Avoid a zero-length string problem. Explicitly
+initialize variable to zero.</dd>
+
+<dt>grpars.f</dt>
+
+<dd>(Bug fix.) No longer overwrites supplied string with logical
+name translation; avoid a zero-length string problem.</dd>
+
+<dt>grpckg1.inc</dt>
+
+<dd>Remove unused variable GRFASL.</dd>
+
+<dt>grsfs.f</dt>
+
+<dd>(File deleted.)</dd>
+
+<dt>grtext.f</dt>
+
+<dd>Now sends text as a comment to output when requested.</dd>
+
+<dt>pgbeg.f</dt>
+
+<dd>Initialize hatching attributes. Explicitly initialize variable
+to zero.</dd>
+
+<dt>pgbox.f</dt>
+
+<dd>(Aesthetic improvement.) Move labels outwards slightly when
+inverted ticks are requested; adjust position of `MV' y
+labels.</dd>
+
+<dt>pgcl.f (support routine for pgconl)</dt>
+
+<dd>(Bug fix.) The contour labels were written at the wrong angle
+when x and y scales differed (thanks to Gerry Haines for
+discovering this); also labels could be drawn outside the
+window.</dd>
+
+<dt>pgerrb.f</dt>
+
+<dd>(Enhancement.) Add options 5 and 6 for drawing symmetric
+two-sided error-bars.</dd>
+
+<dt>pghtch.f</dt>
+
+<dd>(New file.) Routine for hatching (shading) polygon.</dd>
+
+<dt>pgmtxt.f</dt>
+
+<dd>(Bug fix.) The routine could try to use a zero-length character
+substring, which is not allowed by the Fortran-77 standard.</dd>
+
+<dt>pgplot.inc</dt>
+
+<dd>Add hatching attributes.</dd>
+
+<dt>pgpoly.f</dt>
+
+<dd>Add support for hatching.</dd>
+
+<dt>pgqfs.f</dt>
+
+<dd>Add file styles 3 and 4 (hatching).</dd>
+
+<dt>pgqinf.f</dt>
+
+<dd>Change version to 5.0.2. Avoid some zero-length string
+problems.</dd>
+
+<dt>pgqhs.f</dt>
+
+<dd>(New file.) Routine to inquire hatching style.</dd>
+
+<dt>pgrect.f</dt>
+
+<dd>Add support for hatching.</dd>
+
+<dt>pgsave.f</dt>
+
+<dd>Save hatching style.</dd>
+
+<dt>pgsfs.f</dt>
+
+<dd>Add file styles 3 and 4 (hatching).</dd>
+
+<dt>pgshs.f</dt>
+
+<dd>(New file.) Routine to set hatching style.</dd>
+
+<dt>pgsubp.f</dt>
+
+<dd>(Bug fix.) Rescale viewport when panel size changes.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_dos</dt>
+
+<dd>
+<dl>
+<dt>*.f</dt>
+
+<dd>Split grdos.for into separate files for easier
+maintenance.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_freebsd</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me, f77_cc.conf, iand.c</dt>
+
+<dd>(New directory.) Support for FreeBSD operating system
+(Jean-Marc Zucconi).</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_hp</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>(New file.) Add notes about optimization.</dd>
+
+<dt>fort77_gcc.conf</dt>
+
+<dd>(New file.) Configuration file for use with gcc compiler (not
+tested).</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_msdos</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me, etc.</dt>
+
+<dd>(New directory.) Support files for MS Power Station 32-bit
+Fortran (from C. T. Dum).</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_osf1</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>(Modified.) Add note about shareable library.</dd>
+
+<dt>f77_cc_shared.conf</dt>
+
+<dd>(New file.) For making a shareable library.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_salford</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me, *.f</dt>
+
+<dd>(New directory.) New system-specific files for MS-DOS with
+Salford Software Fortran (from Michael Michelson).</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_sun4</dt>
+
+<dd>
+<dl>
+<dt>*.conf</dt>
+
+<dd>Change -pic to -PIC (a large global offset table is needed if
+many drivers are selected).</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_ultrix</dt>
+
+<dd>
+<dl>
+<dt>f77_cc.conf</dt>
+
+<dd>Add "-lX11" in LIBS and "-Olimit 600" (for optimizing complex
+routines) in CFLAGC (Jaiyong Lee).</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_vms</dt>
+
+<dd>
+<dl>
+<dt>build.com</dt>
+
+<dd>Add PGSHS, PGQHS to transfer vector. Do not attempt to link
+with UIS on an AXP machine.</dd>
+</dl>
+</dd>
+</dl>
+
+<div class="NOPRINT">
+<hr>
+Tim Pearson, California Institute of Technology, <i><a href=
+"mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995 California Institute of Technology</div>
+</body>
+</html>
+

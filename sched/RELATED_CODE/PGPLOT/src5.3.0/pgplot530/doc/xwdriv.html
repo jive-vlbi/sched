@@ -1,0 +1,415 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT XWDRIV driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NONE">
+<LINK REV="made" HREF="mailto:mcs@astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR="#dddddd">
+
+<H2>X Window Workstations</H2>
+<DL>
+<DT><B>Author</B>
+<DD>M. C. Shepherd, 1994.
+
+<P>
+<DT><b>Supported device</b>
+<DD>All workstations running the X Window System (Version 11 Release 4
+         and above) under
+UNIX, VMS and OpenVMS.
+
+<P>
+<DT><b>Device type codes</b>
+<DD>
+<UL>
+<LI><CODE>/XWINDOW</CODE> opens a window that disappears when PGEND is called.
+<LI><CODE>/XSERVE</CODE> opens a window that persists for reuse after
+    PGEND is called.
+</UL>
+
+<BR>
+<DT><b>Default device name</b>
+<DD>The default X display name defined by one's environment.
+    <BR> Under UNIX this is given by the <CODE>DISPLAY</CODE>
+         environment variable.
+    <BR> Under VMS it is the device last created with
+         <CODE>CREATE/DISPLAY</CODE>. 
+
+<P>
+<DT><b>Device name specification</b>
+<DD><CODE>window@host:display.screen</CODE>
+   <P>
+   The device name specifies the X-window display to use,
+   the screen of that display and the PGPLOT window number to use.
+   <P>
+   The <CODE>window</CODE> number is a small integer used to identify
+   individual windows created by PGPLOT. You can either specify the
+   number of an existing inactive window to reuse, or provide a new
+   number to assign to a new window. If the number is omitted or
+   specified as zero, then either the last window to become inactive will
+   be reused, or a new window will be created and assigned the lowest
+   unused window number. The number of each window is displayed in the
+   title of the window.
+   <P>
+   The <CODE>host</CODE> part of the specification is the address of
+   the host on which the display resides. If a DECNET address is used,
+   the host name should be separated from the display number by two
+   colons instead of one.
+   <P>
+   The <CODE>display</CODE> part of the specification is the number of the
+   display server on the given host. Usually this is 0, but if you
+   have multiple X terminals connected to the same machine, then each
+   terminal is generally assigned a different display number.
+   <P>
+   The <CODE>screen</CODE> number is also usually 0, but if your display has
+   multiple screens, then each is identified by a small integer.
+   <P>
+   For example &quot;<CODE>2@foo.wherever.edu:0.0/xw</CODE>&quot; opens
+   PGPLOT window 2 as a <CODE>/xwindow</CODE> window on host
+   <CODE>foo.wherever.edu</CODE>. Note that the @ symbol is optional
+   if the display name is omitted. Thus &quot;<CODE>2/xw</CODE>&quot;
+   opens window 2 on the default display.
+   <P>
+
+<DT><b>Default view surface dimensions</b>
+<DD>The default geometry of each window is specified in pixels, using
+    the following hierarchy of specifications. Missing details at each
+    level are supplied by those below.
+<OL>
+<LI>X resource:    <CODE>pgxwin.win#.geometry:    WIDTHxHEIGHT+X+Y</CODE>
+<LI>X resource:    <CODE>pgxwin.Win.geometry:    WIDTHxHEIGHT+X+Y</CODE>
+<LI>Environment variable: <CODE>PGPLOT_XW_WIDTH</CODE>  [fractional display width]
+<LI>Width=867, height=669 and aspect=8.5/11.
+</OL>
+    Once displayed, the window can be resized with the mouse, but the
+    drawing area is only resized to reflect this when the next page is
+    started.
+
+<P>
+<DT><b>Resolution</b>
+<DD>Depends on monitor.
+
+<P>
+<DT><b>Color capability</b>
+<DD>Colormaps of types PseudoColor, StaticColor, GrayScale,
+    StaticGray, and TrueColor are supported. By default, the first
+    available colormap from one of the following lists is used.
+
+    <UL>
+    <LI> For color displays: PseudoColor, StaticColor, TrueColor.
+    <LI> For gray-scale displays: GrayScale, StaticGray.
+    <LI> For monochrome displays: The default colormap of the screen.
+    </UL>
+
+    Thus, where possible a read/write colormap is chosen. This allows
+    color representation changes via PGCTAB, PGSCR and PGSHLS to
+    be applied immediately to previously drawn graphics, which makes
+    it possible to interactively fiddle the colors when used in
+    conjunction with PGBAND.
+    <P>
+    If the first available colormap type happens to match that of the
+    default colormap of the screen, and enough colors are available
+    therein, then that colormap is used. Otherwise, allocation of a
+    private colormap is attempted. If this fails, the device is
+    treated as monochrome. The default color-map type can be overriden
+    via the <CODE>pgxwin.Win.visual</CODE> resource described below.
+    However, if the requested colormap type is not available, the
+    driver reverts to its default colormap search strategy.
+    <P>
+    When allocating colors from the colormap that other applications
+    on the display are also using, if that colormap is of a type where
+    applications compete for a limited number of modifiable color
+    cells, rather than sharing a predefined table of colors, the
+    driver tries to allocate 100 colors. This number usually makes it
+    possible to have two windows displayed simultaneously without
+    having to allocate a private colormap. This helps to avoid
+    colormap flashing as the pointer is moved between windows. You can
+    override this default with a number in the range 2 to 255 by using
+    the <CODE>pgxwin.Win.maxColors</CODE> X resource.
+
+<P>
+<DT><b>Input capability</b>
+<DD>The cursor is usually controlled by a mouse. Cursor input is
+    achieved by moving the cursor into the window, and pressing either
+    a mouse button or a keyboard key to select a given position in the
+    window and return a key value. The mouse buttons are mapped to
+    return characters A, D, and X.  The cursor can also be moved horizontally
+    and vertically with the keyboard arrow keys: each keystroke moves the
+    cursor by one pixel, or 10 pixels if the SHIFT key is depressed.
+    Rubber-banding is supported: see
+    routine PGBAND. With <em>Click-to-focus</em> window managers you
+    may have to explicitly click on the window to enable keyboard
+    input in the PGPLOT window.
+
+<P>
+<DT><b>X resources</b>
+<DD>The following optional X window resources can be used to specify
+    configuration options. On POSIX-compliant systems, these should
+    be placed in a file called <CODE>.Xdefaults</CODE> in your home
+    directory. Under VMS they should be placed in
+    <CODE>DECW$USER_DEFAULTS:DECW$XDEFAULTS.DAT</CODE>. Note that by
+    default DECW$USER_DEFAULTS is defined as SYS$LOGIN. Resource
+    specification is discussed further in the &quot;<tt>Potential
+    problems</tt>&quot; section further below.
+    <P>
+    The following resource descriptions show how a resource line
+    should be constructed in one's resource file. Where default values
+    are available they are indicated. Otherwise the value is indicated
+    symbolically and instructions are given for substituting
+    appropriate values.
+   <DL>
+
+   <DT><CODE>pgxwin.Win.geometry:     WIDTHxHEIGHT+X+Y</CODE>
+   <DD>This specifies the size and position of a window in pixels.
+       Any of the above components can be omitted. The X and Y values
+       specify the position of the top left corner of the window wrt
+       the top left corner of the screen, if positive, or the bottom
+       right corner wrt the bottom right corner, if negative.
+
+   <P>
+   <DT><CODE>pgxwin.Win.iconGeometry:     +X+Y</CODE>
+   <DD>This specifies the position of the iconized form of a window,
+       in pixels. The X and Y values specify the position of the top
+       left corner of the window wrt the top left corner of the
+       screen, if positive, or the bottom right corner wrt the bottom
+       right corner, if negative.
+
+   <P>
+   <DT><CODE>pgxwin.Win.acceptQuit:   False</CODE>
+   <DD>Most window managers provide a way for the user to destroy a
+       window using the mouse, often via an option in a pull down
+       menu.  By default PGPLOT takes steps to ignore this action when
+       a window is actually being used by a PGPLOT program. To
+       re-enable it, set:<BR> <CODE>pgxwin.Win.acceptQuit: True</CODE>
+
+   <P>
+   <DT><CODE>pgxwin.Win.iconize:     False</CODE>
+   <DD>By default, PGPLOT /XSERVE windows remain mapped when PGEND is
+       called or when the program is terminated.  If instead you wish
+       the window to be iconized until opened by a new PGPLOT program,
+       set:
+       <BR> <CODE>pgxwin.Win.iconize: True</CODE>
+
+   <P>
+   <DT><CODE>pgxwin.Win.maxColors:   100</CODE>
+   <DD>When allocating colors from the colormap that other
+       applications on the display are also using, if that colormap is
+       of a type where applications compete for a limited number of
+       modifiable color cells, as opposed to a predefined table of
+       colors that all applications share, the
+       <CODE>pgxwin.Win.maxColors</CODE> specifies the maximum number
+       of colors that the driver attempts to allocate for each pgplot
+       window. The smaller the number chosen, the grater the number of
+       PGPLOT windows that can be displayed simultaneously without
+       causing "colormap flashing".
+
+       When allocating private colormaps, and when allocating colors
+       from readonly colormaps that are shared with other
+       applications, the driver attempts to allocate the PGPLOT
+       maximum of 256 colors, regardless of the value of the
+       <CODE>pgxwin.Win.maxColors</CODE> resource. However, when
+       searching for a suitable private colormap, if multiple
+       colormaps of different sizes are available, the driver uses
+       this resource as a hint as to which of these colormap to
+       choose. If possible, it allocates a colormap of &gt;= maxColors
+       colors, and if there is more than one colormap that satifies
+       this constraint, the smallest is selected.
+
+   <P>
+   <DT><CODE>pgxwin.Win.minColors:   16</CODE>
+   <DD>To reject colormaps with fewer than a given number of color
+       entries, specify the minimum number of colors required.
+
+   <P>
+   <DT><CODE>pgxwin.Win.visual:      default</CODE>
+   <DD>If you have a preference for the type of colormap to use,
+       specify the name of the preferred type. PGPLOT will then try
+       that type first. The following type names are recognized:
+	<UL>
+	<LI>default     -  Use the colormap search strategy described
+    in the &quot;<tt>Color Capability</tt>&quot; section.
+        <LI>monochrome  -  Use black and white.
+        <LI>PseudoColor -  Read/write color visual.
+        <LI>DirectColor -  (This is treated as an alias for TrueColor).
+        <LI>StaticColor -  Read-only color visual.
+        <LI>TrueColor   -  Read-only color visual (3 primary colortables).
+        <LI>GrayScale   -  Read/write gray-scale visual.
+        <LI>StaticGray  -  Read-only gray-scale visual.
+	</UL>
+
+   <BR>
+   <DT><CODE>pgxwin.Win.crosshair:   False</CODE>
+   <DD>To augment the default active PGPLOT cursor with cross hairs,
+       set:
+      <BR><CODE>pgxwin.Win.crosshair: True</CODE>
+
+   <P>
+   <DT><CODE>pgxwin.server.visible:     True</CODE>
+   <DD>To hide the PGPLOT server window set
+       <BR><CODE>pgxwin.server.visible: False</CODE>
+
+   <P>
+   <DT><CODE>pgxwin.server.iconGeometry:     +X+Y</CODE>
+   <DD>This specifies the position of the server window icon on the X
+       display, in display pixels. The X and Y values specify the
+       position of the top left corner of the window wrt the top left
+       corner of the screen, if positive, or the bottom right corner
+       wrt the bottom right corner, if negative.
+   </DL>
+
+   Note that resource specifications that start with
+   <tt>pgxwin.Win</tt> apply to all PGPLOT /xwindow and /xserve
+   windows. To target options at specific windows, replace the
+   <tt>Win</tt> component of the specification with <tt>win#</tt>,
+   where <tt>#</tt> is the number of the PGPLOT window. For
+   example:<br>
+
+   <pre>
+   pgxwin.Win.crosshair:       True
+   pgxwin.win2.crosshair:      False
+   </pre>
+
+   stipulates that all windows except PGPLOT window 2 will use a
+   crosshair for the default cursor. Note that <tt>Win</tt> is spelt
+   with an upper case initial <tt>'W'</tt>, whereas <tt>win#</tt> is
+   spelt with an initial lower-case <tt>'w'</tt>. This is important
+   because all resource names are case sensitive.
+   <P>
+   A better example of the utility of targeting options at specific
+   windows is the following:
+
+   <pre>
+   pgxwin.Win.geometry:        500x500+600+360
+   pgxwin.win1.geometry:       500x500+600+33
+   </pre>
+
+   This example places the first PGPLOT window in one position on the
+   display, and all other windows in a second location - thus avoiding
+   obscuring the first by the second etc..
+   <P>
+   Similarly if one wanted to dedicate one window to line graphics,
+   one could designate a specific window number to have a reduced
+   number of colors.
+
+   <pre>
+   pgxwin.win10.maxColors:     16
+   </pre>
+
+   This window would then be selected using a device specification of
+   &quot;<tt>10/xserve</tt>&quot;.
+   <P>
+
+<DT><b>The /XWINDOW and /XSERVE window server (pgxwin_server).</b>
+<DD>All PGPLOT /xwindow and /xserve windows on a single display are
+created and maintained by a separate server program called
+pgxwin_server. If PGPLOT has been installed correctly then this
+program is automatically started by the /xw and /xs driver when first
+called upon. pgxwin_server then continues to serve windows to
+subsequent PGPLOT programs and remains running indefinitely. In order
+that it be possible to kill the server, an icon window for it is
+displayed. Window managers generally provide a way to interactively
+kill windows, and if this is applied to the server window, then the
+server will close any inactive /xserve windows, and if no active /xw
+or /xs windows remain, then the server will shut itself down cleanly.
+Note that inactive windows are distinguishable from active windows by
+the appearance of a skull-and-crossbones cursor.
+<P>
+If pgxwin_server fails to start automatically, see the
+&quot;<tt>Potential problems</tt>&quot; section below on how to remedy
+this. However, if for some reason it is necessary to run pgxwin_server 
+manually, you'll need to know the following. In particular, under VMS,
+before you can run the server you will first need to register it as a
+foreign command, by typing:
+
+<PRE>
+pgxwin_server:=="$directory_name:pgxwin_server.exe"
+</PRE>
+
+If your default display is correctly set then simply typing:
+
+<PRE>
+pgxwin_server
+</PRE>
+
+with no arguments should start the server, and the server icon should
+appear on the display. If an alternate display is desired then the
+default display can be overridden with the -display argument. Other
+options to override selected X resources from the command-line are
+also available. To see them type:
+
+<PRE>
+pgxwin_server -help
+</PRE>
+<P>
+<DT><b>Potential problems.</b>
+  <DD><DL>
+  <DT>The server fails to start.
+  <DD>If the server fails to start automatically then this means that
+      the /xw and /xs driver was unable to find the pgxwin_server
+      executable. It first looks in the directory specified in your
+      PGPLOT_DIR environment variable (or LOGICAL PGPLOT_DIR variable
+      under VMS). Under UNIX, if it fails to find the executable
+      there, it then looks for the executable in each component
+      directory cited in your PATH environment variable. To fix the
+      problem, first determine where the person who compiled PGPLOT
+      installed pgxwin_server and then either place this directory
+      name in your PGPLOT_DIR variable or, under UNIX, add it to your
+      PATH.
+      <P>
+      If you are still unable to get the server to start automatically,
+      please send me Email at mcs@astro.caltech.edu. In the meantime,
+      you can work around the problem by starting the server by hand,
+      as described previously.
+  <P>
+  <DT>X resource options are ignored.
+  <DD>
+      First check check both the spelling and case of your resource
+      names. Resource names are case sensitive and must appear
+      <em>exactly</em> as indicated above.
+      <P>      
+      The X resource database is compiled by the pgxwin_server program
+      when it is started. Resources set after it has been started are
+      ignored and pgxwin_server will need to be restarted before they
+      are acquired. There are a number of places in which the server
+      can find resources, and your specifications will not be seen if
+      they appear in the wrong place. pgxwin_server attempts to follow
+      the rules laid down by the X Toolkit. First it looks for a
+      RESOURCE_MANAGER property on the root window of your display.
+      This contains a list of resource names and values and comes into
+      being when the standard xrdb program is applied to a resource
+      file. It is common for xrdb to be applied automatically to your
+      Xdefaults file, or to a system supplied xdefaults file when the
+      X server is first started. If this is the case then changes to
+      your Xdefaults file will be ignored until the server is
+      restarted or you explicitly re-run the xrdb command.
+      <P>
+      If - and only if - the RESOURCE_MANAGER property does not exist,
+      then under UNIX pgxwin_server looks for a file called .Xdefaults
+      in your home directory, and under VMS it looks for a file called
+      DECW$USER_DEFAULTS:DECW$XDEFAULTS.DAT. If it finds this file, it
+      initializes its resource database from it. It then also looks to
+      see if the XENVIRONMENT environment variable contains a valid
+      file name and if so reads resources from that file, overriding
+      any contrasting resources from your Xdefaults file.
+      <P>
+      To be sure that changes to resources in your Xdefaults are seen
+      by pgxwin_server you should use the xrdb command to install them
+      on the display:
+      <P>
+      <DL>
+      <DT>UNIX:
+      <DD> <PRE> (cd;xrdb .Xdefaults) </PRE>
+      <P>
+      <DT>VMS:
+      <DD> <PRE> $ xrdb -nocpp decw$user_defaults:decw$xdefaults.dat</PRE>
+           If the xrdb command is not defined on your system, then first
+            execute:
+           <PRE> $ @DECW$UTILS:DECW$DEFINE_UTILS.COM </PRE>
+      </DL>
+      <P>
+      Then terminate pgxwin_server by quiting its icon and ask for /xw
+      or /xs again to restart it.
+  </DL>
+</DL>
+<HR>
+</BODY></HTML>
