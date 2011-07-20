@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>PGPLOT version 5.1.1</title>
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body bgcolor="WHITE">
+<h2>PGPLOT version 5.1.1</h2>
+
+<h3>Tested Systems</h3>
+
+Version 5.1.1 has been tested with the following operating systems
+and compilers. Drivers tested include: GI, GL, NU, PP, PS, TT, VT,
+WD, X2, XM, XW (but not all combinations of drivers and systems
+have been tested exhaustively). 
+
+<ul>
+<li><b>SunOS 4.1.3_U1</b>, Sun Fortran (f77) 1.3.1, GNU C (gcc)
+2.7.0 (tested on SPARC 5).</li>
+
+<li><b>Solaris 2.5</b> (SunOS 5.5), Sun Fortran (f77) 3.0.1, Sun C
+(cc) 3.0.1 (tested on SPARC IPX).</li>
+
+<li><b>Solaris 2.5</b> (SunOS 5.5), Sun Fortran (f77) 3.0.1, GNU C
+(gcc) 2.7.2 (tested on SPARC IPX, SPARC Ultra-1).</li>
+
+<li><b>OpenVMS AXP V6.1</b>, DEC FORTRAN V6.2, DEC C V4.0,
+DECwindows Motif 1.1 (tested on DEC 3000/M600).</li>
+
+<li><b>OpenVMS VAX V6.1</b>, DEC FORTRAN V6.2, DEC C V4.0,
+DECwindows Motif 1.2 (tested on VAXstation 4000-90).</li>
+</ul>
+
+<h3>Changes in Version 5.1.1</h3>
+
+All changes are bug fixes or minor improvements. The most notable
+bug fixes are: 
+
+<ul>
+<li>PGOPEN, PGBEG: a device specification like '? ' (question mark
+with one or more trailing spaces) causes PGOPEN to issue a blank
+prompt for device specification. This was an unintended change in
+5.1.0, and has been fixed in version 5.1.1.</li>
+
+<li>PGBEG: in version 5.1.0, the ordering of panels changed from
+row order to column order. The way the sign of the NXSUB argument
+was interpreted was precisely the opposite of the documented
+interpretation (NXSUB &gt; 0 should give row order, and &lt; 0
+should give column order). PGSUBP has always been wrong, but PGBEG
+acquired the incorrect behavior in version 5.1.0. Both PGBEG and
+PGSUBP now behave as documented.</li>
+
+<li>The PostScript driver was ignoring environment variables used
+to set the paper size. It now recognizes these variables. In
+addition, it will accept requests via routine PGPAP to change the
+paper size, even if the size requested is larger than the default
+size. (You can still set the default size with environment
+variables PGPLOT_PS_WIDTH and PGPLOT_PS_HEIGHT.) There are two
+side-effects of this change: (1) When PGPAP is used, a
+portrait-mode graph is placed in the lower left corner of the paper
+(offset by the amount specified by environment variables
+PGPLOT_PS_HOFFSET and PGPLOT_PS_VOFFSET; a landscape-mode graph is
+placed in the same corner of the paper, but in this case it appears
+to be the top left corner! (2) When PGPAP is used, the bounding-box
+cannot be guessed when the file is opened, so you should not use
+the PGPLOT_PS_BBOX environment variable; if you do not set this
+variable, a correct bounding box will be written in the file
+trailer (see the discussion in the note on <a href="psdriv.html">
+the PostScript printer driver</a>).</li>
+</ul>
+
+<h4>List of Changes</h4>
+
+<dl>
+<dt><b>pgplot</b></dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Revised for version 5.1.1.</dd>
+
+<dt>copyright.notice</dt>
+
+<dd>Version number changed.</dd>
+
+<dt>makemake</dt>
+
+<dd>It now issues a message encouraging the installer to read the
+appropriate README file.</dd>
+
+<dt>ver511.txt [new file]</dt>
+
+<dd>List of changes (this file).</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/drivers</b></dt>
+
+<dd>
+<dl>
+<dt>psdriv.f</dt>
+
+<dd>Bug fixes: PGPLOT_PS_HOFFSET and PGPLOT_PS_VOFFSET were not
+decoded correctly (bug introduced in v5.1.0); bounding box could be
+incorrect (probably only on systems with non-static allocation of
+Fortran variables). Driver now honors all requests to change the
+paper size with PGPAP. Optimization: suppressed attempts to draw
+zero-length continuation line segments (thanks to Remko
+Scharroo).</dd>
+
+<dt>vtdriv-vms.f</dt>
+
+<dd>This is an alternative to vtdriv.f. It uses VMS-specific
+Fortran, but may work better than vtdriv.f on VMS systems.</dd>
+
+<dt>xwdriv.c, pgxwin_server.c</dt>
+
+<dd>Bug fix: images were displayed incorrectly on (some?) X-servers
+with more than 8 bits per pixel.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/examples</b></dt>
+
+<dd>
+<dl>
+<dt>pgdemo2.f</dt>
+
+<dd>Added example of Cyrillic text on page 3.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/src</b></dt>
+
+<dd>
+<dl>
+<dt>grdtyp.f, grpars.f</dt>
+
+<dd>Bug fix: improved minmatch routine for device types to allow,
+e.g., /HPGL even if /HPGL2 is also an option.</dd>
+
+<dt>grpocl.f</dt>
+
+<dd>Bug fix: (this is a support routine for polygon fill with
+PGPOLY, etc.) A polygon with one vertex exactly aligned with the
+edge of the window was not clipped correctly (thanks to Remko
+Scharroo for the bug fix).</dd>
+
+<dt>pgopen.f</dt>
+
+<dd>Bug fix and improvement in header comments. V5.1.0 introduced a
+bug: a device argument of '? ' with one or more trailing spaces did
+not issue the correct prompt.</dd>
+
+<dt>pgqinf.f</dt>
+
+<dd>Change version to 5.1.1.</dd>
+
+<dt>pgsave.f</dt>
+
+<dd>Correction in header comments.</dd>
+
+<dt>pgsubp.f</dt>
+
+<dd>This routine was interpreting a negative NXSUB argument
+incorrectly. According to the documentation, positive NXSUB should
+step through the panels in row order, while negative NXSUB should
+step through them in column order; but the routine was interpreting
+positive NXSUB as column order and negative as row order. The
+behavior has been corrected to match the documentation. (In version
+5.1.0, pgbeg was changed to call pgsubp, thus introducing this bug
+in pgbeg as well.)</dd>
+
+<dt>pgtbox.f</dt>
+
+<dd>The positioning of labels relative to the axis has been
+improved; the displacement of labels from the axis should now be
+the same as in PGBOX. Problems were most noticeable when a large
+character size was requested. (Thanks to Neil Killeen for the
+fix.)</dd>
+
+<dt>pgvect.f</dt>
+
+<dd>The routine was ignoring the first row and column of the array
+when finding the scale-factor for the vector length. (Thanks to
+David Singleton for pointing this out.)</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_arc</b></dt>
+
+<dd>
+<dl>
+<dt>F77/ACDriver</dt>
+
+<dd>Revised to allow a concurrent hardcopy device (Dave
+Crennell).</dd>
+
+<dt>F77/GRexecAC</dt>
+
+<dd>Correct typo (Dave Crennell).</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_fujitsu</b></dt>
+
+<dd><i>This new directory replaces</i> sys_vp2200. The files are
+from David Singleton. 
+
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Revised.</dd>
+
+<dt>uxpm_frt_cc.conf</dt>
+
+<dd>Configuration file for Fujitsu UXP/M, frt FORTRAN compiler and
+/usr/ucb/cc compiler.</dd>
+
+<dt>uxpv_frt_cc.conf</dt>
+
+<dd>Configuration file for Fujitsu UXP/V, frt FORTRAN compiler and
+/usr/ucb/cc compiler.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_hp</b></dt>
+
+<dd>
+<dl>
+<dt>*.conf</dt>
+
+<dd>Added support for compiling the Motif driver (xmdriv)
+[mcs].</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_linux</b></dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Added notes on Linux variants and problems.</dd>
+
+<dt>g77_elf.conf [new file]</dt>
+
+<dd>Configuration file for Linux systems that use ELF
+binaries.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_sol2</b></dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Added notes about use of Sun f90 compiler and GNU g77 compiler.
+Added note about problem with the ucb version of "ld".</dd>
+
+<dt>f90_cc.conf [new file]</dt>
+
+<dd>For Solaris f90 1.1 Fortran compiler (from Ricardo Piriz).</dd>
+
+<dt>g77_gcc.conf [new file]</dt>
+
+<dd>For GNU g77 Fortran compiler (with gcc).</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_vp2200</b></dt>
+
+<dd><i>Directory removed.</i></dd>
+
+<dt><b>pgplot/sys_vms</b></dt>
+
+<dd>
+<dl>
+<dt>aaaread.me [new file]</dt>
+
+<dd>Includes some notes on incompatibilities between versions of
+Motif, C compiler, and VMS.</dd>
+
+<dt>grlgtr.f</dt>
+
+<dd>This has been rewritten: it now treats logical names as
+case-insensitive, and uses $TRNLNM instead of obsolete
+$TRNLOG.</dd>
+
+<dt>makedoc.com [new file]</dt>
+
+<dd>A DCL command procedure to extract the documentation from the
+source code.</dd>
+</dl>
+</dd>
+</dl>
+
+<div class="NOPRINT">
+<hr>
+Tim Pearson, California Institute of Technology, <i><a href=
+"mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1996 California Institute of Technology</div>
+</body>
+</html>
+
