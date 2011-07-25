@@ -84,6 +84,7 @@ C
             WRITE( CTRSRCN(ISRC,NCENT), '( A8, A4 )' ) 
      1           PVAL(IK), PVAL(IK+1)
             IF( CTRSRCN(ISRC,NCENT) .EQ. ' ' ) GO TO 200
+            CALL UPCASE( CTRSRCN(ISRC,NCENT) )
             NCSRC(NCENT) = NCSRC(NCENT) + 1
             IK = IK + 2
          END DO

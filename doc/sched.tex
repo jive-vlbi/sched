@@ -8995,8 +8995,13 @@ to the ``/'') is not considered the end of inputs for this file.  The
 next inputs after the setup data are entered will continue to apply to
 the current file (usually the first).
 
+Since \htmlref{{\tt SETUP}}{MP:SETUP} can specify a file name, when
+there isn't an embedded setup file, it must be case sensitive.  As
+a result, the case of the argument of {\tt SETINIT} much match 
+{\tt SETUP}.
+
 \rcwbox
-{A setup file name of up to 80 characters.}
+{A setup file name of up to 80 characters. Case sensitive.}
 {Any character string.  Must not be blank.}
 {Will not assume that setup information will follow.}
 {Will revert to assuming no setup information will follow.}
@@ -9020,8 +9025,12 @@ local directory), then one can specify the setup file with
 {\tt SETUP = \$SCHED/setups/v6cm-128-4-2.set}.  Use the {\tt setenv}
 (c or t shell) or export (korn shell) to set environment variables.
 
+Since {\tt SETUP} can be a file name and some operating systems (unix,
+Linux) are case sensitive, {\tt SETUP} must be treated as case sensitive,
+including when refering to an embedded setup (from {\tt SETINIT)}.
+
 \rcwbox
-{A file name of up to 80 characters.}
+{A file name of up to 80 characters.  Case sensitive.}
 {A valid file name.}
 {No setup file used.}
 {Defaults to previous scan.}
@@ -13639,23 +13648,24 @@ attempting to schedule a project.
 
 The sched software, catalogs, auxiliary files, and documentation all
 reside in subdirectories under a parent directory.  At the AOC, the
-parent directory is {\sl /users/cwalker/sched}.  Installing
-\schedb involves unpacking the tar file of the distribution into
-these directories.  If a canned executable is available for your type
-of computer, it can hopefully, used as is.  Otherwise
-it will be necessary to compile the program.  This may involve
-installing the {\sc PGPLOT} subroutine library if it is not already
-available.  On unix systems, the installation also involves setting up
-the useful environment variables and path.  The installation can be
-tested using the {\sl Verify} script in the {\sl examples}
-subdirectory.  That script runs all the examples and compares the
-results with results obtained at the time the release was created.
+parent directory is {\sl /users/cwalker/sched}.  Installing \schedb
+involves unpacking the tar file of the distribution into these
+directories.  If a canned executable is available for your type of
+computer, it can hopefully, used as is.  Otherwise it will be
+necessary to compile the program.  This may involve installing the
+{\sc PGPLOT} subroutine library if it is not already available.  A
+{\sc PGPLOT} distribution is included with \sched.  On unix systems,
+the installation also involves setting up the useful environment
+variables and path.  The installation can be tested using the {\sl
+Verify} script in the {\sl examples} subdirectory.  That script runs
+all the examples and compares the results with results obtained at the
+time the release was created.
 
 \schedb is written in FORTRAN 77 using only a few common extensions
 from the standard.  Development has occurred on a variety of machines
-including VAXes, PCs, and SUNs.  Current development is done under
+including VAXes, PCs, SUNs and Macs.  Current development is done under
 Linux and Mac OSX.  Reasonably recent versions have mainly been tested
-on Linux (g77), Solaris, and a Mac OSX (PPC machine using g77 and
+on Linux (g77), Solaris, and a Mac OSX (Intel machine using g77 and
 gfortran).  Older versions were tested on Hp, SGI, IBM (AIX), and DEC
 Alpha.  A big ``thank you'' to Franco Tinarelli at Bologna for
 performing many of these tests.  Machine dependent code has been
@@ -13694,7 +13704,7 @@ specify the full path name when you run the program, or put a copy of
 the binary (or a link to it) in some directory that is in your PATH.
 If the plotting capabilities are used, which is highly recommended,
 {\sl PGPLOT} will need to have been installed and the environoment
-variables {\tt PGPLOT\_DIR} and {\tt PGPLOT\_FONT} will need to be
+variables {\tt PGPLOT\_DIR} and maybe {\tt PGPLOT\_FONT} will need to be
 set.  In Socorro, the path and environment variables can be
 established by adding {\tt setup\_vlba} and {\tt setup\_pgplot} to your
 {\sl .tcshrc.Linux} (or equivalent file for other shells).
@@ -13706,15 +13716,13 @@ List the tar files and subdirectories present.  The latest version
 will be in a subdirectory with the highest version number.  Go to that
 subdirectory and copy the {\sl sched.<version>.tar.gz} to your {\sl
 \$SCHED} directory.  As of Version 8.0, that tar file contains
-everything except the binaries for the common architectures.  It is
-larger than the older split tar files, but is still smaller than most
-software updates these days.  There will also be a binaries
-subdirectory which has subdirectories for several architectures which
-are obvious from their names ("spice" in the name implies a version
-with satellite tracking enabled, which may only work at the AOC).
-Inside the architecture subdirectory is an executable version of
-sched.  If one of these works for you, you can skip compiling the
-program and just use it.
+everything except the binaries for the common architectures. There
+will also be a binaries subdirectory which has subdirectories for
+several architectures which are obvious from their names ("spice" in
+the name implies a version with satellite tracking enabled, which may
+only work at the AOC).  Inside the architecture subdirectory is an
+executable version of \sched.  If one of these works for you, you can
+skip compiling the program and just use it.
 
 \item [Unpack the tar file:] To unpack the tar file, type {\tt tar
 -xvf <filename> --gunzip} while in the {\sl \$SCHED} directory.  This
@@ -13726,13 +13734,7 @@ the directory structure and on installing \sched.
 Note that, after this step, a local html version of this manual will
 be available in the doc/sched/sched.html under the parent \schedb
 directory ({\sl \$SCHED}).  Your browser will probably run much faster
-pointing at that version than at the version at NRAO.  Links inside
-the manual to examples depend on the presence of some logical links
-to other sched directories.  If these are not there after unpacking
-the tar files, they can be established by running the script
-{\sl \$SCHED/doc/makelinks}, assuming you are using unix or linux
-(just type {\tt makelinks} while {\sl \$SCHED/doc} is your
-default directory).
+pointing at that version than at the version at NRAO.
 
 \item [Try the binary for your system:] If you downloaded an
 executable file, put it in the {\sl \$SCHED/bin} directory.  Note that
@@ -13744,11 +13746,56 @@ Macs have moved from PPC chips to Intel chips.  And some versions of
 \schedb are set up to do satellite tracking with extra software not
 normally distributed with the package.  The architectures covered are
 what are immediately available to the developers.  The subdirectories
-are LINUX (32 bit Intel based Linux using g77), LINUX64 (64 bit Intel
-based Linux using g77), LINUX64SPICE (like LINUX64 but enabled for
-spacecraft tracking), OSXPPC (PPC based Mac using gfortran), and SUN
-(SUN workstation running Solaris using f77).  If one of the binaries
-works for you, use it.  If not, you will need to recompile.
+are LINUX64 (64 bit Intel based Linux using g77), LINUX64SPICE (like
+LINUX64 but enabled for spacecraft tracking), and OSX\_INTEL (Intel
+based Mac with gfortran).  For a while, there may also be one or more
+of LINUX (32 bit Intel based Linux using g77), OSXPPC (PPC based Mac
+using gfortran), and SUN (SUN workstation running Solaris using f77).
+If one of the binaries works for you, use it.  If not, you will need
+to recompile.
+
+\item [{\sc PGPLOT:}] If the plotting capabilities are desired
+(believe me --- you want them), you should make the {\sc PGPLOT}
+libraries and the font file available.  Check if your system already
+has them.  That is fairly likely at astronomy sites.  If not, they can
+be obtained from many repositories of open source code.  But if that
+doesn't work, as of July 2011, {\sc PGPLOT 5.3.0} is included with the
+\schedb distribution in the {\sl \$SCHED/RELATED\_CODE/PGPLOT}
+subdirectory (That may be upgraded to 5.3.1 soon).  Versions of the
+libraries are included in machine dependent subdirectories.  If you
+need something else, or need to rebuild, you can create your own
+subdirectory.  There is extensive information on {\sc PGPLOT}
+available from the WWW page at \htmladdnormallink
+{http://www.astro.caltech.edu/\~{}tjp/pgplot/}
+{http://astro.caltech.edu/\~{}tjp/pgplot/}.  Note that {\sc PGPLOT} 
+should be built with the same compiler and machine architecture as
+\sched for everything to function properly.
+
+Detailed installation instructions for {\sc PGPLOT} can be found using
+your browser by looking at
+\$SCHED/RELATED\_CODE/PGPLOT/src5.3.0/ptlplot530/doc/index.html (you'll
+have to expand out \$SCHED to make this work), or at the caltech site
+noted above, and looking at the installation manual.  Many of the
+instructions relating to downloading the code and constructing the
+{\sl drivers.list} file have already been done (look in the machine
+dependent areas for a basic {\sl drivers.list}).  Also the
+instructions for installing compilers, X11 etc on Mac systems have
+likely already been done if you are contemplating an installation.
+
+In short, what you need to do is create a target directory for the
+installation, cd to it, copy a drivers.list to is, run makemake, run
+make, run make install.  Then define PGPLOT\_DIR to be the target
+directory (or some place you have put the libraries and font file).  I
+think you only need PGPLOT\_FONT if {\sl grfont.dat} is not in
+PGPLOT\_DIR after the installation (it is put there by make).  The
+\schedb distribution of {\sc PGPLOT} includes a {\sl
+gfortran\_gcc.conf} file in {\sl sys\_darwin} that is not included in
+the instructions.  If you have an Intel Mac with gfortran, you can run
+makemake with the line
+
+\begin{verbatim}
+../src5.3.0/pgplot530/makemake ../src5.3.0/pgplot530 darwin gfortran_gcc
+\end{verbatim}
 
 \item [Compiling the program:] If you need to compile \schedb, you
 will need to construct an appropriate Makefile and run make.  There is
@@ -13809,21 +13856,6 @@ differences can be ignored.  Any more serious differences are cause
 for concern.
 
 \end{description}
-
-As noted above, \schedb has plotting capabilities that utilize the
-{\sc PGPLOT} graphics subroutine library.  You must have version 5.2
-or later.  {\sc PGPLOT} is not distributed with \schedb and will have
-to be obtained independently by anyone who wants to do plotting and
-who does not already have it available.  There is extensive
-information on {\sc PGPLOT} available from the WWW page at
-\htmladdnormallink {http://www.astro.caltech.edu/\~{}tjp/pgplot/}
-{http://astro.caltech.edu/\~{}tjp/pgplot/}.  {\sc PGPLOT} can be
-obtained in packaged form from the Fink and Macports for MacOSX and
-from standard package libraries for many Linux distributions including
-Ubuntu, Debian and probably Redhat.  Be careful about what compiler
-was used to build the packages and use the same to build SCHED or
-there may be problems.  You may need to download some other libraries
-including those for PNG.
 
 Some VAX FORTRAN features that are commonly supported by other FORTRAN
 compilers remain in the code.  These features are supported by all of
@@ -13986,6 +14018,16 @@ more information.
 \item REMINDER TO RCW: Need to fix frequency selection to allow
 inverted sidebands for the RDBE.
 
+\item Make sources in phase centers not case sensitive.  July 22, 2011 RCW.
+
+\item Include a {\sl PGPLOT} distribution with \sched.  July 20, 2011. RCW.
+
+\item Improve the logic for the printing of frequency sets and 
+especially the printing of sets used for each source.  July 19, 2011 RCW.
+
+\item Avoid problems with printing .sum file when there are too many
+setups.  July 19, 2011 RCW.
+
 \item Fix flush.f (FLUXH) to backup over the EOF once it has read to the
 end of file.  GFORTRAN 4.6 was getting a run time crash.  Reported by
 Leonid Petrov.  June 16, 2011.  RCW.
@@ -14020,7 +14062,10 @@ of sources close to the Sun.  March 16, 2011  RCW.
 
 \item  Modify the calculations of the pointing offsets due to rotation
 changes for ROT patterns.  Those calculations had been based on
-incorrect rotation positions.  Feb. 22, 2011  RCW.
+incorrect rotation positions.  Feb. 22, 2011  RCW.  Later made some
+corrections to the accounting for the circular feed circle.  The
+errors had been causing problems with rotation patterns at lower 
+frequencies.  July 2011  RCW.
 
 \end{itemize}
 
