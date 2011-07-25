@@ -22,6 +22,7 @@ C
       CHARACTER*132 LINE(ML)
       LOGICAL       PMUSED
 C ------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'SRCWRT starting.' )
       FF = CHAR( 12 )
 C
       IF( IP .EQ. 1 ) THEN
@@ -61,6 +62,7 @@ C
      1       ( IP .EQ. 2 .AND. SUSED(ISRC) .AND. .NOT. USEDREC(ISRC) )
      2       .OR. ( IP .EQ. 3 .AND. .NOT. SUSED(ISRC) .AND. 
      3        USEDPHS(ISRC) ) ) THEN
+C
             DO IL = 1, ML
                LINE(IL) = ' '
             END DO

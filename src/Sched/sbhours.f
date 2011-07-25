@@ -16,12 +16,13 @@ C
       INTEGER     NFP, IFP, IFS, IFSETS(MFP)
       LOGICAL     GOTFS
       DOUBLE PRECISION   TBASE, TSCAN, TBSTRT
-      CHARACTER   KFSETS*78
+      CHARACTER   KFSETS*(*)
 C -----------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'SBHOURS starting.' )
       TSCAN = 0.D0
       TBASE = 0.D0
       NFP = 0
-      DO I = 1, 29
+      DO I = 1, MFP
          IFSETS(I) = 0 
       END DO
 C
