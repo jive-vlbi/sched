@@ -41,7 +41,7 @@ C      VERSION = 'Release March 23, 2010 with Apr. 8 bug fix.'
 C      VERNUM  = 9.4
 C      VERSION = 'Release Jan. 13, 2011.'
        VERNUM  = 10.0
-       VERSION = 'Beta version after Feb. 22, 2011'
+       VERSION = 'Beta version of July 25, 2011'
 C
       RETURN
       END
