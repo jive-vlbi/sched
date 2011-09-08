@@ -49,6 +49,7 @@ C
       CALL KEYADD( 'NODOP', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'DOPINCR', 0.0D0, 2, KD, KC, KI )
       CALL KEYCHR( 'PCAL', ' ', 4, KD, KC, KI )
+      CALL KEYCHR( 'PREEMPT', 'OK', 2, KD, KC, KI )
 C
 C     Tape control and eVLBI datapath control.
 C     TAPE, REWIND, FASTFOR, and REVERSE can have separate 

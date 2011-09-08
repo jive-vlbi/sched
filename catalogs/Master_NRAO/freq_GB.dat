@@ -8,6 +8,7 @@
 !     Some additions to get same LOs as VLBA as needed by the RDBE.
 !     Later changed priority to use the original LOs by default, 
 !     not the new RDBE ones.  Force the RDBE user to set FIRSTLO.
+!     Aug. 15, 2011  Added the K band multi-beam receiver.  RCW.
 !  -----------------------------------------------------------------
 !  GBT based on web site on 8Dec2000 RCW.
 !  Revised 27Apr2002 FDG
@@ -18,13 +19,13 @@
 !  All GBT setups have LO3=10.5 GHz, IF3 = 0.75 GHz, and IF2 = 9.75 GHz.
 
 Name = gbt90cm  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 =  290,  290    ifname = B,    D
+  rf1 =  290,  290    ifname = A,    C
   rf2 =  395,  395    fe  = '90cm', '90cm'
   pol =  RCP,  LCP    lo1 = 1092.0, 1092.0
   note = 'LO1=1.422, LO2=10.83, LO3=10.5 '
 /
 Name = gbt70cm  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 =  385,  385    ifname = B,    D
+  rf1 =  385,  385    ifname = A,    C
   rf2 =  520,  520    fe  = '70cm', '70cm'
   pol =  RCP,  LCP    lo1 = 1200.0, 1200.0
   note = 'LO1=1.530, LO2=10.83, LO3=10.5 '
@@ -97,13 +98,13 @@ Name = gbt18cm  Station = GBT_VLBA, GBT_COLD priority = 0
 !   A notch filter has been installed which cuts out 2320-2345 MHz.
 !----------------------------------------------------
 Name = gbt16cm  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 1680, 1680    ifname = B,    D
+  rf1 = 1680, 1680    ifname = A,    C
   rf2 = 2100, 2100    fe  = '13cm', '13cm'
   pol =  RCP,  LCP    lo1 = 2600.0, 2600.0
   note = 'LO1=7.850, LO2=15.75, LO3=10.5 '
 /
 Name = gbt13cm  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 1950, 1950    ifname = B,    D
+  rf1 = 1950, 1950    ifname = A,    C
   rf2 = 2450, 2450    fe  = '13cm', '13cm'
   pol =  RCP,  LCP    lo1 = 2950.0, 2950.0
   note = 'LO1=8.200, LO2=15.75, LO3=10.5 '
@@ -111,13 +112,13 @@ Name = gbt13cm  Station = GBT_VLBA, GBT_COLD priority = 0
 !  This one matches the VLBA so use it when possible. (May 2, 2011)
 !  Must set FIRSTLO or will likely get the one below.
 Name = g13cm_2  Station = GBT_VLBA, GBT_COLD priority = 1
-  rf1 = 2100, 2100    ifname = B,    D
+  rf1 = 2100, 2100    ifname = A,    C
   rf2 = 2600, 2600    fe  = '13cm', '13cm'
   pol =  RCP,  LCP    lo1 = 3100.0, 3100.0
   note = 'LO1=8.350, LO2=15.75, LO3=10.5 '
 /
 Name = gbt12cm  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 2200, 2200    ifname = B,    D
+  rf1 = 2200, 2200    ifname = A,    C
   rf2 = 2650, 2650    fe  = '13cm', '13cm'
   pol =  RCP,  LCP    lo1 = 3200.0, 3200.0
   note = 'LO1=8.450, LO2=15.75, LO3=10.5 '
@@ -198,19 +199,19 @@ Name = gbt6cmf Station = GBT_VLBA, GBT_COLD priority = 0
 !      more setups could be added
 !---------------------------------------------------------
 Name = gbt4cma  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 7900, 7900    ifname = B,    D
+  rf1 = 7900, 7900    ifname = A,    C
   rf2 = 8400, 8400    fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 = 8900.0, 8900.0
   note = 'LO1=11.150, LO2=12.75, LO3=10.5 '
 /
 Name = gbt4cmb  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 8100, 8100    ifname = B,    D
+  rf1 = 8100, 8100    ifname = A,    C
   rf2 = 8600, 8600    fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 = 9100.0, 9100.0
   note = 'LO1=11.350, LO2=12.75, LO3=10.5 '
 /
 Name = gbt4cmc  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 8400, 8400    ifname = B,    D
+  rf1 = 8400, 8400    ifname = A,    C
   rf2 = 8900, 8900    fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 = 9400.0, 9400.0
   note = 'LO1=11.650, LO2=12.75, LO3=10.5 '
@@ -239,30 +240,20 @@ Name = gbt2cm_d2  Station = GBT_VLBA, GBT_COLD priority = 0
 !  Only give a couple near the water line version for now,
 !  matching a couple of VLBA sets.  Many more could be added.
 !-------------------------------------------------------------------------
-! Note: GBT 1.3 cm receiver has two parts: 18.0-22.5 GHz and 22.0-26.5 GHz.
-!	These setups for the lower band.
+! GBT with new 7-beam 18-26 GHz receiver (KFPA)
+!  for VLBI, we use just beam 1.   From email by Frank Ghigo Aug 15, 2011.
 !-------------------------------------------------------------------------
 Name = gbt1cm_a3  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 21800, 21800    ifname = A,    C
+  rf1 = 21800, 21800    ifname = B,    D
   rf2 = 22300, 22300    fe  = '1cm', '1cm'
-  pol =  RCP,  LCP    lo1 = 21300.0, 21300.0
-  note = 'LO1=16.05, LO2=15.75, LO3=10.5 '
+  pol =  RCP,  LCP    lo1 = 22800.0, 22800.0
+  note = 'LO1=28.85, LO2=16.55, LO3=10.5 '
 /
 Name = gbt1cm_b3  Station = GBT_VLBA, GBT_COLD priority = 0
-  rf1 = 22000, 22000    ifname = A,    C
-  rf2 = 22500, 22500    fe  = '1cm', '1cm'
-  pol =  RCP,  LCP    lo1 = 21500.0, 21500.0
-  note = 'LO1=16.25, LO2=15.75, LO3=10.5 '
-/
-! High frequency set added Sept. 8, 2010 by RCW based on usage by
-! Amy Mioduszewski.  The frequencies in the note in her version 
-! the same as the above entry so were almost certainly wrong.  I
-! removed them.
-Name = gbt1cm_c3  Station = GBT_VLBA    Priority = 0
-  rf1    = 23500, 23500   ifname = A,    C
-  rf2    = 24000, 24000   fe     = '1cm', '1cm'
-  pol    =   RCP,   LCP   lo1    = 23000.0, 23000.0
-  note = 'Unknown LO settings. '
+  rf1 = 23500, 23500    ifname = B,    D
+  rf2 = 24000, 24000    fe  = '1cm', '1cm'
+  pol =  RCP,  LCP    lo1 = 24500.0, 24500.0
+  note = 'LO1=30.55, LO2=16.55, LO3=10.5 '
 /
 
 !------------------------------------------------------

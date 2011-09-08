@@ -11,9 +11,8 @@ C
       INCLUDE 'schset.inc' 
       INCLUDE 'vxlink.inc' 
 C 
-      INTEGER   IHP, KS, I, ASTAT, IMODE
-      INTEGER   LEN1, HEADPOS, VXNHDS
-      LOGICAL   TWOSTACK
+      INTEGER   IHP, KS, ASTAT, IMODE
+      INTEGER   LEN1
 C ----------------------------------------------------------------------
 C
 C     Write the HEADPOS sections, this is fixed

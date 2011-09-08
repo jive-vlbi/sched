@@ -42,20 +42,28 @@ C
             END DO
 C
 C           Baseband frequencies must be 1024.0-16.0-N*32.0 for
-C           N = 0 to 14.
+C           N = 0 to 14.  Also allow 15 so that there can be
+C           16 channels in one polarization, but warn that it 
+C           will be bad.
 C
             DO ICH = 1, NCHAN(KS)
                BBOFF = 1024.0D0 - 16.0D0 - BBCFREQ(ICH)
                IF( MOD( BBOFF, 32.0D0 ) .NE. 0.0D0 .OR.
      1             NINT( BBOFF / 32.0D0 ) .LT. 0 .OR.
-     2             NINT( BBOFF / 32.0D0 ) .GT. 14 ) THEN
+     2             NINT( BBOFF / 32.0D0 ) .GT. 15 ) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F8.2, A )' )
      1               'CHKRDFQ: Invalid BBSYN for DBE=RDBE_PFB: ', 
      2               BBCFREQ(ICH),
-     3               '.  Must be 1024-16-N*32 for N=0-14.'
-                  CALL WLOG( 1, MSGTXT )
+     3               '.  Must be 1024-16-N*32 for N=0-15.'
                   ERRS = .TRUE.
+                  CALL WLOG( 1, MSGTXT )
+               END IF
+               IF( BBCFREQ(ICH) .EQ. 528.0 ) THEN
+                  WRITE( MSGTXT, '( A, F8.2, A )' )
+     1               'CHKRDFQ: Baseband frequency ', BBCFREQ(ICH),
+     2               '.  Will produce poor data with the PFB.'
+                  CALL WLOG( 1, MSGTXT )
                END IF
             END DO
 C
