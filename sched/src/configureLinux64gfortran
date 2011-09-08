@@ -2,6 +2,7 @@
 #
 # Use sed and the template Makefile.master to build a Makefile
 # for a Linux 64bit machine using gfortran (gcc4+) without satellite tracking.
+# This uses SCHED's local version of PGPLOT.
 #
 # RCW  Oct 30, 2008
 #
@@ -16,15 +17,18 @@
 cat <<EOF >! makelinux64gf_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux64gfortran:
 s:#ARCHSED: ARCH = LINUX:
-s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
+s:#FCSED: FC = /usr/local/compilers/rhel-5/x86_64/gcc-4.3.1/bin/gfortran -Wall -fimplicit-none -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib64 -lX11:
 s:#PLOT_SRCS_SED: PLOT_SRCS = \$(wildcard Plot/*.f) \$(wildcard PlotNRAO/*.f):
-s:#LPGPLOTSED: LPGPLOT = /usr/lib64:
-s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -lpng:
+s:#LPGPLOTSED: LPGPLOT = ../lib/LINUX64:
+s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
 EOF
+#  Removed png from one line above.  Keep here in case needed.
+#  s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -lpng:
+
 
 #  Run sed with the above file.
 

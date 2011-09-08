@@ -6,13 +6,17 @@ C     In this case the IF = $IF section
 C     By H.J. van Langevelde, JIVE, 300496 
 C     Update to 1.4 240796
 C
+C     Add comment about receiver, receiver LO, and 610 MHz filter
+C     for VLBA.  Aug. 11, 2011  R. C. Walker
+C
       INCLUDE 'sched.inc' 
       INCLUDE 'schset.inc' 
       INCLUDE 'vxlink.inc' 
 C      
-      INTEGER IIF, KS, ICH, J
+      INTEGER IIF, KS, ICH, J, I1, I2
       INTEGER LEN1
       LOGICAL NEWFND, DOWARN
+      CHARACTER   VBCOM*40
 C ----------------------------------------------------------------------
 C
 C     Write the IF section
@@ -44,31 +48,56 @@ C
             IF( NEWFND ) THEN
 C
                IF( TONEINT(IIF) .NE. 1.0 ) DOWARN = .TRUE.
+C
+C              Fill in most of the line to the MSGTXT string:
+C
+               MSGTXT = ' '
+C
+               WRITE( MSGTXT, '( 5X, A, A1, A, A, 1X, A1, 
+     1             1X, A, 1X, A1, 1X, A1, 1X, A1, F8.1, 1X, A, 1X, 
+     2             A1, 1X, A1)' ) 
+     3             'if_def = ', LNK, 'IF_', 
+     4             IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), COL, 
+     5             IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), COL,
+     6             POL(ICH,KS)(1:1), COL,
+     7             FIRSTLO( ICH, KS), 'MHz',
+     8             COL, SIDE1( ICH, KS )
+C
+C              Add the pulse cal specification and comment.
+C
+C              Add a blank comment (just a "*") even if there will be
+C              no Pcal comment.  This is related to parsing the comment
+C              with the receiver information.  The VEX parser used for
+C              the VLBA observing system does not easily return the line
+C              on which a comment was found.  The simplest way to keep
+C              track is to make all if_def line have a comment.  Hopefully
+C              future VEX definitions will get us out of this kludge.
+C              RCW  Sep. 8, 2011
+C
+               I1 = LEN1( MSGTXT ) + 1
                IF( TONEINT(IIF) .GT. 1E-15 ) THEN               
-                  WRITE( IVEX, '( 5X, A, A1, A, A, 1X, A1, 
-     1                1X, A, 1X, A1, 1X, A1, 1X, A1, F8.1, 1X, A, 1X, 
-     2                A1, 1X, A1, 1X, A1, 1X, I1, 1X, A, 1X, A1 )' ) 
-     3                'if_def = ', LNK, 'IF_', 
-     4                IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), COL, 
-     5                IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), COL,
-     6                POL(ICH,KS)(1:1), COL,
-     7                FIRSTLO( ICH, KS), 'MHz',
-     8                COL, SIDE1( ICH, KS ), COL, NINT(TONEINT(IIF)),
-     9                'MHz', SEP
+                  I2 = I1 + 11
+                  WRITE( MSGTXT(I1:I2), 
+     1                '( 1X, A1, 1X, I1, 1X, A, 1X, A1, 1X, A1 )' ) 
+     2                COL, NINT(TONEINT(IIF)),'MHz', SEP, COM
                ELSE
-C
-C              No Tone; 0 MHz here, or nothing....
-C
-                  WRITE( IVEX, '( 5X, A, A1, A, A, 1X, A1, 
-     1                1X, A, 1X, A1, 1X, A1, 1X, A1, F8.1, 1X, A,
-     2                1X, A1, 1X, A1, 1X, A1, 1X, A1, 1X, A )' ) 
-     3                'if_def = ', LNK, 'IF_', 
-     4                IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), COL, 
-     5                IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), COL, 
-     6                POL(ICH,KS), COL,
-     7                FIRSTLO( ICH, KS), 'MHz',
-     8                COL, SIDE1( ICH, KS ), SEP, COM, 'PCall off!'
+                  I2 = I1+15
+                  WRITE( MSGTXT(I1:I2), '( 1X, A1, 1X, A1, 1X, A  )' ) 
+     1                SEP, COM, 'PCall off!'
                END IF
+C
+C              Now add the VLBA receiver information in a comment.
+C              Hopefully this is a stop-gap until VEX2 provides a
+C              better mechanism.
+C
+               CALL VXVBRX( KS, IIF, VBCOM )
+               I1 = LEN1( MSGTXT )
+               MSGTXT = MSGTXT(1:I1) // VBCOM
+C
+C              Write the line.
+C
+               WRITE( IVEX, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+C
             END IF
          END DO
          WRITE( IVEX, '( A, A1 )' ) 'enddef',SEP

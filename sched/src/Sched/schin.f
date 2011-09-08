@@ -257,6 +257,7 @@ C
          SELCOL(ISCN) = KD( KEYPTR( 'ELCOLIM', KC, KI ) )
          OPMISS(ISCN) = KD( KEYPTR( 'OPMISS', KC, KI ) )
          SCANTAG(ISCN) = KCHAR( 'SCANTAG', 4, .FALSE., KD, KC, KI )
+         PREEMPT(ISCN) = KCHAR( 'PREEMPT', 2, .TRUE., KD, KC, KI )
          CRDLINE(ISCN) = KCHAR( 'CRDLINE', 80, .FALSE., KD, KC, KI )
          DODOWN(ISCN) =  KD( KEYPTR( 'DODOWN', KC, KI ) ) .EQ. 0.D0 
 C

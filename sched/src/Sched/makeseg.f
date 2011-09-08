@@ -98,18 +98,39 @@ C
 C
 C     For the first source, be relaxed about what is chosen.  This
 C     was flagged as a test in the 9.4 release, but that release
-C     seems to be working, to keep it.
+C     seems to be working, so keep it.  Note that MAXPRIO 5 are 
+C     sources that can be observed but don't contribute anything
+C     special.  The only higher setting is 9, which are not useful
+C     for a variety of reasons.
 C
       MAXPRIO = 6
 C
-C     Start the initial search for low and high stations from 
-C     sources close to previous ones looking for one of each.
-C     Later this gets raised to 2
+C     In the initial source selection, try to get low and high elevations
+C     at each station using sources close to previous one to avoid
+C     long slews.  LHGOAL is the desired number of sources at each
+C     station with low (or high) elevation scans.  Start trying to get
+C     one of each (LHGOAL=1).  Later this will be raised to 2.
 C
       LHGOAL = 1
 C
-C     Move LASTISCN to LASTLSCAN where 
-C     it can keep getting remade with each call to this routine.
+C     Keep track of the number of scans each station is in.
+C     Mainly use this to try to avoid too few for the quality
+C     measure least square fit.  Initialize the counter here.
+C     Also keep track of the number of low elevation scans
+C     a station has, at least for before each station has minimal
+C     low and high elevation sources.
+C
+      DO ISTA = 1, NSTA
+         INSCN(ISTA) = 0
+         STALOW(ISTA) = 0
+         STAHIGH(ISTA) = 0
+      END DO
+      NSTALOW = 0
+      NSTAHIGH = 0
+C
+C     Copy LASTISCN to LASTLSCN where it can then get modified
+C     in calls to other routines during trials of sets of sources
+C     without affecting the input values.
 C
       DO ISTA = 1, NSTA
          LASTLSCN(ISTA) = LASTISCN(ISTA)
@@ -121,22 +142,7 @@ C     experiment and all LASTISCN entries are zero.
 C
       STARTJ(ISCN) = STARTB
 C
-C     Keep track of the number of scans each station is in.
-C     Mainly use this to try to avoid too few for the quality
-C     measure least square fit.  Initialize the counter here.
-C     Also keep track of the number of low elevation scans
-C     a station has, at least for before each station has minimal
-C     low and high elevation sources.
-C
-      DO ISTA = 1, NSTA
-        INSCN(ISTA) = 0
-        STALOW(ISTA) = 0
-        STAHIGH(ISTA) = 0
-      END DO
-      NSTALOW = 0
-      NSTAHIGH = 0
-C
-C     Write column headers if going to print the sigmas.
+C     Write column headers if it's going to print the sigmas.
 C
       IF( GEOPRT .GE. 1 ) THEN
          WRITE( MSGTXT, '( T40, 20( 2X, A2, 1X) )' ) 
@@ -166,6 +172,11 @@ C        3 scans (actually one can have 2, but ignore that), although
 C        it might be disguised by using all the baselines.  Get the 
 C        minimum number of scans so far per station and don't allow
 C        the use of the least squares fit until there are 3 per station.
+C        MINNSS is the minimum number of scans for a station.
+C
+C        First count the number of scans each station is in for which
+C        the source is up.  Note LSCN is the next scan which for which
+C        the source is not yet picked.
 C        
          DO ISTA = 1, NSTA
             NSTASCN(ISTA) = 0
@@ -178,12 +189,15 @@ C
                END DO
             END IF
          END DO
+C
+C        Now get the minimum across stations.
+C
          MINNSS=999
          DO ISTA = 1, NSTA
             MINNSS = MIN( NSTASCN(ISTA), MINNSS )
          END DO
 C
-C        Note start of new source attempt if putting out debug print.
+C        Note the start of new source attempt if putting out debug print.
 C
          IF( GEOPRT .GE. 2 ) THEN
             CALL WLOG( 1, ' ' )
@@ -224,7 +238,7 @@ C
 C        ====  First sources - get something low el and something high 
 C        ====  el for each station 
 C
-C        Also force this selection scheme if any station has has one scan
+C        Also force this selection scheme if any station has only one scan
 C        as it cannot reach the required 3 with one additional scan.
 C
          IF( ( ( NSTALOW .LT. NSTA .OR. NSTAHIGH .LT. NSTA ) .AND. 
@@ -232,7 +246,7 @@ C
             NRAND = NRAND + 1
             METHOD = 'RAND'
 C
-C           Find all of the sources with USEGEO LE MAXPRIO below the limit 
+C           Find all of the sources with USEGEO .LE. MAXPRIO below the limit 
 C           that can contribute to the number stations with low or high
 C           elevation data.  MAXPRIO starts as 2, but is raised to 3 
 C           (> 5, the highest for useful sources) if there are no more
@@ -255,7 +269,7 @@ C           source increase one of those numbers.  Once both reach NSTA,
 C           switch to doing test fits.
 C
 C           This selection process is much faster than the scheme used 
-C           below based on a psuedo LSQ fit for SecZ.  Try to use is as
+C           below based on a psuedo LSQ fit for SecZ.  Try to use it as
 C           much as possible.  That means trying to find 2 low and 2 high
 C           sources for each station.
 C
@@ -467,9 +481,18 @@ C
                      DORAND = .TRUE.
                   END IF
                ELSE IF( MAXPRIO .GE. 5 ) THEN
-                  MSGTXT = 'Too few sources to choose from to ' //
-     1                'construct a geodetic segment.  Add more. '
-                  CALL ERRLOG( MSGTXT )
+                  MSGTXT = 'Too few useful sources to choose from to ' 
+     1                // 'construct a geodetic segment. '
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, '   Possible solutions include: ' )
+                  CALL WLOG( 1, '     Add sources ' )
+                  MSGTXT =      '     Adjust GEOLOWEL and GEOHIEL '//
+     1              'so more sources are considered useful.'
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT =      '     Try different OPMINANT or '//
+     1              'OPMINEL'
+                  CALL WLOG( 1, MSGTXT )
+                  CALL ERRLOG( '    Pick a solution and try again.' )
                ELSE
                   MAXPRIO = MAXPRIO + 1
                   IF( GEOPRT .GE. 1 ) THEN
