@@ -44,8 +44,8 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
       LINUX64   64 bit Intel linux machine without satellite tracking. (noatak)
       LINUX64GFORTRAN  Like LINUX64 but compiled with gfortran. (noatak)
       LINUX64SPICE  Like LINUX64 but with satellite tracking (noatak)
-      OSXPPC    PowerPC Mac. (horton)
-      OSX_INTEL Intel Mac (stikine)
+      OSXPPC    PowerPC Mac. (horton - no longer supported)
+      OSX_INTEL Intel Mac (stikine or lodore)
       SUN       Sun Solaris machine  (shire)
             Note some Sun's have too little memory for the default
             parameter settings.
@@ -167,10 +167,20 @@ mv sched/.* .
 #  Copy over the examples/Stdout files, the execute modules, and 
 #  the html manual, none of which are under svn (they are fast changing
 #  and can be derived from files that are in svn.
+#  The --delete deletes files on the receiving side that are not on the
+#  sending side and is useful when updating, say, a beta release that
+#  is not being done from scratch.
 
-rsync -auv --exclude ".svn" $SCHED/bin  $SCHEDNEW
-rsync -auv --exclude ".svn" $SCHED/examples/Stdout $SCHEDNEW/examples
-rsync -auv --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
+rsync -auv --delete --exclude ".svn" $SCHED/bin  $SCHEDNEW
+rsync -auv --delete --exclude ".svn" $SCHED/examples/Stdout $SCHEDNEW/examples
+rsync -auv --delete --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
+
+For copying to another machine, like lodore - from lodore:
+
+cd $SCHED/doc/sched
+rsync -auv --delete --exclude ".svn" \
+-e "ssh -A cwalker@ssh.aoc.nrao.edu ssh" \
+noatak.aoc.nrao.edu:/users/cwalker/files/sched_work/doc/sched/\* .
 
 #  Make the tar file.  Don't include the binaries.
 #  First be sure there are not old copies in the archive and ftp areas.
