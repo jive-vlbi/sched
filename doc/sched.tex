@@ -721,6 +721,17 @@ slewing.  For the VLBA, the monitor flags would usually take care of
 such times, but for other types of stations, such information is not
 always available from the logs.
 
+\item[Preempt file:] Starting in Oct. 2011, the VLBA will be providing
+observations of up to 1.5 hours on the Pie Town to Mauna Kea baseline
+to the USNO for EOP determination.  This is in return for financial
+support for operations.  These observations will preempt the scheduled
+project on the two stations.  There is some flexibility to choose the
+exact time of the preemption so the user has been given some ability
+to guide the choice.  Important scans can be protected using the
+\htmlref{{\tt PREEMPT}}{MP:PREEMPT} parameter.  Information in the
+preempt file, which is also in the summary file, is used by operations
+when picking the time for the EOP observations.
+
 \item[Plots:] Sched can make plots of u-v coverage and of various
 combinations of azimuth, elevation, paralactic angle, hour angle, UT,
 and GST against each other.  Plots can be made of the time antennas
@@ -748,7 +759,7 @@ new main schedule file.  If desired, the user can use this to
 construct, and perhaps modify, a new optimized main schedule input.
 This used to be the way all optimized schedules were constructed, but
 now that \schedb fully processes an optimized schedule, it is rarely
-used or needed.  The newer use is to make it easy to reproduce 
+used or needed.  The newer use is to make it easy to reproduce
 geodetic segments when something else is changed that would otherwise
 change the results of the optimization.
 
@@ -852,7 +863,10 @@ center for the DiFX correlator.
 demonstrates how to use the capability in \schedb to add automatically
 short geodetic segments for the purpose of atmospheric calibration
 delay.  Note that similar segments, with very short scans, can be added
-for tropospheric opacity calibration.
+for tropospheric opacity calibration.  This example also shows the use
+of the \htmlref{{\tt PREEMPT}}{MP:PREEMPT} parameter to protect
+specific scans from preemption at Pie Town and Mauna Kea for daily
+EOP observations of up to 1.5 hr.
 
 \item[\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}]
 demonstrates a \schedb file for use with the new digital backend
@@ -1731,6 +1745,29 @@ again cleanly for the calibration scans.  It is best to take time (a
 few minutes on each calibrator) out of the middle of the schedule a
 couple of times to get the calibration data.
 
+\item{\bf Protected scans:} Starting in Oct. 2011, ongoing VLBA
+observations will be preempted at the Pie Town and Mauna Kea stations
+once per day for up to 1.5 hours for Earth Orientation Observations.
+This is in return for operations funding from the USNO.  There is some
+flexibility in the exact times of the preemption. \schedb parameter
+\htmlref{{\tt PREEMPT}}{MP:PREEMPT} can be used to protect key scans such
+as special calibrators or geodetic segments.  See the writeup for that
+parameter for more details.
+
+\item{\bf 24 hour schedules:} With dynamic scheduling, it is useful if
+24 hour schedules can be ``wrapped'' by starting part way through,
+then picking up the first scans at the end.  The schedulers have been
+doing this by hand.  If you have a 24 hour schedule, it would help the
+process if you insert a unique \htmlref{{\tt COMMENT}}{MP:COMMENT} at
+the logical places for wrapping the schedule, and include a
+\htmlref{{\tt SETUP}}{MP:SETUP} specification in that scan line so the
+project doesn't end up starting in the wrong mode.  The comment should
+be unique because the scheduler is going to have to relate the LST
+information in the {\sl ...sch.pt} file to the input scans.  Identical
+comments will make this confusing as it is not always obvious which
+input scan corresponds to which output scan.  Example {\sl eg24.key}
+demonstrates such a schedule.
+
 
 \end{list}
 
@@ -2011,7 +2048,7 @@ LST at the VLBA\_PT (Pie Town) that will be scheduled, if the
 observation is done.  It is useful slotting projects together if the
 PI allows some flexibility in the actual start time.  The PI should
 prepare a schedule using the \htmlref{LST}{MP:LST} parameter with Pie
-Town as an argument ({\tt LST=VLBA\_PT}).  
+Town as an argument ({\tt LST=VLBA\_PT}).
 
 When a program is selected for a dynamically scheduled time slot,
 VLBA operations personel will modify the date (calendar or lst day
@@ -2042,14 +2079,14 @@ cannot be changed.
 For most VLBI observations, the data are recorded at the stations and
 played back later at the correlator.  It is not yet possible for the
 recording process to be totally transparent to the user, but dealing
-with it is now much less of a burden than it was in the tape era. 
+with it is now much less of a burden than it was in the tape era.
 A top level issue is that a user is typically allocated a total amount
 of recording media that he/she is allowed to use.  This number may
 be less than the total that could be recorded during the observation.
 It is required because the overall media supply may not be large
 enough to allow full time recording at the maximum bit rate and the
 scheduling committees need to apportion the resources according to
-the project needs and priorities.  
+the project needs and priorities.
 
 Beyond the overall amount of data recorded, the disk-based systems
 still require the user to pay attention to the need for data quality
@@ -2379,11 +2416,11 @@ in the setup file.
 
 
 
-\section{\label{SEC:WIDE}Wide Band Observing: RDBE, DBBC, VLBA and 
+\section{\label{SEC:WIDE}Wide Band Observing: RDBE, DBBC, VLBA and
 Mark IV Modes}
 
 With the Mark5A recording system, the maximum bit rate that can be
-normally be recorded is 1024 Mbps on a Mark IV system and 512 Mbps 
+normally be recorded is 1024 Mbps on a Mark IV system and 512 Mbps
 on a VLBA system.  These rates are recorded on a single module, unlike
 in the tape era when 2 drives or 2 heads were required.
 
@@ -2414,7 +2451,7 @@ sets the power levels, samples the signals at a 1024 MHz sample rate
 basebands, resamples the data to 2 bits, and formats it for recording.
 It takes the place of the IF distributers, baseband converters,
 samplers, and formatter (including pulse cal detectors) in the old
-VLBA system.  
+VLBA system.
 
 Control of the RDBE and Mark5C recorders is handled by a
 new VLBA control system running on a standard Linux computer.  The new
@@ -2434,7 +2471,7 @@ interchangeably for the VLBI systems.  However, for the EVLA, the word
 and is equivalent to the ``IF'' used here.  We have opted not to use
 that terminology because of the massive confusion it might create by
 swapping terms used for different signals compared to previous
-practice.  
+practice.
 
 The FPGA in the RDBE supports multiple personalities that can be
 swapped as needed.  The first developed uses a polyphase filter to
@@ -2470,7 +2507,7 @@ cross one of these boundaries.
 
 The frequencies for the band edges in the DDC personality can be set
 to any multiple of 1 Hz in principle.  But, for now, the set points
-are being limited to 10 kHz intervals as with the BBCs.  This is 
+are being limited to 10 kHz intervals as with the BBCs.  This is
 because throughout SCHED these numbers are stored in single precision
 variables that cannot support more precision and in the various output
 files, including those used to control the telescope hardware, not
@@ -2480,8 +2517,8 @@ issues will be addressed.
 The overall LO/IF/RDBE system on the VLBA will have some significant
 tuning flexibility issues.  The RDBE is an addon to the older system
 where the baseband converters, which could take only a small portion
-of the 500 MHz IF, provided the necessary flexibility.  The LO/IF 
-system that creates those IFs is based on synthesizers that have 
+of the 500 MHz IF, provided the necessary flexibility.  The LO/IF
+system that creates those IFs is based on synthesizers that have
 set points at N*500+-100 MHz.  Now, with the ability to take all of
 an IF, that restricted tuning ability will become an issue, especially
 in conjunction with the lack of tuning ability for the PFB personality
@@ -2499,7 +2536,7 @@ frequencies in the setup file.  See the examples.  The defaulting
 capability will be added eventually.
 
 During testing of the RDBE/MARK5C system, it is useful to have a
-parallel Mark5A recording.  That can be requested with parameter 
+parallel Mark5A recording.  That can be requested with parameter
 switch /htmlref{{\tt DOMKA}}{MP:DOMKA}.
 
 The DBBC being developed for the EVN is also a system that samples
@@ -2517,11 +2554,11 @@ put out 8 Gbps.  This device is not yet supported by SCHED.
 
 When the DAR is the RDBE, the output channels and all the input channel
 information given to \schedb are written to the VEX file.  But the crd
-files that control the old VLBA hardware also has to be told something.  
+files that control the old VLBA hardware also has to be told something.
 \schedb does not have a separate set of variables for all those configuration
 parameters, so it just does something reasonable.  It sets the number of
 channels to the maximum of the number requested and 8.  It sets the
-frequencies and sidebands to match the RDBE requests.  It sets the 
+frequencies and sidebands to match the RDBE requests.  It sets the
 sample rate to the maximum of that requested and 32 Ms/s.  It sets the
 channel bandwidth to the lesser of the request and 16 MHz.  It only
 writes the first 4 pcal extraction requests (avoiding going into
@@ -3351,6 +3388,12 @@ was derived.  The third list is based on the USNO 1cm survey and is
 should be the right one to use at 22 GHz and up.  It also has over 200
 sources.
 
+{\bf The algorithm:}
+
+Note:  There were minor changes to the algorithm when it got tested
+for 2 station observations.  Those changes are not yet reflected in
+the description below.
+
 As long as \schedb is producing good geodetic segments, the details of
 the algorithm shouldn't matter too much to users.  But some may wish
 to know, so it is described here.  When starting to work on a segment,
@@ -3419,12 +3462,12 @@ low that the risk of failures is great.
 
 While selecting sources, normally no one source will be allowed to
 repeat.  But sometimes there aren't very many low elevation options
-and it may be desirable to allow repeats.  Parameter (\htmlref{{\tt
+and it may be desirable to allow repeats.  Parameter \htmlref{{\tt
 GEOSREP}}{MP:GEOSREP} sets the minimum number of scans that must go by
 before a source is allowed to repeat.  This was a problem for the
 original 60 source list, but much less so for the ICRF2 or 1cm sources.
 
-For each of the (\htmlref{{\tt GEOTRIES}}{MP:GEOTRIES} trial segments,
+For each of the \htmlref{{\tt GEOTRIES}}{MP:GEOTRIES} trial segments,
 a quality measure is generated.  \schedb picks the best segment
 according to the quality measure, and inserts that into the schedule.
 The quality measure is based on the expected errors of a fit for the
@@ -5228,7 +5271,9 @@ BASIC SCAN TIMING and CONFIGURATION:
 \htlm{DWELL}{~~~} Duration of scan but start when antennas on
                         source.
 \htlm{GAP}{~~~~~} Minimum interval between scans.
-\htlm{PRESCAN}{~} Time to wait before starting recording.
+\htlm{PRESCAN}{~} Time to wait before starting recording (Obsolete).
+\htlm{PRESTART}{} Time to start recording before scan start.
+\htlm{PREEMPT}{~} Protect scan from preemption at PT and MK for EOP observations.
 \htlm{GROUP}{~~~} Number of scans to repeat.
 \htln{REPeat}{REPEAT}{~~} Number of times to repeat scan(s).
 \htlm{SETUP}{~~~} Name of file containing VLBA setup information.
@@ -6382,7 +6427,7 @@ second time is normally smaller than the first}
 {The duration of the scan must be specified with some combination of
 {\tt START, STOP, DURation,} and {\tt DWELL}.  The number of antennas to
 not wait for defaults to zero as does the minimum time.}
-{Reverts to previous scan.  Overridden by {\tt DUR}.  The second and 
+{Reverts to previous scan.  Overridden by {\tt DUR}.  The second and
 third arguments use the last setting in a {\tt DWELL} command (not
 overridden by {\tt DUR})}
 {{\tt DWELL=110,1,60} (which is equivalent to {\tt DWELL=1:50,1,1:00}).
@@ -7408,8 +7453,8 @@ request continuous tape motion through scans long enough to keep the
 VEX check routines happy for a reversal.
 
 Note that {\tt MINPAUSE} used to be multiplied by the speedup factor
-to determine the actual length of a pause at record time.  That made 
-it actually a time of the pause at playback time on the old VLBA 
+to determine the actual length of a pause at record time.  That made
+it actually a time of the pause at playback time on the old VLBA
 correlator.  That concept is no long relevant so the multiplication
 by the speedup factor has been removed.
 
@@ -8567,6 +8612,61 @@ writing) was changed to 1979.9, the VLA value.
 {Only one value is used.}
 {{\tt PRECDATE = 1950.0}}
 
+\subsubsection{\label{MP:PREEMPT}{\tt PREEMPT}}
+
+Starting in October 2011, the VLBA will be used to provide daily
+Earth Orientation Parameter (EOP) observations for the U.S. Naval
+Observatory in return for financial support for VLBA operations.
+These observations will be a geodetic style run of duration up to
+1.5 hours using the Pie Town to Mauna Kea baseline.  The observations
+will happen within about 4 hours of 18 hours UT, but will likely
+shift 12 hours from there after confidence is gained in the results.
+
+These observations will cause some disruption to normally scheduled
+projects.  The plan is to schedule fixed and dynamic projects in the
+normal manner.  Then, if possible, the USNO observations will be
+inserted in gaps between other projects.  If that is not possible,
+the USNO observations will preempt the normal project for the two
+stations involved. An effort to minimize the impact on the normal
+project will be made.  Parameter {\tt PREEMPT} allows the PI to
+help with that minimization by specifying portions of the project
+that can be preempted and portions that should be protected.  For
+example, the parameter can be used to protect key calibration
+observations.
+
+{\tt PREEMPT} can be specified for each scan and has two allowed
+arguments --- {\tt 'NO'} and {\tt 'OK'}.  The default, {\tt 'OK'},
+means that the scan be preempted.  {\tt 'NO'} means that it should
+be protected.  The parameter need only be specified when it changes.
+
+\schedb will examine the {\tt PREEMPT} specifications and identify
+time periods of at least 1.7 hours when all scans allow preemption.
+Those times are listed in the {\sl .sum} file and the new {\sl .preempt}
+file.  Shorter periods that include the start and/or end of the project
+are also listed as those would allow a partial overlap with the USNO
+observations.
+
+If there is a period of more than 4 hours between the $>1.7$ hour
+preemptable periods, \schedb will complain.  If such periods are left
+in the schedule, the user requests for scan protection may be ignored
+when chosing when to insert the USNO observations.  If the whole project
+is less than 4 hours long and is all protected, a warning will be
+issued, but preemption would probably only occur if the project is
+adjacent to a higher priority project that also cannot be preempted.
+
+If {\tt PREEMPT} is not specified for any scans, but the project
+uses automatic generation of geodetic segments, the geodetic segments
+will have {\tt PREEMPT} default to {\tt 'NO'}.  This helps avoid
+problems for legacy schedules.
+
+\rcwbox
+{A 2 character string.}
+{'OK' or 'NO'.  No other strings allowed.}
+{'OK', except see text about geodetic segments.}
+{Defaults to previous scan.}
+{{\tt PREEMPT = 'NO'}}
+
+
 \subsubsection{\label{MP:PRESCAN}{\tt PRESCAN}}
 
 Please note: {\tt PRESCAN} is retained mainly for backwards
@@ -8639,11 +8739,12 @@ expected.  It was used to give time for earlier correlators to
 synchronize playback.  All correlators now in use are able to sync
 quickly so the need to adjust start times to allow for synchronization
 is basically gone.  The default {\tt PRESTART} is now set to zero
-seconds.  In practice, the the Mark5A units may take a fraction of a
-second to get going on record, but we are not trying to compensate for
-that by default.  The following discussion is kept to describe the
-function of {\tt PRESTART} while the parameter is available, but can
-be ignored by most current (2010+) users.
+seconds.  In practice, the the Mark5A units take few seconds to get
+going on record which is why the default is 5 seconds.  When the
+new digital systems are in place, the default will likely be reduced
+to zero and the parameter could be ignored.  The following
+discussion is kept to describe the function of {\tt PRESTART} while
+the parameter is available.
 
 {\tt PRESTART} gives a time by which to start the recording at a
 site before the nominal start time as established by \htmlref{{\tt
@@ -8997,7 +9098,7 @@ the current file (usually the first).
 
 Since \htmlref{{\tt SETUP}}{MP:SETUP} can specify a file name, when
 there isn't an embedded setup file, it must be case sensitive.  As
-a result, the case of the argument of {\tt SETINIT} much match 
+a result, the case of the argument of {\tt SETINIT} much match
 {\tt SETUP}.
 
 \rcwbox
@@ -11878,13 +11979,13 @@ rolls should be forced.
 {\tt BBFILTER} sets the baseband channel bandwidth.  There is one
 value for each baseband channel.  Any that are not specified will be
 set equal to the first so in the usual case that all channels have the
-same bandwidth, only one needs to be set.  
+same bandwidth, only one needs to be set.
 
 For the RDBE systems with the PFB personality ({\tt DBE = RDBE\_PFB}),
 the bandwidth must be 32 MHz.  There are no options.  For the DDC
 personality ({\tt DBE = RDBE\_DDC}), the baseband channel
 bandwidth can be anywhere between 0.125 and 64 MHz in factor of 2
-steps.  For the DBBC, the options are the factors of 2 between 0.5 
+steps.  For the DBBC, the options are the factors of 2 between 0.5
 and 16 MHz, with additional options at 32 and 512 MHz.
 
 For the original VLBA system and for MarkIV, the value must be a
@@ -11905,7 +12006,7 @@ and are required to obtain up to 6.
 \rcwbox
 {Up to one real number for each channel giving bandwidths in MHz.}
 {{\tt 0.0625}, {\tt 0.125}, {\tt 0.250}, {\tt 0.5}, {\tt 1.0}, {\tt
-2}, {\tt 4}, {\tt 8}, {\tt 16}, {\tt 32}, {\tt 64}, {\tt 512}, 
+2}, {\tt 4}, {\tt 8}, {\tt 16}, {\tt 32}, {\tt 64}, {\tt 512},
 depending on system.}
 {{\tt 0} - If one is specified, it will be used for all channels.
 If none are specified, half the sample rate will be used.}
@@ -12121,11 +12222,11 @@ and an earlier one has it set to something else.
 
 When the DAR is the RDBE, the output channels and all the input channel
 information given to \schedb are written to the VEX file.  But the crd
-files that control the old VLBA hardware also has to be told something.  
+files that control the old VLBA hardware also has to be told something.
 \schedb does not have a separate set of variables for all those configuration
 parameters, so it just does something reasonable.  It sets the number of
 channels to the maximum of the number requested and 8.  It sets the
-frequencies and sidebands to match the RDBE requests.  It sets the 
+frequencies and sidebands to match the RDBE requests.  It sets the
 sample rate to the maximum of that requested and 32 Ms/s.  It sets the
 channel bandwidth to the lesser of the request and 16 MHz.  It only
 writes the first 4 pcal extraction requests (avoiding going into
@@ -13767,7 +13868,7 @@ need something else, or need to rebuild, you can create your own
 subdirectory.  There is extensive information on {\sc PGPLOT}
 available from the WWW page at \htmladdnormallink
 {http://www.astro.caltech.edu/\~{}tjp/pgplot/}
-{http://astro.caltech.edu/\~{}tjp/pgplot/}.  Note that {\sc PGPLOT} 
+{http://astro.caltech.edu/\~{}tjp/pgplot/}.  Note that {\sc PGPLOT}
 should be built with the same compiler and machine architecture as
 \sched for everything to function properly.
 
@@ -14021,8 +14122,12 @@ email (all BD or some such).
 \item REMINDER TO RCW: Need to fix frequency selection to allow
 inverted sidebands for the RDBE.
 
-\item Add to the VEX if_def lines information about the receiver, the
-LO to the receiver (as opposed to the IF converter), and the 50cm 
+\item Add parameter {\tt PREEMPT} to allow the user to protect certain
+scans from preemption of PT and MK for EOP observations. For details,
+see the section on \htmlref{{\tt PREEMPT}}{MP:PREEMPT}.
+
+\item Add to the VEX if\_def lines information about the receiver, the
+LO to the receiver (as opposed to the IF converter), and the 50cm
 filter.  These are required for the new control system to set the
 switches on the VLBA antenna.  Using a comment is a kludge, but VEX
 has no place for the information.  Sept. 8, 2011.
@@ -14035,7 +14140,7 @@ channels in one polarization as per user request.  Aug. 12, 2011  RCW.
 
 \item Include a {\sl PGPLOT} distribution with \sched.  July 20, 2011. RCW.
 
-\item Improve the logic for the printing of frequency sets and 
+\item Improve the logic for the printing of frequency sets and
 especially the printing of sets used for each source.  July 19, 2011 RCW.
 
 \item Avoid problems with printing .sum file when there are too many
@@ -14045,31 +14150,31 @@ setups.  July 19, 2011 RCW.
 end of file.  GFORTRAN 4.6 was getting a run time crash.  Reported by
 Leonid Petrov.  June 16, 2011.  RCW.
 
-\item Make various changes to the code that generates the DELZN segments 
+\item Make various changes to the code that generates the DELZN segments
 to work better when there are only 2 stations and when there are a large
 number of scans.  mid June, 2011. RCW.
 
 \item Add pointers in the frequency sets and source summaries in the {\sl .sum}
 file so that it is possible to relate a source to a frequency.  Useful when
-trying to see what {\tt DOPPLER} has selected for frequencies when there are 
+trying to see what {\tt DOPPLER} has selected for frequencies when there are
 several sources.  May 17, 2011 RCW.
 
 \item Add some GBT setups that match the IF range (possibly with inverted
 sideband) with the VLBA to facilitate RDBE PFB runs.  May 2, 2011  RCW
 
-\item Change manual to correct the default PRESTART from 0 to 5 seconds 
+\item Change manual to correct the default PRESTART from 0 to 5 seconds
 reflecting recent code changes.
 April 1, 2011.  RCW.
 
 \item Working on DDC frequency checks.  ********
 
-\item Upcase the name of a pointing center group so there aren't 
+\item Upcase the name of a pointing center group so there aren't
 case sensitivities in the selection of such groups.  Mar. 18, 2011  RCW.
 
 \item Cause the .sch file to be written when geodetic segments are
 requested.  This makes it easy to reproduce segments created when
 they are desired in another segement, such as when making files to
-test new backends.  The change in frequencies can cause freshly 
+test new backends.  The change in frequencies can cause freshly
 created segments to be different due to the frequency dependent flagging
 of sources close to the Sun.  March 16, 2011  RCW.
 
@@ -14077,17 +14182,17 @@ of sources close to the Sun.  March 16, 2011  RCW.
 changes for ROT patterns.  Those calculations had been based on
 incorrect rotation positions.  Feb. 22, 2011  RCW.  Later made some
 corrections to the accounting for the circular feed circle.  The
-errors had been causing problems with rotation patterns at lower 
+errors had been causing problems with rotation patterns at lower
 frequencies.  July 2011  RCW.
 
 \end{itemize}
 
 \subsection{\label{SSEC:VER_9.4}Version 9.4}
 
-This version brings in many new capabilities including support for 
+This version brings in many new capabilities including support for
 multiple phase centers on the DiFX correlator, automatic insertion
-of geodetic segments (DELZN), enhancement to {\tt DWELL} to allow 
-scans to start before the slowest antennas arrive, and support for 
+of geodetic segments (DELZN), enhancement to {\tt DWELL} to allow
+scans to start before the slowest antennas arrive, and support for
 the new wideband hardware (RDBE and Mark5C with hooks for the DBBC).
 The release will likely be on Jan. 14, 2011.
 
@@ -17032,7 +17137,7 @@ been addressed, but not taken out here.
 \begin{itemize}
 
 \item Add a SUNAVOID parameter sort of like DODOWN that avoids pointing
-      and antenna too close to the Sun.  Request for the CMVA from 
+      and antenna too close to the Sun.  Request for the CMVA from
       Krischbaum  Mar. 22, 2011.
 
 \item Somehow provide for different VLA positions for single dish

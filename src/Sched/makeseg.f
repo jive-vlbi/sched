@@ -158,6 +158,19 @@ C
 C        Set the scan number.
 C
          ISEG = ISEG + 1
+         IF( ISEG .GT. MSEG ) THEN
+            CALL WLOG( 1, ' ' )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5, A )' )
+     1        ' Trying to exceed SCHED''s limit of ', MSEG, 
+     2        ' scans in an inserted geodetic segment.'
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A )' )
+     1        ' Shorten the requested segment or divide it into ',
+     2        'multiple segments.'
+            CALL ERRLOG( MSGTXT )
+         END IF
          LSCN = ISEG + ISCN - 1
 C
 C        Initialize these or they get remembered to next trial

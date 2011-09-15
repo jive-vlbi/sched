@@ -257,9 +257,22 @@ C
          SELCOL(ISCN) = KD( KEYPTR( 'ELCOLIM', KC, KI ) )
          OPMISS(ISCN) = KD( KEYPTR( 'OPMISS', KC, KI ) )
          SCANTAG(ISCN) = KCHAR( 'SCANTAG', 4, .FALSE., KD, KC, KI )
-         PREEMPT(ISCN) = KCHAR( 'PREEMPT', 2, .TRUE., KD, KC, KI )
          CRDLINE(ISCN) = KCHAR( 'CRDLINE', 80, .FALSE., KD, KC, KI )
          DODOWN(ISCN) =  KD( KEYPTR( 'DODOWN', KC, KI ) ) .EQ. 0.D0 
+C
+C        Deal with the requests for protection from preemption.
+C        Default to no preemption.  But if PREEMPT was not specified,
+C        protect geodetic segments.  This must be done after GEOLEN
+C        is set.
+C
+         PREEMPT(ISCN) = KCHAR( 'PREEMPT', 2, .TRUE., KD, KC, KI )
+         IF( PREEMPT(ISCN) .EQ. '--' ) THEN
+            IF( GEOLEN(ISCN) .GT. 0.D0 ) THEN
+               PREEMPT(ISCN) = 'NO'
+            ELSE
+               PREEMPT(ISCN) = 'OK'
+            END IF
+         END IF
 C
 C        The minimum tape pause time and the tape prestart time.
 C
