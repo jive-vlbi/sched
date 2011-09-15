@@ -113,8 +113,7 @@ C     parts of this process that are a bit tricky.  The first is
 C     selecting the sequences to try.  The second is the quality 
 C     measure.  See GEOQUAL for details the quality measure in use.
 C
-C     Loop over the trials.  For now, the number is hardwired.  That
-C     will likely be pulled out as a user parameter some day.
+C     Loop over the trials.  GEOTRIES is a user parameter.
 C
       DO ITRIAL = 1, GEOTRIES
          IF( GEOPRT .GE. 1 ) THEN
@@ -201,8 +200,8 @@ C
      2                ITRIAL, ' Number of scans:', ntseg, '  Quality:', 
      3                TESTQUAL, '  Previous best:', BESTQUAL
                CALL WLOG( 1, MSGTXT )
-               IF( NTSEG .GT. 70 ) THEN
-                  CALL WLOG( 1, '  Only first 70 scans printed' )
+               IF( NTSEG .GT. 50 ) THEN
+                  CALL WLOG( 1, '  Only first 50 scans printed' )
                   NPRT = 50 
                ELSE
                   NPRT = NTSEG

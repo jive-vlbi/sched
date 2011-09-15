@@ -14,7 +14,7 @@ C
       INTEGER            IP, IPC, ISSTA, JF, ICH
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
-      LOGICAL            GOTIT, FSDUP, FSMATCH
+      LOGICAL            GOTIT
       CHARACTER          RESULT*100, FSMATSTR*132
 C----------------------------------------------------------------------
       NNCHAN = NCHAN(KS)
