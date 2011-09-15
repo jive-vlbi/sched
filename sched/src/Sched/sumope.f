@@ -78,7 +78,7 @@ C
 C     Derive and list the times that the schedule can be preempted
 C     at some stations (Meant for PT and MK use by USNO).
 C
-      CALL PROTECT
+      CALL PROTECT( ISUM )
 C
 C     Write the correlator information.
 C
