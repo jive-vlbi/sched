@@ -29,9 +29,9 @@ C
          DO KS = 1, NSET
             IF( FORMAT(KS)(1:4) .NE. 'VLBA' .AND.
      1          FORMAT(KS)(1:6) .NE. 'MARK5B' .AND. 
-     2          FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
+     2          FORMAT(KS)(1:4) .NE. 'MKIV' ) THEN
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, A )' ) 
+               WRITE( MSGTXT, '( A, A, A )' ) 
      1            'CHKVDIFX:  Socorro DIFX correlator does not ',
      2            'understand format: ', FORMAT(KS)
                CALL ERRLOG( MSGTXT )
