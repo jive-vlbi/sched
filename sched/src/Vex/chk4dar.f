@@ -48,7 +48,8 @@ C
      3       FORMAT(KS) .NE. 'MKIV1:4' .AND. 
      4       FORMAT(KS) .NE. 'MKIV2:1' .AND.
      5       FORMAT(KS) .NE. 'MKIV4:1' .AND.
-     4       FORMAT(KS) .NE. 'S2' ) THEN
+     6       FORMAT(KS) .NE. 'MARK5B' .AND.
+     7       FORMAT(KS) .NE. 'S2' ) THEN
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, A)' )
      1          'CHK4DAR: Invalid FORMAT for wideband observing '//

@@ -121,6 +121,8 @@ C
             IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
      1          DAR(ISETSTA(KS)) .EQ. 'RDBE' ) THEN
                FORMAT(KS) = 'MARK5B'
+            ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5B' ) THEN
+               FORMAT(KS) = 'MARK5B'
             ELSE
                FORMAT(KS) = DAR(ISETSTA(KS))
             END IF
