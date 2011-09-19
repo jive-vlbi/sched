@@ -67,9 +67,12 @@ C
       END DO
 C
 C     Recorder and USETAPE are obsolete RCW.
+C        but add back in DISK to be able to separate Mark5A & 5B stations
+C        into different $DAS-section blocks -- rmc (16sep2011)
 C
       IF( CONTROL(ISCAT) .NE. CONTROL(JSCAT) ) IDENT = .FALSE.
       IF( DAR(ISCAT) .NE. DAR(JSCAT) ) IDENT = .FALSE.
+      IF( DISK(ISCAT) .NE. DISK(JSCAT) ) IDENT = .FALSE.
 C      IF( RECORDER(ISCAT) .NE. RECORDER(JSCAT) ) IDENT = .FALSE.
 C      IF( USETAPE(ISTA) .NEQV. USETAPE(JSTA) ) IDENT = .FALSE.
 C

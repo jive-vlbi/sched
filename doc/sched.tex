@@ -64,7 +64,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  BETA RELEASE 10.0}
+\title{THE \schedb USER MANUAL \\  RELEASE 10.0}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -103,11 +103,11 @@ anonymous ftp at \htmladdnormallink{{\sl ftp.aoc.nrao.edu}}
 {ftp://ftp.aoc.nrao.edu/pub/sched} in directory {\sl pub/sched}.
 
 For comments and questions, contact Craig Walker at cwalker@nrao.edu
-or, for EVN, Mark IV and VEX format issues, Antonios Polatidis at
-polatidis@jive.nl.  \schedb is written and supported by Craig Walker
-of NRAO, Huib van Langevelde (originally), Cormac Reynolds, Antonios
-Polatidis, and Friso Olnon (now) of JIVE, and Franco Tinarelli of CNR
-in Bologna.
+or, for EVN, Mark IV and VEX format issues, Des Small at
+small@jive.nl.  \schedb was written by Craig Walker of NRAO, Huib van
+Langevelde, Cormac Reynolds, Antonios Polatidis, Friso Olnon, and Des
+Small of JIVE, and Franco Tinarelli of CNR in Bologna.  It is
+currently supported by Craig Walker and Des Small.
 
 \tableofcontents
 % \listoftables
@@ -850,6 +850,12 @@ projects on the VLBA.
 sample schedule for VLBA observations.  It demonstrates band switching
 and some recording control proceedures not in \htmladdnormallink{{\sl
 manual\_2.key}}{examples/manual\_2.key}
+
+\item[\htmladdnormallink{{\sl eg24.key}}{examples/eg24.key}] is a
+sample schedule of a simple project on the VLBA, but one that goes
+for 24 hours.  For dynamic scheduling, it is useful to be able to
+wrap such schedules to use a different start time.  This shows how
+to put in comments for the schedulers to aid that process.
 
 \item[\htmladdnormallink{{\sl egOH.key}}{examples/egOH.key}] is a
 sample spectral line file for VLBA
@@ -1760,12 +1766,13 @@ then picking up the first scans at the end.  The schedulers have been
 doing this by hand.  If you have a 24 hour schedule, it would help the
 process if you insert a unique \htmlref{{\tt COMMENT}}{MP:COMMENT} at
 the logical places for wrapping the schedule, and include a
-\htmlref{{\tt SETUP}}{MP:SETUP} specification in that scan line so the
+\htmlref{{\tt SETUP}}{MP:SETUP} specification in that scan so the
 project doesn't end up starting in the wrong mode.  The comment should
 be unique because the scheduler is going to have to relate the LST
 information in the {\sl ...sch.pt} file to the input scans.  Identical
 comments will make this confusing as it is not always obvious which
-input scan corresponds to which output scan.  Example {\sl eg24.key}
+input scan corresponds to which output scan.  Example 
+\htmladdnormallink{{\sl eg24.key}}{examples/eg24.key}
 demonstrates such a schedule.
 
 
@@ -14111,16 +14118,35 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_10.0}Development Version 10.0}
+\subsection{\label{SSEC:VER_10.1}Development Version 10.1}
 
 \begin{itemize}
 
+\item Nothing yet.
 
-\item REMINDER TO RCW: Fix catalog IFs at GBT according to recent
-email (all BD or some such).
+\end {itemize}
+%  \item Working on DDC frequency checks.  ********
 
-\item REMINDER TO RCW: Need to fix frequency selection to allow
-inverted sidebands for the RDBE.
+% \item REMINDER TO RCW: Need to fix frequency selection to allow
+% inverted sidebands for the RDBE.
+
+
+\subsection{\label{SSEC:VER_10.0}Version 10.0}
+
+\begin{itemize}
+
+\item Add eg24.key to demonstrate putting comments in 24 hour schedules
+to help the people doing the dynamic scheduling choose alternate 
+start points, shifting scans before that point to the end of the schedule
+(wrap).  RCW  Sept. 18, 2011.
+
+\item Make changes in Vex code and catalogs to support Mark5B better
+on the EVN.  Des Small Sep. 2011.
+
+\item Add the maximum settling time for stations in a pointing group
+to the interval between pointing scans when doing 
+\htmlref{{\tt AUTOPEAK}}{MP:AUTOPEAK}.  This was related to a 
+request from Krichbaum in early 2011.  Sep. 16, 2011  RCW.
 
 \item Add parameter {\tt PREEMPT} to allow the user to protect certain
 scans from preemption of PT and MK for EOP observations. For details,
@@ -14132,19 +14158,23 @@ filter.  These are required for the new control system to set the
 switches on the VLBA antenna.  Using a comment is a kludge, but VEX
 has no place for the information.  Sept. 8, 2011.
 
+\item Add entries for the K band 7 feed receiver at the GBT.  Also 
+change all the other receivers to the A,C IFs.  Aug. 15, 2011  RCW.
+
 \item Allow the 528 MHz BBC setting for the PFB personality of the
 RDBE.  It will produce poor data, but is needed to get 16 unique
 channels in one polarization as per user request.  Aug. 12, 2011  RCW.
 
 \item Make sources in phase centers not case sensitive.  July 22, 2011 RCW.
 
-\item Include a {\sl PGPLOT} distribution with \sched.  July 20, 2011. RCW.
+\item Include a {\sl PGPLOT} distribution with \sched.  
+This is still somewhat of a work in progress.  July 20, 2011. RCW.
 
 \item Improve the logic for the printing of frequency sets and
 especially the printing of sets used for each source.  July 19, 2011 RCW.
 
-\item Avoid problems with printing .sum file when there are too many
-setups.  July 19, 2011 RCW.
+\item Avoid problems with printing the {\sl .sum} file when there are
+too many setups.  July 19, 2011 RCW.
 
 \item Fix flush.f (FLUXH) to backup over the EOF once it has read to the
 end of file.  GFORTRAN 4.6 was getting a run time crash.  Reported by
@@ -14163,10 +14193,7 @@ several sources.  May 17, 2011 RCW.
 sideband) with the VLBA to facilitate RDBE PFB runs.  May 2, 2011  RCW
 
 \item Change manual to correct the default PRESTART from 0 to 5 seconds
-reflecting recent code changes.
-April 1, 2011.  RCW.
-
-\item Working on DDC frequency checks.  ********
+reflecting recent code changes.  April 1, 2011.  RCW.
 
 \item Upcase the name of a pointing center group so there aren't
 case sensitivities in the selection of such groups.  Mar. 18, 2011  RCW.
@@ -17226,8 +17253,6 @@ been addressed, but not taken out here.
       RCW.  (consult Ken Sowinski)  Maybe don't use the "front end
       filter at all since this other filter is earlier and is only
       30 MHz.
-
-\item Survey optimizer
 
 \item Plotting:  For beam, get beam size and some sidelobe statistics.
       21 Feb 2002 RCW.

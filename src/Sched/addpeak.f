@@ -23,7 +23,7 @@ C
       INTEGER           ISCN, LASTISCN(*), PEAKOPT
       INTEGER           NADDED, NGOOD
 C
-      INTEGER           IS, ISTA, USEPSRC
+      INTEGER           IS, ISTA, KSTA, USEPSRC
       INTEGER           LASTKSCN(MAXSTA), LASTJSCN(MAXSTA)
       INTEGER           KSCN, MSCN, KSRC, PSRC, IGRP, JSCN
       INTEGER           NTRY, I, YEAR, DAY1, OKSC, NUP(MPKGRP)
@@ -36,6 +36,7 @@ C
       DOUBLE PRECISION  STARTK, STOPK, START2, STOP2
       DOUBLE PRECISION  SLEWMIN, SLEWMAX(MPKSRC), START, FREQTEST
       DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4)
+      DOUBLE PRECISION  MSETTLE(MPKGRP)
       CHARACTER         TFORM*8, STIME*8
 C
       SAVE              NADDED
@@ -83,6 +84,7 @@ C
             TRYGRP(IGRP) = .FALSE.
             TRYGRP2(IGRP) = .FALSE.
             NUP(IGRP) = 0
+            MSETTLE(IGRP) = 0.D0
          END DO
 C
 C        Don't try if there were no antennas up for this scan.
@@ -169,6 +171,10 @@ C
 C
          END DO
 C
+C        Get the maximum number of scans that could be inserted if
+C        all groups are used for the number of scans determined to
+C        be possible above for the group.
+C
          NTRY = 0
          DO IGRP = 1, NPKGRP
             IF( TRYGRP(IGRP) ) NTRY = NTRY + 1
@@ -227,7 +233,8 @@ C
 C
 C        Loop through the groups.  MSCN is the one that will stay the
 C        original for sure so it can be used for slew calculations etc.
-C        KSCN is the one we are trying to insert.
+C        KSCN is the one we are trying to insert.  NADDED is the number
+C        already added.
 C
          NADDED = 0
          MSCN = ISCN + NTRY
@@ -244,6 +251,7 @@ C
                KSCN = ISCN + NADDED
 C
 C              Get the stations that will be in the inserted scan.
+C              GOTST indicates that we got at least one for this group.
 C
                GOTST = .FALSE.
                DO ISTA = 1, NSTA
@@ -276,9 +284,10 @@ C
 C
 C                    Look for the one closest to the target that is
 C                    up at all required stations.  First check that
-C                    the source is up at all stations that need it.
-C                    Recall STASCN retains the information about whether
-C                    the target source is up at the station.
+C                    the source is above the minimum elevation at all 
+C                    stations that need it.  Recall STASCN retains 
+C                    the information about whether the target source 
+C                    is up at the station.
 C
                      SROK(PSRC) = .TRUE.
                      SROK2(PSRC) = .TRUE.
@@ -334,13 +343,27 @@ C
                               END IF
                               MINTOT = MIN( MINTOT, TOTTIME * 86400.D0 )
 C
-C                             Check time for 2 scans.
+C                             Check time for 2 scans.  Add a "slew" 
+C                             time for the second pointing set.  Use
+C                             the TSETTLE (sec) time.
 C
+                              KSTA = STANUM(ISTA)
                               TOTTIME2 = 2.D0 * PKDWELL(IGRP) +
-     1                           TSLEW(KSCN,ISTA) + TSLEW(MSCN,ISTA)
+     1                           TSLEW(KSCN,ISTA) + TSLEW(MSCN,ISTA) +
+     2                           TSETTLE(KSTA) / 86400.D0
                               IF( TGAP(ISTA) .LT. TOTTIME2 ) THEN
                                  SROK2(PSRC) = .FALSE.
                               END IF
+C
+C                             Collect the largest TSETTLE into MSETTLE
+C                             It doesn't matter too much where this is
+C                             done since these are fixed values per 
+C                             station.  This is a place where we are
+C                             only looking at the stations in the group
+C                             which is what we want.
+C
+                              MSETTLE(IGRP) = 
+     1                            MAX( MSETTLE(IGRP), TSETTLE(KSTA) )
                            END IF
                         END DO
                      END IF
@@ -408,7 +431,7 @@ C
                      ADD2 = TRYGRP2(IGRP) .AND. SROK2(PSRC)
 C
 C                    Insert the actual scan(s) that we are going to use.
-C                    JSCN is the on just before the target, and
+C                    JSCN is the one just before the target, and
 C                    possibly the only one.  The 2 scan (START2 etc)
 C                    is the first one of two, if there are two.
 C
@@ -432,8 +455,10 @@ C                       all that is needed.  For MSCN, LASTISCN may
 C                       change so it should be run again later.  It
 C                       is in SRINSERT for the use above where slews
 C                       were needed.
+C                       Place a gap of TSETTLE between the pointing 
+C                       scans.
 C
-                        STOP2 = STARTK
+                        STOP2 = STARTK - MSETTLE(IGRP) / 86400.D0
                         START2 = STOP2 - PKDWELL(IGRP)
                         CALL SRINSERT( KSCN, KSRC, PKSRC(PSRC,IGRP),
      1                                 START2, STOP2, LASTISCN, MSCN )
