@@ -1,0 +1,1076 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>PGPLOT: Writing a Device Handler</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+<div class="header"><a href="../index.html">PGPLOT</a>&nbsp;&gt; <a
+href="doc-index.html">Documentation</a>&nbsp;&gt; <a href=
+"install-manual.html">Installation Manual</a>&nbsp;&gt; Writing a
+Device Handler</div>
+
+<h1>Writing a Device Handler</h1>
+
+<p>PGPLOT can be configured for a particular installation by adding
+or removing &ldquo;device handlers&rdquo;. A device handler is a subroutine
+which handles all the device-specific aspects of graphical output
+for a particular device or class of devices.</p>
+
+<p>To write a new device handler, it is simplest to start by
+modifying an existing one. This Appendix explains what the device
+handler must do, but it does not explain how to do it&mdash;which is,
+of course, very hardware-dependent.</p>
+
+<h2>The device dispatch routine GREXEC</h2>
+
+<p>All graphical output and input is handled by a &ldquo;device dispatch
+routine&rdquo; in PGPLOT, called <code>GREXEC</code>. Routine <code>
+GREXEC</code> is called whenever PGPLOT needs to determine
+device-specific information or perform graphical I/O. This routine
+in turn calls on the appropriate device handler. Reconfiguring
+PGPLOT involves modifying the <code>GREXEC</code> routine to use a
+different set of device handlers; no other changes to PGPLOT are
+needed.</p>
+
+<p>Usually the Fortran code for <code>GREXEC</code> is created
+automatically from a list of selected device handlers during the
+installation of PGPLOT.</p>
+
+<center>
+<table border="0" summary="Example Device Dispatch Routine">
+<caption><b><i>Table E.1: Example Device Dispatch
+Routine</i></b></caption>
+
+<tr>
+<td bgcolor="#ffffff">
+<pre>
+C*GREXEC -- PGPLOT device handler dispatch routine
+C+
+      SUBROUTINE GREXEC(IDEV,IFUNC,RBUF,NBUF,CHR,LCHR)
+      INTEGER IDEV, IFUNC, NBUF, LCHR
+      REAL    RBUF(*)
+      CHARACTER*(*) CHR
+C---
+      INTEGER NDEV
+      PARAMETER (NDEV=6)
+      CHARACTER*10 MSG
+C---
+      GOTO(1,2,3,4,5,6) IDEV
+      IF (IDEV.EQ.0) THEN
+          RBUF(1) = NDEV
+          NBUF = 1
+      ELSE
+          WRITE (MSG,'(I10)') IDEV
+          CALL GRWARN('Unknown device code in GREXEC: '//MSG)
+      END IF
+      RETURN
+C---
+1     CALL NUDRIV(IFUNC,RBUF,NBUF,CHR,LCHR)
+      RETURN
+2     CALL PSDRIV(IFUNC,RBUF,NBUF,CHR,LCHR,1)
+      RETURN
+3     CALL PSDRIV(IFUNC,RBUF,NBUF,CHR,LCHR,2)
+      RETURN
+4     CALL TTDRIV(IFUNC,RBUF,NBUF,CHR,LCHR,1)
+      RETURN
+5     CALL XWDRIV(IFUNC,RBUF,NBUF,CHR,LCHR,1)
+      RETURN
+6     CALL XWDRIV(IFUNC,RBUF,NBUF,CHR,LCHR,2)
+      RETURN
+C
+      END
+</pre>
+</td>
+</tr>
+</table>
+</center>
+
+<p>Table E.1 gives an example. The first argument
+(<code>IDEV</code>) is an integer specifying the type of the
+currently selected device. Routine <code>GREXEC</code> calls the
+appropriate device handler for this type, passing the remaining
+arguments to the device handler. If <code>IDEV</code> is zero,
+<code>GREXEC</code> returns the number of device types available.
+Some device handlers handle more than one PGPLOT device type: e.g.,
+in the above example <code>PSDRIV</code> handles both types PS and
+VPS. The last argument passed to the device handler is an integer
+specifying which of the supported types is required. This argument
+is omitted for handlers that support only one type
+(<code>NUDRIV</code> in the above example).</p>
+
+<p>To reconfigure PGPLOT, <code>GREXEC</code> must be modified as
+follows: (a) set parameter <code>NDEV</code> to the number of
+device types; (b) make sure that the computed-goto statement has
+<code>NDEV</code> branches; (c) supply a target for each branch to
+call the appropriate device handler.</p>
+
+<h2>Device handler interface</h2>
+
+<p>A device handler is a Fortran (or Fortran-callable) subroutine.
+The name of the subroutine must be of the form <i>xx</i>DRIV, where
+<i>xx</i> is a two-character code for the device type, usually the
+first two letters of the type; this code must (of course) be
+different for each different device handler.</p>
+
+<pre class="f">
+      SUBROUTINE xxDRIV (OPCODE, RBUF, NBUF, CHR, LCHR, MODE)
+      INTEGER        OPCODE
+      REAL           RBUF(*)
+      INTEGER        NBUF
+      CHARACTER*(*)  CHR
+      INTEGER        LCHR
+      INTEGER        MODE
+</pre>
+
+<p>The first argument (<code>OPCODE</code>) is an integer
+&ldquo;operation code&rdquo; which specifies what operation the device
+handler is to perform; it is an input parameter to the subroutine
+(see Table E.2). The <code>MODE</code> argument is another input
+parameter that distinguishes between multiple device types
+supported by the same handler. The other arguments are used for
+both input and output, and their meaning depends on the value of
+the operation code. Not all arguments are used for every operation
+code. <code>RBUF</code> is a floating-point array used to pass
+numerical data to or from the device handler, and <code>NBUF</code>
+indicates how many elements of the array are used. <code>CHR</code>
+is a character variable used to pass character data to or from the
+device handler, and <code>LCHR</code> indicates how many characters
+are used. <code>NBUF</code> or <code>LCHR</code> should be set to
+zero if no data of the corresponding type are passed. If the
+function requested by the operation code (<code>OPCODE</code>) is
+not implemented in the device handler, the subroutine should set
+<code>NBUF = -1</code> before returning.</p>
+
+<p>The device handler subroutine can communicate with PGPLOT <i>
+only</i> through the arguments. It should not attempt to reference
+the PGPLOT common blocks (this is because the internal structure of
+the PGPLOT common blocks may change). Data stored internally by the
+handler between calls should be placed in static storage (use the
+Fortran <code>SAVE</code> statement).</p>
+
+<center>
+<table border="0" summary="Device Handler Operation Codes">
+<caption><b><i>Table E.2: Device Handler Operation
+Codes</i></b></caption>
+
+<tr>
+<th>Opcode</th>
+<th>Function</th>
+</tr>
+
+<tr>
+<td><a href="#opcode01">1</a></td>
+<td>Return device type</td>
+</tr>
+
+<tr>
+<td><a href="#opcode02">2</a></td>
+<td>Return maximum dimensions of view surface, and range of color
+index</td>
+</tr>
+
+<tr>
+<td><a href="#opcode03">3</a></td>
+<td>Return device scale</td>
+</tr>
+
+<tr>
+<td><a href="#opcode04">4</a></td>
+<td>Return device capabilities</td>
+</tr>
+
+<tr>
+<td><a href="#opcode05">5</a></td>
+<td>Return default device/file name</td>
+</tr>
+
+<tr>
+<td><a href="#opcode06">6</a></td>
+<td>Return default size of view surface</td>
+</tr>
+
+<tr>
+<td><a href="#opcode07">7</a></td>
+<td>Return miscellaneous defaults</td>
+</tr>
+
+<tr>
+<td><a href="#opcode08">8</a></td>
+<td>Select device</td>
+</tr>
+
+<tr>
+<td><a href="#opcode09">9</a></td>
+<td>Open workstation</td>
+</tr>
+
+<tr>
+<td><a href="#opcode10">10</a></td>
+<td>Close workstation</td>
+</tr>
+
+<tr>
+<td><a href="#opcode11">11</a></td>
+<td>Begin picture</td>
+</tr>
+
+<tr>
+<td><a href="#opcode12">12</a></td>
+<td>Draw line</td>
+</tr>
+
+<tr>
+<td><a href="#opcode13">13</a></td>
+<td>Draw dot</td>
+</tr>
+
+<tr>
+<td><a href="#opcode14">14</a></td>
+<td>End picture</td>
+</tr>
+
+<tr>
+<td><a href="#opcode15">15</a></td>
+<td>Set color index</td>
+</tr>
+
+<tr>
+<td><a href="#opcode16">16</a></td>
+<td>Flush buffer</td>
+</tr>
+
+<tr>
+<td><a href="#opcode17">17</a></td>
+<td>Read cursor</td>
+</tr>
+
+<tr>
+<td><a href="#opcode18">18</a></td>
+<td>Erase alpha screen</td>
+</tr>
+
+<tr>
+<td><a href="#opcode19">19</a></td>
+<td>Set line style</td>
+</tr>
+
+<tr>
+<td><a href="#opcode20">20</a></td>
+<td>Polygon fill</td>
+</tr>
+
+<tr>
+<td><a href="#opcode21">21</a></td>
+<td>Set color representation</td>
+</tr>
+
+<tr>
+<td><a href="#opcode22">22</a></td>
+<td>Set line width</td>
+</tr>
+
+<tr>
+<td><a href="#opcode23">23</a></td>
+<td>Escape function</td>
+</tr>
+
+<tr>
+<td><a href="#opcode24">24</a></td>
+<td>Rectangle fill</td>
+</tr>
+
+<tr>
+<td><a href="#opcode25">25</a></td>
+<td>Set fill pattern</td>
+</tr>
+
+<tr>
+<td><a href="#opcode26">26</a></td>
+<td>Line of pixels</td>
+</tr>
+
+<tr>
+<td><a href="#opcode27">27</a></td>
+<td>Scaling information</td>
+</tr>
+
+<tr>
+<td><a href="#opcode28">28</a></td>
+<td>Draw marker</td>
+</tr>
+
+<tr>
+<td><a href="#opcode29">29</a></td>
+<td>Query color representation</td>
+</tr>
+
+<tr>
+<td><a href="#opcode30">30</a></td>
+<td>Scroll rectangle</td>
+</tr>
+</table>
+</center>
+
+<h2>Handler state</h2>
+
+<p>PGPLOT will send commands to the device handler in a set
+sequence. Inquiry commands (opcodes 1&ndash;7 and 29) may be sent at any
+time, whether or not a device has been selected for output. The <i>
+open workstation</i> and <i>close workstation</i> commands are used
+to open and close a device. The <i>begin picture</i> and <i>end
+picture</i> commands are used to start and finish a &ldquo;frame&rdquo; (one
+page on a hardcopy device). Graphical output commands (opcodes
+12&ndash;13, 16&ndash;20, and 22&ndash;28) are only used between <i>begin
+picture</i> and <i>end picture</i>. The set-color-representation
+command (opcode 21) can be used at any time that a device is open.
+Thus the sequence of commands for a plot consisting of two frames
+will be:</p>
+
+<pre>
+(query commands)
+open workstation
+    (query commands, set color rep)
+    begin picture
+        (graphical output commands)
+    end picture
+    (query commands, set color rep)
+    begin picture
+        (graphical output commands)
+    end picture
+close workstation
+</pre>
+
+<p>Any violation of this sequence is due to a bug in PGPLOT.</p>
+
+<p>Device handlers should attempt to trap all errors, including I/O
+errors (e.g., insufficient disk space or insufficient memory), and
+issue a warning message rather than terminating execution of the
+program.</p>
+
+<h2>Summary of operations</h2>
+
+<hr>
+<h3><a name="opcode01">OPCODE = 1, Return device type</a></h3>
+
+<p>This is an inquiry function; the handler returns the name by
+which the the user will refer to the device type, e.g., <code>
+'PS'</code> for a PostScript device handler. This name must be
+different for each mode of each device handler installed in PGPLOT,
+and should preferably be unique in the first two or three
+characters. A descriptive character string (displayed by routine
+<code>PGLDEV</code>) should be included in parentheses after the
+name, e.g., <code>'PS (PostScript file, landscape
+orientation)'</code>.</p>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>CHR(:LCHR): the device type supported by the handler in the
+specified mode.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode02">OPCODE = 2, Return maximum dimensions of
+view surface, and range of color index</a></h3>
+
+<p>This is an inquiry function; the handler returns the maximum
+dimensions of the plot surface, and the range of color indices
+available. These will usually be the same as the default
+dimensions, but if it is possible to make a larger image, the
+maximum dimensions may be larger. If there is no set upper limit to
+a dimension, the corresponding maximum should be set to -1. All
+dimensions are in device coordinates. All devices should support
+color indices 0 and 1; color and gray-scale devices will allow
+color indices &gt;1 up to a device-dependent maximum value (which
+should not exceed 255). Color index 0 is the background color and
+is used to erase; if it is not possible to erase by overwriting in
+the background color, then requests to write in color index 0
+should be ignored.</p>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>RBUF(1): Minimum physical <i>x</i> value (set to zero).</li>
+
+<li>RBUF(2): Maximum physical <i>x</i> value (a value of -1
+indicates no effective maximum).</li>
+
+<li>RBUF(3): Minimum physical <i>y</i> value (set to zero).</li>
+
+<li>RBUF(4): Maximum physical <i>y</i> value (a value of -1
+indicates no effective maximum).</li>
+
+<li>RBUF(5): Minimum allowed color index (usually 0).</li>
+
+<li>RBUF(6): Maximum allowed color index (in range 1&ndash;255).</li>
+</ul>
+
+<hr>
+<h3><a name="opcode03">OPCODE = 3, Return device scale</a></h3>
+
+<p>This is an inquiry function; the handler returns the device
+scale in device coordinate units per inch (1 inch = 25.4 mm).
+Usually, the units of the device coordinates are pixels, so this
+also gives the physical resolution in pixels per inch. For hardcopy
+devices, the values should be as accurate as possible, to ensure
+that an image has the correct scale. For video display terminals
+and other devices where the scale is variable, nominal values
+should be returned.</p>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>RBUF(1): <i>x</i> scale in device coordinates per inch.</li>
+
+<li>RBUF(2): <i>y</i> scale in device coordinates per inch.</li>
+
+<li>RBUF(3): &ldquo;pen diameter&rdquo; in device coordinates (i.e., the
+width of a hardware line); this value is used by PGPLOT when
+emulating thick lines and polygon fill (usually 1).</li>
+</ul>
+
+<hr>
+<h3><a name="opcode04">OPCODE = 4, Return device
+capabilities</a></h3>
+
+<p>This is an inquiry function which is used to inform PGPLOT of
+the device's capabilities. If the device lacks a capability in
+hardware, PGPLOT will try to emulate it.</p>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>LCHR : number of characters defined in CHR. Should be at least
+10. Additional characters are assumed to be `N' if they are not
+supplied by the driver.</li>
+
+<li>CHR(1:1) = `H' if the device is a hardcopy device, `I' if it is
+an interactive device. On an interactive device, the image is
+visible as it is being drawn, while on a hardcopy device it cannot
+be viewed until the workstation is closed.</li>
+
+<li>CHR(2:2) = `C' if a cursor is available, `X' if a cursor is
+available and opcode 27 is accepted by the handler, `N' if there is
+no cursor. PGPLOT cannot emulate a cursor if none is
+available.</li>
+
+<li>CHR(3:3) = `D' if the hardware can draw dashed lines, `N' if it
+cannot. PGPLOT emulates dashed lines by drawing line segments.
+Software emulation is usually superior to hardware dashed lines,
+and not much slower, so CHR(3:3) = `N' is recommended.</li>
+
+<li>CHR(4:4) = `A' if the hardware can fill arbitrary polygons with
+solid color, `N' if it cannot. PGPLOT emulates polygon fill by
+drawing horizontal or vertical lines spaced by the pen diameter
+(see OPCODE = 3).</li>
+
+<li>CHR(5:5) = `T' if the hardware can draw lines of variable
+width, `N' if it cannot. PGPLOT emulates thick lines by drawing
+multiple strokes. Note that thick lines are supposed to have
+rounded ends, as if they had been drawn by a circular nib of the
+specified diameter.</li>
+
+<li>CHR(6:6) = `R' if the hardware can fill rectangles with solid
+color, `N' if it cannot. If this feature is not available, PGPLOT
+will treat the rectangle as an arbitrary polygon. In this context,
+a `rectangle' is assumed to have its edges parallel to the
+device-coordinate axes.</li>
+
+<li>CHR(7:7) = `P' if the handler understands the pixel primitives,
+'Q' if it understands the image primitives (opcode 26), or `N'
+otherwise (see the description of opcode 26).</li>
+
+<li>CHR(8:8) = `V' if PGPLOT should issue an extra prompt to the
+user before closing the device (in <code>PGCLOS</code>), `N'
+otherwise. Use `V' for devices where the PGPLOT window is deleted
+from the screen when the device is closed.</li>
+
+<li>CHR(9:9) = `Y' if the handler accepts color representation
+queries (opcode 29), `N' if it does not.</li>
+
+<li>CHR(10:10) = `M' if the device handler accepts opcode 28 to
+draw graph markers; `N' otherwise.</li>
+
+<li>CHR(11:11) = `S' if the device handler accepts opcode 30 to
+scroll the underlying pixel map; `N' otherwise.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode05">OPCODE = 5, Return default device/file
+name</a></h3>
+
+<p>This is an inquiry routine. The device handler returns the
+device or file name to be used if the PGPLOT device specification
+does not include one. (On VMS, the default file name may also be
+used to fill in missing fields of the supplied file name, e.g.,
+disk, directory, and file type.)</p>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>CHR(:LCHR): default device/file name.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode06">OPCODE = 6, Return default size of view
+surface</a></h3>
+
+<p>This is an inquiry function; the handler returns the default
+dimensions of the plot surface in device coordinates. At present,
+PGPLOT assumes that the device coordinates of the bottom left
+corner are (0,0). Note: on some devices the default size can change
+during PGPLOT execution; e.g., on windowing workstations the window
+manager may allow the user to change the size of the PGPLOT window.
+PGPLOT uses this opcode to determine the current the default size
+before starting each new page.</p>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>RBUF(1): default <i>x</i>-coordinate of bottom left corner
+(must be zero).</li>
+
+<li>RBUF(2): default <i>x</i>-coordinate of top right corner.</li>
+
+<li>RBUF(3): default <i>y</i>-coordinate of bottom left corner
+(must be zero).</li>
+
+<li>RBUF(4): default <i>y</i>-coordinate of top right corner.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode07">OPCODE = 7, Return miscellaneous
+defaults</a></h3>
+
+<p>This is an inquiry routine. The handler returns a scale-factor
+to be used for the &ldquo;obsolete character set&rdquo; used by old GRPCKG
+routines but not by PGPLOT.</p>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>RBUF(1): character scale factor (integer, &gt; 0).</li>
+</ul>
+
+<hr>
+<h3><a name="opcode08">OPCODE = 8, Select device</a></h3>
+
+<p>A PGPLOT device handler may handle more than one open device at
+once. All graphical I/O operations apply to the &ldquo;active&rdquo; device.
+This opcode is used to select a new active device; note that opcode
+9 (open workstation) also changes the active device.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): plot ID. This is not needed by the handler, and can be
+ignored.</li>
+
+<li>RBUF(2): identification number of selected device (as returned
+by <i>open workstation</i>).</li>
+</ul>
+
+<hr>
+<h3><a name="opcode09">OPCODE = 9, Open workstation</a></h3>
+
+<p>Allocate an I/O channel to the requested device and open the
+device. Any hardware resets that need to be done once for a plot
+session (which could consist of several frames) should be done
+here. Allocate buffer, if its size is fixed for the device. No
+visible I/O should be performed on an interactive device: e.g., the
+screen should not be cleared; this should be deferred until the <i>
+begin picture</i> call.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(3): if this is not 0.0, the device specification included
+the /APPEND flag. If this flag is specified, the device handler
+should suppress any initial screen erase so that the new image is
+superimposed on any previously displayed image. The device handler
+may ignore this if it is inappropriate (e.g., for a hardcopy
+device).</li>
+
+<li>CHR(:LCHR): the file/device to be opened. This may be a
+physical device name or the name of a disk file.</li>
+</ul>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>RBUF(1): identification number for the opened device; PGPLOT
+will use this number in subsequent <i>select device</i> calls for
+this device (see OPCODE = 8).</li>
+
+<li>RBUF(2): error flag; 1.0 indicates that the workstation was
+opened successfully; any other number indicates an error.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode10">OPCODE = 10, Close workstation</a></h3>
+
+<p>Close the device opened by the <i>open workstation</i> command,
+and deallocate any resources allocated for the device (e.g.,
+memory, I/O channels).</p>
+
+<hr>
+<h3><a name="opcode11">OPCODE = 11, Begin picture</a></h3>
+
+<p>Prepare the workstation for plotting. This command has two
+arguments which specify a size for the view surface overriding the
+default size; if the device handler is unable to change the size of
+the view surface, it may ignore these arguments. On interactive
+devices, erase the screen. Note: this command has no way to return
+an error to the user; if an error occurs (e.g., insufficient memory
+for a frame buffer), the handler should issue an error message
+(with routine <code>GRWARN</code>) and ignore subsequent output
+commands, rather than terminating execution of the program.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): maximum <i>x</i> coordinate.</li>
+
+<li>RBUF(2): maximum <i>y</i> coordinate.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode12">OPCODE = 12, Draw line</a></h3>
+
+<p>Draw a straight line from device coordinates <i>(x1,y1)</i> to
+<i>(x2,y2)</i> using the current line attributes (color index, line
+style, and line width). The coordinates are floating point, and may
+need to be rounded to the nearest integer before they are passed to
+the hardware; they are in the range (0,0) to the maxima specified
+with <i>begin picture</i>.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): <i>x1</i>.</li>
+
+<li>RBUF(2): <i>y1</i>.</li>
+
+<li>RBUF(3): <i>x2</i>.</li>
+
+<li>RBUF(4): <i>y2</i>.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode13">OPCODE = 13, Draw dot</a></h3>
+
+<p>Draw a dot at device coordinates <i>(x,y)</i> using the current
+line attributes (color index and line width). The result should be
+an approximation to a filled circle of diameter equal to the line
+width, or a dot of minimum size if line width is 0. The coordinates
+are floating point, and may need to be rounded to the nearest
+integer before they are passed to the hardware.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): <i>x</i>.</li>
+
+<li>RBUF(2): <i>y</i>.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode14">OPCODE = 14, End picture</a></h3>
+
+<p>Terminate the current frame. On hardcopy devices always advance
+the paper. On interactive devices, clear the screen only if
+requested. Deallocate buffers that were created by <i>begin
+picture</i> (OPCODE = 11).</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): if not 0.0, clear screen.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode15">OPCODE = 15, Set color index</a></h3>
+
+<p>Set the color index for subsequent plotting. The default color
+index is 1.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): color index; in range defined by OPCODE = 2.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode16">OPCODE = 16, Flush buffer</a></h3>
+
+<p>If the handler is buffering output to an interactive device, it
+should flush its buffers to ensure that the displayed image is up
+to date. Hardcopy devices can ignore this opcode.</p>
+
+<hr>
+<h3><a name="opcode17">OPCODE = 17, Read cursor</a></h3>
+
+<p>This function is not used if OPCODE = 4 indicates that the
+device has no cursor.</p>
+
+<p>The handler should make the cursor visible at position <i>
+(x,y)</i>, allow the user to move the cursor, and wait for a key
+stroke. It should then return the new cursor <i>(x,y)</i> position
+and the character (key stroke) typed. (If it is not possible to
+make the cursor visible at a particular position, the handler may
+ignore the requested <i>(x,y)</i> coordinates.) On a device with a
+mouse or similar device, clicking mouse-button 1 should return
+character `A', mouse-button 2 should return `D', and mouse-button 3
+should return `X'.</p>
+
+<p>If the hardware permits, the handler should interpret the
+&ldquo;mode&rdquo; as specified in the description of routine <code>
+PGBAND</code>. The exact appearance of the dynamic &ldquo;rubber band&rdquo;
+lines may be hardware specific; if possible, they should be drawn
+with the current color index, but they must not erase previously
+drawn graphics. Handlers that cannot draw the &ldquo;rubber band&rdquo; lines
+should treat all modes as mode = 0.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): initial <i>x</i> position of cursor.</li>
+
+<li>RBUF(2): initial <i>y</i> position of cursor.</li>
+
+<li>RBUF(3): <i>x</i> position of reference point.</li>
+
+<li>RBUF(4): <i>y</i> position of reference point.</li>
+
+<li>RBUF(5): mode = 0 (no feedback), 1 (rubber band), 2 (rubber
+rectangle), 3 (vertical range), 4 (horizontal range). 5 (horizontal
+line), 6 (vertical line), 7 (cross-hair).</li>
+</ul>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>RBUF(1): <i>x</i> position of cursor.</li>
+
+<li>RBUF(2): <i>y</i> position of cursor.</li>
+
+<li>CHR(1:1): character typed by user.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode18">OPCODE = 18, Erase alpha screen</a></h3>
+
+<p>If the graphics device is a terminal that displays both graphics
+and text on the same screen, clear the text screen, leaving
+graphics unchanged. All other devices should ignore this
+opcode.</p>
+
+<hr>
+<h3><a name="opcode19">OPCODE = 19, Set line style</a></h3>
+
+<p>This opcode is not used if OPCODE = 4 indicates that the device
+does not support hardware dashing; PGPLOT will use
+software-generated dashed lines.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): requested line style (integer 1&ndash;5).</li>
+</ul>
+
+<hr>
+<h3><a name="opcode20">OPCODE = 20, Polygon fill</a></h3>
+
+<p>This function is not used if OPCODE = 4 indicates that the
+device does not support hardware polygon fill. The polygon may be
+arbitrarily complex (concave or re-entrant); if the hardware cannot
+cope with this, the handler should set the OPCODE = 4 response to
+disable hardware fill. If hardware fill is enabled, the handler
+should respond to this function by filling the polygon with the
+current color index. To draw an <i>N</i>-sided polygon, PGPLOT uses
+this opcode <i>N+1</i> times.</p>
+
+<p><b>Parameters passed to handler on first call:</b></p>
+
+<ul>
+<li>RBUF(1): number of points <i>N</i> in polygon.</li>
+</ul>
+
+<p><b>Parameters passed to handler on next <i>N</i> calls:</b></p>
+
+<ul>
+<li>RBUF(1): <i>x</i> value.</li>
+
+<li>RBUF(2): <i>y</i> value.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode21">OPCODE = 21, Set color
+representation</a></h3>
+
+<p>Assign the specified <i>(R,G,B)</i> color, or the best available
+approximation, to the specified color index. If colors cannot be
+changed dynamically, ignore the request.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): color index (integer, in range defined by OPCODE =
+2).</li>
+
+<li>RBUF(2): red component (0.0&ndash;1.0).</li>
+
+<li>RBUF(3): green component (0.0&ndash;1.0).</li>
+
+<li>RBUF(4): blue component (0.0&ndash;1.0).</li>
+</ul>
+
+<hr>
+<h3><a name="opcode22">OPCODE = 22, Set line width</a></h3>
+
+<p>This function is not used if OPCODE = 4 indicates that the
+device does not support hardware thick lines. Subsequent lines and
+dots should be drawn with the requested width, or the closest
+available approximation. The units of line-width are 0.005 inches.
+A requested line-width of zero should give the narrowest line
+available on the device (&ldquo;hair line&rdquo;).</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): requested line width, in units of 0.005 inch.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode23">OPCODE = 23, Escape function</a></h3>
+
+<p>This function allows an arbitrary character string to be sent to
+the device handler. The interpretation is up to the handler;
+usually, the string will be sent directly to the device or ignored.
+Use of this function should be avoided.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>CHR(:LCHR): character string.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode24">OPCODE = 24, Rectangle fill</a></h3>
+
+<p>This function is not used if OPCODE = 4 indicates that the
+device does not support hardware rectangle fill.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1), RBUF(2): <i>x,y</i> coordinates of lower left corner
+of rectangle.</li>
+
+<li>RBUF(3), RBUF(4): <i>x,y</i> coordinates of upper right corner
+of rectangle.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode25">OPCODE = 25, Set fill pattern</a></h3>
+
+<p>This function is not yet implemented.</p>
+
+<hr>
+<h3><a name="opcode26">OPCODE = 26, Line of pixels <i>or</i>
+Image</a></h3>
+
+<p>This operation is used for gray-scale and color imaging (e.g.,
+routine PGGRAY). It is used in two different ways, depending
+whether OPCODE=4 reports CHR(7:7) = 'P' or 'Q'. <b>Case P</b> This
+function is used to write a horizontal line of pixels on the device
+screen with specified color indices; it should be more efficient to
+do this with one device handler call rather than separate calls for
+each pixel. If the device handler implements this operation, it is
+important that the device coordinates should be true pixel
+numbers.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1), RBUF(2): <i>x,y</i> coordinates of the first pixel to
+be written. These should be integer pixel numbers in the device
+coordinate system (passed as REAL numbers).</li>
+
+<li>RBUF(3),...RBUF(NBUF): color indices for <i>n</i> pixels to be
+filled in, starting at <i>(x,y)</i> and ending at <i>(x+n-1,y)</i>.
+The values should be valid integer color indices for the device
+(passed as REAL numbers). The number of pixels is specified by the
+argument NBUF: <i>n</i> = <code>NBUF - 2</code>.</li>
+</ul>
+
+<b>Case Q</b> This case is used for devices like PostScript where
+PGPLOT cannot address individual device pixels; the handler, or the
+device, must map the image array onto hardware pixels, taking care
+of clipping. In this case, the first call specifies the parameters
+of the image, and subsequent calls pass color indices of image
+pixels, and a final call indicates the end of the image. 
+
+<p><b>Parameters passed to handler on first call:</b></p>
+
+<ul>
+<li>RBUF(1): 0.0 (indicates start of image).</li>
+
+<li>RBUF(2,3): dimension of the image (image pixels in <i>x</i> and
+<i>y</i>).</li>
+
+<li>RBUF(4),...RBUF(7): the current clipping rectangle, in device
+coordinates.</li>
+
+<li>RBUF(8),...RBUF(13): a matrix used to transform image
+coordinates to device coordinates.</li>
+</ul>
+
+<p><b>Parameters passed to handler on first call:</b></p>
+
+<ul>
+<li>RBUF(1): number <i>n</i> of pixels in this call (&gt; 0).</li>
+
+<li>RBUF(2),...RBUF(<i>n+1</i>): color indices for <i>n</i>
+pixels.</li>
+</ul>
+
+<p><b>Parameters passed to handler on last call:</b></p>
+
+<ul>
+<li>RBUF(1): -1.0.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode27">OPCODE = 27, Scaling information</a></h3>
+
+<p>This function is only used if OPCODE = 4 indicates a cursor of
+type X. It is used to tell the device handler what the user's
+(world) coordinate system is. The handler may ignore the
+information, or it may use it to generate a read-out of the cursor
+position in the world coordinate system.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1)...RBUF(4): should be interpreted as follows: <i>
+(xd,yd)</i> are device coordinates, as used by the handler, <i>
+(xw,yw)</i> are user's world coordinates: xw = [xd -
+RBUF(1)]/RBUF(2), yw = [yd - RBUF(3)]/RBUF(4). The device handler
+may (but is not required to) display the current cursor location,
+in world coordinates. The display can be continuous or only while
+the PGPLOT cursor is active (during execution of opcode 17). Until
+opcode 27 is received, the handler should assume that <i>
+(xw,yw)=(xd,yd)</i>.</li>
+</ul>
+
+<hr>
+<h3><a name="opcode28">OPCODE = 28, Draw marker</a></h3>
+
+<p>This function is only used if OPCODE = 4 indicates that the
+device handler can draw graph markers. If it is to be used, the
+device handler (or hardware) must know how to draw each of the
+markers numbered 0 to 31.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>RBUF(1): the number of the marker symbol to be drawn (integer,
+0&ndash;31).</li>
+
+<li>RBUF(2), RBUF(3): the <i>x,y</i> coordinates of the center of
+the marker (device coordinates).</li>
+
+<li>RBUF(4): scale factor (number of device units per unit of
+&ldquo;marker coordinate space&rdquo;). The shapes of the marker symbols are
+defined in a coordinate system in which the radius of typical
+symbols is 10 units or less; for more information, see the Hershey
+definitions of the markers (Appendix B).</li>
+</ul>
+
+<hr>
+<h3><a name="opcode29">OPCODE = 29, Query color
+representation</a></h3>
+
+<p>This function ay be called at any time after open workstation
+(9) and before close workstation (10). It will not be called if the
+handler does not report itself as having this capability. The
+handler should attempt to return the actual color representation in
+use on the device, if it is possible that this is different from
+the values requested. Otherwise it should return the values
+requested in the last call with opcode 21 (set color
+representation) for this color index. (Re-calling opcode 21 with
+the values returned by opcode 29 should not change the actual color
+representation!) If the handler does not have this capability,
+<code>PGQCR</code> will return R=G=B=0.0 for color index 0 and
+R=G=B=1.0 for all other color indices.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>NBUF = 1</li>
+
+<li>RBUF(1) = color index to query (integer, passed as real), in
+the device range reported by opcode 2.</li>
+</ul>
+
+<p><b>Parameters returned by handler:</b></p>
+
+<ul>
+<li>NBUF = 4</li>
+
+<li>RBUF(1) = unchanged from input,</li>
+
+<li>RBUF(2) = red component [real, 0.0&ndash;1.0],</li>
+
+<li>RBUF(3) = green component [real, 0.0&ndash;1.0],</li>
+
+<li>RBUF(4) = blue component [real, 0.0&ndash;1.0].</li>
+</ul>
+
+<hr>
+<h3><a name="opcode30">OPCODE = 30, Scroll rectangle</a></h3>
+
+<p>This function is not used if OPCODE = 4 indicates that the
+device does not support scrolling. If it is to be used, then the
+device handler should be capable of scrolling a rectangular region
+of the display-surface, both horizontally and vertically, by an
+integral number of device coordinates. A horizontal scroll of
+positive <i>dx</i> device pixels is defined to mean that all but
+the rightmost <i>dx</i> pixels of the rectangle should be copied
+<i>dx</i> pixels to the right of their original positions. The
+vacated <i>dx</i> pixels at the left edge of the rectangle are to
+be filled with the background color. Vertical scrolling is defined
+similarly.</p>
+
+<p><b>Parameters passed to handler:</b></p>
+
+<ul>
+<li>NBUF = 6</li>
+
+<li>RBUF(1), RBUF(2): <i>x,y</i> coordinates of lower left corner
+of rectangle.</li>
+
+<li>RBUF(3), RBUF(4): <i>x,y</i> coordinates of upper right corner
+of rectangle.</li>
+
+<li>RBUF(5), RBUF(6): <i>dx,dy</i> coordinate offsets of the
+scrolled rectangle.</li>
+</ul>
+
+<p>All of these parameters are intended to be integral, and should
+be rounded to the nearest integer. Note that RBUF(5) and RBUF(6)
+are allowed to exceed the lengths of the corresponding sides of the
+scrolling region. In such cases the region should be completely
+filled with the background color.</p>
+
+<div class="footer">Tim Pearson, California Institute of
+Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995-1996 California Institute of Technology</div>
+</body>
+</html>
+

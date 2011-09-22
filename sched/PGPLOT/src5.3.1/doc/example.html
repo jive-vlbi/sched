@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>PGPLOT: A Simple Example</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+
+
+<div class="header">
+<a href="../index.html">PGPLOT</a>&nbsp;&gt; 
+<a href="doc-index.html">Documentation</a>&nbsp;&gt; 
+<a href="user-manual.html">User's Manual</a>&nbsp;&gt; 
+A Simple Example
+</div>
+
+<h1>A Simple Example</h1>
+
+
+<p>This chapter introduces the basic subroutines needed to create a graph using PGPLOT, by way of a concrete example. It does not describe all the capabilities of PGPLOT; these are presented in later chapters.</p>
+
+<p>A simple graph is composed of several elements: a <i>box</i> or <i>axes</i> delineating the graph and indicating the scale, <i>labels</i> if required, and one or more <i>points</i> or <i>lines</i>. To draw a graph you need to call at least four of the PGPLOT functions and subroutines:</p>
+
+<ol>
+<li><a href="subroutines.html#PGOPEN">PGOPEN</a>, to start up PGPLOT and specify the device you want to plot on;</li>
+
+<li><a href="subroutines.html#PGENV">PGENV</a>, to define the range and scale of the graph, and draw labels, axes etc;</li>
+
+<li>one or more calls to <a href="subroutines.html#PGPT">PGPT</a> or <a href="subroutines.html#PGLINE">PGLINE</a> or both, or other drawing routines, to draw points or lines.</li>
+
+<li><a href="subroutines.html#PGCLOS">PGCLOS</a> to close the plot.</li>
+</ol>
+
+<p>To draw more than one graph on the same device, repeat steps (2) and (3). It is only necessary to call PGOPEN and PGCLOS once each, unless you want to plot on more than one device.</p>
+
+<p>This chapter presents a very simple example program to demonstrate the above four steps. The example program is presented in both Fortran and C.</p>
+
+<h2>Example Program</h2>
+
+<p>A typical application of PGPLOT is to draw a set of measured data points and a theoretical curve for comparison. This chapter describes a simple program for drawing such a plot; in this case there are five data points and the theoretical curve is <i>y = x</i>&sup2;.</p>
+
+<p>Here is the complete <a href="simple.f">Fortran code</a> for the program:</p>
+
+<pre class="f">      PROGRAM SIMPLE
+      INTEGER I, ID, PGOPEN
+      REAL XR(100), YR(100)
+      REAL XS(5), YS(5)
+      DATA XS/1.,2.,3.,4.,5./
+      DATA YS/1.,4.,9.,16.,25./
+
+      ID = PGOPEN('?')
+      IF (ID.LT.1) STOP
+      CALL PGENV(0.,10.,0.,20.,0,1)
+      CALL PGLAB('(x)', '(y)', 'A Simple Graph')
+      CALL PGPT(5,XS,YS,9)
+      DO 10 I=1,60
+          XR(I) = 0.1*I
+          YR(I) = XR(I)**2
+   10 CONTINUE
+      CALL PGLINE(60,XR,YR)
+      CALL PGCLOS
+      END
+</pre>
+
+<p>And here is the complete <a href="simple.c">C code</a> for the program; note that PGPLOT programs should include the header file <a href="cpgplot.h"><code>cpgplot.h</code></a>:</p>
+
+<pre class="c">#include "cpgplot.h"
+
+int main(void)
+{
+  int i;
+  float xs[5] = {1., 2., 3., 4., 5.};
+  float ys[5] = {1., 4., 9., 16., 25.};
+  float x, xr[100], yr[100];
+
+  if (cpgopen("?") &lt; 1)
+    return 1;
+  cpgenv(0., 10., 0., 20., 0, 1);
+  cpglab("(x)", "(y)", "A Simple Graph");
+  cpgpt(5, xs, ys, 9);
+  for (i=1; i&lt;=60; i++) {
+    x = 0.1*i;
+    xr[i-1] = x;
+    yr[i-1] = x*x;
+  }
+  cpgline(60, xr, yr);
+  cpgclos();
+  return 0;
+}
+</pre>
+
+<p>The following sections of this chapter describe how the program works, and the resulting plot is shown in Figure 2.1.</p>
+
+<div align="CENTER"><img src="fig21.gif" alt="Output of example program" width="480" height="320">
+<p><b>Figure 2.1:</b> Output of Example Program</p>
+</div>
+
+<h3>Data Initialization</h3>
+
+<p>We store the <i>x</i> and <i>y</i> coordinates of the five data points in arrays <code>XS</code> and <code>YS</code>. For convenience, this values are defined in the program, but a more realistic program might read them from a file. Arrays <code>XR</code> and <code>YR</code> will be used later in the program for the theoretical curve.</p>
+
+<pre class="f">      REAL XR(100), YR(100)
+      REAL XS(5), YS(5)
+      DATA XS/1.,2.,3.,4.,5./
+      DATA YS/1.,4.,9.,16.,25./
+</pre>
+
+<pre class="c">  float xs[5] = {1., 2., 3., 4., 5.};
+  float ys[5] = {1., 4., 9., 16., 25.};
+  float xr[100], yr[100];
+</pre>
+
+<font size="-1">Note for Fortran users: all floating-point scalars and arrays used with PGPLOT should be declared <code>REAL</code>, not <code>DOUBLE PRECISION</code>.</font> 
+
+<p><font size="-1">Note for C users: arrays used in PGPLOT must be <code>float</code>, not <code>double</code>; scalar arguments should also be <code>float</code>, but <code>double</code> arguments will be converted following the function prototypes in <code>cpgplot.h</code>.</font></p>
+
+<h3>Starting PGPLOT</h3>
+
+<p>The first thing the program must do is to start up PGPLOT and select the graphics device for output:</p>
+
+<pre class="f">      INTEGER PGOPEN
+      ID = PGOPEN('?')
+      IF (ID.LT.1) STOP
+</pre>
+
+<pre class="c">  if (cpgopen("?") &lt; 1)
+    return 1;
+</pre>
+
+<p><a href="subroutines.html#PGOPEN">PGOPEN</a> has one argument: a character string which gives a ``device specification'' for the interactive graphics device or disk file for hardcopy graphics. This program makes use of a special shorthand feature of PGPLOT, however: if the argument is set to <code>'?'</code>, the program will ask the user to supply the device specification at run-time. An explicit device specification might look like</p>
+
+<pre class="f">      ID = PGOPEN('pgfile.ps/PS')
+</pre>
+
+<p>The value returned by PGOPEN (<code>ID</code>) is an identifier that can be used to distinguish this PGPLOT device from other open devices. It is important to test the returned value: a value less than 1 indicates an error, such as an invalid device specification. (Fortran users: note that PGOPEN is a Fortran <i>function</i>, not a subroutine, and must be declared <code>INTEGER</code>.)</p>
+
+<h3>Defining Plot Scales and Drawing Axes</h3>
+
+<p>Subroutine <a href="subroutines.html#PGENV">PGENV</a> starts a new picture and defines the range of variables and the scale of the plot. PGENV also draws and labels the enclosing box and the axes if requested. In this case, the <i>x</i>-axis of the plot will run from 0.0 to 10.0 and the <i>y</i>-axis will run from 0.0 to 20.0.</p>
+
+<pre class="f">      CALL PGENV(0.,10.,0.,20.,0,1)
+</pre>
+
+<pre class="c">  cpgenv(0., 10., 0., 20., 0, 1);
+</pre>
+
+<p>PGENV has six arguments:</p>
+
+<ul>
+<li>the left and right limits for the <i>x</i> (horizontal) axis (REAL/float numbers, not integers).</li>
+
+<li>the bottom and top limits for the <i>y</i> (vertical) axis (also REAL/float numbers).</li>
+
+<li>An integer argument: if this is 1, the scales of the <i>x</i>-axis and <i>y</i>-axis (in units per inch) will be equal; otherwise the axes will be scaled independently. In this case we have not requested equal scales.</li>
+
+<li>Another integer argument, that controls whether an enclosing box, tick-marks, numeric labels, and/or a grid will be put on the graph. The recommended value is 0. Some of the allowed values are: -2: no annotation; -1: draw box only; 0: draw box, and label it with coordinate values around the edge;1: in addition to the box and labels, draw the two axes (lines <i>x=0</i>, <i>y=0</i>) with tick marks; 2: in addition to the box, labels, and axes, draw a grid at major increments of the <i>x</i> and <i>y</i> coordinates.</li>
+</ul>
+
+<h3>Labeling the Axes</h3>
+
+<p>Subroutine <a href="subroutines.html#PGLAB">PGLAB</a> may (optionally) be called after PGENV to write identifying labels on the <i>x</i> and <i>y</i> axes, and at the top of the picture:</p>
+
+<pre class="f">      CALL PGLAB('(x)', '(y)', 'A Simple Graph')
+</pre>
+
+<pre class="c">  cpglab("(x)", "(y)", "A Simple Graph");
+</pre>
+
+<p>All three arguments are character variables or constants; any of them can be blank (<code>' '</code>).</p>
+
+<ul>
+<li>A label for the <i>x</i>-axis (bottom of picture).</li>
+
+<li>A label for the <i>y</i>-axis (left-hand edge).</li>
+
+<li>A label for the plot (top of picture).</li>
+</ul>
+
+<h3>Drawing Graph Markers</h3>
+
+<p>Subroutine <a href="subroutines.html#PGPT">PGPT</a> draws <i>graph markers</i> at one or more points on the graph. Here we use it to mark the five data points:</p>
+
+<pre class="f">      CALL PGPT(5,XS,YS,9)
+</pre>
+
+<pre class="c">  cpglab("(x)", "(y)", "A Simple Graph");
+</pre>
+
+<p>If any of the specified points fall outside the window defined in the call to PGENV, they will not be plotted. The arguments to PGPT are:</p>
+
+<ul>
+<li>The number of points to be marked (integer).</li>
+
+<li>The <i>x</i> and <i>y</i> coordinates of the points (real arrays).</li>
+
+<li>The number of the symbol to be used to mark the points. In this example, we use symbol number 9 which is a circle with a central dot. The available symbols are shown in <a href="primitives.html">Chapter 4</a>.</li>
+</ul>
+
+<h3>Drawing Lines</h3>
+
+<p>The following code draws the ``theoretical curve'' through the data points:</p>
+
+<pre class="f">      DO 10 I=1,60
+          XR(I) = 0.1*I
+          YR(I) = XR(I)**2
+   10 CONTINUE
+      CALL PGLINE(60,XR,YR)
+</pre>
+
+<pre class="c">  for (i=1; i&lt;=60; i++) {
+    x = 0.1*i;
+    xr[i-1] = x;
+    yr[i-1] = x*x;
+  }
+</pre>
+
+<p>We compute the <i>x</i> and <i>y</i> coordinates at 60 points on the theoretical curve, and use subroutine <a href="subroutines.html#PGLINE">PGLINE</a> to draw a curve through them. PGLINE joins up the points with straight-line segments, so it is necessary to compute coordinates at fairly close intervals in order to get a smooth curve. Any lines which cross the boundary of the window defined in PGENV are ``clipped'' at the boundary, and lines which lie outside the boundary are not drawn. The arguments of PGLINE are like those of PGPT:</p>
+
+<ul>
+<li>The number of points defining the line (integer).</li>
+
+<li>The <i>x</i> and <i>y</i> coordinates of the points (real arrays).</li>
+</ul>
+
+<h3>Ending the Plot</h3>
+
+<p>Subroutine <a href="subroutines.html#PGCLOS">PGCLOS</a> must be called to complete the graph properly, otherwise some pending output may not get sent to the device:</p>
+
+<pre class="f">CALL PGCLOS
+</pre>
+
+<pre class="c">pgclos();
+</pre>
+
+<h2>Compiling and Running the Program</h2>
+
+<p>The commands required to compile, link, and run a PGPLOT program vary greatly from system to system, and are described in <a href="compiling.html">the next chapter</a>. For example, under UNIX, the commands are something like the following:</p>
+
+<dl>
+<dt>Fortran</dt>
+
+<dd>
+<code class="f">f77 -o simple simple.f -L/usr/local/pgplot -lpgplot
+</code>
+</dd>
+
+<dt>C</dt>
+
+<dd>
+<code class="c">cc -c -I/usr/local/pgplot simple.c<br>
+f77 -o simple simple.o -L/usr/local/pgplot -lcpgplot -lpgplot
+</code>
+</dd>
+</dl>
+
+<p>When you run the program, it will ask you to supply the graphics
+device specification. Type in any allowed device specification, or
+type a question-mark (<code>?</code>) to get a list of the available
+device types. For example, if you are using an X-Window display, type
+<code>/XSERVE</code>: the graph will appear in a window on the
+workstation screen.</p>
+
+<p>If you want a hard copy, you can run the program again, and specify
+a different device type, e.g., <code>simple.ps/PS</code> to make a
+disk file in PostScript format. To obtain the hard copy, print the
+file on a PostScript printer. You may be able to preview the file with
+a program such as GhostView.</p>
+
+<div class="footer">
+Tim Pearson, California Institute of Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</a></i><br>
+ Copyright &copy; 1995-2005 California Institute of Technology
+</div>
+
+</body>
+</html>
+

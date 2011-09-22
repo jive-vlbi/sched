@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT: Contour Maps</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp·astro.caltech.edu">
+</HEAD>
+<BODY bgcolor=WHITE>
+
+<DIV class=NOPRINT>
+<FONT FACE="sans-serif, Arial, Helvetica" SIZE="2" COLOR="#0033CC">You
+are here:&nbsp;
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="user-manual.html">User's Manual</A>&nbsp;&gt;
+Contour Maps</FONT>
+</DIV>
+
+<H1>Contour Maps</H1>
+
+In a contour map of <I>f</I>(<I>x,y</I>), the world-coordinates are
+<I>x</I> and <I>y</I> and the contours are lines of constant <I>f</I>.
+The PGPLOT contouring routines (<CODE>PGCONT</CODE> and
+<CODE>PGCONS</CODE>) require the input data to be stored in a
+two-dimensional Fortran array <CODE>F</CODE>, with element
+<CODE>F(I,J)</CODE> containing the value of the function $f(x,y)$ for
+a point $(x_i, y_j)$.  Furthermore, the function must be sampled on a
+regular grid: the $(x,y)$ coordinates corresponding to
+<CODE>(I,J)</CODE> must be related to <CODE>I</CODE> and
+<CODE>J</CODE> by:
+$$\eqalign{x = a + b<CODE>I</CODE> + c<CODE>J</CODE>,\cr
+           y = d + e<CODE>I</CODE> + f<CODE>J</CODE>.\cr}
+$$
+The constants $a, b, c, d, e, f$ are supplied to <CODE>PGCONT</CODE> in a six-element
+Fortran array.  The other input required is an array containing the
+contour values, i.e., the constant values of $f$ corresponding to each 
+contour to be drawn. In the following example, we assume that values 
+have been assigned to the elements of array <CODE>F</CODE>. We first find the 
+maximum and minimum values of <CODE>F</CODE>, and choose 10 contour levels evenly
+spaced between the maximum and minimum:
+<PRE>
+      REAL F(50,50), ALEV(10), TR(6)
+      ...
+      FMIN = F(1,1)
+      FMAX = F(1,1)
+      DO 300 I=1,50
+        DO 200 J=1,50
+          FMIN = MIN(F(I,J),FMIN)
+          FMAX = MAX(F(I,J),FMAX)
+  200   CONTINUE
+  300 CONTINUE
+      DO 400 I=1,10
+        ALEV(I) = FMIN + (I-1)*(FMAX-FMIN)/9.0
+  400 CONTINUE
+</PRE>
+Next, we choose a window and viewport, and set up an array <CODE>TR</CODE>
+containing the 6 constants in the transformation between array indices
+and world coordinates. In this case, the transformation is simple,
+as we want $x = <CODE>I</CODE>$, $y = <CODE>J</CODE>$:
+<PRE>
+      CALL PGENV(0.,50.,5.,45.,0,2)
+      TR(1) = 0.0
+      TR(2) = 1.0
+      TR(3) = 0.0
+      TR(4) = 0.0
+      TR(5) = 0.0
+      TR(6) = 1.0
+</PRE>
+Finally, we call <CODE>PGCONT</CODE>; actually, we call it twice, to draw the first
+five contours in color index 2 (red) and the remaining 5 in color index 3 
+(green):
+<PRE> 
+      CALL PGSCI(2)
+      CALL PGCONT(F,50,50,1,50,1,50,ALEV,5,TR)
+      CALL PGSCI(3)
+      CALL PGCONT(F,50,50,1,50,1,50,ALEV(6),5,TR)
+</PRE>
+Normally <CODE>PGCONT</CODE> is preferable to <CODE>PGCONS</CODE>.  See the description in
+Appendix A for suggestions as to when <CODE>PGCONS</CODE> should be used.</P>
+
+
+<DIV class=NOPRINT>
+<HR>
+Next: <A HREF="chapter6b.html">Images</A>
+<HR>
+<A HREF="../index.html">PGPLOT</A><BR>
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp·astro.caltech.edu">tjp·astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY></HTML>
+
+
+

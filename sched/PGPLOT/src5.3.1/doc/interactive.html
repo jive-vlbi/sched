@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT: Interactive Graphics</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp·astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</HEAD>
+
+<DIV class="header">
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="user-manual.html">User's Manual</A>&nbsp;&gt;
+Interactive Graphics
+</DIV>
+
+<H1>Interactive Graphics</H1>
+
+<H2>Introduction</H2>
+
+<p>The previous chapters have described how to produce a <I>static</I>
+graphical image: if the same program is run twice with the same input
+parameters, the same image will result.  An <I>interactive</I> program
+allows the user to control the behavior of the program with a
+graphical input device.  PGPLOT supports a limited interactive
+capability on devices with a cursor for graphical input (e.g., Xwindow
+workstations, some Tektronix terminals and emulators). The
+capabilities are necessarily limited by the aim to keep PGPLOT
+device-independent.</p>
+
+<H2>The Cursor</H2>
+
+<p>Some of the graphics devices supported by PGPLOT have a <I>graphics
+cursor</I>.  This appears on the view surface as a plus sign, a
+cross-hair, or a diamond, and can be moved around the view surface
+with a mouse, joy-stick, or trackball attached to the graphics
+device. If the hardware does not provide this mechanism, PGPLOT allows
+the user to move the cursor using the arrow keys on his terminal. See
+the <i>PGPLOT Device Manual</i> for instructions for using the cursor
+on a specific device.</p>
+
+<H2>Using the Cursor</H2>
+
+<p>The basic routines for cursor input are PGCURS and PGBAND. Routine <A
+HREF="subroutines.html#PGCURS">PGCURS</A> enables the
+cursor on the selected device, positions it at a specified location
+within the viewport, and allows the user to move it.  When the user
+has positioned the cursor, he types a key on his terminal;
+PGCURS returns the cursor position (in world coordinates)
+and the character that was typed. On some devices the user can also
+click (depress and release) a mouse button. Buttons 1, 2, 3 have the
+same effect as typing A, D, or X. Routine <A
+HREF="subroutines.html#PGBAND">PGBAND</A> is similar to
+PGCURS but has additional options that request that a
+visible line (``rubber band'') or rectangle join the cursor position
+to a fixed point and track it as it moves. These options are not
+available on every device that supports a cursor.</p>
+
+<p>In addition, PGPLOT provides three higher-level routines for cursor
+input: PGOLIN, PGNCUR, and
+PGLCUR.  These three routines require that the device has
+erase capability.</P>
+
+<p><A HREF="subroutines.html#PGOLIN">PGOLIN</A> allows the user to
+specify a set of points within the viewport, with the capability of
+correcting mistakes. Interactive commands (single characters [A, D, or
+X] typed on the keyboard) allow the user to <I>add</I> a point at the
+current cursor position, <I>delete</I> the last-entered point, or
+<I>exit</I> from the subroutine. The world-coordinates of the entered
+points are returned to the calling program. The following program
+fragments illustrate the use of PGOLIN; the user supplies <i>NPT</i> (up to
+50) points with world-coordinates <i>X</i> and <i>Y</i>, and the program then
+shades the polygon defined by these points by calling PGPOLY:</p>
+
+<PRE class="f">    INTEGER NPT
+    REAL X(50), Y(50)
+    ...
+    WRITE (6,*) 'Use the cursor to draw a polygon'
+    WRITE (6,*) 'Type A to add point, D to delete, X to exit'
+    NPT = 0
+    CALL PGOLIN (50, NPT, X, Y, 0)
+    IF (NPT.GE.3) CALL PGPOLY (NPT, X, Y)
+</PRE>
+
+<PRE class="c">    int npt;
+    float x(50), y(50);
+    ...
+    puts("Use the cursor to draw a polygon\n"
+         "Type A to add point, D to delete, X to exit\n");
+    npt = 0;
+    cpgolin(50, &amp;npt, x, y, 0)
+    if (npt &gt;= 3)
+      cpgpoly(npt, x, y);
+</PRE>
+
+<p><A HREF="subroutines.html#PGNCUR">PGNCUR</A> is similar to
+PGOLIN, but the points are sorted into increasing order
+of <I>x</I> before being returned to the calling program. In addition,
+the <I>delete</I> command deletes the point nearest to the cursor,
+rather than the last-entered point. It can be used, for example, to
+allow the user to supply a set of points to represent the continuum
+level on a spectrum.</P>
+
+<p><A HREF="subroutines.html#PGLCUR">PGLCUR</A> is similar to
+PGOLIN but instead of using a graph marker to mark each
+entered point it draws a polyline through them.</p>
+
+<H2>Buffering</H2>
+
+<p>By default, PGPLOT ensures that the image seen on the view surface is
+up to date at all times; that is, each PGPLOT subroutine updates the
+image before returning control to the calling program. To improve
+efficiency, PGPLOT can save instructions for controlling the graphics
+device in a buffer, and only send them to the device when the buffer
+is filled up.  This means that at any given moment, the image
+displayed on the screen may not be completely up to date. This can be
+a problem in an interactive program, where, for example, the user has
+to tell the program what to do next based on his interpretation of the
+current display. Three PGPLOT routines (PGBBUF,
+PGEBUF, and PGUPDT) are provided for
+controlling the buffering of output. All three routines have no
+arguments.</P>
+
+<p>The routine <A HREF="subroutines.html#PGBBUF">PGBBUF</A>
+causes PGPLOT to begin saving graphical output in a buffer. The output
+is saved until (1) a matching PGEBUF call is made, or (2)
+the buffer fills up, or (3) the buffer is emptied by a call to
+PGUPDT, or (4) PGEND is called.  The routine
+<A HREF="subroutines.html#PGEBUF">PGEBUF</A> stops
+buffering and causes the buffered commands to be sent to the output
+device. Calls to PGBBUF and PGEBUF should
+always be paired. PGBBUF increments an internal counter,
+while PGEBUF decrements this counter and flushes the
+buffer to the output device when the counter drops to zero.  This
+allows a subroutine to turn on and turn off buffering without
+disturbing any buffering that may have been established by the calling
+program.</P>
+
+<p>Routine <A HREF="subroutines.html#PGUPDT">PGUPDT</A>
+empties the buffer created by PGBBUF, but it does not
+alter the internal counter. The routine should be called when it is
+essential that the display be completely up-to-date (before
+interaction with the user, for example) but it is not known if output
+is being buffered.</P>
+
+<p>Usually output is not buffered; this is the default state established
+by PGOPEN (or PGBEG). The default behavior can be changed, however,
+by defining an <A HREF="compiling.html#ENV">environment variable</A>
+PGPLOT_BUFFER. If this variable is defined, with any
+value, PGOPEN will start buffering output (by calling
+PGBBUF).</P>
+
+<p>The following examples show how routine PGLAB might be implemented
+in terms of routine PGMTXT:</p>
+
+<PRE class="f">    SUBROUTINE PGLAB (XLBL, YLBL, TOPLBL)
+    CHARACTER*(*) XLBL, YLBL, TOPLBL
+    CALL PGBBUF
+    CALL PGMTXT('T', 2.0, 0.5, 0.5, TOPLBL)
+    CALL PGMTXT('B', 3.2, 0.5, 0.5, XLBL)
+    CALL PGMTXT('L', 2.2, 0.5, 0.5, YLBL)
+    CALL PGEBUF
+    END
+</PRE>
+
+<PRE class="c">  void cpglab(char *xlbl, char *ylbl, char *toplbl)
+  {
+    cpgbbuf();
+    cpgmtxt("T", 2.0, 0.5, 0.5, toplbl);
+    cpgmtxt("B", 3.2, 0.5, 0.5, xlbl);
+    cpgmtxt("L", 2.2, 0.5, 0.5, ylbl);
+    cpgebuf();
+  }
+</PRE>
+
+<p>The calls to PGBBUF and PGEBUF ensure that the output generated by the
+three calls to PGMTXT is buffered (i.e., sent to the output device as
+a single command instead of three separate ones). If buffering is
+already enabled by the program which calls PGLAB, the calls to PGBBUF
+and PGEBUF have no effect.</P>
+
+<p>On some devices (e.g., X-Window workstations) use of buffering can
+greatly speed up the execution of a program.</P>
+
+<H2>Animation</H2>
+
+<p>An <i>animated</i> display is one that changes with time, or in
+response to external events. Obviously, this is only possible on an
+interactive device. In order to create a smooth animation, without
+screen blanks between updates, it is necessary to do the following:</p>
+<OL>
+<LI>Do not call PGPAGE (or PGENV, which calls PGPAGE) between frames.
+<LI>Enclose all the calls required to generate each frame between
+    PGBBUF and PGEBUF calls, so that the updates are sent to the device as 
+    a single unit.
+<LI>Either: erase the entire previous frame by calling PGERAS before
+    drawing the next frame; or: erase the parts of the frame that
+    have changed by overwriting with the background color (color
+    index 0).
+</OL>
+
+<p>It is usually easier to erase the entire frame and redraw it, and on a
+fast device this will give satisfactory results. Erasing selected
+parts of the display can be faster, but it may be difficult to avoid
+erasing parts that should remain visible (e.g., if the text to be erased
+lies on top of an image).</p>
+
+<p>In outline, an animated program will look like the following:</p>
+
+<PRE class="f">    IF (PGOPEN('/xserv') .LT. 1) STOP
+    CALL PGPAGE
+    ... 
+    DO I=1,NFRAMES
+        ... wait for event ...
+        CALL PGBBUF
+        CALL PGERAS
+        ... draw new frame ...
+	CALL PGEBUF
+    END DO
+    CALL PGCLOS
+</PRE>
+<PRE class="c">    if (cpgopen("/xserv") &lt; 1)
+      return;
+    cpgpage();
+    ... 
+    for (i=0; i &lt; NFRAMES; i++) {
+      ... wait for event ...
+      cpgbbuf();
+      cpgeras();
+      ... draw new frame ...
+      cpgebuf();
+    }
+    cpgclos();
+</PRE>
+
+<div class="footer">Tim Pearson, California Institute of
+Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995-2005 California Institute of Technology</div>
+
+</BODY></HTML>
+

@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT PostScript driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR=WHITE>
+
+<DIV class=NOPRINT>
+<FONT FACE="sans-serif, Arial, Helvetica" SIZE="2" COLOR="#0033CC">You
+are here:&nbsp;
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="device-manual.html">Device Manual</A>&nbsp;&gt;
+PostScript file format</FONT>
+</DIV>
+
+<H2>PGPLOT: PostScript file format</H2>
+
+<P>The PostScript page description language is widely used for desktop
+publishing. PostScript files can be printed on many laser printers and
+photo-typesetters, and they can also be viewed on most workstations
+(e.g., use <code>ghostview</code> on UNIX workstations,
+<code>pageview</code> on Sun workstations,
+<code>view/format=ps/interface=decw</code> on VMS workstations). A
+single-page PGPLOT PostScript file is valid ``encapsulated
+PostScript'' and can be included in another file by way of a
+page-composition program. PGPLOT generates level-1 PostScript which is
+accepted by all PostScript printers.  PostScript is a trademark of
+Adobe Systems Incorporated.</P>
+
+<DL>
+
+<P><DT><B>Device type code</B>
+<DD><UL>
+<LI><CODE>/PS   </CODE> (monochrome landscape mode, long edge of paper horizontal).
+<LI><CODE>/CPS  </CODE> (color landscape mode, long edge of paper horizontal).
+<LI><CODE>/VPS  </CODE> (monochrome portrait mode, short edge of paper horizontal).
+<LI><CODE>/VCPS </CODE> (color portrait mode, short edge of paper horizontal).
+</UL>
+``Color'' PostScript files can be printed on monochrome printers: the
+colors will be rendered as shades of grey. Use the monochrome codes
+(/PS, /VPS) when you know that the file is to be printed only on
+monochrome printers.
+
+<P><DT><B>Default file name</B>
+<DD><code>pgplot.ps</code>
+<BR>
+If a file name of <CODE>-</CODE> is specified (e.g., <CODE>-/PS</CODE>) the
+PostScript file is sent to the standard output stream (stdout in UNIX).
+
+<P><DT><B>Default view surface dimensions</B>
+<DD>
+  10.5 inches horizontal by  7.8 inches vertical (landscape mode);
+   7.8 inches horizontal by 10.5 inches vertical (portrait mode).
+  These dimensions can be changed with environment variables.
+
+<P><DT><B>Resolution</B>
+<DD>
+  The driver uses coordinate increments of 0.001 inch, giving an
+  ``apparent'' resolution of 1000 pixels/inch. The true resolution is
+  device-dependent; e.g., on an Apple LaserWriter it is 300 pixels/inch
+  (in both dimensions).
+
+<P><DT><B>Color capability</B>
+<DD>
+ Color indices 0--255 are supported, and the color representation
+can be changed with routine <CODE>PGSCR</CODE>. With device types /PS
+and /VPS, color index 0 is white (erase or background color), indices
+1--13 are black, 14 is light grey, and 15 is dark grey; while with
+device types /CPS and /VCPS, color index 0 is white (erase or
+background color), index 1 is black, and indices 2--15 have the
+standard PGPLOT color assignments.
+
+<P><DT><B>File format</B>
+<DD>
+The file contains variable length records (maximum 132 characters)
+containing PostScript commands. The commands use only printable ASCII
+characters, and the file can be examined or modified with a text
+editor.
+
+<P><DT><B>Obtaining hardcopy</B>
+<DD>
+Use the operating system print or copy command to send the file to
+a suitable PostScript printer.
+
+<P><DT><B>Environment variables</B>
+<DD>
+
+<DL>
+<DT><CODE>PGPLOT_PS_WIDTH</CODE>  (default  7800)
+<DT><CODE>PGPLOT_PS_HEIGHT</CODE> (default 10500)
+<DT><CODE>PGPLOT_PS_HOFFSET</CODE> (default   350)
+<DT><CODE>PGPLOT_PS_VOFFSET</CODE> (default   250)
+<DD>These variables tell PGPLOT how big an image to produce. The defaults
+are appropriate for 8.5 x 11-inch paper. The maximum dimensions of
+a PGPLOT image are WIDTH by HEIGHT, with the lower left corner offset
+by HOFFSET horizontally and VOFFSET vertically from the lower left
+corner of the paper. The units are milli-inches. The ``top'' of the
+paper is the edge that comes out of the printer first.
+
+<DT><CODE>PGPLOT_IDENT</CODE> <DD>If this variable is defined (with
+any value), the user name, date and time are written in the bottom
+right corner of each page.
+
+<DT><CODE>PGPLOT_PS_BBOX</CODE> <DD>Normally, PGPLOT computes the
+bounding box for the entire plot (the smallest rectangle that includes
+all the graphics) as it creates the PostScript file, and writes this
+information in a %%BoundingBox comment in the file trailer. Some
+programs that read encapsulated PostScript files expect to find the
+%%BoundingBox comment in the file header, not the trailer, and may not
+display the plot correctly. To fix this problem, you may need to move
+the comment from the trailer to the header with a text editor or
+special program.  Alternatively, you can define <CODE>PGPLOT_PS_BBOX =
+MAX</CODE>. This tells PGPLOT to put a %%BoundingBox comment in the
+header of the PostScript file; the bounding box is one which
+encompasses the whole plottable area, not a minimal one, because PGPLOT
+does not know the correct bounding box until it has finished writing
+the file.
+
+<DT><CODE>PGPLOT_PS_DRAW_BBOX</CODE> <DD>If this variable is set, the
+bounding box (the smallest rectangle that includes all the graphics)
+is drawn on each page.
+
+<DT><CODE>PGPLOT_PS_VERBOSE_TEXT</CODE>
+<DD>If this variable is set, the text of each plotted character string is
+included in the PostScript file as a comment before the sequence of
+vectors that represents the string. This makes the file slightly larger, but 
+it can be useful if you want to edit
+the PostScript file.
+<DT><CODE>PGPLOT_PS_EOF</CODE>
+<DD>Normally the output file does not contain special end-of-file
+characters. But if environment variable PGPLOT_PS_EOF is defined
+(with any value) PGPLOT writes a control-D job-separator character at 
+the beginning and at the end of the file. This is appropriate for
+Apple LaserWriters using the serial interface, but it may not be 
+appropriate for other PostScript devices.
+<DT><CODE>PGPLOT_PS_MARKERS</CODE>
+<DD>Specify <CODE>NO</CODE> to suppress use of a PostScript font for
+the graph markers; markers are then emulated by line-drawing. If this
+option is not requested, PGPLOT graph markers are scaled geometrically
+with the character-height attribute and the line-width attribute is
+ignored. This is different from most of the other drivers, where the
+line-width used for markers is set by the line-width attribute rather
+than the character-height attribute. Requesting this option makes the
+PostScript driver behave like the other drivers, but it also makes
+the PostScript files larger.
+</DL>
+
+<P><DT><B>Document Structuring Conventions</B>
+<DD>
+
+The PostScript files conform to Version 3.0 of the Adobe Document
+Structuring Conventions (see ref.3) and to version 3.0 of the
+encapsulated PostScript file (EPSF) format. This should allow the
+files to be read by other programs that accept the EPSF format.  Note,
+though, that multi-page plots are not valid EPSF files. The files do
+not contain a screen preview section. A device-independent screen
+preview can be added to PGPLOT files with the program <b>ps2epsi</b>
+by George Cameron, available with the <A
+HREF="http://www.cs.wisc.edu/~ghost/../index.html">GhostScript</A>
+PostScript interpreter from Aladdin Enterprises.<P>
+
+Note that a valid EPSF file should have a %%BoundingBox comment in the
+header of the file. By default, PGPLOT puts the comment in the trailer
+of the file, where some but not all programs will find it. You may
+need to move this comment into the file header using a text editor or
+special program. See also the discussion of the environment variable
+<CODE>PGPLOT_PS_BBOX</CODE> above.
+
+<P><DT><B>References</B>
+<DD>
+
+<OL>
+<LI>Adobe Systems, Inc.: PostScript Language Reference Manual.
+Addison-Wesley, Reading, Massachusetts, 1985.
+<LI>Adobe Systems, Inc.: PostScript Language Tutorial and Cookbook.
+Addison-Wesley, Reading, Massachusetts, 1985.
+<LI>Adobe Systems, Inc.: PostScript Language Reference Manual, Second 
+Edition. Addison-Wesley, Reading, Massachusetts, 1990.
+</OL>
+
+</DL>
+
+<DIV class=NOPRINT>
+<HR>
+<SMALL>
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</SMALL>
+</DIV>
+
+</BODY>
+</HTML>
+

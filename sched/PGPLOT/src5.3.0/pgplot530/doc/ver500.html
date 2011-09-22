@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>PGPLOT What's New in Version 5.0</title>
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+
+<body>
+<div class="header">
+<a href="../index.html">PGPLOT</a>&nbsp;&gt;
+<a href="doc-index.html">Documentation</a>&nbsp;&gt;
+<a href="install-manual.html">Installation Manual</a>&nbsp;&gt;
+Version 5.0.0
+</div>
+
+<h2>PGPLOT version 5.0.0</h2>
+
+<p>All changes are intended to be backwards-compatible: i.e.,
+existing programs should run correctly when recompiled, and
+recompilation should not be necessary. Some programs may give
+slightly different results, owing to the bug fixes described
+below.</p>
+
+<h3>New installation procedure</h3>
+
+<p>The installation procedure for UNIX systems has changed
+substantially, to allow automatic generation of the makefile and
+the device dispatch routine (<code>grexec.f</code>).</p>
+
+<h3>New C binding</h3>
+
+<p>This release of PGPLOT includes an experimental <a href=
+"cbinding.html">C binding</a> for calling PGPLOT from C programs.
+It consists of two files, a header file <code>cpgplot.h</code> that
+should be included in C programs that call PGPLOT, and a
+system-dependent wrapper library that encapsulates the
+manipulations necessary to call Fortran subroutines from C programs
+(e.g, converting C null-terminated char arrays to Fortran character
+strings). The wrapper library requires an ANSI-compliant C
+compiler, and is not available on all systems (interlanguage calls
+are very difficult or impossible on some systems).</p>
+
+<h3>Changes to device drivers</h3>
+
+<ul>
+<li><a href="psdriv.html">PostScript</a>: the PostScript device
+driver (device types /PS, /VPS, /CPS, and /VCPS) has been changed
+to handle the new <a href="subroutines.html#PGIMAG">PGIMAG</a>
+routine. Use /CPS or /VCPS for color images. One side-effect is
+that the monochrome types (/PS and /VPS) now honor color
+representation changes requested by <a href=
+"subroutines.html#PGSCR">PGSCR</a>, although they substitute a grey
+level for the requested color.</li>
+
+<li><a href="xwdriv.html">X-Window</a>: the X-Window driver has had
+major changes to speed it up, make it more portable, and add new
+features. The window is now resizable, and it is possible to
+specify that it stay up after the PGPLOT program exits. The driver
+provides support for the new cursor features in <a href=
+"subroutines.html#PGBAND">PGBAND</a>. The number of colors reserved
+and the default placement of the window can be specified in X
+resources.</li>
+
+<li><a href="gidriv.html">GIF (Graphics Interchange Format)</a>: a
+new driver to create GIF files (type /GIF or /VGIF).</li>
+
+<li><a href="ppdriv.html">PPM (Portable Pixmap)</a>: a new driver
+to create PPM files (type /PPM or /VPPM).</li>
+
+<li>Many of the other drivers have been cleaned up to make them
+more portable.</li>
+</ul>
+
+<h3>New routines</h3>
+
+<p>For details of all the PGPLOT routines, see file pgplot.doc or
+<a href="subroutines.html">pgplot.html</a> that the installation
+procedures puts in the pgplot directory. The file pgplot.html can
+be viewed with Mosaic (e.g., <code>Mosaic
+/usr/local/pgplot/pgplot.html</code>).</p>
+
+<ul>
+<li><a href="subroutines.html#PGSCIR">PGSCIR</a>, <a href=
+"subroutines.html#PGQCIR">PGQCIR</a>: set/query the range of color
+indices used by routines <a href="subroutines.html#PGGRAY">
+PGGRAY</a> and <a href="subroutines.html#PGIMAG">PGIMAG</a>.</li>
+
+<li><a href="subroutines.html#PGERAS">PGERAS</a>: erase screen
+without advancing to new page.</li>
+
+<li><a href="subroutines.html#PGCONL">PGCONL</a>: for labelling
+contours drawn with <a href="subroutines.html#PGCONT">
+PGCONT</a>.</li>
+
+<li><a href="subroutines.html#PGBAND">PGBAND</a>: new cursor
+routine, with many more features than <a href=
+"subroutines.html#PGCURS">PGCURS</a> including cross-hairs and
+rubber-bands (on devices that support this; currently only
+X-window).</li>
+
+<li><a href="subroutines.html#PGIMAG">PGIMAG</a>: new routine (like
+<a href="subroutines.html#PGGRAY">PGGRAY</a>) for color
+images.</li>
+
+<li><a href="subroutines.html#PGCTAB">PGCTAB</a>: for generating a
+color table for use with <a href="subroutines.html#PGIMAG">
+PGIMAG</a>.</li>
+
+<li><a href="subroutines.html#PGSITF">PGSITF</a>/<a href=
+"subroutines.html#PGQITF">PGQITF</a>: set/query the image transfer
+function used by routines <a href="subroutines.html#PGGRAY">
+PGGRAY</a> and <a href="subroutines.html#PGIMAG">PGIMAG</a>.</li>
+
+<li><a href="subroutines.html#PGPANL">PGPANL</a>: to move to a
+different panel when the view surface has been divided into panels
+with <a href="subroutines.html#PGBEG">PGBEG</a> or <a href=
+"subroutines.html#PGSUBP">PGSUBP</a>.</li>
+</ul>
+
+<p>The pgdem* programs in pgplot/examples have been enhanced to
+demonstrate the new routines, and there are new demos programs
+(10--12).</p>
+
+<h3>Enhanced routines</h3>
+
+<ul>
+<li><a href="subroutines.html#PGBOX">PGBOX</a>: new options for
+forcing decimal or exponential labeling.</li>
+
+<li><a href="subroutines.html#PGBEG">PGBEG</a> (PGBEGIN): now
+parses device specifications differently, so that file names
+including slash characters do not need to be quoted.</li>
+
+<li><a href="subroutines.html#PGCONX">PGCONX</a>: contours are now
+traced in a consistent direction (clockwise or anticlockwise).</li>
+
+<li><a href="subroutines.html#PGGRAY">PGGRAY</a>: enhanced to allow
+use of linear, log, or square-root mapping of array value onto
+image brightness (see <a href="subroutines.html#PGSITF">
+PGSITF</a>).</li>
+
+<li><a href="subroutines.html#PGPIXL">PGPIXL</a>: new algorithm
+makes smaller PS files that print faster.</li>
+
+<li><a href="subroutines.html#PGPAGE">PGPAGE</a>: no longer beeps
+when prompting for next page.</li>
+</ul>
+
+<h3>Bugs fixed</h3>
+
+<ul>
+<li><a href="subroutines.html#PGNUMB">PGNUMB</a>: the FORM argument
+was ignored, but is now used as documented.</li>
+
+<li><a href="subroutines.html#PGPAP">PGPAP</a> (PGPAPER) was boken
+in 4.9H; it now works as documented, and can be used to change size
+between pages.</li>
+
+<li><a href="subroutines.html#PGQCR">PGQCR</a>: now works as
+advertised (on most devices).</li>
+
+<li>Calling <a href="subroutines.html#PGSCR">PGSCR</a> before
+starting a new page (or defining PGPLOT_BACKGROUND or
+PGPLOT_FOREGROUND) no longer creates a blank page in the graphics
+file.</li>
+
+<li>Filled polygons are now correctly clipped against the window on
+all devices; formerly they were not clipped on PostScript and
+X-Window devices.</li>
+
+<li>The unit of line-width in <a href="subroutines.html#PGSLW">
+PGSLW</a> is now 0.005 inch on all devices.</li>
+
+<li>Sometimes markers centered exactly on the edge of the window
+were not drawn when they should have been.</li>
+</ul>
+
+<div class="footer">
+Tim Pearson, California Institute of Technology, <i><a href=
+"mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995 California Institute of Technology
+</div>
+
+</body>
+</html>
+

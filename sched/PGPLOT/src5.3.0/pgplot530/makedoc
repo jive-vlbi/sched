@@ -1,0 +1,85 @@
+#!/bin/sh
+cat << \EOD
+PGPLOT SUBROUTINE DESCRIPTIONS
+
+Tim Pearson, California Institute of Technology
+Copyright © 1995-2003 California Institute of Technology
+
+
+Introduction
+
+This document includes a list of all the PGPLOT subroutines, and then
+gives detailed instructions for the use of each routine. The subroutine
+descriptions are in alphabetical order. For more information about PGPLOT,
+see the PGPLOT home page <http://www.astro.caltech.edu/~tjp/pgplot/>.
+
+Fortran Usage
+
+The subroutine descriptions indicate the data type of each argument. When
+arguments are described as input, they may be replaced with constants or
+expressions in the CALL statement, but make sure that the constant or
+expression has the correct data type.
+
+INTEGER arguments:
+     these should be declared INTEGER or INTEGER*4 in the calling program,
+     not INTEGER*2.
+REAL arguments:
+     these should be declared REAL or REAL*4 in the calling program, not
+     REAL*8 or DOUBLE PRECISION.
+LOGICAL arguments:
+     these should be declared LOGICAL or LOGICAL*4 in the calling program.
+CHARACTER arguments:
+     any valid Fortran CHARACTER variable may be used (declared CHARACTER*n
+     for some integer n).
+
+C usage
+
+A standard C synopsis indicating argument types is provided for each
+subroutine that has a C binding. The PGPLOT header file should be included
+in all programs that use these subroutines:
+
+#include "cpgplot.h"
+
+int arguments
+     Input int arguments are passed by value, and non-int values will be
+     converted to int; for output arguments, supply a pointer to int
+float arguments
+     Single-valued float arguments are passed by value, and non-float values
+     (e.g., double) will be converted to float; for output arguments, supply
+     a pointer to float. Array arguments are passed by address.
+char* arguments
+     For input, supply a pointer to a null-terminated string; for an output
+     argument char *value, there is another argument int * value_length.
+     value_length should be set to the maximum number of characters that may
+     be stored in value before entry to the routine; it receives the actual
+     number of characters used.
+2-dimensional arrays
+     Two-dimensional arrays should be packed in a one-dimensional C array,
+     with the first index changing fastest.
+
+Index of Routines
+
+EOD
+
+# Extract documentation from pgplot source code: output index of routines
+
+awk '
+/^C\*/ { print substr($0, 3, 500)}
+' $*
+
+# Extract documentation from pgplot source code: output ASCII text
+
+awk '
+/^C\*/ { print ""; print "";
+         print "------------------------------------------------------------------------";
+         print substr($0, 3, 500);
+         print "------------------------------------------------------------------------"; print "";
+       }
+/^C\+/ { echo = 1; getline }
+/^C--/ { echo = 0}
+
+echo == 1 && /^C/ {print substr($0, 3, 500) }
+
+echo == 1 && !/^C/ { print }
+' $*
+

@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT: Scientific Graphs</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp·astro.caltech.edu">
+</HEAD>
+<BODY bgcolor=WHITE>
+
+<DIV class=NOPRINT>
+<FONT FACE="sans-serif, Arial, Helvetica" SIZE="2" COLOR="#0033CC">You
+are here:&nbsp;
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="user-manual.html">User's Manual</A>&nbsp;&gt;
+Scientific Graphs</FONT>
+</DIV>
+
+<H1>Scientific Graphs</H1>
+
+<H2>Introduction</H2>
+
+This chapter describes a number of ``high level'' routines that
+simplify the composition of complicated graphical images.  They
+include routines for drawing graphs of one variable or function
+against another (``xy-plots''), histograms, and display of
+two-dimensional data (functions of two variables).  Rather than giving
+complete details of all the available routines, this chapter just
+points out some of the ways that they can be used. See Appendix A for
+details of the calling sequences.
+
+<H2>XY-plots</H2>
+
+The basic technique for drawing xy-plots is described in Chapter 2,
+which showed how to make <I>scatter plots</I> using graph markers
+produced by <CODE>PGPT</CODE> and <I>line plots</I> produced by
+<CODE>PGLINE</CODE>.  Considerable variation in the appearance of the
+graph can be achieved using the following techniques.
+
+<H3>Attributes</H3>
+
+Use different attributes to distinguish different datasets.  Graph markers
+can be distinguished by choosing different markers, different colors, or
+different sizes (character height attribute).  Lines and curves can be 
+distinguished by line-style, color, or line-width.
+
+<H3>Box parameters</H3>
+
+If routine <CODE>PGENV</CODE> is replaced by calls to the more basic
+routines (see Section 3.6), including <CODE>PGBOX</CODE>, considerable
+variety in the appearance of the graph can be achieved.  For example,
+one can suppress the tick marks, draw the tick marks projecting out of
+the box instead of into it, or draw a grid over the whole viewport.
+Note that <CODE>PGBOX</CODE> may be called many times: one might call
+it once to draw a grid using thin dotted lines, and again to draw the
+frame and tick marks using thick lines:
+<PRE>
+      CALL PGSLW(1)
+      CALL PGSLS(4)
+      CALL PGBOX('G',30.0,0,'G',0.2,0)
+      CALL PGSLW(3)
+      CALL PGSLS(1)
+      CALL PGBOX('ABCTSN',90.0,3,'ABCTSNV',0.0,0)
+</PRE>
+Note that in this example we have also specified tick intervals
+explicitly.  If the horizontal axis is to represent an angle in
+degrees, it is convenient to choose a tick interval that is a simple
+fraction of 360; here we have a major tick interval of 90 degrees and
+a minor tick interval of 30 degrees.
+
+<H3>Stepped-line plots</H3>
+
+As an alternative to <CODE>PGLINE</CODE>, which ``joins up the dots''
+using straight line segments, it is sometimes appropriate to use
+<CODE>PGBIN</CODE> which produces a ``stepped line plot'' (sometimes
+misleadingly called a histogram) with horizontal line segments at each
+data point and vertical line segments joining them.  This is often
+used, for example, in displaying digitized spectra.
+
+<H3>Error bars</H3>
+
+Graphs of real data often require the inclusion of error bars.  The
+two routines <CODE>PGERRX</CODE> and <CODE>PGERRY</CODE> draw
+horizontal and vertical error bars, respectively.  These routines are
+usually used in combination with <CODE>PGPT</CODE>, e.g., to draw a
+set of points with 2-sigma error-bars:
+<PRE>
+      DO 10 I=1,15
+          YHI = YPTS(I) + 2.0*ERR(I)
+          YLO = YPTS(I) - 2.0*ERR(I)
+          CALL PGPT(1, XPTS(I), YPTS(I), 17)
+          CALL PGERRY(1, XPTS(I), YLO, YHI, 1.0)
+   10 CONTINUE
+</PRE>
+
+<H3>Logarithmic axes</H3>
+
+It is commonly required that the <I>x</I>-axis, the <I>y</I>-axis, or both, be
+logarithmic instead of linear; that is, one wishes to plot the
+logarithm of the quantity instead of its actual value.  PGPLOT doesn't
+provide any automatic mechanism to do this: one has to adopt $\log_{10} x$
+and/or $\log_{10} y$ instead of <I>x</I> and <I>y</I> as world-coordinates; \ie,
+if the range of <I>x</I> is to be 1 to 1000, choose as world-coordinate 
+limits for the window $\log 1 = 0.0$ and $\log 1000 = 3.0$, and supply
+the logarithms of <I>x</I> to <CODE>PGPT</CODE> and <CODE>PGLINE</CODE>.  However, <CODE>PGENV</CODE> and
+<CODE>PGBOX</CODE> have options for <I>labeling</I> the axis logarithmically;
+if this option is used in our example, the axis will have labeled
+major tick marks at 1, 10, 100, and 1000, with logarithmically-spaced
+minor tick marks at 2, 3, 4, ..., 20, 30, 40, etc.  An example may 
+make this clearer:
+<PRE>
+      CALL PGENV(-2.0,2.0,-0.5,2.5,1,30)
+      CALL PGLAB('Frequency, \gn (GHz)',
+     1             'Flux Density, S\d\gn\u (Jy)', ' ')
+      DO 10 I=1,15
+          XPTS(I) = ALOG10(FREQ(I))
+          YPTS(I) = ALOG10(FLUX(I))
+   10 CONTINUE
+      CALL PGPT(15, XPTS, YPTS, 17)
+</PRE>
+This is a fragment of a program to draw the spectrum of a radio source,
+which is usually plotted as a log--log plot of flux density $v$.
+frequency. It first calls <CODE>PGENV</CODE> to initialize the viewport and window;
+the <CODE>AXIS</CODE> argument is 30 so both axes will be logarithmic. The <I>x</I>-axis
+(frequency) runs from 0.01 to 100 GHz, the <I>y</I>-axis (flux 
+density) runs from 0.3 to 300 Jy. Note that it is necessary to
+specify the logarithms of these limits in the call to <CODE>PGENV</CODE>. The
+penultimate argument requests equal scales in <I>x</I> and <I>y</I> so that slopes
+will be correct. The program then marks 15 data points, supplying the 
+<I>logarithms</I> of frequency and flux density to <CODE>PGPT</CODE>.
+
+<H2>Graphs with two <i>y</i> axes</H2>
+
+<PRE>
+* Example: drawing two superimposed graphs, with graph 1 labeled on the
+* left side, and graph 2 labeled on the right side. This is achieved
+* by superimposing two different coordinate systems (windows) in the same
+* viewport, and using the options in PGBOX to select which edeges of the
+* viewport to label.
+
+      PROGRAM E
+      INTEGER PGOPEN
+
+* Open the graphics devive. The PGPAGE call is required is you do
+* not use PGENV.
+
+      IF (PGOPEN('?') .LT. 1) STOP
+      CALL PGPAGE
+
+* Set up viewport.
+
+      CALL PGVSTD
+
+* Set up window for graph 1.
+
+      CALL PGSWIN(0.,10.,0.,0.65)
+
+* Draw graph 1 (green).
+
+      CALL PGSCI(3)
+      CALL PGMOVE(1., 0.6)
+      CALL PGDRAW(8., 0.2)
+
+* Label the graph, omitting the right-hand axis.
+
+      CALL PGSCI(1)
+      CALL PGBOX('BCNST', 0.0, 0, 'BNST', 0.0, 0)
+      CALL PGLAB('x-axis', ' ', ' ')
+      CALL PGSCI(3)
+      CALL PGMTXT('L', 2.2, 0.5, 0.5, 'y1-axis')
+
+* Set the window for the second graph, with the same x-range but a
+* different y range.
+
+      CALL PGSWIN(0.,10.,0.,100.0)
+
+* Draw graph 2 (red).
+
+      CALL PGSCI(2)
+      CALL PGMOVE(1., 10.)
+      CALL PGDRAW(8., 90.)
+
+* Label the right hand axis in this coordinate system.
+
+      CALL PGSCI(1)
+      CALL PGBOX(' ', 0.0, 0, 'CMST', 0.0, 0)
+      CALL PGSCI(2)
+      CALL PGMTXT('R', 2.2, 0.5, 0.5, 'y2-axis')
+
+* Done.
+
+      CALL PGCLOS
+
+      END
+</PRE>
+
+<H2>Graphs with common axes</H2>
+
+<P>Sometimes one wishes to plot two or more graphs side-by-side with a
+common <i>y</i> axis, which only needs to be labeled once, or one
+above another, with a common <i>x</i> axis. The way to do this is to
+specify the viewports for the graphs so that they arranged on the page
+as desired, and then use the options in PGBOX to ensure that only the
+graphs that require them get axis labels.
+
+<P><i>Example</i>
+
+<H2>Histograms</H2>
+
+<P>The routine <CODE>PGHIST</CODE> draws a histogram, that is, the frequency distribution 
+of measured values in a dataset.  Suppose we have 500 measurements of
+a quantity (the sky brightness temperature at 20 GHz, say, in mK) stored
+in Fortran array <CODE>VALUES</CODE>.  The following program-fragment draws a
+histogram of the distribution of these values in the range 0.0 to 5.0,
+using 25 bins (so that each bin is 0.2 K wide, the first running from 
+0.0 to 0.2, the second from 0.2 to 0.4, etc.):
+<PRE>
+      DO 10 I=1,500
+          VALUES(I) = ....
+   10 CONTINUE
+      CALL PGHIST(500, VALUES, 0.00, 5.00, 25, 0)
+      CALL PGLAB('Temperature (K)',
+     1           'Number of measurements',
+     2           'Sky Brightness at 20 GHz' )
+</PRE>
+The histogram does not depend on the <I>order</I> of the values within 
+the array.
+
+
+
+<DIV class=NOPRINT>
+<HR>
+Next: <A HREF="chapter6a.html">Contour Maps</A>
+<HR>
+<A HREF="../index.html">PGPLOT</A><BR>
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp·astro.caltech.edu">tjp·astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY></HTML>
+
+
+

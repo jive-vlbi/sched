@@ -1,0 +1,131 @@
+<HTML>
+<HEAD>
+<TITLE>X2DRIV</TITLE>
+</HEAD>
+<BODY>
+
+<H2>PGDISP or FIGDISP server for X Window workstations</H2>
+
+The figdisp server is part of Figaro: it maintains a ``line graphics''
+window which can be addressed by PGPLOT using the /XDISP device
+type. The pgdisp server is a subset of figdisp that shows only the
+line graphics window. Both server programs run in the background and
+keep the PGPLOT window open. (Most users will prefer to use /XSERV
+instead of /XDISP).
+
+<DL>
+<DT>Author
+<DD>Sam Southard, Jr., 1991.
+
+<DT>Device type code
+<DD><CODE>/XDISP</CODE>.
+
+</DL>
+
+<H3>Starting PGDISP</H3>
+
+To start up the pgdisp server (in the background), use
+<PRE>
+% pgdisp [options] &
+</PRE>
+You can change the size of the server window with the mouse.  You can
+also use standard -geometry and -display options with pgdisp. PGPLOT
+will adapt to the size selected, but it is not possible to change the
+size of a graph after it has been displayed. To remove the server,
+select Quit from its menu.
+
+If the pgdisp program is not in a directory in your path, you will need to use the full file name (or create an alias), e.g.,
+<PRE>
+% /usr/local/pgplot/pgdisp [options] &
+</PRE>
+
+<H3>Redirecting the Display</H3>
+
+Before starting pgdisp, both the Figaro and the X11 environment must be
+set  up.  The X11 environment consists of setting the DISPLAY
+environment variable  appropriately.  For example:
+<PRE>
+% setenv DISPLAY :0
+</PRE>
+or
+<PRE>
+% setenv DISPLAY lo-fan:0.0
+</PRE>
+
+The first example would cause the display to appear on the local machine.  
+Other values which can be used to accomplish this are "unix:0.0" and
+"lhost:0.0", where lhost is the name of the local host.
+
+<H3>Multiple Copies</H3>
+
+If you wish to start up a second copy of pgdisp, type the line
+<PRE>
+% pgdisp -id # [options] &
+</PRE>
+where # represents any integer.  Note that there cannot be a copy of figdisp
+and a copy of pgdisp running on the same screen with the same id. To
+send graphics to a particular pgdisp window, specify the id number
+before /XDISP, e.g., "1/XDISP". The default is 0.
+
+<H3>Options</H3>
+
+The PGDISP window uses a default of 16 colors (2 if on a monochrome
+screen or it can't get 16 colors for some reason), but this can be
+changed with the lineColors resource. You need more than 16 colors for
+PGPLOT gray-scales; I recommend 64. More than 64 colors is likely to
+steal too many from other windows.<P>
+
+The window can be resized arbitrarily.  The initial size is determined
+by the figdisp.lg.geometry resource.  Since PGPLOT  automatically scales
+to use the entire window, the line graphics window should not be resized
+while a program is accessing it.  If  this is done, the display server
+will not crash, but the output will look odd, and cursor positioning may
+be incorrect.<P>
+
+The window title is updated to show the position of the cursor  when the
+cursor is in the line graphics window.<P>
+<HR>
+<PRE>
+Command Line Option	X resource	Default	Notes
+</PRE>
+<HR>
+<PRE>
+-display disp		.display	none	The display on which the
+						display server should run.
+
+-id #			.id		0	The id number of this copy of
+						figdisp or pgdisp.  An
+						arbitrary number of copies of
+						figdisp/pgdisp may be run at
+						the same time, as long as each
+						one's id number is unique.
+
+-geometry WxH[+x+y]			512x512	This flag corresponds to
+						.bm.geometry in figdisp and
+						.lg.geometry in pgdisp
+
+-lgGeometry WxH[+x+y]	.lg.geometry	512x512	The line graphics window
+						geometry.
+
+
+-lineColors #		.lineColors	16	The number of colors to use for
+						line graphics.
+
+-visual			.visual		Any	The visual to use.  Accepted
+						values include the X11 visuals
+						PseudoColor and GrayScale, as
+						well as Default (only the
+						default visual is allowed) and
+						Any (any visual is allowed) for
+						either pgdisp or figdisp.
+						Pgdisp also allows the X11
+						visual classes StaticGray,
+						StaticColor, DirectColor, and
+						TrueColor.
+
+-lgCrosshair            .lg.Crosshair           Specify to get
+                                                cross-hair cursor.
+</PRE>
+<HR>
+</BODY>
+</HTML>

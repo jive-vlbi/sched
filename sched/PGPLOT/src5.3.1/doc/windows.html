@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>PGPLOT: Windows and Viewports</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+
+<div class="header"><a href="../index.html">PGPLOT</a>&nbsp;&gt;
+<a href="../index.html">Documentation</a>&nbsp;&gt;
+<a href="user-manual.html">User's Manual</a>&nbsp;&gt;
+Windows and Viewports
+</div>
+
+<h1>Windows and Viewports</h1>
+
+<p>This chapter is concerned with positioning a graph on the screen
+or hardcopy page, and controlling its scale. In simple
+applications, the position and scale of the graph are controlled
+more-or-less automatically by the routine <a href=
+"subroutines.html#PGENV">PGENV</a>, but in order to obtain complete
+control of positioning and scaling, it is necessary to understand
+the concepts of the <i>View Surface</i>, the <i>Window</i>, and the
+<i>Viewport</i>, and two coordinate systems: <i>World
+Coordinates</i> and <i>Device Coordinates</i>.</p>
+
+<p>A simple PGPLOT picture might be a two-dimensional graph showing
+the dependence of one variable on another. A typical graph has data
+points, represented by error bars or special markers such as dots
+or diamonds, possibly connected by lines, or perhaps plotted on the
+same scale as a theoretical model drawn as a smooth curve. The
+graph must be labeled with two axes to indicate the coordinate
+scales.</p>
+
+<p>The programmer must describe to PGPLOT the various elements of
+the graph in terms of rectangular Cartesian coordinates. The only
+limitation on the coordinates is that they be represented as
+floating-point (Fortran <code>REAL</code> or <code>REAL*4</code>,
+or C <code>float</code>) numbers; otherwise we are totally free to
+choose the meaning of the coordinates. For example, in a graph
+showing the temporal variation of a quasar, the abscissa
+(<i>x</i>-coordinate) might be Epoch (in years) and the ordinate
+(<i>y</i>-coordinate) Flux Density (in Jy).</p>
+
+<p>In accordance with common practice in graphics programming,
+these coordinates, chosen by the programmer, are termed <i>world
+coordinates</i>. PGPLOT maps a selected rectangular region of the
+world-coordinate space (termed the <i>window</i>) onto a specified
+rectangle (termed the <i>viewport</i>) on the <i>view surface</i>
+(the screen of an interactive display or a sheet of paper on a
+hardcopy plotter). The program must make calls to PGPLOT routines
+to define both the window and the viewport. For complete
+descriptions of the routines and their arguments, refer to the
+<a href="subroutines.html">subroutine synopses</a>.</p>
+
+<p>After it has opened a graphics device by calling <a href=
+"subroutines.html#PGOPEN">PGOPEN</a>, a program has access to a <i>
+view surface</i>. This is, for example, a window on the workstation
+screen, or a piece of paper on a printer. The size of the view
+surface depends on the device. Each device type has a default size,
+but on some devices the size can be changed by calling <a href=
+"subroutines.html#PGPAP">PGPAP</a> after opening the device, and
+some workstations allow the user to change the size of a PGPLOT
+window by using the functions of the window manager. A program can
+determine the size of the view surface by calling <a href=
+"subroutines.html#PGQVSZ">PGQVSZ</a>.</p>
+
+<p>Note that when the graphics device is subdivided into <i>
+panels</i>, as described in the preceding chapter, the view surface
+is the current panel.</p>
+
+<h2>Defining the Viewport</h2>
+
+<p>A <i>viewport</i> is a rectangular portion of the plotting
+surface onto which the graph is mapped. PGPLOT has a default
+viewport which is centered on the plotting surface and leaves
+sufficient space around it for annotation. The application program
+can redefine the viewport by calling routine <a href=
+"subroutines.html#PGSVP">PGSVP</a> or <a href=
+"subroutines.html#PGVSIZ">PGVSIZ</a>, or reset the default by
+calling <a href="subroutines.html#PGVSTD">PGVSTD</a>.</p>
+
+<p><a href="subroutines.html#PGSVP">PGSVP</a> defines the viewport
+in a device-independent manner, using a coordinate system whose
+coordinates run from 0 to 1 in both <i>x</i> and <i>y</i>. This
+coordinate system is called <i>normalized device coordinate
+space</i>. For example, if we wish to divide the view surface into
+four quadrants and map a different plot onto each quadrant, we can
+define a new viewport before starting each plot. PGSVP has the
+format:</p>
+
+<pre class="f">
+CALL PGSVP(XMIN, XMAX, YMIN, YMAX)
+</pre>
+
+<pre class="c">
+cpgsvp(xmin, xmax, ymin, ymax);
+</pre>
+
+For example, to map the viewport onto the upper left quadrant of
+the view surface: 
+
+<pre class="f">
+CALL PGSVP(0.0, 0.5, 0.5, 1.0)
+</pre>
+
+<pre class="c">
+cpgsvp(0.0, 0.5, 0.5, 1.0);
+</pre>
+
+<p>(Note that this does not leave room around the edge of the viewport
+for annotation.)</p>
+
+<p><a href="subroutines.html#PGVSIZ">PGVSIZ</a> defines the
+viewport in absolute coordinates (inches); it should only be used
+when it is known how big the view surface is and a definite plot
+scale is required. The arguments are the same as for PGSVP, but
+measured in inches from the bottom left corner of the view surface
+(1 inch = 25.4 mm). For example:</p>
+
+<pre class="f">CALL PGVSIZ(1.5, 9.5, 1.5, 6.5)
+</pre>
+
+<pre class="c">cpgvsiz(1.5, 9.5, 1.5, 6.5);
+</pre>
+
+<p>defines a rectangular viewport 8 by 5 inches, offset 1.5 inches
+from the bottom and left edges of the view surface.</p>
+ 
+<p><a href="subroutines.html#PGVSTD">PGVSTD</a> defines a standard
+viewport, the size of which depends on the particular device being
+used, and on the current character size (it uses the whole view
+surface excluding a margin of four character heights all
+around):</p>
+
+<pre class="f">CALL PGVSTD</pre>
+
+<pre class="c">cpgvstd();</pre>
+
+<p>This is the default viewport set up by PGOPEN.</p>
+
+<p>Note that the viewport must be defined <i>before</i> calling any
+routines that would actually generate a display. The viewport may,
+however, be changed at any time: this will affect the appearance of
+objects drawn later in the program.</p>
+
+<h2>Defining the Window</h2>
+
+<p>The program defines the <i>window</i> by calling routine <a
+href="subroutines.html#PGSWIN">PGSWIN</a>, whose arguments specify
+the world-coordinate limits of the window along each coordinate
+axis, e.g.</p>
+
+<pre class="f">CALL PGSWIN(1975.0, 1984.0, 5.0, 20.0)
+</pre>
+
+<pre class="c">cpgswin(1975.0, 1984.0, 5.0, 20.0);
+</pre>
+
+<p>specifies that the <i>x</i>-axis (epoch) is going to run (left to
+right) from 1975 to 1984, and the <i>y</i>-axis (flux density) is
+going to run (bottom to top) from 5 to 20~Jy. Note that the
+arguments are floating-point numbers (Fortran <code>REAL</code> or
+C <code>float</code> variables or constants), and require decimal
+points. If the order of either the <i>x</i> pair or the <i>y</i>
+pair is reversed, the corresponding axis will point in the opposite
+sense, i.e., right to left for <i>x</i> or top to bottom for <i>
+y</i>. PGPLOT uses the window specification to construct a mapping
+that causes the image of the window to coincide with the viewport
+on the view surface. Furthermore, PGPLOT ``clips'' lines so that
+only those portions of objects that lie within the window are
+displayed on the view surface.</p>
+
+<p>Like the viewport, the window must be defined before drawing any
+objects. The window can be defined either before or after the
+viewport: the effect will be the same. The default window, set up
+by PGOPEN, has <i>x</i> limits 0.0 - 1.0 and <i>y</i> limits 0.0 -
+1.0.</p>
+
+<p>If the ratio of the sides of the window does not equal the ratio
+of the sides of the viewport, the mapping of the world coordinates
+onto the view surface results in an image whose shape is compressed
+in either <i>x</i> or <i>y</i>. One way to avoid this compression
+is to carefully choose the viewport to have the same aspect ratio
+as the window. Routine <a href="subroutines.html#PGWNAD">PGWNAD</a>
+can do this: it defines the window and simultaneously adjusts the
+viewport to have the same aspect ratio as the window. The new
+viewport is the largest that can fit inside the old one, and is
+centered in the old one.</p>
+
+<h2>Annotating the Viewport</h2>
+
+<p>For a simple graph, it is usually necessary to draw a frame
+around the viewport and label the frame with tick marks and numeric
+labels. This can be done with the routine <a href=
+"subroutines.html#PGBOX">PGBOX</a>. For our sample graph, the call
+might be:</p>
+
+<pre class="f">CALL PGBOX('BCTN', 0.0, 0, 'BCNST', 0.0, 0)
+</pre>
+
+<pre class="c">cpgbox("BCTN", 0.0, 0, "BCNST", 0.0, 0);
+</pre>
+
+<p>PGBOX has many options for controlling the appearance of the box or
+graph axes, and there is another routine <a href=
+"subroutines.html#PGAXIS">PGAXIS</a> which provides further
+capabilities (see <a href="chapter6.html">Chapter 8</a>).</p>
+
+<p>Another routine, <a href="subroutines.html#PGLAB">PGLAB</a>,
+provides text labels for the bottom, left hand side, and top of the
+viewport:</p>
+
+<pre class="f">CALL PGLAB('Epoch', 'Flux Density (Jy)',
+           'Variation of 3C345 at 10.7 GHz')
+</pre>
+
+<pre class="c">cpglab("Epoch", "Flux Density (Jy)",
+       "Variation of 3C345 at 10.7 GHz");
+</pre>
+
+<p>The first two arguments provide explanations for the two axes; the
+third provides a title for the whole plot. Note that unlike all the
+other plotting routines, the lines and characters drawn by PGBOX
+and PGLAB are not clipped at the boundaries of the window. PGLAB
+actually calls a more general routine, <a href=
+"subroutines.html#PGMTXT">PGMTXT</a>, which can be used for
+plotting labels at any point relative to the viewport.</p>
+
+<p>The amount of space needed outside the viewport for annotation
+depends on the exact options specified in PGBOX; usually four
+character heights will be sufficient, and this is the amount
+allowed when the standard viewport (created by PGVSTD) is used. The
+character height can be changed by using routine <a href=
+"subroutines.html#PGSCH">PGSCH</a> (see <a href="attributes.html">
+Chapter 7</a>).</p>
+
+<h2>Routine PGENV</h2>
+
+<p>Having to specify calls to PGPAGE, PGSVP, PGSWIN, and PGBOX is
+excessively cumbersome for drawing simple graphs. Routine <a href=
+"subroutines.html#PGENV">PGENV</a> (for PGplot ENVironment)
+combines all four of these in one subroutine, using the standard
+viewport, and a limited set of the capabilities of PGBOX. For
+example, the graph described above could be initiated by the
+following call:</p>
+
+<pre class="f">CALL PGENV(1975.0, 1984.0, 5.0, 20.0, 0, 0)
+</pre>
+
+<pre class="c">cpgenv(1975.0, 1984.0, 5.0, 20.0, 0, 0);
+</pre>
+
+<p>which is equivalent to the following series of calls: </p>
+
+<pre class="f">CALL PGPAGE
+CALL PGVSTD
+CALL PGSWIN(1975.0, 1984.0, 5.0, 20.0)
+CALL PGBOX('BCNST', 0.0, 0, 'BCNST', 0.0, 0)
+</pre>
+
+<pre class="c">cpgpage();
+cpgvstd();
+cpgswin(1975.0, 1984.0, 5.0, 20.0);
+cpgbox("BCNST", 0.0, 0, "BCNST", 0.0, 0);
+</pre>
+
+<p>PGENV uses the standard viewport. The first four arguments define
+the world-coordinate limits of the window. The fifth argument can
+be 0 or 1; if it is 1, PGENV calls PGWNAD instead of PGSWIN so that
+the plot has equal scales in <i>x</i> and <i>y</i>. The sixth
+argument controls the amount of annotation.</p>
+
+
+<div class="footer">Tim Pearson, California Institute of
+Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995-2005 California Institute of Technology</div>
+</body>
+</html>
+

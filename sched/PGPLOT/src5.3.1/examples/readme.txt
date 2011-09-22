@@ -1,0 +1,142 @@
+This directory contains test/demonstration programs for PGPLOT.
+
+Fortran programs:     pgdemo*.f
+
+The following table (generated with procedure 'check' in this
+directory) indicates which routines are exercised by each demo
+program.
+
+pgarc : 1
+pgarro : 1 3 13
+pgask : 4 13 17
+pgaxis :
+pgaxlg :
+pgband : 6 14
+pgbbuf : 1 2 3 7 8 11 13 14 15 16 17
+pgbeg : 3 5 6 7 8 10 11 13 15
+pgbin :
+pgbox : 1 2 3 4 5 6 9 10 11 13 16
+pgbox1 :
+pgcirc : 1 2 13 15
+pgcl :
+pgclos : 1 2 9 12 14 16 17
+pgcn01 :
+pgcnsc :
+pgconb : 3 15
+pgconf : 3
+pgconl : 3
+pgcons : 3
+pgcont : 3 4 9 15
+pgconx : 3
+pgcp :
+pgctab : 4
+pgcurs : 4 13 14
+pgdraw : 1 2 3 7 13 14
+pgebuf : 1 2 3 7 8 11 13 14 15 16 17
+pgend : 3 4 5 6 7 8 10 11 13 15
+pgenv : 1 2 3 7 10 11 12 13 15 17
+pgeras : 1 2 4 8 10 11 13 14 17
+pgerr1 : 1 13
+pgerrb :
+pgerrx :
+pgerry : 1 13
+pgetxt :
+pgfunt : 1 13
+pgfunx : 1 13
+pgfuny :
+pggray :
+pghi2d :
+pghis1 :
+pghist : 1 13
+pghtch :
+pgiden : 15
+pgimab :
+pgimag : 4
+pginit :
+pglab : 1 2 3 10 12 13 15 16
+pglcur : 5
+pgldev :
+pglen :
+pgline : 1 2 3 4 8 10 11 13 17
+pgmove : 1 2 3 7 13 14
+pgmtxt : 1 2 3 4 9 11 13 16
+pgncur :
+pgnoto : 16
+pgnpl :
+pgnumb :
+pgolin : 5
+pgopen : 1 2 4 9 12 13 14 15 16 17
+pgpage : 1 2 3 4 5 6 8 9 10 11 12 13 14 16
+pgpanl :
+pgpap : 12 13 14
+pgpie : 1
+pgpixl : 9
+pgpnts :
+pgpoly : 1 2 5 13
+pgpt : 1 10 13 17
+pgpt1 : 1 2 3 6 13
+pgptxt : 1 2 13 14
+pgqah :
+pgqcf :
+pgqch :
+pgqci : 14 16
+pgqcir : 4
+pgqclo :
+pgqclp :
+pgqcol : 8 9
+pgqcr :
+pgqcs :
+pgqdt :
+pgqfs :
+pgqhs :
+pgqid :
+pgqids : 13
+pgqinf : 1 2 4 11
+pgqitf :
+pgqls :
+pgqlw :
+pgqndt :
+pgqpos : 3
+pgqtbg :
+pgqtxt : 14
+pgqvp : 2 4
+pgqvsz : 1
+pgqwin : 4
+pgrect : 1 2 10 13 14 16
+pgrnd :
+pgrnge : 16
+pgsah : 1 13 15
+pgsave : 1 2 13 14 16
+pgscf : 10
+pgsch : 1 2 3 4 10 13 14 15
+pgsci : 1 2 3 4 5 8 9 10 11 13 14 15 16 17
+pgscir :
+pgsclo : 3
+pgsclp :
+pgscr : 1 2 3 8 9 10 13 14
+pgscrl :
+pgscrn : 10
+pgsfs : 1 2 3 13 14 15 16
+pgshd1 : 1
+pgshd2 : 1
+pgshls :
+pgshs : 1 2 16
+pgsitf :
+pgslct : 13
+pgsls : 1 2 3 4 8 13 16
+pgslw : 1 2 3 4 10 13 14 16 17
+pgstbg : 1 13
+pgsubp : 1 13 16
+pgsvp : 1 2 3 4 5 6 9 13 14
+pgswin : 1 2 3 4 5 6 8 10 13 14 16
+pgtbox : 1 13
+pgtext : 1 2 13
+pgtick :
+pgtikl :
+pgupdt : 16
+pgvect : 15
+pgvsiz : 2 4
+pgvstd : 1 2 3 4 10 11 16
+pgvw :
+pgwedg : 4
+pgwnad : 1 2 3 4 9 11 13

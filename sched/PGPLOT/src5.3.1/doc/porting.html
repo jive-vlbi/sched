@@ -1,0 +1,537 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>Porting PGPLOT</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+
+<div class="header">
+<a href="../index.html">PGPLOT</a>&nbsp;&gt; 
+<a href="doc-index.html">Documentation</a>&nbsp;&gt;
+<a href="install-manual.html">Installation Manual</a>&nbsp;&gt;
+Porting
+</div>
+
+<h1>Porting PGPLOT</h1>
+
+<p>This chapter gives some hints for people trying to install PGPLOT
+on a computer running an unsupported operating system.</p>
+
+<h2>General Notes</h2>
+
+<p>The PGPLOT library consists of the following routines:</p>
+
+<ol>
+<li>The &ldquo;standard&rdquo; routines <code>pgplot/src/pg*.f</code> and
+<code>pgplot/src/gr*.f</code>. All of these routines should be
+compiled and put in the object-module library, although the
+&ldquo;obsolete&rdquo; routines may be omitted (they are not used by
+current PGPLOT programs and will not be included in future versions of
+PGPLOT). The obsolete routines are: <code>grchar, grchr0, grdat2,
+grgtc0, grinqfont, grinqli, grinqpen, grlinr, grmark, grmovr,
+grsetfont, grsetli, grsetpen, grtran, grvect, pgsetc,
+pgsize</code>. All routines in the pgplot/src directory are standard
+Fortran-77 with the following exceptions:
+
+<ul>
+<li>Several routines use the non-standard INCLUDE statement; if
+your compiler does not accept this, you need to replace the INCLUDE
+statement with the contents of the named file
+(<code>pgplot.inc</code> or <code>grpckg1.inc</code> as
+appropriate).</li>
+
+<li>Some routines have names longer than 6 characters, the maximum
+allowed by the Fortran-77 standard: these routines can be omitted:
+all have shorter aliases that can be used in preference (e.g.,
+PGPAGE instead of PGADVANCE).</li>
+
+<li>One routine, GRSYXD, uses a non-standard INTEGER*2 statement;
+you can replace this with INTEGER, but if you do so you must make
+the corresponding change in GRSY00 and PGPACK (see below).</li>
+
+<li>Routine GRCLPL uses function IAND(I,J) for bitwise logical and
+of two integers; most compilers recognize this as an intrinsic
+function and compile it inline, but if yours does not, you will
+need to supply this as an external function.</li>
+</ul>
+
+</li>
+
+<li>The system-dependent routines. Versions of these routines that
+work for many UNIX systems are provided in directory <code>
+pgplot/sys</code>, but for other systems these will need to be
+written. Some of the routines are used only by certain device
+drivers and will not be needed if you do not use these drivers. 
+
+<ul>
+<li>GRDATE -- get date and time as character string</li>
+
+<li>GRFILEIO -- routines GROFIL, GRCFIL, GRWFIL, GRWFCH for binary
+file I/O</li>
+
+<li>GRFLUN -- free a Fortran logical unit number</li>
+
+<li>GRFMEM -- free memory</li>
+
+<li>GRGCOM -- read with prompt from user's terminal</li>
+
+<li>GRGENV -- get value of PGPLOT environment parameter</li>
+
+<li>GRGLUN -- get a Fortran logical unit number</li>
+
+<li>GRGMEM -- allocate memory</li>
+
+<li>GRGMSG -- print system message</li>
+
+<li>GRIBF1 -- fill buffer with a specified character</li>
+
+<li>GROPTX -- open input/output text file</li>
+
+<li>GRSY00 -- initialize font definition</li>
+
+<li>GRTERMIO -- routines GROTER, GRCTER, GRWTER, GRPTER, GRRTER for
+I/O to terminals</li>
+
+<li>GRTRML -- get name of user's terminal</li>
+
+<li>GRTTER -- test whether device is user's terminal</li>
+
+<li>GRUSER -- get user name</li>
+</ul>
+
+</li>
+
+<li>The device-dispatch routine, <code>grexec.f</code>. This
+routine includes calls to all the selected device drivers. It is
+the only routine that needs to be modified to configure PGPLOT for
+a particular installation. It is usally generated automatically
+from <code>drivers.list</code>. For more information about this
+routine, see <a href="drivers.html">Writing a PGPLOT Device Handler</a>.
+</li>
+
+<li>The device drivers. Most device drivers are included in single
+files in the <code>pgplot/drivers</code> directory, with file name
+<code>XXdriv.f</code> or <code>XXdriv.c</code>. Some C drivers
+require additional <code>.c</code> or <code>.h</code> files. The
+drivers you wish to include in PGPLOT should be compiled and added
+to the object library. Many of the device drivers are written in
+portable, standard Fortran-77, but others cannot be written
+portably and either use Fortran-77 with extensions (such as <code>
+BYTE</code> and <code>%VAL</code>) or C. Some of the older drivers
+are sloppily written and could be made more portable. For driver
+written in C, it is necessary to pay careful attention to the
+system-dependent conventions for calling C subroutines from Fortran
+programs.</li>
+</ol>
+
+<h2>Porting to UNIX systems</h2>
+
+<h3>Background</h3>
+
+<p>While no two UNIX systems are identical, the overall similarities
+allow for a single installation procedure. The procedure, embodied
+in pgplot/makemake, is implemented as a Bourne shell script whose
+job is to create makefiles specific to specific systems. The design
+goals of the script were:</p>
+
+<ol>
+<li>To provide a uniform installation procedure for as many systems
+as possible.</li>
+
+<li>To support PGPLOT compilation in directories other than the
+distribution directory. If the disk containing the source code
+distribution is cross-mounted over a number of different UNIX
+systems, this allows one copy of the source code to be used to
+compile PGPLOT on each of those systems. It also allows the
+source-code directory to be placed on a read-only disk partition or
+CD-ROM.</li>
+
+<li>To allow more than one compiler combination on systems that
+support multiple compilers. Separate configuration files are
+provided for each compiler combination.</li>
+
+<li>To avoid code duplication of system-specific routines where
+possible. The script allows one to selectively override generic
+routines with system specific versions.</li>
+
+<li>To make the script behave as told by the user, rather than have
+it try to automatically determine its configuration from the system
+that it is run upon. This enables one to make makefiles for many
+systems without actually having to log in to those systems.</li>
+</ol>
+
+<h3>How to port PGPLOT to a new UNIX system</h3>
+
+<h4>Create a system directory</h4>
+
+<p>The first thing to do when porting to a new system is to create a
+system directory for the port. This is where system-specific
+source-code and system attributes, will be placed. If the generic
+name for your system is say xxx, then the system directory must be
+called pgplot/sys_xxx. The xxx suffix is the name used by users to
+to specify a system type to the makemake script.</p>
+
+<h4>Create a configuration file</h4>
+
+<p>The next thing to do is to create a configuration file within the
+new system directory. This is a Bourne shell script containing
+assignments to the shell variables that determine how makemake will
+configure a makefile for your system.</p>
+
+<p>Configuration files are distinguished from other files by a
+.conf file name extension. If you intend to support more than one
+FORTRAN and/or C compiler, then one configuration file will be
+needed per compiler combination. By convention, configuration files
+are named as a_b.conf, where <code>a</code> is the name of the
+FORTRAN compiler and <code>b</code> is the name of the C
+compiler.</p>
+
+<p>The first line must be a short Bourne shell comment that
+describes how the configuration differs from other configuration
+files in the system directory. In most configuration files, the
+comment just ellaborates on which FORTRAN and C compilers are being
+configured. The comment is displayed alongside the configuration
+name when makemake users fail to specify a configuration name.</p>
+
+<p>The easiest way to create a new configuration file is to copy
+one from another sys_xxx directory, rename it and then modify the
+shell variable assignments to suite your system. Note that within
+these scripts no spaces are tolerated around the = operator, and
+that you should enclose the assignment string within double
+quotes.</p>
+
+
+<h4>Configuration file variables</h4>
+
+<p>Some of the supported variables are obligatory, while others are
+optional. The required variables and their meanings are:</p>
+
+<dl>
+<dt>XINCL</dt>
+
+<dd>The argument used to tell the C compiler where the X11/ include
+directory can be found. If your machine doesn't have X-windows,
+assign the empty string "". e.g., 
+
+<pre>
+      XINCL=""
+      XINCL="-I/usr/local/include"
+      XINCL="-I/usr/openwin/include"
+</pre>
+</dd>
+
+<dt>FCOMPL</dt>
+
+<dd>The command used to invoke the FORTRAN compiler. e.g., 
+
+<pre>
+      FCOMPL="f77"
+      FCOMPL="fort77"
+      FCOMPL="fortran"
+      FCOMPL="frt"
+      FCOMPL="gf77"
+      FCOMPL="xlf"
+</pre>
+</dd>
+
+<dt>FFLAGC</dt>
+
+<dd>Any FORTRAN compiler flags required for compiling and linking
+the PGPLOT library. Note that this should not include the "-c" or
+"-o" options, which are automatically added, where needed, by the
+makemake script. Examples of possible flags to include, are
+optimization level flags and flags pertinent to creating shared
+libraries (where possible). This is usually an option to generate
+position-independent code (e.g., "+z", "-fpic", "-K PIC"). An
+option to check for undeclared variables (e.g., "-u") may be
+specified, but is not required. An option to use static rather than
+automatic storage (e.g., "-static") is not required but may be
+used: PGPLOT should work correctly with either static or automatic
+storage. e.g., 
+
+<pre>
+      FFLAGC="-u -O"
+      FFLAGC="-u -PIC -O"
+      FFLAGC="-u -pic -O"
+      FFLAGC="-u"
+      FFLAGC='-Wf"-o novector -i64"'
+</pre>
+</dd>
+
+<dt>FFLAGD</dt>
+
+<dd>In most cases this should be the same as FFLAGC. It is used
+instead of FFLAGC when compiling and linking the PGPLOT demo
+programs. The main potential difference has to do with the fact
+that many of the demo programs exploit the '\' character to
+introduce special plot symbols within PGPLOT text. Unfortunately
+many compilers treat this as an escape character. To avoid this,
+FFLAGD should include a flag to tell the compiler to turn off
+special treatment of this character. Options for shared libraries
+(position-independent code) are not required. e.g., 
+
+<pre>
+      FFLAGD=""
+      FFLAGD="-O0"
+      FFLAGD="-assume backslash"
+      FFLAGD="-u -!bs"
+      FFLAGD="-u -O"
+      FFLAGD="-u -backslash -O0"
+      FFLAGD="-u -qnoescape"
+      FFLAGD="-xl -u -O"
+</pre>
+</dd>
+
+<dt>CCOMPL</dt>
+
+<dd>The command used to invoke the chosen C compiler on your
+system. If you intend to use the C wrapper library <a href=
+"cbinding.html"><code>cpgplot</code></a>, then this should be an
+ANSI-C compiler. Otherwise a pre-ANSI K&amp;R C compiler will be
+sufficient. e.g., 
+
+<pre>
+      CCOMPL="/usr/ucb/cc"
+      CCOMPL="c89"
+      CCOMPL="cc"
+      CCOMPL="gcc"
+</pre>
+</dd>
+
+<dt>CFLAGC</dt>
+
+<dd>Any C compiler flags that are needed to compile PGPLOT. Note
+that this should not include the "-c" or "-o" options, which are
+automatically added, where needed, by the makemake script. Examples
+of possible flags to include, are optimization level flags and
+flags pertinent to creating shared libraries (where possible; the
+option usually required is the one that generates
+"position-independent code"). Also, if your system exports FORTRAN
+symbols to the linker postfixed with an underscore then you should
+include the -DPG_PPU flag. e.g., 
+
+<pre>
+      CFLAGC=""
+      CFLAGC="+z -O -D_HPUX_SOURCE"
+      CFLAGC="-DPG_PPU -pic -O"
+</pre>
+</dd>
+
+<dt>LIBS</dt>
+
+<dd>This should specify the loader flags required to cite any
+external libraries that are required when linking any of the demo
+and server programs. In most cases this is just the X-windows
+library, cited as "-Ldirectory_name -lX11" where directory_name is
+the name of the directory in which the library resides. e.g., 
+
+<pre>
+      LIBS=""
+      LIBS="-L/usr/lib/X11R5 -lX11"
+      LIBS="-L/usr/openwin/lib -lX11"
+</pre>
+</dd>
+
+<dt>RANLIB</dt>
+
+<dd>Many older UNIX systems require newly created or modified
+libraries to be post-processed for better access speed. On such
+systems, you should set RANLIB="ranlib". On other systems you
+should set RANLIB="echo ranlib".</dd>
+</dl>
+
+The following are optional. If they are not pertinent to your
+system configuration, you must omit them from the configuration
+script. 
+
+<dl>
+<dt>MOTIF_INCLUDE, MOTIF_LIBS</dt>
+
+<dd>On systems where Motif is installed the MOTIF_INCLUDE and
+MOTIF_LIBS configuration variables should contain flags telling the
+C compiler and loader where to find the include files and libraries
+associated with Motif. This should include files related to X11, Xt
+and Xm. Note that the XINCL and LIBS variables are not consulted
+when compiling and linking Motif code, e.g., 
+
+<pre>
+      MOTIF_INCL="-I/usr/dt/include $XINCL"
+      MOTIF_LIBS="-L/usr/dt/lib -lXm -L/usr/openwin/lib -lXt $LIBS"
+</pre>
+</dd>
+
+<dt>SYSDIR</dt>
+
+<dd>On entering the configuration script, this variable contains
+the directory name of the system directory in which the
+configuration file resides. If you have multiple compiler
+combinations which require a different set of system-specific
+routines, then you should create a subdirectory in the system
+directory, for each combination, and redirect SYSDIR in each
+configuration file, to point at the relevant directory. eg.
+SYSDIR="$SYSDIR/f77_cc/".</dd>
+
+<dt>PGBIND_FLAGS</dt>
+
+<dd>If you wish to have the PGPLOT C wrapper library compiled for
+your system, then you will need to assign this variable. Its
+arguments are the configuration flags to the PGPLOT pgbind command.
+To see the available options, compile the pgbind program in
+pgplot/cpg/ with an ANSI-C compiler and invoke it with no
+arguments.</dd>
+
+<dt>SHARED_LIB</dt>
+
+<dd>If your system supports shared libraries, you should specify
+the name to give the shared library here.</dd>
+
+<dt>SHARED_LD</dt>
+
+<dd>If your system supports shared libraries, then you should
+specify the command and its leading arguments, which when all the
+PGPLOT object files are appended as trailing arguments, will create
+a shared library. You can use the SHARED_LIB variable specified
+above as an argument to this command, by referring to it as
+$SHARED_LIB.</dd>
+
+<dt>MCOMPL</dt>
+
+<dd>The command used to invoke the chosen Objective C compiler on
+your system. This is only required if any of the system code that
+you supply is written in Objective C. Few people have Objective C
+compilers, so you should stick to using just C and FORTRAN if at
+all possible.</dd>
+
+<dt>MFLAGC</dt>
+
+<dd>The compiler flags to use with MCOMPL. Note that this should
+not include the "-c" or "-o" options, which are automatically
+added, where needed, by the makemake script.</dd>
+</dl>
+
+<h4>Creating system-dependent files</h4>
+
+<p>While every effort was made to write PGPLOT in standard FORTRAN-77,
+some routines, particularly those that provide interfaces to
+terminals and other graphics devices, had to be written using
+either FORTRAN extensions or C code. Versions of these routines
+that work on many systems are included in the pgplot/sys/
+directory. When the makemake script looks for the system dependent
+routines, it looks first in the specific pgplot/sys_xxx directory
+then in the default pgplot/sys/ directory, so you can override one
+or more of the default versions, by placing your own versions in
+the new system directory. The new versions can be in C, FORTRAN or,
+if unavoidable, Objective C (postfixed with .f, .c or .m
+respectively).</p>
+
+<p>Points to consider when determining whether new versions of the
+default system routines are required include the following.</p>
+
+<dl>
+<dt><b>FORTRAN routines</b></dt>
+
+<dd><p>All of the *.f files in pgplot/sys/ use FORTRAN extensions, or
+rely upon unportable assumptions such as unformatted I/O record
+sizes. If you are not familiar with the specifics of your FORTRAN
+compiler, then probably the best thing to do here, is to simply try
+to compile PGPLOT without overriding any of the default FORTRAN
+code, and see what the compiler or linker chokes upon.</p>
+
+<p>Problems that might only show up at run time include:</p>
+
+<ul>
+<li>PGPLOT crashes when trying to read its FONT file. This probably
+means that grsy00.f, which relies upon being able to read large
+unformatted record sizes, will need to be re-written. This is a
+difficult problem to fix. The simplest way is to replace both
+pgplot/sys/grsy00.f and pgplot/fonts/pgpack.f with versions that
+read and write a useable file format. Both files should be placed
+in your local system directory. makemake will pick them up from
+there and compile them in place of the default versions.</li>
+
+<li>When PGPLOT prompts for terminal input, the cursor is placed on
+the line after the prompt. This is only a cosmetic problem, but if
+you can find a way to suppress the carriage return at the end of
+the prompt string, the appearance will be better.</li>
+</ul>
+
+<p>An optional routine that makemake only compiles if it finds a
+version in your system directory, is a replacement for the common
+IAND() intrinsic function. This is used by pgplot/src/grclpl.f and
+if your compiler doesn't have the IAND intrinsic, you should place
+a function to replace it in your system directory. Its purpose is
+simply to return the bitwise logical AND of two FORTRAN
+integers.</p>
+</dd>
+
+<dt><b>C routines</b></dt>
+
+<dd><p>Where C routines have been used, you should be aware that there
+is no guaranteed way to portably call C from FORTRAN. The C
+routines in pgplot/sys/ support the two most common conventions,
+both of which are based on the convention used in the original BSD
+f77 compiler. In the BSD f77 convention, FORTRAN symbols are
+converted to lower-case and postfixed with an underscore when
+exported to the linker, all arguments are passed by pointer, and
+the lengths of any string arguments are silently appended to the
+end of the argument list. A common modification to the BSD f77
+convention, is to omit the trailing underscore. If you need the
+trailing underscore, (this is the most common convention), then you
+must include -DPG_PPU in the configuration file CFLAGS assignment.</p>
+
+<p>If neither of the above conventions are supported by your
+compiler, then you will have to copy the C routines to the new
+system directory and modify them to support the calling conventions
+on your system.</p>
+
+<p>Where C routines have been provided, they are usually based on
+the availability of POSIX.1. If your machine doesn't support POSIX
+yet, then you will have some changes to make - particularly as
+regards terminal I/O routines. If your system is of BSD decent,
+then try the BSD compatible terminal I/O routines in the
+pgplot/sys_convex/ system directory.</p>
+</dd>
+
+<dt><b>Wrapper routines for C drivers</b></dt>
+
+<dd><p>As mentioned above there is no portable way to call C from
+FORTRAN, yet there are several drivers that are written in C in the
+pgplot/drivers/ directory. A prominent example is the X-windows
+drivers pgplot/drivers/xwdriv.c. Such drivers only understand the
+two calling conventions mentioned above. Unlike the system
+routines, the drivers are complicated, so for maintenance reasons
+it would be unwise to modify copies of them just to support a new
+calling convention. Instead, makemake checks to see if there are
+any C wrapper functions in the system directory. These are routines
+that act as intermediaries between FORTRAN and the unmodified
+drivers, and makemake arranges to have both the original driver
+code and wrapper code compiled and linked. In order that makemake
+detect such wrapper functions, for driver code called xxdriv.c, the
+wrapper function should be called xxwrap.c, where the two letter
+prefix xx names a particular driver.</p>
+
+<p>The same mechanism can be used for Objective C drivers, in which
+case the file would be called xxwrap.m. However as mentioned before
+you should try to stick to C and FORTRAN code if possible.</p>
+
+<p>Note that there is no requirement that you support all of the
+drivers in the pgplot/drivers/ directory. Many of them are targeted
+at specific systems, and others are for rare devices. When first
+porting PGPLOT, you should probably first stick to a small simple
+subset until PGPLOT appears to be working reliably, then re-run
+makemake with a larger selection of drivers uncommented to test
+more of them.</p>
+</dd>
+</dl>
+
+<div class="footer">Tim Pearson, California Institute of
+Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995-2005 California Institute of Technology</div>
+</body>
+</html>
+

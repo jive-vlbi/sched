@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT GIF driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</HEAD>
+<BODY>
+
+<DIV class="header">
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="doc-index.html">Documentation</A>&nbsp;&gt;
+<A HREF="device-manual.html">Device Manual</A>&nbsp;&gt;
+GIF file format
+</DIV>
+
+<H2>PGPLOT: GIF file format</H2>
+
+<p>GIF (Graphics Interchange Format)is a widely supported format for
+raster graphics, defined by Compuserve, Inc. All web browsers and most
+image-display programs can be used to display GIF files. PGPLOT uses
+the GIF87a variant, with up to 8 bits per pixel (256 colors).</P>
+
+<p>The GIF specification incorporates the Lempel-Zev-Welch (LZW)
+compression algorithm which is the subject of a patent awarded to
+Unisys. Use of this technology, and in particular creation of GIF
+format files using this PGPLOT device driver, may require a license
+from Unisys.</p>
+
+<DL>
+
+<dt><B>Device type code</B>
+<DD>
+<CODE>/GIF</CODE> (landscape orientation),
+<CODE>/VGIF</CODE> (portrait orientation).
+
+<dt><B>Default file name</B>
+<DD>
+<CODE>pgplot.gif</CODE><BR> A GIF file can contain only a single
+image, so for multi-page plots PGPLOT creates additional files. If the
+supplied file name contains the character #, the file name is derived
+by replacing this character with the current page number. If the
+supplied file name does not contain a #, PGPLOT appends an underscore
+and the page number for the second and subsequent pages, e.g.,
+<PRE>
+   PGOPEN file name:	File names used:
+    pgplot#.gif          pgplot1.gif, pgplot2.gif, pgplot3.gif, ...
+    pgplot.gif           pgplot.gif, pgplot.gif_2, pgplot.gif_3, ...
+</PRE>
+If the supplied file name is ``-'', the output is sent to the standard
+output stream, so that it can, for example, be piped into a viewing
+program. This will only work for single-page plots.
+
+<dt><B>Default view surface dimensions</B>
+<DD>
+/GIF: 850 by 680 pixels (nominally 10.0 by 8.0 inches)<BR>
+    /VGIF: 680 by 850 pixels (nominally 8.0 by 10.0 inches)<BR>
+    These defaults can be overridden by specifying environment
+variables, or by calling routine <A
+HREF="subroutines.html#PGPAP">PGPAP</A>. The maximum size is limited
+only by available memory.
+
+<dt><B>Resolution</B>
+<DD>
+PGPLOT assumes that the device resolution is 85 pixels/inch, but the
+actual resolution will vary depending on the display device.
+
+<dt><B>Color capability</B>
+<DD>
+Color indices 0--255 are accepted, with standard defaults for color
+indices 0--15. If the color representation of a color index is changed,
+it affects all pixels drawn in that color on the current page.
+
+<dt><B>Input capability</B>
+<DD>None.
+
+<dt><B>Environment variables</B>
+<DD>
+<CODE>PGPLOT_GIF_WIDTH</CODE> : width of image in pixels (default 850)<BR>
+<CODE>PGPLOT_GIF_HEIGHT</CODE> : height of image in pixels (default 680)
+
+<dt><B>File format</B>
+<DD>GIF files are binary files.
+
+</DL>
+
+<H3>Transparent Background Images</H3>
+
+<p>The GIF87a images produced by PGPLOT do not have a way of specifying a
+transparent background. You can mark the background as transparent if
+you convert the file to GIF89a format using <i>giftrans</I> and
+specify that color index 0 should be transparent.</p>
+
+<ul>
+
+<li><b>Giftrans source code</b> for Unix is available from the <a
+href="ftp://ftp.rz.uni-karlsruhe.de/pub/net/www/tools/giftrans.c">European
+FTP site</a>
+
+<li><b>Giftrans documentation</b> (nroff format) is available from the
+<a
+href="ftp://ftp.rz.uni-karlsruhe.de/pub/net/www/tools/giftrans.1">European
+FTP site</a>
+
+<li><b>Giftrans.exe executable</b> for DOS is available from <a
+href="ftp://ftp.rz.uni-karlsruhe.de/pub/net/www/tools/giftrans.exe">European
+FTP site</a> 
+
+</ul>
+
+<p>To use <i>giftrans</I>, just type</p>
+<pre>
+giftrans -t <i>index</i> <i>GIF87a-file</i> &gt; <i>GIF89a-file</i>
+</pre>
+
+<p>This converts the <i>GIF87a-file</i> to a <i>GIF89a-file</i>, with the
+<i>index</i> entry in the colormap made transparent.  Invoke giftrans
+with the <code>-?</code> option to see a complete usage description.</P>
+
+
+<DIV class="footer">
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY>
+</HTML>
+

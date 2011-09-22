@@ -1,0 +1,114 @@
+<HTML>
+<HEAD>
+<TITLE>HJDRIV</TITLE>
+</HEAD>
+<BODY>
+
+<H2>Hewlett-Packard Deskjet or Laserjet</H2>
+<DL>
+
+<DT>Supported device
+<DD>Hewlett-Packard LaserJet, LaserJet+, or
+LaserJet II. DeskJet, DeskJet Plus, DeskJet 500.
+
+<DT>Device type code
+<DD><CODE>/HJ</CODE>.
+
+<DT>Default device name
+<DD><CODE>PGPLOT.HJPLT</CODE>.
+
+<DT>Default view surface dimensions
+<DD>Depends on which driver settings are
+chosen, via environment variables <CODE>PGPLOT_HJ_MODE</CODE>, <CODE>PGPLOT_HJ_MAR</CODE>, 
+<CODE>PGPLOT_HJ_SIZE</CODE>, and <CODE>PGPLOT_HJ_PAGE</CODE>.
+
+<DT>Resolution
+<DD>Depends on which driver settings are chosen, via
+logical names <CODE>PGPLOT_HJ_MODE</CODE> or <CODE>PGPLOT_HJ_RES</CODE>.
+
+<DT>Color capability
+<DD>Color indices 0 (erase, white) and 1 (black) are
+supported. It is not possible to change color representation.
+
+<DT>Input capability
+<DD>None.
+
+<DT>File format
+<DD>See the LaserJet andDeskJet Printer Technical
+Reference Manuals for details of the file format.
+
+<DT>Obtaining hardcopy
+<DD>VMS: use the command <CODE>PRINT/PASSALL</CODE>.
+
+<DT>Environment variables
+<DD>use <CODE>DEFINE</CODE> in VMS, <CODE>setenv</CODE> in Unix
+to define the following environment variables or logical names.
+
+<CODE>PGPLOT_HJ_MODE</CODE> = <CODE>xxxx</CODE> 
+where <CODE>xxxx</CODE> is one of the entries in the following table.
+<CODE>PHOT</CODE> puts out bitmaps suitable for inclusion in TeX
+output if you are using the Arbortext DVIHP program.  The only options
+that will work with unexpanded LaserJet are HJ08 and HJ09.  The other
+seven options require a LaserJet Plus or LaserJet II.  Do NOT
+attempt to send grayscale plots to the drivers that use the optimized
+bitmap dumps.  Terrible things will happen.
+<PRE>
+      Option  Equiv         Size (H x V)          Resolution
+      ------  -----     ---------------------    ----------
+       HJ01   LHOR        10.25 by  8.00 inches   300 DPI
+       HJ02   PHOR         8.00 by 10.25 inches   300 DPI
+       HJ03   PHOT         8.00 by 10.25 inches   300 DPI
+       HJ04   LHBR         6.54 by  4.91 inches   300 DPI
+       HJ05   PHBS         5.65 by  5.65 inches   300 DPI
+       HJ06   LMBR        10.25 by  8.00 inches   150 DPI
+       HJ07   PMBR         8.00 by 10.25 inches   150 DPI
+       HJ08   PMBS         4.48 by  4.48 inches   150 DPI
+       HJ09   PLBS         6.00 by  6.00 inches   100 DPI
+</PRE>
+ The following logical names will override the <CODE>PGPLOT_HJ_MODE</CODE> settings,
+ if used.
+
+<CODE>PGPLOT_HJ_RES</CODE> =
+<PRE>
+         H or HIGH     for 300 bpi
+         M or MEDIUM   for 150 bpi
+         L or LOW      for 100 bpi
+         V or VERYLOW  for  75 bpi
+</PRE>
+<CODE>PGPLOT_HJ_MAR</CODE> = ``xx.xx,yy.yy''
+where ``xx.xx'' and ``yy.yy'' are the vertical and horizontal
+margin dimensions in inches. The number of characters, including
+spaces preceding and following the comma, should not exceed five.
+
+<CODE>PGPLOT_HJ_SIZE</CODE> = ``xx.xx,yy.yy''
+where ``xx.xx'' and ``yy.yy''are the vertical and horizontal
+plot dimensions in inches. The number of characters, including
+spaces preceding and following the comma, should not exceed five.
+
+<CODE>PGPLOT_HJ_TEX</CODE>: if this
+is defined with any value, TeX mode (see above)
+will be used.
+
+<CODE>PGPLOT_HJ_NOFF</CODE>:
+if this is defined with any value, the form feed
+needed to eject the final page will be omitted. This is useful
+for spooled printers -- it prevents wasted (blank) pages.
+
+<CODE>PGPLOT_HJ_PAGE</CODE> = <CODE>L</CODE> (or <CODE>LANDSCAPE</CODE>) for Landscape mode,
+<CODE>P</CODE> (or <CODE>PORTRAIT</CODE>) for Portrait mode.
+
+<CODE>PGPLOT_HJ_OPT</CODE> = 
+<CODE>O</CODE> (or <CODE>OPTIMIZE</CODE>) so that bitmap will be ``optimize,''
+pr <CODE>C</CODE> (or <CODE>COMPRESS</CODE>) so that bitmap will be ``compressed.''
+Optimized mode minimizes the memory usage for the LaserJet devices.
+This sometimes leads to a larger file than if optimization is not
+used. Optimized mode may not be used with the DeskJet devices.
+Compressed mode decreases the size of the bitmap file for later
+model HP devices, particularly the DeskJet devices.
+
+<DT>Author
+<DD>S. C. Allendorf, 1989; B. H. Toby, 1991.
+</DL>
+<HR>
+</BODY>
+</HTML>

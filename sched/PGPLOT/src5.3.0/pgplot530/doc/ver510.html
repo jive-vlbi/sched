@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>PGPLOT version 5.1.0</title>
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+
+<div class="header">
+<a href="../index.html">PGPLOT</a>&nbsp;&gt;
+<a href="doc-index.html">Documentation</a>&nbsp;&gt;
+<a href="install-manual.html">Installation Manual</a>&nbsp;&gt;
+Version 5.1.0
+</div>
+
+<h2>PGPLOT version 5.1.0</h2>
+
+<h3>Tested Systems</h3>
+
+<p>Version 5.1.0 has been tested with the following operating systems
+and compilers. Drivers tested include: GI, GL, NU, PP, PS, TT, VT,
+WD, X2, XM, XW (but not all combinations of drivers and systems
+have been tested exhaustively).</p>
+
+<ul>
+<li><b>SunOS 4.1.3_U1</b>, Sun Fortran (f77) 1.3.1, GNU C (gcc)
+2.7.0 (tested on SPARC 5).</li>
+
+<li><b>Solaris 2.5</b> (SunOS 5.5), Sun Fortran (f77) 3.0.1, Sun C
+(cc) 3.0.1 (tested on SPARC IPX).</li>
+
+<li><b>Solaris 2.5</b> (SunOS 5.5), Sun Fortran (f77) 3.0.1, GNU C
+(gcc) 2.7.2 (tested on SPARC IPX, SPARC Ultra-1).</li>
+
+<li><b>OpenVMS AXP V6.1</b>, DEC FORTRAN V6.2, DEC C V4.0,
+DECwindows Motif 1.1 (tested on DEC 3000/M600).</li>
+
+<li><b>OpenVMS VAX V6.1</b>, DEC FORTRAN V6.2, DEC C V4.0,
+DECwindows Motif 1.2 (tested on VAXstation 4000-90).</li>
+</ul>
+
+<h3>Changes in Version 5.1.0</h3>
+
+<h4>New Features</h4>
+
+<ol>
+<li>A major change in this version allows a program to have more
+than one PGPLOT device open at once. The devices can be of the same
+type, e.g., two windows on an X-window workstation, or of different
+types, e.g., a Tektronix terminal emulator and a PostScript file.
+Up to 8 devices may be open at once. To support this new feature,
+four new routines have been added: <a href=
+"subroutines.html#PGOPEN">PGOPEN</a>, <a href=
+"subroutines.html#PGQID">PGQID</a>, <a href=
+"subroutines.html#PGSLCT">PGSLCT</a>, and <a href=
+"subroutines.html#PGCLOS">PGCLOS</a>, and many routines have been
+modified internally. 
+
+<p><small>At present, support for multiple devices of the
+same type is not complete. Each PGPLOT device driver needs to be
+modified to support multiple devices of the same type (i.e., served
+by the same driver), or to explicitly prohibit opening more than
+one device. Some of the older drivers have not yet been modified,
+and these drivers may give incorrect results if you attempt to use
+them to open two devices. There should never be any problem with
+unlike devices served by different drivers, e.g., /XTERM and
+/PS.</small></p>
+</li>
+
+<li>A new driver (<a href="xmdriv.html">xmdriv</a>) and support
+routines have been provided by Martin Shepherd to facilitate use of
+PGPLOT in a Motif application. Note that this is an experimental
+driver: feedback would be appreciated.</li>
+
+<li>The C function prototypes (<a href="cpgplot.h">cpgplot.h</a>)
+and C binding are now compatible with C++ as well as C.</li>
+</ol>
+
+<h4>Bugs Fixed</h4>
+
+<p>A bug has been fixed in GRPOCL (support routine for PGPOLY). This
+could cause overflow and incorrect plots if the world-coordinate
+values were greater than about 1E18 (on most machines). A
+rounding-error has been fixed in GRFA (support routine for PGPOLY);
+this could cause gaps between polygons that should abut.</p> 
+
+<p>A bug has been fixed in GRPIXL (support routine for PGPIXL);
+this should improve speed.</p>
+
+<p>Two bugs have been fixed in the X-window driver (XWDRIV): it
+would sometimes cause color maps to be set incorrectly; it allowed
+only 255 colors, not 256.</p>
+
+<h4>Drivers Removed</h4>
+
+<p>The following device drivers have been moved into directory
+pgplot/drivers/old, and cannot be selected in a normal
+installation. I believe that no-one is still using these drivers:
+ardriv.f (Args image display), grdriv.f (Grinnell image display),
+ikdriv (Ikon pixel engine), lidriv (Liacom display), pkdriv.f and
+pzdriv.f (Peritek image displays), vedriv.f (Versatec V80 printer).</p>
+
+
+<h4>List of Changes</h4>
+
+<dl>
+<dt><b>pgplot</b></dt>
+
+<dd>
+<dl>
+<dt>aaaread.me, copyright notice, makedoc, makehtml</dt>
+
+<dd>Updated date and version number.</dd>
+
+<dt>drivers.list</dt>
+
+<dd>Added XMDRIV (Motif driver). Do not select this unless you have
+the necessary Motif support and plan to write Motif applications
+that call PGPLOT. Removed obsolete drivers as noted above.</dd>
+
+<dt>makemake</dt>
+
+<dd>Added new subroutines. Added targets pgplot.hlp (VMS help
+file); pgplot-routines.tex (LaTeX); pgmdemo (example Motif
+application). Name changes: pgdisp is now pgdispd (directory);
+pgview is now pgview.app (NeXT).</dd>
+
+<dt>makehelp</dt>
+
+<dd>(New file.) Script to generate VMS help file.</dd>
+
+<dt>maketex</dt>
+
+<dd>(New file.) Script to generate LaTeX documentation.</dd>
+
+<dt>pgdispd</dt>
+
+<dd>Changed name of directory from pgdisp to pgdispd to avoid
+problems if you try to compile PGPLOT in the source directory.</dd>
+
+<dt>ver510.txt</dt>
+
+<dd>(New file.) List of changes since previous version.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/cpg</b></dt>
+
+<dd>
+<dl>
+<dt>cpgdemo.c</dt>
+
+<dd>Added a third page to exercise more routines.</dd>
+
+<dt>cpgplot.h</dt>
+
+<dd>Deleted file (note that this file needs to be created as part
+of the installation).</dd>
+
+<dt>pgbind.c</dt>
+
+<dd>Added C++ wrapper to the generated cpgplot.h file. Added
+support for <code>const</code> qualified declarations in the
+function prototypes.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/drivers</b></dt>
+
+<dd>
+<dl>
+<dt>gidriv.f, ppdriv.f, psdriv.f, ttdriv, wddriv.f, x2driv.c</dt>
+
+<dd>Modified to prevent concurrent access.</dd>
+
+<dt>gidriv.f, ppdriv.f, psdriv.f, wddriv.f</dt>
+
+<dd>On some systems the decoding of environment variables
+PGPLOT_xx_WIDTH, HEIGHT failed owing to a bad Fortran format.
+Rewritten to avoid this problem.</dd>
+
+<dt>nudriv.f</dt>
+
+<dd>Modified to allow concurrent access (up to 8 devices).</dd>
+
+<dt>xmdriv.c, pgxwin.c, pgxwin.h</dt>
+
+<dd>New files: PGPLOT driver for Motif applications (from Martin
+Shepherd).</dd>
+
+<dt>xwdriv.c</dt>
+
+<dd>Fix bug in handling query-color-representation.</dd>
+
+<dt>pgxwin_server.c</dt>
+
+<dd>Fix bug: 256 colors allowed, not 255.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/drivers/old</b></dt>
+
+<dd>New directory: several obsolete drivers (and associated
+drivers.list) have been moved from pgplot/drivers into this
+directory. These drivers should not be used; contact Tim Pearson if
+you still have a need for any of them.</dd>
+
+<dt><b>pgplot/drivers/xmotif</b></dt>
+
+<dd>New directory: support routines and example program for Motif
+applications.</dd>
+
+<dt><b>pgplot/examples</b></dt>
+
+<dd>Some of the example programs have been modified to use
+PGOPEN/PGCLOS instead of PGBEG/PGEND. 
+
+<dl>
+<dt>pgdemo1.f</dt>
+
+<dd>Changed the pseudo-random number generator to avoid integer
+overflows.</dd>
+
+<dt>pgdemo6.f</dt>
+
+<dd>`+' key now cycles between cursor modes (rubber-band,
+cross-hair, etc.)</dd>
+
+<dt>pgdemo13.f</dt>
+
+<dd>(New program) Demonstration of two open devices.</dd>
+
+<dt>pgdemo14.f</dt>
+
+<dd>(New program) This program demonstrates a method of coding a
+user interface in PGPLOT. It requires the /XSERV device. For a more
+professional approach to graphical user interfaces, consider using
+the PGPLOT Motif driver.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/src</b></dt>
+
+<dd>
+<dl>
+<dt>(Many pg routines)</dt>
+
+<dd>Changed the C function prototypes to use the <code>const</code>
+qualifier where appropriate. This makes it easier to use the
+function prototypes with C++. Most arguments declared <code>float
+*</code> or <code>char *</code> are now <code>const float *</code>
+or <code>const char *</code> (except for returned values).</dd>
+
+<dt>grpckg1.inc</dt>
+
+<dd>Modified to allow up to 8 concurrent devices.</dd>
+
+<dt>grfa.f</dt>
+
+<dd>Rounding-error fix (thanks to Remko Scharroo; twice).</dd>
+
+<dt>grinit.f</dt>
+
+<dd>New routine: initializes common block (avoids BLOCK DATA).</dd>
+
+<dt>grpixl.f</dt>
+
+<dd>Minor bug fix (Remko Scharroo).</dd>
+
+<dt>grpocl.f</dt>
+
+<dd>Rewrite to avoid potential overflow (thanks to Tomasz
+Plewa).</dd>
+
+<dt>pgplot.inc</dt>
+
+<dd>Modified to allow up to 8 concurrent devices; many variables
+changed from scalars to arrays, with new names.</dd>
+
+<dt>pgask.f, pgband.f, pgbbuf.f, pgbeg.f, pgbox.f, pgcirc.f,
+pgebuf.f, pgend.f, pgerrb.f, pgerrx.f, pgerry.f, pggray.f,
+pghi2d.f, pgiden.f, pgimag.f, pglen.f, pgmtxt.f, pgncur.f,
+pgnoto.f, pgpage.f, pgpanl.f, pgpap.f, pgpoly.f, pgptxt.f, pgqah.f,
+pgqch.f, pgqcir.f, pgqcs.f, pgqfs.f, pgqhs.f, pgqinf.f, pgqitf.f,
+pgqtbg.f, pgqtxt.f, pgqvp.f, pgqvsz.f, pgqwin.f, pgrect.f, pgsah.f,
+pgsch.f, pgscir.f, pgsfs.f, pgshs.f, pgsitf.f, pgstbg.f, pgsubp.f,
+pgsvp.f, pgswin.f, pgvsiz.f, pgvstd.f, pgvw.f, pgwnad.f</dt>
+
+<dd>Modified to allow multiple concurrent devices.</dd>
+
+<dt>pgclos.f</dt>
+
+<dd>(New routine.) Closes the currently selected graphics
+device.</dd>
+
+<dt>pginit.f</dt>
+
+<dd>(New internal routine.) Initialize PGPLOT (this is to avoid an
+illegal initialization of data in COMMON).</dd>
+
+<dt>pgopen.f</dt>
+
+<dd>(New routine.) Open (and select) a graphics device; unlike
+PGBEG, this does not close any previously opened device.</dd>
+
+<dt>pgqid.f</dt>
+
+<dd>(New routine.) Returns the identifier of the currently selected
+graphics device, for use with PGSLCT.</dd>
+
+<dt>pgslct.f</dt>
+
+<dd>(New routine.) Selects one of the open devices for graphics
+output.</dd>
+
+<dt>pgqinf.f</dt>
+
+<dd>Changed version number to 5.1.0.</dd>
+
+<dt>pgshs.f</dt>
+
+<dd>Added checks on validity of arguments.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_*</b></dt>
+
+<dd>Changes to configuration files to support compilation of the
+Motif driver and example programs.</dd>
+
+<dt><b>pgplot/sys_arc</b></dt>
+
+<dd>Contents of directory updated for version 5.1.0 by Dave
+Crennell. See file AAAREADME.</dd>
+
+<dt><b>pgplot/sys_linux</b></dt>
+
+<dd>The current version of gcc does not require system-specific
+variants of any files. The variants for f2c have been moved into a
+subdirectory pgplot/sys_linux/f77_src and the configuration files
+have been modified accordingly.</dd>
+
+<dt><b>pgplot/sys_mac</b></dt>
+
+<dd>Contents of directory updated for version 5.0.3 by J. S.
+Salmento. See file aaaread.me.</dd>
+
+<dt><b>pgplot/sys_msdos</b></dt>
+
+<dd>Contents of directory updated for version 5.1.0 by C. T. Dum.
+See file aaaread.me.</dd>
+
+<dt><b>pgplot/sys_next</b></dt>
+
+<dd>Contents of directory updated for version 5.1.0 and NeXtStep
+3.0 by Allyn Tennant. Configuration file for GNU Fortran (g77)
+added. See file aaaread.me.</dd>
+
+<dt><b>pgplot/sys_sol2</b></dt>
+
+<dd>Added -R options to the ld commands in the configuration files;
+these help the demo programs to find the PGPLOT shared library at
+run time (assuming you haven't moved it after compilation.)</dd>
+
+<dt><b>pgplot/sys_sun4</b></dt>
+
+<dd>Changed version number from 1.7 to 1.8 in all .conf files.</dd>
+
+<dt><b>pgplot/sys_vms</b></dt>
+
+<dd>
+<dl>
+<dt>build.com, compile.com</dt>
+
+<dd>Added new routines to shared library transfer vector. Added
+instructions for linking with Motif library when needed.</dd>
+
+<dt>grlgtr.f</dt>
+
+<dd>This routine formerly converted all PGPLOT device
+specifications to uppercase for VMS. It now preserves case (VMS
+file and device names are not case-sensitive, but some PGPLOT
+device specifications can be).</dd>
+
+<dt>install.com</dt>
+
+<dd>Added new target (pgmdemo) to compile/install the Motif
+demonstration program.</dd>
+
+<dt>make_cpg.com</dt>
+
+<dd>Corrected to use the version of cpgplot.h in the current
+directory; set correct protection on generated files.</dd>
+
+<dt>make_pgdisp.com</dt>
+
+<dd>Changed name of directory from PGDISP to PGDISPD.</dd>
+
+<dt>make_pgmdemo.com</dt>
+
+<dd>(New file.) Used in compilation of the Motif example
+program.</dd>
+</dl>
+</dd>
+
+<dt><b>pgplot/sys_win</b></dt>
+
+<dd>New directory: from Phil Seeger. Port of version 5.1.0 to MS
+PowerStation Fortran/Windows95 (or WindowsNT) environment. See file
+aaaread.me.</dd>
+</dl>
+
+<div class="footer">
+Tim Pearson, California Institute of Technology, <i><a href=
+"mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1996 California Institute of Technology</div>
+
+</body>
+</html>
+
