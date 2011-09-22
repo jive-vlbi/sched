@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT XWD driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</HEAD>
+<BODY>
+
+<DIV class="header">
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="doc-index.html">Documentation</A>&nbsp;&gt;
+<A HREF="device-manual.html">Device Manual</A>&nbsp;&gt;
+XWD file format
+</DIV>
+
+<H2>PGPLOT: XWD file format</H2>
+
+<p>XWD (X Window dump) files can be displayed on X Window workstations
+using the <CODE>xwud</CODE> utility and converted to a printable form
+using the <CODE>xpr</CODE> utility. These utilities are available in
+most X Window installations.</P>
+
+<p>The X Window system can produce dump files in a variety of formats.
+PGPLOT uses an image format of &ldquo;ZPixmap&rdquo; with 8 bits per pixel.</P>
+
+<p>Note that the XWD format is inefficient; usually a <A
+HREF="gidriv.html">GIF</A> file will be smaller.</P>
+
+<DL>
+
+<dt><B>Device type code</B>
+<DD>
+<CODE>/WD</CODE> (landscape orientation),
+<CODE>/VWD</CODE> (portrait orientation).
+
+<dt><B>Default file name</B>
+<DD>
+<CODE>pgplot.xwd</CODE><BR>
+An X Window dump  file can contain only a single image, so for multi-page plots
+PGPLOT creates additional files. If the supplied file name contains
+the character #, the file name is derived by replacing this
+character with the current page number. If the supplied file name does not
+contain a #, PGPLOT appends an underscore and the page number for the
+second and subsequent pages, e.g.,
+<PRE>
+   PGOPEN file name:	File names used:
+    pgplot#.xwd          pgplot1.xwd, pgplot2.xwd, pgplot3.xwd, ...
+    pgplot.xwd           pgplot.xwd, pgplot.xwd_2, pgplot.xwd_3, ...
+</PRE>
+
+<dt><B>Default view surface dimensions</B>
+<DD>
+/WD: 850 by 680 pixels (nominally 10.0 by 8.0 inches)<BR> /VWD: 680 by
+850 pixels (nominally 8.0 by 10.0 inches)<BR> These defaults can be
+overridden by specifying environment variables, or by calling routine
+<A HREF="subroutines.html#PGPAP">PGPAP</A>. The maximum size is
+limited only by available memory.
+
+<dt><B>Resolution</B>
+<DD>
+PGPLOT assumes that the device resolution is 85 pixels/inch, but
+the actual resolution will vary depending on the display device.
+
+<dt><B>Color capability</B>
+<DD>
+Color indices 0--255 are accepted, with standard defaults for color
+indices 0--15. If the color representation of a color index is changed,
+it affects all pixels drawn in that color on the current page.
+
+<dt><B>Input capability</B>
+<DD>
+None.
+
+<dt><B>Environment variables</B>
+<DD>
+<CODE>PGPLOT_WD_WIDTH</CODE> : width of image in pixels (default 850)<BR>
+<CODE>PGPLOT_WD_HEIGHT</CODE> : height of image in pixels (default 680)
+
+<dt><B>File format</B>
+<DD>
+X Window Dump files are binary files.
+
+</DL>
+
+<DIV class="footer">
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY>
+</HTML>

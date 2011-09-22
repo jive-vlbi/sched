@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT PPM driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</HEAD>
+<BODY>
+
+<DIV class="header">
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="doc-index.html">Documentation</A>&nbsp;&gt;
+<A HREF="device-manual.html">Device Manual</A>&nbsp;&gt;
+PPM file format
+</DIV>
+
+
+<H2>PGPLOT: PPM file format</H2>
+
+<p>The PPM (Portable Pixel Map) raster format was defined by Jef
+Poskanzer, whose Portable Bitmap Utilities (available on the Internet)
+can be used to translate it into a variety of other formats.  The
+program <CODE>xv</CODE> (by John Bradley) can
+be used to display PPM files on UNIX and VMS workstations. PGPLOT uses
+the P6 variant, with 24 bits (8 each for R, G, B) for each pixel.  The
+format is not efficient in use of storage, so for most purposes the
+GIF format is preferred. However, the PPM format allows more than 256
+colors.</p>
+
+<DL>
+
+<DT><B>Device type code</B>
+<DD>
+<CODE>/PPM</CODE> (landscape orientation),
+<CODE>/VPPM</CODE> (portrait orientation).
+
+<DT><B>Default file name</B>
+<DD>
+<CODE>pgplot.ppm</CODE><BR>
+A PPM file can contain only a single image, so for multi-page plots
+PGPLOT creates additional files. If the supplied file name contains
+the character #, the file name is derived by replacing this
+character with the current page number. If the supplied file name does not
+contain a #, PGPLOT appends an underscore and the page number for the
+second and subsequent pages, e.g.,
+<PRE>
+   PGOPEN file name:	File names used:
+    pgplot#.ppm          pgplot1.ppm, pgplot2.ppm, pgplot3.ppm, ...
+    pgplot.ppm           pgplot.ppm, pgplot.ppm_2, pgplot.ppm_3, ...
+</PRE>
+If the supplied file name is ``-'', the output is sent to the standard
+output stream, so that it can, for example, be piped into a viewing
+program. This will only work for single-page plots.
+
+<DT><B>Default view surface dimensions</B>
+<DD>
+/PPM: 850 by 680 pixels (nominally 10.0 by 8.0 inches)<BR> /VPPM: 680
+by 850 pixels (nominally 8.0 by 10.0 inches)<BR> These defaults can be
+overridden by specifying environment variables, or by calling routine
+<A HREF="subroutines.html#PGPAP">PGPAP</A>. The maximum size is limited
+only by available memory.
+
+<DT><B>Resolution</B>
+<DD>
+PGPLOT assumes that the device resolution is 85 pixels/inch, but
+the actual resolution will vary depending on the display device.
+
+<DT><B>Color capability</B>
+<DD>
+Color indices 0--255 are accepted, with standard defaults for color
+indices 0--15. If the color representation of a color index is changed,
+it affects only pixels drawn subsequently, so the number of different
+colors that can be used in an image is not limited to 256. 
+
+<DT><B>Input capability</B>
+<DD>
+None.
+
+<DT><B>Environment variables</B>
+<DD>
+<CODE>PGPLOT_PPM_WIDTH</CODE> : width of image in pixels (default 850)<BR>
+<CODE>PGPLOT_PPM_HEIGHT</CODE> : height of image in pixels (default 680)
+
+<DT><B>File format</B>
+<DD>
+PPM files are binary files.
+
+</DL>
+
+<DIV class="footer">
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY>
+</HTML>

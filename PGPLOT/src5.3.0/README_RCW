@@ -1,0 +1,42 @@
+I am installing pgplot from scratch to explore including it with SCHED.
+
+I am basing this on a version 5.3.0 that I got from Tim Pearson years
+ago when I was first installing on Macs.  Version 5.2.2 is the latest
+on the pgplot web site.  Since then, there has been a shift from g77
+to gfortran which is requiring some changes.  I got a
+gfortran_gcc.conf to put in sys_darwin from a web site that was mainly
+aimed at bsd.
+
+For reference, at http://www.lorene.obspm.fr/pgplot_quick.txt
+the author made the makefile, then edited it.  There the following
+change was made:
+     # Replace "FFLAGC=-u -Wall -fPIC -O" in line 26
+     #   by    "FFLAGC=-ffixed-form -ffixed-line-length-none -u -Wall -fPIC -O"
+Did not do that for now.
+
+Ran makemake and make.
+
+Will need PGPLOT_DIR to point to where the following file are put:
+
+       libpgplot.a
+       grfont.dat
+       rgb.txt
+       pgxwin_server
+
+In the past, I had those in /usr/local/pgplot.  That file is not there
+after my disaster with macports (failed on both pgplot and g95 - do they
+test their stuff?).  Make that place a link to the current directory.
+
+Actually the make file points to /opt/local for macports.
+
+
+Copy the above files to $SCHED/lib/OSX_INTEL.
+Make a new makefile pointing there and test it.  It's ok.
+
+Make a new directory $SCHED/RELATED_CODE/PGPLOT
+
+Copy the src5.3.0 directory there.
+Make an osx_intel_5.3.0 directory.
+Put drivers.list there
+rerun makemake and make.
+

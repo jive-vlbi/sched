@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>PGPLOT changes in Version 5.0.1</title>
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body bgcolor="WHITE">
+<h2>PGPLOT version 5.0.1</h2>
+
+This version corrects several minor bugs; corrects a serious error
+in PGGRAY; adds functionality to the X window driver; adds a new
+driver for X window dump files. 
+
+<dl>
+<dt>pgplot</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Split into files aaaread.me, install.txt, whatsnew.txt,
+changes.txt.</dd>
+
+<dt>drivers.list</dt>
+
+<dd>Add warning that use of GIDRIV may require a license. Add /WD
+and /VWD (X-window dump files). Add comments to discourage people
+from trying to use PC drivers on UNIX systems. Revise /VERS and
+/VVERS.</dd>
+
+<dt>makehtml</dt>
+
+<dd>New perl script now generates syntactically correct html with
+cross-references [Diab Jerius].</dd>
+
+<dt>makemake</dt>
+
+<dd>Add instructions for SVdriv and WDdriv. Make it work with bash
+as well as sh. No longer makes pgplot.html by default. Remove
+VVdriv.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/drivers</dt>
+
+<dd>
+<dl>
+<dt>gidriv.f</dt>
+
+<dd>Avoid integer overflow (caused driver to crash on VAX/VMS). Add
+warning that use of this driver may require a license from
+Unisys.</dd>
+
+<dt>tfdriv.f</dt>
+
+<dd>Correct error in usage of GRFMEM.</dd>
+
+<dt>svdriv.c, svblock.c</dt>
+
+<dd>Restored from v4.9H (note: this driver for SunView is no longer
+supported: use XWdriv instead).</dd>
+
+<dt>vedriv.f</dt>
+
+<dd>Merge landscape and portrait modes in one driver.</dd>
+
+<dt>vvdriv.f</dt>
+
+<dd>Deleted.</dd>
+
+<dt>wddriv.f</dt>
+
+<dd>New file: generates X-window dump file [Scott Allendorf].</dd>
+
+<dt>xwdriv.c, pgxwin_server.c</dt>
+
+<dd>Fixes to datatypes of properties: corrects bugs found on Cray
+and Dec-Alpha (OSF/1). Support for all visual types, including
+TrueColor. Ability to set different attributes for each window via
+X resources. On VMS, checks that pgxwin_server has E or R
+access.</dd>
+
+<dt>x2driv.c, figdisp_comm.c</dt>
+
+<dd>Suppress warning messages produced by DECC compiler.</dd>
+
+<dt>bcdriv.f, ccdriv.f, hjdriv.f, ladriv.f, ljdriv.f, todriv.f,
+txdriv.f</dt>
+
+<dd>Eliminate use of routine gribf1.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/examples</dt>
+
+<dd>
+<dl>
+<dt>pgdemo2.f</dt>
+
+<dd>Add a test of an invisible polygon.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/fonts</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Note that pgunpack and pgdchar are unsupported.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/src</dt>
+
+<dd>
+<dl>
+<dt>grcurs.f</dt>
+
+<dd>Correct bug: start new picture if necessary.</dd>
+
+<dt>grldev.f</dt>
+
+<dd>Change ``Legal PGPLOT device types are:'' to ``Device types
+available:''.</dd>
+
+<dt>grmker.f</dt>
+
+<dd>Fix bug: viewport grew as symbols were plotted!</dd>
+
+<dt>pgband.f, pgcurs.f</dt>
+
+<dd>Issue message if device is not open.</dd>
+
+<dt>pggray.f, grgray.f</dt>
+
+<dd>PGGRAY now uses a color ramp between the colors assigned to
+color index 0 (background) and color index 1 (foreground). This
+should restore the old behavior: the ramp runs from black to white
+on devices with black background and white foreground, and from
+white to black on devices with white background and black
+foreground.</dd>
+
+<dt>pgpage.f</dt>
+
+<dd>If this routine detects that the size of the view surface has
+been changed (e.g., by a workstation window manager), it now
+rescales the viewport in proportion. Formerly the size of the
+viewport (in absolute units, e.g., mm) was not changed and so the
+viewport might extend outside the view surface. This only affects
+programs that do not reset the viewport for each page.</dd>
+
+<dt>pgpoly.f, grpocl.f</dt>
+
+<dd>Correct bug: an invisible polygon generated a spurious error
+message.</dd>
+
+<dt>pgqcs.f, pglen.f, pgqvsz.f</dt>
+
+<dd>Fix minor formatting errors in header comments.</dd>
+
+<dt>pgqinf.f</dt>
+
+<dd>Change version to 5.0.1.</dd>
+
+<dt>pgslw.f, pgqlw.f, grslw.f</dt>
+
+<dd>Correct header comments (line width unit is 0.005 inch).</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys</dt>
+
+<dd>
+<dl>
+<dt>gribf1.f</dt>
+
+<dd>Deleted (also system-dependent variants).</dd>
+
+<dt>grfileio.c</dt>
+
+<dd>Add O_TRUNC to cause truncation when an existing file is
+overwritten.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_convex</dt>
+
+<dd>
+<dl>
+<dt>fc_cc.conf</dt>
+
+<dd>Added -lX11.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_cray</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Removed note about /XWIN: it now works.</dd>
+
+<dt>grfileio.c</dt>
+
+<dd>add O_TRUNC to cause truncation when an existing file is
+overwritten.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_linux</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>New file: note that many drivers cannot be compiled; note about
+disabling backslash interpretation.</dd>
+
+<dt>f77_gcc.conf</dt>
+
+<dd>Corrected to use ranlib, and revised list of libraries.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_next</dt>
+
+<dd>
+<dl>
+<dt>pgview/PGView.m</dt>
+
+<dd>[Allyn Tennant] Correct resize bar.</dd>
+
+<dt>af77_src/grfileio.c</dt>
+
+<dd>add O_TRUNC to cause truncation when an existing file is
+overwritten.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_sol2</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Added warning about non-ANSI C compilers.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_sun</dt>
+
+<dd>
+<dl>
+<dt>aaaread.me</dt>
+
+<dd>Added note about SunView driver.</dd>
+</dl>
+</dd>
+
+<dt>pgplot/sys_vms</dt>
+
+<dd>
+<dl>
+<dt>build.com</dt>
+
+<dd>Add PGQITF, PGSITF, PGPANL to transfer vector.</dd>
+
+<dt>grfileio.c</dt>
+
+<dd>Suppress warning messages produced by DECC compiler. Add
+O_TRUNC to cause a new version of the file to be created instead of
+overwriting (usual VMS behavior).</dd>
+
+<dt>grlgtr.f</dt>
+
+<dd>Convert supplied string to uppercase before attempting to
+translate it as a logical name.</dd>
+
+<dt>make_demos.com</dt>
+
+<dd>Correct comment.</dd>
+
+<dt>make_font.com</dt>
+
+<dd>Change protection of grfont.dat.</dd>
+</dl>
+</dd>
+</dl>
+
+<div class="NOPRINT">
+<hr>
+Tim Pearson, California Institute of Technology, <i><a href=
+"mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995 California Institute of Technology</div>
+</body>
+</html>
+

@@ -1,0 +1,988 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT XMDRIV driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:mcs@astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR="#dddddd">
+
+<H2>X Motif widget driver</H2>
+<DL>
+<DT><B>Author</B>
+<DD>M. C. Shepherd, 1996.
+
+<P>
+<DT><b>Supported device</b>
+<DD>Restricted to Motif applications on workstations running the X Window
+    System (Version 11 Release 4 and above).
+
+<P>
+<DT><b>Availability</b>
+<DD>Released as a beta-test driver in PGPLOT 5.1.0.
+<BR>Updated for general use in PGPLOT 5.2.0.
+    See the <a href="#CHANGES">changes</a> section for revision
+    details.
+<P>
+<DT><b>Device type code</b>
+<DD><CODE>/XMOTIF</CODE>
+
+<P>
+<DT><b>Device name specification</b>
+<DD>The device name used to refer to an already created and realized
+    <CODE>XmPgplot</CODE> widget is the name that was given to the
+    widget as the first argument of
+    <CODE>XtVaCreateManagedWidget()</CODE> when the widget
+    was created. The full device specification used to open a given
+    widget to PGPLOT with
+    <a href="subroutines.html#PGBEG"><code>cpgbeg()</code></a> or
+    <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a> can
+    also be obtained through the 
+    <a href="#XMP_DEVICE_NAME"><CODE>xmp_device_name()</CODE></a> 
+    convenience function.
+
+<P>
+<DT><b>Default view surface dimensions</b>
+<DD> By default the size of an <CODE>XmPgplot</CODE> widget window is 256×256
+     pixels. This can be overridden by setting the
+     <CODE>XmNheight</CODE> and <CODE>XmNwidth</CODE> X resources when
+     creating the widget.
+
+<P>
+<DT><b>Resolution</b>
+<DD>This depends on the monitor on which the windows are to be displayed.
+
+<P>
+<DT><b>Color capability</b>
+<DD>Colors are allocated from the colormap of the top-level window of
+    the application. Colormaps of types <CODE>PseudoColor</CODE>,
+    <CODE>StaticColor</CODE>, <CODE>GrayScale</CODE>,
+    <CODE>StaticGray</CODE>, and <CODE>TrueColor</CODE> are supported.
+    For <CODE>PseudoColor</CODE> and <CODE>GrayScale</CODE> colormaps,
+    colors can be allocated either readonly or read/write. The other
+    colormaps only support readonly colors.
+
+<P>
+
+    The value of the <a href="#MAXCOLORS"><code>XmpNmaxColors</code></a>
+    configuration option specifies the number of colors that each
+    widget should attempt to allocate. This defaults to 100. To reduce
+    the likelihood of depleting the colormap you should reduce this
+    number to what you actually need. For read/write colors the actual
+    number allocated will be less than this if there are fewer color
+    cells left in the application's colormap.
+
+<P>
+
+    If your application needs to dynamically change the colors of
+    existing graphics, you will need read/write colors allocated from
+    PseudoColor or GrayScale colormaps. If the default colormap is not
+    one of these, or contains insufficient free colors then you will
+    either have to cope with readonly colors as described below, or
+    allocate a <a href="#COLOR_CONFIGURATION">private colormap</a> for
+    the application, as described later. If there are insufficient
+    read/write colors in the colormap (this can happen even with a
+    private colormap if your application contains too many
+    color-hungry widgets), then the widget will quietly allocate
+    readonly colors instead.  You can control the point at which this
+    happens with the <a href="#MINCOLORS"><code>XmpNminColors</code></a>
+    configuration attribute when the widget is created, and test
+    whether readonly colors were allocated by querying the <a
+    href="#SHARE"><code>XmpNshare</code></a> attribute.
+
+<P>
+
+    If your application either doesn't need to change colors
+    dynamically or can cope with colors not changing until the next
+    page-clearing call to <a
+    href="subroutines.html#PGPAGE"><CODE>cpgpage()</CODE></a>, then
+    you should allocate readonly colors by setting the <a
+    href="#SHARE"><code>XmpNshare</code></a> option to
+    <code>True</code> when you create the PGPLOT widget. On readonly
+    colormaps this has no effect, but on PseudoColor and GrayScale
+    colormaps it results in colors potentially being shared with other
+    applications that allocate readonly colors. If there are no
+    read/write colors available in the color map when the widget tries
+    to allocate a color that no other application has allocated
+    shared, then the widget will search out the closest colors to
+    those required, by sorting through the pool of readonly colors
+    that other applications (including other PGPLOT widgets) have
+    allocated. Thus the colors may not always precisely match those
+    requested.
+
+
+<P>
+<DT><b>Input capability</b>
+<DD>The cursor is usually controlled by a mouse. Cursor input is
+    achieved by moving the cursor into the window of the widget, and
+    pressing either a mouse button or a keyboard key to select a given
+    position in the window and return a key value. The mouse buttons
+    are mapped to return characters A, D, and X.
+<P>
+    An <a href="#CURSOR_INPUT_FUNCTIONS">asynchronous alternative</a>
+    to the <a href="subroutines.html#PGCURS"><code>cpgcurs()</code></a>
+    and <a href="subroutines.html#PGBAND"><code>cpgband()</code></a>
+    procedures is provided. This provides the same functionality as
+    <a href="subroutines.html#PGBAND"><code>cpgband()</code></a> except
+    that once armed, cursor input is delivered to the application via
+    callback functions.
+<P>
+    Facilities are also provided to support applications that want to
+    handle cursor input themselves via
+    <code>XtAddEventHandler()</code>. This includes optional
+    augmentation of the X cursor with rubber-bands, and functions for
+    converting between X-window coordinates and world coordinates.
+<P>
+<DT><b>Multiple open device capability</b>
+<DD>The XmPgplot driver places no restrictions on the number of
+    <CODE>XmPgplot</CODE> widgets that can be open to PGPLOT
+    simultaneously. Note, however that PGPLOT does set limits on the
+    total number of open devices. Currently (April 96) this limit is
+    8.
+
+<P>
+<DT><b>Required files from the PGPLOT installation</b>
+    <DD>
+    <DL>
+    <DT> <b>C include files:</b>
+    <DD>
+         <DL>
+         <DT><b><CODE>XmPgplot.h</CODE></b>
+         <DD>This header file should be included by all application source code files
+             from which <CODE>XmPgplot</CODE> widget functions or resources are
+             used.
+         <DT><b><CODE>cpgplot.h</CODE></b>
+         <DD>Since Motif is usually used from C, the include file for the C
+             PGPLOT wrapper library should also be included in all
+             Motif applications that make calls to the PGPLOT library.
+         </DL>
+<P>
+    <DT> <b>UNIX PGPLOT libraries:</b>
+    <DD>
+         <DL>
+         <DT><b><CODE>libXmPgplot.a</CODE></b>
+         <DD>This library contains the Motif PGPLOT widget and its PGPLOT
+             driver. The main PGPLOT library only contains a stub
+             version of the driver so when linking Motif applications,
+             it is essential that <CODE>libXmPgplot.a</CODE> appear
+             <em>before</em> the main PGPLOT library. For example, a
+             snapshot of the link line under UNIX would be:
+<P>
+ <PRE>
+   -lXmPgplot -lcpgplot -lpgplot -lXm -lXt -lX11
+ </PRE>
+          <DT><b><CODE>libcpgplot.a</CODE></b> and <b><CODE>libpgplot.a</CODE></b>
+          <DD> The PGPLOT C wrapper library and the FORTRAN PGPLOT library.
+          </DL>
+<P>
+    <DT> <b>VMS PGPLOT libraries:</b>
+    <DD>
+         <DL>
+         <DT><b><CODE>XMPGPLOT.OBJ</CODE></b>
+         <DD>This object file contains the compiled Motif PGPLOT
+             widget and its PGPLOT driver. Note that the main PGPLOT
+             library only contains a stub version of the driver and
+             that programs that use the Motif widget must link with
+             <CODE>XMPGPLOT.OBJ</CODE> in addition to the the main
+             PGPLOT library.
+         <DT><b><CODE>GRPCKG.OLB and CPGPLOT.OLB</CODE></b>
+         <DD>The PGPLOT C wrapper library and the static version of
+             the main PGPLOT library. The shareable PGPLOT library
+             can not be used when the Motif driver is required.
+         <DT><b><CODE>XMOTIF.OPT</CODE></b>
+         <DD>This file can be used to link PGPLOT applications that
+             use the <CODE>XmPgplot</CODE> widget driver. It is a
+             linker options file that lists the PGPLOT, Motif,
+             X-toolkit and X11 libraries. It should be used like:
+<P>
+ <PRE>
+   LINK PROGRAM,PGPLOT_DIR:PGMOTIF.OPT/OPT
+ </PRE>
+
+         </DL>
+     </DL>
+    
+<P>
+<DT><b>Configuration</b>
+<DD>The configuration of individual widgets is controlled by X resources.
+    It is usually most convenient to set such resources in the call to
+    <CODE>XtVaCreateManagedWidget()</CODE> when each PGPLOT widget is
+    created, but they can also be placed in app-defaults files or, on
+    POSIX-compliant systems, the <CODE>.Xdefaults</CODE> file in your
+    home directory. Under VMS this file is called
+    <CODE>DECW$USER_DEFAULTS:DECW$XDEFAULTS.DAT</CODE>. Note that by
+    default DECW$USER_DEFAULTS is defined as SYS$LOGIN.
+    <P>
+    <DL>
+    <DT><a name="COLOR_CONFIGURATION">
+          <b>Configuration of the widget colormap and visual.</b>
+        </a>
+    <DD><CODE>XmPgplot</CODE> widgets allocate colors from the Visual and
+        Colormap specified via the <CODE>XmNcolormap</CODE> and
+        <CODE>XmNvisual</CODE> resources. These default to
+        <CODE>CopyFromParent</CODE>, as they do in most other
+        widgets. As a result, <CODE>XmPgplot</CODE> widgets normally allocate
+        colors from the default colormap and visual of the screen. If
+        the default colormap of the screen is insufficient for your
+        needs and you need to allocate a private colormap then I
+        suggest that you register the result with the top-level
+        widget of the application rather than with a specific
+        <CODE>XmPgplot</CODE> widget. This will then be inherited by
+        all widgets in the application, including <CODE>XmPgplot</CODE>
+        widgets. The steps to perform to allocate a private colormap
+        and assign it to the top-level widget of the application are
+        as follows:
+<P>
+        <UL>
+          <LI> Call <CODE>XtVaAppInitialize()</CODE> as you normally
+               would.
+<br>
+               For the sake of the example, let's say that you store
+               the returned top-level widget in a variable called
+               <CODE>w_top</CODE>.
+          <LI> Call <CODE>XtDisplay(w_top)</CODE> to acquire the
+               <CODE>Display</CODE> Xlib context object.
+          <LI> Use the normal Xlib functions to find an appropriate
+               visual and allocate the required private colormap.
+          <LI> Register the selected colormap and visual to the
+               top-level widget:
+<PRE>
+  XtVaSetValues(w_top,
+                XmNcolormap, colormap,
+                XmNvisual,   visual,
+                NULL);
+</PRE>
+        </UL>
+<P>
+        Alternatively if you really want to assign private
+        colormaps to individual <CODE>XmPgplot</CODE> widgets then
+	note that to get the window manager to automatically install
+	the colormap of a widget window, one has to set the
+        <CODE>WM_COLORMAP_WINDOWS</CODE> property on the 
+        top-level window of the host application. The X toolkit
+        provides the function <CODE>XtSetWMColormapWindows()</CODE>
+        to do this.
+<P>
+        Other X resources that effect the way that colors are
+        allocated are:
+<P>
+        <DL>
+        <DT><CODE><a name="MINCOLORS"><b>XmpNminColors</b></a></CODE>
+        <DD>This has a default value of 2. Its value determines the
+            minimum acceptable number of colors in a colormap. If
+            fewer colors are available than this number, then the
+            color allocation code will give up and fall back on using
+            just the black and white colors of the screen to draw
+            PGPLOT graphics.
+        <DT><CODE><a name="MAXCOLORS"><b>XmpNmaxColors</b></a></CODE>
+        <DD>This has a default value of 100. It specifies how many
+            colors to attempt to allocate per widget. Thus if you have
+            two PGPLOT widgets sharing a colormap that has only 100
+            free colors then you would need to make the
+            <CODE>XmpNmaxColors</CODE> resource values of the two
+            widgets add up to no more than 100.
+        <DT><CODE><a name="SHARE"><b>XmpNshare</b></a></CODE>
+        <DD>Select whether shared readonly colors, (<code>True</code>)
+            or private read/write colors (<code>False</code>) should
+            be allocated from PseudoColor and GrayScale colormaps. The
+            default is <code>False</code>.  This option is only
+            consulted when a widget is created, but after creation it
+            can be queried to determine what type of colors were
+            actually allocated.
+            
+        </DL>
+<P>
+    <DT><b>Configuring how widget resizes are handled.</b>
+    <DD>When geometry management widgets are resized by users,
+        their child widgets generally also get resized. This means that
+        the PGPLOT widget can get resized at unpredictable times.
+        However PGPLOT assumes that the size of its view surface remains
+        unchanged between the start of one page and the start of the
+        next. To handle this <CODE>XmPgplot</CODE> widgets use an
+        off screen pixmap for buffering and backing store. This is
+        kept fixed in size for the duration of each page, and is only
+        resized to fit the window when
+        <a href="subroutines.html#PGPAGE"><code>cpgpage()</code></a> is
+        called. If the widget window is resized to a smaller size, then
+        part of the plot will become obscured until the next page is
+        started. The <CODE>XmPgplot</CODE> widget driver supports two
+        optional ways to improve this situation.
+<P>
+        <DL>
+        <DT><b> Scrolled PGPLOT windows.</b>
+        <DD>If you arrange for the parent widget of a
+            <CODE>XmPgplot</CODE> widget to be a Motif
+            <CODE>ScrolledWindow</CODE> widget then the PGPLOT 
+            widget will automatically adopt the scroll-bars of its
+            parent and arrange that they scroll the underlying pixmap
+            relative to the window. Then if the window is resized to a
+            smaller size the scroll bars can be used to see the
+            obscured part of the plot.
+        <DT><b> Using a resize callback.</b>
+        <DD>Another way to handle the situation is to register a callback
+            to be called whenever the PGPLOT widget gets resized. For
+            this to be useful you should have the callback call the
+            PGPLOT
+            <a href="subroutines.html#PGPAGE"><code>cpgpage()</code></a>
+            procedure so as to synchronize the size of the pixmap with
+            the window, and then re-draw any graphics that you want to
+            re-appear there. Registering such a callback is just a
+            matter of calling <CODE>XtAddCallback()</CODE> with the
+            PGPLOT widget as the first argument,
+            <CODE>XmNresizeCallback</CODE> as the second argument,
+            your callback function as the third argument and an
+            optional client-context data argument as the final
+            argument. The callback function should be declared like:
+<P>
+            <DL>
+            <DT><CODE><b> void </b></CODE>whatever<CODE><b>(w,
+                client_data, call_data)</b></CODE>
+            <DD>Where the arguments are declared and interpreted as:
+<P>
+                <DL>
+                <DT><CODE>Widget w</CODE>
+                <DD> The <CODE>XmPgplot</CODE> widget that has been resized.
+                <DT><CODE>XtPointer client_data</CODE>
+                <DD> This is the <CODE>client_data</CODE> pointer that was
+                     registered with <CODE>XtAddCallback()</CODE>. It should
+                     be cast back to its actual type before use.
+                <DT><CODE>XtPointer call_data</CODE>
+                <DD>This argument is always <CODE>NULL</CODE>.
+                </DL>
+            </DL>
+        </DL>
+   </DL>
+<P>
+<DT><a name="CURSOR_INPUT_FUNCTIONS">
+      <b>Cursor input functions</b>
+    </a>
+<DD>The standard PGPLOT
+    <a href="subroutines.html#PGCURS"><code>cpgcurs()</code></a> and
+    <a href="subroutines.html#PGBAND"><code>cpgband()</code></a>
+    cursor-input functions are not recommended for use in Motif
+    applications because they block the toolkit event loop.  Instead
+    an alternative callback system, designed to mimic <a
+    href="subroutines.html#PGBAND"><code>cpgband()</code></a> but
+    without blocking the event loop, has been provided. Arming and
+    disarming the cursor is achieved through two functions:
+<P>
+     <DL>
+     <DT><a name="ARM_CURSOR"><CODE><b>int xmp_arm_cursor(widget, mode, xref, yref, callback,
+          client_data)</b></CODE></a>
+     <DD> This function augments the X cursor with the type of
+          rubber-band specified in the <CODE>mode</CODE> argument. It
+          also optionally registers a callback function to be passed
+          the world coordinates and character of key-press and
+          button-press events. The cursor can subsequently be disarmed
+          via a call to <CODE>xmp_disarm_cursor()</CODE>. The cursor is
+          automatically disarmed when the device is closed to PGPLOT
+          by
+          <a href="subroutines.html#PGCLOS"><code>cpgclos()</code></a>
+          or
+          <a href="subroutines.html#PGEND"><code>cpgend()</code></a>, and 
+          whenever the cursor is re-armed.
+<P>
+          Note that when the cursor is augmented, the rubber band is
+          redrawn every time that the PGPLOT buffer is flushed. This
+          happens after every call to PGPLOT functions unless
+          sensible use is made of
+          <a href="subroutines.html#PGBBUF"><code>cpgbbuf()</code></a> and 
+          <a href="subroutines.html#PGEBUF"><code>cpgebuf()</code></a> to
+          buffer sequential calls. Be sure to use these functions
+          properly if you don't want your PGPLOT code to be slow.
+<P>
+          The arguments of <CODE>xmp_arm_cursor()</CODE> are:
+<P>
+         <DL>
+         <DT><CODE>Widget widget</CODE>
+         <DD> The target PGPLOT widget. The widget must be open to PGPLOT.
+         <DT><CODE>int mode</CODE>
+         <DD> The type of cursor to display, from:
+              <DL>
+              <DT><CODE>XMP_NORM_CURSOR</CODE>
+                  <DD> The un-augmented X cursor.
+              <DT><CODE>XMP_LINE_CURSOR</CODE>
+                  <DD> A line drawn between <CODE>(xref,yref)</CODE> and
+                       the pointer. 
+              <DT><CODE>XMP_RECT_CURSOR</CODE>
+                  <DD> A rectangular cursor with opposing vertices at
+                       <CODE>(xref,yref)</CODE> and the pointer.
+              <DT><CODE>XMP_YRNG_CURSOR</CODE>
+                  <DD> Two horizontal lines, one through
+                       <CODE>xref</CODE> and the other through the
+                       pointer.
+              <DT><CODE>XMP_XRNG_CURSOR</CODE>
+                  <DD> Two vertical lines, one through <CODE>yref</CODE>
+                       and the other through the pointer.
+              <DT><CODE>XMP_HLINE_CURSOR</CODE>
+                  <DD> A horizontal line through the pointer. 
+              <DT><CODE>XMP_VLINE_CURSOR</CODE>
+                  <DD> A vertical line through the pointer.
+              <DT><CODE>XMP_CROSS_CURSOR</CODE>
+                  <DD> A cross-hair cursor centered on the pointer.
+              </DL>
+         <DT><CODE>float xref, yref</CODE>
+              <DD> The cursor reference position in the current
+                   world-coordinate system. If the world coordinate
+                   system is subsequently changed the reference
+                   position will <em>not</em> be recomputed.
+         <DT><CODE>XtCallbackProc callback</CODE> - The cursor-input callback
+                                                function, or 0 if not required.
+              <DD> This is used just like any other Xt callback
+                   function, except that its <CODE>call_data</CODE>
+                   argument is a pointer to a struct of the following
+                   declaration, cast to <CODE>(XtPointer)</CODE>.
+<P>
+ <PRE>
+ typedef struct {
+   float x,y;  /* The world-coordinate position of the cursor */
+   char key;   /* The key pressed by the user. Mouse buttons */
+               /* are encode as 'A','D','X' (left to right) */
+ } XmpCursorCallbackStruct;
+ </PRE>
+<P>
+                   The callback function will be called whenever a key
+                   (if the widget has keyboard input focus) or pointer
+                   button is pressed while the pointer is in the
+                   associated PGPLOT widget.
+
+         <DT><CODE>void *client_data</CODE> - Client context data.
+              <DD> This pointer will be passed verbatim to the callback
+                   function whenever a cursor-input event is reported.
+         </DL>
+<P>
+         The return value of <CODE>xmp_arm_cursor()</CODE> is 0 if
+         successful or 1 if the specified widget is not an open PGPLOT
+         widget or the <CODE>callback</CODE> argument is <CODE>NULL</CODE>.
+<P>
+     <DT><CODE><b>int xmp_disarm_cursor(widget)</b></CODE>
+     <DD> This function can be called to undo the effect of a previous
+          call to <CODE>xmp_arm_cursor()</CODE> for the specified
+          widget. Note that this function can be called even when the
+          cursor has not been previously armed or when the widget is
+          not open to PGPLOT.
+<P>
+          The <CODE>xmp_disarm_cursor()</CODE> function returns
+          0 if successful or 1 if the specified widget is not a PGPLOT
+          widget.
+<P>
+     
+     <DT><a name="RAW_INPUT"><b>Advanced cursor-input</b></a>
+     <DD> On its own <code>xmp_arm_cursor()</code> provides a
+          convenient but limited cursor-input facility, designed to
+          mimic
+          <a href="subroutines.html#PGBAND"><code>cpgband()</code></a>.
+          What it doesn't provide is a general means of responding to
+          the full variety of X-window events. For example, it doesn't
+          report Motion events via its callback. This section
+          describes the facilities available for establishing one's
+          own cursor-input handlers.
+<P>
+          To display a rubber band cursor without using its callback
+          facility, call <code>xmp_arm_cursor()</code> with its
+          callback argument specified as 0. This tells the widget's
+          cursor event handler not to select for button-press and
+          key-press events and disables the special interpretation of
+          mouse-buttons and Tab keys with respect to
+          <a href="#FOCUS">keyboard-focus management</a> .
+<P>
+          To register input event handlers externally to
+          <code>xmp_arm_cursor()</code> use the standard
+          <code>XtAddEventHander()</code>. In order to convert from
+          the reported X-window coordinates to PGPLOT
+          world-coordinates, use the
+          <a href="#PIX_2_WORLD"><code>xmp_pixel_to_world()</code></a>
+          function described later.
+<P>
+          For example, having created a Label widget
+          <code>w_label</code> and a PGPLOT widget
+          <code>w_plot</code>, the following code would result in a
+          world-coordinate readout of the cursor being displayed in
+          the label whenever the cursor was moved over the PGPLOT
+          widget.
+<P>
+<PRE>
+  XtAddEventHandler(w_plot, PointerMotionMask, False,
+                    report_cursor, (XtPointer)w_label);
+  ...
+
+  static void report_cursor(Widget w, XtPointer context,
+              XEvent *event, Boolean *continue_dispatch)
+  {
+    Widget w_label = (Widget) context;
+    char text[80];
+    float wx, wy;
+/*
+ * Convert from X-window coordinates to world coordinates.
+ */
+    if(xmp_pixel_to_world(w, event->xmotion.x, event->xmotion.y,
+                          &amp;wx, &amp;wy) == 0) {
+      sprintf(text, &quot;X=%-10g Y=%-10g&quot;, wx, wy);
+      XtVaSetValues(w_label,
+           XtVaTypedArg, XmNlabelString, XmRString,
+           text, strlen(text)+1, NULL);
+    }
+    *continue_dispatch = True;
+  }
+</PRE>
+          
+<P>
+     
+     <DT><a name="FOCUS"><b>Keyboard focus issues</b></a>
+     <DD> A widget that receives keyboard input is said to have the
+          keyboard input focus. Only one widget can have this at one
+          time. If you want to be told of keyboard input when an
+          <CODE>XmPgplot</CODE> cursor is armed, then read on about
+          the awkward issue of how an <CODE>XmPgplot</CODE> widget
+          receives the input focus.
+	  <a name="NO_KEYBOARD">
+          Alternatively, if you only care about receiving cursor input
+          from button presses, then you should set the
+          <CODE>XmNtraversalOn</CODE> widget resource to
+          <CODE>False</CODE>, otherwise some button-presses will be
+          lost to focus management.</a>
+<P>
+          When a Motif application has the keyboard input focus, the 
+	  Motif library decides which of the application's widgets will
+	  receive keyboard input. This is independent of the method used
+	  by the window manager for top-level windows. Motif supports two
+	  schemes, either of which can be selected by setting the value of the
+	  <CODE>XmNkeyboardFocusPolicy</CODE> resource of the top-level widget
+	  to one of the following values:
+     <P>
+	  <OL>
+	  <LI> <a name="XM_EXPLICIT">
+	          <CODE>XmEXPLICIT</CODE> (The default focus policy).
+	       </a>
+     <P>
+	       This implements a click-to-focus model whereby the user must
+	       explicitly set the input focus either by pressing the TAB
+	       key repeatedly until the required widget is reached, or by
+	       moving the pointer into the widget window and pressing a
+	       mouse button.
+     <P>
+	       Unfortunately, this means that when a PGPLOT widget
+	       doesn't have the keyboard input focus, the first button
+	       press is used to acquire the input focus, rather than
+	       being reported as cursor-input. Similarly, once the
+	       widget has the keyboard input focus, TAB characters are
+	       used to move the input focus to the next widget rather
+	       than being delivered as cursor input. This is confusing
+	       to users, so it is better to either use the
+	       <a href="#XM_POINTER"><CODE>XmPOINTER</CODE></a> focus
+               policy, or to tell the 
+	       widget that keyboard input is not desired, as described
+               <a href="#NO_KEYBOARD">above</a>.
+     <P>
+	       In order to allow users to determine in advance whether an
+	       <CODE>XmPgplot</CODE> widget has input focus, the border of
+	       the widget is changed from the background color of its
+	       parent to white. This color was chosen so as to be distinct
+	       from the default black background color of
+	       <CODE>XmPgplot</CODE> widgets. The color and other aspects
+	       of highlighting can be changed via the highlighting
+	       resources of the <CODE>Primitive</CODE> widget.
+     <P>
+               Note that X conventions discourage applications from
+               moving the keyboard focus unless under user direction.
+               However, in cases where the user presses a button who's
+               primary function is to activate an <CODE>XmPgplot</CODE> 
+               cursor for user input, you might consider actively
+               setting the keyboard input focus to the respective
+               <CODE>XmPgplot</CODE> widget via a statement of the
+               following form,
+<PRE>
+  XmProcessTraversal(widget, XmTRAVERSE_CURRENT);
+</PRE>
+               placed just after the call to
+               <CODE>xmp_arm_cursor(widget, ..)</CODE>. This statement
+               has no effect if the focus policy is not
+               <CODE>XmEXPLICIT</CODE>.
+     <P>
+	  <LI> <a name="XM_POINTER">
+	         <CODE>XmPOINTER</CODE>
+	       </a>
+     <P>
+	       In this scheme the widget in which the pointer lies is the
+	       one that receives keyboard input, and button presses are
+               always unambiguously treated as cursor input. This
+               avoids all keyboard focus complications. However, some
+               users don't like it because they like to be able to
+               move the pointer out of the window in which they are
+               typing.
+     </OL>
+     <P>
+	  Note that the above resource values can either be hard-coded via
+	  the call to <CODE>XtVaAppInitialize()</CODE> or specified in
+	  the application's app-defaults file.
+     <P>
+          If having read this, you still want to be told about
+          keyboard input in addition to mouse-button input, but you
+          don't like the way <code>xmp_arm_cursor()</code> manages the
+          keyboard input focus, then you can write your own using the
+          facilities described above under
+          <a href="#RAW_INPUT">&quot;Advanced cursor-input&quot;</a>.
+     </DL>
+
+<P>
+
+<DT><a name="CONVERSION"><b>Coordinate conversion functions</b></a>
+<DD>The following functions are designed for use with custom event
+    handlers. They perform conversions between widget X-window
+    coordinates and PGPLOT world coordinates.
+<P>
+     <DL>
+     <DT><a name="PIX_2_WORLD"><b><code>int xmp_pixel_to_world(widget, px, py, wx, wy)</code></b></a>
+     <DD>This function takes the X-window coordinates of a pixel
+         within a PGPLOT widget and returns the corresponding PGPLOT
+         world coordinates. If the widget is not open to PGPLOT the
+         reported world coordinates will be 0.0,0.0. The function
+         arguments are:
+<P>
+         <DL>
+         <DT><code>Widget widget</code>
+         <DD>The target PGPLOT widget.
+         <DT><code>int px, py</code>
+         <DD>The pixel coordinates to be converted. These are
+             interpretted with respect to the origin at the top left
+             corner of the widget window. This is the 
+             normal coordinate system used by X windows.
+         <DT><code>float *wx, *wy</code>
+         <DD>On output the variables pointed to by <code>wx</code> and
+             <code>wy</code> will be assigned the PGPLOT world coordinates
+             that correspond to pixel <code>px</code>, <code>py</code>.
+         </DL>
+<P>
+         The function returns 0 on success or 1 if the widget is invalid.
+<P>
+     <DT><b><code>int xmp_world_to_pixel(widget, wx, wy, px, py)</code></b>
+     <DD>This function takes the PGPLOT world coordinates of a point
+         on the viewsurface of a PGPLOT widget and returns the
+         X-window coordinates of the nearest pixel.
+         If the widget is not open to PGPLOT the
+         reported coordinates will be 0,0. The function arguments are:
+<P>
+         <DL>
+         <DT><code>Widget widget</code>
+         <DD>The target PGPLOT widget.
+         <DT><code>float wx, wy</code>
+         <DD> The PGPLOT world coordinates to be converted.
+         <DT><code>int *px, *py</code>
+         <DD>On output the variables pointed to by <code>px</code> and
+             <code>py</code> will be assigned the X-window coordinates
+             of the pixel nearest to world coordinate <code>wx</code>,
+	     <code>wy</code>.
+         </DL>
+<P>
+         The function returns 0 on success or 1 if the widget is invalid.
+     </DL>
+
+<P>
+<DT><b>Widget identification functions</b>
+<DD> Two convenience functions are provided for determining the
+     name and PGPLOT id associated with a particular PGPLOT
+     widget.
+
+     <DL>
+     <DT><a name="XMP_DEVICE_NAME">
+           <CODE><b>int xmp_device_name(Widget widget)</b></CODE>
+         </a>
+     <DD> This function returns a device-name string suitable for
+          use with the
+          <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>
+          or
+          <a href="subroutines.html#PGBEG"><code>cpgbeg()</code></a>
+          functions to open the specified <CODE>XmPgplot</CODE> widget to
+          PGPLOT. An example of how this can be used with
+          <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>
+          is shown <a href="#XMP_DEVICE_NAME_EXAMPLE">later</a>. The
+          returned string is part of the specified widget and must be
+          treated as read-only by the caller.
+<P>
+          The form of the returned string is
+          <CODE>"widget_name/XMOTIF"</CODE> where
+          <CODE>widget_name</CODE> is the name that was given to the
+          widget when it was created.
+<P>
+          If the specified widget is not a PGPLOT widget then an error
+          message will be emitted and the returned device name will be
+          <CODE>&quot;/null&quot;</CODE>. 
+<P>
+     <DT><a name="XMP_DEVICE_ID">
+           <CODE><b>int xmp_device_id(Widget widget)</b></CODE>
+         </a>
+     <DD> When a PGPLOT device is opened with the
+          <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>
+          function, PGPLOT returns an integral identifier. This may
+          then be used, via the
+          <a href="subroutines.html#PGSLCT"><code>cpgslct()</code></a>
+          function, to select which of the open PGPLOT devices is to
+          be the current graphics device. The
+          <CODE>xmp_device_id()</CODE> convenience function returns
+          the PGPLOT identifier associated with the given <CODE>XmPgplot</CODE>
+          widget. This can be useful in callbacks, where the
+          <CODE>Widget</CODE> argument passed to the callback function
+          can then be used to select the widget as the current PGPLOT
+          device.
+<P>
+          If the <CODE>Widget</CODE> argument passed to the
+          <CODE>xmp_device_id()</CODE> function either hasn't been
+          opened to PGPLOT or hasn't been re-opened after being
+          closed, then <CODE>xmp_device_id()</CODE> emits an error
+          message and returns 0.
+     </DL>
+
+<P>
+
+<DT><a name="INHERIT"><b>Other <CODE>XmPgplot</CODE> widget resources.</b></a>
+<DD><DL>
+    <DT><b>XmpNpadX</b>
+    <DD>This sets the width of the optional blank margin that is left
+        on either side of the drawable part of the widget. The single
+        argument is an integer pixel count, recorded as a
+        <code>Dimension</code> (see <code>X11/Instrinsic.h</code>).
+        For historical reasons its default value is 20 pixels
+	(typically 1/4"). Changes made to this attribute do not take
+	effect until a new page is started.
+
+    <DT><b>XmpNpadY</b>
+    <DD>This sets the height of the optional blank margin that is left
+        above and below the drawable part of the widget. The single
+        argument is a an integer pixel count, recorded as a
+        <code>Dimension</code> (see <code>X11/Instrinsic.h</code>). For
+	historical reasons its default value is 20 pixels (typically
+        1/4"). Changes made to this attribute do not take effect until
+	a new page is started.
+    </DL>
+
+<P>
+
+<DT><a name="INHERIT"><b>Inherited widget resources.</b></a>
+<DD> <CODE>XmPgplot</CODE> widgets inherit all of the <CODE>X</CODE> resources of
+     the <CODE>Core</CODE> and <CODE>Primitive</CODE> Motif widget
+     classes.
+<P>
+     Note that the <code>XmNbackground</code> and
+     <code>XmNforeground</code> resources change the color
+     representations of pgplot color indexes 0 and 1. The default
+     background is black and the default foreground is white. Thus to
+     create an <code>XmPgplot</code> widget with these colors swapped,
+     one could type:
+<PRE>
+  plot = XtVaCreateManagedWidget(&quot;plot&quot;, xmPgplotWidgetClass,	parent,
+	XmNheight, 400,
+	XmNwidth, 400,
+	XmpNmaxColors, 50,
+	XmNtraversalOn, False,
+	XtVaTypedArg, XmNbackground, XmRString, &quot;white&quot;, strlen(&quot;white&quot;)+1,
+	XtVaTypedArg, XmNforeground, XmRString, &quot;black&quot;, strlen(&quot;black&quot;)+1,
+	NULL);
+</PRE>
+
+<P>
+<DT><b>How to create and use a Motif PGPLOT widget with PGPLOT</b>
+<DD> Motif PGPLOT widgets are created just like other widgets, by
+     calling <CODE>XtVaCreateManagedWidget</CODE>. The first argument
+     to <CODE>XtVaCreateManagedWidget</CODE> must be the device name
+     by which you wish to refer to the widget in
+     <a href="subroutines.html#PGBEG"><code>cpgbeg()</code></a>
+     or
+     <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>,
+     and the second argument must be
+     <CODE>xmPgplotWidgetClass</CODE>. The third argument specifies 
+     the parent widget. If you want the widget to have scroll bars then
+     this should be a Motif <CODE>ScrollBar</CODE> widget. The
+     remaining arguments are a list of X resource-value pairs
+     terminated by a <CODE>NULL</CODE> argument. These should be used
+     to configure the widget, via the resources listed earlier.
+<P>
+     A non-variadic &quot;convenience&quot; function for creating a
+     PGPLOT widget is also available, called
+     <CODE>XmCreatePgplot()</CODE> and the equivalent function to
+     create both a PGPLOT widget and an associated
+     <CODE>ScrollBar</CODE> widget is called
+     <CODE>XmCreateScrolledPgplot()</CODE>. Note that in both cases
+     you should apply <CODE>XtManageChild()</CODE> to the returned
+     widget.
+<P>
+     Before a PGPLOT widget can be used from PGPLOT it has to be
+     opened by calling
+     <a href="subroutines.html#PGBEG"><code>cpgbeg()</code></a> or
+     <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>.
+     This can be done any time <em>after</em> the PGPLOT widget has
+     been realized.
+<P>
+     Note that PGPLOT now supports multiple open PGPLOT devices via 
+     <a href="subroutines.html#PGOPEN"><code>cpgopen()</code></a>,
+     <a href="subroutines.html#PGSLCT"><code>cpgslct()</code></a> and
+     <a href="subroutines.html#PGCLOS"><code>cpgclos()</code></a>.
+     You can thus create and have multiple PGPLOT widgets open to
+     PGPLOT simultaneously. If you do this, be sure to call
+     <a href="subroutines.html#PGSLCT"><code>cpgslct()</code></a> in
+     each callback to ensure that the intended PGPLOT widget is
+     addressed. The id to pass to
+     <a href="subroutines.html#PGSLCT"><code>cpgslct()</code></a> to
+     select a given <CODE>XmPgplot</CODE> widget can be obtained via
+     the <a href="#XMP_DEVICE_ID"><CODE>xmp_device_id()</CODE></a>
+     convenience function. 
+<P>
+     Please see the previous sections on configuration, resize options
+     and how to get cursor input.
+<P>
+     An example of creating a PGPLOT widget as the child of a scroll bar
+     widget is as follows:
+<P>
+     <PRE>
+         #include &lt;stdio.h&gt;
+         #include &lt;X11/Intrinsic.h&gt;
+         #include &lt;Xm/Xm.h&gt;
+         #include &lt;Xm/ScrolledW.h&gt;
+
+         #include &quot;XmPgplot.h&quot;
+         #include &quot;cpgplot.h&quot;
+
+         int main(int argc, char *argv[])
+         {
+            XtAppContext app; /* Application context */
+            Widget w_top;     /* The top-level widget of the application */
+            Widget w_scroll;  /* Scroll-bar widget */
+            Widget w_pgplot1; /* PGPLOT widget */
+         /*
+          * Initialize Motif and request a pointer following
+          * keyboard-focus policy. 
+          */
+            XtSetLanguageProc(NULL, NULL, NULL);
+            w_top = XtVaAppInitialize(&amp;app, &quot;Pgplot&quot;, NULL, 0,
+                                     &amp;argc, argv, NULL,
+                                     XmNkeyboardFocusPolicy, XmPOINTER,
+                                     NULL);
+         /*
+          * Create a ScrollBar widget.
+          */
+            w_scroll = XtVaCreateManagedWidget(&quot;pgplot_scrollbar&quot;,
+                                     xmScrolledWindowWidgetClass, w_top,
+                                     NULL);
+         /*
+          * Create a PGPLOT widget as a child of the scroll-bar widget.
+          * Give it an initial size of 300x300 pixels and allow it to
+          * allocate up to 60 colors from the colormap used by the parent
+          * widget.
+          */
+            w_pgplot1 = XtVaCreateManagedWidget(&quot;pgplot1&quot;,
+                                     xmPgplotWidgetClass, w_scroll,
+                                     XmNheight, 300,
+                                     XmNwidth, 300,
+                                     XmpNmaxColors, 60);
+         /*
+          * Create and display the application windows.
+          */
+            XtRealizeWidget(w_top);
+         /*
+          * Open w_pgplot1 as the current PGPLOT device.
+          */
+            if(cpgopen(<a name="XMP_DEVICE_NAME_EXAMPLE">xmp_device_name(w_pgplot1)</a>) &lt;= 0) {
+              fprintf(stderr, &quot;Failed to open PGPLOT widget: %s\n&quot;,
+                      xmp_device_name(w_pgplot1));
+              exit(1);
+            };
+         /*
+          * Proceed with the Xt event loop.
+          */
+            XtAppMainLoop(app);
+         /* NOT REACHED */
+            return 0; 
+         };
+   </PRE>
+<P>
+   This example doesn't actually do anything useful except create a
+   PGPLOT widget with scroll-bars and open it to PGPLOT. To make the
+   example useful you would have to arrange for something to draw into
+   the PGPLOT widget. This could be a work procedure, 
+   a callback registered to a communication stream for logging incoming
+   data, or a push-button callback.
+<P>
+   The <CODE>pgmdemo</CODE> demo program provides a much more
+   complete example. The source code for it can be found in the PGPLOT
+   distribution in <CODE>pgplot/drivers/xmotif/pgmdemo.c</CODE>. It is
+   compiled automatically when the <CODE>xmdriv</CODE> driver is
+   uncommented in <CODE>drivers.list</CODE> during PGPLOT
+   installation.
+
+<P>
+
+<DT><a name="CHANGES"><b>Version history.</b></a>
+<DD><DL><DT><b>Changes in PGPLOT 5.2.0</b>
+        <DD>The rubber-band and cursor input facilities have been
+            reworked. The changes include:
+     <P>
+     <UL>
+     <LI> Setting the
+	  <a href="#NO_KEYBOARD"><code>XmNtraversalOn</code></a> widget
+	  resource to <code>False</code> now correctly disables
+	  keyboard-focus management. Previously this resource was
+	  ignored.
+     <LI> <a href="#ARM_CURSOR"><code>xmp_arm_cursor</code></a> now
+	  allows one to specify 0 for its callback argument. This allows
+	  people to use the rubber-band cursor augmentation facility
+	  without incuring the side-effects of its callback
+	  facility. This paves the way for programmers to use
+	  <code>XtAddEventHandler</code> to register more <a
+	  href="#RAW_INPUT">advanced cursor-event handlers</a> than would
+	  otherwise be possible.
+     <LI> There are two new <a href="#CONVERSION">coordinate conversion
+	  functions</a> for use by those who want to write their own
+	  X-window event handlers.
+     <LI> The cursor used to be disarmed whenever the world coordinate
+	  system of a widget changed. It no longer is.
+     <LI> It used to be the case that if graphics were drawn while the
+	  rubber-band cursor was displayed, the new graphics could
+	  overwrite parts of the cursor. To counter this the rubber-band
+	  cursor is redrawn every time the PGPLOT buffer is
+	  flushed. This will slow down graphical output unless you use
+	  <a href="subroutines.html#PGBBUF"><code>cpgbbuf()</code></a>
+	  and
+	  <a href="subroutines.html#PGEBUF"><code>cpgebuf()</code></a>
+	  prudently to buffer sequential pgplot calls.
+     <LI> Various bugs have been fixed that had been causing the
+	  rubber-band cursor to be left un-erased in certain obscure
+	  situations, or to leave a "bristly" edge in the highlight
+	  border where the cursor shouldn't have been drawn in the first
+	  place, or to flip to the bottom when the mouse pointer exited
+	  the top of a widget.
+     <LI> The <code>XmNbackground</code> and <code>XmNforeground</code>
+	  resources were being overriden by the default pgplot
+	  background and foreground colors whenever a widget was opened
+	  to pgplot. This made these resources useless. They now work
+	  correctly. If not specified, the default background and
+	  foreground colors will be black and white (as before) rather
+	  than taking on the conventional blue and black Motif colors.
+	  See the <a href="#INHERIT">Inherited widget resources</a>
+	  section for more details.
+     </UL>
+    </DL>
+
+    <P>
+
+    <DL><DT><b>Unrealeased changes.</b>
+        <DD> <UL>
+             <LI> The XmpNshare attribute was added to support the
+                  allocation of shared colors from read/write
+                  colormaps.
+             <LI> The XmpNpadX and XmpNpadY attributes were added to allow
+                  one to control the previously hardwired size of the
+                  blank margin that is left around the drawable area
+                  of the widget. This was the result of discussions
+                  with Brian Glendenning and Bob Garwood at NRAO.
+             <LI> Internally an integer was incorrectly used to record
+                  pixels-per-inch instead of floating point. This
+                  resulted in the widget being a bit smaller than it
+                  ought to be. Thanks to Bob Garwood at NRAO for
+                  finding this. It is now fixed.
+             </UL>
+    </DL>
+
+</DL>
+
+<HR>
+Martin Shepherd (<a href="mailto:mcs@astro.caltech.edu">mcs@astro.caltech.edu</a>).
+</BODY></HTML>

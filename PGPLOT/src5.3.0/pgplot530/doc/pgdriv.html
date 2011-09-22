@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT PGDRIV driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR="#dddddd">
+
+<H2>PGPLOT metafile driver</H2>
+
+<i>Beta-test version released with PGPLOT v5.2.0</i>
+
+<DL>
+
+<DT><B>Author</B>
+<DD>T. J. Pearson, 1997.<P>
+
+<DT><b>Supported device</b>
+
+<DD>This PGPLOT driver creates a disk file in the private PGPLOT
+metafile format.  [Do not confuse this format with other formats, such
+as the Windows Metafile format.]Files in this format can be read into
+a PGPLOT program with subroutine <code>pgrdmf</code> and displayed on
+another PGPLOT device.<P>
+
+The device driver is written in standard Fortran-77 and can be used
+with all operating systems for which PGPLOT is available.<P>
+
+The PGPLOT metafile is a plain ASCII text file; it can be
+transferred from one machine to another using standard channels (e.g.,
+ftp, e-mail).  The first five characters in the file must be
+<code>%PGMF</code> to identify the file type. PGPLOT metafiles can
+contain more than one picture (``page''). PGPLOT metafiles may be
+concatenated: the resulting file is also a valid PGPLOT metafile.
+Files can be substantially compressed by using standard utilities such
+as <code>gzip</code>.<P>
+
+It should be fairly easy to write translation programs to convert
+files from this format to another graphics format. <P>
+
+<DT><b>Device specification</b>
+
+<DD><i>filename</i><CODE>/PGMF</CODE><BR>
+    <CODE>-/PGMF</CODE><P>
+
+Supply any file name suitable for use on the host operating
+system. The default file name is <code>pgplot.pgmf</code>. If the file
+already exists, it will be overwritten (unless the operating system
+can create multiple <i>versions</i> of the file).<P>
+
+If the filename is ``-'', the file will be sent to the standard output
+and can be piped into another program (on operating systems that
+support this).<P>
+
+<DT><b>Default view surface dimensions</b>
+
+<DD>The default view surface is 6400×4800 units, with a nominal scale
+and resolution of 1000 units per inch (about 40 units per mm). The
+actual scale can be changed when the metafile is displayed.
+The default can be overridden by calling <code>pgpap</code> in the 
+PGPLOT program, or, if <code>pgpap</code> is not used, by setting
+environment variables (logical names in VMS):
+<UL>
+<LI><CODE>PGPLOT_PGMF_WIDTH</CODE>  (default 6400)
+<LI><CODE>PGPLOT_PGMF_HEIGHT</CODE> (default 4800)
+</UL>
+These variables specify width and height in metafile units.<P>
+
+<DT><b>Color capability</b>
+
+<DD>Color indices 0-255 are available; color indices 0-15 have the
+standard PGPLOT default color representations, with white background
+(color index 0) and black foreground (color index 1). The <i>RGB</i>
+representation of any color index can be changed by calling
+<code>pgscr</code>. The default representations of color indices 0 and 1 can be changed with PGPLOT environment variables, e.g.<UL>
+<LI><CODE>PGPLOT_BACKGROUND</CODE>  (default <code>white</code>)
+<LI><CODE>PGPLOT_FOREGROUND</CODE>  (default <code>black</code>)
+</UL>
+<P>
+
+<DT><b>Input capability</b>
+
+<DD>None (non-interactive device).<P>
+
+<DT><b>Limitations</b>
+
+<DD>1. Only one PGPLOT device of this type may be opened at once.<BR>
+    2. The driver does not yet support the <i>image</i> functions (routines
+       <code>pgimag</code>, <code>pggray</code>, etc.).
+
+</DL><P>
+
+<HR>
+</BODY></HTML>

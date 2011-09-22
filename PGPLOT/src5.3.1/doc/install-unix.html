@@ -1,0 +1,436 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>PGPLOT Installation Instructions: UNIX systems</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css"></head>
+<body bgcolor="WHITE">
+<div class="NOPRINT"><font face="sans-serif, Arial, Helvetica"
+size="2" color="#0033CC"><a href="../index.html">PGPLOT</a>&nbsp;&gt;
+<a href="../index.html">Documentation</a>&nbsp;&gt; 
+<a href="install-manual.html">Installation Manual</a>&nbsp;&gt;
+ UNIX</font></div>
+
+<h1>Installation Instructions: UNIX systems</h1>
+
+<h2>PGPLOT 5.3.0</h2>
+
+<p><b>Note:</b> The following instructions refer to two directories,
+the <i>distribution (source) directory</i> which will contain the
+PGPLOT source code directory tree, and the <i>target directory</i>
+in which the machine-specific libraries, data files, and
+demonstration programs will be created. It is recommended that you
+create new, <i>empty</i> directories for these. They should not be
+the same directory. In the examples below, these directories are
+named</p>
+
+<p><code>/usr/local/src/pgplot531</code> (distribution directory)
+<br>
+<code>/usr/local/pgplot</code> (target directory)</p>
+
+<p>but you can use any convenient names. Unusual (root) privileges
+are not required to install PGPLOT, assuming you have write access
+to the directories. A single distribution directory can be used to
+install versions of PGPLOT for different architectures in different
+target directories.</p>
+
+<h2>Download the distribution file</h2>
+
+<p>Download the distribution file <a href= 
+"../downloads/pgplot531.tar.gz">pgplot531.tar.gz</a>.</p>
+
+<h2>Decompress the files</h2>
+
+<p>Use <code>gunzip</code> and <code>tar</code> to decompress the
+archive and extract its contents. This will create directory
+<code>pgplot531</code> (and subdirectories) in the current
+directory. Make sure that your current directory is where you want to
+create the &ldquo;PGPLOT distribution&rdquo; directory tree. e.g.,</p>
+
+<pre>cd /usr/local/src
+gunzip -c pgplot531.tar.gz | tar xvof -
+</pre>
+
+<p>This example will create <code>/usr/local/src/pgplot531</code> and
+subdirectories.</p>
+
+<h2>Create the target directory</h2>
+
+<p>Create a writeable directory in which the PGPLOT library and
+associated files will be created. One such directory is needed for
+each different operating system and compiler combination (&ldquo;target
+system&rdquo;) that you wish to support, e.g.,</p> 
+
+<pre>mkdir /usr/local/pgplot
+</pre>
+
+<p>Do not try to create the PGPLOT library in the distribution
+directory.</p>
+
+<h2>Select device drivers</h2>
+
+<p>Configure PGPLOT by selecting device drivers from the available
+list. First copy the file <code>drivers.list</code> from the
+distribution directory to the target directory, and then use a text
+editor to select device drivers. This file contains one line for
+each available device driver: delete the exclamation mark (!) at
+the beginning of the line to include the driver, or ensure that an
+exclamation mark is present if you want to exclude the driver. Many
+of the drivers can be used only on certain operating systems (see
+notes in <code>drivers.list</code>), so include <b>only the drivers
+you plan to use</b>. PGPLOT can later be reconfigured by restarting
+the installation at this step. Most installations should include:
+the null device (/NULL), PostScript printers (/PS, /VPS, /CPS, and
+/VCPS), Tektronix terminals (/TEK, /XTERM, and possibly other
+variants), and, if the X window system is available on the target,
+the X window drivers (/XWINDOW, /XSERVE). You may also wish to include
+drivers for GIF files (/GIF, /VGIF) or some of the other printers.</p>
+
+<pre>cd /usr/local/pgplot
+cp /usr/local/src/pgplot531/drivers.list .
+vi drivers.list         (or use your preferred editor)
+</pre>
+
+<blockquote><i>The file <code>drivers.list</code> is already configured
+to select the drivers that are useful on most systems, so you should
+not have to edit it unless you have special requirements.</i></blockquote>
+
+<p><b>Note:</b> If you select either the Motif widget driver (XMDRIV)
+or the Tk/Tcl widget driver (TKDRIV), the installation procedure
+will install additional files and demonstration programs. Do not
+select these drivers unless you are planning to develop programs
+that will use them. For further information see the appropriate
+documentation:</p>
+
+<ul>
+<li><a href="xmdriv.html">XMDRIV</a></li>
+
+<li><a href="tkdriv.html">TKDRIV</a></li>
+</ul>
+
+<h2>Create the makefile</h2>
+
+<p>The PGPLOT installation procedure for UNIX uses a script, called
+<code>makemake</code>, to generate a standard UNIX makefile for
+your operating system, compilers, and list of selected PGPLOT
+device drivers. Operating-system and compiler information is
+obtained from a <i>configuration file</i>. Configuration files are
+available for the following systems. If your configuration is not
+one of those listed, or if you have trouble using the generated
+makefile, see below for information about creating your own
+configuration file.</p>
+
+<p>Note that the configuration files are for particular compilers,
+on particular operating systems. If, for example, you have set up
+your system so that the command <code>f77</code> invokes the GNU
+g77 compiler, then you cannot use a configuration file designed
+for, say, a SPARC f77 compiler. You will have to create a special
+configuration file.</p>
+
+<p>In the following table, Arg#2 is a code for the operating
+system, and Arg#3 is a code for the Fortran and C compilers. For
+more information about the supported systems, see the file <code>
+pgplot/sys_*/aaaread.me</code>, where * stands for one of the
+options for Arg#2.</p>
+
+<pre>
+    Arg#2   Arg#3
+    ------  ------
+    aix     xlf_cc
+    alliant fortran_cc
+    bsd     g77_gcc
+    convex  fc_cc
+    cray    cf77_cc
+    epix2   f77_cc         (Control Data EP/IX 2.x)
+    freebsd f77_cc
+    fujitsu uxpm_frt_cc
+    fujitsu uxpv_frt_cc
+    hp      fort77_c89
+    hp      fort77_gcc
+    irix    f77_cc
+    linux   absoft_gcc
+    linux   f77_gcc
+    linux   g77_elf
+    linux   g77_gcc
+    next    af77_cc
+    next    f2c_cc
+    next    g77_cc
+    next    gf77_cc
+    osf1    f77_cc
+    osf1    f77_cc_shared
+    sol2    f77_cc         (Solaris 2.x, SunOs 5.x)
+    sol2    f77_gcc
+    sol2    f90_cc
+    sol2    g77_gcc
+    sun4    f77_acc        (SunOS 4.x)
+    sun4    f77_cc
+    sun4    f77_gcc
+    ultrix  f77_cc
+</pre>
+
+<p>If your system is one of those listed, proceed as follows:</p>
+
+<p>Make the target directory your current default directory,
+e.g.,</p>
+
+<pre>cd /usr/local/pgplot
+</pre>
+
+<p>Execute the script <code>makemake</code> from the distribution
+directory: e.g., </p>
+
+<pre>/usr/local/src/pgplot531/makemake  /usr/local/src/pgplot531  sun4
+</pre>
+
+<p>The first argument supplied to <code>makemake</code> is the name of
+the distribution directory. Note that when you run
+<code>makemake</code>, your current default directory should be the
+target directory, i.e., the directory in which you want to put the
+compiled library.</p>
+
+<p>The second argument is the name of the operating system (Arg#2
+from the above table); if you omit it or supply an unrecognized
+name, makemake will indicate the allowed values.</p>
+
+<p>On some operating systems, where more than one Fortran or C
+compiler is available, a third argument is required (Arg#3 from the
+above table); usually this is composed of the two compiler names
+separated by an underscore. If you omit it, makemake will indicate
+the allowed values.</p>
+
+<p>Once you have supplied valid arguments, makemake may complain
+that it can't find the <code>drivers.list</code> file. Go back to
+step 4!</p>
+
+<p><b>Example</b></p>
+
+<pre>
+% ../pgplot531/makemake ../pgplot531 sol2 f77_gcc
+For additional information, read file ../pgplot/sys_sol2/aaaread.me
+Reading configuration file: ../pgplot/sys_sol2/f77_gcc.conf
+Selecting uncommented drivers from ./drivers.list
+Found drivers GIDRIV NUDRIV PPDRIV PSDRIV TKDRIV TTDRIV WDDRIV XMDRIV XWDRIV
+Creating make file: makefile
+Determining object file dependencies.
+%
+</pre>
+
+<p>The script <code>makemake</code> generates a file <code>
+makefile</code> for subsequent use, a Fortran file <code>
+grexec.f</code> that calls the selected device drivers, and a text
+file <code>rgb.txt</code> that contains color definitions for use
+by routine PGSCRN. (If you already have a file <code>
+rgb.txt</code>, possibly modified with your own custom definitions,
+<code>makemake</code> does not modify it.) It also copies two
+Fortran include files that will be needed during compilation. So at
+this stage you will have at least the following files:</p>
+
+<pre>
+    drivers.list
+    grexec.f
+    grpckg1.inc
+    makefile
+    pgplot.inc
+    rgb.txt 
+</pre>
+
+<p>You should check that these files have been created, and you should
+also check that the list of drivers that <code>makemake</code> says
+that it found corresponds to those you selected in
+<code>drivers.list</code>.</p>
+
+<p>If your UNIX system is not one of the supported systems listed
+above, create your own configuration file in the target directory,
+with name <code>local.conf</code>. It is best to copy one of the
+configuration files provided (from <code>
+pgplot/sys_*/*.conf</code>, and then edit it following the comments
+in the file. The <code>makemake</code> procedure will use <code>
+local.conf</code> if it exists in the current directory, and if you
+do not specify Arg#3. Note that you must still specify Arg#2
+(operating system). For more information about configuration files,
+see <a href="porting.html"><i>Porting PGPLOT</i></a>, or consult <a
+href="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</a>. 
+
+<h2>Use <em>make</em> to compile the code</h2>
+
+<p>Now use the UNIX <code>make</code> command to compile the PGPLOT
+library following the instructions in <code>makefile</code>:</p>
+
+<pre>make
+</pre>
+
+<p>By default, <code>make</code> will generate: an object-module
+library, <code>libpgplot.a</code>; a shareable library (if possible
+on the selected operating system), the binary PGPLOT font file
+<code>grfont.dat</code>, the demonstration programs <code>
+pgdemo*</code>, and a documentation file <code>pgplot.doc</code>.
+In addition, if the /XWINDOW and/or /XSERVE driver was selected in step
+4, it will generate a program <code>pgxwin_server</code>, and if
+the /XDISP driver was selected, it will generate a program <code>
+pgdisp</code>.</p>
+
+<p>If this step proceeds satisfactorily, you may want to type</p>
+
+<pre>make clean
+</pre>
+
+<p>to remove unneeded intermediate files. You will then have the
+following files in the current directory:</p>
+
+<pre>drivers.list
+grexec.f
+grfont.dat            (binary font file)*
+libpgplot.a           (PGPLOT library)*
+libpgplot.so          (shared library, optional)*
+makefile
+pgdemo1 ... pgdemo16  (demonstration programs)
+pgdisp                (required by /XDISP driver)*
+pgplot.doc            (ASCII documentation file)
+pgxwin_server         (required by /XWINDOW driver)*
+rgb.txt               (color name database)*
+</pre>
+
+<p>If you requested XMDRIV or TKDRIV, you will also have some of the
+following files:</p>
+
+<pre>pgmdemo                 (executable demo program)
+libXmPgplot.a           (object library required by PGPLOT/Motif applications)*
+XmPgplot.h              (header file required by PGPLOT/Motif applications)*
+libtkpgplot.a           (object library required by PGPLOT/Tk applications)*
+pgtkdemo                (executable demo program)
+pgtkdemo.tcl            (script used by demo program)
+tkpgplot.h              (header file required by PGPLOT/Tk applications)*
+</pre>
+
+<p>If you want to copy the compiled version of PGPLOT to another
+directory, you must copy at least the files marked with an asterisk
+(*). The documentation file contains the PGPLOT subroutine
+descriptions, which are also available in the manual.</p>
+
+<h2>Install the C binding</h2>
+
+<p>Optionally, install and test the C binding for PGPLOT. This
+requires an ANSI C compiler (that understands function prototypes)
+and is not available on all systems.</p>
+
+<pre>make cpg
+</pre>
+
+<p>This creates three files:</p>
+
+<pre>cpgplot.h       (ANSI C header file)
+libcpgplot.a    (library containing the C binding)
+cpgdemo         (demonstration program)
+</pre>
+
+<p><b>Note:</b> The installation procedure does not create a shared
+library for the C binding. If you want one, you can create it by
+hand using the appropriate commands for your system, e.g. for some
+versions of Linux,</p>
+
+<pre>ld -shared -o libcpgplot.so --whole-archive libcpgplot.a
+</pre>
+
+<h2>Run the demonstration programs</h2>
+
+<p>Run the demonstration programs on your selected devices and verify
+that they run satisfactorily.</p>
+
+<p>Before running any PGPLOT program, you must ensure that the
+environment variable <code>PGPLOT_DIR</code> is correctly defined.
+This is the name of the directory in which PGPLOT will look for the
+files <code>grfont.dat</code> and <code>rgb.txt</code> (unless
+environment variables <code>PGPLOT_FONT</code> and <code>
+PGPLOT_RGB</code> are defined to override this default behavior),
+and, if needed, the X-window server program <code>
+pgxwin_server</code>:</p>
+
+<pre>UNIX csh:   setenv PGPLOT_DIR /usr/local/pgplot/
+UNIX sh:    PGPLOT_DIR="/usr/local/pgplot/"; export PGPLOT_DIR
+</pre>
+
+<p>It is also convenient, but not essential, to define a default
+PGPLOT device with environment variable <code>PGPLOT_DEV</code>,
+e.g.</p> 
+
+<pre>UNIX csh:   setenv PGPLOT_DEV      /xwindow
+</pre>
+
+<p>Other PGPLOT environment variables are described in the <a href="user-manual.html">User Manual</a>.</p>
+
+<p>When using a UNIX shared library (e.g., on Solaris 2.x), you may
+also need to put the PGPLOT directory in your loader search path,
+defined in environment variable <code>LD_LIBRARY_PATH</code>.</p>
+
+<p>To run a program, type its name (with directory if the current
+directory is not in your path):</p>
+
+<pre>./pgdemo1
+</pre>
+
+<p>All he demonstration programs prompt for a device name and type.
+Type a question mark <code>?</code> to see a list of the available
+device types and verify that PGPLOT has been configured properly.</p>
+
+<p>Points to check for: the PGPLOT program correctly reads the font
+file and displays superscripts, subscripts and special characters
+(pgdemo2); the PGPLOT program can read the color database
+(pgdemo10); on interactive devices, the cursor works correctly
+(pgdemo5, pgdemo6).</p>
+
+<p>To test the PGPLOT Motif widget driver, run <code>pgmdemo</code>
+in the same way as the other demonstration programs. You must first
+ensure that an X-window display is available and that environment
+variable <code>PGPLOT_DIR</code> is correctly defined.</p>
+
+<p>To test the PGPLOT Tk/Tcl widget driver, type</p>
+
+<pre>pgtkdemo pgtkdemo.tcl
+</pre>
+
+<p>See the <a href="tkdriv.html">documentation</a> for the driver for
+more information.</p>
+
+<p><small><b>Note:</b> The installation procedure does not install
+the Tk demo correctly on Digital Unix (4.0B). The demos program
+pgtkdemo is unable to read command-line arguments. Use the
+following commands to compile and link the demo:</small></p>
+
+<pre>cc -c -I`pwd` -I/usr/local/include pgtkdemo.c
+cc -o pgtkdemo pgtkdemo.o -L`pwd` -ltkpgplot -lcpgplot -lpgplot \
+     -L/usr/local/shlib/alpha -ltk -ltcl -lX11 -lUfor -lfor -lm
+</pre>
+
+<small>(i.e., omit -Dmain=MAIN__ and use cc instead of f77 for the
+link step.)</small> 
+
+<h2>Install documentation file (optional)</h2>
+
+<p>The standard installation procedure creates an ASCII text file
+containing synopses of all the PGPLOT subroutines: <code>
+pgplot.doc</code>.</p>
+
+<p>HTML documentation for PGPLOT is include in the
+distribution in directory <code>pgplot531/doc</code>.</p>
+
+<h2>Install the library of obsolete routines (optional)</h2>
+
+<p>The library <code>libpgobs.a</code> includes some obsolete PGPLOT
+routines. If you have old programs that use these routines, you can
+install the library by </p>
+
+<pre>make libpgobs.a
+</pre>
+
+<p>However, these routines will not be included in future versions of
+PGPLOT, so you should rewrite your programs to avoid their use.</p>
+
+
+<DIV class="footer">
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY></HTML>

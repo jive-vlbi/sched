@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+
+<title>PGPLOT: Compiling, Linking, and Running</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+
+<div class="header">
+<a href="../index.html">PGPLOT</a>&nbsp;&gt;
+<a href="doc-index.html">Documentation</a>&nbsp;&gt;
+<a href="user-manual.html">User's Manual</a>&nbsp;&gt;
+Compiling, Linking, and Running
+</div>
+
+<h1>Compiling, Linking, and Running</h1>
+
+<p>Any Fortran or C program must be compiled and linked with its necessary support libraries before it can be run. The commands required to do this differ greatly from system to system, but you should already be familiar with them. The following paragraphs describe some special considerations for PGPLOT programs.</p>
+
+<p>PGPLOT programs have special requirements at run time, which are described below. In particular, if you are using a shared library, you need to ensure that the system can find the library at run time. You also need to ensure that the program can find the PGPLOT font file which it needs in order to draw characters (text).</p>
+
+<p>Some aspects of the behavior of PGPLOT programs can be changed by defining <i>environment variables</i> before running the program. These are also described in this chapter.</p>
+
+<h2>Compiling and Linking a Fortran-77 Program</h2>
+
+<p>Some examples, assuming the source code is in a file called <span
+class="f"><code>pgprog.f</code></span>:</p>
+
+<ul>
+<li><b>UNIX</b> 
+
+<pre class="f">f77 -o pgprog pgprog.f -L/usr/local/pgplot -lpgplot
+</pre>
+
+<ul>
+<li><code>f77</code> is the command used to invoke the Fortran compiler. On some systems, this may be, e.g., <code>fort77</code> or <code>g77</code>.</li>
+
+<li>Some compilers interpret a backslash in character strings in a way that is incompatible with PGPLOT's use of the backslash as an escape character (see <a href="chapter6.html"><i>Chapter 6</i></a>). If your compiler has an option to suppress this, use it (some forms that this option takes are <code>-assume backslash</code>, <code>-xl</code>, <code>-!bs</code>, <code>-qnoescape</code>). The symptom of backslash problems is that greek letters, subscripts, superscripts, etc. are displayed incorrectly.</li>
+
+<li>The <code>-lpgplot</code> option tells the linker to scan the PGPLOT library, and the <code>-L</code> option specifies a directory where the linker should look for it.</li>
+
+<li>You may also need to specify additional libraries that are used by your program or by PGPLOT. For example, if your version of PGPLOT includes one of the X-window drivers, you will probably need to add <code>-L<i>directory</i> -lX11</code> to the command line. (This is not required on Solaris.)</li>
+</ul>
+</li>
+
+<li><b>VMS</b> 
+
+<pre class="f">$ FORTRAN PGPROG
+$ LINK PGPROG, PGPLOT_DIR:GRPSHR/LIB
+</pre>
+
+The logical name <code>PGPLOT_DIR</code> should point to the directory in which the PGPLOT library is installed. (Your system may be set up so that the library is scanned automatically, in which case you just need <code>$ LINK PGPROG</code>.) The result is an executable file <code>PGPROG.EXE</code> that can be executed with the <code>RUN</code> command.<br>
+ To make a transportable <code>.EXE</code> file, use the non-shared library as follows (the XLIB library is not required if your version of PGPLOT does not include an X-window driver): 
+
+<pre class="f">$ LINK PGPROG,PGPLOT_DIR:GRPCKG/LIB,SYS$INPUT:/OPT
+SYS$SHARE:DECW$XLIBSHR.EXE/SHARE
+[ctrl-Z]
+</pre>
+</li>
+</ul>
+
+<h2>Compiling and Linking a Fortran-95 Program</h2>
+
+<p>Although the PGPLOT subroutines are written using Fortran-77
+conventions and do not take advantage of the new features in
+Fortran-90 or Fortran-95, they can be called directly from
+Fortran-90/95 programs.</p>
+
+<p>If the PGPLOT library has been compiled with the Fortran-90 compiler,
+compiling and linking are straightforward:</p>
+<pre class="f">f95 -o pgprog pgprog.f90 -L/usr/local/pgplot -lpgplot
+</pre>
+
+<p>If, on the other hand, the library has been compiled with a Fortran-77 compiler, as is commonly the case, you will need to link with the Fortran-77 support libraries. The names and locations of these libraries are system- and compiler-dependent. For the Sun/Solaris compilers, the following should work:</p>
+<pre class="f">f95 -o pgprog pgprog.f90 -L/usr/local/pgplot -lpgplot -lF77
+</pre>
+
+
+
+<h2>Compiling and Linking a C Program</h2>
+
+<p>Some examples, assuming the source code is in a file called <span class="c"><code>pgprog.c</code></span>:</p>
+
+<ul>
+<li><b>Unix</b> 
+
+<pre class="c">cc -c -I/usr/local/pgplot pgprog.c
+f77 -o pgprog pgprog.o -L/usr/local/pgplot -lcpgplot -lpgplot
+</pre>
+
+<ul>
+<li><code>c</code> is the command used to invoke the C compiler. On some systems, this may be, e.g., <code>gcc</code> or <code>c89</code>.</li>
+
+<li>The <code>-I</code> option in compilation specifies a directory where the linker should look for the header file <code>cpgplot.h</code>.</li>
+
+<li>Note that, for C, compilation and linking are done separately; the <code>f77</code> (or equivalent) command is used for linking to ensure that the required Fortran support libraries are loaded. It is possible to link using <code>cc</code> or <code>ld</code>, but you must then figure out which libraries your Fortran compiler needs (<code>man f77</code> might help).</li>
+
+<li>The <code>-lcpgplot -lpgplot</code> options tell the linker to scan the PGPLOT libraries, and the <code>-L</code> option specifies a directory where the linker should look for them. Both <code>-lcpgplot</code> and <code>-lpgplot</code> are required, in that order.</li>
+
+<li>You may also need to specify additional libraries that are used by your program or by PGPLOT. For example, if your version of PGPLOT includes one of the X-window drivers, you will probably need to add <code>-L<i>directory</i> -lX11</code> to the command line.</li>
+</ul>
+
+<p>To give an indication of how difficult it can be to include the correct libraries when using the C compiler to do the linking, here is an example of the command required to compile a PGPLOT program using gcc on a Sun/Solaris system (assuming that the PGPLOT code was compiled using g77):</p>
+
+<pre class="c">gcc -o pgprog -I/usr/local/pgplot pgprog.c -L/usr/local/pgplot/ \
+  -lcpgplot -lpgplot -L/usr/local/lib/gcc-lib/sparc-sun-solaris2.6/2.8.1/ \
+  -lf2c -lgcc -lm
+</pre>
+
+The locations of the libraries vary according to the operating system and compiler versions.</li>
+
+<li><b>VMS</b> 
+
+<pre class="c">$ CC PGPROG /INCLUDE=PGPLOT_DIR:
+$ LINK PGPROG, PGPLOT_DIR:CPGPLOT/LIB, PGPLOT_DIR:GRPSHR/LIB
+</pre>
+
+For C, two libraries are required.</li>
+</ul>
+
+<h2>Compiling and Linking a C++ Program</h2>
+
+<p>This is even more difficult than compiling a C program, because you must ensure that both the C++ support libraries and the Fortran support libraries are included. The example above (using g77) can be adapted for the GNU C++ compiler (g++) on Solaris and Linux; for other compilers, you may need to consult an expert.</p>
+
+<pre class="c">g++ -o pgprog -I/usr/local/pgplot pgprog.cc -L/usr/local/pgplot/ \
+  -lcpgplot -lpgplot -L/usr/local/lib/gcc-lib/sparc-sun-solaris2.6/2.8.1/ \
+  -lf2c -lgcc -lm
+</pre>
+
+<pre class="c">g++ -o pgprog -I/usr/local/pgplot pgprog.cc -L/usr/local/pgplot/ \
+  -lcpgplot -lpgplot  -lg2c -lgcc
+</pre>
+
+<h2>Shared Libraries</h2>
+
+<p>On some systems, PGPLOT can be created as a shared library. This means it is only loaded into the program at run time, saving disk space in the executable file, and may also mean that several programs running at the same time can share a single copy of the library in memory.</p>
+
+<p>The main drawback of shared libraries is that they can get separated from the program that needs them; e.g., if you copy the compiled program to another machine, you will also need to copy the library (unless it is already installed). On some systems, special care is required to ensure that the run-time system can find the library when it needs it.</p>
+
+<p>On <b>UNIX</b> systems, the shared library (named <code>libpgplot.so</code> on most systems, but the extension may be different on yours) must be placed in one of the directories automatically scanned by the run-time loader (such as <code>/usr/lib</code>); if not, the directory containing the library should be named in the colon-separated list of directories specified by the environment variable <code>LD_LIBRARY_PATH</code>, e.g.</p>
+
+<pre>LD_LIBRARY_PATH="/usr/local/pgplot"; export LD_LIBRARY_PATH <i>(sh)</i>
+setenv LD_LIBRARY_PATH /usr/local/pgplot <i>(csh)</i>
+</pre>
+
+<p>Take care when defining <code>LD_LIBRARY_PATH</code> to include directories that other programs may need to search, as well as the PGPLOT directory. Not all UNIX systems use <code>LD_LIBRARY_PATH</code>: see the documentation for your system. On some systems, you can use the <code>-R</code> option (or an equivalent one) of <code>ld</code> to specify a search directory for the library when you link the program; then the search directory is attached to the executable program and doesn't need to be specified by <code>LD_LIBRARY_PATH</code>.</p>
+
+<p>On <b>VMS</b> systems, the shared library <code>GRPSHR.EXE</code> must be placed in a standard directory (<code>SYS$LIBRARY</code>), or you must define a logical name to point to the location of the library, e.g.,</p>
+
+<pre>$ DEFINE GRPSHR USER:[PGPLOT]GRPSHR.EXE
+</pre>
+
+<p>The logical name may be defined system-wide (system logical name) or for a specific user (process logical name, usually defined in <code>LOGIN.COM</code>).</p>
+
+<h2>The PGPLOT Font File</h2>
+
+<p>Any PGPLOT program that draws text needs to read a font file at run time; if it cannot find the file, no text will be drawn, and a warning message will be issued. Usually the font file is called <code>grfont.dat</code> and is placed in the same directory as the PGPLOT library. If you use routine <a href="subroutines.html#PGSCRN">PGSCRN</a>, the program also needs to read file <code>rgb.txt</code>. You tell PGPLOT where to find both files by defining an environment variable giving the name of the directory containing the files:</p>
+
+<ul>
+<li><b>UNIX</b> 
+
+<pre>PGPLOT_DIR="/usr/local/pgplot"; export PGPLOT_DIR <i>(sh)</i>
+setenv PGPLOT_DIR /usr/local/pgplot <i>(csh)</i>
+</pre>
+</li>
+
+<li><b>VMS</b> 
+
+<pre>$ DEFINE PGPLOT_DIR USER:[PGPLOT]
+</pre>
+</li>
+</ul>
+
+<p>The definitions may be placed in a startup file such as <code>.cshrc</code> or <code>login.com</code>. For other ways to locate the files, see the next section.</p>
+
+<h2><a name="ENV">Environment Variables</a></h2>
+
+<p>Some aspects of the behavior of PGPLOT can be modified at run time by specifying <i>environment variables</i>. The variables have names which begin with <code>PGPLOT_</code>.</p>
+
+<p>In UNIX systems, environment variables can be defined using the shell. For the bash, bourne (sh), or korn (ksh) shell, use commands like the following:</p>
+
+<pre>PGPLOT_DIR="/usr/local/pgplot"; export PGPLOT_DIR
+</pre>
+
+<p>For the c-shell and tcsh, use</p>
+
+<pre>setenv PGPLOT_DIR "/usr/local/pgplot/"
+</pre>
+
+<p>Note that the names of PGPLOT environment variables are specified using <i>upper case</i> characters, e.g. <code>PGPLOT_DIR</code>, not <code>pgplot_dir</code>.</p>
+
+<p>In VMS systems, environment variables are ``logical names'' and can be defined with the <code>DEFINE</code> or <code>ASSIGN</code> command, e.g.</p>
+
+<pre>$ DEFINE PGPLOT_DIR user_disk:[local.pgplot]
+$ DEASSIGN PGPLOT_DIR
+</pre>
+
+<p>The following environment variables affect all PGPLOT programs:</p>
+
+<dl>
+<dt>PGPLOT_DIR</dt>
+
+<dd><i>Directory name.</i> Unless told otherwise by environment variables PGPLOT_FONT and PGPLOT_RGB, PGPLOT looks for the files it needs at run-time in this directory. The binary font file is <code>grfont.dat</code> and the color-name database is <code>rgb.txt</code>. If this variable is undefined, or if the specified file does not exist in this directory, PGPLOT looks in the current default directory. e.g. 
+
+<pre>setenv PGPLOT_DIR /usr/local/lib/pgplot/
+</pre>
+</dd>
+
+<dt>PGPLOT_FONT</dt>
+
+<dd><i>File name for the binary font file.</i> If this variable is defined, PGPLOT will interpret the value as a file name for the binary font file. If it is not defined, PGPLOT will look for the binary font file under name <code>grfont.dat</code> in the directory specified by PGPLOT_DIR. e.g. 
+
+<pre>setenv PGPLOT_FONT /usr/local/pgplot/grfont.dat
+</pre>
+</dd>
+
+<dt>PGPLOT_RGB</dt>
+
+<dd><i>File name for the color-name database.</i> If this variable is defined, PGPLOT will interpret the value as a file name for the color-name database. If it is not defined, PGPLOT will look for the binary font file under name <code>rgb.txt</code> in the directory specified by PGPLOT_DIR. The color-name database is only used by programs that call <a href="subroutines.html#PGSCRN">PGSCRN</a>, or when environment variable PGPLOT_BACKGROUND or PGPLOT_FOREGROUND is defined. e.g. 
+
+<pre>setenv PGPLOT_RGB /usr/local/pgplot/rgb.txt
+</pre>
+</dd>
+
+<dt>PGPLOT_DEV</dt>
+
+<dd><i>Device specification.</i> If this variable is defined, it is used as the default device specification: if the device specification given to <a href="subroutines.html#PGOPEN">PGOPEN</a> (or supplied by the user in response to the PGPLOT prompt) is a blank string, this device specification is used, e.g. 
+
+<pre>setenv PGPLOT_DEV /xwin
+</pre>
+</dd>
+
+<dt>PGPLOT_TYPE</dt>
+
+<dd><i>Device type.</i> If this variable is defined, it is used as the default device type: if the device specification supplied to <a href="subroutines.html#PGOPEN">PGOPEN</a> consists of a file name without a trailing slash (/) and device type, this device type is assumed. e.g. 
+
+<pre>setenv PGPLOT_TYPE ps
+</pre>
+</dd>
+
+<dt>PGPLOT_ENVOPT</dt>
+
+<dd><i>Character string.</i> This affects programs that call routine <a href="subroutines.html#PGENV">PGENV</a>. The characters supplied are options for <a href="subroutines.html#PGBOX">PGBOX</a> (in addition to those assumed by default by PGENV), i.e., `BCNST'. Useful options include `G' to draw a grid, `V' to draw y-axis labels upright, `I' to draw axis tick marks outside the box instead of inside, `1' or `2' to change the numeric label style. e.g. 
+
+<pre>setenv PGPLOT_ENVOPT IVG
+</pre>
+</dd>
+
+<dt>PGPLOT_FOREGROUND</dt>
+
+<dd><i>Color name.</i> This variable can be used to change the color representation of color index 1 (the ``foreground'' color) from its device-dependent default (usually white or black). The value of the variable should be a color name defined in the color-name database. If the variable is defined, the effect is the same as a call to <a href="subroutines.html#PGSCRN">PGSCRN</a> with this name as argument immediately after the graphics device is opened. Color names are case-insensitive and embedded spaces are ignored. e.g. 
+
+<pre>setenv PGPLOT_FOREGROUND springgreen
+</pre>
+</dd>
+
+<dt>PGPLOT_BACKGROUND</dt>
+
+<dd><i>Color name.</i> This variable can be used to change the color representation of color index 0 (the ``background'' color) from its device-dependent default (usually black or white). The value of the variable should be a color name defined in the color-name database. If the variable is defined, the effect is the same as a call to <a href="subroutines.html#PGSCRN">PGSCRN</a> with this name as argument immediately after the graphics device is opened. On devices without a color lookup table, changing the background color only affects the color of elements explicitly drawn in color index 0. To ensure that the background of the entire view surface changes to the new color, it is also necessary to call <a href="subroutines.html#PGERAS">PGERAS</a> at the start of each page. e.g. 
+
+<pre>setenv PGPLOT_BACKGROUND slateblue
+</pre>
+</dd>
+
+<dt>PGPLOT_BUFFER</dt>
+
+<dd><i>Switch.</i> If this variable is defined, with any non-null value, PGPLOT buffers output. The effect is the same as if <a href="subroutines.html#PGBBUF">PGBBUF</a> is called immediately after opening the graphics device, and <a href="subroutines.html#PGEBUF">PGEBUF</a> immediately before closing it. It will have no effect on programs that already include these calls. On some devices, buffering output can lead to large improvements in speed, but enabling buffering may upset synchronization between graphical output and other program activity. e.g. 
+
+<pre>setenv PGPLOT_BUFFER yes
+</pre>
+</dd>
+
+<dt>PGPLOT_DEBUG</dt>
+
+<dd><i>Switch.</i> If this variable is defined, with any non-null value, PGPLOT will print some debugging information on the standard output. Currently this includes attempts to open input files (binary font file and color-name database), and, when the null device is selected for output, statistics of device-driver calls. e.g. 
+
+<pre>setenv PGPLOT_DEBUG yes
+</pre>
+</dd>
+</dl>
+
+<p>In addition to these environment variables, several device drivers use device-specific environment variables. See the <a href="device-manual.html"><i>PGPLOT Device Manual</i></a> for details.</p>
+
+<div class="footer">
+Tim Pearson, California Institute of Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</a></i>
+ Copyright &copy; 1995-2005 California Institute of Technology
+</div>
+
+</body>
+</html>
+

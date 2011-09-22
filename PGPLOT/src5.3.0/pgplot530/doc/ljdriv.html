@@ -1,0 +1,91 @@
+<HTML>
+<HEAD>
+<TITLE>LJDRIV</TITLE>
+</HEAD>
+<BODY>
+
+<H2>Hewlett-Packard LaserJet Printer</H2>
+<DL>
+
+<DT>Author
+<DD>S. C. Allendorf, 1989.
+
+<DT>Supported device
+<DD>Hewlett Packard LaserJet, LaserJet+, or LaserJet II.
+
+<DT>Device type code
+<DD><CODE>/LJnn</CODE> where nn is a number 01--09.
+
+<DT>Default device name
+<DD><CODE>PGPLOT.LJPLT.</CODE>
+
+<DT>Default view surface dimensions
+<DD>Depends on which version of
+the driver is chosen via the logical name <CODE>PGPLOT_LJ_MODE</CODE>.
+<PRE>
+      Driver  Equivalence         Size (H x V)
+      ------  -----------     ---------------------
+       LJ01       LHOR        10.50 by  8.00 inches
+       LJ02       PHOR         8.00 by 10.50 inches
+       LJ03       PHOT         8.00 by 10.50 inches
+       LJ04       LHBR         6.54 by  4.91 inches
+       LJ05       PHBS         5.65 by  5.65 inches
+       LJ06       LMBR        10.50 by  8.00 inches
+       LJ07       PMBR         8.00 by 10.50 inches
+       LJ08       PMBS         4.48 by  4.48 inches
+       LJ09       PLBS         6.00 by  6.00 inches
+</PRE>
+<DT>Resolution
+<DD>Depends on which version of the driver is chosen via the
+logical name <CODE>PGPLOT_LJ_MODE</CODE>.
+<PRE>
+      Driver  Equivalence     Resolution
+      ------  -----------     ----------
+       LJ01       LHOR          300 DPI
+       LJ02       PHOR          300 DPI
+       LJ03       PHOT          300 DPI
+       LJ04       LHBR          300 DPI
+       LJ05       PHBS          300 DPI
+       LJ06       LMBR          150 DPI
+       LJ07       PMBR          150 DPI
+       LJ08       PMBS          150 DPI
+       LJ09       PLBS          100 DPI
+</PRE>
+
+<DT>Color capability
+<DD>Color indices 0 (erase, white) and 1 (black) are
+supported. It is not possible to change color representation.
+
+<DT>Input capability
+<DD>None.
+
+To choose one of the specific LaserJet drivers, you must execute a DCL
+command of the following form before executing your program:
+<PRE>
+$ DEFINE PGPLOT_LJ_MODE LJnn
+</PRE>
+where <CODE>nn</CODE> is a number 01--09 NDEV inclusive.  You may also use one of the
+equivalent names listed above.  These equivalent names are an attempt
+to make the driver names make sense.  They are decoded as follows:
+   1st character: P for protrait orientation or
+                  L for landscape orientation.
+   2nd character: H for high resolution (300 dpi) or
+                  M for medium resolution (150 dpi) or
+                  L for low resolution (100 dpi).
+   3rd character: B for a straight bitmap dump or
+                  O for an optimized bitmap dump.
+   4th character: R for a rectangular view surface or
+                  S for a square view surface.
+
+A few notes are in order.  First, not all of the possible combinations
+above are supported (currently).  The driver that goes by the name of
+PHOT is a driver that puts out bitmaps suitable for inclusion in TeX
+output if you are using the Arbortext DVIHP program.  The only drivers
+that will work with unexpanded LaserJet are LJ08 and LJ09.  The other
+seven drivers require a LaserJet Plus or LaserJet II.  Finally, do NOT
+attempt to send grayscale plots to the drivers that use the optimized 
+bitmap dumps.  Terrible things will happen.
+</DL>
+<HR>
+</BODY>
+</HTML>
