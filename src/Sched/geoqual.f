@@ -221,15 +221,18 @@ C
 C
 C     If there aren't enough delays to each station, skip the fit.  
 C     Set IERR = 1 so the rest of the routine thinks the fit failed.
+C     Tell the user if appropriate.
 C
       IF( MINNSS .LT. 3 ) THEN
          IERR = 1
-         MSGTXT = ' '
-         WRITE( MSGTXT, '( A, 5A5 )' ) 
-     1      'GEOQUAL skipping fit - inadequate data ', 
-     2      NSTA, NBAS, SC1, SC1A, SC2
-         CALL WLOG( 1, MSGTXT )
-         MSGTXT = ' '
+         IF( GEOPRT .GE. 1 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, 5I5 )' ) 
+     1         'GEOQUAL skipping fit - inadequate data ', 
+     2         NSTA, NBAS, SC1, SC1A, SC2
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+         END IF
       ELSE
          CALL LSQFIT( 0, .FALSE., .FALSE., MAXDAT, NSTA*2-1, NBAS,
      1         STANAME, GUESS, SOLVE, RESDEL, PPARTIAL, DELERR,

@@ -104,14 +104,19 @@ C
      3   ,'# gives the desired number of channels',
      4   'SETUP default', '{'
       WRITE( IV2D, '( A, F7.3 )' ) '  tInt =', CORAVG
-      WRITE( IV2D, '( A, I6 )' ) '  nChan = ', CORFFT
+C     Format change email of 6/6/2001 Deller - old:  
+C     WRITE( IV2D, '( A, I6 )' ) '  nChan = ', CORFFT
+      WRITE( IV2D, '( A, I6 )' ) '  nFFTChan = ', CORFFT
       IF( CORCHAN .GT. 0 ) THEN
          CCHAN = CORCHAN
       ELSE 
          CCHAN = 16
       END IF
 C
-      WRITE( IV2D, '( A, I4 )' ) '  specAvg =', CORFFT / CCHAN
+C     Format change email of 6/6/2001 Deller - old:  
+C      WRITE( IV2D, '( A, I4 )' ) '  specAvg =', CORFFT / CCHAN
+      WRITE( IV2D, '( A, I4 )' ) '  nChan =', CCHAN
+C
 C      WRITE( IV2D, '( 2A )' )
 C     1     'numBufferedFFTs = 10 #This is a DiFX parameter, ', 
 C     2     'defaulting to 10 is good'
