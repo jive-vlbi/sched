@@ -1,0 +1,79 @@
+<HTML>
+<HEAD>
+<TITLE>VTDRIV</TITLE>
+</HEAD>
+<BODY>
+
+<H2>DEC Regis Terminals</H2>
+<DL>
+
+<DT>Author
+<DD>T. J. Pearson, 1988.
+
+<DT>Supported devices
+<DD>Digital Equipment Corporation VT125, VT240, or
+VT241 terminal; other REGIS devices may also work.
+
+<DT>Device type code
+<DD><CODE>/VT125</CODE>.
+
+<DT>Default file name
+<DD><CODE>TT:PGPLOT.VTPLOT</CODE>. This usually means the
+terminal you are logged in to (logical name <CODE>TT</CODE>), but the plot can be
+sent to another terminal by giving the device name, e.g., <CODE>TTC0:/VT</CODE>, or
+it can be saved in a file by specifying a file name (in this case a disk
+name must be included as part of the file name).
+
+<DT>Default view surface dimensions
+<DD>Depends on monitor.
+
+<DT>Resolution
+<DD>The default view surface is 768 (horizontal) by
+460 (vertical) pixels.  On most Regis devices, the resolution is
+degraded in the vertical direction giving only 230 distinguishable
+raster lines. (There are actually 240 raster lines, but 10 are reserved
+for a line of text.)
+
+<DT>Color capability
+<DD> Color indices 0--3 are supported. By default,
+color index 0 is black (the background color). Color indices 1--3
+are white, red, and green on color monitors, or white, dark grey, and
+light grey on monochrome monitors.  The color representation of all
+the color indices can be changed, although only a finite number of
+different colors can be obtained (see the manual for the terminal).
+
+<DT>Input capability
+<DD>The graphics cursor is a blinking
+diamond-crosshair. The user positions the cursor using the arrow keys
+and PF1--PF4 keys on his keyboard  [Note: NOT the keyboard of 
+the terminal on which he is plotting, if that is different.]
+The arrow keys move the cursor in the appropriate direction; the size
+of the step for each keystroke is controlled by the PF1--PF4 keys: PF1
+= 1 pixel, PF2 = 4 pixels, PF3 = 16 pixels, PF4 = 64 pixels. [The
+VT240 terminal has a built-in capability to position the cursor, but
+PGPLOT does not use this as it is not available on the VT125.] The
+user indicates that the cursor has been positioned by typing any
+character other than an arrow or PF1--PF4 key [control characters, eg,
+ctrl-C, and other special characters should be avoided, as they
+may be intercepted by the operating system].
+
+<DT>File format
+<DD>A REGIS plot file is formatted in records of 80
+characters or less, and has no carriage-control attributes. The
+records are grouped into ``buffers,'' each of which begins with a command
+to put the terminal into graphics mode and ends with a command
+to put it back into text mode.  The terminal is in graphics mode only
+while a buffer is being transmitted, so a user's program can write to
+the terminal at any time (in text mode) without worrying if it might
+be in graphics mode. 
+
+<DT>Obtaining hardcopy
+<DD>A hardcopy of the plot can be obtained
+using a printer attached to the VT125/VT240 terminal (see the
+instruction manual for the terminal). A plot stored in disk file
+can be displayed by issuing a <CODE>TYPE</CODE> command (e.g., <CODE>TYPE PGPLOT.VTPLOT</CODE>)
+on a VT125 or VT240.
+</DL>
+<HR>
+</BODY>
+</HTML>

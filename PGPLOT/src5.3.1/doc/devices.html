@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>PGPLOT: Graphics Devices</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<div class="header">
+<a href="../index.html">PGPLOT</a>&nbsp;&gt; 
+<a href="doc-index.html">Documentation</a>&nbsp;&gt; 
+<a href="user-manual.html">User's Manual</a>&nbsp;&gt; 
+Graphics Devices
+</div>
+
+<h1>Graphics Devices</h1>
+
+<h2>Opening and Closing a Graphics Device</h2>
+
+<p>A PGPLOT program can generate graphical output on a variety of different devices, including both interactive devices such as graphics terminals and windows on workstations, hardcopy devices such as printers and pen-plotters, and graphics files in a variety of formats. Before generating graphical output, the program must <em>open</em> a particular device and specify the device type by calling PGOPEN, and after the image is complete it must <em>close</em> the device by calling PGCLOS or PGEND. Forgetting to close a device is a common error which can lead to incomplete or unprintable files. Thus a basic PGPLOT program has the following form:</p>
+
+<pre>
+      INTEGER ID
+      INTEGER PGOPEN
+      CHARACTER*n DEVICE
+*     ...
+      ID = PGOPEN(DEVICE)
+      IF (ID .LT. 1) THEN
+*          an error occurred
+           STOP
+      END IF
+*     ...
+*     other PGPLOT calls
+*     ...
+      CALL PGCLOS
+</pre>
+
+<p>The argument of PGOPEN is the <em>device specification</em>, a character string variable or constant specifying the type of graphics device and the particular device to be opened, and its value is described below. Note that PGOPEN is a Fortran <em>function</em> and you should declare its type as INTEGER and test its return value. If the device is opened successfully, the value returned by PGOPEN is a positive integer which identifies the device (you will need this identifier if you want to use more than one device at the same time; otherwise you can ignore it). If the PGOPEN call fails, e.g., because you supplied an incorrect device specification, the program could not open a disk file, or there are too many devices already open, PGOPEN returns a zero or negative value; it also writes an explanatory error message to the standard error stream.</p>
+
+<p>Subroutine PGCLOS takes no arguments. It closes the currently selected graphics device. Subroutine PGEND can be called in place of PGCLOS; this subroutine closes <em>all</em> open graphics devices.</p>
+
+<h2>Device Specifications</h2>
+
+<p>Graphics devices fall into two classes: devices which produce a hardcopy output, usually on paper; and interactive devices, which usually display the plot on a TV monitor. Some of the interactive devices allow modification to the displayed picture, and some have a movable cursor which can be used as a graphical input device. There is also a ``null device,'' to which unwanted graphical output can be directed. Hardcopy devices are not used interactively. One must first create a disk file and then send it to the appropriate device with a print or copy command. Consult Appendix D (or your System Manager) to determine the appropriate device-specific command.</p>
+
+<p>A PGPLOT graphical output device is described by a ``device specification'' that consists of two parts, separated by a slash (/): the <i>device name</i> or <i>file name</i>, and the <i>device type</i>.</p>
+
+<h3>Device Name</h3>
+
+<p>device name or file name is the name by which the output device is known to the operating system. For most hardcopy devices, this should be the name of a disk file, while for interactive devices, it should be the name of a device of the appropriate type; in both cases, the name should be specified according to the syntax of the operating system in use. If the device or file name includes a slash (<code>/</code>), enclose the name in double quotation marks (<code>&quot;</code>). If the device name is omitted from the device specification, a default device is used, the default depending on the device type (see Appendix D). In Unix, device and file names are case-sensitive.</p>
+
+<h3>Device Type</h3>
+
+<p>device type tells PGPLOT what sort of graphical device it is. Appendix D lists the device types available at the time of writing, together with the names by which they are known to PGPLOT. If the device type is omitted, a system-dependent default type is assumed (this is the value of the ``environment variable'' <code>PGPLOT_TYPE</code>). The device type is not case-sensitive: you can use uppercase or lowercase letters, or a mixture of the two.</p>
+
+<h3>Examples</h3>
+
+<p>A window on the default Xwindow display screen:</p>
+
+<ul>
+<li><code>/XWINDOW</code></li>
+</ul>
+
+<p>Tektronix 4006/4010 terminal:</p>
+
+<ul>
+<li><code>/TEK</code> (the logged-in terminal)</li>
+
+<li><code>tta4/TEK</code> (VMS device <code>_TTA4:</code>)</li>
+
+<li><code>&quot;/dev/tty6&quot;/TEK</code> (Unix device <code>tty6</code>)</li>
+</ul>
+
+<p>Disk file, PostScript format:</p>
+
+<ul>
+<li><code>plot.ps/PS</code> (in the current default directory)</li>
+
+<li><code>plot.ps/VPS</code> (the same, but in portrait orientation)</li>
+
+<li><code>&quot;/scr/tjp/plot.ps&quot;/PS</code> (in a specified directory)</li>
+</ul>
+
+<h2>Commonly Used Devices</h2>
+
+<h2>Prompting for a Device Specification</h2>
+
+<p>Instead of supplying an explicit device specification to PGOPEN, you can request that PGOPEN ask the user to supply the device specification. To do this, the argument should be a question mark <code>?</code> followed by a prompt string, e.g.,</p>
+
+<pre>
+      ID1 = PGOPEN('?Graphics device for histogram: ')
+</pre>
+
+<p>The program displays the prompt string (without the leading question mark) on the standard output channel, and reads a user-supplied device specification from the standard input channel. The user can type a question mark to get a list of available device types. If the argument to PGOPEN is just a question mark <code>'?'</code>, PGOPEN will use a prompt string like ``<code>Graphics device/type:</code>''.</p>
+
+<h2>Advancing to a new page</h2>
+
+<h2>Changing the Device Characteristics</h2>
+
+<h2>Panels</h2>
+
+<h2>Using More Than One Device</h2>
+
+<p>Up to eight graphics devices can be open at any time. The devices may be of similar type, e.g., different windows on the same workstation, or of different type, e.g., a workstation windows and a PostScript file.</p>
+
+<p><font size="-1">There are some restrictions on the types of devices; e.g., it is not possible to have two Tektronix terminals or emulators open at the same time. These restrictions will be lifted as PGPLOT device drivers are updated to handle multiple devices.</font></p>
+
+<p>Most of the PGPLOT routines affect only one device, the <em>active</em> device. Only one of the open devices can be active at a time. When a device is opened with PGOPEN it becomes the active device, but a different open device can be selected as the active device by calling PGSLCT, e.g.</p>
+
+<pre>
+      ID1 = PGOPEN(DEV1)    ! the active device is now DEV1
+      ID2 = PGOPEN(DEV2)    ! the active device is now DEV2
+      CALL PGLINE(...)      ! drawing on DEV2
+      CALL PGSLCT(ID1)      ! the active device is now DEV1
+      CALL PGLINE(...)      ! drawing on DEV1
+      CALL PGCLOS           ! DEV1 is closed; no device is active
+      CALL PGSLCT(ID2)      ! the active device is now DEV2
+</pre>
+
+<p>The routine PGQID can be used to determine the identifier of the active device. This provides a way for a subroutine to create graphics on a separate device without disturbing any open devices, e.g.,</p>
+
+<pre>
+      SUBROUTINE HARDC
+      INTEGER IDOLD, ID, PGOPEN
+*      Get identifier of active device (if any)
+      CALL PGQID(IDOLD)
+*      Open a new device
+      ID = PGOPEN(...)
+*      Create an image on the new device, and close it
+      IF (ID.GT.0) THEN
+*           plot on the new device
+            CALL PGCLOS
+      END IF
+*      Re-select the old device
+      IF (IDOLD.GT.0) CALL PGSLCT(IDOLD)
+      RETURN
+      END
+</pre>
+
+<h2>Buffering</h2>
+
+<p>By default, PGPLOT ensures that the image seen on the view surface is up to date at all times; that is, each PGPLOT subroutine updates the image before returning control to the calling program. To improve efficiency, PGPLOT can save instructions for controlling the graphics device in a ``buffer'', and only send them to the device when the buffer is filled up. This means that at any given moment, the image displayed on the screen may not be completely up to date. This can be a problem in an interactive program, where, for example, the user has to tell the program what to do next based on his interpretation of the current display. Three PGPLOT routines (PGBBUF, PGEBUF, and PGUPDT) are provided for controlling the buffering of output. All three routines have no arguments. The routine PGBBUF causes PGPLOT to begin saving graphical output in a buffer. The output is saved until (1) a matching PGEBUF call is made, or (2) the buffer fills up, or (3) the buffer is emptied by a call to PGUPDT, or (4) PGEND is called. The routine PGEBUF stops buffering and causes the buffered commands to be sent to the output device. Calls to PGBBUF and PGEBUF should always be paired. PGBBUF increments an internal counter, while PGEBUF decrements this counter and flushes the buffer to the output device when the counter drops to zero. This allows a subroutine to turn on and turn off buffering without disturbing any buffering that may have been established by the calling program.</p>
+
+<p>Routine PGUPDT empties the buffer created by PGBBUF, but it does not alter the internal counter. The routine should be called when it is essential that the display be completely up-to-date (before interaction with the user, for example) but it is not known if output is being buffered.</p>
+
+<p>Usually output is not buffered; this is the default state established by PGOPEN. The default behavior can be changed, however, by defining an environment variable <code>PGPLOT_BUFFER</code>. If this variable is defined, with any value, PGOPEN will start buffering output (by calling PGBBUF).</p>
+
+<p>The following example shows how routine PGLAB might be implemented in terms of routine PGMTXT:</p>
+
+<pre>
+      SUBROUTINE PGLAB (XLBL, YLBL, TOPLBL)
+      CHARACTER*(*) XLBL, YLBL, TOPLBL
+      CALL PGBBUF
+      CALL PGMTXT('T', 2.0, 0.5, 0.5, TOPLBL)
+      CALL PGMTXT('B', 3.2, 0.5, 0.5, XLBL)
+      CALL PGMTXT('L', 2.2, 0.5, 0.5, YLBL)
+      CALL PGEBUF
+      END
+</pre>
+
+<p>The calls to PGBBUF and PGEBUF ensure that the output generated by the three calls to PGMTXT is buffered (i.e., sent to the output device as a single command instead of three separate ones). If buffering is already enabled by the program which calls PGLAB, the calls to PGBBUF and PGEBUF have no effect.</p>
+
+<p>On some devices (e.g., X-Window workstations) use of buffering can greatly speed up the execution of a program.</p>
+
+<h2>Subroutine PGBEG</h2>
+
+<p>Subroutines PGOPEN and PGCLOS, which allow more than one PGPLOT device to be open at the same time, were added in version 5.1 in PGPLOT. PGOPEN replaces the older routine PGBEG (or PGBEGIN), but old programs that use PGBEG (or PGBEGIN) will still work. The following call</p>
+
+<pre>
+      IER = PGBEG(0, DEVICE, NX, NY)
+      IF (IER.NE.1) STOP
+</pre>
+
+<p>is equivalent to</p>
+
+<pre>
+      CALL PGEND
+      ID = PGOPEN(DEVICE)
+      IF (ID.GT.0) CALL PGSUBP(NX, NY)
+      IF (ID.LE.0) STOP
+</pre>
+
+<p>Note that the first argument of PGBEG is ignored. PGBEG returns 1 if the device was opened successfully, unlike PGOPEN which returns a device identifier.</p>
+
+<div class="footer">
+Tim Pearson, California Institute of Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</a></i><br>
+ Copyright &copy; 1995-2005 California Institute of Technology
+</div>
+
+</body>
+</html>
+

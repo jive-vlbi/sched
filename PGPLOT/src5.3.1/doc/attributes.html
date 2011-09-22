@@ -1,0 +1,661 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>PGPLOT: Attributes</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+<div class="header"><a href="../index.html">PGPLOT</a>&nbsp;&gt; <a
+href="doc-index.html">Documentation</a>&nbsp;&gt; <a href=
+"user-manual.html">User's Manual</a>&nbsp;&gt; Attributes</div>
+
+<h1>Attributes</h1>
+
+<p>The appearance of the primitive elements of a graphical image
+(lines, graph-markers, text, and area-fill) can be changed by
+specifying <i>primitive attributes</i>. The attributes, and the
+corresponding routines for changing them, are:</p>
+
+<ul>
+<li><b>Color Index:</b> <a href="subroutines.html#PGSCI">
+PGSCI</a>.</li>
+
+<li><b>Color Representation:</b> <a href="subroutines.html#PGSCR">
+PGSCR</a>, <a href="subroutines.html#PGSCRN">PGSCRN</a>, and <a
+href="subroutines.html#PGSHLS">PGSHLS</a>.</li>
+
+<li><b>Line Style:</b> <a href="subroutines.html#PGSLS">
+PGSLS</a>.</li>
+
+<li><b>Line Width:</b> <a href="subroutines.html#PGSLW">
+PGSLW</a>.</li>
+
+<li><b>Character Height:</b> <a href="subroutines.html#PGSCH">
+PGSCH</a>.</li>
+
+<li><b>Character Font:</b> <a href="subroutines.html#PGSCF">
+PGSCF</a>.</li>
+
+<li><b>Text Background:</b> <a href="subroutines.html#PGSTBG">
+PGSTBG</a>.</li>
+
+<li><b>Fill-area Style:</b> <a href="subroutines.html#PGSFS">
+PGSFS</a>, <a href="subroutines.html#PGSHS">PGSHS</a>.</li>
+</ul>
+
+<p>The routines to change attributes can be freely intermixed with
+the PGPLOT drawing routines. Once an attribute has been changed by
+a call to the appropriate routine, it remains in effect for all
+subsequent plotting until it is changed again. In addition to the
+routines that set attributes (PGS<i>xx</i>) there are routines for
+determining the current value of each attribute (PGQ<i>xx</i>).
+These make it possible to write subroutines which change attribute
+values temporarily but restore the old attributes before returning
+to the calling program.</p>
+
+<h2>Color Index</h2>
+
+<p>This attribute affects all the primitives: lines, graph-markers,
+text, and area-fill, and is controlled by routine <a href=
+"subroutines.html#PGSCI">PGSCI</a>.</p>
+
+<p>Devices differ considerably in their ability to draw in more
+than one color. On most hardcopy devices, the default color is
+black on a white background, while on most CRT devices, it is white
+on a black background. Color is selected using an integer parameter
+called the <i>color index</i>. Color index 1 is the default color,
+and color index 0 is the background color. The number of different
+color indices available depends on the device. On most monochrome
+devices, only color indices 0 and 1 are available, while some color
+CRT devices may permit color indices from 0 to 255. On some
+monochrome devices, color index can be used to select different
+brightnesses (intensities).</p>
+
+<p>Color index 0, the background color, can be used to &ldquo;erase&rdquo;
+elements from a picture by overwriting them with color index 0.
+Note that not all devices are capable of this: e.g., Tektronix
+storage-tube terminals and pen-plotters cannot erase part of a
+displayed picture.</p>
+
+<p>To select a new color index for subsequent plotting, use routine
+<a href="subroutines.html#PGSCI">PGSCI</a> (Set Color Index). For
+example, the following code fragment draws a line using color index
+2 and some markers using color index 3:</p>
+
+<pre class="f">
+    CALL PGSCI(2)
+    CALL PGLINE(100, XL, YL)
+    CALL PGSCI(3)
+    CALL PGPT(15, XP, YP, 17)
+</pre>
+
+<pre class="c">
+    cpgsci(2);
+    cpgline(100, xl, yl);
+    cpgsci(3);
+    cpgpt(15, xp, yp, 17);
+</pre>
+
+<p>The <i><a href="device-manual.html">PGPLOT Device Manual</a></i>
+lists the capabilities of the devices for plotting in color and
+variable intensity. The default color index is 1; all devices
+accept this. Most devices also accept color index 0 (background or
+erase), and several accept color index up to 15 or more. The
+maximum color index is the number of different colors that can be
+displayed at once. Some devices permit the assignment of colors to
+color indices to be changed (by calling <a href=
+"subroutines.html#PGSCR">PGSCR</a>, see below). The range of color
+indices available on the active device can be determined by calling
+routine <a href="subroutines.html#PGQCOL">PGQCOL</a>. The lower
+limit is always either 0 or 1, and the upper limit can be in the
+range 1 to 255.</p>
+
+<h2>Color Representation</h2>
+
+<p>Each color index has an associated <i>Color Representation</i>,
+which defines the associated color and intensity. Color
+Representation may be expressed by a set of three numbers, either
+the Hue, Lightness, and Saturation (H,L,S) components or the Red,
+Green, and Blue (R,G,B) components. (R,G,B) are quantities in the
+range 0.0 to 1.0, with 1.0 being maximum intensity; if R=G=B the
+color is a shade of gray. In the (H,L,S) system, hue is a cyclic
+quantity expressed as an angle in the range 0 to 360, while L and S
+are in the range 0.0 to 1.0.</p>
+
+<p>The following table and <a href="#FIG51">Figure 5.1</a> show how
+the color indices are defined on most devices when PGPLOT is
+started. Note that these assignments are device-dependent, and in
+particular some devices plot in black on white background (color
+index 0 = white, color index 1 = black), while others plot in white
+on black background (color index 0 = black, color index 1 = white).
+Color indices 0-15 have these predefined color representations, but
+these may be changed with by calling PGSCR, PGSCRN, or PGSHLS.
+Color indices 16-maximum have no predefined representations: if
+these indices are used, one of these routines must be called to
+define the representation.</p>
+
+<div align="CENTER"><b>Table 5.1. Default Color Representation</b> 
+
+<pre>
+Color
+Index    Color                  (H, L, S)        (R, G, B)
+
+ 0   Black (background)       0, 0.00, 0.00   0.00, 0.00, 0.00
+ 1   White (default)          0, 1.00, 0.00   1.00, 1.00, 1.00
+ 2   Red                    120, 0.50, 1.00   1.00, 0.00, 0.00
+ 3   Green                  240, 0.50, 1.00   0.00, 1.00, 0.00
+ 4   Blue                     0, 0.50, 1.00   0.00, 0.00, 1.00
+ 5   Cyan (Green + Blue)    300, 0.50, 1.00   0.00, 1.00, 1.00
+ 6   Magenta (Red + Blue)    60, 0.50, 1.00   1.00, 0.00, 1.00
+ 7   Yellow  (Red + Green)  180, 0.50, 1.00   1.00, 1.00, 0.00
+ 8   Red + Yellow (Orange)  150, 0.50, 1.00   1.00, 0.50, 0.00
+ 9   Green + Yellow         210, 0.50, 1.00   0.50, 1.00, 0.00
+10   Green + Cyan           270, 0.50, 1.00   0.00, 1.00, 0.50
+11   Blue + Cyan            330, 0.50, 1.00   0.00, 0.50, 1.00
+12   Blue + Magenta          30, 0.50, 1.00   0.50, 0.00, 1.00
+13   Red + Magenta           90, 0.50, 1.00   1.00, 0.00, 0.50
+14   Dark Gray                0, 0.33, 0.00   0.33, 0.33, 0.33
+15   Light Gray           0, 0.66, 0.00   0.66, 0.66, 0.66
+16--255 Undefined                                             
+</pre>
+</div>
+
+<p>On some devices, but not all, the assignments of colors to color
+indices can be changed by calling routine <a href=
+"subroutines.html#PGSCR">PGSCR</a>, to specify the color in terms
+of its (R,G,B) components, <a href="subroutines.html#PGSHLS">
+PGSHLS</a>, to specify the color in terms of its (H,L,S)
+components, or <a href="subroutines.html#PGSCRN">PGSCRN</a>, to
+specify the color by name. Note that color-index 0, the background
+color, can be redefined in this way.</p>
+
+<p>The effect of changing color representation is device-dependent.
+Devices usually fall into one of three classes: static color
+(unchangeable representation), pseudo-color (color lookup table),
+and direct color. On static color devices (e.g., pen plotters,
+Printronix printer, Tektronix terminal), attempts to change the
+color representation are ignored. On pseudo-color devices (e.g.,
+most X Window devices), changing the color representation of index
+J changes the lookup table. Pixels already drawn with index J
+change to the new color, as do subsequent ones. On direct color
+devices (e.g., PostScript color printers, some X Window devices),
+changing color representation only affects the color of pixels
+drawn with that color index later in the program.</p>
+
+<p>On monochrome devices which can display a range of intensities,
+the displayed intensity I is calculated from the requested (R,G,B)
+intensities by the following formula:</p>
+
+<p>I = 0.30 R + 0.59 G + 0.11 B</p>
+
+<p>as in the NTSC encoding used by US color television systems.</p>
+
+
+<h3>Setting Color Representation in the RGB System</h3>
+
+<p>Use routine <a href="subroutines.html#PGSCR">PGSCR</a>, which
+requires red, green, and blue values in the range 0.0 (dark) to 1.0
+(maximum intensity). The following example changes color index 2 to
+dark blue:</p>
+
+<pre class="f">
+    CALL PGSCR(2, 0.0, 0.0, 0.3)
+</pre>
+
+<pre class="c">
+    cpgscr(2, 0.0, 0.0, 0.3);
+</pre>
+
+<p>Note that most devices do not have an infinite range of colors
+or monochrome intensities available; the nearest available color is
+used. Examples: for black, set R = G = B = 0.0; for white, set R =
+G = B = 1.0; for medium gray, set R = G = B = 0.5; for medium
+yellow, set R = G = 0.5, B = 0.0.</p>
+
+<h3>Setting Color Representation in the HLS System</h3>
+
+<p>The HLS, or Hue-Saturation-Lightness, system is an alternative
+to RGB for specifying color representation. Use routine <a href=
+"subroutines.html#PGSHLS">PGSHLS</a> instead of PGSCR. Hue is
+represented by an angle in degrees, with red at 120, green at 240,
+and blue at 0 (or 360). Lightness ranges from 0.0 to 1.0, with
+black at lightness 0.0 and white at lightness 1.0. Saturation
+ranges from 0.0 (gray) to 1.0 (pure color). Hue is irrelevant when
+saturation is 0.0.</p>
+
+<pre>
+ Examples:           H     L     S        R     G     B
+     black          any   0.0   0.0      0.0   0.0   0.0
+     white          any   1.0   0.0      1.0   1.0   1.0
+     medium gray    any   0.5   0.0      0.5   0.5   0.5
+     red            120   0.5   1.0      1.0   0.0   0.0
+     yellow         180   0.5   1.0      1.0   1.0   0.0
+     pink           120   0.7   0.8      0.94  0.46  0.46
+</pre>
+
+<p><small>Reference: SIGGRAPH Status Report of the Graphic
+Standards Planning Committee, Computer Graphics, Vol.13, No.3,
+Association for Computing Machinery, New York, NY, 1979. See also:
+J. D. Foley <i>et al.</i>, &ldquo;Computer Graphics: Principles and
+Practice&rdquo;, second edition, Addison-Wesley, 1990, section
+13.3.5.</small></p>
+
+<h3>Setting Color Representation by Name</h3>
+
+<p>A third alternative to PGSCR and PGSHLS is routine <a href=
+"subroutines.html#PGSCRN">PGSCRN</a>, which specifies color by
+name. For example,</p>
+
+<pre class="f">
+    CALL PGSCRN(2, 'MediumOrchid', IER)
+</pre>
+
+<pre class="c">
+    cpgscrn(2, "MediumOrchid", &amp;ier);
+</pre>
+
+<p>The name is converted to R, G, B intensities by consulting an
+external file which is read the first time that PGSCRN is called.
+The name of the external file is found as follows:</p> 
+
+<ol>
+<li>if environment variable (logical name) <code>PGPLOT_RGB</code>
+is defined, its value is used as the file name;</li>
+
+<li>otherwise, if environment variable <code>PGPLOT_DIR</code> is
+defined, a file <code>rgb.txt</code> in the directory named by this
+environment variable is used;</li>
+
+<li>otherwise, file <code>rgb.txt</code> in the current directory
+is used.</li>
+
+<li>If all of these fail to find a file, an error is reported and
+the routine does nothing.</li>
+</ol>
+
+<p>Each line of the file defines one color, with four blank- or
+tab-separated fields per line. The first three fields are the R, G,
+B components, which are integers in the range 0 (zero intensity) to
+255 (maximum intensity). The fourth field is the color name. The
+color name may include embedded blanks. The file <a href="rgb.txt">
+<code>rgb.txt</code></a> distributed with PGPLOT is based on the
+standard list of color names supported by the X-window system. To see
+how the colors will appear on your system, print or view the <a
+href="pgplot_color_chart.pdf">PGPLOT Color Chart</a> (a PDF file).</p>
+
+<p>The color name in PGSCRN can be replaced by a hexadecimal code,
+e.g., '#ff0000'. The hexadecimal code consists of 7 characters; the
+first is '#', and the remaining 6 characters are pairs of
+hexadecimal digits (0-9, a-f, upper or lower case) giving R, G, B
+components for the color in the range 00 (black) to ff (maximum)
+(0-255 decimal). This convention is widely used to specify colors,
+e.g., in Web browsers.</p>
+
+
+<h3>Setting Background and Foreground colors at run time</h3>
+
+<p>The device-dependent default color representation of color indices
+0 (background) and 1 (foreground) can be overridden at run time by
+defining environment variables <code>PGPLOT_BACKGROUND</code> and
+<code>PGPLOT_FOREGROUND</code>. The values of these variables are
+color names, as used by routine PGSCRN. For example, to ensure that
+all devices use a black foreground on a white background, on a
+UNIX/csh system, type </p>
+
+<pre>
+    setenv PGPLOT_FOREGROUND black 
+    setenv PGPLOT_BACKGROUND white
+</pre>
+
+<p>before running the PGPLOT program. Or you can be more creative,
+e.g., </p>
+
+<pre>
+    setenv PGPLOT_FOREGROUND gold
+    setenv PGPLOT_BACKGROUND #2040C0
+</pre>
+
+<p>On direct color devices (e.g., PostScript), it is necessary to fill
+the view surface with the background color (by calling routine <a
+href="subroutines.html#PGERAS">PGERAS</a>) for a change in color
+representation to affect the whole view surface. </p>
+
+<h2>Line Style</h2>
+
+<p>Line Style can be, e.g., solid, dashed, or dotted. The attribute
+affects only lines, not the other primitives. It is controlled by
+subroutine <a href="subroutines.html#PGSLS">PGSLS</a>. The default
+line style is a full, unbroken line. Line style is described by an
+integer code: </p>
+
+<ul>
+<li>1: full line,</li>
+
+<li>2: long dashes,</li>
+
+<li>3: dash-dot-dash-dot,</li>
+
+<li>4: dotted,</li>
+
+<li>5: dash-dot-dot-dot.</li>
+</ul>
+
+<p>To change the line style, use routine <a href=
+"subroutines.html#PGSLS">PGSLS</a>. For example, to draw a dashed
+line: </p>
+
+<pre class="f">
+CALL PGSLS(2)
+CALL PGLINE(620, X, Y)
+CALL PGSLS(1)
+</pre>
+
+<pre class="c">
+cpgsls(2);
+cpgline(620, x, y);
+cpgsls(1);
+</pre>
+
+<h2>Line Width</h2>
+
+<p>Line Width affects lines, graph-markers, and text. It is
+specified with routine <a href="subroutines.html#PGSLW">PGSLW</a>,
+which takes an <i>integer</i> argument specifying the line-width
+multiplier. The exact appearance of thick lines is
+device-dependent---it depends on the resolution of the device---but
+on most devices PGPLOT attempts to make the line-width unit equal
+to 0.005 inches (0.13 mm). The default width is 1, and the maximum
+that may be specified is 201. Requesting a line-width of 10, say,
+will give lines that are approximately 1/20 inch thick. e.g.,</p>
+
+<pre class="f">
+CALL PGSLW(5)
+</pre>
+
+<pre class="c">
+cpgslw(5);
+</pre>
+
+<h2>Character Height</h2>
+
+<p>Character Height affects graph-markers and text. Character
+height is specified as a multiple of the default character height;
+the default character height one-fortieth of the height or width of
+the view surface (whichever is less). To change the character
+height, use routine <a href="subroutines.html#PGSCH">PGSCH</a>.
+Note that the argument is a <i>real</i> [<i>float</i>] variable or
+constant, not an integer like the other attribute routines. The
+following example is part of the program used to draw Figure
+4.2:</p>
+
+<pre class="f">
+CALL PGSCH(1.5)
+CALL PGSLW(3)
+CALL PGTEXT(0.05,10.0,'Bigger (1.5)')
+CALL PGSCH(0.5)
+CALL PGSLW(1)
+CALL PGTEXT(0.5,10.0,'Smaller (0.5)')
+CALL PGSCH(1.0)
+</pre>
+
+<pre class="c">cpgsch(1.5);
+cpgslw(3);
+cpgtxt(0.05, 10.0, "Bigger (1.5)");
+cpgsch(0.5);
+cpgslw(1);
+cpgtxt(0.5, 10.0, "Smaller (0.5)");
+cpgsch(1.0);
+</pre>
+
+<h2>Character Font</h2>
+
+<p>Character Font affects text only. Four fonts are available. The
+default font (1) is simple and is the fastest to draw. The font is
+defined by an integer code:</p>
+
+<ul>
+<li>1: normal (simple) font (default),</li>
+
+<li>2: roman font,</li>
+
+<li>3: italic font,</li>
+
+<li>4: script font.</li>
+</ul>
+
+<p>To change the character font, use routine <a href=
+"subroutines.html#PGSCF">PGSCF</a>; it is also possible to change
+the font temporarily by using escape sequences (see Chapter 4). For
+example, the following code generates text in roman font:</p>
+
+<pre class="f">
+INTEGER ROMAN
+PARAMETER (ROMAN=2)
+...
+CALL PGSCF(ROMAN)
+CALL PGTEXT(X, Y, 'SPQR')
+</pre>
+
+<pre class="c">
+#define ROMAN 2
+...
+cpgscf(ROMAN);
+cpgtext(x, y, "SPQR");
+</pre>
+
+<h2>Text Background</h2>
+
+<p>This attribute affects the appearance of text. Text may be
+either <i>transparent</i> (the default), in which case underlying
+graphics show between the characters of the text, or <i>opaque</i>,
+in which case the bounding box of the text is filled with a
+specified color before drawing the text characters. Use routine <a
+href="subroutines.html#PGSTBG">PGSTBG</a> to specify the text
+background; the argument is an integer which may be</p>
+
+<ul>
+<li>-1: to select transparent text (the default), or</li>
+
+<li>0 - 255: to select opaque text, with the argument specifying
+the color index of the text background. Use color index 0 to erase
+underlying graphics before drawing text.</li>
+</ul>
+
+<p>If the color index specified by PGSTBG is the same as that
+specified by PGSCI, then text will be written on a background of
+the same color and will be unreadable.</p>
+
+<p>The following code draws yellow text on a blue background:</p>
+
+<pre class="f">
+INTEGER YELLOW, BLUE
+PARAMETER (BLUE=4, YELLOW=7)
+...
+CALL PGSCI(YELLOW)
+CALL PGSTBG(BLUE)
+CALL PGTEXT(X, Y, 'SPQR')
+</pre>
+
+<pre class="c">#define BLUE 4
+#define YELLOW 7
+...
+cpgsci(YELLOW);
+cpgstbg(BLUE);
+cpgtext(x, y, "SPQR");
+</pre>
+
+<h2>Fill-Area Style</h2>
+
+<p>Fill-Area Style can be <i>solid</i> (fill the area with the
+current color), <i>outline</i> (only the outline of the polygon is
+drawn), <i>hatched</i> (the region is shaded with parallel lines)
+or <i>cross-hatched</i> (the region is shaded with two sets of
+perpendicular lines). The style is defined by an integer code:</p>
+
+<ul>
+<li>1: solid (default),</li>
+
+<li>2: outline,</li>
+
+<li>3: hatched,</li>
+
+<li>4: cross-hatched.</li>
+</ul>
+
+<p>These are illustrated in <a href="#FIG52">Figure 5.2</a>.</p>
+
+<p>Fill-area style applies to polygons (<a href=
+"subroutines.html#PGPOLY">PGPOLY</a>), circles (<a href=
+"subroutines.html#PGCIRC">PGCIRC</a>), and rectangles (<a href=
+"subroutines.html#PGRECT">PGRECT</a>).</p>
+
+<p>To change the fill-area style, use routine <a href=
+"subroutines.html#PGSFS">PGSFS</a>. The following example uses both
+outline and solid fill: it first erases a rectangle (using color
+index 0 and fill-area style 1), and then draws a frame around it
+(using color index 1 and fill-area style 2):</p>
+
+<pre class="f">
+CALL PGSCI(0)
+CALL PGSFS(1)
+CALL PGRECT(0.31, 0.69, 0.85, 0.97)
+CALL PGSCI(1)
+CALL PGSFS(2)
+CALL PGRECT(0.31, 0.69, 0.85, 0.97)
+</pre>
+
+<pre class="f">
+cpgsci(0);
+cpgsfs(1);
+cpgrect(0.31, 0.69, 0.85, 0.97);
+cpgsci(1);
+cpgsfs(2);
+cpgrect(0.31, 0.69, 0.85, 0.97);
+</pre>
+
+<p>The spacing and orientation of the hatching lines in styles 3
+and 4 can be changed by calling routine <a href=
+"subroutines.html#PGSHS">PGSHS</a>.</p>
+
+<h2>The Inquiry Routines</h2>
+
+<p>The current setting of each attribute can be determined with an
+inquiry routine, e.g., <a href="subroutines.html#PGQCH">PGQCH</a>
+to determine the current character height. A general-purpose
+subroutine that needs to change attributes temporarily should first
+determine the current settings and then restore them before
+finishing, e.g.,</p>
+
+<pre class="f">
+INTEGER LW, CI
+REAL X(7), Y(7)
+* <i>save the current attributes</i>
+CALL PGQLW(LW)
+CALL PGQCI(CI)
+* <i>change the attributes and draw something</i>
+CALL PGSLW(2)
+CALL PGSCI(11)
+CALL PGLINE(7, X, Y)
+* <i>restore the attributes</i>
+CALL PGSLW(LW)
+CALL PGSCI(CI)
+RETURN
+</pre>
+
+<pre class="c">
+int lw, ci;
+float x[7], y[7];
+cpgqlw(&amp;lw);
+cpgqci(&amp;ci);
+cpgslw(2);
+cpgsci(11);
+cpgline(7, x, y);
+cpgslw(lw);
+cpgsci(ci);
+return;
+</pre>
+
+<p>There are also inquiry routines for determining the current
+window (<a href="subroutines.html#PGQWIN">PGQWIN</a>), current
+viewport (<a href="subroutines.html#PGQVP">PGQVP</a>), and current
+pen position for use with <a href="subroutines.html#PGMOVE">
+PGMOVE</a> and <a href="subroutines.html#PGDRAW">PGDRAW</a> (<a
+href="subroutines.html#PGQPOS">PGQPOS</a>).</p>
+
+<h2>Saving and Restoring Attributes</h2>
+
+<p>It is sometimes convenient to change the current attributes
+temporarily, to draw a small prt of a picture, for example, and
+then restore them to their previous settings. This can be
+accomplished with the routines <a href="subroutines.html#PGSAVE">
+PGSAVE</a> and <a href="subroutines.html#PGUNSA">PGUNSA</a>.</p>
+
+<p><a href="subroutines.html#PGSAVE">PGSAVE</a> saves the current
+PGPLOT attributes in a private storage area. They can be restored
+by calling <a href="subroutines.html#PGUNSA">PGUNSA</a> (unsave).
+Attributes saved are: character font, character height, color
+index, fill-area style, line style, line width, pen position,
+arrow-head style, hatching style. Color representation is not
+saved.</p>
+
+<p>Calls to PGSAVE and PGUNSA should always be paired. Up to 20
+copies of the attributes may be saved. PGUNSA always retrieves the
+last-saved values (last-in first-out stack).</p>
+
+<p>Note that when multiple devices are in use, PGUNSA retrieves the
+values saved by the last PGSAVE call, even if they were for a
+different device.</p>
+
+<p>The example in the previous section can be written more simply
+as:</p>
+
+<pre class="f">
+REAL X(7), Y(7)
+* <i>save the current attributes</i>
+CALL PGSAVE
+* <i>change the attributes and draw something</i>
+CALL PGSLW(2)
+CALL PGSCI(11)
+CALL PGLINE(7, X, Y)
+* <i>restore the attributes</i>
+CALL PGUNSA
+RETURN
+</pre>
+
+<pre class="c">
+float x[7], y[7];
+cpgsave();
+cpgslw(2);
+cpgsci(11);
+cpgline(7, x, y);
+cpgunsa();
+return;
+</pre>
+
+<!--NewPage-->
+<div align="CENTER"><a name="FIG51"><img src="fig51.gif" width=
+"384" height="639" alt="Color figure"></a>
+<p><b>Figure 5.1</b> Default color representations of color indices
+0-15 on most color and gray-scale devices.</p>
+
+<blockquote class="note">Note: Some Web browsers may not display
+the colors correctly.</blockquote>
+</div>
+
+<!--NewPage-->
+<div align="CENTER"><a name="FIG52"><img src="fig52.gif" width=
+"511" height="511" alt="Figure"></a>
+<p><b>Figure 5.2</b> Fill-Area Styles: illustrated with PGPOLY,
+PGCIRC, and PGRECT.</p>
+</div>
+
+<div class="footer">Tim Pearson, California Institute of
+Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995-2005 California Institute of Technology</div>
+</body>
+</html>
+

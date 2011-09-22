@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT CGM driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR=WHITE>
+
+<DIV class=NOPRINT>
+<FONT FACE="sans-serif, Arial, Helvetica" SIZE="2" COLOR="#0033CC">You
+are here:&nbsp;
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="device-manual.html">Device Manual</A>&nbsp;&gt;
+CGM file format</FONT>
+</DIV>
+
+<H2>PGPLOT: CGM file format</H2>
+
+<P>CGM (Computer Graphics Metafile) is a standard, device-independent
+graphics file format (ANSI/ISO 8632, 1991). It is a vector format, so
+files can be scaled without loss of resolution, and some editing is
+possible.</P>
+
+<P>Two PGPLOT device types are supported by this driver: CGM and CGMD.
+The two differ in the way colors are represented. CGM uses the
+indexed method, representing colors using index values and a color
+table. CGMD on the other hand, uses direct color representation,
+whereby each color reference is stored as a combination of RGB
+values.  Generally both CGM and CGMD should produce identical output,
+with CGM producing slightly smaller files. However not all software
+supports the indexed color selection method. Therefore if color
+problems occur when displaying CGM output CGMD should be used instead.</P>
+
+<P>Computer Graphics Metafiles offer many advantages over other file
+formats currently supported by PGPLOT:
+<UL>
+
+<LI>As CGM is an international standard, it is supported by a great
+number of application programs on many different platforms.
+
+<LI>Metafiles, unlike bitmaps (GIF, BMP etc.) do not loose detail and
+look blocky when re-sized. This is because rather than storing the
+actual image, information is stored which allows the picture to be
+re-drawn at any physical size. This makes them ideal for storing
+pictures which are comprised of lines and other simple shapes, such as
+scientific plots.  
+
+<LI>With this driver full 256 color plots can be
+accurately stored as CGM files. Even cell-arrays can be handled,
+although these can cause files to become somewhat large.
+
+<LI>CGM files can be imported into the popular Microsoft Office suite
+(under Windows, but not MacOS). In MS Word or PowerPoint an imported
+picture can be interactively resized and edited without losing detail
+or resolution. The color of individual lines can also be changed to
+suit the style of the document or presentation.
+An imported CGM image is visible on screen in most applications, unlike a
+PostScript image which can only be seen when printed.
+</UL>
+</P>
+
+<DL>
+
+<P><DT><B>Device type code</B>
+<DD>
+<CODE>/CGM</CODE> (indexed color mode).
+<BR>
+<CODE>/CGMD</CODE> (direct color mode).
+
+<P><DT><B>Default file name</B>
+<DD>
+<CODE>pgplot.cgm</CODE><BR>
+The standard extension for CGM files is <code>.cgm</code>.
+
+<P><DT><B>Default view surface dimensions</B>
+<DD>
+Width 7.8 inch by height 10.5 inch. These defaults can be overridden by
+calling <A HREF="subroutines.html#PGPAP">PGPAP</A>.
+
+<P><DT><B>Resolution</B>
+<DD>
+PGPLOT uses an addressing resolution of 1000 units per inch. The
+actual resolution is set by the display device. Metric scaling is
+included. If this is supported by the application then imported
+pictures appear exactly as created, i.e. a 2-inch plot will be exactly
+2inch on screen. (Microsoft Office programs do not recognize this
+information.)
+
+<P><DT><B>Color capability</B>
+<DD>
+Color indices 0-255 are accepted, with standard defaults for color
+indices 0-15 (white background, color index 1 = black). For /CGM, if
+the color representation of a color index is changed, it affects all
+elements drawn in that color on the current page. For /CGMD, changes
+in color representation affect only elements drawn after the change.
+
+<P><DT><B>Input capability</B>
+<DD>None.
+
+<P><DT><B>File format</B>
+<DD>
+PGPLOT uses the binary encoding for CGM files, and conforms to
+version 1 of the CGM specification.
+
+<P><DT><B>Known Problems</B>
+<DD>
+        <strong>Plots look chunky and of a
+            low resolution when imported into an application.</strong>
+            <em>This is because the application uses abstract
+            scaling. To overcome this problem make the plot
+            larger and it will then appear at a higher
+            resolution, but at the same physical size.</em>
+        <br><strong>Colors look wrong or the
+            picture simply is not visible.</strong> <em>This is
+            because you have used the /CGM device to create the
+            file, but the application does not understand indexed
+            color selection. To overcome this use /CGMD instead.</em>
+        <br><strong>A file takes a long time to
+            load or causes the application to crash.</strong> <em>This
+            is caused by files which have become extremely large,
+            usually when cell-arrays are present. The only
+            solution to this problem is to consider using a
+            different file format, e.g. a bitmap format such as
+            GIF.</em>
+        <br><strong>A picture cannot be edited by
+            an application.</strong> <em>This is due to the fact
+            that large files, containing many separate drawing
+            elements, are too large for applications like Word or
+            PowerPoint to convert completely. They can still be
+            re-sized and included normally, but cannot be edited.</em>
+
+
+<P><DT><B>Author</B>
+<DD>
+Robin Sergeant, Rutherford Appleton Laboratory (Oxfordshire, UK),
+(<A HREF="mailto:rsergeant@clara.net">rsergeant@clara.net</A>).
+</DL>
+
+<DIV class=NOPRINT>
+<HR>
+<SMALL>
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</A></I><BR>
+Copyright &#169; 1999 California Institute of Technology
+</SMALL>
+</DIV>
+
+</BODY>
+</HTML>
+

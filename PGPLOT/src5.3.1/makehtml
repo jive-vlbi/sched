@@ -1,0 +1,204 @@
+#!/usr/local/bin/perl
+
+$, = ' ';		# set output field separator
+$\ = "\n";		# set output record separator
+
+@files = @ARGV;
+
+print <<'EOD';
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head><title>PGPLOT Subroutine Descriptions</title>
+<meta name="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<link rev="made" HREF="mailto:tjp·astro.caltech.edu">
+</head>
+<body bgcolor="WHITE">
+
+<h1>PGPLOT Subroutine Descriptions</h1>
+
+<h2>Introduction</h2>
+
+This appendix includes a list of all the PGPLOT subroutines, and then
+gives detailed instructions for the use of each routine. The
+subroutine descriptions are in alphabetical order.  For more
+information about PGPLOT, see the <a
+href="http://www.astro.caltech.edu/~tjp/pgplot/">PGPLOT home page</a>.
+
+<h2>Fortran Usage</h2>
+
+The subroutine descriptions indicate the data type of each
+argument. When arguments are described as <i>input</i>, they may be
+replaced with constants or expressions in the <code>CALL</code>
+statement, but make sure that the constant or expression has the
+correct data type.
+
+<dl><dt><code>INTEGER</code> arguments:
+<dd>these should be declared
+<code>INTEGER</code> or <code>INTEGER*4</code> in the calling program,
+not <code>INTEGER*2</code>.
+
+<dt><code>REAL</code> arguments:
+<dd>these should be declared
+<code>REAL</code> or <code>REAL*4</code> in the calling program, not
+<code>REAL*8</code> or <code>DOUBLE PRECISION</code>.
+
+<dt><code>LOGICAL</code> arguments:
+<dd>these should be declared
+<code>LOGICAL</code> or <code>LOGICAL*4</code> in the calling program.
+
+<dt><code>CHARACTER</code> arguments:
+<dd> any valid Fortran
+<code>CHARACTER</code> variable may be used (declared
+<code>CHARACTER*n</code> for some integer <code>n</code>).
+
+</dl>
+
+<h2>C usage</h2>
+
+A standard C synopsis indicating argument types
+is provided for each subroutine that has a C binding. The PGPLOT
+header file should be included in all programs that use these
+subroutines: <pre>
+#include "cpgplot.h"
+</pre>
+
+<dl>
+<dt><code>int</code> arguments
+<dd>Input <code>int</code> arguments are passed by value, and non-int values will be converted to int; for output arguments,
+supply a pointer to <code>int</code>
+<dt><code>float</code> arguments
+<dd>Single-valued <code>float</code> arguments are passed by value, and non-float values (e.g., double) will be converted to float; for output arguments,
+supply a pointer to <code>float</code>. Array arguments are passed by address.
+<dt><code>char*</code> arguments
+    <dd>For input, supply a pointer to a null-terminated string; for an output argument <code>char *value</code>, there is another argument <code>int * value_length</code>. <code>value_length</code> should be set to the maximum number
+    of characters that may be stored in <code>value</code> before entry to the routine; it receives the actual number of characters used.
+<dt>2-dimensional arrays
+<dd>Two-dimensional arrays should be packed in a one-dimensional C array, with the first index changing fastest.
+</dl>
+
+
+<h2>Index of Routines</h2>
+
+EOD
+
+# Extract documentation from pgplot source code: output index of routines
+print '<ul>';
+while (<>) {
+    chop;	# strip record separator
+    if (/^C\*/) {
+      ($module, $rest) = split (' ', $_, 2);
+      $module = substr($module, 2);
+      print "<li><a href=\"#$module\">$module</a> $rest";
+      $ref{$module} = "<a href=\"#$module\">$module</a>";
+      push (@modules, $module);
+    }
+}
+
+# reverse sort so that modules with the same first few characters occur
+# longest to shortest.
+@modules = sort {length($b) <=> length($a)} @modules;
+
+print '</ul>';
+
+# Extract documentation from pgplot source code: output HTML code
+
+@ARGV = @files;
+while (<>)
+{
+    s/\&/\&amp\;/g;
+    s/\>/\&gt\;/g;
+    s/\</\&lt\;/g;
+  chop;				# strip record separator
+
+  /^C\*/ && do
+  {
+    print '';
+
+    print '<hr>';
+    ($module, $rest) = split (' ', substr($_, 2), 2);
+    print "<h2><a name=\"$module\">$module</A> $rest</h2>";
+    $ccode = 0;
+    next;
+  };
+
+  /^C\+/ && do
+  {
+      print '</font></pre>' if $ccode == 1;
+      $ccode = 0;
+    print '<pre>' if $echo == 0;
+    $echo = 1;
+    print &Getline0();
+    next;
+  };
+
+  /^C--/ && do
+  {
+    print '</pre>' if $echo == 1;
+    $echo = 0;
+    next;
+  };
+
+  /^C\%/ && do
+  {
+      print "<pre><font color=\"#FF3300\">" if $ccode == 0;
+      $ccode = 1;
+      print substr($_, 2);
+  };
+
+  /^C\~/ && do
+  {
+      print substr($_, 2);
+  };
+
+  next if ! $echo;
+
+  /^C/ && do
+  {
+    # replace module names with links.  when a module name is recognized,
+    # it's replaced by a tag in the line to avoid multiple recognitions
+    # (by modules which have similar substrings).  the tags are replaced
+    # by the actual links after all identifications have been made.
+    # it'd be cheaper to have the tags be variables that could be
+    # interpolated, but there's no guarantee that the rest of the text
+    # wouldn't be adversely affected. thus, a set of replacements is
+    # created and then eval'd
+    $line = substr($_, 2);
+    $reps = 0;
+    $repstr = '';
+    foreach $module (@modules)
+    {
+      $start = index($line, $module);
+      next if $start == -1;
+      $tag = sprintf("REPLACE<%04d>", $reps);
+      $line = join('', substr($line, 0, $start), $tag,
+		   substr($line, $start+length($module)));
+      $repstr .= "\$line =~ s:$tag:$ref{$module}:;\n";
+      ++$reps;
+    }
+    eval $repstr if $repstr ne '';
+    print $line;
+    next;
+  };
+
+  print;
+}
+
+print <<'EOD';
+
+<div class=noprint>
+<hr>
+<a href="index.html">PGPLOT</a><br>
+Tim Pearson, California Institute of Technology, 
+<i><a href="mailto:tjp·astro.caltech.edu">tjp·astro.caltech.edu</a></i><br>
+Copyright &#169; 1995-2002 California Institute of Technology
+</div>
+ 
+</body></html>
+EOD
+
+sub Getline0 {
+    if ($getline_ok = (($_ = <>) ne '')) {
+	chop;	# strip record separator
+    }
+    $_;
+}

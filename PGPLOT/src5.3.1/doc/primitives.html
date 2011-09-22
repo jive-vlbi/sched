@@ -1,0 +1,372 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT: Primitives</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp·astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</HEAD>
+<BODY>
+
+<DIV class="header">
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="user-manual.html">User's Manual</A>&nbsp;&gt;
+Primitives
+</DIV>
+
+<H1>Primitives</H1>
+
+<P>Having opened a graphics device and defined the viewport and the
+window, we are ready to draw the substance of the image that is to
+appear within the viewport.  This chapter describes the most basic
+routines, called <I>primitives</I>, that can be used for drawing
+elements of the image.  There are four different sorts of primitive:
+<I>lines, graph-markers, text</I>, and <I>area fill</I>.  The <A
+HREF="attributes.html">next chapter</A> explains how to change the
+<I>attributes</I> of these primitives, e.g., color, line-style, and text
+font.</P>
+
+<P>The primitive routines can be used in any combination and order after
+the viewport and window have been defined.  They all indicate where
+the primitive is to appear on the view surface by specifying world
+coordinates. See the <A HREF="subroutines.html">subroutine descriptions</A>
+for more details.</P>
+
+<H2>Clipping</H2>
+
+<P>The primitives are &ldquo;clipped&rdquo; at the edge of the viewport: any parts 
+of the image that would appear outside the viewport are suppressed.  The 
+various primitives behave slightly differently. A <I>line</I> is
+clipped where it crosses the edge of the viewport. A <I>graph marker</I>
+is plotted if the center (the point marked) lies within or on the edge 
+of the viewport; otherwise it is suppressed. <I>Text</I>, which is 
+usually used for annotation, is not clipped (except at the edge of the 
+view surface). A <I>filled area</I> is clipped at the edge of the
+viewport.
+
+<P>In rare cases, it is useful to disable clipping of lines and graph
+markers; this can be done with routine <A
+HREF="subroutines.html#PGSCLP">PGSCLP</A>. However, it is usually
+better to redefine the viewport rather than trying to draw outside
+it.</P>
+
+<H2>Lines</H2>
+
+<P>The primitive line-drawing routine is <A
+HREF="subroutines.html#PGLINE">PGLINE</A>.  This draws one or more
+connected straight-line segments (generally called a <I>polyline</I>
+in computer graphics).  It has three arguments: the integer number
+(<CODE>N</CODE>) of points defining the polyline, and two real or
+float arrays (<CODE>XPTS</CODE> and <CODE>YPTS</CODE>) containing the
+world <I>x</I> and <I>y</I>-coordinates of the points.  The polyline
+consists of N-1 straight-line segments connecting points 1-2, 2-3,
+..., (N-1)-N:</p>
+<PRE class="f">CALL PGLINE(N, XPTS, YPTS)
+</PRE>
+<PRE class="c">cpgline(n, xpts, ypts);
+</PRE>
+
+
+<P>The two routines <A HREF="subroutines.html#PGMOVE">PGMOVE</A> and
+<A HREF="subroutines.html#PGDRAW">PGDRAW</A> are even more primitive
+than PGLINE, in the sense that any line graph can be produced by
+calling these two routines alone.  In general, PGLINE should be
+preferred, as it is more modular. PGMOVE and PGDRAW are provided for
+those who are used to Calcomp-style plotting packages.  PGMOVE moves
+the plotter &ldquo;pen&rdquo; to a specified point, without drawing a line
+(&ldquo;pen up&rdquo;). It has two arguments: the world-coordinates of the
+required new pen position.  PGDRAW moves the plotter &ldquo;pen&rdquo; from its
+current position (defined by the last call of PGMOVE or PGDRAW) to a
+new point, drawing a straight line as it goes (&ldquo;pen down&rdquo;).  The
+above call to PGLINE could be replaced by the following:
+
+<PRE class="f">CALL PGMOVE(XPTS(1), YPTS(1))
+DO I=2,N
+    CALL PGDRAW XPTS(I), YPTS(I))
+END DO
+</PRE>
+
+<PRE class="c">cpgmove(xpts[0], ypts[0]);
+for (i=1; i &lt; n; i++)
+    cpgdraw(xpts[i], ypts[i]);
+</PRE>
+<p>(Note: Fortran array indices usually start at 1 while C array indices 
+start at 0.)</p>
+
+<P>To draw an <i>arc of a circle</i>, use routine <A
+HREF="subroutines.html#PGARC">PGARC</A>. This routine has five
+arguments: the (<I>x,y</I>) world coordinates of the center, the
+radius in world coordinates, and two angles defining the endpoints of
+the arc. The following example draws a quadrant (90° segment).</p>
+
+<PRE class="f">CALL PGARC(X, Y, RADIUS, 0.0, 90.0)
+</PRE>
+<PRE class="c">cpgarc(x, y, radius, 0.0, 90.0);
+</PRE>
+
+<p>This routine can be used to draw a complete circle, by specifying two
+angles 360° apart; it is also possible to use <A
+HREF="subroutines.html#PGCIRC">PGCIRC</A> with fill-style 2
+(outline). PGPLOT approximates the arc by straight-line segments.
+</P>
+
+
+
+<H2>Graph Markers</H2>
+
+<P>A Graph Marker is a symbol, such as a cross, dot, or circle, drawn on
+a graph to mark a specific point. Usually the symbol used will be
+chosen to be symmetrical with a well-defined center. The routine <A
+HREF="subroutines.html#PGPT1">PGPT1</A> draws a single graph marker at
+a specified world-coordinate point; while <A
+HREF="subroutines.html#PGPT">PGPT</A> draws several graph markers
+(sometimes called a <I> polymarker</I>) at a set or points specified
+by arrays of coordinates.  PGPT has three arguments: the real/float
+<i>x</i> and <i>y</i> world-coordinates of the point and an integer
+number identifying the symbol to use. PGPT has four arguments: the
+number of points to mark, two arrays containing the world <I>x</I> and
+<I>y</I>-coordinates of the points, and a symbol number:
+
+<PRE CLASS="F">    CALL PGPT1(X, Y, NSYM)
+    REAL XPTS(N), YPTS(N)
+    CALL PGPT (N, XPTS, YPTS, NSYM)
+</PRE>
+<PRE CLASS="C">    cpgpt1(x, y, nsym);
+    float xpts[n], ypts[n];
+    cpgpt(n, xpts, ypts, nsym);
+</PRE>
+
+<p>The symbol number can be:</p>
+<UL>
+<LI>-1, to draw a dot of the smallest possible
+size;
+<LI>0 - 31, to draw any one of the symbols in <A HREF="#FIG41">Figure 5.1</A>;
+<LI>-3 - -8, to draw a filled regular polygon with 3--8 sides;
+<LI>33--127, to draw the
+corresponding ASCII character (the character is taken from the
+currently selected text font);
+<LI>&gt;127, to draw one of the Hershey
+symbols from <A HREF="hershey.html">Chapter 11</A>.
+</UL>
+
+<p>For example, to use letter <I>F</I> as the marker:</p>
+
+<PRE CLASS="F">    CALL PGPT1(0.5, 0.75, ICHAR('F') ) 
+</PRE>
+<PRE CLASS="C">    cpgpt1(0.5, 0.75, 'F' );
+</PRE>
+
+<p>(<CODE>ICHAR</CODE> is the Fortran intrinsic function that returns the
+integer value of a character.)</P>
+
+<H2>Text</H2>
+
+<P>The Text primitive routine is used for writing labels and titles on
+the image.  It converts an internal computer representation of the
+text (ASCII codes) into readable text.  (The correspondence between
+codes and representations is given in <A HREF="hershey.html">Appendix B</A>.) The simplest routine for
+writing text is <A
+HREF="subroutines.html#PGTEXT">PGTEXT</A>, which writes a
+horizontal character string starting at a specific <I>(x,y)</I> world
+coordinate position, e.g.,
+
+<PRE CLASS="F">    CALL PGTEXT(X, Y, 'A text string')
+</PRE>
+<PRE CLASS="C">    cpgtext(x, y, "A text string");
+</PRE>
+
+<p>PGTEXT is actually a simplified interface to the more
+general primitive routine <A
+HREF="subroutines.html#PGPTXT">PGPTXT</A>, which allows one to
+change orientation and justification of the text, e.g.,</p> 
+
+<PRE CLASS="F">    CALL PGPTXT (X, Y, 45.0, 0.5, 'A text string')
+</PRE>
+<PRE CLASS="C">    cpgptxt(x, y, 45.0, 0.5, "A text string");
+</PRE>
+
+<p>which writes the text at an angle of 45 degrees to the horizontal, centered
+at <I>(x,y)</I>.</P>
+
+<P>Both PGTEXT and PGPTXT require the position of the text string to
+be specified in world coordinates.  When annotating a graph, it is
+usually more convenient to position the text relative to the edge of
+the viewport, rather than in world-coordinate space.  The routine <A
+HREF="subroutines.html#PGMTXT">PGMTXT</A> is provided for this, and <A
+HREF="subroutines.html#PGLAB">PGLAB</A> provides a simple interface to
+PGMTXT for the normal job of annotating an <I>(x,y)</I> graph.</P>
+
+<P>The appearance of text can be altered by specifying a number of
+<I>attributes</I>, described in the next chapter.  In particular, the
+character size and character font can be changed. <A HREF="#FIG42">Figure
+5.2</A> illustrates some of the possibilities.</P>
+
+
+<H3>Escape Sequences</H3>
+
+<P>The routine PGPTXT (and all the other PGPLOT text-plotting routines,
+e.g., PGTEXT, PGLAB) allows one to
+include <I>escape sequences</I> in the text string to be
+plotted. These are character-sequences that are not plotted, but are
+interpreted as instructions to change font, draw superscripts or
+subscripts, draw non-ASCII characters (e.g., Greek letters), etc.  All
+escape sequences start with a backslash character
+(<CODE>\</CODE>). 
+
+<BLOCKQUOTE>
+Note that in C, and some varieties of Fortran, <i>two</i> backslash
+characters (<code>\\</code>) are required to prevent special
+interpretation by the compiler.
+</BLOCKQUOTE>
+
+<p>The following escape sequences are defined (the
+letter following the <CODE>\</CODE> may be either upper or lower
+case):</P>
+
+<TABLE BORDER=1 summary="PGPLOT escape sequences"> 
+
+<TR><TD>\u</TD>
+    <TD>start a superscript, or end a subscript</TD></TR>
+<TR><TD>\d</TD>
+    <TD>start a subscript, or end a superscript (note that \u
+        and \d must always be used in pairs)</TD></TR> 
+<TR><TD>\b</TD>
+    <TD>backspace (i.e., do not advance text pointer after
+        plotting the previous character)</TD></TR>
+<TR><TD>\fn</TD>
+    <TD>switch to Normal font (1)</TD></TR>
+<TR><TD>\fr</TD>
+    <TD>switch to Roman font (2)</TD></TR>
+<TR><TD>\fi</TD>
+    <TD>switch to Italic font (3)</TD></TR>
+<TR><TD>\fs</TD>
+    <TD>switch to Script font (4)</TD></TR>
+<TR><TD>\\</TD>
+    <TD>backslash character (\)</TD></TR>
+<TR><TD>\x</TD>
+    <TD>multiplication sign (&#215;)</TD></TR>
+<TR><TD>\.</TD>
+    <TD>centered dot (&#183;)</TD></TR>
+<TR><TD>\,</TD>
+    <TD>thin space (half the width of a normal space)</TD></TR>
+<TR><TD>\A</TD>
+    <TD>&aring;ngstr&ouml;m symbol (&Aring;)</TD></TR>
+<TR><TD>\g<I>x</I></TD>
+    <TD>greek letter corresponding to roman letter <I>x</I>,
+ as indicated in <A HREF="#FIG43">Figure 5.3</A></TD></TR>
+<TR><TD>\m<I>n</i><BR>\m<I>nn</i></TD>
+    <TD>graph marker number <I>n</i> or <I>nn</i> (0-31),
+ as indicated in <A HREF="#FIG41">Figure 5.1</A></TD></TR>
+<TR><TD>\(<I>nnnn</i>)</TD>
+    <TD>character number <I>nnnn</i> (1 to 4 decimal digits) from the Hershey character set;
+the closing parenthesis may be omitted if the next character is neither
+a digit nor &ldquo;)&rdquo;.  This makes a number of special characters (e.g.,
+mathematical, musical, astronomical, and cartographical symbols)
+available.  See <A HREF="hershey.html">Appendix B</A> for a list of available characters. </TD></TR>
+</TABLE>
+
+<P>As an example, here is the code required to write</p>
+<BLOCKQUOTE>
+ <I>H</i><sub>0</sub> = 75 ± 25 km s<sup>-1</sup> Mpc<sup>-1</sup>
+</BLOCKQUOTE>
+
+<PRE CLASS="F">    CALL PGTEXT(X, Y, '\fiH\d0\u \fr= 75 \(2233) 25 km s\u-1\d Mpc\u-1\d')
+</PRE>
+<PRE CLASS="C">    cpgtext(x, y, "\\fiH\\d0\\u \\fr= 75 \\(2233) 25 km s\\u-1\\d Mpc\\u-1\\d");
+</PRE>
+
+<H2>Area Fill: Polygons, Rectangles, and Circles</H2>
+
+<P>The Area Fill primitives allow the programmer to shade the interior
+of an arbitrary polygonal or circular region.  The appearance of the
+primitive is controlled by attributes <I>fill area style</I> and
+<I>color index</I> (see <A HREF="attributes.html">next
+chapter</A>). Note that one fill-style option is <I>hollow</I>, i.e.,
+draw the outline only.</P>
+
+<P>The routine <A HREF="subroutines.html#PGPOLY">PGPOLY</A>
+is used to fill an area defined as a <b>polygon</b>.  It has three arguments:
+the number (<CODE>N</CODE>) of vertices defining the polygon, and two
+arrays (<CODE>XPTS</CODE> and <CODE>YPTS</CODE>) containing the world
+<I>x</I> and <I>y</I>-coordinates of the vertices:
+
+<PRE CLASS="F">    CALL PGPOLY(N, XPTS, YPTS)
+</PRE>
+<PRE CLASS="C">    cppoly(n, xpts, ypts);
+</PRE>
+
+<p>If the polygon is not convex, it may not be obvious which points in the
+image are inside the polygon. PGPLOT assumes that a point is inside the
+polygon if a straight line drawn from the point to infinity intersects
+an odd number of the polygon's edges.</P>
+
+<P>For the special case of a <b>rectangle</b> with edges parallel to the
+coordinate axes, it is better to use routine <A
+HREF="subroutines.html#PGRECT">PGRECT</A> instead of
+PGPOLY; this routine will use the hardware rectangle-fill
+capability if available. PGRECT has four arguments: the
+(<I>x,y</I>) world coordinates of two opposite corners (note the order
+of the arguments):</p>
+
+<PRE CLASS="F">    CALL PGRECT(X1, X2, Y1, Y2)
+</PRE>
+<PRE CLASS="C">    cpgrect(x1, x2, y1, y2);
+</PRE>
+
+<P>To draw a <b>circle</b> use routine <A
+HREF="subroutines.html#PGCIRC">PGCIRC</A>. This routine has
+three arguments: the (<I>x,y</I>) world coordinates of the center,
+and the radius in world coordinates. Note that a circle may appear
+elliptical if the world-coordinate scaling is not the same in <I>x</I>
+and <I>y</I>.</p>
+<PRE CLASS="F">    CALL PGCIRC(X, Y, RADIUS)
+</PRE>
+<PRE CLASS="C">    cpgcirc(x, y, radius);
+</PRE>
+
+
+<P>To fill a <b>sector of a circle</b> (defined by two radii and the
+included arc of the circle), use routine <A
+HREF="subroutines.html#PGPIE">PGPIE</A>. This routine has five
+arguments: the (<I>x,y</I>) world coordinates of the center, the
+radius in world coordinates, and two angles defining the endpoints of
+the arc. The following example draws a quadrant (90° segment).</p>
+
+<PRE CLASS="F">    CALL PGPIE(X, Y, RADIUS, 0.0, 90.0)
+</PRE>
+<PRE CLASS="C">    cpgpie(x, y, radius, 0.0, 90.0);
+</PRE>
+
+<H2>Arrows</H2>
+
+[To be written]
+
+
+
+<!--NewPage-->
+<DIV ALIGN=CENTER>
+<P><A NAME="FIG41"><IMG SRC="fig41.gif" ALT="Standard Graph Markers"></A><P>
+<B>Figure 5.1:</B>  PGPLOT standard graph markers
+</DIV>
+
+<!--NewPage-->
+<DIV ALIGN=CENTER>
+<P><A NAME="FIG42"><IMG SRC="fig42.gif" ALT="Text Examples"></A><P>
+<B>Figure 5.2:</B>  Text Examples
+</DIV>
+
+<!--NewPage-->
+<DIV ALIGN=CENTER>
+<P><A NAME="FIG43"><IMG SRC="fig43.gif" ALT="Greek Letters"></A><P>
+<B>Figure 5.3:</B>  Escape Sequences for Greek Letters
+</DIV>
+
+<DIV class="footer">
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp·astro.caltech.edu">tjp·astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY></HTML>
+

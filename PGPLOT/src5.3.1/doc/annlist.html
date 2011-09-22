@@ -1,0 +1,376 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT: Annotated List of Routines</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</HEAD>
+<BODY bgcolor=WHITE>
+
+<DIV class="header">
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="index.html">Documentation</A>&nbsp;&gt;
+<A HREF="user-manual.html">User's Manual</A>&nbsp;&gt;
+Annotated List of Routines
+</DIV>
+
+<H1>Annotated List of Routines</H1>
+
+
+<p>Many of the routines that set the values of parameters
+used by PGPLOT have corresponding <EM>inquiry</EM> routines that can be
+used to determine the current parameter values. Most of these routines
+have names starting PGQ...  and are indicated in italics.</p>
+
+
+<H2>Opening, Closing, and Selecting Devices</H2>
+
+<p>Use PGOPEN to open a graphical device or file and select
+it for PGPLOT output, PGCLOS to close the device when graphical output
+is completed, and PGSLCT to switch subsequent output to a different
+open device. PGBEG is an alternative to PGOPEN, retained for
+compatibility with existing programs. PGEND can be used to close all
+open devices.</p>
+ 
+<UL>
+<LI><A HREF="subroutines.html#PGOPEN">PGOPEN</A> : open a graphics device
+<LI><A HREF="subroutines.html#PGBEG">PGBEG</A> : open a graphics device
+<LI><A HREF="subroutines.html#PGSLCT">PGSLCT</A> : select an open graphics device
+<LI><A HREF="subroutines.html#PGCLOS">PGCLOS</A> : close the selected graphics device
+<LI><A HREF="subroutines.html#PGEND">PGEND</A> : close all open graphics devices
+<LI><EM><A HREF="subroutines.html#PGQID">PGQID</A> : inquire current device identifier</EM>
+<LI><EM><A HREF="subroutines.html#PGQIDS">PGQIDS</A> : inquire list of open devices</EM>  <span class="new"><EM>(New in version 5.3)</EM></span>
+</UL>
+
+<p>The following routines can be used to determine what
+types of graphics device are available - the list of types is
+installation-dependent.</p>
+
+<UL>
+<LI><A HREF="subroutines.html#PGLDEV">PGLDEV</A> : list available device types on standard output
+<LI><EM><A HREF="subroutines.html#PGQNDT">PGQNDT</A> : inquire number of available device types</EM>  <EM>(New in version 5.2)</EM>
+
+<LI><EM><A HREF="subroutines.html#PGQDT">PGQDT</A> : inquire name of <i>n</i><sup>th</sup> available device type</EM>  <EM>(New in version 5.2)</EM>
+</UL>
+
+<p>After a graphics device has been opened, the following
+routines may be used to determine some of its device-dependent
+characteristics.</p>
+
+<UL>
+<LI><EM><A HREF="subroutines.html#PGQINF">PGQINF</A> : inquire PGPLOT general information</EM>
+<LI><EM><A HREF="subroutines.html#PGQCOL">PGQCOL</A> : inquire color capability</EM>
+</UL>
+
+
+<H2>Controlling the View Surface</H2>
+
+<p>Use PGPAGE to start a new page, or PGERAS to clear the screen
+without starting a new page. On interactive devices, PGPLOT prompts the user
+before starting a new page unless told not to via PGASK.</p>
+<UL>
+<LI><A HREF="subroutines.html#PGPAGE">PGPAGE</A> : advance to new page
+<LI><A HREF="subroutines.html#PGERAS">PGERAS</A> : erase all graphics from current page
+<LI><A HREF="subroutines.html#PGASK">PGASK</A> : control new page prompting
+</UL>
+
+<p>The size of the view surface is device-dependent and is
+established when the graphics device is opened.  Use PGQVSZ if you
+need to know the absolute size of the view surface. On some devices,
+it can be changed by calling PGPAP before starting a new page with
+PGPAGE. On some devices, the size can be changed (e.g., by a
+workstation window manager) outside PGPLOT, and PGPLOT detects the
+change when PGPAGE is used.</p>
+
+<UL>
+<LI><A HREF="subroutines.html#PGPAP">PGPAP</A> : change the size of the view surface 
+<LI><EM><A HREF="subroutines.html#PGQVSZ">PGQVSZ</A> : inquire size of view surface</EM>
+</UL>
+
+<p>PGPLOT can divide the view surface into two or more
+<EM>panels</EM>; to request this, call PGSUBP after opening the device
+or before starting a new page. When the view surface is divided into
+panels, PGPAGE advances to the next panel, only clearing the screen or
+starting a new page after all the panels have been filled. It is also
+possible to move to a specific panel by calling PGPANL.</p>
+
+<UL>
+<LI><A HREF="subroutines.html#PGSUBP">PGSUBP</A> : subdivide view surface into panels
+<LI><A HREF="subroutines.html#PGPANL">PGPANL</A> : switch to a different panel on the view surface
+</UL>
+
+<p>To improve efficiency by <EM>buffering</EM> graphical
+output, group a sequence of PGPLOT routines between PGBBUF and PGEBUF
+calls. To force a screen update, call PGUPDT.</p>
+
+<UL>
+<LI><A HREF="subroutines.html#PGBBUF">PGBBUF</A> : begin batch of output (buffer)
+<LI><A HREF="subroutines.html#PGEBUF">PGEBUF</A> : end batch of output (buffer)
+<LI><A HREF="subroutines.html#PGUPDT">PGUPDT</A> : update display
+</UL>
+
+
+<H2>Windows and Viewports</H2>
+
+<p>Specify the <EM>viewport</EM> to indicate where on the device's
+view surface you want the graph to appear.</p>
+
+<UL>
+<LI><A HREF="subroutines.html#PGSVP">PGSVP</A> : set viewport (normalized device coordinates)
+<LI><A HREF="subroutines.html#PGVSIZ">PGVSIZ</A> : set viewport (inches)
+<LI><A HREF="subroutines.html#PGVSTD">PGVSTD</A> : set standard (default) viewport
+<LI><EM><A HREF="subroutines.html#PGQVP">PGQVP</A> : inquire viewport size and position</EM>
+</UL>
+
+<p>Specify the <EM>window</EM> to define the range of your
+world-coordinate space that will be visible in the viewport.</p>
+
+<UL>
+<LI><A HREF="subroutines.html#PGSWIN">PGSWIN</A> : set window
+<LI><A HREF="subroutines.html#PGWNAD">PGWNAD</A> : set window and adjust viewport to same aspect ratio
+<LI><EM><A HREF="subroutines.html#PGQWIN">PGQWIN</A> : inquire window boundary coordinates</EM>
+</UL>
+
+<p>Normally all PGPLOT primitives except text are ``clipped'' at the
+edge of the viewport; use PGSCLP to disable or re-enable clipping.</P>
+
+<UL>
+<LI><A HREF="subroutines.html#PGSCLP">PGSCLP</A> : enable or disable clipping at edge of viewport  <EM>(New in version 5.2)</EM>
+<LI><EM><A HREF="subroutines.html#PGQCLP">PGQCLP</A> : inquire clipping status</EM>  <EM>(New in version 5.2)</EM>
+</UL>
+
+<H2>Primitives</H2>
+
+<H3><EM>Lines</EM></H3>
+
+<p>Straight lines and curves made up of straight-line segments
+can be specified either segment by segment (PGMOVE, PGDRAW) or by a list
+of points to be joined together (PGLINE).</p>
+<UL>
+<LI><A HREF="subroutines.html#PGMOVE">PGMOVE</A> : move pen (change current pen position)
+<LI><A HREF="subroutines.html#PGDRAW">PGDRAW</A> : draw a line from the current pen position to a point
+<LI><EM><A HREF="subroutines.html#PGQPOS">PGQPOS</A> : inquire current pen position</EM>
+<LI><A HREF="subroutines.html#PGLINE">PGLINE</A> : draw a polyline (curve defined by line-segments)
+<LI><A HREF="subroutines.html#PGARC">PGARC</A> : draw an arc of a circle  <span class="new"><EM>(New in version 5.3)</EM></span>
+</UL>
+
+<H3><EM>Polygons and Filled Areas</EM></H3>
+
+<P>Closed polygons, circles, and rectangles canbe outlined, filled
+with solid color, or shaded using hatching, depending on the current fill-area
+attributes.</P>
+
+<UL>
+<LI><A HREF="subroutines.html#PGPOLY">PGPOLY</A> : draw a polygon, using fill-area attrutes
+<LI><A HREF="subroutines.html#PGRECT">PGRECT</A> : draw a rectangle, using fill-area attributes
+<LI><A HREF="subroutines.html#PGCIRC">PGCIRC</A> : draw a circle, using fill-area attributes
+<LI><A HREF="subroutines.html#PGPIE">PGPIE</A> : fill a sector of a circle  <span class="new"><EM>(New in version 5.3)</EM></span>
+</UL>
+
+<H3><EM>Graph Markers</EM></H3>
+
+<P>Use PGPT1 to mark a single point, PGPT to mark several
+points with the same symbol, or PGPNTS to mark several points with
+different symbols.</P>
+
+<UL>
+<LI><A HREF="subroutines.html#PGPT1">PGPT1</A> : draw one graph marker  <EM>(New in version 5.2)</EM>
+<LI><A HREF="subroutines.html#PGPT">PGPT</A> : draw several graph markers
+<LI><A HREF="subroutines.html#PGPNTS">PGPNTS</A> : draw several graph markers, not all the same
+</UL>
+
+<H3><EM>Text</EM></H3>
+
+<P>The basic routine for drawing text is PGPTXT. PGTEXT
+provides a simplified interface for the commonest case.</P>
+
+<UL>
+<LI><A HREF="subroutines.html#PGTEXT">PGTEXT</A> : write text (horizontal, left-justified)
+<LI><A HREF="subroutines.html#PGPTXT">PGPTXT</A> : write text at arbitrary position and angle
+</UL>
+
+<P>In order to correctly position text on a graph, it may
+be necessary to determine the space occupied by a text string without
+actually drawing it.</P>
+
+<UL>
+<LI><EM><A HREF="subroutines.html#PGLEN">PGLEN</A> : find length of a string in a variety of units</EM>
+<LI><EM><A HREF="subroutines.html#PGQTXT">PGQTXT</A> : find bounding box of text string</EM>
+</UL>
+
+<H3><EM>Arrows</EM></H3>
+
+<P>An arrow is made up of a line (for the shaft) and a polygon
+(for the head), but can be regarded as a separate primitive.</P>
+
+<UL>
+<LI><A HREF="subroutines.html#PGARRO">PGARRO</A> : draw an arrow
+</UL>
+
+<H2>Attributes</H2>
+
+<H3><EM>Color</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGSCI">PGSCI</A> : set color index
+<LI><EM><A HREF="subroutines.html#PGQCI">PGQCI</A> : inquire color index</EM>
+<LI><A HREF="subroutines.html#PGSCR">PGSCR</A> : set color representation
+<LI><EM><A HREF="subroutines.html#PGQCR">PGQCR</A> : inquire color representation</EM>
+<LI><A HREF="subroutines.html#PGSCRN">PGSCRN</A> : set color representation by name
+<LI><A HREF="subroutines.html#PGSHLS">PGSHLS</A> : set color representation using HLS system
+</UL>
+
+<H3><EM>Line Attributes</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGSLS">PGSLS</A> : set line style
+<LI><EM><A HREF="subroutines.html#PGQLS">PGQLS</A> : inquire line style</EM>
+<LI><A HREF="subroutines.html#PGSLW">PGSLW</A> : set line width (integer)
+<LI><EM><A HREF="subroutines.html#PGQLW">PGQLW</A> : inquire line width (integer)</EM>
+
+</UL>
+
+<H3><EM>Text and Marker Attributes</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGSCF">PGSCF</A> : set character font
+<LI><EM><A HREF="subroutines.html#PGQCF">PGQCF</A> : inquire character font</EM>
+<LI><A HREF="subroutines.html#PGSCH">PGSCH</A> : set character height
+<LI><EM><A HREF="subroutines.html#PGQCH">PGQCH</A> : inquire character height</EM>
+<LI><EM><A HREF="subroutines.html#PGQCS">PGQCS</A> : inquire character height in a variety of units</EM>
+<LI><A HREF="subroutines.html#PGSTBG">PGSTBG</A> : set text background color index
+<LI><EM><A HREF="subroutines.html#PGQTBG">PGQTBG</A> : inquire text background color index</EM>
+</UL>
+
+<H3><EM>Fill-Area Attributes</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGSFS">PGSFS</A> : set fill-area style
+<LI><EM><A HREF="subroutines.html#PGQFS">PGQFS</A> : inquire fill-area style</EM>
+<LI><A HREF="subroutines.html#PGSHS">PGSHS</A> : set hatching style
+<LI><EM><A HREF="subroutines.html#PGQHS">PGQHS</A> : inquire hatching style</EM>
+
+</UL>
+
+<H3><EM>Arrow Attributes</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGSAH">PGSAH</A> : set arrow-head style
+<LI><EM><A HREF="subroutines.html#PGQAH">PGQAH</A> : inquire arrow-head style</EM>
+</UL>
+
+<H3><EM>Saving and Restoring Attributes</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGSAVE">PGSAVE</A> : save PGPLOT attributes
+<LI><A HREF="subroutines.html#PGUNSA">PGUNSA</A> : restore PGPLOT attributes
+</UL>
+
+<H2>Axes, Boxes, and Labels</H2>
+
+<P>To label a graph with axes or a box around the viewport,
+use PGBOX (or PGTBOX if one or both coordinates are to be treated as a time
+or angle).  More complete control over axes is possible with PGAXIS,
+including drawing axes that are not parallel to the edges of
+the viewport.  If you need complete control over how an axis is
+labeled, e.g., for non-linear or curved axes, draw the axis with
+line-drawing routines and then label it with PGTICK.</P>
+
+<UL>
+<LI><A HREF="subroutines.html#PGBOX">PGBOX</A> : draw labeled frame around viewport
+<LI><A HREF="subroutines.html#PGTBOX">PGTBOX</A> : draw frame and write (DD) HH MM SS.S labelling
+<LI><A HREF="subroutines.html#PGAXIS">PGAXIS</A> : draw an axis <EM>(New in version 5.2)</EM>
+<LI><A HREF="subroutines.html#PGTICK">PGTICK</A> : draw a single tick mark on an axis  <EM>(New in version 5.2)</EM>
+</UL>
+
+<P>To place labels around the edges of the viewport, use
+PGLAB or PGMTXT.</P>
+
+<UL>
+<LI><A HREF="subroutines.html#PGLAB">PGLAB</A> : write labels for x-axis, y-axis, and top of plot
+<LI><A HREF="subroutines.html#PGMTXT">PGMTXT</A> : write text at position relative to viewport
+</UL>
+
+<H2><EM>XY</EM> Plots</H2>
+
+<H3><EM>Error Bars</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGERRB">PGERRB</A> : horizontal or vertical error bars
+<LI><A HREF="subroutines.html#PGERR1">PGERR1</A> : single horizontal or vertical error bar  <EM>(New in version 5.2)</EM>
+<LI><A HREF="subroutines.html#PGERRX">PGERRX</A> : horizontal error bars
+<LI><A HREF="subroutines.html#PGERRY">PGERRY</A> : vertical error bars
+</UL>
+
+
+<H3><EM>Shading Between Curves</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGSHD1">PGSHD1</A> : shade area under curve <span class="new"><EM>(New in version 5.3)</EM></span>
+<LI><A HREF="subroutines.html#PGSHD2">PGSHD2</A> : shade area between two curves <span class="new"><EM>(New in version 5.3)</EM></span>
+</UL>
+
+
+<H3><EM>Curves Defined by Functions</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGFUNT">PGFUNT</A> : function defined by X = F(T), Y = G(T)
+<LI><A HREF="subroutines.html#PGFUNX">PGFUNX</A> : function defined by Y = F(X)
+<LI><A HREF="subroutines.html#PGFUNY">PGFUNY</A> : function defined by X = F(Y)
+</UL>
+
+<H3><EM>Histograms</EM></H3>
+<UL>
+<LI><A HREF="subroutines.html#PGBIN">PGBIN</A> : histogram of binned data
+<LI><A HREF="subroutines.html#PGHI2D">PGHI2D</A> : cross-sections through a 2D data array
+<LI><A HREF="subroutines.html#PGHIST">PGHIST</A> : histogram of unbinned data
+</UL>
+
+<H2>Contour Maps</H2>
+<UL>
+<LI><A HREF="subroutines.html#PGCONB">PGCONB</A> : contour map of a 2D data array, with blanking
+<LI><A HREF="subroutines.html#PGCONF">PGCONF</A> : fill between two contours <EM>(New in version 5.2)</EM>
+<LI><A HREF="subroutines.html#PGCONL">PGCONL</A> : label contour map of a 2D data array 
+<LI><A HREF="subroutines.html#PGCONS">PGCONS</A> : contour map of a 2D data array (fast algorithm)
+<LI><A HREF="subroutines.html#PGCONT">PGCONT</A> : contour map of a 2D data array (contour-following)
+<LI><A HREF="subroutines.html#PGCONX">PGCONX</A> : contour map of a 2D data array (non rectangular)
+<LI><A HREF="subroutines.html#PGSCLO">PGSCLO</A> : controls orientation of labels drawn by PGCONL <span class="new"><EM>(New in version 5.3)</EM></span>
+<LI><em><A HREF="subroutines.html#PGQCLO">PGQCLO</A> : query PGCONL orientation parameter</em> <span class="new"><EM>(New in version 5.3)</EM></span>
+</UL>
+
+<H2>Images</H2>
+<UL>
+<LI><A HREF="subroutines.html#PGIMAG">PGIMAG</A> : color image from a 2D data array
+<LI><A HREF="subroutines.html#PGSCIR">PGSCIR</A> : set color index range
+<LI><EM><A HREF="subroutines.html#PGQCIR">PGQCIR</A> : inquire color index range</EM>
+<LI><A HREF="subroutines.html#PGCTAB">PGCTAB</A> : install the color table to be used by PGIMAG
+<LI><A HREF="subroutines.html#PGGRAY">PGGRAY</A> : gray-scale map of a 2D data array
+<LI><A HREF="subroutines.html#PGPIXL">PGPIXL</A> : draw pixels
+<LI><A HREF="subroutines.html#PGSITF">PGSITF</A> : set image transfer function
+<LI><EM><A HREF="subroutines.html#PGQITF">PGQITF</A> : inquire image transfer function</EM>
+<LI><A HREF="subroutines.html#PGWEDG">PGWEDG</A> : annotate an image plot with a wedge
+</UL>
+
+<H2>Vector Plots</H2>
+<UL>
+<LI><A HREF="subroutines.html#PGVECT">PGVECT</A> : vector map of a 2D data array, with blanking
+</UL>
+
+<H2>Interactive Graphics</H2>
+<UL>
+<LI><A HREF="subroutines.html#PGCURS">PGCURS</A> : read cursor position
+<LI><A HREF="subroutines.html#PGBAND">PGBAND</A> : read cursor position, with anchor
+<LI><A HREF="subroutines.html#PGLCUR">PGLCUR</A> : draw a line using the cursor
+<LI><A HREF="subroutines.html#PGNCUR">PGNCUR</A> : mark a set of points using the cursor
+<LI><A HREF="subroutines.html#PGOLIN">PGOLIN</A> : mark a set of points using the cursor
+<LI><A HREF="subroutines.html#PGSCRL">PGSCRL</A> : scroll window <EM>(New in version 5.2)</EM>
+</UL>
+
+
+<H2>Miscellaneous Routines</H2>
+<UL>
+<LI><A HREF="subroutines.html#PGNUMB">PGNUMB</A> : convert a number into a plottable character string
+<LI><A HREF="subroutines.html#PGRND">PGRND</A> : find the smallest `round' number greater than x
+<LI><A HREF="subroutines.html#PGRNGE">PGRNGE</A> : choose axis limits
+<LI><A HREF="subroutines.html#PGETXT">PGETXT</A> : erase text from graphics display
+<LI><A HREF="subroutines.html#PGIDEN">PGIDEN</A> : write username, date, and time at bottom of plot
+</UL>
+
+<div class="footer">Tim Pearson, California Institute of
+Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995-2005 California Institute of Technology</div>
+
+</BODY></HTML>

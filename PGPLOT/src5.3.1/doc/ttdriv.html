@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>PGPLOT Tektronix terminal driver</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp&middot;astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR=WHITE>
+
+<DIV class=NOPRINT>
+<FONT FACE="sans-serif, Arial, Helvetica" SIZE="2" COLOR="#0033CC">You
+are here:&nbsp;
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="device-manual.html">Device Manual</A>&nbsp;&gt;
+Tektronix terminals</FONT>
+</DIV>
+
+<H2>PGPLOT: Tektronix Terminals and Emulators</H2>
+
+<BLOCKQUOTE>
+<I>This device driver can be used only on UNIX and VMS systems.</I>
+</BLOCKQUOTE>
+
+<DL>
+
+<P><DT><B>Supported device</B>
+<DD><OL>
+<LI>Tektronix 4006/4010 storage-tube terminal; can be used with
+    emulators, but the options below take advantage of features not
+    present in the basic Tektronix terminal.
+<LI>GraphOn Corporation 200-series terminals. These emulate a
+    Tektronix-4010 with enhancements (selective erase, rectangle fill,
+    switch between Tek and VT100 modes).
+<LI>Digital Engineering, Inc., Retrographics modified VT100
+    terminal (VT640). 
+<LI>IRAF GTERM Tektronix terminal emulator, with color extensions.
+<LI>Xterm window on an X-window server. Emulates a Tektronix-4014,
+    with extensions (switch between Tek and VT100 windows).
+<LI>ZSTEM 240 and ZSTEM 4014 terminal emulators for the IBM PC and
+    clones. ZSTEM supports Tektronix 4014 emulation and the 4105 color
+    escape sequences. ZSTEM can be obtained from: KEA Systems Ltd.,
+    2150 West Broadway, Suite 412, Vancouver, British Columbia, Canada,
+    V6K 4L9.
+<LI>Visual-603 and 630 terminals. These are VT100/220 compatible
+    terminals with Tektronix 4010/4014 emulation (Visual Technology
+    Incorporated, 1703 Middlesex Street, Lowell, Mass 01851). The 
+    Visual 630 has the capability of displaying dual text and graphics.
+    This feature is not used in this driver. Graphics mode is entered 
+    automatically when the graph is drawn but only exited when PGPAGE 
+    or PGEND is called. Therefore, for multiple plots interspersed
+    with text I/O, use PGPAGE at the end of each plot. This will prompt
+    for a carriage return before switching. If this is not done,
+    intervening text will appear on the graphics screen. Graphics mode
+    can be entered and exited from the setup menu, or by SHIFT-PF1.
+    Graphics extensions include rectangle fill, selective erase and 
+    switch between Tek and VT100 modes.
+<LI>IBM PC's and compatibles running MS-Kermit 3 as a terminal emulator.
+    The video board is assumed to have sufficient memory to retain the 
+    graphics image in memory when switched to text. This will be true 
+    for VGA and EGA, but some early PCs might not be able to do this. 
+    If Kermit is using full VGA resolution (ie SET TERMINAL GRAPHICS 
+    VGA), there is not usually enough memory to store the full 480 
+    vertical lines, so the bottom few lines may disappear. Tektronix 
+    enhancements include selective erase, colours, rectangle fill, and
+    switching between text and graphics mode. The cursor may be
+    operated with the mouse. Tested with Kermit version 3.1.
+<LI>Tektronix 4100 series color terminals (and emulators, e.g.,
+    Versaterm-PRO for Macintosh).
+</OL>
+
+<P><DT><B>Device type codes</B>
+<DD><OL>
+    <LI>/TEK4010 Tektronix-4010 terminal
+    <LI>/GF      GraphOn terminal
+    <LI>/RETRO   Retrographics VT640 terminal
+    <LI>/GTERM   GTERM terminal emulator
+    <LI>/XTERM   XTERM terminal emulator
+    <LI>/ZSTEM   ZSTEM terminal emulator
+    <LI>/V603    Visual V603 terminal
+    <LI>/KRM3    Kermit 3 on IBM-PC
+    <LI>/TK4100  Tektronix 4100 series terminals
+</OL>
+
+<P><DT><B>Default device name</B>
+<DD>The logged-in terminal: <CODE>/dev/tty</CODE> (UNIX),
+                            <CODE>TT:</CODE> (VMS).
+
+<P><DT><B>Default view surface dimensions</B>
+<DD>Depends on monitor; nominally 8in (horizontal) by 6in (vertical).
+
+<P><DT><B>Resolution</B>
+<DD>A standard Tektronix terminal displays a screen of 1024 pixels
+   (horizontal) by 780 pixels (vertical), with a nominal resolution
+   of 130 pixels per inch. The actual resolution may be less.
+
+<P><DT><B>Color capability</B>
+<DD><UL>
+<LI>/TEK4010, /XTERM: none; only color index 1 is available; selective
+       erase is not possible. Requests to draw in color index 0 are
+       ignored.
+<LI>/GF, /RETRO, /V603: color indices 0 (erase, black) and 1 (bright:
+       usually white, green or amber) are supported. It is not 
+       possible to change color representation.
+<LI>/GTERM:  color indices 0 to 15 are available and default to the
+       standard PGPLOT colors. The color representation can be changed.
+<LI>/ZSTEM: color indices 0 to 7 are available and default to the
+       indicated in the ZSTEM setup menu (which default to the standard
+       PGPLOT colors).  The color representation cannot be changed.
+<LI>/KRM3: color indices 0 to 7 are the standard PGPLOT colors. Indices
+       8 to 14 are also available, but are BRIGHT versions of 1 to 7,
+       and thus non-standard. Color representation can't be changed.
+<LI>/TK4100: color indices 0-15.
+</UL>
+
+<P><DT><B>Input capability</B>
+<DD>Depending on the emulation, the graphics cursor may be a pointer,
+   a small cross, or a crosshair across the entire screen. The user
+   positions the cursor using thumbwheels, mouse, trackball, or the
+   arrow keys on the keyboard. The user indicates that the cursor has
+   been positioned by typing any printable ASCII character on the 
+   keyboard. Most control characters (eg, ^C) are intercepted by the
+   operating system and cannot be used. 
+
+<P><DT><B>File format </B>
+<DD>Binary byte stream. Under Unix, the output may be directed to
+a file; under VMS, this is not possible: the output device must
+be a terminal.
+
+</DL>
+
+<DIV class=NOPRINT>
+<HR>
+<SMALL>
+Tim Pearson, California Institute of Technology, 
+<I><A HREF="mailto:tjp&middot;astro.caltech.edu">tjp&middot;astro.caltech.edu</A></I><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</SMALL>
+</DIV>
+
+</BODY>
+</HTML>

@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Calling PGPLOT from a C or C++ Program</TITLE>
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<LINK REV="made" HREF="mailto:tjp·astro.caltech.edu">
+</HEAD>
+<BODY BGCOLOR=WHITE>
+
+<DIV class=NOPRINT>
+<FONT FACE="sans-serif, Arial, Helvetica" SIZE="2" COLOR="#0033CC">You
+are here:&nbsp;
+<A HREF="../index.html">PGPLOT</A>&nbsp;&gt;
+<A HREF="../index.html">Documentation</A>&nbsp;&gt;
+<A HREF="user-manual.html">User's Manual</A>&nbsp;&gt;
+Calling from C or C++</FONT>
+</DIV>
+
+<H1>Calling PGPLOT from a C or C++ Program</H1>
+
+<H2>Introduction</H2>
+
+PGPLOT is a Fortran subroutine library, and calling Fortran
+subroutines directly from C or C++ is a messy, difficult, and
+unportable exercise. This is due to the lack of a universal set of
+interlanguage calling conventions, and to the lack of a standard on
+how FORTRAN <CODE>LOGICAL</CODE> and <CODE>CHARACTER</CODE> types are
+represented in terms of basic machine types. Furthermore, since C
+implements call-by-value argument passing semantics, whereas FORTRAN
+uses pass-by-reference, there is the added complication that literal
+values must be sent indirectly by way of references to dummy
+variables.<P>
+
+The CPGPLOT library adds an intermediate level of wrapper functions
+between C programs and the PGPLOT library. These functions hide the
+system dependencies of calling PGPLOT behind a system-independent
+interface.<P>
+
+It is essential when using the CPGPLOT interface library to include
+the library header file <CODE><A HREF="cpgplot.h">cpgplot.h</A></CODE>
+at the top of all C files containing calls to the library. Without
+this file, the functions will not be correctly prototyped and your
+code will not work.<P>
+
+The CPGPLOT library can be used only with an ANSI-compatible C
+compiler that understands C function prototypes.<P>
+
+
+<H2>Using the CPGPLOT library</H2>
+
+The names of the C interface library functions are the same as their
+PGPLOT counterparts, but are prefixed with a <CODE>c</CODE> and
+written in lower case, e.g., <CODE>PGTEXT</CODE> becomes
+<CODE>cpgtext</CODE>.<P>
+
+The header file <CODE><A HREF="cpgplot.h">cpgplot.h</A></CODE>
+declares the types of the arguments of each CPGPLOT routine. The types
+can usually be deduced from the FORTRAN subroutine descriptions in <A
+HREF="subroutines.html">Appendix A</A>, as described below, but
+<CODE><A HREF="cpgplot.h">cpgplot.h</A></CODE> should be consulted in
+case of doubt.<P>
+
+<H3>REAL and INTEGER arguments</H3>
+
+Where the PGPLOT routine expects a <CODE>REAL</CODE> or
+<CODE>INTEGER</CODE> argument, supply the C routine with a
+<CODE>float</CODE> or <CODE>int</CODE> argument as appropriate. If the
+Fortran routine uses the argument for input only, it should be passed
+by value; but if it is used to return a value, supply a pointer to a
+variable of the appropriate type. If the <CODE>FORTRAN</CODE> argument
+is an array, the C argument should be a pointer to an array. For
+two-dimensional arrays, supply a pointer to a one-dimensional C array
+in which the elements are packed with the first index changing fastest
+(see example below).<P>
+
+<H3>LOGICAL arguments</H3>
+
+Where the PGPLOT routine expects a <CODE>LOGICAL</CODE> argument, the
+C routine requires an <CODE>int</CODE> argument. Zero is interpreted
+as FORTRAN <CODE>.FALSE.</CODE> and non-zero as FORTRAN
+<CODE>.TRUE.</CODE>, e.g.,
+<PRE>
+    <U>FORTRAN call</U>        <U>C equivalent call(s)</U>
+
+    PGASK(.FALSE.)      cpgask(0)
+    PGASK(.TRUE.)       cpgask(1) or cpgask(2) etc.
+</PRE>
+
+<H3>CHARACTER arguments</H3>
+
+When the FORTRAN routine expects a <CODE>CHARACTER</CODE> argument for
+input, the C routine takes a normal C pointer to a nul-terminated
+string (<CODE>char</CODE> array, with end-of string marked by
+<CODE>'\0'</CODE>).<P>
+
+Arguments that are used to return FORTRAN character strings must be
+treated with care. FORTRAN doesn't understand <CODE>'\0'</CODE>
+termination of strings and instead requires that the dimension of the
+character array be specified along with the array. The interface
+handles this transparently for input-only strings by using
+<CODE>strlen()</CODE> to determine the length of the string, but for
+return string arguments it needs to be told the length available in
+the passed <CODE>char</CODE> array.  Fortunately all PGPLOT routines
+that return such strings also have an argument to return the unpadded
+length of the return string. In CPGPLOT, you must initialize this
+argument with the dimension of the string array that has been sent. In
+the prototypes listed in <CODE><A
+HREF="cpgplot.h">cpgplot.h</A></CODE> the length arguments are
+distinguishable by virtue of their having the name of the string to
+which they relate, postfixed with <CODE>_length</CODE>. For example,
+the PGPLOT routine <CODE>PGQINF()</CODE> is prototyped as
+<PRE>
+     void cpgqinf(char *item, char *value, int *value_length);
+</PRE>
+where the <CODE>value_length</CODE> argument is the length argument
+for the string argument <CODE>value</CODE>.<P>
+
+For example, to write a C function to return 1 if a PGPLOT device is
+open, or 0 otherwise, one could write.
+<PRE>
+     #include "cpgplot.h"
+     int pgplot_is_open(void)
+     {
+       char answer[10];                 /* The PGQINF return string */
+       int answer_len = sizeof(answer); /* allocated size of answer[] */
+       cpgqinf("STATE", answer, &amp;answer_len);
+       return strcmp(answer, "YES") == 0;
+     }
+</PRE>
+Note that the dimension, sent as the third argument, is the total
+number of characters allocated to the <CODE>answer[]</CODE> array. The
+interface function actually subtracts one from this when it tells
+PGPLOT how long the string is. This leaves room for the interface
+function to terminate the returned string with a
+<CODE>'\0'</CODE>. All returned strings are terminated in this manner
+at the length returned by PGPLOT in the length argument.
+
+<H2>Limitations</H2>
+
+PGPLOT procedures that take FORTRAN <CODE>SUBROUTINE</CODE>s or
+<CODE>FUNCTION</CODE>s as arguments (e.g., <CODE>PGFUNX</CODE>,
+<CODE>PGCONX</CODE>) are not represented in the CPGPLOT library. Such
+procedures cannot be handled on most systems.
+
+<H2>Other Machine Dependencies</H2>
+
+Many system vendors say that if you call FORTRAN functions that do any
+I/O, you should have a FORTRAN main program, so that the FORTRAN I/O
+module gets correctly initialized. Since PGPLOT uses FORTRAN I/O, this
+applies to C or C++ programs that call PGPLOT. However, this can be
+difficult to arrange, and in many systems it is not necessary. Consult
+the documentation for your operating system to determine how to write
+a C or C++ program that calls subroutines written in Fortran.<P>
+
+When you mix languages, it is usually necessary to include system
+support libraries for each language. Again, you will need to consult
+the documentation for your operating system and compilers to determine
+what libaries are needed and where they are located.<P>
+
+On UNIX systems, the compiler usually invokes the linker/loader
+itself, specifying the necessary libraries. However, with this method
+the linker/lodaer will not automatically find the libraries required
+by the other compilers involved.<P>
+
+Since FORTRAN usually has to be linked with a lot of support
+libraries, it is usually most convenient to use the FORTRAN compiler
+to link your C program. If your compiler is not the system-supplied
+compiler, then it is unlikely that the FORTRAN compiler will cite the
+correct C run-time library to the linker. This means that you will
+have to do it yourself (e.g., the <CODE>gcc</CODE> compiler requires
+programs to be linked with <CODE>libgcc.a</CODE>, e.g.,
+<PRE>
+ gcc -c blob.c
+ f77 -o blob blob.o -lcpgplot -lpgplot -lX11 -lgcc -lm
+</PRE>
+
+<H3>Example: Solaris</H3>
+
+A C program calling PGPLOT; in this case it is easiest to use <code>f77</code>
+to do the link:
+<PRE>
+cc -c -I/usr/local/pgplot ctest.c
+f77 -o ctest ctest.o -L/usr/local/pgplot -lcpgplot -lpgplot
+</PRE>
+(Replace <code>/usr/local/pgplot</code> with your PGPLOT directory.)<P>
+
+A C++ program calling PGPLOT; in this case we need both Fortran and
+C++ libraries, and it is easiest to use CC to do the link and to
+provide the Fortran libraries explicitly:
+<PRE>
+CC  -c c++test.C 
+CC c++test.o -L/usr/local/pgplot -lcpgplot -lpgplot \
+   /usr/local/lang/SUNWspro/SC3.0.1/lib/libM77.a -lX11 -lF77
+</PRE>
+Note that the names and locations of the Fortran libraries will depend on the
+version of the compiler in use.<P>
+
+<H3>Example: Digital UNIX</H3>
+
+A C program calling PGPLOT:
+<PRE>
+cc -c -I/usr/local/pgplot ctest.c
+f77 -o ctest ctest.o -L/usr/local/pgplot -lcpgplot -lpgplot -lX11
+  -lm -nofor_main
+</PRE>
+Note the use of <code>f77</code> to do the link step, and the use of
+the <code>-nofor_main</code> switch.
+
+
+<H2>Examples</H2>
+
+The following example shows some simple CPGPLOT calls:
+
+<PRE>
+#include "cpgplot.h"
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+
+int main()
+{
+  int i;
+  static float xs[] = {1.0, 2.0, 3.0, 4.0, 5.0 };
+  static float ys[] = {1.0, 4.0, 9.0, 16.0, 25.0 };
+  float xr[60], yr[60];
+  int n = sizeof(xr) / sizeof(xr[0]);
+  /*
+   * Call PGBEG to initiate PGPLOT and open the output device; PGBEG
+   * will prompt the user to supply the device name and type.
+   */
+  if(cpgbeg(0, "?", 1, 1) != 1)
+    return EXIT_FAILURE;
+  /*
+   * Call PGENV to specify the range of the axes and to draw a box, and
+   * PGLAB to label it. The x-axis runs from 0 to 10, and y from 0 to 20.
+   */
+  cpgenv(0.0, 10.0, 0.0, 20.0, 0, 1);
+  cpglab("(x)", "(y)", "PGPLOT Example 1: y = x\\u2\\d");
+  /*
+   * Mark five points (coordinates in arrays XS and YS), using symbol
+   * number 9.
+   */
+  cpgpt(5, xs, ys, 9);
+  /*
+   * Compute the function at 'n=60' points, and use PGLINE to draw it.
+   */
+  for(i=0; i&lt;n; i++) {
+    xr[i] = 0.1*i;
+    yr[i] = xr[i]*xr[i];
+  }
+  cpgline(n, xr, yr);
+  /*
+   * Finally, call PGEND to terminate things properly.
+   */
+  cpgend();
+  return EXIT_SUCCESS;
+}
+</PRE>
+
+A second example shows how a two-dimensional FORTRAN array should be
+handled:
+
+<PRE>
+#include "cpgplot.h"
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+
+int main()
+{
+  static int nx = 40, ny = 40;
+  int i, j, k, lw, ci, ls;
+  float f[1600], fmin, fmax, alev;
+  double x, y;
+  static float tr[6] = {0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
+  
+  printf("Demonstration of PGPLOT contouring routines\n");
+
+  /* Compute a suitable function. A C array is used to emulate
+     a 2D fortran array f(nx,ny). */
+
+  fmin = fmax = 0.0;
+  for (j=1; j&lt;=ny; j++) {
+    for (i=1; i&lt;=ny; i++) {
+      k = (j-1)*nx + (i-1);	/* Fortran convention */
+      x = tr[0] + tr[1]*i + tr[2]*j;
+      y = tr[3] + tr[4]*i + tr[5]*j;
+      f[k] = cos(0.3*sqrt(x*2)-0.13333*y)*cos(0.13333*x)+
+	(x-y)/(double)nx;
+      if (f[k] &lt; fmin) fmin = f[k];
+      if (f[k] &gt; fmax) fmax = f[k];
+    }
+  }
+
+  /* Call PGBEG to initiate PGPLOT and open the output device; PGBEG
+   * will prompt the user to supply the device name and type. */
+
+  if(cpgbeg(0, "?", 1, 1) != 1)
+    return EXIT_FAILURE;
+  
+  /* Clear the screen. Set up window and viewport. */
+  
+  cpgpage();
+  cpgsvp(0.05, 0.95, 0.05, 0.95);
+  cpgswin(1.0, (float) nx, 1.0, (float) ny);
+  cpgbox("bcts", 0.0, 0, "bcts", 0.0, 0);
+  cpgmtxt("t", 1.0, 0.0, 0.0, "Contouring using PGCONT");
+  
+  /* Draw the map.  PGCONT is called once for each contour, using
+     different line attributes to distinguish contour levels. */
+  
+  cpgbbuf();
+  for (i=1; i&lt;21; i++) {
+    alev = fmin + i*(fmax-fmin)/20.0;
+    lw = (i%5 == 0) ? 3 : 1;
+    ci = (i &lt; 10)   ? 2 : 3;
+    ls = (i &lt; 10)   ? 2 : 1;
+    cpgslw(lw);
+    cpgsci(ci);
+    cpgsls(ls);
+    cpgcont(f, nx, ny, 1, nx, 1, ny, &amp;alev, -1, tr);
+  }
+  cpgslw(1);
+  cpgsls(1);
+  cpgsci(1);
+  cpgebuf();
+  /*
+   * Finally, call PGEND to terminate things properly.
+   */
+  cpgend();
+  return EXIT_SUCCESS;
+}
+</PRE>
+
+<DIV class=NOPRINT>
+<HR>
+Next: <A HREF="devices.html">Appendix D</A>
+<HR>
+<A HREF="../index.html">PGPLOT</A><BR>
+Tim Pearson, California Institute of Technology, 
+<EM><A HREF="mailto:tjp·astro.caltech.edu">tjp·astro.caltech.edu</A></EM><BR>
+Copyright &#169; 1995-2005 California Institute of Technology
+</DIV>
+
+</BODY></HTML>
+

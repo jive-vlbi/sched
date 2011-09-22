@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>PGPLOT Version 5.3.1</title>
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<link rev="made" href="mailto:tjp&middot;astro.caltech.edu">
+<link rel="stylesheet" href="stylesheet.css" type="text/css">
+</head>
+<body>
+
+<div class="header"><a href="../index.html">PGPLOT</a>&nbsp;&gt; <a
+href="doc-index.html">Documentation</a>&nbsp;&gt; <a href=
+"install-manual.html">Installation Manual</a>&nbsp;&gt; Release
+Notes v5.3.1</div>
+
+<h2>PGPLOT version 5.3.1</h2>
+
+<p>This version includes bug fixes, improvements in existing
+routines, new routines, and new device drivers. All changes are
+intended to be compatible: existing programs should run unchanged
+and produce the same output (except for a few bug fixes).</p>
+
+<h3>Tested Systems</h3>
+
+<p>Version 5.3.1 has been tested with the following operating
+systems and compilers. Drivers tested include: GI, NU, PP, PS, TT,
+XW (but not all combinations of drivers and systems have been
+tested exhaustively).</p>
+
+<ul>
+<li><b>Linux</b> (RedHat 8.0), GNU Fortran (g77), GNU C
+(gcc) 3.2.3 [linux g77_gcc].</li>
+
+<li><b>Linux</b>, Intel Fortran (ifc) and C (icc) v8.0 [linux ifc_icc].</li>
+
+<li><b>Solaris 9</b> (SunOS 5.9), Sun Fortran (f77) 5.1, Sun C (cc)
+5.1 [sol2 f77_cc].</li>
+
+<li><b>Solaris 9</b> (SunOS 5.9), GNU Fortran (g77) 2.95.2, GNU C
+(gcc) 2.95.2 [sol2 g77_gcc].</li>
+
+<li><b>Mac OS X 10.3.7</b> with Apple <b>X11 v1.0</b> (XFree86 4.3.0) and GBU FOrtran (g77) and C (gcc)  [macos g77_gcc]</li>
+
+</ul>
+
+<h3>New PGPLOT routines</h3>
+
+<p>The following routines are documented in the <a href=
+"annlist.html">list of subroutines</a>.</p>
+
+<dl>
+<dt><a href="subroutines.html#pgarc">pgarc</a></dt>
+
+<dd>draw an arc of a circle</dd>
+
+<dt><a href="subroutines.html#pgpie">pgpie</a></dt>
+
+<dd>fill a sector of a circle</dd>
+
+<dt><a href="subroutines.html#pgqids">pgqids</a></dt>
+
+<dd>returns the number of open PGPLOT devices, and a list of their
+identifiers</dd>
+
+<dt><a href="subroutines.html#pgshd1">pgshd1</a></dt>
+
+<dd>shade area under curve</dd>
+
+<dt><a href="subroutines.html#pgshd2">pgshd2</a></dt>
+
+<dd>shade area between two curves</dd>
+
+<dt><a href="subroutines.html#pgsclo">pgsclo</a></dt>
+
+<dd>controls orientation of labels drawn by PGCONL</dd>
+
+<dt><a href="subroutines.html#pgqclo">pgqclo</a></dt>
+
+<dd>query PGCONL orientation parameter</dd>
+</dl>
+
+<h3>Modified PGPLOT routines</h3>
+
+<p>Internal changes that do not affect the API are not listed.</p>
+
+<dl>
+
+<dt><a href="subroutines.html#pgcirc">pgcirc</a></dt>
+<dd>correct a bug which sometimes caused it to plot octagons
+instead of smoother circles</dd>
+
+<dt><a href="subroutines.html#pgscrn">pgscrn</a></dt>
+<dd>will now accept hex-coded RGB colors (e.g., '#ff0000') as well
+as names (e.g., 'red').</dd>
+
+<dt><a href="subroutines.html#pgsls">pgsls</a>, <a href="subroutines.html#pgqls">pgqls</a></dt>
+
+<dd>there are now 10 different predefined dashed line-styles,
+instead of 5</dd>
+</dl>
+
+<h3>New escape-sequence in text</h3>
+
+<p>'\,' is an invisible thin-space character (half the width of a
+normal space).</p>
+
+<h3>Modified Example Programs</h3>
+
+<dl>
+<dt>pgdemo1</dt>
+
+<dd>exercise pgarc, pgpie, pgshd1, pgshd2</dd>
+
+<dt>pgdemo2</dt>
+
+<dd>exercise '\,' escape and new line-styles</dd>
+
+<dt>pgdemo3</dt>
+
+<dd>show effect of contour label orientation</dd>
+
+<dt>pgdemo4</dt>
+
+<dd>rewritten to redraw the picture when the colour table is changed,
+rather than assuming that a dynamic color table is available</dd>
+
+<dt>pgdemo13</dt>
+
+<dd>exercise pgqids</dd>
+
+<dt>pgdemo16</dt>
+</dl>
+
+<h3>Modified device drivers</h3>
+
+<dl>
+<dt><a href="psdriv.html">psdriv</a> (Postscript drivers)</dt>
+
+<dd>Some printing systems, notably CUPS, erroneously print multipage
+PostScript files on a single page if they include an Encapsulated
+PostScript (EPS) header. To work around this, I have removed the EPS
+header from /PS, /CPS, /VPS, /VCPS files. This may cause problems with some
+programs that expect to find the EPS header present.</dd>
+
+<dd>I have added a new variant of PostScript, /EPS. This is intended
+for creating encapsulated PostScript files, and it includes an EPS header
+in the file. The default picture size is 6.0 inches wide by 4.5 inches high.
+Othwerwise the behavior is similar to /VCPS.</dd>
+
+<dd>PGPLOT still puts the &ldquo;bounding box&rdquo; at the end of the
+file rather than the beginning. Although this is legal PostScript, it
+can cause problems with some programs (e.g., early versions of dvips,
+and pstopdf).</dd>
+
+<dt><a href="xwdriv.html">xwdriv</a> (X Window System drivers)</dt>
+
+<dd>pgxwin_server now allocates 256 colors on devices where there
+is no contention for color resources</dd>
+
+<dd>Various other corrections from Martin Shepherd, including:
+correct error in definition of horizontal/vertical line cursors;
+fix for Compaq Digital Unix (OSF1).
+</dd>
+
+</dl>
+
+<h3>Documentation</h3>
+
+<p>Updated documentation in HTML format is now included in the
+<code>pgplot/doc</code> directory. To view the documentation,
+direct a web browser to the index file pgplot/doc/../index.html. A
+modern browser that supports style sheets is recommended.</p>
+
+<h3>Operating System Support</h3>
+
+<p>Support is added for Mac OS X (Darwin) running the X-window system
+or the AquaTerm display. Use options &quot;darwin g77_gcc&quot; with
+makemake. The files are in directory <code>sys_darwin</code>.  Support
+for earlier versions of Mac OS has been removed (it was never very
+good anyway).</p>
+
+<p>Support is added for the Intel C/C++/Fortran compiler
+  for Linux: use options &quot;linux ifc_icc&quot; with makemake.</p>
+
+<p>Support is added for making 64-bit SPARC libraries under Solaris.
+Use options &quot;sol64 f77_cc&quot; with makemake.</p>
+
+<p>VMS/OpenVMS is no longer supported.</p>
+
+<h3>Miscellaneous changes</h3>
+
+<dl>
+
+<dt>drivers.list</dt>
+<dd>now comes with all portable drivers selected by default</dd>
+
+<dt>aaaread.me</dt>
+<dd>updated to 5.3.1;   ftp and www address changed</dd>
+
+<dt>makehelp</dt>
+<dd>[removed] (VMS help file no longer supported)</dd>
+
+<dt>makemake</dt>
+<dd>added new routines; no longer makes pgplot.hlp</dd>
+
+</dl>
+
+
+<div class="footer">Tim Pearson, California Institute of
+Technology, <i><a href="mailto:tjp&middot;astro.caltech.edu">
+tjp&middot;astro.caltech.edu</a></i><br>
+Copyright &copy; 1995-2005 California Institute of Technology</div>
+
+</body>
+</html>
+

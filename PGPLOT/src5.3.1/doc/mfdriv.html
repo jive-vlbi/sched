@@ -1,0 +1,103 @@
+<HTML>
+<HEAD>
+<TITLE>MFDRIV</TITLE>
+</HEAD>
+<BODY>
+
+<H2>PGPLOT Graphics MetaFile</H2>
+<DL>
+
+<DT>Supported device
+<DD>A graphics <EM>metafile</EM> is a disk file in which a device-independent
+representation of a graphics image can be stored. Such a file cannot be
+displayed directly on a graphics device, but must first be translated
+into the commands appropriate for the specific device using a <EM>
+metafile translator</EM>.  This may seem like an unnecessary complication,
+when PGPLOT can create the device-specific commands directly, but it has
+some advantages. Metafiles can be used, for example, to transfer
+pictures between two computing sites (they are usually smaller than the
+corresponding device-specific files) or for archiving pictures.  It is
+sometimes convenient to make a program generate a metafile rather than a
+device-specific file so that one can, for example, take a ``quick look''
+at the picture on an interactive display before making hard copies. One
+may not know what hard-copy devices will be available when the program
+runs: for example, if it turns out after your 6-hour batch job has
+finished that the Versatec printer has broken, it is nice to be able to
+send the plot to some other device without re-running the batch job. 
+
+Metafiles may be created using PGPLOT in the same way that any other
+plot file is created: the device specification consists of a disk file
+name and a device type <CODE>/FILE</CODE>, for example <CODE>PLOT17.GMF/FILE</CODE>. The
+default file type if none is specified is <CODE>.GMF</CODE> (for Graphics Meta
+File).  Programs which might generate metafile output should not make
+any assumptions about the physical scale of the picture; the scale will
+vary depending on what device the picture is ultimately plotted on. 
+
+
+<DT>Device type code
+<DD><CODE>/FILE</CODE>.
+
+<DT>Default device name
+<DD><CODE>PGPLOT.GMF</CODE>.
+
+<DT>Default view surface dimensions
+<DD>Undefined (nominally 8 in square).
+
+<DT>Resolution
+<DD>Undefined.
+
+<DT>Color capability
+<DD>Color indices 0--255 are accepted and the
+representation of all colors may be changed.  The actual colors used
+depend upon the output device chosen when the file is rendered.
+
+<DT>Input capability
+<DD>None.
+
+<DT>File format
+<DD>binary data; see ``GSPC Metafile Proposal''
+described in <EM> Computer Graphics (A. C. M.)</EM>, volume 13, number
+3 (August 1979). 
+
+<DT>Translating Metafiles
+<DD>
+In order to generate graphics output from a metafile, one must use a
+<EM>Metafile Translator</EM> to interpret the device independent metafile
+commands. The Metafile Translator (GMFPLOT) provided with PGPLOT uses
+the PGPLOT subroutines to generate the device-specific output: thus a
+metafile may be displayed on any of the devices supported by PGPLOT. (A
+metafile may even be translated into another metafile, but this is not
+very useful.) To use GMFPLOT, first define a command <CODE>PLOT</CODE>, say, as
+follows; this definition may be included in your <CODE>LOGIN.COM</CODE> file if you
+make extensive use of it: 
+<PRE>
+$ PLOT == &quot;$PGPLOT_DIR:GMFPLOT&quot;
+</PRE>
+The <CODE>PLOT</CODE> command takes two arguments: the name of the input metafile,
+and the device specification for the output. The following sample
+commands display a metafile on a Grinnell and on a Versatec printer: 
+<PRE>
+$ PLOT PLOT17.GMF /GR
+$ PLOT PLOT17 DEIMOS::LVA0:/VE
+</PRE>
+Again, the default file type for the metafile is <CODE>.GMF</CODE>.
+
+At present, it is not possible to edit the metafile before display. This
+is a facility which might be added one day. Nor is it possible to change
+the scale or <EM>aspect ratio</EM> (ratio of height/width of the display
+surface).  When PGPLOT generates a metafile, it does not know the size
+or shape of the display surface that it will ultimately be plotted on;
+as it has to make some assumption, it assumes that the surface will be
+square. The metafile translator displays the metafile in the largest
+square available on the output device. Thus a plot which is sent
+directly to a terminal may not look exactly the same as one that is
+stored in a metafile and subsequently displayed on the terminal. Future
+enhancements may allow one to specify the scale and aspect ratio of the
+metafile when it is generated. 
+
+<DT>Author
+<DD>S. C. Allendorf, 1989.
+</DL>
+<HR>
+</BODY>
+</HTML>
