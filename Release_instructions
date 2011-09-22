@@ -185,12 +185,16 @@ noatak.aoc.nrao.edu:/users/cwalker/files/sched_work/doc/sched/\* .
 #  Make the tar file.  Don't include the binaries.
 #  First be sure there are not old copies in the archive and ftp areas.
 #  Populate the ftp area.
+#  Also be sure to clean out the Verify output with schclean "*"
+#  Otherwise the file will twice as big as needed.
 
 #  Note the excludes include the lib directory which has the NAIF software.
 #  Without that, the satellite version cannot be linked.
 #  Also the RELATED_CODE directory is excluded.
 
-#  cd $SCHED
+cd $SCHED/examples
+schclean "*"
+cd $SCHED
 
 tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
     --exclude "lib" --exclude "core*" --exclude "TEST"  \
@@ -199,11 +203,12 @@ tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
 gzip $TARDIR/sched_$NEWVER.tar
 
 ==================  Put files on the ftp site  =======================
+# Remove the sched executable in the bare bin area, leaving only those
+# in the machine subdirectories.
 
 mkdir $FTP/sched/sched_$NEWVER
 mkdir $FTP/sched/sched_$NEWVER/binaries
-cp ~/files/sched_ARCHIVE_nonSVN/TARFILES/sched_$NEWVER.tar.gz \
-     $FTP/sched/sched_$NEWVER/
+cp $TARDIR/sched_$NEWVER.tar.gz  $FTP/sched/sched_$NEWVER/
 rsync -auv bin/*  $FTP/sched/sched_$NEWVER/binaries
 
 #  Copy over README.ftp if it has changed.
@@ -343,3 +348,13 @@ svn copy -r 276 https://svn.aoc.nrao.edu/repos/sched/trunk/sched \
 https://svn.aoc.nrao.edu/repos/sched/tags/sched_9.3 \
 -m "Tagging release 9.3 of sched."
 
+svn copy -r 347 https://svn.aoc.nrao.edu/repos/sched/trunk/sched \
+https://svn.aoc.nrao.edu/repos/sched/tags/sched_10.0 \
+-m "Tagging release 10.0 of sched."
+
+
+
+I pasted the sched 9.3 version of the above into a window by accident
+and made revision 348 which tags version 276 as release 9.3.  That
+was probably correct, but had already been done.  I don't think it
+had any effect.
