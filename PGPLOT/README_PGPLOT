@@ -1,18 +1,22 @@
 These are simplified instructions for installing the PGPLOT
 distributed with SCHED from the code.  Compiled libraries are also
-provided with SCHED, but there could be compatibility issues.  If you
-want a full set of PGPLOT installation instructions, go to
-src5.3.1/doc/index.html with a browser.
+provided with SCHED, but there could be compatibility issues that
+would require you to recompile with the same OS and compiler that you
+are using for SCHED.  If you want a full set of PGPLOT installation
+instructions, go to src5.3.1/doc/index.html with a browser.
 
 I have constructed a basic drivers.list for each architecture and have
 made some small modifications to a couple of .conf files for use with
-gfortran rather than g77.  Those are in the RCW_additions
+gfortran rather than g77.  Those .conf chagnes are in the RCW_additions
 subdirectories and are included in the src files with symbolic links.
-Note that MAC OSX goes under "darwin".
+Note that MAC OSX goes under the name "darwin".
 
 You will need X11, gfortran and other programming tools installed, but
 you need those for SCHED anyway so I won't go through the instructions
 to get those.
+
+The initial supported versions are for linux 64 bit and OSX, both with
+gfortran.
 
 Here are the steps:
 
@@ -25,9 +29,11 @@ probably there already.  Feel free to edit to add output options.
 
 3.  Execute makemake script to make the makefile and copy in some
 other required files.  If you are using an existing directory and
-there is a makefile present, this may not be needed.  An example line
-to run makemake when the source code is in ../src5.3.1 (this for OSX 
-and gfortran) is:
+there is a makefile present, this may not be needed.  There are 
+domakemake scripts in the existing directories that can just be
+executed, but paths may require you type your own.  An example line
+to run makemake for OSX and gfortran with the default directory
+set to osx_intel_5.3.1 and the code is in ../src5.3.1 is:
 
 ../src5.3.1/makemake ../src5.3.1 darwin gfortran_gcc
 
@@ -37,20 +43,13 @@ pgwin_server are present after make is done.  There will be lots of
 object modules and a few demo programs.  The object modules can be
 cleaned out with a "make clean"
 
-5. Set the environment variable PGPLOT_DIR to the directory where
-you are working.  Example:
-csh or tcsh:  
-setenv PGPLOT_DIR /Users/cwalker/code/sched_work/PGPLOT/osx_intel_5.3.1
-bash etc:
-export PGPLOT_DIR=/Users/cwalker/code/sched_work/PGPLOT/osx_intel_5.3.1
+5.  If desired, move the files listed in 4 to some place where you
+want your pgplot libraries, or provide links in that location to
+where you built them.  Then set the environment variable PGPLOT_DIR
+to that location (could be where you built them) with setenv (t or c
+shell) or export (bash etc).
 
 You may want to put the setenv/export command in your login script.
-
-Alternatively put the 5 files listed above, or symbolic links to them,
-in, for example, $SCHED/lib/OSX_INTEL and point PGPLOT_DIR there.  Or
-even put the files or links in the system area of your choice and set
-PGPLOT_DIR accordingly.  The latter might be better if you wish to use
-PGPLOT for other software.
 
 That should do it.  There is much more detail in the included PGPLOT
 documention referenced above.
