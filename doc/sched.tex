@@ -810,7 +810,7 @@ If your version of \schedb is linked with the {\sc PGPLOT} libraries
 (has plotting capability) and you are on a unix system, you will need
 to set the environoment variables {\tt PGPLOT\_DIR} to the location of
 the {\sc PGPLOT} libraries and {\tt PGPLOT\_FONT} to the location of
-the {\sc PGPLOT} font files.
+the {\sc PGPLOT} font files, if that is not the same as {\tt PGPLOT\_DIR}.
 
 \begin{description}
 
@@ -1315,7 +1315,7 @@ Pearson used by the other Caltech Package programs and in wide use in
 astronomy.  Be sure that the environment variables {\tt PGPLOT\_DIR}
 is set to the location of the {\sc PGPLOT} libraries on your system
 and that {\tt PGPLOT\_FONT} is set the the location of the {\sc
-PGPLOT} font files.
+PGPLOT} font files if that is different from {\tt PGPLOT\_DIR}.
 
 If {\tt PLOT} has been invoked, \schedb will proceed to read all of
 the input files, check the schedule, and do any requested optimization
@@ -13867,43 +13867,17 @@ to recompile.
 libraries and the font file available.  Check if your system already
 has them.  That is fairly likely at astronomy sites.  If not, they can
 be obtained from many repositories of open source code.  But if that
-doesn't work, as of July 2011, {\sc PGPLOT 5.3.0} is included with the
-\schedb distribution in the {\sl \$SCHED/RELATED\_CODE/PGPLOT}
-subdirectory (That may be upgraded to 5.3.1 soon).  Versions of the
-libraries are included in machine dependent subdirectories.  If you
-need something else, or need to rebuild, you can create your own
-subdirectory.  There is extensive information on {\sc PGPLOT}
-available from the WWW page at \htmladdnormallink
+doesn't work, as of July 2011, {\sc PGPLOT 5.3.1} (which is not
+obviously available on the {\sl PGPLOT} website) is included with
+the \schedb distribution in the {\sl \$SCHED/PGPLOT} subdirectory.
+Simplified instructions for installation are given in {\tt
+$SCHED/PGPLOT/README_PGPLOT}.  There is extensive information on {\sc
+PGPLOT} available from the WWW page at \htmladdnormallink
 {http://www.astro.caltech.edu/\~{}tjp/pgplot/}
-{http://astro.caltech.edu/\~{}tjp/pgplot/}.  Note that {\sc PGPLOT}
+{http://astro.caltech.edu/\~{}tjp/pgplot/}.  Those web pages are also
+included with the {\sl PGPLOT} distribution.  Note that {\sc PGPLOT}
 should be built with the same compiler and machine architecture as
 \sched for everything to function properly.
-
-Detailed installation instructions for {\sc PGPLOT} can be found using
-your browser by looking at
-\$SCHED/RELATED\_CODE/PGPLOT/src5.3.0/ptlplot530/doc/index.html (you'll
-have to expand out \$SCHED to make this work), or at the caltech site
-noted above, and looking at the installation manual.  Many of the
-instructions relating to downloading the code and constructing the
-{\sl drivers.list} file have already been done (look in the machine
-dependent areas for a basic {\sl drivers.list}).  Also the
-instructions for installing compilers, X11 etc on Mac systems have
-likely already been done if you are contemplating an installation.
-
-In short, what you need to do is create a target directory for the
-installation, cd to it, copy a drivers.list to is, run makemake, run
-make, run make install.  Then define PGPLOT\_DIR to be the target
-directory (or some place you have put the libraries and font file).  I
-think you only need PGPLOT\_FONT if {\sl grfont.dat} is not in
-PGPLOT\_DIR after the installation (it is put there by make).  The
-\schedb distribution of {\sc PGPLOT} includes a {\sl
-gfortran\_gcc.conf} file in {\sl sys\_darwin} that is not included in
-the instructions.  If you have an Intel Mac with gfortran, you can run
-makemake with the line
-
-\begin{verbatim}
-../src5.3.0/pgplot530/makemake ../src5.3.0/pgplot530 darwin gfortran_gcc
-\end{verbatim}
 
 \item [Compiling the program:] If you need to compile \schedb, you
 will need to construct an appropriate Makefile and run make.  There is
@@ -13934,13 +13908,8 @@ is available in the same ftp area as \sched.
 \schedb can be compiled with or without the plotting capabilities.  It
 is highly recommended that you compile with those capabilites.  To do
 so, you will need {\sc PGPLOT} (version 5.2 or later) installed on
-your system.  See below for more information on getting {\sc PGPLOT}
-if you don't already have it.  It is commonly available at astronomy
-sites and is used in other packages, so it is likely that you already
-have it installed.  There are stubs that can be used to bypass {\sc
-PGPLOT} if necessary and the instructions on how to do so are in the
-Makefile.  \schedb will still be able to make schedules if the stubs
-are used, but it will not be able to make any plots.
+your system.  See above for more information on getting {\sc PGPLOT}
+if you don't already have it.
 
 There is also a stub for the routines related to use of the JPL
 emphemeris, in case that code causes problems.  The JPL routines are
@@ -14130,7 +14099,10 @@ more information.
 \item Only announce fits being skipped in geodetic segment if GEOPRT=1 or
 higher.  Sept 21, 2011.
 
-\item Nothing yet.
+\item Improve the {\sl PGPLOT} distribution included with \sched.  This is
+mainly improving the organization and instructions.  Also it involved 
+some changes in the scripts that build the makefile for \sched.
+RCW  Sept 24, 2011.
 
 \end {itemize}
 
