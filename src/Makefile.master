@@ -14,16 +14,20 @@
 # Make the selections described below, then type "make" or "gmake"
 # The selected option is the one without a # at the start of the line.
 #
+# 2011sep22 - using PGPLOT_DIR to get the PGPLOT location and remove
+# the related SED option.  Also remove the stub as a SED option as 
+# it's not being used.  RCW.
 #
 #----- Architecture - Choose one -----
 #      This helps grab the right machine dependent routines.
-#      LINUX is ok for many g77 systems, including Mac OSX
+#      LINUX is ok for many g77/gfortran systems, including Mac OSX
 
 #ARCHSED
 #ARCH = LINUX
 #ARCH = SUN
 
-#  Most of these are probably history.
+
+#  These are probably history.
 #ARCH = ALLIANT
 #ARCH = CONVEX
 #ARCH = DECALPHA
@@ -86,45 +90,56 @@
 
 
 #----- Plot code.  If you don't have PGPLOT, select the stub. ------
-#  But you will loose a lot of useful functionality.
+#  Note that PGPLOT is now included in the SCHED distribution and is
+#  reasonably easy to build.  If you don't use it, 
+#  you will loose a lot of useful functionality in SCHED.
 #  To use the stub, set XLD above to blank, choose the stub option
 #  below, and set LDPGPLOT to blank further below.
 
-#PLOT_SRCS_SED
-#PLOT_SRCS = $(wildcard Plot/*.f) $(wildcard PlotNRAO/*.f) # With PGPLOT
+PLOT_SRCS = $(wildcard Plot/*.f) $(wildcard PlotNRAO/*.f) # With PGPLOT
+
 #PLOT_SRCS = $(wildcard Plotstub/*.f)        # Stub - no PGPLOT calls.
 
 
 #----- Path to PGPLOT library - likely to be site specific. ------
 #    Note that PGPLOT version 5.2 or later is required.
-#      For more on PGPLOT, see http://www.astro.caltech.edu/~tjp/pgplot/
-#    For MacOSX, PGPLOT is available from the Fink.
-#    It looks like it is available as a package for some Linux distrubitions.
+#    For more on PGPLOT, see http://www.astro.caltech.edu/~tjp/pgplot/
+#    PGPLOT is available as a package for many Linux and OSX distrubitions.
+#    PGPLOT is also available with SCHED in the $SCHED/PGPLOT directories.
 #
-#    To run SCHED, on unix systems anyway, environment variable PGPLOT_DIR
-#    needs to be set to the same place as LPGPLOT and PGPLOT_FONT needs 
-#    to be set to the location of the font files.
+#    To compile (or run) SCHED, on unix-like systems anyway, environment 
+#    variable PGPLOT_DIR needs to be set to the location of the code
+#    libraries (eg libpgplot.a).  PGPLOT_FONT needs 
+#    to be set to the location of the font files if that is different.
 
 #    For the stub, set to blank.
 
 # Location:
-#LPGPLOTSED
+LPGPLOT = $(PGPLOT_DIR)
+
+#  These should not be needed with use of PGPLOT_DIR above.
 #LPGPLOT = /usr/local/lib           # Typical location
 #LPGPLOT = /usr/local/pgplot        # Alternate location.
 #LPGPLOT = /sw/lib/pgplot           # PGPLOT from the fink - MacOSX
+#LPGPLOT =                          # For use with the stub.
 
-# For linker:  (LPGPLOT not needed for first and second).
+# For linker:  (LPGPLOT not needed for all).
 #   If there are missing items, consider adding -lz
 
 #LDPGPLOTSED
-#LDPGPLOT = -lpgplot -lpng         # pgplot, png, z in the standard load path.
-#LDPGPLOT =                       # No library needed with stub.
-#LDPGPLOT =    -lpgplot  -lpng -lz                # If png lib separate and 
-             # pgplot is in the standard load path.  Used with Intel compiler
-#LDPGPLOT = -L$(LPGPLOT) -lpgplot -lpng          # Many
+
+#  Some options - will be set in the configure scripts, but you can change:
+#LDPGPLOT = -lpgplot -lpng       # pgplot, png, z in the standard load path.
+                                 #  This when png included in drivers.list.
+#LDPGPLOT =                      # No library needed with stub.
+#LDPGPLOT = -lpgplot  -lpng -lz  # If png lib separate and pgplot is in the
+                                 #  standard load path.  Used with Intel compiler
+#LDPGPLOT = -L$(LPGPLOT) -lpgplot -lpng          # Many (with png)
 #LDPGPLOT = -L$(LPGPLOT) -lpgplot -R$(LPGPLOT)   # Alternate
 #LDPGPLOT = -Wl,-L$(LPGPLOT) -lpgplot            # Hp - link lib
 #  The following is for pgplot from the Fink and using gfortran on MacOSX.
+#  I think it is meant for use wiht aquaterm, which is not set in the 
+#  drivers.list with PGPLOT in the SCHED distribution.
 #LDPGPLOT = -L$(LPGPLOT) -lpgplot -L/sw/lib -lpng -lz -laquaterm -framework Foundation -framework AppKit
 
 
