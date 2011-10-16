@@ -181,8 +181,10 @@ C
 C                    Look for overlap.
 C
                      IF( ( FLOWI.GE.FLOWJ .AND. FLOWI.LT.FHIGHJ ) .OR.
-     1                   ( FHIGHI.GT.FLOWJ .AND. FHIGHI.LE.FHIGHJ ) )
-     2                   OVERWARN = .TRUE.
+     1                   ( FHIGHI.GT.FLOWJ .AND. FHIGHI.LE.FHIGHJ ) ) 
+     2                    THEN
+                        OVERWARN = .TRUE.
+                     END IF
 C
                   END IF
                END DO

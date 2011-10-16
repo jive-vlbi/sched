@@ -30,11 +30,11 @@ C
 C
 C     Catalog input parameters.
 C
-      INTEGER           MLO, I, IPTR, MODE
-      PARAMETER         (MLO = 25)
+      INTEGER           MLO, I, JS, IPTR, MODE
+      PARAMETER         (MLO = 50)
       INTEGER           KI(MLO), KEYPTR, VLBOPE
       CHARACTER         KC(MLO)*8, KCHAR*256, TEXT*80, RESULT*256
-      DOUBLE PRECISION  KD(MLO*2), ENDMRK, BLANK
+      DOUBLE PRECISION  KD(MLO*2), ENDMRK, BLANK, SEP, TOVER
       LOGICAL           EXISTS
 C for commented out statement      INTEGER           LEN1
 C
@@ -76,6 +76,8 @@ C
          CALL KEYADD( 'DYDT', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'DZDT', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'EPOCH', 0.D0, 1, KD, KC, KI )
+         CALL KEYADD( 'BEGIN', 0.D0, 1, KD, KC, KI )
+         CALL KEYADD( 'END', 0.D0, 1, KD, KC, KI )
 C
 C        The reading loop.
 C 
@@ -101,6 +103,8 @@ C
             KD( KEYPTR( 'EPOCH', KC, KI ) ) = 0.0D0
             KD( KEYPTR( 'AXISTYPE', KC, KI ) ) = BLANK
             KD( KEYPTR( 'AXISOFF', KC, KI ) ) = 0.0D0
+            KD( KEYPTR( 'BEGIN', KC, KI ) ) = 0.0D0
+            KD( KEYPTR( 'END', KC, KI ) ) = 1.0D5
 C
 C           Call KEYIN to get the data record.
 C
@@ -132,6 +136,8 @@ C
                DBEPO(NDB) = KD( KEYPTR( 'EPOCH', KC, KI ) )
                DBDBA(NDB) = KCHAR( 'AXISTYPE', 5, .TRUE., KD, KC, KI )
                DBOFF(NDB) = KD( KEYPTR( 'AXISOFF', KC, KI ) )
+               DBBEG(NDB) = KD( KEYPTR( 'BEGIN', KC, KI ) )
+               DBEND(NDB) = KD( KEYPTR( 'END', KC, KI ) )
 C
 C              Adjust for various varients on the axis type spec,
 C              especially for altaz mounts.
@@ -144,6 +150,35 @@ C
                IF( DBDBA(NDB) .EQ. 'ALTZ' .OR. 
      1             DBDBA(NDB) .EQ. 'ALTA' ) THEN
                   DBDBA(NDB) = 'ALTAZ'
+               END IF
+C
+C              Check for duplicates.  Note coordinates are in meters
+C              and times in MJD (days).
+C
+               IF( NDB .GT. 1 ) THEN
+                  DO JS = 1, NDB-1
+                     SEP = SQRT( ( DBX(NDB) - DBX(JS) )**2 +
+     1                           ( DBY(NDB) - DBY(JS) )**2 +
+     2                           ( DBZ(NDB) - DBZ(JS) )**2 )
+                     TOVER = MIN( DBEND(NDB), DBEND(JS) ) -
+     1                       MAX( DBBEG(NDB), DBBEG(JS) )
+                     IF( SEP .LT. 10.D0 .AND. TOVER .GT. 0.D0 ) THEN
+C
+C                       Avoid bothering users about known pairs
+C                    
+                        IF( DBNAME(JS) .NE. 'MIAMI20' .AND.
+     1                      DBNAME(JS) .NE. 'SINTOTU' .AND.
+     2                      DBNAME(JS)(1:3) .NE. 'VLA' ) THEN
+                           RESULT = ' '
+                           WRITE( RESULT, '( 6A, F10.2 )' )
+     1                        'RDLOC:  Locations.dat stations ', 
+     2                        DBNAME(JS), ' and ', DBNAME(NDB),
+     3                        ' appear to be the same ',
+     4                        '(time and position).  Sep (m):', SEP
+                           CALL WLOG( 0, RESULT )
+                        END IF
+                     END IF
+                  END DO
                END IF
 C
 C              Go back for next record.

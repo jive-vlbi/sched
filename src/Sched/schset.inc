@@ -21,7 +21,7 @@ C     the zero default), SCHED breaks the setup into one group per
 C     station before dealing with any other defaults.  This allows 
 C     the defaults (eg FIRSTLO) to vary between stations.  
 C
-C     The function NSETUP will get the setup group index (LS or KS) 
+C     The array NSETUP will contain the setup group index (LS or KS) 
 C     required for any combination of station and scan. 
 C
 C     Note that SETSTA is the setup file station name and ISETSTA 
@@ -122,6 +122,7 @@ C
       DOUBLE PRECISION  BBSYN(MCHAN,MSET)
       DOUBLE PRECISION  BBSYN2(MCHAN,MSET)
       DOUBLE PRECISION  BBFILT(MCHAN,MSET)
+      DOUBLE PRECISION  CORINV(MCHAN,MSET)
       REAL              AZCOLIM(MSET), ELCOLIM(MSET)
       REAL              PTINCR(MSET)
       REAL              PTOFF(MSET)
@@ -192,8 +193,8 @@ C
       INTEGER           MLEVEL, LLEVEL(MCHAN)
 C
       COMMON  /SETN2A/  FREQREF, FIRSTLO, FIFMIN, FIFMAX,
-     1                  BBSYN, BBSYN2, BBFILT, AZCOLIM, ELCOLIM, 
-     2                  PTINCR,  PTOFF, 
+     1                  BBSYN, BBSYN2, BBFILT, CORINV, 
+     2                  AZCOLIM, ELCOLIM, PTINCR,  PTOFF, 
      3                  SAMPRATE, SYNTH, SPEEDH, SPEEDL, FANOUT,
      4                  SPEEDUP, BESTOVER, TOTBW
       COMMON  /SETN2B/  NCHAN, ISETSTA, TRACK, PERIOD, BITS, MLEVEL,

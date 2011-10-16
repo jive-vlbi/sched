@@ -12,7 +12,7 @@ C
       CHARACTER         TPFILE*80
       CHARACTER         CSFILE*80
       INTEGER           YEAR(MAXSCN), DAY(MAXSCN)
-      DOUBLE PRECISION  STOP(MAXSCN), START(MAXSCN)
+      DOUBLE PRECISION  STOP(MAXSCN), START(MAXSCN), MJD1
 C
 C     Keyin input parameters.  Key names are in second half of KD.
 C     KI(2) contains number of parameters.
@@ -208,11 +208,21 @@ C
             DOSTWARN = .FALSE.
          END IF
 C
+C        Set scan times etc.  Also get MJD1 which is the MJD of
+C        first scan.  This is just for use by the station reading
+C        routine to select a locations catalog entry in the 
+C        presence of episodic motion (earthquakes etc).
+C
+         CALL GETTIM( ISCN, KD, KC, KI, START, STOP, DAY, YEAR, MJD1 )
+C
 C        Process the station request for this scan. 
 C        Read the station catalog if haven't already.
 C        Also get station dependent tape motion requests in GETSTA.
+C        Note that this has to come after the timing for the first
+C        scan has been set because stations can have episodic 
+C        positions.
 C
-         CALL GETSTA( ISCN, KD, KC, KI, GOTVEX )
+         CALL GETSTA( ISCN, KD, KC, KI, GOTVEX, MJD1 )
 C
 C        Get the eVLBI input parameters.
 C
@@ -237,10 +247,6 @@ C
 C        Get pointer to phase center list.
 C
          CENTERS(ISCN) = KCHAR( 'CENTERS', 12, .TRUE., KD, KC, KI )
-C
-C        Set scan times etc.
-C
-         CALL GETTIM( ISCN, KD, KC, KI, START, STOP, DAY, YEAR )
 C
 C        Some observing instructions.
 C

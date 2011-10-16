@@ -83,13 +83,19 @@ C
 C
          IF( OKXC(ISETF) .AND. FREQ(ILC,KSCN) .GT. 0.0D0 ) THEN
 C
-C           Use the frequency from the main schedule.  Avoid spurious
-C           low significant digits.
+C           Use the frequency from the main schedule.  The fact that
+C           it is not zero implies that either DOPPLER or FREQ was
+C           specified for the scan(s).  Avoid spurious low significant 
+C           digits.  FREQ will be in the system (logical channels)
+C           before the sideband inversion reflected in CORINV for
+C           RDBE/PFB stations.  So CORINV needs to be added.
 C
-            BBCFREQ(I) = ABS( FREQ(ILC,KSCN) - FIRSTLO(I,KS) )
+            BBCFREQ(I) = ABS( FREQ(ILC,KSCN) + CORINV(I,KS) - 
+     1                        FIRSTLO(I,KS) )
             BBCFREQ(I) =  DNINT( BBCFREQ(I) * 1000.D0 ) / 1000.D0
 C
-C           Check that the assumed sideband is correct.
+C           Check that the assumed sideband is correct.  Pedantically,
+C           this should be corrected for CORINV, but it won't matter.
 C
             IF( ( FREQ(ILC,KSCN) - FIRSTLO(I,KS) ) * ISIDE1 .LT. 0 )
      1           THEN
@@ -118,8 +124,8 @@ C
                IFIF = IFREQIF(I,KS)
                IFCAT = IFREQNUM(I,KS)
                CALL FRFADJ( KS, IFIF, IFCAT, FRAD1, FRAD2 )
-               IF( ( FREQ(ILC,KSCN) .LT. FRAD1 .OR. 
-     1               FREQ(ILC,KSCN) .GT. FRAD2 ) ) THEN
+               IF( ( FREQ(ILC,KSCN) + CORINV(I,KS) .LT. FRAD1 .OR. 
+     1               FREQ(ILC,KSCN) + CORINV(I,KS) .GT. FRAD2 ) ) THEN
                   CALL WLOG( 1, 'FSFREQ: -- WARNING -- Frequency ' //
      1                 'specified in  schedule (or by Doppler) is ' )
                   CALL WLOG( 1, '          outside limits for IF.' )
@@ -132,7 +138,7 @@ C
                   CALL WLOG( 1, MSGTXT )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F9.2 )' )
-     1              '        Frequency:', FREQ(ILC,KSCN)
+     1              '        Frequency:', FREQ(ILC,KSCN) + CORINV(I,KS)
                   CALL WLOG( 1, MSGTXT )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F9.2, A, F9.2 )' )
@@ -213,7 +219,7 @@ C        that the requested bandwidth is valid.
 C
          DO I = 1, NCHAN(KS)
             IF( BBCFREQ(I) .LT. 500.0D0 .OR.
-     1          BBCFREQ(I) .GE. 1000.0D0 ) THEN
+     5          BBCFREQ(I) .GE. 1000.0D0 ) THEN
                WRITE( MSGTXT, '( A, I3, F10.2, I5, F10.2, I5 )' )
      1            'FSFREQ: chan, firstLO, setup, freq, freq set: ', 
      2            I, FIRSTLO(I,KS), KS, LOSUM(I), KF
@@ -244,14 +250,15 @@ C
          END DO
       END IF
 C
-C     Similar checks for Mark 4?
-C
-C     Add similar checks for the RDBE.
+C     Similar checks for the RDBE, but put in subroutine.
 C
       ERRS = .FALSE.
       CALL CHKRDFQ( KS, BBCBW, BBCFREQ, ERRS )
       IF( ERRS ) CALL ERRLOG( 'FSFREQ:  Fix problem with in-line '//
      1    'or Doppler derived frequencies or bandwidths.' )
+C
+C     Similar checks for Mark 4?
+C
 C
 C     END
 C
