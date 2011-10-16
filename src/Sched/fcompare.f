@@ -1,10 +1,9 @@
       SUBROUTINE FCOMPARE( KS, KF, MATCH, OKIF, NBAD, PRTMISS )
 C
 C     Routine for SCHED called by setfcat that compares a setup file KS
-C     with a frequency catalog entry to KF see if they are compatible.
-C     The purpose is to narrow the range of those that will be
-C     used to search for a source of defaults or error checks.
-C     MATCH is returned .true. if 
+C     with a frequency catalog (eg freq.dat) entry KF to see if they 
+C     are compatible.  The purpose is to narrow the range of those 
+C     that will be used to search for a source of defaults or error checks.
 C
 C     Require that every channel in the setup file match, in all ways
 C     that have already been set in the setup file, an IF in the

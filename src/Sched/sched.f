@@ -73,7 +73,8 @@ C        Get sun distance from each source for later flags.
 C
          CALL GETSUN
 C
-C        A last chance to find problems.
+C        A last chance to find problems.  Also get the frequency
+C        and pcal sets, along with FSSAME.
 C
          CALL CHKSCN
 C

@@ -1,9 +1,13 @@
       SUBROUTINE VXTRAMD(IMODE,IFS,IPS)
       IMPLICIT NONE
 C
-C     Make a new mode, NMDVEX
-C     IMODE is the template, IFS and IPS are the 
-C     augmenting freq and pcal modes
+C     Make a new mode, NMDVEX.  Called by VXSCNS when it encounters
+C     a need for a mode because of FREQ, BW, PCAL.
+C     IMODE is the current VEX mode template, IFS and IPS are the 
+C     augmenting freq and pcal sets for one of the stations needing the
+C     new mode.
+C     RCW Oct. 15, 2011.  Adding some comments while debugging 
+C     transfer of incorrect setup data (sideband this time) from setup file.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
@@ -18,6 +22,15 @@ C
       CHARACTER NAME*32, UPCAL*4
 C
 C     Setup the necessary pointers
+C *********************************************************************
+C  This gets into trouble because these really need to be station
+C  dependent when they are used to pass parameters - certainly parameters
+C  that might vary by station.  I have fixed the use of IFQ in VXTRAFQ,
+C  but these other parameters should also be dealt with in this routine.
+C  I don't have time to deal with them now.  That means that the tone
+C  specifications, in particular, may be wrong at least with sideband
+C  inversion.  RCW  Oct. 16, 2011.
+C *********************************************************************
 C
       IFQ = IMODFQ(1,IMODE)
       IPH = IMODPH(1,IMODE)
@@ -86,8 +99,20 @@ C
          CALL WLOG( 1, MSGTXT )
       END IF
 C
-C     Always call new FQ(can be multiple now) 
+C     Always call new FQ (can be multiple now) 
 C
+C     IFQ is set above to be  IFQ = IMODFQ(1,IMODE). IMODFQ is the list of 
+C     FQ blocks in IMODE.  VXTRAFQ takes a number of parameters from the 
+C     IFQ entry.  But IMODFQ is station dependent.  Only using the first 
+C     one causes wrong parameters to be passed.  In particular, the wrong 
+C     netsideband is passed when correlator sideband inversion is used.  
+C     This has to be fixed in VXTRAFQ inside the loop through FQ blocks.  
+C     This is a problem was found in testing with egrdbe2.key in the TEST 
+C     area, which includes GBT at K band with a sideband inversion, plus 
+C     a FREQ spec part way through (would do the same if using Doppler).
+C     So I modified VXTRAFQ to not use the IFQ from the call.  RCW
+C     Oct 16, 2011.
+C 
       CALL VXTRAFQ(ISCN, NMDVEX, IMODE, IFQ)
 C     
 C     Copy other links to this new MODE

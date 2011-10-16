@@ -17,6 +17,18 @@ C
       CHARACTER NAME*32
       LOGICAL   NEWVXMD
 C ----------------------------------------------------------------------
+C     There is a comment below claiming that SETNAME can be blank.  That
+C     surprises me so look for it.  RCW Oct. 15, 2011.
+C
+      DO ISET = 1, NSET
+         IF( SETNAME(ISET) .EQ. ' ' ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A, I4 )' )
+     1         'VXMODE: Info for programmer - blank SETNAME found.',
+     2         '  Setup group ', ISET
+            CALL WLOG( 1, MSGTXT )
+         END IF
+      END DO
 C
 C
 C
@@ -29,7 +41,7 @@ C
       NMDVEX = 1      
       DO ISETFL = 1, NSETF
 C
-C        It seems sometimes setname can be empty, be careful
+C        It seems sometimes setname can be empty, be careful.
 C
          NAME = ' ' 
          ICH2 = LEN1( SETFILE(ISETFL) )
@@ -56,7 +68,7 @@ C
          DO ISET = 1, NSET
             IF( USED(ISET) ) THEN 
 C
-C              Only if this group is in this file
+C              Only if this group is in this file.
 C
                IF( SETNAME(ISET) .EQ. SETFILE(ISETFL) ) THEN
                   DO ISTA = 1, NSTA

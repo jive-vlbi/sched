@@ -3,7 +3,13 @@ C
 C     Routine for SCHED that does Doppler calculations and sets 
 C     frequencies for spectral line sources.  The calculated 
 C     frequencies replace any values previously placed in the FREQ 
-C     array.
+C     array, such as from FREQ specified for a scan.
+C
+C     FREQ is the LO sum (band edge) given the sideband of the 
+C     logical channel.  It may need to be adjusted if the station
+C     is going to put out a sideband inverted from the logical
+C     channel, as is sometimes required for the RDBE/PFB personality.
+C     This routine only deals with logical channel values.
 C
 C     The velocities are obtained from the source catalog.
 C

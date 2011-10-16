@@ -168,7 +168,7 @@ C
          FOPEN = .TRUE. 
       END IF
 C
-C     Read the catalog line with KEYIN.  
+C     Read the regular station catalog line with KEYIN.  
 C
 C     Reset all parameters before start (except version).
 C     Use defaults that are ok for the VLBA to 
@@ -346,7 +346,12 @@ C              perhaps check for consistency.
 C              Also note that the locations catalog, and the VLBA
 C              data base, has 4 character station codes.
 C
-               IF( STADBN .EQ. DBNAME(IDB) ) THEN
+C              Deal with possible episodic motion here by checking
+C              OBSTIM against DBBEG and DBEND
+C
+               IF( STADBN .EQ. DBNAME(IDB) .AND.
+     1             OBSDATE .GE. DBBEG(IDB) .AND.
+     2             OBSDATE .LT. DBEND(IDB) ) THEN
                   STADBC = DBCODE(IDB)
                   STAX = DBX(IDB)
                   STAY = DBY(IDB)
@@ -376,6 +381,8 @@ C
             ELSE
                CALL PUTOUT( 'RDSTA: No coordinates in stations or' //
      1                ' locations file for '//STANAM )
+               CALL PUTOUT( 'RDSTA: Check date range in addition' //
+     1                ' to names.' )
             END IF
          END IF
       END IF

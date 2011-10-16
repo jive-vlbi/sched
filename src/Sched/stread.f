@@ -1,10 +1,21 @@
-      SUBROUTINE STREAD( IKIN, OPENIT )
+      SUBROUTINE STREAD( IKIN, OPENIT, MJD1 )
 C
 C     Subroutine for SCHED that reads the stations catalog.
+C     Stations whose locations are in the locations file can
+C     have episodic motion specified by way of begin and end
+C     dates.  Therefore the reading program needs to know the
+C     date.  It gets it from OBSDAT in rdcat.inc.  Set that to
+C     STARTJ(1) in this call.  Note that this means that 
+C     scan times have to have been processed before this routine
+C     is called with OPENIT=.TRUE. 
 C
 C     Input:
+C
       INTEGER       IKIN      ! Unit number of input file.
       LOGICAL       OPENIT    ! Open file on first call, close on last.
+      DOUBLE PRECISION MJD1   ! MJD from scan 1 for position selection
+C                             ! when the locations file has episodic
+C                             ! motion. Used only when OPENIT=.TRUE.
 C
 C     Include file for SCHED and for catalog reads.
 C
@@ -21,6 +32,7 @@ C     locations file (I don't think anyone uses inline station
 C     catalogs anyway and, if they do, they probably want to put
 C     the positions in it anyway).
 C
+      OBSDATE = MJD1
       IF( OPENIT ) THEN
          INFILE = STAFILE
          LOCFILE = LOCAFILE

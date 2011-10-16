@@ -7,13 +7,18 @@ C     The frequency and bandwidth checks are broken out to a
 C     subroutine (CHKRDFQ) so that it can also be called by FSFREQ
 C     to check in-schedule changes of frequency and bandwidth.
 C
+C     The RDBE PFB personality can only do lower sideband.  But
+C     DiFX can invert sidebands.  So, if an upper sideband is
+C     found, add the bandwidth to the BBC frequency and invert
+C     the sideband.  Oct 11, 2011.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH
-      LOGICAL           ERRS, DDWARN
-      DATA              DDWARN / .TRUE. /
-      SAVE              DDWARN
+      LOGICAL           ERRS, DDWARN, SBWARN
+      DATA              DDWARN, SBWARN / .TRUE., .TRUE. /
+      SAVE              DDWARN, SBWARN
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDBE: Starting' )
 C
@@ -68,15 +73,61 @@ C
             END DO
 C
 C           All sidebands must be lower.
+C           Here is were we get a bit tricky and try to use
+C           inverted sidebands.
 C
             DO ICH = 1, NCHAN(KS)
                IF( SIDEBD(ICH,KS) .NE. 'L' ) THEN
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, A, A )' )
-     1               'CHKRDBE: SIDEBAND must be LSB for DBE=RDBE_PFB. ',
-     2               '  Value specified is: ', SIDEBD(ICH,KS)
-                  CALL WLOG( 1, MSGTXT )
-                  ERRS = .TRUE.
+                  IF( SBWARN ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, A, A )' )
+     1                  'CHKRDBE: SIDEBAND must be LSB for ',
+     2                  '  DBE=RDBE_PFB. Value specified is: ', 
+     3                  SIDEBD(ICH,KS)
+                     CALL WLOG( 1, MSGTXT )
+                  END IF
+C
+C                 Now let's fix it, if it was 'U' - ie not some
+C                 other bad spec.
+C
+                  IF( SIDEBD(ICH,KS) .EQ. 'U' .AND.
+     1                ( CORREL .EQ. 'SOCORRO' .OR.
+     2                  CORREL .EQ. 'VLBA' .OR.
+     3                  CORREL .EQ. 'VLBADIFX' ) ) THEN
+C
+C                    Tell the user we will invert sidebands.
+C
+                     IF( SBWARN ) THEN
+                        MSGTXT = ' '
+                        WRITE( MSGTXT, '( A,A )' )
+     1                     '         DiFX can invert the sideband',
+     2                     ' so we''ll do that.'
+                        CALL WLOG( 1, MSGTXT )
+                     END IF
+C
+C                    Now do the inversion.
+C                    For FREQREF, we need the net sideband.
+C                    CORINV is the amount that got added to FREQREF 
+C                    to get the LO setting. For comparison with 
+C                    channels that will get correlated against
+C                    this one, subtract CORINV.
+C
+                     IF( NETSIDE(ICH,KS) .EQ. 'U' ) THEN
+                        NETSIDE(ICH,KS) = 'L'
+                        CORINV(ICH,KS) = DBLE( SAMPRATE(KS) ) / 2.D0
+                     ELSE
+                        NETSIDE(ICH,KS) = 'U'
+                        CORINV(ICH,KS) = 
+     1                       -1.D0 * DBLE( SAMPRATE(KS) ) / 2.D0
+                     END IF
+                     SIDEBD(ICH,KS) = 'L'
+                     BBSYN(ICH,KS) = BBSYN(ICH,KS) + 
+     1                              ABS( CORINV(ICH,KS) )
+                     FREQREF(ICH,KS) = FREQREF(ICH,KS) + CORINV(ICH,KS)
+                  ELSE
+                     IF( SIDEBD(ICH,KS) .NE. 'U' ) ERRS = .TRUE.
+                  END IF
+                  SBWARN = .FALSE.
                END IF
             END DO
 C
@@ -92,7 +143,7 @@ C
 C
             IF( DDWARN ) THEN
                CALL WLOG( 1, 
-     1           '***** WARNING:  DBE=RDBE_DDC is not yet available. ' )
+     1           '** WARNING:  DBE=RDBE_DDC is experimental. ** ' )
             END IF
             DDWARN = .FALSE.
 C

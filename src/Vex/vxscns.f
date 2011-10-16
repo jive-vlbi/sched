@@ -33,16 +33,30 @@ C
       NMDORI = NMDVEX
       OLDSCN = 0
       OLDIPS = 0
+C
+C RCW  VXMDIFP is the VEX mode that included a given frequency set 
+C      and polarization set.  Note a mode can also include other sets
+C      for other stations.
 C CR 050106: initialise VXMDIFP
+C
       DO I = 1, MFSET
         DO J = 1, MPSET
           VXMDIFP(I,J) = 0
         END DO
       END DO
 C
+C     Loop through the scans looking for the need for new modes.
+C
       DO ISCN = SCAN1, SCANL
 C
 C        First default IMODE to old mode which equals a setup file
+C
+C        RCW notes to aid debugging Oct 15, 2011:  
+C        NMDORI set above to NMDVEX, the number of vex modes defined
+C        so far.
+C        MDISFIL is set in VXMODE.  Basically it is set to the setup 
+C        file number, but skipping any that are not used.
+C        So the following just gets the default VEX mode for the scan.
 C
          ISETFL = SETNUM(ISCN)
          IMODE = -1
@@ -52,25 +66,40 @@ C
          IF( IMODE .LT. 0 ) CALL ERRLOG('VXSCNS: Unexpected Mode'//
      1           ' encountered ')
 C
+C        Make a pointer from the scan to the VEX mode.
+C
          MODSCN(ISCN) = IMODE
 C
-C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
-C        mode can later be replaced with the mode of the previous 
-C        recording scan, or can simply be skipped when writing the
-C        scans.
-C        Also do nothing if this scan is skipped (like if all antennas
-C        are down.
+C        Do nothing if this scan is skipped (like if all antennas
+C        are down).  SKIPPED tested below along with FORMAT.
 C
          SKIPPED = .TRUE.
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
          END DO
+C
+C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
+C        mode can later be replaced with the mode of the previous 
+C        recording scan, or can simply be skipped when writing the
+C        scans.
+C
+C        To check the FORMAT, a SCHED setup file is needed.  
+C        VXGTXT is a function that returns one of possibly several setups
+C        used by the mode.  That means that it would be dangerous to mix
+C        format = 'none' with other formats at other stations in the 
+C        same scan.  I doubt that is done (RCW  Oct 15, 2011).
+C
          ISET = VXGTST( IMODE )
          IF( .NOT. SKIPPED .AND. FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
 C
-C          The VEX modes are the same across antennas, but some
-C          antennas may join later, so find the "oldest" freq mode
-C          or an IPS change, set IFS and IPS to A valid number
+C          The VEX modes are the same across antennas in a scan, but some
+C          antennas may join later, so find the first scan for which the
+C          current (scan) mode will be used.  That involves looking at
+C          through the stations for the first scan (FSETSCN) in which the
+C          current frequency set was used, then taking the minimum of
+C          those.  FRSTSCN will be that first scan.  IFS and IPS will
+C          be one of the frequency sets and pcal sets used in that first
+C          scan for the mode.  Note that they are not the only such sets.
 C
            FRSTSCN = MAXSCN + 1
            IPS = 0
@@ -114,6 +143,16 @@ C
            END IF
 C
 C          Account for the telescopes that came in for first time
+C          after others.  This only does anything if VXMDIFP has been
+C          set, which will it will not be by here on SCAN1, or on 
+C          FRSTSCN.  The IF passes the first scan for the late arriving
+C          station that uses the current frequency set.  It doesn't seem
+C          to worry about pcal.  It sets the station dependent MODSET
+C          (the base setup group for the station/scan) to the value for 
+C          this scan and sets VXMDIFP for this scan (set earlier)
+C          and station dependent frequency set/pcal set combination to
+C          the value used for other stations, which are set when the
+C          new mode is created.
 C
            DO ISTA = 1, NSTA
               IF( STASCN(ISCN,ISTA) ) THEN  
@@ -140,8 +179,11 @@ C
               END IF
            END DO
 C
-C          Totally new mode, remember IFS, IPS are set for one good value
-C          Problem ifs, ips could be first scan unmodified or modified..
+C          Deal with a totally new mode.  This is the main point of this
+C          routine.  Remember IFS, IPS are set for one good value, but
+C          it is for just one of the stations.  A problem is that IFS, 
+C          IPS could be for the first scan unmodified or could be 
+C          modified by DOPPLER, FREQ, BW etc...
 C
            IF( VXMDIFP(IFS,IPS) .EQ. 0 ) THEN
 C
@@ -155,12 +197,21 @@ C
      .               'VXSCNS: Unused or new mode in scan ',ISCN
                  CALL WLOG( 1, MSGTXT )
               END IF
+C
+C             Look for the case when FREQ, BW, and PCAL are not changed
+C             with main scan inputs (the setup values are used).
+C
               IF( FREQ(1,FRSTSCN).LT.1E-6 .AND. 
      .            BW(1,FRSTSCN).LT.1E-6 .AND. 
      .            CALSET .EQ. CALSCN ) 
      .            THEN
 C     
-C                 Must set all other telescopes too
+C                This case does not involve FREQ or BW so it is the
+C                original mode for the setup.
+C                Must set all other telescopes too
+C                A station that uses this mode that comes in
+C                late might not got VXMDIFP assigned here, but it
+C                will be assigned above in the late arrivals section.
 C
                  DO ISTA = 1, NSTA
                     IF( STASCN(ISCN,ISTA) ) THEN
@@ -171,13 +222,15 @@ C
                  END DO
               ELSE
 C
-C                if this is not the original mode?
+C                This is not the original mode, or at least one of 
+C                FREQ (perhaps via Doppler), BW, and PCAL were set.
+C                So a new mode is needed.  Call VXTRAMD to do the work.
 C
                  CALL VXTRAMD(IMODE,IFS,IPS)
                  FRSTSCN = ISCN
                  MODSCN(ISCN) = NMDVEX
 C
-C                 Must set all other telescopes too
+C                Must set all other telescopes too
 C
                  DO ISTA = 1, NSTA
                     IF( STASCN(ISCN,ISTA) ) THEN
@@ -187,7 +240,10 @@ C
                     END IF
                  END DO
 C
-C                list all antennas in this mode
+C                Set the setup group for each station in the new mode to 
+C                be the same as it currently is.  This serves to transfer
+C                most setup file parameters to the new mode when a FREQ
+C                or BW requires a new mode
 C
                  DO ISTA = 1, NSTA  
                     IF( STASCN(ISCN,ISTA) ) THEN
@@ -198,7 +254,10 @@ C
 C
            END IF
 C
-C          Any Mode switch
+C          Any Mode switch.  RCW Oct 15, 2011.  I don't think this IF
+C          statement accomplishes anything because it only sets OLDSCN
+C          and OLDIPS, which are not used anywhere.  Is this left over 
+C          from some previous effort?  In any case, it's harmless.
 C
            IF (FRSTSCN.NE.OLDSCN .OR.
      .         IPS.NE.OLDIPS) THEN
@@ -209,12 +268,17 @@ C
                  OLDIPS = IPS
               END IF 
            END IF
+C
+C          Set the pointer to the mode for this scan.
+C
            MODSCN(ISCN) = VXMDIFP(IFS,IPS)
          END IF
 C
 C        end loop all scans
 C
       END DO
+C
+C
 C     CR 050818: The logic below works if you want the FORMAT=NONE scans
 C       to appear in the VEX file as non-recording scans, using the mode from
 C       another scan. However, at the current time FS stations would
