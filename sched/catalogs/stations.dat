@@ -117,7 +117,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2011Sep18-14:05:26"
+ VERSION = "2011Oct13-13:09:29"
 
 !
 !  =====================================================================
@@ -318,7 +318,7 @@
      HOR_AZ = 0,360  HOR_EL = 8,8  !  Horizon not blocked to El limit.
    / 
   STATION=N140VLBA   STCODE=Gb  CONTROL=NRAOV   ZALIM=88.000  
-    DBNAME = NRAO140
+    DBNAME = NRAO_140
     MOUNT = EQUAT AX1RATE=20  AX2RATE=20  ! From bvance email 16nov95.
     AX1LIM= -3.296,3.296, -4.958,4.958, -7.092,7.092
     AX2LIM=    -45,  -36,    -36,  -16,    -16,   86
@@ -973,15 +973,14 @@
     TSETTLE=10 DAR=VERA  RECORDER=VERA  NDRIVES=1  NHEADS=1 NBBC=16
     DISK=MARK5B MEDIADEF=DISK
 /
-!  
 !  =====================================================================
 !  The following entries in the SCHED stations catalog are for NASA Deep
 !  Space Network (DSN) antennas.
 !  These stations are maintained in file stations_DSN.dat.
 !  =====================================================================
 !
-! Coordinates are geodetic, from DSN Radio Astronomy web site at
-!   http://DSNra.jpl.nasa.gov  
+! Coordinates where given here are geodetic, from DSN Radio Astronomy 
+!   web site at http://DSNra.jpl.nasa.gov  
 !
 ! Updated by Jim Ulvestad, 21 Nov. 1997, based on information
 !   from Chuck Naudet and Valery Altunin.  NHEADS changed to 1
@@ -1001,54 +1000,65 @@
 ! Also really removed S2
 !
 ! DSS54 moved from stations_JIVE.dat Oct. 15, 2009. RCW.
+!
+! Trying to rationalize the DSN stations, and switch to DSS style names
+! as much as possible given names from the geo solutions.  Oct 2011, RCW.
+!
+!  Goldstone:
+!     All antennas (wikipedia and SCHED files):
+!       Name    Positions used     Description
+!      DSS13  geo solution         "Venus" 34m BWG
+!      DSS14  locations_DSN.dat    "Mars" 70m 
+!      DSS15  geo solution         "Uranus" 34m HEF  Two date ranges.
+!      DSS24,24,26  none           "Apollo" 34m BWG  (array?)
+!      DSS27,28     none           "Gemini" 34m BWG  (array?)
+!     Not in Wikipedia
+!      GOLDVENU  geo solution      Old DSS13. 
+!      GOLDS_TS  locations_DSN.dat VSOP tracking station
+!    
+!
+!   I will not provide station data for GOLDVENU because I think it 
+!   is no longer in use.  The geo solution is based on 1981-1991 data.
 
-
-  STATION=GOLD70   STCODE=Go  CONTROL=VEX
-    !  DSS14 - Goldstone 70m  Goldmars.
+  STATION=DSS13  STCODE=Go  CONTROL=VEX
+!   There is confusion between GOLDVENU and DSS13.
+!   I think DSS13 is the new 34m BWG and GOLDVENU is the old 26m
+!   From old catalog: ELEV= 6370000.00  LONG= 116:47:40.04    LAT= 35:14:49.79
+!   Now both are in the geodetic solution.
+    DBNAME=DSS13
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=270,810 AX2LIM=6,88
+    TSETTLE=2  DAR=MKIV   RECORDER=MKIV   NDRIVES=1  NHEADS=1 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS14   STCODE=Go  CONTROL=VEX
+    !  Old SCHED name GOLD70 - Goldstone 70m  Goldmars.
     DBNAME = DSS14
     MOUNT=ALTAZ AX1RATE=15 AX2RATE=15  AX1LIM=135,675 AX2LIM=6,86
     AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
     TSETTLE=2 DAR=MKIV   RECORDER=MKIV   NDRIVES=2  NHEADS=1 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
-  STATION=GOLDHEF  STCODE=Go  CONTROL=VEX
-    !  DSS15 - Goldstone 34m HEF
+  STATION=DSS15  STCODE=Go  CONTROL=VEX
+    !  Old SCHED name GOLDHEF  - Goldstone 34m HEF
     DBNAME = DSS15
     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=270,720 AX2LIM=6,88
     AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
     TSETTLE=2  DAR=MKIV   RECORDER=MKIV   NDRIVES=2  NHEADS=1 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
-  STATION=GOLDVENU  STCODE=Go  CONTROL=VEX
-    !  DSS13 - 34m BWG, replaced old 26m
-    !  Not listed in 810-005 document June 09.  Retired?
-    !     Goldstone BWG antennas are DSS-24, DSS-25, and DSS-26
-    !     Also DSS-27 is a HSB (high speed) 34m antenna
-    !     and DSS-16 is a 26m antenna.
-    ELEV= 6370000.00  LONG= 116:47:40.04    LAT= 35:14:49.79
-    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=270,810 AX2LIM=6,88
-    TSETTLE=2  DAR=MKIV   RECORDER=MKIV   NDRIVES=1  NHEADS=1 NBBC=14
-    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
-   / 
-  STATION=TID70   STCODE=Ti  CONTROL=VEX
-    !  DSS43 - Australia 70m
-    DBNAME = DSS43
-    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=230,759.8 AX2LIM=6,86
-    AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
-    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
-    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
-   / 
-  STATION=TID34   STCODE=Ti  CONTROL=VEX
-    !  DSS45 - Australia 34m HEF  
-    !  WARNING TID34 is a confusing name as DSS34 is a different antenna.
-    DBNAME = DSS45
-    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
-    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
-    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
-    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
-   / 
-!
-! Cannot use until a position is found.
+
+!  Tidbinbilla:
+!     All antennas (wikipedia and SCHED files):
+!       Name    Positions used     Description
+!      DSS-34  In this file        34m BWG
+!      DSS-43  locations_DSN.dat   Was 64m, now 70m ** USE TIDBIN64 **
+!      DSS-45  geo solution        34m
+!      DSS-46  none                26m decommissioned 2009
+!      DSS-49  geo solution        Is the Parkes 64m.  Find under "PARKES"
+!     Not in Wikipedia
+!      TIDBIN64 geo solution       DSS43.  Use this position.
+!      TDBIN_TS locations_DSN.dat  VSOP tracking station       
+
   STATION=DSS34   STCODE=Ti  CONTROL=VEX
     !  DSS34 - Australia 34m BWG antenna similar to DSS45
     !  Temporary azimuth slew limit temporarily low (June 2009 RCW -
@@ -1064,9 +1074,39 @@
      TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
      DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
+  STATION=DSS43   STCODE=Ti  CONTROL=VEX
+    !  Old SCHED name TID70 - Australia 70m.  
+    !  Change to use use TIDBIN64 from geodetic solutions, not old
+    !  DSS43 1998 position
+    DBNAME = TIDBIN64
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=230,759.8 AX2LIM=6,86
+    AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
+    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS45   STCODE=Ti  CONTROL=VEX
+    !  Old SCHED name TID34 (confusing with DSS34) - Australia 34m HEF  
+    DBNAME = DSS45
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
 !
-  STATION=ROB70    STCODE=Ro  CONTROL=VEX
-    !  DSS63 - Madrid 70m
+! Robledo:
+!     All antennas (wikipedia and SCHED files):
+!       Name    Positions used     Description
+!      DSS-54  locations_DSN.dat   34m BWG
+!      DSS-55  None                34m BWG
+!      DSS-63  locations_DSN.dat   Was 64m, now 70m.
+!      DSS-65  geo solution        34m HEF  Some name confusion.
+!      DSS-66  None                26m Moved in 1983, Shut down in 1985.
+!     Not in wikipedia:
+!      ROBLED_32 geo solution      One experiment.  Old dead antenna?
+!      ROBLED_TS locations_DSN.dat VSOP tracking station.
+
+  STATION=DSS63    STCODE=Ro  CONTROL=VEX
+    !  Madrid 70m  Old SCHED name ROB70
     DBNAME = DSS63
     !  Update from Esther Mol, 17 May 2005 via Cormac:
     !    Changes were addition of acceleration, change to 1 drive
@@ -1076,15 +1116,17 @@
     TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
-  STATION=ROB34    STCODE=Ro  CONTROL=VEX
-    !  DSS65 - Madrid 34m HEF
-    DBNAME = DSS65
+  STATION=DSS65    STCODE=Ro  CONTROL=VEX
+    !  Madrid 34m HEF.  Old SCHED name ROB34
+    DBNAME = DSS65A
     !  Note that this antenna was moved about 61 meters around 
     !  July 3, 2005.  At the new position, it is sometimes 
     !  called DSS64.  The up-to-date position in locations.dat is
-    !  the one called DSS65.
+    !  the one called DSS65A.  I modified this from DSS65 on Oct 10,
+    !  2011 based on the date ranges in the GSFC and RFC catalogs.
+
     !  Update from Esther Mol, 17 May 2005 via Cormac:
-    !    Change was change to 1 drive and new tsettle.
+    !    Change was to change to 1 drive and new tsettle.
     !    Note DSS-54 and DSS-55 are BWG 34m antennas at Madrid.
     !    Original version had AX1RATE=12.  Almost certainly wrong.
   MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=-88,358 AX2LIM=6,88
@@ -1092,12 +1134,9 @@
     TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    / 
-
-! ================================================
-! Moved from stations_JIVE.dat   2009 Oct 15
-! ================================================
-  STATION=ROB34BWG   STCODE=Ro  CONTROL=VEX
-    !  DSS54 - Madrid 34m BWG
+  STATION=DSS54   STCODE=Ro  CONTROL=VEX
+    ! Moved from stations_JIVE.dat   2009 Oct 15
+    !  Madrid 34m BWG  Old SCHED name ROB34BWG
     DBNAME = DSS54
     !  Update from Cristina Garcia, 16 Feb 2009 via Campbell:
     !    New antenna available for 7mm
@@ -1105,16 +1144,15 @@
     TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
    /
-
-
-
-
 !  
 !  =====================================================================
 !  The following entries in the SCHED stations catalog are stations that
 !  are members of the Australian Long Basline Array (LBA)
 !  These stations are maintained in file stations_ATNF.dat.
 !  =====================================================================
+!  Changed TID70_S2 to use DBNAME=TIDBIN64 for the position while trying
+!  to rationalize DSN names.  That seems to be the name in the more recent
+!  geodetic solutions.  Oct 2011 RCW.
 !
   STATION=ATCA       STCODE=At    CONTROL=VEX
 !   All info from Phil Edwards, e-mail 09NOV96
@@ -1179,7 +1217,7 @@
    / 
      STATION=TID70_S2 STCODE=Ti  CONTROL=VEX
     !  DSS43 - Australia 70m, S2 recorder
-    DBNAME = DSS43
+    DBNAME = TIDBIN64
     MOUNT=ALTAZ AX1RATE=12 AX2RATE=12 AX1LIM=230,760 AX2LIM=6,86
     TSETTLE=2  DAR=LBA DISK=LBADR  NDRIVES=1  NBBC=2
    /

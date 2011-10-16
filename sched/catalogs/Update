@@ -11,11 +11,15 @@ echo Delete the old catalogs.
 chmod u+w stations.dat
 chmod u+w freq.dat
 chmod u+w messages.txt
+chmod u+w locations.dat
 /bin/rm stations.dat
 /bin/rm freq.dat
 /bin/rm messages.txt
 /bin/rm -f blankline
 /bin/rm version
+/bin/rm locations.dat
+/bin/rm freq_RDBE.dat
+/bin/rm stations_RDBE.dat
 
 # Make a line to indicate the date the catalog was
 # assembled. 
@@ -41,6 +45,14 @@ cat Master_NRAO/stations_top.dat \
     Master_NRAO/stations_geodesy.dat \
        > stations.dat
 
+
+echo Make the new stations_RDBE_US.dat file.
+cat Master_NRAO/stations_RDBE_top.dat \
+    version \
+    Master_NRAO/stations_RDBE_US.dat \
+       > stations_RDBE.dat
+
+
 echo Make the new freq.dat file.
 cat Master_NRAO/freq_top.dat \
     version \
@@ -56,7 +68,35 @@ cat Master_NRAO/freq_top.dat \
     Master_NRAO/freq_geodesy.dat \
        > freq.dat
 
-cat freq.dat Master_NRAO/freq_EB_RDBE.dat > freq_RDBE.dat
+echo Make the new freq_RDBE.dat file.
+echo This needs to be made global.
+cat Master_NRAO/freq_RDBE_top.dat \
+    version \
+    Master_NRAO/freq_RDBE_VLBA.dat \
+    Master_NRAO/freq_RDBE_GB.dat \
+    Master_NRAO/freq_RDBE_EB.dat \
+       > freq_RDBE.dat
+
+
+echo Make the new locations.dat file.
+echo   \*\*\*\*  Be sure you edit Update to get the intended locations input files.
+cat Master_NRAO/locations.top \
+    version \
+    Master_NRAO/locations.dat.gsfc2011a \
+    Master_NRAO/locations_DSN.dat \
+    Master_NRAO/locations_extras.dat \
+       > locations.dat
+
+#  Later it should look like below and should be
+#  updated when there are catalog updates.
+#  Or a symlink should be made to the desired specific catalog.
+#  I might end up needing Petrov and GSFC versions like the sources.
+
+# cat Master_NRAO/locations_top \
+#     version \
+#     Master_NRAO/locations.dat.gsfc2011a \
+#     Master_NRAO/locations_extras.dat \
+#        > locations.dat
 
 echo "   " > blankline
 echo Make the new messages.txt file.
@@ -67,11 +107,10 @@ cat Master_NRAO/messages_NRAO.txt \
        > messages.txt
 echo ++end >> messages.txt
 
-cp Master_NRAO/stations_RDBE_US.dat .
-
 echo 
 echo Prohibit write on the new catalogs.
 chmod u-w stations.dat
 chmod u-w freq.dat
 chmod u-w messages.txt
+chmod u-w locations.dat
 /bin/rm blankline

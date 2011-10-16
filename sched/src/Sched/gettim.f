@@ -1,4 +1,5 @@
-      SUBROUTINE GETTIM( ISCN, VALUE, KC, KI, START, STOP, DAY, YEAR )
+      SUBROUTINE GETTIM( ISCN, VALUE, KC, KI, START, STOP, DAY, YEAR,
+     1                   MJD1 )
 C
 C     Routine for SCHED called by SCHIN to extract time information
 C     from the input for each scan.
@@ -11,13 +12,17 @@ C     SATTIM will be called later by TIMES (called by SCHIN) to set
 C     the STARTJ etc based on the START, STOP, DAY, and YEAR 
 C     parameters read here.
 C
+C     MJD1 is the MJD of the first scan and is used for selection
+C     of locations file entries when there is episodic motion.
+C     It might be off by a day, but that shouldn't matter.
+C
       INCLUDE 'sched.inc'
 C
       INTEGER           ISCN, KI(*), MONTH, DOY, YR, JERR
       INTEGER           I1, I2, KEYPTR, TNOWAIT
-      INTEGER           YEAR(*), DAY(*)
-      DOUBLE PRECISION  STOP(*), START(*)
-      DOUBLE PRECISION  VALUE(*), TDWELL, TDUR, TMINDW
+      INTEGER           YEAR(*), DAY(*), MYEAR, MDAY
+      DOUBLE PRECISION  STOP(*), START(*), MUT
+      DOUBLE PRECISION  VALUE(*), TDWELL, TDUR, TMINDW, MJD1
       CHARACTER         KC(*)*(*)
 C -------------------------------------------------------------------
 C     Month defaults to 1 for day = day of year.
@@ -44,6 +49,37 @@ C
       IF( VALUE(I2) .EQ. UNSET )  STOP(ISCN)  = UNSET
       PRESCAN(ISCN) = VALUE( KEYPTR( 'PRESCAN', KC, KI ) ) / 86400.D0
       GAP(ISCN) = VALUE( KEYPTR( 'GAP', KC, KI ) ) / 86400.D0
+C
+C     Get MJD1 based just on the day.  There are lots of ways to 
+C     specify the sub-day timing and that will only be straightened
+C     out later.  We need MJD1 now because the stations catalog is
+C     about to be read.  Being off by a day is no big deal as 
+C     typically observations at the time of the shift are unlikely, or
+C     you don't want to buck them out.
+C
+      IF( ISCN .EQ. 1 ) THEN
+         IF( DAY(ISCN) .GT. 366 ) THEN
+C
+C           Deal with a date specified as an LST day.  This is
+C           approximate because we will not be using actual start
+C           times and we don't know a longitude.  Assume 0 for
+C           unknown information.
+C
+            CALL LST2UT( 0.D0, DAY(ISCN), 0.D0, MYEAR, MDAY, MUT )
+            CALL SLA_CLDJ( MYEAR, 1, MDAY, MJD1, JERR )
+            IF( JERR .NE. 0 .AND. JERR .NE. 3 ) 
+     1          CALL ERRLOG( 'GETTIM: Problem converting day to MJD' )
+C            
+         ELSE
+C
+C           Deal with a traditional day/year.
+C
+            CALL SLA_CLDJ( YEAR(ISCN), 1, DAY(ISCN), MJD1, JERR )
+            IF( JERR .NE. 0 .AND. JERR .NE. 3 ) 
+     1         CALL ERRLOG( 'GETTIM: Problem getting MJD' //
+     2             ' of first scan before station catalog read.' )
+         END IF
+      END IF
 C
 C     Process the duration/dwell request.  Here the input has been
 C     reset before the scan so that we can detect any changes.

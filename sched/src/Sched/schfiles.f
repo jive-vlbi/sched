@@ -87,7 +87,7 @@ C
          IF( DEBUG ) CALL WLOG( 0,'SCHFILES: Imbedded station catalog.')
          IF( GOTONE ) CALL ERRLOG( 'SCHFILES: Cannot do 2 in-stream'//
      1           ' files at the same time. ' )
-         CALL STREAD( INSCH, .FALSE. )
+         CALL STREAD( INSCH, .FALSE., 0.D0 )
          VALUE(I1) = UNSET
          DOINIT = .FALSE.
          GOTONE = .TRUE.

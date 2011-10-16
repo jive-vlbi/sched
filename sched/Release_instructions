@@ -1,19 +1,13 @@
- NOT DONE
-
-Put in copy of egcentsrcs.dat to the public html site and the
-other sched documentation sites.  This is not set up at all yet.
-
-
-
 Instructions for making a release of SCHED
+
 
 ==================  Before a release:  ===========================
 
     Get the latest versions of the Vex and plot code from 
-    Antonios and Franco (and maybe Cormac)
+    JIVE and Franco.
 
     Make sure VERSION and VERNUM in versched.f are up to date.
-    Make sure the version on the manual first page are current.
+    Make sure the version on the manual first page is current.
 
     Make sure sched_work is synced with the svn repository.  This
     should include the results of updating the manual
@@ -38,23 +32,50 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
     Go to the base directory for the release (trunk or branch)
 
     Compile and link SCHED for each target architecture.
-    Run source ./Verify after each compile to make sure it works.
-    Architectures are (with local usable machines):
-      LINUX     32 bit Intel linux machine without satellite tracking. (dave)
-      LINUX64   64 bit Intel linux machine without satellite tracking. (noatak)
-      LINUX64GFORTRAN  Like LINUX64 but compiled with gfortran. (noatak)
-      LINUX64SPICE  Like LINUX64 but with satellite tracking (noatak)
-      OSXPPC    PowerPC Mac. (horton - no longer supported)
-      OSX_INTEL Intel Mac (stikine or lodore)
-      SUN       Sun Solaris machine  (shire)
+    Run "source ./Verify" in the examples directory after each compile 
+    to make sure it works.  The compilations are without satellite 
+    tracking unless otherwise noted.  Architectures are (with local 
+    usable machines):
+
+      LINUX            32 bit Intel linux machine compiled with g77 (dave).
+      LINUX64GFORTRAN  64 bit Intel linux compiled with gfortran (noatak).
+      LINUX64SPICE     64 bit Intel linux compiled with g77 with
+                       satellite tracking (noatak).
+      OSX_INTEL        Intel Mac compiled with gfortran (stikine or lodore).
+      SUN              Sun Solaris compiled with f77 (shire).
             Note some Sun's have too little memory for the default
             parameter settings.
 
-    Go to sched_work/src while logged into a machine of the right type.
-      Invoke the appropriate configure file  eg configureLinux
-      make clean   (gmake clean on the Sun)
-      make         (gmake on the Sun)
-      Move the binary to the right subdirectory in bin.
+    One could also do the following, but I don't propose to keep 
+    supporting them:
+      LINUX64   64 bit Intel linux machine compiled with g77 without 
+                satellite tracking. (noatak)
+      OSXPPC    PowerPC Mac. (horton - no longer supported)
+
+
+    To compile on a given machine, login to that machine.
+    1.  Make sure $SCHED is set properly.  You can use the normal 
+        development directory.  Just be sure to revert to the 
+        default compilation when finished.  
+    2.  Use the appropriate configure file to make a makefile (
+        (eg configureLinuxSpice64). Someday, get a proper 
+        configure script.
+    3.  Clean out previous efforts, then compile and link using make.
+    4.  Copy the binary to the right subdirectory in bin.
+    5.  Test the examples.
+
+cd $SCHED/src
+configureLinuxSpice64
+make clean   (gmake clean on the Sun)
+make         (gmake on the Sun)
+cp ../bin/sched ../bin/LINUX64SPICE/
+cd ../examples
+source ./Verify
+less testruns.out
+
+    In the final step, look for unexpected differences.  Run times
+    will be different, and often there will be last-digit differences
+    due to different rounding schemes.
       
 =================  Setup files and catalogs  ======================
 
@@ -99,17 +120,11 @@ schclean "*"
 
 =================  Manual  =========================================
 
-    Update the examples embedded in the manual.  You can use the 
-    following lines as a script.
-    inserttex is in $SCHED/RELATED_CODE/INSERTTEX if it is not in path.
+    The examples in the manual are grabbed from ../examples starting
+    from where latex is being run.  So this should be done in 
+    $SCHED/doc, the normal place in a distribution.  The inserttex
+    scheme used in the past has been replace with verbatiminput.
 
-cd $SCHED/doc
-/bin/rm sched.tex.tmp
-mv sched.tex sched.tex.tmp
-inserttex 
-sched.tex.tmp
-sched.tex
- 
     Process the manual.  latex will probably need to be run up to
     3 times to get all the links right.
     The local icons switch keeps users from having to go to
@@ -118,6 +133,7 @@ sched.tex
     go at each level.  Without it, the contents on the top level
     page are long enough to frighten off users.
 
+cd $SCHED/doc
 latex sched.tex
 latex2html -local_icons -link 2 sched.tex
 
@@ -131,7 +147,8 @@ latex2html -local_icons -link 2 sched.tex
 tar cf - ../catalogs/sources.vlba  ../catalogs/freq.dat \
          ../catalogs/stations.dat  ../catalogs/locations.dat \
          ../catalogs/peak.cmd      ../catalogs/linefreqs.dat \
-         ../examples/*.key         ../examples/*.com     ../examples/*.set \
+         ../examples/*.key         ../examples/*.com \
+         ../examples/*.set         ../examples/egcentsrc.dat \
             | (cd sched; tar xfp -)
 chmod  u+w sched/catalogs/*
 
@@ -144,11 +161,6 @@ chmod  u+w sched/catalogs/*
     only showed up on a Sun.
 
 =================  Make the release version =======================
-
-  I'm no longer convinced making a tagged version is that good an idea.
-  But Des Small has found he wants them, so I should try for a while.
-  Perhaps just treat them as a marker for the release.
-  If making a tagged version, see instructions at end of this file.
 
   Make a directory for the new version.
 
@@ -175,7 +187,9 @@ rsync -auv --delete --exclude ".svn" $SCHED/bin  $SCHEDNEW
 rsync -auv --delete --exclude ".svn" $SCHED/examples/Stdout $SCHEDNEW/examples
 rsync -auv --delete --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
 
-For copying to another machine, like lodore - from lodore:
+#  For copying to another machine, like lodore - from lodore:
+#  This example is there because I haven't gotten latex2html working
+#  on Lodore and want a local manual.
 
 cd $SCHED/doc/sched
 rsync -auv --delete --exclude ".svn" \
@@ -189,8 +203,11 @@ noatak.aoc.nrao.edu:/users/cwalker/files/sched_work/doc/sched/\* .
 #  Otherwise the file will twice as big as needed.
 
 #  Note the excludes include the lib directory which has the NAIF software.
-#  Without that, the satellite version cannot be linked.
-#  Also the RELATED_CODE directory is excluded.
+#  Without that, the satellite version cannot be linked.  Without that,
+#  anyone wanting to do satellite tracking will need the AOC version or
+#  a special export.
+#  Also the RELATED_CODE directory is excluded as users shouldn't need it.
+#  But the PGPLOT directory is included because users may well want it.
 
 cd $SCHED/examples
 schclean "*"
@@ -203,8 +220,8 @@ tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
 gzip $TARDIR/sched_$NEWVER.tar
 
 ==================  Put files on the ftp site  =======================
-# Remove the sched executable in the bare bin area, leaving only those
-# in the machine subdirectories.
+#  Remove the sched executable in the bare bin area, leaving only those
+#  in the machine subdirectories.
 
 mkdir $FTP/sched/sched_$NEWVER
 mkdir $FTP/sched/sched_$NEWVER/binaries
@@ -216,7 +233,8 @@ rsync -auv bin/*  $FTP/sched/sched_$NEWVER/binaries
 =================  Test the release  ==============================
 
     This will not use the spice stuff so it will not be the internal release.
-    Clean out sched_temp first if needed.    Unpack the source distribution into /users/cwalker/sched_temp and
+    Clean out sched_temp first if needed.    
+    Unpack the source distribution into /users/cwalker/sched_temp and
     test the compilation without the satellite stuff
     Use the makefile that does not use the spice package (run configureLinux)
     Check testruns.out at the end.
@@ -236,8 +254,7 @@ cd ../examples
 Verify
 
 
-     Kill the window to dump the unwanted $SCHED etc.
-     or at least:
+     Kill the window to dump the unwanted $SCHED etc. or at least:
 setenv SCHED /users/cwalker/files/sched_work
 
 ==================  Put the documentation on the web  =============
@@ -292,69 +309,69 @@ software web page.
 #  I think that is all.  It's still too much.
 
 
-==================  SVN branch and other SVN info  ======================
-OPTIONAL
 
-If this is the first of a series, it could also be useful to make
-a branch for modified versions of that series, separate from the 
-new development stuff (I'm souring on this - too much work (Feb 18, 2009).
+==================  If a tagged version is wanted ===================
+
+    There is demand for tagging the releases, so here are the instructions.
+    This basically marks a revision as the tag (release).
+    To do so from trunk ( There is a slight variation for a branch origen):
 
 svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
-         https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-8.0 \
-         -m "Tagging the 8.0 release of SCHED"
+         https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER \
+         -m "Tagging SCHED $NEWVER for maintenance"
+
+    To backfit a tag to other than the latest version:
+
+svn copy -r 276 https://svn.aoc.nrao.edu/repos/sched/trunk/sched \
+         https://svn.aoc.nrao.edu/repos/sched/tags/sched_9.3 \
+         -m "Tagging release 9.3 of sched."
 
 
-SVN:  In order to ignore some files in svn status etc.
-Note the "." on the end of the second one.  And ignore.txt is needed.
+==================  SVN branch and other SVN info  ======================
+
+OPTIONAL (I normally don't do this)
+
+Under some circumstances, it might be useful to have a full copy of a
+release that is maintained with svn.  This involves making a branch
+or tag (I think they are equivalent), and then checking it out to 
+a new directory.  Then to be really useful, the items not maintained
+in svn should be copied in.  I tried this with my first post-svn 
+release in 2009, but found it too much work to maintain, so abandoned the
+practice.  But the instructions are here in case.  They have been
+edited since they were last tried, so watch for gotchas.
+
+Make the branch - just a different directory than the tag.
+
+svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
+         https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-$NEWVER \
+         -m "Branching the 8.0 release of SCHED"
+
+
+setenv SCHEDBASE ~/files/sched_branch$NEWVER
+mkdir $SCHEDBASE
+cd $SCHEDBASE
+svn checkout https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-$NEWVER/ .
+
+#  Don't drop the period at the end of the last command (= current directory)
+
+#  Copy over the examples/Stdout files, the execute modules, and the html.
+#  The exclusion of .svn files shouldn't be needed, but just in case...
+
+cd $SCHEDNEW
+rsync -auv --exclude ".svn" bin  $SCHEDBASE
+rsync -auv --exclude ".svn" examples/Stdout $SCHEDBASE/examples
+rsync -auv --exclude ".svn" doc/sched $SCHEDBASE/doc
+
+
+================   SVN HINTS: ================================
+
+   In order to ignore some files in svn status etc.
+   Note the "." on the end of the second one.  
+   ignore.txt is needed for the second form.
+
 cd examples
 svn propset svn:ignore "*" Stdout
 svn propset svn:ignore -F ignore.txt .
 cd ../doc
 svn propset svn:ignore "*" sched
 
-
-==================  If a tagged version is wanted ===================
-
-I'm no longer convinced I want to do this, so stash the instructions here.
-
-    Make a tagged version.
-    To do so from trunk ( There is a slight variation for a branch origen)
-
-svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
-         https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER \
-         -m "Tagging SCHED $NEWVER for maintenance"
-
-setenv SCHEDBASE ~/files/sched_branch8
-cd $SCHEDNEW
-svn checkout https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER/ .
-
-#  Copy over the examples/Stdout files and the execute modules.
-
-cd $SCHEDBASE
-rsync -auv --exclude ".svn" bin  $SCHEDNEW
-rsync -auv --exclude ".svn" examples/Stdout $SCHEDNEW/examples
-rsync -auv --exclude ".svn" doc/sched $SCHEDNEW/doc
-
-
-#  Des Small does want tagged versions.  But I think mainly he
-#  wants to have a way to find the version that was the release.
-#  I think my problem related to having to maintain the tagged
-#  version separately when fixes were needed.  I'd rather come off
-#  the main version.  But perhaps I can still do it that way.
-
-#  Below taken from Des Small's email when he set 9.3 and 9.4
-#  It shows how to backfit a tag.
-svn copy -r 276 https://svn.aoc.nrao.edu/repos/sched/trunk/sched \
-https://svn.aoc.nrao.edu/repos/sched/tags/sched_9.3 \
--m "Tagging release 9.3 of sched."
-
-svn copy -r 347 https://svn.aoc.nrao.edu/repos/sched/trunk/sched \
-https://svn.aoc.nrao.edu/repos/sched/tags/sched_10.0 \
--m "Tagging release 10.0 of sched."
-
-
-
-I pasted the sched 9.3 version of the above into a window by accident
-and made revision 348 which tags version 276 as release 9.3.  That
-was probably correct, but had already been done.  I don't think it
-had any effect.

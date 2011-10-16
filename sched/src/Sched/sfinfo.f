@@ -65,15 +65,26 @@ C        Find a "complete" group and establish the "logical" channels.
 C        Want a group with the to the maximum number of channels and,
 C        if any groups have it, with dual polarization.  Bias toward 
 C        saving the first group of each file by going backwards.
+C        Buck out any correlator inversions that might be expected
+C        (currently only set in CHKRDBE).
 C
          DO KS = NSET, 1, -1
             ISETF = ISETNUM(KS)
             IF( NCHAN(KS) .EQ. MSCHN(ISETF) .AND. 
      1          ( SGDUAL(KS) .EQV. SFDUAL(ISETF) ) ) THEN
                DO ICHN = 1, NCHAN(KS)
-                  SFFREQ(ICHN,ISETF) = FREQREF(ICHN,KS)
+                  SFFREQ(ICHN,ISETF) = FREQREF(ICHN,KS) + 
+     1                                 CORINV(ICHN,KS)
                   SFPOL(ICHN,ISETF) = POL(ICHN,KS)
-                  SFSIDE(ICHN,ISETF) = NETSIDE(ICHN,KS)
+                  IF( CORINV(ICHN,KS) .NE. 0.D0 ) THEN
+                     IF( NETSIDE(ICHN,KS) .EQ. 'L' ) THEN
+                        SFSIDE(ICHN,ISETF) = 'U'
+                     ELSE
+                        SFSIDE(ICHN,ISETF) = 'L'
+                     END IF
+                  ELSE
+                     SFSIDE(ICHN,ISETF) = NETSIDE(ICHN,KS)
+                  END IF
                END DO
             END IF
          END DO
@@ -83,10 +94,20 @@ C        If any group has a channel that does not correspond to a
 C        logical channel, set OKXC(ISETF) to .FALSE..  This will 
 C        block a number of tests and features later.
 C
-C        SFCHAN is the pointer to the setup file logical channel for
-C        each setup group channel for this setup group.
-C        SGCHAN is the pointer to the setup group channel for each
-C        setup file logical channel.
+C        The following pointers are associated with each setup group.
+C        SFCHAN.  For each channel in this setup group, this points to
+C        the logical channel of the setup file.
+C        SGCHAN.  For this setup group, this points to the channel
+C        in the setup group associated with indexed setup file logical
+C        channel.
+C
+C        Again, deal with correlator inversions flagged by CORINV.
+C        Assume that NETSIDE and SFSIDE will be either 'L' or 'U' 
+C        and nothing else so you can check for opposite sidebands
+C        by just checking that they are not equal.  CORINV is the
+C        amount that got added to FREQREF to get the LO setting.
+C        For comparison with channels that will get correlated against
+C        this one, subtract CORINV.
 C
          DO KS = 1, NSET
             ISETF = ISETNUM(KS)
@@ -98,14 +119,19 @@ C
 C
             DO ICHN = 1, NCHAN(KS)
                DO KCHN = 1, MSCHN(ISETF)
-                  IF( ABS( FREQREF(ICHN,KS) - SFFREQ(KCHN,ISETF) ) .LT.
-     1                 0.05D0 * BBFILT(ICHN,KS) .AND.
-     2                POL(ICHN,KS) .EQ. SFPOL(KCHN,ISETF) .AND.
-     3                NETSIDE(ICHN,KS) .EQ. SFSIDE(KCHN,ISETF) ) THEN
+                  IF( ABS( FREQREF(ICHN,KS) - CORINV(ICHN,KS) - 
+     1              SFFREQ(KCHN,ISETF) ) .LT. 0.05D0 * BBFILT(ICHN,KS) 
+     2                .AND. POL(ICHN,KS) .EQ. SFPOL(KCHN,ISETF) ) THEN
+                     IF(  ( CORINV(ICHN,KS) .EQ. 0.D0 .AND. 
+     1                 NETSIDE(ICHN,KS) .EQ. SFSIDE(KCHN,ISETF) ) .OR.
+     2                 ( CORINV(ICHN,KS) .NE. 0.D0 .AND. 
+     3                 (NETSIDE(ICHN,KS) .NE. SFSIDE(KCHN,ISETF) ) ) )
+     4                    THEN
 C
-                     SFCHAN(ICHN,KS) = KCHN
-                     SGCHAN(KCHN,KS) = ICHN
+                        SFCHAN(ICHN,KS) = KCHN
+                        SGCHAN(KCHN,KS) = ICHN
 C   
+                     END IF
                   END IF
                END DO
             END DO         
@@ -119,6 +145,7 @@ C
             ISETF = ISETNUM(KS)
             DO ICHN = 1, NCHAN(KS)
                IF( SFCHAN(ICHN,KS) .EQ. 0 ) THEN
+         write(*,*) 'sfinfo set okxc F ', ks, isetf, ichn
                   OKXC(ISETF) = .FALSE.
                END IF
                IF( ICHN .GE. 2 ) THEN
@@ -136,31 +163,39 @@ C        Warn the user if there are missmatched channels.
 C
          DO ISETF = 1, NSETF
             IF( .NOT. OKXC(ISETF) ) THEN
+       write(*,*) 'sfinfo not okxc ', isetf
                CALL WLOG( 1, 
      1             'SFINFO:  **** WARNING ****' )
-               CALL WLOG( 1, '    The setup file:' )
-               CALL WLOG( 1, '    ' //
-     1              SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))) )
-               CALL WLOG( 1, '    has unmatched channels at '//
-     1              'different stations.' )
-               CALL WLOG( 1, '    Is this intentional?' )
-               CALL WLOG( 1, '    Some checks will be disabled.' )
-               CALL WLOG( 1, '    DOPPLER, FREQ, and BW will be '//
-     1               'disabled for this setup.' )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, A, A )' )
+     1            '    The setup file:',
+     2            SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))),
+     3            '  has unmatched channels at different stations.'
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, A )' ) 
+     1           '    Is this intentional?', 
+     2           ' Some checks will be disabled.'
+               CALL WLOG( 1, '    DOPPLER, FREQ, and BW scan '//
+     1               'inputs will be disabled for this setup.' )
             END IF
 C
             IF( DUP(ISETF) ) THEN
                CALL WLOG( 1, 
      1               'SFINFO:  **** WARNING ****' )
-               CALL WLOG( 1, '    The setup file:' )
-               CALL WLOG( 1, '    ' //
-     1              SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))) )
-               CALL WLOG( 1, '    has duplicate channels.  ' //
-     1                      '  Is this intentional?' )
-               CALL WLOG( 1, '    This messes up SCHED internal ' //
-     1               'bookkeeping.  As a result,' )
-               CALL WLOG( 1, '    DOPPLER, FREQ, and BW will be '//
-     1               'disabled for scans using this setup.' )
+               WRITE( MSGTXT, '( A, A, A )' )
+     1            '    The setup file:',
+     2            SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))),
+     3            '  has duplicate channels.'
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, A )' ) 
+     1             '  Is this intentional?  ', 
+     2             'This messes up SCHED internal bookkeeping'
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               CALL WLOG( 1, '    As a result, DOPPLER, FREQ, and BW '//
+     2              'will be disabled for scans using this setup.' )
 C
 C              Flag the bookkeeping as bad for later.
 C

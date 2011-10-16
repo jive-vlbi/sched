@@ -139,6 +139,7 @@ C
          FIFMAX(I,TO)  = FIFMAX(I,FROM)
          BBSYN(I,TO)   = BBSYN(I,FROM)        
          BBSYN2(I,TO)  = BBSYN2(I,FROM)       
+         CORINV(I,TO)  = CORINV(I,FROM)
          BBFILT(I,TO)  = BBFILT(I,FROM)       
          BITS(I,TO)    = BITS(I,FROM)         
          BBC(I,TO)     = BBC(I,FROM)          

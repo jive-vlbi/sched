@@ -22,6 +22,7 @@ C
       INTEGER           KI(MFRQV)
       CHARACTER         KC(MFRQV)*8, KCHAR*256
       DOUBLE PRECISION  KD(2*MFRQV), ENDMARK
+c      double precision tf1, tf2, tl1
       SAVE              GOTKEYS, KI, KC, KD, ENDMARK, BLANK, ZZZZ
 C
       DATA          (KI(I),I=1,3)   / MFRQV, 0, 3 /
@@ -181,6 +182,28 @@ C
             FLO1(IIF,NFREQ) = KD(I3+IIF)
             FCH1RF1(IIF,NFREQ) = KD(I4+IIF)
             FCH1RF2(IIF,NFREQ) = KD(I5+IIF)
+c
+c           Temporary sanity check for the RDBE freq_RDBE.dat.
+c
+c            tf1 = frf1(iif,nfreq)
+c            tf2 = frf2(iif,nfreq)
+c            tl1 = flo1(iif,nfreq)
+c            if( tf1 .gt. tl1 .and. tf2 .gt. tl1 ) then
+c               if( abs( tf1 - ( tl1 + 512.d0 ) ) .gt. 0.01 .or.
+c     1             abs( tf2 - ( tl1 + 1024.d0 ) ) .gt. 0.01 ) then
+c                  write(*,'(A,2I6,3F8.1)') 'getfreq freqs right?',
+c     1                  iif, nfreq, tf1, tf2, tl1
+c               end if
+c            else if( tf1 .lt. tl1 .and. tf2 .lt. tl1 ) then
+c               if( abs( tf1 - ( tl1 - 1024.d0 ) ) .gt. 0.01 .or.
+c     1             abs( tf2 - ( tl1 - 512.d0 ) ) .gt. 0.01 ) then
+c                  write(*,'(A,2I6,3F8.1)') 'getfreq freqs right?',
+c     1                  iif, nfreq, tf1, tf2, tl1
+c               end if
+c            else
+c               write(*,'(A,2I6,3F8.1)') 'getfreq goofy?',
+c     1         iif, nfreq, tf1, tf2, tl1
+c            end if
          END DO
 C
 C        Verious obvious parameters.

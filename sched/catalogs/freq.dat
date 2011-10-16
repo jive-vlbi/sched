@@ -99,7 +99,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2011Sep18-14:05:26"
+ VERSION = "2011Oct13-13:09:29"
 
 !  
 !  =====================================================================
@@ -3333,10 +3333,26 @@ Name = gbt2cm_d2  Station = GBT_VLBA, GBT_COLD priority = 0
 !-------------------------------------------------------------------------
 !  Only give a couple near the water line version for now,
 !  matching a couple of VLBA sets.  Many more could be added.
+!  These match available VLBA bands, but with the wrong sideband.
+!  The LOs will need to be shifted up by 36 MHz for a match with
+!  the RDBE/PFBs with sideband inversion at the correlator.
 !-------------------------------------------------------------------------
 ! GBT with new 7-beam 18-26 GHz receiver (KFPA)
 !  for VLBI, we use just beam 1.   From email by Frank Ghigo Aug 15, 2011.
 !-------------------------------------------------------------------------
+
+Name = gbt1cm_a1  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 21300, 21300    ifname = B,    D
+  rf2 = 21800, 21800    fe  = '1cm', '1cm'
+  pol =  RCP,  LCP    lo1 = 22300.0, 22300.0
+  note = 'LO1=28.35, LO2=16.55, LO3=10.5 '
+/
+Name = gbt1cm_a2  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 21500, 21500    ifname = B,    D
+  rf2 = 22000, 22000    fe  = '1cm', '1cm'
+  pol =  RCP,  LCP    lo1 = 22500.0, 22500.0
+  note = 'LO1=28.55, LO2=16.55, LO3=10.5 '
+/
 Name = gbt1cm_a3  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 21800, 21800    ifname = B,    D
   rf2 = 22300, 22300    fe  = '1cm', '1cm'
@@ -5829,7 +5845,6 @@ Name = no1cm  Station = NOBEYAMA   priority = 5
    note = 'RF-256 MHz'
   ! K Fujisawa (05/Feb/2009)
 /
-!  
 !  =====================================================================
 !  The following entries in the SCHED frequency catalog are for the
 !  DSN antennas.
@@ -5841,7 +5856,13 @@ Name = no1cm  Station = NOBEYAMA   priority = 5
 !  from Chuck Naudet of JPL.
 ! Removed S2 July 22, 2010  RCW.
 !
-Name = go18cm  Station = GOLD70   priority = 5
+! Changed to DSS names  Oct 10, 2011.  RCW.
+!    GOLD70 and GOLDMARS -> DSS14  Took out one entry like the last
+!        but with a RF range that seemed too wide.
+!    TID70 -> DSS43
+!    ROB70 -> DSS63
+!
+Name = go18cm  Station = DSS14   priority = 5
   rf1 =  1608, 1608    ifname =   '2N', '1N'    fe = '18cm', '18cm'
   rf2 =  1708, 1708    altifn =   '1A', '2A' 
   pol =   RCP,  LCP    lo1    =  1380.0, 1380.0
@@ -5850,7 +5871,7 @@ Name = go18cm  Station = GOLD70   priority = 5
   ! rf and LO from Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = go13cm  Station = GOLD70   priority = 5
+Name = go13cm  Station = DSS14   priority = 5
   rf1 =  2265, 2265    ifname =   '2N', '1N'    fe = '13cm', '13cm'
   rf2 =  2305, 2305    altifn =   '1A', '2A' 
   pol =   RCP,  LCP    lo1    =  2000.0, 2000.0
@@ -5859,7 +5880,7 @@ Name = go13cm  Station = GOLD70   priority = 5
   ! rf and LO from Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = go4cm  Station = GOLD70   priority = 5
+Name = go4cm  Station = DSS14   priority = 5
   rf1 = 8400, 8400     ifname =    '2N', '1N'    fe  = '4cm',  '4cm'
   rf2 = 8500, 8500     altifn =    '1A', '2A'
   pol =   RCP,  LCP    lo1    = 8100.00,8100.00
@@ -5867,15 +5888,7 @@ Name = go4cm  Station = GOLD70   priority = 5
   ! confirmed by Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = go1cm  Station = GOLD70   priority = 5
-  rf1 = 18000,18000    ifname =    '2N', '1N'    fe = '1cm',  '1cm'
-  rf2 = 26000,26000    altifn =    '1A', '2A' 
-  pol =   RCP,  LCP    lo1    = 21914.0,21914.0
-  note = 'LO from Altunin 01Nov96, must be Low patch (well they can do anything)'
-  ! Range assuming low patch, but there is a problem with filters
-/
-
-Name = go1cm  Station = GOLDMARS   priority = 5
+Name = go1cm  Station = DSS14   priority = 5
   rf1 = 22140,22140    ifname =    '2N', '1N'    fe  = '1cm',  '1cm'
   rf2 = 22410,22410    altifn =    '1A', '2A'
   pol =   RCP,  LCP    lo1    = 21914.0,21914.0
@@ -5883,7 +5896,7 @@ Name = go1cm  Station = GOLDMARS   priority = 5
   ! Range assuming low patch, but there is a problem with filters
 /
 
-Name = ti18cm  Station = TID70   priority = 5
+Name = ti18cm  Station = DSS43   priority = 5
   rf1 = 1608, 1608      ifname = '2N',  '1N'  fe = '18cm', '18cm'
   rf2 = 1708, 1708      altifn = '1A',  '2A'
   pol =  RCP,  LCP      lo1 = 1380.00, 1380.00
@@ -5893,7 +5906,7 @@ Name = ti18cm  Station = TID70   priority = 5
   ! rf and lo from Naudet, 20 Nov 1997 (jsu)
 /
 
-Name = ti13cm  Station = TID70   priority = 5
+Name = ti13cm  Station = DSS43   priority = 5
   rf1 = 2265, 2265    ifname = '2N',  '1N'  fe = '13cm', '13cm'
   rf2 = 2305, 2305    altifn = '1A',  '2A'
   pol =  RCP,  LCP    lo1 = 2000.00, 2000.00
@@ -5904,7 +5917,7 @@ Name = ti13cm  Station = TID70   priority = 5
   ! rf and LO confirmed by Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = ti4cm  Station = TID70, DSS34   priority = 5
+Name = ti4cm  Station = DSS43, DSS34   priority = 5
   rf1 = 8200, 8200    ifname = '2N',  '1N'  fe = '4cm', '4cm'
   rf2 = 8600, 8600    altifn = '1A',  '2A'
   pol =  RCP,  LCP    lo1 = 8100.00, 8100.00
@@ -5917,7 +5930,7 @@ Name = ti4cm  Station = TID70, DSS34   priority = 5
 !     Need to confirm LO.
 /
 
-Name = ti1cm  Station = TID70   priority = 5
+Name = ti1cm  Station = DSS43   priority = 5
   rf1 = 18000, 18000    ifname = '2N',  '1N'  fe = '1cm', '1cm'
   rf2 = 26000, 26000    altifn = '1A',  '2A'
   pol =  RCP,  LCP      lo1 = 21914.00, 21914.00
@@ -5925,7 +5938,7 @@ Name = ti1cm  Station = TID70   priority = 5
   ! especially no idea on rf* and if names, uses ?? DAR
 /
 
-Name = ro18cm  Station = ROB70   priority = 5
+Name = ro18cm  Station = DSS63   priority = 5
   rf1 = 1608, 1608      ifname = '2N',  '1N'  fe = '18cm', '18cm'
   rf2 = 1708, 1708      altifn = '1A',  '2A'
   pol =  RCP,  LCP      lo1 = 1380.00, 1380.00
@@ -5935,7 +5948,7 @@ Name = ro18cm  Station = ROB70   priority = 5
   ! rf and LO confirmed by Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = ro13cm  Station = ROB70   priority = 5
+Name = ro13cm  Station = DSS63   priority = 5
   rf1 = 2265, 2265    ifname = '2N',  '1N'  fe = '13cm', '13cm'
   rf2 = 2305, 2305    altifn = '1A',  '2A'
   pol =  RCP,  LCP    lo1 = 2000.00, 2000.00
@@ -5946,7 +5959,7 @@ Name = ro13cm  Station = ROB70   priority = 5
   ! rf and LO confirmed by Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = ro4cm  Station = ROB70   priority = 5
+Name = ro4cm  Station = DSS63   priority = 5
   rf1 = 8400, 8400    ifname = '2N',  '1N'  fe = '4cm', '4cm'
   rf2 = 8500, 8500    altifn = '1A',  '2A'
   pol =  RCP,  LCP    lo1 = 8100.00, 8100.00
@@ -5957,7 +5970,7 @@ Name = ro4cm  Station = ROB70   priority = 5
   ! rf and LO confirmed by Chuck Naudet, 20 Nov. 1997 (jsu)
 /
 
-Name = ro1cm  Station = ROB70   priority = 5
+Name = ro1cm  Station = DSS63   priority = 5
   rf1 = 18000, 18000    ifname = '2N',  '1N'  fe = '1cm', '1cm'
   rf2 = 26000, 26000    altifn = '1A',  '2A'
   pol =  RCP,  LCP      lo1 = 21914.00, 21914.00

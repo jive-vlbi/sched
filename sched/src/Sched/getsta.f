@@ -1,4 +1,4 @@
-      SUBROUTINE GETSTA( ISCN, VALUE, KC, KI, GOTVEX )
+      SUBROUTINE GETSTA( ISCN, VALUE, KC, KI, GOTVEX, MJD1 )
 C
 C     Subroutine for SCHED, called by SCHIN, that deals with station
 C     information.
@@ -10,13 +10,17 @@ C     ISTA in the internal stations arrays is used in scan ISCN.
 C
 C     It filters stations based on the DOSTA request.
 C
+C     MJD1 is the modified Julian date of the first scan - somewhat
+C     approximately - for use in selecting entries in the locations
+C     file when there is episodic motion.
+C
 C     Tape stuff removed July 21, 2010.  RCW.
 C
       INCLUDE 'sched.inc'
 C
       INTEGER          ISCN, ISTA, KSTA, INSTA, KI(*), I1, LEN1
       INTEGER          KEYPTR
-      DOUBLE PRECISION VALUE(*)
+      DOUBLE PRECISION VALUE(*), MJD1
       LOGICAL          DOIT, GOTVEX
       CHARACTER        NAMEST*8, KC(*)*(*)
       CHARACTER        KCHAR*256, FILEUP*80
@@ -42,7 +46,7 @@ C
       IF( ( FILEUP .NE. 'NONE' .OR. LEN1(STAFILE) .NE. 4 ) .AND. 
      1      STAFILE .NE. LSTAFIL ) THEN
 C
-         CALL STREAD( IUSTA, .TRUE. )
+         CALL STREAD( IUSTA, .TRUE., MJD1 )
 C
       END IF
       LSTAFIL = STAFILE

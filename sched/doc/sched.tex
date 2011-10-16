@@ -13,7 +13,7 @@
 % script will establish the links.
 
 \documentclass{report}
-\usepackage{html}
+\usepackage{html,verbatim}
 
 % \documentstyle[11pt,html]{report}
 % \special{psfile=logo.ps hoffset=0 voffset=-30}
@@ -27,15 +27,13 @@
 \sloppy
 
 %
-%  This file is set up for insertion of examples using C. Walker
-%  program inserttex.  If that program is run, the included
-%  examples will be replaced by the files specified in the % RCWINCLUDE
-%  lines.  These lines will look like comments to LaTeX and the most
-%  recent included examples are in place, so it should not be necessary
-%  for any user to worry about this capability.
+%  This file is set up for insertion of examples using verbatiminput.
+%  For those commands, the examples are expected to be in ../examples
+%  so the processing of this file should be done from a SCHED distribution
+%  or equivalent.
 %
-%  Because of the above, DO NOT EDIT the examples here.  Rather, edit
-%  them in the examples subdirectory.
+%  This scheme for including examples replaced the use of the private
+%  program RCWINCLUDE on Sept. 26, 2011.
 %
 % fonts
 % {\sc SMALL CAPS} - computer programs names
@@ -1088,146 +1086,7 @@ manual\_1.key}}{examples/manual\_1.key} but that example actually
 shows how many items, that are defaulted or taken from standard
 catalogs here, can be specified in the schedule file.
 
-% RCWINCLUDE ../examples/manual_2.key
-\begin{verbatim}
-!  BE002 example of 3C84 observations at 6 and 4 cm.
-!
-!    This example produces the same schedule as manual_1.key
-!    but uses many SCHED defaults and is missing most comments.
-!    It shows approximately the sort of file a users would
-!    normally make.  Note that all catalogs are defaulted.
-!
-!
-overwrit
-! ==========================================================
-! =================  Cover Information  ====================
-! ==========================================================
-
-version  = 1
-expt     = 'Example: 3C84 6, and 4 cm'
-expcode  = BE002
-obstype  = VLBA
-
-piname   = 'Craig Walker'
-address1 = 'National Radio Astronomy Observatory'
-address2 = 'P. O. Box O'
-address3 = 'Socorro, New Mexico, 87801'
-address4 = ' U.S.A. '
-phone    = '505 835 7247 '
-obsphone = '505 835 7247 '
-email    = 'cwalker@nrao.edu'
-fax      = '505 835 7027 '
-obsmode  = 'Continuum'
-correl   = 'Socorro'
-note1    = ' '
-
-! ==========================================================
-! ==============  Correlator Information  ==================
-! ==========================================================
-
-correl   = 'Socorro'
-coravg   = 4
-corchan  = 16
-cornant  = 10
-corpol   = 'on'
-corwtfn  = 'uniform'
-corsrcs  = 'VLBA Data Base'
-cortape  = DAT
-corship1 = 'Craig Walker'
-corship2 = 'P. O. Box O'
-corship3 = 'Socorro NM 87801'
-cornote1 = ' '
-!
-
-! ==========================================================
-! ==================== Setup Information ===================
-! ==========================================================
-!  The first setup file shows the bare minimum that needs to
-!  be specified.  Essentially all of this information would
-!  be needed to choose one of the standard setup files.  This
-!  one would correspond to v6cm-64-4-1.set, with a possible
-!  slight frequency offset between what is in the specific
-!  "standard setups" and what is generated using BAND=6cm.
-
-setinit = v6cm.set /
-   nchan    = 4
-   band     = '6cm'
-   bbfilter = 8.0
-   bits     = 1
-   pol      = dual
-   /
-endset /
-
-!  For the second example setup, the user forces the
-!  frequencies, BBC's, sidebands, and format.  It still
-!  relies on the frequency catalog for the IF assignments
-!  and for many VLA parameters.  There are a lot more
-!  parameters that could be forced in extreme cases.
-
-setinit = v4cm.set /
-   nchan    = 4
-   freqref  = 8416.99
-   freqoff  = -3.5, -3.5, 4.5, 4.5
-   bbfilter = 8.0
-   bits     = 1
-   bbc      = 1,    2,    3,   4
-   netside  = U,    U,    U,   U
-   pol      = RCP,  LCP,  RCP, LCP
-   format   = VLBA1:4
-   /
-endset /
-
-! ==========================================================
-! ========================  The Scans  =====================
-! ==========================================================
-year  = 1995
-month = 10
-day   = 22
-start = 01:30:00
-vlamode = vs   !  Single dish VLA mode.
-
-!  Note use of station codes.  Names could also be used.
-stations = SC, HN, NL, FD, LA, PT, KP, OV, BR, MK, VLA1
-
-Source = 3C454.3   Dur   = 5:30   Setup = v6cm.set    /
-Source = 3C454.3   Dwell = 5:30   Setup = v4cm.set /
-
-stations = SC, HN, NL, FD, LA, PT, KP, OV, BR, VLA1
-
-group 4 rep 14  ! About 3 hours in 12 repeats of the next 4 scans.
-Source = 3C84      Dur   = 3:00  gap = 2:00  Setup = v6cm.set /
-Source = 3C84      Dwell = 3:00  gap = 0     Setup = v4cm.set /
-Source = 0309+411  Dwell = 2:00  /
-Source = 3C84      Dwell = 3:00  /
-
-!  Add MK
-stations = SC, HN, NL, FD, LA, PT, KP, OV, BR, MK, VLA1
-
-group 4 rep 14  !   About 3 hours.
-Source = 3C84      Dur   = 3:00  gap = 2:00  Setup = v6cm.set /
-Source = 3C84      Dwell = 3:00  gap = 0     Setup = v4cm.set /
-Source = 0309+411  Dwell = 2:00  /
-Source = 3C84      Dwell = 3:00  /
-
-group 8 rep 15  !  6.5 hours
-Source = 3C84      Dur   = 3:00  gap = 2:00  Setup = v6cm.set /
-Source = 0552+398  Dwell = 3:00  gap = 0     /
-Source = 0552+398  Dwell = 2:00  gap = 0     Setup = v4cm.set /
-Source = 3C84      Dwell = 3:00  gap = 0     /
-
-Source = 3C84      Dur   = 3:00  gap = 2:00  Setup = v6cm.set /
-Source = 3C84      Dwell = 3:00  gap = 0     Setup = v4cm.set /
-Source = 0309+411  Dwell = 2:00  /
-Source = 3C84      Dwell = 3:00  /
-
-Source = 3C273     Dur   = 5:30  gap = 3:00  Setup = v6cm.set /
-Source = 3C273     Dwell = 5:30  gap = 0:00  Setup = v4cm.set /
-
-! ==========================================================
-! ========================  End of example  ================
-! ==========================================================
-\end{verbatim}
-% RCWEND
+\verbatiminput{../examples/manual_2.key}
 
 
 \subsection{\label{SSEC:EXAMPLE3}A Minimal Schedule for Planning.}
@@ -1239,30 +1098,7 @@ availability, of a list of sources using the plotting abilities of
 \schedb and using the \htmlref{{\tt UPTIME}}{MP:OPTMODE} optimization
 mode to give overlapping 24 hour schedules for each source.
 
-% RCWINCLUDE ../examples/manual_simp.key
-\begin{verbatim}
-!----------------------------------------------------------------------
-!  Example of very simple SCHED file - for making uv etc plots.
-!----------------------------------------------------------------------
-overwrit                 !  Allow writing over old output files.
-expcode  = UVCOV         !  Needed for name of summary file.
-obstype  = NONE          !  No tape recording.
-nosetup                  !  No setup file.
-optmode  = uptime        !  Planning mode.
-opdur    = 24:00:00      !  Look at a whole day.
-opminant = 4             !  Minimum number of antennas that must be up.
-opminel  = 15            !  Don't include scans below this elevation.
-year     = 1996  day = 1 !  Year and day.
-start    = 00:00:00      !  Start time for plots.
-dur      = 10:00         !  Ten minute scans.
-stations = SC, HN, NL, FD, LA, PT, KP, OV, BR, MK
-source   = DA193 /
-source   = 3C120 /
-!----------------------------------------------------------------------
-! End of example.
-!----------------------------------------------------------------------
-\end{verbatim}
-% RCWEND
+\verbatiminput{../examples/manual_simp.key}
 
 If the above file were named {\sl uvcov.key}, it could be run with the
 commands:
@@ -2818,221 +2654,7 @@ certainly doesn't hurt.  Also, the bandwidth specification is the same
 as the setup file so it is not required (it used to be).
 
 
-% RCWINCLUDE ../examples/manual_line.key
-\begin{verbatim}
-
-! EXAMPLE - spectral line observations.
-
-! ==========================================================
-! =================  Cover Information  ====================
-! ==========================================================
-
-EXPT = 'BD27 VLBA format 7mm line 1995 DEC 29 18:00 -> DEC 30 18:00 UT'
-EXPCODE  = 'BD027'
-VERSION  = 1
-
-PINAME   = 'P.J.Diamond'
-ADDRESS1 = 'NRAO'
-ADDRESS2 = 'P.O. Box O'
-ADDRESS3 = 'Socorro, NM 87801, USA'
-PHONE    = '1-505-835-7365 (work) or 1-505-835-2095 (home)'
-OBSPHONE = '1-505-835-7365 (work) or 1-505-835-2095 (home)'
-FAX      = '1-505-835-7027'
-EMAIL    = 'pdiamond@nrao.edu (internet)'
-OBSMODE  = 'VLBA'
-OBSTYPE  = 'VLBA'
-NOTE1 = 'At VLA use antenna 27'
-NOTE2 = 'its the standard VLBI antenna and has good Q band performance'
-
-! ==========================================================
-! ==============  Correlator Information  ==================
-! ==========================================================
-
-correl   = 'Socorro'
-coravg   = 4
-corchan  = 256
-cornant  = 10
-corpol   = 'off'
-corwtfn  = 'uniform'
-corsrcs  = 'standard'
-cortape  = DAT
-corship1 = 'Athol Kemball'
-corship2 = 'P. O. Box O'
-corship3 = 'Socorro NM 87801'
-
-! ==========================================================
-! ====================  Source Catalog  ====================
-! ==========================================================
-!  This has sources with positions in mixed equinoxes.
-!  It is normally recommended to use J2000.
-!  Note most of the continuum sources below could be picked up
-!  from $SCHED/catalogs/sources.vlba
-
-SRCCAT /
-SOURCE='3C273'    RA=12:26:33.2480 DEC= 02:19:43.290 EQUINOX='B1950' /
-SOURCE='3C279'    RA=12:53:35.8380 DEC=-05:31:08.040 EQUINOX='B1950' /
-SOURCE='3C345'    RA=16:41:17.6080 DEC= 39:54:10.820 EQUINOX='B1950' /
-SOURCE='3C454.3'  RA=22:51:29.52   DEC= 15:52:54.35  EQUINOX='B1950' /
-SOURCE='OJ287'    RA=08:51:57.2530 DEC= 20:17:58.440 EQUINOX='B1950' /
-SOURCE='1823+568' RA=18:23:14.9490 DEC= 56:49:18.050 EQUINOX='B1950' /
-SOURCE='1334-127' RA=13:34:59.8150 DEC=-12:42:09.900 EQUINOX='B1950' /
-SOURCE='1633+382' RA=16:33:30.6280 DEC= 38:14:10.050 EQUINOX='B1950' /
-SOURCE='0420-014' RA=04:20:43.5400 DEC=-01:27:28.660 EQUINOX='B1950' /
-SOURCE='1749+096' RA=17:51:32.8185 DEC= 09:39:00.728 EQUINOX='J2000' /
-SOURCE='RAQR'     RA=23:41:14.269  DEC=-15:33:42.89   EQUINOX='B1950'
-                  VEL = -27.0, -27.0 /
-SOURCE='RLEO'     RA=09:44:52.2    DEC= 11:39:40.8   EQUINOX='B1950'
-                  VEL = -2.0,  -2.0 /
-SOURCE='VYCMA'    RA=07:20:54.6    DEC=-25:40:12.2   EQUINOX='B1950'
-                  VEL = 20.0 /
-SOURCE='VXSGR'    RA=18:05:02.9    DEC=-22:13:55.6   EQUINOX='B1950'
-                  VEL = 8.0 /
-SOURCE='UHER'     RA=16:23:35.0    DEC= 19:00:18.0   EQUINOX='B1950'
-                  VEL = -15.0, -15.0 /
-SOURCE='IKTAU'    RA=03:50:43.7    DEC= 11:15:31.8   EQUINOX='B1950'
-                  VEL = 34.0, 34.0  /
-SOURCE='TXCAM'    RA=04:56:41.4    DEC= 56:06:29.9   EQUINOX='B1950'
-                  VEL = 9.0, 9.0 /
-SOURCE='NMLCYG'   RA=20:46:25.59   DEC= 40:06:58.3   EQUINOX='J2000'
-                  VEL = -5.0, -5.0 /
-SOURCE='SPER'     RA=02:19:15.1    DEC=+58:21:34.0   EQUINOX='B1950'
-                  VEL = -40.0, -40.0 /
-
-ENDCAT /
-
-! ==========================================================
-! ====================  Station Catalog  ===================
-! ==========================================================
-
-stafile  = '$SCHED/catalogs/stations.dat'
-
-! ==========================================================
-! ==============  Spectral line rest frequecies  ===========
-! ==========================================================
-
-LINEINIT /
-lineset='ccal'  restfreq=43122.027, 43122.027, 43126.027, 43126.027,
-                         43130.027, 43130.027, 43134.027, 43134.027 /
-lineset='prog'  restfreq=43122.027, 43122.027 /
-ENDLINES /
-
-! ==========================================================
-! ====================  Observing setup  ===================
-! ==========================================================
-!  This is a fairly fully specified setup file.
-
-setinit = bd27.set  /
-nchan    = 8  samprate = 8.0  bits = 1  bbfilter = 4.0  !  128 Mbps
-tpmode   = 4  format = VLBA1:1
-bbc      = 1, 2, 3, 4, 5, 6, 7, 8
-netside  = U, U, U, U, U, U, U, U
-ifchan   = R, L, R, L, R, L, R, L
-!    Radio Astronomy allocation:  42400-43500
-pcal     = 'off'
-freqref  = 43150.99
-freqoff  = -8,-8,-4,-4,0,0,4,4
-firstlo  = 42400.00  fe(1) = '7mm'   fe(3) = '7mm'
-synth(2) = 7.6  synth(3)= 11.6   ! LO = Syn(2) + 3*Syn(3)
-station  = 'VLBA'   rchan = A  lchan = C   /
-firstlo  = 42489.9, 42489.9
-vlaband  = VQ
-vlabw    = '0000'
-vlafeab  = 51.6
-vlafecd  = 13.4
-vlasyna  = 3889.9
-vlasynb  = 3889.9
-flukea   = 100.0
-flukeb   = 200.0
-pcal     = 'off'    !  Pulse cal tone can mess up spectra.
-station  = 'VLA1'   rchan = B  lchan = D
-/
-endset /
-
-!  As a demonstration, the following is all that is needed
-!  to get an equivalent setup to the above.  It uses A,C IFs at
-!  the VLA and a different VLA LO setup (better), but is otherwise
-!  the same.  Note that both turn off the pulse calibration tones
-!  which can mess up spectral line observations.
-
-!  Neither setup uses the default 'format' because that would give a
-!  speedup factor on correlation and the correlator output data
-!  rate would be too high.  Note that the format can be forced
-!  with either 'tpmode' or 'format'.
-
-setinit = bd27a.set  /
-nchan    = 8  bits = 1  bbfilter = 4.0
-tpmode   = 4
-pol      = dual
-pcal     = 'off'
-band     = '7mm'
-/
-endset /
-
-! ==========================================================
-! =================  Initial Scan Information  =============
-! ==========================================================
-!
-STATIONS = VLBA_SC, VLBA_HN, VLBA_NL, VLBA_FD, VLBA_LA,
-           VLBA_PT, VLBA_KP, VLBA_OV, VLBA_BR, VLBA_MK, VLA1
-VLAMODE 'VS'
-
-YEAR   = 1995
-MONTH  = 12
-DAY    = 29
-START  = 18:02:00
-!
-!
-LINENAME = 'ccal'  DOPPLER
-SETUP  = 'bd27a.set'
-
-! ==========================================================
-! ========================  The Scans  =====================
-! ==========================================================
-
-SOURCE = '1749+096'  GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'SPER'/
-!
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-!
-SOURCE = '3C454.3'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'SPER'/
-!
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-!
-SOURCE = '3C454.3'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'SPER'/
-!
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'SPER'      GAP = 00:02:00 DUR = 00:11:00 /
-!
-!     __________________________________
-!    |                                  |
-!    |   Many scans in the same style.  |
-!    |__________________________________|
-!
-
-SOURCE = '1749+096'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'UHER'/
-!
-SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
-!
-SOURCE = '1749+096'   GAP = 00:02:00 DUR = 00:11:00 DOPSRC 'UHER'/
-!
-SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
-SOURCE = 'UHER'       GAP = 00:02:00 DUR = 00:11:00 /
-!
-SOURCE = '1749+096'   GAP = 00:02:00 DUR = 00:11:00  DOPSRC 'UHER'/
-! ---------------------------------------------------------------------
-\end{verbatim}
-% RCWEND
-
-
+\verbatiminput{../examples/manual_line.key}
 
 \section{\label{SEC:REFPOINT}Reference Pointing}
 
@@ -3736,183 +3358,7 @@ Note that the \htmlref{main example} {SSEC:EXAMPLE1} in the
 \htmlref{Examples}{SEC:EXAMPLES} section has a single VLA antenna
 in it and serves as an example of that type of observing.
 
-% RCWINCLUDE ../examples/vla_vlbi.key
-\begin{verbatim}
-! Start file bw099.key.  Example of a VLBI observation using the
-!                        VLA as a phased array.
-!                        Original file by J. Wrobel.
-!                        Modified for the SCHED manual by C. Walker.
-!                        VLAINTEG added Sep. 8, 2008 RCW.
-!
-!  Much of this will change in 2010
-! ==========================================================
-! =================  Cover Information  ====================
-! ==========================================================
-
-expt     = 'bw099 1cm 15jan97 Wrobel'
-expcode  = 'bw099'
-version  = 1
-piname   = 'J.M. Wrobel'
-address1 = 'NRAO, P.O. Box O'
-address2 = 'Socorro, NM 87801'
-address3 = 'USA'
-phone    = '+1-505-835-7392'
-obsphone = 'VLA'
-fax      = '+1-505-835-7027'
-email    = 'jwrobel@nrao.edu (internet)'
-obsmode  = '128-4-2'
-obstype  = 'VLBA'
-note1    = 'VLBA target                : J1220+29=NGC4278=UGC07386 ***'
-note2    = 'VLBA DR check/VLA phase ref: J1221+28                  ***'
-note3    = 'VLBA FF/manual pcal/bpass  : J1229+02=3C273            ***'
-note4    = 'VLBA amp check, VLA amp std: J1310+32, J1331+30=3C286  ***'
-
-! ==========================================================
-! ==============  Correlator Information  ==================
-! ==========================================================
-
-correl   = 'socorro'
-cornant  = 11
-corchan  = 16
-coravg   = 2
-corpol   = 'on'
-corwtfn  = 'uniform'
-corsrcs  = 'NGC4278 from schedule, else standard'
-cortape  = 'dat'
-corship1 = 'jwrobel at aoc'
-
-! ==========================================================
-! ==================== Source Catalog  =====================
-! ==========================================================
-
-! Imbedded catalog for possible non-standard source.
-srccat  /
-source='J1220+2916','J1220+29','B1217+295','NGC4278','UGC07386'
-     ra=12:20:06.8243  dec= 29:16:50.716  equinox='J2000'  calcode='M'
-     remarks='From preliminary JVAS paper III' /
-endcat /
-
-! standard catalogs
-!        These are the defaults - included to show format.
-
-srcfile  = $SCHED/catalogs/sources.vlba
-stafile  = $SCHED/catalogs/stations.dat
-
-! ==========================================================
-! ==================== Setup Information ===================
-! ==========================================================
-!  This shows how to specify a full VLA setup when doing
-!  a frequency set unlike any in freq.dat.  This is fairly
-!  common when trying to span more than the 50 MHz of a
-!  single VLA IF.  Start SCHED and specify FREQLIST=<f1>,<f2>
-!  for lists of possible inputs.
-
-setinit = '1cmwide.set' /
-  nchan    = 4
-  bits     = 2
-  bbfilter = 8.0
-  freqref  =  22228.49
-  freqoff  =   -200.00,  -192.00,   +200.00,   +208.00
-  netside  =  U, U, U, U
-  pol      = LCP
-  /
-  station = vla1, vla27
-  ifchan  = C, C, D, D
-  firstlo = 21410.10, 21410.10, 21810.10, 21810.10
-  vlaband = VK    vlafeab = 17.5  vlasyna = 3510.1  flukea = 100.0
-  vlabw = '0000'  vlafecd = 17.5  vlasynb = 3910.1  flukeb = 200.0
-  fefilter = '0000'
-  /
-endset /
-
-
-! ==========================================================
-! ========================  The Scans  =====================
-! ==========================================================
-
-year     = 1997
-month    = 1
-day      = 15
-start    = 06:45:00
-stations = vlba_sc, vlba_hn, vlba_nl, vlba_fd, vlba_la,
-           vla27,
-           vlba_pt, vlba_kp, vlba_ov, vlba_br, vlba_mk
-
-
-! Adopt 14 passes per tape and 44m per thin tape pass.
-! Note that this sample was set up before automatic tape allocation
-! was used.  Keeping track of passes is no longer necessary, and
-! can occasionally be counterproductive.
-
-! Use the setup specified above.
-setup   = '1cmwide.set'
-
-! Point vla27 south to make wraps predictable. Assess phasing.
-! Use vlamode 'VL' to phase IFs C and D, rather than the A and D
-! normally used with mode 'VA'.
-
-source  = 'J0725-00' gap = 00:00 dur = 12:00 vlamode 'VL' norecord /
-
-! Swing vla27 to ngc4278's phase ref source.
-source  = 'J1221+28' gap = 00:00 dur = 05:00 vlamode 'VL' norecord /
-
-! Do passes 1-4.  This is a sequence of calibrator/source pairs.
-group 2   repeat 16
- source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
- source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
-
-! Start pass 5.   Get VLBI fringe finder and VLA flux calibrator.
-comment = '**** Start 1st calibration sequence.'
-! vla27 mode VA is ok for J1310+32 but not for 3C273.
-! vla27 mode VX for 3C286 to hold phases constant.
- source = 'J1224+03' gap = 00:00 dur = 04:00 vlamode 'VL' norecord /
- source = '3C273'    gap = 00:00 dur = 05:30 vlamode 'VX'   record /
- source = 'J1310+32' gap = 01:00 dur = 05:30 vlamode 'VL'   record /
- source = '3C286'    gap = 00:00 dur = 04:00 vlamode 'VX' norecord /
-comment = '**** End   1st calibration sequence.'
-
-! Swing vla27 to ngc4278's phase ref source.
-source  = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL' norecord /
-
-! As a demonstration, change the on-line integration time to 3 sec.
-! This might allow faster phasing.
-vlainteg = 3
-
-! Finish pass 5.
-group   2 repeat 3
- source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
- source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
-
-! Do passes 6-9.
-group   2 repeat 16
- source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
- source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
-
-! Start pass 10.
-comment = '**** Start 2nd calibration sequence.'
- source = 'J1224+03' gap = 00:00 dur = 04:00 vlamode 'VL' norecord /
- source = '3C273'    gap = 00:00 dur = 05:30 vlamode 'VX'   record /
- source = 'J1310+32' gap = 01:00 dur = 05:30 vlamode 'VL'   record /
- source = '3C286'    gap = 00:00 dur = 04:00 vlamode 'VX' norecord /
-comment = '**** End   2nd calibration sequence.'
-
-! Swing vla27 to ngc4278's phase ref source.
-source  = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL' norecord /
-
-! Finish pass 10.
-group   2 repeat 3
- source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
- source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
-
-! Do passes 11-14.
-group   2 repeat 16
- source = 'J1221+28' gap = 00:00 dur = 03:00 vlamode 'VL'   record /
- source = 'NGC4278'  gap = 00:00 dur = 08:00 vlamode 'VX'   record /
-
-! end bw099.key
-
-\end{verbatim}
-% RCWEND
+\verbatiminput{../examples/vla_vlbi.key}
 
 \subsection{\label{SSEC:VLAONLY}VLA-Only Project Example}
 
@@ -3935,118 +3381,7 @@ scans), and \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.  Some of these
 parameters are now read from the setup files, not the main schedule
 input.
 
-% RCWINCLUDE ../examples/manual_vla.key
-\begin{verbatim}
-! -------------------------------------------------------------------
-! EXAMPLE of SCHED file for non-VLBI VLA observations.
-! -------------------------------------------------------------------
-!  VLA observations to get flux densities of DA193 and 3C84 at VLA.
-!  Note that the example setup files are used for cc and qq bands.
-
-! -----  Cover Information
-
-version  = 1
-expt     = 'Get flux densities for BV16'
-piname   = 'Craig Walker'
-address1 = 'National Radio Astronomy Observatory'
-address2 = 'P. O. Box O'
-address3 = 'Socorro, New Mexico, 87801'
-address4 = ' U.S.A. '
-phone    = '505 835 7247 '
-obsphone = '505 835 7247 '
-email    = 'cwalker@nrao.edu'
-fax      = '505 835 7027 '
-obsmode  = 'Continuum'
-correl   = 'Socorro'
-
-! -----  File names and other details.
-
-stafile   = $SCHED/catalogs/stations.dat
-srcfile   = $SCHED/catalogs/sources.vlba
-obstype   = vla           ! Tells SCHED that this is VLA only.
-expcode   = BV016
-stations  = VLA
-vlatype   = CONTINUUM
-vlausern  = 450
-vlamode   = '  '
-
-dovex=-1 ! No VEX file
-
-lst                       ! Schedule in LST.
-
-! -----  A source that is not in the external source list:
-
-srccat /
-
-source='CTA21'   ra=03:16:09.1383   dec= 16:17:40.448
-equinox='B1950'   calcode='B' /
-
-endcat /
-
-! -----  Scans.
-
-day = 56719               ! LST day of stop of first scan.
-start = 4:00:00           ! LST start time.
-
-source = 'DA193'
-
- ! No reference pointing at the lower frequencies
- ! Note the manual_vla setup files should be in the current
- ! directory.
- vlamode = ' '  vlapeak = ' '
- dur = 8:00  setup = manual_vla-cc.set  /
- dur = 3:00  setup = $SCHED/setups/vla-uu.set  /
- dur = 3:00  setup = $SCHED/setups/vla-xx.set  /
-
- ! Use reference pointing at X band for K and Q band observations.
- vlamode = IR  vlapeak = ' '
- dur = 5:00  setup = $SCHED/setups/vla-xx.set  /
- vlamode = ' '  vlapeak = T
- dur = 4:00  setup = manual_vla-qq.set  /
-             setup = $SCHED/setups/vla-kk.set  /
-
-source = '3C48'
- vlamode = IR  vlapeak = ' '
- dur = 8:00  setup = $SCHED/setups/vla-xx.set  /
- vlamode = ' '  vlapeak = T
- dur = 4:00  setup = manual_vla-qq.set  /
-             setup = $SCHED/setups/vla-kk.set  /
-
-source = '3C84'
- vlamode = IR  vlapeak = ' '
- dur = 6:00  setup = $SCHED/setups/vla-xx.set  /
- vlamode = ' '  vlapeak = T
- dur = 3:00  setup = manual_vla-qq.set  /
-             setup = $SCHED/setups/vla-kk.set  /
-
- ! Do not use reference pointing for the rest of the session.
-source = '3C84'
- vlamode = ' '  vlapeak = ' '
-             setup = $SCHED/setups/vla-uu.set  /
-             setup = $SCHED/setups/vla-xx.set  /
-             setup = manual_vla-cc.set  /
-             setup = manual_vla-cc.set  /
-             setup = $SCHED/setups/vla-pp.set  /
-
-source = '3C48'
- dur=6:00    setup = $SCHED/setups/vla-uu.set  /
- dur=3:00    setup = $SCHED/setups/vla-xx.set  /
-             setup = manual_vla-cc.set  /
-             setup = manual_vla-cc.set  /
- dur=4:00    setup = $SCHED/setups/vla-pp.set  /
-
-source = 'DA193'
- dur=9:00    setup = $SCHED/setups/vla-uu.set  /
- dur=4:00    setup = $SCHED/setups/vla-xx.set  /
-             setup = manual_vla-cc.set  /
-
-source = 'CTA21'
- dur=10:00   setup = $SCHED/setups/vla-ll.set  /
- dur=4:00    setup = $SCHED/setups/vla-pp.set  /
-
-! -------------------------------------------------------------------
-\end{verbatim}
-% RCWEND
+\verbatiminput{../examples/manual_vla.key}
 
 The above file used several setup files since it was sampling all
 bands used at the VLA.  Two are shown below.  All of the others are
@@ -4056,39 +3391,7 @@ so it is rather more complicated.  Note that, for many frequency settings,
 \schedb can obtain the required information from entries in the
 \htmlref{frequency catalog}{SEC:FRQCAT}.
 
-% RCWINCLUDE ../examples/manual_vla-cc.set
-\begin{verbatim}
-! -------------------------------------------------------------------
-! EXAMPLE setup file for non-VLBI observations at the VLA at 6cm.
-! -------------------------------------------------------------------
-!  vla-cc.set
-!  Non-VLBI observations at the VLA at C band
-format=none  station=VLA  vlaband=CC  vlabw='0000' /
-! -------------------------------------------------------------------
-\end{verbatim}
-% RCWEND
-
-% RCWINCLUDE ../examples/manual_vla-qq.set
-\begin{verbatim}
-! -------------------------------------------------------------------
-! EXAMPLE setup file for non-VLBI observations at the VLA at 7mm.
-!     (Use as an example of the format, not the detailed numbers)
-! -------------------------------------------------------------------
-! firstlo (ifa, qband) = feab-fecd+syna+flukea+900MHz-600MHz
-freqref = 43210.99
-format = none
-vlaband = VQ
-vlabw   = '0000'
-!
-firstlo  = 42589.9
-vlafeab = 51.6      vlafecd = 13.0
-vlasyna = 3589.9    vlasynb = 3639.9
-flukea = 100.0      flukeb = 200.0
-station  = 'VLA'  /
-! -------------------------------------------------------------------
-\end{verbatim}
-% RCWEND
-
+\verbatiminput{../examples/manual_vla-cc.set}
 
 \subsection{\label{SSEC:VLAPAR}Parameters Specific to the VLA}
 
@@ -4488,291 +3791,7 @@ can be done with the program.  It actually makes a different schedule
 for each station, taking into account the different portions of
 the sky that can be seen.
 
-% RCWINCLUDE ../examples/doptg.com
-\begin{verbatim}
-#!/bin/csh
-# ========================================================
-# =====  Script to make pointing files for the VLBA  =====
-# ========================================================
-#  Set stations to be processed.
-#  The schedules need to be different depending on whether
-#  a 3mm receiver is present.
-#  Examples:
-#  set stalist_3mm="HN NL FD LA PT KP OV MK"
-#  set stalist_no3mm="BR SC"
-#  set stalist_no3mm=""      eg use blank if no stations of this type.
-set stalist_3mm="BR FD PT"
-set stalist_no3mm="HN SC"
-
-#
-#  Set times and experiment code
-#
-echo Sched environment variable = $SCHED
-echo PLANET_DATA environoment variable = $PLANET_DATA
-cat <<eofp >! times.par
-  year    = 1996
-  month   = 10
-  day     = 25
-  start   = 0:00:00
-  opdur   = 4:00:00         !  Total project duration
-  expcode = ptg
-eofp
-
-# =====================================================================
-# =====================================================================
-# ======                                                         ======
-# ======      Changes not normally needed below this line.       ======
-# ======                                                         ======
-# =====================================================================
-# =====================================================================
-# Specify the location of the setup files.
-#
-setenv SETDIR $SCHED/setups
-#
-# Put much of the generic setup information in ptg_setup.par
-#
-cat <<eofs >! ptg_setup.par
-! ---------------------------------------------------------------------
-! SCHED input file setup stuff to be used with pointing proceedure doptg.
-
-! -----  Cover information
-version  = 1
-expt     = 'STARTUP pointing'
-obstype  = PTVLBA
-obsmode  = 'Multi-frequency pointing observations.'
-piname   = 'Operations'
-phone    = '505 835 7251'
-obsphone = '505 835 7251'
-fax      = '505 835 7027'
-email    = 'vlbaops@nrao.edu'
-address1 = 'AOC'
-
-! -----  Catalogs etc.
-srcfile = '$SCHED/catalogs/sources.pointing'
-stafile = '$SCHED/catalogs/stations.dat'
-ephfile = '$PLANET_DATA/JPLEPH.405.2'
-!ephfile = '$SCHED/catalogs/JPLEPH.405.2.Linux'
-! -----  Schedule instructions
-sumitem = EL1, AZ1 ! Start elevation and azimuth in summary.
-ptvlba
-ptdur   = 15       ! => scan length = ptslew + 2*ptdur + N*10*ptdur
-                   ! The autoleveling scan is 2*ptdur long for pcx.
-                   ! Here we have 15+30+2*150 = 345s = 5:45
-dwell   = 5:45
-ptslew  = 15
-optmode = SCANS    ! Select scans that are above minimum elevation.
-opminel = 20.      ! Minimum elevation.
-dovex=-1           ! Turn off VEX so it will do planets.
-
-eofs
-
-#  Now make a file with the actual schedule info for 3mm sites.
-#  Any imbedded catalogs etc must be here.
-
-cat <<eofs >! ptg_3mm.par
-! -----  Spectral lines
-! -----  Set up for 4 channels - 2 on line, 2 off.
-lineinit /
- lineset ='H2O'    restfreq=22235.08,22235.08,22285.08,22285.08 /
- lineset ='SiO431' restfreq=43122.03,43122.03,43222.03,43222.03 /
- lineset ='SiO862' restfreq=86243.4, 86243.4, 86343.4, 86343.4  /
-endlines /
-
-! -----  The detailed schedule
-! The frequencies are in an order reasonable for FRM.
-!  50/90 cm  CYGA,    TAUA,    3C274
-!  20-4 cm   3C454.3, 3C123,   3C274
-!  2, 1 cm   DR21,    3C84,    3C274
-!  7 mm      RCAS,    RLEO,    WHYA, DR21, 3C84, 3C273, planets
-!  3 mm      RCAS,    RLEO,    WHYA, planets
-
-!  Group must equal the number of scans below.
-!  (Group*rep) must be less than 2000 (as of 18 Apr 1996).
-!  The 7mm line sources used to have qual=50.  This used to be the way
-!     to trigger line processing.  Now CALCODE='L' does it.
-!  Note that for a peak=1 scan, no reference pointing will be done
-!  if the slew takes longer than 40 seconds.  That is partly why
-!  there is a second peak scan.
-
-group=(10*3+8*3) rep=50
-setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
-setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt6cm.set'   source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt13cm.set'  source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt4cmsx.set' source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt1cm.set'   source 'DR21'    nodop   bw=0,0   /
-setup='$SETDIR/pt24ghz.set' source 'DR21'    nodop   bw=0,0   /
-setup='$SETDIR/pt2cm.set'   source 'DR21'    nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source 'DR21'    nodop   bw=0,0   /
-
-setup='$SETDIR/pt7mm.set'   source 'JUPITER' nodop   bw=0,0 qual=0
-  noptvlba peak=1 dwell=01:00  /
-  noptvlba peak=1 dwell=01:00  /
-  nopeak ptvlba   dwell = 5:45  /
-  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45   /
-setup='$SETDIR/pt7mm.set'   source 'RCAS'    doppler bw=2,2 qual=0
-  linename='SiO431'
-  noptvlba peak=1 dwell=01:00  /
-  noptvlba peak=1 dwell=01:00  /
-  nopeak ptvlba   dwell = 5:45 /
-  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45  linename='SiO862'  /
-
-
-setup='$SETDIR/pt90cm.set'  source 'TAUA'    nodop   bw=0,0   /
-setup='$SETDIR/pt4cm.set'   source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt18cm.set'  source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt6cm.set'   source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt13cm.set'  source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt4cmsx.set' source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt1cm.set'   source '3C84'    nodop   bw=0,0   /
-setup='$SETDIR/pt24ghz.set' source '3C84'    nodop   bw=0,0   /
-setup='$SETDIR/pt2cm.set'   source '3C84'    nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source '3C84'    nodop   bw=0,0   /
-
-setup='$SETDIR/pt7mm.set'   source 'RLEO'    doppler bw=2,2 qual=0
-  linename='SiO431'
-  noptvlba peak=1 dwell=01:00  /
-  noptvlba peak=1 dwell=01:00  /
-  nopeak ptvlba   dwell = 5:45  /
-  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45  linename='SiO862' /
-setup='$SETDIR/pt7mm.set'   source 'VENUS'   nodop   bw=0,0 qual=0
-  noptvlba peak=1 dwell=01:00  /
-  noptvlba peak=1 dwell=01:00  /
-  nopeak ptvlba   dwell = 5:45  /
-  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45   /
-
-setup='$SETDIR/pt90cm.set'  source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt4cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt18cm.set'  source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt6cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt13cm.set'  source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt4cmsx.set' source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt1cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt24ghz.set' source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt2cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source '3C273'   nodop   bw=0,0   /
-
-setup='$SETDIR/pt7mm.set'   source 'WHYA'    doppler bw=2,2 qual=0
-  linename='SiO431'
-  noptvlba peak=1 dwell=01:00  /
-  noptvlba peak=1 dwell=01:00  /
-  nopeak ptvlba   dwell = 5:45  /
-  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45  linename='SiO862' /
-setup='$SETDIR/pt7mm.set'   source 'SATURN'  nodop   bw=0,0 qual=0
-  noptvlba peak=1 dwell=01:00  /
-  noptvlba peak=1 dwell=01:00  /
-  nopeak ptvlba   dwell = 5:45  /
-  setup='$SETDIR/pt3mm.set'   nopeak ptvlba dwell = 5:45   /
-
-! ---------------------------------------------------------------------
-eofs
-
-#  Now make a file with the actual schedule info for sites without 3mm.
-#  Any imbedded catalogs etc must be here.
-
-cat <<eofs >! ptg_no3mm.par
-! -----  Spectral lines
-! -----  Set up for 4 channels - 2 on line, 2 off.
-lineinit /
- lineset ='H2O'    restfreq=22235.08,22235.08,22285.08,22285.08 /
- lineset ='SiO431' restfreq=43122.03,43122.03,43222.03,43222.03 /
- lineset ='SiO862' restfreq=86243.4, 86243.4, 86243.4, 86243.4  /
-endlines /
-
-! -----  The detailed schedule
-! The frequencies are in an order reasonable for FRM.
-!  50/90 cm  CYGA,    TAUA,    3C274
-!  20-4 cm   3C454.3, 3C123,   3C274
-!  2, 1 cm   DR21,    3C84,    3C274
-!  7 mm      RCAS,    RLEO,    WHYA, DR21, 3C84, 3C273, planets
-!  Group must equal the number of scans below.
-!  (Group*rep) must be less than 2000 (as of 18 Apr 1996).
-!  The 7mm line sources used to have qual=50.  This used to be the way
-!     to trigger line processing.  Now CALCODE='L' does it.
-
-linename='SiO431'
-
-group=(12*3) rep=60
-setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
-setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt6cm.set'   source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt13cm.set'  source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt4cmsx.set' source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt1cm.set'   source 'DR21'    nodop   bw=0,0   /
-setup='$SETDIR/pt24ghz.set' source 'DR21'   nodop   bw=0,0   /
-setup='$SETDIR/pt2cm.set'   source 'DR21'    nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source 'DR21'    nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source 'RCAS'    doppler bw=2,2 qual=0 /
-setup='$SETDIR/pt7mm.set'   source 'JUPITER' nodop   bw=0,0 qual=0 /
-
-setup='$SETDIR/pt90cm.set'  source 'TAUA'    nodop   bw=0,0   /
-setup='$SETDIR/pt4cm.set'   source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt18cm.set'  source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt6cm.set'   source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt13cm.set'  source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt4cmsx.set' source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt1cm.set'   source '3C84'    nodop   bw=0,0   /
-setup='$SETDIR/pt24ghz.set' source '3C84'   nodop   bw=0,0   /
-setup='$SETDIR/pt2cm.set'   source '3C84'    nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source '3C84'    nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source 'RLEO'    doppler bw=2,2 qual=0 /
-setup='$SETDIR/pt7mm.set'   source 'VENUS'   nodop   bw=0,0 qual=0 /
-
-setup='$SETDIR/pt90cm.set'  source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt4cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt18cm.set'  source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt6cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt13cm.set'  source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt4cmsx.set' source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt1cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt24ghz.set' source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt2cm.set'   source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source '3C273'   nodop   bw=0,0   /
-setup='$SETDIR/pt7mm.set'   source 'WHYA'    doppler bw=2,2 qual=0 /
-setup='$SETDIR/pt7mm.set'   source 'SATURN'  nodop   bw=0,0 qual=0 /
-! ---------------------------------------------------------------------
-eofs
-
-#
-# Now run sched separately for each 3mm station.
-#
-foreach station ( $stalist_3mm[1*] )
-   echo station=vlba_$station >! station.par
-   $SCHED/bin/sched <<eofst
-       @times.par
-       @station.par
-       @ptg_setup.par
-       sch = ptg_3mm.par
-       overwrit /
-eofst
-end
-#
-# Finally run sched separately for each no 3mm station.
-#
-foreach station ( $stalist_no3mm[1*] )
-   echo station=vlba_$station >! station.par
-   $SCHED/bin/sched <<eofst
-       @times.par
-       @station.par
-       @ptg_setup.par
-       sch = ptg_no3mm.par
-       overwrit /
-eofst
-end
-#
-#   Some clean up.
-#
-/bin/rm times.par
-/bin/rm ptg_setup.par
-/bin/rm ptg_3mm.par
-/bin/rm ptg_no3mm.par
-#
-#   END
-
-\end{verbatim}
-% RCWEND
+\verbatiminput{../examples/doptg.com}
 
 \section{\label{SEC:CONFIG}Configuration Studies}
 
@@ -11603,26 +10622,7 @@ observations using VLBA and MarkIV formats.  It is the standard setup
 file {\sl vsop1cm.set}.  \schedb defaults are used to set almost
 everything including the station names and recording formats.
 
-% RCWINCLUDE ../setups/vsop1cm.set
-\begin{verbatim}
-! Standard setup file: vsop1cm.set
-!     (Produced by MAKESETUP)
-!  VSOP covers 22.0 - 22.3 GHz
-!      128 Mbps - 2 pass/headpos
-!     Format      Tape length  Density  Tape speed  Time/pass
-! VLBA/MkIII/MkIV    17600      High     160.00        22:00
-!    MkIII/MkIV       8800      Low      270.00         6:31
-  nchan    = 2
-  bits     = 2
-  bbfilter = 16.0
-  pol      = lcp
-  freqref  = 22200.0, 22216.0
-  netside  = U, U
-  barrel   = 'roll_off'
-  /
-\end{verbatim}
-% RCWEND
-
+\verbatiminput{../setups/vsop1cm.set}
 
 \newpage
 
@@ -11693,56 +10693,7 @@ This example shows a setup file for dual frequency, wide spanned
 bandwidth, geodetic style observations.  Note that the firstlo
 has to be specified separately for each channel because it varies.
 
-% RCWINCLUDE ../setups/vgeo-128-8-1.set
-\begin{verbatim}
-! Standard setup file: vgeo-128-8-1.set
-!     (Produced by MAKESETUP)
-!  For dual frequency, single polarization, 13cm/4cm observations.
-!  Changed to use RDV frequencies (but ending in .49) 27 Feb 2002  RCW.
-!  Changed again to follow RDV away from satellite radio  29Jul2004 RCW.
-!  RDV32 uses: 2225.99, 2255.99, 2345.99, 2365.99
-!              8405.99, 8475.99, 8790.99, 8895.99
-!  RDV45 uses: 2232.99, 2262.99, 2352.99, 2272.99 and same X as above.
-! ***  Geodesy reference frequecies ***
-!        Space Research (eg DSN) allocation: 2290-2300
-!        Space Research (eg DSN) allocation: 8400-8450
-!        Satellite radio 2320-2345.
-!     Format      Tape length  Density  Tape speed  Time/pass
-! VLBA/MkIII/MkIV    17600      High      80.0         44:00
-!    MkIII/MkIV       8800      Low      135.0         13.02
-!      128 Mbps - 1 pass/headpos
-  nchan    = 8
-  bits     = 1
-  bbfilter = 8.0
-  freqref  =   2232.49,  2232.49,  2232.49,  2232.49,  8405.49,  8405.49,
-               8405.49,  8405.49
-  freqoff  =  0.0, 30.0, 120.0, 140.0, 0.0, 70.0, 385.0, 490.0
-  netside  =  U, U, U, U, U, U, U, U
-  pol      = rcp
-!
-!  VLBA recorders with VLBA control
-!
-  format = VLBA1:4
-  station  =  VLBA, EB_VLBA
-  /
-!
-!  VLBA recorders with VEX control.
-!
-  barrel   = roll_off
-  format = VLBA1:4
-  station  =  NOTO, YEBES
-  /
-!
-!  MkIV recorders with VEX control.
-!  Be careful about BBC asignments.
-!
-  barrel   = roll_off
-  format = MKIV1:4
-  station  =  MEDICINA, ONSALA85, WSTRBORK
-  /
-\end{verbatim}
-% RCWEND
-
+\verbatiminput{../setups/vgeo-128-8-1.set}
 
 
 \subsection{\label{SSEC:SETLST}Summary List of Setup File Parameters}
@@ -13817,9 +12768,9 @@ more details at the end of this section.
 
 \item [Environment and PATH (unix systems):] Set the environment
 variable SCHED to the base directory under which \schedb will be
-installed.  To do this type, for example, either \begin{verbatim}
-setenv SCHED /users/cwalker/sched \end{verbatim} or \begin{verbatim}
-export SCHED=/users/cwalker/sched \end{verbatim} depending on the
+installed.  To do this type, for example, either {\tt setenv SCHED 
+/users/cwalker/sched} or {\tt export SCHED=/users/cwalker/sched}
+depending on the
 shell you use.  Add the bin subdirectory to your PATH, be prepared to
 specify the full path name when you run the program, or put a copy of
 the binary (or a link to it) in some directory that is in your PATH.
@@ -14108,6 +13059,34 @@ more information.
 % inverted sidebands for the RDBE.
 
 \begin{itemize}
+
+**********  For RDBE/PFB observations where the sideband in the RDBE
+must be lower, allow for the fact that the DiFX correlator can invert
+the sideband.  *******  this is working, but still generating 
+unmatched channel messages so finish debug.
+
+\item Make freq_RDBE.dat with frequency bands adjusted for 512-1024 MHz.
+This now has the VLBA and GBT and one fake EB entry.  More will be 
+needed.  Oct. 12, 2011  RCW.
+
+\item Fix the hsa1cm.key file for some setup errors recently identified
+in the ongoing observations.  Oct. 11, 2011  RCW.
+
+\item Rationalize the DSN stations in the catalogs.  Move to the DSS
+names as much as possible, consistent with the positions from the 
+geodetic solutions.  This might break old key files. Oct. 11, 2011  RCW
+
+\update the locations catalog to gsfc2011a.  Oct. 7, 2011
+
+\item Add BEGIN and END to locations catalog inputs to deal with time
+ranges for episodic motion.  Set up the format translators from 
+geodetic solutions to provide those numbers.  Discontinue the use
+of DBCODE and AXISTYPE in the locations file (AXISTYPE is in the
+stations catalog) and DBCODE is not used.  Oct. 5, 2011 RCW
+
+\item Remove use of RCWINCLUDE with verbatiminput to include examples
+in the manual and simplify the update and release process.  Sept. 26, 2011
+RCW.
 
 \item Only announce fits being skipped in geodetic segment if GEOPRT=1 or
 higher.  Sept 21, 2011.
@@ -18528,10 +17507,12 @@ installed itself on download and simply worked.  PGPLOT was installed.
 There was no PGPLOT configuration file ({\sl .conf} file) provided for
 OS X (there probably is one now).  I made a {\sl local.conf} file
 starting with the one from {\sl ../src/sys\_bsd/g77\_gcc.conf}. The
-following two lines were different: \begin{verbatim}
-    FFLAGD="-fno-backslash"
+following two lines were different: 
+\begin{verbatim}
+ FFLAGD="-fno-backslash"
  LIBS="-L/usr/lib -lgcc -L/usr/X11R6/lib -lX11"
 \end{verbatim}
+
 The routine that makes the font file (pgpack) caused some trouble
 while I was messing with various variants on the above, but eventually
 worked.  I suspect problems with big vs little endian byte orders, but

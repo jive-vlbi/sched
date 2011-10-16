@@ -211,7 +211,6 @@ C     I've got emails out to ask.
 
 
       IF( ANYLEFT ) THEN
-        write(*,*) 'setform got to anyleft ', (needfmt(ks), ks=1,nset)
          CALL FSPREAD( NEEDFMT )
          ANYLFT2 = .FALSE.
          DO KS = 1, NSET
@@ -230,7 +229,6 @@ C     not likely that the program will enter this call.  I should
 C     confirm that, and maybe ditch FMTPICK.
 C
       IF( ANYLEFT ) THEN
-        write(*,*) 'setform got to anyleft2 ', (needfmt(ks), ks=1,nset)
          CALL FMTPICK( NEEDFMT )
       END IF
 C

@@ -1,5 +1,8 @@
       PROGRAM MAKEFREQ
 C
+C     Oct. 11, 2011.  Modify to allow 512-1024 final 
+C     IF by a parameter setting.
+C
 C     Make freq.dat entries based on possible LO settings.
 C     The initial version if for 3mm.
 C
@@ -43,12 +46,15 @@ C
       REAL  SYN3(NCOMBO), SYN1(NCOMBO)
       REAL  IF1(NCOMBO), IF2(NCOMBO), SRF(NCOMBO)
       REAL  RF1(NCOMBO), RF2(NCOMBO)
+      REAL     FIF1, FIF2
       INTEGER FLAG(NCOMBO), SINDEX(NCOMBO)
       CHARACTER NAME(NCOMBO)*7
       DATA  WLO1 / 10.9, 11.1, 11.4, 11.6, 11.9, 12.1, 
      1             12.4, 12.6, 12.9, 13.1, 13.4, 13.6 /
       DATA  WLO2 / 11.4, 11.6, 11.9,   12.4, 12.6, 12.9,  
      1             13.4, 13.6, 13.9,   14.4, 14.6  /
+      DATA  FIF1, FIF2 / 512.0, 1024.0 /
+C      DATA  FIF1, FIF2 / 500.0, 1000.0 /
 C -------------------------------------------------------------
 C     Make all possible combinations.
 C
@@ -60,10 +66,10 @@ C
             SUMLO(NSET) = 6 * WLO1(ILO1)*1000. + WLO2(ILO2)*1000.
             SYN1(NSET) = WLO2(ILO2)
             SYN3(NSET) = WLO1(ILO1)
-            IF1(NSET) = SUMLO(NSET) + 500. - 6 * WLO1(ILO1)*1000.
-            IF2(NSET) = SUMLO(NSET) + 1000. - 6 * WLO1(ILO1)*1000.
-            RF1(NSET) = SUMLO(NSET) + 500.
-            RF2(NSET) = SUMLO(NSET) + 1000.
+            IF1(NSET) = SUMLO(NSET) + FIF1 - 6 * WLO1(ILO1)*1000.
+            IF2(NSET) = SUMLO(NSET) + FIF2 - 6 * WLO1(ILO1)*1000.
+            RF1(NSET) = SUMLO(NSET) + FIF1
+            RF2(NSET) = SUMLO(NSET) + FIF2
             NAME(NSET) = 'v3mm_'//CHAR(96+ILO1)//CHAR(96+ILO2)
          END DO
       END DO

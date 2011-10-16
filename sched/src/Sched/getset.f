@@ -54,11 +54,14 @@ C     Initialize the allowed IF frequency ranges.  These will be
 C     used to check that Doppler or schedule set frequencies are ok.
 C     For now, don't know anything, so set wide open.  Later set
 C     according to the frequency catalog values.
+C     Also initialize CORINV, the frequency offset when we are going
+C     to count on the correlator inverting the sideband.
 C
       DO KS = 1, NSET
          DO ICH = 1, MCHAN
             FIFMIN(ICH,KS) = 0.D0
             FIFMAX(ICH,KS) = 1.D15
+            CORINV(ICH,KS) = 0.D0
          END DO
       END DO
 C
