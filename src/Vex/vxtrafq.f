@@ -103,8 +103,8 @@ C
             DO ICH = 1, NVXCHN(NFQVEX)
                IF( FREQ(ICH,ISCN).GT.1E-6 ) THEN
                   ISTA = TMPSTA(NTMPST)
-                  VXLOSUM(ICH,NFQVEX) = FREQ(ICH,ISCN) + 
-      1                     CORINV(ICH,NSETUP(ISCN,ISTA))
+                       VXLOSUM(ICH,NFQVEX) = FREQ(ICH,ISCN) + 
+     1                     CORINV(ICH,NSETUP(ISCN,ISTA))
                ELSE
                   VXLOSUM(ICH,NFQVEX) = VXLOSUM(ICH,IFQ)
                END IF
