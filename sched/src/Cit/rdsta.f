@@ -342,9 +342,13 @@ C              Get data from the stations catalog.
 C              Note that the mount type is given in both the 
 C              stations catalog and the locations catalog.  For now,
 C              ignore the one in the locations catalog.  Someday,
-C              perhaps check for consistency.
+C              perhaps check for consistency, although that parameter
+C              may no longer be in the locations catalog (Sept 2011).
 C              Also note that the locations catalog, and the VLBA
-C              data base, has 4 character station codes.
+C              data base, has 4 character station codes.  Those
+C              are also no longer present after Sept. 2011.
+C              Note that the parameter used in the rest of Sched 
+C              for the axis type is STAMNT, not STADBA.
 C
 C              Deal with possible episodic motion here by checking
 C              OBSTIM against DBBEG and DBEND
