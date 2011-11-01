@@ -1,10 +1,10 @@
       PROGRAM MAKEFREQ
 C
+C     Make freq.dat entries based on possible LO settings.
+C     This version is for 3mm.
+C
 C     Oct. 11, 2011.  Modify to allow 512-1024 final 
 C     IF by a parameter setting.
-C
-C     Make freq.dat entries based on possible LO settings.
-C     The initial version if for 3mm.
 C
 C     For 3mm:
 C
