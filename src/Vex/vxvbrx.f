@@ -50,11 +50,11 @@ C
 C         Get the receiver LO frequency.
 C
           IF( FETXT .EQ. '1cm' ) THEN
-             SYNPRT = 1000 * SYNTH(3,KS)
+             SYNPRT = NINT( 1000.D0 * SYNTH(3,KS) )
           ELSE IF( FETXT .EQ. '7mm' ) THEN
-             SYNPRT = 3000 * SYNTH(3,KS)
+             SYNPRT = NINT( 3000.D0 * SYNTH(3,KS) )
           ELSE IF( FETXT .EQ. '3mm' ) THEN
-             SYNPRT = 6000 * SYNTH(3,KS)
+             SYNPRT = NINT( 6000.D0 * SYNTH(3,KS) )
           ELSE
              SYNPRT = 0
           END IF
