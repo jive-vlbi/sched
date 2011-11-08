@@ -5,6 +5,7 @@
 % Note that the $SCHED/doc/sched subdirectories should contain
 % links on unix systems generated with:
 % ln -s ../../examples
+
 % ln -s ../../catalogs
 % ln -s ../../setups
 % Other OS's require some equivalent, or create those directories and
@@ -13060,12 +13061,44 @@ more information.
 
 \begin{itemize}
 
-**********  For RDBE/PFB observations where the sideband in the RDBE
-must be lower, allow for the fact that the DiFX correlator can invert
-the sideband.  *******  this is working, but still generating 
-unmatched channel messages so finish debug.
+\item Fix an oversight in the Vex code where two FREQ blocks could
+be considered the same if everything except the net sideband matches.
+We actually had a test schedule involving sideband inversion at the
+GBT that had just such a situation, when the FREQ blocks should
+not have been condsidered to be the same.  Nov. 8, 2011  RCW.
 
-\item Make freq_RDBE.dat with frequency bands adjusted for 512-1024 MHz.
+\item Fix a bug where, if there were no periods ok for preemption,
+an array element with subscript 0 was accessed.  The SUN version
+did not like that and crashed.  Nov. 3, 2011.  RCW
+
+\item When using the frequency catalog to find a good first LO etc
+when using the RDBE, discourage choices that will cause baseband 
+channels to include a crossover point.  This should help get settings
+for which the 32 MHz channels with the PFB are at the right place, 
+even when there are both upper and lower sideband first LO choices.
+It also helps get the right LO setting when the DDC is used.  Nov. 3,
+2011.  RCW.
+
+\item Add warning when the first scan crosses midnight and there might
+be confusion about DAY, MONTH, and YEAR applying to the stop time.
+Nov. 2, 2011  RCW.
+
+\item Add support for the new VLBA 4-8 GHz receiver.  Very many
+frequency options were added to freq_RDBE.dat to support the 4 channel
+IF converter.  The use of any of the 4 IFs was added to the checking
+routines, although the total number is still limited to 2 for now.
+Example egCwide.key was added to exercise this system.  This will still
+be called the 6cm band.  Nov. 1, 2011 RCW.
+
+\item For RDBE/PFB observations where the sideband in the RDBE
+must be lower, allow for the fact that the DiFX correlator can invert
+the sideband.  This is done in the code by the program that checks
+the setups for the RDBE/PFB.  If an upper sideband is found, it is
+converted to lower with appropriate LO and sideband changes.
+Some bugs were revealed in the VEX new mode section,
+some of which were fixed, but not all yet.  Oct. 16, 2011  RCW
+
+\item Make freq\_RDBE.dat with frequency bands adjusted for 512-1024 MHz.
 This now has the VLBA and GBT and one fake EB entry.  More will be 
 needed.  Oct. 12, 2011  RCW.
 
@@ -13076,7 +13109,9 @@ in the ongoing observations.  Oct. 11, 2011  RCW.
 names as much as possible, consistent with the positions from the 
 geodetic solutions.  This might break old key files. Oct. 11, 2011  RCW
 
-\update the locations catalog to gsfc2011a.  Oct. 7, 2011
+\item Update the locations catalog to gsfc2011a.  The Petrov rfc2011d
+and GSFC 2011a source catalogs are there but I have not dealt yet 
+with a combination.  Oct. 16, 2011
 
 \item Add BEGIN and END to locations catalog inputs to deal with time
 ranges for episodic motion.  Set up the format translators from 

@@ -2,7 +2,8 @@
 C
 C     Routine for SCHED called by SETFCAT that finds the best IF
 C     channel from the frequency catalog to use for a setup file 
-C     channel. 
+C     channel.   By this point, FREQREF, BBFILT, and NETSIDE 
+C     are known.  Other items may still be unset.
 C
 C     KS is the setup group.
 C     KF is the frequency catalog group.
@@ -14,13 +15,18 @@ C
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
 C
-      INTEGER           KS, KF, IIF, ICH, USEIF(MCHAN)
+      INTEGER           KS, KF, IIF, ICH, IC
+      INTEGER           USEIF(MCHAN), JSIDE(MCHAN)
       DOUBLE PRECISION  FRAD1, FRAD2
       REAL              OVERLAP, CENTER
       REAL              BESTCN
       REAL              CHOVER(MCHAN,MFIF), CHCENT(MCHAN,MFIF)
       LOGICAL           OKIF(MCHAN,MFIF)
-      DOUBLE PRECISION  FRQ1(MCHAN), FRQ2(MCHAN)
+      DOUBLE PRECISION  FRQ1(MCHAN), FRQ2(MCHAN), BBCFREQ(MCHAN)
+      INTEGER           NCROSS
+      PARAMETER         (NCROSS=2)
+      DOUBLE PRECISION  CROSS(NCROSS)
+      DATA  CROSS  / 640.D0, 896.D0 /
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'FMATCH starting' )
 C
@@ -29,6 +35,7 @@ C
       DO ICH = 1, NCHAN(KS)
 C
 C        Get the minimum and maximum frequency in each channel.
+C        Also get the baseband converter frequency.
 C
          IF( NETSIDE(ICH,KS) .EQ. 'L' ) THEN
             FRQ1(ICH) = FREQREF(ICH,KS) - BBFILT(ICH,KS)
@@ -56,12 +63,18 @@ C           Be sure this is an ok match according to FCOMPARE.
 C
             IF( OKIF(ICH,IIF) ) THEN
 C
-C              Check how much bandwidth overlaps.  
+C              Check how much bandwidth overlaps.
+C              For the RDBE, only count the part between the
+C              LO sum and a crossover if one is in the channel.
 C
                IF( FRQ2(ICH) .GT. FRAD1 .AND. 
      1             FRQ1(ICH) .LT. FRAD2 ) THEN
                   CHOVER(ICH,IIF) = MIN( FRQ2(ICH), FRAD2 ) - 
      1                              MAX( FRQ1(ICH), FRAD1 )
+                  IF( DBE(KS)(1:4) .EQ. 'RDBE' ) THEN
+                     CALL RDBEMTCH( KS, KF, ICH, IIF, FRAD1, FRAD2,
+     1                   FRQ1(ICH), FRQ2(ICH), CHOVER(ICH,IIF) )
+                  END IF
                ELSE
                   CHOVER(ICH,IIF) = 0.0
                END IF

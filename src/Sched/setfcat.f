@@ -4,6 +4,8 @@ C     Routine for SCHED called by SETDEFS that determines which
 C     frequency catalog entry to use for a setup group.  This
 C     catalog entry will be used to set parameters where necessary
 C     and will be used to check parameters that are provided.
+C     Critically, FREQREF and NETSIDE are known for each channel
+C     by the time this is called.
 C
 C     If an apropriate entry cannot be found, a warning is issued
 C     if NEEDCAT is false and an abort is issued if NEEDCAT is true.

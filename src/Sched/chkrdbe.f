@@ -17,6 +17,7 @@ C
 C
       INTEGER           KS, ICH
       LOGICAL           ERRS, DDWARN, SBWARN
+      CHARACTER         USEDIFC(2)*2
       DATA              DDWARN, SBWARN / .TRUE., .TRUE. /
       SAVE              DDWARN, SBWARN
 C --------------------------------------------------------------------
@@ -29,7 +30,29 @@ C     ---------
 C
       IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN 
 C
-C        First check the RDBE_PFB personality.
+C        Make sure there are only 2 IFs requested for now.
+C
+         USEDIFC(1) = ' '
+         USEDIFC(2) = ' '
+         DO ICH = 1, NCHAN(KS)
+            IF( IFCHAN(ICH,KS) .EQ. USEDIFC(1) .OR. 
+     1          IFCHAN(ICH,KS) .EQ. USEDIFC(2) ) THEN
+C              Do nothing
+            ELSE IF( USEDIFC(1) .EQ. ' ' ) THEN 
+               USEDIFC(1) = IFCHAN(ICH,KS)
+            ELSE IF( USEDIFC(2) .EQ. ' ' ) THEN
+               USEDIFC(2) = IFCHAN(ICH,KS)
+            ELSE
+C
+C              Here we have a problem - a third IF.
+C
+               CALL WLOG( 1, 'CHKRDBE: More than 2 IF''s requested '//
+     1             'for RDBE.  Cannot do that yet.' )
+               ERRS = .TRUE.
+            END IF
+         END DO
+C
+C        Check the RDBE_PFB personality.
 C        Most checks are meant to be used both before and after 
 C        the filter selection is available.
 C        There is one check that is meant to be temporary that
@@ -72,9 +95,10 @@ C
                END IF
             END DO
 C
-C           All sidebands must be lower.
+C           All baseband sidebands must be lower.
 C           Here is were we get a bit tricky and try to use
-C           inverted sidebands.
+C           inverted sidebands and let the correlator 
+C           fix it.
 C
             DO ICH = 1, NCHAN(KS)
                IF( SIDEBD(ICH,KS) .NE. 'L' ) THEN
@@ -89,6 +113,7 @@ C
 C
 C                 Now let's fix it, if it was 'U' - ie not some
 C                 other bad spec.
+C                 Add other correlators to the list eventually.
 C
                   IF( SIDEBD(ICH,KS) .EQ. 'U' .AND.
      1                ( CORREL .EQ. 'SOCORRO' .OR.
@@ -110,7 +135,9 @@ C                    For FREQREF, we need the net sideband.
 C                    CORINV is the amount that got added to FREQREF 
 C                    to get the LO setting. For comparison with 
 C                    channels that will get correlated against
-C                    this one, subtract CORINV.
+C                    this one, subtract CORINV.  Note in all cases
+C                    we will be increasing the BBSYN frequency.
+C                    FREQREF can go either way.
 C
                      IF( NETSIDE(ICH,KS) .EQ. 'U' ) THEN
                         NETSIDE(ICH,KS) = 'L'

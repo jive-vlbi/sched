@@ -3,6 +3,9 @@ C
 C     Routine for SCHED, called by CHKSET, that checks a number of
 C     items specific to the VLBA.
 C
+C     Allow 4 IFs from 6cm and allow wider LO range as it is 4-8 GHz.
+C     Nov 2011  RCW.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
@@ -44,8 +47,9 @@ C
 C
       IF( ( FE(1,KS) .EQ. '6cm'  .OR. FE(1,KS) .EQ. 'omit' ) .AND.
      1    ( FE(3,KS) .EQ. '6cm'  .OR. FE(3,KS) .EQ. 'omit' ) .AND. 
-     2    ( FE(2,KS) .EQ. 'omit' .OR. FE(4,KS) .EQ. 'omit' ) )
-     3   OK = .TRUE.
+     2    ( FE(2,KS) .EQ. '6cm'  .OR. FE(2,KS) .EQ. 'omit' ) .AND. 
+     3    ( FE(4,KS) .EQ. '6cm'  .OR. FE(4,KS) .EQ. 'omit' ) )
+     4   OK = .TRUE.
 C
       IF( ( FE(2,KS) .EQ. '3cm' .OR. FE(2,KS) .EQ. 'omit' ) .AND.
      1    ( FE(4,KS) .EQ. '3cm' .OR. FE(4,KS) .EQ. 'omit' ) .AND.
@@ -181,10 +185,24 @@ C
 C              Bands that use synthesizer 2.
 C
                ELSE IF( FE(IIF,KS) .EQ. '20cm' .OR.
-     1                  FE(IIF,KS) .EQ. '13cm' .OR.
-     2                  FE(IIF,KS) .EQ. '6cm' ) THEN
+     1                  FE(IIF,KS) .EQ. '13cm' ) THEN
                   IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(2) ) .GT. TEST) 
      1                OK = .FALSE.
+C
+C              Deal with 6 cm which can use either.
+C
+               ELSE IF( FE(IIF,KS) .EQ. '6cm' .AND. 
+     1                ( IFCHAN(ICH,KS) .EQ. 'A' .OR. 
+     2                  IFCHAN(ICH,KS) .EQ. 'C' ) ) THEN
+                  IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(2) ).GT.TEST ) THEN
+                     OK = .FALSE.
+                  END IF
+               ELSE IF( FE(IIF,KS) .EQ. '6cm' .AND. 
+     1                ( IFCHAN(ICH,KS) .EQ. 'B' .OR. 
+     2                  IFCHAN(ICH,KS) .EQ. 'D' ) ) THEN
+                  IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(1) ).GT.TEST ) THEN
+                     OK = .FALSE.
+                  END IF
 C
 C              1cm, 7mm, and 3mm use 2 synthesizers.
 C

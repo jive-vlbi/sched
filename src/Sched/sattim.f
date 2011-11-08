@@ -101,12 +101,27 @@ C
 C
 C     Above we required that STOP or DUR be set.  If STOP was not
 C     set, and START was, set INSTOP now.  Later, once we have
-C     STOPJ, we will reconstruct STARTJ from DUR.  This avoids
+C     STOPJ, we will reconstructS TARTJ from DUR.  This avoids
 C     a lot of hoop jumping concerning the start day number.
 C     If START, STOP, and DUR were given, require consistency to
 C     better than 1 second.
+C     Also add a day to DUR if start and stop on different days.
+C     Warn the user when this happens.
 C
       IF( START .NE. UNSET .AND. INSTOP .EQ. UNSET ) THEN
+         IF( START + INDUR .GT. 1.D0 - ONESEC ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I4, 2A )' ) 
+     1           'SATTIM: ** WARNING:  Scan ', ISCN, ' has a specified',
+     2        ' start time and crosses midnight (or almost).'
+            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 1, '        Remember that YEAR, MONTH, and DAY'//
+     1        ' apply to the scan stop time.' )
+            CALL WLOG( 1, '        Also if the stop was right at 24hr,'
+     1        // ' it might be adjusted to 23:59:59 after application'
+     2        // ' of the day.' )
+            CALL WLOG( 1, '        Check your scan dates carefully.' )
+         END IF
          INSTOP = MOD( START + INDUR, 1.D0 )
       END IF
       IF( START .NE. UNSET .AND. INSTOP .NE. UNSET ) THEN

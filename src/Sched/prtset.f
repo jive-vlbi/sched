@@ -21,7 +21,7 @@ C
       INTEGER           LEN1, KS, KF, IP, ICH, JCH 
       INTEGER           BITRATE, IUNIT, ISTA
       CHARACTER         FMT*80, IFNAME(4)*9
-      LOGICAL           ERRS, SPATCH, GOTFRQ, NEWFRQ
+      LOGICAL           ERRS, SPATCH, GOTFRQ, NEWFRQ, SIDEINV
       DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4)
       SAVE              IFNAME
       DATA              IFNAME / 'VLA IF A:', 'VLA IF B:', 
@@ -38,7 +38,7 @@ C
 C     Write the setup file name.
 C
       WRITE( IUNIT, '( 1X, /, 1X, /, 2A )' )
-     1       ' Setup file: ', SETNAME(KS)(1:LEN1(SETNAME(KS))) 
+     1       ' ======== Setup file: ', SETNAME(KS)(1:LEN1(SETNAME(KS))) 
 C
 C     Give matching entry in frequency catalog.  Can be more than
 C     one entry since differents channels can use different ones
@@ -148,6 +148,21 @@ C
      1           '   Setup not used for recording data.'
             END IF
 C
+         END IF
+C
+C        Warning about sideband inversion.
+C
+         SIDEINV = .FALSE.
+         DO ICH = 1, NCHAN(KS)
+            IF( CORINV(ICH,KS) .NE. 0.D0 ) SIDEINV = .TRUE.
+         END DO
+         IF( SIDEINV ) THEN
+            WRITE( IUNIT, '( 1X, /, A, A )' )
+     1         '   Frequencies shifted and sidebands ',
+     2         'inverted because RDBE_PFB can only'
+            WRITE( IUNIT, '( A, A )' )
+     1         '   do LSB.  Use a correlator, ',
+     2         'such as DiFX, that can invert sidebands.'
          END IF
 C
 C        Frequency info.
