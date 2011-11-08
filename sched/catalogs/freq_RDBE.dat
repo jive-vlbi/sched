@@ -104,7 +104,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2011Oct13-13:09:29"
+ VERSION = "2011Nov04-16:40:03"
 
 !  
 !  =====================================================================
@@ -238,27 +238,1683 @@ Name = v13cm_3  Station = VLBA    Priority = 1
   note='Most only 2200-2400'
 /
 
-! VLBA  6 cm    This one is fairly simple.
+! Old VLBA  6 cm    This one is fairly simple.
 !               Receiver:          4500 - 5200 MHz
 !               LO Filter:         3450 - 4750
 !               Maximum range:     4440 - 5240
 !               Good range:        4480 - 5200
+!
+!Name = v6cm_1  Station = VLBA     Priority = 0
+!  rf1 = 4440, 4440  ifname = A,    C
+!  rf2 = 4924, 4924  fe  = '6cm', '6cm'
+!  pol =  RCP,  LCP  lo1 =  3900,  3900  syn(2) = 3.9
+!/
+!Name = v6cm_2  Station = VLBA     Priority = 0
+!  rf1 = 4612, 4612  ifname = A,    C
+!  rf2 = 5124, 5124  fe  = '6cm', '6cm'
+!  pol =  RCP,  LCP  lo1 =  4100,  4100  syn(2) = 4.1
+!/
+!Name = v6cm_3  Station = VLBA     Priority = 1
+!  rf1 = 4912, 4912  ifname = A,    C
+!  rf2 = 5240, 5240  fe  = '6cm', '6cm'
+!  pol =  RCP,  LCP  lo1 =  4400,  4400  syn(2) = 4.4
+! /
 
-Name = v6cm_1  Station = VLBA     Priority = 0
-  rf1 = 4440, 4440  ifname = A,    C
-  rf2 = 4924, 4924  fe  = '6cm', '6cm'
-  pol =  RCP,  LCP  lo1 =  3900,  3900  syn(2) = 3.9
-/
-Name = v6cm_2  Station = VLBA     Priority = 0
-  rf1 = 4612, 4612  ifname = A,    C
-  rf2 = 5124, 5124  fe  = '6cm', '6cm'
-  pol =  RCP,  LCP  lo1 =  4100,  4100  syn(2) = 4.1
-/
-Name = v6cm_3  Station = VLBA     Priority = 1
-  rf1 = 4912, 4912  ifname = A,    C
-  rf2 = 5240, 5240  fe  = '6cm', '6cm'
-  pol =  RCP,  LCP  lo1 =  4400,  4400  syn(2) = 4.4
-/
+!  VLBA  4-8 GHz receiver.
+!        With the IF at 512-1024, this one cannot be simple as
+!        it would be impossible to reach the center of the band
+!        without aliasing.  So there is a choice of 2 filters
+!        at RF, plus the option to use upper or lower sideband.
+!        In addition, there can be 4 IF outputs split between
+!        2 bands (2 LO's available).
+!                RF filter 1:   3900.0 - 5900.0 MHz
+!                RF filter 2:   5600.0 - 7900.0 MHz
+!
+!        Syn(1) is attached to the BD channels.
+!        Syn(2) is attached to the AC channels.
+!
+!        In some cases, part of a band will be subject to aliased 
+!        signals.  The RF ranges reflect the unaffected portions.
+!
+!        The frequency sets below are created by program makefq_c.f
+!        in the $SCHED/RELATED_CODE/MAKEFREQ area.
+!
+!        The priorities are set to discourage the use of the
+!        four IF systems when not needed.
+
+Name = vc_a     Station = VLBA   Priority = 1
+  rf1    =  3912.,  3912.   ifname = A,    C
+  rf2    =  4424.,  4424.   fe    = '6cm', '6cm'    syn(2) =  3.4
+  pol    =   RCP,   LCP    lo1    =  3400.,  3400.
+ /
+Name = vc_b     Station = VLBA   Priority = 0
+  rf1    =  4112.,  4112.   ifname = A,    C
+  rf2    =  4624.,  4624.   fe    = '6cm', '6cm'    syn(2) =  3.6
+  pol    =   RCP,   LCP    lo1    =  3600.,  3600.
+ /
+Name = vc_f     Station = VLBA   Priority = 2
+  rf1    =  4376.,  4376.   ifname = A,    C
+  rf2    =  4750.,  4750.   fe    = '6cm', '6cm'    syn(2) =  5.4
+  pol    =   RCP,   LCP    lo1    =  5400.,  5400.
+ /
+Name = vc_c     Station = VLBA   Priority = 0
+  rf1    =  4412.,  4412.   ifname = A,    C
+  rf2    =  4924.,  4924.   fe    = '6cm', '6cm'    syn(2) =  3.9
+  pol    =   RCP,   LCP    lo1    =  3900.,  3900.
+ /
+Name = vc_g     Station = VLBA   Priority = 0
+  rf1    =  4576.,  4576.   ifname = A,    C
+  rf2    =  5088.,  5088.   fe    = '6cm', '6cm'    syn(2) =  5.6
+  pol    =   RCP,   LCP    lo1    =  5600.,  5600.
+ /
+Name = vc_d     Station = VLBA   Priority = 0
+  rf1    =  4612.,  4612.   ifname = A,    C
+  rf2    =  5124.,  5124.   fe    = '6cm', '6cm'    syn(2) =  4.1
+  pol    =   RCP,   LCP    lo1    =  4100.,  4100.
+ /
+Name = vc_h     Station = VLBA   Priority = 0
+  rf1    =  4876.,  4876.   ifname = A,    C
+  rf2    =  5388.,  5388.   fe    = '6cm', '6cm'    syn(2) =  5.9
+  pol    =   RCP,   LCP    lo1    =  5900.,  5900.
+ /
+Name = vc_e     Station = VLBA   Priority = 2
+  rf1    =  5050.,  5050.   ifname = A,    C
+  rf2    =  5424.,  5424.   fe    = '6cm', '6cm'    syn(2) =  4.4
+  pol    =   RCP,   LCP    lo1    =  4400.,  4400.
+ /
+Name = vc_i     Station = VLBA   Priority = 0
+  rf1    =  5076.,  5076.   ifname = A,    C
+  rf2    =  5588.,  5588.   fe    = '6cm', '6cm'    syn(2) =  6.1
+  pol    =   RCP,   LCP    lo1    =  6100.,  6100.
+ /
+Name = vc_j     Station = VLBA   Priority = 0
+  rf1    =  5376.,  5376.   ifname = A,    C
+  rf2    =  5888.,  5888.   fe    = '6cm', '6cm'    syn(2) =  6.4
+  pol    =   RCP,   LCP    lo1    =  6400.,  6400.
+ /
+Name = vc_k     Station = VLBA   Priority = 2
+  rf1    =  5576.,  5576.   ifname = A,    C
+  rf2    =  5900.,  5900.   fe    = '6cm', '6cm'    syn(2) =  6.6
+  pol    =   RCP,   LCP    lo1    =  6600.,  6600.
+ /
+Name = vc_l     Station = VLBA   Priority = 2
+  rf1    =  5600.,  5600.   ifname = A,    C
+  rf2    =  5924.,  5924.   fe    = '6cm', '6cm'    syn(2) =  4.9
+  pol    =   RCP,   LCP    lo1    =  4900.,  4900.
+ /
+Name = vc_m     Station = VLBA   Priority = 0
+  rf1    =  5612.,  5612.   ifname = A,    C
+  rf2    =  6124.,  6124.   fe    = '6cm', '6cm'    syn(2) =  5.1
+  pol    =   RCP,   LCP    lo1    =  5100.,  5100.
+ /
+Name = vc_n     Station = VLBA   Priority = 0
+  rf1    =  5912.,  5912.   ifname = A,    C
+  rf2    =  6424.,  6424.   fe    = '6cm', '6cm'    syn(2) =  5.4
+  pol    =   RCP,   LCP    lo1    =  5400.,  5400.
+ /
+Name = vc_o     Station = VLBA   Priority = 0
+  rf1    =  6112.,  6112.   ifname = A,    C
+  rf2    =  6624.,  6624.   fe    = '6cm', '6cm'    syn(2) =  5.6
+  pol    =   RCP,   LCP    lo1    =  5600.,  5600.
+ /
+Name = vc_r     Station = VLBA   Priority = 2
+  rf1    =  6376.,  6376.   ifname = A,    C
+  rf2    =  6700.,  6700.   fe    = '6cm', '6cm'    syn(2) =  7.4
+  pol    =   RCP,   LCP    lo1    =  7400.,  7400.
+ /
+Name = vc_p     Station = VLBA   Priority = 0
+  rf1    =  6412.,  6412.   ifname = A,    C
+  rf2    =  6924.,  6924.   fe    = '6cm', '6cm'    syn(2) =  5.9
+  pol    =   RCP,   LCP    lo1    =  5900.,  5900.
+ /
+Name = vc_s     Station = VLBA   Priority = 0
+  rf1    =  6576.,  6576.   ifname = A,    C
+  rf2    =  7088.,  7088.   fe    = '6cm', '6cm'    syn(2) =  7.6
+  pol    =   RCP,   LCP    lo1    =  7600.,  7600.
+ /
+Name = vc_q     Station = VLBA   Priority = 2
+  rf1    =  6800.,  6800.   ifname = A,    C
+  rf2    =  7124.,  7124.   fe    = '6cm', '6cm'    syn(2) =  6.1
+  pol    =   RCP,   LCP    lo1    =  6100.,  6100.
+ /
+Name = vc_t     Station = VLBA   Priority = 0
+  rf1    =  6876.,  6876.   ifname = A,    C
+  rf2    =  7388.,  7388.   fe    = '6cm', '6cm'    syn(2) =  7.9
+  pol    =   RCP,   LCP    lo1    =  7900.,  7900.
+ /
+Name = vc_u     Station = VLBA   Priority = 0
+  rf1    =  7076.,  7076.   ifname = A,    C
+  rf2    =  7588.,  7588.   fe    = '6cm', '6cm'    syn(2) =  8.1
+  pol    =   RCP,   LCP    lo1    =  8100.,  8100.
+ /
+Name = vc_v     Station = VLBA   Priority = 0
+  rf1    =  7376.,  7376.   ifname = A,    C
+  rf2    =  7888.,  7888.   fe    = '6cm', '6cm'    syn(2) =  8.4
+  pol    =   RCP,   LCP    lo1    =  8400.,  8400.
+ /
+Name = vc_w     Station = VLBA   Priority = 1
+  rf1    =  7576.,  7576.   ifname = A,    C
+  rf2    =  7900.,  7900.   fe    = '6cm', '6cm'    syn(2) =  8.6
+  pol    =   RCP,   LCP    lo1    =  8600.,  8600.
+ /
+Name = vc_ab    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  4112.,  4112.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  4624.,  4624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  3.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  3600.,  3600.
+ /
+Name = vc_af    Station = VLBA   Priority = 4
+  rf1    =  3912.,  3912.,  4376.,  4376.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  4750.,  4750.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  5400.,  5400.
+ /
+Name = vc_ac    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  4412.,  4412.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  4924.,  4924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  3.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  3900.,  3900.
+ /
+Name = vc_ag    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  4576.,  4576.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5088.,  5088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  5600.,  5600.
+ /
+Name = vc_ad    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  4612.,  4612.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5124.,  5124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  4.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  4100.,  4100.
+ /
+Name = vc_ah    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  4876.,  4876.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5388.,  5388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  5900.,  5900.
+ /
+Name = vc_ae    Station = VLBA   Priority = 4
+  rf1    =  3912.,  3912.,  5050.,  5050.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5424.,  5424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  4.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  4400.,  4400.
+ /
+Name = vc_ai    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  6100.,  6100.
+ /
+Name = vc_aj    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  6400.,  6400.
+ /
+Name = vc_ak    Station = VLBA   Priority = 4
+  rf1    =  3912.,  3912.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  6600.,  6600.
+ /
+Name = vc_al    Station = VLBA   Priority = 4
+  rf1    =  3912.,  3912.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  4900.,  4900.
+ /
+Name = vc_am    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  5100.,  5100.
+ /
+Name = vc_an    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  5400.,  5400.
+ /
+Name = vc_ao    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  5600.,  5600.
+ /
+Name = vc_ar    Station = VLBA   Priority = 4
+  rf1    =  3912.,  3912.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  7400.,  7400.
+ /
+Name = vc_ap    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  5900.,  5900.
+ /
+Name = vc_as    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  7600.,  7600.
+ /
+Name = vc_aq    Station = VLBA   Priority = 4
+  rf1    =  3912.,  3912.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  6100.,  6100.
+ /
+Name = vc_at    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  7900.,  7900.
+ /
+Name = vc_au    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  8100.,  8100.
+ /
+Name = vc_av    Station = VLBA   Priority = 2
+  rf1    =  3912.,  3912.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  8400.,  8400.
+ /
+Name = vc_aw    Station = VLBA   Priority = 3
+  rf1    =  3912.,  3912.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  4424.,  4424.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.4   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3400.,  3400.,  8600.,  8600.
+ /
+Name = vc_bf    Station = VLBA   Priority = 3
+  rf1    =  4112.,  4112.,  4376.,  4376.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  4750.,  4750.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  5400.,  5400.
+ /
+Name = vc_bc    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  4412.,  4412.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  4924.,  4924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  3.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  3900.,  3900.
+ /
+Name = vc_bg    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  4576.,  4576.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5088.,  5088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  5600.,  5600.
+ /
+Name = vc_bd    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  4612.,  4612.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5124.,  5124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  4.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  4100.,  4100.
+ /
+Name = vc_bh    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  4876.,  4876.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5388.,  5388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  5900.,  5900.
+ /
+Name = vc_be    Station = VLBA   Priority = 3
+  rf1    =  4112.,  4112.,  5050.,  5050.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5424.,  5424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  4.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  4400.,  4400.
+ /
+Name = vc_bi    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  6100.,  6100.
+ /
+Name = vc_bj    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  6400.,  6400.
+ /
+Name = vc_bk    Station = VLBA   Priority = 3
+  rf1    =  4112.,  4112.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  6600.,  6600.
+ /
+Name = vc_bl    Station = VLBA   Priority = 3
+  rf1    =  4112.,  4112.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  4900.,  4900.
+ /
+Name = vc_bm    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  5100.,  5100.
+ /
+Name = vc_bn    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  5400.,  5400.
+ /
+Name = vc_bo    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  5600.,  5600.
+ /
+Name = vc_br    Station = VLBA   Priority = 3
+  rf1    =  4112.,  4112.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  7400.,  7400.
+ /
+Name = vc_bp    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  5900.,  5900.
+ /
+Name = vc_bs    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  7600.,  7600.
+ /
+Name = vc_bq    Station = VLBA   Priority = 3
+  rf1    =  4112.,  4112.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  6100.,  6100.
+ /
+Name = vc_bt    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  7900.,  7900.
+ /
+Name = vc_bu    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  8100.,  8100.
+ /
+Name = vc_bv    Station = VLBA   Priority = 1
+  rf1    =  4112.,  4112.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  8400.,  8400.
+ /
+Name = vc_bw    Station = VLBA   Priority = 2
+  rf1    =  4112.,  4112.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  4624.,  4624.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.6   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3600.,  3600.,  8600.,  8600.
+ /
+Name = vc_fc    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  4412.,  4412.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  4924.,  4924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  3.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  3900.,  3900.
+ /
+Name = vc_fg    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  4576.,  4576.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5088.,  5088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5600.,  5600.
+ /
+Name = vc_fd    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  4612.,  4612.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5124.,  5124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  4.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  4100.,  4100.
+ /
+Name = vc_fh    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  4876.,  4876.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5388.,  5388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5900.,  5900.
+ /
+Name = vc_fe    Station = VLBA   Priority = 5
+  rf1    =  4376.,  4376.,  5050.,  5050.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5424.,  5424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  4.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  4400.,  4400.
+ /
+Name = vc_fi    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  6100.,  6100.
+ /
+Name = vc_fj    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  6400.,  6400.
+ /
+Name = vc_fk    Station = VLBA   Priority = 5
+  rf1    =  4376.,  4376.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  6600.,  6600.
+ /
+Name = vc_fl    Station = VLBA   Priority = 5
+  rf1    =  4376.,  4376.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  4900.,  4900.
+ /
+Name = vc_fm    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5100.,  5100.
+ /
+Name = vc_fn    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5400.,  5400.
+ /
+Name = vc_fo    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5600.,  5600.
+ /
+Name = vc_fr    Station = VLBA   Priority = 5
+  rf1    =  4376.,  4376.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  7400.,  7400.
+ /
+Name = vc_fp    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5900.,  5900.
+ /
+Name = vc_fs    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  7600.,  7600.
+ /
+Name = vc_fq    Station = VLBA   Priority = 5
+  rf1    =  4376.,  4376.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  6100.,  6100.
+ /
+Name = vc_ft    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  7900.,  7900.
+ /
+Name = vc_fu    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  8100.,  8100.
+ /
+Name = vc_fv    Station = VLBA   Priority = 3
+  rf1    =  4376.,  4376.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  8400.,  8400.
+ /
+Name = vc_fw    Station = VLBA   Priority = 4
+  rf1    =  4376.,  4376.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  4750.,  4750.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  8600.,  8600.
+ /
+Name = vc_cg    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  4576.,  4576.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5088.,  5088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  5600.,  5600.
+ /
+Name = vc_cd    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  4612.,  4612.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5124.,  5124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  4.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  4100.,  4100.
+ /
+Name = vc_ch    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  4876.,  4876.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5388.,  5388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  5900.,  5900.
+ /
+Name = vc_ce    Station = VLBA   Priority = 3
+  rf1    =  4412.,  4412.,  5050.,  5050.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5424.,  5424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  4.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  4400.,  4400.
+ /
+Name = vc_ci    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  6100.,  6100.
+ /
+Name = vc_cj    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  6400.,  6400.
+ /
+Name = vc_ck    Station = VLBA   Priority = 3
+  rf1    =  4412.,  4412.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  6600.,  6600.
+ /
+Name = vc_cl    Station = VLBA   Priority = 3
+  rf1    =  4412.,  4412.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  4900.,  4900.
+ /
+Name = vc_cm    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  5100.,  5100.
+ /
+Name = vc_cn    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  5400.,  5400.
+ /
+Name = vc_co    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  5600.,  5600.
+ /
+Name = vc_cr    Station = VLBA   Priority = 3
+  rf1    =  4412.,  4412.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  7400.,  7400.
+ /
+Name = vc_cp    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  5900.,  5900.
+ /
+Name = vc_cs    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  7600.,  7600.
+ /
+Name = vc_cq    Station = VLBA   Priority = 3
+  rf1    =  4412.,  4412.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  6100.,  6100.
+ /
+Name = vc_ct    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  7900.,  7900.
+ /
+Name = vc_cu    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  8100.,  8100.
+ /
+Name = vc_cv    Station = VLBA   Priority = 1
+  rf1    =  4412.,  4412.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  8400.,  8400.
+ /
+Name = vc_cw    Station = VLBA   Priority = 2
+  rf1    =  4412.,  4412.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  4924.,  4924.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  3.9   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  3900.,  3900.,  8600.,  8600.
+ /
+Name = vc_gd    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  4612.,  4612.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  5124.,  5124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  4.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  4100.,  4100.
+ /
+Name = vc_gh    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  4876.,  4876.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  5388.,  5388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  5900.,  5900.
+ /
+Name = vc_ge    Station = VLBA   Priority = 3
+  rf1    =  4576.,  4576.,  5050.,  5050.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  5424.,  5424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  4.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  4400.,  4400.
+ /
+Name = vc_gi    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  6100.,  6100.
+ /
+Name = vc_gj    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  6400.,  6400.
+ /
+Name = vc_gk    Station = VLBA   Priority = 3
+  rf1    =  4576.,  4576.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  6600.,  6600.
+ /
+Name = vc_gl    Station = VLBA   Priority = 3
+  rf1    =  4576.,  4576.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  4900.,  4900.
+ /
+Name = vc_gm    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  5100.,  5100.
+ /
+Name = vc_gn    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  5400.,  5400.
+ /
+Name = vc_go    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  5600.,  5600.
+ /
+Name = vc_gr    Station = VLBA   Priority = 3
+  rf1    =  4576.,  4576.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  7400.,  7400.
+ /
+Name = vc_gp    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  5900.,  5900.
+ /
+Name = vc_gs    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  7600.,  7600.
+ /
+Name = vc_gq    Station = VLBA   Priority = 3
+  rf1    =  4576.,  4576.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  6100.,  6100.
+ /
+Name = vc_gt    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  7900.,  7900.
+ /
+Name = vc_gu    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  8100.,  8100.
+ /
+Name = vc_gv    Station = VLBA   Priority = 1
+  rf1    =  4576.,  4576.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  8400.,  8400.
+ /
+Name = vc_gw    Station = VLBA   Priority = 2
+  rf1    =  4576.,  4576.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5088.,  5088.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  8600.,  8600.
+ /
+Name = vc_dh    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  4876.,  4876.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  5388.,  5388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  5900.,  5900.
+ /
+Name = vc_de    Station = VLBA   Priority = 3
+  rf1    =  4612.,  4612.,  5050.,  5050.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  5424.,  5424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  4.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  4400.,  4400.
+ /
+Name = vc_di    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  6100.,  6100.
+ /
+Name = vc_dj    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  6400.,  6400.
+ /
+Name = vc_dk    Station = VLBA   Priority = 3
+  rf1    =  4612.,  4612.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  6600.,  6600.
+ /
+Name = vc_dl    Station = VLBA   Priority = 3
+  rf1    =  4612.,  4612.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  4900.,  4900.
+ /
+Name = vc_dm    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  5100.,  5100.
+ /
+Name = vc_dn    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  5400.,  5400.
+ /
+Name = vc_do    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  5600.,  5600.
+ /
+Name = vc_dr    Station = VLBA   Priority = 3
+  rf1    =  4612.,  4612.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  7400.,  7400.
+ /
+Name = vc_dp    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  5900.,  5900.
+ /
+Name = vc_ds    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  7600.,  7600.
+ /
+Name = vc_dq    Station = VLBA   Priority = 3
+  rf1    =  4612.,  4612.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  6100.,  6100.
+ /
+Name = vc_dt    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  7900.,  7900.
+ /
+Name = vc_du    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  8100.,  8100.
+ /
+Name = vc_dv    Station = VLBA   Priority = 1
+  rf1    =  4612.,  4612.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  8400.,  8400.
+ /
+Name = vc_dw    Station = VLBA   Priority = 2
+  rf1    =  4612.,  4612.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5124.,  5124.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.1   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4100.,  4100.,  8600.,  8600.
+ /
+Name = vc_he    Station = VLBA   Priority = 3
+  rf1    =  4876.,  4876.,  5050.,  5050.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  5424.,  5424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  4.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  4400.,  4400.
+ /
+Name = vc_hi    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  6100.,  6100.
+ /
+Name = vc_hj    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  6400.,  6400.
+ /
+Name = vc_hk    Station = VLBA   Priority = 3
+  rf1    =  4876.,  4876.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  6600.,  6600.
+ /
+Name = vc_hl    Station = VLBA   Priority = 3
+  rf1    =  4876.,  4876.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  4900.,  4900.
+ /
+Name = vc_hm    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  5100.,  5100.
+ /
+Name = vc_hn    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  5400.,  5400.
+ /
+Name = vc_ho    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  5600.,  5600.
+ /
+Name = vc_hr    Station = VLBA   Priority = 3
+  rf1    =  4876.,  4876.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  7400.,  7400.
+ /
+Name = vc_hp    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  5900.,  5900.
+ /
+Name = vc_hs    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  7600.,  7600.
+ /
+Name = vc_hq    Station = VLBA   Priority = 3
+  rf1    =  4876.,  4876.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  6100.,  6100.
+ /
+Name = vc_ht    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  7900.,  7900.
+ /
+Name = vc_hu    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  8100.,  8100.
+ /
+Name = vc_hv    Station = VLBA   Priority = 1
+  rf1    =  4876.,  4876.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  8400.,  8400.
+ /
+Name = vc_hw    Station = VLBA   Priority = 2
+  rf1    =  4876.,  4876.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5388.,  5388.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  8600.,  8600.
+ /
+Name = vc_ei    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  5076.,  5076.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  5588.,  5588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  6100.,  6100.
+ /
+Name = vc_ej    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  6400.,  6400.
+ /
+Name = vc_ek    Station = VLBA   Priority = 5
+  rf1    =  5050.,  5050.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  6600.,  6600.
+ /
+Name = vc_el    Station = VLBA   Priority = 5
+  rf1    =  5050.,  5050.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  4900.,  4900.
+ /
+Name = vc_em    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  5100.,  5100.
+ /
+Name = vc_en    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  5400.,  5400.
+ /
+Name = vc_eo    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  5600.,  5600.
+ /
+Name = vc_er    Station = VLBA   Priority = 5
+  rf1    =  5050.,  5050.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  7400.,  7400.
+ /
+Name = vc_ep    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  5900.,  5900.
+ /
+Name = vc_es    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  7600.,  7600.
+ /
+Name = vc_eq    Station = VLBA   Priority = 5
+  rf1    =  5050.,  5050.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  6100.,  6100.
+ /
+Name = vc_et    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  7900.,  7900.
+ /
+Name = vc_eu    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  8100.,  8100.
+ /
+Name = vc_ev    Station = VLBA   Priority = 3
+  rf1    =  5050.,  5050.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  8400.,  8400.
+ /
+Name = vc_ew    Station = VLBA   Priority = 4
+  rf1    =  5050.,  5050.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5424.,  5424.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.4   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4400.,  4400.,  8600.,  8600.
+ /
+Name = vc_ij    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  5376.,  5376.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  5888.,  5888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  6.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  6400.,  6400.
+ /
+Name = vc_ik    Station = VLBA   Priority = 3
+  rf1    =  5076.,  5076.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  6600.,  6600.
+ /
+Name = vc_il    Station = VLBA   Priority = 3
+  rf1    =  5076.,  5076.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  4900.,  4900.
+ /
+Name = vc_im    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  5100.,  5100.
+ /
+Name = vc_in    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  5400.,  5400.
+ /
+Name = vc_io    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  5600.,  5600.
+ /
+Name = vc_ir    Station = VLBA   Priority = 3
+  rf1    =  5076.,  5076.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  7400.,  7400.
+ /
+Name = vc_ip    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  5900.,  5900.
+ /
+Name = vc_is    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  7600.,  7600.
+ /
+Name = vc_iq    Station = VLBA   Priority = 3
+  rf1    =  5076.,  5076.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  6100.,  6100.
+ /
+Name = vc_it    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  7900.,  7900.
+ /
+Name = vc_iu    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  8100.,  8100.
+ /
+Name = vc_iv    Station = VLBA   Priority = 1
+  rf1    =  5076.,  5076.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  8400.,  8400.
+ /
+Name = vc_iw    Station = VLBA   Priority = 2
+  rf1    =  5076.,  5076.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5588.,  5588.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  8600.,  8600.
+ /
+Name = vc_jk    Station = VLBA   Priority = 3
+  rf1    =  5376.,  5376.,  5576.,  5576.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  5900.,  5900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  6.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  6600.,  6600.
+ /
+Name = vc_jl    Station = VLBA   Priority = 3
+  rf1    =  5376.,  5376.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  4900.,  4900.
+ /
+Name = vc_jm    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  5100.,  5100.
+ /
+Name = vc_jn    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  5400.,  5400.
+ /
+Name = vc_jo    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  5600.,  5600.
+ /
+Name = vc_jr    Station = VLBA   Priority = 3
+  rf1    =  5376.,  5376.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  7400.,  7400.
+ /
+Name = vc_jp    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  5900.,  5900.
+ /
+Name = vc_js    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  7600.,  7600.
+ /
+Name = vc_jq    Station = VLBA   Priority = 3
+  rf1    =  5376.,  5376.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  6100.,  6100.
+ /
+Name = vc_jt    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  7900.,  7900.
+ /
+Name = vc_ju    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  8100.,  8100.
+ /
+Name = vc_jv    Station = VLBA   Priority = 1
+  rf1    =  5376.,  5376.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  8400.,  8400.
+ /
+Name = vc_jw    Station = VLBA   Priority = 2
+  rf1    =  5376.,  5376.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5888.,  5888.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.4   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6400.,  6400.,  8600.,  8600.
+ /
+Name = vc_kl    Station = VLBA   Priority = 5
+  rf1    =  5576.,  5576.,  5600.,  5600.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  5924.,  5924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  4.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  4900.,  4900.
+ /
+Name = vc_km    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  5100.,  5100.
+ /
+Name = vc_kn    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  5400.,  5400.
+ /
+Name = vc_ko    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  5600.,  5600.
+ /
+Name = vc_kr    Station = VLBA   Priority = 5
+  rf1    =  5576.,  5576.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  7400.,  7400.
+ /
+Name = vc_kp    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  5900.,  5900.
+ /
+Name = vc_ks    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  7600.,  7600.
+ /
+Name = vc_kq    Station = VLBA   Priority = 5
+  rf1    =  5576.,  5576.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  6100.,  6100.
+ /
+Name = vc_kt    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  7900.,  7900.
+ /
+Name = vc_ku    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  8100.,  8100.
+ /
+Name = vc_kv    Station = VLBA   Priority = 3
+  rf1    =  5576.,  5576.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  8400.,  8400.
+ /
+Name = vc_kw    Station = VLBA   Priority = 4
+  rf1    =  5576.,  5576.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5900.,  5900.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.6   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6600.,  6600.,  8600.,  8600.
+ /
+Name = vc_lm    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  5612.,  5612.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  6124.,  6124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  5.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  5100.,  5100.
+ /
+Name = vc_ln    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  5400.,  5400.
+ /
+Name = vc_lo    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  5600.,  5600.
+ /
+Name = vc_lr    Station = VLBA   Priority = 5
+  rf1    =  5600.,  5600.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  7400.,  7400.
+ /
+Name = vc_lp    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  5900.,  5900.
+ /
+Name = vc_ls    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  7600.,  7600.
+ /
+Name = vc_lq    Station = VLBA   Priority = 5
+  rf1    =  5600.,  5600.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  6100.,  6100.
+ /
+Name = vc_lt    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  7900.,  7900.
+ /
+Name = vc_lu    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  8100.,  8100.
+ /
+Name = vc_lv    Station = VLBA   Priority = 3
+  rf1    =  5600.,  5600.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  8400.,  8400.
+ /
+Name = vc_lw    Station = VLBA   Priority = 4
+  rf1    =  5600.,  5600.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  5924.,  5924.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  4.9   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  4900.,  4900.,  8600.,  8600.
+ /
+Name = vc_mn    Station = VLBA   Priority = 1
+  rf1    =  5612.,  5612.,  5912.,  5912.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  6424.,  6424.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  5.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  5400.,  5400.
+ /
+Name = vc_mo    Station = VLBA   Priority = 1
+  rf1    =  5612.,  5612.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  5600.,  5600.
+ /
+Name = vc_mr    Station = VLBA   Priority = 3
+  rf1    =  5612.,  5612.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  7400.,  7400.
+ /
+Name = vc_mp    Station = VLBA   Priority = 1
+  rf1    =  5612.,  5612.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  5900.,  5900.
+ /
+Name = vc_ms    Station = VLBA   Priority = 1
+  rf1    =  5612.,  5612.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  7600.,  7600.
+ /
+Name = vc_mq    Station = VLBA   Priority = 3
+  rf1    =  5612.,  5612.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  6100.,  6100.
+ /
+Name = vc_mt    Station = VLBA   Priority = 1
+  rf1    =  5612.,  5612.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  7900.,  7900.
+ /
+Name = vc_mu    Station = VLBA   Priority = 1
+  rf1    =  5612.,  5612.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  8100.,  8100.
+ /
+Name = vc_mv    Station = VLBA   Priority = 1
+  rf1    =  5612.,  5612.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  8400.,  8400.
+ /
+Name = vc_mw    Station = VLBA   Priority = 2
+  rf1    =  5612.,  5612.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  6124.,  6124.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.1   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5100.,  5100.,  8600.,  8600.
+ /
+Name = vc_no    Station = VLBA   Priority = 1
+  rf1    =  5912.,  5912.,  6112.,  6112.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  6624.,  6624.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5600.,  5600.
+ /
+Name = vc_nr    Station = VLBA   Priority = 3
+  rf1    =  5912.,  5912.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  7400.,  7400.
+ /
+Name = vc_np    Station = VLBA   Priority = 1
+  rf1    =  5912.,  5912.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  5900.,  5900.
+ /
+Name = vc_ns    Station = VLBA   Priority = 1
+  rf1    =  5912.,  5912.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  7600.,  7600.
+ /
+Name = vc_nq    Station = VLBA   Priority = 3
+  rf1    =  5912.,  5912.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  6100.,  6100.
+ /
+Name = vc_nt    Station = VLBA   Priority = 1
+  rf1    =  5912.,  5912.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  7900.,  7900.
+ /
+Name = vc_nu    Station = VLBA   Priority = 1
+  rf1    =  5912.,  5912.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  8100.,  8100.
+ /
+Name = vc_nv    Station = VLBA   Priority = 1
+  rf1    =  5912.,  5912.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  8400.,  8400.
+ /
+Name = vc_nw    Station = VLBA   Priority = 2
+  rf1    =  5912.,  5912.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  6424.,  6424.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.4   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5400.,  5400.,  8600.,  8600.
+ /
+Name = vc_or    Station = VLBA   Priority = 3
+  rf1    =  6112.,  6112.,  6376.,  6376.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  6700.,  6700.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  7.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  7400.,  7400.
+ /
+Name = vc_op    Station = VLBA   Priority = 1
+  rf1    =  6112.,  6112.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  5900.,  5900.
+ /
+Name = vc_os    Station = VLBA   Priority = 1
+  rf1    =  6112.,  6112.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  7600.,  7600.
+ /
+Name = vc_oq    Station = VLBA   Priority = 3
+  rf1    =  6112.,  6112.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  6100.,  6100.
+ /
+Name = vc_ot    Station = VLBA   Priority = 1
+  rf1    =  6112.,  6112.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  7900.,  7900.
+ /
+Name = vc_ou    Station = VLBA   Priority = 1
+  rf1    =  6112.,  6112.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  8100.,  8100.
+ /
+Name = vc_ov    Station = VLBA   Priority = 1
+  rf1    =  6112.,  6112.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  8400.,  8400.
+ /
+Name = vc_ow    Station = VLBA   Priority = 2
+  rf1    =  6112.,  6112.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  6624.,  6624.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.6   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5600.,  5600.,  8600.,  8600.
+ /
+Name = vc_rp    Station = VLBA   Priority = 3
+  rf1    =  6376.,  6376.,  6412.,  6412.   ifname = A, C, B, D
+  rf2    =  6700.,  6700.,  6924.,  6924.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.4   syn(1) =  5.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7400.,  7400.,  5900.,  5900.
+ /
+Name = vc_rs    Station = VLBA   Priority = 3
+  rf1    =  6376.,  6376.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  6700.,  6700.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.4   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7400.,  7400.,  7600.,  7600.
+ /
+Name = vc_rq    Station = VLBA   Priority = 5
+  rf1    =  6376.,  6376.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  6700.,  6700.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.4   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7400.,  7400.,  6100.,  6100.
+ /
+Name = vc_rt    Station = VLBA   Priority = 3
+  rf1    =  6376.,  6376.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  6700.,  6700.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.4   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7400.,  7400.,  7900.,  7900.
+ /
+Name = vc_ru    Station = VLBA   Priority = 3
+  rf1    =  6376.,  6376.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  6700.,  6700.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.4   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7400.,  7400.,  8100.,  8100.
+ /
+Name = vc_rv    Station = VLBA   Priority = 3
+  rf1    =  6376.,  6376.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  6700.,  6700.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.4   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7400.,  7400.,  8400.,  8400.
+ /
+Name = vc_rw    Station = VLBA   Priority = 4
+  rf1    =  6376.,  6376.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  6700.,  6700.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.4   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7400.,  7400.,  8600.,  8600.
+ /
+Name = vc_ps    Station = VLBA   Priority = 1
+  rf1    =  6412.,  6412.,  6576.,  6576.   ifname = A, C, B, D
+  rf2    =  6924.,  6924.,  7088.,  7088.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  7.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  7600.,  7600.
+ /
+Name = vc_pq    Station = VLBA   Priority = 3
+  rf1    =  6412.,  6412.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  6924.,  6924.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  6100.,  6100.
+ /
+Name = vc_pt    Station = VLBA   Priority = 1
+  rf1    =  6412.,  6412.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  6924.,  6924.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  7900.,  7900.
+ /
+Name = vc_pu    Station = VLBA   Priority = 1
+  rf1    =  6412.,  6412.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  6924.,  6924.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  8100.,  8100.
+ /
+Name = vc_pv    Station = VLBA   Priority = 1
+  rf1    =  6412.,  6412.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  6924.,  6924.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  8400.,  8400.
+ /
+Name = vc_pw    Station = VLBA   Priority = 2
+  rf1    =  6412.,  6412.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  6924.,  6924.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  5.9   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  5900.,  5900.,  8600.,  8600.
+ /
+Name = vc_sq    Station = VLBA   Priority = 3
+  rf1    =  6576.,  6576.,  6800.,  6800.   ifname = A, C, B, D
+  rf2    =  7088.,  7088.,  7124.,  7124.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.6   syn(1) =  6.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7600.,  7600.,  6100.,  6100.
+ /
+Name = vc_st    Station = VLBA   Priority = 1
+  rf1    =  6576.,  6576.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  7088.,  7088.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.6   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7600.,  7600.,  7900.,  7900.
+ /
+Name = vc_su    Station = VLBA   Priority = 1
+  rf1    =  6576.,  6576.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  7088.,  7088.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.6   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7600.,  7600.,  8100.,  8100.
+ /
+Name = vc_sv    Station = VLBA   Priority = 1
+  rf1    =  6576.,  6576.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  7088.,  7088.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.6   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7600.,  7600.,  8400.,  8400.
+ /
+Name = vc_sw    Station = VLBA   Priority = 2
+  rf1    =  6576.,  6576.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  7088.,  7088.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.6   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7600.,  7600.,  8600.,  8600.
+ /
+Name = vc_qt    Station = VLBA   Priority = 3
+  rf1    =  6800.,  6800.,  6876.,  6876.   ifname = A, C, B, D
+  rf2    =  7124.,  7124.,  7388.,  7388.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  7.9
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  7900.,  7900.
+ /
+Name = vc_qu    Station = VLBA   Priority = 3
+  rf1    =  6800.,  6800.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  7124.,  7124.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  8100.,  8100.
+ /
+Name = vc_qv    Station = VLBA   Priority = 3
+  rf1    =  6800.,  6800.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  7124.,  7124.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  8400.,  8400.
+ /
+Name = vc_qw    Station = VLBA   Priority = 4
+  rf1    =  6800.,  6800.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  7124.,  7124.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  6.1   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  6100.,  6100.,  8600.,  8600.
+ /
+Name = vc_tu    Station = VLBA   Priority = 1
+  rf1    =  6876.,  6876.,  7076.,  7076.   ifname = A, C, B, D
+  rf2    =  7388.,  7388.,  7588.,  7588.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.9   syn(1) =  8.1
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7900.,  7900.,  8100.,  8100.
+ /
+Name = vc_tv    Station = VLBA   Priority = 1
+  rf1    =  6876.,  6876.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  7388.,  7388.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.9   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7900.,  7900.,  8400.,  8400.
+ /
+Name = vc_tw    Station = VLBA   Priority = 2
+  rf1    =  6876.,  6876.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  7388.,  7388.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  7.9   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  7900.,  7900.,  8600.,  8600.
+ /
+Name = vc_uv    Station = VLBA   Priority = 1
+  rf1    =  7076.,  7076.,  7376.,  7376.   ifname = A, C, B, D
+  rf2    =  7588.,  7588.,  7888.,  7888.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  8.1   syn(1) =  8.4
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  8100.,  8100.,  8400.,  8400.
+ /
+Name = vc_uw    Station = VLBA   Priority = 2
+  rf1    =  7076.,  7076.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  7588.,  7588.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  8.1   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  8100.,  8100.,  8600.,  8600.
+ /
+Name = vc_vw    Station = VLBA   Priority = 2
+  rf1    =  7376.,  7376.,  7576.,  7576.   ifname = A, C, B, D
+  rf2    =  7888.,  7888.,  7900.,  7900.   fe  = '6cm', '6cm', '6cm', '6cm'
+  syn(2) =  8.4   syn(1) =  8.6
+  pol    =   RCP,   LCP,   RCP,  LCP      lo1 =  8400.,  8400.,  8600.,  8600.
+ /
 
 !   4cm   This receiver can split RCP and route a second version 
 !         through the LCP electronics with a separate LO.  This
@@ -1863,8 +3519,12 @@ Name = gbt6cmf Station = GBT_VLBA, GBT_COLD priority = 0
 !---------------------------------------------------------
 ! Note: X-band range is 7.9 - 11.6 GHz
 !      more setups could be added
-! The VLBA can match first LOs with the second 2, but prefers
-! upper sideband low in the range.
+! The VLBA can match first LOs at 9100 and 9400, but prefers
+! upper sideband low in the range.  If the VLBA is using
+! upper sideband and the GBT lower, a match requires adding 
+! 36 MHz to the GBT frequencies.  SCHED is reluctant to span 
+! crossover frequencies, which will be different between the
+! choices, so that should drive it to select the right set.
 !---------------------------------------------------------
 Name = gbt4cma  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 7912, 7912    ifname = A,    C
@@ -1878,11 +3538,23 @@ Name = gbt4cmb  Station = GBT_VLBA, GBT_COLD priority = 0
   pol =  RCP,  LCP    lo1 = 9100.0, 9100.0
   note = 'LO1=11.332, LO2=12.732, LO3=10.5 '
 /
+Name = gbt4cmd  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 8112, 8112    ifname = A,    C
+  rf2 = 8624, 8624    fe  = '4cm', '4cm'
+  pol =  RCP,  LCP    lo1 = 9136.0, 9136.0
+  note = 'LO1=11.368, LO2=12.732, LO3=10.5 '
+/
 Name = gbt4cmc  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 8376, 8376    ifname = A,    C
   rf2 = 8888, 8888    fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 = 9400.0, 9400.0
   note = 'LO1=11.632, LO2=12.732, LO3=10.5 '
+/
+Name = gbt4cme  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 8412, 8412    ifname = A,    C
+  rf2 = 8924, 8924    fe  = '4cm', '4cm'
+  pol =  RCP,  LCP    lo1 = 9436.0, 9436.0
+  note = 'LO1=11.668, LO2=12.732, LO3=10.5 '
 /
 
 !---------------------------------------------------------

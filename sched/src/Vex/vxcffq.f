@@ -10,7 +10,6 @@ C
       INTEGER ISET, JSET, ISIDE1, JSIDE1, ICH
       LOGICAL IDENT
       CHARACTER UPCALI*4, UPCALJ*4
-      DOUBLE PRECISION ILOSUM, JLOSUM
 C ----------------------------------------------------------------------
 C
       IDENT = .TRUE.
@@ -38,35 +37,24 @@ C           now compare pols, can only be RCP or LCP (chkset)
 C
             IF( POL(ICH,ISET) .NE. POL(ICH,JSET) ) IDENT = .FALSE. 
 C
-C           build up sky freqs for I...
+C           Check the frequencies.
+C           I removed the unnecessary calculation of ILOSUM and 
+C           JLOSUM.  The values are already available as FREQREF.
+C           RCW  Nov. 8, 2011
 C
-            IF( SIDE1(ICH,ISET) .EQ. 'U' ) THEN
-               ISIDE1 = 1
-            ELSE IF( SIDE1(ICH,ISET) .EQ. 'L' ) THEN
-               ISIDE1 = -1
-            ELSE
-               CALL ERRLOG( 'VXCFFQ: First LO sideband problem.' )
-            END IF
-C
-            ILOSUM = FIRSTLO(ICH,ISET) + ISIDE1 * BBSYN(ICH,ISET)
-C
-C           build up sky freqs for J...
-C
-            IF( SIDE1(ICH,JSET) .EQ. 'U' ) THEN
-               JSIDE1 = 1
-            ELSE IF( SIDE1(ICH,JSET) .EQ. 'L' ) THEN
-               JSIDE1 = -1
-            ELSE
-               CALL ERRLOG( 'VXCFFQ: First LO sideband problem.' )
-            END IF
-C
-            JLOSUM = FIRSTLO(ICH,JSET) + JSIDE1 * BBSYN(ICH,JSET)
-C
-            IF( ABS(ILOSUM-JLOSUM) .GT. 1e-4 ) IDENT = .FALSE.
+            IF( ABS(FREQREF(ICH,ISET)-FREQREF(ICH,JSET)) .GT. 1D-4 ) 
+     1           IDENT = .FALSE.
 C
 C           check bandwidth
 C
             IF( BBFILT(ICH,ISET) .NE. BBFILT(ICH,JSET) ) IDENT = .FALSE.
+C
+C           Check the net sideband.  We ran into a real schedule that 
+C           shifted by one BBC bandwidth and flipped sideband causing
+C           two different cases to appear to be the same.
+C
+            IF( NETSIDE(ICH,ISET) .NE. NETSIDE(ICH,JSET) ) 
+     1           IDENT = .FALSE.
 C
 C           finally wiring should be identical
 C

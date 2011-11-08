@@ -82,7 +82,7 @@ C
 C
          END DO
 C
-C        Now that we have the FREQSET and NETSIDE, we can 
+C        Now that we have the FREQREF and NETSIDE, we can 
 C        identify the proper frequency catalog entry.  Do so 
 C        and extract any information available in the frequency 
 C        catalog that is needed.  Of course, much of this is 

@@ -12,8 +12,8 @@ C     schedule time - something like 6 hours.  This routine will
 C     try to enforce providing adequate unprotected opportunities.
 C
 C     PESTART and PESTOP are the start and stop times of intervals
-C     when preemption is not ok.  Such intervals have intervals between
-C     unpreemptable scans of less than MINTPE long (set to 2 hr).  
+C     when preemption is ok.  Such intervals have intervals between
+C     unpreemptable scans longer than MINTPE long (set to 2 hr).  
 C
 C     The algorithm would be fairly simple if it weren't that SCHED 
 C     does not demand that scans be in time order.  Only each station
@@ -35,7 +35,7 @@ C
       INTEGER            SY, SD, TY, TD, LEN1
       INTEGER            IOERR, VLBOPE
       LOGICAL            GOTPTMK, TOOLONG, IGWARN, EXISTS
-      LOGICAL            SCNPTMK(MAXSCN)
+      LOGICAL            SCNPTMK(MAXSCN), ADDEND
       DOUBLE PRECISION   ST, TL
       DOUBLE PRECISION   PESTART(MPROT), PESTOP(MPROT)
       DOUBLE PRECISION   EXSTART, EXSTOP, BLOCK1, BLOCKL
@@ -206,10 +206,17 @@ C
       END DO
 C
 C     Now see if there is a short, but finite period of preemptable
-C     scans at the end.
+C     scans at the end.  If the final period is long, then PESTOP(NP)
+C     should equal EXSTOP and a segment won't be added.
 C
-      IF( ABS( PESTOP(NP) - EXSTOP ) .GT. ONESEC .AND. 
-     1    ABS( BLOCKL - EXSTOP ) .GT. ONESEC ) THEN
+      ADDEND = .FALSE.
+      IF( NP .EQ. 0 ) THEN
+         ADDEND =  ABS( BLOCKL - EXSTOP ) .GT. ONESEC
+      ELSE 
+         ADDEND =  ABS( PESTOP(NP) - EXSTOP ) .GT. ONESEC .AND. 
+     1             ABS( BLOCKL - EXSTOP ) .GT. ONESEC 
+      END IF
+      IF( ADDEND ) THEN
          NP = NP + 1
          PESTART(NP) = BLOCKL
          PESTOP(NP) = EXSTOP

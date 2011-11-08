@@ -86,6 +86,9 @@ C     eliminating the strongly overlapped ones because, with
 C     opposite sidebands, avoiding the crossover points might be
 C     possible in one and not the other.
 C
+C     For the priority, add 1 to discourage use of the dual 
+C     sets if they are not needed.
+C
       DO IFAC = 1, NF
          DO IFBD = 1, NF
             JF = SINDEX(IFAC)
@@ -94,7 +97,7 @@ C
                NAME(JF) = 'vc_'//CHAR(96+JF)//CHAR(96+KF)
                WRITE( *, '( A, A, A, I1 )' )
      1            'Name = ', NAME(JF), '  Station = VLBA'//
-     2            '   Priority = ', MAX( PRIO(JF), PRIO(KF) )
+     2            '   Priority = ', PRIO(JF) + PRIO(KF) +1
                WRITE( *, '( A, F6.0, A, F6.0, A, F6.0, A, F6.0, A )' )
      1            '  rf1    = ', RF1(JF), ', ', RF1(JF), ', ', 
      2            RF1(KF), ', ', RF1(KF), 
@@ -104,7 +107,7 @@ C
      2            RF2(KF), ', ', RF2(KF), 
      3            '   fe  = ''6cm'', ''6cm'', ''6cm'', ''6cm'''
                WRITE( *, '( A, F4.1, A, F4.1 )' )
-     1            '  syn(2) = ', LO(JF), '   syn(3) = ', LO(KF) 
+     1            '  syn(2) = ', LO(JF), '   syn(1) = ', LO(KF) 
                WRITE( *, '( A, F6.0, A, F6.0, A, F6.0, A, F6.0 )' )
      1            '  pol    =   RCP,   LCP,   RCP,  LCP      lo1 = ',
      2            LO(JF) * 1000.0, ', ', LO(JF) * 1000.0, ', ',
