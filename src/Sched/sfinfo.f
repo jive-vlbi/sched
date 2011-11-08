@@ -73,7 +73,7 @@ C
             IF( NCHAN(KS) .EQ. MSCHN(ISETF) .AND. 
      1          ( SGDUAL(KS) .EQV. SFDUAL(ISETF) ) ) THEN
                DO ICHN = 1, NCHAN(KS)
-                  SFFREQ(ICHN,ISETF) = FREQREF(ICHN,KS) + 
+                  SFFREQ(ICHN,ISETF) = FREQREF(ICHN,KS) -
      1                                 CORINV(ICHN,KS)
                   SFPOL(ICHN,ISETF) = POL(ICHN,KS)
                   IF( CORINV(ICHN,KS) .NE. 0.D0 ) THEN
@@ -145,7 +145,9 @@ C
             ISETF = ISETNUM(KS)
             DO ICHN = 1, NCHAN(KS)
                IF( SFCHAN(ICHN,KS) .EQ. 0 ) THEN
-         write(*,*) 'sfinfo set okxc F ', ks, isetf, ichn
+C              write(*,*) 'sfinfo set okxc F ', ks, isetf, ichn, 
+C     1           sfchan(ichn,ks), freqref(ichn,ks), corinv(ichn,ks),
+C     2           sffreq(ichn,isetf)
                   OKXC(ISETF) = .FALSE.
                END IF
                IF( ICHN .GE. 2 ) THEN
@@ -163,7 +165,6 @@ C        Warn the user if there are missmatched channels.
 C
          DO ISETF = 1, NSETF
             IF( .NOT. OKXC(ISETF) ) THEN
-       write(*,*) 'sfinfo not okxc ', isetf
                CALL WLOG( 1, 
      1             'SFINFO:  **** WARNING ****' )
                MSGTXT = ' '

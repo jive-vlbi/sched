@@ -11,7 +11,7 @@ C           MFIF     - Max number of IF's
 
 C           
       INTEGER       MFREQ, MFSTA, MFIF
-      PARAMETER     (MFREQ=800)
+      PARAMETER     (MFREQ=1200)
       PARAMETER     (MFSTA=10)
       PARAMETER     (MFIF=8)
 C

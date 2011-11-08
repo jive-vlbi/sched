@@ -182,8 +182,12 @@ Name = gbt6cmf Station = GBT_VLBA, GBT_COLD priority = 0
 !---------------------------------------------------------
 ! Note: X-band range is 7.9 - 11.6 GHz
 !      more setups could be added
-! The VLBA can match first LOs with the second 2, but prefers
-! upper sideband low in the range.
+! The VLBA can match first LOs at 9100 and 9400, but prefers
+! upper sideband low in the range.  If the VLBA is using
+! upper sideband and the GBT lower, a match requires adding 
+! 36 MHz to the GBT frequencies.  SCHED is reluctant to span 
+! crossover frequencies, which will be different between the
+! choices, so that should drive it to select the right set.
 !---------------------------------------------------------
 Name = gbt4cma  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 7912, 7912    ifname = A,    C
@@ -197,11 +201,23 @@ Name = gbt4cmb  Station = GBT_VLBA, GBT_COLD priority = 0
   pol =  RCP,  LCP    lo1 = 9100.0, 9100.0
   note = 'LO1=11.332, LO2=12.732, LO3=10.5 '
 /
+Name = gbt4cmd  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 8112, 8112    ifname = A,    C
+  rf2 = 8624, 8624    fe  = '4cm', '4cm'
+  pol =  RCP,  LCP    lo1 = 9136.0, 9136.0
+  note = 'LO1=11.368, LO2=12.732, LO3=10.5 '
+/
 Name = gbt4cmc  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 8376, 8376    ifname = A,    C
   rf2 = 8888, 8888    fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 = 9400.0, 9400.0
   note = 'LO1=11.632, LO2=12.732, LO3=10.5 '
+/
+Name = gbt4cme  Station = GBT_VLBA, GBT_COLD priority = 0
+  rf1 = 8412, 8412    ifname = A,    C
+  rf2 = 8924, 8924    fe  = '4cm', '4cm'
+  pol =  RCP,  LCP    lo1 = 9436.0, 9436.0
+  note = 'LO1=11.668, LO2=12.732, LO3=10.5 '
 /
 
 !---------------------------------------------------------

@@ -12,7 +12,6 @@ C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKVDIFX: starting.' )
 C
 C
-        write(*,*) 'chkvdifx if ', correl
       IF( ( CORREL(1:8) .EQ. 'VLBADIFX' .OR.
      1      CORREL(1:4) .EQ. 'VLBA' .OR.
      2      CORREL(1:4) .EQ. 'SOCORRO' ) .AND. .NOT. NOTAPE ) THEN
@@ -22,9 +21,7 @@ C
          IF( CAEXACT ) THEN
             CALL WRTMSG( 0, 'CHKVDIFX', 'CORAVGsetting1' )
          ELSE
-        write(*,*) 'chkvdifx calling wrtmsg '
             CALL WRTMSG( 0, 'CHKVDIFX', 'CORAVGsetting2' )
-         write(*,*) 'chkvdifx called wrtmsg '
          END IF
 C
 C        Check for known formats.
