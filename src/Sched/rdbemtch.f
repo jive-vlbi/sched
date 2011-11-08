@@ -64,16 +64,16 @@ C     corresponding the the freq catalog entry RF range.  They
 C     will be in inverse order relative to FRADn for lower IF
 C     sideband.
 C
-      IF( FREQREF(ICH,KS) .GT. FLO1(ICH,KF) ) THEN
+      IF( FREQREF(ICH,KS) .GT. FLO1(IIF,KF) ) THEN
          IFSIDE  = 1
-         BBCFR1  = FREQREF(ICH,KS) - FLO1(ICH,KF)
-         BBFRAD1 = FRAD1 - FLO1(ICH,KF)
-         BBFRAD2 = FRAD2 - FLO1(ICH,KF)
+         BBCFR1  = FREQREF(ICH,KS) - FLO1(IIF,KF)
+         BBFRAD1 = FRAD1 - FLO1(IIF,KF)
+         BBFRAD2 = FRAD2 - FLO1(IIF,KF)
       ELSE
          IFSIDE  = -1
-         BBCFR1  = FLO1(ICH,KF) - FREQREF(ICH,KS)
-         BBFRAD1 = FLO1(ICH,KF) - FRAD2
-         BBFRAD2 = FLO1(ICH,KF) - FRAD1
+         BBCFR1  = FLO1(IIF,KF) - FREQREF(ICH,KS)
+         BBFRAD1 = FLO1(IIF,KF) - FRAD2
+         BBFRAD2 = FLO1(IIF,KF) - FRAD1
       END IF
 C
       IF( ( NETSIDE(ICH,KS) .EQ. 'U' .AND. IFSIDE .EQ. 1 ) .OR.
