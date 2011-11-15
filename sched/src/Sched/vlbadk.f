@@ -17,6 +17,8 @@ C     means not recording.  That might happen without NOREC for
 C     RDBE schedules where the recording is happening outside the 
 C     control of the crd files.
 C
+C     LS is in schset.inc
+C
       IF( USEDISK(ISTA) ) THEN
          IF( NOREC(ISCN) .OR. SETSC .OR. FORMAT(LS) .EQ. 'NONE' .OR.
      1       ( DAR(STANUM(ISTA)) .EQ. 'RDBE' .AND. .NOT. DOMKA ) ) THEN

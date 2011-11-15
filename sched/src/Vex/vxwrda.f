@@ -7,6 +7,7 @@ C     By H.J. van Langevelde, JIVE, 300496
 C     Fix 1.5 version for DAS = none 070397
 C
 C     Removed much tape handling July 22, 2010  RCW.
+C     Initialize HEAD for pointing type observations.  Nov. 11, 2011 RCW.
 C 
       INCLUDE 'sched.inc' 
       INCLUDE 'schset.inc' 
@@ -135,7 +136,8 @@ C
 C     
 C        And the headstacks for each
 C
-         IF( USEDISK(ISTA) ) THEN
+         IF( USEDISK(ISTA) .OR. OBSTYP .EQ. 'NONE' .OR. 
+     1       OBSTYP .EQ. 'PTVLBA' ) THEN
 C           WRITE (HEAD, '( A )' ) ''
             HEAD = ' '
          END IF
