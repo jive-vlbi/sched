@@ -5,6 +5,9 @@ C     function generates a name for PO block IXX
 C     By H.J. van Langevelde, JIVE, 010996
 C
 C     Removed tape section July 22, 2010 RCW.
+C     Allow no disk if OBSTYP is NONE or PTVLBA.  Nov. 14, 2011
+C     The PO block is the pass order block, which is basically
+C     obsolete.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
@@ -35,7 +38,8 @@ C
      4          ASTAT = ISTA
          END DO
 C
-         IF( USEDISK(ASTAT) ) THEN
+         IF( USEDISK(ASTAT) .OR. OBSTYP .EQ. 'NONE' .OR.
+     1      OBSTYP .EQ. 'PTVLBA' ) THEN
             VXNMPO = 'DiskVoid'
          ELSE 
             CALL ERRLOG('VXNMPO: Not using disks at '//

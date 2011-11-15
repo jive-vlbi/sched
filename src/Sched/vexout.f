@@ -30,6 +30,12 @@ C     Allow VEX files to be written for moving sources, but warn that
 C     the positions should be obtained elsewhere for correlation.
 C     (Feb 27, 2010 RCW)
 C
+C     Nov. 2011.  We need Vex files for pointing observations, so
+C     no longer block non-recording projects.  The Vex files will
+C     now drive the new control systems at VLBA stations which are
+C     setting all the switches in the antenna.
+C
+C
       IF( DOVEX ) THEN
 C
 C        Look for recording scans on planets or satellites.  We don't
@@ -46,6 +52,7 @@ C
             END IF
          END DO
          IF( MOVING ) THEN
+            MSGTXT = ' '
             WRITE( MSGTXT, '(A,A)' )
      1        '++++ VEXOUT: Cannot pass accurate positions for ',
      2        'planets or satellites in the VEX file.'
@@ -55,6 +62,17 @@ C
      1        '        For correlation, get the source positions ',
      2        'elsewhere - like from ephemeris.'
             CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '(A,A)' )
+     1        '        For VLBA pointing observations as of 2011, the ',
+     2        'VEX positions'
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '(A,A)' )
+     1        '        are not used so this is ok.  You may ignore the',
+     2        ' warnings from VXSUDT.'
+            CALL WLOG( 1, MSGTXT )
+
          END IF
 C
 C        Check for any FORMAT 'NONE' and all FORMAT 'NONE'.  Don't

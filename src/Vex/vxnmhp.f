@@ -6,6 +6,9 @@ C     for now it is all 14 track, except for S2
 C     By H.J. van Langevelde, JIVE, 010996
 C
 C     Removed tape section July 22, 2010 RCW.
+C     Allow OBSTYPE NONE or PTVLBA.  Nov. 14, 2011.
+C     Note that the HP block is the head position block, 
+C     which is basically obsolete.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
@@ -31,7 +34,8 @@ C
      4            ASTAT = ISTA
          END DO
 C
-         IF( USEDISK(ASTAT) ) THEN
+         IF( USEDISK(ASTAT) .OR. OBSTYP .EQ. 'PTVLBA' .OR.
+     1       OBSTYP .EQ. 'NONE' ) THEN
             VXNMHP = 'DiskVoid'
          ELSE
             CALL ERRLOG('VXNMHP: Not using disks at '//

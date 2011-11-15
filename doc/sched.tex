@@ -9209,30 +9209,42 @@ positions, and velocities.  These catalogs are in keyin
 format. Entries are terminated with a ``/''.  Some or all of the
 catalog may be included in a section in the \sched\ input file.
 \sched\ will look there first for sources, and then go to the two
-possible external catalogs to find the rest (or all).  There is a
-standard catalog, {\sl sources.vlba}, included with the \schedb
-distribution, which will probably have most, if not all, sources in a
-project.  The scheduler may just refer to this catalog, or may copy
-the desired entries into catalog sections in the main \schedb input.
-The scheduler should consult the catalog to be sure that the right
-source names are being used in the schedule.
+possible external catalogs to find the rest (or all).  
 
-The a standard source catalog contains over 5000 sources, mostly from
-one or more geodetic VLBI solutions.  These are based on the
-International Celestial Reference Frame or ICRF (these have {\tt
-CALCODE=V}) and will be updated to the ICRF2 in 2010.  There are a few
-other sources that have not yet been measured with VLBI, or might be
-inappropriate for VLBI (too resolved) that are from the VLA calibrator
+As of Nov. 2011, there are three catalogs included with the \schedb
+distribution.  One contains only a recent astrometry solution from the
+Goddard Space Flight Center geodetic group.  Another contains only a
+recent solution provided by Leonid Petrov.  This one typically has
+very nearly all of the sources in the Goddard solution (they are
+working from the same data sets) plus a significant number more.  The
+third file, {\sl sources.vlba.all}, includes all sources in the other
+two plus around 500 other sources.  These are mostly VLA calibrator
+list or JVAS sources that, for whatever reason, don't have a good VLBI
+astrometric position.  They should be considered suspect for VLBI and
+may not even be detectable with VLBI.  There are over 7000 sources in
+the latter catalog, so there is a very good chance that a user's
+target sources will be in it and that there will be fairly nearby
+calibrators.
+
+The sources in the catalogs from the geodetic solutions are based on
+the International Celestial Reference Frame version 2 or ICRF2 (these
+have {\tt CALCODE=V}).  These have positional errors of a fraction of
+a milliarcsecond to a few milliarcseconds.  They include sources from
+the standard geodetic observing program, sources from the VLBA
+calibrator survey, the Australian LBA survey, and various sources
+specially observed in the RDV project on the VLBA.  Most of the additional sources
+in the third file above, as noted, are
+sources that have not yet been measured with VLBI, or might be
+inappropriate for VLBI (too resolved), that are from the VLA calibrator
 list ({\tt CALCODE=Y}) and from the JVAS survey ({\tt CALCODE=M};
 Patnaik et al. 1992, mnras, 254, 655; Browne et al. 1998, mnras, 293,
-257; Wilkinson et al. 1998, mnras, 300, 790).  The geodetic sources,
-which include sources from the VLBA calibrator survey, the Australian
-LBA survey, and various sources observed in the RDV project on the
-VLBA, have positions good to typically a milliarcsecond or better.
-The JVAS sources are good to $12-55$ mas.  The VLA calibrator positions
-are somewhat worse than the JVAS positions.  Users of accurate
-positions from the geodetic catalog are encouraged to reference the
-original papers.  Information about, and data from, the GSFC solutions
+257; Wilkinson et al. 1998, mnras, 300, 790).
+The JVAS source positions are good to $12-55$ mas.  The VLA calibrator
+positions are somewhat worse than the JVAS positions.  
+
+Users of accurate positions from the geodetic catalog are encouraged
+to reference the original papers, some of which are listed in the
+catalog headers.  Information about, and data from, the GSFC solutions
 can be found at
 \htmladdnormallink{http://vlbi.gsfc.nasa.gov/dataresults\_main.htm}
 {http://vlbi.gsfc.nasa.gov/dataresults\_main.htm}.  Catalogs and much
@@ -13061,6 +13073,13 @@ more information.
 
 \begin{itemize}
 
+\item Make new source catalogs sources.vlba.all, sources.rfc2011d, and
+sources.gsfc2011a based on the Goddard 2011a_astro and Petrov 2011d
+solutions.  See the top lines of any of those files for details of how
+they differ.  Users should think about which they wish to use which is
+why sources.vlba is no longer there except temporarily as a link to
+the previous catalog.  Nov. 11, 2011 RCW
+
 \item Fix an oversight in the Vex code where two FREQ blocks could
 be considered the same if everything except the net sideband matches.
 We actually had a test schedule involving sideband inversion at the
@@ -13109,9 +13128,7 @@ in the ongoing observations.  Oct. 11, 2011  RCW.
 names as much as possible, consistent with the positions from the 
 geodetic solutions.  This might break old key files. Oct. 11, 2011  RCW
 
-\item Update the locations catalog to gsfc2011a.  The Petrov rfc2011d
-and GSFC 2011a source catalogs are there but I have not dealt yet 
-with a combination.  Oct. 16, 2011
+\item Update the locations catalog to gsfc2011a.  Oct. 16, 2011  RCW
 
 \item Add BEGIN and END to locations catalog inputs to deal with time
 ranges for episodic motion.  Set up the format translators from 
