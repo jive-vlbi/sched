@@ -9,6 +9,10 @@ C     Deleting tape stuff, including S2.  July 20, 2010  RCW.
 C     Copy of original kept in sched_ARCHIVE_nonSVN/obsolete_routines/
 C     and also in SVN versions 294 and earlier.
 C
+C     When USEDISK is false since tape was taken out, some elements of 
+C     the lines were not written, causing parsing errors on read.  
+C     fixed  Nov. 15, 2011  RCW.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
@@ -466,7 +470,13 @@ C
                      END IF
                      WRITE( LINE(LPOS:LPOS+12), '( F9.3, A3, A1 )' ) 
      1                      STGB,' GB', COL
-                     
+C
+                  ELSE
+C                     
+C                    If not using disk (eg pointing), just put in blanks.
+C
+                     WRITE( LINE(LPOS:LPOS+2), '( 2X, A1 )' ) COL                  
+C
                   END IF
 C
 C                 Next is pass and subpass
@@ -476,10 +486,11 @@ C
                      WRITE( LINE(LPOS:LPOS+5), '( 3X, I1, 1X, A1 )' ) 
      1                   0,  COL
                   ELSE
-                     IF( USEDISK(ISTA) ) THEN
-                        WRITE( LINE(LPOS:LPOS+3), 
+C
+C                     In all other cases, put in the space and separator.
+C
+                      WRITE( LINE(LPOS:LPOS+3), 
      1                     '( 3X, A1 )' ) COL
-                     END IF
                   END IF
 C
 C                 Pointscr not implemented leave blank
@@ -494,7 +505,7 @@ C                 With removal of tape stuff, this is 1 if recording,
 C                 0 if not.
 C
                   TPDRIV = 1
-                  IF( NOREC(ISCN) ) TPDRIV = 0
+                  IF( NOREC(ISCN) .OR. .NOT. USEDISK(ISTA) ) TPDRIV = 0
                   LPOS = LEN1(LINE) + 1
                   WRITE( LINE(LPOS:LPOS+2), '( 1X, I1, A1 )' ) TPDRIV,
      1                 SEP

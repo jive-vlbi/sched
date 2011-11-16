@@ -90,7 +90,7 @@ C              Now add the VLBA receiver information in a comment.
 C              Hopefully this is a stop-gap until VEX2 provides a
 C              better mechanism.
 C
-               CALL VXVBRX( KS, IIF, VBCOM )
+               CALL VXVBRX( KS, ICH, VBCOM )
                I1 = LEN1( MSGTXT )
                MSGTXT = MSGTXT(1:I1) // VBCOM
 C

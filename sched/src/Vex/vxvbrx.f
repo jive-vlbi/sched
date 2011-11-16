@@ -1,4 +1,4 @@
-      SUBROUTINE VXVBRX( KS, IIF, VBCOM )
+      SUBROUTINE VXVBRX( KS, ICH, VBCOM )
 C
 C     Routine for writing comment information to the $IF segments
 C     of a VEX file to indicate the receiver, any receiver LO 
@@ -12,14 +12,15 @@ C     antenna.  It is station specific to the VLBA
 C
 C     All of the information needed is in the setup group on a per
 C     IF basis.  The calling program has both the setup group KS
-C     and IIF, so we only need those to get the info needed.
+C     and ICH, so we only need those to get the info needed.
 C
 C     Routine by RCW Sep. 2011.
+C     Bug fix Nov. 15, 2011.  Was using IF number as channel number.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER        KS, IIF
+      INTEGER        KS, ICH
       INTEGER        LEN1
       INTEGER        SYNPRT
       LOGICAL        GOTIT
@@ -35,13 +36,13 @@ C         Get the receiver.  Recall that, on the VLBA,
 C         IFs A, B, C, D correspond to the 4 elements of
 C         FE.
 C
-          IF( IFCHAN(IIF,KS) .EQ. 'A' ) THEN
+          IF( IFCHAN(ICH,KS) .EQ. 'A' ) THEN
              FETXT = FE(1,KS)
-          ELSE IF( IFCHAN(IIF,KS) .EQ. 'B' ) THEN
+          ELSE IF( IFCHAN(ICH,KS) .EQ. 'B' ) THEN
              FETXT = FE(2,KS)
-          ELSE IF( IFCHAN(IIF,KS) .EQ. 'C' ) THEN
+          ELSE IF( IFCHAN(ICH,KS) .EQ. 'C' ) THEN
              FETXT = FE(3,KS)
-          ELSE IF( IFCHAN(IIF,KS) .EQ. 'D' ) THEN
+          ELSE IF( IFCHAN(ICH,KS) .EQ. 'D' ) THEN
              FETXT = FE(4,KS)
           ELSE
              FETXT = 'NA'
@@ -60,11 +61,11 @@ C
           END IF
 C
           IF( FETXT .EQ. '50cm' .OR. FETXT .EQ. '90cm' ) THEN
-             IF( IFCHAN(IIF,KS) .EQ. 'A' .OR.
-     1           IFCHAN(IIF,KS) .EQ. 'C' ) THEN
+             IF( IFCHAN(ICH,KS) .EQ. 'A' .OR.
+     1           IFCHAN(ICH,KS) .EQ. 'C' ) THEN
                 FILTTXT = RCP50CM(KS)
-             ELSE IF( IFCHAN(IIF,KS) .EQ. 'B' .OR.
-     1           IFCHAN(IIF,KS) .EQ. 'D' ) THEN
+             ELSE IF( IFCHAN(ICH,KS) .EQ. 'B' .OR.
+     1           IFCHAN(ICH,KS) .EQ. 'D' ) THEN
                 FILTTXT = LCP50CM(KS)
              END IF
           ELSE

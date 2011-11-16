@@ -48,7 +48,7 @@ C
      A       CORREL(1:9) .NE. 'PENTICTON' .AND.
      B       CORREL(1:3) .NE. 'LBA' .AND.
      C       CORREL(1:6) .NE. 'FXCORR' .AND.
-     D       CORREL(1:4) .NE. 'OTHER' ) THEN
+     D       CORREL(1:5) .NE. 'OTHER' ) THEN
             CALL WLOG( 1, ' ** WARNING: ' // CORREL(1:LEN1(CORREL)) //
      1        ' is not a recognized correlator.' )
             CALL WLOG( 1, '     Recognized correlators are: '//
