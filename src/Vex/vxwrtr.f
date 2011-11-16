@@ -90,10 +90,27 @@ C
                WRITE( IVEX, '( 5X, A, A, A1 )' )
      1             'data_modulation = ','off', SEP
             ELSE IF( FORMAT(KS)(1:4) .EQ. 'VLBA' ) THEN
-               WRITE( IVEX, '( 5X, A, A, A1 )' )
-     1             'track_frame_format = ','VLBA', SEP
-               WRITE( IVEX, '( 5X, A, A, A1 )' )
-     1             'data_modulation = ','on', SEP
+C
+C              Temporary kludge to support pointing observations.
+C              RCW  Nov. 15, 2011.
+C
+               IF( OBSTYP .EQ. 'NONE' .OR. OBSTYP .EQ. 'PTVLBA' ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, A )' )
+     1                'VXWRTR: Setting format to MARK5B for ',
+     2                'pointing observations.'
+                  CALL WLOG( 1, MSGTXT )
+                  WRITE( IVEX, '( A1, A, A )' ) COM,
+     1                ' This is a fake format for ',
+     2                'non-recording observations.'
+                  WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1                'track_frame_format = ','MARK5B', SEP
+               ELSE
+                  WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1                'track_frame_format = ','VLBA', SEP
+                  WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1                'data_modulation = ','on', SEP
+               END IF
             ELSE IF( FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
                WRITE( IVEX, '( 5X, A, A, A1 )' )
      1             'track_frame_format = ','Mark4', SEP

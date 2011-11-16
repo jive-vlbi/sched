@@ -24,7 +24,7 @@ C
 C
 C     Only do some parameters only for the Socorro hardware correlator
 C
-      IF( CORREL(1:4) .EQ. 'FXCORR' .AND. .NOT. NOTAPE ) THEN
+      IF( CORREL(1:6) .EQ. 'FXCORR' .AND. .NOT. NOTAPE ) THEN
 C
 C        Get the FFT size and spectral averaging.  This is also done
 C        in CHKSOC where the results are checked against allowed
