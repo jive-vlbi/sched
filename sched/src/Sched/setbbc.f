@@ -98,6 +98,12 @@ C        to Mark IV.
 C
          CALL BBCM4( KS )
 C
+      ELSE IF( DAR(ISETSTA(KS)) .EQ. 'DBBC') THEN
+C
+C     Gino Tuccardi's DBBC, as used at Effelsberg
+C
+         CALL BBCDBBC( KS )
+C
       ELSE IF( DAR(ISETSTA(KS)) .NE. 'NONE' ) THEN
 C
 C        Do not try to default with other formats.
