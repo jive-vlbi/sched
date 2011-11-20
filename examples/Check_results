@@ -32,10 +32,14 @@ sed -e s:"$SCHED":"$SCHED_SUB":g $1.runlog | \
 
 #   Check the summary file.
 
-echo '----------------------' $1.sum '-------------------------'
 if( -e $1.sum ) then
+  echo '----------------------' $1.sum '-------------------------'
   sed -e s:"$SCHED":"$SCHED_SUB":g $1.sum | \
      sed -f Check_sed | diff - $3/$1.sum
+else if( -e $1.sum.$2 ) then
+  echo '----------------------' $1.sum.$2 '-------------------------'
+  sed -e s:"$SCHED":"$SCHED_SUB":g $1.sum.$2 | \
+     sed -f Check_sed | diff - $3/$1.sum.$2
 else
   echo '*************  SCHED did not run. ***************'
   echo 'This might be ok if the example tried to use an unsupported'
@@ -104,6 +108,10 @@ endif
 if( -e $1.vex ) then
   echo '----------------------' $1.vex ' ------------------------'
   sed -f Check_sed $1.vex | diff - $3/$1.vex
+else if( -e $1.sum.$2 ) then
+  echo '----------------------' $1.vex.$2 ' ---------------------'
+  sed -e s:"$SCHED":"$SCHED_SUB":g $1.vex.$2 | \
+     sed -f Check_sed | diff - $3/$1.vex.$2
 endif
 
 echo '----------------------------------------------------------'

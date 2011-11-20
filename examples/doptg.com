@@ -1,16 +1,21 @@
 #!/bin/csh
+#
+#  Try with VEX file
+#
 # ========================================================
 # =====  Script to make pointing files for the VLBA  =====
 # ========================================================
 #  Set stations to be processed.
+#  Note that the case used here will appear in the sum and
+#  vex file names, so it is better to use lower.
 #  The schedules need to be different depending on whether
 #  a 3mm receiver is present.
 #  Examples:
-#  set stalist_3mm="HN NL FD LA PT KP OV MK"
-#  set stalist_no3mm="BR SC"
+#  set stalist_3mm="hn nl fd la pt kp ov mk"
+#  set stalist_no3mm="br sc"
 #  set stalist_no3mm=""      eg use blank if no stations of this type.
-set stalist_3mm="BR FD PT"
-set stalist_no3mm="HN SC"
+set stalist_3mm="pt hn"
+set stalist_no3mm="hn"
 
 #
 #  Set times and experiment code
@@ -70,7 +75,6 @@ dwell   = 5:45
 ptslew  = 15 
 optmode = SCANS    ! Select scans that are above minimum elevation.
 opminel = 20.      ! Minimum elevation.
-dovex=-1           ! Turn off VEX so it will do planets.
 
 eofs
 
@@ -102,7 +106,9 @@ endlines /
 !  if the slew takes longer than 40 seconds.  That is partly why
 !  there is a second peak scan.
 
+
 group=(10*3+8*3) rep=50
+
 setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
 setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
@@ -255,6 +261,8 @@ foreach station ( $stalist_3mm[1*] )
        sch = ptg_3mm.par
        overwrit /
 eofst
+   mv ptg.sum ptg.sum.$station
+   mv ptg.vex ptg.vex.$station
 end
 #
 # Finally run sched separately for each no 3mm station.
@@ -268,6 +276,8 @@ foreach station ( $stalist_no3mm[1*] )
        sch = ptg_no3mm.par
        overwrit /
 eofst
+   mv ptg.sum ptg.sum.$station
+   mv ptg.vex ptg.vex.$station
 end
 #
 #   Some clean up.

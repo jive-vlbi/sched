@@ -50,14 +50,15 @@ C     First find out how many $BLOCKS there are and keep one
 C     of the sets that specifies it (many sets can use one $FREQ or $IF)
 C
       WRITE( MSGTXT, '( A, A, A )' ) 
-     1    'VXSORT: Start sorting ', BLOCK, ' definition'
+     1    ' VXSORT: Start sorting ', BLOCK, ' definition'
       IF( DEBUG ) CALL WLOG( 1, MSGTXT(1:LEN1(MSGTXT) ))
       NXXVEX = 0
       DO KS = 1, NSET
 C
 C        Obviously a new block when it's the first.
 C
-         IF( USED(KS) .AND. FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
+         IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+     1         OBSTYP .EQ. 'PTVLBA' ) ) THEN
             IF( NXXVEX .EQ. 0 ) THEN
                NEWFND = .TRUE.
             ELSE
@@ -158,42 +159,51 @@ C        Go through the antennas in a experiment
 C
          DO ISTA = 1, NSTA
 C
-C           Obviously there is a new SET when there is no previous one
+C           Skip for unused or format NONE and not PTVLBA
+C           Nov. 2011  RCW.
 C
-            IF( MODSET(ISTA,IMODE) .NE. 0 .AND. 
-     1             NMODXX(IMODE) .EQ. 0 ) THEN
-               NEWFND = .TRUE.
-            ELSE
+            KS = MODSET(ISTA,IMODE)
+            IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+     1         OBSTYP .EQ. 'PTVLBA' ) ) THEN
 C
-C              Find if a set already used for a previous antenna:
+C              Obviously there is a new SET when there is no previous one
 C
-               IF( MODSET(ISTA,IMODE) .EQ. 0 ) THEN
-                  NEWFND = .FALSE.
-               ELSE
+               IF( MODSET(ISTA,IMODE) .NE. 0 .AND. 
+     1                NMODXX(IMODE) .EQ. 0 ) THEN
                   NEWFND = .TRUE.
-                  DO J = 1, NMODXX(IMODE)
+               ELSE
+C
+C                 Find if a set already used for a previous antenna:
+C
+                  IF( MODSET(ISTA,IMODE) .EQ. 0 ) THEN
+                     NEWFND = .FALSE.
+                  ELSE
+                     NEWFND = .TRUE.
+                     DO J = 1, NMODXX(IMODE)
 C
 C                    Check if XX already used, note many modes may use 1 XX
 C
-                     IF( SETISXX(MODSET(ISTA,IMODE)) .EQ. 
-     1                   IMODXX(J,IMODE) )
-     2                   NEWFND = .FALSE.
-                  END DO
+                        IF( SETISXX(MODSET(ISTA,IMODE)) .EQ. 
+     1                      IMODXX(J,IMODE) )
+     2                      NEWFND = .FALSE.
+                     END DO
+                  END IF
                END IF
-            END IF
 C
-C           Now take the appropriate action
+C              Now take the appropriate action
 C
-            IF( NEWFND ) THEN
+               IF( NEWFND ) THEN
 C
-C              so a new block def is found for this mode, remember
-C              which block it is that is referenced in this mode
+C                 so a new block def is found for this mode, remember
+C                 which block it is that is referenced in this mode
 C
-               NMODXX(IMODE) = NMODXX(IMODE) + 1
-               IF( NMODXX(IMODE) .GT. MAXMOD ) CALL ERRLOG(
-     1           'VXSORT: Number of $'//BLOCK//' defs in $MODE '//
-     2           'exceeding MAXMOD, should never happen...')
-               IMODXX(NMODXX(IMODE),IMODE) = SETISXX(MODSET(ISTA,IMODE))
+                  NMODXX(IMODE) = NMODXX(IMODE) + 1
+                  IF( NMODXX(IMODE) .GT. MAXMOD ) CALL ERRLOG(
+     1              'VXSORT: Number of $'//BLOCK//' defs in $MODE '//
+     2              'exceeding MAXMOD, should never happen...')
+                  IMODXX(NMODXX(IMODE),IMODE) = 
+     1               SETISXX(MODSET(ISTA,IMODE))
+               END IF
             END IF
          END DO
       END DO
@@ -224,7 +234,8 @@ C              first find an exact match:
 C              should be possible to make clearer
 C
                DO KS = 1, NSET
-                  IF( USED(KS) .AND. FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
+                  IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+     1                OBSTYP .EQ. 'PTVLBA' ) ) THEN
                      IF( SETISXX(KS) .EQ. IXX .AND. 
      .                   KS .EQ. MODSET(ISTA,IMODE)) THEN
                         IF( STATION(ISCAT) .EQ. SETSTA(1,KS) ) THEN
@@ -259,13 +270,14 @@ C
 C
 C     Test whether a complication with stations in different
 C     defs used across modes occurs. Huib thinks this is solved
-C     but lets keep the check
+C     but lets keep the check.
 C
       PROBLEM = .FALSE.
       IF( NMDVEX .GT. 1) THEN
          DO IMODE = 1, NMDVEX
            KS = VXGTST( IMODE ) 
-           IF( USED(KS) .AND. FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
+           IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+     1          OBSTYP .EQ. 'VLBA' ) ) THEN
              IF( NMODXX(IMODE) .GT. 1 ) THEN
                 DO I = 2, NMODXX(IMODE)
                    IXX = IMODXX(I,IMODE)
