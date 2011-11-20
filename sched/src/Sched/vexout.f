@@ -90,14 +90,16 @@ C
 C        Actually write the VEX file, or explain why not.
 C
 C         IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
-         IF( ( OVERRIDE .OR. .NOT. ALLNONE ) .AND. 
-     1         OBSTYP .NE. 'CONFIG' ) THEN
+       write(*,*) 'vexout: ', override, fmtnone, allnone
+         IF( ( OVERRIDE .OR. .NOT. ALLNONE .OR. 
+     1         OBSTYP .EQ. 'PTVLBA') .AND. 
+     2         OBSTYP .NE. 'CONFIG' ) THEN
 C
             CALL VXWRT
 C
 C           Also write a template v2d file for DiFX correlation.
 C
-            CALL V2DOUT
+            IF( .NOT. OBSTYP .EQ. 'PTVLBA' ) CALL V2DOUT
 C
          ELSE IF( ALLNONE ) THEN
             WRITE( MSGTXT, '(A,A)' )

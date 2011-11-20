@@ -15,10 +15,13 @@ C
 C ----------------------------------------------------------------------
 C
       DO IMODE = 1, NMDVEX
+C
 C        Find the sched setup corresponding to this mode so we can check
 C        the format
+C
          ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
+         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
+     1       OBSTYP .EQ. 'PTVLBA' ) THEN
            IF ( NSTAXX(IXX,IMODE) .GT. 0 ) THEN
               WRITE( LINE, '( A1, A, I2, 4X, A )' ) 
      1            COM, ' mode = ', IMODE, 'stations = '

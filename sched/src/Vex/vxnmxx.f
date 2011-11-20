@@ -23,7 +23,7 @@ C
          XXLINK(NXX) = VXNMHP( NXX )
       ELSE IF( BLOCK .EQ. 'RL' ) THEN
          XXLINK(NXX) = VXNMRL( NXX )
-      ELSE IF( BLOCK .EQ. 'PO' ) THEN
+      ELSE IF( BLOCK .EQ. 'PO' .AND. .NOT. OBSTYP .EQ. 'PTVLBA' ) THEN
          XXLINK(NXX) = VXNMPO( NXX )
       ELSE IF( BLOCK .EQ. 'PH' ) THEN
          XXLINK(NXX) = VXNMPH( NXX, .FALSE. )
@@ -33,7 +33,7 @@ C
          XXLINK(NXX) = VXNMIF( NXX, .FALSE. )
       ELSE IF( BLOCK .EQ. 'BB' ) THEN
          XXLINK(NXX) = VXNMBB( NXX )
-      ELSE IF( BLOCK .EQ. 'TR' ) THEN
+      ELSE IF( BLOCK .EQ. 'TR' .AND. .NOT. OBSTYP .EQ. 'PTVLBA' ) THEN
          XXLINK(NXX) = VXNMTR( NXX )
       ELSE IF( BLOCK .EQ. 'DA' ) THEN
          XXLINK(NXX) = VXNMDA( NXX )

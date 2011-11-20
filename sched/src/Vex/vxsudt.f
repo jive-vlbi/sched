@@ -22,9 +22,17 @@ C      REAL      RARATE, DECRAT
 C
 C                 we have some info on cal code, write in comment
 C
-            WRITE( IVEX, '( A1, 4X, A, A1 )' )
-     1          COM, 'this source had calibrator code: ', 
-     2          CALCODE(ISRC)
+      WRITE( IVEX, '( A1, 4X, A, A1 )' )
+     1     COM, 'this source had calibrator code: ', 
+     2     CALCODE(ISRC)
+C
+      IF( PLANET(ISRC) .OR. SATEL(ISRC) ) THEN
+         WRITE( IVEX, '( A1, 4X, A, A )' )
+     1     COM, 'This source is a planet or satellite.  ',
+     2     'The motion is not handled in VEX.'
+         WRITE( IVEX, '( A1, 4X, A )' )
+     1     COM, 'Do not use the position for pointing or correlation.'
+      END IF
 C
       DO I = 1, MALIAS
          IF( I .NE. INAME ) THEN

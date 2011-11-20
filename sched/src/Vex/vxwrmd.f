@@ -26,9 +26,14 @@ C
 C     First issue a warning for more than 20 modes...
 C
       IF( NMDVEX .GT. 20 ) THEN
+         MSGTXT = ' ' 
          WRITE( MSGTXT, '( A, I3, A )' ) 
      1       'VXWRMD: WARNING: More than 20 VEX modes (', NMDVEX,
-     2       ') in this schedule. This VEX will NOT run!' 
+     2       ') in this schedule. '
+         CALL WLOG( 1,MSGTXT)
+         MSGTXT = ' ' 
+         WRITE( MSGTXT, '( 2A )' ) 'VXWRMD:          ',
+     1       'This VEX will NOT run in the field system!' 
          CALL WLOG( 1,MSGTXT)
       END IF
 C
@@ -40,7 +45,8 @@ C        Find a station that uses this Vex mode so we can find its Sched
 C        setup to check the FORMAT
 C
          ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
+         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' .AND. 
+     1       OBSTYP .NE. 'PTVLBA' ) THEN
            WRITE( IVEX, '( A1 )' ) COM
            WRITE( IVEX, '( A, A, A, A1 )' ) COM, 'def ',
      1             MDLINK(IMODE)(1:LEN1(MDLINK(IMODE))), SEP

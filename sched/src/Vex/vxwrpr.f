@@ -20,13 +20,14 @@ C
       DO IXX = 1, NPRVEX
 C     don't write anything for FORMAT=NONE modes
          ISET = VXGTST( IXX )
-         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
+         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' .AND. 
+     1       OBSTYP .NE. 'PTVLBA' ) THEN
            WRITE( IVEX, '( A1 )' ) COM
            WRITE( IVEX, '( A1, A, A, A )' ) COM, 
      1         'This comment results from mode "', 
      2         PRLINK(IXX)(1:LEN1(PRLINK(IXX))), 
      3         '" which used FORMAT=NONE'
-           ELSE 
+         ELSE 
 C
 C          Write a prefix (number)
 C
