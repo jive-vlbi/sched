@@ -16,7 +16,7 @@ C
 C ----------------------------------------------------------------------
       IF( DEBUG ) THEN
          MSGTXT = ' '
-         WRITE( MSGTXT, '( A, I5, A )' ) 'VXUNQL: Starting ', 
+         WRITE( MSGTXT, '( A, I5, 2X, A )' ) 'VXUNQL: Starting ', 
      1        NXX, XXLINK(NXX)
          CALL WLOG( 1, MSGTXT )
       END IF

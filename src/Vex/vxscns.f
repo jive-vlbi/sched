@@ -81,7 +81,8 @@ C
 C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
 C        mode can later be replaced with the mode of the previous 
 C        recording scan, or can simply be skipped when writing the
-C        scans.
+C        scans.  Don't do this for single dish VLBA observing for which
+C        OBSTYPE='PTVLBA'
 C
 C        To check the FORMAT, a SCHED setup file is needed.  
 C        VXGTXT is a function that returns one of possibly several setups
@@ -90,7 +91,8 @@ C        format = 'none' with other formats at other stations in the
 C        same scan.  I doubt that is done (RCW  Oct 15, 2011).
 C
          ISET = VXGTST( IMODE )
-         IF( .NOT. SKIPPED .AND. FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
+         IF( .NOT. SKIPPED .AND. ( FORMAT(ISET)(1:4) .NE. 'NONE' .OR.
+     1        OBSTYP .EQ. 'PTVLBA' ) ) THEN
 C
 C          The VEX modes are the same across antennas in a scan, but some
 C          antennas may join later, so find the first scan for which the
@@ -286,6 +288,9 @@ C       prefer that there were simply gaps in the schedule so they can
 C       use their own pointing procedures. So leave this section of code
 C       commented out for now and in VXSCH, the FORMAT=NONE scans can be
 C       skipped.
+C     RCW Nov 2011.  For VLBA pointing, also do not want to replace the mode
+C     even though format is NONE as the mode will be important for setting 
+C     up the telescope switches.
 C
 C     Now loop through the scans again and replace the MODSCN for any with 
 C     FORMAT=NONE (not processed first time) with the MODSCAN from a recording 

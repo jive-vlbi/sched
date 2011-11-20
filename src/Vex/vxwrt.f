@@ -80,6 +80,16 @@ C
      5      '*'
          WRITE( IVEX, '( A )' ) COMLIN
       END IF
+      IF( OBSTYP .EQ. 'PTVLBA' ) THEN
+         WRITE( IVEX, '( A, / A, /, A, /, A, /, A, /, A )' )
+     1      '*',
+     2      '*   ++++  WARNING:  This file is meant for VLBA single',
+     3      '*          dish observing.  It may contain setups',
+     4      '*          with FORMAT=NONE or other constructs that',
+     5      '*          will not work at most stations.',
+     6      '*'
+         WRITE( IVEX, '( A )' ) COMLIN
+      END IF
 C
 C     first issue warnings if violates PCFS constraints
 C      
@@ -129,27 +139,46 @@ C
       CALL VXMODE
 C
 C     sort out how many FQ sections exist and how they are referenced
+C     If doing single dish, skip some that are not needed.  RCW Nov 2011
+C
+C     Freqency
 C
       CALL VXSORT( 'FQ', NFQVEX, FQISSET, NMODFQ, IMODFQ,
      1     NSTAFQ, ISTAFQ, FQLINK )
 C
+C     IF
+C
       CALL VXSORT( 'IF', NIFVEX, IFISSET, NMODIF, IMODIF,
      1     NSTAIF, ISTAIF, IFLINK )
+C
+C     BBC
 C
       CALL VXSORT( 'BB', NBBVEX, BBISSET, NMODBB, IMODBB,
      1     NSTABB, ISTABB, BBLINK )
 C
-      CALL VXSORT( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
-     1     NSTATR, ISTATR, TRLINK )
+C     Tracks
 C
-      CALL VXSORT( 'HP', NHPVEX, HPISSET, NMODHP, IMODHP,
-     1     NSTAHP, ISTAHP, HPLINK )
+      IF( OBSTYP .NE. 'PTVLBA' ) THEN
+         CALL VXSORT( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
+     2       NSTATR, ISTATR, TRLINK )
 C
-      CALL VXSORT( 'PO', NPOVEX, POISSET, NMODPO, IMODPO,
-     1     NSTAPO, ISTAPO, POLINK )
+C        Head position
 C
-      CALL VXSORT( 'RL', NRLVEX, RLISSET, NMODRL, IMODRL,
-     1     NSTARL, ISTARL, RLLINK )
+         CALL VXSORT( 'HP', NHPVEX, HPISSET, NMODHP, IMODHP,
+     1       NSTAHP, ISTAHP, HPLINK )
+C
+C        Pass order.
+C
+         CALL VXSORT( 'PO', NPOVEX, POISSET, NMODPO, IMODPO,
+     2       NSTAPO, ISTAPO, POLINK )
+C
+C        Roll
+C
+         CALL VXSORT( 'RL', NRLVEX, RLISSET, NMODRL, IMODRL,
+     1        NSTARL, ISTARL, RLLINK )
+      END IF
+C
+C     Phase Cal
 C
       CALL VXSORT( 'PH', NPHVEX, PHISSET, NMODPH, IMODPH,
      1     NSTAPH, ISTAPH, PHLINK )

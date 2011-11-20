@@ -119,7 +119,10 @@ C
             WRITE( IVEX, '(A1, 4X, A, A)' ) COM, 'Skipping scan on:',
      1          TMPSRC(1:LEN1(TMPSRC))
             INPAGE = INPAGE + 1
-         ELSE IF( FMTNONE ) THEN
+C
+C        Allow format NONE if doing single dish pointing on the VLBA.
+C
+         ELSE IF( FMTNONE .AND. OBSTYP .NE. 'PTVLBA' ) THEN
             TMPSRC = SCNSRC(ISCN)
             CALL VXSTNM( TMPSRC, .FALSE.)
             WRITE( IVEX, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',

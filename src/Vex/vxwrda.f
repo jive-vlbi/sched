@@ -59,7 +59,8 @@ C        Start by finding a set in which this station occurs,
 C        because some things need to know eg. FORMAT
 C
          DO I = 1, NSET
-            IF ( USED(I) .AND. FORMAT(I) .NE. 'NONE' .AND.
+            IF ( USED(I) .AND. ( FORMAT(I) .NE. 'NONE' .OR.
+     1          OBSTYP .EQ. 'PTVLBA' ) .AND.
      1          ( STATION(ISCAT) .EQ. SETSTA(1,I) )) KS = I
          END DO
 C

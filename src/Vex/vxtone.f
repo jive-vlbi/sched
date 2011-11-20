@@ -5,6 +5,9 @@ C     because the cross-referencing is complicated, not done on the fly
 C     Routine specific for the VEX extension of SCHED. 
 C     By H.J. van Langevelde, JIVE, 130596 
 C
+C     Allow this to run with FORMAT='NONE' if OBSTYP='PTVLBA' - single
+C     dish VLBA observations.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
@@ -21,7 +24,8 @@ C
 C     first check that it is not using FORMAT=NONE
 C
          ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
+         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
+     1       OBSTYP .EQ. 'PTVLBA' ) THEN
 C
 C          in this mode find all IPH for which there are all antennas
 C
