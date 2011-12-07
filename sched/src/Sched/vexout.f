@@ -90,7 +90,6 @@ C
 C        Actually write the VEX file, or explain why not.
 C
 C         IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
-       write(*,*) 'vexout: ', override, fmtnone, allnone
          IF( ( OVERRIDE .OR. .NOT. ALLNONE .OR. 
      1         OBSTYP .EQ. 'PTVLBA') .AND. 
      2         OBSTYP .NE. 'CONFIG' ) THEN

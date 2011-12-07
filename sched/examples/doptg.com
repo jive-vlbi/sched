@@ -261,8 +261,11 @@ foreach station ( $stalist_3mm[1*] )
        sch = ptg_3mm.par
        overwrit /
 eofst
-   mv ptg.sum ptg.sum.$station
-   mv ptg.vex ptg.vex.$station
+#
+#  Make the sum and vex files station dependent.
+#
+   mv ptg.sum ptg.$station.sum
+   mv ptg.vex ptg.$station.vex
 end
 #
 # Finally run sched separately for each no 3mm station.
@@ -276,8 +279,11 @@ foreach station ( $stalist_no3mm[1*] )
        sch = ptg_no3mm.par
        overwrit /
 eofst
-   mv ptg.sum ptg.sum.$station
-   mv ptg.vex ptg.vex.$station
+#
+#  Make the sum and vex files station dependent.
+#
+   mv ptg.sum ptg.$station.sum
+   mv ptg.vex ptg.$station.vex
 end
 #
 #   Some clean up.

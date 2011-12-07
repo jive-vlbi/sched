@@ -74,16 +74,18 @@ C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS: Start on PH def ')
       CALL VXWRPH
 C
+C     Tracks  (This is needed in practice, if not in principle,
+C     for OBSTYP=PTVLBA.  There is code in the routine to 
+C     provide dummy data for such projects).
+C      
+      IF (DEBUG) CALL WLOG( 1,'   VXDEFS: Start on TR def ')
+      CALL VXWRTR
+C
 C     Skip the following for single dish.  They are also not
 C     needed for the RDBE, I believe, but deal with that 
 C     later.  RCW  Nov 2011.
 C
       IF( .NOT. OBSTYP .EQ. 'PTVLBA' ) THEN
-C
-C        Tracks
-C      
-         IF (DEBUG) CALL WLOG( 1,'   VXDEFS: Start on TR def ')
-         CALL VXWRTR
 C      
 C        Head positions
 C      

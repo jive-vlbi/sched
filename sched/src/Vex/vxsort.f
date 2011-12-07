@@ -163,46 +163,55 @@ C           Skip for unused or format NONE and not PTVLBA
 C           Nov. 2011  RCW.
 C
             KS = MODSET(ISTA,IMODE)
-            IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
-     1         OBSTYP .EQ. 'PTVLBA' ) ) THEN
+C
+C           Note that, if the station is not used with the mode
+C           (egvsop.key does that), then KS can end up zero, which
+C           is trouble below.  Jump to next station if this happens.
+C           RCW Nov 2011
+C
+            IF( KS .NE. 0 ) THEN
+               IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+     1            OBSTYP .EQ. 'PTVLBA' ) ) THEN
 C
 C              Obviously there is a new SET when there is no previous one
 C
-               IF( MODSET(ISTA,IMODE) .NE. 0 .AND. 
-     1                NMODXX(IMODE) .EQ. 0 ) THEN
-                  NEWFND = .TRUE.
-               ELSE
-C
-C                 Find if a set already used for a previous antenna:
-C
-                  IF( MODSET(ISTA,IMODE) .EQ. 0 ) THEN
-                     NEWFND = .FALSE.
-                  ELSE
+                  IF( MODSET(ISTA,IMODE) .NE. 0 .AND. 
+     1                   NMODXX(IMODE) .EQ. 0 ) THEN
                      NEWFND = .TRUE.
-                     DO J = 1, NMODXX(IMODE)
+                  ELSE
+C 
+C                    Find if a set already used for a previous antenna:
 C
-C                    Check if XX already used, note many modes may use 1 XX
+                     IF( MODSET(ISTA,IMODE) .EQ. 0 ) THEN
+                        NEWFND = .FALSE.
+                     ELSE
+                        NEWFND = .TRUE.
+                        DO J = 1, NMODXX(IMODE)
 C
-                        IF( SETISXX(MODSET(ISTA,IMODE)) .EQ. 
-     1                      IMODXX(J,IMODE) )
-     2                      NEWFND = .FALSE.
-                     END DO
+C                       Check if XX already used, note many modes 
+C                       may use 1 XX
+C
+                           IF( SETISXX(MODSET(ISTA,IMODE)) .EQ. 
+     1                         IMODXX(J,IMODE) )
+     2                         NEWFND = .FALSE.
+                        END DO
+                     END IF
                   END IF
-               END IF
 C
-C              Now take the appropriate action
+C                 Now take the appropriate action
 C
-               IF( NEWFND ) THEN
+                  IF( NEWFND ) THEN
 C
-C                 so a new block def is found for this mode, remember
-C                 which block it is that is referenced in this mode
+C                    so a new block def is found for this mode, remember
+C                    which block it is that is referenced in this mode
 C
-                  NMODXX(IMODE) = NMODXX(IMODE) + 1
-                  IF( NMODXX(IMODE) .GT. MAXMOD ) CALL ERRLOG(
-     1              'VXSORT: Number of $'//BLOCK//' defs in $MODE '//
-     2              'exceeding MAXMOD, should never happen...')
-                  IMODXX(NMODXX(IMODE),IMODE) = 
-     1               SETISXX(MODSET(ISTA,IMODE))
+                     NMODXX(IMODE) = NMODXX(IMODE) + 1
+                     IF( NMODXX(IMODE) .GT. MAXMOD ) CALL ERRLOG(
+     1                 'VXSORT: Number of $'//BLOCK//' defs in $MODE '//
+     2                 'exceeding MAXMOD, should never happen...')
+                     IMODXX(NMODXX(IMODE),IMODE) = 
+     1                  SETISXX(MODSET(ISTA,IMODE))
+                  END IF
                END IF
             END IF
          END DO
