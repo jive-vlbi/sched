@@ -92,7 +92,11 @@ C
       TMINDW  = VALUE( KEYPTR( 'DWELL', KC, KI ) + 2 ) / 86400.D0
 C
       IF( TDWELL .NE. UNSET .AND. TDUR .NE. UNSET ) THEN
-         CALL ERRLOG( 'GETTIM: Don''t specify both DUR and DWELL! ' )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, I5 )' ) 
+     1     'GETTIM: Don''t specify both DUR and DWELL!  Input scan: ',
+     2     ISCN
+         CALL ERRLOG( MSGTXT )
       ELSE IF( TDWELL .NE. UNSET ) THEN
          DWELL(ISCN) = .TRUE.
          DUR(ISCN) = TDWELL / 86400.D0

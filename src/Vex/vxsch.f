@@ -113,6 +113,9 @@ C        Let the user know which was the first scan to raise warnbank
          OLDWARNB = WARNBANK
 C
 C
+CRCW      write(*,*) 'vxsch: ', iscn, iset, pntvlba(iscn), 
+CRCW     1               autopeak, dopeak(iscn), 
+CRCW     1               point(iscn), ' ', format(iset)
          IF( SKIPPED ) THEN
             TMPSRC = SCNSRC(ISCN)
             CALL VXSTNM( TMPSRC, .FALSE.)
@@ -128,6 +131,9 @@ C
             WRITE( IVEX, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
      1          'with FORMAT=NONE on:',
      2          TMPSRC(1:LEN1(TMPSRC))
+C       write( *, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
+C     1          'with FORMAT=NONE on:',
+C     2          TMPSRC(1:LEN1(TMPSRC))
             INPAGE = INPAGE + 1
          ELSE
 C  
@@ -478,7 +484,7 @@ C
 C                     
 C                    If not using disk (eg pointing), just put in blanks.
 C
-                     WRITE( LINE(LPOS:LPOS+2), '( 2X, A1 )' ) COL                  
+                     WRITE( LINE(LPOS:LPOS+2), '( 2X, A1 )' ) COL 
 C
                   END IF
 C
