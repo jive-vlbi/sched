@@ -74,10 +74,12 @@ C     first find out which IF, there are at least as many FQ sections
 C
       DO IMODE = 1, NMDVEX
 C 
-C     first check that it is not using FORMAT=NONE
+C     first check that it is not using FORMAT=NONE, unless it is a 
+C     VLBA pointing project.
 C
          ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .NE. 'NONE' ) THEN
+         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
+     1         OBSTYP .EQ. 'PTVLBA' ) THEN
 C
 C          in this mode find all IIF for which there are all antennas
 C

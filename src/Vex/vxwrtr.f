@@ -18,24 +18,58 @@ C
       LOGICAL   S2OK, LOWBBC, HIBBC
 C
 C ----------------------------------------------------------------------
+      write(*,*) 'vxwrtr tracks block hi ', obstyp
+      write(*,*) 'vxwrtr line2 ', format(1)
 C
       LINE = ' ' 
 C
-C     pending development of MkIII modes through VEX and chk3rec
-C     stop writing MkIII modes in VEX file
+C     Nov 2011 - MarkIII is now ancient history so a abort if FORMAT=
+C     MARKIII was no longer needed.
+      WRITE( IVEX, '( A, A1 )' ) '$TRACKS', SEP     
 C
-      DO ITR = 1, NTRVEX
-         KS = TRISSET(ITR)
-         IF( FORMAT(KS)(1:7) .EQ. 'MARKIII' ) 
-     1       CALL ERRLOG('VXWRTR: MkIII modes not yet supported ')
-      END DO
+C     Deal with no requested track information - like pointing.
+C
+      IF( NTRVEX .EQ. 0 .OR. OBSTYP .EQ. 'NONE' .OR. 
+     1      OBSTYP .EQ. 'PTVLBA' ) THEN
+C
+C        Try to support pointing observations (no recording) with 
+C        dummy format specification.  RCW  Nov. 21, 2011.
+C
+         IF( OBSTYP .EQ. 'PTVLBA' ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A )' )
+     1          'VXWRTR: Setting format to NONE for ',
+     2          'pointing observations.'
+            CALL WLOG( 1, MSGTXT )
+            WRITE( IVEX, '( A )' )
+     1         'def TRACKS.NONE;'
+            WRITE( IVEX, '( A1, A, A )' ) COM,
+     1          ' This is a fake format for ',
+     2          'non-recording observations.'
+            WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1          'track_frame_format = ','NONE', SEP
+C
+C           Wrap up.
+C
+            WRITE( IVEX, '( A, A1 )' ) 'enddef',SEP
+            WRITE( IVEX, '( A )' ) COMLIN
+         ELSE
+            CALL ERRLOG( 'VSWRTR:  No VEX TRACK blocks requested. '//
+     1       'Something wrong.' )
+         END IF
+C
+C        Jump to end of routine.  This should be an IF/THEN/ELSE,
+C        but I did not want to indent the whole rest of the routine
+C        again.  RCW, Nov 2011
+C
+         GO TO 999
+      END IF
 C
 C     start with the right business
 C
-      WRITE( IVEX, '( A, A1 )' ) '$TRACKS', SEP     
-C
       DO ITR = 1, NTRVEX
          KS = TRISSET(ITR)
+       write(*,*) 'vxwrtr in blocks ', ntrvex, ks, ' ', format(ks)
 C
 C        Find a station using this setup so you can check its medium later
 C
@@ -90,27 +124,10 @@ C
                WRITE( IVEX, '( 5X, A, A, A1 )' )
      1             'data_modulation = ','off', SEP
             ELSE IF( FORMAT(KS)(1:4) .EQ. 'VLBA' ) THEN
-C
-C              Temporary kludge to support pointing observations.
-C              RCW  Nov. 15, 2011.
-C
-               IF( OBSTYP .EQ. 'NONE' .OR. OBSTYP .EQ. 'PTVLBA' ) THEN
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, A )' )
-     1                'VXWRTR: Setting format to MARK5B for ',
-     2                'pointing observations.'
-                  CALL WLOG( 1, MSGTXT )
-                  WRITE( IVEX, '( A1, A, A )' ) COM,
-     1                ' This is a fake format for ',
-     2                'non-recording observations.'
-                  WRITE( IVEX, '( 5X, A, A, A1 )' )
-     1                'track_frame_format = ','MARK5B', SEP
-               ELSE
-                  WRITE( IVEX, '( 5X, A, A, A1 )' )
-     1                'track_frame_format = ','VLBA', SEP
-                  WRITE( IVEX, '( 5X, A, A, A1 )' )
+               WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1             'track_frame_format = ','VLBA', SEP
+               WRITE( IVEX, '( 5X, A, A, A1 )' )
      1                'data_modulation = ','on', SEP
-               END IF
             ELSE IF( FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
                WRITE( IVEX, '( 5X, A, A, A1 )' )
      1             'track_frame_format = ','Mark4', SEP
@@ -390,6 +407,10 @@ C
 C
       ENDDO
       WRITE( IVEX, '( A )' ) COMLIN
+C
+C     Jump to here if NTRVEX was zero.
+C
+  999 CONTINUE
       RETURN
       END
 
