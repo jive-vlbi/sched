@@ -13,6 +13,11 @@ C     When USEDISK is false since tape was taken out, some elements of
 C     the lines were not written, causing parsing errors on read.  
 C     fixed  Nov. 15, 2011  RCW.
 C
+C     Be selective about skipping FORMAT=NONE scans.  For now, do not
+C     do so for VLBA stations.  Perhaps add more exceptions later,
+C     or make it a stations.dat parameter, or make the Field System
+C     happy with such scans.  RCW  Dec 8, 2011
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
@@ -22,7 +27,7 @@ C
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
       INTEGER     YEAR, DAY, DOY, JD, MONTH, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
-      INTEGER     I, LASTSCN, ISET, VXGTST, NTSYS(MAXSTA)
+      INTEGER     I, LASTSCN, ISET, KS, VXGTST, NTSYS(MAXSTA)
       INTEGER     NTSYSON(MAXSTA), TSYSGAP(MAXSTA), TPDRIV
       REAL        STASPD(MANT) 
       CHARACTER   FULTIM*18, TMPSRC*32
@@ -31,8 +36,8 @@ C
       CHARACTER   DISKFILE*30, STNLC*2
       DOUBLE PRECISION  STARTT, STOPT, TAPOFF, IDAY
       LOGICAL     SKIPPED, WARNFS, WARNTS(MAXSTA), DATATRAN, WARNGP
-      LOGICAL     GAPERR, FMTNONE, TSYSMESS, WARNTSOF(MAXSTA)
-      LOGICAL     WARNBANK, OLDWARNB
+      LOGICAL     GAPERR, SKIPNONE, TSYSMESS, WARNTSOF(MAXSTA)
+      LOGICAL     ANYNONE, WARNBANK, OLDWARNB
       REAL        STGB, SCNGAP, MINGAP
 C -------------------------------------------------------------
       IF (DEBUG) CALL WLOG( 1,'VXSCH: Start VEX SCHED section ')
@@ -78,21 +83,33 @@ C
       DO ISCN = SCAN1, SCANL
 C
 C        If the scan was skipped, just note that fact.
+C        This is likely to be because of some SCHED optimization mode.
 C
          SKIPPED = .TRUE.
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
          END DO
 C
-C        If this Mode uses FORMAT=NONE, then skip it. This can be
-C         changed (with a corresponding change in vxscns.f) whenever the FS
-C         gets an automated pointing procedure.
+C        Skip the scan if FORMAT=NONE and no stations need to keep
+C        such scans (set SKIPNONE=.TRUE.).  SKIPNONE should end up 
+C        false for any scan with a different format or for a scan that
+C        include stations, such as the VLBA, that needs such scans.
+C        ANYNONE records whether the FORMAT=NONE regardless of whether
+C        the scan will be retained.  It triggers a comment.
 C
-         FMTNONE = .FALSE.
-         ISET = VXGTST( MODSCN(ISCN) )
-         IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
-           FMTNONE = .TRUE.
-         END IF
+         SKIPNONE = .TRUE.
+         ANYNONE = .FALSE.
+         DO ISTA = 1, NSTA
+            IF( STASCN(ISCN,ISTA) ) THEN  
+               KS = NSETUP(ISCN,ISTA)
+               IF( FORMAT(KS)(1:4) .NE. 'NONE' .OR. 
+     1             STANAME(ISTA)(1:4) .EQ. 'VLBA'   ) THEN
+                  SKIPNONE = .FALSE.
+               END IF
+               IF( FORMAT(KS)(1:4) .EQ. 'NONE' ) 
+     1             ANYNONE = .TRUE.
+            END IF
+         END DO
 C
 C
 C        Check various tape issues, return a common tape offset
@@ -113,27 +130,25 @@ C        Let the user know which was the first scan to raise warnbank
          OLDWARNB = WARNBANK
 C
 C
-CRCW      write(*,*) 'vxsch: ', iscn, iset, pntvlba(iscn), 
-CRCW     1               autopeak, dopeak(iscn), 
-CRCW     1               point(iscn), ' ', format(iset)
          IF( SKIPPED ) THEN
             TMPSRC = SCNSRC(ISCN)
             CALL VXSTNM( TMPSRC, .FALSE.)
             WRITE( IVEX, '(A1, 4X, A, A)' ) COM, 'Skipping scan on:',
      1          TMPSRC(1:LEN1(TMPSRC))
             INPAGE = INPAGE + 1
+         ELSE IF( SKIPNONE ) THEN
 C
-C        Allow format NONE if doing single dish pointing on the VLBA.
+C           Skip a scan with FORMAT=NONE if there are no stations that 
+C           need to keep such scans, such as the VLBA.
 C
-         ELSE IF( FMTNONE .AND. OBSTYP .NE. 'PTVLBA' ) THEN
             TMPSRC = SCNSRC(ISCN)
             CALL VXSTNM( TMPSRC, .FALSE.)
             WRITE( IVEX, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
      1          'with FORMAT=NONE on:',
      2          TMPSRC(1:LEN1(TMPSRC))
-C       write( *, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
-C     1          'with FORMAT=NONE on:',
-C     2          TMPSRC(1:LEN1(TMPSRC))
+       write(*, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
+     1          'with FORMAT=NONE on:',
+     2          TMPSRC(1:LEN1(TMPSRC))
             INPAGE = INPAGE + 1
          ELSE
 C  
@@ -184,6 +199,13 @@ C
      1                      ANNOT(ISCN)(JCH1:JCH2)
                   END IF
                END IF
+            END IF
+C
+C           Add a comment for FORMAT=NONE scans.
+C
+            IF( ANYNONE ) THEN
+               WRITE( IVEX, '( A1, 5X, A )' ) COM,
+     1            'This is a FORMAT=NONE, non-recording scan.'
             END IF
 C
 C           May move scan time fwd for tapestart: then write comment
@@ -412,7 +434,15 @@ C
             END IF
             DO ISTA = 1, NSTA
 C
-               IF( STASCN(ISCN,ISTA) ) THEN
+C              Do not write non-VLBA stations for which FORMAT=NONE
+C              Note use of NSETUP rather than MODSET.  I think this
+C              should be equivalent.  This is a step toward using 
+C              the main SCHED bookkeeping which I think will be 
+C              simpler.
+C
+               IF( STASCN(ISCN,ISTA) .AND. (
+     1              STANAME(ISTA)(1:4) .EQ. 'VLBA' .OR.
+     2              FORMAT(NSETUP(ISCN,ISTA)) .NE. 'NONE' ) ) THEN
 C     
 C                 Write this in fixed format use LINE
 C
@@ -524,6 +554,18 @@ C
                   WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                   INPAGE = INPAGE + 1
 C     
+               ELSE IF( STASCN(ISCN,ISTA) ) THEN
+C     
+C                 Write a comment line indicating the station is
+C                 being skipped because of FORMAT=NONE
+C
+                  LINE = ' '
+                  LPOS = 6
+                  WRITE( LINE, '( A1, 4X, A, A1, 4X, A, A, A )' ) 
+     1               COM, 'station=', STCODE(STANUM(ISTA))(1:2), COL,
+     2              ' Skipping scan with FORMAT=NONE on:',
+     3               TMPSRC(1:LEN1(TMPSRC))
+C
                END IF
             END DO
             WRITE( IVEX, '( A, A1 )' ) 'endscan', SEP
@@ -531,6 +573,10 @@ C
 C
          END IF
       END DO
+
+
+      write(*,*)  '  Unfinished allow format=none on vlba peak scans'
+
 C
 C     Print warning about frequency of Tsys. 
       TSYSMESS = .FALSE.

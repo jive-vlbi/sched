@@ -57,11 +57,13 @@ C
 C
 C        Start by finding a set in which this station occurs,
 C        because some things need to know eg. FORMAT
+C        RCW  Dec 2011.  Don't avoid FORMAT=NONE.
 C
          DO I = 1, NSET
-            IF ( USED(I) .AND. ( FORMAT(I) .NE. 'NONE' .OR.
-     1          OBSTYP .EQ. 'PTVLBA' ) .AND.
-     1          ( STATION(ISCAT) .EQ. SETSTA(1,I) )) KS = I
+C            IF ( USED(I) .AND. ( FORMAT(I) .NE. 'NONE' .OR.
+C     1          OBSTYP .EQ. 'PTVLBA' ) .AND.
+C     1          ( STATION(ISCAT) .EQ. SETSTA(1,I) )) KS = I
+            IF ( USED(I) .AND. STATION(ISCAT) .EQ. SETSTA(1,I) ) KS = I
          END DO
 C
 C        Now write recorder.
@@ -142,7 +144,8 @@ C
 C        And the headstacks for each
 C
          IF( USEDISK(ISTA) .OR. OBSTYP .EQ. 'NONE' .OR. 
-     1       OBSTYP .EQ. 'PTVLBA' ) THEN
+     1       OBSTYP .EQ. 'PTVLBA' .OR. FORMAT(KS)(1:4) .EQ. 'NONE' ) 
+     2       THEN
 C           WRITE (HEAD, '( A )' ) ''
             HEAD = ' '
          END IF

@@ -7,6 +7,8 @@ C     This is complicated, the code can be compacter, but than it is
 C     really incomprehensible. Note that some more MODE, FREQ, PHASECAL
 C     sections are to be discovered in VXSCNS.
 C
+C     Dec 2011.  Allow retention of FORMAT=NONE modes.  RCW.
+C
 C     Input:
 C        BLOCK = Two letter code, denoting which $BLOCK we are sorting
 C     Output:
@@ -56,9 +58,11 @@ C
       DO KS = 1, NSET
 C
 C        Obviously a new block when it's the first.
+C        Keep regardless of FORMAT=NONE status.
 C
-         IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
-     1         OBSTYP .EQ. 'PTVLBA' ) ) THEN
+C         IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+C     1         OBSTYP .EQ. 'PTVLBA' ) ) THEN
+         IF( USED(KS) ) THEN
             IF( NXXVEX .EQ. 0 ) THEN
                NEWFND = .TRUE.
             ELSE
@@ -159,9 +163,6 @@ C        Go through the antennas in a experiment
 C
          DO ISTA = 1, NSTA
 C
-C           Skip for unused or format NONE and not PTVLBA
-C           Nov. 2011  RCW.
-C
             KS = MODSET(ISTA,IMODE)
 C
 C           Note that, if the station is not used with the mode
@@ -170,8 +171,9 @@ C           is trouble below.  Jump to next station if this happens.
 C           RCW Nov 2011
 C
             IF( KS .NE. 0 ) THEN
-               IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
-     1            OBSTYP .EQ. 'PTVLBA' ) ) THEN
+C               IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+C     1            OBSTYP .EQ. 'PTVLBA' ) ) THEN
+               IF( USED(KS) ) THEN
 C
 C              Obviously there is a new SET when there is no previous one
 C
@@ -243,10 +245,11 @@ C              first find an exact match:
 C              should be possible to make clearer
 C
                DO KS = 1, NSET
-                  IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
-     1                OBSTYP .EQ. 'PTVLBA' ) ) THEN
+C                  IF( USED(KS) .AND. ( FORMAT(KS)(1:4) .NE. 'NONE' .OR.
+C     1                OBSTYP .EQ. 'PTVLBA' ) ) THEN
+                  IF( USED(KS) ) THEN
                      IF( SETISXX(KS) .EQ. IXX .AND. 
-     .                   KS .EQ. MODSET(ISTA,IMODE)) THEN
+     1                   KS .EQ. MODSET(ISTA,IMODE)) THEN
                         IF( STATION(ISCAT) .EQ. SETSTA(1,KS) ) THEN
                            NEWFND = .TRUE.
                            IF( NSTAXX(IXX,IMODE) .GE. 1 ) THEN

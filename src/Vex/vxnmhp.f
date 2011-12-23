@@ -9,6 +9,8 @@ C     Removed tape section July 22, 2010 RCW.
 C     Allow OBSTYPE NONE or PTVLBA.  Nov. 14, 2011.
 C     Note that the HP block is the head position block, 
 C     which is basically obsolete.
+C     Dec. 8, 2011.  Note that all observations that are recording
+C     data will pass ok, even if there are FORMAT=NONE scans.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
@@ -35,7 +37,7 @@ C
          END DO
 C
          IF( USEDISK(ASTAT) .OR. OBSTYP .EQ. 'PTVLBA' .OR.
-     1       OBSTYP .EQ. 'NONE' ) THEN
+     1       OBSTYP .EQ. 'NONE' .OR. FORMAT(KS)(1:4) .EQ. 'NONE' ) THEN
             VXNMHP = 'DiskVoid'
          ELSE
             CALL ERRLOG('VXNMHP: Not using disks at '//
