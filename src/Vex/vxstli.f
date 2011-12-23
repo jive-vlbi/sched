@@ -18,10 +18,11 @@ C
 C
 C        Find the sched setup corresponding to this mode so we can check
 C        the format
+C        RCW Dec 2011.  Don't filter the FORMAT=NONE cases.
 C
-         ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
-     1       OBSTYP .EQ. 'PTVLBA' ) THEN
+C         ISET = VXGTST( IMODE )
+C         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
+C     1       OBSTYP .EQ. 'PTVLBA' ) THEN
            IF ( NSTAXX(IXX,IMODE) .GT. 0 ) THEN
               WRITE( LINE, '( A1, A, I2, 4X, A )' ) 
      1            COM, ' mode = ', IMODE, 'stations = '
@@ -41,7 +42,7 @@ C
 C
               WRITE(IVEX, '( A )' ) LINE(1:LEN1(LINE))
            END IF
-         END IF
+C         END IF
       END DO
 C
       RETURN

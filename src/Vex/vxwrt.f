@@ -86,7 +86,7 @@ C
      2      '*   ++++  WARNING:  This file is meant for VLBA single',
      3      '*          dish observing.  It may contain setups',
      4      '*          with FORMAT=NONE or other constructs that',
-     5      '*          will not work at most stations.',
+     5      '*          will not work at some stations.',
      6      '*'
          WRITE( IVEX, '( A )' ) COMLIN
       END IF
@@ -158,12 +158,12 @@ C
 C
 C     Tracks
 C
-      IF( OBSTYP .NE. 'PTVLBA' ) THEN
-         CALL VXSORT( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
+      CALL VXSORT( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
      2       NSTATR, ISTATR, TRLINK )
 C
 C        Head position
 C
+      IF( OBSTYP .NE. 'PTVLBA' ) THEN
          CALL VXSORT( 'HP', NHPVEX, HPISSET, NMODHP, IMODHP,
      1       NSTAHP, ISTAHP, HPLINK )
 C

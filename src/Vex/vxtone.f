@@ -22,10 +22,13 @@ C
       DO IMODE = 1, NMDVEX
 C 
 C     first check that it is not using FORMAT=NONE
+C     RCW  Dec 2011.  Remove this check so all scans can be configured.
+C     The stations that don't want FORMAT=NONE scans will not be included
+C     in them in the $SCHED section.
 C
-         ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
-     1       OBSTYP .EQ. 'PTVLBA' ) THEN
+C         ISET = VXGTST( IMODE )
+C         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
+C     1       OBSTYP .EQ. 'PTVLBA' ) THEN
 C
 C          in this mode find all IPH for which there are all antennas
 C
@@ -67,7 +70,7 @@ C             loop PH stations
 C
               END DO
            END DO
-        END IF
+C                     END IF
       END DO
 C
 C     first find out which IF, there are at least as many FQ sections
@@ -76,10 +79,11 @@ C
 C 
 C     first check that it is not using FORMAT=NONE, unless it is a 
 C     VLBA pointing project.
+C     RCW Dec 2011.  Remove the FORMAT=NONE check here too.
 C
-         ISET = VXGTST( IMODE )
-         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
-     1         OBSTYP .EQ. 'PTVLBA' ) THEN
+C         ISET = VXGTST( IMODE )
+C         IF( FORMAT(ISET)(1:4) .NE. 'NONE' .OR. 
+C     1         OBSTYP .EQ. 'PTVLBA' ) THEN
 C
 C          in this mode find all IIF for which there are all antennas
 C
@@ -121,7 +125,7 @@ C                loop IF stations
 C
               END DO
            END DO
-        END IF
+C                 END IF
 C
 C        loop Modes
 C

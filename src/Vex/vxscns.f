@@ -13,6 +13,9 @@ C     PHASE_CAL and sometimes vice versa.
 C     Routine sets up the array MODSCN in VXLINK.INC
 C     And calls for the creation of new modes: VXTRAMD
 C
+C     Dec 2011 RCW:  Configure FORMAT=NONE setups along with
+C     the rest.  The VLBA now needs them and they can be ignored
+C     when not used at other stations.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
@@ -20,7 +23,7 @@ C
 C
       INTEGER OLDSCN, PSETI, OLDIPS, FRSTSCN
       INTEGER VXMDIFP(MFSET,MPSET)
-      INTEGER ISCN, ISETFL, IMODE, I, IFS, IPS, J
+      INTEGER ISCN, ISETFL, IMODE, I, IFS, IPS, J, LEN1, NC
 C      INTEGER JSCN, RECSCN
       INTEGER ISTA, NMDORI, VXGTST, ISET
       CHARACTER CALSET*4, CALSCN*4
@@ -63,8 +66,26 @@ C
          DO I = 1, NMDORI
             IF( MDISFIL(I) .EQ. ISETFL ) IMODE = I
          END DO
-         IF( IMODE .LT. 0 ) CALL ERRLOG('VXSCNS: Unexpected Mode'//
+C
+C        Abort if this is not a mode.  This was a rather mysterious 
+C        error message when encountered, but it tended to mean that
+C        all scans using a setup file were skipped.  Added more 
+C        informative messages.  Dec 12, 2012  RCW
+C        
+         IF( IMODE .LT. 0 ) THEN
+            CALL WLOG(1, 'VXSCNS: Unexpected Mode'//
      1           ' encountered ')
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, 3I5 )' ) '  Problem in scan:',
+     1          ISCN, SCAN1, SCANL
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            NC = LEN1(SETFILE(SETNUM(ISCN)))
+            WRITE( MSGTXT, '( A, A, A )' ) 
+     1          ' Were all scans using setup file ',  
+     2          SETFILE(SETNUM(ISCN))(1:NC), ' skipped?'
+            CALL ERRLOG( 'VXSCNS: Fix setups' )
+         END IF
 C
 C        Make a pointer from the scan to the VEX mode.
 C
@@ -78,6 +99,11 @@ C
             IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
          END DO
 C
+C ------------------------------------------------
+C        RCW:  The following test for FORMAT=NONE was deactivated in 
+C        Dec 2011 so modes would be defined in all cases.  
+C        The code was left here for reference.
+C
 C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
 C        mode can later be replaced with the mode of the previous 
 C        recording scan, or can simply be skipped when writing the
@@ -90,9 +116,11 @@ C        used by the mode.  That means that it would be dangerous to mix
 C        format = 'none' with other formats at other stations in the 
 C        same scan.  I doubt that is done (RCW  Oct 15, 2011).
 C
-         ISET = VXGTST( IMODE )
-         IF( .NOT. SKIPPED .AND. ( FORMAT(ISET)(1:4) .NE. 'NONE' .OR.
-     1        OBSTYP .EQ. 'PTVLBA' ) ) THEN
+C         ISET = VXGTST( IMODE )
+C         IF( .NOT. SKIPPED .AND. ( FORMAT(ISET)(1:4) .NE. 'NONE' .OR.
+C     1        OBSTYP .EQ. 'PTVLBA' ) ) THEN
+C  ----------------------------------------------------
+         IF( .NOT. SKIPPED ) THEN
 C
 C          The VEX modes are the same across antennas in a scan, but some
 C          antennas may join later, so find the first scan for which the
