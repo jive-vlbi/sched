@@ -87,7 +87,7 @@ C
      1              ' encountered ')
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, 3I5 )' ) '  Problem in scan:',
-     1             ISCN, SCAN1, SCANL
+     1             ISCN
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
                NC = LEN1(SETFILE(SETNUM(ISCN)))
