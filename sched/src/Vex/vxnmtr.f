@@ -25,7 +25,8 @@ C
      2    FORMAT(ISET)(1:2) .EQ. 'S2' .OR.
      3    FORMAT(ISET)(1:3) .EQ. 'LBA' .OR.
      4    FORMAT(ISET)(1:6) .EQ. 'MKIV1:' .OR.
-     5    FORMAT(ISET)(1:6) .EQ. 'MARK5B') ) THEN
+     5    FORMAT(ISET)(1:6) .EQ. 'MARK5B' .OR.
+     6    FORMAT(ISET)(1:4) .EQ. 'NONE' ) ) THEN
          MSGTXT = 'VXNMTR: unsupported recording mode: ' // FORMAT(ISET)
          CALL ERRLOG( MSGTXT )
       END IF
@@ -67,6 +68,12 @@ C
      1       CALL ERRLOG(' VXNMTR: inconsistent or impossible'//
      2       ' S2 mode ')
          WRITE( NAME, '( A, A )' ) 'S2.', S2MDNM(1:LEN1(S2MDNM))
+C
+C     FORMAT = NONE 
+C
+      ELSE IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
+         WRITE( NAME, '( A )' ) 'TRACKS.NONE'
+C
       ELSE
 C
 C        either MkIV or VLBA or LBA or MARK5B:

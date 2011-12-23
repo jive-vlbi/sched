@@ -6,6 +6,8 @@ C     By H.J. van Langevelde, JIVE, 010996
 C
 C     Removed tape section July 22, 2010 RCW.
 C     Allow no disk if OBSTYP is NONE or PTVLBA.  Nov. 14, 2011
+C     Note that this should also be ok if there are FORMAT=NONE
+C     scans in a recording observation (USEDISK true).
 C     The PO block is the pass order block, which is basically
 C     obsolete.
 C
@@ -39,7 +41,7 @@ C
          END DO
 C
          IF( USEDISK(ASTAT) .OR. OBSTYP .EQ. 'NONE' .OR.
-     1      OBSTYP .EQ. 'PTVLBA' ) THEN
+     1      OBSTYP .EQ. 'PTVLBA' .OR. FORMAT(KS)(1:4) .EQ. 'NONE' ) THEN
             VXNMPO = 'DiskVoid'
          ELSE 
             CALL ERRLOG('VXNMPO: Not using disks at '//

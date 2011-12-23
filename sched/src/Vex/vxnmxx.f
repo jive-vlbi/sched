@@ -33,7 +33,8 @@ C
          XXLINK(NXX) = VXNMIF( NXX, .FALSE. )
       ELSE IF( BLOCK .EQ. 'BB' ) THEN
          XXLINK(NXX) = VXNMBB( NXX )
-      ELSE IF( BLOCK .EQ. 'TR' .AND. .NOT. OBSTYP .EQ. 'PTVLBA' ) THEN
+C      ELSE IF( BLOCK .EQ. 'TR' .AND. .NOT. OBSTYP .EQ. 'PTVLBA' ) THEN
+      ELSE IF( BLOCK .EQ. 'TR' ) THEN
          XXLINK(NXX) = VXNMTR( NXX )
       ELSE IF( BLOCK .EQ. 'DA' ) THEN
          XXLINK(NXX) = VXNMDA( NXX )
