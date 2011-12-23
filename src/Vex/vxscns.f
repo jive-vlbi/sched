@@ -52,75 +52,76 @@ C     Loop through the scans looking for the need for new modes.
 C
       DO ISCN = SCAN1, SCANL
 C
-C        First default IMODE to old mode which equals a setup file
-C
-C        RCW notes to aid debugging Oct 15, 2011:  
-C        NMDORI set above to NMDVEX, the number of vex modes defined
-C        so far.
-C        MDISFIL is set in VXMODE.  Basically it is set to the setup 
-C        file number, but skipping any that are not used.
-C        So the following just gets the default VEX mode for the scan.
-C
-         ISETFL = SETNUM(ISCN)
-         IMODE = -1
-         DO I = 1, NMDORI
-            IF( MDISFIL(I) .EQ. ISETFL ) IMODE = I
-         END DO
-C
-C        Abort if this is not a mode.  This was a rather mysterious 
-C        error message when encountered, but it tended to mean that
-C        all scans using a setup file were skipped.  Added more 
-C        informative messages.  Dec 12, 2012  RCW
-C        
-         IF( IMODE .LT. 0 ) THEN
-            CALL WLOG(1, 'VXSCNS: Unexpected Mode'//
-     1           ' encountered ')
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, 3I5 )' ) '  Problem in scan:',
-     1          ISCN, SCAN1, SCANL
-            CALL WLOG( 1, MSGTXT )
-            MSGTXT = ' '
-            NC = LEN1(SETFILE(SETNUM(ISCN)))
-            WRITE( MSGTXT, '( A, A, A )' ) 
-     1          ' Were all scans using setup file ',  
-     2          SETFILE(SETNUM(ISCN))(1:NC), ' skipped?'
-            CALL ERRLOG( 'VXSCNS: Fix setups' )
-         END IF
-C
-C        Make a pointer from the scan to the VEX mode.
-C
-         MODSCN(ISCN) = IMODE
-C
-C        Do nothing if this scan is skipped (like if all antennas
+C        Don't do much if this scan is skipped (like if all antennas
 C        are down).  SKIPPED tested below along with FORMAT.
 C
          SKIPPED = .TRUE.
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
          END DO
-C
-C ------------------------------------------------
-C        RCW:  The following test for FORMAT=NONE was deactivated in 
-C        Dec 2011 so modes would be defined in all cases.  
-C        The code was left here for reference.
-C
-C        If this Mode uses FORMAT=NONE, then  do nothing more here. This
-C        mode can later be replaced with the mode of the previous 
-C        recording scan, or can simply be skipped when writing the
-C        scans.  Don't do this for single dish VLBA observing for which
-C        OBSTYPE='PTVLBA'
-C
-C        To check the FORMAT, a SCHED setup file is needed.  
-C        VXGTXT is a function that returns one of possibly several setups
-C        used by the mode.  That means that it would be dangerous to mix
-C        format = 'none' with other formats at other stations in the 
-C        same scan.  I doubt that is done (RCW  Oct 15, 2011).
-C
-C         ISET = VXGTST( IMODE )
-C         IF( .NOT. SKIPPED .AND. ( FORMAT(ISET)(1:4) .NE. 'NONE' .OR.
-C     1        OBSTYP .EQ. 'PTVLBA' ) ) THEN
-C  ----------------------------------------------------
          IF( .NOT. SKIPPED ) THEN
+C
+C           First default IMODE to old mode which equals a setup file
+C		 
+C           RCW notes to aid debugging Oct 15, 2011:  
+C           NMDORI set above to NMDVEX, the number of vex modes defined
+C           so far.
+C           MDISFIL is set in VXMODE.  Basically it is set to the setup 
+C           file number, but skipping any that are not used.
+C           So the following just gets the default VEX mode for the scan.
+C		 
+            ISETFL = SETNUM(ISCN)
+            IMODE = -1
+            DO I = 1, NMDORI
+               IF( MDISFIL(I) .EQ. ISETFL ) IMODE = I
+            END DO
+C		 
+C           Abort if this is not a mode.  This was a rather mysterious 
+C           error message when encountered, but it tended to mean that
+C           all scans using a setup file were skipped.  Added more 
+C           informative messages.  Also don't do the test for skipped
+C           scans.   Dec 12, 2012  RCW
+C           
+            IF( IMODE .LT. 0 ) THEN
+               CALL WLOG(1, 'VXSCNS: Unexpected Mode'//
+     1              ' encountered ')
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, 3I5 )' ) '  Problem in scan:',
+     1             ISCN, SCAN1, SCANL
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               NC = LEN1(SETFILE(SETNUM(ISCN)))
+               WRITE( MSGTXT, '( A, A, A )' ) 
+     1             ' Were all scans using setup file ',  
+     2             SETFILE(SETNUM(ISCN))(1:NC), ' skipped?'
+               CALL ERRLOG( 'VXSCNS: Fix setups' )
+            END IF
+C		 
+C           Make a pointer from the scan to the VEX mode.
+C		 
+            MODSCN(ISCN) = IMODE
+C		 
+C ---------------------------------------------------
+C           RCW:  The following test for FORMAT=NONE was deactivated in 
+C           Dec 2011 so modes would be defined in all cases.  
+C           The code was left here for reference.
+C		 
+C           If this Mode uses FORMAT=NONE, then  do nothing more here. This
+C           mode can later be replaced with the mode of the previous 
+C           recording scan, or can simply be skipped when writing the
+C           scans.  Don't do this for single dish VLBA observing for which
+C           OBSTYPE='PTVLBA'
+C		 
+C           To check the FORMAT, a SCHED setup file is needed.  
+C           VXGTXT is a function that returns one of possibly several setups
+C           used by the mode.  That means that it would be dangerous to mix
+C           format = 'none' with other formats at other stations in the 
+C           same scan.  I doubt that is done (RCW  Oct 15, 2011).
+C		 
+C            ISET = VXGTST( IMODE )
+C            IF( .NOT. SKIPPED .AND. ( FORMAT(ISET)(1:4) .NE. 'NONE' .OR.
+C     1          OBSTYP .EQ. 'PTVLBA' ) ) THEN
+C  -------------------------------------------------------
 C
 C          The VEX modes are the same across antennas in a scan, but some
 C          antennas may join later, so find the first scan for which the
