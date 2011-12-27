@@ -91,6 +91,7 @@ C
      2          'non-recording observations.'
             WRITE( IVEX, '( 5X, A, A, A1 )' )
      1          'track_frame_format = ','NONE', SEP
+            WRITE( IVEX, '( A, A1 )' ) 'enddef',SEP
          ELSE
 C
 C          ignore fan in's for now, do fan-outs, figure out what it is
