@@ -30,15 +30,13 @@
 *     :     occasion that a leap second is      :
 *     :                announced                :
 *     :                                         :
-*     :  Latest leap second:  1999 January 1    :
+*     :  Latest leap second:  2012 July 1    :
 *     :                                         :
 *     :-----------------------------------------:
 *
 *  P.T.Wallace   Starlink   14 November 1995
 *
-*  Updated for July 1 1997 leapsecond by RC Walker.
-*  Many updates not recorded.
-*  Updated for Jan 1 2008 leapsecond by RC Walker.
+*  Maintained by RC Walker for SCHED to at least July 2012.
 *
 *  Copyright (C) 1995 Rutherford Appleton Laboratory
 *-
@@ -125,6 +123,8 @@
 *  2009 Jan 1
       IF (UTC.GE.54832D0) DT=34D0
 
+*  2012 Jul 1
+      IF (UTC.GE.56109D0) DT=35D0
 
 * - - - - - - - - - - - - - - - - - - - - - - - - - - *
 *  (Add a new pair of lines to the above set on each  *
