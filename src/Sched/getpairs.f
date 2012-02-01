@@ -23,8 +23,8 @@ C
          IF( ICENT(ISCN) .NE. 0 ) THEN
             IF( NPAIR .NE. 0 ) THEN
                DO IPAIR = 1, NPAIR
-                  IF( PAIRSRC(NPAIR) .EQ. SRCNUM(ISCN) .AND.
-     1                PAIRCENT(NPAIR) .EQ. ICENT(ISCN) ) THEN
+                  IF( PAIRSRC(IPAIR) .EQ. SRCNUM(ISCN) .AND.
+     1                PAIRCENT(IPAIR) .EQ. ICENT(ISCN) ) THEN
                      GO TO 100
                   END IF
                END DO

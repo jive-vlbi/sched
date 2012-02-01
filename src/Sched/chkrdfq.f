@@ -9,12 +9,14 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH, ISIDEBD, nwarn
+      INTEGER           KS, ICH, ISIDEBD, nwarn, N40WARN, N528WARN
       DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*)
       LOGICAL           ERRS, DEQUAL
       DATA              nwarn / 0 /
+      DATA              N40WARN, N528WARN / 0, 0 /
       SAVE              nwarn
+      SAVE              N40WARN, N528WARN
 C -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Starting' )
 C
@@ -46,50 +48,50 @@ C           N = 0 to 14.  Also allow 15 so that there can be
 C           16 channels in one polarization, but warn that it 
 C           will be bad.
 C
+C           Jan 2012.  Allow the "0" channel from 1040-1008 MHz 
+C           for when people want to span the full 512 MHz IF in
+C           one polarization.  The on-line system wants this one,
+C           not the one at the low end of the IF.
+C
             DO ICH = 1, NCHAN(KS)
-               BBOFF = 1024.0D0 - 16.0D0 - BBCFREQ(ICH)
+               BBOFF = 1024.0D0 + 16.0D0 - BBCFREQ(ICH)
                IF( MOD( BBOFF, 32.0D0 ) .NE. 0.0D0 .OR.
      1             NINT( BBOFF / 32.0D0 ) .LT. 0 .OR.
-     2             NINT( BBOFF / 32.0D0 ) .GT. 15 ) THEN
+     2             NINT( BBOFF / 32.0D0 ) .GT. 16 ) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F8.2, A )' )
      1               'CHKRDFQ: Invalid BBSYN for DBE=RDBE_PFB: ', 
      2               BBCFREQ(ICH),
-     3               '.  Must be 1024-16-N*32 for N=0-15.'
+     3               '.  Must be 1024+16-N*32 for N=0-15.'
                   ERRS = .TRUE.
                   CALL WLOG( 1, MSGTXT )
                END IF
-               IF( BBCFREQ(ICH) .EQ. 528.0 ) THEN
+               IF( BBCFREQ(ICH) .EQ. 1040.0 .AND. N40WARN .LE. 5 ) THEN
                   WRITE( MSGTXT, '( A, F8.2, A )' )
      1               'CHKRDFQ: Baseband frequency ', BBCFREQ(ICH),
      2               '.  Will produce poor data with the PFB.'
                   CALL WLOG( 1, MSGTXT )
+                  N40WARN = N40WARN + 1
+               END IF
+               IF( BBCFREQ(ICH) .EQ. 528.0 .AND. N528WARN .LE. 5 ) THEN
+                  WRITE( MSGTXT, '( A, F8.2, A, A )' )
+     1               'CHKRDFQ: Baseband frequency ', BBCFREQ(ICH),
+     2               '.  Will be changed to 1040 by the VLBA on-line',
+     3               ' system.'
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' ' 
+                  WRITE( MSGTXT, '( A, A )' )
+     1               'CHKRDFQ: Correlation of that channel will be ',
+     2               ' corrupted.'
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' ' 
+                  WRITE( MSGTXT, '( A, A, A )' )
+     1               'CHKRDFQ:  This is normal for 16 chan, 1 pol, ',
+     3               'with sideband inversion at some station.'
+                  CALL WLOG( 1, MSGTXT )
+                  N528WARN = N528WARN + 1
                END IF
             END DO
-C
-C           Temporarily, BBSYN must be 1024-16-INT((ICH-1)/2)*2*32.
-C           Complain, but don't trigger an error because soon we'll
-C           have the switched version.  Actually it is so close I'm
-C           going to comment this out.
-C
-C            DO ICH = 1, NCHAN(KS)
-C               BBOFF = 1024.0D0 - 16.0D0 - INT( (ICH-1)/2) * 64.0D0
-C               IF( BBCFREQ(ICH) .NE. BBOFF ) THEN
-C                  MSGTXT = ' '
-C                  WRITE( MSGTXT, '( A, A, F8.2 )' )
-C     1               'CHKRDFQ: Wrong BBSYN for initial implementation ',
-C     2               'of the RDBE (DBE=RDBE_PFB): ', 
-C     3               BBCFREQ(ICH)
-C                  CALL WLOG( 1, MSGTXT )
-C                  MSGTXT = ' '
-C                  WRITE( MSGTXT, '( A, I5, A, F8.3, A )' )
-C     1               '   For channel ', ICH, ' the frequency must be',
-C     2               1024.0-16.0-INT((ICH-1)/2)*2.0*32.0,
-C     3               '  (ie 1024-16-INT((ICH-1)/2)*2*32).'
-C                  CALL WLOG( 1, MSGTXT )
-C
-C               END IF
-C            END DO
          END IF
 C
 C        ===  Now check the DDC personality. ===

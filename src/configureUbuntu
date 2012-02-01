@@ -1,9 +1,15 @@
 #! /bin/csh
 #
 # Use sed and the template Makefile.master to build a Makefile
-# for 32-bit Ubuntu Hardy Linux machine without satellite tracking.
 #
-# RCW  Oct 30, 2008
+# The original version was for a 32-bit Ubuntu Hardy Linux machine 
+# without satellite tracking and using g77.  Modified Jan. 12, 2012
+# (RCW) to use gfortran based on input from Justin Linford UNM.  
+# Only changed the FCSED line.  Apparently g77 is no longer available
+# on more modern releases of Ubuntu, which makes sense since it is not
+# supported on modern versions of gcc.
+#
+# Original RCW  Oct 30, 2008
 #
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
@@ -17,7 +23,7 @@
 cat <<EOF >! makeubuntu_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureUbuntu:
 s:#ARCHSED: ARCH = LINUX:
-s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash:
+s:#FCSED: FC = gfortran -Wall -Wimplicit -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib -lX11:
 s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -lpng:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
@@ -25,7 +31,10 @@ s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
 EOF
 
+# g77 version:  s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash:
+
 #  Run sed with the above file.
 
 sed -f makeubuntu_sedscript Makefile.master > Makefile
 /bin/rm makeubuntu_sedscript
+

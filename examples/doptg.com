@@ -28,8 +28,8 @@ cat <<eofp >! times.par
   day     = 25 
   start   = 0:00:00 
   opdur   = 4:00:00         !  Total project duration
-  expcode = ptg
 eofp
+set  expcode="ptg"
 
 # =====================================================================
 # =====================================================================
@@ -264,14 +264,15 @@ eofst
 #
 #  Make the sum and vex files station dependent.
 #
-   mv ptg.sum ptg.$station.sum
-   mv ptg.vex ptg.$station.vex
+   /bin/mv ptg.sum ptg.$station.sum
+   /bin/mv ptg.vex ptg.$station.vex
 end
 #
 # Finally run sched separately for each no 3mm station.
 #
 foreach station ( $stalist_no3mm[1*] )
    echo station=vlba_$station >! station.par
+   echo expcode=$expcode >> station.par
    $SCHED/bin/sched <<eofst
        @times.par
        @station.par
@@ -282,8 +283,8 @@ eofst
 #
 #  Make the sum and vex files station dependent.
 #
-   mv ptg.sum ptg.$station.sum
-   mv ptg.vex ptg.$station.vex
+   /bin/mv $expcode.sum $expcode.$station.sum
+   /bin/mv $expcode.vex $expcode.$station.vex
 end
 #
 #   Some clean up.

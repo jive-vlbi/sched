@@ -2278,14 +2278,14 @@ through the specification of track numbers above 64.  Note that the
 two examples do either only VLBA or only Mark IV, but it is ok to mix
 them.
 
-New digital backends and a new recording system are starting to be
-tested as of this January 2011 writing.  These will increase the
-available bit rate to significantly higher values.  The RDBE/Mark5C
-system under development at Haystack and NRAO will initially record
-2048 Mbps which will increase to 4096 Mbps soon afterward, assuming
-funds can be found.  The DBBC system, also using the Mark5C recording,
-system is being deployed on a similar time scale and should have
-similar bandwidths.
+New digital backends and a new recording system are under test and
+will soon be released for users as of this January 2012 writing.
+These will increase the available bit rate to significantly higher
+values.  The RDBE/Mark5C system developed at Haystack and NRAO will
+initially record 2048 Mbps which will increase to 4096 Mbps
+eventually, assuming funds can be found.  The DBBC system, developed in
+Italy and also using the Mark5C recording system, is being deployed on a
+similar time scale and will have similar bandwidths.
 
 The RDBE (Roach Digital Backend, where ROACH is the core board
 containing a large FPGA) is a module that takes in 2 analog IF
@@ -2297,14 +2297,14 @@ It takes the place of the IF distributers, baseband converters,
 samplers, and formatter (including pulse cal detectors) in the old
 VLBA system.
 
-Control of the RDBE and Mark5C recorders is handled by a
-new VLBA control system running on a standard Linux computer.  The new
-system is based on the EVLA Executor.  Schedule information it given
+Control of the RDBE and Mark5C recorders is handled by a new VLBA
+control system running on a standard Linux computer.  The new system
+software is based on the EVLA Executor.  Schedule information is given
 to this computer by way of the VEX file, which is converted by
 operations to a Python script that is read by the Executor.  All new
 hardware installed at the VLBA for the next few years will use this
 control system and, probably slowly, the old hardware will be switched
-over to it.  In the meantime, both crd files and VEX files will be
+over to it.  In the meantime, both crd files and VEX files are
 needed to control the VLBA sites.
 
 Note that what are called basebands in the new system, for backward
@@ -2320,26 +2320,28 @@ practice.
 The FPGA in the RDBE supports multiple personalities that can be
 swapped as needed.  The first developed uses a polyphase filter to
 break the 512 MHz band into 16 basebands of 32 MHz each, all lower
-sideband.  This personality is selected using the \htmlref{{\tt
-DBE}}{SP:DBE} parameter set to {\tt RDBE\_PFB} in the setup file.
-Actually, there are 15 bands of 32 MHz and one 16 MHz half band at
-each end because the end filters are centered on the band edges.  In
-the initial implementation, every other one of the full 32 MHz bands
-was taken from each of the 2 IFs, creating 16 basebands total for a
-total bit rate of 2 Gbps.  An enhancement expected shortly (early
-2011) is to allow any 16 of the 30 full 32 MHz bands to be selected.
-This personality can only provide 32 MHz basebands at fixed
-frequencies for a total of 2 Gbps.  No variations on those parameters
-are supported.  Note that eventually there will be 2 RDBE modules at
-each station to support 4 Gbps.
+sideband.  Exactly 16 channels must be recorded.  This personality is
+selected using the \htmlref{{\tt DBE}}{SP:DBE} parameter set to {\tt
+RDBE\_PFB} in the setup file.  Actually, there are 15 bands of 32 MHz
+that provide good data, and one that is really 16 MHz from each end of
+the 512 MHz.  The channel with the edge data is not likely to be
+useful, although it may be selected in order to have all 16 required
+channels in one polarization.  In the initial implementation, every
+other one of the full 32 MHz bands was taken from each of the 2 IFs,
+creating 16 basebands total for a total bit rate of 2 Gbps.  This was
+soon enhanced to allow any 16 of the 30 good and 2 bad 32 MHz bands to
+be selected.  This personality can only provide 32 MHz basebands at
+fixed frequencies for a total of 2 Gbps.  No variations on those
+parameters are supported.  Note that eventually there will be 2 RDBE
+modules at each station to support 4 IFs.
 
 The second personality that will be available is the DDC (Digital Down
 Converter).  It is selected using the \htmlref{{\tt DBE}}{SP:DBE}
 parameter set to {\tt RDBE\_DDC} in the setup file. This personality
-will provide 8 filters per RDBE (typically 4 on each IF) that can
-provide arbitrary offset frequencies and can provide any bandwidth at
-the factor of 2 steps between 0.125 and 64 MHz.  There is a
-complication forced by the use of a polyphase filter first step of
+will likely provide up to 8 filters per RDBE (typically 4 on each IF)
+that can provide arbitrary offset frequencies and can provide any
+bandwidth at the factor of 2 steps between 0.125 and 64 MHz.  There is
+a complication forced by the use of a polyphase filter first step of
 filtration to get the clock rate down to values the FPGA can support.
 Such filters do not have flexible frequency ranges.  This one splits
 the band into 3 segments, 512 to 640 MHz, 640 to 896 MHz, and 896 to
@@ -2350,13 +2352,14 @@ something like 4-10 MHz (to be determined) that is not really usable.
 cross one of these boundaries.
 
 The frequencies for the band edges in the DDC personality can be set
-to any multiple of 1 Hz in principle.  But, for now, the set points
-are being limited to 10 kHz intervals as with the BBCs.  This is
-because throughout SCHED these numbers are stored in single precision
-variables that cannot support more precision and in the various output
-files, including those used to control the telescope hardware, not
-enough digits are printed.  At some point, if there is demand, these
-issues will be addressed.
+to any multiple of 256 / (2^32) MHz = 0.0596046 Hz in principle.  But 
+values that are not integer Hz would cause problems elsewhere - mainly
+with returning to phase after changes.  The smallest allowed value 
+that qualifies is 15.625 kHz.  One way to look at the allowed values
+is that they are N*125 kHz plus 0, 15.625, 31.250, 46.875, 62.500, 
+78.125, 93.750, or 109.375 kHz.  For the moment, it is best to stick
+to multiples of 10 kHz until we determine that there is adequate 
+precision everywhere.  This means increments of 250 kHz.
 
 The overall LO/IF/RDBE system on the VLBA will have some significant
 tuning flexibility issues.  The RDBE is an addon to the older system
@@ -2373,11 +2376,11 @@ full tuning flexibility that might be desired is not there.  Eventually
 we hope to upgrade the front end synthesizers to designs with more
 tuning options, but that is not yet funded.
 
-Note that, for the initial /schedb implementation in place (Jan 2011,
-version 9.4) the code to provide default channel frequencies based on
-the band has not yet been written.  It is necessary to give the
-frequencies in the setup file.  See the examples.  The defaulting
-capability will be added eventually.
+Note that, for the initial /schedb implementation in place (versions
+9.4, through at least 10.1) the code to provide default channel
+frequencies based on the band has not yet been written.  It is
+necessary to give the frequencies in the setup file.  See the
+examples.  The defaulting capability will be added eventually.
 
 During testing of the RDBE/MARK5C system, it is useful to have a
 parallel Mark5A recording.  That can be requested with parameter
@@ -2389,20 +2392,21 @@ But it has a different design where, like with the old BBCs, the frequency
 can be set flexibly anywhere in the IF band without concern about
 crossover frequencies etc.  The DBBC design has a module for each output
 baseband, so they are more directly comparable to BBCs.  More information
-is needed abou the system to flesh out this discussion.
+is needed about the system to flesh out this discussion.
 
 There is a varient on the RDBE being developed at Haystack for mm VLBI
 that has 4 input IFs and does not attempt any filtration.  It simply
 samples and formats the data and sends it to the recorders.  It can
 put out 8 Gbps.  This device is not yet supported by SCHED.
 
-When the DAR is the RDBE, the output channels and all the input channel
-information given to \schedb are written to the VEX file.  But the crd
-files that control the old VLBA hardware also has to be told something.
-\schedb does not have a separate set of variables for all those configuration
-parameters, so it just does something reasonable.  It sets the number of
-channels to the maximum of the number requested and 8.  It sets the
-frequencies and sidebands to match the RDBE requests.  It sets the
+When the DAR is the RDBE, the output channels and all the input
+channel information given to \schedb are written to the VEX file.  But
+the crd files that control the old VLBA hardware also has to be told
+something.  \schedb does not have a separate set of variables for all
+those configuration parameters, so it just does something reasonable.
+It sets the number of channels to the maximum of the number requested
+and 8.  It sets the frequencies to cover the middle of the RDBE
+basebands and the sidebands to match the RDBE basebands.  It sets the
 sample rate to the maximum of that requested and 32 Ms/s.  It sets the
 channel bandwidth to the lesser of the request and 16 MHz.  It only
 writes the first 4 pcal extraction requests (avoiding going into
@@ -5641,12 +5645,17 @@ for the particular receiver.
 Note that the schedule requires focus values in mm while tsm
 reports focus achieved in cm.
 
+This parameter might be used in astronomical observations if one
+wished to have the most optimum focus for a given frequency for a
+receiver that has a significant focus variation with frequency.  The
+new (2012) 6cm receiver (4-8 GHz) has such a variation.
+
 \rcwbox
-{A focus position in mm.}
-{Any focus positon.}
+{An incremental focus position in mm.}
+{Any incremental focus position.}
 {0.0}
 {Default to previous scan.}
-{{\tt FOCUS = 98.5 }}
+{{\tt FOCUS = 10.2 }}
 
 \subsubsection{\label{MP:FREQ}{\tt FREQ}}
 
@@ -7766,8 +7775,7 @@ on tape stop time given in the section on parameter \htmlref{{\tt GAP.}}
 expected.  It was used to give time for earlier correlators to
 synchronize playback.  All correlators now in use are able to sync
 quickly so the need to adjust start times to allow for synchronization
-is basically gone.  The default {\tt PRESTART} is now set to zero
-seconds.  In practice, the the Mark5A units take few seconds to get
+is basically gone.  In practice, the the Mark5A units take few seconds to get
 going on record which is why the default is 5 seconds.  When the
 new digital systems are in place, the default will likely be reduced
 to zero and the parameter could be ignored.  The following
@@ -13067,14 +13075,35 @@ more information.
 
 \subsection{\label{SSEC:VER_10.1}Development Version 10.1}
 
-%  \item Working on DDC frequency checks.  ********
+% \item Working on DDC frequency checks.  ********
 
 % \item REMINDER TO RCW: Need to fix frequency selection to allow
 % inverted sidebands for the RDBE.
 
+%  Deal with Adam's issues about multiple centers.
+
+%  Deal with slew calculation problem (gets one end of scan on
+%  wrong wrap.
+
 \begin{itemize}
 
-\item
+
+\item Deal with cases of multiple pcenters input groups.  Also warn when
+a centers group is not found.  Fix bug when testing for multiple centers
+on a phase center.  Feb. 1, 2012  RCW.
+
+\item Some pointing schedules driven from the scripts using the optimization
+mode that takes scans that are up were passing up a lot of good scans at the
+start.  It turns out that this was because the estimated start time of
+the first scan was changing too much until a scan was finally kept and 
+sources that were actually up were flagged as down.  Fixed Jan. 31, 2012.  RCW
+
+\item Allow 1040MHz BBC for RDBE_PFB so it is possible to schedule
+single polarization runs that span the full IF bandwidth.  Warn
+of likely corruption of data in that channel.  If sideband inversion
+is being used, the 528 channel will also be needed so allow that too,
+but warn that the on-line system will change it to 1040.  Correlation
+will happen as if it is 1040, so don't expect fringes.  Jan. 4, 2012 RCW.
 
 \item Make it possible to write Vex files for pointing observations on
 the VLBA.  This required providing a FORMAT in the schedules and
