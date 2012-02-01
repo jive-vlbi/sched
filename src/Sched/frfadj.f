@@ -24,7 +24,8 @@ C     redo the freq.dat table to match the RDBE ranges.
 C
 C     Note that, if the freq.dat file (or freq_RDBE.dat) has
 C     been adjusted for the RDBE, then the tests for 500 or
-C     1000 will fail and adjustments will not be made.
+C     1000 will fail and adjustments will not be made.  This
+C     will be the case if using freq_RDBE.dat.
 C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'

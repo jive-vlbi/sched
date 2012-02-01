@@ -72,7 +72,11 @@ C
                SSTIME = MAX( SSTIME, STOPJ(LASTISCN(ISTA)) + GAP(ISCN) )
             END IF
          END DO
-         IF( SSTIME .EQ. 0.D0 ) SSTIME = STARTJ(ISCN)
+C
+C         IF( SSTIME .EQ. 0.D0 ) SSTIME = STARTJ(ISCN)
+C        Use this instead.  But it's not used when LASTISCN is 0.
+C
+         IF( SSTIME .EQ. 0.D0 ) SSTIME = TFIRST
 C
 C        Loop through stations checking slews to get the time to start.
 C

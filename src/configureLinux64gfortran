@@ -2,9 +2,18 @@
 #
 # Use sed and the template Makefile.master to build a Makefile
 # for a Linux 64bit machine using gfortran (gcc4+) without satellite tracking.
-# This uses SCHED's local version of PGPLOT.
+# This assumes that the PGPLOT libraries are in the location specified
+# externally in the environment variable $PGPLOT_DIR.  That is the default
+# in the Makefile.master.
+#
+# ************************************************************************
+# *******  Be sure PGPLOT_DIR is set properly!                     *******
+# *******  At the AOC with SCHED's version of pgplot, we use       *******
+# *******  setenv PGPLOT_DIR $SCHED/PGPLOT/linux64gfortran_5.3.1/  *******
+# ************************************************************************
 #
 # RCW  Oct 30, 2008
+# Updates RCW Jan. 31, 2012.
 #
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
@@ -13,6 +22,8 @@
 /bin/rm -f makelinux64gf_sedscript
 
 # Make a file for sed with all the required changes to Makefile.master
+# The detailed specification of gfortran is required because the default gfortran
+# at the AOC is older than what is required for the pgplot gif routines.
 
 cat <<EOF >! makelinux64gf_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux64gfortran:
@@ -24,8 +35,12 @@ s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
 EOF
+
+# Some changed stuff kept in case they are needed again.
 #  Removed png from one line above.  Keep here in case needed.
-#  s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -lpng:
+#   s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -lpng:
+$ If standard version of gfortran is ok:  
+#   s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
 
 
 #  Run sed with the above file.

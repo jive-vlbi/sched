@@ -15,7 +15,7 @@ C
       CHARACTER   FF*1, PDATE*50
       INTEGER     LENGTH
       REAL        VEXVER, VXVER, PLTVER, JPVER
-      CHARACTER   PGVER*8, LINE*128, EXTIME*24
+      CHARACTER   PGVER*8, LINE*128, EXTIME*30
 C-----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHSUM: Starting.' )
       FF = CHAR(12)

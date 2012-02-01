@@ -34,6 +34,7 @@ C
 C
       INTEGER    ISCN, KSRC, PSRC, IGRP, JCENT, ICSRC, IGEO
       LOGICAL    GOTSS, GOTSD, GOTSP, GOTPTG, INCLPTG, GOTPHS, GOTGEO
+      LOGICAL    GOTPCEN
 C ---------------------------------------------------------------------
 C     Initialize counters etc.  Recall that this routine is called
 C     more than once.
@@ -90,9 +91,14 @@ C
 C        The multiple phase center sources.
 C
          ICENT(ISCN) = 0
+C
+C        If a centers has been specified, find its sources.
+C
          IF( CENTERS(ISCN) .NE. ' ' ) THEN
+            GOTPCEN = .FALSE.
             DO JCENT = 1, NCENT
                IF( CENTERS(ISCN) .EQ. CTRNAME(JCENT) ) THEN
+                  GOTPCEN = .TRUE.
                   ICENT(ISCN) = JCENT
                   DO ICSRC = 1, NCSRC(JCENT)
                      GOTPHS = .FALSE.
@@ -112,6 +118,16 @@ C
                   END DO
                END IF
             END DO
+C
+C           Complain if centers not found.
+C
+            IF( .NOT. GOTPCEN ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, A )' )
+     1            'ACCSRC: Could not find pcenters ', 
+     2            CENTERS(ISCN)
+               CALL ERRLOG( MSGTXT )
+            END IF
          END IF
 
       END DO

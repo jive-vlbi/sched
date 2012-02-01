@@ -35,12 +35,12 @@ C
 C
 C     Write some debugging output.
 C
-      IF( DEBUG ) THEN
+c      IF( DEBUG ) THEN
          SETMSG = ' '
          WRITE( SETMSG, '( A, I4, 2X, A )' )
      1       'RDSET: Reading setup', ISETF, SETREQ(1:LEN1(SETREQ))
          CALL WLOG( 0, SETMSG )
-      END IF
+c      END IF
 C
 C     Following needed for portability:
 C
@@ -72,8 +72,11 @@ C
          END DO
       END IF
 C
-C     Open setup file.
+C     Open setup file.  Put output string first so error messages
+C     make more sense.
 C
+      CALL WLOG( 0, 'RDSET:   Reading setup file:      '//
+     1              SETRQ(1:LEN1(SETRQ) ) )
       IF( UOPEN ) THEN
          IER = VLBOPE( IUNIT, SETREQ, 'TEXT', 'OLD', RESULT )
          IF( IER .NE. 1 ) THEN
@@ -81,8 +84,6 @@ C
             CALL ERRLOG( 'RDSET: Problem opening setup file' )
          END IF
       END IF
-      CALL WLOG( 0, 'RDSET:   Reading setup file:      '//
-     1              SETRQ(1:LEN1(SETRQ) ) )
 C
 C     Set defaults of some individual parameters. First set all to 0.D0,
 C     then set a few to reasonable defaults or to non-zero values for

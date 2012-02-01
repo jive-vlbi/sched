@@ -86,11 +86,24 @@ C
 C     Azimuths from SCHGEO will be in range 0-360 and will be 
 C     adjusted as required below for the wrap condition.
 C
-C     For LSCN=0, do the calculation for the scan start time for
-C     want of a better option.
+C     For LSCN=0, it's a bit tricky because the start times of the
+C     scans are being incremented from the experiment start time.
+C     They only get reset back to the requested start once a scan
+C     is accepted.  So one might use STARTJ(1).  But if other stations
+C     have scans, this might not be best as the current scan could
+C     start much later.  I think all this doesn't make much difference,
+C     unless it triggers a wrap condition, which it can easily do if
+C     many early scans are skipped.  I'm seeing problems in pointing
+C     runs because of it.  So try the scheme programmed below.  
+C     Basically, if SCANL (last scan) is not yet set, use TFIRST.
+C     If this is the first scan for the station, but not the 
+C     observation, use the start time of SCANL.  If not the first
+C     scan for the station, use the last one (LSCN).  That worked.
 C
-      IF( LSCN .EQ. 0 ) THEN
-         STTIME = STARTJ(ISCN)
+      IF( SCANL .EQ. 0 ) THEN
+         STTIME = TFIRST
+      ELSE IF( LSCN .EQ. 0 ) THEN
+         STTIME = STARTJ(SCANL)
       ELSE
          STTIME = STOPJ(LSCN)
       END IF
@@ -236,9 +249,11 @@ C     AZ2 by the same amount.
 C
       IF( AZ1(ISCN,ISTA) .LT. AX1LIM(1,KSTA) ) THEN
          NT1 = INT( ( AX1LIM(1,KSTA) - AZ1(ISCN,ISTA) ) / 360.0 ) + 1
+         if(iscn.eq.28) write(*,*) 'Wrap - none acceptable 1'
          AZ1(ISCN,ISTA) = AZ1(ISCN,ISTA) + NT1 * 360.0
          AZ2(ISCN,ISTA) = AZ2(ISCN,ISTA) + NT1 * 360.0
       ELSE IF( AZ1(ISCN,ISTA) .GT. AX1LIM(2,KSTA) ) THEN
+         if(iscn.eq.28) write(*,*) 'Wrap - none acceptable 2'
          NT1 = INT( ( AZ1(ISCN,ISTA) - AX1LIM(2,KSTA) ) / 360.0 ) + 1
          AZ1(ISCN,ISTA) = AZ1(ISCN,ISTA) - NT1 * 360.0
          AZ2(ISCN,ISTA) = AZ2(ISCN,ISTA) - NT1 * 360.0

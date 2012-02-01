@@ -6,28 +6,39 @@ C     Each list has a name and a list of sources.
 C     Later the sources need to be found in the source catalogs
 C     and added to the lists used.
 C
+C     Jan. 12, 2012.  Deal with a user who thinks there should be
+C     a whole separate pcenters group segment for each group.  I
+C     sort of envisioned that when I wrote this, but did not 
+C     quite get it right.  RCW.
+C
       INCLUDE 'sched.inc'
 C
 C     Don't use all the KEYADD structure for this short list.
 C
       INTEGER           MPKEY, ISRC, IK, MODE, NPKEY, INSCH
       PARAMETER         ( MPKEY = 2100 )
+      LOGICAL           PFIRST
       DOUBLE PRECISION  PKEY(MPKEY), PVAL(MPKEY), ENDMARK, BLANK8
+      SAVE              PKEY, PVAL, ENDMARK, BLANK8, NPKEY, PFIRST
+      DATA              PFIRST / .TRUE. /
 C -------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0,
      1      'PCREAD:  Starting to read groups of phase centers' )
 C
-C     Set up the input variables.  Avoid data statements because g77
-C     does not like putting strings into other types.  Also didn't
-C     bother using keyadd etc for this small set.
+C     If this routine was called before, skip the setup.
 C
-      CALL KPACK( '/       ', ENDMARK )
-      CALL KPACK( '        ', BLANK8 )
+      IF( PFIRST ) THEN
+         PFIRST = .FALSE.
 C
-C     Set keys.  Only do if haven't been here before.  Shouldn't
-C     go through here more than once, but ....
+C        Set up the input variables.  Avoid data statements because
+C        g77 does not like putting strings into other types.  Also
+C        didn't bother using keyadd etc for this small set.
 C
-      IF( PKEY(1) .NE. ENDMARK ) THEN
+         CALL KPACK( '/       ', ENDMARK )
+         CALL KPACK( '        ', BLANK8 )
+C
+C        Set keys. 
+C
          CALL KPACK( 'ENDCENT',  PKEY(1) )
          PVAL(1) = UNSET
          CALL KPACK( 'NAME', PKEY(2) )
@@ -39,15 +50,22 @@ C
             IK = IK + 2
          END DO
          NPKEY = IK - 1
+C
+C        Initialize the count of centers.
+C
+         NCENT = 0
       END IF
 C
-      NCENT = 0
+C     Don't get fooled if there was an ENDCENT from a 
+C     previous entry into the routine.
+C
+      PVAL(1) = UNSET
 C
 C     Loop through input records and gather the groups.
 C
   100 CONTINUE
 C
-C        Set everything back to defaults.
+C        Set everything back to defaults for a new group.
 C
          DO IK = 2, NPKEY
             PVAL(IK) = BLANK8
