@@ -43,15 +43,16 @@ C     it is a restart and we should reload the freq catalog.
 C
       NFREQ = 0
 C
-C     Open frequencies catalog.
+C     Open frequencies catalog.  Indicate the attempt before 
+C     doing it so output messages make more sense.
 C
+      CALL WLOG( 0, 'GETFREQ: Reading frequency file:  '//
+     1              FREQFILE(1:LEN1(FREQFILE) ) )
       IER = VLBOPE( IFRQ, FREQFILE, 'TEXT', 'OLD', RESULT )
       IF( IER .NE. 1 ) THEN
          CALL WLOG( 1, RESULT )
          CALL ERRLOG( 'GETFREQ: Problem opening frequency file' )
       END IF
-      CALL WLOG( 0, 'GETFREQ: Reading frequency file:  '//
-     1              FREQFILE(1:LEN1(FREQFILE) ) )
 C
 C     Set some dummy parameters to avoid triggering checks in VLASETF
 C
