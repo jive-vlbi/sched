@@ -93,7 +93,8 @@ C
 C        Skip the scan if FORMAT=NONE and no stations need to keep
 C        such scans (set SKIPNONE=.TRUE.).  SKIPNONE should end up 
 C        false for any scan with a different format or for a scan that
-C        include stations, such as the VLBA, that needs such scans.
+C        includes stations, such as the VLBA, that needs such scans.
+C        Such scans include reference pointing scans.
 C        ANYNONE records whether the FORMAT=NONE regardless of whether
 C        the scan will be retained.  It triggers a comment.
 C
@@ -575,10 +576,11 @@ C
       END DO
 
 
-      write(*,*)  '  Unfinished allow format=none on vlba peak scans'
-
+      write(*,*) ' Unfinished (?) allow format=none on vlba peak scans'
+C     But what is left to do?  It seems to be working.
 C
 C     Print warning about frequency of Tsys. 
+C
       TSYSMESS = .FALSE.
       DO ISTA = 1, NSTA
          IF( WARNTS(ISTA) ) THEN
