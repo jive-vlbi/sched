@@ -63,7 +63,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  DEVELOPMENT VERSION 10.1}
+\title{THE \schedb USER MANUAL \\  BETA VERSION 10.1}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -793,9 +793,10 @@ Note that the example suite has grown up over many years and is in
 some considerable need up updating.  All are valid schedules that run
 and could be used.  But many features used are dated and new features
 and currently preferred styles are still only seen in a few.  Some
-with recent (Late 2010) modifications that are especially current are
-{\sl manual\_1.key}, {\sl egdelzn.key}, {\sl egrdbe.key}, {\sl
-egddc.key}, and {\sl egcent.key} which target certain new features,
+with recent (After late 2010) modifications that are especially current are
+{\sl manual\_1.key}, {\sl egdelzn.key}, {\sl egrdbe.key}, 
+{\sl egrdbe2.key}, {\sl egddc.key}, and {\sl egcent.key} which target 
+certain new features,
 but also show decent scheduling style.
 
 See the section of this manual on
@@ -873,11 +874,21 @@ of the \htmlref{{\tt PREEMPT}}{MP:PREEMPT} parameter to protect
 specific scans from preemption at Pie Town and Mauna Kea for daily
 EOP observations of up to 1.5 hr.
 
+\item[\htmladdnormallink{{\sl egrdbe2.key}}{examples/egrdbe.key}]
+demonstrates a \schedb file for use with the new digital backend and
+Mark5C recorders being deployed on the VLBA and elsewhere.  This one
+is relatively simple and uses the PFB personality which gives many
+channels of fixed frequency and bandwidth.  It does exercise the
+mode where one station (GBT) has to observe in the opposite sideband
+from others.
+
 \item[\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}]
-demonstrates a \schedb file for use with the new digital backend
-and Mark5C recorders being deployed on the VLBA and elsewhere.  This
-one uses the PFB personality which gives many channels of fixed frequency
-and bandwidth.
+demonstrates a \schedb file for use with the new digital backend and
+Mark5C recorders being deployed on the VLBA and elsewhere.  This also
+uses the PFB personality which gives many channels of fixed frequency
+and bandwidth.  This key file demonstrates fully specified setup
+files.  It also demonstrates how to set up a key file for piggyback
+MARK5A and MARK5C scheduling.
 
 \item[\htmladdnormallink{{\sl egddc.key}}{examples/egddc.key}]
 demonstrates a \schedb file for use with the new digital backend
@@ -2263,7 +2274,16 @@ in the setup file.
 \section{\label{SEC:WIDE}Wide Band Observing: RDBE, DBBC, VLBA and
 Mark IV Modes}
 
-With the Mark5A recording system, the maximum bit rate that can be
+This section covers the scheduling of wide bandwidth observations.
+With the older tape and MARK5A systems, that meant 512 Mbps using 
+a 2 tape recorders, or a large number of "tracks" on disk.  With 
+the digital backends (RDBE and DBBC) and newer recording systems
+(MARK5C for now, maybe X cube or MARK6 later), completely new 
+systems are involved.  The first couple of paragraphs below are about
+the old systems.  Then the section goes into more detail about the
+new digital systems.
+
+With the Mark5A recording system, the maximum bit rate that can
 normally be recorded is 1024 Mbps on a Mark IV system and 512 Mbps
 on a VLBA system.  These rates are recorded on a single module, unlike
 in the tape era when 2 drives or 2 heads were required.
@@ -2285,7 +2305,9 @@ values.  The RDBE/Mark5C system developed at Haystack and NRAO will
 initially record 2048 Mbps which will increase to 4096 Mbps
 eventually, assuming funds can be found.  The DBBC system, developed in
 Italy and also using the Mark5C recording system, is being deployed on a
-similar time scale and will have similar bandwidths.
+similar time scale and will have similar bandwidths.  Other, even wider
+bandwidth, recording systems are under development but will not be
+discussed here yet.
 
 The RDBE (Roach Digital Backend, where ROACH is the core board
 containing a large FPGA) is a module that takes in 2 analog IF
@@ -2305,7 +2327,11 @@ operations to a Python script that is read by the Executor.  All new
 hardware installed at the VLBA for the next few years will use this
 control system and, probably slowly, the old hardware will be switched
 over to it.  In the meantime, both crd files and VEX files are
-needed to control the VLBA sites.
+needed to control the VLBA sites.  The in-progress installation of the
+new 4-8 GHz receiver on the VLBA includes a new RF switch controller 
+that affects all observing bands, so antennas with the full installation
+require a VEX file and use of the new control system, in addition to
+the old system (which points the antennas) for all observations.
 
 Note that what are called basebands in the new system, for backward
 compatibility, are known as subbands in the terminology used on the
@@ -2352,7 +2378,7 @@ something like 4-10 MHz (to be determined) that is not really usable.
 cross one of these boundaries.
 
 The frequencies for the band edges in the DDC personality can be set
-to any multiple of 256 / (2^32) MHz = 0.0596046 Hz in principle.  But 
+to any multiple of $256 / (2^32)$ MHz = $0.0596046$ Hz in principle.  But 
 values that are not integer Hz would cause problems elsewhere - mainly
 with returning to phase after changes.  The smallest allowed value 
 that qualifies is 15.625 kHz.  One way to look at the allowed values
@@ -2374,17 +2400,28 @@ can be reached using more than one LO setting, so no cases have been
 identified where a particular spectral line cannot be observed.  But
 full tuning flexibility that might be desired is not there.  Eventually
 we hope to upgrade the front end synthesizers to designs with more
-tuning options, but that is not yet funded.
+tuning options, and in fact design and prototyping of such a system
+has started, although deployment is not yet funded (Feb 2012).
 
 Note that, for the initial /schedb implementation in place (versions
 9.4, through at least 10.1) the code to provide default channel
 frequencies based on the band has not yet been written.  It is
 necessary to give the frequencies in the setup file.  See the
-examples.  The defaulting capability will be added eventually.
+simple examples.  The defaulting capability will be added eventually.
 
-During testing of the RDBE/MARK5C system, it is useful to have a
-parallel Mark5A recording.  That can be requested with parameter
-switch /htmlref{{\tt DOMKA}}{MP:DOMKA}.
+Example \schedb input {(\sl .key)} files for observations using the
+new systems are: \htmladdnormallink{{\sl egrdbe2.key}}{examples/egrdbe2.key}.
+which is a reasonably simple case, 
+\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key} which demonstrates
+more fully specified setups and demonstrates scheduling of piggyback
+Mark5A and Mark5C observations, and 
+\htmladdnormallink{{\sl egddc.key}}{examples/egddc.key} which uses the
+DDC personality of the RDBE.
+
+As of Feb 2012, one weakness of the available system is that reference
+pointing on masers requiring doppler setting cannot be mixed with PFB
+personality observations.  The use of the DDC, or high overheads for
+personality changes, may be required.  This is an area of development.
 
 The DBBC being developed for the EVN is also a system that samples
 at 1024 MHz and digitally filters the signals to the desired bandwidths.
@@ -2410,8 +2447,17 @@ basebands and the sidebands to match the RDBE basebands.  It sets the
 sample rate to the maximum of that requested and 32 Ms/s.  It sets the
 channel bandwidth to the lesser of the request and 16 MHz.  It only
 writes the first 4 pcal extraction requests (avoiding going into
-channel numbers that are too high).
+channel numbers that are too high).  Recording on the Mark5A system
+is not requested.
 
+During testing of the RDBE/MARK5C system, it is useful to have a
+parallel Mark5A recording.  That can be requested with parameter
+switch /htmlref{{\tt DOMKA}}{MP:DOMKA}.  If the user does not want to
+take the Mark5A setups provided by \schedb with {\tt DOMKA}, then the
+run can be set up as a piggyback with separate setups for each system.
+The scheme for doing that won't be described here, but described and
+demonstrated in example 
+\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}.
 
 
 \section{\label{SEC:LINE}Spectral Line Observations}
@@ -13073,20 +13119,24 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_10.1}Development Version 10.1}
+\subsection{\label{SSEC:VER_10.1}Development/Beta Version 10.1}
 
 % \item Working on DDC frequency checks.  ********
 
-% \item REMINDER TO RCW: Need to fix frequency selection to allow
-% inverted sidebands for the RDBE.
+% Configure eg3mm_rdbe.key and make it work - maser reference 
+% pointing with RDBE/PFB personality.  It is not clear how to do
+% this.
 
-%  Deal with Adam's issues about multiple centers.
-
-%  Deal with slew calculation problem (gets one end of scan on
-%  wrong wrap.
 
 \begin{itemize}
 
+\item Beta version released near Feb. 7, 2012  RCW
+
+\item Tweak egrdbe.key and egrdbe2.key to make them more useful for
+users.  Also work on the wideband part of the manual.  Feb. 7, 2012.
+
+\item Increase number of digits on RA and Dec in multiple phase centers
+in the v2d output at request of Adam Deller.  Feb. 6, 2012 RCW.
 
 \item Deal with cases of multiple pcenters input groups.  Also warn when
 a centers group is not found.  Fix bug when testing for multiple centers
@@ -13098,7 +13148,7 @@ start.  It turns out that this was because the estimated start time of
 the first scan was changing too much until a scan was finally kept and 
 sources that were actually up were flagged as down.  Fixed Jan. 31, 2012.  RCW
 
-\item Allow 1040MHz BBC for RDBE_PFB so it is possible to schedule
+\item Allow 1040MHz BBC for RDBE\_PFB so it is possible to schedule
 single polarization runs that span the full IF bandwidth.  Warn
 of likely corruption of data in that channel.  If sideband inversion
 is being used, the 528 channel will also be needed so allow that too,

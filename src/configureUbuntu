@@ -1,15 +1,35 @@
 #! /bin/csh
 #
-# Use sed and the template Makefile.master to build a Makefile
+# If you try to run this script and get the error 
+# "/bin/csh: bad interpreter: No such file or directory"
+# You need to install csh
+#       sudo apt-get install csh
+#       or use the Ubuntu Sofware Center and search for csh
 #
-# The original version was for a 32-bit Ubuntu Hardy Linux machine 
-# without satellite tracking and using g77.  Modified Jan. 12, 2012
-# (RCW) to use gfortran based on input from Justin Linford UNM.  
-# Only changed the FCSED line.  Apparently g77 is no longer available
-# on more modern releases of Ubuntu, which makes sense since it is not
+# NOTE: Prior to running this configure script, you should
+# make sure that you have installed all of the add-ons
+# for PGPLOT!
+# 1. Open the Ubuntu Software Center:
+# 2. Search for PGPLOT
+# 3. Click "More Info"
+# 4. Check every box under "Add-Ons"
+# 5. Click "Apply Changes"
+#
+# Alternatively install the PGPLOT distributed with SCHED.
+#
+# This script uses sed and the template Makefile.master to build a Makefile
+#
+# The original version was for a 32-bit Ubuntu Hardy Linux machine
+# without satellite tracking and using g77. 
+#
+# Original RCW Oct 30, 2008
+#
+# Modified Jan. 12, 2012 (RCW and Justin Linford UNM)
+# Converted to use gfortran.  Added the instructions above.  The only
+# change to active lines was to the FCSED line that specifies the
+# Compiler.  Apparently g77 is no longer available on more modern 
+# releases of Ubuntu, which makes sense since it is not
 # supported on modern versions of gcc.
-#
-# Original RCW  Oct 30, 2008
 #
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
@@ -18,23 +38,25 @@
 /bin/rm -f makeubuntu.sedscript
 
 # Make a file for sed with all the required changes to Makefile.master
-# Note that LPGPLOT is not needed for this case.
+# Note that LPGPLOT is not needed for this case but $PGPLOT_DIR needs
+# to be set before make is run.
 
 cat <<EOF >! makeubuntu_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureUbuntu:
 s:#ARCHSED: ARCH = LINUX:
-s:#FCSED: FC = gfortran -Wall -Wimplicit -fno-backslash:
+s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib -lX11:
+s:#PLOT_SRCS_SED: PLOT_SRCS = \$(wildcard Plot/*.f) \$(wildcard PlotNRAO/*.f):
+s:#LPGPLOTSED: LPGPLOT = /usr/lib:
 s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -lpng:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
 EOF
 
-# g77 version:  s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash:
+# g77 version: s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash:
 
-#  Run sed with the above file.
+# Run sed with the above file.
 
 sed -f makeubuntu_sedscript Makefile.master > Makefile
 /bin/rm makeubuntu_sedscript
-
