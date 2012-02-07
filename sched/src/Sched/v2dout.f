@@ -17,7 +17,7 @@ C
       INTEGER           IPAIR, CCHAN
       CHARACTER         V2DFILE*80, OPSTAT*4, OPTEXT*255
       INTEGER           JSRC
-      CHARACTER         TRA*13, TDEC*13, TFORM*13, UPCODE*3
+      CHARACTER         TRA*16, TDEC*16, TFORM*16, UPCODE*3
 C
 C----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'V2DOUT starting' )
@@ -191,9 +191,9 @@ C
             END IF
             DO ICSRC = 1, NCSRC(PAIRCENT(IPAIR))
                JSRC = CTRSRCI(ICSRC,PAIRCENT(IPAIR))
-               TRA =  TFORM( RA2000(JSRC), 'T', 0, 2, 7, '::@' )
-               TDEC = TFORM( D2000(JSRC), ' ', 1, 2, 6, '::@' )
-               IF( TDEC(1:1) .EQ. ' ' ) TDEC = TDEC(2:13)//' '
+               TRA =  TFORM( RA2000(JSRC), 'T', 0, 2, 10, '::@' )
+               TDEC = TFORM( D2000(JSRC), ' ', 1, 2, 9, '::@' )
+               IF( TDEC(1:1) .EQ. ' ' ) TDEC = TDEC(2:16)//' '
                WRITE( IV2D, '( 6A )' )
      1             '  addPhaseCentre = name@', 
      2             CTRSRCN(ICSRC,PAIRCENT(IPAIR))(1:LEN1(
