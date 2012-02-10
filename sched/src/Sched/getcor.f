@@ -48,13 +48,14 @@ C
      A       CORREL(1:9) .NE. 'PENTICTON' .AND.
      B       CORREL(1:3) .NE. 'LBA' .AND.
      C       CORREL(1:6) .NE. 'FXCORR' .AND.
-     D       CORREL(1:5) .NE. 'OTHER' ) THEN
+     D       CORREL(1:3) .NE. 'ASC' .AND.
+     E       CORREL(1:5) .NE. 'OTHER' ) THEN
             CALL WLOG( 1, ' ** WARNING: ' // CORREL(1:LEN1(CORREL)) //
      1        ' is not a recognized correlator.' )
             CALL WLOG( 1, '     Recognized correlators are: '//
      1        'SOCORRO, VLBADIFX, VLBA, HAYSTACK, BONN, JIVE,' )
             CALL WLOG( 1, '       USNO, JPL, BOLOGNA, MITAKA, '//
-     1             'PENTICTON, LBA, FXCORR, and OTHER' )
+     1             'PENTICTON, LBA, FXCORR, ASC, and OTHER' )
             MISCOR = .TRUE.
          END IF
       END IF
