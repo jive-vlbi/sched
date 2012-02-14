@@ -4,7 +4,8 @@ Instructions for making a release of SCHED
 ==================  Before a release:  ===========================
 
     Get the latest versions of the Vex and plot code from 
-    JIVE and Franco.
+    JIVE and Franco.  Note I have not had contact with Franco
+    for a long time (as of Feb. 2012).
 
     Make sure VERSION and VERNUM in versched.f are up to date.
     Make sure the version on the manual first page is current.
@@ -29,15 +30,15 @@ setenv NEWVER 8.1
 setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
 
 ==================  Compile  ======================================
-    Go to the base directory for the release (trunk or branch)
+    Go to the base directory for the release.
 
     Compile and link SCHED for each target architecture.
     Run "source ./Verify" in the examples directory after each compile 
     to make sure it works.  The compilations are without satellite 
-    tracking unless otherwise noted.  Architectures are (with local 
-    usable machines):
+    tracking unless otherwise noted.  Doing multiple compilations has
+    been useful for finding bugs that don't affect all types of machine.
+    Architectures are (with local usable machines):
 
-      LINUX            32 bit Intel linux machine compiled with g77 (dave).
       LINUX64GFORTRAN  64 bit Intel linux compiled with gfortran (noatak).
       LINUX64SPICE     64 bit Intel linux compiled with g77 with
                        satellite tracking (noatak).
@@ -46,11 +47,14 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
             Note some Sun's have too little memory for the default
             parameter settings.
 
-    One could also do the following, but I don't propose to keep 
-    supporting them:
+    The following architectures used to be supported, but have been 
+    retired:
+      LINUX     32 bit Intel linux machine compiled with g77 (dave).
+                    SCHED no longer used on such machines at the AOC
       LINUX64   64 bit Intel linux machine compiled with g77 without 
                 satellite tracking. (noatak)
-      OSXPPC    PowerPC Mac. (horton - no longer supported)
+      OSXPPC    PowerPC Mac. (horton. No longer supported and I no longer
+                    have the machine.)
 
 
     To compile on a given machine, login to that machine.
@@ -62,7 +66,7 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
         configure script.
     3.  Clean out previous efforts, then compile and link using make.
     4.  Copy the binary to the right subdirectory in bin.
-    5.  Test the examples.
+    5.  Test the examples. (more under examples below)
 
 cd $SCHED/src
 configureLinuxSpice64
@@ -72,6 +76,7 @@ cp ../bin/sched ../bin/LINUX64SPICE/
 cd ../examples
 source ./Verify
 less testruns.out
+
 
     In the final step, look for unexpected differences.  Run times
     will be different, and often there will be last-digit differences
@@ -84,7 +89,7 @@ less testruns.out
 cd $SCHED/setups
 makesetup
 
-    Update updates the stations, freq, and messages files for which
+    Update the stations, freq, and messages files for which
     the masters are in subdirectories.
 
 cd $SCHED/catalogs
@@ -134,7 +139,7 @@ schclean "*"
     page are long enough to frighten off users.
 
 cd $SCHED/doc
-latex sched.tex
+latex sched.tex   (may need several repeats to get internal links right)
 latex2html -local_icons -link 2 sched.tex
 
     Put copies of the examples and catalogs in appropriate subdirectories
@@ -177,8 +182,8 @@ mv sched/.* .
 
 
 #  Copy over the examples/Stdout files, the execute modules, and 
-#  the html manual, none of which are under svn (they are fast changing
-#  and can be derived from files that are in svn.
+#  the html manual, none of which are under svn (they are fast changing,
+#  bulky, and can be derived from files that are in svn).
 #  The --delete deletes files on the receiving side that are not on the
 #  sending side and is useful when updating, say, a beta release that
 #  is not being done from scratch.
@@ -187,9 +192,10 @@ rsync -auv --delete --exclude ".svn" $SCHED/bin  $SCHEDNEW
 rsync -auv --delete --exclude ".svn" $SCHED/examples/Stdout $SCHEDNEW/examples
 rsync -auv --delete --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
 
-#  For copying to another machine, like lodore - from lodore:
-#  This example is there because I haven't gotten latex2html working
-#  on Lodore and want a local manual.
+#  For a machine with an svn version (not the tar version), you may wish
+#  to update the manual to have a local version.  This is the case for
+#  my laptop lodore where I have not gotten latex2html working yet.
+#  type on the target machine:
 
 cd $SCHED/doc/sched
 rsync -auv --delete --exclude ".svn" \

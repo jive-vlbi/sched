@@ -105,12 +105,17 @@ C
          DO KSCN = 1, NSCANS
             IF( .NOT. NOREC(KSCN) ) GO TO 100
          END DO
-         CALL WLOG( 1, 'CHKSC1:   This schedule claims to involve ' //
-     1       'recording but' )
-         CALL WLOG( 1, '          there are no recording scans.' )
-         CALL WLOG( 1, '          Check OBSTYPE and RECORD/NORECORD' )
-         CALL ERRLOG( 'Fix key file and try again.' )
-      END IF
+         CALL WLOG( 1, ' ' )
+         CALL WLOG( 1, 'CHKSC1:   *** This schedule uses formats ' //
+     1       'that suggest it should     ***' )
+         CALL WLOG( 1, '          *** be recording but there are ' //
+     1       'no recording scans.        ***' )
+         CALL WLOG( 1, '          *** Was this intended? ' //
+     1       'It might be for reference pointing ***' )
+         CALL WLOG( 1, '          *** If not, check OBSTYPE and ' //
+     1       'RECORD/NORECORD             ***' )
+         CALL WLOG( 1, ' ' )
+       END IF
   100 CONTINUE
 C
 C     Warn users if they are setting FREQ and BW in the scans and
