@@ -21,6 +21,7 @@ This is the input file for MAKESETUP which makes the standard
                  to check all the odd ones.
    28 Aug 2007   Add 24 GHz to pointing.
    18 Sep 2008   Remove (comment out) MarkII and MarkIII
+   13 Feb 2012   Add a 7mm dummy setup for the RDBE-PFB for reference pointing.
 --------------------------------------------------------------------
 Lead comments from makesetup.f:
 
@@ -1422,6 +1423,15 @@ POINTING FILES
   pol      = dual
   #end
 
+#mode ptg16
+!      16 channel VLBA Pointing observations for use with RDBE-PFB
+!      Mainly to be used with 7mm.
+  nchan = 16  bits = 2  netside  = L  sideband  = L  pol = dual
+  bbfilt = 32.0
+  bbsyn    = 912, 912,  880, 880, 848, 848,  816.0, 816,
+             784, 784,  752, 752, 720, 720,  688.0, 688
+  #end
+
 #file pt18cm.set  @mode ptg4
   format   = NONE
   bbfilter = 16  
@@ -1534,7 +1544,14 @@ Now the versions without FORMAT to try to get vex files.
   ptincr   = 2.5   
   ptoff    = 36.0 /   #end
 
+# Version to be used for the RDBE/MARK5C schedule when doing
+# reference pointing with the old BBCs and old control system
+# on the VLBA.  This ensures the RF switches are set right.
 
+#file pr7mm.set   @mode ptg16
+  format   = NONE
+  firstlo  = 42400.0 
+  ptincr   = 0.5   /  #end
 
 VLA STAND ALONE SETUPS
 

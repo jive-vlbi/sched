@@ -2,24 +2,33 @@
 
 #  This script is meant to help with generation of both Mark5A and
 #  Mark5C schedules for a project.  This idea is simple.  Write
-#  the key file with all of the lines required for either output,
+#  a key file with all of the lines required for either output,
 #  but put a special comment at the front of each line that is only
-#  needed for one.  I have in mind using !MARK5A in front of the
-#  Mark5A lines and !MARK5C in front of the Mark5C lines.  Put that
+#  needed for one or that needs to be different in the two cases.  
+#  Typically the special comment is "!MARK5A" in front of the
+#  Mark5A lines and "!MARK5C" in front of the Mark5C lines.  Put that
 #  key file in the main directory for the project.  Make subdirectories
 #  for each of the types of output desired.  cd to the desired
-#  subdirectory and run the script like:
+#  subdirectory and run the script. For example, type:
 #    runsch ../td009a.key MARK5A
-#  The script will copy ../tb009a.key to the current subdirectory, will
-#  blank the comment markers of the !MARK5A type in the copied
-#  file leaving those lines active for SCHED.  The script then runs 
-#   SCHED.
+#  The script will copy ../tb009a.key to file temp_in in the current 
+#  subdirectory.  Then it will use sed to create temp.key that has 
+#  the comment markers of the !MARK5A type blankedleaving those lines 
+#  active for SCHED.  The script then runs SCHED.
 
-/bin/rm temp_in.key
+#  Note that normally the script would be run from either a MARK5A or
+#  a MARK5C subdirectory.  For the examples, it is run in the parent
+#  directory and the SCHED files end up there for easy bookkeeping.
+#  There are scripts in the examples, like egrdbe.run, that invoke this
+#  script.
+
+#  This version of runsch is meant to be run from the Verify script.
+#  If you wish to use it separately, in the AOC, use the one in 
+#  ~cwalker/bin, or anywhere, change $SCHBIN below to $SCHED/bin.
+
 /bin/rm temp.key
-/bin/cp $1 temp_in.key
 echo Running $1:t with \!$2 replaced by blanks.
 echo Modified key file is in temp.key
-sed   's:\!'$2'::'  <temp_in.key >temp.key
-$SCHED/bin/sched < temp.key
+sed   's:\!'$2'::'  <$1:t >temp.key
+$SCHBIN/sched < temp.key
 
