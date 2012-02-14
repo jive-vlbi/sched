@@ -63,7 +63,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  BETA VERSION 10.1}
+\title{THE \schedb USER MANUAL \\  Version 10.1}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -626,6 +626,9 @@ that function.  It will only be of interest for observations at 43 GHz
 on the VLA and at 86 GHz on the VLBA.  The standard reference pointing
 control file is at \htmladdnormallink{{\sl
 \$SCHED/catalogs/peak.cmd}}{catalogs/peak.cmd}
+There is a special version related to reference pointing when using the
+new wideband (RDBE/MARK5C) system on the VLBA.  It is \htmladdnormallink{{\sl
+\$SCHED/catalogs/peak\_RDBE.cmd}}{catalogs/peak\_RDBE.cmd}.
 
 \item[\htmlref{Spectral Line Rest Frequencies}{SEC:LINE}:] \schedb can
 adjust the observing frequency to remove the doppler shifts due to the
@@ -945,12 +948,22 @@ when that project is far enough along to make it clear what is needed.
 VLBA schedule for observations at 86 GHz.  There is special emphasis
 on \htmlref{reference pointing}{SEC:REFPOINT}, which is done
 explicitly in this file.
+This file does not create the separate new and old system files needed
+for reference pointing on masers while observing with the new RDBE wide
+band system with the PFB personality.  For instructions on how to do 
+that, please see 
+\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
 
 \item[\htmladdnormallink{{\sl eg3mmb.key}}{examples/eg3mmb.key}] is
 another VLBA 3mm schedule, but in this one \schedb is instructed to
 insert \htmlref{reference pointing}{SEC:REFPOINT} scans automatically
 based on commands for reference pointing in the standard
 \htmladdnormallink{referece pointing control file}{catalogs/peak.cmd}.
+This file does not create the separate new and old system files needed
+for reference pointing on masers while observing with the new RDBE wide
+band system with the PFB personality.  For instructions on how to do 
+that, please see 
+\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
 
 \item[\htmladdnormallink{{\sl eg3mmc.key}}{examples/eg3mmc.key}] is
 yet a third VLBA 3mm schedule, again using automatic insertion of
@@ -958,6 +971,18 @@ pointing scans.  But this time, the file with the commands controling
 that insertion is inserted in the main schedule file and is somewhat
 simplified from that in \htmladdnormallink{{\sl
 eg3mmb.key}}{examples/eg3mmb.key}
+This file does not create the separate new and old system files needed
+for reference pointing on masers while observing with the new RDBE wide
+band system with the PFB personality.  For instructions on how to do 
+that, please see 
+\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
+
+\item[\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}] 
+is very similar to {\sl eg3mmb.key}, but shows how to make the two
+sets of schedules necessary to control the old VLBA control system, 
+which is actually doing the reference pointing, and the RDBE with the
+PFB personality, which does not have the tuning or bandwidth flexibility 
+to use with maser pointing sources.
 
 \item[\htmladdnormallink{{\sl vips11.key}} {examples/vips11.key}]
 shows use of \htmlref{{\tt OPTMODE=HAS}}{MP:OPTMODE} for automatic
@@ -2780,6 +2805,21 @@ for the automatic scan insertion discussed below.  See the discussion
 of the parameter \htmlref{{\tt POINT}}{MP:POINT} for information on
 how to control this semi-automatic mode.
 
+Note that there will be a period from early 2012 until the antenna
+pointing on the VLBA is moved to the new control system (RDBE/MARK5C ---
+see the wideband observing section), when there will be complications
+for reference pointing.  Both the old and new control system must know
+about the scans and how to set up the frequencies.  This means that
+they must be described in both the {\sl .crd} and {\sl .vex} output
+files.  But with the PFB personality of the RDBE the Doppler tracking
+and narrow bandwidths needed for maser pointing are not possible.
+Therefore separate runs of \schedb are required for reference pointing
+to set up both the old BBCs, with the fine tuning needed for pointing,
+and the RDBEs which can't do fine tuning.  These two runs of \schedb
+must maintain the same scan times.  See the example
+\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} for
+details on how to schedule such observations.
+
 Explicit insertion of pointing scans can be a pain and can completely
 dominate the work involved in scheduling high frequency observations.
 Therefore \schedb has a mode where it can do the work.  This mode is
@@ -2806,7 +2846,13 @@ eg3mmc.key}}{examples/eg3mmc.key} produces the same results but using
 \htmlref{{\tt PEAKINIT}}{MP:PEAKINIT} and no external file.
 \htmladdnormallink{{\sl egvla7mm.key}}{examples/egvla7mm.key} shows
 the insertion of peaking scans on the VLA. These examples only include
-a few VLBA stations and the VLA.  Others will be added to demonstrate
+a few VLBA stations and the VLA.  These examples don't show all that is
+needed to make schedules for wideband (RDBE/MARK5C) observations with
+reference pointing where two different passes through \schedb are 
+required.  For that, see a couple of paragraph back and see the example 
+\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
+The other 3mm examples need to be updated to show these methods.  Also
+some more examples should be added to demonstrate
 scheduling of more global observations such as those of the CMVA.
 
 The peaking control information is organized around groups of antennas
@@ -13123,16 +13169,34 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_10.1}Development/Beta Version 10.1}
+\subsection{\label{SSEC:VER_10.2}Development Version 10.2}
+
+\begin{itemize}
 
 % \item Working on DDC frequency checks.  ********
 
-% Configure eg3mm_rdbe.key and make it work - maser reference 
-% pointing with RDBE/PFB personality.  It is not clear how to do
-% this.
+\item  Nothing yet.
 
+\end{itemize}
+
+\subsection{\label{SSEC:VER_10.1}Version 10.1}
+
+This version was released on or about Feb. 14, 2012.  It addresses a number 
+of issues related to the new wideband system on the VLBA.
 
 \begin{itemize}
+
+\item Add example \htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}
+that shows how to schedule reference pointing while doing RDBE\_PFB observations
+where the RDBE cannot be told to use the Doppler frequencies and narrow 
+bandwidths needed for reference pointing.  This involved adding the catalog files
+{\sl sources\_RDBE\_PFB.pointing} and {\sl peak\_RDBE.cmd} which are very 
+similar to {\sl sources.pointing} and {\sl peak.cmd} but set up for use when
+making the RDBE schedule (VEX file).  Feb. 14, 2012.  RCW.
+
+\item Add warning if requesting more than 0.5 MHz per spectral channel
+if correlating in Socorro.  That puts the  data at some risk of smearing
+when correlated with a priori clocks.  Feb. 10, 2012.
 
 \item Add ASC (Astro Space Center - Moscow) to the allowed correlators.
 That correlator is used for Radioastron data.  Feb. 10, 2012  RCW.

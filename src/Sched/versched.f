@@ -46,7 +46,8 @@ C       VERSION = 'Release Sept. 15, 2011'
 C       VERSION = 'Development version after Sept. 21, 2011'
 C       VERSION = 'Beta version of Dec. 7, 2011'
 C       VERSION = 'Development version after Dec. 7, 2011'
-       VERSION = 'Beta version of Feb. 7, 2012'
+C       VERSION = 'Beta version of Feb. 7, 2012'
+       VERSION = 'Development version after Feb. 7, 2012'
 C
       RETURN
       END
