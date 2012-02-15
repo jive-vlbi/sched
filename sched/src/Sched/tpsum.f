@@ -9,7 +9,7 @@ C
       INCLUDE  'sched.inc'
 C
       LOGICAL     FIRSTS
-      INTEGER     ISTA, ISCN, YEAR, DAY1, DAY2
+      INTEGER     ISTA, ISCN, YEAR, DAY1, DAY2, NACC
       DOUBLE PRECISION  START, STOP
       CHARACTER   TFORM*8
       CHARACTER   LSTOP*10, LSTART*10, LDAY1*3, LDAY2*3
@@ -29,6 +29,7 @@ C
 
 C         WRITE( ISUM, '( 2X )' )
          FIRSTS = .TRUE.
+         NACC = 0
          DO ISCN = SCAN1, SCANL
 C     
 C           Is this station involved in this scan?
@@ -56,15 +57,22 @@ C
                   LSTOP(9:10) = '  '
                   WRITE( LDAY2, '(I3)' ) DAY2
                END IF
+C
+               NACC = NACC + 1
             END IF
 C     
          END DO
 C     
 C        Write data for last tape.
 C     
-         WRITE(ISUM,'( 2X, A, T18, A,2X,A, 5X, A,2X,A, 3X, F8.1 )')
+         IF( NACC .GE. 1 ) THEN
+            WRITE(ISUM,'( 2X, A, T18, A,2X,A, 5X, A,2X,A, 3X, F8.1 )')
      1         STANAME(ISTA), LDAY1, LSTART, LDAY2, LSTOP,
      2         TGBYTES(ISTA)
+         ELSE
+            WRITE(ISUM,'( 2X, A, A )' ) STANAME(ISTA), 
+     1          '      No recorded data. '
+         END IF
 C     
       END DO
       WRITE( ISUM,'(2X)' )
