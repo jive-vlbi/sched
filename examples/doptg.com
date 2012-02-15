@@ -254,6 +254,7 @@ eofs
 #
 foreach station ( $stalist_3mm[1*] )
    echo station=vlba_$station >! station.par
+   echo expcode=$expcode >> station.par
    $SCHED/bin/sched <<eofst
        @times.par
        @station.par
@@ -289,10 +290,11 @@ end
 #
 #   Some clean up.
 #
-/bin/rm times.par
-/bin/rm ptg_setup.par
-/bin/rm ptg_3mm.par
-/bin/rm ptg_no3mm.par
+#/bin/rm times.par
+#/bin/rm ptg_setup.par
+#/bin/rm ptg_3mm.par
+#/bin/rm ptg_no3mm.par
+#/bin/rm station.par
 #
 #   END
 
