@@ -8,7 +8,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           ISCN, ISTA, ICH
-      INTEGER           KS, KF
+      INTEGER           KS, KF, NACC
       DOUBLE PRECISION  LSTART, LSTOP, START, STOP
       DOUBLE PRECISION  LOSUM(MCHAN)
       DOUBLE PRECISION  BBBF(MCHAN), BBBW(MCHAN)
@@ -39,6 +39,7 @@ C
 C     Initialize the relevant parameters to the first recording scan.
 C
       FIRSTS = .TRUE.
+      NACC = 0
       DO ISCN = SCAN1, SCANL
 C
 C        Initialize the flags.
@@ -54,6 +55,7 @@ C        so changes are not double counted.
 
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) .AND. .NOT. NOREC(ISCN) ) THEN
+               NACC = NACC + 1
 C
 C              Initialize the string to give the reason for a break.
 C
@@ -188,29 +190,35 @@ C     End the scan loop.
 C
       END DO
 C
-C     Write the last line.  This is always needed because any
-C     previous lines written are for preceeding scans.  With 
-C     old code, this was skipped if the last scan was the only
-C     one in the block, which was not good.
+      IF( NACC .GE. 1 ) THEN
 C
-      CALL TIMEJ( LSTART, YEAR1, DOY1, START )
-      DAY1 = DOY1
-      IM = 1
-      CALL TDATECW( YEAR1, IM, DAY1, JD, MONTH1, DNAME1 )
-      CALL UPCASE( MONTH1 )
-      TCHAR1 = TFORM( START, 'T', 0, 2, 2, '::@' )
+C        Write the last line.  This is always needed because any
+C        previous lines written are for preceeding scans.  With 
+C        old code, this was skipped if the last scan was the only
+C        one in the block, which was not good.
+C
+         CALL TIMEJ( LSTART, YEAR1, DOY1, START )
+         DAY1 = DOY1
+         IM = 1
+         CALL TDATECW( YEAR1, IM, DAY1, JD, MONTH1, DNAME1 )
+         CALL UPCASE( MONTH1 )
+         TCHAR1 = TFORM( START, 'T', 0, 2, 2, '::@' )
 C     	
-      CALL TIMEJ( LSTOP, YEAR2, DOY2, STOP )
-      DAY2 = DOY2
-      IM = 1
-      CALL TDATECW( YEAR2, IM, DAY2, JD, MONTH2, DNAME2 )
-      CALL UPCASE( MONTH2 )
-      TCHAR2 = TFORM( STOP, 'T', 0, 2, 2, '::@' )
+         CALL TIMEJ( LSTOP, YEAR2, DOY2, STOP )
+         DAY2 = DOY2
+         IM = 1
+         CALL TDATECW( YEAR2, IM, DAY2, JD, MONTH2, DNAME2 )
+         CALL UPCASE( MONTH2 )
+         TCHAR2 = TFORM( STOP, 'T', 0, 2, 2, '::@' )
 C     	
-      WRITE( ISUM, 
-     1  '( A, I4, A3, I2.2, 3A, I4, A3, I2.2, 2A )' )
-     2  'UTTIMERANGE ', YEAR1, MONTH1, DAY1, ' at ', TCHAR1,
-     3  ' to ', YEAR2, MONTH2, DAY2, ' at ', TCHAR2
+         WRITE( ISUM, 
+     1     '( A, I4, A3, I2.2, 3A, I4, A3, I2.2, 2A )' )
+     2     'UTTIMERANGE ', YEAR1, MONTH1, DAY1, ' at ', TCHAR1,
+     3     ' to ', YEAR2, MONTH2, DAY2, ' at ', TCHAR2
+      ELSE
+         WRITE( ISUM, '( A, A )' ) '  There were no recording scans so',
+     1       ' there will be no correlation.'
+      END IF
 C
       RETURN
       END
