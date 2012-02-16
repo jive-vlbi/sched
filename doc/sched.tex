@@ -2300,13 +2300,14 @@ in the setup file.
 Mark IV Modes}
 
 This section covers the scheduling of wide bandwidth observations.
-With the older tape and MARK5A systems, that meant 512 or 1024 Mbps
-using 2 tape recorders or 2 headstacks, or using a large number of
-"tracks" on disk.  With the digital backends (RDBE and DBBC) and newer
-recording systems (MARK5C for now, maybe X cube or MARK6 later),
-completely new systems are involved.  The first couple of paragraphs
-below are about the old systems.  Then the section goes into more
-detail about the new digital systems.
+With the older tape and MARK5A systems, that means 512 or 1024 Mbps
+using or using a large number of "tracks" on disk.  With the digital
+backends (RDBE and DBBC) and newer recording systems (MARK5C for now,
+maybe X cube or MARK6 later), completely new systems are involved.
+The first couple of paragraphs below are about the old systems.  Then
+the section goes into more detail about the new digital systems.
+
+{\bf OLD SYSTEMS:}
 
 With the Mark5A recording system, the maximum bit rate that can
 normally be recorded is 1024 Mbps on a Mark IV system and 512 Mbps
@@ -2316,23 +2317,26 @@ in the tape era when 2 drives or 2 heads were required.
 \schedb can make schedules for the 512 Mbps and 1Gbps modes.  See the
 examples \htmladdnormallink{{\sl eg512.key}}{examples/eg512.key} for a
 VLBA only case and \htmladdnormallink{{\sl
-eg2head.key}}{examples/eg2head.key} for a PCFS (MarkIV) case.  For the
-user, 512 Mbps modes are not much different from other modes.  The
+eg2head.key}}{examples/eg2head.key} for a PCFS (MarkIV) case.  Since the
+advent of disk recordings, for the
+user, these modes are not much different from other modes.  The
 VLBA telescope schedules indicate use of the wide band mode simply
 through the specification of track numbers above 64.  Note that the
 two examples do either only VLBA or only Mark IV, but it is ok to mix
 them.
 
-New digital backends and a new recording system are under test and
-will soon be released for users as of this January 2012 writing.
-These will increase the available bit rate to significantly higher
-values.  The RDBE/Mark5C system developed at Haystack and NRAO will
-initially record 2048 Mbps which will increase to 4096 Mbps
-eventually, assuming funds can be found.  The DBBC system, developed in
-Italy and also using the Mark5C recording system, is being deployed on a
-similar time scale and will have similar bandwidths.  Other, even wider
-bandwidth, recording systems are under development but will not be
-discussed here yet.
+{\bf NEW SYSTEMS:}
+
+New digital backends and a new recording system are under test and are
+just starting to be used for science for a few projects as of this
+January 2012 writing.  These will increase the available bit rate to
+significantly higher values.  The RDBE/Mark5C system developed at
+Haystack and NRAO will initially record 2048 Mbps which will increase
+to 4096 Mbps eventually, assuming funds can be found.  The DBBC
+system, developed in Italy and also using the Mark5C recording system,
+is being deployed on a similar time scale and will have similar
+bandwidths.  Other, even wider bandwidth, recording systems are under
+development but will not be discussed here yet.
 
 The RDBE (Roach Digital Backend, where ROACH is the core board
 containing a large FPGA) is a module that takes in 2 analog IF
@@ -2356,43 +2360,55 @@ needed to control the VLBA sites.  The in-progress installation of the
 new 4-8 GHz receiver on the VLBA includes a new RF switch controller 
 that affects all observing bands, so antennas with the full installation
 require a VEX file and use of the new control system, in addition to
-the old system (which points the antennas) for all observations.
+the old system (which points the antennas) for all observations.  The
+VEX file is also used by field system stations (EVN and others) for 
+antenna control.
 
-Note that what are called basebands in the new system, for backward
-compatibility, are known as subbands in the terminology used on the
-somewhat similar EVLA system and the two terms can be used
-interchangeably for the VLBI systems.  However, for the EVLA, the word
-``baseband'' is used for the final analog signal sent to the samplers
-and is equivalent to the ``IF'' used here.  We have opted not to use
-that terminology because of the massive confusion it might create by
-swapping terms used for different signals compared to previous
-practice.
+{\bf TERMINOLOGY:}
+
+Note that the terminology for the various signals has become rather
+confused.  For backward compatibility in \schedb, we call the final
+analog signal sent to the sampler at 512-1024 MHz the ``IF''.  That is
+broken into narrower bandwidths called ``subbands'' by a polyphase
+filter regardless of RDBE personality.  There is no flexibility to
+move those subbands around in frequency.  The final signal that is
+resampled to, usually, 2 bits and recorded is called the ``baseband
+channel'' for purposes of \sched.  The baseband channel might be a
+subband (PFB personality) or might be further frequency shifted and
+filtered from within a subband (DDC personality).  This terminology
+differs somewhat from EVLA practice where a baseband is the final 
+analog signal and the final filtered signal is a subband.
+
+{\bf RDBE PFB PERSONALITY:}
 
 The FPGA in the RDBE supports multiple personalities that can be
-swapped as needed.  The first developed uses a polyphase filter to
-break the 512 MHz band into 16 basebands of 32 MHz each, all lower
-sideband.  Exactly 16 channels must be recorded.  This personality is
-selected using the \htmlref{{\tt DBE}}{SP:DBE} parameter set to {\tt
-RDBE\_PFB} in the setup file.  Actually, there are 15 bands of 32 MHz
-that provide good data, and one that is really 16 MHz from each end of
-the 512 MHz.  The channel with the edge data is not likely to be
-useful, although it may be selected in order to have all 16 required
-channels in one polarization.  In the initial implementation, every
-other one of the full 32 MHz bands was taken from each of the 2 IFs,
-creating 16 basebands total for a total bit rate of 2 Gbps.  This was
-soon enhanced to allow any 16 of the 30 good and 2 bad 32 MHz bands to
-be selected.  This personality can only provide 32 MHz basebands at
-fixed frequencies for a total of 2 Gbps.  No variations on those
-parameters are supported.  Note that eventually there will be 2 RDBE
-modules at each station to support 4 IFs.
+swapped as needed.  The first developed, and only one available in
+early 2012, is the PFB personality that uses a polyphase filter to
+break each of the two 512 MHz IFs into 16 basebands of 32 MHz each,
+all lower sideband.  Exactly 16 channels must be recorded, selected
+from the total of 32 provided from both inputs.  This personality is
+selected setting the \htmlref{{\tt DBE}}{SP:DBE} parameter to {\tt
+RDBE\_PFB} in the setup file.  Of the 16 subbands of the polyphase
+filter from each IF, 15 provide good data.  The other is really 16 MHz
+from each end of the 512 MHz, is probably not useful.  It is made
+available for selection in cases where it is desired to have all 16
+required channels in one polarization.  More typically, 8 channels,
+constituting polarization pairs, will be selected from each IF input.
+This personality can only provide 32 MHz basebands at fixed
+frequencies within the IF for a total of 2 Gbps.  Other than selecting
+the desired subbands, there is no tuning flexibility.  Note that
+eventually there will be 2 RDBE modules at each station to support 4
+IFs.
 
-The second personality that will be available is the DDC (Digital Down
-Converter).  It is selected using the \htmlref{{\tt DBE}}{SP:DBE}
-parameter set to {\tt RDBE\_DDC} in the setup file. This personality
-will likely provide up to 8 filters per RDBE (typically 4 on each IF)
-that can provide arbitrary offset frequencies and can provide any
-bandwidth at the factor of 2 steps between 0.125 and 64 MHz.  There is
-a complication forced by the use of a polyphase filter first step of
+{\bf RDBE DDC PERSONALITY (not yet available):}
+
+The second personality that will be available eventually is the DDC
+(Digital Down Converter).  It is selected using the \htmlref{{\tt
+DBE}}{SP:DBE} parameter set to {\tt RDBE\_DDC} in the setup file. This
+personality will provide a few (maybe 4 or 8) filters per RDBE that
+can provide arbitrary offset frequencies and can provide any bandwidth
+at the factor of 2 steps between 0.125 and 64 MHz.  There is a
+complication forced by the use of a polyphase filter first step of
 filtration to get the clock rate down to values the FPGA can support.
 Such filters do not have flexible frequency ranges.  This one splits
 the band into 3 segments, 512 to 640 MHz, 640 to 896 MHz, and 896 to
@@ -2403,14 +2419,17 @@ something like 4-10 MHz (to be determined) that is not really usable.
 cross one of these boundaries.
 
 The frequencies for the band edges in the DDC personality can be set
-to any multiple of $256 / (2^32)$ MHz = $0.0596046$ Hz in principle.  But 
-values that are not integer Hz would cause problems elsewhere - mainly
-with returning to phase after changes.  The smallest allowed value 
-that qualifies is 15.625 kHz.  One way to look at the allowed values
-is that they are N*125 kHz plus 0, 15.625, 31.250, 46.875, 62.500, 
-78.125, 93.750, or 109.375 kHz.  For the moment, it is best to stick
-to multiples of 10 kHz until we determine that there is adequate 
-precision everywhere.  This means increments of 250 kHz.
+to any multiple of $256 / (2^{32})$ MHz = $0.0596046$ Hz in principle.
+But values that are not integer Hz would cause problems elsewhere -
+mainly with returning to phase after changes.  The smallest allowed
+value that qualifies is 15.625 kHz.  One way to look at the allowed
+values is that they are N*125 kHz plus 0, 15.625, 31.250, 46.875,
+62.500, 78.125, 93.750, or 109.375 kHz.  For the moment, it is best to
+stick to multiples of 10 kHz (the step in the BBCs of the old system)
+until we determine that there is adequate precision everywhere.  The
+only way to do the is with multiples of 250 kHz.
+
+{\bf VLBA TUNING RESTRICTIONS:}
 
 The overall LO/IF/RDBE system on the VLBA will have some significant
 tuning flexibility issues.  The RDBE is an addon to the older system
@@ -2431,25 +2450,50 @@ has started, although deployment is not yet funded (Feb 2012).
 Note that, for the initial /schedb implementation in place (versions
 9.4, through at least 10.1) the code to provide default channel
 frequencies based on the band has not yet been written.  It is
-necessary to give the frequencies in the setup file.  See the
-simple examples.  The defaulting capability will be added eventually.
+necessary to give the frequencies in the setup file.  See the simple
+examples.  The defaulting capability will be added eventually.  But
+for now, the upper-edge baseband frequencies with PFB personality must
+be from the following list: 1040.0, 1008.0, 976.0, 944.0, 912.0,
+880.0, 848.0, 816.0, 784.0, 752.0, 720.0, 688.0, 656.0, 624.0, 592.0,
+560.0.  These can either be selected directly using the {\tt BBSYNTH}
+setup file parameter, or values of {\tt FREQREF} and {\tt FREQOFF}
+can be selected so that the difference between the desired baseband
+frequency and the signed sum of all other LOs is one of these values.
+
+{\bf EXAMPLES:}
 
 Example \schedb input {(\sl .key)} files for observations using the
-new systems are: \htmladdnormallink{{\sl egrdbe2.key}}{examples/egrdbe2.key}.
-which is a reasonably simple case, 
+new systems are: 
+
+\htmladdnormallink{{\sl egrdbe2.key}}{examples/egrdbe2.key} which is
+a reasonably simple case.
+
 \htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key} which demonstrates
 more fully specified setups and demonstrates scheduling of piggyback
-Mark5A and Mark5C observations, and 
+Mark5A and Mark5C observations.
+
+\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} which
+shows how to use the piggyback scheme to do maser reference pointing 
+while recording on the RDBE/MARK5C system with the PFB personality.
+
 \htmladdnormallink{{\sl egddc.key}}{examples/egddc.key} which uses the
-DDC personality of the RDBE.
+DDC personality of the RDBE (do not consider this complete yet).
+
+{\bf REFERENCE POINTING WITH THE RDBE:}
 
 As of Feb 2012, one weakness of the available system is that reference
 pointing on masers requiring doppler setting cannot be mixed with PFB
 personality observations.  The use of the DDC, or high overheads for
 personality changes, may be required. For now (early 2012), the best way
-to handle such observations is likely to be to schedule the project as
+to handle such observations is to schedule the project as
 as a piggy-back project with a separate non-recording Mark5A schedule
-that does the pointing using the old system.  This is an area of development.
+that does the pointing using the old system.  The example
+\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} shows
+how this is done for a 3mm observation while more extensive information
+about setting up piggyback observations is contained in the example
+\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}
+
+{\bf DBBC:}
 
 The DBBC being developed for the EVN is also a system that samples
 at 1024 MHz and digitally filters the signals to the desired bandwidths.
@@ -2458,6 +2502,8 @@ can be set flexibly anywhere in the IF band without concern about
 crossover frequencies etc.  The DBBC design has a module for each output
 baseband, so they are more directly comparable to BBCs.  More information
 is needed about the system to flesh out this discussion.
+
+{\bf OTHER DIGITAL BACKENDS:}
 
 There is a varient on the RDBE being developed at Haystack for mm VLBI
 that has 4 input IFs and does not attempt any filtration.  It simply
@@ -2478,14 +2524,31 @@ writes the first 4 pcal extraction requests (avoiding going into
 channel numbers that are too high).  Recording on the Mark5A system
 is not requested.
 
+{\bf PARALLEL MARK5A and MARK5C RECORDINGS:}
+
+Normally when scheduling a project that uses the RDBE/MARK5C system,
+\schedb creates control files for the old system ({\sl .crd} files)
+that drive the telescope and other systems, but do not cause MARK5A
+recordings to be made.  Since \schedb does not have adequate bookkeeping
+to allow independent specification of frequencies for both systems
+in one pass, a reasonable choice of frequencies and bandwidths for 
+the old system is made based on the capabilities of that system and
+the settings for the new system.  
+
 During testing of the RDBE/MARK5C system, it is useful to have a
-parallel Mark5A recording.  That can be requested with parameter
-switch /htmlref{{\tt DOMKA}}{MP:DOMKA}.  If the user does not want to
-take the Mark5A setups provided by \schedb with {\tt DOMKA}, then the
-run can be set up as a piggyback with separate setups for each system.
-The scheme for doing that won't be described here, but described and
-demonstrated in example 
+parallel Mark5A recording.  If the default choices of frequencies and
+bandwidths for the old system is adequate, \schedb can be told to make
+MARK5A recordings using parameter switch /htmlref{{\tt
+DOMKA}}{MP:DOMKA}.  The only way to check what those settings are is
+to look at the output {\sl .crd} files.  Because of the limited 
+bookkeeping, that information does not appear in the {\sl .sum} file.
+
+If the user does not want to take the Mark5A setups provided by
+\schedb with {\tt DOMKA}, then the run can be set up as a piggyback
+with separate setups for each system.  The scheme for doing was 
+mentioned above, and is described and demonstrated in example
 \htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}.
+
 
 
 \section{\label{SEC:LINE}Spectral Line Observations}
@@ -11261,13 +11324,14 @@ The possible options are:
 \begin{description}
 
 \item {\tt RDBE\_PFB} is the original polyphase filter personality
-developed by Haystack for the RDBE digital backend ({\tt DAR=RDBE}).
-It is restricted to 16 baseband channels of 32 MHz bandwidth each,
-lower sideband, with frequencies of 1024-16-N*32 MHz, where N is an
-integer between 0 and 15.  The initial version is restricted to N even
-and there are no choices.  In that version, channels come in pairs,
-one on each input IF, which are usually polarization pairs.  Switching
-is being added to allow general selection.
+developed by Haystack for the RDBE digital backend ({\tt DAR=RDBE} in
+the station catalog).  It is restricted to 16 baseband channels of 32
+MHz bandwidth each, lower sideband, with frequencies of 1024-16-N*32
+MHz, where N is an integer between 0 and 15.  The initial version is
+restricted to N even and there are no choices.  In that version,
+channels come in pairs, one on each input IF, which are usually
+polarization pairs.  Switching is being added to allow general
+selection.
 
 \item {\tt RDBE\_DDC} is the digital downconverter personality being
 developed for the RDBE digital backend at NRAO.  It has a high degree
