@@ -26,7 +26,7 @@ Instructions for making a release of SCHED
     version number is also needed.
 
 
-setenv NEWVER 8.1
+setenv NEWVER 10.1
 setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
 
 ==================  Compile  ======================================
@@ -184,26 +184,46 @@ mv sched/* .
 mv sched/.* .
 
 
-#  Copy over the examples/Stdout files, the execute modules, and 
-#  the html manual, none of which are under svn (they are fast changing,
-#  bulky, and can be derived from files that are in svn).
+#  Copy over the examples/Stdout files, the execute modules, the setup 
+#  files, the html manual, and PGPLOT installation stuff, none of which 
+#  are under svn (they are fast changing, bulky, and can be derived from 
+#  files that are in svn).
 #  The --delete deletes files on the receiving side that are not on the
 #  sending side and is useful when updating, say, a beta release that
 #  is not being done from scratch.
 
 rsync -auv --delete --exclude ".svn" $SCHED/bin  $SCHEDNEW
 rsync -auv --delete --exclude ".svn" $SCHED/examples/Stdout $SCHEDNEW/examples
+rsync -auv --delete --exclude ".svn" $SCHED/setups $SCHEDNEW
 rsync -auv --delete --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
+rsync -auv --delete --exclude ".svn" --exclude "*.o" $SCHED/PGPLOT $SCHEDNEW
 
-#  For a machine with an svn version (not the tar version), you may wish
-#  to update the manual to have a local version.  This is the case for
-#  my laptop lodore where I have not gotten latex2html working yet.
-#  type on the target machine:
+#  Optional:
+#    For a machine with an svn version (not the tar version), you may wish
+#    to update the manual to have a local version.  This is the case for
+#    my laptop lodore where I have not gotten latex2html working yet.
+#    type on the target machine:
 
-cd $SCHED/doc/sched
-rsync -auv --delete --exclude ".svn" \
--e "ssh -A cwalker@ssh.aoc.nrao.edu ssh" \
-noatak.aoc.nrao.edu:/users/cwalker/files/sched_work/doc/sched/\* .
+   cd $SCHED/doc/sched
+   rsync -auv --delete --exclude ".svn" \
+   -e "ssh -A cwalker@ssh.aoc.nrao.edu ssh" \
+   noatak.aoc.nrao.edu:/users/cwalker/files/sched_work/doc/sched/\* .
+
+
+Test the completeness using an rsync dry run.  The release directory
+was filled with an svn checkout and some limited rsyncs, so it could
+have missed something.  Also if some iteration happened, it might not
+be complete. Note that lines that end with a / are just an indication
+of having entered the directory.  They don't indicate a missing file.
+
+rsync -auvn --exclude ".svn" --exclude "TEST" --exclude "*.o" \
+   --exclude "*TEMP*" --exclude "*OLD*" --exclude "RELATED_CODE" \
+   --exclude "*~" --exclude "*old*"  --exclude "*save*" \
+   --exclude "*new*" \
+   ../sched_work/* .
+
+
+=================  Make the tar file  =======================
 
 #  Make the tar file.  Don't include the binaries.
 #  First be sure there are not old copies in the archive and ftp areas.
@@ -220,24 +240,14 @@ noatak.aoc.nrao.edu:/users/cwalker/files/sched_work/doc/sched/\* .
 
 cd $SCHED/examples
 schclean "*"
-cd $SCHED
+cd $SCHED  or maybe to $SCHEDNEW
 
-tar --exclude sched --exclude ".svn" --exclude "*.o" --exclude "*~" \
+tar --exclude "bin/*/sched" --exclude "bin/sched" \
+    --exclude ".svn" --exclude "*.o" --exclude "*~" \
     --exclude "lib" --exclude "core*" --exclude "TEST"  \
     --exclude "RELATED_CODE" \
      -cf $TARDIR/sched_$NEWVER.tar .
 gzip $TARDIR/sched_$NEWVER.tar
-
-==================  Put files on the ftp site  =======================
-#  Remove the sched executable in the bare bin area, leaving only those
-#  in the machine subdirectories.
-
-mkdir $FTP/sched/sched_$NEWVER
-mkdir $FTP/sched/sched_$NEWVER/binaries
-cp $TARDIR/sched_$NEWVER.tar.gz  $FTP/sched/sched_$NEWVER/
-rsync -auv bin/*  $FTP/sched/sched_$NEWVER/binaries
-
-#  Copy over README.ftp if it has changed.
 
 =================  Test the release  ==============================
 
@@ -266,6 +276,17 @@ Verify
      Kill the window to dump the unwanted $SCHED etc. or at least:
 setenv SCHED /users/cwalker/files/sched_work
 
+==================  Put files on the ftp site  =======================
+#  Remove the sched executable in the bare bin area, leaving only those
+#  in the machine subdirectories.
+
+mkdir $FTP/sched/sched_$NEWVER
+mkdir $FTP/sched/sched_$NEWVER/binaries
+cp $TARDIR/sched_$NEWVER.tar.gz  $FTP/sched/sched_$NEWVER/
+rsync -auv bin/*  $FTP/sched/sched_$NEWVER/binaries
+
+#  Copy over README.ftp if it has changed.
+
 ==================  Put the documentation on the web  =============
 
     Copy documentation to the web server master files on noatak.
@@ -291,6 +312,7 @@ cp -R $SCHEDNEW/doc/sched/* $WEBDIR/sched_$NEWVER/
 
     When actually doing the release, update the link from generic sched 
     to the version directory.
+    Warning - when doing a quick test, beware of a cached link.  Hit reload.
 
 cd $WEBDIR
 /bin/rm sched
