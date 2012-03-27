@@ -278,7 +278,7 @@ Name = gbt1cm_b3  Station = GBT_VLBA, GBT_COLD priority = 0
 !  VLBA standard band at 43135 MHz.
 !  VLA band at 43289.90- 43339.90
 !------------------------------------------------------
-! GBT 3 mm receiver frequency range is 40.0-48.0 GHz.
+! GBT 7 mm receiver frequency range is 40.0-48.0 GHz.
 !------------------------------------------------------
 Name = gbt7mm_c7  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 42300, 42300    ifname = A,    C
@@ -299,3 +299,101 @@ Name = gbt7mm_c8  Station = GBT_VLBA, GBT_COLD priority = 0
   note = 'LO1=37.15, LO2=15.75, LO3=10.5 '
 /
 
+!------------------------------------------------------
+! Some example frequency setups for the GBT 3mm receiver,
+! based on the standard freq.dat file
+!------------------------------------------------------
+! From email from Frank Ghigo on March 9, 2012.
+! The GBT receiver has 4 overlapping bands
+!   68-74 GHz  FL1 upper sideband;   lo1 = sky frequency - 750 MHz
+!   73-80 GHz  FL2 lower sideband;   lo1 = sky frequency + 750 MHz
+!   79-86 GHz  FL3 upper sideband;   lo1 = sky frequency - 750 MHz
+!   85-92 GHz  FL4 upper sideband;   lo1 = sky frequency - 750 MHz
+!
+! Beam 1 connects to DAR inputs A and C
+! Beam 2 connects to DAR inputs B and D
+!
+!  I am told the Tsys on beam 2 is slightly better, so ifname=B,D is used here.
+
+! example in 68-74 GHz band:
+Name = gbt3mm_a0  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 70000., 70000.   ifname = B,    D
+  rf2    = 70500., 70500.   fe    = '3mm', '3mm' 
+  pol    =   RCP,   LCP    lo1    = 69500., 69500.
+  note = 'LO1A=66.0, LO2=14.0, LO3=10.5, filter2_8, upper sideband'
+ /
+
+! example in 73-80 GHz band:
+Name = gbt3mm_a1  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 75000., 75000.   ifname = B,    D
+  rf2    = 75500., 75500.   fe    = '3mm', '3mm' 
+  pol    =   RCP,   LCP    lo1    = 76000., 76000.
+  note = 'LO1A=66.0, LO1B=15.25, LO2=15.75, LO3=10.5, filter7_14, lower sideband'
+ /
+
+! examples in 79-86 band : 
+
+Name = gbt3mm_be  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 79700., 79700.   ifname = B,    D
+  rf2    = 80200., 80200.   fe    = '3mm', '3mm'  
+  pol    =   RCP,   LCP    lo1    = 79200., 79200.
+  note = 'LO1A=66.0, LO1B=8.8, LO2=14.9, LO3=10.5, filter13_20, upper sideband'
+ /
+Name = gbt3mm_ai  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 79800., 79800.   ifname = B,    D
+  rf2    = 80300., 80300.   fe    = '3mm', '3mm'  
+  pol    =   RCP,   LCP    lo1    = 79300., 79300.
+  note = 'LO1A=66.0, LO1B=8.8, LO2=15.0, LO3=10.5, filter13_20, upper sideband'
+ /
+Name = gbt3mm_bf  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 80000., 80000.   ifname = B,    D
+  rf2    = 80500., 80500.   fe    = '3mm', '3mm'  
+  pol    =   RCP,   LCP    lo1    = 79500., 79500.
+  note = 'LO1A=66.0, LO1B=8.8, LO2=15.2, LO3=10.5, filter13_20, upper sideband'
+ /
+
+!
+! examples in 85-92 GHz:
+
+Name = gbt3mm_eh  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 85500., 85500.   ifname = B,    D
+  rf2    = 86000., 86000.   fe    = '3mm', '3mm'  
+  pol    =   RCP,   LCP    lo1    = 85000., 85000.
+  note = 'LO1A=66.0, LO1B=13.75, LO2=15.75, LO3=10.5, filter19_26, upper sideband'
+ /
+Name = gbt3mm_fe  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 85700., 85700.   ifname = B,    D
+  rf2    = 86200., 86200.   fe    = '3mm', '3mm'   
+  pol    =   RCP,   LCP    lo1    = 85200., 85200. 
+  note = 'LO1A=66.0, LO1B=13.95, LO2=15.75, LO3=10.5, filter19_26, upper sideband'
+ /
+Name = gbt3mm_ei  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 85800., 85800.   ifname = B,    D
+  rf2    = 86300., 86300.   fe    = '3mm', '3mm'   
+  pol    =   RCP,   LCP    lo1    = 85300., 85300. 
+  note = 'LO1A=66.0, LO1B=14.05, LO2=15.75, LO3=10.5, filter19_26, upper sideband'
+ /
+Name = gbt3mm_ff  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 86000., 86000.   ifname = B,    D
+  rf2    = 86500., 86500.   fe    = '3mm', '3mm'  
+  pol    =   RCP,   LCP    lo1    = 85500., 85500.
+  note = 'LO1A=66.0, LO1B=14.25, LO2=15.75, LO3=10.5, filter19_26, upper sideband'
+ /
+
+!  The following were added by Craig Walker to push high enough to cover
+!  the 86846.89 MHz SiO line.  Note that the usual maser observed is at
+!  86243.35 MHz so it is covered by the above set.
+!  Note that the final letters of the name indicate the VLBA setup that
+!  matches.
+Name = gbt3mm_ej  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 86300., 86300.   ifname = B,    D
+  rf2    = 86800., 86800.   fe    = '3mm', '3mm'  
+  pol    =   RCP,   LCP    lo1    = 85800., 85800.
+  note = 'LO1A=66.0, LO1B=14.55, LO2=15.75, LO3=10.5, filter19_26, upper sideband'
+ /
+Name = gbt3mm_ek  Station = GBT_VLBA, GBT_COLD   Priority = 0
+  rf1    = 86500., 86500.   ifname = B,    D
+  rf2    = 87000., 87000.   fe    = '3mm', '3mm'  
+  pol    =   RCP,   LCP    lo1    = 86000., 86000.
+  note = 'LO1A=66.0, LO1B=14.75, LO2=15.75, LO3=10.5, filter19_26, upper sideband'
+ /
