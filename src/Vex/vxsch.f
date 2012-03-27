@@ -574,10 +574,6 @@ C
 C
          END IF
       END DO
-
-
-      write(*,*) ' Unfinished (?) allow format=none on vlba peak scans'
-C     But what is left to do?  It seems to be working.
 C
 C     Print warning about frequency of Tsys. 
 C

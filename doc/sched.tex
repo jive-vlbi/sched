@@ -13025,6 +13025,15 @@ included with the {\sl PGPLOT} distribution.  Note that {\sc PGPLOT}
 should be built with the same compiler and machine architecture as
 \sched for everything to function properly.
 
+Robert Mutel provided the following suggestion if you are running into
+problems on a MAC with the use of the pgplot libraries (complaints
+about being a FAT file): Edit the PGPLOT makefile to eliminate the
+ranlib indexing steps, and add a 's' option to the ar steps (this is
+equivalent to indexing with ranlib, but ranlib chokes because it
+cannot read 'fat' libraries, which contain both 32bit and 64 bit
+versions of the routines. 'Fat' libraries seem to be created by
+default by ar, at least in the recent Mac OSX release.
+
 \item [Compiling the program:] If you need to compile \schedb, you
 will need to construct an appropriate Makefile and run make.  There is
 a template Makefile ({\sl Makefile.master}) showing lots of possible
