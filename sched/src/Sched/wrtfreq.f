@@ -75,7 +75,7 @@ C        versions.  If the BBC frequency is over 1000.0 MHz, drop it
 C        by 25 MHz.  This will not change the pcal tone frequencies.
 C        If needed, center the Mark5A channel on the RDBE channel.
 C        Collect some information like the LOSUM for use in setting
-C        the pcal frequencies.
+C        the pcal frequencies.  Round frequencies to 10 kHz.
 C
          IF( DAR(KSTA) .NE. 'RDBE' ) THEN
             NCH = NCHAN(LS)
@@ -101,6 +101,7 @@ C
                IF( NETSIDE(ICH,LS) .EQ. 'L' ) RFSIDE(KCH) = -1
                TBBCBW(KCH) = BBCBW(ICH)
                TBBCFREQ(KCH) = BBCFREQ(ICH)
+               TBBCFREQ(KCH) = NINT( TBBCFREQ(KCH) * 100.D0 ) / 100.D0
                FSHIFT = 0.0D0
                IF( TBBCBW(KCH) .GT. 16.0D0 ) THEN
 C
