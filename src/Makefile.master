@@ -112,7 +112,7 @@ PLOT_SRCS = $(wildcard Plot/*.f) $(wildcard PlotNRAO/*.f) # With PGPLOT
 #    libraries (eg libpgplot.a).  PGPLOT_FONT needs 
 #    to be set to the location of the font files if that is different.
 
-#    For the stub, set to blank.
+#    For the stub, set LPGPLOT and LDPGPLOT to blank.
 
 # Location:
 LPGPLOT = $(PGPLOT_DIR)
@@ -138,7 +138,7 @@ LPGPLOT = $(PGPLOT_DIR)
 #LDPGPLOT = -L$(LPGPLOT) -lpgplot -R$(LPGPLOT)   # Alternate
 #LDPGPLOT = -Wl,-L$(LPGPLOT) -lpgplot            # Hp - link lib
 #  The following is for pgplot from the Fink and using gfortran on MacOSX.
-#  I think it is meant for use wiht aquaterm, which is not set in the 
+#  I think it is meant for use with aquaterm, which is not set in the 
 #  drivers.list with PGPLOT in the SCHED distribution.
 #LDPGPLOT = -L$(LPGPLOT) -lpgplot -L/sw/lib -lpng -lz -laquaterm -framework Foundation -framework AppKit
 
@@ -168,17 +168,22 @@ LPGPLOT = $(PGPLOT_DIR)
 #      versions of SCHED, so it may be ok to leave this in, but if 
 #      there are any problems or you don't need it, or you aren't
 #      using Linux on a PC with g77, take the stub.
+#      The SAT_SRCS_SED and SATLDSED lines below are modified when
+#      using the configure scripts.
 
-
-#SAT_SRCS_SED
-# SAT_SRCS = $(wildcard Sat/*.f)         # Include satellite tracking
+#      Options for using SPICE:
+# SAT_SRCS = $(wildcard Sat/*.f)      # Include satellite tracking
 # Links for satellite tracking, depending on 32 vs 64 bit g77
-#SATLDSED
 #SATLD = ../lib/LINUX/spicelib.a ../lib/LINUX/support.a -lm
 #SATLD = ../lib/LINUX64/spicelib.a ../lib/LINUX64/support.a -lm
 
+#      For the stub:
 #SAT_SRCS = $(wildcard Satstub/*.f)   # Stub
 #SATLD =                              # Link option for stub
+
+#      For the configure scripts:
+#SAT_SRCS_SED
+#SATLDSED
 
 #-----  Note  ------
 

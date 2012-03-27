@@ -4,26 +4,30 @@ C     Routine for SCHED called by CHKRDBE and FSFREQ that checks
 C     the frequencies and bandwidths requested for the RDBE.
 C     CHKRDBE checks the input setup file.  FSFREQ checks just
 C     before writing the scan info to be sure in-line changes
-C     don't cause trouble.
+C     don't cause trouble.  Note that, for non-RDBE setups, this
+C     routine will fall through without doing anything thanks
+C     to the second level of IF statements.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH, ISIDEBD, nwarn, N40WARN, N528WARN
+      INTEGER           NFWARN
       DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*)
       LOGICAL           ERRS, DEQUAL
       DATA              nwarn / 0 /
-      DATA              N40WARN, N528WARN / 0, 0 /
+      DATA              N40WARN, N528WARN, NFWARN / 0, 0, 0 /
       SAVE              nwarn
-      SAVE              N40WARN, N528WARN
+      SAVE              N40WARN, N528WARN, NFWARN
 C -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Starting' )
 C
 C     Only do anything if this is a recording scan.
 C     (Actually the checks might be needed for non-recording scans too.
+C     Yes they are!
 C
-      IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN 
+C  Always needed.      IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN 
 C
 C        First check the RDBE_PFB personality.
 C
@@ -144,7 +148,13 @@ C                        projectus interruptus.
 
             nwarn = nwarn + 1
             if( nwarn .le. 5 ) then
-            WRITE(*,*)  '****** UNFINISHED CODE IN chkrdefq.f ******'
+               write(*,*)  '****** Projectus interruptus in chkrdfq.f '
+     1            // '******'
+               write(*,*) '   Check number of digits printed '//
+     1            'in all places.'
+               write(*,*) '   working on number of digits in prints '
+
+
             end if
 
 C           Check any rounding of BBCFREQ that might happen in other
@@ -176,18 +186,25 @@ C
 C
 C              Check for multiple of 15.625 kHz.
 C
-               IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.015625D0 ) .GT. 1.D-6 ) 
-     1             THEN
+               IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.015625D0 ) .GT. 1.D-6
+     1             .AND. NFWARN .LE. 16 ) THEN
+                  NFWARN = NFWARN + 1
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
-     1              ' BBSYN for the RDBE_DDC must be an even 10kHz.'
+     1              ' BBSYN for the RDBE_DDC must be an even multiple',
+     2              ' of 15.625 kHz.'
                   CALL WLOG( 1, MSGTXT )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( 2A, F15.6, A, I3, A, I3 )' ) 
      1               '          ',
      2               ' Value of: ', BBCFREQ(ICH), 
-     3               ' found in channel ', ICH, ' of setup ', ks
+     3               ' MHz found in channel ', ICH, ' of setup ', ks
                   CALL WLOG( 1, MSGTXT )
+                  IF( NFWARN .GT. 16 ) THEN
+                     MSGTXT = 'CHKRDFQ:   Further warnings suppressed '
+     1                  //'- too many.'
+                     CALL WLOG( 1, MSGTXT )                     
+                  END IF                  
                END IF
 C
 C              Test the crossover points for the DDC.
@@ -226,7 +243,7 @@ C
             END DO
 C
          END IF
-      END IF
+C      END IF
 C
       RETURN
       END
