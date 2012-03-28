@@ -118,6 +118,12 @@ C
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',
      2          'DBBC', SEP
+C    2011-09-30 small@astron:
+C    Also add support for KVASAR stations here:
+         ELSE IF( DAR(ISCAT) .EQ. 'R1002' ) THEN
+            WRITE( IVEX, '( 5X, A, A, A1)' )
+     1          'electronics_rack_type = ',
+     2          'Mark4', SEP
          ELSE
             CALL ERRLOG(' VXWRDA: Unknown DAR of type: '//
      1          DAR(ISCAT) )

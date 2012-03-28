@@ -104,6 +104,10 @@ C     Gino Tuccardi's DBBC, as used at Effelsberg
 C
          CALL BBCDBBC( KS )
 C
+      ELSE IF( DAR(ISETSTA(KS)) .EQ. 'R1002') THEN
+C
+         CALL BBCKVSR( KS )
+C
       ELSE IF( DAR(ISETSTA(KS)) .NE. 'NONE' ) THEN
 C
 C        Do not try to default with other formats.
