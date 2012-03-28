@@ -197,7 +197,8 @@ C
      A       DAR(MSTA) .NE. 'VSOP'  .AND. 
      B       DAR(MSTA) .NE. 'VLBA4' .AND. 
      C       DAR(MSTA) .NE. 'LBA'   .AND. 
-     D       DAR(MSTA) .NE. 'NONE' ) THEN
+     D       DAR(MSTA) .NE. 'R1002' .AND.
+     E       DAR(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF
