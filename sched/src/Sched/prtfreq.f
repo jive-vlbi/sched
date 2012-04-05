@@ -11,7 +11,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER            I, IUNIT, KS, JS, KF, NNCHAN, KSCN, LEN1, IC
-      INTEGER            IP, IPC, ISSTA, JF, ICH
+      INTEGER            IP, IPC, ISSTA, JF, ICH, ICH1, ILINE
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
       LOGICAL            GOTIT
@@ -157,14 +157,17 @@ C
                END IF
 C        
 C              Write the frequencies etc for this frequency set.
+C              ILINE is a dummy here.
 C        
                IF( NNCHAN .GT. 0 ) THEN
-                  WRITE( IUNIT, '( A, 8F10.2,:, 6(/,11X,8(F10.2,:)) )' )
-     1             '   LO sum= ', ( LOSUM(I), I  =1, NNCHAN )
-                  WRITE( IUNIT, '( A, 8F10.2,:, 6(/,11X,8(F10.2,:)) )' )
-     1             '   BBC fr= ', ( BBCFREQ(I), I = 1, NNCHAN )
-                  WRITE( IUNIT, '( A, 8F10.3,:, 6(/,11X,8(F10.3,:)) )' )
-     1             '   Bandwd= ', ( BBCBW(I), I = 1, NNCHAN )
+                  ICH1 = 11
+                  ILINE = 1
+                  CALL LSTFREQ( IUNIT, LOSUM, BBCFREQ, BBCBW, ICH1, 
+     1                NNCHAN, ILINE, 100, 8, .TRUE., .TRUE., 
+     2                '   LO sum= ',
+     3                '   BBC fr= ',
+     4                '   Bandwd= ' )
+C
                ELSE
                   CALL WLOG( 0, 'PRTFREQ:  Still no channels' )
                END IF

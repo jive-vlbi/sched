@@ -86,13 +86,15 @@ C
 C           Use the frequency from the main schedule.  The fact that
 C           it is not zero implies that either DOPPLER or FREQ was
 C           specified for the scan(s).  Avoid spurious low significant 
-C           digits.  FREQ will be in the system (logical channels)
+C           digits but allow down to fractional Hz.  The allowed digits
+C           will be set elsewhere and we don't want to preclude those
+C           tests here.  FREQ will be in the system (logical channels)
 C           before the sideband inversion reflected in CORINV for
 C           RDBE/PFB stations.  So CORINV needs to be added.
 C
             BBCFREQ(I) = ABS( FREQ(ILC,KSCN) + CORINV(I,KS) - 
      1                        FIRSTLO(I,KS) )
-            BBCFREQ(I) =  DNINT( BBCFREQ(I) * 1000.D0 ) / 1000.D0
+            BBCFREQ(I) =  DNINT( BBCFREQ(I) * 1.D7 ) / 1.D7
 C
 C           Check that the assumed sideband is correct.  Pedantically,
 C           this should be corrected for CORINV, but it won't matter.
@@ -201,7 +203,7 @@ C
 C        Get the LO sum.  
 C
          LOSUM(I) = FIRSTLO(I,KS) + ISIDE1 * BBCFREQ(I)
-         LOSUM(I) =  DNINT( LOSUM(I) * 1000.D0 ) / 1000.D0
+         LOSUM(I) =  DNINT( LOSUM(I) * 1.D7 ) / 1.D7
 C
       END DO
 C

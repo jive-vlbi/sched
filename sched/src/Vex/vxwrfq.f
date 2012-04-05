@@ -14,8 +14,8 @@ C
 C     Huib's local variables 
 C      
       INTEGER   IFQ, KS, ICH, LPOS
-      INTEGER   LEN1
-      CHARACTER LINE*132, FRFMT*20
+      INTEGER   LEN1, NPER, NFC1, NFCN
+      CHARACTER LINE*132, FRTXT*16
 C ----------------------------------------------------------------------
 C
       LINE = ' ' 
@@ -57,27 +57,11 @@ C
 C           next is Sky freq:
 C           Make the number of digits depend on how many are needed.
 C
-C
-            FRFMT = ' '
-            IF( VXLOSUM(ICH,IFQ) - 1.D-7 .LT. 
-     1          DINT( VXLOSUM(ICH,IFQ) * 1.D2 ) / 1.D2 ) THEN
-               FRFMT = '( F9.2, A5, A1 )'
-            ELSE IF( VXLOSUM(ICH,IFQ) - 1.D-7 .LT. 
-     1          DINT( VXLOSUM(ICH,IFQ) * 1.D3 ) / 1.D3 ) THEN
-               FRFMT = '( F15.8, A5, A1 )'
- s ae    aoienbe   Bomb if compiled.  This area needs work.
-            ELSE IF( VXLOSUM(ICH,IFQ) - 1.D-7 .LT. 
-     1          DINT( VXLOSUM(ICH,IFQ) * 1.D4 ) / 1.D4 ) THEN
-               FRFMT = '( F11.4, A5, A1 )'
-            ELSE IF( VXLOSUM(ICH,IFQ) - 1.D-7 .LT. 
-     1          DINT( VXLOSUM(ICH,IFQ) * 1.D5 ) / 1.D5 ) THEN
-               FRFMT = '( F12.5, A5, A1 )'
-            ELSE IF( VXLOSUM(ICH,IFQ) - 1.D-7 .LT. 
-     1          DINT( VXLOSUM(ICH,IFQ) * 1.D6 ) / 1.D6 ) THEN
-               FRFMT = '( F13.6, A5, A1 )'
-            ELSE
+            NPER = 7
+            CALL FRCHAR( VXLOSUM(ICH,IFQ), NPER, NFC1, NFCN, FRTXT )
+            IF( NFCN .GT. NPER + 6 ) THEN
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I3, A, I3, A, F14.7)' )
+               WRITE( MSGTXT, '( A, I3, A, I3, A, 15.8)' )
      1            ' Channel ', ICH, ' of freq set ', IFQ, 
      2            ' not an integer Hz: ', VXLOSUM(ICH,IFQ)
                CALL ERRLOG( MSGTXT )
@@ -87,8 +71,8 @@ C           Now actually write the frequency.  Allow plenty of
 C           room.  The next LPOS will truncate the blanks.
 C
             LPOS = LEN1(LINE)+1
-            WRITE( LINE(LPOS:LPOS+25), FRFMT ) 
-     1             VXLOSUM(ICH,IFQ),' MHz ', COL
+            WRITE( LINE(LPOS:LPOS+25), '( A, A, A )' ) 
+     1             FRTXT(1:NFCN),' MHz ', COL
 C
 C           and sideband (net)
 C

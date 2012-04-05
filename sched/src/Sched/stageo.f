@@ -71,9 +71,10 @@ C     station was in plus the geometry of the new source at the same
 C     time, which is what the antennas do.  It also uses the 
 C     geometry at the nominal end of the scan to check need for a
 C     wrap.  The latter may not be right before the final scan times
-C     are set.
+C     are set.  T_EST1 is used as and estimated slew start time when
+C     LSCN is zero.
 C
-      CALL WRAP( ISCN, LSCN, ISTA )
+      CALL WRAP( ISCN, LSCN, ISTA, T_EST1 )
 C
 C     Check if rising, setting, below horizon, etc.  Should be called
 C     before SLEW because of the consistency check in ANTPOS which is

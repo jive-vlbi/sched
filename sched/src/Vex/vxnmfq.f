@@ -12,7 +12,8 @@ C
 C
       LOGICAL XTRAFQ, DUALFRQ
       INTEGER IXX, ISET, ISIDE1, LPOS, LEN1, ICH
-      CHARACTER NAME*32
+      INTEGER NPER, NFC1, NFCN
+      CHARACTER NAME*32, FRTXT*16
       DOUBLE PRECISION SUMILO 
       REAL BBVAL
 C ----------------------------------------------------------------------
@@ -48,21 +49,16 @@ C
       END IF
 C
 C     write a name with the freq in it.
+C     Let the number of digits used depend on the tuning.
 C
       IF( DUALFRQ ) THEN
          NAME(1:8) = 'DualFreq'
       ELSE
-         IF( SUMILO .GT. 1.E5 ) THEN
-            WRITE( NAME(1:12), '( F9.2, A3 )' ) SUMILO, 'MHz'
-         ELSE IF( SUMILO .GT. 1.E4 ) THEN
-            WRITE( NAME(1:11), '( F8.2, A3 )' ) SUMILO, 'MHz'
-         ELSE IF( SUMILO .GT. 1E3 ) THEN
-            WRITE( NAME(1:10), '( F7.2, A3 )' ) SUMILO, 'MHz'
-         ELSE IF( SUMILO .GT. 99.0 ) THEN
-            WRITE( NAME(1:9), '( F6.2, A3 )' ) SUMILO, 'MHz'
-         ELSE
-            WRITE( NAME(1:8), '( F5.2, A3 )' ) SUMILO, 'MHz'
-         ENDIF
+         NPER=7
+         CALL FRCHAR( SUMILO, NPER, NFC1, NFCN, FRTXT )
+         WRITE( NAME, '(A)' ) FRTXT(NFC1:NFCN)
+         LPOS = LEN1( NAME ) + 1
+         WRITE( NAME(LPOS:LPOS+2), '(A)' ) 'MHz'
       END IF
 C
       LPOS = LEN1( NAME ) + 1

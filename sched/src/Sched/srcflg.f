@@ -6,7 +6,8 @@ C     the appropriate pointers.  It is called again later by SCHOPT
 C     after the optimization routines are run and after pointing 
 C     sources are added.
 C
-C     It marks catalog sources as used, including which alias.  
+C     It marks which alias is used.  Marking whether or not the source
+C     was used (SUSED) is handled elsewhere.
 C
 C     It also checks whether all sources have been found.
 C     MSRC is assumed to be greater than 0 on the call.
