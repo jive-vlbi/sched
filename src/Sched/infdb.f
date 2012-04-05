@@ -37,10 +37,11 @@ C
 C
 C        When BBSYN, BBFILT, BW etc were made double precision, they 
 C        ended up with some spurious digits at insignificant levels that 
-C        confounded some value tests.  Try to prevent that.
+C        confounded some value tests.  Try to prevent that.  But allow
+C        sub Hz settings - original rounding to 1 kHz was not good.
 C
-         FREQ(ICHAN,ISCN) = DNINT( FREQ(ICHAN,ISCN)*1000.D0 ) / 1000.D0
-         BW(ICHAN,ISCN) = DNINT( BW(ICHAN,ISCN)*1000.D0 ) / 1000.D0
+         FREQ(ICHAN,ISCN) = DNINT( FREQ(ICHAN,ISCN)*1.D7 ) / 1.D7
+         BW(ICHAN,ISCN) = DNINT( BW(ICHAN,ISCN)*1.D7 ) / 1.D7
 C
       END DO
 C

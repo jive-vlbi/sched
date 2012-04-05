@@ -17,9 +17,10 @@ C
       INTEGER IFQ, IPH, IIF
       INTEGER ISTA, NTMP, TTMPCHN(MAXCHN), IXX
       INTEGER NTONTMP(MAXCHN), ITONTMP(MAXTON,MAXCHN)
+      INTEGER NPER, NFC1, NFCN, LEN1, LPOS
       REAL    PHTONE
       LOGICAL MATCHPH
-      CHARACTER NAME*32, UPCAL*4
+      CHARACTER NAME*32, UPCAL*4, FRTXT*16
 C
 C     Setup the necessary pointers
 C *********************************************************************
@@ -68,7 +69,11 @@ C
       IF( FREQ(1,ISCN) .GT. 1E-6 ) THEN
          IF( .NOT. DOPCAL(ISCN) ) THEN
             NAME(1:10) = 'SwitchFreq'
-            WRITE( NAME(11:21), '( F8.2, A3 )' ) FREQ(1,ISCN), 'MHz'
+            NPER=7
+            CALL FRCHAR( FREQ(1,ISCN), NPER, NFC1, NFCN, FRTXT )
+            WRITE( NAME(11:25), '(A)' ) FRTXT(NFC1:NFCN)
+            LPOS = LEN1( NAME ) + 1
+            WRITE( NAME(LPOS:LPOS+2), '(A)' ) 'MHz'
          ELSE
             NAME(1:8) = 'Doppler@'
             WRITE( NAME(9:20), '( A12 )' ) DOPSRC(ISCN)

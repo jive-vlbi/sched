@@ -35,16 +35,23 @@ C                 Add the planet to the source catalog.
 C                 Don't know the errors - can they be guessed?
 C
                   MSRC = MSRC + 1
-                  SUSED(MSRC) = .TRUE.
+C
+C                 Don't do SUSED here - it can get it wrong for 
+C                 optimized schedules and cause havoc elsewhere.
+C                  SUSED(MSRC) = .TRUE.
+C
                   SRCATN(KSRC) = MSRC
                   SRLSTN(MSRC) = KSRC
                   PLANET(MSRC) = .TRUE.
                   SOURCE(1,MSRC) = SRCNAME(KSRC)
+C
+C                 These may not be needed here, but should be harmless.
                   CSUSED(1,MSRC) = '*'
                   DO NAM = 2, MALIAS
                      SOURCE(NAM,MSRC) = ' '
                      CSUSED(NAM,MSRC) = ' '
                   END DO
+C
                   C2000(MSRC) = '*'
                   C1950(MSRC) = ' '
                   CDATE(MSRC) = ' '

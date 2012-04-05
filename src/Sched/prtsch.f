@@ -11,7 +11,7 @@ C
       INTEGER            DAY1, DAY2, DAY3, YEAR1, YEAR2, YEAR3
       INTEGER            IFREQ, I
       INTEGER            TEARLY, TDWELL, NFLINES
-      INTEGER            KF, LKF, GBY1, GBY2, LGBY
+      INTEGER            KF, LKF, GBY1, GBY2, LGBY, ICH1
       DOUBLE PRECISION   LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
       DOUBLE PRECISION   LFREQ(MCHAN), SFREQ(MCHAN), START, STOP 
       DOUBLE PRECISION   TSTART, RTCORR, LSTOPJ
@@ -19,8 +19,7 @@ C
       CHARACTER          TFORM*15, SHORTN*10
       CHARACTER          CLST1*9, CLST2*9, FF*1
       CHARACTER          CSTART*15, CSTOP*15, CTSTART*15, CTCORR*15
-      CHARACTER          OUTFRQ(MCHAN)*9, OUTBW(MCHAN)*9
-      CHARACTER          PRTSRC*12, OUTBBC(MCHAN)*9
+      CHARACTER          PRTSRC*12
       CHARACTER          MNAME1*3, MNAME2*3, DNAME1*3, DNAME2*3
       SAVE               ILINE, IPAGE, LASTDY, LNCHL, LFREQ, LBW
       SAVE               LGBY, LKF
@@ -105,9 +104,6 @@ C
             DOWRTB = .TRUE.
          END IF
          DO IFREQ = 1, NCHL
-            WRITE( OUTFRQ(IFREQ), '(F9.2)' ) SFREQ(IFREQ)
-            WRITE( OUTBBC(IFREQ), '(F9.2)' ) SBBC(IFREQ)
-            WRITE( OUTBW(IFREQ), '(F9.2)' ) SBW(IFREQ)
             IF( SFREQ(IFREQ) .NE. LFREQ(IFREQ) ) DOWRTF = .TRUE.
             IF( SBW(IFREQ) .NE. LBW(IFREQ) ) DOWRTB = .TRUE.
          END DO
@@ -122,7 +118,8 @@ C
          END DO         
 C
 C        Get the number of lines it will take to print frequencies
-C        or bandwidths at 6 per line.
+C        or bandwidths at 6 per line.  Note that this might not be
+C        exact as it depends on how many digits are needed per freq.
 C
          NFLINES = 1 + ( NCHL - 1 ) / 6 
 C
@@ -205,23 +202,21 @@ C
          ILINE = ILINE + 2
       END IF
 C
-C     Write new frequencies and bandwidths.  Assume less than 36 chan.
+C     Write new frequencies and bandwidths.
+C     Allow more digits in the frequency specifications.  Only print
+C     them all when needed.  To align columns, assume SFREQ(1) has the
+C     number of digits normally needed for the frequency.
 C
       IF( DOWRTF .OR. DOWRTB ) THEN
          WRITE( IPRT, '( 2X )' )
       END IF
-      IF( DOWRTF ) THEN
-         WRITE( IPRT, '( A, 6A, 6( /, 23X, 6A ) )' )
-     1      ' Next scan frequencies:', (OUTFRQ(IFREQ),IFREQ=1,NCHL)
-         WRITE( IPRT, '( A, 6A, 6( /, 23X, 6A ) )' )
-     1      ' Next BBC frequencies: ', (OUTBBC(IFREQ),IFREQ=1,NCHL)
-         ILINE = ILINE + 1 + 2 * NFLINES
-      END IF
-      IF( DOWRTB ) THEN
-         WRITE( IPRT, '( A, 6A, 6( /, 23X, 6A ) )' )
-     1      ' Next scan bandwidths: ', (OUTBW(IFREQ),IFREQ=1,NCHL)
-         ILINE = ILINE + 1 + NFLINES
-      END IF
+C
+      ICH1 = LEN1( ' Next scan frequencies:' )
+      CALL LSTFREQ( IPRT, SFREQ, SBBC, SBW, ICH1, NCHL, ILINE,
+     1       100, 8, DOWRTF, DOWRTB,
+     2       ' Next scan frequencies:',
+     3       ' Next BBC frequencies:',
+     4       ' Next scan bandwidths:' )
 C
 C     Schedule file output
 C

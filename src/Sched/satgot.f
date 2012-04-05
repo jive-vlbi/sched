@@ -47,15 +47,21 @@ C
                   SATEL(MSRC) = .TRUE.
                   SATN(MSRC) = ISSAT
 C
-                  SUSED(MSRC) = .TRUE.
+C                 Don't do SUSED here - it can get it wrong for 
+C                 optimized schedules and cause havoc elsewhere.
+C                  SUSED(MSRC) = .TRUE.
+C
                   SRCATN(KSRC) = MSRC
                   SRLSTN(MSRC) = KSRC
                   SOURCE(1,MSRC) = SRCNAME(KSRC)
+C
+C                 These may not be needed here, but should be harmless.
                   CSUSED(1,MSRC) = '*'
                   DO NAM = 2, MALIAS
                      SOURCE(NAM,MSRC) = ' '
                      CSUSED(NAM,MSRC) = ' '
                   END DO
+C
                   C2000(MSRC) = '*'
                   C1950(MSRC) = ' '
                   CDATE(MSRC) = ' '

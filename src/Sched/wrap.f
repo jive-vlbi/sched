@@ -1,4 +1,4 @@
-      SUBROUTINE WRAP( ISCN, LSCN, ISTA )
+      SUBROUTINE WRAP( ISCN, LSCN, ISTA, T_EST1 )
 C
 C     Routine for SCHED that determines where in the full range of
 C     azimuth for ALTAZ antennas the antenna will be.  Typically there
@@ -15,8 +15,8 @@ C     scan times, the stop time may get adjusted later.  For ultimate
 C     accuracy, there should be a second pass after the scan times
 C     are close.  Note that using the position at the start of the 
 C     slew may cause quite a large time offset if the station has 
-C     not been used in out a previous scan.  So that might not be
-C     optimal, but I think that is what the antennas do to.
+C     not been used in a previous scan.  So that might not be
+C     optimal, but I think that is what the antennas do too.
 C
 C     This routine will be called by STAGEO for use while optimizing
 C     the pointing to take into account slew times and in SCHSRC
@@ -49,10 +49,10 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER        ISCN, LSCN, ISTA, KSTA, NT1
-      INTEGER        IWRAP, NWRAP1, NWRAP2, IMSLEW, IMSLEW2
+      INTEGER        IWRAP, NWRAP1, NWRAP2, IMSLEW, IMSLEW2, IMSLEWE
       REAL           CURAZ1, CURAZ2, LASTAZ, MINSLEW, MINSLEW2
-      REAL           CURHA1, CUREL1, CURPA1, AZSLEW
-      DOUBLE PRECISION  CURLST1, STTIME
+      REAL           CURHA1, CUREL1, CURPA1, AZSLEW, MINSLEWE
+      DOUBLE PRECISION  CURLST1, STTIME, T_EST1
 C ------------------------------------------------------------------
       KSTA = STANUM(ISTA)
 C
@@ -86,26 +86,38 @@ C
 C     Azimuths from SCHGEO will be in range 0-360 and will be 
 C     adjusted as required below for the wrap condition.
 C
-C     For LSCN=0, it's a bit tricky because the start times of the
-C     scans are being incremented from the experiment start time.
-C     They only get reset back to the requested start once a scan
-C     is accepted.  So one might use STARTJ(1).  But if other stations
-C     have scans, this might not be best as the current scan could
-C     start much later.  I think all this doesn't make much difference,
-C     unless it triggers a wrap condition, which it can easily do if
-C     many early scans are skipped.  I'm seeing problems in pointing
-C     runs because of it.  So try the scheme programmed below.  
-C     Basically, if SCANL (last scan) is not yet set, use TFIRST.
-C     If this is the first scan for the station, but not the 
-C     observation, use the start time of SCANL.  If not the first
-C     scan for the station, use the last one (LSCN).  That worked.
+C     For LSCN=0 and not the first scan (say other stations have
+C     started), we basically have no idea when the scan will finally
+C     be scheduled.  It may depend on the history for other stations
+C     in the scan.  And it may deviate from the currently set scan
+C     times because, in the optimazation process where scans are skipped,
+C     scan times can keep incrementing even though none are accepeted, 
+C     until one is finally accepted.  I think for all this, I will
+C     just assume that the calling routine has a better idea of when
+C     the scan will start than this routine has, so I'll use T_EST1.
 C
       IF( SCANL .EQ. 0 ) THEN
+C
+C        No scans scheduled yet.
+C
          STTIME = TFIRST
-      ELSE IF( LSCN .EQ. 0 ) THEN
-         STTIME = STARTJ(SCANL)
-      ELSE
+C
+      ELSE IF( LSCN .NE. 0 ) THEN
+C
+C        This station has previous scans.  Pick up from last.
+C
          STTIME = STOPJ(LSCN)
+C
+      ELSE
+C
+C        First scan for this station, but not for experiment.  Assume the
+C        calling routine had an idea what it was doing.
+C        An alternative that worked for pointing cases: STTIME=STARTJ(SCANL)
+C        But that doesn't work well when different antennas are being scheduled
+C        separately.
+C
+         STTIME = T_EST1
+C
       END IF
       CALL SCHGEO( ISCN, ISTA, STTIME, CURHA1,
      1             CUREL1, CURAZ1, CURLST1, CURPA1 )
@@ -120,8 +132,8 @@ C     a declination dependent manner.  I think we don't need
 C     to distinguish hemispheres.
 C     First put both AZ values in 0-360 deg.
 C
-      CURAZ1 = AMOD( CURAZ1, 360.0 )
-      CURAZ2 = AMOD( CURAZ2, 360.0 )
+      CURAZ1 = MOD( CURAZ1, 360.0 )
+      CURAZ2 = MOD( CURAZ2, 360.0 )
       IF( CURAZ1 .LT. 0.0 ) CURAZ1 = CURAZ1 + 360.0
       IF( CURAZ2 .LT. 0.0 ) CURAZ2 = CURAZ2 + 360.0
 C
@@ -195,13 +207,21 @@ C        to get to the next source at its position at the end
 C        of the previous scan (ie CURAZ1).  So determine the
 C        wrap for that position.
 C
+C        This can also happen if the estimated start time is
+C        way off (like end of previous station's scans when 
+C        scheduling antennas separately in the old scheme.
+C
+C        When we don't have an acceptable combination, a 
+C        common wrap for start and end is not viable by definition.
+C        Then assume a wrap will happen during the scan.
+C
          MINSLEW2 = 99999.0
          IMSLEW2 = -99
          DO IWRAP = NWRAP1, NWRAP2
             IF( CURAZ1 + IWRAP * 360.0 .GE. AX1LIM(1,KSTA) .AND.
      1          CURAZ1 + IWRAP * 360.0 .LE. AX1LIM(2,KSTA) ) THEN
                AZSLEW = ABS( CURAZ1 + IWRAP * 360.0 - LASTAZ )
-               IF( AZSLEW .LT. MINSLEW ) THEN
+               IF( AZSLEW .LT. MINSLEW2 ) THEN
                   MINSLEW2 = AZSLEW
                   IMSLEW2 = IWRAP
                END IF
@@ -209,12 +229,45 @@ C
          END DO
 C
          IF( IMSLEW2 .NE. -99 ) THEN
-            CURAZ1 = CURAZ1 + IMSLEW2 * 360.0
-            CURAZ2 = CURAZ2 + IMSLEW2 * 360.0
+C
+C           Get the minimum slew to the end of scan.
+C           This might even help fix (get a non-slewing end of scan) 
+C           the azimuths when a very bad start time gave a 
+C           messed up projected start position.  At least it 
+C           shouldn't give illegal azimuths at the end of scan.
+C
+            MINSLEWE = 99999.0
+            IMSLEWE = -99
+            DO IWRAP = NWRAP1, NWRAP2
+               IF( CURAZ2 + IWRAP * 360.0 .GE. AX1LIM(1,KSTA) .AND.
+     1             CURAZ2 + IWRAP * 360.0 .LE. AX1LIM(2,KSTA) ) THEN
+                  AZSLEW = ABS( CURAZ2 + IWRAP * 360.0 - CURAZ1 )
+                  IF( AZSLEW .LT. MINSLEWE ) THEN
+                     MINSLEWE = AZSLEW
+                     IMSLEWE = IWRAP
+                  END IF
+               END IF
+            END DO
+            IF( IMSLEWE .NE. -99 ) THEN
+               CURAZ2 = CURAZ2 + IMSLEWE * 360.0
+            ELSE
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I4, A, A )' )
+     1            'WRAP:  Could not get wrap for end of scan ', ISCN, 
+     2            ', station: ', STANAME(ISTA),
+     3            '  Program logic problem?' 
+               CALL WLOG( 1, MSGTXT )
+            END IF
          ELSE
 C           
-C           Leave CURAZ1 and CURAZ2 as is.
+C           Leave CURAZ1 and CURAZ2 as is, but complain.
 C
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I4, A, A )' )
+     1         'WRAP:  Could not get wrap for scan ', ISCN, 
+     2         ', station: ', STANAME(ISTA),
+     3         '  Program logic problem?' 
+            CALL WLOG( 1, MSGTXT )
          END IF
       END IF
 C
@@ -249,11 +302,9 @@ C     AZ2 by the same amount.
 C
       IF( AZ1(ISCN,ISTA) .LT. AX1LIM(1,KSTA) ) THEN
          NT1 = INT( ( AX1LIM(1,KSTA) - AZ1(ISCN,ISTA) ) / 360.0 ) + 1
-         if(iscn.eq.28) write(*,*) 'Wrap - none acceptable 1'
          AZ1(ISCN,ISTA) = AZ1(ISCN,ISTA) + NT1 * 360.0
          AZ2(ISCN,ISTA) = AZ2(ISCN,ISTA) + NT1 * 360.0
       ELSE IF( AZ1(ISCN,ISTA) .GT. AX1LIM(2,KSTA) ) THEN
-         if(iscn.eq.28) write(*,*) 'Wrap - none acceptable 2'
          NT1 = INT( ( AZ1(ISCN,ISTA) - AX1LIM(2,KSTA) ) / 360.0 ) + 1
          AZ1(ISCN,ISTA) = AZ1(ISCN,ISTA) - NT1 * 360.0
          AZ2(ISCN,ISTA) = AZ2(ISCN,ISTA) - NT1 * 360.0
