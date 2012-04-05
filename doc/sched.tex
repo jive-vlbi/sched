@@ -2424,10 +2424,12 @@ But values that are not integer Hz would cause problems elsewhere -
 mainly with returning to phase after changes.  The smallest allowed
 value that qualifies is 15.625 kHz.  One way to look at the allowed
 values is that they are N*125 kHz plus 0, 15.625, 31.250, 46.875,
-62.500, 78.125, 93.750, or 109.375 kHz.  For the moment, it is best to
-stick to multiples of 10 kHz (the step in the BBCs of the old system)
-until we determine that there is adequate precision everywhere.  The
-only way to do the is with multiples of 250 kHz.
+62.500, 78.125, 93.750, or 109.375 kHz.  For the moment, it may be
+best to stick to multiples of 10 kHz (the step in the BBCs of the old
+system) until we determine that there is adequate precision
+everywhere.  The only way to do the is with multiples of 250 kHz.
+However finer tuning (multiples of 15.625 kHz) is now (\schedb version
+10.2) supposed to work, but has not yet been tested
 
 {\bf VLBA TUNING RESTRICTIONS:}
 
@@ -2455,7 +2457,7 @@ examples.  The defaulting capability will be added eventually.  But
 for now, the upper-edge baseband frequencies with PFB personality must
 be from the following list: 1040.0, 1008.0, 976.0, 944.0, 912.0,
 880.0, 848.0, 816.0, 784.0, 752.0, 720.0, 688.0, 656.0, 624.0, 592.0,
-560.0.  These can either be selected directly using the {\tt BBSYNTH}
+560.0.  These can either be selected directly using the {\tt BBSYN}
 setup file parameter, or values of {\tt FREQREF} and {\tt FREQOFF}
 can be selected so that the difference between the desired baseband
 frequency and the signed sum of all other LOs is one of these values.
@@ -11235,7 +11237,21 @@ boundary between two.  That won't work and \schedb will issue a warning.
 
 The DDC personality can provide 8 basebands per RDBE.  Those basebands
 can have bandwidths of the factors of 2 between 0.125 and 64.0 MHz.  The
-total output bit rate has a maximum of 2048 Mbps.
+total output bit rate has a maximum of 2048 Mbps.  The values of 
+{\tt BBSYN} can set to any frequencies that are 1024 MHz (the sample rate)
+divided by powers of 2.  The finest setting is 0.0596046 Hz.
+But any frequency that does not have an integer number of cycles
+in one second can cause big problems with carrying phase over
+various events like frequency switches.  So the settings should
+be limited to multiples of 15.625 kHz --- the smallest setting that
+has an integer number of cycles in a second.  This can be looked
+at as N*125 kHz + 0, 15.625, 31.250, 46.875, 62.500, 78.125, 
+93.750, or 109.375 kHz.  \schedb will not accept settings that
+are not multiples of 15.625 kHz.  Note that any crd files to control
+the old system while the DDC is in use will have BBC frequencies
+rounded to the nearest 10 kHz because of hardware limitations.  That
+should be ok as data from the BBCs are most likely not going to be
+recorded.
 
 The PFB personality of the RDBE, ({\tt DBE = RDBE\_PFB}) has rather rigid
 baseband frequency options.  A polyphase filter divides the 512-1024
@@ -13248,7 +13264,13 @@ more information.
 
 % \item Working on DDC frequency checks.  ********
 
-\item  Nothing yet.
+\item The DDC will use frequencies that require more digits than the 
+usual 10kHz steps.  In the output files, make the number of digits
+sensitive to the number required.  March 2012 RCW
+
+\item Fixed a rarely encountered bug when making optimized schedules when
+they stopped on the first scan of a particular planet or satellite.
+Found in a pointing run.  March 2012  RCW
 
 \end{itemize}
 

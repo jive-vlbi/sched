@@ -137,10 +137,11 @@ C
 C
 C           Prep synth to use in double precision.  The rounding is
 C           to prevent issues comparing with the previous result.
+C           Change to sub-Hz rounding.
 C
             DO I = 1, 3
                DSYNTH(I) = SYNTH(I,LS)
-               DSYNTH(I) = DNINT( DSYNTH(I) * 1000.0D0 ) / 1000.D0
+               DSYNTH(I) = DNINT( DSYNTH(I) * 1.0D7 ) / 1.D7
             END DO
             CALL VLBAREAL( 'synth', 5, 3, DSYNTH, LSYNTH, 
      1             MSYNTH, '(F4.1)', 4, FIRSTS, IUVBA )

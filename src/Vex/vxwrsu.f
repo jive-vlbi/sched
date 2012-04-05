@@ -40,24 +40,41 @@ C
      2                   ' in this schedule. This VEX will NOT run!'
                      CALL WLOG( 1,MSGTXT)
                   END IF
-
+C
                   TMPSRC = SOURCE(I,ISRC)
                   CALL VXSTNM(TMPSRC,.FALSE.)
                   WRITE( IVEX, '( A1 )' ) COM
                   WRITE( IVEX, '( A, A, A1 )' ) 'def ',
      1                 TMPSRC(1:LEN1(TMPSRC)), SEP 
                   FOUND = .TRUE.
-
                   CALL VXSUDT( ISRC, I )
-
+C
                   WRITE( IVEX, '( A, A1 )' ) 'enddef',SEP  
                END IF
             END DO
 C
-C           Check if found, then write other coordinates in comments
+C           Check if found.  
+C           (This comment was also here, but doesn't seem to 
+C           apply - RCW Mar 2012):, then write other coordinates in comments
 C
-            IF( .NOT. FOUND ) CALL ERRLOG('VXWRSU: Schedule source'//
-     1          ' name cannot be reproduced')
+C           Output text changed Mar 2012  RCW.
+C
+            IF( .NOT. FOUND ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, A )' )
+     1            'VXWRSU: A catalog source is marked as used but ',
+     2                  'the alias used is not identified.'
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I5, 2A )' )
+     1            'VXWRSU: Source number is: ', ISRC, 
+     2            '  The first alias is: ', 
+     3            SOURCE(1,ISRC)
+               CALL WLOG( 1, MSGTXT )
+C                
+               CALL ERRLOG('VXWRSU: Probable program bug.'//
+     1             '  Please report.' )
+            END IF
          END IF
       END DO
       WRITE( IVEX, '( A )' ) COMLIN

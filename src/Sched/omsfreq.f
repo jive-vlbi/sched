@@ -11,6 +11,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER            I, IUNIT, KS, KF, NNCHAN
+      INTEGER            ICH1, ILINE
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
 C----------------------------------------------------------------------
@@ -40,15 +41,14 @@ C
                   WRITE( IUNIT, '( A )' )
      1               '    BEGIN = FREQUENCY_SET'
                   WRITE( IUNIT, '( 1X )' )
-                  WRITE( IUNIT, '( A, 64( F10.2, : ) )' )
-     1               '        LO_SUM         = ', 
-     2               ( LOSUM(I), I  =1, NNCHAN )
-                  WRITE( IUNIT, '( A, 64( F10.2, : ) )' )
-     1               '        BBC_FREQUENCY  = ', 
-     2               ( BBCFREQ(I), I = 1, NNCHAN )
-                  WRITE( IUNIT, '( A, 64( F10.3, : ) )' )
-     1               '        BANDWIDTH      = ', 
-     2               ( BBCBW(I), I = 1, NNCHAN )
+                  ICH1 = 25
+                  ILINE = 1
+                  CALL LSTFREQ( IUNIT, LOSUM, BBCFREQ, BBCBW, ICH1, 
+     1                NNCHAN, ILINE, 1024, 200, .TRUE., .TRUE., 
+     2                '        LO_SUM         = ',
+     3                '        BBC_FREQUENCY  = ',
+     4                '        BANDWIDTH      = ' )
+C
                   WRITE( IUNIT, '( 1X )' )
                   WRITE( IUNIT, '( A )' )
      1               '    END = FREQUENCY_SET'

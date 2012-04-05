@@ -136,27 +136,8 @@ C           we are going to restrict the tuning increment to the smallest
 C           value that is an even number of Hz, namely 15.625 kHz ( which
 C           is 256E6/2**14.  That means the allowed values are N*125 kHz plus
 C           0, 15.625, 31.250, 46.875, 62.500, 78.125, 93.750, or 109.375
-C           *******  Care needs to be taken to print enough digits 
-C                    everywhere required.  Currently we're only ok at the
-C                    10 kHz level, which means restricting the settings
-C                    to increments of 250 kHz.
+C           kHz.
 C
-
-
-C *********************  not finished.  Bad, long duration, 
-C                        projectus interruptus.
-
-            nwarn = nwarn + 1
-            if( nwarn .le. 5 ) then
-               write(*,*)  '****** Projectus interruptus in chkrdfq.f '
-     1            // '******'
-               write(*,*) '   Check number of digits printed '//
-     1            'in all places.'
-               write(*,*) '   working on number of digits in prints '
-
-
-            end if
-
 C           Check any rounding of BBCFREQ that might happen in other
 C           routines.  Check validity of the check below.
 C
