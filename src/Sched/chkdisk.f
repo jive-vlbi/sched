@@ -12,9 +12,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER  KS, ISTA, NTRACKS
-      LOGICAL  ERRS, WARNED
-      DATA     WARNED / .FALSE. /
-      SAVE     WARNED
+      LOGICAL  ERRS
 C -----------------------------------------------------------------
 C     Get the station number.
 C
@@ -29,25 +27,32 @@ C
          IF( NTRACKS .LT. 8 ) THEN
             CALL WLOG( 1, 'CHKDISK:  Less than 8 tracks for '//
      1         'Mark5A at '// SETSTA(1,KS) )
-            IF( .NOT. WARNED ) THEN
-               CALL WLOG( 1, 
-     1            '          On VLBA systems, dummy data will '//
-     2            'be added to make 8.  This will use extra disk. ')
-               CALL WLOG( 1, 
+C
+C           We used to just issue warnings.  But the padding with
+C           extra channels seems to have gone away.  These cases
+C           will be rare and the old system is slated for removal,
+C           so just make it an error and request a fix.
+C
+C            CALL WLOG( 1, 
+C     1         '          On VLBA systems, dummy data will '//
+C     2         'be added to make 8.  This will use extra disk. ')
+            CALL WLOG( 1, 
      1            '          Note ntracks = nchan * fanout * bits)' )
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I3, A, I3, A, F4.1, A, I2 )' )
-     1            '                Tracks=', NTRACKS, 
-     2            '  NCHAN=', NCHAN(KS), 
-     3            '  FANOUT=', FANOUT(KS),
-     4            '  BITS=', BITS(1,KS)
-               CALL WLOG( 1, MSGTXT )
-            END IF
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I3, A, I3, A, F4.1, A, I2 )' )
+     1         '                Tracks=', NTRACKS, 
+     2         '  NCHAN=', NCHAN(KS), 
+     3         '  FANOUT=', FANOUT(KS),
+     4         '  BITS=', BITS(1,KS)
+            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 1, 
+     1          '          Please adjust one or more of these '//
+     2          'parameters to get at least 8 tracks and try again.' )
 C
-C            Walter doesn't want this to be an error, just a warning.
+C           Walter doesn't want this to be an error, just a warning.
+C           Changed his mind later.
 C
-C            ERRS = .TRUE.
-            WARNED = .TRUE.
+            ERRS = .TRUE.
          END IF
       END IF   
 C

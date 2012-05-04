@@ -149,6 +149,16 @@ C
             END DO
          END DO
 C
+C        Set the pointer from channel to synthesizer to 0.  It
+C        will be set properly for the VLBA in CHKVLBA and left
+C        at zero for others.
+C
+         DO KS = 1, NSET
+            DO ICH = 1, NCHAN(KS)
+               VFESYN(ICH,KS) = 0
+            END DO
+         END DO
+C
       END IF
 C
       RETURN

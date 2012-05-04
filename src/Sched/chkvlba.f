@@ -6,6 +6,13 @@ C
 C     Allow 4 IFs from 6cm and allow wider LO range as it is 4-8 GHz.
 C     Nov 2011  RCW.
 C
+C     Set VFESYN while going through bands.  That is for the VLBA and
+C     gives which of the front end synthesizers is being used.  This 
+C     will be used later to set a sign on the synthesizer setting
+C     to indicate the IF sideband.  It only worries about the 
+C     second mix as the mix in the high frequency front ends
+C     is (so far) always upper sideband.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
@@ -141,9 +148,17 @@ C     Note that if alternate inputs are being used, believe the FIRSTLO.
 C     It would be likely that the VLBA receiver systems are not being
 C     used (eg mm VLBI)
 C
+C     While going through the receivers, set the synthesizer used for
+C     each IF.  This is only the synthesizer 1 or 2, not synthesizer
+C     3 which is used for the mix in the front end for the 1cm, 7mm, 
+C     and 3mm receivers. The exception is when synthesizer 3 is used
+C     for the extra bandwidth mode in S/X.  zero means none which will 
+C     apply for 50/90cm.
+C
       DO ICH = 1, NCHAN(KS)
          OK = .TRUE.
          KIIF = 0
+         VFESYN(ICH,KS) = 0
          DO IIF = 1, 4
             IF( IFCHAN(ICH,KS) .EQ. IFNAMES(IIF) .AND. (
      1          IFDIST(IIF,KS) .NE. 'A  ' .AND. 
@@ -159,6 +174,7 @@ C
      1             THEN
                   IF( FIRSTLO(ICH,KS) .NE. -500.0D0 .AND.
      1                FIRSTLO(ICH,KS) .NE. 0.0D0 ) OK = .FALSE.
+                  VFESYN(ICH,KS) = 0
 C
 C              4cm can use either of two synthesizers.
 C
@@ -166,9 +182,11 @@ C
                   IF( IFCHAN(ICH,KS) .EQ. 'B' ) THEN
                      IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(1) ) .GT. TEST )
      1                  OK = .FALSE.
+                     VFESYN(ICH,KS) = 1
                   ELSE IF( IFCHAN(ICH,KS) .EQ. 'D' ) THEN
                      IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(3) ) .GT. TEST )
      1                     OK = .FALSE.
+                     VFESYN(ICH,KS) = 3
                   ELSE
                      CALL WLOG( 1, 'CHKVLBA: Bad IFCHAN in DUALX mode.')
                      ERRS = .TRUE.
@@ -181,6 +199,7 @@ C
      2               FE(IIF,KS) .EQ. '2cm' ) THEN
                   IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(1) ) .GT. TEST )
      1               OK = .FALSE.
+                  VFESYN(ICH,KS) = 1
 C
 C              Bands that use synthesizer 2.
 C
@@ -188,6 +207,7 @@ C
      1                  FE(IIF,KS) .EQ. '13cm' ) THEN
                   IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(2) ) .GT. TEST) 
      1                OK = .FALSE.
+                  VFESYN(ICH,KS) = 2
 C
 C              Deal with 6 cm which can use either.
 C
@@ -197,12 +217,14 @@ C
                   IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(2) ).GT.TEST ) THEN
                      OK = .FALSE.
                   END IF
+                  VFESYN(ICH,KS) = 2
                ELSE IF( FE(IIF,KS) .EQ. '6cm' .AND. 
      1                ( IFCHAN(ICH,KS) .EQ. 'B' .OR. 
      2                  IFCHAN(ICH,KS) .EQ. 'D' ) ) THEN
                   IF( ABS( FIRSTLO(ICH,KS) - R8FREQ(1) ).GT.TEST ) THEN
                      OK = .FALSE.
                   END IF
+                  VFESYN(ICH,KS) = 1
 C
 C              1cm, 7mm, and 3mm use 2 synthesizers.
 C
@@ -210,16 +232,19 @@ C
      1                   FE(IIF,KS) .EQ. '1.3cm' ) THEN
                   IF( ABS( FIRSTLO(ICH,KS) - ( R8FREQ(1) + R8FREQ(3) ) )
      1               .GT. TEST ) OK = .FALSE.
+                  VFESYN(ICH,KS) = 1
 C
                ELSE IF ( FE(IIF,KS) .EQ. '7mm' ) THEN
                   IF( ABS( FIRSTLO(ICH,KS) - 
      1                ( R8FREQ(2) + 3.0D0 * R8FREQ(3) ) ) .GT. TEST ) 
      2               OK = .FALSE.
+                  VFESYN(ICH,KS) = 2
 C
                ELSE IF ( FE(IIF,KS) .EQ. '3mm' ) THEN
                   IF( ABS( FIRSTLO(ICH,KS) - 
      1                ( R8FREQ(1) + 6.0D0 * R8FREQ(3) ) ) .GT. TEST ) 
      2               OK = .FALSE.
+                  VFESYN(ICH,KS) = 1
 C
 C              Shouldn't get here.
 C

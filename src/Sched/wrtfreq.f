@@ -10,9 +10,9 @@ C
 C
       INTEGER           ISCN, ISTA, NCH1, NCH2, NCH, KP, LKP, KF, LKF
       INTEGER           PSETI, LEN1, ICH, KCH, NPC, KSTA, ISIDE(MCHAN)
-      INTEGER           RFSIDE(MCHAN), TPSFR(MCHAN)
+      INTEGER           IFSIDE(MCHAN), RFSIDE(MCHAN), TPSFR(MCHAN)
       DOUBLE PRECISION  LOSUM(MCHAN), TLOSUM(MCHAN), TONEINT
-      DOUBLE PRECISION  FTONE
+      DOUBLE PRECISION  FTONE, TFIRSTLO
       DOUBLE PRECISION  BBCBW(MCHAN), BBCFREQ(MCHAN), FSHIFT
       LOGICAL           FIRSTS, WRTSET
       CHARACTER         TPSX1(MAXPC)*3, TPSX2(MAXPC)*3
@@ -99,26 +99,48 @@ C
                IF( SIDEBD(ICH,LS) .EQ. 'L' ) ISIDE(KCH) = -1
                RFSIDE(KCH) = 1
                IF( NETSIDE(ICH,LS) .EQ. 'L' ) RFSIDE(KCH) = -1
+               IFSIDE(KCH) = ISIDE(KCH) * RFSIDE(KCH)
                TBBCBW(KCH) = BBCBW(ICH)
                TBBCFREQ(KCH) = BBCFREQ(ICH)
+C
+C              Round to 10 kHz for BBCs and First LO.  Unless there
+C              are new synthesizers, this shouldn't do anything to
+C              the First LO, but to not be blindsided later, do it.
+C              This might cause a bit of a shift from the RDBE 
+C              frequency if using the DDC.
+C
                TBBCFREQ(KCH) = NINT( TBBCFREQ(KCH) * 100.D0 ) / 100.D0
+               TFIRSTLO = NINT( FIRSTLO(ICH,LS) * 100.D0 ) / 100.D0
                FSHIFT = 0.0D0
                IF( TBBCBW(KCH) .GT. 16.0D0 ) THEN
 C
-C                 Center the band on the wider RDBE band, but 
-C                 make the shift an even number of 5 MHz
-C                 to try to preserve the pcal calcualations
-C                 in the common case of a 5 MHz tone.
+C                 Center the band on the wider RDBE band.  Round.
 C
                   TBBCBW(KCH) = 16.0D0
-                  FSHIFT = ISIDE(KCH) * 
-     1                  0.5D0 * ( BBCBW(KCH) - TBBCBW(KCH) )
+                  FSHIFT = ( BBCBW(KCH) - TBBCBW(KCH) ) / 2.D0
+                  FSHIFT = NINT( FSHIFT * 100.D0 ) / 100.D0
                END IF
+C
+C              Get the new BBC frequency and LO sum.  Note that
+C              the effects of the sideband can differe.
+C
+               TBBCFREQ(KCH) = TBBCFREQ(KCH) + ISIDE(KCH) * FSHIFT
+               TLOSUM(KCH) = TFIRSTLO + IFSIDE(KCH) * TBBCFREQ(KCH)
+C
+C              Get away from the frequency range that can't be 
+C              covered by the old BBCs.  Go by a multiple of 
+C              5 MHz to keep pcal detection frequencies for 5 MHz
+C              tones.  Here I need the IF sideband which is
+C              RFSIDE * ISIDE
+C
                IF( TBBCFREQ(KCH) .GT. 1000.0D0 ) THEN
-                  FSHIFT = -25.0D0 + FSHIFT
+                  TBBCFREQ(KCH) = TBBCFREQ(KCH) - 25.0D0
+                  TLOSUM(KCH) = TLOSUM(KCH) - 
+     1               IFSIDE(KCH) * 25.D0
                END IF
-               TBBCFREQ(KCH) = TBBCFREQ(KCH) + FSHIFT
-               TLOSUM(KCH) = LOSUM(ICH) + FSHIFT
+Cdebug            write(*,*) 'wrtfreq tlosum: ', ich, kch, tfirstlo,
+Cdebug     1            losum(ich), BBCFREQ(ICH), fshift, 
+Cdebug     2            tlosum(kch), tbbcfreq(kch), bbcbw(kch), tbbcbw(kch)
             END DO
          END IF
 C
@@ -160,8 +182,9 @@ C           variables.  Utilize number such as NCH1, NCH2, TBBCBW,
 C           and TBBCFREQ to help.  Also take advantage of the fact
 C           that there will be at most 8 channels (1 digit).  This
 C           is a simplified verision of what is done for non-RDBE
-C           projects.
-C
+C           projects.  Also take advantage of the fact that there 
+C           will be no more than 8 channels as set earlier in this
+C           routine, so get one tone per channel.
 C
 C           Get the first tone frequency for each band.  These are for
 C           the channels handled in the frequency section above.
@@ -171,6 +194,7 @@ C           upper sideband case, need to go up.
 C 
             TONEINT = 1.0D0
             IF( PSPCAL(KP) .EQ. '5MHZ' ) TONEINT = 5.0D0
+C
             DO KCH = 1, NCH
                FTONE =  TONEINT * INT( TLOSUM(KCH) / TONEINT )
                IF( RFSIDE(KCH) .GT. 0 ) THEN
@@ -185,7 +209,9 @@ C
                END IF
             END DO
 C
-            NPC = NCH/2
+C           NPC is the number of detectors needed.
+C
+            NPC = NCH / 2
             DO IPD = 1, NPC
                KCHA = 2 * IPD - 1
                KCHB = KCHA + 1

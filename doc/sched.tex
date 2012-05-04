@@ -63,7 +63,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 10.1}
+\title{THE \schedb USER MANUAL \\  Version 10.2 beta}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -13262,7 +13262,43 @@ more information.
 
 \begin{itemize}
 
-% \item Working on DDC frequency checks.  ********
+\item Make a beta release May 4, 2012 RCW.
+
+\item Change maximum DDC bandwidth to 128 MHz.  Before May 3, 2012. RCW.
+
+\item Make lists of stations in the Vex file work when there are 
+large numbers of stations.  The MODE lines will just get long, which
+is ok because each station is a parsable token.  The comment lines
+with various other definitions are a single such token and are limited
+to 128 characters, so they overflow into multiple lines if needed.
+Apr 27, 2012.
+
+\item Fix bug when warning about two pointing centers using the same 
+list of phase centers.  A line break in a write to a character string
+caused overwrite of the next string.  April 27, 2012.
+
+\item Add elevation of skipped scan when scheduling one station at
+a time.  Meant for pointing observations when there is a question
+about why too many scans are being skipped.  April 23, 2012  RCW.
+
+\item Improve the checks on bandwidths and frequency settings for the
+DDC personality.  April 19, 2012. RCW
+
+\item When the IF sideband is lower, set the synthesizer frequency
+in the crd file to negative.  This is the ruse we are using to convey
+the IF sideband information to the VME on-line system at the VLBA
+sites.  Previously, it could always be figured out from the band
+name and synthesizer setting.  But the new 6cm (4-8 GHz) receivers
+have made it possible for the sideband to be ambiguous.  April 16, 2012
+RCW.
+
+\item When making a RDBE schedule, the pulse cal tone detection for
+the artificial channels created for the VLBA old backend was being 
+set up for the wrong frequencies in some cases (lower sideband IF).
+Fixed.  March 11, 2012.  RCW.
+
+\item There were some issues with the wrap calculation when different
+antennas were scheduled separately.  Fixed, I hope.  April 5, 2012.
 
 \item The DDC will use frequencies that require more digits than the 
 usual 10kHz steps.  In the output files, make the number of digits
