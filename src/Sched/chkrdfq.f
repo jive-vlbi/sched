@@ -12,14 +12,20 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH, ISIDEBD, nwarn, N40WARN, N528WARN
-      INTEGER           NFWARN
-      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2
-      DOUBLE PRECISION  BBCBW(*), BBCFREQ(*)
-      LOGICAL           ERRS, DEQUAL
+      INTEGER           NFWARN, IPF, I, NPBW
+      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, MAXOVER
+      DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
+      LOGICAL           ERRS, DEQUAL, PBWARN
       DATA              nwarn / 0 /
+      DATA              NPBW / 0 /
       DATA              N40WARN, N528WARN, NFWARN / 0, 0, 0 /
+      DATA              PLO / 512.D0, 640.D0, 896.D0 /
+      DATA              PHI / 640.D0, 896.D0, 1024.D0 /
+      DATA              CR1, CR2 / 640.D0, 896.D0 /
       SAVE              nwarn
-      SAVE              N40WARN, N528WARN, NFWARN
+      SAVE              N40WARN, N528WARN, NFWARN, NPBW
+C
+C      PLO and PHI are the ranges for the DDC initial polyphase filter.
 C -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Starting' )
 C
@@ -102,10 +108,11 @@ C        ===  Now check the DDC personality. ===
 C
          IF( DBE(KS) .EQ. 'RDBE_DDC' ) THEN
 C
-C           All bandwidths must be between 125 kHz and 64 MHz.
+C           All bandwidths must be between 250 kHz and 128 MHz.
 C
             DO ICH = 1, NCHAN(KS)
-               IF( .NOT. ( DEQUAL( BBCBW(ICH), 64.0D0 ) .OR. 
+               IF( .NOT. ( DEQUAL( BBCBW(ICH), 128.0D0 ) .OR. 
+     a             DEQUAL( BBCBW(ICH), 64.0D0 ) .OR. 
      1             DEQUAL( BBCBW(ICH), 32.0D0 ) .OR. 
      2             DEQUAL( BBCBW(ICH), 16.0D0 ) .OR. 
      3             DEQUAL( BBCBW(ICH), 8.0D0 ) .OR. 
@@ -113,11 +120,10 @@ C
      5             DEQUAL( BBCBW(ICH), 2.0D0 ) .OR. 
      6             DEQUAL( BBCBW(ICH), 1.0D0 ) .OR. 
      7             DEQUAL( BBCBW(ICH), 0.5D0 ) .OR. 
-     8             DEQUAL( BBCBW(ICH), 0.25D0 ) .OR. 
-     9             DEQUAL( BBCBW(ICH), 0.125D0 ) ) ) THEN
+     8             DEQUAL( BBCBW(ICH), 0.25D0 ) ) ) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, A, F8.3 )' )
-     1               'CHKRDFQ: Bandwidth must be 0.125 to 64 MHz for ',
+     1               'CHKRDFQ: Bandwidth must be 0.125 to 128 MHz for ',
      2               'DBE=RDBE_DDC. Value specified is: ', 
      3               SIDEBD(ICH,KS)
                   CALL WLOG( 1, MSGTXT )
@@ -138,11 +144,6 @@ C           is 256E6/2**14.  That means the allowed values are N*125 kHz plus
 C           0, 15.625, 31.250, 46.875, 62.500, 78.125, 93.750, or 109.375
 C           kHz.
 C
-C           Check any rounding of BBCFREQ that might happen in other
-C           routines.  Check validity of the check below.
-C
-
-C
 C           Once all frequencies are set, prevent basebands crossing 
 C           the crossover points.
 C           We have decided for now (Feb. 2011) to restrict tuning
@@ -154,8 +155,12 @@ C              Check that it is in the IF.
 C              **********  Add other end of band check, or start thinking
 C                          center frequency.
 C
-               IF( BBCFREQ(ICH) .LT. 512.0D0 .OR.
-     1             BBCFREQ(ICH) .GT. 1024.0D0 ) THEN
+               ISIDEBD = 1
+               IF( SIDEBD(ICH,KS) .EQ. 'L' ) ISIDEBD = -1
+               BB1 = BBCFREQ(ICH)
+               BB2 = BBCFREQ(ICH) + ISIDEBD * BBCBW(ICH)
+               IF( BB1 .LT. 512.0D0 .OR.
+     1             BB1 .GT. 1024.0D0 ) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F8.2, A )' )
      1               'CHKRDFQ: Invalid BBSYN for DBE=RDBE_DDC: ', 
@@ -164,6 +169,21 @@ C
                   CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
                END IF
+C
+C              Check the other end of the sideband.  Just warn of the
+C              issue in this case.
+C
+               IF( BB2 .LT. 512.0D0 .OR.
+     1             BB2 .GT. 1024.0D0 ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, F8.2, A )' )
+     1               'CHKRDFQ: Channel ', ICH, 
+     2               ' extends outside the IF band of 512-1024 MHz.'
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, '         Part of the band will '//
+     1               'be corrupted.' )
+               END IF
+
 C
 C              Check for multiple of 15.625 kHz.
 C
@@ -188,38 +208,100 @@ C
                   END IF                  
                END IF
 C
-C              Test the crossover points for the DDC.
-C              Use the trick that, if one filter edge is above the
-C              crossover point and the other below, the product of
-C              the differences between the filter edges and the 
-C              crossover frequency will be negative.  Otherwise it
-C              will be positive (both differences positive or both
-C              negative).
+C              Test the crossover points for the DDC.  Allow a small
+C              percentage crossover at the end of the band opposite
+C              from the LO.  This may be hard to avoid with the highest
+C              bandwidths and a desire for a decent pcal frequency.
+C              The filter used will be the one that includes the band
+C              edge (should check with Matthias).
 C
                ISIDEBD = 1
                IF( SIDEBD(ICH,KS) .EQ. 'L' ) ISIDEBD = -1
                BB1 = BBCFREQ(ICH)
                BB2 = BBCFREQ(ICH) + ISIDEBD * BBCBW(ICH)
-               CR1 = 640.0D0
-               CR2 = 896.0D0
-               IF( ( BB1 - CR1 ) * ( BB2 - CR1 ) .LT. 0.0D0 .OR.
-     1             ( BB1 - CR2 ) * ( BB2 - CR2 ) .LT. 0.0D0 ) THEN
+C
+C              Get which polyphase filter the band will end up in.
+C
+               IPF = 0
+               DO I = 1, 3
+C
+C                 The executor chooses the PFB channel to use.  If 
+C                 the frequency falls right on a boundary, it goes
+C                 to the appropriate side for the sideband.
+C
+                  IF( SIDEBD(ICH,KS) .EQ. 'U' ) THEN
+                     IF( BB1 .GE. PLO(I) .AND. BB1 .LT. PHI(I) ) THEN
+                        IPF = I
+                     END IF
+                  ELSE
+                     IF( BB1 .GT. PLO(I) .AND. BB1 .LE. PHI(I) ) THEN
+                        IPF = I
+                     END IF
+                  END IF
+               END DO
+               IF( IPF .EQ. 0 ) THEN
                   MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, I4, A, I4, A, F10.2, A )' )
-     1               'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
-     2               ' at ', BBCFREQ(ICH), ' MHz spans a crossover.'
+                  WRITE( MSGTXT, 
+     1                  '( A, I4, A, I4, A, F10.2, A )' )
+     2               'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
+     3               ' has baseband frequency ', BB1,
+     4               ' outside 512-1024 MHz.'
                   CALL WLOG( 1, MSGTXT )
-                  write(*,*) 'chkrdfq: bb: ', bb1, bb2
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A )' )
-     1               '         This will produce corrupted data.'
-                  CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, F10.2, A, F10.2, A )' )
-     1               '         The crossovers are at ', CR1, ' and ',
-     2               CR2, ' MHz in the IF.'
-                  CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
+               ELSE
+C
+C                 Now see if the band goes outside the filter.  Allow
+C                 a bit of tolerance.
+C
+                  PBWARN = .FALSE.
+                  IF( SIDEBD(ICH,KS) .EQ. 'U' ) THEN
+                     IF( BB2 .GT. PHI(IPF) + 0.02D0 * BBCBW(ICH) ) THEN
+                        PBWARN = .TRUE.
+                     END IF
+                  ELSE
+                     IF( BB2 .LT. PLO(IPF) - 0.02D0 * BBCBW(ICH) ) THEN
+                        PBWARN = .TRUE.
+                     END IF
+                  END IF
+                  IF( PBWARN ) NPBW = NPBW + 1
+                  IF( PBWARN .AND. NPBW .LE. 10 ) THEN               
+C
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, 
+     1                  '( A, I4, A, I4, A, F10.4, A, F10.4, A, )' )
+     2                  'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
+     3                  ' between ', BB1, ' and ', BB2, 
+     4                  ' MHz '
+                     CALL WLOG( 1, MSGTXT )
+C
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( 2A )' )
+     1                  '         spans a crossover or ',
+     2                  'goes outside 512-1024 MHz.'
+                     CALL WLOG( 1, MSGTXT )
+C
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A )' )
+     1                  '         This will produce corrupted data.'
+                     CALL WLOG( 1, MSGTXT )
+C
+                     CALL WLOG( 1, '         Recall crossovers are '//
+     1                  'the boundaries between the polyphase filter ' )
+                     CALL WLOG( 1, '         outputs in the initial '//
+     2                  'stage of processing in the RDBE.' )
+C
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, F10.2, A, F10.2, A )' )
+     1                  '         The crossovers are at ', CR1, ' and ',
+     2                  CR2, ' MHz in the IF.'
+                     CALL WLOG( 1, MSGTXT )
+C
+                     MSGTXT = ' '
+                  ELSE IF( PBWARN .AND. NPBW .EQ. 11 ) THEN
+                     CALL WLOG( 1, ' ' )
+                     CALL WLOG( 1, 
+      1                'CHKRDFQ:  More crossover warnings suppressed.' )
+                     CALL WLOG( 1, ' ' )
+                  END IF
                END IF
             END DO
 C

@@ -151,6 +151,7 @@ C
          SIDE1(I,TO)   = SIDE1(I,FROM)      
          SFCHAN(I,TO)  = SFCHAN(I,FROM)
          SGCHAN(I,TO)  = SGCHAN(I,FROM)
+         VFESYN(I,TO)  = VFESYN(I,FROM)
          DO J = 1, MTPMOD
             TRACK(I,J,TO) = TRACK(I,J,FROM)      
          END DO

@@ -146,6 +146,7 @@ C
       INTEGER           SWTCHDUR(MSET)
       INTEGER           PCALFR1(MAXPC,MSET)
       INTEGER           PCALFR2(MAXPC,MSET)
+      INTEGER           VFESYN(MCHAN,MSET)
       LOGICAL           DUALPOL(MSET)
       LOGICAL           FRSWITCH(MSET)
       LOGICAL           DUALX(MSET)
@@ -199,9 +200,10 @@ C
      4                  SPEEDUP, BESTOVER, TOTBW
       COMMON  /SETN2B/  NCHAN, ISETSTA, TRACK, PERIOD, BITS, MLEVEL,
      1                  LEVEL, LLEVEL, BBC, TAPEMODE, TPMODE, SWTCHDUR,
-     2                  PCALFR1, PCALFR2, DUALPOL, FRSWITCH, DUALX, 
-     3                  MODETEST, USED, MINTRAK, MAXTRAK, MINTBPS, 
-     4                  MAXTBPS, TBPS, TOTBPS, VLBAMKIV, RECUSED
+     2                  PCALFR1, PCALFR2, VFESYN, DUALPOL, FRSWITCH, 
+     3                  DUALX, MODETEST, USED, MINTRAK, MAXTRAK, 
+     4                  MINTBPS, MAXTBPS, TBPS, TOTBPS, VLBAMKIV, 
+     5                  RECUSED
       COMMON  /SETC2/   SETSTA, BAND, SIDEBD, POL, NOISE, NOISEFRQ, FE, 
      1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, DBE, 
      2                  IFDIST, SPCAL, PCALX1, PCALX2, NETSIDE, SIDE1, 

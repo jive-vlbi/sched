@@ -126,10 +126,16 @@ C
                   DO ISTA = 1, NSTA
                      IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
                   END DO
-                  IF( SKIPPED ) THEN
+                  IF( SKIPPED .AND. NSTA .GT. 1 ) THEN
                      WRITE( ISUM, '( I4, 2A )' ) ISCN, 
      1                     '  Skipping scan on ',
      2                     SCNSRC(ISCN)(1:LEN1(SCNSRC(ISCN)))
+                     LINE = LINE + 1
+                  ELSE IF( SKIPPED .AND. NSTA .EQ. 1 ) THEN
+                     WRITE( ISUM, '( I4, 3A, F8.2 )' ) ISCN, 
+     1                     '  Skipping scan on ',
+     2                     SCNSRC(ISCN)(1:LEN1(SCNSRC(ISCN))),
+     3                     '  at El=', EL1(ISCN,1)
                      LINE = LINE + 1
                   ELSE
 C  

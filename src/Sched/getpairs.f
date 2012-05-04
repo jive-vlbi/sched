@@ -13,6 +13,7 @@ C     how Adam's V2D spec can support either.
 C
       INCLUDE   'sched.inc'
 C
+      integer   len1
       INTEGER   ISCN, IPAIR, JPAIR
 C -----------------------------------------------------------------
 C
@@ -49,7 +50,8 @@ C
                IF( PAIRSRC(JPAIR) .EQ. PAIRSRC(IPAIR) .OR.
      1             PAIRCENT(JPAIR) .EQ. PAIRCENT(IPAIR) ) THEN
                   MSGTXT = ' '
-                  WRITE( MSGTXT, '( 1X, /, A, A, 3X, A )' )
+                  CALL WLOG( 1, ' ' )
+                  WRITE( MSGTXT, '( A, A, 3X, A )' )
      1              'Sources: ', SRCNAME(SRLSTN(PAIRSRC(JPAIR))),
      2               SRCNAME(SRLSTN(PAIRSRC(IPAIR)))
                   CALL WLOG(1, MSGTXT )
