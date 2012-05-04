@@ -178,19 +178,23 @@ C           Set the code for testing the DDC.
 C
 C
 C           NCHAN must be 8 or less.
+C           Hopefully temporarily, this is actually 4.
 C
-            IF( NCHAN(KS) .GT. 8 ) THEN
+            IF( NCHAN(KS) .GT. 4 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, A, I4 )' )
-     1           'CHKRDBE: For DBE=RDBE_DDC, NCHAN must <= 8.', 
+     1           'CHKRDBE: For DBE=RDBE_DDC, NCHAN must <= 4.', 
      2           ' Setup specified.', NCHAN(KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
 C
-C           Sample rate can have many values.  (Not yet confirmed)
+C           Sample rate can have many values.
+C           These may need to shift down by 1 if we do complex
+C           sampling.
 C
-            IF( SAMPRATE(KS) .NE. 128.0 .AND. 
+            IF( SAMPRATE(KS) .NE. 256.0 .AND. 
+     a          SAMPRATE(KS) .NE. 128.0 .AND. 
      1          SAMPRATE(KS) .NE. 64.0 .AND.
      2          SAMPRATE(KS) .NE. 32.0 .AND.
      3          SAMPRATE(KS) .NE. 16.0 .AND.
@@ -198,12 +202,11 @@ C
      5          SAMPRATE(KS) .NE. 4.0 .AND.
      6          SAMPRATE(KS) .NE. 2.0 .AND.
      7          SAMPRATE(KS) .NE. 1.0 .AND.
-     8          SAMPRATE(KS) .NE. 0.5 .AND.
-     9          SAMPRATE(KS) .NE. 0.25 ) THEN
+     8          SAMPRATE(KS) .NE. 0.5 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKRDBE: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=VLBA_DDC. Must be 0.25 to 128 Msamp/s.'
+     2           ' for DBE=VLBA_DDC. Must be 0.5 to 256 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF

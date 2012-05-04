@@ -9,20 +9,32 @@ C     needs them.  In cases that don't use the VLBA, they are unlikely
 C     to be scheduled and, if they are, they will be safely ignored, 
 C     I hope, as no scans using they will actually be written in the
 C     $SCHED block.
+C
+C     Allow station list lines to go beyond 132 characters for projects
+C     with large numbers of stations.  Apparently the VEX parsers only
+C     care about the length of the parsable tokens which is what is
+C     between the colons.  A comment is one parsable token, so that 
+C     has problems if over 128 characters, but the station lists 
+C     created here can be long.  Limit the length for the ref lines
+C     to 512 characters, but make LINE a bit longer so we don't have
+C     to worry about overflowing it on the last addition.  If 512 is
+C     not adequate, simply increase the length of LINE and recompile.
+C     Apr. 27, 2012.  RCW.
 C 
       INCLUDE 'sched.inc' 
       INCLUDE 'schset.inc' 
       INCLUDE 'vxlink.inc' 
 C 
       INTEGER   IXX, I, ISTA, IMODE, LPOS
-      INTEGER   LEN1, NTAPEST, ISET
-      CHARACTER LINE*132, LSETNAME*80, DEL*1
+      INTEGER   LEN1, NTAPEST, ISET, MAXLINE
+      CHARACTER LINE*520, LSETNAME*80, DEL*1
       INTEGER   VXGTST
 C     NTAPEST is a temporary counter for the number of stations in a
 C     given mode that use tapes.
 C ----------------------------------------------------------------------
 C
       LINE = ' ' 
+      MAXLINE = LEN( LINE )
 C
 C     Loop through the SETUP groups and write the modes
 C
@@ -103,6 +115,13 @@ C                    reduce the spaces
 C
                      LPOS = LEN1(LINE)
                      WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
+C
+C                    Check for too long line.
+C
+                     IF( LPOS .GT. MAXLINE - 8 ) THEN
+                        CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                    'for VEX MODE lines.  Change code?' )
+                     END IF
                   END DO
                ELSE
                   WRITE( LINE, '( A1, 4X, A, A, A )' ) 
@@ -147,6 +166,13 @@ C                    reduce the spaces
 C
                      LPOS = LEN1(LINE)
                      WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
+C
+C                    Check for too long line.
+C
+                     IF( LPOS .GT. MAXLINE - 8 ) THEN
+                        CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                    'for VEX MODE lines.  Change code?' )
+                     END IF
                   END DO
                ELSE
                   WRITE( LINE, '( A1, 4X, A, A, A )' ) 
@@ -191,6 +217,13 @@ C                    reduce the spaces
 C
                      LPOS = LEN1(LINE)
                      WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
+C
+C                    Check for too long line.
+C
+                     IF( LPOS .GT. MAXLINE - 8 ) THEN
+                        CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                    'for VEX MODE lines.  Change code?' )
+                     END IF
                   END DO
                ELSE
                   WRITE( LINE, '( A1, 4X, A, A, A )' ) 
@@ -235,6 +268,13 @@ C                 reduce the spaces
 C
                      LPOS = LEN1(LINE)
                      WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
+C
+C                    Check for too long line.
+C
+                     IF( LPOS .GT. MAXLINE - 8 ) THEN
+                        CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                    'for VEX MODE lines.  Change code?' )
+                     END IF
                   END DO
                ELSE
                   WRITE( LINE, '( A1, 4X, A, A, A )' ) 
@@ -292,6 +332,13 @@ C                    reduce the spaces
 C
                         LPOS = LEN1(LINE)
                         WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
+C
+C                    Check for too long line.
+C
+                        IF( LPOS .GT. MAXLINE - 8 ) THEN
+                           CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                       'for VEX MODE lines.  Change code?' )
+                     END IF
                      END IF
                   END DO
                ELSE
@@ -337,6 +384,13 @@ C                 reduce the spaces
 C
                      LPOS = LEN1(LINE)
                      WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
+C
+C                    Check for too long line.
+C
+                     IF( LPOS .GT. MAXLINE - 8 ) THEN
+                        CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                    'for VEX MODE lines.  Change code?' )
+                     END IF
                   END DO
                ELSE
                   WRITE( LINE, '( A1, 4X, A, A, A )' ) 
@@ -396,6 +450,13 @@ C
                        LPOS = LEN1(LINE)
                        WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
                      END IF
+C
+C                    Check for too long line.
+C
+                     IF( LPOS .GT. MAXLINE - 8 ) THEN
+                        CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                    'for VEX MODE lines.  Change code?' )
+                     END IF
                   END DO
                ELSE
                   WRITE( LINE, '( A1, 4X, A, A, A )' ) 
@@ -440,6 +501,13 @@ C                 reduce the spaces
 C
                      LPOS = LEN1(LINE)
                      WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) DEL
+C
+C                    Check for too long line.
+C
+                     IF( LPOS .GT. MAXLINE - 8 ) THEN
+                        CALL ERRLOG( 'VXWRMD: Too many stations '//
+     1                    'for VEX MODE lines.  Change code?' )
+                     END IF
                   END DO
                ELSE
                   WRITE( LINE, '( A1, 4X, A, A, A )' ) 

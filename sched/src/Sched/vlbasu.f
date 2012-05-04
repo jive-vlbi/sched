@@ -24,7 +24,7 @@ C
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
       REAL          DOAZ, DOEL
       DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR
-      LOGICAL       LDUALX, LUSEDIF(4), WARNCRD
+      LOGICAL       LDUALX, LUSEDIF(4), WARNCRD, FEWARN
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
       CHARACTER     LFORMAT*8, LIFDIST(4)*3
@@ -47,10 +47,11 @@ C
       DOUBLE PRECISION  EXTLO(4), LEXTLO(4)
       LOGICAL       USEDIF(4)
       CHARACTER     IFLABEL(4)*1, SIDEX(4)*1, LSIDEX(4)*1
-      SAVE          LEXTLO, LSIDEX
+      SAVE          LEXTLO, LSIDEX, FEWARN
 C
       DATA          IFLABEL / 'A', 'B', 'C', 'D' /
       DATA          WARNCRD / .TRUE. /
+      DATA          FEWARN  / .TRUE. /
 C
 C ----------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBASU: Starting.' )
@@ -137,11 +138,54 @@ C
 C
 C           Prep synth to use in double precision.  The rounding is
 C           to prevent issues comparing with the previous result.
-C           Change to sub-Hz rounding.
+C           Change to sub-Hz rounding.  Aarg - SYNTH is a single 
+C           precision variable and it doesn't have enough bits to go
+C           to the Hz level.  The new synthesizers will be more finely
+C           tunable, but I think they will still be multiples of
+C           10 kHz or even bigger, so it should be ok to round at
+C           something higher.  From debugging printouts, it looks
+C           to be around 100 Hz that precision is gone.  Round to
+C           kHz.  Recall that the SYNTH values are GHz.
 C
             DO I = 1, 3
                DSYNTH(I) = SYNTH(I,LS)
-               DSYNTH(I) = DNINT( DSYNTH(I) * 1.0D7 ) / 1.D7
+               DSYNTH(I) = DNINT( DSYNTH(I) * 1.0D6 ) / 1.D6
+            END DO
+C
+C           For the new (2012) C band receiver on the VLBA, the sideband
+C           after the FIRSTLO mixes is not unique.  The same FIRSTLO can
+C           be used for different frequencies.  The desired sideband is
+C           encoded in SIDE1, so try to use that.  The variable VFESYN
+C           was set in CHKVLBA to give the synthesizer being used for
+C           each channel.  Here set the sign of the synthesizer setting
+C           according to the first channel that uses that synthesizer.
+C           Do not change anything if the synthesizer is not used (it
+C           may be getting set to a benign value).  Look over all 
+C           channels, not just the psuedo subset that will be written
+C           for the old hardware when using the RDBE.
+C
+            DO ICH = 1, NCHAN(LS)
+               IF( FIRSTLO(ICH,LS) .GT. FREQREF(ICH,LS) ) THEN
+                  I = VFESYN(ICH,LS)
+                  IF( I .GE. 1 .AND. I .LE. 3 ) THEN
+                     DSYNTH(I) = -1.D0 * ABS( DSYNTH(I) )
+                     IF( FEWARN ) THEN
+                        CALL WLOG( 1, 
+     1                    'VLBASU: ***** Setting negative synth ' )
+                        MSGTXT = '        Do not deploy this SCHED ' //
+     2                     'until stations updated. '
+                        CALL WLOG( 1, MSGTXT )
+                        FEWARN = .FALSE.
+                     END IF
+                  ELSE IF( FREQREF(ICH,LS) .GT. 800.D0 .AND.
+     1                     SETSTA(1,LS)(1:4) .EQ. 'VLBA' ) THEN
+                     MSGTXT = ' ' 
+                     WRITE( MSGTXT, '( A, A, I3, I4, F10.2 )' ) 
+     1                  'VLBASU: Program error. ',
+     2                  'VFESYN not set ', ICH, LS, FREQREF(ICH,LS)
+                     CALL WLOG( 1, MSGTXT )
+                  END IF
+               END IF
             END DO
             CALL VLBAREAL( 'synth', 5, 3, DSYNTH, LSYNTH, 
      1             MSYNTH, '(F4.1)', 4, FIRSTS, IUVBA )
