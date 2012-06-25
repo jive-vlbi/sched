@@ -126,7 +126,6 @@ C
       KD( KEYPTR( 'FEFILTER', KC, KI ) ) = ZZZZ
       KD( KEYPTR( 'VLABW', KC, KI ) ) = ZZZZ
       KD( KEYPTR( 'VLABAND', KC, KI ) ) = ZZZZ
-      KD( KEYPTR( 'EVLA', KC, KI ) ) = 0.D0
       I1 = KEYPTR( 'VLAIF', KC, KI ) - 1
       I2 = KEYPTR( 'VLAROT', KC, KI ) - 1
       DO I = 1, 2
@@ -513,8 +512,8 @@ C
          STRING(4,KS) = KCHAR( 'STRING4', 80, .FALSE., KD, KC, KI )
 C
 C        Get the VLA specific parameters.
+C        These are now all obsolete as of 2012 or earlier.
 C
-         EVLA(KS)     = KD( KEYPTR( 'EVLA', KC, KI ) )
          FLUKESET(KS) = KD( KEYPTR( 'FLUKESET', KC, KI ) )
          FLUKEA(KS)   = KD( KEYPTR( 'FLUKEA', KC, KI ) )
          FLUKEB(KS)   = KD( KEYPTR( 'FLUKEB', KC, KI ) )
@@ -527,6 +526,32 @@ C
          VLAROT(KS)   = KCHAR( 'VLAROT', 10, .FALSE., KD, KC, KI )
          VLABAND(KS)  = KCHAR( 'VLABAND', 2, .TRUE., KD, KC, KI )
          VLABW(KS)    = KCHAR( 'VLABW', 4, .TRUE., KD, KC, KI )
+C
+C        Warn of use of obsolete parameters.
+C
+         IF( VLABAND(KS) .NE. 'ZZ' .OR.
+     1       VLABW(KS) .NE. 'ZZZZ' .OR.
+     2       FLUKESET(KS) .NE. 0.D0 .OR.
+     3       FLUKEA(KS) .NE. 0.D0 .OR.
+     4       FLUKEB(KS) .NE. 0.D0 .OR.
+     5       VLAFEAB(KS) .NE. 0.D0 .OR. 
+     6       VLAFECD(KS) .NE. 0.D0 .OR. 
+     7       VLASYNA(KS) .NE. 0.D0 .OR. 
+     8       VLASYNB(KS) .NE. 0.D0 .OR. 
+     9       FEFILTER(KS) .NE. 'ZZZZ' .OR.
+     A       VLAIF(KS) .NE. ' ' .OR.
+     B       VLAROT(KS) .NE. ' ' ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( 2A, I4 )' )
+     1         'RDSET - WARNING: Old VLA parameters used in ', 
+     2         'input setup: ', KS
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( 2A )' )
+     1         '                 They are no longer used and ',
+     2         'will be removed soon. '
+            CALL WLOG( 1, MSGTXT )
+         END IF
 C
 C        Get the PCAL information. 
 C

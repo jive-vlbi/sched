@@ -95,27 +95,6 @@ C
       VLBAMKIV(TO) = VLBAMKIV(FROM)
       RECUSED(TO)  = RECUSED(FROM)
 C
-C     VLA parameters
-C
-      FLUKESET(TO) = FLUKESET(FROM)           
-      EVLA(TO)     = EVLA(FROM)
-      FLUKEA(TO)   = FLUKEA(FROM)             
-      FLUKEB(TO)   = FLUKEB(FROM)             
-      VLAFEAB(TO)  = VLAFEAB(FROM)            
-      VLAFECD(TO)  = VLAFECD(FROM)            
-      VLASYNA(TO)  = VLASYNA(FROM)            
-      VLASYNB(TO)  = VLASYNB(FROM)            
-      FEFILTER(TO) = FEFILTER(FROM)         
-      VLAIF(TO)    = VLAIF(FROM)           
-      VLAROT(TO)   = VLAROT(FROM)          
-      VLABAND(TO)  = VLABAND(FROM)         
-      VLABW(TO)    = VLABW(FROM)          
-      VLALOFI(TO)  = VLALOFI(FROM)          
-      VLAVA(TO)    = VLAVA(FROM)
-      VLAVB(TO)    = VLAVB(FROM)
-      VLAVR(TO)    = VLAVR(FROM)
-      VLAVL(TO)    = VLAVL(FROM)
-C
 C     Multi-dimension arrays that need loops.
 C
       DO IF = 1, 4

@@ -46,12 +46,12 @@ else
   echo 'feature for this installation, like satellite tracking.'
 endif
 
-#   Check the v2d file.
+#   Check the tv2d file.
 
-echo '----------------------' $1.v2d '-------------------------'
-if( -e $1.v2d ) then
-  sed -e s:"$SCHED":"$SCHED_SUB":g $1.v2d | \
-     sed -f Check_sed | diff - $3/$1.v2d
+echo '----------------------' $1.tv2d '-------------------------'
+if( -e $1.tv2d ) then
+  sed -e s:"$SCHED":"$SCHED_SUB":g $1.tv2d | \
+     sed -f Check_sed | diff - $3/$1.tv2d
 endif
 
 #   Check crd file of the requested station, if present.
@@ -76,32 +76,16 @@ echo '----------------------' $1.flag '-----------------------'
    diff $1.flag $3/$1.flag
 endif
 
-#  Check any VLA files that might be present.
-
-if( -e $1obs.y ) then
-  echo '----------------------' $1obs.y ' -----------------------'
-  sed -f Check_sed $1obs.y | diff - $3/$1obs.y
-endif
-if( -e $1obs.y && $2 != "y" ) then
-  echo '----------------------' $1crd.y ' -----------------------'
-  sed -f Check_sed $1crd.y | diff - $3/$1crd.y
-endif
-
 #  Check any Green Bank files that might be present.
+#  Removed checking of obs.gb files as they are no longer used.
 
 if( -e $1obs.gb ) then
-  echo '----------------------' $1obs.gb ' -----------------------'
-  sed -f Check_sed $1obs.gb | diff - $3/$1obs.gb
   echo '----------------------' $1crd.gb ' -----------------------'
   sed -f Check_sed $1crd.gb | diff - $3/$1crd.gb
 endif
 
-#  Check any Snap files that might be present (from the mark2 file)
-
-if( -e $1obs.mc ) then
-  echo '----------------------' $1obs.mc ' -----------------------'
-  sed -f Check_sed $1obs.mc | diff - $3/$1obs.mc
-endif
+#  Removed check of any Snap files that might be present (from the 
+#  mark2 file).  There are none in the Verify suite.
 
 #  Check a VEX file if one is present.
 

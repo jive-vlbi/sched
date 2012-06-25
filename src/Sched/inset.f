@@ -106,8 +106,9 @@ C
       CALL KEYCHR( 'BARREL', 'not_set', 9, KD, KC, KI )
 C
 C     VLA parameters. 'ZZ' will cause error.
+C     All of these are obsolete.  They should be removed at
+C     some point.
 C
-      CALL KEYADD( 'EVLA', 0.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'VLABAND', 'ZZ', 2, KD, KC, KI )
       CALL KEYCHR( 'VLABW', 'ZZZZ', 4, KD, KC, KI )
       CALL KEYADD( 'FLUKESET', 0.D0, 1, KD, KC, KI )

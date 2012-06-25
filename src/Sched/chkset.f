@@ -205,10 +205,10 @@ C        Note that the "geodetic" VLBA systems need some extra checks
 C        beyond what the normal VLBA systems get thanks to incomplete
 C        wiring.
 C
-         IF( DAR(ISETSTA(KS)) .EQ. 'RDBE' ) 
-     1         CALL CHKRDBE( KS, ERRS )
-         IF( DAR(ISETSTA(KS)) .EQ. 'VLBA' .OR. 
-     1       DAR(ISETSTA(KS)) .EQ. 'VLBAG'  .OR.
+         IF( DAR(ISETSTA(KS)) .EQ. 'RDBE' )  CALL CHKRDBE( KS, ERRS )
+         IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) CALL CHKWIDAR( KS, ERRS )
+         IF( DAR(ISETSTA(KS)) .EQ. 'VLBA'  .OR. 
+     1       DAR(ISETSTA(KS)) .EQ. 'VLBAG' .OR.
      2       DAR(ISETSTA(KS)) .EQ. 'VLBA4' )  
      3         CALL CHKVDAR( KS, NBBC(ISETSTA(KS)), ERRS )
          IF( DAR(ISETSTA(KS)) .EQ. 'VLBA4' ) CALL CHKV4DAR( KS, ERRS )

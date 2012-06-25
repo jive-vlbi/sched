@@ -32,10 +32,10 @@ C
          IF( DODETECT(IPH) ) THEN
             DO ICH = 1, NTONES(IPH)
                WRITE( LINE(1:), '( 5X, A, A1, A5 )' )
-     2             'phase_cal_detect = ', LNK, TONLNK(ICH,IPH)
+     1             'phase_cal_detect = ', LNK, TONLNK(ICH,IPH)
                DO IP = 1, NTONDET(ICH, IPH)
                   LPOS = LEN1(LINE)+1
-                  WRITE( LINE(LPOS:LPOS+4), '( 1X, A1, I2 )' ) COL, 
+                  WRITE( LINE(LPOS:LPOS+4), '( 1X, A1, I3 )' ) COL, 
      1                ITONDET(IP, ICH,IPH)
                END DO
                LPOS = LEN1(LINE)+1

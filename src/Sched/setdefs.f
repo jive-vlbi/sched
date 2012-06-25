@@ -14,11 +14,6 @@ C
 C ---------------------------------------------------------------------
       IF( SDEBUG ) CALL WLOG( 0, 'SETDEFS: Starting' )
 C
-C     Deal with the VLA phasing mode flags in the setup groups.
-C     The results are needed in SETFCAT.
-C
-      CALL VLAPMODE
-C
 C     Now begin the real work.  First set the global parameters
 C     that are station independent and should match across stations.  
 C     But for the moment, don't attempt to check that they do match.
@@ -112,7 +107,8 @@ C
             IF( TRACK(1,1,KS) .EQ. 0 .AND.
      1        ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR.
      2          FORMAT(KS)(1:4) .EQ. 'MKIV' .OR.
-     3          FORMAT(KS) .EQ. 'MARKIII' ) ) THEN
+     3          FORMAT(KS)(1:4) .EQ. 'VDIF' .OR.
+     4          FORMAT(KS) .EQ. 'MARKIII' ) ) THEN
 C
                CALL SETTRK( NCHAN(KS), TAPEMODE(KS), FORMAT(KS), 
      1               BITS(1,KS), TRACK(1,1,KS), MCHAN, BBC(1,KS), 

@@ -23,7 +23,7 @@ C     the routine for which parameters are involved.
 C
       INCLUDE   'sched.inc'
 C
-      INTEGER      TO, FROM, JST, ICHAN
+      INTEGER      TO, FROM, JST, ICHAN, I
       LOGICAL      COPYALL
 C ------------------------------------------------------------------
       IF( DEBUG ) THEN
@@ -121,6 +121,13 @@ C
       SAZCOL(TO)   = SAZCOL(FROM)
       SELCOL(TO)   = SELCOL(FROM)
       CRDLINE(TO)  = CRDLINE(FROM)
+C
+C     Intents.
+C
+      NSCINT(TO)   = NSCINT(FROM)
+      DO I = 1, MSCINT
+         ISCINT(I,TO) = ISCINT(I,FROM)
+      END DO
 C
 C     Tape parameters.  Many should not be duplicated for some scans.
 C

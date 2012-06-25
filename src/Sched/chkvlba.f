@@ -18,9 +18,9 @@ C
 C
 C     Test is a tolerance limit for FIRSTLO - SYNTH tests in MHz.
 C
-      INTEGER     I, KS, ICH, IIF, KIIF
-      LOGICAL     ERRS, OK, BADLO
-      DOUBLE PRECISION  R8FREQ(3), TEST
+      INTEGER     I, KS, ICH, IIF, KIIF, JCH
+      LOGICAL     ERRS, OK, BADLO, LOIFWARN
+      DOUBLE PRECISION  R8FREQ(3), TEST, TFR1, TFR2
       PARAMETER   (TEST=1.D-3)
       SAVE        IFNAMES
       CHARACTER   IFNAMES(4)*1
@@ -148,12 +148,12 @@ C     Note that if alternate inputs are being used, believe the FIRSTLO.
 C     It would be likely that the VLBA receiver systems are not being
 C     used (eg mm VLBI)
 C
-C     While going through the receivers, set the synthesizer used for
-C     each IF.  This is only the synthesizer 1 or 2, not synthesizer
-C     3 which is used for the mix in the front end for the 1cm, 7mm, 
-C     and 3mm receivers. The exception is when synthesizer 3 is used
-C     for the extra bandwidth mode in S/X.  zero means none which will 
-C     apply for 50/90cm.
+C     While going through the receivers, set the bookkeeping of which
+C     synthesizer is used for each IF.  This is only the synthesizer 
+C     1 or 2, not synthesizer 3 which is used for the mix in the front 
+C     end for the 1cm, 7mm, and 3mm receivers. The exception is when 
+C     synthesizer 3 is used for the extra bandwidth mode in S/X.  zero 
+C     means none which will apply for 50/90cm.
 C
       DO ICH = 1, NCHAN(KS)
          OK = .TRUE.
@@ -305,6 +305,47 @@ C
      5       NOISE(IIF,KS) .NE. 'low-s' ) THEN
             CALL WLOG( 1, 'CHKVLBA: Invalid NOISE = '//NOISE(IIF,KS) )
             ERRS = .TRUE.
+         END IF
+      END DO
+C
+C     Try to prevent LOs from some channels interfering with other 
+C     channels.  This is mainly an issue for the wide C band but 
+C     do a more generic check.  Don't attempt to be clever to avoid
+C     looking at all channels.
+C
+C     The limits used for the test are rather arbitrary and drawn out
+C     of a hat, but should be reasonable.
+C     Don't check P band this way.
+C
+      LOIFWARN = .TRUE.
+      DO ICH = 1, NCHAN(KS)
+         IF( FIRSTLO(ICH,KS) .GT. 1000.D0 ) THEN
+            IF( SIDE1(ICH,KS) .EQ. 'U' ) THEN
+               TFR1 = FIRSTLO(ICH,KS) + 400.0D0
+               TFR2 = FIRSTLO(ICH,KS) + 1200.0D0
+            ELSE 
+               TFR1 = FIRSTLO(ICH,KS) - 1200.0D0
+               TFR2 = FIRSTLO(ICH,KS) - 400.0D0
+            END IF
+            DO JCH = 1, NCHAN(KS)
+               IF( FIRSTLO(JCH,KS) .GT. TFR1 .AND. 
+     1             FIRSTLO(JCH,KS) .LT. TFR2 .AND.
+     2             LOIFWARN .AND. FIRSTLO(JCH,KS) .GT. 1000.D0 ) THEN
+                  CALL WLOG( 1, ' ' )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I3, A, A, A )' )
+     1               'CHKVLBA WARNING:  In setup ', KS, ' the first ',
+     2               ' LO for one channel is in or close to the IF ',
+     3               ' for another.'
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, 
+     1              '               This can cause bad interference' )
+                  CALL WLOG( 1,
+     1              '               See sched.runlog for details.' )
+                  CALL PRTSET( KS, ILOG ) 
+                  LOIFWARN = .FALSE.
+               END IF
+            END DO
          END IF
       END DO
 C

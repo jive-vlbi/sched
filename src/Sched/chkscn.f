@@ -190,8 +190,11 @@ C
          END IF
 C
 C     Check some VLA issues.
+C      This routine doesn't do anything now.  Perhaps a new one will
+C      be needed.  The original routine has been put in 
+C      ~/files/sched_ARCHIVE_nonSVN/obsolete_routines/
 C
-      CALL VLASCHK
+C      CALL VLASCHK
 C
       RETURN
       END

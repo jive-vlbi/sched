@@ -88,6 +88,9 @@ C
          END DO
 C
 C        Actually write the VEX file, or explain why not.
+C        Only allow all format='none' for VLBA pointing files.
+C        Can I change that eventually?
+C        Don't write it for a configuration test.
 C
 C         IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
          IF( ( OVERRIDE .OR. .NOT. ALLNONE .OR. 

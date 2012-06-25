@@ -46,12 +46,14 @@ C         without full resources to record reduced bandwidth by
 C         reducing the number of channels.  Actually this can
 C         be done for any setup where a station has inadequate
 C         resources.  Just cut NCHAN for the setup group.  Do this
-C         after setting all the formats to reduce confusion.  But
-C         during the setting, try hard to stay on one drive or head.
+C         after setting all the formats to reduce confusion.  
+C         This part obsolete:
+C         But during the setting, try hard to stay on one drive or head.
 C         The recording resources should no longer cause this, but
 C         DAR's might.
 C
-C     5.  Eventually there will be systems (eg MARK5B) that don't
+C     5.  Obsolete
+C         Eventually there will be systems (eg MARK5B) that don't
 C         care about speed up factors and number of tracks.  I think
 C         they will be easier.  Actually the disk systems and 
 C         correlators remaining after FXCORR was turned off qualify.
@@ -123,6 +125,8 @@ C
                FORMAT(KS) = 'MARK5B'
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5B' ) THEN
                FORMAT(KS) = 'MARK5B'
+            ELSE IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) THEN
+               FORMAT(KS) = 'VDIF'
             ELSE
                FORMAT(KS) = DAR(ISETSTA(KS))
             END IF

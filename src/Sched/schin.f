@@ -6,9 +6,9 @@ C     file.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER           MODE, I, LEN1, ISCN, IREP, INAME
+      INTEGER           MODE, I, J, LEN1, ISCN, IREP, INAME
       INTEGER           I1, I2, KEYPTR
-      LOGICAL           GOTSAT, DOINIT, DOSTWARN, GOTVEX
+      LOGICAL           GOTSAT, DOINIT, DOSTWARN, GOTVEX, EXIT
       CHARACTER         TPFILE*80
       CHARACTER         CSFILE*80
       INTEGER           YEAR(MAXSCN), DAY(MAXSCN)
@@ -18,7 +18,8 @@ C     Keyin input parameters.  Key names are in second half of KD.
 C     KI(2) contains number of parameters.
 C
       INTEGER           MK, INSCH
-      PARAMETER         (MK=650 + 7*MAXSTA + 2*MAXCHN + 2*MGEO )
+      PARAMETER         (MK=650 + 7*MAXSTA + 2*MAXCHN + 2*MGEO + 
+     1                   10*MINTENT )
       INTEGER           KI(MK)
       CHARACTER         KC(MK)*8, KCHAR*256, KCHARA*256, TEMP*256
       DOUBLE PRECISION  KD(2*MK), ENDMARK, BLANK
@@ -87,6 +88,19 @@ C
          SATN(I) = 0
       END DO
 C
+C     Initialize the INTENT variables.
+C
+      NINTENT = 0
+      DO I = 1, MINTENT
+         INTENT(I) = ' '
+      END DO
+      DO I = 1, MAXSCN
+         NSCINT(I) = 0
+         DO J = 1, MSCINT
+            ISCINT(J,I) = 0
+         END DO
+      END DO
+C
 C  ---------  Jump to here to read next scan data.   ---------------
 C
   1   CONTINUE
@@ -135,6 +149,10 @@ C
             DO I = 1, 128/8
                KD(I1+I) = BLANK
             END DO
+            I1 = KEYPTR( 'INTENTs', KC, KI ) - 1
+            DO I = 1, MSCINT * 10
+               KD(I1+I) = BLANK
+            END DO
          END IF
 C
 C        Get scan information with KEYIN.
@@ -142,7 +160,8 @@ C
          MODE = 0
          CALL KEYIN( KD(MK+1), KD, KI(2), ENDMARK, MODE, INSCH, 6 )
          I1 = KEYPTR( 'EXIT', KC, KI )
-         IF( MODE.EQ.1 .OR. KD(I1) .EQ. 0.D0 ) GO TO 990
+         EXIT = KD(I1) .EQ. 0.D0 
+         IF( MODE.EQ.1 .OR. EXIT ) GO TO 990
 C
 C        Some program controls that will be needed quickly.
 C
@@ -280,6 +299,10 @@ C
             END IF
          END IF
 C
+C        Get the INTENTs.
+C
+         CALL GINTENT( ISCN, KD, KC, KI, BLANK )
+C
 C        The minimum tape pause time and the tape prestart time.
 C
          PRESTART(ISCN) = KD( KEYPTR( 'PRESTART', KC, KI ) ) / 86400.D0
@@ -405,6 +428,11 @@ C
       NSCANS = ISCN
       SCANL = NSCANS
       IF( ISCN .LE. 0 ) THEN
+         IF( EXIT ) THEN
+            CALL WLOG( 1, 'SCHIN:  EXIT requested.  Shutting down.' )
+            CALL DELSCR( .FALSE. )
+            STOP
+         END IF
          CALL ERRLOG('SCHIN: No input scans')
       END IF
 C 
@@ -417,7 +445,6 @@ C
       TPREF = KD( KEYPTR( 'TPREF', KC, KI ) )
       PTDUR = KD( KEYPTR( 'PTDUR', KC, KI ) )
       PRECDATE = KD( KEYPTR( 'PRECDATE', KC, KI ) )
-      PTLINK = KD( KEYPTR( 'PTLINK', KC, KI ) ) .EQ. 0.D0
 C
 C     The default of DOVEX was set to true on Oct. 14, 2008 in preparation
 C     for the use of VEX for the VLBA software correlator.  Now setting

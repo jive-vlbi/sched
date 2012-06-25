@@ -24,7 +24,7 @@ C
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
       REAL          DOAZ, DOEL
       DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR
-      LOGICAL       LDUALX, LUSEDIF(4), WARNCRD, FEWARN
+      LOGICAL       LDUALX, LUSEDIF(4), WARNCRD
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
       CHARACTER     LFORMAT*8, LIFDIST(4)*3
@@ -47,11 +47,10 @@ C
       DOUBLE PRECISION  EXTLO(4), LEXTLO(4)
       LOGICAL       USEDIF(4)
       CHARACTER     IFLABEL(4)*1, SIDEX(4)*1, LSIDEX(4)*1
-      SAVE          LEXTLO, LSIDEX, FEWARN
+      SAVE          LEXTLO, LSIDEX
 C
       DATA          IFLABEL / 'A', 'B', 'C', 'D' /
       DATA          WARNCRD / .TRUE. /
-      DATA          FEWARN  / .TRUE. /
 C
 C ----------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBASU: Starting.' )
@@ -165,18 +164,11 @@ C           channels, not just the psuedo subset that will be written
 C           for the old hardware when using the RDBE.
 C
             DO ICH = 1, NCHAN(LS)
-               IF( FIRSTLO(ICH,LS) .GT. FREQREF(ICH,LS) ) THEN
+               IF( FIRSTLO(ICH,LS) .GT. FREQREF(ICH,LS) .AND. 
+     1            STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
                   I = VFESYN(ICH,LS)
                   IF( I .GE. 1 .AND. I .LE. 3 ) THEN
                      DSYNTH(I) = -1.D0 * ABS( DSYNTH(I) )
-                     IF( FEWARN ) THEN
-                        CALL WLOG( 1, 
-     1                    'VLBASU: ***** Setting negative synth ' )
-                        MSGTXT = '        Do not deploy this SCHED ' //
-     2                     'until stations updated. '
-                        CALL WLOG( 1, MSGTXT )
-                        FEWARN = .FALSE.
-                     END IF
                   ELSE IF( FREQREF(ICH,LS) .GT. 800.D0 .AND.
      1                     SETSTA(1,LS)(1:4) .EQ. 'VLBA' ) THEN
                      MSGTXT = ' ' 
