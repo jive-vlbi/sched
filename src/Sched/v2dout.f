@@ -24,7 +24,7 @@ C----------------------------------------------------------------------
 C
 C     Construct the name of the v2d file.
 C     
-      WRITE( V2DFILE, '(A,A)' )  EXPCODE(1:LEN1(EXPCODE)), '.V2D'
+      WRITE( V2DFILE, '(A,A)' )  EXPCODE(1:LEN1(EXPCODE)), '.TV2D'
       CALL DWCASE( V2DFILE )
       IF( DEBUG ) CALL WLOG( 0, 'V2DOUT: Opening ' //
      1      V2DFILE(1:LEN1(V2DFILE)) )

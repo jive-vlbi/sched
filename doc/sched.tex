@@ -1052,31 +1052,6 @@ planning file similar to the other VLBA planning files, but has
 all 27 stations of the VLA A configuration.  You can use this to
 explore VLA uv coverage etc.
 
-\item[\htmladdnormallink{{\sl
-manual\_vla.key}}{examples/manual\_vla.key}] is a file for VLA continuum
-observations that don't involve VLBI or special pointing problems.
-This is the template for simple VLA continuum projects.
-
-\item[\htmladdnormallink{{\sl egvla.key}}{examples/egvla.key}] is a
-basic file for a VLA observations.  With the advent of
-the EVLA, this is all likely to be out of date.
-
-\item[\htmladdnormallink{{\sl egvla7mm.key}}{examples/egvla7mm.key}] is a
-file for a VLA observation at 7mm.  It demonstrates both explicit and
-automatic insertion of reference pointing scans.  With the advent of
-the EVLA, this is all likely to be out of date.
-
-\item[\htmladdnormallink{{\sl ptlink.key}}{examples/ptlink.key}] is a
-file for VLA continuum observations involving the Pie Town link.  This
-is not really useful as the Pie Town link was normally scheduled using
-the VLA scheduling program.  Plus the link is no longer active (2007),
-hopefully temporarily.  When it wakes up again, much will be
-different.  Note \schedb can not schedule fast switching or spectral
-line VLA observations and the normal scheduling scheme for Pie Town
-link projects is to use {\sc OBSERVE}.  This file does demonstrate the
-use of setup files the fully specify the VLA setup, something that
-might be useful for other types of observing.
-
 \item[\htmladdnormallink{{\sl doptg.com}}{examples/doptg.com}] is a
 script that creates and runs VLBA pointing observations.  It exercizes
 one of the optimization modes to allow the same script to be used for
@@ -2909,8 +2884,7 @@ eg3mmb.key}}{examples/eg3mmb.key} demonstrates use of the external
 peak command file.  \htmladdnormallink{{\sl
 eg3mmc.key}}{examples/eg3mmc.key} produces the same results but using
 \htmlref{{\tt PEAKINIT}}{MP:PEAKINIT} and no external file.
-\htmladdnormallink{{\sl egvla7mm.key}}{examples/egvla7mm.key} shows
-the insertion of peaking scans on the VLA. These examples only include
+These examples only include
 a few VLBA stations and the VLA.  These examples don't show all that is
 needed to make schedules for wideband (RDBE/MARK5C) observations with
 reference pointing where two different passes through \schedb are 
@@ -3352,83 +3326,54 @@ file to turn off some of the checks of frequency ranges.  This is all
 at a primitive state as of Fall 2007 and will be updated as the EVLA
 matures.
 
-Support for the Pie Town link was being added although, in practice,
-Pie Town link observations were not generally scheduled with \sched.
-Parameter \htmlref{{\tt PTLINK}}{MP:PTLINK} tells \schedb that the
-link is to be used.  This causes {\tt //LO} cards to be written to the
-VLA OBS file and causes \schedb to put the Pie Town first LO value on
-those cards.  A setup parameter, {\tt NOISEFRQ} has been added to
-control the noise cal switching frequency.  This is a new project and
-features will be added as necessary.  The example file {\sl
-ptlink.key} shows how to construct a file for an observation using the
-link.  The Pie Town link is not currently active as of mid 2007, and
-when it returns it will be based on the new VLBA digital backend and
-on the EVLA correlator.  So control is likely to be different.
-
 
 \subsection{\label{SSEC:VLAVLBI}VLBI at the VLA}
 
-Note that many of the details of what is below applies to the old VLA
-system which is no longer in use.  VLBI on the EVLA with the WIDAR
-correlator has not yet been implemented and \schedb does not have the
-ability to write EVLA control files.  Most likely, control of VLBI at
-the VLA will be based on the VEX files and a translator that makes the
-VLA specific files.  This section will be updated when this appears.
-
+This section has change drastically with the advent of the VLA upgrade
+to the JVLA and the use of the WIDAR correlator.  If you have a perverse
+interest in the old system, see the obsolete sections.
 
 For much detailed information on VLBI at the VLA, follow the links to
 the \htmladdnormallink{VLBI at the VLA guide}
 {http://www.vla.nrao.edu/astro/guides/vlbivla/current/}.
 
-There are two very different modes in which VLBI can be done at the
-VLA.  These are single dish and phased array observations.  For single
-dish VLBI observations, the IF signals from one antenna of the array
-are sent to the VLBI recording equipment (VLBA DAR and recorder).
-Other than having to worry about the VLA's rather complicated LO
-system, such observations are very similar to observations at other
-VLBI observatories.  The phased array observations, on the other hand,
-have some very special needs.  For such observations, the signals from
-all VLA antennas are summed in the VLA correlator and the summed
-signal is sent to the VLBI equipment.  This gives a sensitivity for
-the ``antenna'' that is increased by about the number of phased
-antennas, {\em if} the array is phased properly.  Array phasing is
-accomplished by the on-line control system.  Output phases from the
-correlator are used to derive adjustments to the phase of the LO at
-each antenna that, when applied, will cause the next correlator phases
-to go toward zero.  The system can phase up on a calibrator and then
-freeze the phases on a target source when the target source is either
-too weak, resolved, or confused for successful phasing.
+The WIDAR correlator is capable of providing phased array output from
+the JVLA in a VDIF format to be recorded on a Mark5C disk recording 
+unit.  Such data can be played back on the DiFX correlators, at least.
+Single dish recording is a subset of phased array recording.  Since
+recorder ready data are provided by WIDAR, none of the normal VLBI
+backends are used.  But the properties of the correlator are rather 
+similar to the RDBE so, in fact, scheduling the VLA has become more
+similar to scheduling other antennas than it was with the old system.
 
-The type of VLA observation is distinguished by the \htmlref {{\tt
-VLAMODE}}{MP:VLAMODE}.  {\tt VLAMODE = VS} indicates single dish
-observing.  {\tt VLAMODE = VX} indicates phased array observing, but
-using the phases from a previous phasing scan.  {\tt VLAMODE = VA}
-indicates phased array observing with phasing on the VLA {\tt A} and
-{\tt D} IFs and is the usual active phasing mode.  {\tt VLAMODE = VB}
-is similar, but with phasing on the VLA {\tt B} and {\tt C} IFs.  {\tt
-VLAMODE = VR} or {\tt VL} indicates phased array observing using,
-respectively, the VLA {\tt A} and {\tt B} or {\tt C} and {\tt D} IFs.
-As might be deduced by this, because of hardware limitations, the VLA
-can only phase one of the {\tt A} and {\tt C} IFs and one of the {\tt
-B} and {\tt D} IFs.  The {\tt VLAMODE} can be changed on a
-scan-by-scan basis.  See the description of the setup parameter
-\htmlref{{\tt IFCHAN}}{SP:IFCHAN} for more information on routing VLA
-IFs to VLB IFs.  {\tt VS} mode (single dish) can be mixed with the
-phased array modes, but the number of changes back and forth should be
-limited.  Normally this would only be done when atmospheric
-calibration, geodetic-like (DELZN) sections are included in a phase
-referencing project.
+The /schedb output used by the JVLA is the VEX file.  As for setups, the
+JVLA can be treated as if it were a VLBA antenna.  Any setup that the
+VLBA can manage, except 610 MHz and 86 GHz, can be duplicated on the JVLA.
+The LO/IF setup required to do so can be complicated, but that is 
+handled by software and staff in the conversion of the VEX file to the
+scripts actually used by the JVLA.
 
-The reference antenna can be controlled with parameter \htmlref{{\tt
-VLARFANT}}{MP:VLARFANT}.  That will be the antenna from which data are
-recorded in single dish mode and the reference antenna (whose phases
-are not changed) for the phased array modes.  Normally users should not
-worry about setting {\tt VLARFANT} because the default is usually
-good, and if not, you will not know in time and the change needs to be
-made by operations.
+For scheduling, the user should be aware that the JVLA slews at 40
+deg/min in azimuth and 20 deg/min in elevation, which is about half
+the speed of the VLBA.  This can be an issue for widely separated
+sources.  It is, however, faster than some other HSA or Global VLBI
+antennas.
+
+One area where the JVLA, or any interferometer for that matter,
+differs from the VLBA and other single antennas is the need to adjust
+the individual antenna phases so that the signals add coherently when
+summed.  The instructions to actively phase during a scan or hold
+phase from a previous active scan are given in \htmlref{{\tt
+INTENTs}}{MP:INTENTs}.  Use {\tt DETERMINE\_AUTOPHASE} and {\tt
+APPLY\_AUTOPHASE}.  There will also need to be one to specify single
+dish observing and to one control reference pointing.  Phasing scans
+can be added simply as additional VLBI scans, or the JVLA can be sent
+to a source not observed by the rest of the antennas and for which no
+recording is made.
 
 For successful phasing of the array, a source must be greater than
-about 0.1 Jy (see the guide referenced above for details) and have a
+about 0.1 Jy (That is an old VLA number but is probably still
+reasonable.  See the guide referenced above for details) and have a
 position that is good to a fraction of the VLA synthesized beam
 (enhanced sensitivity is only obtained over this area).  It must have
 small structure phases and not have other sources in the primary beam
@@ -3436,383 +3381,27 @@ that might confuse the phasing algorithm.  The position accuracy is
 especially important if a calibrator is being used to phase the array
 for observations of another source.  Adding phasing sources is tricky,
 because it is desirable to spend a minimum amount of time on them, but
-if they are missed, the rest of the data will be bad.  It is possible
-to try to influence the speed of phasing by using \htmlref{{\tt VLAINTEG}}
-{MP:VLAINTEG} to adjust the correlator integration time.  The default
-is 10 seconds.  Use of a shorter time may speed phasing but is done at
-the expense of added noise.
+if they are missed, the rest of the data will be bad.  A phasing scan
+should be at least 30 seconds in length (This guess needs to be 
+replaced by a real number!).
 
-There are two ways to deal with VLBI observations that require
-phasing on a source different from the target source.  The best
-is probably to simply schedule VLBI scans, with the proper \htmlref
-{{\tt VLAMODE}}{MP:VLAMODE}, on the phasing source.  These observations
-can then also be used to assist the VLBI calibration, assuming an
-appropriate calibrator has been chosen.  The other scheme is to
-insert calibration scans into the VLA's schedule file (the OBSERVE
-file), but not the VLBI control file, for the phasing operation.
-\schedb provides some tools to simplify this operation.  It can
-also be done using the {\sc VLA OBSERVE} program.  This is done
-by the VLA analysts for some programs.
+If doing DELZN segments to measure the tropospheric delay, it is best
+to use a single dish mode as the phasing can take time and can confuse 
+the troposphere solution algorithm.
 
-For VLBI observations at the VLA, both an OBSERVE file and a VLBA
-style control file are needed and can be created by \sched.  All of
-the controls provided for managing recordings for the VLBA also work
-for the VLA.  \schedb also has special capabilities for scheduling VLA
-observations as described below.
+This was written as JVLA VLBI observations were just being tested.  It
+almost certainly needs more details.
 
-For observations that require phasing on a calibrator, the array must
-be phased in auto-phasing (\htmlref{{\tt VLAMODE = VA}}{MP:VLAMODE})
-mode prior to VLBI observations of the target source in
-extended-phasing (\htmlref{{\tt VLAMODE = VX}}{MP:VLAMODE}) mode.
-These calibrator observations constitute additional scans that must be
-in the VLA observe file, but that no other VLBI observatory or the
-recorder control file for the VLA needs to know about. (Note that
-Westerbork needs something of the sort, but they have never requested
-special information in \schedb output files).
+Note that normal output from the WIDAR correlator will be obtained during
+VLBI observations.  Such observations may be useful for determination 
+of large scale structure, total flux density, polarization, or absolute
+amplitude calibration.  The user may need some JVLA specific scans, such
+as on a flux calibrator, to make full use of such data.
 
-If it is desired to add phasing scans on a calibrator on which VLBI
-data will not be recorded and that will not be observed at the other
-VLBI observatories, the parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC}
-can be used.  If a \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} is given,
-\schedb will automatically insert phasing observations in the VLA
-OBSERVE file at appropriate times.  Note that \htmlref{{\tt
-VLAPSRC}}{MP:VLAPSRC} must be a source in the same catalogs that are
-searched for \htmlref{{\tt SOURCE}}{MP:SOURCE} and \htmlref{{\tt
-DOPSRC}}{MP:DOPSRC}. \schedb will add a phasing scan to the observe
-file which will end either 1 minute before the main VLBI scan starts,
-or 3 minutes after the previous VLBI scan ends, whichever is later.
-If the latter option is used, \schedb complains if less than 2 minutes
-of the VLBI scan remains.  Also with the latter option, the VLBA-style
-control file will still start the recorder when the main VLBI scan
-was supposed to start. This keeps recording at the VLA and other
-sites synchronized, although it can lead to the need to flag data that
-won't have VLBI fringes. \schedb will not add a phasing scan if the
-VLBI scan is in \htmlref{{\tt VLAMODE=VA}}{MP:VLAMODE} or if
-\htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} is the same as \htmlref{{\tt
-SOURCE}}{MP:SOURCE}. This avoids the need to keep respecifying
-\htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} whenever a VLBI calibrator is
-observed in mode {\tt VA} and prevents the addition of unnecessary
-extra scans when the VLBI schedule calls for observations of the
-phasing source.
-
-It is highly recommended that the NRAO {\sc OBSERVE} program be used
-to check the VLA observe file for slew and dwell times on the phasing
-sources. The scan stop times may have to be adjusted with {\sc
-OBSERVE} to obtain an adequate amount of on-source time for phasing.
-It is especially critical to be careful about slew times for sources
-near the zenith where long azimuth slews may be needed to go a short
-distance on the sky.  \schedb only recently acquired to ability to
-calculate slew times and this has not yet been extended to the VLA
-phasing scans.  This is an area of future construction.
-
-\schedb is also able to deal with reference pointing using the
-\htmlref{{\tt PEAK}}{MP:PEAK} command.  Refer to the description
-of {\tt PEAK} for details.  The \htmlref{VLA-only example}{SSEC:VLAONLY}
-below uses this capability.
-
-\subsubsection{\label{SSSEC:VLBIEG}An Example}
-
-Below is an example of a file for a VLBI observation that uses the
-phased VLA.  For phasing, a source is used that can also be used as a
-VLBI phase or fringe fitting reference.  All antennas are sent to the
-reference and VLBI data is taken on it.  This is now the prefered
-style for phasing.  Of course the \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC}
-parameter could also have been used if non-recording scans with only
-the VLA on the calibrator had been desired.
-
-Note that the \htmlref{main example} {SSEC:EXAMPLE1} in the
-\htmlref{Examples}{SEC:EXAMPLES} section has a single VLA antenna
-in it and serves as an example of that type of observing.
-
-\verbatiminput{../examples/vla_vlbi.key}
-
-\subsection{\label{SSEC:VLAONLY}VLA-Only Project Example}
-
-\schedb cannot be used for scheduling the EVLA (yet anyway) and the
-old VLA system has been turned off.  So the following section is not
-of much use now.  Once VLBI at the EVLA has been established, the
-capabilities to schedule EVLA runs with \schedb will be revisited.
-
-This second VLA example demonstrates the use of \schedb to schedule a
-pure VLA project.  The \schedb input for VLA observations is very much
-like that for VLBI observations.  There are some parameters provided,
-and listed below, to control some of the input information for which
-the VLBI defaults may not be appropriate.  The example is a modified
-version of an actual schedule used to make the VLA observations
-described.  The modifications were required by changes in the way in
-which \schedb handles setup files and the parameters \htmlref{{\tt
-VLABAND}}{SP:VLABAND}, \htmlref{{\tt VLABW}}{SP:VLABW}, \htmlref{{\tt
-PEAK}}{MP:PEAK}, \htmlref{{\tt VLAMODE}}{MP:VLAMODE} (for pointing
-scans), and \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.  Some of these
-parameters are now read from the setup files, not the main schedule
-input.
-
-\verbatiminput{../examples/manual_vla.key}
-
-The above file used several setup files since it was sampling all
-bands used at the VLA.  Two are shown below.  All of the others are
-like the first --- very simple because they use the standard mode.
-The second specifies the LO settings for the Q (7mm) band observations
-so it is rather more complicated.  Note that, for many frequency settings,
-\schedb can obtain the required information from entries in the
-\htmlref{frequency catalog}{SEC:FRQCAT}.
-
-\verbatiminput{../examples/manual_vla-cc.set}
-
-\subsection{\label{SSEC:VLAPAR}Parameters Specific to the VLA}
-
-The VLA capabilities in SCHED are for the old VLA system that has
-been shut down.  Stay tuned for instructions related to running
-the EVLA.
-
-This sections gives a brief description of each of the parameters
-available to \schedb that are specifically for VLA observations or
-are especially useful for VLA observations.  More general purpose
-\schedb parameters that are also required for other stations are
-not mentioned.  For details on the parameters, consult
-the detailed descriptions of each parameter.  The first list
-is of parameters in the main schedule input.  The second is of
-setup parameters.
-
-\begin{list}{}{\parsep 0em  \itemsep 0em }
-
-\item \htmlref{{\tt VLATYPE:}}{MP:VLATYPE} Specify the type of observations.
-Should be provided for non-VLBI observations. Valid options are {\tt
-'VLBI'}, {\tt 'CONTINUUM'} or {\tt 'LINE'}.
-
-\item \htmlref{{\tt VLATSYS} and {\tt VLANTSYS}}{MP:VLATSYS} These turn on
-and off the Tsys corrections made to the correlated VLA data. This
-used to be required in order to obtain calibration data for the VLBI
-observations. That is no longer true so most observations can be made
-with the Tsys corrections turned on which is now the default.
-
-\item \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK} controls reference pointing
-on the VLA.  It is a good idea to do reference pointing when
-observing at 7 mm.  See the section on \htmlref{Reference Pointing}
-{SEC:REFPOINT} to see how to get \schedb to insert reference pointing
-scans automatically.
-
-\item \htmlref{{\tt VLAUSERN:}}{MP:VLAUSERN} This gives the VLA user
-number. The default of 600 is reasonable for VLBI but the actual user
-number should be provided for other types of projects.
-
-\item \htmlref{{\tt VLAMODE:}}{MP:VLAMODE} Specify the VLA mode.
-Common options for VLBI are {\tt ' '}, {\tt VA}, {\tt VX}, or {\tt
-VS}. See VLA documentation on the many others that are available
-for non-VLBI observations.
-
-\item \htmlref{{\tt LST:}}{MP:LST} Schedule is assumed to be in LST. {\tt LST}
-specified without a value assumes the VLA. A station name can be given
-as the argument, in which case the {\tt LST} is for that station. When
-{\tt LST} is specified, the {\tt DAY} must be the modified local
-sidereal day number as found on VLA monthly schedules.
-
-\item \htmlref{{\tt DAY:}}{MP:LST} Must be the modified local sidereal
-day number as found on VLA monthly schedules if {\tt LST} is
-specified. In such cases, {\tt YEAR} and {\tt MONTH} are ignored.
-
-\item \htmlref{{\tt IATUTC:}}{MP:IATUTC} Difference between IAT and UTC,
-which is currently about 30 seconds. This is only used for setting the
-zero offset epoch for the ``//PM'' (proper motion) card.
-
-\item \htmlref{{\tt SETUP:}}{MP:SETUP} Specifies the setup file from
-which information for the ``//LO'' and ``//FI'' cards are taken.
-
-\item \htmlref{{\tt FREQ:}}{MP:FREQ} and \htmlref{{\tt DOPPLER}}{MP:DOPPLER}
-Warning --- these parameters cannot be used for non-VLBI observations
-at the VLA since they are only used to adjust the baseband converter
-frequencies.
-
-\item \htmlref{{\tt RECord:} and {\tt NORECord}}{MP:RECORD} These parameters
-find one of their main uses in observations that use the VLA, especially
-the phased array.  It is often useful, for both phasing scans and for
-scans inserted just for calibration of the VLA, to be able to turn the
-VLBI recorders off.  {\tt RECord} and {\tt NORECord} can be used
-to specify which scans should be recorded on the VLBI drives and which
-should not be.
-
-\item \htmlref{{\tt VLAPSRC:}}{MP:VLAPSRC} Phasing source to use
-before a VX mode scan.  This is a convenient way to insert VLA phasing
-scans without having to explicitly include extra scans in a VLBI
-schedule.
-
-\item \htmlref{{\tt VLARFANT:}}{MP:VLARFANT} Reference antenna to use
-for single dish data source or as phasing reference for phased array.
-The default should be good, and, if not, operations is likely to need
-a last minute change, so it is unlikely that users should use this
-parameter.
-
-\item \htmlref{{\tt VLAINTEG:}}{MP:VLAINTEG} This parameter gives the
-correlator integration time.  It would normally be used to give a
-value less than 10 seconds to encourage faster phasing.
-
-\item \htmlref{{\tt PTLINK:}}{MP:PTLINK} The Pie Town link is to be
-used so the VLA on-line system needs to be told about the Pie Town
-first LO through the VLA observe file.
-
-\end{list}
-
-The parameters in the setup file that apply only to the VLA are
-below. They are used to set the band and bandwidths of the VLA and
-for setting up the ``//FI'' and ``//LO''  cards.
-
-The values for all of these parameters, except {\tt FLUKESET, VLAIF,
-and VLAROT,}, which are not normally needed, can be determined by
-\schedb from the \htmlref{frequency catalog}{SSEC:FREQLST}.  Therefore
-most projects do not require VLA specific parameters in the setup
-files.
-
-The setup file parameters are:
-
-\begin{list}{}{\parsep 0em  \itemsep 0em }
-
-\item \htmlref{{\tt FEFILTER:}}{SP:FEFILTER} The front end filters are
-normally 50~MHz wide. If there is strong RFI near the observing
-frequency, as is common at L and P bands, it may be desirable to use
-the 25~MHz or 12.5~MHz front end filters. This parameter is used to
-request the filters to use. It goes on the ``//LO'' card.
-
-\item \htmlref{{\tt FLUKESET:}}{SP:FLUKESET} Which flukeset (1 or 2)
-to be used. Unfortunately there seems to be no good way to predict
-this reliably. Usually Flukeset 1 will be used for phased array and
-normal VLA observations while Flukeset 2 will be used for single
-antenna VLBI, but this is not always true. The VLA operators should be
-alerted that Flukeset specified on the ``//FI'' card might have to be
-changed. If it is not specified, or is set to 0, a blank will be given
-and the VLA operators will set it.
-
-\item \htmlref{{\tt VLABAND:}}{SP:VLABAND} Specify the frequency band.
-Must be one of the defaults without the //LO and //FI cards.  Some
-valid options are {\tt VP, VL, VC, VX, VK, PP, LL, CC, XX, UU, KK,
-HH,} or 18.  For complete information on the standard bands, see
-the following \htmlref{section}{SSEC:VLASTDBD}.
-
-\item \htmlref{{\tt VLABW:}}{SP:VLABW} Specify the back end bandwidth
-for each of the 4 VLA IFs as a 4 digit number in quotes (\schedb
-treats it as a character string), with one digit for each IF. The
-default is {\tt '0000'} for 50~MHz in each IF. The consequent back end
-bandwidth is {\tt 50/(2**n)}~MHz, where {\tt n} is the digit
-specified.
-
-\item \htmlref{{\tt FLUKEA:}}{SP:FLUKEA} A Fluke synthesizer frequency.
-It is usually near 100~MHz. See the document ``VLBI at the VLA'' for
-details on what it should be. See Section~\ref{SEC:LINE} for more
-information on the frequency settings.
-
-\item \htmlref{{\tt FLUKEB:}}{SP:FLUKEA} B Fluke synthesizer frequency.
-Actually this is the value for the ``//FI'' card which is twice the
-actual synthesizer setting.  To get the same frequency on the AC and
-BD IFs, {\tt FLUKEB} should be {\tt FLUKEA} plus 100.0.
-
-\item \htmlref{{\tt VLAFEAB:}}{SP:VLAFEAB} 1st LO for the VLA observations
-for the AB (RCP) IFs. For standard VLBI projects, the value should be
--3.2 for L band, 0 for C band, and 17.5 for K band. Again see VLA
-documentation for details of other alternatives.
-
-\item \htmlref{{\tt VLAFECD:}}{SP:VLAFEAB} Same as {\tt VLAFEAB} but for
-the VLA's C and D (LCP) IFs.
-
-\item \htmlref{{\tt VLASYNA:}}{SP:VLASYNA} 2nd LO for the VLA A and C IFs.
-On the ``//LO card'' this number is rounded to the nearest MHz, but it
-should be given here exactly. It is usually near 3900~MHz. It must be
-a value of {\tt N * 50 +- 10.1}~MHz.
-
-\item \htmlref{{\tt VLASYNB:}}{SP:VLASYNA} Same as {\tt VLASYNA} but for
-the VLA B and D IFs.
-
-\end{list}
-
-\subsection{\label{SSEC:VLASTDBD}VLA Standard Bands.}
-
-All of the below will change with the EVLA, which can reach just about
-any frequency.  The following is basically obsolete.
-
-A total of 19 standard observing bands are defined at the VLA.  All
-projects should specify one of these bands, even when frequencies will
-be modified.  This ensures that various defaults at the VLA get set
-properly.  Just pick one with similar properties.  For VLBI, one of the
-``V'' bands should be chosen.
-
-The tables below describe the bands.
-The first show the band names along with the synthesizer settings.
-The column headings are the SCHED names (not necessarily the traditional
-names in use at the VLA) for these parameters.  The second table gives
-the value that \schedb would want for the VLBI \htmlref{{\tt FIRSTLO}}
-{SP:FIRSTLO} parameter when using the standard setup.  If the
-frequencies are modified, {\tt FIRSTLO} would need to be altered.
-\schedb will insure that {\tt FIRSTLO} agrees with the frequency
-that will be obtained with the settings used.  The other columns
-in the second table show the range of sky frequencies covered by
-the VLA band.  The observing frequencies must lie in these bands.  Note
-that the first frequency is that of the edge converted to DC, and then
-to 600 MHz in the signal sent to the VLBI rack.  The other end of the
-band can be a lower frequency if there is a net lower sideband at this
-point (the BBC's can be used in lower sideband mode to get a final
-net upper sideband).
-
-% Note that this table was created from the vla on-line system's
-% standard bands file using program VLABANDS.  There were some more
-% recent modifications made by hand.
-
-The VLA band {\tt VQ} will be changed a few months into 2001.  The
-table below gives the frequencies for the new version.  The old version
-was 80 MHz higher in frequency and missed the SiO line at 43.122 GHz.
-The current plan is to switch \schedb to the new {\tt VQ} in January
-2001, but have \schedb always write {\tt LO} and {\tt IF} cards in
-the VLA observe file for 43 GHz observing, even when using the standard
-band.  After a few months in which any schedules made with the old
-scheme are flushed through the system, the VLA on-line system will
-be switch to the new standard.  Some months after that, \schedb will
-stop writing the {\tt LO} and {\tt IF} cards for the new standard
-{\tt VQ} band.
-
-\begin{verbatim}
-          VLA STANDARD BANDS - VLA SYNTHESIZER SETTINGS
-VLABAND  VLAFEAB  VLAFECD  VLASYNA   VLASYNB   FLUKEA     FLUKEB  FEFILT
-  CC      0.00      0.00    3860.1    3810.1  100.00000  200.00000  0000
-  UU     19.60     19.60    3610.1    3660.1  100.00000  200.00000  0000
-  KK     17.60     17.60    3860.1    3810.1  100.00000  200.00000  0000
-  LL     -3.20     -3.20    3639.9    3560.1  100.00000  200.00000  0000
-  XX     13.40     13.40    3939.9    3889.9  100.00000  200.00000  0000
-  QQ     51.60     13.00    3689.9    3739.9  100.00000  200.00000  0000
-  PP      0.00      0.00    -689.9    -710.1  115.83750  230.10000  1111
-  44      0.00      0.00    -939.9    -939.9  112.91875  212.91875  0000
-  4P      0.00      0.00    -939.9    -689.9  112.91875  215.83750  1111
-  LP     -3.20      0.00    3639.9    -689.9  100.00000  215.83750  0101
-  18     -3.20     -3.20    3839.9    3810.1  100.00000  200.00000  0000
-  HH     -3.20     -3.20    3589.9    3639.9  115.10000  215.10000  0000
-  VP      0.00      0.00    -689.9    -689.9  112.50000  212.50000  1111
-  VL     -3.20     -3.20    3839.9    3839.9  100.00000  200.00000  0000
-  VC      0.00      0.00    3960.1    3960.1  100.00000  200.00000  0000
-  VX     13.00     13.00    3560.1    3560.1  100.00000  200.00000  0000
-  VU     19.90     19.90    3510.1    3510.1  100.00000  200.00000  0000
-  VK     17.50     17.50    3710.1    3710.1  100.00000  200.00000  0000
-  VQ     51.60     13.00    3510.1    3510.1  100.00000  200.00000  0000
-
-          VLA STANDARD BANDS - VLBI FIRSTLO and VLA BANDPASSES
-VLABAND FIRSTLO A  FIRSTLO D         BANDPASS A           BANDPASS D
-  CC     4260.10     4210.10     4860.10-  4910.10    4810.10-  4860.10
-  UU    15589.90    15539.90    14989.90- 14939.90   14939.90- 14889.90
-  KK    21860.10    21810.10    22460.10- 22510.10   22410.10- 22460.10
-  LL      839.90      760.10     1439.90-  1489.90    1360.10-  1410.10
-  XX     9060.10     9110.10     8460.10-  8410.10    8510.10-  8460.10
-  QQ    42689.90    42739.90    43289.90- 43339.90   43339.90- 43389.90
-  PP  -274.06250     -280.00   325.93750-350.93750     320.00-   345.00
-  44  -526.98125  -526.98125    73.01875-123.01875   73.01875-123.01875
-  4P  -526.98125  -274.06250    73.01875- 98.01875  325.93750-350.93750
-  LP      839.90  -274.06250     1439.90-  1489.90  325.93750-350.93750
-  18     1039.90     1010.10     1639.90-  1689.90    1610.10-  1660.10
-  HH      805.00      855.00     1405.00-  1455.00    1455.00-  1505.00
-  VP     -277.40     -277.40      322.60-   347.60     322.60-   347.60
-  VL     1039.90     1039.90     1639.90-  1689.90    1639.90-  1689.90
-  VC     4360.10     4360.10     4960.10-  5010.10    4960.10-  5010.10
-  VX     9039.90     9039.90     8439.90-  8389.90    8439.90-  8389.90
-  VU    15989.90    15989.90    15389.90- 15339.90   15389.90- 15339.90
-  VK    21610.10    21610.10    22210.10- 22260.10   22210.10- 22260.10
-  VQ    42510.10    42510.10    43110.10- 43160.10   43110.10- 43160.10
- Note that IF A and C are usually at the same frequency as are B and D.
-
-\end{verbatim}
+The old parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} allowed automatic
+insertion of VLA phasing scans in the observe files.  That scheme no 
+longer works.  But an item on the to-do list is to make that parameter
+insert JVLA phasing scans.  That has not yet been done.
 
 
 \section{\label{SEC:INDIV}Special Concerns for Specific Observatories}.
@@ -4385,6 +3974,7 @@ CORRELATOR INFORMATION:
 \htlm{CORSRCS}{~} Origin of source positions for correlator.
 \htlm{CORWTFN}{~} Correlator weighting function.
 \htlm{CORTAPE}{~} Type of media on which to send correlator output to user.
+\htlm{CORDFMT}{~} Format of export data.
 \htln{CORSHIP1}{CORSHIP}{} Shipping address for correlator output.
 \htln{CORSHIP2}{CORSHIP}{}
 \htln{CORSHIP3}{CORSHIP}{}
@@ -4438,6 +4028,7 @@ GENERAL CONTROL PARAMETERS:
 \htlm{CALTIME}{~} Integration time for calibration data.
 \htlm{DODOWN}{~~} Keep down antennas in scans.
 \htlm{IATUTC}{~~} IAT-UTC for planetary motion cards at VLA.
+\htlm{INTENTs}{~} Directives for observing, correlation, and processing.
 \htlm{LINEPG}{~~} Number of lines per page in operator schedules.
 \htlm{LST}{~~~~~} Schedule is in LST for specified station.
 \htlm{NCHAN}{~~~} Number of baseband channels (Obsolete).
@@ -4605,7 +4196,6 @@ OPTIMIZATION (Beware --- experimental features!):
 SPECIAL VLA PARAMETERS:
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
-\htlm{PTLINK}{~~} Set up for the Pie Town link.
 \htls{VLABAND}{~} Obsolete - put in setup file.
 \htls{VLABW}{~~~} Obsolete - put in setup file.
 \htlm{VLAINTEG}{} VLA correlator integration time.
@@ -5013,6 +4603,23 @@ are being recorded.
 Otherwise it defaults to 16.  The second argument defaults 128}
 {Only one pair of values is used --- the last.}
 {{\tt CORCHAN = 32} or {\tt CORCHAN=16,2048}}
+
+
+\subsubsection{\label{MP:CORDFMT}{\tt CORDFMT}}
+
+Data correlated at the VLBA is always archived.  Most has been
+converted to FITS files for use with astronomical processing software.
+Some is now being converted to the types of files produced on the
+Mark4 correlators (Haystack etc).  Those data can be processed through
+the geodetic oriented programs including Fourfit.  To request production
+of a Mark4 file, specify "{\tt CORDFMT = MARK4}".
+
+\rcwbox
+{A character string of up to 8 characters.}
+{Any, should be FITS or MARK4.}
+{Defaults to 'FITS'}
+{Only one value is used --- the last.}
+{{\tt CORDFMT=MARK4} or {\tt CORCHAN=16,2048}}
 
 
 \subsubsection{\label{MP:CORNANT}{\tt CORNANT}}
@@ -6421,6 +6028,8 @@ be used to set the scan lengths.
 
 \subsubsection{\label{MP:IATUTC}{\tt IATUTC}}
 
+Obsolete parameter now that the VLA is no longer using observe decks.
+
 {\tt IATUTC} sets the value of IAT-UTC. This is about 30 seconds now.
 This is only used if ``//PM'' cards are needed for the VLA since the
 zero-offset epoch must then be specified in IAT. \schedb does not
@@ -6434,6 +6043,62 @@ routine is maintained.
 {Value from {\sl SLA\_DAT}, which should be correct.}
 {Only one value accepted, the last.}
 {{\tt IATUTC=29}}
+
+
+\subsubsection{\label{MP:INTENTs}{\tt INTENTs}}
+
+{\tt INTENTs} is used to provide a series of text strings that give
+guidance to various stages of data handling.  They can be directives
+to telescopes to, for example, do active phasing at the VLA or hold
+the previous phase.  They could be used by the correlator.  Or they can
+be used to tell pipeline processing that a scan is to be used for one or
+more specific types of calibration.  For now, the intents are written
+to the VEX file as comments with the scans.
+
+The arguments of {\tt INTENTs} are up to 25 strings of up to 80
+characters each.  Note that each string should be in quotes and they
+should be separated by commas.  If the line ends with a comma, the
+next line can be used for the next string.  If no {\tt INTENTs} are
+given, they default to the previous scan.  If any are given, they all
+return to blank unless given again.
+
+\schedb makes no attempt yet to parse {\tt INTENTs} and treats them all
+identically.
+
+Some established values of {\tt INTENTs} in the JVLA environment are
+listed here.  A VLBI specific list has not been generated.  Of interest
+for the JVLA is {\tt DETERMINE\_AUTOPHASE}.  {\tt APPLY\_AUTOPHASE} may
+also get established.
+
+\begin{list}{}{\parsep 0em  \itemsep 0em }
+\item {\tt OBSERVE\_TARGET}
+\item {\tt CALIBRATE\_BANDPASS}
+\item {\tt CALIBRATE\_FLUX\_DENSITY\_SCALE} 
+\item {\tt CALIBRATE\_COMPLEX\_GAIN}
+\item {\tt CALIBRATE\_POLARIZATION\_ANGLE}
+\item {\tt CALIBRATE\_POLARIZATION\_LEAKAGE}
+\item {\tt CALIBRATE\_ABSOLUTE\_POSITION}
+\item {\tt CALIBRATE\_OFFSET\_POINTING}
+\item {\tt DETERMINE\_AUTOPHASE}
+\item {\tt DETERMINE\_RFI}
+\item {\tt CALIBRATE\_DELAY}
+\item {\tt DETERMINE\_ANTENNA\_GLOBAL\_POINTING\_MODEL}
+\item {\tt MAP\_ANTENNA\_SURFACE}
+\item {\tt CALIBRATE\_FOCUS}
+\item {\tt DETERMINE\_SINGLE\_DISH\_POINTING}
+\item {\tt DETERMINE\_OPACITY\_TIPPING\_STYLE}
+\item {\tt OBSERVE\_PULSAR}
+\item {\tt TIME\_PULSAR}
+\item {\tt OTHER}
+\end{list}
+
+\rcwbox
+{Up to 25 character strings of up to 80 characters each.}
+{Any strings.}
+{Blank}
+{All {\tt INTENTs} keep the last value if none are specified.  If any
+are specified, all are initialized to blank.}
+{intent = 'DETERMINE\_AUTOPHASE', 'CALIBRATE\_BANDPASS'}
 
 
 \subsubsection{\label{MP:LINEINIT}{\tt LINEINIT}}
@@ -8010,21 +7675,6 @@ operations staff.
 {Only one value accepted, the last.}
 {{\tt PTDUR=15}}
 
-\subsubsection{\label{MP:PTLINK}{\tt PTLINK}}
-
-Specifying {\tt PTLINK} tells \schedb that these are observations
-involving the Pie Town link.  \schedb will write {\tt //LO} lines
-in the ...obs.y control file for the VLA and the Pie Town first
-LO frequency will be given on those lines.  Probably other functions
-will be added as this capability comes on-line.
-
-\rcwbox
-{None - }
-{None}
-{Not set.}
-{Only one value accepted, the last.}
-{{\tt PTLINK}}
-
 
 \subsubsection{\label{MP:PTSLEW}{\tt PTSLEW}}
 
@@ -9252,9 +8902,9 @@ parameter)}
 
 \subsubsection{\label{MP:VLAPSRC}{\tt VLAPSRC}}
 
-All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
+This parameter was developed originally for the old VLA system.  It has
+not yet been converted for use with the JVLA.  But that is on the to-do 
+list.
 
 {\tt VLAPSRC} can be used to specify the source to use for phasing the
 VLA. If the scan is mode {\tt VX} and {\tt VLAPSRC} differs from {\tt
@@ -9317,8 +8967,8 @@ parameter.
 \subsubsection{\label{MP:VLATYPE}{\tt VLATYPE}}
 
 All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
+VLA system has been turned off and the EVLA is entirely different.
+For now, the EVLA is being treated more like a normal station.
 
 {\tt VLATYPE} specifies the type of the observation
 for the VLA observe file.
@@ -10919,7 +10569,7 @@ confused about what signal is in each baseband channel.
 \htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
 \htls{DBE}{~~~~~} The personality to use in a digital backend.
 \htls{ELCOLIM}{~} Colimation offset in elevation.
-\htls{EVLA}{~~~~} Allow EVLA frequencies the old VLA could not reach.
+\htls{EVLA}{~~~~} Removed parameter.
 \htls{FE}{~~~~~~} Receivers to be used.
 \htls{FEFILTER}{} VLA front end filter specification for `` //LO'' card.
 \htls{FIRSTLO}{~} Sum of all LOs except the one set if {\tt FREQ} used.
@@ -11428,6 +11078,10 @@ the VLBA pointing.
 {{\tt ELCOLIM=1.2}}
 
 \subsubsection{\label{SP:EVLA}{\tt EVLA}}
+
+The EVLA parameter has been removed.  You can no longer use it without
+causing \schedb to abort.  The EVLA is being treated more like a
+normal station.
 
 The EVLA can reach many frequencies that the VLA cannot.  Such
 frequencies can be specified to the VLA using the same {\tt VLASYNA}
@@ -12857,7 +12511,7 @@ If the parameter \htmlref{{\tt EVLA}}{SP:EVLA} is set, {\tt VLASYNA} and
 {\tt VLASYNB} must still conform to N*50 +- 10.1 MHz, but there is no
 limit on the range.  The EVLA LO system is entirely different, and the
 program that converts the VLA style file to an EVLA file will do the
-necessary conversions.  Also when \htmlref{{\tt EVLA}}{SP:EVLA}, the
+necessary conversions.  Also when EVLA is set, the
 {\tt VLAFEAB} and {\tt VLAFECD} parameters are not checked.
 
 SCHED can determine the value of this parameter from the
@@ -13261,6 +12915,56 @@ more information.
 \subsection{\label{SSEC:VER_10.2}Development Version 10.2}
 
 \begin{itemize}
+
+%  Remove the old VLA parameters from the code and manual.  Too much
+%  work to do before the next beta release.
+
+%  Put in spectral zoom.
+%  Put GST in some sched output file (sch file?)
+
+
+\item Make a beta version June 25, 1012  RCW.
+
+\item Remove PTLINK parameter and example.  Jun 19, 2012. RCW
+
+\item Remove the EVLA parameter.  The EVLA is now being handled more
+like a normal station.  Jun 19, 2012.  RCW.
+
+\item When EXIT requested, shut down normally rather than aborting
+for no scans given.  Jun 16, 2012  RCW.
+
+\item Add all the C band options for the new receiver to freq.dat
+so that we don't have to use freq\_RDBE.dat when scheduling with the
+old system.  {\sl \$SCHED/RELATED\_CODE/MAKEFREQ/makefq\_c.f} can make the
+list.  The choice of new or old systems is hardcoded, but easy to
+change in this program that will likely only get used once. 
+May 6, 2012 RCW.
+
+\item Add CORDFMT to request Mark4 output files from the correlator.
+The default is to request FITS output.  June 4, 2012, RCW.
+
+\item Change the {\sl .v2d} file to the {\sl .tv2d} file.  These files
+are not the final one used for correlation and we had too many cases
+where a rerun of SCHED would clobber the hand modified version.  So
+now, the file should be renamed before hand editing.  May 31, 2012.  RCW.
+
+\item Add a warning if the LO for one channel is going to be in the
+IF for another.  The scheme used does not recognize possible odd cases
+if we ever get receivers with multiple first LOs in the receivers,
+but will work for the main current case of the wide C band receivers 
+or for the wide RCP option at X band.  May 22, 2012  RCW.
+
+\item Make it possible to schedule the JVLA for VLBI.  Much old VLA
+code was removed or bypassed.  It is now expected that the VLA will be
+scheduled by way of the VEX file.  May 16, 2012. RCW
+
+\item Add INTENTs to sched input and to VEX output.  SCHED treats these
+as character strings and does not attempt to parse them, at least not 
+yet.  They can be used to tell observing, correlation, and post processing
+systems of the intended use of the scans.  May 07, 2012.  RCW
+
+\item Fix Vex Freq naming convention to allow for 3 digit bandwidth for
+the RDBE/DDC 128 MHz option.  May 7, 2012.
 
 \item Make a beta release May 4, 2012 RCW.
 
@@ -16840,6 +16544,449 @@ This chapter is a repository of documention of SCHED's capabilities
 for systems that are no longer in use.  It will not normally be of
 interest for current users.  Much of what is here is details of
 handling tape.
+
+\section{\label{SEC:OLDVLA}Old VLA}
+
+\subsection{\label{SSEC:VLAVLBIOLD}VLBI at the VLA - old system}
+
+Note that many of the details of what is below applies to the old VLA
+system which is no longer in use.  
+
+For much detailed information on VLBI at the VLA, follow the links to
+the \htmladdnormallink{VLBI at the VLA guide}
+{http://www.vla.nrao.edu/astro/guides/vlbivla/current/}.
+
+There are two very different modes in which VLBI can be done at the
+VLA.  These are single dish and phased array observations.  For single
+dish VLBI observations, the IF signals from one antenna of the array
+are sent to the VLBI recording equipment (VLBA DAR and recorder).
+Other than having to worry about the VLA's rather complicated LO
+system, such observations are very similar to observations at other
+VLBI observatories.  The phased array observations, on the other hand,
+have some very special needs.  For such observations, the signals from
+all VLA antennas are summed in the VLA correlator and the summed
+signal is sent to the VLBI equipment.  This gives a sensitivity for
+the ``antenna'' that is increased by about the number of phased
+antennas, {\em if} the array is phased properly.  Array phasing is
+accomplished by the on-line control system.  Output phases from the
+correlator are used to derive adjustments to the phase of the LO at
+each antenna that, when applied, will cause the next correlator phases
+to go toward zero.  The system can phase up on a calibrator and then
+freeze the phases on a target source when the target source is either
+too weak, resolved, or confused for successful phasing.
+
+The type of VLA observation is distinguished by the \htmlref {{\tt
+VLAMODE}}{MP:VLAMODE}.  {\tt VLAMODE = VS} indicates single dish
+observing.  {\tt VLAMODE = VX} indicates phased array observing, but
+using the phases from a previous phasing scan.  {\tt VLAMODE = VA}
+indicates phased array observing with phasing on the VLA {\tt A} and
+{\tt D} IFs and is the usual active phasing mode.  {\tt VLAMODE = VB}
+is similar, but with phasing on the VLA {\tt B} and {\tt C} IFs.  {\tt
+VLAMODE = VR} or {\tt VL} indicates phased array observing using,
+respectively, the VLA {\tt A} and {\tt B} or {\tt C} and {\tt D} IFs.
+As might be deduced by this, because of hardware limitations, the VLA
+can only phase one of the {\tt A} and {\tt C} IFs and one of the {\tt
+B} and {\tt D} IFs.  The {\tt VLAMODE} can be changed on a
+scan-by-scan basis.  See the description of the setup parameter
+\htmlref{{\tt IFCHAN}}{SP:IFCHAN} for more information on routing VLA
+IFs to VLB IFs.  {\tt VS} mode (single dish) can be mixed with the
+phased array modes, but the number of changes back and forth should be
+limited.  Normally this would only be done when atmospheric
+calibration, geodetic-like (DELZN) sections are included in a phase
+referencing project.
+
+The reference antenna can be controlled with parameter \htmlref{{\tt
+VLARFANT}}{MP:VLARFANT}.  That will be the antenna from which data are
+recorded in single dish mode and the reference antenna (whose phases
+are not changed) for the phased array modes.  Normally users should not
+worry about setting {\tt VLARFANT} because the default is usually
+good, and if not, you will not know in time and the change needs to be
+made by operations.
+
+For successful phasing of the array, a source must be greater than
+about 0.1 Jy (see the guide referenced above for details) and have a
+position that is good to a fraction of the VLA synthesized beam
+(enhanced sensitivity is only obtained over this area).  It must have
+small structure phases and not have other sources in the primary beam
+that might confuse the phasing algorithm.  The position accuracy is
+especially important if a calibrator is being used to phase the array
+for observations of another source.  Adding phasing sources is tricky,
+because it is desirable to spend a minimum amount of time on them, but
+if they are missed, the rest of the data will be bad.  It is possible
+to try to influence the speed of phasing by using \htmlref{{\tt VLAINTEG}}
+{MP:VLAINTEG} to adjust the correlator integration time.  The default
+is 10 seconds.  Use of a shorter time may speed phasing but is done at
+the expense of added noise.
+
+There are two ways to deal with VLBI observations that require
+phasing on a source different from the target source.  The best
+is probably to simply schedule VLBI scans, with the proper \htmlref
+{{\tt VLAMODE}}{MP:VLAMODE}, on the phasing source.  These observations
+can then also be used to assist the VLBI calibration, assuming an
+appropriate calibrator has been chosen.  The other scheme is to
+insert calibration scans into the VLA's schedule file (the OBSERVE
+file), but not the VLBI control file, for the phasing operation.
+\schedb provides some tools to simplify this operation.  It can
+also be done using the {\sc VLA OBSERVE} program.  This is done
+by the VLA analysts for some programs.
+
+For VLBI observations at the VLA, both an OBSERVE file and a VLBA
+style control file are needed and can be created by \sched.  All of
+the controls provided for managing recordings for the VLBA also work
+for the VLA.  \schedb also has special capabilities for scheduling VLA
+observations as described below.
+
+For observations that require phasing on a calibrator, the array must
+be phased in auto-phasing (\htmlref{{\tt VLAMODE = VA}}{MP:VLAMODE})
+mode prior to VLBI observations of the target source in
+extended-phasing (\htmlref{{\tt VLAMODE = VX}}{MP:VLAMODE}) mode.
+These calibrator observations constitute additional scans that must be
+in the VLA observe file, but that no other VLBI observatory or the
+recorder control file for the VLA needs to know about. (Note that
+Westerbork needs something of the sort, but they have never requested
+special information in \schedb output files).
+
+If it is desired to add phasing scans on a calibrator on which VLBI
+data will not be recorded and that will not be observed at the other
+VLBI observatories, the parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC}
+can be used.  If a \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} is given,
+\schedb will automatically insert phasing observations in the VLA
+OBSERVE file at appropriate times.  Note that \htmlref{{\tt
+VLAPSRC}}{MP:VLAPSRC} must be a source in the same catalogs that are
+searched for \htmlref{{\tt SOURCE}}{MP:SOURCE} and \htmlref{{\tt
+DOPSRC}}{MP:DOPSRC}. \schedb will add a phasing scan to the observe
+file which will end either 1 minute before the main VLBI scan starts,
+or 3 minutes after the previous VLBI scan ends, whichever is later.
+If the latter option is used, \schedb complains if less than 2 minutes
+of the VLBI scan remains.  Also with the latter option, the VLBA-style
+control file will still start the recorder when the main VLBI scan
+was supposed to start. This keeps recording at the VLA and other
+sites synchronized, although it can lead to the need to flag data that
+won't have VLBI fringes. \schedb will not add a phasing scan if the
+VLBI scan is in \htmlref{{\tt VLAMODE=VA}}{MP:VLAMODE} or if
+\htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} is the same as \htmlref{{\tt
+SOURCE}}{MP:SOURCE}. This avoids the need to keep respecifying
+\htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} whenever a VLBI calibrator is
+observed in mode {\tt VA} and prevents the addition of unnecessary
+extra scans when the VLBI schedule calls for observations of the
+phasing source.
+
+It is highly recommended that the NRAO {\sc OBSERVE} program be used
+to check the VLA observe file for slew and dwell times on the phasing
+sources. The scan stop times may have to be adjusted with {\sc
+OBSERVE} to obtain an adequate amount of on-source time for phasing.
+It is especially critical to be careful about slew times for sources
+near the zenith where long azimuth slews may be needed to go a short
+distance on the sky.  \schedb only recently acquired to ability to
+calculate slew times and this has not yet been extended to the VLA
+phasing scans.  This is an area of future construction.
+
+\schedb is also able to deal with reference pointing using the
+\htmlref{{\tt PEAK}}{MP:PEAK} command.  Refer to the description
+of {\tt PEAK} for details.  The \htmlref{VLA-only example}{SSEC:VLAONLY}
+below uses this capability.
+
+\subsubsection{\label{SSSEC:VLBIEG}An Example}
+
+Below is an example of a file for a VLBI observation that uses the
+phased VLA.  For phasing, a source is used that can also be used as a
+VLBI phase or fringe fitting reference.  All antennas are sent to the
+reference and VLBI data is taken on it.  This is now the prefered
+style for phasing.  Of course the \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC}
+parameter could also have been used if non-recording scans with only
+the VLA on the calibrator had been desired.
+
+Note that the \htmlref{main example} {SSEC:EXAMPLE1} in the
+\htmlref{Examples}{SEC:EXAMPLES} section has a single VLA antenna
+in it and serves as an example of that type of observing.
+
+\verbatiminput{../examples/vla_vlbi.key}
+
+\subsection{\label{SSEC:VLAONLY}VLA-Only Project Example}
+
+\schedb cannot be used for scheduling the EVLA (yet anyway) and the
+old VLA system has been turned off.  So the following section is not
+of much use now.  Once VLBI at the EVLA has been established, the
+capabilities to schedule EVLA runs with \schedb will be revisited.
+
+This second VLA example demonstrates the use of \schedb to schedule a
+pure VLA project.  The \schedb input for VLA observations is very much
+like that for VLBI observations.  There are some parameters provided,
+and listed below, to control some of the input information for which
+the VLBI defaults may not be appropriate.  The example is a modified
+version of an actual schedule used to make the VLA observations
+described.  The modifications were required by changes in the way in
+which \schedb handles setup files and the parameters \htmlref{{\tt
+VLABAND}}{SP:VLABAND}, \htmlref{{\tt VLABW}}{SP:VLABW}, \htmlref{{\tt
+PEAK}}{MP:PEAK}, \htmlref{{\tt VLAMODE}}{MP:VLAMODE} (for pointing
+scans), and \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.  Some of these
+parameters are now read from the setup files, not the main schedule
+input.
+
+\verbatiminput{../examples/manual_vla.key}
+
+The above file used several setup files since it was sampling all
+bands used at the VLA.  Two are shown below.  All of the others are
+like the first --- very simple because they use the standard mode.
+The second specifies the LO settings for the Q (7mm) band observations
+so it is rather more complicated.  Note that, for many frequency settings,
+\schedb can obtain the required information from entries in the
+\htmlref{frequency catalog}{SEC:FRQCAT}.
+
+\verbatiminput{../examples/manual_vla-cc.set}
+
+\subsection{\label{SSEC:VLAPAR}Parameters Specific to the VLA}
+
+The VLA capabilities in SCHED are for the old VLA system that has
+been shut down.  Stay tuned for instructions related to running
+the EVLA (JVLA).
+
+This section gives a brief description of each of the parameters
+available to \schedb that are specifically for VLA observations or
+are especially useful for VLA observations.  More general purpose
+\schedb parameters that are also required for other stations are
+not mentioned.  For details on the parameters, consult
+the detailed descriptions of each parameter.  The first list
+is of parameters in the main schedule input.  The second is of
+setup parameters.
+
+\begin{list}{}{\parsep 0em  \itemsep 0em }
+
+\item \htmlref{{\tt VLATYPE:}}{MP:VLATYPE} Specify the type of observations.
+Should be provided for non-VLBI observations. Valid options are {\tt
+'VLBI'}, {\tt 'CONTINUUM'} or {\tt 'LINE'}.
+
+\item \htmlref{{\tt VLATSYS} and {\tt VLANTSYS}}{MP:VLATSYS} These turn on
+and off the Tsys corrections made to the correlated VLA data. This
+used to be required in order to obtain calibration data for the VLBI
+observations. That is no longer true so most observations can be made
+with the Tsys corrections turned on which is now the default.
+
+\item \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK} controls reference pointing
+on the VLA.  It is a good idea to do reference pointing when
+observing at 7 mm.  See the section on \htmlref{Reference Pointing}
+{SEC:REFPOINT} to see how to get \schedb to insert reference pointing
+scans automatically.
+
+\item \htmlref{{\tt VLAUSERN:}}{MP:VLAUSERN} This gives the VLA user
+number. The default of 600 is reasonable for VLBI but the actual user
+number should be provided for other types of projects.
+
+\item \htmlref{{\tt VLAMODE:}}{MP:VLAMODE} Specify the VLA mode.
+Common options for VLBI are {\tt ' '}, {\tt VA}, {\tt VX}, or {\tt
+VS}. See VLA documentation on the many others that are available
+for non-VLBI observations.
+
+\item \htmlref{{\tt LST:}}{MP:LST} Schedule is assumed to be in LST. {\tt LST}
+specified without a value assumes the VLA. A station name can be given
+as the argument, in which case the {\tt LST} is for that station. When
+{\tt LST} is specified, the {\tt DAY} must be the modified local
+sidereal day number as found on VLA monthly schedules.
+
+\item \htmlref{{\tt DAY:}}{MP:LST} Must be the modified local sidereal
+day number as found on VLA monthly schedules if {\tt LST} is
+specified. In such cases, {\tt YEAR} and {\tt MONTH} are ignored.
+
+\item \htmlref{{\tt IATUTC:}}{MP:IATUTC} Difference between IAT and UTC,
+which is currently about 30 seconds. This is only used for setting the
+zero offset epoch for the ``//PM'' (proper motion) card.
+
+\item \htmlref{{\tt SETUP:}}{MP:SETUP} Specifies the setup file from
+which information for the ``//LO'' and ``//FI'' cards are taken.
+
+\item \htmlref{{\tt FREQ:}}{MP:FREQ} and \htmlref{{\tt DOPPLER}}{MP:DOPPLER}
+Warning --- these parameters cannot be used for non-VLBI observations
+at the VLA since they are only used to adjust the baseband converter
+frequencies.
+
+\item \htmlref{{\tt RECord:} and {\tt NORECord}}{MP:RECORD} These parameters
+find one of their main uses in observations that use the VLA, especially
+the phased array.  It is often useful, for both phasing scans and for
+scans inserted just for calibration of the VLA, to be able to turn the
+VLBI recorders off.  {\tt RECord} and {\tt NORECord} can be used
+to specify which scans should be recorded on the VLBI drives and which
+should not be.
+
+\item \htmlref{{\tt VLAPSRC:}}{MP:VLAPSRC} Phasing source to use
+before a VX mode scan.  This is a convenient way to insert VLA phasing
+scans without having to explicitly include extra scans in a VLBI
+schedule.
+
+\item \htmlref{{\tt VLARFANT:}}{MP:VLARFANT} Reference antenna to use
+for single dish data source or as phasing reference for phased array.
+The default should be good, and, if not, operations is likely to need
+a last minute change, so it is unlikely that users should use this
+parameter.
+
+\item \htmlref{{\tt VLAINTEG:}}{MP:VLAINTEG} This parameter gives the
+correlator integration time.  It would normally be used to give a
+value less than 10 seconds to encourage faster phasing.
+
+
+\end{list}
+
+The parameters in the setup file that apply only to the VLA are
+below. They are used to set the band and bandwidths of the VLA and
+for setting up the ``//FI'' and ``//LO''  cards.
+
+The values for all of these parameters, except {\tt FLUKESET, VLAIF,
+and VLAROT,}, which are not normally needed, can be determined by
+\schedb from the \htmlref{frequency catalog}{SSEC:FREQLST}.  Therefore
+most projects do not require VLA specific parameters in the setup
+files.
+
+The setup file parameters are:
+
+\begin{list}{}{\parsep 0em  \itemsep 0em }
+
+\item \htmlref{{\tt FEFILTER:}}{SP:FEFILTER} The front end filters are
+normally 50~MHz wide. If there is strong RFI near the observing
+frequency, as is common at L and P bands, it may be desirable to use
+the 25~MHz or 12.5~MHz front end filters. This parameter is used to
+request the filters to use. It goes on the ``//LO'' card.
+
+\item \htmlref{{\tt FLUKESET:}}{SP:FLUKESET} Which flukeset (1 or 2)
+to be used. Unfortunately there seems to be no good way to predict
+this reliably. Usually Flukeset 1 will be used for phased array and
+normal VLA observations while Flukeset 2 will be used for single
+antenna VLBI, but this is not always true. The VLA operators should be
+alerted that Flukeset specified on the ``//FI'' card might have to be
+changed. If it is not specified, or is set to 0, a blank will be given
+and the VLA operators will set it.
+
+\item \htmlref{{\tt VLABAND:}}{SP:VLABAND} Specify the frequency band.
+Must be one of the defaults without the //LO and //FI cards.  Some
+valid options are {\tt VP, VL, VC, VX, VK, PP, LL, CC, XX, UU, KK,
+HH,} or 18.  For complete information on the standard bands, see
+the following \htmlref{section}{SSEC:VLASTDBD}.
+
+\item \htmlref{{\tt VLABW:}}{SP:VLABW} Specify the back end bandwidth
+for each of the 4 VLA IFs as a 4 digit number in quotes (\schedb
+treats it as a character string), with one digit for each IF. The
+default is {\tt '0000'} for 50~MHz in each IF. The consequent back end
+bandwidth is {\tt 50/(2**n)}~MHz, where {\tt n} is the digit
+specified.
+
+\item \htmlref{{\tt FLUKEA:}}{SP:FLUKEA} A Fluke synthesizer frequency.
+It is usually near 100~MHz. See the document ``VLBI at the VLA'' for
+details on what it should be. See Section~\ref{SEC:LINE} for more
+information on the frequency settings.
+
+\item \htmlref{{\tt FLUKEB:}}{SP:FLUKEA} B Fluke synthesizer frequency.
+Actually this is the value for the ``//FI'' card which is twice the
+actual synthesizer setting.  To get the same frequency on the AC and
+BD IFs, {\tt FLUKEB} should be {\tt FLUKEA} plus 100.0.
+
+\item \htmlref{{\tt VLAFEAB:}}{SP:VLAFEAB} 1st LO for the VLA observations
+for the AB (RCP) IFs. For standard VLBI projects, the value should be
+-3.2 for L band, 0 for C band, and 17.5 for K band. Again see VLA
+documentation for details of other alternatives.
+
+\item \htmlref{{\tt VLAFECD:}}{SP:VLAFEAB} Same as {\tt VLAFEAB} but for
+the VLA's C and D (LCP) IFs.
+
+\item \htmlref{{\tt VLASYNA:}}{SP:VLASYNA} 2nd LO for the VLA A and C IFs.
+On the ``//LO card'' this number is rounded to the nearest MHz, but it
+should be given here exactly. It is usually near 3900~MHz. It must be
+a value of {\tt N * 50 +- 10.1}~MHz.
+
+\item \htmlref{{\tt VLASYNB:}}{SP:VLASYNA} Same as {\tt VLASYNA} but for
+the VLA B and D IFs.
+
+\end{list}
+
+\subsection{\label{SSEC:VLASTDBD}VLA Standard Bands.}
+
+All of the below will change with the EVLA, which can reach just about
+any frequency.  The following is basically obsolete.
+
+A total of 19 standard observing bands are defined at the VLA.  All
+projects should specify one of these bands, even when frequencies will
+be modified.  This ensures that various defaults at the VLA get set
+properly.  Just pick one with similar properties.  For VLBI, one of the
+``V'' bands should be chosen.
+
+The tables below describe the bands.
+The first show the band names along with the synthesizer settings.
+The column headings are the SCHED names (not necessarily the traditional
+names in use at the VLA) for these parameters.  The second table gives
+the value that \schedb would want for the VLBI \htmlref{{\tt FIRSTLO}}
+{SP:FIRSTLO} parameter when using the standard setup.  If the
+frequencies are modified, {\tt FIRSTLO} would need to be altered.
+\schedb will insure that {\tt FIRSTLO} agrees with the frequency
+that will be obtained with the settings used.  The other columns
+in the second table show the range of sky frequencies covered by
+the VLA band.  The observing frequencies must lie in these bands.  Note
+that the first frequency is that of the edge converted to DC, and then
+to 600 MHz in the signal sent to the VLBI rack.  The other end of the
+band can be a lower frequency if there is a net lower sideband at this
+point (the BBC's can be used in lower sideband mode to get a final
+net upper sideband).
+
+% Note that this table was created from the vla on-line system's
+% standard bands file using program VLABANDS.  There were some more
+% recent modifications made by hand.
+
+The VLA band {\tt VQ} will be changed a few months into 2001.  The
+table below gives the frequencies for the new version.  The old version
+was 80 MHz higher in frequency and missed the SiO line at 43.122 GHz.
+The current plan is to switch \schedb to the new {\tt VQ} in January
+2001, but have \schedb always write {\tt LO} and {\tt IF} cards in
+the VLA observe file for 43 GHz observing, even when using the standard
+band.  After a few months in which any schedules made with the old
+scheme are flushed through the system, the VLA on-line system will
+be switch to the new standard.  Some months after that, \schedb will
+stop writing the {\tt LO} and {\tt IF} cards for the new standard
+{\tt VQ} band.
+
+\begin{verbatim}
+          VLA STANDARD BANDS - VLA SYNTHESIZER SETTINGS
+VLABAND  VLAFEAB  VLAFECD  VLASYNA   VLASYNB   FLUKEA     FLUKEB  FEFILT
+  CC      0.00      0.00    3860.1    3810.1  100.00000  200.00000  0000
+  UU     19.60     19.60    3610.1    3660.1  100.00000  200.00000  0000
+  KK     17.60     17.60    3860.1    3810.1  100.00000  200.00000  0000
+  LL     -3.20     -3.20    3639.9    3560.1  100.00000  200.00000  0000
+  XX     13.40     13.40    3939.9    3889.9  100.00000  200.00000  0000
+  QQ     51.60     13.00    3689.9    3739.9  100.00000  200.00000  0000
+  PP      0.00      0.00    -689.9    -710.1  115.83750  230.10000  1111
+  44      0.00      0.00    -939.9    -939.9  112.91875  212.91875  0000
+  4P      0.00      0.00    -939.9    -689.9  112.91875  215.83750  1111
+  LP     -3.20      0.00    3639.9    -689.9  100.00000  215.83750  0101
+  18     -3.20     -3.20    3839.9    3810.1  100.00000  200.00000  0000
+  HH     -3.20     -3.20    3589.9    3639.9  115.10000  215.10000  0000
+  VP      0.00      0.00    -689.9    -689.9  112.50000  212.50000  1111
+  VL     -3.20     -3.20    3839.9    3839.9  100.00000  200.00000  0000
+  VC      0.00      0.00    3960.1    3960.1  100.00000  200.00000  0000
+  VX     13.00     13.00    3560.1    3560.1  100.00000  200.00000  0000
+  VU     19.90     19.90    3510.1    3510.1  100.00000  200.00000  0000
+  VK     17.50     17.50    3710.1    3710.1  100.00000  200.00000  0000
+  VQ     51.60     13.00    3510.1    3510.1  100.00000  200.00000  0000
+
+          VLA STANDARD BANDS - VLBI FIRSTLO and VLA BANDPASSES
+VLABAND FIRSTLO A  FIRSTLO D         BANDPASS A           BANDPASS D
+  CC     4260.10     4210.10     4860.10-  4910.10    4810.10-  4860.10
+  UU    15589.90    15539.90    14989.90- 14939.90   14939.90- 14889.90
+  KK    21860.10    21810.10    22460.10- 22510.10   22410.10- 22460.10
+  LL      839.90      760.10     1439.90-  1489.90    1360.10-  1410.10
+  XX     9060.10     9110.10     8460.10-  8410.10    8510.10-  8460.10
+  QQ    42689.90    42739.90    43289.90- 43339.90   43339.90- 43389.90
+  PP  -274.06250     -280.00   325.93750-350.93750     320.00-   345.00
+  44  -526.98125  -526.98125    73.01875-123.01875   73.01875-123.01875
+  4P  -526.98125  -274.06250    73.01875- 98.01875  325.93750-350.93750
+  LP      839.90  -274.06250     1439.90-  1489.90  325.93750-350.93750
+  18     1039.90     1010.10     1639.90-  1689.90    1610.10-  1660.10
+  HH      805.00      855.00     1405.00-  1455.00    1455.00-  1505.00
+  VP     -277.40     -277.40      322.60-   347.60     322.60-   347.60
+  VL     1039.90     1039.90     1639.90-  1689.90    1639.90-  1689.90
+  VC     4360.10     4360.10     4960.10-  5010.10    4960.10-  5010.10
+  VX     9039.90     9039.90     8439.90-  8389.90    8439.90-  8389.90
+  VU    15989.90    15989.90    15389.90- 15339.90   15389.90- 15339.90
+  VK    21610.10    21610.10    22210.10- 22260.10   22210.10- 22260.10
+  VQ    42510.10    42510.10    43110.10- 43160.10   43110.10- 43160.10
+ Note that IF A and C are usually at the same frequency as are B and D.
+
+\end{verbatim}
+
 
 \section{\label{SSEC:TAPEMANAGEMENT}Tape Management}
 

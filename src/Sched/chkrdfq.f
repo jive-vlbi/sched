@@ -13,7 +13,7 @@ C
 C
       INTEGER           KS, ICH, ISIDEBD, nwarn, N40WARN, N528WARN
       INTEGER           NFWARN, IPF, I, NPBW
-      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, MAXOVER
+      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
       LOGICAL           ERRS, DEQUAL, PBWARN
       DATA              nwarn / 0 /
@@ -299,7 +299,7 @@ C
                   ELSE IF( PBWARN .AND. NPBW .EQ. 11 ) THEN
                      CALL WLOG( 1, ' ' )
                      CALL WLOG( 1, 
-      1                'CHKRDFQ:  More crossover warnings suppressed.' )
+     1                'CHKRDFQ:  More crossover warnings suppressed.' )
                      CALL WLOG( 1, ' ' )
                   END IF
                END IF

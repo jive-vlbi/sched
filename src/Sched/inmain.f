@@ -11,7 +11,7 @@ C
 C
       DOUBLE PRECISION  KD(*), BLANK
       CHARACTER         KC(*)*(*), FILENAME*80
-      INTEGER           KI(*)
+      INTEGER           KI(*), I
 C ----------------------------------------------------------------
 C
 C     Scan data.  These parameter have a separate entry for each scan.
@@ -50,6 +50,9 @@ C
       CALL KEYADD( 'DOPINCR', 0.0D0, 2, KD, KC, KI )
       CALL KEYCHR( 'PCAL', ' ', 4, KD, KC, KI )
       CALL KEYCHR( 'PREEMPT', '--', 2, KD, KC, KI )
+      DO I = 1, MSCINT
+         CALL KEYCHR( 'INTENTs', ' ', 80, KD, KC, KI )
+      END DO
 C
 C     Tape control and eVLBI datapath control.
 C     TAPE, REWIND, FASTFOR, and REVERSE can have separate 
@@ -98,7 +101,6 @@ C
       CALL KEYCHR( 'SCANTAG', ' ', 4, KD, KC, KI )
       CALL KEYADD( 'FREQLIST', UNSET, 2, KD, KC, KI )
       CALL KEYADD( 'PRECDATE', 1979.9D0, 1, KD, KC, KI )
-      CALL KEYADD( 'PTLINK', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'POINT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'PUBPLOT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'VEXTEST', UNSET, 1, KD, KC, KI )
@@ -159,6 +161,7 @@ C
       CALL KEYCHR( 'CORSRCS', 'Not specified.', 64, KD, KC, KI )
       CALL KEYCHR( 'CORWTFN', 'UNIFORM', 16, KD, KC, KI )
       CALL KEYCHR( 'CORTAPE', ' ', 16, KD, KC, KI )
+      CALL KEYCHR( 'CORDFMT', 'FITS', 8, KD, KC, KI )
       CALL KEYCHR( 'CORSHIP1', ' ', 64, KD, KC, KI )
       CALL KEYCHR( 'CORSHIP2', ' ', 64, KD, KC, KI )
       CALL KEYCHR( 'CORSHIP3', ' ', 64, KD, KC, KI )

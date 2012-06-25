@@ -37,8 +37,6 @@ C
       LOGICAL          RFCLOSE
       LOGICAL          FCSTA, FCIFCH, FCFLO1, FCPOL, FCCH1
       LOGICAL          FCFE, FC50, FCVLAIF
-      LOGICAL          MFLKA, MFLKB, MFEAB, MFECD, MSYNA, MSYNB
-      LOGICAL          MFEF, MVBND, MVBW
       CHARACTER        CHFLAGS*12
 C ---------------------------------------------------------------------
 C     Initialize MATCH for the return in case a top level item 
@@ -349,49 +347,7 @@ C
 C
       END IF
 C
-C     Check the VLA parameters.  Note that many unset parameters
-C     will be set in VLASETF.  Note that MATCH in the IF statement  
-C     insures that the MATCH = statement is equivalent to 
-C     MATCH = MATCH .AND. ...
 C
-      IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' .AND. MATCH ) THEN
-         MFLKA = FLUKEA(KS) .EQ. 0.D0 .OR. FLUKEA(KS) .EQ. FVFLKA(KF)
-         MFLKB = FLUKEB(KS) .EQ. 0.D0 .OR. FLUKEB(KS) .EQ. FVFLKB(KF)
-         MFEAB = VLAFEAB(KS) .EQ. 0.D0 .OR. VLAFEAB(KS) .EQ. FVFEAB(KF)
-         MFECD = VLAFECD(KS) .EQ. 0.D0 .OR. VLAFECD(KS) .EQ. FVFECD(KF)
-         MSYNA = VLASYNA(KS) .EQ. 0.D0 .OR. VLASYNA(KS) .EQ. FVSYNA(KF)
-         MSYNB = VLASYNB(KS) .EQ. 0.D0 .OR. VLASYNB(KS) .EQ. FVSYNB(KF)
-         MFEF  = FEFILTER(KS).EQ.'ZZZZ' .OR. FEFILTER(KS).EQ.FVFILT(KF)
-         MVBND = VLABAND(KS) .EQ. 'ZZ' .OR. VLABAND(KS) .EQ. FVBAND(KF)
-         MVBW  = VLABW(KS) .EQ. 'ZZZZ' .OR. VLABW(KS) .EQ. FVBW(KF)
-C
-         MATCH =  MFLKA .AND. MFLKB .AND. MFEAB .AND. MFECD .AND. 
-     1            MSYNA .AND. MSYNB .AND. MFEF .AND. MVBND .AND. MVBW
-C
-         IF( PRTMISS .OR. SDEBUG ) THEN
-            IF( MATCH ) THEN
-               CALL WLOG( 0, 'FCOMPARE: VLA stuff matches.' )
-            ELSE
-               CALL WLOG( 0,'FCOMPARE: The problem is with the match '
-     1             // 'of VLA parameters (F indicates mismatch):' )
-               CALL WLOG( 0, '     FLUKEA   FLUKEB  VLAFEAB  VLAFECD  '
-     1            // 'VLASYNA  VLASYNB FEFILTER  VLABAND    VLABW' )
-               SETMSG = ' '
-               WRITE( SETMSG, '( 9( 8X, L1 ) )' ) 
-     1             MFLKA, MFLKB, MFEAB, MFECD, MSYNA, MSYNB,
-     2             MFEF, MVBND, MVBW
-C
-C              For ptlink.key, this bit of code is reached and it sees
-C              the difference between XX and VX VLAMODE.  In older 
-C              versions, it didn't get here because some IFs didn't
-C              match.  Now that is allowed and MATCH is still true,
-C              so it gets here.  This comment can probably be deleted 
-C              once the new programming is done.
-C
-               CALL WLOG( 0, SETMSG )
-            END IF
-         END IF
-      END IF
       IF( SDEBUG ) THEN
          IF( MATCH ) THEN
             CALL WLOG( 0, 'FCOMPARE: Got overall match.' )

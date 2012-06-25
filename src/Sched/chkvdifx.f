@@ -32,7 +32,8 @@ C
             IF( FORMAT(KS)(1:4) .NE. 'VLBA' .AND.
      1          FORMAT(KS)(1:6) .NE. 'MARK5B' .AND. 
      2          FORMAT(KS)(1:4) .NE. 'MKIV' .AND.
-     3          FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
+     3          FORMAT(KS)(1:4) .NE. 'VDIF' .AND.
+     4          FORMAT(KS)(1:4) .NE. 'NONE' ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, A )' ) 
      1            'CHKVDIFX:  Socorro DIFX correlator does not ',

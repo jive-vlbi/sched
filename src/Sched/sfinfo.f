@@ -75,6 +75,7 @@ C
                DO ICHN = 1, NCHAN(KS)
                   SFFREQ(ICHN,ISETF) = FREQREF(ICHN,KS) -
      1                                 CORINV(ICHN,KS)
+                  SFFILT(ICHN,ISETF) = BBFILT(ICHN,KS)
                   SFPOL(ICHN,ISETF) = POL(ICHN,KS)
                   IF( CORINV(ICHN,KS) .NE. 0.D0 ) THEN
                      IF( NETSIDE(ICHN,KS) .EQ. 'L' ) THEN
@@ -96,10 +97,10 @@ C        block a number of tests and features later.
 C
 C        The following pointers are associated with each setup group.
 C        SFCHAN.  For each channel in this setup group, this points to
-C        the logical channel of the setup file.
+C           the logical channel of the setup file.
 C        SGCHAN.  For this setup group, this points to the channel
-C        in the setup group associated with indexed setup file logical
-C        channel.
+C           in the setup group associated with indexed setup file logical
+C           channel.
 C
 C        Again, deal with correlator inversions flagged by CORINV.
 C        Assume that NETSIDE and SFSIDE will be either 'L' or 'U' 
@@ -119,9 +120,16 @@ C
 C
             DO ICHN = 1, NCHAN(KS)
                DO KCHN = 1, MSCHN(ISETF)
+C
+C                 Match center frequency, bandwidth, and polarization.
+C
                   IF( ABS( FREQREF(ICHN,KS) - CORINV(ICHN,KS) - 
-     1              SFFREQ(KCHN,ISETF) ) .LT. 0.05D0 * BBFILT(ICHN,KS) 
-     2                .AND. POL(ICHN,KS) .EQ. SFPOL(KCHN,ISETF) ) THEN
+     1               SFFREQ(KCHN,ISETF) ) .LT. 0.05D0 * BBFILT(ICHN,KS) 
+     2               .AND. SFFILT(ICHN,ISETF) .EQ. BBFILT(ICHN,KS)
+     3               .AND. POL(ICHN,KS) .EQ. SFPOL(KCHN,ISETF) ) THEN
+C
+C                    Match sideband, allowing for correlator inversion.
+C
                      IF(  ( CORINV(ICHN,KS) .EQ. 0.D0 .AND. 
      1                 NETSIDE(ICHN,KS) .EQ. SFSIDE(KCHN,ISETF) ) .OR.
      2                 ( CORINV(ICHN,KS) .NE. 0.D0 .AND. 

@@ -22,12 +22,12 @@ C
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
 C
-      INTEGER     ISCN, ISTA, LEN1, NCHR
+      INTEGER     ISCN, ISTA, LEN1, NCHR, INT, ILEN
       INTEGER     MCH, ICH, JCH1, JCH2
       INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
       INTEGER     YEAR, DAY, DOY, JD, MONTH, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
-      INTEGER     I, LASTSCN, ISET, KS, VXGTST, NTSYS(MAXSTA)
+      INTEGER     I, LASTSCN, KS, NTSYS(MAXSTA)
       INTEGER     NTSYSON(MAXSTA), TSYSGAP(MAXSTA), TPDRIV
       REAL        STASPD(MANT) 
       CHARACTER   FULTIM*18, TMPSRC*32
@@ -144,12 +144,11 @@ C           need to keep such scans, such as the VLBA.
 C
             TMPSRC = SCNSRC(ISCN)
             CALL VXSTNM( TMPSRC, .FALSE.)
-            WRITE( IVEX, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
+            MSGTXT = ' '
+            WRITE( MSGTXT, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
      1          'with FORMAT=NONE on:',
      2          TMPSRC(1:LEN1(TMPSRC))
-       write(*, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
-     1          'with FORMAT=NONE on:',
-     2          TMPSRC(1:LEN1(TMPSRC))
+            WRITE( IVEX, '(A)' ) MSGTXT(1:LEN1(MSGTXT))
             INPAGE = INPAGE + 1
          ELSE
 C  
@@ -195,9 +194,11 @@ C
      1               'Note a COMMENT was inserted during scheduling: '
                   WRITE( IVEX, '( A1, 7X, A )' ) COM,
      1                      ANNOT(ISCN)(1:MCH)
+                  INPAGE = INPAGE + 1
                   IF( JCH1 .GT. 1 ) THEN
                      WRITE( IVEX, '( A1, 10X, A )' ) COM, 
      1                      ANNOT(ISCN)(JCH1:JCH2)
+                     INPAGE = INPAGE + 1
                   END IF
                END IF
             END IF
@@ -207,6 +208,21 @@ C
             IF( ANYNONE ) THEN
                WRITE( IVEX, '( A1, 5X, A )' ) COM,
      1            'This is a FORMAT=NONE, non-recording scan.'
+               INPAGE = INPAGE + 1
+            END IF
+C
+C           Add any intents.  This is as comments for now.
+C
+            IF( NSCINT(ISCN) .GE. 1 ) THEN
+               DO INT = 1, NSCINT(ISCN)
+                  LINE = ' '
+                  ILEN = LEN1( INTENT(ISCINT(INT,ISCN)) )
+                  WRITE( LINE, '( 5A, )' ) COM,
+     1                ' intent = ', QOT, 
+     2                INTENT(ISCINT(INT,ISCN))(1:ILEN), QOT
+                  WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
+                  INPAGE = INPAGE + 1
+               END DO
             END IF
 C
 C           May move scan time fwd for tapestart: then write comment
@@ -579,9 +595,11 @@ C     Print warning about frequency of Tsys.
 C
       TSYSMESS = .FALSE.
       DO ISTA = 1, NSTA
-         IF( WARNTS(ISTA) ) THEN
-            WRITE( MSGTXT, '( A, A, I5, A , I4, A)' ) 
-     2         STATION(STANUM(ISTA)), ' has ',
+         IF( WARNTS(ISTA) .AND. ( CONTROL(STANUM(ISTA)) .EQ. 'VEX' 
+     1      .AND. STATION(STANUM(ISTA))(1:3) .NE. 'VLA' ) ) THEN
+C
+            WRITE( MSGTXT, '( A, A, A, I5, A , I4, A)' ) 
+     2         'VXSCH: ', STATION(STANUM(ISTA)), ' has ',
      3         NTSYS(ISTA), 
      4         ' Tsys measurements. Maximum interval = ',
      5         TSYSGAP(ISTA), ' minutes.'

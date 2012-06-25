@@ -296,23 +296,8 @@ C
             IF( SYNTH(I,KS) .EQ. 0.0 ) SYNTH(I,KS) = FSYN(I,KF) 
          END DO
 C
-C        Get the VLA parameters if they were not given in the
-C        setup file but were specified in the frequency catalog.
-C        Any not set here will be set by VLASETF called from CHKVLA.
-C        I suspect that this should all be cleaned up some eventually,
-C        perhaps with an external file that contains VLA defaults.
+C        Setting old VLA parameters removed for SCHED 10.2
 C
-         IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' ) THEN
-            IF( FLUKEA(KS)  .EQ. 0.D0 ) FLUKEA(KS)  = FVFLKA(KF)
-            IF( FLUKEB(KS)  .EQ. 0.D0 ) FLUKEB(KS)  = FVFLKB(KF)
-            IF( VLAFEAB(KS) .EQ. 0.D0 ) VLAFEAB(KS) = FVFEAB(KF)
-            IF( VLAFECD(KS) .EQ. 0.D0 ) VLAFECD(KS) = FVFECD(KF)
-            IF( VLASYNA(KS) .EQ. 0.D0 ) VLASYNA(KS) = FVSYNA(KF)
-            IF( VLASYNB(KS) .EQ. 0.D0 ) VLASYNB(KS) = FVSYNB(KF)
-            IF( VLABAND(KS) .EQ. 'ZZ' ) VLABAND(KS) = FVBAND(KF)
-            IF( VLABW(KS) .EQ. 'ZZZZ' ) VLABW(KS)   = FVBW(KF)
-            IF( FEFILTER(KS) .EQ. 'ZZZZ' ) FEFILTER(KS) = FVFILT(KF)
-         END IF
       END IF
 C
 C     Set the default 50CM filters if they haven't been set yet.

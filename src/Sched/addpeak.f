@@ -125,17 +125,8 @@ C
                IGRP = PKGROUP(ISTA)
 C
 C              Test that the frequency is high enough.
-C              For the VLA, test the VLA band, not the setup file
-C              frequency.  This helps when the setup doesn't set
-C              up VLBI channels, as in pure VLA observations.
 C
-               IF( STANAME(ISTA)(1:3) .EQ. 'VLA' ) THEN
-                  CALL VLAFREQ( IS, VLO, VFLO, VBP, ERRS )
-                  FREQTEST = VBP(1,1)
-               ELSE
-                  FREQTEST = FREQREF(1,IS)
-               END IF
-C
+               FREQTEST = FREQREF(1,IS)
                IF( PKMINFQ(IGRP) .LT. FREQTEST ) THEN
 C
                   IF( LASTISCN(ISTA) .NE. 0 ) THEN

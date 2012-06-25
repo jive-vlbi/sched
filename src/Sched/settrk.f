@@ -5,6 +5,12 @@ C     Routine for SCHED, called by SETDEFS, that sets the track
 C     assignments, if needed.  It will only be called if
 C     TRACK1(1) is 0 which is the trigger to use this routine.
 C
+C     Note that SETDEF calls this routine with the element of the 
+C     arrays in the call argument for a particular setup.  That means
+C     that the number of indices will be one less than in the 
+C     include files.  I don't think I'd do that if writing it again.
+C
+C
       INTEGER    MCHAN, KS, ILOG
       INTEGER    NCHAN, TAPEMODE, BITS, TRACK(MCHAN,8), KBBC(MCHAN)
       CHARACTER  FORMAT*8, SIDEBAND(MCHAN)*1, MSG*80
@@ -308,6 +314,15 @@ C
             ELSE IF ( BITS .EQ. 2 ) THEN
                TRACK(ICH,1) = A2(MK5BCH(ICH))
             END IF
+         END DO
+C
+      ELSE IF( FORMAT .EQ. 'VDIF' ) THEN
+C
+C        Simply set the tracks for both bits to be the channel number.
+C        (W. Brisken email May 14, 2012.  Change by RCW)
+C
+         DO ICH = 1, NCHAN
+            TRACK(ICH,1) = ICH
          END DO
 C
       ELSE IF( FORMAT .EQ. 'MARKIII' ) THEN

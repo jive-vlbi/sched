@@ -61,9 +61,9 @@ C       MAXSTA       plot.inc:PSTMAX (set at 1000 - may not need change)
 C       MAXSRC       plot.inc:PSOMAX (set at 2000 - may not need change)
 C       MAXCAT       rdcat.inc:MDB (set at 1000 - may not need change)
 C
-C
       INTEGER       MAXCAT, MAXSRC, MALIAS, MAXSCN, MAXSTA, MAXLCH
       INTEGER       MAXLGP, MAXSET, MAXCHN, MAXSAT, MSET
+      INTEGER       MINTENT, MSCINT
 C
 C     For normal usage.  Phase referencing and pointing observations
 C     need lots of scans, but the number of stations is limited.
@@ -94,6 +94,11 @@ C
       PARAMETER     (MAXCHN=32)
       PARAMETER     (MAXLCH=MAXCHN)
       PARAMETER     (MAXSAT=5)
+C
+C     For intents.
+C
+      PARAMETER     (MINTENT=100)
+      PARAMETER     (MSCINT=25)
 C
 C
 C     Unit Numbers.    Main keyin input read on unit 5.
@@ -442,7 +447,7 @@ C
       INTEGER          LINEPG
       LOGICAL          PLOT, PUBPLOT, DEBUG, OVERWRIT 
       LOGICAL          DOVEX, VEXTEST, DOMKA, DOVSOP, MISSING, MOVING
-      LOGICAL          NOSET, PTLINK, COVERLET, AUTOPEAK, PKWATCH
+      LOGICAL          NOSET, COVERLET, AUTOPEAK, PKWATCH
       LOGICAL          OVERRIDE, READLOG, DODOWN(MAXSCN)
       CHARACTER        MSGTXT*256, SUMITEM(10)*8, DOSTA*8
       CHARACTER        EPHFILE*80, FREQFILE*80, FREQVER*20
@@ -480,7 +485,7 @@ C
 C
       COMMON  /SCHCON/ FREQLIST, PRECDATE, OPDUR, LINEPG, PLOT, 
      1                 PUBPLOT, DEBUG, OVERWRIT, DOVEX, VEXTEST, DOMKA, 
-     2                 DOVSOP, MISSING, MOVING, NOSET, PTLINK, COVERLET,
+     2                 DOVSOP, MISSING, MOVING, NOSET, COVERLET,
      3                 AUTOPEAK, PKWATCH, OVERRIDE, READLOG, DODOWN,
      4                 OPMINEL, OPTSLEW, OPTLOWT, OPSLEWWT, OPSLEWTI,
      5                 OPHLIMWT, OPHLIMTI, OPHMAXDT, OPMINSEP, OPHA, 
@@ -540,6 +545,7 @@ C                      SFSIDE is the net sideband used for the
 C                       logical channel throughout the setup file.
 C                      SFFREQ is the frequency used for the logical
 C                       channel (there can be small station offsets)
+C                      SFFILT is the bandwidth for the logical chan.
 C                      SFPOL is the polarization for the logical 
 C                       channel.
 C                      OKXC means that all setup groups contain a 
@@ -549,7 +555,7 @@ C                       If OKXC is false, don't allow DOPPLER, FREQ,
 C                       BW etc in schedule and don't do checks of 
 C                       cross correlatability.  Also warn user.
 C
-      DOUBLE PRECISION SFFREQ(MAXCHN,MAXSET)
+      DOUBLE PRECISION SFFREQ(MAXCHN,MAXSET), SFFILT(MAXCHN,MAXSET)
       INTEGER          MSCHN(MAXSET), NSETF
       INTEGER          SAMEBBC(MAXCHN,MAXSET), MINBBC(MAXSET)
       REAL             FSPEED(MAXSET)
@@ -557,7 +563,7 @@ C
       CHARACTER        SETFILE(MAXSET)*80, SFSIDE(MAXCHN,MAXSET)*1
       CHARACTER        SFPOL(MAXCHN,MAXSET)*3
 C
-      COMMON  /SCHSF/  SFFREQ, MSCHN, NSETF, SAMEBBC, MINBBC, 
+      COMMON  /SCHSF/  SFFREQ, SFFILT, MSCHN, NSETF, SAMEBBC, MINBBC, 
      1                 FSPEED, OKXC
       COMMON  /SCHSSF/ SETFILE, SFSIDE, SFPOL
 C
@@ -573,7 +579,7 @@ C
       REAL             SCHVER
 C
       INTEGER          MCOR
-      PARAMETER        (MCOR=22)
+      PARAMETER        (MCOR=23)
       CHARACTER        CORSTUFF(MCOR)*150
       INTEGER          CORCHAN, CORFFT, CORNANT
       REAL             CORAVG
@@ -581,14 +587,14 @@ C
       LOGICAL          CORPOL
       LOGICAL          CAEXACT
       LOGICAL          CAEXACT2
-      CHARACTER        CORREL*64, CORTAPE*16, CORWTFN*16
+      CHARACTER        CORREL*64, CORTAPE*16, CORDFMT*8, CORWTFN*16
       CHARACTER        CORSRCS*64, CORSHIP(4)*64, CORNOTE(4)*(128)
 C
       COMMON  /SCHCO/  SCHVER, CORCHAN, CORFFT, CORNANT, CORAVG, CORAV2, 
      1                 CORPOL, CAEXACT, CAEXACT2
       COMMON  /SCHSCO/ COVER, PINAME, PHONE, OBSPHONE, EMAIL, ADDRESS,
      1                 FAX, OBSMODE, NOTE, OBSTYP,
-     2                 CORSTUFF, CORREL, CORTAPE,
+     2                 CORSTUFF, CORREL, CORTAPE, CORDFMT,
      3                 CORWTFN, CORSRCS, CORSHIP, CORNOTE
 C
 C
@@ -657,6 +663,13 @@ C                          ISCN.
 C                        SETNUM(ISCN) is the setup file number (not 
 C                          setup group number) of scan ISCN.
 C
+C                      Intents.
+C                        INTENT is list of distinct intent text strings.
+C                        NINTENT is the number of such strings.
+C                        ISCINT is an array giving intents used per scan.
+C                        NSCINT is the number of intents in a scan.
+C                        
+C
       DOUBLE PRECISION PRESCAN(MAXSCN), DUR(MAXSCN), GAP(MAXSCN)
       DOUBLE PRECISION MINDW(MAXSCN), STARTJ(MAXSCN), STOPJ(MAXSCN)
       DOUBLE PRECISION FREQ(MAXCHN,MAXSCN), DOPINCR(MAXSCN,2)
@@ -665,21 +678,24 @@ C
       INTEGER          SETNUM(MAXSCN), NSETUP(MAXSCN,MAXSTA)
       INTEGER          FSETI(MAXSCN,MAXSTA), DOPEAK(MAXSCN)
       INTEGER          POINT(MAXSCN), DURONLY(MAXSCN), NOWAIT(MAXSCN)
+      INTEGER          ISCINT(MSCINT,MAXSCN), NSCINT(MAXSCN), NINTENT
       LOGICAL          STASCN(MAXSCN,MAXSTA)
       LOGICAL          NOTSYS(MAXSCN), DOPCAL(MAXSCN)
       LOGICAL          DWELL(MAXSCN), TANT1(MAXSCN), TANT2(MAXSCN)
       CHARACTER        ANNOT(MAXSCN)*128, SCNSRC(MAXSCN)*12
       CHARACTER        DOPSRC(MAXSCN)*12, LINES(MAXSCN)*8
       CHARACTER        PCAL(MAXSCN)*4, SCANTAG(MAXSCN)*4
-      CHARACTER        PREEMPT(MAXSCN)*2
+      CHARACTER        PREEMPT(MAXSCN)*2, INTENT(MINTENT)*80
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
-     1                 DOPEAK, POINT, DURONLY, NOWAIT, STASCN, 
-     2                 NOTSYS, DOPCAL, DWELL, TANT1, TANT2
+     1                 DOPEAK, POINT, DURONLY, NOWAIT, 
+     2                 ISCINT, NSCINT, NINTENT,
+     3                 STASCN, NOTSYS, DOPCAL, DWELL, TANT1, TANT2
       COMMON  /SCHN2B/ PRESCAN, DUR, GAP, MINDW, FREQ, DOPINCR
       COMMON  /SCHN2C/ STARTJ, STOPJ, BW
       COMMON  /SCHC2A/ ANNOT
       COMMON  /SCHC2B/ SCNSRC, DOPSRC, LINES, PCAL, SCANTAG, PREEMPT
+      COMMON  /SCHC2C/ INTENT
 C
 C
 C     Specific items for VLA.

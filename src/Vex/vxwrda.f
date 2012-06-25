@@ -106,6 +106,10 @@ C
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',
      2          'Mark4', SEP
+         ELSE IF( DAR(ISCAT) .EQ. 'WIDAR' ) THEN
+            WRITE( IVEX, '( 5X, A, A, A1 )' ) 
+     1          'electronics_rack_type = ',
+     2          'WIDAR', SEP
          ELSE IF( DAR(ISCAT) .EQ. 'LBA' ) THEN
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',

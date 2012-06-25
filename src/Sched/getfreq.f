@@ -54,11 +54,6 @@ C
          CALL ERRLOG( 'GETFREQ: Problem opening frequency file' )
       END IF
 C
-C     Set some dummy parameters to avoid triggering checks in VLASETF
-C
-      FVIF = ' '
-      FVROT = ' '
-C
 C     Read the groups from the frequence catalog.
 C
   100 CONTINUE
@@ -233,39 +228,8 @@ C
          END IF
 C
 C        Get the VLA specific parameters.
-C
-         I1 = KEYPTR( 'CHNSTA', KC, KI ) - 1
-         DO IIF = 1, FNIF(NFREQ)
-            WRITE( FVCHNSTA(IIF,NFREQ), '(A8)' ) KD(I1+IIF)
-            CALL UPCASE( FVCHNSTA(IIF,NFREQ) )
-         END DO
-         FVFLKA(NFREQ) = KD( KEYPTR( 'FLUKEA', KC, KI ) )
-         FVFLKB(NFREQ) = KD( KEYPTR( 'FLUKEB', KC, KI ) )
-         FVFEAB(NFREQ) = KD( KEYPTR( 'VLAFEAB', KC, KI ) )
-         FVFECD(NFREQ) = KD( KEYPTR( 'VLAFECD', KC, KI ) )
-         FVSYNA(NFREQ) = KD( KEYPTR( 'VLASYNA', KC, KI ) )
-         FVSYNB(NFREQ) = KD( KEYPTR( 'VLASYNB', KC, KI ) )
-         FVFILT(NFREQ) = KCHAR( 'FEFILTER', 4,.FALSE., KD, KC, KI )
-         FVBAND(NFREQ) = KCHAR( 'VLABAND', 2, .TRUE., KD, KC, KI )
-         FVBW(NFREQ)   = KCHAR( 'VLABW', 4, .TRUE., KD, KC, KI )
-C
-         CALL UPCASE( FVBAND(NFREQ) )
-C
-C        Set anything that defaulted.  This is needed for matching
-C        user specified values in FCOMPARE.  FVIF and FVROT are
-C        dummies as they are not input through the catalog.  Only do
-C        if the VLA band was specified.
-C
-         IF( FVBAND(NFREQ) .NE. 'ZZ' ) THEN
-            ERRS = .FALSE.
-            CALL VLASETF( FVBAND(NFREQ), FVFLKA(NFREQ), FVFLKB(NFREQ), 
-     1                    FVFEAB(NFREQ), FVFECD(NFREQ),
-     2                    FVSYNA(NFREQ), FVSYNB(NFREQ), 
-     3                    FVFILT(NFREQ), FVIF, FVROT,
-     4                    FVBW(NFREQ), LDUMMY, ERRS )
-            IF( ERRS ) CALL ERRLOG( 'GETFREQ: Problem with VLA ' //
-     1           'items in frequency catalog.' )
-         END IF
+C        This is now gone.  See SCHED 10.1 or earlier for what
+C        was here.
 C
 C        Go back for next group.
 C

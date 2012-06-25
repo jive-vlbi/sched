@@ -203,36 +203,14 @@ C     Also don't allow them to pretend to be the same if one
 C     is a VLA antenna and the other is not (will need VLA
 C     parameters in the VLA listing).
 C
+C     The check of all the old VLA parameters has been removed.
+C
       SA = SA .AND. 
      1     ( SETSTA(1,KS)(1:3) .EQ. 'VLA' .AND. 
      2       SETSTA(1,JS)(1:3) .EQ. 'VLA' ) .OR.
      3     ( SETSTA(1,KS)(1:3) .NE. 'VLA' .AND. 
      4       SETSTA(1,JS)(1:3) .NE. 'VLA' )
 C
-      IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' .AND. 
-     1    SETSTA(1,JS)(1:3) .EQ. 'VLA' ) THEN
-C
-         SA = SA .AND.
-     1        FLUKESET(KS) .EQ. FLUKESET(JS) .AND.
-     2        FLUKEA(KS)   .EQ. FLUKEA(JS)   .AND.
-     3        FLUKEB(KS)   .EQ. FLUKEB(JS)   .AND.
-     4        VLAFEAB(KS)  .EQ. VLAFEAB(JS)  .AND.
-     5        VLAFECD(KS)  .EQ. VLAFECD(JS)  .AND.
-     6        VLASYNA(KS)  .EQ. VLASYNA(JS)  .AND.
-     7        VLASYNB(KS)  .EQ. VLASYNB(JS)  .AND.
-     8        FEFILTER(KS) .EQ. FEFILTER(JS) .AND.
-     9        VLAIF(KS)    .EQ. VLAIF(JS) 
-C
-         SA = SA .AND.
-     1        VLAROT(KS)  .EQ. VLAROT(JS)  .AND.
-     2        VLABAND(KS) .EQ. VLABAND(JS) .AND.
-     3        VLABW(KS)   .EQ. VLABW(JS)   .AND.
-     4        ( VLALOFI(KS) .EQV. VLALOFI(JS) ) .AND.
-     5        ( VLAVA(KS)   .EQV. VLAVA(JS) )  .AND.
-     6        ( VLAVB(KS)   .EQV. VLAVB(JS) )   .AND.
-     7        ( VLAVR(KS)   .EQV. VLAVR(JS) )   .AND.
-     8        ( VLAVL(KS)   .EQV. VLAVL(JS) ) 
-      END IF
       IF ( .NOT. SA ) THEN
          IF( LOCDBG ) CALL WLOG( 0, 'SAMESET: before vlavl' )
          GO TO 999 

@@ -45,7 +45,7 @@ C
       INTEGER ISTA
       LOGICAL TPOINI, WARNTS(MAXSTA), WARNBANK
 C
-      LOGICAL WARNTSOF(MAXSTA)
+      LOGICAL WARNTSOF(MAXSTA), FIELDSY(MAXSTA)
       INTEGER LASTTSYS(MAXSTA), LASTTSON(MAXSTA), DATLAT, I 
       INTEGER NTSYSON(MAXSTA), NTSYS(MAXSTA), TSYSGAP(MAXSTA), THISGAP
       REAL LASTBYTE(MAXSTA)
@@ -72,6 +72,17 @@ C     Major loop over all stations in scan
 C
       DO ISTA = 1, NSTA
 C
+C        Check if this is likely to be a field system station.  Maybe
+C        we need to make this more explicit in the station catalog 
+C        because CONTROL=VEX no longer necessarily implies field system.
+C        Field system stations require some checks not needed elsewhere.
+C        Added May 30, 2012 RCW
+C
+         FIELDSY(ISTA) = CONTROL(STANUM(ISTA)) .EQ. 'VEX' .AND.
+     1      STATION(STANUM(ISTA))(1:3) .NE. 'VLA'
+C
+C        Process the stations actually in the scan.
+C
          IF( STASCN(ISCN,ISTA) ) THEN
 C        
 C           Current VEX does not allow for different tape starts, so 
@@ -96,14 +107,15 @@ C           Remember tpstart is already the offset from startj
             END IF
 C        
 C        Other checks depend on this not being the first scan
-C        Close the STASCN loop
+C        Close the STASCN loop.  These checks also apply only
+C        to the field system.
 C
          END IF
-         IF( STASCN(ISCN,ISTA) .AND.
-     1       CONTROL(STANUM(ISTA)) .EQ. 'VEX'
-     2      .AND. DISK(STANUM(ISTA)) .NE. 'LBADR' ) THEN
+         IF( STASCN(ISCN,ISTA) .AND. FIELDSY(ISTA)
+     1      .AND. DISK(STANUM(ISTA)) .NE. 'LBADR' ) THEN
 C
-C        scans should be longer than 15s, according to NRV
+C           Field system scans should be longer than 15s, 
+C           according to NRV
 C        
             IF( NINT( ( STOPJ(ISCN) - (STARTJ(ISCN)-TAPOFF) ) 
      1          * 86400d0) .LT. 15 ) THEN
@@ -130,8 +142,12 @@ C           be zero if this is the first scan for this station).
             END DO
 C
 C           Only need to check for long passes at disk stations.
+C           Elsewhere in SCHED, there are warnings about long 
+C           recording scans, so don't try to duplicate that here.
+C           This warning is for field system stations so restrict
+C           it to CONTROL=VEX.
 C
-            IF( USEDISK(ISTA) ) THEN
+            IF( USEDISK(ISTA) .AND. FIELDSY(ISTA) ) THEN
                IF (LASTSCN .EQ. 0) THEN
                   LASTBYTE(ISTA) = 0
                ELSE IF( NINT( ( (STARTJ(ISCN)-TAPOFF) - 
@@ -149,9 +165,11 @@ C
 C 
 C           Scans longer than 15 min should cause a warning
 C           because Tsys is only measured at scan start
+C           Restrict this to the field system stations
+C           as others tend to have continuous Tsys.
 C
             IF( NINT( ( STOPJ(ISCN) - (STARTJ(ISCN)-TAPOFF) ) 
-     1          * 1440d0) .GT. 15 ) THEN  
+     1          * 1440d0) .GT. 15 .AND. FIELDSY(ISTA) ) THEN
                WARNTS(ISTA) = .TRUE.
 C              And record the longest gap for information
                THISGAP = NINT( ( STOPJ(ISCN) - 
@@ -290,7 +308,7 @@ C        End loop on STASCN(ISCN&ISCN-1)
 C        Next Vex specific things
 C
          IF( STASCN(ISCN,ISTA) .AND. STASCN(ISCN-1,ISTA) .AND.
-     1       CONTROL(STANUM(ISTA)) .EQ. 'VEX' ) THEN
+     1       FIELDSY(ISTA) ) THEN
 C        
 C           Removed tape reversal check.
 C        
@@ -323,5 +341,3 @@ C
 
       RETURN
       END
-
-

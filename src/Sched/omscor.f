@@ -26,9 +26,7 @@ C     Only do some parameters only for the Socorro hardware correlator
 C
       IF( CORREL(1:6) .EQ. 'FXCORR' .AND. .NOT. NOTAPE ) THEN
 C
-C        Get the FFT size and spectral averaging.  This is also done
-C        in CHKSOC where the results are checked against allowed
-C        values for the Socorro correlator.
+C        Get the FFT size and spectral averaging.
 C
          IF( CORPOL ) THEN
             MINFFT = 256
@@ -92,6 +90,7 @@ C
       END IF
 C
       WRITE( IOMS, '( A, A )' ) '    OUTPUT_TAPE       = ', CORTAPE
+      WRITE( IOMS, '( A, A )' ) '    OUTPUT_FORMAT     = ', CORDFMT
       IF( CORSHIP(1) .NE. ' ' ) WRITE( IOMS, '( A, A )' )
      1     '    SHIPPING          = ', CORSHIP(1)(1:LEN1(CORSHIP(1)))
       IF( CORSHIP(2) .NE. ' ' ) WRITE( IOMS, '( A, A )' )

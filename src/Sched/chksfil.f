@@ -9,6 +9,10 @@ C     known correlators.  The speedup factor is really not a relevant
 C     concept for the disk based recordings.  They can play back
 C     at arbitrary speeds.  So take out that check.  Jan. 11 2011.  RCW.
 C
+C     Allow the mixed bandwidth mode where several channels from one
+C     station play against one from another station.  Don't allow
+C     FREQ and DOPPLER when this happens as it becomes ambiguous.
+C
 C     Older comment, reworded:  The speedup factor only mattered for some
 C     correlators.  The sample rate won't matter for DiFX eventually,
 C     but leave that for now.  Dec. 3, 2009 RCW
@@ -69,14 +73,25 @@ C            FSPEED(ISETF) = 1.0
 C         END IF
 C
 C        Now do the same thing for the sample rate.
+C        We now need to allow for multiple bands at one station playing
+C        against 1 band at another.  That means that this needs to be
+C        turned into a warning, not an error.  Also, I'd like to indicate
+C        the amount of overlap.  Finally, note that later code (OKXC) will
+C        prevent DOPPLER and FREQ from being used in the main schedule
+C        because the meaning of channels becomes ambiguous.
 C          
          IF( FORMAT(KS) .NE. 'NONE' .AND. 
      1       FORMAT(KS) .NE. 'MARKII' ) THEN
             IF( SAMPRATE(KS) .NE. RSAMP(ISETF) .AND. 
      1          RSAMP(ISETF) .NE. 0.0 ) THEN
-               CALL WLOG( 1, 'CHKSFIL: Two setup groups in the ' //
-     1          'same setup file have different sample rates.' )
-               CALL ERRSET( KS )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I3, A, I3, 2A )' )
+     1             'CHKSFIL: Setup group, ', KS, ' in setup file ',
+     2             ISETF, 
+     3             ' does not have the same sample rate as ',
+     4             ' other groups in the file.'
+               CALL WLOG( 1, MSGTXT )
+               CALL WRTMSG( 1, 'CHKSFIL', 'MismatchedSamprate' )
             END IF
             RSAMP(ISETF) = SAMPRATE(KS)
          END IF

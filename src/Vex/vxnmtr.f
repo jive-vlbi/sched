@@ -26,7 +26,8 @@ C
      3    FORMAT(ISET)(1:3) .EQ. 'LBA' .OR.
      4    FORMAT(ISET)(1:6) .EQ. 'MKIV1:' .OR.
      5    FORMAT(ISET)(1:6) .EQ. 'MARK5B' .OR.
-     6    FORMAT(ISET)(1:4) .EQ. 'NONE' ) ) THEN
+     6    FORMAT(ISET)(1:4) .EQ. 'VDIF' .OR.
+     7    FORMAT(ISET)(1:4) .EQ. 'NONE' ) ) THEN
          MSGTXT = 'VXNMTR: unsupported recording mode: ' // FORMAT(ISET)
          CALL ERRLOG( MSGTXT )
       END IF
