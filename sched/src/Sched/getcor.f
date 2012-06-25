@@ -1,8 +1,8 @@
       SUBROUTINE GETCOR( VALUE, KC, KI )
 C
-C     This is a routine for SCHED that processes the input correlator
-C     requests and creates the output for including in the output 
-C     summary file.
+C     This is a routine for SCHED that processes and checks the input 
+C     correlator requests and creates the output for including in 
+C     the output summary file.
 C
       INCLUDE 'sched.inc'
 C
@@ -14,7 +14,7 @@ C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'GETCOR starting.' )
       MISCOR = .FALSE.
 C
-C     Decode the correlator information.  Make upper case and
+C     Decode the name of the requested correlator.  Make upper case and
 C     remove leading blanks for easier testing later.
 C
       CORREL     = KCHAR( 'CORREL', 62, .FALSE., VALUE, KC, KI )
@@ -87,6 +87,8 @@ C
       CALL UPCASE( CORWTFN )
       CORTAPE    = KCHAR( 'CORTAPE', 16, .TRUE., VALUE, KC, KI )
       CALL UPCASE( CORTAPE )
+      CORDFMT    = KCHAR( 'CORDFMT', 8, .TRUE., VALUE, KC, KI )
+      CALL UPCASE( CORDFMT )
       CORSRCS    = KCHAR( 'CORSRCS',  64, .TRUE., VALUE, KC, KI )
       CORSHIP(1) = KCHAR( 'CORSHIP1', 64, .FALSE., VALUE, KC, KI )
       CORSHIP(2) = KCHAR( 'CORSHIP2', 64, .FALSE., VALUE, KC, KI )
@@ -96,6 +98,30 @@ C
       CORNOTE(2) = KCHAR( 'CORNOTE2', 128, .FALSE., VALUE, KC, KI )
       CORNOTE(3) = KCHAR( 'CORNOTE3', 128, .FALSE., VALUE, KC, KI )
       CORNOTE(4) = KCHAR( 'CORNOTE4', 128, .FALSE., VALUE, KC, KI )
+C
+C     Check the parameters.  Especially make sure the required ones
+C     are present.  None of this matters if not recording (NOTAPE).
+C
+      IF( .NOT. NOTAPE ) THEN
+C
+C        Check the imputs common to all correlators.  These are 
+C        were in the SOCDEF and CORDEF, but got consolidated for
+C        ease of understanding.
+C
+         CALL CHKCOR
+C
+C        Check the ones that are different for Socorro and elsewhere.
+C
+         IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
+     1       CORREL(1:4) .EQ. 'VLBA' .OR.
+     2       CORREL(1:7) .EQ. 'VLBADIFX' .OR.
+     3       CORREL(1:6) .EQ. 'FXCORR' ) THEN
+            CALL SOCDEF( CHPOL )
+         ELSE
+            CALL CORDEF( CHPOL )
+         END IF
+C
+      END IF
 C
 C     Make up printout array.
 C
@@ -137,40 +163,28 @@ C
      1  '  Correlator weighting function (UNIFORM):     ' // CORWTFN
       CORSTUFF(10) = 
      1  '  Distribution tape (DAT):                     ' // CORTAPE
+      CORSTUFF(11) = 
+     1  '  Distribution format (FITS):                  ' // CORDFMT
 C
       SPLEN = LEN1( CORSRCS )      
-      IF( SPLEN .LE. 12 ) THEN
-         CORSTUFF(11) = 
+      IF( SPLEN .LE. 13 ) THEN
+         CORSTUFF(12) = 
      1      '  Source positions from:             '// CORSRCS(1:SPLEN)
-         CORSTUFF(12) = '   '
+         CORSTUFF(13) = '   '
       ELSE
-         CORSTUFF(11) = '  Source positions from:'
-         CORSTUFF(12) = '  '//CORSRCS
+         CORSTUFF(12) = '  Source positions from:'
+         CORSTUFF(13) = '  '//CORSRCS
       END IF
-      CORSTUFF(13) = '  Shipping address for correlator output: ' 
-      CORSTUFF(14) = '      ' // CORSHIP(1)
-      CORSTUFF(15) = '      ' // CORSHIP(2)
-      CORSTUFF(16) = '      ' // CORSHIP(3)
-      CORSTUFF(17) = '      ' // CORSHIP(4)
-      CORSTUFF(18) = '  Correlator Notes: ' // CORNOTE(1)
-      CORSTUFF(19) = '      ' // CORNOTE(2)
-      CORSTUFF(20) = '      ' // CORNOTE(3)
-      CORSTUFF(21) = '      ' // CORNOTE(4)
-      CORSTUFF(22) = ' '
-C
-C     Check required parameters.
-C
-      IF( .NOT. NOTAPE ) THEN
-         IF( CORREL(1:7) .EQ. 'SOCORRO' .OR. 
-     1       CORREL(1:4) .EQ. 'VLBA' .OR.
-     2       CORREL(1:7) .EQ. 'VLBADIFX' .OR.
-     3       CORREL(1:6) .EQ. 'FXCORR' ) THEN
-            CALL SOCDEF( CHPOL )
-         ELSE
-            CALL CORDEF( CHPOL )
-         END IF
-C
-      END IF
+      CORSTUFF(14) = '  Shipping address for correlator output: ' 
+      CORSTUFF(15) = '      ' // CORSHIP(1)
+      CORSTUFF(16) = '      ' // CORSHIP(2)
+      CORSTUFF(17) = '      ' // CORSHIP(3)
+      CORSTUFF(18) = '      ' // CORSHIP(4)
+      CORSTUFF(19) = '  Correlator Notes: ' // CORNOTE(1)
+      CORSTUFF(20) = '      ' // CORNOTE(2)
+      CORSTUFF(21) = '      ' // CORNOTE(3)
+      CORSTUFF(22) = '      ' // CORNOTE(4)
+      CORSTUFF(23) = ' '
 C
       RETURN
       END

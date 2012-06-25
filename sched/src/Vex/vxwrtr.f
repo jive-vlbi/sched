@@ -98,12 +98,13 @@ C          ignore fan in's for now, do fan-outs, figure out what it is
 C                
            IF( .NOT. (FORMAT(KS)(1:6) .EQ. 'VLBA1:' .OR. 
      1                FORMAT(KS)(1:7) .EQ. 'MARKIII' .OR.
-     2          FORMAT(KS)(1:2) .EQ. 'S2' .OR.
-     3          FORMAT(KS)(1:3) .EQ. 'LBA' .OR.
-     4          FORMAT(KS)(1:6) .EQ. 'MKIV1:' .OR.
-     5          FORMAT(KS)(1:6) .EQ. 'MARK5B' ) .OR. 
-     6         ( FANOUT(KS) .LT. 0.9 .AND.
-     7         FORMAT(KS)(1:2) .NE. 'S2' )) THEN
+     2                FORMAT(KS)(1:7) .EQ. 'VDIF' .OR.
+     3          FORMAT(KS)(1:2) .EQ. 'S2' .OR.
+     4          FORMAT(KS)(1:3) .EQ. 'LBA' .OR.
+     5          FORMAT(KS)(1:6) .EQ. 'MKIV1:' .OR.
+     6          FORMAT(KS)(1:6) .EQ. 'MARK5B' ) .OR. 
+     7         ( FANOUT(KS) .LT. 0.9 .AND.
+     8         FORMAT(KS)(1:2) .NE. 'S2' )) THEN
               WRITE( MSGTXT, '( A, A, F6.2 )' )
      1            'VXWRTR: unsupported recording mode/fan: ', 
      2            FORMAT(KS), FANOUT(KS)
@@ -150,6 +151,9 @@ C
               ELSE IF( FORMAT(KS)(1:6) .EQ. 'MARK5B' ) THEN
                  WRITE( IVEX, '( 5X, A, A, A1 )' )
      1               'track_frame_format = ','MARK5B', SEP
+              ELSE IF( FORMAT(KS)(1:4) .EQ. 'VDIF' ) THEN
+                 WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1               'track_frame_format = ','VDIF', SEP
            
               ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
 C                       WRITE( IVEX, '( 5X, A, A, A1 )' )
@@ -388,7 +392,8 @@ C
      3                     'fanout_def =', TPSUBP, COL, LNK, 'CH', ICH, 
      4                     COL, THEBIT, COL, HEDSTK
                        IF( FORMAT(KS)(1:3) .NE. 'LBA' .AND. 
-     1                     FORMAT(KS)(1:6) .NE. 'MARK5B' ) THEN
+     1                     FORMAT(KS)(1:6) .NE. 'MARK5B' .AND.
+     2                     FORMAT(KS)(1:4) .NE. 'VDIF' ) THEN
                           DO IFAN = 1, NINT(FANOUT(KS))
 C          
 C                         here are some implicit assumptions made, 
@@ -401,6 +406,15 @@ C
      2                           TRACK1+(IFAN-1)*2+
      3                           (IBIT-1)*2*NINT(FANOUT(KS))
                           END DO
+                       ELSE IF( FORMAT(KS)(1:4) .EQ. 'VDIF' ) THEN
+C
+C                         For VDIF format, just set the track number
+C                         to the channel number.   That was set in settrk.f.
+C                         (W. Brisken email May 14, 2012.  Change by RCW)
+C
+                          LPOS = LEN1(LINE)+1
+                          WRITE( LINE(LPOS:LPOS+4), '(A1, 1X, I2)') 
+     1                       COL, TRACK1
                        ELSE 
 C                         For LBA and Mark5B, the layout is simpler - 
 C                         There is no fanout and simple mapping of 

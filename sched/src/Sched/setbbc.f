@@ -79,6 +79,12 @@ C        RDBE digital backend, including VLBA
 C
          CALL BBCRDBE( KS )
 C
+      ELSE IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) THEN
+C
+C        WIDAR (VLA) digital backend.
+C
+         CALL BBCWIDAR( KS )
+C
       ELSE IF( DAR(ISETSTA(KS)) .EQ. 'VLBAG' ) THEN
 C
 C        VLBA systems with "geodetic wiring".

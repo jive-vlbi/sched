@@ -41,7 +41,7 @@ C     Check things that shouldn't vary between groups in a setup file.
 C
       CALL CHKSFIL
 C
-C     Get logical channels as needed by the dopplar and in-line freq
+C     Get logical channels as needed by the doppler and in-line freq
 C     options to know how to associate channels in those specs with
 C     setup file channels.
 C
@@ -56,7 +56,6 @@ C
 C     Check that some correlator restrictions have not been
 C     violated.
 C
-      CALL CHKSOC
       CALL CHKVDIFX
       CALL CHKJIVE
 C

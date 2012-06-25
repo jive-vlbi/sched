@@ -176,9 +176,19 @@ C
          IF( CONTROL(MSTA)(1:3) .EQ. 'NRAO' .OR. 
      1       CONTROL(MSTA)(1:4) .EQ. 'SNAP' .OR. 
      2       CONTROL(MSTA)(1:4) .EQ. 'SN50' ) THEN
-            CALL ERRLOG( 'STREAD: Control type '//CONTROL(MSTA)
-     1          //' no longer supported by SCHED.  Station: '// 
-     2          STATION(MSTA) )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( 4A )' )
+     1          'STREAD: Control type ', CONTROL(MSTA),
+     2          ' no longer supported by SCHED.  Station: ',
+     2          STATION(MSTA)
+            CALL ERRLOG( MSGTXT )
+         END IF
+         IF( CONTROL(MSTA)(1:3) .EQ. 'VLA' ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A )' )
+     1          'STREAD: Control type VLA (old system card images)',
+     2          ' no longer supported.  Use VEX.'
+            CALL ERRLOG( MSGTXT )
          END IF
 C
 C        Be sure the DAR type is known.
@@ -198,7 +208,8 @@ C
      B       DAR(MSTA) .NE. 'VLBA4' .AND. 
      C       DAR(MSTA) .NE. 'LBA'   .AND. 
      D       DAR(MSTA) .NE. 'R1002' .AND. 
-     E       DAR(MSTA) .NE. 'NONE' ) THEN
+     E       DAR(MSTA) .NE. 'WIDAR' .AND.
+     F       DAR(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF

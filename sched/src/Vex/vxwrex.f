@@ -193,6 +193,10 @@ C
      1     WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'distrib_medium : ',
      2     CORTAPE(1:MAX(1,LEN1(CORTAPE)))
 C
+      IF( CORDFMT .NE. ' ' ) 
+     1     WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'distrib_format : ',
+     2     CORDFMT(1:MAX(1,LEN1(CORDFMT)))
+C
       IF( CORSRCS .NE. ' ' ) 
      1     WRITE( IVEX, '( A1, 4X, A, A )' ) COM, 'source_pos_cat : ',
      2     CORSRCS(1:MAX(1,LEN1(CORSRCS)))

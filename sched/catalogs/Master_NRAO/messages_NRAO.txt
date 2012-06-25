@@ -239,10 +239,10 @@ Remember MINPAUSE is multiplied by the speed up factor.
 ++vlaover24
 --Called from CHKVLA
 
-This schedule is over 24 hours and contains the VLA.  That is not
-wise.  VLA telescope files do not have a day associated with each
-scan, so, if there is a restart after the first 24 hours are up,
-observing may resume on the wrong (previous day's) scan.
+This schedule is over 24 hours and contains the JVLA.  With the old
+VLA system, that wa not wise because the VLA telescope files do not 
+have a day associated with each scan.  This may no longer be a problem,
+but we're not sure yet.
 
 ++resync
 --Called by CHKSCN
@@ -445,3 +445,23 @@ the new hardware.  They only affect observations in that they
 will be used for reference pointing until the new control system
 can point the antenna.
 
+++MismatchedSamprate
+--Called by CHKSFIL
+
+You have sample rates that don't match in different setup groups in
+the same setup file.  Normally data recorded under all groups in a
+setup file are correlated with each other.  This is impossible with
+some correlators and requires special care with others.  With DiFX,
+for example, it is possible to mix sample rates (and bandwidths by
+implication) to, for example, correlate several narrow baseband
+channels against one wide one.  To do so requires the right relative
+frequencies for all basebands and SCHED does not yet check to be sure
+the setups are reasonable.  A case where such a mode might be used is
+with the JVLA at a required 128 MHz baseband bandwidth when it started
+doing VLBI being correlated against 32 MHz channels from the RDBE_PFB
+systems on the VLBA.
+
+When mixed sample rates, the options to use DOPPLER or FREQ to 
+adjust the frequency from the schedule rather than the setup file
+will be blocked.  Those inputs assume all stations have the same
+channel structure which will not be true with mixed sample rates.

@@ -61,7 +61,7 @@ C
             CALL FRCHAR( VXLOSUM(ICH,IFQ), NPER, NFC1, NFCN, FRTXT )
             IF( NFCN .GT. NPER + 6 ) THEN
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I3, A, I3, A, 15.8)' )
+               WRITE( MSGTXT, '( A, I3, A, I3, A, F15.8)' )
      1            ' Channel ', ICH, ' of freq set ', IFQ, 
      2            ' not an integer Hz: ', VXLOSUM(ICH,IFQ)
                CALL ERRLOG( MSGTXT )

@@ -27,11 +27,13 @@ C
      4        LONG(ISCAT)/RADDEG,
      5        ELEV(ISCAT),
      6        XPOS(ISCAT), YPOS(ISCAT), ZPOS(ISCAT), AXOFF(ISCAT)
-         IF( AXOFF(ISCAT) .EQ. 0.0 ) AXWARN = .TRUE.
+         IF( AXOFF(ISCAT) .EQ. 0.0 .AND. 
+     1       STATION(ISCAT)(1:3) .NE. 'VLA' ) AXWARN = .TRUE.
       END DO
 C
 C     While we're poking at geometry data, issue a warning if
-C     the axis offset is zero for one or more stations.
+C     the axis offset is zero for one or more stations.  Don't do
+C     this for the VLA (or add other phased arrays eventually).
 C
       IF( AXWARN ) THEN
          CALL WLOG( 1, 'STALST:  WARNING - A station has zero '//

@@ -189,75 +189,7 @@ C
 C
       END IF
 C
-C     Write some VLA specific stuff if the station is the VLA.
-C
-      IF( SETSTA(1,KS)(1:3) .EQ. 'VLA' ) THEN
-         IF( VLALOFI(KS) ) THEN
-            WRITE( IUNIT, '( 1X, /, A )' ) '   VLA specific '//
-     1         'information: (LO and FI cards will be written.)'
-         ELSE
-            WRITE( IUNIT, '( 1X, /, A )' ) '   VLA specific '//
-     1        'information: (LO and FI cards not needed.  '//
-     2        'Defaults shown.)'
-         END IF
-         IF( EVLA(KS) .EQ. 0 ) THEN
-            WRITE( IUNIT, '( A )' )
-     1      '     Parameter EVLA not set. '
-         ELSE
-            WRITE( IUNIT, '( A, I3, A, A )' )
-     1      '     Parameter EVLA set to', EVLA(KS), '.  VLASYNA and ',
-     2      'VLASYNB may be outside old VLA range.'
-         END IF
-         WRITE( IUNIT, '( A, A, T26, A, A, T49, 2A )' )
-     1      '     VLABAND:       ', VLABAND(KS), 'VLABW:       ', 
-     2      VLABW(KS), 'FEFILTER: ', FEFILTER(KS)
-         WRITE( IUNIT, '( A, F8.2, T26, A, F8.2, T49, 2A )' )
-     1      '     VLAFEAB: ', VLAFEAB(KS), 'VLAFECD: ', VLAFECD(KS),
-     2      'VLAIF:  ', VLAIF(KS)
-         WRITE( IUNIT, '( A, F8.2, T26, A, F8.2, T49, 2A )' )
-     1      '     VLASYNA: ', VLASYNA(KS), 'VLASYNB: ', VLASYNB(KS),
-     2      'VLAROT: ', VLAROT(KS)
-         WRITE( IUNIT, '( A, F8.2, T26, A, F8.2, T49, A, I4 )' )
-     1      '     FLUKEA:  ', FLUKEA(KS), 'FLUKEB:  ', FLUKEB(KS),
-     2      'FLUKESET: ', FLUKESET(KS)
-C
-C        Get details of VLA bands.
-C
-         CALL VLAFREQ( KS, VLO, VFLO, VBP, ERRS )
-C
-         WRITE( IUNIT, '( A )' ) 
-     1           '     Details for VLA IFs: LO Sum ' //
-     1           '      Frequency span    VLBI FIRSTLO '
-         DO ICH = 1, 4
-            WRITE( IUNIT, '( 11X, A, 2X, F10.4, F12.4, A, F10.4,  ' //
-     1         'F12.4 )' ) IFNAME(ICH), VLO(ICH), VBP(1,ICH), 
-     2         '-', VBP(2,ICH), VFLO(ICH)
-         END DO
-         WRITE( IUNIT, '( A )' )
-     1       '     With new digital patch panel, VLA IF = VLB IF.'
-C
-C        Try to detect any special patching requirements.
-C
-         SPATCH = .FALSE.
-         DO ICH = 1, NCHAN(KS)
-            IF( IFCHAN(ICH,KS) .EQ. 'A' .AND. 
-     1          POL(ICH,KS) .EQ. 'LCP' ) SPATCH = .TRUE.
-            IF( IFCHAN(ICH,KS) .EQ. 'B' .AND. 
-     1          POL(ICH,KS) .EQ. 'LCP' )  SPATCH = .TRUE.
-            IF( IFCHAN(ICH,KS) .EQ. 'C' .AND. 
-     1          POL(ICH,KS) .EQ. 'RCP' )  SPATCH = .TRUE.
-            IF( IFCHAN(ICH,KS) .EQ. 'D' .AND. 
-     1          POL(ICH,KS) .EQ. 'RCP' )  SPATCH = .TRUE.
-         END DO
-         IF( SPATCH) THEN
-             WRITE( IUNIT, '( A )' )
-     1       '  --- WARNING ---  Special patch required. '//
-     2       'Contact VLA.'
-         END IF
-      END IF
-C
       IF( DEBUG ) CALL WLOG( 0, 'PRTSET: Done with setup.' )
 C
       RETURN
       END
-
