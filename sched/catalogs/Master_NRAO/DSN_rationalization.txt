@@ -1,0 +1,126 @@
+I am now in the throws of updating the catalogs for SCHED and am
+looking at the DSN situation.  In a word, it was a mess.
+
+First a bit of explanation of how SCHED works.  SCHED has a stations
+catalog that contains lots of information about each antenna,
+including name, code, dbname (name in geodetic solutions or a local
+locations file), slew rates and accelerations, recorder type, data
+aquisition rack type, number of BBCs, a horizon mask and so forth.  It
+can contain the antenna position.  But more commonly, the dbname is
+used to link the station to an entry in the locations catalog.  That
+was once a reflection of the VLBA data base and, for the stations in
+common, was loaded from geodetic solutions by someone else.  Also
+positions used by individual observations could end up there.  I now
+get the stations of the geodetic solutions from GSFC and replace the
+data for those stations in the catalog.  I suspect I will soon be
+encouraged to provide an option to use Petrov's solutions.  There
+are a significant number of stations in the locations file that are
+not in the geodetic solutions - their positions came from somewhere
+else as noted in the local locations file.
+
+It looks to me like the VLBA data base had DSN stations added at
+various times from different inputs than a geodetic solution, and with
+different names.  What I've ended up with is up to 4 different entries
+for some of the antenna, all with different names (both station
+catalog names and dbnames).  Meanwhile, there is a freq.dat file that
+describes setups for observing at various frequencies.  The names
+there must match those in the stations file.  I am now going to take 
+a shot at rationalizing all this to the extent that I can.  There
+are a few details below.
+
+As new stations are added, it would be good to have a point of contact
+at JPL who could pass me required information when needed, or better
+yet, could keep the files up to date.  I manage all this in separate
+files for each major group of antennas, so there are files with just
+DSN stations.  When I make catalogs for a release, these files for the
+different groups get combined into the export catalog.
+
+So, here we go:
+
+DSN antennas in the GSFC 2011a geodetic solution:
+
+Goldstone:
+DSS13 (2007-2010 data), DSS15 (two date ranges), and GOLDVENU (Old DSS13)
+Note, there is no GOLDMARS or DSS14.
+
+Tidbinbilla:
+DSS45, TIDBIN64 (is DSS43)
+
+Robledo:
+DSS65 (two date ranges split long ago), DSS65A (I think this is the 
+recent position), ROBLED32 (DSS61? - Only one experiment in 1983, so ignore).
+
+Also MOJ_7288, MOJAVE12 (2 time ranges) are close to the Goldstone
+antennas.  I presume those are old mobile sites and are not of 
+interest to the astronomy community
+
+The 2 episodic DSS65 station entries are within a cm or so of each
+other.  DSS65A is about 3m, 61m, and 2m away from DSS65 in X, Y, and Z
+respectively.  The antenna was moved by that amount in 2005.  I think
+DSS65A is the new position based on the geo solution date ranges, but
+that should be confirmed.
+
+In the locations_DSN.dat file, which contains stations with a DBNAME 
+that does not match something in 2011a, I have:
+
+DSS14 This had 4 entries under the names DS14, DSS14, GO, and GOLDMARS.  
+      All seem to have coordinates ultimately from reference frame 
+      1995-1 from Eubanks.  Only one entry has rates so I will use 
+      that one and consolidate under DSS14
+GOLD_TS  VSOP tracking station?
+DSS43 This matches TIDBIN64 but is 1995 coordinates so I'll comment this
+      one out.
+TDBIN_TS VSOP tracking station?
+DSS54 ITRF93 coordinate (2003)
+DSS64 Matches coordinates of DSS65.  Why the change of DSS number?
+      I've seen a suggestion that this was a temporary name.  From
+      a 2004b GSFC solution.  I've commented it out in the file.
+DSS63 under the names DS63 and MADRID64      
+      1995 coordinates, rates on DSS63 only so use that 
+      The position was in a 1998 catalog.
+DSS53 under the names ROBLD_TS and MADRD_TS.  VSOP tracking station?
+      1997 coordinates, no rates.
+
+I don't dare change the names of ROBLED32, GOLDVENU, or TIDBIN64 as
+those will keep coming back every new geodetic solution.  ROBLED32 and
+GOLDVENU are old antennas or locations no longer in use so ignore
+them.  They are not in the SCHED station catalog.  TIDBIN64 is an
+important one for the large antenna.  Switch stations.dat to use it
+from the old DSS63 coordinate.  I will change all the rest to the DSS
+names.  Note that neither DSS14 nor DSS63 have geodetic solutions in
+gsfc2011a.  Those are the big ones most used (other than TIDBIN64) by
+astonomers.
+
+
+The stations_DSN.dat (part of SCHED's master stations file) had:
+GOLD70    DBNAME DSS14    Rename to DSS14
+GOLDHEF   DBNAME DSS15    Rename to DSS15
+GOLDVENU  This is the old DSS13.  Don't keep it but keep a DSS13 that
+          points to DSS13 in the geodetic file.
+
+TID70     DBNAME DSS43    Rename to DSS43
+TID34     DBNAME DSS45    Rename to DSS45
+DSS34     DSS34   Coordinate from JPL doc embedded in stations.dat.
+                  Not in geo solution.
+ROB70     DBNAME DSS63    Rename to DSS63
+ROB34     DBNAME DSS65    Rename to DSS65
+ROB34BWG  DBNAME DSS54    Rename to DSS54
+
+The old names are preserved in comments.
+
+The freq.dat file, that gives frequency setup information, only has
+GOLD70, GOLDMARS, TID70, and ROB70 Note GOLDMARS is the same as GOLD70
+and both are DSS14.  The freq.dat entry is for 1cm and dates from
+1996.  Except for a tighter RF range (more realistic), it seems
+identical to the GOLD70 1cm entry.  I suspect I should rename it to
+DSS14 and get rid of the GOLD70 entry.  Did that.  All names in
+the freq.dat file changed to the DSS form.
+
+Based on Eric Clark's email forwarded to me on Aug. 9, 2011:
+
+Is DSS61 active?  Should I have station data for it?
+
+It looks like I need to add DSS25, DSS26, and DSS55, but I don't have
+any information about them.  They are also not in the geodetic
+solution.
+

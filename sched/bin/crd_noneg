@@ -1,0 +1,33 @@
+#!/bin/csh
+
+#  Strip negative synthesizer settings from crd files going
+#  to stations without the new VME on-line code.
+#  As of June 15, 2012, that is only LA and SC.
+#  C. Walker  June 15, 2012.
+#  Stored in $SCHED/RELATED_CODE with copy in $SCHED/bin.
+
+if( $1 == '' ) then
+      echo Usage example:  crd_noneg tjun17cw la sc
+      echo or for all st:  crd_noneg tjun17cw all
+   endif
+if( $2 == 'all' ) then
+      set stalist="sc hn nl fd la pt kp ov br mk"
+   else
+      set stalist="$2 $3 $4 $5 $6 $7 $8 $9 $10 $11"
+   endif
+
+foreach station ($stalist[1*] )
+   set cfile = $1crd.$station
+   if( -e $cfile ) then
+      if( -e $cfile.tmp ) then
+            /bin/rm $cfile.tmp
+         endif
+      echo converting $cfile
+      mv $cfile $cfile.tmp
+      sed '/synth/ s/-/ /g' $cfile.tmp > $cfile
+   else
+      echo $cfile does not exist
+   endif   
+end
+
+echo Done.
