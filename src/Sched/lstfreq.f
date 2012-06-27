@@ -36,7 +36,7 @@ C
       LOGICAL            DOWRTF, DOWRTB
       DOUBLE PRECISION   SFREQ(*), SBBC(*), SBW(*)
       CHARACTER          PRLINE*1024, FRTXT*16
-      CHARACTER          LABFR*128, LABBB*128, LABBW*128
+      CHARACTER          LABFR*(*), LABBB*(*), LABBW*(*)
 C -------------------------------------------------------------------
       NPER = 7
 C
@@ -53,6 +53,7 @@ C
 C     Write the frequencies.
 C
       IF( DOWRTF ) THEN
+         PRLINE = ' '
          PRLINE = LABFR
          ICH  = ICH1
          INLINE = 0
@@ -75,6 +76,7 @@ C
             ILINE = ILINE + 1
          END IF
 C
+         PRLINE = ' '
          PRLINE = LABBB
          ICH  = ICH1
          INLINE = 0
@@ -101,6 +103,7 @@ C
 C     Write the bandwidths.
 C
       IF( DOWRTB ) THEN
+         PRLINE = ' '
          PRLINE = LABBW
          ICH  = ICH1
          INLINE = 0
