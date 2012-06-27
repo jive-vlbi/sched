@@ -266,8 +266,8 @@ C
                   IF( PBWARN .AND. NPBW .LE. 10 ) THEN               
 C
                      MSGTXT = ' '
-                     WRITE( MSGTXT, 
-     1                  '( A, I4, A, I4, A, F10.4, A, F10.4, A, )' )
+                     WRITE( MSGTXT,
+     1                  '( A, I4, A, I4, A, F10.4, A, F10.4, A )' )
      2                  'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
      3                  ' between ', BB1, ' and ', BB2, 
      4                  ' MHz '
