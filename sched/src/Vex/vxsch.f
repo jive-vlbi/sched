@@ -217,7 +217,7 @@ C
                DO INT = 1, NSCINT(ISCN)
                   LINE = ' '
                   ILEN = LEN1( INTENT(ISCINT(INT,ISCN)) )
-                  WRITE( LINE, '( 5A, )' ) COM,
+                  WRITE( LINE, '( 5A )' ) COM,
      1                ' intent = ', QOT, 
      2                INTENT(ISCINT(INT,ISCN))(1:ILEN), QOT
                   WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
