@@ -46,6 +46,7 @@ C
          DATASIZE = 0.D0
          OVERLAP = .FALSE.
          GOTCENT = .FALSE.
+         MAXSPD = 0.0
 C
 C        Loop through scans.
 C
