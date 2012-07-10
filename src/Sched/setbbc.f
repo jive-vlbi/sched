@@ -112,10 +112,8 @@ C
 C
       ELSE IF( DAR(ISETSTA(KS)) .EQ. 'R1002') THEN
 C
-C        There doesn't seem to be a BBCKVSR routine anywhere.
-C        Did I loose something?
 C
-C         CALL BBCKVSR( KS )
+         CALL BBCKVSR( KS )
 C
       ELSE IF( DAR(ISETSTA(KS)) .NE. 'NONE' ) THEN
 C
