@@ -123,7 +123,11 @@ C
      1          'electronics_rack_type = ',
      2          'DBBC', SEP
 C    2011-09-30 small@astron:
-C    Also add support for KVASAR stations here:
+C    Also add support for KVAZAR stations here.
+C    (Note that "KVAZAR" is a back-transliteration 
+C     of the Cyrillic transliteration of "quasar".
+C     "KVAZAR" is apparently preferred at JIVE, although
+C     the Russians write "QUASAR" in English.)
          ELSE IF( DAR(ISCAT) .EQ. 'R1002' ) THEN
             WRITE( IVEX, '( 5X, A, A, A1)' )
      1          'electronics_rack_type = ',
