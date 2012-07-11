@@ -14,7 +14,7 @@ C
       PARAMETER   ( MFP = 26 )   !  1/3 dimension of KFSETS
       INTEGER     I, ISCN, ISTA, JSTA, ISRC, ISET
       INTEGER     NFP, IFP, IFS, IFSETS(MFP)
-      LOGICAL     GOTFS
+      LOGICAL     GOTFS, SCNUSED
       DOUBLE PRECISION   TBASE, TSCAN, TBSTRT
       CHARACTER   KFSETS*(*)
 C -----------------------------------------------------------------
@@ -36,8 +36,17 @@ C        to false while recording schedules set NOREC true for
 C        scans like pointing scans (true as of July 2011).  I
 C        might change that but I'm not sure that is not what I want.
 C
-         IF( SRCNUM(ISCN) .EQ. ISRC .AND. ( .NOT. NOREC(ISCN) ) .AND.
-     1       SETNUM(ISCN) .EQ. ISET ) THEN
+C        Don't count scans that are skipped by all stations being 
+C        processed.
+C
+         SCNUSED = .FALSE.
+         DO ISTA = 1, NSTA
+            IF( STASCN(ISCN,ISTA) ) SCNUSED = .TRUE.
+         END DO
+C
+         IF( SCNUSED .AND. SRCNUM(ISCN) .EQ. ISRC .AND. 
+     1       ( .NOT. NOREC(ISCN) ) .AND.
+     2       SETNUM(ISCN) .EQ. ISET ) THEN
 C
 C           Add the scan time.
 C
