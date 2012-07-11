@@ -63,13 +63,16 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 10.2 beta}
+\title{THE \schedb USER MANUAL \\  Version 10.2}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
 
-\schedb is a program for planning and scheduling VLBA, Global VLBI,
-EVN, and some VLA observations.  This manual describes how to use the
+\schedb is a program for planning and scheduling Very Long Baseline
+Array (VLBA), High Sensitivity Array (HSA), Global Very Long Baseline
+Interferometry (Global VLBI), Eurpean VLBI Network (EVN), Long
+Baseline Array (LBA; Australia), and some Karl G. Jansky Very Large
+Array (VLA) observations.  This manual describes how to use the
 program, provides extensive information on all possible inputs, and
 gives considerable information and advice on many aspects of
 scheduling VLBI observations.  The \htmlref{INTRODUCTION}{CHP:INTRO}
@@ -569,9 +572,15 @@ line sources, velocities.  There are standard source catalogs,
 although the user may need to add non-standard sources.  Source
 catalog entries can be included in the \htmlref{Main Schedule Input
 File}{SEC:SCHPAR}.  The standard catalog is \htmladdnormallink{{\sl
-\$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}.  Two external
-catalogs can be specified if one wishes, for example, to use the
-standard one for calibrators and another for multiple phase centers
+\$SCHED/catalogs/sources.vlba}}{catalogs/sources.vlba}, which contains
+sources from several sources, mainly the Goddard geodetic VLBI group
+and Leonid Petrov.  There is a separate file, \htmladdnormallink{{\sl
+\$SCHED/catalogs/sources.petrov}}{catalogs/sources.petrov}, with just
+Petrov's results if a set of positions all from one solution is
+desired.  There are on the order of 7000 sources in these catalogs.
+Two external catalogs can be specified if one wishes, for example, to
+use the standard one for calibrators and another for multiple phase
+centers.
 
 \item[\htmlref{Station Catalog}{SEC:STACAT}:] This file contains
 information about the antennas including names, positions, slew
@@ -580,7 +589,10 @@ suffice for nearly all users.  If not, entries can be included in the
 \htmlref{Main Schedule Input File}{SEC:SCHPAR}.  Station positions may
 stored sparately in the \htmlref{Location Catalog}{SEC:STACAT}.  The
 standard station catalog is \htmladdnormallink{{\sl
-\$SCHED/catalogs/stations.dat}}{catalogs/stations.dat}.
+\$SCHED/catalogs/stations.dat}}{catalogs/stations.dat}.  A second version
+is available for use with the new backend (RDBE) hardware.  It is
+\htmladdnormallink{{\sl 
+\$SCHED/catalogs/stations\_RDBE.dat}}{catalogs/stations\_RDBE.dat}.
 
 \item[\htmlref{Location Catalog}{SEC:STACAT}:] This file contains
 station locations.  The standard version reflects the locations and
@@ -590,7 +602,7 @@ coupled.  The Locations Catalog is optional since it is not needed if
 the station locations are specified in the Station Catalog.  It exists
 separately for ease of maintenance.  The standard
 location catalog is \htmladdnormallink{{\sl
-\$SCHED/catalogs/stations.dat}}{catalogs/locations.dat}.
+\$SCHED/catalogs/locations.dat}}{catalogs/locations.dat}.
 
 \item[\htmlref{Setup Files}{SEC:SETUPS}:] These files contain the
 details required to configure the hardware at the stations.  Different
@@ -606,7 +618,12 @@ good defaults for many parameters in the setup files.  The standard
 file should be used.  Any non-standard information can be in the setup
 files.  This file cannot be imbedded in the main input file.  The standard
 frequency catalog is \htmladdnormallink{{\sl
-\$SCHED/catalogs/freq.dat}}{catalogs/freq.dat}
+\$SCHED/catalogs/freq.dat}}{catalogs/freq.dat}.  A second version is
+available for use with the new backend hardware (RDBE).  It is
+\htmladdnormallink{{\sl 
+\$SCHED/catalogs/freq\_RDBE.dat}}{catalogs/freq\_RDBE.dat}
+The main difference is that the VLBA IFs are assumed to be between 512
+and 1024 MHz, not 500 and 1000 MHz.
 
 \item[\htmlref{Tape Initialization File}{SEC:TPINI}:] This file tells
 \schedb the properties of the tape systems at the stations and where
@@ -1495,11 +1512,13 @@ close enough time to the VLBI observations that variations will not be
 significant.  At the time of the VLBI observations, some of the larger
 antennas can be asked to measure flux densities of sources being
 observed (see the \htmlref{{\tt TANT}}{MP:TANT1} command.  Better yet,
-if you have the phased array at the VLA or can get an hour or so of
+if you have a phased array, such as the VLA, or can get an hour or so of
 VLA test time, accurate flux densities of your VLBI calibrators can be
 measured.  In order to do this, be sure to include a VLA flux calibrator
 (usually 3C286 or 3C48) in the VLA schedule.  You don't need to
-record VLBI data on it.
+record VLBI data on it.  This method can go awry if the calibrator has
+intermediate scale structure that is compact to the interferometer but 
+resolved out by VLBI.
 
 It is also possible, and perhaps preferable, to rely on the apriori
 calibration of the VLBI antennas.  For this, it is best to look
@@ -1509,7 +1528,9 @@ frequencies, it is possible to get the flux scale right to within a
 few percent this way.  You just have to be sure not to let any
 antennas with bad weather or other problems contribute to the flux
 scale.  In the AIPS calibration task CALIB, use ANTUSE to limit the
-gain normalization to the antennas whose gains you trust.
+gain normalization to the antennas whose gains you trust.  Also
+specify a generous minimum elevation, such as 30 degrees, for the gain
+normalization.
 
 When using the apriori gains for absolute flux calibration, care must
 be taken with bandpass calibration and channel selection.  The gains
@@ -1518,7 +1539,7 @@ are based on total power measurements from the baseband converters.
 Such gains apply to the average across the full baseband.  If you
 attempt to apply such gains to a data set with the edge channels
 removed, there will be an error of a few percent because those edge
-channels typically have lower gain (which is partly why you removed
+channels typically have lower gain (which is probably why you removed
 them) and the average for the remaining channels will be higher.  You
 can deal with this either by doing the calibration including all edge
 channels, or by doing a bandpass calibration based on all channels.
@@ -1530,7 +1551,7 @@ have been measured.  These frequencies are given in the {\sl
 vlba\_gains.key} available by anonymous ftp to ftp.aoc.nrao.edu.  This
 is the file that you will need for VLBA calibration.  At those
 frequencies, the Tsys used in calibration and the gain are based on
-the same values of Tcal.  If you observe at other frequencies, you
+the same values of Tcal so the Tcal value cancels out.  If you observe at other frequencies, you
 will be depending on the Tcal values being correct (or at least having
 the right ratio) at your frequency and the frequency where the gains
 are measured.  That is not assured.
@@ -1539,6 +1560,21 @@ For any of these methods to work, it is best to include a strong,
 compact calibrator and to observe it several times to check
 consistency.
 
+There appears to be an offset of on the order of 6.5\% between Tsys
+values measured with the legacy VLBA system's baseband converters and
+Tsys measured with the new, wide-band RDBE. The cause of that offset
+is not yet understood, but is thought to be some issue with the old
+system.  During the transition, the gains distributed are for the old
+system.  An adjustment appears to be required to for data data
+calibrated using Tsys measured either by the RDBE or by DiFX and gains
+derived from the old system (all gains distributed so far as of July
+2012).  For a discussion of this effect, see /htmladdnormallink{VLBA
+Senesitivity Upgrade Memo 34}{
+https://science.nrao.edu/facilities/vlba/publications/memos/sensitivity-upgrade/index.sensimemo34.pdf}.
+Stay tuned on developments in this area.
+
+\htmladdnormallink{``VLBA Information for Astronomers''}
+{http://www.vlba.nrao.edu/astro}
 
 \item {\bf Setting the relative gains of antennas:}  Another invaluable
 use of a strong, compact calibrator is to help ensure that all antennas
@@ -1549,22 +1585,25 @@ These can be applied to the whole observation to obtain the best possible
 calibration, short of self-cal.
 
 
-\item {\bf ``Readback tests'' and module-swap gaps:} The recording
-media should be stopped occasionally to help prevent major amounts of
-data loss if something should go wrong and, on non-VLBA controlled
-stations, to allow disk bank changes.  Two minute gaps every hour or
-two used to be used for readback tests with the tape systems.  Tape is
-no longer used, but an equivalent data integrity test is likely to be
-built into the disk based systems in the future.  Also, if the disks
-are not stopped, all the data ends up in one file. If there are
-problems closing the file, the data can become unreadable.  As of
-early 2008, it is recommended that a gap of 30s or more be inserted
-every hour or two.  For Vex stations (most non-VLBA stations), gaps
-should also be inserted to allow bank changes.  The VLBA can switch
-between mounted disk banks (modules) on the fly, but the field systems
-need a pause in the data recording.  Such gaps should be inserted
-every 22 minutes for recordings at 1 Gbps and proportionally less
-often at lower bit rates.  These gaps need to be more than 10s long.
+\item {\bf Scan Gaps, ``Readback tests'', and module-swap gaps:} The
+recording media should be stopped occasionally to help prevent major
+amounts of data loss if something should go wrong and, on non-VLBA
+controlled stations, to allow disk bank changes.  Two minute gaps
+every hour or two used to be used for readback tests with the tape
+systems.  Tape is no longer used, but an equivalent data integrity
+test is likely to be built into the disk based systems in the future.
+Also, if the disks are not stopped, all the data ends up in one
+file. If there are problems closing the file, the data can become
+unreadable.  As of early 2008, it is recommended that a gap of 30s or
+more be inserted every hour or two.  In fact, any pause in recording
+will start a new recording scan, but beware that \schedb prevents gaps
+of less than \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} seconds.  For field
+system controlled stations, (most non-VLBA stations) gaps should also
+be inserted to allow bank changes.  The VLBA can switch between
+mounted disk banks (modules) on the fly, but the field systems need a
+pause in the data recording.  Such gaps should be inserted every 22
+minutes for recordings at 1 Gbps and proportionally less often at
+lower bit rates.  These gaps need to be more than 10s long.
 
 
 \item {\bf Phased VLA:} The phased VLA has special calibration needs.
@@ -3330,7 +3369,7 @@ matures.
 \subsection{\label{SSEC:VLAVLBI}VLBI at the VLA}
 
 This section has change drastically with the advent of the VLA upgrade
-to the JVLA and the use of the WIDAR correlator.  If you have a perverse
+to the VLA and the use of the WIDAR correlator.  If you have a perverse
 interest in the old system, see the obsolete sections.
 
 For much detailed information on VLBI at the VLA, follow the links to
@@ -3338,7 +3377,7 @@ the \htmladdnormallink{VLBI at the VLA guide}
 {http://www.vla.nrao.edu/astro/guides/vlbivla/current/}.
 
 The WIDAR correlator is capable of providing phased array output from
-the JVLA in a VDIF format to be recorded on a Mark5C disk recording 
+the VLA in a VDIF format to be recorded on a Mark5C disk recording 
 unit.  Such data can be played back on the DiFX correlators, at least.
 Single dish recording is a subset of phased array recording.  Since
 recorder ready data are provided by WIDAR, none of the normal VLBI
@@ -3346,20 +3385,20 @@ backends are used.  But the properties of the correlator are rather
 similar to the RDBE so, in fact, scheduling the VLA has become more
 similar to scheduling other antennas than it was with the old system.
 
-The /schedb output used by the JVLA is the VEX file.  As for setups, the
-JVLA can be treated as if it were a VLBA antenna.  Any setup that the
-VLBA can manage, except 610 MHz and 86 GHz, can be duplicated on the JVLA.
+The /schedb output used by the VLA is the VEX file.  As for setups, the
+VLA can be treated as if it were a VLBA antenna.  Any setup that the
+VLBA can manage, except 610 MHz and 86 GHz, can be duplicated on the VLA.
 The LO/IF setup required to do so can be complicated, but that is 
 handled by software and staff in the conversion of the VEX file to the
-scripts actually used by the JVLA.
+scripts actually used by the VLA.
 
-For scheduling, the user should be aware that the JVLA slews at 40
+For scheduling, the user should be aware that the VLA slews at 40
 deg/min in azimuth and 20 deg/min in elevation, which is about half
 the speed of the VLBA.  This can be an issue for widely separated
 sources.  It is, however, faster than some other HSA or Global VLBI
 antennas.
 
-One area where the JVLA, or any interferometer for that matter,
+One area where the VLA, or any interferometer for that matter,
 differs from the VLBA and other single antennas is the need to adjust
 the individual antenna phases so that the signals add coherently when
 summed.  The instructions to actively phase during a scan or hold
@@ -3367,7 +3406,7 @@ phase from a previous active scan are given in \htmlref{{\tt
 INTENTs}}{MP:INTENTs}.  Use {\tt DETERMINE\_AUTOPHASE} and {\tt
 APPLY\_AUTOPHASE}.  There will also need to be one to specify single
 dish observing and to one control reference pointing.  Phasing scans
-can be added simply as additional VLBI scans, or the JVLA can be sent
+can be added simply as additional VLBI scans, or the VLA can be sent
 to a source not observed by the rest of the antennas and for which no
 recording is made.
 
@@ -3389,19 +3428,19 @@ If doing DELZN segments to measure the tropospheric delay, it is best
 to use a single dish mode as the phasing can take time and can confuse 
 the troposphere solution algorithm.
 
-This was written as JVLA VLBI observations were just being tested.  It
+This was written as VLA VLBI observations were just being tested.  It
 almost certainly needs more details.
 
 Note that normal output from the WIDAR correlator will be obtained during
 VLBI observations.  Such observations may be useful for determination 
 of large scale structure, total flux density, polarization, or absolute
-amplitude calibration.  The user may need some JVLA specific scans, such
+amplitude calibration.  The user may need some VLA specific scans, such
 as on a flux calibrator, to make full use of such data.
 
 The old parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} allowed automatic
 insertion of VLA phasing scans in the observe files.  That scheme no 
 longer works.  But an item on the to-do list is to make that parameter
-insert JVLA phasing scans.  That has not yet been done.
+insert VLA phasing scans.  That has not yet been done.
 
 
 \section{\label{SEC:INDIV}Special Concerns for Specific Observatories}.
@@ -6065,9 +6104,9 @@ return to blank unless given again.
 \schedb makes no attempt yet to parse {\tt INTENTs} and treats them all
 identically.
 
-Some established values of {\tt INTENTs} in the JVLA environment are
+Some established values of {\tt INTENTs} in the VLA environment are
 listed here.  A VLBI specific list has not been generated.  Of interest
-for the JVLA is {\tt DETERMINE\_AUTOPHASE}.  {\tt APPLY\_AUTOPHASE} may
+for the VLA is {\tt DETERMINE\_AUTOPHASE}.  {\tt APPLY\_AUTOPHASE} may
 also get established.
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
@@ -8903,7 +8942,7 @@ parameter)}
 \subsubsection{\label{MP:VLAPSRC}{\tt VLAPSRC}}
 
 This parameter was developed originally for the old VLA system.  It has
-not yet been converted for use with the JVLA.  But that is on the to-do 
+not yet been converted for use with the VLA.  But that is on the to-do 
 list.
 
 {\tt VLAPSRC} can be used to specify the source to use for phasing the
@@ -12912,7 +12951,15 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_10.2}Development Version 10.2}
+\subsection{\label{SSEC:VER_10.3}Development Version 10.3}
+
+\begin{itemize}
+
+\item  Nothing yet.
+
+\end{itemize}
+
+\subsection{\label{SSEC:VER_10.2}Version 10.2}
 
 \begin{itemize}
 
@@ -12922,6 +12969,8 @@ more information.
 %  Put in spectral zoom.
 %  Put GST in some sched output file (sch file?)
 
+
+\item Update source catalogs to RFC2012b and GSFC2011b.  RCW  July 4, 2012.
 
 \item Make a beta version June 25, 1012  RCW.
 
@@ -12954,7 +13003,7 @@ if we ever get receivers with multiple first LOs in the receivers,
 but will work for the main current case of the wide C band receivers 
 or for the wide RCP option at X band.  May 22, 2012  RCW.
 
-\item Make it possible to schedule the JVLA for VLBI.  Much old VLA
+\item Make it possible to schedule the VLA for VLBI.  Much old VLA
 code was removed or bypassed.  It is now expected that the VLA will be
 scheduled by way of the VEX file.  May 16, 2012. RCW
 
@@ -16700,7 +16749,7 @@ Note that the \htmlref{main example} {SSEC:EXAMPLE1} in the
 \htmlref{Examples}{SEC:EXAMPLES} section has a single VLA antenna
 in it and serves as an example of that type of observing.
 
-\verbatiminput{../examples/vla_vlbi.key}
+% no longer there \verbatiminput{../examples/vla_vlbi.key}
 
 \subsection{\label{SSEC:VLAONLY}VLA-Only Project Example}
 
@@ -16739,7 +16788,7 @@ so it is rather more complicated.  Note that, for many frequency settings,
 
 The VLA capabilities in SCHED are for the old VLA system that has
 been shut down.  Stay tuned for instructions related to running
-the EVLA (JVLA).
+the EVLA (VLA).
 
 This section gives a brief description of each of the parameters
 available to \schedb that are specifically for VLA observations or
