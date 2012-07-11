@@ -453,8 +453,6 @@ mv sched.runlog lba.runlog
 #  Check planet and satellite pointing, and creation of pointing
 #  schedules.  The required ephemeris files and spice files are
 #  only available at the AOC, so don't try elsewhere.
-#  Do the diff for the sum and vex files here as they will have
-#  station codes in their names.
 
 if ("$PLANET_DATA" == "/users/cwalker/PLANETDATA/Linux") then
 
@@ -467,6 +465,16 @@ if ("$PLANET_DATA" == "/users/cwalker/PLANETDATA/Linux") then
    /bin/rm doptgt.com
    mv sched.runlog ptg.runlog
    ./Check_results ptg hn $SCH_STDOUT doptg.com >> testruns.out
+
+   echo "******************************************************"  >> testruns.out
+   echo "************" Processing doptg2.com "*******************" | tee -a testruns.out
+   echo "******************************************************"  >> testruns.out
+   sed s.\$SCHED/bin.\$SCHBIN.g  doptg2.com > doptgt2.com
+   chmod +x doptgt2.com
+   source ./doptgt2.com >> testruns.out
+   /bin/rm doptgt2.com
+   mv sched.runlog ptg2.runlog
+   ./Check_results ptg2 la $SCH_STDOUT doptg.com >> testruns.out
 
    echo "******************************************************"  >> testruns.out
    echo "***********" Processing egsat.key "*********************"  | tee -a testruns.out
