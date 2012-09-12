@@ -17,6 +17,7 @@ C
       INTEGER        I, KS, KF, ICH, IIF, KIF, NBAD
       INTEGER        USEKF, USEIF(MCHAN), BESTPRIO
       LOGICAL        MATCH, GOT, NEEDCAT, OKIF(MCHAN,MFIF), TAKEIT
+      CHARACTER      LASTPOL*4
       REAL           OVERLAP, CENTER
       REAL           BESTCENT
 C ---------------------------------------------------------------------
@@ -28,6 +29,8 @@ C
       BESTCENT = 1.E5
       BESTOVER(KS) = 0.0
       BESTPRIO = 100
+
+C      write(*,*) 'setfcat starting ', KS, NEEDCAT
       DO KF = 1, NFREQ
 C
 C        Find if this frequency catalog group is compatible with this
@@ -222,39 +225,52 @@ C
 C       write(*,*) 'setfcat ifreqnum', ifreqnum(1,ks)
       IF( IFREQNUM(1,KS) .GE. 1 ) THEN
          KF = IFREQNUM(1,KS)
+         LASTPOL = ' '
          DO ICH = 1, NCHAN(KS)
             KIF = IFREQIF(ICH,KS)
 C
-            IF( FIRSTLO(ICH,KS) .EQ. NOTSET )
-     1          FIRSTLO(ICH,KS) = FLO1(KIF,KF)
+C           If the channel didn't have a match, KIF will be zero.
+C           That is not a good array index.
 C
-C            Set the IFCHAN in SETBBC.  There are issues with 
-C            MarkIV that are better handled there.
+            IF( KIF .GT. 0 ) THEN
+               IF( FIRSTLO(ICH,KS) .EQ. NOTSET )
+     1             FIRSTLO(ICH,KS) = FLO1(KIF,KF)
 C
-C            IF( IFCHAN(ICH,KS) .EQ. ' ' )
-C     1          IFCHAN(ICH,KS) = FIFNAM(KIF,KF)
+C               Set the IFCHAN in SETBBC.  There are issues with 
+C               MarkIV that are better handled there.
 C
-            ALTIFC(ICH,KS) = FALTIF(KIF,KF)
+C               IF( IFCHAN(ICH,KS) .EQ. ' ' )
+C     1             IFCHAN(ICH,KS) = FIFNAM(KIF,KF)
 C
-C           If setting the polarization, update DUALPOL.
-C           It will be false if the polarization was previously
-C           unknown.
+               ALTIFC(ICH,KS) = FALTIF(KIF,KF)
 C
-            IF( POL(ICH,KS) .EQ. ' ' ) THEN
-               POL(ICH,KS) = FPOL(KIF,KF)
-               IF( POL(ICH,KS) .NE. POL(1,KS) ) THEN
+C              If setting the polarization, update DUALPOL.
+C              It will be false if the polarization was previously
+C              unknown.  Jump through a hoop or two because 
+C              the first channel might not be getting set yet.
+C
+               IF( POL(ICH,KS) .EQ. ' ' ) THEN
+                  POL(ICH,KS) = FPOL(KIF,KF)
+               END IF
+               IF( LASTPOL .NE. ' ' .AND. 
+     1             POL(ICH,KS) .NE. LASTPOL ) THEN
                   DUALPOL(KS) = .TRUE.
                END IF
-            END IF
+               IF( POL(ICH,KS) .NE. ' ' ) LASTPOL = POL(ICH,KS)
 C
-            IF( SDEBUG ) THEN
-               SETMSG = ' '
-               WRITE( SETMSG, '( A, 4I4, 3F9.2, 1X, 5A )' ) 
-     1            'SETFCAT: A ', ICH, KS, KIF, KF, 
-     2            FIRSTLO(ICH,KS), FLO1(KIF,KF), FREQREF(ICH,KS),
-     3            IFCHAN(ICH,KS), FIFNAM(KIF,KF), ALTIFC(ICH,KS),
-     4            POL(ICH,KS), FPOL(KIF,KF)
-               CALL WLOG( 0, SETMSG )
+               IF( SDEBUG ) THEN
+                  SETMSG = ' '
+                  WRITE( SETMSG, '( A, 4I4, 3F9.2, 1X, 5A )' ) 
+     1               'SETFCAT: A ', ICH, KS, KIF, KF, 
+     2               FIRSTLO(ICH,KS), FLO1(KIF,KF), FREQREF(ICH,KS),
+     3               IFCHAN(ICH,KS), FIFNAM(KIF,KF), ALTIFC(ICH,KS),
+     4               POL(ICH,KS), FPOL(KIF,KF)
+                  CALL WLOG( 0, SETMSG )
+               END IF
+            ELSE
+C
+C              Channel doesn't match.  Leave parameters alone.
+C
             END IF
 C
          END DO

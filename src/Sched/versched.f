@@ -49,10 +49,12 @@ C       VERSION = 'Development version after Dec. 7, 2011'
 C       VERSION = 'Beta version of Feb. 7, 2012'
 C       VERSION = 'Development version after Feb. 7, 2012'
 C       VERSION = 'Release of about Feb. 14, 2012'
-       VERNUM  = 10.2
+C       VERNUM  = 10.2
 C       VERSION = 'Development version after beta of May 4, 2012'
 C       VERSION = 'Development version after beta of June 25, 2012'
-       VERSION = 'Release of about July 12, 2012'
+C       VERSION = 'Release of about July 12, 2012'
+       VERNUM  = 10.3
+       VERSION = 'Beta version of July 12, 2012'
 C
       RETURN
       END
