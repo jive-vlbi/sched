@@ -17,6 +17,14 @@ C
 C     Routine by RCW Sep. 2011.
 C     Bug fix Nov. 15, 2011.  Was using IF number as channel number.
 C
+C     Bug found Sept. 10, 2012.  if_def lines are reused if they are 
+C     good for more than one station.  But the line is only 
+C     constructed based on the first station to use it.  If a 
+C     non-VLBA station is first, the comments get omitted.  A user
+C     ran into this when he specified EB first.  I am going to 
+C     prevent the Vex code (VXCFIF) from using the same if_def for two
+C     IFs that are not both VLBA or both non-VLBA.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
@@ -30,6 +38,7 @@ C ------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VXVBRX starting.' )
 C
       GOTIT = .FALSE.
+C
       IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
 C
 C         Get the receiver.  Recall that, on the VLBA,
