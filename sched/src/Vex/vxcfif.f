@@ -3,13 +3,19 @@ C     Routine specific for the VEX extension of SCHED.
 C     By H.J. van Langevelde, JIVE, 290596 
 C     returns true if IF block in 2 SCHED sets are identical
 C
+C     The if_def lines for the VLBA require extra information
+C     in comments not required for other stations.  When those
+C     lines are shared between VLBA and non-VLBA stations, there
+C     can be confusion.  So return false if one station is a 
+C     VLBA station and the other not.  Sept. 10, 2012.  RCW.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
 C
       INTEGER ISET, JSET, I, J, ISTA
       INTEGER NICHAN, NJCHAN, ILIST(MCHAN), JLIST(MCHAN)
-      LOGICAL NEWFND, IDENT
+      LOGICAL NEWFND, IDENT, IVLBA, JVLBA
       CHARACTER UPCALI*4, UPCALJ*4, IDAR*5, JDAR*5
 C ----------------------------------------------------------------------
 C
@@ -83,19 +89,28 @@ C
 C     can also have different IF blocks if have different IF-coding
 C     so need to find DAR for station involved
 C
+C     Use this piece of code to test for both VLBA or both not VLBA.
+C
+C
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) ) 
-     4       IDAR = DAR(STANUM(ISTA))
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,ISET) ) THEN
+            IDAR = DAR(STANUM(ISTA))
+            IVLBA = STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA'
+         END IF
       END DO
 C 
       DO ISTA = 1, NSTA
-         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) ) 
-     4       JDAR = DAR(STANUM(ISTA))
+         IF( STATION(STANUM(ISTA)) .EQ. SETSTA(1,JSET) ) THEN
+            JDAR = DAR(STANUM(ISTA))
+            JVLBA = STATION(STANUM(ISTA))(1:4) .EQ. 'VLBA'
+         END IF
       END DO
 C
 C     the following statement covers MkIII/MkIV and VLBA/VLBAG
+C     It also tests for both VLBA or both not VLBA
 C
-      IF( IDAR(1:3) .NE. JDAR(1:3) ) IDENT = .FALSE.
+      IF( ( IDAR(1:3) .NE. JDAR(1:3) ) .OR.
+     1    ( IVLBA .NEQV. JVLBA ) ) IDENT = .FALSE.
 C
       VXCFIF = IDENT 
 C

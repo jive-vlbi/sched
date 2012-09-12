@@ -30,7 +30,13 @@ C
          WRITE( IVEX, '( A, A, A1 )' ) 'def ',
      1        IFLINK(IIF)(1:LEN1(IFLINK(IIF))), SEP
          CALL VXSTLI( IIF, NSTAIF, ISTAIF )
+C
+C        Loop over channels.
+C
          DO ICH = 1, NCHAN(KS)
+C
+C           See if this is the first channel that uses the IF.
+C
             NEWFND = .FALSE.
             IF( ICH .EQ. 1 ) THEN
                NEWFND = .TRUE.
@@ -44,6 +50,8 @@ C
             END IF
 C
 C           could save NIF and IFNAMSs
+C
+C           If this is a new IF, then write most of the if_def line.
 C
             IF( NEWFND ) THEN
 C
