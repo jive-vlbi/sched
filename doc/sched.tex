@@ -3291,6 +3291,8 @@ each scan.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
+See the subsection below for the VLA information.  
+
 Note that much of what is below applies to the old VLA system.  VLBI
 on the EVLA with the WIDAR correlator has not yet been implemented and
 \schedb does not have the ability to write EVLA control files.
@@ -3298,77 +3300,11 @@ Most likely, control of VLBI at the VLA will be based on the VEX files
 and a translator that makes the VLA specific files.  This section will
 be updated when this appears.
 
-\schedb can be used to schedule essentially all types of VLBI
-observations on the VLA.  It can also be used instead of {\sc OBSERVE}
-to schedule pure VLA observations involving a limited subset of the
-special cards that can be in VLA schedules.  This includes most
-continuum observations.  This situation is likely to evolve as the EVLA
-upgrade, which includes a new control system, comes on line, so stay
-tuned.  For more information on the VLA, check out
-the VLA from the NRAO home page at \htmladdnormallink{{\sl
-http://www.nrao.edu}} {http://www.nrao.edu}.  For much detailed
-information on VLBI at the VLA, follow the links to
-\htmladdnormallink{VLBI at the VLA}
-{http://www.vla.nrao.edu/astro/guides/vlbivla/current/}.  The latter
-document is available in postscript form from the VLA home page.
-
-All observations at the VLA need an observe file that is used by the
-VLA on-line computers to control the antennas and correlator.  In
-addition, all VLBI observations at the VLA also require a VLBA-style
-control file for the VME that controls the VLBA data aquisition rack
-and recorder.  \schedb produces both kinds of files.
-
-The VLBA control file, called {\sl bq001crd.y} by \schedb for an
-example project with {\tt EXPCODE=bq001}, is similar to those provided
-for VLBA stations, except that some VLBA specific commands for
-receivers, etc. are omitted. This file controls BBC settings, when the
-recorder starts and stops, and other recording details.
-
-The observe file, called {\sl bq001obs.y} by \schedb in this example,
-is the file that is normally created by the NRAO program {\tt OBSERVE}
-(can be found from the \htmladdnormallink{NRAO home page}
-{http://www.nrao.edu}) and given to the VLA on-line system. While
-\schedb is intended for VLBI scheduling and this output is provided
-mainly for projects that use the VLA for VLBI, there is no reason that
-it cannot be used for scheduling pure VLA projects. In fact, a few
-parameters of interest only for non-VLBI projects are provided for VLA
-observers, including the ability to schedule in LST. However, \schedb
-has only limited ability to provide the special setup cards, namely
-those that start with ``//''.
-
-\schedb can provide ``//LO'' and ``//FI'' cards with parameters to set
-synthesizers to fixed values. The setup file can be used to provide
-values for the synthesizer settings. If \htmlref{{\tt FREQ}} {MP:FREQ}
-or \htmlref{{\tt DOPPLER}}{MP:DOPPLER} is used, the BBC settings will
-be adjusted to try to reach the right frequency for the VLBI
-data. Note that this has no effect on the VLA observing
-frequency. ``//LO'' and ``//FI'' cards are provided if, and only if,
-the required information is present in the setup file or could be
-obtained for the setup file by \schedb from the frequency catalog.
-\schedb also provides the ``//PM'' cards if proper (or planetary)
-motion is present for the source in the source catalog. Since the
-epoch of zero offset is given in IAT, IAT-UTC must be provided with
-parameter \htmlref{{\tt IATUTC}}{MP:IATUTC} in the \schedb keyin
-file. If other ``//'' cards are needed, or other options are needed on
-the ``//LO'' and ``//FI' cards, the regular VLA {\sl OBSERVE} must be
-used or they must be edited in by hand. Beware of the fixed formats:
-if values are put in the wrong columns, the VLA on-line system will
-not behave as expected!
-
-\schedb checks the ranges of the frequency settings given for the
-``//LO'' cards.  But the EVLA has made it possible to reach
-frequencies far outside the range of the original VLA hardware.  Such
-frequencies can be requested using frequency settings in the style of
-the VLA, but outside the allowed VLA ranges.  In addition, the
-parrameter \htmlref{{\tt EVLA}}{SP:EVLA} should be given in the setup
-file to turn off some of the checks of frequency ranges.  This is all
-at a primitive state as of Fall 2007 and will be updated as the EVLA
-matures.
 
 
 \subsection{\label{SSEC:VLAVLBI}VLBI at the VLA}
 
-This section has change drastically with the advent of the VLA upgrade
+This section has changed drastically with the advent of the VLA upgrade
 to the VLA and the use of the WIDAR correlator.  If you have a perverse
 interest in the old system, see the obsolete sections.
 
@@ -3385,7 +3321,7 @@ backends are used.  But the properties of the correlator are rather
 similar to the RDBE so, in fact, scheduling the VLA has become more
 similar to scheduling other antennas than it was with the old system.
 
-The /schedb output used by the VLA is the VEX file.  As for setups, the
+The \schedb output used by the VLA is the VEX file.  As for setups, the
 VLA can be treated as if it were a VLBA antenna.  Any setup that the
 VLBA can manage, except 610 MHz and 86 GHz, can be duplicated on the VLA.
 The LO/IF setup required to do so can be complicated, but that is 
@@ -12963,6 +12899,15 @@ more information.
 
 %  Fix headers of source files.  There is no summary on them.
 
+\item Beta version to be released Sept. 20, 2012 to get the changes
+below into the system.  RCW.
+
+\item For the crd files written for RDBE/Mark5C observations, offset
+the LO frequencies by 10 kHz for better pulse cal detection.  Also
+change from format='none' to a reasonable recording type format so
+that the formatter will be configured, which is required for pulse
+cal detection.  Sept 20, 2012.  RCW.
+
 \item Beta version to be released around Sept. 12, 2012.
 
 \item Fix bug in the VEX code where the if\_def comments needed by the
@@ -16615,6 +16560,77 @@ interest for current users.  Much of what is here is details of
 handling tape.
 
 \section{\label{SEC:OLDVLA}Old VLA}
+
+Note that much of what is below applies to the old VLA system and 
+has changed drastically with the EVLA upgrade. See the
+earlier section on VLBI at the VLA for more current information.
+
+\schedb can be used to schedule essentially all types of VLBI
+observations on the VLA.  It can also be used instead of {\sc OBSERVE}
+to schedule pure VLA observations involving a limited subset of the
+special cards that can be in VLA schedules.  This includes most
+continuum observations.  This situation is likely to evolve as the EVLA
+upgrade, which includes a new control system, comes on line, so stay
+tuned.  For more information on the VLA, check out
+the VLA from the NRAO home page at \htmladdnormallink{{\sl
+http://www.nrao.edu}} {http://www.nrao.edu}.  For much detailed
+information on VLBI at the VLA, follow the links to
+\htmladdnormallink{VLBI at the VLA}
+{http://www.vla.nrao.edu/astro/guides/vlbivla/current/}.  The latter
+document is available in postscript form from the VLA home page.
+
+All observations at the VLA need an observe file that is used by the
+VLA on-line computers to control the antennas and correlator.  In
+addition, all VLBI observations at the VLA also require a VLBA-style
+control file for the VME that controls the VLBA data aquisition rack
+and recorder.  \schedb produces both kinds of files.
+
+The VLBA control file, called {\sl bq001crd.y} by \schedb for an
+example project with {\tt EXPCODE=bq001}, is similar to those provided
+for VLBA stations, except that some VLBA specific commands for
+receivers, etc. are omitted. This file controls BBC settings, when the
+recorder starts and stops, and other recording details.
+
+The observe file, called {\sl bq001obs.y} by \schedb in this example,
+is the file that is normally created by the NRAO program {\tt OBSERVE}
+(can be found from the \htmladdnormallink{NRAO home page}
+{http://www.nrao.edu}) and given to the VLA on-line system. While
+\schedb is intended for VLBI scheduling and this output is provided
+mainly for projects that use the VLA for VLBI, there is no reason that
+it cannot be used for scheduling pure VLA projects. In fact, a few
+parameters of interest only for non-VLBI projects are provided for VLA
+observers, including the ability to schedule in LST. However, \schedb
+has only limited ability to provide the special setup cards, namely
+those that start with ``//''.
+
+\schedb can provide ``//LO'' and ``//FI'' cards with parameters to set
+synthesizers to fixed values. The setup file can be used to provide
+values for the synthesizer settings. If \htmlref{{\tt FREQ}} {MP:FREQ}
+or \htmlref{{\tt DOPPLER}}{MP:DOPPLER} is used, the BBC settings will
+be adjusted to try to reach the right frequency for the VLBI
+data. Note that this has no effect on the VLA observing
+frequency. ``//LO'' and ``//FI'' cards are provided if, and only if,
+the required information is present in the setup file or could be
+obtained for the setup file by \schedb from the frequency catalog.
+\schedb also provides the ``//PM'' cards if proper (or planetary)
+motion is present for the source in the source catalog. Since the
+epoch of zero offset is given in IAT, IAT-UTC must be provided with
+parameter \htmlref{{\tt IATUTC}}{MP:IATUTC} in the \schedb keyin
+file. If other ``//'' cards are needed, or other options are needed on
+the ``//LO'' and ``//FI' cards, the regular VLA {\sl OBSERVE} must be
+used or they must be edited in by hand. Beware of the fixed formats:
+if values are put in the wrong columns, the VLA on-line system will
+not behave as expected!
+
+\schedb checks the ranges of the frequency settings given for the
+``//LO'' cards.  But the EVLA has made it possible to reach
+frequencies far outside the range of the original VLA hardware.  Such
+frequencies can be requested using frequency settings in the style of
+the VLA, but outside the allowed VLA ranges.  In addition, the
+parrameter \htmlref{{\tt EVLA}}{SP:EVLA} should be given in the setup
+file to turn off some of the checks of frequency ranges.  This is all
+at a primitive state as of Fall 2007 and will be updated as the EVLA
+matures.
 
 \subsection{\label{SSEC:VLAVLBIOLD}VLBI at the VLA - old system}
 
