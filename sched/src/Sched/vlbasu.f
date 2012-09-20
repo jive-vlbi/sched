@@ -288,30 +288,36 @@ C
 C
 C        Various parameters in standard formats. 
 C        For the format, make it "NONE" if using the RDBE.
+C        Oops, that shuts off all formatter configuration
+C        which means the pulse cal doesn't get set up.
+C        So specify a valid format.
 C
          IF( FIRSTS .OR. FORMAT(LS) .NE. LFORMAT ) THEN
             IF( DAR(KSTA) .NE. 'RDBE' ) THEN
                WRITE( IUVBA, '( 2A )' )
      1             'format=', FORMAT(LS)(1:LEN1(FORMAT(LS)))
             ELSE
-               IF( DOMKA ) THEN
+C              Now do always. IF( DOMKA ) THEN
 C
-C                 Write disk.  Need a format.  Be simple.
+C              If writing to disk, a format is needed.  One is
+C              also needed to set up the pulse cal detectors.  So
+C              do a simple format selection based on the sample
+C              rate for all cases.
 C
-                  IF( SAMPRATE(LS) .GE. 32.0 ) THEN
-                      WRITE( IUVBA, '( A )' ) 'format=VLBA1:4'
-                  ELSE IF( SAMPRATE(LS) .EQ. 16.0 ) THEN
-                      WRITE( IUVBA, '( A )' ) 'format=VLBA1:2'
-                  ELSE IF( SAMPRATE(LS) .EQ. 16.0 ) THEN
-                      WRITE( IUVBA, '( A )' ) 'format=VLBA1:1'
-                  END IF
-               ELSE
-                  IF( WARNCRD ) THEN
-                     CALL WRTMSG( 0, 'VLBASU', 'CRD_RDBE_Warning' )
-                     WARNCRD = .FALSE.
-                  END IF
-                  WRITE( IUVBA, '( A )' ) 'format=NONE'
+               IF( SAMPRATE(LS) .GT. 16.0 ) THEN
+                   WRITE( IUVBA, '( A )' ) 'format=VLBA1:4'
+               ELSE IF( SAMPRATE(LS) .EQ. 16.0 ) THEN
+                   WRITE( IUVBA, '( A )' ) 'format=VLBA1:2'
+               ELSE IF( SAMPRATE(LS) .LT. 16.0 ) THEN
+                   WRITE( IUVBA, '( A )' ) 'format=VLBA1:1'
                END IF
+               IF( WARNCRD ) THEN
+                  CALL WRTMSG( 0, 'VLBASU', 'CRD_RDBE_Warning' )
+                  WARNCRD = .FALSE.
+               END IF
+C                     Always writing a format for RDBE.   ELSE
+C                           WRITE( IUVBA, '( A )' ) 'format=NONE'
+C                        END IF
             END IF
             LFORMAT = FORMAT(LS)
          END IF

@@ -122,7 +122,7 @@ C
                END IF
 C
 C              Get the new BBC frequency and LO sum.  Note that
-C              the effects of the sideband can differe.
+C              the effects of the sideband can differ.
 C
                TBBCFREQ(KCH) = TBBCFREQ(KCH) + ISIDE(KCH) * FSHIFT
                TLOSUM(KCH) = TFIRSTLO + IFSIDE(KCH) * TBBCFREQ(KCH)
@@ -138,9 +138,23 @@ C
                   TLOSUM(KCH) = TLOSUM(KCH) - 
      1               IFSIDE(KCH) * 25.D0
                END IF
+C
 Cdebug            write(*,*) 'wrtfreq tlosum: ', ich, kch, tfirstlo,
 Cdebug     1            losum(ich), BBCFREQ(ICH), fshift, 
 Cdebug     2            tlosum(kch), tbbcfreq(kch), bbcbw(kch), tbbcbw(kch)
+C
+C              If the BBC frequency is an even number of MHz, the
+C              pulse cal tones will be subject to aliasing etc.  Since
+C              the exact frequency settings here are not critical,
+C              shift the TBBCFREQ and TLOSUM in such cases by 10 kHz 
+C              so that the tone is at 10 kHz in the baseband.
+C
+               IF( ( PSPCAL(KP) .EQ. '1MHZ' .OR. 
+     1               PSPCAL(KP) .EQ. '5MHZ' ) .AND. 
+     2              MOD( TLOSUM(KCH), 1.D0 ) .EQ. 0.D0 ) THEN
+                  TLOSUM(KCH) = TLOSUM(KCH) - RFSIDE(KCH) * 0.01D0
+                  TBBCFREQ(KCH) = TBBCFREQ(KCH) - ISIDE(KCH) * 0.01D0
+               END IF
             END DO
          END IF
 C
@@ -182,9 +196,8 @@ C           variables.  Utilize number such as NCH1, NCH2, TBBCBW,
 C           and TBBCFREQ to help.  Also take advantage of the fact
 C           that there will be at most 8 channels (1 digit).  This
 C           is a simplified verision of what is done for non-RDBE
-C           projects.  Also take advantage of the fact that there 
-C           will be no more than 8 channels as set earlier in this
-C           routine, so get one tone per channel.
+C           projects.  With  no more than 8 channels (as set earlier 
+C           in this routine), there can be one tone per channel.
 C
 C           Get the first tone frequency for each band.  These are for
 C           the channels handled in the frequency section above.
@@ -201,11 +214,11 @@ C
                   FTONE =  FTONE + TONEINT
                   IF( ABS( FTONE - TLOSUM(KCH) ) .LT. TONEINT / 1.D1 )
      1                FTONE =  FTONE + TONEINT
-                  TPSFR(KCH) = 1000.D0 * ( FTONE - TLOSUM(KCH) )
+                  TPSFR(KCH) = NINT( 1000.D0 * ( FTONE - TLOSUM(KCH) ) )
                ELSE
                   IF( ABS( FTONE - TLOSUM(KCH) ) .LT. TONEINT / 1.D1 )
      1                FTONE =  FTONE - TONEINT
-                  TPSFR(KCH) = 1000.D0 * ( TLOSUM(KCH) - FTONE )
+                  TPSFR(KCH) = NINT( 1000.D0 * ( TLOSUM(KCH) - FTONE ) )
                END IF
             END DO
 C
