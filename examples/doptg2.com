@@ -5,6 +5,7 @@
 # ========================================================
 # Based on doptg.com, but using DOSTA to avoid having 2
 # full schedules for 3mm and non-3mm.
+# Observes the 7ghz band within the 6 cm receiver.
 
 # Clean up from a previous run if these didn't get deleted.
 
@@ -110,7 +111,8 @@ stations = sc, hn, nl, fd, la, pt, kp, ov, br, mk    ! all stations.
 setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
 setup='$SETDIR/pt4cm.set'   source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt18cm.set'  source '3C454.3' nodop   bw=0,0   /
-setup='$SETDIR/pt6cmw.set'   source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C454.3' nodop   bw=0,0   /
+setup='$SETDIR/pt7ghz.set'   source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C454.3' nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source 'DR21'    nodop   bw=0,0   /
@@ -145,7 +147,8 @@ stations = sc, hn, nl, fd, la, pt, kp, ov, br, mk    ! all stations.
 setup='$SETDIR/pt90cm.set'  source 'TAUA'    nodop   bw=0,0   /
 setup='$SETDIR/pt4cm.set'   source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt18cm.set'  source '3C123'   nodop   bw=0,0   /
-setup='$SETDIR/pt6cmw.set'   source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C123'   nodop   bw=0,0   /
+setup='$SETDIR/pt7ghz.set'   source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C123'   nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source '3C84'    nodop   bw=0,0   /
@@ -179,7 +182,8 @@ stations = sc, hn, nl, fd, la, pt, kp, ov, br, mk    ! all stations
 setup='$SETDIR/pt90cm.set'  source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt4cm.set'   source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt18cm.set'  source '3C274'   nodop   bw=0,0   /
-setup='$SETDIR/pt6cmw.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt6cm.set'   source '3C274'   nodop   bw=0,0   /
+setup='$SETDIR/pt7ghz.set'   source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt13cm.set'  source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt4cmsx.set' source '3C274'   nodop   bw=0,0   /
 setup='$SETDIR/pt1cm.set'   source '3C274'   nodop   bw=0,0   /
