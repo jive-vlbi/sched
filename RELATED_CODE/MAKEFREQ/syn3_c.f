@@ -19,8 +19,6 @@ C
      5           10.9, 10.6, 10.4, 10.1, 
      6            9.9,  9.6,  9.4,  9.1 /
 C --------------------------------------------------------------------
-      WRITE(*,*)  'RFI risks'
-      WRITE(*,*)  ' F3  * N    LO * N   IFF'
 C
 C     Construct the LO array.
 C
@@ -35,6 +33,8 @@ C
 C     Identify the cases where there are likely to be signals in the IF.
 C     These are pairs of F3 and LO
 C
+      WRITE(*,*)  'RFI risks'
+      WRITE(*,*)  ' F3  * N    LO * N   IFF    RF low  RF high'
       DO I = 1, NF3
          DO J = 1, NLO
             MARK(I,J) = '-'
@@ -56,6 +56,10 @@ C
 C     Identify the cases where there are likely to be signals in the IF.
 C     These are pairs of two LOs
 C
+      WRITE(*,*)  ' '
+      WRITE(*,*)  'RFI risks with two active LOs'
+      WRITE(*,*)  ' F3  * N    LO * N   IFF    RF low  RF high'//
+     1   '  RF2 low  RF2 high  Severity code'
       DO I = 1, NLO
          DO J = 1, NLO
             MRK2(I,J) = '~'
@@ -63,11 +67,6 @@ C
                DO L = 1, 5
                   IFF = ABS( LO(I) * K - LO(J) * L )
                   IF( IFF .GT. 0.45 .AND. IFF .LT. 1.05 ) THEN
-                     WRITE(*,'( F7.3, I2, F7.3, I2, F7.3, 4X, 2F7.0, '//
-     1                     ' 4X, 2F7.0 )' )
-     2                  LO(I), K, LO(J), L, IFF, 
-     3                  (LO(I)-IFF) * 1000., (LO(I)+IFF) * 1000., 
-     4                  (LO(J)-IFF) * 1000., (LO(J)+IFF) * 1000.
                      IF( K + L .LE. 4 ) THEN
                         MRK2(I,J) = 'O'
                      ELSE IF( MRK2(I,J) .NE. 'O' .AND. 
@@ -77,6 +76,12 @@ C
      1                        MRK2(I,J) .NE. 'O' ) THEN
                         MRK2(I,J) = 'l'
                      END IF
+                     WRITE(*,'( F7.3, I2, F7.3, I2, F7.3, 4X, 2F7.0, '//
+     1                     ' 4X, 2F7.0, 5X, A1 )' )
+     2                  LO(I), K, LO(J), L, IFF, 
+     3                  (LO(I)-IFF) * 1000., (LO(I)+IFF) * 1000., 
+     4                  (LO(J)-IFF) * 1000., (LO(J)+IFF) * 1000., 
+     5                  MRK2(I,J)
                   END IF
                END DO
             END DO
@@ -87,9 +92,11 @@ C
 C     Write a matrix to show what is or is not good for the unused synthesizers.
 C
       WRITE(*,*) ' '
-      WRITE(*,'( 8X, 28F4.1)' )   (F3(J),J=1,NF3)
+      WRITE(*,*) 'Dummy synthesizer settings vs LO'
+      WRITE(*,'( 5X, 14F6.1)' )   (F3(J),J=1,NF3,2)
+      WRITE(*,'( 8X, 14F6.1)' )   (F3(J),J=1+1,NF3,2)
       DO I = 1, NLO
-         WRITE(*,'( F6.1, 2X, 28( 2X, A1, 1X) )' ) 
+         WRITE(*,'( F6.1, 2X, 28( 1X, A1, 1X) )' ) 
      1       LO(I), (MARK(J,I),J=1,NF3)
       END DO
 C
@@ -97,9 +104,11 @@ C     Write a matrix to show what is or is not good for the pairs of LOs.
 C     Keep this one in the C band range.
 C
       WRITE(*,*) ' '
-      WRITE(*,'( 8X, 23F4.1)' )   (LO(J),J=IC1,IC2)
+      WRITE(*,*) 'Pairs of LOs with potential problems.'
+      WRITE(*,'( 6X, 14F6.1)' )   (LO(J),J=IC1,IC2,2)
+      WRITE(*,'( 9X, 14F6.1)' )   (LO(J),J=IC1+1,IC2,2)
       DO I = IC1, IC2
-         WRITE(*,'( F6.1, 2X, 23( 2X, A1, 1X) )' ) 
+         WRITE(*,'( F6.1, 2X, 23( 2X, A1) )' ) 
      1       LO(I), (MRK2(I,J),J=IC1,IC2)
       END DO
 C
@@ -107,10 +116,12 @@ C     Write a matrix for 2 LO combinations.
 C     Also mark cases where there will be issues between the LOs.
 C
       WRITE(*,*) ' '
-      WRITE(*,'( 15X, 28F5.1)' )   (F3(I),I=1,NF3)
+      WRITE(*,*) 'Dummy settings with two active LOs'
+      WRITE(*,'( 12X, 14F8.1)' )   (F3(J),J=1,NF3,2)
+      WRITE(*,'( 16X, 14F8.1)' )   (F3(J),J=1+1,NF3,2)
       DO J = 1, NLO-1
          DO K = J+1, NLO
-            WRITE(*,'( 2F5.1, 2X, A1, 2X, 28( 3X, 2A1 ) )' ) 
+            WRITE(*,'( 2F5.1, 2X, A1, 2X, 28( 2X, 2A1 ) )' ) 
      1             LO(J), LO(K), MRK2(J,K), 
      2             (MARK(I,J),MARK(I,K),I=1,NF3)
          END DO
