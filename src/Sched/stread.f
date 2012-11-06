@@ -150,6 +150,7 @@ C
          TSETTLE(MSTA)  = STASTL
          MINSETUP(MSTA) = STAMSU
          MAXSRCHR(MSTA) = STAMSH
+         TLEVSET(MSTA)  = STATLS
          AXOFF(MSTA)    = STAOFF
          DO I = 1, 6
             AX1LIM(I,MSTA) = STAAX1(I)

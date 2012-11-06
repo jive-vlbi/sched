@@ -8,7 +8,7 @@ C
 C
       INTEGER       MSEP, ML
       PARAMETER     ( MSEP = 7 )
-      PARAMETER     ( ML = 10 + MAXSET )
+      PARAMETER     ( ML = 10 + 2 * MAXSET )
 C
       INTEGER       IP, ISRC, LEN1, IOUT, INAME
       INTEGER       ICHN

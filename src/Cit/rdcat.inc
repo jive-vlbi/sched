@@ -92,6 +92,8 @@ C     STAOFF  R4     -  Axis offset (m)
 C     STASTL  R4     -  "Settling time" in seconds (time to add to slew)
 C     STAMSU  R4     -  Minimum time to start new scan.
 C     STAMSH  R4     -  Maximum number of slews per hour (for Jodrell).
+C     STATLS  R4     -  Time to set analog levels at VLBA and VLA on the
+C                       first scan for a setup.
 C     STATSC  C4     -  Method of Tsys measurement (GAP, CONT).
 C
 C     OBSDATE R8     -  MJD of observations - this is set in the routines
@@ -153,7 +155,7 @@ C
       REAL              STAAX1(6), STAAX2(6)
       REAL              STARA1, STARA2, STAAC1(2), STAAC2(2)
       REAL              STAZAL, STAHAL, STASTL, STAMSU, STAOFF
-      REAL              STAMSH
+      REAL              STAMSH, STATLS
       DOUBLE PRECISION  STALON, STALAT, STAEL, STAX, STAY, STAZ
       DOUBLE PRECISION  STADX, STADY, STADZ, OBSDATE
 C
@@ -191,6 +193,6 @@ C
      7                STAHAZ, STAHEL, STAAX1, STAAX2, 
      8                STARA1, STARA2, STAAC1, STAAC2,
      9                STAZAL, STAHAL, STASTL, STAMSU, STAOFF,
-     A                STAMSH, DBEPO, NDB, DBOFF
+     A                STAMSH, STATLS, DBEPO, NDB, DBOFF
 C
 C   --------  End of RDCAT.INC ------------

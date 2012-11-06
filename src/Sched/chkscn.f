@@ -120,6 +120,10 @@ C        formatter reconfigures.
 C
          CALL RESYNC
 C
+C        Check for adequate time to set the levels in the RDBE.
+C
+         CALL RDBELEVT
+C
       END IF
 C
 C     Check for scans that are excessively long.  Setting 40min as
