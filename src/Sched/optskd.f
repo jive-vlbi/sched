@@ -46,12 +46,13 @@ C
 C     Initialize stuff for skipping scans - the mode initialized
 C     with OPSKIP.  This causes a source to be skipped OPSKIP times 
 C     before it is used.  If it is in a favored elevation window,
-C     set by OPELPRIO, every pass will be taken.
+C     set by OPELPRIO, every pass will be taken.  Initialize SKIP
+C     so a source is taken the first pass.
 C     Also initialize the counter of missed scans.
 C
       IF( ISCN .EQ. 1 ) THEN
          DO ISRC = 1, MAXSRC
-            SKIP(ISRC) = 0
+            SKIP(ISRC) = OPSKIP
          END DO
          MISSED = 0
       END IF

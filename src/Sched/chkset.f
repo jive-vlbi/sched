@@ -120,8 +120,12 @@ C           Polarization.
 C
             IF( POL(ICH,KS)(1:3) .NE. 'RCP' .AND.
      1          POL(ICH,KS)(1:3) .NE. 'LCP' ) THEN
-               CALL WLOG( 1, 'CHKSET: Polarization not given '//
-     1             'or deduced (should be RCP or LCP).' )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( 3A, I4, A )' )
+     1            'CHKSET: In setup ', SETNAME(KS)(1:LEN1(SETNAME(KS))), 
+     2            ' polarization of chan ', ICH, 
+     3            ' not given or deduced (should be RCP or LCP).'
+               CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
 C

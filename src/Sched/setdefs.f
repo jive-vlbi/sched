@@ -9,7 +9,7 @@ C
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
 C
-      INTEGER    KS, ISETF, I, ICH
+      INTEGER    KS, ISETF, I, J, ICH
       LOGICAL    NEEDCAT(MSET)
 C ---------------------------------------------------------------------
       IF( SDEBUG ) CALL WLOG( 0, 'SETDEFS: Starting' )
@@ -128,22 +128,9 @@ C
             END IF
          END DO
 C
-C        Set unspecified synthesizers to 15.4 for most bands.
-C        Set to 10.9 GHz for 2 cm observations to keep them out
-C        of the RF.  This is for the VLBA.
-C     
-         DO KS = 1, NSET
-            DO I = 1, 3
-               IF( SYNTH(I,KS) .EQ. 0.0 ) THEN
-                  IF( FE(2,KS) .EQ. '2cm' .OR.
-     1                FE(4,KS) .EQ. '2cm' ) THEN
-                     SYNTH(I,KS) = 10.9
-                  ELSE
-                     SYNTH(I,KS) = 15.4
-                  END IF
-               END IF
-            END DO
-         END DO
+C        Set the unspecified synthesizers for the VLBA
+C
+         CALL SETUSYN
 C
 C        Set the pointer from channel to synthesizer to 0.  It
 C        will be set properly for the VLBA in CHKVLBA and left

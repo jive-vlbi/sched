@@ -121,6 +121,7 @@ C
          CALL KEYADD( 'TSETTLE', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'MINSETUP', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'MAXSRCHR', 1.D6, 1, KD, KC, KI )
+         CALL KEYADD( 'TLEVSET', 0.D0, 1, KD, KC, KI )
          CALL KEYCHR( 'TSCAL', 'CONT', 4, KD, KC, KI )
          CALL KEYADD( 'ENDCAT', 0.D0, 1, KD, KC, KI )
          GOTKEYS = .TRUE.
@@ -205,6 +206,7 @@ C
       KD( KEYPTR( 'TSETTLE', KC, KI ) ) = 0.0D0
       KD( KEYPTR( 'MINSETUP', KC, KI ) ) = 0.0D0
       KD( KEYPTR( 'MAXSRCHR', KC, KI ) ) = 1.0D6
+      KD( KEYPTR( 'TLEVSET', KC, KI ) ) = 0.0D6
       KD( KEYPTR( 'TSCAL', KC, KI ) ) = CCONT
       KD( KEYPTR( 'ENDCAT', KC, KI ) ) = UNSET
 C
@@ -417,15 +419,20 @@ C
          END IF
       END DO
 C
-C     Settling time, minimum setup time, and max sources per hour.
+C     Settling time, minimum setup time, and max sources per hour
+C     and time for setting levels for first scan with a setup.
 C     STASTL is the number of seconds to be added to the time for a 
 C     slew.  STAMSU is the minimum time for a scan change.
 C     STAMSH is the maximum number of sources (slews) per hour.  That
 C     is something needed for Jodrell.
+C     STATLS is the time needed to do the set-and-remember operation
+C     to set the analog power levels at the VLBA or VLA.  It is only
+C     done once per setup per observation.
 C
       STASTL = KD( KEYPTR( 'TSETTLE', KC, KI ) )
       STAMSU = KD( KEYPTR( 'MINSETUP', KC, KI ) )
       STAMSH = KD( KEYPTR( 'MAXSRCHR', KC, KI ) )
+      STATLS = KD( KEYPTR( 'TLEVSET', KC, KI ) )
 C
 C     An indicator of how the Tsys measrurements are done.
 C

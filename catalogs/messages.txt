@@ -231,7 +231,7 @@ CHKSOC:  Channels to be processed in Socorro as a polarization pair
 ++taperunning
 --Called from SETTPS
 
-  Recording is being continued through short gaps between scans.
+Recording is being continued through short gaps between scans.
 Add TPSTART to the SUMITEM list to see details.
 MINPAUSE and PRESTART may be used to adjust.
 Remember MINPAUSE is multiplied by the speed up factor.
@@ -240,7 +240,7 @@ Remember MINPAUSE is multiplied by the speed up factor.
 --Called from CHKVLA
 
 This schedule is over 24 hours and contains the JVLA.  With the old
-VLA system, that wa not wise because the VLA telescope files do not 
+VLA system, that was not wise because the VLA telescope files do not 
 have a day associated with each scan.  This may no longer be a problem,
 but we're not sure yet.
 
@@ -443,10 +443,12 @@ reduced channels and adjusted samplerate, frequencies and bandwidths
 to conform to the capabilities of the old system.  These only affect
 the old backend and recorder, not the new hardware.  They only affect
 observations in that they will be used for reference pointing until
-the new control system can point the antenna.  Note that, until
-Sept. 20, 2012, SCHED also set the format to 'none', but it was then
-realized that this was not allowing the formatter to be configured
-which prevented the detectors from being set up properly.
+the new control system can point the antenna.  Also the system
+temperatures and pulse cal information will be useful for monitoring
+system health.  Note that, until Sept. 20, 2012, SCHED also set the
+format to 'none', but it was then realized that this was not allowing
+the formatter to be configured which prevented the pulse cal
+detectors, which are in the formatter, from being set up properly.
 
 ++MismatchedSamprate
 --Called by CHKSFIL
@@ -468,6 +470,41 @@ When mixed sample rates, the options to use DOPPLER or FREQ to
 adjust the frequency from the schedule rather than the setup file
 will be blocked.  Those inputs assume all stations have the same
 channel structure which will not be true with mixed sample rates.
+
+++Level_Settings
+--Called by RDBELEVT
+
+The RDBE and the WIDAR have to set signal power levels in at least two
+places.  Prior to the samplers, the analog power level is set.
+Changes can cause changes in phase and the sampler, with many bits,
+has a lot of headroom, so this is only done once per project for each
+setup configuration that affects the IF (it is not done for minor
+baseband frequency changes within an IF such as occur with Doppler
+tracking, at least on the VLBA).  Fifteen seconds should be allowed
+for this process on the VLBA.  Sixty seconds are needed on the VLA.
+The antenna catalog input TLEVSET is used to try to enforce such a
+gap for the first scan of each setup.
+
+The second level setting operation occurs at the start of every scan
+and involves the thresholds for high and low states of the 4 level/2
+bit samples that are recorded.  Five seconds should be allowed for
+that.  Again, when the on-line system is given an inadequate gap, the
+beginning of the scan will be corrupted.  Flags will eventually be
+written, but are not yet.  SCHED will warn when it sees a scan gap
+shorter than that for the first time.  The antenna catalog parameter
+MINSETUP should be long enough to include this time.
+
+The gap of interest is between the stop time of the previous scan at
+the station and the time when recording of data would start.  With the
+RDBE/MARK5C system, the recording starts when the good data is
+expected to start.  In the VEX file, that is the "start" time plus the
+station dependent start time offset in the $SCHED section.  The
+"start" time is the nominal scan start time minus the offset for
+starting the "tape" requested using PRESTART and MINPAUSE.
+
+For the VLBA, information about the first incidence of a recording
+stop of less than 15 seconds with a first setup encounter or 5 seconds
+with no setup change is below.
    
 ++VXDISK
 --Called from VXWRT (obsolete)

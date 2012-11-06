@@ -41,16 +41,23 @@ C
       WRITE( IVEX, '( A, A1 )' ) '$MODE', SEP
 C
 C     First issue a warning for more than 20 modes...
+C     This is a field system issue.  The VLBA should take more.
 C
       IF( NMDVEX .GT. 20 ) THEN
          MSGTXT = ' ' 
          WRITE( MSGTXT, '( A, I3, A )' ) 
-     1       'VXWRMD: WARNING: More than 20 VEX modes (', NMDVEX,
+     1       '++++ VXWRMD: WARNING: More than 20 VEX modes (', NMDVEX,
      2       ') in this schedule. '
          CALL WLOG( 1,MSGTXT)
          MSGTXT = ' ' 
-         WRITE( MSGTXT, '( 2A )' ) 'VXWRMD:          ',
-     1       'This VEX will NOT run in the field system!' 
+         WRITE( MSGTXT, '( 2A )' ) 
+     1       '             ',
+     2       'This VEX will NOT run in the field system!' 
+         CALL WLOG( 1,MSGTXT)
+         MSGTXT = ' ' 
+         WRITE( MSGTXT, '( 2A )' )
+     1       '             ',
+     2       'It should be ok on the VLBA.' 
          CALL WLOG( 1,MSGTXT)
       END IF
 C

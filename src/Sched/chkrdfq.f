@@ -12,18 +12,19 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH, ISIDEBD, nwarn, N40WARN, N528WARN
-      INTEGER           NFWARN, IPF, I, NPBW
-      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2
+      INTEGER           NFWARN, IPF, I, NPBW, LEN1
+      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, SLOP
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
-      LOGICAL           ERRS, DEQUAL, PBWARN
+      LOGICAL           ERRS, DEQUAL, PBWARN, OBWARN
       DATA              nwarn / 0 /
       DATA              NPBW / 0 /
+      DATA              OBWARN / .TRUE. /
       DATA              N40WARN, N528WARN, NFWARN / 0, 0, 0 /
       DATA              PLO / 512.D0, 640.D0, 896.D0 /
       DATA              PHI / 640.D0, 896.D0, 1024.D0 /
       DATA              CR1, CR2 / 640.D0, 896.D0 /
       SAVE              nwarn
-      SAVE              N40WARN, N528WARN, NFWARN, NPBW
+      SAVE              N40WARN, N528WARN, NFWARN, NPBW, OBWARN
 C
 C      PLO and PHI are the ranges for the DDC initial polyphase filter.
 C -----------------------------------------------------------------
@@ -171,17 +172,38 @@ C
                END IF
 C
 C              Check the other end of the sideband.  Just warn of the
-C              issue in this case.
+C              issue in this case.  Only warn once if it is less than
+C              1% of the band - it's probably because of trying to get
+C              decent pcal frequencies.
 C
-               IF( BB2 .LT. 512.0D0 .OR.
-     1             BB2 .GT. 1024.0D0 ) THEN
+               SLOP = MAX( 512.D0 - BB2, BB2 - 1024.D0 )
+               IF( ( SLOP .GT. 0.D0 .AND. OBWARN ) .OR. 
+     2               SLOP .GT. 0.01 * BBCBW(ICH) ) THEN
                   MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, F8.2, A )' )
-     1               'CHKRDFQ: Channel ', ICH, 
-     2               ' extends outside the IF band of 512-1024 MHz.'
+                  WRITE( MSGTXT, '( A, A, A, I3, A, F8.2, A )' )
+     1              'CHKRDFQ: Setup ', SETNAME(KS)(1:LEN1(SETNAME(KS))),
+     2              '  Channel ', ICH, 
+     3              ' with bandwidth ', BBCBW(ICH), ' MHz extends '
                   CALL WLOG( 1, MSGTXT )
-                  CALL WLOG( 1, '         Part of the band will '//
-     1               'be corrupted.' )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, F8.3, A )' )
+     1               '          ', SLOP,
+     2               ' MHz outside the IF band of 512-1024 MHz.'
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, '         That Part of the band '//
+     1               'will be corrupted.' )
+                  IF( SLOP .LE. 0.01 * BBCBW(ICH) ) THEN
+                     OBWARN = .FALSE.
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( 2A )' )
+     1                 '         This is small and may be ',
+     2                 'intentional for good pulse cal.'
+                     CALL WLOG( 1, MSGTXT )
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A )' )
+     1                 '         This warning will not be repeated.'
+                     CALL WLOG( 1, MSGTXT )
+                  END IF
                END IF
 
 C
@@ -196,10 +218,11 @@ C
      2              ' of 15.625 kHz.'
                   CALL WLOG( 1, MSGTXT )
                   MSGTXT = ' '
-                  WRITE( MSGTXT, '( 2A, F15.6, A, I3, A, I3 )' ) 
+                  WRITE( MSGTXT, '( 2A, F15.6, A, I3, A, A )' ) 
      1               '          ',
      2               ' Value of: ', BBCFREQ(ICH), 
-     3               ' MHz found in channel ', ICH, ' of setup ', ks
+     3               ' MHz found in channel ', ICH, ' of setup ', 
+     4               SETNAME(KS)
                   CALL WLOG( 1, MSGTXT )
                   IF( NFWARN .GT. 16 ) THEN
                      MSGTXT = 'CHKRDFQ:   Further warnings suppressed '

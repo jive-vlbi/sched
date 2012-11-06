@@ -227,8 +227,8 @@ C
       REAL             AX1LIM(6,MAXCAT), AX2LIM(6,MAXCAT)
       REAL             AX1RATE(MAXCAT), AX2RATE(MAXCAT)
       REAL             AX1ACC(2,MAXCAT), AX2ACC(2,MAXCAT)
-      REAL             TSETTLE(MAXCAT), MINSETUP(MAXCAT) 
-      REAL             MAXSRCHR(MAXCAT)
+      REAL             TSETTLE(MAXCAT), MINSETUP(MAXCAT)
+      REAL             MAXSRCHR(MAXCAT), TLEVSET(MAXCAT)
       REAL             ZALIM(MAXCAT), AXOFF(MAXCAT)
 C
       COMMON  /SCHSTA/ XPOS, YPOS, ZPOS, DXPOS, DYPOS, DZPOS, 
@@ -238,7 +238,7 @@ C
      4                 NHORIZ, HORAZ, HOREL,
      5                 NAXLIM, AX1LIM, AX2LIM, AX1RATE, AX2RATE, 
      6                 AX1ACC, AX2ACC, TSETTLE, MINSETUP, MAXSRCHR,
-     7                 ZALIM, AXOFF
+     7                 TLEVSET, ZALIM, AXOFF
       COMMON  /SCHCST/ STAFILE, STVER, LOCAFILE, LOCAVER, STATION, 
      1                 STCODE, STCODEU, POSREF, CONTROL, MOUNT, DAR, 
      2                 RECORDER, DISK, MEDIADEF, TSCAL
