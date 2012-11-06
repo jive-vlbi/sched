@@ -455,6 +455,15 @@ mv sched.runlog jvla.runlog
 echo " " >> testruns.out
 echo " " >> testruns.out
 echo "******************************************************"  >> testruns.out
+echo "************" Processing vladdc.key "*******************"  | tee -a testruns.out
+echo "******************************************************"  >> testruns.out
+$SCHBIN/sched < vladdc.key >> testruns.out
+mv sched.runlog vladdc.runlog
+./Check_results vladdc hn $SCH_STDOUT vladdc.key >> testruns.out
+
+echo " " >> testruns.out
+echo " " >> testruns.out
+echo "******************************************************"  >> testruns.out
 echo "**************" Processing lba.key "********************"  | tee -a testruns.out
 echo "******************************************************"  >> testruns.out
 $SCHBIN/sched < lba.key >> testruns.out

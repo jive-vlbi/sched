@@ -23,7 +23,11 @@ C     The stations and source catalogs should be available by here.
 C
       CALL PKFINISH
 C
-C     Set defaults and check the setups.
+C     Make sure some items for the VLA are set.
+C
+      CALL VLASCNS
+C
+C     Set setup defaults and check the setups.
 C
       IF( .NOT. NOSET ) CALL DEFSET
 C

@@ -14,12 +14,14 @@ C
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
 C
-      INTEGER        I, KS, KF, ICH, IIF, KIF, NBAD
+      INTEGER        I, KS, KF, ICH, IIF, KIF, NBAD, NBWARN
       INTEGER        USEKF, USEIF(MCHAN), BESTPRIO
       LOGICAL        MATCH, GOT, NEEDCAT, OKIF(MCHAN,MFIF), TAKEIT
       CHARACTER      LASTPOL*4
       REAL           OVERLAP, CENTER
       REAL           BESTCENT
+      DATA           NBWARN / 0 /
+      SAVE           NBWARN
 C ---------------------------------------------------------------------
       IF( SDEBUG ) CALL WLOG( 0, 'SETFCAT: Starting' )
 C
@@ -152,16 +154,22 @@ C        Check if any of the received band is outside the RF bands.
 C
          IF( BESTOVER(KS) .LT. TOTBW(KS) ) THEN
 C      write(*,*) 'setfcat some lack of overlap:', ks
-            CALL WLOG( 1, 'SETFCAT: In setup: ' // SETNAME(KS) )
-            CALL WLOG( 1, '         Station '//SETSTA(1,KS) )
-            SETMSG = ' '
-            WRITE( SETMSG, '( A, F7.2, A, F7.2, A )' )
-     1         '         Only ', BESTOVER(KS), ' of ', TOTBW(KS), 
-     2         ' MHz total bandwidth is within the IFs'
-            CALL WLOG( 1, SETMSG )
-            CALL WLOG( 1, 
-     1         '         in the setup file before any FREQ or ' //
-     2         'DOPPLER shifts.' )
+            NBWARN = NBWARN + 1
+            IF( NBWARN .LE. 5 ) THEN
+               CALL WLOG( 1, 'SETFCAT: In setup: ' // SETNAME(KS) )
+               CALL WLOG( 1, '         Station '//SETSTA(1,KS) )
+               SETMSG = ' '
+               WRITE( SETMSG, '( A, F7.2, A, F7.2, A )' )
+     1            '         Only ', BESTOVER(KS), ' of ', TOTBW(KS),
+     2            ' MHz total bandwidth is within the IFs'
+               CALL WLOG( 1, SETMSG )
+               CALL WLOG( 1, 
+     1            '         in the setup file before any FREQ or ' //
+     2            'DOPPLER shifts.' )
+            ELSE IF( NBWARN .EQ. 6 ) THEN
+               CALL WLOG( 1, 'SETFCAT: Additional bandwidth '//
+     1            'warnings suppressed.' )
+            END IF
          END IF
 C
       ELSE

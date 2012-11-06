@@ -39,14 +39,15 @@ C     Note that valid mount types are checked in HORCHK.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER            ISCN, LSCN, ISTA, KSTA, PASS
+      INTEGER            ISCN, KSCN, LSCN, ISTA, KSTA, PASS, KS
       REAL               LASTAX1, LASTAX2, CURAX1, CURAX2
+      LOGICAL            KSUSED
       DOUBLE PRECISION   AX1SLEW, AX2SLEW, DMINSU, TARRIVE
       REAL               TACC1, TACC2, DACC1, DACC2, TSLW1, TSLW2
       REAL               RATE1, RATE2, AX1ADU, AX2ADU
       REAL               LDEC4, DEC4
       REAL               AHA, AEL, AAZ, APA, AZDIFF
-      DOUBLE PRECISION    ALSTTIM
+      DOUBLE PRECISION   ALSTTIM
 C --------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'SLEW: Starting.' )
 C
@@ -234,13 +235,41 @@ C
 C        Add the settling time for the station.  
 C
          TSLEW(ISCN,ISTA) = TSLEW(ISCN,ISTA) + TSETTLE(KSTA)
+      END IF
 C
-C        Make sure that the "slew" time does not drop below the minimum
-C        setup time.
+C     Make sure that the "slew" time does not drop below the minimum
+C     setup time.
 C
-         DMINSU = MINSETUP(KSTA)
-         TSLEW(ISCN,ISTA) = MAX( TSLEW(ISCN,ISTA), DMINSU )
+      DMINSU = MINSETUP(KSTA)
+      TSLEW(ISCN,ISTA) = MAX( TSLEW(ISCN,ISTA), DMINSU )
 C
+C     Be sure there is time for the "set and remember" level setting
+C     operation on the VLBA or VLA (or any other antenna with 
+C     TLEVSET set non-zero).  There are special problems doing this
+C     because SLEW is called often during calculations for trial 
+C     scans that will not be part of the final schedule (pointing, 
+C     DELZN, etc).  Those trials do need to know if the extra time 
+C     will be added.  But having added it is no assurance that the 
+C     station no longer needs the time - the scan that added it may 
+C     not get used in the final schedule.  I don't see a clean 
+C     solution to this, so, each time the routine is called, look 
+C     back for a previous incidence of the setup.  Crude, but 
+C     computers are fast now.
+C
+      KS = NSETUP(ISCN,ISTA)
+      KSUSED = .FALSE.
+      KSCN = ISCN - 1
+      DO WHILE( .NOT. KSUSED .AND. KSCN .GE. SCAN1 )
+         IF( STASCN(KSCN,ISTA) .AND. NSETUP(KSCN,ISTA) .EQ. KS )
+     1        THEN
+            KSUSED = .TRUE.
+         END IF
+         KSCN = KSCN - 1
+      END DO
+      IF( .NOT. KSUSED ) THEN
+         IF( TLEVSET(ISTA) .GT. TSLEW(ISCN,ISTA) ) THEN
+            TSLEW(ISCN,ISTA) = TLEVSET(ISTA)
+         END IF
       END IF
 C
 C     Convert TSLEW from seconds to fractional days.

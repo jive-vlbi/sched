@@ -5,12 +5,22 @@ C     start time to start the recording.  Recorders may be started
 C     early to help the correlator sync up and/or to prevent the
 C     recorder from stopping for too short a time between scans.
 C
-C     For now, if VEX is used, all stations should start their tapes
-C     at the same time.  That is why this code was moved out of
+C     If VEX is used, all stations should nominally start their 
+C     recordings at the same time ("start" in the SCHED section 
+C     of the VEX file).  That is why this code was moved out of 
 C     TPSCH which only knows about one station.
 C
-C     Do not change TPSTART later if DOVEX.  If not DOVEX, TPSTART
-C     may be reduced later at tape turnarounds or changes.
+C     However, while the nominal start time  is common to all 
+C     antennas, the new VLBA system (~2012), and DiFX, believe the 
+C     station dependent start time offset and don't start recording 
+C     or correlation until that time.  That basically obsoletes much 
+C     of the hoop jumping related to dealing with tape start times.
+C     Also the disk systems don't mind short recording stoppages - 
+C     in fact the Mark5C always stops between scans.
+C
+C     To preserve the common start time, do not change TPSTART later 
+C     if DOVEX (which it is for all recording observations).  If not 
+C     DOVEX, TPSTART may be reduced later at tape turnarounds or changes.
 C
 C     Jan 09:  The disk systems don't mind very short stops so don't
 C     worry about that aspect any more.  That was an issue related
@@ -18,7 +28,7 @@ C     to spin up and spin down of the tapes.
 C
 C     Try to prevent excessively long recording scans. Feb. 26, 2010 RCW
 C     Code was added to insert gaps, but that was a can of worms.
-C     Dummy that code (we may want it again later), but keep a stern
+C     Comment out that code (we may want it again later), but keep a stern
 C     warning if a scan longer than an hour is encountered.  Mar. 7, 2010.
 C
       INCLUDE  'sched.inc'

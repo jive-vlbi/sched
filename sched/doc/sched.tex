@@ -220,7 +220,7 @@ computer.
 
 \item VLBA observing:  Most of this manual.
 
-\item \htmlref {VLA observing, both VLBI and VLA-only.}{SEC:VLA}
+\item \htmlref {VLA observing for VLBI.}{SEC:VLA}
 
 \item \htmlref {General information on non-VLBA systems.}{SEC:RECSYS}
 
@@ -848,7 +848,8 @@ parameters are actually specified in the input file.  This includes
 having at least parts of all auxiliary input files (catalogs etc)
 imbedded.  It is fairly complicated and contains a lot of comments in
 an attempt to show many \schedb features and give some advice on
-scheduling strategy.
+scheduling strategy.  It has been updated to use the RDBE/DDC system
+on the VLBA and the WIDAR on the VLA.
 
 \item[\htmladdnormallink{{\sl
 manual\_simp.key}}{examples/manual\_simp.key}] is \htmlref{the third
@@ -943,7 +944,9 @@ use 2 heads.
 
 \item[\htmladdnormallink{{\sl egglobal.key}}{examples/egglobal.key}]
 is a sample file for simple continuum observations involving the VLBA,
-the EVN,the VLA, and the GBT.
+the EVN,and the GBT.  The VLA has been removed because this example
+uses the legacy recording system which is no longer supported at the
+VLA.
 
 \item[\htmladdnormallink{{\sl egiv.key}}{examples/egiv.key}] is a
 sample schedule for Mark IV/VLBA observations involving mainly EVN
@@ -1053,9 +1056,10 @@ Effelsberg + Arecibo + VLA) at 1cm.  This file does not include the
 VLA and Arecibo.
 
 \item[\htmladdnormallink{{\sl hsa21cm.key}}{examples/hsa21cm.key}] is a
-sample schedule for the High Sensitivity Array (HSA - VLBA + GBT +
-Effelsberg + Arecibo + VLA) at 21cm (this does include Arecibo, but also
-does not include the VLA).
+sample schedule for the High Sensitivity Array (HSA = VLBA + GBT +
+Effelsberg + Arecibo (VLA removed)) at 21cm.  The schedule uses the
+legacy system which is not avaiable at the VLA so the VLA has been taken
+out for now.
 
 \item[\htmladdnormallink{{\sl lba.key}}{examples/lba.key}] is a
 sample schedule for the Long Baseline Array in Australia.
@@ -1067,7 +1071,9 @@ of the complications that can be involved in phasing that instrument.
 \item[\htmladdnormallink{{\sl planvla.key}}{examples/planvla.key}] is a
 planning file similar to the other VLBA planning files, but has
 all 27 stations of the VLA A configuration.  You can use this to
-explore VLA uv coverage etc.
+explore VLA uv coverage etc.  It should still work despite the current
+(2012) inability to schedule the VLA for other than VLBI.  It doesn't
+actually create observing files.
 
 \item[\htmladdnormallink{{\sl doptg.com}}{examples/doptg.com}] is a
 script that creates and runs VLBA pointing observations.  It exercizes
@@ -1094,9 +1100,17 @@ that Mark5 is the standard.
 one of the weekly VLBA integrity check observations.  It is here mainly
 to exercize SCHED in a mode that uses lots of setup files.
 
-\item[\htmladdnormallink{{\sl vla\_vlbi.key}}{examples/vla\_vlbi.key}] is
-and example covering use of the VLA as a phased array for VLBI.  It
-is likely to be out of date now with the switch to the EVLA.
+\item[\htmladdnormallink{{\sl jvla.key}}{examples/jvla.key}] is
+an example covering use of the VLA as a phased array for VLBI.  This
+version uses the 32 MHz output baseband bandwidths of the WIDAR to
+create recordings that can be played against 4 of the 16 channels
+created by the PFB personality of the RDBE on the VLBA.
+
+\item[\htmladdnormallink{{\sl vladdc.key}}{examples/vladdc.key}] is
+another example covering use of the VLA as a phased array for VLBI.  This
+version uses 128 MHz baseband bandwidths of the WIDAR to and RDBE with
+the DDC personality to achieve 512 MHz (2 Gbps) of compatible bandwidth
+with all antennas.  All VLBA antennas, the GBT, and the VLA are included.
 
 
 \end{description}
@@ -1545,16 +1559,16 @@ can deal with this either by doing the calibration including all edge
 channels, or by doing a bandpass calibration based on all channels.
 Bandpass calibration brings all channels to the average level.
 
-If you are going to rely on apriori calibration, be sure to
-obtain some data at close to the frequencies at which antenna gains
-have been measured.  These frequencies are given in the {\sl
-vlba\_gains.key} available by anonymous ftp to ftp.aoc.nrao.edu.  This
-is the file that you will need for VLBA calibration.  At those
-frequencies, the Tsys used in calibration and the gain are based on
-the same values of Tcal so the Tcal value cancels out.  If you observe at other frequencies, you
-will be depending on the Tcal values being correct (or at least having
-the right ratio) at your frequency and the frequency where the gains
-are measured.  That is not assured.
+If you are going to rely on apriori calibration, be sure to obtain
+some data at close to the frequencies at which antenna gains have been
+measured.  These frequencies are given in the {\sl vlba\_gains.key}
+available by anonymous ftp to ftp.aoc.nrao.edu.  This is the file that
+you will need for VLBA calibration.  At those frequencies, the Tsys
+used in calibration and the gain are based on the same values of Tcal
+so the Tcal value cancels out.  If you observe at other frequencies,
+you will be depending on the Tcal values being correct (or at least
+having the right ratio) at your frequency and the frequency where the
+gains are measured.  That is not assured.
 
 For any of these methods to work, it is best to include a strong,
 compact calibrator and to observe it several times to check
@@ -1585,34 +1599,44 @@ These can be applied to the whole observation to obtain the best possible
 calibration, short of self-cal.
 
 
-\item {\bf Scan Gaps, ``Readback tests'', and module-swap gaps:} The
-recording media should be stopped occasionally to help prevent major
-amounts of data loss if something should go wrong and, on non-VLBA
-controlled stations, to allow disk bank changes.  Two minute gaps
-every hour or two used to be used for readback tests with the tape
-systems.  Tape is no longer used, but an equivalent data integrity
-test is likely to be built into the disk based systems in the future.
-Also, if the disks are not stopped, all the data ends up in one
-file. If there are problems closing the file, the data can become
-unreadable.  As of early 2008, it is recommended that a gap of 30s or
-more be inserted every hour or two.  In fact, any pause in recording
-will start a new recording scan, but beware that \schedb prevents gaps
-of less than \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} seconds.  For field
-system controlled stations, (most non-VLBA stations) gaps should also
-be inserted to allow bank changes.  The VLBA can switch between
-mounted disk banks (modules) on the fly, but the field systems need a
-pause in the data recording.  Such gaps should be inserted every 22
-minutes for recordings at 1 Gbps and proportionally less often at
-lower bit rates.  These gaps need to be more than 10s long.
+\item {\bf Scan Gaps, ``Readback tests'', and module-swap gaps:}  Before
+the Mark5C era, one had to be very careful about scan gaps to avoid
+data loss due to resync times, but also not to put the data at risk
+through excessively long record scans (period of no media stoppage).  With
+the Mark5C, most of these issues go away.  The media are stopped from
+the end of one scan to the expected time of good data at that station
+in the next scan.  Resyncs don't take time with the software correlator.
+
+With the older media (including currently (2012) in use Mark5B and
+VLBA disk recording), the recording media should be stopped
+occasionally to help prevent major amounts of data loss if something
+should go wrong and, on non-VLBA controlled stations, to allow disk
+bank changes.  Two minute gaps every hour or two used to be used for
+readback tests with the tape systems.  Tape is no longer used, but an
+equivalent data integrity test is likely to be built into the disk
+based systems in the future.  Also, if the disks are not stopped, all
+the data ends up in one file. If there are problems closing the file,
+the data can become unreadable.  As of early 2008, it is recommended
+that a gap of 30s or more be inserted every hour or two.  In fact, any
+pause in recording will start a new recording scan, but beware that
+\schedb prevents gaps of less than \htmlref{{\tt
+MINPAUSE}}{MP:MINPAUSE} seconds.  For field system controlled
+stations, (most non-VLBA stations) gaps should also be inserted to
+allow bank changes.  The VLBA can switch between mounted disk banks
+(modules) on the fly, but the field systems need a pause in the data
+recording.  Such gaps should be inserted every 22 minutes for
+recordings at 1 Gbps and proportionally less often at lower bit rates.
+These gaps need to be more than 10s long.
 
 
 \item {\bf Phased VLA:} The phased VLA has special calibration needs.
 If the target source is either too weak or too resolved to be used for
 phasing up the array, special scans on a calibrator must be inserted
-for this purpose.  This can be done with \schedb or {\sc VLA OBSERVE}
+for this purpose.  This can be done with \schedb.  Or it might be
+possible to do it with the VLA scheduling software, but it is probably
+to explicitly include the calibrators in the \schedb files.  
 (see \hyperref{the section on VLBI at the VLA}{Section
-}{}{SSEC:VLAVLBI} for details.  It can be done by the VLA data
-analysts, but the schedule must contain gaps of adequate length.
+}{}{SEC:VLA} for details.
 
 Also, the effective beam of the phased VLA (or any other phased
 interferomenter such as Westerbork) is the synthesized beam.  This
@@ -1661,6 +1685,21 @@ comments will make this confusing as it is not always obvious which
 input scan corresponds to which output scan.  Example 
 \htmladdnormallink{{\sl eg24.key}}{examples/eg24.key}
 demonstrates such a schedule.
+
+\item{\bf Set-and-remember:}  Both the VLBA (RDBE) and the VLA new
+systems require the power levels for the analog signals to be set
+before the wide band samplers.  Changing the attenuators can cause
+phase errors, but there is a lot of dynamic range in the allowed 
+levels.  Therefore the attenuators are only set once for each 
+frequency setup per observation.  Time needs to be left for that
+operation.  The RDBE needs 15 seconds.  The VLA needs 60 seconds.
+\schedb will warn when inadequate time is provided.  Also, \schedb
+will schedule in the required time automatically using the numbers
+in the station catalog parameter {\tt TLEVSET} when using dwell
+time scheduling.  After the first scan with a setup, the RDBE needs
+about 5 seconds at the start of each scan to set the levels for
+the final down-sampler to 2 bits.  The VLA doesn't need extra time
+for that, although that operation is done.
 
 
 \end{list}
@@ -1849,19 +1888,35 @@ Start Time}
 The nominal scan start time, if set using \htmlref{{\tt
 DWELL}}{MP:DWELL}, is the time good data is expected to be available.
 If recording and correlation could start instantly, that would also be
-a good time to start the recorders.  However in the real world, it can
-take a small amount of time to the the recording going at the stations
-and the correlation fully synced up.  With previous generation
-correlators, this was a serious issue and it was advisable to start
-the recordings at least 20 seconds before good data.  Modern (2010)
-correlators are faster so the total time needed for both starting
-recording and synchronizing is only a few seconds, or less.  Another
-reason for possibly starting recordings early, or even recording
-continuously between scans is that the Mark5A disk system can only
-handle up to 1024 recording.  A recording scan is the time between
-stops of the recording media.  There might be several source scans in
-a recording scan.  Fast-switching, phase-referencing observations
-could run into this issue so the default \htmlref{{\tt
+a good time to start the recorders.  The more modern systems,
+especially the Mark5C recorders and the software correlators, approach
+this ideal and the recordings are started at the time specified in the
+VEX file for the start of good data.  That time is calculated based on
+the expected slew rates and on any extra time, specified using the
+{\tt TSETTLE, MINSETUP} and {\tt TLEVSET} parameters in the
+\htmlref{station catalog}{SEC:STACAT}.  The start can also be
+postponed with \htmlref{{\tt GAP}}{MP:GAP}.  With fixed scheduling
+(\htmlref{{\tt DUR}}{MP:DUR}, \htmlref{{\tt START}}{MP:START}, etc),
+the nominal scan starts are forced by \schedb, but the time of good
+data, if later than the scheduled scan start, is still set by the
+actual expected slews and additions and that is believed by the Mark5C
+control software and the correlator.  Parameters \htmlref{{\tt
+MINPAUSE}}{MP:MINPAUSE} and \htmlref{{\tt PRESTART}}{MP:PRESTART},
+discussed below have no actual effect if the derived start time is
+before the expected start of good data.
+
+With older systems, it can take a small amount of time to get the the
+recording going at the stations and the correlation fully synced up.
+With previous generation correlators, this was a serious issue and it
+was advisable to start the recordings at least 20 seconds before good
+data.  Modern (2010) correlators are faster so the total time needed
+for both starting recording and synchronizing is only a few seconds,
+or less.  Another reason for possibly starting recordings early, or
+even recording continuously between scans is that the Mark5A disk
+system can only handle up to 1024 recording.  A recording scan is the
+time between stops of the recording media.  There might be several
+source scans in a recording scan.  Fast-switching, phase-referencing
+observations could run into this issue so the default \htmlref{{\tt
 MINPAUSE}}{MP:MINPAUSE} (see below) has been set to prevent recording
 gaps during the fast-switching in most cases.  This section describes
 the tools in \schedb to allow the recordings to be started early.
@@ -1887,7 +1942,7 @@ gap between scans for which the recording will be stopped.  If the gap
 is smaller, the recorder will be left running.  {\tt MINPAUSE} used to
 be in units of playback time, so it was multiplied by the speed up
 factor to get the effect at record time.  The speedup factor is no
-longer a simple concept so that adjustment has been remove and now
+longer a simple concept so that adjustment has been removed and now
 {\tt MINPAUSE} applies to the record time.
 
 {\tt PRESTART} is applied before {\tt MINPAUSE}.  First the recording
@@ -3291,23 +3346,6 @@ each scan.
 
 \section{\label{SEC:VLA}Scheduling the VLA}
 
-See the subsection below for the VLA information.  
-
-Note that much of what is below applies to the old VLA system.  VLBI
-on the EVLA with the WIDAR correlator has not yet been implemented and
-\schedb does not have the ability to write EVLA control files.
-Most likely, control of VLBI at the VLA will be based on the VEX files
-and a translator that makes the VLA specific files.  This section will
-be updated when this appears.
-
-
-
-\subsection{\label{SSEC:VLAVLBI}VLBI at the VLA}
-
-This section has changed drastically with the advent of the VLA upgrade
-to the VLA and the use of the WIDAR correlator.  If you have a perverse
-interest in the old system, see the obsolete sections.
-
 For much detailed information on VLBI at the VLA, follow the links to
 the \htmladdnormallink{VLBI at the VLA guide}
 {http://www.vla.nrao.edu/astro/guides/vlbivla/current/}.
@@ -3321,18 +3359,57 @@ backends are used.  But the properties of the correlator are rather
 similar to the RDBE so, in fact, scheduling the VLA has become more
 similar to scheduling other antennas than it was with the old system.
 
-The \schedb output used by the VLA is the VEX file.  As for setups, the
-VLA can be treated as if it were a VLBA antenna.  Any setup that the
-VLBA can manage, except 610 MHz and 86 GHz, can be duplicated on the VLA.
-The LO/IF setup required to do so can be complicated, but that is 
-handled by software and staff in the conversion of the VEX file to the
-scripts actually used by the VLA.
+The \schedb output used by the VLA is the VEX file.  In many ways, the
+setups are similar to those for the VLBA.  The user does not need to
+worry about the external LO setup.  The software involved in
+translating the VEX file and making the VLA scheduling blocks
+(VEX2OPT) takes care of those details.
+
+As for setups, the VLA is fairly similar to a VLBA antenna.  But there
+are several crucial differences.  There are a maximum of 4 baseband
+channels in the initial version (2012).  All of those channels must
+be net upper sideband.  They must come in polarization pairs - having 
+four separate frequencies is not possible.  Each baseband must come from
+a separate IF with RCP in A or B and LCP in C or D.
+
+The restriction to net upper sideband needs to be considered when using
+the RDBE on the VLBA.  Either the VLBA LO needs to be above the RF
+frequency, or the sideband inverting capability of DiFX needs to be 
+invoked.  Testing of the latter is not complete, but is close as of
+late Oct. 2012.  For some bands, a high VLBA LO is not possible so
+the DiFX mode will be needed.  However note that the four channel 
+restriction means that there can only be 4X32 MHz of mutual coverage.
+That gives 512 Mbps so does not represent a gain over the legacy system.
+
+The four channel restriction limits the sensitivity that can be
+achieved with the PFB at the VLBA, although the intra-VLBA baselines,
+with 2 Gbps, will be more sensitive than in the past.  See
+\htmladdnormallink{{\sl jvla.key}}{examples/jvla.key} for an example
+of using the VLA with the WIDAR along with the RDBE/PFB system on the
+VLBA.  The WIDAR channels can have much wider bandwidths than the PFB
+32 MHz channels.  The WIDAR channels can be up to 128 MHz wide so,
+with 4, there is enough bandwidth to feed 2 Gbps.  To use this will
+require systems at the other stations that can do such wide basebands.
+The DDC personality of the RDBE on the VLBA has that capability and
+should be available by the end of 2012.  For an example of using 128
+MHz bandwidths with WIDAR and the RDBE/DDC, see 
+\htmladdnormallink{{\sl vladdc.key}}{examples/vladdc.key}.  The other
+option is to activate a mixed bandwidth mode in DiFX so that one WIDAR
+channel can be correlated against 4 PFB channels, but that mode has
+not yet been implemented.
 
 For scheduling, the user should be aware that the VLA slews at 40
 deg/min in azimuth and 20 deg/min in elevation, which is about half
 the speed of the VLBA.  This can be an issue for widely separated
 sources.  It is, however, faster than some other HSA or Global VLBI
-antennas.
+antennas.  Also, each time there is a change of frequency, there needs
+to be a one minute dummy scan.  This is handled through the antenna
+catalog parameter {\tt TLEVSET} which tries (with dwell scheduling) to
+insert adequate time between scans.  Then {\sl VEX2OPT} should insert
+the dummy scan.  This mechanism will only work properly after modifications
+are made to the VLA system to avoid needing dummy scans even for small
+frequency changes such as those associated with different Doppler 
+frequencies for different sources.
 
 One area where the VLA, or any interferometer for that matter,
 differs from the VLBA and other single antennas is the need to adjust
@@ -3377,6 +3454,10 @@ The old parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} allowed automatic
 insertion of VLA phasing scans in the observe files.  That scheme no 
 longer works.  But an item on the to-do list is to make that parameter
 insert VLA phasing scans.  That has not yet been done.
+
+This section has changed drastically with the advent of the upgrade
+to the VLA and the use of the WIDAR correlator.  If you have a perverse
+interest in the old system, see the obsolete sections.
 
 
 \section{\label{SEC:INDIV}Special Concerns for Specific Observatories}.
@@ -5145,17 +5226,17 @@ information on the specification of scans.
 is distinguished from \htmlref{{\tt DURation}}{MP:DUR} only in that
 the start time of the scan will be delayed until \schedb expects all
 antennas to be on source.  Both the slew time, including acceleration,
-and the settling time from {\tt TSETTLE} in the antenna catalog will
-be taken into account.  The interval between scans will not be allowed
-to drop below {\tt MINSETUP} from the antenna catalog to allow for
-finite scan setup times at some antennas.  \schedb tries to arrange
-that useful data will be obtained for the full time specified by {\tt
-DWELL}.  With \htmlref{{\tt DURation}}{MP:DUR}, some of the specified
-time may not have good data because antennas are still slewing.
-Please see the description of \htmlref{{\tt DURation}}{MP:DUR} for a
-more complete discussion of the actions of these two parameters and
-their interactions with other parameters that influence scan times and
-recording activity.
+and the settling time from {\tt TSETTLE} in the \htmlref{station
+catalog}{SEC:STACAT} will be taken into account.  The interval between
+scans will not be allowed to drop below {\tt MINSETUP} from the
+antenna catalog to allow for finite scan setup times at some antennas.
+\schedb tries to arrange that useful data will be obtained for the
+full time specified by {\tt DWELL}.  With \htmlref{{\tt
+DURation}}{MP:DUR}, some of the specified time may not have good data
+because antennas are still slewing.  Please see the description of
+\htmlref{{\tt DURation}}{MP:DUR} for a more complete discussion of the
+actions of these two parameters and their interactions with other
+parameters that influence scan times and recording activity.
 
 As of Oct. 2010, {\tt DWELL} has acquired second and third arguments.
 Argument 2 is the number of antennas to not wait for.  Typically it
@@ -9573,6 +9654,16 @@ and time to make calibration observations.  Acceleration and
 deceleration will be calculated explicitly if the above acceleration
 parameters are provided in the station catalog.
 
+\item [{\tt TLEVSET}:] This is a time to be added to the slew calculation
+to allow for the set-and-remember power level adjustments that happen
+on the VLBA (RDBE) or VLA the first time a particular setup is seen.
+Like {\tt MINSETUP}, the time can overlap with slews so functionally, this
+parameter acts exactly like {\tt MINSETUP} but only for the first scan
+with a particular setup.  The VLBA needs 15 seconds.  The VLA needs 60
+seconds.  As of Nov. 2012, the VLA actually needs this every time there
+is a slight frequency change (like new Doppler shift), but we will try 
+to get that changed to be only for more major changes.
+
 \item [{\tt MINSETUP}:] The minimum interval between scans when using
 dwell time scheduling.  If the slew time plus the settling time
 drops below {\tt MINSETUP}, {\tt MINSETUP} will be used as the
@@ -12898,6 +12989,44 @@ more information.
 
 
 %  Fix headers of source files.  There is no summary on them.
+
+
+
+\item Add antenna catalog parameter TLEVSET which attempts to allow
+time for the set-and-remember operation the first time a setup is seen
+on the VLBA (RDBE) or VLA.  Populate the catalog with those values.
+Nov. 05, 2012.  RCW.
+
+\item Remove the VLA from the examples egglobal.key and hsa21cm.key, both
+of which use the legacy system which is not supported on the VLA.  Switch
+manual\_1.key to the RDBE/DDC + WIDAR systems.  Replace VLA1 with GBT\_VLBA
+in manual\_2.key.  Nov. 1, 2012.  RCW.
+
+\item Added vladdc.key as an example of observing with the VLBA, GBT, 
+and VLA using the DDC personality of the RDBE.  Oct. 31, 2012.  RCW
+
+\item For optmode SCANS (used for pointing) using the scheme for 
+skipping some scans in less interesting elevation ranges, set so 
+that the first scan for each source is taken.  Oct. 31, 2012.
+
+\item Make example jvla.key be for a VLBA RDBE/PFB vs 4 channel WIDAR setup.
+Oct. 28, 2012.  RCW.
+
+\item Add checking for violations of the setup file constraints imposed
+by the WIDAR correlator phased array system.  Oct 27, 2012.  RCW
+
+\item Add a warning if the scan gaps using the RDBE are inadequate for
+level setting.  Oct 24, 2012.  RCW.
+
+\item Fix and array overflow when listing the setups used for each source
+when there are lots of such setups.  This was found trying to do 3mm 
+wideband observations.  Oct. 23, 2012.  RCW.
+
+\item Calculate the best settings for the unset front end synthesizers
+to avoid birdies from beats of harmonics of the different synthesizers.
+Such birdies turned up strongly in the RFI tests with the new C band
+receiver.  The optimum settings depend on the frequencies of the
+synthesizers in use so no one simple choice works.  Oct. 22, 2012.  RCW.
 
 \item Beta version to be released Sept. 20, 2012 to get the changes
 below into the system.  RCW.
