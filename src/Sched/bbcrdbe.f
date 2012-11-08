@@ -3,13 +3,15 @@ C
 C     Routine called by SETBBC to set the BBC assignments for
 C     the RDBE digital backend.
 C
-c     The awkward thing is that the PFB personality doesn't 
-C     have an obvious BBC numbering system.
-C
-C     Deal only the the PFB personality now and that is hard
-C     wired.
+c     The RDBE doesn't have an obvious BBC numbering scheme
+C     like the legacy system.  But I think it
+C     is ok to simply assign a "BBC" number equal to the
+C     channel number.  This should work for DAR=RDBE and
+C     DAR=RDBE2
 C
 C     Based on BBCVLBA.
+C
+C     Updatedd a bit for the DDC  Nov. 7, 2012.  RCW
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'

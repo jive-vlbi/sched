@@ -64,7 +64,7 @@ C
        IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
 C
 C        Make a short list of the synthesizer settings already
-C        done.
+C        established.
 
          NLO = 0
          DO I = 1, 3
@@ -158,7 +158,7 @@ C
            I = I + 1
           END DO 
 C
-C         If got here, we fell ran out of possible dummy LO
+C         If got here, we ran out of possible dummy LO
 C         values.  I don't think this should happen with the
 C         list provided.  All are checked in syn_c.f.  If this
 C         happens, issue a warning, and use 15.4.

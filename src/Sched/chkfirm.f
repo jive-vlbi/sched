@@ -28,6 +28,13 @@ C
      1               DBE(KS) .NE. 'RDBE_DDC' ) THEN
                GOTERR = .TRUE.
             END IF
+         ELSE IF( DAR(KSTA) .EQ. 'RDBE2' ) THEN
+C
+            IF( DBE(KS) .EQ. ' ' ) THEN
+               DBE(KS) = 'RDBE_DDC'
+            ELSE IF( DBE(KS) .NE. 'RDBE_DDC' ) THEN
+               GOTERR = .TRUE.
+            END IF
          ELSE IF( DAR(KSTA) .EQ. 'DBBC' ) THEN
             IF( DBE(KS) .EQ. ' ' ) THEN
                DBE(KS) = 'DBBC'

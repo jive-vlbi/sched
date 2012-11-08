@@ -9,7 +9,7 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    KSCN, LSCN, KSTA, KS
+      INTEGER    KSCN, LSCN, ISTA, KS
       LOGICAL    GOTERR, HAVEPL, HAVESA
 C ----------------------------------------------------------------------
       GOTERR = .FALSE.
@@ -31,16 +31,16 @@ C        the ephemeris.  If doing satellites, you can also do a planet
 C        by treating it like a satellite and getting the info from the
 C        bsp file.
 C
-         DO KSTA = 1, NSTA
-            IF( STASCN(KSCN,KSTA) ) THEN
+         DO ISTA = 1, NSTA
+            IF( STASCN(KSCN,ISTA) ) THEN
                IF( PLANET(SRCNUM(KSCN)) .OR. SATEL(SRCNUM(KSCN)) ) THEN
-                  IF( CONTROL(STANUM(KSTA)) .NE. 'VLBA' .AND.
-     1                .NOT. VLBADAR(STANUM(KSTA)) .AND.
-     2                CONTROL(STANUM(KSTA)) .NE. 'VLA' ) THEN
+                  IF( CONTROL(STANUM(ISTA)) .NE. 'VLBA' .AND.
+     1                .NOT. VLBADAR(STANUM(ISTA)) .AND.
+     2                CONTROL(STANUM(ISTA)) .NE. 'VLA' ) THEN
                      GOTERR = .TRUE.
                      CALL WLOG( 1, 'CHKSC1: Trying to use ephemeris '//
      1                    'or satellite position for '//SCNSRC(KSCN) )
-                     CALL WLOG( 1, '        at '//STATION(STANUM(KSTA)) 
+                     CALL WLOG( 1, '        at '//STATION(STANUM(ISTA)) 
      1                    //' but SCHED doesn''t know how.' )
                   END IF
                END IF
@@ -70,9 +70,9 @@ C     be allowed on non-recording scans.
 C
       IF( .NOT. ( NOSET .OR. NOTAPE ) ) THEN
          DO KSCN = 1, NSCANS
-            DO KSTA = 1, NSTA
-               IF( STASCN(KSCN,KSTA) ) THEN
-                  KS = NSETUP(KSCN,KSTA)
+            DO ISTA = 1, NSTA
+               IF( STASCN(KSCN,ISTA) ) THEN
+                  KS = NSETUP(KSCN,ISTA)
                   IF( FORMAT(KS) .EQ. 'NONE' .AND. .NOT. NOREC(KSCN) ) 
      1                THEN
                      WRITE( MSGTXT, '( A, A )' ) 

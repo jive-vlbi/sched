@@ -12,12 +12,15 @@ C     DiFX can invert sidebands.  So, if an upper sideband is
 C     found, add the bandwidth to the BBC frequency and invert
 C     the sideband.  Oct 11, 2011.
 C
+C     Add the dual RDBE case.  Nov. 8, 2012  RCW.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH
-      LOGICAL           ERRS, DDWARN, SBWARN
-      CHARACTER         USEDIFC(2)*2
+      INTEGER           KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4)
+      INTEGER           NGT4
+      LOGICAL           ERRS, DDWARN, SBWARN, IFNEW, OK4
+      CHARACTER         USEDIFC(4)*2
       DATA              DDWARN, SBWARN / .TRUE., .TRUE. /
       SAVE              DDWARN, SBWARN
 C --------------------------------------------------------------------
@@ -28,27 +31,66 @@ C     Need to do something about the solar attenuators similar to
 C     the IFDIST entry for the VLBA DAR.
 C     ---------
 C
+C     Get the station catalog number for the station.
+C
+      KSTA = ISETSTA(KS)
+C
+C     Set the usable number of IF (2 for RDBE, 4 for RDBE2)
+C
+      MIF = 2
+      IF( DAR(KSTA) .EQ. 'RDBE2' .AND. FORMAT(KS) .EQ. 'VDIF' .AND.
+     1    DBE(KS) .EQ. 'RDBE_DDC' ) MIF = 4
+C
       IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN 
 C
-C        Make sure there are only 2 IFs requested for now.
+C        Make sure there are no more than 2 IFs requested for 
+C        DAR=RDBE or 4 IFs for DAR=RDBE2.  Get a count of IFs and
+C        number of channels per IF for later use.
 C
-         USEDIFC(1) = ' '
-         USEDIFC(2) = ' '
+         DO IIF = 1, 4
+            USEDIFC(IIF) = ' '
+         END DO
+         NIF = 0
+         DO IIF = 1, 4
+            NNIF(IIF) = 0
+         END DO
          DO ICH = 1, NCHAN(KS)
-            IF( IFCHAN(ICH,KS) .EQ. USEDIFC(1) .OR. 
-     1          IFCHAN(ICH,KS) .EQ. USEDIFC(2) ) THEN
-C              Do nothing
-            ELSE IF( USEDIFC(1) .EQ. ' ' ) THEN 
-               USEDIFC(1) = IFCHAN(ICH,KS)
-            ELSE IF( USEDIFC(2) .EQ. ' ' ) THEN
-               USEDIFC(2) = IFCHAN(ICH,KS)
-            ELSE
 C
-C              Here we have a problem - a third IF.
+C           See if this channel's IF is one that is in lower 
+C           numbered channels.
 C
-               CALL WLOG( 1, 'CHKRDBE: More than 2 IF''s requested '//
-     1             'for RDBE.  Cannot do that yet.' )
-               ERRS = .TRUE.
+            IFNEW = .TRUE.
+            DO IIF = 1, NIF
+               IF( IFCHAN(ICH,KS) .EQ. USEDIFC(IIF) ) THEN
+                  IFNEW = .FALSE.
+                  NNIF(IIF) = NNIF(IIF) + 1
+               END IF
+            END DO
+C
+C           If it is new, increment the count and add the IF to
+C           the record of previously used ones.  Complain and die
+C           if there are too many.
+C           
+            IF( IFNEW ) THEN
+               NIF = NIF + 1
+               IF( NIF .GT. MIF ) THEN
+C
+C                 Here we have a problem - too many IFs.
+C
+                  IF( MIF .EQ. 4 ) THEN
+                     CALL WLOG( 1, 
+     1                    'CHKRDBE: More than 4 IF''s requested '//
+     2                    'for 2 RDBE station using the DDC and VDIF' )
+                  ELSE
+                     CALL WLOG( 1, 
+     1                    'CHKRDBE: More than 2 IF''s requested '//
+     2                    'for single RDBE station or PFB '//
+     3                    'or format other than VDIF' )
+                  END IF
+                  ERRS = .TRUE.
+               END IF
+               NNIF(NIF) = 1
+               USEDIFC(NIF) = IFCHAN(ICH,KS)
             END IF
          END DO
 C
@@ -174,19 +216,61 @@ C
             END IF
             DDWARN = .FALSE.
 C
-C           Set the code for testing the DDC.
+C           NCHAN must be 8 or less with 2 RDBEs or 4 or less with
+C           one.  MIF is already set depending on the capability.
 C
-C
-C           NCHAN must be 8 or less.
-C           Hopefully temporarily, this is actually 4.
-C
-            IF( NCHAN(KS) .GT. 4 ) THEN
+            IF( MIF .EQ. 4 .AND. NCHAN(KS) .GT. 8 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, A, I4 )' )
-     1           'CHKRDBE: For DBE=RDBE_DDC, NCHAN must <= 4.', 
-     2           ' Setup specified.', NCHAN(KS)
+     1           'CHKRDBE: For DAR=RDBE2, DBE=RDBE_DDC, and VDIF ',
+     2           'format, NCHAN must <= 8.', 
+     3           ' Setup specified.', NCHAN(KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
+            END IF
+            IF( MIF .EQ. 2 .AND. NCHAN(KS) .GT. 4 ) THEN
+               MSGTXT = ' '              
+               WRITE( MSGTXT, '( A, A, I4 )' )
+     1           'CHKRDBE: For a single RDBE, or PFB or not VDIF, ',
+     2           ' NCHAN must <= 4.  Setup specified.', NCHAN(KS)
+               CALL WLOG( 1, MSGTXT )
+               ERRS = .TRUE.
+            END IF
+C
+C           Check for invalid distributions of IFs for RDBE2 (MIF=4).
+C           For NIF 3, all possible combinations that have NIF < 8
+C           conform to the restrictions which say that one IF can
+C           have up to 8 channels and the other 2 must be less than
+C           or equal to 4 each (only one IF can go to both RDBE's).
+C           If one IF has more than 4 channels, the largest possible 
+C           number of channels the others can have is 3, so it's ok.
+C           So no test beyond the total number test is needed.
+C
+C           If NIF is 4, there must be two pairs, each with less
+C           than 4 channels (each such pair goes to an RDBE and 
+C           no IF can go to both RDBEs).  Note that there can be
+C           pairs with more than 4 as long as they are kept
+C           separated.  There are only 3 possible combinations so
+C           just make a brute force check.  That will be more
+C           understandable.
+C
+            IF( NIF .EQ. 4 ) THEN
+               OK4 = ( NNIF(1) + NNIF(2) .LE. 4 .AND. 
+     1                 NNIF(3) + NNIF(4) .LE. 4 ) .OR. 
+     2               ( NNIF(1) + NNIF(3) .LE. 4 .AND. 
+     3                 NNIF(2) + NNIF(4) .LE. 4 ) .OR. 
+     4               ( NNIF(1) + NNIF(4) .LE. 4 .AND. 
+     5                 NNIF(2) + NNIF(3) .LE. 4 )
+               IF( .NOT. OK4 ) THEN
+                  CALL WLOG( 1, 
+     1               'CHKRDBE:  When using 2 RDBEs, with 4 IFs, '//
+     2               'it must be possible to pair the IFs so ' )
+                  WRITE( MSGTXT, '( A, A, A )' )
+     1               '          that each pair has less than 4 ',
+     2               'channels total.  This is not the case for ',
+     3               'setup ', SETNAME(KS)
+                  ERRS = .TRUE.
+               END IF
             END IF
 C
 C           Sample rate can have many values.
