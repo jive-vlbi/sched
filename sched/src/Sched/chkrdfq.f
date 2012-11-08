@@ -290,10 +290,10 @@ C
 C
                      MSGTXT = ' '
                      WRITE( MSGTXT,
-     1                  '( A, I4, A, I4, A, F10.4, A, F10.4, A )' )
-     2                  'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
-     3                  ' between ', BB1, ' and ', BB2, 
-     4                  ' MHz '
+     1                  '( A, I4, A, A, A, F10.4, A, F10.4, A )' )
+     2                  'CHKRDFQ: Baseband ', ICH, ' in setup ', 
+     3                  SETNAME(KS)(1:LEN1(SETNAME(KS))), 
+     4                  ' between IF freqs ', BB1, ' and ', BB2, ' MHz'
                      CALL WLOG( 1, MSGTXT )
 C
                      MSGTXT = ' '

@@ -2415,7 +2415,13 @@ sets the power levels, samples the signals at a 1024 MHz sample rate
 basebands, resamples the data to 2 bits, and formats it for recording.
 It takes the place of the IF distributers, baseband converters,
 samplers, and formatter (including pulse cal detectors) in the old
-VLBA system.
+VLBA system.  Sometime in 2013, the VLBA antennas will have two RDBE
+systems each, allowing an increase in the number of channels, at least
+with the DDC personality.  In addition to allowing increased numbers
+of channels, the use of 2 RDBEs allows simultaneous access to all
+4 VLBA IFs.  That is useful for the S/X system and for the new 
+4-8 GHz system, for which two polarization pairs of output data are
+available.
 
 Control of the RDBE and Mark5C recorders is handled by a new VLBA
 control system running on a standard Linux computer.  The new system
@@ -2466,26 +2472,34 @@ constituting polarization pairs, will be selected from each IF input.
 This personality can only provide 32 MHz basebands at fixed
 frequencies within the IF for a total of 2 Gbps.  Other than selecting
 the desired subbands, there is no tuning flexibility.  Note that
-eventually there will be 2 RDBE modules at each station to support 4
-IFs.
+the PFB personality cannot be used on both RDBEs at a VLBA station
+(once those are available) because the required VDIF output is not
+available and because the required 2 Gbps per RDBE is beyond the
+capacity of the recording system.
 
-{\bf RDBE DDC PERSONALITY (not yet available):}
 
-The second personality that will be available eventually is the DDC
-(Digital Down Converter).  It is selected using the \htmlref{{\tt
-DBE}}{SP:DBE} parameter set to {\tt RDBE\_DDC} in the setup file. This
-personality will provide a few (maybe 4 or 8) filters per RDBE that
-can provide arbitrary offset frequencies and can provide any bandwidth
-at the factor of 2 steps between 0.125 and 64 MHz.  There is a
-complication forced by the use of a polyphase filter first step of
-filtration to get the clock rate down to values the FPGA can support.
-Such filters do not have flexible frequency ranges.  This one splits
-the band into 3 segments, 512 to 640 MHz, 640 to 896 MHz, and 896 to
-1024 MHz.  Each baseband must be confined to one of those ranges.  The
-``crossover'' frequencies at the filter edges have a range of
-something like 4-10 MHz (to be determined) that is not really usable.
-\schedb will issue a warning if an attempt is made to have a baseband
-cross one of these boundaries.
+{\bf RDBE DDC PERSONALITY:}
+
+The second personality that is available is the DDC (Digital Down
+Converter - under final testing in late 2012).  It is selected using
+the \htmlref{{\tt DBE}}{SP:DBE} parameter set to {\tt RDBE\_DDC} in
+the setup file. This personality will provide a few 4 (possibly 8 later)
+filters per RDBE that can provide arbitrary offset frequencies and can
+provide any bandwidth at the factor of 2 steps between 0.125 and 64
+MHz.  There is a complication forced by the use of a polyphase filter
+first step of filtration to get the clock rate down to values the FPGA
+can support.  Such filters do not have flexible frequency ranges.
+This one splits the band into 3 segments, 512 to 640 MHz, 640 to 896
+MHz, and 896 to 1024 MHz.  Each baseband must be confined to one of
+those ranges.  The ``crossover'' frequencies at the filter edges have
+a range of something like 4-10 MHz (to be determined) that is not
+really usable.  \schedb will issue a warning if an attempt is made to
+have a baseband cross one of these boundaries.  Note that the polyphase
+filter to use will be determined by the frequency of the LO sum.  It
+is possible that users of the 128 MHz bandwidth will want to offset
+slightly for better pulse cal performance and this will cause a tiny
+fraction of the band to get aliased.  \schedb will issue warnings, but
+this can be tolerated.
 
 The frequencies for the band edges in the DDC personality can be set
 to any multiple of $256 / (2^{32})$ MHz = $0.0596046$ Hz in principle.
@@ -2550,9 +2564,19 @@ while recording on the RDBE/MARK5C system with the PFB personality.
 \htmladdnormallink{{\sl egddc.key}}{examples/egddc.key} which uses the
 DDC personality of the RDBE (do not consider this complete yet).
 
+\htmladdnormallink{{\sl jvla.key}}{examples/jvla.key} is an example
+that uses the PFB personality of the RDBE for joint observations
+with the GBT and VLA.  There are only 512 Mbps at the VLA in this 
+mode.
+
+\htmladdnormallink{{\sl vladdc.key}}{examples/vladdc.key} is an
+example that uses the DDC personality with the VLBA, VLA, and GBT 
+with a full 2 Gbps on all three.
+
 {\bf REFERENCE POINTING WITH THE RDBE:}
 
-As of Feb 2012, one weakness of the available system is that reference
+As of Feb 2012, one weakness of the \schedb support for the new
+systems is that reference
 pointing on masers requiring doppler setting cannot be mixed with PFB
 personality observations.  The use of the DDC, or high overheads for
 personality changes, may be required. For now (early 2012), the best way
@@ -9476,18 +9500,25 @@ will be produced.  This is the default when {\tt CONTROL = VLA}.
 \item [{\tt DAR}:] Gives the type of Data Acquisition Rack present.
 This is mainly to identify the type of formatter is at the station
 which will let the program know about the capabilities available.
-Valid types are: {\tt VLBA}, {\tt RDBE}, {\tt DBBC}, {\tt MKIV}, {\tt
-VLBA4}, {\tt MKIII}, {\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt
-VSOP}, {\tt LBA} and {\tt NONE} (the default).  Note that for Mark II
-scheduling (now obsolete), any site scheduled will be assumed to have
-Mark II equipment.  The main non-obvious option above is {\tt VLBA4},
-which is a VLBA DAR but with a Mark IV formatter installed. This will
-have VLBA BBC's and IF switching, but Mark IV formatting
-characteristics.  The {\tt RDBE} and {\tt DBBC} are digital systems
-containing FPGA chips that can support multiple personalities.  Those
-personalities are specified in the setup file since they can change
-between schedules, or even scans.  The personalities are specified
-with \htmlref{{\tt DBE}}{SP:DBE} setup file parameter.
+Valid types are: {\tt VLBA}, {\tt RDBE}, {\tt RDBE2}, {\tt DBBC}, {\tt
+MKIV}, {\tt VLBA4}, {\tt MKIII}, {\tt S2}, {\tt K4}, {\tt K5}, {\tt
+VERA}, {\tt VSOP}, {\tt LBA} and {\tt NONE} (the default).  Note that
+for Mark II scheduling (now obsolete), any site scheduled will be
+assumed to have Mark II equipment.  The main non-obvious option above
+is {\tt VLBA4}, which is a VLBA DAR but with a Mark IV formatter
+installed. This will have VLBA BBC's and IF switching, but Mark IV
+formatting characteristics.  The {\tt RDBE} and {\tt DBBC} are digital
+systems containing FPGA chips that can support multiple personalities.
+Those personalities are specified in the setup file since they can
+change between schedules, or even scans.  The personalities are
+specified with \htmlref{{\tt DBE}}{SP:DBE} setup file parameter.
+
+The {\tt RDBE2} option is the same as the {\tt RDBE} except that
+the presence of 2 RDBE units is assumed allowing twice as many 
+channels with the DDC personality.  To use 2 RDBEs with one MARK5C
+unit required the use of the VDIF format which is not yet available
+for the PFB personality.  Also the PFB personality puts out a fixed
+2 Gbps which is twice the capacity of the current MARK5C recorders.
 
 \item [{\tt RECORDER}:] Gives the type of tape recorder(s) present
 Valid options are: {\tt VLBA}, {\tt MKIV}, {\tt VLBA4}, {\tt MKIII},
@@ -11078,7 +11109,9 @@ access one side of such a ``crossover'' frequency.  \schedb will warn
 of attempts use degraded frequencies (eventually).  The RDBE\_DDC can
 provide 4 baseband channels from each of the two input IFs.  Those
 baseband channels can be as wide as 128 MHz so the full input bandwidth
-can be covered.
+can be covered.  See \htmlref{the wideband observing section}{SEC:WIDE}
+for more information about tuning restrictions and about the use of
+dual RDBEs.
 
 \item {\tt DBBC} This is for the DBBC digital backend being built in
 Noto for the EVN.  It is meant to have the flexibility of the old
@@ -11495,13 +11528,18 @@ baseband channel for VLBA observations using VLBA data aquisition
 systems.  For the VLBA, it should be {\tt A} or {\tt C} for 20, 13, or
 6cm.  For 90, 50, 4, 3, 2, or 1.3cm, it should be {\tt B} or {\tt D}.
 {\tt A} and {\tt B} are RCP; {\tt C} and {\tt D} are LCP. If {\tt
-DUALX} is specified, both {\tt B} and {\tt D} are RCP. As an
-alternative, {\tt R} or {\tt L} can be specified. Then if {\tt RCHAN}
-and {\tt LCHAN} are specified in the setup files, {\tt IFCHAN='R'}
-will be replaced with {\tt RCHAN} and {\tt IFCHAN='L'} will be
-replaced with {\tt LCHAN}.  If a bad {\tt RCHAN} or {\tt LCHAN} value
-is specified, \schedb will then complain about a bad {\tt IFCHAN}
-specification.
+DUALX} is specified, both {\tt B} and {\tt D} are RCP. The new 4-8 GHz
+system (still called 6cm) can put out signals on all 4 IFs in 2
+polarization pairs.  The BBCs of the legacy backend can acces any
+of the 4 IFs.  An RDBE can only access 2 (any 2), so the 2 RDBE
+option is needed to access all 4.  
+
+As an alternative to explicit specification of the IF, {\tt R} or {\tt
+L} can be specified. Then if {\tt RCHAN} and {\tt LCHAN} are specified
+in the setup files, {\tt IFCHAN='R'} will be replaced with {\tt RCHAN}
+and {\tt IFCHAN='L'} will be replaced with {\tt LCHAN}.  If a bad {\tt
+RCHAN} or {\tt LCHAN} value is specified, \schedb will then complain
+about a bad {\tt IFCHAN} specification.
 
 1N, 1A, 2N, 2A are allowed values for MkIV telescopes.
 See \htmlref{{\tt BBC}}{SP:BBC} and the \htmlref{frequency catalog}
@@ -12991,6 +13029,9 @@ more information.
 %  Fix headers of source files.  There is no summary on them.
 
 
+\item Working on support for the dual RDBE option.
+
+\item Made a BETA release on Nov. 5, 2012  RCW
 
 \item Add antenna catalog parameter TLEVSET which attempts to allow
 time for the set-and-remember operation the first time a setup is seen
@@ -13193,7 +13234,7 @@ on a phase center.  Feb. 1, 2012  RCW.
 
 \item Some pointing schedules driven from the scripts using the optimization
 mode that takes scans that are up were passing up a lot of good scans at the
-start.  It turns out that this was because the estimated start time of
+start.  Itcatalogs/sources.gsfc2011b turns out that this was because the estimated start time of
 the first scan was changing too much until a scan was finally kept and 
 sources that were actually up were flagged as down.  Fixed Jan. 31, 2012.  RCW
 
@@ -15005,7 +15046,6 @@ Other types of projects are not affected.
 \item Added subroutine (SCANID) to help warning and error messages
       identify the offending scan.  A few such messages modified.
       Many more needed. 3 feb 2000. RCW.
-
 \item At the requist of Ralph Marson who is writing AIPS++ fillers,
       I have restricted CALCODE to be a letter (which is capitalized
       by SCHED) or a number.  10 Feb 2000  RCW.

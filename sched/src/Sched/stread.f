@@ -197,20 +197,21 @@ C
          IF( DAR(MSTA) .EQ. ' ' ) DAR(MSTA) = 'NONE'
          IF( DAR(MSTA) .NE. 'VLBA'  .AND. 
      1       DAR(MSTA) .NE. 'RDBE'  .AND.
-     2       DAR(MSTA) .NE. 'DBBC'  .AND.
-     3       DAR(MSTA) .NE. 'VLBAG' .AND.
-     4       DAR(MSTA) .NE. 'MKIV'  .AND.
-     5       DAR(MSTA) .NE. 'MKIII' .AND. 
-     6       DAR(MSTA) .NE. 'S2'    .AND. 
-     7       DAR(MSTA) .NE. 'K4'    .AND. 
-     8       DAR(MSTA) .NE. 'K5'    .AND. 
-     9       DAR(MSTA) .NE. 'VERA'  .AND. 
-     A       DAR(MSTA) .NE. 'VSOP'  .AND. 
-     B       DAR(MSTA) .NE. 'VLBA4' .AND. 
-     C       DAR(MSTA) .NE. 'LBA'   .AND. 
-     D       DAR(MSTA) .NE. 'R1002' .AND. 
-     E       DAR(MSTA) .NE. 'WIDAR' .AND.
-     F       DAR(MSTA) .NE. 'NONE' ) THEN
+     2       DAR(MSTA) .NE. 'RDBE2' .AND.
+     3       DAR(MSTA) .NE. 'DBBC'  .AND.
+     4       DAR(MSTA) .NE. 'VLBAG' .AND.
+     5       DAR(MSTA) .NE. 'MKIV'  .AND.
+     6       DAR(MSTA) .NE. 'MKIII' .AND. 
+     7       DAR(MSTA) .NE. 'S2'    .AND. 
+     8       DAR(MSTA) .NE. 'K4'    .AND. 
+     9       DAR(MSTA) .NE. 'K5'    .AND. 
+     A       DAR(MSTA) .NE. 'VERA'  .AND. 
+     B       DAR(MSTA) .NE. 'VSOP'  .AND. 
+     C       DAR(MSTA) .NE. 'VLBA4' .AND. 
+     D       DAR(MSTA) .NE. 'LBA'   .AND. 
+     E       DAR(MSTA) .NE. 'R1002' .AND. 
+     F       DAR(MSTA) .NE. 'WIDAR' .AND.
+     G       DAR(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF
