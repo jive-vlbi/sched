@@ -98,7 +98,7 @@ C          ignore fan in's for now, do fan-outs, figure out what it is
 C                
            IF( .NOT. (FORMAT(KS)(1:6) .EQ. 'VLBA1:' .OR. 
      1                FORMAT(KS)(1:7) .EQ. 'MARKIII' .OR.
-     2                FORMAT(KS)(1:7) .EQ. 'VDIF' .OR.
+     2                FORMAT(KS)(1:4) .EQ. 'VDIF' .OR.
      3          FORMAT(KS)(1:2) .EQ. 'S2' .OR.
      4          FORMAT(KS)(1:3) .EQ. 'LBA' .OR.
      5          FORMAT(KS)(1:6) .EQ. 'MKIV1:' .OR.
@@ -152,8 +152,13 @@ C
                  WRITE( IVEX, '( 5X, A, A, A1 )' )
      1               'track_frame_format = ','MARK5B', SEP
               ELSE IF( FORMAT(KS)(1:4) .EQ. 'VDIF' ) THEN
+C
+C                VDIF:5032 is appropriate for RDBE/DDC and WIDAR,
+C                but might need something else for other 
+C                systems.
+C
                  WRITE( IVEX, '( 5X, A, A, A1 )' )
-     1               'track_frame_format = ','VDIF', SEP
+     1               'track_frame_format = ','VDIF:5032', SEP
            
               ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
 C                       WRITE( IVEX, '( 5X, A, A, A1 )' )

@@ -73,9 +73,9 @@ C        Normal VLBA systems.
 C
          CALL BBCVLBA( KS )
 C
-      ELSE IF( DAR(ISETSTA(KS)) .EQ. 'RDBE' ) THEN
+      ELSE IF( DAR(ISETSTA(KS))(1:4) .EQ. 'RDBE' ) THEN
 C
-C        RDBE digital backend, including VLBA
+C        RDBE and RDBE2 digital backend, including VLBA
 C
          CALL BBCRDBE( KS )
 C

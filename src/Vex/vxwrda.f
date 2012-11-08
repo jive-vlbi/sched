@@ -91,10 +91,11 @@ C        Next electronic rack
 C
          IF( DAR(ISCAT) .EQ. 'VLBA' .OR. 
      1       DAR(ISCAT) .EQ. 'RDBE' .OR. 
-     2       DAR(ISCAT) .EQ. 'S2' .OR. 
-     3       DAR(ISCAT) .EQ. 'VLBAG' .OR.
-     4       DAR(ISCAT) .EQ. 'VLBA4' .OR. 
-     5       DAR(ISCAT) .EQ. 'K4' ) THEN
+     2       DAR(ISCAT) .EQ. 'RDBE2' .OR. 
+     3       DAR(ISCAT) .EQ. 'S2' .OR. 
+     4       DAR(ISCAT) .EQ. 'VLBAG' .OR.
+     5       DAR(ISCAT) .EQ. 'VLBA4' .OR. 
+     6       DAR(ISCAT) .EQ. 'K4' ) THEN
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',
      2          DAR(ISCAT)(1:LEN1(DAR(ISCAT))), SEP
@@ -122,12 +123,14 @@ C
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',
      2          'DBBC', SEP
+C
 C    2011-09-30 small@astron:
 C    Also add support for KVAZAR stations here.
 C    (Note that "KVAZAR" is a back-transliteration 
 C     of the Cyrillic transliteration of "quasar".
 C     "KVAZAR" is apparently preferred at JIVE, although
 C     the Russians write "QUASAR" in English.)
+C
          ELSE IF( DAR(ISCAT) .EQ. 'R1002' ) THEN
             WRITE( IVEX, '( 5X, A, A, A1)' )
      1          'electronics_rack_type = ',
