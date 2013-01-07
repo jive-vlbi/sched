@@ -8,12 +8,12 @@ C     specified with VLAMODE are reflected in the INTENTS.
 C
       INCLUDE   'sched.inc'
 C
-      INTEGER   ISCN, ISTA, VLASTA
+      INTEGER   ISCN, ISTA
       INTEGER   IIVA, IIVX, IIVS, II
       LOGICAL   GOTINT, VLASCN
 
 C -------------------------------------------------------------
-C     See if the VLA is used.
+C     See if the VLA is used, setting VLASTA if so.
 C
       VLASTA = 0
       DO ISTA = 1, NSTA
@@ -23,18 +23,27 @@ C
       END DO
       IF( VLASTA .EQ. 0 ) RETURN
 C
-C     Get the intent numbers for the AUTOPHASE commands.
+C     Get the intent numbers for the VLA AUTOPHASE commands.
 C     Note that the intent for single dish is not actually
 C     defined yet.
+C     Allow for the case of some other interferometer being told
+C     to autophase.  Ignore if so.  That is done with a station
+C     name in the intent.
 C
       IIVA = 0
       IIVX = 0
       IIVS = 0
       IF( NINTENT .GE. 1 ) THEN
          DO II = 1, NINTENT
-            IF( INTENT(II) .EQ. 'DETERMINE_AUTOPHASE' ) IIVA = II
-            IF( INTENT(II) .EQ. 'APPLY_AUTOPHASE' ) IIVX = II
-            IF( INTENT(II) .EQ. 'NO_AUTOPHASE' ) IIVS = II
+            IF( INDEX( INTENT(II), ':' ) .EQ. 0  .OR. 
+     1          INDEX( INTENT(II), 'VLA' ) .NE. 0 ) THEN
+               IF( INDEX( INTENT(II), 'DETERMINE_AUTOPHASE' ) .NE. 0 ) 
+     1              IIVA = II
+               IF( INDEX( INTENT(II), 'APPLY_AUTOPHASE' ) .NE. 0 ) 
+     1              IIVX = II
+               IF( INDEX( INTENT(II), 'NO_AUTOPHASE' ) .NE. 0 ) 
+     1              IIVS = II
+            END IF
          END DO
       END IF
 C
@@ -67,6 +76,11 @@ C
       DO ISCN = SCAN1, SCANL
 C
 C        Only worry about the scan if the VLA is in it.
+C        Note that SCHOPT has not yet been called, so the current
+C        scans may not be the final ones and the VLA might be
+C        dropped from the list later.  But set the phasing intents now.
+C        They might show up later on non-VLA scans, but that is not
+C        really a problem.
 C
          IF( STASCN(ISCN,VLASTA) ) THEN
 C

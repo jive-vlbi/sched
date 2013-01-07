@@ -7,11 +7,13 @@ C     If ERRS is returned as TRUE, CHKSET will give the setup
 C     file name and then crash the program.
 C
 C     The VLA routines are getting major surgery for the switch from
-C     the old VLA system to the JVLA.  The VLA now uses VEX for 
+C     the old VLA system to the new hardware.  The VLA now uses VEX for 
 C     control and WIDAR for the DAR.  For now (Oct 2012), the VLA
 C     is restricted to 4 channels.  Each must be from a separate
 C     IF and they must be in polarization pairs.  The channels must
-C     be net USB.
+C     be net USB.  This is changing to 16 channels, four each from
+C     each IF.  That is coming soon enough that this routine will
+C     assume it is here (Dec. 28, 2012).
 C
 C     Conversion to new system started May 9, 2012 RCW.  
 C     For the old code, look for versions of SCHED 10.1 or earlier.
@@ -20,22 +22,25 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER     KS, ICH, JCH
-      LOGICAL     ERRS, GOTPAIR
+      INTEGER     VMIF
+      PARAMETER   (VMIF=4)
+      CHARACTER   VIFNAME(VMIF)*1, VIFPOL(VMIF)*3
+      INTEGER     KS, ICH, JCH, NCIF(VMIF), IIF, NAC, NBD, ISCN
+      INTEGER     ISETF, LEN1
+      LOGICAL     ERRS, GOTPAIR, IFOK
+      DOUBLE PRECISION  VIFFLO(VMIF), VIFFHI(VMIF), FRMAX
+      DOUBLE PRECISION  ACAVG, BDAVG
+      DATA  VIFNAME  / 'A', 'B', 'C', 'D' /
+      DATA  VIFPOL   / 'RCP', 'RCP', 'LCP', 'LCP' /
 C  --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKVLA: Starting.' )
+      ISETF = ISETNUM(KS) 
 C
-C     It is not wise to make VLA schedules longer than 24 hours.
-C     There is no day number on the scans so, if there is a restart,
-C     they can end up on the wrong day.
+C     Get rid of the pre-EVLA inhibition against 24+ hr schedules due to 
+C     no day number in the obs files.  Also remove "vlaover24" from 
+C     messages.txt.  Dec. 28, 2012.  RCW
 C
-C     Still current for JVLA?  Leave it just in case.
-C
-      IF( TEND - TFIRST .GT. 1.D0 ) THEN
-         CALL WRTMSG( 0, 'CHKVLA', 'vlaover24' )
-      END IF
-C
-C     Check VLARFANT.  Not sure if this will do anything for JVLA.
+C     Check VLARFANT.  Not sure if this will do anything for VLA.
 C     This parameter is not used for the new system, so ignore it.
 C     Keep the code in case it comes back.
 C
@@ -48,63 +53,125 @@ C         ERRS = .TRUE.
 C      END IF
 C
 C     Check the maximum number of channels.
+C     This is modified for the new 16 channel option  Dec. 28, 2012.
+C     Embed the 16 channel check in separate 4 channel checks for each
+C     IF.  If there are more than 16, it will fail that test.
+C     Check the polarization spec while at it.
+C     Also check the frequency range for each IF.  Assume upper sideband
+C     here.  That will be checked later.
 C
-      IF( NCHAN(KS) .GT. 4 ) THEN
-         SETMSG = ' '
-         WRITE( SETMSG, '( A, I7, A )' ) 'CHKVLA: NCHAN ', 
-     1      NCHAN(KS), ' more than the maximum of 4 for the VLA.'
-         CALL WLOG( 1, SETMSG )
-         ERRS = .TRUE.
-      END IF
+C     Initializations for summary info.
 C
-C     Check valid IFs.
-C
+      DO IIF = 1, VMIF
+         NCIF(IIF) = 0
+         VIFFLO(IIF) = 1.D15
+         VIFFHI(IIF) = 0.D0
+         ACAVG = 0.D0
+         BDAVG = 0.D0
+         NAC = 0
+         NBD = 0
+      END DO
+      FRMAX = 0.D0
       DO ICH = 1, NCHAN(KS)
-         IF( IFCHAN(ICH,KS) .NE. 'A' .AND. IFCHAN(ICH,KS) .NE. 'B' .AND.
-     1       IFCHAN(ICH,KS) .NE. 'C' .AND. IFCHAN(ICH,KS) .NE. 'D' ) 
-     2          THEN
-            SETMSG = ' '
-            WRITE( SETMSG, '( A, I4, 3A )' ) 
-     1         'CHKVLA: IFCHAN for channel ', 
-     2         ICH, ' at the VLA is ', IFCHAN(ICH,KS), 
-     3         ' VLA which is not A, B, C, or D. '
-            CALL WLOG( 1, SETMSG )
+C
+C        Initialize - bad IF spec until proven good!
+C
+         IFOK = .FALSE.
+C
+C        Get which IF this is.
+C
+         DO IIF = 1, VMIF
+            IF( IFCHAN(ICH,KS) .EQ. VIFNAME(IIF) ) THEN
+               NCIF(IIF) = NCIF(IIF) + 1
+               IFOK = .TRUE.
+C
+C              Check polarization specification.
+C
+               IF( POL(ICH,KS) .NE. VIFPOL(IIF) ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, A, A, A3, A, A3, A, 2I5 )' )
+     1              'CHKVLA: VLA IF ', IFCHAN(ICH,KS), 
+     2              ' is ', VIFPOL(IIF), ' but ', POL(ICH,KS), 
+     3              ' requested for setup, channel ', KS, ICH
+                  CALL WLOG( 1, MSGTXT )
+                  ERRS = .TRUE.
+               END IF
+               VIFFLO(IIF) = MIN( VIFFLO(IIF), FREQ(ICH,KS) )
+               VIFFHI(IIF) = MAX( VIFFHI(IIF), 
+     1                            FREQ(ICH,KS) + BBFILT(ICH,KS) )
+               FRMAX = MAX( VIFFHI(IIF), FRMAX )
+               IF( VIFNAME(IIF) .EQ. 'A' .OR. 
+     1             VIFNAME(IIF) .EQ. 'C' ) THEN
+                  NAC = NAC + 1
+                  ACAVG = ACAVG + FREQ(ICH,KS) + 0.5D0 * BBFILT(ICH,KS)
+               ELSE IF( VIFNAME(IIF) .EQ. 'B' .OR. 
+     1                  VIFNAME(IIF) .EQ. 'D' ) THEN
+                  NBD = NBD + 1
+                  BDAVG = BDAVG + FREQ(ICH,KS) + 0.5D0 * BBFILT(ICH,KS)
+               END IF
+            END IF
+         END DO
+C
+C        Complain about an unrecognized IF name.
+C
+         IF( .NOT. IFOK ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I4, 3A )' )
+     1          'CHKVLA: VLA baseband channel ', ICH, ' has IFCHAN ',
+     2          IFCHAN(ICH,KS), ' which is not a VLA IF.'
+            ERRS = .TRUE.
+         END IF
+      END DO
+      IF( NAC .GT. 0 ) ACAVG = ACAVG / NAC
+      IF( NBD .GT. 0 ) BDAVG = BDAVG / NBD
+C
+C     Now complain if any IF has too many channels.
+C
+      DO IIF = 1, VMIF
+         IF( NCIF(IIF) .GT. 4 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A, I4, A, A )' )
+     1          'CHKVLA: ', NCIF(IIF),
+     2          ' channels were assigned to VLA IF ', VIFNAME(IIF),
+     3          '  The maximum allowed is 4.'
+            CALL WLOG( 1, MSGTXT )
+            ERRS = .TRUE.
+         END IF
+C
+C        Complain if frequency range is too high for IF's that got used.
+C
+         IF( NCIF(IIF) .GT. 0 .AND. 
+     1       VIFFHI(IIF) - VIFFLO(IIF) .GT. 1024.D0 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A, A, A )' )
+     1          'CHKVLA: Frequency range of channels assigned to ',
+     2          'VLA IF ', VIFNAME(IIF), 
+     3          ' span over the 1024 MHz (', VIFFHI(IIF) - VIFFLO(IIF),
+     4          ' MHz).' 
+            CALL WLOG( 1, MSGTXT )
             ERRS = .TRUE.
          END IF
       END DO
 C
-C     Check for unique IFCHAN for each channel.
-C     While at it, check for RCP in A or B and LCP in C or D
+C     Enforce AC > BD for F>18GHz and data requested from AC and BD.
+C     Comment this out.  It only affects cases that won't be used for 
+C     VLBI, like Ka band.  Leave the hook here in case we get Ka band
+C     on the VLBA some day.
 C
-      IF( NCHAN(KS) .GT. 1 ) THEN
-         DO ICH = 1, NCHAN(KS) - 1
-            DO JCH = ICH + 1, NCHAN(KS)
-               IF( IFCHAN(ICH,KS) .EQ. IFCHAN(JCH,KS) ) THEN
-                  SETMSG = ' '
-                  WRITE( SETMSG, '( 3A )' ) 'CHKVLA: For the ',
-     1            'VLA, each baseband channel must be from a different',
-     2            ' IF channel (IFCHAN).'
-                  CALL WLOG( 1, SETMSG )
-                  ERRS = .TRUE.
-               END IF
-            END DO
-C
-C           Check the polarization vs IF.
-C
-            IF( .NOT. ( ( POL(ICH,KS) .EQ. 'RCP' .AND. 
-     1        ( IFCHAN(ICH,KS) .EQ. 'A' .OR. IFCHAN(ICH,KS) .EQ. 'B' ) )
-     2          .OR. ( POL(ICH,KS) .EQ. 'LCP' .AND. 
-     3        ( IFCHAN(ICH,KS) .EQ. 'C' .OR. IFCHAN(ICH,KS) .EQ. 'D' ) )
-     4          ) ) THEN
-               SETMSG = ' '
-               WRITE( SETMSG, '( 2A )' )
-     1           'CHKVLA: For VLA, RCP must be IF A or B and LCP must ',
-     2           'be IF C or D.'
-               CALL WLOG( 1, SETMSG )
-               ERRS = .TRUE.
-            END IF
-         END DO         
-      END IF
+C      IF( FRMAX .GT. 18000.0 .AND. NAC .GT. 0 .AND. NBD .GT. 0 ) THEN
+C         IF( BDAVG .GT. ACAVG ) THEN
+C            CALL WLOG( 1, 'CHKVLA WARNING:  Above 18 GHz, '//
+C     1               'it is best, and sometimes required, that the ' )
+C            CALL WLOG( 1, MSGTXT )
+C            CALL WLOG( 1, '                  VLA AC IFs be at '//
+C     1               'higher frequencies than the BD IFs.' )
+C            MSGTXT = ' '
+C            WRITE( MSGTXT, '( 2A )' )
+C     1                    '                  Please fix setup ', 
+C     2         SETFILE(ISETF)(1:LEN1(SETFILE(ISETF)))
+C            CALL WLOG( 1, MSGTXT )
+C         END IF
+C      END IF
 C
 C     Require dual polarization pairs.
 C     Do this a bit crudely - go through all channels looking for the
@@ -147,6 +214,34 @@ C
      3        ' is not.'
             CALL WLOG( 1, SETMSG )
             ERRS = .TRUE.
+         END IF
+      END DO
+C
+C     Require that FE be set.
+C
+      DO ICH = 1, NCHAN(KS)
+         IF( ( IFCHAN(ICH,KS).EQ.'A' .AND. FE(1,KS).EQ.'omit' ) .OR.
+     1       ( IFCHAN(ICH,KS).EQ.'B' .AND. FE(2,KS).EQ.'omit' ) .OR.
+     2       ( IFCHAN(ICH,KS).EQ.'C' .AND. FE(3,KS).EQ.'omit' ) .OR.
+     3       ( IFCHAN(ICH,KS).EQ.'D' .AND. FE(4,KS).EQ.'omit' ) ) THEN
+            SETMSG = ' '
+            WRITE( SETMSG, '( 3A )' ) 
+     1         'CHKVLA: FE not specified for IF ', IFCHAN(ICH,KS),
+     2         ' at the VLA.'
+            CALL WLOG( 1, SETMSG )
+            ERRS = .TRUE.
+         END IF
+      END DO
+C
+C     Check VLAPTIME is 10 seconds or more.
+C
+      DO ISCN = SCAN1, SCANL
+         IF( VLAPTIME(ISCN) .LT. 10 ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A, I7, A, I5 )' )
+     1         'CHKVLA:  VLA phase time (VLAPTIME) should be 10 sec ',
+     2         'or more.', VLAPTIME(ISCN), ' s found on scan ', ISCN
+            CALL ERRLOG( MSGTXT )
          END IF
       END DO
 C

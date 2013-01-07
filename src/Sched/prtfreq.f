@@ -35,6 +35,9 @@ C
          WRITE( IUNIT, '( 2X, A, 8( 9X, A1, :), /, 10X, 8( 9X, A1, :), '
      1           // ' /, 10X, 8( 9X, A1, :), /, 10X, 8( 9X, A1, :) )' )
      2           ' Net SB=', ( NETSIDE(I,KS), I = 1, NNCHAN )
+         WRITE( IUNIT, '( 2X, A, 8( 9X, A1, :), /, 10X, 8( 9X, A1, :), '
+     1           // ' /, 10X, 8( 9X, A1, :), /, 10X, 8( 9X, A1, :) )' )
+     2           ' IF SB =', ( SIDE1(I,KS), I = 1, NNCHAN )
          WRITE( IUNIT, '( 2X, A, 8(6X,A4,:), /, 10X, 8( 6X, A4, :), '
      1           // '/, 10X, 8( 6X, A4, :), /, 10X, 8( 6X, A4, :) )' )
      2           ' Pol.  =', ( POL(I,KS), I = 1, NNCHAN )

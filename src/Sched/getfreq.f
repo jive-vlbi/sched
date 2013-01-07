@@ -202,7 +202,7 @@ c     1         iif, nfreq, tf1, tf2, tl1
 c            end if
          END DO
 C
-C        Verious obvious parameters.
+C        Various obvious parameters.
 C
          FDUALX(NFREQ)  = KD( KEYPTR( 'DUALX', KC, KI ) ) .EQ. 0.D0
          I1 = KEYPTR( 'SYN', KC, KI ) - 1

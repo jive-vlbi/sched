@@ -166,10 +166,9 @@ C
      1       '  NOTE:  Above numbers assume the same correlator'//
      2       ' parameters are used for all data.'
 
-         IF( DATASIZE .GT. 4.0E9 ) THEN
-            WRITE( ISUM, '( A, A )' )
-     1       '    NOTE:  Output data set size large.  ',
-     2       'Consider requesting high density tapes.'
+         IF( DATASIZE .GT. 16.0E9 ) THEN
+            WRITE( ISUM, '( A )' )
+     1       '  NOTE:  Output data set size large.  '
          END IF
 C
 C        Deal with correlator specific situations.  Only Socorro 

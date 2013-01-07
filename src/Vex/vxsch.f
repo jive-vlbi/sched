@@ -24,17 +24,16 @@ C
 C
       INTEGER     ISCN, ISTA, LEN1, NCHR, INT, ILEN
       INTEGER     MCH, ICH, JCH1, JCH2
-      INTEGER     DAY1, DAY2, INTSTOP, LPOS, INPAGE
-      INTEGER     YEAR, DAY, DOY, JD, MONTH, DATLAT
+      INTEGER     DAY1, INTSTOP, LPOS, INPAGE
+      INTEGER     YEAR, DATLAT
       INTEGER     TRANSTAR, TRANEND, TRANLEN, GRABSTOP
       INTEGER     I, LASTSCN, KS, NTSYS(MAXSTA)
       INTEGER     NTSYSON(MAXSTA), TSYSGAP(MAXSTA), TPDRIV
       REAL        STASPD(MANT) 
       CHARACTER   FULTIM*18, TMPSRC*32
-      CHARACTER   DNAME*3, MNAME*3
       CHARACTER   LINE*132, TFORM*9, TRANTYPE*10, SCANNAME*10
       CHARACTER   DISKFILE*30, STNLC*2
-      DOUBLE PRECISION  STARTT, STOPT, TAPOFF, IDAY
+      DOUBLE PRECISION  STARTT, TAPOFF, IDAY
       LOGICAL     SKIPPED, WARNFS, WARNTS(MAXSTA), DATATRAN, WARNGP
       LOGICAL     GAPERR, SKIPNONE, TSYSMESS, WARNTSOF(MAXSTA)
       LOGICAL     ANYNONE, WARNBANK, OLDWARNB
@@ -60,12 +59,8 @@ C
          STASPD(ISTA) = -1.0
       END DO
 C
-C     Set up a date line.
-C
-      CALL TIMEJ( STOPJ(1), YEAR, DOY, STOPT )
-      MONTH = 1
-      DAY = DOY
-      CALL TDATECW( YEAR, MONTH, DAY, JD, MNAME, DNAME )
+C     Old code called TIMEJ and TDATECW to set up a date line.  
+C     But then the results were never used.  Removed Jan. 2, 2013
 C
 C     Write SCHED section add some comments in case this gets pasted
 C     into VEX schedule
@@ -75,11 +70,11 @@ C
      2     COM,'schedule section for experiment ', EXPCODE, COM, EXPT
 C
 C     Now loop through scans. A few shortcuts are kept
+C     RCW Jan. 2, 2013: Removed unneeded STARTT and STOPT initializations.
+C     INTSTOP initialization probably not needed.  
 C
       INPAGE = -100
       INTSTOP = 0
-      STARTT = 0
-      STOPT = 0
       DO ISCN = SCAN1, SCANL
 C
 C        If the scan was skipped, just note that fact.
@@ -223,6 +218,18 @@ C
                   WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                   INPAGE = INPAGE + 1
                END DO
+C
+C              For VLA phasing scans, add the phasing subscan length.
+C              This is here because there is a scan dependent argument
+C              in the INTENT.
+C
+               IF( PHASING(ISCN) ) THEN
+                  WRITE( LINE, '( 4A, I3.3, A )' ) COM,
+     1                ' intent = ', QOT, 
+     2                'VLA:PHASE_SUBSCAN=', VLAPTIME(ISCN), QOT
+                  WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
+                  INPAGE = INPAGE + 1
+               END IF
             END IF
 C
 C           May move scan time fwd for tapestart: then write comment
@@ -242,10 +249,13 @@ C            print*, 'tapoff=',ABS(TAPOFF*86400d0)
                INPAGE = INPAGE + 1
             END IF
 C                  
-C           Get scan times
+C           Get scan times.  Be sure to use the start time year, day
+C           etc.  RCW Jan. 2, 2013 after problem at year boundary.
+C           There was a call to TIMEJ for the STOPJ too, but the output
+C           wasn't used for anything so it was removed.
+C           
 C
             CALL TIMEJ( (STARTJ(ISCN)-TAPOFF), YEAR, DAY1, STARTT )
-            CALL TIMEJ( STOPJ(ISCN), YEAR, DAY2, STOPT )
             WRITE( FULTIM(1:5), '( I4, A1 )' ) YEAR,'y'
             WRITE( FULTIM(6:9), '( I3.3, A1 )' ) DAY1,'d'
             FULTIM(10:18) = TFORM( STARTT, 'T', 0, 2, 2, 'hms' )

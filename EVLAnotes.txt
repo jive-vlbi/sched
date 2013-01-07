@@ -1,0 +1,89 @@
+This is the version on noatak.  I don't have my laptop with me today
+to work on the version on it.  Jan 4, 2013.
+
+
+
+
+Each "stream" must come from a separate IF.
+
+1 GHz IFs.  128 MHz chunks inside that.
+
+11 MicroHz tuning granularity.  So can ignore.
+
+The stream is always upper sideband.
+
+Crossovers are about 1/16 of band wide.
+
+Eventually the narrow bands are arbibrary positions in the 128 MHz
+But for now, treat it like a PFB - "snap to grid"
+
+IF names in pairs.
+
+Jan 4, 2013  So far, only using A, B, C, and D.  Assume that means
+the 8 bit samplers.  Ok?
+
+A0/C0     8bit
+B0/D0     8bit
+A1/C1     3bit
+B1/D1     3bit
+A2/C2     3bit
+B2/D2     3bit
+...       ...
+
+
+No phase application across observing bands.  enforce?
+Parse intents
+
+
+Parse intents and warn if not recognized.
+
+Keep VLAMODE as is and put in an intent.
+
+Deal with pointing.
+Put request into an intent.  But keep old infrastructure.
+
+For reference pointing, using interferometry so don't use same 
+sources as the VLBA.
+
+
+Added at meeting Sept. 13, 2012
+
+4 streams 
+
+MARK5C on VLBA stops the recorder every scan.  No longer need inhibition
+against long recording scans?
+
+
+
+Several short scans in a row are needed for phasing as phase is only
+applied at end of scan.  These short scans should not show up on the
+VLBA schedule as VLBA scans.  But the user should have control of the
+lengths of the short scans ("subscans").
+VLAPSCAN  phasing subscan length.  Pass through VEX file to VLA.
+INTENT="VLA:PHASE_SUBSCAN=10"
+
+First scan on a phase up source must have no phases applied (not even from
+previous phasing).
+
+VLA always net upper sideband.  Make sure that is clear in the VEX file 
+and the bookkeeping is ok.
+
+Maybe include the receiver name in the if_def.
+
+Include pointing scans as with other antennas.
+
+Pointing scans need to be 2.5 minutes.  Identify in VEX file by 
+lack of a phasing intent and a drive number 0 (no record).
+
+
+Just specify frequency and bandwidth.
+
+Don't worry too much about which IF names are used.
+If there are more than 2 IFs, keep A and C higher than B and D.
+
+Always say A and C if there are only 2 IFs.
+
+
+
+Main new thing needed now is the subscan specification for pointing 
+scans.

@@ -86,7 +86,9 @@ C
          IF( STASCN(ISCN,ISTA) ) THEN
 C        
 C           Current VEX does not allow for different tape starts, so 
-C           check and set the overall offset TPOFF
+C           check and set the overall offset TPOFF.  Note that this
+C           should have already been enforced earlier in SCHED when
+C           the scans were being established (RCW).
 C
             IF( TPOINI ) THEN
 C           Remember tpstart is already the offset from startj
