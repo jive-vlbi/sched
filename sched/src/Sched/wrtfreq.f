@@ -23,7 +23,7 @@ C     Keep track of last use.
 C
       INTEGER           MBBCBW, MBBCFREQ
       DOUBLE PRECISION  LBBCBW(MCHAN), LBBCFREQ(MCHAN)
-      DOUBLE PRECISION  TBBCBW(MCHAN), TBBCFREQ(MCHAN) 
+      DOUBLE PRECISION  TBBCBW(MCHAN), TBBCFREQ(MCHAN), FDROP
       INTEGER           LPCALFR1(MAXPC), LPCALFR2(MAXPC)
       INTEGER           MPCALFR1, MPCALFR2, MPCALX1, MPCALX2
       CHARACTER         LPCALX1(MAXPC)*3, LPCALX2(MAXPC)*3
@@ -131,12 +131,15 @@ C              Get away from the frequency range that can't be
 C              covered by the old BBCs.  Go by a multiple of 
 C              5 MHz to keep pcal detection frequencies for 5 MHz
 C              tones.  Here I need the IF sideband which is
-C              RFSIDE * ISIDE
+C              RFSIDE * ISIDE.  Note that requesting 1000.0 might
+C              be ok for the BBCs, but blows the format used for
+C              this parameter, so avoid it.
 C
-               IF( TBBCFREQ(KCH) .GT. 1000.0D0 ) THEN
-                  TBBCFREQ(KCH) = TBBCFREQ(KCH) - 25.0D0
-                  TLOSUM(KCH) = TLOSUM(KCH) - 
-     1               IFSIDE(KCH) * 25.D0
+               IF( TBBCFREQ(KCH) .GE. 999.95D0 ) THEN
+                  FDROP = TBBCFREQ(KCH) - 999.95D0
+                  FDROP = 5.D0 * ( 1.D0 + DINT( FDROP / 5.D0 ))
+                  TBBCFREQ(KCH) = TBBCFREQ(KCH) - FDROP
+                  TLOSUM(KCH) = TLOSUM(KCH) - IFSIDE(KCH) * FDROP
                END IF
 C
 Cdebug            write(*,*) 'wrtfreq tlosum: ', ich, kch, tfirstlo,

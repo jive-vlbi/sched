@@ -302,6 +302,15 @@ C
 C
 C        Get the FE spec.  This is a bit tricky because it is not
 C        indexed by the channel but by the IF (A=1, B=2, C=3, D=4)
+C        The ABCD scheme of the VLBA type systems is not changing
+C        with the RDBEs.
+C
+C        It gets tricky for systems that don't follow the VLBA 
+C        style convention.  The MarkIV uses 1N, 2N, 1A, 2A
+C        but that will all change with the DBBC.  So don't try to
+C        deal with it.  There is an ABCD system with the DBBC.
+C        I may need to deal with that eventually as it would get
+C        through this filter, but might not be right.
 C
          DO IIF = 1, FNIF(KF)
             IF( FE(1,KS) .EQ. 'omit' .AND. FIFNAM(IIF,KF) .EQ. 'A' )

@@ -199,7 +199,7 @@ C
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A )' ) 
-     1             '  Is this intentional?  ', 
+     1             '    Is this intentional?  ', 
      2             'This messes up SCHED internal bookkeeping'
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '

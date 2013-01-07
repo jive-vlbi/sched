@@ -241,6 +241,7 @@ C     VLATSYS and VLANTSYS are a toggle pair for on-line tsys corr.
 C
       CALL KEYCHR( 'VLAPSRC', ' ', 12, KD, KC, KI )
       CALL KEYCHR( 'VLAMODE', 'ZZ', 2, KD, KC, KI )
+      CALL KEYADD( 'VLAPTIME', 10.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'VLATYPE', 'VLBI', 9, KD, KC, KI )
       CALL KEYADD( 'VLAUSERN', 600.D0, 1, KD, KC, KI )
       CALL KEYADD( 'IATUTC', 0.D0, 1, KD, KC, KI )
