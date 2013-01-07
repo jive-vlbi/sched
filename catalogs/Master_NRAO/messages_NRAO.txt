@@ -236,14 +236,6 @@ Add TPSTART to the SUMITEM list to see details.
 MINPAUSE and PRESTART may be used to adjust.
 Remember MINPAUSE is multiplied by the speed up factor.
 
-++vlaover24
---Called from CHKVLA
-
-This schedule is over 24 hours and contains the JVLA.  With the old
-VLA system, that was not wise because the VLA telescope files do not 
-have a day associated with each scan.  This may no longer be a problem,
-but we're not sure yet.
-
 ++resync
 --Called by CHKSCN
 
@@ -457,14 +449,15 @@ You have sample rates that don't match in different setup groups in
 the same setup file.  Normally data recorded under all groups in a
 setup file are correlated with each other.  This is impossible with
 some correlators and requires special care with others.  With DiFX,
-for example, it is possible to mix sample rates (and bandwidths by
+for example, it may be possible to mix sample rates (and bandwidths by
 implication) to, for example, correlate several narrow baseband
 channels against one wide one.  To do so requires the right relative
 frequencies for all basebands and SCHED does not yet check to be sure
 the setups are reasonable.  A case where such a mode might be used is
-with the JVLA at a required 128 MHz baseband bandwidth when it started
+with the VLA at a required 128 MHz baseband bandwidth when it started
 doing VLBI being correlated against 32 MHz channels from the RDBE_PFB
-systems on the VLBA.
+systems on the VLBA.  But this should be considered an untested mode
+and is not really available for users.
 
 When mixed sample rates, the options to use DOPPLER or FREQ to 
 adjust the frequency from the schedule rather than the setup file
@@ -505,3 +498,77 @@ starting the "tape" requested using PRESTART and MINPAUSE.
 For the VLBA, information about the first incidence of a recording
 stop of less than 15 seconds with a first setup encounter or 5 seconds
 with no setup change is below.
+
+++harmwarn
+--Called by HARMWARN
+
+Internally generated RFI tones can result from mixing of harmonics of
+the front-end synthesizers on the VLBA.  Under some circumstances,
+these tones can have amplitudes of several hundred in the
+autocorrelations as measured using a 32 MHz baseband bandwidth and
+31.25 kHz spectral channel bandwidth.  Such tones cause very strong
+ringing across the autocorrelation spectrum without smoothing.  They
+are also seen, more weakly, in the cross-correlations because of the
+concentration of power in the affected channel.  All three of the
+synthesizers are involved in producing these tones whether or not they
+are actually in use.  So it matters how all synthesizers are set, not
+just the active ones.
+
+The tones are strongest when the frequencies that mix include the
+nominal output frequency of one of the synthesizers.  They are also
+strongest, at least for the 4-8 GHz "6cm" receiver when the
+synthesizers are numbers 1 and 2, both of which feed the IF converter.
+Other harmonics, and synthesizer 3, which usually is used for the high
+frequency front ends, create tones that are much weaker.  
+
+A complication is that, above 8.0 GHz, the synthesizer's main
+oscillator is running at half the output frequency and doubler
+produces the final output.  A birdy is seen at the half frequency.
+
+SCHED tries to warn of choices of front end frequencies (often
+obtained from the freq.dat file) that could cause problems.  When
+SCHED is allowed to choose the frequencies of the unused synthesizers
+(Setup parameter SYNTH not set for the unused synthesizers), it will
+try exhaustively to find benign frequencies and it should be able to
+in essentially all cases.  So it is best to let SCHED choose.
+
+Any bands can be affected if the user sets the unused synthesizers to
+unfortunate frequencies.  It is not yet clear which bands will be
+affected when SCHED is allowed to choose the unused synthesizer
+settings.  Any case where only one synthesizer is in use (most
+observations below 16 GHz) will be ok as SCHED can find benign
+settings for the other two.  If 2 IF pairs are in use in the new 6cm
+receiver, it is has been established that one can get in trouble.
+Other cases where the science requirements drive the choice of
+synthesizer settings, and where two synthesizers must be set, include
+S/X dual band observations, observations using the 4cm ``DUALX'' mode,
+and frequencies above 20 GHz where synthesizer 3 is used in the front
+These modes have not yet been tested.
+
+You are getting this message because your setup has a combination of
+front end settings that could cause this sort of internal RFI.
+Note that the harmonic number can have half integer values for LOs
+above 8 GHz because of the use of a primary oscillator at half the
+output frequency, along with a doubler.  Half integer harmonics are
+integer harmonics of the primary oscillator.
+
+++overlap_scans
+--Called by CHKSCN
+
+Some previous generation correlators used information from the 
+observing logs to determine what antennas to correlate together.  
+SCHED supports modes that allow different antennas to be scheduled
+in different SCHED scans even when they are meant to be cross
+correlated.  The VEX driven correlators, including DiFX (the current
+VLBA correlator), do not support this scheduling style.  All antennas
+to be correlated must be specified in the same SCHED scan.  
+
+You are seeing this message because SCHED has found two scans that
+look like they might be intended to be correlated together.  They have
+different antennas, but overlap in time, frequency, and source.  SCHED
+has not done an exhaustive check of the setup channels so it is still
+possible that they are different - but the frequency range overlaps.
+If the scans were not intended to be correlated together, ignore the
+warnings.  But if they were, you should combine the scans into one
+or more that include all the stations.
+

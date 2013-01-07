@@ -83,6 +83,12 @@ C        Get the integration time.  Can speed phasing.
 C
          VLAINTEG(ISCN) = VALUE( KEYPTR( 'VLAINTEG', KC, KI ) )
 C
+C
+C        Get the time for EVLA phasing subscans.  This is a new EVLA
+C        parameter not used for the old VLA.
+C
+         VLAPTIME(ISCN) = VALUE( KEYPTR( 'VLAPTIME', KC, KI ) )
+C
       ELSE IF( CASE .EQ. 2 ) THEN
 C
 C        Schedule wide parameters.

@@ -5,14 +5,29 @@ C     parameters after SCHOPT and all other scan adjusting routines
 C     are run.  Also, collects the "frequency sets".  See also
 C     CHKSC1 which is called before SCHOPT.
 C
+C     VEX driven correlators need to have all stations to be correlated
+C     together to be in the same scan.  That was not true of the log
+C     driven correlators.  Warn about probable attempts to schedule
+C     parallel scans that are meant to be correlated together.
+C     Added Dec. 26, 2012.  RCW.
+C
+C     Deal with VLAPTIME.  Jan. 4, 2013
+C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC
+      INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC, JSCN, KS, KF
+      INTEGER    ICH, GNSET, IINT, IIPTIME
       INTEGER    NEXPECT, NLATE, NNEVER, NSLATE
       REAL       NSRCCHG
-      LOGICAL    DOPWARN, WARNLONG
-      DOUBLE PRECISION  TIME1, TIMEDUR
+      LOGICAL    DOPWARN, WARNLONG, OVWARN
+      DOUBLE PRECISION  FRSUM(MAXCHN), FRBB(MAXCHN), FRBW(MAXCHN)
+      DOUBLE PRECISION  TIME1, TIMEDUR, MINFR(MSET), MAXFR(MSET)
+      DOUBLE PRECISION  MINFRI, MAXFRI, MINFRJ, MAXFRJ
+      DOUBLE PRECISION  MINDEF, MAXDEF, FR1, FR2
+      DOUBLE PRECISION  SCANLEN, VPT
+      PARAMETER         ( MINDEF = 1.D15 )
+      PARAMETER         ( MAXDEF = 0.D0 ) 
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKSCN starting' )
 C
@@ -180,25 +195,178 @@ C
 C     Tell the user about the number of scans with late arrival by most
 C     antennas.
 C
-         IF( NSLATE .GT. 0 ) THEN
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I5, 2A )' )
-     1         'CHKSCN: ',  NSLATE, ' scans had more than half the ',
-     2         'antennas arrive on-source after the start time.'
-            CALL WLOG( 1, MSGTXT )
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( 2A )' )
-     1         '              This could be normal if using duration ',
-     2         'scheduling with small gaps.'
-            CALL WLOG( 1, MSGTXT )
-         END IF
+      IF( NSLATE .GT. 0 ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, I5, 2A )' )
+     1      'CHKSCN: ',  NSLATE, ' scans had more than half the ',
+     2      'antennas arrive on-source after the start time.'
+         CALL WLOG( 1, MSGTXT )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( 2A )' )
+     1      '              This could be normal if using duration ',
+     2      'scheduling with small gaps.'
+         CALL WLOG( 1, MSGTXT )
+      END IF
 C
 C     Check some VLA issues.
-C      This routine doesn't do anything now.  Perhaps a new one will
-C      be needed.  The original routine has been put in 
-C      ~/files/sched_ARCHIVE_nonSVN/obsolete_routines/
+C        This routine doesn't do anything now.  Perhaps a new one will
+C        be needed.  The original routine has been put in 
+C        ~/files/sched_ARCHIVE_nonSVN/obsolete_routines/
 C
-C      CALL VLASCHK
+C        CALL VLASCHK
+C
+C
+C     Look for parallel scans meant to be correlated.  Don't bother
+C     checking frequencies in detail - just check the range.
+C
+C     First gather the minimum and maximum frequency in each setup
+C     group.  Just loop through the frequency sets and find the max
+C     and min for the associated setup group.
+C
+C     Initialize.
+C
+      DO KS = 1, NSET
+         MINFR(KS) = MINDEF
+         MAXFR(KS) = MAXDEF
+      END DO
+C
+C     Get the extrema.
+C
+      DO KF = 1, MFSET
+         KS = FSETKS(KF)
+         ISTA = ISCHSTA(ISETSTA(KS))
+         CALL FSFREQ( KF, FRSUM, FRBB, FRBW )
+         DO ICH = 1, NCHAN(KS)
+            IF( NETSIDE(ICH,KS) .EQ. 'U' ) THEN
+               FR1 = FRSUM(ICH)
+               FR2 = FRSUM(ICH) + FRBW(ICH)
+            ELSE
+               FR1 = FRSUM(ICH) - FRBW(ICH)
+               FR2 = FRSUM(ICH)
+            END IF
+            MINFR(KS) = MIN( MINFR(KS), FR1 )
+            MAXFR(KS) = MAX( MAXFR(KS), FR2 )
+         END DO            
+      END DO
+C
+C     Now do the double scan loop looking for matches.
+C     Note that we don't need to check the station because other
+C     code assures that a station will not have two scans that
+C     overlap.
+C
+      OVWARN = .TRUE.
+      DO ISCN = SCAN1 + 1, SCANL
+        IF( .NOT. NOREC(ISCN) ) THEN
+          DO JSCN = SCAN1, ISCN - 1
+            IF( .NOT. NOREC(JSCN) ) THEN
+              IF( SCNSRC(ISCN) .EQ. SCNSRC(JSCN) .AND.
+     1           STARTJ(ISCN) .LT. STOPJ(JSCN) .AND.
+     2           STOPJ(ISCN) .GT. STARTJ(JSCN) ) THEN
+                MINFRI = MINDEF
+                MAXFRI = MAXDEF
+                MINFRJ = MINDEF
+                MAXFRJ = MAXDEF
+                DO ISTA = 1, NSTA
+                   IF( STASCN(ISCN,ISTA) ) THEN
+                      MINFRI = MIN( MINFR(GNSET(ISCN,ISTA)), MINFRI )
+                      MAXFRI = MAX( MAXFR(GNSET(ISCN,ISTA)), MAXFRI )
+                   END IF
+                   IF( STASCN(JSCN,ISTA) ) THEN
+                      MINFRJ = MIN( MINFR(GNSET(JSCN,ISTA)), MINFRJ )
+                      MAXFRJ = MAX( MAXFR(GNSET(JSCN,ISTA)), MAXFRJ )
+                   END IF
+                END DO               
+                IF( MINFRI .EQ. MINDEF .OR. MAXFRI .EQ. MAXDEF ) THEN
+                   MSGTXT = ' '
+                   WRITE( MSGTXT, '( )' )
+     1                'CHKSCN: Frequency group not found for scan ',
+     2                ISCN, '.  Should not happen.'
+                END IF
+                IF( MINFRJ .EQ. MINDEF .OR. MAXFRJ .EQ. MAXDEF ) THEN
+                   MSGTXT = ' '
+                   WRITE( MSGTXT, '( A, I5, A )' )
+     1                'CHKSCN: Frequency group not found for scan ',
+     2                JSCN, '.  Should not happen.'
+                END IF
+                IF( MINFRI .LT. MAXFRJ .AND. MAXFRI .GT. MINFRJ ) THEN
+                  IF( OVWARN ) THEN
+                    CALL WRTMSG(  0, 'CHKSCN', 'overlap_scans' )
+                    CALL WLOG( 1, 'CHKSCN:  ***** WARNING ****** ' )
+                    MSGTXT = ' '
+                    WRITE( MSGTXT, '( A, 2I5, A )' )
+     1                '  Two scans (', ISCN, JSCN, 
+     3                ') overlap in source, time, and frequency.'
+                    CALL WLOG( 1, MSGTXT )
+                    MSGTXT = ' '
+                    WRITE( MSGTXT, '( 3A )' )
+     1                '  At VEX driven correlators (others too?) ',
+     2                'antennas in these scans will not be cross ',
+     3                'correlated.'
+                    CALL WLOG( 1, MSGTXT )
+                    CALL WLOG( 1, '  See sched.runlog for more info.' )
+                    OVWARN = .FALSE.
+                  ELSE
+                    MSGTXT = ' ' 
+                    WRITE( MSGTXT, '( A, 2I5 )' )
+     1                 '  Additional overlapping scans: ', ISCN, JSCN
+                    CALL WLOG( 1, MSGTXT )
+                  END IF
+                END IF
+              END IF
+            END IF
+          END DO
+        END IF
+      END DO
+C
+C     Check that VLA phasing scans are at least 4 times VLAPTIME
+C     in length.  VLASTA set in VLASCNS.  Establish the PHASING
+C     parameter which will east writing the VLAPTIME based intent
+C     in VXSCH.
+C
+C     Loop through scans to be sure the VLA phasing time is appropriate.
+C     Use less indention here because of deep nest and long lines.
+C     First be sure the VLA is in the observation and that phasing is
+C     requested.  VLASCNS took care of adding INTENTS when VLAMODE
+C     is used.
+C
+      IF( VLASTA .NE. 0 ) THEN
+       DO ISCN = SCAN1, SCANL
+        PHASING(ISCN) = .FALSE.
+        IF( STASCN(ISCN,VLASTA) ) THEN
+          IF( NSCINT(ISCN) .NE. 0 ) THEN
+            DO IINT = 1, NSCINT(ISCN)
+              IF( INDEX( INTENT(ISCINT(IINT,ISCN)),
+     1           'DETERMINE_AUTOPHASE' ) .NE. 0 .AND.
+     2         ( INDEX( INTENT(ISCINT(IINT,ISCN)), ':' ) .EQ. 0 .OR.
+     3           INDEX( INTENT(ISCINT(IINT,ISCN)), 'VLA' ) .NE. 0 ) )
+     4              THEN
+                PHASING(ISCN) = .TRUE. 
+              END IF
+            END DO
+          END IF
+          IF( PHASING(ISCN) ) THEN  
+             VPT = DBLE( VLAPTIME(ISCN) ) * ONESEC 
+             SCANLEN = STOPJ(ISCN) - 
+     1            MAX ( ( STARTJ(ISCN) - TPSTART(ISCN,VLASTA) ), 
+     2                    TONSRC(ISCN,VLASTA) )
+             IF( SCANLEN / VPT .LT. 4.D0 ) THEN
+                MSGTXT = ' ' 
+                WRITE( MSGTXT, '( 2A )' )
+     1             'CHKSCN:  ** VLA phasing scan must be at least 4 ',
+     2             'times longer than the phasing time from VLAPTIME.'
+                CALL WLOG( 1, MSGTXT )
+                MSGTXT = ' '
+                WRITE( MSGTXT, '( A, I5, 3A, F8.1, A, F8.1 )' )
+     1             '         Please fix scan', ISCN, ' on ',
+     2             SCNSRC(ISCN), ' Scan length:', SCANLEN / ONESEC,
+     3             '  VLAPTIME:',  VPT / ONESEC
+                CALL ERRLOG( MSGTXT )
+             END IF
+          END IF
+        END IF
+       END DO
+      END IF
+C
 C
       RETURN
       END

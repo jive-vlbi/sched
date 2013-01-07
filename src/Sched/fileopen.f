@@ -6,6 +6,8 @@ C                           drives and, for many stations, the
 C                           antennas.
 C       2.  The obs. file - for antenna control where that requires
 C                           a file different from the crd. file.
+C                           These are no longer used, but have not
+C                           been stripped out yet (Dec 2012)
 C       3.  The sch. file - Something for operators or the scheduler
 C                           to look at for a readable summary of
 C                           scans for that station.
@@ -79,6 +81,9 @@ C
          END IF
 C 
 C        Open other types of control files.
+C          Shouldn't get here because these files are no longer being 
+C          used.  But there are a few "CONTROL=VSOP" stations still
+C          in the station catalog so be careful.
 C
          IF( CONTROL(STANUM(ISTA)) .NE. 'VLBA' .AND. 
      1       CONTROL(STANUM(ISTA)) .NE. 'VEX' ) THEN

@@ -330,8 +330,7 @@ place to start for information on European and Global VLBI.
 (VLBI) Observations.  It can be used to schedule any observations on
 antennas that use the VLBA real time control software and to schedule
 Mark IV/VLBA(4)/S2/Mark5 observations on any stations that can read
-VEX format schedules.  It can also be used for scheduling many types
-of VLA observations.  \schedb is the program used to schedule
+VEX format schedules.  \schedb is the program used to schedule
 essentially all non-geodetic VLBA projects and has been adopted by the
 European VLBI Network (EVN) as the standard scheduling program for the
 EVN.  \schedb is also a useful tool for planning observations, both at
@@ -580,7 +579,16 @@ Petrov's results if a set of positions all from one solution is
 desired.  There are on the order of 7000 sources in these catalogs.
 Two external catalogs can be specified if one wishes, for example, to
 use the standard one for calibrators and another for multiple phase
-centers.
+centers.  
+
+Please note that this catalog, along with the locations catalog, is
+updated approximately annually.  It cannot be relied upon to maintain
+constant positions for a multi-year project.  If you need constant
+positions, include your own set in your schedule.  Otherwise, include
+a step in processing that accounts for changes in the assumed
+calibrator position.  Note that the Earth orientation and station
+locations change actually change with time (plate tectonics etc) so
+exact repeats of the observing geometry are not possible.
 
 \item[\htmlref{Station Catalog}{SEC:STACAT}:] This file contains
 information about the antennas including names, positions, slew
@@ -636,8 +644,7 @@ recording systems.  Note that many old files, often used as templates,
 contain tape initialization sections.  These should be removed.
 
 \item[\htmlref{Reference Pointing Control File}{SEC:REFPOINT}:]
-\schedb ca
-n insert scans for reference pointing at high frequencies on
+\schedb can insert scans for reference pointing at high frequencies on
 the VLBA and VLA.  This file contains information needed to control
 that function.  It will only be of interest for observations at 43 GHz
 on the VLA and at 86 GHz on the VLBA.  The standard reference pointing
@@ -710,13 +717,12 @@ control of the station or for control of just the data aquisition
 system (data recorders, baseband converters etc.).  The files are named,
 for example, {\sl bv016crd.pt}.
 
-\item[Other Antenna Control Files:]  These files are
-antenna control files in VLA observe deck format, Green Bank Card
-format, or SNAP (Mark III style, but \schedb can make them
-for Mark II only).  Some antennas, such as the VLA, require both
-crd. and obs. files.  The files are named, for example, {\sl
-bv016obs.y} for the VLA file.  No currently active telescopes use
-the SNAP or Green Bank card types and they will be removed shortly.
+% \item[Other Antenna Control Files:]  These files are
+% antenna control files in VLA observe deck format, Green Bank Card
+% format, or SNAP (Mark III style, but \schedb can make them
+% for Mark II only).  The files are named, for example, {\sl
+% bv016obs.y} for the VLA file.  All of these format types have been
+% abandoned and SCHED no longer produces them.
 
 \item[VEX file:] This is the file needed for stations under control of
 the Goddard ``Field System'', e.g.\ MkIV telescopes.  It is also used
@@ -895,7 +901,7 @@ of the \htmlref{{\tt PREEMPT}}{MP:PREEMPT} parameter to protect
 specific scans from preemption at Pie Town and Mauna Kea for daily
 EOP observations of up to 1.5 hr.
 
-\item[\htmladdnormallink{{\sl egrdbe2.key}}{examples/egrdbe.key}]
+\item[\htmladdnormallink{{\sl egrdbe2.key}}{examples/egrdbe2.key}]
 demonstrates a \schedb file for use with the new digital backend and
 Mark5C recorders being deployed on the VLBA and elsewhere.  This one
 is relatively simple and uses the PFB personality which gives many
@@ -1634,7 +1640,7 @@ If the target source is either too weak or too resolved to be used for
 phasing up the array, special scans on a calibrator must be inserted
 for this purpose.  This can be done with \schedb.  Or it might be
 possible to do it with the VLA scheduling software, but it is probably
-to explicitly include the calibrators in the \schedb files.  
+better to explicitly include the calibrators in the \schedb files.  
 (see \hyperref{the section on VLBI at the VLA}{Section
 }{}{SEC:VLA} for details.
 
@@ -2483,23 +2489,24 @@ capacity of the recording system.
 The second personality that is available is the DDC (Digital Down
 Converter - under final testing in late 2012).  It is selected using
 the \htmlref{{\tt DBE}}{SP:DBE} parameter set to {\tt RDBE\_DDC} in
-the setup file. This personality will provide a few 4 (possibly 8 later)
-filters per RDBE that can provide arbitrary offset frequencies and can
-provide any bandwidth at the factor of 2 steps between 0.125 and 64
-MHz.  There is a complication forced by the use of a polyphase filter
-first step of filtration to get the clock rate down to values the FPGA
-can support.  Such filters do not have flexible frequency ranges.
-This one splits the band into 3 segments, 512 to 640 MHz, 640 to 896
-MHz, and 896 to 1024 MHz.  Each baseband must be confined to one of
-those ranges.  The ``crossover'' frequencies at the filter edges have
-a range of something like 4-10 MHz (to be determined) that is not
-really usable.  \schedb will issue a warning if an attempt is made to
-have a baseband cross one of these boundaries.  Note that the polyphase
-filter to use will be determined by the frequency of the LO sum.  It
-is possible that users of the 128 MHz bandwidth will want to offset
-slightly for better pulse cal performance and this will cause a tiny
-fraction of the band to get aliased.  \schedb will issue warnings, but
-this can be tolerated.
+the setup file. This personality will provide a few 4 (possibly 8
+later) filters per RDBE that can provide arbitrary offset frequencies
+and can provide any bandwidth at the factor of 2 steps between 1 and
+64 MHz.  (That may be extended downward some day).  There is a
+complication forced by the use of a polyphase filter first step of
+filtration to get the clock rate down to values the FPGA can support.
+Such filters do not have flexible frequency ranges.  This one splits
+the band into 3 segments, 512 to 640 MHz, 640 to 896 MHz, and 896 to
+1024 MHz.  Each baseband must be confined to one of those ranges.  The
+``crossover'' frequencies at the filter edges have a range of
+something like 4-10 MHz (to be determined) that is not really usable.
+\schedb will issue a warning if an attempt is made to have a baseband
+cross one of these boundaries.  Note that the polyphase filter to use
+will be determined by the frequency of the LO sum.  It is possible
+that users of the 128 MHz bandwidth will want to offset slightly for
+better pulse cal performance and this will cause a tiny fraction of
+the band to get aliased.  \schedb will issue warnings, but this can be
+tolerated.
 
 The frequencies for the band edges in the DDC personality can be set
 to any multiple of $256 / (2^{32})$ MHz = $0.0596046$ Hz in principle.
@@ -2512,7 +2519,9 @@ best to stick to multiples of 10 kHz (the step in the BBCs of the old
 system) until we determine that there is adequate precision
 everywhere.  The only way to do the is with multiples of 250 kHz.
 However finer tuning (multiples of 15.625 kHz) is now (\schedb version
-10.2) supposed to work, but has not yet been tested
+10.2) supposed to work, but has not yet been tested.  /schedb will 
+warn if the frequency is not a multiple of 250 kHz and will abort if
+it is not a multiple of 15.625 kHz.
 
 {\bf VLBA TUNING RESTRICTIONS:}
 
@@ -2562,7 +2571,10 @@ shows how to use the piggyback scheme to do maser reference pointing
 while recording on the RDBE/MARK5C system with the PFB personality.
 
 \htmladdnormallink{{\sl egddc.key}}{examples/egddc.key} which uses the
-DDC personality of the RDBE (do not consider this complete yet).
+DDC personality of the RDBE.
+
+\htmladdnormallink{{\sl egddc2.key}}{examples/egddc2.key} which uses the
+DDC personality with two RDBEs and 8 baseband channels.
 
 \htmladdnormallink{{\sl jvla.key}}{examples/jvla.key} is an example
 that uses the PFB personality of the RDBE for joint observations
@@ -3385,38 +3397,56 @@ similar to scheduling other antennas than it was with the old system.
 
 The \schedb output used by the VLA is the VEX file.  In many ways, the
 setups are similar to those for the VLBA.  The user does not need to
-worry about the external LO setup.  The software involved in
-translating the VEX file and making the VLA scheduling blocks
-(VEX2OPT) takes care of those details.
+worry about the details of the external VLA LO setup, although the front
+end name (\htmlref{{\tt FE}}{SP:FE}) does need to be provided as there
+can be ambiguities.  The software involved in translating the VEX file
+and making the VLA scheduling blocks (VEX2OPT) takes care of most
+details.  The important factor is that the LO and baseband frequency
+specifications, taking into account the IF sideband, add up to the
+RF frequency of the bottom edge of the desired baseband.  The bottom
+edge is required because the EVLA phased output is always net upper
+sideband.  
 
 As for setups, the VLA is fairly similar to a VLBA antenna.  But there
 are several crucial differences.  There are a maximum of 4 baseband
-channels in the initial version (2012).  All of those channels must
-be net upper sideband.  They must come in polarization pairs - having 
-four separate frequencies is not possible.  Each baseband must come from
-a separate IF with RCP in A or B and LCP in C or D.
+channels in the initial version (2012), which only allows a maximum of
+512 Mbps when used with the 32 MHz bandwidths of the RDBE PFB
+personality on the VLBA.  The VLBA DDC personality can have up to 128
+MHz bandwidths so it can provide 2 Gbps compatibility with the VLA
+with the 4 channels.  All of the channels at the VLA must be net upper
+sideband.  They must come in polarization pairs --- having four
+separate frequencies is not possible.  Each baseband must come from a
+separate IF with RCP in A or B and LCP in C or D.  There are some
+cases above 18 GHz where the BD pair must be at a lower frequency than
+AC, but that mainly affects Ka band (~30 GHz), which is not available
+on the VLBA.  \schedb will not try to protect against that although
+the hooks are in the code in case of future need.
 
-The restriction to net upper sideband needs to be considered when using
-the RDBE on the VLBA.  Either the VLBA LO needs to be above the RF
-frequency, or the sideband inverting capability of DiFX needs to be 
-invoked.  Testing of the latter is not complete, but is close as of
-late Oct. 2012.  For some bands, a high VLBA LO is not possible so
-the DiFX mode will be needed.  However note that the four channel 
-restriction means that there can only be 4X32 MHz of mutual coverage.
-That gives 512 Mbps so does not represent a gain over the legacy system.
+A new mode has been implemented at the end of 2012 that allows up to 4
+basebands to be extracted from each 1 GHz-wide IF.  That will allow an
+8 pair, 32 MHz baseband configuration that matches the RDBE PFB
+personality on the VLBA at 2 Gbps, at least for dual polarization.
+The SCHED checking will assume this mode.  All channels must still be
+upper sideband.
 
-The four channel restriction limits the sensitivity that can be
-achieved with the PFB at the VLBA, although the intra-VLBA baselines,
-with 2 Gbps, will be more sensitive than in the past.  See
-\htmladdnormallink{{\sl jvla.key}}{examples/jvla.key} for an example
-of using the VLA with the WIDAR along with the RDBE/PFB system on the
-VLBA.  The WIDAR channels can have much wider bandwidths than the PFB
-32 MHz channels.  The WIDAR channels can be up to 128 MHz wide so,
-with 4, there is enough bandwidth to feed 2 Gbps.  To use this will
-require systems at the other stations that can do such wide basebands.
-The DDC personality of the RDBE on the VLBA has that capability and
-should be available by the end of 2012.  For an example of using 128
-MHz bandwidths with WIDAR and the RDBE/DDC, see 
+The restriction to net upper sideband needs to be considered when
+using the RDBE with the PFB personality on the VLBA.  Either the VLBA
+LO needs to be above the RF frequency, or the sideband inverting
+capability of DiFX needs to be invoked.  For some bands, a high VLBA
+LO is not possible so the DiFX mode will be needed.  If the LO/sideband
+combination from a station for a channel spans the same RF range as
+the LO/sideband combination at another station, despite opposite
+sidebands, SCHED will detect the overlap and schedule for sideband
+inversion.
+
+Sample schedules that include the VLA have been provided.  One using
+the PFB personality of the RDBE at the VLBA is \htmladdnormallink{{\sl
+jvla.key}}{examples/jvla.key} (modify for 16 channels!).  The WIDAR
+baseband channels can have much wider bandwidths than the PFB 32 MHz
+channels.  They can be up to 128 MHz wide so, with 4, there is enough
+bandwidth to feed 2 Gbps, matching the output of the VLBA stations
+when they use the DDC personality of the RDBE.  For an example of
+using 128 MHz bandwidths with WIDAR and the RDBE/DDC, see
 \htmladdnormallink{{\sl vladdc.key}}{examples/vladdc.key}.  The other
 option is to activate a mixed bandwidth mode in DiFX so that one WIDAR
 channel can be correlated against 4 PFB channels, but that mode has
@@ -3426,7 +3456,11 @@ For scheduling, the user should be aware that the VLA slews at 40
 deg/min in azimuth and 20 deg/min in elevation, which is about half
 the speed of the VLBA.  This can be an issue for widely separated
 sources.  It is, however, faster than some other HSA or Global VLBI
-antennas.  Also, each time there is a change of frequency, there needs
+antennas.  The use of \htmlref{{\tt DWELL}}{MP:DWELL} for scheduling
+should insure that adequate on-source time is obtained with the
+slower antennas.
+
+Another issue is that each time there is a change of frequency, there needs
 to be a one minute dummy scan.  This is handled through the antenna
 catalog parameter {\tt TLEVSET} which tries (with dwell scheduling) to
 insert adequate time between scans.  Then {\sl VEX2OPT} should insert
@@ -3435,49 +3469,81 @@ are made to the VLA system to avoid needing dummy scans even for small
 frequency changes such as those associated with different Doppler 
 frequencies for different sources.
 
-One area where the VLA, or any interferometer for that matter,
-differs from the VLBA and other single antennas is the need to adjust
-the individual antenna phases so that the signals add coherently when
-summed.  The instructions to actively phase during a scan or hold
-phase from a previous active scan are given in \htmlref{{\tt
-INTENTs}}{MP:INTENTs}.  Use {\tt DETERMINE\_AUTOPHASE} and {\tt
-APPLY\_AUTOPHASE}.  There will also need to be one to specify single
-dish observing and to one control reference pointing.  Phasing scans
-can be added simply as additional VLBI scans, or the VLA can be sent
-to a source not observed by the rest of the antennas and for which no
-recording is made.
+{\bf ARRAY PHASING:}
+
+An important concern unique to the VLA and other interferometers used
+in phased array mode to generate a single data stream for VLBI is the
+need to adjust the individual antenna phases so that the signals add
+coherently when summed.  The instructions to actively phase during a
+scan or hold phase from a previous active scan are given in
+\htmlref{{\tt INTENTs}}{MP:INTENTs}.  Use {\tt DETERMINE\_AUTOPHASE},
+{\tt APPLY\_AUTOPHASE}, and {\tt N0_AUTOPHASE} as needed.  The old
+\htmlref{{\tt VLAMODE}}{MP:VLAMODE} parameter can also be used for
+this purpose.  If it is, \schedb will generate the required {\tt
+INTENTs}.  (talk to Matthias about "NO_AUTOPHASE".  Also how about
+VLA: in front of each.  There will also need to be one to specify
+single dish observing and to one control reference pointing.  Phasing
+scans can be added simply as additional VLBI scans, or the VLA can be
+sent to a source not observed by the rest of the antennas and for
+which no recording is made.
 
 For successful phasing of the array, a source must be greater than
 about 0.1 Jy (That is an old VLA number but is probably still
 reasonable.  See the guide referenced above for details) and have a
 position that is good to a fraction of the VLA synthesized beam
 (enhanced sensitivity is only obtained over this area).  It must have
-small structure phases and not have other sources in the primary beam
-that might confuse the phasing algorithm.  The position accuracy is
-especially important if a calibrator is being used to phase the array
-for observations of another source.  Adding phasing sources is tricky,
-because it is desirable to spend a minimum amount of time on them, but
-if they are missed, the rest of the data will be bad.  A phasing scan
-should be at least 30 seconds in length (This guess needs to be 
-replaced by a real number!).
+small structure phases and not have other sources of comparable
+strength in the primary beam that might confuse the phasing algorithm.
+The position accuracy is especially important if a calibrator is being
+used to phase the array for observations of another source.  
+
+Adding phasing sources is tricky, because it is desirable to spend a
+minimum amount of time on them, but if they are missed, the rest of
+the data will be bad.  When phasing, the \schedb scan during which the
+phasing occurs is broken into subscans by the VLA as only one solution
+is done per subscan.  The \schedb scan should be long enough for at
+least 4 such subscans.  The length of the subscans is set by the
+scan-dependent parameter \htmlref{{\tt VLAPTIME}}{MP:VLAPTIME} in
+seconds.  The default is 10 seconds which is reasonable for most good
+phasing sources and is the minimum \schedb will allow.  If it is
+necessary to phase on a weak source, this could be extended.  With the
+default subscan length, the \schedb scan for phasing should be at
+least 40 seconds on-source.
+
+The interval between phasing scans depends on the observing frequency,
+the VLA configuration, and the weather.  Intervals between 15 and 30 minutes
+are typical. % ********  (add more or reference another document).
+
+{\tt REFERENCE POINTING}
+
+At Q band (7mm, 43 GHz), the VLA a priori pointing is not good enough so
+reference pointing must be used.  That is also controlled through use
+of \htmlref{{\tt INTENTs}}{MP:INTENTs}.
+
+*********  Document how to insert pointing scans, and the use of 
+automatic insertion of pointing scans.
+
+The old parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} allowed automatic
+insertion of VLA phasing scans in the observe files.  That scheme no 
+longer works.  But an item on the to-do list is to make that parameter
+insert VLA phasing scans.  That has not yet been done.
+
+
+{\bf OTHER CONSIDERATIONS}
 
 If doing DELZN segments to measure the tropospheric delay, it is best
 to use a single dish mode as the phasing can take time and can confuse 
 the troposphere solution algorithm.
 
-This was written as VLA VLBI observations were just being tested.  It
-almost certainly needs more details.
+It is still early days for VLBI observations using the WIDAR correlator
+to generate the phased array output data.  This section will likely
+need more information eventually.
 
 Note that normal output from the WIDAR correlator will be obtained during
 VLBI observations.  Such observations may be useful for determination 
 of large scale structure, total flux density, polarization, or absolute
 amplitude calibration.  The user may need some VLA specific scans, such
 as on a flux calibrator, to make full use of such data.
-
-The old parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} allowed automatic
-insertion of VLA phasing scans in the observe files.  That scheme no 
-longer works.  But an item on the to-do list is to make that parameter
-insert VLA phasing scans.  That has not yet been done.
 
 This section has changed drastically with the advent of the upgrade
 to the VLA and the use of the WIDAR correlator.  If you have a perverse
@@ -3492,9 +3558,7 @@ This section contains various hints regarding the special requirements
 of specific observatories.  Some of this information is lifted directly
 from email and other sources from the observatories.
 
-This section was just started in June 1997 and has had very little work
-done on it yet.
-
+This section is still woefully incomplete.
 
 
 \subsection{\label{SSEC:GBT}Green Bank Telescope.}
@@ -4279,6 +4343,7 @@ SPECIAL VLA PARAMETERS:
 \htls{VLABAND}{~} Obsolete - put in setup file.
 \htls{VLABW}{~~~} Obsolete - put in setup file.
 \htlm{VLAINTEG}{} VLA correlator integration time.
+\htlm{VLAPTIME}{} Duration of phasing subscans on the EVLA
 \htlm{VLAMODE}{~} VLA observing mode.
 \htlm{VLAPEAK}{~} Control reference pointing.
 \htln{VLANTSYS}{VLATSYS}{} Turn off VLA system temperature corrections.
@@ -4286,7 +4351,7 @@ SPECIAL VLA PARAMETERS:
 \htlm{VLARFANT}{} Reference antenna for single dish or phasing.
 \htlm{VLATSYS}{~} Turn on VLA system temperature corrections. Also {\tt VLANTSYS}.
 \htlm{VLATYPE}{~} Type of VLA observations.
-\htlm{VLAUSERN}{} VLA user number.
+\htlm{VLAUSERN}{} Obsolete - VLA user number.
 \end{list}
 
 
@@ -4855,18 +4920,18 @@ are being recorded.
 
 {\tt CORTAPE} specifies the type of media that should be used for the
 data distribution from the correlator.  This must be {\tt FTP}, {\tt
-DAT}, or {\tt NONE}.  {\tt FTP} and {\tt NONE} basically mean that the
-PI will pick up a disk copy of the data by means of a network copy
-(there is no effective difference between the two).  EXABYTE was recently
-removed for lack of use, as 9TRACK was long ago.  FLASH or DISK may get
-added some day, but not yet.
+DAT}, {\tt DISK} or {\tt NONE}.  {\tt FTP} and {\tt NONE} basically
+mean that the PI will pick up a disk copy of the data by means of a
+network copy (there is no effective difference between the two).
+EXABYTE was recently removed for lack of use, as 9TRACK was long ago.
+DAT will likely go soon.  FLASH may get added some day, but not yet.  
 
 \rcwbox
 {A string of up to 16 characters}
-{DAT, EXABYTE, or FTP}
+{DAT, DISK, NONE, or FTP}
 {Blank, which causes and abort if data are being recorded.}
 {Only one used --- the last.}
-{{\tt CORTAPE = 'DAT'}}
+{{\tt CORTAPE = 'DISK'}}
 
 \subsubsection{\label{MP:CORWTFN}{\tt CORWTFN}}
 
@@ -5419,8 +5484,8 @@ this parameter should rarely be used.
 \subsubsection{\label{MP:EXPCODE}{\tt EXPCODE}}
 
 {\tt EXPCODE} is the project code from the Network or from NRAO.
-This is used as the first few characters of many file names. Only the
-first 6 characters are used in the VLA observe files.
+This is used as the first few characters of many file names.
+
 
 \rcwbox
 {Text of up to 8 characters. Best to use 6 or less.  In fact, only
@@ -6140,15 +6205,23 @@ characters each.  Note that each string should be in quotes and they
 should be separated by commas.  If the line ends with a comma, the
 next line can be used for the next string.  If no {\tt INTENTs} are
 given, they default to the previous scan.  If any are given, they all
-return to blank unless given again.
+return to blank unless given again again.
 
-\schedb makes no attempt yet to parse {\tt INTENTs} and treats them all
-identically.
+\schedb does not parse most {\tt INTENTs}.  But some, especially related
+to the VLA phasing, are recognized and appropriate actions are taken.
+
+An intent may be made to target a specific antenna by starting with
+the station name followed by a colon.  Use the same station name as
+used in the station catalog.  If no station name is given, the {\tt
+INTENTs} will be assumed to apply to all stations for which it is
+meaningful.  An example line with a station might address asking the
+VLA to phase but not some other interferometer with: 
+{\tt INTENT = 'VLA:DETERMINE_AUTOPHASE'}.
 
 Some established values of {\tt INTENTs} in the VLA environment are
-listed here.  A VLBI specific list has not been generated.  Of interest
-for the VLA is {\tt DETERMINE\_AUTOPHASE}.  {\tt APPLY\_AUTOPHASE} may
-also get established.
+listed here.  Most will not be used in VLBI schedules.  A VLBI
+specific list has not been generated.  Of interest for the VLA are {\tt
+DETERMINE\_AUTOPHASE} and {\tt DETERMINE\_OFFSET\_POINTING}.
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \item {\tt OBSERVE\_TARGET}
@@ -6172,8 +6245,22 @@ also get established.
 \item {\tt OTHER}
 \end{list}
 
+This above list is from VLA documentation.  For VLBI, the following
+are also needed:
+
+\begin{list}{}{\parsep 0em  \itemsep 0em }
+\item {\tt APPLY\_AUTOPHASE} to apply the phasing offsets.}
+\item {\tt NO\_AUTOPHASE} to not apply any phasing offsets.}
+\item {\tt APPLY\_OFFSET\_POINTING}
+\end{list}
+
+**Question - is DETERMINE\_OFFET\_POINTING equivalent to reference
+pointing, or is it just to deterine the relative offsets between
+receivers?
+
 \rcwbox
-{Up to 25 character strings of up to 80 characters each.}
+{Up to 25 character strings of up to 80 characters each.  Can use 
+separate lines as long as the preceding line ends in a comma.}
 {Any strings.}
 {Blank}
 {All {\tt INTENTs} keep the last value if none are specified.  If any
@@ -6538,7 +6625,9 @@ Mark~III is obsolete and no longer in use.
 \item[Pure VLA observations.]  If {\tt OBSTYPE = VLA}, \schedb will
 assume that only the VLA is being scheduled and that VLBI recorder setup or
 commands are required.  This is the mode in which \schedb can be used
-for many types of VLA scheduling.
+for many types of VLA scheduling.  With the advent of the EVLA project,
+\schedb should no longer be used for scheduling pure VLA projects so 
+this option is basically obsolete.
 
 \item[Single dish observing.]  {\tt OBSTYPE = NONE} or {\tt PTVLBA}
 (the default) causes recorder handling to be ignored. This is mainly for
@@ -8767,17 +8856,18 @@ after a {\tt VLAINTEG} is specified.
 
 \subsubsection{\label{MP:VLAMODE}{\tt VLAMODE}}
 
-All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
+This is a carryover from the old VLA, but can still be used to specify
+the phasing mode for the VLA.  It is an alternative to specifying the
+phasing related \htmlref{{\tt INTENTs}}{MP:INTENTs}.  If {\tt VLAMODE}
+is used, the approprate {\tt INTENTs} will be generated by SCHED.
 
 {\tt VLAMODE} gives the VLA observing mode.  The valid options are:
 
 \begin{description}
 
-\item  {\tt '  '} - normal VLA continuum
+\item  {\tt '  '} - No phasing {\tt INTENTs} will be set.
 
-\item  {\tt 'VS'} - single antenna VLBI
+\item  {\tt 'VS'} - single antenna VLBI (not available on EVLA as of Jan. 2013).
 
 \item  {\tt 'VA'} - auto phasing on VLA A (RCP) and VLA D (LCP) IFs
 
@@ -8790,14 +8880,15 @@ The control scheme may change with the EVLA.
 \item  {\tt 'VX'} - extended phasing (holding phases from previous
 {\tt VA, VR} or {\tt VL} scan.)
 
-\item  {\tt 'IR'} - measure pointing offsets.  See \htmlref{{\tt
-VLAPEAK}}{MP:VLAPEAK} for details.
+%  The following options were for the old VLA only.
+% \item  {\tt 'IR'} - (Don't use on EVLA) measure pointing offsets.  
+% See \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK} for details.
 
-\item  Other valid options are
-{\tt 'IA'}, {\tt 'IB'}, {\tt 'IC'}, {\tt 'PA'},
-{\tt 'PB'}, {\tt 'PC'}, {\tt 'PD'}, {\tt 'D '},
-{\tt 'TE'}, {\tt 'TF'}, {\tt 'O '}, and {\tt 'ON'}.
-Consult VLA documentation for details.
+% \item  Other valid options are (Don't use on EVLA)
+% {\tt 'IA'}, {\tt 'IB'}, {\tt 'IC'}, {\tt 'PA'},
+$ {\tt 'PB'}, {\tt 'PC'}, {\tt 'PD'}, {\tt 'D '},
+% {\tt 'TE'}, {\tt 'TF'}, {\tt 'O '}, and {\tt 'ON'}.
+$ Consult VLA documentation for details.
 
 \end{description}
 
@@ -8944,6 +9035,27 @@ require different {\tt VLAMODE}s.
 reference pointing.}
 {Defaults to previous value.}
 {{\tt VLAPEAK=T}}
+
+
+\subsubsection{\label{MP:VLAPTIME}{\tt VLAPTIME}
+
+On the VLA, a \schedb scan intended for array phasing is broken into
+subscans for purposes of obtaining phasing solutions at one solution
+per subscan.  At least 4 subscans are required to obtain reliable
+phases.  The length of the subscans can be set separately for each
+scan using {\tt VLAPTIME} whose argument is in integer seconds.  The default
+of 10 seconds will be good in most cases.  Longer times can be used if
+a weak calibrator must be used or perhaps when phasing while recording
+on the VLBI target source.  The subscan length is passed to the VLA 
+through the VEX file in an {\tt INTENT} that is created by \sched.
+
+\rcwbox
+{A time in integer seconds.}
+{Any time over 10 seconds.}
+{10 seconds}
+{Defaults to previous scan's value.}
+{{\tt VLAPTIME=20}}
+
 
 
 \subsubsection{\label{MP:VLATSYS}{\tt VLATSYS and VLANTSYS}}
@@ -9109,7 +9221,14 @@ positions, and velocities.  These catalogs are in keyin
 format. Entries are terminated with a ``/''.  Some or all of the
 catalog may be included in a section in the \sched\ input file.
 \sched\ will look there first for sources, and then go to the two
-possible external catalogs to find the rest (or all).  
+possible external catalogs to find the rest (or all).  Please note 
+that the source catalog, along with the locations catalog of station
+positions, is updated approximately annually to new solutions.  
+All source positions will change, although likely by small amounts.
+But relative astrometry projects should either use their own 
+source positions to keep them constant over long times, or include
+processing steps that account for any changes in the catalog positions
+(the preferred solution).
 
 As of Nov. 2011, there are three catalogs included with the \schedb
 distribution.  One contains only a recent astrometry solution from the
@@ -9132,15 +9251,15 @@ have {\tt CALCODE=V}).  These have positional errors of a fraction of
 a milliarcsecond to a few milliarcseconds.  They include sources from
 the standard geodetic observing program, sources from the VLBA
 calibrator survey, the Australian LBA survey, and various sources
-specially observed in the RDV project on the VLBA.  Most of the additional sources
-in the third file above, as noted, are
-sources that have not yet been measured with VLBI, or might be
-inappropriate for VLBI (too resolved), that are from the VLA calibrator
-list ({\tt CALCODE=Y}) and from the JVAS survey ({\tt CALCODE=M};
-Patnaik et al. 1992, mnras, 254, 655; Browne et al. 1998, mnras, 293,
-257; Wilkinson et al. 1998, mnras, 300, 790).
-The JVAS source positions are good to $12-55$ mas.  The VLA calibrator
-positions are somewhat worse than the JVAS positions.  
+specially observed in the RDV project on the VLBA.  Most of the
+additional sources in the third file above, as noted, are sources that
+have not yet been measured with VLBI, or might be inappropriate for
+VLBI (too resolved), that are from the VLA calibrator list ({\tt
+CALCODE=Y}) and from the JVAS survey ({\tt CALCODE=M}; Patnaik et
+al. 1992, mnras, 254, 655; Browne et al. 1998, mnras, 293, 257;
+Wilkinson et al. 1998, mnras, 300, 790).  The JVAS source positions
+are good to $12-55$ mas.  The VLA calibrator positions are somewhat
+worse than the JVAS positions.
 
 Users of accurate positions from the geodetic catalog are encouraged
 to reference the original papers, some of which are listed in the
@@ -10872,8 +10991,9 @@ same bandwidth, only one needs to be set.
 For the RDBE systems with the PFB personality ({\tt DBE = RDBE\_PFB}),
 the bandwidth must be 32 MHz.  There are no options.  For the DDC
 personality ({\tt DBE = RDBE\_DDC}), the baseband channel
-bandwidth can be anywhere between 0.125 and 64 MHz in factor of 2
-steps.  For the DBBC, the options are the factors of 2 between 0.5
+bandwidth can be anywhere between 1 and 64 MHz in factor of 2
+steps, with possible extension down to 125 kHz some day.  For the 
+DBBC, the options are the factors of 2 between 0.5
 and 16 MHz, with additional options at 32 and 512 MHz.
 
 For the original VLBA system and for MarkIV, the value must be a
@@ -10983,22 +11103,26 @@ of those 3 filter bands, but one should not attempt to cross the
 boundary between two.  That won't work and \schedb will issue a warning.
 
 The DDC personality can provide 8 basebands per RDBE.  Those basebands
-can have bandwidths of the factors of 2 between 0.125 and 64.0 MHz.  The
-total output bit rate has a maximum of 2048 Mbps.  The values of 
-{\tt BBSYN} can set to any frequencies that are 1024 MHz (the sample rate)
-divided by powers of 2.  The finest setting is 0.0596046 Hz.
-But any frequency that does not have an integer number of cycles
-in one second can cause big problems with carrying phase over
-various events like frequency switches.  So the settings should
-be limited to multiples of 15.625 kHz --- the smallest setting that
-has an integer number of cycles in a second.  This can be looked
-at as N*125 kHz + 0, 15.625, 31.250, 46.875, 62.500, 78.125, 
-93.750, or 109.375 kHz.  \schedb will not accept settings that
-are not multiples of 15.625 kHz.  Note that any crd files to control
-the old system while the DDC is in use will have BBC frequencies
-rounded to the nearest 10 kHz because of hardware limitations.  That
-should be ok as data from the BBCs are most likely not going to be
-recorded.
+can have bandwidths of the factors of 2 between 1 and 64.0 MHz with
+possible extension down to 125 kHz eventually.  The total output bit
+rate has a maximum of 2048 Mbps.  The values of {\tt BBSYN} can set to
+any frequencies that are 1024 MHz (the sample rate) divided by powers
+of 2.  The finest setting is 0.0596046 Hz.  But any frequency that
+does not have an integer number of cycles in one second can cause big
+problems with carrying phase over various events like frequency
+switches.  So the settings must be limited to multiples of 15.625
+kHz --- the smallest setting that has an integer number of cycles in a
+second.  This can be looked at as N*125 kHz + 0, 15.625, 31.250,
+46.875, 62.500, 78.125, 93.750, or 109.375 kHz.  \schedb will not
+accept settings that are not multiples of 15.625 kHz.  But until we
+have a chance to make sure that the frequencies are kept to sufficient
+precision for finer settings, it is advisable to use multiples of 10 
+kHz, which is only actually possible with multiples of 250 kHz.  \schedb
+will warn of attempts to use finer settings.  Note that any
+crd files to control the old system while the DDC is in use will have
+BBC frequencies rounded to the nearest 10 kHz because of hardware
+limitations.  That should be ok as data from the BBCs are most likely
+not going to be recorded.
 
 The PFB personality of the RDBE, ({\tt DBE = RDBE\_PFB}) has rather rigid
 baseband frequency options.  A polyphase filter divides the 512-1024
@@ -12183,6 +12307,46 @@ should be treated carefully.
 mix. After this mix (or 2 mixes for 1.3cm and 7mm), the signal must be
 in the 500-1000~MHz IF band.
 
+Harmonic mixing issue:
+
+Internally generated RFI tones can result from mixing of harmonics of
+the front-end synthesizers on the VLBA.  Under some circumstances,
+these tones can have amplitudes of several hundred in the
+autocorrelations as measured using a 32 MHz baseband bandwidth and
+31.25 kHz spectral channel bandwidth.  Such tones cause very strong
+ringing across the autocorrelation spectrum without smoothing.  They
+are also seen, more weakly, in the cross-correlations because of the
+concentration of power in the affected channel.  All three of the
+synthesizers are involved in producing these tones whether or not they
+are actually in use.  So it matters how all synthesizers are set, not
+just the active ones.
+
+The tones are strongest when the frequencies that mix include the
+nominal output frequency of one of the synthesizers.  They are also
+strongest, at least for the 4-8 GHz "6cm" receiver when the
+synthesizers are numbers 1 and 2, both of which feed the IF converter.
+Other harmonics, and synthesizer 3, which usually is used for the high
+frequency front ends, create tones that are much weaker.  A
+complication is that, above 8.0 GHz, the synthesizer's main oscillator
+is running at half the output frequency and doubler produces the final
+output.  A birdy is seen at the half frequency.
+
+SCHED tries to warn of choices of front end frequencies (often
+obtained from the freq.dat file) that could cause problems.  When
+SCHED is allowed to choose the frequencies of the unused synthesizers
+(Setup parameter SYNTH), it will try exhaustively to find benign
+frequencies and it should be able to in essentially all cases.  So it
+is best to let SCHED choose.
+
+It is not yet clear which bands can be affected when SCHED is allowed
+to choose the unused synthesizer settings.  Any case where only one
+synthesizer is in use (most observations below 16 GHz) will be ok as
+SCHED can find benign settings for the other two.  If 2 IF pairs are
+in use in the new 6cm receiver, it is established that one can get in
+trouble with this issue - that is where it was found. S/X and high
+frequencies where synthesizer 3 is used in the front end have not yet
+been tested.
+
 \rcwbox
 {3 frequencies in GHz.}
 {N*500 +- 100~MHz and between 2 and 16~GHz.}
@@ -13024,12 +13188,59 @@ more information.
 %  Possible:  yydddhhhbb  where b is baseband channel and h is hour*100
 %  Or encode the telescope?  See discussion in evla-vlbi email for 2012
 %  meeting discussion in July.
+%  Where does it go?
 
 
 %  Fix headers of source files.  There is no summary on them.
 
+need the phasing scan length - see Amy email.
 
-\item Working on support for the dual RDBE option.
+Continue work on the VLA part above.
+See notes in $SCHED on lodore - more recent notes on noatak.
+
+
+
+\item Add parameter {\tt VLAPTIME} and the resulting INTENT in the VEX file.
+This is the VLA phasing subscan length.  Check that the scan length is
+at least 4 times that length and that the subscan length is over 10s. 
+Jan. 4, 2013.
+
+\item Fix bug where the stop year was used in the VEX file $SCHED section
+for the start time of a scan.  If the scan crossed the year boundary, this
+created havoc later.  Jan 2, 2013  RCW.
+
+\item Add warning if it looks like scans that are meant to be correlated
+with each other are being scheduled separately.  That was ok with log
+driven correlators, but not VEX driven correlators.  Dec. 27, 2012. RCW
+
+\item Warn when harmonics of the front end synthesizers can beat with
+each other and cause internal RFI.  Also make the choice of frequency
+for the unused synthesizers much more sophisticated to try to avoid
+such harmonics.  Dec. 27, 2012  RCW
+
+\item Added FE etc output to the if_def lines of the VEX file for
+stations other than the VLBA.  Require FE be specified for the VLA.
+Dec. 13, 2012.  RCW.  *********  Still needs check with Matthias.
+
+
+
+\item For the RDBE/DDC, change some comments and the manual about the
+allowed bandwidths and frequencies.  Encourage the use of multiples
+of 250 kHz.  Update egddc.key.  Dec. 13, 2012.  RCW.
+
+\item Add "DISK" as a valid option to CORTAPE.  Dec. 7, 2012.  RCW.
+
+\item Fix link to wrong file for egrdbe2.key in list of examples in
+this manual.  Dec 7, 2012  RCW.
+
+\item Fix issue with selecting a legacy BBC frequency when the RDBE
+baseband frequency is 1008.00.  Previously 1000.00 was chosen, but
+the output format to the crd file did not have enough digits.  Changed
+to subtract a multiple of 5 MHz to prevent going above 999.99.
+Dec 6, 2012. RCW.
+
+\item Support for the dual RDBE option at the VLBA antennas added.
+Nov. 8, 2012  RCW.
 
 \item Made a BETA release on Nov. 5, 2012  RCW
 

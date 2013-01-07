@@ -19,10 +19,10 @@ C
 C
       INTEGER           KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4)
       INTEGER           NGT4
-      LOGICAL           ERRS, DDWARN, SBWARN, IFNEW, OK4
+      LOGICAL           ERRS, SBWARN, IFNEW, OK4
       CHARACTER         USEDIFC(4)*2
-      DATA              DDWARN, SBWARN / .TRUE., .TRUE. /
-      SAVE              DDWARN, SBWARN
+      DATA              SBWARN / .TRUE. /
+      SAVE              SBWARN
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDBE: Starting' )
 C
@@ -209,12 +209,6 @@ C
 C        ===  Now check the DDC personality. ===
 C
          IF( DBE(KS) .EQ. 'RDBE_DDC' ) THEN
-C
-            IF( DDWARN ) THEN
-               CALL WLOG( 1, 
-     1           '** WARNING:  DBE=RDBE_DDC is experimental. ** ' )
-            END IF
-            DDWARN = .FALSE.
 C
 C           NCHAN must be 8 or less with 2 RDBEs or 4 or less with
 C           one.  MIF is already set depending on the capability.

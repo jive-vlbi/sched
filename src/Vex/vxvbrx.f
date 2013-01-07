@@ -3,12 +3,15 @@ C
 C     Routine for writing comment information to the $IF segments
 C     of a VEX file to indicate the receiver, any receiver LO 
 C     (when there is a second mix in an IF converter) and any
-C     externally selected filter.  This is only for VLBA stations.
+C     externally selected filter.  This only for VLBA stations
+C     but was changed to do all stations on Dec. 13, 2012 (RCW).
 C
-C     This information is required at the telescopes because it
-C     cannot be deduced in all cases from other information in the
-C     VEX file.  It is required to set the various switches on the
-C     antenna.  It is station specific to the VLBA
+C     This information is required at the VLBA telescopes and at
+C     the VLA because it cannot be deduced in all cases from other 
+C     information in the VEX file and there is not normally enough
+C     operator interaction to let someone take care of it outside
+C     the schedule.  Among other things, it is required to set 
+C     the various switches on the VLBA antennas.  
 C
 C     All of the information needed is in the setup group on a per
 C     IF basis.  The calling program has both the setup group KS
@@ -39,11 +42,12 @@ C ------------------------------------------------------------
 C
       GOTIT = .FALSE.
 C
-      IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
+C     Do for all stations.
+C                  IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
 C
 C         Get the receiver.  Recall that, on the VLBA,
-C         IFs A, B, C, D correspond to the 4 elements of
-C         FE.
+C         IFs A, B, C, D correspond to the 4 elements of the
+C         FE array.
 C
           IF( IFCHAN(ICH,KS) .EQ. 'A' ) THEN
              FETXT = FE(1,KS)
@@ -57,19 +61,28 @@ C
              FETXT = 'NA'
           END IF
 C
-C         Get the receiver LO frequency.
+C         Get the receiver LO frequency, but only for the VLBA
+C         because this depends on the synthesizer settings which
+C         don't translate well for other stations.
 C
-          IF( FETXT .EQ. '1cm' ) THEN
-             SYNPRT = NINT( 1000.D0 * SYNTH(3,KS) )
-          ELSE IF( FETXT .EQ. '7mm' ) THEN
-             SYNPRT = NINT( 3000.D0 * SYNTH(3,KS) )
-          ELSE IF( FETXT .EQ. '3mm' ) THEN
-             SYNPRT = NINT( 6000.D0 * SYNTH(3,KS) )
+          IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
+             IF( FETXT .EQ. '1cm' ) THEN
+                SYNPRT = NINT( 1000.D0 * SYNTH(3,KS) )
+             ELSE IF( FETXT .EQ. '7mm' ) THEN
+                SYNPRT = NINT( 3000.D0 * SYNTH(3,KS) )
+             ELSE IF( FETXT .EQ. '3mm' ) THEN
+                SYNPRT = NINT( 6000.D0 * SYNTH(3,KS) )
+             ELSE
+                SYNPRT = 0
+             END IF
           ELSE
              SYNPRT = 0
           END IF
 C
-          IF( FETXT .EQ. '50cm' .OR. FETXT .EQ. '90cm' ) THEN
+C         Get the 50cm filter setting for the VLBA.
+C
+          IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' .AND. 
+     1        ( FETXT .EQ. '50cm' .OR. FETXT .EQ. '90cm' ) ) THEN
              IF( IFCHAN(ICH,KS) .EQ. 'A' .OR.
      1           IFCHAN(ICH,KS) .EQ. 'C' ) THEN
                 FILTTXT = RCP50CM(KS)
@@ -82,7 +95,7 @@ C
           END IF
 C
           GOTIT = .TRUE.
-      END IF
+C         END IF              Doing for all stations.
 C
 C     Fill out VBCOM
 C

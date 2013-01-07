@@ -28,7 +28,8 @@ C     Never really got into CD or DVD.
 C
       IF( CORTAPE(1:3) .NE. 'DAT' .AND. 
      1    CORTAPE(1:4) .NE. 'NONE' .AND.
-     2    CORTAPE(1:3) .NE. 'FTP' ) THEN
+     2    CORTAPE(1:4) .NE. 'DISK' .AND.
+     3    CORTAPE(1:3) .NE. 'FTP' ) THEN
          MISCOR = .TRUE.
          CALL WLOG( 1, '        Unrecognized correlator distribution'
      1    //' media: '// CORTAPE )
