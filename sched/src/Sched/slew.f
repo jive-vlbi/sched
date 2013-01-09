@@ -267,8 +267,11 @@ C
          KSCN = KSCN - 1
       END DO
       IF( .NOT. KSUSED ) THEN
-         IF( TLEVSET(ISTA) .GT. TSLEW(ISCN,ISTA) ) THEN
-            TSLEW(ISCN,ISTA) = TLEVSET(ISTA)
+C
+C        Change index on TLEVSET from ISTA to KSTA Jan. 7, 2012 RCW.
+C
+         IF( TLEVSET(KSTA) .GT. TSLEW(ISCN,ISTA) ) THEN
+            TSLEW(ISCN,ISTA) = TLEVSET(KSTA)
          END IF
       END IF
 C
