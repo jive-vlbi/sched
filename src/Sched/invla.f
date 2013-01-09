@@ -56,7 +56,7 @@ C
 C
 C        Pointing.
 C
-         VLAPEAK(ISCN) = KCHAR( 'VLAPEAK', 1, .TRUE., VALUE, KC, KI )
+         VLAPEAK(ISCN) = KCHAR( 'VLAPEAK', 9, .TRUE., VALUE, KC, KI )
 C
 C        VLA phasing source with its default.
 C
