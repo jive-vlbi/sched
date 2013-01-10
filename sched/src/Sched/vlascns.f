@@ -11,7 +11,7 @@ C
       INTEGER   ISCN, ISTA
       INTEGER   IIVA, IIVX, IIVO, IIVS, II
       INTEGER   IIDE, IIAP, IIAD, IIOF
-      LOGICAL   GOTINT, VLASCN
+      LOGICAL   GOTINT, GOTPTINT, VLASCN, GOTVLAMD
 
 C -------------------------------------------------------------
 C     See if the VLA is used, setting VLASTA if so.
@@ -27,15 +27,18 @@ C     Don't do the rest of this routine if the VLA is not present.
 C
       IF( VLASTA .EQ. 0 ) RETURN
 C
-C     Get the intent numbers for the VLA AUTOPHASE commands if any
-C     were issued by the user.
+C     Allow only one method of specifying VLA phasing - specific INTENTS
+C     or VLAMODE.  Detect which a user is using.  If both, stop.
+C
+C     First determine if any VLA phasing INTENTs were specified, and, if so,
+C     which they were.
+C     While at it, get the intent numbers for the VLA AUTOPHASE commands 
+C     if any were issued by the user.
 C     Note that the intent for single dish is not actually
 C     supported yet.
-C     Allow for the case of some other interferometer being told
-C     to autophase by only paying attention to intents specific
-C     for the VLA (start with VLA:).  Someday this may be a problem
-C     if one wishes to use the generic version of the command for
-C     more than one interferometer.
+C
+C     Ignore similar commands meant for another site (presence of ":"
+C     but not "VLA"), but accept a version that is not qualified by site.
 C
       IIVA = 0
       IIVX = 0
@@ -58,72 +61,59 @@ C
             END IF
          END DO
       END IF
+      GOTPTINT =  IIVA .GT. 0 .OR. IIVX .GT. 0 .OR. 
+     1            IIVO .GT. 0 .OR. IIVS .GT. 0 
 C
-C     Add the phasing intents to the list if they are not there yet.
-C     The user must provide the phasing status, so if the intents were
-C     not set explicitly, they will need to be added based on VLAMODE.
-C     So go ahead and add the VLA specific forms to the INTENTS list.
+C     Now detect the use of VLAMODE.  Note that the default is ZZ, not
+C     one of the allowed modes, but test against the allowed ones.
 C
-      IF( IIVA .EQ. 0 ) THEN
-         NINTENT = NINTENT + 1
-         IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1      'VLASCNS: Too many intents when adding phasing commands.' )
-         IIVA = NINTENT
-         INTENT(NINTENT) = 'VLA:AUTOPHASE_DETERMINE'
-      END IF
-      IF( IIVX .EQ. 0 ) THEN
-         NINTENT = NINTENT + 1
-         IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1      'VLASCNS: Too many intents when adding phasing commands.' )
-         IIVX = NINTENT
-         INTENT(NINTENT) = 'VLA:AUTOPHASE_APPLY'
-      END IF
-      IF( IIVO .EQ. 0 ) THEN
-         NINTENT = NINTENT + 1
-         IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1      'VLASCNS: Too many intents when adding phasing commands.' )
-         IIVO = NINTENT
-         INTENT(NINTENT) = 'VLA:AUTOPHASE_OFF'
-      END IF
-      IF( IIVS .EQ. 0 ) THEN
-         NINTENT = NINTENT + 1
-         IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1      'VLASCNS: Too many intents when adding phasing commands.' )
-         IIVS = NINTENT
-         INTENT(NINTENT) = 'VLA:SINGLE_DISH'
-      END IF
-C
-C     Loop over scans to set the required phasing intents if they are
-C     to be based on VLAMODE.
-C
+      GOTVLAMD = .FALSE.
       DO ISCN = SCAN1, SCANL
+         IF( VLAMODE(ISCN) .EQ. '  ' .OR. VLAMODE(ISCN) .EQ. 'VA' .OR.
+     1       VLAMODE(ISCN) .EQ. 'VX' .OR. VLAMODE(ISCN) .EQ. 'VS' ) THEN
+            GOTVLAMD = .TRUE.
+         END IF
+      END DO
 C
-C        Only worry about the scan if the VLA is in it.
-C        Note that SCHOPT has not yet been called, so the current
-C        scans may not be the final ones and the VLA might be
-C        dropped from the list later.  But set the phasing intents now.
-C        They might show up later on non-VLA scans, but that is not
-C        really a problem.
+C     Don't allow both methods in one project.
 C
-         IF( STASCN(ISCN,VLASTA) ) THEN
+      IF( GOTPTINT .AND. GOTVLAMD ) THEN
+         CALL WLOG( 1, 'VLASCNS:  Both VLA phasing INTENTS and '//
+     1       'VLAMODE used in the same schedule.' )
+         CALL WLOG( 1, '          This confuses SCHED so do not '//
+     1       'do it.'
+         CALL ERRLOG( ' Use only VLAMODE -or- pointing INTENTS ' )
+      END IF
 C
-C           Check if the intent is already set.
+C     Now add the INTENTS and set their use if VLAMODE is being used.
 C
-            GOTINT = .FALSE.
-            DO II = 1, NSCINT(ISCN)
-               IF( ISCINT(II,ISCN) .EQ. IIVA .OR. 
-     1             ISCINT(II,ISCN) .EQ. IIVX .OR. 
-     2             ISCINT(II,ISCN) .EQ. IIVS ) THEN
-                  GOTINT = .TRUE.
-               END IF
-            END DO
+      IF( GOTVLAMD ) THEN
+         IF( NINTENT + 4 .GT. MINTENT ) CALL ERRLOG( 
+     1      'VLASCNS: Too many intents for SCHED arrays after adding '//
+     2      'phasing commands.' )
+         INTENT(NINTENT+1) = 'VLA:AUTOPHASE_DETERMINE'
+         IIVA = NINTENT + 1
+         INTENT(NINTENT+2) = 'VLA:AUTOPHASE_APPLY'
+         IIVX = NINTENT +2
+         INTENT(NINTENT+3) = 'VLA:AUTOPHASE_OFF'
+         IIVO = NINTENT + 3
+         INTENT(NINTENT+4) = 'VLA:SINGLE_DISH'
+         IIVS = NINTENT + 4
+         NINTENT = NINTENT + 4      
 C
-C           If VLAMODE was set and the corresponding INTENT was not,
-C           set the INTENT.  Remove the old VB, VR, and VL options.
-C           Require that a VLA phasing mode of some sort is provided.
+C        Loop over scans to set the required phasing intents if they are
+C        to be based on VLAMODE.
 C
-            IF( .NOT. GOTINT ) THEN
+         DO ISCN = SCAN1, SCANL
 C
+C           Only worry about the scan if the VLA is in it.
+C           Note that SCHOPT has not yet been called, so the current
+C           scans may not be the final ones and the VLA might be
+C           dropped from the list later.  But set the phasing intents now.
+C           They might show up later on non-VLA scans, but that is not
+C           really a problem.
+C
+            IF( STASCN(ISCN,VLASTA) ) THEN
                NSCINT(ISCN) = NSCINT(ISCN) + 1
                IF( VLAMODE(ISCN) .EQ. ' ' ) THEN
      1             ISCINT(NSCINT(ISCN),ISCN) = IIVO
@@ -152,6 +142,12 @@ C
 C
 C     -----------------
 C
+
+  *****************  still need to do the mods to this section where I
+don't allow VLAPEAK and explicit INTENTS in the same schedule.
+
+
+
 C     Now do a rather similar sequence of steps to deal with reference
 C     pointing.
 C
