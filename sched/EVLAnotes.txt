@@ -87,3 +87,57 @@ Always say A and C if there are only 2 IFs.
 
 Main new thing needed now is the subscan specification for pointing 
 scans.
+
+
+
+
+
+Jan. 13, 2013
+
+Thinking about generalizing freq.dat.  Try to handle continuously
+tunable LOs and separately tunable IFs (multi band (eg S/X) or multi 
+IF in one band (eg. 6cm, wide X).
+
+Current freq.dat entries (ignoring old VLA)
+
+VERSION
+STATIONs
+NAME
+NOTE
+PRIOrity
+IFNAME
+ALTIFN
+RF1
+RF2
+LO1
+FE
+POL
+SYN
+DUALX
+LCP50CM
+RCP50CM
+CH1RF1 (for 2cm filter)
+CH1RF2 (for 2cm filter)
+
+Additions for tunable LOs and multiple settings.
+IFLO  Low end of usable IF  (512 on RDBE)
+IFHI  High end of usable IF  (1024 on RDBE)
+LO1   Low or only FIRSTLO
+LO2   High FIRSTLO or 0.D0 if it's fixed.
+IFSIDE
+For VLBA, might have a fixed FE3
+LO1EQN   Recognized options:  (fe1+fe3, fe2+3*fe3, fe1+6*fe3)
+IFMATCH  Must share LOs with this IF.
+
+
+For DUALX:
+  Normal X band IF B would have IFMATCH = ' ' (eg any)
+                IF D LCP would have IFMATCH = B
+                IF D RCP would have IFMATCH = ' '
+          That forces dual pol to share LO, but not 
+          2 RCPs.
+ Most bands  IF A would have IFMATCH C   (RCP)
+             IF B would have IFMATCH D   (RCP)
+             IF C would have IFMATCH A   (LCP)
+             IF D would have IFMATCH B   (LCP)
+

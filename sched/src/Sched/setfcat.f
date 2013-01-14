@@ -10,6 +10,10 @@ C
 C     If an apropriate entry cannot be found, a warning is issued
 C     if NEEDCAT is false and an abort is issued if NEEDCAT is true.
 C
+C     Jan 2013 RCW  Adding continuously tunable options.  This is
+C     mainly for the VLA, but could possibly be used for other antennas.
+C
+C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
