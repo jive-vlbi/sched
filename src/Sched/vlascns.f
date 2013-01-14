@@ -11,8 +11,8 @@ C
       INTEGER   ISCN, ISTA
       INTEGER   IIVA, IIVX, IIVO, IIVS, II
       INTEGER   IIDE, IIAP, IIAD, IIOF
-      LOGICAL   GOTINT, GOTPTINT, VLASCN, GOTVLAMD
-
+      LOGICAL   GOTPHINT, GOTVLAMD
+      LOGICAL   GOTPTINT, VLADOPK
 C -------------------------------------------------------------
 C     See if the VLA is used, setting VLASTA if so.
 C
@@ -61,7 +61,7 @@ C
             END IF
          END DO
       END IF
-      GOTPTINT =  IIVA .GT. 0 .OR. IIVX .GT. 0 .OR. 
+      GOTPHINT =  IIVA .GT. 0 .OR. IIVX .GT. 0 .OR. 
      1            IIVO .GT. 0 .OR. IIVS .GT. 0 
 C
 C     Now detect the use of VLAMODE.  Note that the default is ZZ, not
@@ -77,12 +77,12 @@ C
 C
 C     Don't allow both methods in one project.
 C
-      IF( GOTPTINT .AND. GOTVLAMD ) THEN
+      IF( GOTPHINT .AND. GOTVLAMD ) THEN
          CALL WLOG( 1, 'VLASCNS:  Both VLA phasing INTENTS and '//
      1       'VLAMODE used in the same schedule.' )
          CALL WLOG( 1, '          This confuses SCHED so do not '//
-     1       'do it.'
-         CALL ERRLOG( ' Use only VLAMODE -or- pointing INTENTS ' )
+     1       'do it.' )
+         CALL ERRLOG( ' Use only VLAMODE -or- phasing INTENTS ' )
       END IF
 C
 C     Now add the INTENTS and set their use if VLAMODE is being used.
@@ -116,13 +116,13 @@ C
             IF( STASCN(ISCN,VLASTA) ) THEN
                NSCINT(ISCN) = NSCINT(ISCN) + 1
                IF( VLAMODE(ISCN) .EQ. ' ' ) THEN
-     1             ISCINT(NSCINT(ISCN),ISCN) = IIVO
-               ELSE IF( VLAMODE(ISCN) .EQ. 'VA' )
-     1             ISCINT(NSCINT(ISCN),ISCN) = IIVA
+                   ISCINT(NSCINT(ISCN),ISCN) = IIVO
+               ELSE IF( VLAMODE(ISCN) .EQ. 'VA' ) THEN
+                   ISCINT(NSCINT(ISCN),ISCN) = IIVA
                ELSE IF( VLAMODE(ISCN) .EQ. 'VX' ) THEN
-     1             ISCINT(NSCINT(ISCN),ISCN) = IIVX
+                   ISCINT(NSCINT(ISCN),ISCN) = IIVX
                ELSE IF( VLAMODE(ISCN) .EQ. 'VS' ) THEN
-     1             ISCINT(NSCINT(ISCN),ISCN) = IIVS
+                   ISCINT(NSCINT(ISCN),ISCN) = IIVS
                ELSE
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, A, A, I5 )' )
@@ -136,18 +136,12 @@ C
                END IF
 C
             END IF
-         END IF
+         END DO
 C
-      END DO
+      END IF
 C
 C     -----------------
 C
-
-  *****************  still need to do the mods to this section where I
-don't allow VLAPEAK and explicit INTENTS in the same schedule.
-
-
-
 C     Now do a rather similar sequence of steps to deal with reference
 C     pointing.
 C
@@ -173,73 +167,59 @@ C
          END IF
       END DO
 C
-C     Now add the pointing intents if they are needed.
+C     Detect if any VLA reference pointing intents were used.  If so,
+C     set the pointers.
+C
+      IIDE = 0
+      IIAP = 0
+      IIAD = 0
+      IIOF = 0
+      IF( NINTENT .GE. 1 ) THEN
+         DO II = 1, NINTENT
+            IF( INDEX( INTENT(II), ':' ) .EQ. 0  .OR. 
+     1          INDEX( INTENT(II), 'VLA' ) .NE. 0 ) THEN
+               IF( INDEX( INTENT(II), 'REFERENCE_POINTING_DETERMINE' ) 
+     1              .NE. 0 ) IIDE = II
+               IF( INDEX( INTENT(II), 'REFERENCE_POINTING_APPLY' ) 
+     1              .NE. 0 ) IIAP = II
+               IF( INDEX( INTENT(II), 'REFERENCE_POINTING_ADJUST' ) 
+     1              .NE. 0 ) IIAD = II
+               IF( INDEX( INTENT(II), 'REFERENCE_POINTING_OFF' ) 
+     1              .NE. 0 ) IIOF = II
+            END IF
+         END DO
+      END IF
+      GOTPTINT = IIDE .NE. 0 .OR. IIAP .NE. 0 .OR. IIAD .NE. 0 .OR.
+     1           IIOF .NE. 0
+C        
+C     Don't allow both INTENTS and VLAPEAKs.
+C        
+      IF( VLADOPK .AND. GOTPTINT ) THEN
+         CALL WLOG( 1, 'VLASCNS:  Both VLA reference pointing '//
+     1       'INTENTS and VLAPEAK are used in the same schedule.' )
+         CALL WLOG( 1, '          This confuses SCHED so do not '//
+     1       'do it.' )
+         CALL ERRLOG( ' Use only VLAPEAK -or- pointing INTENTS ' )
+      END IF
+C
+C     If they are using INTENTS, let them hang themselves.  Put if, as
+C     recommended, they use VLAPEAK, set up the appropriate intents.
 C
       IF( VLADOPK ) THEN
-C
-C        Get the intent numbers for the VLA AUTOPHASE commands.
-C        Note that the intent for single dish is not actually
-C        defined yet.
-C        Allow for the case of some other interferometer being told
-C        to autophase.  Ignore if so.  That is done with a station
-C        name in the intent.
+         IF( NINTENT + 4 .GT. MINTENT ) CALL ERRLOG( 
+     1      'VLASCNS: Too many intents for SCHED arrays after adding '//
+     2      'VLA pointing commands.' )
+         IIDE = NINTENT + 1
+         INTENT(NINTENT+1) = 'VLA:REFERENCE_POINTING_DETERMINE'
+         IIAP = NINTENT + 2
+         INTENT(NINTENT+2) = 'VLA:REFERENCE_POINTING_APPLY'
+         IIAD = NINTENT + 3
+         INTENT(NINTENT+3) = 'VLA:REFERENCE_POINTING_ADJUST'
+         IIOF = NINTENT + 4
+         INTENT(NINTENT+4) = 'VLA:REFERENCE_POINTING_OFF'
+         NINTENT = NINTENT + 4
 C         
-         IIDE = 0
-         IIAP = 0
-         IIAD = 0
-         IIOF = 0
-         IF( NINTENT .GE. 1 ) THEN
-            DO II = 1, NINTENT
-               IF( INDEX( INTENT(II), ':' ) .EQ. 0  .OR. 
-     1             INDEX( INTENT(II), 'VLA' ) .NE. 0 ) THEN
-                  IF( INDEX( INTENT(II), 'REFERENCE_POINTING_DETERMINE' ) 
-     1                 .NE. 0 ) IIDE = II
-                  IF( INDEX( INTENT(II), 'REFERENCE_POINTING_APPLY' ) 
-     1                 .NE. 0 ) IIAP = II
-                  IF( INDEX( INTENT(II), 'REFERENCE_POINTING_ADJUST' ) 
-     1                 .NE. 0 ) IIAD = II
-                  IF( INDEX( INTENT(II), 'REFERENCE_POINTING_OFF' ) 
-     1                 .NE. 0 ) IIOF = II
-               END IF
-            END DO
-         END IF
-C        
-C        Add the phasing intents to the list if they are not there yet.
-C        
-         IF( IIDE .EQ. 0 ) THEN
-            NINTENT = NINTENT + 1
-            IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1         'VLASCNS: Too many intents when adding reference '//
-     2         'pointing commands.' )
-            IIDE = NINTENT
-            INTENT(NINTENT) = 'VLA:REFERENCE_POINTING_DETERMINE'
-         END IF
-         IF( IIAP .EQ. 0 ) THEN
-            NINTENT = NINTENT + 1
-            IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1         'VLASCNS: Too many intents when adding reference '//
-     2         'pointing commands.' )
-            IIAP = NINTENT
-            INTENT(NINTENT) = 'VLA:REFERENCE_POINTING_APPLY'
-         END IF
-         IF( IIAD .EQ. 0 ) THEN
-            NINTENT = NINTENT + 1
-            IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1         'VLASCNS: Too many intents when adding reference '//
-     2         'pointing commands.' )
-            IIAD = NINTENT
-            INTENT(NINTENT) = 'VLA:REFERENCE_POINTING_ADJUST'
-         END IF
-         IF( IIOF .EQ. 0 ) THEN
-            NINTENT = NINTENT + 1
-            IF( NINTENT .GT. MINTENT ) CALL ERRLOG( 
-     1         'VLASCNS: Too many intents when adding reference '//
-     2         'pointing commands.' )
-            IIOF = NINTENT
-            INTENT(NINTENT) = 'VLA:REFERENCE_POINTING_OFF'
-         END IF
-C         
-C        Loop over scans to make the check.
+C        Loop over scans and set the INTENTS as required.
 C         
          DO ISCN = SCAN1, SCANL
 C         
@@ -252,51 +232,26 @@ C           really a problem.
 C         
             IF( STASCN(ISCN,VLASTA) ) THEN
 C         
-C              Check if the intent is already set.
+C              Set the INTENT according to VLAPEAK.
 C         
-               GOTINT = .FALSE.
-               DO II = 1, NSCINT(ISCN)
-                  IF( ISCINT(II,ISCN) .EQ. IIDE .OR. 
-     1                ISCINT(II,ISCN) .EQ. IIAP .OR. 
-     2                ISCINT(II,ISCN) .EQ. IIAD .OR. 
-     3                ISCINT(II,ISCN) .EQ. IIOF ) THEN
-                     GOTINT = .TRUE.
-                  END IF
-               END DO
-C         
-C              If VLAMODE was set and the corresponding INTENT was not,
-C              set the INTENT.  Remove the old VB, VR, and VL options.
-C         
-               IF( .NOT. GOTINT ) THEN
-                  NSCINT(ISCN) = NSCINT(ISCN) + 1
-                  IF( VLAPEAK(ISCN) .EQ. 'DETERMINE' ) THEN
-                     ISCINT(NSCINT(ISCN),ISCN) = IIDE
-                     GOTINT = .TRUE.
-                  ELSE IF( VLAPEAK(ISCN) .EQ. 'APPLY' ) THEN
-                     NSCINT(ISCN) = NSCINT(ISCN) + 1
-                     ISCINT(NSCINT(ISCN),ISCN) = IIAP
-                     GOTINT = .TRUE.
-                  ELSE IF( VLAPEAK(ISCN) .EQ. 'ADJUST' ) THEN
-                     NSCINT(ISCN) = NSCINT(ISCN) + 1
-                     ISCINT(NSCINT(ISCN),ISCN) = IIAD
-                     GOTINT = .TRUE.
-                  ELSE IF( VLAPEAK(ISCN) .EQ. 'OFF' ) THEN
-                     NSCINT(ISCN) = NSCINT(ISCN) + 1
-                     ISCINT(NSCINT(ISCN),ISCN) = IIOF
-                     GOTINT = .TRUE.
-                  ELSE
-                     MSGTXT = ' '
-                     WRITE( MSGTXT, '( A, A, A, I5 )' )
-     1                  'VLASCNS: Invalid VLAPEAK=', VLAPEAK(ISCN),
-     2                  ' on scan ', ISCN
-                     CALL WLOG( 1, MSGTXT )
-                     CALL WLOG( 1, '         VLAPEAK must be '//
-     1                  'OFF, DETERMINE, ADJUST, or APPLY'
-                     CALL ERRLOG( '         Correct VLAPEAK ' )
-                  END IF
-  trap for next compile to pay attention to this routine.
-
-
+               NSCINT(ISCN) = NSCINT(ISCN) + 1
+               IF( VLAPEAK(ISCN) .EQ. 'DETERMINE' ) THEN
+                  ISCINT(NSCINT(ISCN),ISCN) = IIDE
+               ELSE IF( VLAPEAK(ISCN) .EQ. 'APPLY' ) THEN
+                  ISCINT(NSCINT(ISCN),ISCN) = IIAP
+               ELSE IF( VLAPEAK(ISCN) .EQ. 'ADJUST' ) THEN
+                  ISCINT(NSCINT(ISCN),ISCN) = IIAD
+               ELSE IF( VLAPEAK(ISCN) .EQ. 'OFF' ) THEN
+                  ISCINT(NSCINT(ISCN),ISCN) = IIOF
+               ELSE
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, A, A, I5 )' )
+     1               'VLASCNS: Invalid VLAPEAK=', VLAPEAK(ISCN),
+     2               ' on scan ', ISCN
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, '         VLAPEAK must be '//
+     1               'OFF, DETERMINE, ADJUST, or APPLY' )
+                  CALL ERRLOG( '         Correct VLAPEAK ' )
                END IF
 C         
             END IF
@@ -305,6 +260,5 @@ C
       END IF
 C
 C   
-      END DO
       RETURN
       END

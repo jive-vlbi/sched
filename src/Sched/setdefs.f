@@ -77,10 +77,11 @@ C
 C
          END DO
 C
-C        Now that we have the FREQREF and NETSIDE, we can 
-C        identify the proper frequency catalog entry.  Do so 
-C        and extract any information available in the frequency 
-C        catalog that is needed.  Of course, much of this is 
+C        Now that we have FREQREF and NETSIDE, we can get the 
+C        FIRSTLO, FE, IFCHAN, synthesizer settings for the VLBA, etc.
+C        This is done based on the frequency catalog.  SETFCAT
+C        identifies the appropriate frequency catalog entry to use
+C        sets the required parameters.  Of course, much of this is 
 C        station hardware dependent.
 C
          DO KS = 1, NSET
