@@ -167,7 +167,7 @@ C
       IF( NEEDSB .AND. ( MSCHN(ISETF) .GT. 2 * MINBBC(ISETF) .OR. 
      1    ( MSCHN(ISETF) .GT. MINBBC(ISETF) .AND. 
      2     ( DAR(ISETSTA(KS))(1:4) .EQ. 'RDBE' .OR.
-     3       DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) ) ) ) ) THEN
+     3       DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) ) ) ) THEN
          WRITE( SETMSG, '( A, I3 )' )
      1        'SETCHAN: Too many channels for maximum BBCs '//
      2        'available at some site: ', MINBBC(ISETF)
@@ -194,15 +194,15 @@ C
             GOTFQ  = FIRSTLO(ICH,KS) .NE. 0.D0 .AND.
      1               FREQREF(ICH,KS) .EQ. 0.D0 
             IF( .NOT. GOTNSD .AND. .NOT. GOTFQ ) THEN
-               CALL WLOG( 1, 'SETCHAN:  For the RDBE PFB personality, ',
-     1             //' SCHED needs NETSIDE or FIRSTLO and FREQREF'
-               CALL WLOG( 1, '          specified in the setup file.' 
+               CALL WLOG( 1, 'SETCHAN:  For the RDBE PFB personality, '
+     1             //' SCHED needs NETSIDE or FIRSTLO and FREQREF' )
+               CALL WLOG( 1, '          specified in the setup file.' )
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
                WRITE( MSGTXT, '( 4A )' )
      1             '          Neither is given for ', 
      2             STATION(ISETSTA(KS)), ' in setup file: ',
-     3             SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))
+     3             SETFILE(ISETF)(1:LEN1(SETFILE(ISETF)))
                CALL WLOG( 1, MSGTXT )
                CALL ERRLOG( 
      1              'Please provide NETSIDE or FIRSTLO+FREQREF' )

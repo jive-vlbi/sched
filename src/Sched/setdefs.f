@@ -9,7 +9,7 @@ C
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
 C
-      INTEGER    KS, ISETF, I, J, ICH
+      INTEGER    KS, ISETF, ICH
       LOGICAL    NEEDCAT(MSET)
 C ---------------------------------------------------------------------
       IF( SDEBUG ) CALL WLOG( 0, 'SETDEFS: Starting' )
