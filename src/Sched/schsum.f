@@ -352,9 +352,13 @@ C     Get the pgplot version.  Note that there is a special
 C     version of PGQINF in the Plotstub directory in case
 C     pgplot is not available.
 C
-C      CALL PGQINF( 'VERSION', PGVER, LENGTH ) 
-      pgver='fix me'
-      length=len1(pgver)
+C     Note for future:  Problems with the PGPLOT installation can
+C     cause execution to go into an infinite loop here.  I had to
+C     rebuild the PGPLOT libraries Jan. 14, 2012 to get past this.
+C     To my knowledge, I had done nothing to trigger the problem
+C     except maybe some software updates for the OS.
+C
+      CALL PGQINF( 'VERSION', PGVER, LENGTH ) 
       WRITE( ISUM, '( A, A )' )
      1   '  Version of PGPLOT:        ', PGVER(1:LENGTH)
 C
