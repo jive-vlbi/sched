@@ -274,6 +274,7 @@ C     Add correlator parameters in format for OMS.
 C
       CALL OMSOUT( RESTART )
 C
+
 C     Write the available catalog versions.
 C
       WRITE( ISUM, '( 1X, /, 1X, /, A )' )
@@ -324,6 +325,7 @@ C
 C
 C     Finish off with the code versions.
 C
+
       WRITE( ISUM, '( 1X, /, 1X, /, A )' )
      1   'Code versions: '  
 C
@@ -350,7 +352,9 @@ C     Get the pgplot version.  Note that there is a special
 C     version of PGQINF in the Plotstub directory in case
 C     pgplot is not available.
 C
-      CALL PGQINF( 'VERSION', PGVER, LENGTH ) 
+C      CALL PGQINF( 'VERSION', PGVER, LENGTH ) 
+      pgver='fix me'
+      length=len1(pgver)
       WRITE( ISUM, '( A, A )' )
      1   '  Version of PGPLOT:        ', PGVER(1:LENGTH)
 C
