@@ -1,12 +1,526 @@
-!  This is a short file containing some dummy frequency setups
-!  for Effelsberg that are needed in order to make RDBE test
-!  schedules for HSA runs that are scheduled in duration. 
-!  It will be a part of freq_RDBE.dat, the rest of which is the
-!  normal freq.dat.
+!  FREQUENCY CATALOG for SCHED.
+!
+!  RDBE setups for EB_VLBA
+!
+!  Just the EB_VLBA part of freq_ef_eb.dat, mostified by Craig Walker
+!  Dec 2012-Jan 2012 for the RDBE.  The original file is (for now) in
+!  /users/cwalker/files/sched_work/TEST/EVN_DBBC_TEST
+!
+!  The original file gives a selection of possible frequency setups for
+!  EFLSBERG (DBBC terminal) and the EB_VLBA
+!
+!  The input parameters are:
+!     STATION   Stations covered by this group.
+!     PRIOrity  Lower values are favored groups.
+!     RF1       Lower limit of RF frequencies covered by this group.
+!     RF2       Upper RF limit.
+!     POL       Polarization of this IF.
+!     LO1       The sum of all LOs other than the BBC.
+!     IFNAME    The name of the IF as used by control software.
+!     FE        The front end name (mainly VLBA).
+!     SYN       The 3 VLBA front end synthesizer settings.
+!     DUALX     Use the wide band X band system on the VLBA.
+!     CH1RF1    Lower hard RF limit for channel 1.  Mainly for 2cm VLBA.
+!     CH1RF2    Upper hard RF limit for channel 1.  These select filter.
+!     RCP50CM, LCP50CM  50 cm VLBA filter (NARROW or BROAD)
+!
+!  VLA specific items.  For the meaning of most, see the SCHED manual.
+!     CHNSTA    Used to show if IF is phased array or single dish. (obsolete)
+!     VLABAND, VLABW, VLAFEAB, VLAFECD, VLASYNA, VLASYNB, FLUKEA, FLUKEB
+!
+!
+!  2012oct25 Update of Ef and Eb frequency ranges.
+!
+!  2012 dec 07 - 2013 Jan 17  Craig Walker.  Attempted update of EB_VLBA 
+!       setups for use with RDBE and for compatibility with the VLBA.  
+!       Many comments added and modified setups provided that allow the 
+!       IF to match the IF at the VLBA.
+!
+!       For VLBA compatibility using the RDBE, it is very useful to have
+!       the IF be identical to what the VLBA uses, although a sideband
+!       inversion is ok as it can be fixed in DiFX (might not be ok with
+!       all correlators).  The RF range should be the same, and the LO
+!       should either be the same or, with sideband inversion, should 
+!       be different by 1024+512=1536 MHz.  If the IFs don't match, for
+!       the PFB personality, a sufficient number of 32 MHz baseband 
+!       channels must match exactly.  Since there is no tuning flexibilty
+!       of those channels (their edges are at 512+16+N*32 MHz in the IF)
+!       the external LOs must be set carefully.  The DDC personality has
+!       an initial polyphase filter that puts "crossover frequencies" at
+!       640 and 896 MHz in the IF.  A baseband channel cannot get good
+!       data from both sides of such a crossover.  If the external LOs
+!       are not set the same, it is complicated, but not impossible, to
+!       set baseband channels that are compatible and don't run into
+!       problems with the crossovers.  For these reasons, it is much
+!       preferred to have matching IFs.
+!
+!       Obtaining matching IFs runs into the problem that the VLBA LOs
+!       have very restricted frequency set points.  They can only be set
+!       to N*500+-100 MHz and must be between 2.1 and 15.9 GHz.  For 1cm
+!       and higher frequency bands, two such LOs are used so the sum
+!       is still restricted, but the allowed settings don't follow such
+!       a simple rule.  See the VLBA part of freq.dat or freq_RDBE.dat
+!       for allowed settings - the list is exhaustive.  There is an 
+!       active project at the VLBA to make more flexible synthesizers,
+!       but it will likely be at least 2014 before those are available.
+!
+!       The IF range for the RDBE is 512 to 1024 MHz which is offset
+!       slightly from the 500 to 1000 MHz assumed for the legacy VLBA
+!       system.  The IF filters haven't actually changed but they had
+!       soft edges.  I have changed the frequency ranges of all setups
+!       whose edges seemed to be set by the IF range to match the new
+!       limits.  Where the limits looked like they were set by something
+!       else (they weren't at 500 and 1000 MHz from the LO), I have left
+!       them alone.  With the PFB personality, the 16 MHz at the edge 
+!       of the IF end up in a corrupted, aliased channel and are not useful.
+!       Thus the IF range for the PFB is really 528-1008 MHz.
+!
+!       From Dave Graham's email of Dec. 17, 2012, the IF switch box does 
+!       not seem to work for them, so no IF switching.  Not sure of the 
+!       full implications, but some band switching might not be allowed.  Ask.
 
-Name = eb_x_rdbe  Station = EB_VLBA   priority = 0
-  rf1 = 8100, 8100    ifname = A,    C
-  rf2 = 8600, 8600    fe  = '4cm', '4cm'
-  pol =  RCP,  LCP    lo1 =  9100,  9100
-  note = 'FAKE SETUP FOR RDBE TESTING - DO NOT OBSERVE'
+!       A few of the old setups had frequency ranges that violated even
+!       the legacy system constraints.  I have tried to fix those.
+!       I have not touched the EFLSBERG section of this file.
+!
+!       I have initialed (RCW) my changes and comments.
+!
+!
+!  -----------------------------------------------------------------------
+!   Effelsberg
+!
+! EB_VLBA
+! 
+Name = eb_610  Station = EB_VLBA   priority = 0
+  rf1 =  595,  595    ifname = A,    C 
+  rf2 =  626,  626    fe  = '50cm', '50cm'
+  pol =  RCP,  LCP    lo1 =    0,    0
+  note = 'Prime focus system: not usually available (new in 2011).'
+/
+
+!  20cm.
+!RCW  Here are the important facts as I understand them (certainly imperfect) 
+!  based on Dave Graham's email of Dec. 17, 2012, the old freq.dat file for 
+!  the legacy system, on the constraints imposed by the VLBA system for 
+!  joint observations and from the receiver information on 
+!  http://www3.mpifr-bonn.mpg.de/div/effelsberg/receivers/receiver.html
+!  Not all of these sources agree, so this needs to be checked.
+
+!  NOTE: I don't know the LO constraints.  I will assume it is flexible 
+!        until told otherwise.
+
+!  Effelsberg properties:
+!        The receiver range is 1290 - 1725 MHz.
+!        The lower RF filter is 1290-1430 MHz
+!        The upper RF filter is 1580-1725 MHz
+!        IF range 80-220 MHz (web) or 100-250 (Graham).  Use 250 upper.
+!        The IF is upconverted by 400 MHz which is fixed.
+!        RDBE useful IF range: PFB - 528-650.  DDC - 512-650 
+!        The DDC has a crossover at 640 so 640-650 is not very useful.
+!        The LO1 values listed include the 400 MHz upshift
+!        With the PFB, the boundaries of the usable filters are:
+!           528, 560, 592, 624, 656 MHz in the IF after the upshift.
+
+!  The related VLBA properties:
+!      Useful LOs are 2100 and 2400 MHz with 2600 MHz possible if needed for
+!        baseband placement or crossover avoidance.
+!      With 2100 MHz relevant PFB filter boundaries are at:
+!        1284, 1316, 1348, 1380, 1412, 1444, 1476, 1508, 1540, 1572
+!        The DDC band limits and crossovers are 1076, 1205, 1460, and 1588 MHz
+!      With 2400 MHz, the relevant PFB filters  are:
+!        1392, 1424, 1456, 1488, 1520, 1552, 1584, 1616, 1648, 1680, 1712, 1744
+!        The DDC band limits and crossovers are 1376, 1504, 1760, and 1888 MHz
+!      With 2600 MHz, the relevant PFB filters  are:
+!        1592, 1624, 1656, 1688, 1720, 1752 
+!        The DDC band limits and crossovers are 1576, 1704, 1960, and 2088 MHz
+! 
+!   So here are my suggested setups.
+
+!   The first two go to the low end of the receiver.
+Name = eb_p1_1345  Station = EB_VLBA   priority = 0
+!  For use with the PFB:
+  rf1 = 1285, 1285    ifname = B,    D
+  rf2 = 1406, 1406    fe  = '20cm', '20cm'
+  pol =  RCP,  LCP    lo1 = 756  ! (1284-528) 1284 is a PFB edge for VLBA
+  note = 'Prime focus receiver, new 2008 (lower edge)'
+/
+Name = eb_d1_1354  Station = EB_VLBA   priority = 0
+!  For use with the DDC:  Crossover at 1413.  No VLBA crossover.
+  rf1 = 1285, 1285    ifname = B,    D
+  rf2 = 1423, 1423    fe  = '20cm', '20cm'
+  pol =  RCP,  LCP    lo1 = 773  ! (1285-512)
+  note = 'Prime focus receiver, new 2008 (lower edge)'
+/
+
+!   The next one is for both personalities and gets the 1420.4 MHz 
+!   hydrogen line comfortably in a PFB channel
+!   and away from a DDC crossover (at 1428)
+!   This also gets to the high end of the lower RF filter.
+Name = eb_pd2_1396  Station = EB_VLBA   priority = 0
+  rf1 = 1300, 1300    ifname = B,    D
+  rf2 = 1438, 1438    fe  = '20cm', '20cm'
+  pol =  RCP,  LCP    lo1 = 788  ! (1316-528) 
+  note = 'Prime focus receiver, new 2008 (lower edge)'
+/
+
+!RCW  The upper range for the EB receiver is 1580-1725.  In this range
+!     the VLBA must use 2400 or 2600 MHz for the first LO.  See above for
+!     the PFB boundaries.
+!     For the DDC, there is no crossover in this range with the 2400 MHz LO.
+!     With the 2600 MHz VLBA LO, there is a crossover at 1704 MHz.
+
+!  This one is for use with the PFB and the VLBA 2400 MHz LO.
+Name = eb_p4_1645  Station = EB_VLBA   priority = 0
+  rf1 = 1584, 1584    ifname = B,    D
+  rf2 = 1706, 1706    fe  = '18cm', '18cm'
+  pol =  RCP,  LCP    lo1 =  1056, 1056 !  (1584-528)
+  note = 'Prime focus receiver, new 2008'
+! Use with 2400 MHz LO on the VLBA to get full match to the VLBA IF.
+/
+!  This one is for use with the DDC and the VLBA 2400 MHz LO.  
+!  It gets a bit more bandwidth than the above.
+!  EB Crossover at 1708
+Name = eb_d4_1649  Station = EB_VLBA   priority = 0
+  rf1 = 1580, 1580    ifname = B,    D
+  rf2 = 1718, 1718    fe  = '18cm', '18cm'
+  pol =  RCP,  LCP    lo1 =  1068, 1068 !  (1580-512)
+  note = 'Prime focus receiver, new 2008'
+! Use with 2400 MHz LO on the VLBA to get full match to the VLBA IF.
+/
+!  This one is for either personality.  No DDC crossover in band (1728)
+!  PFB starts at 1616.  For use with the VLBA 2400 MHz LO.
+Name = eb_pd1_1650  Station = EB_VLBA   priority = 0
+  rf1 = 1600, 1600    ifname = B,    D
+  rf2 = 1725, 1725    fe  = '18cm', '18cm'
+  pol =  RCP,  LCP    lo1 =  1088, 1088
+  note = 'Prime focus receiver, new 2008'
+/
+!  Bottom of the upper filter:
+!    For use with either PFB or DDC
+!    Use with the VLBA 2600 MHz LO.
+!    There is a DDC crossover at 1704 MHz.
+!    Lowest frequency for PFB is 1592
+!    DDC actually goes down to 1576 but the edge may be poor.
+Name = eb_pd_1647  Station = EB_VLBA   priority = 0
+  rf1 = 1580, 1580   ifname = B,    D
+  rf2 = 1714, 1714    fe  = '18cm', '18cm'
+  pol =  RCP,  LCP    lo1 =  1064, 1064 !  (1592-528 = 2600-1536)
+  note = 'Prime focus receiver, new 2008'
+/
+!  Top of the upper filter with VLBA 2600 MHz LO
+!    Reaches 1720 OH.
+!    Same as above shifted up 32 MHz.
+!    Crossover at 1704 at the VLBA.  None at EB
+Name = eb_d4_1649  Station = EB_VLBA   priority = 0
+  rf1 = 1608, 1608    ifname = B,    D
+  rf2 = 1725, 1725    fe  = '18cm', '18cm'
+  pol =  RCP,  LCP    lo1 =  1096, 1096
+  note = 'Prime focus receiver, new 2008'
+/
+
+!  From email from Dave Graham on Dec. 17, 2012.  The Effelsberg S-band
+!  has a fixed LO at 2100.  The 1st IF is 100-250 MHz, which is upshifted
+!  by 400 MHz so that the effective S-band LO is fixed at 1700.
+
+Name = eb_s  Station = EB_VLBA   priority = 1
+!     rf1 = 2200, 2200    ifname = B,    D
+  rf1 = 2212, 2212    ifname = B,    D                               !RCW
+  rf2 = 2350, 2350    fe  = '13cm', '13cm'
+  pol =  RCP,  RCP    lo1 =  1700,  1700
+  note = '170Jy S-band system for use with SX, RCP only.'
+!RCW  The VLBA cannot match this LO so the DDC must be used, not the PFB.
+!RCW  Adjusted RF2 for the described 250 MHz IF.  Was 2320.
+!RCW  RF1 was adjusted from 2200 to 2212 for the RDBE 512 MHz lower edge.
+/
+!  Dummy dual polarization version of the above (the receiver is RCP only)
+!  This prevents problems scheduling dual pol observations.
+Name = eb_sd  Station = EB_VLBA   priority = 3
+!     rf1 = 2200, 2200    ifname = B,    D
+  rf1 = 2212, 2212    ifname = B,    D                               !RCW
+  rf2 = 2350, 2350    fe  = '13cm', '13cm'
+  pol =  RCP,  LCP    lo1 =  1700,  1700
+  note = '170Jy S-band system for use with SX, RCP only.'
+/
+
+!RCW  The VLBA does not cover this part of the spectrum.
+Name = eb_2695  Station = EB_VLBA   priority = 0
+  rf1 = 2645, 2645    ifname = B,    D
+  rf2 = 2745, 2745    fe  = '13cm', '13cm'
+  pol =  RCP,  LCP    lo1 =  2000,  2000
+  note = '30Jy S-Band, not for use with X'
+/
+
+!RCW  All of the 6cm setups can be matched by the VLBA.
+Name = eb_6cm  Station = EB_VLBA   priority = 0
+!      rf1 = 4600, 4600    ifname = A,    C
+!      rf2 = 5100, 5100    fe  = '6cm', '6cm'
+  rf1 = 4612, 4612    ifname = A,    C                               !RCW
+  rf2 = 5124, 5124    fe  = '6cm', '6cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  4100,  4100
+  note = '6cm secondary focus.'
+/
+Name = eb_6150  Station = EB_VLBA   priority = 4
+!      rf1 = 5900, 5900    ifname = C,    A
+!      rf2 = 6400, 6400    fe  = '5cm', '5cm'
+  rf1 = 5912, 5912    ifname = C,    A                               !RCW
+  rf2 = 6424, 6424    fe  = '5cm', '5cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  5400,  5400
+  note = 'rebuild in 2011'
+/
+Name = eb_6650 Station = EB_VLBA   priority = 4
+!      rf1 = 6400, 6400    ifname = A,    C
+!      rf2 = 6900, 6900    fe  = '5cm', '5cm'
+  rf1 = 6412, 6412    ifname = A,    C                               !RCW
+  rf2 = 6924, 6924    fe  = '5cm', '5cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  5900,  5900
+  note = 'rebuild in 2011'
+/
+Name = eb_sx  Station = EB_VLBA   priority = 2
+!      rf1 = 2200, 2200, 8300, 8300    ifname = B,     D,     A,     C
+!      rf2 = 2320, 2320, 8800, 8800    fe  = '13cm', '13cm', '4cm', '4cm'
+  rf1 = 2212, 2212, 8312, 8312    ifname = B,     D,     A,     C    !RCW
+  rf2 = 2320, 2320, 8824, 8824    fe  = '13cm', '13cm', '4cm', '4cm' !RCW
+  pol =  RCP,  RCP,  RCP,  LCP    lo1 =   1700,   1700,  7800,  7800
+  note = 'SX using 4cm secondary focus: not easy to get below 8300.'
+!RCW Neither LO can be used with the VLBA using the RDBE/PFB.  Use the DDC.
+/
+
+Name = eb_x  Station = EB_VLBA   priority = 0
+!      rf1 = 8300, 8300    ifname = A,    C
+!      rf2 = 8800, 8800    fe  = '4cm', '4cm'
+  rf1 = 8312, 8312    ifname = A,    C                               !RCW
+  rf2 = 8824, 8824    fe  = '4cm', '4cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  7800,  7800
+  note = '4cm secondary focus.'
+!RCW This LO cannot be matched by the VLBA so use the DDC.  See eb_xc below.
+!    for an alternative.
+/
+
+!RCW.  The rest of the 4cm setups are compatible with the VLBA
+
+Name = eb_xa  Station = EB_VLBA   priority = 1
+!      rf1 = 7900, 7900    ifname = A,    C
+!      rf2 = 8400, 8400    fe  = '4cm', '4cm'
+  rf1 = 7912, 7912    ifname = A,    C                               !RCW
+  rf2 = 8424, 8424    fe  = '4cm', '4cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  7400,  7400
+  note = '4cm secondary focus.'
+/
+Name = eb_xb  Station = EB_VLBA   priority = 1
+!      rf1 = 8100, 8100    ifname = A,    C
+!      rf2 = 8600, 8600    fe  = '4cm', '4cm'
+  rf1 = 8112, 8112    ifname = A,    C                               !RCW
+  rf2 = 8624, 8624    fe  = '4cm', '4cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  7600,  7600
+  note = '4cm secondary focus.'
+/
+Name = eb_xc  Station = EB_VLBA   priority = 1
+!      rf1 = 8400, 8400    ifname = A,    C
+!      rf2 = 8900, 8900    fe  = '4cm', '4cm'
+  rf1 = 8412, 8424    ifname = A,    C                               !RCW
+  rf2 = 8912, 8924    fe  = '4cm', '4cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  7900,  7900
+  note = '4cm secondary focus.'
+/
+Name = eb_xd  Station = EB_VLBA   priority = 2
+!      rf1 = 8500, 8500    ifname = A,    C  These frequencies wrong for 
+!                      this LO as they give an IF of 400-900 MHz (RCW).
+!      rf2 = 9000, 9000    fe  = '4cm', '4cm'
+  rf1 = 8612, 8612    ifname = A,    C                               !RCW
+  rf2 = 9124, 9124    fe  = '4cm', '4cm'                             !RCW
+  pol =  RCP,  LCP    lo1 =  8100,  8100
+  note = '4cm secondary focus.'
+/
+
+Name = eb2cm_p1  Station = EB_VLBA   priority = 0
+!    rf1 = 11700, 11700    ifname = B,    D  Too much bandwidth - 800 MHz
+!    rf2 = 12500, 12500    fe  = '2cm', '2cm'
+!RCW  Bandwidth reduced to 512 MHz as required by the RDBE.  There are 3
+!     setups here that match VLBA setups and cover the above frequency range.
+!     Note the low end of the 2cm receiver for the VLBA is 11800
+  rf1 = 11700, 11700    ifname = B,    D                             !RCW
+  rf2 = 12124, 12124    fe  = '2cm', '2cm'                           !RCW
+  pol =  LCP,  LCP      lo1 = 11100, 11100
+  note = '12GHz prime focus: not usually available:LCP'
+/
+
+Name = eb2cm_p2  Station = EB_VLBA   priority = 0
+!RCW  This is the second of the setups replacing the old eb2cm_p
+  rf1 = 11912, 11912    ifname = B,    D                             !RCW
+  rf2 = 12424, 12424    fe  = '2cm', '2cm'                           !RCW
+  pol =  LCP,  LCP      lo1 = 11400, 11400
+  note = '12GHz prime focus: not usually available:LCP'
+/
+
+Name = eb2cm_p3  Station = EB_VLBA   priority = 0
+!RCW  This is the third of the setups replacing the old eb2cm_p
+  rf1 = 12112, 11212    ifname = B,    D                             !RCW
+  rf2 = 12624, 12624    fe  = '2cm', '2cm'                           !RCW
+  pol =  LCP,  LCP      lo1 = 11600, 11600
+  note = '12GHz prime focus: not usually available:LCP'
+/
+
+Name = eb2cm_a  Station = EB_VLBA   priority = 1
+!     rf1 = 13700, 13700    ifname = A,    C
+!     rf2 = 14200, 14200    fe  = '2cm', '2cm'
+  rf1 = 13712, 13712    ifname = A,    C                             !RCW
+  rf2 = 14224, 14224    fe  = '2cm', '2cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 13200, 13200
+  note = '2cm secondary focus'
+!RCW  LO cannot be matched on the VLBA.  Also this spans the boundary 
+!     between two of the IF filters on the VLBA, so it doesn't work.
+/
+!RCW closest alternative to the above for use with the VLBA
+Name = eb2cm_v_a  Station = EB_VLBA   priority = 1
+  rf1 = 13912, 13912    ifname = A,    C                             !RCW
+  rf2 = 14424, 14424    fe  = '2cm', '2cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 13400, 13400
+  note = '2cm secondary focus'
+/
+
+Name = eb2cm_b  Station = EB_VLBA   priority = 1
+!     rf1 = 14200, 14200    ifname = A,    C
+!     rf2 = 14700, 14700    fe  = '2cm', '2cm'
+  rf1 = 14212, 14212    ifname = A,    C                             !RCW
+  rf2 = 14724, 14724    fe  = '2cm', '2cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 13700, 13700
+  note = '2cm secondary focus'
+!RCW  LO cannot be matched on the VLBA.
+/
+!RCW Alternative to the above to use with the VLBA.
+Name = eb2cm_v_b  Station = EB_VLBA   priority = 1
+  rf1 = 14112, 14112    ifname = A,    C                             !RCW
+  rf2 = 14624, 14624    fe  = '2cm', '2cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 13600, 13600
+  note = '2cm secondary focus'
+/
+
+Name = eb2cm_c  Station = EB_VLBA   priority = 0
+!     rf1 = 14700, 14700    ifname = A,    C
+!     rf2 = 15200, 15200    fe  = '2cm', '2cm'
+  rf1 = 14712, 14712    ifname = A,    C                             !RCW
+  rf2 = 15224, 15224    fe  = '2cm', '2cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 14200, 14200
+  note = '2cm secondary focus'
+!RCW  LO cannot be matched on the VLBA.  The IF would fit in the 4th filter
+! but if the first channel is below 14900, the third would be chosen which
+! would not be good.
+/
+!RCW  Alternative to the above for use with the VLBA
+Name = eb2cm_v_c  Station = EB_VLBA   priority = 0
+  rf1 = 14912, 14912    ifname = A,    C                             !RCW
+  rf2 = 15424, 15424    fe  = '2cm', '2cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 14400, 14400
+  note = '2cm secondary focus'
+/
+
+Name = eb2cm_d  Station = EB_VLBA   priority = 0
+!     rf1 = 15100, 15100    ifname = A,    C
+!     rf2 = 15600, 15600    fe  = '2cm', '2cm'
+  rf1 = 15112, 15112    ifname = A,    C                             !RCW
+  rf2 = 15624, 15624    fe  = '2cm', '2cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 14600, 14600
+  note = '2cm secondary focus'
+!RCW  Can be matched by the VLBA
+/
+
+! 1.3cm secondary focus
+!RCW.  All of the 1cm setups are compatible with the VLBA
+
+Name = eb1cm_a  Station = EB_VLBA   priority = 1
+  rf1 = 21500, 21500    ifname = A,    C
+!     rf2 = 21800, 21800    fe  = '1cm', '1cm'
+  rf2 = 21824, 21824    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 20800, 20800
+  note = '1.3cm secondary focus'
+/
+Name = eb1cm_b  Station = EB_VLBA   priority = 1
+!     rf1 = 21700, 21700    ifname = A,    C
+!     rf2 = 22200, 22200    fe  = '1cm', '1cm'
+  rf1 = 21712, 21712    ifname = A,    C                             !RCW
+  rf2 = 22224, 22224    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 21200, 21200
+  note = '1.3cm secondary focus'
+/
+Name = eb1cm_c  Station = EB_VLBA   priority = 1
+!     rf1 = 21800, 21800    ifname = A,    C
+!     rf2 = 22300, 22300    fe  = '1cm', '1cm'
+  rf1 = 21812, 21824    ifname = A,    C                             !RCW
+  rf2 = 22312, 22324    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 21300, 21300
+  note = '1.3cm secondary focus'
+/
+
+Name = eb1cm_d  Station = EB_VLBA   priority = 0
+!     rf1 = 22000, 22000    ifname = A,    C 
+!     rf2 = 22500, 22500    fe  = '1cm', '1cm'
+  rf1 = 22012, 22012    ifname = A,    C                             !RCW
+  rf2 = 22524, 22524    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 21500, 21500
+  note = '1.3cm secondary focus'
+/
+
+Name = eb1cm_e  Station = EB_VLBA   priority = 1
+!     rf1 = 22500, 22500    ifname = A,    C
+!     rf2 = 23000, 23000    fe  = '1cm', '1cm'
+  rf1 = 22512, 22512    ifname = A,    C                             !RCW
+  rf2 = 23024, 23024    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 22000, 22000
+  note = '1.3cm secondary focus'
+/
+
+Name = eb1cm_f  Station = EB_VLBA   priority = 1
+!     rf1 = 23000, 23000    ifname = A,    C
+!     rf2 = 23500, 23500    fe  = '1cm', '1cm'
+  rf1 = 23012, 23012    ifname = A,    C                             !RCW
+  rf2 = 23524, 23524    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 22500, 22500
+  note = '1.3cm secondary focus'
+/
+
+Name = eb1cm_g  Station = EB_VLBA   priority = 1
+!     rf1 = 23500, 23500    ifname = A,    C
+!     rf2 = 24000, 24000    fe  = '1cm', '1cm'
+  rf1 = 23512, 23512    ifname = A,    C                             !RCW
+  rf2 = 24024, 24024    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 23000, 23000
+  note = '1.3cm secondary focus'
+/
+
+Name = eb1cm_h  Station = EB_VLBA   priority = 1
+!     rf1 = 24000, 24000    ifname = A,    C
+!     rf2 = 24400, 24400    fe  = '1cm', '1cm'
+  rf1 = 24012, 24012    ifname = A,    C                             !RCW
+  rf2 = 24424, 24424    fe  = '1cm', '1cm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 23500, 23500
+  note = '1.3cm secondary focus'
+/
+
+Name = eb7mm  Station = EB_VLBA   priority = 1
+!     rf1 = 42870, 42870    ifname = A,    C
+!     rf2 = 43370, 43370    fe  = '7mm', '7mm'
+  rf1 = 42846, 42846    ifname = A,    C                             !RCW
+  rf2 = 43358, 43358    fe  = '7mm', '7mm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 43870, 43870
+  note = '7mm secondary focus: only LSB, no USB available'
+!RCW  VLBA cannot provide a matching IF.
+/
+!RCW  Alternative setup for which the VLBA can provide a matching IF.
+!     Uses sideband inversion (VLBA LO1 is 42400).
+Name = eb7mmv  Station = EB_VLBA   priority = 1
+  rf1 = 42912, 42912    ifname = A,    C                             !RCW
+  rf2 = 43424, 43424    fe  = '7mm', '7mm'                           !RCW
+  pol =  RCP,  LCP      lo1 = 43936, 43936
+  note = '7mm secondary focus: only LSB, no USB available'
+!RCW  VLBA cannot provide a matching IF.
+/
+
+!RCW  The VLBA can provide a matching IF for this setup.
+Name = 3mm_eb_vlba Station = EB_VLBA  Priority = 0
+!      rf1    = 86000, 86000   ifname = A,    C
+!      rf2    = 86500, 86500   fe     = '3mm', '3mm'
+  rf1    = 86012, 86012   ifname = A,    C                           !RCW
+  rf2    = 86524, 86524   fe     = '3mm', '3mm'                      !RCW
+  pol    =   RCP,   LCP   lo1 = 85500, 85500
+  note = 'new 3mm RX: April 2001 for CMVA'
 /
