@@ -3,7 +3,7 @@ C
 C     Routine for SCHED, called by SCHOPT, that inserts reference
 C     pointing scans.
 C
-C     The routine is set up to handle multiple sets groups of
+C     The routine is set up to handle multiple groups of
 C     antennas to be processed together.
 C
 C     It is assumed that the final scan time for the main observing
@@ -29,13 +29,12 @@ C
       INTEGER           NTRY, I, YEAR, DAY1, OKSC, NUP(MPKGRP)
       LOGICAL           SROK(MPKSRC), SROK2(MPKSRC)
       LOGICAL           TRYGRP(MPKGRP), TRYGRP2(MPKGRP), ADD2
-      LOGICAL           WATCHIT, LASTPTG, GOTST, TABHEAD, ERRS
+      LOGICAL           WATCHIT, LASTPTG, GOTST, TABHEAD
       REAL              MINEL, MAXEL
       DOUBLE PRECISION  MINSLEW, MAXSLEW, MINTOT
       DOUBLE PRECISION  TGAP(MAXSTA), TOTTIME, TOTTIME2
       DOUBLE PRECISION  STARTK, STOPK, START2, STOP2
       DOUBLE PRECISION  SLEWMIN, SLEWMAX(MPKSRC), START, FREQTEST
-      DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4)
       DOUBLE PRECISION  MSETTLE(MPKGRP)
       CHARACTER         TFORM*8, STIME*8
 C

@@ -10,7 +10,7 @@ C
 C
       INTEGER   ISCN, ISTA
       INTEGER   IIVA, IIVX, IIVO, IIVS, II
-      INTEGER   IIDE, IIAP, IIAD, IIOF
+      INTEGER   IIDE, IIAP, IIAD, IIOF, LEN1
       LOGICAL   GOTPHINT, GOTVLAMD
       LOGICAL   GOTPTINT, VLADOPK
 C -------------------------------------------------------------
@@ -50,14 +50,41 @@ C
      1          INDEX( INTENT(II), 'VLA' ) .NE. 0 ) THEN
 C
                IF( INDEX( INTENT(II), 'AUTOPHASE_DETERMINE' ) .NE. 0 ) 
-     1              IIVA = II
-               IF( INDEX( INTENT(II), 'AUTOPHASE_APPLY' ) .NE. 0 ) 
-     1              IIVX = II
-               IF( INDEX( INTENT(II), 'AUTOPHASE_OFF' ) .NE. 0 ) 
-     1              IIVO = II
-               IF( INDEX( INTENT(II), 'SINGLE_DISH' ) .NE. 0 ) 
-     1              IIVS = II
+     1              THEN 
+                  IIVA = II
+               ELSE IF( INDEX( INTENT(II), 'AUTOPHASE_APPLY' ) .NE. 0 ) 
+     1              THEN
+                  IIVX = II
+               ELSE IF( INDEX( INTENT(II), 'AUTOPHASE_OFF' ) .NE. 0 ) 
+     1              THEN
+                  IIVO = II
+               ELSE IF( INDEX( INTENT(II), 'SINGLE_DISH' ) .NE. 0 ) 
+     1              THEN
+                  IIVS = II
+               ELSE IF( INDEX( INTENT(II), 'AUTOPHASE' ) .NE. 0 ) THEN
+                  CALL WLOG( 1, ' ' )
+                  CALL WLOG( 1, '   ************************  ' )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( 3A )' )
+     1                'VLASCNS: Unrecognized AUTOPHASE INTENT used: ',
+     2                INTENT(II)(1:LEN1(INTENT(II))), 
+     3                '.  Please fix.'
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, '         Recognized options are '//
+     1                 '(see the manual):' )
+                  CALL WLOG( 1, 
+     1                          '         AUTOPHASE_DETERIMINE, '//
+     2                 'AUTOPHASE_APPLY, AUTOPHASE_OFF, and '//
+     3                 'SINGLE_DISH' )
+                  CALL WLOG( 1, '         For the VLA, it is better '//
+     2                 'to use VLAMODE.' )
+                  CALL WLOG( 1, '   ************************  ' )
+                  CALL WLOG( 1, ' ' )
+               END IF
 C
+C              Attempt to detect an unrecognized AUTOPHASE command.
+C
+
             END IF
          END DO
       END IF
@@ -81,8 +108,9 @@ C
          CALL WLOG( 1, 'VLASCNS:  Both VLA phasing INTENTS and '//
      1       'VLAMODE used in the same schedule.' )
          CALL WLOG( 1, '          This confuses SCHED so do not '//
-     1       'do it.' )
-         CALL ERRLOG( ' Use only VLAMODE -or- phasing INTENTS ' )
+     1       'do it.  VLAMODE is preferred.' )
+         CALL ERRLOG( 
+     1       '          Use only VLAMODE -or- phasing INTENTS ' )
       END IF
 C
 C     Now add the INTENTS and set their use if VLAMODE is being used.
@@ -167,8 +195,9 @@ C
          END IF
       END DO
 C
-C     Detect if any VLA reference pointing intents were used.  If so,
-C     set the pointers.
+C     Detect if any VLA reference pointing INTENTS were given by the
+C     observer.  If so, set the pointers.  These would be INTENTS that
+C     either have no station qualifier (no ":") or are for the VLA.
 C
       IIDE = 0
       IIAP = 0
@@ -198,8 +227,9 @@ C
          CALL WLOG( 1, 'VLASCNS:  Both VLA reference pointing '//
      1       'INTENTS and VLAPEAK are used in the same schedule.' )
          CALL WLOG( 1, '          This confuses SCHED so do not '//
-     1       'do it.' )
-         CALL ERRLOG( ' Use only VLAPEAK -or- pointing INTENTS ' )
+     1       'do it.  VLAPEAK is preferred.' )
+         CALL ERRLOG( 
+     1      '           Use only VLAPEAK -or- pointing INTENTS ' )
       END IF
 C
 C     If they are using INTENTS, let them hang themselves.  Put if, as
