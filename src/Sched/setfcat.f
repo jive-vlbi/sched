@@ -157,9 +157,9 @@ C
 C        Check if any of the received band is outside the RF bands.
 C
          IF( BESTOVER(KS) .LT. TOTBW(KS) ) THEN
-C      write(*,*) 'setfcat some lack of overlap:', ks
-            NBWARN = NBWARN + 1
-            IF( NBWARN .LE. 5 ) THEN
+            IF( BESTOVER(KS) / TOTBW(KS) .GE. 0.90 ) NBWARN = NBWARN + 1
+            IF( NBWARN .LE. 1 .OR. 
+     1          BESTOVER(KS) / TOTBW(KS) .LT. 0.90 ) THEN
                CALL WLOG( 1, 'SETFCAT: In setup: ' // SETNAME(KS) )
                CALL WLOG( 1, '         Station '//SETSTA(1,KS) )
                SETMSG = ' '
@@ -170,9 +170,9 @@ C      write(*,*) 'setfcat some lack of overlap:', ks
                CALL WLOG( 1, 
      1            '         in the setup file before any FREQ or ' //
      2            'DOPPLER shifts.' )
-            ELSE IF( NBWARN .EQ. 6 ) THEN
+            ELSE IF( NBWARN .EQ. 2 ) THEN
                CALL WLOG( 1, 'SETFCAT: Additional bandwidth '//
-     1            'warnings suppressed.' )
+     1            'warnings suppressed for small losses.' )
             END IF
          END IF
 C

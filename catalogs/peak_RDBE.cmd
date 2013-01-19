@@ -2,7 +2,7 @@
 
 !  This version is for use for MARK5C/RDBE-PFB schedules that are run in
 !  parallel with MARK5A schedules.  The RDBE cannot do Doppler 
-!  tracking or any find tuning of frequency, so this file will
+!  tracking or any fine tuning of frequency, so this file will
 !  not attempt that.  The results will not actually be usable for
 !  pointing with the RDBE data, but should allow the new control system
 !  to set the RF switches right so the old system can handle pointing.

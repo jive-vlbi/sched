@@ -40,13 +40,17 @@ C
             END IF
 C
 C           Warn about possible problems when using long names.
+C           This was confirmed and reworded on Jan. 15, 2012.
+C           See email on that day from David Gordon.
 C
             IF( CSUSED(INAME,ISRC) .EQ. '*' .AND.
      1          NCHAR .GT. 8 .AND. SLWARN ) THEN
                CALL WLOG( 1, 'SHORTN: WARNING - Source '//
      1            'names longer than 8 characters used. ' )
-               CALL WLOG( 1, '        Mark III correlators and '//
-     1            'geodetic software will have problems.' )
+               CALL WLOG( 1, '        This will be a problem if '//
+     1            'geodetic software (SOLV etc) is used.' )
+               CALL WLOG( 1, '        This might be a problem on '//
+     1            'some correlators.' )
                SLWARN = .FALSE.
             END IF
          END DO

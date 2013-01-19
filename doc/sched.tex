@@ -4392,7 +4392,11 @@ section on \htmlref{reference pointing}{SEC:REFPOINT} for much
 more information.  Note that specifying {\tt AUTOPEAK} will cause
 \schedb to try to insert pointing scans, but does not guarantee
 that it will find scans at high enough frequency or with enough
-of a gap from the previous scan.
+of a gap from the previous scan.  Scans will be inserted when it has
+been at least 10 minutes since the last set of pointing measurements
+and when there is adequate time for one or two pointing patterns
+based on the dwell time in the PEAKFILE.  This can be triggered by
+specifying adequate gaps.
 
 \rcwbox
 {No argument.  Just specifying it turns on the attempts to insert
@@ -7404,21 +7408,25 @@ not touch the formatter.  Note that this is very likely to mean
 that any pulse cal data gathered during such scans are likely to
 be spurious.
 
+For stations other than the VLA and VLBA, adding a PEAK specification
+to a scan will help trigger reference pointing observations.  This 
+is common for the GBT and Effelsberg.
+
 See the section on \htmlref{reference pointing}{SEC:REFPOINT} for
 much more information on easy ways to insert pointing scans.
 
-This command has no effect on the VEX file, there is currently no
-means to peak up telescopes that are controlled through the PCFS.
-
-The following paragraph is obsolete as the 140' is no longer in use
-for VLBI.  But SCHED can still make the cards, so the description is
-retained.
-For the Green Bank 140' (NRAO type files), ``cards'' will be issued that
-request that the antenna peak up on source. This will happen for any
-{\tt PEAK} argument greater than or equal to zero. It can be turned
-off by setting a negative argument or by specifying {\tt NOPEAK}.
-The peak takes about 5 minutes in addition to slew time on the 140'.
-
+This command triggers the addition of {\tt REFERENCE_POINTING 
+INTENTS} to the VEX file.  When similar intents are added using 
+VLAPEAK, they are prepended by {\tt VLA:}.  When they are added
+because of the use of PEAK, they will not have a station identifier.
+The scans before the first scan in which reference pointing is
+requested with PEAK will have {\tt "INTENT = REFERENCE_POINTING_OFF"}.
+All scans for which PEAK is greater than zero will have 
+{\tt "INTENT = REFERENCE_POINTING_DETERMINE"}.  After the first
+determination, any scans with {\tt PEAK} less than or equal to 0 
+will have {\tt "INTENT = REFERENCE_POINTING_APPLY"}.  The {\tt PEAK}
+scheme needs to be enhanced if we are going to treat different 
+stations differently.
 
 \rcwbox
 {A digit that for the VLBA is a baseband channel number.}
@@ -11407,12 +11415,33 @@ frequency of baseband channel 1, with the dividing points for the
 filter choice are 12.9, 13.9, and 14.9~GHz.  {\tt FE = omit} may
 be specified to cause a channel not to be used.
 
+The front ends for the VLA and VLBA are listed here.  The maximum
+ranges are given for the VLBA, which may be considerably greater than
+the good ranges, especially at 13cm.
+
+\begin{verbatim}
+Name (FE)      VLBA Range  VLBA IFs  VLA Range   
+VLBA   VLA         GHz                 GHz
+4 m     4          ---        --   0.058-0.084  
+90cm    P      0.302-0.352    BD    0.23-0.472   
+50cm    -      0.588-0.633    BD       ---
+20cm    L       1.18-1.85     AC     1.0-2.03     
+13cm    S       1.92-2.84     AC     2.0-4.0    
+6cm     C        3.9-7.9     ACBD    4.0-8.0      
+4cm     X        7.7-9.05     BD     8.0-12.0 (also called 3cm)
+2cm     Ku      11.8-15.6     BD    12.0-18.0    
+1cm     K       20.5-25.3     --    18.0-26.5 (also called 1.3cm)
+ -      Ka         ---        BD    26.5-40.0    
+7mm     Q       37.6-46.2     AC    40.0-50.0    
+3mm     -       79.7-96.0     BD       ---
+13cm and 4cm can be observed together on the VLBA using all 4 IFs.
+\end{verbatim}
+
 \rcwbox
 {A character string containing one of the options.}
-{For elements 1 or 3: {\tt 20cm}, {\tt 13cm}, {\tt 6cm}, or {\tt 7mm}.
-For elements 2 or 4: {\tt 90cm}, {\tt 50cm}, {\tt 4cm}, {\tt 3cm},
-{\tt 2cm}, {\tt 1cm}, or {\tt omit}.}
-{{\tt 0} - should be specified.}
+{Band name for IF A, B, C, D in FE elements 1, 2, 3, 4.  {\tt omit}
+for an unused IF (that's the default for unused IFs.).}
+{{\tt 0} - should be specified for the used IFs.}
 {Defaults to previous station if none are specified.  If any are
 specified, only the new values are used.}
 {{\tt FE(1)='20cm' FE(3)='20cm'}}
@@ -13248,24 +13277,33 @@ more information.
 
 \begin{itemize}
 
-%  Thread IDs for VDIF (VLA) - 10 bit number.
-%  Possible:  yydddhhhbb  where b is baseband channel and h is hour*100
-%  Or encode the telescope?  See discussion in evla-vlbi email for 2012
-%  meeting discussion in July.
-%  Where does it go?
+\item Add reference pointing {\tt INTENTs} for stations other than the
+VLA (they were added for the VLA previously).  See the description
+of the {\tt PEAK} command for more details.    Jan. 18, 2013
 
-%  Fix headers of source files.  There is no summary on them.
+\item Creating example hsaddc.key which will be a primary example for
+VLBA and HSA observations with the RDBE with DDC personality.  It 
+demonstrates VLA phasing and reference pointing on all 3 instruments.
+In setting up the VLBA pointing at 3mm, it also uses resetting of
+bandwidths and doppler tracking.  The comments in the file provide
+much advice on setting up such observations.  Jan. 17, 2013.
 
-% need the phasing scan length - see Amy email.
+\item Add ptdxxx.set pointing setup files for use with the RDBE/DDC.
+While at it, get rid of the ptvxxx.set pointing setup files that I do not
+believe are needed.  Jan. 17, 2013.  RCW
 
-% Continue work on the VLA part above.
-% See notes in \$SCHED on lodore - more recent notes on noatak.
+\item Add a couple of GBT and many EB entries to freq_RDBE.dat.  Jan. 17, 2013
 
-\item Control VLA reference pointing the use of {\tt VLAPEAK} and 
+\item Add headers to the source files and fix some solution names, 
+especially in sources.vlba.  Jan. 15, 2013.
+
+\item Set up for use of VLA band names for the VLA.  Jan. 15, 2013.
+
+\item Control VLA reference pointing through the use of {\tt VLAPEAK} and 
 {\tt INTENTs}.  Jan. 2013 ongoing  RCW.
 
-\item Control VLA phasing through 
-Jan. 2013 ongoing   RCW
+\item Control VLA phasing through the use of {\tt VLAMODE} and {\tt INTENTs}
+Jan. 2013  RCW
 
 \item Add parameter {\tt VLAPTIME} and the resulting INTENT in the VEX file.
 This is the VLA phasing subscan length.  Check that the scan length is

@@ -22,16 +22,45 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER     VMIF
+      INTEGER     VMIF, MVFE
       PARAMETER   (VMIF=4)
+      PARAMETER   (MVFE=10)
       CHARACTER   VIFNAME(VMIF)*1, VIFPOL(VMIF)*3
+      CHARACTER   VBANDS(MVFE)*2, VBANDSL(MVFE)*2, VLBBANDS(MVFE)*4
       INTEGER     KS, ICH, JCH, NCIF(VMIF), IIF, NAC, NBD, ISCN
-      INTEGER     ISETF, LEN1
+      INTEGER     ISETF, IB, LEN1
       LOGICAL     ERRS, GOTPAIR, IFOK
-      DOUBLE PRECISION  VIFFLO(VMIF), VIFFHI(VMIF), FRMAX
+      DOUBLE PRECISION  VIFFLO(VMIF), VIFFHI(VMIF), FRMAX, FRMIN
       DOUBLE PRECISION  ACAVG, BDAVG
+      DOUBLE PRECISION  VLFREQ(MVFE), VHFREQ(MVFE)
       DATA  VIFNAME  / 'A', 'B', 'C', 'D' /
       DATA  VIFPOL   / 'RCP', 'RCP', 'LCP', 'LCP' /
+C
+C     The following are the lower and upper frequencies for each band
+C     in MHz.
+C
+      DATA  VLFREQ  / 0.D0, 200.D0, 900.D0, 2000.D0, 4000.D0, 8000.D0,
+     1               12.D3, 18.D3, 26.5D3, 40.D3 /
+      DATA  VHFREQ  / 200.D0, 900.D0, 2000.D0, 4000.D0, 8000.D0, 12.D3,
+     2               18.D3, 26.5D3, 40.D3, 50.D3 /
+C
+C     The following are the official band names.
+C
+      DATA  VBANDS  / '4', 'P', 'L', 'S', 'C', 'X', 
+     1                'Ku', 'K', 'Ka', 'Q' /
+C
+C       The following are used for testing because FE, on input, is
+C       down-cased.  They will be converted to the above.
+C
+      DATA  VBANDSL / '4', 'p', 'l', 's', 'c', 'x', 
+     1                'ku', 'k', 'ka', 'q' /
+C
+C       The following are the VLBA names.  If found, translate to VLA.
+C
+      DATA  VLBBANDS / 'NA', '50cm', '20cm', '13cm', '6cm', '4cm', 
+     1                '2cm', '1cm', 'NA', '7mm' /
+
+
 C  --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKVLA: Starting.' )
       ISETF = ISETNUM(KS) 
@@ -51,6 +80,14 @@ C     1      VLARFANT, ' out of range 1 to 28.'
 C         CALL WLOG( 1, SETMSG )
 C         ERRS = .TRUE.
 C      END IF
+C
+C      Check the format.  Must be VDIF.
+C
+       IF( FORMAT(KS)(1:4) .NE. 'VDIF' ) THEN
+          CALL WLOG( 1, 'CHKVLA:  The recording format at the VLA '//
+     1       'must be VDIF, not '//FORMAT(KS) )
+          CALL ERRLOG( 'Change the FORMAT and try again.' )
+       END IF
 C
 C     Check the maximum number of channels.
 C     This is modified for the new 16 channel option  Dec. 28, 2012.
@@ -72,6 +109,7 @@ C
          NBD = 0
       END DO
       FRMAX = 0.D0
+      FRMIN = 1.D12
       DO ICH = 1, NCHAN(KS)
 C
 C        Initialize - bad IF spec until proven good!
@@ -96,10 +134,15 @@ C
                   CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
                END IF
-               VIFFLO(IIF) = MIN( VIFFLO(IIF), FREQ(ICH,KS) )
+C
+C              Get the minimum and maximum frequencies for the IF.
+C              Recall that the VLA is always upper sideband.
+C
+               VIFFLO(IIF) = MIN( VIFFLO(IIF), FREQREF(ICH,KS) )
                VIFFHI(IIF) = MAX( VIFFHI(IIF), 
-     1                            FREQ(ICH,KS) + BBFILT(ICH,KS) )
+     1                            FREQREF(ICH,KS) + BBFILT(ICH,KS) )
                FRMAX = MAX( VIFFHI(IIF), FRMAX )
+               FRMIN = MAX( VIFFLO(IIF), FRMIN )
                IF( VIFNAME(IIF) .EQ. 'A' .OR. 
      1             VIFNAME(IIF) .EQ. 'C' ) THEN
                   NAC = NAC + 1
@@ -125,7 +168,8 @@ C
       IF( NAC .GT. 0 ) ACAVG = ACAVG / NAC
       IF( NBD .GT. 0 ) BDAVG = BDAVG / NBD
 C
-C     Now complain if any IF has too many channels.
+C     Now complain if any IF has too many channels and do other 
+C     checks of the IFs.
 C
       DO IIF = 1, VMIF
          IF( NCIF(IIF) .GT. 4 ) THEN
@@ -146,10 +190,41 @@ C
             WRITE( MSGTXT, '( A, A, A, A )' )
      1          'CHKVLA: Frequency range of channels assigned to ',
      2          'VLA IF ', VIFNAME(IIF), 
-     3          ' span over the 1024 MHz (', VIFFHI(IIF) - VIFFLO(IIF),
+     3          ' span over 1024 MHz (', VIFFHI(IIF) - VIFFLO(IIF),
      4          ' MHz).' 
             CALL WLOG( 1, MSGTXT )
             ERRS = .TRUE.
+         END IF
+C
+C        Deal with the VLA receiver names.  And complain if they
+C        don't seem right.  Base this on the lowest frequency
+C        requested for the IF.  Given that the frequencies span 
+C        all of the logical space, one should stop somewhere in this
+C        loop.
+C
+         IF( VIFFLO(IIF) .GT. VHFREQ(MVFE) ) THEN
+            FE(IIF,KS) = 'omit'
+         ELSE 
+            DO IB = 1, MVFE
+               IF( VIFFLO(IIF) .GT. VLFREQ(IB) .AND. 
+     1             VIFFLO(IIF) .LE. VHFREQ(IB) ) THEN
+                  IF( FE(IIF,KS) .EQ. ' ' .OR. 
+     1                FE(IIF,KS) .EQ. 'omit' .OR.
+     2                FE(IIF,KS) .EQ. VBANDSL(IB) .OR.
+     3                FE(IIF,KS) .EQ. VLBBANDS(IB) ) THEN
+                     FE(IIF,KS) = VBANDS(IB)
+                  ELSE IF( FE(IIF,KS) .NE. VBANDS(IB) ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, I5, 4A )' )
+     1                  'CHKVLA: Apparently incorrect VLA FE name ',
+     2                  'for setup:', KS, '.  Is: ', FE(IIF,KS),
+     3                  '  Should be: ', VBANDS(IB)
+                     CALL WLOG( 1, MSGTXT )
+                     CALL ERRLOG( 'Fix VLA BAND name in setup'//
+     1                   SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))) )
+                  END IF
+               END IF
+            END DO
          END IF
       END DO
 C

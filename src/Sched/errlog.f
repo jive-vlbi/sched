@@ -12,6 +12,7 @@ C
       CALL WLOG( 1, ' ' )
       CALL WLOG( 1, MESSAGE )
       CALL WLOG( 1, ' ' )
+      CALL WLOG( 1, '+++ERROR+++ SCHED terminating' )
       CALL WLOG( 1, '   The above is a fatal error.' )
       CALL PUTOUT( '   There may be much more information in '//
      1     LOGFILE  )
