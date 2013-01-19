@@ -14,12 +14,14 @@ C
 C
 C
       INTEGER     KS, K, L
-      LOGICAL     TONHD
+      LOGICAL     TONHD, HWARN
       DOUBLE PRECISION  LO1, LO2, LOI, LOJ, IFF
       REAL        K2, L2
 C
       INTEGER     LEN1, NRF, IRF, ISIDE1, ICH
       DOUBLE PRECISION  RF(3), RFF
+      DATA        HWARN / .TRUE. /
+      SAVE        HWARN
 C  -------------------------------------------------------------------
       IF( TONHD ) THEN
          TONHD = .FALSE.
@@ -53,8 +55,11 @@ C
 C
 C        Write a detailed explanation.
 C
-         CALL WRTMSG( 0, 'HARMWARN', 'harmwarn' )
-
+         IF( HWARN ) THEN
+            CALL WRTMSG( 0, 'HARMWARN', 'harmwarn' )
+            HWARN = .FALSE.
+         END IF
+C
          CALL WLOG( 1, ' ' )
          WRITE( MSGTXT, '( 2A )' )
      1       '  Setup   LO (GHz) Osc   Harmonic  LO(GHz)  ',

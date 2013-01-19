@@ -11,13 +11,16 @@ C     driven correlators.  Warn about probable attempts to schedule
 C     parallel scans that are meant to be correlated together.
 C     Added Dec. 26, 2012.  RCW.
 C
+C     Set up INTENTS for pointing at stations other than the VLA.
+C     Added Jan. 18, 2013.  RCW.
+C
 C     Deal with VLAPTIME.  Jan. 4, 2013
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
       INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC, JSCN, KS, KF
-      INTEGER    ICH, GNSET, IINT, IIPTIME
+      INTEGER    ICH, GNSET, IINT
       INTEGER    NEXPECT, NLATE, NNEVER, NSLATE
       REAL       NSRCCHG
       LOGICAL    DOPWARN, WARNLONG, OVWARN
@@ -318,9 +321,13 @@ C
         END IF
       END DO
 C
+C     Add phasing INTENTs for stations other than VLA.
+C
+      CALL PHINT
+C
 C     Check that VLA phasing scans are at least 4 times VLAPTIME
 C     in length.  VLASTA set in VLASCNS.  Establish the PHASING
-C     parameter which will east writing the VLAPTIME based intent
+C     parameter which will ease writing the VLAPTIME based intent
 C     in VXSCH.
 C
 C     Loop through scans to be sure the VLA phasing time is appropriate.
@@ -336,7 +343,7 @@ C
           IF( NSCINT(ISCN) .NE. 0 ) THEN
             DO IINT = 1, NSCINT(ISCN)
               IF( INDEX( INTENT(ISCINT(IINT,ISCN)),
-     1           'DETERMINE_AUTOPHASE' ) .NE. 0 .AND.
+     1           'AUTOPHASE_DETERMINE' ) .NE. 0 .AND.
      2         ( INDEX( INTENT(ISCINT(IINT,ISCN)), ':' ) .EQ. 0 .OR.
      3           INDEX( INTENT(ISCINT(IINT,ISCN)), 'VLA' ) .NE. 0 ) )
      4              THEN

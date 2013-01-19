@@ -59,7 +59,7 @@ C
             IF( STATION(STANUM(ISTA))(1:3) .EQ. 'VLA' .AND.
      1          STASCN(ISCN,ISTA) ) THEN
 C
-               IF( VLAPEAK(ISCN) .EQ. 'D' ) THEN
+               IF( VLAPEAK(ISCN) .EQ. 'DETERMINE' ) THEN
 C
 C                 Check if the last pointing was appropriate.
 C
@@ -67,9 +67,9 @@ C
      1                ABS( AZ1(ISCN,ISTA) - LVAZ(ISTA) ) .LT. 50.0 .AND. 
      2                ABS( EL1(ISCN,ISTA)-LVEL(ISTA) ) .LT. 40.0 ) THEN
 C
-                     VLAPEAK(ISCN) = 'T'
+                     VLAPEAK(ISCN) = 'APPLY'
                   ELSE
-                     VLAPEAK(ISCN) = ' '
+                     VLAPEAK(ISCN) = 'OFF'
                   END IF
 C
                END IF
@@ -134,7 +134,7 @@ C
 C
                IF( USEGRP(IG) ) THEN
                   IF( USESET .EQ. 0 ) THEN
-C
+
 C                    Record the first setup file number.
 C
                      USESET = PKLSET(IG)
@@ -232,8 +232,8 @@ C              are involved.
 C
                IF( STATION(STANUM(ISTA)) .EQ. 'VLA' .OR. 
      1             STATION(STANUM(ISTA)) .EQ. 'VLA27' ) THEN
-                  VLAMODE(ISCN) = 'IR'
-                  VLAPEAK(ISCN) = ' '
+                  VLAMODE(ISCN) = ' '
+                  VLAPEAK(ISCN) = 'DETERMINE'
                END IF
             END IF
          END DO
@@ -242,9 +242,3 @@ C
 C   
       RETURN
       END
-
-
-
-
-
-

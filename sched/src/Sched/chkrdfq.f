@@ -64,7 +64,7 @@ C
                WRITE( MSGTXT, '( A, A, F8.3 )' )
      1            'CHKRDFQ: Bandwidth must be 32.0 MHz for ',
      2            'DBE=RDBE_PFB. Value specified is: ', 
-     3            SIDEBD(ICH,KS)
+     3            BBCBW(ICH)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
