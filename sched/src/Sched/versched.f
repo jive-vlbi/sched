@@ -57,7 +57,7 @@ C       VERSION = 'Release of about July 12, 2012'
 C       VERSION = 'Beta version of Sept. 12, 2012'
 C                 There was a beta of Sept. 20.
 C       VERSION = 'Beta version of Nov. 5, 2012'
-       VERSION = 'Development version after Nov. 5, 2012'
+       VERSION = 'sched_temp version of Jan. 19, 2013'
 C
       RETURN
       END
