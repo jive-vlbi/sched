@@ -108,8 +108,7 @@ C
             IF( TRACK(1,1,KS) .EQ. 0 .AND.
      1        ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR.
      2          FORMAT(KS)(1:4) .EQ. 'MKIV' .OR.
-     3          FORMAT(KS)(1:4) .EQ. 'VDIF' .OR.
-     4          FORMAT(KS) .EQ. 'MARKIII' ) ) THEN
+     3          FORMAT(KS)(1:4) .EQ. 'VDIF' ) ) THEN
 C
                CALL SETTRK( NCHAN(KS), TAPEMODE(KS), FORMAT(KS), 
      1               BITS(1,KS), TRACK(1,1,KS), MCHAN, BBC(1,KS), 

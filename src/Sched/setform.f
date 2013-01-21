@@ -7,10 +7,13 @@ C     Conform to the modern disk world.  Jan. 11, 2011. RCW.  This
 C     mainly means stop worrying about matching many recording
 C     parameters across stations.
 
+C     Much of this routine might be unnecessary after the legacy 
+C     VLBA and MKIV systems go away.  Save the recoding until 
+C     then.
 
-C     ************  Have not actually done the modifications yet.
-C                   but that is next up.
-
+C     ************  Have not actually done the modifications for
+C       the above two comments yet.  Things are working for now
+C       and time is going to more critical changes.
 
 C
 C     The following applies to MarkIV and VLBA tape or Mark5A systems.
@@ -94,12 +97,21 @@ C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
 C
-      INTEGER           KS, ISETF, ISCN, ISTA
+      INTEGER           KS, ISETF, ISTA, ISCN, I
       REAL              MAXBPS
       LOGICAL           OK, NEEDFMT(MSET)
       LOGICAL           ANYLEFT, ANYLFT2
 C -------------------------------------------------------------------- 
       IF( DEBUG ) CALL WLOG( 0, 'SETFORM: Starting' )
+C
+C     MARKIII no longer supported.
+C
+      DO KS = 1, NSET
+         IF( FORMAT(KS) .EQ. 'MARKIII' ) THEN
+            CALL ERRLOG ( 
+     1         'MARKIII format no longer in use.  Fix setup.' )
+         END IF
+      END DO
 C
 C     Initialize the format related variables.  This helps prevent
 C     problems on restarts.  Initialize TAPEMODE to the setup file
@@ -110,18 +122,22 @@ C
          FANOUT(KS) = 0.0
          TAPEMODE(KS) = TPMODE(KS)
       END DO
+
 C
 C     First, set as much of the format as possible from the 
 C     information provided in the setup file and catalogs.
 C
 C     If the format was not specified at all, set the default
-C     general type based on the type of DAR at the station.
-C     Actually, this is not always right.
+C     general type based on the type of DAR at the station where
+C     this can be done as with most modern systems.
+C     Actually, this is not always right, but, if not, the
+C     user will need to be specific.
 C
       DO KS = 1, NSET
          IF( FORMAT(KS) .EQ. ' ' ) THEN
             IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
-     1          DAR(ISETSTA(KS)) .EQ. 'RDBE' ) THEN
+     1          ( DAR(ISETSTA(KS)) .EQ. 'RDBE' .OR. 
+     2            DAR(ISETSTA(KS)) .EQ. 'DBBC' ) ) THEN
                FORMAT(KS) = 'MARK5B'
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5B' ) THEN
                FORMAT(KS) = 'MARK5B'

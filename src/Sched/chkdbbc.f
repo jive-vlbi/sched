@@ -1,10 +1,14 @@
-      SUBROUTINE CHKRDBE( KS, ERRS )
+      SUBROUTINE CHKDBBC( KS, ERRS )
 C
 C     Routine for SCHED called by CHKSET that checks items related
-C     to the use of the RDBE digital backend.
+C     to the use of the DBBC digital backend.  This is adapted from,
+C     and very similar to CHKRDBE.
+C
+C     I'm going to need help from Europe because I can't find all
+C     the specs for the DBBC.
 C
 C     The frequency and bandwidth checks are broken out to a 
-C     subroutine (CHKRDFQ) so that it can also be called by FSFREQ
+C     subroutine (CHKDBFQ) so that it can also be called by FSFREQ
 C     to check in-schedule changes of frequency and bandwidth.
 C
 C     The RDBE PFB personality can only do lower sideband.  But
@@ -14,16 +18,19 @@ C     the sideband.  Oct 11, 2011.
 C
 C     Add the dual RDBE case.  Nov. 8, 2012  RCW.
 C
+C     Adapted from CHKRDBE.  Jan 20, 2013.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4)
+      INTEGER           NGT4
       LOGICAL           ERRS, SBWARN, IFNEW, OK4
       CHARACTER         USEDIFC(4)*2
       DATA              SBWARN / .TRUE. /
       SAVE              SBWARN
 C --------------------------------------------------------------------
-      IF( DEBUG ) CALL WLOG( 0, 'CHKRDBE: Starting' )
+      IF( DEBUG ) CALL WLOG( 0, 'CHKDBBC: Starting' )
 C
 C     ---------
 C     Need to do something about the solar attenuators similar to 
@@ -34,17 +41,16 @@ C     Get the station catalog number for the station.
 C
       KSTA = ISETSTA(KS)
 C
-C     Set the usable number of IF (2 for RDBE, 4 for RDBE2)
+C     Set the usable number of IFs (4)
+C   ***********************  Is this correct?
 C
-      MIF = 2
-      IF( DAR(KSTA) .EQ. 'RDBE2' .AND. FORMAT(KS) .EQ. 'VDIF' .AND.
-     1    DBE(KS) .EQ. 'RDBE_DDC' ) MIF = 4
+      MIF = 4
 C
       IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN 
 C
-C        Make sure there are no more than 2 IFs requested for 
-C        DAR=RDBE or 4 IFs for DAR=RDBE2.  Get a count of IFs and
-C        number of channels per IF for later use.
+C        Make sure there are no more than the available number of
+C        IFs requested.  Get a count of IFs and number of channels 
+C        per IF for later use.
 C
          DO IIF = 1, 4
             USEDIFC(IIF) = ' '
@@ -77,16 +83,11 @@ C
 C
 C                 Here we have a problem - too many IFs.
 C
-                  IF( MIF .EQ. 4 ) THEN
-                     CALL WLOG( 1, 
-     1                    'CHKRDBE: More than 4 IF''s requested '//
-     2                    'for 2 RDBE station using the DDC and VDIF' )
-                  ELSE
-                     CALL WLOG( 1, 
-     1                    'CHKRDBE: More than 2 IF''s requested '//
-     2                    'for single RDBE station or PFB '//
-     3                    'or format other than VDIF' )
-                  END IF
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I2, 2A )' )
+     1               'CHKDBBC: More than ', MIF, ' IF''s requested ',
+     2                    'for a DBBC station.'
+                  CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
                END IF
                NNIF(NIF) = 1
@@ -94,20 +95,21 @@ C
             END IF
          END DO
 C
-C        Check the RDBE_PFB personality.
+C        Check the DBBC_PFB personality.
 C        Most checks are meant to be used both before and after 
 C        the filter selection is available.
 C        There is one check that is meant to be temporary that
 C        forces the current frequencies.
 C
-         IF( DBE(KS) .EQ. 'RDBE_PFB' ) THEN
+         IF( DBE(KS) .EQ. 'DBBC_PFB' ) THEN
 C
 C           NCHAN must be 16 (in initial version).
+C    ******************  I think this may be wrong for the DBBC.
 C
             IF( NCHAN(KS) .NE. 16 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, A, I4 )' )
-     1           'CHKRDBE: For DBE=RDBE_PFB, NCHAN must be 16.', 
+     1           'CHKDBBC: For DBE=DBBC_PFB, NCHAN must be 16.', 
      2           ' Setup specified: ', NCHAN(KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
@@ -118,8 +120,8 @@ C
             IF( SAMPRATE(KS) .NE. 64.0 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
-     1           'CHKRDBE: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=RDBE_PFB. Must be 32.0 Msamp/s.'
+     1           'CHKDBBC: Invalid SAMPRATE specified: ', SAMPRATE(KS),
+     2           ' for DBE=DBBC_PFB. Must be 32.0 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
@@ -130,7 +132,7 @@ C
                IF( BITS(ICH,KS) .NE. 2 ) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, A, I3 )' )
-     1               'CHKRDBE: BITS must be 2 for DBE=RDBE_PFB. ',
+     1               'CHKDBBC: BITS must be 2 for DBE=DBBC_PFB. ',
      2               '  Value specified is: ', BITS(ICH,KS)
                   CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
@@ -141,14 +143,15 @@ C           All baseband sidebands must be lower.
 C           Here is were we get a bit tricky and try to use
 C           inverted sidebands and let the correlator 
 C           fix it.
+C   *********************  is this needed for the DBBC_PFB?
 C
             DO ICH = 1, NCHAN(KS)
                IF( SIDEBD(ICH,KS) .NE. 'L' ) THEN
                   IF( SBWARN ) THEN
                      MSGTXT = ' '
                      WRITE( MSGTXT, '( A, A, A )' )
-     1                  'CHKRDBE: SIDEBAND must be LSB for ',
-     2                  '  DBE=RDBE_PFB. Value specified is: ', 
+     1                  'CHKDBBC: SIDEBAND must be LSB for ',
+     2                  '  DBE=DBBC_PFB. Value specified is: ', 
      3                  SIDEBD(ICH,KS)
                      CALL WLOG( 1, MSGTXT )
                   END IF
@@ -156,6 +159,9 @@ C
 C                 Now let's fix it, if it was 'U' - ie not some
 C                 other bad spec.
 C                 Add other correlators to the list eventually.
+C  *********************  Can JIVE invert sidebands?  I could use
+C              the answer to this one even if the DBBC can do either
+C              sideband because it affects the RDBE.
 C
                   IF( SIDEBD(ICH,KS) .EQ. 'U' .AND.
      1                ( CORREL .EQ. 'SOCORRO' .OR.
@@ -202,35 +208,30 @@ C
 C
 C           Bandwidths and frequencies will be checked in CHKRDFQ.
 C
-C           Still to be checked - IF, POL.
+C     ***********************      Still to be checked - IF, POL.
 C
          END IF
 C
 C        ===  Now check the DDC personality. ===
 C
-         IF( DBE(KS) .EQ. 'RDBE_DDC' ) THEN
+         IF( DBE(KS) .EQ. 'DBBC_DDC' ) THEN
 C
 C           NCHAN must be 8 or less with 2 RDBEs or 4 or less with
 C           one.  MIF is already set depending on the capability.
+C     *********************  please adjust above statement as needed
+C                for the DBBC.  Then adjust the code below accordingly
+C                The RDBE version has separate tests for 1 or 2 RDBEs
 C
-            IF( MIF .EQ. 4 .AND. NCHAN(KS) .GT. 8 ) THEN
-               MSGTXT = ' '              
-               WRITE( MSGTXT, '( A, A, I4 )' )
-     1           'CHKRDBE: For DAR=RDBE2, DBE=RDBE_DDC, and VDIF ',
-     2           'format, NCHAN must <= 8.', 
-     3           ' Setup specified.', NCHAN(KS)
-               CALL WLOG( 1, MSGTXT )
-               ERRS = .TRUE.
-            END IF
             IF( MIF .EQ. 2 .AND. NCHAN(KS) .GT. 4 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, A, I4 )' )
-     1           'CHKRDBE: For a single RDBE, or PFB or not VDIF, ',
+     1           'CHKDBBC: For DBBCor PFB or not VDIF, ',
      2           ' NCHAN must <= 4.  Setup specified.', NCHAN(KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
 C
+C   *********************  This may not be needed for the DBBC.
 C           Check for invalid distributions of IFs for RDBE2 (MIF=4).
 C           For NIF 3, all possible combinations that have NIF < 8
 C           conform to the restrictions which say that one IF can
@@ -257,7 +258,7 @@ C
      5                 NNIF(2) + NNIF(3) .LE. 4 )
                IF( .NOT. OK4 ) THEN
                   CALL WLOG( 1, 
-     1               'CHKRDBE:  When using 2 RDBEs, with 4 IFs, '//
+     1               'CHKDBBC:  When using 2 RDBEs, with 4 IFs, '//
      2               'it must be possible to pair the IFs so ' )
                   WRITE( MSGTXT, '( A, A, A )' )
      1               '          that each pair has less than 4 ',
@@ -271,6 +272,9 @@ C           Sample rate can have many values.
 C           These may need to shift down by 1 if we do complex
 C           sampling.
 C
+C    *********************  Isn't the DBBC_DDC channel bandwidth
+C                           limited?.  If so, this could impact
+C                           compatibility.
             IF( SAMPRATE(KS) .NE. 256.0 .AND. 
      a          SAMPRATE(KS) .NE. 128.0 .AND. 
      1          SAMPRATE(KS) .NE. 64.0 .AND.
@@ -283,24 +287,29 @@ C
      8          SAMPRATE(KS) .NE. 0.5 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
-     1           'CHKRDBE: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=VLBA_DDC. Must be 0.5 to 256 Msamp/s.'
+     1           'CHKDBBC: Invalid SAMPRATE specified: ', SAMPRATE(KS),
+     2           ' for DBE=DBBC_DDC. Must be 0.5 to 256 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
 C
 C           Bits per sample must be 2.
+C   ************************  are there other options for the DBBC?
 C
             DO ICH = 1, NCHAN(KS)
                IF( BITS(ICH,KS) .NE. 2 ) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, A, I3 )' )
-     1               'CHKRDBE: BITS must be 2 for DBE=RDBE_DDC. ',
+     1               'CHKDBBC: BITS must be 2 for DBE=DBBC_DDC. ',
      2               '  Value specified is: ', BITS(ICH,KS)
                   CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
                END IF
             END DO
+C
+C  ******************  There are some "interesting" ifchan assignment
+C            restrictions for the DBBC that I have not put in yet.
+
 C
 C           Bandwidths and frequencies checked in CHKRDFQ
 C

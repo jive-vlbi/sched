@@ -11322,10 +11322,27 @@ can be covered.  See \htmlref{the wideband observing section}{SEC:WIDE}
 for more information about tuning restrictions and about the use of
 dual RDBEs.
 
-\item {\tt DBBC} This is for the DBBC digital backend being built in
+\item {\tt DBBC\_PFB} This is for the DBBC digital backend being built in
 Noto for the EVN.  It is meant to have the flexibility of the old
-MarkIV and VLBA backends.  Many more details need to be added here and
-in the code concerning its capabilities.
+MarkIV and VLBA backends.  Like the RDBE, it has PFB and DDC options.  
+The PFB option is much like the RDBE equivalent and the two will be treated
+the same in SCHED until that proves to be incorrect.
+
+\item {\tt DBBC\_DDC} This is the digital down converter option for
+the DBBC.  Unlike the RDBE equivalent, it does not have crossover
+issues as the frequency conversion is done on the full bandwidth data
+stream.  Each channel, or upper and lower sideband pair of channels,
+is derived in a separate converter.  Basically it tries to duplicate
+the function of the legacy BBC/VC in a digital package with sampling
+before the filter.  There are restrictions on the IFs that can be
+assigned to each BBCs.  BBCs 1-4 are attached to IF A which is
+normally RCP.  BBCs 5-8 are normally attached to IF C which is
+normally LCP.  For single polarization work, it is possible to route
+the desired polarization to both A and C.  I'm not sure where IFs B
+and D fit in this picture.  This description, written Jan. 20, 2013 by
+RCW, should not be considered preliminarly and a bit suspect.
+
+
 
 \end{description}
 
@@ -11348,10 +11365,10 @@ channel numbers that are too high).
 
 \rcwbox
 {A character string of up to 8 characters}
-{One of ' ', '{\tt RDBE\_PFB}', '{\tt RDBE\_DDC}', or '{\tt DBBC}'. It
-is not case sensitive}
-{'{\tt RDBE\_PFB}' for the RDBE, '{\tt DBBC}' for the DBBC, and
-blank for anything else.}
+{One of ' ', '{\tt RDBE\_PFB}', '{\tt RDBE\_DDC}', '{\tt DBBC_PFB}' or
+'{\tt DBBC_DDC}'. It is not case sensitive}
+{'{\tt RDBE\_PFB}' for a station with the RDBE DAR, '{\tt DBBC_PFB}' 
+for a station with the DBBC DAR, and blank for anything else.}
 {Defaults to previous segment.  See note above about setting blank}
 {{\tt DBE='RDBE\_DDC'}}
 
