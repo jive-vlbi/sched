@@ -24,7 +24,6 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4)
-      INTEGER           NGT4
       LOGICAL           ERRS, SBWARN, IFNEW, OK4
       CHARACTER         USEDIFC(4)*2
       DATA              SBWARN / .TRUE. /
