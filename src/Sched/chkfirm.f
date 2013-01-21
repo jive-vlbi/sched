@@ -37,8 +37,9 @@ C
             END IF
          ELSE IF( DAR(KSTA) .EQ. 'DBBC' ) THEN
             IF( DBE(KS) .EQ. ' ' ) THEN
-               DBE(KS) = 'DBBC'
-            ELSE IF( DBE(KS) .NE. 'DBBC' ) THEN
+               DBE(KS) = 'DBBC_PFB'
+            ELSE IF( DBE(KS) .NE. 'DBBC_PFB' .AND. 
+     1               DBE(KS) .NE. 'DBBC_DDC' ) THEN
                GOTERR = .TRUE.
             END IF
          ELSE IF( DAR(KSTA) .EQ. 'WIDAR' ) THEN

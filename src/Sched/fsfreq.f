@@ -252,10 +252,16 @@ C
          END DO
       END IF
 C
-C     Similar checks for the RDBE, but put in subroutine.
+C     Similar checks for the RDBE or DBBC, but put in subroutine that
+C     is called from here and from CHKRDBE or CHKDBBC.
 C
       ERRS = .FALSE.
-      CALL CHKRDFQ( KS, BBCBW, BBCFREQ, ERRS )
+      IF( DBE(KS) .EQ. 'RDBE_PFB' .OR. DBE(KS) .EQ. 'RDBE_DDC' ) THEN
+         CALL CHKRDFQ( KS, BBCBW, BBCFREQ, ERRS )
+      END IF
+      IF( DBE(KS) .EQ. 'DBBC_PFB' .OR. DBE(KS) .EQ. 'DBBC_DDC' ) THEN
+         CALL CHKDBFQ( KS, BBCBW, BBCFREQ, ERRS )
+      END IF
       IF( ERRS ) CALL ERRLOG( 'FSFREQ:  Fix problem with in-line '//
      1    'or Doppler derived frequencies or bandwidths.' )
 C

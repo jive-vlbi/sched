@@ -150,15 +150,6 @@ C
       NEEDSB = NETSIDE(1,KS) .NE. 'U' .AND. NETSIDE(1,KS) .NE. 'L' .AND.
      2         SIDEBD(1,KS) .NE. 'U' .AND. SIDEBD(1,KS) .NE. 'L'
 C
-C     Abort if trying to default for Mark III.  This can probably
-C     be deleted because MarkIII is long gone.
-C
-      IF( NEEDSB .AND. FORMAT(KS) .EQ. 'MARKIII' ) THEN
-         CALL WLOG( 1, 'SETCHAN: SCHED will not default '//
-     1         'sidebands for Mark III observations.' )
-         CALL ERRSET(KS)
-      END IF
-C
 C     Abort if there are too few BBCs period.  This is probably
 C     redundant with other checks, but oh well.  With the new systems,
 C     we no longer have dual sidebands per BBC, so the check is a bit
@@ -183,19 +174,21 @@ C     called, will invoke sideband inversion when necessary.  It is
 C     all too complicated to deal with here.  Just require that NETSIDE
 C     or FIRSTLO plus FREQREF be provided.  It is common to use 
 C     FIRSTLO and BBSYN, but for this NETSIDE should be given.
+C     The DBBC_PFB may be the same.  Treat it as such for now.
 C
 C     The PFB is not expected to be in regular use for long, so I don't 
 C     want to jump through too many hoops for it.
 C
-      IF( DBE(KS) .EQ. 'RDBE_PFB' ) THEN
+      IF( DBE(KS) .EQ. 'RDBE_PFB' .OR. DBE(KS) .EQ. 'DBBC_PFB' ) THEN
          DO ICH = 1, NCHAN(KS)
             GOTNSD = NETSIDE(ICH,KS) .NE. 'L' .OR. 
      1               NETSIDE(ICH,KS) .NE. 'U' 
             GOTFQ  = FIRSTLO(ICH,KS) .NE. 0.D0 .AND.
      1               FREQREF(ICH,KS) .EQ. 0.D0 
             IF( .NOT. GOTNSD .AND. .NOT. GOTFQ ) THEN
-               CALL WLOG( 1, 'SETCHAN:  For the RDBE PFB personality, '
-     1             //' SCHED needs NETSIDE or FIRSTLO and FREQREF' )
+               CALL WLOG( 1, 'SETCHAN:  For the '// DBE(KS) //
+     1            'personality, SCHED needs NETSIDE or FIRSTLO '//
+     2            'and FREQREF' )
                CALL WLOG( 1, '          specified in the setup file.' )
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
