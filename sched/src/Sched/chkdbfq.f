@@ -1,12 +1,10 @@
-      SUBROUTINE CHKRDFQ( KS, BBCBW, BBCFREQ, ERRS )
+      SUBROUTINE CHKDBFQ( KS, BBCBW, BBCFREQ, ERRS )
 C
-C     Routine for SCHED called by CHKRDBE and FSFREQ that checks
-C     the frequencies and bandwidths requested for the RDBE.
-C     CHKRDBE checks the input setup file.  FSFREQ checks just
+C     Routine for SCHED called by CHKDBBC and FSFREQ that checks
+C     the frequencies and bandwidths requested for the DBBC.
+C     CHKDBBC checks the input setup file.  FSFREQ checks just
 C     before writing the scan info to be sure in-line changes
-C     don't cause trouble.  Note that, for non-RDBE setups, this
-C     routine will fall through without doing anything thanks
-C     to the second level of IF statements.
+C     don't cause trouble.
 C
 C     Note that this routine can get called multiple times for 
 C     each setup file, especially if different frequency sets
@@ -52,18 +50,19 @@ C
 C     Note the checks are needed for all setups, not just ones used for
 C     recording.
 C
-C     First check the RDBE_PFB personality.
+C     First check the DBBC_PFB personality.
 C
-      IF( DBE(KS) .EQ. 'RDBE_PFB' ) THEN
+      IF( DBE(KS) .EQ. 'DBBC_PFB' ) THEN
 C
 C        All bandwidths must be 32 MHz.
+C   ***********************  True.
 C
          DO ICH = 1, NCHAN(KS)
             IF( BBCBW(ICH) .NE. 32.0D0 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, F8.3 )' )
      1            'CHKRDFQ: Bandwidth must be 32.0 MHz for ',
-     2            'DBE=RDBE_PFB. Value specified is: ', 
+     2            'DBE=DBBC_PFB. Value specified is: ', 
      3            BBCBW(ICH)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
@@ -78,7 +77,7 @@ C
 C        Jan 2012.  Allow the "-1" channel from 1040-1008 MHz 
 C        for when people want to span the full 512 MHz IF in
 C        one polarization.  The on-line system wants this one,
-C        not the one at the low end of the IF.
+C        not the one at the low end of the IF (#15).
 C
          DO ICH = 1, NCHAN(KS)
             BBOFF = 1024.0D0 + 16.0D0 - BBCFREQ(ICH)
@@ -87,7 +86,7 @@ C
      2          NINT( BBOFF / 32.0D0 ) .GT. 16 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F8.2, A )' )
-     1            'CHKRDFQ: Invalid BBSYN for DBE=RDBE_PFB: ', 
+     1            'CHKRDFQ: Invalid BBSYN for DBE=DBBC_PFB: ', 
      2            BBCFREQ(ICH),
      3            '.  Must be 1024+16-N*32 for N=0-15.'
                ERRS = .TRUE.
@@ -105,6 +104,7 @@ C
             END IF
             IF( BBCFREQ(ICH) .EQ. 528.0 .AND. 
      1            N528WARN(ISETF) .LE. 1 ) THEN
+C      **********************   Is this one true for the DBBC?
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F8.2, A, A )' )
      1            'CHKRDFQ: Baseband frequency ', BBCFREQ(ICH),
@@ -129,10 +129,11 @@ C
 C
 C     ===  Now check the DDC personality. ===
 C
-      IF( DBE(KS) .EQ. 'RDBE_DDC' ) THEN
+      IF( DBE(KS) .EQ. 'DBBC_DDC' ) THEN
 C
 C        All bandwidths must be between 250 kHz and 128 MHz.
 C
+C  *******************  Are these ok?  Maybe not.
          DO ICH = 1, NCHAN(KS)
             IF( .NOT. ( DEQUAL( BBCBW(ICH), 128.0D0 ) .OR. 
      a          DEQUAL( BBCBW(ICH), 64.0D0 ) .OR. 
@@ -145,13 +146,14 @@ C
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, F8.3 )' )
      1            'CHKRDFQ: Bandwidth must be 1 to 128 MHz for ',
-     2            'DBE=RDBE_DDC. Value specified is: ', 
+     2            'DBE=DBBC_DDC. Value specified is: ', 
      3            SIDEBD(ICH,KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
          END DO
 C
+C   *******************  this may be RDBE specific.  Is there a DBBC equivalent?
 C        Baseband frequencies must be between 512 and 1024 MHz.
 C        They can be set to within 1 Hz or less, but must be 
 C        a multiple of 256E6/2**32 MHz =0.0596046 Hz. (I don't absolutely
@@ -184,7 +186,7 @@ C
      1          BB1 .GT. 1024.0D0 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F8.2, A )' )
-     1            'CHKRDFQ: Invalid BBSYN for DBE=RDBE_DDC: ', 
+     1            'CHKRDFQ: Invalid BBSYN for DBE=DBBC_DDC: ', 
      2            BBCFREQ(ICH),
      3            '.  Must be between 512 and 1024 MHz.'
                CALL WLOG( 1, MSGTXT )
@@ -233,7 +235,7 @@ C
      1          .AND. NFWARN .LE. 16 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
-     1           ' BBSYN for the RDBE_DDC must be an even multiple',
+     1           ' BBSYN for the DBBC_DDC must be an even multiple',
      2           ' of 15.625 kHz.'
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
@@ -257,7 +259,7 @@ C
      1          .AND. N2WARN .LE. 16 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
-     1           ' It is recommended that BBSYN for the RDBE_DDC ',
+     1           ' It is recommended that BBSYN for the DBBC_DDC ',
      2           'be an even multiple of 250 kHz.'
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
@@ -276,6 +278,9 @@ C
                SHOWID = .TRUE.
             END IF
 C
+C   ******************  does the DBBC have crossover points?  I've
+C                       heard it does not.
+
 C           Test the crossover points for the DDC.  Allow a small
 C           percentage crossover at the end of the band opposite
 C           from the LO.  This may be hard to avoid with the highest
@@ -351,7 +356,7 @@ C
                   CALL WLOG( 1, '         Recall crossovers are '//
      1               'the boundaries between the polyphase filter ' )
                   CALL WLOG( 1, '         outputs in the initial '//
-     2               'stage of processing in the RDBE.' )
+     2               'stage of processing in the DBBC.' )
 C
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F10.2, A, F10.2, A )' )

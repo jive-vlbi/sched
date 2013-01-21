@@ -4,11 +4,27 @@ C
 C     Routine for Sched called by SETBBC that assigns video converters
 C     for Gino Tuccari's DBBC system, as used at Effelsberg.
 C
+C     First committed to SVN by "schedsvn" (That seems to be what I (RCW) get
+C     called - not sure why) on Nov. 11, 2011.   But some coding style
+C     features suggest it was not by me, but I can't seem to find an email.
+C     I have made some modifications for coding style and based on information
+C     from a Dave Graham email Uwe Bach email of Dec. 7, 2012.
+C
+C     There are two personalities for the DBBC.  Both are pretty close to 
+C     the RDBE personalities PFB and DDC.  The differnce is that the 
+C     IF selection for the BBCs by unit number is somewhat more restricted.
+C     The PFB personality is essentially the same as the RDBE, so just run
+C     through the same code for that.  The DDC is different and is partly
+C     addressed here.
+C
+C     I'm working on this Jan. 20, 2013  RCW.
+C
+C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
       INTEGER   KS, ICH, JCH
-      INTEGER   MAXBBC, MAXIF, I
+      INTEGER   MAXBBC, MAXIF
       PARAMETER (MAXBBC=16)
       PARAMETER (MAXIF=4)
       INTEGER IBBCA, IBBCB, IBBCC, IBBCD
@@ -16,7 +32,11 @@ C
 C -------------------------------------------------------------------  
 C     Software check:
 C
+      IF( DEBUG ) CALL WLOG( 1, 'In bbcdbbc.f' )
       call wlog(1, 'In bbcdbbc.f')
+C
+C     Check against the maximum number of BBCs.
+C
       IF( NBBC(ISETSTA(KS)) .GT. MAXBBC ) THEN
          WRITE( MSGTXT, '( 3A, I4 )' )
      1       'BBCDBBC: Number of VCs at ', SETSTA(1,KS), 

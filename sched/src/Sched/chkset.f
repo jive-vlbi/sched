@@ -211,13 +211,18 @@ C        wiring.
 C
          IF( DAR(ISETSTA(KS))(1:4) .EQ. 'RDBE' )  
      1         CALL CHKRDBE( KS, ERRS )
-         IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) CALL CHKWIDAR( KS, ERRS )
+         IF( DAR(ISETSTA(KS))(1:4) .EQ. 'DBBC' )  
+     1         CALL CHKDBBC( KS, ERRS )
+         IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) 
+     1         CALL CHKWIDAR( KS, ERRS )
          IF( DAR(ISETSTA(KS)) .EQ. 'VLBA'  .OR. 
      1       DAR(ISETSTA(KS)) .EQ. 'VLBAG' .OR.
      2       DAR(ISETSTA(KS)) .EQ. 'VLBA4' )  
      3         CALL CHKVDAR( KS, NBBC(ISETSTA(KS)), ERRS )
-         IF( DAR(ISETSTA(KS)) .EQ. 'VLBA4' ) CALL CHKV4DAR( KS, ERRS )
-         IF( DAR(ISETSTA(KS)) .EQ. 'VLBAG' ) CALL CHKGDAR( KS, ERRS )
+         IF( DAR(ISETSTA(KS)) .EQ. 'VLBA4' ) 
+     1         CALL CHKV4DAR( KS, ERRS )
+         IF( DAR(ISETSTA(KS)) .EQ. 'VLBAG' ) 
+     1         CALL CHKGDAR( KS, ERRS )
          IF( DAR(ISETSTA(KS)) .EQ. 'MKIV'  ) 
      1         CALL CHK4DAR( KS, NBBC(ISETSTA(KS)), ERRS )
 C
@@ -308,6 +313,5 @@ C
          CALL ERRSET( KS )
       END IF
 C
-  990 CONTINUE
       RETURN
       END
