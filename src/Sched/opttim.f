@@ -198,9 +198,16 @@ C        earlier scans.
 C        This will also give a number for the case where no 
 C        stations are up.
 C
+C        Jan. 23, 2012.  Change to use the first scan start time
+C        even if this was not the first scan.  We are running into
+C        problems attempting to schedule different antennas 
+C        differently at the start of an observation.  The VLA dummy
+C        scans are the stand-out culprit.  I think using this scan's
+C        gap is appropriate.
+C
          IF( ALL0 ) THEN
-            TIME1J = STARTJ(ISCN)
-            MAXLASTT = STARTJ(ISCN) - GAP(ISCN)
+            TIME1J = STARTJ(1)
+            MAXLASTT = STARTJ(1) - GAP(ISCN)
          END IF
 C
 C        If TIME1K did not get set, set it the same as TIME1J
