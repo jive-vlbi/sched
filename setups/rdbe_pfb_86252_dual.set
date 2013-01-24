@@ -1,0 +1,40 @@
+! Standard setup file: rdbe_pfb_86252_dual.set                 
+!     (Produced by MAKESETUP)
+!  Setup for 1cm observations near the old standard of 86245 MHz near
+!  the SiO maser line at 86243.  This setup uses a compact frequency
+!  sequence with the RDBE PFB personality.
+!  This setup will actually be centered at 86252 MHz.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry v7mm_c8 will be used with
+!  firstlo=85500 for the VLBA.
+
+!  The upper sideband IF forces lower sideband basebands.
+
+!  Caution:  The two primary LO's (syn(1) and syn(3) that must be used
+!  in this setup on the VLBA are 800 MHz apart so there could be a birdy
+!  at 800 MHz in the IF which is at 86300 in the RF.  That will be in
+!  the middle of baseband channels 11 and 12.
+
+!  If a change of baseband frequencies is desired, the 16 new values of
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = 560.0, 560.0,  592.0, 592.0,  624.0, 624.0,  656.0, 656.0,
+!             688.0, 688.0,  720.0, 720.0,  752.0, 752.0,  784.0, 784.0,
+!             816.0, 816.0,  848.0, 848.0,  880.0, 880.0,  912.0, 912.0,
+!             944.0, 944.0,  976.0, 976.0, 1008.0, 1008.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+
+  freqref = 85500
+  freqoff  =  656.0, 656.0, 688.0, 688.0,  720.0, 720.0, 752.0, 752.0,
+              784.0, 784.0, 816.0, 816.0,  848.0, 848.0, 880.0, 880.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /

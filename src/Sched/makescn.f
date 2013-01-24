@@ -7,6 +7,7 @@ C     The scan times coming out of this are good enough to use
 C     in SCHOPT after SCHOPT has nominally done it's final tweaks.
 C
 C     LASTISCN is the scan number of the last scan the station was in.
+C          If = -1, force the use of TAPPROX.
 C     ISCN is the scan number being constructed.
 C     JSCN is the template scan.  It will be in the original
 C        range of 1 to NSCANS.  Pay attention to its STASCN.
@@ -27,6 +28,7 @@ C
       INCLUDE 'sched.inc'
 C
       INTEGER            ISCN, JSCN, ISRC, ISTA, NGOOD, LASTISCN(*)
+      INTEGER            LASTLSCN(MAXSTA)
       REAL               MINEL
       LOGICAL            OKSTA(*)
       DOUBLE PRECISION   TAPPROX, LASTTIME, T_AVAIL
@@ -43,6 +45,13 @@ C
       SRCNUM(ISCN) = ISRC
       SCNSRC(ISCN) = SRCN
 C
+C     Move LASTISCN to LASTLSCN, getting rid of any -1 values.  Only
+C     OPTTIM will understand -1.
+C
+      DO ISTA = 1, NSTA
+         LASTLSCN(ISTA) = MAX( LASTISCN(ISTA), 0 )
+      END DO
+C
 C     Loop through stations to see which ones are up at TAPPROX.
 C     Also see how many are above the minimum elevation.
 C     This pass determines the approximate geometry - enough to 
@@ -52,7 +61,7 @@ C
       DO ISTA = 1, NSTA
          OKSTA(ISTA) = .FALSE.
          IF( STASCN(JSCN,ISTA) ) THEN
-            CALL STAGEO( ISCN, ISTA, TAPPROX, LASTISCN(ISTA),  
+            CALL STAGEO( ISCN, ISTA, TAPPROX, LASTLSCN(ISTA),  
      1          LASTTIME, T_AVAIL )
             IF( UP1(ISCN,ISTA) .EQ. ' ' .AND. 
      1          UP2(ISCN,ISTA) .EQ. ' ' .AND. 
@@ -92,7 +101,7 @@ C        Determine the geometry, slew times, and time of arrival
 C        on source based on the final times.  NGOOD is 
 C        redetermined based on the final times.
 C
-         CALL SCNGEO( LASTISCN, NGOOD, ISCN )
+         CALL SCNGEO( LASTLSCN, NGOOD, ISCN )
 C
       END IF
 C

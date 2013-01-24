@@ -1,0 +1,36 @@
+! Standard setup file: rdbe_pfb_7680_dual.set                  
+!     (Produced by MAKESETUP)
+!  Setup for 4-8 GHz receiver observations near the top of the band.
+!  It uses a compact frequency sequence with the RDBE PFB personality.
+!  This setup is actually centered on 7680 MHz.
+!  For the VLBA only - GBT and EB don't cover the frequency
+
+!  There are RFI issues in this region, especially at BR.  The optimal
+!  selection of baseband frequencies needs study.
+
+!  The freq_RDBE.dat entry vc_v will be used with firstlo=8400 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+
+
+!  If a change of baseband frequencies is desired, the 16 new values of
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = -1008.0, -1008.0, -976.0,  -976.0, -944.0,  -944.0, -912.0,  -912.0,
+!              -880.0,  -880.0, -848.0,  -848.0, -816.0,  -816.0, -784.0,  -784.0,
+!              -752.0,  -752.0, -720.0,  -720.0, -688.0,  -688.0, -656.0,  -656.0,
+!              -624.0,  -624.0, -592.0,  -592.0, -560.0,  -560.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+
+  freqref = 8400.0
+  freqoff  = -816.,  -816., -784.,  -784., -752.,  -752., -720.,  -720.,
+             -688.,  -688., -656.,  -656., -624.,  -624., -592.,  -592.
+  netside = U
+  station = vlba
+  /

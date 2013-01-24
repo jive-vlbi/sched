@@ -61,10 +61,12 @@ C
 C
 C------------------------------------------------------------------
 C     Initialize LASTLSCN so MAKESCN will use TAPPROX without 
-C     adjustment.  Set TAPPROX to the center of the sequence.
+C     adjustment (set it to -1).  Set TAPPROX to the center 
+C     of the sequence.
+C     
 C
       DO ISTA = 1, NSTA
-         LASTLSCN(ISTA) = 0
+         LASTLSCN(ISTA) = -1
       END DO
       TAPPROX = ( TGEOEND + STARTB ) / 2.D0
       NREJECT = 0
