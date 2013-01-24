@@ -18,6 +18,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER           KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4)
+      INTEGER           LEN1
       LOGICAL           ERRS, SBWARN, IFNEW, OK4
       CHARACTER         USEDIFC(4)*2
       DATA              SBWARN / .TRUE. /
@@ -150,6 +151,11 @@ C
      1                  'CHKRDBE: SIDEBAND must be LSB for ',
      2                  '  DBE=RDBE_PFB. Value specified is: ', 
      3                  SIDEBD(ICH,KS)
+                     CALL WLOG( 1, MSGTXT )
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, A )' )
+     1                  '         Setup file is: ',
+     2                  SETNAME(KS)(1:LEN1(SETNAME(KS)))
                      CALL WLOG( 1, MSGTXT )
                   END IF
 C

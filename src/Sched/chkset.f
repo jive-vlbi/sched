@@ -274,9 +274,13 @@ C
       END IF   ! not VLAONLY
 C
 C     Warn 2cm users about different standard frequencies.
+C     Only worry about the VLBA and the narrower band systems.
 C
-      IF( FREQREF(1,KS) .GT. 15100.D0 .AND. 
-     1    FREQREF(1,KS) .LT. 15500.D0 .AND. WARN2CM ) THEN
+      IF( WARN2CM .AND.
+     1    FREQREF(1,KS) .GT. 15100.D0 .AND. 
+     2    FREQREF(1,KS) .LT. 15500.D0 .AND. 
+     3    SETSTA(1,KS)(1:4) .EQ. 'VLBA' .AND.
+     4    TOTBPS(KS) .LT. 1000.0 ) THEN
          MSGTXT = 'CHKSET:  See sched.runlog for information' //
      1        ' on 2cm frequencies.'
          CALL WLOG( 1, ' ' )

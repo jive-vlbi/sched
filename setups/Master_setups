@@ -23,7 +23,7 @@ This is the input file for MAKESETUP which makes the standard
    18 Sep 2008   Remove (comment out) MarkII and MarkIII
    13 Feb 2012   Add a 7mm dummy setup for the RDBE-PFB for reference pointing.
    16 Jan 2013   Actually delete some commented setups (eg M3)
-                 Add EVLA pointing setups.
+                 Add EVLA pointing setups.  Start on RDBE setups.
 --------------------------------------------------------------------
 Lead comments from makesetup.f:
 
@@ -1414,3 +1414,361 @@ endset /
      /
 endset /
 #end
+
+
+Make some "standard" setups for the RDBE. 
+Start with PFB versions.
+
+#mode pfbcomment
+!  The RDBE with the PFB personality can only make 16 baseband channels
+!  of 32 MHz each with lower sideband at IF frequencies that are fixed 
+!  by the polyphase filters.  Those filter DC edges are at IF frequencies
+!  of 512+16+N*32 MHz with N between 0 and 16.  N=0 and N=16 produce 
+!  basebands that cross the 512 or 1024 MHz IF edge and are not useful.  
+!  But, since the PFB must produce 16 distinct channels, they are
+!  allowed for single polarization observations.  If N=0 is used, it
+!  will be converted to N=16 by the VLBA on-line system.
+#end
+
+#mode pfbFrqUpDual
+!  If a change of baseband frequencies is desired, the 16 new values of 
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = 560.0, 560.0,  592.0, 592.0,  624.0, 624.0,  656.0, 656.0, 
+!             688.0, 688.0,  720.0, 720.0,  752.0, 752.0,  784.0, 784.0, 
+!             816.0, 816.0,  848.0, 848.0,  880.0, 880.0,  912.0, 912.0, 
+!             944.0, 944.0,  976.0, 976.0, 1008.0, 1008.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+#end
+
+#mode pfbFrqUpSingle
+!  The allowed bbsyn (or freqoff if freqref=firstlo) values for a single 
+!  polarization observation with an upper sideband IF are:
+!  bbsyn    = 560.0, 592.0, 624.0, 656.0, 688.0, 720.0, 752.0, 784.0, 
+!             816.0, 848.0, 880.0, 912.0, 944.0, 976.0, 1008.0, 1040.0
+#end
+
+#mode pfbFrqDownDual
+!  If a change of baseband frequencies is desired, the 16 new values of 
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = -1008.0, -1008.0, -976.0,  -976.0, -944.0,  -944.0, -912.0,  -912.0,
+!              -880.0,  -880.0, -848.0,  -848.0, -816.0,  -816.0, -784.0,  -784.0,
+!              -752.0,  -752.0, -720.0,  -720.0, -688.0,  -688.0, -656.0,  -656.0,
+!              -624.0,  -624.0, -592.0,  -592.0, -560.0,  -560.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+#end
+
+#mode pfbFrqDownSingle
+!  The allowed bbsyn (or freqoff if freqref=firstlo) values for a single 
+!  polarization observation with a lower sideband IF are:
+!  bbsyn    = -1040., -1008., -976., -944., -912., -880., -848., -816.,
+!              -784., -752.,  -720., -688., -656., -624., -592., -560., 
+#end
+
+#mode inverted_sideband_used
+!  That LO provides an IF covering the same RF range as the other stations, 
+!  but with inverted sidebands on the BBC's.  The BBC frequencies in the
+!  .sum file will be offset by the bandwidth from the other stations.  
+!  SCHED invokes the inverted sideband mode of DiFX to allow this.
+#end
+
+#mode rdbe_pfb_common_dual
+  dbe      = 'rdbe_pfb'
+  nchan    = 16  
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+#end
+#mode rdbe_pfb_common_lcp
+  dbe      = 'rdbe_pfb'
+  nchan    = 16  
+  bbfilt   = 32
+  bits     = 2
+  pol      = L
+  pcal     = '1MHz'
+#end
+
+----------------
+
+#file rdbe_pfb_4120_dual.set
+!  Setup for 6cm observations near the low end of the 4-8 GHz receiver.
+!  This should be useful for spectral index and rotation measure 
+!  observations when used in the same project as a higher frequency 
+!  setup.  This setup using a compact frequency sequence with the 
+!  RDBE PFB personality.  
+!  This setup is actually centered on 4120 MHz.
+!  For the VLBA and GBT.
+
+!  This setup is subject to change based on RFI and sensitivity test
+!  results
+
+!  The freq_RDBE.dat entry vc_a will be used with firstlo=3400 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+
+!  The GBT uses a high-side LO (5636) based on gbt6cmc in freq_RDBE.dat.  
+@mode inverted_sideband_used
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 3400.0
+  freqoff  = 624.0, 624.0,  656.0, 656.0,  688.0, 688.0,  720.0, 720.0,  
+             752.0, 752.0,  784.0, 784.0,  816.0, 816.0,  848.0, 848.0
+  netside = L
+  station = vlba, gbt_vlba, gbt_cold
+  /
+#end
+
+---------------
+
+#file rdbe_pfb_4980_dual.set
+!  Setup for 6cm observations centered on the old standard of 4990 MHz
+!  using a compact frequency sequence with the RDBE PFB personality.  
+!  This setup is actually centered on 4980 MHz.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry vc_d will be used with firstlo=4100 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+
+!  The GBT uses a high-side LO (5636) based on gbt6cmc in freq_RDBE.dat.  
+@mode inverted_sideband_used
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 4100.0
+  freqoff  = 784.0, 784.0,  816.0, 816.0,  848.0, 848.0,  880.0, 880.0,  
+             912.0, 912.0,  944.0, 944.0,  976.0, 976.0, 1008.0, 1008.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /
+#end
+
+---------------
+
+#file rdbe_pfb_6588_dual.set
+!  Setup for 6cm observations centered near the methanol line at 6668.5 MHz.
+!  It uses a compact frequency sequence with the RDBE PFB personality.  
+!  This setup is actually centered on 6588 MHz.
+!  For the VLBA and EB_VLBA  (GBT doesn't cover this frequency)
+
+!  There are RFI issues in this region, especially at BR.  The optimal
+!  selection of baseband frequencies needs study.
+
+!  The freq_RDBE.dat entry vc_p will be used with firstlo=5900 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+
+!  The GBT uses a high-side LO (5636) based on gbt6cmc in freq_RDBE.dat.  
+@mode inverted_sideband_used
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 5900.0
+  freqoff  = 592.0, 592.0,  624.0, 624.0,  656.0, 656.0, 688.0, 688.0,  
+             720.0, 720.0,  752.0, 752.0,  784.0, 784.0, 816.0, 816.0
+  netside = L
+  station = vlba, eb_vlba
+  /
+#end
+
+------------------
+
+#file rdbe_pfb_7680_dual.set
+!  Setup for 4-8 GHz receiver observations near the top of the band.
+!  It uses a compact frequency sequence with the RDBE PFB personality.  
+!  This setup is actually centered on 7680 MHz.
+!  For the VLBA only - GBT and EB don't cover the frequency
+
+!  There are RFI issues in this region, especially at BR.  The optimal
+!  selection of baseband frequencies needs study.
+
+!  The freq_RDBE.dat entry vc_v will be used with firstlo=8400 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+
+
+@mode pfbFrqDownDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 8400.0
+  freqoff  = -816.,  -816., -784.,  -784., -752.,  -752., -720.,  -720., 
+             -688.,  -688., -656.,  -656., -624.,  -624., -592.,  -592.
+  netside = U 
+  station = vlba
+  /
+#end
+
+------------------
+
+#file rdbe_pfb_wide_lcp.set
+!  Setup for 4-8 GHz receiver observations using LCP only but with 
+!  frequencies separated by nearly the full bandwidth of the receiver.
+!  Within each of the 2 IFs, the frequencies will be spread for wide
+!  spanned bandwidth coverage.  This uses the RDBE_PFB personality
+!  VLBA only.
+
+!  This setup may change as experience is gained with the RFI 
+!  environment.
+
+!  The freq_RDBE.dat entry vc_av will be used.
+
+@mode pfbFrqUpSingle
+! Note that this observation has an upper sideband IF near 4 GHz and a
+! lower sideband IF near 7.5 GHz.
+
+@mode rdbe_pfb_common_lcp
+
+  freqref    = 3400., 3400., 3400., 3400., 3400., 3400., 3400., 3400., 
+               8400., 8400., 8400., 8400., 8400., 8400., 8400., 8400.
+  freqoff    = 560.0, 624.0, 688.0, 752.0, 816.0, 880.0, 944.0, 1008.0,
+              -1008., -944., -880., -816., -752., -688., -624., -560.
+  netside = L,L,L,L, L,L,L,L, U,U,U,U, U,U,U,U
+  station = vlba
+  /
+#end
+
+---------------
+
+#file rdbe_pfb_8416_dual.set
+!  Setup for 4cm observations centered near the old standard of 8415 MHz
+!  using a compact frequency sequence with the RDBE PFB personality.
+!  This file is actually centered at 8416 MHz.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry v4cm_3 will be used with firstlo=7600 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+!  Note the VLBA could also use a high side LO (9100) if that were desired.
+
+!  The GBT uses a high-side LO (9136) based on gbt6cmc in freq_RDBE.dat.  
+@mode inverted_sideband_used
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 7600.0
+  freqoff  =  720.0, 720.0,  752.0, 752.0,  784.0, 784.0, 816.0, 816.0,  
+              848.0, 848.0,  880.0, 880.0,  912.0, 912.0, 944.0, 944.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /
+#end
+
+------------
+
+#file rdbe_pfb_15248_dual.set
+!  Setup for 2cm observations near the old standard of 15360 MHz
+!  using a compact frequency sequence with the RDBE PFB personality.  
+!  This setup will actually be centered near 15248.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry v2cm_d2 will be used with firstlo=14400 for the VLBA
+!  Note that the next higher LO option (14600) has an IF that extends beyond
+!  the good range for the receiver (top at 15500).
+
+!  The upper sideband IF forces lower sideband basebands.
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 14400
+  freqoff  =  752.0, 752.0,  784.0, 784.0, 816.0, 816.0,  848.0, 848.0,
+              880.0, 880.0,  912.0, 912.0, 944.0, 944.0,  976.0, 976.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /
+#end
+
+--------
+
+
+#file rdbe_pfb_22220_dual.set
+!  Setup for 1cm observations near the old standard of 22235 MHz at
+!  the water maser line.  This setup uses a compact frequency 
+!  sequence with the RDBE PFB personality.  
+!  This setup will actually be centered at 22220 MHz.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry v1cm_b3 (or v1cm_a4 - they have the same
+!  firstlo with different syn(1) and syn(3) settings) will be used with 
+!  firstlo=21500 for the VLBA.
+
+!  The upper sideband IF forces lower sideband basebands.
+@mode inverted_sideband_used
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 21500
+  freqoff  =  624.0, 624.0,  656.0, 656.0, 688.0, 688.0,  720.0, 720.0,  
+              752.0, 752.0,  784.0, 784.0, 816.0, 816.0,  848.0, 848.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /
+#end
+
+----------------
+
+#file rdbe_pfb_43120_dual.set
+!  Setup for 1cm observations near the old standard of 43124 MHz near
+!  the SiO maser line at 43122.  This setup uses a compact frequency 
+!  sequence with the RDBE PFB personality.  
+!  This setup will actually be centered at 43120 MHz.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry v7mm_c8 will be used with 
+!  firstlo=42400 for the VLBA.
+
+!  The upper sideband IF forces lower sideband basebands.
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 42400
+  freqoff  =  624.0, 624.0,  656.0, 656.0, 688.0, 688.0,  720.0, 720.0,  
+              752.0, 752.0,  784.0, 784.0, 816.0, 816.0,  848.0, 848.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /
+#end
+
+------------------------
+
+#file rdbe_pfb_86252_dual.set
+!  Setup for 1cm observations near the old standard of 86245 MHz near
+!  the SiO maser line at 86243.  This setup uses a compact frequency 
+!  sequence with the RDBE PFB personality.  
+!  This setup will actually be centered at 86252 MHz.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry v7mm_c8 will be used with 
+!  firstlo=85500 for the VLBA.
+
+!  The upper sideband IF forces lower sideband basebands.
+
+!  Caution:  The two primary LO's (syn(1) and syn(3) that must be used 
+!  in this setup on the VLBA are 800 MHz apart so there could be a birdy 
+!  at 800 MHz in the IF which is at 86300 in the RF.  That will be in 
+!  the middle of baseband channels 11 and 12.
+
+@mode pfbFrqUpDual
+
+@mode rdbe_pfb_common_dual
+
+  freqref = 85500
+  freqoff  =  656.0, 656.0, 688.0, 688.0,  720.0, 720.0, 752.0, 752.0,   
+              784.0, 784.0, 816.0, 816.0,  848.0, 848.0, 880.0, 880.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /
+#end
+
