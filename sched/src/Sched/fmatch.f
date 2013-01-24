@@ -15,14 +15,13 @@ C
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
 C
-      INTEGER           KS, KF, IIF, ICH, IC
-      INTEGER           USEIF(MCHAN), JSIDE(MCHAN)
-      DOUBLE PRECISION  FRAD1, FRAD2
+      INTEGER           KS, KF, IIF, ICH
+      INTEGER           USEIF(MCHAN)
       REAL              OVERLAP, CENTER
       REAL              BESTCN
       REAL              CHOVER(MCHAN,MFIF), CHCENT(MCHAN,MFIF)
       LOGICAL           OKIF(MCHAN,MFIF)
-      DOUBLE PRECISION  FRQ1(MCHAN), FRQ2(MCHAN), BBCFREQ(MCHAN)
+      DOUBLE PRECISION  FRQ1(MCHAN), FRQ2(MCHAN)
       INTEGER           NCROSS
       PARAMETER         (NCROSS=2)
       DOUBLE PRECISION  CROSS(NCROSS)
@@ -57,7 +56,6 @@ C
          DO IIF = 1, FNIF(KF)
             CHOVER(ICH,IIF) = 0.0
             CHCENT(ICH,IIF) = 1.E5
-            CALL FRFADJ( KS, IIF, KF, FRAD1, FRAD2 )
 C
 C           Be sure this is an ok match according to FCOMPARE.
 C
@@ -67,13 +65,14 @@ C              Check how much bandwidth overlaps.
 C              For the RDBE, only count the part between the
 C              LO sum and a crossover if one is in the channel.
 C
-               IF( FRQ2(ICH) .GT. FRAD1 .AND. 
-     1             FRQ1(ICH) .LT. FRAD2 ) THEN
-                  CHOVER(ICH,IIF) = MIN( FRQ2(ICH), FRAD2 ) - 
-     1                              MAX( FRQ1(ICH), FRAD1 )
+               IF( FRQ2(ICH) .GT. FRF1(IIF,KF) .AND. 
+     1             FRQ1(ICH) .LT. FRF2(IIF,KF) ) THEN
+                  CHOVER(ICH,IIF) = MIN( FRQ2(ICH), FRF2(IIF,KF) ) - 
+     1                              MAX( FRQ1(ICH), FRF1(IIF,KF) )
                   IF( DBE(KS)(1:4) .EQ. 'RDBE' ) THEN
-                     CALL RDBEMTCH( KS, KF, ICH, IIF, FRAD1, FRAD2,
-     1                   FRQ1(ICH), FRQ2(ICH), CHOVER(ICH,IIF) )
+                     CALL RDBEMTCH( KS, KF, ICH, IIF, 
+     1                   FRF1(IIF,KF), FRF2(IIF,KF),
+     2                   FRQ1(ICH), FRQ2(ICH), CHOVER(ICH,IIF) )
                   END IF
                ELSE
                   CHOVER(ICH,IIF) = 0.0
@@ -82,8 +81,9 @@ C
 C              Get centering - the offset between the middle of the IF
 C              and the middle of the baseband.
 C
-               CHCENT(ICH,IIF) = ABS( ( FRAD1 + FRAD2 )/2.0
-     1                - ( FRQ1(ICH) + FRQ2(ICH) ) / 2.0 )
+               CHCENT(ICH,IIF) = ABS( 
+     1                  ( FRF1(IIF,KF) + FRF2(IIF,KF) )/2.0
+     2                - ( FRQ1(ICH) + FRQ2(ICH) ) / 2.0 )
 C
                IF( SDEBUG ) THEN
                   SETMSG = ' '

@@ -1,0 +1,39 @@
+! Standard setup file: rdbe_pfb_8416_dual.set                  
+!     (Produced by MAKESETUP)
+!  Setup for 4cm observations centered near the old standard of 8415 MHz
+!  using a compact frequency sequence with the RDBE PFB personality.
+!  This file is actually centered at 8416 MHz.
+!  For the VLBA, EB_VLBA, and GBT.
+
+!  The freq_RDBE.dat entry v4cm_3 will be used with firstlo=7600 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+!  Note the VLBA could also use a high side LO (9100) if that were desired.
+
+!  The GBT uses a high-side LO (9136) based on gbt6cmc in freq_RDBE.dat.
+!  That LO provides an IF covering the same RF range as the other stations,
+!  but with inverted sidebands on the BBC's.  The BBC frequencies in the
+!  .sum file will be offset by the bandwidth from the other stations.
+!  SCHED invokes the inverted sideband mode of DiFX to allow this.
+
+!  If a change of baseband frequencies is desired, the 16 new values of
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = 560.0, 560.0,  592.0, 592.0,  624.0, 624.0,  656.0, 656.0,
+!             688.0, 688.0,  720.0, 720.0,  752.0, 752.0,  784.0, 784.0,
+!             816.0, 816.0,  848.0, 848.0,  880.0, 880.0,  912.0, 912.0,
+!             944.0, 944.0,  976.0, 976.0, 1008.0, 1008.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+
+  freqref = 7600.0
+  freqoff  =  720.0, 720.0,  752.0, 752.0,  784.0, 784.0, 816.0, 816.0,
+              848.0, 848.0,  880.0, 880.0,  912.0, 912.0, 944.0, 944.0
+  netside = L
+  station = vlba, eb_vlba, gbt_vlba, gbt_cold
+  /

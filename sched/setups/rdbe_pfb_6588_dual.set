@@ -1,0 +1,41 @@
+! Standard setup file: rdbe_pfb_6588_dual.set                  
+!     (Produced by MAKESETUP)
+!  Setup for 6cm observations centered near the methanol line at 6668.5 MHz.
+!  It uses a compact frequency sequence with the RDBE PFB personality.
+!  This setup is actually centered on 6588 MHz.
+!  For the VLBA and EB_VLBA  (GBT doesn't cover this frequency)
+
+!  There are RFI issues in this region, especially at BR.  The optimal
+!  selection of baseband frequencies needs study.
+
+!  The freq_RDBE.dat entry vc_p will be used with firstlo=5900 for the VLBA
+!  The upper sideband IF forces lower sideband basebands.
+
+!  The GBT uses a high-side LO (5636) based on gbt6cmc in freq_RDBE.dat.
+!  That LO provides an IF covering the same RF range as the other stations,
+!  but with inverted sidebands on the BBC's.  The BBC frequencies in the
+!  .sum file will be offset by the bandwidth from the other stations.
+!  SCHED invokes the inverted sideband mode of DiFX to allow this.
+
+!  If a change of baseband frequencies is desired, the 16 new values of
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = 560.0, 560.0,  592.0, 592.0,  624.0, 624.0,  656.0, 656.0,
+!             688.0, 688.0,  720.0, 720.0,  752.0, 752.0,  784.0, 784.0,
+!             816.0, 816.0,  848.0, 848.0,  880.0, 880.0,  912.0, 912.0,
+!             944.0, 944.0,  976.0, 976.0, 1008.0, 1008.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+
+  freqref = 5900.0
+  freqoff  = 592.0, 592.0,  624.0, 624.0,  656.0, 656.0, 688.0, 688.0,
+             720.0, 720.0,  752.0, 752.0,  784.0, 784.0, 816.0, 816.0
+  netside = L
+  station = vlba, eb_vlba
+  /

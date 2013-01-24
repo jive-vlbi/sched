@@ -1,4 +1,4 @@
-      SUBROUTINE OPTTIM( LASTISCN, ISCN, ADJUST )
+      SUBROUTINE OPTTIM( LASTLSCN, ISCN, ADJUST )
 C
 C     Routine that adjust the time of optimized scans.  
 C
@@ -27,16 +27,30 @@ C     a good result.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER          LASTISCN(MAXSTA), ISCN, ISTA, LSCN, I
+      INTEGER          LASTLSCN(*), LASTISCN(MAXSTA)
+      INTEGER          ISCN, ISTA, LSCN, I
       DOUBLE PRECISION LASTTIME, TIME1J, TIME2J, T_AVAIL, TIME1K
       DOUBLE PRECISION MAXLASTT, TOLER, TBEGSRT(MAXSTA+1), DTEMP
       DOUBLE PRECISION SSTIME
-      LOGICAL          ADJUST, ALL0
+      LOGICAL          ADJUST, ALL0, USETIME
       PARAMETER        (TOLER=ONESEC/1000.D0)
 C --------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'OPTTIM: Starting.' )
       MAXLASTT = -99.D9
       LSCN = 0
+C
+C     Transfer LASTLSCN to LASTISCN.  GEOCHK tries to tell this routine
+C     to use the current scan time by setting all LASTISCNs to -1.
+C     This used to be zero and interacted properly with the way this 
+C     routine dealt with first scans.  But that proved to be flawed
+C     and things got more complicated (see ALL0 segment below).
+C
+      USETIME = .FALSE.
+      DO ISTA = 1, NSTA
+         IF( LASTLSCN(ISTA) .EQ. -1 ) USETIME = .TRUE.
+         LASTISCN(ISTA) = MAX( LASTLSCN(ISTA), 0 )
+      END DO
+C   
 C
       IF( ADJUST ) THEN
 C
@@ -81,6 +95,9 @@ C
 C        Loop through stations checking slews to get the time to start.
 C
          DO ISTA = 1, NSTA
+C
+C           Now deal with scans that are not first.
+C
             IF( STASCN(ISCN,ISTA) .AND. LASTISCN(ISTA) .NE. 0) THEN
 C
 C              Get the geometry for the earliest possible start time
@@ -190,8 +207,8 @@ C
             END IF
          END IF
 C
-C        Set time if this is the first scan for all antennas.
-C        I think this covers any remaining possible cases.
+C        Set time if this is the first scan for all antennas in 
+C        the scan. I think this covers any remaining possible cases.
 C        Recall that this need not be the first scan of the
 C        experiment if all the included stations were not in
 C        earlier scans.
@@ -205,9 +222,20 @@ C        differently at the start of an observation.  The VLA dummy
 C        scans are the stand-out culprit.  I think using this scan's
 C        gap is appropriate.
 C
+C        But that had a further complication.  Routine GEOCHK which
+C        is part of the DELZN section generation tries to tell this
+C        routine to use the current scan time rather than the scan 1
+C        time by setting all LASTISCNs to -1.  That was trapped
+C        above and USETIME was set.
+C
          IF( ALL0 ) THEN
-            TIME1J = STARTJ(1)
-            MAXLASTT = STARTJ(1) - GAP(ISCN)
+            IF( USETIME ) THEN
+               TIME1J = STARTJ(ISCN)
+               MAXLASTT = STARTJ(ISCN) - GAP(ISCN)
+            ELSE 
+               TIME1J = STARTJ(1)
+               MAXLASTT = STARTJ(1) - GAP(ISCN)
+            END IF
          END IF
 C
 C        If TIME1K did not get set, set it the same as TIME1J

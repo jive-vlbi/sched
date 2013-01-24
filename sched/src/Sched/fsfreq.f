@@ -16,7 +16,7 @@ C
       INTEGER            IFIF, IFCAT, LEN1
       CHARACTER          SDAR*5
       DOUBLE PRECISION   LOSUM(*)
-      DOUBLE PRECISION   BBCFREQ(*), BBCBW(*), FRAD1, FRAD2
+      DOUBLE PRECISION   BBCFREQ(*), BBCBW(*)
       LOGICAL            FWARN, VLAWARN, ERRS, DEQUAL
 C
       DATA               FWARN, VLAWARN / .TRUE., .TRUE. /
@@ -125,9 +125,10 @@ C
             IF( IFREQNUM(I,KS) .GE. 1 .AND. FWARN ) THEN
                IFIF = IFREQIF(I,KS)
                IFCAT = IFREQNUM(I,KS)
-               CALL FRFADJ( KS, IFIF, IFCAT, FRAD1, FRAD2 )
-               IF( ( FREQ(ILC,KSCN) + CORINV(I,KS) .LT. FRAD1 .OR. 
-     1               FREQ(ILC,KSCN) + CORINV(I,KS) .GT. FRAD2 ) ) THEN
+               IF( ( FREQ(ILC,KSCN) + CORINV(I,KS) .LT. 
+     1                 FRF1(IFIF,IFCAT) .OR. 
+     2               FREQ(ILC,KSCN) + CORINV(I,KS) .GT. 
+     3                 FRF2(IFIF,IFCAT) ) ) THEN
                   CALL WLOG( 1, 'FSFREQ: -- WARNING -- Frequency ' //
      1                 'specified in  schedule (or by Doppler) is ' )
                   CALL WLOG( 1, '          outside limits for IF.' )
@@ -144,8 +145,8 @@ C
                   CALL WLOG( 1, MSGTXT )
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, F9.2, A, F9.2 )' )
-     1              '        Freq catalog limits: ', FRAD1,
-     2              ' to ', FRAD2
+     1              '        Freq catalog limits: ', FRF1(IFIF,IFCAT),
+     2              ' to ', FRF2(IFIF,IFCAT)
                   CALL WLOG( 1, MSGTXT )
                   FWARN = .FALSE.
                END IF
