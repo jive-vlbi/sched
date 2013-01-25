@@ -23,7 +23,7 @@ C
       INTEGER    ICH, GNSET, IINT
       INTEGER    NEXPECT, NLATE, NNEVER, NSLATE
       REAL       NSRCCHG
-      LOGICAL    DOPWARN, WARNLONG, OVWARN
+      LOGICAL    DOPWARN, WARNLONG, OVWARN, VLAPTG
       DOUBLE PRECISION  FRSUM(MAXCHN), FRBB(MAXCHN), FRBW(MAXCHN)
       DOUBLE PRECISION  TIME1, TIMEDUR, MINFR(MSET), MAXFR(MSET)
       DOUBLE PRECISION  MINFRI, MAXFRI, MINFRJ, MAXFRJ
@@ -336,9 +336,13 @@ C     First be sure the VLA is in the observation and that phasing is
 C     requested.  VLASCNS took care of adding INTENTS when VLAMODE
 C     is used.
 C
+C     While at it, this is a convenient place to throw a fit if the
+C     user is trying to phase and reference point at the same time.
+C
       IF( VLASTA .NE. 0 ) THEN
        DO ISCN = SCAN1, SCANL
         PHASING(ISCN) = .FALSE.
+        VLAPTG = .FALSE.
         IF( STASCN(ISCN,VLASTA) ) THEN
           IF( NSCINT(ISCN) .NE. 0 ) THEN
             DO IINT = 1, NSCINT(ISCN)
@@ -349,9 +353,31 @@ C
      4              THEN
                 PHASING(ISCN) = .TRUE. 
               END IF
+              IF( INDEX( INTENT(ISCINT(IINT,ISCN)),
+     1           'REFERENCE_POINTING_DETERMINE' ) .NE. 0 .AND.
+     2         ( INDEX( INTENT(ISCINT(IINT,ISCN)), ':' ) .EQ. 0 .OR.
+     3           INDEX( INTENT(ISCINT(IINT,ISCN)), 'VLA' ) .NE. 0 ) )
+     4              THEN
+                VLAPTG = .TRUE. 
+              END IF
             END DO
           END IF
+C
+C         If it's a phasing scan, complain if it is also a pointing scan.
+C         If not, then check the length.
+C
           IF( PHASING(ISCN) ) THEN  
+             IF( VLAPTG ) THEN
+                MSGTXT = ' '
+                WRITE(MSGTXT, '( 2A, I5 )' )
+     1             'CHKSCN:  VLA reference pointing AND phasing ',
+     2             'requested in scan ', ISCN
+                CALL WLOG( 1, MSGTXT )
+                CALL WLOG( 1, '         That is not possible.' )
+                CALL ERRLOG( 
+     1              'Make separate pointing and phasing scans.' )
+             END IF
+C
              VPT = DBLE( VLAPTIME(ISCN) ) * ONESEC 
              SCANLEN = STOPJ(ISCN) - 
      1            MAX ( ( STARTJ(ISCN) - TPSTART(ISCN,VLASTA) ), 
