@@ -1,15 +1,23 @@
       SUBROUTINE PROTECT( IUNIT )
 C
+C     Called by SUMOPE during writing of the .sum file.  Must be
+C     called before the main scan listings and the generation of
+C     the crd and VEX files.
+C
 C     Make a listing in the summary file of the times when
 C     a couple of stations can be taken from the project.
 C     This allows users to protect critical calibration scans
 C     or other critical scans.
 C
-C     This is mainly to support scheduling of the USNO observations
-C     on the VLBA.  These observations will take 1.5 hr per day on
-C     the PT-MK baseline.  The USNO will have some flexibility in
-C     schedule time - something like 6 hours.  This routine will
-C     try to enforce providing adequate unprotected opportunities.
+C     Also deal with specification of "extra" scans whose scheduling
+C     is optional.
+C
+C     The preempt concept is  mainly to support scheduling of the 
+C     USNO observations on the VLBA.  These observations will take 
+C     1.5 hr per day on the PT-MK baseline.  The USNO will have 
+C     some flexibility in schedule time - something like 6 hours.  
+C     This routine will try to enforce providing adequate 
+C     unprotected opportunities.
 C
 C     PESTART and PESTOP are the start and stop times of intervals
 C     when preemption is ok.  Such intervals have intervals between
@@ -32,26 +40,50 @@ C
       PARAMETER          (MINTPE = 1.6666D0 / 24.D0 )      
       PARAMETER          (MAXBLOCK = 4.D0 / 24.D0 )
       INTEGER            IP, NP, ISCN, JSCN, IUNIT, ISTA
-      INTEGER            SY, SD, TY, TD, LEN1
+      INTEGER            SY, SD, TY, TD, CBY, CBD, CEY, CED, LEN1
       INTEGER            IOERR, VLBOPE
       LOGICAL            GOTPTMK, TOOLONG, IGWARN, EXISTS
       LOGICAL            SCNPTMK(MAXSCN), ADDEND
-      DOUBLE PRECISION   ST, TL
+      DOUBLE PRECISION   ST, TL, CBT, CEL
       DOUBLE PRECISION   PESTART(MPROT), PESTOP(MPROT)
-      DOUBLE PRECISION   EXSTART, EXSTOP, BLOCK1, BLOCKL
+      DOUBLE PRECISION   BLOCK1, BLOCKL
       CHARACTER          TFORM*8, CSTART*8, CSTOP*8
+      CHARACTER          CBSTART*8, CESTOP*8
       CHARACTER          PREFILE*80, OPSTAT*4, OPTEXT*255
+      CHARACTER          LINE1*80, LINE2*80, LINE3*80, LINE4*80 
+      CHARACTER          LINE5*80
 C  -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'PROTECT starting' )
-
-C *********************************
-C  Automatically protect the DELZN segments if the user has not
-C  specified any PREEMPTs
-C *********************************
+C
+C     First check PREEMPT for valid arguments.
+C
+      DO ISCN = SCAN1, SCANL
+         IF( PREEMPT(ISCN) .NE. 'OK' .AND. 
+     1       PREEMPT(ISCN) .NE. 'NO' .AND.
+     2       PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A, A, I5, A )' )
+     1         'PROTECT:  Invalid input PREEMPT=''',
+     2         PREEMPT(ISCN)(1:LEN1(PREEMPT(ISCN))), ''' on scan ', 
+     3         ISCN, '.  Must be OK, NO, or EXTRA.'
+            CALL ERRLOG( MSGTXT )
+         END IF
+      END DO
+C
+C     If the the VLBA is not in use and no PREEMPT=EXTRA scans were
+C     specified, get out of here silently.  This routine will 
+C     only cause confusion.
+C
+      IF( .NOT. GOTVLBA .AND. .NOT. FUZZY ) RETURN
+C
+C     Recall that the default PREEMPT is OK for normal scans
+C     and NO for DELZN scans (GEOLEN .NE. 0).  That was set
+C     in SCHIN.  FUZZY was also set there if any PREEMPT=EXTRA scans
+C     were seen.
 C
 C     Check if PT or MK are included in the project.  If not, 
-C     make a quick note and RETURN.  Also get presence of the
-C     stations on a scan by scan basis.
+C     record that fact and don't worry about preemptable scans.
+C     But will still need to worry about EXTRA scans if FUZZY.
 C
       GOTPTMK = .FALSE.
       DO ISTA = 1, NSTA
@@ -61,24 +93,29 @@ C
          END IF
       END DO
       IF( .NOT. GOTPTMK ) THEN
-         MSGTXT = 'PROTECT:  No PT or MK, so will not check that '//
-     1       'preemptable times are present.'
-         CALL WLOG( 1, MSGTXT )
-         RETURN
+         CALL WLOG( 1, 'PROTECT:  No PT or MK, so will not check '//
+     1       'that times preemptable for USNO are present.' )
+         IF( .NOT. FUZZY ) RETURN
       END IF
+C
+C     Determine scan by scan if PT or MK are present.
+C
       DO ISCN = SCAN1, SCANL
          SCNPTMK(ISCN) = .FALSE.
-         DO ISTA = 1, NSTA
-            IF( ( STANAME(ISTA) .EQ. 'VLBA_PT' .OR. 
-     1          STANAME(ISTA) .EQ. 'VLBA_MK' ) .AND.
-     2          STASCN(ISCN,ISTA) ) THEN
-               SCNPTMK(ISCN) = .TRUE.
-            END IF
-         END DO
+         IF( GOTPTMK ) THEN
+            DO ISTA = 1, NSTA
+               IF( ( STANAME(ISTA) .EQ. 'VLBA_PT' .OR. 
+     1             STANAME(ISTA) .EQ. 'VLBA_MK' ) .AND.
+     2             STASCN(ISCN,ISTA) ) THEN
+                  SCNPTMK(ISCN) = .TRUE.
+               END IF
+            END DO
+         END IF
       END DO
 C
-C     Open the .preempt file.  Construct the name, then check if it
-C     exists.  Finally open it with VLBOPE.
+C     By this point, either PT and MK are present, or EXTRA scans were
+C     specified.  Open the .preempt file.  Construct the name, then 
+C     check if it  exists.  Finally open it with VLBOPE.
 C
       WRITE( PREFILE, '( A,A )' )  EXPCODE(1:LEN1(EXPCODE)), '.PREEMPT'
       CALL DWCASE( PREFILE )
@@ -98,17 +135,30 @@ C
       IOERR = VLBOPE( IPRE, PREFILE, 'TEXT', OPSTAT, OPTEXT )
       IF( IOERR .NE. 1 ) CALL ERRLOG( ' PROTECT open problem:'//OPTEXT )
 C
-C     Collect the experiment start and stop time and the first
-C     and last times of protected data.
+C     Collect the first and last times of protected data (the core), 
+C     and the times of the first and last scans of the core 
+C     (not PREEMPT(ISCN)=EXTRA).  The overall experiment first and 
+C     last times are already in TFIRST and TEND.
 C
-      EXSTART = 1.D10
-      EXSTOP = 0.D0
+      COREBEG = 1.D10
+      COREEND = 0.D0
       DO ISCN = SCAN1, SCANL
-         EXSTART = MIN( EXSTART, STARTJ(ISCN) )
-         EXSTOP = MAX( EXSTOP, STOPJ(ISCN) )
+         IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+            COREBEG = MIN( COREBEG, STARTJ(ISCN) )
+            COREEND = MAX( COREEND, STOPJ(ISCN) )
+         END IF
       END DO
-      BLOCK1 = EXSTOP
-      BLOCKL = EXSTART
+C
+C     Deal with no EXTRA scans, although FUZZY already flags that.
+C
+      IF( COREBEG .EQ. 1.D10 ) COREBEG = TFIRST
+      IF( COREEND .EQ. 0.D0 ) COREEND = TEND
+C
+C     Get BLOCK1 and BLOCKL, the first and last times for protected
+C     scans.
+C
+      BLOCK1 = TEND
+      BLOCKL = TFIRST
       DO ISCN = SCAN1, SCANL
          IF( PREEMPT(ISCN) .EQ. 'NO' .AND. SCNPTMK(ISCN) ) THEN
             BLOCK1 = MIN( BLOCK1, STARTJ(ISCN) )
@@ -116,12 +166,12 @@ C
          END IF
       END DO
 C
-C     Initialize the time ranges.  Assume the whole time range is
-C     ok to start with.
+C     Initialize the time ranges of the individual preemptable periods.  
+C     Assume the whole time range is ok to start with.
 C
       DO IP = 1, MPROT
-         PESTART(IP) = EXSTART
-         PESTOP(IP) = EXSTOP
+         PESTART(IP) = TFIRST
+         PESTOP(IP) = TEND
       END DO
 C
 C     Now look for blocks of preemptable times in a manner that works
@@ -131,22 +181,11 @@ C     First see if there is a block at the start of non-zero
 C     length.
 C
       NP = 0
-      IF( BLOCK1 .GT. EXSTART ) THEN
-         PESTART(1) = EXSTART
+      IF( BLOCK1 .GT. TFIRST ) THEN
+         PESTART(1) = TFIRST
          PESTOP(1) = BLOCK1
          NP = 1
       END IF
-C
-C     Sanity check PREEMPT, but only on the scans that matter.
-C
-      DO ISCN = SCAN1, SCANL
-         IF( PREEMPT(ISCN) .NE. 'OK' .AND. 
-     1       PREEMPT(ISCN) .NE. 'NO' ) THEN
-            MSGTXT = 'PROTECT:  Invalid input PREEMPT='''//
-     1         PREEMPT(ISCN)//'''.  Must be OK or NO.'
-            CALL ERRLOG( MSGTXT )
-         END IF
-      END DO
 C
 C     Now look for other good periods based on scan times.
 C     Assume that any available block other than the first (which
@@ -163,7 +202,7 @@ C     cannot start a valid interval.
 C
       DO ISCN = SCAN1, SCANL
          IF( PREEMPT(ISCN) .EQ. 'NO' .AND. SCNPTMK(ISCN) .AND.
-     1       STOPJ(ISCN) .NE. EXSTOP ) THEN
+     1       STOPJ(ISCN) .NE. TEND ) THEN
             NP = NP + 1
             PESTART(NP) = STOPJ(ISCN)
             DO JSCN = SCAN1, SCANL
@@ -207,121 +246,101 @@ C
 C
 C     Now see if there is a short, but finite period of preemptable
 C     scans at the end.  If the final period is long, then PESTOP(NP)
-C     should equal EXSTOP and a segment won't be added.
+C     should equal TEND and a segment won't be added.
 C
       ADDEND = .FALSE.
       IF( NP .EQ. 0 ) THEN
-         ADDEND =  ABS( BLOCKL - EXSTOP ) .GT. ONESEC
+         ADDEND =  ABS( BLOCKL - TEND ) .GT. ONESEC
       ELSE 
-         ADDEND =  ABS( PESTOP(NP) - EXSTOP ) .GT. ONESEC .AND. 
-     1             ABS( BLOCKL - EXSTOP ) .GT. ONESEC 
+         ADDEND =  ABS( PESTOP(NP) - TEND ) .GT. ONESEC .AND. 
+     1             ABS( BLOCKL - TEND ) .GT. ONESEC 
       END IF
       IF( ADDEND ) THEN
          NP = NP + 1
          PESTART(NP) = BLOCKL
-         PESTOP(NP) = EXSTOP
+         PESTOP(NP) = TEND
       END IF       
 C
 C     Write the periods and complain if there are inadequate times
-C     to run the EOP project.
+C     to run the EOP project.  This included a fair amount of text
+C     which is being written to both the .sum file and the .preempt files.
 C
-      WRITE( IUNIT, '( A )' ) ' '
-      MSGTXT = 'ALLOWED PREEMPTION TIMES:'
-      WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-      WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+      LINE1 = ' Dynamically scheduled VLBA projects can have '//
+     1        'optional scans at'
+      LINE2 = ' the start and end designated by PREEMPT=''EXTRA''.  '//
+     1        'These can be'
+      LINE3 = ' used or not used to help with efficient meshing '//
+     1        'with previous'
+      LINE4 = ' and following projects.  Only the core time range '//
+     1        'will be used '
+      LINE5 = ' for the initial dynamic project selection.'
+      WRITE( IUNIT, '( A, 8( /, A ) )' )
+     1        ' ', ' ', 'ALLOWED PREEMPTION TIMES', ' ', 
+     2        LINE1, LINE2, LINE3, LINE4, LINE5
+      WRITE( IPRE, '( A, 6( /, A ) )' )
+     1        'ALLOWED PREEMPTION TIMES', ' ', 
+     2        LINE1, LINE2, LINE3, LINE4, LINE5
 C
-      WRITE( IUNIT, '( A )' ) ' '
-      WRITE( IPRE, '( A )' ) ' '
+      LINE1 = ' The schedule can also designate which scans can be '//
+     1        'preempted at'
+      LINE2 = ' PT and MK for daily USNO EOP observations using '//
+     1        'PREEMPT=''OK'' '
+      LINE3 = ' or ''NO''.  For details, see the manual discussion '//
+     1        'of PREEMPT.'
+      WRITE( IUNIT, '( A, 4( /, A ) )' ) ' ', LINE1, LINE2, LINE3, ' '
+      WRITE( IPRE, '( A, 4( /, A ) )' ) ' ', LINE1, LINE2, LINE3, ' '
 C
-      MSGTXT = ' '
-      WRITE( MSGTXT, '( A, F4.1, A, A, A )' ) 
-     1    ' Daily USNO EOP observations of ', MINTPE * 24.D0, 
-     2    ' hr on one baseline (usually PT-MK) will be made.'
-      WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-      WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-C
-      MSGTXT = 
-     1   ' These will preempt other projects for those two stations.'
-      WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-      WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-C
-      MSGTXT = 
-     1    ' Usually this will happen between 14:00 and 22:00 UT.'
-      WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-      WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-C
-      MSGTXT = ' Gaps between projects will be used when possible.'
-      WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-      WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-C
-      MSGTXT = ' Input parameter PREEMPT can be used to protect '//
-     1    'important scans - see manual.'
-      WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-      WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-C
-C     Deal with entire project protected.
+C     Deal with the case where the entire project is protected.  Complain,
+C     but then be forgiving if the project is short.  This information also
+C     goes to the screen and logfile.
 C
       IGWARN = .FALSE.
       IF( NP .EQ. 0 ) THEN
 C
-         MSGTXT = ' *******'
-         WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         CALL WLOG( 1, MSGTXT )
-C
-         MSGTXT = ' ******* This schedule has no times that ' //
+         LINE1 = ' ******* This schedule has no times that ' //
      1     'can be preempted for EOP observations.'
-         WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         CALL WLOG( 1, MSGTXT )
+         WRITE( IUNIT, '( A, / ,A )' ) ' *******', LINE1
+         WRITE( IPRE, '( A, /, A )' ) ' *******', LINE1
+         CALL WLOG( 1, ' *******' )
+         CALL WLOG( 1, LINE1 )
 C
 C        Deal with short projects.
 C
-         IF( EXSTOP - EXSTART .LE. MAXBLOCK ) THEN
+         IF( TEND - TFIRST .LE. MAXBLOCK ) THEN
 C
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, F5.1, A )' ) 
+            LINE1 = ' '
+            WRITE( LINE1, '( A, F5.1, A )' ) 
      1          ' ******* But the project is less than ', 
-     2          MAXBLOCK * 24.D0, 
-     2          ' hours long so this may not be a'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
-C
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, A)' ) 
-     1          ' ******* problem unless 2 such runs are scheduled ',
-     2          'back to back.'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
-C
-            MSGTXT = ' ******* If that happens, your protection '//
-     2          'requests may be ignored.'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
-C
-            MSGTXT = ' ******* See .sum file or .preempt file'//
-     1           ' for details.'
-            CALL WLOG( 1, MSGTXT )
-C
-            MSGTXT = ' *******'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
+     2          MAXBLOCK * 24.D0, ' hours long so this may not be a'
+            LINE2 = ' ******* problem unless 2 such runs are '//
+     1          'scheduled back to back.'
+            LINE3 = ' ******* If that happens, your protection '//
+     1          'requests may be ignored.'
+            LINE4 = ' *******'
+            WRITE( IUNIT, '( A, /, A, /, A, /, A )' ) 
+     1          LINE1, LINE2, LINE3, LINE4
+            WRITE( IPRE, '( A, /, A, /, A, /, A )' ) 
+     1          LINE1, LINE2, LINE3, LINE4
+            CALL WLOG( 1, LINE1 )
+            CALL WLOG( 1, LINE2 )
+            CALL WLOG( 1, LINE3 )
+            CALL WLOG( 1, LINE4 )
 C
          ELSE
 C
-C           Now the bad case of a long project.
+C           Now flag the case of a long project with no preemption times.
 C
             IGWARN = .TRUE.
+C
          END IF
       ELSE
 C
-         MSGTXT = ' Unprotected time ranges that could be used are: '
-         WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+C        This is the case where there are some available blocks.
+C
+         LINE1 = ' Time ranges available for USNO daily EOP '//
+     1        'observations at PT and MK:'
+         WRITE( IUNIT, '( A )' ) LINE1
+         WRITE( IPRE, '( A )' ) LINE1
 C
          DO IP = 1, NP
             CALL TIMEJ( PESTART(IP), SY, SD, ST )
@@ -336,28 +355,14 @@ C
             WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
          END DO
 C
-C        Write the time range of the observations.
-C
-         CALL TIMEJ( EXSTART, SY, SD, ST )
-         CALL TIMEJ( EXSTOP, TY, TD, TL )
-         CSTART = TFORM( ST, 'T', 0, 2, 2, '::@' )
-         CSTOP = TFORM( TL, 'T', 0, 2, 2, '::@' )
-         MSGTXT = ' '
-         WRITE( MSGTXT, 
-     1       '( A, 4X, A, I3.3, A, A8, A, I3.3, A,  A8 )' ) 
-     2       ' Project start and stop: ', '(', SD, ') ', 
-     3       CSTART, '  to  (', TD, ') ', CSTOP
-         WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-C
 C        Check for adequate options.  Look for, and complain about, 
 C        protected periods of MAXBLOCK hours or more.  This assumes
 C        time order, but that should be the case given how the blocks
 C        were derived.
 C
          TOOLONG = .FALSE.
-         IF( PESTART(1) - EXSTART .GT. MAXBLOCK ) TOOLONG = .TRUE.
-         IF( EXSTOP - PESTOP(NP) .GT. MAXBLOCK ) TOOLONG = .TRUE.
+         IF( PESTART(1) - TFIRST .GT. MAXBLOCK ) TOOLONG = .TRUE.
+         IF( TEND - PESTOP(NP) .GT. MAXBLOCK ) TOOLONG = .TRUE.
          IF( NP .GE. 2 ) THEN
             DO IP = 2, NP
                IF( PESTART(NP) - PESTOP(NP-1) .GT. MAXBLOCK ) 
@@ -368,37 +373,27 @@ C
 C        Complain about long blocked periods.
 C
          IF( TOOLONG ) THEN
-C
-C
-            MSGTXT = ' *******'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
-C
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, F5.1, A )' )
+            LINE1 = ' *******'
+            LINE2 = ' '
+            WRITE( LINE2, '( A, F5.1, A )' )
      1         ' ******* There is at least one block of over ', 
-     2         MAXBLOCK * 24.D0, 
-     3         ' hr when your PREEMPT specification does not'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
-C
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, F5.1, A, A )' )
-     1         ' ******* allow ', MINTPE * 24.D0,
-     2         ' hr EOP observations on ',
-     3         'one baseline (PT-MK usually) to be inserted.'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
-C
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A )' )
-     1         ' ******* See details in the .sum or .preempt file.'
-            WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-            CALL WLOG( 1, MSGTXT )
+     2         MAXBLOCK * 24.D0, 'hr'
+            LINE3 = ' '
+            WRITE( LINE3, '( A, F5.1, A )' )
+     1         ' ******* when your PREEMPT specification does not '//
+     2         'allow ', MINTPE * 24.D0, ' hr'
+            LINE4 = ' ******* EOP observations on '//
+     1         'one baseline (PT-MK usually) to be inserted.'
+            LINE5 = ' ******* See details in the .sum or .preempt file.'
+            WRITE( IUNIT, '( A, 4( /, A ) )' )
+     1          LINE1, LINE2, LINE3, LINE4, LINE5
+            WRITE( IPRE, '( A, 4( /, A ) )' )
+     1          LINE1, LINE2, LINE3, LINE4, LINE5
+            CALL WLOG( 1, LINE1 )
+            CALL WLOG( 1, LINE2 )
+            CALL WLOG( 1, LINE3 )
+            CALL WLOG( 1, LINE4 )
+            CALL WLOG( 1, LINE5 )
 C
             IGWARN = .TRUE.
          END IF
@@ -407,27 +402,55 @@ C
 C        Warn user his/her instructions may be ignored.
 C
       IF( IGWARN ) THEN 
-C
-         MSGTXT = ' '
-         WRITE( MSGTXT, '( A, A )' )
-     1      ' ******* Your requests to protect scans will be ',
-     2      'ignored.'
-         WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         CALL WLOG( 1, MSGTXT )
-C
-         MSGTXT = ' '
-         WRITE( MSGTXT, '( A )' )
-     1      ' ******* See the SCHED manual info on parameter PREEMPT.'
-         WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         CALL WLOG( 1, MSGTXT )
-C
-         MSGTXT = ' *******'
-         WRITE( IUNIT, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         WRITE( IPRE, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
-         CALL WLOG( 1, MSGTXT )
+         LINE1 = 
+     1     ' ******* Your requests to protect scans will be ignored.'
+         LINE2 = 
+     1     ' ******* See the SCHED manual info on parameter PREEMPT.'
+         LINE3 = ' *******'
+         WRITE( IUNIT, '( A, /, A, /, A )' ) LINE1, LINE2, LINE3
+         WRITE( IPRE, '( A, /, A, /, A )' ) LINE1, LINE2, LINE3
+         CALL WLOG( 1, LINE1 )
+         CALL WLOG( 1, LINE2 )
+         CALL WLOG( 1, LINE3 )
       END IF
+C
+C     Write the time ranges of the EXTRA and CORE scans.
+C
+      LINE1 = ' Project times summary:'
+      CALL TIMEJ( TFIRST, SY, SD, ST )
+      CALL TIMEJ( TEND, TY, TD, TL )
+      CALL TIMEJ( COREBEG, CBY, CBD, CBT )
+      CALL TIMEJ( COREEND, CEY, CED, CEL )
+      CSTART = TFORM( ST, 'T', 0, 2, 2, '::@' )
+      CSTOP = TFORM( TL, 'T', 0, 2, 2, '::@' )
+      CBSTART = TFORM( CBT, 'T', 0, 2, 2, '::@' )
+      CESTOP = TFORM( CEL, 'T', 0, 2, 2, '::@' )
+C
+      WRITE( IUNIT, '( A, /, A )' ) ' ', LINE1
+      WRITE( IPRE, '( A, /, A )' ) ' ', LINE1
+      IF( TFIRST .LT. COREBEG ) THEN
+         WRITE( LINE2, 
+     1     '( A, 4X, A, I3.3, A, A8, A, I3.3, A,  A8 )' ) 
+     2     ' Extra scans at start:    ', '(', SD, ') ', 
+     3     CSTART, '  to  (', CBD, ') ', CBSTART
+         WRITE( IUNIT, '( A )' ) LINE2
+         WRITE( IPRE, '( A )' ) LINE2
+      END IF
+      WRITE( LINE3,
+     1    '( A, 4X, A, I3.3, A, A8, A, I3.3, A,  A8 )' ) 
+     2    ' Core start and stop:     ', '(', CBD, ') ', 
+     3    CBSTART, '  to  (', CED, ') ', CESTOP
+      WRITE( IUNIT, '( A )' ) LINE3
+      WRITE( IPRE, '( A )' ) LINE3
+      IF( TEND .GT. COREEND ) THEN
+         WRITE( LINE4, 
+     1      '( A, 4X, A, I3.3, A, A8, A, I3.3, A,  A8 )' ) 
+     2      ' Extra scans at end:      ', '(', CED, ') ', 
+     3      CESTOP, '  to  (', TD, ') ', CSTOP
+         WRITE( IUNIT, '( A )' ) LINE4
+         WRITE( IPRE, '( A )' ) LINE4
+      END IF
+      WRITE( IUNIT, '( A )' ) ' '
 C
       RETURN
       END

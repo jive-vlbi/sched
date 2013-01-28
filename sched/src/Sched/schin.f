@@ -65,6 +65,8 @@ C
       COVERLET = .FALSE. ! Is there a cover letter?
       ALLVLBA = .TRUE.  !  All stations have VLBA control systems.
       ANYGEO = .FALSE.  !  Will any geodetic segments be inserted?
+      FUZZY  = .FALSE.  !  Were any PREEMPT=EXTRA scans specified.
+      GOTVLBA = .FALSE. !  Are there any VLBA stations?
       DO I = 1, MAXSCN
           SRCNUM(I) = 0
           IDOPSRC(I) = 0
@@ -288,9 +290,10 @@ C
 C        Deal with the requests for protection from preemption.
 C        Default to no preemption.  But if PREEMPT was not specified,
 C        protect geodetic segments.  This must be done after GEOLEN
-C        is set.
+C        is set.  If any PREEMPT=EXTRA, trigger fuzzy ends.
 C
-         PREEMPT(ISCN) = KCHAR( 'PREEMPT', 2, .TRUE., KD, KC, KI )
+         PREEMPT(ISCN) = KCHAR( 'PREEMPT', 5, .TRUE., KD, KC, KI )
+         IF( PREEMPT(ISCN) .EQ. 'EXTRA' )  FUZZY = .TRUE.
          IF( PREEMPT(ISCN) .EQ. '--' ) THEN
             IF( GEOLEN(ISCN) .GT. 0.D0 ) THEN
                PREEMPT(ISCN) = 'NO'

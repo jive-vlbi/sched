@@ -1,0 +1,63 @@
+! Standard setup file: rdbe_pfb_1548_dual.set                  
+!     (Produced by MAKESETUP)
+!  Setup for 20cm observations with the RDBE using the PFB personality.
+!  There are 2 LO settings on the VLBA for 20cm observations.
+
+!  With the 2.1 GHz LO, the frequency range tops out at 1600 MHz.  The
+!  bottom is set by the receiver and, at some sites, RFI filters.
+!  See freq_RDBE.dat for details, but expect problems below about 1350 MHz.
+!  The top is set by the IF range at most sites.  SC, has an IF-based
+!  665-1027 MHz RFI filter that cuts signals above 1435 MHz (with this LO)
+!
+!  With the 2.4 GHz LO, the lower frequency limit is 1392 for the PFB (1376
+!  for the DDC).  The top is set by the receiver to around 1850 MHz, with
+!  values closer to 1750 MHz for the sites with RFI filters.  Again see
+!  freq_RDBE.dat for details.
+
+!  For reasons of RFI, it is generally preferred to use the 2.4 GHz LO over
+!  the 2.1 GHz option unless the science absolutely requires going to
+!  lower frequencies.  For this setup, the 2.4 GHz LO is used.
+
+!  The freq_RDBE.dat entry v20cm_2 will be used with firstlo=2400 for the VLBA
+!  The GBT uses the same LO so there is a good match.  EB_VLBA has an option
+!  to observe in the range 1584 to 1706 MHz with matching PFB channels but
+!  sideband inversion has to be used.
+
+!  The following RF frequencies are allowed with the PFB and 2.4 GHz LO.
+!  They are the bottom of the 32 MHz bands (bad IF 1040 channel not shown)
+!  1392.  1424.  1456.  1488.  1520.  1552.  1584.
+!  1616.  1648.  1680.  1712.  1744.  1776.  1808.  1840.
+
+!  Hydrodgen is at 1420.4 MHz.  OH is at 1612.2, 1665.4, 1667.4, and 1720.5
+!  MHz, so those are covered.   Very approximately, the bad RFI regions
+!  for the VLBA are 1525 to 1555 MHz, near 1620 MHz, and 1690 to 1720 MHz.
+!  For dual band, we need to leave out 7 of those listed.  Taking into
+!  account the RFI and band edges, and trying to get the spectral lines,
+!  Leave out:  1520, 1616, 1680, 1744, 1776, 1808, and 1840
+!  Keep:   1392, 1424, 1456, 1488, 1552, 1584, 1648, and 1712
+!  Note that this set is not a good match for EB so a separate setup is
+!  provided for that station that covers the range 1584 to 1706 solidly
+
+!  If a change of baseband frequencies is desired, the 16 new values of
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = -1008.0, -1008.0, -976.0,  -976.0, -944.0,  -944.0, -912.0,  -912.0,
+!              -880.0,  -880.0, -848.0,  -848.0, -816.0,  -816.0, -784.0,  -784.0,
+!              -752.0,  -752.0, -720.0,  -720.0, -688.0,  -688.0, -656.0,  -656.0,
+!              -624.0,  -624.0, -592.0,  -592.0, -560.0,  -560.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+
+
+  freqref = 2400.0
+  freqoff = -1008, -1008, -976,  -976, -944,  -944, -912,  -912,
+             -848,  -848, -816,  -816, -752,  -752, -688,  -688
+  netside = U
+  station = vlba, gbt_vlba, gbt_cold
+  /

@@ -22,6 +22,7 @@ C
       CHARACTER   TFORM*8, SUMDAT*6
       CHARACTER   FF*1, PDATE*(*)
       CHARACTER   SUMTXT1*100, SUMTXT2*100, SUMDESC*100, EXTN*4
+      CHARACTER   PRESYM*1
 C-----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SUMSCN: Starting.' )
       FF = CHAR(12)
@@ -69,8 +70,14 @@ C
                   IF( LINE .EQ. 0 ) THEN
 C
                      WRITE( ISUM, '( 1X, /, 1X, /, A1, A, A, A ) ' )
-     1                 FF, ' SUMMARY for experiment ', EXPCODE, EXPT
+     1                 FF, ' SUMMARY for experiment ', EXPCODE, 
+     1                 EXPT(1:LEN1(EXPT))
                      LINE = 2
+C
+                     WRITE( ISUM, '( A, A )' )
+     1                   '     Symbol after SCAN number:  ''+'' => ',
+     2                   'Extra scan.  ''-'' => preemptable for USNO.'
+                        LINE = LINE + 1
 C
                      IF( LABFLG1 .OR. LABFLG2 ) THEN
                         WRITE( ISUM, '( 5X, A, A, A )' )
@@ -120,6 +127,16 @@ C
 C
                   END IF
 C
+C                 Get the symbol based on PREEMPT.
+C 
+                  IF( PREEMPT(ISCN) .EQ. 'EXTRA' ) THEN
+                     PRESYM = '+'
+                  ELSE IF( PREEMPT(ISCN) .EQ. 'OK' ) THEN
+                     PRESYM = '-'
+                  ELSE
+                     PRESYM = ' '
+                  END IF
+C
 C                 If the scan was skipped, detect and note that fact.
 C
                   SKIPPED = .TRUE.
@@ -127,12 +144,12 @@ C
                      IF( STASCN(ISCN,ISTA) ) SKIPPED = .FALSE.
                   END DO
                   IF( SKIPPED .AND. NSTA .GT. 1 ) THEN
-                     WRITE( ISUM, '( I4, 2A )' ) ISCN, 
+                     WRITE( ISUM, '( I4, 3A )' ) ISCN, PRESYM, 
      1                     '  Skipping scan on ',
      2                     SCNSRC(ISCN)(1:LEN1(SCNSRC(ISCN)))
                      LINE = LINE + 1
                   ELSE IF( SKIPPED .AND. NSTA .EQ. 1 ) THEN
-                     WRITE( ISUM, '( I4, 3A, F8.2 )' ) ISCN, 
+                     WRITE( ISUM, '( I4, 4A, F8.2 )' ) ISCN, PRESYM,
      1                     '  Skipping scan on ',
      2                     SCNSRC(ISCN)(1:LEN1(SCNSRC(ISCN))),
      3                     '  at El=', EL1(ISCN,1)
@@ -144,7 +161,8 @@ C                    Get scan times.
 C
                      CALL TIMEJ( STARTJ(ISCN), YEAR, DAY1, START )
                      CALL TIMEJ( STOPJ(ISCN), YEAR, DAY2, STOP )
-                     WRITE( LINE1(1:9), '( I4, I5 )' ) ISCN, DAY1
+                     WRITE( LINE1(1:9), '( I4, A, I4 )' ) 
+     1                    ISCN, PRESYM, DAY1
                      WRITE( LINE2(1:9), '( A4, I5 )' ) 
      1                    SCANTAG(ISCN), DAY2
                      LINE1(11:18) = TFORM( START, 'T', 0, 2, 2, '::@' )
