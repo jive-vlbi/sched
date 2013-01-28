@@ -133,10 +133,16 @@ C
 C
 C                    Record if all stations are VLBA stations.
 C                    If so, we can assume some things are done
-C                    that might not be done elsewhere.
+C                    that might not be done elsewhere.  Actually
+C                    ALLVLBA is not currently in use.  Also
+C                    get GOTVLBA to indicate that at least one
+C                    VLBA antenna is present.  If not, some
+C                    things don't need to be done.
 C
                      IF( STANAME(ISTA)(1:4) .NE. 'VLBA' )
      1                  ALLVLBA = .FALSE.
+                     IF( STANAME(ISTA)(1:4) .EQ. 'VLBA' )
+     1                  GOTVLBA = .TRUE.
 C
                   END IF
 C

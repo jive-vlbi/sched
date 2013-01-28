@@ -604,18 +604,20 @@ C                      SCAN1 and SCANL are the first and last scans
 C                         to process after the SCHOPT call.
 C                      The optimization routines might cause these 
 C                      to be very different from 1 and NSCANS.
+C                      FUZZY means that there are some PREEMPT=EXTRA scans.
+C                      GOTVLBA indicates that there are some VLBA stations.
 C
 C                      Input items:
 C
       REAL             IATUTC
       INTEGER          LSTSTA
       LOGICAL          LST, MARK2, VLBITP, VLAONLY, NOTAPE, CONFIG
-      LOGICAL          TANTS1(MAXSTA), TANTS2(MAXSTA)
+      LOGICAL          TANTS1(MAXSTA), TANTS2(MAXSTA), FUZZY, GOTVLBA
       CHARACTER        EXPT*72, EXPCODE*8
 C
 C                      Calculated items:
 C
-      DOUBLE PRECISION TFIRST, TEND
+      DOUBLE PRECISION TFIRST, TEND, COREBEG, COREEND
       INTEGER          SCAN1, SCANL, NSCANS
       LOGICAL          GOTFREQ, DWELLS
 C
@@ -635,10 +637,11 @@ C
       INTEGER          NSRC, SRCATN(MAXSRC)
       CHARACTER        SRCNAME(MAXSRC)*12
 C
-      COMMON /SCHN1/   TFIRST, TEND, IATUTC, LSTSTA, LST, 
-     1                 MARK2, VLBITP, VLAONLY, NOTAPE, CONFIG, TANTS1,
-     2                 TANTS2, SCAN1, SCANL, NSCANS, GOTFREQ, 
-     3                 DWELLS, NSTA, STANUM, NSRC, SRCATN
+      COMMON /SCHN1/   TFIRST, TEND, COREBEG, COREEND, IATUTC, 
+     1                 LSTSTA, LST, MARK2, VLBITP, VLAONLY, 
+     2                 NOTAPE, CONFIG, TANTS1, TANTS2, FUZZY, 
+     3                 GOTVLBA, SCAN1, SCANL, NSCANS, GOTFREQ, 
+     4                 DWELLS,  NSTA, STANUM, NSRC, SRCATN
       COMMON /SCHC1/   EXPT, EXPCODE, STANAME, SRCNAME
 C
 C
@@ -685,7 +688,7 @@ C
       CHARACTER        ANNOT(MAXSCN)*128, SCNSRC(MAXSCN)*12
       CHARACTER        DOPSRC(MAXSCN)*12, LINES(MAXSCN)*8
       CHARACTER        PCAL(MAXSCN)*4, SCANTAG(MAXSCN)*4
-      CHARACTER        PREEMPT(MAXSCN)*2, INTENT(MINTENT)*80
+      CHARACTER        PREEMPT(MAXSCN)*5, INTENT(MINTENT)*80
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
      1                 DOPEAK, POINT, DURONLY, NOWAIT, 

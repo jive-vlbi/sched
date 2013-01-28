@@ -6469,7 +6469,7 @@ so a gap inserted to break a recording scan should be longer than
 that.
 
 Short recorder stoppages could cause problems for playback in the era
-of tapes.  Every time the recording stoped, it must be resynced, which
+of tapes.  Every time the recording stopped, it must be resynced, which
 takes 10-20 seconds for the old VLBA hardware correlator.  This is not
 much of an issue for the DiFX software correlator or the MarkIV
 correlators.
@@ -8879,15 +8879,17 @@ after a {\tt VLAINTEG} is specified.
 \subsubsection{\label{MP:VLAMODE}{\tt VLAMODE}}
 
 {\tt VLAMODE} is used to control phasing up of the VLA.  The control
-can also be done directly by specifying the 
-phasing related \htmlref{{\tt INTENTs}}{MP:INTENTs}, but that can
-be more cumbersome, especially if other {\tt INTENTs} are changing
-from scan to scan.  A phasing mode is required.  For a schedule using
-the VLA, if \schedb does not
-get a {\tt VLAMODE} or a phasing related {\tt INTENT}, it will quit.
-When {\tt VLAMODE} is used, \schedb will 
-generate the appropriate {\tt INTENTs} for the VEX file for the {\tt VLAMODE}
-that is given.
+can also be done directly by specifying the phasing related
+\htmlref{{\tt INTENTs}}{MP:INTENTs}, but that can be more cumbersome,
+especially if other {\tt INTENTs} are changing from scan to scan.  A
+phasing mode is required.  For a schedule using the VLA, if \schedb
+does not get a {\tt VLAMODE} or a phasing related {\tt INTENT}, it
+will quit.  When {\tt VLAMODE} is used, \schedb will generate the
+appropriate {\tt INTENTs} for the VEX file for the {\tt VLAMODE} that
+is given.
+
+VLA reference pointing and array phasing must not be requested in the 
+same scan.
 
 The valid {\tt VLAMODE} values are:
 
@@ -8972,6 +8974,9 @@ attempted, should be done more often than at lower elevations.  For
 pointing at X band, a calibrator (or target) source should be used
 that has a flux density in excess of about 200 mJy on all VLA
 baselines.  See the VLA documentation for more details and advice.
+
+VLA reference pointing and array phasing must not be attempted in
+the same scan.  SCHED will abort if that is tried.
 
 \rcwbox
 {Text of up to 9 characters.}
@@ -13297,6 +13302,9 @@ more information.
 \subsection{\label{SSEC:VER_10.3}Development Version 10.3}
 
 \begin{itemize}
+
+\item Prohibit VLA phasing and reference pointing in the same scan.
+Jan. 23, 2013. RCW.
 
 \item Release a version to {\sl sched\_temp} for testing by others.  
 Jan. 23, 2013. RCW.

@@ -12,7 +12,7 @@ C
       INCLUDE  'sched.inc'
 C
       INTEGER         ISCN, ISTA, II, IIDE, IIAP, IIAD, IIOF
-      LOGICAL         GOTPTINT, GOTDOPK, GOTPK1
+      LOGICAL         GOTPTINT, GOTDOPK, GOTPK1, JUSTVLA
 C  ----------------------------------------------------------------------
 C
 C     First see if the user has added their own peaking INTENTS.  If
@@ -92,17 +92,32 @@ C            applied so don't worry about that.  If there is a long slew,
 C            or a long time, the on-line system or operators may stop 
 C            applying on its own.
 C
+C            Don't do anything on a scan that only includes the VLA 
+C            (probably a phasing or VLA pointing scan).
+C
              GOTPK1 = .FALSE.
              DO ISCN = SCAN1, SCANL
-                NSCINT(ISCN) = NSCINT(ISCN) + 1
-                IF( DOPEAK(ISCN) .GE. 1 ) THEN
-                   ISCINT(NSCINT(ISCN),ISCN) = IIDE
-                   GOTPK1 = .TRUE.
-                ELSE
-                   IF( GOTPK1 ) THEN
-                      ISCINT(NSCINT(ISCN),ISCN) = IIAP
+C
+                JUSTVLA = .TRUE.
+                DO ISTA = 1, NSTA
+                  IF( STASCN(ISCN,ISTA) .AND. 
+     1                INDEX( STANAME(ISTA), 'VLA' ) .EQ. 0 ) THEN
+                     JUSTVLA = .FALSE.
+                     GO TO 200
+                  END IF
+                END DO
+  200           CONTINUE
+                IF( .NOT. JUSTVLA ) THEN
+                   NSCINT(ISCN) = NSCINT(ISCN) + 1
+                   IF( DOPEAK(ISCN) .GE. 1 ) THEN
+                      ISCINT(NSCINT(ISCN),ISCN) = IIDE
+                      GOTPK1 = .TRUE.
                    ELSE
-                      ISCINT(NSCINT(ISCN),ISCN) = IIOF
+                      IF( GOTPK1 ) THEN
+                         ISCINT(NSCINT(ISCN),ISCN) = IIAP
+                      ELSE
+                         ISCINT(NSCINT(ISCN),ISCN) = IIOF
+                      END IF
                    END IF
                 END IF
              END DO
