@@ -1,0 +1,33 @@
+! Standard setup file: rdbe_pfb_18cm_HSA_dual.set              
+!     (Produced by MAKESETUP)
+!  Setup for 20cm observations with the RDBE using the PFB personality.
+!  This is much like rdbe_pfb_1548_dual.set so see the comments in
+!  that file for details.  The difference is that this one is meant
+!  for better overlap with EB_VLBA so the list of baseband frequencies
+!  is a bit different, with solid coverage in the 1584-1706 range covered
+!  at EB_VLBA with a 1056 MHz LO.  Basically, the basebands are split
+!  into two chunks, one near 1400 and the other with the EB overlap.
+!  Keep:   1392, 1424, 1456, 1488, 1584, 1616, 1648, and 1680
+!  But for EB_VLBA, we will need to use dummy basebands at higher
+!  frequencies.  Also we need to use sideband inversion.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+
+  freqref = 2400.0
+  freqoff = -1008, -1008, -976,  -976, -944,  -944, -912,  -912,
+            -816,  -816,  -784,  -784, -752,  -752, -720,  -720
+  netside = U
+  station = vlba, gbt_vlba, gbt_cold
+  /
+  firstlo = 1056
+  station = eb_vlba
+  freqref = 1056
+  freqoff = 560.0, 560.0,  592.0, 592.0,  624.0, 624.0,  656.0, 656.0,
+            688.0, 688.0,  720.0, 720.0,  752.0, 752.0,  784.0, 784.0
+  netside = L
+  /

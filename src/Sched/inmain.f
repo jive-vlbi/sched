@@ -49,7 +49,7 @@ C
       CALL KEYADD( 'NODOP', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'DOPINCR', 0.0D0, 2, KD, KC, KI )
       CALL KEYCHR( 'PCAL', ' ', 4, KD, KC, KI )
-      CALL KEYCHR( 'PREEMPT', '--', 2, KD, KC, KI )
+      CALL KEYCHR( 'PREEMPT', '--', 5, KD, KC, KI )
       DO I = 1, MSCINT
          CALL KEYCHR( 'INTENTs', ' ', 80, KD, KC, KI )
       END DO
