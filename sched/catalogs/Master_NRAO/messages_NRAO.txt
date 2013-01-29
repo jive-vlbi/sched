@@ -182,11 +182,17 @@ CHKSOC:  Channels to be processed in Socorro as a polarization pair
 
   * Some stations are unable to reach a scheduled source before the
     scan end time.  In most cases, those stations, if using disk 
-    recordings, are being removed from the affected scans.  This 
-    behavior can be overridden using DODOWN.  Also using DWELL time 
-    scheduling can prevent such cases.  With DWELL with a second, 
-    but not a third argument, this may still happen if there are 
-    slow antennas.
+    recordings, are being removed from the affected scans.  Usually
+    the antenna is ready late because of a long slew, especially a
+    cable wrap on alt/az antennas.  But it is also possible that
+    other parameters that can delay a scan start time, such as 
+    TLEVSET (time allowed for the first scan of a setup for digital
+    backends to set levels), are playing a role.  Omission of an
+    antenna in a scan for which it is not ready by the end can be 
+    overridden using DODOWN, which is scan dependent.  Also using 
+    DWELL time scheduling can prevent such cases.  With DWELL 
+    with a second, but not a third argument, this may still happen 
+    if there are slow antennas.
 
     Note that, if using DWELL with a second argument, the antenna
     that does not make it to source is counted as one of the ones

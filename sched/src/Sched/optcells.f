@@ -171,7 +171,7 @@ C
 C                 Get the geometric parameters.
 C
                   CALL STAGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
-     1                   LASTTIME, TONSRC(JSCN,ISTA) )
+     1                   LASTTIME, TONSRC(JSCN,ISTA), 'OPTCELLS' )
 C
 C                 Only do anything if the station is up.
 C

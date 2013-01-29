@@ -1696,20 +1696,23 @@ input scan corresponds to which output scan.  Example
 \htmladdnormallink{{\sl eg24.key}}{examples/eg24.key}
 demonstrates such a schedule.
 
-\item{\bf Set-and-remember:}  Both the VLBA (RDBE) and the VLA new
+\item{\bf Set-and-remember:} Both the VLBA (RDBE) and the VLA new
 systems require the power levels for the analog signals to be set
 before the wide band samplers.  Changing the attenuators can cause
-phase errors, but there is a lot of dynamic range in the allowed 
-levels.  Therefore the attenuators are only set once for each 
+phase errors, but there is a lot of dynamic range in the allowed
+levels.  Therefore the attenuators are only set once for each
 frequency setup per observation.  Time needs to be left for that
 operation.  The RDBE needs 15 seconds.  The VLA needs 60 seconds.
 \schedb will warn when inadequate time is provided.  Also, \schedb
-will schedule in the required time automatically using the numbers
-in the station catalog parameter {\tt TLEVSET} when using dwell
-time scheduling.  After the first scan with a setup, the RDBE needs
-about 5 seconds at the start of each scan to set the levels for
-the final down-sampler to 2 bits.  The VLA doesn't need extra time
-for that, although that operation is done.
+will schedule in the required time automatically using the numbers in
+the station catalog parameter {\tt TLEVSET} when using dwell time
+scheduling when the scan itself is a recording scan, a pointing scan,
+or a phasing scan (VLA) or is not long enough.  After the first scan
+with a setup, the RDBE needs about 5 seconds at the start of each scan
+to set the levels for the final down-sampler to 2 bits.  That time
+will be provided automatically for if the station file parameter {\tt
+TSETTLE} is higher, which it normally is for other reasons.  The VLA
+doesn't need extra time for that, although that operation is done.
 
 
 \end{list}
@@ -3463,6 +3466,8 @@ sources.  It is, however, faster than some other HSA or Global VLBI
 antennas.  The use of \htmlref{{\tt DWELL}}{MP:DWELL} for scheduling
 should insure that adequate on-source time is obtained with the
 slower antennas.
+
+$099834t   this is a trap for latex to say changes needed below
 
 Another issue is that each time there is a change of frequency, there needs
 to be a one minute dummy scan.  This is handled through the antenna
@@ -11370,8 +11375,8 @@ channel numbers that are too high).
 
 \rcwbox
 {A character string of up to 8 characters}
-{One of ' ', '{\tt RDBE\_PFB}', '{\tt RDBE\_DDC}', '{\tt DBBC_PFB}' or
-'{\tt DBBC_DDC}'. It is not case sensitive}
+{One of ' ', '{\tt RDBE\_PFB}', '{\tt RDBE\_DDC}', '{\tt DBBC\_PFB}' or
+'{\tt DBBC\_DDC}'. It is not case sensitive}
 {'{\tt RDBE\_PFB}' for a station with the RDBE DAR, '{\tt DBBC\_PFB}' 
 for a station with the DBBC DAR, and blank for anything else.}
 {Defaults to previous segment.  See note above about setting blank}
@@ -13310,7 +13315,7 @@ Jan. 23, 2013. RCW.
 Jan. 23, 2013. RCW.
 
 \item Removing the routine that tried to adjust the freq.dat frequency
-ranges for the RDBE.  With freq_RDBE.dat available, it is not useful,
+ranges for the RDBE.  With freq\_RDBE.dat available, it is not useful,
 and is improperly changing some entries.  Jan. 21, 2013.  RCW.
 
 \item Changed behavior of setting the start time with dwell scheduling

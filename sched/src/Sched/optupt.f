@@ -110,7 +110,7 @@ C
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) ) THEN
                CALL STAGEO( ISCN, ISTA, STARTJ(ISCN), 
-     1             0, LASTTIME, T_AVAIL )
+     1             0, LASTTIME, T_AVAIL, 'OPTUPT' )
                STASCN(ISCN,ISTA) = UP1(ISCN,ISTA) .EQ. ' ' .AND.
      1             UP2(ISCN,ISTA) .EQ. ' ' .AND.
      2             ( EL1(ISCN,ISTA) + EL2(ISCN,ISTA) ) / 2.0 .GT. 

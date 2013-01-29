@@ -108,7 +108,7 @@ C              when using DUR.  T_AVAIL is meant to be the earliest
 C              that this station can start the scan given the scheduling type.
 C
                CALL STAGEO( ISCN, ISTA, SSTIME, 
-     1                      LASTISCN(ISTA), LASTTIME, T_AVAIL )
+     1                 LASTISCN(ISTA), LASTTIME, T_AVAIL, 'OPTTIM' )
 C
 C              With dwell scheduling, you can specify to wait for all
 C              but the last NOWAIT antennas.  This helps deal with slow,

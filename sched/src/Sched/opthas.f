@@ -311,7 +311,7 @@ C
                DO ISTA = 1, NSTA
                   IF( STASCN(JSCN,ISTA) ) THEN
                      CALL STAGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
-     1                      LASTTIME, TONSRC(JSCN,ISTA) )
+     1                      LASTTIME, TONSRC(JSCN,ISTA), 'OPTHAS' )
                      IF( KSCN .GT. 1 .AND. 
      1                      UP1(JSCN,ISTA) .EQ. ' ' ) THEN
                         ATSRC = MAX( ATSRC, TONSRC(JSCN,ISTA) )
