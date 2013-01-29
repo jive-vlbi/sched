@@ -153,7 +153,7 @@ C                 calls to SCHSRC and SLEW plus setting TONSRC.
 C                 I want to absorb SCHSRC into STAGEO.
 C
                   CALL STAGEO( ISCN, ISTA, STARTJ(ISCN), LASTJSCN,
-     1                 LASTTIME, T_AVAIL )
+     1                 LASTTIME, T_AVAIL, 'SUVOPT_1' )
                   LASTJSCN = ISCN
                END IF
             END DO
@@ -197,7 +197,7 @@ C
       DO ISCN = SCAN1, SCANL
          IF( STASCN(ISCN,KSTA) ) THEN
             CALL STAGEO( ISCN, ISTA, STARTJ(ISCN), LASTJSCN,
-     1                   LASTTIME, T_AVAIL )
+     1                   LASTTIME, T_AVAIL, 'SUVOPT_2' )
             LASTJSCN = ISCN
          END IF
       END DO

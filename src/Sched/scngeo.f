@@ -36,7 +36,7 @@ C        it will observe.  The output arguments for STAGEO (LASTTIME
 C        and T_AVAIL) are not used for this application).
 C
          CALL STAGEO( ISCN, ISTA, STARTJ(ISCN), LASTISCN(ISTA),
-     1              LASTTIME, T_AVAIL)
+     1              LASTTIME, T_AVAIL, 'SCNGEO' )
 C
 C        Count the number of stations in the scan that will get good
 C        data.

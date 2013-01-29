@@ -67,7 +67,7 @@ C
             OKSTA(ISTA) = .FALSE.
             IF( STASCN(JSCN,ISTA) ) THEN
                CALL STAGEO( ISCN, ISTA, TAPPROX, LASTISCN(ISTA),  
-     1             LASTTIME, T_AVAIL )
+     1             LASTTIME, T_AVAIL, 'GMKSCN' )
                IF( UP1(ISCN,ISTA) .EQ. ' ' .AND. 
      1             UP2(ISCN,ISTA) .EQ. ' ' .AND. 
      2             EL1(ISCN,ISTA) .GT. MINEL .AND.

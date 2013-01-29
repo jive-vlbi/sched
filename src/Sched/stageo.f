@@ -1,5 +1,5 @@
       SUBROUTINE STAGEO( ISCN, ISTA, T_EST1, LSCN,
-     1                   LASTTIME, T_AVAIL)
+     1                   LASTTIME, T_AVAIL, CALLER )
 C
 C     General purpose geometry routine for calculation of
 C     the geometry for a station in a scan.  It is used a lot
@@ -34,6 +34,10 @@ C
 C       The geometric parameters are in the HA1, EL1 etc arrays.
 C       This is set to the next even second.
 C
+C     CALLER is the name of the calling routine.  This routine 
+C       is called from so many places that, during debugging, 
+C       it can help a lot to know who called it.
+C
 C     If this is the first scan (LSCN=0), return 0.D0 for
 C     LASTTIME and T_AVAIL.  The calling routine should not use
 C     these times.
@@ -42,9 +46,15 @@ C
 C
       INTEGER          ISCN, ISTA, LSCN
       DOUBLE PRECISION T_EST1, T_EST2, T_AVAIL, LASTTIME
-      CHARACTER        HORCHK*1
+      CHARACTER        HORCHK*1, CALLER*(*)
 C ----------------------------------------------------------------
-      IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'STAGEO: starting.' )
+      IF( DEBUG .AND. ISCN .LE. 3 ) THEN
+          MSGTXT = ' '
+          WRITE( MSGTXT, '( A, A )' )
+     1        'STAGEO: starting. Called by ', CALLER
+          CALL WLOG( 0, MSGTXT )
+      END IF
+C      write(*,*) 'stageo: called by ', caller
 C
 C     Get geometric parameters for this station and this scan.
 C
