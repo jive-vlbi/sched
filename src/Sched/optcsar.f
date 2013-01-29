@@ -126,7 +126,7 @@ C
 C              Get geometry and time available.
 C
                CALL STAGEO( JSCN, ISTA, TAPPROX, LASTISCN(ISTA),
-     1                      LASTTIME, TONSRC(JSCN,ISTA) )
+     1                      LASTTIME, TONSRC(JSCN,ISTA), 'OPTCSAR' )
 C
 C              For first scan at the station, set TONSRC to the
 C              nominal start time.

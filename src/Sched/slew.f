@@ -41,7 +41,7 @@ C
 C
       INTEGER            ISCN, KSCN, LSCN, ISTA, KSTA, PASS, KS
       REAL               LASTAX1, LASTAX2, CURAX1, CURAX2
-      LOGICAL            KSUSED
+      LOGICAL            KSUSED, OKLEV
       DOUBLE PRECISION   AX1SLEW, AX2SLEW, DMINSU, TARRIVE
       REAL               TACC1, TACC2, DACC1, DACC2, TSLW1, TSLW2
       REAL               RATE1, RATE2, AX1ADU, AX2ADU
@@ -256,6 +256,14 @@ C     solution to this, so, each time the routine is called, look
 C     back for a previous incidence of the setup.  Crude, but 
 C     computers are fast now.
 C
+C     It turns out there is another issue.  Users will sometimes
+C     schedule scans that are explicitly meant for the level setting,
+C     especially on the VLA.  Try to sense when that happens, and
+C     don't add the time for the level setting if it can be done
+C     during the scan.
+C
+C     Check if this scan is the first with this setup.
+C
       KS = NSETUP(ISCN,ISTA)
       KSUSED = .FALSE.
       KSCN = ISCN - 1
@@ -266,7 +274,24 @@ C
          END IF
          KSCN = KSCN - 1
       END DO
-      IF( .NOT. KSUSED ) THEN
+C
+C     Also see if this could be a level setting scan.
+C
+      OKLEV = NOREC(ISCN) .AND. 
+     1        SNGL( DUR(ISCN) * 86400.D0 ) .GE. TLEVSET(KSTA) - 1
+      IF( STANAME(ISTA)(1:3) .EQ. 'VLA' ) THEN
+         OKLEV = OKLEV .AND. 
+     1           VLAPEAK(ISCN) .NE. 'ADJUST' .AND. 
+     2           VLAMODE(ISCN) .NE. 'VA'
+      ELSE
+         OKLEV = OKLEV .AND. DOPEAK(ISCN) .LT. 1
+      END IF
+C
+C     Now if it is first, and the scan itself can't serve, then
+C     claim the slew has to be long enough to accommodate the leve
+C     setting.
+C
+      IF( .NOT. KSUSED .AND. .NOT. OKLEV ) THEN
 C
 C        Change index on TLEVSET from ISTA to KSTA Jan. 7, 2012 RCW.
 C
