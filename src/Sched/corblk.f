@@ -4,6 +4,11 @@ C     Routine to produce a summary of the times when new correlation
 C     blocks will be required.  These are times when parameters like
 C     speedup, bandwidth etc change.
 C
+C     According to Paul Dyer on Feb. 4, 2013, this is no longer needed.
+C     So I will comment out the call, and require that this routine 
+C     be retrieved from SVN or an old version if it is needed again.
+C     First commit with this comment, then delete.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
@@ -34,7 +39,7 @@ C
 C     Put a title line in the sum file.
 C
       WRITE( ISUM, '( 1X, /, 1X, /, A, /, 1X )' )
-     1    ' Correlation blocks required by setup changes. '
+     1    ' CORRELATION BLOCKS REQUIRED BY SETUP CHANGES'
 C
 C     Initialize the relevant parameters to the first recording scan.
 C
