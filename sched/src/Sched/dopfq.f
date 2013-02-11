@@ -148,7 +148,7 @@ C
                   FREQ(ICH,ISCN) = FREQ(SAMEBBC(ICH,ISETF),ISCN)
                   IF( WARN(ICH) ) THEN
                      WRITE( MSGTXT, '( A, I2, A, I2, A )' )
-     1                  'DOPFQ: ** Set freq of chan ', ICH, 
+     1                  'DOPFQ Note: Setting freq of chan ', ICH, 
      2                  ' = freq of channel ',
      3                  SAMEBBC(ICH,ISETF), ' (shared BBC).'
                      CALL WLOG( 0, MSGTXT )

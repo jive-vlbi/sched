@@ -14,7 +14,9 @@ C
 C
       INTEGER           ISCN, ISTA, NCNT
       INTEGER           SY, SD, TY, TD, MAXSTOP
-      LOGICAL           TSWARN, RECLAST(MAXSTA)
+      REAL              C1GBYTES(MAXSTA), D1GBYTES(MAXSTA)
+      LOGICAL           TSWARN, RECLAST(MAXSTA), GOTCORE(MAXSTA)
+      LOGICAL           DOSC
       DOUBLE PRECISION  ST, TL, FIRSTT, NRSEC, RECTIME
       DOUBLE PRECISION  ONEMIN, ONEHR, TLAST(MAXSTA)
       CHARACTER         TFORM*8, CSTART*8, CSTOP*8
@@ -23,6 +25,8 @@ C  -----------------------------------------------------------------
 C
 C     Initialize.  Prevent counting start of expt as a readback.
 C     NRDBCK and NSTOP set to -1 to ignore the break before obs start.
+C     NRDBCK is no longer used outside this routine.  Remove it some day.
+C     It was a tape issue.
 C
       ONEMIN = 60.D0 * ONESEC
       ONEHR = 3600.D0 * ONESEC
@@ -31,14 +35,31 @@ C
       TSWARN = .FALSE.
       DO ISTA = 1, NSTA
          TLAST(ISTA) = UNSET
+C
          NSTSC(ISTA) = 0
-         NRDBCK(ISTA) = 0
          SCNHR(ISTA) = 0.0
          TPHR(ISTA) = 0.0
          TPSCN(ISTA) = 0
          TGBYTES(ISTA) = 0.0
+C
+         ENSTSC(ISTA) = 0
+         ESCNHR(ISTA) = 0.0
+         ETPHR(ISTA) = 0.0
+         ETPSCN(ISTA) = 0
+         EGBYTES(ISTA) = 0.0
+C
+         DNSTSC(ISTA) = 0
+         DSCNHR(ISTA) = 0.0
+         DTPHR(ISTA) = 0.0
+         DTPSCN(ISTA) = 0
+         DGBYTES(ISTA) = 0.0
+C
+         C1GBYTES(ISTA) = 0.0
+         D1GBYTES(ISTA) = 0.0
+         GOTCORE(ISTA) = .FALSE.
          NSTOP(ISTA) = -1
          RECLAST(ISTA) = .TRUE.
+         NRDBCK(ISTA) = 0
       END DO
       IF( DEBUG ) CALL WLOG( 0, 'SCHTIM:  Counting readback tests.' )
 C
@@ -61,6 +82,11 @@ C
       DO ISCN = SCAN1, SCANL
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) ) THEN
+C
+C              Simplify later testing for DOSCANS range.
+C
+               DOSC = DOSCANS(1) .EQ. 0 .OR.
+     1           ( ISCN .GE. DOSCANS(1) .AND. ISCN .LE. DOSCANS(2) )
 C
 C              Save first and last times of scans actually used.
 C
@@ -90,24 +116,78 @@ C
 C              Count scans and total time.  Also count disk scans
 C              (TPSCN) which are blocks of recording without a break.
 C
-               NSTSC(ISTA) = NSTSC(ISTA) + 1
-               SCNHR(ISTA) = SCNHR(ISTA) + 
+               ENSTSC(ISTA) = ENSTSC(ISTA) + 1
+               IF( PREEMPT(ISCN) .NE. 'EXTRA' ) 
+     1             NSTSC(ISTA) = NSTSC(ISTA) + 1
+               IF( DOSC ) DNSTSC(ISTA) = DNSTSC(ISTA) + 1
+C
+               ESCNHR(ISTA) = ESCNHR(ISTA) + 
      1             ( STOPJ(ISCN) - STARTJ(ISCN) ) / ONEHR
-
+               IF( PREEMPT(ISCN) .NE. 'EXTRA' ) 
+     1             SCNHR(ISTA) = SCNHR(ISTA) + 
+     2                ( STOPJ(ISCN) - STARTJ(ISCN) ) / ONEHR
+               IF( DOSC ) DSCNHR(ISTA) = DSCNHR(ISTA) + 
+     2                ( STOPJ(ISCN) - STARTJ(ISCN) ) / ONEHR
+C
                IF( .NOT. NOREC(ISCN) ) THEN
-                  RECTIME = ( STOPJ(ISCN) - STARTJ(ISCN) + 
+C
+C                 The recording time depends on the system.  Nominally
+C                 the media start at STARTJ - TPSTART.  But the 
+C                 RDBE/VLBA and VLA systems look instead at the good
+C                 data start time in the VEX file.  So try to account
+C                 for that difference here.  I'm not sure about the
+C                 DBBC.
+C
+                  IF( USEONSRC(STANUM(ISTA)) ) THEN
+                     RECTIME =  STOPJ(ISCN) - MAX( ( STARTJ(ISCN) - 
+     1                    TPSTART(ISCN,ISTA) ), TONSRC(ISCN,ISTA) )
+                  ELSE
+                     RECTIME = ( STOPJ(ISCN) - STARTJ(ISCN) + 
      1                        TPSTART(ISCN,ISTA) )
-                  TPHR(ISTA) = TPHR(ISTA) + RECTIME / ONEHR
-                  IF( STARTJ(ISCN) - TPSTART(ISCN,ISTA) - ONESEC .GT. 
-     1                TLAST(ISTA) .OR. .NOT. RECLAST(ISTA) ) THEN
-                     TPSCN(ISTA) = TPSCN(ISTA) + 1
                   END IF
 C
-C                 Get the total bytes recorded.  This will be the
-C                 same as the bytes at the end of the last scan
-C                 this station is in.
+                  ETPHR(ISTA) = ETPHR(ISTA) + RECTIME / ONEHR
+                  IF( PREEMPT(ISCN) .NE. 'EXTRA' ) 
+     1               TPHR(ISTA) = TPHR(ISTA) + RECTIME / ONEHR
+                  IF( DOSC ) DTPHR(ISTA) = DTPHR(ISTA) + 
+     1               RECTIME / ONEHR
 C
-                  TGBYTES(ISTA) = GBYTES(ISCN,ISTA)
+                  IF( STARTJ(ISCN) - TPSTART(ISCN,ISTA) - ONESEC .GT. 
+     1                TLAST(ISTA) .OR. .NOT. RECLAST(ISTA) ) THEN
+                     ETPSCN(ISTA) = ETPSCN(ISTA) + 1
+                     IF( PREEMPT(ISCN) .NE. 'EXTRA' ) 
+     1                  TPSCN(ISTA) = TPSCN(ISTA) + 1
+                     IF( DOSC ) DTPSCN(ISTA) = DTPSCN(ISTA) + 1
+                  END IF
+C
+C                 Take the opportunity to get the total bytes recorded.  
+C                 This will be the same as the bytes at the end of the 
+C                 last scan this station is in.  Also get the bytes in the
+C                 core scans.  Keep C1GBYTES and CLGBYTES as the values
+C                 at the start and end of the core.  The core total is
+C                 the difference.
+C
+C                 Record the GBYTES of the last EXTRA scan seen.
+C                 This will end up being the value at the start of the core.
+C                 Also get the GBYTES of the last non-DOSCANS scan.
+C
+                  IF( PREEMPT(ISCN) .NE. 'EXTRA' ) 
+     1                 GOTCORE(ISTA) = .TRUE.
+                  IF( .NOT. GOTCORE(ISTA) ) 
+     1                 C1GBYTES(ISTA) = GBYTES(ISCN,ISTA)
+                  IF( DOSCANS(1) .GT. 0 .AND. ISCN .LT. DOSCANS(1) )
+     1                 D1GBYTES(ISTA) = GBYTES(ISCN,ISTA)
+C
+C                 Record the total core gbytes as of the last core scan 
+C                 seen and the total of all scans on the last scan seen.
+C
+                  EGBYTES(ISTA) = GBYTES(ISCN,ISTA)
+                  IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+                     TGBYTES(ISTA) = GBYTES(ISCN,ISTA) - C1GBYTES(ISTA)
+                  END IF
+                  IF( DOSC ) THEN
+                     DGBYTES(ISTA) = GBYTES(ISCN,ISTA) - D1GBYTES(ISTA)
+                  END IF
                END IF
 C
 C              Count readbacks.  They can happen in gaps or during
@@ -172,7 +252,7 @@ C
                   IF( STARTJ(ISCN) - TPSTART(ISCN,ISTA) - TLAST(ISTA)
      1                   .GT. ONESEC .AND. RECLAST(ISTA) ) THEN
                      NSTOP(ISTA) = NSTOP(ISTA) + 1
-                  ENDIF
+                  END IF
                ELSE
                   IF( RECLAST(ISTA) ) THEN
                      NSTOP(ISTA) = NSTOP(ISTA) + 1
@@ -187,34 +267,39 @@ C
          END DO
       END DO
 C
-C     Warn if SCNHR is zero for some station.  Abort if using VEX.
-C     (Removed ".NOT. DODOWN" from first IF statement below.  Not
+C     If no scans will for a station will be written to the output
+C     files, abort.  The VEX file does not like this.  It is possible
+C     that this will make it difficult to put a station in the EXTRA
+C     scans that are not in the core, but that can still be done by
+C     giving DOSCANS.  
+C
+C     (Removed ".NOT. DODOWN" from the SCNHR IF statement below.  Not
 C     sure why it was there, and now DODOWN is scan dependent and
 C     this is not a scan dependent place in the code.  Dec 2010 RCW).
 C
       DO ISTA = 1, NSTA
-         IF( SCNHR(ISTA) .LE. 0.0 .AND. CONTROL(STANUM(ISTA)) .EQ. 'VEX'
-     1           .AND. USEDISK(ISTA) ) THEN
-            MSGTXT = 'SCHTIM:  ****** ERROR: Station ' // 
-     1          STANAME(ISTA) // ' is not in any scans.'
-            CALL WLOG( 1, MSGTXT )
-            CALL WLOG( 1, '      This can happen if the source is ' //
-     1                 'not up in any of of the assigned scans.' )
-            MSGTXT = ' '
-            CALL ERROR( '      SCHED cannot make a Vex file.' )
-         ELSE IF( SCNHR(ISTA) .LE. 0.0 ) THEN
-            MSGTXT = 'SCHTIM:  ****** WARNING: Station ' // 
-     1          STANAME(ISTA) // ' is not in any scans.'
-            CALL WLOG( 1, MSGTXT )
-            CALL WLOG( 1, '      This can happen if the source is ' //
-     1                 'not up in any of of the assigned scans.' )
-            MSGTXT = ' '
+         IF( DNSTSC(ISTA) .EQ. 0 .AND. DOSCANS(1) .NE. 0 ) THEN
+            CALL WLOG( 1, 'SCHTIM: There are no scans for '//
+     1         STANAME(ISTA)//' with the source up in the range '//
+     2         'specified with DOSCANS.' )
+            CALL ERRLOG( 'Please add scans or take out the station.' )
+         END IF
+C
+         IF( NSTSC(ISTA) .EQ. 0 .AND. FUZZY ) THEN
+            CALL WLOG( 1, 'SCHTIM: There are no scans for '//
+     1         STANAME(ISTA)//' with the source up and PREEMPT '//
+     2         'not set to EXTRA.' )
+            CALL ERRLOG( 'Please add scans or take out the station.' )
+         END IF
+C
+         IF( ESCNHR(ISTA) .LE. 0.0  ) THEN
+            CALL WLOG( 1, 'SCHTIM: There are no scans for '//
+     1         STANAME(ISTA)//' with the source up.' )
+            CALL ERRLOG( 'Please add scans or take out the station.' )
          END IF
       END DO
 C
 C     Warn if TFIRST .NE. FIRSTT (first time specified in input 
-C     schedule vs. first time in optimized schedule.  Actually
-C     allow a couple of seconds tolerance.
 C
       IF( ABS( TFIRST - FIRSTT ) .GT. 2.0D0 / 86400.D0 ) THEN
          CALL WLOG( 1, 'SCHTIM: Earliest output scan start time ' //

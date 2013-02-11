@@ -3,7 +3,7 @@ C
 C     Routine for SCHED that checks some generic disk specific
 C     setup parameters.  There isn't much here yet.
 C
-C     This routine is only called if USDISK(ISTA) is set.
+C     This routine is only called if USEDISK(ISTA) is set.
 C       KS is setup group
 C       ERRS indicates an error was found and SCHED should die after
 C            other checks are done.

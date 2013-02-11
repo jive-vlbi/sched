@@ -521,7 +521,7 @@ C                    in and print the GB at the end of that scan.
 C                    Note, STASCN(ISCN,ISTA) is a flag that indicates
 C                    that station ISTA is in scan ISCN.  
 C
-                     IF( ISCN .GT. 1 ) THEN
+                     IF( ISCN .GT. SCAN1 ) THEN
                         LASTSCN = 0
                         DO I = SCAN1, ISCN-1
                           IF( STASCN(I, ISTA) ) LASTSCN = I

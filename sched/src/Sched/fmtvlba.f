@@ -55,7 +55,10 @@ C     for stations that don't have enough resources for TWOHEAD.
 C
 C     The meaning of some variables:
 C     NSTREAM  - The number of bit streams.
-C     TOTBPS   - The total bit rate.  Derived in SETFORM.
+C     TOTBPS   - The total bit rate.  Derived in SETFORM.  This will
+C                be a bit less than WRTBPS, the actual bit rate 
+C                because of headers, but is more useful for format 
+C                picking.
 C     MINTBPS  - The minimum track bit rate that can be used.
 C     MAXTBPS  - The maximum track bit rate that can be used.
 C     MINTRAK  - The minimum number of tracks required.

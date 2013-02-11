@@ -97,7 +97,7 @@ C           Adjust the scan times based on a geometry calculation.
 C           This reruns the above STAGEO so it could possibly be made
 C           more efficient some day.
 C      
-            CALL OPTTIM( LASTISCN, ISCN, .TRUE. )
+            CALL OPTTIM( LASTISCN, ISCN, .TRUE., .FALSE., .FALSE. )
 C      
 C           Determine the geometry, slew times, and time of arrival 
 C           on source based on the final times.  NGOOD is 
@@ -255,7 +255,7 @@ C        GMODE=SET version.
 C
          IF( NGOOD .GE. 1 ) THEN
             STARTJ(ISCN) = TAPPROX
-            CALL OPTTIM( LASTISCN, ISCN, .TRUE. )
+            CALL OPTTIM( LASTISCN, ISCN, .TRUE., .FALSE., .FALSE. )
             CALL SCNGEO( LASTISCN, NGOOD, ISCN )
          END IF
 

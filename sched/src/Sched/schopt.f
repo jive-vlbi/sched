@@ -265,7 +265,7 @@ C              that OPTTIM does not calculate geometry for all scans
 C              and, even when it does, it may be for the wrong time - 
 C              like for a guessed start time.
 C        
-               CALL OPTTIM( LASTISCN, ISCN, ADJUST )
+               CALL OPTTIM( LASTISCN, ISCN, ADJUST, .FALSE., .FALSE. )
 C        
 C              Now be sure that the experiment time boundaries have
 C              not been exceeded.  Some optimization modes watch this
@@ -368,7 +368,10 @@ C           making any changes to the scan.  Note NGOOD is not needed
 C           here (also determined by AUTODOWN) but SCNGEO is used 
 C           elsewhere where it is needed.
 C
-            CALL OPTTIM( LASTISCN, ISCN, ADJUST )
+C           This is the last call to OPTTIM, so apply the PRESCAN 
+C           offsets here.  They should only be applied once.
+C
+            CALL OPTTIM( LASTISCN, ISCN, ADJUST, .FALSE., .TRUE. )
             CALL SCNGEO( LASTISCN, NGOOD, ISCN )
 C
 C           Eliminate stations using disk recorders
@@ -522,7 +525,8 @@ C
 C
 C     Check for a monotonic time sequence at each station.
 C     Also, get the extreme times of experiment (used for Mark II tape
-C     scheduling, Doppler calculations, and Sun position).
+C     scheduling, Doppler calculations, and Sun position).  While at
+C     it, get statistics for summaries on numbers of scans, hours etc.
 C
       CALL  SCHTIM
 C

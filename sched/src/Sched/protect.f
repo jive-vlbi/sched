@@ -4,13 +4,13 @@ C     Called by SUMOPE during writing of the .sum file.  Must be
 C     called before the main scan listings and the generation of
 C     the crd and VEX files.
 C
-C     Make a listing in the summary file of the times when
+C     Make a listing in the summary file (IUNIT) of the times when
 C     a couple of stations can be taken from the project.
 C     This allows users to protect critical calibration scans
 C     or other critical scans.
 C
 C     Also deal with specification of "extra" scans whose scheduling
-C     is optional.
+C     is optional.  Only allow that at the ends of the project.
 C
 C     The preempt concept is  mainly to support scheduling of the 
 C     USNO observations on the VLBA.  These observations will take 
@@ -41,7 +41,7 @@ C
       PARAMETER          (MAXBLOCK = 4.D0 / 24.D0 )
       INTEGER            IP, NP, ISCN, JSCN, IUNIT, ISTA
       INTEGER            SY, SD, TY, TD, CBY, CBD, CEY, CED, LEN1
-      INTEGER            IOERR, VLBOPE
+      INTEGER            IOERR, VLBOPE, CORESC1, CORESCL
       LOGICAL            GOTPTMK, TOOLONG, IGWARN, EXISTS
       LOGICAL            SCNPTMK(MAXSCN), ADDEND
       DOUBLE PRECISION   ST, TL, CBT, CEL
@@ -51,7 +51,7 @@ C
       CHARACTER          CBSTART*8, CESTOP*8
       CHARACTER          PREFILE*80, OPSTAT*4, OPTEXT*255
       CHARACTER          LINE1*80, LINE2*80, LINE3*80, LINE4*80 
-      CHARACTER          LINE5*80
+      CHARACTER          LINE5*80, LINE6*80, LINE7*80
 C  -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'PROTECT starting' )
 C
@@ -140,19 +140,38 @@ C     and the times of the first and last scans of the core
 C     (not PREEMPT(ISCN)=EXTRA).  The overall experiment first and 
 C     last times are already in TFIRST and TEND.
 C
+      CORESC1 = 100000
+      CORESCL = 1
       COREBEG = 1.D10
       COREEND = 0.D0
       DO ISCN = SCAN1, SCANL
          IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
             COREBEG = MIN( COREBEG, STARTJ(ISCN) )
             COREEND = MAX( COREEND, STOPJ(ISCN) )
+            CORESC1 = MIN( CORESC1, ISCN )
+            CORESCL = MAX( CORESCL, ISCN )
          END IF
       END DO
 C
-C     Deal with no EXTRA scans, although FUZZY already flags that.
+C     Don't allow all EXTRA scans.  Also don't allow 
+C     EXTRA scans in the core range.
 C
-      IF( COREBEG .EQ. 1.D10 ) COREBEG = TFIRST
-      IF( COREEND .EQ. 0.D0 ) COREEND = TEND
+      IF( COREBEG .EQ. 1.D10 ) THEN
+         CALL ERRLOG( 'PROTECT:  You must have some scans with '//
+     1        'PREEMPT not set to EXTRA.' )
+      END IF
+      DO ISCN = CORESC1, CORESCL
+         IF( PREEMPT(ISCN) .EQ. 'EXTRA' ) THEN
+            CALL WLOG( 1, 'PROTECT: PREEMPT=EXTRA is only allowed in '//
+     1         'blocks at the start and end.' )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5, A )' )
+     1         '         Scan ', ISCN, ' is in the core and is EXTRA.'
+            CALL WLOG( 1, MSGTXT )
+            CALL ERRLOG( 
+     1           'Please change PREEMPT for the offending scan.' )
+         END IF
+      END DO
 C
 C     Get BLOCK1 and BLOCKL, the first and last times for protected
 C     scans.
@@ -273,13 +292,18 @@ C
      1        'with previous'
       LINE4 = ' and following projects.  Only the core time range '//
      1        'will be used '
-      LINE5 = ' for the initial dynamic project selection.'
-      WRITE( IUNIT, '( A, 8( /, A ) )' )
+      LINE5 = ' for the initial dynamic project selection.  DOSCANS'//
+     1        'can be used to '
+      LINE6 = ' restrict the scan range sent to the .vex, .oms, '//
+     1        'crd., sch., and'
+      LINE7 = ' .flag files. '
+C
+      WRITE( IUNIT, '( A, 10( /, A ) )' )
      1        ' ', ' ', 'ALLOWED PREEMPTION TIMES', ' ', 
-     2        LINE1, LINE2, LINE3, LINE4, LINE5
-      WRITE( IPRE, '( A, 6( /, A ) )' )
+     2        LINE1, LINE2, LINE3, LINE4, LINE5, LINE6, LINE7
+      WRITE( IPRE, '( A, 8( /, A ) )' )
      1        'ALLOWED PREEMPTION TIMES', ' ', 
-     2        LINE1, LINE2, LINE3, LINE4, LINE5
+     2        LINE1, LINE2, LINE3, LINE4, LINE5, LINE6, LINE7
 C
       LINE1 = ' The schedule can also designate which scans can be '//
      1        'preempted at'
@@ -399,7 +423,7 @@ C
          END IF
       END IF
 C
-C        Warn user his/her instructions may be ignored.
+C     Warn user his/her instructions may be ignored.
 C
       IF( IGWARN ) THEN 
          LINE1 = 
@@ -451,6 +475,25 @@ C
          WRITE( IPRE, '( A )' ) LINE4
       END IF
       WRITE( IUNIT, '( A )' ) ' '
+C
+C     If DOSCANS was specified, give the time range.
+C     Reuse some temporary variables from above.
+C
+      IF( DOSCANS(1) .NE. 0 ) THEN
+         WRITE( LINE1, '( A, I5, A, I5 )' ) 
+     1       ' DOSCANS was set to only pass scans ', 
+     2       DOSCANS(1), ' to ', DOSCANS(2)
+         CALL TIMEJ( STARTJ(DOSCANS(1)), SY, SD, ST )
+         CALL TIMEJ( STOPJ(DOSCANS(2)), TY, TD, TL )
+         CSTART = TFORM( ST, 'T', 0, 2, 2, '::@' )
+         CSTOP = TFORM( TL, 'T', 0, 2, 2, '::@' )
+         WRITE( LINE2, 
+     1     '( A, 4X, A, I3.3, A, A8, A, I3.3, A,  A8 )' ) 
+     2     ' DOSCANS time range:      ', '(', SD, ') ', 
+     3     CSTART, '  to  (', TD, ') ', CSTOP
+         WRITE( IUNIT, '( A, /, A)' ) LINE1, LINE2
+         WRITE( IPRE, '( A, /, A)' ) LINE1, LINE2
+      END IF
 C
       RETURN
       END

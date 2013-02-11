@@ -98,7 +98,7 @@ C
       INCLUDE   'schset.inc'
 C
       INTEGER           KS, ISETF, ISTA, ISCN, I
-      REAL              MAXBPS
+      REAL              MAXBPS, HDFACT
       LOGICAL           OK, NEEDFMT(MSET)
       LOGICAL           ANYLEFT, ANYLFT2
 C -------------------------------------------------------------------- 
@@ -132,6 +132,7 @@ C     general type based on the type of DAR at the station where
 C     this can be done as with most modern systems.
 C     Actually, this is not always right, but, if not, the
 C     user will need to be specific.
+C     Note the ELSE option grabs VLBA and MKIV.
 C
       DO KS = 1, NSET
          IF( FORMAT(KS) .EQ. ' ' ) THEN
@@ -157,12 +158,35 @@ C
 C     Flag VLBA and MKIV format setup groups.  This is used by
 C     various other routines besides this one.  Get the total
 C     bit rate nice and early.  Initialize RECUSED.
+C     TOTBPS is the old version and is the nominal data rate.
+C     For calculations of actual disk space used, the true bit
+C     rate WRTBPS should be used as it includes the effects
+C     of the headers.
+C     The factors for the header contribution are as per email 
+C     from W. Brisken on Jan. 8, 2013.  If the format is not a 
+C     recognized one, assume the overhead is 1.0.  For VDIF, 
+C     the overhead can depend on specific flavor.  Use the one 
+C     that we're starting with (5032 => 32 byte header on 5000 
+C     bytes data).
 C
       DO KS = 1, NSET
          VLBAMKIV(KS) = FORMAT(KS)(1:4) .EQ. 'VLBA' .OR. 
      1                  FORMAT(KS)(1:4) .EQ. 'MKIV'
          RECUSED(KS) = .FALSE.
+C
+         IF( FORMAT(KS)(1:4) .EQ. 'VLBA' ) THEN
+            HDFACT = 1.008
+         ELSE IF( FORMAT(KS)(1:4) .EQ. 'MKIV' ) THEN
+            HDFACT = 1.0
+         ELSE IF( FORMAT(KS)(1:6) .EQ. 'MARK5B' ) THEN
+            HDFACT = 1.0016
+         ELSE IF( FORMAT(KS)(1:4) .EQ. 'VDIF' ) THEN
+            HDFACT = 1.0064
+         ELSE
+            HDFACT = 1.0
+         END IF
          TOTBPS(KS)  = NCHAN(KS) * SAMPRATE(KS) * BITS(1,KS)
+         WRTBPS(KS)  = TOTBPS(KS) * HDFACT
       END DO
 C
 C     Go through scans and stations to determine which 

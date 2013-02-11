@@ -84,11 +84,26 @@ C
 C              Flag for slewing while tape writing.
 C              Note that the reason should be < 24 characters.
 C
+C              Allow for some rounding tolerance now that recordings
+C              can start right at TONSRC.  Before dealing with this,
+C              a lot of flags with the same start and stop times 
+C              were introduced.  Looking in some detail showed 
+C              that TONSRC-(STARTJ-TPSTART) was often between .15 and
+C              .2 seconds.  Not sure why.  For now, extend the flag
+C              1 second early and 0.5 second late.  That seems to have
+C              the effect of extending the flag one second beyond the
+C              VEX on-source start time for most scans when this antenna
+C              is limiting the slew.  That's probably an effect of the
+C              .15 second offset and is likely to be what you actually want.
+C              Note that, for stations with USEONSRC true, the flag
+C              could well start quite a while before the start of recording.
+C              but that should be harmless.
+C
                IF( TONSRC(ISCN,ISTA) - ( STARTJ(ISCN) - 
-     1             TPSTART(ISCN,ISTA) ) .GT. 0.D0 ) THEN
+     1             TPSTART(ISCN,ISTA) ) .GT. 0.1D0 * ONESEC ) THEN
                   CALL FLAGWRT( IFLAG, STCODE(STANUM(ISTA)), 
-     1                   STARTJ(ISCN) - TPSTART(ISCN,ISTA),
-     2                   TONSRC(ISCN,ISTA),
+     1                   STARTJ(ISCN) - TPSTART(ISCN,ISTA) - ONESEC,
+     2                   TONSRC(ISCN,ISTA) + 0.5D0 * ONESEC,
      3                   'Slewing expected.' )
                END IF
 C

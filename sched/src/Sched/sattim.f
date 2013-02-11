@@ -101,7 +101,7 @@ C
 C
 C     Above we required that STOP or DUR be set.  If STOP was not
 C     set, and START was, set INSTOP now.  Later, once we have
-C     STOPJ, we will reconstructS TARTJ from DUR.  This avoids
+C     STOPJ, we will reconstruct STARTJ from DUR.  This avoids
 C     a lot of hoop jumping concerning the start day number.
 C     If START, STOP, and DUR were given, require consistency to
 C     better than 1 second.

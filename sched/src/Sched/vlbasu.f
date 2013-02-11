@@ -96,10 +96,18 @@ C        Much of setup is not desired for a station with just a
 C        VLBA DAR (VLA, Green Bank, Bonn ...).  This is triggered
 C        by either CONTROL='VLA' or by CONTROL(5:5)='V'
 C
+
+C     worry about validity of VLBADAR in the modern world.
+
          IF( .NOT. VLBADAR(KSTA) ) THEN
 C
 C           Front end spec.
 C
+            IF( FIRSTS ) THEN
+               DO I = 1, 4
+                  LFE(I) = 'xxxxx'
+               END DO
+            END IF
             CALL VLBACHAR( 'fe', 2, 4, FE(1,LS), LFE, MFE,
      1                     FIRSTS, IUVBA )
 C

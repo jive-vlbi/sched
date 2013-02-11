@@ -19,7 +19,7 @@ C     that possibility.
       INCLUDE 'schfreq.inc'
 C
       INTEGER           LEN1, KS, KF, IP, ICH, JCH 
-      INTEGER           BITRATE, IUNIT, ISTA
+      INTEGER           IUNIT, ISTA
       CHARACTER         FMT*80, IFNAME(4)*9
       LOGICAL           ERRS, SPATCH, GOTFRQ, NEWFRQ, SIDEINV
       DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4)
@@ -103,12 +103,11 @@ C
 C
 C        Group number and station and some other items.
 C
-         BITRATE =  NCHAN(KS) * BITS(1,KS) * SAMPRATE(KS)
-         WRITE( IUNIT, '( 1X, /, A, I4, 2A, A, I4, /,  ' //
+         WRITE( IUNIT, '( 1X, /, A, I4, 2A, A, I5, /,  ' //
      1       ' 3A, I1, A, F7.3 )' ) 
      2       '   Setup group: ', KS, 
      3       '         Station: ', SETSTA(1,KS),
-     4       '          Total bit rate: ', BITRATE, 
+     4       '          Total bit rate: ', NINT( TOTBPS(KS) ),
      5       '   Format: ', FORMAT(KS),
      6       '          Bits per sample: ', BITS(1,KS),
      7       '         Sample rate:', SAMPRATE(KS)
