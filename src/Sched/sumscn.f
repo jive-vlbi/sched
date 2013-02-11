@@ -70,14 +70,31 @@ C
                   IF( LINE .EQ. 0 ) THEN
 C
                      WRITE( ISUM, '( 1X, /, 1X, /, A1, A, A, A ) ' )
-     1                 FF, ' SUMMARY for experiment ', EXPCODE, 
+     1                 FF, ' SCAN SUMMARY for experiment ', EXPCODE, 
      1                 EXPT(1:LEN1(EXPT))
                      LINE = 2
 C
-                     WRITE( ISUM, '( A, A )' )
-     1                   '     Symbol after SCAN number:  ''+'' => ',
-     2                   'Extra scan.  ''-'' => preemptable for USNO.'
+                     IF( DOSCANS(1) .GT. 0 ) THEN
+                        WRITE( ISUM, '( 3A )' )
+     1                     '     DOSCANS specified.  ''X'' in col 1 ',
+     2                     'means scan will not be in VEX and other ',
+     3                     'output files.'
+                     END IF
+C
+                     IF( GOTPREEM ) THEN
+                        WRITE( ISUM, '( 3A )' )
+     1                     '     Symbol after SCAN number (based ', 
+     2                     'on PREEMPT): ''+'' EXTRA scan.  ',
+     3                     '''-'' Do not preempt for USNO.'
                         LINE = LINE + 1
+                        IF( DOSCANS(1) .EQ. 0 ) THEN
+                           WRITE( ISUM, '( 3A )' ) 
+     1                        '       DOSCANS not specified so the ',
+     2                        '''EXTRA'' scans will not be written ',
+     3                        'to the VEX, crd, and other files.'
+                           LINE = LINE + 1
+                        END IF
+                     END IF
 C
                      IF( LABFLG1 .OR. LABFLG2 ) THEN
                         WRITE( ISUM, '( 5X, A, A, A )' )
@@ -131,10 +148,19 @@ C                 Get the symbol based on PREEMPT.
 C 
                   IF( PREEMPT(ISCN) .EQ. 'EXTRA' ) THEN
                      PRESYM = '+'
-                  ELSE IF( PREEMPT(ISCN) .EQ. 'OK' ) THEN
+                  ELSE IF( PREEMPT(ISCN) .EQ. 'NO' ) THEN
                      PRESYM = '-'
                   ELSE
                      PRESYM = ' '
+                  END IF
+C
+C                 Write any comments that the user might have given.
+C
+                  IF( ANNOT(ISCN) .NE. ' ' ) THEN
+                     WRITE ( ISUM, '( '' ---------- '',A, ' //
+     1                  ' '' ----------'', /, A )' )
+     1                  ANNOT(ISCN)(1:MAX(1,LEN1(ANNOT(ISCN)))), ' '
+      		     LINE = LINE + 2
                   END IF
 C
 C                 If the scan was skipped, detect and note that fact.
@@ -216,11 +242,20 @@ C
      1                        SUMDAT( SUMITEM(IT2), ISCN, ISTA )
                      END DO
 C
-C                    Write scan information.
+C                    Write scan information with the indicator
+C                    derived from DOSCANS.
 C
-                     WRITE( ISUM, '( A, /, A )' ) 
+                     IF( DOSCANS(1) .EQ. 0 .OR. 
+     1                   ( ISCN .GE. DOSCANS(1) .AND. 
+     2                   ISCN .LE. DOSCANS(2) ) ) THEN
+                        WRITE( ISUM, '( A, /, A )' ) 
      1                        LINE1(1:LEN1(LINE1)),
      2                        LINE2(1:LEN1(LINE2))
+                     ELSE
+                        WRITE( ISUM, '( A A, /, A, A )' ) 
+     1                        'X ', LINE1(1:LEN1(LINE1)),
+     2                        'X ', LINE2(1:LEN1(LINE2))
+                     END IF
                      LINE = LINE + 2
 C
 C                    Write sun warning if needed.

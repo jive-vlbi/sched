@@ -122,11 +122,25 @@ C
 C
 C        VLBADAR flags sites that use the VLBA control computer and
 C        software to control the recorder and DAR, but not the antenna.
-C        This is mainly Green Bank (NRAOV) and the VLA.
+C        This was mainly Green Bank (NRAOV) and the VLA (before EVLA)
+C        As of Jan. 2013, there are no stations that will give VLBADAR
+C        true.  It can probably be removed some day.
 C
          VLBADAR(MSTA)  = STACTL(5:5) .EQ. 'V' .OR. 
-     1                    STACTL(5:5) .EQ. 'v' .OR.
-     2                    CONTROL(MSTA) .EQ. 'VLA'
+     1                    STACTL(5:5) .EQ. 'v'
+C
+C        USEONSRC indicates that the station will start recordings
+C        at the time indicated in the VEX file for that station to
+C        start good data.  That time is a positive-only offset from
+C        the recording start time (the uncommented start time in the
+C        VEX file) given for the scan as a whole.
+C        If USEONSRC is not true, assume that the recording starts
+C        at the recording start time.
+C
+         USEONSRC(MSTA) = ( DAR(MSTA) .EQ. 'RDBE' .AND.   
+     1                      CONTROL(MSTA) .EQ. 'VLBA' ) .OR.
+     2                    ( DAR(MSTA) .EQ. 'WIDAR' .AND.   
+     3                      CONTROL(MSTA) .EQ. 'VEX' )      
 C
 C        Horizon mask
 C

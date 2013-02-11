@@ -9,7 +9,7 @@ C     stations up for the source.
 C
 C     A main intent is to pare down the sources being considered.
 C     Use a dummy ISCN that should be an empty slot for this test.
-C     Initialize the LASTLSCN values so that TAPPROX is used.
+C     Set USETIME so that TAPPROX is used.
 C
 C     Try to provide a list (in USEGEO) that will optimize the 
 C     chances of getting a good set.  When there are a lot of 
@@ -54,19 +54,19 @@ C
       REAL              ELTOL
       INTEGER           NLOW, NHIGH
       INTEGER           ISTA, ICH, IGEO, LSCN, MSPRT
-      INTEGER           NREJECT, LASTLSCN(MAXSTA)
+      INTEGER           NREJECT, LASTISCN(MAXSTA)
       INTEGER           YR, DY, NGOOD
-      LOGICAL           OKSTA(MAXSTA)
+      LOGICAL           OKSTA(MAXSTA), USETIME
       CHARACTER         TFORM*8, CTIME*8
 C
 C------------------------------------------------------------------
-C     Initialize LASTLSCN so MAKESCN will use TAPPROX without 
-C     adjustment (set it to -1).  Set TAPPROX to the center 
-C     of the sequence.
+C     Initialize USETIME so MAKESCN will use TAPPROX without 
+C     adjustment.  Set TAPPROX to the center of the sequence.
 C     
 C
+      USETIME = .TRUE.
       DO ISTA = 1, NSTA
-         LASTLSCN(ISTA) = -1
+         LASTISCN(ISTA) = 0
       END DO
       TAPPROX = ( TGEOEND + STARTB ) / 2.D0
       NREJECT = 0
@@ -162,9 +162,9 @@ C
 C        Make a scan with the geodetic source IGEO.  This gets all
 C        the geometric information.
 C
-         CALL MAKESCN( LASTLSCN, LSCN, JSCN, GEOSRCI(IGEO),
+         CALL MAKESCN( LASTISCN, LSCN, JSCN, GEOSRCI(IGEO),
      1        GEOSRC(IGEO), TAPPROX, OPMINEL(JSCN) - ELTOL,
-     2        NGOOD, OKSTA )
+     2        NGOOD, OKSTA, USETIME )
 C
 C        Save the elevations.
 C

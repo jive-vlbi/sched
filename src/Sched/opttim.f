@@ -1,4 +1,4 @@
-      SUBROUTINE OPTTIM( LASTLSCN, ISCN, ADJUST )
+      SUBROUTINE OPTTIM( LASTISCN, ISCN, ADJUST, USETIME, DOPRESC )
 C
 C     Routine that adjust the time of optimized scans.  
 C
@@ -14,8 +14,14 @@ C     stop time was specified, it will be used.  ADJUST refers to
 C     to whether the start time can be altered.  DURONLY determines
 C     whether to adjust the stop time.
 C
-C     Adjust the start time by PRESCAN (regardless of ADJUST), being 
-C     careful not to overlap the previous scan.
+C     If, and only if, DOPRESC is true, adjust the start time by 
+C     PRESCAN (regardless of ADJUST), being careful not to overlap 
+C     the previous scan.  This should only be true on the very last
+C     call, or this routine tends to add extra offsets with each call.
+C
+C     If USETIME is true and all LASTISCNs for stations in the scan,
+C     (indicating that this is their first scan), then use the scan
+C     time as is.  If false, use the experiment start time.
 C
 C     SSTIME is the time for which to do the geometry calculation.
 C     it will be set to the last stop time for any station scheduled
@@ -27,30 +33,17 @@ C     a good result.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER          LASTLSCN(*), LASTISCN(MAXSTA)
+      INTEGER          LASTISCN(*)
       INTEGER          ISCN, ISTA, LSCN, I
       DOUBLE PRECISION LASTTIME, TIME1J, TIME2J, T_AVAIL, TIME1K
       DOUBLE PRECISION MAXLASTT, TOLER, TBEGSRT(MAXSTA+1), DTEMP
       DOUBLE PRECISION SSTIME
-      LOGICAL          ADJUST, ALL0, USETIME
+      LOGICAL          ADJUST, ALL0, USETIME, DOPRESC
       PARAMETER        (TOLER=ONESEC/1000.D0)
 C --------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'OPTTIM: Starting.' )
       MAXLASTT = -99.D9
       LSCN = 0
-C
-C     Transfer LASTLSCN to LASTISCN.  GEOCHK tries to tell this routine
-C     to use the current scan time by setting all LASTISCNs to -1.
-C     This used to be zero and interacted properly with the way this 
-C     routine dealt with first scans.  But that proved to be flawed
-C     and things got more complicated (see ALL0 segment below).
-C
-      USETIME = .FALSE.
-      DO ISTA = 1, NSTA
-         IF( LASTLSCN(ISTA) .EQ. -1 ) USETIME = .TRUE.
-         LASTISCN(ISTA) = MAX( LASTLSCN(ISTA), 0 )
-      END DO
-C   
 C
       IF( ADJUST ) THEN
 C
@@ -215,26 +208,23 @@ C        earlier scans.
 C        This will also give a number for the case where no 
 C        stations are up.
 C
-C        Jan. 23, 2012.  Change to use the first scan start time
-C        even if this was not the first scan.  We are running into
-C        problems attempting to schedule different antennas 
-C        differently at the start of an observation.  The VLA dummy
-C        scans are the stand-out culprit.  I think using this scan's
-C        gap is appropriate.
+C        Jan. 30, 2012.  Change to use the first time of the project
+C        for the start time when no stations were in a previous scan.
+C        unless USETIME is true.  If it is true, use the time already
+C        associated with the scan.  This is used by optimization 
+C        routines, especially GEOCHK.
 C
-C        But that had a further complication.  Routine GEOCHK which
-C        is part of the DELZN section generation tries to tell this
-C        routine to use the current scan time rather than the scan 1
-C        time by setting all LASTISCNs to -1.  That was trapped
-C        above and USETIME was set.
+C        This change was provoked by undesired behavior when VLA dummy
+C        scans were scheduled in parallel with other stations at the
+C        start of an observation.
 C
          IF( ALL0 ) THEN
             IF( USETIME ) THEN
                TIME1J = STARTJ(ISCN)
                MAXLASTT = STARTJ(ISCN) - GAP(ISCN)
             ELSE 
-               TIME1J = STARTJ(1)
-               MAXLASTT = STARTJ(1) - GAP(ISCN)
+               TIME1J = TFIRST
+               MAXLASTT = TFIRST - GAP(ISCN)
             END IF
          END IF
 C
@@ -299,21 +289,30 @@ C
          END IF
       END IF
 C
-C     Adjust the start time for PRESCAN for all cases.  
+C     Adjust the start time for PRESCAN for all cases (ADJUST set
+C     or not), but only if DOPRESC is true.  The DOPRESC is needed
+C     to avoid scans marching along with successive calls to OPTTIM.
+C     DOPRESC should only be set on the last call from SCHOPT.
+C
 C     Note that PRESCAN can be of either sign.  If it is negative,
 C     it should not be allowed to back the scan up over the end of
 C     the preceeding scan.  It differs from GAP in that it can be
 C     shortened if it is longer than the interval between scans as
-C     set so far.  Recall that PRESCAN was meant for prestarting tapes
-C     and is now considered an obsolete parameter.
+C     set so far and does not move the overall scan timing, just 
+C     the start.  Recall that PRESCAN was meant for prestarting tapes
+C     and is has been considered an obsolete parameter, although 
+C     there may be a use for it for delaying scans to be absolutely
+C     sure no bad data are recorded.
 C
 C     Don't mess up the UPTIME optimization mode in the process.  That
 C     mode can have backward time jumps.
 C
-      IF( OPTMODE .NE. 'UPTIME' ) THEN
-         TIME1J = MAX( MAXLASTT, TIME1J + PRESCAN(ISCN) )
-      ELSE
-         TIME1J = TIME1J + PRESCAN(ISCN)
+      IF( DOPRESC ) THEN
+         IF( OPTMODE .NE. 'UPTIME' ) THEN
+            TIME1J = MAX( MAXLASTT, TIME1J + PRESCAN(ISCN) )
+         ELSE
+           TIME1J = TIME1J + PRESCAN(ISCN)
+         END IF
       END IF
 C
 C     Avoid crossing 0 hr when setting scan times.
@@ -356,4 +355,3 @@ C
 C
       RETURN
       END
-

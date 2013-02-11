@@ -97,7 +97,8 @@ C               END IF
 C            END IF
 C
 C           Get the maximum total bit rate for the setup file and 
-C           overall.
+C           overall.  Use the nominal rates TOTBPS rather than the
+C           format specific true bit rates WRTBPS.
 C
             MAXFTOT(ISETF) = MAX( MAXFTOT(ISETF), TOTBPS(KS) )
             MAXTOT = MAX( MAXTOT, TOTBPS(KS) )

@@ -182,11 +182,17 @@ CHKSOC:  Channels to be processed in Socorro as a polarization pair
 
   * Some stations are unable to reach a scheduled source before the
     scan end time.  In most cases, those stations, if using disk 
-    recordings, are being removed from the affected scans.  This 
-    behavior can be overridden using DODOWN.  Also using DWELL time 
-    scheduling can prevent such cases.  With DWELL with a second, 
-    but not a third argument, this may still happen if there are 
-    slow antennas.
+    recordings, are being removed from the affected scans.  Usually
+    the antenna is ready late because of a long slew, especially a
+    cable wrap on alt/az antennas.  But it is also possible that
+    other parameters that can delay a scan start time, such as 
+    TLEVSET (time allowed for the first scan of a setup for digital
+    backends to set levels), are playing a role.  Omission of an
+    antenna in a scan for which it is not ready by the end can be 
+    overridden using DODOWN, which is scan dependent.  Also using 
+    DWELL time scheduling can prevent such cases.  With DWELL 
+    with a second, but not a third argument, this may still happen 
+    if there are slow antennas.
 
     Note that, if using DWELL with a second argument, the antenna
     that does not make it to source is counted as one of the ones
@@ -335,21 +341,21 @@ set FREQ=0 and/or BW=0.
 --Called by CHKSET
 
 NOTE ABOUT 2CM FREQUENCIES: This message was triggered by your
-observation near 15.3 GHz.  There is an inconsistency between the
-frequencies specified in the standard setup files and by a
-specification of BAND='2cm' in SCHED.  The standard setup files use a
-center frequency of 15360.99.  This is also the frequency at which the
-VLBA gains are measured.  The center frequency used by SCHED for
-BAND='2cm' is 15285.49.  These frequencies are near the edge of the
-"U" band at the VLA so it is likely that the lower frequency was
-chosen for better VLA performance.  On the other hand, the higher
-frequency is in a shared radio astronomy band (15.35-15.4 GHz) so is
-more protected.  One or the other could be changed so that they match,
-but that has not been done in order to avoid a glitch in on-going
-projects.  For most purposes, these two frequency settings should be
-equivalent, but this message is provided to clarify the situation, and
-to explain why the calibration gains might be for a slightly different
-frequency than your observations.
+observation with the legacy system near 15.3 GHz.  There is an
+inconsistency between the frequencies specified in the standard setup
+files and by a specification of BAND='2cm' in SCHED.  The standard
+setup files use a center frequency of 15360.99.  This is also the
+frequency at which the VLBA gains are measured.  The center frequency
+used by SCHED for BAND='2cm' is 15285.49.  These frequencies are near
+the edge of the "U" band at the VLA so it is likely that the lower
+frequency was chosen for better VLA performance.  On the other hand,
+the higher frequency is in a shared radio astronomy band (15.35-15.4
+GHz) so is more protected.  One or the other could be changed so that
+they match, but that has not been done in order to avoid a glitch in
+on-going projects.  For most purposes, these two frequency settings
+should be equivalent, but this message is provided to clarify the
+situation, and to explain why the calibration gains might be for a
+slightly different frequency than your observations.
 
 
 ++warnlong
@@ -408,11 +414,11 @@ bandwidths and many channels, can be more significant.
 You have allowed the DiFX software correlator to adjust your average
 time to be an integral number of input FFT intervals (and an integral
 number of short-term accumulator intervals).  You did this by
-specifying CORAVG without a second argument set to "EXACT".  This is
-the default, and recommended, option.  The adjustment will be a few
-percent or less in most cases, although it can get as high as sqrt(2)
-for an extreme narrow bandwidth case with a large number of spectral
-channels.
+specifying CORAVG without a second argument set to "EXACT".  What you
+did is the default, and recommended, option.  The adjustment will be a
+few percent or less in most cases, although it can get as high as
+sqrt(2) for an extreme narrow bandwidth case with a large number of
+spectral channels.
 
 ++CRD_RDBE_Warning
 --Called by VLBASU

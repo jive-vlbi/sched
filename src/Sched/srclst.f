@@ -48,7 +48,8 @@ C
 C
 C     Give sun distance summary.
 C
-      WRITE( IOUT, '( 2( 1X, / ), A, A, /, A, A )' )
+      WRITE( IOUT, '( 2( 1X, / ), A )' ) 'EFFECT OF SOLAR CORONA'
+      WRITE( IOUT, '( 1X, /, A, A, /, A, A )' )
      1  '  The solar corona can cause unstable phases for sources',
      2  ' too close to the Sun.',
      3  '  SCHED provides warnings at individual scans for distances',
@@ -102,6 +103,7 @@ C
          MAXSEP = 1.0
          DO K = 1, 2
             IF( K .EQ. 2 ) THEN
+               WRITE( IOUT, '( 1X, A )' ) 'SOURCE SEPARATIONS'
                WRITE( IOUT, '( 1X, /, A, F6.2, A, /, 1X )' )
      1          ' Source separations in degrees for pairs closer than ',
      2            MAXSEP,' degrees.'
@@ -159,37 +161,42 @@ C
          END DO
       END IF
 C
-C     Now the third list in the format for the transfer of coordinates
-C     to the correlator data base.
+C     Now make the third source list in the format for the transfer 
+C     of coordinates to the correlator data base.  This was for the
+C     old VLBA data base and may no longer be needed.
+C     On Feb. 4, 2013, Paul Dyer said they don't need it so I am 
+C     commenting it out.  If someone squawks, it can be put back.
 C
-      IF( MODE .EQ. 2 .AND. .NOT. NOTAPE ) THEN
-         WRITE( IOUT, '( 5( 1X, / ), A, A )' )
-     1      ' J2000 coordinates formatted for possible transfer to ',
-     2      'the correlator data base:' 
-         DO ISRC = 1, MSRC
-            IF( SUSED(ISRC) ) THEN
-               TRA20 = TFORM( RA2000(ISRC), 'T', 0, 2, 9, 'hms' )
-               LENR = LEN1( TRA20 )
-               IF( D2000(ISRC) .GE. 0.D0 ) THEN
-                 TDEC20 = TFORM( D2000(ISRC),  ' ', 0, 2, 8, 'd''"' )
-               ELSE
-                 TDEC20 = TFORM( D2000(ISRC),  ' ', 1, 2, 8, 'd''"' )
-               END IF
-               LEND = LEN1( TDEC20 )
-C
-               DO J = 1, MALIAS
-                  IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
-                     LENS = LEN1( SOURCE(J,ISRC) )
-                     
-                     WRITE( IOUT, '( 6A )' )
-     1                 'name = ''', SOURCE(J,ISRC)(1:LENS),
-     2                 '''  ra = ', TRA20(1:LENR),
-     3                 '  dec = ', TDEC20(1:LEND)
-                  END IF
-               END DO
-            END IF
-         END DO
-      END IF
+C      IF( MODE .EQ. 2 .AND. .NOT. NOTAPE ) THEN
+C         WRITE( IOUT, '( 3( 1X, / ), A, A )' )
+C     1      'SOURCE LIST IN SPECIAL FORMAT'
+C         WRITE( IOUT, '( 1X, /, A, A )' )
+C     1      ' J2000 coordinates formatted for possible transfer to ',
+C     2      'the correlator data base:' 
+C         DO ISRC = 1, MSRC
+C            IF( SUSED(ISRC) ) THEN
+C               TRA20 = TFORM( RA2000(ISRC), 'T', 0, 2, 9, 'hms' )
+C               LENR = LEN1( TRA20 )
+C               IF( D2000(ISRC) .GE. 0.D0 ) THEN
+C                 TDEC20 = TFORM( D2000(ISRC),  ' ', 0, 2, 8, 'd''"' )
+C               ELSE
+C                 TDEC20 = TFORM( D2000(ISRC),  ' ', 1, 2, 8, 'd''"' )
+C               END IF
+C               LEND = LEN1( TDEC20 )
+CC
+C               DO J = 1, MALIAS
+C                  IF( CSUSED(J,ISRC) .NE. ' ' ) THEN
+C                     LENS = LEN1( SOURCE(J,ISRC) )
+C                     
+C                     WRITE( IOUT, '( 6A )' )
+C     1                 'name = ''', SOURCE(J,ISRC)(1:LENS),
+C     2                 '''  ra = ', TRA20(1:LENR),
+C     3                 '  dec = ', TDEC20(1:LEND)
+C                  END IF
+C               END DO
+C            END IF
+C         END DO
+C      END IF
 C
       RETURN
       END
