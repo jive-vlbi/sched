@@ -53,7 +53,9 @@ C
 C
 C     The meaning of some variables:
 C     NSTREAM   - The number of bit streams.
-C     TOTBPS    - The total bit rate.  Derived in SETFORM.
+C     TOTBPS    - The nominal total bit rate.  Derived in SETFORM.  
+C                 This will be the same as WRTBPS because of data 
+C                 replacement headers.
 C     MINTBPS   - The minimum track bit rate that can be used.
 C     MAXTBPS   - The maximum track bit rate that can be used.
 C     MINTRAK   - The minimum number of tracks required.

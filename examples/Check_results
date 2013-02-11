@@ -42,6 +42,7 @@ else if( -e $1.$2.sum ) then
      sed -f Check_sed | diff - $3/$1.$2.sum
 else
   echo '*************  SCHED did not run. ***************'
+  echo 'Or at least the .sum file was not found'
   echo 'This might be ok if the example tried to use an unsupported'
   echo 'feature for this installation, like satellite tracking.'
 endif
@@ -92,10 +93,14 @@ endif
 if( -e $1.vex ) then
   echo '----------------------' $1.vex ' ------------------------'
   sed -f Check_sed $1.vex | diff - $3/$1.vex
-else if( -e $1.sum.$2 ) then
+else if( -e $1.$2.sum ) then
   echo '----------------------' $1.$2.vex ' ---------------------'
   sed -e s:"$SCHED":"$SCHED_SUB":g $1.$2.vex | \
      sed -f Check_sed | diff - $3/$1.$2.vex
+else
+  echo '*************  VEX file not found. ***************'
+  echo 'This might be ok if the example tried to use an unsupported'
+  echo 'feature for this installation, like satellite tracking.'
 endif
 
 echo '----------------------------------------------------------'

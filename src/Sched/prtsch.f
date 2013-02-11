@@ -14,7 +14,7 @@ C
       INTEGER            KF, LKF, GBY1, GBY2, LGBY, ICH1
       DOUBLE PRECISION   LBW(MCHAN), SBW(MCHAN), SBBC(MCHAN)
       DOUBLE PRECISION   LFREQ(MCHAN), SFREQ(MCHAN), START, STOP 
-      DOUBLE PRECISION   TSTART, RTCORR, LSTOPJ
+      DOUBLE PRECISION   TSTART, RTCORR, LSTOPJ, DSTART
       LOGICAL            FIRSTS, DOWRTF, DOWRTB
       CHARACTER          TFORM*15, SHORTN*10
       CHARACTER          CLST1*9, CLST2*9, FF*1
@@ -73,8 +73,6 @@ C     Get time information for the scan.
 C
       CALL TIMEJ( STARTJ(ISCN), YEAR1, DAY1, START )
       CALL TIMEJ( STOPJ(ISCN), YEAR2, DAY2, STOP )
-      CALL TIMEJ( STARTJ(ISCN) - TPSTART(ISCN,ISTA), 
-     1            YEAR3, DAY3, TSTART )
       CALL TIMEJ( TCORR(ISCN,ISTA), 
      1            YEAR3, DAY3, RTCORR )
 C
@@ -245,10 +243,23 @@ C
          CTSTART = 'Stopped '
          CTCORR  = ' '
       ELSE
-         IF( ABS( LSTOPJ - ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) ) ) .LT.
-     1         1.D0 / 86400.D0 ) THEN
+C
+C        Get the media start time.  This is no longer so simple because
+C        the VLA and VLBA systems believe the good data time from the
+C        Vex file.  Other systems still use the old start time.
+C        USEONSRC is the flag for which to use.
+C
+         IF( USEONSRC(ISTA) ) THEN
+            DSTART = MAX( ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) ), 
+     1           TONSRC(ISCN,ISTA) )
+         ELSE
+            DSTART = ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) )
+         END IF
+C
+         IF( ABS( LSTOPJ - DSTART ) .LT. ONESEC ) THEN
             CTSTART = 'No stop'
          ELSE
+            CALL TIMEJ( DSTART, YEAR3, DAY3, TSTART )
             CTSTART = TFORM( TSTART, 'T', 0, 2, 2, '  @' )
          END IF
          CTCORR = TFORM( RTCORR, 'T', 0, 2, 2, '  @' )

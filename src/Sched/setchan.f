@@ -124,6 +124,10 @@ C
       END IF
 C
 C     Get the total bandwidth and bitrate.  Useful later.
+C     This is the nominal bit rate.  An adjustment for headers is
+C     needed for the actual write rate.  BITRATE is the same
+C     as TOTBPS(KS) will be after SETFORM, but that has not been
+C     called yet.
 C
       TOTBW(KS) = 0.0D0
       DO ICH = 1, NCHAN(KS)

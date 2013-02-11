@@ -78,6 +78,10 @@ C              and the media has not stopped.  Note TPSTART=0 for non
 C              recording scans, which gives the desired behavior.
 C
                TCORR(ISCN,ISTA) = STARTJ(ISCN) - TPSTART(ISCN,ISTA)
+C         write(*,*) 'resync: tcorr ', TCORR(ISCN,ISTA), 
+C     1          '  startj:', STARTJ(ISCN), 
+C     2          '  tpstart:',  TPSTART(ISCN,ISTA), 
+C     3          MINPAUSE(1), PRESTART(1)
 C
 C              Deal with formatter reconfigures.  Note that a VLBA 
 C              reconfigure will start at the end time of the previous 
@@ -238,6 +242,10 @@ C                 Also make sure TCORR is not past the stop time.
 C
                   TCORR(ISCN,ISTA) = TSADD + 
      1                  MAX( TRECON, TCORR(ISCN,ISTA) )
+C       write(*,*) 'rsync ', ista, iscn,  
+C     1      ' start stop: ', startj(iscn),  stopj(iscn),
+C     2     ' tsadd, tcorr: ', tsadd, tcorr(iscn,ista), 
+C     3     ' tonsrc, trecon:', tonsrc(iscn,ista), trecon
                   TCORR(ISCN,ISTA) = MIN( TCORR(ISCN,ISTA), 
      1                  STOPJ(ISCN) )
 C

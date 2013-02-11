@@ -1,7 +1,7 @@
       SUBROUTINE SRCWRT( IOUT, IP )
 C
 C     Subroutine for SCHED that writes the actual source lines for
-C     SRCLST.
+C     SRCLST.  See first few lines of code for meaning of IP.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schpeak.inc'
@@ -14,29 +14,33 @@ C
       INTEGER       ICHN
       INTEGER       MLINE, CLINE, IL, NPCH
       INTEGER       ISET, NFC, NCHSET, CH1SET, IPAIR, ICSRC
-      DOUBLE PRECISION  TSCAN, TBASE
-      CHARACTER     FF*1
+      DOUBLE PRECISION  TSCAN, TBASE, ESCAN, EBASE
+      CHARACTER     FF*1, WRSRC*12
       CHARACTER*16  TFORM, TRA50, TRA20, TRAP, TDEC50, TDEC20, TDECP
       CHARACTER*16  TRAPM, TDECPM
-      CHARACTER     CVELREF*12, CVELDEF*18, HEADLINE*60, KFSETS*78
-      CHARACTER*132 LINE(ML)
-      LOGICAL       PMUSED
+      CHARACTER     CVELREF*12, CVELDEF*18, HEADLINE*80, KFSETS*78
+      CHARACTER*132 LINE(ML), PFSETS*30, PRSRC*12
+      LOGICAL       PMUSED, CALL1
+      DATA          CALL1 / .TRUE. /
+      SAVE          CALL1
 C ------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'SRCWRT starting.' )
       FF = CHAR( 12 )
 C
       IF( IP .EQ. 1 ) THEN
-        HEADLINE = ' SOURCES USED IN RECORDING SCANS -- '
+        HEADLINE = ' POSITIONS OF SOURCES USED IN RECORDING SCANS'
       ELSE IF( IP .EQ. 2 ) THEN
-        HEADLINE = 
-     1    ' ADDITIONAL SOURCES USED ONLY IN NON-RECORDING SCANS -- '
+        HEADLINE = ' POSITIONS OF ADDITIONAL SOURCES USED ONLY '//
+     1     'IN NON-RECORDING SCANS'
       ELSE IF( IP .EQ. 3 ) THEN
-        HEADLINE = ' ADDITIONAL SOURCES USED ONLY FOR PHASE CENTERS -- '
+        HEADLINE = ' POSITIONS OFADDITIONAL SOURCES USED ONLY FOR '//
+     1     'PHASE CENTERS'
       END IF
 C
-      WRITE( IOUT, '( A1, A, A, /, A, /, A, A, /, 2( A, / ), ' //
-     1    'A, A, F10.3, /, A, /, A, /, A, A )' )
-     2    FF, HEADLINE, EXPT(1:LEN1(EXPT)),
+      IF( CALL1 ) THEN
+         WRITE( IOUT, '( A1, A, /, A, /, A, A, /, 2( A, / ), ' //
+     1    'A, A, F10.3, /, A )' )
+     2    FF, HEADLINE(1:LEN1(HEADLINE)),
      3    '     Catalog positions marked with *. ',
      4    '     Precession of date coordinates is based on stop ',
      5    'time of first scan.',
@@ -44,10 +48,17 @@ C
      7    '     Short names used in VLA and SNAP files marked with +. ',
      8    '     Observation date used in B1950/J2000 coordinate ',
      9    'conversion (PRECDATE):', PRECDATE,
-     a    '     No adjustments are made for rates (DRA, DDEC).',
-     b    '     Scan hours are for recording scans only. ',
-     c    '     Baseline hours are only counted for scans above ',
-     d    'horizon at both ends.'
+     a    '     No adjustments are made for rates (DRA, DDEC).'
+      ELSE
+         WRITE( IOUT, '( 1X, /, A )' ) HEADLINE(1:LEN1(HEADLINE))
+      END IF
+      CALL1 = .FALSE.
+C
+      IF( IP .EQ. 2 ) THEN
+         WRITE( IOUT, '( 1X, /, A, A)' )
+     1    '     An unused dummy source of a scan that becomes ',
+     2    'a geodetic segment will show up here.'
+      END IF
 C
       WRITE( IOUT, '( 2X, /, A, 24X, A, 23X, A /, 22X, A, 6X, A, 
      1        /, 2X )' )
@@ -185,37 +196,6 @@ C
      1            'Doppler based on other sources.'
             END IF
 C
-C           Now write the observing hours summary.  May or may
-C           not be on 5th source name line depending on doppler.
-C
-C           Get scan and baseline hours for source.  Planning schedules
-C           can have TONSRC way past STARTJ so protect against that.
-C           Break down by setup file.
-C
-            DO ISET = 1, NSETF
-               CALL SBHOURS( ISRC, TSCAN, TBASE, ISET, KFSETS )
-               IF( TSCAN .GT. 0.D0 ) THEN
-                  CLINE = CLINE + 1
-                  MLINE = MAX( MLINE, CLINE )
-                  NCHSET = LEN1(SETFILE(ISET))
-                  CH1SET = MAX( NCHSET-30, 1 )
-                  WRITE( LINE(CLINE)(22:132), 
-     1                 '( F8.3, A, F10.3, A, A )' )
-     2                 TSCAN * 24.D0, ' scan and ', 
-     3                 TBASE * 24.D0, ' baseline hours in setup: ',
-     4                 SETFILE(ISET)(CH1SET:NCHSET)
-C
-C                 List the FSETS involved.  Compiled in SBHOURS.
-C
-                  CLINE = CLINE + 1
-                  MLINE = MAX( MLINE, CLINE )
-                  NFC = LEN1( KFSETS )
-                  WRITE( LINE(CLINE)(22:132), '( 2A )' )
-     1                  'Frequency sets (dups not shown): ', 
-     2                  KFSETS(1:NFC)
-               END IF
-            END DO
-C
 C           Tell about proper motions.
 C
             PMUSED = PMRA(ISRC) .NE. 0.D0 .OR.
@@ -326,10 +306,116 @@ C
             DO IL = 1, MLINE
                WRITE( IOUT, '( A )' ) LINE(IL)(1:LEN1(LINE(IL)))
             END DO
-C
-C           Write a space before the next source.
-C
             WRITE( IOUT, '(1X)' )
+         END IF
+      END DO
+C
+C     Now write the observing hours summary as a separate section.  
+C
+      WRITE( IOUT, '( 1X, /, 1X, /, A )' ) 
+     1      'SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE'
+
+
+      WRITE( IOUT, '( 1X, /, A, /, A, A )' )
+     1    '     Scan hours are for recording scans only. ',
+     2    '     Baseline hours are only counted for scans above ',
+     3    'horizon at both ends.'
+      IF( FUZZY) WRITE( IOUT, '( A, A )' )
+     1    '     ''Core'' scans are those for which PREEMPT is ',
+     2    'not ''EXTRA''.'
+      IF( DOSCANS(1) .NE. 0 ) WRITE( IOUT, '( A, A, /, A )' )
+     1    '     The ''DOSCANS'' columns are for scans in the range ',
+     2    'selected by DOSCANS',
+     3    '     Those are the scans sent to the Vex and other files'
+C
+      LINE(1) = ' '
+      LINE(2) = ' '
+      LINE(1) = '  Source       Setup file             Frequency sets'
+      LINE(2)(36:78) = '(duplicates not shown)'
+C
+      IF( FUZZY .AND. DOSCANS(1) .EQ. 0 ) THEN
+         LINE(1)(71:101) = ' Core scans  (Hours)  All scans'
+         LINE(2)(71:102) = 'Scan  Baseline    Scan  Baseline'
+      ELSE IF( FUZZY .AND. DOSCANS(1) .NE. 0 ) THEN
+         LINE(1)(71:101) = ' Core scans  (Hours) DOSCANS'
+         LINE(2)(71:102) = 'Scan  Baseline    Scan  Baseline'
+      ELSE IF( .NOT. FUZZY .AND. DOSCANS(1) .EQ. 0 ) THEN
+         LINE(1)(71:86) = 'Observing hours'
+         LINE(2)(71:86) = ' Scan  Baseline'
+      ELSE IF( .NOT. FUZZY .AND. DOSCANS(1) .NE. 0 ) THEN
+         LINE(1)(71:86) = ' DOSCANS hours'
+         LINE(2)(71:86) = ' Scan  Baseline'
+      ELSE
+         CALL ERRLOG( 'SRCWRT: Programming error with FUZZY and '//
+     1        'DOSCANS' )
+      END IF
+C
+      WRITE( IOUT, '( A )' ) LINE(1)(1:LEN1(LINE(1)))
+      WRITE( IOUT, '( A )' ) LINE(2)(1:LEN1(LINE(2)))
+C
+C     Get scan and baseline hours for source.  Planning schedules
+C     can have TONSRC way past STARTJ so protect against that.
+C     Break down by setup file.
+C
+      DO ISRC = 1, MSRC
+         IF( ( IP .EQ. 1 .AND. USEDREC(ISRC) ) .OR.
+     1       ( IP .EQ. 2 .AND. SUSED(ISRC) .AND. .NOT. USEDREC(ISRC) )
+     2       .OR. ( IP .EQ. 3 .AND. .NOT. SUSED(ISRC) .AND. 
+     3        USEDPHS(ISRC) ) ) THEN
+C
+            DO IL = 1, ML
+               LINE(IL) = ' '
+            END DO
+C
+C           Write the name.  There should only be one.
+C
+            MLINE = 0
+            DO INAME = 1, MALIAS
+               IF( CSUSED(INAME,ISRC) .EQ. '*' ) THEN
+                  PRSRC = SOURCE(INAME,ISRC)
+               END IF
+            END DO
+C
+            CLINE = 0
+            DO ISET = 1, NSETF
+               CALL SBHOURS( ISRC, TSCAN, TBASE, ESCAN, EBASE, 
+     1                       ISET, KFSETS )
+               IF( ESCAN .GT. 0.D0 ) THEN
+C
+C                 Characters for setup - get end of file path.
+C
+                  NCHSET = LEN1(SETFILE(ISET))
+                  CH1SET = MAX( NCHSET-20, 1 )
+C
+C                 Number of characters of list of frequency sets.
+C                 This will end up being incomplete in some extreme cases.
+C                 Put a + on the end when it is.
+C
+                  NFC = LEN1( KFSETS )
+                  PFSETS = KFSETS
+                  IF( NFC .GE. 29 ) THEN
+                     PFSETS(29:30) = ' +'
+                     NFC = 30
+                  END IF
+C
+                  IF( FUZZY ) then
+                     WRITE( IOUT, '( 2X, A, T14 , A, T35, A, T67, '//
+     1                 '2( F8.3, F10.3) )' )
+     2                 PRSRC, SETFILE(ISET)(CH1SET:NCHSET), 
+     3                 PFSETS(1:NFC),
+     4                 TSCAN * 24.D0, TBASE * 24.D0, 
+     5                 ESCAN * 24.D0, EBASE * 24.D0
+                  ELSE
+                     WRITE( IOUT, '( 2X, A, T14 , A, T35, A, T67, '//
+     1                 '2( F8.3, F10.3) )' )
+     2                 PRSRC, SETFILE(ISET)(CH1SET:NCHSET), 
+     3                 PFSETS(1:NFC),
+     4                 ESCAN * 24.D0, EBASE * 24.D0
+                  END IF
+                  PRSRC = '  '
+C
+               END IF
+            END DO
          END IF
       END DO
 C

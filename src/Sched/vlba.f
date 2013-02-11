@@ -90,6 +90,7 @@ C
                CRLWARN = .FALSE.
             END IF
          END IF
+
          LCRDLINE = CRDLINE(ISCN)
 C
 C        Do a setup scan for VLBA observations when there

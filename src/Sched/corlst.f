@@ -6,15 +6,29 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER           ISTA, ISCN, I, NSANT, NBAS, NPOL, LEN1
-      REAL              DATARATE, MAXSPD
-      DOUBLE PRECISION  TTIME, TRTIME, TBTIME, STIME
+C     Note that the "E" accumulators are to include the "EXTRA" 
+C     scans while the original versions are for the core.
+C
+      INTEGER           ISTA, ISCN, I, NSANT, NBAS, NPOL, LEN1, IC
+      REAL              DATARATE, MAXSPD, EMAXSPD, DMAXSPD
+      DOUBLE PRECISION  STIME, STIME1, STIME2
+      DOUBLE PRECISION  TTIME, TRTIME, TBTIME
       DOUBLE PRECISION  TIMEB, TIMEL, TLAST
-      LOGICAL           OVERLAP, GOTCENT
+      DOUBLE PRECISION  ETTIME, ETRTIME, ETBTIME
+      DOUBLE PRECISION  ETIMEB, ETIMEL, ETLAST
+      DOUBLE PRECISION  DTTIME, DTRTIME, DTBTIME
+      DOUBLE PRECISION  DTIMEB, DTIMEL, DTLAST
+      LOGICAL           OVERLAP, GOTCENT, DOSC
+      CHARACTER*90      LINEH, LINE1, LINE2, LINE3, LINE4, LINE5, LINE6
 C
 C     Note that MAXDR and DATASIZE are passed through the include
 C     to the correlator specific routines and the OMS routines 
 C     which must be called later.
+
+
+C  *************  go looking for MAXDR and DATASIZE and add E equiv.
+
+
 C ------------------------------------------------------------------
 C     Only do this if tapes are being used.
 C
@@ -48,14 +62,47 @@ C
          GOTCENT = .FALSE.
          MAXSPD = 0.0
 C
+         ETTIME = 0.D0
+         ETRTIME = 0.D0
+         ETBTIME = 0.D0
+         EMAXDR = 0.0
+         ETIMEB = 1.D10
+         ETIMEL = 0.D0
+         ETLAST = 0.D0
+         EDATASIZ = 0.D0
+         EMAXSPD = 0.0
+C
+         DTTIME = 0.D0
+         DTRTIME = 0.D0
+         DTBTIME = 0.D0
+         DMAXDR = 0.0
+         DTIMEB = 1.D10
+         DTIMEL = 0.D0
+         DTLAST = 0.D0
+         DDATASIZ = 0.D0
+         DMAXSPD = 0.0
+C
 C        Loop through scans.
 C
          DO ISCN = SCAN1, SCANL
 C
+C           Simplify the repeated test for DOSCANS.
+C
+            DOSC = DOSCANS(1) .EQ. 0 .OR.
+     1        ( ISCN .GE. DOSCANS(1) .AND. ISCN .LE. DOSCANS(2) )
+C
 C           Start and end times of experiment to determine elapsed time.
 C
-            TIMEB = MIN( TIMEB, STARTJ(ISCN) )
-            TIMEL = MAX( TIMEL, STOPJ(ISCN) )
+            ETIMEB = MIN( ETIMEB, STARTJ(ISCN) )
+            ETIMEL = MAX( ETIMEL, STOPJ(ISCN) )
+            IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+               TIMEB = MIN( TIMEB, STARTJ(ISCN) )
+               TIMEL = MAX( TIMEL, STOPJ(ISCN) )
+            END IF
+            IF( DOSC ) THEN
+               DTIMEB = MIN( DTIMEB, STARTJ(ISCN) )
+               DTIMEL = MAX( DTIMEL, STOPJ(ISCN) )
+            END IF
 C
 C           Get number of stations in the scan.
 C
@@ -70,18 +117,39 @@ C           Get time in all scans, including non-recording scans.
 C
             IF( NSANT .GT. 0 ) THEN
                STIME = ( STOPJ(ISCN) - STARTJ(ISCN) ) * 86400.D0
-               TTIME = TTIME + STIME
+               ETTIME = ETTIME + STIME
+               IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+                  TTIME = TTIME + STIME
+               END IF
+               IF( DOSC ) THEN
+                  DTTIME = DTTIME + STIME
+               END IF
             END IF
 C
 C           For scans recording data, get the time and the time 
 C           multiplied by the number of baselines.  Look for signs
 C           that the derived data volume will be wrong.
 C
+C           The estimate here will be an overestimate of the actual
+C           time used in some cases.  This is because the time that 
+C           the recorders will be on actually depends on the 
+C           on-source time for VLA and VLBA MARK5C observations.
+C           Thus the starts are station dependent.  For now, just 
+C           warn of the over estimate of baseline time, but don't
+C           jump through the hoops to fix it.  Some day.....
+C
             IF( NSANT .GT. 0 .AND. .NOT. NOREC(ISCN) ) THEN
-               STIME = ( STOPJ(ISCN) - STARTJ(ISCN) ) * 86400.D0
                NBAS = NSANT * ( NSANT - 1 ) / 2 + NSANT
-               TRTIME = TRTIME + STIME
-               TBTIME = TBTIME + STIME * NBAS
+               ETRTIME = ETRTIME + STIME
+               ETBTIME = ETBTIME + STIME * NBAS
+               IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+                  TRTIME = TRTIME + STIME
+                  TBTIME = TBTIME + STIME * NBAS
+               END IF
+               IF( DOSC ) THEN
+                  DTRTIME = DTRTIME + STIME
+                  DTBTIME = DTBTIME + STIME * NBAS
+               END IF
 C
 C              Test for backward time jumps.
 C
@@ -112,16 +180,32 @@ C
                ELSE
                   DATARATE = 0.0
                END IF
-               MAXDR = MAX( MAXDR, DATARATE )
-               MAXSPD = MAX( MAXSPD, FSPEED(SETNUM(ISCN)))
+               EMAXDR = MAX( EMAXDR, DATARATE )
+               EMAXSPD = MAX( EMAXSPD, FSPEED(SETNUM(ISCN)))
+               IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+                  MAXDR = MAX( MAXDR, DATARATE )
+                  MAXSPD = MAX( MAXSPD, FSPEED(SETNUM(ISCN)))
+               END IF
+               IF( DOSC ) THEN
+                  DMAXDR = MAX( DMAXDR, DATARATE )
+                  DMAXSPD = MAX( DMAXSPD, FSPEED(SETNUM(ISCN)))
+               END IF
 C
 C              Accumulate the data size.  Note double precision - for 
 C              multiple Gbytes, small numbers being added to large 
 C              numbers might stop accumulating.
 C
                IF( FSPEED(SETNUM(ISCN)) .NE. 0.0 ) THEN
-                  DATASIZE = DATASIZE + DATARATE * STIME / 
+                  EDATASIZ = EDATASIZ + DATARATE * STIME / 
      1                       FSPEED(SETNUM(ISCN))
+                  IF( PREEMPT(ISCN) .NE. 'EXTRA' ) THEN
+                     DATASIZE = DATASIZE + DATARATE * STIME / 
+     1                       FSPEED(SETNUM(ISCN))
+                  END IF
+                  IF( DOSC ) THEN
+                     DDATASIZ = DDATASIZ + DATARATE * STIME / 
+     1                       FSPEED(SETNUM(ISCN))
+                  END IF
                END IF
 C
                IF( ICENT(ISCN) .NE. 0 ) GOTCENT = .TRUE.
@@ -129,42 +213,87 @@ C
             END IF
          END DO
 C
-C        Now write the above results.
+C        Now write the above results.  Only make the Core/Extras 
+C        distinction if there are differences.
 C
          WRITE( ISUM, '( 1X, /, A )' )
      1       'DERIVED INFORMATION FOR CORRELATION: '
-         WRITE( ISUM, '( 1X, /, A, F8.2, A )' )
-     1       '  Elapsed time for project:      ', 
-     2        ( TIMEL - TIMEB ) * 24.D0, ' hours.'
-         WRITE( ISUM, '( A, F8.2, A )' )
-     1       '  Total time in scheduled scans: ', TTIME/3600.D0, 
-     2       ' hours.'
-         WRITE( ISUM, '( A, F8.2, A )' )
-     1       '  Total time in recording scans: ', TRTIME/3600.D0, 
-     2       ' hours.'
-         WRITE( ISUM, '( A, F8.2, A )' )
-     1       '  Total number of baseline hours:', TBTIME/3600.D0, 
-     2       '    (Recording scans only)'
-         IF( MAXSPD .NE. 1.0 ) THEN
-            WRITE( ISUM, '( A, F10.1, A, /, T10, A, A, F6.1  )' )
-     1     '  Projected maximum data output rate from the correlator:',
-     2       MAXDR/1000.0, ' kbytes/sec',
-     3        ' if processed in one pass at a maximum speed ',
-     4        'up factor of', MAXSPD
-         ELSE
-            WRITE( ISUM, '( A, F10.1, A )' )
-     1     '  Projected maximum data output rate from the correlator:',
-     2       MAXDR/1000.0, ' kbytes/sec of observe time.'
-         END IF            
-         WRITE( ISUM, '( A, F14.1, A )' )
-     1       '  Projected correlator output data set size:', 
-     2       DATASIZE/1.D6, ' Mbytes'
+         LINEH = ' '
+         LINE1 = '  Elapsed time for project (hours):' 
+         LINE2 = '  Total time in scheduled scans (hours):'
+         LINE3 = '  Total time in recording scans (hours): '
+         LINE4 = '  Total baseline hours (recording scans):'
+         LINE5 = '  Projected max correlator output rate (kB/s):'
+         LINE6 = '  Projected correlator output data size (MB):'
+         IC    = 47
+C
+C        Write the core data to the lines if there were fuzzy ends.
+C
+         IF( FUZZY ) THEN
+            WRITE( LINEH(IC+6:IC+10), '( A )' ) 'Core'
+            WRITE( LINE1(IC+2:IC+9), '( F8.2 )' )
+     1           ( TIMEL - TIMEB ) * 24.D0
+            WRITE( LINE2(IC+2:IC+9), '( F8.2 )' ) TTIME / 3600.D0
+            WRITE( LINE3(IC+2:IC+9), '( F8.2 )' ) TRTIME / 3600.D0
+            WRITE( LINE4(IC+2:IC+9), '( F8.2 )' ) TBTIME / 3600.D0
+            WRITE( LINE5(IC:IC+9), '( F10.1 )' ) MAXDR / 1000.0
+            WRITE( LINE6(IC:IC+9), '( F10.1 )' ) DATASIZE / 1.D6
+            IC = IC + 10
+         END IF
+C
+C        Now write the sums for all data.  Always do this.
+C
+         WRITE( LINEH(IC+2:IC+10), '( A )' ) 'All scans'
+         WRITE( LINE1(IC+2:IC+9), '( F8.2 )' )
+     1        ( ETIMEL - ETIMEB ) * 24.D0
+         WRITE( LINE2(IC+2:IC+9), '( F8.2 )' ) ETTIME / 3600.D0
+         WRITE( LINE3(IC+2:IC+9), '( F8.2 )' ) ETRTIME / 3600.D0
+         WRITE( LINE4(IC+2:IC+9), '( F8.2 )' ) ETBTIME / 3600.D0
+         WRITE( LINE5(IC:IC+9), '( F10.1 )' ) EMAXDR / 1000.0
+         WRITE( LINE6(IC:IC+9), '( F10.1 )' ) EDATASIZ / 1.D6
+         IC = IC + 10
+C
+C        Then the sums for the DOSCANS.
+C
+         IF( DOSCANS(1) .GT. 0 ) THEN
+            WRITE( LINEH(IC+4:IC+10), '( A )' ) 'DOSCANS'
+            WRITE( LINE1(IC+2:IC+9), '( F8.2 )' )
+     1           ( DTIMEL - DTIMEB ) * 24.D0
+            WRITE( LINE2(IC+2:IC+9), '( F8.2 )' ) DTTIME / 3600.D0
+            WRITE( LINE3(IC+2:IC+9), '( F8.2 )' ) DTRTIME / 3600.D0
+            WRITE( LINE4(IC+2:IC+9), '( F8.2 )' ) DTBTIME / 3600.D0
+            WRITE( LINE5(IC:IC+9), '( F10.1 )' ) DMAXDR / 1000.0
+            WRITE( LINE6(IC:IC+9), '( F10.1 )' ) DDATASIZ / 1.D6
+         END IF
+C
+C        Now write the lines.
+C
+
+         WRITE( ISUM, '( A, 6( /, A ) )' ) LINEH(1:LEN1(LINEH)), 
+     1         LINE1(1:LEN1(LINE1)), LINE2(1:LEN1(LINE2)),
+     2         LINE3(1:LEN1(LINE3)), LINE4(1:LEN1(LINE4)), 
+     3         LINE5(1:LEN1(LINE5)), LINE6(1:LEN1(LINE6))
+C
+         WRITE( ISUM, '( A, A, /, A, A, /, A, A )' )
+     1       ' NOTES:  Above numbers assume the same correlator ',
+     2       'parameters are used for all data.',
+     3       '         The correlator output data rate is for ',
+     4       'real-time processing.',
+     5       '         Above numbers assume the same correlator',
+     6       ' parameters are used for all data.'
+         WRITE( ISUM, '( A, A, /, A, A )' )
+     1       '         The recordings for a scan are assumed to ',
+     2       'start at the scan START minus PRESTART.',
+     3       '         Some stations (VLA, VLBA/MARK5C) wait for ',
+     4       'good data so the estimates may be high.'
+         IF( FUZZY ) WRITE( ISUM, '( A )' )
+     1       '         ''Core'' are scans with PREEMPT not ''EXTRA''.'
+         IF( DOSCANS(1) .NE. 0 ) WRITE( ISUM, '( A, A )' )
+     1       '         Only scans in the DOSCANS range will be written',
+     2       ' to the Vex and other files.'
          IF( GOTCENT ) WRITE( ISUM, '( A, /, A )' ) 
-     1       '  Multiple phase center processing requested.',
+     1       '         Multiple phase center processing requested.',
      2       '     Correlator output numbers are for first file only.'
-         WRITE( ISUM, '( A )' )
-     1       '  NOTE:  Above numbers assume the same correlator'//
-     2       ' parameters are used for all data.'
 
          IF( DATASIZE .GT. 16.0E9 ) THEN
             WRITE( ISUM, '( A )' )

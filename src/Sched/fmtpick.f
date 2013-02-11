@@ -58,11 +58,12 @@ C
          END IF
       END DO
 C
-C     Get the maximum total bit rate both overall (MAXBPS) and for 
+C     Get the maximum total nominal bit rate both overall (MAXBPS) and for 
 C     each setup file (MAXFBPS).  Only use unset formats (this keeps
 C     any isolated, forced formats from affecting things).
 C     Get the maximum and minimum track bits per second for each setup 
-C     file (BTBPS and TTBPS).  
+C     file (BTBPS and TTBPS).  Use the nominal bit rate TOTBPS as the
+C     actual bit rate WRTBPS is affected by format specific overheads.
 C
       MAXBPS = 0.0
       MINNTRK = 0.0

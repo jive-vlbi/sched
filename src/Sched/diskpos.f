@@ -4,13 +4,24 @@ C     Routine for SCHED called by SCHTAPE that deals with the
 C     accounting for disk based systems.  Basically it just gets
 C     the byte count at the end of the scan.
 C
+C     Distinguish between core and extras.  But need to only count
+C     extras that are before or after the core, not during.
+C     Don't try to separate core from extra scans (see PREEMPT) here
+C     because this routine is called before the handling of PREEMPT.
+C
+C     Note that GBYTES here is the value at the end of the scan when
+C     this routine returns.  In the VEX file, the value shown needs
+C     to be for the start of the scan.  AARG.
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER   KS, ISCN, ISTA, LASTISCN(MAXSTA)
-      REAL      RECTIME, TBR
+      INTEGER   KS, ISCN, ISTA, KSTA, LASTISCN(MAXSTA)
+      DOUBLE PRECISION  RECSTART
+      REAL      RECTIME
 C ---------------------------------------------------------------------
-C     Initialize GBYTES.
+C     Initialize GBYTES and EGBYTES to the value at the start
+C     of the scan.  Will add this scan below.
 C
       IF( LASTISCN(ISTA) .EQ. 0 ) THEN
          GBYTES(ISCN,ISTA) = 0
@@ -18,20 +29,40 @@ C
          GBYTES(ISCN,ISTA) = GBYTES(LASTISCN(ISTA),ISTA)
       END IF
 C
-C     Now add on the contribution from this scan.  The 1000 is
-C     the conversion from Mbps to Gbps.  8 is the conversion to bytes.
-C     1.008 is for headers.
+C     Now add on the contribution from this scan.
 C
 C     We've already selected on STASCN and NOREC before this routine
 C     was called.
 C
-      RECTIME = ( STOPJ(ISCN) - STARTJ(ISCN) + TPSTART(ISCN,ISTA) )
+C     This has gotten somewhat more complicated the fact that 
+C     STARTJ(ISCN) - TPSTART(ISCN,ISTA) is no longer the start of
+C     recording for some VEX controlled stations.  These include
+C     the VLA and the MARK5C system on the VLBA.
+C
+      KSTA = STANUM(ISTA)
+      IF( USEONSRC(KSTA) ) THEN
+         RECSTART = MAX( STARTJ(ISCN) - TPSTART(ISCN,ISTA), 
+     1          TONSRC(ISCN,ISTA) )
+      ELSE
+         RECSTART = STARTJ(ISCN) - TPSTART(ISCN,ISTA)
+      END IF
+      RECTIME = DNINT( ( STOPJ(ISCN) - RECSTART ) * 86400.D0 )
+C
+C     Get the actual bits recorded.  The factor 1000 is
+C     the conversion from Mbps to Gbps.  Note that this is the
+C     decimal version, not the binary one which may be what is
+C     wanted.  The factor of 8 is the conversion to bytes.
+C     Don't use WRTBPS here because it includes the FORMAT-specific
+C     contribution from headers.
+C
       KS = NSETUP(ISCN,ISTA)
       IF( RECUSED(KS) ) THEN
-         TBR =  NCHAN(KS) * BITS(1,KS) * SAMPRATE(KS)
          GBYTES(ISCN,ISTA) = GBYTES(ISCN,ISTA) + 
-     1       RECTIME * 86400.0 * TBR * 1.008 / ( 1000.D0 * 8 )
+     1       RECTIME * WRTBPS(KS) / ( 1000.0 * 8. )
       END IF
+C      write(*,*) 'diskpos', iscn, ista, gbytes(iscn,ista),
+C     1   RECTIME, wrtbps(ks)
 C
       RETURN
       END
+

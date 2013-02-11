@@ -218,7 +218,7 @@ C
       CHARACTER        DISK(MAXCAT)*6, MEDIADEF(MAXCAT)*6
       CHARACTER        TSCAL(MAXCAT)*4
       INTEGER          NBBC(MAXCAT), STNDRIV(MAXCAT), NHEADS(MAXCAT)
-      LOGICAL          VLBADAR(MAXCAT)
+      LOGICAL          VLBADAR(MAXCAT), USEONSRC(MAXCAT)
 C
       INTEGER          NHORIZ(MAXCAT)
       REAL             HORAZ(200,MAXCAT), HOREL(200,MAXCAT)
@@ -234,7 +234,7 @@ C
       COMMON  /SCHSTA/ XPOS, YPOS, ZPOS, DXPOS, DYPOS, DZPOS, 
      1                 ELEV, LAT, LONG, 
      2                 MSTA, ISCHSTA, MJDRATE, 
-     3                 NBBC, STNDRIV, NHEADS, VLBADAR,
+     3                 NBBC, STNDRIV, NHEADS, VLBADAR, USEONSRC,
      4                 NHORIZ, HORAZ, HOREL,
      5                 NAXLIM, AX1LIM, AX2LIM, AX1RATE, AX2RATE, 
      6                 AX1ACC, AX2ACC, TSETTLE, MINSETUP, MAXSRCHR,
@@ -610,9 +610,10 @@ C
 C                      Input items:
 C
       REAL             IATUTC
-      INTEGER          LSTSTA
+      INTEGER          LSTSTA, DOSCANS(2)
       LOGICAL          LST, MARK2, VLBITP, VLAONLY, NOTAPE, CONFIG
       LOGICAL          TANTS1(MAXSTA), TANTS2(MAXSTA), FUZZY, GOTVLBA
+      LOGICAL          GOTPREEM, WRAP24
       CHARACTER        EXPT*72, EXPCODE*8
 C
 C                      Calculated items:
@@ -638,10 +639,11 @@ C
       CHARACTER        SRCNAME(MAXSRC)*12
 C
       COMMON /SCHN1/   TFIRST, TEND, COREBEG, COREEND, IATUTC, 
-     1                 LSTSTA, LST, MARK2, VLBITP, VLAONLY, 
+     1                 LSTSTA, DOSCANS, LST, MARK2, VLBITP, VLAONLY, 
      2                 NOTAPE, CONFIG, TANTS1, TANTS2, FUZZY, 
-     3                 GOTVLBA, SCAN1, SCANL, NSCANS, GOTFREQ, 
-     4                 DWELLS,  NSTA, STANUM, NSRC, SRCATN
+     3                 GOTVLBA, GOTPREEM, WRAP24, SCAN1, SCANL,
+     4                 NSCANS, GOTFREQ, DWELLS,  NSTA, STANUM, 
+     5                 NSRC, SRCATN
       COMMON /SCHC1/   EXPT, EXPCODE, STANAME, SRCNAME
 C
 C
@@ -757,27 +759,36 @@ C
       CHARACTER        MEDIA(MAXSTA)*8
 C
 C                      Calculated items. Some for summaries.
+C                      Keep track of core and all, including extras, for 
+C                      many of these.  
 C
       INTEGER          NRDBCK(MAXSTA), NSTOP(MAXSTA), NRECONF(2,MAXSTA)
-      INTEGER          NSTSC(MAXSTA)
-      INTEGER          TPSCN(MAXSTA)
-      DOUBLE PRECISION TPSTART(MAXSCN,MAXSTA), DATASIZE
+      INTEGER          NSTSC(MAXSTA), ENSTSC(MAXSTA), DNSTSC(MAXSTA)
+      INTEGER          TPSCN(MAXSTA), ETPSCN(MAXSTA), DTPSCN(MAXSTA)
+      DOUBLE PRECISION TPSTART(MAXSCN,MAXSTA)
+      DOUBLE PRECISION DATASIZE, EDATASIZ, DDATASIZ
       DOUBLE PRECISION TCORR(MAXSCN,MAXSTA)
-      REAL             TPHR(MAXSTA), SCNHR(MAXSTA)
-      REAL             MAXDR, GBYTES(MAXSCN,MAXSTA), TGBYTES(MAXSTA)
+      REAL             TPHR(MAXSTA), ETPHR(MAXSTA), DTPHR(MAXSTA)
+      REAL             SCNHR(MAXSTA), ESCNHR(MAXSTA), DSCNHR(MAXSTA)
+      REAL             MAXDR, EMAXDR, DMAXDR
+      REAL             GBYTES(MAXSCN,MAXSTA)
+      REAL             TGBYTES(MAXSTA), EGBYTES(MAXSTA), DGBYTES(MAXSTA)
       REAL             TTSYNC(MAXSTA)
       LOGICAL          TWOHEAD, FASTTRK, ALLVLBA
 C
       COMMON  /SCHN5/  TPREF, TPLEN, MINPAUSE, PRESTART, TPTIME, 
-     1                 TPSTART, DATASIZE, TCORR, 
+     1                 TPSTART, DATASIZE, EDATASIZ, DDATASIZ, TCORR, 
      2                 AUTOTAPE, AUTOALOC, AUTOREV, 
      3                 NTPSTA, TPSDRIV, TPSINDX, TPLENG, 
      4                 NDRIVE, NHDPOS, USETAPE, USEDISK, ANYTAPE,
-     5                 ALLDISK, NRDBCK, NSTOP, NRECONF, NSTSC,
-     6                 TPSCN, TPHR, SCNHR, 
-     7                 MAXDR, GBYTES, TGBYTES, TTSYNC,
-     8                 TWOHEAD, FASTTRK, ALLVLBA, NOREC,
-     9                 GRABTIME, GRABGAP
+     5                 ALLDISK, NRDBCK, NSTOP, NRECONF, 
+     6                 NSTSC, ENSTSC, DNSTSC, 
+     7                 TPSCN, ETPSCN, DTPSCN, TPHR, ETPHR, DTPHR,
+     8                 SCNHR, ESCNHR, DSCNHR, 
+     9                 MAXDR, EMAXDR, DMAXDR, GBYTES, 
+     A                 TGBYTES, EGBYTES, DGBYTES,
+     B                 TTSYNC, TWOHEAD, FASTTRK, ALLVLBA, NOREC,
+     C                 GRABTIME, GRABGAP
       COMMON  /SCHC5/  DATAPATH, GRABTO, TPOBS, DENSITY, HEADMODE, 
      1                 MEDIA
 C

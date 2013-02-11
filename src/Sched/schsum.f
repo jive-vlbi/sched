@@ -67,110 +67,19 @@ C
      1        '  Number of setup files used:', NSETF
       WRITE( ISUM, '( 1X )' )
 C
-C     Write some information about each station.  Much was gathered
-C     in SCHTIM.  Note NOTAPE really means no recordings.
+C     Write some information about each station.
 C
-C     Do disk stations.  (Tape station summary removed.)
-C
-      IF( .NOT. NOTAPE ) THEN
-         WRITE( ISUM, '( 1X, /, A, /, A )' )  
-     1       ' Station summaries (disk stations): ',
-     2       '  Station  Control   Scans   Scan   Record  Record' //
-     3       '   Gbytes     Formatter       Sync '
-         WRITE( ISUM, '( T29, A, T64, A )' )
-     1       'Hours   Hours   Scans', 'Reconfigures    Hours  '
-
-         DO ISTA = 1, NSTA
-            IF( USEDISK(ISTA) ) THEN
-               IF( DAR(STANUM(ISTA))(1:4) .EQ. 'VLBA' ) THEN
-                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2,
-     1              I8, 2X, F8.0, I9, A, I3, F12.2 )' )
-     2              STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     3              SCNHR(ISTA), TPHR(ISTA), TPSCN(ISTA), TGBYTES(ISTA),
-     4              NRECONF(1,ISTA),  '/', NRECONF(2,ISTA),
-     5              TTSYNC(ISTA) * 24.0
-               ELSE
-                  WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2,
-     1              I8, 2X, F8.0, I13, F12.2 )' )
-     2              STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA), 
-     3              SCNHR(ISTA), TPHR(ISTA), TPSCN(ISTA), TGBYTES(ISTA),
-     4              NRECONF(1,ISTA), TTSYNC(ISTA) * 24.0
-               END IF
-            END IF
-         END DO
-
-      ELSE
-         WRITE( ISUM, '( A, /, A )' )  ' Station summaries: ',
-     1       '  Station  Control   Scans '
-         DO ISTA = 1, NSTA
-            WRITE( ISUM, '( 2X, A8, 2X, A5, 2X, I6 )' ) 
-     1          STANAME(ISTA), CONTROL(STANUM(ISTA)), NSTSC(ISTA) 
-         END DO
-      END IF
-C
-C     Explain Sync Hours.
-C
-      WRITE( ISUM, '( 1X )' )
-      WRITE( ISUM, '( A )' )
-     1      'Notes on the station summaries: '
-      WRITE( ISUM, '( 1X )' )
-      WRITE( ISUM, '( A, /, A, /, A, /, A, /, A )' )
-     1      '    "Record Scans" are periods of recording with no '//
-     2      'gap.  The Mark5A disk systems ', 
-     3      '    have a limit of 1024 such scans.  There are often '//
-     4      'multiple projects on a disk pack.',
-     5      '    Try to keep above about 6 GB per record scan by '//
-     6      'using MINPAUSE and PRESTART ',
-     7      '    to prevent short gaps.  However, also try to '//
-     8      'prevent record scans of more than', 
-     9      '    an hour to minimize risk to data from playback '//
-     A      'problems.'
-      WRITE( ISUM, '( 1X )' )
-      WRITE( ISUM, '( A, /, A)' )
-     1      '    "Sync Hours" is on-source, in-scan time ' //
-     2      'lost during correlation to resyncing',
-     3      '    recordings.  Resyncs follow tape stoppages '//
-     4      'and formatter reconfigures.'
-      WRITE( ISUM, '( 1X )' )
-      WRITE( ISUM, '( A, /, A, /, A )' )
-     1      '    For VLBA DAR stations, total reconfigures and ' //
-     2      'reconfigures during recording are shown.',
-     3      '    Reconfigures during recording can cause ' //
-     4      'slow correlator sync.',
-     5      '    Any reconfigure can slow sync at JIVE.'
-C
-C     Set up a warning about early tape starts.
-C
-      NTPS = 0
-      GOTTPS = .FALSE.
-      DO ISCN = SCAN1, SCANL
-         DO ISTA = 1, NSTA
-            IF( TPSTART(ISCN,ISTA) .NE. 0.D0 ) THEN
-               GOTTPS = .TRUE.
-               NTPS = NTPS + 1
-            END IF
-         END DO
-      END DO
-      IF( GOTTPS ) THEN
-         WRITE( ISUM, '( 1X )' )
-         WRITE( ISUM, '( 2A, I5, A )' ) '    Recording started',
-     1         ' before scan start time ', NTPS, 
-     2         ' times.  See PRESTART and MINPAUSE.'
-         WRITE( ISUM, '( 2A )' )
-     1         '    They may have been kept running through ',
-     2         'short scan gaps.'
-         WRITE( ISUM, '( 2A )' )
-     1         '    The number can be large because each ',
-     2         'station/scan combination counts.'
-      END IF
-      WRITE( ISUM, '( 1X, /, 1X, / )' )
+      CALL STSUM
 C
 C     Write the setup information for setup groups that were used.
 C     Avoid repeats of identical setups, but let the user know which
 C     are identical.
 C
+      WRITE( ISUM, '( 1X, /, 1X, /, A )' )
+     1   ' SETUP FILES:'
+C
       IF( NOSET ) THEN
-         WRITE( ISUM, '( 1X, /, 1X, /, A, /, A )' )
+         WRITE( ISUM, '( 1X, /, A, /, A )' )
      1    'NOSETUP specified.  No setups used. ',
      2    '        Cannot write telescope control files. '
       ELSE
@@ -267,17 +176,16 @@ C
       CALL SRCLST( ISUM, 2 )
 C
 C     Note the configuration breaks for generating correlator blocks.
+C     No longer needed.  Subroutine deleted (still in SVN and old
+C     versions in case it is needed.
+C      CALL CORBLK
 C
-      CALL CORBLK
-C
-C     Add correlator parameters in format for OMS.
-C
-      CALL OMSOUT( RESTART )
-C
-
 C     Write the available catalog versions.
 C
-      WRITE( ISUM, '( 1X, /, 1X, /, A )' )
+      WRITE( ISUM, '( 1X, /, 1X, /, A )' ) 
+     1     'CATALOGS, FILES, and CODE VERSIONS'
+C
+      WRITE( ISUM, '( 1X, /, A )' )
      1   'Catalogs: '  
 C
       WRITE( ISUM, '( A, A / A, A )' )

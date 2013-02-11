@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Temp Version 10.3}
+\title{THE \schedb USER MANUAL \\  Development Version 11.0}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -76,14 +76,14 @@
 Array (VLBA), High Sensitivity Array (HSA), Global Very Long Baseline
 Interferometry (Global VLBI), Eurpean VLBI Network (EVN), Long
 Baseline Array (LBA; Australia), and some Karl G. Jansky Very Large
-Array (VLA) observations.  This manual describes how to use the
-program, provides extensive information on all possible inputs, and
-gives considerable information and advice on many aspects of
-scheduling VLBI observations.  The \htmlref{INTRODUCTION}{CHP:INTRO}
-gives an overview of the program and is the only chapter that a new
-user should read before starting to use the program.  The rest of the
-manual can be treated as a reference to be consulted to answer
-questions.
+Array (VLA --- VLBI only) observations.  This manual describes how to
+use the program, provides extensive information on all possible
+inputs, and gives considerable information and advice on many aspects
+of scheduling VLBI observations.  The
+\htmlref{INTRODUCTION}{CHP:INTRO} gives an overview of the program and
+is the only chapter that a new user should read before starting to use
+the program.  The rest of the manual can be treated as a reference to
+be consulted to answer questions.
 
 Scheduling with \schedb involves creating an input file with a text
 editor, and then running the program on that file.  \schedb creates a
@@ -110,10 +110,14 @@ anonymous ftp at \htmladdnormallink{{\sl ftp.aoc.nrao.edu}}
 
 For comments and questions, contact Craig Walker at cwalker@nrao.edu
 or, for EVN, Mark IV and VEX format issues, Des Small at
-small@jive.nl.  \schedb was written by Craig Walker of NRAO, Huib van
-Langevelde, Cormac Reynolds, Antonios Polatidis, Friso Olnon, and Des
-Small of JIVE, and Franco Tinarelli of CNR in Bologna.  It is
-currently supported by Craig Walker and Des Small.
+small@jive.nl.  \schedb was written by Craig Walker of NRAO with
+significant contributions from Huib van Langevelde, Cormac Reynolds,
+Antonios Polatidis, Friso Olnon, and Des Small of JIVE, and Franco
+Tinarelli of CNR in Bologna.  It is currently supported by Craig
+Walker and Des Small.  The manual is long and is supported only
+by Craig Walker, so, in this period of rapid changes in hardware
+(circa 2013), please excuse occasional sections that are not 
+entirely up to date.
 
 \tableofcontents
 % \listoftables
@@ -814,8 +818,11 @@ as templates from which to create your own schedule.  All should
 produce valid schedules if run as is.  In fact, all are used in the
 {\sl Verify} script that is used to check new installations and new
 versions of \sched.  All of the examples are described briefly and
-linked here.  The two in subsections show a typical, reasonably simple,
-schedule and a minimal schedule of the type one might use for
+linked here.  As of Feb. 2013, there were 49 examples.  Some
+consolidation is on the agenda for future releases.
+
+The two examples in subsections below show a typical, reasonably
+simple, schedule and a minimal schedule of the type one might use for
 experiment planning.  The latter is likely to be useful when writing
 proposals or doing other conceptual work.
 
@@ -862,7 +869,7 @@ scheduling strategy.  It has been updated to use the RDBE/DDC system
 on the VLBA and the WIDAR on the VLA.
 
 \item[\htmladdnormallink{{\sl
-manual\_simp.key}}{examples/manual\_simp.key}] is \htmlref{the third
+manual\_simp.key}}{examples/manual\_simp.key}] is \htmlref{the second
 example}{SSEC:EXAMPLE3} below.  It is a very simple file that can be
 used to make plots for experiment planning purposes.  Because of the
 lack of cover information and because of the special optimization mode
@@ -880,13 +887,18 @@ projects on the VLBA.
 \item[\htmladdnormallink{{\sl egvlba.key}}{examples/egvlba.key}] is a
 sample schedule for VLBA observations.  It demonstrates band switching
 and some recording control proceedures not in \htmladdnormallink{{\sl
-manual\_2.key}}{examples/manual\_2.key}
+manual\_2.key}}{examples/manual\_2.key}.  It also demonstrates 
+providing {\tt PREEMPT=EXTRA} scans on the ends of the project so
+that operations might be able to provide extra data if there is a gap
+that cannot otherwise be filled between projects.
 
 \item[\htmladdnormallink{{\sl eg24.key}}{examples/eg24.key}] is a
 sample schedule of a simple project on the VLBA, but one that goes
 for 24 hours.  For dynamic scheduling, it is useful to be able to
 wrap such schedules to use a different start time.  This shows how
-to put in comments for the schedulers to aid that process.
+to put in comments for the schedulers to aid that process and shows
+how the schedulers can use parameters {\tt WRAP24 and DOSCANS} to
+simplify the wrapping process.
 
 \item[\htmladdnormallink{{\sl egOH.key}}{examples/egOH.key}] is a
 sample spectral line file for VLBA
@@ -913,6 +925,18 @@ channels of fixed frequency and bandwidth.  It does exercise the
 mode where one station (GBT) has to observe in the opposite sideband
 from others.
 
+\item[\htmladdnormallink{{\sl rdbepfb.key}}{examples/rdbepfb.key}]
+is a stripped down version of {\sl egrdbe2.key} that shows a rather
+basic schedule for the VLBA only using the RDBE with the PFB personality.
+It uses a \schedb standard setup so the user doesn't need to set
+the configuration information.
+
+\item[\htmladdnormallink{{\sl egcwide.key}}{examples/egcwide.key}]
+Example sched input for a VLBA using the RDBE with the PFB personality
+and the wideband 6 cm receiver.  Setups are given that use dual
+polarization in one pair of IFs and that use single polarization in
+two IFs at very different frequencies.
+
 \item[\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}]
 demonstrates a \schedb file for use with the new digital backend and
 Mark5C recorders being deployed on the VLBA and elsewhere.  This also
@@ -926,6 +950,11 @@ demonstrates a \schedb file for use with the new digital backend
 and Mark5C recorders being deployed on the VLBA and elsewhere.
 This one allows flexible baseband frequencies and bandwidths, but provides
 fewer channels than the PFB personality.
+
+\item[\htmladdnormallink{{\sl egddc2.key}}{examples/egddc2.key}]
+demonstrates a \schedb file for use with 2 RDBE's and 8 channels
+from the DDC personality.  Otherwise it is a fairly simple VLBA
+schedule.  The deployment of 2 RDBE's is expected in early 2013.
 
 \item[\htmladdnormallink{{\sl
 manual\_line.key}}{examples/manual\_line.key}] is the example that is
@@ -1071,12 +1100,15 @@ Effelsberg + Arecibo (VLA removed)) at 21cm.  The schedule uses the
 legacy system which is not avaiable at the VLA so the VLA has been taken
 out for now.
 
+\item[\htmladdnormallink{{\sl hsaddc.key}}{examples/hsaddc.key}] is
+a rather complex example that uses the RDBE with the DDC personality
+on the VLBA, VLA, GBT, and Effelsberg.  There are segments
+at 6cm, 1cm, and 3mm.  It exercises array phasing 
+at the VLA, reference pointing at all of the telescopes, and Doppler 
+tracking.
+
 \item[\htmladdnormallink{{\sl lba.key}}{examples/lba.key}] is a
 sample schedule for the Long Baseline Array in Australia.
-
-\item[\htmladdnormallink{{\sl vla\_vlbi.key}}{examples/vla\_vlbi.key}]
-is an example of VLBI observations that include the VLA and show some
-of the complications that can be involved in phasing that instrument.
 
 \item[\htmladdnormallink{{\sl planvla.key}}{examples/planvla.key}] is a
 planning file similar to the other VLBA planning files, but has
@@ -1093,6 +1125,12 @@ the {\sl Verify} script if the site is not at NRAO because the
 emphemeris routines used for pointing at planets will not generally be
 available.  It is also not of much interest beyond the staff
 responsible for maintaining the VLBA.
+
+\item[\htmladdnormallink{{\sl doptg2.com}}{examples/doptg.com}] is a
+script that creates and runs VLBA pointing observations.  It is very
+much like {\sl doptg.com} except that it uses the \htmlref{{\tt DOSTA}
+{MP:DOSTA} parameter to allow the same script to be used for stations
+with 3mm and stations without 3mm.
 
 \item[\htmladdnormallink{{\sl egsat.com}}{examples/egsat.key}] demonstrates
 scheduling a satellite observation using both MER-B and Stardust.  It
@@ -1116,11 +1154,13 @@ version uses the 32 MHz output baseband bandwidths of the WIDAR to
 create recordings that can be played against 4 of the 16 channels
 created by the PFB personality of the RDBE on the VLBA.
 
-\item[\htmladdnormallink{{\sl vladdc.key}}{examples/vladdc.key}] is
-another example covering use of the VLA as a phased array for VLBI.  This
-version uses 128 MHz baseband bandwidths of the WIDAR to and RDBE with
-the DDC personality to achieve 512 MHz (2 Gbps) of compatible bandwidth
-with all antennas.  All VLBA antennas, the GBT, and the VLA are included.
+\item[\htmladdnormallink{{\sl n2227.key}}{examples/n2227.key}] is a
+sample USNO Earth Orientation observation using PT and MK.
+
+\htmladdnormallink{{\sl pfbsettst.key}}{examples/pfbsettst.key} is a
+vehicle for testing all the new RDBE/MARK5C standard setup files that
+use the pfb personality.  These are the setups that start with 
+{\sl rdbe\_pfb}.
 
 
 \end{description}
@@ -1134,10 +1174,12 @@ reduced nor can the individual scan information.  All of those inputs
 are unique to the observation.  This example is probably the most
 useful one for users to use as a template for making their own
 VLBA schedules, including for observations that include an antenna
-of the VLA.  It produces the same schedule as \htmladdnormallink{{\sl
+of the VLA.  It used to produce the same schedule as \htmladdnormallink{{\sl
 manual\_1.key}}{examples/manual\_1.key} but that example actually
 shows how many items, that are defaulted or taken from standard
-catalogs here, can be specified in the schedule file.
+catalogs here, can be specified in the schedule file.  More recently
+(late 2012), {\sl manual\_1.key} was converted to use the wideband
+RDBE system.
 
 \verbatiminput{../examples/manual_2.key}
 
@@ -1683,18 +1725,16 @@ parameter for more details.
 
 \item{\bf 24 hour schedules:} With dynamic scheduling, it is useful if
 24 hour schedules can be ``wrapped'' by starting part way through,
-then picking up the first scans at the end.  The schedulers have been
-doing this by hand.  If you have a 24 hour schedule, it would help the
-process if you insert a unique \htmlref{{\tt COMMENT}}{MP:COMMENT} at
-the logical places for wrapping the schedule, and include a
-\htmlref{{\tt SETUP}}{MP:SETUP} specification in that scan so the
-project doesn't end up starting in the wrong mode.  The comment should
-be unique because the scheduler is going to have to relate the LST
-information in the {\sl ...sch.pt} file to the input scans.  Identical
-comments will make this confusing as it is not always obvious which
-input scan corresponds to which output scan.  Example 
-\htmladdnormallink{{\sl eg24.key}}{examples/eg24.key}
-demonstrates such a schedule.
+then picking up the first scans at the end.  If you have a 24 hour
+schedule, it would help the process if you insert a unique
+\htmlref{{\tt COMMENT}}{MP:COMMENT} at the logical places for wrapping
+the schedule.  The scheduler will use the \htmlref{{\tt
+WRAP24}}{MP:WRAP24} switch to cause \schedb to copy the scans onto the
+end of the schedule to create a 48 hour schedule.  He/she will then
+use \htmlref{{\tt DOSCANS}}{MP:COMMENT} to select the desired 24 hour
+block.  Unique comments help find the same place in the two copies of
+the schedule.  Example \htmladdnormallink{{\sl
+eg24.key}}{examples/eg24.key} demonstrates such a schedule.
 
 \item{\bf Set-and-remember:} Both the VLBA (RDBE) and the VLA new
 systems require the power levels for the analog signals to be set
@@ -1721,81 +1761,108 @@ doesn't need extra time for that, although that operation is done.
 
 \subsection{\label{SSEC:SCANTIMES}Scan Times}
 
-Scans have a start time and a stop time.  In addition, they have a
-time that the recording is started, which may differ from the start
-time.  Throughout most of \schedb, the scan times presented are the
-nominal start and stop times.  But often, it will be the recording
-start time that is used in files sent to the antennas.  Both types of
-start times can be seen in the operator schedule files - the {\sl sch}
-files.
+Scans have a nominal start time and a stop time that may be set
+explicitly by the user or derived by \schedb based on a variety of
+criteria.  Scans have a separate start time, often offset from the
+nominal start time, that \schedb assigns for the start of recording.
+\schedb also has a reasonably good idea of when good data will start
+to be available after any required slews and setup times are
+completed.  Throughout most of \sched, the scan times presented to the
+user are the nominal start and stop times.  On the other hand, the
+recording start time is what will be given in the files sent to the
+telescopes and correlators.  The VEX file, which is becoming dominant
+as the telescope and correltor control file, uses the recorder start
+time as the scan time, but contains the offset from that to the good
+data start.  Some systems, including the VLBA and VLA now use the good
+data start as the time to start recording or correlation.  This
+section describes how all this is controlled using a number of \schedb
+input parameters.
 
-There are a variety of ways to set the times of a scan.  A \htmlref{{\tt
-START}}{MP:START} time must always be set for the first scan of a
-schedule --- \schedb obviously has to know when to start.  After that,
-the ways to set the nominal scan times are:
+There are a variety of ways to set the nominal times of a scan.  A
+\htmlref{{\tt START}}{MP:START} time must always be set for the first
+scan of a schedule --- \schedb obviously has to know when to start.
+After that, the ways to set the nominal scan times are:
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 
 \item Set the \htmlref{{\tt START}}{MP:START} time and the
-\htmlref{{\tt STOP}}{MP:STOP} time.
+\htmlref{{\tt STOP}}{MP:STOP} time.  This is uncommon except with
+\schedb inputs derived automatically from other sorts of schedules.
 
 \item Set just the \htmlref{{\tt STOP}}{MP:STOP} time.  \schedb will
-use the previous scan's stop time as this scan's start time.
+use the previous scan's stop time plus any gap as this scan's start
+time.
 
 \item Set the \htmlref{{\tt START}}{MP:START} time and the
 \htmlref{{\tt DURation}}{MP:DUR}.  Sched will set the start time as
 requested and the stop time to the start time plus the duration.
 
 \item Set a duration using \htmlref{{\tt DURation}}{MP:DUR}.  \schedb
-will set the start time to the previous scan's stop time and the
-stop time to the start time plus the duration.
+will set the start time to the previous scan's stop time pus any
+\htmlref{{\tt GAP}}{MP:GAP} and the stop time to the start time 
+plus the duration.
 
 \item Set a duration using \htmlref{{\tt DWELL}}{MP:DWELL}.  \schedb
 will set the start time to the previous scan's stop time plus the time
-it takes to get the antennas on source.  Then it will set the stop
-time to the start time plus the requested dwell time.  Note that this
-option does not yet take into account correlator resync times, if any,
-or time to switch between frequency bands (say 7mm to 2cm).  There is
-an option, with a second argument, to not wait for the last, or last
-few antennas.  This can be useful when there is a slow antenna
+it takes to get the antennas on source and observing.  Then it will
+set the stop time to the start time plus the requested dwell time.
+Note that this option does not yet take into account the time to
+switch between frequency bands (say 7mm to 2cm).  There is an option,
+with a second argument to {\tt DWELL}, to not wait for the last, or
+last few antennas.  This can be useful when there is a slow antenna
 involved or when some antenna is too close to the zenith.  A third
-argument can be used to insure that the slow antennas get some time
-on source.
+argument can be used to insure that the slow antennas get some time on
+source. \htmlref{{\tt GAP}}{MP:GAP} can be used to set the minimum
+interval between the scans.  This is the most recommended scan
+scheduling scheme.
 
-\item Set a duration using either \htmlref{{\tt DURation}}{MP:DUR} or
-\htmlref{{\tt DWELL}}{MP:DWELL} and set a minimum interval since the
-previous scan with \htmlref{{\tt GAP}}{MP:GAP}.  The start time will
-be set to the previous stop time plus the the time specified with {\tt
-GAP}.  If {\tt DWELL} was specified, the start time may be further
-delayed to allow all antennas to reach the source.  The stop time
-will be {\tt DURation} or {\tt DWELL} after the derived start time.
-
-\item (Obsolete) Use any of the above to set the start and stop times,
-and then offset the resulting start time with \htmlref{{\tt
+\item Use any of the above to set the start and stop times, and then
+offset the resulting start time with \htmlref{{\tt
 PRESCAN}}{MP:PRESCAN}.  Only the start time, not the stop time, is
 affected by {\tt PRESCAN}.  If {\tt PRESCAN} is positive, the start
 time is delayed.  If {\tt PRESCAN} is negative, the start time is
 moved earlier by the requested amount, although it will not be moved
-into the previous scan.  This can be used to start recording early to
-allow synchronization at the correlator, or to keep recording media
-moving through short inter-scan intervals --- also helps
-sychronization on processing.  {\tt PRESCAN} shifts the start for all
-stations by the same amount, and is reflected in the start times in
-the summary and sch files.  {\tt PRESCAN} is retained mainly for
-backwards compatibility.  The separate parameters \htmlref{{\tt
+into the previous scan.  This used to be the primary scheme for
+controlling time provided for media acceleration and correlator
+synchronization, but has been superceded by \htmlref{{\tt
 GAP}}{MP:GAP}, \htmlref{{\tt PRESTART}}{MP:PRESTART}, and
- \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE} are really better suited to
-achieve the desired results. Note that any intervals specified with
-{\tt PRESCAN} and the newer parameters will be added.
+\htmlref{{\tt MINPAUSE}} {MP:MINPAUSE}.  A still-useful function is
+to delay the start of scans scheduled with {\tt DWELL} somewhat to
+be more sure that the first recorded data will be good.
 
 \end{list}
 
+The calculation of the time required for an antenna to start delivering
+good data is based on on information in the
+\htmlref{station catalog}{SEC:STACAT}.  See the section on that catalog
+for details of the parmeters mentioned here.  The slew time is calculated
+based on the pointing direction at the previous and next sources along
+with the slew rates and accelerations for the antenna.  An additional
+time {\tt TSETTLE} is added to the slew time for
+the antenna to settle and the electronics to get ready.  Additional
+time might be added for digital systems to set power levels based
+on {\tt TLEVSET} for the first time a setup is seen (VLBA and VLA).
+The total time to be ready will not be less than {\tt MINSETUP}, even if
+the slew is fast and the settling time ({\tt TSETTLE}) is short.  
+
+The slew time calculator tries to take into account the need for cable
+wraps.  The algorithm is simply --- the shortest path to the next
+source will be taken even if that turns out not to be optimal later.
+Early VLBA experience suggested that a simple, predictable algorithm
+was preferred over a more optimal, but hard to predict, algorithm.
+
 After the nominal times are determined, the recording start time is
-derived as described in the \htmlref{Adjusting the Scan or Recording
+adjusted as described in the \htmlref{Adjusting the Scan or Recording
 Start Time section}{SSSEC:Starttime} below using \htmlref{{\tt
 PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE}.
-
-% ***************  How long do reconfigurations take on MarkIV systems.?
+Such adjustments were used to allow time for the recording media to
+get up to speed, formaters to reconfigure between scans with different
+setups, and for playback to synchronize on correlation.  These were
+significant issues with the old tape systems, and to a lesser extent
+with the MARK5A system.  The newer MARK5C recording system and DiFX
+correlators, and perhaps others, are able to record and correlate data
+beginning right at the assigned start time so such adjustments are
+not required.
 
 The date specification for a scan is for the scan stop time,
 regardless of how the scan times are specified.  If there is a scan
@@ -1813,7 +1880,7 @@ time order.  This allows, for example, for the scans for one antenna
 to be specified separately from the scans for another antenna.  While
 this works, it is not recommended bacause \schedb does not try to
 identify scans that can be correlated together.  Anything that depends
-on knowing what the whole array is doing is likely to fail.  Dwell
+on knowing what the whole array is doing is likely to fail.  {\tt DWELL}
 time scheduling is one such item because \schedb must know how long
 the slews are for all antennas in a scan.  Plotting of u-v coverage is
 another because \schedb only plots u-v points for baselines between
@@ -1821,7 +1888,7 @@ antennas in the same scan.  The estimates of data volumes and rates
 from the correlator, given in the summary file, are yet another
 because they depend on counts of baselines.  Finally, any VEX file
 produced in such a way is likely to cause problems at a correlator
-that depends on it.
+that depends on it, such as DiFX (VLBA and many others).
 
 \schedb allows sidereal time scheduling by means of the \htmlref{{\tt
 LST}} {MP:LST} parameter.  For VLBI, the concept of LST needs a bit more
@@ -1837,19 +1904,16 @@ for such projects.
 If \htmlref{{\tt LST}}{MP:LST} is specified, there are two ways to set
 the date.  With the original method, the year and month are ignored
 and the day is assumed to be the (modified?) julian sidereal day
-number.  One way to determine what this number is to find a VLA
-schedule and read it off the side.  Another is to make a dummy run of
-\schedb with the VLA as a station and look at the fifth line in the
-{\sl exptobs.y} file where the day is specified as the ``Observation
-day''.  For comparison, LST day 56789 was 1995 Dec. 12.  Of course the
-LST day increments at a slightly different rate that the UT day.
-The second method is to specify the UT day in the usual manner.
-\schedb will attempt to figure out the LST day number, taking into
-account the fact that 0 hours LST is sometime in the middle of
-the UT day.  It will also check if your start time is in the
-approximately 3.9 minutes where the result is ambiguous (LST days
-are shorter than UT days) and request specification of the LST
-day number --- giving you the options.
+number.  Finding the LST day can be a bit painful, but a rough
+estimate can be had from the fact that LST day 60501 was 2006 Feb. 16.
+The estimate can be put in \schedb to narrow down to the right date.
+The second method is much easier and the scheme normally used.  It is
+to specify the UT day in the usual manner.  \schedb will attempt to
+figure out the LST day number, taking into account the fact that 0
+hours LST is sometime in the middle of the UT day.  It will also check
+if your start time is in the approximately 3.9 minutes where the
+result is ambiguous (LST days are shorter than UT days) and request
+specification of the LST day number --- giving you the options.
 
 If sidereal time scheduling is requested, most times and durations are
 assumed to be in sidereal units.  Some exceptions are {\tt PRESCAN} and
@@ -1859,14 +1923,35 @@ It is a very good idea, when using LST scheduling, to check the
 final output schedules, which are all in UT, to be sure that they
 are for the right day.
 
+When dynamic scheduling, it is often difficult to mesh projects
+together perfectly.  This can lead to gaps in scientific observing
+which causes an under-utilization of the array.  \schedb supports two
+features that are meant to help with this situation.  The first is
+that the user can specify optional scans on the ends of the project by
+setting \htmlref{{\tt PREEMPT}}{MP:PREEMPT} {\tt = EXTRA} for those
+scans.  The scans will appear in the summary file so their properties
+are clear, but will not be passed to the machine readable files used
+to control the antennas.  To activate them, so they are on the control
+files, parameter \htmlref{{\tt DOSCANS}}{MP:DOSCANS} can be used to
+select the scan range to be used.  The second option applies to 24
+hour schedules which could be started at times other than in the
+original schedule and wrapped around the day.  Parameter \htmlref
+{{\tt WRAP24}}{MP:WRAP24} causes \schedb to copy the scans onto the
+end of the original scans to make a 48 hour schedule.  \htmlref{{\tt
+DOSCANS}}{MP:DOSCANS} is then used to select the desired 24 hour
+block.  It is expected that {\tt DOSCANS} and {\tt WRAP24} will be
+used mainly by operations personel.
+
+
 \subsubsection{\label{SSSEC:Reconfigurations}Dealing with Formatter
 Reconfigurations}
 
-NOTE: Concerns about reconfigurations will likely change and hopefully
-disappear when the digital backends take over, which should happen in
-2010.
+NOTE: Concerns about formatter reconfigurations will disappear when
+the digital backends take over.  About half of VLBA projects use the
+new system as of the start of 2013 and that should go to all during
+the year, so soon this section will be obsolete.
 
-A factor to consider when planning scan times is formatter
+A factor to consider when planning scan times is legacy formatter
 reconfigurations.  These happen when the internal switching and setup
 of the formatter at the station has to be changed.  Such changes
 happen when any of a number of parameters, including the number of
@@ -1908,44 +1993,54 @@ VEX file for the start of good data.  That time is calculated based on
 the expected slew rates and on any extra time, specified using the
 {\tt TSETTLE, MINSETUP} and {\tt TLEVSET} parameters in the
 \htmlref{station catalog}{SEC:STACAT}.  The start can also be
-postponed with \htmlref{{\tt GAP}}{MP:GAP}.  With fixed scheduling
-(\htmlref{{\tt DUR}}{MP:DUR}, \htmlref{{\tt START}}{MP:START}, etc),
-the nominal scan starts are forced by \schedb, but the time of good
-data, if later than the scheduled scan start, is still set by the
-actual expected slews and additions and that is believed by the Mark5C
-control software and the correlator.  Parameters \htmlref{{\tt
-MINPAUSE}}{MP:MINPAUSE} and \htmlref{{\tt PRESTART}}{MP:PRESTART},
-discussed below have no actual effect if the derived start time is
-before the expected start of good data.
+postponed with \htmlref{{\tt GAP}}{MP:GAP} or \htmlref{{\tt PRESCAN}}
+{MP:PRESCAN}.  With fixed scheduling (\htmlref{{\tt DUR}}{MP:DUR},
+\htmlref{{\tt START}}{MP:START}, etc), the nominal scan starts are
+forced by \schedb, but the time of good data, if later than the
+scheduled scan start, is still set by the actual expected slews and
+additions and that is believed by the Mark5C control software and the
+correlator.  Parameters \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} and
+\htmlref{{\tt PRESTART}}{MP:PRESTART}, discussed below have no actual
+effect if the derived start time is before the expected start of good
+data.
 
-With older systems, it can take a small amount of time to get the the
-recording going at the stations and the correlation fully synced up.
-With previous generation correlators, this was a serious issue and it
-was advisable to start the recordings at least 20 seconds before good
-data.  Modern (2010) correlators are faster so the total time needed
-for both starting recording and synchronizing is only a few seconds,
-or less.  Another reason for possibly starting recordings early, or
-even recording continuously between scans is that the Mark5A disk
-system can only handle up to 1024 recording.  A recording scan is the
-time between stops of the recording media.  There might be several
-source scans in a recording scan.  Fast-switching, phase-referencing
-observations could run into this issue so the default \htmlref{{\tt
+With older systems, including the MARK5A systems that are still in use
+at least part time at the beginning of 2013, it can take a small
+amount of time to get the the recording going at the stations and the
+correlation fully synced up.  With previous generation correlators and
+tape recorders, this was a serious issue and it was advisable to start
+the recordings at least 20 seconds before good data.  Modern (2010)
+correlators are faster so the total time needed for both starting
+recording and synchronizing is only a few seconds, or less.  Another
+reason for possibly starting recordings early, or even recording
+continuously between scans is that the Mark5A disk system can only
+handle up to 1024 recording scans.  A recording scan is the time between
+stops of the recording media.  There might be several source scans in
+a recording scan.  Fast-switching, phase-referencing observations
+could run into this issue so the default \htmlref{{\tt
 MINPAUSE}}{MP:MINPAUSE} (see below) has been set to prevent recording
 gaps during the fast-switching in most cases.  This section describes
 the tools in \schedb to allow the recordings to be started early.
 
-The schemes described in \htmlref{scan times section}{SSEC:SCANTIMES}
-(parent of this section) are used to set the times of the scans as
-reported in the output files meant for human consumption.  But the
-telescope control files actually give the times for the recording to
-start and stop.  There are two primary parameters that can affect the
-recording start time (ignoring the obsolete {\tt PRESCAN}).  They are
+The schemes described in the \htmlref{scan times
+section}{SSEC:SCANTIMES} (parent of this section) are used to set the
+times of the scans as reported in the output files meant for human
+consumption.  But the telescope control files actually give the times
+for the recording to start and stop.  For the legacy (Mark5A) systems,
+those times are in the {\sl crd.xx} files for VLBA systems and as the
+uncommented scan-wide start time in the \$SCHED section of the VEX
+file.  For the RDBE (VLBA etc) and WIDAR (VLA) systems, it is the data
+good time in the VEX file, shown for each telescope as an offset from
+the start time.
+
+There are two primary parameters that can affect the
+recording start time used for the legacy systems.  They are
 \htmlref{{\tt PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}}
 {MP:MINPAUSE}.  \htmlref{{\tt PRESTART}}{MP:PRESTART}
 is used to request that the recording be started the requested
 amount of time (record time) before the scan start time.  If that time
 is earlier than the previous stop time, the recorder will be left
-running.
+running.  
 
 The extreme, and often useful, case of a pre-start is to not stop
 recording between scans.  This is especially useful if you have many
@@ -1957,6 +2052,15 @@ be in units of playback time, so it was multiplied by the speed up
 factor to get the effect at record time.  The speedup factor is no
 longer a simple concept so that adjustment has been removed and now
 {\tt MINPAUSE} applies to the record time.
+
+The default values for \htmlref{{\tt PRESTART}}{MP:PRESTART} and
+\htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} are zero when using the VLBA
+control system with the RDBE based wideband system (VLBA, GBT, EB)
+and when using the VLA.  Because these systems use the data good time, the
+effects of offsetting the recording start time from the nominal start
+time are basically ignored and create some confusion.  For the legacy
+systems, the defaults are 5 seconds for {\tt PRESTART} and 10 seconds
+for {\tt MINPAUSE}.
 
 {\tt PRESTART} is applied before {\tt MINPAUSE}.  First the recording
 start time is shifted earlier, then the interval from the last
@@ -1971,20 +2075,18 @@ file by adding {\tt PTSTART} to the arguments of \htmlref{{\tt
 SUMITEM}}{MP:SUMITEM}.  The recording start time is also available in
 the {\sl sch.} files.
 
-
-(Obsolete information kept for historical interest:) The time required
-to sync playback on the VLBA hardware correlator (no longer in use)
-was empirically about 8, 13, and 25 seconds for speedup factors 1, 2
-and 4 respectively (ie, about 8 seconds in correlator wall clock
-time).  These times were determined for tape.  For some time, disks
-(Mark5a) were slower by about 10 seconds, but a quick check in
-Dec. 2007 suggests that the times are now about the same for disk.
-The sync time for disk at JIVE, Bonn, Haystack and USNO is around 1
-second or less and can be ignored.  The software correlator now in use
-on the VLBA and other instruments do not have a delayed sync so
-attempts to adjust the recording start time relative to the scan start
-time are no longer especially important.
-
+Another way to shift the recording start time is to use the parameter
+\htmlref{{\tt PRESCAN}}{MP:PRESCAN}.  This parameter was the original
+way of introducing gaps between scans, but was considered obsolete in
+recent years. However, it may have a use as a way of increasing the
+time allowed between scans beyond what would be given with the station
+parameter {\tt TSETTLE}.  {\tt PRESCAN} shifts the start time in
+either direction (positive shifts to later times) after the other
+parameters discussed above set the time.  If a positive {\tt PRESCAN}
+is given, and the {\tt DURation} or {\tt DWELL} is increased by the
+same amount, the whole scan can be shifted farther from the period of
+the slew, allowing somewhat increased confidence that the recording
+will start with good data.
 
 \subsection{\label{SSEC:DYNAMIC}Dynamic Scheduling}
 
@@ -2409,16 +2511,14 @@ them.
 
 {\bf NEW SYSTEMS:}
 
-New digital backends and a new recording system are under test and are
-just starting to be used for science for a few projects as of this
-January 2012 writing.  These will increase the available bit rate to
+New digital backends and a new recording system started to be used for
+science in 2012.  These increase the available bit rate to
 significantly higher values.  The RDBE/Mark5C system developed at
-Haystack and NRAO will initially record 2048 Mbps which will increase
-to 4096 Mbps eventually, assuming funds can be found.  The DBBC
-system, developed in Italy and also using the Mark5C recording system,
-is being deployed on a similar time scale and will have similar
-bandwidths.  Other, even wider bandwidth, recording systems are under
-development but will not be discussed here yet.
+Haystack and NRAO records 2048 Mbps.  Higher rates may eventually be
+provided.  The DBBC system, developed in Italy and also using the
+Mark5C recording system, is being deployed on a similar time scale and
+has similar bandwidths.  Other, even wider bandwidth, recording
+systems are under development but will not be discussed here yet.
 
 The RDBE (Roach Digital Backend, where ROACH is the core board
 containing a large FPGA) is a module that takes in 2 analog IF
@@ -2430,11 +2530,11 @@ It takes the place of the IF distributers, baseband converters,
 samplers, and formatter (including pulse cal detectors) in the old
 VLBA system.  Sometime in 2013, the VLBA antennas will have two RDBE
 systems each, allowing an increase in the number of channels, at least
-with the DDC personality.  In addition to allowing increased numbers
-of channels, the use of 2 RDBEs allows simultaneous access to all
-4 VLBA IFs.  That is useful for the S/X system and for the new 
-4-8 GHz system, for which two polarization pairs of output data are
-available.
+with the DDC personality (see below).  In addition to allowing
+increased numbers of channels, the use of 2 RDBEs allows simultaneous
+access to all 4 VLBA IFs.  That is useful for the S/X system and for
+the new 4-8 GHz system, for which two polarization pairs of output
+data are available.
 
 Control of the RDBE and Mark5C recorders is handled by a new VLBA
 control system running on a standard Linux computer.  The new system
@@ -2443,14 +2543,27 @@ to this computer by way of the VEX file, which is converted by
 operations to a Python script that is read by the Executor.  All new
 hardware installed at the VLBA for the next few years will use this
 control system and, probably slowly, the old hardware will be switched
-over to it.  In the meantime, both crd files and VEX files are
-needed to control the VLBA sites.  The in-progress installation of the
-new 4-8 GHz receiver on the VLBA includes a new RF switch controller 
-that affects all observing bands, so antennas with the full installation
-require a VEX file and use of the new control system, in addition to
-the old system (which points the antennas) for all observations.  The
-VEX file is also used by field system stations (EVN and others) for 
-antenna control.
+over to it.  In the meantime, both crd files and VEX files are needed
+to control the VLBA sites.  When the new 4-8 GHz receiver was
+installed on the VLBA, a new RF switch controller was installed that
+affects all observing bands.  Because of this, both the new and old
+control systems must be used to support observations with either the
+new or old recording systems.  Note that the VEX file is also used by
+field system stations (EVN and others) for antenna control.
+
+The new control system at the site, and the DiFX correlator have a 
+slightly different idea of when scans should start compared to the
+old systems.  With the old system, the media are commanded to start
+at a time that is the same at all stations and is set as the nominal
+scan start time minus an offset given by \htmlref{{\tt PRESTART}}
+{MP:PRESTART}.  The Vex file shows that time as the uncommented 
+``start'' time of the scan.  But the Vex file also has a station
+dependent offset for the start of good data.  With {\tt DWELL}
+scheduling, that is usually zero.  But if {\tt DURation} scheduling
+is used, it can be significant.  That time is often referred to
+as the good-data time or on-source time.  It depends on \sched's
+concept of slew times and settling times.  The new systems do not 
+start the media, or the correlation until that time.
 
 {\bf TERMINOLOGY:}
 
@@ -2567,7 +2680,15 @@ Example \schedb input {(\sl .key)} files for observations using the
 new systems are: 
 
 \htmladdnormallink{{\sl egrdbe2.key}}{examples/egrdbe2.key} which is
-a reasonably simple case.
+a reasonably simple case with the VLBA and GBT.
+
+\htmladdnormallink{{\sl manual\_1.key}}{examples/manual\_1.key} shows
+a lot of \schedb inputs instead of taking the defaults.  It uses
+the RDBE/DDC on the VLBA and WIDAR on the VLA1 (VLA1 not really offered
+yet, but VLA27 would be similar).
+
+\htmladdnormallink{{\sl rdbepfb.key}}{examples/rdbepfb.key} which is
+an even simpler case with just the VLBA and using a standard setup.
 
 \htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key} which demonstrates
 more fully specified setups and demonstrates scheduling of piggyback
@@ -2583,6 +2704,11 @@ DDC personality of the RDBE.
 \htmladdnormallink{{\sl egddc2.key}}{examples/egddc2.key} which uses the
 DDC personality with two RDBEs and 8 baseband channels.
 
+\htmladdnormallink{{\sl egcwide.key}}{examples/egcwide.key} which uses the
+PFB personality and observes using the new 4-8 GHz VLBA receiver with
+one dual polarization setup and one single polarization, widely 
+split frequencies setup.
+
 \htmladdnormallink{{\sl jvla.key}}{examples/jvla.key} is an example
 that uses the PFB personality of the RDBE for joint observations
 with the GBT and VLA.  There are only 512 Mbps at the VLA in this 
@@ -2592,30 +2718,55 @@ mode.
 example that uses the DDC personality with the VLBA, VLA, and GBT 
 with a full 2 Gbps on all three.
 
+\htmladdnormallink{{\sl hsaddc.key}}{examples/hsaddc.key} is an
+all-singing, all-dancing HSA example with the VLBA, VLA, GBT, and
+Effelsberg.  It exercizes reference pointing at all sites, array
+phasing at the VLA, and Doppler tracking.
+
+\htmladdnormallink{{\sl pfbsettst.key}}{examples/pfbsettst.key} is a
+vehicle for testing all the new RDBE/MARK5C standard setup files that
+use the pfb personality.  These are the setups that start with 
+{\sl rdbe\_pfb}.
+
+\htmladdnormallink{{\sl n2227.key}}{examples/n2227.key} is a
+sample USNO Earth Orientation observation using PT and MK.
+
+
 {\bf REFERENCE POINTING WITH THE RDBE:}
 
-As of Feb 2012, one weakness of the \schedb support for the new
-systems is that reference
-pointing on masers requiring doppler setting cannot be mixed with PFB
-personality observations.  The use of the DDC, or high overheads for
-personality changes, may be required. For now (early 2012), the best way
-to handle such observations is to schedule the project as
-as a piggy-back project with a separate non-recording Mark5A schedule
-that does the pointing using the old system.  The example
-\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} shows
-how this is done for a 3mm observation while more extensive information
-about setting up piggyback observations is contained in the example
-\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}
+See the \htmlref{Reference Pointing section}{SEC:REFPOINT} for much
+more information on how to do reference pointing.
+
+Reference pointing on the VLBA is handled by the legacy system using
+power measurements made by the old baseband converters (BBCs).  When
+the main observations are using the RDBE, \schedb tries to set the
+BBCs as closely as possible to the settings of the RDBE baseband
+channels.  For bandwidths below 16 MHz, this can be done well for 8
+channels, as long as the requested frequency is below 1000 MHz in the
+IF.  \schedb will select the center 8 channels if there are more from
+the RDBE (the PFB always gives 16).  For wider bandwidth baseband
+channels, 16 MHz will be used and it will be centered on the RDBE
+channel.  All this means that reference pointing, including using
+Doppler for setting frequencies and setting narrow bandwidths for
+masers can be done normally for the DDC personality.  If such
+reference pointing must be done when using the PFB personality with
+it's fixed 32 MHz baseband channels, it is best to set up the old
+system using the piggyback scheme as demonstrated in the example
+\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}.  That
+requires separate runs of \schedb for the MARK5C and legacy systems.
+
 
 {\bf DBBC:}
 
-The DBBC being developed for the EVN is also a system that samples
-at 1024 MHz and digitally filters the signals to the desired bandwidths.
-But it has a different design where, like with the old BBCs, the frequency
-can be set flexibly anywhere in the IF band without concern about
-crossover frequencies etc.  The DBBC design has a module for each output
-baseband, so they are more directly comparable to BBCs.  More information
-is needed about the system to flesh out this discussion.
+The DBBC being developed for the EVN is also a system that samples at
+1024 MHz and digitally filters the signals to the desired bandwidths.
+But it has a different design where, like with the old BBCs, the
+frequency can be set flexibly anywhere in the IF band without concern
+about crossover frequencies etc.  The DBBC design has a module for
+each output baseband, so they are more directly comparable to BBCs.
+Support for the DBBC in \schedb is being implemented, but is not yet
+ready for use as of Feb. 2013.  More information is needed about the
+system to flesh out this discussion.
 
 {\bf OTHER DIGITAL BACKENDS:}
 
@@ -2926,7 +3077,7 @@ lower frequency than the interferometer observations for improved SNR.
 
 Reference pointing is commonly used at the VLBA for observations at
 3mm.  The actual pointing observations are typically done at 7mm where
-the sensitivity is greater and the beam is a larger.  The pointing
+the sensitivity is greater and the beam is larger.  The pointing
 offsets are determined by the on-line system by fitting total power
 measurements made while the antenna is moved over a pattern that
 includes the nominal on-source, half power, and off-source positions.
@@ -2937,7 +3088,11 @@ be used until another is determined, or the project changes.  It
 cannot be turned off.  Optimal time intervals between pointing scans
 and maximum offsets to pointing sources are not yet known.  But
 pointing every half hour to hour on sources within about 20 degrees
-should be ok.
+should be ok.  
+
+The power data used for the reference pointing is measured by the
+legacy system baseband converters (BBCs) which should be kept in mind
+when scheduling MARK5C/RDBE observations.  More on that later.
 
 Because total power mode is being used for VLBA pointing, sources must
 be very strong --- more than about 10 Jy for continuum sources or
@@ -2950,25 +3105,42 @@ the sample pointing command file \htmladdnormallink{{\sl
 \schedb catalogs and discussed below, for a list of possible targets.
 Most of the SiO line sources are variable.  The ones in {\sl peak.cmd}
 were thought to be good at the time the file was made.  Information on
-masers can be found at the \htmladdnormallink{SEST web
+masers used to be found at the \htmladdnormallink{SEST web
 site}{http://www.ls.eso.org/lasilla/Telescopes/SEST/html/telescope-calibration/index.html}.
-Some information on continuum sources at mm wavelengths can be found
-at the
-\htmladdnormallink{OVRO}{http://www.ovro.caltech.edu/mm/preobs/sched97.html\#phasecal}.
-(Dec. 2011 --- these old links are broken and need updating.)
+That link is now dead.  Please let me know if you know an alternative.
+For information on high frequency flux densities of continuum
+calibrator, one can try the
+\htmladdnormallink{CalFind}{http://www.mmarray.org/} tool at the CARMA
+website.  Please recommend other options if you have them.
 
 Reference pointing is commonly used for 7mm observations on the VLA.
-It is done in interferometer mode at X band (4cm) and so can only be done
-when more than one antenna is available to the observer.  VLBI
+It is done in interferometer mode at X band (4cm) and so can only be
+done when more than one antenna is available to the observer.  VLBI
 projects with only one VLA antenna (Y1) cannot use reference pointing.
 Since interferometer mode is used, only on-source and half-power
 pointing positions are needed.  But the pattern is slower, taking
 about 2.5 minutes.  See the discussion of \htmlref{{\tt
-VLAPEAK}}{MP:VLAPEAK} for more details.  Intervals between pointing
-observations should again be half to one hour and the source should
-be within about 15 degrees of the target.  Continuum calibrators above
-about 0.5 Jy at 8 GHz are appropriate, so there are far more available
-than for the VLBA.
+VLAPEAK}}{MP:VLAPEAK} and the comments in the example
+\htmladdnormallink {{\sl hsaddc.key}}{examples/hsaddc.key} for more
+details.  Intervals between pointing observations should again be
+about one hour, shortened to about half an hour at sunrise and sunset.
+The source should be within about 20 degrees (not more than 30deg) of
+the target.  Sources within 10 deg of the zenith should be avoided.
+Continuum calibrators above about 0.5 Jy at 8 GHz are appropriate, so
+there are far more available than for the VLBA.  For more information
+on VLBI at the VLA, see \htmladdnormallink{VLBI at the VLA guide}
+{http://www.vla.nrao.edu/astro/guides/vlbivla/current/}.
+
+For the GBT, reference pointing is recommend for frequencies of 8 GHz
+and higher.  The interval should be 4-5 hr for 8-10 GHz, 3-4 hr for
+12-16 GHz, 1.5-2 hr for 18-26 GHz, and 30-45min for 40-50 GHz.  The
+pointing source should be stronger than 0.5 Jy and within 15 degrees
+of the target.  Allow 8 minutes or more in a non-recording scan for
+the pointing.  For more on VLBI at the GBT, see \htmladdnormallink
+{the GBT documentation.}{http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html}
+
+For Effelsberg, reference pointing should be used for frequencies 
+above 5 GHz.  Like the GBT, allow 8 minutes on-source.
 
 Reference pointing scans can be inserted explicitly by the observer or
 \schedb can be requested to attempt to do the job automatically.  For
@@ -2983,19 +3155,28 @@ of the parameter \htmlref{{\tt POINT}}{MP:POINT} for information on
 how to control this semi-automatic mode.
 
 Note that there will be a period from early 2012 until the antenna
-pointing on the VLBA is moved to the new control system (RDBE/MARK5C ---
-see the wideband observing section), when there will be complications
-for reference pointing.  Both the old and new control system must know
-about the scans and how to set up the frequencies.  This means that
-they must be described in both the {\sl .crd} and {\sl .vex} output
-files.  But with the PFB personality of the RDBE the Doppler tracking
-and narrow bandwidths needed for maser pointing are not possible.
-Therefore separate runs of \schedb are required for reference pointing
-to set up both the old BBCs, with the fine tuning needed for pointing,
-and the RDBEs which can't do fine tuning.  These two runs of \schedb
-must maintain the same scan times.  See the example
-\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} for
-details on how to schedule such observations.
+pointing on the VLBA is moved to the new control system (RDBE/MARK5C
+--- see the wideband observing section), when there will be
+complications for reference pointing.  Both the old and new control
+system must know about the scans and how to set up the frequencies.
+This means that they must be described in both the {\sl .crd} and {\sl
+.vex} output files.  The power measurements used for reference
+pointing are made using the old BBCs of the legacy system.  Those will
+be configured as well as possible by \schedb to match the baseband
+channels of the wideband system.  For the DDC personality with
+bandwidths below 16 MHz, that is possible and reference pointing can
+be configured normally including using Doppler tracking and narrow
+(usally 2MHz) bandwidths.  However for the PFB, it is not possible
+because the PFB has too many channels (16) of too wide a bandwidth (16
+MHz).  Therefore, if reference pointing is desired while observing
+with the PFB personality of the RDBE, \schedb must be run twice, once
+for the wideband recordings and once to set up the legacy system for
+the pointing observations.  The Vex file used will be that from the
+wideband pass.  The crd files will come from the legacy system pass.
+These two runs of \schedb must maintain the same scan times.  See the
+example \htmladdnormallink{{\sl
+eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} for details on how to
+schedule such observations.
 
 Explicit insertion of pointing scans can be a pain and can completely
 dominate the work involved in scheduling high frequency observations.
@@ -3014,22 +3195,22 @@ the format.  It is possible to watch details of the process by which
 a lot of output to the {\sl sched.runlog} file.
 
 There are several examples that demonstrate the use of reference
-pointing.  \htmladdnormallink{{\sl eg3mma.key}}{examples/eg3mma.key}
-sets up the pointing scans without any help from the automatic
-features in \sched.  \htmladdnormallink{{\sl
-eg3mmb.key}}{examples/eg3mmb.key} demonstrates use of the external
-peak command file.  \htmladdnormallink{{\sl
+pointing.  The best example for the new systems (RDBE/DDC, WIDAR etc)
+is \htmladdnormallink{{\sl hsaddc.key}}{examples/hsaddc.key}.  That
+example demonstrates reference pointing at the VLBA, VLA, GBT, and
+Effelsberg, array phasing at the VLA, and Doppler setting with the DDC
+personality.  As noted earlier, \htmladdnormallink{{\sl
+eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} demonstrates the use of
+two passes to schedule reference pointing when using the RDBE with the
+PFB personality.  For reference pointing on the VLBA using the MARK5A
+systems, see the ``eg3mm'' examples.  \htmladdnormallink{{\sl
+eg3mma.key}}{examples/eg3mma.key} sets up the pointing scans without
+any help from the automatic features in \sched.
+\htmladdnormallink{{\sl eg3mmb.key}}{examples/eg3mmb.key} demonstrates
+use of the external peak command file.  \htmladdnormallink{{\sl
 eg3mmc.key}}{examples/eg3mmc.key} produces the same results but using
-\htmlref{{\tt PEAKINIT}}{MP:PEAKINIT} and no external file.
-These examples only include
-a few VLBA stations and the VLA.  These examples don't show all that is
-needed to make schedules for wideband (RDBE/MARK5C) observations with
-reference pointing where two different passes through \schedb are 
-required.  For that, see a couple of paragraph back and see the example 
-\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
-The other 3mm examples need to be updated to show these methods.  Also
-some more examples should be added to demonstrate
-scheduling of more global observations such as those of the CMVA.
+\htmlref{{\tt PEAKINIT}}{MP:PEAKINIT} and no external file.  These
+examples only include a few VLBA stations and the VLA.
 
 The peaking control information is organized around groups of antennas
 and lists of possible pointing sources.  Up to 5 groups of antennas
@@ -3467,16 +3648,24 @@ antennas.  The use of \htmlref{{\tt DWELL}}{MP:DWELL} for scheduling
 should insure that adequate on-source time is obtained with the
 slower antennas.
 
-$099834t   this is a trap for latex to say changes needed below
-
-Another issue is that each time there is a change of frequency, there needs
-to be a one minute dummy scan.  This is handled through the antenna
-catalog parameter {\tt TLEVSET} which tries (with dwell scheduling) to
-insert adequate time between scans.  Then {\sl VEX2OPT} should insert
-the dummy scan.  This mechanism will only work properly after modifications
-are made to the VLA system to avoid needing dummy scans even for small
-frequency changes such as those associated with different Doppler 
-frequencies for different sources.
+Another issue is that, each time a frequency is seen for the first
+time, there needs to be a one minute dummy scan during which the
+levels of the analog signals into the samplers are set.  \schedb can
+handle this when using \htmlref{{\tt DWELL}}{MP:DWELL} scheduling by
+inserting the appropriate amount of time as a gap before the first
+scan with each frequency.  The time required is given by the antenna
+catalog parameter {\tt TLEVSET}.  {\sl VEX2OPT} will insert the
+required dummy scan in this gap.  Alternatively, the user can
+explicitly insert DUMMY scans.  These are scans that are not
+recording, not doing pointing, and not doing phasing and are at least
+as long as {\tt TLEVSET} (1 minute for the VLA).  \schedb will not try
+to insert a gap, or claim a late on-source time, based on {\tt
+TLEVSET} before such a scan.  It is traditional to put a series of
+such DUMMY scans at the start of the observing block, stepping through
+all the frequencies that will be used in the observing block.  Note
+that an enhancement needed for the DUMMY scans on the VLA is to avoid
+needing DUMMY scans even for small frequency changes such as those
+associated with different Doppler frequencies for different sources.
 
 {\bf ARRAY PHASING:}
 
@@ -4187,11 +4376,13 @@ GENERAL CONTROL PARAMETERS:
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \htlm{CALTIME}{~} Integration time for calibration data.
 \htlm{DODOWN}{~~} Keep down antennas in scans.
+\htlm{DOSCANS}{~} Keep only this scan range.  Mainly for operations.
+\htlm{WRAP24}{~~} Double a 24 hour schedule to allow different start.
 \htlm{IATUTC}{~~} IAT-UTC for planetary motion cards at VLA.
 \htlm{INTENTs}{~} Directives for observing, correlation, and processing.
 \htlm{LINEPG}{~~} Number of lines per page in operator schedules.
 \htlm{LST}{~~~~~} Schedule is in LST for specified station.
-\htlm{NCHAN}{~~~} Number of baseband channels (Obsolete).
+\htlm{NCHAN}{~~~} Number of baseband channels (Obsolete - set setups).
 \htlm{PRECDATE}{} ``Observe'' date for coordinate conversions.
 \htlm{SUMITEM}{~} Items to show in the summary file.
 \htlm{TANTSTA1}{} List 1 of stations for Ta measurement requests.
@@ -5212,6 +5403,38 @@ do the same thing.}
 {Reverts to previous scan.}
 {{\tt DOPPLER}}
 
+\subsubsection{\label{MP:DOSCANS}{\tt DOCANS}}
+
+The user can specify optional scans on the ends of a project using
+the \htmlref{{\tt PREEMPT}}{MP:PREEMPT} parameter.  Those scans will
+be shown in the summary file {\sl .sum file}, but will not be sent 
+to the telescope control and others files ({\sl .vex, crd.xx, sch.xx,
+.oms} and {\sl .flag} files.  To actually utilize those scans, or for
+that matter, any arbitrary subset of all the input scans, specify
+the range of desired output scans with {\tt DOSCANS}.  The arguments
+are the scan numbers of the first and last scans as they appear in 
+the summary file.  
+
+It is intended that {\tt DOSCANS} be used mainly by the VLBA scheduler
+while trying to put together dynamic schedules.  It is often hard to
+find projects that mesh together exactly without leaveing gaps.  The
+{\tt PREEMPT=EXTRA} and {\tt DOSCANS} parameters are intended to let
+users provide productive observations to make during such otherwise
+unfilled gaps.
+
+Note that {\tt DOSCANS} can be used in conjunction with parameter
+\htmlref{{\tt WRAP24}}{MP:WRAP24} to rotate the start point of
+full day schedules around the clock for more convenient dynamic
+scheduling.
+
+\rcwbox
+{Two integers}
+{Values that correspond to scan numbers in the {\sl .sum} file}
+{zero - don't use this scan restriction}
+{One set of values used for the whole project}
+{{\tt DOSCANS = 154, 367}}
+
+
 \subsubsection{\label{MP:DOPSRC}{\tt DOPSRC}}
 
 {\tt DOPSRC} is the name of the source for which the Doppler
@@ -5279,16 +5502,20 @@ required for essentially all VLBI observations now.
 
 \subsubsection{\label{MP:DUR}{\tt DURation}}
 
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
+
 {\tt DURation} specifies the length of the current scan. Usually this
 is used instead of \htmlref{{\tt STOP}}{MP:STOP}. It is assumed to be
 a UT time interval unless \htmlref{{\tt LST}}{MP:LST} was specified,
 in which case it was assumed to be an LST time interval.
 \htmlref{{\tt DWELL}}{MP:DWELL} is a very similar parameter except
 that, with {\tt DURation}, the scan starts \htmlref{{\tt GAP}}{MP:GAP}
-seconds after the previous stop time while with dwell, the scan will
-start at least \htmlref{{\tt GAP}}{MP:GAP} seconds after the previous
-stop time, but, if necessary, will wait longer to allow all antennas to
-reach the source.
+seconds (perhaps adjusted by the old parameter {\tt PRESCAN} after the
+previous stop time while with {\tt DWELL}, the scan will start at least
+\htmlref{{\tt GAP}}{MP:GAP} seconds after the previous stop time, but,
+if necessary, will wait longer to allow all antennas to reach the
+source.
 
 Note that {\tt DUR} and \htmlref{{\tt DWELL}}{MP:DWELL}
 may be both be used in the same schedule, but cannot both be used
@@ -5296,27 +5523,48 @@ for the same scan (that would not make sense).  If either is used,
 the time specified overrides any previous specification of the
 scan length made with either parameter.
 
-Once the scan start time has been specified as above, it can be
-adjusted further with \htmlref{{\tt PRESCAN}}{MP:PRESCAN}.  Then the
-actual time that recording starts is adjusted further with
-\htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} and \htmlref{{\tt PRESTART}}
-{MP:PRESTART}.  {\tt PRESTART}, {\tt MINPAUSE}, and {\tt PRESTART}
-allow the user to start recording early to give the correlator
-a chance to synchronize before the start of good data.  This should no
-longer be needed for correlators currently in use.  These parameters also
-can help prevent short stoppages which can cause problems
-with playback. Again, this is not really a problem with the disk
-systems like Mark5.   See the descriptions of those parameters for more
-information.  The \schedb defaults are generally reasonable so, if
-you are not an experienced user who wants to exercise fine control
-of recording management, don't worry about these parameters.
+Once the nominal scan start time has been specified as above it can be
+adjusted further with the old, and mostly obsolete, parameter
+\htmlref{{\tt PRESCAN}}{MP:PRESCAN}.  Then the actual time that
+recording starts is adjusted further with \htmlref{{\tt
+MINPAUSE}}{MP:MINPAUSE} and \htmlref{{\tt PRESTART}} {MP:PRESTART}.
+{\tt PRESTART}, {\tt MINPAUSE}, and {\tt PRESCAN} allow the user to
+start recording early to give the correlator a chance to synchronize
+before the start of good data.  {\tt PRESTART} can also be used to
+delay the scan start to be more sure it starts on good data --- mostly
+useful with {\tt DWELL}.  These parameters also can help prevent short
+stoppages which used to cause problems with playback with tape
+systems.  Adjusting the media start time should no longer be needed
+for correlators and recording systems currently in use (eg MARK5 and
+DiFX).  See the descriptions of the parameters mentioned for more
+information.  The \schedb defaults are generally reasonable so, if you
+are not an experienced user who wants to exercise fine control of
+recording management, don't worry about these parameters.
 
 The start and stop times reported in the summary and operator schedule
 files are the same for all stations.  They take into account any
 adjustments made as a result of specifying \htmlref{{\tt PRESCAN}}
 {MP:PRESCAN}, but do not take into account adjustments requested using
 \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} and \htmlref{{\tt
-PRESTART}}{MP:PRESTART}, since those can be station dependent.
+PRESTART}}{MP:PRESTART}, since those can be station dependent.  The
+time the media is started is reported in the {\sl sch.xx} files
+under the headnig ''TPStart''.
+
+With the VLBA RDBE recording system and DiFX correlators, both
+recording and correlation start times ignore most of the efforts by
+\schedb to adjust recorder start times.  They treat the data-good time
+as given as an offset from the start time in the \$SCHED section of
+the VEX file as the time to start handling data.  In the \$SCHED
+section, there can be two start times, one commented out (line starts
+with ``*'').  The commented one is the nominal start time as seen in
+the \schedb summary file.  The active one is what \schedb thinks is
+the media start time, usually the nominal start time minus {\tt
+PRESTART}.  Then on each station line, there are two offset times, one
+for the start and one for the stop.  The start is greater of zero and
+the time when \schedb thinks the data will be good (on-source etc).
+That is what is used by the VLBA to start recording and DiFX to start
+correlation.  So effectively, even when using duration scheduling, you
+are fairly likely to actually be using dwell scheduling.
 
 See the \htmlref{Scan Times}{SSEC:SCANTIMES} section for more
 information on the specification of scans.
@@ -5330,6 +5578,9 @@ information on the specification of scans.
 
 
 \subsubsection{\label{MP:DWELL}{\tt DWELL}}
+
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
 
 {\tt DWELL} is an alternate way to specify the duration of a scan.  It
 is distinguished from \htmlref{{\tt DURation}}{MP:DUR} only in that
@@ -5661,6 +5912,9 @@ which antennas can observe certain frequencies.
 
 \subsubsection{\label{MP:GAP}{\tt GAP}}
 
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
+
 {\tt GAP} is the minimum gap in time between the previous stop time
 and the current nominal scan start time when scheduling with
 \htmlref{{\tt DURation}}{MP:DUR} or \htmlref{{\tt DWELL}}{MP:DWELL}.
@@ -5668,7 +5922,7 @@ For scheduling with \htmlref{{\tt DURation}}{MP:DUR}, it will be that
 time interval.  For scheduling with \htmlref{{\tt DWELL}}{MP:DWELL},
 the interval might be longer if required for slews, but it will not be
 shorter.  Note that \htmlref{{\tt PRESTART}}{MP:PRESTART},
-\htmlref{{\tt PRESCAN}}{MP:PRESCAN} (obsolete parameter) and
+\htmlref{{\tt PRESCAN}}{MP:PRESCAN} (old, mostly obsolete parameter) and
 \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} are applied after the nominal
 scan times are established and could make the period during which the
 recording is stopped shorter than {\tt GAP}.  {\tt MINPAUSE} is used
@@ -6443,19 +6697,48 @@ some schemes.
 \subsubsection{\label{MP:MINPAUSE}{\tt MINPAUSE}}
 
 {\tt MINPAUSE} is used to specify the minimum time a recording will be
-stopped between scans.  It can be specified for each scan, but usually
-will be set to one value for the whole schedule.  If the start of a
-scan is less than MINPAUSE (seconds) {\sl times the speedup factor}
-from the end of the last recording scan, the recording will be left
-running between the scans.  This action is station dependent ---
-different stations can have the recording started at different times
-except when writing a VEX file, in which case simultaneity is
-enforced.  The nominal start time of the scan as displayed in the
-summary is not affected by {\tt MINPAUSE}.  You can use the option
-{\tt TPSTART} in the \htmlref{{\tt SUMITEM}}{MP:SUMITEM} list to
-display in the summary how long before the scan start time the
-recording starts.  The recording start time is also given in the {\sl
-sch} file.
+stopped between scans.  Its effects are basically ignored by the 
+wideband systems (RDBE, WIDAR with MARK5C recording) on the VLBA, VLA
+GBT, EB\_VLBA and perhaps others so users of those systems can ignore
+the parameter, taking the default of zero.
+
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
+
+If the interval between scans is shorter than the minimum specified
+with {\tt MINPAUSE}, the recording will be be kept going between the
+scans.  The need to prevent the recording from stopping for a short
+interval was most pronounced with tapes which took several seconds to
+accelerate and decelerate.  With disks, that is not an issue so the
+only reason would be if there is a finite time to get the recording
+organized and the playback synchronized.  Those are issues, at a low
+level with the Mark5A systems, but not with the Mark5C, which is in
+use and will become the dominent recording during 2013.  With Mark5C,
+{\tt MINPAUSE} should be set to a very small value or zero.  Zero is
+the default for the VLA and for any system with {\tt CONTROL = VLBA}
+and {\tt DAR=RDBE} in the stations file (VLBA, GBT, EB\_VLBA).
+
+For the VLA and sites with the VLBA control system, the recordings are
+started at the data-good time as reflected in the individual station
+lines of the VEX file.  Those times account for any antenna slew and
+the additional time requested through {\tt TSETTLE} and other such
+parameter in the station catalog.  {\tt MINPAUSE} only affects the
+media start time which is the nominal start time minus {\tt PRESTART},
+not the data good time, so it is basically ignored for such VLBA and
+VLA
+
+{\tt MINPAUSE} can be specified for each scan, but usually will be set
+to one value for the whole schedule.  If the media start of a scan is
+less than MINPAUSE (seconds) from the end of the last recording scan,
+the recording will be left running between the scans.  This action is
+station dependent --- different stations can have the recording
+started at different times except when writing a VEX file, in which
+case simultaneity is enforced.  The nominal start time of the scan as
+displayed in the summary is not affected by {\tt MINPAUSE}.  You can
+use the option {\tt TPSTART} in the \htmlref{{\tt
+SUMITEM}}{MP:SUMITEM} list to display in the summary how long before
+the scan start time the recording starts.  The recording start time is
+also given in the {\sl sch} file.
 
 {\tt MINPAUSE} is mainly used now to prevent excessive recording scans
 on the Mark5A system.  The system does not allow more than 1024
@@ -6486,8 +6769,8 @@ between scans.  In such cases, \schedb will not schedule any sort of
 pause in scans or recordings.  One can use {\tt MINPAUSE} to keep the
 recording going through short gaps.  For longer gaps when using {\tt
 MINPAUSE}, the recording start time will not be affected.  \htmlref{{\tt
-PRESTART}}{MP:PRESTART}, or a negative value for the obsolete
-parameter \htmlref{{\tt PRESCAN}}{MP:PRESCAN}, can be used to shift
+PRESTART}}{MP:PRESTART} (or a negative value for the old
+parameter \htmlref{{\tt PRESCAN}}{MP:PRESCAN}) can be used to shift
 the scan start time forward from the time set by other criteria (such
 as antennas on-source when using \htmlref{{\tt DWELL}}{MP:DWELL}).
 The start time is moved by the same amount for all stations and is not
@@ -6514,7 +6797,7 @@ by the speedup factor has been removed.
 \rcwbox
 {A number giving the minimum recording stoppage in seconds.}
 {Any number.}
-{10 seconds.}
+{10 seconds for legacy systems, 0 for VLBA/RDBE and VLA/WIDAR systems.}
 {Defaults to previous scan.}
 {{\tt MINPAUSE=30}}
 
@@ -7673,30 +7956,64 @@ writing) was changed to 1979.9, the VLA value.
 
 \subsubsection{\label{MP:PREEMPT}{\tt PREEMPT}}
 
-Starting in October 2011, the VLBA will be used to provide daily
+{\tt PREEMPT} is used to allow, or not, scans to be preempted
+for other purposes.  There are two cases.  {\tt PREEMPT = EXTRA}
+tells /schedb and VLBA operations to treat the scans as extras
+that can be used to help fill gaps between projects that often
+occur with dynamic scheduling.  {\tt PREEMPT = NO} tells
+operations not to use the Pie Town and Mauna Kea antennas at
+the time of the scan for daily USNO Earth Orientation Parameter
+(EOP) observations.  {\tt PREEMPT = OK} means that the time of
+the scan can be used for the EOP observations on PT and MK.
+
+The {\tt PREEMPT = EXTRA} option should only be used for a block of
+scans at the beginning of the project and another at the end of the
+project.  These scans can, and normally will, extend outside the time
+assigned by the Time Allocation Committee.  The scans that do not have
+{\tt PREEMPT = EXTRA} are considered to be the ``core'' and should
+stay within the time allocation.  If \schedb finds any ``{\tt EXTRA}''
+scans in the ``core'', it will complain and stop.  The {\tt EXTRA}
+scans should be designed to enhance the goals of the project but
+should not be critical to it as they may well not get observed.  Also,
+they should not be used to do what is effectively a different project.
+
+Scans that have {\tt PREEMPT = EXTRA} will not be written to the
+output files other than the summary file unless they are included in
+the range of scans specified with \htmlref{{\tt DOSCANS}}{MP:DOSCANS}.
+The files affected are the {\sl .vex, .oms, crd.xx, sch.xx,} and {\sl
+.flag} files.  These include all the antenna control files, so as far
+as the telescopes are concerned, these scans do not exist unless
+explicitly included in {\tt DOSCANS}.  Generally {\tt DOSCANS} should
+only be used by VLBA schedulers.
+
+Starting in October 2011, the VLBA has been used to provide daily
 Earth Orientation Parameter (EOP) observations for the U.S. Naval
 Observatory in return for financial support for VLBA operations.
-These observations will be a geodetic style run of duration up to
+These observations are a geodetic style run of duration up to
 1.5 hours using the Pie Town to Mauna Kea baseline.  The observations
-will happen within about 4 hours of 18 hours UT, but will likely
+happen within about 4 hours of 18 hours UT, but will likely
 shift 12 hours from there after confidence is gained in the results.
 
-These observations will cause some disruption to normally scheduled
-projects.  The plan is to schedule fixed and dynamic projects in the
-normal manner.  Then, if possible, the USNO observations will be
+These observations cause some disruption to normally scheduled
+projects.  The fixed and dynamic projects are scheduled in the
+normal manner.  Then, if possible, the USNO observations are
 inserted in gaps between other projects.  If that is not possible,
-the USNO observations will preempt the normal project for the two
-stations involved. An effort to minimize the impact on the normal
-project will be made.  Parameter {\tt PREEMPT} allows the PI to
+the USNO observations preempt the normal project for the two
+stations involved.  An effort to minimize the impact on the normal
+project is made.  Parameter {\tt PREEMPT} allows the PI to
 help with that minimization by specifying portions of the project
 that can be preempted and portions that should be protected.  For
 example, the parameter can be used to protect key calibration
 observations.
 
-{\tt PREEMPT} can be specified for each scan and has two allowed
-arguments --- {\tt 'NO'} and {\tt 'OK'}.  The default, {\tt 'OK'},
-means that the scan be preempted.  {\tt 'NO'} means that it should
-be protected.  The parameter need only be specified when it changes.
+{\tt PREEMPT} can be specified for each scan and has three allowed
+arguments --- {\tt 'EXTRA'}, {\tt 'NO'} and {\tt 'OK'}.  The default,
+{\tt 'OK'}, means that the scan be preempted and is a ``core'' scan.
+{\tt 'NO'} means that it should be protected from preemption for the
+EOP observations.  {\tt 'EXTRA'} means that this is an extra scan at
+the beginning or end.  {\tt 'EXTRA'} implies {\tt 'OK'} as far as
+preemption for EOP observations is concerned.  The parameter need only
+be specified when it changes.
 
 \schedb will examine the {\tt PREEMPT} specifications and identify
 time periods of at least 1.7 hours when all scans allow preemption.
@@ -7719,8 +8036,8 @@ will have {\tt PREEMPT} default to {\tt 'NO'}.  This helps avoid
 problems for legacy schedules.
 
 \rcwbox
-{A 2 character string.}
-{'OK' or 'NO'.  No other strings allowed.}
+{A character string of up to 5 characters.}
+{'EXTRA', 'OK' or 'NO'.  No other strings allowed.}
 {'OK', except see text about geodetic segments.}
 {Defaults to previous scan.}
 {{\tt PREEMPT = 'NO'}}
@@ -7728,52 +8045,30 @@ problems for legacy schedules.
 
 \subsubsection{\label{MP:PRESCAN}{\tt PRESCAN}}
 
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
+
 Please note: {\tt PRESCAN} is retained mainly for backwards
-compatibility and should not normally be used.  The separate
-parameters \htmlref{{\tt GAP}}{MP:GAP}, \htmlref{{\tt
-PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE}
-are really better suited to achieve the desired results.  Because this
-is an outdated parameter, the discussion below has not been changed to
-reflect the change from tapes to disk and eVLBI.  In fact, with the
-advent of the VLBA DiFX correlator (other correlators already synced
-quickly) and Mark5 recording systems, the need to prevent short stops
-and to allow the correlators time to sync is basically gone.
+compatibility and should not normally be used.  However it may be
+useful for a few situations with modern schedules.  For example, if
+the user using \htmlref{{\tt DWELL}}{MP:DWELL} wishes to push the scan
+further away from the preceding scan, then adding a positive {\tt
+PRESCAN}, and lengthening the {\tt DWELL} time by the same amount will
+do the job.  That is an alternative to increasing {\tt TSETTLE} in the
+station catalog, which the user may not normally want to touch.
 
-{\tt PRESCAN} specifies a time by which to offset the start of VLBI
-tape motion from what would otherwise have been the start of the scan
-based on such parameters as \htmlref{{\tt START}}{MP:START},
-\htmlref{{\tt GAP}}{MP:GAP}, and the optimization implied by
-\htmlref{{\tt DWELL}}{MP:DWELL}.  The scan start time in the summary
-and sch files is adjusted to reflect the offset due to the
-requested {\tt PRESCAN}.  The offset may be of either sign.  If
-positive, the start time is delayed by the requested amount.  This
-is the old way to insert an interval between scans, although {\tt
-GAP} is now the preferred mechanism to accomplish that goal.  If
-negative, the start time is moved to an earlier time by the requested
-amount, with the condition that it will not be set before the stop
-time of the last scan containing any station in the current scan.
-This can be used to start tapes rolling before antennas get to source
-or to keep them rolling when there are short intervals between scans.
+Originally, {\tt PRESCAN} was the mechanism for introducing gaps
+between scans.  However that function is now better handled using the
+separate parameters \htmlref{{\tt GAP}}{MP:GAP}, \htmlref{{\tt
+PRESTART}}{MP:PRESTART}, and \htmlref{{\tt MINPAUSE}} {MP:MINPAUSE}.
 
-Note that, when there is an interval between the stop time of one scan
-and the start of the next, the VLBI tapes will be stopped.  Frequent
-or short stops are not desirable because they degrade the ability of
-the correlator to keep the tapes synchronized --- the tapes lose sync
-every time they are stopped and it takes some time (10-20 seconds,
-usually) to reacquire sync.  Data are lost during that time.  There
-are a number of ways to convince \schedb to keep the tapes rolling at
-scan boundaries.  This gets a bit tricky when there is a mixture of
-slew times and one wishes to stop the tapes during the long ones, but
-not during the short ones.  {\tt PRESCAN} can deal with short gaps,
-but will always move the start time up even when there is a long slew.
-Scheduling with no {\tt GAP} and using {\tt DUR} rather than {\tt
-DWELL} keeps the tape rolling, but does so in all circumstances.
-The new parameters designed to deal with this situation are \htmlref{{\tt
-MINPAUSE}}{MP:MINPAUSE}, which will keep the tape rolling during short
-gaps, and \htmlref{{\tt PRESTART}}{MP:PRESTART} which starts the
-tapes earlier, in a station dependent manner, without moving the
-nominal scan start time.  See the discussion on \htmlref{Scan Times}
-{SSEC:SCANTIMES} for more information.
+{\tt PRESCAN} specifies a time by which to offset the nominal start 
+of a scan from what has been determined based on all other criteria.
+It is applied after all scan timing has been settled.  It won't 
+back up (negative value) over the stop of a previous scan, but it
+would be capable of messing up scan timing set by other parameters.
+It should only be used with considerable care as it should not be
+considered a carefully maintained feature.
 
 Note that PRESCAN is treated as a UT time regardless of whether or
 not LST scheduling is specified (it is added to the start time after
@@ -7789,18 +8084,20 @@ on tape stop time given in the section on parameter \htmlref{{\tt GAP.}}
 {Any time.}
 {Not used.}
 {Defaults to previous scan.}
-{{\tt PRESCAN=-20}, meaning start the scan 20 seconds early.}
+{{\tt PRESCAN=20}, meaning start the scan 20 seconds late.}
 
 \subsubsection{\label{MP:PRESTART}{\tt PRESTART}}
+
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
 
 {\tt PRESTART} allows the recording to be started before good data is
 expected.  It was used to give time for earlier correlators to
 synchronize playback.  All correlators now in use are able to sync
 quickly so the need to adjust start times to allow for synchronization
 is basically gone.  In practice, the the Mark5A units take few seconds to get
-going on record which is why the default is 5 seconds.  When the
-new digital systems are in place, the default will likely be reduced
-to zero and the parameter could be ignored.  The following
+going on record which is why the default is 5 seconds for the legacy systems.
+For VLBA/RDBE and VLA/WIDAR systems, the default is zero.  The following
 discussion is kept to describe the function of {\tt PRESTART} while
 the parameter is available.
 
@@ -7854,7 +8151,7 @@ reconfigure, a resync will be done normally.
 \rcwbox
 {A time.}
 {Any time.}
-{5.0}
+{5.0 for legacy systems, 0.0 for VLBA/RDBE and VLA/WIDAR systems.}
 {Defaults to previous scan.}
 {{\tt PRESTART=15}, meaning start the recording 15 seconds early.}
 
@@ -8359,6 +8656,9 @@ local directory), then one can specify the station file with
 
 \subsubsection{\label{MP:START}{\tt START}}
 
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
+
 {\tt START} is used to specify the start time of the scan in UT. If
 {\tt LST} was specified, {\tt START} is assumed to be in local
 sidereal time. {\tt START} must be specified for the first scan. For
@@ -8407,6 +8707,9 @@ in the station catalog.
 
 
 \subsubsection{\label{MP:STOP}{\tt STOP}}
+
+The topic of controlling scan timing is discussed in detail in
+the \htmlref{Scan Times section}{SSEC:SCANTIMES}.
 
 {\tt STOP} is used to specify the stop time of the scan in UT. If {\tt
 LST} is specified, the time is in local sidereal time. Either a {\tt
@@ -9288,6 +9591,30 @@ default of 600 is fine.
 {{\tt VLAUSERN=332}}
 
 
+\subsubsection{\label{MP:WRAP24}{\tt WRAP24}}
+
+{\tt WRAP24} is a switch to aid VLBA operations in dynamic scheduling
+of 24 hour projects.  For such projects, it is useful to be able to
+start at a time of day different from what the user specified.  This
+is facilitated by the parameters {\tt WRAP24} and \htmlref{{\tt DOSCANS}}
+{MP:DOSCANS}.  Specifying {\tt WRAP24} with no argument causes \schedb
+to duplicate the schedule on a second day to form a 48 hour schedule.  
+Actually it would duplicate any schedule, but it is mainly useful for
+24 hour schedules.  The full 2 day (or whatever) schedule shows up in
+the summary {\sl .sum} file.  Then {\tt DOSCANS} can be used to select
+the desired 24 hours (or whatever time).
+
+Note that this command has nothing to do with cable wraps.  \schedb does
+not yet have control over cable wraps --- it only tries to predict them.
+
+\rcwbox
+{No argument}
+{No argument - actually anything but -9999 will have the same effect}
+{Do not wrap}
+{Will take one specification for the observation}
+{{\tt WRAP24}}
+
+
 \subsubsection{\label{MP:YEAR}{\tt YEAR}}
 
 {\tt YEAR} specifies the year of the stop time of the scan. This must
@@ -9899,15 +10226,19 @@ and time to make calibration observations.  Acceleration and
 deceleration will be calculated explicitly if the above acceleration
 parameters are provided in the station catalog.
 
-\item [{\tt TLEVSET}:] This is a time to be added to the slew calculation
-to allow for the set-and-remember power level adjustments that happen
-on the VLBA (RDBE) or VLA the first time a particular setup is seen.
-Like {\tt MINSETUP}, the time can overlap with slews so functionally, this
-parameter acts exactly like {\tt MINSETUP} but only for the first scan
-with a particular setup.  The VLBA needs 15 seconds.  The VLA needs 60
-seconds.  As of Nov. 2012, the VLA actually needs this every time there
-is a slight frequency change (like new Doppler shift), but we will try 
-to get that changed to be only for more major changes.
+\item [{\tt TLEVSET}:] This is a time to be added to the slew
+calculation to allow for the set-and-remember power level adjustments
+that happen on the VLBA (RDBE) or VLA the first time a particular
+setup is seen.  Like {\tt MINSETUP}, the time can overlap with slews
+so functionally, this parameter acts exactly like {\tt MINSETUP} but
+only for the first scan with a particular setup.  The VLBA needs 15
+seconds.  The VLA needs 60 seconds.  As of Nov. 2012, the VLA actually
+needs this every time there is a slight frequency change (like new
+Doppler shift), but we will try to get that changed to be only for
+more major changes.  Note that, if the first scan with a setup is
+non-recording, non-pointing, and non-phasing, the scan itself will be
+accepted as the level setting (DUMMY on the VLA) scan.  This allows
+for explicity insertion of DUMMY scans.
 
 \item [{\tt MINSETUP}:] The minimum interval between scans when using
 dwell time scheduling.  If the slew time plus the settling time
@@ -13304,9 +13635,82 @@ more information.
 \section{\label{SEC:CURRENT}Current Release}
 
 
-\subsection{\label{SSEC:VER_10.3}Development Version 10.3}
+\subsection{\label{SSEC:VER_11.0}Development Version 11.0}
 
 \begin{itemize}
+
+% **  Get wrap state in Vex.
+% **  Stop worrying about resyncs for MARK5C 
+
+
+
+\item Extend the flags for slewing to one second before START
+- PRESTART and to one half second after TONSRC.  There were
+rounding issues of some sort and, with the switch to PRESTART=0
+for the VLBA and VLA wideband systems, many flags had zero 
+length.  Note that start times, good-data times, and flag times
+are all only given to the integer second, while the START and
+TONSRC times can be fractional seconds --- one may be converted
+from LST and the other is based on a slew calculation.  Feb. 10,
+2013.  RCW.
+
+\item User scan comments are now shown in the summary file.
+Feb. 9, 2013.  RCW.
+
+\item Created example rdbepfb.key that is a simple 6cm example using
+the RDBE with the PFB personality.  The setup is one of the new
+standard setups. Feb. 9, 2013.  RCW.
+
+\item Added parameter {\tt WRAP24} to assist in dynamic scheduling
+of 24 hour projects.  {\tt WRAP24} duplicates the schedule, causing
+a 24 hour project to look like a 48 hour project.  Then {\tt DOSCANS}
+can be used to select the desired 24 hours.  Feb. 9, 2013.
+
+\item Modified the disk use calculation for the VLBA and VLA wideband,
+MARK5C system to reflect the fact that they don't start recording
+until the data-good time in the {\sl VEX} file rather than the
+specified media start time that has been used by previous systems.
+The calculation for the MARK5A and other systems still depends on the
+start time.  Note that the media start time is the nominal scan start
+time minus {\tt PRESTART} and is the uncommented start time in the
+{\sl VEX} file.  Feb. 9, 2013  RCW.
+
+\item Removed the special source list in a format for the old correlator
+data base from the {\sl .sum} file.  Also remove the list of 
+correlation blocks required by setup changes, which was also an
+old VLBA correlator issue only.  Feb. 4, 2013  RCW.
+
+\item Upped the version number to 11.0 given the number of changes
+and the time since the last full release (10.2).  But it is still
+a development version.  Feb. 3, 2013,  RCW.
+
+\item While adding scan counts etc for the ``EXTRA'' scans, (see next
+item) many format changes were made in the .sum file.  Anyone parsing
+this file automatically should check their code.  As a human, rather
+than machine, readable file, the format is subject to changes.
+Feb. 3, 2013 RCW.
+
+\item Adding the ability of the user to specify optional ``EXTRA''
+scans at the ends of projects to help fill gaps using the {\tt
+PREEMPT} parameter.  Feb. 3, 2013 RCW
+
+\item Change the note that is written by the Doppler routine when
+it is forced to set two channels to the same frequency because they
+are opposite sidebands from the same BBC.  It looked too much like an 
+error message rather than an informational note and worried a user.
+Feb. 1, 2013  RCW.
+
+\item The parameter PRESCAN no longer did as advertised in that it
+could end up being applied more than once because some scan time
+setting routines get called more than once.  Fix the situation and
+modify the documentation to indicate the use of PRESCAN to shift
+a scan relative to the data ready time.  Jan 30, 2013.  RCW.
+
+\item Change the defaults for {\tt PRESTART} and {\tt MINPAUSE} so
+that they continue to be 5 and 10 sec respectively unless all of
+the stations are VLBA/RDBE or VEX/WIDER CONTROL/DAR.  In those
+cases, make them zero as those systems always stop and only pay
+attention to the data good time in the Vex file.  Jan 29, 2013  RCW.
 
 \item Prohibit VLA phasing and reference pointing in the same scan.
 Jan. 23, 2013. RCW.
@@ -13328,7 +13732,7 @@ be added for use by the scheme for adding DELZN sections.  Jan. 23,
 2012. RCW.
 
 \item Standard setups for the RDBE PFB personality added for 6cm and 
-higher frequencies.  Jan. 23, 2013. RCW
+higher frequencies.  Jan. 23, 2013. RCW.  Later added 20 and 13 cm.
 
 \item Starting to implement support for the DBBC.  Jan. 20, 2013.
 
@@ -13672,7 +14076,7 @@ Nov. 2, 2011  RCW.
 frequency options were added to freq\_RDBE.dat to support the 4 channel
 IF converter.  The use of any of the 4 IFs was added to the checking
 routines, although the total number is still limited to 2 for now.
-Example egCwide.key was added to exercise this system.  This will still
+Example egcwide.key was added to exercise this system.  This will still
 be called the 6cm band.  Nov. 1, 2011 RCW.
 
 \item For RDBE/PFB observations where the sideband in the RDBE

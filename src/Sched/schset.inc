@@ -186,6 +186,7 @@ C
       REAL              MAXTBPS(MSET)
       REAL              TBPS(MSET)
       REAL              TOTBPS(MSET)
+      REAL              WRTBPS(MSET)
       LOGICAL           VLBAMKIV(MSET)
       LOGICAL           RECUSED(MSET)
 C
@@ -202,8 +203,8 @@ C
      1                  LEVEL, LLEVEL, BBC, TAPEMODE, TPMODE, SWTCHDUR,
      2                  PCALFR1, PCALFR2, VFESYN, DUALPOL, FRSWITCH, 
      3                  DUALX, MODETEST, USED, MINTRAK, MAXTRAK, 
-     4                  MINTBPS, MAXTBPS, TBPS, TOTBPS, VLBAMKIV, 
-     5                  RECUSED
+     4                  MINTBPS, MAXTBPS, TBPS, TOTBPS, WRTBPS, 
+     5                  VLBAMKIV, RECUSED
       COMMON  /SETC2/   SETSTA, BAND, SIDEBD, POL, NOISE, NOISEFRQ, FE, 
      1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, DBE, 
      2                  IFDIST, SPCAL, PCALX1, PCALX2, NETSIDE, SIDE1, 

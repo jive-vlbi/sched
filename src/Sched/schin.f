@@ -6,7 +6,7 @@ C     file.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER           MODE, I, J, LEN1, ISCN, IREP, INAME
+      INTEGER           MODE, I, J, LEN1, ISCN, KSCN, IREP, INAME
       INTEGER           I1, I2, KEYPTR
       LOGICAL           GOTSAT, DOINIT, DOSTWARN, GOTVEX, EXIT
       CHARACTER         TPFILE*80
@@ -67,6 +67,7 @@ C
       ANYGEO = .FALSE.  !  Will any geodetic segments be inserted?
       FUZZY  = .FALSE.  !  Were any PREEMPT=EXTRA scans specified.
       GOTVLBA = .FALSE. !  Are there any VLBA stations?
+      GOTPREEM = .FALSE. ! Was PREEMPT ever other than "OK"?
       DO I = 1, MAXSCN
           SRCNUM(I) = 0
           IDOPSRC(I) = 0
@@ -301,6 +302,7 @@ C
                PREEMPT(ISCN) = 'OK'
             END IF
          END IF
+         IF( PREEMPT(ISCN) .NE. 'OK' ) GOTPREEM = .TRUE.
 C
 C        Get the INTENTs.
 C
@@ -308,8 +310,8 @@ C
 C
 C        The minimum tape pause time and the tape prestart time.
 C
-         PRESTART(ISCN) = KD( KEYPTR( 'PRESTART', KC, KI ) ) / 86400.D0
-         MINPAUSE(ISCN) = KD( KEYPTR( 'MINPAUSE', KC, KI ) ) / 86400.D0
+         PRESTART(ISCN) = KD( KEYPTR( 'PRESTART', KC, KI ) ) * ONESEC
+         MINPAUSE(ISCN) = KD( KEYPTR( 'MINPAUSE', KC, KI ) ) * ONESEC
 C
 C        Some toggled logicals.
 C
@@ -438,6 +440,34 @@ C
          END IF
          CALL ERRLOG('SCHIN: No input scans')
       END IF
+C
+C     If WRAP24 was specified, duplicate the schedule, doubling its
+C     length.  The desired output range is then selected with DOSCANS.
+C     Be sure only scan 1 has a start time and/or stop time.  Set
+C     START and STOP for all copied scans to UNSET.
+C     
+C
+      WRAP24 = KD( KEYPTR( 'WRAP24', KC, KI ) ) .EQ. 0.D0
+      IF( WRAP24 ) THEN
+         DO ISCN = 1, SCANL
+            IF( ISCN .GE. 2 ) THEN
+               IF( START(ISCN) .NE. UNSET .OR. 
+     1             STOP(ISCN) .NE. UNSET ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( 2A, I5 )' )
+     1               'SCHIN: Do not use START or STOP times after ',
+     2               'scan 1 with WRAP24. See scan:', ISCN 
+                  CALL ERRLOG( MSGTXT )
+               END IF
+            END IF
+            KSCN = ISCN + NSCANS
+            CALL SCNDUP( KSCN, ISCN, .FALSE. )
+            START(KSCN) = UNSET
+            STOP(KSCN) = UNSET
+         END DO
+         SCANL = 2 * NSCANS
+         NSCANS = SCANL
+      END IF
 C 
 C     Get items for which only the last input given is used.
 C
@@ -499,10 +529,20 @@ C
      1         'MKIV, VLBI, VLA, NONE, or CONFIG' )
       END IF
 C
+C     To request only a subset of scans go to the output files other
+C     than .sum.
+C
+      DOSCANS(1) = KD( KEYPTR( 'DOSCANS', KC, KI ) )
+      DOSCANS(2) = KD( KEYPTR( 'DOSCANS', KC, KI ) + 1 )
+      IF( ( DOSCANS(1) .EQ. 0 .AND. DOSCANS(2) .NE. 0 ) .OR.
+     1    ( DOSCANS(1) .NE. 0 .AND. DOSCANS(2) .EQ. 0 ) ) THEN
+         CALL ERRLOG( 'If using DOSCANS, specify both!' )
+      END IF
+C
 C     For the schedule optimization mode and some plotting stuff.
 C
       OPTMODE = KCHAR( 'OPTMODE', 8, .TRUE., KD, KC, KI )
-      OPDUR   = KD( KEYPTR( 'OPDUR', KC, KI ) ) / 86400.D0
+      OPDUR   = KD( KEYPTR( 'OPDUR', KC, KI ) ) * ONESEC
       OPNOSUB = KD( KEYPTR( 'OPNOSUB', KC, KI ) ) .EQ. 0.D0
       OPSKIP  = KD( KEYPTR( 'OPSKIP', KC, KI ) )
       OPTSLEW = KD( KEYPTR( 'OPTSLEW', KC, KI ) )

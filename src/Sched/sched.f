@@ -108,6 +108,15 @@ C     of these cases typically occur when plotting.
 C
       IF( MKFILES .AND. OPTMODE .NE. 'UPTIME' .AND. .NOT. NOSET ) THEN
 C
+C        Only write a subset of scans if DOSCANS or PREEMPT=EXTRA was 
+C        specified.
+C
+         CALL SCNRANGE
+C
+C        Write the OMS file - information for VLBA operations.
+C
+         CALL OMSOUT( RESTART )
+C
 C        Make the VEX and V2D files if needed and allowed.  There are 
 C        somewhat complicated criteria so put the calls in a subroutine.
 C

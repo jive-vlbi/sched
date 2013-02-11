@@ -120,7 +120,7 @@ mv sched.runlog eg3mmrc.runlog
 echo " " >> testruns.out
 echo " " >> testruns.out
 echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg512g.key "********************"  >> testruns.out
+echo "*************" Processing eg512g.key "******************"  | tee -a  testruns.out
 echo "******************************************************"  >> testruns.out
 $SCHBIN/sched < eg512g.key >> testruns.out
 mv sched.runlog eg512g.runlog
@@ -200,9 +200,9 @@ $SCHBIN/sched < egplan.key >> testruns.out
 mv sched.runlog egplan.runlog
 ./Check_results egplan hn $SCH_STDOUT egplan.key >> testruns.out
 
+echo " " >> testruns.out
+echo " " >> testruns.out
 echo "******************************************************"  >> testruns.out
-echo " " >> testruns.out
-echo " " >> testruns.out
 echo "***********" Processing egvlba.key "********************"  | tee -a testruns.out
 echo "******************************************************"  >> testruns.out
 $SCHBIN/sched < egvlba.key >> testruns.out
@@ -267,6 +267,15 @@ mv sched.runlog egrd2.runlog
 echo " " >> testruns.out
 echo " " >> testruns.out
 echo "******************************************************"  >> testruns.out
+echo "***********" Processing rdbepfb.key "*******************"  | tee -a testruns.out
+echo "******************************************************"  >> testruns.out
+$SCHBIN/sched < rdbepfb.key >> testruns.out
+mv sched.runlog rdbepfb.runlog
+./Check_results rdbepfb hn $SCH_STDOUT rdbepfb.key >> testruns.out
+
+echo " " >> testruns.out
+echo " " >> testruns.out
+echo "******************************************************"  >> testruns.out
 echo "***********" Processing egcent.key "********************"  | tee -a testruns.out
 echo "******************************************************"  >> testruns.out
 $SCHBIN/sched < egcent.key >> testruns.out
@@ -292,6 +301,17 @@ echo "******************************************************"  >> testruns.out
 $SCHBIN/sched < n2227.key >> testruns.out
 mv sched.runlog n2227.runlog
 ./Check_results n2227 pt $SCH_STDOUT n2227.key >> testruns.out
+
+# pfbsettst.key test PFB setups.
+
+echo " " >> testruns.out
+echo " " >> testruns.out
+echo "******************************************************"  >> testruns.out
+echo "*********" Processing pfbsettst.key "*****************"  | tee -a testruns.out
+echo "******************************************************"  >> testruns.out
+$SCHBIN/sched < pfbsettst.key >> testruns.out
+mv sched.runlog pfbtst.runlog
+./Check_results pfbtst pt $SCH_STDOUT pfbsettst.key >> testruns.out
 
 #  egdifx.key deleted May 12, 2010.
 
@@ -526,9 +546,3 @@ echo "  with standard results in directory Stdout."
 echo "Do not worry about numbers differing in last digit -"
 echo "  Some machines round differently"
 echo "===================================================="
-
-
-
-
-
-

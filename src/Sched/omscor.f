@@ -1,6 +1,6 @@
       SUBROUTINE OMSCOR
 C
-C     Write correlation parameters into summary file in format for
+C     Write correlation parameters into the OMS file.
 C     OMS at Socorro correlator.
 C
       INCLUDE       'sched.inc'
