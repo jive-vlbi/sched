@@ -29,10 +29,20 @@ C ---------------------------------------------------------------------
             MSGTXT = ' '
       END IF
 C
+C     Assume guilty unless proven otherwise.  SA true means they
+C     are the same.
+C
+      SA = .TRUE.
+C
+C     Are we even using the same sort of hardware?
+C
+      SA = SA .AND.
+     1     DBE(KS) .EQ. DBE(JS) .AND.
+     2     FIRMFILE(KS) .EQ. FIRMFILE(KS)
+C
 C     First gross tests of setup file and number of channels.
 C     Having channels equal allows simpler loops later.
 C
-      SA = .TRUE.
       SA = SA .AND. ISETNUM(KS) .EQ. ISETNUM(JS) .AND.
      1     NCHAN(KS) .EQ. NCHAN(JS)
       IF ( .NOT. SA ) THEN

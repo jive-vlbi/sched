@@ -38,15 +38,20 @@ C     This has gotten somewhat more complicated the fact that
 C     STARTJ(ISCN) - TPSTART(ISCN,ISTA) is no longer the start of
 C     recording for some VEX controlled stations.  These include
 C     the VLA and the MARK5C system on the VLBA.
+C     Also pay attention to NOREC.
 C
-      KSTA = STANUM(ISTA)
-      IF( USEONSRC(KSTA) ) THEN
-         RECSTART = MAX( STARTJ(ISCN) - TPSTART(ISCN,ISTA), 
-     1          TONSRC(ISCN,ISTA) )
+      IF( NOREC(ISCN) ) THEN
+         RECTIME = 0.D0
       ELSE
-         RECSTART = STARTJ(ISCN) - TPSTART(ISCN,ISTA)
+         KSTA = STANUM(ISTA)
+         IF( USEONSRC(KSTA) ) THEN
+            RECSTART = MAX( STARTJ(ISCN) - TPSTART(ISCN,ISTA), 
+     1             TONSRC(ISCN,ISTA) )
+         ELSE
+            RECSTART = STARTJ(ISCN) - TPSTART(ISCN,ISTA)
+         END IF
+         RECTIME = DNINT( ( STOPJ(ISCN) - RECSTART ) * 86400.D0 )
       END IF
-      RECTIME = DNINT( ( STOPJ(ISCN) - RECSTART ) * 86400.D0 )
 C
 C     Get the actual bits recorded.  The factor 1000 is
 C     the conversion from Mbps to Gbps.  Note that this is the

@@ -76,6 +76,7 @@ C
       LOGGING(TO)  = LOGGING(FROM)          
       FORMAT(TO)   = FORMAT(FROM)           
       DBE(TO)      = DBE(FROM)
+      FIRMFILE(TO) = FIRMFILE(FROM)
       SPCAL(TO)    = SPCAL(FROM)            
       RCHAN(TO)    = RCHAN(FROM)            
       LCHAN(TO)    = LCHAN(FROM)            

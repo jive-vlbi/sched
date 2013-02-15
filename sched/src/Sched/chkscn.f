@@ -235,7 +235,7 @@ C
 C
 C     Get the extrema.
 C
-      DO KF = 1, MFSET
+      DO KF = 1, NFSET
          KS = FSETKS(KF)
          ISTA = ISCHSTA(ISETSTA(KS))
          CALL FSFREQ( KF, FRSUM, FRBB, FRBW )

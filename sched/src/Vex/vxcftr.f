@@ -6,6 +6,8 @@ C     for now it is mostly 14 pos, so depends on fanout, nchan and bits
 C     and format
 C     By H.J. van Langevelde, JIVE, 010996
 C
+C     Added comparison of DBE and FIRMFILE  Feb. 13, 2013  RCW.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
@@ -28,6 +30,11 @@ C     compare the format, and the fanout
 C
       IF( FORMAT(ISET) .NE. FORMAT(JSET) ) IDENT = .FALSE.
       IF( FANOUT(ISET) .NE. FANOUT(JSET) ) IDENT = .FALSE.
+C
+C     Compare the DEB and FIRMFILE settings.
+C
+      IF( DBE(ISET) .NE. DBE(JSET) ) IDENT = .FALSE.
+      IF( FIRMFILE(ISET) .NE. FIRMFILE(JSET) ) IDENT = .FALSE.
 C
 C     because of the S2 modes depend on cabling, S2 are not identical
 C     for different DAR
