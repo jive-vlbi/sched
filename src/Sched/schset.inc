@@ -166,6 +166,7 @@ C
       CHARACTER         STRING(4,MSET)*80
       CHARACTER         FORMAT(MSET)*8
       CHARACTER         DBE(MSET)*8
+      CHARACTER         FIRMFILE(MSET)*80
       CHARACTER         SPCAL(MSET)*4
       CHARACTER         PCALX1(MAXPC,MSET)*3
       CHARACTER         PCALX2(MAXPC,MSET)*3
@@ -207,8 +208,9 @@ C
      5                  VLBAMKIV, RECUSED
       COMMON  /SETC2/   SETSTA, BAND, SIDEBD, POL, NOISE, NOISEFRQ, FE, 
      1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, DBE, 
-     2                  IFDIST, SPCAL, PCALX1, PCALX2, NETSIDE, SIDE1, 
-     3                  RCHAN, LCHAN, LCP50CM, RCP50CM, BARREL, M4PATCH
+     2                  FIRMFILE, IFDIST, SPCAL, PCALX1, PCALX2, 
+     3                  NETSIDE, SIDE1, RCHAN, LCHAN, LCP50CM, RCP50CM, 
+     4                  BARREL, M4PATCH
 C
 C     VLA information.
 C     Included are the fluke set, the fluke frequencies, the F.E. LO

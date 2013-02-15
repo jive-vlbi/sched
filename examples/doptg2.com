@@ -105,7 +105,7 @@ endlines /
 !  there is a second peak scan.
 
 
-group=(10*3+8*3) rep=50
+group=(11*3+8*3) rep=50
 
 stations = sc, hn, nl, fd, la, pt, kp, ov, br, mk    ! all stations.
 setup='$SETDIR/pt90cm.set'  source 'CYGA'    nodop   bw=0,0   /
