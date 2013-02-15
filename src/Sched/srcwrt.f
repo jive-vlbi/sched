@@ -12,7 +12,7 @@ C
 C
       INTEGER       IP, ISRC, LEN1, IOUT, INAME
       INTEGER       ICHN
-      INTEGER       MLINE, CLINE, IL, NPCH
+      INTEGER       MLINE, CLINE, NMLINE, IL, NPCH
       INTEGER       ISET, NFC, NCHSET, CH1SET, IPAIR, ICSRC
       DOUBLE PRECISION  TSCAN, TBASE, ESCAN, EBASE
       CHARACTER     FF*1, WRSRC*12
@@ -77,16 +77,16 @@ C
             DO IL = 1, ML
                LINE(IL) = ' '
             END DO
-            MLINE = 3
+            NMLINE = 0
 C
 C           Write the names into the first columns for up to 
 C           MALIAS lines if there are multiple names.
 C
             DO INAME = 1, MALIAS
                IF( SOURCE(INAME,ISRC) .NE. ' ' ) THEN
-                  WRITE( LINE(INAME), '( T2, A1, 1X, A12 )' ) 
+                  NMLINE = NMLINE + 1
+                  WRITE( LINE(NMLINE), '( T2, A1, 1X, A12 )' ) 
      1                CSUSED(INAME,ISRC), SOURCE(INAME,ISRC)
-                  MLINE = INAME
                END IF
             END DO
 C
@@ -142,7 +142,6 @@ C           Write any remark included in catalog for this source.
 C
             IF( REMARK(ISRC) .NE. ' ') THEN
                CLINE = CLINE + 1
-               MLINE = MAX( MLINE, CLINE )
                LINE(CLINE) = LINE(CLINE)(1:21) //
      1              REMARK(ISRC)(1:LEN1(REMARK(ISRC)))
             END IF
@@ -176,14 +175,12 @@ C
      3            CVELDEF(1:LEN1(CVELDEF)), '.  Velocities:'
 C
                CLINE = CLINE + 1
-               MLINE = MAX( MLINE, CLINE )
                NPCH = MIN( DIDNDOP(ISRC), 8 )
                WRITE( LINE(CLINE)(22:132), '( 8( F9.2,:) )' )
      1            ( VLSR(ICHN,ISRC), ICHN=1,NPCH )
 C
                IF( DIDNDOP(ISRC) .GE. 9 ) THEN
                   CLINE = CLINE + 1
-                  MLINE = MAX( MLINE, CLINE )
                   NPCH = MIN( DIDNDOP(ISRC), 16 )
                   WRITE( LINE(CLINE)(22:132), '( 8( F9.2,:) )' )
      1               ( VLSR(ICHN,ISRC), ICHN=9,NPCH )
@@ -191,7 +188,6 @@ C
 
             ELSE IF(  DOPPED(ISRC) ) THEN
                CLINE = CLINE + 1
-               MLINE = MAX( MLINE, CLINE )
                WRITE( LINE(CLINE)(22:132), '( A )' ) 
      1            'Doppler based on other sources.'
             END IF
@@ -224,7 +220,6 @@ C
                WRITE( LINE(CLINE)(22:132), '( A, F9.4, A )' )
      1             '   Paralax: ', PARALAX(ISRC) * 1000.0, ' mas.'
 C
-               MLINE = MAX( MLINE, CLINE )
             END IF
 C
 C           Planetary motion used.
@@ -249,7 +244,6 @@ C
      1                A, A, E12.5, A  )' )
      2            '   Rates: RA = ', DRA(ISRC), ' s/day ',
      3            '  Dec = ', DDEC(ISRC), ' arcsec/day '
-               MLINE = MAX( MLINE, CLINE )
             END IF
 C
 C           Write ephemeris file names if appropriate.
@@ -258,7 +252,6 @@ C
                CLINE = CLINE + 1
                WRITE( LINE(CLINE)(22:132), '( A, A )' )
      1               'EPHFILE: ', EPHFILE(1:LEN1(EPHFILE))
-               MLINE = MAX( MLINE, CLINE )
             END IF
             IF( WHICHCAT(ISRC) .EQ. 'S' ) THEN
                CLINE = CLINE + 1
@@ -267,7 +260,6 @@ C
                CLINE = CLINE + 1
                WRITE( LINE(CLINE)(22:132), '( A, A )' ) 'SATFILE: ',
      1                 SATFILE(SATN(ISRC))(1:LEN1(SATFILE(SATN(ISRC))))
-               MLINE = MAX( MLINE, CLINE )
             END IF
 C
 C           Tell if the source is a pointing center for a multi-field
@@ -297,12 +289,11 @@ C
                      END IF
                   END DO
                END DO
-C
-               MLINE = MAX( MLINE, CLINE )
             END IF
 C
 C           Now write out the lines.
 C
+            MLINE = MAX( NMLINE, CLINE )
             DO IL = 1, MLINE
                WRITE( IOUT, '( A )' ) LINE(IL)(1:LEN1(LINE(IL)))
             END DO

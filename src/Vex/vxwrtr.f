@@ -83,6 +83,17 @@ C
      1        TRLINK(ITR)(1:LEN1(TRLINK(ITR))), SEP
          CALL VXSTLI( ITR, NSTATR, ISTATR )
 C
+C        Write the DBE if one was specified and the FIRMFILE, if 
+C        specified.
+C
+         IF( DBE(KS) .NE. ' ' )
+     1       WRITE( IVEX, '( A1, A, A, A )' ) COM,
+     2         '    firmware_type = ', DBE(KS)(1:LEN1(DBE(KS))), SEP
+         IF( FIRMFILE(KS) .NE. ' ' )
+     1       WRITE( IVEX, '( A1, A, A, A )' ) COM,
+     2         '    firmware_file = ', 
+     3         FIRMFILE(KS)(1:LEN1(FIRMFILE(KS))), SEP
+C
 C        If format is none, write a minimal track def.
 C
          IF( FORMAT(KS)(1:4) .EQ. 'NONE' ) THEN

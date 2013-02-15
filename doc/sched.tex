@@ -1128,7 +1128,7 @@ responsible for maintaining the VLBA.
 
 \item[\htmladdnormallink{{\sl doptg2.com}}{examples/doptg.com}] is a
 script that creates and runs VLBA pointing observations.  It is very
-much like {\sl doptg.com} except that it uses the \htmlref{{\tt DOSTA}
+much like {\sl doptg.com} except that it uses the \htmlref{{\tt DOSTA}}
 {MP:DOSTA} parameter to allow the same script to be used for stations
 with 3mm and stations without 3mm.
 
@@ -11210,6 +11210,7 @@ confused about what signal is in each baseband channel.
 \htls{BITS}{~~~~} Number of bits per sample.
 \htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
 \htls{DBE}{~~~~~} The personality to use in a digital backend.
+\htls{FIRMFILE}{} A firmware file name to use - VLBA testers only!
 \htls{ELCOLIM}{~} Colimation offset in elevation.
 \htls{EVLA}{~~~~} Removed parameter.
 \htls{FE}{~~~~~~} Receivers to be used.
@@ -11712,6 +11713,24 @@ channel numbers that are too high).
 for a station with the DBBC DAR, and blank for anything else.}
 {Defaults to previous segment.  See note above about setting blank}
 {{\tt DBE='RDBE\_DDC'}}
+
+\subsubsection{\label{SP:FIRMFILE}{\tt FIRMFILE}}
+
+If you are not involved in VLBA testing, you don't want to know about
+this parameter!
+
+{\tt FIRMFILE} is a way to specify the file name of the version of the 
+digital backend firmware that will be used for an observation.  It
+was requested after excessive confusion was encountered during 
+intensive testing.  It will cause a comment with the file name to 
+be inserted in the {\sl VEX} file {\tt \$TRACKS} section.
+
+\rcwbox
+{A character string of up to 80 characters meant to be a file name.}
+{If you have to ask, don't try to use this parameter}
+{Blank}
+{Kept for each setup group specified for the setup file.}
+{{\tt firmfile = 'DDCxy7872203'}}
 
 
 \subsubsection{\label{SP:DUALX}{\tt DUALX}}
@@ -13643,6 +13662,22 @@ more information.
 % **  Stop worrying about resyncs for MARK5C 
 
 
+
+
+\item \schedb version 11.0 release.  Jan. 15, 2013. RCW 
+
+\item Add {\tt firmware\_type} to the {\sl VEX} file as comment in the
+\$TRACKS section.  It is set to the value of the parameter {\tt DBE}.
+Aldo add the setup file parameter {\tt FIRMFILE} for use by VLBA
+testers.  It is written as another comment in the \$TRACKS section of
+the {\sl VEX} file.  Normally users should ignore {\tt FIRMFILE}.
+Feb. 13, 2013.
+
+\item The accounting for Gbytes recorded did not stop accumulating
+for non recording scans.  Fixed.  Feb 13, 2013.  RCW.
+
+\item A sched\_temp version released for local testing on Feb. 10, 
+2013.  RCW.
 
 \item Extend the flags for slewing to one second before START
 - PRESTART and to one half second after TONSRC.  There were

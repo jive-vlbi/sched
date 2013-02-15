@@ -117,11 +117,13 @@ C
       I2 = KEYPTR( 'STRING2', KC, KI ) - 1
       I3 = KEYPTR( 'STRING3', KC, KI ) - 1
       I4 = KEYPTR( 'STRING4', KC, KI ) - 1
+      I5 = KEYPTR( 'FIRMFILE', KC, KI ) - 1
       DO I = 1, 10
          KD(I1+I) = BLANK
          KD(I2+I) = BLANK
          KD(I3+I) = BLANK
          KD(I4+I) = BLANK
+         KD(I5+I) = BLANK
       END DO
       KD( KEYPTR( 'FEFILTER', KC, KI ) ) = ZZZZ
       KD( KEYPTR( 'VLABW', KC, KI ) ) = ZZZZ
@@ -285,8 +287,15 @@ C
          SWTCHDUR(KS) = KD( KEYPTR( 'SWTCHDUR', KC, KI ) )
          TPMODE(KS)   = KD( KEYPTR( 'TPMODE', KC, KI ) )
          FORMAT(KS)   = KCHAR( 'FORMAT', 8, .TRUE., KD, KC, KI )
-         DBE(KS)      = KCHAR( 'DBE', 8, .TRUE., KD, KC, KI )
          MODETEST(KS) = KD( KEYPTR( 'MODETEST', KC, KI ) ) .EQ. 0.D0
+C
+C        DBE is the digital backend type, perhaps combined with a
+C        personality description.  FIRMFILE is the specific firmware 
+C        file that should be loaded at the station for use in tests.
+C        If you don't know about it, ignore it.
+C
+         DBE(KS)      = KCHAR( 'DBE', 8, .TRUE., KD, KC, KI )
+         FIRMFILE(KS) = KCHAR( 'FIRMFILE', 80, .FALSE., KD, KC, KI )
 C
          I1 = KEYPTR( 'BARREL', KC, KI )
          IF( KD(I1) .EQ. 0.D0 ) THEN

@@ -94,11 +94,21 @@ C
       DATA             KERLOAD / MAXSAT*.TRUE. /
       SAVE                  KERLOAD
 C -------------------------------------------------------------------- 
-      IF( DEBUG ) CALL WLOG( 0, 'SATEP: Starting.' )
 C
 C     Set whether or not to print various debugging information.
 C
       SPDEBUG = .FALSE.
+C
+C     Normal first debug line.
+C
+      IF( DEBUG .OR. SPDEBUG ) THEN
+         MSGTXT = ' '
+         CALL WLOG( 1, ' ' )
+         WRITE( MSGTXT, '( A, 3I5, F14.5)' )
+     1      '=++++++ SATEP starting ++++++ ', ISAT, ISCN, ISTA, 
+     2      STARTJ(ISCN)
+         CALL WLOG( 1, MSGTXT )
+      END IF
 C
 C     The calculations are done for the start time of scan ISCN.
 C     The time is needed in an ascii format.  Recall that SCHED
@@ -207,6 +217,8 @@ C        ISTA = 0.  Here we do the station adjustment if required.
 C        XYZ above are in km.  Telescope positions are in m.
 C        The station coordinates are known in the Earth frame.  Need
 C        to put them in the sky frame using the sidereal time.
+C        Note that SCHED does not know UT1-UTC so this has to be 
+C        an approximation.
 C        
          KSTA = STANUM(ISTA)
          GMST = SLA_GMST( STARTJ(ISCN) )
@@ -275,39 +287,42 @@ C        calculations that follow for source positions etc.
 C
 C        Get the latitude, longitude of the station.
 C
-         STLATD = LAT(KSTA) 
-         STLOND = LONG(KSTA)
+         IF( ISTA .NE. 0 ) THEN
+            STLATD = LAT(KSTA) 
+            STLOND = LONG(KSTA)
 C
-         WRITE(*,'( A, 2F10.4 )' )  '  STLATD, STLOND:', STLATD, STLOND
+            WRITE(*,'( A, 2F10.4 )' )  '  STLATD, STLOND:', 
+     1             STLATD, STLOND
 C
-C        Calculate the Local Sidereal Time. 
-C        Remember W is negative longitude.
+C           Calculate the Local Sidereal Time. 
+C           Remember W is negative longitude.
 C
-         LSTIME = GMST - LONG(KSTA)
+            LSTIME = GMST - LONG(KSTA)
 C
-C        Calculate the source Hour Angle.
+C           Calculate the source Hour Angle.
 C
-         STHA = LSTIME - SRA
+            STHA = LSTIME - SRA
 C
-         WRITE(*,'( A, 2F10.4 )' )  '  LSTIME, STHA:', LSTIME, STHA
+            WRITE(*,'( A, 2F10.4 )' )  '  LSTIME, STHA:', LSTIME, STHA
 C
-C        Calculate the elevation and azimuth of the source.
+C           Calculate the elevation and azimuth of the source.
 C
-         SRCEL = ASIN( SIN(SDEC) * SIN(LAT(KSTA)) 
+            SRCEL = ASIN( SIN(SDEC) * SIN(LAT(KSTA)) 
      1                + COS(SDEC) * COS(LAT(KSTA)) * COS(STHA) )
 
-         SRCAZ = ACOS( SIN(SDEC) / (COS(SRCEL) * COS(LAT(KSTA)))
+            SRCAZ = ACOS( SIN(SDEC) / (COS(SRCEL) * COS(LAT(KSTA)))
      1                - TAN(SRCEL) * TAN(LAT(KSTA)) ) 
 C
-C        Write some results if in debug mode.
+C           Write some results if in debug mode.
 C
-         WRITE(*,'( A, I4 )' ) 'Station # ', KSTA
-         WRITE(*,'( A, 2F10.4 )' )  '  STLAT, STLONG:', 
+            WRITE(*,'( A, I4 )' ) 'Station # ', KSTA
+            WRITE(*,'( A, 2F10.4 )' )  '  STLAT, STLONG:', 
      1                                 LAT(KSTA), LONG(KSTA)
-         WRITE(*,'( A, 3F14.4 )' )  
+            WRITE(*,'( A, 3F14.4 )' )  
      1                     '  ET, SRCAZ (deg), SRCEL (deg):  ', 
      2                        ET, SRCAZ/RADDEG, SRCEL/RADDEG
 C
+         END IF
       END IF
 C
 C     Get the rates in the right format.  
@@ -330,13 +345,13 @@ C     *** Do the correction ONLY if there is a station!
 C
       IF (ISTA .NE. 0) THEN
 C
-C     Take care with units. These are in meters.
+C        Take care with units. These are in meters.
 C
          XS = XPOS(KSTA)
          YS = YPOS(KSTA)
          ZS = ZPOS(KSTA)
 C
-C     But DX, DY, DZ are in km/s.
+C        But DX, DY, DZ are in km/s.
 C
          RHOE = SQRT(XS*XS + YS*YS + ZS*ZS) / 1000.0D0
 C
@@ -351,8 +366,8 @@ C
 C
          SZDOT = 0.0D0
 C
-C     Make the correction. Get the sense correct.
-C     For geosynch satellite this is the correct sense.
+C        Make the correction. Get the sense correct.
+C        For geosynch satellite this is the correct sense.
 C
          DX = DX - SXDOT
          DY = DY - SYDOT
