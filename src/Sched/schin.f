@@ -6,6 +6,7 @@ C     file.
 C
       INCLUDE 'sched.inc'
 C
+      integer           itd
       INTEGER           MODE, I, J, LEN1, ISCN, KSCN, IREP, INAME
       INTEGER           I1, I2, KEYPTR
       LOGICAL           GOTSAT, DOINIT, DOSTWARN, GOTVEX, EXIT
@@ -464,6 +465,13 @@ C
             CALL SCNDUP( KSCN, ISCN, .FALSE. )
             START(KSCN) = UNSET
             STOP(KSCN) = UNSET
+C
+C           The day and year will get adjusted later, but they are
+C           not set in scndup so they can have uninitialized values
+C           when they hit some tests later.
+C
+            DAY(KSCN) = DAY(ISCN)
+            YEAR(KSCN) = YEAR(ISCN)
          END DO
          SCANL = 2 * NSCANS
          NSCANS = SCANL

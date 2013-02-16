@@ -16,7 +16,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER     I, ISCN, ISTA, KSTA, LEN1, IC
+      INTEGER     ISCN, ISTA, KSTA, LEN1, IC
       INTEGER     NTPS
       LOGICAL     GOTTPS, DORECONF
       CHARACTER   LINE*90
@@ -137,7 +137,9 @@ C
             IF( DORECONF ) LINE(64:86) = 'Reconfigures    Hours'
             WRITE( ISUM, '( A )' ) LINE(1:LEN1(LINE))
 C
-       write(*,*) 'stsum:  Get case dependent nreconfs.'
+C probably still need to get case dependent nreconfs.  Deal with
+C after SCHED 11.0
+C
             DO ISTA = 1, NSTA
                LINE = ' '
                WRITE( LINE, '( 2X, A8, 2X, A5, 2X, I6, F8.2, F8.2,
