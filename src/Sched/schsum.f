@@ -6,9 +6,9 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER     I, ISCN, ISTA, KSTA, JSTA, KS, JS, ICH, LEN1
-      INTEGER     YEAR, DAY, DOY, JD, MONTH, NTPS
+      INTEGER     YEAR, DAY, DOY, JD, MONTH
       INTEGER     NSCHED, MJD
-      LOGICAL     RESTART, GOTTPS, GOTSCN
+      LOGICAL     RESTART, GOTSCN
       LOGICAL     PRTHEAD, PRTED(MSET), SAMESET, DUPSET
       DOUBLE PRECISION   STOP
       CHARACTER   DNAME*3, MNAME*3
@@ -233,7 +233,6 @@ C
 C
 C     Finish off with the code versions.
 C
-
       WRITE( ISUM, '( 1X, /, 1X, /, A )' )
      1   'Code versions: '  
 C
@@ -266,6 +265,8 @@ C     rebuild the PGPLOT libraries Jan. 14, 2012 to get past this.
 C     To my knowledge, I had done nothing to trigger the problem
 C     except maybe some software updates for the OS.
 C
+      IF( DEBUG ) CALL WLOG(1, 'SCHSUM calling PGQINF. '//
+     1    'Trouble here can mean wrong PGPLOT_DIR' )
       CALL PGQINF( 'VERSION', PGVER, LENGTH ) 
       WRITE( ISUM, '( A, A )' )
      1   '  Version of PGPLOT:        ', PGVER(1:LENGTH)
