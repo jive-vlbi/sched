@@ -307,6 +307,14 @@ C
             END IF
 C
 C           set things up for an ftp scan
+C           Note default on read (from inmain.f) for GRABTIMEs 1 and 2
+C           is UNSET = -9999.D0.  Here test against LT zero. This was 
+C           to allow GRABTIME(2) to be zero which didn't work before.  
+C           Feb. 20, 2013  RCW.
+C           
+C           In defaults.f, the GRABTIME=30,10 defaults were set when 
+C           GRABTO is not "NONE" and DATAPATH is IN2DISK so there
+C           may be some duplication of effort going on.
 C
             IF( GRABTO(ISCN) .EQ. 'FILE' ) THEN
 C              ftp scans
@@ -321,7 +329,7 @@ C              default TRANLEN should be 30 seconds
                IF ( TRANLEN .LE. 0) TRANLEN = 30
 C              default TRANEND should be 10 seconds from end of scan
                GRABSTOP = NINT (GRABTIME(2,ISCN))
-               IF (GRABSTOP .LE. 0) GRABSTOP = 10
+               IF (GRABSTOP .LT. 0) GRABSTOP = 10
                TRANSTAR = INTSTOP - (TRANLEN + GRABSTOP)
                TRANEND = INTSTOP - GRABSTOP
 C              check the transfer time is consistent with the scan length

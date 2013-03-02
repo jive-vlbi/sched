@@ -38,17 +38,16 @@ C
       END IF
 C
       IF( CALL1 ) THEN
-         WRITE( IOUT, '( A1, A, /, A, /, A, A, /, 2( A, / ), ' //
+         WRITE( IOUT, '( A1, A, /, A, /, A, A, /, A, /, ' //
      1    'A, A, F10.3, /, A )' )
      2    FF, HEADLINE(1:LEN1(HEADLINE)),
      3    '     Catalog positions marked with *. ',
      4    '     Precession of date coordinates is based on stop ',
      5    'time of first scan.',
      6    '     Names used in schedule marked with *. ',
-     7    '     Short names used in VLA and SNAP files marked with +. ',
-     8    '     Observation date used in B1950/J2000 coordinate ',
-     9    'conversion (PRECDATE):', PRECDATE,
-     a    '     No adjustments are made for rates (DRA, DDEC).'
+     7    '     Observation date used in B1950/J2000 coordinate ',
+     8    'conversion (PRECDATE):', PRECDATE,
+     9    '     No adjustments are made for rates (DRA, DDEC).'
       ELSE
          WRITE( IOUT, '( 1X, /, A )' ) HEADLINE(1:LEN1(HEADLINE))
       END IF

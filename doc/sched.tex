@@ -11210,11 +11210,11 @@ confused about what signal is in each baseband channel.
 \htls{BITS}{~~~~} Number of bits per sample.
 \htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
 \htls{DBE}{~~~~~} The personality to use in a digital backend.
-\htls{FIRMFILE}{} A firmware file name to use - VLBA testers only!
 \htls{ELCOLIM}{~} Colimation offset in elevation.
 \htls{EVLA}{~~~~} Removed parameter.
 \htls{FE}{~~~~~~} Receivers to be used.
 \htls{FEFILTER}{} VLA front end filter specification for `` //LO'' card.
+\htls{FIRMFILE}{} A firmware file name to use - VLBA testers only!
 \htls{FIRSTLO}{~} Sum of all LOs except the one set if {\tt FREQ} used.
 \htls{FLUKEA}{~~} VLA A Fluke frequency for ``//FI'' card.
 \htlt{FLUKEB}{FLUKEA}{~~} VLA B Fluke frequency for ``//FI'' card.
@@ -11714,24 +11714,6 @@ for a station with the DBBC DAR, and blank for anything else.}
 {Defaults to previous segment.  See note above about setting blank}
 {{\tt DBE='RDBE\_DDC'}}
 
-\subsubsection{\label{SP:FIRMFILE}{\tt FIRMFILE}}
-
-If you are not involved in VLBA testing, you don't want to know about
-this parameter!
-
-{\tt FIRMFILE} is a way to specify the file name of the version of the 
-digital backend firmware that will be used for an observation.  It
-was requested after excessive confusion was encountered during 
-intensive testing.  It will cause a comment with the file name to 
-be inserted in the {\sl VEX} file {\tt \$TRACKS} section.
-
-\rcwbox
-{A character string of up to 80 characters meant to be a file name.}
-{If you have to ask, don't try to use this parameter}
-{Blank}
-{Kept for each setup group specified for the setup file.}
-{{\tt firmfile = 'DDCxy7872203'}}
-
 
 \subsubsection{\label{SP:DUALX}{\tt DUALX}}
 
@@ -11848,6 +11830,25 @@ standard value for the specified {\tt VLABAND}.
 {Takes VLA default for the specified band.}
 {Defaults to previous station.}
 {{\tt FEFILTER='1111'}}
+
+
+\subsubsection{\label{SP:FIRMFILE}{\tt FIRMFILE}}
+
+If you are not involved in VLBA testing, you don't want to know about
+this parameter!
+
+{\tt FIRMFILE} is a way to specify the file name of the version of the 
+digital backend firmware that will be used for an observation.  It
+was requested after excessive confusion was encountered during 
+intensive testing.  It will cause a comment with the file name to 
+be inserted in the {\sl VEX} file {\tt \$TRACKS} section.
+
+\rcwbox
+{A character string of up to 80 characters meant to be a file name.}
+{If you have to ask, don't try to use this parameter}
+{Blank}
+{Kept for each setup group specified for the setup file.}
+{{\tt firmfile = 'DDCxy7872203'}}
 
 
 \subsubsection{\label{SP:FIRSTLO}{\tt FIRSTLO}}
@@ -13660,6 +13661,14 @@ more information.
 
 % **  Get wrap state in Vex.
 % **  Stop worrying about resyncs for MARK5C 
+% **  For the rdbe_pfb setups, worry about harmonic issues.
+%     The wideband 6cm setup has a fairly serious problem.
+%     Check for others.
+% **  egrdbe.key has a very bad sx setup.  Fix it.
+% **  n2227.key has possible birdies in some basebands.  Try to
+%     find some sniffer output to check.
+
+
 
 
 \item \schedb version 11.0 release.  Jan. 16, 2013. RCW 
