@@ -70,7 +70,7 @@ C
       CALL KEYADD( 'REVERSE', UNSET, MAXSTA, KD, KC, KI )
       CALL KEYCHR( 'DATAPATH', 'IN2DISK', 8, KD, KC, KI )
       CALL KEYCHR( 'GRABTO', 'NONE', 4, KD, KC, KI )
-      CALL KEYADD( 'GRABTIME', 0.D0, 2, KD, KC, KI )
+      CALL KEYADD( 'GRABTIME', UNSET, 2, KD, KC, KI )
       CALL KEYADD( 'GRABGAP', 0.D0, 1, KD, KC, KI )
 C
 C     Program control including external input flags.

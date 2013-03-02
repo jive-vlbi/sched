@@ -57,9 +57,11 @@ C       VERNUM  = 10.3
 C       VERSION = 'Beta version of Sept. 12, 2012'
 C                 There was a beta of Sept. 20.
 C       VERSION = 'Beta version of Nov. 5, 2012'
-       VERNUM  = 11.0
+C       VERNUM  = 11.0
 C       VERSION = 'sched_temp version of Jan. 24, 2013'
-       VERSION = 'Release of Feb. 15, 2013'
+C       VERSION = 'Release of Feb. 15, 2013'
+       VERNUM  = 11.1
+       VERSION = 'Version 11.1 TEST'
 C
       RETURN
       END
