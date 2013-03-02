@@ -76,10 +76,10 @@ C     have the bit rate.  The GRABGAP assumes that the required
 C     bit rate is the total over all channels.
 C
       DO ISCN = SCAN1, SCANL
-         IF( GRABTO(ISCN) .NE. 'NONE' .AND. GRABTIME(1,ISCN) .EQ. 0.0
-     1       .AND. DATAPATH(ISCN) .EQ. 'IN2DISK' ) THEN
-            GRABTIME(1,ISCN) = 30
-            IF( GRABTIME(2,ISCN) .EQ. 0.0 ) GRABTIME(2,ISCN) = 10
+         IF( GRABTO(ISCN) .NE. 'NONE' .AND.
+     1       DATAPATH(ISCN) .EQ. 'IN2DISK' ) THEN
+            IF( GRABTIME(1,ISCN) .LT. 0.0 ) GRABTIME(1,ISCN) = 30
+            IF( GRABTIME(2,ISCN) .LT. 0.0 ) GRABTIME(2,ISCN) = 10
             IF( GRABGAP(ISCN) .EQ. 0.0 ) THEN
                DO ISTA = 1, NSTA
                   IF( STASCN(ISCN,ISTA) ) THEN
