@@ -149,8 +149,15 @@ C
 C  
 C           Now process a good scan.
 C           First write scanname, probably easiest and useful as number
+C           Allow for more than 10000 - highly unlikely but just possible
+C           with a 24 hr schedule of 15 second scans and using WRAP24
+C           which turns it into a 48 hour schedule.
 C
-            WRITE( SCANNAME, '( A2, I4.4 )' ) 'No', ISCN
+            IF( ISCN .LE. 9999 ) THEN
+               WRITE( SCANNAME, '( A2, I4.4 )' ) 'No', ISCN
+            ELSE
+               WRITE( SCANNAME, '( A2, I5.5 )' ) 'No', ISCN
+            END IF
             WRITE( IVEX, '( A, 1X, A, A, A1 )' )
      1           'scan', SCANNAME(1:LEN1(SCANNAME)), SEP
             INPAGE = INPAGE + 1
