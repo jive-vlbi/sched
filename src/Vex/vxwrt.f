@@ -101,12 +101,20 @@ C
          VIOLFS = .TRUE.
       END IF
 C
+C     Warn if PCFS will have problem, but tone it down for ALLVLBA.
+C
       IF( SCANL-SCAN1 .GT. 2000 ) THEN
+         MSGTXT = ' '
          WRITE( MSGTXT, '( A, I3, A )' ) 
      1       'VXWRT: WARNING: More than 2000 scans (', (SCANL-SCAN1),
      2       ') in this schedule.' 
          CALL WLOG( 1,MSGTXT)
-         VIOLFS = .TRUE.
+         IF( ALLVLBA ) THEN
+            CALL WLOG( 1, '                It will not run on PCFS '//
+     1          'stations but should be ok on the VLBA.' )
+         ELSE
+            VIOLFS = .TRUE.
+         END IF
       END IF
 C
 C     And if there are non-unique station codes
@@ -127,7 +135,7 @@ C
 C     
       IF( VIOLFS )
      1    CALL WLOG( 1,'VXWRT: WARNING Violating the limits '//
-     2    'of PCFS, this VEX will NOT run!!!!')
+     2       'of PCFS, this VEX will NOT run!!!!')
 C
 C     
 C     Find out if any of the VLBAs are doing something different to the
