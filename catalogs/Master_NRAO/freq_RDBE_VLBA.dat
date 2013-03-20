@@ -184,9 +184,19 @@ Name = v13cm_3  Station = VLBA    Priority = 1
 !        four IF systems when not needed.
 
 Name = vc_a     Station = VLBA   Priority = 1
+!  This setup has a potential problem.  The first harmonic
+!  of the LO is at 6800.  That can mix with the RF that passes the
+!  lower filter (20db points 3750 and 6050 MHz) to give signal in the
+!  IF above 750 MHz.  This will land on top of the desired signal
+!  that comes from RF above 4150.  So this setup is primarily
+!  recommended if the very bottom end of the RF range is needed.
+!  All that said, no obvious effects showed up in the initial 
+!  wideband tests so it might be ok across the whole band.  It
+!  would depend the unknown strength of the 6800 MHz harmonic.
   rf1    =  3912.,  3912.   ifname = A,    C
   rf2    =  4424.,  4424.   fe    = '6cm', '6cm'    syn(2) =  3.4
   pol    =   RCP,   LCP    lo1    =  3400.,  3400.
+  note = 'Potential problems above 4150 see note in freq file.'
  /
 Name = vc_b     Station = VLBA   Priority = 0
   rf1    =  4112.,  4112.   ifname = A,    C
