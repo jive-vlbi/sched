@@ -1,13 +1,14 @@
       SUBROUTINE BBCALT( KS, MAXBBC, MAXIF, IFBBC, IFNAM, UBBC, NNBBC,
      1                   WARNING )
 C
-C     Routine for SCHED called by BBCGEO, BBCM4, and BBCVS2 to assign 
-C     BBC's to channels.  BBCGEO is for VLBA systems with geodetic 
-C     wiring.  BBCM4 is for Mark IV systems.  BBCVS2 is for S2 systems
-C     attached to VLBA DAR's.  They are similar in many ways
-C     and the code needed to process them is the same.  They differ
-C     in the wiring configurations as embodied in the IFBBC and IFNAM
-C     arrays.
+C     Routine for SCHED called by BBCGEO, BBCM4, BBCVS2, BBCDBBC and
+C     BBCLBA to assign BBC's to channels.  BBCGEO is for VLBA systems
+C     with geodetic wiring.  BBCM4 is for Mark IV systems.  BBCVS2 is
+C     for S2 systems attached to VLBA DAR's. BBCDBBC is for Hat-lab's
+C     (Tuccari) DBBC. BBCLBA is for the Australian LBA DAS. They are
+C     similar in many ways and the code needed to process them is the
+C     same.  They differ in the wiring configurations as embodied in the
+C     IFBBC and IFNAM arrays.
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'

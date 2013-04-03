@@ -4,36 +4,40 @@ C
 C     Routine for Sched called by SETBBC that assigns video converters
 C     for Gino Tuccari's DBBC system, as used at Effelsberg.
 C
-C     First committed to SVN by "schedsvn" (That seems to be what I (RCW) get
-C     called - not sure why) on Nov. 11, 2011.   But some coding style
-C     features suggest it was not by me, but I can't seem to find an email.
-C     I have made some modifications for coding style and based on information
-C     from a Dave Graham email Uwe Bach email of Dec. 7, 2012.
-C
-C     There are two personalities for the DBBC.  Both are pretty close to 
-C     the RDBE personalities PFB and DDC.  The differnce is that the 
+C     There are two personalities for the DBBC. The difference is that the 
 C     IF selection for the BBCs by unit number is somewhat more restricted.
 C     The PFB personality is essentially the same as the RDBE, so just run
-C     through the same code for that.  The DDC is different and is partly
-C     addressed here.
+C     through the same code for that.  The DDC is quite different.
 C
-C     I'm working on this Jan. 20, 2013  RCW.
+C     CR March, 2013: There are essentially 3 flavours (DBBCVER) of DBBC
+C     with different IF->BBC mappings. They are described below as
+C     'astro', 'geo' or 'hybrid'. Note that the astro flavour can have
+C     either 2 or 4 IFs, but for now we assume 4 IFs are available. The
+C     code below forms the masks for allowed IF->BBC mappings then
+C     passes that to BBCALT in common with MkIV, etc.
 C
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER   KS, ICH, JCH
-      INTEGER   MAXBBC, MAXIF
-      PARAMETER (MAXBBC=16)
-      PARAMETER (MAXIF=4)
-      INTEGER IBBCA, IBBCB, IBBCC, IBBCD
+      INTEGER     KS, I
+      INTEGER     MAXBBC, MAXIF
+      PARAMETER   (MAXBBC=16)
+      PARAMETER   (MAXIF=4)
+      LOGICAL     UBBC(MAXBBC)
+      CHARACTER   IFNAM(MAXIF)*2
+      CHARACTER   WARNING*4, MYDBBCVER*8
+      INTEGER     IFBBC(MAXBBC, MAXIF), MIF
+      DATA        (IFNAM(I),I=1,MAXIF) / 'A', 'B', 'C', 'D' /
+C Note that IFNAM is also defined in CHKDBBC (should match!)
+
 C
 C -------------------------------------------------------------------  
 C     Software check:
 C
-      IF( DEBUG ) CALL WLOG( 1, 'In bbcdbbc.f' )
-      call wlog(1, 'In bbcdbbc.f')
+      IF( DEBUG ) CALL WLOG( 1, 'BBCDBBC: Starting' )
+C
+      MYDBBCVER = DBBCVER(ISETSTA(KS))
 C
 C     Check against the maximum number of BBCs.
 C
@@ -45,63 +49,19 @@ C
          CALL WLOG( 1, '   Catalog or programming problem ' )
          CALL ERRSET( KS )
       END IF
-      IBBCA = 1
-      IBBCB = 5
-      IBBCC = 9
-      IBBCD = 13
-
-      DO ICH = 1, NCHAN(KS)
-         IF (ifchan(ICH, KS).EQ.' ') THEN
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I3 )' )
-     1          'BBCDBBC: IFNAME not set for channel ', ICH
-            CALL WLOG(0, MSGTXT)
-            CALL ERRSET( KS )
-         ELSE
-C     See if we can reuse a BBC with the same FREQREF and IFCHAN
-            IF( BBC(ICH,KS) .EQ. 0 .AND. ICH .GT. 1 ) THEN
-               DO JCH = 1, ICH-1
-                  IF( FREQREF(ICH,KS) .EQ. FREQREF(JCH,KS) .AND.
-     1                 IFCHAN(ICH,KS) .EQ. IFCHAN(JCH,KS) ) THEN
-                     BBC(ICH,KS) = BBC(JCH,KS)
-                     GO TO 100
-                  END IF
-               END DO
-  100          CONTINUE
-            END IF
-C           If BBC still not set:        
-            IF( BBC(ICH,KS) .EQ. 0 ) THEN
-               write(msgtxt, '( A, I3 )')
-     1           'BBCDBBC: doing ', ICH
-               call wlog(1, MSGTXT)
-               IF ((ifchan(ICH, KS).EQ.'A').AND.(IBBCA.LE.4)) THEN
-                  BBC(ICH, KS) = IBBCA
-                  IBBCA = IBBCA + 1
-               ELSE IF ((ifchan(ICH, KS).EQ.'B').AND.(IBBCB.LE.8)) THEN
-                  BBC(ICH, KS) = IBBCB
-                  IBBCB = IBBCB + 1
-               ELSE IF ((ifchan(ICH, KS).EQ.'C').AND.(IBBCC.LE.12)) THEN
-                  BBC(ICH, KS) = IBBCC
-                  IBBCB = IBBCB + 1
-               ELSE IF ((ifchan(ICH, KS).EQ.'D').AND.(IBBCD.LE.16)) THEN
-                  BBC(ICH, KS) = IBBCD
-                  IBBCB = IBBCB + 1
-               ELSE
-                  write(msgtxt, '( A, I3 )')
-     1                 'BBCDBBC: Oops! ', ICH
-                  call wlog(1, MSGTXT)
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, I3, 2A )' )
-     1                 'BBCDBBC: Error setting IF for channel ', ICH,
-     2                 ' IFCHAN=', IFCHAN(ICH, KS)
-                  CALL WLOG(0, MSGTXT)
-                  CALL ERRSET( KS )
-               END IF
-            END IF
-         END IF
-      END DO
-      call wlog(1, 'Leaving bbcdbbc.f')
-
+C
+C     Which BBC can see which IF is dependent on the DBBC flavour. 
+C     Put the (complicated) IF->BBC mapping in external routine so it
+C     can be reused by chkdbbc.
+C
+      CALL IFDBBC( MYDBBCVER, MAXBBC, MAXIF, IFBBC, MIF )
+C
+      WARNING = ' '
+C
+C     Use the standard routine to set the BBC->IF mappings.
+C
+      CALL BBCALT( KS, MAXBBC, MIF, IFBBC, IFNAM, UBBC, MAXBBC,
+     1          WARNING)
 C
       RETURN 
       END

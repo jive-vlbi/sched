@@ -22,12 +22,22 @@ C     Adapted from CHKRDBE.  Jan 20, 2013.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
+      INCLUDE  'schfreq.inc'
 C
-      INTEGER           KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4)
-      LOGICAL           ERRS, SBWARN, IFNEW, OK4
-      CHARACTER         USEDIFC(4)*2
-      DATA              SBWARN / .TRUE. /
-      SAVE              SBWARN
+      INTEGER     KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4), I, IBBC
+      INTEGER     MAXBBC, MAXIF
+      PARAMETER   (MAXBBC=16, MAXIF=4)
+      LOGICAL     ERRS, SBWARN, IFNEW, OK, SOMEBAD
+C     Can have up to 4 IFs but actual number depends on DBBCVER
+      INTEGER     IFBBC(MAXBBC,4)
+      CHARACTER   USEDIFC(4)*2, MYDBBCVER*8
+      CHARACTER   IFNAM(4)*2
+      DATA        SBWARN / .TRUE. /
+      SAVE        SBWARN
+      DATA        (IFNAM(I),I=1,MAXIF) / 'A', 'B', 'C', 'D' /
+C Note that IFNAM is also defined in BBCDBBC (should match!)
+C MAXIF is the maximum possible number of IFs (4), MIF is the actual
+C number of IFs in this version of the DBBC (which we figure out later)
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKDBBC: Starting' )
 C
@@ -40,10 +50,12 @@ C     Get the station catalog number for the station.
 C
       KSTA = ISETSTA(KS)
 C
-C     Set the usable number of IFs (4)
-C   ***********************  Is this correct?
+C     All constraints (including the number of IFs) depend on the
+C     personality (DDC or PFB) and the DBBCVER (astro, geo or hybrid).
+C     IFDBBC knows the rules...
+      MYDBBCVER = DBBCVER(KSTA)
+      CALL IFDBBC( MYDBBCVER, MAXBBC, 4, IFBBC, MIF )
 C
-      MIF = 4
 C
       IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN 
 C
@@ -99,11 +111,15 @@ C        Most checks are meant to be used both before and after
 C        the filter selection is available.
 C        There is one check that is meant to be temporary that
 C        forces the current frequencies.
+C        CR: The PFB code here is just a copy of the RDBE and therefore
+C        almost certainly wrong. However, I don't currently have any
+C        better documenation on the DBBC...
 C
          IF( DBE(KS) .EQ. 'DBBC_PFB' ) THEN
 C
 C           NCHAN must be 16 (in initial version).
 C    ******************  I think this may be wrong for the DBBC.
+C    CR: I'm not sure the PFB mode will ever be used on the DBBC...
 C
             IF( NCHAN(KS) .NE. 16 ) THEN
                MSGTXT = ' '              
@@ -215,75 +231,30 @@ C        ===  Now check the DDC personality. ===
 C
          IF( DBE(KS) .EQ. 'DBBC_DDC' ) THEN
 C
-C           NCHAN must be 8 or less with 2 RDBEs or 4 or less with
-C           one.  MIF is already set depending on the capability.
-C     *********************  please adjust above statement as needed
-C                for the DBBC.  Then adjust the code below accordingly
-C                The RDBE version has separate tests for 1 or 2 RDBEs
 C
-            IF( MIF .EQ. 2 .AND. NCHAN(KS) .GT. 4 ) THEN
-               MSGTXT = ' '              
-               WRITE( MSGTXT, '( A, A, I4 )' )
-     1           'CHKDBBC: For DBBCor PFB or not VDIF, ',
-     2           ' NCHAN must <= 4.  Setup specified.', NCHAN(KS)
-               CALL WLOG( 1, MSGTXT )
-               ERRS = .TRUE.
-            END IF
-C
-C   *********************  This may not be needed for the DBBC.
-C           Check for invalid distributions of IFs for RDBE2 (MIF=4).
-C           For NIF 3, all possible combinations that have NIF < 8
-C           conform to the restrictions which say that one IF can
-C           have up to 8 channels and the other 2 must be less than
-C           or equal to 4 each (only one IF can go to both RDBE's).
-C           If one IF has more than 4 channels, the largest possible 
-C           number of channels the others can have is 3, so it's ok.
-C           So no test beyond the total number test is needed.
-C
-C           If NIF is 4, there must be two pairs, each with less
-C           than 4 channels (each such pair goes to an RDBE and 
-C           no IF can go to both RDBEs).  Note that there can be
-C           pairs with more than 4 as long as they are kept
-C           separated.  There are only 3 possible combinations so
-C           just make a brute force check.  That will be more
-C           understandable.
-C
-            IF( NIF .EQ. 4 ) THEN
-               OK4 = ( NNIF(1) + NNIF(2) .LE. 4 .AND. 
-     1                 NNIF(3) + NNIF(4) .LE. 4 ) .OR. 
-     2               ( NNIF(1) + NNIF(3) .LE. 4 .AND. 
-     3                 NNIF(2) + NNIF(4) .LE. 4 ) .OR. 
-     4               ( NNIF(1) + NNIF(4) .LE. 4 .AND. 
-     5                 NNIF(2) + NNIF(3) .LE. 4 )
-               IF( .NOT. OK4 ) THEN
-                  CALL WLOG( 1, 
-     1               'CHKDBBC:  When using 2 RDBEs, with 4 IFs, '//
-     2               'it must be possible to pair the IFs so ' )
-                  WRITE( MSGTXT, '( A, A, A )' )
-     1               '          that each pair has less than 4 ',
-     2               'channels total.  This is not the case for ',
-     3               'setup ', SETNAME(KS)
+            DO IIF = 1,NIF
+               IF( NNIF(IIF) .GT. 8 ) THEN
+                  MSGTXT = ' '              
+                  WRITE( MSGTXT, '( A, A, I4 )' )
+     1              'CHKDBBC: For DBBC, NCHAN <= 8 per IF. ',
+     2              'Setup specified:', NCHAN(KS)
+                  CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
                END IF
-            END IF
+            END DO
 C
 C           Sample rate can have many values.
 C           These may need to shift down by 1 if we do complex
 C           sampling.
+C           Current version of DBBC only allows 1-16 MHz channels and
+C           Nyquist sampling, though a future 2048 Msps version of the
+C           firmware will enable 32 MHz channels.
 C
-C    *********************  Isn't the DBBC_DDC channel bandwidth
-C                           limited?.  If so, this could impact
-C                           compatibility.
-            IF( SAMPRATE(KS) .NE. 256.0 .AND. 
-     a          SAMPRATE(KS) .NE. 128.0 .AND. 
-     1          SAMPRATE(KS) .NE. 64.0 .AND.
-     2          SAMPRATE(KS) .NE. 32.0 .AND.
-     3          SAMPRATE(KS) .NE. 16.0 .AND.
-     4          SAMPRATE(KS) .NE. 8.0 .AND.
-     5          SAMPRATE(KS) .NE. 4.0 .AND.
-     6          SAMPRATE(KS) .NE. 2.0 .AND.
-     7          SAMPRATE(KS) .NE. 1.0 .AND.
-     8          SAMPRATE(KS) .NE. 0.5 ) THEN
+            IF( SAMPRATE(KS) .NE. 32.0 .AND.
+     1          SAMPRATE(KS) .NE. 16.0 .AND.
+     2          SAMPRATE(KS) .NE. 8.0 .AND.
+     3          SAMPRATE(KS) .NE. 4.0 .AND.
+     4          SAMPRATE(KS) .NE. 2.0 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKDBBC: Invalid SAMPRATE specified: ', SAMPRATE(KS),
@@ -293,7 +264,8 @@ C                           compatibility.
             END IF
 C
 C           Bits per sample must be 2.
-C   ************************  are there other options for the DBBC?
+C           1 bit recording is possible via channel selection. Don't
+C           currently support this.
 C
             DO ICH = 1, NCHAN(KS)
                IF( BITS(ICH,KS) .NE. 2 ) THEN
@@ -307,8 +279,56 @@ C
             END DO
 C
 C  ******************  There are some "interesting" ifchan assignment
-C            restrictions for the DBBC that I have not put in yet.
-
+C            restrictions for the DBBC.  They are DBBCVER dependent.
+C            IFDBBC knows the rules.
+C
+      DO ICH = 1, NCHAN(KS)
+         IF( IFCHAN(ICH,KS) .NE. 'A' .AND.
+     1       IFCHAN(ICH,KS) .NE. 'B' .AND.
+     2       IFCHAN(ICH,KS) .NE. 'C' .AND.
+     3       IFCHAN(ICH,KS) .NE. 'D' ) THEN
+            CALL WLOG ( 1, 'CHKDBBC: IFCHAN ''' // IFCHAN(ICH,KS) //
+     1          ''' not A,B,C or D' )
+            ERRS = .TRUE.
+         END IF
+      END DO
+C
+C
+C     Loop through the channels checking IF assignments.
+C
+      SOMEBAD = .FALSE.
+      DO ICH = 1, NCHAN(KS)
+C
+C        See if this channel uses an allowed IF given the wiring
+C        constraints embodied in the IFBBC array.
+C
+         OK = .FALSE.
+         IBBC = BBC(ICH,KS)
+         DO IIF = 1, NIF
+            IF( IFNAM(IIF) .EQ. IFCHAN(ICH,KS) .AND.
+     1          IFBBC(IBBC,IIF) .EQ. 1 ) OK = .TRUE.
+         END DO
+C
+C        Give warnings if it was not allowed.
+C
+         IF( .NOT. OK ) THEN
+            SOMEBAD = .TRUE.
+            SETMSG = ' '
+            WRITE( SETMSG, '( 3A, I4 )' )
+     1          'CHKDBBC: Illegal IF input ', IFCHAN(ICH,KS),
+     2          ' for DBBC, channel ', ICH
+            CALL WLOG( 1, SETMSG )
+            ERRS = .TRUE.
+         END IF
+C
+      END DO
+      IF( SOMEBAD ) THEN
+         SETMSG = ' '
+         WRITE( SETMSG, '( 2A )' )
+     1       '         Be careful of special wiring restrictions ',
+     2       'for these DARs.'
+         CALL WLOG( 1, SETMSG )
+      END IF
 C
 C           Bandwidths and frequencies checked in CHKRDFQ
 C
