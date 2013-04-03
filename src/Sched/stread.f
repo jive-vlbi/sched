@@ -119,6 +119,7 @@ C
          DYPOS(MSTA)    = STADY
          DZPOS(MSTA)    = STADZ
          MJDRATE(MSTA)  = STAEPO
+         DBBCVER(MSTA)  = STADBBCV
 C
 C        VLBADAR flags sites that use the VLBA control computer and
 C        software to control the recorder and DAR, but not the antenna.

@@ -27,6 +27,9 @@ C
       INTEGER    MMCH
       PARAMETER  (MMCH=32)
       INTEGER    MK5BCH(MMCH), M5BBBC, IM5, ICHMK5B(MMCH)
+C 
+C     For LBA
+      INTEGER    LBACH(MMCH), LBABBC, ILBA, ICHLBA(MMCH)
 C
 C     M5BCH is the sequence number of this SCHED channel in the
 C     Mark5B channels, which go by BBC number with upper sidebands
@@ -304,16 +307,41 @@ C
                   END IF
                END DO
             END IF
+            MK5BCH(ICHMK5B(IM5)) = IM5
          END DO
 C
 C        Now assign the tracks
 C
          DO ICH = 1, NCHAN
+            print*, 'ICH, MK5BCH', ICH, MK5BCH(ICH)
             IF( BITS .EQ. 1 ) THEN
-               TRACK(ICH,1) = A1(MK5BCH(ICH))
+               TRACK(ICH,1) = MK5BCH(ICH)
             ELSE IF ( BITS .EQ. 2 ) THEN
-               TRACK(ICH,1) = A2(MK5BCH(ICH))
+               TRACK(ICH,1) = MK5BCH(ICH)*2
             END IF
+         END DO
+C
+      ELSE IF( FORMAT .EQ. 'LBA' ) THEN
+C        Tracks (bitstreams) are simply ordered by BBC. Similar to
+C        Mark5b but the two sidebands for a single BBC follow each
+C        other. Note also that the dual sidebands from an LBA BBC can
+C        both be USB. 2 bits is the only option.
+         DO ICH = 1, NCHAN
+            LBACH(ICH) = 0
+         END DO
+         DO ILBA = 1, NCHAN
+            LBABBC = 100000
+            DO ICH = 1, NCHAN
+               IF( KBBC(ICH) .LT. LBABBC .AND. 
+     1             LBACH(ICH) .EQ. 0 ) THEN
+                  ICHLBA(ILBA) = ICH
+                  LBABBC = KBBC(ICH)
+               END IF
+            END DO
+            LBACH(ICHLBA(ILBA)) = ILBA
+         END DO
+         DO ICH = 1, NCHAN
+            TRACK(ICH,1) = LBACH(ICH)*2-1 
          END DO
 C
       ELSE IF( FORMAT .EQ. 'VDIF' ) THEN

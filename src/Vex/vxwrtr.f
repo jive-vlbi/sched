@@ -434,12 +434,12 @@ C
                        ELSE 
 C                         For LBA and Mark5B, the layout is simpler - 
 C                         There is no fanout and simple mapping of 
-C                         track to channel.
+C                         track to channel that we set in settrk.f.
 C          
                           LPOS = LEN1(LINE)+1
-                              ITRK = ( ICH - 1 ) * BITS(1,KS) + IBIT - 1
-                          IF( FORMAT(KS)(1:6) .EQ. 'MARK5B' )
-     1                       ITRK = ITRK + 2
+                          ITRK = TRACK1 + IBIT - 1
+C                          IF( FORMAT(KS)(1:6) .EQ. 'MARK5B' )
+C     1                       ITRK = ITRK + 2
                           WRITE( LINE(LPOS:LPOS+4), '(A1, 1X, I2)') 
      1                       COL, ITRK
                        END IF

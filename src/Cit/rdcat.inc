@@ -95,6 +95,7 @@ C     STAMSH  R4     -  Maximum number of slews per hour (for Jodrell).
 C     STATLS  R4     -  Time to set analog levels at VLBA and VLA on the
 C                       first scan for a setup.
 C     STATSC  C4     -  Method of Tsys measurement (GAP, CONT).
+C     STADBBCV C8    -  DBBC version (astro, geo, hybrid)
 C
 C     OBSDATE R8     -  MJD of observations - this is set in the routines
 C                       that call the reader.  It is needed because the
@@ -150,7 +151,7 @@ C
       CHARACTER         STANAM*8, STACOD*3, STADBN*10, STADBC*4
       CHARACTER         STAFRM*80, STACTL*5, STAMNT*5, STADBA*5
       CHARACTER         STADAR*5, STAREC*6, STADSK*6, STAMD*6
-      CHARACTER         STATSC*4
+      CHARACTER         STATSC*4, STADBBCV*8
       REAL              STAHAZ(MHOR), STAHEL(MHOR)
       REAL              STAAX1(6), STAAX2(6)
       REAL              STARA1, STARA2, STAAC1(2), STAAC2(2)
@@ -193,6 +194,6 @@ C
      7                STAHAZ, STAHEL, STAAX1, STAAX2, 
      8                STARA1, STARA2, STAAC1, STAAC2,
      9                STAZAL, STAHAL, STASTL, STAMSU, STAOFF,
-     A                STAMSH, STATLS, DBEPO, NDB, DBOFF
+     A                STAMSH, STATLS, STADBBCV, DBEPO, NDB, DBOFF
 C
 C   --------  End of RDCAT.INC ------------

@@ -106,7 +106,7 @@ C
 C
       ELSE IF( DAR(ISETSTA(KS)) .EQ. 'DBBC') THEN
 C
-C     Gino Tuccardi's DBBC, as used at Effelsberg
+C     Gino Tuccari's DBBC
 C
          CALL BBCDBBC( KS )
 C
@@ -114,6 +114,11 @@ C
 C
 C
          CALL BBCKVSR( KS )
+C
+      ELSE IF( DAR(ISETSTA(KS)) .EQ. 'LBA') THEN
+C
+C     Australian LBA system
+         CALL BBCLBA( KS )
 C
       ELSE IF( DAR(ISETSTA(KS)) .NE. 'NONE' ) THEN
 C

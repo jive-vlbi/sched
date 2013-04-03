@@ -36,8 +36,10 @@ C
                GOTERR = .TRUE.
             END IF
          ELSE IF( DAR(KSTA) .EQ. 'DBBC' ) THEN
+C           CR: DBBC defaults to DDC personality (PFB will probably
+C           never be used)
             IF( DBE(KS) .EQ. ' ' ) THEN
-               DBE(KS) = 'DBBC_PFB'
+               DBE(KS) = 'DBBC_DDC'
             ELSE IF( DBE(KS) .NE. 'DBBC_PFB' .AND. 
      1               DBE(KS) .NE. 'DBBC_DDC' ) THEN
                GOTERR = .TRUE.

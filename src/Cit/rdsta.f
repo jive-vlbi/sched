@@ -124,6 +124,7 @@ C
          CALL KEYADD( 'TLEVSET', 0.D0, 1, KD, KC, KI )
          CALL KEYCHR( 'TSCAL', 'CONT', 4, KD, KC, KI )
          CALL KEYADD( 'ENDCAT', 0.D0, 1, KD, KC, KI )
+         CALL KEYCHR( 'DBBCVER', 'ASTRO', 8, KD, KC, KI )
          GOTKEYS = .TRUE.
          WARNXYZ = .TRUE.
          GOTLOC  = .FALSE.
@@ -209,6 +210,7 @@ C
       KD( KEYPTR( 'TLEVSET', KC, KI ) ) = 0.0D6
       KD( KEYPTR( 'TSCAL', KC, KI ) ) = CCONT
       KD( KEYPTR( 'ENDCAT', KC, KI ) ) = UNSET
+      KD( KEYPTR( 'DBBCVER', KC, KI ) ) = BLANK
 C
 C     Reset the horizon mask.
 C
@@ -286,6 +288,7 @@ C
       STANBC = KD( KEYPTR( 'NBBC', KC, KI ) )
       STADBA = KCHAR( 'AXISTYPE', 5, .FALSE., KD, KC, KI )
       STAOFF = KD( KEYPTR( 'AXISOFF', KC, KI ) )
+      STADBBCV = KCHAR( 'DBBCVER', 5, .TRUE., KD, KC, KI )
 C
 C     Note that STADBA and STAOFF will be changed if we have to get
 C     positions from the locations catalog.
