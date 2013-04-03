@@ -36,11 +36,9 @@ C        'Astro' version
       ELSE IF( MYDBBCVER .EQ. 'GEO' ) THEN
 C        'geo' version
          MIF = 2
-         IFBBC(1, 1) = 1
-         IFBBC(1, 2) = 1
-         DO IBBC = 2, 8
+         DO IBBC = 1, 8
             IFBBC(IBBC, 1) = 1
-            IFBBC(IBBC+7, 2) = 1
+            IFBBC(IBBC+8, 2) = 1
          END DO
       ELSE IF( MYDBBCVER .EQ. 'HYBRID' ) THEN
 C        'hybrid' version
@@ -49,9 +47,8 @@ C        'hybrid' version
             IFBBC(IBBC, 1) = 1
             IFBBC(IBBC+4, 2) = 1
          END DO
-         IFBBC(1, 3) = 1
-         DO IBBC = 2, 8
-            IFBBC(IBBC+7, 3) = 1
+         DO IBBC = 1, 8
+            IFBBC(IBBC+8, 3) = 1
          END DO
       END IF
 C      DO IBBC=1,MAXBBC
