@@ -377,28 +377,30 @@ C              Make sure that we are not continuous recording from
 C              the previous scan. Insist on a 10 second gap (this can
 C              be shorter when we get rid of adaptive tape motion).
 C
-               SCNGAP = REAL( ( STARTJ(ISCN) - TAPOFF 
-     1                       - STOPJ (ISCN-1) ) * 86400.d0)
-               IF ( GRABTO(ISCN) .EQ. 'FILE' ) THEN
-                 MINGAP = 11.0
-               END IF
-               IF ( DATAPATH(ISCN) .EQ. 'IN2NET' ) THEN
-                 IF ( ISCN .GT. SCAN1 .AND. DATAPATH(ISCN) .NE.
-     1                          DATAPATH(ISCN-1) ) THEN
-                   MINGAP = 11.0
-                 ELSE
-                   MINGAP = 0.0
-                 END IF
-               END IF
-C                   
-               IF ( ISCN .GT. SCAN1 .AND. SCNGAP .LT. MINGAP ) THEN
-                 CALL PRTSCN ( ISCN )
-                 WRITE ( MSGTXT, '(A, A, A, I4, A)' )
-     1           'VXSCH: You have scheduled an ftp or eVLBI ',
-     2           'scan as part of continuous recording - you must ',
-     3           'leave a ', NINT(MINGAP), 
-     4           ' second gap before the scan.'
-                 CALL ERRLOG ( MSGTXT )
+               IF( ISCN .GT. SCAN1 ) THEN
+                  SCNGAP = REAL( ( STARTJ(ISCN) - TAPOFF 
+     1                          - STOPJ (ISCN-1) ) * 86400.d0)
+                  IF ( GRABTO(ISCN) .EQ. 'FILE' ) THEN
+                    MINGAP = 11.0
+                  END IF
+                  IF ( DATAPATH(ISCN) .EQ. 'IN2NET' ) THEN
+                    IF ( ISCN .GT. SCAN1 .AND. DATAPATH(ISCN) .NE.
+     1                             DATAPATH(ISCN-1) ) THEN
+                      MINGAP = 11.0
+                    ELSE
+                      MINGAP = 0.0
+                    END IF
+                  END IF
+C                      
+                  IF ( ISCN .GT. SCAN1 .AND. SCNGAP .LT. MINGAP ) THEN
+                    CALL PRTSCN ( ISCN )
+                    WRITE ( MSGTXT, '(A, A, A, I4, A)' )
+     1              'VXSCH: You have scheduled an ftp or eVLBI ',
+     2              'scan as part of continuous recording - you must ',
+     3              'leave a ', NINT(MINGAP), 
+     4              ' second gap before the scan.'
+                    CALL ERRLOG ( MSGTXT )
+                  END IF
                END IF
 C
 C              write the data transfer statements for each station
