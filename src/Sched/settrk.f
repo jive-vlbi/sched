@@ -313,7 +313,6 @@ C
 C        Now assign the tracks
 C
          DO ICH = 1, NCHAN
-            print*, 'ICH, MK5BCH', ICH, MK5BCH(ICH)
             IF( BITS .EQ. 1 ) THEN
                TRACK(ICH,1) = MK5BCH(ICH)
             ELSE IF ( BITS .EQ. 2 ) THEN
