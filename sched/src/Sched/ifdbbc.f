@@ -14,7 +14,6 @@ C  -----------------------------------------------------------
 C     Software check:
 C
       IF( DEBUG ) CALL WLOG( 1, 'IFDBBC: Starting' )
-      call wlog(1, 'In ifdbbc.f')
 C
 C     Initialise the IF->BBC lists. IFBBC(IBBC, IIF) = 0 means IBBC not
 C     accessible from IIF. 
@@ -51,11 +50,6 @@ C        'hybrid' version
             IFBBC(IBBC+8, 3) = 1
          END DO
       END IF
-C      DO IBBC=1,MAXBBC
-C         print*, (IFBBC(IBBC,IIF), IIF=1,MAXIF)
-C      END DO
-      
-      call wlog(1, 'leaving ifdbbc.f')
 
       RETURN
       END
