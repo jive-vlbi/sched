@@ -341,7 +341,8 @@ C        both be USB. 2 bits is the only option.
             LBACH(ICHLBA(ILBA)) = ILBA
          END DO
          DO ICH = 1, NCHAN
-            TRACK(ICH,1) = LBACH(ICH)*2-1 
+C           First bitstream is 0
+            TRACK(ICH,1) = LBACH(ICH)*2-2
          END DO
 C
       ELSE IF( FORMAT .EQ. 'VDIF' ) THEN
