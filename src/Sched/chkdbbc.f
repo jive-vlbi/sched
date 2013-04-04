@@ -221,7 +221,7 @@ C
                END IF
             END DO
 C
-C           Bandwidths and frequencies will be checked in CHKRDFQ.
+C           Bandwidths and frequencies will be checked in CHKDBFQ.
 C
 C     ***********************      Still to be checked - IF, POL.
 C
@@ -280,7 +280,7 @@ C
 C
 C  ******************  There are some "interesting" ifchan assignment
 C            restrictions for the DBBC.  They are DBBCVER dependent.
-C            IFDBBC knows the rules.
+C            IFDBBC knows the rules and set IFBBC above.
 C
       DO ICH = 1, NCHAN(KS)
          IF( IFCHAN(ICH,KS) .NE. 'A' .AND.
@@ -304,7 +304,7 @@ C        constraints embodied in the IFBBC array.
 C
          OK = .FALSE.
          IBBC = BBC(ICH,KS)
-         DO IIF = 1, NIF
+         DO IIF = 1, MAXIF
             IF( IFNAM(IIF) .EQ. IFCHAN(ICH,KS) .AND.
      1          IFBBC(IBBC,IIF) .EQ. 1 ) OK = .TRUE.
          END DO
@@ -330,7 +330,7 @@ C
          CALL WLOG( 1, SETMSG )
       END IF
 C
-C           Bandwidths and frequencies checked in CHKRDFQ
+C           Bandwidths and frequencies checked in CHKDBFQ
 C
          END IF
 C
@@ -338,7 +338,7 @@ C        Check the frequencies and bandwidths.  This is pulled out
 C        so that it can be used again later on frequencies set in-line
 C        or using Doppler.
 C
-         CALL CHKRDFQ( KS, BBFILT(1,KS), BBSYN(1,KS), ERRS )
+         CALL CHKDBFQ( KS, BBFILT(1,KS), BBSYN(1,KS), ERRS )
 C
       END IF
 C
