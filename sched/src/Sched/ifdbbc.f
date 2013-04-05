@@ -41,6 +41,7 @@ C        'geo' version
          END DO
       ELSE IF( MYDBBCVER .EQ. 'HYBRID' ) THEN
 C        'hybrid' version
+         print*, 'hybrid'
          MIF = 3
          DO IBBC = 1, 4
             IFBBC(IBBC, 1) = 1
@@ -49,6 +50,12 @@ C        'hybrid' version
          DO IBBC = 1, 8
             IFBBC(IBBC+8, 3) = 1
          END DO
+      ELSE
+         WRITE( MSGTXT, '( A, A )' )
+     1       'IFDBBC: DBBCVER not recognised:', MYDBBCVER
+         CALL WLOG( 1, MSGTXT )
+         CALL ERRLOG( 'catalog error' )
+
       END IF
 
       RETURN

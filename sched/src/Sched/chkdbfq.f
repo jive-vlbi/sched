@@ -154,9 +154,11 @@ C
             END IF
             IF( DEQUAL( BBCBW(ICH), 32.0D0 ) ) THEN
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, A, I3 )' )
+               WRITE( MSGTXT, '( A, A )' )
      1            'CHKDBFQ: You have requested 32 MHz bandwidth for ',
-     2            'DBE=DBBC_DDC. This is not available yet! Setup: ', KS
+     2            'DBE=DBBC_DDC. This is not available yet! '
+               CALL WLOG( 1, MSGTXT )
+               SHOWID = .TRUE.
             END IF
          END DO
 C
