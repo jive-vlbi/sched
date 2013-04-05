@@ -288,7 +288,7 @@ C
       STANBC = KD( KEYPTR( 'NBBC', KC, KI ) )
       STADBA = KCHAR( 'AXISTYPE', 5, .FALSE., KD, KC, KI )
       STAOFF = KD( KEYPTR( 'AXISOFF', KC, KI ) )
-      STADBBCV = KCHAR( 'DBBCVER', 5, .TRUE., KD, KC, KI )
+      STADBBCV = KCHAR( 'DBBCVER', 8, .TRUE., KD, KC, KI )
 C
 C     Note that STADBA and STAOFF will be changed if we have to get
 C     positions from the locations catalog.
