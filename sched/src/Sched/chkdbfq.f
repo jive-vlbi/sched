@@ -21,10 +21,10 @@ C
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
       INTEGER           NFWARN, N2WARN
       INTEGER           LSETF
-      INTEGER           IPF, I, NPBW, LEN1, ISETF
-      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, SLOP
+      INTEGER           I, NPBW, LEN1, ISETF
+      DOUBLE PRECISION  BBOFF, BB1, BB2, SLOP
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
-      LOGICAL           ERRS, DEQUAL, PBWARN, OBWARN, SHOWID
+      LOGICAL           ERRS, DEQUAL, OBWARN, SHOWID
       LOGICAL           IFHIGH, IFLOW
 C
       DATA     nwarn    / 0 /
@@ -163,8 +163,9 @@ C
          END DO
 C
 C        CR: Eventually a single 10-1024 MHz IF will become available
-C        with a future firmware release. For now the following appears
-C        to be correct.
+C        with a future firmware release (but probably not for all
+C        versions of DBBC). 
+C        For now the following appears to be correct.
 C        Baseband frequencies must be between 10 and 512 MHz or between
 C        512 and 1024 MHz. They appear to be fully flexible within that
 C        range.
@@ -228,6 +229,36 @@ C
                END IF
                SHOWID = .TRUE.
             END IF
+C
+C           The DBBC has both a binary and a decimal tuning mode. The
+C           binary mode can set the frequency with resolution
+C           1024MHz/2^31=0.476 Hz
+C           The decimal mode has 10KHz resolution and is normally used.
+C           We will enforce the decimal mode here.
+C           Allowing some tolerance as Craig did for the RDBE.
+C
+            IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.010D0 ) .GT. 2.D-7
+     1          .AND. NFWARN .LE. 16 ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( 3A )' ) 'CHKDBFQ:  ',
+     1           ' BBSYN for the DBBC_DDC must be an even multiple',
+     2           ' of 10.0 kHz.'
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( 2A, F15.6, A, I3, A, A )' ) 
+     1            '          ',
+     2            ' Value of: ', BBCFREQ(ICH), 
+     3            ' MHz found in channel ', ICH, ' of setup ', 
+     4            SETNAME(KS)
+               CALL WLOG( 1, MSGTXT )
+               IF( NFWARN .GE. 16 ) THEN
+                  MSGTXT = 'CHKRDFQ:   Further warnings suppressed '
+     1               //'- too many.'
+                  CALL WLOG( 1, MSGTXT )                     
+               END IF                  
+               NFWARN = NFWARN + 1
+               SHOWID = .TRUE.
+            END IF
          END DO
 
          IF( IFHIGH .AND. IFLOW ) THEN
@@ -237,7 +268,7 @@ C
      2         'All BBSYN must either be between 10 and 512 MHz', 
      3         '*or* between 512 and 1024 MHz. '
             CALL WLOG( 1, MSGTXT )
-            ERRS = .TRUE.
+            SHOWID = .TRUE.
          END IF
 C
 C
