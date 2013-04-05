@@ -282,6 +282,7 @@ C        MK5BCH  Mark5B channel of SCHED channel
 C
          DO ICH = 1, NCHAN
             MK5BCH(ICH) = 0
+            ICHMK5B(ICH) = 0
          END DO
          DO IM5 = 1, NCHAN
             M5BBBC = 100000

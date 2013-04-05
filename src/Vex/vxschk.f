@@ -328,7 +328,7 @@ C
      1             'VXSCHK:  WARNING: Mode setup < 40s for ',
      3             'station ', STATION(STANUM(ISTA))
                CALL WLOG( 1, MSGTXT )
-               CALL WLOG( 1,'         Stations need 40s for '//
+               CALL WLOG( 1,'         FS Stations need 40s for '//
      1             'any mode change, incl frequency shift.')
                WARNFS = .TRUE.
             END IF
