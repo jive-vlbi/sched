@@ -24,6 +24,7 @@ C
       INTEGER    NEXPECT, NLATE, NNEVER, NSLATE
       REAL       NSRCCHG
       LOGICAL    DOPWARN, WARNLONG, OVWARN, VLAPTG
+      LOGICAL    SKIPI, SKIPJ
       DOUBLE PRECISION  FRSUM(MAXCHN), FRBB(MAXCHN), FRBW(MAXCHN)
       DOUBLE PRECISION  TIME1, TIMEDUR, MINFR(MSET), MAXFR(MSET)
       DOUBLE PRECISION  MINFRI, MAXFRI, MINFRJ, MAXFRJ
@@ -269,50 +270,71 @@ C
                 MAXFRI = MAXDEF
                 MINFRJ = MINDEF
                 MAXFRJ = MAXDEF
+                SKIPI = .TRUE.
+                SKIPJ = .TRUE.
                 DO ISTA = 1, NSTA
                    IF( STASCN(ISCN,ISTA) ) THEN
+                      SKIPI = .FALSE.
                       MINFRI = MIN( MINFR(GNSET(ISCN,ISTA)), MINFRI )
                       MAXFRI = MAX( MAXFR(GNSET(ISCN,ISTA)), MAXFRI )
                    END IF
                    IF( STASCN(JSCN,ISTA) ) THEN
+                      SKIPJ = .FALSE.
                       MINFRJ = MIN( MINFR(GNSET(JSCN,ISTA)), MINFRJ )
                       MAXFRJ = MAX( MAXFR(GNSET(JSCN,ISTA)), MAXFRJ )
                    END IF
                 END DO               
-                IF( MINFRI .EQ. MINDEF .OR. MAXFRI .EQ. MAXDEF ) THEN
-                   MSGTXT = ' '
-                   WRITE( MSGTXT, '( )' )
-     1                'CHKSCN: Frequency group not found for scan ',
-     2                ISCN, '.  Should not happen.'
-                END IF
-                IF( MINFRJ .EQ. MINDEF .OR. MAXFRJ .EQ. MAXDEF ) THEN
-                   MSGTXT = ' '
-                   WRITE( MSGTXT, '( A, I5, A )' )
-     1                'CHKSCN: Frequency group not found for scan ',
-     2                JSCN, '.  Should not happen.'
-                END IF
-                IF( MINFRI .LT. MAXFRJ .AND. MAXFRI .GT. MINFRJ ) THEN
-                  IF( OVWARN ) THEN
-                    CALL WRTMSG(  0, 'CHKSCN', 'overlap_scans' )
-                    CALL WLOG( 1, 'CHKSCN:  ***** WARNING ****** ' )
-                    MSGTXT = ' '
-                    WRITE( MSGTXT, '( A, 2I5, A )' )
-     1                '  Two scans (', ISCN, JSCN, 
-     3                ') overlap in source, time, and frequency.'
-                    CALL WLOG( 1, MSGTXT )
-                    MSGTXT = ' '
-                    WRITE( MSGTXT, '( 3A )' )
-     1                '  At VEX driven correlators (others too?) ',
-     2                'antennas in these scans will not be cross ',
-     3                'correlated.'
-                    CALL WLOG( 1, MSGTXT )
-                    CALL WLOG( 1, '  See sched.runlog for more info.' )
-                    OVWARN = .FALSE.
-                  ELSE
-                    MSGTXT = ' ' 
-                    WRITE( MSGTXT, '( A, 2I5 )' )
-     1                 '  Additional overlapping scans: ', ISCN, JSCN
-                    CALL WLOG( 1, MSGTXT )
+C
+C               Don't get confused by empty scans.  They can have
+C               weird properties - like overlapping times.
+C
+                IF( .NOT. SKIPI .AND. .NOT. SKIPJ ) THEN
+C
+C                  First complain if frequency groups not found.
+C
+                   IF( MINFRI .EQ. MINDEF .OR. MAXFRI .EQ. MAXDEF ) THEN
+                      MSGTXT = ' '
+                      WRITE( MSGTXT, '( A, I5, A )' )
+     1                   'CHKSCN: Frequency group not found for scan ',
+     2                   ISCN, '.  Should not happen.'
+                      CALL ERRLOG( MSGTXT )
+                   END IF
+                   IF( MINFRJ .EQ. MINDEF .OR. MAXFRJ .EQ. MAXDEF ) THEN
+                      MSGTXT = ' '
+                      WRITE( MSGTXT, '( A, I5, A )' )
+     1                   'CHKSCN: Frequency group not found for scan ',
+     2                   JSCN, '.  Should not happen.'
+                      CALL ERRLOG( MSGTXT )
+                   END IF
+C
+C                  Now if there are overlapping frequencies, actually
+C                  warn about the overlapping scans.
+C
+                   IF( MINFRI .LT. MAXFRJ .AND. MAXFRI .GT. MINFRJ ) 
+     1                 THEN
+                     IF( OVWARN ) THEN
+                       CALL WRTMSG(  0, 'CHKSCN', 'overlap_scans' )
+                       CALL WLOG( 1, 'CHKSCN:  ***** WARNING ****** ' )
+                       MSGTXT = ' '
+                       WRITE( MSGTXT, '( A, 2I5, A )' )
+     1                   '  Two scans (', ISCN, JSCN, 
+     3                   ') overlap in source, time, and frequency.'
+                       CALL WLOG( 1, MSGTXT )
+                       MSGTXT = ' '
+                       WRITE( MSGTXT, '( 3A )' )
+     1                   '  At VEX driven correlators (others too?) ',
+     2                   'antennas in these scans will not be cross ',
+     3                   'correlated.'
+                       CALL WLOG( 1, MSGTXT )
+                       CALL WLOG( 1, 
+     1                      '  See sched.runlog for more info.' )
+                       OVWARN = .FALSE.
+                     ELSE
+                       MSGTXT = ' ' 
+                       WRITE( MSGTXT, '( A, 2I5 )' )
+     1                    '  Additional overlapping scans: ', ISCN, JSCN
+                       CALL WLOG( 1, MSGTXT )
+                     END IF
                   END IF
                 END IF
               END IF

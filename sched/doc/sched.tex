@@ -2428,8 +2428,8 @@ are:
 \end{list}
 
 
-% \asdf  l*****************  do I need to still avoid changing rates.
-% That was in okmodes.f (jan2011)
+% \asdf  ***  Do I need to still avoid changing rates.
+% That was in okmodes.f (jan2011) which has been removed.
 
 
 In addition to requiring use of tested modes, \schedb will not
@@ -3110,8 +3110,9 @@ site}{http://www.ls.eso.org/lasilla/Telescopes/SEST/html/telescope-calibration/i
 That link is now dead.  Please let me know if you know an alternative.
 For information on high frequency flux densities of continuum
 calibrator, one can try the
-\htmladdnormallink{CalFind}{http://www.mmarray.org/} tool at the CARMA
-website.  Please recommend other options if you have them.
+\htmladdnormallink{CalFind}{http://carma.astro.umd.edu/cgi-bin/calfind.cgi}
+tool at the CARMA website.  Please recommend other options if you have
+them.
 
 Reference pointing is commonly used for 7mm observations on the VLA.
 It is done in interferometer mode at X band (4cm) and so can only be
@@ -5057,7 +5058,6 @@ The first word of {\tt CORREL} must be one of:
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \item {\tt Socorro}, {\tt VLBA}, or {\tt VLBADIFX}
 (VLBA DiFX software correlator)
-\item {\tt FXCORR} (Original VLBA hardware correlator)
 \item {\tt Haystack},
 \item {\tt Bonn (MPIfR DiFX correlator)},
 \item {\tt JIVE},
@@ -5069,6 +5069,8 @@ The first word of {\tt CORREL} must be one of:
 \item {\tt ASC (Astro Space Center - Moscow)}
 \item {\tt Penticton}, or
 \item {\tt Other}
+\item {\tt FXCORR} (Original VLBA hardware correlator --- no longer 
+exists so \schedb will stop.)
 \end{list}
 
 Note the correlation parameters {\tt CORAVG, CORCHAN,
@@ -11216,9 +11218,6 @@ confused about what signal is in each baseband channel.
 \htls{FEFILTER}{} VLA front end filter specification for `` //LO'' card.
 \htls{FIRMFILE}{} A firmware file name to use - VLBA testers only!
 \htls{FIRSTLO}{~} Sum of all LOs except the one set if {\tt FREQ} used.
-\htls{FLUKEA}{~~} VLA A Fluke frequency for ``//FI'' card.
-\htlt{FLUKEB}{FLUKEA}{~~} VLA B Fluke frequency for ``//FI'' card.
-\htls{FLUKESET}{} VLA Fluke set to specify on ``//FI'' card.
 \htls{FORMAT}{~~} Recording format to use --- ({\tt VLBA1:2} etc.
 \htls{FREQOFF}{~} Value to add to {\tt FREQREF} for each
                         baseband channel to get LO sum.
@@ -11232,7 +11231,7 @@ confused about what signal is in each baseband channel.
 \htls{LOGGING}{~} Type of logging to be done.
 \htls{LCP50CM}{~} Controls narrow band filter at 50 cm for LCP.
 \htls{M4PATCH}{~} Controls which MarkIV patching to use.
-\htls{MODETEST}{} Allow untested recording modes.
+\htls{MODETEST}{} Allow use of features still under development
 \htls{NCHAN}{~~~} Number of baseband channels.
 \htls{NETSIDE}{~} Net sideband of baseband channel.
 \htls{NOISE}{~~~} Noise diode switching mode.
@@ -11270,15 +11269,6 @@ confused about what signal is in each baseband channel.
 \htlt{TRACK6}{TRACK1}{~~} Tape tracks for pass 6 (obsolete).
 \htlt{TRACK7}{TRACK1}{~~} Tape tracks for pass 7 (obsolete).
 \htlt{TRACK8}{TRACK1}{~~} Tape tracks for pass 8 (obsolete).
-\htls{VLABAND}{~} Band code for VLA.
-\htls{VLABW}{~~~} Bandwidth code for VLA.
-\htls{VLAFEAB}{~} VLA first LO frequency for ``//LO'' card.
-\htlt{VLAFECD}{VLAFEAB}{~} VLA first LO frequency for ``//LO'' card.
-\htls{VLAIF}{~~~} VLA gain file name for ``//LO'' card (Obsolete).
-\htls{VLAROT}{~~} VLA rot file name for ``//LO'' card (Obsolete).
-\htls{VLASYNA}{~} VLA AC F6 frequency for ``//LO'' card (not rounded).
-\htlt{VLASYNB}{VLASYNA}{~} VLA BD F6 frequency for ``//LO'' card
-                 (not rounded).
 \end{list}
 
 
@@ -11744,29 +11734,6 @@ the VLBA pointing.
 {Defaults to previous station.}
 {{\tt ELCOLIM=1.2}}
 
-\subsubsection{\label{SP:EVLA}{\tt EVLA}}
-
-The EVLA parameter has been removed.  You can no longer use it without
-causing \schedb to abort.  The EVLA is being treated more like a
-normal station.
-
-The EVLA can reach many frequencies that the VLA cannot.  Such
-frequencies can be specified to the VLA using the same {\tt VLASYNA}
-etc parameters as before, but with values that would be outside the
-range that would be allowed for the VLA.  Since \schedb checks the
-ranges of these settings, that checking has to be overridden.  Setting
-{\tt EVLA} to a non-zero value will cause such checking.  It is an
-integer to allow for possible future varients with different values.
-Note that the {\tt VLASYNA} etc frequencies must still conform to the
-patterns like 50*N +- 10.1 MHz.  When {\tt EVLA} is set, the {\tt VLAFEAB}
-and {\tt VLAFECD} parmeters are not checked at all.
-
-\rcwbox
-{Override VLA frequency checking.}
-{Any integer.}
-{{\tt 0}}
-{Defaults to previous station, but only affects the VLA.}
-{{\tt EVLA=1}}
 
 
 \subsubsection{\label{SP:FE}{\tt FE}}
@@ -11777,6 +11744,11 @@ has 4 filters; the on-line system chooses which to use based on the
 frequency of baseband channel 1, with the dividing points for the
 filter choice are 12.9, 13.9, and 14.9~GHz.  {\tt FE = omit} may
 be specified to cause a channel not to be used.
+
+{\tt FE} can also be used for other stations, especially the VLA and
+any station that uses a VLBA backend.  The 4 receiver names correspond
+to the first 4 IFs.  \schedb can provide appropriate defaults for the
+VLA based on the frequency requests.
 
 The front ends for the VLA and VLBA are listed here.  The maximum
 ranges are given for the VLBA, which may be considerably greater than
@@ -11809,27 +11781,6 @@ for an unused IF (that's the default for unused IFs.).}
 specified, only the new values are used.}
 {{\tt FE(1)='20cm' FE(3)='20cm'}}
 
-
-\subsubsection{\label{SP:FEFILTER}{\tt FEFILTER}}
-
-{\tt FEFILTER} specifies the VLA front end filter.  Some
-options are: {\tt '0000'} - 50~MHz.  {\tt '1111'} - 25~MHz.  {\tt
-'2222'} - 12.5~MHz.  These are used to help avoid RFI especially at
-the lower frequencies. They are centered or close to the normal 50-MHz
-band. Anyone using these should understand the VLA system well.
-
-Note that, if any of {\tt FLUKEA}, {\tt FLUKEB}, {\tt VLAFEAB}, {\tt
-VLAFECD}, {\tt VLASYNA}, {\tt VLASYNB}, {\tt VLAIF}, {\tt FEFILTER},
-or {\tt VLAROT} are specified, both LO and FI cards will be made.  In
-such cases, any other parameters allowed to default will be set to the
-standard value for the specified {\tt VLABAND}.
-
-\rcwbox
-{A four character string.}
-{{\tt '    ', '0000', '1111', and '2222'.} }
-{Takes VLA default for the specified band.}
-{Defaults to previous station.}
-{{\tt FEFILTER='1111'}}
 
 
 \subsubsection{\label{SP:FIRMFILE}{\tt FIRMFILE}}
@@ -11872,31 +11823,6 @@ times synthesizer 3.  For 4 mm, it is the sum of synthesizer 1 and 6
 times synthesizer 3.  At 90cm the value should be -500.0~MHz to make
 any frequency calculations come out right; that mix is an up-convert.
 
-For the VLA, use the following equations:
-\begin{description}
-\item[20, 6, and 1 cm] --- FIRSTLO = F1 + F6 + 900 + FA - 600
-\item[4 and 2 cm]  --- FIRSTLO = F1 - F6 - 900 - FA + 600
-\item[7mm] --- FIRSTLO = F1ab - F1cd + F6 + 900 + FA - 600
-\end{description}
-For the BD VLA channels, substitute 800 + 2*FB for the 900 + FA
-where:
-\begin{description}
-\item[] F1 = VLAFEAB(LS)*1000 for VLA A and B channels.
-\item[] F1 = VLAFECD(LS)*1000 for VLA C and D channels.
-\item[] F6 = VLASYNA(LS) for VLA A and C channels - not rounded.
-\item[] F6 = VLASYNB(LS) for VLA B and D channels - not rounded.
-\item[] FA = FLUKEA(LS)  AC Fluke setting.
-\item[] 2*FB = FLUKEB(LS)  BD Fluke setting (usually FA + 100).
-\item[] F1ab = VLAFEAB(LS)*1000, F1cd = VLAFECD(LS)*1000
-\end{description}
-
-If the VLA frequency parameters are set, \schedb will calculate
-the {\tt FIRSTLO} that will be provided by these frequencies and
-compare it with the {\tt FIRSTLO} given by the user.  If the
-match fails, \schedb will complain and abort.  \schedb also checks
-that each synthesizer setting conforms to the rules required by
-that piece of hardware.
-
 If {\tt FIRSTLO} is not specified, \schedb will try to determine it
 from the \htmlref{frequency catalog}{SEC:FRQCAT}.  This should be
 the usual case.
@@ -11908,53 +11834,6 @@ the usual case.
 others are not, the others will be set equal to channel 1.}
 {Defaults to previous station.}
 {{\tt FIRSTLO = 2400, 2400}}
-
-
-\subsubsection{\label{SP:FLUKEA}{\tt FLUKEA} and {\tt FLUKEB}}
-
-{\tt FLUKEA and FLUKEB} are used to set the VLA fluke synthesizer
-frequencies.  See the discussion of \htmlref{{\tt FIRSTLO}}{SP:FIRSTLO}
-for more details on what this does to the observing frequency.  The
-numbers to give are the numbers for the ``//FI'' card in the VLA
-observe file, which is twice the actual synthesizer setting for {\tt
-FLUKEB} but is the frequency mixed with the data.  To get the same
-frequency on the VLA's AC and BD IFs, make {\tt FLUKEB} equal {\tt
-FLUKEA} plus 100.00.
-
-Note that, if any of {\tt FLUKEA}, {\tt FLUKEB}, {\tt VLAFEAB}, {\tt
-VLAFECD}, {\tt VLASYNA}, {\tt VLASYNB}, {\tt VLAIF}, {\tt FEFILTER},
-or {\tt VLAROT} are specified, both LO and FI cards will be made.  In
-such cases, any other parameters allowed to default will be set to the
-standard value for the specified {\tt VLABAND}.
-
-{\tt FLUKEA and FLUKEB} can be provided in the \htmlref{frequency
-catalog}{SEC:FRQCAT}.
-
-\rcwbox
-{A real number giving the frequency in MHz.}
-{FLUKEA: Values between about {\tt 100} and {\tt 150}.
-FLUKEB: Values between about {\tt 200} and {\tt 250}.}
-{The VLA default for the band is used.}
-{Defaults to previous station.}
-{{\tt FLUKEA=102.11  FLUKEB=202.11}}
-
-
-\subsubsection{\label{SP:FLUKESET}{\tt FLUKESET}}
-
-
-{\tt FLUKESET} specifies which set of Fluke synthesizers to use at the
-VLA.  Usually this should be {\tt 1} for phased array or normal VLA
-observations and {\tt 2} for single antenna VLBI. The VLA operators
-should be warned to check this in case the normal pattern is not being
-followed. The default {\tt 0}, written as blank, may usually be
-best. Let the VLA operator select the flukeset.
-
-\rcwbox
-{Integer.}
-{{\tt 1} or {\tt 2}.}
-{{\tt 0} - written as blank.}
-{Defaults to previous station.}
-{{\tt FLUKESET=1}}
 
 
 \subsubsection{\label{SP:FORMAT}{\tt FORMAT}}
@@ -12173,15 +12052,11 @@ IFCHAN} is specified as ``{\tt R}'' or ``{\tt L}'', and {\tt RCHAN},
 obvious polarization channels, although use of {\tt POL} is
 recommended.
 
-At the VLA, there is now (as of July 97) a computer controlled patch
-pannel that routes the VLA IFs from the correlator sum ports or any
-of several single antennas to the VLB rack IFs.  The mapping is now
-different than it used to be.  Now VLA IF A goes to VLB IF A, B->B,
-C->C, and D->D.  The VLA computer selects which antenna or sum port
-to use depending on the mode and on the reference antenna given by
-the operators.  Nothing is required in the schedule files to specify
-the mapping explicitly.  The switch is very general so other mappings
-are possible, but the above will be the normal setup.
+As of early 2013, the VLA can provide 4 output basebands to the recording
+system.  Each is expected to come from a different IF so they should
+be assigned to A, and C for RCP and B and D for LCP.  Eventually there
+will probably be an increase in the number and more than one channel
+will use the same IF.
 
 \rcwbox
 {An array of up to 16 characters of length 2.}
@@ -12335,34 +12210,18 @@ GEO1 is for a geodetic style patching. The pattern is:
 
 \subsubsection{\label{SP:MODETEST}{\tt MODETEST}}
 
-This parameter is obsolete and no longer does anything.  It
-used to bypass the checks in a routine that kept track of supported
-modes, but that routine became obsolete and has been removed.  The
-parameter is still present to avoid breaking old files.
-
-Old text:
-
-\schedb will not normally allow schedules to be made that use
-untested VLBA or MarkIV recording modes.  The tested modes are
-listed in the document OK\_modes.vlba accessible from the VLBA
-WWW home page.  This is to try to prevent the situation where
-the correlator group is forced to work on some modes that are
-not otherwise important at the moment just because some user
-decided, probably in ignorance, to use one that doesn't work.
-This test is done only for the VLBA correlator.  Essentially
-all modes that are possible have been approved as of 2001 so this
-should not be needed unless (as was the case for a long time) the
-tables in \schedb are not up to date.
-
-In order to test new modes, or in cases where the documentation
-is out of date, it is necessary to schedule untested modes.  To
-bypass the test in \sched, specify {\tt MODETEST} in the setup
-file.
+{\tt MODETEST} was first used to allow testing of recording modes
+that were not ready for public release.  It is being adapted for
+use whenever there are features under development that should not
+be used by normal scientific users.  Either the features are still
+under test, or have not been deployed to sufficient antennas to 
+allow science use.  For example, it will be used while the new
+VLBA synthesizers are being tested and deployed.
 
 \rcwbox
 {None.}
 {}
-{Defaults to false which means don't allow untested modes.}
+{Defaults to false which means don't allow unreleased features.}
 {Defaults to previous station.}
 {{\tt MODETEST}}
 
@@ -12437,6 +12296,10 @@ This has no effect on the VEX file.
 {{\tt NOISE='low-s','low-s','low-s','low-s'}}
 
 \subsubsection{\label{SP:NOISEFRQ}{\tt NOISEFRQ}}
+
+This is not a useful parameter (2013) as the Pie Town link is
+not in operation.  Someday it may be reactivated, although with
+different hardware.
 
 {\tt NOISEFRQ} is used to tell the system to use either the VLBA or
 VLA noise tube switching frequency.  This is for VLBA antennas only
@@ -12951,7 +12814,7 @@ The speeds currently in use are:
 \item[6.3 ips] for S2 format on low density recordings.
 \end{description}
 
-The VLBA and VLA start using high density on all thin tapes on
+The VLBA and VLA started using high density on all thin tapes on
 about 1 May 1996.
 
 Note that the recording speed determines the speed up factor on
@@ -13041,238 +12904,6 @@ the rest of the channels.
  {\tt TRACK2=5,19,7,21,9,23,11,25,13,27,15,29,17,31} \\
 This example is Mark~III Mode B.}
 
-
-
-
-\subsubsection{\label{SP:VLABAND}{\tt VLABAND}}
-
-{\tt VLABAND} is an alternate way of specifying \htmlref{{\tt FE}}
-{SP:FE} for the VLA.  It is useful for a setup that is otherwise
-the same for the VLA and VLBA.  It has the same use in the 
-\htmlref{frequency catalog}{SEC:FRQCAT}.
-
-This has not yet been implemented for the Jansky VLA, but will be soon
-(Jan 2013).
-
-Note that the allowed arguments have changed from the pre-EVLA version.
-
-\rcwbox
-{Text of 1 or 2 characters.}
-{{\tt '4'} - 75 MHz \\
- {\tt 'P'} - 90cm \\
- {\tt 'L'} - 18cm \\
- {\tt 'C'} - 6cm \\
- {\tt 'X'} - 4cm \\
- {\tt 'Ku'} - 2cm \\
- {\tt 'K'} - 1cm \\
- {\tt 'Ka'} - 30 GHz (not on the VLBA) \\
- {\tt 'Q'} - 7mm}
-{None - required for VLA.  Can be specified in the frequency catalog.}
-{Defaults to previous scan.}
-{{\tt VLABAND='C'}}
-
-
-
-
-\subsubsection{\label{SP:VLABW}{\tt VLABW}}
-
-All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
-
-{\tt VLABW} specifies the bandwidth of each of the VLA's 4
-IFs (ABCD). This is done with coded digits such that the bandwidth is
-{\tt 50/2**n} MHz where {\tt n} is the digit used. For example, {\tt
-VLABW='0202'} specifies that the AC IFs are at 50~MHz bandwidth and
-the BD IFs are at 12.5~MHz bandwidth. The digits are specified in a
-4-character text which is copied to the VLA observe file. The default
-of {\tt '0000'} is appropriate for most VLBI observations. The final
-baseband filters for VLBI at the VLA are in the VLBA DAS and not
-controlled by the VLA on-line computers.
-
-SCHED can determine the value of this parameter from the
-\htmlref{frequency catalog}{SEC:FRQCAT} if that file includes
-an entry that covers the desired VLA setup.
-
-\rcwbox
-{Text of 4 characters, each of shich is a decimal digit.}
-{Each digit can be between {\tt 0} and {\tt 9}.}
-{Takes the VLA default for the specified band.}
-{Defaults to previous scan.}
-{{\tt VLABW='1414'}}
-
-
-\subsubsection{\label{SP:VLAFEAB}{\tt VLAFEAB} and {\tt VLAFECD}}
-
-All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
-
-{\tt VLAFEAB} is the VLA front end synthesizer for the A and B IFs
-(RCP).  {\tt VLAFECD} is the VLA front end synthesizer for the C and D
-IFs (LCP).  See the discussion of the parameter \htmlref{{\tt
-FIRSTLO}}{SP:FIRSTLO} for more details. If specified, a ``//LO'' card
-will be written, and {\tt VLAFECD}, {\tt VLASYNA}, and {\tt VLASYNB}
-will also be required.  Note that, except at 7mm, {\tt VLAFEAB} must
-be the same as {\tt VLAFECD} --- there is really only one synthesizer.
-
-Allowed values for the front end synthesizer are (in GHz) (this list
-was extended downward for 1 and 2 cm on 2004 Aug 27 after consulting
-with Ken Sowinski):
-
-\begin{verbatim}
-  For 90 cm:       0.0
-  For 18-20 cm:   -3.2
-  For 6 cm:        0.0
-  For 4 cm         11.8, 12.2, 12.4, 12.8, 13.0, 13.4,
-                   13.6, 14.0, 14.2, 14.6, 14.8, 15.2
-
-  For 1 and 2 cm:  15.1, 15.2, 15.4, 15.5, 15.7, 15.8, 16.0,
-                   16.1, 16.3, 16.4, 16.6,
-                   16.7, 16.9, 17.0, 17.2, 17.3, 17.5, 17.6,
-                   17.8, 17.9, 18.1, 18.2, 18.4, 18.5, 18.7,
-                   18.8, 19.0, 19.1, 19.3, 19.4, 19.6, 19.7,
-                   19.9, 20.0, 20.2, 20.3, 20.5, 20.6
-
-\end{verbatim}
-
-Note that many of the above settings will not produce usable
-signals.
-
-After conversion by one of the above frequencies, the upper sideband
-is kept at 90, 18-20, 6, 1.3 cm bands and the lower sideband is
-kept for the 3.6 and 2 cm bands.  The resulting IF should fit within the
-6 cm receiver band of 4500--5000 MHz (actually a 4355 to 5145 MHz
-filter).  See \htmlref{{\tt VLASYNA} and {\tt VLASYNB}}{SP:VLASYNA}
-for more frequency constraints based on allowed values of the L6
-synthesizer.
-
-At 7 mm, {\tt VLAFEAB} should be 3 times a valid value for the
-1/2 cm synthesizer.  {\tt VLAFECD} should be a valid 4 cm value.
-The first value (51.6 is a typical one) will produce a lower
-sideband IF in the 4 cm part of the spectrum which is then fed
-to the 4 cm frequency conversion system.
-
-Note that, if any of {\tt FLUKEA}, {\tt FLUKEB}, {\tt VLAFEAB}, {\tt
-VLAFECD}, {\tt VLASYNA}, {\tt VLASYNB}, {\tt VLAIF}, {\tt FEFILTER},
-or {\tt VLAROT} are specified, both LO and FI cards will be made.  In
-such cases, any other parameters allowed to default will be set to the
-standard value for the specified {\tt VLABAND}.
-
-{\tt FEFLITER} can be provided in the \htmlref{frequency
-catalog}{SEC:FRQCAT}.
-
-\rcwbox
-{A frequency in GHz.}
-{See VLA documentation for details.}
-{Takes the VLA default for the specified band.}
-{Defaults to previous station.}
-{{\tt VLAFEAB=-3.2  VLAFECD=-3.2}}
-
-
-\subsubsection{\label{SP:VLAIF}{\tt VLAIF}}
-
-The VLA parameters generated using this command are apparently are no
-longer used as of 2007 or earlier.  The capability to specify the
-parameter has been left in place, but should not be used.
-
-Description for historical interest:
-
-{\tt VLAIF} gives the name of the VLA IF file that contains gain
-calibration and efficiency information.
-
-Note that, if any of {\tt FLUKEA}, {\tt FLUKEB}, {\tt VLAFEAB}, {\tt
-VLAFECD}, {\tt VLASYNA}, {\tt VLASYNB}, {\tt VLAIF}, {\tt FEFILTER},
-or {\tt VLAROT} are specified, both LO and FI cards will be made.  In
-such cases, any other parameters allowed to default will be set to the
-standard value for the specified {\tt VLABAND}.
-
-\rcwbox
-{Up to 10 character file name.}
-{Any string.}
-{Uses VLA default for the specified band.}
-{Defaults to previous station.}
-{{\tt VLAIF = 'SYSLIF'}}
-
-
-\subsubsection{\label{SP:VLAROT}{\tt VLAROT}}
-
-All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
-
-The VLA parameters generated using this command are apparently are no
-longer used as of 2007 or earlier.  The capability to specify the
-parameter has been left in place, but should not be used.
-
-Description for historical interest:
-
-{\tt VLAROT} gives the name of the VLA ROT file that contains such
-things as control information for subreflector focus and rotation,
-collimation errors and control parameters for each frontend.
-
-Note that, if any of {\tt FLUKEA}, {\tt FLUKEB}, {\tt VLAFEAB}, {\tt
-VLAFECD}, {\tt VLASYNA}, {\tt VLASYNB}, {\tt VLAIF}, {\tt FEFILTER},
-or {\tt VLAROT} are specified, both LO and FI cards will be made.  In
-such cases, any other parameters allowed to default will be set to the
-standard value for the specified {\tt VLABAND}.
-
-\rcwbox
-{Up to 10 character file name.}
-{Any string.}
-{Uses VLA default for the specified band.}
-{Defaults to previous station.}
-{{\tt VLAROT = 'VLBLROT'}}
-
-
-\subsubsection{\label{SP:VLASYNA}{\tt VLASYNA} and {\tt VLASYNB}}
-
-All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
-
-{\tt VLASYNA} and {\tt VLASYNB} give the VLA F6 synthesizer settings
-for the A and C IFs {\tt VLASYNA} and for the B and D IFs {\tt
-VLASYNB}.  The value will be near 3900~MHz and must be N*50 +-
-10.1~MHz.  It will be rounded to the nearest MHz for the ``//LO''
-card but should be given to full precision here to facilitate
-frequency calculations.  The LO is passed through a filter
-that has the range 3435 - 4065 MHz.  Allowed settings, some of
-which will not pass through this filter, are:
-
-\begin{verbatim}
-  3310.1, 3339.9, 3360.1, 3389.9,   3410.1, 3439.9, 3460.1, 3489.9,
-  3510.1, 3539.9, 3560.1, 3589.9,   3610.1, 3639.9, 3660.1, 3689.9,
-  3710.1, 3739.9, 3760.1, 3789.9,   3810.1, 3839.9, 3860.1, 3889.9,
-  3910.1, 3939.9, 3960.1, 3989.9,   4010.1, 4039.9, 4060.1
-\end{verbatim}
-
-There are actually even more allowed values at the low end, but
-it is not clear that it is possible to use them.
-
-If the parameter \htmlref{{\tt EVLA}}{SP:EVLA} is set, {\tt VLASYNA} and
-{\tt VLASYNB} must still conform to N*50 +- 10.1 MHz, but there is no
-limit on the range.  The EVLA LO system is entirely different, and the
-program that converts the VLA style file to an EVLA file will do the
-necessary conversions.  Also when EVLA is set, the
-{\tt VLAFEAB} and {\tt VLAFECD} parameters are not checked.
-
-SCHED can determine the value of this parameter from the
-\htmlref{frequency catalog}{SEC:FRQCAT} if that file includes
-an entry that covers the desired VLA setup.
-
-Note that, if any of {\tt FLUKEA}, {\tt FLUKEB}, {\tt VLAFEAB}, {\tt
-VLAFECD}, {\tt VLASYNA}, {\tt VLASYNB}, {\tt VLAIF}, {\tt FEFILTER},
-or {\tt VLAROT} are specified, both LO and FI cards will be made.  In
-such cases, any other parameters allowed to default will be set to the
-standard value for the specified {\tt VLABAND}.
-
-\rcwbox
-{A frequency in MHz.}
-{N*50+-10.1}
-{Uses the VLA default for the specified band.}
-{Defaults to previous station.}
-{{\tt VLASYNA = 3889.9}}
 
 \section{\label{SEC:SATINIT}Satellite Initialization.}
 
@@ -13510,8 +13141,9 @@ currently.  They include long variable names, in-line comments, and
 {\sl cwalker@nrao.edu}.  Considerable use was made of the SLALIB
 (STARLINK) routines for precession, etc.  These routines use long
 variable names so removing this non-standard feature would not be
-easy. (email permission to use the FORTRAN SLALIB routines has been
-obtained from P. Wallace).
+easy.  (email permission to use the FORTRAN SLALIB routines has been
+obtained from P. Wallace, although the version under the GNU licence
+was installed in March 2013).
 
 If the code or any other files are moved from a unix or VMS machine to
 a machine using DOS or Windows, beware that the end-of-line characters
@@ -13655,26 +13287,95 @@ more information.
 \section{\label{SEC:CURRENT}Recent Releases}
 
 
-\subsection{\label{SSEC:VER_11.0}Version 11.1 Test}
+% seek point for editing:  development version
 
-\begin{itemize}
+\subsection{\label{SSEC:VER_11.1}Version 11.1 test}
+
+
+
 
 % **  Get wrap state in Vex.
-% **  Stop worrying about resyncs for MARK5C 
-% **  For the rdbe_pfb setups, worry about harmonic issues.
-%     The wideband 6cm setup has a fairly serious problem.
-%     Check for others.
 % **  egrdbe.key has a very bad sx setup.  Fix it.
 % **  n2227.key has possible birdies in some basebands.  Try to
 %     find some sniffer output to check.
+%     Modify choice of unset synthesizer for the new synthesizers.
+%     Finish with newsyn.key and put in Verify.  Interrupted project.
+
+
+\begin{itemize}
+
+\item Make it an error, not an obscure warning, when someone tries to
+assign two polarizations to the same IF.  Yes we observed a schedule
+that did that.  April 3, 2013.  RCW.
+
+\item Adjust the correlator resync times for the RDBE/MARK5C systems
+go reflect that the media always stops, that it starts at the 
+time good data is expected to start, and that correlation does not
+take any time to synchronize (no recorded data are lost).  Besides
+reflecting actual timeings better, this will prevent inappropriate
+warnings from being issued.  April 1, 2013  RCW.
+
+\item Update the SLALIB to version 2.5-4.  This version is under the
+GNU license so there should be no licensing issues, although I did 
+have permission to use the older version.  Tests show that the positions
+of date change by tens of milliarcseconds relative to the old version.
+This was traced to changes in the nutation routine nutc.f which contains
+more modern theory than the previous version.  For details see the 
+comments in that routine.  The new positions are presummably better.
+March 28, 2013 with the difference reconciled on Apr. 6, 2013.  RCW.
+
+\item {\tt CORREL=FXCORR} will now cause an abort.  The correlator no
+longer exists.  March 26, 2013.  RCW
+
+\item Remove a number of parameters related to the old VLA system
+from the manual descriptions of the setup files.  March 25, 2013 RCW.
+
+\item Add VLBA entries in {\sl freq.dat} and {\freq_RDBE.dat} for
+S/X that use 7.9 GHz for 4cm.  These have the LO in the RF so are
+not considered good.  But the geodesy community is using them.
+March 25, 2013  RCW.
+
+\item Implement the ability to set VLBA synthesizer frequencies
+to 10 kHz rather than the current 500+-100 MHz in preparation for
+the new synthesizers that are still under development.  March 25, 2013,
+RCW.
+
+\item Write the synthesizer 1 and 2 settings, regardless of which
+is being used, in the comment at the end of the if_def line in the
+VEX file.  This is in support of the new VLBA synthesizers which will
+be controlled by the Executor based on information in the VEX file.
+March 21, 2013  RCW
+
+\item Write the first LO frequency in the VEX if_def lines to one
+more significant figure to support the new VLBA synthesizer that is
+under development.  That synthesizer can be set in 10 kHz steps.
+March 20, 2013  RCW
+
+\item Shift frequencies of pt7ghz.set to avoid RFI.  Use different
+frequency at BR from other sites.  March 13, 2013  RCW.
+
+\item Add a question about are you using the right station catalog
+when a mismatch between the DBE and the DAR are found.  March 8, 2013.
+
+\item The test to warn about overlapping scans that might be intended
+to be correlated together got confused when there were empty scans.
+Fixed March 8, 2013.
 
 \item Soften the warning about more than 2000 scans if only the
 VLBA is being used.  March 1, 2013  RCW.
+
+\item Change read time default of GRABTIME so that GRABTIME(2) can
+be set to zero.  As it was, the read default was zero and, if that
+was found, the default of 10 seconds was set.  The read default
+GRABTIME(1) also changed, but that should have no effect visible to
+the user.  Feb. 20, 2013  RCW.
 
 \item Change the defaulting behavior of {\tt GRABTIME} to allow
 {\GRABTIME(2)} to be zero.  Feb. 2013  RCW.
 
 \end{itemize}
+
+
 \subsection{\label{SSEC:VER_11.0}Version 11.0}
 
 \begin{itemize}

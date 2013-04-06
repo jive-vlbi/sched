@@ -50,7 +50,7 @@ C        FRCP50CM  Command for 50 cm filter in RCP.
 C        FLCP50CM  Command for 50 cm filter in LCP.
 C        FDUALX    Xband wide band setup.
 C
-      REAL              FSYN(3,MFREQ)
+      DOUBLE PRECISION  FSYN(3,MFREQ)
       DOUBLE PRECISION  FCH1RF1(MFIF,MFREQ), FCH1RF2(MFIF,MFREQ)
       CHARACTER         FRCP50CM(MFREQ)*6, FLCP50CM(MFREQ)*6
       LOGICAL           FDUALX(MFREQ)
@@ -84,9 +84,9 @@ C
 C     The commons.
 C
       COMMON / FRQN /  FRF1, FRF2, FLO1, FVFEAB, FVFECD,
-     1                 FCH1RF1, FCH1RF2,
+     1                 FSYN, FCH1RF1, FCH1RF2,
      2                 FVSYNA, FVSYNB, FVFLKA, FVFLKB, 
-     3                 NFREQ, PRIO, FNIF, FSYN, FDUALX
+     3                 NFREQ, PRIO, FNIF, FDUALX
       COMMON / FRQC /  FSTNAM, FIFNAM, FALTIF, FRNAME, FRNOTE, FPOL, 
      1                 FFE, FRCP50CM, FLCP50CM, FVCHNSTA, 
      2                 FVBAND, FVBW, FVFILT

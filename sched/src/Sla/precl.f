@@ -35,9 +35,26 @@
 *
 *  Called:  sla_DEULER
 *
-*  P.T.Wallace   Starlink   23 August 1994
+*  P.T.Wallace   Starlink   23 August 1996
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 1996 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE
@@ -46,7 +63,7 @@
 
 *  Arc seconds to radians
       DOUBLE PRECISION AS2R
-      PARAMETER (AS2R=0.4848136811095359949D-05)
+      PARAMETER (AS2R=0.484813681109535994D-5)
 
       DOUBLE PRECISION T0,T,TAS2R,W,ZETA,Z,THETA
 

@@ -39,27 +39,48 @@
 *      is always negligible.  Moreover, for all but the most
 *      critical applications UTC is adequate.
 *
-*  2)  The accuracy of the routines using the parameters AMPRMS is
-*      limited by the routine sla_EVP, used here to compute the
-*      Earth position and velocity by the methods of Stumpff.
-*      The maximum error in the resulting aberration corrections is
-*      about 0.3 milliarcsecond.
-*
-*  3)  The vectors AMPRMS(2-4) and AMPRMS(5-7) are referred to
+*  2)  The vectors AMPRMS(2-4) and AMPRMS(5-7) are referred to
 *      the mean equinox and equator of epoch EQ.
 *
-*  4)  The parameters AMPRMS produced by this routine are used by
-*      sla_MAPQK and sla_MAPQKZ.
+*  3)  The parameters AMPRMS produced by this routine are used by
+*      sla_AMPQK, sla_MAPQK and sla_MAPQKZ.
+*
+*  4)  The accuracy is sub-milliarcsecond, limited by the
+*      precession-nutation model (IAU 1976 precession, Shirai &
+*      Fukushima 2001 forced nutation and precession corrections).
+*
+*  5)  A further limit to the accuracy of routines using the parameter
+*      array AMPRMS is imposed by the routine sla_EVP, used here to
+*      compute the Earth position and velocity by the methods of
+*      Stumpff.  The maximum error in the resulting aberration
+*      corrections is about 0.3 milliarcsecond.
 *
 *  Called:
 *     sla_EPJ         MDJ to Julian epoch
 *     sla_EVP         earth position & velocity
-*     sla_DVN         normalise vector
+*     sla_DVN         normalize vector
 *     sla_PRENUT      precession/nutation matrix
 *
-*  P.T.Wallace   Starlink   21 July 1994
+*  P.T.Wallace   Starlink   24 October 2003
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 2003 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE
@@ -70,7 +91,7 @@
       DOUBLE PRECISION CR
       PARAMETER (CR=499.004782D0)
 
-*  Gravitational radius of the sun x 2 (2*mu/c**2, AU)
+*  Gravitational radius of the Sun x 2 (2*mu/c**2, AU)
       DOUBLE PRECISION GR2
       PARAMETER (GR2=2D0*9.87063D-9)
 
@@ -88,7 +109,7 @@
 *  Get Earth barycentric and heliocentric position and velocity
       CALL sla_EVP(DATE,EQ,EBD,AMPRMS(2),EHD,EH)
 
-*  Heliocentric direction of earth (normalised) and modulus
+*  Heliocentric direction of earth (normalized) and modulus
       CALL sla_DVN(EH,AMPRMS(5),E)
 
 *  Light deflection parameter

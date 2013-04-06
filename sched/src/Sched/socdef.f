@@ -16,6 +16,14 @@ C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SOCDEF starting.' )
       MISCOR = .FALSE.
 C
+C     First abort if FXCORR chosen.  That is the original VLBA FX
+C     correlator and it no longer exists.
+C
+      IF( CORREL(1:6) .EQ. 'FXCORR' ) THEN
+         CALL ERRLOG( 'SOCDEF:  The original VLBA correlator FXCORR '//
+     1     'no longer exists.  Choose another CORREL.' )
+      END IF
+C
       IF( CORAVG .EQ. 0.0 ) THEN
          MISCOR = .TRUE.
          CALL WLOG( 1, '        Correlator average time missing.' )

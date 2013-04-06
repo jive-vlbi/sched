@@ -1198,6 +1198,8 @@ POINTING FILES
 
 #mode ptg
 !      Two channel VLBA Pointing observations.
+!      I've long forgotten why I did this with freqoff=-6.
+!      But don't change now or we'll get in trouble.
   station = VLBA
   nchan    = 2
   bits     = 2
@@ -1246,12 +1248,18 @@ POINTING FILES
   bbfilter = 16.0
   freqref  = 4990.99, 4990.99, 6660.49, 6660.49
   ptincr   = 4.0   /  #end
+
+  Don't forget the freqoff=-6,-6 in the ptg mode.
+
 #file pt7ghz.set   @mode ptg
-!  Try to stay below the RFI at BR, so this is just under Methanol.
+!  Center on the Methanol line at most sites.
+!  BR has RFI so shift it to a clear band.
+!  Note cannot take all down to 6657 because OV bad.
   format   = NONE
   bbfilter = 16.0
-  freqref  = 6657.49, 6657.49
-  ptincr   = 5.0   /  #end
+  freqref  = 6666.49, 6666.49
+  ptincr   = 5.0   / 
+  freqref  = 6696.49, 6696.49 station=vlba_br /  #end
 #file pt4cm.set   @mode ptg
   format   = NONE
   freqref  = 8416.99  
@@ -1733,12 +1741,19 @@ Start with PFB versions.
 
 ------------------
 
-#file rdbe_pfb_wide_lcp.set
+#file rdbe_pfb_6cm_wide_lcp.set
 !  Setup for 4-8 GHz receiver observations using LCP only but with 
 !  frequencies separated by nearly the full bandwidth of the receiver.
 !  Within each of the 2 IFs, the frequencies will be spread for wide
 !  spanned bandwidth coverage.  This uses the RDBE_PFB personality
 !  VLBA only.
+
+!  Note that a slightly wider spread could be achieved with a freqref
+!  of 3400 at the low end, but that risks problems related to the
+!  harmonic of the LO mixing in unwanted signal as described in 
+!  freq_RDBE.dat.  Initial tests suggests that this might not be a
+!  problem and if that stands up, the low end may be moved back down
+!  (it was 3400 in the initial version of this file). 
 
 !  This setup may change as experience is gained with the RFI 
 !  environment.
@@ -1751,7 +1766,7 @@ Start with PFB versions.
 
 @mode rdbe_pfb_common_lcp
 
-  freqref    = 3400., 3400., 3400., 3400., 3400., 3400., 3400., 3400., 
+  freqref    = 3600., 3600., 3600., 3600., 3600., 3600., 3600., 3600., 
                8400., 8400., 8400., 8400., 8400., 8400., 8400., 8400.
   freqoff    = 560.0, 624.0, 688.0, 752.0, 816.0, 880.0, 944.0, 1008.0,
               -1008., -944., -880., -816., -752., -688., -624., -560.

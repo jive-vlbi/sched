@@ -323,11 +323,11 @@ C     to anything.  Note that MATCH in the IF statement insures that
 C     the MATCH = statement is equivalent to MATCH = MATCH .AND. ...
 C
       IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' .AND. MATCH ) THEN
-         MATCH = ( SYNTH(1,KS) .EQ. 0.0 .OR. FSYN(1,KF) .EQ. 0.0 .OR.
+         MATCH = ( SYNTH(1,KS) .EQ. 0.D0 .OR. FSYN(1,KF) .EQ. 0.D0 .OR.
      1             SYNTH(1,KS) .EQ. FSYN(1,KF) ) .AND.
-     2           ( SYNTH(2,KS) .EQ. 0.0 .OR. FSYN(2,KF) .EQ. 0.0 .OR.
+     2           ( SYNTH(2,KS) .EQ. 0.D0 .OR. FSYN(2,KF) .EQ. 0.D0 .OR.
      3             SYNTH(2,KS) .EQ. FSYN(2,KF) ) .AND.
-     4           ( SYNTH(3,KS) .EQ. 0.0 .OR. FSYN(3,KF) .EQ. 0.0 .OR.
+     4           ( SYNTH(3,KS) .EQ. 0.D0 .OR. FSYN(3,KF) .EQ. 0.D0 .OR.
      5             SYNTH(3,KS) .EQ. FSYN(3,KF) )
 C
          IF( SDEBUG ) THEN

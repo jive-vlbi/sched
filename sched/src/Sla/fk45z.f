@@ -5,7 +5,7 @@
 *     - - - - - -
 *
 *  Convert B1950.0 FK4 star data to J2000.0 FK5 assuming zero
-*  proper motion in an inertial frame (double precision)
+*  proper motion in the FK5 frame (double precision)
 *
 *  This routine converts stars from the old, Bessel-Newcomb, FK4
 *  system to the new, IAU 1976, FK5, Fricke system, in such a
@@ -34,7 +34,7 @@
 *      2000.0 only is provided for.  Conversions involving other
 *      epochs will require use of the appropriate precession,
 *      proper motion, and E-terms routines before and/or
-*      after FK425 is called.
+*      after FK45Z is called.
 *
 *  3)  In the FK4 catalogue the proper motions of stars within
 *      10 degrees of the poles do not embody the differential
@@ -71,9 +71,26 @@
 *
 *  Called:  sla_DCS2C, sla_EPJ, sla_EPB2D, sla_DCC2S, sla_DRANRM
 *
-*  P.T.Wallace   Starlink   24 December 1992
+*  P.T.Wallace   Starlink   21 September 1998
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 1998 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE

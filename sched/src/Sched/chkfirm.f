@@ -66,6 +66,10 @@ C
      3         DAR(KSTA)(1:LEN1(DAR(KSTA))), 
      4         ' at station ', 
      5         SETSTA(1,KS)(1:LEN1(SETSTA(1,KS)))
+            CALL WLOG( 1, MSGTXT )
+            MSGTXT = ' '
+            MSGTXT = 
+     1         '          Are you using the right station catalog?' 
             CALL ERRLOG( MSGTXT )
          END IF
       END DO

@@ -10,7 +10,8 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER       I, NNCHAN, LEN1, LENS, ISTA, ISCN, ICH, KSTA
-      LOGICAL       FIRSTS, FRS, LPNTVLBA, LTANVLBA, LDOPN3DB, WRTSET
+      LOGICAL       FIRSTS, FRS, LPNTVLBA, LTANVLBA, LDOPN3DB
+      LOGICAL       WRTSET, SWARNS
 C
 C     Parameters to hold previous values to avoid duplication.
 C     Each one needs a counter for the number of channels.
@@ -23,7 +24,7 @@ C
       INTEGER       RLEVEL(MCHAN)
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
       REAL          DOAZ, DOEL
-      DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR
+      DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR, RSYNTH
       LOGICAL       LDUALX, LUSEDIF(4), WARNCRD
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
@@ -47,7 +48,7 @@ C
       DOUBLE PRECISION  EXTLO(4), LEXTLO(4)
       LOGICAL       USEDIF(4)
       CHARACTER     IFLABEL(4)*1, SIDEX(4)*1, LSIDEX(4)*1
-      SAVE          LEXTLO, LSIDEX
+      SAVE          LEXTLO, LSIDEX, SWARNS
 C
       DATA          IFLABEL / 'A', 'B', 'C', 'D' /
       DATA          WARNCRD / .TRUE. /
@@ -56,6 +57,7 @@ C ----------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBASU: Starting.' )
 C
       NNCHAN = NCHAN(LS)
+      IF( FIRSTS ) SWARNS = .TRUE.
 C
 C     Need pointer to entries in the station catalog for this 
 C     schedule station ISTA.
@@ -143,21 +145,52 @@ C
             CALL VLBACHAR( 'noise', 5, 4, NOISE(1,LS), LNOISE, 
      1             MNOISE, FIRSTS, IUVBA )
 C
-C           Prep synth to use in double precision.  The rounding is
-C           to prevent issues comparing with the previous result.
-C           Change to sub-Hz rounding.  Aarg - SYNTH is a single 
-C           precision variable and it doesn't have enough bits to go
-C           to the Hz level.  The new synthesizers will be more finely
-C           tunable, but I think they will still be multiples of
-C           10 kHz or even bigger, so it should be ok to round at
-C           something higher.  From debugging printouts, it looks
-C           to be around 100 Hz that precision is gone.  Round to
-C           kHz.  Recall that the SYNTH values are GHz.
+C           Round SYNTH to try to avoid digital precision issues
+C           resulting in repeat prints.  It is not clear that this
+C           is still needed after the change of SYNTH to double
+C           precision, but it shouldn't hurt. Use 1 kHz rounding.  
+C           The new synthesizers will be more finely tunable but will 
+C           still be multiples of 10 kHz. Recall that the SYNTH values are GHz.
 C
             DO I = 1, 3
-               DSYNTH(I) = SYNTH(I,LS)
-               DSYNTH(I) = DNINT( DSYNTH(I) * 1.0D6 ) / 1.D6
+               DSYNTH(I) = DNINT( SYNTH(I,LS) * 1.0D6 ) / 1.D6
             END DO
+C
+C           If using the new synthesizers (should be installed in 
+C           2013/2014), lie to the legacy system to avoid generating
+C           complaints about invalid frequencies.  The new synthesizers
+C           are controlled by the Executor, so they will not be affected
+C           by what is given here.  They, and the correlator are controlled
+C           by the VEX file.  Lying here will result in incorrect frequencies
+C           being given in monitor data and operator displays, but we
+C           do not believe that is a problem.  Put a warning in the
+C           crd file if the value has been changed.  Recall synthesizer 3
+C           will still be the old style, so don't change it.
+C
+C
+            IF( MODETEST(LS) ) THEN
+               DO I = 1, 2
+                  RSYNTH = 0.5D0 * DNINT( DSYNTH(I) * 2.D0 )
+                  IF( DSYNTH(I) .GT. RSYNTH ) THEN
+                    RSYNTH = RSYNTH + 0.1D0
+                  ELSE
+                    RSYNTH = RSYNTH - 0.1D0
+                  END IF
+                  IF( DSYNTH(I) .NE. RSYNTH .AND. SWARNS ) THEN
+                     WRITE( IUVBA, '( A )' ) ' '
+                     MSGTXT = '!*  synth 1 & 2 values shown are '//
+     1               'not actual values used in new synthesizers.   *!'
+                     WRITE( IUVBA, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+                     MSGTXT = '!*  This suppresses warnings for '//
+     1               'settings that the old synthesizers cannot use.*!'
+                     WRITE( IUVBA, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+                     WRITE( IUVBA, '( A )' ) ' '
+                     SWARNS = .FALSE.
+                  END IF
+                  DSYNTH(I) = RSYNTH
+               END DO
+            END IF
+C           
 C
 C           For the new (2012) C band receiver on the VLBA, the sideband
 C           after the FIRSTLO mixes is not unique.  The same FIRSTLO can
