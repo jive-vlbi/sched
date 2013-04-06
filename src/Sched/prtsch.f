@@ -73,8 +73,6 @@ C     Get time information for the scan.
 C
       CALL TIMEJ( STARTJ(ISCN), YEAR1, DAY1, START )
       CALL TIMEJ( STOPJ(ISCN), YEAR2, DAY2, STOP )
-      CALL TIMEJ( TCORR(ISCN,ISTA), 
-     1            YEAR3, DAY3, RTCORR )
 C
 C     Get the dwell time and the margin of arrival time.
 C
@@ -262,6 +260,10 @@ C
             CALL TIMEJ( DSTART, YEAR3, DAY3, TSTART )
             CTSTART = TFORM( TSTART, 'T', 0, 2, 2, '  @' )
          END IF
+C
+C        Get the correlator sync time.
+C
+         CALL TIMEJ( TCORR(ISCN,ISTA), YEAR3, DAY3, RTCORR )
          CTCORR = TFORM( RTCORR, 'T', 0, 2, 2, '  @' )
 C
          LSTOPJ = STOPJ(ISCN)

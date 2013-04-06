@@ -59,8 +59,16 @@ C
       IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
          WRITE( IUNIT, '( 1X, /, 2X, A, 4(5X,A4) )' )
      1           ' VLBA FE=', (FE(I,KS),I=1,4)
-         WRITE( IUNIT, '( 2X, A, F6.1, 2F9.1 )' )
+         IF( ABS( SYNTH(1,KS) * 10.D0 - DNINT( SYNTH(1,KS) * 10.D0 ) )
+     1       .GT. 1.D-6 .OR.
+     2       ABS( SYNTH(2,KS) * 10.D0 - DNINT( SYNTH(2,KS) * 10.D0 ) )
+     3       .GT. 1.D-6 ) THEN
+            WRITE( IUNIT, '( 2X, A, 2F12.5, F9.1 )' )
      1           ' VLBA Synth=', (SYNTH(I,KS),I=1,3)
+         ELSE
+            WRITE( IUNIT, '( 2X, A, F6.1, 2F9.1 )' )
+     1           ' VLBA Synth=', (SYNTH(I,KS),I=1,3)
+         END IF
       END IF
 C
 C     List the frequency sets.  Try to catch all sets that use this

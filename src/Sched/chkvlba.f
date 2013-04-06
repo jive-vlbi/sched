@@ -135,11 +135,30 @@ C
 C
 C     Now check the synthesizer settings.  R8FREQ is a double
 C     precision version of SYNTH in MHz.  It is used later too.
+C     March 2013 SYNTH converted to double so this is simpler.  It is
+C     now just the MHz version of Synth.
 C
       DO I = 1, 3
-         R8FREQ(I) = DNINT( SYNTH(I,KS) * 1.D6 ) / 1.D3
-         IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 500.D0, 1, 100.D0, 0.D0, 
-     1               2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.
+C         R8FREQ(I) = DNINT( SYNTH(I,KS) * 1.D6 ) / 1.D3
+         R8FREQ(I) = SYNTH(I,KS) * 1.D3
+C
+C        We need two versions here, one for the old synthesizers and
+C        one for the new.  For the transition, only allow the fine
+C        tuning if MODETEST is set.  Also, the new synthesizer hardware
+C        will only be used for synthesizers 1 and 2.  An old style
+C        synthesizer with its coarse tuning restrictions will be 
+C        used for synthesizer 3.  The old synthesizers are thought to
+C        put out a cleaner signal and, hence, are better for multiplying
+C        up for receiver first LOs.
+C
+         IF( MODETEST(KS) .AND. ( I .EQ. 1 .OR. I .EQ. 2 ) ) THEN
+            IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 0.01D0, 0, 0.D0,
+     1          0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.
+        write(*,*) 'chkvlba badlo ', i, r8freq(i), ' ', errs
+         ELSE
+            IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 500.D0, 1, 100.D0, 
+     1          0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.
+         END IF
       END DO
 C
 C     Check the synthesizer settings against FIRSTLO.  Note that

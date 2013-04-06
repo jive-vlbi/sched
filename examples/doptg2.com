@@ -18,7 +18,8 @@
 #  Stick to lower case to get expected file names.
 #  Examples:
 #  set stalist="sc hn nl fd la pt kp ov br mk"
-set stalist="pt la hn"
+#  Include br to check the offset frequency in 7ghz.
+set stalist="pt br hn"
 #
 #  Set times and experiment code
 #

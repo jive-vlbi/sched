@@ -8,6 +8,8 @@ C     Update to 1.4 240796
 C
 C     Add comment about receiver, receiver LO, and 610 MHz filter
 C     for VLBA.  Aug. 11, 2011  R. C. Walker
+C     Add a digit to the FIRSTLO output to support the new VLBA
+C     synthesizers.  Mar. 20, 2013  RCW  (Synthesizers not in place yet.)
 C
       INCLUDE 'sched.inc' 
       INCLUDE 'schset.inc' 
@@ -62,7 +64,7 @@ C
                MSGTXT = ' '
 C
                WRITE( MSGTXT, '( 5X, A, A1, A, A, 1X, A1, 
-     1             1X, A, 1X, A1, 1X, A1, 1X, A1, F8.1, 1X, A, 1X, 
+     1             1X, A, 1X, A1, 1X, A1, 1X, A1, F9.2, 1X, A, 1X, 
      2             A1, 1X, A1)' ) 
      3             'if_def = ', LNK, 'IF_', 
      4             IFCHAN(ICH,KS)(1:LEN1(IFCHAN(ICH,KS))), COL, 

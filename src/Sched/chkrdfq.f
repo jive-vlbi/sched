@@ -281,7 +281,8 @@ C           percentage crossover at the end of the band opposite
 C           from the LO.  This may be hard to avoid with the highest
 C           bandwidths and a desire for a decent pcal frequency.
 C           The filter used will be the one that includes the band
-C           edge (should check with Matthias).
+C           edge described by BBCFREQ as confirmed by Matt Luce on 
+C           March 25, 2013.
 C
             ISIDEBD = 1
             IF( SIDEBD(ICH,KS) .EQ. 'L' ) ISIDEBD = -1

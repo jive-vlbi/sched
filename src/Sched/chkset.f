@@ -129,6 +129,27 @@ C
                ERRS = .TRUE.
             END IF
 C
+C           Check to see if two polarizations are expected from the
+C           same IF (I seen users do that one and the warning about
+C           not all bandwidth being in the IF is not too clear.
+C
+            IF( ICH .GE. 2 .AND. ICH .LT. NCHAN(KS) ) THEN
+               DO JCH = ICH, NCHAN(KS)
+                  IF( POL(ICH,KS) .NE. POL(JCH,KS) .AND. 
+     1                IFCHAN(ICH,KS) .EQ. IFCHAN(JCH,KS) ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( 7A, I3, 3A, I3, A )' )
+     1                  'CHKSET:  In setup ', SETNAME(KS)(1:LNAME),
+     2                  ' IF channel ', IFCHAN(ICH,KS), 
+     3                  ' is assigned to ', POL(ICH,KS), ' in chan ',
+     4                  ICH, ' and to ', POL(JCH,KS), ' in chan ',
+     5                  JCH, '  Not possible.'
+                     CALL WLOG( 1, MSGTXT )
+                     ERRS = .TRUE.
+                  END IF
+               END DO
+            END IF
+C
 C           Be sure bandwidth is not more than half the sample rate.
 C
             IF( VLBITP ) THEN

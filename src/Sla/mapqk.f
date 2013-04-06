@@ -62,11 +62,28 @@
 *     sla_DVDV        dot product
 *     sla_DMXV        matrix x vector
 *     sla_DCC2S       Cartesian to spherical
-*     sla_DRANRM      normalise angle 0-2Pi
+*     sla_DRANRM      normalize angle 0-2Pi
 *
-*  P.T.Wallace   Starlink   16 September 1995
+*  P.T.Wallace   Starlink   15 January 2000
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 2000 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE
@@ -75,7 +92,7 @@
 
 *  Arc seconds to radians
       DOUBLE PRECISION AS2R
-      PARAMETER (AS2R=0.4848136811095359949D-5)
+      PARAMETER (AS2R=0.484813681109535994D-5)
 
 *  Km/s to AU/year
       DOUBLE PRECISION VF
@@ -85,7 +102,7 @@
 
       DOUBLE PRECISION PMT,GR2E,AB1,EB(3),EHN(3),ABV(3),
      :                 Q(3),PXR,W,EM(3),P(3),PN(3),PDE,PDEP1,
-     :                 P1(3),P1DV,P1DVP1,P2(3),P3(3)
+     :                 P1(3),P1DV,P2(3),P3(3)
 
       DOUBLE PRECISION sla_DVDV,sla_DRANRM
 
@@ -111,7 +128,7 @@
       EM(2) =  PR*Q(1)-PD*SIN(RM)*SIN(DM)+W*Q(2)
       EM(3) =          PD*COS(DM)        +W*Q(3)
 
-*  Geocentric direction of star (normalised)
+*  Geocentric direction of star (normalized)
       DO I=1,3
          P(I) = Q(I)+PMT*EM(I)-PXR*EB(I)
       END DO
@@ -125,12 +142,11 @@
          P1(I) = PN(I)+W*(EHN(I)-PDE*PN(I))
       END DO
 
-*  Aberration
+*  Aberration (normalization omitted)
       P1DV = sla_DVDV(P1,ABV)
-      P1DVP1 = P1DV+1D0
       W = 1D0+P1DV/(AB1+1D0)
       DO I=1,3
-         P2(I) = (AB1*P1(I)+W*ABV(I))/P1DVP1
+         P2(I) = AB1*P1(I)+W*ABV(I)
       END DO
 
 *  Precession and nutation
