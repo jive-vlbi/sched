@@ -35,7 +35,7 @@ C
       INTEGER        LEN1
       INTEGER        SYNPRT
       LOGICAL        GOTIT
-      CHARACTER      VBCOM*(*), FETXT*6, FILTTXT*6
+      CHARACTER      VBCOM*(*), LOPRT*20, FETXT*6, FILTTXT*6
 
 C ------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VXVBRX starting.' )
@@ -44,6 +44,17 @@ C
 C
 C     Do for all stations.
 C                  IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
+C
+C
+C         Get the first two FE synth settings for the VLBA.
+C         This is for once the new synthesizers are installed.
+C
+          IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
+             WRITE( LOPRT, '( 2F10.2 )' ) SYNTH(1,KS) * 1.D3, 
+     1          SYNTH(2,KS) * 1.D3
+          ELSE
+             LOPRT = '  0.0   0.0 '
+          END IF
 C
 C         Get the receiver.  Recall that, on the VLBA,
 C         IFs A, B, C, D correspond to the 4 elements of the
@@ -64,6 +75,11 @@ C
 C         Get the receiver LO frequency, but only for the VLBA
 C         because this depends on the synthesizer settings which
 C         don't translate well for other stations.
+C
+C         Whenever the third synthesizer comes under the control
+C         of the Executor, we will likely want to put its frequency
+C         setting here even when it is not used.  But Matthias and
+C         I decided to hold off on that for now (RCW  March 2013).
 C
           IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
              IF( FETXT .EQ. '1cm' ) THEN
@@ -101,8 +117,8 @@ C     Fill out VBCOM
 C
       VBCOM = ' '
       IF( GOTIT ) THEN
-         WRITE( VBCOM, '( 1X, A, I6, 1X, A )' )
-     1       FETXT(1:LEN1(FETXT)), SYNPRT,
+         WRITE( VBCOM, '( 1X, A, 2X, A, I6, 1X, A )' )
+     1       LOPRT(1:LEN1(LOPRT)), FETXT(1:LEN1(FETXT)), SYNPRT,
      2       FILTTXT(1:LEN1(FILTTXT))
       ELSE
          VBCOM = ' '

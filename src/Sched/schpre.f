@@ -24,6 +24,12 @@ C     Modified for apparent rather than mean coordinates of date and
 C     B1950/J2000 coordinate transforms fixed by John Reynolds, 
 C     Feb. 1991
 C
+C     Updated the SLA routines to GNU licensed versions in April 2013.
+C     Without modification of this code, this caused the coordinates
+C     of date to change by a few tens of milli-arcseconds.  The B1950
+C     and J2000 did not change.
+
+C
       INCLUDE 'sched.inc'
 C
       INTEGER           ISRC, YEAR, DAY

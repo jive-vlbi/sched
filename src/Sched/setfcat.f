@@ -19,7 +19,7 @@ C
       INCLUDE   'schfreq.inc'
 C
       INTEGER        I, KS, KF, ICH, IIF, KIF, NBAD, NBWARN
-      INTEGER        USEKF, USEIF(MCHAN), BESTPRIO
+      INTEGER        USEKF, USEIF(MCHAN), BESTPRIO, LEN1
       LOGICAL        MATCH, GOT, NEEDCAT, OKIF(MCHAN,MFIF), TAKEIT
       CHARACTER      LASTPOL*4
       REAL           OVERLAP, CENTER
@@ -170,6 +170,12 @@ C
                CALL WLOG( 1, 
      1            '         in the setup file before any FREQ or ' //
      2            'DOPPLER shifts.' )
+               KF = IFREQNUM(1,KS)
+               SETMSG = ' '
+               WRITE( SETMSG, '( A, A )' ) 
+     1            '         IFs defined in frequency group: ', 
+     2            FRNAME(KF)(1:LEN1(FRNAME(KF)))
+               CALL WLOG( 1, SETMSG )
             ELSE IF( NBWARN .EQ. 2 ) THEN
                CALL WLOG( 1, 'SETFCAT: Additional bandwidth '//
      1            'warnings suppressed for small losses.' )
@@ -330,7 +336,7 @@ C
 C        Get the synthesizer settings if they were not already set.
 C
          DO I = 1, 3
-            IF( SYNTH(I,KS) .EQ. 0.0 ) SYNTH(I,KS) = FSYN(I,KF) 
+            IF( SYNTH(I,KS) .EQ. 0.D0 ) SYNTH(I,KS) = FSYN(I,KF) 
          END DO
 C
 C        Setting old VLA parameters removed for SCHED 10.2

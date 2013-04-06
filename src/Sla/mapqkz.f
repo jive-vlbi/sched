@@ -54,16 +54,28 @@
 *      about 1.85 arcsec at this radius, and decreases to zero as
 *      the centre of the disc is approached.
 *
-*  Called:
-*     sla_DCS2C       spherical to Cartesian
-*     sla_DVDV        dot product
-*     sla_DMXV        matrix x vector
-*     sla_DCC2S       Cartesian to spherical
-*     sla_DRANRM      normalise angle 0-2Pi
+*  Called:  sla_DCS2C, sla_DVDV, sla_DMXV, sla_DCC2S, sla_DRANRM
 *
-*  P.T.Wallace   Starlink   16 September 1995
+*  P.T.Wallace   Starlink   18 March 1999
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 1999 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE
@@ -72,7 +84,7 @@
 
       INTEGER I
 
-      DOUBLE PRECISION GR2E,AB1,EB(3),EHN(3),ABV(3),
+      DOUBLE PRECISION GR2E,AB1,EHN(3),ABV(3),
      :                 P(3),PDE,PDEP1,W,P1(3),P1DV,
      :                 P1DVP1,P2(3),P3(3)
 
@@ -85,7 +97,6 @@
       GR2E = AMPRMS(8)
       AB1 = AMPRMS(12)
       DO I=1,3
-         EB(I) = AMPRMS(I+1)
          EHN(I) = AMPRMS(I+4)
          ABV(I) = AMPRMS(I+8)
       END DO

@@ -62,14 +62,16 @@ C
 C     Dec. 19, 2012.  The synthesizers create tones at harmonics of 
 C     half the output frequency when working at or above 8.1 GHz.  Try
 C     to protect against those.  They exist because a doubler is used
-C     for the higher frequencies.
+C     for the higher frequencies.  This will probably not be a problem
+C     with the new synthesizers under development in 2013 for use in
+C     slots 1 and 2.
 C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
       INCLUDE   'schfreq.inc'
 C
       INTEGER    KS, I, J, K, L, NLO, NTLO, NHI, NHJ, NHT
-      INTEGER    BESTI, MLHAR, IHAR, LSETUP, DLO
+      INTEGER    BESTI, MLHAR, IHAR, LSETUP, DLO, SY(3)
       LOGICAL    TONHD, USEIT, GOTGOOD
       DOUBLE PRECISION   FMAX
       PARAMETER  ( NTLO = 56 )
@@ -108,18 +110,15 @@ C
        IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
 C
 C        Make a short list of the synthesizer settings already
-C        established.  Also do some initializations.
-C        I'm running into a variety of rounding and precision 
-C        issues with SYNTH being R*4 and all other frequencies
-C        being R*8.
+C        established.
 C
          NLO = 0
          DO I = 1, 3
-            IF( SYNTH(I,KS) .NE. 0.0 ) THEN
+            IF( SYNTH(I,KS) .NE. 0.D0 ) THEN
                NLO = NLO + 1
-               LO(NLO) = DBLE( NINT( SYNTH(I,KS) * 1000.0 ) ) / 1.D3
-               IF( LO(NLO) .LT. 1.D-5 ) LO(NLO) = 0.D0
-           END IF
+               LO(NLO) = SYNTH(I,KS)
+               SY(NLO) = I
+            END IF
          END DO
          TONHD = .TRUE.
 C
@@ -130,7 +129,7 @@ C
 C        Only do when 2 or 3 are preset.
 C        Go to the 5th harmonic of the primary, or 10th when
 C        checking harmonics of the tone at half the primary
-C        for LOs above 8.1 GHz.  Don't worry about signals
+C        for old type LOs above 8.1 GHz.  Don't worry about signals
 C        above 60 GHz.  Give special warning when one of the
 C        offending "harmonics" is the primary synthesizer output
 C        as I expect those will be strong.
@@ -140,7 +139,8 @@ C        a new station for the last setup file.
 C
          IF( NLO .GE. 2 .AND. ISETNUM(KS) .NE. LSETUP ) THEN
           DO I = 1, NLO - 1
-           IF( LO(I) .LE. 8.0 ) THEN
+           IF( LO(I) .LE. 8.0 .OR. 
+     1         ( MODETEST(KS) .AND. SY(I) .LT. 3 ) ) THEN
               LOI = LO(I)
               NHI = MIN( 5, INT( FMAX / LOI ) )
            ELSE
@@ -148,7 +148,8 @@ C
               NHI = MIN( 10, INT( FMAX / LOI ) )
            END IF
            DO J = I + 1, NLO
-            IF( LO(J) .LE. 8.0 ) THEN
+            IF( LO(J) .LE. 8.0 .OR. 
+     1         ( MODETEST(KS) .AND. SY(J) .LT. 3 )) THEN
                LOJ = LO(J)
                NHJ = MIN( 5, INT( FMAX / LOJ ) )
             ELSE
@@ -199,7 +200,19 @@ C
           I = 1
 C
 C         Loop over the TLO options list for values for the unset
-C         synthesizers.
+C         synthesizers.  Note that this may need to change with
+C         the new synthesizers which have finer set points and for
+C         which power consumption considerations suggest that the
+C         sum of SYNTH(1,KS)+SYNTH(2,KS) should be close to 18 GHz
+C         ideally.  For now, the existing algorithm should find
+C         a usable frequency so don't worry about it yet.
+C
+C         For future thinking: One way to set a new synthesizer 
+C         would be to use a frequency that is very close to a 
+C         harmonic of another, so the harmonics never separate by
+C         more than 500 MHz.  But with 2 preset LOs, especially if
+C         one is the old-style one with coarse tuning, it won't 
+C         be that simple.
 C
           MLHAR = 0
           DO WHILE( I .LE. NTLO )
@@ -208,7 +221,7 @@ C          Avoid putting a tone in the 2cm band - jump down below
 C          11.5 if this is 2cm.  This protects the whole band.  Is
 C          is now needed for other bands too?
 C
-           IF( TLO(I) .LE. 11.5 .OR. ( FE(2,KS) .NE. '2cm' .AND.
+           IF( TLO(I) .LE. 11.5D0 .OR. ( FE(2,KS) .NE. '2cm' .AND.
      1                 FE(4,KS) .NE. '2cm' ) ) THEN
 C
 C           Loop over the assigned synthesizer frequencies (set above)
@@ -232,19 +245,20 @@ C           Don't worry about tones above 60 GHz (I picked that out of
 C           thin air).
 C
             USEIT = .TRUE.
-            IF( TLO(I) .LE. 8.0 ) THEN
+            IF( TLO(I) .LE. 8.D0 ) THEN
               LOT = TLO(I)
               NHT = MIN( 5, INT( FMAX / LOT ) )
             ELSE
-              LOT = TLO(I) / 2.0
+              LOT = TLO(I) / 2.D0
               NHT = MIN( 10, INT( FMAX / LOT ) )
             END IF
             DO J = 1, NLO
-             IF( LO(J) .LE. 8.0 ) THEN
+             IF( LO(J) .LE. 8.D0 .OR. 
+     1           ( MODETEST(KS) .AND. SY(J) .LT. 3 ) ) THEN
                LOJ = LO(J)
                NHJ = MIN( 10, INT( FMAX / LOJ ) )
              ELSE
-               LOJ = LO(J) / 2.0
+               LOJ = LO(J) / 2.D0
                NHJ = MIN( 10, INT( FMAX / LOJ ) )
              END IF
 C
@@ -294,29 +308,32 @@ C        synthesizers to the value selected above.
 C
   100    CONTINUE
          DO I = 1, 3
-            IF( SYNTH(I,KS) .EQ. 0.0 ) THEN
+            IF( SYNTH(I,KS) .EQ. 0.D0 ) THEN
                SYNTH(I,KS) = TLO(DLO)
             END IF
          END DO
 C
 C        Now, if necessary, warn of frequencies of possible birdies
-C        with the new synthesizer.  This is just warnings so skip
+C        with the synthesizer.  This is just warnings so skip
 C        if on a setup file we've done for another VLBA station.
+C        Note that the concern about the fundamental tone being
+C        at half the output is for the old synthesizers, not the
+C        new ones to be deployed in slots 1 and 2 in 2014.
 C
          IF( .NOT. GOTGOOD .AND. ISETNUM(KS) .NE. LSETUP ) THEN
-          IF( TLO(DLO) .LE. 8.0 ) THEN
+          IF( TLO(DLO) .LE. 8.D0 ) THEN
              LOT = TLO(DLO)
              NHT = MIN( 5, INT( FMAX / LOT ) )
           ELSE
-             LOT = TLO(DLO) / 2.0
+             LOT = TLO(DLO) / 2.D0
              NHT = MIN( 10, INT( FMAX / LOT ) )
           END IF
           DO I = I + 1, NLO
-           IF( LO(I) .LE. 8.0 ) THEN
+           IF( LO(I) .LE. 8.D0 ) THEN
               LOI = LO(I)
               NHI = MIN( 5, INT( FMAX / LOI ) )
            ELSE
-              LOI = LO(I) / 2.0
+              LOI = LO(I) / 2.D0
               NHI = MIN( 10, INT( FMAX / LOI ) )
            END IF
            DO K = 1, NHT

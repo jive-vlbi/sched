@@ -1,21 +1,19 @@
-      DOUBLE PRECISION FUNCTION sla_EPB2D (EPB)
+      SUBROUTINE sla_DVXV (VA, VB, VC)
 *+
-*     - - - - - -
-*      E P B 2 D
-*     - - - - - -
+*     - - - - -
+*      D V X V
+*     - - - - -
 *
-*  Conversion of Besselian Epoch to Modified Julian Date
-*  (double precision)
+*  Vector product of two 3-vectors  (double precision)
 *
 *  Given:
-*     EPB      dp       Besselian Epoch
+*      VA      dp(3)     first vector
+*      VB      dp(3)     second vector
 *
-*  The result is the Modified Julian Date (JD - 2400000.5).
+*  Returned:
+*      VC      dp(3)     vector result
 *
-*  Reference:
-*     Lieske,J.H., 1979. Astron.Astrophys.,73,282.
-*
-*  P.T.Wallace   Starlink   February 1984
+*  P.T.Wallace   Starlink   March 1986
 *
 *  Copyright (C) 1995 Rutherford Appleton Laboratory
 *
@@ -39,9 +37,20 @@
 
       IMPLICIT NONE
 
-      DOUBLE PRECISION EPB
+      DOUBLE PRECISION VA(3),VB(3),VC(3)
+
+      DOUBLE PRECISION VW(3)
+      INTEGER I
 
 
-      sla_EPB2D = 15019.81352D0 + (EPB-1900D0)*365.242198781D0
+*  Form the vector product VA cross VB
+      VW(1)=VA(2)*VB(3)-VA(3)*VB(2)
+      VW(2)=VA(3)*VB(1)-VA(1)*VB(3)
+      VW(3)=VA(1)*VB(2)-VA(2)*VB(1)
+
+*  Return the result
+      DO I=1,3
+         VC(I)=VW(I)
+      END DO
 
       END

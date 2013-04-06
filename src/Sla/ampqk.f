@@ -37,25 +37,37 @@
 *     (also Lederle & Schwan, Astron. Astrophys. 134,
 *      1-6, 1984)
 *
-*  Notes:
+*  Note:
 *
-*  1)  The accuracy is limited by the routine sla_EVP, called
-*      by sla_MAPPA, which computes the Earth position and
-*      velocity using the methods of Stumpff.  The maximum
-*      error is about 0.3 milliarcsecond.
-*
-*  2)  Iterative techniques are used for the aberration and
-*      light deflection corrections so that the routines
-*      sla_AMP (or sla_AMPQK) and sla_MAP (or sla_MAPQK) are
-*      accurate inverses;  even at the edge of the Sun's disc
-*      the discrepancy is only about 1 nanoarcsecond.
+*     Iterative techniques are used for the aberration and
+*     light deflection corrections so that the routines
+*     sla_AMP (or sla_AMPQK) and sla_MAP (or sla_MAPQK) are
+*     accurate inverses;  even at the edge of the Sun's disc
+*     the discrepancy is only about 1 nanoarcsecond.
 *
 *  Called:  sla_DCS2C, sla_DIMXV, sla_DVDV, sla_DVN, sla_DCC2S,
 *           sla_DRANRM
 *
-*  P.T.Wallace   Starlink   21 June 1993
+*  P.T.Wallace   Starlink   7 May 2000
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 2000 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE

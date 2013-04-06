@@ -32,6 +32,7 @@ C     Facilitate debugging of routines that don't have sched.inc,
 C     or, by setting SDEBUG true, debugging the frequency setting.
 C
       SDEBUG = DEBUG
+C      SDEBUG = .TRUE.
 C
 C     Write some debugging output.
 C

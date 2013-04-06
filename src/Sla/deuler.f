@@ -8,13 +8,13 @@
 *  rotations about specified Cartesian axes (double precision)
 *
 *  Given:
-*    ORDER  c*(*)    specifies about which axes the rotations occur
-*    PHI    dp       1st rotation (radians)
-*    THETA  dp       2nd rotation (   "   )
-*    PSI    dp       3rd rotation (   "   )
+*    ORDER   c*(*)   specifies about which axes the rotations occur
+*    PHI     d       1st rotation (radians)
+*    THETA   d       2nd rotation (   "   )
+*    PSI     d       3rd rotation (   "   )
 *
 *  Returned:
-*    RMAT   dp(3,3)  rotation matrix
+*    RMAT    d(3,3)  rotation matrix
 *
 *  A rotation is positive when the reference frame rotates
 *  anticlockwise as seen looking towards the origin from the
@@ -32,14 +32,32 @@
 *  axis labelling/numbering conventions apply;  the xyz (=123)
 *  triad is right-handed.  Thus, the 'ZXZ' example given above
 *  could be written 'zxz' or '313' (or even 'ZxZ' or '3xZ').  ORDER
-*  is terminated by length or by the first unrecognised character.
+*  is terminated by length or by the first unrecognized character.
 *
 *  Fewer than three rotations are acceptable, in which case the later
-*  angle arguments are ignored.  Zero rotations produces a unit RMAT.
+*  angle arguments are ignored.  If all rotations are zero, the
+*  identity matrix is produced.
 *
-*  P.T.Wallace   Starlink   November 1988
+*  P.T.Wallace   Starlink   23 May 1997
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 1997 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE
@@ -53,7 +71,7 @@
 
 
 
-*  Initialise result matrix
+*  Initialize result matrix
       DO J=1,3
          DO I=1,3
             IF (I.NE.J) THEN
@@ -71,7 +89,7 @@
       DO N=1,3
          IF (N.LE.L) THEN
 
-*        Initialise rotation matrix for the current rotation
+*        Initialize rotation matrix for the current rotation
             DO J=1,3
                DO I=1,3
                   IF (I.NE.J) THEN
@@ -127,7 +145,7 @@
 
             ELSE
 
-*           Unrecognised character - fake end of string
+*           Unrecognized character - fake end of string
                L = 0
 
             END IF

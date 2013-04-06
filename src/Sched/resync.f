@@ -9,21 +9,27 @@ C     medium is started after being stopped and when a formatter reconfigure
 C     knocks the correlator out of sync by giving invalid time codes
 C     (constant time in the VLBA case).
 C
+C     With the RDBE/MARK5C system and DiFX, the scans actually start at
+C     TONSRC and there are no resync or reconfigure losses.  So deal with
+C     that simple case early, but do put in values for TCORR as that is
+C     one possible item for the summary.
+C
 C     Assumed sync times:
-C         VLBA correlator with tape (time/speedup): 8s/1   13s/2   25s/4
-C         VLBA correlator with disk:  tape resync + 10s (improve soon?)
+C         Old VLBA correlator with tape (time/speedup): 8s/1   13s/2   25s/4
+C         Old VLBA correlator with disk:  tape resync + 10s (improve soon?)
 C         VLBADIFX - instant sync.
 C         Others (JIVE, Bonn, Haystack) with disk: 1s
 C     Assumed reconfigure times (need confirmation):
 C         VLBA Formatter: 8 sec.
 C         MarkIV Formatter: 3 sec.  But no big effect on resync.
-C         RDBE - not yet known.
+C         RDBE - 5 seconds
 C     A reconfigure slows sync on the correlator. 
-C         VLBA:  Add 7s to reconfigure+resync 
+C         Old VLBA:  Add 7s to reconfigure+resync 
 C            Much longer sync times occur on 10-20% of stations
 C         JIVE:  20-30s.  Call it 25s.  Consistent?
 C              This is when station setup really changes (subjob change),
 C              not just a reconfigure, which happens every scan on MkIV.
+C         DiFX:  instant.
 C         Others:  Not sure, assume no effect.
 C
 C     Note that a pcal detector change triggers a reconfigure in VLBA
@@ -66,7 +72,25 @@ C
          NSSCAN = 0
          DO ISCN = SCAN1, SCANL
             TCORR(ISCN,ISTA) = 0.D0
-            IF( STASCN(ISCN,ISTA) ) THEN
+C
+C           Deal with the simple case of RDBE/MARK5C and DiFX.  
+C           Eventually see if the DBBC and/or JIVE correlator 
+C           should be here.
+C
+            IF( STASCN(ISCN,ISTA) .AND.
+     1          DAR(STANUM(ISTA))(1:4) .EQ. 'RDBE' .AND.
+     2          ( CORREL(1:7) .EQ. 'SOCORRO' .OR.
+     3            CORREL(1:8) .EQ. 'VLBADIFX' .OR.
+     4          CORREL(1:4) .EQ. 'VLBA' ) ) THEN
+C
+               TCORR(ISCN,ISTA) = 
+     1            MAX( ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) ),  
+     2                   TONSRC(ISCN,ISTA) )
+               TTSYNC(ISTA) = 0.D0
+C
+C           Deal with the other cases.
+C
+            ELSE IF( STASCN(ISCN,ISTA) ) THEN
                KS = NSETUP(ISCN,ISTA)
                NSSCAN = NSSCAN + 1
                SCNRCF = .FALSE.
@@ -159,7 +183,7 @@ C
                      END IF
 C
 C                 Others - unknown so set TRECON to stop time, but don't
-C                 count reconfigures.
+C                 count reconfigures.  This will include DAR=RDBE
 C
                   ELSE IF( NEWCONF ) THEN
                      IF( LSCN .EQ. 0 ) THEN
@@ -177,7 +201,7 @@ C                 to get the sync time.
 C
                   TSADD = 0.D0
 C
-C                 Start with the VLBA hardware correlator.
+C                 Start with the old VLBA hardware correlator.
 C
                   IF( LSCN .EQ. 0 ) THEN
                      NEWSYNC = .TRUE.

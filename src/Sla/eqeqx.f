@@ -18,12 +18,29 @@
 *  References:  IAU Resolution C7, Recommendation 3 (1994)
 *               Capitaine, N. & Gontier, A.-M., Astron. Astrophys.,
 *               275, 645-650 (1993)
-*               
+*
 *  Called:  sla_NUTC
 *
-*  Patrick Wallace   Starlink   21 November 1994
+*  Patrick Wallace   Starlink   23 August 1996
 *
-*  Copyright (C) 1995 Rutherford Appleton Laboratory
+*  Copyright (C) 1996 Rutherford Appleton Laboratory
+*
+*  License:
+*    This program is free software; you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation; either version 2 of the License, or
+*    (at your option) any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program (see SLA_CONDITIONS); if not, write to the 
+*    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+*    Boston, MA  02111-1307  USA
+*
 *-
 
       IMPLICIT NONE
@@ -33,7 +50,7 @@
 *  Turns to arc seconds and arc seconds to radians
       DOUBLE PRECISION T2AS,AS2R
       PARAMETER (T2AS=1296000D0,
-     :           AS2R=0.4848136811095359949D-05)
+     :           AS2R=0.484813681109535994D-5)
 
       DOUBLE PRECISION T,OM,DPSI,DEPS,EPS0
 

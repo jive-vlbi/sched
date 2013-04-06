@@ -91,7 +91,7 @@ C     IFREQNUM is the frequency catalog entry that applies to the group.
 C     It has been made channel dependent so that multiple groups can
 C     be used.
 C     IFREQIF is the IF from the freq. catalog to use for the channel.
-C     SDEBUG is set equal to DEBUG in sched.inc.
+C     SDEBUG is set equal to DEBUG, which is in sched.inc, by RDSET.
 C     SFCHAN is a pointer from the setup group channel to the setup
 C      file logical channel.
 C     SGCHAN is the corresponding pointer from the setup file logical
@@ -123,11 +123,11 @@ C
       DOUBLE PRECISION  BBSYN2(MCHAN,MSET)
       DOUBLE PRECISION  BBFILT(MCHAN,MSET)
       DOUBLE PRECISION  CORINV(MCHAN,MSET)
+      DOUBLE PRECISION  SYNTH(3,MSET)
       REAL              AZCOLIM(MSET), ELCOLIM(MSET)
       REAL              PTINCR(MSET)
       REAL              PTOFF(MSET)
       REAL              SAMPRATE(MSET)
-      REAL              SYNTH(3,MSET)
       REAL              SPEEDH(MSET)
       REAL              SPEEDL(MSET)
       REAL              FANOUT(MSET)
@@ -196,9 +196,9 @@ C
       INTEGER           MLEVEL, LLEVEL(MCHAN)
 C
       COMMON  /SETN2A/  FREQREF, FIRSTLO, FIFMIN, FIFMAX,
-     1                  BBSYN, BBSYN2, BBFILT, CORINV, 
+     1                  BBSYN, BBSYN2, BBFILT, CORINV, SYNTH, 
      2                  AZCOLIM, ELCOLIM, PTINCR,  PTOFF, 
-     3                  SAMPRATE, SYNTH, SPEEDH, SPEEDL, FANOUT,
+     3                  SAMPRATE, SPEEDH, SPEEDL, FANOUT,
      4                  SPEEDUP, BESTOVER, TOTBW
       COMMON  /SETN2B/  NCHAN, ISETSTA, TRACK, PERIOD, BITS, MLEVEL,
      1                  LEVEL, LLEVEL, BBC, TAPEMODE, TPMODE, SWTCHDUR,
