@@ -105,18 +105,24 @@ C
 C        Set the default track assignments for wide band modes.
 C
          DO KS = 1, NSET
+            print*, 'DBE=', DBE(ISETSTA(KS))
             IF( TRACK(1,1,KS) .EQ. 0 .AND.
      1        ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR.
      2          FORMAT(KS)(1:4) .EQ. 'MKIV' .OR.
      3          FORMAT(KS)(1:4) .EQ. 'VDIF' .OR.
-     4          FORMAT(KS)(1:6) .EQ. 'MARK5B' .OR. 
-     5          FORMAT(KS)(1:3) .EQ. 'LBA' ) ) THEN
+     4          (FORMAT(KS)(1:6) .EQ. 'MARK5B' .AND.
+     5               (DBE(ISETSTA(KS))(1:4) .NE. 'RDBE' .OR.
+                      DAR(ISETSTA(KS)(1:4) .NE. 'NONE' ) .OR. 
+     6          FORMAT(KS)(1:3) .EQ. 'LBA' ) ) THEN
 C
                CALL SETTRK( NCHAN(KS), TAPEMODE(KS), FORMAT(KS), 
      1               BITS(1,KS), TRACK(1,1,KS), MCHAN, BBC(1,KS), 
      2               SIDEBD(1,KS), KS, TWOHEAD, DEBUG, ILOG )
 C
             ELSE IF( TRACK(1,1,KS) .EQ. 0 .AND.
+C              If we get here it's probably an NRAO RDBE masquerading as
+C              MARK5B. Just write the MARK5B bitstream assuming the
+C              channel ordering will match.
      1        FORMAT(KS)(1:6) .EQ. 'MARK5B' ) THEN
                IF( BITS(1,KS) .EQ. 2 ) THEN
                   DO ICH = 1, NCHAN(KS)
