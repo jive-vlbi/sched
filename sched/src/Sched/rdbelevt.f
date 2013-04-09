@@ -103,77 +103,78 @@ C                    about the first time the setup is seen.  There
 C                    doesn't seem to be any reasonable way to deal
 C                    with restarts and still allow frequency referencing.
 C
-                     IF( LSCN .NE. 0 .AND.
-     1                 ( STARTS - STOPJ(LSCN) .LT. 
-     2                   ( TSAMPLEV - TOL ) * ONESEC )) THEN
+                     IF( LSCN .NE. 0 ) THEN
+                       IF( STARTS - STOPJ(LSCN) .LT. 
+     1                     ( TSAMPLEV - TOL ) * ONESEC ) THEN
 C
-C                       Issue a description of the problem.
+C                         Issue a description of the problem.
 C
-                        IF( WARNMSG .AND. .NOT. SETSEEN(KS) ) THEN
-                           CALL WRTMSG( 1, 'RDBELEVT', 
-     1                          "Level_Settings" )
-                           WARNMSG = .FALSE.
-                        END IF
+                          IF( WARNMSG .AND. .NOT. SETSEEN(KS) ) THEN
+                             CALL WRTMSG( 1, 'RDBELEVT', 
+     1                            "Level_Settings" )
+                             WARNMSG = .FALSE.
+                          END IF
 C
-C                       Issue the specific warning which is different
-C                       the first time than later because it will always
-C                       be a problem the first time, but usually not later.
+C                         Issue the specific warning which is different
+C                         the first time than later because it will always
+C                         be a problem the first time, but usually not later.
 C
-                        IF( SETSEEN(KS) ) THEN
+                          IF( SETSEEN(KS) ) THEN
 C
-C                          Don't do this one, but save the code in case
-C                          we decide to change that.
+C                            Don't do this one, but save the code in case
+C                            we decide to change that.
 C
-C                           IF( TSWARN1 ) THEN
+C                             IF( TSWARN1 ) THEN
 C
-C                             Issue a mild warning
+C                               Issue a mild warning
 C
-C                              MSGTXT = ' '
-C                              WRITE( MSGTXT, '( 4A, I4 )' ) 
-C     1                           'RDBELEVT: Excessively short scan ',
-C     2                           'gap at ', STANAME(ISTA), 
-C     3                           ' at scan ', ISCN
-C                              CALL WLOG( 1, MSGTXT )
-C                              MSGTXT = ' '
-C                              WRITE( MSGTXT, '( 10X, 2A, I4, A )' ) 
-C     1                           'after switch back to use of a ', 
-C     2                           'setup group, ', KS, 
-C     3                           ', that was seen earlier.'
-C                              CALL WLOG( 1, MSGTXT )
-C                              CALL WLOG( 1, 
-C     1                         '          This could degrade data '//
-C     2                         'if the on-line system is restarted.' )
-C                           END IF
-C                           WARNMSG = .FALSE.
-C                           TSWARN1 = .FALSE.
-                        ELSE
-                           IF( WARNMSG ) THEN
-                              CALL WRTMSG( 1, 'RDBELEVT', 
-     1                             "Level_Settings" )
-                              WARNMSG = .FALSE.
-                           END IF
-                           WARNMSG = .FALSE.
-                           IF( TSWARN2 ) THEN
+C                                MSGTXT = ' '
+C                                WRITE( MSGTXT, '( 4A, I4 )' ) 
+C     1                             'RDBELEVT: Excessively short scan ',
+C     2                             'gap at ', STANAME(ISTA), 
+C     3                             ' at scan ', ISCN
+C                                CALL WLOG( 1, MSGTXT )
+C                                MSGTXT = ' '
+C                                WRITE( MSGTXT, '( 10X, 2A, I4, A )' ) 
+C     1                             'after switch back to use of a ', 
+C     2                             'setup group, ', KS, 
+C     3                             ', that was seen earlier.'
+C                                CALL WLOG( 1, MSGTXT )
+C                                CALL WLOG( 1, 
+C     1                           '          This could degrade data '//
+C     2                           'if the on-line system is restarted.' )
+C                             END IF
+C                             WARNMSG = .FALSE.
+C                             TSWARN1 = .FALSE.
+                          ELSE
+                             IF( WARNMSG ) THEN
+                                CALL WRTMSG( 1, 'RDBELEVT', 
+     1                               "Level_Settings" )
+                                WARNMSG = .FALSE.
+                             END IF
+                             WARNMSG = .FALSE.
+                             IF( TSWARN2 ) THEN
 C
-C                             Strong warning
+C                               Strong warning
 C
-                              MSGTXT = ' '
-                              WRITE( MSGTXT, '( 2A, I4, A )' ) 
-     1                           'RDBELEVT: Excessively short scan ',
-     2                           'gap for the first scan (', ISCN, ')'
-                              CALL WLOG( 1, MSGTXT )
-                              MSGTXT = ' '
-                              WRITE( MSGTXT, '( 10X, 4A )' ) 
-     1                           'with setup file',
-     2                           SETNAME(KS)(1:LEN1(SETNAME(KS))), 
-     3                           ' at ', STANAME(ISTA)
-                              CALL WLOG( 1, MSGTXT )
-                              CALL WLOG( 1, 
-     1                         '          This will cause loss of '//
-     2                         'data at the start of this scan.' )
-                           END IF
-                           TSWARN2 = .FALSE.
-                        END IF
+                                MSGTXT = ' '
+                                WRITE( MSGTXT, '( 2A, I4, A )' ) 
+     1                             'RDBELEVT: Excessively short scan ',
+     2                             'gap for the first scan (', ISCN, ')'
+                                CALL WLOG( 1, MSGTXT )
+                                MSGTXT = ' '
+                                WRITE( MSGTXT, '( 10X, 4A )' ) 
+     1                             'with setup file',
+     2                             SETNAME(KS)(1:LEN1(SETNAME(KS))), 
+     3                             ' at ', STANAME(ISTA)
+                                CALL WLOG( 1, MSGTXT )
+                                CALL WLOG( 1, 
+     1                           '          This will cause loss of '//
+     2                           'data at the start of this scan.' )
+                             END IF
+                             TSWARN2 = .FALSE.
+                          END IF
+                       END IF
                      END IF
 C
                   END IF
@@ -182,29 +183,30 @@ C                 Always check if there is time for the resampling level set.
 C                 If no gap is set, both one of the above warnings, and
 C                 this one might be triggered.
 C
-                  IF( LSCN .NE. 0 .AND. 
-     1                ( STARTS - STOPJ(LSCN) .LT. TRESAMP * ONESEC ) )
-     2                  THEN
-                     IF( WARNMSG ) THEN
-                        CALL WRTMSG( 1, 'RDBELEVT', 
-     1                       "Level_Settings" )
-                        WARNMSG = .FALSE.
-                     END IF
-                     WARNMSG = .FALSE.
-                     IF( TRWARN ) THEN
+                  IF( LSCN .NE. 0 ) THEN
+                     IF( STARTS - STOPJ(LSCN) .LT. TRESAMP * ONESEC )
+     1                  THEN
+                       IF( WARNMSG ) THEN
+                          CALL WRTMSG( 1, 'RDBELEVT', 
+     1                         "Level_Settings" )
+                          WARNMSG = .FALSE.
+                       END IF
+                       WARNMSG = .FALSE.
+                       IF( TRWARN ) THEN
 C
-C                       Mild warning
+C                         Mild warning
 C
-                        WRITE( MSGTXT, '( 2A, I4, 2A )' ) 
-     1                     'RDBELEVT: Excessively short scan ',
-     2                     'gap for scan', ISCN, 
-     3                     ' without setup change at ', STANAME(ISTA)
-                        CALL WLOG( 1, MSGTXT )
-                        CALL WLOG( 1, '          The first few '//
-     1                     'of the scan may be corrupted.' )
+                          WRITE( MSGTXT, '( 2A, I4, 2A )' ) 
+     1                       'RDBELEVT: Excessively short scan ',
+     2                       'gap for scan', ISCN, 
+     3                       ' without setup change at ', STANAME(ISTA)
+                          CALL WLOG( 1, MSGTXT )
+                          CALL WLOG( 1, '          The first few '//
+     1                       'of the scan may be corrupted.' )
 
+                       END IF
+                       TRWARN = .FALSE.
                      END IF
-                     TRWARN = .FALSE.
                   END IF
 C
 C                 Keep track of the last setup and scan for this station
