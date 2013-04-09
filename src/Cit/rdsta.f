@@ -49,10 +49,11 @@ C
       INTEGER        MODE, IER, VLBOPE, LEN1, IDB
       LOGICAL        FOPEN, NOLOC, LOCWARN, LOCNONE, GOTLOC
       REAL*8         NONAME, XX, NONE, ALTAZ, CVLBA, BLANK, CCONT
+      REAL*8         ASTRO
       CHARACTER      CNAME*50, LOCTST*80
       CHARACTER      RESULT*255
       SAVE           FOPEN, NONAME, XX, NONE, ALTAZ, CVLBA, BLANK
-      SAVE           NOLOC, LOCWARN, CCONT
+      SAVE           NOLOC, LOCWARN, CCONT, ASTRO
 C
 C     Catalog input parameters.
 C
@@ -79,6 +80,7 @@ C
          CALL KPACK( 'ALTAZ   ', ALTAZ )
          CALL KPACK( 'VLBA    ', CVLBA )
          CALL KPACK( 'CONT    ', CCONT )
+         CALL KPACK( 'ASTRO   ', ASTRO )
          CALL KPACK( '        ', BLANK )
          CALL KEYCHR( 'VERSION', ' ', 20, KD, KC, KI )
          CALL KEYCHR( 'STAtion', ' ', 8, KD, KC, KI )
@@ -210,7 +212,7 @@ C
       KD( KEYPTR( 'TLEVSET', KC, KI ) ) = 0.0D6
       KD( KEYPTR( 'TSCAL', KC, KI ) ) = CCONT
       KD( KEYPTR( 'ENDCAT', KC, KI ) ) = UNSET
-      KD( KEYPTR( 'DBBCVER', KC, KI ) ) = BLANK
+      KD( KEYPTR( 'DBBCVER', KC, KI ) ) = ASTRO
 C
 C     Reset the horizon mask.
 C
