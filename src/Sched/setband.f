@@ -90,9 +90,7 @@ C
 C           Abort if this is an RDBE.
 C
             IF( DBE(KS) .EQ. 'RDBE_PFB' .OR. 
-     1          DBE(KS) .EQ. 'RDBE_DDC' .OR.
-     2          DBE(KS) .EQ. 'DBBC_PFB' .OR. 
-     3          DBE(KS) .EQ. 'DBBC_DDC' ) THEN
+     1          DBE(KS) .EQ. 'RDBE_DDC' ) THEN
                CALL ERRLOG( 
      1            'SETBAND: SCHED cannot yet set frequencies ' //
      2            'from just a BAND specification for RDBE and '//
