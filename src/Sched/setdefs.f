@@ -105,7 +105,6 @@ C
 C        Set the default track assignments for wide band modes.
 C
          DO KS = 1, NSET
-            print*, 'DBE=', DBE(ISETSTA(KS))
             IF( TRACK(1,1,KS) .EQ. 0 .AND.
      1        ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR.
      2          FORMAT(KS)(1:4) .EQ. 'MKIV' .OR.
