@@ -101,18 +101,21 @@ C
      1  '         GEOSLEW=', GEOSLEW, '  GEOSLOW= ', GEOSLOW,
      3  '  GELOWEL=', GEOLOWEL,'  GEOHIEL=', GEOHIEL
       CALL WLOG( 1, MSGTXT )
+      CALL WLOG( 1, 
+     1  '         See sched.runlog for details of the build process.' )
+C
       IF( GEOPRT .GE. 0 ) THEN
          MSGTXT = ' '
          WRITE( MSGTXT, '( A )' ),'       Note in fit, SecZ < 4 '
      1     // 'treated as 4 to avoid favoring'
      2     // ' extreme low elevations.'
-         CALL WLOG( 1, MSGTXT )
-         CALL WLOG( 1, 
+         CALL WLOG( 0, MSGTXT )
+         CALL WLOG( 0, 
      1       'Elevations at center for sources considered are: ' )
          MSGTXT = ' '
          WRITE( MSGTXT, '( 18X, A, 20( A3, 2X ) )' ) 'Prio ',
      1        (STCODE(STANUM(ISTA)),ISTA=1,MSPRT)
-         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 0, MSGTXT )
          MSGTXT = ' '
       END IF
 C
@@ -257,7 +260,7 @@ C
                WRITE( MSGTXT(ICH:ICH+30), '( A, F5.0, A )' )
      1              '  Too near sun:', SRCSEP, ' deg.'
             END IF
-            CALL WLOG(1,MSGTXT)
+            CALL WLOG(0,MSGTXT)
          END IF
 C
       END DO

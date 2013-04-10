@@ -51,7 +51,7 @@ C
 C
 C         Recordings
 C
-      CALL KEYADD( 'DBE',    0.D0, 1, KD, KC, KI )
+      CALL KEYCHR( 'DBE',    ' ', 8, KD, KC, KI )
       CALL KEYCHR( 'FIRMFILE' , ' ', 80, KD, KC, KI )
       CALL KEYADD( 'FORMAT', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'MODETEST', NOTSET, 1, KD, KC, KI )
