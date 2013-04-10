@@ -230,7 +230,7 @@ C
             WRITE( MSGTXT, '( A, 5I5 )' ) 
      1         'GEOQUAL skipping fit - inadequate data ', 
      2         NSTA, NBAS, SC1, SC1A, SC2
-            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 0, MSGTXT )
             MSGTXT = ' '
          END IF
       ELSE
@@ -256,7 +256,7 @@ C
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, I5, A, 20L2  )' ) ' Scan: ', ISCN, 
      1          '  Stations in scan: ', (STASCN(ISCN,ISTA),ISTA=1,NSTA)
-               CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 0, MSGTXT )
             END DO
          END IF
          IF( GEOPRT .GE. 1 ) THEN
@@ -265,12 +265,12 @@ C
                WRITE( MSGTXT, '( 3A, 2I5, 3A )' ) 
      1            ' GEOQUAL: Fit error when testing ', SCNSRC(SC2), 
      2            ' to scans:', SC1, SC2, ' Skip source this scan.' 
-               CALL WLOG( 1, MSGTXT )
-               CALL WLOG( 1, '        This message can usually be'//
+               CALL WLOG( 0, MSGTXT )
+               CALL WLOG( 0, '        This message can usually be'//
      1            ' ignored safely when inserting geodetic segments.' )
                LSC2 = SC2
             ELSE
-               CALL WLOG( 1, ' GEOQUAL: Similar error testing '//
+               CALL WLOG( 0, ' GEOQUAL: Similar error testing '//
      1             SCNSRC(SC2) )
             END IF
 C              
@@ -291,7 +291,7 @@ C
          MSGTXT = ' '
          WRITE( MSGTXT, '( A )' )
      1        'GEOQUAL:   Sta  Zatm RMS      El by scan. '
-         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 0, MSGTXT )
       END IF
       DO ISTA = 1, NSTA
          IF( STASCN(JSCN,ISTA) ) THEN
@@ -327,7 +327,7 @@ C
                   END IF
                   ICH = ICH + 6
                END DO
-               CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 0, MSGTXT )
                MSGTXT = ' '
             END IF
          END IF

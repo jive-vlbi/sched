@@ -129,7 +129,7 @@ C
                END IF
                ICH = ICH + 7
             END DO
-            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 0, MSGTXT )
          END IF
 C
       END IF

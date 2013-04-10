@@ -1,9 +1,9 @@
       SUBROUTINE SETTRK( NCHAN, TAPEMODE, FORMAT, BITS, TRACK, MCHAN,
-     1                   KBBC, SIDEBAND, KS, TWOHEAD, DEBUG, ILOG )
+     1           KBBC, SIDEBAND, DBE, DAR, KS, TWOHEAD, DEBUG, ILOG )
 C
 C     Routine for SCHED, called by SETDEFS, that sets the track 
 C     assignments, if needed.  It will only be called if
-C     TRACK1(1) is 0 which is the trigger to use this routine.
+C     TRACK(1,1,KS) is 0 which is the trigger to use this routine.
 C
 C     Note that SETDEF calls this routine with the element of the 
 C     arrays in the call argument for a particular setup.  That means
@@ -14,6 +14,7 @@ C
       INTEGER    MCHAN, KS, ILOG
       INTEGER    NCHAN, TAPEMODE, BITS, TRACK(MCHAN,8), KBBC(MCHAN)
       CHARACTER  FORMAT*8, SIDEBAND(MCHAN)*1, MSG*80
+      CHARACTER  DAR*(*), DBE*(*)
       LOGICAL    TWOHEAD, DEBUG
 C
       INTEGER    ICH, ICH1, IP, MAXCHN, CHPASS
@@ -269,57 +270,79 @@ C
 C
       ELSE IF( FORMAT .EQ. 'MARK5B' ) THEN
 C
-C        The wiring is fixed between the BBC's and the "tracks".  
-C        We need the channels in order of BBC number upper sideband
-C        followed by BBC number, lower sideband.  I'll be crude and 
-C        just loop through the channels finding the order.  MK5BCH
-C        is the sequence number of this sched channel in the Mark5B
-C        channels.  It is basically the index of the appropriate 
-C        track assignment array to use.
-C        IM5 Index for looping over the Mark5B channels
-C        ICHM5B  SCHED channel of Mark5B channel
-C        MK5BCH  Mark5B channel of SCHED channel
+         IF( DBE(1:4) .NE. 'RDBE' .OR. DAR(1:4) .NE. 'NONE' ) THEN
 C
-         DO ICH = 1, NCHAN
-            MK5BCH(ICH) = 0
-            ICHMK5B(ICH) = 0
-         END DO
-         DO IM5 = 1, NCHAN
-            M5BBBC = 100000
+C           Deal with the NRAO RDBE which simply wants the tracks
+C           numbered following the channel ordering.  Also use this
+C           scheme for no, or unknown, formatters.
+C
+            IF( BITS .EQ. 2 ) THEN
+               DO ICH = 1, NCHAN
+                  TRACK(ICH,1) = 2*ICH
+               END DO
+            ELSE
+               DO ICH = 1, NCHAN
+                  TRACK(ICH,1) = ICH + 1
+               END DO
+            END IF
+
+         ELSE
+C
+C           Full MARK5B systems.
+C
+C           The wiring is fixed between the BBC's and the "tracks".  
+C           We need the channels in order of BBC number upper sideband
+C           followed by BBC number, lower sideband.  I'll be crude and 
+C           just loop through the channels finding the order.  MK5BCH
+C           is the sequence number of this sched channel in the Mark5B
+C           channels.  It is basically the index of the appropriate 
+C           track assignment array to use.
+C           IM5 Index for looping over the Mark5B channels
+C           ICHM5B  SCHED channel of Mark5B channel
+C           MK5BCH  Mark5B channel of SCHED channel
+C      	 
             DO ICH = 1, NCHAN
-               IF( SIDEBAND(ICH) .EQ. 'U' .AND. 
-     1             KBBC(ICH) .LT. M5BBBC .AND. 
-     2             MK5BCH(ICH) .EQ. 0 ) THEN
-                  ICHMK5B(IM5) = ICH
-                  M5BBBC = KBBC(ICH)
-               END IF
+               MK5BCH(ICH) = 0
+               ICHMK5B(ICH) = 0
             END DO
-C
-C           Process lower sidebands only when uppers are done.
-C
-            IF( ICHMK5B(IM5) .EQ. 0 ) THEN
+            DO IM5 = 1, NCHAN
                M5BBBC = 100000
                DO ICH = 1, NCHAN
-                  IF( SIDEBAND(ICH) .EQ. 'L' .AND. 
+                  IF( SIDEBAND(ICH) .EQ. 'U' .AND. 
      1                KBBC(ICH) .LT. M5BBBC .AND. 
      2                MK5BCH(ICH) .EQ. 0 ) THEN
                      ICHMK5B(IM5) = ICH
                      M5BBBC = KBBC(ICH)
                   END IF
                END DO
-            END IF
-            MK5BCH(ICHMK5B(IM5)) = IM5
-         END DO
+C      	 
+C              Process lower sidebands only when uppers are done.
+C      	 
+               IF( ICHMK5B(IM5) .EQ. 0 ) THEN
+                  M5BBBC = 100000
+                  DO ICH = 1, NCHAN
+                     IF( SIDEBAND(ICH) .EQ. 'L' .AND. 
+     1                   KBBC(ICH) .LT. M5BBBC .AND. 
+     2                   MK5BCH(ICH) .EQ. 0 ) THEN
+                        ICHMK5B(IM5) = ICH
+                        M5BBBC = KBBC(ICH)
+                     END IF
+                  END DO
+               END IF
+               MK5BCH(ICHMK5B(IM5)) = IM5
+            END DO
+C      	 
+C           Now assign the tracks
+C      	 
+            DO ICH = 1, NCHAN
+               IF( BITS .EQ. 1 ) THEN
+                  TRACK(ICH,1) = MK5BCH(ICH)
+               ELSE IF ( BITS .EQ. 2 ) THEN
+                  TRACK(ICH,1) = MK5BCH(ICH)*2
+               END IF
+            END DO
 C
-C        Now assign the tracks
-C
-         DO ICH = 1, NCHAN
-            IF( BITS .EQ. 1 ) THEN
-               TRACK(ICH,1) = MK5BCH(ICH)
-            ELSE IF ( BITS .EQ. 2 ) THEN
-               TRACK(ICH,1) = MK5BCH(ICH)*2
-            END IF
-         END DO
+         END IF
 C
       ELSE IF( FORMAT .EQ. 'LBA' ) THEN
 C        Tracks (bitstreams) are simply ordered by BBC. Similar to
