@@ -2516,9 +2516,10 @@ science in 2012.  These increase the available bit rate to
 significantly higher values.  The RDBE/Mark5C system developed at
 Haystack and NRAO records 2048 Mbps.  Higher rates may eventually be
 provided.  The DBBC system, developed in Italy and also using the
-Mark5C recording system, is being deployed on a similar time scale and
-has similar bandwidths.  Other, even wider bandwidth, recording
-systems are under development but will not be discussed here yet.
+Mark5B or Mark5C recording systems, is being deployed on a similar time
+scale and has similar bandwidths.  Other, even wider bandwidth,
+recording systems are under development but will not be discussed here
+yet.
 
 The RDBE (Roach Digital Backend, where ROACH is the core board
 containing a large FPGA) is a module that takes in 2 analog IF
@@ -2758,15 +2759,44 @@ requires separate runs of \schedb for the MARK5C and legacy systems.
 
 {\bf DBBC:}
 
-The DBBC being developed for the EVN is also a system that samples at
-1024 MHz and digitally filters the signals to the desired bandwidths.
-But it has a different design where, like with the old BBCs, the
-frequency can be set flexibly anywhere in the IF band without concern
-about crossover frequencies etc.  The DBBC design has a module for
-each output baseband, so they are more directly comparable to BBCs.
-Support for the DBBC in \schedb is being implemented, but is not yet
-ready for use as of Feb. 2013.  More information is needed about the
-system to flesh out this discussion.
+The DBBC being developed for the EVN and many geodesy stations is also a
+system that samples at 1024 MHz and digitally filters the signals to the
+desired bandwidths. But it has a different design where, like with the
+old BBCs, the frequency can be set flexibly anywhere in the IF band
+without concern about crossover frequencies etc.  The DBBC design has a
+module for each output baseband, so they are more directly comparable to
+BBCs. Support for the DDC personality of the DBBC has recently been
+implemented in \sched, but should be used with caution. The PFB
+personality is not yet supported.
+
+The DDC personality is selected by default, and can be selected
+explicitly by setting the \htmlref{{\tt DBE}}{SP:DBE} parameter to {\tt
+DBBC\_DDC} in the setup file. \schedb will also accept a value of {\tt
+DBBC\_PFB} but this is not properly supported and will simply mimic the
+PFB personality of the RDBE. There are several different versions of the
+DBBC being deployed with slightly different components. The major
+difference is in the patching of IFs to particular BBCs (this may become
+fully switchable with future upgrades). Three variants are recognised by
+\sched. The variant is specified in the stations file with the
+\htmlref{{\tt DBBCVER}}{ST:DBBCVER} parameter. 
+
+Currently 2 IF filters are supported. One in the range 10-512 MHz and a
+second in the range 512-1024 MHz. A suite of additional IF filters will
+be enabled with a future firmware release but are not available yet and
+so are not yet supported by \sched. \schedb will warn you if your
+selected frequencies attempt to use both the 10-512 MHz and 512-1024
+filters at the same time.
+
+Baseband filter widths of 1, 2, 4, 8 or 16 MHz are possible. 32 MHz will
+be enabled with a future firmware upgrade. The frequencies for the band
+edges in the DDC personality can be set to any multiple of 10 kHz.
+(There is also a binary tuning mode which allows band edges to be set to
+a multiple of $1024/2^{31} \,{\rm MHz} = 0.476 \,{\rm Hz}$, but its use
+is not advised and it is not currently supported by \sched.)
+
+Sampling is done with 2 bits at Nyquist rate only (1 bit sampling can be
+emulated by channel selection on the recorder).
+
 
 {\bf OTHER DIGITAL BACKENDS:}
 
@@ -2778,7 +2808,7 @@ put out 8 Gbps.  This device is not yet supported by SCHED.
 When the DAR is the RDBE, the output channels and all the input
 channel information given to \schedb are written to the VEX file.  But
 the crd files that control the old VLBA hardware also has to be told
-something.  \schedb does not have a separate set of variables for all
+something. \schedb does not have a separate set of variables for all
 those configuration parameters, so it just does something reasonable.
 It sets the number of channels to the maximum of the number requested
 and 8.  It sets the frequencies to cover the middle of the RDBE
@@ -10063,6 +10093,21 @@ unit required the use of the VDIF format which is not yet available
 for the PFB personality.  Also the PFB personality puts out a fixed
 2 Gbps which is twice the capacity of the current MARK5C recorders.
 
+\item [{\tt DBBCVER}: \label{ST:DBBCVER}] Gives the version of the DBBC.
+Currently supported versions are:
+\begin{itemize} 
+      \item {\tt ASTRO} is the default {\tt DBBCVER}. It has 4
+            IFs, with the following fixed patching: ifa=bbc01 to
+            bbc04; ifb=bbc05 to bbc08; ifc=bbc09 to bbc12;
+            ifd=bbc13 to bbc16. 
+      \item {\tt GEO} has 2 IFs with the following fixed patching:
+            ifa=bbc01 to bbc08; ifb=bbc09 to bbc16.
+      \item {\tt HYBRID} has 3 IFs with the following fixed
+            patching: ifa=bbc01 to bbc04; ifb=bbc05 to bbc08;
+            ifc=bbc09 to bbc16.
+\end{itemize}
+
+
 \item [{\tt RECORDER}:] Gives the type of tape recorder(s) present
 Valid options are: {\tt VLBA}, {\tt MKIV}, {\tt VLBA4}, {\tt MKIII},
 {\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt VSOP}, {\tt MARK5A},
@@ -13330,7 +13375,7 @@ longer exists.  March 26, 2013.  RCW
 \item Remove a number of parameters related to the old VLA system
 from the manual descriptions of the setup files.  March 25, 2013 RCW.
 
-\item Add VLBA entries in {\sl freq.dat} and {\freq_RDBE.dat} for
+\item Add VLBA entries in {\sl freq.dat} and {\tt freq\_RDBE.dat} for
 S/X that use 7.9 GHz for 4cm.  These have the LO in the RF so are
 not considered good.  But the geodesy community is using them.
 March 25, 2013  RCW.
@@ -13341,12 +13386,12 @@ the new synthesizers that are still under development.  March 25, 2013,
 RCW.
 
 \item Write the synthesizer 1 and 2 settings, regardless of which
-is being used, in the comment at the end of the if_def line in the
+is being used, in the comment at the end of the if\_def line in the
 VEX file.  This is in support of the new VLBA synthesizers which will
 be controlled by the Executor based on information in the VEX file.
 March 21, 2013  RCW
 
-\item Write the first LO frequency in the VEX if_def lines to one
+\item Write the first LO frequency in the VEX if\_def lines to one
 more significant figure to support the new VLBA synthesizer that is
 under development.  That synthesizer can be set in 10 kHz steps.
 March 20, 2013  RCW
@@ -13371,7 +13416,7 @@ GRABTIME(1) also changed, but that should have no effect visible to
 the user.  Feb. 20, 2013  RCW.
 
 \item Change the defaulting behavior of {\tt GRABTIME} to allow
-{\GRABTIME(2)} to be zero.  Feb. 2013  RCW.
+{\tt GRABTIME(2)} to be zero.  Feb. 2013  RCW.
 
 \end{itemize}
 
