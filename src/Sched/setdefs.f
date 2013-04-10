@@ -109,29 +109,14 @@ C
      1        ( FORMAT(KS)(1:4) .EQ. 'VLBA' .OR.
      2          FORMAT(KS)(1:4) .EQ. 'MKIV' .OR.
      3          FORMAT(KS)(1:4) .EQ. 'VDIF' .OR.
-     4          (FORMAT(KS)(1:6) .EQ. 'MARK5B' .AND.
-     5               ( DBE(ISETSTA(KS))(1:4) .NE. 'RDBE' .AND.
-     6                DAR(ISETSTA(KS))(1:4) .NE. 'NONE' )) .OR. 
-     7          FORMAT(KS)(1:3) .EQ. 'LBA' ) ) THEN
+     4          FORMAT(KS)(1:6) .EQ. 'MARK5B' .OR.
+     5          FORMAT(KS)(1:3) .EQ. 'LBA' ) ) THEN
 C
                CALL SETTRK( NCHAN(KS), TAPEMODE(KS), FORMAT(KS), 
      1               BITS(1,KS), TRACK(1,1,KS), MCHAN, BBC(1,KS), 
-     2               SIDEBD(1,KS), KS, TWOHEAD, DEBUG, ILOG )
+     2               SIDEBD(1,KS), DBE(KS), DAR(ISETSTA(KS)),
+     3               KS, TWOHEAD, DEBUG, ILOG )
 C
-            ELSE IF( TRACK(1,1,KS) .EQ. 0 .AND.
-     1        FORMAT(KS)(1:6) .EQ. 'MARK5B' ) THEN
-C              If we get here it's probably a 'NONE' rack or an NRAO
-C              RDBE masquerading as MARK5B. Just write the MARK5B
-C              bitstream assuming the channel ordering will match.
-               IF( BITS(1,KS) .EQ. 2 ) THEN
-                  DO ICH = 1, NCHAN(KS)
-                     TRACK(ICH,1,KS) = 2*ICH
-                  END DO
-               ELSE
-                  DO ICH = 1, NCHAN(KS)
-                     TRACK(ICH,1,KS) = ICH + 1
-                  END DO
-               END IF
             END IF
          END DO
 C

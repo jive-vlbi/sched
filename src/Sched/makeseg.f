@@ -148,7 +148,7 @@ C
          WRITE( MSGTXT, '( T40, 20( 2X, A2, 1X) )' ) 
      1           '                      ', 
      2           (STCODE(STANUM(ISTA)),ISTA=1,NPRT)
-         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 0, MSGTXT )
       END IF
 C
 C     Start selecting scans.  Jump to 100 to get next source.
@@ -213,13 +213,13 @@ C
 C        Note the start of new source attempt if putting out debug print.
 C
          IF( GEOPRT .GE. 2 ) THEN
-            CALL WLOG( 1, ' ' )
+            CALL WLOG( 0, ' ' )
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, I3, A, L1, A, I3, A, I2 )' ) 
      1         '----MAKESEG:  Starting to work on next source: ISEG: ',
      2         ISEG, '   DORAND:', DORAND, '   MINNSS:', MINNSS, 
      3         '   MAXPRIO: ', MAXPRIO
-            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 0, MSGTXT )
             MSGTXT = ' '
          END IF
 C
@@ -307,8 +307,7 @@ C                 For debug print, mark attempt for this source.
      3                 'source.  Considering:', iseg, ' SRC: ', igeo,
      4                  ' ',  GEOSRC(igeo), '  USEGEO: ', USEGEO(IGEO), 
      5                  ' at ', TAPPROX
-                     CALL WLOG( 1, MSGTXT )
-                     MSGTXT = ' ' 
+                     CALL WLOG( 0, MSGTXT )
                   END IF
 C
 C                 Insert the new scan.  GMKSCN is like MAKESCN
@@ -413,24 +412,26 @@ C
                            LSRCNAME = SCNSRC(LSCN-1)
                            TSEP = (STARTJ(LSCN)-STOPJ(LSCN-1))*86400.D0
                         END IF
-                        WRITE(*,*) 'MAKESEG getting slew info',
+                        MSGTXT = ' '
+                        WRITE( MSGTXT, * ) 'MAKESEG getting slew info',
      1                     IGEO, LSCN, ' Last source: ', LSRCNAME, 
      2                     '  Testing: ', GEOSRC(IGEO)
+                        CALL WLOG( 0, MSGTXT )
                         DO ISTA = 1, NSTA
                            IF( LSCN .EQ. SCAN1 ) THEN
                               LSTAS = .FALSE.
                            ELSE
                               LSTAS = STASCN(LSCN-1,ISTA)
                            END IF
-                           WRITE(*,'(A,2I5,5F7.1,2L2,F7.1)') 
-     1                     ' makeseg els, azs, tslew: ', ISTA, 
-     2                     LASTLSCN(ISTA), 
-     3                     EL2(LASTLSCN(ISTA),ISTA), EL1(LSCN,ISTA),
-     4                     AZ2(LASTLSCN(ISTA),ISTA), AZ1(LSCN,ISTA),
-     5                     TSLEW(LSCN,ISTA)*86400.D0,
-     6                     LSTAS, STASCN(LSCN,ISTA),
-     7                     TSEP
-                     
+                           MSGTXT = ' '
+                           WRITE( MSGTXT, '(A,2I5,5F7.1,2L2,F7.1)' ) 
+     1                       ' makeseg els, azs, tslew: ', ISTA, 
+     2                       LASTLSCN(ISTA), 
+     3                       EL2(LASTLSCN(ISTA),ISTA), EL1(LSCN,ISTA),
+     4                       AZ2(LASTLSCN(ISTA),ISTA), AZ1(LSCN,ISTA),
+     5                       TSLEW(LSCN,ISTA)*86400.D0,
+     6                       LSTAS, STASCN(LSCN,ISTA), TSEP
+                           CALL WLOG( 0, MSGTXT )
                         END DO
                      END IF
 C
@@ -473,8 +474,7 @@ C
                   WRITE( MSGTXT, '( A, I2, A )' )
      1               'MAKESEG: No priority <= ', MAXPRIO, 
      2               ' sources found for random source additions.'
-                  CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
+                  CALL WLOG( 0, MSGTXT )
                END IF
 C
 C              Take action depending on MAXPRIO.
@@ -486,7 +486,7 @@ C
                   IF( MINNSS .GE. 2 ) THEN
                      DORAND = .FALSE.
                      IF (GEOPRT .GE. 1 ) THEN
-                        CALL WLOG( 1, 
+                        CALL WLOG( 0, 
      1                  '         Select a source using a SecZ fit.' )
                      END IF
                   ELSE
@@ -509,7 +509,7 @@ C
                ELSE
                   MAXPRIO = MAXPRIO + 1
                   IF( GEOPRT .GE. 1 ) THEN
-                     CALL WLOG( 1, 
+                     CALL WLOG( 0, 
      1                  '         Allow scans with low stations but '
      2                  // 'no very high elevation stations.' )
                   END IF
@@ -542,8 +542,7 @@ C
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, 2I4 )' ) 
      1            'MAKESEG picked random source: ', IC, CHANCE(IC)
-               CALL WLOG( 1, MSGTXT )
-               MSGTXT = ' '
+               CALL WLOG( 0, MSGTXT )
             END IF
             TSRC(ISEG) = CHANCE(IC)
             DO ISTA = 1, NSTA
@@ -560,10 +559,10 @@ C
                WRITE( MSGTXT,'( A, 2I4, F10.2, 2I4 )' )
      1             'MAKESEQ slew times: ', TSRC(ISEG), IC, 
      2             (STOPJ(LSCN-1)-T0)*24.D0*60.D0, NCHANCE, MAXIC
-               CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 0, MSGTXT )
                MSGTXT = ' '
-               CALL WLOG( 1, ' Time below is minutes in day ' )
-               CALL WLOG( 1, 
+               CALL WLOG( 0, ' Time below is minutes in day ' )
+               CALL WLOG( 0, 
      1             '                    Src    Time  Since Last stop' )
                DO IS = 1, NCHANCE
                   MSGTXT = ' '
@@ -571,8 +570,7 @@ C
      1             '   ', IS, CHANCE(IS), ' ', GEOSRC(CHANCE(IS)), 
      2             (TESTTIME(IS)-T0)*24.D0*60.D0, 
      3             (TESTTIME(IS)-STOPJ(LSCN-1))*24.D0*60.D0
-                  CALL WLOG( 1, MSGTXT )
-                  MSGTXT = ' '
+                  CALL WLOG( 0, MSGTXT )
                END DO
             END IF
 C
@@ -702,11 +700,13 @@ C
                      PRDEBUG = GEOPRT .GE. 2
 C
                      IF( GEOPRT .GE. 2 ) THEN
-                        WRITE(*,*) ' '
-                        WRITE(*,*) 
+                        CALL WLOG( 0, ' ' )
+                        MSGTXT = ' '
+                        WRITE( MSGTXT, * ) 
      1                   'Makeseg about to test quality ', ISEG, 
      2                   ISCN, IISCN, KSCN, LSCN, JSCN,
      3                   '  geosrc:', IGEO, ' ', GEOSRC(IGEO)
+                        CALL WLOG( 0, MSGTXT )
                      END IF
 C
                      CALL GEOQUAL( IISCN, KSCN, LSCN, JSCN, 14.48,
@@ -779,11 +779,14 @@ C
 C                    Spew info if requested.
 C
                      IF( GEOPRT .GE. 2 ) THEN
-                        WRITE(*,'( A, 2I4, A, I4, 3A, 3F7.2, I5, F7.2)')
-     1                     'Makeseg quality - LSCN:',
-     2                     LSCN, ISEG, ' Source:', IGEO, '  ',
-     3                     GEOSRC(IGEO), ' Quality: ', FQUALSL, FQUAL,
-     4                     SLQUAL, LHIGHSTA, PKSIG
+                        MSGTXT = ' '
+                        WRITE( MSGTXT,
+     1                     '( A, 2I4, A, I4, 3A, 3F7.2, I5, F7.2)')
+     2                     'Makeseg quality - LSCN:',
+     3                     LSCN, ISEG, ' Source:', IGEO, '  ',
+     4                     GEOSRC(IGEO), ' Quality: ', FQUALSL, FQUAL,
+     5                     SLQUAL, LHIGHSTA, PKSIG
+                        CALL WLOG( 0, MSGTXT )
                      END IF
 C
 C                    Keep this track of the best source based on
@@ -803,12 +806,16 @@ C
                            END IF
                            SAVSIG1(ISTA) = SIGMA(ISTA)
                         END DO
-                        IF( GEOPRT .GE. 2 ) 
-     1                    WRITE(*, '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
-     2                    'makeseg: Got new best sigma with ',
-     3                    'slew penalty: ', 
-     4                    igeo, ' ', geosrc(igeo), fqualsl, highsta1,
-     5                    highsig1
+                        IF( GEOPRT .GE. 2 ) THEN
+                           MSGTXT = ' '
+                           WRITE( MSGTXT, 
+     1                       '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
+     2                       'makeseg: Got new best sigma with ',
+     3                       'slew penalty: ', igeo, ' ', 
+     4                       geosrc(igeo), fqualsl, highsta1,
+     5                       highsig1
+                           CALL WLOG( 0, MSGTXT )
+                        END IF
                      END IF
 C
                      IF( FQUAL .NE. 0.0 .AND. FQUAL .LT. BFQUAL ) THEN
@@ -823,12 +830,16 @@ C
                            END IF
                            SAVSIG2(ISTA) = SIGMA(ISTA)
                         END DO
-                        IF( GEOPRT .GE. 2 )
-     1                      WRITE(*, '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
+                        IF( GEOPRT .GE. 2 ) THEN
+                           MSGTXT = ' '
+                           WRITE( MSGTXT, 
+     1                         '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
      2                         'makesig: Got new best sigma without ',
      3                         'slew penalty: ',
      4                         igeo, ' ', geosrc(igeo), fqual, highsta2, 
      5                         highsig2
+                           CALL WLOG( 0, MSGTXT )
+                        END IF
                      END IF
 C
                      IF( SLQUAL .LT. BSLQUAL ) THEN
@@ -843,12 +854,15 @@ C
                               HIGHSIG3 = SIGMA(ISTA)
                            END IF
                         END DO
-                        IF( GEOPRT .GE. 2 )
-     1                    WRITE(*, '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
-     2                    'makeseg: Got new best RMS sigma with ', 
-     3                    'slew penalty: ',
-     4                    igeo, ' ', geosrc(igeo), slqual, 
-     5                    highsta3, highsig3
+                        IF( GEOPRT .GE. 2 ) THEN
+                          MSGTXT = ' '
+                          WRITE(*, '( 2A, I5, 2A, F8.2, I5, F8.2 )' ) 
+     1                      'makeseg: Got new best RMS sigma with ', 
+     2                      'slew penalty: ',
+     3                      igeo, ' ', geosrc(igeo), slqual, 
+     4                      highsta3, highsig3
+                          CALL WLOG( 0, MSGTXT )
+                        END IF
                      END IF
                   END IF
                END IF
@@ -903,7 +917,7 @@ C
      4                  SAVSIG1(LHIGHSTA), HIGHSTA1, TSRC1, 
      5                  SAVSIG2(LHIGHSTA), HIGHSTA2, TSRC2, 
      6                  SAVSIG3(LHIGHSTA), HIGHSTA3, TSRC3
-                     CALL WLOG( 1, MSGTXT )
+                     CALL WLOG( 0, MSGTXT )
                   END IF
 C
 C              Use the version without the slew penalty if the one
@@ -945,7 +959,7 @@ C
      4                  SAVSIG1(LHIGHSTA), HIGHSTA1, TSRC1, 
      5                  SAVSIG2(LHIGHSTA), HIGHSTA2, TSRC2, 
      6                  SAVSIG3(LHIGHSTA), HIGHSTA3, TSRC3
-                     CALL WLOG( 1, MSGTXT )
+                     CALL WLOG( 0, MSGTXT )
                   END IF
                END IF
             END IF
@@ -981,7 +995,7 @@ C
      4              SAVSIG1(LHIGHSTA), HIGHSTA1, TSRC1, 
      5              SAVSIG2(LHIGHSTA), HIGHSTA2, TSRC2, 
      6              SAVSIG3(LHIGHSTA), HIGHSTA3, TSRC3
-                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 0, MSGTXT )
                END IF
 C
             END IF
@@ -1006,10 +1020,12 @@ C
          IF( TSRC(ISEG) .GT. 0 ) THEN
 C
             IF( GEOPRT .GE. 2 ) THEN
-               WRITE(*,*) 'Makeseg got the next source - seg:', 
+               MSGTXT = ' '
+               WRITE( MSGTXT, * ) 'Makeseg got the next source - seg:', 
      1           ISEG, '  Geosrc:', TSRC(ISEG), 
      2           '  ', GEOSRC(TSRC(ISEG)), ' tapprox:', TAPPROX,
      3           ' stascn: ', (sstascn(ista),ista=1,nsta) 
+               CALL WLOG( 0, MSGTXT )
             END IF
 C
 C           Insert the chosen source in the sequence.  Don't second
@@ -1078,7 +1094,7 @@ C
      1               ' High:', HIGHSTA, '  Sigmas: ', 
      3                (SAVSIG(ISTA),ISTA=1,NPRT)
                END IF
-               CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 0, MSGTXT )
             END IF
 C
 C           Save the identity of the worst station.
@@ -1110,8 +1126,8 @@ C
 C
          ELSE
             IF( GEOPRT .GE. 2 ) THEN
-               WRITE(*,*) 'makeseg:  No source found that fits'
-               WRITE(*,*) '          Ending sequence.'
+               CALL WLOG( 0, 'makeseg:  No source found that fits' )
+               CALL WLOG( 0, '          Ending sequence.' )
             END IF
 C
 C           If no source was found, either it is too late, or there

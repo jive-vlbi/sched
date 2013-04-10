@@ -202,11 +202,13 @@ C
                      IF( EL1(ISCN,ISTA) .LT. GEOLOWEL ) THEN
                         NGOOD = 0
                         IF( GEOPRT .GE. 2 ) THEN
-                           WRITE(*,*) 
+                           MSGTXT = ' '
+                           WRITE( MSGTXT,* ) 
      1                         '**gmkscn: Dropping scan - '//
-     1                         'low el for slow ant',
-     2                         ISTA, ISCN, '   ', SRCN, 
-     3                         EL1(ISCN,ISTA)
+     2                         'low el for slow ant',
+     3                         ISTA, ISCN, '   ', SRCN, 
+     4                         EL1(ISCN,ISTA)
+                           CALL WLOG( 0, MSGTXT )
                         END IF
 C
 C                    High elevation scan for the slow antenna.
@@ -217,10 +219,12 @@ C
                         STASCN(ISCN,ISTA) = .FALSE.
                         OKSTA(ISTA) = .FALSE.
                         IF( GEOPRT .GE. 2 ) THEN
-                           WRITE( *, '( A, I3, A, 2I5, 3A )' ) 
+                           MSGTXT = ' '
+                           WRITE( MSGTXT, '( A, I3, A, 2I5, 3A )' ) 
      1                        '++gmkscn: Dropping station ',
      2                        ISTA, '  Scan ', ISCN, SCAN1, 
      3                        '  Geosrc: ', SRCN, ' for long slew.'
+                           CALL WLOG( 0, MSGTXT )
                         END IF
                      END IF
                   END IF

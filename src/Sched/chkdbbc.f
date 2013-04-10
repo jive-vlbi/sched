@@ -115,6 +115,7 @@ C        CR: The PFB code here is just a copy of the RDBE and therefore
 C        almost certainly wrong. However, I don't currently have any
 C        better documenation on the DBBC...
 C
+         write(*,*) 'chkddc dbe ', ks, '  ''', dbe(ks), ''''
          IF( DBE(KS) .EQ. 'DBBC_PFB' ) THEN
 C
 C           NCHAN must be 16 (in initial version).
