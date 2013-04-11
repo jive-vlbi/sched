@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 11.1 Test}
+\title{THE \schedb USER MANUAL \\  Version 11.1 beta}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -2164,14 +2164,32 @@ here.
 
 \section{\label{SEC:RECSYS}Recording Systems.}
 
+VLBI observations require the transmission of raw data samples over 
+very long distances.  Progress is being made toward an ultimate
+goal of doing this in real time over fiber networks.  But EVLBI, as
+such a system is called, is still only used for a small portion 
+of VLBI observing and that is not likely to change in some regions
+until more affordable access to high bandwidth networks can be obtained.
+
+Most VLBI relies on recording the raw data on magnetic media, and then
+shipping that media to a correlator where it is processed days to months
+after the observations are made.  Managing those recordings, and the 
+specification of the data streams to be recorded, is a major part of 
+scheduling with \sched.  This section provides background on the
+various recording systems in use.
+
+Please be aware that recording systems are a technology under rapid
+development.  It is entirely possible that some of the sections here
+are not entirely up to date.
+
 \subsection{\label{SSEC:RECBAK}Recording Systems History and Background}
 
-\schedb was originally written as the scheduling program for global
-VLBI observations using the Mark II recording system.  That was a
-system capable of recording 4 Mbps on video tape recorders.  It was
-in use in some parts of the world much longer than expected (at least
-to 2003), but is now gone as far as we know.  \schedb version 9.4 and
-later does not support Mark II.
+\schedb was originally written in about 1979 as the scheduling program
+for global VLBI observations using the Mark II recording system.  That
+was a system capable of recording 4 Mbps on video tape recorders.  It
+was in use in some parts of the world much longer than expected (at
+least to 2003), but is now gone as far as we know.  \schedb version
+9.4 and later does not support Mark II.
 
 The wide band recording system in use for VLBI for many years was
 the Mark~III system.  \schedb was never a general purpose scheduling
@@ -2186,39 +2204,54 @@ suite.  I am not aware of any Mark~III systems remaining in use.
 
 The Mark~III system was replaced by several other systems with greater
 capabilities.  These include the VLBA, VLBA4, Mark~IV, S2, and K4 tape
-systems.  There are correlators associated with each system, and there
-is a considerable amount of cross compatibility, either directly or
-through the use of translation machines.  The Mark~III, VLBA, VLBA4,
-and Mark~IV systems all used the same tape transport, although with
-different electronics.  In their native modes, they use different data
-formats, but the VLBA and Mark~IV systems are capable of reading and
-writing Mark~III data.  More importantly, the VLBA and Mark~IV systems
-have a wide range of compatible recording modes that can be correlated
-together on the VLBA, JIVE, and other correlators.
+systems.  There were correlators associated with each system, and
+there was a considerable amount of cross compatibility, either directly
+or through the use of translation machines.  The Mark~III, VLBA,
+VLBA4, and Mark~IV systems all used the same tape transport, although
+with different electronics.  In their native modes, they used different
+data formats, but the VLBA and Mark~IV systems were capable of reading
+and writing Mark~III data.  More importantly, the VLBA and Mark~IV
+systems have a wide range of compatible recording modes that could be
+correlated together on the VLBA, JIVE, and other correlators.
 
 By 2007, the tape systems were replaced by disk based recording
-systems nearly everywhere.  Most widespread is the Mark5A system
-developed by Haystack Observatory and Conduant Corporation.  The
-Mark5A system is a plug replacement for the old tape drives and still
-has the concept of tracks.  That is the most common system as of early
-2008.  The Mark5B system uses the VSI standard interface to record the
-data channels without all the formatting baggage left over from the
-tape systems.  The Mark5A+ system allows Mark5B recordings to be
-played on Mark5A playback units, but a minor glitch that nobody is in
-a position to fix is preventing its use on the VLBA.  The Mark5B+
-system uses a faster interface and can handle up to 2 Gbps.  The
-Mark5C system is being deployed in 2011 and records up to 4 Gbps.  The
-Mark5C- system is a scheme for allowing lesser Mark5 hardware to
-pretend to be a Mark5C system for system development.  Confused yet?
-The VLBA is using (early 2011) the Mark5A system and is beginning to
-test the Mark5C system, in an initial 2 Gbps mode, at the telescopes.
-Mark5A will likely be supplanted by Mark5C on the VLBA during 2011.
+systems nearly everywhere.  The early disk systems were plug
+compatible replacements for the tape drives so most of the data
+configuration remained unchanged.  
+
+The Mark5A system was the most widespread early disk system.  It was
+developed by Haystack Observatory and the Conduant Corporation.  As a
+plug replacement for the tape drives, the Mark5A system still has the
+concept of tracks.  
+
+The Mark5B system is an enhancement that uses the VSI standard
+interface to record the data channels without all the formatting
+baggage left over from the tape systems.  The Mark5A+ system allows
+Mark5B recordings to be played on Mark5A playback units, but a minor
+glitch that nobody is in a position to fix is preventing its use on
+the VLBA.  The Mark5B+ system uses a faster interface and can handle
+up to 2 Gbps.  
+
+The Mark5C system was being deployed in 2011 and is meant to record up
+to 4 Gbps, although it the initial configuration can be used at a
+maximum of 2 Gbps.  The Mark5C- system is a scheme for allowing lesser
+Mark5 hardware to pretend to be a Mark5C system for system
+development.  
+
+As of early 2013, the VLBA winding down use of the Mark5A
+system and is moving most projects over to the Mark5C system.  Some 
+other observatories are also moving to Mark5C, but usually with
+different electronics.
 
 There are other recording systems in use.  The Japanese have a K5
 system.  The Australians are using a variant on the PCEVN system.
 Also a variety of groups are testing real time VLBI over the fiber
 networks.  This can involve real time correlation, or recording at
 sites remote from the telescope.
+
+Meanwhile, other potential future recording systems are being
+investigated.
+
 
 \subsection{\label{SSEC:RECCONTROL}Recording Systems Control}
 
@@ -2521,6 +2554,8 @@ scale and has similar bandwidths.  Other, even wider bandwidth,
 recording systems are under development but will not be discussed here
 yet.
 
+\subsection{\label{SSEC:RDBE}The RDBE system}
+
 The RDBE (Roach Digital Backend, where ROACH is the core board
 containing a large FPGA) is a module that takes in 2 analog IF
 signals, applies an anti-alias filter that passes 512 to 1024 MHz,
@@ -2757,7 +2792,33 @@ system using the piggyback scheme as demonstrated in the example
 requires separate runs of \schedb for the MARK5C and legacy systems.
 
 
-{\bf DBBC:}
+{\bf PARALLEL MARK5A and MARK5C RECORDINGS:}
+
+Normally when scheduling a project that uses the RDBE/MARK5C system,
+\schedb creates control files for the old system ({\sl .crd} files)
+that drive the telescope and other systems, but do not cause MARK5A
+recordings to be made.  Since \schedb does not have adequate bookkeeping
+to allow independent specification of frequencies for both systems
+in one pass, a reasonable choice of frequencies and bandwidths for 
+the old system is made based on the capabilities of that system and
+the settings for the new system.  
+
+During testing of the RDBE/MARK5C system, it is useful to have a
+parallel Mark5A recording.  If the default choices of frequencies and
+bandwidths for the old system is adequate, \schedb can be told to make
+MARK5A recordings using parameter switch /htmlref{{\tt
+DOMKA}}{MP:DOMKA}.  The only way to check what those settings are is
+to look at the output {\sl .crd} files.  Because of the limited 
+bookkeeping, that information does not appear in the {\sl .sum} file.
+
+If the user does not want to take the Mark5A setups provided by
+\schedb with {\tt DOMKA}, then the run can be set up as a piggyback
+with separate setups for each system.  The scheme for doing was 
+mentioned above, and is described and demonstrated in example
+\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}.
+
+
+\subsection{\label{SSEC:DBBC}DBBC:}
 
 The DBBC being developed for the EVN and many geodesy stations is also a
 system that samples at 1024 MHz and digitally filters the signals to the
@@ -2798,7 +2859,8 @@ Sampling is done with 2 bits at Nyquist rate only (1 bit sampling can be
 emulated by channel selection on the recorder).
 
 
-{\bf OTHER DIGITAL BACKENDS:}
+
+\subsection{\label{SSEC:OTHERREC}OTHER DIGITAL BACKENDS:}
 
 There is a varient on the RDBE being developed at Haystack for mm VLBI
 that has 4 input IFs and does not attempt any filtration.  It simply
@@ -2818,32 +2880,6 @@ channel bandwidth to the lesser of the request and 16 MHz.  It only
 writes the first 4 pcal extraction requests (avoiding going into
 channel numbers that are too high).  Recording on the Mark5A system
 is not requested.
-
-{\bf PARALLEL MARK5A and MARK5C RECORDINGS:}
-
-Normally when scheduling a project that uses the RDBE/MARK5C system,
-\schedb creates control files for the old system ({\sl .crd} files)
-that drive the telescope and other systems, but do not cause MARK5A
-recordings to be made.  Since \schedb does not have adequate bookkeeping
-to allow independent specification of frequencies for both systems
-in one pass, a reasonable choice of frequencies and bandwidths for 
-the old system is made based on the capabilities of that system and
-the settings for the new system.  
-
-During testing of the RDBE/MARK5C system, it is useful to have a
-parallel Mark5A recording.  If the default choices of frequencies and
-bandwidths for the old system is adequate, \schedb can be told to make
-MARK5A recordings using parameter switch /htmlref{{\tt
-DOMKA}}{MP:DOMKA}.  The only way to check what those settings are is
-to look at the output {\sl .crd} files.  Because of the limited 
-bookkeeping, that information does not appear in the {\sl .sum} file.
-
-If the user does not want to take the Mark5A setups provided by
-\schedb with {\tt DOMKA}, then the run can be set up as a piggyback
-with separate setups for each system.  The scheme for doing was 
-mentioned above, and is described and demonstrated in example
-\htmladdnormallink{{\sl egrdbe.key}}{examples/egrdbe.key}.
-
 
 
 \section{\label{SEC:LINE}Spectral Line Observations}
@@ -3462,8 +3498,7 @@ happy.
 
 The parameter \htmlref{{\tt GEOPRT}}{MP:GEOPRT} can be used to cause
 some details about each trial source sequence tested to be printed to
-the screen and to {\sl sched.runlog}.  There are various levels of
-print possible.
+{\sl sched.runlog}.  There are various levels of print possible.
 
 The algorithm used to construct geo segments is described in more
 detail below.  It involves constructing a number of trial segments and
@@ -3568,8 +3603,9 @@ slew penalty was used.  If even that is not sufficiently interesting,
 the source that gives the best RMS improvement in the SecZ sigmas
 across the array, subject to the slew penalty, is chosen.  The
 deranged may wish to use \htmlref{{\tt GEOPRT}}{MP:GEOPRT} to watch in
-detail what is going on in the algorithm.  Actually you can tell quite
-a bit from {GEOPRTY=0} but you will likely need to use the code to
+detail , in {\sl sched.runlog}, what is going on in the algorithm.  
+Actually you can tell quite
+a bit from {\tt GEOPRT=0} but you will likely need to use the code to
 understand much of what is being spewed out, especially for a high
 value of {\tt GEOPRT} such as 2.
 
@@ -4575,11 +4611,11 @@ OPTIMIZATION (Beware --- experimental features!):
 \htlm{UVMFS}{~~~} Show effect of MFS in UV plots.
 \end{list}
 
-SPECIAL VLA PARAMETERS:
+SPECIAL VLA PARAMETERS (These are now obsolete):
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
-\htls{VLABAND}{~} Obsolete - put in setup file.
-\htls{VLABW}{~~~} Obsolete - put in setup file.
+%\htls{VLABAND}{~} Obsolete - put in setup file.
+%\htls{VLABW}{~~~} Obsolete - put in setup file.
 \htlm{VLAINTEG}{} VLA correlator integration time.
 \htlm{VLAPTIME}{} Duration of phasing subscans on the EVLA
 \htlm{VLAMODE}{~} VLA observing mode.
@@ -6067,7 +6103,8 @@ default for {\tt GEOHIEL}.
 Specifying {\tt GEOPRT} (no argument) or {\tt GEOPRT = 0}
 will cause the quality measure and the elevations at all sites for all
 scans in each trial geodetic sequence to be printed while trying to
-specify a new sequence.  This can be a considerable amount of print
+specify a new sequence.  The output will go to {\sl sched.runlog}. 
+This can be a considerable amount of print
 and is only recommended when trying to understand what the algorithm
 is doing.  If you are a glutton for punishment, use {\tt GEOPRT = 1}
 or even {\tt GEOPRT = 2} to cause a lot of information from the source
@@ -10916,32 +10953,30 @@ and the effort by \schedb to determine which IF's are to be used for
 the each setup depending on the specified modes in the schedule.
 Modes {\tt VA, VR} and {\tt VL} require different IF restrictions.
 
+\end{description}
+
+The following are OBSOLETE VLA parameters that should not be used.
+
+\begin{description}
+
 \item [{\tt VLABAND}] The VLA frequency band.  See setup file parameter
-\htmlref{{\tt VLABAND}}{SP:VLABAND}
+{\tt VLABAND}
 
-\item [{\tt VLABW}] The VLA bandwidth codes.  See setup file parameter
-\htmlref{{\tt VLABW}}{SP:VLABW}
+\item [{\tt VLABW}] The VLA bandwidth codes.
 
-\item [{\tt VLAFEAB}] The VLA first LO.  See setup file parameter
-\htmlref{{\tt VLAFEAB}}{SP:VLAFEAB}
+\item [{\tt VLAFEAB}] The VLA first LO.
 
-\item [{\tt VLAFECD}] The other VLA first LO.  See setup file parameter
-\htmlref{{\tt VLAFECD}}{SP:VLAFEAB}
+\item [{\tt VLAFECD}] The other VLA first LO.
 
-\item [{\tt VLAIF}] Obsolete.  The VLA gain file name.
-See setup file parameter \htmlref{{\tt VLAIF}}{SP:VLAIF}
+\item [{\tt VLAIF}]  The VLA gain file name.
 
-\item [{\tt VLAROT}] Obsolete.  The VLA ROT file name.
-See setup file parameter \htmlref{{\tt VLAROT}}{SP:VLAROT}
+\item [{\tt VLAROT}] The VLA ROT file name.
 
-\item [{\tt VLASYNA}] The VLA AC F6 setting.  See setup file parameter
-\htmlref{{\tt VLASYNA}}{SP:VLASYNA}
+\item [{\tt VLASYNA}] The VLA AC F6 setting.
 
-\item [{\tt VLASYNB}]The VLA BD F6 setting.  See setup file parameter
-\htmlref{{\tt VLAFECD}}{SP:VLAFEAB}
+\item [{\tt VLASYNB}] The VLA BD F6 setting.
 
-\item [{\tt FEFILTER}]The VLA BD F6 setting.  See setup file parameter
-\htmlref{{\tt FEFILTER}}{SP:FEFILTER}
+\item [{\tt FEFILTER}] The VLA BD F6 setting.
 
 \end{description}
 
@@ -11258,9 +11293,7 @@ confused about what signal is in each baseband channel.
 \htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
 \htls{DBE}{~~~~~} The personality to use in a digital backend.
 \htls{ELCOLIM}{~} Colimation offset in elevation.
-\htls{EVLA}{~~~~} Removed parameter.
 \htls{FE}{~~~~~~} Receivers to be used.
-\htls{FEFILTER}{} VLA front end filter specification for `` //LO'' card.
 \htls{FIRMFILE}{} A firmware file name to use - VLBA testers only!
 \htls{FIRSTLO}{~} Sum of all LOs except the one set if {\tt FREQ} used.
 \htls{FORMAT}{~~} Recording format to use --- ({\tt VLBA1:2} etc.
@@ -13349,6 +13382,16 @@ more information.
 
 \begin{itemize}
 
+
+\item Cause the printout that monitors the building of geodetic 
+segments to go only to sched.runlog, not to the terminal.
+April 10, 2013.
+
+\item Support for the DBBC provided by Cormac Reynolds, April 9,
+2013.  More details would be useful.
+Slightly modified by RCW to prevent changes to the Mark5B track
+assignments when using the VLBA. 
+
 \item Make it an error, not an obscure warning, when someone tries to
 assign two polarizations to the same IF.  Yes we observed a schedule
 that did that.  April 3, 2013.  RCW.
@@ -13375,7 +13418,7 @@ longer exists.  March 26, 2013.  RCW
 \item Remove a number of parameters related to the old VLA system
 from the manual descriptions of the setup files.  March 25, 2013 RCW.
 
-\item Add VLBA entries in {\sl freq.dat} and {\tt freq\_RDBE.dat} for
+\item Add VLBA entries in {\sl freq.dat} and {\sl freq\_RDBE.dat} for
 S/X that use 7.9 GHz for 4cm.  These have the LO in the RF so are
 not considered good.  But the geodesy community is using them.
 March 25, 2013  RCW.
@@ -17374,7 +17417,7 @@ not behave as expected!
 frequencies far outside the range of the original VLA hardware.  Such
 frequencies can be requested using frequency settings in the style of
 the VLA, but outside the allowed VLA ranges.  In addition, the
-parrameter \htmlref{{\tt EVLA}}{SP:EVLA} should be given in the setup
+parrameter {\tt EVLA} should be given in the setup
 file to turn off some of the checks of frequency ranges.  This is all
 at a primitive state as of Fall 2007 and will be updated as the EVLA
 matures.
@@ -17548,9 +17591,9 @@ and listed below, to control some of the input information for which
 the VLBI defaults may not be appropriate.  The example is a modified
 version of an actual schedule used to make the VLA observations
 described.  The modifications were required by changes in the way in
-which \schedb handles setup files and the parameters \htmlref{{\tt
-VLABAND}}{SP:VLABAND}, \htmlref{{\tt VLABW}}{SP:VLABW}, \htmlref{{\tt
-PEAK}}{MP:PEAK}, \htmlref{{\tt VLAMODE}}{MP:VLAMODE} (for pointing
+which \schedb handles setup files and the parameters {\tt
+VLABAND}, {\tt VLABW}, {\tt
+PEAK}, \htmlref{{\tt VLAMODE}}{MP:VLAMODE} (for pointing
 scans), and \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.  Some of these
 parameters are now read from the setup files, not the main schedule
 input.
@@ -17671,13 +17714,13 @@ The setup file parameters are:
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 
-\item \htmlref{{\tt FEFILTER:}}{SP:FEFILTER} The front end filters are
+\item {\tt FEFILTER:} The front end filters are
 normally 50~MHz wide. If there is strong RFI near the observing
 frequency, as is common at L and P bands, it may be desirable to use
 the 25~MHz or 12.5~MHz front end filters. This parameter is used to
 request the filters to use. It goes on the ``//LO'' card.
 
-\item \htmlref{{\tt FLUKESET:}}{SP:FLUKESET} Which flukeset (1 or 2)
+\item {\tt FLUKESET:} Which flukeset (1 or 2)
 to be used. Unfortunately there seems to be no good way to predict
 this reliably. Usually Flukeset 1 will be used for phased array and
 normal VLA observations while Flukeset 2 will be used for single
@@ -17686,43 +17729,43 @@ alerted that Flukeset specified on the ``//FI'' card might have to be
 changed. If it is not specified, or is set to 0, a blank will be given
 and the VLA operators will set it.
 
-\item \htmlref{{\tt VLABAND:}}{SP:VLABAND} Specify the frequency band.
+\item {\tt VLABAND:} Specify the frequency band.
 Must be one of the defaults without the //LO and //FI cards.  Some
 valid options are {\tt VP, VL, VC, VX, VK, PP, LL, CC, XX, UU, KK,
 HH,} or 18.  For complete information on the standard bands, see
 the following \htmlref{section}{SSEC:VLASTDBD}.
 
-\item \htmlref{{\tt VLABW:}}{SP:VLABW} Specify the back end bandwidth
+\item {\tt VLABW:} Specify the back end bandwidth
 for each of the 4 VLA IFs as a 4 digit number in quotes (\schedb
 treats it as a character string), with one digit for each IF. The
 default is {\tt '0000'} for 50~MHz in each IF. The consequent back end
 bandwidth is {\tt 50/(2**n)}~MHz, where {\tt n} is the digit
 specified.
 
-\item \htmlref{{\tt FLUKEA:}}{SP:FLUKEA} A Fluke synthesizer frequency.
+\item {\tt FLUKEA:} A Fluke synthesizer frequency.
 It is usually near 100~MHz. See the document ``VLBI at the VLA'' for
 details on what it should be. See Section~\ref{SEC:LINE} for more
 information on the frequency settings.
 
-\item \htmlref{{\tt FLUKEB:}}{SP:FLUKEA} B Fluke synthesizer frequency.
+{\tt FLUKEB:} B Fluke synthesizer frequency.
 Actually this is the value for the ``//FI'' card which is twice the
 actual synthesizer setting.  To get the same frequency on the AC and
 BD IFs, {\tt FLUKEB} should be {\tt FLUKEA} plus 100.0.
 
-\item \htmlref{{\tt VLAFEAB:}}{SP:VLAFEAB} 1st LO for the VLA observations
+{\tt VLAFEAB:} 1st LO for the VLA observations
 for the AB (RCP) IFs. For standard VLBI projects, the value should be
 -3.2 for L band, 0 for C band, and 17.5 for K band. Again see VLA
 documentation for details of other alternatives.
 
-\item \htmlref{{\tt VLAFECD:}}{SP:VLAFEAB} Same as {\tt VLAFEAB} but for
+{\tt VLAFECD:} Same as {\tt VLAFEAB} but for
 the VLA's C and D (LCP) IFs.
 
-\item \htmlref{{\tt VLASYNA:}}{SP:VLASYNA} 2nd LO for the VLA A and C IFs.
+{\tt VLASYNA:} 2nd LO for the VLA A and C IFs.
 On the ``//LO card'' this number is rounded to the nearest MHz, but it
 should be given here exactly. It is usually near 3900~MHz. It must be
 a value of {\tt N * 50 +- 10.1}~MHz.
 
-\item \htmlref{{\tt VLASYNB:}}{SP:VLASYNA} Same as {\tt VLASYNA} but for
+\item {\tt VLASYNB:} Same as {\tt VLASYNA} but for
 the VLA B and D IFs.
 
 \end{list}
