@@ -270,7 +270,7 @@ C
 C
       ELSE IF( FORMAT .EQ. 'MARK5B' ) THEN
 C
-         IF( DBE(1:4) .NE. 'RDBE' .OR. DAR(1:4) .NE. 'NONE' ) THEN
+         IF( DBE(1:4) .EQ. 'RDBE' .OR. DAR(1:4) .EQ. 'NONE' ) THEN
 C
 C           Deal with the NRAO RDBE which simply wants the tracks
 C           numbered following the channel ordering.  Also use this
