@@ -41,7 +41,6 @@ C        'geo' version
          END DO
       ELSE IF( MYDBBCVER .EQ. 'HYBRID' ) THEN
 C        'hybrid' version
-         print*, 'hybrid'
          MIF = 3
          DO IBBC = 1, 4
             IFBBC(IBBC, 1) = 1

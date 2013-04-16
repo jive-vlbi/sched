@@ -115,12 +115,11 @@ C        CR: The PFB code here is just a copy of the RDBE and therefore
 C        almost certainly wrong. However, I don't currently have any
 C        better documenation on the DBBC...
 C
-         write(*,*) 'chkddc dbe ', ks, '  ''', dbe(ks), ''''
+C         write(*,*) 'chkddc dbe ', ks, '  ''', dbe(ks), ''''
          IF( DBE(KS) .EQ. 'DBBC_PFB' ) THEN
 C
 C           NCHAN must be 16 (in initial version).
 C    ******************  I think this may be wrong for the DBBC.
-C    CR: I'm not sure the PFB mode will ever be used on the DBBC...
 C
             IF( NCHAN(KS) .NE. 16 ) THEN
                MSGTXT = ' '              
@@ -284,12 +283,19 @@ C            restrictions for the DBBC.  They are DBBCVER dependent.
 C            IFDBBC knows the rules and set IFBBC above.
 C
       DO ICH = 1, NCHAN(KS)
-         IF( IFCHAN(ICH,KS) .NE. 'A' .AND.
-     1       IFCHAN(ICH,KS) .NE. 'B' .AND.
-     2       IFCHAN(ICH,KS) .NE. 'C' .AND.
-     3       IFCHAN(ICH,KS) .NE. 'D' ) THEN
+C        IFs are in range A-D, inputs in range 1-4. You may omit the
+C        input number, but it's not encouraged.
+         IF( ( IFCHAN(ICH,KS)(1:1) .NE. 'A' .AND.
+     1         IFCHAN(ICH,KS)(1:1) .NE. 'B' .AND.
+     2         IFCHAN(ICH,KS)(1:1) .NE. 'C' .AND.
+     3         IFCHAN(ICH,KS)(1:1) .NE. 'D' )  .OR.
+     4       ( IFCHAN(ICH,KS)(2:2) .NE. '1' .AND.
+     5         IFCHAN(ICH,KS)(2:2) .NE. '2' .AND.
+     6         IFCHAN(ICH,KS)(2:2) .NE. '3' .AND.
+     7         IFCHAN(ICH,KS)(2:2) .NE. '4' .AND.
+     8         IFCHAN(ICH,KS)(2:2) .NE. ' ' )) THEN
             CALL WLOG ( 1, 'CHKDBBC: IFCHAN ''' // IFCHAN(ICH,KS) //
-     1          ''' not A,B,C or D' )
+     1          ''' not A[1-4], B[1-4], C[1-4] or D[1-4]' )
             ERRS = .TRUE.
          END IF
       END DO
@@ -301,12 +307,15 @@ C
       DO ICH = 1, NCHAN(KS)
 C
 C        See if this channel uses an allowed IF given the wiring
-C        constraints embodied in the IFBBC array.
+C        constraints embodied in the IFBBC array. Only the IF name can
+C        be enforced, the input number is known only to the catalogue.
+C        Omitting the input number is not an error, but will require
+C        remedial action at the station after running drudg.
 C
          OK = .FALSE.
          IBBC = BBC(ICH,KS)
          DO IIF = 1, MAXIF
-            IF( IFNAM(IIF) .EQ. IFCHAN(ICH,KS) .AND.
+            IF( IFNAM(IIF) .EQ. IFCHAN(ICH,KS)(1:1) .AND.
      1          IFBBC(IBBC,IIF) .EQ. 1 ) OK = .TRUE.
          END DO
 C
