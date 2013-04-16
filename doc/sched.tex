@@ -2821,14 +2821,14 @@ mentioned above, and is described and demonstrated in example
 \subsection{\label{SSEC:DBBC}DBBC:}
 
 The DBBC being developed for the EVN and many geodesy stations is also a
-system that samples at 1024 MHz and digitally filters the signals to the
-desired bandwidths. But it has a different design where, like with the
-old BBCs, the frequency can be set flexibly anywhere in the IF band
-without concern about crossover frequencies etc.  The DBBC design has a
-module for each output baseband, so they are more directly comparable to
-BBCs. Support for the DDC personality of the DBBC has recently been
-implemented in \sched, but should be used with caution. The PFB
-personality is not yet supported.
+system that samples at 512 or 1024 MHz and digitally filters the signals
+to the desired bandwidths. But it has a different design where, like
+with the old BBCs, the frequency can be set flexibly anywhere in the IF
+band without concern about crossover frequencies etc.  The DBBC design
+has a module for each output baseband, so they are more directly
+comparable to BBCs. Support for the DDC personality of the DBBC has
+recently been implemented in \sched, but should be used with caution.
+The PFB personality is not yet supported.
 
 The DDC personality is selected by default, and can be selected
 explicitly by setting the \htmlref{{\tt DBE}}{SP:DBE} parameter to {\tt
@@ -2836,10 +2836,13 @@ DBBC\_DDC} in the setup file. \schedb will also accept a value of {\tt
 DBBC\_PFB} but this is not properly supported and will simply mimic the
 PFB personality of the RDBE. There are several different versions of the
 DBBC being deployed with slightly different components. The major
-difference is in the patching of IFs to particular BBCs (this may become
-fully switchable with future upgrades). Three variants are recognised by
-\sched. The variant is specified in the stations file with the
-\htmlref{{\tt DBBCVER}}{ST:DBBCVER} parameter. 
+difference is in the patching of IFs (aka conditioning modules) to
+particular BBCs (this may become fully switchable with future upgrades).
+Three variants are recognised by \sched. The variant is specified in the
+stations file with the \htmlref{{\tt DBBCVER}}{ST:DBBCVER} parameter.
+Each conditioning module (IF) has up to 4 switchable inputs. The signal
+available on each input is station dependent, so IF names should be
+assigned with due reference to the particular station's wiring.
 
 Currently 2 IF filters are supported. One in the range 10-512 MHz and a
 second in the range 512-1024 MHz. A suite of additional IF filters will
