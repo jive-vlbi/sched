@@ -16,6 +16,9 @@ C     either 2 or 4 IFs, but for now we assume 4 IFs are available. The
 C     code below forms the masks for allowed IF->BBC mappings then
 C     passes that to BBCALT in common with MkIV, etc.
 C
+C     Each IF also has 4 inputs, one of which we must select to get the
+C     right signal out.
+C
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
@@ -56,7 +59,7 @@ C     can be reused by chkdbbc.
 C
       CALL IFDBBC( MYDBBCVER, MAXBBC, MAXIF, IFBBC, MIF )
 C
-      WARNING = ' '
+      WARNING = 'DBBC'
 C
 C     Use the standard routine to set the BBC->IF mappings.
 C
