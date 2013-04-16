@@ -2841,7 +2841,8 @@ particular BBCs (this may become fully switchable with future upgrades).
 Three variants are recognised by \sched. The variant is specified in the
 stations file with the \htmlref{{\tt DBBCVER}}{ST:DBBCVER} parameter.
 Each conditioning module (IF) has up to 4 switchable inputs. The signal
-available on each input is station dependent, so IF names should be
+available on each input is station dependent, so IF names (\htmlref{{\tt
+IFNAME}}{FQ:IFNAME}, \htmlref{{\tt IFCHAN}}{SP:IFCHAN}) should be
 assigned with due reference to the particular station's wiring.
 
 Currently 2 IF filters are supported. One in the range 10-512 MHz and a
@@ -10882,10 +10883,10 @@ Up to 12 characters long.  Any string ok.
 various listings.  It is wise to note any limitations here that
 might not be obvious to a user.  Up to 80 characters.
 
-\item [{\tt IFNAME}] The name of the IF for up to 8 IF descriptions
-(eg. A, B, C, D).  There are a larger number than there are phsical IFs
-to allow description of such systems as the VLBA 50/90 cm system
-where there are more than one signal in each IF.
+\item [{\tt IFNAME}\label{FQ:IFNAME}] The name of the IF for up to 8 IF
+descriptions (eg. A, B, C, D).  There are a larger number than there are
+phsical IFs to allow description of such systems as the VLBA 50/90 cm
+system where there are more than one signal in each IF.
 
 For antennas in the EVN that have VLBA(4) DARs, the codes in use are
 usually A and C (LCP and RCP). For MkIV antennas there are two IF
@@ -10894,6 +10895,13 @@ Each distributor is connected to a fixed subset of the BBC's, either
 the odds or the evens.  The normal situation has IF 1N on LCP and 2N
 on RCP, but alternate channels 1A or 2A can be connected if more than
 the first 7 BBC's need to be set to a single polarization.
+
+For the \htmlref{{\tt DBBC}}{SSEC:DBBC}, {\tt IFNAME} contains two
+characters. The first (A-D) gives the conditioning module to be used,
+the second (1-4) deterimines which of the switchable inputs on that
+conditioning module is to be selected. The signal available on each
+input depends on the local station wiring, so careful catalogue
+maintenance is required.
 
 \item[{\tt ALTIFN}]  An alternate IF name for this frequency setup.
 For the Mark IV systems, the odd BBC's are attached to IF's 1N and
@@ -11491,8 +11499,8 @@ the bandwidth must be 32 MHz.  There are no options.  For the DDC
 personality ({\tt DBE = RDBE\_DDC}), the baseband channel
 bandwidth can be anywhere between 1 and 64 MHz in factor of 2
 steps, with possible extension down to 125 kHz some day.  For the 
-DBBC, the options are the factors of 2 between 0.5
-and 16 MHz, with additional options at 32 and 512 MHz.
+DBBC, the options are the factors of 2 between 1 and 16 MHz, with
+additional options at 32 and 512 MHz to be enabled in the future.
 
 For the original VLBA system and for MarkIV, the value must be a
 multiple of 2 times 0.0625~MHz up to a maximum of 16~MHz. Up to 16
@@ -11529,14 +11537,21 @@ try to set to reasonable default values for the digital backends
 and VLBA and MKIV format observations.  This is the option most
 users should take.
 
-Note that BBC assignments are arbitrary for the digital systems (RDBE
-and DBBC) and the old VLBA systems since all BBCs can see all input
-IFs.  However, for Mark III and Mark IV systems, there are strong
-constraints.  For ``astronomical patching'', which is the only one
-currently understood, the odd BBCs must be connected to IF1 (IFCHAN 1N
-or 1A where 1N is normally LCP and 1A is normally RCP).  Even BBCs
-must be connected to IF2 (IFCHAN 2N or 2A, where 2N is normally RCP
-and 2A is normally LCP).
+Note that BBC assignments are arbitrary for the RDBE and the old VLBA
+systems since all BBCs can see all input IFs.  However, for Mark~III and
+Mark~IV systems and the current version of the DBBC, there are strong
+constraints.  For Mark~III/IV ``astronomical patching'', which is the
+only one currently properly understood, the odd BBCs must be connected
+to IF1 (IFCHAN 1N or 1A where 1N is normally LCP and 1A is normally
+RCP).  Even BBCs must be connected to IF2 (IFCHAN 2N or 2A, where 2N is
+normally RCP and 2A is normally LCP). Mark III/IV ``geodetic patching''
+is more complicated and partially understood by \sched. Essentially IF1
+is connected to BBCs 1 to 8, and IF2 is connected to BBCs 9-14, though
+in some systems there is an IF3 available on BBCs 3 and 4 (this is
+actually an additional mixer on IF1 allowing access to a wider range of
+frequencies). The current version of the DBBC also has constraints on
+patching of BBCs to IF as described in the \htmlref{{\tt
+DBBCVER}}{SSEC:DBBC} section of the manual.
 
 \rcwbox
 {Up to one integer per baseband channel.}
@@ -11643,9 +11658,10 @@ The allowed {\tt BBSYN} frequencies for the PFB personality are
 sideband.  The freqeuncies listed are at the top of the 32 MHz
 channel.
 
-The DBBC system is more of a plug replacement for the MarkIV.
-More of a description will be provided eventually, along with support
-in \sched.
+The DBBC system is more of a plug replacement for the MarkIV. The DBBC
+has a range of possible IF frequencies, but currently only 2 are
+supported (10-512 MHz and 512-1024 MHz). Up to 16 {\tt BBSYN} frequencies
+can lie anywhere in the selected IF at a multiple of 10 kHz.
 
 \rcwbox
 {Up to 16 frequencies in MHz.}
@@ -11742,19 +11758,14 @@ The PFB option is much like the RDBE equivalent and the two will be treated
 the same in SCHED until that proves to be incorrect.
 
 \item {\tt DBBC\_DDC} This is the digital down converter option for
-the DBBC.  Unlike the RDBE equivalent, it does not have crossover
-issues as the frequency conversion is done on the full bandwidth data
-stream.  Each channel, or upper and lower sideband pair of channels,
-is derived in a separate converter.  Basically it tries to duplicate
-the function of the legacy BBC/VC in a digital package with sampling
-before the filter.  There are restrictions on the IFs that can be
-assigned to each BBCs.  BBCs 1-4 are attached to IF A which is
-normally RCP.  BBCs 5-8 are normally attached to IF C which is
-normally LCP.  For single polarization work, it is possible to route
-the desired polarization to both A and C.  I'm not sure where IFs B
-and D fit in this picture.  This description, written Jan. 20, 2013 by
-RCW, should not be considered preliminarly and a bit suspect.
-
+the DBBC.  Unlike the RDBE equivalent, it does not have crossover issues
+as the frequency conversion is done on the full bandwidth data stream.
+Each channel, or upper and lower sideband pair of channels, is derived
+in a separate converter.  Basically it tries to duplicate the function
+of the legacy BBC/VC in a digital package with sampling before the
+filter.  There are complicated restrictions on the IFs that can be
+assigned to each BBC as described in \htmlref{{\tt DBBC}}{SSEC:DBBC}.
+These restrictions should be alleviated with future firmware upgrades.
 
 
 \end{description}
@@ -12112,6 +12123,12 @@ about a bad {\tt IFCHAN} specification.
 1N, 1A, 2N, 2A are allowed values for MkIV telescopes.
 See \htmlref{{\tt BBC}}{SP:BBC} and the \htmlref{frequency catalog}
 {SEC:FRQCAT} parameter {\tt IFNAME} for more details.
+
+A[1-4], B[1-4], C[1-4] and D[1-4] are all possible values for
+the DBBC. The letter gives the conditioning module (A-D) to use, and the
+number gives the input (1-4) on that conditioning module to select. See
+the \htmlref{{\tt DBBC}}{SSEC:DBBC} section of the manual for more
+details.
 
 The ``geodetic'' wired VLBA systems (all not controlled by VLBA
 software) have restrictions on their IF assignments because the IF
