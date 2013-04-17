@@ -24,7 +24,7 @@ C
          END DO
       END DO
       IF( MYDBBCVER .EQ. 'ASTRO' ) THEN
-C        'Astro' version
+C        'Astro' version, 4 IFs with 4 BBCs each
          MIF = 4
          DO IBBC = 1, 4
             IFBBC(IBBC, 1) = 1
@@ -33,14 +33,14 @@ C        'Astro' version
             IFBBC(IBBC+12, 4) = 1
          END DO
       ELSE IF( MYDBBCVER .EQ. 'GEO' ) THEN
-C        'geo' version
+C        'geo' version, 2 IFs with 8 BBCs each
          MIF = 2
          DO IBBC = 1, 8
             IFBBC(IBBC, 1) = 1
             IFBBC(IBBC+8, 2) = 1
          END DO
       ELSE IF( MYDBBCVER .EQ. 'HYBRID' ) THEN
-C        'hybrid' version
+C        'hybrid' version, 3 IFs with 2x4 and 1x8 BBCs
          MIF = 3
          DO IBBC = 1, 4
             IFBBC(IBBC, 1) = 1
@@ -54,8 +54,8 @@ C        'hybrid' version
      1       'IFDBBC: DBBCVER not recognised:', MYDBBCVER
          CALL WLOG( 1, MSGTXT )
          CALL ERRLOG( 'catalog error' )
-
+C
       END IF
-
+C
       RETURN
       END

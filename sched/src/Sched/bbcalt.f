@@ -16,7 +16,8 @@ C
       INTEGER    ICH, JCH, KS, IBBC, NNBBC, IIF
       INTEGER    MAXBBC, MAXIF
       INTEGER    IFBBC(MAXBBC,MAXIF)
-      CHARACTER  IFNAM(MAXIF)*2, WARNING*(*), CHKCHAN*2
+      CHARACTER  IFNAM(MAXIF)*2, WARNING*(*), CHKNAM*2
+      CHARACTER  IFINPUT(MAXIF)*2
       LOGICAL    UBBC(MAXBBC)
 C -------------------------------------------------------------------  
       IF( DEBUG ) CALL WLOG( 0, 'BBCALT starting.' )
@@ -25,6 +26,10 @@ C     Initialize the array that flags used BBC's.
 C
       DO IBBC = 1, NNBBC
          UBBC(IBBC) = .FALSE.
+      END DO
+C     Initialize the array that flags used IF inputs on the DBBC
+      DO IIF = 1, MAXIF
+         IFINPUT(IIF) = 'ZZ'
       END DO
 C
 C     Flag those that have been used.
@@ -64,23 +69,38 @@ C
             DO IBBC = 1, NNBBC
                IF( .NOT. UBBC(IBBC) ) THEN
                   DO IIF = 1, MAXIF
-C                    For DBBC only first letter of IFCHAN is significant
-C                    for comparing with IFNAM
-                     CHKCHAN = IFCHAN(ICH,KS)
-                     IF( WARNING .EQ. 'DBBC' ) CHKCHAN=CHKCHAN(1:1)
-                     IF( CHKCHAN .EQ. IFNAM(IIF) .AND.
+C                    For DBBC only first letter of IFCHAN is
+C                    significant, unless an input has already been
+C                    assigned for this IF.
+                     CHKNAM = IFNAM(IIF)
+                     IF( WARNING .EQ. 'DBBC' ) THEN
+                        IF( IFINPUT(IIF) .EQ. 'ZZ' ) THEN
+                           CHKNAM = CHKNAM(1:1)//IFCHAN(ICH,KS)(2:2)
+                        ELSE
+                           CHKNAM=IFINPUT(IIF)
+                        END IF
+                     END IF
+C
+                     IF( IFCHAN(ICH,KS) .EQ. CHKNAM .AND.
      1                   IFBBC(IBBC,IIF) .EQ. 1 ) THEN
                         BBC(ICH,KS) = IBBC                  
                         UBBC(IBBC) = .TRUE.
+                        IFINPUT(IIF) = IFCHAN(ICH,KS)
                         GO TO 200
                      END IF
-                     CHKCHAN = ALTIFC(ICH,KS)
-                     IF( WARNING .EQ. 'DBBC' ) CHKCHAN=CHKCHAN(1:1)
-                     IF( CHKCHAN .EQ. IFNAM(IIF) .AND.
+                     IF( WARNING .EQ. 'DBBC' ) THEN
+                        IF( IFINPUT(IIF) .EQ. 'ZZ' ) THEN
+                           CHKNAM = CHKNAM(1:1)//ALTIFC(ICH,KS)(2:2)
+                        ELSE
+                           CHKNAM=IFINPUT(IIF)
+                        END IF
+                     END IF
+                     IF( ALTIFC(ICH,KS) .EQ. CHKNAM .AND.
      1                   IFBBC(IBBC,IIF) .EQ. 1 ) THEN
                         BBC(ICH,KS) = IBBC                  
                         UBBC(IBBC) = .TRUE.
                         IFCHAN(ICH,KS) = ALTIFC(ICH,KS)
+                        IFINPUT(IIF) = IFCHAN(ICH,KS)
                         GO TO 200
                      END IF
                   END DO
