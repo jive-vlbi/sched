@@ -166,7 +166,8 @@ C
                   IF( SIDEBD(ICH,KS) .EQ. 'U' .AND.
      1                ( CORREL .EQ. 'SOCORRO' .OR.
      2                  CORREL .EQ. 'VLBA' .OR.
-     3                  CORREL .EQ. 'VLBADIFX' ) ) THEN
+     3                  CORREL .EQ. 'VLBADIFX' .OR.
+     4                  CORREL .EQ. 'LBA' ) ) THEN
 C
 C                    Tell the user we will invert sidebands.
 C

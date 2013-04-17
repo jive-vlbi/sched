@@ -24,7 +24,7 @@ C
       INCLUDE  'schset.inc'
       INCLUDE  'schfreq.inc'
 C
-      INTEGER     KS, ICH, IIF, MIF, NIF, KSTA, NNIF(4), I, IBBC
+      INTEGER     KS, ICH, JCH, IIF, MIF, NIF, KSTA, NNIF(4), I, IBBC
       INTEGER     MAXBBC, MAXIF
       PARAMETER   (MAXBBC=16, MAXIF=4)
       LOGICAL     ERRS, SBWARN, IFNEW, OK, SOMEBAD
@@ -107,19 +107,13 @@ C
          END DO
 C
 C        Check the DBBC_PFB personality.
-C        Most checks are meant to be used both before and after 
-C        the filter selection is available.
-C        There is one check that is meant to be temporary that
-C        forces the current frequencies.
-C        CR: The PFB code here is just a copy of the RDBE and therefore
-C        almost certainly wrong. However, I don't currently have any
-C        better documenation on the DBBC...
+C        CR: The PFB code here is based on the RDBE code, with some
+C        modifications based on a brief message from Gino Tuccari. 
+C        This should be used with great caution...
 C
-C         write(*,*) 'chkddc dbe ', ks, '  ''', dbe(ks), ''''
          IF( DBE(KS) .EQ. 'DBBC_PFB' ) THEN
 C
 C           NCHAN must be 16 (in initial version).
-C    ******************  I think this may be wrong for the DBBC.
 C
             IF( NCHAN(KS) .NE. 16 ) THEN
                MSGTXT = ' '              
@@ -130,7 +124,9 @@ C
                ERRS = .TRUE.
             END IF
 C
-C           Sample rate must be 64 Msamp/sec.
+C           Sample rate must be 64 Msamp/sec. A future firmware upgrade
+C           will allow 2048 Mbps recording with 64 MHz baseband channels
+C           (128 Msamp/sec).
 C
             IF( SAMPRATE(KS) .NE. 64.0 ) THEN
                MSGTXT = ' '              
@@ -154,71 +150,24 @@ C
                END IF
             END DO
 C
-C           All baseband sidebands must be lower.
-C           Here is were we get a bit tricky and try to use
-C           inverted sidebands and let the correlator 
-C           fix it.
-C   *********************  is this needed for the DBBC_PFB?
+C           Basebands are either all LSB or all USB (depending on the
+C           Nyquist zone to be used). 1st Nyq is USB, 2nd LSB, 3rd USB,
+C           4th LSB.
 C
-            DO ICH = 1, NCHAN(KS)
-               IF( SIDEBD(ICH,KS) .NE. 'L' ) THEN
-                  IF( SBWARN ) THEN
-                     MSGTXT = ' '
-                     WRITE( MSGTXT, '( A, A, A )' )
-     1                  'CHKDBBC: SIDEBAND must be LSB for ',
-     2                  '  DBE=DBBC_PFB. Value specified is: ', 
-     3                  SIDEBD(ICH,KS)
-                     CALL WLOG( 1, MSGTXT )
-                  END IF
-C
-C                 Now let's fix it, if it was 'U' - ie not some
-C                 other bad spec.
-C                 Add other correlators to the list eventually.
-C  *********************  Can JIVE invert sidebands?  I could use
-C              the answer to this one even if the DBBC can do either
-C              sideband because it affects the RDBE.
-C
-                  IF( SIDEBD(ICH,KS) .EQ. 'U' .AND.
-     1                ( CORREL .EQ. 'SOCORRO' .OR.
-     2                  CORREL .EQ. 'VLBA' .OR.
-     3                  CORREL .EQ. 'VLBADIFX' ) ) THEN
-C
-C                    Tell the user we will invert sidebands.
-C
+            DO ICH = 1, NCHAN(KS) - 1
+               DO JCH = 2, NCHAN(KS)
+                  IF( SIDEBD(ICH,KS) .NE. SIDEBD(JCH,KS) ) THEN
                      IF( SBWARN ) THEN
                         MSGTXT = ' '
-                        WRITE( MSGTXT, '( A,A )' )
-     1                     '         DiFX can invert the sideband',
-     2                     ' so we''ll do that.'
+                        WRITE( MSGTXT, '( A, A )' )
+     1                     'CHKDBBC: SIDEBAND must be the same for ',
+     2                     'all channels if  DBE=DBBC_PFB. '
                         CALL WLOG( 1, MSGTXT )
+                        ERRS = .TRUE.
+                        SBWARN = .FALSE.
                      END IF
-C
-C                    Now do the inversion.
-C                    For FREQREF, we need the net sideband.
-C                    CORINV is the amount that got added to FREQREF 
-C                    to get the LO setting. For comparison with 
-C                    channels that will get correlated against
-C                    this one, subtract CORINV.  Note in all cases
-C                    we will be increasing the BBSYN frequency.
-C                    FREQREF can go either way.
-C
-                     IF( NETSIDE(ICH,KS) .EQ. 'U' ) THEN
-                        NETSIDE(ICH,KS) = 'L'
-                        CORINV(ICH,KS) = DBLE( SAMPRATE(KS) ) / 2.D0
-                     ELSE
-                        NETSIDE(ICH,KS) = 'U'
-                        CORINV(ICH,KS) = 
-     1                       -1.D0 * DBLE( SAMPRATE(KS) ) / 2.D0
-                     END IF
-                     SIDEBD(ICH,KS) = 'L'
-                     BBSYN(ICH,KS) = BBSYN(ICH,KS) + 
-     1                              ABS( CORINV(ICH,KS) )
-                     FREQREF(ICH,KS) = FREQREF(ICH,KS) + CORINV(ICH,KS)
-                  ELSE
-                     IF( SIDEBD(ICH,KS) .NE. 'U' ) ERRS = .TRUE.
                   END IF
-                  SBWARN = .FALSE.
-               END IF
+               END DO
             END DO
 C
 C           Bandwidths and frequencies will be checked in CHKDBFQ.
@@ -279,70 +228,69 @@ C
             END DO
 C
 C  ******************  There are some "interesting" ifchan assignment
-C            restrictions for the DBBC.  They are DBBCVER dependent.
+C            restrictions for the DBBC_DDC.  They are DBBCVER dependent.
 C            IFDBBC knows the rules and set IFBBC above.
 C
-      DO ICH = 1, NCHAN(KS)
-C        IFs are in range A-D, inputs in range 1-4. You may omit the
-C        input number, but it's not encouraged.
-         IF( ( IFCHAN(ICH,KS)(1:1) .NE. 'A' .AND.
-     1         IFCHAN(ICH,KS)(1:1) .NE. 'B' .AND.
-     2         IFCHAN(ICH,KS)(1:1) .NE. 'C' .AND.
-     3         IFCHAN(ICH,KS)(1:1) .NE. 'D' )  .OR.
-     4       ( IFCHAN(ICH,KS)(2:2) .NE. '1' .AND.
-     5         IFCHAN(ICH,KS)(2:2) .NE. '2' .AND.
-     6         IFCHAN(ICH,KS)(2:2) .NE. '3' .AND.
-     7         IFCHAN(ICH,KS)(2:2) .NE. '4' .AND.
-     8         IFCHAN(ICH,KS)(2:2) .NE. ' ' )) THEN
-            CALL WLOG ( 1, 'CHKDBBC: IFCHAN ''' // IFCHAN(ICH,KS) //
-     1          ''' not A[1-4], B[1-4], C[1-4] or D[1-4]' )
-            ERRS = .TRUE.
+            DO ICH = 1, NCHAN(KS)
+C              IFs are in range A-D, inputs in range 1-4. You may omit the
+C              input number, but it's not encouraged.
+               IF( ( IFCHAN(ICH,KS)(1:1) .NE. 'A' .AND.
+     1               IFCHAN(ICH,KS)(1:1) .NE. 'B' .AND.
+     2               IFCHAN(ICH,KS)(1:1) .NE. 'C' .AND.
+     3               IFCHAN(ICH,KS)(1:1) .NE. 'D' )  .OR.
+     4             ( IFCHAN(ICH,KS)(2:2) .NE. '1' .AND.
+     5               IFCHAN(ICH,KS)(2:2) .NE. '2' .AND.
+     6               IFCHAN(ICH,KS)(2:2) .NE. '3' .AND.
+     7               IFCHAN(ICH,KS)(2:2) .NE. '4' .AND.
+     8               IFCHAN(ICH,KS)(2:2) .NE. ' ' )) THEN
+                  CALL WLOG ( 1, 'CHKDBBC: IFCHAN ''' // IFCHAN(ICH,KS)
+     1              // ''' not A[1-4], B[1-4], C[1-4] or D[1-4]' )
+                  ERRS = .TRUE.
+               END IF
+            END DO
+C
+C
+C           Loop through the channels checking IF assignments.
+C
+            SOMEBAD = .FALSE.
+            DO ICH = 1, NCHAN(KS)
+C
+C              See if this channel uses an allowed IF given the wiring
+C              constraints embodied in the IFBBC array. Only the IF name can
+C              be enforced, the input number is known only to the catalogue.
+C              Omitting the input number is not an error, but will require
+C              remedial action at the station after running drudg.
+C
+               OK = .FALSE.
+               IBBC = BBC(ICH,KS)
+               DO IIF = 1, MAXIF
+                  IF( IFNAM(IIF) .EQ. IFCHAN(ICH,KS)(1:1) .AND.
+     1                IFBBC(IBBC,IIF) .EQ. 1 ) OK = .TRUE.
+               END DO
+C
+C              Give warnings if it was not allowed.
+C
+               IF( .NOT. OK ) THEN
+                  SOMEBAD = .TRUE.
+                  SETMSG = ' '
+                  WRITE( SETMSG, '( 3A, I4 )' )
+     1                'CHKDBBC: Illegal IF input ', IFCHAN(ICH,KS),
+     2                ' for DBBC, channel ', ICH
+                  CALL WLOG( 1, SETMSG )
+                  ERRS = .TRUE.
+               END IF
+C
+            END DO
+            IF( SOMEBAD ) THEN
+               SETMSG = ' '
+               WRITE( SETMSG, '( 2A )' )
+     1             '        Be careful of special wiring restrictions ',
+     2             'for these DARs.'
+               CALL WLOG( 1, SETMSG )
+            END IF
          END IF
-      END DO
-C
-C
-C     Loop through the channels checking IF assignments.
-C
-      SOMEBAD = .FALSE.
-      DO ICH = 1, NCHAN(KS)
-C
-C        See if this channel uses an allowed IF given the wiring
-C        constraints embodied in the IFBBC array. Only the IF name can
-C        be enforced, the input number is known only to the catalogue.
-C        Omitting the input number is not an error, but will require
-C        remedial action at the station after running drudg.
-C
-         OK = .FALSE.
-         IBBC = BBC(ICH,KS)
-         DO IIF = 1, MAXIF
-            IF( IFNAM(IIF) .EQ. IFCHAN(ICH,KS)(1:1) .AND.
-     1          IFBBC(IBBC,IIF) .EQ. 1 ) OK = .TRUE.
-         END DO
-C
-C        Give warnings if it was not allowed.
-C
-         IF( .NOT. OK ) THEN
-            SOMEBAD = .TRUE.
-            SETMSG = ' '
-            WRITE( SETMSG, '( 3A, I4 )' )
-     1          'CHKDBBC: Illegal IF input ', IFCHAN(ICH,KS),
-     2          ' for DBBC, channel ', ICH
-            CALL WLOG( 1, SETMSG )
-            ERRS = .TRUE.
-         END IF
-C
-      END DO
-      IF( SOMEBAD ) THEN
-         SETMSG = ' '
-         WRITE( SETMSG, '( 2A )' )
-     1       '         Be careful of special wiring restrictions ',
-     2       'for these DARs.'
-         CALL WLOG( 1, SETMSG )
-      END IF
 C
 C           Bandwidths and frequencies checked in CHKDBFQ
-C
-         END IF
 C
 C        Check the frequencies and bandwidths.  This is pulled out
 C        so that it can be used again later on frequencies set in-line
