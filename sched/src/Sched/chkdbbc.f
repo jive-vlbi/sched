@@ -112,6 +112,16 @@ C        modifications based on a brief message from Gino Tuccari.
 C        This should be used with great caution...
 C
          IF( DBE(KS) .EQ. 'DBBC_PFB' ) THEN
+            IF( .NOT. MODETEST(KS) ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, A, A, A )' )
+     1            'CHKDBBC: You have specified DBE=DBBC_PFB ',
+     2            'The PFB mode is not yet supported in the DBBC. ',
+     3            'This schedule will probably fail. ',
+     4            'Specify MODETEST if you are testing.'
+               CALL WLOG( 1, MSGTXT )
+               ERRS = .TRUE.
+            END IF
 C
 C           NCHAN must be 16 (in initial version).
 C
