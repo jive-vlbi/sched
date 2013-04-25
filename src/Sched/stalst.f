@@ -14,13 +14,13 @@ C
       WRITE( ISUM, '( 1X, /, 1X, /, 1X, /, A, /, 1X, /, A,A, /, '//
      1         ' 87X, A /, 1X )' )
      1      'STATIONS USED IN SCHEDULE:',
-     2      '   Station  Code   Latitude Longitude Elevation ',
+     2      '   Station  Code   Latitude Longitude  Elevation ',
      3      '      X            Y            Z       Axis',
      4      'Offset'
       AXWARN = .FALSE.
       DO ISTA = 1, NSTA
           ISCAT = STANUM(ISTA)
-          WRITE( ISUM, '( 3X, A8, 2X, A3, 2F10.5, F9.0, 2X, ' //
+          WRITE( ISUM, '( 3X, A8, 2X, A3, F10.5, F11.5, F9.0, 2X, ' //
      1           ' 3F13.3, F7.3 )' ) 
      2        STATION(ISCAT), STCODE(ISCAT),
      3        LAT(ISCAT)/RADDEG,
