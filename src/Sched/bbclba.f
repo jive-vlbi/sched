@@ -8,7 +8,7 @@ C
       INCLUDE    'schfreq.inc'
 C
       INTEGER    ICH, JCH, KS, MMBBC
-      LOGICAL    GOTMATCH(NCHAN(KS))
+      LOGICAL    GOTMATCH(MCHAN)
 C -------------------------------------------------------------------  
       IF( SDEBUG ) CALL WLOG( 0, 'BBCLBA: Starting.' )
 C     Determine the highest numbered BBC already assigned.
