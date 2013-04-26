@@ -14,20 +14,29 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER    ICH, JCH, KS, IBBC, NNBBC, IIF
-      INTEGER    MAXBBC, MAXIF
+      INTEGER    MAXBBC, MAXIF, MAXIFI
+      PARAMETER  (MAXIFI=8)
       INTEGER    IFBBC(MAXBBC,MAXIF)
       CHARACTER  IFNAM(MAXIF)*2, WARNING*(*), CHKNAM*2
-      CHARACTER  IFINPUT(MAXIF)*2
+      CHARACTER  IFINPUT(MAXIFI)*2
       LOGICAL    UBBC(MAXBBC)
 C -------------------------------------------------------------------  
       IF( DEBUG ) CALL WLOG( 0, 'BBCALT starting.' )
+C
+C     Since MAXIF could not be used for IFINPUT, check that MAXIFI
+C     is big enough.
+C
+      IF( MAXIF .GT. MAXIFI ) CALL ERRLOG( 'BBCALT:  MAXIF bigger '//
+     1  'than MAXIFI - programming error' )
 C
 C     Initialize the array that flags used BBC's.
 C
       DO IBBC = 1, NNBBC
          UBBC(IBBC) = .FALSE.
       END DO
+C
 C     Initialize the array that flags used IF inputs on the DBBC
+C
       DO IIF = 1, MAXIF
          IFINPUT(IIF) = 'ZZ'
       END DO
