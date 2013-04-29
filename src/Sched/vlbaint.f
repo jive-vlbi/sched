@@ -14,7 +14,7 @@ C     must be written.
 C
 C     Some hoop jumping is done to avoid writing blanks.
 C
-      CHARACTER   LABEL*(12), OUTLINE*80
+      CHARACTER   LABEL*(*), OUTLINE*80
       CHARACTER   FMTCH*4, FMTDAT*4
       INTEGER     ARRAY(*), OLDARRAY(*)
       INTEGER     NCHAN, OLDCHAN, KCHAR, NCHAR, NCL, NDIG

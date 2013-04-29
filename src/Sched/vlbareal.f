@@ -14,7 +14,7 @@ C     record (eg BBSYN) and IUVBA is the output unit number.  OLDARRAY
 C     should be dimensioned the same as ARRAY.  If the number of 
 C     channels increases, write out the new ones.
 C
-      CHARACTER   LABEL*12, OUTLINE*80, FMT*6
+      CHARACTER   LABEL*(*), OUTLINE*80, FMT*6
       DOUBLE PRECISION  ARRAY(*), OLDARRAY(*)
       INTEGER     NCHAN, OLDCHAN, KCHAR, NCHAR, NCL
       INTEGER     I, IUVBA, NDIG
