@@ -54,7 +54,7 @@ C
       DATA          WARNCRD / .TRUE. /
 C
 C ----------------------------------------------------------------------
-      IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBASU: Starting.' )
+      IF( DEBUG ) CALL WLOG( 0, 'VLBASU: Starting.' )
 C
       NNCHAN = NCHAN(LS)
       IF( FIRSTS ) SWARNS = .TRUE.
@@ -72,7 +72,7 @@ C     NBBC parameter for the station will apply to the RDBE so don't
 C     use that.  Later I need to protect against invalid BBC frequencies,
 C     bandwidths, formats, and pcal detection information (yuk).
 C
-      IF( DAR(KSTA) .EQ. 'RDBE' ) THEN
+      IF( DAR(KSTA)(1:4) .EQ. 'RDBE' ) THEN
          NNCHAN = MIN( NNCHAN, 8 )
       END IF
 C
@@ -176,6 +176,7 @@ C
                   ELSE
                     RSYNTH = RSYNTH - 0.1D0
                   END IF
+
                   IF( DSYNTH(I) .NE. RSYNTH .AND. SWARNS ) THEN
                      WRITE( IUVBA, '( A )' ) ' '
                      MSGTXT = '!*  synth 1 & 2 values shown are '//
@@ -226,7 +227,7 @@ C
 C           For Pie Town link experiments, tell PT to switch to the
 C           other noise cal switching frequency.
 C
-            IF( STANAME(ISTA) .EQ. 'VLBA_PT' .AND. 
+           IF( STANAME(ISTA) .EQ. 'VLBA_PT' .AND. 
      1          ( FIRSTS .OR. NOISEFRQ(LS) .NE. LNOISEF ) ) THEN
                WRITE( IUVBA, '( 2A )' ) 'noisefreq=', 
      1           NOISEFRQ(LS)(1:LEN1(NOISEFRQ(LS)))
@@ -334,7 +335,7 @@ C        which means the pulse cal doesn't get set up.
 C        So specify a valid format.
 C
          IF( FIRSTS .OR. FORMAT(LS) .NE. LFORMAT ) THEN
-            IF( DAR(KSTA) .NE. 'RDBE' ) THEN
+            IF( DAR(KSTA)(1:4) .NE. 'RDBE' ) THEN
                WRITE( IUVBA, '( 2A )' )
      1             'format=', FORMAT(LS)(1:LEN1(FORMAT(LS)))
             ELSE
@@ -484,7 +485,7 @@ C     moved the NOREC check to cover only the track specification.
 C     Also protect against too high samplerate when using the RDBE.
 C
       IF( VLBITP .AND. FORMAT(LS) .NE. 'NONE' ) THEN
-         IF( DAR(KSTA) .NE. 'RDBE' ) THEN
+         IF( DAR(KSTA)(1:4) .NE. 'RDBE' ) THEN
             DSAMPR = SAMPRATE(LS)
          ELSE
             DSAMPR = MIN( SAMPRATE(LS), 32.0 )
@@ -500,6 +501,6 @@ C     Set frequency switching request.
 C
       FRS = FRSWITCH(LS)
 C
+      IF( DEBUG ) CALL WLOG( 0, 'VLBASU: Ending' )
       RETURN
       END          
-

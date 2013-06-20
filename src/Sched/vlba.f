@@ -32,7 +32,7 @@ C
 C
       DATA          LSTA, LLS / 0, 0 /
 C --------------------------------------------------------------------
-      IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBA: Starting' )
+      IF( DEBUG ) CALL WLOG( 0, 'VLBA: Starting' )
 C
 C     Wrap up the schedule on the last call.
 C
@@ -204,6 +204,7 @@ C
 C
       END IF      ! Not final wrapup.
 C
+      IF( DEBUG ) CALL WLOG( 0, 'VLBA: Ending' )
       RETURN
       END
 

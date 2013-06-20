@@ -1,18 +1,19 @@
       SUBROUTINE RDBELEVT
 C
-C     The RDBE takes a finite, and for now unfortunately large, amount
-C     of time to set power levels.  This routine checks that adequate
-C     time is available to do this operation.
+C     The RDBE takes a finite amount of time to set power levels.  This 
+C     routine checks that adequate time is available to do this operation.
+C     It was more important when the times were longer.
 C
 C     There are two level setting operations.  The first is to set the analog
 C     power level before the sampler.  That is a "set and remember" operation.
 C     It is done only once per project just before the first scan that uses
 C     a particular setup in terms of RF band, external LOs etc - items that
 C     can affect the power level in the 512 MHz.  The on-line system will 
-C     try to start this operation 15 seconds before the scan start, but will
-C     delay the start by the required amount to allow 15 seconds if necessary.
-C     The antenna catalog parameter TLEVSET can be used to be sure this time
-C     is provided.
+C     try to start this operation 5 seconds before the scan start, but will
+C     delay the start by the required amount to allow 5 seconds if necessary.
+C     This was originally 15 seconds when this routine was written, so was
+C     rather more important than now. The antenna catalog parameter TLEVSET 
+C     can be used to be sure this time is provided.
 C
 C     If this operation is not done properly, the whole experiment at that
 C     band (setup file) can be messed up pretty badly.  After the first time,
@@ -23,13 +24,13 @@ C     the same setup and so don't need to redo the set.
 C
 C     The second set happens at the beginning of each scan.  It is to set
 C     the thresholds for the final resampling to 2 bits.  That operation
-C     is allocated 5 seconds.  So every scan should have that much of a gap.
-C     To be sure this time is added for DWELL scheduled projects, use the
-C     antenna catalog parameter MINSETUP.
-C
-C     It is hoped that these times will be reduced in the future.
+C     is allocated 2 seconds (absorbed in the 5 seconds for the first time).  
+C     This used to be 5 seconds. So every scan should have that much of a 
+C     gap.  To be sure this time is added for DWELL scheduled projects, use 
+C     the antenna catalog parameter MINSETUP.
 C
 C     Craig Walker  Oct. 23, 2012.
+C     Changed to reflect faster times, May 22, 2013
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
@@ -38,8 +39,8 @@ C
       LOGICAL    SETSEEN(MSET), WARNMSG
       LOGICAL    TRWARN, TSWARN1, TSWARN2
       DOUBLE PRECISION   TSAMPLEV, TRESAMP, STARTS, TOL
-      PARAMETER          ( TSAMPLEV = 15.D0 )
-      PARAMETER          ( TRESAMP = 5.D0 )
+      PARAMETER          ( TSAMPLEV = 5.D0 )
+      PARAMETER          ( TRESAMP = 2.D0 )
       PARAMETER          ( TOL = 0.1 )
       DATA       TRWARN, TSWARN1, TSWARN2, WARNMSG / 4*.TRUE. /
       SAVE       TRWARN, TSWARN1, TSWARN2, WARNMSG
@@ -48,7 +49,7 @@ C     Loop over stations.  Do this operation on a per station basis except
 C     don't repeat the warnings too often. Only worry about RDBE stations.
 C
       DO ISTA = 1, NSTA
-         IF( DAR(STANUM(ISTA))  .EQ. 'RDBE' ) THEN
+         IF( DAR(STANUM(ISTA))(1:4) .EQ. 'RDBE' ) THEN
 C
 C           Loop over scans.  Look for setup changes.  Assume for the
 C           purposes of this check that a change of setup group

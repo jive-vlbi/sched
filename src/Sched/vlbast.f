@@ -20,7 +20,7 @@ C
       DOUBLE PRECISION  PMFRACD, FRACD1, FRACD2
       SAVE              PMSET, LCALTIME
 C --------------------------------------------------------------------
-      IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'VLBAST: Starting.' )
+      IF( DEBUG ) CALL WLOG( 0, 'VLBAST: Starting.' )
 C
 C     Some initializations.
 C
@@ -109,5 +109,6 @@ C
          WRITE( IUVBA, '( A, I4 )' ) 'maxcaltime=', LCALTIME
       END IF
 C
+      IF( DEBUG ) CALL WLOG( 0, 'VLBAST: Ending.' )
       RETURN
       END

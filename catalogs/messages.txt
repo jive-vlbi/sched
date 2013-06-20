@@ -468,19 +468,20 @@ Changes can cause changes in phase and the sampler, with many bits,
 has a lot of headroom, so this is only done once per project for each
 setup configuration that affects the IF (it is not done for minor
 baseband frequency changes within an IF such as occur with Doppler
-tracking, at least on the VLBA).  Fifteen seconds should be allowed
-for this process on the VLBA.  Sixty seconds are needed on the VLA.
-The antenna catalog input TLEVSET is used to try to enforce such a
-gap for the first scan of each setup.
+tracking, at least on the VLBA).  Five seconds should be allowed for
+this process on the VLBA, which normally won't be a probem.  Sixty
+seconds are needed on the VLA.  The antenna catalog input TLEVSET is
+used to try to enforce such a gap for the first scan of each setup.
 
 The second level setting operation occurs at the start of every scan
-and involves the thresholds for high and low states of the 4 level/2
-bit samples that are recorded.  Five seconds should be allowed for
-that.  Again, when the on-line system is given an inadequate gap, the
-beginning of the scan will be corrupted.  Flags will eventually be
-written, but are not yet.  SCHED will warn when it sees a scan gap
-shorter than that for the first time.  The antenna catalog parameter
-MINSETUP should be long enough to include this time.
+for the RDBE/PFB and involves the thresholds for high and low states
+of the 4 level/2 bit samples that are recorded.  Two seconds should be
+allowed for that, which will normally be provided automatically thanks
+to TSETTLE.  Again, when the on-line system is given an inadequate
+gap, the beginning of the scan will be corrupted.  Flags will
+eventually be written, but are not yet.  SCHED will warn when it sees
+a scan gap shorter than that for the first time.  The antenna catalog
+parameter MINSETUP should be long enough to include this time.
 
 The gap of interest is between the stop time of the previous scan at
 the station and the time when recording of data would start.  With the
@@ -491,7 +492,7 @@ station dependent start time offset in the $SCHED section.  The
 starting the "tape" requested using PRESTART and MINPAUSE.
 
 For the VLBA, information about the first incidence of a recording
-stop of less than 15 seconds with a first setup encounter or 5 seconds
+stop of less than 5 seconds with a first setup encounter or 2 seconds
 with no setup change is below.
 
 ++harmwarn

@@ -120,7 +120,7 @@ C
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKRDBE: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=RDBE_PFB. Must be 32.0 Msamp/s.'
+     2           ' for DBE=RDBE_PFB. Must be 64.0 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
@@ -230,10 +230,13 @@ C
                ERRS = .TRUE.
             END IF
             IF( MIF .EQ. 2 .AND. NCHAN(KS) .GT. 4 ) THEN
+               CALL WLOG( 1, 
+     1           'CHKRDBE: If there is a single RDBE using the DDC '//
+     2           'personality, or the format is not VDIF,' )
                MSGTXT = ' '              
-               WRITE( MSGTXT, '( A, A, I4 )' )
-     1           'CHKRDBE: For a single RDBE, or PFB or not VDIF, ',
-     2           ' NCHAN must <= 4.  Setup specified.', NCHAN(KS)
+               WRITE( MSGTXT, '( A, I4 )' )
+     1           '         NCHAN must be <= 4.  Setup specified.', 
+     2           NCHAN(KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF

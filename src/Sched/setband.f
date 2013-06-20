@@ -19,7 +19,7 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER           KS, ICH, MBD, IB, I, ISETF, ICS, ICX, IBS, IBX
-      INTEGER           ISTA
+      INTEGER           ISTA, NBWARN
       PARAMETER         (MBD=15)
       DOUBLE PRECISION  CFREQ(MBD), FRQLOW(MCHAN), TEMP, TEMPS, TEMPX
       DOUBLE PRECISION  TOTBAND, CBW(MBD)
@@ -68,6 +68,7 @@ C
 C     Keep the indices for the X and S band frequencies used for SX.
 C
       DATA  IBS, IBX  /  1,  2  /
+      DATA  NBWARN  / 0 /
 C ----------------------------------------------------------------------
 C     First see if the frequency is needed based on the first 
 C     channel.
@@ -244,6 +245,17 @@ C
             END DO
 C
          END IF
+C
+C     Check for case where both BAND and setup info are provided. 
+C     Warn user.
+C
+      ELSE IF( BAND(KS) .NE. ' ' .AND. NBWARN .LT. 1) THEN
+         CALL WLOG( 1, 'SETBAND:  Both BAND and adequate information '
+     1       //' to set frequencies were provided' )
+         CALL WLOG( 1, '          BAND will be ignored. ' //
+     1       ' Only one warning will be issued.' )
+         CALL WLOG( 1, '          Setup file: '// SETNAME(KS) )
+         NBWARN = NBWARN + 1
       END IF
 C
       RETURN

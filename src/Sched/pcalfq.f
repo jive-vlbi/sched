@@ -25,6 +25,8 @@ C
       CHARACTER     PCX1(MAXPC)*3, PCX2(MAXPC)*3
       CHARACTER     PCALC1*3, UPCAL*4, PCOPT*4
 C ----------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'PCALFQ starting ' )
+C
 C     Allow a call that uses the setup file values.
 C
       IF( PCOPT .EQ. 'SET' ) THEN

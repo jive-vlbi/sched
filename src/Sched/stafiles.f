@@ -95,5 +95,6 @@ C
 C
       END DO   ! Station loop
 C
+      IF( DEBUG ) CALL WLOG( 0, 'STAFILES: Ending.' )
       RETURN
       END

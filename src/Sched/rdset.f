@@ -6,6 +6,9 @@ C
 C     Routine called by SCHIN for in-stream setup files (IUNIT=5) 
 C     and by GETSET for external files (IUNIT = IUSET).
 C
+C     UOPEN tells whether the file needs to be opened (external)
+C     of not (imbedded in input file).
+C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
@@ -38,8 +41,9 @@ C     Write some debugging output.
 C
 c      IF( DEBUG ) THEN
          SETMSG = ' '
-         WRITE( SETMSG, '( A, I4, 2X, A )' )
-     1       'RDSET: Reading setup', ISETF, SETREQ(1:LEN1(SETREQ))
+         WRITE( SETMSG, '( A, I4, 1X, L1, 2X, A )' )
+     1       'RDSET: Reading setup', ISETF, UOPEN, 
+     2       SETREQ(1:LEN1(SETREQ))
          CALL WLOG( 0, SETMSG )
 c      END IF
 C
