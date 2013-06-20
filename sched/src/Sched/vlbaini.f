@@ -56,7 +56,7 @@ C     Also write a warning that the VEX file probably cannot be
 C     used for correlation.
 C
       IF( VLBITP .AND. USEDISK(ISTA) ) THEN
-         IF( DAR(KSTA) .EQ. 'RDBE' .AND. DOMKA ) THEN
+         IF( DAR(KSTA)(1:4) .EQ. 'RDBE' .AND. DOMKA ) THEN
             DISKD = 'mark5a'
             WRITE( IUVBA, '( 1X, /, 2A )' ) 
      1         '!*  WARNING:  This crd file ',

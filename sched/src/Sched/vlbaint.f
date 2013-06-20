@@ -14,7 +14,7 @@ C     must be written.
 C
 C     Some hoop jumping is done to avoid writing blanks.
 C
-      CHARACTER   LABEL*(*), OUTLINE*80
+      CHARACTER   LABEL*(*), OUTLINE*80, MSGLINE*80
       CHARACTER   FMTCH*4, FMTDAT*4
       INTEGER     ARRAY(*), OLDARRAY(*)
       INTEGER     NCHAN, OLDCHAN, KCHAR, NCHAR, NCL, NDIG
@@ -52,8 +52,9 @@ C
                IF( ARRAY(I) .LT. 0 ) NDIG = NDIG + 1
             END IF
             IF( NDIG .GT. 9 ) THEN
-               CALL ERRLOG( ' A value in '//LABEL(1:NCL)//
-     1             ' is too large for format.' )
+               MSGLINE = ' A value in '//LABEL(1:NCL)//
+     1             ' is too large for format.'
+               CALL ERRLOG( MSGLINE )
             END IF
             WRITE( FMTDAT, '( A, I1, A )' ) '(I', NDIG, ')'
             IDAADD = NDIG

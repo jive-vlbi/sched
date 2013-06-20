@@ -21,7 +21,8 @@ C     LS is in schset.inc
 C
       IF( USEDISK(ISTA) ) THEN
          IF( NOREC(ISCN) .OR. SETSC .OR. FORMAT(LS) .EQ. 'NONE' .OR.
-     1       ( DAR(STANUM(ISTA)) .EQ. 'RDBE' .AND. .NOT. DOMKA ) ) THEN
+     1       ( DAR(STANUM(ISTA))(1:4) .EQ. 'RDBE' .AND. 
+     2       .NOT. DOMKA ) ) THEN
             WRITE( IUVBA, '( A )' ) 'disk=off'
          ELSE
             WRITE( IUVBA, '( A )' ) 'disk=on'

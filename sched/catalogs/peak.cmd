@@ -53,8 +53,14 @@ linename = 'PSiO431'
 !!!
 sources = 'P-OCeti','P-IkTau','P-TxCam','P-Orinew2','P-RLeo','P-UHer',
           'P-VYCma','P-VXSgr', 'SiO-WHya','SiO-RCas',
-          '3C279','1334-127','3C273','3C345','3C446','0607-157',
-          'NRAO530','3C84'
+          '3C279','1334-127','3C273','3C345','0607-157',
+          '3C84'
+!  3C446 and NRAO530 used to be in this list, but appear to be too weak
+!  as of May 2013 according to the BU Blazar project.
+!  3C345's peak is low in the Blazar project, but it's total might be higher.
+!  1334-127, 0607-157 are not in the BU project or VLBA regular pointing
+!  so their status is unknown
+!    This source list need to be revisited.
 
 !!! moderately strong sources, but variable so they may not always work..
 !!! Vivek 2001 Feb12.

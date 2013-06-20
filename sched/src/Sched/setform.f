@@ -133,6 +133,8 @@ C     this can be done as with most modern systems.
 C     Actually, this is not always right, but, if not, the
 C     user will need to be specific.
 C     Note the ELSE option grabs VLBA and MKIV.
+C     Operation of 2 RDBE's simultaneously requires the use of
+C     VDIF for processing.
 C
       DO KS = 1, NSET
          IF( FORMAT(KS) .EQ. ' ' ) THEN
@@ -142,7 +144,8 @@ C
                FORMAT(KS) = 'MARK5B'
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5B' ) THEN
                FORMAT(KS) = 'MARK5B'
-            ELSE IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) THEN
+            ELSE IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' .OR.
+     1          DAR(ISETSTA(KS)) .EQ. 'RDBE2' ) THEN
                FORMAT(KS) = 'VDIF'
             ELSE
                FORMAT(KS) = DAR(ISETSTA(KS))

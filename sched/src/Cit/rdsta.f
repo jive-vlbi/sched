@@ -387,11 +387,12 @@ C
                CALL GEOXYZ( 1, STALON, STALAT, STAEL, 
      1                      STAX, STAY, STAZ, IER )
                IF( IER .NE. 0 ) CALL PUTOUT( 
-     1             'RDSTA: Problem with locations file coordinate '//
-     2             'conversions for '// STANAM )
+     1           'RDSTA: Problem with locations file coordinate '//
+     2           'conversions for '// STANAM )
             ELSE
                CALL PUTOUT( 'RDSTA: No coordinates in stations or' //
-     1                ' locations file for '//STANAM )
+     1                ' locations file for '//STANAM // ' dbname:' //
+     2                STADBN )
                CALL PUTOUT( 'RDSTA: Check date range in addition' //
      1                ' to names.' )
             END IF

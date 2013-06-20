@@ -138,7 +138,7 @@ C        VEX file) given for the scan as a whole.
 C        If USEONSRC is not true, assume that the recording starts
 C        at the recording start time.
 C
-         USEONSRC(MSTA) = ( DAR(MSTA) .EQ. 'RDBE' .AND.   
+         USEONSRC(MSTA) = ( DAR(MSTA)(1:4) .EQ. 'RDBE' .AND.   
      1                      CONTROL(MSTA) .EQ. 'VLBA' ) .OR.
      2                    ( DAR(MSTA) .EQ. 'WIDAR' .AND.   
      3                      CONTROL(MSTA) .EQ. 'VEX' )      
