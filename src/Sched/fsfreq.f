@@ -22,7 +22,7 @@ C
       DATA               FWARN, VLAWARN / .TRUE., .TRUE. /
       SAVE               FWARN, VLAWARN
 C ----------------------------------------------------------------------
-      IF( DEBUG ) CALL WLOG( 0, 'FSFREQ starting.' )
+      IF( DEBUG ) CALL WLOG( 0, 'FSFREQ: starting.' )
 C
 C     Make sure this wasn't mistakenly called with KF = 0, perhaps 
 C     when NOSETUP was specified.  I had a complaint from JIVE about
@@ -272,5 +272,6 @@ C
 C     END
 C
   999 CONTINUE
+      IF( DEBUG ) CALL WLOG( 0, 'FSFREQ: Ending' )
       RETURN
       END

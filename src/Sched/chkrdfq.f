@@ -131,23 +131,45 @@ C     ===  Now check the DDC personality. ===
 C
       IF( DBE(KS) .EQ. 'RDBE_DDC' ) THEN
 C
-C        All bandwidths must be between 250 kHz and 128 MHz.
+C        All bandwidths must be between 1MHz and 128 MHz.
+C        Narrower bandwidths are possible but can create some
+C        problems.  Restrict non-testers to 1 MHz and above.
+C        All bandwidths must be the same.  This might lapse 
+C        eventually by allowing 2 RDBEs to each have a different
+C        BW.
+C
+C     *********  Worry about DDC needing SAMPRATE = 2 * BBCBW. *********
 C
          DO ICH = 1, NCHAN(KS)
             IF( .NOT. ( DEQUAL( BBCBW(ICH), 128.0D0 ) .OR. 
-     a          DEQUAL( BBCBW(ICH), 64.0D0 ) .OR. 
-     1          DEQUAL( BBCBW(ICH), 32.0D0 ) .OR. 
-     2          DEQUAL( BBCBW(ICH), 16.0D0 ) .OR. 
-     3          DEQUAL( BBCBW(ICH), 8.0D0 ) .OR. 
-     4          DEQUAL( BBCBW(ICH), 4.0D0 ) .OR. 
-     5          DEQUAL( BBCBW(ICH), 2.0D0 ) .OR. 
-     6          DEQUAL( BBCBW(ICH), 1.0D0 ) ) ) THEN
+     1          DEQUAL( BBCBW(ICH), 64.0D0 ) .OR. 
+     2          DEQUAL( BBCBW(ICH), 32.0D0 ) .OR. 
+     3          DEQUAL( BBCBW(ICH), 16.0D0 ) .OR. 
+     4          DEQUAL( BBCBW(ICH), 8.0D0 ) .OR. 
+     5          DEQUAL( BBCBW(ICH), 4.0D0 ) .OR. 
+     6          DEQUAL( BBCBW(ICH), 2.0D0 ) .OR. 
+     7          DEQUAL( BBCBW(ICH), 1.0D0 ) ) ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, F8.3 )' )
-     1            'CHKRDFQ: Bandwidth must be 1 to 128 MHz for ',
+     1            'CHKRDFQ: Bandwidth should be 1 to 128 MHz for ',
      2            'DBE=RDBE_DDC. Value specified is: ', 
      3            SIDEBD(ICH,KS)
                CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 1, '         Narrower bands are possible '//
+     1            'if MODETEST is specified.' )
+               IF( BBCBW(ICH) .LT. 1.D0 .AND. MODETEST(KS) ) THEN
+                  CALL WLOG( 1, '        Overriding BW restriction.'//
+     2                '  You are on your own to get it right!' )
+               ELSE
+                  ERRS = .TRUE.
+               END IF
+            END IF
+C
+C           Same bandwidth test.
+C
+            IF( ICH .GE. 2 .AND. BBCBW(ICH) .NE. BBCBW(1) ) THEN
+               CALL WLOG(1, 'CHKRDFQ: All channels must have the '//
+     1             'same bandwidth with the DDC.  Yours don''t.' )
                ERRS = .TRUE.
             END IF
          END DO
@@ -230,7 +252,7 @@ C           Check for multiple of 15.625 kHz.  This test allows a
 C           bit of slop (about 100 mHz)
 C
             IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.015625D0 ) .GT. 2.D-7
-     1          .AND. NFWARN .LE. 16 ) THEN
+     1          .AND. NFWARN .LE. 1 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
      1           ' BBSYN for the RDBE_DDC must be an even multiple',
@@ -243,9 +265,8 @@ C
      3            ' MHz found in channel ', ICH, ' of setup ', 
      4            SETNAME(KS)
                CALL WLOG( 1, MSGTXT )
-               IF( NFWARN .GE. 16 ) THEN
+               IF( NFWARN .GE. 1 ) THEN
                   MSGTXT = 'CHKRDFQ:   Further warnings suppressed '
-     1               //'- too many.'
                   CALL WLOG( 1, MSGTXT )                     
                END IF                  
                NFWARN = NFWARN + 1
@@ -254,7 +275,7 @@ C
 C           Check for multiple of 250 kHz.
 C
             ELSE IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.250D0 ) .GT. 2.D-7
-     1          .AND. N2WARN .LE. 16 ) THEN
+     1          .AND. N2WARN .LE. 1 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
      1           ' It is recommended that BBSYN for the RDBE_DDC ',
@@ -267,9 +288,8 @@ C
      3            ' MHz found in channel ', ICH, ' of setup ', 
      4            SETNAME(KS)
                CALL WLOG( 1, MSGTXT )
-               IF( N2WARN .GE. 16 ) THEN
-                  MSGTXT = 'CHKRDFQ:   Further warnings suppressed '
-     1               //'- too many.'
+               IF( N2WARN .GE. 1 ) THEN
+                  MSGTXT = 'CHKRDFQ:   Further warnings suppressed.'
                   CALL WLOG( 1, MSGTXT )                     
                END IF                  
                N2WARN = N2WARN + 1
@@ -384,5 +404,6 @@ C
          CALL WLOG( 1, MSGTXT )
       END IF
 C
+      IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Ending' )
       RETURN
       END

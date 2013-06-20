@@ -13,6 +13,8 @@ C
       DOUBLE PRECISION   JBBCFREQ(MCHAN), JBBCBW(MCHAN)
       DOUBLE PRECISION   JLOSUM(MCHAN)
 C -------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'FSMATCH starting' )
+C
 C     Get the setup group numbers these are from.
 C
       KS = FSETKS(KF)

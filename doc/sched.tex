@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 11.1 beta}
+\title{THE \schedb USER MANUAL \\  Version 11.1 beta of June 19, 2013}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -1746,17 +1746,19 @@ before the wide band samplers.  Changing the attenuators can cause
 phase errors, but there is a lot of dynamic range in the allowed
 levels.  Therefore the attenuators are only set once for each
 frequency setup per observation.  Time needs to be left for that
-operation.  The RDBE needs 15 seconds.  The VLA needs 60 seconds.
+operation.  The RDBE needs 5 seconds.  The VLA needs 60 seconds.
 \schedb will warn when inadequate time is provided.  Also, \schedb
 will schedule in the required time automatically using the numbers in
 the station catalog parameter {\tt TLEVSET} when using dwell time
 scheduling when the scan itself is a recording scan, a pointing scan,
 or a phasing scan (VLA) or is not long enough.  After the first scan
-with a setup, the RDBE needs about 5 seconds at the start of each scan
-to set the levels for the final down-sampler to 2 bits.  That time
-will be provided automatically for if the station file parameter {\tt
-TSETTLE} is higher, which it normally is for other reasons.  The VLA
-doesn't need extra time for that, although that operation is done.
+with a setup, the RDBE/PFB needs about 2 seconds at the start of each
+scan to set the levels for the final down-sampler to 2 bits.  That
+time will be provided automatically for if the station file parameter
+{\tt TSETTLE} is higher, which it normally is for other reasons.  For
+the DDC personality, the level setting will be adjusted regularily
+during the scan.  The VLA doesn't need extra time for that, although
+that operation is done.
 
 
 \end{list}
@@ -8066,10 +8068,10 @@ only be used by VLBA schedulers.
 Starting in October 2011, the VLBA has been used to provide daily
 Earth Orientation Parameter (EOP) observations for the U.S. Naval
 Observatory in return for financial support for VLBA operations.
-These observations are a geodetic style run of duration up to
-1.5 hours using the Pie Town to Mauna Kea baseline.  The observations
-happen within about 4 hours of 18 hours UT, but will likely
-shift 12 hours from there after confidence is gained in the results.
+These observations are a geodetic style run of duration up to 1.5
+hours using the Pie Town to Mauna Kea baseline.  The observations were
+happening within about 4 hours of 18 hours UT.  In early June 2013,
+they were shifted to within about 4 hours of 7 UT, during the night.
 
 These observations cause some disruption to normally scheduled
 projects.  The fixed and dynamic projects are scheduled in the
@@ -13394,8 +13396,6 @@ more information.
 \subsection{\label{SSEC:VER_11.1}Version 11.1 test}
 
 
-
-
 % **  Get wrap state in Vex.
 % **  egrdbe.key has a very bad sx setup.  Fix it.
 % **  n2227.key has possible birdies in some basebands.  Try to
@@ -13407,7 +13407,45 @@ more information.
 \begin{itemize}
 
 
-\item Trying for a beta release close to April 26, 2013.
+%  ToDo:
+%    Calibrator selection
+%    BBC_BW and DOPPLER in RDBE schedules - affect only BBCs
+%    Check if LO edge for DDC always in right polyphase filter.
+
+\item Release a new Version 11.1 Beta on June 19, 2013  RCW
+
+\item Trap bad IF names coming from freq.dat under some special
+circumstances when freq.dat entries cover some, but not all, 
+channels.  Also trap errors caused when the vlbasetup stuff tries
+to print a blank string.  June 17, 2013.  RCW.
+
+\item Fix frequency error in ptd7ghz.set.  Jun. 11, 2013.  RCW.
+
+\item Update the text in the in the {\tt PREEMPT} section to reflect
+the 12 hour shift of when the USNO observations are being made.
+June 10, 2013  RCW.
+
+\item Don't allow channels with different bandwidths with the DDC.
+Adjust some of the warnings having to do with frequency setting.
+Clarify the warning about duplicate channels.   Jun. 6, 2013  RCW.
+
+\item Fixed bug in generation of the VLBA legacy system crd files 
+created when scheduling antennas with two RDBEs.  June 4, 2013.  RCW.
+
+\item Removed a couple of continuum sources from the recommended list
+in peak.cmd because of recent low flux densities.  May 2013  RCW.
+The pointing source list needs to be revisited.
+
+\item Changing the code (RDBELEVT) and documentation to reflect the
+shorter set-and-remember time and shorter down-sampling level setting
+times on the VLBA.  May 22, 2013.
+
+\item Changed the compiler (FC) in configureLinux64gfortran from a
+specific one, newer than the default, needed at the AOC do support 
+pgplot to generic gfortran.  Made configureLinux64gfortranAOC to 
+retain the AOC specific path to gfortran.  May 10, 2013.  RCW.
+
+\item Released a beta version on April 26, 2013.
 
 \item Reduce TLEVSET in the stations catalogs from 15 to 5 seconds 
 for the RDBE reflecting recent changes in the set-and-remember operation.

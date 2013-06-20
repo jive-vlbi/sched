@@ -32,6 +32,8 @@ C
       PARAMETER   ( C = 2.99792458E8 )
       DATA        WARNFQ / .TRUE. /
 C -------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'STAFRD starting ' )
+C
 C     Get the frequency.  Use the first channel.
 C
       KF = FSETI( ISCN, ISTA )

@@ -1,9 +1,8 @@
 #! /bin/csh
 #
-# *** This is for the default gfortran compiler.
-# *** At the AOC, this will use a version of the compiler that is too old for
-# *** pgplot.  Use configureLinux64gfortranAOC for a newer version.
-#
+# Special gfortran version to get a version of gfortran that is newer than
+# the default at the AOC.  This is needed for pgplot.
+
 # Use sed and the template Makefile.master to build a Makefile
 # for a Linux 64bit machine using gfortran (gcc4+) without satellite tracking.
 # This assumes that the PGPLOT libraries are in the location specified
@@ -32,7 +31,7 @@
 cat <<EOF >! makelinux64gf_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux64gfortran:
 s:#ARCHSED: ARCH = LINUX:
-s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
+s:#FCSED: FC = /usr/local/compilers/rhel-5/x86_64/gcc-4.3.1/bin/gfortran -Wall -fimplicit-none -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib64 -lX11:
 s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):

@@ -45,8 +45,10 @@ C
             END IF
 C
 C           Get the number of characters in ARRAY(I)
+C           Protect against a blank requesting write to a substring
+C           of negative length.
 C
-            NCA = LEN1( ARRAY(I) )
+            NCA = MAX( LEN1( ARRAY(I) ), 1 )
 C
 C           Get the number of characters for this point.
 C

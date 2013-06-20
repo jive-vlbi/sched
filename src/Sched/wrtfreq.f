@@ -37,6 +37,7 @@ C
       SAVE    LPCALX1, LPCALX2, MPCALX1, MPCALX2
       SAVE    LPCALFR1, LPCALFR2, MPCALFR1, MPCALFR2
 C----------------------------------------------------------------------
+      IF( DEBUG ) CALL WLOG( 1, 'WRTFREQ starting ' )
 C
 C     Get pointer to station catalog entry for schedule station ISTA
 C
@@ -77,7 +78,7 @@ C        If needed, center the Mark5A channel on the RDBE channel.
 C        Collect some information like the LOSUM for use in setting
 C        the pcal frequencies.  Round frequencies to 10 kHz.
 C
-         IF( DAR(KSTA) .NE. 'RDBE' ) THEN
+         IF( DAR(KSTA)(1:4) .NE. 'RDBE' ) THEN
             NCH = NCHAN(LS)
             DO ICH = 1, NCH
                TBBCBW(ICH) = BBCBW(ICH)
@@ -181,7 +182,7 @@ C
      2             PSPCAL(KP)(1:LEN1(PSPCAL(KP)))
          LPCAL = PSPCAL(KP)
          NPC = MAXPC
-         IF( DAR(KSTA) .NE. 'RDBE' .OR. ( PSPCAL(KP) .NE. '1MHZ'
+         IF( DAR(KSTA)(1:4) .NE. 'RDBE' .OR. ( PSPCAL(KP) .NE. '1MHZ'
      1        .AND. PSPCAL(KP) .NE. '5MHZ' ) ) THEN
             CALL VLBACHAR( 'pcalxbit1', 9, NPC, 
      1             PSX1(1,KP), LPCALX1, MPCALX1, FIRSTS, IUVBA )
@@ -250,6 +251,7 @@ C
       LKP = KP         
 C
 C
+      IF( DEBUG ) CALL WLOG( 1, 'WRTFREQ Ending ' )
       RETURN
       END
 

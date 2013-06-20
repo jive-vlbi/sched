@@ -197,6 +197,8 @@ C
      2            SETFILE(ISETF)(1:LEN1(SETFILE(ISETF))),
      3            '  has duplicate channels.'
                CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 1, '      (ie, Freqency match to 5% of BW. '
+     1             // '  Other properties match.)' )
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A )' ) 
      1             '    Is this intentional?  ', 
@@ -204,7 +206,9 @@ C
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
                CALL WLOG( 1, '    As a result, DOPPLER, FREQ, and BW '//
-     2              'will be disabled for scans using this setup.' )
+     1              'will be disabled for scans using this setup.' )
+               CALL WLOG( 1, '    If those are not needed, the '//
+     1              'schedule should be ok.' )
 C
 C              Flag the bookkeeping as bad for later.
 C
@@ -215,10 +219,3 @@ C
 C
       RETURN
       END
-
-
-
-
-
-
-

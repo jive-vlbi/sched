@@ -14,7 +14,7 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER    ISETF, KS, ICH
+      INTEGER    ISETF, KS, ICH, len1
       LOGICAL    READSET
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0,'GETSET: Starting.' )

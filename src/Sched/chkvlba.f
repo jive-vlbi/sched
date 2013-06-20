@@ -19,7 +19,7 @@ C
 C     Test is a tolerance limit for FIRSTLO - SYNTH tests in MHz.
 C
       INTEGER     I, KS, ICH, IIF, KIIF, JCH
-      LOGICAL     ERRS, OK, BADLO, LOIFWARN
+      LOGICAL     ERRS, OK, BADLO, LOIFWARN, IFOK
       DOUBLE PRECISION  R8FREQ(3), TEST, TFR1, TFR2
       PARAMETER   (TEST=1.D-3)
       SAVE        IFNAMES
@@ -100,6 +100,31 @@ C
      1           ' the VLBA.' )
          ERRS = .TRUE.
       END IF
+C
+C     Check for valid IF names.  I think user supplied names get
+C     checked earlier, but an error can happen with freq.dat if some
+C     channels, but not all, fit in the best freq.dat entry.  I had
+C     this happen with and S/X wideband setup where I had not set
+C     the sidebands properly, but had set the LOs.
+C
+      DO ICH = 1, NCHAN(KS)
+         IFOK = .FALSE.
+         DO IIF = 1, 4
+            IF( IFCHAN(ICH,KS) .EQ. IFNAMES(IIF) ) THEN
+               IFOK = .TRUE.
+            END IF
+         END DO
+         IF( .NOT. IFOK ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I3, 3A )' )
+     1         'CHKVLBA: Bad IF channel name, channel: ', ICH, 
+     2         ', name: ''', IFCHAN(ICH,KS), ''''
+            CALL WLOG( 1, MSGTXT )
+            CALL WLOG( 1, '         Hint - check what came from ' //
+     1         'the frequency file.' )
+            ERRS = .TRUE.
+         END IF
+      END DO
 C
 C     Check the channels to be sure a front end was specified.
 C     Allow for alternate inputs - eg mm VLBI.
