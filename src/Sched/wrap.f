@@ -252,7 +252,7 @@ C
                CURAZ2 = CURAZ2 + IMSLEWE * 360.0
             ELSE
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, I4, A, A )' )
+               WRITE( MSGTXT, '( A, I4, A, A, A )' )
      1            'WRAP:  Could not get wrap for end of scan ', ISCN, 
      2            ', station: ', STANAME(ISTA),
      3            '  Program logic problem?' 
