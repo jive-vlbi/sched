@@ -6,7 +6,6 @@ C     file.
 C
       INCLUDE 'sched.inc'
 C
-      integer           itd
       INTEGER           MODE, I, J, LEN1, ISCN, KSCN, IREP, INAME
       INTEGER           I1, I2, KEYPTR
       LOGICAL           GOTSAT, DOINIT, DOSTWARN, GOTVEX, EXIT
@@ -19,7 +18,7 @@ C     Keyin input parameters.  Key names are in second half of KD.
 C     KI(2) contains number of parameters.
 C
       INTEGER           MK, INSCH
-      PARAMETER         (MK=650 + 7*MAXSTA + 2*MAXCHN + 2*MGEO + 
+      PARAMETER         (MK=650 + 7*MAXSTA + 4*MAXCHN + 2*MGEO + 
      1                   10*MINTENT )
       INTEGER           KI(MK)
       CHARACTER         KC(MK)*8, KCHAR*256, KCHARA*256, TEMP*256
@@ -57,7 +56,6 @@ C
       SCAN1 = 1   !  First scan actually used.  SCHOPT may change.
       NGEO = 0    !  Number of sources for possible geodetic sections.
       GOTSAT = .FALSE.  !  Need satellite info.
-      GOTFREQ = .FALSE. !  Frequencies, Bandwidths, or Dopcals set.
       DOINIT = .TRUE.   !  Do initializations before next read.
       DWELLS = .FALSE.  !  Got any dwell requests.
       DOSTWARN = .TRUE. !  Warn if DOSTA specified.
@@ -129,6 +127,8 @@ C           For toggle pairs.
 C
             KD( KEYPTR( 'DOPPLER', KC, KI ) ) = UNSET
             KD( KEYPTR( 'NODOP', KC, KI ) ) = UNSET
+            KD( KEYPTR( 'CRDDOP', KC, KI ) ) = UNSET
+            KD( KEYPTR( 'CRDNODOP', KC, KI ) ) = UNSET
             KD( KEYPTR( 'RECord', KC, KI ) ) = UNSET
             KD( KEYPTR( 'NORECord', KC, KI ) ) = UNSET
             KD( KEYPTR( 'PTVLBA', KC, KI ) ) = UNSET
@@ -279,7 +279,7 @@ C
          TANT2(ISCN)  = KD( KEYPTR( 'TANT2', KC, KI ) ) .EQ. 0.D0
          CALTIME(ISCN) = KD( KEYPTR( 'CALTIME', KC, KI ) )
          PTSLEW(ISCN) = KD( KEYPTR( 'PTSLEW', KC, KI ) )
-         PCAL(ISCN) = KCHAR( 'PCAL', 4, .FALSE., KD, KC, KI )
+         PCAL(ISCN) = KCHAR( 'PCAL', 4, .TRUE., KD, KC, KI )
          FOCUS(ISCN) = KD( KEYPTR( 'FOCUS', KC, KI ) )
          ROTATION(ISCN) = KD( KEYPTR( 'ROTATION', KC, KI ) )
          SAZCOL(ISCN) = KD( KEYPTR( 'AZCOLIM', KC, KI ) )
@@ -288,6 +288,23 @@ C
          SCANTAG(ISCN) = KCHAR( 'SCANTAG', 4, .FALSE., KD, KC, KI )
          CRDLINE(ISCN) = KCHAR( 'CRDLINE', 80, .FALSE., KD, KC, KI )
          DODOWN(ISCN) =  KD( KEYPTR( 'DODOWN', KC, KI ) ) .EQ. 0.D0 
+C
+C        Give the traditional capitalization to PCAL.  It was forced
+C        to upper case above.
+C
+         IF( PCAL(ISCN) .EQ. '1MHZ' ) THEN
+            PCAL(ISCN) = '1MHz'
+         ELSE IF( PCAL(ISCN) .EQ. '5MHZ' ) THEN
+            PCAL(ISCN) = '5MHz'
+         ELSE IF( PCAL(ISCN) .EQ. 'OFF' ) THEN
+            PCAL(ISCN) = 'off'
+         ELSE IF( PCAL(ISCN) .NE. ' ' ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5, A, A )' ) 
+     1         'SCHIN: Invalid PCAL (', PCAL(ISCN), 
+     2         ') specified in scan ', ISCN
+            CALL ERRLOG( MSGTXT )
+         END IF
 C
 C        Deal with the requests for protection from preemption.
 C        Default to no preemption.  But if PREEMPT was not specified,

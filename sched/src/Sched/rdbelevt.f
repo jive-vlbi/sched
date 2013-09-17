@@ -37,13 +37,19 @@ C
 C
       INTEGER    ISTA, ISCN, LSCN, KS, LASTSET, LEN1
       LOGICAL    SETSEEN(MSET), WARNMSG
-      LOGICAL    TRWARN, TSWARN1, TSWARN2
+      LOGICAL    TRWARN, TSWARN2
       DOUBLE PRECISION   TSAMPLEV, TRESAMP, STARTS, TOL
       PARAMETER          ( TSAMPLEV = 5.D0 )
       PARAMETER          ( TRESAMP = 2.D0 )
       PARAMETER          ( TOL = 0.1 )
-      DATA       TRWARN, TSWARN1, TSWARN2, WARNMSG / 4*.TRUE. /
-      SAVE       TRWARN, TSWARN1, TSWARN2, WARNMSG
+      DATA       TRWARN, TSWARN2, WARNMSG / 3*.TRUE. /
+      SAVE       TRWARN, TSWARN2, WARNMSG
+C
+C     The following are for use if a code segment below if reactivated.
+C
+C      LOGICAL    TRWARN, TSWARN1, TSWARN2
+C      DATA       TRWARN / .TRUE. /
+C      SAVE       TSWARN1
 C ---------------------------------------------------------------------
 C     Loop over stations.  Do this operation on a per station basis except
 C     don't repeat the warnings too often. Only worry about RDBE stations.

@@ -21,11 +21,12 @@ C
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
 C
-      INTEGER OLDSCN, PSETI, OLDIPS, FRSTSCN
-      INTEGER VXMDIFP(MFSET,MPSET)
-      INTEGER ISCN, ISETFL, IMODE, I, IFS, IPS, J, LEN1, NC
-C      INTEGER JSCN, RECSCN
-      INTEGER ISTA, NMDORI, VXGTST, ISET
+      INTEGER OLDSCN, FRSTSCN
+C      INTEGER VXMDIFP(MFSET,MPSET)    PSETI also no longer declared.
+      INTEGER VXMDIFP(MFSET)
+      INTEGER ISCN, ISETFL, IMODE, I, IFS, LEN1, NC
+C From commented code:     INTEGER JSCN, RECSCN, ISET, VXGTST, J
+      INTEGER ISTA, NMDORI
       CHARACTER CALSET*4, CALSCN*4
       LOGICAL SKIPPED
 C ----------------------------------------------------------------------
@@ -35,7 +36,6 @@ C     Loop through scans
 C
       NMDORI = NMDVEX
       OLDSCN = 0
-      OLDIPS = 0
 C
 C RCW  VXMDIFP is the VEX mode that included a given frequency set 
 C      and polarization set.  Note a mode can also include other sets
@@ -43,9 +43,11 @@ C      for other stations.
 C CR 050106: initialise VXMDIFP
 C
       DO I = 1, MFSET
-        DO J = 1, MPSET
-          VXMDIFP(I,J) = 0
-        END DO
+C        DO J = 1, MPSET    Removing pcal sets.
+C          VXMDIFP(I,J) = 0
+C        END DO
+
+         VXMDIFP(I) = 0
       END DO
 C
 C     Loop through the scans looking for the need for new modes.
@@ -128,25 +130,29 @@ C          antennas may join later, so find the first scan for which the
 C          current (scan) mode will be used.  That involves looking at
 C          through the stations for the first scan (FSETSCN) in which the
 C          current frequency set was used, then taking the minimum of
-C          those.  FRSTSCN will be that first scan.  IFS and IPS will
-C          be one of the frequency sets and pcal sets used in that first
-C          scan for the mode.  Note that they are not the only such sets.
+C          those.  FRSTSCN will be that first scan.  IFS will
+C          be one of the frequency sets used in that first
+C          scan for the mode.  This also used to deal with pcal sets,
+C          but pcal sets have been absorbed into frequency sets and
+C          no longer exist as separate items (Sept. 2013 RCW).
 C
            FRSTSCN = MAXSCN + 1
-           IPS = 0
+C              IPS = 0
            IFS = 0
            DO ISTA = 1, NSTA
               IF( STASCN(ISCN,ISTA) ) THEN
                  IF (FSETSCN(FSETI(ISCN,ISTA)).LT.FRSTSCN) THEN
                     IFS = FSETI(ISCN,ISTA)
                     FRSTSCN = FSETSCN(IFS)
+C
 C                   bug fix CR 20051114: make sure ips and ifs get set
 C                   to values from the same antenna
-                    IPS = PSETI(ISCN,ISTA)
+C                    IPS = PSETI(ISCN,ISTA)
+C
                  END IF
-                 IF (IPS.GT.MPSET.OR.IFS.GT.MFSET) THEN
+                 IF (IFS.GT.MFSET) THEN
                     CALL ERRLOG('VXSCNS: Too many frequency'//
-     .                  ' mode or Pcal changes ')
+     1                  ' mode changes ')
                     STOP
                  END IF
 C
@@ -165,9 +171,9 @@ C                 END IF
            END DO
 C
 C          In case no station is recording this could have 
-C          resulted in IFS=0, IPS=0
+C          resulted in IFS=0.
 C
-           IF( IPS .EQ. 0 ) IPS = 1
+C             IF( IPS .EQ. 0 ) IPS = 1
            IF( IFS .EQ. 0 ) THEN
               IFS = 1
               FRSTSCN = FSETSCN(IFS)
@@ -187,7 +193,7 @@ C          new mode is created.
 C
            DO ISTA = 1, NSTA
               IF( STASCN(ISCN,ISTA) ) THEN  
-                 IF (VXMDIFP(IFS,IPS) .GT. 0 .AND. 
+                 IF (VXMDIFP(IFS) .GT. 0 .AND. 
      .               FSETSCN(FSETI(ISCN,ISTA)).NE.FRSTSCN .AND. 
      .               FSETSCN(FSETI(ISCN,ISTA)).EQ.ISCN ) THEN
                     IF( DEBUG ) THEN
@@ -198,28 +204,30 @@ C
      .                     FSETSCN(FSETI(ISCN,ISTA))
                        CALL WLOG( 1, MSGTXT )
                     END IF
-                    MODSET(ISTA,VXMDIFP(IFS,IPS)) = MODSET(ISTA,IMODE)
+                    MODSET(ISTA,VXMDIFP(IFS)) = MODSET(ISTA,IMODE)
 C
 C                   set VXMDIFP and MODSET for the new station's IFS and IPS
-C                   (bug fix, CR 20051005)
+C                   (bug fix, CR 20051005).
 C
-                    VXMDIFP(FSETI(ISCN,ISTA), PSETI(ISCN,ISTA)) =
-     1                          VXMDIFP(IFS,IPS)
+C                    VXMDIFP(FSETI(ISCN,ISTA), PSETI(ISCN,ISTA)) =
+C     1                          VXMDIFP(IFS,IPS)
+                    VXMDIFP(FSETI(ISCN,ISTA)) = VXMDIFP(IFS)
 C
                  END IF
               END IF
            END DO
 C
 C          Deal with a totally new mode.  This is the main point of this
-C          routine.  Remember IFS, IPS are set for one good value, but
-C          it is for just one of the stations.  A problem is that IFS, 
-C          IPS could be for the first scan unmodified or could be 
+C          routine.  Remember IFS is set for one good value, but
+C          it is for just one of the stations.  A problem is that IFS
+C          could be for the first scan unmodified or could be 
 C          modified by DOPPLER, FREQ, BW etc...
+C          Now get the pcal info from the frequency set (Sep 2013  RCW).
 C
-           IF( VXMDIFP(IFS,IPS) .EQ. 0 ) THEN
+           IF( VXMDIFP(IFS) .EQ. 0 ) THEN
 C
               CALSET = SPCAL(FSETKS(IFS))
-              CALSCN = PSPCAL(IPS)
+              CALSCN = FSPCAL(IFS)
               CALL UPCASE(CALSET)
               CALL UPCASE(CALSCN)
               IF( DEBUG ) THEN
@@ -247,8 +255,7 @@ C
                  DO ISTA = 1, NSTA
                     IF( STASCN(ISCN,ISTA) ) THEN
 C     
-                       VXMDIFP(FSETI(ISCN,ISTA),
-     .                     PSETI(ISCN,ISTA)) = IMODE
+                       VXMDIFP(FSETI(ISCN,ISTA)) = IMODE
                     END IF
                  END DO
               ELSE
@@ -257,7 +264,7 @@ C                This is not the original mode, or at least one of
 C                FREQ (perhaps via Doppler), BW, and PCAL were set.
 C                So a new mode is needed.  Call VXTRAMD to do the work.
 C
-                 CALL VXTRAMD(IMODE,IFS,IPS)
+                 CALL VXTRAMD(IMODE,IFS)
                  FRSTSCN = ISCN
                  MODSCN(ISCN) = NMDVEX
 C
@@ -266,8 +273,7 @@ C
                  DO ISTA = 1, NSTA
                     IF( STASCN(ISCN,ISTA) ) THEN
 C     
-                       VXMDIFP(FSETI(ISCN,ISTA),
-     .                     PSETI(ISCN,ISTA)) = NMDVEX
+                     VXMDIFP(FSETI(ISCN,ISTA)) = NMDVEX
                     END IF
                  END DO
 C
@@ -287,22 +293,19 @@ C
 C
 C          Any Mode switch.  RCW Oct 15, 2011.  I don't think this IF
 C          statement accomplishes anything because it only sets OLDSCN
-C          and OLDIPS, which are not used anywhere.  Is this left over 
-C          from some previous effort?  In any case, it's harmless.
+C          and OLDIPS (since removed), which are not used anywhere.  
+C          Is this left over from some previous effort?  In any case, 
+C          it's harmless.
 C
-           IF (FRSTSCN.NE.OLDSCN .OR.
-     .         IPS.NE.OLDIPS) THEN
+           IF (FRSTSCN.NE.OLDSCN ) THEN
               IF( FSETSCN(IFS) .NE. OLDSCN ) THEN 
                  OLDSCN = FSETSCN(IFS)
               END IF
-              IF ( OLDIPS .NE. IPS ) THEN 
-                 OLDIPS = IPS
-              END IF 
            END IF
 C
 C          Set the pointer to the mode for this scan.
 C
-           MODSCN(ISCN) = VXMDIFP(IFS,IPS)
+           MODSCN(ISCN) = VXMDIFP(IFS)
          END IF
 C
 C        end loop all scans

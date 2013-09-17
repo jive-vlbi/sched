@@ -2,32 +2,39 @@
 C
 C     Routine for SCHED, called by VLBASU, that writes the frequency
 C     and bandwidth specifications, plus the pulse cal commands,
-C     to VLBA files.
+C     to the VLBA crd files that control the VLBA legacy system.
+C
+C     If the RDBE is in use and bandwidths greater than 16 MHz have
+C     been requested, or if CRDDOP, CRDFREQ, or CRDBW has been 
+C     specified, this routine will write channels somewhat different 
+C     than the main schedule channels.  The main channels may have 
+C     bandwidths too great for the legacy BBCs.  Also the main channels
+C     may need to conform to RDBE (especially PFB) tuning restrictions
+C     which make pointing on masers difficult.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
       INCLUDE  'schfreq.inc'
 C
-      INTEGER           ISCN, ISTA, NCH1, NCH2, NCH, KP, LKP, KF, LKF
-      INTEGER           PSETI, LEN1, ICH, KCH, NPC, KSTA, ISIDE(MCHAN)
-      INTEGER           IFSIDE(MCHAN), RFSIDE(MCHAN), TPSFR(MCHAN)
-      DOUBLE PRECISION  LOSUM(MCHAN), TLOSUM(MCHAN), TONEINT
-      DOUBLE PRECISION  FTONE, TFIRSTLO
-      DOUBLE PRECISION  BBCBW(MCHAN), BBCFREQ(MCHAN), FSHIFT
+      INTEGER           ISCN, ISTA, KP, LKP, KF, LKF
+      INTEGER           LEN1, NPC, KSTA
+      INTEGER           CRDN
+      DOUBLE PRECISION  LOSUM(MCHAN)
+      DOUBLE PRECISION  BBCBW(MCHAN), BBCFREQ(MCHAN)
+      DOUBLE PRECISION  CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
       LOGICAL           FIRSTS, WRTSET
-      CHARACTER         TPSX1(MAXPC)*3, TPSX2(MAXPC)*3
-      INTEGER           IPD, TPSFR1(MAXPC), TPSFR2(MAXPC)
-      INTEGER           KCHA, KCHB
+      CHARACTER         CRDS(MCHAN)*1
+      CHARACTER         PCX1(MAXPC)*3, PCX2(MAXPC)*3
+      INTEGER           PCFR1(MAXPC), PCFR2(MAXPC)
 C
 C     Keep track of last use.  
 C
       INTEGER           MBBCBW, MBBCFREQ
       DOUBLE PRECISION  LBBCBW(MCHAN), LBBCFREQ(MCHAN)
-      DOUBLE PRECISION  TBBCBW(MCHAN), TBBCFREQ(MCHAN), FDROP
       INTEGER           LPCALFR1(MAXPC), LPCALFR2(MAXPC)
       INTEGER           MPCALFR1, MPCALFR2, MPCALX1, MPCALX2
       CHARACTER         LPCALX1(MAXPC)*3, LPCALX2(MAXPC)*3
-      CHARACTER         LPCAL*4
+      CHARACTER         LPCAL*4, UPPCAL*4
 C
 C     Common for communication with FSVLBA (for frequency switching).
 C
@@ -54,199 +61,72 @@ C
          LPCAL = ' '
       END IF
 C
-C     Get the frequency and pcal sets.
+C     Get the frequency set.  We are no longer using pcal sets.
 C
       KF = FSETI(ISCN,ISTA)
-      KP = PSETI( ISCN, ISTA )      
 C
 C     Get the frequency etc for this station/scan.  Save some work
 C     if there hasn't been a change.  Write the results for any
 C     changes.
 C
+C     Note that the use of CRDBW or CRDFREQ (directly or through 
+C     CRDDOP) triggers a new frequency set, so testing for a new
+C     set should pick up changes needed for those reasons in addition
+C     to true setup file changes.
+C
       IF( WRTSET .OR. KF .NE. LKF ) THEN
+         LKF = KF
 C
-         CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW )
+C        Get the frequencies.  For this routine, the values delivered
+C        by FSFREQ in the CRD variables can be used in all cases.  Even
+C        when CRDFREQ or CRDDOP are not used, FSFREQ transfers the correct
+C        values to the CRD numbers.
 C
-C        If using the RDBE, be sure not to ask the crd file for too
-C        many channels.   If NCHAN is greater than 8, use the center
-C        8 channels.  Start on an odd channel in case of dual pol.
-C        Also check against invalid values of 
-C        frequency and bandwidth.  Transfer the arrays to local
-C        versions.  If the BBC frequency is over 1000.0 MHz, drop it
-C        by 25 MHz.  This will not change the pcal tone frequencies.
-C        If needed, center the Mark5A channel on the RDBE channel.
-C        Collect some information like the LOSUM for use in setting
-C        the pcal frequencies.  Round frequencies to 10 kHz.
-C
-         IF( DAR(KSTA)(1:4) .NE. 'RDBE' ) THEN
-            NCH = NCHAN(LS)
-            DO ICH = 1, NCH
-               TBBCBW(ICH) = BBCBW(ICH)
-               TBBCFREQ(ICH) = BBCFREQ(ICH)
-            END DO
-         ELSE
-            IF( NCHAN(LS) .GT. 8 ) THEN
-               NCH1 = 1 + 2 * INT( ( NCHAN(LS) - 8 ) / 4 )
-               NCH2 = NCH1 + 7
-               NCH = 8
-            ELSE
-               NCH1 = 1
-               NCH2 = NCHAN(LS)
-               NCH = NCH2
-            END IF
-            DO ICH = NCH1, NCH2
-               KCH = ICH - NCH1 + 1
-               ISIDE(KCH) = 1
-               IF( SIDEBD(ICH,LS) .EQ. 'L' ) ISIDE(KCH) = -1
-               RFSIDE(KCH) = 1
-               IF( NETSIDE(ICH,LS) .EQ. 'L' ) RFSIDE(KCH) = -1
-               IFSIDE(KCH) = ISIDE(KCH) * RFSIDE(KCH)
-               TBBCBW(KCH) = BBCBW(ICH)
-               TBBCFREQ(KCH) = BBCFREQ(ICH)
-C
-C              Round to 10 kHz for BBCs and First LO.  Unless there
-C              are new synthesizers, this shouldn't do anything to
-C              the First LO, but to not be blindsided later, do it.
-C              This might cause a bit of a shift from the RDBE 
-C              frequency if using the DDC.
-C
-               TBBCFREQ(KCH) = NINT( TBBCFREQ(KCH) * 100.D0 ) / 100.D0
-               TFIRSTLO = NINT( FIRSTLO(ICH,LS) * 100.D0 ) / 100.D0
-               FSHIFT = 0.0D0
-               IF( TBBCBW(KCH) .GT. 16.0D0 ) THEN
-C
-C                 Center the band on the wider RDBE band.  Round.
-C
-                  TBBCBW(KCH) = 16.0D0
-                  FSHIFT = ( BBCBW(KCH) - TBBCBW(KCH) ) / 2.D0
-                  FSHIFT = NINT( FSHIFT * 100.D0 ) / 100.D0
-               END IF
-C
-C              Get the new BBC frequency and LO sum.  Note that
-C              the effects of the sideband can differ.
-C
-               TBBCFREQ(KCH) = TBBCFREQ(KCH) + ISIDE(KCH) * FSHIFT
-               TLOSUM(KCH) = TFIRSTLO + IFSIDE(KCH) * TBBCFREQ(KCH)
-C
-C              Get away from the frequency range that can't be 
-C              covered by the old BBCs.  Go by a multiple of 
-C              5 MHz to keep pcal detection frequencies for 5 MHz
-C              tones.  Here I need the IF sideband which is
-C              RFSIDE * ISIDE.  Note that requesting 1000.0 might
-C              be ok for the BBCs, but blows the format used for
-C              this parameter, so avoid it.
-C
-               IF( TBBCFREQ(KCH) .GE. 999.95D0 ) THEN
-                  FDROP = TBBCFREQ(KCH) - 999.95D0
-                  FDROP = 5.D0 * ( 1.D0 + DINT( FDROP / 5.D0 ))
-                  TBBCFREQ(KCH) = TBBCFREQ(KCH) - FDROP
-                  TLOSUM(KCH) = TLOSUM(KCH) - IFSIDE(KCH) * FDROP
-               END IF
-C
-Cdebug            write(*,*) 'wrtfreq tlosum: ', ich, kch, tfirstlo,
-Cdebug     1            losum(ich), BBCFREQ(ICH), fshift, 
-Cdebug     2            tlosum(kch), tbbcfreq(kch), bbcbw(kch), tbbcbw(kch)
-C
-C              If the BBC frequency is an even number of MHz, the
-C              pulse cal tones will be subject to aliasing etc.  Since
-C              the exact frequency settings here are not critical,
-C              shift the TBBCFREQ and TLOSUM in such cases by 10 kHz 
-C              so that the tone is at 10 kHz in the baseband.
-C
-               IF( ( PSPCAL(KP) .EQ. '1MHZ' .OR. 
-     1               PSPCAL(KP) .EQ. '5MHZ' ) .AND. 
-     2              MOD( TLOSUM(KCH), 1.D0 ) .EQ. 0.D0 ) THEN
-                  TLOSUM(KCH) = TLOSUM(KCH) - RFSIDE(KCH) * 0.01D0
-                  TBBCFREQ(KCH) = TBBCFREQ(KCH) - ISIDE(KCH) * 0.01D0
-               END IF
-            END DO
-         END IF
+         CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
 C
 C        Write the frequency and bandwidth.
 C
-         CALL VLBAREAL( 'bbsynth', 7, NCH, TBBCFREQ, LBBCFREQ,
+         CALL VLBAREAL( 'bbsynth', 7, CRDN, CRDF, LBBCFREQ,
      1         MBBCFREQ, '(F6.2)', 6, FIRSTS, IUVBA )
-         CALL VLBABWS( 'bbfilter', 8, NCH, TBBCBW, LBBCBW,
+         CALL VLBABWS( 'bbfilter', 8, CRDN, CRDB, LBBCBW,
      1         MBBCBW, FIRSTS, IUVBA )
 C
-      END IF
-      LKF = KF
 C
-C     Deal with pulse cal through function PSETI.  KP needed
-C     for the RDBE frequency shifting so it was set above.
+C        Get the pulse cal detector settings.
 C
-      IF( WRTSET .OR. KP .NE. LKP ) THEN
+C        Note that, with Vex, it seems that only a numerical index 
+C        of which tone in the band to detect is specified.  Treat
+C        that separately from the legacy VLBA system.  PCALFQ
+C        deals with the details of calculating the detection data.
 C
-         IF( PSPCAL(KP) .NE. LPCAL) 
+         CALL PCALFQ( FSPCAL(KF), KF, PCX1, PCX2, PCFR1, PCFR2 )
+C
+C        First, specify the setting for the generators.
+C        The old files had an all upper case version of pcal, do duplicate
+C        that.  I'm not sure that is needed.
+C        
+         UPPCAL = FSPCAL(KF)
+         CALL UPCASE( UPPCAL )
+         IF( FSPCAL(KF) .NE. LPCAL) 
      1      WRITE( IUVBA, '( A, A )' ) 'pcal=', 
-     2             PSPCAL(KP)(1:LEN1(PSPCAL(KP)))
-         LPCAL = PSPCAL(KP)
+     2             UPPCAL(1:LEN1(UPPCAL))
+         LPCAL = FSPCAL(KF)
+C
+C        Now write the pcalx commands based on the returns from PCALFQ.
+C        These should be the normal defaults when MARK5A recordings are
+C        being made.
+C
          NPC = MAXPC
-         IF( DAR(KSTA)(1:4) .NE. 'RDBE' .OR. ( PSPCAL(KP) .NE. '1MHZ'
-     1        .AND. PSPCAL(KP) .NE. '5MHZ' ) ) THEN
-            CALL VLBACHAR( 'pcalxbit1', 9, NPC, 
-     1             PSX1(1,KP), LPCALX1, MPCALX1, FIRSTS, IUVBA )
-            CALL VLBACHAR( 'pcalxbit2', 9, NPC, 
-     1             PSX2(1,KP), LPCALX2, MPCALX2, FIRSTS, IUVBA )
-            CALL VLBAINT( 'pcalxfreq1', 10, NPC, 
-     1             PSFR1(1,KP), LPCALFR1, MPCALFR1, FIRSTS, IUVBA )
-            CALL VLBAINT( 'pcalxfreq2', 10, NPC, 
-     1             PSFR2(1,KP), LPCALFR2, MPCALFR2, FIRSTS, IUVBA )
-         ELSE
+         CALL VLBACHAR( 'pcalxbit1', 9, NPC, 
+     1          PCX1, LPCALX1, MPCALX1, FIRSTS, IUVBA )
+         CALL VLBACHAR( 'pcalxbit2', 9, NPC, 
+     1          PCX2, LPCALX2, MPCALX2, FIRSTS, IUVBA )
+         CALL VLBAINT( 'pcalxfreq1', 10, NPC, 
+     1          PCFR1, LPCALFR1, MPCALFR1, FIRSTS, IUVBA )
+         CALL VLBAINT( 'pcalxfreq2', 10, NPC, 
+     1          PCFR2, LPCALFR2, MPCALFR2, FIRSTS, IUVBA )
 C
-C           When using the RDBE, we need something else - sigh, and
-C           we need to keep the details in this routine in local
-C           variables.  Utilize number such as NCH1, NCH2, TBBCBW,
-C           and TBBCFREQ to help.  Also take advantage of the fact
-C           that there will be at most 8 channels (1 digit).  This
-C           is a simplified verision of what is done for non-RDBE
-C           projects.  With  no more than 8 channels (as set earlier 
-C           in this routine), there can be one tone per channel.
-C
-C           Get the first tone frequency for each band.  These are for
-C           the channels handled in the frequency section above.
-C           Don't let tones be too close to the LO.
-C           Note FTONE will be slightly below the LO.  So for the
-C           upper sideband case, need to go up.
-C 
-            TONEINT = 1.0D0
-            IF( PSPCAL(KP) .EQ. '5MHZ' ) TONEINT = 5.0D0
-C
-            DO KCH = 1, NCH
-               FTONE =  TONEINT * INT( TLOSUM(KCH) / TONEINT )
-               IF( RFSIDE(KCH) .GT. 0 ) THEN
-                  FTONE =  FTONE + TONEINT
-                  IF( ABS( FTONE - TLOSUM(KCH) ) .LT. TONEINT / 1.D1 )
-     1                FTONE =  FTONE + TONEINT
-                  TPSFR(KCH) = NINT( 1000.D0 * ( FTONE - TLOSUM(KCH) ) )
-               ELSE
-                  IF( ABS( FTONE - TLOSUM(KCH) ) .LT. TONEINT / 1.D1 )
-     1                FTONE =  FTONE - TONEINT
-                  TPSFR(KCH) = NINT( 1000.D0 * ( TLOSUM(KCH) - FTONE ) )
-               END IF
-            END DO
-C
-C           NPC is the number of detectors needed.
-C
-            NPC = NCH / 2
-            DO IPD = 1, NPC
-               KCHA = 2 * IPD - 1
-               KCHB = KCHA + 1
-               WRITE( TPSX1(IPD), '( A, I1 )' ) 'S', KCHA
-               WRITE( TPSX2(IPD), '( A, I1 )' ) 'S', KCHB
-               TPSFR1(IPD) = TPSFR(KCHA)
-               TPSFR2(IPD) = TPSFR(KCHB)
-            END DO
-            CALL VLBACHAR( 'pcalxbit1', 9, NPC, 
-     1             TPSX1, LPCALX1, MPCALX1, FIRSTS, IUVBA )
-            CALL VLBACHAR( 'pcalxbit2', 9, NPC, 
-     1             TPSX2, LPCALX2, MPCALX2, FIRSTS, IUVBA )
-            CALL VLBAINT( 'pcalxfreq1', 10, NPC, 
-     1             TPSFR1, LPCALFR1, MPCALFR1, FIRSTS, IUVBA )
-            CALL VLBAINT( 'pcalxfreq2', 10, NPC, 
-     1             TPSFR2, LPCALFR2, MPCALFR2, FIRSTS, IUVBA )
-C
-         END IF
       END IF
       LKP = KP         
 C

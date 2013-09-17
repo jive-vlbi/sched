@@ -10,10 +10,13 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER            I, IUNIT, KS, KF, NNCHAN
+      INTEGER            IUNIT, KS, KF, NNCHAN
       INTEGER            ICH1, ILINE
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
+      INTEGER            CRDN
+      DOUBLE PRECISION   CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
+      CHARACTER          CRDS(MCHAN)*1
 C----------------------------------------------------------------------
       NNCHAN = NCHAN(KS)
       IF( DEBUG ) THEN
@@ -31,8 +34,12 @@ C
             IF( FSETKS(KF) .EQ. KS ) THEN
 C
 C              Get the frequencies to be used for this frequency set.
+C              We will be concerned only about the main recording 
+C              frequencies, not any different frequencies used for
+C              reference pointing etc (CRD.. parameters below).
 C
-               CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW )
+               CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
 C        
 C              Write the frequencies etc for this frequency set.
 C        

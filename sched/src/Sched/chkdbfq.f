@@ -13,34 +13,25 @@ C     it can get called from print routines etc.
 C
 C     Original based on CHKDBFQ, but modified by CR to the best of
 C     current knowledge...
+C     Removed unused variables from declarations.  Aug. 30, 2013. RCW
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH, ISIDEBD, nwarn
+      INTEGER           KS, ICH, ISIDEBD ! , nwarn
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
-      INTEGER           NFWARN, N2WARN
-      INTEGER           LSETF
-      INTEGER           I, NPBW, LEN1, ISETF
+      INTEGER           NFWARN
+      INTEGER           LEN1, ISETF
       DOUBLE PRECISION  BBOFF, BB1, BB2, SLOP
-      DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
+      DOUBLE PRECISION  BBCBW(*), BBCFREQ(*)
       LOGICAL           ERRS, DEQUAL, OBWARN, SHOWID
       LOGICAL           IFHIGH, IFLOW
 C
-      DATA     nwarn    / 0 /
-      DATA     NPBW     / 0 /
       DATA     OBWARN   / .TRUE. /
       DATA     N40WARN  / MAXSET*1 /
       DATA     N528WARN / MAXSET*1 /
-      DATA     NFWARN, N2WARN / 0, 0 /
-      DATA     LSETF    / 0 /
-      DATA     PLO      / 512.D0, 640.D0, 896.D0 /
-      DATA     PHI      / 640.D0, 896.D0, 1024.D0 /
-      SAVE     nwarn
-      SAVE     N40WARN, N528WARN, NFWARN, N2WARN, NPBW, OBWARN
-      SAVE     LSETF
-C
-C      PLO and PHI are the ranges for the DDC initial polyphase filter.
+      DATA     NFWARN   / 0 /
+      SAVE     N40WARN, N528WARN, NFWARN, OBWARN
 C -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKDBFQ: Starting' )
 C

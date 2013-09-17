@@ -1,19 +1,22 @@
-      SUBROUTINE VXTRAMD(IMODE,IFS,IPS)
+      SUBROUTINE VXTRAMD(IMODE,IFS)
       IMPLICIT NONE
 C
 C     Make a new mode, NMDVEX.  Called by VXSCNS when it encounters
 C     a need for a mode because of FREQ, BW, PCAL.
-C     IMODE is the current VEX mode template, IFS and IPS are the 
-C     augmenting freq and pcal sets for one of the stations needing the
-C     new mode.
+C     IMODE is the current VEX mode template, IFS (and IPS before pcal
+C     sets were removed) is the augmenting freq set for one of the 
+C     stations needing the new mode.
 C     RCW Oct. 15, 2011.  Adding some comments while debugging 
 C     transfer of incorrect setup data (sideband this time) from setup file.
+C     RCW Sep. 10, 2013.  Removing pulse cal sets.  They have been merged
+C     with the frequency sets.  Make case of PulseCal name portion from
+C     FSFREQ upper case for consistency with old files.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'       
 C
-      INTEGER ISCN, ICH, ISET, ISETFL, IMODE, I, IP, IFS, IPS
+      INTEGER ISCN, ICH, ISET, ISETFL, IMODE, I, IP, IFS
       INTEGER IFQ, IPH, IIF
       INTEGER ISTA, NTMP, TTMPCHN(MAXCHN), IXX
       INTEGER NTONTMP(MAXCHN), ITONTMP(MAXTON,MAXCHN)
@@ -91,7 +94,9 @@ C
             END IF
          ELSE
             NAME(1:8) = 'PulseCal'
-            WRITE( NAME(9:12), '( A4 )' ) PSPCAL(IPS)
+            UPCAL = FSPCAL(IFS)
+            CALL UPCASE( UPCAL )
+            WRITE( NAME(9:12), '( A4 )' ) UPCAL
          END IF
       END IF
       MDLINK(NMDVEX) = NAME
@@ -175,8 +180,9 @@ C
 C     Phase cal is complex, tones may change because
 C     PHASECAL because of a FREQ change.
 C     Calculate where the tones come in.
+C     Update UPCAL - might not have been set before.
 C
-      UPCAL = PSPCAL(IPS)
+      UPCAL = FSPCAL(IFS)
       CALL UPCASE(UPCAL)
       IF( UPCAL .EQ. 'OFF' ) THEN
          PHTONE = 0.
@@ -188,10 +194,10 @@ C
          PHTONE = 5.0
       ELSE 
          CALL ERRLOG( 'VXSCNS: Invalid PCAL: '
-     1       //PSPCAL(IPS)//
+     1       //FSPCAL(IFS)//
      1       ' - Must be 1MHz, 5MHz, or off.' )
       END IF   
-      CALL VXTON2( IPS, ISET, NVXCHN(NFQVEX), 
+      CALL VXTON2( -1, ISET, NVXCHN(NFQVEX), 
      1    VXLOSUM(1,IFQ), 
      1    VXNETSID(1,NFQVEX), VXBBFILT(1,NFQVEX), 
      2    PHTONE, NTMP, TTMPCHN,

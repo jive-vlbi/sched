@@ -49,6 +49,7 @@ C                       NOTSET - Flag for unset parameters.  Must match
 C                                UNSET in sched.inc.
 C                       MFSET  - Max number of frequency sets.
 C                       MPSET  - Max number of pulse cal sets.
+C                                   Pcal sets being removed Sep. 2013. RCW.
 C
 C     Set up to get a number of these from parameters in sched.inc.
 C     2002may01  RCW.  This means sched.inc must be invoked before 
@@ -156,6 +157,7 @@ C
       CHARACTER         BAND(MSET)*5
       CHARACTER         IFDIST(4,MSET)*3
       CHARACTER         SIDEBD(MCHAN,MSET)*1
+      CHARACTER         CRDSIDE(MCHAN,MSET)*1
       CHARACTER         POL(MCHAN,MSET)*4
       CHARACTER         NOISE(4,MSET)*6
       CHARACTER         NOISEFRQ(MSET)*4
@@ -206,11 +208,11 @@ C
      3                  DUALX, MODETEST, USED, MINTRAK, MAXTRAK, 
      4                  MINTBPS, MAXTBPS, TBPS, TOTBPS, WRTBPS, 
      5                  VLBAMKIV, RECUSED
-      COMMON  /SETC2/   SETSTA, BAND, SIDEBD, POL, NOISE, NOISEFRQ, FE, 
-     1                  IFCHAN, ALTIFC, LOGGING, STRING, FORMAT, DBE, 
-     2                  FIRMFILE, IFDIST, SPCAL, PCALX1, PCALX2, 
-     3                  NETSIDE, SIDE1, RCHAN, LCHAN, LCP50CM, RCP50CM, 
-     4                  BARREL, M4PATCH
+      COMMON  /SETC2/   SETSTA, BAND, SIDEBD, CRDSIDE, POL, NOISE, 
+     1                  NOISEFRQ, FE, IFCHAN, ALTIFC, LOGGING, 
+     2                  STRING, FORMAT, DBE, FIRMFILE, IFDIST, SPCAL, 
+     3                  PCALX1, PCALX2, NETSIDE, SIDE1, RCHAN, LCHAN, 
+     4                  LCP50CM, RCP50CM, BARREL, M4PATCH
 C
 C     VLA information.
 C     Included are the fluke set, the fluke frequencies, the F.E. LO
@@ -241,15 +243,24 @@ C
      2                  VLAVA, VLAVB, VLAVR, VLAVL
       COMMON  /SETC3/   FEFILTER, VLAIF, VLAROT, VLABAND, VLABW
 C
-C     Frequency sets and pcal sets.
-C     FSSAME is the lowest numbered set that has the same frequencies,
-C     bandwidths, BBC frequencies, and input setup file.
+C     Frequency sets.  Pcal sets are being retired.
+C     FSSAME is the lowest numbered set that has the same 
+C     frequencies, bandwidths, BBC frequencies, PCAL, and input 
+C     setup file.
 C
       INTEGER           NFSET
       INTEGER           FSETKS(MFSET)
       INTEGER           FSETSCN(MFSET)
       INTEGER           FSETPS(3,MFSET)
       INTEGER           FSSAME(MFSET)  
+      CHARACTER         FSPCAL(MFSET)*4
+C
+C     Trying to purge the pcal sets and have done so for the
+C     code in src/Sched.  But they are also used in the Vex code.
+C     That still needs to be dealt with.  Meanwhile keep the
+C     variables.  Have a one-to-one correspondence between 
+C     pcal sets and frequency sets and get the PS variables for
+C     each.
 C
       INTEGER           NPSET
       CHARACTER         PSPCAL(MPSET)*4
@@ -261,7 +272,7 @@ C
 C
       COMMON  /FSETN/   NFSET, FSETKS, FSETSCN, FSETPS, FSSAME,
      1                  NPSET, PSFR1, PSFR2
-      COMMON  /FSETC/   PSPCAL, PSX1, PSX2
+      COMMON  /FSETC/   FSPCAL, PSPCAL, PSX1, PSX2
 C
 C     End of setup include file.
 

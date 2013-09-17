@@ -7,13 +7,13 @@ C     routine!)
 C
 C     The call should come after the SETUP is determined.
 C
-C     GOTFREQ (from sched.inc) tests if there are any frequency 
-C     changes specified in the main schedule.  It only seems to 
-C     be used by SNAP and by this routine (also commented code in 
-C     GETSET).  
+C     GOTFREQ and GOTBW fell out of use and have been eliminated
+C     as of July 1, 2013.  RCW.
 C
-C     GOTBW was used to help prevent use of BW when VEX or VSOP 
-C     (DRUDG) is being written, but that is now ok so GOTBW is gone.
+C     Adding CRDBW, CRDFREQ, CRDDOP, and CRDNODOP to allow doppler 
+C     and frequency settings of the BBCs of the legacy system (crd
+C     file) while the RDBE_PFB is being used.  This prevents the 
+C     need for separate MARK5C and MARK5A schedules.  July, 2013 RCW.
 C
       INCLUDE 'sched.inc'
 C
@@ -30,8 +30,6 @@ C
       DO ICHAN = 1, MAXCHN
          FREQ(ICHAN,ISCN) = VALUE(I1+ICHAN)
          BW(ICHAN,ISCN)   = VALUE(I2+ICHAN)
-         IF( GOTFREQ .OR. FREQ(ICHAN,ISCN) .NE. 0.0D0 .OR. 
-     1         BW(ICHAN,ISCN) .NE. 0.0D0 ) GOTFREQ = .TRUE.
          IF( BW(ICHAN,ISCN) .EQ. 0.0D0 ) 
      1         BW(ICHAN,ISCN) = BW(1,ISCN)
 C
@@ -42,6 +40,27 @@ C        sub Hz settings - original rounding to 1 kHz was not good.
 C
          FREQ(ICHAN,ISCN) = DNINT( FREQ(ICHAN,ISCN)*1.D7 ) / 1.D7
          BW(ICHAN,ISCN) = DNINT( BW(ICHAN,ISCN)*1.D7 ) / 1.D7
+C
+      END DO
+C
+C     Get CRDDOP, CRDFREQ and CRDBW.  Default CRDBW to first channel if 
+C     others not given.
+C
+      I1 = KEYPTR( 'CRDFREQ', KC, KI ) - 1
+      I2 = KEYPTR( 'CRDBW', KC, KI ) - 1
+      CALL TOGGLE( CRDDOP, ISCN, 'CRDDOP', 'CRDNODOP', UNSET,
+     1             VALUE, KC, KI )
+      DO ICHAN = 1, MAXCHN
+         CRDFREQ(ICHAN,ISCN) = VALUE(I1+ICHAN)
+         CRDBW(ICHAN,ISCN)   = VALUE(I2+ICHAN)
+         IF( CRDBW(ICHAN,ISCN) .EQ. 0.0D0 ) 
+     1         CRDBW(ICHAN,ISCN) = CRDBW(1,ISCN)
+C
+C        Again, try to avoid spurious digits.
+C
+         CRDFREQ(ICHAN,ISCN) = 
+     1        DNINT( CRDFREQ(ICHAN,ISCN)*1.D7 ) / 1.D7
+         CRDBW(ICHAN,ISCN) = DNINT( CRDBW(ICHAN,ISCN)*1.D7 ) / 1.D7
 C
       END DO
 C
@@ -61,7 +80,6 @@ C
          CALL TOGGLE( DOPCAL, ISCN, 'DOPPLER', 'NODOP', UNSET,
      1                VALUE, KC, KI )
       END IF
-      IF( DOPCAL(ISCN) ) GOTFREQ = .TRUE.
       LINES(ISCN) = KCHAR( 'LINENAME', 8, .TRUE., VALUE, KC, KI )
 C
 C     Get rounding increment for doppler calculations.  Default to
@@ -75,14 +93,13 @@ C     Check that frequencies are not defaulting to previous
 C     values when a setup is changed.  This has to come after FREQ
 C     and SETUP are decoded.
 C
-      IF( ISCN .NE. 1 .AND. GOTFREQ ) THEN
+      IF( ISCN .NE. 1 .AND. FREQ(1,ISCN) .NE. 0.D0 ) THEN
          IF( SETNUM(ISCN) .NE. SETNUM(ISCN-1) .AND.
-     1       FREQ(1,ISCN) .EQ. FREQ(1,ISCN-1) .AND.
-     1       FREQ(1,ISCN) .NE. 0.0 )  THEN
+     1       FREQ(1,ISCN) .EQ. FREQ(1,ISCN-1) ) THEN
             CALL WLOG( 1, 
      1       'INFDB: Setup changed and specified frequency didn''t. ' )
             CALL WLOG( 1, ' Is this really what you wanted? ' )
-            CALL WLOG( 1, ' Use FREQ=0 to get new default.' )
+            CALL WLOG( 1, ' Use FREQ=0 to get the new setup default.' )
          END IF
       END IF
 C

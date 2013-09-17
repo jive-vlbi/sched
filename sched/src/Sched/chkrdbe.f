@@ -180,13 +180,19 @@ C
                      END IF
 C
 C                    Now do the inversion.
-C                    For FREQREF, we need the net sideband.
+C
+C                    For FREQREF, we need the net sideband to know
+C                    whether to add or subtract CORINV.
+C
 C                    CORINV is the amount that got added to FREQREF 
 C                    to get the LO setting. For comparison with 
 C                    channels that will get correlated against
-C                    this one, subtract CORINV.  Note in all cases
-C                    we will be increasing the BBSYN frequency.
-C                    FREQREF can go either way.
+C                    this one, subtract CORINV.  
+C
+C                    Note in all cases we will be increasing the 
+C                    BBSYN frequency because we will be switching
+C                    from BBC sideband 'U' to 'L'.   FREQREF can go 
+C                    either way depending on the IF sideband.
 C
                      IF( NETSIDE(ICH,KS) .EQ. 'U' ) THEN
                         NETSIDE(ICH,KS) = 'L'
@@ -199,9 +205,19 @@ C
                      SIDEBD(ICH,KS) = 'L'
                      BBSYN(ICH,KS) = BBSYN(ICH,KS) + 
      1                              ABS( CORINV(ICH,KS) )
+C
+C                    Get the new reference frequeny.  The direction
+C                    of the shift is in the sign of CORINV.
+C
                      FREQREF(ICH,KS) = FREQREF(ICH,KS) + CORINV(ICH,KS)
+C
                   ELSE
+C
+C                    We have the wrong baseband sideband and a correlator
+C                    that can't deal with it.
+C
                      IF( SIDEBD(ICH,KS) .NE. 'U' ) ERRS = .TRUE.
+C
                   END IF
                   SBWARN = .FALSE.
                END IF

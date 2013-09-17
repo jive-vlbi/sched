@@ -11,8 +11,6 @@ C
       INTEGER           VLBOPE, LEN1, IER
       DOUBLE PRECISION  BLANK, ZZZZ
       CHARACTER         RESULT*256
-      CHARACTER         FVIF*10, FVROT*10
-      LOGICAL           ERRS, LDUMMY
 C
 C     For KEYIN
 C
@@ -22,7 +20,6 @@ C
       INTEGER           KI(MFRQV)
       CHARACTER         KC(MFRQV)*8, KCHAR*256
       DOUBLE PRECISION  KD(2*MFRQV), ENDMARK
-c      double precision tf1, tf2, tl1
       SAVE              GOTKEYS, KI, KC, KD, ENDMARK, BLANK, ZZZZ
 C
       DATA          (KI(I),I=1,3)   / MFRQV, 0, 3 /
@@ -181,6 +178,7 @@ C
 c
 c           Temporary sanity check for the RDBE freq_RDBE.dat.
 c
+c put in front:     double precision tf1, tf2, tl1
 c            tf1 = frf1(iif,nfreq)
 c            tf2 = frf2(iif,nfreq)
 c            tl1 = flo1(iif,nfreq)

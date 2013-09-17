@@ -9,7 +9,7 @@ C     the same setup (like VLBA stations).
 C
 C     In the comparison, don't compare:
 C       Station name
-C       Frequency catalog info
+C       Frequency set info
 C
 C     Provide several spots to skip tests if SA becomes false - just
 C     jump to the end.

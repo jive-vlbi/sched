@@ -368,12 +368,13 @@ C
 C             only tapemode 1,2 4, 8 supported in SCHED, PCFS does
 C                   4 max, see vxwrpo
 C          
+        write(*,*) 'vxwrtr: ', ks, tapemode(ks)
               DO IP = 1, TAPEMODE(KS)
                        TPSUBP = 'X'
 C          
-C          
-                       IF( USETAPE(ISCAT) ) THEN
-                          IF( IP .EQ. 1) TPSUBP = 'A'
+C
+                 IF( USETAPE(ISCAT) ) THEN
+                    IF( IP .EQ. 1) TPSUBP = 'A'
                     IF( IP .EQ. 2) TPSUBP = 'B'
                     IF( IP .EQ. 3) TPSUBP = 'C'
                     IF( IP .EQ. 4) TPSUBP = 'D'
@@ -386,7 +387,7 @@ C
                  END IF
 C          
                  DO ICH = 1, NCHAN(KS)
-                          DO IBIT = 1, BITS(1,KS) 
+                    DO IBIT = 1, BITS(1,KS) 
 C          
 C                      different bits per channel not supported (ICH,KS)
 C                

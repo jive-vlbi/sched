@@ -7,7 +7,7 @@ C
       INCLUDE    'sched.inc'
 C
       CHARACTER   MYDBBCVER*(*)
-      INTEGER     MAXBBC, MAXIF, I
+      INTEGER     MAXBBC, MAXIF
       INTEGER     IFBBC(MAXBBC, MAXIF), MIF, IIF, IBBC
 C
 C  -----------------------------------------------------------

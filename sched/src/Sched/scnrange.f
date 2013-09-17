@@ -11,7 +11,7 @@ C     Moved from MAIN (sched.f) to keep that routine simple.
 C
       INCLUDE   'sched.inc'
 C
-      INTEGER   CORE1, COREL, ISCN, IC, LEN1
+      INTEGER   CORE1, COREL, ISCN
       LOGICAL   GOTC1
 C -----------------------------------------------------------------
 

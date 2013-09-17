@@ -11,12 +11,14 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER            I, IUNIT, KS, JS, KF, NNCHAN, KSCN, LEN1, IC
-      INTEGER            IP, IPC, ISSTA, JF, ICH, ICH1, ILINE
+      INTEGER            JF, ICH, ICH1, ILINE
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
-      LOGICAL            GOTIT
       CHARACTER          RESULT*100, FSMATSTR*132
-C----------------------------------------------------------------------
+      INTEGER            CRDN
+      DOUBLE PRECISION   CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
+      CHARACTER          CRDS(MCHAN)*1
+CC----------------------------------------------------------------------
       NNCHAN = NCHAN(KS)
       IF( DEBUG ) THEN
          MSGTXT = ' '
@@ -85,6 +87,11 @@ C
       IF( NFSET .GT. 0 ) THEN
          WRITE( IUNIT, '( 1X, /, A, A )' ) '  The following ',
      1         'frequency sets based on these setups were used.'
+         IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
+            WRITE( IUNIT, '( A, A )' )
+     1         '     See the crd files for VLBA legacy system ',
+     2         'pcal detection details.'
+         END IF
          DO KF = 1, NFSET
             JS = FSETKS(KF)
             IF( LISTKS(JS) .EQ. LISTKS(KS) .AND. 
@@ -93,7 +100,8 @@ C
 C
 C              Get the frequencies to be used for this frequency set.
 C
-               CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW )
+               CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
+     1                      CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
 C        
 C              Write a label that depends on whether this is a 
 C              default set.
@@ -125,39 +133,19 @@ C
      1                '   Frequency Set:', KF, '  Setup file default.'
                   RESULT = 'OK'
                END IF
-C        
-C              Add the pcal sets used.
-C        
-               IF( DAR(ISETSTA(KS))(1:4) .EQ. 'VLBA' ) THEN
-C        
-                  IC = LEN1( MSGTXT ) + 1
-                  WRITE( MSGTXT(IC:LEN(MSGTXT)), '( A )' ) 
-     1                 '  Used pcal sets:'
-C        
-                  IF( FSETPS(1,KF) .NE. 0 ) THEN
-                     IC = LEN1( MSGTXT ) + 1
-                     WRITE( MSGTXT(IC:IC+3), '( I4 )' ) FSETPS(1,KF)
-                  END IF
-C        
-                  IF( FSETPS(2,KF) .NE. 0 ) THEN
-                     IC = LEN1( MSGTXT ) + 1
-                     WRITE( MSGTXT(IC:IC+3), '( I4 )' ) FSETPS(2,KF)
-                  END IF
-C        
-                  IF( FSETPS(3,KF) .NE. 0 ) THEN
-                     IC = LEN1( MSGTXT ) + 1
-                     WRITE( MSGTXT(IC:IC+3), '( I4 )' ) FSETPS(3,KF)
-                  END IF
-C        
-               ELSE
 C
-C                  Take out this statement.  It just worried users who
-C                  were expecting detection at the correlator.
+C              The details of the pcal detection on the VLBA used to
+C              be included here, but that is getting messier as the
+C              legacy system channels are no longer the same frequency
+C              or bandwidth as the main schedule channels.  So remove
+C              that information.  In fact, the whole concept of 
+C              pcal sets is being removed.
+C        
+C              Add the pcal state for this freqency set.
 C
-C                  IC = LEN1( MSGTXT ) + 1
-C                  WRITE( MSGTXT(IC:LEN(MSGTXT)), '( A )' ) 
-C     1             '  No pcal detection.'
-               END IF
+               IC = LEN1( MSGTXT ) + 1
+               WRITE( MSGTXT(IC:LEN(MSGTXT)), '( A, A )' ) 
+     1                 '  Used with PCAL = ', FSPCAL(KF)
 C        
 C              Write the header line and a warning if there is one.
 C
@@ -217,53 +205,9 @@ C
          END IF
       END IF
 C
-      ISSTA = ISETSTA(KS)
-      IF( ISSTA .EQ. 0 ) THEN
-         CALL WLOG( 1, 'PRTFREQ:  Do not know stations yet.  '//
-     1      'Cannot check pulse cal sets.' )
-      ELSE IF( DAR(ISSTA)(1:4) .EQ. 'VLBA' ) THEN
-C
-C        Pulse cal information.
-C
-         WRITE( IUNIT, '( 1X, /, A )' ) 
-     1     '  The following pulse cal sets were used with this setup:'
-C
-         DO IP = 1, NPSET
-            GOTIT = .FALSE.
-            KF = 1
-            DO WHILE( KF .LE. NFSET .AND. .NOT. GOTIT )
-               IF( FSETKS(KF) .EQ. KS ) THEN
-                  DO IPC = 1, 3
-                     IF( FSETPS(IPC,KF) .EQ. IP ) GOTIT = .TRUE.
-                  END DO
-               END IF
-               KF = KF + 1
-            END DO
-C
-C           This pcal set was used with this setup.
-C
-            IF( GOTIT .AND. MAXPC .GT. 0 ) THEN
-               WRITE( IUNIT, '( 1X, /, A, I4, A, A )' )
-     1          '   Pulse cal detection set:', IP, 
-     2             '  PCAL = ', PSPCAL(IP)
-               WRITE( IUNIT, '( 2X, A, 8( A6, :), /, 11X, 8( A6, :) )' )
-     1           '  PCALXB1=', ( PSX1(I,IP), I = 1, MAXPC )
-               WRITE( IUNIT, '( 2X, A, 8( A6, :), /, 11X, 8( A6, :) )' )
-     1           '  PCALXB2=', ( PSX2(I,IP), I = 1, MAXPC )
-               WRITE( IUNIT, '( 2X, A, 8( I6, :), /, 11X, 8( I6, :) )' )
-     1           '  PCALFR1=', ( PSFR1(I,IP), I = 1, MAXPC )
-               WRITE( IUNIT, '( 2X, A, 8( I6, :), /, 11X, 8( I6, :) )' )
-     1           '  PCALFR2=', ( PSFR2(I,IP), I = 1, MAXPC )
-            ELSE IF( GOTIT .AND. MAXPC .LE. 0 ) THEN
-               CALL WLOG( 1, 
-     1             'PRTFREQ: No pulse cal sets!  Program problem.' )
-               WRITE( IUNIT, '( A )' )
-     1             'PRTFREQ: No pulse cal sets!  Program problem.'
-C            
-            END IF
-         END DO
-C
-      END IF
+C     The pulse cal information has been removed.  For the VLBA legacy
+C     system, the user will need to check the crd files for what got
+C     used.
 C
       RETURN
       END
