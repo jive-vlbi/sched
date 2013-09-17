@@ -7,7 +7,6 @@ C     settings.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER       LEN1
       LOGICAL       MISCOR
       CHARACTER     CHPOL*(*)
 C --------------------------------------------------------------------      

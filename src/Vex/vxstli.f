@@ -10,7 +10,8 @@ C
 C
       INTEGER   IXX,NSTAXX(MAXMOD,MAXMOD), ISTAXX(MAXSTA,MAXMOD,MAXMOD)
 C
-      INTEGER   ISTA, LPOS, LEN1, IMODE, ISET, VXGTST
+      INTEGER   ISTA, LPOS, LEN1, IMODE
+C From commented code: ISET, VXGTST
       CHARACTER LINE*132
 C ----------------------------------------------------------------------
 C

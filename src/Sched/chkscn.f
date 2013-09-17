@@ -30,6 +30,9 @@ C
       DOUBLE PRECISION  MINFRI, MAXFRI, MINFRJ, MAXFRJ
       DOUBLE PRECISION  MINDEF, MAXDEF, FR1, FR2
       DOUBLE PRECISION  SCANLEN, VPT
+      INTEGER            CRDN
+      DOUBLE PRECISION   CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
+      CHARACTER          CRDS(MCHAN)*1
       PARAMETER         ( MINDEF = 1.D15 )
       PARAMETER         ( MAXDEF = 0.D0 ) 
 C ----------------------------------------------------------------------
@@ -126,13 +129,13 @@ C     Do some checking that only applies when using real setups.
 C
       IF( .NOT. NOSET ) THEN
 C
-C        Get the "frequency sets".  
+C        Get the "frequency sets".
 C
          CALL GETFSET
 C
-C        Get the "pcal sets".
+C        "pcal sets" are no longer used.
 C
-         CALL GETPSET
+C         CALL GETPSET
 C
 C        Check for possible data loss due to correlator resyncs and 
 C        formatter reconfigures.
@@ -239,7 +242,8 @@ C
       DO KF = 1, NFSET
          KS = FSETKS(KF)
          ISTA = ISCHSTA(ISETSTA(KS))
-         CALL FSFREQ( KF, FRSUM, FRBB, FRBW )
+         CALL FSFREQ( KF, FRSUM, FRBB, FRBW,
+     1                CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
          DO ICH = 1, NCHAN(KS)
             IF( NETSIDE(ICH,KS) .EQ. 'U' ) THEN
                FR1 = FRSUM(ICH)

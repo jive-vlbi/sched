@@ -7,7 +7,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER ISET, JSET, ISIDE1, JSIDE1, ICH
+      INTEGER ISET, JSET, ICH ! ISIDE1, JSIDE1 (comment Sep 2013 RCW)
       LOGICAL IDENT
       CHARACTER UPCALI*4, UPCALJ*4
 C ----------------------------------------------------------------------

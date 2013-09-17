@@ -9,7 +9,6 @@ C     hardward correlator and the DiFX software correlator.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER    LEN1
       LOGICAL    MISCOR
       CHARACTER  CHPOL*(*), PRTPOL*3
 C ---------------------------------------------------------------------

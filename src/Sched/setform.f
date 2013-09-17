@@ -97,7 +97,7 @@ C
       INCLUDE   'sched.inc'
       INCLUDE   'schset.inc'
 C
-      INTEGER           KS, ISETF, ISTA, ISCN, I
+      INTEGER           KS, ISETF, ISTA, ISCN
       REAL              MAXBPS, HDFACT
       LOGICAL           OK, NEEDFMT(MSET)
       LOGICAL           ANYLEFT, ANYLFT2

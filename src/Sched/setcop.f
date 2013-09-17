@@ -124,6 +124,7 @@ C
          BITS(I,TO)    = BITS(I,FROM)         
          BBC(I,TO)     = BBC(I,FROM)          
          SIDEBD(I,TO)  = SIDEBD(I,FROM)     
+         CRDSIDE(I,TO) = CRDSIDE(I,FROM)     
          POL(I,TO)     = POL(I,FROM)        
          IFCHAN(I,TO)  = IFCHAN(I,FROM)     
          ALTIFC(I,TO)  = ALTIFC(I,FROM)

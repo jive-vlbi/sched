@@ -12,13 +12,23 @@ C     This is a stripped down and modified version of SAMESET.
 C     Note that this time, frequencies must be considered, hence
 C     the scan numbers.
 C
-      INTEGER   ISCN, LSCN, ISTA
-      INTEGER   KS, JS, KP, JP, ICH
-      INTEGER   PSETI
-      LOGICAL   LOCDBG, NEWCONF, NEWPCAL, SAMECONF
+C     Note that this is only for the VLBA formatters.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
+C
+      INTEGER   ISCN, LSCN, ISTA
+      INTEGER   KS, JS, ICH, IPC
+      LOGICAL   LOCDBG, NEWCONF, NEWPCAL, SAMECONF
+C
+C     For checking a pcal detector setup change.
+C
+      INTEGER       KF, LF
+      CHARACTER     KPCX1(MAXPC)*3, KPCX2(MAXPC)*3
+      CHARACTER     LPCX1(MAXPC)*3, LPCX2(MAXPC)*3
+      INTEGER       KPCFR1(MAXPC), KPCFR2(MAXPC)
+      INTEGER       LPCFR1(MAXPC), LPCFR2(MAXPC)
+C
       PARAMETER  (LOCDBG=.FALSE.)
 C ---------------------------------------------------------------------
 C     Don't do this if this is the first scan.
@@ -49,6 +59,9 @@ C
       END IF
 C
 C     First test the obvious items that will cause a reconfigure.
+C     Note that the frequency, Doppler, and bandwidth commands only
+C     affect the formatter through the pulse cal detection.  The
+C     sample rate does not change when BW is changed by scan.
 C
       SAMECONF = NCHAN(KS)    .EQ. NCHAN(JS)    .AND.
      1          SAMPRATE(KS) .EQ. SAMPRATE(JS) .AND.
@@ -65,12 +78,23 @@ C
      3     BBC(ICH,KS)  .EQ. BBC(ICH,JS)
       END DO
 C
-C     Worry about the pcal setup.  The pcal set concept makes this 
-C     easy.
+C     Worry about the pcal setup.  This was easier with the pcal 
+C     groups, but those are gone.  Now compare the settings to 
+C     be used with the last ones.  First get the frequency group 
+C     for both inputs, then calculate the detector setup and compare.
 C
-      KP = PSETI(ISCN,ISTA)
-      JP = PSETI(LSCN,ISTA)
-      NEWPCAL = KP .NE. JP
+      KF = FSETI(ISCN,ISTA)
+      LF = FSETI(LSCN,ISTA)
+      CALL PCALFQ( FSPCAL(KF), KF, KPCX1, KPCX2, KPCFR1, KPCFR2 )
+      CALL PCALFQ( FSPCAL(LF), LF, LPCX1, LPCX2, LPCFR1, LPCFR2 )
+C
+      NEWPCAL = FSPCAL(KF) .NE. FSPCAL(LF) 
+      DO IPC = 1, MAXPC
+         IF( KPCX1(IPC) .NE. LPCX1(IPC) .OR.
+     1       KPCX2(IPC) .NE. LPCX2(IPC) .OR.
+     2       KPCFR1(IPC) .NE. LPCFR1(IPC) .OR.
+     3       KPCFR2(IPC) .NE. LPCFR2(IPC) ) NEWPCAL = .TRUE.
+      END DO
 C
 C     Jump here on first or non-recording scan.
 C

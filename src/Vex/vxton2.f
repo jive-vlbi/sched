@@ -6,6 +6,9 @@ C     and the sequence they are. Tone zero is level statistics.
 C     Routine specific for the VEX extension of SCHED. 
 C     By H.J. van Langevelde, JIVE, 020896
 C     revised to deal with PSETI and FSETI 180699, Huib
+C     Removing pcal sets.  Sep. 2013  RCW.
+C         Eventually get the desired tone numbers from new variables
+C         in the setup file or frequency set.  But that's not done yet.
 C
 C     Inputs are
 C         IPS: override ISET values with these if IPS > 0
@@ -63,12 +66,15 @@ C
       END DO
 C
 C     This routine can be used to calculate tones in IPS or ISET
+C       RCW:  This routine is always called with IPS=-1.  PSX1 is
+C             being dropped, so comment out the reference.
+C     
 C
-      IF( IPS.GT. 0 ) THEN
-         PXXS = PSX1(1,IPS) 
-      ELSE
+C      IF( IPS.GT. 0 ) THEN
+C         PXXS = PSX1(1,IPS) 
+C      ELSE
          PXXS = PCALX1(1,ISET)
-      END IF
+C      END IF
 C
 C     When not explicitly set, calculate
 C
@@ -230,17 +236,19 @@ C
       ELSE 
 C
 C        Use the values from the PCal set or setup file
+C        RCW:  Again, IPS always=-1 and PS variable are being
+C        dropped, so comment them out.
 C
-         IF( IPS .GT. 0 ) THEN
-            DO IP = 1, MAXPC
-               PCX1(IP) = PSX1(IP,IPS)
-               PCX2(IP) = PSX2(IP,IPS)
-               PCF1(IP) = PSFR1(IP,IPS)
-               PCF2(IP) = PSFR2(IP,IPS)
-               IF( PCX1(IP) .EQ. ' ' ) PCX1(IP) = 'off'
-               IF( PCX2(IP) .EQ. ' ' ) PCX2(IP) = 'off'
-            END DO
-         ELSE
+C         IF( IPS .GT. 0 ) THEN
+C            DO IP = 1, MAXPC
+C               PCX1(IP) = PSX1(IP,IPS)
+C               PCX2(IP) = PSX2(IP,IPS)
+C               PCF1(IP) = PSFR1(IP,IPS)
+C               PCF2(IP) = PSFR2(IP,IPS)
+C               IF( PCX1(IP) .EQ. ' ' ) PCX1(IP) = 'off'
+C               IF( PCX2(IP) .EQ. ' ' ) PCX2(IP) = 'off'
+C            END DO
+C         ELSE
             DO IP = 1, MAXPC
                PCX1(IP) = PCALX1(IP,ISET)
                PCX2(IP) = PCALX2(IP,ISET)
@@ -249,7 +257,7 @@ C
                IF( PCX1(IP) .EQ. ' ' ) PCX1(IP) = 'off'
                IF( PCX2(IP) .EQ. ' ' ) PCX2(IP) = 'off'
             END DO
-         END IF
+C         END IF
 C
       END IF
 C

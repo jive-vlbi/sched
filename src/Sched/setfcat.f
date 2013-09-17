@@ -421,6 +421,14 @@ C
             BBSYN(ICH,KS) = ABS( FREQREF(ICH,KS) - FIRSTLO(ICH,KS) )
          END IF
 C
+C        While thinking about sidebands, save the BBC sideband as of this
+C        point for use with the VLBA legacy system if reference pointing.
+C        The SIDEBD variable can get altered later if the correlator 
+C        sideband inversion option is used.  That can make the bookkeeping
+C        complicated for the legacy BBC settings.
+C
+         CRDSIDE(ICH,KS) = SIDEBD(ICH,KS)
+C
       END DO
 C
       RETURN

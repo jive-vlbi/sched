@@ -25,7 +25,7 @@ C
       INTEGER     MCHAN
       PARAMETER   (MCHAN=128)
       CHARACTER   LABEL*(*), OUTLINE*80, FMT1*4, FMT2*4
-      CHARACTER   FMTCH*4
+      CHARACTER   FMTCH*4, MSGLINE*132
       DOUBLE PRECISION  ARRAY(*), OLDARRAY(*)
       DOUBLE PRECISION  LOG2
       INTEGER     NCHAN, OLDCHAN, KCHAR, NCHAR, LEN1, NCL
@@ -70,8 +70,22 @@ C
 C           Determine the ASCII version of the number to be printed.
 C
             NBWS = LOG( (ARRAY(I) + 0.02D0 ) / 0.0625D0 ) / LOG2  +  1
-            IF( NBWS .LT. 1 .OR. NBWS .GT. MBWS ) CALL ERRLOG ( 
-     1           'VLBABWS: Bad bandwidth or sample rate specification ')
+            IF( NBWS .LT. 1 .OR. NBWS .GT. MBWS ) THEN
+               CALL WLOG ( 1,
+     1          'VLBABWS: Bad bandwidth or sample rate specification ' )
+               MSGLINE = ' '
+               WRITE( MSGLINE, '( 3A, I3 )' ) 
+     1           '         label = ', LABEL,
+     2           '         channel = ', I
+               CALL WLOG( 1, MSGLINE )
+               MSGLINE = ' '
+               WRITE( MSGLINE, '( A, F8.3, A, I4, A, I4 )' ) 
+     1           '         bandwidth/samprate (MHz) = ', ARRAY(I),
+     2           '         index of bandwidth = ', NBWS, '  Max=', MBWS
+               CALL WLOG( 1, MSGLINE )
+               CALL ERRLOG( '         Fix the problem.' //
+     1             '  Possible programming issue.' )
+            END IF
             PRTBWS(I) = SPECBWS(NBWS)
 C
 C           Get the format and number of digits needed for the array 

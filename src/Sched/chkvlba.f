@@ -179,7 +179,7 @@ C
          IF( MODETEST(KS) .AND. ( I .EQ. 1 .OR. I .EQ. 2 ) ) THEN
             IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 0.01D0, 0, 0.D0,
      1          0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.
-        write(*,*) 'chkvlba badlo ', i, r8freq(i), ' ', errs
+C           write(*,*) 'chkvlba badlo ', i, r8freq(i), ' ', errs
          ELSE
             IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 500.D0, 1, 100.D0, 
      1          0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.

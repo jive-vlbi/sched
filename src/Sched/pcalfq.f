@@ -1,121 +1,214 @@
       SUBROUTINE PCALFQ( PCOPT, KF, PCX1, PCX2, PCFR1, PCFR2 )
 C
-C     Routine to set the pcal tone commands for frequency set KF
-C     and pcal state PCOPT.  Called by GETPSET.
+C     Routine to set the pcal tone commands for frequency set KF.
+C     Called by RECONFIG
+C     and WRTFREQ, perhaps others.  These pcal commands control
+C     the detectors in the legacy system on the VLBA.  They appear
+C     only in the crd files.  They may differ from what is in the 
+C     Vex file.
+C
 C     If PCOPT = "SET", get the setup file values for setup group KS=KF.
-C     This option is not yet used.
+C     This option is not yet used.  PCOPT is usually the pcal state
+C     (1MHZ, 5MHZ, or OFF) which is what is was meant to be in the past.
+C     But the pcal state is now an item in the frequency set and is
+C     obtained there.
 C
 C     PCX1 and PCX1 are the detector/bit to use (eg. S2, M4 etc).
 C     PCFR1 and PCFR2 are the tone frequency to use in kHz. 
 C
 C     This routine takes into account any FREQ and BW set in the scan
+C     It also takes into account and CRD parameters that are meant
+C     to only affect the VLBA crd files.
+C
+C     Aug. 2013.  Modifying the way we deal with PCALX.  This is
+C     triggered by addition of infrastructure to allow the VLBA
+C     legacy system BBCs to be set to different frequencies than
+C     the main recording channels, mainly to allow reference pointing
+C     on masers while using the RDBE_PFB which cannot do narrow 
+C     bands or be finely tuned.  In the process, there will no longer
+C     be pulse cal sets - they are merged with frequency sets.
+C
+C     The pcalx information for the tone detectors in the legacy 
+C     system can be provided by the user in the setup.  But that 
+C     information is likely to become inappropriate if any of the
+C     scan parameters FREQ, BW, DOPPLER, CRDDOP, CRDFREQ, CRDBW, or
+C     PCAL are given.  Any changes in these parameters triggers
+C     a new (or previously used) frequency set.
+C
+C     In the new scheme, the pcalx assignments will be made on the
+C     fly by this routine when they are needed for crd files, the .sum
+C     file etc.  There is an assumption, enforced by the nature
+C     of the code, that the pcx setup will be unique to a frequency
+C     set.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER       KF, KS
-      INTEGER       ICH, ID, IP, ICT, IDD
-      INTEGER       NTONES(MCHAN)
-      INTEGER       TONE1(MCHAN), TONE2(MCHAN), TONE3(MCHAN)
-      INTEGER       INTBW, NTPB
-      INTEGER       PCFR1(MAXPC), PCFR2(MAXPC)
+      INTEGER           KF, KS
+      INTEGER           ICH, ID, IP, ICT, IDD
+      INTEGER           NTONES(MCHAN)
+      INTEGER           TONE1(MCHAN), TONE2(MCHAN), TONE3(MCHAN)
+      INTEGER           INTBW, NTPB
+      INTEGER           PCFR1(MAXPC), PCFR2(MAXPC)
       DOUBLE PRECISION  RTONE1
       DOUBLE PRECISION  BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION  TONEINT, LOSUM(MCHAN)
-      CHARACTER     PCX1(MAXPC)*3, PCX2(MAXPC)*3
-      CHARACTER     PCALC1*3, UPCAL*4, PCOPT*4
+      CHARACTER         PCX1(MAXPC)*3, PCX2(MAXPC)*3
+      CHARACTER         PCALC1*3, UPCAL*4, PCOPT*4
+      INTEGER           CRDN
+      DOUBLE PRECISION  CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
+      CHARACTER         CRDS(MCHAN)*1, CNETSIDE*1
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'PCALFQ starting ' )
 C
-C     Allow a call that uses the setup file values.
+C     Allow a call that uses the setup file values rather than any
+C     that might have been provided in the scan dependent variables
+C     FREQ, BW, and DOPPLER, or the CRD equivalents.  Here we assume
+C     that KF is the desired setup group.
+C     Not used yet - not sure why this was provided.
 C
       IF( PCOPT .EQ. 'SET' ) THEN
          KS = KF
          UPCAL = SPCAL(KS)
+         CRDN = NCHAN(KS)
          DO ICH = 1, NCHAN(KS)
             LOSUM(ICH) = FREQREF(ICH,KS)
             BBCBW(ICH) = BBFILT(ICH,KS)
+            CRDF(ICH) = LOSUM(ICH)
+            CRDB(ICH) = BBCBW(ICH)
+            CRDS(ICH) = SIDEBD(ICH,KS)
+            CRDLOSUM(ICH) = LOSUM(ICH)
          END DO
       ELSE
 C
 C        Get information from the frequency set.
+C        This includes the frequencies that we will actually
+C        be using for the legacy system for which we are trying
+C        to set the pulse cal detector values.
 C
          KS = FSETKS(KF)
-         UPCAL = PCOPT
-         CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW )
+         UPCAL = FSPCAL(KF)
+         CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
 C
       END IF
 C
-C     Get the tone interval.
+C     Get the tone interval.  The case and validity of the PCAL 
+C     commands was checked on input of PCAL in the setups and schedule.
 C
-      CALL UPCASE( UPCAL )
-      IF( UPCAL .EQ. '1MHZ' ) THEN
+      TONEINT = -1.D0
+      IF( UPCAL .EQ. '1MHz' ) THEN
          TONEINT = 1.D0
-      ELSE IF( UPCAL .EQ. '5MHZ' ) THEN
+      ELSE IF( UPCAL .EQ. '5MHz' ) THEN
          TONEINT = 5.D0
-      ELSE IF( UPCAL .EQ. 'OFF' ) THEN
+      ELSE IF( UPCAL .EQ. 'off' ) THEN
          TONEINT = 0.D0
       ELSE
 C
-C        Earlier tests should have failed.
+C        Earlier tests should have failed so we shouldn't get here.
 C
-         CALL ERRLOG( 'PCALFQ: Programming error with PCAL.'//UPCAL ) 
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, A, A, F7.3)' )
+     1     'PCALFQ: Programming error with PCAL. PCAL=''', UPCAL,
+     2     '''  TONEINT=', TONEINT 
+         CALL ERRLOG( MSGTXT )
       END IF
 C
-C     If the first PCALX1 is set, assume that all others are
-C     set and just write out what came from the setup file.
-C     Otherwise, set the defaults.
+C     If the first PCALX1 is set and the pcal setting is the same
+C     as for the setup group, assume that all other PCALX values are
+C     also set and don't need to change.  Just write out what came 
+C     from the setup file. Otherwise, set the defaults.
 C
-      IF( PCALX1(1,KS) .EQ. ' ' ) THEN
+      IF( PCALX1(1,KS) .NE. ' ' .AND. UPCAL .EQ. SPCAL(KS) ) THEN
+C
+         DO IP = 1, MAXPC
+            PCX1(IP) = PCALX1(IP,KS)
+            PCX2(IP) = PCALX2(IP,KS)
+            PCFR1(IP) = PCALFR1(IP,KS)
+            PCFR2(IP) = PCALFR2(IP,KS)
+            IF( PCX1(IP) .EQ. ' ' ) PCX1(IP) = 'OFF'
+            IF( PCX2(IP) .EQ. ' ' ) PCX2(IP) = 'OFF'
+         END DO
+C
+      ELSE
 C
 C        Find the tone frequencies that might be of interest,
 C        namely the lowest and highest frequency ones in the 
 C        bandpass.  Count the tones of interest (0, 1, 2, or 3).
 C        Zero will mean just do state counts.
-C        Avoid tones at the band edges (0 and BBCBW).
+C        Avoid tones at the band edges (0 and CRDB).
 C        RTONE1 is the tone frequency in MHz (real).
 C        TONE1 etc are the tone frequencies in kHz (integer).
+C
+C        For all this, use the CRD values as they represent the
+C        signals that the detectors will see.
 C
          DO ICH = 1, NCHAN(KS)
             NTONES(ICH) = 0
          END DO
 C
          IF( TONEINT .GT. 0.D0 ) THEN
-            DO ICH = 1, NCHAN(KS)
-               INTBW = 1000 * BBCBW(ICH)
+            DO ICH = 1, CRDN
+               INTBW = 1000 * CRDB(ICH)
 C
 C              Get the first tone.
+C              Need the net sideband.  CRDS is the BBC sideband
+C              before any sideband inversion tricks were done.
+C              Get a CNETSIDE which is the net sideband in the
+C              BBC.  Presumably NETSIDE has reflected the 
+C              inversions so can't be used directly.
 C
-               IF( NETSIDE(ICH,KS).EQ.'U'.AND.LOSUM(ICH).NE.0.D0 ) THEN
+               IF( CRDS(ICH) .EQ. SIDE1(ICH,KS) ) THEN
+                  CNETSIDE = 'U'
+               ELSE
+                  CNETSIDE = 'L'
+               END IF
+C
+               IF( CNETSIDE.EQ.'U' .AND. CRDLOSUM(ICH).NE.0.D0 ) THEN
                   TONE1(ICH) = DNINT( 1.D3 * 
-     1                   ( TONEINT - MOD( LOSUM(ICH), TONEINT ) ) )
+     1                   ( TONEINT - MOD( CRDLOSUM(ICH), TONEINT ) ) )
                   IF( TONE1(ICH) .EQ. 0 ) 
      1                   TONE1(ICH) = DNINT( TONEINT * 1000.D0 )
                   IF( TONE1(ICH) .LT. INTBW ) NTONES(ICH) = 1
                   RTONE1 = TONE1(ICH) / 1000.0D0
-               ELSE IF(NETSIDE(ICH,KS).EQ.'L' .AND. LOSUM(ICH).NE.0.D0) 
-     1              THEN
-                  TONE1(ICH) = DNINT( 1.D3 * MOD( LOSUM(ICH), TONEINT ))
+               ELSE IF( CNETSIDE .EQ. 'L' .AND. 
+     1                  CRDLOSUM(ICH) .NE. 0.D0 ) THEN
+                  TONE1(ICH) = 
+     1                 DNINT( 1.D3 * MOD( CRDLOSUM(ICH), TONEINT ))
                   IF( TONE1(ICH) .EQ. 0 ) 
      1                   TONE1(ICH) = DNINT( TONEINT * 1000.D0 )
                   IF( TONE1(ICH) .LT. INTBW ) NTONES(ICH) = 1
                   RTONE1 = TONE1(ICH) / 1000.0D0
                ELSE
-                  CALL ERRLOG( 'PCALFQ: Invalid sideband or no LO sum' )
+                  CALL WLOG( 1,
+     1                 'PCALFQ: Invalid sideband or no LO sum.' )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( 3A, 2I5 )' )
+     1                 '        BBC Net Sideband ', CNETSIDE,
+     2                 ' in frequency set/channel: ', KS, ICH
+                  CALL WLOG( 1, MSGTXT )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, F14.6 )' )
+     1                 '        Legacy system LO sum: ', 
+     2                 CRDLOSUM(ICH)
+                  CALL WLOG( 1, MSGTXT )
+
+                  CALL ERRLOG( '        when setting VLBA legacy '//
+     1                  'system pulse cal detectors.' )
                END IF
 C
 C              Get the second tone.  The 0.005 prevents the tone from
 C              ending up right on the band edge.  
 C
                IF( NTONES(ICH) .EQ. 1 .AND. 
-     1             BBCBW(ICH) - RTONE1 .GT. TONEINT ) THEN
-                  NTPB = ( BBCBW(ICH) - RTONE1 - 0.005D0 ) / TONEINT
+     1             CRDB(ICH) - RTONE1 .GT. TONEINT ) THEN
+                  NTPB = ( CRDB(ICH) - RTONE1 - 0.005D0 ) / TONEINT
 C
 C                 Try to prevent getting too close to the upper edge 
 C                 of the band where there is a strong filter roll off.
 C
                   IF( TONE1(ICH) / 1000.0D0 + NTPB * TONEINT .GT.
-     1                  0.85D0 * BBCBW(ICH) ) THEN
+     1                  0.85D0 * CRDB(ICH) ) THEN
                      IF( NTPB .LE. 8 .AND. NTPB .GE. 3 ) THEN
                         NTPB = NTPB - 1
                      ELSE IF( NTPB .GT. 8 ) THEN
@@ -249,22 +342,9 @@ C
             END DO
          END IF
 C
-      ELSE
-C
-C        Use the values from the setup file.
-C
-         DO IP = 1, MAXPC
-            PCX1(IP) = PCALX1(IP,KS)
-            PCX2(IP) = PCALX2(IP,KS)
-            PCFR1(IP) = PCALFR1(IP,KS)
-            PCFR2(IP) = PCALFR2(IP,KS)
-            IF( PCX1(IP) .EQ. ' ' ) PCX1(IP) = 'OFF'
-            IF( PCX2(IP) .EQ. ' ' ) PCX2(IP) = 'OFF'
-         END DO
-C
       END IF
 C
-C     Guarantee uppercase so GETPSET does not have problems.
+C     Guarantee uppercase.
 C
       DO IP = 1, MAXPC
          CALL UPCASE( PCX1(IP) )

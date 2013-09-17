@@ -13,7 +13,7 @@ C     how Adam's V2D spec can support either.
 C
       INCLUDE   'sched.inc'
 C
-      integer   len1
+C      integer   len1
       INTEGER   ISCN, IPAIR, JPAIR
 C -----------------------------------------------------------------
 C

@@ -5,6 +5,10 @@ C     frequencies for spectral line sources.  The calculated
 C     frequencies replace any values previously placed in the FREQ 
 C     array, such as from FREQ specified for a scan.
 C
+C     It calls the closely related (almost copied) routine DOPCRD to
+C     set frequencies for the BBCs when reference pointing under
+C     circumstances when the main channels cannot be adjusted (PFB).
+C
 C     FREQ is the LO sum (band edge) given the sideband of the 
 C     logical channel.  It may need to be adjusted if the station
 C     is going to put out a sideband inverted from the logical
@@ -64,6 +68,7 @@ C
 C     Loop through scans looking for ones that need doppler calc.
 C
       DO ISCN = SCAN1, SCANL
+C
          ISETF = SETNUM(ISCN)
          IF( DOPCAL(ISCN) .AND. OKXC(ISETF) .AND. .NOT. VLAONLY ) THEN
 C
@@ -71,6 +76,11 @@ C           Get the velocity of the Earth in the direction of the
 C           source.  It is the sum of the LSR velocity of the Sun 
 C           and the solar system velocity of the Earth.  Get both 
 C           from SLA_LIB routines.
+C
+C           Note that the midpoint of the experiment will be used for
+C           the calculation.  Thus, despite redoing the calculation for
+C           each scan, each source will use the same velocity for every
+C           scan.
 C
             TMID = (TFIRST + TEND) / 2.0
             CALL TIMEJ( TMID, YEAR, DAY, TIME )
@@ -292,7 +302,9 @@ C
          ELSE IF( DOPCAL(ISCN) .AND. VLAONLY ) THEN
 C
 C           Warn that cannot do doppler adjustments on just VLA.
-C           For VLAONLY schedules, SFINFO will set OKXC 
+C           For VLAONLY schedules, SFINFO will set OKXC.
+C           May be able to remove this restriction if VLA only schedules
+C           become no different than any other single station obs.
 C
             CALL ERRLOG( 'DOPFQ: Sched can not do Doppler ' //
      1             'adjustments for VLA only schedules.' )
@@ -325,6 +337,12 @@ C
      1                  'FREQ or BW.' )
          END IF
       END DO
+C
+C     Call DOPCRD to set the legacy VLBA system frequencies for 
+C     reference pointing when the main channels cannot be finely 
+C     tuned.  Mainly for reference pointing while using the RDBE
+C
+      CALL DOPCRD
 C
       RETURN
       END

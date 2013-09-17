@@ -12,7 +12,6 @@ C
       INTEGER           KS, ICH, JCH, ISTA
       INTEGER           LEN1, LNAME, ITOUT
       LOGICAL           ERRS, SAMPWARN, OVERWARN, WARN2CM
-      CHARACTER         UPPCAL*4
       DOUBLE PRECISION  BBWIDI, BBWIDJ
       DOUBLE PRECISION  FLOWI, FLOWJ, FHIGHI, FHIGHJ
       SAVE              ITOUT, WARN2CM
@@ -279,16 +278,8 @@ C
                END IF
             END DO
 C
-C           Check the pulse cal specification.  Simple so far.
-C
-            UPPCAL = SPCAL(KS)
-            CALL UPCASE( UPPCAL )
-            IF( UPPCAL .NE. 'OFF' .AND. UPPCAL .NE. '1MHZ' .AND.
-     1          UPPCAL .NE. '5MHZ' ) THEN
-               CALL WLOG( 1, 'CHKSET: Invalid PCAL specification: '
-     1               // SPCAL(KS) )
-               ERRS = .TRUE.
-            END IF
+C           Pulse cal specification SPCAL was set to right case 
+C           and checked in RDSET.
 C
          END IF
 C

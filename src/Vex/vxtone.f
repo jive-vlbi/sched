@@ -13,7 +13,8 @@ C
       INCLUDE 'vxlink.inc'
 C
       INTEGER IPH, IFQ, IIF, I, J, ICH, NUP, NLO, ILPH, ILFQ, ILIF
-      INTEGER IMODE, VXGTST, ISET
+      INTEGER IMODE
+C From commented code: INTEGER  VXGTST, ISET
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'VXTONE: Starting' )
 C

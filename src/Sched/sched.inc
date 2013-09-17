@@ -620,7 +620,7 @@ C                      Calculated items:
 C
       DOUBLE PRECISION TFIRST, TEND, COREBEG, COREEND
       INTEGER          SCAN1, SCANL, NSCANS
-      LOGICAL          GOTFREQ, DWELLS
+      LOGICAL          DWELLS
 C
 C                      The list of stations used - the "schedule
 C                      stations".  See the notes for the station 
@@ -642,7 +642,7 @@ C
      1                 LSTSTA, DOSCANS, LST, MARK2, VLBITP, VLAONLY, 
      2                 NOTAPE, CONFIG, TANTS1, TANTS2, FUZZY, 
      3                 GOTVLBA, GOTPREEM, WRAP24, SCAN1, SCANL,
-     4                 NSCANS, GOTFREQ, DWELLS,  NSTA, STANUM, 
+     4                 NSCANS, DWELLS,  NSTA, STANUM, 
      5                 NSRC, SRCATN
       COMMON /SCHC1/   EXPT, EXPCODE, STANAME, SRCNAME
 C
@@ -674,18 +674,26 @@ C                        NINTENT is the number of such strings.
 C                        ISCINT is an array giving intents used per scan.
 C                        NSCINT is the number of intents in a scan.
 C                        
+C                      The variables starting the CRD are for the
+C                      settings to use for the VLBA legacy system
+C                      baseband converters while using the RDBE.
+C                      They are separate to allow reference pointing
+C                      on masers when the RDBE_PFB is in use, which
+C                      does not allow fine tuning.
 C
       DOUBLE PRECISION PRESCAN(MAXSCN), DUR(MAXSCN), GAP(MAXSCN)
       DOUBLE PRECISION MINDW(MAXSCN), STARTJ(MAXSCN), STOPJ(MAXSCN)
       DOUBLE PRECISION FREQ(MAXCHN,MAXSCN), DOPINCR(MAXSCN,2)
       DOUBLE PRECISION BW(MAXCHN,MAXSCN)
+      DOUBLE PRECISION CRDFREQ(MAXCHN,MAXSCN), CRDBW(MAXCHN,MAXSCN)
       INTEGER          SRCNUM(MAXSCN), IDOPSRC(MAXSCN), QUAL(MAXSCN)
       INTEGER          SETNUM(MAXSCN), NSETUP(MAXSCN,MAXSTA)
       INTEGER          FSETI(MAXSCN,MAXSTA), DOPEAK(MAXSCN)
       INTEGER          POINT(MAXSCN), DURONLY(MAXSCN), NOWAIT(MAXSCN)
       INTEGER          ISCINT(MSCINT,MAXSCN), NSCINT(MAXSCN), NINTENT
+      INTEGER          CRDNCH(MAXSCN)
       LOGICAL          STASCN(MAXSCN,MAXSTA)
-      LOGICAL          NOTSYS(MAXSCN), DOPCAL(MAXSCN)
+      LOGICAL          NOTSYS(MAXSCN), DOPCAL(MAXSCN), CRDDOP(MAXSCN)
       LOGICAL          DWELL(MAXSCN), TANT1(MAXSCN), TANT2(MAXSCN)
       CHARACTER        ANNOT(MAXSCN)*128, SCNSRC(MAXSCN)*12
       CHARACTER        DOPSRC(MAXSCN)*12, LINES(MAXSCN)*8
@@ -694,10 +702,11 @@ C
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
      1                 DOPEAK, POINT, DURONLY, NOWAIT, 
-     2                 ISCINT, NSCINT, NINTENT,
-     3                 STASCN, NOTSYS, DOPCAL, DWELL, TANT1, TANT2
+     2                 ISCINT, NSCINT, NINTENT, CRDNCH, STASCN, 
+     3                 NOTSYS, DOPCAL, CRDDOP, DWELL, TANT1, TANT2
       COMMON  /SCHN2B/ PRESCAN, DUR, GAP, MINDW, FREQ, DOPINCR
       COMMON  /SCHN2C/ STARTJ, STOPJ, BW
+      COMMON  /SCHN2D/ CRDFREQ, CRDBW
       COMMON  /SCHC2A/ ANNOT
       COMMON  /SCHC2B/ SCNSRC, DOPSRC, LINES, PCAL, SCANTAG, PREEMPT
       COMMON  /SCHC2C/ INTENT
