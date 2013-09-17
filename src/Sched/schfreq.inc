@@ -4,6 +4,12 @@ C    Include file for SCHED to hold station frequency setups as read
 C    from the frequency catalog.  The default frequency catalog is in
 C    the file $SCHED/catalogs/freq.dat
 C
+C    Be a bit careful with terminology.  Frequency sets are not what is
+C    here, but rather are related to setup groups.  This file relates
+C    to the frequency data in the frequency catalog.  I might want to
+C    do someting to make this difference a bit less potentially confusing
+C    some day.
+C
 C     Parameters:
 C           MFREQ    - Max number of frequency setups.
 C           MFSTA    - Max number of stations described by a freq setup.

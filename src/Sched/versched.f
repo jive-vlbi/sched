@@ -62,7 +62,8 @@ C       VERSION = 'sched_temp version of Jan. 24, 2013'
 C       VERSION = 'Release of Feb. 15, 2013'
        VERNUM  = 11.1
 C       VERSION = 'Version 11.1 Beta of about April 26, 2013'
-       VERSION = 'Version 11.1 Beta of June 19, 2013'    
+C       VERSION = 'Version 11.1 Beta of June 19, 2013'    
+       VERSION = 'Development version 11.1 after June 19, 2013'    
 C
       RETURN
       END

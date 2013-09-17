@@ -1,5 +1,7 @@
       SUBROUTINE FMATCH( KS, KF, OVERLAP, CENTER, OKIF, USEIF )
 C
+C   ****  Something is dangling here for RDBE_DDC - CROSS is not yet used.
+C   
 C     Routine for SCHED called by SETFCAT that finds the best IF
 C     channel from the frequency catalog to use for a setup file 
 C     channel.   By this point, FREQREF, BBFILT, and NETSIDE 
@@ -22,10 +24,6 @@ C
       REAL              CHOVER(MCHAN,MFIF), CHCENT(MCHAN,MFIF)
       LOGICAL           OKIF(MCHAN,MFIF)
       DOUBLE PRECISION  FRQ1(MCHAN), FRQ2(MCHAN)
-      INTEGER           NCROSS
-      PARAMETER         (NCROSS=2)
-      DOUBLE PRECISION  CROSS(NCROSS)
-      DATA  CROSS  / 640.D0, 896.D0 /
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'FMATCH starting' )
 C

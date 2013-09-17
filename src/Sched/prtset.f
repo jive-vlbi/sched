@@ -20,12 +20,8 @@ C     that possibility.
 C
       INTEGER           LEN1, KS, KF, IP, ICH, JCH 
       INTEGER           IUNIT, ISTA
-      CHARACTER         FMT*80, IFNAME(4)*9
-      LOGICAL           ERRS, SPATCH, GOTFRQ, NEWFRQ, SIDEINV
-      DOUBLE PRECISION  VLO(4), VFLO(4), VBP(2,4)
-      SAVE              IFNAME
-      DATA              IFNAME / 'VLA IF A:', 'VLA IF B:', 
-     1                           'VLA IF C:', 'VLA IF D:' /
+      CHARACTER         FMT*80
+      LOGICAL           GOTFRQ, NEWFRQ, SIDEINV
 C ---------------------------------------------------------------------
       ISTA = ISCHSTA(ISETSTA(KS))
       IF( DEBUG ) THEN

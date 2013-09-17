@@ -4506,6 +4506,10 @@ SCAN PROPERTIES:
 \htlm{FREQ}{~~~~} Up to 16 baseband channel sky frequencies for
                         VLBA.
 \htlm{BW}{~~~~~~}       Baseband channel bandwidths.
+\htlm{CRDFREQ}{~} Force VLBA legacy BBC frequencies separate from RDBE.
+\htlm{CRDBW}{~~~} Force VLBA legacy BBC bandwidth separate from RDBE.
+\htln{CRDDOP}{CRDNODOP}{~~} Provoke Doppler setting of VLBA legacy 
+                         BBCs sparate from RDBE.
 \htlm{PCAL}{~~~~} Mode for pulse cal generators.
 \htlm{CENTERS}{~} Use multiple phase centers in processing.
 \htlm{PEAK}{~~~~} Peak up on source.
@@ -5296,6 +5300,67 @@ The {\sl egglobal.key} example shows the use of {\tt COVERLET}.
 {Only use preceeding the cover letter input.}
 {{\tt COVERLET /}}
 
+
+\subsubsection{\label{MP:CRDBW}{\tt CRDBW}}
+
+{\tt CRDBW} is used in the main schedule when using either 
+\htmlref{{\tt CRDFREQ}}{MP:CRDFREQ} or \htmlref{{\tt CRDDOP}}{MP:CRDDOP}
+to set frequencies on the VLBA for the legacy system that are 
+different from what is set for the RDBE.  This is mainly to allow
+Doppler setting for masers for reference pointing, which is recommended
+at 86 GHz.  See \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ} for more
+details.
+
+The channels should correspond to the channels in the current setup
+file because configuration information like the IF, first LO, sideband,
+etc will be taken from the setup.  Only 8 channels will actually get
+used as, when the RDBE is in use, for bookkeeping ease, only one channel
+will be assigned to each bbc.
+
+This parameter is equivalent to BW, but is only for use when using the
+RDBE but wanting different settings in the old system.  It will be
+ignored except on the VLBA using the RDBE.
+
+Any unset values will be set to the same as the first channel.  It is
+good practice to set to 0.D0 when not in use, which may require setting
+all channels explicitly.
+
+\rcwbox
+{A list of bandwidths in MHz, one per channel.}
+{0.0625, 0.125, 0.250, 0.5, 1, 2, 4, 8, or 16 MHz}
+{It is required if {\tt CRDFREQ} or {\tt CRDDOP} is used.}
+{Retains the value from the previous scan if not set.}
+{{\tt CRDBW= 2.0, 2.0, 2.0, 2.0 /}}
+
+\subsubsection{\label{MP:CRDDOP}{{\tt CRDDOP} and {\tt CRDNODOP}}
+
+{\tt CRDDOP} requests Doppler frequency setting for the VLBA legacy
+system BBCs.  It is much like \htmlref{\tt DOPPLER}}{MP:DOPPLER}}
+except that it should only affect the BBCs, not the RDBE.  This is
+needed because the legacy system still controls the antenna pointing
+and does not have access to power levels from the RDBEs, which are
+controlled by the separate new control system.  The total power 
+data from the legacy BBCs are used to make the pointing measurements.
+See the discussion of \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ} for more
+details about using the {\tt CRDxx} parameters.
+
+When using {\tt CRDDOP}, you must also set \htmlref{\tt
+DOPBW}}{MP:DOPBW}}.  As an alternative to requesting Sched do Doppler
+calculations, you can force a specific frequency with \htmlref{{\tt
+CRDFREQ}}{MP:CRDFREQ}.
+
+Specify {\tt CRDNODOP} to turn off the BBC Doppler setting.
+
+It is not recommended to attempt to use {\tt DOPPLER} and {\tt CRDDOP}
+at the same time, although it might work.
+
+\rcwbox
+{No argument}
+{None}
+{Do not use {\tt CRDDOP}}
+{Uses previous scan value if not specified}
+{{\tt CRDDOP}}
+
 \subsubsection{\label{MP:CRDLINE}{\tt CRDLINE}}
 
 {\tt CRDLINE} allows the scheduler to insert and arbitrary string
@@ -5310,6 +5375,48 @@ unless you are a VLBA programmer.
 {Blank}
 {One per scan.  Remains at most recent value set.}
 {{\tt CRDLINE = 'This was requested by Walter'}}
+
+\subsubsection{\label{MP:CRDFREQ}{\tt CRDFREQ}}
+
+This parameter is equivalent to \htmlref{{\tt FREQ}{{MP:FREQ}, but is
+only for use when using the RDBE but wanting different settings in the
+old system.  It will be ignored except on the VLBA using the RDBE.
+The main use will be for 86 GHz observations using the PFB personality
+of the RDBE.  With the PFB, the bandwidth per channel can only be 32
+MHz and the frequencies are not flexible.  To reference point on
+masers, it is necessary to use the legacy BBCs with narrower
+bandwidths and with frequencies that are not closely related to the
+main setup frequencies.  Such settings can be determined from Doppler
+calculatoins using \htmlref{{\tt CRDDOP}}{MP:CRDDOP} or set explicitly
+using {\tt CRDFREQ}.  Note that \htmlref{\tt DOPBW}}{MP:DOPBW}} must
+also be set if either of these options is used.
+
+When {\tt CRDFREQ} or \htmlref{{\tt CRDDOP}}{MP:CRDDOP} is used, the
+resulting frequencies appear in the {\sl xxcrd.ss} files that control
+the VLBA legacy system.  They do not appear in the VEX file.  As of
+this writing, they also don't appear on the summary file, although
+changes can trigger specification of a new setup group that may not
+obviously be different from another group, if the only change is 
+in the setup parameters.
+
+Any unset values of {\tt CRDFREQ} will be set to the same as the first
+channel' value.  It is good practice to set to 0.D0 when not in use,
+which may require setting all channels explicitly.
+
+It is expected that this capability will be retired when the new
+control system takes over antenna pointing.  At that time, any projects
+requiring reference pointing on masers will need to use the DDC
+personality of the RDBE, which allows fine tuning and narrow bandwidths.
+
+\rcwbox
+{A list of RF frequencies in MHz, one per channel.}
+{Any allowed RF frequency MHz}
+{Use values based on the setup file, with adjustments based on the
+limitations of the BBCs relative to the RDBE}
+{Retains the value from the previous scan if not set.}
+{{\tt CRDFREQ= 43122.03, 43122.03 /}}
+
+
 
 \subsubsection{\label{MP:DATAPATH}{\tt DATAPATH}}
 
@@ -6572,7 +6679,8 @@ VLA to phase but not some other interferometer with:
 {\tt INTENT = 'VLA:AUTOPHASE\_DETERMINE'}.
 
 Some established values of {\tt INTENTs} in the VLA environment are
-listed here.  Most will not be used in VLBI schedules.  A VLBI
+listed here.  Also some requested for other instruments are listed.
+Most will not be used in VLBI schedules.  A VLBI
 specific list has not been generated.  Of interest for the VLA are {\tt
 DETERMINE\_AUTOPHASE} and {\tt DETERMINE\_OFFSET\_POINTING}.
 
@@ -6588,6 +6696,7 @@ DETERMINE\_AUTOPHASE} and {\tt DETERMINE\_OFFSET\_POINTING}.
 \item {\tt DETERMINE\_AUTOPHASE}
 \item {\tt DETERMINE\_RFI}
 \item {\tt CALIBRATE\_DELAY}
+\item {\tt FIND\_FRINGE}
 \item {\tt DETERMINE\_ANTENNA\_GLOBAL\_POINTING\_MODEL}
 \item {\tt MAP\_ANTENNA\_SURFACE}
 \item {\tt CALIBRATE\_FOCUS}
@@ -13396,12 +13505,16 @@ more information.
 \subsection{\label{SSEC:VER_11.1}Version 11.1 test}
 
 
+%     Allow VLAONLY schedules?  Maybe these don't differ from any other
+%         single station schedules any more.
 % **  Get wrap state in Vex.
 % **  egrdbe.key has a very bad sx setup.  Fix it.
 % **  n2227.key has possible birdies in some basebands.  Try to
 %     find some sniffer output to check.
 %     Modify choice of unset synthesizer for the new synthesizers.
 %     Finish with newsyn.key and put in Verify.  Interrupted project.
+%     Legacy system format needs to keep track of bandwidth when 
+%     main format spec is for RDBE.
 
 
 \begin{itemize}
@@ -13411,6 +13524,11 @@ more information.
 %    Calibrator selection
 %    BBC_BW and DOPPLER in RDBE schedules - affect only BBCs
 %    Check if LO edge for DDC always in right polyphase filter.
+%    Put newsyn.key in Verify.
+
+
+\item Fix synthesizer 2 setting for 2.6 GHz LO entry in freq_RDBE.dat.
+Sep. 4, 2013.  RCW.
 
 \item Release a new Version 11.1 Beta on June 19, 2013  RCW
 

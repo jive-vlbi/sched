@@ -5,7 +5,7 @@ C     anywhere that I found in a quick look in Feb. 2010 and was last
 C     modified in 2008.  So keep it here in case I remember what was
 C     up, but don't worry about it.
 C
-C     Subroutine for to give the numbers for plotting the residual
+C     Subroutine calculate the numbers for plotting the residual
 C     fringe rates and delays from 1 arcsecond offsets in X and Y.
 C
 C     The results here might be thought of as for a baseline from the
@@ -13,6 +13,12 @@ C     center of the Earth to the station.  Actual baseline parameters
 C     can be calculated from differences.
 C
 C     IE specifies which end of the scan to process.
+C
+C     Updated the FSFREQ call Aug. 30, 2013 RCW
+C         Also dealt with MCHAN rather than MAXCHN in some declared.
+C         MCHAN comes from schset.inc which isn't invoked, but it is
+C         set equal to MAXCHN (from sched.inc) in schset.inc.  Just
+C         use MAXCHN here.
 C
       INCLUDE 'sched.inc'
 C
@@ -24,6 +30,9 @@ C use commented out     REAL        V
       REAL        DFRDX, DFRDY, DDELDX, DDELDY
       LOGICAL     WARNFQ
       DOUBLE PRECISION  LOSUM(MAXCHN)
+      INTEGER            CRDN
+      DOUBLE PRECISION   CRDF(MAXCHN), CRDB(MAXCHN), CRDLOSUM(MAXCHN)
+      CHARACTER          CRDS(MAXCHN)*1
 C
 C     OMEGA is the rotation rate of the Earth in radians per second.
 C
@@ -45,7 +54,8 @@ C
          END IF
          WARNFQ = .FALSE.
       ELSE
-         CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW )
+         CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
          FRQ = LOSUM(1)
       END IF
 C

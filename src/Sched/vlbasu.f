@@ -6,6 +6,12 @@ C     parameter, only write it out if it has changed or if this is
 C     the first scan for the station.  The VLBAINT etc. routines 
 C     take care of detecting changes.
 C
+C     Note that the current setup group is passed through the
+C     parameter LS which is in schset.inc.  Usually this is passed
+C     in the call argument or determined from ISCN and ISTA.  I 
+C     probably should get rid of using the schset.inc variable for
+C     this.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
@@ -25,6 +31,7 @@ C
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
       REAL          DOAZ, DOEL
       DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR, RSYNTH
+      DOUBLE PRECISION  LSAMPRAT
       LOGICAL       LDUALX, LUSEDIF(4), WARNCRD
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
@@ -38,7 +45,7 @@ C
       SAVE          MSYNTH, MSIDEBD, MNOISE, MFE, MIFCHAN, MSAMPR 
       SAVE          LBBC, LNCHAN, LPERIOD, LBITS
       SAVE          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
-      SAVE          LSAMPR, LSYNTH
+      SAVE          LSAMPR, LSYNTH, LSAMPRAT
       SAVE          LDUALX, LUSEDIF, LSIDEBD, LNOISE, LFE
       SAVE          LIFCHAN, LLOGGING, LSTRING, LFORMAT, LIFDIST
       SAVE          LLCP50CM, LRCP50CM, LNOISEF, WARNCRD
@@ -334,7 +341,13 @@ C        Oops, that shuts off all formatter configuration
 C        which means the pulse cal doesn't get set up.
 C        So specify a valid format.
 C
-         IF( FIRSTS .OR. FORMAT(LS) .NE. LFORMAT ) THEN
+C        When using the RDBE, format will not necessarily 
+C        change with bandwidth (formats are VDIF and MARK5B).
+C        But the legacy system may need a format change if
+C        the sample rate changes.
+C
+         IF( FIRSTS .OR. FORMAT(LS) .NE. LFORMAT .OR.
+     1       SAMPRATE(LS) .NE. LSAMPRAT ) THEN
             IF( DAR(KSTA)(1:4) .NE. 'RDBE' ) THEN
                WRITE( IUVBA, '( 2A )' )
      1             'format=', FORMAT(LS)(1:LEN1(FORMAT(LS)))
@@ -362,6 +375,7 @@ C                           WRITE( IUVBA, '( A )' ) 'format=NONE'
 C                        END IF
             END IF
             LFORMAT = FORMAT(LS)
+            LSAMPRAT = SAMPRATE(LS)
          END IF
 C
 C        Removed barrel roll spec for tape.

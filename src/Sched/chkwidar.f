@@ -10,11 +10,12 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH
-      LOGICAL           ERRS, DDWARN, SBWARN
-      CHARACTER         USEDIFC(2)*2
-      DATA              DDWARN, SBWARN / .TRUE., .TRUE. /
-      SAVE              DDWARN, SBWARN
+      INTEGER           KS !  , ICH
+      LOGICAL           ERRS
+C      LOGICAL           DDWARN, SBWARN
+C      CHARACTER         USEDIFC(2)*2
+C      DATA              DDWARN, SBWARN / .TRUE., .TRUE. /
+C      SAVE              DDWARN, SBWARN
 C ------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKWIDAR: Starting' )
       ERRS = .FALSE.

@@ -12,14 +12,13 @@ C
       PARAMETER     ( MSEP = 7 )
       PARAMETER     ( ML = 20 )
 C
-      INTEGER       ISRC, LEN1, IOUT, J, K, MODE, LENS, LENR, LEND
+      INTEGER       ISRC, IOUT, J, K, MODE
       INTEGER       NPAIRS, ISEP, IP
       INTEGER       KSRC, JN, KN
       INTEGER       HISTSEP(MSEP)
       REAL          HISTLEV(MSEP)
       REAL          MAXSEP, SRCSEP
       DOUBLE PRECISION  SLA_DSEP
-      CHARACTER*16  TFORM, TRA20, TDEC20
       LOGICAL       ANYS(3)
       DATA          HISTLEV / 3.0, 5.0, 7.5, 10.0, 15., 20., 30. /
 C ------------------------------------------------------------------
@@ -166,6 +165,9 @@ C     of coordinates to the correlator data base.  This was for the
 C     old VLBA data base and may no longer be needed.
 C     On Feb. 4, 2013, Paul Dyer said they don't need it so I am 
 C     commenting it out.  If someone squawks, it can be put back.
+C
+C Put in front.     CHARACTER*16  TFORM, TRA20, TDEC20
+C                   INTEGER       LENS, LENR, LEND, LEN1
 C
 C      IF( MODE .EQ. 2 .AND. .NOT. NOTAPE ) THEN
 C         WRITE( IOUT, '( 3( 1X, / ), A, A )' )

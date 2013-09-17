@@ -567,14 +567,29 @@ C
             CALL WLOG( 1, MSGTXT )
          END IF
 C
-C        Get the PCAL information. 
+C        Get the PCAL information.  Convert SPCAL to the traditional
+C        capitalization.  Recall KCHAR will return upcased version.
 C
          I1 = KEYPTR( 'PCAL', KC, KI )
          IF( KD(I1) .EQ. 0.D0 ) THEN
-            SPCAL(KS) = '1MHz'
+            SPCAL(KS) = '1MHZ'
          ELSE
-            WRITE( SPCAL(KS), '(A4)' ) KD(I1)
+            SPCAL(KS) = KCHAR( 'PCAL', 4, .TRUE., KD, KC, KI )
          END IF
+         IF( SPCAL(KS) .EQ. 'OFF' ) THEN
+            SPCAL(KS) = 'off'
+         ELSE IF( SPCAL(KS) .EQ. '1MHZ' ) THEN
+            SPCAL(KS) = '1MHz'
+         ELSE IF( SPCAL(KS) .EQ. '5MHZ' ) THEN
+            SPCAL(KS) = '5MHz'
+         ELSE
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, A )' ) 
+     1          'CHKSET: Invalid PCAL specification: ', SPCAL(KS)
+            CALL ERRLOG( MSGTXT )
+         END IF
+C
+C        Get the VLBA legacy system PCAL detector information.
 C
          I1 = KEYPTR( 'PCALXB1', KC, KI ) - 1
          I2 = KEYPTR( 'PCALXB2', KC, KI ) - 1

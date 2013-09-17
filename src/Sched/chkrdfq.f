@@ -16,28 +16,23 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH, ISIDEBD, nwarn
+      INTEGER           KS, ICH, ISIDEBD
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
       INTEGER           NFWARN, N2WARN
-      INTEGER           LSETF
       INTEGER           IPF, I, NPBW, LEN1, ISETF
       DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, SLOP
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
       LOGICAL           ERRS, DEQUAL, PBWARN, OBWARN, SHOWID
 C
-      DATA     nwarn    / 0 /
       DATA     NPBW     / 0 /
       DATA     OBWARN   / .TRUE. /
       DATA     N40WARN  / MAXSET*1 /
       DATA     N528WARN / MAXSET*1 /
       DATA     NFWARN, N2WARN / 0, 0 /
-      DATA     LSETF    / 0 /
       DATA     PLO      / 512.D0, 640.D0, 896.D0 /
       DATA     PHI      / 640.D0, 896.D0, 1024.D0 /
       DATA     CR1, CR2 / 640.D0, 896.D0 /
-      SAVE     nwarn
       SAVE     N40WARN, N528WARN, NFWARN, N2WARN, NPBW, OBWARN
-      SAVE     LSETF
 C
 C      PLO and PHI are the ranges for the DDC initial polyphase filter.
 C -----------------------------------------------------------------
