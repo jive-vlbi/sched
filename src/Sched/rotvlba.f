@@ -57,7 +57,7 @@ C
       INCLUDE           'sched.inc'
       INCLUDE           'schset.inc'
 C
-      INTEGER           I, PTADD, ISCN, ISTA, IPAT
+      INTEGER           I, PTADD, ISCN, ISTA, IPAT, KS
       INTEGER           RLEVEL(MCHAN), DOY, LASTDY, IDUR, ISDUR
       REAL              DOAZ, DOEL, ROTINC, FOCINC, FEEDPOS
       REAL              DOFOC, DOROT, DOAZPAT, DOELPAT, LOWLIM
@@ -65,11 +65,15 @@ C
       CHARACTER         TSTOP*9, VLBAD*9, HUMAND*16, TFORM*9
       LOGICAL           BEGPAT, ENDPAT
 C --------------------------------------------------------------------
+C     Get the setup file pointer.
+C
+      KS = NSETUP(ISCN,ISTA)
+C
 C     Get the center pointing position.  This is a sum from both
 C     the main schedule and the setup file.
 C
-      DOAZ = SAZCOL(ISCN) + AZCOLIM(LS)
-      DOEL = SELCOL(ISCN) + ELCOLIM(LS)
+      DOAZ = SAZCOL(ISCN) + AZCOLIM(KS)
+      DOEL = SELCOL(ISCN) + ELCOLIM(KS)
 C
 C     Get some required data for the F/R pattern.
 C     On-line system ignores commands to go beyond limit.
@@ -86,36 +90,36 @@ C     down on the feed circle.  The zero point is on the
 C     E/W axis that goes between the 13cm and 4cm feeds.
 C
       LOWLIM = -30.0
-      IF( FE(2,LS) .EQ. '2cm' .OR. FE(4,LS) .EQ. '2cm' ) THEN
+      IF( FE(2,KS) .EQ. '2cm' .OR. FE(4,KS) .EQ. '2cm' ) THEN
          ROTINC = 8.0                !  Expect 12 GHz (masers)
          FOCINC = 17.0
          FEEDPOS = ( 360. - 138.0 ) * RADDEG
-      ELSE IF( FE(2,LS) .EQ. '1.3cm' .OR. FE(4,LS) .EQ. '1.3cm' .OR. 
-     1         FE(2,LS) .EQ. '1cm' .OR. FE(4,LS) .EQ. '1cm') THEN
+      ELSE IF( FE(2,KS) .EQ. '1.3cm' .OR. FE(4,KS) .EQ. '1.3cm' .OR. 
+     1         FE(2,KS) .EQ. '1cm' .OR. FE(4,KS) .EQ. '1cm') THEN
          ROTINC = 4.5
          FOCINC = 10.0
          FEEDPOS = ( 360. - 78.0 ) * RADDEG
-      ELSE IF( FE(1,LS) .EQ. '7mm' .OR. FE(3,LS) .EQ. '7mm' ) THEN
+      ELSE IF( FE(1,KS) .EQ. '7mm' .OR. FE(3,KS) .EQ. '7mm' ) THEN
          ROTINC = 2.2
          FOCINC = 5.0
          FEEDPOS = ( 360. - 155.0 ) * RADDEG
-      ELSE IF( FE(2,LS) .EQ. '3mm' .OR. FE(4,LS) .EQ. '3mm' ) THEN
+      ELSE IF( FE(2,KS) .EQ. '3mm' .OR. FE(4,KS) .EQ. '3mm' ) THEN
          ROTINC = 1.1
          FOCINC = 2.5
          FEEDPOS = ( 360. - 180.0 ) * RADDEG
-      ELSE IF( FE(2,LS) .EQ. '90cm' .OR. FE(4,LS) .EQ. '90cm' .OR.
-     1         FE(2,LS) .EQ. '50cm' .OR. FE(4,LS) .EQ. '50cm' .OR.
-     2         FE(1,LS) .EQ. '20cm' .OR. FE(3,LS) .EQ. '20cm' ) THEN
+      ELSE IF( FE(2,KS) .EQ. '90cm' .OR. FE(4,KS) .EQ. '90cm' .OR.
+     1         FE(2,KS) .EQ. '50cm' .OR. FE(4,KS) .EQ. '50cm' .OR.
+     2         FE(1,KS) .EQ. '20cm' .OR. FE(3,KS) .EQ. '20cm' ) THEN
          CALL ERRLOG( 'PTVLBA:  Cannot do rotpat for 50/90 or 20 cm.' )
-      ELSE IF( FE(1,LS) .EQ. '6cm' .OR. FE(3,LS) .EQ. '6cm' ) THEN
+      ELSE IF( FE(1,KS) .EQ. '6cm' .OR. FE(3,KS) .EQ. '6cm' ) THEN
          ROTINC = 20.0
          FOCINC = 30.0
          FEEDPOS = ( 360. - 108.0 ) * RADDEG
          IF( STCODE(STANUM(ISTA)) .EQ. 'Nl' ) LOWLIM = -25.0
-      ELSE IF( FE(2,LS) .EQ. '4cm' .OR. FE(4,LS) .EQ. '4cm' ) THEN
+      ELSE IF( FE(2,KS) .EQ. '4cm' .OR. FE(4,KS) .EQ. '4cm' ) THEN
          ROTINC = 12.0
          FOCINC = 26.0
-         IF( FE(1,LS) .EQ. '13cm' .OR. FE(3,LS) .EQ. '13cm' ) THEN
+         IF( FE(1,KS) .EQ. '13cm' .OR. FE(3,KS) .EQ. '13cm' ) THEN
             FEEDPOS = ( 360. - 32.0 ) * RADDEG
          ELSE
             FEEDPOS = ( 360. - 323.0 ) * RADDEG
@@ -123,15 +127,15 @@ C
 C
 C     Put 13 cm after the 4cm so the sx is right.
 C
-      ELSE IF( FE(1,LS) .EQ. '13cm' .OR. FE(3,LS) .EQ. '13cm' ) THEN
+      ELSE IF( FE(1,KS) .EQ. '13cm' .OR. FE(3,KS) .EQ. '13cm' ) THEN
          ROTINC = 45.0
          FOCINC = 30.0
          FEEDPOS = ( 360. - 32.0 ) * RADDEG
          IF( STCODE(STANUM(ISTA)) .EQ. 'Nl' ) LOWLIM = -10.0
       ELSE
          WRITE( MSGTXT, '( A, 4( 1X, A ) )' )
-     1       'ROTVLBA:  Unrecognized FE: ', FE(1,LS), FE(2,LS), 
-     2       FE(3,LS), FE(4,LS)
+     1       'ROTVLBA:  Unrecognized FE: ', FE(1,KS), FE(2,KS), 
+     2       FE(3,KS), FE(4,KS)
          CALL ERRLOG( MSGTXT )
       END IF
 
@@ -140,10 +144,10 @@ C     Do setup scan on half power point to get reasonable levels.
 C     First go to half power point.  Note that subroutine VLBA
 C     only does setup scans if tape is being written.
 C
-      DO I = 1, NCHAN(LS)
+      DO I = 1, NCHAN(KS)
          RLEVEL(I) = -1 
       END DO
-      CALL VLBAINT( 'level', 5, NCHAN(LS), RLEVEL, LLEVEL, MLEVEL,
+      CALL VLBAINT( 'level', 5, NCHAN(KS), RLEVEL, LLEVEL, MLEVEL,
      1           .FALSE., IUVBA )
 C
 C     Use a stop time that is STARTJ + PTSLEW.  This makes it
@@ -162,7 +166,7 @@ C
 C     Scan info.
 C
       WRITE( IUVBA, '( A, F7.2, A, F7.2, /, A, /, 3A )' )
-     1      'azcolim=', DOAZ - PTINCR(LS), ' elcolim=', DOEL,
+     1      'azcolim=', DOAZ - PTINCR(KS), ' elcolim=', DOEL,
      2      'focus=0.0  rotation=0.0  dur=0s ',
      3      'stop=', TSTOP, '   !NEXT! '
 C
@@ -170,10 +174,10 @@ C     Then sit there while fixing the BBC levels.  Take long
 C     enough for this to get a pcx test.  Assume that 2 times
 C     PTDUR will be long enough.  The scan is set up in PTPAT.
 C
-      DO I = 1, NCHAN(LS)
+      DO I = 1, NCHAN(KS)
          RLEVEL(I) = 256
       END DO
-      CALL VLBAINT( 'level', 5, NCHAN(LS), RLEVEL, LLEVEL, MLEVEL,
+      CALL VLBAINT( 'level', 5, NCHAN(KS), RLEVEL, LLEVEL, MLEVEL,
      1 .FALSE., IUVBA ) 
 C 
 C     Now do the offset forcus and rotation positions if that is
@@ -242,11 +246,11 @@ C
          WRITE( IUVBA, '( A, F7.2, A, F7.2 )' ) 
      1      'focus = ', DOFOC, '  rotation = ', DOROT
          WRITE( IUVBA, '( A, F7.2, A, F7.2 )' )
-     1      'azcolim=', DOAZPAT - PTINCR(LS), ' elcolim=', DOELPAT
+     1      'azcolim=', DOAZPAT - PTINCR(KS), ' elcolim=', DOELPAT
          BEGPAT = IPAT .EQ. 1
          ENDPAT = IPAT .EQ. ROTPAT
-         CALL PTPAT( IUVBA, DOAZPAT, DOELPAT, PTINCR(LS), 
-     1        PTOFF(LS), PTDUR, QUAL(ISCN) )
+         CALL PTPAT( IUVBA, DOAZPAT, DOELPAT, PTINCR(KS), 
+     1        PTOFF(KS), PTDUR, QUAL(ISCN) )
       END DO
 C
       RETURN

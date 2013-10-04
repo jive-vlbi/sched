@@ -121,7 +121,8 @@ C           different from the setup group channel.
 C
 C           Set FREQ to band edge.  The net sideband for the channel
 C           was found by SBPAIR and is stored in SFSIDE, based on the
-C           setup file.  Round the frequency to the nearest 0.01 MHz.
+C           setup file.  Round the frequency to the nearest multiple
+C           of DOPINCR (0.01 MHz for the VLBA legacy system).
 C           If two channels share the same BBC, SAMEBBC will be set.  
 C           In that case, use the frequency calculated for the first 
 C           of those channels.
@@ -234,6 +235,7 @@ C                    Round it to the required DOPINCR.  Note that
 C                    the LO equation is assumed to be 
 C                    FREQ = N * DOPINCR(ISCN,1) + DOPINCR(ISCN,2)
 C                    The ATCA needs the offset.
+C                    Note that DOPINCR is in kHz while FREQ is in MHz.
 C            
                      FREQ(ICH,ISCN) = 1.0D-3 * ( DOPINCR(ISCN,2) +
      1                   DOPINCR(ISCN,1) * DNINT( 

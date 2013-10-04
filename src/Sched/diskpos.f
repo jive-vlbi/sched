@@ -65,8 +65,6 @@ C
          GBYTES(ISCN,ISTA) = GBYTES(ISCN,ISTA) + 
      1       RECTIME * WRTBPS(KS) / ( 1000.0 * 8. )
       END IF
-C      write(*,*) 'diskpos', iscn, ista, gbytes(iscn,ista),
-C     1   RECTIME, wrtbps(ks)
 C
       RETURN
       END

@@ -1,7 +1,10 @@
       INTEGER FUNCTION GNSET( ISCN, ISTA )
 C
-C     Function to select the required setup index (usually LS)
-C     for the current scan and station.
+C     Function to select the required setup index  for the specified
+C     current scan and station.  It is used in SETEXPND to set the
+C     variable NSETUP(ISCN,ISTA) which is where most routines get
+C     the setup.  It is also used in MAKEPTG in the process of making
+C     pointing scans.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'

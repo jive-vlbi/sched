@@ -14,8 +14,8 @@ C
 C
       INTEGER           ISCN, ISTA, QUOUT
       INTEGER           LASTDY, DOY1, DOY2
-      INTEGER           PTADD, LLS, LSTA
-      INTEGER           LSCN, LEN1
+      INTEGER           PTADD, LKS, LSTA
+      INTEGER           LSCN, LEN1, KS, KR, LKR
       DOUBLE PRECISION  LSTOP
       LOGICAL           FIRSTS, FRS, DOSET, LPTVLB
       LOGICAL           WRTSET, CRLWARN
@@ -25,12 +25,12 @@ C
 C
 C     Save variables.
 C
-      SAVE              LSTA, LLS, LASTDY, LPTVLB, LSCN
+      SAVE              LSTA, LKS, LKR, LASTDY, LPTVLB, LSCN
       SAVE              LSTOP, CRLWARN, LCRDLINE
 C
       DATA          CRLWARN  / .TRUE. /
 C
-      DATA          LSTA, LLS / 0, 0 /
+      DATA          LSTA, LKS, LKR / 0, 0, 0 /
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VLBA: Starting' )
 C
@@ -67,10 +67,15 @@ C
          CALL VLBAST( ISCN, ISTA, FIRSTS, LSTOP,
      1          TSTART, TSTOP, DOSET, DOY1, DOY2, VLBAD1, VLBAD2 )
 C
-C        Detect a new setup file.
+C        Detect a new setup file.  WRTFREQ will deal with new
+C        frequency groups.
 C
-         WRTSET = FIRSTS .OR. ISTA .NE. LSTA .OR. LS .NE. LLS 
-         LLS = LS
+         KS = NSETUP(ISCN,ISTA)
+         KR = FSETI(ISCN,ISTA)
+         WRTSET = FIRSTS .OR. ISTA .NE. LSTA .OR. KS .NE. LKS .OR.
+     1         KR .NE. LKR
+         LKS = KS
+         LKR = KR
          LSTA = ISTA
 C
 C        Write most of setup information.  Call every scan since
@@ -142,7 +147,7 @@ C        a 40 second timeout to get to source, plus if DWELL is used,
 C        time may be short.  Therefore put it during the main scan.
 C
          IF( .NOT. VLBADAR(STANUM(ISTA)) ) THEN
-            IF( DOPEAK(ISCN) .GT. NCHAN(LS) ) THEN
+            IF( DOPEAK(ISCN) .GT. NCHAN(KS) ) THEN
                WRITE( MSGTXT, '( A, I4 )' ) 
      1             'VLBA: Invalid channel specified for PEAK: ', 
      2             DOPEAK(ISCN)
@@ -177,16 +182,16 @@ C
 C
          IF( PNTVLBA(ISCN) ) THEN
             IF( ROTPAT .EQ. 0 ) THEN
-               CALL PTVLBA( ISCN, PTADD, TSTOP )
+               CALL PTVLBA( ISCN, PTADD, TSTOP, KS )
             ELSE
                CALL ROTVLBA( ISCN, ISTA, PTADD, LASTDY )
             END IF
          ELSE IF( TANVLBA(ISCN) ) THEN
-            CALL TAVLBA( ISCN, PTADD, TSTOP )
+            CALL TAVLBA( ISCN, PTADD, TSTOP, KS )
          ELSE IF( DOPN3DB(ISCN) ) THEN
-            CALL PN3DB( ISCN, PTADD, TSTOP )
+            CALL PN3DB( ISCN, PTADD, TSTOP, KS )
          ELSE IF( FRS ) THEN
-            CALL FSVLBA( TSTOP )
+            CALL FSVLBA( TSTOP, KS )
          ELSE
             IF( LPTVLB ) THEN
                WRITE( IUVBA, '( 3A )' )

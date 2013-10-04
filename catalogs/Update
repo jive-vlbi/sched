@@ -12,6 +12,10 @@ chmod u+w stations.dat
 chmod u+w freq.dat
 chmod u+w messages.txt
 chmod u+w locations.dat
+chmod u+w peak.cmd
+chmod u+w peak_RDBE_DDC.cmd
+chmod u+w peak_RDBE_PFB.cmd
+
 /bin/rm stations.dat
 /bin/rm freq.dat
 /bin/rm messages.txt
@@ -21,6 +25,9 @@ chmod u+w locations.dat
 /bin/rm freq_RDBE.dat
 /bin/rm stations_RDBE.dat
 /bin/rm stations_RDBE2.dat
+/bin/rm peak.cmd
+/bin/rm peak_RDBE_PFB.cmd
+/bin/rm peak_RDBE_DDC.cmd
 
 # Make a line to indicate the date the catalog was
 # assembled. 
@@ -116,10 +123,22 @@ cat Master_NRAO/messages_NRAO.txt \
        > messages.txt
 echo ++end >> messages.txt
 
+#  Auto reference pointing control files.
+
+echo Make the new peakxxx.cmd files
+sed s:zzzz:pt7mm.set:  Master_NRAO/peak.cmd > peak.cmd
+sed s:zzzz:ptd7mm.set:  Master_NRAO/peak.cmd > peak_RDBE_DDC.cmd
+sed s:zzzz:ptr7mm.set:  Master_NRAO/peak.cmd > peak_RDBE_PFB.cmd
+
+
 echo 
 echo Prohibit write on the new catalogs.
 chmod u-w stations.dat
 chmod u-w freq.dat
 chmod u-w messages.txt
 chmod u-w locations.dat
+chmod u-w peak.cmd
+chmod u-w peak_RDBE_DDC.cmd
+chmod u-w peak_RDBE_PFB.cmd
+
 /bin/rm blankline

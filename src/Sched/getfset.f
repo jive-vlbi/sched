@@ -92,20 +92,40 @@ C
      1                        BW(ICH,ISCN) .EQ. BW(ICH,KSCN)
                         END DO
 C
-C                       Compare the VLBA legacy system freq and bw.
-C                       used for pointing.  The Doppler setting
-C                       for the legacy system has already been done
-C                       and the results are in CRDFREQ.
+C                       Compare the VLBA legacy system settings.
+C                       First require both scans either have or don't
+C                       have GOTCRD set, which means they have had
+C                       CRDFREQ or CRDDOP specified.  And require that
+C                       the same number of channels was specified.
+C                       For the channels, always require that CRDBW
+C                       match and that CRDFREQ matches if GOTCRD was
+C                       set.  We are allowing CRDNCH and CRDBW to be
+C                       used even when CRDFREQ and CRDDOP are not.
+C                       Note that the Doppler setting for the legacy 
+C                       system has already been done and the results 
+C                       are in CRDFREQ.
 C
-                        MATCH = MATCH .AND. CRDNCH(ISCN) .EQ.
-     1                        CRDNCH(KSCN)
-                        IF( CRDNCH(ISCN) .GE. 1 ) THEN
-                           DO ICH = 1, CRDNCH(ISCN)
-                              MATCH = MATCH .AND. 
-     1                          CRDFREQ(ICH,ISCN) .EQ. CRDFREQ(ICH,KSCN)
-                              MATCH = MATCH .AND. 
-     1                          CRDBW(ICH,ISCN) .EQ. CRDBW(ICH,KSCN)
-                           END DO
+C                       FORTRAN WARNING:  The parentheses around the
+C                       .EQV. below are needed or all the logical 
+C                       operations earlier in the line are evaluated
+C                       as the left side of the .EQV.
+C
+                        IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
+                           MATCH = MATCH .AND.
+     1                        CRDNCH(ISCN) .EQ. CRDNCH(KSCN) .AND. 
+     2                        ( GOTCRD(ISCN) .EQV. GOTCRD(KSCN) )
+                           IF( CRDNCH(ISCN) .GT. 0 ) THEN
+                              DO ICH = 1, CRDNCH(ISCN)
+                                 IF( GOTCRD(ISCN) ) THEN
+                                    MATCH = MATCH .AND. 
+     1                              CRDFREQ(ICH,ISCN) .EQ. 
+     2                              CRDFREQ(ICH,KSCN)
+                                 END IF
+                                 MATCH = MATCH .AND. 
+     1                             CRDBW(ICH,ISCN) .EQ. CRDBW(ICH,KSCN)
+                              END DO
+                           END IF
+C
                         END IF
 C
 C                       Compare the pcal state.
@@ -141,7 +161,7 @@ C
                      FSSAME(NFSET) = NFSET
                      IF( NFSET .GE. 2 ) THEN
                         DO JF = NFSET - 1, 1, -1
-                          IF( FSMATCH( NFSET, JF ) ) THEN
+                           IF( FSMATCH( NFSET, JF ) ) THEN
                               FSSAME(NFSET) = JF
                            END IF
                         END DO

@@ -21,8 +21,8 @@ C     the zero default), SCHED breaks the setup into one group per
 C     station before dealing with any other defaults.  This allows 
 C     the defaults (eg FIRSTLO) to vary between stations.  
 C
-C     The array NSETUP will contain the setup group index (LS or KS) 
-C     required for any combination of station and scan. 
+C     The array NSETUP will contain the setup group index (usually 
+C     set to KS) required for any combination of station and scan. 
 C
 C     Note that SETSTA is the setup file station name and ISETSTA 
 C     is the station index in the station catalog of the first SETSTA 
@@ -74,15 +74,14 @@ C
       PARAMETER         (MFSET=MSET*2)
       PARAMETER         (MPSET=MSET*2)
 C
-C     Bookkeeping, etc. LS    - The current setup for this scan/station.
-C                       NSET  - The number of setup groups read.
+C     Bookkeeping, etc. NSET  - The number of setup groups read.
 C                       SETMSG - Just useful to have a character string
 C                           handy and avoid new ones in every routine.
 C                       LISTKS - points to another setup group that is
 C                           deemed to be the same and is the only one
 C                           listed in the summary.
 C
-      INTEGER           LS, NSET, LISTKS(MSET)
+      INTEGER           NSET, LISTKS(MSET)
       CHARACTER         SETMSG*120
 C
 C     Relate the setup to file names and other catalogs.
@@ -108,13 +107,22 @@ C
 C
 C     The COMMONs for bookkeeping parameters.
 C
-      COMMON  /SETN1/   LS, NSET, LISTKS, ISETNUM, IFREQNUM, IFREQIF, 
+      COMMON  /SETN1/   NSET, LISTKS, ISETNUM, IFREQNUM, IFREQIF, 
      1                  SDEBUG, SFCHAN, SGCHAN
       COMMON  /SETC1/   SETMSG, SETNAME
 C
 C     The setup information:
 C
 C     For VLBA and similar antennas
+C
+C     Note on sidebands, which can be a bit confusing:
+C     Note that only 2 of NETSIDE, SIDEBD and SIDE1 are independent.
+C       NETSIDE - Sideband of the baseband channel relative to RF.
+C       SIDEBD  - Sideband of baseband relative to final IF.
+C       SIDE1   - Sideband of final IF relative to RF.
+C       CRDSIDE - Sideband of VLBA legacy BBC channel relative to IF.
+C                 Comparable to, but may differ from SIDEBD.
+C       
 C
       DOUBLE PRECISION  FREQREF(MCHAN,MSET)
       DOUBLE PRECISION  FIRSTLO(MCHAN,MSET)

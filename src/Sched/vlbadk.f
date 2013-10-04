@@ -9,7 +9,7 @@ C     the calling routine vlba.f in each of the 2 calls.
 C
       INCLUDE  'sched.inc'
       INCLUDE   'schset.inc'
-      INTEGER  ISCN, ISTA
+      INTEGER  ISCN, ISTA, KS
       LOGICAL  SETSC
 C ---------------------------------------------------------------------
 C     Write disk=on if recording, else disk=off.  Assume FORMAT=NONE
@@ -17,10 +17,10 @@ C     means not recording.  That might happen without NOREC for
 C     RDBE schedules where the recording is happening outside the 
 C     control of the crd files.
 C
-C     LS is in schset.inc
 C
+      KS = NSETUP(ISCN,ISTA)
       IF( USEDISK(ISTA) ) THEN
-         IF( NOREC(ISCN) .OR. SETSC .OR. FORMAT(LS) .EQ. 'NONE' .OR.
+         IF( NOREC(ISCN) .OR. SETSC .OR. FORMAT(KS) .EQ. 'NONE' .OR.
      1       ( DAR(STANUM(ISTA))(1:4) .EQ. 'RDBE' .AND. 
      2       .NOT. DOMKA ) ) THEN
             WRITE( IUVBA, '( A )' ) 'disk=off'
