@@ -6,16 +6,11 @@ C     parameter, only write it out if it has changed or if this is
 C     the first scan for the station.  The VLBAINT etc. routines 
 C     take care of detecting changes.
 C
-C     Note that the current setup group is passed through the
-C     parameter LS which is in schset.inc.  Usually this is passed
-C     in the call argument or determined from ISCN and ISTA.  I 
-C     probably should get rid of using the schset.inc variable for
-C     this.
-C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER       I, NNCHAN, LEN1, LENS, ISTA, ISCN, ICH, KSTA
+      INTEGER       I, LEN1, LENS, ISTA, ISCN, ICH, KSTA
+      INTEGER       CRDN, CR1, CRN, KS, ICHS, ISYN
       LOGICAL       FIRSTS, FRS, LPNTVLBA, LTANVLBA, LDOPN3DB
       LOGICAL       WRTSET, SWARNS
 C
@@ -25,7 +20,7 @@ C
       INTEGER       MBBC, MPERIOD, MBITS, MIFDIST
       INTEGER       MSYNTH, MSIDEBD, MNOISE, MFE, MIFCHAN, MSAMPR 
 C
-      INTEGER       LBBC(MCHAN), LNCHAN
+      INTEGER       USEBBC(MCHAN), LBBC(MCHAN), LNCHAN
       INTEGER       RPERIOD(MCHAN), LPERIOD(MCHAN), LBITS(MCHAN)
       INTEGER       RLEVEL(MCHAN)
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
@@ -35,7 +30,7 @@ C
       LOGICAL       LDUALX, LUSEDIF(4), WARNCRD
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
-      CHARACTER     LFORMAT*8, LIFDIST(4)*3
+      CHARACTER     LFORMAT*8, PFORMAT*8, LIFDIST(4)*3
       CHARACTER     LLCP50CM*6, LRCP50CM*6, LNOISEF*4
 C
 C     Save all the numbers that we need to keep between calls.
@@ -45,7 +40,7 @@ C
       SAVE          MSYNTH, MSIDEBD, MNOISE, MFE, MIFCHAN, MSAMPR 
       SAVE          LBBC, LNCHAN, LPERIOD, LBITS
       SAVE          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
-      SAVE          LSAMPR, LSYNTH, LSAMPRAT
+      SAVE          LSAMPR, LSYNTH
       SAVE          LDUALX, LUSEDIF, LSIDEBD, LNOISE, LFE
       SAVE          LIFCHAN, LLOGGING, LSTRING, LFORMAT, LIFDIST
       SAVE          LLCP50CM, LRCP50CM, LNOISEF, WARNCRD
@@ -63,7 +58,12 @@ C
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VLBASU: Starting.' )
 C
-      NNCHAN = NCHAN(LS)
+C     Get the number of channels and which setup channels to use.  When
+C     using the RDBE, this might not be the same as the setup file.
+C
+      KS = NSETUP(ISCN,ISTA)
+      CALL GETCRDN( ISCN, ISTA, CRDN, CR1, CRN )
+C
       IF( FIRSTS ) SWARNS = .TRUE.
 C
 C     Need pointer to entries in the station catalog for this 
@@ -71,27 +71,15 @@ C     schedule station ISTA.
 C
       KSTA = STANUM(ISTA)
 C
-C     When using the RDBE, we need to be sure the crd file doesn't 
-C     contain items that will cause the on-line system to die.  First
-C     protect against too many channels.  The RDBE will have a separate
-C     "BBC" for each channel, so limit the total to 8.  Note that the
-C     NBBC parameter for the station will apply to the RDBE so don't 
-C     use that.  Later I need to protect against invalid BBC frequencies,
-C     bandwidths, formats, and pcal detection information (yuk).
-C
-      IF( DAR(KSTA)(1:4) .EQ. 'RDBE' ) THEN
-         NNCHAN = MIN( NNCHAN, 8 )
-      END IF
-C
 C     Protect against requesting too many BBC's.
 C
-      DO I = 1, NNCHAN
-         IF( BBC(I,LS) .GT. NBBC(KSTA) ) THEN
+      DO I = CR1, CRN
+         IF( BBC(I,KS) .GT. NBBC(KSTA) ) THEN
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, I3, A, 2I4 )' )
      1         'VLBASU: ' // STATION(KSTA) // ' only has',
      2         NBBC(KSTA), ' BBCs.  Setup requested more.',
-     3         BBC(I,LS), BBC(NNCHAN,LS)
+     3         BBC(I,KS), BBC(CRN,KS)
             CALL ERRLOG( MSGTXT )
          END IF
       END DO
@@ -117,18 +105,18 @@ C
                   LFE(I) = 'xxxxx'
                END DO
             END IF
-            CALL VLBACHAR( 'fe', 2, 4, FE(1,LS), LFE, MFE,
+            CALL VLBACHAR( 'fe', 2, 4, FE(1,KS), LFE, MFE,
      1                     FIRSTS, IUVBA )
 C
 C           Set transfer switch if dual X band is to be used.
 C
-            IF( FIRSTS .OR. (DUALX(LS) .NEQV. LDUALX) ) THEN
-               IF( DUALX(LS) ) THEN
+            IF( FIRSTS .OR. (DUALX(KS) .NEQV. LDUALX) ) THEN
+               IF( DUALX(KS) ) THEN
                   WRITE( IUVBA, '( ''fexfer=(2,split)'' )' )
                ELSE
                   WRITE( IUVBA, '( ''fexfer=(2,norm)'' )' )
                END IF
-               LDUALX = DUALX(LS)
+               LDUALX = DUALX(KS)
             END IF
 C
 C           50 cm filter.  Don't write if the default of NARROW
@@ -138,18 +126,18 @@ C
                LLCP50CM = 'NARROW'
                LRCP50CM = 'NARROW'
             END IF
-            IF( LCP50CM(LS) .NE. LLCP50CM ) THEN
-               WRITE( IUVBA, '( A, A )' ) 'lcp50cm=', LCP50CM(LS)
+            IF( LCP50CM(KS) .NE. LLCP50CM ) THEN
+               WRITE( IUVBA, '( A, A )' ) 'lcp50cm=', LCP50CM(KS)
             END IF
-            IF( RCP50CM(LS) .NE. LRCP50CM ) THEN
-               WRITE( IUVBA, '( A, A )' ) 'rcp50cm=', RCP50CM(LS)
+            IF( RCP50CM(KS) .NE. LRCP50CM ) THEN
+               WRITE( IUVBA, '( A, A )' ) 'rcp50cm=', RCP50CM(KS)
             END IF
-            LLCP50CM = LCP50CM(LS)
-            LRCP50CM = RCP50CM(LS)
+            LLCP50CM = LCP50CM(KS)
+            LRCP50CM = RCP50CM(KS)
 C
 C           Various parameters in standard formats not wanted for VLA.
 C
-            CALL VLBACHAR( 'noise', 5, 4, NOISE(1,LS), LNOISE, 
+            CALL VLBACHAR( 'noise', 5, 4, NOISE(1,KS), LNOISE, 
      1             MNOISE, FIRSTS, IUVBA )
 C
 C           Round SYNTH to try to avoid digital precision issues
@@ -160,7 +148,7 @@ C           The new synthesizers will be more finely tunable but will
 C           still be multiples of 10 kHz. Recall that the SYNTH values are GHz.
 C
             DO I = 1, 3
-               DSYNTH(I) = DNINT( SYNTH(I,LS) * 1.0D6 ) / 1.D6
+               DSYNTH(I) = DNINT( SYNTH(I,KS) * 1.0D6 ) / 1.D6
             END DO
 C
 C           If using the new synthesizers (should be installed in 
@@ -175,7 +163,7 @@ C           crd file if the value has been changed.  Recall synthesizer 3
 C           will still be the old style, so don't change it.
 C
 C
-            IF( MODETEST(LS) ) THEN
+            IF( MODETEST(KS) ) THEN
                DO I = 1, 2
                   RSYNTH = 0.5D0 * DNINT( DSYNTH(I) * 2.D0 )
                   IF( DSYNTH(I) .GT. RSYNTH ) THEN
@@ -212,18 +200,22 @@ C           may be getting set to a benign value).  Look over all
 C           channels, not just the psuedo subset that will be written
 C           for the old hardware when using the RDBE.
 C
-            DO ICH = 1, NCHAN(LS)
-               IF( FIRSTLO(ICH,LS) .GT. FREQREF(ICH,LS) .AND. 
+            DO ICHS = 1, NCHAN(KS)
+C
+C              For negative IF sideband, make DSYNTH negative.
+C              Loop over all setup file parameters for this one.
+C
+               IF( FIRSTLO(ICHS,KS) .GT. FREQREF(ICHS,KS) .AND. 
      1            STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
-                  I = VFESYN(ICH,LS)
-                  IF( I .GE. 1 .AND. I .LE. 3 ) THEN
-                     DSYNTH(I) = -1.D0 * ABS( DSYNTH(I) )
-                  ELSE IF( FREQREF(ICH,LS) .GT. 800.D0 .AND.
-     1                     SETSTA(1,LS)(1:4) .EQ. 'VLBA' ) THEN
+                  ISYN = VFESYN(ICHS,KS)
+                  IF( ISYN .GE. 1 .AND. ISYN .LE. 3 ) THEN
+                     DSYNTH(ISYN) = -1.D0 * ABS( DSYNTH(ISYN) )
+                  ELSE IF( FREQREF(ICHS,KS) .GT. 800.D0 .AND.
+     1                     SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
                      MSGTXT = ' ' 
                      WRITE( MSGTXT, '( A, A, I3, I4, F10.2 )' ) 
      1                  'VLBASU: Program error. ',
-     2                  'VFESYN not set ', ICH, LS, FREQREF(ICH,LS)
+     2                  'VFESYN not set ', ICHS, KS, FREQREF(ICHS,KS)
                      CALL WLOG( 1, MSGTXT )
                   END IF
                END IF
@@ -235,44 +227,17 @@ C           For Pie Town link experiments, tell PT to switch to the
 C           other noise cal switching frequency.
 C
            IF( STANAME(ISTA) .EQ. 'VLBA_PT' .AND. 
-     1          ( FIRSTS .OR. NOISEFRQ(LS) .NE. LNOISEF ) ) THEN
+     1          ( FIRSTS .OR. NOISEFRQ(KS) .NE. LNOISEF ) ) THEN
                WRITE( IUVBA, '( 2A )' ) 'noisefreq=', 
-     1           NOISEFRQ(LS)(1:LEN1(NOISEFRQ(LS)))
-               LNOISEF = NOISEFRQ(LS)
+     1           NOISEFRQ(KS)(1:LEN1(NOISEFRQ(KS)))
+               LNOISEF = NOISEFRQ(KS)
             END IF
 C
 C           End of non-VLA items.
 C
          ELSE
 C
-C           However, for the VLA, we should check that an error
-C           has not been made with the IF assignments.
-C
-C           The distinctions between the three VLA "stations" are being
-C           removed as mixed modes are now allowed.  Comment out for 
-C           now, but don't remove in case problems are encountered.
-C
-C            IF( (STANAME(ISTA) .EQ. 'VLA' .OR.
-C     1           STANAME(ISTA) .EQ. 'VLA27') .AND.
-C     2           VLAMODE(ISCN) .EQ. 'VS' ) THEN
-C               CALL WLOG( 1, 'VLBASU: VS mode specified for station '//
-C     1            'VLA or VLA27.' )
-C               CALL WLOG( 1, 'VLBASU: That is for single dish '//
-C     1            '(VLA1), not phased array.' )
-C               CALL WLOG( 1, 'VLBASU: The patch panel will probably '//
-C     1            'be set wrong.' )
-C            ELSE IF( STANAME(ISTA) .EQ. 'VLA1' .AND.
-C     1           ( VLAMODE(ISCN) .EQ. 'VA' .OR.
-C     2             VLAMODE(ISCN) .EQ. 'VB' .OR.
-C     3             VLAMODE(ISCN) .EQ. 'VR' .OR.
-C     4             VLAMODE(ISCN) .EQ. 'VL' .OR.
-C     5             VLAMODE(ISCN) .EQ. 'VX' ) ) THEN
-C               CALL WLOG( 1, 'VLBASU: '//VLAMODE(ISCN)//
-C     1            ' mode specified for station VLA1.' )
-C               CALL WLOG( 1, 'VLBASU: The patch panel will probably '//
-C     1            'be set wrong.' )
-C               CALL WLOG( 1, 'VLBASU: Use VS for single dish mode.' )
-C            END IF
+C           Removed some VLAMODE checking here.
 C
          END IF
 C
@@ -282,9 +247,12 @@ C        Trigger on the station name - I don't really like doing this
 C        but I don't see a clean alternative.
 C        These are by channel.  They are supposed to be in GHz.
 C
+
          IF( STANAME(ISTA)(1:4) .NE. 'VLBA' ) THEN
 C
 C           First find the data for each  used IF channel.
+C           For this, loop over all setup file channels rather than
+C           just the ones to be specified in the crd file.
 C
             DO I = 1, 4
                USEDIF(I) = .FALSE.
@@ -293,10 +261,10 @@ C
                   LSIDEX(I) = ' '
                   LUSEDIF(I) = .FALSE.
                END IF
-               DO ICH = 1, NNCHAN
-                  IF( IFCHAN(ICH,LS) .EQ. IFLABEL(I) ) THEN
-                     EXTLO(I) = FIRSTLO(ICH,LS) / 1000.D0
-                     SIDEX(I) = SIDE1(ICH,LS)
+               DO ICH = 1, NCHAN(KS)
+                  IF( IFCHAN(ICH,KS) .EQ. IFLABEL(I) ) THEN
+                     EXTLO(I) = FIRSTLO(ICH,KS) / 1000.D0
+                     SIDEX(I) = SIDE1(ICH,KS)
                      USEDIF(I) = .TRUE.
                   END IF
                END DO
@@ -323,84 +291,124 @@ C
 C
 C        Logging type:
 C
-         IF( FIRSTS .OR. LOGGING(LS) .NE. LLOGGING ) THEN
-            WRITE( IUVBA, '( A, A )' ) 'logging=', LOGGING(LS)
-            LLOGGING = LOGGING(LS)
+         IF( FIRSTS .OR. LOGGING(KS) .NE. LLOGGING ) THEN
+            WRITE( IUVBA, '( A, A )' ) 'logging=', LOGGING(KS)
+            LLOGGING = LOGGING(KS)
          END IF
 C
 C        Number of channels.
 C
-         IF( FIRSTS .OR. NNCHAN .NE. LNCHAN ) THEN 
-            WRITE( IUVBA, '( A, I2 )' ) 'nchan=', NNCHAN
-            LNCHAN = NNCHAN
+         IF( FIRSTS .OR. CRDN .NE. LNCHAN ) THEN 
+            WRITE( IUVBA, '( A, I2 )' ) 'nchan=', CRDN
+            LNCHAN = CRDN
          END IF
 C
 C        Various parameters in standard formats. 
-C        For the format, make it "NONE" if using the RDBE.
-C        Oops, that shuts off all formatter configuration
+C
+C        For the format, don't just make it "NONE" if using 
+C        the RDBE.  That shuts off all formatter configuration
 C        which means the pulse cal doesn't get set up.
-C        So specify a valid format.
+C        So specify a valid format for the samplerate.  Note
+C        that CRDBW may cause a high oversampling, but that
+C        should be ok.  We can't just use the setup file format
+C        (formats are VDIF and MARK5B) because that will not 
+C        encode the fan-out that the legacy system wants to 
+C        know about.  So base it on the samprate.
 C
-C        When using the RDBE, format will not necessarily 
-C        change with bandwidth (formats are VDIF and MARK5B).
-C        But the legacy system may need a format change if
-C        the sample rate changes.
-C
-         IF( FIRSTS .OR. FORMAT(LS) .NE. LFORMAT .OR.
-     1       SAMPRATE(LS) .NE. LSAMPRAT ) THEN
-            IF( DAR(KSTA)(1:4) .NE. 'RDBE' ) THEN
-               WRITE( IUVBA, '( 2A )' )
-     1             'format=', FORMAT(LS)(1:LEN1(FORMAT(LS)))
+         IF( DAR(KSTA) .EQ. 'RDBE' ) THEN
+            IF( FORMAT(KS) .EQ. 'NONE' ) THEN
+               PFORMAT = 'NONE'
+            ELSE IF( SAMPRATE(KS) .GT. 16.0 ) THEN
+               PFORMAT = 'VLBA1:4'
+            ELSE IF( SAMPRATE(KS) .EQ. 16.0 ) THEN
+               PFORMAT = 'VLBA1:2'
+            ELSE IF( SAMPRATE(KS) .LT. 16.0 ) THEN
+               PFORMAT = 'VLBA1:1'
             ELSE
-C              Now do always. IF( DOMKA ) THEN
-C
-C              If writing to disk, a format is needed.  One is
-C              also needed to set up the pulse cal detectors.  So
-C              do a simple format selection based on the sample
-C              rate for all cases.
-C
-               IF( SAMPRATE(LS) .GT. 16.0 ) THEN
-                   WRITE( IUVBA, '( A )' ) 'format=VLBA1:4'
-               ELSE IF( SAMPRATE(LS) .EQ. 16.0 ) THEN
-                   WRITE( IUVBA, '( A )' ) 'format=VLBA1:2'
-               ELSE IF( SAMPRATE(LS) .LT. 16.0 ) THEN
-                   WRITE( IUVBA, '( A )' ) 'format=VLBA1:1'
-               END IF
-               IF( WARNCRD ) THEN
-                  CALL WRTMSG( 0, 'VLBASU', 'CRD_RDBE_Warning' )
-                  WARNCRD = .FALSE.
-               END IF
-C                     Always writing a format for RDBE.   ELSE
-C                           WRITE( IUVBA, '( A )' ) 'format=NONE'
-C                        END IF
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I5, F10.2, A )' )
+     1            'VLBASU:  Something wrong with SAMPRATE ',
+     2            KS, SAMPRATE(KS), '  Programming error?'
+               CALL ERRLOG( MSGTXT )
             END IF
-            LFORMAT = FORMAT(LS)
-            LSAMPRAT = SAMPRATE(LS)
+C
+C           Write a message about the crd files - just once.
+C
+            IF( WARNCRD ) THEN
+               CALL WRTMSG( 0, 'VLBASU', 'CRD_RDBE_Warning' )
+               WARNCRD = .FALSE.
+            END IF
+C
+         ELSE
+C
+C           For non-RDBE projects, use the setup file format.
+C
+            PFORMAT = FORMAT(KS)
+C
          END IF
+C
+C        Now write the format if it has changed.
+C
+         IF( FIRSTS .OR. PFORMAT .NE. LFORMAT ) THEN
+C
+C           For non-RDBE projects, use the setup file format.
+C
+            WRITE( IUVBA, '( 2A )' )
+     1             'format=', PFORMAT(1:LEN1(PFORMAT))
+         END IF
+         LFORMAT = PFORMAT
 C
 C        Removed barrel roll spec for tape.
 C
-C        Signal routing and properties information.
+C        When the VLBA legacy system is being used for recording, 
+C        or for non-VLBA systems (shouldn't get into this routine
+C        anyway), the baseband converter assignment should be
+C        as per the setup file.  But when the VLBA legacy system
+C        is used, different assignments are needed.  Most obviously,
+C        when the RDBE_PFB is used, there are too many channels.
+C        For these cases, the number of channels is restricted to
+C        no more than 8, the number of BBCs, and we can just assign
+C        the BBCs sequentially (BBC number = channel number).
 C
-         CALL VLBACHAR( 'ifdistr', 7, 4, IFDIST(1,LS), LIFDIST, 
+C        Note CONTROL(KSTA) .EQ. 'VLBA' .OR. VLBADAR(KSTA) can be
+C        assumed because of the call to VLBA in CRDWRT.  VLBA calls
+C        this routine.  For non-RDBE cases, CR1 will almost certainly
+C        be 1 and the second loop will actually be over 1 to NCHAN(KS).
+C
+         IF( DAR(KSTA)(1:4) .EQ. 'RDBE' ) THEN
+            DO ICH = 1, CRDN
+               USEBBC(ICH) = ICH
+            END DO
+         ELSE 
+            DO ICH = 1, CRDN
+               USEBBC(ICH) = BBC(CR1+ICH-1,KS)
+            END DO
+         END IF
+C
+C
+C        Signal routing and properties information.
+C        Now we use the restricted set of channels.
+C        But IFDIST is per IF, not baseband channel.
+C
+         CALL VLBACHAR( 'ifdistr', 7, 4, IFDIST(1,KS), LIFDIST, 
      1          MIFDIST, FIRSTS, IUVBA )
-         CALL VLBAINT( 'baseband', 8, NNCHAN, BBC(1,LS), LBBC,
+         CALL VLBAINT( 'baseband', 8, CRDN, USEBBC, LBBC,
      1          MBBC, FIRSTS, IUVBA )
-         CALL VLBACHAR( 'ifchan', 6, NNCHAN, IFCHAN(1,LS), 
+         CALL VLBACHAR( 'ifchan', 6, CRDN, IFCHAN(CR1,KS), 
      1          LIFCHAN, MIFCHAN, FIRSTS, IUVBA )
-         CALL VLBACHAR( 'sideband', 8, NNCHAN, SIDEBD(1,LS), 
+         CALL VLBACHAR( 'sideband', 8, CRDN, SIDEBD(CR1,KS), 
      1          LSIDEBD, MSIDEBD, FIRSTS, IUVBA )
-         CALL VLBAINT( 'bits', 4, NNCHAN, BITS(1,LS), LBITS,
+         CALL VLBAINT( 'bits', 4, CRDN, BITS(CR1,KS), LBITS,
      1          MBITS, FIRSTS, IUVBA )
 C
 C        Some parameters for which NCHAN versions should be printed,
 C        but for which SCHED only allows one input.
 C
-         IF( FIRSTS .OR. PERIOD(LS) .NE. LPERIOD(1) ) THEN
-            DO I = 1, NNCHAN
-               RPERIOD(I) = PERIOD(LS)
+         IF( FIRSTS .OR. PERIOD(KS) .NE. LPERIOD(1) ) THEN
+            DO I = 1, CRDN
+               RPERIOD(I) = PERIOD(KS)
             END DO
-            CALL VLBAINT( 'period', 6, NNCHAN, RPERIOD, LPERIOD,
+            CALL VLBAINT( 'period', 6, CRDN, RPERIOD, LPERIOD,
      1           MPERIOD, FIRSTS, IUVBA )
          END IF
 C
@@ -412,12 +420,12 @@ C
             END DO
          END IF
          DO I = 1, 4
-            IF( STRING(I,LS) .NE. LSTRING(I) ) THEN
-               LENS = LEN1( STRING(I,LS) )
+            IF( STRING(I,KS) .NE. LSTRING(I) ) THEN
+               LENS = LEN1( STRING(I,KS) )
                IF( LENS .NE. 0 ) THEN
-                  WRITE( IUVBA, '(A)' ) STRING(I,LS)(1:LENS)
+                  WRITE( IUVBA, '(A)' ) STRING(I,KS)(1:LENS)
                END IF
-               LSTRING(I) = STRING(I,LS)
+               LSTRING(I) = STRING(I,KS)
             END IF
          END DO
 C
@@ -426,11 +434,11 @@ C
 C     Reset the levels.  This can happen even without a new setup
 C     if there have been pointing or Ta scans.
 C
-      IF( FIRSTS .OR. LEVEL(LS) .NE. LLEVEL(1) ) THEN
-         DO I = 1, NNCHAN
-            RLEVEL(I) = LEVEL(LS)
+      IF( FIRSTS .OR. LEVEL(KS) .NE. LLEVEL(1) ) THEN
+         DO I = 1, CRDN
+            RLEVEL(I) = LEVEL(KS)
          END DO
-         CALL VLBAINT( 'level', 5, NNCHAN, RLEVEL, LLEVEL,
+         CALL VLBAINT( 'level', 5, CRDN, RLEVEL, LLEVEL,
      1           MLEVEL, FIRSTS, IUVBA )
       END IF
 C
@@ -454,8 +462,8 @@ C     change, and when going from pointing or Ta scans to non-pointing
 C     scans.  Note that colimation offsets can come from either the
 C     setup file or the schedule.
 C
-      DOAZ = SAZCOL(ISCN) + AZCOLIM(LS)
-      DOEL = SELCOL(ISCN) + ELCOLIM(LS)
+      DOAZ = SAZCOL(ISCN) + AZCOLIM(KS)
+      DOEL = SELCOL(ISCN) + ELCOLIM(KS)
 C
       IF( FIRSTS .OR. DOAZ .NE. LAZCOLIM .OR. DOEL .NE. LELCOLIM .OR.
      1    ( LPNTVLBA .AND. .NOT. PNTVLBA(ISCN) ) .OR.
@@ -474,7 +482,8 @@ C
 C
 C     Deal with synthesizer settings (freq and bw) and pulse cal.  
 C     This can change scan by scan because of DOPCAL and main 
-C     routine FREQ and BW.
+C     routine FREQ and BW.  It can also be set by the CRD parameters
+C     when using the RDBE.
 C
       CALL WRTFREQ( ISCN, ISTA, FIRSTS, WRTSET )
 C
@@ -498,11 +507,16 @@ C     complained about incompatible samplerate and format.  So I
 C     moved the NOREC check to cover only the track specification.
 C     Also protect against too high samplerate when using the RDBE.
 C
-      IF( VLBITP .AND. FORMAT(LS) .NE. 'NONE' ) THEN
+C     Note tht the samprate will be likely be rather far from 
+C     appropriate if crdbw is selected far different from bbcbw.
+C     I don't think that matters, but keep an eye on it.
+C
+      IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN
+C
          IF( DAR(KSTA)(1:4) .NE. 'RDBE' ) THEN
-            DSAMPR = SAMPRATE(LS)
+            DSAMPR = SAMPRATE(KS)
          ELSE
-            DSAMPR = MIN( SAMPRATE(LS), 32.0 )
+            DSAMPR = MIN( SAMPRATE(KS), 32.0 )
          END IF
          CALL VLBABWS( 'samplerate', 10, 1, DSAMPR, LSAMPR, 
      1       MSAMPR, FIRSTS, IUVBA )
@@ -513,7 +527,7 @@ C
 C
 C     Set frequency switching request.
 C
-      FRS = FRSWITCH(LS)
+      FRS = FRSWITCH(KS)
 C
       IF( DEBUG ) CALL WLOG( 0, 'VLBASU: Ending' )
       RETURN

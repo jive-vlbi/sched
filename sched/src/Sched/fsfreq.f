@@ -6,6 +6,11 @@ C     and the bandwidth for each channel for a frequency set.
 C     It has to take into account any FREQ and BW requests in
 C     the schedule, besides the setup file information.
 C
+C     Note that, for historical reasons, there is a potential 
+C     confusion because the BBC parameters of the call
+C     refer to the RDBE channels for the VLBA when that is
+C     in use while the CRD parameters are for the legacy BBCs.
+C
 C     Also provide the values for the VLBA legacy system
 C     which might be different for reference pointing or if the 
 C     new system is being used at too wide a bandwidth or with
@@ -13,7 +18,7 @@ C     too many channels.  These parameters are:
 C       CRDN          Number of channels for the BBCs (1 per BBC).
 C       CRDF(ICH)     Baseband frequency for channel.
 C       CRDB(ICH)     Bandwidth for channel.
-C       CRDS(ICH)     Sideband for channel.
+C       CRDS(ICH)     Sideband for channel (U/L)
 C       CRDLOSUM(ICH) LO sum to use for setting up PCALX.
 C
 C     Do not call ERRSET from this routine despite the temptation.
@@ -27,22 +32,22 @@ C
       INCLUDE     'schset.inc'
       INCLUDE     'schfreq.inc'
 C
-      INTEGER            KF, KS, KSCN, ILC, ISETF, ISIDE1, KSTA
-      INTEGER            IFIF, IFCAT, LEN1, FSCN, ICH
+      INTEGER            KF, KS, KSCN, ILC, ISETF, KSTA, ISTA
+      INTEGER            IFIF, IFCAT, LEN1, ICH
       CHARACTER          SDAR*5
       DOUBLE PRECISION   LOSUM(*)
       DOUBLE PRECISION   BBCFREQ(*), BBCBW(*) 
       DOUBLE PRECISION   CRDF(*), CRDB(*), CRDLOSUM(*), FDROP
       LOGICAL            FWARN, VLAWARN, ERRS, DEQUAL
 C
-      INTEGER            CRDN
+      INTEGER            CRDN, CR1, CRN, ICHS
       CHARACTER          CRDS(*)*1
-      INTEGER            NCH, ISIDE(MCHAN)
-      INTEGER            IFSIDE(MCHAN), RFSIDE(MCHAN)
+      INTEGER            ICRDS(MCHAN)
+      INTEGER            ISIDE1(MCHAN), INETSIDE(MCHAN)
       DOUBLE PRECISION   FSHIFT
 C
-      DATA               FWARN, VLAWARN / .TRUE., .TRUE. /
-      SAVE               FWARN, VLAWARN
+      DATA               FWARN / .TRUE. /
+      SAVE               FWARN
 C ----------------------------------------------------------------------
       IF( DEBUG ) THEN
          MSGTXT = ' '
@@ -62,12 +67,36 @@ C
       END IF
 C
 C     Get the setup group, the defining scan of the frequency set,
-C     and the setup file.
+C     and the setup file.  Also get the schedule station number of
+C     the catalog station.
 C
-      KS = FSETKS(KF)
-      KSCN = FSETSCN(KF)
+      KS    = FSETKS(KF)
+      KSCN  = FSETSCN(KF)
+      KSTA  = ISETSTA(KS)
       ISETF = ISETNUM(KS)
+      ISTA  = ISCHSTA(KSTA)
+      IF( ISTA .LE. 0 ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, I5, A, I5 )' )
+     1      'FSFREQ:  Schedule station corresponding to setup ', 
+     2      'station ', KSTA, ' is ', ISTA 
+         CALL WLOG( 1, MSGTXT )
+         CALL ERRLOG( '         That is now allowed. ' //
+     1      'Programming error? ' )
+      END IF
 C
+C     Get the number of channels and the range of setup file channels
+C     to use for parameters other than frequency and bandwidth.
+C
+      CALL GETCRDN( KSCN, ISTA, CRDN, CR1, CRN )
+C
+C----------------------------------------
+C     Deal with the VLBI channels (These are for the Vex file).
+C----------------------------------------
+C
+C     On the VLBA, these are likely to be in the RDBE as the MARK5A
+C     system is retired.
+C 
 C     Loop through the setup group channels.
 C
       DO ICH = 1, NCHAN(KS)
@@ -83,7 +112,7 @@ C        setup group only.
 C
 C        Get the setup file "logical" channel.  Note that, if
 C        OKXC is false, ILC will not be used except in some
-C        IF statments that should fail.  It is set here to I
+C        IF statments that should fail.  It is set here to ICH
 C        to keep those IF statements from having addressing 
 C        exceptions.
 C
@@ -97,9 +126,9 @@ C        Assume that the sideband structure and firstlo are the
 C        same as the setup file.
 C
          IF( SIDE1(ICH,KS) .EQ. 'U' ) THEN
-            ISIDE1 = 1
+            ISIDE1(ICH) = 1
          ELSE IF( SIDE1(ICH,KS) .EQ. 'L' ) THEN
-            ISIDE1 = -1
+            ISIDE1(ICH) = -1
          ELSE
             CALL WLOG( 1,
      1         'FSFREQ: First LO sideband not correctly specified.' )
@@ -108,6 +137,8 @@ C
             CALL ERRLOG( ' Fix the problem ' )
          END IF
 C
+C        Get the BBC frequency using the FREQ input or setup value.
+
          IF( OKXC(ISETF) .AND. FREQ(ILC,KSCN) .GT. 0.0D0 ) THEN
 C
 C           Use the frequency from the main schedule.  The fact that
@@ -126,14 +157,14 @@ C
 C           Check that the assumed sideband is correct.  Pedantically,
 C           this should be corrected for CORINV, but it won't matter.
 C
-            IF( ( FREQ(ILC,KSCN) - FIRSTLO(ICH,KS) ) * ISIDE1 .LT. 0 )
-     1           THEN
+            IF( ( FREQ(ILC,KSCN) -
+     1           FIRSTLO(ICH,KS) ) * ISIDE1(ILC) .LT. 0 ) THEN
                CALL WLOG( 1, 'FSFREQ: Frequency from main schedule' //
      1              ' not consistent with sideband from setup file.' )
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, 2F14.5, I3 )' )
      1             '        Frequency, first LO, sideband: ',
-     2              FREQ(ILC,KSCN), FIRSTLO(ICH,KS), ISIDE1
+     2              FREQ(ILC,KSCN), FIRSTLO(ICH,KS), ISIDE1(ILC)
                CALL WLOG( 1, MSGTXT )
                CALL WLOG( 1, ' Setup file: ' //
      1                    SETNAME(KS)(1:LEN1(SETNAME(KS))) )
@@ -181,28 +212,14 @@ C
 C
          ELSE
 C
-C           Use the SETUP file value.
+C           Use the SETUP file value.  Simple case.
 C
             BBCFREQ(ICH) = BBSYN(ICH,KS)
 C
          END IF
 C
-C        Warn if outside of VLA 50 MHz window at VLA
-C
-         IF( CONTROL(ISETSTA(KS)) .EQ. 'VLA' .AND. VLAWARN) THEN
-            IF( BBCFREQ(ICH) .LT. 600.0D0 .OR.
-     1          BBCFREQ(ICH) .GT. 650.0D0 ) THEN
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( A, F10.2, A )' )
-     1           'FSFREQ: **** VLA BBC frequency (',
-     2           BBCFREQ(ICH), ') outside normal'
-               CALL WLOG( 1, MSGTXT )
-               CALL WLOG( 1, 'FSFREQ:     range (600-650) at the VLA' )
-            END IF
-            VLAWARN = .FALSE.
-         END IF
-C
-C        Get the bandwidth specification.
+C        Get the BBC bandwidth specification, again using program input
+C        or the setup file value.
 C
          IF( OKXC(ISETF) .AND. BW(ILC,KSCN) .NE. 0.0D0 ) THEN
 C
@@ -213,8 +230,8 @@ C
             BBCBW(ICH) = ABS( BW(ILC,KSCN) )
 C
             IF( BBCBW(ICH) .GT. 0.50001D0 * SAMPRATE(KS) ) THEN
-               CALL WLOG( 1, 'FSFREQ: **** Bandwidth from schedule more'
-     1                  // ' than half of sample rate.' )
+               CALL WLOG( 1, 'FSFREQ: **** Bandwidth from schedule '
+     1                  // ' more than half of sample rate.' )
                CALL WLOG( 1, ' Setup file: ' //
      1                 SETNAME(KS)(1:LEN1(SETNAME(KS))) )
                CALL ERRLOG( ' Fix bandwidth or sample rate ' )
@@ -228,16 +245,15 @@ C
 C
          END IF
 C
-C        Get the LO sum.  
+C        Get the LO sum.  Clean up any odd digits.
 C
-         LOSUM(ICH) = FIRSTLO(ICH,KS) + ISIDE1 * BBCFREQ(ICH)
+         LOSUM(ICH) = FIRSTLO(ICH,KS) + ISIDE1(ICH) * BBCFREQ(ICH)
          LOSUM(ICH) =  DNINT( LOSUM(ICH) * 1.D7 ) / 1.D7
 C
       END DO
 C
 C     Check some of the results.
 C
-      KSTA = ISETSTA(KS)
       SDAR = DAR(KSTA)
 C
 C     Make some VLBA specific checks.
@@ -299,28 +315,139 @@ C
 C
 C     Similar checks for Mark 4?
 C
-C     Get the CRD parameters if they are needed.  The values returned
-C     should be usable at the VLBA for setting the BBC's in any situation.
-C     They will duplicate the other values where that is appropriate, such
-C     as with MARK5A observations.
 C
-      IF( SDAR(1:4) .EQ. 'RDBE' .AND. STATION(KSTA)(1:4) .EQ. 'VLBA' ) 
-     1   THEN
+C----------------------------------------------
+C     CRD parameters for legacy BBCs.
+C----------------------------------------------
 C
-C        Check if CRDFREQ or CRDDOP were used and frequencies already
-C        were derived.  Since the CRD stuff is scan dependent, we need
-C        the scan number associated with the frequency set.
+C     Get the CRD parameters if they are needed, which they always will
+C     be for a VLBA station until the legacy system is gone.  For some
+C     cases (MARK5A observations, narrow band DDC setups ...), these
+C     values will duplicate items in the normal setup, but it is easier
+C     for the calling routines if they can always use the value from
+C     here so set them regardless.
 C
-         FSCN = FSETSCN(KF)
+C     First the cases when the CRD parameters should just be the same as
+C     the setup or the main FREQ and DOPPLER numbers.  This is when 
+C     either a VLBA control system is not being used or the RDBE is 
+C     not being used.
 C
-         IF( CRDNCH(FSCN) .GT. 0 ) THEN
-            CRDN = CRDNCH(FSCN)
-            DO ICH = 1, CRDN
-               CRDF(ICH) = ABS( CRDFREQ(ICH,KSCN) - FIRSTLO(ICH,KS) )
+      IF( SDAR(1:4) .NE. 'RDBE' .OR. 
+     1    ( CONTROL(KSTA) .NE. 'VLBA' .AND. .NOT. VLBADAR(KSTA) ) ) THEN
+C
+C        For this case, the setup values, possibly adjusted by FREQ and 
+C        DOPPLER should be used.  On the VLBA, this will likely be a 
+C        MARK5A recording case and we should not muck with the BBC 
+C        frequencies using the CRD parameters.  Other stations  don't 
+C        use the CRD parameters, so just put in the setup values
+C        as dummies.
+C
+         DO ICH = 1, CRDN
+            ICHS = ICH + CR1 - 1
+            CRDF(ICH) = BBCFREQ(ICHS)
+            CRDB(ICH) = BBCBW(ICHS)
+            CRDS(ICH) = SIDEBD(ICHS,KS)
+            CRDLOSUM(ICH) = LOSUM(ICHS)
+         END DO
+C
+      ELSE 
+C
+C        Now the case when using the RDBE on the VLBA or a station with 
+C        the legacy VLBA control system (GBT and EB are the only ones in
+C        the station catalog).  The legacy BBCs are used to generate 
+C        some Tsys and pulse cal data, but not VLBI data.  More 
+C        importantly, the legacy BBCs generate the power data used for 
+C        reference pointing on the VLBA.  Since the VLBI data are not
+C        affected, we are free to change the frequencies, bandwidths, 
+C        and number of channels.
+C
+C        First get CRDB and CRDS - the legacy BBC bandwidth and 
+C        sideband - out of the way as they need the same treatment for
+C        all of the cases dealt with later.  Here use CRDBW if it is 
+C        not zero and BBCBW if it is.  If BBCBW is over 16 MHz, the 
+C        maximum that the BBCs allow, use 16 MHz.  Do not let CRDB
+C        exceed BBCBW.  That would create more issues with the samplerate
+C        and format than are worth trying to deal with for a case 
+C        that is not likely to be used.
+C
+C        Using CRDBW even in scans that do not have CRDFREQ or CRDDOP 
+C        allows adjustment of the BBC bandwidth without setting the 
+C        other CRD parameters.  I'm not too sure why you would do that,
+C        but it's easy.
+C
+C        Do for the number of channels given in GETCRDN and relate 
+C        those to the specified setup file channels.
+C
+         DO ICH = 1, CRDN
+            ICHS = ICH + CR1 - 1
+            IF( CRDBW(ICH,KSCN) .LE. 0.D0 ) THEN
+               CRDB(ICH) = MIN( BBCBW(ICHS), 16.D0 )
+            ELSE IF( CRDBW(ICH,KSCN) .GT. BBCBW(ICHS) ) THEN
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( 2A )' )
+     1            'FSFREQ:  CRDBW value greater than setup file ',
+     2            'value.  Don''t do that!'
+               CALL WLOG( 1, MSGTXT )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I4, A, F10.2 )' )
+     1            '         Setup: ', KS, '  CRDBW: ', CRDBW(ICH,KSCN)
+               CALL ERRLOG( MSGTXT )
+            ELSE
                CRDB(ICH) = CRDBW(ICH,KSCN)
-               CRDS(ICH) = CRDSIDE(ICH,KS)
-               CRDLOSUM(ICH) = FIRSTLO(ICH,KS) + ISIDE1 * CRDB(ICH)
+            END IF
+C
+C           Deal with sidebands.  Keep same as RDBE before any
+C           inversions.  Note that we need to do the same as in DOPCRD
+C           or the frequencies will be wrong.
+C
+            IF( CRDSIDE(ICH,KS) .EQ. 'U' ) THEN
+               CRDS(ICH) = 'U'
+               ICRDS(ICH) = 1
+            ELSE
+               CRDS(ICH) = 'L'
+               ICRDS(ICH) = -1
+            END IF
+         END DO
+C
+C        If CRDFREQ or CRDDOP were used, GOTCRD should be set and CRDFREQ
+C        should either be the input value or one calculated by DOPCRD.
+C        Since the CRD stuff is scan dependent, we get the needed information
+C        from the reference scan for the frequency set.  That was 
+C        set above as KSCN.
+C
+C        CRDNCH is a required user input if CRDFREQ or CRDDOP is used
+C        but can be given any time.  Use it if set.  INFDB will already
+C        have not allowed it to not be set if CRDFREQ or CRDDOP is used.
+C        DOPCRD has enforced reasonable values for all scans.  The user
+C        could have used CRDCH1 to specify that the legacy system channels
+C        not start with the first setup file channel.  This will be useful
+C        for dual band cases when some CRD channels are desired from both
+C        bands.  Because of this option, we need to be careful about the
+C        meaning of the channel numbers.  Here ICH is an output CRD
+C        channel and ICHS is the corresponding setup file channel.
+C
+         IF( GOTCRD(KSCN) ) THEN
+            DO ICH = 1, CRDN
+               ICHS = ICH + CR1 - 1
+               CRDF(ICH) = ABS( CRDFREQ(ICH,KSCN) - FIRSTLO(ICHS,KS) )
+               CRDB(ICH) = CRDBW(ICH,KSCN)
+               CRDLOSUM(ICH) = FIRSTLO(ICHS,KS) + ISIDE1(ICHS) * 
+     1               CRDF(ICH)
                CRDLOSUM(ICH) = DNINT( CRDLOSUM(ICH) * 1.D7 ) / 1.D7
+C
+C              Complain if CRDFREQ has not been set (happened during
+C              debugging).
+C
+               IF( CRDFREQ(ICH,KSCN) .LE. 0.D0 ) THEN
+                  CALL WLOG( 1, 'FSFREQ: CRDFREQ zero when either '//
+     1                'it or CRDDOP was set by user.' )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I5, A, I5, A, F12.4 )' )
+     1                '        KSCN:', KSCN, '    ICH:', ICH,
+     2                '    CRDFREQ:', CRDFREQ(ICH,KSCN)
+                  CALL WLOG( 1, MSGTXT )
+                  CALL ERRLOG( ' Probable programming error.  ' )
+               END IF
             END DO
          ELSE
 C
@@ -328,7 +455,8 @@ C           Now deal with the case where valid BBC frequencies need
 C           to be established based on the setup and FREQ/BW entries.
 C           They cannot necessarily be the same as in the setup because
 C           the RDBE can handle more channels (PFB) and wider bandwidths
-C           than the legacy system.  We will try for a reasonable match.
+C           (DDC and PFB) than the legacy system.  We will try for a 
+C           reasonable match.
 C
 C           This code used to be in WRTFREQ, but has been moved in
 C           case I want to use it other than in writing the crd files.
@@ -336,33 +464,46 @@ C           The CRDDOP etc parameters forced enough of a restructuring
 C           to make it reasonable to put it here.
 C
 C           Deal with which setup channels to try to match.  We will only
-C           do 8 (one per BBC) where the RDBE_PFB would have 16, so we
-C           need to be selective.  Originally I went for the middle set,
-C           but that makes it hard to explain what the CRDFREQ and CRDBW
-C           are for.  This could cause use of wrong IF, FIRSTLO etc.
-C           So just take the first 8.
+C           do 8 (one per BBC).  This is fine for the DDC, but for the
+C           PFB there are 16 channels, so we need to be selective.  
+C           For now, do the first 8.  We used to do the middle 8 but 
+C           it is easier to do the first 8, although the benefits are
+C           less strong than I thought when I switched.  We could go
+C           back to the middle 8 some day.  If so, neet to deal with 
+C           the bandwidth above.
 C
-            CRDN = MIN( 8, NCHAN(KS) )
+C           Allow the user to have specified the number of channels 
+C           even if not doing CRDFREQ or CRDDOP.
+C
 C
 C           Loop over the channels assigning data to use.
 C
             DO ICH = 1, CRDN
-               ISIDE(ICH) = 1
-               IF( SIDEBD(ICH,KS) .EQ. 'L' ) ISIDE(ICH) = -1
-               RFSIDE(ICH) = 1
-               IF( NETSIDE(ICH,KS) .EQ. 'L' ) RFSIDE(ICH) = -1
-               IFSIDE(ICH) = ISIDE(ICH) * RFSIDE(ICH)
-               CRDB(ICH) = BBCBW(ICH)
-               CRDF(ICH) = BBCFREQ(ICH)
+               ICHS = ICH + CR1 - 1
 C
-C              If the observing band is too wide for the BBCs, reduce
-C              the BBC bandwidth and center the band on the RDBE band.
+C              Get an integer version of NETSIDE for multiplications.
+C
+               IF( NETSIDE(ICHS,KS) .EQ. 'U' ) THEN
+                  INETSIDE(ICH) = 1
+               ELSE
+                  INETSIDE(ICH) = -1
+               END IF
+C
+C              Start with setting the bandwidth and frequency to the
+C              setup file versions.
+C
+               CRDF(ICH) = BBCFREQ(ICHS)
+C
+C              If the bandwidth had to be limited to the BBC hardware
+C              max, get the amount to shift the frequency to center
+C              on the RDBE band.
+C
 C              Be sure the shift is a multiple of 10 kHz.
 C
                FSHIFT = 0.0D0
-               IF( CRDB(ICH) .GT. 16.0D0 ) THEN
+               IF( BBCBW(ICHS) .GT. 16.0D0 ) THEN
                   CRDB(ICH) = 16.0D0
-                  FSHIFT = ( BBCBW(ICH) - CRDB(ICH) ) / 2.D0
+                  FSHIFT = ( BBCBW(ICHS) - CRDB(ICH) ) / 2.D0
                   FSHIFT = NINT( FSHIFT * 100.D0 ) / 100.D0
                END IF
 C
@@ -373,34 +514,27 @@ C              conform to that BBC constraint.  Note that DDC
 C              frequency rules might well generate main basebands 
 C              that do not conform to the legacy constraints.
 C
-               CRDF(ICH) = CRDF(ICH) + ISIDE(ICH) * FSHIFT
+               CRDF(ICH) = CRDF(ICH) + ICRDS(ICH) * FSHIFT
                CRDF(ICH) = NINT( CRDF(ICH) * 100.D0 ) / 100.D0
-               CRDLOSUM(ICH) = FIRSTLO(ICH,KS) + IFSIDE(ICH) * CRDF(ICH)
 C
-C              Get away from the frequency range that can't be 
-C              covered by the old BBCs.  Go by a multiple of 
-C              5 MHz to keep pcal detection frequencies for 5 MHz
-C              tones.  Here I need the IF sideband which is
-C              RFSIDE * ISIDE.  Note that requesting 1000.0 might
-C              be ok for the BBCs, but blows the format used for
-C              this parameter, so avoid it.
+C              Get the LO sum for the legacy channels.
 C
-               IF( CRDF(ICH) .GE. 999.95D0 ) THEN
-                  FDROP = CRDF(ICH) - 999.95D0
-                  FDROP = 5.D0 * ( 1.D0 + DINT( FDROP / 5.D0 ))
-                  CRDF(ICH) = CRDF(ICH) - FDROP
-                  CRDLOSUM(ICH) = CRDLOSUM(ICH) - IFSIDE(ICH) * FDROP
-               END IF
+               CRDLOSUM(ICH) = FIRSTLO(ICHS,KS) + 
+     1               ISIDE1(ICHS) * CRDF(ICH)
 C
-C              If the LO sum is an even number of MHz, the
+C              If the LO sum is an integer number of MHz, the
 C              pulse cal tones can be subject to aliasing.  Since
 C              the exact frequency settings here are not critical
 C              (not going to be used for the recordings), 
 C              shift the CRDF and CRDLOSUM in such cases by 10 kHz 
 C              so that the tone is at 10 kHz in the baseband.
 C
+C              Do this before the FDROP adjustment in case this provokes
+C              crossing the boundary of allowed values.
+C
 C              Note that, in some cases with a FIRSTLO that is not an
-C              integer MHz, CKSCHED may reject the specified tone frequencies
+C              integer MHz (eg new VLBA synthesizer), CKSCHED may 
+C              reject the specified tone frequencies
 C              even if they are right.  Don't worry about that for the 
 C              moment.  Hopefully we'll have pulse cal detection in the 
 C              new system before the arrival of full use of the new
@@ -409,31 +543,26 @@ C
                IF( ( FSPCAL(KF) .EQ. '1MHz' .OR. 
      1               FSPCAL(KF) .EQ. '5MHz' ) .AND. 
      2             MOD( CRDLOSUM(ICH), 1.D0 ) .EQ. 0.D0 ) THEN
-                  CRDLOSUM(ICH) = CRDLOSUM(ICH) - RFSIDE(ICH) * 0.01D0
-                  CRDF(ICH) = CRDF(ICH) - ISIDE(ICH) * 0.01D0
+                  CRDLOSUM(ICH) = CRDLOSUM(ICH) - INETSIDE(ICH) * 0.01D0
+                  CRDF(ICH) = ABS( FIRSTLO(ICHS,KS) - CRDLOSUM(ICH) )
+               END IF
+C
+C              Get away from the frequency range that can't be 
+C              covered by the old BBCs but are ok for the RDBE 
+C              (1000.0 to 1024.0 - or even up to 1040 in some cases
+C              with a sacrificial channel).  Go by a multiple of 
+C              5 MHz to keep pcal detection frequencies for 5 MHz
+C              tones.
+C
+               IF( CRDF(ICH) .GE. 999.95D0 ) THEN
+                  FDROP = CRDF(ICH) - 999.95D0
+                  FDROP = 5.D0 * ( 1.D0 + DINT( FDROP / 5.D0 ))
+                  CRDF(ICH) = CRDF(ICH) - FDROP
+                  CRDLOSUM(ICH) = FIRSTLO(ICHS,KS) + 
+     1                            ISIDE1(ICHS) * CRDF(ICH)
                END IF
             END DO
          END IF
-      ELSE
-C
-C        Jump here if not using the RDBE on a VLBA station.  In this case
-C        the setup values, possibly adjusted by FREQ and DOPPLER should be
-C        used.  On the VLBA, this will likely be a MARK5A recording case and
-C        we should not muck with the BBC frequencies.  On other stations, 
-C        there probably isn't an ability, or need, to set one set of hardware
-C        differently from another, and again we need to keep the original
-C        frequencies so the interferometry works.
-C
-C        Just set these to the normal values derived for the setup
-C        or FREQ and BW entries (which may include DOPPLER results).
-C
-         CRDN = NCHAN(KS)
-         DO ICH = 1, CRDN
-            CRDF(ICH) = BBCFREQ(ICH)
-            CRDB(ICH) = BBCBW(ICH)
-            CRDS(ICH) = SIDEBD(ICH,KS)
-            CRDLOSUM(ICH) = LOSUM(ICH)
-         END DO
       END IF
 
 C

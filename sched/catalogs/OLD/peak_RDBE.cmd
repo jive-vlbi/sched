@@ -1,13 +1,16 @@
 !  Instructions to control reference pointing.
 
-!  This version is for use for MARK5C/RDBE-PFB schedules that are run in
-!  parallel with MARK5A schedules.  The RDBE cannot do Doppler 
-!  tracking or any fine tuning of frequency, so this file will
-!  not attempt that.  The results will not actually be usable for
-!  pointing with the RDBE data, but should allow the new control system
-!  to set the RF switches right so the old system can handle pointing.
+!  This version is for use for MARK5C/RDBE schedules which to do
+!  reference pointing using the legacy BBCs - the only way it can
+!  be done on the VLBA.  With the RDBE_DDC, the main schedule
+!  channels can be used and can do Doppler tracking and narrow
+!  bandwidths, which will be copied by the legacy system.  For
+!  the RDBE_PFB, the main channels have to be 16 MHz without 
+!  tuning capability.  So the CRD parameters must be used.  Note
+!  that the CRD parameters can also be used with the DDC, so 
+!  that may be the default.
 
-!  The only difference with peak.cmd is the use of pr7mm.set instead of
+!  ??????????  The only difference with peak.cmd is the use of pr7mm.set instead of
 !  pt7mm.set.  SCHED also has learned not to do Doppler with the PFB.
 
 !  Specify the source catalog file with pointing sources.  These 
@@ -15,19 +18,20 @@
 !  distinct from sources in the main source list (often sources.vlba).  
 !  Note that some sources in the main list can also be used for pointing.
 
-!  The source file here has all the velocity information commented out
-!  so that there is no attempt at Doppler tracking, which is not possible
-!  with the RDBE-PFB.
+!  The RDBE_PFB source file here has all the velocity information 
+!  commented out so that there is no attempt at Doppler tracking, 
+!  which is not possible with the RDBE_PFB.  But the CRD parameter 
+!  allow Doppler, so use the file with velocities.
 
-!  srcfile = $SCHED/catalogs/sources.pointing ! Reference pointing sources
- srcfile = $SCHED/catalogs/sources_RDBE_PFB.pointing 
+  srcfile = $SCHED/catalogs/sources.pointing ! Reference pointing sources
+! srcfile = $SCHED/catalogs/sources_RDBE_PFB.pointing 
 
 ! Add the rest frequencies to the list of lines.
 ! This can also be done in the main schedule inputs.
 ! For here, use special names that won't conflict with what users
 ! use in the main program.  I am doing this because there are 4
 ! rest frequencies given, two of which are off the line for use
-! with the pointing setup file, which has 4 channels and allows
+! with the pointing setup file, which often has 4 channels and allows
 ! on/off line difference power pointing (although that is not yet
 ! available for reference pointing, it is used for pointing tests.)
 
@@ -52,10 +56,9 @@ minfreq = 60000.0     !  Don't bother for lower frequencies (MHz)
 dwell = 1:00          !  Duration of peak scan.
 minel = 10.00         !  Minimum elevation for pointing.
 
-! The setup is for the RDBE-PFB.  It will not work for actual maser
-! pointing data so changes will be needed (to the DDC) once reference
-! pointing is done by the new VLBA system.
-setup = $SCHED/setups/pr7mm.set     !  Setup to use for peakup
+
+setup = $SCHED/setups/ptr7mm.set   !  Setup to use for peakup for RDBE_PFB
+! setup = $SCHED/setups/ptd7mm.set   !  Setup to use for peakup for RDBE_DDC
 linename = 'PSiO431'
 
 !  The pointing for 3mm projects will be done at 7mm.  Essentially all
@@ -101,6 +104,10 @@ sources = 'P-OCeti','P-IkTau','P-TxCam','P-Orinew2','P-RLeo','P-UHer',
 stations = vlba_ov, vlba_br, vlba_mk
 
   /
+
+!  Obsolete but leave commented here to remind me to deal with it
+!  eventually.
+!
 !  Third group.    These apply to inserted scans for group 3 or
 !  for any scans for which POINT=3 or POINT=0 was specified.
 !  This group is the VLA at 43 GHz.

@@ -20,7 +20,7 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC, JSCN, KS, KF
-      INTEGER    ICH, GNSET, IINT
+      INTEGER    ICH, IINT
       INTEGER    NEXPECT, NLATE, NNEVER, NSLATE
       REAL       NSRCCHG
       LOGICAL    DOPWARN, WARNLONG, OVWARN, VLAPTG
@@ -277,15 +277,16 @@ C
                 SKIPI = .TRUE.
                 SKIPJ = .TRUE.
                 DO ISTA = 1, NSTA
+                   KS = NSETUP(ISCN,ISTA)
                    IF( STASCN(ISCN,ISTA) ) THEN
                       SKIPI = .FALSE.
-                      MINFRI = MIN( MINFR(GNSET(ISCN,ISTA)), MINFRI )
-                      MAXFRI = MAX( MAXFR(GNSET(ISCN,ISTA)), MAXFRI )
+                      MINFRI = MIN( MINFR(KS), MINFRI )
+                      MAXFRI = MAX( MAXFR(KS), MAXFRI )
                    END IF
                    IF( STASCN(JSCN,ISTA) ) THEN
                       SKIPJ = .FALSE.
-                      MINFRJ = MIN( MINFR(GNSET(JSCN,ISTA)), MINFRJ )
-                      MAXFRJ = MAX( MAXFR(GNSET(JSCN,ISTA)), MAXFRJ )
+                      MINFRJ = MIN( MINFR(KS), MINFRJ )
+                      MAXFRJ = MAX( MAXFR(KS), MAXFRJ )
                    END IF
                 END DO               
 C

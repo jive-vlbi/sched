@@ -10,9 +10,9 @@ C
 C     GOTFREQ and GOTBW fell out of use and have been eliminated
 C     as of July 1, 2013.  RCW.
 C
-C     Adding CRDBW, CRDFREQ, CRDDOP, and CRDNODOP to allow doppler 
-C     and frequency settings of the BBCs of the legacy system (crd
-C     file) while the RDBE_PFB is being used.  This prevents the 
+C     Adding CRDNCH, CRDBW, CRDFREQ, CRDDOP, and CRDNODOP to allow 
+C     doppler and frequency settings of the BBCs of the legacy system 
+C     (crd file) while the RDBE_PFB is being used.  This prevents the 
 C     need for separate MARK5C and MARK5A schedules.  July, 2013 RCW.
 C
       INCLUDE 'sched.inc'
@@ -23,12 +23,18 @@ C
 C ------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LT. 3 ) CALL WLOG( 0, 'INFDB: Starting' )
 C
-C     Get freq and bw.  Default BW to first channel if others not given.
+C     Get freq and bw.  Default to first channel if others not given.
+C     Will not really know the number of channels until we have the
+C     setup files, so for now just process all slots in the arrays.
 C
       I1 = KEYPTR( 'FREQ', KC, KI ) - 1
       I2 = KEYPTR( 'BW', KC, KI ) - 1
       DO ICHAN = 1, MAXCHN
+C
          FREQ(ICHAN,ISCN) = VALUE(I1+ICHAN)
+         IF( FREQ(ICHAN,ISCN) .EQ. 0.0D0 ) 
+     1         FREQ(ICHAN,ISCN) = FREQ(1,ISCN)
+C
          BW(ICHAN,ISCN)   = VALUE(I2+ICHAN)
          IF( BW(ICHAN,ISCN) .EQ. 0.0D0 ) 
      1         BW(ICHAN,ISCN) = BW(1,ISCN)
@@ -43,15 +49,34 @@ C
 C
       END DO
 C
-C     Get CRDDOP, CRDFREQ and CRDBW.  Default CRDBW to first channel if 
-C     others not given.
+C     Get CRDNCH and CRDCH1.  Do not attempt to fix the case when is
+C     zero yet.  Will do that later when the setups are available.
+C     Don't allow CRDCH1 without setting CRDNCH.
+C
+      CRDNCH(ISCN) = VALUE( KEYPTR( 'CRDNCH', KC, KI ) )
+      CRDCH1(ISCN) = VALUE( KEYPTR( 'CRDCH1', KC, KI ) )
+      IF( CRDCH1(ISCN) .NE. 1 .AND. CRDNCH(ISCN) .EQ. 0 ) THEN
+         CALL ERRLOG( 
+     1        'INFDB:  If CRDCH1 is set, CRDNCH must also be set.' )
+      END IF
+C
+C     Get CRDDOP, CRDFREQ and CRDBW.  Default CRDFREQ and CRDBW to 
+C     the first channel if others not given.
+C     GOTCRD keeps track of whether CRDFREQ or CRDDOP were specified 
+C     for this scan.
 C
       I1 = KEYPTR( 'CRDFREQ', KC, KI ) - 1
       I2 = KEYPTR( 'CRDBW', KC, KI ) - 1
       CALL TOGGLE( CRDDOP, ISCN, 'CRDDOP', 'CRDNODOP', UNSET,
      1             VALUE, KC, KI )
+      GOTCRD(ISCN) = CRDDOP(ISCN)
+C
       DO ICHAN = 1, MAXCHN
+C
          CRDFREQ(ICHAN,ISCN) = VALUE(I1+ICHAN)
+         IF( CRDFREQ(ICHAN,ISCN) .EQ. 0.0D0 ) 
+     1         CRDFREQ(ICHAN,ISCN) = CRDFREQ(1,ISCN)
+C
          CRDBW(ICHAN,ISCN)   = VALUE(I2+ICHAN)
          IF( CRDBW(ICHAN,ISCN) .EQ. 0.0D0 ) 
      1         CRDBW(ICHAN,ISCN) = CRDBW(1,ISCN)
@@ -62,7 +87,25 @@ C
      1        DNINT( CRDFREQ(ICHAN,ISCN)*1.D7 ) / 1.D7
          CRDBW(ICHAN,ISCN) = DNINT( CRDBW(ICHAN,ISCN)*1.D7 ) / 1.D7
 C
+         GOTCRD(ISCN) = GOTCRD(ISCN) .OR. CRDFREQ(ICHAN,ISCN) .GT. 0.D0
+C
       END DO
+C
+C     Require CRDNCH if CRDFREQ or CRDDOP were set.  Also don't allow
+C     it to be greater than 8, the number of BBCs, because we don't
+C     want the complications of trying to use upper/lower sidebands
+C     and will only use one channel per BBC for the CRD parameters.
+C
+      IF( ( CRDNCH(ISCN) .LT. 1 .OR. CRDNCH(ISCN) .GT. 8 )
+     1      .AND. GOTCRD(ISCN) ) THEN
+         CALL WLOG( 1, 'INFDB: CRDNCH is required '//
+     1       'and must be between 1 and 8 ' )
+         CALL WLOG( 1, '       when CRDFREQ or CRDDOP is specified.' )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, I3, A, I5 )' ) 
+     1     '       CRDNCH is ', CRDNCH(ISCN), ' on scan ', iscn
+         CALL ERRLOG( MSGTXT )
+      END IF
 C
 C     Source name for Doppler calibration and default to scan source.
 C     Get flag for whether or not to do Doppler calibration.

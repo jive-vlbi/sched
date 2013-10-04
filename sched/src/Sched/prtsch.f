@@ -33,7 +33,7 @@ C -----------------------------------------------------------------
      1      STANAME(ISTA) )
       END IF
 C
-      NCHL = NCHAN(LS)
+      NCHL = NCHAN(NSETUP(ISCN,ISTA))
 C
 C     Reset line (ILINE) and page (IPAGE) counters on first scan.
 C

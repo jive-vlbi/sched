@@ -12,7 +12,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER      ISTA, ISCN, SETUSED(MSET), NSUSED, I
+      INTEGER      ISTA, ISCN, SETUSED(MSET), NSUSED, I, KS
       LOGICAL      FIRSTS, OVBA, OLOC, GOT
 C  --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'STAFILES: Station loop starting.' )
@@ -39,18 +39,19 @@ C
                   CALL WLOG( 0, MSGTXT )
                END IF
 C
-C              Get the setup group number for this scan/station.
+C              Get the setup group number for this scan/station
+C              and record whether it was used.
 C
-               LS = NSETUP( ISCN, ISTA )
+               KS = NSETUP( ISCN, ISTA )
                GOT = .FALSE.
                IF( NSUSED .NE. 0 ) THEN
                   DO I = 1, NSUSED
-                     IF( SETUSED(I) .EQ. LS ) GOT = .TRUE.
+                     IF( SETUSED(I) .EQ. KS ) GOT = .TRUE.
                   END DO
                END IF
                IF( .NOT. GOT ) THEN
                   NSUSED = NSUSED + 1
-                  SETUSED(NSUSED) = LS
+                  SETUSED(NSUSED) = KS
                END IF
 C
 C              Write operator schedule.

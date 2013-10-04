@@ -674,9 +674,9 @@ C                        NINTENT is the number of such strings.
 C                        ISCINT is an array giving intents used per scan.
 C                        NSCINT is the number of intents in a scan.
 C                        
-C                      The variables starting the CRD are for the
-C                      settings to use for the VLBA legacy system
-C                      baseband converters while using the RDBE.
+C                      The variables starting the CRD (except CRDLINE)
+C                      are for the settings to use for the VLBA legacy 
+C                      system baseband converters while using the RDBE.
 C                      They are separate to allow reference pointing
 C                      on masers when the RDBE_PFB is in use, which
 C                      does not allow fine tuning.
@@ -691,8 +691,8 @@ C
       INTEGER          FSETI(MAXSCN,MAXSTA), DOPEAK(MAXSCN)
       INTEGER          POINT(MAXSCN), DURONLY(MAXSCN), NOWAIT(MAXSCN)
       INTEGER          ISCINT(MSCINT,MAXSCN), NSCINT(MAXSCN), NINTENT
-      INTEGER          CRDNCH(MAXSCN)
-      LOGICAL          STASCN(MAXSCN,MAXSTA)
+      INTEGER          CRDNCH(MAXSCN), CRDCH1(MAXSCN)
+      LOGICAL          STASCN(MAXSCN,MAXSTA), GOTCRD(MAXSCN)
       LOGICAL          NOTSYS(MAXSCN), DOPCAL(MAXSCN), CRDDOP(MAXSCN)
       LOGICAL          DWELL(MAXSCN), TANT1(MAXSCN), TANT2(MAXSCN)
       CHARACTER        ANNOT(MAXSCN)*128, SCNSRC(MAXSCN)*12
@@ -702,8 +702,9 @@ C
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
      1                 DOPEAK, POINT, DURONLY, NOWAIT, 
-     2                 ISCINT, NSCINT, NINTENT, CRDNCH, STASCN, 
-     3                 NOTSYS, DOPCAL, CRDDOP, DWELL, TANT1, TANT2
+     2                 ISCINT, NSCINT, NINTENT, CRDNCH, CRDCH1, STASCN,
+     3                 GOTCRD,NOTSYS, DOPCAL, CRDDOP, DWELL, TANT1,
+     4                 TANT2
       COMMON  /SCHN2B/ PRESCAN, DUR, GAP, MINDW, FREQ, DOPINCR
       COMMON  /SCHN2C/ STARTJ, STOPJ, BW
       COMMON  /SCHN2D/ CRDFREQ, CRDBW

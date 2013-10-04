@@ -97,12 +97,14 @@ C                       JS not to be printed in the future.  SAMESET
 C                       doesn't test recording medium, so test that
 C                       too.  Do call tape and disk stations the same
 C                       for non-recording setups (eg pointing).
+C                       FORTRAN: Parentheses around the .EQV. required
+C                       or previous logicals evaluated as left side.
 C
                         KSTA = ISCHSTA(ISETSTA(KS))
                         JSTA = ISCHSTA(ISETSTA(JS))
                         DUPSET = SAMESET( KS, JS ) .AND.
      1                   ( ( .NOT. RECUSED(KS) .AND. .NOT. RECUSED(JS) )
-     2                   .OR. USEDISK(KSTA) .EQV. USEDISK(JSTA) )
+     2                   .OR. ( USEDISK(KSTA) .EQV. USEDISK(JSTA) ) )
 C
                         IF( DUPSET ) THEN
 C
