@@ -4823,23 +4823,28 @@ patterns and the \htmlref{value from the setup file.}{SP:AZCOLIM}
 {\tt BW} specifies the bandwidths to use for the scan.  One value can
 be given for each baseband channel.  Any unset values will be set
 equal to the first so it is usually only necessary to specify one.
-These are used mainly for VLBA files, although the value will be
+Because of details of how the defaulting works, once more than one 
+channel is explicitly set to a non-zero value (rather than just defaulting
+to the first), be sure to set that 
+channel is explicitly again, or it will retain the previous value.
+These bandwidth inputs are used mainly for VLBA files, although the value will be
 written to {\tt VC} commands in snap files. If not specified for a
 scan, the most recent value will be used. To get back to the default,
 (from the setup file), specify {\tt BW=0}.  The sign of {\tt BW}
 traditionally has been negative for a net lower sideband.  This
 is no longer required or even recommended.
 
-%The use of {\tt BW} is not be allowed when VEX files are being
-%written because of complications that introduces to program logic.
-%If you wish to change bandwidths in such circumstances, use a
-%new setup file.
+Note that new parameter \htmlref{{\tt CRDBW}}{MP:CRDBW} can be used to
+set the VLBA legacy system BBCs to a bandwidth when using the RDBE, 
+which, with the PFB personality, cannot to narrow bandwidths.  This is
+useful for reference pointing.
 
 \rcwbox
 {Up to one real number for each channel.  The number is the bandwidth
 in MHz.}
-{{\tt 0.0625}, {\tt 0.125}, {\tt 0.250}, {\tt 0.5}, {\tt 1},
-{\tt 2}, {\tt 4}, {\tt 8}, or {\tt 16}}
+{Need valid setting for the backend in use.  For the VLBA legacy
+system, they were {\tt 0.0625}, {\tt 0.125}, {\tt 0.250}, {\tt 0.5}, {\tt 1},
+{\tt 2}, {\tt 4}, {\tt 8}, or {\tt 16} MHz.}
 {Uses bandwidth from setup file.}
 {Uses the most recent value specified.}
 {{\tt BW=2,2,2,2}}
@@ -5375,6 +5380,33 @@ unless you are a VLBA programmer.
 {Blank}
 {One per scan.  Remains at most recent value set.}
 {{\tt CRDLINE = 'This was requested by Walter'}}
+
+
+
+
+q348702639)(*^($*$  Much not in yet.
+
+Add links.
+
+\subsubsection{\label{MP:CRDNCH}{\tt CRDNCH}}
+
+{\tt CRDNCH} sets the number of channels to use on the legacy VLBA 
+hardware (BBCs especially) when using the RDBE.  The main reason for
+being concerned about the legacy hardware is that the power levels
+in the BBCs are used by the old control system to do reference pointing.
+See also CRDFREQ, CRDBW and CRDDOP for controls related to such reference
+pointing, especially with masers.
+
+{\tt CRDNCH} is a required parameter when CRDFREQ or CRDDOP are set.
+
+When not using CRDFREQ of CRDDOP, {\tt CRDNCH} will still set the number 
+of channels used in the crd files controlling the BBCs.  If CRDFREQ and 
+CRDDOP are never used, CRDNCH will be set to lesser of 8 (the number of
+BBCs) and the number of setup channels.
+
+\rcwbox
+...............
+
 
 \subsubsection{\label{MP:CRDFREQ}{\tt CRDFREQ}}
 
@@ -6030,21 +6062,22 @@ new (2012) 6cm receiver (4-8 GHz) has such a variation.
 
 {\tt FREQ} specifies the LO sum observing frequencys for the baseband
 channels in MHz.  When not specified, the last value specified is
-used. If {\tt 0} is specified, or {\tt FREQ} is not given for any
-scan, the default from the setup file is used.  Any channels not
-specified will be set to the same frequency as the first.  This is
-usually not what is desired.  Whenever the frequencies change, a
-comment appears in the operator schedule file; the appropriate changes
-are made to the BBC frequencies for antennas using VLBA or VEX control
-files; and for snap files, dummy video converter commands are written
-without the correct video converter number and with the full LO sum
-(personnel at ``snap'' sites must edit in the correct video converter
-numbers and subtract the first LO). Since both the VLBA and Mark~IV
-systems can only set frequencies to the nearest 10~kHz and the
-Mark~III video converters are often used for Mark~II projects, do not
-try to set a frequency that is not an even 10~kHz.  Actually, \schedb
-will round to this value, or to \htmlref{{\tt DOPINCR}}{MP:DOPINCR},
-if it is given.
+used. If {\tt 0} is specified, or {\tt FREQ} is never given in the
+schedule, the default from the setup file is used.  Any channels not
+specified will be set to the same frequency as the first.  This
+defaulting only works when that channel was not previously set to an
+explicity value.  The defaulting to the first channel is usually not
+what is desired.  Whenever the frequencies change, a comment appears
+in the operator schedule file; the appropriate changes are made to the
+BBC frequencies for antennas using VLBA or VEX control files; and for
+snap files, dummy video converter commands are written without the
+correct video converter number and with the full LO sum (personnel at
+``snap'' sites must edit in the correct video converter numbers and
+subtract the first LO). Since both the VLBA and Mark~IV systems can
+only set frequencies to the nearest 10~kHz and the Mark~III video
+converters are often used for Mark~II projects, do not try to set a
+frequency that is not an even 10~kHz.  Actually, \schedb will round to
+this value, or to \htmlref{{\tt DOPINCR}}{MP:DOPINCR}, if it is given.
 
 
 \rcwbox
@@ -13513,9 +13546,10 @@ more information.
 %     find some sniffer output to check.
 %     Modify choice of unset synthesizer for the new synthesizers.
 %     Finish with newsyn.key and put in Verify.  Interrupted project.
-%     Legacy system format needs to keep track of bandwidth when 
-%     main format spec is for RDBE.
-
+%     Allow setting of one BW or CRDBW to change all.  Think about it first.
+%     Allow specification of one BW, FREQ, CRDBW, or CRDFREQ to cover all
+%       channels even if previous spec set more than one.
+%     Document the crd inputs.
 
 \begin{itemize}
 
@@ -13526,6 +13560,39 @@ more information.
 %    Check if LO edge for DDC always in right polyphase filter.
 %    Put newsyn.key in Verify.
 
+
+\item Example eg3mm_rd2 demonstrates the new ability to deal with
+reference pointing in the crd files while using the RDBE_PFB and
+without separate Mark5C and Mark5A passes.  Example eg3mm_rdbe.key
+used the separate passes and is being removed.  Oct. 2, 2013.
+
+\item Change egrdbe.key to piggyback.key.  It is the one remaining
+example of a file that uses the runsch scheme to get Mark5C and Mark5A
+files or recordings.  Oct. 2, 2013  RCW
+
+\item Move peak.cmd to catalogs/Master_NRAO and set it up to be the
+parent of the related files in the catalog directory.  Have Update
+write peak.cmd, peak_RDBE_PFB.cmd, peak_RDBE_DDC.cmd based on the
+parent peak.cmd but with altered (with sed) setup file names.  Oct. 2,
+2013.  RCW
+
+\item Allow SCHED to make VLBA legacy system (crd) files using reference
+pointing on masers using Doppler calibration even when using the
+RDBE_PFB which cannot be tuned.  As part of this, the new input parameters
+CRDDOP, CRDNCH, CRDCH1, CRDFREQ, and CRDBW were added to control just
+the crd files and not the main setups.  This an the item below
+were a significant code upgrade.  Sept. 30, 2013.  RCW
+
+\item Remove the concept of pcal sets and merge them into the frequency
+sets.  There will not be a separate frequency set for each pcal state
+used.  This simplifies some program logic and should make eventual
+simplification of the Vex code easier.  Sept. 30, 2013.  RCW.
+
+\item Add Verify_one to test one key file in the same way that Verify
+tests all of them.  Later added Newstd_one to add one example's output
+to the Stdout directory.  RCW  Sept. 30, 2013.
+
+\item Removed manual_vla.key - it was for the pre-Widar system.  RCW.
 
 \item Fix synthesizer 2 setting for 2.6 GHz LO entry in freq_RDBE.dat.
 Sep. 4, 2013.  RCW.

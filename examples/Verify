@@ -16,6 +16,12 @@
 #
 #  The -f above prevents resetting of $SCHED
 
+#  Note, to test the crd files with cksched, login to a machine that can
+#  run cksched and issue a command like:
+# find . \( -name Stdout -prune \) -o -name "*crd.hn" -print -exec cksched '{}' \;
+
+
+
 echo "==================================================="
 echo "Be sure that the SCHED environment variable is set."
 echo "Currently set to " $SCHED
@@ -102,20 +108,11 @@ mv sched.runlog eg3mmc.runlog
 echo " " >> testruns.out
 echo " " >> testruns.out
 echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg3mm_rdbe.key for MARK5A "*****" | tee -a testruns.out
+echo "**************" Processing eg3mm_rd2.key "**************" | tee -a testruns.out
 echo "******************************************************"  >> testruns.out
-./runsch eg3mm_rdbe.key MARK5A >> testruns.out
-mv sched.runlog eg3mmra.runlog
-./Check_results eg3mmra pt $SCH_STDOUT eg3mm_rdbe.key >> testruns.out
-
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg3mm_rdbe.key for MARK5C "*****" | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-./runsch eg3mm_rdbe.key MARK5C >> testruns.out
-mv sched.runlog eg3mmrc.runlog
-./Check_results eg3mmrc pt $SCH_STDOUT eg3mm_rdbe.key >> testruns.out
+$SCHBIN/sched < eg3mm_rd2.key  >> testruns.out
+mv sched.runlog eg3mmrd2.runlog
+./Check_results eg3mmrd2 pt $SCH_STDOUT eg3mm_rd2.key >> testruns.out
 
 echo " " >> testruns.out
 echo " " >> testruns.out
@@ -239,12 +236,20 @@ mv sched.runlog egddc2.runlog
 echo " " >> testruns.out
 echo " " >> testruns.out
 echo "******************************************************"  >> testruns.out
-echo "***********" Processing egrdbe.key "********************"  | tee -a testruns.out
+echo "******" Processing piggyback.key for MARK5A"*************"  | tee -a testruns.out
 echo "******************************************************"  >> testruns.out
-# $SCHBIN/sched < egrdbe.key >> testruns.out
-egrdbe.run >> testruns.out
-mv sched.runlog egrdbe.runlog
-./Check_results egrdbe hn $SCH_STDOUT egrdbe.key >> testruns.out
+./runsch piggyback.key MARK5A >> testruns.out
+mv sched.runlog piggya.runlog
+./Check_results piggya hn $SCH_STDOUT piggyback.key >> testruns.out
+
+echo " " >> testruns.out
+echo " " >> testruns.out
+echo "******************************************************"  >> testruns.out
+echo "******" Processing piggyback.key for MARK5C"*************"  | tee -a testruns.out
+echo "******************************************************"  >> testruns.out
+./runsch piggyback.key MARK5C >> testruns.out
+mv sched.runlog piggyc.runlog
+./Check_results piggyc hn $SCH_STDOUT piggyback.key >> testruns.out
 
 echo " " >> testruns.out
 echo " " >> testruns.out
@@ -272,6 +277,15 @@ echo "******************************************************"  >> testruns.out
 $SCHBIN/sched < rdbepfb.key >> testruns.out
 mv sched.runlog rdbepfb.runlog
 ./Check_results rdbepfb hn $SCH_STDOUT rdbepfb.key >> testruns.out
+
+echo " " >> testruns.out
+echo " " >> testruns.out
+echo "******************************************************"  >> testruns.out
+echo "************" Processing newsyn.key "********************"  | tee -a testruns.out
+echo "******************************************************"  >> testruns.out
+$SCHBIN/sched < newsyn.key >> testruns.out
+mv sched.runlog newsyn.runlog
+./Check_results newsyn la $SCH_STDOUT newsyn.key >> testruns.out
 
 echo " " >> testruns.out
 echo " " >> testruns.out

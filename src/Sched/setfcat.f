@@ -1,17 +1,24 @@
       SUBROUTINE SETFCAT( KS, NEEDCAT )
 C
-C     Routine for SCHED called by SETDEFS that determines which
-C     frequency catalog entry to use for a setup group.  This
-C     catalog entry will be used to set parameters where necessary
-C     and will be used to check parameters that are provided.
-C     Critically, FREQREF and NETSIDE are known for each channel
-C     by the time this is called.
+C     Routine for SCHED, called by SETDEFS, to deal with setup 
+C     frequency, sideband and other such information.
+C
+C     First determine which frequency catalog entry to use for a 
+C     setup group.  This catalog entry will be used to set 
+C     parameters where necessary and will be used to check 
+C     parameters that are provided.  Critically, FREQREF and 
+C     NETSIDE are known for each channel by the time this is called.
 C
 C     If an apropriate entry cannot be found, a warning is issued
 C     if NEEDCAT is false and an abort is issued if NEEDCAT is true.
 C
+C     Once done with the frequency catalog (or if it wasn't used),
+C     deal with filling out all the sideband and LO information based
+C     on what is available.
+C
 C     Jan 2013 RCW  Adding continuously tunable options.  This is
 C     mainly for the VLA, but could possibly be used for other antennas.
+C     Sep 2013 RCW  Adjusting for use with the CRD parameters.
 C
 C
       INCLUDE   'sched.inc'

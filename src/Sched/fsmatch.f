@@ -62,7 +62,7 @@ C        Compare the CRD channels.
 C
          FSMATCH = FSMATCH .AND. KCRDN .EQ. JCRDN
          NCCHAN = KCRDN
-         IF( FSMATCH ) THEN
+         IF( FSMATCH .AND. NCCHAN .GT. 0 ) THEN
             DO ICH = 1, NCCHAN
                IF( ABS( KCRDF(ICH) - JCRDF(ICH) ) .GT. 1.0D-6 .OR.
      1             ABS( KCRDB(ICH) - JCRDB(ICH) ) .GT. 1.0D-6 .OR.

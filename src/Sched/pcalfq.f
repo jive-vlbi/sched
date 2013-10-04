@@ -50,12 +50,13 @@ C
       INTEGER           TONE1(MCHAN), TONE2(MCHAN), TONE3(MCHAN)
       INTEGER           INTBW, NTPB
       INTEGER           PCFR1(MAXPC), PCFR2(MAXPC)
+      INTEGER           KSTA, KSCN, ISTA
       DOUBLE PRECISION  RTONE1
       DOUBLE PRECISION  BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION  TONEINT, LOSUM(MCHAN)
       CHARACTER         PCX1(MAXPC)*3, PCX2(MAXPC)*3
       CHARACTER         PCALC1*3, UPCAL*4, PCOPT*4
-      INTEGER           CRDN
+      INTEGER           CRDN, CR1, CRN, ICHS
       DOUBLE PRECISION  CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
       CHARACTER         CRDS(MCHAN)*1, CNETSIDE*1
 C ----------------------------------------------------------------------
@@ -65,7 +66,7 @@ C     Allow a call that uses the setup file values rather than any
 C     that might have been provided in the scan dependent variables
 C     FREQ, BW, and DOPPLER, or the CRD equivalents.  Here we assume
 C     that KF is the desired setup group.
-C     Not used yet - not sure why this was provided.
+C     Note added later:  Not used - not sure why this was provided.
 C
       IF( PCOPT .EQ. 'SET' ) THEN
          KS = KF
@@ -92,6 +93,9 @@ C
      1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
 C
       END IF
+      KSCN = FSETSCN(KF)
+      KSTA = ISETSTA(KS)
+      ISTA = ISCHSTA(KSTA)
 C
 C     Get the tone interval.  The case and validity of the PCAL 
 C     commands was checked on input of PCAL in the setups and schedule.
@@ -143,12 +147,20 @@ C
 C        For all this, use the CRD values as they represent the
 C        signals that the detectors will see.
 C
-         DO ICH = 1, NCHAN(KS)
+         CALL GETCRDN( KSCN, ISTA, CRDN, CR1, CRN )
+C
+         DO ICH = 1, CRDN
             NTONES(ICH) = 0
          END DO
 C
+C        There may be an offset between the output crd channels
+C        and the setup channels.  ICH refers to the output to the
+C        crd file.  ICHS refers to the setup file.  GETCRDN did
+C        the work setting this up.
+C
          IF( TONEINT .GT. 0.D0 ) THEN
             DO ICH = 1, CRDN
+               ICHS = ICH + CR1 - 1
                INTBW = 1000 * CRDB(ICH)
 C
 C              Get the first tone.
@@ -158,7 +170,7 @@ C              Get a CNETSIDE which is the net sideband in the
 C              BBC.  Presumably NETSIDE has reflected the 
 C              inversions so can't be used directly.
 C
-               IF( CRDS(ICH) .EQ. SIDE1(ICH,KS) ) THEN
+               IF( CRDS(ICH) .EQ. SIDE1(ICHS,KS) ) THEN
                   CNETSIDE = 'U'
                ELSE
                   CNETSIDE = 'L'
@@ -237,7 +249,7 @@ C        which there are MAXPC.  ICT is the channel.
 C
          ID = 0
 C
-         DO ICH = 1, NCHAN(KS)
+         DO ICH = 1, CRDN
             IF( NTONES(ICH) .GE. 1 .AND. ID .LT. MAXTON ) THEN
                ID = ID + 1
                IP = ( ID + 1 ) / 2
@@ -256,7 +268,7 @@ C
 C
 C        Now do the high frequency tones (tone2).
 C
-         DO ICH = 1, NCHAN(KS)
+         DO ICH = 1, CRDN
             IF( NTONES(ICH) .GE. 2 .AND. ID .LT. MAXTON ) THEN
                ID = ID + 1
                IP = ( ID + 1 ) / 2
@@ -276,7 +288,7 @@ C
 C        Now do the state counts.  If 2 bit, use a pair of detectors.
 C        If this means skipping a detector, assign it to S1, freq 0.
 C
-         DO ICH = 1, NCHAN(KS)
+         DO ICH = 1, CRDN
             IF( ID .LT. MAXTON ) THEN
                ID = ID + 1
                IP = ( ID + 1 ) / 2
@@ -309,7 +321,7 @@ C
 C
 C        Finally do the middle frequency tones (tone3).
 C
-         DO ICH = 1, NCHAN(KS)
+         DO ICH = 1, CRDN
             IF( NTONES(ICH) .GE. 3 .AND. ID .LT. MAXTON ) THEN
                ID = ID + 1
                IP = ( ID + 1 ) / 2

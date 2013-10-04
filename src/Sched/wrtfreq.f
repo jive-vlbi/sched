@@ -17,7 +17,7 @@ C
       INCLUDE  'schfreq.inc'
 C
       INTEGER           ISCN, ISTA, KP, LKP, KF, LKF
-      INTEGER           LEN1, NPC, KSTA
+      INTEGER           LEN1, NPC, ich
       INTEGER           CRDN
       DOUBLE PRECISION  LOSUM(MCHAN)
       DOUBLE PRECISION  BBCBW(MCHAN), BBCFREQ(MCHAN)
@@ -45,10 +45,6 @@ C
       SAVE    LPCALFR1, LPCALFR2, MPCALFR1, MPCALFR2
 C----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'WRTFREQ starting ' )
-C
-C     Get pointer to station catalog entry for schedule station ISTA
-C
-      KSTA = STANUM(ISTA)
 C
 C     Force writing bbsynth and bbfilter on first file specified.
 C     Then will write whenever there are changes.
@@ -86,6 +82,9 @@ C
      1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
 C
 C        Write the frequency and bandwidth.
+C        FSFREQ takes care of restricting the data to the proper
+C        setup channels when the number of crd channels does not
+C        match the number of RDBE channels.
 C
          CALL VLBAREAL( 'bbsynth', 7, CRDN, CRDF, LBBCFREQ,
      1         MBBCFREQ, '(F6.2)', 6, FIRSTS, IUVBA )

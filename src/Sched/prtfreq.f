@@ -90,7 +90,7 @@ C
          IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
             WRITE( IUNIT, '( A, A )' )
      1         '     See the crd files for VLBA legacy system ',
-     2         'pcal detection details.'
+     2         'setups and pcal detection details.'
          END IF
          DO KF = 1, NFSET
             JS = FSETKS(KF)
@@ -141,6 +141,14 @@ C              or bandwidth as the main schedule channels.  So remove
 C              that information.  In fact, the whole concept of 
 C              pcal sets is being removed.
 C        
+C              Note if used with CRD parameters.
+C
+               IF( GOTCRD(KSCN) ) THEN
+                  IC = LEN1( MSGTXT ) + 1
+                  WRITE( MSGTXT(IC:LEN(MSGTXT)), '( A )' ) 
+     1                 '  Used with CRDFREQ or CRDDOP.'
+               END IF                  
+C
 C              Add the pcal state for this freqency set.
 C
                IC = LEN1( MSGTXT ) + 1

@@ -12,14 +12,15 @@ C     For the VLA, it also sets up non-pointing scans to use the
 C     pointing results if any have been derived.
 C
       INCLUDE     'sched.inc'
+      INCLUDE     'schset.inc'
       INCLUDE     'schpeak.inc'
 C
       INTEGER      ISCN, LASTISCN(*)
       LOGICAL      KEEP
 C
-      INTEGER      IGRP, NPST, ISTA, ICHN, IG
+      INTEGER      IGRP, NPST, ISTA, ICHN, IG, KS, ISRC
       INTEGER      USESET, GNSET
-      LOGICAL      USEGRP(MPKGRP), FIRST
+      LOGICAL      USEGRP(MPKGRP), FIRST, DOCRD
       DOUBLE PRECISION  LVSTOP(MAXSTA)
       REAL         LVAZ(MAXSTA), LVEL(MAXSTA)
       SAVE         LVSTOP, LVAZ, LVEL, FIRST
@@ -178,15 +179,47 @@ C
             NSETUP(ISCN,ISTA) = GNSET(ISCN,ISTA)
          END DO
 C   
-C        Doppler specifications.  Note that, if the source did not have
-C        VLSR set, it was set to -1.E9.
+C        Doppler specifications.
+C          If the source did not have VLSR set, it was set to -1.E9.
+C          If the bandwidth should be 2 MHz, the CALCODE is 'L', which
+C          is also a flag to use the difference scheme for getting
+C          pointing data (not implemented for reference pointing).
 C   
+C        If the RDBE_PFB is in use, use the CRD parameters, not the
+C        main DOPCAL etc., because the PFB can't tune adequately.
+C        Search all stations for a PFB.
+C
+         DOCRD = .FALSE.
+         DO ISTA = 1, NSTA
+            IF( STASCN(ISCN,ISTA) ) THEN
+               KS = NSETUP(ISCN,ISTA)
+               IF( DBE(KS) .EQ. 'RDBE_PFB' ) DOCRD = .TRUE.
+            END IF
+         END DO
+C
          IF( VLSR(1,SRCNUM(ISCN)) .GT. -1.E8 ) THEN
-            DOPCAL(ISCN) = .TRUE.
-            DO ICHN = 1, MAXCHN
-               BW(ICHN,ISCN) = 2.0D0
-               FREQ(ICHN,ISCN) = 0.0D0
-            END DO
+            IF( DOCRD ) THEN
+               GOTCRD(ISCN) = .TRUE.
+               CRDDOP(ISCN) = .TRUE.
+               CRDNCH(ISCN) = 2
+               ISRC = SRCNUM(ISCN)
+               IF( CALCODE(ISRC) .EQ. 'L' ) THEN
+                  DO ICHN = 1, MAXCHN
+                     CRDBW(ICHN,ISCN) = 2.0D0
+                  END DO
+               ELSE
+                  DO ICHN = 1, MAXCHN
+                     CRDBW(ICHN,ISCN) = MIN( 16.D0, BBFILT(ICHN,KS) )
+                  END DO
+               END IF
+               CRDFREQ(ICHN,ISCN) = 0.0D0
+            ELSE
+               DOPCAL(ISCN) = .TRUE.
+               DO ICHN = 1, MAXCHN
+                  BW(ICHN,ISCN) = 2.0D0
+                  FREQ(ICHN,ISCN) = 0.0D0
+               END DO
+            END IF
             PCAL(ISCN) = 'off'
          ELSE
             DOPCAL(ISCN) = .FALSE.

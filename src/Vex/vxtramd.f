@@ -10,7 +10,7 @@ C     RCW Oct. 15, 2011.  Adding some comments while debugging
 C     transfer of incorrect setup data (sideband this time) from setup file.
 C     RCW Sep. 10, 2013.  Removing pulse cal sets.  They have been merged
 C     with the frequency sets.  Make case of PulseCal name portion from
-C     FSFREQ upper case for consistency with old files.
+C     the frequency set upper case for consistency with old files.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'

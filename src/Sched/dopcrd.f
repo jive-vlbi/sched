@@ -8,6 +8,14 @@ C     for reference pointing on maser lines.
 C
 C     Called by DOPFQ.
 C
+C     The number of channels is specified by CRDNCH which is required
+C     when CRDFREQ or CRDDOP (but not CRDBW) is specified.  Some channel
+C     information is obtained from the setup file channels and one may
+C     not wish to use just the first CRDNCH of those (think dual band
+C     cases), especially with the PFB.  CRDCH1 allows the user to 
+C     specify the first channel of the setup file to use for the crd
+C     file channel 1.  The rest will be sequential from there.
+C
 C     CRDBW will be required user input if either CRDFREQ or CRDDOP
 C     has been specified.  Specification of CRDFREQ and CRDDOP is
 C     considered invalid as they stomp on each other.
@@ -26,10 +34,14 @@ C     control computer that deals with antenna control, when doing
 C     reference pointing.
 C
 C     The user inputs are:
+C       CRDNCH(ISCN)      - Number of channels to specify to the BBCs.
+C       CRDCH1(ISCN)      - Start setup file channel to get channel
+C                           parameters such as IF, Pol, FIRSTLO etc.
 C       CRDFREQ(ICH,ISCN) - LO sum for channel ICH in scan ISCN in 
-C             the legacy system.  Comparable to FREQ for the main schedule.
-C       CRDBW(ICH,ISCN) - Bandwidth for the BBC channel/scan.
-C       CRDDOP/CRDNODOP - Comparable to DOPPLER/NODOP but for the BBCs.
+C                           the legacy system.  Comparable to FREQ 
+C                           for the main schedule.
+C       CRDBW(ICH,ISCN)   - Bandwidth for the BBC channel/scan.
+C       CRDDOP/CRDNODOP   - Comparable to DOPPLER/NODOP but for the BBCs.
 C
 C     In addition, CRDSIDE(ICH,KS) is saved for each setup group to 
 C     preserve the original sideband specification prior to any changes
@@ -64,6 +76,7 @@ C
 C
       INTEGER          ISCN, YEAR, DAY, IGP, NGP, ICH
       INTEGER          ISETF, SBW, NCH
+      INTEGER          CRDN, CR1, CRN, ICHS
       REAL             RA4, DEC4, SLA_RVLSRK, VELC, TIME4
       REAL             VSUN, VEARTH, TL
       LOGICAL          DEQUAL
@@ -95,19 +108,21 @@ C        Note that CRDSIDE is per setup group, not setup file.  It was
 C        set in SETFCAT to equal SIDEBD, before sideband inversions but
 C        after the normal frequency settings are done.
 C
-         CRDNCH(ISCN) = 0
-C
 C        First check that inappropriate requests have not been made.
 C
-C        Balk at CRDDOP when different stations have incompatible
-C        channelization (OKXC false).  "see above" refers to message
-C        from SFINFO.  One way to get this is to have no setup.
-C
          IF( CRDDOP(ISCN) ) THEN
+C
+C           Don't attempt to set frequencies when there is no setup.
+C
             IF( NOSET ) THEN
                CALL ERRLOG( 'DOPCRD: Doppler calculations requested '//
      1           'with no setup.  I cannot do that!' )
             END IF
+C
+C           Balk at CRDDOP when different stations have incompatible
+C           channelization (OKXC false).  "see above" refers to message
+C           from SFINFO.  One way to get this is to have no setup.
+C
             IF( .NOT. OKXC(ISETF) ) THEN
                CALL ERRLOG( 'DOPCRD: Doppler calculations requested '//
      1           'but have been disabled.  See SFINFO message above.' )
@@ -127,11 +142,13 @@ C
                CALL ERRLOG(  
      1             '          Please choose only one option.' )
             END IF
+C
          END IF
 C
 C        Check that CRDFREQ and CRDBW were not specified when 
 C        the channelization is unclear.  Again the "see above" refers
-C        to a message from SFINFO.
+C        to a message from SFINFO.  Really this only catches CRDBW
+C        because CRDDOP will be true if CRDFREQ not zero.
 C
          IF( .NOT. CRDDOP(ISCN) .AND. .NOT. OKXC(ISETF) .AND.
      1     ( CRDFREQ(1,ISCN) .NE. 0.D0 .OR. 
@@ -143,22 +160,24 @@ C
      1                  'CRDFREQ or CRDBW.' )
          END IF
 C
-C        Set the number of channels for the CRD files to the minimum of
-C        the number of BBCs (8), the number in the setup, or, if 
-C        using CRDFREQ, the number of non-zero CRDFREQ values given.
+C        Check that CRDNCH is viable - less than the number of BBCs
+C        and the number of channels in the main setup (so we don't
+C        try using some unset parameter like FIRSTLO).
+C        Recall that INFDB forced that it be set by the user if 
+C        CRDFREQ or CRDDOP were set, so we should not need to set it
+C        or test for too low a value.
 C
-         IF( CRDFREQ(1,ISCN) .GT. 0.D0 .OR. CRDDOP(ISCN) ) THEN
-            CRDNCH(ISCN) = MIN( 8, MSCHN(ISETF) )
-            IF( CRDFREQ(1,ISCN) .GT. 0.D0 ) THEN
-               NCH = 0
-               DO ICH = 1, CRDNCH(ISCN)
-                  IF( CRDFREQ(ICH,ISCN) .GT. 0.D0 ) THEN
-                     NCH = ICH
-                     CRDNCH(ISCN) = MIN( CRDNCH(ISCN), ICH )
-                  END IF
-               END DO
-               CRDNCH(ISCN) = MIN( CRDNCH(ISCN), NCH )
-            END IF
+         IF( CRDNCH(ISCN) .GT. MIN( 8, MSCHN(ISETF) ) ) THEN
+            CALL WLOG( 1, 
+     1          'DOPCRD: CRDNCH must be less than 8 (number ' //
+     2          'of BBCs) and less than the ' )
+            CALL WLOG( 1, 
+     1          '        number of channels in the setup file.' )
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I5, A, I5 )' ) 
+
+     2          ISCN
+            CALL ERRLOG( MSGTXT )
          END IF
 C
 C        Be sure the required bandwidths were given.
@@ -209,7 +228,7 @@ C
          IF( CRDDOP(ISCN) ) THEN
 C
 C           Get the velocity of the Earth in the direction of the 
-C           source.  It is the sum of the LSR velocity of the Sun 
+
 C           and the solar system velocity of the Earth.  Get both 
 C           from SLA_LIB routines.
 C
@@ -272,9 +291,19 @@ C
 C              Note that correlator inversions could cause an issue here,
 C              but leave accounting for that to WRTFREQ.
 C
-               IF( SFSIDE(ICH,ISETF) .EQ. 'U' ) THEN
+C              SFSIDE will be indexed based on the setup file 
+C              channels.  All the CRD parameters are for the crd
+C              channel index.  An offset is specified by CRDCH1 by
+C              the user.  Routine GETCRDN determines the defaults,
+C              but this part of this routine only deals with the 
+C              case when CRDDOP was specified and in that case, 
+C              CRDNCH was required and CRDCH1 could be given as the
+C              only way of doing offsets.
+C
+               ICHS = ICH + CRDCH1(ISCN) - 1
+               IF( SFSIDE(ICHS,ISETF) .EQ. 'U' ) THEN
                   SBW = 1
-               ELSE IF( SFSIDE(ICH,ISETF) .EQ. 'L' ) THEN
+               ELSE IF( SFSIDE(ICHS,ISETF) .EQ. 'L' ) THEN
                   SBW = -1
                ELSE
                   CALL ERRLOG( 'DOPCRD: Unrecognized SFSIDE '//
@@ -333,14 +362,13 @@ C
      2                 VELDEF(IDOPSRC(ISCN)) )
                   END IF
 C
-C                 Round it to the required 0.01, which is good for
+C                 Round it to the required 0.01 MHz, which is good for
 C                 the BBC's.  DOPINCR might have been set for the PFB
-C                 or something else.  Note that 
-C                 the LO equation is assumed to be 
-C                 FREQ = N * 0.01
+C                 or something else.  In other words, the the LO 
+C                 equation is assumed to be FREQ = N * 0.01
 C            
-                  DFREQ(ICH) = 1.0D-3 * 0.01D0 * DNINT( 
-     1                1.0D3 * DFREQ(ICH) / 0.01D0 )
+                  DFREQ(ICH) = 0.01D0 * 
+     1                 DNINT( DFREQ(ICH) * 100.D0 )
 C            
 C                 Don't worry about overlapped channels.
 C            
@@ -360,17 +388,13 @@ C
 C           Took out warning related to VLAONLY observations.  We are
 C           no longer supporting those.
 C
-         END IF
+C           Transfer the calculated frequency DFREQ to CRDFREQ
+C           (the bandwidth is not changed in this routine).
 C
-C        Transfer the calculated frequency DFREQ to CRDFREQ
-C        (the bandwidth is not changed in this routine).
-C        If CRDFREQ has already been set, there would have been an
-C        error exit at the top of this routine.
-C
-         IF( CRDDOP(ISCN) ) THEN
             DO ICH = 1, CRDNCH(ISCN)
                CRDFREQ(ICH,ISCN) = DFREQ(ICH)
             END DO
+C
          END IF
 C
       END DO
