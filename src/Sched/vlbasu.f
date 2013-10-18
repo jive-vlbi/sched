@@ -26,8 +26,7 @@ C
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
       REAL          DOAZ, DOEL
       DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR, RSYNTH
-      DOUBLE PRECISION  LSAMPRAT
-      LOGICAL       LDUALX, LUSEDIF(4), WARNCRD
+      LOGICAL       LDUALX, LUSEDIF(4), WARNCRD, TOOMANY
       CHARACTER     LSIDEBD(MCHAN)*1, LNOISE(4)*6, LFE(4)*5
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
       CHARACTER     LFORMAT*8, PFORMAT*8, LIFDIST(4)*3
@@ -73,16 +72,22 @@ C
 C
 C     Protect against requesting too many BBC's.
 C
-      DO I = CR1, CRN
-         IF( BBC(I,KS) .GT. NBBC(KSTA) ) THEN
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I3, A, 2I4 )' )
+      TOOMANY = .FALSE.
+      IF( DAR(KSTA)(1:4) .EQ. 'RDBE' ) THEN
+         IF( CRN - CR1 + 1 .GT. NBBC(KSTA) ) TOOMANY = .TRUE.
+      ELSE
+         DO I = CR1, CRN
+            IF( BBC(I,KS) .GT. NBBC(KSTA) ) TOOMANY = .TRUE.
+         END DO
+      END IF
+      IF( TOOMANY ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, I3, A, I4, A, 2I4 )' )
      1         'VLBASU: ' // STATION(KSTA) // ' only has',
-     2         NBBC(KSTA), ' BBCs.  Setup requested more.',
-     3         BBC(I,KS), BBC(CRN,KS)
-            CALL ERRLOG( MSGTXT )
-         END IF
-      END DO
+     2         NBBC(KSTA), ' BBCs.  Setup ', KS, ' requested more.',
+     3         BBC(CR1,KS), BBC(CRN,KS)
+         CALL ERRLOG( MSGTXT )
+      END IF
 C
 C     If there has been no change of setup or station, skip much of 
 C     this routine.
