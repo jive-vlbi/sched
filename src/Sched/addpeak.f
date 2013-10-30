@@ -1,4 +1,4 @@
-      SUBROUTINE ADDPEAK( LASTISCN, ISCN, PEAKOPT )
+      SUBROUTINE ADDPEAK( LASTISCN, ISCN, PEAKOPT, IADJUST )
 C
 C     Routine for SCHED, called by SCHOPT, that inserts reference
 C     pointing scans.
@@ -27,7 +27,7 @@ C
       INTEGER           LASTKSCN(MAXSTA), LASTJSCN(MAXSTA)
       INTEGER           KSCN, MSCN, KSRC, PSRC, IGRP, JSCN
       INTEGER           NTRY, I, YEAR, DAY1, OKSC, NUP(MPKGRP)
-      LOGICAL           SROK(MPKSRC), SROK2(MPKSRC)
+      LOGICAL           SROK(MPKSRC), SROK2(MPKSRC), IADJUST
       LOGICAL           TRYGRP(MPKGRP), TRYGRP2(MPKGRP), ADD2
       LOGICAL           WATCHIT, LASTPTG, GOTST, TABHEAD
       REAL              MINEL, MAXEL
@@ -214,11 +214,17 @@ C        a frequency at which we should be thinking about doing
 C        something, at least for some station.
 C
 C        Now make NTRY new scans to be the templates.  The calculated
-C        parameters will be copied.
+C        parameters will be copied.  Note that with the third argument
+C        (COPYALL) true, the start, stop, duronly and annot will also
+C        be copied so this preserves scan times as desired for moving
+C        as opposed to duplicating a scan (we're mainly worried about
+C        the last copy - the one that will become the main observing
+C        scan.  Also note that there end up being NTRY+1 versions of
+C        this scan of which at most NTRY will become pointing scans.
 C
          DO I = 1, NTRY
             KSCN = ISCN + I
-            CALL SCNDUP( KSCN, ISCN, .TRUE. )
+            CALL SCNDUP( KSCN, ISCN, .TRUE., 'ADDPEAK' )
          END DO
 C
 C        Loop through the groups.  MSCN is the one that will stay the
@@ -534,7 +540,9 @@ C        scan after the last of the inserts. Then update the
 C        slew times etc.
 C
          KSCN = ISCN + NADDED
-         IF( KSCN .NE. MSCN) CALL SCNDUP( KSCN, MSCN, .TRUE. )
+         IF( KSCN .NE. MSCN) THEN
+            CALL SCNDUP( KSCN, MSCN, .TRUE., 'ADDPEAK2' )
+         END IF
 C
 C        Set some scan variables to more reasonable values if
 C        scans were inserted.
@@ -544,8 +552,9 @@ C
          END IF
 C
 C        Update the scan slew times, geometry etc.  SRINSERT may
-C        have taken care of this, but just to be sure it is all
-C        done right and for the right "last scans".
+C        have taken care of this, as may SCHOPT later, but just to 
+C        be sure it is all done right and for the right "last scans",
+C        do it here.
 C
          CALL SCNGEO( LASTKSCN, NGOOD, KSCN )
          POINT(KSCN) = -999
@@ -563,7 +572,11 @@ C
 C        Grind through any scans set up by the processing of the
 C        last target scan.  There really isn't much to do as we
 C        set everything up before.  We just need to decrement
-C        PEAKOPT if it is above zero.
+C        PEAKOPT.
+C
+C        Note that PEAKOPT will not hit zero until the NADDED new
+C        scans, and the original observing scan, have been flushed
+C        through.  So it is zero when the original scan is sent.
 C
          IF( PEAKOPT .GT. 0 ) PEAKOPT = PEAKOPT - 1
 C
@@ -572,6 +585,14 @@ C        scan and the normal mechanism for updating LASTISCN will work
 C        ok for all other scans.
 C
       END IF
+C
+C     For IADJUST, we want to set it false for any added pointing
+C     scans.  One could debate whether to override the original ADJUST
+C     for the last scan, but I think it is ok to keep the original.
+C     That is easier because PEAKOPT will be zero for it, or for any 
+C     scans we are not touching, so we can simply test on PEAKOPT.
+C
+      IF( PEAKOPT .GE. 1 ) IADJUST = .FALSE.
 C
   999 CONTINUE
       RETURN

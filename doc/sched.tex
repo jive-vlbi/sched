@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 11.1 beta of June 19, 2013}
+\title{THE \schedb USER MANUAL \\  Development Version 11.1 after beta of June 19, 2013}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -1015,7 +1015,7 @@ This file does not create the separate new and old system files needed
 for reference pointing on masers while observing with the new RDBE wide
 band system with the PFB personality.  For instructions on how to do 
 that, please see 
-\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
+\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
 
 \item[\htmladdnormallink{{\sl eg3mmb.key}}{examples/eg3mmb.key}] is
 another VLBA 3mm schedule, but in this one \schedb is instructed to
@@ -1026,7 +1026,7 @@ This file does not create the separate new and old system files needed
 for reference pointing on masers while observing with the new RDBE wide
 band system with the PFB personality.  For instructions on how to do 
 that, please see 
-\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
+\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
 
 \item[\htmladdnormallink{{\sl eg3mmc.key}}{examples/eg3mmc.key}] is
 yet a third VLBA 3mm schedule, again using automatic insertion of
@@ -1038,14 +1038,16 @@ This file does not create the separate new and old system files needed
 for reference pointing on masers while observing with the new RDBE wide
 band system with the PFB personality.  For instructions on how to do 
 that, please see 
-\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}.
+\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
 
-\item[\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key}] 
-is very similar to {\sl eg3mmb.key}, but shows how to make the two
-sets of schedules necessary to control the old VLBA control system, 
-which is actually doing the reference pointing, and the RDBE with the
-PFB personality, which does not have the tuning or bandwidth flexibility 
-to use with maser pointing sources.
+\item[\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}]
+is similar to {\sl eg3mmb.key}, but shows how to make reference
+pointing observations, when using the RDBE wide band system with the
+PFB personality which uses fixed 32 MHz channels and cannot be fine
+tuned.  It uses the crd parameters to specify the allowed bandwidth
+and frequency, including using Doppler calculations, to set the legacy
+system as desired.
+
 
 \item[\htmladdnormallink{{\sl vips11.key}} {examples/vips11.key}]
 shows use of \htmlref{{\tt OPTMODE=HAS}}{MP:OPTMODE} for automatic
@@ -2736,9 +2738,11 @@ an even simpler case with just the VLBA and using a standard setup.
 more fully specified setups and demonstrates scheduling of piggyback
 Mark5A and Mark5C observations.
 
-\htmladdnormallink{{\sl eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} which
-shows how to use the piggyback scheme to do maser reference pointing 
-while recording on the RDBE/MARK5C system with the PFB personality.
+\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key} which
+shows how to do referencing pointing at 3mm, including using narrow
+band data on masers, when the RDBE is used with the PFB personality.
+It uses the crd input parameters to control the VLBA legacy hardware
+which produces the power data used for reference pointing.
 
 \htmladdnormallink{{\sl egddc.key}}{examples/egddc.key} which uses the
 DDC personality of the RDBE.
@@ -3231,29 +3235,37 @@ for the automatic scan insertion discussed below.  See the discussion
 of the parameter \htmlref{{\tt POINT}}{MP:POINT} for information on
 how to control this semi-automatic mode.
 
-Note that there will be a period from early 2012 until the antenna
-pointing on the VLBA is moved to the new control system (RDBE/MARK5C
---- see the wideband observing section), when there will be
-complications for reference pointing.  Both the old and new control
-system must know about the scans and how to set up the frequencies.
-This means that they must be described in both the {\sl .crd} and {\sl
-.vex} output files.  The power measurements used for reference
-pointing are made using the old BBCs of the legacy system.  Those will
-be configured as well as possible by \schedb to match the baseband
-channels of the wideband system.  For the DDC personality with
-bandwidths below 16 MHz, that is possible and reference pointing can
-be configured normally including using Doppler tracking and narrow
-(usally 2MHz) bandwidths.  However for the PFB, it is not possible
-because the PFB has too many channels (16) of too wide a bandwidth (16
-MHz).  Therefore, if reference pointing is desired while observing
-with the PFB personality of the RDBE, \schedb must be run twice, once
-for the wideband recordings and once to set up the legacy system for
-the pointing observations.  The Vex file used will be that from the
-wideband pass.  The crd files will come from the legacy system pass.
-These two runs of \schedb must maintain the same scan times.  See the
-example \htmladdnormallink{{\sl
-eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} for details on how to
-schedule such observations.
+Note that for the VLBA is in a transition period between the legacy
+control system and a new control system similar to that on the VLA.
+During the transition, both systems are operating in parallel.  They
+cannot talk to each other, but are run from {\sl crd} files (legacy)
+and a {\sl vex} file (new system) written by \schedb for the same
+schedule.  For a project using the RDBE and MARK5C, the channel
+control information must be appropriate for those devices.  But the
+antenna control is still in the hands of the legacy system for all
+cases, and reference pointing is based on power measurements made in
+the legacy baseband converters.  \schedb sets the legacy system
+frequencies and bandwidths to match as well as possible those being
+used in the RDBE.  For continuum sources, this is ok for reference
+pointing.  But most reference pointing is done on SiO masers using
+narrow bandwidths and with frequencies set using Doppler calculations.
+With the DDC personality, that is also ok because narrow bandwidths
+at flexible frequencies can be set, and be matched between systems.
+
+For RDBE based observations using the PFB personality, reference
+pointing becomes a problem.  The PFB can only use 32 MHz bandwidths at
+very restricted frequency set points.  A scheme has been established
+using the input parameters \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ},
+\htmlref{{\tt CRDDOP}}{MP:CRDDOP}, \htmlref{{\tt CRDBW}}{MP:CRDBW},
+and \htmlref{{\tt CRDNCH}}{MP:CRDNCH} to allow somewhat independent
+control of the legacy BBCs.  See the descriptions of those parameters,
+and the example \htmladdnormallink{{\sl
+eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key} for details.  As shown in the
+example, these parameters can be used for both explicit pointing scan
+insertion and for use with automatic pointing scan insertion by
+\sched.  Note that these capabilities have replaced the need that
+existed when the RDBEs were first deployed for separate MARK5A and
+MARK5C schedules.
 
 Explicit insertion of pointing scans can be a pain and can completely
 dominate the work involved in scheduling high frequency observations.
@@ -3262,9 +3274,18 @@ invoked with the \htmlref{{\tt AUTOPEAK}}{MP:AUTOPEAK} command and
 involves the use of a special set of input parameters either from a
 separate file, the \htmlref{{\tt PEAKFILE}}{MP:PEAKFILE}, or from
 in-stream commands, in the main \schedb input, contained between
-\htmlref{{\tt PEAKINIT}}{MP:PEAKINIT} and {\tt ENDPEAK}.  A standard
-version of this file is called \htmladdnormallink{{\sl
-peak.cmd}}{catalogs/peak.cmd} and is available in the
+\htmlref{{\tt PEAKINIT}}{MP:PEAKINIT} and {\tt ENDPEAK}.  Three
+standard versions of this file are \htmladdnormallink{{\sl
+peak.cmd}}{catalogs/peak.cmd} (VLBA legacy system),
+\htmladdnormallink{{\sl
+peak\_RDBE\_DDC.cmd}}{catalogs/peak\_RDBE\_DDC.cmd} (use with the RDBE
+using the DDC personality), and \htmladdnormallink{{\sl
+peak\_RDBE\_PFB.cmd}}{catalogs/peak\_RDBE\_PFB.cmd} (use with the RDBE
+using the PFB personality).  The three file differ only in the setup
+file they specify and are, in fact, constructed from the same master
+file.
+
+ and is available in the
 \schedb catalogs subdirectory.  That file can be used as an example of
 the format.  It is possible to watch details of the process by which
 \schedb chooses pointing sources by setting the parameter
@@ -3277,17 +3298,19 @@ is \htmladdnormallink{{\sl hsaddc.key}}{examples/hsaddc.key}.  That
 example demonstrates reference pointing at the VLBA, VLA, GBT, and
 Effelsberg, array phasing at the VLA, and Doppler setting with the DDC
 personality.  As noted earlier, \htmladdnormallink{{\sl
-eg3mm\_rdbe.key}}{examples/eg3mm\_rdbe.key} demonstrates the use of
-two passes to schedule reference pointing when using the RDBE with the
-PFB personality.  For reference pointing on the VLBA using the MARK5A
-systems, see the ``eg3mm'' examples.  \htmladdnormallink{{\sl
+eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key} demonstrates the use of the
+crd parameters to schedule reference pointing when using the RDBE with
+the PFB personality.  For reference pointing on the VLBA using the
+MARK5A systems, see the ``eg3mm'' examples.  \htmladdnormallink{{\sl
 eg3mma.key}}{examples/eg3mma.key} sets up the pointing scans without
 any help from the automatic features in \sched.
 \htmladdnormallink{{\sl eg3mmb.key}}{examples/eg3mmb.key} demonstrates
 use of the external peak command file.  \htmladdnormallink{{\sl
 eg3mmc.key}}{examples/eg3mmc.key} produces the same results but using
 \htmlref{{\tt PEAKINIT}}{MP:PEAKINIT} and no external file.  These
-examples only include a few VLBA stations and the VLA.
+examples only include a few VLBA stations.  For the new systems, they
+are mostly superseded by \htmladdnormallink{{\sl eg3mm\_rd2.key}}
+{examples/eg3mm\_rd2.key}.
 
 The peaking control information is organized around groups of antennas
 and lists of possible pointing sources.  Up to 5 groups of antennas
@@ -3802,7 +3825,7 @@ At Q band (7mm, 43 GHz), the VLA a priori pointing is not good enough so
 reference pointing must be used.  That is also controlled through use
 of \htmlref{{\tt INTENTs}}{MP:INTENTs}.
 
-*********  Document how to insert pointing scans, and the use of 
+******  Document how to insert pointing scans, and the use of 
 automatic insertion of pointing scans.
 
 The old parameter \htmlref{{\tt VLAPSRC}}{MP:VLAPSRC} allowed automatic
@@ -4499,7 +4522,7 @@ SCAN PROPERTIES:
 \htlm{DOPINCR}{~} Minimum increments for frequency setting.
 \htlm{DOPPLER}{~} Set frequency based on velocity for
                         spectral line.
-\htln{NODOP}{DOPPLER}{~~~} Turn off doppler calculations.
+\htln{NODOP}{DOPPLER}{~} Turn off doppler calculations.
 \htlm{DOMKA}{~~~} Record on Mark5A during Mark5C observations.
 \htlm{DOPCAL}{~~} Obsolete form of {\tt DOPPLER}.
 \htlm{DOPSRC}{~~} Set frequency based on velocity of this source.
@@ -4508,7 +4531,7 @@ SCAN PROPERTIES:
 \htlm{BW}{~~~~~~}       Baseband channel bandwidths.
 \htlm{CRDFREQ}{~} Force VLBA legacy BBC frequencies separate from RDBE.
 \htlm{CRDBW}{~~~} Force VLBA legacy BBC bandwidth separate from RDBE.
-\htln{CRDDOP}{CRDNODOP}{~~} Provoke Doppler setting of VLBA legacy 
+\htln{CRDDOP}{CRDDOP}{~~} Provoke Doppler setting of VLBA legacy 
                          BBCs sparate from RDBE.
 \htlm{PCAL}{~~~~} Mode for pulse cal generators.
 \htlm{CENTERS}{~} Use multiple phase centers in processing.
@@ -5337,10 +5360,10 @@ all channels explicitly.
 {Retains the value from the previous scan if not set.}
 {{\tt CRDBW= 2.0, 2.0, 2.0, 2.0 /}}
 
-\subsubsection{\label{MP:CRDDOP}{{\tt CRDDOP} and {\tt CRDNODOP}}
+\subsubsection{\label{MP:CRDDOP}{{\tt CRDDOP} and {\tt CRDNODOP}}}
 
 {\tt CRDDOP} requests Doppler frequency setting for the VLBA legacy
-system BBCs.  It is much like \htmlref{\tt DOPPLER}}{MP:DOPPLER}}
+system BBCs.  It is much like \htmlref{{\tt DOPPLER}}{MP:DOPPLER}
 except that it should only affect the BBCs, not the RDBE.  This is
 needed because the legacy system still controls the antenna pointing
 and does not have access to power levels from the RDBEs, which are
@@ -5349,8 +5372,8 @@ data from the legacy BBCs are used to make the pointing measurements.
 See the discussion of \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ} for more
 details about using the {\tt CRDxx} parameters.
 
-When using {\tt CRDDOP}, you must also set \htmlref{\tt
-DOPBW}}{MP:DOPBW}}.  As an alternative to requesting Sched do Doppler
+When using {\tt CRDDOP}, you must also set \htmlref{{\tt
+CRDBW}}{MP:CRDBW}.  As an alternative to requesting Sched do Doppler
 calculations, you can force a specific frequency with \htmlref{{\tt
 CRDFREQ}}{MP:CRDFREQ}.
 
@@ -5368,7 +5391,7 @@ at the same time, although it might work.
 
 \subsubsection{\label{MP:CRDLINE}{\tt CRDLINE}}
 
-{\tt CRDLINE} allows the scheduler to insert and arbitrary string
+{\tt CRDLINE} allows the scheduler to insert an arbitrary string
 into the crd control files for VLBA antennas.  It is intended to
 simplify the testing of new features by someone programming the
 on-line system.  You almost certainly don't want to use this parameter
@@ -5382,9 +5405,7 @@ unless you are a VLBA programmer.
 {{\tt CRDLINE = 'This was requested by Walter'}}
 
 
-
-
-q348702639)(*^($*$  Much not in yet.
+********************       Much not in yet.
 
 Add links.
 
@@ -5405,12 +5426,15 @@ CRDDOP are never used, CRDNCH will be set to lesser of 8 (the number of
 BBCs) and the number of setup channels.
 
 \rcwbox
-...............
-
+{An integer}
+{Any integer 8 or less}
+{The lesser of {\sl NCHAN} for the setup and 8 (number of BBCs)}
+{One per scan.  Defaults to last value.}
+{{\tt CHDNCH = 2}}
 
 \subsubsection{\label{MP:CRDFREQ}{\tt CRDFREQ}}
 
-This parameter is equivalent to \htmlref{{\tt FREQ}{{MP:FREQ}, but is
+This parameter is equivalent to \htmlref{{\tt FREQ}}{MP:FREQ}, but is
 only for use when using the RDBE but wanting different settings in the
 old system.  It will be ignored except on the VLBA using the RDBE.
 The main use will be for 86 GHz observations using the PFB personality
@@ -5420,7 +5444,7 @@ masers, it is necessary to use the legacy BBCs with narrower
 bandwidths and with frequencies that are not closely related to the
 main setup frequencies.  Such settings can be determined from Doppler
 calculatoins using \htmlref{{\tt CRDDOP}}{MP:CRDDOP} or set explicitly
-using {\tt CRDFREQ}.  Note that \htmlref{\tt DOPBW}}{MP:DOPBW}} must
+using {\tt CRDFREQ}.  Note that \htmlref{{\tt CRDBW}}{MP:CRDBW} must
 also be set if either of these options is used.
 
 When {\tt CRDFREQ} or \htmlref{{\tt CRDDOP}}{MP:CRDDOP} is used, the
@@ -13537,65 +13561,83 @@ more information.
 
 \subsection{\label{SSEC:VER_11.1}Version 11.1 test}
 
+%  ToDo:
 
+%     Search through this file for incomplete items, generally flagged
+%     with a line of asterisks.
 %     Allow VLAONLY schedules?  Maybe these don't differ from any other
 %         single station schedules any more.
 % **  Get wrap state in Vex.
-% **  egrdbe.key has a very bad sx setup.  Fix it.
-% **  n2227.key has possible birdies in some basebands.  Try to
-%     find some sniffer output to check.
 %     Modify choice of unset synthesizer for the new synthesizers.
-%     Finish with newsyn.key and put in Verify.  Interrupted project.
-%     Allow setting of one BW or CRDBW to change all.  Think about it first.
-%     Allow specification of one BW, FREQ, CRDBW, or CRDFREQ to cover all
-%       channels even if previous spec set more than one.
-%     Document the crd inputs.
+%     Calibrator selection
+%     Check if LO edge for DDC always in right polyphase filter.
 
 \begin{itemize}
 
 
-%  ToDo:
-%    Calibrator selection
-%    BBC_BW and DOPPLER in RDBE schedules - affect only BBCs
-%    Check if LO edge for DDC always in right polyphase filter.
-%    Put newsyn.key in Verify.
 
 
-\item Example eg3mm_rd2 demonstrates the new ability to deal with
-reference pointing in the crd files while using the RDBE_PFB and
-without separate Mark5C and Mark5A passes.  Example eg3mm_rdbe.key
-used the separate passes and is being removed.  Oct. 2, 2013.
+
+
+\item Update the USNO example n2227.key to the new frequency setup.
+Oct 29, 2013  RCW.
+
+\item Make the warnings about self-generated RFI from LO harmonics
+less intimidating and a bit more informative.  Oct 25, 2013.  RCW.
+
+\item Improve the scan timing for inserted reference pointing.  Before,
+if there was a long gap between scans, the first inserted scan would
+start at the beginning of the gap and cover the full time.  Especially
+while Mauna Kea is waiting for the source to rise, that could be hours.
+The issue had to do with when the final optimization routine call was 
+allowed to adjust times and when it was not.  Oct. 24, 2013.  RCW.
+
+\item Fix bug that caused comments to be lost in many circumstances.
+Oct. 21, 2013  RCW.
+
+\item Example eg3mm\_rd2 demonstrates the new ability to deal with
+reference pointing in the crd files while using the RDBE\_PFB and
+without separate Mark5C and Mark5A passes.  Example eg3mm\_rdbe.key
+used the separate passes and has been removed.  Oct. 2, 2013.
 
 \item Change egrdbe.key to piggyback.key.  It is the one remaining
 example of a file that uses the runsch scheme to get Mark5C and Mark5A
 files or recordings.  Oct. 2, 2013  RCW
 
-\item Move peak.cmd to catalogs/Master_NRAO and set it up to be the
+\item Move peak.cmd to catalogs/Master\_NRAO and set it up to be the
 parent of the related files in the catalog directory.  Have Update
-write peak.cmd, peak_RDBE_PFB.cmd, peak_RDBE_DDC.cmd based on the
+write peak.cmd, peak\_RDBE\_PFB.cmd, peak\_RDBE\_DDC.cmd based on the
 parent peak.cmd but with altered (with sed) setup file names.  Oct. 2,
 2013.  RCW
 
-\item Allow SCHED to make VLBA legacy system (crd) files using reference
-pointing on masers using Doppler calibration even when using the
-RDBE_PFB which cannot be tuned.  As part of this, the new input parameters
-CRDDOP, CRDNCH, CRDCH1, CRDFREQ, and CRDBW were added to control just
-the crd files and not the main setups.  This an the item below
-were a significant code upgrade.  Sept. 30, 2013.  RCW
+\item The changes to allow frequency settings different between the
+legacy and RDBE systems included setting the legacy system data format
+to a reasonable value for the sample rate, independent of user input 
+(which would be for the RDBE).  This cured a problem that happened when 
+changing bandwidths in some satellite tests.  Note added Oct. 28, 2012
+RCW (work done in September).
+
+\item Allow SCHED to make VLBA legacy system (crd) files using
+reference pointing on masers using Doppler calibration even when using
+the RDBE\_PFB which cannot be tuned.  As part of this, the new input
+parameters {\tt CRDDOP, CRDNCH, CRDCH1, CRDFREQ,} and {\tt CRDBW} were
+added to control just the crd files and not the main setups.  This an
+the item below were a significant code upgrade.  Sept. 30, 2013.  RCW
 
 \item Remove the concept of pcal sets and merge them into the frequency
 sets.  There will not be a separate frequency set for each pcal state
 used.  This simplifies some program logic and should make eventual
 simplification of the Vex code easier.  Sept. 30, 2013.  RCW.
 
-\item Add Verify_one to test one key file in the same way that Verify
-tests all of them.  Later added Newstd_one to add one example's output
-to the Stdout directory.  RCW  Sept. 30, 2013.
+\item Add {\sl Verify\_one} to test one key file in the same way that
+Verify tests all of them.  Later added {\tt Newstd\_one} to add one
+example's output to the Stdout directory.  RCW Sept. 30, 2013.
 
-\item Removed manual_vla.key - it was for the pre-Widar system.  RCW.
+\item Removed {\sl manual\_vla.key} - it was for the pre-Widar system.
+RCW.
 
-\item Fix synthesizer 2 setting for 2.6 GHz LO entry in freq_RDBE.dat.
-Sep. 4, 2013.  RCW.
+\item Fix synthesizer 2 setting for 2.6 GHz LO entry in
+{\sl freq\_RDBE.dat}.  Sep. 4, 2013.  RCW.
 
 \item Release a new Version 11.1 Beta on June 19, 2013  RCW
 
@@ -17875,16 +17917,6 @@ PEAK}, \htmlref{{\tt VLAMODE}}{MP:VLAMODE} (for pointing
 scans), and \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.  Some of these
 parameters are now read from the setup files, not the main schedule
 input.
-
-\verbatiminput{../examples/manual_vla.key}
-
-The above file used several setup files since it was sampling all
-bands used at the VLA.  Two are shown below.  All of the others are
-like the first --- very simple because they use the standard mode.
-The second specifies the LO settings for the Q (7mm) band observations
-so it is rather more complicated.  Note that, for many frequency settings,
-\schedb can obtain the required information from entries in the
-\htmlref{frequency catalog}{SEC:FRQCAT}.
 
 \verbatiminput{../examples/manual_vla-cc.set}
 

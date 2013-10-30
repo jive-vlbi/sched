@@ -88,7 +88,7 @@ C
       INTEGER           ISCN, KSCN, ISTA, LASTISCN(MAXSTA), NGSCANS
       INTEGER           NGOOD, YEAR, DAY1, DAY2, ICSRC
       INTEGER           PEAKOPT, GEOOPT
-      LOGICAL           ADJUST, KEEP, DONE, GOTALL
+      LOGICAL           ADJUST, IADJUST, KEEP, DONE, GOTALL
       DOUBLE PRECISION  START, STOP
       CHARACTER         TFORM*8, TIME1*8, TIME2*8
 C
@@ -96,6 +96,7 @@ C     For test only.
 C
 C      double precision      SIGMA(20)
 C      real                   DUM1
+       integer                len1
 C
       SAVE              LASTISCN
 C ---------------------------------------------------------------------
@@ -137,7 +138,8 @@ C
       CALL WLOG( 0, MSGTXT )
 C
 C
-C     Scan loop.
+C     Scan loop.  We are looping over output scans, which may not
+C     correspond to input scans.
 C
 C
       DO WHILE( .NOT. DONE )
@@ -148,15 +150,29 @@ C
      1       'SCHOPT:  Trying to generate too many scans. Max:', MAXSCN
             CALL ERRLOG( MSGTXT )
          END IF
-
+C
          IF( PEAKOPT .NE. 0 .OR. GEOOPT .NE. 0 ) THEN
 C
-C           If peaking or geodetic insertions are in progress, skip
-C           generation of new scans, but be sure to enter the sections
-C           of the code that generate the new scans.
+C           The insertion of geodetic sequences and reference pointing
+C           scans is initiated by this routine.  The first time that
+C           ADDGEO or ADDPEAK is called while processing a scan for
+C           which geodetic or pointing scans will be added, all of the
+C           required output scans related to the input scan will be
+C           generated and added to the output scan sequence.  That
+C           pass of this scan loop will then finish by processing the
+C           first of the added scans.
+C
+C           For the following passes through the scan loop, the added
+C           scans need to be processed without invoking the optimization
+C           routines.   PEAKOPT and GEOOPT keep track of how many more
+C           added scans need to be processed so when they are not
+C           zero, jump around the optimization routines.  But be 
+C           sure to call PEAKOPT or GEOOPT (by setting KEEP and DONE)
+C           so that they can decrement PEAKOPT or GEOOPT.
 C
             KEEP = .TRUE.
             DONE = .FALSE.
+C
          ELSE
 C
 C           Get a new main scan if no peaking or geodetic scan insertions 
@@ -251,11 +267,17 @@ C
 C           KSCN not used below this point.
 C
 C           Some of the optimization routines only give approximate
-C           scan times.  Get better, final, ones now.  Inserted 
-C           pointing scans have not been added yet, but they won't 
-C           be allowed to adjust the main scan times.  Also the 
-C           geodedic scans have not been added. ADDGEO will call 
-C           OPTTIM and SCNGEO (in GMKSCN) for the geodetic scans.
+C           scan times.  Get better, ones now.  Inserted pointing 
+C           scans have not been added yet, but they won't 
+C           be allowed to adjust the main scan times.  When geodetic
+C           scans are being inserted, the times for here are for the
+C           dummy scan to which the geodetic segment insertion 
+C           parameters are attached.  That scan will not actually
+C           be used so what is calculated here is a bit superfluous,
+C           but there isn't much overhead and it is simpler not to
+C           try to trap that case.  ADDGEO will call OPTTIM and 
+C           SCNGEO (in GMKSCN) for the geodetic scans, plus they will
+C           get called yet again after the insertions are done.
 C
             IF( KEEP .AND. .NOT. DONE ) THEN
 C        
@@ -290,6 +312,17 @@ C
             END IF
          END IF
 C
+C        ADJUST was set above for the nominal scan.  The insertion
+C        routines below can postpone dealing with that scan and may
+C        want other values of ADJUST than was set above.  But then
+C        when the main scan is processed in OPTTIM, we may want the
+C        original value.  So transfer ADJUST to IADJUST here, then
+C        allow the insertion routines to change IADJUST as they
+C        see fit.  ADJUST should not be changed below here, or above 
+C        while flushing through inserted scans.
+C
+         IADJUST = ADJUST
+C
 C        Only keep the scan if told to do so by optimization routine.  
 C        Also enter this section if in the middle of adding pointing
 C        or geodetic scans.
@@ -307,8 +340,13 @@ C           Only do it if not in the middle of inserting pointing.
 C           Mixing pointing and geo insertion might work, but it
 C           sounds both dangerous and unnecessary.
 C
+C           For any inserted scans, ADDGEO will have run OPTTIM and
+C           SCNGEO so use IADJUST to not allow the later runs to 
+C           move things around.
+C
             IF( PEAKOPT .EQ. 0 .AND. ( GEOLEN(ISCN) .GT. 0.D0 .OR. 
      1            GEOOPT .GE. 1 ) ) THEN
+               IADJUST = .FALSE.
                CALL ADDGEO( LASTISCN, ISCN, GEOOPT, KEEP )
             END IF
 C
@@ -334,9 +372,10 @@ C           the times for the added scans.
 C
 C           ADDPEAK will also set PEAKOPT so that the optimization
 C           routines will be skipped until all the peaking scans and
-C           the main scan have been processed.
+C           the main scan have been processed.  It will set IADJUST
+C           false for all inserted scans.
 C      
-            CALL ADDPEAK( LASTISCN, ISCN, PEAKOPT )
+            CALL ADDPEAK( LASTISCN, ISCN, PEAKOPT, IADJUST )
 C      
 C           The scans added by ADDPEAK will have the right times and 
 C           source but the main scan's setup.  POINT will be set.  
@@ -350,28 +389,27 @@ C
 C        All possible scan insertions etc are now done.  The details 
 C        of the current scan can be finalized.
 C
-C        Redo the IF statement to allow KEEP and DONE to be reset by 
-C        the above insertion routines routines.  The main case is that 
-C        MAKEPTG may discover no stations that can do reference 
+C        Retest KEEP and DONE to allow them (actually only KEEP) be 
+C        reset by the above insertion routines.  The main case is 
+C        that MAKEPTG may discover no stations that can do reference 
 C        pointing are in the scan.
 C
          IF( KEEP .AND. .NOT. DONE ) THEN
 C
-C           Get the geometry at the stations and count the stations
-C           that are considered UP.  It is almost certain that this 
-C           has already been done for all scans, but with the pointing
-C           scan and DELZN scan insertions etc, there is room for 
-C           confusion and this makes sure that all is ok.  OPTTIM
-C           tweaks the scan timing if needed while SCNGEO updates the
-C           geometry and expected arrival time at the source without 
-C           making any changes to the scan.  Note NGOOD is not needed
-C           here (also determined by AUTODOWN) but SCNGEO is used 
-C           elsewhere where it is needed.
+C           Now that all the insertions are done, if they happened,
+C           do a final pass of the geometry calculations.  This will
+C           not actually be needed in most (any?) cases, but it doesn't 
+C           cost much and this ensures everything is in good shape.
+C           This can tweak the scan timing (in OPTTIM if IADJUST is 
+C           true), gets the geometry at the stations and counts the
+C           stations that are considered UP.  Note NGOOD in SCNGEO
+C           is not needed here (also determined by AUTODOWN) but 
+C           SCNGEO is used elsewhere where it is needed.
 C
 C           This is the last call to OPTTIM, so apply the PRESCAN 
 C           offsets here.  They should only be applied once.
 C
-            CALL OPTTIM( LASTISCN, ISCN, ADJUST, .FALSE., .TRUE. )
+            CALL OPTTIM( LASTISCN, ISCN, IADJUST, .FALSE., .TRUE. )
             CALL SCNGEO( LASTISCN, NGOOD, ISCN )
 C
 C           Eliminate stations using disk recorders

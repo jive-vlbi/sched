@@ -103,7 +103,7 @@ C
 C
 C        Fill in the required information for the scan.
 C
-         CALL SCNDUP( ISCN, INSCN, .FALSE. )
+         CALL SCNDUP( ISCN, INSCN, .FALSE., 'OPTUPT' )
 C
 C        Only keep stations that are up.
 C

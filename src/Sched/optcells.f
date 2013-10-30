@@ -395,7 +395,7 @@ C
 C     Copy JSCN stuff into scan ISCN.  This includes DUR, but not 
 C     STARTJ and STOPJ.  Set nominal values for those separately.
 C
-      CALL SCNDUP( ISCN, JSCN, .FALSE. )
+      CALL SCNDUP( ISCN, JSCN, .FALSE., 'OPTCELLS' )
       STARTJ(ISCN) = TIMESRC(JSCN)
       STOPJ(ISCN)  = STARTJ(ISCN) + DUR(ISCN)
 C

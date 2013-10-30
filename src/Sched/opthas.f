@@ -433,7 +433,7 @@ C     Now keep the scan with the highest weight
 C
       IF( WTMSCN .GT. 0 ) THEN
          NOUT = NOUT + 1
-         CALL SCNDUP( ISCN, WTMSCN, .FALSE. )
+         CALL SCNDUP( ISCN, WTMSCN, .FALSE., 'OPTHAS' )
          STARTJ(ISCN) = TAPPROX
          STOPJ(ISCN)  = STARTJ(ISCN) + DUR(ISCN)
          SCNUSED(WTMSCN) = ISCN

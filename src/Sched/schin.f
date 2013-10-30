@@ -21,7 +21,7 @@ C
       PARAMETER         (MK=650 + 7*MAXSTA + 4*MAXCHN + 2*MGEO + 
      1                   10*MINTENT )
       INTEGER           KI(MK)
-      CHARACTER         KC(MK)*8, KCHAR*256, KCHARA*256, TEMP*256
+      CHARACTER         KC(MK)*8, KCHAR*256, KCHARA*256
       DOUBLE PRECISION  KD(2*MK), ENDMARK, BLANK
       LOGICAL           SETKEYS
       SAVE              KI, KD, KC, ENDMARK, BLANK, INSCH, SETKEYS
@@ -273,7 +273,6 @@ C
 C
 C        Some observing instructions.
 C
-         TEMP = KCHAR( 'COMMENT', 128, .FALSE., KD, KC, KI )
          ANNOT(ISCN) = KCHAR( 'COMMENT', 128, .FALSE., KD, KC, KI )
          TANT1(ISCN)  = KD( KEYPTR( 'TANT1', KC, KI ) ) .EQ. 0.D0
          TANT2(ISCN)  = KD( KEYPTR( 'TANT2', KC, KI ) ) .EQ. 0.D0
@@ -463,6 +462,8 @@ C     If WRAP24 was specified, duplicate the schedule, doubling its
 C     length.  The desired output range is then selected with DOSCANS.
 C     Be sure only scan 1 has a start time and/or stop time.  Set
 C     START and STOP for all copied scans to UNSET.
+C     Use SCNDUP in the mode where only duration is copied.  But 
+C     do pass the comment (ANNOT) which would not happen in that mode.
 C     
 C
       WRAP24 = KD( KEYPTR( 'WRAP24', KC, KI ) ) .EQ. 0.D0
@@ -479,7 +480,8 @@ C
                END IF
             END IF
             KSCN = ISCN + NSCANS
-            CALL SCNDUP( KSCN, ISCN, .FALSE. )
+            CALL SCNDUP( KSCN, ISCN, .FALSE., 'SCHIN' )
+            ANNOT(KSCN) = ANNOT(ISCN)
             START(KSCN) = UNSET
             STOP(KSCN) = UNSET
 C

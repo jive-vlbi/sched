@@ -11,17 +11,17 @@ C     its internal use.
 C
 C     Note that, even with optimization, if an explicit start or
 C     stop time was specified, it will be used.  ADJUST refers to
-C     to whether the start time can be altered.  DURONLY determines
-C     whether to adjust the stop time.
+C     to whether the start time can be altered.  DURONLY also indicates
+C     whether the start and/or stop can be adjusted.
 C
 C     If, and only if, DOPRESC is true, adjust the start time by 
 C     PRESCAN (regardless of ADJUST), being careful not to overlap 
 C     the previous scan.  This should only be true on the very last
 C     call, or this routine tends to add extra offsets with each call.
 C
-C     If USETIME is true and all LASTISCNs for stations in the scan,
-C     (indicating that this is their first scan), then use the scan
-C     time as is.  If false, use the experiment start time.
+C     If USETIME is true and all LASTISCNs for stations in the scan
+C     are zero (indicating that this is their first scan), then use 
+C     the scan time as is.  If false, use the experiment start time.
 C
 C     SSTIME is the time for which to do the geometry calculation.
 C     it will be set to the last stop time for any station scheduled
@@ -45,7 +45,8 @@ C --------------------------------------------------------------------
       MAXLASTT = -99.D9
       LSCN = 0
 C
-      IF( ADJUST ) THEN
+      IF( ADJUST .AND. DURONLY(ISCN) .NE. 2 .AND. DURONLY(ISCN) .NE. 3
+     1    .AND. DURONLY(ISCN) .NE. 6 .AND. DURONLY(ISCN) .NE. 7 ) THEN
 C
 C        Get the start time based on previous scans and on slews.  This
 C        can use dwell or dur.  Note that user input DWELL(1) (now in DUR 
@@ -242,70 +243,85 @@ C        down.  Do the same for TIME1K
 C
          TIME1J = MAX( TIME1J, MAXLASTT + GAP(ISCN) )
          TIME1K = MAX( TIME1K, MAXLASTT + GAP(ISCN) )
-C    
-C        Set the scan stop time based on the input scan duration.
-C        But there are circumstances when the stop time is fixed
-C        when the start time is not (STOP specified).  STOP is
-C        also implicitly fixed with START+DUR, so the only case
-C        when STOP can float is when START and STOP are not specified.
-C
-C        At this point, also take into account MINDW - the minimum 
-C        dwell time for all antennas.
-C
-         IF( DURONLY(ISCN) .LE. 1 ) THEN
-            TIME2J = TIME1J + DUR(ISCN)
-            IF( NOWAIT(ISCN) .GE. 1 .AND. MINDW(ISCN) .GT. 0.D0 ) THEN
-               TIME2J = MAX( TIME2J, TIME1K + MINDW(ISCN) ) 
-            END IF
-         ELSE
-            TIME2J = STOPJ(ISCN)
-         END IF
-C
-C     Deal with scans we're not allowed to adjust.
 C
       ELSE
+C
+C        Deal with scans for which we are not allowed to adjust the 
+C        start time.
+C
+C        Set the start time to the requested value.
+C
          TIME1J = STARTJ(ISCN)
-         TIME2J = STOPJ(ISCN)
-         DO ISTA = 1, NSTA
-            IF( STASCN(ISCN,ISTA) .AND. LASTISCN(ISTA) .GT. 0 ) THEN
-               IF( STOPJ(LASTISCN(ISTA)) .GT. MAXLASTT ) THEN
-                  MAXLASTT = STOPJ(LASTISCN(ISTA)) 
-                  LSCN = LASTISCN(ISTA)
-               ENDIF
-            END IF
-         END DO
+         TIME1K = STARTJ(ISCN)
 C
-C        Test bad specified times (overlapped scans).
-C
-         IF( TIME1J .LT. MAXLASTT - TOLER .AND. 
-     1       OPTMODE .NE. 'UPTIME' ) THEN
-            WRITE( MSGTXT, '( 2A, I5 )' )
-     1          'OPTTIM: Specified start time before last scan ',
-     2          'stop time in scan: ', ISCN
-            CALL WLOG( 1, MSGTXT )
-            CALL PRTSCN( LSCN )
-            CALL PRTSCN( ISCN )
-            CALL ERRLOG( 'OPTTIM: Check scan times and days.' )
-         END IF
       END IF
+C
+C     Set scan stop time.  This is easier.
+C
+C     First deal with the case of when we are allowed to adjust the
+C     stop time.  This is when the STOP time was not explicitly set 
+C     and has to be set with the help of the start time and duration.  
+C     Note that the case of stop time implicit forced by a forced
+C     start time and duration can be treated in the same way as the
+C     flexible stop time - the forced start and dur ensure it comes
+C     out right.  If the STOP time has been forced, just use it.
+C     The value of DURONLY tells us which case we are in.
+C    
+C     At this point, also take into account MINDW - the minimum 
+C     dwell time for all antennas.
+C
+      IF( DURONLY(ISCN) .LE. 3 ) THEN
+         TIME2J = TIME1J + DUR(ISCN)
+         IF( NOWAIT(ISCN) .GE. 1 .AND. MINDW(ISCN) .GT. 0.D0 ) THEN
+            TIME2J = MAX( TIME2J, TIME1K + MINDW(ISCN) ) 
+         END IF
+      ELSE
+         TIME2J = STOPJ(ISCN)
+      END IF
+C 
+C     Prepare to deal with PRESCAN insertion and with a check for
+C     overlapped scans.  Get the last stop time for stations in the
+C     scan and preserve the scan number of that last stop time.
+C     MAXLASTT and LSCN were derived before, but only for the
+C     case when adjustments could be made.  Do here again to get
+C     all scans.  At the previous use, there was concern about how 
+C     to set first scans.  Here we are only going to worry about 
+C     PRESCAN and overlaps so we be a bit simpler.
+C
+      MAXLASTT = -99.D9
+      LSCN = 0
+      DO ISTA = 1, NSTA
+         IF( STASCN(ISCN,ISTA) .AND. LASTISCN(ISTA) .GT. 0 ) THEN
+            IF( STOPJ(LASTISCN(ISTA)) .GT. MAXLASTT ) THEN
+               MAXLASTT = STOPJ(LASTISCN(ISTA)) 
+               LSCN = LASTISCN(ISTA)
+            ENDIF
+         END IF
+      END DO
 C
 C     Adjust the start time for PRESCAN for all cases (ADJUST set
 C     or not), but only if DOPRESC is true.  The DOPRESC is needed
 C     to avoid scans marching along with successive calls to OPTTIM.
 C     DOPRESC should only be set on the last call from SCHOPT.
 C
+C     Recall that PRESCAN is an historical parameter for moving the
+C     start time away from where it might normally land.  Various
+C     other parameters have taken it's place, but it might still be
+C     useful for delaying scan starts for an extra amount of time when
+C     using DWELL to absolutely insure there is no bad data.
+C
 C     Note that PRESCAN can be of either sign.  If it is negative,
 C     it should not be allowed to back the scan up over the end of
 C     the preceeding scan.  It differs from GAP in that it can be
 C     shortened if it is longer than the interval between scans as
 C     set so far and does not move the overall scan timing, just 
-C     the start.  Recall that PRESCAN was meant for prestarting tapes
-C     and is has been considered an obsolete parameter, although 
-C     there may be a use for it for delaying scans to be absolutely
-C     sure no bad data are recorded.
+C     the start.
 C
 C     Don't mess up the UPTIME optimization mode in the process.  That
 C     mode can have backward time jumps.
+C
+C     This works for the first scan when MAXLASTT is not set because
+C     MAXLASTT will not be chosen over TIME1J+PRESCAN.
 C
       IF( DOPRESC ) THEN
          IF( OPTMODE .NE. 'UPTIME' ) THEN
@@ -313,6 +329,21 @@ C
          ELSE
            TIME1J = TIME1J + PRESCAN(ISCN)
          END IF
+      END IF
+C
+C     Now do a sanity check.  Make sure we don't have overlapped scans.
+C     Don't panic if that happens with OPTMODE=UPTIME as each source
+C     will start at the experiment start time.
+C
+      IF( TIME1J .LT. MAXLASTT - TOLER .AND. 
+     1    OPTMODE .NE. 'UPTIME' ) THEN
+         WRITE( MSGTXT, '( 2A, I5 )' )
+     1       'OPTTIM: Specified start time before last scan ',
+     2       'stop time in scan: ', ISCN
+         CALL WLOG( 1, MSGTXT )
+         CALL PRTSCN( LSCN )
+         CALL PRTSCN( ISCN )
+         CALL ERRLOG( 'OPTTIM: Check scan times and days.' )
       END IF
 C
 C     Avoid crossing 0 hr when setting scan times.
