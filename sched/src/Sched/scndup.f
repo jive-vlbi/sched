@@ -1,4 +1,4 @@
-      SUBROUTINE SCNDUP( TO, FROM, COPYALL )
+      SUBROUTINE SCNDUP( TO, FROM, COPYALL, CALLER )
 C
 C     Routine for sched that copies one scan (FROM) into scan another 
 C     (TO). It copies all items which have a MAXSCN array size
@@ -21,14 +21,25 @@ C     copied but many should be recalculated after the call.  In most
 C     usage, they have not yet been calculated.  See the bottom of
 C     the routine for which parameters are involved.
 C
+C     CALLER was added as a debugging aid.  It should contain the
+C     name of the calling routine.
+C
       INCLUDE   'sched.inc'
 C
       INTEGER      TO, FROM, JST, ICHAN, I
       LOGICAL      COPYALL
+      CHARACTER    CALLER*(*)
 C ------------------------------------------------------------------
       IF( DEBUG ) THEN
          MSGTXT = ' '
-         WRITE( MSGTXT, '( A, 2I5 )' ) 'SCNDUP: To, From: ', TO, FROM
+         WRITE( MSGTXT, '( A, I5, A, I5, 3A, L1 )' ) 
+     1      'SCNDUP: Duplicating scan ',
+     2      FROM, ' to scan ', TO, '.  Called by: ', CALLER,
+     3      '  copyall = ', COPYALL
+         CALL WLOG( 0, MSGTXT )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( 2A )' ) 
+     1      'SCNDUP: ANNOT: ', ANNOT(FROM)
          CALL WLOG( 0, MSGTXT )
       END IF
 C
@@ -88,12 +99,15 @@ C
       DOPEAK(TO)   = DOPEAK(FROM)
       POINT(TO)    = POINT(FROM)
 C
+C     Note Oct 21, 2013 - inverted the behavior with ANNOT.  I think
+C     it was a bug.  RCW.
+C
       IF( COPYALL ) THEN
          DURONLY(TO) = DURONLY(FROM)
-         ANNOT(TO)   = ' '
+         ANNOT(TO)   = ANNOT(FROM)
       ELSE
          DURONLY(TO) = 1
-         ANNOT(TO)   = ANNOT(FROM)
+         ANNOT(TO)   = ' '
       END IF
 C
       NOTSYS(TO)   = NOTSYS(FROM)

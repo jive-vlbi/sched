@@ -26,12 +26,14 @@ C
 C        Copy the input scan to the output if necessary.
 C
          IF( KSCN .NE. ISCN ) THEN
-            CALL SCNDUP( ISCN, KSCN, .TRUE. )
+            CALL SCNDUP( ISCN, KSCN, .TRUE., 'OPTNONE' )
          END IF
 C
       END IF
 C
-C     Set whether to allow time adjustments.
+C     Set whether to allow start time adjustments.  Note that, if
+C     stop times only were specified (DURONLY(ISCN)=4), OPTTIM will not
+C     adjust the stop time regardless of the setting of ADJUST.
 C
       ADJUST = ( DWELLS .AND. ISCN .GT. SCAN1 ) .AND. 
      1         ( DURONLY(ISCN) .EQ. 1 .OR. DURONLY(ISCN) .EQ. 4 ) 
