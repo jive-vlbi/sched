@@ -107,6 +107,7 @@ C     (Other stations are unlikly to have the same first LO system)
 C
       LSETUP = 0
       DO KS = 1, NSET
+       TONHD = .TRUE.
        IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
 C
 C        Make a short list of the synthesizer settings already
@@ -120,14 +121,14 @@ C
                SY(NLO) = I
             END IF
          END DO
-         TONHD = .TRUE.
 C
 C        +++++
 C        Find the possible birdies from pre-set tones.
 C        +++++
 C
-C        Only do when 2 or 3 are preset.
-C        Go to the 5th harmonic of the primary, or 10th when
+C        Only do when 2 or 3 synthesizers have been set.
+C
+C        Test out to the 5th harmonic of the primary, or 10th when
 C        checking harmonics of the tone at half the primary
 C        for old type LOs above 8.1 GHz.  Don't worry about signals
 C        above 60 GHz.  Give special warning when one of the
@@ -138,7 +139,16 @@ C        This segment is only for warnings so skip if just doing
 C        a new station for the last setup file.
 C
          IF( NLO .GE. 2 .AND. ISETNUM(KS) .NE. LSETUP ) THEN
+C
+C         Checking pairs of tones.  Loop over the first LO of a
+C         pair.  It can only go to NLO - 1.
+C
           DO I = 1, NLO - 1
+C
+C          Set the base tone for this LO.  MODETEST allows the
+C          test value to be the output frequency when using the
+C          new synthesizer.
+C
            IF( LO(I) .LE. 8.0 .OR. 
      1         ( MODETEST(KS) .AND. SY(I) .LT. 3 ) ) THEN
               LOI = LO(I)
@@ -147,6 +157,9 @@ C
               LOI = LO(I) / 2.0
               NHI = MIN( 10, INT( FMAX / LOI ) )
            END IF
+C
+C          Loop over the second frequency of the pair.
+C
            DO J = I + 1, NLO
             IF( LO(J) .LE. 8.0 .OR. 
      1         ( MODETEST(KS) .AND. SY(J) .LT. 3 )) THEN
@@ -156,6 +169,14 @@ C
                LOJ = LO(J) / 2.0
                NHJ = MIN( 10, INT( FMAX / LOJ ) )
             END IF
+C
+C           Now loop over the harmonics of each frequency
+C           and look at the difference.  Note that the LOs
+C           are in GHz so the IF is 0.512-1.024.
+C           Allow a birdy at 500 (out of band), but not 1000 (in band)
+C           Since all birdies will be at N*0.1 GHz, using 0.52 is
+C           equivalent to 0.512.
+C
             DO K = 1, NHI
              DO L = 1, NHJ
               IFF = ABS( LOI * K - LOJ * L )
@@ -168,6 +189,10 @@ C
            END DO
           END DO
          END IF
+C
+C        +++++
+C        Set unused synthesizers.
+C        +++++
 C
 C        Now set the unset synthesizers to try to avoid RFI
 C        from mixes of harmonics.  Also avoid putting an LO
@@ -197,7 +222,6 @@ C        did not find a good setting with no harmonic issues.
 C
          GOTGOOD = NLO .EQ. 3 
          IF( NLO .LT. 3 ) THEN
-          I = 1
 C
 C         Loop over the TLO options list for values for the unset
 C         synthesizers.  Note that this may need to change with
@@ -215,6 +239,7 @@ C         one is the old-style one with coarse tuning, it won't
 C         be that simple.
 C
           MLHAR = 0
+          I = 1
           DO WHILE( I .LE. NTLO )
 C
 C          Avoid putting a tone in the 2cm band - jump down below
@@ -318,8 +343,21 @@ C        with the synthesizer.  This is just warnings so skip
 C        if on a setup file we've done for another VLBA station.
 C        Note that the concern about the fundamental tone being
 C        at half the output is for the old synthesizers, not the
-C        new ones to be deployed in slots 1 and 2 in 2014.
+C        new ones to be deployed in slots 1 and 2 in 2014 (maybe).
 C
+C        Here we only need to compare the one setting used for the 
+C        previously unset synthesizers with the forced settings.
+C        We don't need to do this when a good alternative was 
+C        found, which would cause GOTGOOD to be set true.  Any
+C        problems between previously set synthesizers have already
+C        been dealt with in the first HARMWARN call above.
+C
+C        Note that, if more than one synthesizer needed to be set, 
+C        they will be set to the same frequency.  So we only need
+C        to test that frequency.
+C
+C        So start the nested loops with the one new frequency.
+C             
          IF( .NOT. GOTGOOD .AND. ISETNUM(KS) .NE. LSETUP ) THEN
           IF( TLO(DLO) .LE. 8.D0 ) THEN
              LOT = TLO(DLO)
@@ -328,7 +366,16 @@ C
              LOT = TLO(DLO) / 2.D0
              NHT = MIN( 10, INT( FMAX / LOT ) )
           END IF
-          DO I = I + 1, NLO
+C
+C         Loop over the forced settings.  There was an error
+C         in the loop lower limit prior to Oct 24, 2013 which would
+C         have done something weird.  It was:  DO I = I + 1, NLO.
+C         That should have caused trouble, but it seems none of the
+C         examples get to this point.  I don't know if anything 
+C         else does (all either forced settings or good numbers found
+C         by SCHED).
+C
+          DO I = 1, NLO
            IF( LO(I) .LE. 8.D0 ) THEN
               LOI = LO(I)
               NHI = MIN( 5, INT( FMAX / LOI ) )
@@ -336,6 +383,9 @@ C
               LOI = LO(I) / 2.D0
               NHI = MIN( 10, INT( FMAX / LOI ) )
            END IF
+C
+C          Double loop over harmonics.
+C
            DO K = 1, NHT
             DO L = 1, NHI
              IFF = ABS( LOT * K - LOI * L )
@@ -345,6 +395,7 @@ C
              END IF
             END DO
            END DO
+C
           END DO
 C
          END IF

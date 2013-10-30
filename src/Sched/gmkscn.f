@@ -46,7 +46,7 @@ C
 C
 C     Copy the template scan.
 C
-      CALL SCNDUP ( ISCN, JSCN, .FALSE. )
+      CALL SCNDUP ( ISCN, JSCN, .FALSE., 'GMKSCN' )
 C
 C     Insert the source.
 C

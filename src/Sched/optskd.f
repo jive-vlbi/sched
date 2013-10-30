@@ -32,7 +32,7 @@ C
 C     Copy the input scan to the output if necessary.
 C
       IF( KSCN .NE. ISCN ) THEN
-         CALL SCNDUP( ISCN, KSCN, .TRUE. )
+         CALL SCNDUP( ISCN, KSCN, .TRUE., 'OPTSKD' )
       END IF
 C
 C     Determine whether to use input scan time.  Only do this for

@@ -49,7 +49,7 @@ C
 C
 C              Copy the items in the include file.
 C
-               CALL SCNDUP( IS, L, .FALSE. )
+               CALL SCNDUP( IS, L, .FALSE., 'SCHREP' )
 C
 C              Act as if start, stop, and date were not given.
 C              Note that DAY and YEAR are not in the include file.
@@ -58,6 +58,11 @@ C
                STOP(IS)  = UNSET
                DAY(IS)   = DAY(L)
                YEAR(IS)  = YEAR(L)
+C
+C              Also copy the COMMENT (ANNOT) which would not be copied
+C              with the .FALSE. in the SCNDUP call.
+C
+               ANNOT(IS) = ANNOT(L)
 C
             END DO
          END DO

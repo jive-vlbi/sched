@@ -97,7 +97,7 @@ C
 C     Copy JSCN stuff into scan ISCN.
 C     The nominal STARTJ and STOPJ must also be set.
 C
-      CALL SCNDUP( ISCN, JSCN, .FALSE. )
+      CALL SCNDUP( ISCN, JSCN, .FALSE., 'OPTCSUB' )
       STOPJ(ISCN) = STARTJ(ISCN) + DUR(ISCN)
 C
 C     Set the flags for which antennas are in the current scan.

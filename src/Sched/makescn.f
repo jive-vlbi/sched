@@ -39,7 +39,7 @@ C ----------------------------------------------------------------------
 C
 C     Copy the template scan.
 C
-      CALL SCNDUP ( ISCN, JSCN, .FALSE. )
+      CALL SCNDUP ( ISCN, JSCN, .FALSE., 'MAKESCN' )
 C
 C     Insert the source.
 C
