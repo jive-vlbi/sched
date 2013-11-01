@@ -72,6 +72,9 @@ C
 C --------------------------------------------------------------------
 C     Establish the key names if required.
 C
+C     When any are added, be sure to include in the lists in stations.dat
+C     and in the manual.  Try to keep the same order in all lists.
+C
       IF( .NOT. GOTKEYS ) THEN
          CALL KPACK( '/       ', ENDMRK )
          CALL KPACK( 'NONAME  ', NONAME )
@@ -82,11 +85,13 @@ C
          CALL KPACK( 'CONT    ', CCONT )
          CALL KPACK( 'ASTRO   ', ASTRO )
          CALL KPACK( '        ', BLANK )
+C
          CALL KEYCHR( 'VERSION', ' ', 20, KD, KC, KI )
          CALL KEYCHR( 'STAtion', ' ', 8, KD, KC, KI )
          CALL KEYCHR( 'STCode', ' ', 3, KD, KC, KI )
          CALL KEYCHR( 'DBNAME', ' ', 10, KD, KC, KI )
          CALL KEYCHR( 'DBCODE', ' ', 4, KD, KC, KI )
+C
          CALL KEYCHR( 'FRAME', ' ', 80, KD, KC, KI )
          CALL KEYADD( 'ELev', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'LAT', 0.D0, 1, KD, KC, KI )
@@ -100,6 +105,7 @@ C
          CALL KEYADD( 'DZDT', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'EPOCH', 0.D0, 1, KD, KC, KI )
          CALL KEYCHR( 'DEScrip', ' ', 80, KD, KC, KI )
+C
          CALL KEYCHR( 'CONtrol', ' ', 5, KD, KC, KI )
          CALL KEYCHR( 'DAR', ' ', 5, KD, KC, KI )
          CALL KEYCHR( 'RECORDER', ' ', 6, KD, KC, KI )
@@ -109,8 +115,11 @@ C
          CALL KEYCHR( 'DISC', ' ', 6, KD, KC, KI )
          CALL KEYCHR( 'MEDIADEF', ' ', 6, KD, KC, KI )
          CALL KEYADD( 'NBBC', 0.D0, 1, KD, KC, KI )
+         CALL KEYCHR( 'DBBCVER', 'ASTRO', 8, KD, KC, KI )
+C
          CALL KEYADD( 'HOR_AZ', 0.D0, MHOR, KD, KC, KI )
          CALL KEYADD( 'HOR_EL', 0.D0, MHOR, KD, KC, KI )
+C
          CALL KEYADD( 'AX1LIM', 0.D0, 6, KD, KC, KI )
          CALL KEYADD( 'AX2LIM', 0.D0, 6, KD, KC, KI )
          CALL KEYADD( 'AX1RATE', 0.D0, 1, KD, KC, KI )
@@ -120,13 +129,13 @@ C
          CALL KEYADD( 'MOUNT', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'AXISTYPE', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'AXISOFF', 0.D0, 1, KD, KC, KI )
+C
          CALL KEYADD( 'TSETTLE', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'MINSETUP', 0.D0, 1, KD, KC, KI )
+         CALL KEYCHR( 'TSCAL', 'CONT', 4, KD, KC, KI )
          CALL KEYADD( 'MAXSRCHR', 1.D6, 1, KD, KC, KI )
          CALL KEYADD( 'TLEVSET', 0.D0, 1, KD, KC, KI )
-         CALL KEYCHR( 'TSCAL', 'CONT', 4, KD, KC, KI )
          CALL KEYADD( 'ENDCAT', 0.D0, 1, KD, KC, KI )
-         CALL KEYCHR( 'DBBCVER', 'ASTRO', 8, KD, KC, KI )
          GOTKEYS = .TRUE.
          WARNXYZ = .TRUE.
          GOTLOC  = .FALSE.

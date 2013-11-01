@@ -46,6 +46,10 @@ C
          MINBBC(ISETF) =  MIN( MINBBC(ISETF), NBBC(ISETSTA(KS)) )
       END DO
 C
+C     Set the DBE early, if needed.
+C
+      CALL SETFIRM
+C
 C     Try to set many defaults.  For now, don't attempt to do so
 C     for VLA-only observations.
 C
