@@ -10238,7 +10238,13 @@ be in the locations catalog are noted.  Lower case letters are
 optional.  Entries for a station in the Station Catalog are terminated with
 a ``/''.
 
+Version and station names:
+
 \begin{description}
+
+\item [{\tt VERSION}:] Catalog version.  Actually set to the date when
+all the master catalog segments were last gathered to form a full catalog.
+
 \item [{\tt STAtion}:] Station name. Up to 8 characters.
 
 \item [{\tt STCode}:] Station code. Up to 3 characters.  Usually there
@@ -10260,9 +10266,70 @@ pad of the intererometers so contains more information than the
 usual 2 letter codes given in {\tt STCode}.  Can be put in the
 locations catalog.
 
+\end{description}
+
+Station location:
+
+\begin{description}
+
 \item [{\tt FRAME}:] A character string indicating the origin
 of the station location information.  Can be put in the locations
 catalog.
+
+\item [{\tt ELev}:] Station elevation in meters above (mean?) sea
+level for geodetic coordinates or meters from the center of the Earth
+for geocentric coordinates; these cases are distinguished by value
+magnitude.
+
+\item [{\tt LAT}:] Station latitude, either geodetic or geocentric.
+The format is {\tt dd:mm:ss}. Positive in Northern Hemisphere.
+
+\item [{\tt LONG}:] Station longitude, either geodetic or geocentric.
+The format is {\tt ddd:mm:ss}. Positive in Western Hemisphere.
+
+\item [{\tt ZALim}:] Zenith angle limit in degrees.  Can be used to
+limit elevation coverage for stations with other than AZEL mounts.
+The antenna will be assumed to point below this limit to whatever
+limits are specified with {\tt AX1LIM} and {\tt AX2LIM} for purposes
+of slew calculations.  However, if the antenna is below this limit,
+the source will be considered to be down during any optimizations.
+
+\item [{\tt X}:] Station X coordinate in meters.  This is in the
+direction of the Greenwich meridian.  Can be put in the locations
+catalog.
+
+\item [{\tt Y}:] Station Y coordinate in meters.  This makes a right
+handed coordinate system with X and Z.  Can be put in the locations
+catalog.
+
+\item [{\tt Z}:] Station Z coordinate in meters.  This is in the
+direction of the north pole.  Can be put in the locations catalog.
+
+\item [{\tt DXDT}:] Station rate of change of the X coordinate in
+meters per year.  Not used in \sched.  Can be put in the locations
+catalog.
+
+\item [{\tt DYDT}:] Station rate of change of the Y coordinate
+in meters per year.  Not used in \sched.  Can be put in the locations
+catalog.
+
+\item [{\tt DZDT}:] Station rate of change of the Z coordinate
+in meters per year.  Not used in \sched.  Can be put in the locations
+catalog.
+
+\item [{\tt EPOCH}:] The epoch in MJD at which the X, Y, Z
+coordinates apply.  In other words, when the offsets due to the
+rates is zero.  Not used by \sched.  Can be put in the locations
+catalog.
+
+\item [{\tt DEScrip}:] Any text up to 80 characters (not used
+by \sched).
+
+\end{description}
+
+Hardware types:
+
+\begin{description}
 
 \item [{\tt CONtrol}:] Telescope control file type. {\tt VEX} files
 are produced for all projects because most antennas are converting
@@ -10320,7 +10387,6 @@ Currently supported versions are:
             ifc=bbc09 to bbc16.
 \end{itemize}
 
-
 \item [{\tt RECORDER}:] Gives the type of tape recorder(s) present
 Valid options are: {\tt VLBA}, {\tt MKIV}, {\tt VLBA4}, {\tt MKIII},
 {\tt S2}, {\tt K4}, {\tt K5}, {\tt VERA}, {\tt VSOP}, {\tt MARK5A},
@@ -10362,66 +10428,11 @@ TAPEINI}}{MP:TAPEINI} section.  The options are {\tt TAPE} and {\tt
 DISK}.  This is meant to facilitate VLBA operations during the
 transition from tape to disk.
 
-\item [{\tt TSCAL}:] Lets \schedb know when the station measures
-system temperatures.  Arguments are text of 4 characters.  The viable
-options so far are ``gap'' and ``cont'' that inidicate the system temperature
-measurements, or at least cal measurements, are done in the gap between
-scans or continuously during observing.  The VLBA uses an 80Hz cal switch
-and measures cal-on and cal-off powers from which, using a known cal
-temperature, the system temperature can be derived.  Typical field system
-controlled stations fire the cal once at the start of a scan and measure
-the on and off power.  {\sc SCHED} will warn if there is inadequate time to
-do this if TSCAL=GAP, but not when TSCAL=CONT.  This facility is still
-not fully installed as of Nov. 5, 2008.
+\end{description}
 
-\item [{\tt ELev}:] Station elevation in meters above (mean?) sea
-level for geodetic coordinates or meters from the center of the Earth
-for geocentric coordinates; these cases are distinguished by value
-magnitude.
+Horizon:
 
-\item [{\tt LAT}:] Station latitude, either geodetic or geocentric.
-The format is {\tt dd:mm:ss}. Positive in Northern Hemisphere.
-
-\item [{\tt LONG}:] Station longitude, either geodetic or geocentric.
-The format is {\tt ddd:mm:ss}. Positive in Western Hemisphere.
-
-\item [{\tt ZALim}:] Zenith angle limit in degrees.  Can be used to
-limit elevation coverage for stations with other than AZEL mounts.
-The antenna will be assumed to point below this limit to whatever
-limits are specified with {\tt AX1LIM} and {\tt AX2LIM} for purposes
-of slew calculations.  However, if the antenna is below this limit,
-the source will be considered to be down during any optimizations.
-
-\item [{\tt X}:] Station X coordinate in meters.  This is in the
-direction of the Greenwich meridian.  Can be put in the locations
-catalog.
-
-\item [{\tt Y}:] Station Y coordinate in meters.  This makes a right
-handed coordinate system with X and Z.  Can be put in the locations
-catalog.
-
-\item [{\tt Z}:] Station Z coordinate in meters.  This is in the
-direction of the north pole.  Can be put in the locations catalog.
-
-\item [{\tt DXDT}:] Station rate of change of the X coordinate in
-meters per year.  Not used in \sched.  Can be put in the locations
-catalog.
-
-\item [{\tt DYDT}:] Station rate of change of the Y coordinate
-in meters per year.  Not used in \sched.  Can be put in the locations
-catalog.
-
-\item [{\tt DZDT}:] Station rate of change of the Z coordinate
-in meters per year.  Not used in \sched.  Can be put in the locations
-catalog.
-
-\item [{\tt EPOCH}:] The epoch in MJD at which the X, Y, Z
-coordinates apply.  In other words, when the offsets due to the
-rates is zero.  Not used by \sched.  Can be put in the locations
-catalog.
-
-\item [{\tt DEScrip}:] Any text up to 80 characters (not used
-by \sched).
+\begin{description}
 
 \item [{\tt HOR\_AZ}:] Up to 200 azimuths at which horizon elevations
 are given in {\tt HOR\_EL}.
@@ -10430,6 +10441,12 @@ are given in {\tt HOR\_EL}.
 azimuths specified by {\tt HOR\_AZ}. \sched's down, rise, and set
 notes will take these horizons into account. They will also be used in
 the optimization mode.
+
+\end{description}
+
+Mount details and performance:
+
+\begin{description}
 
 \item[{\tt MOUNT}:] The type of mount.  \schedb uses this, along with
 the axis limits and rates, to calculate slew times.  The understood
@@ -10479,12 +10496,45 @@ deceleration (although for the calculations, they are interchangeable).
 per second squared.  If one value is given, it is
 assumed to apply to both acceleration and deceleration.
 
+\end{description}
+
+Scan timing information:
+
+\begin{description}
+
 \item [{\tt TSETTLE}:] The time in seconds (or mm:ss etc) to add to
 the slew time for dwell time scheduling to determine when the antenna
 is ready to observe.  This will include any computer overhead,
 and time to make calibration observations.  Acceleration and
 deceleration will be calculated explicitly if the above acceleration
 parameters are provided in the station catalog.
+
+\item [{\tt MINSETUP}:] The minimum interval between scans when using
+dwell time scheduling.  If the slew time plus the settling time
+drops below {\tt MINSETUP}, {\tt MINSETUP} will be used as the
+interval between scans.  This is required because some antennas have
+a minimum scan setup time but the actions that take that time can
+overlap with the slew.  When the slew is long, the extra time does
+not need to be added.
+
+\item [{\tt TSCAL}:] Lets \schedb know when the station measures
+system temperatures.  Arguments are text of 4 characters.  The viable
+options so far are ``gap'' and ``cont'' that inidicate the system temperature
+measurements, or at least cal measurements, are done in the gap between
+scans or continuously during observing.  The VLBA uses an 80Hz cal switch
+and measures cal-on and cal-off powers from which, using a known cal
+temperature, the system temperature can be derived.  Typical field system
+controlled stations fire the cal once at the start of a scan and measure
+the on and off power.  {\sc SCHED} will warn if there is inadequate time to
+do this if TSCAL=GAP, but not when TSCAL=CONT.  This facility is still
+not fully installed as of Nov. 5, 2008.
+
+\item [{\tt MAXSRCHR}:] The maximum number of sources per hour.
+This is originally intended to enable enforcement of the limit in
+the number of slews per hour on the Mark1 telescope at Jodrell.  They
+are very worried about fatigue and will refuse to run fast switching
+schedules.  The default is 1.E6 which should be more than anyone
+would try to schedule.
 
 \item [{\tt TLEVSET}:] This is a time to be added to the slew
 calculation to allow for the set-and-remember power level adjustments
@@ -10500,33 +10550,24 @@ non-recording, non-pointing, and non-phasing, the scan itself will be
 accepted as the level setting (DUMMY on the VLA) scan.  This allows
 for explicity insertion of DUMMY scans.
 
-\item [{\tt MINSETUP}:] The minimum interval between scans when using
-dwell time scheduling.  If the slew time plus the settling time
-drops below {\tt MINSETUP}, {\tt MINSETUP} will be used as the
-interval between scans.  This is required because some antennas have
-a minimum scan setup time but the actions that take that time can
-overlap with the slew.  When the slew is long, the extra time does
-not need to be added.
-
-\item [{\tt MAXSRCHR}:] The maximum number of sources per hour.
-This is originally intended to enable enforcement of the limit in
-the number of slews per hour on the Mark1 telescope at Jodrell.  They
-are very worried about fatigue and will refuse to run fast switching
-schedules.  The default is 1.E6 which should be more than anyone
-would try to schedule.
-
 
 \end{description}
 
-Below is a sample segment of the standard station catalog.
+Below is a sample entry from the RDBE based version of the standard 
+station catalog.  The full catalog a can be examined 
+\htmladdnormallink{here}{catalogs/stations.dat} for the 
+version that uses MARK5A at the VLBA and 
+\htmladdnormallink{here}{catalogs/stations\_RDBE.dat} for the RDBE
+based version.
 
 \begin{verbatim}
 
-  STATION=VLBA_MK   STCODE=Mk  CONTROL=VLBA
-    ELEV=3720.00  LONG=155:27:28.95    LAT=19:48:15.85
-    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90
-    AX1RATE=90 AX2RATE=30
-    TSETTLE=2  DAR=VLBA  RECORDER=VLBA  NDRIVES=2  NHEADS=1 NBBC=8
+ STATION=VLBA_MK   STCODE=Mk  CONTROL=VLBA 
+    DBNAME = MK-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=86.8 AX2RATE=28.3
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE  NBBC=16 
+    DISK=MARK5C   MEDIADEF=DISK    TSCAL=CONT
     ! MK    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
     HOR_AZ =   0,  5, 10, 15, 20,120,125,130,135,140,145,150,155,160,
              165,170,175,185,190,195,200,205,210,215,220,255,260,270,
@@ -10536,38 +10577,7 @@ Below is a sample segment of the standard station catalog.
               11, 12, 13, 13, 11, 11,  9,  7,  5,  3,  2,  2,  3,  3,
                5,  6,  8, 10, 12, 14, 12, 11,  9, 10, 11, 10, 12, 14,
               12,  9,  7,  5
-  /
-  STATION=VLBA_HN   STCODE=Hn  CONTROL=VLBA
-    ELEV=309.00  LONG=071:59:11.69    LAT=42:56:00.96
-    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=90 AX2RATE=30
-    TSETTLE=2  DAR=VLBA  RECORDER=VLBA  NDRIVES=2  NHEADS=1 NBBC=8
-    ! HN    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
-    HOR_AZ =   0,  5, 30, 35, 40, 45, 65, 70, 80, 85, 90, 95,100,105,
-             110,115,120,125,130,135,140,145,150,155,160,165,170,190,
-             195,200,205,210,220,225,230,235,240,245,250,255,270,275,
-             290,295,315,320,325,330,335,345,350,355,360
-    HOR_EL =   6,  6,  6,  4,  5,  4,  4,  5,  5,  4,  5,  4,  4,  5,
-               3,  4,  4,  5,  4,  6,  5,  7,  7,  5,  3,  5,  4,  4,
-               2,  5,  5,  6,  6,  5,  6,  4,  5,  5,  4,  5,  5,  4,
-               4,  5,  5,  6,  5,  5,  6,  6,  5,  5,  6
- /
-!   Some stations with VLBA terminals and control computers:
-!   See other entries if Mark~III versions are desired.
-  STATION=EB_VLBA   STCODE=Eb  CONTROL=VLBA  ZALIM=78.000
-    MOUNT=ALTAZ AX1RATE=30 AX2RATE=15 AX1LIM=33,507 AX2LIM=9,89
-    TSETTLE=2  DAR=VLBA  RECORDER=VLBA  NDRIVES=1  NHEADS=1 NBBC=4
-    ELEV= 6365911.00  LONG=-006:53:03.98    LAT= 50:20:09.70     /
-
-  STATION=JODRELL2   STCODE=Jb  CONTROL=SN50
-    MOUNT=ALTAZ AX1RATE=22.5 AX2RATE=22.5 AX1LIM=-85,325 AX2LIM=3,89
-    ELEV= 6364546.00  LONG= 002:18:24.01    LAT= 53:03:06.01
-    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
-   /
-  STATION=MEDICINA  STCODE=Mc  CONTROL=SNAP
-    MOUNT=ALTAZ AX1RATE=48 AX2RATE=30 AX1LIM=90,540 AX2LIM=5,88.5
-    ELEV=     100.00  LONG=-011:18:00.00    LAT= 44:30:00.00
-    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
-   /
+  / 
 
 \end{verbatim}
 
@@ -13575,9 +13585,23 @@ more information.
 \begin{itemize}
 
 
+\item Change the default firmware for the RDBE_DDC to be VDIF.  While
+at it, split the setting of default values of DBE out of CHKFIRM  and
+put in a new routine SETFIRM.  Move both those routines to new
+places in the calling routines for \schedb logical cleanliness
+Oct. 31, 2013.  RCW.
 
+\item Making stations\_RDBE.dat complete raised a conflict between the
+RDBE version of the Effelsberg entry from the NRAO maintained portion
+of the catalog and the Mark5A version maintained at JIVE.  For the
+RDBE, call the station EB\_RDBE with code Er, but expect that to
+merged back to EB\_VLBA eventually.  Oct 31, 2013. RCW
 
-
+\item Getting rid of the old stations_RDBE.dat for single RDBE
+stations.  Renaming stations\_RDBE2.dat to stations\_RDBE.dat since
+all VLBA stations now have 2 RDBEs.  Make stations\_RDBE.dat complete
+by appending all the non-VLBA station catalog segments.  Oct. 31, 2013
+RCW.
 
 \item Update the USNO example n2227.key to the new frequency setup.
 Oct 29, 2013  RCW.

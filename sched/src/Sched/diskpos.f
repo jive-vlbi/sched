@@ -57,8 +57,14 @@ C     Get the actual bits recorded.  The factor 1000 is
 C     the conversion from Mbps to Gbps.  Note that this is the
 C     decimal version, not the binary one which may be what is
 C     wanted.  The factor of 8 is the conversion to bytes.
-C     Don't use WRTBPS here because it includes the FORMAT-specific
-C     contribution from headers.
+C     Use WRTBPS here because it includes the FORMAT-specific
+C     contribution from headers and we're interested in bytes on
+C     the recording.
+C
+C     Nov. 1, 2013.  For some reason, the above comment previously
+C     suggested not using WRTBPS here.  But the uses of GBYTES all
+C     seem more appropriate with it and that is what was in the line
+C     of code, so I changed the comment.  RCW.
 C
       KS = NSETUP(ISCN,ISTA)
       IF( RECUSED(KS) ) THEN

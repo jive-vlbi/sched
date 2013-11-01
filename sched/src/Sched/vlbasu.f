@@ -320,7 +320,7 @@ C        (formats are VDIF and MARK5B) because that will not
 C        encode the fan-out that the legacy system wants to 
 C        know about.  So base it on the samprate.
 C
-         IF( DAR(KSTA) .EQ. 'RDBE' ) THEN
+         IF( DAR(KSTA)(1:4) .EQ. 'RDBE' ) THEN
             IF( FORMAT(KS) .EQ. 'NONE' ) THEN
                PFORMAT = 'NONE'
             ELSE IF( SAMPRATE(KS) .GT. 16.0 ) THEN
