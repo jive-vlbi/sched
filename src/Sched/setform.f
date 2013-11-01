@@ -128,25 +128,36 @@ C     First, set as much of the format as possible from the
 C     information provided in the setup file and catalogs.
 C
 C     If the format was not specified at all, set the default
-C     general type based on the type of DAR at the station where
+C     general type based on the type of DAR/DBE at the station where
 C     this can be done as with most modern systems.
 C     Actually, this is not always right, but, if not, the
 C     user will need to be specific.
-C     Note the ELSE option grabs VLBA and MKIV.
-C     Operation of 2 RDBE's simultaneously requires the use of
-C     VDIF for processing.
+C     Note the ELSE option deals with the VLBA and MKIV MARK5A/B systems.
+C
+C     For the VLBA/RDBE, the default will be firmware dependent with
+C     MARK5B used for the PFB and VDIF used for the DDC.  The DDC
+C     is the only allowed firmware when actually using 2 RDBEs, but that
+C     will be dealt with elsewhere.  Assume for now that the DBBC
+C     will use MARK5B in all cases.
 C
       DO KS = 1, NSET
          IF( FORMAT(KS) .EQ. ' ' ) THEN
             IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
-     1          ( DAR(ISETSTA(KS)) .EQ. 'RDBE' .OR. 
-     2            DAR(ISETSTA(KS)) .EQ. 'DBBC' ) ) THEN
+     1           ( DBE(KS) .EQ. 'RDBE_PFB' .OR.
+     2             DBE(KS) .EQ. 'DBBC_PFB' .OR.
+     3             DBE(KS) .EQ. 'DBBC_DDC' ) ) THEN
                FORMAT(KS) = 'MARK5B'
+C
+            ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
+     1             DBE(KS) .EQ. 'RDBE_DDC' ) THEN
+               FORMAT(KS) = 'VDIF'
+C
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5B' ) THEN
                FORMAT(KS) = 'MARK5B'
-            ELSE IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' .OR.
-     1          DAR(ISETSTA(KS)) .EQ. 'RDBE2' ) THEN
+C
+            ELSE IF( DAR(ISETSTA(KS)) .EQ. 'WIDAR' ) THEN
                FORMAT(KS) = 'VDIF'
+C
             ELSE
                FORMAT(KS) = DAR(ISETSTA(KS))
             END IF
