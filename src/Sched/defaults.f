@@ -11,10 +11,22 @@ C
       INCLUDE    'schset.inc'
 C
       INTEGER    ISCN, ISTA, KSTA, KS
-      LOGICAL    ALLC
+      LOGICAL    ALLC, FRDBE, SRDBE
 C
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'DEFAULTS starting.' )
+C
+C     Protect against mixing RDBE and non-RDBE stations and frequency files.
+C
+      FRDBE = INDEX( FREQFILE, 'RDBE' ) .NE. 0
+      SRDBE = INDEX( STAFILE, 'RDBE' ) .NE. 0
+      IF( FRDBE .NEQV. SRDBE ) THEN
+         MSGTXT = 'DEFAULTS: **** Did you intend to mix RDBE and '//
+     1     'non-RDBE station and frequency files? ****'
+         CALL WLOG( 1, ' ' )
+         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 1, ' ' )
+      END IF
 C
 C     Tie up the loose ends with the source catalogs, adding planets
 C     etc if needed.  Be sure that the Julian scan times are available
@@ -42,12 +54,16 @@ C     defaulted to the flagged value UNSET to make an explicit
 C     input of zero distinguishable.  The values are set
 C     for each scan.
 C
-C     The new MARK5C systems don't need to worry about
+C     The new MARK5C systems on the VLBA don't need to worry about
 C     PRESTART and MINPAUSE.  In fact, by using the data good time
 C     in the VEX file, they are ignoring these parameters.  The 
-C     MARK5A systems, however, need them.  The defaults should
+C     MARK5A legacy systems, however, need them.  The defaults should
 C     be different.  That is handled here.  Take the non-zero
 C     defaults if any of the stations need them.
+C
+C     Note that presence of non-VLBA stations can cause the use of
+C     the non-zero default values.  Think about what is really 
+C     wanted in that case.
 C
       ALLC = .TRUE.
       DO ISTA = 1, NSTA

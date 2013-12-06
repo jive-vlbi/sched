@@ -48,12 +48,12 @@ C     Internal variables.
 C
       INTEGER        MODE, IER, VLBOPE, LEN1, IDB
       LOGICAL        FOPEN, NOLOC, LOCWARN, LOCNONE, GOTLOC
-      REAL*8         NONAME, XX, NONE, ALTAZ, CVLBA, BLANK, CCONT
+      REAL*8         NONAME, XX, NONE, ALTAZ, CVLBA, BLANK, CGAP
       REAL*8         ASTRO
       CHARACTER      CNAME*50, LOCTST*80
       CHARACTER      RESULT*255
       SAVE           FOPEN, NONAME, XX, NONE, ALTAZ, CVLBA, BLANK
-      SAVE           NOLOC, LOCWARN, CCONT, ASTRO
+      SAVE           NOLOC, LOCWARN, CGAP, ASTRO
 C
 C     Catalog input parameters.
 C
@@ -82,7 +82,7 @@ C
          CALL KPACK( 'NONE    ', NONE )
          CALL KPACK( 'ALTAZ   ', ALTAZ )
          CALL KPACK( 'VLBA    ', CVLBA )
-         CALL KPACK( 'CONT    ', CCONT )
+         CALL KPACK( 'GAP     ', CGAP )
          CALL KPACK( 'ASTRO   ', ASTRO )
          CALL KPACK( '        ', BLANK )
 C
@@ -132,7 +132,7 @@ C
 C
          CALL KEYADD( 'TSETTLE', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'MINSETUP', 0.D0, 1, KD, KC, KI )
-         CALL KEYCHR( 'TSCAL', 'CONT', 4, KD, KC, KI )
+         CALL KEYCHR( 'TSCAL', 'GAP', 4, KD, KC, KI )
          CALL KEYADD( 'MAXSRCHR', 1.D6, 1, KD, KC, KI )
          CALL KEYADD( 'TLEVSET', 0.D0, 1, KD, KC, KI )
          CALL KEYADD( 'ENDCAT', 0.D0, 1, KD, KC, KI )
@@ -219,7 +219,7 @@ C
       KD( KEYPTR( 'MINSETUP', KC, KI ) ) = 0.0D0
       KD( KEYPTR( 'MAXSRCHR', KC, KI ) ) = 1.0D6
       KD( KEYPTR( 'TLEVSET', KC, KI ) ) = 0.0D6
-      KD( KEYPTR( 'TSCAL', KC, KI ) ) = CCONT
+      KD( KEYPTR( 'TSCAL', KC, KI ) ) = CGAP
       KD( KEYPTR( 'ENDCAT', KC, KI ) ) = UNSET
       KD( KEYPTR( 'DBBCVER', KC, KI ) ) = ASTRO
 C

@@ -18,7 +18,8 @@ C
 C
       INTEGER           KS, ICH, ISIDEBD
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
-      INTEGER           NFWARN, N2WARN
+      INTEGER           NFWARN
+C      INTEGER                    , N2WARN  Warnings commented out.
       INTEGER           IPF, I, NPBW, LEN1, ISETF
       DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, SLOP
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
@@ -28,11 +29,13 @@ C
       DATA     OBWARN   / .TRUE. /
       DATA     N40WARN  / MAXSET*1 /
       DATA     N528WARN / MAXSET*1 /
-      DATA     NFWARN, N2WARN / 0, 0 /
+      DATA     NFWARN   / 0 /
+C      DATA     N2WARN   / 0 /
       DATA     PLO      / 512.D0, 640.D0, 896.D0 /
       DATA     PHI      / 640.D0, 896.D0, 1024.D0 /
       DATA     CR1, CR2 / 640.D0, 896.D0 /
-      SAVE     N40WARN, N528WARN, NFWARN, N2WARN, NPBW, OBWARN
+      SAVE     N40WARN, N528WARN, NFWARN, NPBW, OBWARN
+C      SAVE     , N2WARN
 C
 C      PLO and PHI are the ranges for the DDC initial polyphase filter.
 C -----------------------------------------------------------------
@@ -185,9 +188,13 @@ C
 C        Once all frequencies are set, prevent basebands crossing 
 C        the crossover points.
 C
-C        We have decided for now (Feb. 2011) to restrict tuning
-C        to multiples of 15.625 kHz.  In fact, we strongly encourage
-C        use of multiples of 250 kHz, so note that.
+C        For a while, we did not recommend frequencies that were not 
+C        multiples of 250 kHz, the smallest allowed value compatible with
+C        the old systems that use N*10kHz.  Compatibility and a concern
+C        about possible precision loss were the issues.  The precision 
+C        worry has been tested and found to be ok, so we are dropping
+C        the 250 kHz advice.  Any non 10kHz multiple should be trapped
+C        when checking the non-RDBE stations.
 C
          DO ICH = 1, NCHAN(KS)
 C
@@ -244,7 +251,9 @@ C
             END IF
 C
 C           Check for multiple of 15.625 kHz.  This test allows a 
-C           bit of slop (about 100 mHz)
+C           bit of slop (about 100 mHz).  This will be treated as
+C           an error and will abort SCHED - the call to ERROR is at
+C           the end of this routine.
 C
             IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.015625D0 ) .GT. 2.D-7
      1          .AND. NFWARN .LE. 1 ) THEN
@@ -254,12 +263,13 @@ C
      2           ' of 15.625 kHz.'
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
-               WRITE( MSGTXT, '( 2A, F15.6, A, I3, A, A )' ) 
+               WRITE( MSGTXT, '( 3A,  A, I3, F15.6,)' ) 
      1            '          ',
-     2            ' Value of: ', BBCFREQ(ICH), 
-     3            ' MHz found in channel ', ICH, ' of setup ', 
-     4            SETNAME(KS)
+     2            ' Found station station/setup/chan/frequency : ', 
+     3            SETSTA(1,KS), SETNAME(KS)(1:LEN1(SETNAME(KS))),
+     4            ICH, BBCFREQ(ICH)
                CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 1, '           ' // SETNAME(KS) )
                IF( NFWARN .GE. 1 ) THEN
                   MSGTXT = 'CHKRDFQ:   Further warnings suppressed '
                   CALL WLOG( 1, MSGTXT )                     
@@ -267,28 +277,29 @@ C
                NFWARN = NFWARN + 1
                SHOWID = .TRUE.
 C
-C           Check for multiple of 250 kHz.
+C           Check for multiple of 250 kHz.   We are dropping this one,
+C           but leave the code available.
 C
-            ELSE IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.250D0 ) .GT. 2.D-7
-     1          .AND. N2WARN .LE. 1 ) THEN
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
-     1           ' It is recommended that BBSYN for the RDBE_DDC ',
-     2           'be an even multiple of 250 kHz.'
-               CALL WLOG( 1, MSGTXT )
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( 2A, F15.6, A, I3, A, A )' ) 
-     1            '          ',
-     2            ' Value of: ', BBCFREQ(ICH), 
-     3            ' MHz found in channel ', ICH, ' of setup ', 
-     4            SETNAME(KS)
-               CALL WLOG( 1, MSGTXT )
-               IF( N2WARN .GE. 1 ) THEN
-                  MSGTXT = 'CHKRDFQ:   Further warnings suppressed.'
-                  CALL WLOG( 1, MSGTXT )                     
-               END IF                  
-               N2WARN = N2WARN + 1
-               SHOWID = .TRUE.
+C            ELSE IF( DMOD( BBCFREQ(ICH) + 1.D-7, 0.250D0 ) .GT. 2.D-7
+C     1          .AND. N2WARN .LE. 1 ) THEN
+C               MSGTXT = ' '
+C               WRITE( MSGTXT, '( 3A )' ) 'CHKRDFQ:  ',
+C     1           ' It is recommended that BBSYN for the RDBE_DDC ',
+C     2           'be an even multiple of 250 kHz.'
+C               CALL WLOG( 1, MSGTXT )
+C               MSGTXT = ' '
+C               WRITE( MSGTXT, '( 2A, F15.6, A, I3, A, A )' ) 
+C     1            '          ',
+C     2            ' Value of: ', BBCFREQ(ICH), 
+C     3            ' MHz found in channel ', ICH, ' of setup ', 
+C     4            SETNAME(KS)
+C               CALL WLOG( 1, MSGTXT )
+C               IF( N2WARN .GE. 1 ) THEN
+C                  MSGTXT = 'CHKRDFQ:   Further warnings suppressed.'
+C                  CALL WLOG( 1, MSGTXT )                     
+C               END IF                  
+C               N2WARN = N2WARN + 1
+C               SHOWID = .TRUE.
             END IF
 C
 C           Test the crossover points for the DDC.  Allow a small
@@ -397,6 +408,13 @@ C
      2     SETNAME(KS)(1:LEN1(SETNAME(KS))),
      3     ' and at least station ', SETSTA(1,KS)
          CALL WLOG( 1, MSGTXT )
+      END IF
+C
+C     Make the non-multiple of 15.625 warning fatal.
+C
+      IF( NFWARN .GT. 0 ) THEN
+         CALL ERROR( 'CHKRDFQ:  Use freqeuenies that are multiples '//
+     1       'of 15.625 kHz.' )
       END IF
 C
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Ending' )

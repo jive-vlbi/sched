@@ -84,6 +84,7 @@
 !  120323: Added KVZR stations with R1002 digital backends. DMS
 !  120710: Updated Hh K-band LO. DMS
 !  131115: Updated Ef and Eb from Uwe Bach's catalogs.
+!  131204: Fix "ifname" (was "name") and missing "fe" on several lines.  RCW
 !
 !  -------------------------------------------------------------------------
 !  KVAZAR stations.
@@ -130,8 +131,8 @@ Name = kvzr_k Station=BADARY,SVETLOE,ZELENCHK priority=0
 ! EB_RDBE
 ! 
 Name = eb_610  Station = EB_RDBE   priority = 0
-  rf1 =  607, 607   name = A,    C 
-  rf2 =  650, 650     = '50cm', '50cm'
+  rf1 =  607, 607     ifname = A,    C 
+  rf2 =  650, 650     fe = '50cm', '50cm'
   pol =  RCP,  LCP    lo1 =    0,    0
   note = 'Prime focus system: not usually available (new in 2011).'
 /
@@ -190,20 +191,20 @@ Name = eb_2695  Station = EB_RDBE   priority = 0
   note = '30Jy S-Band, not for use with X'
 /
 Name = eb_6cm  Station = EB_RDBE   priority = 0
-  rf1 =  4612, 4612   name = A,    C
-  rf2 =  5124, 5124     = '6cm', '6cm'
+  rf1 =  4612, 4612   ifname = A,    C
+  rf2 =  5124, 5124   fe  = '6cm', '6cm'
   pol =  RCP,  LCP    lo1 =  4100,  4100
   note = '6cm secondary focus.'
 /
 Name = eb_6150  Station = EB_RDBE   priority = 4
-  rf1 =  5912, 5912   name = ,A    C
-  rf2 =  6424, 6424     = '5cm', '5cm'
+  rf1 =  5912, 5912   ifname = A,    C
+  rf2 =  6424, 6424   fe  = '5cm', '5cm'
   pol =  RCP,  LCP    lo1 =  5400,  5400
   note = 'rebuild in 2011'
 /
 Name = eb_6650 Station = EB_RDBE   priority = 4
-  rf1 =  6412, 6412   name = A,    C
-  rf2 =  6924, 6924     = '5cm', '5cm'
+  rf1 =  6412, 6412   ifname = A,    C
+  rf2 =  6924, 6924   fe  = '5cm', '5cm'
   pol =  RCP,  LCP    lo1 =  5900,  5900
   note = 'rebuild in 2011'
 /
@@ -214,32 +215,32 @@ Name = eb_sx  Station = EB_RDBE   priority = 2
   note = 'SX using 4cm secondary focus: not easy to get below 8300.'
 /
 Name = eb_x  Station = EB_RDBE   priority = 0
-  rf1 =  8312, 8312   name = A,    C
-  rf2 =  8824, 8824     = '4cm', '4cm'
+  rf1 =  8312, 8312   ifname = A,    C
+  rf2 =  8824, 8824   fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 =  7800,  7800
   note = '4cm secondary focus.'
 /
 Name = eb_xa  Station = EB_RDBE   priority = 1
-  rf1 =  7912, 7912   name = A,    C
-  rf2 =  8424, 8424     = '4cm', '4cm'
+  rf1 =  7912, 7912   ifname = A,    C
+  rf2 =  8424, 8424   fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 =  7400,  7400
   note = '4cm secondary focus. Tunable in 1 MHz steps'
 /
 Name = eb_xb  Station = EB_RDBE   priority = 1
-  rf1 =  8112, 8112   name = A,    C
-  rf2 =  8624, 8624     = '4cm', '4cm'
+  rf1 =  8112, 8112   ifname = A,    C
+  rf2 =  8624, 8624   fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 =  7600,  7600
   note = '4cm secondary focus. Tunable in 1 MHz steps'
 /
 Name = eb_xc  Station = EB_RDBE   priority = 1
-  rf1 =  8412, 8412   name = A,    C
-  rf2 =  8924, 8924     = '4cm', '4cm'
+  rf1 =  8412, 8412   ifname = A,    C
+  rf2 =  8924, 8924   fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 =  7900,  7900
   note = '4cm secondary focus. Tunable in 1 MHz steps'
 /
 Name = eb_xd  Station = EB_RDBE   priority = 2
-  rf1 =  8512, 8512   name = A,    C
-  rf2 =  9024, 9024     = '4cm', '4cm'
+  rf1 =  8512, 8512   ifname = A,    C
+  rf2 =  9024, 9024   fe  = '4cm', '4cm'
   pol =  RCP,  LCP    lo1 =  8100,  8100
   note = '4cm secondary focus. Tunable in 1 MHz steps'
 /
@@ -941,8 +942,8 @@ Name = sh18cm  Station = SHANGHAI   priority = 4
 ! Name = sh6cm  Station = SHANGHAI, SHANG_S2   priority = 5
 Name = sh6cm  Station = SHANGHAI   priority = 5
   rf1 =  4650, 4650    ifname = C, A
-  rf2 =  5150, 5150     fe     = '6cm', '6cm'
-  pol =  RCP, LCP     lo1    = 4200.0, 4200.0
+  rf2 =  5150, 5150    fe     = '6cm', '6cm'
+  pol =  RCP, LCP      lo1    = 4200.0, 4200.0
   note = 'Update freq. range AnTao 22Mar08'
 /
 Name = sh5cm  Station = SHANGHAI, SHANG_S2   priority = 5
@@ -1914,7 +1915,7 @@ Name = ys40_sx  Station = YEBES40M   priority = 4
 Name = ys40_4cm  Station = YEBES40M   priority = 4
   rf1 =  8180, 8180   ifname = C,     A
   rf2 =  8650, 8650   fe     = '4cm', '4cm'
-  pol =   LCP,RCP         lo1    = 7650, 7650
+  pol =   LCP,RCP     lo1    = 7650, 7650
   note = 'LO taken from D.Grahams S/X configuration for EK028A'
 /
  Name = ys40_1cm  Station = YEBES40M   priority = 4
@@ -2187,7 +2188,7 @@ Name = kmsx  Station = KUNMING
   note = 'From Hao Longfei 11 may 2009'
 /
 Name = mysx Station = MIYUN50
-  rf1 = 2150, 8200	ifname = B, A
+  rf1 = 2150, 8200      ifname = B, A
   rf2 = 2450, 8600      fe     = '13cm', '4cm'
   pol = RCP, RCP        lo1    = 1600, 9100
   note = 'From ZHU Xinying 6 July 2009'
