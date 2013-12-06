@@ -64,7 +64,7 @@ C
 C     Use the standard routine to set the BBC->IF mappings.
 C
       CALL BBCALT( KS, MAXBBC, MIF, IFBBC, IFNAM, UBBC, MAXBBC,
-     1          WARNING)
+     1          WARNING, 'BBCDBBC')
 C
       RETURN 
       END

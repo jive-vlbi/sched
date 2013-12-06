@@ -18,6 +18,9 @@ C     do so for VLBA stations.  Perhaps add more exceptions later,
 C     or make it a stations.dat parameter, or make the Field System
 C     happy with such scans.  RCW  Dec 8, 2011
 C
+C     Switch to use of TSCAL for warnings about calibration time.
+C     Nov. 4, 2013  RCW.
+C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
       INCLUDE 'vxlink.inc'
@@ -618,12 +621,15 @@ C
          END IF
       END DO
 C
-C     Print warning about frequency of Tsys. 
+C     Print warning about frequency of Tsys.   Switch trigger for this
+C     from CONTROL=VEX and not VLA to TSCAL='GAP'  Nov. 4, 2013 RCW.
 C
       TSYSMESS = .FALSE.
       DO ISTA = 1, NSTA
-         IF( WARNTS(ISTA) .AND. ( CONTROL(STANUM(ISTA)) .EQ. 'VEX' 
-     1      .AND. STATION(STANUM(ISTA))(1:3) .NE. 'VLA' ) ) THEN
+C         IF( WARNTS(ISTA) .AND. ( CONTROL(STANUM(ISTA)) .EQ. 'VEX' 
+C     1      .AND. STATION(STANUM(ISTA))(1:3) .NE. 'VLA' ) ) THEN
+         IF( WARNTS(ISTA) .AND. ( TSCAL(STANUM(ISTA)) .EQ. 'GAP' ) ) 
+     1        THEN 
 C
             WRITE( MSGTXT, '( A, A, A, I5, A , I4, A)' ) 
      2         'VXSCH: ', STATION(STANUM(ISTA)), ' has ',
@@ -646,11 +652,14 @@ C
          CALL WRTMSG( 0, 'VXSCH', 'tsysgap' )
       END IF
 C
+C     Only give the warning about Tsys measurements off source if 
+C     TSCAL is 'GAP'.
+C
       TSYSMESS = .FALSE.
       DO ISTA = 1, NSTA
-         IF( WARNTSOF(ISTA) ) THEN
-            WRITE( MSGTXT, '( A, A, I5, A, I5, A )' ) 
-     1         STATION(STANUM(ISTA)), ': only ',
+         IF( WARNTSOF(ISTA) .AND. TSCAL(STANUM(ISTA)) .EQ. 'GAP' ) THEN
+            WRITE( MSGTXT, '( 2A, A, I5, A, I5, A )' ) 
+     1         'VXSCH: ', STATION(STANUM(ISTA)), ': only ',
      2         NTSYSON(ISTA), ' out of ', NTSYS(ISTA),
      3         ' Tsys measurements are on-source'
             CALL WLOG( 1, MSGTXT )

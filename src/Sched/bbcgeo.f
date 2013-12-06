@@ -66,7 +66,7 @@ C
 C     Call BBCALT to do the work.
 C
       CALL BBCALT( KS, MAXBBC, MAXIF, IFBBC, IFNAM, UBBC, NNBBC,
-     1             WARNING )
+     1             WARNING, 'BBCGEO' )
 C
       RETURN 
       END

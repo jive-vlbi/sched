@@ -42,7 +42,8 @@ C
 C
 C     Call BBCALT to do the work.
 C
-      CALL BBCALT( KS, MAXBBC, NIF, IFBBC, IFNAM, UBBC, NNBBC, ' ' )
+      CALL BBCALT( KS, MAXBBC, NIF, IFBBC, IFNAM, UBBC, NNBBC, ' ',
+     1    'BBCKVSR' )
 C
       RETURN 
       END
