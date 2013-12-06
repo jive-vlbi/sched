@@ -58,10 +58,10 @@ C     Call BBCALT to do the work.
 C
       IF( DUALPOL(KS) ) THEN
          CALL BBCALT( KS, MAXBBC, MAXIF, IFBBCD, IFNAM, UBBC, NNBBC,
-     1             WARNING )
+     1             WARNING, 'BBCVS2-1' )
       ELSE
          CALL BBCALT( KS, MAXBBC, MAXIF, IFBBCS, IFNAM, UBBC, NNBBC,
-     1             WARNING )
+     1             WARNING, 'BBCVS2-2' )
       END IF
 C
       RETURN 

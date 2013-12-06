@@ -6,7 +6,11 @@ C
 C     For now, this routine does not know how to set frequencies
 C     for the RDBE based systems.  That should change before long but
 C     it will be a bit tricky because of the polyphase filters and 
-C     I need to get a release out soon.
+C     I need to get a release out soon.  Note that this routine has
+C     to do exactly the same thing for all setup groups in a setup file,
+C     or you will have something that cannot be correlated.  That 
+C     means it cannot just detect an RDBE based on the group's station.
+C     Also worry about the 15.625 vs 10 kHz tuning steps.
 C
 C     This will work if most other parameters are also defaulting or
 C     using values similar to the defaults.  But I imagine that

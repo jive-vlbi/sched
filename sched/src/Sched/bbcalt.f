@@ -1,14 +1,28 @@
       SUBROUTINE BBCALT( KS, MAXBBC, MAXIF, IFBBC, IFNAM, UBBC, NNBBC,
-     1                   WARNING )
+     1                   WARNING, CALLER )
 C
 C     Routine for SCHED called by BBCGEO, BBCM4, BBCVS2, BBCDBBC and
-C     BBCLBA to assign BBC's to channels.  BBCGEO is for VLBA systems
+C     BBCLBA to assign BBC's to IF channels.  BBCGEO is for VLBA systems
 C     with geodetic wiring.  BBCM4 is for Mark IV systems.  BBCVS2 is
 C     for S2 systems attached to VLBA DAR's. BBCDBBC is for Hat-lab's
 C     (Tuccari) DBBC. BBCLBA is for the Australian LBA DAS. They are
 C     similar in many ways and the code needed to process them is the
 C     same.  They differ in the wiring configurations as embodied in the
-C     IFBBC and IFNAM arrays.
+C     IFBBC and IFNAM arrays.  This routine is not used for VLBA systems.
+C
+C     Inputs are:
+C        KS            Setup group
+C        MAXBBC        The maximum number of BBCs available.
+C        MAXIF         The maximum number of IFs available.
+C        IFBBC         Array of flags (1,0) MAXBBC by MAXIF indicating
+C                      whether the BBC can see the IF
+C        IFNAM         The names of the IFs
+C        CALLER        The calling subroutine name to help debugging.
+C     Outputs are:
+C        UBBC          Flag for BBCs that were assigned.
+C        NNBBC         
+C        WARNING       Text indicating the backend type.
+C        
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
@@ -18,10 +32,13 @@ C
       PARAMETER  (MAXIFI=8)
       INTEGER    IFBBC(MAXBBC,MAXIF)
       CHARACTER  IFNAM(MAXIF)*2, WARNING*(*), CHKNAM*2
-      CHARACTER  IFINPUT(MAXIFI)*2
+      CHARACTER  IFINPUT(MAXIFI)*2, CALLER*(*)
       LOGICAL    UBBC(MAXBBC)
 C -------------------------------------------------------------------  
-      IF( DEBUG ) CALL WLOG( 0, 'BBCALT starting.' )
+      IF( DEBUG ) THEN
+         MSGTXT = 'BBCALT starting. Called by '// CALLER
+         CALL WLOG( 0, MSGTXT )
+      END IF
 C
 C     Since MAXIF could not be used for IFINPUT, check that MAXIFI
 C     is big enough.
@@ -78,9 +95,14 @@ C
             DO IBBC = 1, NNBBC
                IF( .NOT. UBBC(IBBC) ) THEN
                   DO IIF = 1, MAXIF
+C
 C                    For DBBC only first letter of IFCHAN is
 C                    significant, unless an input has already been
 C                    assigned for this IF.
+C
+C       write(*,*) '+++ bbcalt ', ks, ' ', setsta(1,ks), ich, ibbc, iif, 
+C     1   ' ', ifinput(iif), ' ', ifnam(iif), ' ', ifchan(ich,ks), ' ', 
+C     1   warning, ' ', caller, ' ', DAR(ISETSTA(KS))
                      CHKNAM = IFNAM(IIF)
                      IF( WARNING .EQ. 'DBBC' ) THEN
                         IF( IFINPUT(IIF) .EQ. 'ZZ' ) THEN

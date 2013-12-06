@@ -2927,9 +2927,16 @@ will, however, cover different velocity ranges.
 
 The frequencies derived from the doppler calculations have to be
 rounded off to a value that can be set on the available synthesizers.
-For the Mark~III/IV and VLBA systems, frequencies can be set to
-the nearest 10 kHz.  However other systems are different --- VSOP, for
-example, can only be set to the nearest 1 MHz.  The parameter
+For the Mark~III/IV and legacy VLBA systems, frequencies can be set to
+the nearest 10 kHz.  For the RDBE with the DDC personality on the
+VLBA, usable frequencies are multiples of 15.625 kHz.  Note that, if
+there is a mix of systems with 10 kHz and 15.625 kHz steps, one should
+round to 250 kHz because that is the lowest value common to both.
+Other systems are different --- VSOP, for
+example, can only be set to the nearest 1 MHz.  The RDBE with the
+PFB personality can only do frequencies in 32 MHz steps, and those
+have LO dependent offsets --- it is probably best to avoid {\tt DOPPLER}
+when using the PFB.  The parameter
 \htmlref{{\tt DOPINCR}}{MP:DOPINCR} can be used to control the rounding.
 
 The doppler calculations are for the center of the Earth for the
@@ -5598,11 +5605,16 @@ It is no longer recommended because of possible confusion with
 frequencies using \htmlref{{\tt DOPPLER}}{MP:DOPPLER}.  The
 frequencies will be rounded to the nearest {\tt N * DOPINCR(1) +
 DOPINCR(2)}.  The default for {\tt DOPINCR(1)} is 10 kHz, the setting
-interval for the BBCs in VLBA and Mark~III/IV systems.  However VSOP
-requires a 1 MHz interval and at some bands, the ATCA LO is set in
-intervals of 1 MHz + 0.5 MHz.  The values are in kHz.  A new value may be
-given for each scan, although usually a single value would be used for
-the whole experiment.
+interval for the BBCs in legacy VLBA and Mark~III/IV systems.  The
+RDBE with the DDC personality needs 15.625 kHz.  Mixed legacy and RDBE
+systems should use 250 kHz, the smallest value that is a multiple of
+both 10 kHz and 15.625 kHz.  It is best not to use DOPPLER with the
+RDBE PFB personality because of the tight tuning restrictions.  The
+ATCA LO is set in intervals of 1 MHz + 0.5 MHz.
+
+The values are in kHz.  A new value may be given for each scan,
+although usually a single value would be used for the whole
+experiment.
 
 \rcwbox
 {A number specifying a frequency in kHz.}
@@ -13584,6 +13596,31 @@ more information.
 
 \begin{itemize}
 
+deal with ex eb_rdbe.
+
+***  Make INTENT='NONE' flush all previous intents.
+
+\item Needed to adjust several examples because updated catalog
+information from Europe switched stations to new digital backends.
+Those have different tuning constraints than the old systems.
+Nov. 13, 2013 and later  RCW.
+
+\item Changed TSCAL default in station catalog to 'GAP', indicating
+that the station needs gaps between scans for Tsys measurements.
+All VLBA stations are set explicitly to 'CONT'.  Nov 12, 2013  RCW.
+
+\item No longer warn when the DDC frequency is not a multiple of
+250 kHz as we are no longer concerned about that working, unless
+older systems limited to N*10 kHz are used.  The error when the
+frequency is not a multiple of 15.625 kHz is still in effect.
+
+\item Point out to users when they mix RDBE and non-RDBE frequency 
+and station files.  That is generally a bad idea and has caused 
+problems for some observations.  Nov. 5, 2013  RCW.
+
+\item Change the trigger for warning messages about leaving time for
+Tsys measurements to include the requirement that TSCAL be 'GAP'.
+Nov. 4, 2013. RCW
 
 \item Change the default firmware for the RDBE_DDC to be VDIF.  While
 at it, split the setting of default values of DBE out of CHKFIRM  and
