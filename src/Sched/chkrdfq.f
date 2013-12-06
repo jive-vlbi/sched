@@ -263,7 +263,7 @@ C
      2           ' of 15.625 kHz.'
                CALL WLOG( 1, MSGTXT )
                MSGTXT = ' '
-               WRITE( MSGTXT, '( 3A,  A, I3, F15.6,)' ) 
+               WRITE( MSGTXT, '( 3A,  A, I3, F15.6 )' ) 
      1            '          ',
      2            ' Found station station/setup/chan/frequency : ', 
      3            SETSTA(1,KS), SETNAME(KS)(1:LEN1(SETNAME(KS))),
