@@ -45,10 +45,10 @@ PGBIND_FLAGS=bsd
 #
 # Loader library-flags
 #
-LIBS=-L/usr/X11R6/lib -lX11 -lm -lSystemStubs
-MOTIF_LIBS=-lXm -lXt -L/usr/X11R6/lib -lX11 -lm -lSystemStubs
-ATHENA_LIBS=-lXaw -lXt -lXmu -lXext -L/usr/X11R6/lib -lX11 -lm -lSystemStubs
-TK_LIBS=-L/usr/local/lib -ltk -ltcl -L/usr/X11R6/lib -lX11 -lm -lSystemStubs -ldl
+LIBS=
+MOTIF_LIBS=-lXm -lXt 
+ATHENA_LIBS=-lXaw -lXt -lXmu -lXext 
+TK_LIBS=-L/usr/local/lib -ltk -ltcl  -ldl
 #
 #	Loader command for PGPLOT library
 #
