@@ -23,7 +23,10 @@ C
       INCLUDE    'rdcat.inc'
 C
       INTEGER       ISTAT, RDSTA, I, LEN1, I1, I2
+      LOGICAL       M5AWARN
       CHARACTER     INFILE*80
+      DATA          M5AWARN /.TRUE./
+      SAVE          M5AWARN
 C-----------------------------------------------------------------------
 C     Get input file for stations (equipment) catalog.  Could be
 C     in line or from external file.  If external file, allow use
@@ -274,6 +277,17 @@ C
      4       DISK(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DISK type ' //
      1          DISK(MSTA) // ' for ' // STATION(MSTA) )
+         END IF
+C
+C        Complain about MARK5A at the VLBA.
+C
+         IF( STATION(MSTA)(1:4) .EQ. 'VLBA' .AND. 
+     1       DISK(MSTA) .EQ. 'MARK5A' .AND. M5AWARN ) THEN
+            CALL WLOG( 1, 'STREAD: ==== WARNING ==== Mark5A '//
+     1          'specified for a VLBA  station.' )
+            CALL WLOG( 1, '        Those recorders have been '//
+     1          'removed from most VLBA stations.' )
+            M5AWARN = .FALSE.
          END IF
 C
 C        Be sure the MEDIADEF is an allowed type.

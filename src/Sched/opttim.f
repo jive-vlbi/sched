@@ -341,8 +341,8 @@ C
      1       'OPTTIM: Specified start time before last scan ',
      2       'stop time in scan: ', ISCN
          CALL WLOG( 1, MSGTXT )
-         CALL PRTSCN( LSCN )
-         CALL PRTSCN( ISCN )
+         CALL PRTSCN( LSCN, 'OPTTIM' )
+         CALL PRTSCN( ISCN, 'OPTTIM' )
          CALL ERRLOG( 'OPTTIM: Check scan times and days.' )
       END IF
 C
@@ -372,7 +372,7 @@ C
          WRITE( MSGTXT, '( A, I5 )' )
      1       'OPTTIM: Stop before Start in scan number', ISCN
          CALL WLOG( 1, MSGTXT )
-         CALL PRTSCN( ISCN )
+         CALL PRTSCN( ISCN, 'OPTTIM' )
          CALL ERRLOG( 'OPTTIM: Check scan times and days.' )
       END IF
       IF( STOPJ(ISCN) - STARTJ(ISCN) .LT. ONESEC ) THEN
@@ -380,7 +380,7 @@ C
      1       'OPTTIM: Adjusted times make scan number', ISCN, 
      2       ' shorter than one second long. '
          CALL WLOG( 1, MSGTXT )
-         CALL PRTSCN( ISCN )
+         CALL PRTSCN( ISCN, 'OPTTIM' )
          CALL ERRLOG( 'Check scan times and especially PRESCAN.' )
       END IF
 C

@@ -19,7 +19,7 @@ C
       LOGICAL      KEEP
 C
       INTEGER      IGRP, NPST, ISTA, ICHN, IG, KS, ISRC
-      INTEGER      USESET, GNSET
+      INTEGER      USESET, USELSET, GNSET
       LOGICAL      USEGRP(MPKGRP), FIRST, DOCRD
       DOUBLE PRECISION  LVSTOP(MAXSTA)
       REAL         LVAZ(MAXSTA), LVEL(MAXSTA)
@@ -37,6 +37,10 @@ C
          END DO
          FIRST = .FALSE.
       END IF
+C
+C     Get the source number
+C
+      ISRC = SRCNUM(ISCN)
 C
 C     Deal with a non-pointing scan.  For now, this only means setting
 C     VLAPEAK to an appropriate value.  Don't change it if the user
@@ -80,7 +84,8 @@ C
 C        
       ELSE
 C
-C        Peaking requested.  Be sure that a pointing file was provided.
+C        Peaking requested.  Be sure that a pointing file (peak.cmd or 
+C        whatever) was provided.
 C
          IF( NPKGRP .LE. 0 ) THEN
             WRITE( MSGTXT, '( 2A )' )
@@ -124,46 +129,40 @@ C
             RETURN
          END IF
 C
-C        If POINT is zero, that means use any stations in the
-C        pointing file.  Insist that all stations involved use the 
-C        same setup file.  Check that to be sure.  Waited to here
+C        If POINT is zero (IGRP=0), that means use any stations in
+C        the pointing file.  Insist that all stations involved use 
+C        the same setup file.  Check that to be sure.  Waited to here
 C        so that we only check groups that were used.
 C
          USESET = 0
+         USELSET = 0
          IF( IGRP .EQ. 0 .AND. NPKGRP .GT. 1 ) THEN
             DO IG = 1, NPKGRP
 C
                IF( USEGRP(IG) ) THEN
-                  IF( USESET .EQ. 0 ) THEN
-
-C                    Record the first setup file number.
 C
-                     USESET = PKLSET(IG)
+C                 Record the setup when first seen.
 C
-                  ELSE
+                  IF( USESET .EQ. 0 ) USESET = PKLSET(IG)
+                  IF( USELSET .EQ. 0 ) USELSET = PKLSETL(IG)
 C
-C                    Look for a change that shouldn't happen.
+C                 Look for a change that shouldn't happen.
 C
-                     IF( PKLSET(IG) .NE. USESET ) THEN
-                        WRITE( MSGTXT, '( 2A )' )
-     1                     'MAKEPTG:  POINT was set to zero ',
-     2                     '(or no value) for some scan and'
-                        CALL WLOG( 1, MSGTXT )
-                        MSGTXT = ' '
-                        WRITE( MSGTXT, '( 2A )' )
-     1                     '          not all groups in the PEAKFILE ',
-     2                     'use the same setup file.'
-                        CALL WLOG( 1, MSGTXT )
-                        MSGTXT = ' '
-                        WRITE( MSGTXT, '( 2A )' )
-     1                     '          Either specify pointing groups ',
-     2                     'with POINT or use a common pointing setup.'
-                        CALL WLOG( 1, MSGTXT )
-                        CALL ERRLOG( 
-     1                     'MAKEPTG: change POINT or pointing setups.' )
-                     END IF
-C
+                  IF( PKLSET(IG) .NE. USESET .OR. 
+     1                PKLSETL(IG) .NE. USELSET) THEN
+                     CALL WLOG( 1, 'MAKEPTG:  POINT was set to zero '//
+     1                  '(or no value) for some scan and' )
+                     CALL WLOG( 1, '          not all groups in the '//
+     1                  'PEAKFILE use the same setup file' )
+                     CALL WLOG( 1, '          or the same line '//
+     1                  'setup file.')
+                     CALL WLOG( 1, '          Either specify  '//
+     1                  'pointing groups with POINT or use common '//
+     2                  'pointing setups.' )
+                     CALL ERRLOG( 
+     1                  'MAKEPTG: change POINT or pointing setups.' )
                   END IF
+C
                END IF
 C
             END DO
@@ -172,11 +171,18 @@ C
 C        Make the necessary conversions.  Assume that the source is
 C        right - either set by the scheduler or added by ADDPEAK.
 C   
-C        Setup file:
+C        Setup file.  Use different ones for line and continuum 
+C        sources.
 C   
-         SETNUM(ISCN) = PKLSET( MAX( 1, IGRP ) )      
+         IF( CALCODE(SRCNUM(ISCN)) .NE. 'L' ) THEN
+            SETNUM(ISCN) = PKLSET( MAX( 1, IGRP ) )      
+         ELSE
+            SETNUM(ISCN) = PKLSETL( MAX( 1, IGRP ) )      
+         END IF
          DO ISTA = 1, NSTA
-            NSETUP(ISCN,ISTA) = GNSET(ISCN,ISTA)
+            IF( STASCN(ISCN,ISTA) ) THEN
+               NSETUP(ISCN,ISTA) = GNSET(ISCN,ISTA)
+            END IF
          END DO
 C   
 C        Doppler specifications.
@@ -198,11 +204,13 @@ C
          END DO
 C
          IF( VLSR(1,SRCNUM(ISCN)) .GT. -1.E8 ) THEN
+C
+C           Needs doppler
+C
             IF( DOCRD ) THEN
                GOTCRD(ISCN) = .TRUE.
                CRDDOP(ISCN) = .TRUE.
                CRDNCH(ISCN) = 2
-               ISRC = SRCNUM(ISCN)
                IF( CALCODE(ISRC) .EQ. 'L' ) THEN
                   DO ICHN = 1, MAXCHN
                      CRDBW(ICHN,ISCN) = 2.0D0

@@ -25,7 +25,7 @@ C
       INCLUDE  'schfreq.inc'
 C
       INTEGER     KS, ICH, JCH, IIF, MIF, NIF, KSTA, NNIF(4), I, IBBC
-      INTEGER     MAXBBC, MAXIF
+      INTEGER     MAXBBC, MAXIF, IC, LEN1
       PARAMETER   (MAXBBC=16, MAXIF=4)
       LOGICAL     ERRS, SBWARN, IFNEW, OK, SOMEBAD
 C     Can have up to 4 IFs but actual number depends on DBBCVER
@@ -283,9 +283,22 @@ C
                IF( .NOT. OK ) THEN
                   SOMEBAD = .TRUE.
                   SETMSG = ' '
-                  WRITE( SETMSG, '( 3A, I4 )' )
+                  WRITE( SETMSG, '( 3A, I3, A, I3 )' )
      1                'CHKDBBC: Illegal IF input ', IFCHAN(ICH,KS),
-     2                ' for DBBC, channel ', ICH
+     2                ' for DBBC, channel ', ICH, '  BBC ', IBBC
+                  CALL WLOG( 1, SETMSG )
+                  SETMSG = ' '
+                  WRITE( SETMSG, '( 2A )' )
+     1              '         Allowed IF index and first character',
+     2              ' for this BBC are:'
+                  IC = LEN1( SETMSG ) + 1
+                  DO IIF = 1, MAXIF
+                     IF( IFBBC(IBBC,IIF) .EQ. 1 ) THEN
+                        WRITE( SETMSG(IC:IC+5), '( 1X, A1, I1, 3A1 )' )
+     1                        '(', IIF, ',', IFNAM(IIF), ')'
+                        IC = IC + 6
+                     END IF
+                  END DO
                   CALL WLOG( 1, SETMSG )
                   ERRS = .TRUE.
                END IF

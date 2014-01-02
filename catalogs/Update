@@ -82,11 +82,12 @@ cat Master_NRAO/freq_top.dat \
        > freq.dat
 
 echo Make the new freq_RDBE.dat file.
+#  Took out:     Master_NRAO/freq_RDBE_EB.dat \
+
 cat Master_NRAO/freq_RDBE_top.dat \
     version \
     Master_NRAO/freq_RDBE_VLBA.dat \
     Master_NRAO/freq_RDBE_GB.dat \
-    Master_NRAO/freq_RDBE_EB.dat \
     Master_ATNF/freq_ATNF.dat \
     Master_NRAO/freq_Arecibo.dat \
     Master_JIVE/freq_EVN.dat \
@@ -130,9 +131,14 @@ echo ++end >> messages.txt
 #  Auto reference pointing control files.
 
 echo Make the new peakxxx.cmd files
-sed s:zzzz:pt7mm.set:  Master_NRAO/peak.cmd > peak.cmd
-sed s:zzzz:ptd7mm.set:  Master_NRAO/peak.cmd > peak_RDBE_DDC.cmd
-sed s:zzzz:ptr7mm.set:  Master_NRAO/peak.cmd > peak_RDBE_PFB.cmd
+sed s:zzzz:pt7mm.set:  Master_NRAO/peak.cmd | \
+sed s:lzzz:pt7mm.set:  >  peak.cmd
+
+sed s:zzzz:ptd7mm.set:  Master_NRAO/peak.cmd | \
+sed s:lzzz:ptdl7mm.set:  > peak_RDBE_DDC.cmd
+
+sed s:zzzz:ptr7mm.set:  Master_NRAO/peak.cmd | \
+sed s:lzzz:ptr7mm.set:   > peak_RDBE_PFB.cmd
 
 
 echo 

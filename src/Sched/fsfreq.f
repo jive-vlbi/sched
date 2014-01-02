@@ -4,14 +4,14 @@ C
 C     Routine for SCHED that gets the LO sum, the baseband frequency,
 C     and the bandwidth for each channel for a frequency set.
 C     It has to take into account any FREQ and BW requests in
-C     the schedule, besides the setup file information.
+C     the schedule, besides the setup file information.  Note that
+C     the bandwidth must be half the sample rate with most of the 
+C     modern systems, so the bandwidth setting capability is no
+C     longer all that useful.  This could be changed in SCHED by
+C     adjusting the sample rate, but that is a big job left for
+C     some later time.
 C
-C     Note that, for historical reasons, there is a potential 
-C     confusion because the BBC parameters of the call
-C     refer to the RDBE channels for the VLBA when that is
-C     in use while the CRD parameters are for the legacy BBCs.
-C
-C     Also provide the values for the VLBA legacy system
+C     This routine also provides the values for the VLBA legacy system
 C     which might be different for reference pointing or if the 
 C     new system is being used at too wide a bandwidth or with
 C     too many channels.  These parameters are:
@@ -20,6 +20,12 @@ C       CRDF(ICH)     Baseband frequency for channel.
 C       CRDB(ICH)     Bandwidth for channel.
 C       CRDS(ICH)     Sideband for channel (U/L)
 C       CRDLOSUM(ICH) LO sum to use for setting up PCALX.
+C     The legacy system sample rate can 
+C
+C     Note that, for historical reasons, there is a potential 
+C     confusion because the BBC parameters of the call
+C     refer to the RDBE channels for the VLBA when that is
+C     in use while the CRD parameters are for the legacy BBCs.
 C
 C     Do not call ERRSET from this routine despite the temptation.
 C     It is called by ERRSET, so that can cause big trouble.
@@ -301,7 +307,7 @@ C     is called from here and from CHKRDBE or CHKDBBC.  First the RDBE.
 C
       ERRS = .FALSE.
       IF( DBE(KS) .EQ. 'RDBE_PFB' .OR. DBE(KS) .EQ. 'RDBE_DDC' ) THEN
-         CALL CHKRDFQ( KS, BBCBW, BBCFREQ, ERRS )
+         CALL CHKRDFQ( KS, KF, BBCBW, BBCFREQ, ERRS )
       END IF
 C
 C     DBBC (EVN etc.)

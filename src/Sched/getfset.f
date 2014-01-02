@@ -5,16 +5,16 @@ C
 C     A setup group specifies most of the information about the 
 C     configuration at a station.  But SCHED has scan dependent
 C     variables that can impose variations on what is in the setup.
-C     Those are FREQ, BW, DOPPLER, PCAL, CRDFREQ, CRDBW, CRDDOP, and
-C     PCAL.  A frequency set is a unique combination of these 
-C     parameters.  There will be a different frequency set for each
-C     different combination of these parameters is found.
+C     Those are FREQ, BW, DOPPLER, PCAL, CRDFREQ, CRDBW, and CRDDOP.
+C     A frequency set is a unique combination of these parameters.  
+C     There will be a different frequency set for each different 
+C     combination of these parameters that is found.
 C
 C     Until August 2013, SCHED also had pulse cal sets.  Those
 C     are being merged into the frequency sets to ease some bookkeeping
-C     issues at the time the ability to set the legacy system BBCs
-C     used for reference pointing separately from the RDBE channels
-C     was added.  RCW.
+C     issues.  It was done at the time the ability to set the legacy 
+C     system BBCs used for reference pointing separately from the RDBE 
+C     channels was added.  RCW.
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'

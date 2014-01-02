@@ -336,7 +336,7 @@ C        Check the frequencies and bandwidths.  This is pulled out
 C        so that it can be used again later on frequencies set in-line
 C        or using Doppler.
 C
-         CALL CHKRDFQ( KS, BBFILT(1,KS), BBSYN(1,KS), ERRS )
+         CALL CHKRDFQ( KS, 0, BBFILT(1,KS), BBSYN(1,KS), ERRS )
 C
       END IF
 C

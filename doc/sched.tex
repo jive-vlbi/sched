@@ -67,10 +67,14 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Development Version 11.1 after beta of June 19, 2013}
+\title{THE \schedb USER MANUAL \\  Beta Version 11.1 of Jan. 2, 2014}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
+
+% *****   Update important notes item on state of the conversion
+
+
 
 \schedb is a program for planning and scheduling Very Long Baseline
 Array (VLBA), High Sensitivity Array (HSA), Global Very Long Baseline
@@ -131,6 +135,18 @@ entirely up to date.
 
 \begin{list}{}{\parsep 0.5em \itemsep 0.5em }
 
+\item The world of VLBI is in a transition from the traditional
+backends to the newer digital backends such as the RDBE and the DBBC
+and to newer recording systems such as the MARK5C.  \schedb supports
+many of the digital backends and new recorders.  But not all of the
+examples have been converted yet and some sections of the manual may
+still be somewhat dated.  We're working on the documentation, but need 
+to get this version of \schedb out to support the new capabilities in 
+the field.
+
+\item The MARK5A recorders were removed from the VLBA in December
+2013.  All projects must now use the RDBE.
+
 \item Many requests for help from \schedb users are the result of trying
 to specify more information than necessary.  \schedb knows how to set up
 the details for most observations at most stations.  Before trying to
@@ -141,11 +157,6 @@ you only need to set {\tt NCHAN, BITS, BBFILTER, FREQREF, FREQOFF,
 NETSIDE,} and {\tt POL}.  In fact, you can just set {\tt BAND} rather
 than {\tt FREQREF} and {\tt FREQOFF} and \schedb will give you the
 standard default frequencies.
-
-\item Unless you need to force a non-standard recording medium with
-the {\tt MEDIA} parameter, you should not need a {\tt TAPEINI}
-section.  Many people with old template files still have them and they
-may not be right.  Get rid of them.
 
 \item Mark IV users please see the \htmlref{Mark~IV Section}{SSEC:MKIV}
 for information about mode and mode change restrictions.
@@ -273,9 +284,9 @@ details for the masochistic.
 \item \htmlref{Related programs:}{SEC:RELATEDPROGRAMS} Where does \schedb fit
 in.
 
-\item \htmlref{Station codes:}{APP:STACODES} A list.
+\item \htmlref{Station codes:}{APP:STACODES} A list, a bit dated.
 
-\item \htmlref{Changes to \sched:}{CHP:CHANG} A list of recent changes.
+\item \htmlref{Changes to \sched:}{CHP:CHANG} A list of recent \schedb changes.
 
 \item \htmlref{A history of \sched:}{SEC:HIST} A brief history.
 
@@ -304,7 +315,9 @@ potential concerns if your project might be scheduled during VLA-Pie Town
 link observations on VLA and you are given a VLA antenna instead of
 VLBA\_PT.  Note that the analog PT link has been taken down and use of
 Pie Town with the VLA will not resume until a digital link has been
-developed and activated so this is not currently (late 2007) a concern.
+developed and activated so this is not currently (late 2007 --- still true
+late 2013) a concern.  Also Y1 is still not available with the new VLA
+systems as of late 2013.
 
 \item \htmladdnormallink{VLBI on the GBT:}
 {http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html\#hifreq}
@@ -609,10 +622,12 @@ suffice for nearly all users.  If not, entries can be included in the
 \htmlref{Main Schedule Input File}{SEC:SCHPAR}.  Station positions may
 stored sparately in the \htmlref{Location Catalog}{SEC:STACAT}.  The
 standard station catalog is \htmladdnormallink{{\sl
-\$SCHED/catalogs/stations.dat}}{catalogs/stations.dat}.  A second version
-is available for use with the new backend (RDBE) hardware.  It is
+\$SCHED/catalogs/stations\_RDBE.dat}}{catalogs/stations\_RDBE.dat}. The old
+version for use with the legacy VLBA systems is still 
 \htmladdnormallink{{\sl 
-\$SCHED/catalogs/stations\_RDBE.dat}}{catalogs/stations\_RDBE.dat}.
+\$SCHED/catalogs/stations.dat}}{catalogs/stations.dat}.  By the next
+\schedb release, it is likely that {\sl stations.dat} will be the RDBE version
+and the legacy version will be renamed or removed.
 
 \item[\htmlref{Location Catalog}{SEC:STACAT}:] This file contains
 station locations.  The standard version reflects the locations and
@@ -637,13 +652,15 @@ of each IF are given.  \schedb can use this information to provide
 good defaults for many parameters in the setup files.  The standard
 file should be used.  Any non-standard information can be in the setup
 files.  This file cannot be imbedded in the main input file.  The standard
-frequency catalog is \htmladdnormallink{{\sl
-\$SCHED/catalogs/freq.dat}}{catalogs/freq.dat}.  A second version is
-available for use with the new backend hardware (RDBE).  It is
-\htmladdnormallink{{\sl 
-\$SCHED/catalogs/freq\_RDBE.dat}}{catalogs/freq\_RDBE.dat}
+frequency catalog, for use with the RDBE systems, is \htmladdnormallink{{\sl
+\$SCHED/catalogs/freq\_RDBE.dat}}{catalogs/freq\_RDBE.dat}.  The legacy version is
+still available.  It is \htmladdnormallink{{\sl 
+\$SCHED/catalogs/freq.dat}}{catalogs/freq.dat}
 The main difference is that the VLBA IFs are assumed to be between 512
-and 1024 MHz, not 500 and 1000 MHz.
+and 1024 MHz in the RDBE version, not 500 and 1000 MHz as in the legacy
+version.  By the next \schedb release, the RDBE version will likely become
+{\sl \$SCHED/catalogs/freq.dat} and the legacy version will be renamed or
+removed.
 
 \item[\htmlref{Tape Initialization File}{SEC:TPINI}:] This file tells
 \schedb the properties of the tape systems at the stations and where
@@ -721,13 +738,16 @@ manually controlled antennas, but now most antennas are computer
 controlled and these files are more useful for the scheduler.  The
 files are named, for example, {\sl bv016sch.pt}.
 
-\item[VLBA type Antenna Control Files:]  These files provide
-the on-line control systems of the type found at VLBA antennas with
-the information they need to control the observations.  There is one
-file per antenna that uses a VLBA control computer for either full
-control of the station or for control of just the data aquisition
-system (data recorders, baseband converters etc.).  The files are named,
-for example, {\sl bv016crd.pt}.
+\item[VLBA type Antenna Control Files ({\sl crd} files):] These files
+provide the legacy on-line control systems of the type found at VLBA
+antennas with the information they need to control the observations.
+There is one file per antenna that uses a VLBA control computer for
+either full control of the station or for control of just the data
+aquisition system (data recorders, baseband converters etc.).  The
+files are named, for example, {\sl bv016crd.pt}.  Note that the
+VLBA antennas currently are in transition with some items controlled
+by the legacy system and some by the new control system which is
+commanded using the VEX file.
 
 % \item[Other Antenna Control Files:]  These files are
 % antenna control files in VLA observe deck format, Green Bank Card
@@ -736,13 +756,15 @@ for example, {\sl bv016crd.pt}.
 % bv016obs.y} for the VLA file.  All of these format types have been
 % abandoned and SCHED no longer produces them.
 
-\item[VEX file:] This is the file needed for stations under control of
-the Goddard ``Field System'', e.g.\ MkIV telescopes.  It is also used
-to control correlation on many systems including the VLBA, JIVE, and
-MarkIV correlators.  As new hardware is added, it will also be used
-for station control on the VLBA.  The VEX files are named, for
-example, {\sl bv016.vex}.  A single such file describes the
-observations for all antennas.
+\item[VEX file:] This is the main output file needed by the stations
+for antenna and recording system control and by the correlators to
+process observations.  It is now used by most VLBI systems around the
+world, not just the Goddard ``Field System''.  For the VLBA, it is
+used to control the RDBE, MARK5C, and some antenna data path switches.
+The legacy system, commanded by the crd files described above, still
+controls the antenna pointing among various functions.  Both are
+needed.  A single VEX file describes the observations for all
+antennas.
 
 \item[V2D file:] This is a template correlator setup file for the
 (VLBA) DiFX correlator.  Information that needs to be modified from what
@@ -811,7 +833,6 @@ for planning and for information while making setup files.
 
 
 
-
 \section{\label{SEC:EXAMPLES}Examples}
 
 There are a number of example \schedb input files distributed with the
@@ -822,8 +843,9 @@ as templates from which to create your own schedule.  All should
 produce valid schedules if run as is.  In fact, all are used in the
 {\sl Verify} script that is used to check new installations and new
 versions of \sched.  All of the examples are described briefly and
-linked here.  As of Feb. 2013, there were 49 examples.  Some
-consolidation is on the agenda for future releases.
+linked here.  As of Dec. 2013, there were 52 examples.  Some
+consolidation is on the agenda for future releases, partly from purging
+ones most appropriate for the legacy systems no longer in use.
 
 The two examples in subsections below show a typical, reasonably
 simple, schedule and a minimal schedule of the type one might use for
@@ -837,8 +859,7 @@ and currently preferred styles are still only seen in a few.  Some
 with recent (After late 2010) modifications that are especially current are
 {\sl manual\_1.key}, {\sl egdelzn.key}, {\sl egrdbe.key}, 
 {\sl egrdbe2.key}, {\sl egddc.key}, and {\sl egcent.key} which target 
-certain new features,
-but also show decent scheduling style.
+certain new features, but also show decent scheduling style.
 
 See the section of this manual on
 \hyperref{installation}{installation (Section }{)}{SEC:INSTALL} if
@@ -860,7 +881,7 @@ file is shown below as \htmlref{the first example}{SSEC:EXAMPLE1}.  It
 is a fairly typical \schedb input file for a VLBA plus single VLA
 antenna observation.  It uses defaults where it can and is relatively
 simple.  This example is a good file to use as a template for making
-new schedules.
+new schedules. This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl manual\_1.key}}{examples/manual\_1.key}]
 This file will produce the same schedule as the
@@ -886,7 +907,8 @@ manual\_simp.key}.
 
 \item[\htmladdnormallink{{\sl eglst.key}}{examples/eglst.key}] is a
 sample schedule using LST in the way requested for dynamic scheduling
-projects on the VLBA.
+projects on the VLBA.  This file has not been updated from MARK5A to 
+MARK5C.
 
 \item[\htmladdnormallink{{\sl egvlba.key}}{examples/egvlba.key}] is a
 sample schedule for VLBA observations.  It demonstrates band switching
@@ -902,11 +924,13 @@ for 24 hours.  For dynamic scheduling, it is useful to be able to
 wrap such schedules to use a different start time.  This shows how
 to put in comments for the schedulers to aid that process and shows
 how the schedulers can use parameters {\tt WRAP24 and DOSCANS} to
-simplify the wrapping process.
+simplify the wrapping process.  Note, this has not yet been updated
+from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl egOH.key}}{examples/egOH.key}] is a
 sample spectral line file for VLBA
 observations of several OH masers transitions.
+This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl egcent.key}}{examples/egcent.key}] is
 a sample showing how to specify multiple phase centers for a pointing
@@ -967,13 +991,16 @@ manual.  It is for VLBA and VLA observations of 7mm SiO lines.  It
 is more complicated than \htmladdnormallink{{\sl
 egOH.key}}{examples/egOH.key} and also demonstrates setting VLA
 frequencies and many other setup parameters that were defaulted
-in {\sl egOH.key}.
+in {\sl egOH.key}.  This file has not been updated from MARK5A to 
+MARK5C.
 
 \item[\htmladdnormallink{{\sl eg512.key}}{examples/eg512.key}] is a
 sample schedule for the VLBA that uses the 512 Mbps mode.
+This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg512g.key}}{examples/eg512g.key}] is a
 sample schedule for the a global observation that uses the 512 Mbps mode.
+This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg1024.key}}{examples/eg1024.key}] is a
 sample schedule for the EVN that uses the 1024 Mbps mode.
@@ -989,7 +1016,11 @@ use 2 heads.
 is a sample file for simple continuum observations involving the VLBA,
 the EVN,and the GBT.  The VLA has been removed because this example
 uses the legacy recording system which is no longer supported at the
-VLA.
+VLA. This file has not been updated from MARK5A to MARK5C.
+
+\item[\htmladdnormallink{{\sl egglobalOH.key}}{examples/egglobalOH.key}]
+is a sample file for line observations involving the VLBA,
+the EVN,and the GBT.
 
 \item[\htmladdnormallink{{\sl egiv.key}}{examples/egiv.key}] is a
 sample schedule for Mark IV/VLBA observations involving mainly EVN
@@ -1006,6 +1037,7 @@ field system and VLBA format files for those stations that need them.
 VSOP (HALCA) is no longer operational, but the VSOP-2 project has started
 so this example has been retained.  It will be modified for VSOP-2
 when that project is far enough along to make it clear what is needed.
+This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg3mma.key}}{examples/eg3mma.key}] is a
 VLBA schedule for observations at 86 GHz.  There is special emphasis
@@ -1016,6 +1048,7 @@ for reference pointing on masers while observing with the new RDBE wide
 band system with the PFB personality.  For instructions on how to do 
 that, please see 
 \htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
+This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg3mmb.key}}{examples/eg3mmb.key}] is
 another VLBA 3mm schedule, but in this one \schedb is instructed to
@@ -1027,6 +1060,7 @@ for reference pointing on masers while observing with the new RDBE wide
 band system with the PFB personality.  For instructions on how to do 
 that, please see 
 \htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
+This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg3mmc.key}}{examples/eg3mmc.key}] is
 yet a third VLBA 3mm schedule, again using automatic insertion of
@@ -1039,6 +1073,7 @@ for reference pointing on masers while observing with the new RDBE wide
 band system with the PFB personality.  For instructions on how to do 
 that, please see 
 \htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
+This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}]
 is similar to {\sl eg3mmb.key}, but shows how to make reference
@@ -1057,7 +1092,7 @@ It pays some attention to minimizing slew times.  It is meant to
 simplify scheduling of projects that try to image a number, perhaps
 large, of sources using multiple snap-shots on each.  It was
 originally provided for the VIPS project but should be useful for many
-other programs.
+other programs.  This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl evn\_cont\_strong.key}}
 {examples/evn\_cont\_strong.key}] is an example of EVN observations at
@@ -1116,6 +1151,10 @@ tracking.
 \item[\htmladdnormallink{{\sl lba.key}}{examples/lba.key}] is a
 sample schedule for the Long Baseline Array in Australia.
 
+\item[\htmladdnormallink{{\sl lba\_mk5.key}}{examples/lba\_mk5.key}] is a
+sample schedule for the Long Baseline Array in Australia when some
+MARK5 stations are included.
+
 \item[\htmladdnormallink{{\sl planvla.key}}{examples/planvla.key}] is a
 planning file similar to the other VLBA planning files, but has
 all 27 stations of the VLA A configuration.  You can use this to
@@ -1138,17 +1177,19 @@ much like {\sl doptg.com} except that it uses the \htmlref{{\tt DOSTA}}
 {MP:DOSTA} parameter to allow the same script to be used for stations
 with 3mm and stations without 3mm.
 
-\item[\htmladdnormallink{{\sl egsat.com}}{examples/egsat.key}] demonstrates
-scheduling a satellite observation using both MER-B and Stardust.  It
-also includes Mars to exercise the planet option.  These capabilities are
-unlikely to be of interest outside of the AOC.  In fact, the required
-NAIF software libraries would hugely increase the size of the SCHED
-distribution and are not normally included.
+\item[\htmladdnormallink{{\sl egsat.com}}{examples/egsat.key}]
+demonstrates scheduling a satellite observation using both MER-B and
+Stardust.  It also includes Mars to exercise the planet option.  These
+capabilities are unlikely to be of interest outside of the AOC.  In
+fact, the required NAIF software libraries would hugely increase the
+size of the SCHED distribution and are not normally included.  This
+file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl egmk5vex.key}}{examples/mt506.key}] was
 originally a file for testing Mark5A recording at the stations.  It
 uses a special stations catalog.  It is basically out of date now
-that Mark5 is the standard.
+that Mark5 is the standard.  This file has not been updated from MARK5A 
+to MARK5C.
 
 \item[\htmladdnormallink{{\sl mt506.key}}{examples/mt506.key}] is
 one of the weekly VLBA integrity check observations.  It is here mainly
@@ -1178,14 +1219,15 @@ The following example gives a fairly typical schedule that relies on
 required information.  The cover and correlator information cannot be
 reduced nor can the individual scan information.  All of those inputs
 are unique to the observation.  This example is probably the most
-useful one for users to use as a template for making their own
-VLBA schedules, including for observations that include an antenna
-of the VLA.  It used to produce the same schedule as \htmladdnormallink{{\sl
+useful one for users to use as a template for making their own VLBA
+schedules, including for observations that include an antenna of the
+VLA.  It used to produce the same schedule as \htmladdnormallink{{\sl
 manual\_1.key}}{examples/manual\_1.key} but that example actually
 shows how many items, that are defaulted or taken from standard
 catalogs here, can be specified in the schedule file.  More recently
 (late 2012), {\sl manual\_1.key} was converted to use the wideband
-RDBE system.
+RDBE system.  Note that {\sl manual\_2.key} has not yet been updated
+from MARK5A to MARK5C.
 
 \verbatiminput{../examples/manual_2.key}
 
@@ -2022,13 +2064,14 @@ correlators are faster so the total time needed for both starting
 recording and synchronizing is only a few seconds, or less.  Another
 reason for possibly starting recordings early, or even recording
 continuously between scans is that the Mark5A disk system can only
-handle up to 1024 recording scans.  A recording scan is the time between
-stops of the recording media.  There might be several source scans in
-a recording scan.  Fast-switching, phase-referencing observations
-could run into this issue so the default \htmlref{{\tt
-MINPAUSE}}{MP:MINPAUSE} (see below) has been set to prevent recording
-gaps during the fast-switching in most cases.  This section describes
-the tools in \schedb to allow the recordings to be started early.
+handle up to 1024 recording scans.  A recording scan is the time
+between stops of the recording media.  There might be several source
+scans in a recording scan.  Fast-switching, phase-referencing
+observations with the older systems could run into this issue so the
+default \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} (see below) has been set
+to prevent recording gaps during the fast-switching in appropriate cases.
+This section describes the tools in \schedb to allow the recordings to
+be started early.
 
 The schemes described in the \htmlref{scan times
 section}{SSEC:SCANTIMES} (parent of this section) are used to set the
@@ -2061,14 +2104,13 @@ factor to get the effect at record time.  The speedup factor is no
 longer a simple concept so that adjustment has been removed and now
 {\tt MINPAUSE} applies to the record time.
 
-The default values for \htmlref{{\tt PRESTART}}{MP:PRESTART} and
-\htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} are zero when using the VLBA
-control system with the RDBE based wideband system (VLBA, GBT, EB)
-and when using the VLA.  Because these systems use the data good time, the
-effects of offsetting the recording start time from the nominal start
-time are basically ignored and create some confusion.  For the legacy
-systems, the defaults are 5 seconds for {\tt PRESTART} and 10 seconds
-for {\tt MINPAUSE}.
+The default value for \htmlref{{\tt PRESTART}}{MP:PRESTART} is 5 seconds
+when the {\tt DAR} is the legacy VLBA system or the MKIV system.  Otherwise
+it is zero, which will be the case with the modern digital systems.  The
+default value for \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE} is 10 seconds 
+when using the Field System or the legacy VLBA DAR.  Otherwise it is
+zero which is the case for the new VLBA digital system.  The Field System
+with the DBBC may be switched to zero in the future.
 
 {\tt PRESTART} is applied before {\tt MINPAUSE}.  First the recording
 start time is shifted earlier, then the interval from the last
@@ -2088,7 +2130,8 @@ Another way to shift the recording start time is to use the parameter
 way of introducing gaps between scans, but was considered obsolete in
 recent years. However, it may have a use as a way of increasing the
 time allowed between scans beyond what would be given with the station
-parameter {\tt TSETTLE}.  {\tt PRESCAN} shifts the start time in
+parameter {\tt TSETTLE}, although a negative {\tt PRESTART} can do
+the same thing.  {\tt PRESCAN} shifts the start time in
 either direction (positive shifts to later times) after the other
 parameters discussed above set the time.  If a positive {\tt PRESCAN}
 is given, and the {\tt DURation} or {\tt DWELL} is increased by the
@@ -2912,7 +2955,8 @@ catalog, and the rest frequency, the required observing center
 frequency is calculated.  The antennas need to know the LO settings so
 \schedb must know the bandwidth.  The bandwidth will usually be
 obtained from the setup file.  It may be provided for the scan with
-the \htmlref{{\tt BW}}{MP:BW} parameter.
+the \htmlref{{\tt BW}}{MP:BW} parameter for some systems, unfortunately
+not including the new digital backends such as the RDBE on the VLBA.
 
 The reference frames supported by \schedb are the ``Local Standard
 of Rest'' or LSR {\tt VREF=L}, heliocentric {\tt VREF=H}, and
@@ -3027,12 +3071,13 @@ rest frequencies to use. It must match one of the sets of lines
 named with {\tt LINESET} in the {\tt LINEINIT} input.
 
 \item \htmlref{{\tt BW}}{MP:BW} sets the bandwidth for the scan and
-overrides the setup file value.  This is useful for switching between
+overrides the setup file value.  This was useful for switching between
 wideband observations on calibrators and narrow band observations on
 line sources.  The value in the setup file will be used if it is
 not specified.  In general, it is a good idea to use a new
 setup file when changing bandwidths because quite a few other
-parameters also change.
+parameters also change.  With the new digital back ends, oversampling
+is now allowed so {\tt BW} basically doesn't work.
 
 % (This is out of date) The {\tt BW} parameter is not allowed if VEX
 % files are being written.
@@ -3288,16 +3333,13 @@ peak.cmd}}{catalogs/peak.cmd} (VLBA legacy system),
 peak\_RDBE\_DDC.cmd}}{catalogs/peak\_RDBE\_DDC.cmd} (use with the RDBE
 using the DDC personality), and \htmladdnormallink{{\sl
 peak\_RDBE\_PFB.cmd}}{catalogs/peak\_RDBE\_PFB.cmd} (use with the RDBE
-using the PFB personality).  The three file differ only in the setup
-file they specify and are, in fact, constructed from the same master
-file.
-
- and is available in the
-\schedb catalogs subdirectory.  That file can be used as an example of
-the format.  It is possible to watch details of the process by which
-\schedb chooses pointing sources by setting the parameter
-\htmlref{{\tt PKWATCH}}{MP:PKWATCH}.  Be warned that this can produce
-a lot of output to the {\sl sched.runlog} file.
+using the PFB personality).  The three files differ only in the setup
+files they specify and are, in fact, constructed from the same master
+file.  The standard files can be used as examples of the format.  It
+is possible to watch details of the process by which \schedb chooses
+pointing sources by setting the parameter \htmlref{{\tt
+PKWATCH}}{MP:PKWATCH}.  Be warned that this can produce a lot of
+output to the {\sl sched.runlog} file.
 
 There are several examples that demonstrate the use of reference
 pointing.  The best example for the new systems (RDBE/DDC, WIDAR etc)
@@ -3346,8 +3388,15 @@ NONE}.  This parameter can only be specified once, or rather the last
 value specified for all groups is used.
 
 \item {\tt SETUP} specifies the setup file to use for this group for
-pointing.  If not specified, it keeps the value set in the previous
-group.  The initial default is blank, which will probably produce an error.
+pointing with continuum or very strong line sources.  These are
+sources for which {\tt CALCODE} is not {\tt 'L'}.  If {\tt SETUP} is
+not specified, it keeps the value set in the previous group.  The
+initial default is blank, which will probably produce an error.
+
+\item {\tt SETUPL} specifies the setup file to use for this group for
+pointing on spectral line sources with {\tt CALCODE = 'L'}.  The setup
+should be one with a 2 MHz bandwidth specified.  If not specified, it
+keep uses the value of {\tt SETUP}.
 
 \item {\tt LINEINIT} has exactly the same effect as the main program
 input \htmlref{{\tt LINEINIT}}{MP:LINEINIT} and is used to delimit
@@ -4853,28 +4902,34 @@ patterns and the \htmlref{value from the setup file.}{SP:AZCOLIM}
 {\tt BW} specifies the bandwidths to use for the scan.  One value can
 be given for each baseband channel.  Any unset values will be set
 equal to the first so it is usually only necessary to specify one.
-Because of details of how the defaulting works, once more than one 
-channel is explicitly set to a non-zero value (rather than just defaulting
-to the first), be sure to set that 
-channel is explicitly again, or it will retain the previous value.
-These bandwidth inputs are used mainly for VLBA files, although the value will be
-written to {\tt VC} commands in snap files. If not specified for a
-scan, the most recent value will be used. To get back to the default,
-(from the setup file), specify {\tt BW=0}.  The sign of {\tt BW}
-traditionally has been negative for a net lower sideband.  This
-is no longer required or even recommended.
+Because of details of how the defaulting works, once more than one
+channel is explicitly set to a non-zero value (rather than just
+defaulting to the first), be sure to set that channel explicitly
+again, or it will retain the previous value.  To get back to the 
+default, explicitly set the bandwidth to zero.  Note that, once upon
+a time, the sign of the bandwidth indicated the sideband, but that
+is no longer true.
+
+Some (all?) of the digital backend systems, including the RDBE, cannot
+oversample.  Plus the software job in SCHED to allow the sample rate
+to track the input bandwidth is looking a bit serious - the sample rate
+gets entangled with disk management etc.  So, at least for now (written
+in Dec 2013), it will be necessary to make a new setup file to use
+a different bandwidth for most observations.
 
 Note that new parameter \htmlref{{\tt CRDBW}}{MP:CRDBW} can be used to
-set the VLBA legacy system BBCs to a bandwidth when using the RDBE, 
-which, with the PFB personality, cannot to narrow bandwidths.  This is
-useful for reference pointing.
+set the VLBA legacy system BBCs to a bandwidth when using the RDBE,
+which, with the PFB personality, cannot be set to narrow bandwidths.
+This is useful for reference pointing.  Since the legacy system can
+oversample, {\tt CRDBW} can be used without a new setup file.
 
 \rcwbox
 {Up to one real number for each channel.  The number is the bandwidth
 in MHz.}
 {Need valid setting for the backend in use.  For the VLBA legacy
-system, they were {\tt 0.0625}, {\tt 0.125}, {\tt 0.250}, {\tt 0.5}, {\tt 1},
-{\tt 2}, {\tt 4}, {\tt 8}, or {\tt 16} MHz.}
+system, they were {\tt 0.0625}, {\tt 0.125}, {\tt 0.250}, {\tt 0.5},
+{\tt 1}, {\tt 2}, {\tt 4}, {\tt 8}, or {\tt 16} MHz. For the digital
+backends, must be half the sample rate.}
 {Uses bandwidth from setup file.}
 {Uses the most recent value specified.}
 {{\tt BW=2,2,2,2}}
@@ -5604,13 +5659,16 @@ It is no longer recommended because of possible confusion with
 {\tt DOPINCR} sets the frequency increments to use in setting
 frequencies using \htmlref{{\tt DOPPLER}}{MP:DOPPLER}.  The
 frequencies will be rounded to the nearest {\tt N * DOPINCR(1) +
-DOPINCR(2)}.  The default for {\tt DOPINCR(1)} is 10 kHz, the setting
-interval for the BBCs in legacy VLBA and Mark~III/IV systems.  The
-RDBE with the DDC personality needs 15.625 kHz.  Mixed legacy and RDBE
-systems should use 250 kHz, the smallest value that is a multiple of
-both 10 kHz and 15.625 kHz.  It is best not to use DOPPLER with the
-RDBE PFB personality because of the tight tuning restrictions.  The
-ATCA LO is set in intervals of 1 MHz + 0.5 MHz.
+DOPINCR(2)}.  The default for {\tt DOPINCR(1)} when the RDBE is not in
+use is 10 kHz, the setting interval for the BBCs for the DBBC, LBA,
+and the legacy VLBA and Mark~III/IV systems.  For the {\tt RDBE\_DDC}
+option for {\tt DBE}, the default is 15.625 kHz.  For mixed
+legacy/DBBC/MARKIV and RDBE observations systems, the default is 250
+kHz, the smallest value that is a multiple of both 10 kHz and 15.625
+kHz.  It is best not to use DOPPLER with the RDBE\_PFB personality
+because of the tight tuning restrictions and the fact that the offset
+{\tt DOPINCR(2)} depends on the LO setup.  The ATCA LO is set in
+intervals of 1 MHz + 0.5 MHz.
 
 The values are in kHz.  A new value may be given for each scan,
 although usually a single value would be used for the whole
@@ -5619,7 +5677,7 @@ experiment.
 \rcwbox
 {A number specifying a frequency in kHz.}
 {Any number.}
-{{\tt DOPINCR(1) = 10 kHz} and {\tt DOPINCR(2) = 0}}
+{Depends on DBE --- see text.}
 {A value for each scan.  Defaults to previous scan.}
 {{\tt DOPINCR = 1000,500} (appropriate for ATNF 20 GHz)}
 
@@ -6141,7 +6199,7 @@ Des Small at {\tt small@jive.nl}.
 
 {A file name of up to 80 characters.}
 {Any.}
-{{\tt \$SCHED/catalogs/freq.dat}}
+{{\tt \$SCHED/catalogs/freq\_RDBE.dat}}
 {Uses the last value specified.}
 {{\tt FREQFILE=/users/cwalker/sched/catalogs/freq.dat}}
 
@@ -6189,7 +6247,8 @@ shorter in UT (by about 1.0027).
 
 For all types of scheduling, if the gap between scans is less than the
 value of \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE}, the recordings are
-left running.  The default {\tt MINPAUSE} is 10 seconds.
+left running.  The default {\tt MINPAUSE} is 10 seconds for legacy
+systems and the DBBC. It is zero for the RDBE and WIDAR.
 
 For Vex stations (most non-VLBA stations), gaps should be inserted to
 allow bank changes.  The VLBA can switch between mounted disk banks
@@ -6734,7 +6793,8 @@ characters each.  Note that each string should be in quotes and they
 should be separated by commas.  If the line ends with a comma, the
 next line can be used for the next string.  If no {\tt INTENTs} are
 given, they default to the previous scan.  If any are given, they all
-return to blank unless given again again.
+return to blank unless given again again.  If {\tt NONE} is specified,
+all intents are cleared.
 
 \schedb does not parse most {\tt INTENTs}.  But some, especially related
 to the VLA phasing, are recognized and appropriate actions are taken.
@@ -6795,11 +6855,12 @@ allow mixing methods of specifing these aspects of the observing.
 \rcwbox
 {Up to 25 character strings of up to 80 characters each.  Can use 
 separate lines as long as the preceding line ends in a comma.}
-{Any strings.}
+{Any strings.  'NONE' clears all INTENTES'}
 {Blank}
 {All {\tt INTENTs} keep the last value if none are specified.  If any
-are specified, all are initialized to blank.}
-{intent = 'DETERMINE\_AUTOPHASE', 'CALIBRATE\_BANDPASS'}
+are specified, all are initialized to blank, and must be respecified
+if still desired.}
+{{\tt intent = 'DETERMINE\_AUTOPHASE', 'CALIBRATE\_BANDPASS'}}
 
 
 \subsubsection{\label{MP:LINEINIT}{\tt LINEINIT}}
@@ -6972,8 +7033,9 @@ organized and the playback synchronized.  Those are issues, at a low
 level with the Mark5A systems, but not with the Mark5C, which is in
 use and will become the dominent recording during 2013.  With Mark5C,
 {\tt MINPAUSE} should be set to a very small value or zero.  Zero is
-the default for the VLA and for any system with {\tt CONTROL = VLBA}
-and {\tt DAR=RDBE} in the stations file (VLBA, GBT, EB\_VLBA).
+the default for all systems except the legacy VLBA DAR and anything
+controlled by the Field System (may change for the DBBC).  For the
+exceptions, 10 seconds is used.
 
 For the VLA and sites with the VLBA control system, the recordings are
 started at the data-good time as reflected in the individual station
@@ -7054,7 +7116,9 @@ by the speedup factor has been removed.
 \rcwbox
 {A number giving the minimum recording stoppage in seconds.}
 {Any number.}
-{10 seconds for legacy systems, 0 for VLBA/RDBE and VLA/WIDAR systems.}
+{10 seconds for legacy systems and anything controlled by the
+Field System. It is 0 for anything else including the VLBA/RDBE 
+and VLA/WIDAR systems.}
 {Defaults to previous scan.}
 {{\tt MINPAUSE=30}}
 
@@ -8339,7 +8403,8 @@ on tape stop time given in the section on parameter \htmlref{{\tt GAP.}}
 \rcwbox
 {A time.}
 {Any time.}
-{Not used.}
+{Zero for all systems except legacy VLBA and MKIV DAR, for which it is
+5 seconds.}
 {Defaults to previous scan.}
 {{\tt PRESCAN=20}, meaning start the scan 20 seconds late.}
 
@@ -8805,14 +8870,14 @@ the maximum number of allowed sources in the in-line catalogs.}
 \subsubsection{\label{MP:SRCFILE}{\tt SRCFILE}}
 
 {\tt SRCFILE} is used to specify the name of the external source
-file. See Section~\ref{SEC:SRCCAT} for the required formats. The default {\tt
-SRCFILE} is {\tt
-\$SCHED/catalogs/sources.vlba}.  Assuming the environment variable {\tt
-\$SCHED} is set (see below), this is the usual \schedb source file.
-If {\tt SRCFILE='none'} is specified then no external catalog will be
-read.  The file name is simply passed to the operating system so all
-the usual behavior you expect normally apply, such as the use of the
-current directory if a path is not given.
+file. See Section~\ref{SEC:SRCCAT} for the required formats. The
+default {\tt SRCFILE} is {\tt \$SCHED/catalogs/sources.vlba}.
+Assuming the environment variable {\tt \$SCHED} is set (see below),
+this is the usual \schedb source file.  If {\tt SRCFILE='none'} is
+specified then no external catalog will be read.  The file name is
+simply passed to the operating system so all the usual behavior you
+expect normally apply, such as the use of the current directory if a
+path is not given.
 
 Under unix, environment variables may be used.  For example, if
 {\tt SCHED} is defined to mean {\tt /users/cwalker/sched}, the
@@ -8838,7 +8903,8 @@ then {\tt SRCFILE} and then {\tt SRCFILE2}.
 {Any file name or {\tt none}.}
 {{\tt '\$SCHED/catalogs/sources.vlba'}}
 {Use only once.}
-{{\tt SRCFILE='/users/cwalker/sched/sources.dat'}}
+{{\tt SRCFILE=/users/cwalker/sched/sources.dat}}
+
 
 \subsubsection{\label{MP:SRCFILE2}{\tt SRCFILE2}}
 
@@ -8906,7 +8972,7 @@ local directory), then one can specify the station file with
 \rcwbox
 {A file name of up to 80 characters.}
 {Any valid file name or {\tt none}.}
-{{\tt \$SCHED/catalogs/stations.dat}}
+{{\tt \$SCHED/catalogs/stations\_RDBE.dat}}
 {Only specify once.}
 {{\tt STAFILE='/users/cwalker/sched/stations.dat'}}
 
@@ -9497,7 +9563,7 @@ to specify the pointing related {\tt INTENTs} explicitly although that
 is not prevented.  If that is done, there can be interactions with the
 defaulting when other, unrelated {\tt INTENTs} are used.
 
-The four settings for {\tt VLAPEAK}situations of interest are:
+The four settings for {\tt VLAPEAK} situations of interest are:
 
 \begin{description}
 
@@ -9522,23 +9588,17 @@ frequencies.  This sets {\tt INTENT = VLA:REFERENCE\_POINTING\_OFF}
 
 \end{description}
 
-A pointing pattern can be done if a scan lasts 150 seconds or more
-after arrival at the source.  (Amy - what happens if there is more
-time - is it tweaked with a second determination? Is it worth leaving
-time for two?  This is the old text: and 4 minutes for two
-patterns. The on-line system will keep repeating pointing patterns
-until the scan is over.  The results will be averaged.  Two patterns
-are recommended.)  Reference pointing is important for observations at
-7mm (Q band) and is useful, but not required, at 1cm (K band).  The
-pointing should be updated approximately every hour (some claim
-faster), and any time the antennas move to a significantly different
-part of the sky. At elevations above about 70 degrees, the azimuth
-changes rapidly in both time and calibrator/source position offset.
-Reference pointing may be marginal at such elevations, and, if
-attempted, should be done more often than at lower elevations.  For
-pointing at X band, a calibrator (or target) source should be used
-that has a flux density in excess of about 200 mJy on all VLA
-baselines.  See the VLA documentation for more details and advice.
+A pointing pattern can be done if in a scan if there are at least 150
+on source.  Only one pattern is done, so adding significantly more
+time is not useful (unlike the old VLA system). 
+
+Reference pointing is important for observations at 1cm (K band) and
+higher frequencies (ie Q band).  It might be useful at the high end
+of the 2cm (Ku band) range.  For more information about reference
+pointing on the VLA please see the {\bf Guide to Observing with the VLA}
+section on \htmladdnormallink{High Frequency Observing Strategy}
+{https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/hifreq/strategy}.
+The pointing should be done at C or X band, with X band recommended.
 
 VLA reference pointing and array phasing must not be attempted in
 the same scan.  SCHED will abort if that is tried.
@@ -9549,147 +9609,6 @@ the same scan.  SCHED will abort if that is tried.
 {{\tt 'OFF'}.}
 {Defaults to previous scan.}
 {{\tt VLAPEAK='APPLY'}}
-
-
-
-
-********* Below is the old description.  Amy - should anything below
-be retained?
-
-All of the VLA parameters are, at temporarily, out of use.  The old
-VLA system has been turned off and the EVLA is not yet doing VLBI.
-The control scheme may change with the EVLA.
-
-{\tt VLAPEAK} sets the character to use in the VLA observing deck
-({\sl ...obs.y} file) to control the use of pointing corrections
-determined during the observations.  The actual request to do a
-pointing observation is made by setting \htmlref{{\tt
-VLAMODE}}{MP:VLAMODE} {\tt = IR} in a separate pointing scan on a
-calibrator.  The integration time must be set to 10 seconds, which is
-the default that \schedb does not yet have the ability to modify.
-{\tt VLAPEAK} is used to specify whether or not a previous pointing
-solution should be used as the starting point for the new measurement,
-whether to save a previous solution for use as a future starting point,
-and, for normal scans, whether to use the corrections from pointing
-measurements to adjust the tracking position.
-
-A pointing pattern takes 140 seconds if the VLA correlator integration
-time equals the default 10 seconds, and some extra time should be
-added. Use 150 seconds (after arrival at source) for one pointing
-pattern and 4 minutes for two patterns. The on-line system will keep
-repeating pointing patterns until the scan is over.  The results will
-be averaged.  Two patterns are recommended.  Reference pointing is
-important at 7mm (Q band) and is useful, but not required, at 1cm (K
-band).  The pointing should be updated approximately every hour (some
-claim faster), and any time the antennas move to a significantly
-different part of the sky. At elevations above about 70 degrees, the
-azimuth changes rapidly in both time and calibrator/source position
-offset.  Reference pointing may be marginal at such elevations, and,
-if attempted, should be done more often than at lower elevations.  For
-pointing at X band, a calibrator (or target) source should be used
-that has a flux density in excess of about 200 mJy on all VLA
-baselines.  See the VLA documentation for more details and advice.
-
-When observing at Q band (7 mm), it may be desirable to first
-determine initial pointing corrections at a lower frequency, such as X
-band (4 cm), and then, using those corrections as the starting point,
-determine residual pointing corrections at Q band.  The final pointing
-offset will then be the sum of the two.  Normally just the lower
-frequency determination should be adequate --- the relative offsets
-between bands are rather well known.  But the ultimate pointing
-accuracy requires the final determination at the high frequency,
-assuming, or course, that there is a source of adequate strength close
-to the target.  Pointing should not be done only at 7mm.  The a priori
-offsets can be bad enough that the pointing source will be on the edge
-of the beam and a valid pointing solution may not be obtained.
-
-{\tt VLAPEAK} provides the necessary options to manage the pointing
-corrections.  To understand the {\tt VLAPEAK} options, consider that
-there are ``primary pointing corrections'' and ``total pointing
-corrections''.  The ``total pointing corrections'' are those that are
-applied when running a normal scan that uses the reference pointing
-results.  The ``primary pointing corrections'' are those used as the
-starting point for a pointing determination.  This description is not
-quite literally what the software does, but is correct in concept.
-The {\tt VLAPEAK} options are:
-
-\begin{description}
-
-\item {\tt " "} (blank - the default).  Apply no previously determined
-pointing corrections.  If this is a pointing scan (If {\tt
-VLAMODE=IR}), clear any corrections that have been previously saved,
-both primary and total.  Save any corrections that are determined in
-this scan as the total pointing corrections, leaving the primary
-corrections clear.  Blank should be used when not using
-reference pointing.  It is also be used for a pointing scan
-when no previously determined corrections are to be used as the
-starting point.
-
-\item {\tt "T"} Apply total pointing corrections.  Do not save any
-corrections determined in this scan.  Use {\tt T} during
-normal observing scans when you wish to use the reference pointing
-results.
-
-\item {\tt "S"} This value should only be used for pointing scans
-({\tt VLAMODE=IR}).  It causes the current total pointing corrections
-to be saved as the primary pointing corrections.  The new primary
-corrections are then used as the starting point for a new pointing
-determination.  The result of that determination (primary plus
-secondary) are then saved as the new total pointing corrections.  Use
-{\tt S} when doing double reference pointing any time you wish to
-set the primary pointing corrections, usually just after a lower
-frequency pointing determination.
-
-\item {\tt "R"} This setting is just like {\tt VLAPEAK=S}, except that
-the values of the primary pointing corrections are not changed.  This
-is used to update the total corrections, based on primary corrections
-determined some time ago.  Use {\tt R} to update the pointing at,
-for example, 7 mm, retaining the previously determined solution from X
-band.
-
-\item{\tt "D"} This is the default.  If \htmlref{{\tt AUTOPEAK}}
-{MP:AUTOPEAK} has not been requested, this is equivalent to blank.
-If AUTOPEAK was requested, \schedb usually manages {\tt VLAPEAK}, but
-the user can override the automatic settings.  Once that has been
-done for a scan, \schedb would normally use the specified {\tt VLAPEAK}
-for all remaining scans.  {\tt VLAPEAK='D'} indicates to the program,
-that it should return to setting {\tt VLAPEAK} itself.
-
-\end{description}
-
-Usually, when reference pointing is used, there will be a short
-scan (see times above) with {\tt VLAMODE=IR} and {\tt VLAPEAK=' '}
-to determined the pointing followed by the observing scans with
-whatever \htmlref{{\tt VLAMODE}}{MP:VLAMODE} is needed and using
-{\tt VLAPEAK=T}.  The pointing scan will usually be at X band (4cm).
-This is all that is needed in most circumstances.
-
-When double reference pointing is desired, the pointing is first
-determined at a lower frequency, then tweaked at the higher observing
-frequency.  That is when {\tt VLAPEAK=S} or {\tt R} are used.  The
-sequence would be a scan with {\tt VLAMODE=IR} and {\tt VLAPEAK=' '}
-at the lower frequency, followed by a scan with {\tt VLAMODE=IR} and
-{\tt VLAPEAK=S} at the higher frequency, followed by observing scans
-with {\tt VLAPEAK=T} and the desired {\tt VLAMODE}, followed by
-another tweak of the pointing using a scan with {\tt VLAMODE=IR} and
-{\tt VLAPEAK=R}, followed by more observing scans.  The {\tt
-VLAPEAK=R} -- observing mode scans combination can be repeated several
-times.  Eventually the pattern should be restarted with a new low
-frequency scan.  Whether double reference pointing is actually better
-than just doing the pointing at X band and leaving it at that is
-somewhat controversial.
-
-VLBI recording may be stopped or left running during pointing observations.
-You cannot combine pointing scans with phasing scans because they
-require different {\tt VLAMODE}s.
-
-\rcwbox
-{Text of 1 character.}
-{{\tt ' ', 'T', 'S', 'R'} or {\tt 'D'}}
-{{\tt 'd'} --- Will put ' ' in the file.  Means do not use
-reference pointing.}
-{Defaults to previous value.}
-{{\tt VLAPEAK=T}}
 
 
 \subsubsection{\label{MP:VLAPTIME}{\tt VLAPTIME}}
@@ -10200,8 +10119,10 @@ of \schedb is at \htmladdnormallink{{\tt \$SCHED/catalogs/stations.dat}}
 
 \schedb input parameter {\tt STAFILE} is used to point to any desired
 external catalog.  A file name of up to 80 characters can be
-specified. The default is the standard catalog: \\ {\tt
-STAFILE=\$SCHED/catalogs/stations.dat}
+specified. The default is the standard catalog for digital backends:
+\\ {\tt STAFILE=\$SCHED/catalogs/stations\_RDBE.dat}.  Eventually that
+will be set back to {\tt STAFILE=\$SCHED/catalogs/stations.dat} once
+the conversion of documentation and examples is complete.
 
 Station catalog information can be given in the main \schedb keyin
 file. If the keyword {\tt STACAT} appears, all input after the next
@@ -11277,6 +11198,7 @@ required in such a setup are \htmlref{{\tt BAND}}{SP:BAND},
 You need to know all of those just to pick the standard setup file
 to use so why not make your own?  In fact, as users get accustomed
 to doing this, many of the standard setups may be dropped.
+This file has not been updated from MARK5A to MARK5C.
 
 There are cases, however, when use of the standard files is
 recommended.  These especially include precisely defined, and somewhat
@@ -11911,6 +11833,9 @@ channel 1 if one or more are set.}
 {\tt DBE} is used to specify the personality to use in a digital
 backend that is based on an FPGA.  Such personalities can be changed
 quickly, so this parameter is not appropriate for the station catalog.
+However personality changes have not been integrated with the observing
+system yet so they will not be allowed within one key file.  Use 
+multiple key files if you must switch, and don't do it often.
 The personality determines much about the capabilities of the hardware.
 In particular, it determines what baseband frequencies can be set.
 
@@ -13585,6 +13510,7 @@ more information.
 
 %  ToDo:
 
+%     Every update:  Check leap seconds.
 %     Search through this file for incomplete items, generally flagged
 %     with a line of asterisks.
 %     Allow VLAONLY schedules?  Maybe these don't differ from any other
@@ -13593,12 +13519,70 @@ more information.
 %     Modify choice of unset synthesizer for the new synthesizers.
 %     Calibrator selection
 %     Check if LO edge for DDC always in right polyphase filter.
+%     Revisit the whole issue of scan and recording start times.  Take
+%       into account any delays in start of correlation.  Also deal with
+%       "conservative" slew estimates causing lost data.
+%     Update the station code list.
 
 \begin{itemize}
 
-deal with ex eb_rdbe.
 
-***  Make INTENT='NONE' flush all previous intents.
+\item Set the default for {\tt DOPINCR} to 15.625 kHz for the RDBE\_DDC and
+to 10.0 kHz for non-RDBE systems.  If both are in use, set {\tt DOPINCR} to
+250 kHz.  If the RDBE\_PFB is used with {\tt DOPPLER}, abort if DOPINCR
+is not given.  {\tt DOPINCR(2)} is required and depends on the
+FIRSTLO.  I think using {\tt DOPPLER} with the PFB is a bad idea (32 MHz
+tuning steps, which equals the bandwidth) so I did not want put a lot of
+effort into trying to figure out a reasonable default {\tt DOPINCR(2)}.
+Dec. 28, 2013.  RCW.
+
+\item Cause '{\tt INTENT='NONE'} to clear the list of intents.  Note that
+VLA phasing intents that SCHED adds when {\tt VLAMODE=VA} etc are used are
+not affected.  Dec. 27, 2013.  RCW.
+
+\item Make {\sl stations\_RDBE.dat} and {\sl freq\_RDBE.dat} the default
+files of those types.  Eventually those will be renamed to {\sl stations.dat}
+and {\sl freq.dat}.  But the work of changing examples and documentation
+is being saved for later.  Dec. 27, 2013.  RCW
+
+\item Warn if MARK5A is requested on the VLBA since most of those
+recorders have been removed from the stations.  A significant item
+remaining on the to-do list is to convert the remaining MARK5A
+examples to the digital systems.  Dec. 27, 2013.  RCW.
+
+\item Prohibit change of DBE for a station for RDBE stations.  The
+mechanisms for personality switches are not yet smooth enough to do
+in mid experiment.  Dec. 26, 2013.  RCW.
+
+\item The requirement for a setup with the right bandwidth means that
+multiple pointing setups are needed for the frequencies at which
+reference pointing on lines might be done.  Those are now provided, at
+least for the RDBE\_DDC.  Also the automatic pointing scan insertion
+has been taught to use the 2 MHz files when {\\tt CALCODE='L'} for the
+inserted source.  Dec. 26, 2013.  RCW.
+
+\item The usefulness of the ability to set the bandwidth on a per
+scan basis is basically lost with the new systems.  Those systems
+require that the sample rate be twice the bandwidth.  They don't support
+over sampling.  In principle, SCHED could adjust the sample rate when
+a new bandwidth is requested, but the software changes to do this 
+looks to be extensive because of the number of places where the sample
+rate is used.  Maybe this will be done some day, but not now.  Dec. 22,
+2013  RCW.
+
+\item Changing the name of the RDBE system at Effelsberg from 
+EB\_VLBA to EB\_RDBE to help avoid confusion concerning their
+control systems and other issues.  Dec. 2013  RCW.
+
+\item Make the defaults {\tt MINPAUSE=10} and {\tt PRESTART=0} 
+for the DBBC and for an RDBE not under the VLBA control system,
+such as at EB\_RDBE.  Dec. 18, 2013  RCW.
+
+\item Enforce sample rate = twice bandwidth for RDBE\_DDC.  This
+may mean trouble for schedules that do reference pointing on masers.
+Soon I should make {\tt SAMPRATE} an in-line parameter, or force it
+based on the input bandwidth.  But not for this release.
+Dec. 15, 2013.  RCW
 
 \item Needed to adjust several examples because updated catalog
 information from Europe switched stations to new digital backends.
@@ -13622,7 +13606,7 @@ problems for some observations.  Nov. 5, 2013  RCW.
 Tsys measurements to include the requirement that TSCAL be 'GAP'.
 Nov. 4, 2013. RCW
 
-\item Change the default firmware for the RDBE_DDC to be VDIF.  While
+\item Change the default firmware for the RDBE\_DDC to be VDIF.  While
 at it, split the setting of default values of DBE out of CHKFIRM  and
 put in a new routine SETFIRM.  Move both those routines to new
 places in the calling routines for \schedb logical cleanliness
@@ -13634,7 +13618,7 @@ of the catalog and the Mark5A version maintained at JIVE.  For the
 RDBE, call the station EB\_RDBE with code Er, but expect that to
 merged back to EB\_VLBA eventually.  Oct 31, 2013. RCW
 
-\item Getting rid of the old stations_RDBE.dat for single RDBE
+\item Getting rid of the old stations\_RDBE.dat for single RDBE
 stations.  Renaming stations\_RDBE2.dat to stations\_RDBE.dat since
 all VLBA stations now have 2 RDBEs.  Make stations\_RDBE.dat complete
 by appending all the non-VLBA station catalog segments.  Oct. 31, 2013
@@ -17560,7 +17544,7 @@ Network scheduling as of Feb 1998.  It is a copy of
 \htmladdnormallink{BarryClark's file}
 {http://www.aoc.nrao.edu/~bclark/stationcodes.html}.
 Note that normally only the two letter code is used for the
-scheduling process.
+scheduling process.  This list clearly needs an update.
 
 \begin{verbatim}
         Suggested 2-letter Observatory codes

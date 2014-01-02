@@ -20,7 +20,7 @@ C
 C
       INTEGER      KS, IS, KSO 
 C     INTEGER      JS
-      INTEGER      LSTA, LSCN, KSI, GNSET
+      INTEGER      LSTA, ISCN, KSI, GNSET
 C      LOGICAL      USEIT
 C  --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SETEXPND: Starting.' )
@@ -94,8 +94,8 @@ C     Fill in the NSETUP array with the setup group used for each
 C     scan/station.
 C
       DO LSTA = 1, NSTA
-         DO LSCN = 1, NSCANS
-            NSETUP(LSCN,LSTA) = GNSET(LSCN,LSTA)
+         DO ISCN = 1, NSCANS
+            NSETUP(ISCN,LSTA) = GNSET(ISCN,LSTA)
          END DO
       END DO
 C

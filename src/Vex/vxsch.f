@@ -123,7 +123,7 @@ C        Let the user know which was the first scan to raise warnbank
      2         'limit for continuous recording. Insert a gap ' //
      3         'before this scan, or reduce its length if necessary:'
             CALL WLOG(0, MSGTXT )
-            CALL PRTSCN( ISCN )
+            CALL PRTSCN( ISCN, 'VXSCH' )
             CALL WLOG(0, ' ' )
          END IF
          OLDWARNB = WARNBANK
@@ -301,7 +301,7 @@ C           first, a sanity check
 C
             IF( GRABTO(ISCN) .EQ. 'FILE' .AND. DATAPATH(ISCN) .EQ.
      1                  'IN2NET' ) THEN
-              CALL PRTSCN( ISCN )
+              CALL PRTSCN( ISCN, 'VXSCH' )
               WRITE ( MSGTXT, '(A, A, A)' ) 
      1          'VXSCH: You have requested a GRABTO (ftp) scan, but ',
      2          'you are  not recording to disk. You must set ',
@@ -309,7 +309,7 @@ C
               CALL ERRLOG ( MSGTXT )
             END IF
             IF( GRABTO(ISCN) .EQ. 'NET' ) THEN
-              CALL PRTSCN( ISCN )
+              CALL PRTSCN( ISCN, 'VXSCH' )
               WRITE ( MSGTXT, '(A, A)' ) 
      1          'VXSCH: You have requested GRABTO=NET, but ',
      2          'that is not supported in VEX and will be ignored. '
@@ -346,7 +346,7 @@ C              check the transfer time is consistent with the scan length
                IF (TRANSTAR .LT. 0 .OR. TRANEND .LT. 0 .OR. 
      1                  TRANSTAR .GT. TRANEND) THEN
                  CALL WRTMSG( 0, 'VXSCH', 'vexgrabtime')
-                 CALL PRTSCN( ISCN )
+                 CALL PRTSCN( ISCN, 'VXSCH' )
                  WRITE( MSGTXT, '( A, A, A, A )' )
      1              'VXSCH:   WARNING: You have scheduled a GRABTO ',
      2              'scan, but the GRABTIME is not consistent with ',
@@ -396,7 +396,7 @@ C
                   END IF
 C                      
                   IF ( ISCN .GT. SCAN1 .AND. SCNGAP .LT. MINGAP ) THEN
-                    CALL PRTSCN ( ISCN )
+                    CALL PRTSCN ( ISCN, 'VXSCH' )
                     WRITE ( MSGTXT, '(A, A, A, I4, A)' )
      1              'VXSCH: You have scheduled an ftp or eVLBI ',
      2              'scan as part of continuous recording - you must ',
