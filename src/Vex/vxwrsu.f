@@ -32,12 +32,14 @@ C
                IF( CSUSED(I,ISRC) .EQ. '*' ) THEN
 C
 C              Count and warn if too many for PCFS
+C              See email exchange of June 26, 2013 for change to 1000.
 C
                   NVXSRC = NVXSRC + 1
-                  IF ( NVXSRC .GT. 300 ) THEN
+                  IF ( NVXSRC .GT. 1000 ) THEN
                      WRITE( MSGTXT, '( A )' ) 
-     1                   'VXWRSU: WARNING: More than 300 sources'// 
-     2                   ' in this schedule. This VEX will NOT run!'
+     1                   'VXWRSU: WARNING: More than 1000 sources'// 
+     2                   ' in this schedule. This VEX will NOT run'//
+     3                   ' on the Field System!'
                      CALL WLOG( 1,MSGTXT)
                   END IF
 C
