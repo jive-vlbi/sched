@@ -92,10 +92,11 @@ C
       END IF
 C
 C     first issue warnings if violates PCFS constraints
+C     See email exchange of June 26, 2013 for change to 40.
 C      
-      IF( NSTA .GT. 35 ) THEN
+      IF( NSTA .GT. 40 ) THEN
          WRITE( MSGTXT, '( A, I3, A )' ) 
-     1       'VXWRT: WARNING: More than 35 stations (', NSTA,
+     1       'VXWRT: WARNING: More than 40 stations (', NSTA,
      2       ') in this schedule.' 
          CALL WLOG( 1,MSGTXT)
          VIOLFS = .TRUE.
