@@ -1,7 +1,9 @@
       SUBROUTINE RECONFIG( ISCN, LSCN, ISTA, NEWCONF, NEWPCAL )
 C
-C     Compare setup group KS with group JS to determine if they
-C     will require a formatter reconfigure on VLBA systems.
+C     Compare setup group KS used in scan ISCN with group JS used
+C     in scan LSCN to determine if they will require a formatter 
+C     reconfigure on the legacy VLBA systems.  The results also
+C     apply to MarkIV systems.
 C
 C     Warning, this routine must be called after the pcal sets
 C     have been determined.  That means after CHKSCN which in turn
@@ -12,7 +14,10 @@ C     This is a stripped down and modified version of SAMESET.
 C     Note that this time, frequencies must be considered, hence
 C     the scan numbers.
 C
-C     Note that this is only for the VLBA formatters.
+C
+C     It is not clear that this routine is up to date.  The legacy
+C     VLBA systems have been retired for data recording (Dec. 2013).
+C     Change is happening to the other systems too.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'

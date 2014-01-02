@@ -368,7 +368,6 @@ C
 C             only tapemode 1,2 4, 8 supported in SCHED, PCFS does
 C                   4 max, see vxwrpo
 C          
-        write(*,*) 'vxwrtr: ', ks, tapemode(ks)
               DO IP = 1, TAPEMODE(KS)
                        TPSUBP = 'X'
 C          

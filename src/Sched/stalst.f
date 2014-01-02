@@ -6,9 +6,10 @@ C
       INCLUDE  'sched.inc'
 C
       INTEGER    ISTA, ISCAT, IC1, IC2, BLENKM, LEN1, JSTA, JSCAT
-      INTEGER    NNSTA, MJD
+      INTEGER    NNSTA, MJD, NMINP, NPREST, ISCN, IM, IP
       REAL       BLENSQ, YEARS
-      LOGICAL    ANYDISK, ANYELSE, AXWARN
+      LOGICAL    ANYDISK, ANYELSE, AXWARN, NEW, MOREM, MOREP
+      DOUBLE PRECISION  MINPPRT(6), PRESTPRT(6)
 C ----------------------------------------------------------------------
 C
       WRITE( ISUM, '( 1X, /, 1X, /, 1X, /, A, /, 1X, /, A,A, /, '//
@@ -129,6 +130,65 @@ C
          WRITE( ISUM, '( 1X, /, 1X, /, A )' )
      1      'RECORDING SYSTEM AND CALIBRATION INFORMATION:'
 C
+C        Tell the parameters related to recording:
+C        These are scan dependent so collect the ones seen.
+C        If there are more than 6, just write 'more' for the last.
+C
+         NMINP = 1
+         NPREST = 1
+         MOREM = .FALSE.
+         MOREP = .FALSE.
+         MINPPRT(1) = MINPAUSE(SCAN1)
+         PRESTPRT(1) = PRESTART(SCAN1)
+         DO ISCN = SCAN1 + 1, SCANL
+            NEW = .TRUE.
+            DO IM = 1, NMINP
+               IF( MINPAUSE(ISCN) .EQ. MINPPRT(IM) ) NEW = .FALSE.
+            END DO
+            IF( NEW ) THEN
+               IF( NMINP .GE. 5 ) THEN
+                  MOREM = .TRUE.
+               ELSE
+                  NMINP = NMINP + 1
+                  MINPPRT(NMINP) = MINPAUSE(ISCN)
+               END IF
+            END IF               
+C
+            NEW = .TRUE.
+            DO IP = 1, NPREST
+               IF( PRESTART(ISCN) .EQ. PRESTPRT(IP) ) NEW = .FALSE.
+            END DO
+            IF( NEW ) THEN
+               IF( NPREST .GE. 5 ) THEN
+                  MOREP = .TRUE.
+               ELSE
+                  NPREST = NPREST + 1
+                  PRESTPRT(NPREST) = PRESTART(ISCN)
+               END IF
+            END IF
+         END DO
+         WRITE( ISUM, '( 1X, /, A, A )' )
+     1      '  List of scan-dependent controls seen for recording ',
+     2      'timing.'
+C
+         MSGTXT = '   MINPAUSE:'
+         IC1 = LEN1( MSGTXT ) + 1
+         DO IM = 1, NMINP
+            WRITE( MSGTXT(IC1:IC1+5), '( F6.0)' ) MINPPRT(IM) / ONESEC
+            IC1 = IC1 + 6
+         END DO        
+         IF( MOREM ) WRITE( MSGTXT(IC1:IC1+4), '( A )' ) ' more'
+         WRITE( ISUM, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+C
+         MSGTXT = '   PRESTART:'
+         IC1 = LEN1( MSGTXT ) + 1
+         DO IM = 1, NPREST
+            WRITE( MSGTXT(IC1:IC1+5), '( F6.0)' ) PRESTPRT(IM) / ONESEC
+            IC1 = IC1 + 6
+         END DO        
+         IF( MOREP ) WRITE( MSGTXT(IC1:IC1+4), '( A )' ) ' more'
+         WRITE( ISUM, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
+C
 C        Deal with disk stations.
 C
          IF( ANYDISK ) THEN
@@ -164,7 +224,6 @@ C
 C
       RETURN
       END
-
 
 
 

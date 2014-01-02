@@ -39,13 +39,13 @@ C      SDEBUG = .TRUE.
 C
 C     Write some debugging output.
 C
-c      IF( DEBUG ) THEN
+      IF( DEBUG ) THEN
          SETMSG = ' '
          WRITE( SETMSG, '( A, I4, 1X, L1, 2X, A )' )
      1       'RDSET: Reading setup', ISETF, UOPEN, 
      2       SETREQ(1:LEN1(SETREQ))
          CALL WLOG( 0, SETMSG )
-c      END IF
+      END IF
 C
 C     Following needed for portability:
 C

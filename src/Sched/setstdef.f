@@ -85,12 +85,14 @@ C
 C
 C     Now check any stations that might get added by the automatic
 C     pointing scan insertions.  Utilize PKGROUP that was set up
-C     in RDPEAK to simplify this sort of thing.
+C     in RDPEAK and PKFINISH to simplify this sort of thing.  Test
+C     for both the continuum and line setup files.
 C
       IF( DOPOINT .AND. NPKGRP .GT. 0 ) THEN
          DO ISTA = 1, NSTA
             IF( PKGROUP(ISTA) .NE. 0 ) THEN
-               IF( PKLSET(PKGROUP(ISTA)) .EQ. ISETNUM(KS) ) THEN
+               IF( PKLSET(PKGROUP(ISTA)) .EQ. ISETNUM(KS) .OR. 
+     1             PKLSETL(PKGROUP(ISTA)) .EQ. ISETNUM(KS) ) THEN
                   ANTFILE(ISTA) = .TRUE.
                END IF
             END IF

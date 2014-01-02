@@ -19,7 +19,7 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    ISCN, KCHAN, ISET, ISTA, LSRC, JSCN, KS, KF
+      INTEGER    ISCN, KCHAN, ISET, ISTA, KSTA, LSRC, JSCN, KS, KF
       INTEGER    ICH, IINT
       INTEGER    NEXPECT, NLATE, NNEVER, NSLATE
       REAL       NSRCCHG
@@ -32,7 +32,7 @@ C
       DOUBLE PRECISION  SCANLEN, VPT
       INTEGER            CRDN
       DOUBLE PRECISION   CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
-      CHARACTER          CRDS(MCHAN)*1
+      CHARACTER          CRDS(MCHAN)*1, USEDDBE*8
       PARAMETER         ( MINDEF = 1.D15 )
       PARAMETER         ( MAXDEF = 0.D0 ) 
 C ----------------------------------------------------------------------
@@ -145,6 +145,32 @@ C
 C        Check for adequate time to set the levels in the RDBE.
 C
          CALL RDBELEVT
+C
+C        Enforce use of only one personality on the RDBE and DBBC
+C
+         DO ISTA = 1, NSTA
+            USEDDBE = 'xx'
+            KSTA = STANUM(ISTA)
+            IF( DAR(KSTA)(1:4) .EQ. 'RDBE' .OR. 
+     1          DAR(KSTA)(1:4) .EQ. 'DBBC' ) THEN
+               DO ISCN = SCAN1, SCANL
+                  IF( STASCN(ISCN,ISTA) ) THEN
+                     KS = NSETUP(ISCN,ISTA)
+                     IF( USEDDBE .EQ. 'xx' ) THEN
+                        USEDDBE = DBE(KS)
+                     ELSE IF( USEDDBE .NE. DBE(KS) ) THEN
+                        CALL WLOG( 1, 'CHKSCN: Cannot use 2 DBE ' //
+     1                     'personalities in one experiment' )
+                        CALL WLOG( 1, '        You used ' // USEDDBE //
+     1                     ' and ' // DBE(KS) // ' at ' // 
+     2                     STANAME(ISTA) )
+                        CALL ERRLOG( '       Use the same DBE for ' //
+     1                     'any given station.' )
+                     END IF
+                  END IF
+               END DO
+            END IF
+         END DO
 C
       END IF
 C

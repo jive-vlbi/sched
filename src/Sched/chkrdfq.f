@@ -1,32 +1,41 @@
-      SUBROUTINE CHKRDFQ( KS, BBCBW, BBCFREQ, ERRS )
+      SUBROUTINE CHKRDFQ( KS, KF, BBCBW, BBCFREQ, ERRS )
 C
 C     Routine for SCHED called by CHKRDBE and FSFREQ that checks
 C     the frequencies and bandwidths requested for the RDBE.
-C     CHKRDBE checks the input setup file.  FSFREQ checks just
-C     before writing the scan info to be sure in-line changes
-C     don't cause trouble.  Note that, for non-RDBE setups, this
-C     routine will fall through without doing anything thanks
-C     to the second level of IF statements.
+C     CHKRDBE checks the input setup file.  FSFREQ is used in
+C     several places to get the BBC frequencies and bandwidths.
+C     These include just before writing the scan info to be sure 
+C     in-line changes don't cause trouble.  Note that, for 
+C     non-RDBE setups, this routine will fall through without 
+C     doing anything thanks to the second level of IF statements.
 C
 C     Note that this routine can get called multiple times for 
 C     each setup file, especially if different frequency sets
 C     are being checked.  Also, since it is called from FSFREQ,
-C     it can get called from print routines etc.
+C     it can get called from print routines etc.  So jump through
+C     a couple of hoops to prevent too many repeat warnings.
+C
+C     The bypass of this routine after the first time a frequency
+C     set is seen means that it should not actually set anything.
+C
+C     Note ERRS already has a value on entry.
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH, ISIDEBD
+      INTEGER           KS, KF, ICH, ISIDEBD
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
       INTEGER           NFWARN
 C      INTEGER                    , N2WARN  Warnings commented out.
-      INTEGER           IPF, I, NPBW, LEN1, ISETF
-      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, SLOP
+      INTEGER           IPF, I, NCOW, NIFW, LEN1, ISETF
+      DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, SLOP, BBTOL
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
-      LOGICAL           ERRS, DEQUAL, PBWARN, OBWARN, SHOWID
+      LOGICAL           ERRS, DEQUAL, COWARN, OBWARN, SHOWID, IFWARN
+      LOGICAL           KFWARN(MFSET)
 C
-      DATA     NPBW     / 0 /
+      DATA     NCOW, NIFW  / 0, 0 /
       DATA     OBWARN   / .TRUE. /
+      DATA     KFWARN   / MFSET * .TRUE. /
       DATA     N40WARN  / MAXSET*1 /
       DATA     N528WARN / MAXSET*1 /
       DATA     NFWARN   / 0 /
@@ -34,7 +43,7 @@ C      DATA     N2WARN   / 0 /
       DATA     PLO      / 512.D0, 640.D0, 896.D0 /
       DATA     PHI      / 640.D0, 896.D0, 1024.D0 /
       DATA     CR1, CR2 / 640.D0, 896.D0 /
-      SAVE     N40WARN, N528WARN, NFWARN, NPBW, OBWARN
+      SAVE     N40WARN, N528WARN, NFWARN, NCOW, NIFW, OBWARN, KFWARN
 C      SAVE     , N2WARN
 C
 C      PLO and PHI are the ranges for the DDC initial polyphase filter.
@@ -42,6 +51,13 @@ C -----------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Starting' )
 C
       SHOWID = .FALSE.
+C
+C     Only do if KF=0 or KFWARN = .TRUE.
+C
+      IF( KF .NE. 0 ) THEN
+         IF( .NOT. KFWARN(KF) ) RETURN
+         KFWARN(KF) = .FALSE.
+      END IF
 C
 C     Get the setup file number
 C
@@ -136,8 +152,6 @@ C        All bandwidths must be the same.  This might lapse
 C        eventually by allowing 2 RDBEs to each have a different
 C        BW.
 C
-C     *********  Worry about DDC needing SAMPRATE = 2 * BBCBW. *********
-C
          DO ICH = 1, NCHAN(KS)
             IF( .NOT. ( DEQUAL( BBCBW(ICH), 128.0D0 ) .OR. 
      1          DEQUAL( BBCBW(ICH), 64.0D0 ) .OR. 
@@ -168,6 +182,25 @@ C
             IF( ICH .GE. 2 .AND. BBCBW(ICH) .NE. BBCBW(1) ) THEN
                CALL WLOG(1, 'CHKRDFQ: All channels must have the '//
      1             'same bandwidth with the DDC.  Yours don''t.' )
+               ERRS = .TRUE.
+            END IF
+C
+C           The sample rate needs to be twice the bandwidth.  This
+C           may preclude bandwidth changes with the same setup as 
+C           in-line sample rates are not (yet) supported.  There
+C           is only one sample rate and the above test forces all
+C           bandwidths to be the same, so just check channel 1.
+C
+            IF( SAMPRATE(KS) .NE. 2.D0 * BBCBW(1) ) THEN
+               CALL WLOG( 1, 'CHKRDFQ: The SAMPRATE must be 2 '//
+     1             'times the bandwidth with the DDC.' )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, F10.3, A, F10.3 )' )
+     1              '         You have BW = ', BBCBW(1), 
+     2              ' and SAMPRATE = ', SAMPRATE(KS)
+               CALL WLOG( 1, MSGTXT  )
+               CALL WLOG( 1, '         Did you use in-line inputs '//
+     1             'to change the bandwidth?' )
                ERRS = .TRUE.
             END IF
          END DO
@@ -346,53 +379,76 @@ C
             ELSE
 C
 C              Now see if the band goes outside the filter.  Allow
-C              a bit of tolerance.
+C              a bit of tolerance (2% of bandwidth).
 C
-               PBWARN = .FALSE.
+               IFWARN = .FALSE.
+               COWARN = .FALSE.
+               BBTOL = 0.02D0 * BBCBW(ICH)
                IF( SIDEBD(ICH,KS) .EQ. 'U' ) THEN
-                  IF( BB2 .GT. PHI(IPF) + 0.02D0 * BBCBW(ICH) ) THEN
-                     PBWARN = .TRUE.
+                  IF( BB2 .GT. PHI(3) + BBTOL ) THEN
+                     IFWARN = .TRUE.
+                  ELSE IF( BB2 .GT. PHI(IPF) + BBTOL ) THEN
+                     COWARN = .TRUE.
                   END IF
                ELSE
-                  IF( BB2 .LT. PLO(IPF) - 0.02D0 * BBCBW(ICH) ) THEN
-                     PBWARN = .TRUE.
+                  IF( BB2 .LT. PLO(1) - BBTOL) THEN
+                     IFWARN = .TRUE.
+                  ELSE IF( BB2 .LT. PLO(IPF) - BBTOL ) THEN
+                     COWARN = .TRUE.
                   END IF
                END IF
-               IF( PBWARN ) NPBW = NPBW + 1
-               IF( PBWARN .AND. NPBW .LE. 10 ) THEN               
+               IF( COWARN ) NCOW = NCOW + 1
+               IF( IFWARN ) NIFW = NIFW + 1
+               IF( ( COWARN .AND. NCOW .LE. 10 ) .OR. 
+     1             ( IFWARN .AND. NIFW .LE. 10 ) ) THEN               
 C
                   MSGTXT = ' '
                   WRITE( MSGTXT,
-     1               '( A, I4, A, F10.4, A, F10.4, 2A )' )
-     2               'CHKRDFQ: ***  Baseband ', ICH, 
-     4               ' between IF freqs ', BB1, ' and ', BB2, ' MHz',
-     5               ' spans a crossover'
+     1               '( A, I3, A, F10.4, A, F10.4, A )' )
+     2               'CHKRDFQ: ***  Baseband', ICH, 
+     4               ' between IF freqs', BB1, ' and', BB2, ' MHz'
                   CALL WLOG( 1, MSGTXT )
 C
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( 2A )' )
-     1               '          or goes outside 512-1024 MHz.  ',
+                  IF( IFWARN .AND. NIFW .LE. 10 ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( 2A )' )
+     1                  ' goes outside 512-1024 MHz.  ',
      2               'This will produce corrupted data.'
-                  CALL WLOG( 1, MSGTXT )
+                     CALL WLOG( 1, MSGTXT )
+                  ELSE IF( COWARN .AND. NCOW .LE. 10 ) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( 2A )' )
+     1                  '          spans a crossover.  ',
+     2                  'This will produce corrupted data.'
+                     CALL WLOG( 1, MSGTXT )
 C
-                  CALL WLOG( 1, '         Recall crossovers are '//
-     1               'the boundaries between the polyphase filter ' )
-                  CALL WLOG( 1, '         outputs in the initial '//
-     2               'stage of processing in the RDBE.' )
+                     IF( COWARN .AND. NCOW .EQ. 1 ) THEN
+                        CALL WLOG( 1, '         Recall crossovers are '
+     1                     //'the boundaries between the polyphase '//
+     2                     'filter ' )
+                        CALL WLOG( 1, '         outputs in the initial'
+     2                     //' stage of processing in the RDBE.' )
 C
-                  MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, F10.2, A, F10.2, A )' )
-     1               '         The crossovers are at ', CR1, ' and ',
-     2               CR2, ' MHz in the IF.'
-                  CALL WLOG( 1, MSGTXT )
-C
-                  MSGTXT = ' '
-                  SHOWID = .TRUE.
-               ELSE IF( PBWARN .AND. NPBW .EQ. 11 ) THEN
-                  CALL WLOG( 1, ' ' )
-                  CALL WLOG( 1, 
-     1             'CHKRDFQ:  More crossover warnings suppressed.' )
-                  CALL WLOG( 1, ' ' )
+                        MSGTXT = ' '
+                        WRITE( MSGTXT, '( A, F10.2, A, F10.2, A )' )
+     1                     '         The crossovers are at ', CR1, 
+     2                     ' and ', CR2, ' MHz in the IF.'
+                        CALL WLOG( 1, MSGTXT )
+                     END IF
+C  
+                     MSGTXT = ' '
+                     SHOWID = .TRUE.
+                  ELSE IF( COWARN .AND. NCOW .EQ. 11 ) THEN
+                     CALL WLOG( 1, ' ' )
+                     CALL WLOG( 1, 
+     1                'CHKRDFQ:  More crossover warnings suppressed.' )
+                     CALL WLOG( 1, ' ' )
+                  ELSE IF( IFWARN .AND. NIFW .EQ. 11 ) THEN
+                     CALL WLOG( 1, ' ' )
+                     CALL WLOG( 1, 
+     1                'CHKRDFQ:  More out-of-IF warnings suppressed.' )
+                     CALL WLOG( 1, ' ' )
+                  END IF
                END IF
             END IF
          END DO
@@ -403,10 +459,13 @@ C     Identify the setup if there was a problem.
 C      
       IF( ERRS .OR. SHOWID ) THEN
          MSGTXT = ' '
-         WRITE( MSGTXT, '( A, A, A, A )' )
+         WRITE( MSGTXT, '( A, A )' )
      1     'CHKRDFQ: The above problem is for setup ', 
-     2     SETNAME(KS)(1:LEN1(SETNAME(KS))),
-     3     ' and at least station ', SETSTA(1,KS)
+     1     SETNAME(KS)(1:LEN1(SETNAME(KS)))
+         CALL WLOG( 1, MSGTXT )
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, A )' )
+     1     '         and at least station ', SETSTA(1,KS)
          CALL WLOG( 1, MSGTXT )
       END IF
 C
@@ -418,5 +477,8 @@ C
       END IF
 C
       IF( DEBUG ) CALL WLOG( 0, 'CHKRDFQ: Ending' )
+C
+C     End.  Note that there is a branch to return above when looking at KFWARN.
+C
       RETURN
       END

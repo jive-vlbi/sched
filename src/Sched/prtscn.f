@@ -1,4 +1,4 @@
-      SUBROUTINE PRTSCN( ISCN )
+      SUBROUTINE PRTSCN( ISCN, CALLER )
 C
 C     Print identifying information about a scan.  This will mainly
 C     be used to help identify a problem scan when an error occurs.
@@ -8,9 +8,17 @@ C
       INTEGER           ISCN, ISTA, LEN1, LC, NC
       DOUBLE PRECISION  START, STOP
       INTEGER           YEAR1, YEAR2, DAY1, DAY2
-      CHARACTER         TFORM*15, TSTOP*8, TSTART*8
+      CHARACTER         CALLER*(*), TFORM*15, TSTOP*8, TSTART*8
 C  ------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'PRTSCN starting.' )
+C
+C     Say what is happening and who requested it.  This is the only
+C     line that goes to the screen at runtime.
+C
+      CALL WLOG( 0, '  ' )
+      MSGTXT = 'PRTSCN: Scan information is being ' //
+     1         'written to the log file for ' // CALLER
+      CALL WLOG( 1, MSGTXT )
 C
 C     Get the start and stop times.
 C
@@ -19,7 +27,6 @@ C
       TSTART = TFORM( START, 'T', 0, 2, 2, '::@' )
       TSTOP  = TFORM( STOP, 'T', 0, 2, 2, '::@' )
 C
-      CALL WLOG( 0, '  ' )
       MSGTXT = '  '
       WRITE( MSGTXT, '( A, I5 )' )
      1    '  Scan number:  ', ISCN
@@ -72,8 +79,6 @@ C
       CALL WLOG( 0, MSGTXT )
       MSGTXT = ' '
 C
-      CALL WLOG( 1, 'PRTSCN: Scan information was '//
-     1           'written to the log file.' )
       RETURN
       END
 

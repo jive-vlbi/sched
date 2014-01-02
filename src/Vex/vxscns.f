@@ -162,7 +162,7 @@ C                 IF (IPS .NE. PSETI(ISCN,ISTA)) THEN
 C                    WRITE( MSGTXT, '( A, A, I5 )' ) 'Problem with ',
 C     1                  'PCAL in scan ',ISCN
 C                    CALL WLOG( 1, MSGTXT )
-C                    CALL PRTSCN( ISCN )
+C                    CALL PRTSCN( ISCN, 'VXSCNS' )
 C                    CALL ERRLOG('VXSCNS: All telescopes should '//
 C     .                  'use similar PCal setup ')
 C                    STOP
