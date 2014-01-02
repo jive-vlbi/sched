@@ -251,7 +251,17 @@ C        the VLA and VLBA systems believe the good data time from the
 C        Vex file.  Other systems still use the old start time.
 C        USEONSRC is the flag for which to use.
 C
-         IF( USEONSRC(ISTA) ) THEN
+
+
+C      For exploring the start times and tcorr.
+C      write(*,*) 'prtsch: ', iscn, ista, ' ', stcode(stanum(ista)) ,
+C     1    ' ', useonsrc(stanum(ista)), ' ', prestart(iscn),
+C     2    startj(iscn), tpstart(iscn,ista) / onesec, 
+C     2    ( tonsrc(iscn,ista) - startj(iscn) ) / onesec,
+C     3    ( tcorr(iscn,ista) - startj(iscn) ) / onesec
+
+
+         IF( USEONSRC(STANUM(ISTA)) ) THEN
             DSTART = MAX( ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) ), 
      1           TONSRC(ISCN,ISTA) )
          ELSE

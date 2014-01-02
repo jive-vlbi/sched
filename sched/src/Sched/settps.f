@@ -98,11 +98,12 @@ C
                END IF
 C
 C              Stub the following break insertion, but keep a
-C              strong warning.  The break insertion opened to big
+C              strong warning.  The break insertion opened too big
 C              a can of worms, especially with non-NRAO systems.
 C              In fact, change from doing it if ALLDISK set to only
 C              doing it for stations with MARK5A systems.
 C              
+C              Original comment: 
 C              Do a station dependent break if the record scan
 C              has been too long.  This will propagate to all
 C              stations in the VEX case when starts are aligned.

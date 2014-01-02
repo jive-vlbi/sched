@@ -6,12 +6,13 @@ C     that was not provided.
 C
 C     Jan. 29, 2013  Change the defaults for MINPAUSE and PRESTART.
 C     Make them system dependent.
+C     Dec 2013  Move MINPAUSE and PRESTART defaulting to RECCTL.
 C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    ISCN, ISTA, KSTA, KS
-      LOGICAL    ALLC, FRDBE, SRDBE
+      INTEGER    ISCN, ISTA, KS
+      LOGICAL    FRDBE, SRDBE
 C
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'DEFAULTS starting.' )
@@ -48,44 +49,13 @@ C
       IF( .NOT. NOSET ) CALL DEFSET
 C
 C     Set the system dependent defaults for PRESTART and MINPAUSE.
-C     Set them both to zero for the VLBA RDBE or VLA WIDAR.
-C     Otherwise take the old Mark5A era defaults.  The input 
-C     defaulted to the flagged value UNSET to make an explicit
-C     input of zero distinguishable.  The values are set
-C     for each scan.
 C
-C     The new MARK5C systems on the VLBA don't need to worry about
-C     PRESTART and MINPAUSE.  In fact, by using the data good time
-C     in the VEX file, they are ignoring these parameters.  The 
-C     MARK5A legacy systems, however, need them.  The defaults should
-C     be different.  That is handled here.  Take the non-zero
-C     defaults if any of the stations need them.
+      CALL RECCTL
 C
-C     Note that presence of non-VLBA stations can cause the use of
-C     the non-zero default values.  Think about what is really 
-C     wanted in that case.
+C     Set the default for DOPINCR.  It's a bit complicated with the
+C     digital systems, so use a subroutine.
 C
-      ALLC = .TRUE.
-      DO ISTA = 1, NSTA
-         KSTA = STANUM(ISTA)
-         IF ( .NOT. USEONSRC(KSTA) ) ALLC = .FALSE.
-      END DO
-      DO ISCN = SCAN1, SCANL
-         IF( ALLC ) THEN
-            IF( MINPAUSE(ISCN) .EQ. UNSET * ONESEC ) 
-     1          MINPAUSE(ISCN) = 0.D0
-            IF( PRESTART(ISCN) .EQ. UNSET * ONESEC ) 
-     1          PRESTART(ISCN) = 0.D0
-         ELSE
-            IF( MINPAUSE(ISCN) .EQ. UNSET * ONESEC ) 
-     1            MINPAUSE(ISCN) = 10.D0 * ONESEC
-            IF( PRESTART(ISCN) .EQ. UNSET * ONESEC ) 
-     1            PRESTART(ISCN) = 5.D0 * ONESEC
-         END IF
-      END DO
-C
-C     Clearly lots of stuff still needs to be moved here.
-C
+      CALL SDOPINCR
 C
 C     Default the grab stuff.  Put after setups defaulted so we
 C     have the bit rate.  The GRABGAP assumes that the required
@@ -107,6 +77,10 @@ C
             END IF
          END IF
       END DO
+C
+C     Clearly lots of stuff still needs to be moved here to cleanly
+C     separate the inputs from the default setting.  Someday......
+C
 C
       RETURN
       END

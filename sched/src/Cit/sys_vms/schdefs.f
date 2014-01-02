@@ -12,11 +12,11 @@ C----------------------------------------------------------------------
       IF( FTYPE .EQ. 'location' ) THEN
          FILENAME = 'locations.dat'
       ELSE IF( FTYPE .EQ. 'stations' ) THEN
-         FILENAME = 'stations.dat'
+         FILENAME = 'stations_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'sources' ) THEN
          FILENAME = 'sources.vlba'
       ELSE IF( FTYPE .EQ. 'frequency' ) THEN
-         FILENAME = 'freq.dat'
+         FILENAME = 'freq_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'peakcommand' ) THEN
          FILENAME = 'peak.cmd'
       ELSE IF( FTYPE .EQ. 'refpointing' ) THEN

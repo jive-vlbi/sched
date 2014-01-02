@@ -12,11 +12,11 @@ C----------------------------------------------------------------------
       IF( FTYPE .EQ. 'location' ) THEN
          FILENAME = '$SCHED/catalogs/locations.dat'
       ELSE IF( FTYPE .EQ. 'stations' ) THEN
-         FILENAME = '$SCHED/catalogs/stations.dat'
+         FILENAME = '$SCHED/catalogs/stations_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'sources' ) THEN
          FILENAME = '$SCHED/catalogs/sources.vlba'
       ELSE IF( FTYPE .EQ. 'frequency' ) THEN
-         FILENAME = '$SCHED/catalogs/freq.dat'
+         FILENAME = '$SCHED/catalogs/freq_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'peakcommand' ) THEN
          FILENAME = '$SCHED/catalogs/peak.cmd'
       ELSE IF( FTYPE .EQ. 'refpointing' ) THEN

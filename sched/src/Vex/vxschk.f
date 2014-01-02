@@ -94,7 +94,7 @@ C
 C           Remember tpstart is already the offset from startj
                IF( ABS(TPSTART(ISCN,ISTA) - TAPOFF)
      1             .GT. 0.1d0/86400D0 ) THEN
-                  CALL PRTSCN( ISCN )
+                  CALL PRTSCN( ISCN, 'VXSCHK' )
                   WRITE(MSGTXT, '( A, I3, A )' ) 
      1                'Station tape starts differ,'// 
      2                ' set MINPAUSE to ',
@@ -121,7 +121,7 @@ C           according to NRV
 C        
             IF( NINT( ( STOPJ(ISCN) - (STARTJ(ISCN)-TAPOFF) ) 
      1          * 86400d0) .LT. 15 ) THEN
-               CALL PRTSCN( ISCN )
+               CALL PRTSCN( ISCN, 'VXSCHK' )
                WRITE( MSGTXT, '( A, A, A )' ) 
      1             'VXSCHK:  WARNING: Scan length < 15s',
      2             'for station ',STATION(STANUM(ISTA))
@@ -269,7 +269,7 @@ C
 C           Remember tpstart is already the offset from startj
                IF( ABS(TPSTART(ISCN,ISTA) - TAPOFF)
      .             .GT. 0.1d0/86400D0 ) THEN
-                  CALL PRTSCN( ISCN )
+                  CALL PRTSCN( ISCN, 'VXSCHK' )
                   WRITE(MSGTXT, '( A, I3, A )' ) 
      .                'Station tape starts differ,'// 
      .                ' set MINPAUSE to ',
@@ -294,7 +294,7 @@ C
 C           
 C           Problem if stations overlap
 C           
-               CALL PRTSCN( ISCN )
+               CALL PRTSCN( ISCN, 'VXSCHK' )
                WRITE( MSGTXT, '( A, A, A )' ) 
      1             'VXSCHK:  WARNING: Tape early start failed ',
      2             'station ', STATION(STANUM(ISTA))
@@ -323,7 +323,7 @@ C
 C
 C              If the stations match it is impossible
 C
-               CALL PRTSCN( ISCN )
+               CALL PRTSCN( ISCN, 'VXSCHK' )
                WRITE( MSGTXT, '( A, A, A )' ) 
      1             'VXSCHK:  WARNING: Mode setup < 40s for ',
      3             'station ', STATION(STANUM(ISTA))

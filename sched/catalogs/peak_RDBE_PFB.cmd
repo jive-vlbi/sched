@@ -67,8 +67,15 @@ minel = 10.00         !  Minimum elevation for pointing.
 !     pt7mm.set - for non-rdbe observing.  "peak.cmd"
 !     ptd7mm.set - for observing with the RDBE_DDC   "peak_RDBE_DDC.cmd"
 !     ptr7mm.set - for observing with the RDBE_PFB   "peak_RDBE_PFB.cmd"
+!    For line pointing replace "ptr7mm.set" with:
+!     pt7mm.set - for non-rdbe observing.  "peak.cmd"
+!     ptdl7mm.set - for the RDBE_DDC       "peak_RDBE_DDC.cmd"
+!     ptr7mm.set - for the RDBE_PFB        "peak_RDBE_PFB.cmd"
+!  These are the same as the continuum for the old systems and for the
+!  RDBE.
 
 setup = $SCHED/setups/ptr7mm.set
+setupl = $SCHED/setups/ptr7mm.set
 linename = 'PSiO431'
 
 

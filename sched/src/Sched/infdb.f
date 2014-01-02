@@ -125,12 +125,13 @@ C
       END IF
       LINES(ISCN) = KCHAR( 'LINENAME', 8, .TRUE., VALUE, KC, KI )
 C
-C     Get rounding increment for doppler calculations.  Default to
-C     10 kHz.
+C     Get rounding increment for doppler calculations.  Leave a 
+C     default zero value to be set later.  We need to know the
+C     recording systems in use to find the right default and we
+C     might not know that when this routine is run.
 C
       DOPINCR(ISCN,1) = VALUE( KEYPTR( 'DOPINCR', KC, KI ) )
       DOPINCR(ISCN,2) = VALUE( KEYPTR( 'DOPINCR', KC, KI ) + 1 )
-      IF( DOPINCR(ISCN,1) .EQ. 0.0D0 ) DOPINCR(ISCN,1) = 10.0D0
 C
 C     Check that frequencies are not defaulting to previous
 C     values when a setup is changed.  This has to come after FREQ

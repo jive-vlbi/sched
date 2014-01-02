@@ -21,7 +21,7 @@ C
 C
       INTEGER           MSP, I, I1
       LOGICAL           GOTKEYS
-      PARAMETER         (MSP = 200+MPKSTA+2*MPKSRC)
+      PARAMETER         (MSP = 210+MPKSTA+2*MPKSRC)
       INTEGER           KI(MSP), KEYPTR, MODE
       CHARACTER         KC(MSP)*8, KCHAR*256, FILEUP*80, FILENAME*80
       DOUBLE PRECISION  KD(MSP*2), ENDMRK, BLANK
@@ -79,6 +79,7 @@ C
          CALL SCHDEFS( 'refpointing', FILENAME )
          CALL KEYCHR( 'SRCFILE', FILENAME, 80, KD, KC, KI )
          CALL KEYCHR( 'SETUP', ' ', 80, KD, KC, KI )
+         CALL KEYCHR( 'SETUPL', ' ', 80, KD, KC, KI )
          CALL KEYADD( 'LINEINIT', UNSET, 1, KD, KC, KI )
          CALL KEYADD( 'MINFREQ', 60.D3, 1, KD, KC, KI )
          CALL KEYADD( 'MINEL', 30.D0, 1, KD, KC, KI )
@@ -173,14 +174,34 @@ C
          PKMINFQ(NPKGRP) = KD( KEYPTR( 'MINFREQ', KC, KI ) )
          PKMINEL(NPKGRP) = KD( KEYPTR( 'MINEL', KC, KI ) )
 C
-C        The setup file.  Add it to the overall list if needed.  It
-C        will be read along with the rest later by GETSET.
+C        The setup files.  Add them to the overall list if needed.  They
+C        will be read along with the rest later by GETSET.  Note that 
+C        SETUP is for continuum sources, SETUPL is for line sources
+C        (Those with CALCODE='L' - they want narrow bandwidth).
 C
          PSETFILE(NPKGRP) = KCHAR( 'SETUP', 80, .FALSE., KD, KC, KI )
          CALL ENVIR( PSETFILE(NPKGRP) )
+         PLSETFIL(NPKGRP) = KCHAR( 'SETUPL', 80, .FALSE., KD, KC, KI )
+         CALL ENVIR( PLSETFIL(NPKGRP) )
 C
-C        See if this setup has been requested before.  If not, add it
-C        to SETFILE list.
+C        If SETUPL was not given, set it to SETUP, but write a note to that
+C        effect.
+C
+         IF( PLSETFIL(NPKGRP) .EQ. ' ' ) THEN
+            PLSETFIL(NPKGRP) = PSETFILE(NPKGRP)
+            CALL WLOG( 1, 'RDPEAK:  WARNING:  Your peak command file '//
+     1          'does not have a separate setup file' )
+            CALL WLOG( 1, '         for spectral line (narrow band) '//
+     1          'sources.  You may encounter errors' )
+            CALL WLOG( 1, '         because the digital backends '//
+     1          'require sample rate = 2 times bandwidth ' )
+            CALL WLOG( 1, '         and the sample rate can only be '//
+     1          'changed with a new setup file.' )
+         END IF
+C
+C        See if these setups have been requested before.  If not, add them
+C        to SETFILE list.  Also get the index of the setup for use in making
+C        the pointing scans.
 C
          PKLSET(NPKGRP) = 0
          IF( NSETF .GT. 0 ) THEN
@@ -200,6 +221,29 @@ C
                CALL ERRLOG( 'RDPEAK: Exceeded limit on number of setup '
      1              // 'files while adding ones needed for reference '
      2              // 'pointing.' )
+            END IF
+         END IF
+C
+C        Do the line pointing setup.
+C
+         PKLSETL(NPKGRP) = 0
+         IF( NSETF .GT. 0 ) THEN
+            DO I = 1, NSETF
+               IF( PLSETFIL(NPKGRP) .EQ. SETFILE(I) ) THEN
+                  PKLSETL(NPKGRP) = I
+               END IF
+            END DO
+         END IF
+C
+         IF( PKLSETL(NPKGRP) .EQ. 0 ) THEN
+            IF( NSETF .LT. MAXSET ) THEN
+               NSETF = NSETF + 1
+               SETFILE(NSETF) = PLSETFIL(NPKGRP)
+               PKLSETL(NPKGRP) = NSETF
+            ELSE
+               CALL ERRLOG( 'RDPEAK: Exceeded limit on number of setup '
+     1              // 'files while adding line ones needed for '
+     2              // 'reference pointing.' )
             END IF
          END IF
 C

@@ -27,7 +27,7 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    ICH, JCH, KS, IBBC, NNBBC, IIF
+      INTEGER    ICH, JCH, KS, IBBC, NNBBC, IIF, i
       INTEGER    MAXBBC, MAXIF, MAXIFI
       PARAMETER  (MAXIFI=8)
       INTEGER    IFBBC(MAXBBC,MAXIF)
@@ -100,9 +100,17 @@ C                    For DBBC only first letter of IFCHAN is
 C                    significant, unless an input has already been
 C                    assigned for this IF.
 C
-C       write(*,*) '+++ bbcalt ', ks, ' ', setsta(1,ks), ich, ibbc, iif, 
-C     1   ' ', ifinput(iif), ' ', ifnam(iif), ' ', ifchan(ich,ks), ' ', 
-C     1   warning, ' ', caller, ' ', DAR(ISETSTA(KS))
+C                    From Uwe Bach email of Dec. 7, 2013, at least at
+C                    Effelsberg, RCP is on A1 and B1 while LCP is on
+C                    A3 and B3.  So it looks like the number is also
+C                    important.  The IFNAMs defined in BBCDBBC are
+C                    A, B, C, D, so I'm not quite sure how this relates.
+C                    I smell a possible naming mess.
+C
+C                    Meanwhile, I'm trying to force the IF names in
+C                    hsa1cm.key and it is not accepting what I give.
+C                    So at least fix that.
+C
                      CHKNAM = IFNAM(IIF)
                      IF( WARNING .EQ. 'DBBC' ) THEN
                         IF( IFINPUT(IIF) .EQ. 'ZZ' ) THEN
@@ -126,6 +134,7 @@ C
                            CHKNAM=IFINPUT(IIF)
                         END IF
                      END IF
+C
                      IF( ALTIFC(ICH,KS) .EQ. CHKNAM .AND.
      1                   IFBBC(IBBC,IIF) .EQ. 1 ) THEN
                         BBC(ICH,KS) = IBBC                  
@@ -147,9 +156,12 @@ C
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, I3, A, A, A, A, A, I3 )' )
      1          '         ICHAN=', ICH, '  IFNAME=', IFCHAN(ICH,KS), 
-     2          '  ALTIFN=', ALTIFC(ICH,KS), '  NNBBC=', NNBBC
+     2          '  ALTIFC=', ALTIFC(ICH,KS), '  NNBBC=', NNBBC
             CALL WLOG( 0, MSGTXT )
             CALL WRTMSG( 0, 'BBCALT', 'noassignbbc' )
+            IF( ICH .GT. 5 ) CALL WLOG( 1, 
+     1          '         Maybe too many channels are requested'//
+     2          ' for the same IF channel.' )
 C
 C           A number of special cases need more explanation.
 C

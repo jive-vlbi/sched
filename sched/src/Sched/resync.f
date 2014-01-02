@@ -74,14 +74,14 @@ C
             TCORR(ISCN,ISTA) = 0.D0
 C
 C           Deal with the simple case of RDBE/MARK5C and DiFX.  
+C           Also applies to DBBC going to DiFX.
 C           Eventually see if the DBBC and/or JIVE correlator 
 C           should be here.
 C
-            IF( STASCN(ISCN,ISTA) .AND.
-     1          DAR(STANUM(ISTA))(1:4) .EQ. 'RDBE' .AND.
-     2          ( CORREL(1:7) .EQ. 'SOCORRO' .OR.
-     3            CORREL(1:8) .EQ. 'VLBADIFX' .OR.
-     4          CORREL(1:4) .EQ. 'VLBA' ) ) THEN
+            IF( USEONSRC(STANUM(ISTA)) .AND.
+     1          ( CORREL(1:7) .EQ. 'SOCORRO' .OR.
+     2            CORREL(1:8) .EQ. 'VLBADIFX' .OR.
+     3          CORREL(1:4) .EQ. 'VLBA' ) ) THEN
 C
                TCORR(ISCN,ISTA) = 
      1            MAX( ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) ),  
@@ -102,6 +102,7 @@ C              and the media has not stopped.  Note TPSTART=0 for non
 C              recording scans, which gives the desired behavior.
 C
                TCORR(ISCN,ISTA) = STARTJ(ISCN) - TPSTART(ISCN,ISTA)
+C
 C         write(*,*) 'resync: tcorr ', TCORR(ISCN,ISTA), 
 C     1          '  startj:', STARTJ(ISCN), 
 C     2          '  tpstart:',  TPSTART(ISCN,ISTA), 
@@ -266,10 +267,12 @@ C                 Also make sure TCORR is not past the stop time.
 C
                   TCORR(ISCN,ISTA) = TSADD + 
      1                  MAX( TRECON, TCORR(ISCN,ISTA) )
+C
 C       write(*,*) 'rsync ', ista, iscn,  
 C     1      ' start stop: ', startj(iscn),  stopj(iscn),
 C     2     ' tsadd, tcorr: ', tsadd, tcorr(iscn,ista), 
 C     3     ' tonsrc, trecon:', tonsrc(iscn,ista), trecon
+C
                   TCORR(ISCN,ISTA) = MIN( TCORR(ISCN,ISTA), 
      1                  STOPJ(ISCN) )
 C

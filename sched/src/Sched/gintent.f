@@ -28,12 +28,14 @@ C
       DOUBLE PRECISION    KD(*), BLANK
 C
       INTEGER             I, I1, J, J1, K, KEYPTR
-      CHARACTER           INTEXT*80
+      LOGICAL             GOTNONE
+      CHARACTER           INTEXT*80, CAPTEXT*80
 C ----------------------------------------------------------------
 C
 C     The inputs are reset each scan.  Check if there is anything
 C     new.  Assume that that no one starts with more than 8 blanks.
 C
+      GOTNONE = .FALSE.
       I1 = KEYPTR( 'INTENTs', KC, KI )
       IF( KD(I1) .NE. BLANK ) THEN
          NSCINT(ISCN) = 0
@@ -93,8 +95,27 @@ C
 C
                   END IF
                END IF
+C
+C              Detect an intent of 'NONE', which means clear the intents.
+C              Don't actually clear until we know if there are others.  We'll
+C              want a warning if that happens.
+C
+               CAPTEXT = INTEXT
+               CALL UPCASE( CAPTEXT )
+               IF( CAPTEXT .EQ. 'NONE' ) GOTNONE = .TRUE.
             END IF
          END DO
+C
+C        Deal with a "NONE".
+C
+         IF( GOTNONE ) THEN
+            IF( NSCINT(ISCN) .GE. 2 ) THEN
+               CALL ERRLOG( 'GINTENT:  Please do not mix ''NONE'' ' //
+     1             'with other INTENTs' )
+            END IF
+            ISCINT(1,ISCN) = 0
+            NSCINT(ISCN) = 0
+         END IF         
       ELSE
 C
 C        Nothing new.  Transfer the previous scan's values.

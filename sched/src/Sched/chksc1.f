@@ -84,7 +84,7 @@ C
      1                  '                Scan and setup information:'
                      CALL WLOG( 1, MSGTXT )
                      MSGTXT = ' '
-                     CALL PRTSCN( KSCN )
+                     CALL PRTSCN( KSCN, 'CHKSC1' )
                      CALL PRTSET( KS, ILOG )
                      CALL WLOG( 1, ' ' )
                      CALL WLOG( 1, 'CHKSC1:  See the error message '//
