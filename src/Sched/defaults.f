@@ -44,18 +44,24 @@ C     Make sure some items for the VLA are set.
 C
       CALL VLASCNS
 C
-C     Set setup defaults and check the setups.
+C     Work on setups if there are any.
 C
-      IF( .NOT. NOSET ) CALL DEFSET
+      IF( .NOT. NOSET ) THEN
+C
+C        Set setup defaults and check the setups.
+C
+         CALL DEFSET
+C
+C        Set the default for DOPINCR.  It's a bit complicated with the
+C        digital systems, so use a subroutine.
+C
+         CALL SDOPINCR
+C
+      END IF
 C
 C     Set the system dependent defaults for PRESTART and MINPAUSE.
 C
       CALL RECCTL
-C
-C     Set the default for DOPINCR.  It's a bit complicated with the
-C     digital systems, so use a subroutine.
-C
-      CALL SDOPINCR
 C
 C     Default the grab stuff.  Put after setups defaulted so we
 C     have the bit rate.  The GRABGAP assumes that the required

@@ -220,7 +220,9 @@ C
                      CRDBW(ICHN,ISCN) = MIN( 16.D0, BBFILT(ICHN,KS) )
                   END DO
                END IF
-               CRDFREQ(ICHN,ISCN) = 0.0D0
+               DO ICHN = 1, MAXCHN
+                  CRDFREQ(ICHN,ISCN) = 0.0D0
+               END DO
             ELSE
                DOPCAL(ISCN) = .TRUE.
                DO ICHN = 1, MAXCHN
