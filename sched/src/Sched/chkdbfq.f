@@ -137,7 +137,7 @@ C
      6          DEQUAL( BBCBW(ICH), 1.0D0 ) ) ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, F8.3 )' )
-     1            'CHKDBFQ: Bandwidth must be 1 to 128 MHz for ',
+     1            'CHKDBFQ: Bandwidth must be 1 to 16 MHz for ',
      2            'DBE=DBBC_DDC. Value specified is: ', 
      3            SIDEBD(ICH,KS)
                CALL WLOG( 1, MSGTXT )
@@ -150,6 +150,18 @@ C
      2            'DBE=DBBC_DDC. This is not available yet! '
                CALL WLOG( 1, MSGTXT )
                SHOWID = .TRUE.
+            END IF
+C
+C           Also Sampling must be Nyquist rate.
+C
+            IF( .NOT. DEQUAL(1.0D0*SAMPRATE(KS), 2.0D0*BBCBW(ICH))) THEN
+               MSGTXT = ' '              
+               WRITE( MSGTXT, '( A, A, F8.3, A, F8.3, A )' )
+     1           'CHKDBBC: Invalid SAMPRATE and BBFILTER specified: ', 
+     2           'SAMPRATE= ', SAMPRATE(KS), ', BBFILTER= ', BBCBW(ICH),
+     3           ' Only Nyquist sampling is permitted on DBBCs.'
+               CALL WLOG( 1, MSGTXT )
+               ERRS = .TRUE.
             END IF
          END DO
 C
