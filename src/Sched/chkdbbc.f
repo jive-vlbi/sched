@@ -217,7 +217,7 @@ C
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKDBBC: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=DBBC_DDC. Must be 0.5 to 256 Msamp/s.'
+     2           ' for DBE=DBBC_DDC. Must be 2 to 32 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
@@ -257,6 +257,7 @@ C              input number, but it's not encouraged.
      1              // ''' not A[1-4], B[1-4], C[1-4] or D[1-4]' )
                   ERRS = .TRUE.
                END IF
+C
             END DO
 C
 C
