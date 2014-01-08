@@ -385,6 +385,7 @@ C              caught so some of this might not be needed.
 C
                IFWARN = .FALSE.
                COWARN = .FALSE.
+               WRONGB = .FALSE.
                BBTOL = 0.02D0 * BBCBW(ICH)
                IF( SIDEBD(ICH,KS) .EQ. 'U' ) THEN
                   IF( BB2 .GT. PHI(IPF) + BBTOL ) THEN
