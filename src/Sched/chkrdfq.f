@@ -27,13 +27,13 @@ C
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
       INTEGER           NFWARN
 C      INTEGER                    , N2WARN  Warnings commented out.
-      INTEGER           IPF, I, NCOW, NIFW, LEN1, ISETF
+      INTEGER           IPF, I, NCOW, NIFW, NWB, LEN1, ISETF
       DOUBLE PRECISION  BBOFF, BB1, BB2, CR1, CR2, SLOP, BBTOL
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*), PLO(3), PHI(3)
       LOGICAL           ERRS, DEQUAL, COWARN, OBWARN, SHOWID, IFWARN
-      LOGICAL           KFWARN(MFSET)
+      LOGICAL           KFWARN(MFSET), WRONGB
 C
-      DATA     NCOW, NIFW  / 0, 0 /
+      DATA     NCOW, NIFW, NWB  / 0, 0, 0 /
       DATA     OBWARN   / .TRUE. /
       DATA     KFWARN   / MFSET * .TRUE. /
       DATA     N40WARN  / MAXSET*1 /
@@ -44,6 +44,7 @@ C      DATA     N2WARN   / 0 /
       DATA     PHI      / 640.D0, 896.D0, 1024.D0 /
       DATA     CR1, CR2 / 640.D0, 896.D0 /
       SAVE     N40WARN, N528WARN, NFWARN, NCOW, NIFW, OBWARN, KFWARN
+      SAVE     NWB
 C      SAVE     , N2WARN
 C
 C      PLO and PHI are the ranges for the DDC initial polyphase filter.
@@ -240,11 +241,13 @@ C
             IF( BB1 .LT. 512.0D0 .OR.
      1          BB1 .GT. 1024.0D0 ) THEN
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, F8.2, A )' )
-     1            'CHKRDFQ: Invalid BBSYN for DBE=RDBE_DDC: ', 
-     2            BBCFREQ(ICH),
-     3            '.  Must be between 512 and 1024 MHz.'
+               WRITE( MSGTXT, 
+     1               '( A, I4, A, I4, A, F10.2, A )' )
+     2            'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
+     3            ' has baseband frequency ', BB1,
+     4            ' outside 512-1024 MHz.'
                CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 1, '         This is not allowed.' )
                ERRS = .TRUE.
             END IF
 C
@@ -368,35 +371,73 @@ C
                END IF
             END DO
             IF( IPF .EQ. 0 ) THEN
-               MSGTXT = ' '
-               WRITE( MSGTXT, 
-     1               '( A, I4, A, I4, A, F10.2, A )' )
-     2            'CHKRDFQ: Baseband ', ICH, ' in setup ', KS, 
-     3            ' has baseband frequency ', BB1,
-     4            ' outside 512-1024 MHz.'
-               CALL WLOG( 1, MSGTXT )
+C
+C              This case should have already been caught, so don't
+C              say anything.
+C
                SHOWID = .TRUE.
             ELSE
 C
 C              Now see if the band goes outside the filter.  Allow
 C              a bit of tolerance (2% of bandwidth).
+C              For the IF boundaries, this should already have been 
+C              caught so some of this might not be needed.
 C
                IFWARN = .FALSE.
                COWARN = .FALSE.
                BBTOL = 0.02D0 * BBCBW(ICH)
                IF( SIDEBD(ICH,KS) .EQ. 'U' ) THEN
-                  IF( BB2 .GT. PHI(3) + BBTOL ) THEN
-                     IFWARN = .TRUE.
-                  ELSE IF( BB2 .GT. PHI(IPF) + BBTOL ) THEN
-                     COWARN = .TRUE.
+                  IF( BB2 .GT. PHI(IPF) + BBTOL ) THEN
+                     IF( IPF .EQ. 3 ) THEN
+                        IFWARN = .TRUE.
+                     ELSE
+                        COWARN = .TRUE.
+                     END IF
+                     IF( BB2 - PHI(IPF) .GT. 0.5 * BBCBW(ICH) ) 
+     1                  WRONGB = .TRUE.
                   END IF
                ELSE
-                  IF( BB2 .LT. PLO(1) - BBTOL) THEN
-                     IFWARN = .TRUE.
-                  ELSE IF( BB2 .LT. PLO(IPF) - BBTOL ) THEN
-                     COWARN = .TRUE.
+                  IF( BB2 .LT. PLO(IPF) - BBTOL ) THEN
+                     IF( IPF .EQ. 1 ) THEN
+                        IFWARN = .TRUE.
+                     ELSE
+                        COWARN = .TRUE.
+                     END IF
+                     IF( PLO(IPF) - BB2 .GT. 0.5 * BBCBW(ICH) ) 
+     1                  WRONGB = .TRUE.
                   END IF
                END IF
+C
+C              If more than half the baseband is on the other 
+C              side of the crossover or band edge, treat as
+C              an error.
+C
+               IF( WRONGB .AND. NWB .LE. 10 ) THEN
+                  NWB = NWB + 1
+                  CALL WLOG( 1, 'CHKRDFQ:  For the RDBE_DBBC ' //
+     1                'the polyphase filter used is the one ' )
+                  CALL WLOG( 1, '          containing the baseband ' //
+     1                'frequency. ' )
+                  CALL WLOG( 1, '          You have a channel with ' //
+     1                'most of the bandwidth outside the ' )
+                  CALL WLOG( 1, '          the chosen filter. ' )
+                  CALL WLOG( 1, '          This is too big an ' //
+     1                'error.  Fix the frequency. ' )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT,
+     1               '( A, I3, A, F10.4, A, F10.4, A )' )
+     2               '          The bad channel is baseband', ICH, 
+     3               ' between IF freqs', BB1, ' and', BB2, ' MHz'
+                  CALL WLOG( 1, MSGTXT )
+                  CALL WLOG( 1, '          in setup ' //
+     1               SETNAME(KS)(1:LEN1(SETNAME(KS))) )
+                  CALL WLOG( 1, '          for at least station: ' //
+     1                 SETSTA(1,KS) ) 
+                  ERRS = .TRUE.
+               END IF
+C
+C              Give milder warnings for lesser violations.
+C
                IF( COWARN ) NCOW = NCOW + 1
                IF( IFWARN ) NIFW = NIFW + 1
                IF( ( COWARN .AND. NCOW .LE. 10 ) .OR. 

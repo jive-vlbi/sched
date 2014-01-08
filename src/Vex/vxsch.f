@@ -35,7 +35,7 @@ C
       REAL        STASPD(MANT) 
       CHARACTER   FULTIM*18, TMPSRC*32
       CHARACTER   LINE*132, TFORM*9, TRANTYPE*10, SCANNAME*10
-      CHARACTER   DISKFILE*30, STNLC*2
+      CHARACTER   DISKFILE*30, STNLC*2, ZONE*5
       DOUBLE PRECISION  STARTT, TAPOFF, IDAY
       LOGICAL     SKIPPED, WARNFS, WARNTS(MAXSTA), DATATRAN, WARNGP
       LOGICAL     GAPERR, SKIPNONE, TSYSMESS, WARNTSOF(MAXSTA)
@@ -580,10 +580,13 @@ C
                   END IF
 C
 C                 Pointscr not implemented leave blank
+C                 Get the pointing sector from WRAPZONE.
+C
+                  CALL WRAPZONE( IVEX, ISCN, ISTA, ZONE )
 C
                   LPOS = LEN1(LINE) + 1
-                  WRITE( LINE(LPOS:LPOS+7), '( A6, 1X, A1 )' ) ' ',
-     1                    COL
+                  WRITE( LINE(LPOS:LPOS+7), '( 1X, A5, 1X, A1 )' ) 
+     1                    ZONE, COL
 C
 C                 Write tapedrive in last column, should be head 1 day
 C                 agreed with NRV that norec can be drive 0

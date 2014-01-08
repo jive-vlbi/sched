@@ -4,6 +4,7 @@ C     Routine specific for the VEX extension of SCHED.
 C     Writes a specific section of the VEX file 
 C     In this case the ST = $STATION section 
 C     By H.J. van Langevelde, JIVE, 300496 
+C     Added pointing_sector.  RCW.  Jan. 7, 2014.
 C 
       INCLUDE 'sched.inc' 
       INCLUDE 'schset.inc' 
@@ -11,6 +12,7 @@ C
 C      
       INTEGER   ISTA, ISCAT
       INTEGER   LEN1
+      CHARACTER ZONE*5
 C ----------------------------------------------------------------------
 C
 C     loop through antennas for STATION section
@@ -32,6 +34,7 @@ C
      1       ANLINK(ISTAAN(ISTA))(1:LEN1(ANLINK(ISTAAN(ISTA)))), SEP
          WRITE( IVEX, '( 5X, A, A, A1 )' ) 'ref $DAS = ',
      1       DALINK(ISTADA(ISTA))(1:LEN1(DALINK(ISTADA(ISTA)))), SEP
+         CALL WRAPZONE( IVEX, 0, ISTA, ZONE )
 C
          WRITE( IVEX, '( A, A1 )' ) 'enddef',SEP
 C

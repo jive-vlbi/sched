@@ -3309,12 +3309,13 @@ pointing becomes a problem.  The PFB can only use 32 MHz bandwidths at
 very restricted frequency set points.  A scheme has been established
 using the input parameters \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ},
 \htmlref{{\tt CRDDOP}}{MP:CRDDOP}, \htmlref{{\tt CRDBW}}{MP:CRDBW},
-and \htmlref{{\tt CRDNCH}}{MP:CRDNCH} to allow somewhat independent
-control of the legacy BBCs.  See the descriptions of those parameters,
-and the example \htmladdnormallink{{\sl
-eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key} for details.  As shown in the
-example, these parameters can be used for both explicit pointing scan
-insertion and for use with automatic pointing scan insertion by
+\htmlref{{\tt CRDCH1}}{MP:CRDCH1} and \htmlref{{\tt
+CRDNCH}}{MP:CRDNCH} to allow somewhat independent control of the
+legacy BBCs.  See the descriptions of those parameters, and the
+example \htmladdnormallink{{\sl
+eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key} for details.  As shown in
+the example, these parameters can be used for both explicit pointing
+scan insertion and for use with automatic pointing scan insertion by
 \sched.  Note that these capabilities have replaced the need that
 existed when the RDBEs were first deployed for separate MARK5A and
 MARK5C schedules.
@@ -4585,6 +4586,8 @@ SCAN PROPERTIES:
 \htlm{FREQ}{~~~~} Up to 16 baseband channel sky frequencies for
                         VLBA.
 \htlm{BW}{~~~~~~}       Baseband channel bandwidths.
+\htlm{CRDCH1}{~~} First main channel for related VLBA legacy channel.
+\htlm{CRDNCH}{~~} Number of VLBA legacy system channels.
 \htlm{CRDFREQ}{~} Force VLBA legacy BBC frequencies separate from RDBE.
 \htlm{CRDBW}{~~~} Force VLBA legacy BBC bandwidth separate from RDBE.
 \htln{CRDDOP}{CRDDOP}{~~} Provoke Doppler setting of VLBA legacy 
@@ -5467,25 +5470,56 @@ unless you are a VLBA programmer.
 {{\tt CRDLINE = 'This was requested by Walter'}}
 
 
-********************       Much not in yet.
+**********       Much not in yet. (not still true?)
 
 Add links.
 
+\subsubsection{\label{MP:CRDCH1}{\tt CRDCH1}}
+
+When setting parameters for the VLBA legacy hardware different from
+what is being set for the RDBE, parameters \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ},
+\htmlref{{\tt CRDDOP}}{MP:CRDDOP},\htmlref{{\tt CRDNCH}}{MP:CRDNCH},
+\htmlref{{\tt CRDBW}}{MP:CRDBW}, and {\tt CRDCH1} can be used.  Many of
+the channel parameters are taken from the main setup.  These include
+sideband, sample rate, IF channel etc.  With the legacy system ``CRD''
+parameters, only 8 channels can be specified.  With the RDBE_PFB, the
+number of channels is 16.  By default, \schedb will take the central 8
+channels when no CRD items are specified, or the first 8 when some
+are specified.  But that can be controlled with {\tt CRDCH1} which selects
+the first channel from the setup to use and by 
+\htmlref{{\tt CRDNCH}}{MP:CRDNCH} which sets the number of legacy channels.
+So, for example, to specify the central 8 channels, set {\tt CRDCH1=5
+CRDNCH=8}.
+
+\rcwbox
+{An integer}
+{Any integer 16 or less}
+{1 if CRD parameters were specified or using the DDC.  Otherwise 5}
+{One per scan.  Defaults to last value.}
+{{\tt CHDCH1 = 5}}
+
 \subsubsection{\label{MP:CRDNCH}{\tt CRDNCH}}
 
-{\tt CRDNCH} sets the number of channels to use on the legacy VLBA 
+{\tt CRDNCH} sets the number of channels to use on the legacy VLBA
 hardware (BBCs especially) when using the RDBE.  The main reason for
-being concerned about the legacy hardware is that the power levels
-in the BBCs are used by the old control system to do reference pointing.
-See also CRDFREQ, CRDBW and CRDDOP for controls related to such reference
-pointing, especially with masers.
+being concerned about the legacy hardware is that the power levels in
+the BBCs are used by the old control system to do reference pointing.
+See also \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ}, \htmlref{{\tt
+CRDDOP}}{MP:CRDDOP}, \htmlref{{\tt CRDBW}}{MP:CRDBW}, \htmlref{{\tt
+CRDCH1}}{MP:CRDCH1} for controls related to such reference pointing,
+especially with masers.
 
 {\tt CRDNCH} is a required parameter when CRDFREQ or CRDDOP are set.
 
-When not using CRDFREQ of CRDDOP, {\tt CRDNCH} will still set the number 
+When not using CRDFREQ or CRDDOP, {\tt CRDNCH} will still set the number 
 of channels used in the crd files controlling the BBCs.  If CRDFREQ and 
 CRDDOP are never used, CRDNCH will be set to lesser of 8 (the number of
 BBCs) and the number of setup channels.
+
+When {\tt CRDNCH} is less than the number of channels in the main setup
+(typical if using the RDBE\_PFB), then the alignment between the main
+setup channels and the legacy system channels can be set using
+\htmlref{{\tt CRDCH1}}{MP:CRDCH1}
 
 \rcwbox
 {An integer}
@@ -13515,10 +13549,8 @@ more information.
 %     with a line of asterisks.
 %     Allow VLAONLY schedules?  Maybe these don't differ from any other
 %         single station schedules any more.
-% **  Get wrap state in Vex.
 %     Modify choice of unset synthesizer for the new synthesizers.
 %     Calibrator selection
-%     Check if LO edge for DDC always in right polyphase filter.
 %     Revisit the whole issue of scan and recording start times.  Take
 %       into account any delays in start of correlation.  Also deal with
 %       "conservative" slew estimates causing lost data.
@@ -13526,6 +13558,16 @@ more information.
 
 \begin{itemize}
 
+\item Abort if the baseband frequency for the RDBE\_DDC is closer than
+half the bandwidth to a crossover frequency or band edge.  Jan. 7, 2014 RCW.
+
+\item Add wrap sector to the {\sl Vex} file.  The allowed sectors are in the
+``pointing\_sector'' lines of the \$STATION section for each antenna.  The
+name of the sector is given on the station line of the \$SCHED section.
+Jan. 7, 2014  RCW.
+
+\item Test release made to developers and made available in-house.  Jan. 2,
+2014.  RCW. 
 
 \item Change the limits in warnings from the Vex code from 35 to 40 stations
 and from 300 to 1000 sources.  These match number in an email exchange 
