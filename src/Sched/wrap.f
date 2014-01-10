@@ -8,10 +8,17 @@ C     recent history of scans.  This routine attempts to duplicate
 C     what will happen at the antenna.  It has to worry about the
 C     full time of the scan (by looking at both ends).
 C
-C     To duplicate what happens at the VLBA antennas, the Az is needed
-C     at the time the slew starts (STOPJ(LSCN)) and at the end of the
-C     scan (STOPJ(ISCN)).  When called during the process of setting
-C     scan times, the stop time may get adjusted later.  For ultimate
+C     This routine assumes that the antenna takes the shortest time
+C     slew to get to the next source without trying to optimize when
+C     to slew relative to a series of scans.  The algorithm is simple
+C     to try to increase the chances that it will reproduce what 
+C     happens at the antennas, the antennas having been encouraged to
+C     also keep it simple.  The algorithm does check that the azimuth
+C     of the new source both at the start of the slew and at the end
+C     of the scan are within the limits.
+C
+C     When called during the process of setting scan times, the 
+C     stop time may get adjusted again later.  For ultimate
 C     accuracy, there should be a second pass after the scan times
 C     are close.  Note that using the position at the start of the 
 C     slew may cause quite a large time offset if the station has 
@@ -45,6 +52,55 @@ C     northeast.
 C
 C     There are also a variety of issues when a phase reference pair
 C     goes near the zenith.  See AUTODOWN for dealing with those.
+C     To duplicate what happens at the VLBA antennas, the Az of the
+C     new source is needed at the time the slew starts (STOPJ(LSCN)) 
+C     and at the end of the scan.  What constitutes the end of the
+C     scan is a bit "interesting".  For the VLBA legacy on-line system,
+C     a scan is always in progress.  It can be the normal (probably 
+C     recording) scan, or it can be the setup scan.  The setup scan 
+C     fills the time between recordings during which the antenna might
+C     be slewing, or might be sitting waiting.  The on-line system does
+C     not distinguish the type of scan, so the position used for the 
+C     end of scan for slew calculations may be the end of the setup,
+C     which corresponds to the start of the recording scan.  This is 
+C     not optimal and can lead to slews being needed at the start of 
+C     the recording scan when there was plenty of time in the setup 
+C     scan.
+C
+C     VLBA:
+C
+C     It was realized rather late (Jan. 8, 2014) that the algorithm
+C     here is not quite the same as what is used on the VLBA.  The
+C     algorithm here is the desired one and will be kept.  But the
+C     setup scan confuses the issue on the VLBA.  The legacy on-line 
+C     system only sees a scan.  It does not distinguish setup and 
+C     recording scans.  So when it looks at the stop time, it is the 
+C     end of the setup scan, which corresponds to the start of recording.  
+C     Thus it will not detect a pending limit hit during recording until
+C     the start of recording.  This can cause a slew during recording
+C     even when there was a nice long setup during which it could 
+C     have been done.
+C
+C     The legacy system is no longer controlling recording so there is
+C     a bit more freedom to pick a solution to this issue than there 
+C     was before.  In writing the crd file, I plan to eliminate the
+C     setup scan if AZ1 and AZ2 flank the boundary between the ccw
+C     overlap region and the normal region - ie 90 deg azimuth for
+C     the VLBA - and the final AZ2 of the preceeding scan was greater
+C     than an arbitrary number like 250 deg Az.  This is the case
+C     where SCHED may have chosen the CCW wrap based on the limit
+C     crossing during the scan, but the on-line system might have
+C     gone to near the CW limit based on the end of the setup scan.
+C     I won't worry about scans at the other limit crossing at 270 deg
+C     because that limit will never be crossed while tracking - 
+C     negative azimuth rates are only seen at other azimuths.  The
+C     code for this will be entirely confined to subroutine VLBA.
+C
+C     Over-the-top.
+C
+C     Some antennas have the ability to go beyond 90 deg El.  SCHED
+C     does not yet include that as an option.  Someday, it probably
+C     should.
 C
       INCLUDE 'sched.inc'
 C
