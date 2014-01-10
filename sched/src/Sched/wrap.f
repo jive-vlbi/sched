@@ -96,6 +96,14 @@ C     because that limit will never be crossed while tracking -
 C     negative azimuth rates are only seen at other azimuths.  The
 C     code for this will be entirely confined to subroutine VLBA.
 C
+C     Note that predictions will not be perfect because the on-line 
+C     system makes its choices based on the azimuth after the pointing
+C     equation is applied and SCHED does not know those equations.  The
+C     azimuth encoder offset can be pretty large.  SKED will deal with
+C     this by having exclusion zones.  I am avoiding that so far.  The
+C     best solution is for the antennas to follow the wrap instructions
+C     from the schedulers.
+C
 C     Over-the-top.
 C
 C     Some antennas have the ability to go beyond 90 deg El.  SCHED
