@@ -1003,14 +1003,16 @@ sample schedule for the a global observation that uses the 512 Mbps mode.
 This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg1024.key}}{examples/eg1024.key}] is a
-sample schedule for the EVN that uses the 1024 Mbps mode.
+sample schedule for the EVN that uses the 1024 Mbps mode with DBBC,
+VLBA4, and MKIV systems.
 
-\item[\htmladdnormallink{{\sl eg2head.key}}{examples/eg2head.key}] is a
-sample schedule for an EVN observation that uses the 512 Mbps mode.
-This uses 2 heads on one tape drive on Mark IV stations.  Note that
-it is possible to do 512 Mbps on the VLBA and Mark IV stations
-simultaneously.  The VLBA uses 2 drives while the Mark IV systems
-use 2 heads.
+\item[\htmladdnormallink{{\sl eg2head.key}}{examples/eg2head.key}] is
+a sample schedule for an EVN observation that uses the 512 Mbps mode.
+This uses 2 heads on one tape drive on Mark IV stations.  VLBA4 and
+DBBC stations are included.  Note that it is possible to do 512 Mbps
+on the VLBA and Mark IV stations simultaneously.  The VLBA uses 2
+drives while the Mark IV systems use 2 heads.  This is actually based
+on a network monitoring observation.
 
 \item[\htmladdnormallink{{\sl egglobal.key}}{examples/egglobal.key}]
 is a sample file for simple continuum observations involving the VLBA,
@@ -13557,6 +13559,17 @@ more information.
 %     Update the station code list.
 
 \begin{itemize}
+
+
+
+\item For the VLBA crd files, don't use a setup scan (ie make the main
+scan span the whole time since the last scan) when the main scan, but
+not the setup scan, would require a wrap.  This is to force the on-line
+system to do the wrap when it should, which would it would not have in the
+past.  Note that this does not affect recordings since the legacy control
+system (crd files) no longer controls any recorders.  For those who really
+care about the reasons for this, see the header comments in {\sl wrap.f}. 
+Jan 9, 2013.  RCW.
 
 \item Abort if the baseband frequency for the RDBE\_DDC is closer than
 half the bandwidth to a crossover frequency or band edge.  Jan. 7, 2014 RCW.
