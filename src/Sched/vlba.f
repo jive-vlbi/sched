@@ -12,13 +12,13 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           ISCN, ISTA, QUOUT
+      INTEGER           ISCN, ISTA, QUOUT, KSTA
       INTEGER           LASTDY, DOY1, DOY2
       INTEGER           PTADD, LKS, LSTA
       INTEGER           LSCN, LEN1, KS, KR, LKR
       DOUBLE PRECISION  LSTOP
       LOGICAL           FIRSTS, FRS, DOSET, LPTVLB
-      LOGICAL           WRTSET, CRLWARN
+      LOGICAL           WRTSET, CRLWARN, SLEWPBM
       CHARACTER         VLBAD1*9, VLBAD2*9
       CHARACTER         FRSDUR*17, TSTART*9, TSTOP*9
       CHARACTER         LCRDLINE*80
@@ -30,20 +30,17 @@ C
 C
       DATA          CRLWARN  / .TRUE. /
 C
-      DATA          LSTA, LKS, LKR / 0, 0, 0 /
+      DATA          LSTA, LKS, LKR, LSCN / 0, 0, 0, 0 /
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VLBA: Starting' )
+      IF( ISTA .NE. LSTA ) LSCN = 0
 C
 C     Wrap up the schedule on the last call.
 C
       IF( ISCN .EQ. -999 ) THEN
          CALL VLBAEND( ISTA, LASTDY, LSCN )
       ELSE
-C
 C        Deal with a regular scan.
-C        Record the last scan processed for use in the final call.
-C
-         LSCN = ISCN
 C
 C        On the first call for the station, initialize some variables
 C        and call VLBAINI to start writing the control file.
@@ -60,6 +57,29 @@ C        and there is more than a 1 second gap between scans.
 C
          DOSET =  VLBITP .AND. ( FIRSTS .OR. 
      1      ( STARTJ(ISCN) - TPSTART(ISCN,ISTA) - LSTOP ) .GT. ONESEC )
+C
+C        But don't do a setup scan if there is a reasonable chance that
+C        the on-line system and SCHED will disagree on the wrap.  See
+C        the discussion in the comments in wrap.f for details.  Added
+C        Jan. 9, 2014  RCW.
+C
+         KSTA = STANUM(ISTA)
+         IF( LSCN .NE. 0 ) THEN
+            SLEWPBM = AZ1(ISCN,ISTA) .LE. AX1LIM(2,KSTA) - 360.0 .AND.
+     1                AZ2(ISCN,ISTA) .GT. AX1LIM(2,KSTA) - 360.0 .AND.
+     2                AZ2(LSCN,ISTA) .GT. 250.0 
+            MSGTXT = ' '
+            IF( DOSET .AND. SLEWPBM ) THEN
+               WRITE( MSGTXT, '( A, I5, A, A, A )' )
+     1            'VLBA:  Not writing setup file for scan ', ISCN,
+     2            ', station ', STANAME(ISTA), 
+     3            ' to avoid potential incorrect wrap.'
+               CALL WLOG( 1, MSGTXT )
+            END IF
+         ELSE
+            SLEWPBM = .FALSE.
+         END IF
+         DOSET = DOSET .AND. .NOT. SLEWPBM
 C
 C        Get the scan started.  VLBAST deals with scan times, source
 C        information, caltime, and pointing requests.
@@ -203,7 +223,15 @@ C
          END IF
          LPTVLB = PNTVLBA(ISCN) .OR. TANVLBA(ISCN)
 C
-C        Now set this scan's stop time to be the "last" stop time.
+C        Record the last scan processed for use in the final call.
+C        Do at the end of the scan loop so it can be used as a
+C        lastscan number.  Recall that the test for this station
+C        being in the scan happens in STAFILES, several layers up
+C        from here.
+C
+         LSCN = ISCN
+C
+C        Also set this scan's stop time to be the "last" stop time.
 C
          LSTOP = STOPJ(ISCN)
 C
