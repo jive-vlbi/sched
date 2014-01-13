@@ -1,5 +1,15 @@
 This is the input file for MAKESETUP which makes the standard
-   SCHED setup files.  Very incomplete history:
+   SCHED setup files.  Very incomplete history below.  To use
+   this file, simply go to $SCHED/setups and type makesetup (if
+   it is in the path).  makesetup is maintained in 
+   $SCHED/RELATED_CODE/MAKESETUP
+
+****  WARNING ABOUT DELETES **** 
+There are some setup files that are not built with
+this mechanism.  They are mer*.set, lba*.set.  Do not delete them if
+cleaning out the files produced by this protram.
+*********************************
+
 
    29 Mar 1995.  Add some Effelsberg VLBA parameters.  Avoid 1:4 2bit 
                  pol.  Get rid of LO offsets.  RCW
@@ -24,6 +34,15 @@ This is the input file for MAKESETUP which makes the standard
    13 Feb 2012   Add a 7mm dummy setup for the RDBE_PFB for reference pointing.
    16 Jan 2013   Actually delete some commented setups (eg M3)
                  Add EVLA pointing setups.  Start on RDBE setups.
+   10 Jan 2014   Copy this file to Master_setups_preDDC.
+                 Copy current setups to OLD_JAN2014.
+                 Then convert all appropriate files to use the DDC.
+                 In most cases, this doesn't actually mean much change.
+                 One required change is that the offset LO for pulse
+                 cal change from 0.99 or 0.49 to 0.75 because of the 
+                 combined DDC and legacy system tuning restrictions.
+                 Many files deleted.  Can be founs on the copy above if needed.
+                 Get rid of 1 bit cases.
 --------------------------------------------------------------------
 Lead comments from makesetup.f:
 
@@ -112,15 +131,12 @@ SCHED DEFAULTS:
       period   = 1  
       level    = -1 
       pcal     = '1MHz'
-      bbc      = appropriate choice with knowledge of MKIV constraints.
-      format   = DAR for station from station catalog.  The fanout is
-                 then picked to try for speed up factor 2.
-      station  = stations in schedule in scans that use this setup.
-      netside  = U, U... unless some station has too few BBCs.  Then it
-                 will be L, U, L ... or L, L, U, U, ... depending on pol.
-      tpmode   = correct value for rest of parameters.  Tries to keep 
-                 same number of tracks for all setups in an experiment.
-
+      bbc      = Appropriate choice with knowledge of MKIV constraints.
+      format   = Appropriate for DAR for station from station catalog.
+      dbe      = rdbe_ddc for VLBA.  dbbc_ddc for dbbc stations.  Others blank.
+      station  = Stations in schedule in scans that use this setup.
+      netside  = Depends on DAR and first LO.  For RDBE_DDC, U, U... 
+                 unless some station has too few BBCs.
       track1, track2 ... will be set to appropriate values for the mode.
       pcalxb1, pcalxb2, pcalfr1, and pcalfr2:
         Detect the first 16 of the following:
@@ -155,14 +171,9 @@ SCHED DEFAULTS:
       will be used and the frequency catalog will be relied upon 
       for FIRSTLO etc.
 
-   MARK III
+   MARK III and S2
       Mark III modes removed Sept. 18, 2008.  Mark III is long gone.  RCW.
-
-        The setups conform to the CODES.SCH copied from Haystack on 2feb94
-        unless otherwise noted.
-
-        No Mode A files are given because the VLBA and VLA will do Mode B
-        during such observations because they only have 8 BBC's.
+      S2 removed Jan 10, 2014, to the extent there was any.
 
    MODES
       Below are a series of "mode"s.  Each either defines a channelization
@@ -198,7 +209,6 @@ Makesetup will add a / at the end if there is none.
 !
 !  VLBA recorders with VEX control.
 !
-  barrel   = roll_off
   @vformat
   station  = @fstation
   / ?end
@@ -207,45 +217,13 @@ Makesetup will add a / at the end if there is none.
 !  MkIV recorders with VEX control.
 !  Be careful about BBC asignments.
 !
-  barrel   = roll_off
   @4format
   station  = @4station
-  / ?end
-  ?sstation
-!
-!  S2 recorders with VEX control.
-!
-  barrel   = roll_off
-  format   = S2
-  station  = @sstation
   / ?end
 #end
 
 -------------------------------------------------------------
-Establish the comments concerning tape durations for the 3
-tape recording speeds.  The last digit of the mode name is
-the recording bit rate per track in Mbps.  High density 
-recording is assumed on the longer ("thin") tapes while low
-density recording is assumed on the shorter  ("thick") tapes.
-
-#mode spd2
-!     Format      Tape length  Density  Tape speed  Time/pass  
-! VLBA/MkIII/MkIV    17600      High      40.0       1:28:00    
-!    MkIII/MkIV       8800      Low       67.5        26:04
-#end
-
-#mode spd4
-!     Format      Tape length  Density  Tape speed  Time/pass  
-! VLBA/MkIII/MkIV    17600      High      80.0         44:00
-!    MkIII/MkIV       8800      Low      135.0         13.02
-#end
-
-#mode spd8
-!     Format      Tape length  Density  Tape speed  Time/pass  
-! VLBA/MkIII/MkIV    17600      High     160.00        22:00
-!    MkIII/MkIV       8800      Low      270.00         6:31
-#end
-
+Removed tape speed/duration information.  RIP tapes.
 --------------------------------------------------------------
 Basic information including reference frequency and 
 station lists for each band.  Also some top-of-file comments.
@@ -266,8 +244,7 @@ not to be specified.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 325.99 )
+  #freq freq( 325.75 )
 #end
 
 
@@ -281,8 +258,7 @@ not to be specified.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 607.99 )
+  #freq freq( 607.75 )
 #end
 
 
@@ -294,8 +270,7 @@ not to be specified.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 1662.99 )
+  #freq freq( 1662.75 )
 #end
 
 
@@ -307,8 +282,7 @@ not to be specified.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 2266.99 )
+  #freq freq( 2266.75)
 #end
 
 
@@ -316,15 +290,21 @@ not to be specified.
 !      For the 6 cm band.
 !        Radio Astronomy allocation: 4990-5000
 !        Radio Astnomomy footnote:   4950-4990
-!        VLA 50MHz 4960.1 to 5010.1 with VC mode.
-!        VLA 6cm receiver falling off at high end.
 !      Reference frequency is Mark II network standard
 !      Merlin 4986-5002
+!      There is a problem for the DDC with crossovers.
+!        Firstlo   BBC for 4990  crossover
+!         4100       890           896   6MHz below crossover in RF
+!         4400       590           640   Alias issue < 5050
+!         5600       610           640   30 MHz above crossover in RF
+!         5900       910           896   14 MHz below crossover in RF
+!      5600 is probably best, but need to keep frequency low, or
+!      span the crossover.
+  firstlo = 5600.0
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 4990.99 )
+  #freq freq( 4990.75 )
 #end
 
 
@@ -335,16 +315,19 @@ not to be specified.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 8416.99 )
+  #freq freq( 8416.75 )
 #end
 
 The following gives the stations that can do rcp x/s observations.
-#mode sxrs
+The station indicators below were removed from mode sxrs.
   #vstation  VLBA, EB_VLBA
   #fstation  NOTO, YEBES
   #4station  MEDICINA, ONSALA85, WSTRBORK
-  #sstation
+
+#mode sxrs
+  #vstation 
+  #fstation 
+  #4station 
 #end
 
 #mode sxr
@@ -352,13 +335,15 @@ The following gives the stations that can do rcp x/s observations.
 !        Space Research (eg DSN) allocation: 2290-2300
 !        Space Research (eg DSN) allocation: 8400-8450
   @mode sxrs
-  #freq freq( 2266.99 8416.99 )
+  #freq freq( 2266.75 8416.75 )
 #end
 
 #mode sxg
 !  For dual frequency, single polarization, 13cm/4cm observations.
 !  Changed to use RDV frequencies (but ending in .49) 27 Feb 2002  RCW.
 !  Changed again to follow RDV away from satellite radio  29Jul2004 RCW.
+!  Move to offset frequency of 0.75 to conform to the combination of
+!  frequency between the DDC and the legacy systems.  Jan. 10, 2014.  RCW.
 !  RDV32 uses: 2225.99, 2255.99, 2345.99, 2365.99
 !              8405.99, 8475.99, 8790.99, 8895.99
 !  RDV45 uses: 2232.99, 2262.99, 2352.99, 2272.99 and same X as above.
@@ -367,8 +352,14 @@ The following gives the stations that can do rcp x/s observations.
 !        Space Research (eg DSN) allocation: 8400-8450
 !        Satellite radio 2320-2345.
   @mode sxrs
-  #freq freq( 2232.49 8405.49 )
+  #freq freq( 2232.75 8405.75 )
 #end
+
+
+The following station indicators were removed from mode sxd:
+  #vstation  VLBA, EB_VLBA
+  #fstation  NOTO
+  #4station
 
 
 #mode sxd
@@ -376,24 +367,29 @@ The following gives the stations that can do rcp x/s observations.
 !  Mark IV cannot do this.
 !        Space Research (eg DSN) allocation: 2290-2300
 !        Space Research (eg DSN) allocation: 8400-8450
-  #vstation  VLBA, EB_VLBA
-  #fstation  NOTO
+  #vstation
+  #fstation
   #4station
-  #sstation
-  #freq freq( 2266.99 8416.99 )
+  #freq freq( 2266.75 8416.75 )
 #end
 
+Following removed from the following setup:
+  @vformat
 
-#mode sxv
+This mode has temporarily been disabled by taking out the hashes.
+mode sxv
+!
 !  For X only stations in S/X experiments. 
 !  The recording setup and number of channels won't change,
 !  but the reference frequency for the second set of channels will
 !  be the X band frequency.
 !  This "mode" is intended to be attached to the end of the setup file.
-  barrel = 'roll_auto'
-  @vformat
   station = VLA1, VLA27, GBT_VLBA
   freqref = freq( 8416.49 8416.49 )   /
+end
+Here the null op so the invocation can be left in the setup specs.
+#mode sxv
+
 #end
 
 #mode 2cm
@@ -407,18 +403,16 @@ The following gives the stations that can do rcp x/s observations.
 !        assuming an upper sideband first mix.  The splits are at 12.9, 
 !        13.9 and 14.9 Ghz.
 !
-!        VLA band 14650 - 15325 MHz for 0.9 sensitivity
 !        Methanol has a rest frequency of 12178.595 MHz 
 !
 !        SCHED's standard 2cm band (BAND='2cm' in a setup) sets the 
 !        center frequency for 2cm to 15285.49.  This may have been 
-!        because of the VLA band.
+!        because of the old VLA band.
 !
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 15360.99 )
+  #freq freq( 15360.75 )
 #end
 
 
@@ -429,8 +423,7 @@ The following gives the stations that can do rcp x/s observations.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 22228.99 )
+  #freq freq( 22228.75 )
 #end
 
 
@@ -438,13 +431,12 @@ The following gives the stations that can do rcp x/s observations.
 !      For the 7 mm band.
 !        Radio Astronomy allocation:  42400-43500
 !        Medicina band 43164-43278
-!        Old: freqref  = 43150.99  !  Reasonable Mark II setting.
+!        Old: freqref  = 43150.75  !  Reasonable Mark II setting.
 !        Frequency based on experiments in Feb 95 global session.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freq freq( 43212.99 )
+  #freq freq( 43212.75 )
 #end
 
 
@@ -454,8 +446,7 @@ The following gives the stations that can do rcp x/s observations.
   #vstation 
   #fstation 
   #4station 
-  #sstation 
-  #freqref freq( 86244.99 )
+  #freqref freq( 86244.75 )
 #end
 
 
@@ -520,14 +511,14 @@ for their content (the order of lines is affected).
 
 
 #mode 32-8-2
-  @mode spd2
 !      This is a mode for narrow band observations - lines, P band etc.
 !      32 Mbps - 2 passes per head position.
+!      format removed Jan 2014.
   nchan    = 8 
   bits     = 2  
   bbfilter = 1.0 
-  #vformat format = VLBA1:1  
-  #4format format = MKIV1:1
+  #vformat
+  #4format
   @mode shell
 #end
 
@@ -541,11 +532,10 @@ for their content (the order of lines is affected).
 #file v9050cm-64-8-2.set
 !  For combined 50/90 cm observations on the VLBA.  This is for
 !  dual polarization, 2 MHz/BB channel, 8 channels.
-  @mode spd2  
   nchan    = 8
   bits     = 2
   pol      = dual  
-  freqref  = 326.49, 326.49, 328.49, 328.49, 608.99, 608.99, 610.99, 610.99
+  freqref  = 326.50, 326.50, 328.50, 328.50, 608.75, 608.75, 610.75, 610.75
   netside  = u
   bbfilter = 2.0
   /
@@ -555,591 +545,227 @@ for their content (the order of lines is affected).
 !  For combined 50/90 cm observations on the VLBA.  This is for
 !  dual polarization, 4 MHz/BB channel, 8 channels, with only 2
 !  channels at 50 cm (fit in the filter)
-  @mode spd4
   nchan    = 8
   bits     = 2
   pol      = dual  
-  freqref  = 320.49, 320.49, 324.49, 324.49, 328.49, 328.49, 608.99, 608.99
+  freqref  = 320.49, 320.49, 324.49, 324.49, 328.49, 328.49, 608.75, 608.75
   netside  = u
   bbfilter = 4.0
   /
 #end
 
-#mode 32-2-1
-  @mode spd4
-!      32 Mbps  4 pass/headpos
-  nchan    = 2  
-  bits     = 1  
-  bbfilter = 8.0
+Eliminate the 32 and 64 Mbps modes.  That's getting to be pretty narrow by 2014.
+
+
+Removed from the mode below.
   #vformat format = VLBA1:4
   #4format format = MKIV1:4
-  @mode shell
-#end
-
-#file v18cm-32-2-1-L.set  @mode 18cm  #f1 -3.5;  @mode lcp_u   @mode 32-2-1  #end
-#file v18cm-32-2-1.set    @mode 18cm  #f1 -0.5;  @mode dual_u  @mode 32-2-1  #end
-#file v13cm-32-2-1-R.set  @mode 13cm  #f1 -3.5;  @mode rcp_u   @mode 32-2-1  #end
-#file v13cm-32-2-1.set    @mode 13cm  #f1 -0.5;  @mode dual_u  @mode 32-2-1  #end
-#file v6cm-32-2-1-L.set   @mode 6cm   #f1 -3.5;  @mode lcp_u   @mode 32-2-1  #end
-#file v6cm-32-2-1.set     @mode 6cm   #f1 -0.5;  @mode dual_u  @mode 32-2-1  #end
-#file v4cm-32-2-1-R.set   @mode 4cm   #f1 -3.5;  @mode rcp_u   @mode 32-2-1  #end
-#file v4cm-32-2-1.set     @mode 4cm   #f1 -0.5;  @mode dual_u  @mode 32-2-1  #end
-#file v2cm-32-2-1-L.set   @mode 2cm   #f1 -3.5;  @mode lcp_u   @mode 32-2-1  #end
-#file v2cm-32-2-1.set     @mode 2cm   #f1 -0.5;  @mode dual_u  @mode 32-2-1  #end
-#file v1cm-32-2-1-L.set   @mode 1cm   #f1 -3.5;  @mode lcp_u   @mode 32-2-1  #end
-#file v1cm-32-2-1.set     @mode 1cm   #f1 -0.5;  @mode dual_u  @mode 32-2-1  #end
-#file v7mm-32-2-1-L.set   @mode 7mm   #f1 -3.5;  @mode lcp_u   @mode 32-2-1  #end
-#file v7mm-32-2-1.set     @mode 7mm   #f1 -0.5;  @mode dual_u  @mode 32-2-1  #end
-#file vsx-32-2-1-R.set  @mode sxr #f1 -0.5 -0.5; @mode rcp_u   @mode 32-2-1  @mode sxv #end
-
-
-
-
-#mode 64-2-2
-  @mode spd4
-!      64 Mbps - 2 pass/headpos  
-  nchan    = 2  
-  bits     = 2  
-  bbfilter = 8.0  
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
-  @mode shell
-#end
-
-#file v18cm-64-2-2-L.set  @mode 18cm  #f1 -3.5;  @mode lcp_u  @mode 64-2-2   #end
-#file v18cm-64-2-2.set    @mode 18cm  #f1 -0.5;  @mode dual_u @mode 64-2-2   #end
-#file v13cm-64-2-2-R.set  @mode 13cm  #f1 -3.5;  @mode rcp_u  @mode 64-2-2   #end
-#file v13cm-64-2-2.set    @mode 13cm  #f1 -0.5;  @mode dual_u @mode 64-2-2   #end
-#file v6cm-64-2-2-L.set   @mode 6cm   #f1 -3.5;  @mode lcp_u  @mode 64-2-2   #end
-#file v6cm-64-2-2.set     @mode 6cm   #f1 -0.5;  @mode dual_u @mode 64-2-2   #end
-#file v4cm-64-2-2-R.set   @mode 4cm   #f1 -3.5;  @mode rcp_u  @mode 64-2-2   #end 
-#file v4cm-64-2-2.set     @mode 4cm   #f1 -0.5;  @mode dual_u @mode 64-2-2   #end
-#file v2cm-64-2-2-L.set   @mode 2cm   #f1 -3.5;  @mode lcp_u  @mode 64-2-2   #end
-#file v2cm-64-2-2.set     @mode 2cm   #f1 -0.5;  @mode dual_u @mode 64-2-2   #end
-#file v1cm-64-2-2-L.set   @mode 1cm   #f1 -3.5;  @mode lcp_u  @mode 64-2-2   #end
-#file v1cm-64-2-2.set     @mode 1cm   #f1 -0.5;  @mode dual_u @mode 64-2-2   #end
-#file v7mm-64-2-2-L.set   @mode 7mm   #f1 -3.5;  @mode lcp_u  @mode 64-2-2   #end
-#file v7mm-64-2-2.set     @mode 7mm   #f1 -0.5;  @mode dual_u @mode 64-2-2   #end
-#file vsx-64-2-2-R.set   @mode sxr #f1 -0.5 -0.5; @mode rcp_u @mode 64-2-2  @mode sxv #end  
-
-
-
-#mode 64-4-1
-  @mode spd4
-!      64 Mbps - 2 pass/headpos
-  nchan    = 4  
-  bits     = 1 
-  bbfilter = 8.0  
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
-  @mode shell
-#end
-
-#file v18cm-64-4-1-L.set  @mode 18cm  #f1 -11.5;  @mode lcp_u  @mode 64-4-1  #end
-#file v18cm-64-4-1.set    @mode 18cm  #f1 -3.5;  @mode dual_u  @mode 64-4-1  #end
-#file v13cm-64-4-1-R.set  @mode 13cm  #f1 -11.5;  @mode rcp_u  @mode 64-4-1  #end
-#file v13cm-64-4-1.set    @mode 13cm  #f1 -3.5;  @mode dual_u  @mode 64-4-1  #end
-#file v6cm-64-4-1-L.set   @mode 6cm   #f1 -19.5;  @mode lcp_u  @mode 64-4-1  #end 
-#file v6cm-64-4-1.set     @mode 6cm   #f1 -3.5;  @mode dual_u  @mode 64-4-1  #end
-#file v4cm-64-4-1-R.set   @mode 4cm   #f1 -11.5;  @mode rcp_u  @mode 64-4-1  #end
-#file v4cm-64-4-1.set     @mode 4cm   #f1 -3.5;  @mode dual_u  @mode 64-4-1  #end
-#file v2cm-64-4-1-L.set   @mode 2cm   #f1 -11.5;  @mode lcp_u  @mode 64-4-1  #end
-#file v2cm-64-4-1.set     @mode 2cm   #f1 -3.5;  @mode dual_u  @mode 64-4-1  #end
-#file v1cm-64-4-1-L.set   @mode 1cm   #f1 -11.5;  @mode lcp_u  @mode 64-4-1  #end
-#file v1cm-64-4-1.set     @mode 1cm   #f1 -3.5;  @mode dual_u  @mode 64-4-1  #end
-#file v7mm-64-4-1-L.set   @mode 7mm   #f1 -11.5;  @mode lcp_u  @mode 64-4-1  #end
-#file v7mm-64-4-1.set     @mode 7mm   #f1 -3.5;  @mode dual_u  @mode 64-4-1  #end
-#file vsx-64-4-1-R.set  @mode sxr #f1 -3.5 -3.5;  @mode rcp_u  @mode 64-4-1  @mode sxv #end
-#file vsx-64-4-1.set    @mode sxd #f1  0.5  0.5; @mode dual_u  @mode 64-4-1  @mode sxv #end
-
-
-
-#mode 64-4-2
-  @mode spd2
-!      64 Mbps - 1 pass/headpos
-  nchan    = 4 
-  bits     = 2 
-  bbfilter = 4.0   
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
-  @mode shell
-#end
-
-#file v18cm-64-4-2-L.set  @mode 18cm  #f1 -5.5;  @mode lcp_u     @mode 64-4-2  #end
-#file v18cm-64-4-2.set    @mode 18cm  #f1 -1.5;  @mode dual_u    @mode 64-4-2  #end 
-#file v13cm-64-4-2-R.set  @mode 13cm  #f1 -5.5;  @mode rcp_u     @mode 64-4-2  #end 
-#file v13cm-64-4-2.set    @mode 13cm  #f1 -1.5;  @mode dual_u    @mode 64-4-2  #end 
-#file v6cm-64-4-2-L.set   @mode 6cm   #f1 -5.5;  @mode lcp_u     @mode 64-4-2  #end 
-#file v6cm-64-4-2.set     @mode 6cm   #f1 -1.5;  @mode dual_u    @mode 64-4-2  #end
-#file v4cm-64-4-2-R.set   @mode 4cm   #f1 -5.5;  @mode rcp_u     @mode 64-4-2  #end 
-#file v4cm-64-4-2.set     @mode 4cm   #f1 -1.5;  @mode dual_u    @mode 64-4-2  #end
-#file v2cm-64-4-2-L.set   @mode 2cm   #f1 -5.5;  @mode lcp_u     @mode 64-4-2  #end 
-#file v2cm-64-4-2.set     @mode 2cm   #f1 -1.5;  @mode dual_u    @mode 64-4-2  #end
-#file v1cm-64-4-2-L.set   @mode 1cm   #f1 -5.5;  @mode lcp_u     @mode 64-4-2  #end 
-#file v1cm-64-4-2.set     @mode 1cm   #f1 -1.5;  @mode dual_u    @mode 64-4-2  #end
-#file v7mm-64-4-2-L.set   @mode 7mm   #f1 -5.5;  @mode lcp_u     @mode 64-4-2  #end 
-#file v7mm-64-4-2.set     @mode 7mm   #f1 -1.5;  @mode dual_u    @mode 64-4-2  #end
-#file vsx-64-4-2-R.set    @mode sxr #f1 -2.5 -2.5; @mode rcp_u   @mode 64-4-2  @mode sxv #end 
-#file vsx-64-4-2.set      @mode sxd #f1 -0.5 -0.5; @mode dual_u  @mode 64-4-2  @mode sxv #end
-
 
 
 #mode 128-4-2
-  @mode spd4
-!      128 Mbps - 1 pass/headpos
+!      128 Mbps, 32 MHz
   nchan    = 4 
   bits     = 2 
   bbfilter = 8.0  
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
   @mode shell
 #end
 
-#file v18cm-128-4-2-L.set  @mode 18cm  #f1 -11.5;  @mode lcp_u   @mode 128-4-2  #end
-#file v18cm-128-4-2.set    @mode 18cm  #f1 -3.5;   @mode dual_u  @mode 128-4-2  #end
-#file v13cm-128-4-2-R.set  @mode 13cm  #f1 -11.5;  @mode rcp_u   @mode 128-4-2  #end
-#file v13cm-128-4-2.set    @mode 13cm  #f1 -3.5;   @mode dual_u  @mode 128-4-2  #end
-#file v6cm-128-4-2-L.set   @mode 6cm   #f1 -19.5;  @mode lcp_u   @mode 128-4-2  #end
-#file v6cm-128-4-2.set     @mode 6cm   #f1 -3.5;   @mode dual_u  @mode 128-4-2  #end
-#file v4cm-128-4-2-R.set   @mode 4cm   #f1 -11.5;  @mode rcp_u   @mode 128-4-2  #end
-#file v4cm-128-4-2.set     @mode 4cm   #f1 -3.5;   @mode dual_u  @mode 128-4-2  #end
-#file v2cm-128-4-2-L.set   @mode 2cm   #f1 -11.5;  @mode lcp_u   @mode 128-4-2  #end
-#file v2cm-128-4-2.set     @mode 2cm   #f1 -3.5;   @mode dual_u  @mode 128-4-2  #end
-#file v1cm-128-4-2-L.set   @mode 1cm   #f1 -11.5;  @mode lcp_u   @mode 128-4-2  #end
-#file v1cm-128-4-2.set     @mode 1cm   #f1 -3.5;   @mode dual_u  @mode 128-4-2  #end
-#file v7mm-128-4-2-L.set   @mode 7mm   #f1 -11.5;  @mode lcp_u   @mode 128-4-2  #end
-#file v7mm-128-4-2.set     @mode 7mm   #f1 -3.5;   @mode dual_u  @mode 128-4-2  #end
-#file vsx-128-4-2-R.set  @mode sxr #f1 -4.5 -4.5; @mode rcp_u @mode 128-4-2  @mode sxv #end
-#file vsx-128-4-2.set    @mode sxd #f1 -0.5 -0.5; @mode dual_u @mode 128-4-2  @mode sxv #end
+#file v18cm-128-4-2-L.set  @mode 18cm  #f1 -11.0;  @mode lcp_u   @mode 128-4-2  #end
+#file v18cm-128-4-2.set    @mode 18cm  #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file v13cm-128-4-2-R.set  @mode 13cm  #f1 -11.0;  @mode rcp_u   @mode 128-4-2  #end
+#file v13cm-128-4-2.set    @mode 13cm  #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file v6cm-128-4-2-L.set   @mode 6cm   #f1 -19.0;  @mode lcp_u   @mode 128-4-2  #end
+#file v6cm-128-4-2.set     @mode 6cm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file v4cm-128-4-2-R.set   @mode 4cm   #f1 -11.0;  @mode rcp_u   @mode 128-4-2  #end
+#file v4cm-128-4-2.set     @mode 4cm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file v2cm-128-4-2-L.set   @mode 2cm   #f1 -11.0;  @mode lcp_u   @mode 128-4-2  #end
+#file v2cm-128-4-2.set     @mode 2cm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file v1cm-128-4-2-L.set   @mode 1cm   #f1 -11.0;  @mode lcp_u   @mode 128-4-2  #end
+#file v1cm-128-4-2.set     @mode 1cm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file v7mm-128-4-2-L.set   @mode 7mm   #f1 -11.0;  @mode lcp_u   @mode 128-4-2  #end
+#file v7mm-128-4-2.set     @mode 7mm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file vsx-128-4-2-R.set  @mode sxr #f1 -4.0 -4.0; @mode rcp_u @mode 128-4-2  @mode sxv #end
+#file vsx-128-4-2.set    @mode sxd #f1 -0.0 -0.0; @mode dual_u @mode 128-4-2  @mode sxv #end
 
 
-
-#mode 128-8-1
-  @mode spd4
-!      128 Mbps - 1 pass/headpos
-  nchan    = 8  
-  bits     = 1  
-  bbfilter = 8.0    
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
-  @mode shell
-#end
-
-#file v18cm-128-8-1-L.set  @mode 18cm  #f1 -30.5;    @mode lcp_u    @mode 128-8-1  #end
-#file v18cm-128-8-1.set    @mode 18cm  #f1 -11.5;    @mode dual_u   @mode 128-8-1  #end
-#file v13cm-128-8-1-R.set  @mode 13cm  #f1 -27.5;    @mode rcp_u    @mode 128-8-1  #end
-#file v13cm-128-8-1.set    @mode 13cm  #f1 -11.5;    @mode dual_u   @mode 128-8-1  #end
-#file v6cm-128-8-1-L.set   @mode 6cm   #f1 -30.5;    @mode lcp_u    @mode 128-8-1  #end
-#file v6cm-128-8-1.set     @mode 6cm   #f1 -19.5;    @mode dual_u   @mode 128-8-1  #end
-#file v4cm-128-8-1-R.set   @mode 4cm   #f1 -29.5;    @mode rcp_u    @mode 128-8-1  #end
-#file v4cm-128-8-1.set     @mode 4cm   #f1 -11.5;    @mode dual_u   @mode 128-8-1  #end
-#file v2cm-128-8-1-L.set   @mode 2cm   #f1 -29.5;    @mode lcp_u    @mode 128-8-1  #end
-#file v2cm-128-8-1.set     @mode 2cm   #f1 -11.5;    @mode dual_u   @mode 128-8-1  #end
-#file v1cm-128-8-1-L.set   @mode 1cm   #f1 -26.5;    @mode lcp_u    @mode 128-8-1  #end
-#file v1cm-128-8-1.set     @mode 1cm   #f1 -11.5;    @mode dual_u   @mode 128-8-1  #end
-#file v7mm-128-8-1-L.set   @mode 7mm   #f1 -27.5;    @mode lcp_u    @mode 128-8-1  #end
-#file v7mm-128-8-1.set     @mode 7mm   #f1 -11.5;    @mode dual_u   @mode 128-8-1  #end
-#file vsx-128-8-1-R.set  @mode sxr #f1 -12.5 -12.5;  @mode rcp_u    @mode 128-8-1  @mode sxv  #end
-#file vsx-128-8-1.set    @mode sxd #f1  -4.5  -4.5;  @mode dual_u   @mode 128-8-1  @mode sxv  #end
-
-V  128-8-1-UL for cases like Eb that used to have only 4 bbcs.  
-Same mode as 128-8-1.  Different f1's.
-
-#file v18cm-128-8-1-L-UL.set  @mode 18cm  #f1 -22.5;  @mode lcp_ul    @mode 128-8-1  #end
-#file v18cm-128-8-1-UL.set    @mode 18cm  #f1 -3.5;   @mode dual_ul   @mode 128-8-1  #end
-#file v13cm-128-8-1-R-UL.set  @mode 13cm  #f1 -19.5;  @mode rcp_ul    @mode 128-8-1  #end
-#file v13cm-128-8-1-UL.set    @mode 13cm  #f1 -3.5;   @mode dual_ul   @mode 128-8-1  #end
-#file v6cm-128-8-1-L-UL.set   @mode 6cm   #f1 -22.5;  @mode lcp_ul    @mode 128-8-1  #end
-#file v6cm-128-8-1-UL.set     @mode 6cm   #f1 -11.5;  @mode dual_ul   @mode 128-8-1  #end
-#file v4cm-128-8-1-R-UL.set   @mode 4cm   #f1 -21.5;  @mode rcp_ul    @mode 128-8-1  #end
-#file v4cm-128-8-1-UL.set     @mode 4cm   #f1 -3.5;   @mode dual_ul   @mode 128-8-1  #end
-#file v2cm-128-8-1-L-UL.set   @mode 2cm   #f1 -21.5;  @mode lcp_ul    @mode 128-8-1  #end
-#file v2cm-128-8-1-UL.set     @mode 2cm   #f1 -3.5;   @mode dual_ul   @mode 128-8-1  #end
-#file v1cm-128-8-1-L-UL.set   @mode 1cm   #f1 -18.5;  @mode lcp_ul    @mode 128-8-1  #end
-#file v1cm-128-8-1-UL.set     @mode 1cm   #f1 -3.5;   @mode dual_ul   @mode 128-8-1  #end
-#file v7mm-128-8-1-L-UL.set   @mode 7mm   #f1 -19.5;  @mode lcp_ul    @mode 128-8-1  #end
-#file v7mm-128-8-1-UL.set     @mode 7mm   #f1 -3.5;   @mode dual_ul   @mode 128-8-1  #end
-#file vsx-128-8-1-R-UL.set  @mode sxr #f1 -4.5 -4.5;  @mode rcp_ul    @mode 128-8-1  @mode sxv  #end
-#file vsx-128-8-1-UL.set    @mode sxd #f1 -4.5 -4.5;  @mode dual_ul   @mode 128-8-1  @mode sxv  #end
-
-
-
+Removed from the mode below:
+  #vformat format = VLBA1:2
+  #4format format = MKIV1:2
 
 #mode 256-8-2
-  @mode spd8
-!      256 Mbps - 1 pass/headpos
+!      256 Mbps  64 MHz
   nchan    = 8  
   bits     = 2  
   bbfilter = 8.0    
-  #vformat format = VLBA1:2
-  #4format format = MKIV1:2
   @mode shell
 #end
 
-#file v18cm-256-8-2-L.set  @mode 18cm  #f1 -30.5;    @mode lcp_u    @mode 256-8-2  #end
-#file v18cm-256-8-2.set    @mode 18cm  #f1 -11.5;    @mode dual_u   @mode 256-8-2  #end
-#file v13cm-256-8-2-R.set  @mode 13cm  #f1 -27.5;    @mode rcp_u    @mode 256-8-2  #end
-#file v13cm-256-8-2.set    @mode 13cm  #f1 -11.5;    @mode dual_u   @mode 256-8-2  #end
-#file v6cm-256-8-2-L.set   @mode 6cm   #f1 -30.5;    @mode lcp_u    @mode 256-8-2  #end
-#file v6cm-256-8-2.set     @mode 6cm   #f1 -19.5;    @mode dual_u   @mode 256-8-2  #end
-#file v4cm-256-8-2-R.set   @mode 4cm   #f1 -29.5;    @mode rcp_u    @mode 256-8-2  #end
-#file v4cm-256-8-2.set     @mode 4cm   #f1 -11.5;    @mode dual_u   @mode 256-8-2  #end
-#file v2cm-256-8-2-L.set   @mode 2cm   #f1 -29.5;    @mode lcp_u    @mode 256-8-2  #end
-#file v2cm-256-8-2.set     @mode 2cm   #f1 -11.5;    @mode dual_u   @mode 256-8-2  #end
-#file v1cm-256-8-2-L.set   @mode 1cm   #f1 -26.5;    @mode lcp_u    @mode 256-8-2  #end
-#file v1cm-256-8-2.set     @mode 1cm   #f1 -11.5;    @mode dual_u   @mode 256-8-2  #end
-#file v7mm-256-8-2-L.set   @mode 7mm   #f1 -27.5;    @mode lcp_u    @mode 256-8-2  #end
-#file v7mm-256-8-2.set     @mode 7mm   #f1 -11.5;    @mode dual_u   @mode 256-8-2  #end
-#file vsx-256-8-2-R.set  @mode sxr #f1 -12.5 -12.5;  @mode rcp_u    @mode 256-8-2  @mode sxv  #end
-#file vsx-256-8-2.set    @mode sxd #f1  -4.5  -4.5;  @mode dual_u   @mode 256-8-2  @mode sxv  #end
+#file v18cm-256-8-2-L.set  @mode 18cm  #f1 -30.0;    @mode lcp_u    @mode 256-8-2  #end
+#file v18cm-256-8-2.set    @mode 18cm  #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
+#file v13cm-256-8-2-R.set  @mode 13cm  #f1 -27.0;    @mode rcp_u    @mode 256-8-2  #end
+#file v13cm-256-8-2.set    @mode 13cm  #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
+#file v6cm-256-8-2-L.set   @mode 6cm   #f1 -30.0;    @mode lcp_u    @mode 256-8-2  #end
+#file v6cm-256-8-2.set     @mode 6cm   #f1 -19.0;    @mode dual_u   @mode 256-8-2  #end
+#file v4cm-256-8-2-R.set   @mode 4cm   #f1 -29.0;    @mode rcp_u    @mode 256-8-2  #end
+#file v4cm-256-8-2.set     @mode 4cm   #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
+#file v2cm-256-8-2-L.set   @mode 2cm   #f1 -29.0;    @mode lcp_u    @mode 256-8-2  #end
+#file v2cm-256-8-2.set     @mode 2cm   #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
+#file v1cm-256-8-2-L.set   @mode 1cm   #f1 -26.0;    @mode lcp_u    @mode 256-8-2  #end
+#file v1cm-256-8-2.set     @mode 1cm   #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
+#file v7mm-256-8-2-L.set   @mode 7mm   #f1 -27.0;    @mode lcp_u    @mode 256-8-2  #end
+#file v7mm-256-8-2.set     @mode 7mm   #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
+#file vsx-256-8-2-R.set  @mode sxr #f1 -12.0 -12.0;  @mode rcp_u    @mode 256-8-2  @mode sxv  #end
+#file vsx-256-8-2.set    @mode sxd #f1  -4.0  -4.0;  @mode dual_u   @mode 256-8-2  @mode sxv  #end
 
 V  256-8-2-UL for cases like Eb with only 4 bbcs.  Same mode as 256-8-2.  Different f1's.
 
-#file v18cm-256-8-2-L-UL.set  @mode 18cm  #f1 -22.5;  @mode lcp_ul    @mode 256-8-2  #end
-#file v18cm-256-8-2-UL.set    @mode 18cm  #f1 -3.5;   @mode dual_ul   @mode 256-8-2  #end
-#file v13cm-256-8-2-R-UL.set  @mode 13cm  #f1 -19.5;  @mode rcp_ul    @mode 256-8-2  #end
-#file v13cm-256-8-2-UL.set    @mode 13cm  #f1 -3.5;   @mode dual_ul   @mode 256-8-2  #end
-#file v6cm-256-8-2-L-UL.set   @mode 6cm   #f1 -22.5;  @mode lcp_ul    @mode 256-8-2  #end
-#file v6cm-256-8-2-UL.set     @mode 6cm   #f1 -11.5;  @mode dual_ul   @mode 256-8-2  #end
-#file v4cm-256-8-2-R-UL.set   @mode 4cm   #f1 -21.5;  @mode rcp_ul    @mode 256-8-2  #end
-#file v4cm-256-8-2-UL.set     @mode 4cm   #f1 -3.5;   @mode dual_ul   @mode 256-8-2  #end
-#file v2cm-256-8-2-L-UL.set   @mode 2cm   #f1 -21.5;  @mode lcp_ul    @mode 256-8-2  #end
-#file v2cm-256-8-2-UL.set     @mode 2cm   #f1 -3.5;   @mode dual_ul   @mode 256-8-2  #end
-#file v1cm-256-8-2-L-UL.set   @mode 1cm   #f1 -18.5;  @mode lcp_ul    @mode 256-8-2  #end
-#file v1cm-256-8-2-UL.set     @mode 1cm   #f1 -3.5;   @mode dual_ul   @mode 256-8-2  #end
-#file v7mm-256-8-2-L-UL.set   @mode 7mm   #f1 -19.5;  @mode lcp_ul    @mode 256-8-2  #end
-#file v7mm-256-8-2-UL.set     @mode 7mm   #f1 -3.5;   @mode dual_ul   @mode 256-8-2  #end
-#file vsx-256-8-2-R-UL.set  @mode sxr #f1 -4.5 -4.5;  @mode rcp_ul    @mode 256-8-2  @mode sxv  #end
-#file vsx-256-8-2-UL.set    @mode sxd #f1 -4.5 -4.5;  @mode dual_ul   @mode 256-8-2  @mode sxv  #end
+#file v18cm-256-8-2-L-UL.set  @mode 18cm  #f1 -22.0;  @mode lcp_ul    @mode 256-8-2  #end
+#file v18cm-256-8-2-UL.set    @mode 18cm  #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
+#file v13cm-256-8-2-R-UL.set  @mode 13cm  #f1 -19.0;  @mode rcp_ul    @mode 256-8-2  #end
+#file v13cm-256-8-2-UL.set    @mode 13cm  #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
+#file v6cm-256-8-2-L-UL.set   @mode 6cm   #f1 -22.0;  @mode lcp_ul    @mode 256-8-2  #end
+#file v6cm-256-8-2-UL.set     @mode 6cm   #f1 -11.0;  @mode dual_ul   @mode 256-8-2  #end
+#file v4cm-256-8-2-R-UL.set   @mode 4cm   #f1 -21.0;  @mode rcp_ul    @mode 256-8-2  #end
+#file v4cm-256-8-2-UL.set     @mode 4cm   #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
+#file v2cm-256-8-2-L-UL.set   @mode 2cm   #f1 -21.0;  @mode lcp_ul    @mode 256-8-2  #end
+#file v2cm-256-8-2-UL.set     @mode 2cm   #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
+#file v1cm-256-8-2-L-UL.set   @mode 1cm   #f1 -18.0;  @mode lcp_ul    @mode 256-8-2  #end
+#file v1cm-256-8-2-UL.set     @mode 1cm   #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
+#file v7mm-256-8-2-L-UL.set   @mode 7mm   #f1 -19.0;  @mode lcp_ul    @mode 256-8-2  #end
+#file v7mm-256-8-2-UL.set     @mode 7mm   #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
+#file vsx-256-8-2-R-UL.set  @mode sxr #f1 -4.0 -4.0;  @mode rcp_ul    @mode 256-8-2  @mode sxv  #end
+#file vsx-256-8-2-UL.set    @mode sxd #f1 -4.0 -4.0;  @mode dual_ul   @mode 256-8-2  @mode sxv  #end
+
+The following removed from the mode below
+  #vformat format = VLBA1:4
+  #4format format = MKIV1:4
+
 
 #mode 512-8-2
-  @mode spd8
-!      512 Mbps - 1 pass/headpos - 2 tapes (VLBA) or 2 heads (Mark IV)
+!      512 Mbps  128 MHz
   nchan    = 8  
   bits     = 2  
   bbfilter = 16.0
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
   @mode shell
 #end
-#file v18cm-512-8-2-L.set  @mode 18cm  #f1 -120.5;   @mode lcp_u    @mode 512-8-2  #end
-#file v18cm-512-8-2.set    @mode 18cm  #f1 -54.5;    @mode dual_u   @mode 512-8-2  #end
-#file v13cm-512-8-2-R.set  @mode 13cm  #f1 -64.5;    @mode rcp_u    @mode 512-8-2  #end
-#file v13cm-512-8-2.set    @mode 13cm  #f1 -32.5;    @mode dual_u   @mode 512-8-2  #end
-#file v6cm-512-8-2-L.set   @mode 6cm   #f1 -64.5;    @mode lcp_u    @mode 512-8-2  #end
-#file v6cm-512-8-2.set     @mode 6cm   #f1 -32.5;    @mode dual_u   @mode 512-8-2  #end
-#file v4cm-512-8-2-R.set   @mode 4cm   #f1 -64.5;    @mode rcp_u    @mode 512-8-2  #end
-#file v4cm-512-8-2.set     @mode 4cm   #f1 -32.5;    @mode dual_u   @mode 512-8-2  #end
-#file v2cm-512-8-2-L.set   @mode 2cm   #f1 -64.5;    @mode lcp_u    @mode 512-8-2  #end
-#file v2cm-512-8-2.set     @mode 2cm   #f1 -32.5;    @mode dual_u   @mode 512-8-2  #end
-#file v1cm-512-8-2-L.set   @mode 1cm   #f1 -64.5;    @mode lcp_u    @mode 512-8-2  #end
-#file v1cm-512-8-2.set     @mode 1cm   #f1 -32.5;    @mode dual_u   @mode 512-8-2  #end
-#file v7mm-512-8-2-L.set   @mode 7mm   #f1 -64.5;    @mode lcp_u    @mode 512-8-2  #end
-#file v7mm-512-8-2.set     @mode 7mm   #f1 -32.5;    @mode dual_u   @mode 512-8-2  #end
-#file vsx-512-8-2-R.set  @mode sxr #f1 -32.5 -32.5;  @mode rcp_u    @mode 512-8-2  @mode sxv  #end
-#file vsx-512-8-2.set    @mode sxd #f1 -16.5 -16.5;  @mode dual_u   @mode 512-8-2  @mode sxv  #end
 
-#mode 512-16-1
-  @mode spd8
-!      512 Mbps - 1 pass/headpos - 2 tapes (VLBA) or 2 heads (Mark IV)
-  nchan    = 16
-  bits     = 1 
+This one is more useful if you need to dodge crossovers.
+
+#mode 512-8-2-1P-CO
+!      512 Mbps  128 MHz
+  nchan    = 8  
+  bits     = 2  
   bbfilter = 16.0
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
-  @mode shell
+  freqref  = @freq
+  netside  = @side
+  pol      = @pol
+  /
 #end
-#file v18cm-512-16-1-L.set  @mode 18cm  #f1 -250.5;   @mode lcp_ul    @mode 512-16-1  #end
-#file v18cm-512-16-1.set    @mode 18cm  #f1 -120.5;    @mode dual_ul   @mode 512-16-1  #end
-#file v13cm-512-16-1-R.set  @mode 13cm  #f1 -128.5;    @mode rcp_ul    @mode 512-16-1  #end
-#file v13cm-512-16-1.set    @mode 13cm  #f1 -64.5;    @mode dual_ul   @mode 512-16-1  #end
-#file v6cm-512-16-1-L.set   @mode 6cm   #f1 -128.5;    @mode lcp_ul    @mode 512-16-1  #end
-#file v6cm-512-16-1.set     @mode 6cm   #f1 -64.5;    @mode dual_ul   @mode 512-16-1  #end
-#file v4cm-512-16-1-R.set   @mode 4cm   #f1 -128.5;    @mode rcp_ul    @mode 512-16-1  #end
-#file v4cm-512-16-1.set     @mode 4cm   #f1 -64.5;    @mode dual_ul   @mode 512-16-1  #end
-#file v2cm-512-16-1-L.set   @mode 2cm   #f1 -128.5;    @mode lcp_ul    @mode 512-16-1  #end
-#file v2cm-512-16-1.set     @mode 2cm   #f1 -64.5;    @mode dual_ul   @mode 512-16-1  #end
-#file v1cm-512-16-1-L.set   @mode 1cm   #f1 -128.5;    @mode lcp_ul    @mode 512-16-1  #end
-#file v1cm-512-16-1.set     @mode 1cm   #f1 -64.5;    @mode dual_ul   @mode 512-16-1  #end
-#file v7mm-512-16-1-L.set   @mode 7mm   #f1 -128.5;    @mode lcp_ul    @mode 512-16-1  #end
-#file v7mm-512-16-1.set     @mode 7mm   #f1 -64.5;    @mode dual_ul   @mode 512-16-1  #end
-#file vsx-512-16-1-R.set  @mode sxr #f1 -64.5 -64.5;  @mode rcp_ul    @mode 512-16-1  @mode sxv  #end
-#file vsx-512-16-1.set    @mode sxd #f1 -23.5 -32.5;  @mode dual_ul   @mode 512-16-1  @mode sxv  #end
+#file v18cm-512-8-2-L.set  @mode 18cm  #f1 -120.0;   @mode lcp_u    @mode 512-8-2  #end
+#file v18cm-512-8-2.set    @mode 18cm  #f1 -54.0;    @mode dual_u   @mode 512-8-2  #end
+
+#file v13cm-512-8-2-R.set  @mode 13cm  @mode rcp_u    
+  freqoff =  -56, -40, -24, -08,  8,  24,  84,  100  
+! Work around crossover at 2204 (LO 3100) MHz and satellite radio 2320 and 2345 MHz
+  @mode 512-8-2-1P-CO  #end
+
+#file v13cm-512-8-2.set    @mode 13cm  #f1 -32.0;    @mode dual_u   @mode 512-8-2  #end
+
+#file v6cm-512-8-2-L.set   @mode 6cm  @mode lcp_u    
+  freqoff =  -66, -50, -26, -10,  -2,  22,  38,  54  
+! Crossover between channels 2 and 3 so added a gap. 
+  @mode 512-8-2-1P-CO   #end
+
+#file v6cm-512-8-2.set     @mode 6cm   #f1 -26.0;    @mode dual_u   @mode 512-8-2  #end
+#file v4cm-512-8-2-R.set   @mode 4cm   #f1 -64.0;    @mode rcp_u    @mode 512-8-2  #end
+#file v4cm-512-8-2.set     @mode 4cm   #f1 -32.0;    @mode dual_u   @mode 512-8-2  #end
+#file v2cm-512-8-2-L.set   @mode 2cm   #f1 -64.0;    @mode lcp_u    @mode 512-8-2  #end
+#file v2cm-512-8-2.set     @mode 2cm   #f1 -32.0;    @mode dual_u   @mode 512-8-2  #end
+#file v1cm-512-8-2-L.set   @mode 1cm   #f1 -64.0;    @mode lcp_u    @mode 512-8-2  #end
+#file v1cm-512-8-2.set     @mode 1cm   #f1 -32.0;    @mode dual_u   @mode 512-8-2  #end
+#file v7mm-512-8-2-L.set   @mode 7mm   #f1 -64.0;    @mode lcp_u    @mode 512-8-2  #end
+#file v7mm-512-8-2.set     @mode 7mm   #f1 -32.0;    @mode dual_u   @mode 512-8-2  #end
+#file vsx-512-8-2-R.set  @mode sxr #f1 -32.0 -32.0;  @mode rcp_u    @mode 512-8-2  @mode sxv  #end
+#file vsx-512-8-2.set    @mode sxd #f1 -16.0 -16.0;  @mode dual_u   @mode 512-8-2  @mode sxv  #end
+
+
+The following removed from the mode below
+  #vformat format = VLBA1:2
+  #4format format = MKIV1:2
 
 #mode 512-16-2
-  @mode spd8
-!      512 Mbps - 1 pass/headpos - 2 tapes (VLBA) or 2 heads (Mark IV)
+!   512 Mbpsf
+!   This mode has too many channels for the RDBE_DDC.
+!   SCHED will default to the PFB, but then the frequencies 
+!   and bandwidths will be wrong.
+!   It might be useful for other systems.
+
   nchan    = 16  
   bits     = 2  
   bbfilter = 8.0
-  #vformat format = VLBA1:2
-  #4format format = MKIV1:2
   @mode shell
 #end
-#file v18cm-512-16-2-L.set  @mode 18cm  #f1 -120.5;   @mode lcp_ul    @mode 512-16-2  #end
-#file v18cm-512-16-2.set    @mode 18cm  #f1 -54.5;    @mode dual_ul   @mode 512-16-2  #end
-#file v13cm-512-16-2-R.set  @mode 13cm  #f1 -64.5;    @mode rcp_ul    @mode 512-16-2  #end
-#file v13cm-512-16-2.set    @mode 13cm  #f1 -32.5;    @mode dual_ul   @mode 512-16-2  #end
-#file v6cm-512-16-2-L.set   @mode 6cm   #f1 -64.5;    @mode lcp_ul    @mode 512-16-2  #end
-#file v6cm-512-16-2.set     @mode 6cm   #f1 -32.5;    @mode dual_ul   @mode 512-16-2  #end
-#file v4cm-512-16-2-R.set   @mode 4cm   #f1 -64.5;    @mode rcp_ul    @mode 512-16-2  #end
-#file v4cm-512-16-2.set     @mode 4cm   #f1 -32.5;    @mode dual_ul   @mode 512-16-2  #end
-#file v2cm-512-16-2-L.set   @mode 2cm   #f1 -64.5;    @mode lcp_ul    @mode 512-16-2  #end
-#file v2cm-512-16-2.set     @mode 2cm   #f1 -32.5;    @mode dual_ul   @mode 512-16-2  #end
-#file v1cm-512-16-2-L.set   @mode 1cm   #f1 -64.5;    @mode lcp_ul    @mode 512-16-2  #end
-#file v1cm-512-16-2.set     @mode 1cm   #f1 -32.5;    @mode dual_ul   @mode 512-16-2  #end
-#file v7mm-512-16-2-L.set   @mode 7mm   #f1 -64.5;    @mode lcp_ul    @mode 512-16-2  #end
-#file v7mm-512-16-2.set     @mode 7mm   #f1 -32.5;    @mode dual_ul   @mode 512-16-2  #end
-#file vsx-512-16-2-R.set  @mode sxr #f1 -32.5 -32.5;  @mode rcp_ul    @mode 512-16-2  @mode sxv  #end
-#file vsx-512-16-2.set    @mode sxd #f1 -16.5 -16.5;  @mode dual_ul   @mode 512-16-2  @mode sxv  #end
+#file v18cm-512-16-2-L.set  @mode 18cm  #f1 -120.0;   @mode lcp_ul    @mode 512-16-2  #end
+#file v18cm-512-16-2.set    @mode 18cm  #f1 -54.0;    @mode dual_ul   @mode 512-16-2  #end
+#file v13cm-512-16-2-R.set  @mode 13cm  #f1 -64.0;    @mode rcp_ul    @mode 512-16-2  #end
+#file v13cm-512-16-2.set    @mode 13cm  #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
+#file v6cm-512-16-2-L.set   @mode 6cm   #f1 -64.0;    @mode lcp_ul    @mode 512-16-2  #end
+#file v6cm-512-16-2.set     @mode 6cm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
+#file v4cm-512-16-2-R.set   @mode 4cm   #f1 -64.0;    @mode rcp_ul    @mode 512-16-2  #end
+#file v4cm-512-16-2.set     @mode 4cm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
+#file v2cm-512-16-2-L.set   @mode 2cm   #f1 -64.0;    @mode lcp_ul    @mode 512-16-2  #end
+#file v2cm-512-16-2.set     @mode 2cm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
+#file v1cm-512-16-2-L.set   @mode 1cm   #f1 -64.0;    @mode lcp_ul    @mode 512-16-2  #end
+#file v1cm-512-16-2.set     @mode 1cm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
+#file v7mm-512-16-2-L.set   @mode 7mm   #f1 -64.0;    @mode lcp_ul    @mode 512-16-2  #end
+#file v7mm-512-16-2.set     @mode 7mm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
+#file vsx-512-16-2-R.set  @mode sxr #f1 -32.0 -32.0;  @mode rcp_ul    @mode 512-16-2  @mode sxv  #end
+#file vsx-512-16-2.set    @mode sxd #f1 -16.0 -16.0;  @mode dual_ul   @mode 512-16-2  @mode sxv  #end
 
 
 
-SOME GEODESY MODES.
+SOME GEODESY MODES.  Convert to 2 bit and remove explicit formats.
 
-#mode 64-8-1
-  @mode spd4
+#mode 128-8-2
 !      Useful for low tape consumption geodesy.
 !      64 Mbps - 2 pass/headpos
   nchan    = 8 
-  bits     = 1
+  bits     = 2
   bbfilter = 4.0  
   #vformat format = VLBA1:2
   #4format format = MKIV1:2
   @mode shell
 #end
 
-#mode 256-8-1
-!     Only for geodesy modes.  16 MHz channels.
-  @mode spd8
-!      256 Mbps - 1 pass/headpos
-  nchan    = 8 
-  bits     = 1 
-  bbfilter = 16.0
-  #vformat format = VLBA1:4
-  #4format format = MKIV1:4
-  @mode shell
-  #end
 
-
-
-#file vgeo-64-8-1.set    @mode sxg  @mode rcp_g  @mode 64-8-1   
+#file vgeo-128-8-2.set    @mode sxg  @mode rcp_g  @mode 128-8-2
   #foff  0.0, 30.0, 120.0, 140.0, 0.0, 70.0, 385.0, 490.0 
 #end  
 
-#file vgeo-128-8-1.set   @mode sxg  @mode rcp_g  @mode 128-8-1  
+#file vgeo-256-8-2.set   @mode sxg  @mode rcp_g  @mode 256-8-2  
   #foff  0.0, 30.0, 120.0, 140.0, 0.0, 70.0, 385.0, 490.0 
 #end  
 
-#file vgeo-256-8-1.set   @mode sxg  @mode rcp_g  @mode 256-8-1  
+#file vgeo-512-8-2.set   @mode sxg  @mode rcp_g  @mode 512-8-2  
 !       Come up with a better frequency sequence.  Note Ch 1&2 overlap!
 !       Try for a 3 S, 5 X sequence that spans more bandwidth.
   #foff  0.0, 30.0, 120.0, 140.0, 0.0, 70.0, 385.0, 490.0 
 #end  
 
-#file m3geosx.set
-!   Normal geodesy mode without frequency switching.  2 pass/headpos
-!   Have to force tpmode or SCHED will set 4.
-  format   = MARKIII
-  #vformat
-  #4format
-  tpmode   = 2
-  nchan    = 8
-  bits     = 1
-  bbfilter = 2.0  
-  pol      = rcp
-  netside  = U, U, U, U, U, U, U, U
-  bbc      = 1, 2, 3, 4, 5, 6, 7, 8
-  freqref  = 8210.99, 8250.99, 8310.99, 8570.99,
-             2222.99, 2237.99, 2292.99, 2302.99
-  track1  = 18,  20,  6, 10, 12, 28, 30, 16
-  track2  = 19,  21,  7, 11, 13, 29, 31, 17
-   /
-#end
+m3geosx.set deleted Jan. 2014.  Was Mark 3
 
-#file m3geord.set
-  !   Setup file for early NASA R&D observations.  
-  !   This is a frequency switched setup.
-  !   Attach dummy channels to unswitched BBC other sidebands.
-  !   WARNING:  Some of these frequencies overlap satellite radio
-  !             They will have severe RFI (2320-2345)
-  !             I'm not fixing because old mark3 setups are not
-  !             worth maintaining.  RCW  29 July 2004.
-  !
-  !  HEADER FROM CDP SCHEDULE:
-  !*
-  !* Chan. Sky fr. Syn. BBC    BBC IF Track  Track  BBC# Set    For VLBA
-  !*       MKIII        freq   SB     (For)  (Rev)  VLBA        set to
-  !* ----------------------------------------------------------
-  !*  1  8212.99  7600 612.99   U   B  18     19     1   All
-  !*  2  8252.99  7600 652.99   U   B   4      5     2   Set1
-  !*  3  8352.99  7600 752.99   U   B  20     21     2   Set2
-  !*  4  8512.99  7600 912.99   U   B   6      7     2   Dummy  Ch 1, LSB
-  !*  5  8732.99  9600 867.01   L   D  22     23     3   Set2
-  !*  6  8852.99  9600 747.01   L   D   8      9     3   Dummy  Ch 8, LSB
-  !*  7  8912.99  9600 687.01   L   D  24     25     3   Set1
-  !*  8  8932.99  9600 667.01   L   D  10     11     4   All
-  !* ----------------------------------------------------------
-  !*  9  2220.99  2900 679.01   L   A  26     27     5   All
-  !* 10  2230.99  2900 669.01   L   A  12     13     6   all
-  !* 11  2250.99  2900 649.01   L   A  28     29     6   dummy  Ch 9, LSB
-  !* 12  2305.99  2900 594.01   L   A  14     15     7   Set2
-  !* 13  2340.99  2900 559.01   L   A  30     31     7   Set1
-  !* 14  2345.99  2900 554.01   L   A  16     17     8   All
-  !* ----------------------------------------------------------
-  
-  nchan = 14  samprate=8.0  bits = 1  bbfilter = 4.0
-  tpmode = 2  format = MARKIII
-  fe ='13cm', '4cm', '13cm', '4cm'    synth = 7.6, 2.9, 9.6
-  dualx  frswitch  swtchdur=15
-  firstlo = 7600,   7600,   7600,   7600,   9600,   9600,   9600,   9600,
-            2900,   2900,   2900,   2900,   2900,   2900
-  bbsyn   =  612.99, 652.99, 652.99, 612.99, 687.01, 667.01, 687.01,
-             667.01, 679.01, 669.01, 679.01, 559.01, 559.01, 554.01
-  bbsyn2  =  612.99, 752.99, 752.99, 612.99, 867.01, 667.01, 867.01,
-             667.01, 679.01, 669.01, 679.01, 594.01, 594.01, 554.01
-  sideband=  U,  U,  U,  L,  L,  U,  L,  L,  L,  L,  U,  L,  L,  L
-  netside =  U,  U,  U,  L,  U,  L,  U,  U,  U,  U,  L,  U,  U,  U
-  ifchan  =  B,  B,  B,  B,  D,  D,  D,  D,  A,  A,  A,  A,  A,  A
-  bbc     =  1,  2,  2,  1,  3,  4,  3,  4,  5,  6,  5,  7,  7,  8
-  track1  = 18,  4, 20,  6, 22,  8, 24, 10, 26, 12, 28, 14, 30, 16
-  track2  = 19,  5, 21,  7, 23,  9, 25, 11, 27, 13, 29, 15, 31, 17
+m3geord.set deleted Jan. 2014.  Was Mark3 and frequency switched.
 
-  #vformat
-  #4format
-    /
-#end
+VSOP Setups eliminated.  Jan 2014
 
+PULSE CAL TEST FILES  Deleted Jan 2014. I don't think these are used any more.
+1 MHz BW is rather narrow.
 
-
-VSOP Setups
-
-#mode VSOP
-!      128 Mbps - 2 pass/headpos
-  @mode spd8
-  nchan    = 2 
-  bits     = 2 
-  bbfilter = 16.0
-  pol      = lcp
-  freqref  = @freq
-  netside  = U, U
-  barrel   = 'roll_off'
-#end 
-
-
-#file vsop18cmvla.set  
-!  This is the file for experiments involving the VLA and not Jodrell.
-!  VSOP covers 1.60 - 1.73 GHz 
-  #freq  1648.0, 1664.0
-  @mode VSOP  #end
-
-
-#file vsop18cmjod.set
-!  This is the file for experiments involving Jodrell and not the VLA.
-!  ****  DO NOT USE FOR THE VLA WITHOUT SPECIAL PERMISSION
-!  ****  CONTACT JOAN WROBEL.  SPECIAL CABLES REQUIRED.
-!  VSOP covers 1.60 - 1.73 GHz 
-  #freq  1634.0, 1650.0
-  @mode VSOP  #end
-
-
-#file vsop6cm.set
-!  VSOP covers 4.7 - 5.0 GHz  
-!  Stay above 4960.1 for VLA VC mode.
-  #freq 4962.00,  4978.00
-  @mode VSOP  #end
-
-
-#file vsop1cm.set 
-!  VSOP covers 22.0 - 22.3 GHz
-  #freq 22200.0, 22216.0     
-  @mode VSOP  #end
-
-
-
-
-
-PULSE CAL TEST FILES
-
-#mode pcu
-!         pcal tests, upper sidebands, 1 bit.
-!         VLBA format needed to set up formatter.
-  station  = VLBA
-  format   = VLBA
-  nchan    = 8
-  bits     = 1
-  bbfilter = 1.0 
-  bbc      = 1, 2, 3, 4, 5, 6, 7, 8
-  netside  = U, U, U, U, U, U, U, U
-  pol      = RCP, RCP, RCP, RCP, LCP, LCP, LCP, LCP
-  freqoff  = -1.5, -0.5, 0.5, 1.5, -1.5, -0.5, 0.5, 1.5
-#end
-
-#file pc90cm.set  @mode pcu  freqref = 325.99    /  #end
-#file pc50cm.set  @mode pcu  freqref = 607.99    /  #end
-#file pc18cm.set  @mode pcu  freqref = 1662.99   /  #end  
-#file pc13cm.set  @mode pcu  freqref = 2266.99   /  #end  
-#file pc6cm.set   @mode pcu  freqref = 4990.99   /  #end  
-#file pc4cm.set   @mode pcu  freqref = 8416.99   /  #end  
-#file pc2cm.set   @mode pcu  freqref = 15360.99  /  #end  
-#file pc1cm.set   @mode pcu  freqref = 22228.99  /  #end  
-#file pc7mm.set   @mode pcu  freqref = 43212.99  /  #end  
-
-#mode pcl
-!         pcal tests, lower sidebands, 1 bit.
-!         VLBA format needed to set up formatter.
-  station  = VLBA
-  format   = VLBA 
-  nchan    = 8
-  bits     = 1 
-  bbfilter = 1.0
-  bbc      = 1, 2, 3, 4, 5, 6, 7, 8
-  netside  = L, L, L, L, L, L, L, L
-  pol      = RCP, RCP, RCP, RCP, LCP, LCP, LCP
-  freqoff  = -1.5, -0.5, 0.5, 1.5, -1.5, -0.5, 0.5, 1.5
-#end
-
-#file pcl6cm.set  @mode pcl  freqref = 4990.99  /  #end  
-#file pcl4cm.set  @mode pcl  freqref = 8416.99  /  #end  
-
-
-#mode pc2
-!         pcal tests, upper sidebands, 2 bit.
-!         VLBA format needed to set up formatter.
-  station  = VLBA
-  format   = VLBA  
-  nchan    = 4 
-  bits     = 2 
-  bbfilter = 1.0 ! pcal tests
-  pol      = RCP, LCP, RCP, LCP
-!        SCHED does not automatically request 2 bit tone detections.
-  pcalxb1  = S1,   S2,  S3,  S4,  S1,  S2,  S3,  S4
-  pcalxb2  = M1,   M2,  M3,  S4,  M1,  M2,  M3,  S4
-  pcalfr1  = 510, 510, 510, 510,   0,   0,   0,   0
-  pcalfr2  = 510, 510, 510, 510,   0,   0,   0,   0
-  #end
-#mode pc2u
-  bbc      = 1, 2, 3, 4 
-  netside  = U, U, U, U
-  freqoff  = -0.5, -0.5, 0.5, 0.5   
-#end
-#mode pc2l
-  bbc      = 1, 2, 3, 4 
-  netside  = L, L, L, L  
-  freqoff  = -0.48, -0.48, 0.52, 0.52 
-#end
-                                                    
-#file pc2a6cm.set  @mode pc2  @mode pc2u  freqref = 4990.99  /  #end  
-#file pc2a4cm.set  @mode pc2  @mode pc2u  freqref = 8416.99  /  #end  
-#file pc2b6cm.set  @mode pc2  @mode pc2l  freqref = 4990.99  /  #end  
-#file pc2b4cm.set  @mode pc2  @mode pc2l  freqref = 8416.99  /  #end  
-#file pc2c6cm.set  @mode pc2  @mode pc2u  freqref = 4990.99  /  #end  
-#file pc2c4cm.set  @mode pc2  @mode pc2u  freqref = 8416.99  /  #end  
-#file pc2d6cm.set  @mode pc2  @mode pc2l  freqref = 4990.99  /  #end
-#file pc2d4cm.set  @mode pc2  @mode pc2l  freqref = 8416.99  /  #end  
 
 
 SPECIAL SETUP FOR ALL 4 OH LINES
+Changed to DDC constraints Jan 2014.  Shift frequency 0.44 MHz down,
+but then go to a multiple of 0.25.  Doppler will likely shift that around.
 
 #file vOH.set
 !         Setup for all OH lines.
@@ -1148,17 +774,19 @@ SPECIAL SETUP FOR ALL 4 OH LINES
   nchan    = 8 
   samprate = 2.0
   bits     = 2 
-  bbfilter = 0.125
-  freqref  =  1612.11,1612.11, 1665.28,1665.28, 1667.22,1667.22, 1720.41,1720.41
+  bbfilter = 1.0
+! 0.125 BW  freqref  =  1612.11,1612.11, 1665.28,1665.28, 1667.22,1667.22, 1720.41,1720.41
+  freqref  =  1611.75,1611.75, 1665.00,1665.00, 1667.00,1667.00, 1720.00,1720.00
   netside  =       U,      U,       U,      U,       U,      U,       U,      U
   bbc      =       1,      2,       3,      4,       5,      6,       7,      8
   pol      = dual
   pcal     = 'off'
   /
 !          VLA can only do 2 center lines.
+!          This may preclude using Doppler if the VLA is there.
   nchan    = 4
   station  = VLA1, VLA27
-  freqref  = 1665.28,1665.28, 1667.22,1667.22
+  freqref  = 1665.00,1665.00, 1667.00,1667.00
   /
 #end
 
@@ -1181,11 +809,11 @@ SPECIAL SETUP FOR METHANOL AT 12 GHz
   bbc      = 1, 2
   pcal     = 'off'
   / 
-!  Uncomment for stations with VLBA recorders and VEX control
+!  Uncomment for stations with VLBA recorders and Field System control
 !  format   = 'VLBA1:1'
 !  station  = 
 ! /
-!  Uncomment for stations with MarkIV recorders and VEX control
+!  Uncomment for stations with MarkIV recorders and Field System control
 !  format   = 'MKIV1:1'
 !  station  = 
 ! /
@@ -1239,11 +867,13 @@ POINTING FILES
   freqref  = 2266.99  
   ptincr   = 9.0   /  #end
 #file pt6cm.set   @mode ptg
+  firstlo  = 4100.0
   format   = NONE
   freqref  = 4990.99  
   ptincr   = 6.0   /  #end
 #file pt6cmw.set   @mode ptg4
 !   Will get processed as on-off so don't use
+  firstlo  = 4100.0
   format   = NONE
   bbfilter = 16.0
   freqref  = 4990.99, 4990.99, 6660.49, 6660.49
@@ -1324,6 +954,7 @@ Call them ptdxx.set.
   freqref  = 2266.75  
   ptincr   = 9.0   /  #end
 #file ptd6cm.set   @mode ptg
+  firstlo  = 4100.0
   dbe = rdbe_ddc
   freqref  = 4990.75  
   ptincr   = 6.0   /  #end
@@ -1424,7 +1055,7 @@ a request.
 
 ----------------------------------------------------------------------------
 
-The following are for pointing scans at the VLA (Jansky VLA). 
+The following are for pointing scans at the EVLA.
 
 #mode ptevla
    dbe = widar
@@ -1842,10 +1473,10 @@ Start with PFB versions.
 
 ------------
 
-#file rdbe_pfb_15288_dual.set
-!  Setup for 2cm observations near the old standard of 15360 MHz
+#file rdbe_pfb_15256_dual.set
+!  Setup for 2cm observations near the old standard of 15256 MHz
 !  using a compact frequency sequence with the RDBE PFB personality.  
-!  This setup will actually be centered near 15248.
+!  This setup will actually be centered near 15288.
 !  For the VLBA, EB_RDBE, and GBT.
 
 !  The freq_RDBE.dat entry v2cm_d2 would best be used with firstlo=14400 
