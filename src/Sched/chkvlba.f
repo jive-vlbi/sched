@@ -20,11 +20,14 @@ C     Test is a tolerance limit for FIRSTLO - SYNTH tests in MHz.
 C
       INTEGER     I, KS, ICH, IIF, KIIF, JCH
       LOGICAL     ERRS, OK, BADLO, LOIFWARN, IFOK
+      LOGICAL     WARNED(MAXSET), GOTWARN
       DOUBLE PRECISION  R8FREQ(3), TEST, TFR1, TFR2
+      DOUBLE PRECISION  FRLOW, FRHIGH
       PARAMETER   (TEST=1.D-3)
-      SAVE        IFNAMES
+      SAVE        IFNAMES, WARNED
       CHARACTER   IFNAMES(4)*1
       DATA        IFNAMES   / 'A', 'B', 'C', 'D' /
+      DATA        WARNED / MAXSET * .FALSE. /
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'CHKVLBA: Starting VLBA checks.' )
 C
@@ -359,16 +362,22 @@ C
 C     The limits used for the test are rather arbitrary and drawn out
 C     of a hat, but should be reasonable.
 C     Don't check P band this way.
+C     Jan. 10, 2014  Saw plots of the filter shapes today.  The IF
+C     filters in the IF converters are very soft on the low side and
+C     somewhat sharper on the high side.  Plus the RDBE band is shifted
+C     higher than the previous center.  Previously the low and high
+C     limits for this warning were 400 and 1200.  Keep the 1200,
+C     but drop the lower limit to 300.
 C
       LOIFWARN = .TRUE.
       DO ICH = 1, NCHAN(KS)
          IF( FIRSTLO(ICH,KS) .GT. 1000.D0 ) THEN
             IF( SIDE1(ICH,KS) .EQ. 'U' ) THEN
-               TFR1 = FIRSTLO(ICH,KS) + 400.0D0
+               TFR1 = FIRSTLO(ICH,KS) + 300.0D0
                TFR2 = FIRSTLO(ICH,KS) + 1200.0D0
             ELSE 
                TFR1 = FIRSTLO(ICH,KS) - 1200.0D0
-               TFR2 = FIRSTLO(ICH,KS) - 400.0D0
+               TFR2 = FIRSTLO(ICH,KS) - 300.0D0
             END IF
             DO JCH = 1, NCHAN(KS)
                IF( FIRSTLO(JCH,KS) .GT. TFR1 .AND. 
@@ -391,6 +400,88 @@ C
             END DO
          END IF
       END DO
+C
+C     Do some special S band checks.
+C
+      IF( ( FE(1,KS) .EQ. '13cm' .OR. FE(1,KS) .EQ. '13cm' ) .AND.
+     1    .NOT. WARNED(ISETNUM(KS)) ) THEN
+         GOTWARN = .FALSE.
+         DO ICH = 1, NCHAN(KS)
+            IF( IFCHAN(ICH,KS) .EQ. 'A' .OR. 
+     1          IFCHAN(ICH,KS) .EQ. 'C' ) THEN
+C
+C              Get the high and low RF frequencies.
+C
+               IF( NETSIDE(ICH,KS) .EQ. 'U' ) THEN
+                  FRLOW = FREQREF(ICH,KS)
+                  FRHIGH = FREQREF(ICH,KS) + BBFILT(ICH,KS)
+               ELSE
+                  FRLOW = FREQREF(ICH,KS) - BBFILT(ICH,KS)
+                  FRHIGH = FREQREF(ICH,KS)
+               END IF
+C
+C              Warn if out of RFI filter.
+C
+               IF( FRLOW .LT. 2200.D0 ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I4, A, A, A, I3, A, F7.0, ' //
+     1                    ' A, F7.0, A )' )
+     2                'CHKVLBA:  Setup ', KS, ' at ', SETSTA(1,KS),
+     3                '.  Channel ', ICH, ', ', FRLOW, '-', FRHIGH,
+     4                ' MHz partially or fully '
+                  CALL WLOG( 1, MSGTXT )
+C
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, A )' )
+     1                '          below the bottom of the 2200-2400 ',
+     2                 'MHz RFI filter at all sites but PT, MK, FD'
+                  CALL WLOG( 1, MSGTXT )
+                  GOTWARN = .TRUE.
+               END IF
+
+               IF( FRHIGH .GT. 2400.D0 ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I4, A, A, A, I3, A, F7.0, ' //
+     1                    ' A, F7.0, A )' )
+     2                'CHKVLBA:  Setup ', KS, ' at ', SETSTA(1,KS),
+     3                '.  Channel ', ICH, ', ', FRLOW, '-', FRHIGH,
+     4                ' MHz partially or fully '
+                  CALL WLOG( 1, MSGTXT )
+C
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, A )' )
+     1                '          above the top of the 2200-2400 ',
+     2                 'MHz RFI filter at all sites but PT, MK, FD'
+                  CALL WLOG( 1, MSGTXT )
+                  GOTWARN = .TRUE.
+               END IF
+C
+C              Warn of satellite radio
+C
+               IF( FRLOW .LT. 2345.D0 .AND. FRHIGH .GT. 2320.D0 ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I4, A, A, A, I3, A,  F7.0, ' //
+     1                    ' A, F7.0, A )' )
+     2                'CHKVLBA:  Setup ', KS, ' at ', SETSTA(1,KS),
+     3                '.  Channel ', ICH, ', ', FRLOW, '-', FRHIGH,
+     4                ' MHz will be affected'
+                  CALL WLOG( 1, MSGTXT )
+C
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, A )' )
+     1                '          by strong RFI from Sirius and ',
+     2                 'XM satellite radio between 2320 and 2345 MHz.'
+                  CALL WLOG( 1, MSGTXT )
+                  GOTWARN = .TRUE.
+               END IF
+            END IF
+         END DO
+         IF( GOTWARN ) THEN
+            WARNED(ISETNUM(KS)) = .TRUE.
+            CALL WLOG( 1, 'CHKVLBA:  S band warnings not repeated '//
+     1          'for other stations using the same setup file.' )
+         END IF
+      END IF
 C
 C     That's all for now.  More could be added some day.
 C
