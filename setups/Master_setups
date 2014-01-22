@@ -292,21 +292,27 @@ not to be specified.
 !        Radio Astnomomy footnote:   4950-4990
 !      Reference frequency is Mark II network standard
 !      Merlin 4986-5002
-!      There is a problem for the DDC with crossovers.
+!      There is a problem for the DDC with crossovers for the VLBA.
 !        Firstlo   BBC for 4990  crossover
 !         4100       890           896   6MHz below crossover in RF
 !         4400       590           640   Alias issue < 5050
 !         5600       610           640   30 MHz above crossover in RF
 !         5900       910           896   14 MHz below crossover in RF
 !      5600 is probably best, but need to keep frequency low, or
-!      span the crossover.
-  firstlo = 5600.0
+!      span the crossover.  Put this in mode 6cmlo.
   #vstation 
   #fstation 
   #4station 
   #freq freq( 4990.75 )
 #end
 
+Use the following to set the VLBA first LO.
+
+#mode 6cmlo
+  /
+  firstlo = 5600.0
+  station = 'vlba'
+#end
 
 #mode 4cm
 !      For the 4 cm band.
@@ -574,8 +580,8 @@ Removed from the mode below.
 #file v18cm-128-4-2.set    @mode 18cm  #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
 #file v13cm-128-4-2-R.set  @mode 13cm  #f1 -11.0;  @mode rcp_u   @mode 128-4-2  #end
 #file v13cm-128-4-2.set    @mode 13cm  #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
-#file v6cm-128-4-2-L.set   @mode 6cm   #f1 -19.0;  @mode lcp_u   @mode 128-4-2  #end
-#file v6cm-128-4-2.set     @mode 6cm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
+#file v6cm-128-4-2-L.set   @mode 6cm   #f1 -19.0;  @mode lcp_u   @mode 128-4-2  @mode 6cmlo #end
+#file v6cm-128-4-2.set     @mode 6cm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  @mode 6cmlo #end
 #file v4cm-128-4-2-R.set   @mode 4cm   #f1 -11.0;  @mode rcp_u   @mode 128-4-2  #end
 #file v4cm-128-4-2.set     @mode 4cm   #f1 -3.0;   @mode dual_u  @mode 128-4-2  #end
 #file v2cm-128-4-2-L.set   @mode 2cm   #f1 -11.0;  @mode lcp_u   @mode 128-4-2  #end
@@ -604,8 +610,8 @@ Removed from the mode below:
 #file v18cm-256-8-2.set    @mode 18cm  #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
 #file v13cm-256-8-2-R.set  @mode 13cm  #f1 -27.0;    @mode rcp_u    @mode 256-8-2  #end
 #file v13cm-256-8-2.set    @mode 13cm  #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
-#file v6cm-256-8-2-L.set   @mode 6cm   #f1 -30.0;    @mode lcp_u    @mode 256-8-2  #end
-#file v6cm-256-8-2.set     @mode 6cm   #f1 -19.0;    @mode dual_u   @mode 256-8-2  #end
+#file v6cm-256-8-2-L.set   @mode 6cm   #f1 -30.0;    @mode lcp_u    @mode 256-8-2  @mode 6cmlo #end
+#file v6cm-256-8-2.set     @mode 6cm   #f1 -19.0;    @mode dual_u   @mode 256-8-2  @mode 6cmlo #end
 #file v4cm-256-8-2-R.set   @mode 4cm   #f1 -29.0;    @mode rcp_u    @mode 256-8-2  #end
 #file v4cm-256-8-2.set     @mode 4cm   #f1 -11.0;    @mode dual_u   @mode 256-8-2  #end
 #file v2cm-256-8-2-L.set   @mode 2cm   #f1 -29.0;    @mode lcp_u    @mode 256-8-2  #end
@@ -623,8 +629,8 @@ V  256-8-2-UL for cases like Eb with only 4 bbcs.  Same mode as 256-8-2.  Differ
 #file v18cm-256-8-2-UL.set    @mode 18cm  #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
 #file v13cm-256-8-2-R-UL.set  @mode 13cm  #f1 -19.0;  @mode rcp_ul    @mode 256-8-2  #end
 #file v13cm-256-8-2-UL.set    @mode 13cm  #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
-#file v6cm-256-8-2-L-UL.set   @mode 6cm   #f1 -22.0;  @mode lcp_ul    @mode 256-8-2  #end
-#file v6cm-256-8-2-UL.set     @mode 6cm   #f1 -11.0;  @mode dual_ul   @mode 256-8-2  #end
+#file v6cm-256-8-2-L-UL.set   @mode 6cm   #f1 -22.0;  @mode lcp_ul    @mode 256-8-2  @mode 6cmlo #end
+#file v6cm-256-8-2-UL.set     @mode 6cm   #f1 -11.0;  @mode dual_ul   @mode 256-8-2  @mode 6cmlo #end
 #file v4cm-256-8-2-R-UL.set   @mode 4cm   #f1 -21.0;  @mode rcp_ul    @mode 256-8-2  #end
 #file v4cm-256-8-2-UL.set     @mode 4cm   #f1 -3.0;   @mode dual_ul   @mode 256-8-2  #end
 #file v2cm-256-8-2-L-UL.set   @mode 2cm   #f1 -21.0;  @mode lcp_ul    @mode 256-8-2  #end
@@ -674,9 +680,9 @@ This one is more useful if you need to dodge crossovers.
 #file v6cm-512-8-2-L.set   @mode 6cm  @mode lcp_u    
   freqoff =  -66, -50, -26, -10,  -2,  22,  38,  54  
 ! Crossover between channels 2 and 3 so added a gap. 
-  @mode 512-8-2-1P-CO   #end
+  @mode 512-8-2-1P-CO   @mode 6cmlo #end
 
-#file v6cm-512-8-2.set     @mode 6cm   #f1 -26.0;    @mode dual_u   @mode 512-8-2  #end
+#file v6cm-512-8-2.set     @mode 6cm   #f1 -26.0;    @mode dual_u   @mode 512-8-2  @mode 6cmlo #end
 #file v4cm-512-8-2-R.set   @mode 4cm   #f1 -64.0;    @mode rcp_u    @mode 512-8-2  #end
 #file v4cm-512-8-2.set     @mode 4cm   #f1 -32.0;    @mode dual_u   @mode 512-8-2  #end
 #file v2cm-512-8-2-L.set   @mode 2cm   #f1 -64.0;    @mode lcp_u    @mode 512-8-2  #end
@@ -709,8 +715,8 @@ The following removed from the mode below
 #file v18cm-512-16-2.set    @mode 18cm  #f1 -54.0;    @mode dual_ul   @mode 512-16-2  #end
 #file v13cm-512-16-2-R.set  @mode 13cm  #f1 -64.0;    @mode rcp_ul    @mode 512-16-2  #end
 #file v13cm-512-16-2.set    @mode 13cm  #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
-#file v6cm-512-16-2-L.set   @mode 6cm   #f1 -64.0;    @mode lcp_ul    @mode 512-16-2  #end
-#file v6cm-512-16-2.set     @mode 6cm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
+#file v6cm-512-16-2-L.set   @mode 6cm   #f1 -64.0;    @mode lcp_ul    @mode 512-16-2  @mode 6cmlo #end
+#file v6cm-512-16-2.set     @mode 6cm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  @mode 6cmlo #end
 #file v4cm-512-16-2-R.set   @mode 4cm   #f1 -64.0;    @mode rcp_ul    @mode 512-16-2  #end
 #file v4cm-512-16-2.set     @mode 4cm   #f1 -32.0;    @mode dual_ul   @mode 512-16-2  #end
 #file v2cm-512-16-2-L.set   @mode 2cm   #f1 -64.0;    @mode lcp_ul    @mode 512-16-2  #end

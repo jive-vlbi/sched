@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Beta Version 11.1 of Jan. 2, 2014}
+\title{THE \schedb USER MANUAL \\  Version 11.2 of Jan. 22, 2014}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -140,12 +140,13 @@ backends to the newer digital backends such as the RDBE and the DBBC
 and to newer recording systems such as the MARK5C.  \schedb supports
 many of the digital backends and new recorders.  But not all of the
 examples have been converted yet and some sections of the manual may
-still be somewhat dated.  We're working on the documentation, but need 
-to get this version of \schedb out to support the new capabilities in 
-the field.
+still be somewhat dated.  We're working on it.
 
 \item The MARK5A recorders were removed from the VLBA in December
-2013.  All projects must now use the RDBE.
+2013.  All projects must now use the RDBE.  All VLBA stations have
+two RDBE units for a total of 8 channels with the DDC.  Most MARK5A
+setups can be duplicated with this system.  Most of the standard 
+setups with names like v6cm... will work with the DDC.
 
 \item Many requests for help from \schedb users are the result of trying
 to specify more information than necessary.  \schedb knows how to set up
@@ -5484,7 +5485,7 @@ what is being set for the RDBE, parameters \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ},
 \htmlref{{\tt CRDBW}}{MP:CRDBW}, and {\tt CRDCH1} can be used.  Many of
 the channel parameters are taken from the main setup.  These include
 sideband, sample rate, IF channel etc.  With the legacy system ``CRD''
-parameters, only 8 channels can be specified.  With the RDBE_PFB, the
+parameters, only 8 channels can be specified.  With the RDBE\_PFB, the
 number of channels is 16.  By default, \schedb will take the central 8
 channels when no CRD items are specified, or the first 8 when some
 are specified.  But that can be controlled with {\tt CRDCH1} which selects
@@ -13542,7 +13543,11 @@ more information.
 
 % seek point for editing:  development version
 
-\subsection{\label{SSEC:VER_11.1}Version 11.1 test}
+\subsection{\label{SSEC:VER_11.3}Version 11.3 test}
+
+Nothing yet.
+
+\subsection{\label{SSEC:VER_11.2}Version 11.2}
 
 %  ToDo:
 
@@ -13556,19 +13561,34 @@ more information.
 %     Revisit the whole issue of scan and recording start times.  Take
 %       into account any delays in start of correlation.  Also deal with
 %       "conservative" slew estimates causing lost data.
+%     Related - revisit schtim.f for tape stoppages, readbacks etc.
 %     Update the station code list.
+%     Update all examples for no Mark5A at VLBA.
+
 
 \begin{itemize}
 
+\item  Release version 11.2 on about Jan. 22, 2014.  Note that the
+development and beta versions leading to this release were under
+the version number 11.1.  RCW.
 
+\item  Deactivate the wrap specifications in the Vex file for all but
+the VLBA.  There is concern that some stations may have a partial 
+implementation of this feature and could get in trouble, so we are going
+to do more testing before actually using it.  Jan. 21, 2014.  RCW.
 
-\item Convert the MARK5A setup files for use with the RDBE_DDC and
+\item  Give warning and  abort if  a key  file line  is more  than the
+maximum of 255 characters after a complaint from a  user.  Jan 21, 2014
+RCW
+
+\item Convert the MARK5A setup files for use with the RDBE\_DDC and
 other digital backends.  These are the standard setups whose names
-start with ``v''<band>.  New example {\sl tstsets.key} has been added
+start with "v" <band>.  New example {\sl tstsets.key} has been added
 to test some of the files.  The setups are sufficiently generic that
 they would still work for Mark5A scheduling too.  Many of the old
 standard setup files that were too narrow band or otherwise thought to
-be uninteresting were deleted.  Jan 11, 2014.  RCW.
+be uninteresting were deleted.  Still to be done is to provide standard
+setups for the RDBE\_DDC in the wideband modes.  Jan 11, 2014.  RCW.
 
 \item Provide more explicit warnings about S band channels out of 
 2200-2400 MHz or in the satellite radio range.  Jan. 10, 2014.  RCW.
