@@ -34,7 +34,9 @@ C
      1       ANLINK(ISTAAN(ISTA))(1:LEN1(ANLINK(ISTAAN(ISTA)))), SEP
          WRITE( IVEX, '( 5X, A, A, A1 )' ) 'ref $DAS = ',
      1       DALINK(ISTADA(ISTA))(1:LEN1(DALINK(ISTADA(ISTA)))), SEP
-         CALL WRAPZONE( IVEX, 0, ISTA, ZONE )
+         IF( STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
+            CALL WRAPZONE( IVEX, 0, ISTA, ZONE )
+         END IF
 C
          WRITE( IVEX, '( A, A1 )' ) 'enddef',SEP
 C
