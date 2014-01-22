@@ -104,7 +104,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2014Jan06-15:19:54"
+ VERSION = "2014Jan22-14:17:17"
 
 !  
 !  =====================================================================
@@ -203,30 +203,34 @@ Name = v20cm_2  Station = VLBA    Priority = 0
 !  Added to give PFB band frequency and DDC crossover flexibility.
 /
 
-! VLBA  13 cm  The nominal band is 2150 - 2350 Mhz, but the system
+! VLBA  13 cm  The nominal band is 2150 - 2350 Mhz, but the receiver
 !              is much wider than that.  For observations well above
 !              the nominal band, users should consult Memo 51.
+!              All stations except MK, PT, and FD have a 2200-2400
+!              GHz filter because of RFI.  Many of the ranges given
+!              here only apply without that filter.  It is possible
+!              that the additional headroom of the RDBE will allow
+!              some or all of those filters to be removed in the 
+!              future.
+
 !                Receiver:          2000 - 2800 MHz
 !                LO Filter:         2700 - 3300 
-!                Maximum range:     1920 - 2840 
-!                Good range:        2000 - 2440 
-!                Another OK range:  2490 - 2650 
-!                S band filters:    2200 - 2400 -1db,  2150 - 2450 -60db
-!          The S band filters were necessitated by RFI outside that
-!          range.  As of October 2006, filters are at HN, NL, LA, OV, and 
-!          BR.  Status is tracked among the VLBA Modifications and 
-!          Retrofits for the Monday morning meetings.
-!          As of Feb. 2008, the filters were at all sites except PT and MK.
-!          Oct 2011 - I think there is also no filter at FD.
+!                RFI filters:       2200 - 2400 -1db,  2150 - 2450 -60db
+!                                               All but MK, PT, FD.
+!                Maximum range:     1920 - 2840 without filters.
+!                Good range:        2000 - 2440 without filters.
+!                Another OK range:  2490 - 2650 without filters.
+
 !          Note that Tcals are poor outside of nominal range so be
 !          careful with calibration.
-!          
 !     
 !          Some of the most serious RFI in this band that affects all
 !          North American stations is from:
 !              Sirius Satellite Radio  2320.0 to 2332.5 MHz
 !              XM Satellite Radio      2332.5 to 2345.0 MHz
 
+!          Note that the frequency ranges do not take into
+!          account the S band RFI filters (2200-2400 GHz).
 
 Name = v13cm_1  Station = VLBA    Priority = 0
   rf1 = 1920, 1920  ifname = A,    C
@@ -2003,6 +2007,8 @@ Name = v4cm_7  Station = VLBA    Priority = 0
 !   S/X    -  Not quite an exhaustive set.
 !             Give all S/X modes slightly worse priority so that
 !             they will not be used for single frequency obs.
+!             Note that the frequency ranges do not take into
+!             account the S band RFI filters (2200-2400 GHz).
 
 Name = vsx_11  Station = VLBA    Priority = 2
   rf1 = 1876, 1876, 7912, 7912  ifname =   A,      C,     B,     D
