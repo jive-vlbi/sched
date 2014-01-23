@@ -166,7 +166,7 @@ C        Only warn on ISCN=0 call
 C
          IF( ISCN .EQ. 0 ) THEN
             MSGTXT = ' '
-            WRITE( MSGTXT, '( A, A, )' )
+            WRITE( MSGTXT, '( A, A )' )
      1         'WRAPZONE: Station ', STATION(KSTA), 
      2         ' has an azimuth wrap range over 180 degrees.'
             CALL WLOG( 1, MSGTXT )
