@@ -51,7 +51,6 @@ C
                   ZHIGHEL(1) = AX2LIM(2,KSTA)
                ELSE
                   NZONES = 2
-&
                   ZLOWEL(1) = AX2LIM(1,KSTA)
                   ZHIGHEL(1) = 90.0
 C
