@@ -66,7 +66,7 @@ C       VERSION = 'Version 11.1 Beta of June 19, 2013'
 C       VERSION = 'Development version 11.1 after June 19, 2013'    
 C       VERSION = 'Version 11.1 Beta  Jan. 2, 2014' 
        VERNUM  = 11.2
-       VERSION = 'Release of Jan. 22, 2014'
+       VERSION = 'Release of Jan. 22, 2014 - update 1'
 C
       RETURN
       END
