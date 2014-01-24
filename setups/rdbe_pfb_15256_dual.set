@@ -1,0 +1,45 @@
+! Standard setup file: rdbe_pfb_15256_dual.set                 
+!     (Produced by MAKESETUP)
+!  Setup for 2cm observations near the old standard of 15256 MHz
+!  using a compact frequency sequence with the RDBE PFB personality.
+!  This setup will actually be centered near 15288.
+!  For the VLBA, EB_RDBE, and GBT.
+
+!  The freq_RDBE.dat entry v2cm_d2 would best be used with firstlo=14400
+!  for the VLBA.  But EB_RDBE does not yet have that entry in freq.dat.
+!  The next higher LO option (14600) has an IF that extends beyond the
+!  good range for the VLBA receiver (top at 15500), but the basebands can
+!  be kept below that and that is what we will use.
+
+!  The upper sideband IF forces lower sideband basebands.
+
+!  If a change of baseband frequencies is desired, the 16 new values of
+!  bbsyn (=freqoff if freqref=firstlo) must be chosen from the following:
+!  bbsyn    = 560.0, 560.0,  592.0, 592.0,  624.0, 624.0,  656.0, 656.0,
+!             688.0, 688.0,  720.0, 720.0,  752.0, 752.0,  784.0, 784.0,
+!             816.0, 816.0,  848.0, 848.0,  880.0, 880.0,  912.0, 912.0,
+!             944.0, 944.0,  976.0, 976.0, 1008.0, 1008.0
+!  Other values are not allowed by the nature of the polyphase filter.
+!  The number of channels, bits per sample, and sideband cannot be changed.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = dual
+  pcal     = '1MHz'
+
+!  Could use this without eb_rdbe, or if it gets added to freq.dat.
+!   freqref = 14400
+!   freqoff  =  752.0, 752.0,  784.0, 784.0, 816.0, 816.0,  848.0, 848.0,
+!               880.0, 880.0,  912.0, 912.0, 944.0, 944.0,  976.0, 976.0
+
+!   Specify the firstlo in this case, or it will take 14400 for the VLBA,
+!   then not work for EB_RDBE
+  freqref = 14600  firstlo=14600
+  freqoff  = 560.0, 560.0,  592.0, 592.0,  624.0, 624.0,  656.0, 656.0,
+             688.0, 688.0,  720.0, 720.0,  752.0, 752.0,  784.0, 784.0
+
+  netside = L
+  station = vlba, eb_rdbe, gbt_vlba, gbt_cold
+  /
