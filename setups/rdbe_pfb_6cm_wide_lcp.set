@@ -1,0 +1,42 @@
+! Standard setup file: rdbe_pfb_6cm_wide_lcp.set               
+!     (Produced by MAKESETUP)
+!  Setup for 4-8 GHz receiver observations using LCP only but with
+!  frequencies separated by nearly the full bandwidth of the receiver.
+!  Within each of the 2 IFs, the frequencies will be spread for wide
+!  spanned bandwidth coverage.  This uses the RDBE_PFB personality
+!  VLBA only.
+
+!  Note that a slightly wider spread could be achieved with a freqref
+!  of 3400 at the low end, but that risks problems related to the
+!  harmonic of the LO mixing in unwanted signal as described in
+!  freq_RDBE.dat.  Initial tests suggests that this might not be a
+!  problem and if that stands up, the low end may be moved back down
+!  (it was 3400 in the initial version of this file).
+
+!  This setup may change as experience is gained with the RFI
+!  environment.
+
+!  The freq_RDBE.dat entry vc_av will be used.
+
+!  The allowed bbsyn (or freqoff if freqref=firstlo) values for a single
+!  polarization observation with an upper sideband IF are:
+!  bbsyn    = 560.0, 592.0, 624.0, 656.0, 688.0, 720.0, 752.0, 784.0,
+!             816.0, 848.0, 880.0, 912.0, 944.0, 976.0, 1008.0, 1040.0
+!  Don't use 1040 if you don't have to to get 16 channels.  The data are bad.
+! Note that this observation has an upper sideband IF near 4 GHz and a
+! lower sideband IF near 7.5 GHz.
+
+  dbe      = 'rdbe_pfb'
+  nchan    = 16
+  bbfilt   = 32
+  bits     = 2
+  pol      = L
+  pcal     = '1MHz'
+
+  freqref    = 3600., 3600., 3600., 3600., 3600., 3600., 3600., 3600.,
+               8400., 8400., 8400., 8400., 8400., 8400., 8400., 8400.
+  freqoff    = 560.0, 624.0, 688.0, 752.0, 816.0, 880.0, 944.0, 1008.0,
+              -1008., -944., -880., -816., -752., -688., -624., -560.
+  netside = L,L,L,L, L,L,L,L, U,U,U,U, U,U,U,U
+  station = vlba
+  /
