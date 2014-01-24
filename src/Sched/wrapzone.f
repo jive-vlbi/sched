@@ -5,7 +5,8 @@ C     antenna ISTA is expected to be in for scan ISCN.
 C
 C     If ISCN=0, the routine determines the names and ranges for each
 C     valid zone, and writes them to the Vex file for the $ANTENNA 
-C     section.
+C     section. (erroneously put in STATION section at first).  Fixed
+C     on Jan 23, 2014.  RCW.
 C
 C     When ISCN is not zero, the zone name is returned.  This is
 C     used with writing the $SCHED section of the Vex file.
@@ -120,8 +121,8 @@ C           than 720 deg range.
 C
             DO I = 1, NZONES
                MSGTXT = ' '
-               WRITE( MSGTXT, '( A, A, A, F6.1, A, F6.1, A, F5.1, A, '
-     1            // 'F5.1, A, I2 )' ) '     pointing_sector = ', 
+               WRITE( MSGTXT, '( A, A, A, F7.2, A, F7.2, A, F6.2, A, '
+     1            // 'F6.2, A, I2 )' ) '     pointing_sector = ', 
      2            ZNAMES(I),
      3            ' : az :', ZLOWAZ(I), ' deg:', ZHIGHAZ(I), 
      4            ' deg: el :', ZLOWEL(I), ' deg:', ZHIGHEL(I), 

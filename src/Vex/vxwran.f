@@ -2,6 +2,10 @@
 C 
 C     Routine specific for the VEX extension of SCHED. 
 C     Writes a specific section of the VEX file 
+C
+C     Added wrap zones for VLBA  Jan 23, 2014  RCW.
+C     Was erroneously in the STATION section for a short time.
+C
 C     In this case the AN = $ANTENNA section 
 C     By H.J. van Langevelde, JIVE, 300496 
 C 
@@ -13,6 +17,7 @@ C     Huib's local variables
 C      
       INTEGER   IXX, ISTA, ISCAT, I
       INTEGER   LEN1
+      CHARACTER ZONE*5
 C ----------------------------------------------------------------------
 C
 C     Antenna section
@@ -51,6 +56,14 @@ C
      2           'antenna_motion = ', 'az', COL, AX1RATE(ISCAT), 
      3           'deg/min', COL, NINT(TSETTLE(ISCAT)), 'sec', SEP, COM,
      4           AX1ACC(1,ISCAT), 'deg/sec/sec'
+C
+C           Wrap zones for this mount type only.
+C           For now, only do for VLBA.  Jan. 23, 2014  RCW.
+C
+            IF( STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
+               CALL WRAPZONE( IVEX, 0, ISTA, ZONE )
+            END IF
+C
          ELSE IF( MOUNT(ISCAT) .EQ. 'EQUAT' ) THEN
             WRITE( IVEX, '( 5X, A, A, 1X, A1, 1X, A, A1 )' )
      1           'axis_type = ', 'ha', COL, 'dec', SEP
