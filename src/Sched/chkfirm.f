@@ -54,7 +54,7 @@ C        Write the error message and die.
 C
          IF( GOTERR ) THEN
             MSGTXT = ' '
-            WRITE( MSGTXT, '( 4A, I4, 2A )' ) 'CHKFIRM:  Invalid DBE (',
+            WRITE( MSGTXT, '( 5A, I4, 2A )' ) 'CHKFIRM:  Invalid DBE (',
      1         DBE(KS)(1:LEN1(DBE(KS))),
      2         ') specified for DAR = ', 
      3         DAR(KSTA)(1:LEN1(DAR(KSTA))), 
