@@ -2,7 +2,9 @@
 C
 C     Subroutine for SCHED that takes the user input from both main
 C     schedule input and from the catalogs etc and fills out information
-C     that was not provided.  
+C     that was not provided.  It is also a convenient place to check
+C     inappropriate catalog choices or attempt to use Mark5A on the 
+C     VLBA for other than pointing.
 C
 C     Jan. 29, 2013  Change the defaults for MINPAUSE and PRESTART.
 C     Make them system dependent.
@@ -11,8 +13,10 @@ C
       INCLUDE    'sched.inc'
       INCLUDE    'schset.inc'
 C
-      INTEGER    ISCN, ISTA, KS
-      LOGICAL    FRDBE, SRDBE
+      INTEGER    ISCN, ISTA, KS, KSTA
+      LOGICAL    FRDBE, SRDBE, M5AWARN
+      DATA       M5AWARN /.TRUE./
+      SAVE       M5AWARN
 C
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'DEFAULTS starting.' )
@@ -28,6 +32,21 @@ C
          CALL WLOG( 1, MSGTXT )
          CALL WLOG( 1, ' ' )
       END IF
+C
+C     Discourage use of MARK5A on the VLBA except for pointing.
+C
+      DO ISTA = 1, NSTA
+         KSTA = STANUM(ISTA)
+         IF( STATION(KSTA)(1:4) .EQ. 'VLBA' .AND. 
+     1       DISK(KSTA) .EQ. 'MARK5A' .AND. M5AWARN .AND.
+     2       .NOT. NOTAPE ) THEN
+            CALL WLOG( 1, 'STREAD: ==== WARNING ==== Mark5A '//
+     1          'specified for a VLBA  station.' )
+            CALL WLOG( 1, '        Those recorders have been '//
+     1          'removed from most VLBA stations.' )
+            M5AWARN = .FALSE.
+         END IF
+      END DO
 C
 C     Tie up the loose ends with the source catalogs, adding planets
 C     etc if needed.  Be sure that the Julian scan times are available
