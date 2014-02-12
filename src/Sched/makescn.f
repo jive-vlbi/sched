@@ -87,9 +87,13 @@ C
 C
 C        Adjust the scan times based on a geometry calculation.
 C        This reruns the above STAGEO so it could possibly be made
-C        more efficient some day.  Don't apply PRESCAN.
+C        more efficient some day.  Don't apply PRESCAN.  Assume
+C        we can assume LASTISCN and LASTSSCN are the same for this
+C        call - there is no confusion with preceding inserted pointing.
+C        is that always true?
 C
-         CALL OPTTIM( LASTISCN, ISCN, .TRUE., USETIME, .FALSE. )
+         CALL OPTTIM( LASTISCN, LASTISCN, ISCN, .TRUE., 
+     1                USETIME, .FALSE. )
 C
 C        Determine the geometry, slew times, and time of arrival 
 C        on source based on the final times.  NGOOD is 

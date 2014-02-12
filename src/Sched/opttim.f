@@ -1,6 +1,8 @@
-      SUBROUTINE OPTTIM( LASTISCN, ISCN, ADJUST, USETIME, DOPRESC )
+      SUBROUTINE OPTTIM( LASTISCN, LASTSSCN, ISCN, ADJUST, 
+     1                   USETIME, DOPRESC )
 C
-C     Routine that adjust the time of optimized scans.  
+C     Routine that adjust the time of optimized scans.  It's main
+C     use is in SCHOPT, but it is also called from GMKSCN and MAKESCN.
 C
 C     This is not meant to be the routine that gets the scan 
 C     geometry - in fact it does not calculate geometry for DUR 
@@ -31,9 +33,14 @@ C     We got away with that for a long time because OPTTIM was called
 C     in OPTDWELL (now gone) and later in SCHOPT) so it iterated to 
 C     a good result.
 C
+C     LASTSSCN is the last scan for the station that is not an 
+C     inserted scan (mainly pointing).  Respect GAP for these scans,
+C     but not for LASTISCN.  In some calls, LASTISCN will be used
+C     for LASTSSCN, but not in the final call for the overall schedule.
+C
       INCLUDE 'sched.inc'
 C
-      INTEGER          LASTISCN(*)
+      INTEGER          LASTISCN(*), LASTSSCN(*)
       INTEGER          ISCN, ISTA, LSCN, I
       DOUBLE PRECISION LASTTIME, TIME1J, TIME2J, T_AVAIL, TIME1K
       DOUBLE PRECISION MAXLASTT, TOLER, TBEGSRT(MAXSTA+1), DTEMP
@@ -44,6 +51,17 @@ C --------------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) CALL WLOG( 0, 'OPTTIM: Starting.' )
       MAXLASTT = -99.D9
       LSCN = 0
+C
+C      Some debugging code that might be useful again some day
+C      double precision start
+C      integer          year1, day1
+C      character        cstart*8, tform*8
+C      call timej( startj(iscn), year1, day1, start )
+C      cstart = tform( start, 'T', 0, 2, 2, '::@' )
+C      if( iscn .gt. 170 .and. iscn .lt. 190 ) then
+C       write(*,*) 'opttim:', iscn, duronly(iscn), int(gap(iscn)/onesec),
+C     1     ' ',  adjust, ' ', cstart
+C      end if
 C
       IF( ADJUST .AND. DURONLY(ISCN) .NE. 2 .AND. DURONLY(ISCN) .NE. 3
      1    .AND. DURONLY(ISCN) .NE. 6 .AND. DURONLY(ISCN) .NE. 7 ) THEN
@@ -69,15 +87,18 @@ C
          END DO
 C
 C        Loop through the stations getting the most recent stop time
-C        of a previous scan for the antennas in this scan.
+C        of a previous scan for the antennas in this scan.  This is
+C        the earliest possible start time for the next scan.
 C        Use the schedule scan time if there are no LASTISCN's.  That 
 C        would normally be the first scan which will trigger ALL0 and 
-C        be handled separately anyway.  Allow for GAP.
+C        be handled separately anyway.  Allow for GAP with LASTSSCN,
+C        but not LASTISCN.
 C
          SSTIME = 0.D0
          DO ISTA = 1, NSTA
             IF( STASCN(ISCN,ISTA) .AND. LASTISCN(ISTA) .NE. 0) THEN
-               SSTIME = MAX( SSTIME, STOPJ(LASTISCN(ISTA)) + GAP(ISCN) )
+               SSTIME = MAX( SSTIME, STOPJ(LASTSSCN(ISTA)) + GAP(ISCN),
+     1                       STOPJ(LASTISCN(ISTA)) )
             END IF
          END DO
 C
@@ -114,8 +135,8 @@ C
      1                UP2(ISCN,ISTA) .EQ. ' ' .AND. 
      2                LASTISCN(ISTA) .NE. 0 ) THEN
 C
-                     T_AVAIL = MAX( T_AVAIL, 
-     1                   STOPJ(LASTISCN(ISTA)) + GAP(ISCN) )
+                     T_AVAIL = MAX( T_AVAIL, STOPJ(LASTISCN(ISTA)),
+     1                   STOPJ(LASTSSCN(ISTA)) + GAP(ISCN) )
 C
 C                    Add this station in its place in the list
 C                    of start times sorted into inverse time order.
@@ -219,6 +240,10 @@ C        This change was provoked by undesired behavior when VLA dummy
 C        scans were scheduled in parallel with other stations at the
 C        start of an observation.
 C
+C        Feb. 8 , 2013.  No longer subtract GAP from MAXLASTT for this
+C        first scan because it won't automatically be added back when
+C        gap is used later.
+C
          IF( ALL0 ) THEN
             IF( USETIME ) THEN
                TIME1J = STARTJ(ISCN)
@@ -239,10 +264,33 @@ C        So far, the time has been set based on slew time.  Now treat
 C        GAP as the minimum interval to the next scan, which may require
 C        moving the start to later.  This also deals with a case where
 C        TIME1J has not been set - like all antennas in the scan were
-C        down.  Do the same for TIME1K
+C        down.  Do the same for TIME1K.
 C
-         TIME1J = MAX( TIME1J, MAXLASTT + GAP(ISCN) )
-         TIME1K = MAX( TIME1K, MAXLASTT + GAP(ISCN) )
+C        Before Feb. 2014, GAP was zeroed after pointing scans were
+C        inserted.  But this caused problems for schedules that had
+C        some DWELL and some DUR/GAP scans as the DWELL scans caused
+C        ADJUST to be set positive, but the intervals of the DUR/GAP
+C        scans needed to be retained.  Those intervals are the
+C        intervals to the last non-inserted scan (non-pointing scan). 
+C        LASTSSCN was introduced to keep track of the of the original 
+C        scans.
+C
+C        First set TIME1J and K to the earliest time the antenna can
+C        do something.  Usually MAXLASTT is usually from LASTTIME from
+C        STAGEO, which is normally STOPJ(LASTISCN).
+C               
+         TIME1J = MAX( TIME1J, MAXLASTT )
+         TIME1K = MAX( TIME1K, MAXLASTT )
+C
+C        Now be sure we didn't get closer than GAP to the previous
+C        regular (non-inserted) scan.  But don't do for pointing scans.
+C
+         DO ISTA = 1, NSTA
+            IF( STASCN(ISCN,ISTA) .AND. LASTSSCN(ISTA) .NE. 0 ) THEN
+               TIME1J = MAX( TIME1J, STOPJ(LASTSSCN(ISTA)) + GAP(ISCN) )
+               TIME1K = MAX( TIME1K, STOPJ(LASTSSCN(ISTA)) + GAP(ISCN) )
+            END IF
+         END DO
 C
       ELSE
 C

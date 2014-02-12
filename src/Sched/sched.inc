@@ -445,6 +445,7 @@ C                      Also an often-needed string.
 C                      MISSING implies can plot, but not make files.
 C
       INTEGER          LINEPG
+      INTEGER          ORIGEN(MAXSCN)
       LOGICAL          PLOT, PUBPLOT, DEBUG, OVERWRIT 
       LOGICAL          DOVEX, VEXTEST, DOMKA, DOVSOP, MISSING, MOVING
       LOGICAL          NOSET, COVERLET, AUTOPEAK, PKWATCH
@@ -483,7 +484,7 @@ C
       INTEGER          NTICKS, LINESZ, LABELSZ, COLIND
       LOGICAL          MOVED(MAXSTA)
 C
-      COMMON  /SCHCON/ FREQLIST, PRECDATE, OPDUR, LINEPG, PLOT, 
+      COMMON  /SCHCON/ FREQLIST, PRECDATE, OPDUR, LINEPG, ORIGEN, PLOT, 
      1                 PUBPLOT, DEBUG, OVERWRIT, DOVEX, VEXTEST, DOMKA, 
      2                 DOVSOP, MISSING, MOVING, NOSET, COVERLET,
      3                 AUTOPEAK, PKWATCH, OVERRIDE, READLOG, DODOWN,
@@ -793,8 +794,8 @@ C
      4                 NDRIVE, NHDPOS, USETAPE, USEDISK, ANYTAPE,
      5                 ALLDISK, NRDBCK, NSTOP, NRECONF, 
      6                 NSTSC, ENSTSC, DNSTSC, 
-     7                 TPSCN, ETPSCN, DTPSCN, TPHR, ETPHR, DTPHR,
-     8                 SCNHR, ESCNHR, DSCNHR, 
+     7                 TPSCN, ETPSCN, DTPSCN, TPHR, ETPHR, 
+     8                 DTPHR, SCNHR, ESCNHR, DSCNHR, 
      9                 MAXDR, EMAXDR, DMAXDR, GBYTES, 
      A                 TGBYTES, EGBYTES, DGBYTES,
      B                 TTSYNC, TWOHEAD, FASTTRK, ALLVLBA, NOREC,

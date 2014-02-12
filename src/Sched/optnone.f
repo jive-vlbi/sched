@@ -41,3 +41,20 @@ C
       RETURN
       END
 
+
+
+C     Some notes about my thinking dealing with the Feb. 2014 GMVA run.
+
+C     Nasty case:  There are DWELL scans in the project so ADJUST gets
+C     set to true.  But there are START times on later scans, followed
+C     by only DUR scheduling.  So DWELL should be false.  If there
+C     are inserted pointing scans, GAP gets set to zero.
+C
+C     Does gap apply to the gap from the inserted scan or from the previous
+C     recording scan?  It depends on what you are trying to use GAP for.
+C
+C     Do I need OPTNONE to be scan specific about ADJUST, being sensitive to
+C     the history since the last START or STOP?
+C
+C     In the end, I added ORIGEN and LASTSSCN to deal with these situations.
+C     I'm not all that confident of the results yet.

@@ -219,9 +219,9 @@ C
 C        Write the overlapping channel warning.
 C
          IF( OVERWARN ) THEN
-            CALL WLOG( 0, 'CHKSET: Setup file: ' // SETNAME(KS) )
-            CALL WLOG( 0, 
-     1         '        Has overlapping channels.  Intended?' )
+            CALL WLOG( 1, 'CHKSET: Setup file: ' // 
+     1         SETNAME(KS)(1:LEN1(SETNAME(KS))) //
+     2         ' Has overlapping channels.  Intended?' )
          END IF
 C
 C        Check many items specific to certain DARs.
