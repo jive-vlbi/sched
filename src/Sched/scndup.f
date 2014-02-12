@@ -98,6 +98,7 @@ C
 C
       DOPEAK(TO)   = DOPEAK(FROM)
       POINT(TO)    = POINT(FROM)
+      ORIGEN(TO)   = ORIGEN(FROM)
 C
 C     Note Oct 21, 2013 - inverted the behavior with ANNOT.  I think
 C     it was a bug.  RCW.

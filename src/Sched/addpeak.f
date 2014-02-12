@@ -25,7 +25,7 @@ C
 C
       INTEGER           IS, ISTA, KSTA, USEPSRC
       INTEGER           LASTKSCN(MAXSTA), LASTJSCN(MAXSTA)
-      INTEGER           KSCN, MSCN, KSRC, PSRC, IGRP, JSCN
+      INTEGER           KSCN, MSCN, KSRC, PSRC, IGRP, JSCN, KEEPORIG
       INTEGER           NTRY, I, YEAR, DAY1, OKSC, NUP(MPKGRP)
       LOGICAL           SROK(MPKSRC), SROK2(MPKSRC), IADJUST
       LOGICAL           TRYGRP(MPKGRP), TRYGRP2(MPKGRP), ADD2
@@ -219,12 +219,18 @@ C        (COPYALL) true, the start, stop, duronly and annot will also
 C        be copied so this preserves scan times as desired for moving
 C        as opposed to duplicating a scan (we're mainly worried about
 C        the last copy - the one that will become the main observing
-C        scan.  Also note that there end up being NTRY+1 versions of
-C        this scan of which at most NTRY will become pointing scans.
+C        scan (scan MSCN below).  Also note that there end up being 
+C        NTRY+1 versions of this scan of which at most NTRY will become 
+C        pointing scans.  Set ORIGEN to 4 to indicate these are added
+C        scans.  Later we will set the original scan back to its
+C        input value.
 C
+         KEEPORIG = ORIGEN(ISCN)
+         ORIGEN(ISCN) = 4
          DO I = 1, NTRY
             KSCN = ISCN + I
             CALL SCNDUP( KSCN, ISCN, .TRUE., 'ADDPEAK' )
+            ORIGEN(KSCN) = 4
          END DO
 C
 C        Loop through the groups.  MSCN is the one that will stay the
@@ -537,19 +543,31 @@ C
 C        Now cover ourselves in case we didn't add a scan after
 C        having inserted hypothetical ones.  Copy MSCN to the
 C        scan after the last of the inserts. Then update the
-C        slew times etc.
+C        slew times etc.  Keep the original scan's ORIGEN.
 C
          KSCN = ISCN + NADDED
          IF( KSCN .NE. MSCN) THEN
             CALL SCNDUP( KSCN, MSCN, .TRUE., 'ADDPEAK2' )
          END IF
+         ORIGEN(KSCN) = KEEPORIG
 C
 C        Set some scan variables to more reasonable values if
 C        scans were inserted.
 C
-         IF( NADDED .NE. 0 ) THEN
-            GAP(KSCN) = 0.D0
-         END IF
+C        SCHED used to set gap to zero here, but that created problems
+C        with DURATION/GAP schedules that had some DWELL scans.  Such
+C        schedules want fixed intervals between the DUR/GAP scans but
+C        the whole timing needs to be able to slide because of the
+C        DWELL scans.  This was all found while dealing with Krichbaum's
+C        GMVA schedule in Feb. 2014.
+C
+C        Instead now use ORIGEN and LASTSSCN to keep track of the 
+C        last non-inserted scan.  In OPTTIM, respect GAP for original
+C        scans but not inserted ones.
+C
+C         IF( NADDED .NE. 0 ) THEN
+C            GAP(KSCN) = 0.D0
+C         END IF
 C
 C        Update the scan slew times, geometry etc.  SRINSERT may
 C        have taken care of this, as may SCHOPT later, but just to 
