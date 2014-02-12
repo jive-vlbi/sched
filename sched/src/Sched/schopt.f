@@ -75,8 +75,13 @@ C            filled with SCNDUP).
 C       DONE indicates that there should be no more output scans.
 C       KEEP indicates that this scan is to be kept.
 C       ADJUST indicates that OPTTIM should adjust the times.
-C       LASTISCN(ISTA) is the most recent output scan for station ISTA
-C            prior to the current one.
+C       LASTISCN(ISTA) is the most recent output scan of any sort,
+C            including pointing scans, for station ISTA prior to the 
+C            current one.
+C       LASTSSCN(ISTA) is the most recent output scan for the station
+C            that was not an automatically inserted pointing scan.
+C            If pointing scans have been inserted, gap will be honored
+C            for LASTSSCN, but not for LASTISCN.
 C       NGSCANS is a count of scans that have good data.  Recall that
 C            some scans may have no stations up.
 C
@@ -85,7 +90,8 @@ C     scans SCAN1 through SCANL.
 C
       INCLUDE 'sched.inc'
 C
-      INTEGER           ISCN, KSCN, ISTA, LASTISCN(MAXSTA), NGSCANS
+      INTEGER           ISCN, KSCN, ISTA, NGSCANS
+      INTEGER           LASTISCN(MAXSTA), LASTSSCN(MAXSTA)
       INTEGER           NGOOD, YEAR, DAY1, DAY2, ICSRC
       INTEGER           PEAKOPT, GEOOPT
       LOGICAL           ADJUST, IADJUST, KEEP, DONE, GOTALL
@@ -98,7 +104,7 @@ C      double precision      SIGMA(20)
 C      real                   DUM1
        integer                len1
 C
-      SAVE              LASTISCN
+      SAVE              LASTISCN, LASTSSCN
 C ---------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SCHOPT: Starting.' )
 C
@@ -110,6 +116,21 @@ C
       NGSCANS = 0
       DO ISTA = 1, NSTA
          LASTISCN(ISTA) = 0
+         LASTSSCN(ISTA) = 0
+      END DO
+C
+C     ORIGEN indicates the source of the scan.  It was introduced
+C     in Feb. 2014 to help with dealing with using GAP in the presence
+C     of automatically inserted pointing scans.  GAP needs to refer
+C     back to the last original scan.  Options for ORIGEN are:
+C        ORIGEN=1  Scan explicitly specified in the key file.
+C        ORIGEN=2  Scan inserted by an optimization mode.
+C        ORIGEN=3  Scan inserted for a geodetic segment.
+C        ORIGEN=4  Scan inserted for reference pointing.
+C     At this point, we only have scans from the key file.
+C
+      DO ISCN = 1, NSCANS
+         ORIGEN(ISCN) = 1
       END DO
 C
 C     PEAKOPT is related to reference pointing which is triggered by 
@@ -233,6 +254,7 @@ C              list.  OPTCELLS selects which one to use next and
 C              puts it in scan KSCN + SCAN1 - 1.
 C   
                CALL OPTCELLS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+               ORIGEN(ISCN) = 2
 C   
             ELSE IF( OPTMODE .EQ. 'CSUB' ) THEN
 C   
@@ -240,6 +262,7 @@ C              Cells type optimization like CELLS, but with subarrays
 C              created.
 C   
                CALL OPTCSUB( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+               ORIGEN(ISCN) = 2
 C   
             ELSE IF( OPTMODE .EQ. 'UPTIME' ) THEN
 C   
@@ -247,6 +270,7 @@ C              Creates a string of scans of total length OPDUR for each
 C              input scan.  This is for planning.
 C   
                CALL OPTUPT( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+               ORIGEN(ISCN) = 2
 C   
             ELSE IF( OPTMODE .EQ. 'HAS' ) THEN
 C
@@ -255,6 +279,7 @@ C              with one input scan per output scan.  Try to optimize
 C              for hour angles.  This is a one pass operation.
 C
                CALL OPTHAS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+               ORIGEN(ISCN) = 2
 C
             ELSE
 C   
@@ -263,6 +288,15 @@ C
                CALL ERRLOG( 'SCHOPT: Invalid OPTMODE: '//OPTMODE )
 C   
             END IF
+C
+C                Some potentially useful debug code.
+C                call timej( startj(iscn), year, day1, start )
+C                time1 = tform( start, 'T', 0, 2, 2, '::@' )
+C                if( iscn .gt. 170 .and. iscn .lt. 190 ) then
+C                  write(*,*) ' '
+C                  write(*,*) 'schopt 1:        ', kscn, iscn, adjust, ' ', 
+C               1                  iadjust, ' ', time1, ' ', scnsrc(iscn)
+C                end if
 C
 C           KSCN not used below this point.
 C
@@ -287,7 +321,8 @@ C              that OPTTIM does not calculate geometry for all scans
 C              and, even when it does, it may be for the wrong time - 
 C              like for a guessed start time.
 C        
-               CALL OPTTIM( LASTISCN, ISCN, ADJUST, .FALSE., .FALSE. )
+               CALL OPTTIM( LASTISCN, LASTSSCN, ISCN, ADJUST, 
+     1                      .FALSE., .FALSE. )
 C        
 C              Now be sure that the experiment time boundaries have
 C              not been exceeded.  Some optimization modes watch this
@@ -409,7 +444,8 @@ C
 C           This is the last call to OPTTIM, so apply the PRESCAN 
 C           offsets here.  They should only be applied once.
 C
-            CALL OPTTIM( LASTISCN, ISCN, IADJUST, .FALSE., .TRUE. )
+            CALL OPTTIM( LASTISCN, LASTSSCN, ISCN, IADJUST, 
+     1                   .FALSE., .TRUE. )
             CALL SCNGEO( LASTISCN, NGOOD, ISCN )
 C
 C           Eliminate stations using disk recorders
@@ -495,11 +531,15 @@ C
             END IF
 C
 C           Mark this as most recent scan for each station that is in
-C           the scan.
+C           the scan.  Also mark it as the last non-inserted pointing
+C           scan if that is true.
 C
             DO ISTA = 1, NSTA
                IF( STASCN(ISCN,ISTA) ) THEN
                   LASTISCN(ISTA) = ISCN
+                  IF( ORIGEN(ISCN) .LT. 4 ) THEN
+                     LASTSSCN(ISTA) = ISCN
+                  END IF
                END IF
             END DO
 C
@@ -508,7 +548,14 @@ C
             SCANL = ISCN
 C
          END IF
-C
+C     
+C                More potentially useful debug code.
+C                call timej( startj(iscn), year, day1, start )
+C                time1 = tform( start, 'T', 0, 2, 2, '::@' )
+C                if( iscn .gt. 170 .and. iscn .lt. 190 ) then
+C                write(*,*) 'schopt 2:        ', kscn, iscn, adjust, ' ', 
+C               1                  iadjust, ' ', time1, ' ', scnsrc(iscn)
+C                end if
       END DO
 C
       IF( DEBUG ) CALL WLOG( 0, 'SCHOPT: 9.' )

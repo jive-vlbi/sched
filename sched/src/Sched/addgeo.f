@@ -97,10 +97,11 @@ C
      2        NGOOD, OKSTA, SSTASCN, 'FORCE' )
 C
 C        Get the number of scans left to do and tell SCHED to keep 
-C        this scan.
+C        this scan.  Also flag the origen of the scan.
 C
          GEOOPT = GEOOPT - 1
          KEEP = .TRUE.
+         ORIGEN(ISCN) = 3
 C
          IF( GEOPRT .GE. 0 ) THEN
 C

@@ -41,6 +41,50 @@ C
       IF( DAR(KSTA) .EQ. 'RDBE2' .AND. FORMAT(KS) .EQ. 'VDIF' .AND.
      1    DBE(KS) .EQ. 'RDBE_DDC' ) MIF = 4
 C
+C     Check the format.  The current status as of Feb. 4, 2014 is:
+C
+C        PFB or DDC     NONE    ok
+C        PFB  One RDBE  VDIF    Not implemented.
+C        PFB  One RDBE  MARK5B  Ok
+C        PFB  Two RDBE  Any     Can't do because of bit rate limitations.
+C        DDC  All cases VDIF    Ok
+C        DDC  One RDBE  MARK5B  Ok
+C        DDC  Two RDBE  MARK5B  No.  Cannot be merged.
+C
+      IF( DBE(KS) .EQ. 'RDBE_PFB' .AND. ( FORMAT(KS) .NE. 'MARK5B' 
+     1    .AND. FORMAT(KS) .NE. 'NONE' ) ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( 3A )' )
+     1      'CHKRDBE:  Format ', FORMAT(KS), ' specified for setup ',
+     2      SETNAME(KS)(1:LEN1(SETNAME(KS)))
+         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 1, '          It must be MARK5B for DBE=RDBE_PFB.' )
+         ERRS = .TRUE.
+      END IF
+      IF( DBE(KS) .EQ. 'RDBE_DDC' .AND. MIF .EQ. 2 .AND.
+     1    ( FORMAT(KS) .NE. 'VDIF' .AND. FORMAT(KS) .NE. 'MARK5B'
+     2      .AND. FORMAT(KS) .NE. 'NONE' ) ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( 3A )' )
+     1      'CHKRDBE:  Format ', FORMAT(KS), ' specified for setup ',
+     2      SETNAME(KS)(1:LEN1(SETNAME(KS)))
+         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 1, '          It must be VDIF or MARK5B ' //
+     1        'for DBE=RDBE_DDC with 4 basebands or fewer.' )
+         ERRS = .TRUE.
+      END IF
+      IF( DBE(KS) .EQ. 'RDBE_DDC' .AND. MIF .EQ. 4 .AND.
+     1    ( FORMAT(KS) .NE. 'VDIF' .AND. FORMAT(KS) .NE. 'NONE' ) ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( 3A )' )
+     1      'CHKRDBE:  Format ', FORMAT(KS), ' specified for setup ',
+     2      SETNAME(KS)(1:LEN1(SETNAME(KS)))
+         CALL WLOG( 1, MSGTXT )
+         CALL WLOG( 1, '          It must be VDIF ' //
+     1        'for DBE=RDBE_DDC with 5-8 basebands.' )
+         ERRS = .TRUE.
+      END IF
+C
       IF( VLBITP .AND. FORMAT(KS) .NE. 'NONE' ) THEN 
 C
 C        Make sure there are no more than 2 IFs requested for 

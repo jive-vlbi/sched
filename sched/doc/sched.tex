@@ -3244,7 +3244,7 @@ masers used to be found at the \htmladdnormallink{SEST web
 site}{http://www.ls.eso.org/lasilla/Telescopes/SEST/html/telescope-calibration/index.html}.
 That link is now dead.  Please let me know if you know an alternative.
 For information on high frequency flux densities of continuum
-calibrator, one can try the
+calibrators, one can try the
 \htmladdnormallink{CalFind}{http://carma.astro.umd.edu/cgi-bin/calfind.cgi}
 tool at the CARMA website.  Please recommend other options if you have
 them.
@@ -3375,7 +3375,9 @@ minimum elevation at all antennas in the group.  Pointing will only be
 added for scans observing at a frequency above a specified cutoff and
 only when there is enough of a gap in the schedule to fit one or two
 scans plus the slew to the pointing source from the previous VLBI source
-and the slew to the next VLBI source.
+and the slew to the next VLBI source.  The parameter \htmlref{{\tt GAP}}
+{MP:GAP} can be used to create such a gap.  See the discussion of
+that parameter for a few more details.
 
 The input parameters for the \htmlref{{\tt PEAKFILE}}{MP:PEAKFILE} are:
 
@@ -4762,7 +4764,13 @@ of a gap from the previous scan.  Scans will be inserted when it has
 been at least 10 minutes since the last set of pointing measurements
 and when there is adequate time for one or two pointing patterns
 based on the dwell time in the PEAKFILE.  This can be triggered by
-specifying adequate gaps.
+specifying specifying adequate gaps using \htmlref{{\tt GAP}}{MP:GAP}.  In such
+circumstances, the pointing will be inserted during the specified 
+gap.  The minimum interval between the original scans will maintain the 
+interval from {\tt GAP}, but the pointing will be inserted during that
+time.  The interval between the inserted pointing scans and the input
+scan will typically end up much less than {\tt GAP}.
+
 
 \rcwbox
 {No argument.  Just specifying it turns on the attempts to insert
@@ -5751,7 +5759,7 @@ do the same thing.}
 {Reverts to previous scan.}
 {{\tt DOPPLER}}
 
-\subsubsection{\label{MP:DOSCANS}{\tt DOCANS}}
+\subsubsection{\label{MP:DOSCANS}{\tt DOSCANS}}
 
 The user can specify optional scans on the ends of a project using
 the \htmlref{{\tt PREEMPT}}{MP:PREEMPT} parameter.  Those scans will
@@ -6287,7 +6295,7 @@ value of \htmlref{{\tt MINPAUSE}}{MP:MINPAUSE}, the recordings are
 left running.  The default {\tt MINPAUSE} is 10 seconds for legacy
 systems and the DBBC. It is zero for the RDBE and WIDAR.
 
-For Vex stations (most non-VLBA stations), gaps should be inserted to
+For Field System stations (most non-VLBA stations), gaps should be inserted to
 allow bank changes.  The VLBA can switch between mounted disk banks
 (modules) on the fly, but the field systems need a pause in the data
 recording.  Such gaps should be inserted every 22 minutes for
@@ -6302,7 +6310,17 @@ users should realize that during continuous recording no calibration
 data is taken. Starting and stopping the recording can be forced using
 {\tt GAP} or \htmlref{{\tt PRESCAN}}{MP:PRESCAN}, or by using
 \htmlref{{\tt START times}} {MP:START}.  {\tt GAP} is probably the
-prefered mechanism.
+prefered mechanism.  As of Feb. 2014, we are trying to determine what
+is the current minimum time for bank changes.  It is actually likely
+to be less than 40 seconds.
+
+There is an interaction between {\tt GAP} and {\tt AUTOPEAK}.  Any 
+specified {\tt GAP} will be enforced for the interval between the 
+input scans, but the inserted pointing scan can occur during that 
+interval.  Note, prior to Feb 2014, the gap was set to zero when
+pointing was inserted, so under some circumstances, the input scans
+could end up closer together than {\tt GAP}.
+
 
 \rcwbox
 {A time in any approved time format (hh:mm:ss, mm:ss, sss etc.)}
@@ -8029,6 +8047,14 @@ some antennas to peak up their pointing.  {\tt NOPEAK} causes
 
 As of March 1999, {\tt PEAK} is no longer used to control VLA
 pointing.  Please see parameter \htmlref{{\tt VLAPEAK}}{MP:VLAPEAK}.
+
+Warning, {\tt NOPEAK} takes precedence over {\tt PEAK} if given in
+the same scan.  \schedb has no way to tell that the {\tt PEAK} is new
+rather than left over from the previous scan.  Often {\tt NOPEAK}
+is given right after the peaking scan inputs to ensure that peaking
+doesn't get left on in the next scan.  But if that next scan is 
+meant to be a peaking scan, say on a different set of antennas, you
+will not get what you want.  We have received user files like this.
 
 For the VLBA, if {\tt PEAK} is greater than {\tt 0}, a peakup will be
 done using the channel number specified by the {\tt PEAK} argument.
@@ -13566,12 +13592,40 @@ Nothing yet.
 %     Update all examples for no Mark5A at VLBA.
 %     Warn that even MHz frequency settings are poor for pulse cal.
 %        Most observations are doing it now days.
-%     Restablish the overlapping channel warning.
 
 
 \begin{itemize}
 
-\item  Release version 11.2 on about Jan. 22, 2014.  Note that the
+\item  Fix bug in the frequencies for standard setup v6cm-512-8-2-L.set.  It 
+had unintended overlapping frequencies.  Feb. 10, 2014  RCW.
+
+\item  Change the behavior of GAP when inserting pointing scans.  Previously,
+GAP was set to zero after inserting the pointing, which could allow the
+main schedule scans to end up closer together than expected.  Now enforce 
+the GAP between the main schedule scans.  This can be important especially
+if separate runs are needed for some reason and they need to be kept aligned.
+Feb. 9, 2014  RCW.
+
+\item  Check the specified format for the RDBE.  Feb. 4, 2014. RCW
+
+\item  Turn off the warning about MARK5A recording on the VLBA when
+no recording is being done.  Jan. 30, 2014.  RCW
+
+\item  Manual description of {\tt NOPEAK} updated to include warning
+that {\tt NOPEAK} takes precedence over {\tt PEAK} if both are specified.
+Because of the way the parser works, SCHED has no way to tell when this
+happens.  Jan 30, 2014.
+
+\item Typo fixed in a warning message that the specified {\tt DBE}
+is not consistent with the specified {\tt DAR} for the station.
+Jan 27, 2014  RCW.
+
+\item  Released Version 11.2 Update 1 on Jan. 23, 2014  RCW
+
+\item  Typo fixed (spurious comma) that was tolerated by g77 but
+not gfortran.  Jan. 23, 2014
+
+\item  Release Version 11.2 on about Jan. 22, 2014.  Note that the
 development and beta versions leading to this release were under
 the version number 11.1.  RCW.
 

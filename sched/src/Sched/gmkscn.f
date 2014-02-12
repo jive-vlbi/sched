@@ -95,9 +95,14 @@ C
 C      
 C           Adjust the scan times based on a geometry calculation.
 C           This reruns the above STAGEO so it could possibly be made
-C           more efficient some day.
+C           more efficient some day.  Assume LASTISCN and LASTSSCN
+C           are the same in circumstances where GMKSCN is used, or
+C           at least that such an assumption will not get us in trouble.
+C           The difference relates to whether or not the scan is 
+C           preceded by automatically inserted pointing scans.
 C      
-            CALL OPTTIM( LASTISCN, ISCN, .TRUE., .FALSE., .FALSE. )
+            CALL OPTTIM( LASTISCN, LASTISCN, ISCN, .TRUE., 
+     1                   .FALSE., .FALSE. )
 C      
 C           Determine the geometry, slew times, and time of arrival 
 C           on source based on the final times.  NGOOD is 
@@ -255,11 +260,14 @@ C
          END DO
 C
 C        Get the geometry with the same calls as used for the
-C        GMODE=SET version.
+C        GMODE=SET version.  Assume that it is ok to use
+C        LASTISCN for LASTSSCN.  This certainly true if the
+C        preceding scan is not an inserted pointing scan.
 C
          IF( NGOOD .GE. 1 ) THEN
             STARTJ(ISCN) = TAPPROX
-            CALL OPTTIM( LASTISCN, ISCN, .TRUE., .FALSE., .FALSE. )
+            CALL OPTTIM( LASTISCN, LASTISCN, ISCN, .TRUE., 
+     1                   .FALSE., .FALSE. )
             CALL SCNGEO( LASTISCN, NGOOD, ISCN )
          END IF
 
