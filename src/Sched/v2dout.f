@@ -141,9 +141,9 @@ C
 C
 C     SETUP placeholders.
 C
-      WRITE( IV2D, '( 1X, /, A )' ) '#  SETUP place holders'
+      WRITE( IV2D, '( 1X, /, A )' ) '#  SETUP place holders (commented)'
       DO ISET = 1, NSETF
-         WRITE( IV2D, '( A, A, A )' ) 'SETUP ',
+         WRITE( IV2D, '( A, A, A )' ) '# SETUP ',
      1        SETFILE(ISET)(1:LEN1(SETFILE(ISET))), ' {}'
       END DO
 C
