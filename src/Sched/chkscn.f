@@ -32,7 +32,7 @@ C
       DOUBLE PRECISION  SCANLEN, VPT
       INTEGER            CRDN
       DOUBLE PRECISION   CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
-      CHARACTER          CRDS(MCHAN)*1, USEDDBE*8
+      CHARACTER          CRDS(MCHAN)*1, USEDDBE*8, USEDSETF*80
       PARAMETER         ( MINDEF = 1.D15 )
       PARAMETER         ( MAXDEF = 0.D0 ) 
 C ----------------------------------------------------------------------
@@ -158,12 +158,16 @@ C
                      KS = NSETUP(ISCN,ISTA)
                      IF( USEDDBE .EQ. 'xx' ) THEN
                         USEDDBE = DBE(KS)
+                        USEDSETF = SETNAME(KS)
                      ELSE IF( USEDDBE .NE. DBE(KS) ) THEN
                         CALL WLOG( 1, 'CHKSCN: Cannot use 2 DBE ' //
      1                     'personalities in one experiment' )
                         CALL WLOG( 1, '        You used ' // USEDDBE //
      1                     ' and ' // DBE(KS) // ' at ' // 
      2                     STANAME(ISTA) )
+                        CALL WLOG( 1, '        The setup files were:' )
+                        CALL WLOG( 1, '           ' // SETNAME(KS) )
+                        CALL WLOG( 1, '           ' // USEDSETF )
                         CALL ERRLOG( '       Use the same DBE for ' //
      1                     'any given station.' )
                      END IF

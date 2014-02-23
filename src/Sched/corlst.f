@@ -36,9 +36,23 @@ C
          WRITE( ISUM, '( 1X, /, A )' )
      1      'No recordings.  Correlation requests ignored.'
       ELSE
-         WRITE( ISUM, '( 1X, /, A, /, 1X, /,  9(A,/), 1X, /, ' // 
+C
+C        Write the first line of CORSTUFF - the section header.
+C
+         WRITE( ISUM, '( 1X, /, A )' ) CORSTUFF(1)(1:LEN1(CORSTUFF(1)))
+C
+C        Flag a request for multiple correlation centers.
+C
+         IF( NPAIR .GT. 0 ) THEN
+            WRITE( ISUM, '( 1X,/, A ) ' )
+     1           '  THIS PROJECT USES MULTIPLE PHASE CENTERS.'
+         END IF
+C
+C        Write the correlator summary stuff that was compiled earlier.
+C
+         WRITE( ISUM, '( 1X, /,  9(A,/), 1X, /, ' // 
      1        ' 5(A,/), 1X, /, 5(A,/) )' ) 
-     2      ( CORSTUFF(I)(1:LEN1(CORSTUFF(I))), I = 1, MCOR )
+     2      ( CORSTUFF(I)(1:LEN1(CORSTUFF(I))), I = 2, MCOR )
 C
 C        Get the parameters of the observation that are needed to get 
 C        the data rates and volume.
