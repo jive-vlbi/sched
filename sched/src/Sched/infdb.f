@@ -14,6 +14,7 @@ C     Adding CRDNCH, CRDBW, CRDFREQ, CRDDOP, and CRDNODOP to allow
 C     doppler and frequency settings of the BBCs of the legacy system 
 C     (crd file) while the RDBE_PFB is being used.  This prevents the 
 C     need for separate MARK5C and MARK5A schedules.  July, 2013 RCW.
+C     Adding CRDSETCH Feb. 2014.  RCW
 C
       INCLUDE 'sched.inc'
 C
@@ -49,15 +50,52 @@ C
 C
       END DO
 C
-C     Get CRDNCH and CRDCH1.  Do not attempt to fix the case when is
-C     zero yet.  Will do that later when the setups are available.
-C     Don't allow CRDCH1 without setting CRDNCH.
+C     Get CRDNCH, CRDCH1, and CRDSETCH.  These are parameters for the
+C     crd files for the VLBA to set the legacy system when the main
+C     data path is to the RDBE.  CRDNCH is the number of legacy system
+C     channels, CRDCH1 is the first of a continuous block of new system
+C     channels to use to get many of the baseband channel parameters 
+C     for the legacy system channels.  CRDSETCH is a list of setup 
+C     file (new system) channels to use for channel parameters for the
+C     legacy system.  CRDCH1 and CRDSETCH should not both be used. 
+C     Prevent that.
+C
+C     Do not attempt to fix  the case when is CRDNCH is zero yet.  
+C     Will do that later when the setups are available.   Don't allow 
+C     CRDCH1 or CRDSETCH without setting CRDNCH.
+C
+C     If defaults are taken, they will be dealt with in GETCRDN
 C
       CRDNCH(ISCN) = VALUE( KEYPTR( 'CRDNCH', KC, KI ) )
       CRDCH1(ISCN) = VALUE( KEYPTR( 'CRDCH1', KC, KI ) )
-      IF( CRDCH1(ISCN) .NE. 1 .AND. CRDNCH(ISCN) .EQ. 0 ) THEN
-         CALL ERRLOG( 
-     1        'INFDB:  If CRDCH1 is set, CRDNCH must also be set.' )
+      DO ICHAN = 1, MAXCRD
+         CRDSETCH(ICHAN,ISCN) = 
+     1        VALUE( KEYPTR( 'CRDSETCH', KC, KI )+ICHAN-1 )
+      END DO
+C
+      IF( ( CRDCH1(ISCN) .NE. 0 .OR. CRDSETCH(1,ISCN) .NE. 0 ) 
+     1           .AND. CRDNCH(ISCN) .EQ. 0 ) THEN
+         CALL ERRLOG( 'INFDB:  If CRDCH1 or CRDSETCH is '//
+     1         'set, CRDNCH must also be set.' )
+      END IF
+      IF( CRDCH1(ISCN) .NE. 0 .AND. CRDSETCH(1,ISCN) .NE. 0 ) THEN
+         CALL ERRLOG( 'INFDB:  Do not use both CRDCH1 and CRDSETCH!' )
+      END IF
+      IF( CRDNCH(ISCN) .GT. MAXCRD ) THEN
+         MSGTXT = ' '
+         WRITE( MSGTXT, '( A, I4, A, I4, A, I5 )' )
+     1     'INFDB:  CRDNCH set too high.  Maximum is', MAXCRD,
+     2     '.  It is ', CRDNCH(ISCN), ' in input scan ', ISCN
+         CALL ERRLOG( MSGTXT )
+      END IF
+C
+C     If CRDCH1 was used, fill in CRDSETCH so we can use that from
+C     this point forward.
+C
+      IF( CRDCH1(ISCN) .NE. 0 ) THEN
+         DO ICHAN = 1, CRDNCH(ISCN)
+            CRDSETCH(ICHAN,ISCN) = CRDCH1(ISCN) + ICHAN - 1
+         END DO
       END IF
 C
 C     Get CRDDOP, CRDFREQ and CRDBW.  Default CRDFREQ and CRDBW to 
@@ -69,6 +107,7 @@ C
       I2 = KEYPTR( 'CRDBW', KC, KI ) - 1
       CALL TOGGLE( CRDDOP, ISCN, 'CRDDOP', 'CRDNODOP', UNSET,
      1             VALUE, KC, KI )
+
       GOTCRD(ISCN) = CRDDOP(ISCN)
 C
       DO ICHAN = 1, MAXCHN
@@ -92,19 +131,33 @@ C
       END DO
 C
 C     Require CRDNCH if CRDFREQ or CRDDOP were set.  Also don't allow
-C     it to be greater than 8, the number of BBCs, because we don't
-C     want the complications of trying to use upper/lower sidebands
-C     and will only use one channel per BBC for the CRD parameters.
+C     it to be greater than MAXCRD, the number of BBCs( 4 after 
+C     early 2014), because we don't want the complications of trying 
+C     to use upper/lower sidebands and will only use one channel per 
+C     BBC for the CRD parameters.
 C
-      IF( ( CRDNCH(ISCN) .LT. 1 .OR. CRDNCH(ISCN) .GT. 8 )
+      IF( ( CRDNCH(ISCN) .LT. 1 .OR. CRDNCH(ISCN) .GT. MAXCRD )
      1      .AND. GOTCRD(ISCN) ) THEN
-         CALL WLOG( 1, 'INFDB: CRDNCH is required '//
-     1       'and must be between 1 and 8 ' )
+         WRITE( MSGTXT, '( A, A, I3 )' ) 
+     1       'INFDB: CRDNCH is required and must be between 1 and ', 
+     2       MAXCRD
+         CALL WLOG( MSGTXT )
          CALL WLOG( 1, '       when CRDFREQ or CRDDOP is specified.' )
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, I3, A, I5 )' ) 
      1     '       CRDNCH is ', CRDNCH(ISCN), ' on scan ', iscn
          CALL ERRLOG( MSGTXT )
+      END IF
+C
+C     Require CRDCH1 or CRDSETCH to have been set if CRDDOP is invoked.
+C     When COPCRD is called, a station is not selected so GETCRDN, which
+C     sets the defaults of CRSETC, needs.  So just force the user to
+C     think about it.  Note CRDCH1 has been used to fill out CRDSETCH
+C     above if needed so only check CRDSETCH.
+C
+      IF( CRDDOP(ISCN) .AND. CRDSETCH(1,ISCN) .LT. 1 ) THEN
+         CALL ERRLOG( 'INFDB:  If invoking DOPCRD, please also set '//
+     1       'CRDCH1 or CRDSETCH' )
       END IF
 C
 C     Source name for Doppler calibration and default to scan source.

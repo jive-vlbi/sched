@@ -11,7 +11,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER            I, IUNIT, KS, JS, KF, NNCHAN, KSCN, LEN1, IC
-      INTEGER            JF, ICH, ICH1, ILINE
+      INTEGER            JF, ICH, ICH1, ILINE, CRSETC(MAXCHN), KSTA
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
       CHARACTER          RESULT*100, FSMATSTR*132
@@ -20,6 +20,7 @@ C
       CHARACTER          CRDS(MCHAN)*1
 CC----------------------------------------------------------------------
       NNCHAN = NCHAN(KS)
+      KSTA = ISETSTA(KS)
       IF( DEBUG ) THEN
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, 3I7 )' ) 'PRTFREQ starting. ', 
@@ -101,7 +102,7 @@ C
 C              Get the frequencies to be used for this frequency set.
 C
                CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
-     1                      CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
+     1                      CRDN, CRDF, CRDB, CRDS, CRDLOSUM, CRSETC )
 C        
 C              Write a label that depends on whether this is a 
 C              default set.
@@ -177,6 +178,21 @@ C
 C
                ELSE
                   CALL WLOG( 0, 'PRTFREQ:  Still no channels' )
+               END IF
+C
+C              Deal with the crd information for VLBA stations when
+C              using the RDBE.
+C
+               IF( CONTROL(KSTA) .EQ. 'VLBA' .AND. 
+     1             DBE(KS)(1:4) .EQ. 'RDBE' ) THEN
+                  WRITE( IUNIT, '( A, I2, A, 8I3 )' )
+     1                '   VLBA legacy crd files using ', CRDN, 
+     2                ' channels based on RDBE channels: ',
+     3                (CRSETC(I),I=1,CRDN)
+                  WRITE( IUNIT, '( A, 8F10.2 )' )
+     1                '   CRD fr= ', (CRDF(I),I=1,CRDN)
+                  WRITE( IUNIT, '( A, 8F10.2 )' )
+     1                '   CRD bw= ', (CRDB(I),I=1,CRDN)
                END IF
 C
 C              Write the matching frequency sets.

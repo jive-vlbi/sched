@@ -14,14 +14,19 @@ C     information is obtained from the setup file channels and one may
 C     not wish to use just the first CRDNCH of those (think dual band
 C     cases), especially with the PFB.  CRDCH1 allows the user to 
 C     specify the first channel of the setup file to use for the crd
-C     file channel 1.  The rest will be sequential from there.
+C     file channel 1.  The rest will be sequential from there when 
+C     using CRDNCH.  CRDSETCH allows an arbitrary list of channels
+C     to be specified.
 C
 C     CRDBW will be required user input if either CRDFREQ or CRDDOP
 C     has been specified.  Specification of CRDFREQ and CRDDOP is
 C     considered invalid as they stomp on each other.
 C
 C     If CRDDOP is specified, this routine sets CRDFREQ based on the
-C     source velocity information, experiment timing, and CRDBW.
+C     source velocity information, experiment timing, and CRDBW.  If 
+C     multiple velocities are given for the source, they will be 
+C     assumed to apply to the CRD channels, not necessarily the 
+C     setup channels.  
 C
 C     CRDFREQ will only be used later in making the crd files 
 C     when it has been set, either as an explicit input or here as a 
@@ -75,8 +80,8 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER          ISCN, YEAR, DAY, IGP, NGP, ICH
-      INTEGER          ISETF, SBW, NCH
-      INTEGER          CRDN, CR1, CRN, ICHS
+      INTEGER          ISETF, SBW
+      INTEGER          ICHS
       REAL             RA4, DEC4, SLA_RVLSRK, VELC, TIME4
       REAL             VSUN, VEARTH, TL
       LOGICAL          DEQUAL
@@ -167,10 +172,12 @@ C        Recall that INFDB forced that it be set by the user if
 C        CRDFREQ or CRDDOP were set, so we should not need to set it
 C        or test for too low a value.
 C
-         IF( CRDNCH(ISCN) .GT. MIN( 8, MSCHN(ISETF) ) ) THEN
-            CALL WLOG( 1, 
-     1          'DOPCRD: CRDNCH must be less than 8 (number ' //
-     2          'of BBCs) and less than the ' )
+         IF( CRDNCH(ISCN) .GT. MIN( MAXCRD, MSCHN(ISETF) ) ) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, '( A, I3, A )' )
+     1          'DOPCRD: CRDNCH must be less than', MAXCRD, 
+     2          '(number of BBCs) and less than the '
+            CALL WLOG( 1, MSGTXT )
             CALL WLOG( 1, 
      1          '        number of channels in the setup file.' )
             MSGTXT = ' '
@@ -282,6 +289,13 @@ C           one per BBC.
 C
 C           Set the frequency for each channel.
 C
+C           At this point, we start using channel information from
+C           the main setup.  Use CRDSETCH to map from crd channels to
+C           setup file channels.  INFDB forced it to have been set when
+C           using CRDDOP.  We might have used GETCRDN to get the mapping
+C           CRSETC, but that routine needs a station, and this routine
+C           is not for a specific station.
+C
             DO ICH = 1, CRDNCH(ISCN)
 C
 C              Set up to add or subtract the bandwidth.  As a 
@@ -291,23 +305,29 @@ C
 C              Note that correlator inversions could cause an issue here,
 C              but leave accounting for that to WRTFREQ.
 C
-C              SFSIDE will be indexed based on the setup file 
-C              channels.  All the CRD parameters are for the crd
-C              channel index.  An offset is specified by CRDCH1 by
-C              the user.  Routine GETCRDN determines the defaults,
-C              but this part of this routine only deals with the 
-C              case when CRDDOP was specified and in that case, 
-C              CRDNCH was required and CRDCH1 could be given as the
-C              only way of doing offsets.
+C              SFSIDE will be indexed based on the setup file channels
+C              (ICHS).  All the CRD parameters are for the crd channel 
+C              index (ICH).  The mapping between the two is in CRDSETCH.
+C              The user could have specified the mapping with CRDCH1 and
+C              CRDNCH, but INFDB used those to fill in CRDSETCH.
+C              For most projects, SCHED will set defaults (in GETCRDN)
+C              if CRDSETCH is not filled.  But this routine is called
+C              without a station where GETCRDN needs a station for other
+C              setup information.  So INDFB enforces that CRDSETCH (
+C              or CRDCH1) be given if CRDDOP is requested.  Here, the
+C              only item from the setup that is used is the sideband.
 C
-               ICHS = ICH + CRDCH1(ISCN) - 1
+               ICHS = CRDSETCH(ICH,ISCN)
                IF( SFSIDE(ICHS,ISETF) .EQ. 'U' ) THEN
                   SBW = 1
                ELSE IF( SFSIDE(ICHS,ISETF) .EQ. 'L' ) THEN
                   SBW = -1
                ELSE
-                  CALL ERRLOG( 'DOPCRD: Unrecognized SFSIDE '//
-     1                SFSIDE(ICH,ISETF) )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, I3, A, A, A )' )
+     1                'DOPCRD: Unrecognized SFSIDE(', ICHS, 
+     1                ') = ''', SFSIDE(ICHS,ISETF) , ''''
+                  CALL ERRLOG( MSGTXT )
                END IF
 C
 C              Now get the frequency.  If no velocity was given,
