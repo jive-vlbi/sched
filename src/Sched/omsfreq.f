@@ -11,7 +11,7 @@ C
       INCLUDE  'schset.inc'
 C
       INTEGER            IUNIT, KS, KF, NNCHAN
-      INTEGER            ICH1, ILINE
+      INTEGER            ICH1, ILINE, CRSETC(MAXCHN)
       DOUBLE PRECISION   BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION   LOSUM(MCHAN)
       INTEGER            CRDN
@@ -39,7 +39,7 @@ C              frequencies, not any different frequencies used for
 C              reference pointing etc (CRD.. parameters below).
 C
                CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
-     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM, CRSETC )
 C        
 C              Write the frequencies etc for this frequency set.
 C        

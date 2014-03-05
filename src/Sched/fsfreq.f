@@ -1,5 +1,5 @@
       SUBROUTINE FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
-     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM, CRSETC )
 C
 C     Routine for SCHED that gets the LO sum, the baseband frequency,
 C     and the bandwidth for each channel for a frequency set.
@@ -44,9 +44,9 @@ C
       DOUBLE PRECISION   LOSUM(*)
       DOUBLE PRECISION   BBCFREQ(*), BBCBW(*) 
       DOUBLE PRECISION   CRDF(*), CRDB(*), CRDLOSUM(*), FDROP
-      LOGICAL            FWARN, VLAWARN, ERRS, DEQUAL
+      LOGICAL            FWARN, ERRS, DEQUAL
 C
-      INTEGER            CRDN, CR1, CRN, ICHS
+      INTEGER            CRDN, CRSETC(*), ICHS
       CHARACTER          CRDS(*)*1
       INTEGER            ICRDS(MCHAN)
       INTEGER            ISIDE1(MCHAN), INETSIDE(MCHAN)
@@ -91,10 +91,10 @@ C
      1      'Programming error? ' )
       END IF
 C
-C     Get the number of channels and the range of setup file channels
+C     Get the number of channels and the list of setup file channels
 C     to use for parameters other than frequency and bandwidth.
 C
-      CALL GETCRDN( KSCN, ISTA, CRDN, CR1, CRN )
+      CALL GETCRDN( KSCN, ISTA, CRDN, CRSETC )
 C
 C----------------------------------------
 C     Deal with the VLBI channels (These are for the Vex file).
@@ -349,7 +349,7 @@ C        use the CRD parameters, so just put in the setup values
 C        as dummies.
 C
          DO ICH = 1, CRDN
-            ICHS = ICH + CR1 - 1
+            ICHS = CRSETC(ICH)
             CRDF(ICH) = BBCFREQ(ICHS)
             CRDB(ICH) = BBCBW(ICHS)
             CRDS(ICH) = SIDEBD(ICHS,KS)
@@ -385,7 +385,7 @@ C        Do for the number of channels given in GETCRDN and relate
 C        those to the specified setup file channels.
 C
          DO ICH = 1, CRDN
-            ICHS = ICH + CR1 - 1
+            ICHS = CRSETC(ICH)
             IF( CRDBW(ICH,KSCN) .LE. 0.D0 ) THEN
                CRDB(ICH) = MIN( BBCBW(ICHS), 16.D0 )
             ELSE IF( CRDBW(ICH,KSCN) .GT. BBCBW(ICHS) ) THEN
@@ -423,18 +423,20 @@ C        set above as KSCN.
 C
 C        CRDNCH is a required user input if CRDFREQ or CRDDOP is used
 C        but can be given any time.  Use it if set.  INFDB will already
-C        have not allowed it to not be set if CRDFREQ or CRDDOP is used.
+C        have require that it be set if CRDFREQ or CRDDOP is used.
 C        DOPCRD has enforced reasonable values for all scans.  The user
-C        could have used CRDCH1 to specify that the legacy system channels
-C        not start with the first setup file channel.  This will be useful
-C        for dual band cases when some CRD channels are desired from both
-C        bands.  Because of this option, we need to be careful about the
-C        meaning of the channel numbers.  Here ICH is an output CRD
-C        channel and ICHS is the corresponding setup file channel.
+C        could have used CRDCH1 or CRDSETSC to specify that the mapping
+C        between setup channels and legacy system channels.  This will 
+C        be useful for dual band cases when some CRD channels are 
+C        desired from both bands, although SCHED's defaults will also 
+C        enforce having all IFs represented.  Anyway, because of this 
+C        option, we need to be careful about the meaning of the channel 
+C        numbers.  Here ICH is an output CRD channel and ICHS is the 
+C        corresponding setup file channel.
 C
          IF( GOTCRD(KSCN) ) THEN
             DO ICH = 1, CRDN
-               ICHS = ICH + CR1 - 1
+               ICHS = CRSETC(ICH)
                CRDF(ICH) = ABS( CRDFREQ(ICH,KSCN) - FIRSTLO(ICHS,KS) )
                CRDB(ICH) = CRDBW(ICH,KSCN)
                CRDLOSUM(ICH) = FIRSTLO(ICHS,KS) + ISIDE1(ICHS) * 
@@ -485,7 +487,7 @@ C
 C           Loop over the channels assigning data to use.
 C
             DO ICH = 1, CRDN
-               ICHS = ICH + CR1 - 1
+               ICHS = CRSETC(ICH)
 C
 C              Get an integer version of NETSIDE for multiplications.
 C

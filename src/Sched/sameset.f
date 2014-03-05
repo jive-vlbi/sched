@@ -11,11 +11,15 @@ C     In the comparison, don't compare:
 C       Station name
 C       Frequency set info
 C
+C     But do compare the CONTROL and DAR.  Not comparing these 
+C     caused problems with the display of frequency set parameters
+C     when EB and GB were treated as the same.  (added Mar. 3, 2014 RCW)
+C
 C     Provide several spots to skip tests if SA becomes false - just
 C     jump to the end.
 C 
       INTEGER   KS, JS, I, ICH, IIF, ITP, IPC
-      INTEGER   LEN1
+      INTEGER   LEN1, KSTN, JSTN
       LOGICAL   SA, LOCDBG
 C
       INCLUDE 'sched.inc'
@@ -225,7 +229,16 @@ C
          IF( LOCDBG ) CALL WLOG( 0, 'SAMESET: before vlavl' )
          GO TO 999 
       END IF
-
+C
+C     Compare some station hardware so we don't combine dissimilar 
+C     stations.  This caused some problems with CRD parameters.
+C
+      KSTN = ISETSTA(KS)
+      JSTN = ISETSTA(JS)
+      SA = SA .AND. 
+     1     CONTROL(KSTN) .EQ. CONTROL(JSTN) .AND.
+     2     DAR(KSTN) .EQ. DAR(JSTN)
+C
 C     Don't forget to deal with frequency sets and pcal sets
 C     separately.  They are not compared here.  Think about what
 C     to do.

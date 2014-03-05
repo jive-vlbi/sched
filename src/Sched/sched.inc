@@ -37,6 +37,8 @@ C                   MAXSET - Setup files. - see also SCHSET.INC
 C                   MAXCHN - Number of channels - see also SCHSET.INC
 C                   MAXLCH - Dopset channels.   
 C                   MAXSAT - Number of satellites.
+C                   MAXCRD - Maximum number of VLBA legacy system channels
+C                            when observing with the RDBE.
 C
 C                   MSET   - Number of setup groups - used in schset.inc
 C
@@ -60,10 +62,11 @@ C                    vlbabws.f:MCHAN (set at 128 - may not need change)
 C       MAXSTA       plot.inc:PSTMAX (set at 1000 - may not need change)
 C       MAXSRC       plot.inc:PSOMAX (set at 2000 - may not need change)
 C       MAXCAT       rdcat.inc:MDB (set at 1000 - may not need change)
+
 C
       INTEGER       MAXCAT, MAXSRC, MALIAS, MAXSCN, MAXSTA, MAXLCH
       INTEGER       MAXLGP, MAXSET, MAXCHN, MAXSAT, MSET
-      INTEGER       MINTENT, MSCINT
+      INTEGER       MINTENT, MSCINT, MAXCRD
 C
 C     For normal usage.  Phase referencing and pointing observations
 C     need lots of scans, but the number of stations is limited.
@@ -94,6 +97,7 @@ C
       PARAMETER     (MAXCHN=32)
       PARAMETER     (MAXLCH=MAXCHN)
       PARAMETER     (MAXSAT=5)
+      PARAMETER     (MAXCRD=4)
 C
 C     For intents.
 C
@@ -693,6 +697,7 @@ C
       INTEGER          POINT(MAXSCN), DURONLY(MAXSCN), NOWAIT(MAXSCN)
       INTEGER          ISCINT(MSCINT,MAXSCN), NSCINT(MAXSCN), NINTENT
       INTEGER          CRDNCH(MAXSCN), CRDCH1(MAXSCN)
+      INTEGER          CRDSETCH(MAXCRD,MAXSCN)
       LOGICAL          STASCN(MAXSCN,MAXSTA), GOTCRD(MAXSCN)
       LOGICAL          NOTSYS(MAXSCN), DOPCAL(MAXSCN), CRDDOP(MAXSCN)
       LOGICAL          DWELL(MAXSCN), TANT1(MAXSCN), TANT2(MAXSCN)
@@ -703,9 +708,10 @@ C
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
      1                 DOPEAK, POINT, DURONLY, NOWAIT, 
-     2                 ISCINT, NSCINT, NINTENT, CRDNCH, CRDCH1, STASCN,
-     3                 GOTCRD,NOTSYS, DOPCAL, CRDDOP, DWELL, TANT1,
-     4                 TANT2
+     2                 ISCINT, NSCINT, NINTENT, CRDNCH, CRDCH1, 
+     3                 CRDSETCH, STASCN,
+     4                 GOTCRD,NOTSYS, DOPCAL, CRDDOP, DWELL, TANT1,
+     5                 TANT2
       COMMON  /SCHN2B/ PRESCAN, DUR, GAP, MINDW, FREQ, DOPINCR
       COMMON  /SCHN2C/ STARTJ, STOPJ, BW
       COMMON  /SCHN2D/ CRDFREQ, CRDBW
