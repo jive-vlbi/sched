@@ -50,13 +50,13 @@ C
       INTEGER           TONE1(MCHAN), TONE2(MCHAN), TONE3(MCHAN)
       INTEGER           INTBW, NTPB
       INTEGER           PCFR1(MAXPC), PCFR2(MAXPC)
-      INTEGER           KSTA, KSCN, ISTA
+      INTEGER           KSTA, KSCN, ISTA, CRSETC(MAXCHN)
       DOUBLE PRECISION  RTONE1
       DOUBLE PRECISION  BBCFREQ(MCHAN), BBCBW(MCHAN)
       DOUBLE PRECISION  TONEINT, LOSUM(MCHAN)
       CHARACTER         PCX1(MAXPC)*3, PCX2(MAXPC)*3
       CHARACTER         PCALC1*3, UPCAL*4, PCOPT*4
-      INTEGER           CRDN, CR1, CRN, ICHS
+      INTEGER           CRDN, ICHS
       DOUBLE PRECISION  CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
       CHARACTER         CRDS(MCHAN)*1, CNETSIDE*1
 C ----------------------------------------------------------------------
@@ -90,7 +90,7 @@ C
          KS = FSETKS(KF)
          UPCAL = FSPCAL(KF)
          CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
-     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM, CRSETC )
 C
       END IF
       KSCN = FSETSCN(KF)
@@ -147,7 +147,7 @@ C
 C        For all this, use the CRD values as they represent the
 C        signals that the detectors will see.
 C
-         CALL GETCRDN( KSCN, ISTA, CRDN, CR1, CRN )
+         CALL GETCRDN( KSCN, ISTA, CRDN, CRSETC )
 C
          DO ICH = 1, CRDN
             NTONES(ICH) = 0
@@ -160,7 +160,7 @@ C        the work setting this up.
 C
          IF( TONEINT .GT. 0.D0 ) THEN
             DO ICH = 1, CRDN
-               ICHS = ICH + CR1 - 1
+               ICHS = CRSETC(ICH)
                INTBW = 1000 * CRDB(ICH)
 C
 C              Get the first tone.

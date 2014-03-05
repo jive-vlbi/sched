@@ -3,6 +3,8 @@ C
 C     Routine for the UV coverage optimization that measures the
 C     quality of an array.
 C
+C     IC is a loop index over combinations.
+C
 C     FLAG tells which stations to use.  If 0, don't.  If 1, will
 C     use in all configurations (maybe set up to calcualate once),
 C     If 2, use in this array.
@@ -49,6 +51,7 @@ C --------------------------------------------------------------------
          MSGTXT = 'UVQUAL: Incorrect GRIDMEAS - ' // GRIDMEAS 
          CALL ERRLOG( MSGTXT )
       END IF
+      FIRST = IC .EQ. 1
 C
 C     Hard wire in whether to limit to VLA baselines.
 C
@@ -75,7 +78,6 @@ C     Get some parameters from the includes into the short name
 C     versions to help once we are deep in nested DO's and IF's
 C     and have to live with the limited line length.
 C
-      FIRST = IC .EQ. 1
       NSR = 0
       NR = GRIDNR
       NT = GRIDNT

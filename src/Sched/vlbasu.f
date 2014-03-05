@@ -10,7 +10,7 @@ C
       INCLUDE 'schset.inc'
 C
       INTEGER       I, LEN1, LENS, ISTA, ISCN, ICH, KSTA
-      INTEGER       CRDN, CR1, CRN, KS, ICHS, ISYN
+      INTEGER       CRDN, CRSETC(MAXCHN), KS, ICHS, ISYN
       LOGICAL       FIRSTS, FRS, LPNTVLBA, LTANVLBA, LDOPN3DB
       LOGICAL       WRTSET, SWARNS
 C
@@ -22,7 +22,7 @@ C
 C
       INTEGER       USEBBC(MCHAN), LBBC(MCHAN), LNCHAN
       INTEGER       RPERIOD(MCHAN), LPERIOD(MCHAN), LBITS(MCHAN)
-      INTEGER       RLEVEL(MCHAN)
+      INTEGER       RLEVEL(MCHAN), TEMPINT(MAXCHN)
       REAL          LAZCOLIM, LELCOLIM, LROTAT, LFOCUS
       REAL          DOAZ, DOEL
       DOUBLE PRECISION  DSYNTH(3), LSYNTH(3), DSAMPR, LSAMPR, RSYNTH
@@ -31,6 +31,7 @@ C
       CHARACTER     LIFCHAN(MCHAN)*1, LLOGGING*8, LSTRING(4)*80
       CHARACTER     LFORMAT*8, PFORMAT*8, LIFDIST(4)*3
       CHARACTER     LLCP50CM*6, LRCP50CM*6, LNOISEF*4
+      CHARACTER     TEMPCHAR(MAXCHN)*2
 C
 C     Save all the numbers that we need to keep between calls.
 C
@@ -61,7 +62,7 @@ C     Get the number of channels and which setup channels to use.  When
 C     using the RDBE, this might not be the same as the setup file.
 C
       KS = NSETUP(ISCN,ISTA)
-      CALL GETCRDN( ISCN, ISTA, CRDN, CR1, CRN )
+      CALL GETCRDN( ISCN, ISTA, CRDN, CRSETC )
 C
       IF( FIRSTS ) SWARNS = .TRUE.
 C
@@ -71,13 +72,14 @@ C
       KSTA = STANUM(ISTA)
 C
 C     Protect against requesting too many BBC's.
+C     GETCRDN also does some of this, but be sure.
 C
       TOOMANY = .FALSE.
       IF( DAR(KSTA)(1:4) .EQ. 'RDBE' ) THEN
-         IF( CRN - CR1 + 1 .GT. NBBC(KSTA) ) TOOMANY = .TRUE.
+         IF( CRDN .GT. NBBC(KSTA) ) TOOMANY = .TRUE.
       ELSE
-         DO I = CR1, CRN
-            IF( BBC(I,KS) .GT. NBBC(KSTA) ) TOOMANY = .TRUE.
+         DO I = 1, CRDN
+            IF( BBC(CRSETC(I),KS) .GT. NBBC(KSTA) ) TOOMANY = .TRUE.
          END DO
       END IF
       IF( TOOMANY ) THEN
@@ -85,7 +87,7 @@ C
          WRITE( MSGTXT, '( A, I3, A, I4, A, 2I4 )' )
      1         'VLBASU: ' // STATION(KSTA) // ' only has',
      2         NBBC(KSTA), ' BBCs.  Setup ', KS, ' requested more.',
-     3         BBC(CR1,KS), BBC(CRN,KS)
+     3         BBC(CRSETC(1),KS), BBC(CRSETC(CRDN),KS)
          CALL ERRLOG( MSGTXT )
       END IF
 C
@@ -366,19 +368,20 @@ C
 C        Removed barrel roll spec for tape.
 C
 C        When the VLBA legacy system is being used for recording, 
-C        or for non-VLBA systems (shouldn't get into this routine
+C        or for non-VLBA systems (which shouldn't get into this routine
 C        anyway), the baseband converter assignment should be
-C        as per the setup file.  But when the VLBA legacy system
+C        as per the setup file.  But when the VLBA the RDBE system
 C        is used, different assignments are needed.  Most obviously,
 C        when the RDBE_PFB is used, there are too many channels.
 C        For these cases, the number of channels is restricted to
-C        no more than 8, the number of BBCs, and we can just assign
-C        the BBCs sequentially (BBC number = channel number).
+C        no more than 8 (4 after early 2014), the number of BBCs, and 
+C        we can just assign the BBCs sequentially (BBC number = channel 
+C        number).
 C
 C        Note CONTROL(KSTA) .EQ. 'VLBA' .OR. VLBADAR(KSTA) can be
 C        assumed because of the call to VLBA in CRDWRT.  VLBA calls
-C        this routine.  For non-RDBE cases, CR1 will almost certainly
-C        be 1 and the second loop will actually be over 1 to NCHAN(KS).
+C        this routine.  For non-RDBE cases, CRSETC(ICH) will almost certainly
+C        be ICH and the second loop will actually be over 1 to NCHAN(KS).
 C
          IF( DAR(KSTA)(1:4) .EQ. 'RDBE' ) THEN
             DO ICH = 1, CRDN
@@ -386,7 +389,7 @@ C
             END DO
          ELSE 
             DO ICH = 1, CRDN
-               USEBBC(ICH) = BBC(CR1+ICH-1,KS)
+               USEBBC(ICH) = BBC(CRSETC(ICH),KS)
             END DO
          END IF
 C
@@ -395,15 +398,25 @@ C        Signal routing and properties information.
 C        Now we use the restricted set of channels.
 C        But IFDIST is per IF, not baseband channel.
 C
+
          CALL VLBACHAR( 'ifdistr', 7, 4, IFDIST(1,KS), LIFDIST, 
      1          MIFDIST, FIRSTS, IUVBA )
          CALL VLBAINT( 'baseband', 8, CRDN, USEBBC, LBBC,
      1          MBBC, FIRSTS, IUVBA )
-         CALL VLBACHAR( 'ifchan', 6, CRDN, IFCHAN(CR1,KS), 
+         DO ICH = 1, CRDN
+            TEMPCHAR(ICH) = IFCHAN(CRSETC(ICH),KS)
+         END DO
+         CALL VLBACHAR( 'ifchan', 6, CRDN, TEMPCHAR, 
      1          LIFCHAN, MIFCHAN, FIRSTS, IUVBA )
-         CALL VLBACHAR( 'sideband', 8, CRDN, SIDEBD(CR1,KS), 
+         DO ICH = 1, CRDN
+            TEMPCHAR(ICH) = SIDEBD(CRSETC(ICH),KS)
+         END DO
+         CALL VLBACHAR( 'sideband', 8, CRDN, TEMPCHAR, 
      1          LSIDEBD, MSIDEBD, FIRSTS, IUVBA )
-         CALL VLBAINT( 'bits', 4, CRDN, BITS(CR1,KS), LBITS,
+         DO ICH = 1, CRDN
+            TEMPINT(ICH) = BITS(CRSETC(ICH),KS)
+         END DO
+         CALL VLBAINT( 'bits', 4, CRDN, TEMPINT, LBITS,
      1          MBITS, FIRSTS, IUVBA )
 C
 C        Some parameters for which NCHAN versions should be printed,

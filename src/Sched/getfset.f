@@ -96,11 +96,17 @@ C                       Compare the VLBA legacy system settings.
 C                       First require both scans either have or don't
 C                       have GOTCRD set, which means they have had
 C                       CRDFREQ or CRDDOP specified.  And require that
-C                       the same number of channels was specified.
+C                       the same number of channels, CRDNCH, was specified
+C                       and that, if a channel mapping, CRDSETCH, was
+C                       set, perhaps based on CRDCH1, that it matches.
 C                       For the channels, always require that CRDBW
 C                       match and that CRDFREQ matches if GOTCRD was
-C                       set.  We are allowing CRDNCH and CRDBW to be
-C                       used even when CRDFREQ and CRDDOP are not.
+C                       set.  We are allowing CRDNCH, CRDSETCH, CRDCH1,
+C                       and CRDBW to be used even when CRDFREQ and 
+C                       CRDDOP are not.  I believe CRDSETCH here will
+C                       be equivalent to running GETCRDN and testing
+C                       CRSETC.
+C
 C                       Note that the Doppler setting for the legacy 
 C                       system has already been done and the results 
 C                       are in CRDFREQ.
@@ -123,6 +129,8 @@ C
                                  END IF
                                  MATCH = MATCH .AND. 
      1                             CRDBW(ICH,ISCN) .EQ. CRDBW(ICH,KSCN)
+                                 MATCH = MATCH .AND. CRDSETCH(ICH,ISCN)
+     1                               .EQ. CRDSETCH(ICH,KSCN)
                               END DO
                            END IF
 C

@@ -30,7 +30,7 @@ C use commented out     REAL        V
       REAL        DFRDX, DFRDY, DDELDX, DDELDY
       LOGICAL     WARNFQ
       DOUBLE PRECISION  LOSUM(MAXCHN)
-      INTEGER            CRDN
+      INTEGER            CRDN, CRSETC(MAXCHN)
       DOUBLE PRECISION   CRDF(MAXCHN), CRDB(MAXCHN), CRDLOSUM(MAXCHN)
       CHARACTER          CRDS(MAXCHN)*1
 C
@@ -55,7 +55,7 @@ C
          WARNFQ = .FALSE.
       ELSE
          CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
-     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM, CRSETC )
          FRQ = LOSUM(1)
       END IF
 C

@@ -18,7 +18,7 @@ C
 C
       INTEGER           ISCN, ISTA, KP, LKP, KF, LKF
       INTEGER           LEN1, NPC, ich
-      INTEGER           CRDN
+      INTEGER           CRDN, CRSETC(MAXCHN)
       DOUBLE PRECISION  LOSUM(MCHAN)
       DOUBLE PRECISION  BBCBW(MCHAN), BBCFREQ(MCHAN)
       DOUBLE PRECISION  CRDF(MCHAN), CRDB(MCHAN), CRDLOSUM(MCHAN)
@@ -79,7 +79,7 @@ C        when CRDFREQ or CRDDOP are not used, FSFREQ transfers the correct
 C        values to the CRD numbers.
 C
          CALL FSFREQ( KF, LOSUM, BBCFREQ, BBCBW,
-     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM )
+     1         CRDN, CRDF, CRDB, CRDS, CRDLOSUM, CRSETC )
 C
 C        Write the frequency and bandwidth.
 C        FSFREQ takes care of restricting the data to the proper

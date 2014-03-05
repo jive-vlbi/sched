@@ -208,9 +208,15 @@ C
 C           Needs doppler
 C
             IF( DOCRD ) THEN
+C
+C              Don't set DOPCAL because we cannot tune the PFB.
+C              Just set CRDDOP.
+C
                GOTCRD(ISCN) = .TRUE.
                CRDDOP(ISCN) = .TRUE.
                CRDNCH(ISCN) = 2
+               CRDSETCH(1,ISCN) = 1
+               CRDSETCH(2,ISCN) = 2
                IF( CALCODE(ISRC) .EQ. 'L' ) THEN
                   DO ICHN = 1, MAXCHN
                      CRDBW(ICHN,ISCN) = 2.0D0
@@ -224,6 +230,9 @@ C
                   CRDFREQ(ICHN,ISCN) = 0.0D0
                END DO
             ELSE
+C
+C              Not PFB, so tune the main channels.
+C
                DOPCAL(ISCN) = .TRUE.
                DO ICHN = 1, MAXCHN
                   BW(ICHN,ISCN) = 2.0D0
@@ -232,6 +241,11 @@ C
             END IF
             PCAL(ISCN) = 'off'
          ELSE
+C
+C           Not a line source.  Set for continuum pointing.
+C           Do not need any Doppler, crd or main.
+C           Set for setup file bandwidth.
+
             DOPCAL(ISCN) = .FALSE.
             DO ICHN = 1, MAXCHN
                BW(ICHN,ISCN) = 0.0D0

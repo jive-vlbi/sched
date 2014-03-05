@@ -3312,16 +3312,16 @@ pointing becomes a problem.  The PFB can only use 32 MHz bandwidths at
 very restricted frequency set points.  A scheme has been established
 using the input parameters \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ},
 \htmlref{{\tt CRDDOP}}{MP:CRDDOP}, \htmlref{{\tt CRDBW}}{MP:CRDBW},
-\htmlref{{\tt CRDCH1}}{MP:CRDCH1} and \htmlref{{\tt
-CRDNCH}}{MP:CRDNCH} to allow somewhat independent control of the
-legacy BBCs.  See the descriptions of those parameters, and the
-example \htmladdnormallink{{\sl
-eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key} for details.  As shown in
-the example, these parameters can be used for both explicit pointing
-scan insertion and for use with automatic pointing scan insertion by
-\sched.  Note that these capabilities have replaced the need that
-existed when the RDBEs were first deployed for separate MARK5A and
-MARK5C schedules.
+\htmlref{{\tt CRDCH1}}{MP:CRDCH1}, \htmlref{{\tt
+CRDSETCH}}{MP:CRDSETCH}, and \htmlref{{\tt CRDNCH}}{MP:CRDNCH} to
+allow somewhat independent control of the legacy BBCs.  See the
+descriptions of those parameters, and the example
+\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key} for
+details.  As shown in the example, these parameters can be used for
+both explicit pointing scan insertion and for use with automatic
+pointing scan insertion by \sched.  Note that these capabilities have
+replaced the need that existed when the RDBEs were first deployed for
+separate MARK5A and MARK5C schedules.
 
 Explicit insertion of pointing scans can be a pain and can completely
 dominate the work involved in scheduling high frequency observations.
@@ -4597,6 +4597,8 @@ SCAN PROPERTIES:
 \htlm{CRDBW}{~~~} Force VLBA legacy BBC bandwidth separate from RDBE.
 \htln{CRDDOP}{CRDDOP}{~~} Provoke Doppler setting of VLBA legacy 
                          BBCs sparate from RDBE.
+\htlm{CRDSETCH}{} List of setup baseband channels to use on VLBA legacy 
+                         system.
 \htlm{PCAL}{~~~~} Mode for pulse cal generators.
 \htlm{CENTERS}{~} Use multiple phase centers in processing.
 \htlm{PEAK}{~~~~} Peak up on source.
@@ -5449,7 +5451,10 @@ See the discussion of \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ} for more
 details about using the {\tt CRDxx} parameters.
 
 When using {\tt CRDDOP}, you must also set \htmlref{{\tt
-CRDBW}}{MP:CRDBW}.  As an alternative to requesting Sched do Doppler
+CRDBW}}{MP:CRDBW} and one (and only one) of \htmlref{{\tt CRDCH1}}{MP:CRDCH1}
+or \htmlref{{\tt CRDSETCH}}{MP:CRDSETCH}.  
+
+As an alternative to requesting \schedb do Doppler
 calculations, you can force a specific frequency with \htmlref{{\tt
 CRDFREQ}}{MP:CRDFREQ}.
 
@@ -5481,31 +5486,33 @@ unless you are a VLBA programmer.
 {{\tt CRDLINE = 'This was requested by Walter'}}
 
 
-**********       Much not in yet. (not still true?)
-
-Add links.
-
 \subsubsection{\label{MP:CRDCH1}{\tt CRDCH1}}
 
 When setting parameters for the VLBA legacy hardware different from
-what is being set for the RDBE, parameters \htmlref{{\tt CRDFREQ}}{MP:CRDFREQ},
-\htmlref{{\tt CRDDOP}}{MP:CRDDOP},\htmlref{{\tt CRDNCH}}{MP:CRDNCH},
-\htmlref{{\tt CRDBW}}{MP:CRDBW}, and {\tt CRDCH1} can be used.  Many of
-the channel parameters are taken from the main setup.  These include
-sideband, sample rate, IF channel etc.  With the legacy system ``CRD''
-parameters, only 8 channels can be specified.  With the RDBE\_PFB, the
-number of channels is 16.  By default, \schedb will take the central 8
-channels when no CRD items are specified, or the first 8 when some
-are specified.  But that can be controlled with {\tt CRDCH1} which selects
-the first channel from the setup to use and by 
-\htmlref{{\tt CRDNCH}}{MP:CRDNCH} which sets the number of legacy channels.
-So, for example, to specify the central 8 channels, set {\tt CRDCH1=5
-CRDNCH=8}.
+what is being set for the RDBE, parameters 
+\htmlref{{\tt CRDFREQ}}{MP:CRDFREQ}, 
+\htmlref{{\tt CRDDOP}}{MP:CRDDOP},
+\htmlref{{\tt CRDNCH}}{MP:CRDNCH}, 
+\htmlref{{\tt CRDBW}}{MP:CRDBW}, 
+\htmlref{{\tt CRDSETCH}}{MP:CRDSETCH}, and 
+{\tt CRDCH1} can be used.  Many of the channel parameters are taken
+from the main setup.  These include sideband, sample rate, IF channel
+etc.  With the legacy system ``CRD'' parameters, only 4 channels (8
+before early 2014) can be specified.  With the RDBE\_PFB, the number
+of setup channels is 16 while it can be up to 8 with the RDBE\_DDC.
+By default, \schedb will try to spread the crd channels broadly over
+the setup channels and, in particular, will try to have at least one
+crd channel from each IF.  {\tt CRDCH1} gives the opportunity to
+specify the first channel of a contiguous block of {\tt CRDNCH}
+channels to use.  Alternatively, one can use \htmlref{{\tt
+CRDSETCH}}{MP:CRDSETCH} to specify the template channels individually
+--- probably the preferred option if not taking the default.
 
 \rcwbox
 {An integer}
 {Any integer 16 or less}
-{1 if CRD parameters were specified or using the DDC.  Otherwise 5}
+{\schedb has an algorithm for distributing the channels broadly, 
+making sure all IFs are represented.}
 {One per scan.  Defaults to last value.}
 {{\tt CHDCH1 = 5}}
 
@@ -5579,6 +5586,42 @@ limitations of the BBCs relative to the RDBE}
 {Retains the value from the previous scan if not set.}
 {{\tt CRDFREQ= 43122.03, 43122.03 /}}
 
+
+
+\subsubsection{\label{MP:CRDSETCH}{\tt CRDSETCH}}
+
+{\tt CRDSETCH} is a list of setup file baseband channels to use for
+many channel dependent parameters such as IF channel, polarization,
+etc when setting up the channels for the VLBA legacy system.  There
+can be as many entries as there are legacy system channels.  As of
+early 2014 when 4 BBCs are being removed, that number is only 4.  The
+effect is only on the crd files, not the Vex file.
+
+This parameter can be very important when using the S/X system on
+the VLBA.  The new VLBA control system will know that both S and X
+band receivers are in use and will set the hardware accordingly.  
+Critically, it will or will not deploy the ellipsoidal reflector over
+the X band receiver.  If the channels sent to the legacy control 
+computer (the crd files) do not contain any S band channels, then
+that system will think this is an X band only observation.  It has
+control of the subreflector so it will point the subreflector at 
+the X band receiver.  But that optical path is now blocked by the
+ellipsoid.  So no source data will get through.  However all other
+parameters like system temperature and pulse cal will look ok.  You
+end up with hard-to-diagnose lack of fringes.  This situation can,
+and has (guess how we know about this!) happened when there are many
+X band channels and only a few S band channels as is likely when
+using the RDBE_PFB.
+
+\rcwbox
+{A list of setup file channel numbers - up to 4.  This can be changed
+on a scan basis}
+{Any channels}
+{If not used, and {\tt CRDNCH} is not used, \schedb will make a
+reasonable selection, including making sure all IF channels are
+represented.}
+{Defaults to previous scan}
+{{\tt CRDSETCH = 3,4,7,8}
 
 
 \subsubsection{\label{MP:DATAPATH}{\tt DATAPATH}}
@@ -13569,11 +13612,8 @@ more information.
 
 % seek point for editing:  development version
 
-\subsection{\label{SSEC:VER_11.3}Version 11.3 test}
+\subsection{\label{SSEC:VER_11.3}Development Version 11.3}
 
-Nothing yet.
-
-\subsection{\label{SSEC:VER_11.2}Version 11.2}
 
 %  ToDo:
 
@@ -13592,9 +13632,21 @@ Nothing yet.
 %     Update all examples for no Mark5A at VLBA.
 %     Warn that even MHz frequency settings are poor for pulse cal.
 %        Most observations are doing it now days.
+%     Do something to encourage big FFT sizes for multiple phase centers.
+%        that is CORCHAN(2) and should usually be near 4096.
+%     Abort if S/X project crd files don't have both bands.  FSFREQ? VLBASU?
 
 
 \begin{itemize}
+
+\item  Changing default selection of setup file channels to use for crd
+file channels to ensure all IFs are represented.  Also adjust for only
+4 crd channels because BBCs are getting removed from the stations.
+March 3, 2014 RCW
+
+\item  Add note in the CORRELATION REQUESTS section of the {\sl .sum} file
+to indicate that the project uses multiple phase centers.  This was a
+request from the analysts.  Feb. 20, 2014.  RCW
 
 \item  Comment the SETUP lines in the SETUP place holders in the v2d file.
 The analysts had been having to delete those.  Feb. 14, 2014.  RCW.
@@ -13622,6 +13674,12 @@ happens.  Jan 30, 2014.
 \item Typo fixed in a warning message that the specified {\tt DBE}
 is not consistent with the specified {\tt DAR} for the station.
 Jan 27, 2014  RCW.
+
+\end{itemize}
+
+\subsection{\label{SSEC:VER_11.2}Version 11.2}
+
+\begin{itemize}
 
 \item  Released Version 11.2 Update 1 on Jan. 23, 2014  RCW
 
