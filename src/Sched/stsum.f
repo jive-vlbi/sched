@@ -1,7 +1,7 @@
       SUBROUTINE STSUM
 C
-C     This routine, called by SCHSUM, writes some information 
-C     summary about about the numbers of scans, and hours at
+C     This routine, called by SCHSUM, writes some summary 
+C     information about about the numbers of scans, and hours at
 C     each station. Much of the data were gathered in SCHTIM.  
 C     Note NOTAPE really means no recordings.
 C
@@ -22,7 +22,9 @@ C
       CHARACTER   LINE*90
 C ----------------------------------------------------------------
 C     Sense if there are any stations with a VLBA DAR.  Those are
-C     the ones that need to worry about the reconfigures.
+C     the ones that need to worry about the reconfigures.  These
+C     are the legacy (MARK5A/Tape) DARs that are no longer in use
+C     for recording, so this might be removed some day.
 C
       DORECONF = .FALSE.
       DO ISTA = 1, NSTA
@@ -31,6 +33,8 @@ C
       END DO
 C
 C     Do most of this only if stations were recording.
+C     Note NOTAPE means that the whole observation is a non-recording
+C     observation, like OBSTYP = PTVLBA or CONFIG.
 C
       IF( .NOT. NOTAPE ) THEN
 C

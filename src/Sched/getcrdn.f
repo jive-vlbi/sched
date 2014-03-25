@@ -108,7 +108,7 @@ C
                MSGTXT = ' '
                WRITE( MSGTXT, '(  A, A )' ) 
      1               '         ', SETNAME(KS)
-               CALL ERRLOG( 1, MSGTXT )
+               CALL ERRLOG( MSGTXT )
             END IF
          ELSE
 C

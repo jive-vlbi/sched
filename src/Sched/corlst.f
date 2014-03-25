@@ -46,6 +46,37 @@ C
          IF( NPAIR .GT. 0 ) THEN
             WRITE( ISUM, '( 1X,/, A ) ' )
      1           '  THIS PROJECT USES MULTIPLE PHASE CENTERS.'
+C
+C           Check that the number of FFT channels is reasonable for
+C           multiple phase centers.  It might be better in CHKCOR, 
+C           but it is not necessarily clear by then that the multiple
+C           phase centers are being used.  Use a crude check.
+C
+C           Eventually examine the field of view used in each group
+C           of centers and the baseband bandwidth and make a 
+C           recommendation.  But that is work so it is put off for
+C           now (Feb 2014).
+C
+            IF( CORFFT .LT. 4000 ) THEN
+               CALL WLOG( 1, 'CORLST:   WARNING - your number of '//
+     1            'channels in the correlator FFT may not ' )
+               CALL WLOG( 1, '          be adequate for multiple '//
+     1            'phase centers.' )
+               MSGTXT = ' '
+               WRITE( MSGTXT, '( A, I6, A )' ) 
+     1            '          You have specified CORCHAN(2) =', 
+     2            CORFFT
+               CALL WLOG( 1, MSGTXT )
+               CALL WLOG( 1, '          More typical is several '//
+     1            'thousand to avoid smearing on offset phase centers.')
+               CALL WLOG( 1, '          Please consider CORCHAN(2) '//
+     1            'carefully.')
+               CALL WLOG( 1, '          See the SCHED manual '//
+     1            'sections on multiple phase centers and on '//
+     2            'parameter CORCHAN.')
+               WRITE( ISUM, '( A )' )
+     1            '    Worry about possible inadequate FFT channels.' 
+            END IF
          END IF
 C
 C        Write the correlator summary stuff that was compiled earlier.

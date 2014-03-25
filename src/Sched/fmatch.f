@@ -1,7 +1,8 @@
       SUBROUTINE FMATCH( KS, KF, OVERLAP, CENTER, OKIF, USEIF )
 C
 C   ****  Something is dangling here for RDBE_DDC - CROSS is not yet used.
-C   
+C          CROSS in RDBEMTCH   Fixed mar 2014?
+C        
 C     Routine for SCHED called by SETFCAT that finds the best IF
 C     channel from the frequency catalog to use for a setup file 
 C     channel.   By this point, FREQREF, BBFILT, and NETSIDE 

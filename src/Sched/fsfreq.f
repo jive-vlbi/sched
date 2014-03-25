@@ -316,8 +316,11 @@ C
          CALL CHKDBFQ( KS, BBCBW, BBCFREQ, ERRS )
       END IF
 C
-      IF( ERRS ) CALL ERRLOG( 'FSFREQ:  Fix problem with in-line '//
+      IF( ERRS ) THEN
+         CALL WLOG( 1, 'FSFREQ:  Fix problem with in-line '//
      1    'or Doppler derived frequencies or bandwidths.' )
+         CALL ERRSET( KS )
+      END IF
 C
 C     Similar checks for Mark 4?
 C

@@ -908,8 +908,7 @@ manual\_simp.key}.
 
 \item[\htmladdnormallink{{\sl eglst.key}}{examples/eglst.key}] is a
 sample schedule using LST in the way requested for dynamic scheduling
-projects on the VLBA.  This file has not been updated from MARK5A to 
-MARK5C.
+projects on the VLBA.
 
 \item[\htmladdnormallink{{\sl egvlba.key}}{examples/egvlba.key}] is a
 sample schedule for VLBA observations.  It demonstrates band switching
@@ -931,7 +930,6 @@ from MARK5A to MARK5C.
 \item[\htmladdnormallink{{\sl egOH.key}}{examples/egOH.key}] is a
 sample spectral line file for VLBA
 observations of several OH masers transitions.
-This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl egcent.key}}{examples/egcent.key}] is
 a sample showing how to specify multiple phase centers for a pointing
@@ -997,7 +995,6 @@ MARK5C.
 
 \item[\htmladdnormallink{{\sl eg512.key}}{examples/eg512.key}] is a
 sample schedule for the VLBA that uses the 512 Mbps mode.
-This file has not been updated from MARK5A to MARK5C.
 
 \item[\htmladdnormallink{{\sl eg512g.key}}{examples/eg512g.key}] is a
 sample schedule for the a global observation that uses the 512 Mbps mode.
@@ -1045,25 +1042,8 @@ This file has not been updated from MARK5A to MARK5C.
 \item[\htmladdnormallink{{\sl eg3mma.key}}{examples/eg3mma.key}] is a
 VLBA schedule for observations at 86 GHz.  There is special emphasis
 on \htmlref{reference pointing}{SEC:REFPOINT}, which is done
-explicitly in this file.
-This file does not create the separate new and old system files needed
-for reference pointing on masers while observing with the new RDBE wide
-band system with the PFB personality.  For instructions on how to do 
-that, please see 
-\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
-This file has not been updated from MARK5A to MARK5C.
-
-\item[\htmladdnormallink{{\sl eg3mmb.key}}{examples/eg3mmb.key}] is
-another VLBA 3mm schedule, but in this one \schedb is instructed to
-insert \htmlref{reference pointing}{SEC:REFPOINT} scans automatically
-based on commands for reference pointing in the standard
-\htmladdnormallink{referece pointing control file}{catalogs/peak.cmd}.
-This file does not create the separate new and old system files needed
-for reference pointing on masers while observing with the new RDBE wide
-band system with the PFB personality.  For instructions on how to do 
-that, please see 
-\htmladdnormallink{{\sl eg3mm\_rd2.key}}{examples/eg3mm\_rd2.key}.
-This file has not been updated from MARK5A to MARK5C.
+explicitly in this file.   This file uses the RDBE\_DDC at 2 Gbps
+using 8 channels of 64 MHz each.
 
 \item[\htmladdnormallink{{\sl eg3mmc.key}}{examples/eg3mmc.key}] is
 yet a third VLBA 3mm schedule, again using automatic insertion of
@@ -1095,7 +1075,7 @@ It pays some attention to minimizing slew times.  It is meant to
 simplify scheduling of projects that try to image a number, perhaps
 large, of sources using multiple snap-shots on each.  It was
 originally provided for the VIPS project but should be useful for many
-other programs.  This file has not been updated from MARK5A to MARK5C.
+other programs.
 
 \item[\htmladdnormallink{{\sl evn\_cont\_strong.key}}
 {examples/evn\_cont\_strong.key}] is an example of EVN observations at
@@ -3509,13 +3489,15 @@ maximum distance between the pointing and phase centers (x arcsec).
 For the VLBA for a 5\% loss of amplitude on an offset source, the
 number of channels should be near B*x/2.35.  A somewhat more
 conservative criterion is to limit phase winding to 5 spectral points
-per turn of phase in the spectrum.  By that, given that the maximum delay
-change for a 1 arcsecond shift is 139 ns on the longest VLBA baseline
-(8600 km), the number of channels should be near 5*0.139*B*x.  The
-full width, half maximum beamwidth of a VLBA antenna (25m) is very
+per turn of phase in the spectrum.  By that, given that the maximum
+delay change for a 1 arcsecond shift is 139 ns on the longest VLBA
+baseline (8600 km), the number of channels should be near 5*0.139*B*x.
+The full width, half maximum beamwidth of a VLBA antenna (25m) is very
 close to 30 and 1 arcminutes at 1.4 and 43 GHz, respectively.  For the
-1.4 GHz case, the above two criteria give 3063 and 5004 channels.  A
-specification of 4096 channels would likely be reasonable.
+1.4 GHz case, the above two criteria give 3063 and 5004 channels for a
+4 MHz baseband channel width.  A specification of 4096 channels would
+likely be reasonable.  With the RDBE, much wider baseband channels 
+are possible requiring many more spectral channels.
 
 See the Wide-Field Imaging section of the
 \htmladdnormallink{Observational Status
@@ -5087,18 +5069,20 @@ FFT in the correlator.
 The VLBA correlator (both old and new) will, by default, make 128
 channel spectra which are then channel averaged on-line for continuum
 observations.  The typical number of output channels for continuum
-data is 16 per baseband (32 for 16 MHz basebands).  Over averaging can
-cause loss of amplitude due to ``delay smearing'' --- the effect of
-large phase slopes across the channels going into an average.
+observations is the greater of 16 or twice the baseband channel
+bandwidth in MHz.  Over averaging can cause loss of amplitude due to
+``delay smearing'' --- the effect of large phase slopes across the
+channels going into an average.  Delay offsets can either come from a
+large field of view or from errors in the a priori clocks used in
+processing.  The twice bandwidth number is determined by the clocks
+and should represent a minimum.
+
 Corrections for this effect are made in AIPS, but the corrections are
-probably not perfect.  Over averaging also can lead to SNR loss when
-bandpass calibration is done.  This is because edge channels are
-discarded as part of bandpass calibration because of the frequency
-shifts required to adjust for the effects of the fringe rotators
-(doppler effect, essentially).  It is wise to keep a minimum of 16
-channels and keep the channel bandwidth less than 0.5 MHz.  The latter
-constraint, due to possible delay errors, suggests that observations
-with 16 MHz BBC bands should use 32 output channels.
+probably not perfect.  Besides delay smearing, over averaging can lead
+to SNR loss when bandpass calibration is done.  This is because edge
+channels are discarded as part of bandpass calibration because of the
+frequency shifts required to adjust for the effects of the fringe
+rotators (doppler effect, essentially).
 
 For spectral line observations, the DiFX correlator can do a vary large
 number of channels - "it's just software".  But excessive numbers
@@ -13623,7 +13607,6 @@ more information.
 %     Allow VLAONLY schedules?  Maybe these don't differ from any other
 %         single station schedules any more.
 %     Modify choice of unset synthesizer for the new synthesizers.
-%     Calibrator selection
 %     Revisit the whole issue of scan and recording start times.  Take
 %       into account any delays in start of correlation.  Also deal with
 %       "conservative" slew estimates causing lost data.
@@ -13632,12 +13615,35 @@ more information.
 %     Update all examples for no Mark5A at VLBA.
 %     Warn that even MHz frequency settings are poor for pulse cal.
 %        Most observations are doing it now days.
-%     Do something to encourage big FFT sizes for multiple phase centers.
-%        that is CORCHAN(2) and should usually be near 4096.
-%     Abort if S/X project crd files don't have both bands.  FSFREQ? VLBASU?
-
+%     Put more in summary about multiple field centers - like for each
+%        set, add number of fields and field of view needed.
 
 \begin{itemize}
+
+\item Move NEWLOC, the program for creating {\sl locations.dat} from a
+geodetic station solution, to the RELATED\_CODE area and add it to
+svn.  This means it will be managed with \sched.  March 21, 2014.  RCW.
+
+\item Fix a bug in the selection of frequency file entry to use with
+the RDBE\_DDC.  The calculation related to avoiding problems with crossover
+frequencies was not correct.   March 21, 2014  RCW
+
+\item Updating some more examples from use of MARK5A to MARK5C at the
+VLBA.  Still there are some that are not finished.  March 21, 2014.  RCW.
+
+\item Improve the program (NEWSRC) that updates source catalogs from
+the old sources.vlba and new GSFC and Petrov catalogs.  Produced new
+Petrov catalog, but waiting for new GSFC solution before updating
+everything.  Also moved to the RELATED\_CODE subdirectory and added
+to svn so it is managed with \sched.  March 16, 2014  RCW.
+
+\item Warn when multiple phase centers are used with less than 4000
+FFT channels.  This could be made much more sophisticated eventually
+with a recommended value, but keep it simple for now.  March 6, 2014
+
+\item Cause an abort of \schedb if and S/X project only has one band
+in the crd files.  If the missing band is S band as it would normally
+be, that will cause no fringes.  March 6, 2014.  RCW.
 
 \item  Changing default selection of setup file channels to use for crd
 file channels to ensure all IFs are represented.  Also adjust for only
@@ -17568,9 +17574,13 @@ been addressed, but not taken out here.
 
 \begin{itemize}
 
+\item Add Calibrator selection.  Before Mar 2014  RCW.
+
 \item Add a SUNAVOID parameter sort of like DODOWN that avoids pointing
       and antenna too close to the Sun.  Request for the CMVA from
-      Krischbaum  Mar. 22, 2011.
+      Krischbaum  Mar. 22, 2011.  Note added Feb 6, 2014.  The Sun
+      distance is taken into account in the selection of sources for
+      geodetic segments.  See GEOCHK.
 
 \item Somehow provide for different VLA positions for single dish
       and phased array in the VEX file when mixing the two.  Dec. 8,
