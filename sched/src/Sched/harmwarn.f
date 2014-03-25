@@ -1,10 +1,13 @@
-      SUBROUTINE HARMWARN( KS, LO1, LOI, LO2, LOJ, K, L,
+      SUBROUTINE HARMWARN( KS, SY1, LO1, LOI, SY2 ,LO2, LOJ, K, L,
      1                     IFF, TONHD )
 C
 C     Routine called by SETUSYN to write out warnings about
 C     possible cases of harmonic interference.  This was needed
 C     in two places and got a bit complicated so it was split
 C     out.
+C
+C     SY1 and SY2 are the synthesizer number being used.  They 
+C     will be printed in the table.
 C
 C     LO1 and LO2 are the synthesizer settings.  LOI and LOJ are
 C     the same for LO1/LO2 < 8.0 and half of LO1/LO2 for over 8.0.
@@ -22,7 +25,7 @@ C
       INCLUDE   'schset.inc'
 C
 C
-      INTEGER     KS, K, L
+      INTEGER     KS, K, L, SY1, SY2
       LOGICAL     TONHD, HWARN
       DOUBLE PRECISION  LO1, LO2, LOI, LOJ, IFF, BDIFF
       REAL        K2, L2
@@ -83,8 +86,8 @@ C        Write the table header
 C
          CALL WLOG( 1, ' ' )
          WRITE( MSGTXT, '( 2A )' )
-     1       '  Setup   LO (GHz) Osc   Harmonic  LO(GHz)  ',
-     2       'Osc   Harmonic   IF  (MHz)  RF    In BBC'
+     1       'Setup Syn  LO(GHz)  Osc Harmonic Syn LO(GHz)  ',
+     2       'Osc Harmonic   IF (MHz) RF    In BBC'
          CALL WLOG( 0, MSGTXT )
       END IF
 C
@@ -159,9 +162,9 @@ C
       IF( LO2 .GT. 8.0D0 ) L2 = L / 2.0
       IF( NRF .GE. 1 ) THEN
          MSGTXT = ' '
-         WRITE( MSGTXT, '( I6, F9.1, F7.2, F8.1, F10.1, F7.2,'//
-     1        ' F9.1, 2F10.2, 3X, A3 )' )  KS, LO1, LOI, K2, 
-     2        LO2, LOJ, L2, IFF*1000.0, RF(1), INBBC(1)
+         WRITE( MSGTXT, '( I4, I4, F8.1, F7.2, F7.1, I5, F7.1, F7.2,'
+     1        //' F7.1, 2F10.2, 3X, A3 )' )  KS, SY1, LO1, LOI, K2, 
+     2 	      SY2, LO2, LOJ, L2, IFF*1000.0, RF(1), INBBC(1)
          CALL WLOG( 0, MSGTXT )
       END IF
 C

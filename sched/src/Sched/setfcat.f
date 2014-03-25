@@ -42,8 +42,7 @@ C
       BESTCENT = 1.E5
       BESTOVER(KS) = 0.0
       BESTPRIO = 100
-
-C      write(*,*) 'setfcat starting ', KS, NEEDCAT
+C
       DO KF = 1, NFREQ
 C
 C        Find if this frequency catalog group is compatible with this
@@ -56,7 +55,6 @@ C        Determine which of the frequency groups that are compatible
 C        is best.
 C
          IF( MATCH ) THEN
-C      write(*,*) 'setfcat got match:', ks, kf, ' ', frname(kf)
 C
 C           Determine the amount of bandwidth overlap and the worst
 C           offset of a channel from the center of a band.
@@ -65,7 +63,7 @@ C
             IF( SDEBUG ) THEN
                SETMSG = ' '
                WRITE( SETMSG, '( A, 2I4, 2F10.2, 32I2)' ) 
-     1            'SETFCAT: ', KS, KF, OVERLAP, CENTER, 
+     1            'SETFCAT debug: ', KS, KF, OVERLAP, CENTER, 
      2            (USEIF(I),I=1,NCHAN(KS))
                CALL WLOG( 0, SETMSG )
             END IF
@@ -79,9 +77,17 @@ C           centering.
 C
 
             IF( OVERLAP .GT. 0.0 ) THEN
-C      write(*,*) 'setfcat got overlap:', ks, kf, ' ', frname(kf)
-C      write(*,*) '                    ', overlap, bestover(ks),
-C     1  prio(kf), bestprio, center, bestcent
+               IF( SDEBUG ) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, 2I4, 2A )' )
+     1               'SETFCAT GOT OVERLAP:', KS, KF, ' ', FRNAME(KF)
+                  CALL WLOG( 0, MSGTXT )
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, 2F8.2, 2I3, 2F8.2 )' ) 
+     1                '                    ', OVERLAP, BESTOVER(KS),
+     2                PRIO(KF), BESTPRIO, CENTER, BESTCENT
+                  CALL WLOG( 0, MSGTXT )
+               END IF
 C
 C              Clearly best:
 C
@@ -106,7 +112,8 @@ C              and schedule set frequencies.  For channels that
 C              don't match, set the frequency limits to zero.
 C
                IF( TAKEIT ) THEN
-C      write(*,*) 'setfcat taking it:', ks, kf, ' ', frname(kf)
+                  IF( SDEBUG) WRITE(*,*) 'SETFCAT taking it:', 
+     1                 KS, KF, ' ', FRNAME(KF)
                   GOT = .TRUE.
                   USEKF = KF
                   BESTOVER(KS) = OVERLAP
@@ -144,11 +151,18 @@ C     If got a match, process it.
 C     For the moment, keep all channels using the same IFREQNUM
 C
       IF( GOT ) THEN
-C      write(*,*) 'setfcat got one:', ks, usekf, ' ', frname(usekf)
+         IF( SDEBUG) THEN
+            MSGTXT = ' '
+            WRITE( MSGTXT, * ) 
+     1         'setfcat got one:', ks, usekf, ' ', frname(usekf)
+            CALL WLOG( 0, MSGTXT )
+         END IF
 C
          DO ICH = 1, NCHAN(KS)
             IFREQNUM(ICH,KS) = USEKF
          END DO
+
+
 
 C  partially complete coding here.
 C ***************  be sure to set something for all channels.
@@ -157,7 +171,8 @@ C      I was trying to put in the infrastructure for using more
 C      than 1 freq.dat entry, but now I'm not sure I remember 
 C      what I was planning.  At least a lot of the test results
 C      are now by channel.  But the second KF has not been 
-C      introduced.
+C      introduced.   Get back to this some day.
+
 
 
 C
@@ -174,6 +189,8 @@ C
      1            '         Only ', BESTOVER(KS), ' of ', TOTBW(KS),
      2            ' MHz total bandwidth is within the IFs'
                CALL WLOG( 1, SETMSG )
+               CALL WLOG( 1, '         and on the LO side of '//
+     1            'any crossover frequencies' )
                CALL WLOG( 1, 
      1            '         in the setup file before any FREQ or ' //
      2            'DOPPLER shifts.' )
@@ -183,6 +200,11 @@ C
      1            '         IFs defined in frequency group: ', 
      2            FRNAME(KF)(1:LEN1(FRNAME(KF)))
                CALL WLOG( 1, SETMSG )
+               IF( BESTOVER(KS) / TOTBW(KS) .GT. 0.98 ) THEN
+                  CALL WLOG( 1, '         The loss is small '//
+     1               'and may be the result of setting frequencies '//
+     2               'for good pulse cal.' )
+               END IF
             ELSE IF( NBWARN .EQ. 2 ) THEN
                CALL WLOG( 1, 'SETFCAT: Additional bandwidth '//
      1            'warnings suppressed for small losses.' )
@@ -190,7 +212,7 @@ C
          END IF
 C
       ELSE
-C         write(*,*) 'setfcat:  No match '
+         IF( SDEBUG ) WRITE(*,*) 'setfcat:  No match '
 C
 C        If there is not a match, write some details about 
 C        any near misses.

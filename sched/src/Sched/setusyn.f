@@ -71,7 +71,7 @@ C
       INCLUDE   'schfreq.inc'
 C
       INTEGER    KS, I, J, K, L, NLO, NTLO, NHI, NHJ, NHT
-      INTEGER    BESTI, MLHAR, IHAR, LSETUP, DLO, SY(3)
+      INTEGER    BESTI, MLHAR, IHAR, LSETUP, DLO, SY(3), TSY
       LOGICAL    TONHD, USEIT, GOTGOOD
       DOUBLE PRECISION   FMAX
       PARAMETER  ( NTLO = 56 )
@@ -181,8 +181,8 @@ C
              DO L = 1, NHJ
               IFF = ABS( LOI * K - LOJ * L )
               IF( IFF .GT. 0.52 .AND. IFF .LT. 1.03 ) THEN
-               CALL HARMWARN( KS, LO(I), LOI, LO(J), LOJ, K, L, 
-     1                        IFF, TONHD )
+               CALL HARMWARN( KS, SY(I), LO(I), LOI, 
+     1                        SY(J), LO(J), LOJ, K, L, IFF, TONHD )
               END IF
              END DO
             END DO
@@ -328,13 +328,19 @@ C
           DLO = BESTI
          END IF
 C
-C        Jump here when a usable set is found.  Set the unspecified
-C        synthesizers to the value selected above.
+C        Jump here when a usable set is found.  
 C
   100    CONTINUE
-         DO I = 1, 3
+C
+C        Set the unspecified synthesizers to the value selected 
+C        above.  Retain the number of the synthesizer set (TSY).
+C        Go backwards so that number is the lowest.
+C
+         TSY = 0 
+         DO I = 3, 1, -1
             IF( SYNTH(I,KS) .EQ. 0.D0 ) THEN
                SYNTH(I,KS) = TLO(DLO)
+               TSY = I
             END IF
          END DO
 C
@@ -390,8 +396,8 @@ C
             DO L = 1, NHI
              IFF = ABS( LOT * K - LOI * L )
              IF( IFF .GT. 0.52 .AND. IFF .LT. 1.03 ) THEN
-              CALL HARMWARN( KS, LO(I), LOI, TLO(DLO), LOT, L, K, 
-     1                        IFF, TONHD )
+              CALL HARMWARN( KS, SY(I), LO(I), LOI, 
+     1               TSY, TLO(DLO), LOT, L, K, IFF, TONHD )
              END IF
             END DO
            END DO
@@ -409,3 +415,9 @@ C
 C
       RETURN
       END
+
+
+
+
+
+

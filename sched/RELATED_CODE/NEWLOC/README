@@ -1,0 +1,79 @@
+NEWLOC is a program for updating the SCHED locations catalog based on
+new solutions.  I typically use the GSFC solution, although it would
+be possible to use Petrov's solution.  See the code for more details.
+
+This program would be a simple format translator if it weren't for the
+VLA.  The VLA coordinates are kept in another reference frame,
+although it claims to be aligned with the ITRF.  NEWLOC uses
+coordinates from the VLA and the ITRF coordinates the pad that is
+included in the ITRF to shift all the VLA pad coordinates to the ITRF.
+It can also do a rotation if there is a second station in common.  We
+used to use Pie Town for that, but it is not in the current VLA
+system.  Note that there were indications of a rotation between the
+VLA system and ITRF of around a waveguide cycle (time Earth rotates in
+a cycle).  We haven't gotten to the bottom of that, but it should be
+investigate further, even though the waveguides are no longer in the
+picture.
+
+The code is here, but I still have the working areas elsewhere because
+of the bulk.  Anything here can end up in the export files where bulk
+is a bit of a concern.  As of this writing, the working areas are in
+/home/noatak/cwalker/code/Calibration/GetCatalogs 
+Note  /home/noatak/cwalker is NOT ~cwalker (which is on filehost).
+
+
+
+Here is the README from the original directory that contained newloc:
+--------------------------------------------------------------------
+
+This README is the one transferred to the Newloc directory on 
+Mar. 1, 2010 when setting up that area to be the code location.
+
+I wrote NEWLOC to make a locations.dat file from the geodesy solution
+files and from VLA station location data.  This was done in early
+October 2008.  
+
+Much of what the program does is make VLA ITRF positions from the VLA
+file.  As of the advent of the new system at the VLA, the VLA
+coordinates are in a file aligned with the ITRF but with a zero at the
+array center.  So this program adds the shift to the Earth center and
+allows an arbitrary rotation, which used to be the longitude of the
+VLA with the old system, but is now a very small number.
+
+The program prints out lots of information to help assess the quality
+of the VLA position conversion.  It also shows the changes at a 
+current epoch from the input locations.dat file.  That can show if
+it is worth worrying about the update.
+
+Note that to do a proper VLA conversion, the position of at least one
+VLA pad must be in the geodetic solution.  Some geodetic solutions
+have N8 from some mid 1990's data.  A new observation should be
+made.  It is useful if the VLA data also has Pie Town for a second
+point that can be used to be sure the frames don't have a relative
+rotation.  
+
+In Sep 2008, to get a good fit between current VLA positions from
+Vivek and the old 2006 VLA positions, for which I had PT available,
+I had to rotate the new system by 0.76 arcsec (VLAITS in newloc.inc).
+Note that that is about 0.05 time seconds (1/20).  One waveguide 
+cycle???  Note that this angle is hardwired in the program now.
+Also the position to use for N8, if it is not in the geodetic
+solution, is hardwired in (adjvla.f).
+
+After doing all this in Sept 2008, the changes in the VLA positions
+over the old data were sufficiently small that I am not going to
+request a change to the data base.  But these tools should be useful
+for future conversions.  So the new station catalog will be based on
+2008a_astro for VLBI stations and on my old conversions for the VLA.
+The differences are in the 1-2 cm level which is probably as good as
+the N8 position.
+
+Meanwhile clean up things a bit and put the program in a proper
+subdirectory.
+
+
+Evantually use SCHED or some such for inputs, and make so the
+RUNIT file SED name conversions are not needed.
+--------------------------------------------------End of old README
+
+
