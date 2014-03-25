@@ -89,11 +89,16 @@ C
 C     Print something if debug print is requested.
 C
       IF( SDEBUG ) THEN
+         CALL WLOG( 0, ' ' )
+         CALL WLOG( 0, ' ' )
          SETMSG = ' '
          WRITE( SETMSG, '( A, I4, A, I4, 1X, A )' )
      1       'FCOMPARE: Got station and frequency match. KS:', KS,
      2       '  KF:', KF, FRNAME(KF)
          CALL WLOG( 0, SETMSG )
+         CALL WLOG( 0, 'FCOMPARE: List of logicals are: '//
+     1            'FCFLO1, FCPOL, FCCH1, FCVLAIF, FCFE, '//
+     2            'FREQOK(ICH), RFCLOSE' )
       END IF
 C
 C     Check for IFs that match the input channel parameters.
@@ -283,18 +288,12 @@ C        End of channel loop.
 C
       END DO
 C
-C     Separate frequency sets in the table (print cosmetics).
-C
-      IF( SDEBUG .OR. PRTMISS ) THEN
-         CALL WLOG( 0, ' ' )
-      END IF
-C
 C     Some more debug printout.
 C
       IF( SDEBUG ) THEN
          SETMSG = ' '
-         WRITE( SETMSG, '( A, L1 )' ) 'FCOMPARE: Out of loop: ', 
-     1        MATCH
+         WRITE( SETMSG, '( A, L1 )' ) 
+     1        'FCOMPARE: Out of channel loop: ', MATCH
          CALL WLOG( 0, SETMSG )
       END IF
 C

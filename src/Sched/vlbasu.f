@@ -13,6 +13,7 @@ C
       INTEGER       CRDN, CRSETC(MAXCHN), KS, ICHS, ISYN
       LOGICAL       FIRSTS, FRS, LPNTVLBA, LTANVLBA, LDOPN3DB
       LOGICAL       WRTSET, SWARNS
+      LOGICAL       SCRD, XCRD, SALL, XALL
 C
 C     Parameters to hold previous values to avoid duplication.
 C     Each one needs a counter for the number of channels.
@@ -63,6 +64,67 @@ C     using the RDBE, this might not be the same as the setup file.
 C
       KS = NSETUP(ISCN,ISTA)
       CALL GETCRDN( ISCN, ISTA, CRDN, CRSETC )
+C
+C     Do an important legacy system check.  Done here rather than in chk
+C     routines because it is legacy VLBA system specific, as is this routine,
+C     and will go away when the VME's are replaced.  The legacy system 
+C     controls the subreflector.  The new system controls the ellipsoid.  Both
+C     sense the difference between S/X projects and pure S or X projects by
+C     the presence of both bands among the baseband channels.  When there are
+C     fewer crd channels than RDBE channels, it is possible to end up with
+C     crd channels in only one band.  For example, S band can only take a small
+C     number of channels from the RDBE_PFB, so simple defaulting can end up
+C     only assigning X band channels.  Then the subreflector gets pointed 
+C     at the X band which is blocked by the ellipsoid.  Don't ask how we lost
+C     two days of wide band observing this way!
+C
+C     Use a simple method to detect the bad situation.  Note this might claim
+C     some C band setups have X band, but that should not matter as they
+C     will not have S band and will test as a single band setup.
+C
+      SCRD = .FALSE.
+      XCRD = .FALSE.
+      SALL = .FALSE.
+      XALL = .FALSE.
+      DO ICH = 1, CRDN
+         IF( FREQREF(CRSETC(ICH),KS) .GT. 2000.D0 .AND.
+     1       FREQREF(CRSETC(ICH),KS) .LT. 2900.D0 ) SCRD = .TRUE.
+         IF( FREQREF(CRSETC(ICH),KS) .GT. 7700.D0 .AND.
+     1       FREQREF(CRSETC(ICH),KS) .LT. 9500.D0 ) XCRD = .TRUE.
+      END DO
+      DO ICH = 1, NCHAN(KS)
+         IF( FREQREF(ICH,KS) .GT. 2000.D0 .AND.
+     1       FREQREF(ICH,KS) .LT. 2900.D0 ) SALL = .TRUE.
+         IF( FREQREF(ICH,KS) .GT. 7700.D0 .AND.
+     1       FREQREF(ICH,KS) .LT. 9500.D0 ) XALL = .TRUE.
+      END DO
+C
+C     Detect an S/X observation.  If have one, make sure the crd 
+C     channels cover both bands.  Note that the crd channels cannot
+C     cover a band not in the main setup, so don't worry about S/X
+C     in the CRD channels and only one band in the main setup - can't
+C     happen.
+C
+      IF( XALL .AND. SALL ) THEN
+         IF( .NOT. XCRD .OR. .NOT. SCRD ) THEN
+            CALL WLOG( 1, 
+     1         'VLBASU:  The main setup file has both S and X band.' )
+            CALL WLOG( 1, 
+     1         '         The crd files (VLBA legacy system) have '//
+     2         'only one band. ' )
+            CALL WLOG( 1, 
+     1         '         The subreflector will not be positioned '//
+     2         'properly.' )
+            IF( .NOT. SCRD ) CALL WLOG( 1, 
+     1         '         There will be no fringes!' )
+            CALL WLOG( 1,
+     1         '         Setup file: ' // SETNAME(KS) )
+     2         
+            CALL ERRLOG( '  Use SCHED defaults or use CRDSETCH '//
+     1         'and CRDNCH to set both S and X band channels '//
+     2         'for the crd files.' )
+         END IF
+      END IF
 C
       IF( FIRSTS ) SWARNS = .TRUE.
 C

@@ -36,6 +36,7 @@ C     or, by setting SDEBUG true, debugging the frequency setting.
 C
       SDEBUG = DEBUG
 C      SDEBUG = .TRUE.
+      IF( SDEBUG ) WRITE(*,*) 'RDSET SDEBUG=', SDEBUG
 C
 C     Write some debugging output.
 C
