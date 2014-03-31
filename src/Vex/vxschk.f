@@ -95,7 +95,7 @@ C           Remember tpstart is already the offset from startj
                IF( ABS(TPSTART(ISCN,ISTA) - TAPOFF)
      1             .GT. 0.1d0/86400D0 ) THEN
                   CALL PRTSCN( ISCN, 'VXSCHK' )
-                  WRITE(MSGTXT, '( A, I3, A )' ) 
+                  WRITE( MSGTXT, '( A, I3, A )' ) 
      1                'Station tape starts differ,'// 
      2                ' set MINPAUSE to ',
      3                INT(TPSTART(ISCN,ISTA)*86400d0
@@ -161,6 +161,7 @@ C                 This means there is a gap before this scan
      1               .GT. MAXDISKU ) THEN
 C                 This means there was no recent gap - issue a warning
                   WARNBANK = .TRUE.
+C     1        gbytes(iscn,ista), lastbyte(ista), maxdisku
                END IF
             END IF
 C
@@ -270,7 +271,7 @@ C           Remember tpstart is already the offset from startj
                IF( ABS(TPSTART(ISCN,ISTA) - TAPOFF)
      .             .GT. 0.1d0/86400D0 ) THEN
                   CALL PRTSCN( ISCN, 'VXSCHK' )
-                  WRITE(MSGTXT, '( A, I3, A )' ) 
+                  WRITE( MSGTXT, '( A, I3, A )' ) 
      .                'Station tape starts differ,'// 
      .                ' set MINPAUSE to ',
      .                INT(TPSTART(ISCN,ISTA)*86400d0
