@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 11.2 of Jan. 22, 2014}
+\title{THE \schedb USER MANUAL \\  Version 11.3 of April 4, 2014}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -146,7 +146,10 @@ still be somewhat dated.  We're working on it.
 2013.  All projects must now use the RDBE.  All VLBA stations have
 two RDBE units for a total of 8 channels with the DDC.  Most MARK5A
 setups can be duplicated with this system.  Most of the standard 
-setups with names like v6cm... will work with the DDC.
+setups with names like v6cm... will work with the DDC.  As of April,
+2014, half of the BBCs in the legacy system will be unplugged.  The
+remaining ones are still used to collect pointing data and some old
+style calibration data, mainly for test purposes.
 
 \item Many requests for help from \schedb users are the result of trying
 to specify more information than necessary.  \schedb knows how to set up
@@ -165,7 +168,7 @@ for information about mode and mode change restrictions.
 \item If you are using B1950 coordinates, you should worry
 about the ``observe'' date to use for precession.  Please see the
 discussion of the input parameter \htmlref{{\tt PRECDATE}}
-{MP:PRECDATE}.
+{MP:PRECDATE}.  But you really should not be using B1950!
 
 \item Please note that all setup files intended to be used for
 spectral line observations using \htmlref{{\tt DOPPLER}} {MP:DOPPLER}
@@ -997,8 +1000,8 @@ MARK5C.
 sample schedule for the VLBA that uses the 512 Mbps mode.
 
 \item[\htmladdnormallink{{\sl eg512g.key}}{examples/eg512g.key}] is a
-sample schedule for the a global observation that uses the 512 Mbps mode.
-This file has not been updated from MARK5A to MARK5C.
+sample schedule for the a global observation that uses 512 Mbps with
+the RDBE.
 
 \item[\htmladdnormallink{{\sl eg1024.key}}{examples/eg1024.key}] is a
 sample schedule for the EVN that uses the 1024 Mbps mode with DBBC,
@@ -5515,8 +5518,8 @@ especially with masers.
 
 When not using CRDFREQ or CRDDOP, {\tt CRDNCH} will still set the number 
 of channels used in the crd files controlling the BBCs.  If CRDFREQ and 
-CRDDOP are never used, CRDNCH will be set to lesser of 8 (the number of
-BBCs) and the number of setup channels.
+CRDDOP are never used, CRDNCH will be set to lesser of 4 (the number of
+BBCs after April 2014) and the number of setup channels.
 
 When {\tt CRDNCH} is less than the number of channels in the main setup
 (typical if using the RDBE\_PFB), then the alignment between the main
@@ -5525,8 +5528,9 @@ setup channels and the legacy system channels can be set using
 
 \rcwbox
 {An integer}
-{Any integer 8 or less}
-{The lesser of {\sl NCHAN} for the setup and 8 (number of BBCs)}
+{Any integer 4 or less}
+{The lesser of {\sl NCHAN} for the setup and 4 (number of BBCs after 
+April 2014.)}
 {One per scan.  Defaults to last value.}
 {{\tt CHDNCH = 2}}
 
@@ -5595,7 +5599,7 @@ parameters like system temperature and pulse cal will look ok.  You
 end up with hard-to-diagnose lack of fringes.  This situation can,
 and has (guess how we know about this!) happened when there are many
 X band channels and only a few S band channels as is likely when
-using the RDBE_PFB.
+using the RDBE\_PFB.
 
 \rcwbox
 {A list of setup file channel numbers - up to 4.  This can be changed
@@ -5605,7 +5609,7 @@ on a scan basis}
 reasonable selection, including making sure all IF channels are
 represented.}
 {Defaults to previous scan}
-{{\tt CRDSETCH = 3,4,7,8}
+{{\tt CRDSETCH = 3,4,7,8}}
 
 
 \subsubsection{\label{MP:DATAPATH}{\tt DATAPATH}}
@@ -13596,7 +13600,7 @@ more information.
 
 % seek point for editing:  development version
 
-\subsection{\label{SSEC:VER_11.3}Development Version 11.3}
+\subsection{\label{SSEC:VER_11.3}Version 11.3}
 
 
 %  ToDo:
@@ -13617,6 +13621,8 @@ more information.
 %        Most observations are doing it now days.
 %     Put more in summary about multiple field centers - like for each
 %        set, add number of fields and field of view needed.
+%     Re-calculate the slew rates for the VLBA antennas.
+
 
 \begin{itemize}
 
