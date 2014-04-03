@@ -1,23 +1,22 @@
 #!/bin/csh
 
-#  Run makemake with the directory structures at the AOC.
-#  The compilers new enough for the gif driver are in
-#  /usr/local/compilers/rhel-5/x86_64/gcc-4.3.1
-#  That path is incorporated in 
-#  $SCHED/PGPLOT/RCW_additions/sys_linux/gfortran_gccsp.conf
+#  Run makemake.  
 
 cd $SCHED/PGPLOT/linux64gfortran_5.3.1
 
-$SCHED/PGPLOT/src5.3.1/makemake $SCHED/PGPLOT/src5.3.1 linux gfortran_gccsp
+$SCHED/PGPLOT/src5.3.1/makemake $SCHED/PGPLOT/src5.3.1 linux gfortran_gcc
 
 
-#  The make fails trying to make gpdemo1 because it can't find -lSystemStubs
-#  but libpgplot.a libraries was made.  libcpgplot.a is awol.
+#  Prior to April 1, 2014, the standard gfortran (gcc) compiler at the AOC 
+#  was too old for the gif driver of PGPLOT.  But there was another gfortran
+#  available.  It was available at
+#  /usr/local/compilers/rhel-5/x86_64/gcc-4.3.1
+#  That path is incorporated in 
+#  $SCHED/PGPLOT/RCW_additions/sys_linux/gfortran_gccsp.conf
+#  That was invoked using the following instead of the equivalent line above.
+#  $SCHED/PGPLOT/src5.3.1/makemake $SCHED/PGPLOT/src5.3.1 linux gfortran_gccsp
 
-#  As of Jan. 31, 2012, the AOC gfortran/gcc is still 4.1.2 so this 
-#  mess is still needed.  gcc-4.3.1 is still the latest available.
-#  Same Jan 2, 2014!  Not linking yet even after changing to the 
-#  corresponding gcc.  Still have to figure it out.
+
 
 
 
