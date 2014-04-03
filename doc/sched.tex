@@ -13233,47 +13233,45 @@ copy of \sched.
 
 It is important that users obtain and use the latest version of
 \schedb when scheduling observations.  \schedb is evolving with time
-to add new features, to correct bugs, and to enhance its ability to
-prevent errors from being made in schedules, based on experience.
-There are typically one or two releases each year and they are
-announced on the VLBI email exploder.  At institutions where there are
-several VLBI users, someone should be in charge of making sure that
-the latest version is available.  When that option is not available,
-the user should check that he/she has the latest version before
-attempting to schedule a project.
+to add new features, to correct bugs, to keep up with hardware
+changes, and to enhance its ability to prevent errors from being made
+in schedules, based on experience.  There are typically one or two
+releases each year and they are announced on the VLBI email exploder.
+At institutions where there are several VLBI users, someone should be
+in charge of making sure that the latest version is available.  When
+that option is not available, the user should check that he/she has
+the latest version before attempting to schedule a project.
 
-The sched software, catalogs, auxiliary files, and documentation all
-reside in subdirectories under a parent directory.  At the AOC, the
-parent directory is {\sl /users/cwalker/sched}.  Installing \schedb
-involves unpacking the tar file of the distribution into these
-directories.  If a canned executable is available for your type of
+The \schedb software, catalogs, auxiliary files, and documentation all
+reside in subdirectories under a parent directory.  Installing \schedb
+involves unpacking the tar file of the distribution into such a
+directory.  If a canned executable is available for your type of
 computer, it can hopefully, used as is.  Otherwise it will be
-necessary to compile the program.  This may involve installing the
-{\sc PGPLOT} subroutine library if it is not already available.  A
-{\sc PGPLOT} distribution is included with \sched.  On unix systems,
-the installation also involves setting up the useful environment
-variables and path.  The installation can be tested using the {\sl
-Verify} script in the {\sl examples} subdirectory.  That script runs
-all the examples and compares the results with results obtained at the
-time the release was created.
+necessary to compile the program.  The {\tt SCHED} environment variable
+should be set to the root directory where \schedb is installed.
+The {\sc PGPLOT} subroutine library is required.  See below if you need
+to install it.
+
+The installation can be tested using the {\sl Verify} script in the
+{\sl examples} subdirectory.  That script runs all the examples and
+compares the results with results obtained at the time the release was
+created.
 
 \schedb is written in FORTRAN 77 using only a few common extensions
 from the standard.  Development has occurred on a variety of machines
-including VAXes, PCs, SUNs and Macs.  Current development is done under
-Linux and Mac OSX.  Reasonably recent versions have mainly been tested
-on Linux (g77), Solaris, and a Mac OSX (Intel machine using g77 and
-gfortran).  Older versions were tested on Hp, SGI, IBM (AIX), and DEC
-Alpha.  A big ``thank you'' to Franco Tinarelli at Bologna for
-performing many of these tests.  Machine dependent code has been
-isolated in special subdirectories under the {\sl src/Cit} code
-directory.  All other FORTRAN files should compile without changes on
-a wide variety of machines.  Note, however, that all current testing
-is under one or another flavor of unix.  There has been no recent
-testing under other operating systems.  This will only change if there
-is pressure to do so.  Please inform Craig Walker at cwalker@nrao.edu
-if you install it on something else, including VMS or Windows - it has
-been many years since the last port to VMS or DOS, although both have
-served as the primary development environment for \schedb in the past.
+including VAXes, PCs, SUNs and Macs.  Current development is done
+under Linux and Mac OSX, with pre-release testing on a Sun.  Old
+versions were tested on Hp, SGI, IBM (AIX), and DEC Alpha, but such
+machines are no longer being used for \schedb as far as I know.  A big
+``thank you'' to Franco Tinarelli at Bologna for performing many of
+these tests.  Machine dependent code has been isolated in special
+subdirectories under the {\sl src/Cit} code directory.  There are very
+few.  All other FORTRAN files should compile without changes on a wide
+variety of machines.  Note, however, that all current testing is under
+one or another flavor of unix.  There has been no recent testing under
+other operating systems.  This will only change if there is pressure
+to do so.  Please inform the developers if you install it on something
+else.
 
 Note that the usual fortran compiler on unix machines (including Macs)
 these days are those from the GNU Project.  In the past, the compiler
@@ -13285,8 +13283,8 @@ architectures as can be seen in the configure scripts.  For some older
 versions, we may not bother switching, but simply stop supporting, for
 example, 32 bit machines.  By stop supporting, we mean not provide
 configure scripts or test before releases.  It is likely you could
-still use such machines.  We will also need to migrate the spice code
-for spacecraft tracking before we can abandon g77 completely.
+still use such machines.  We will also need to migrate the {\tt spice}
+code for spacecraft tracking before we can abandon g77 completely.
 
 If you plan to support \schedb under more than one computer
 architecture, you may wish to have subdirectories under bin and point
@@ -13589,8 +13587,537 @@ capabilities, well beyond what is available in the optimization modes
 of \sched, for geodetic projects.  Contact the GSFC VLBI group for
 more information.
 
+\end{description}
+
+
+\section{\label{SEC:RELEASE}Release Instructions.}
+
+This section is mainly for the primary \schedb developer.  It describes
+the process of making a \schedb release.  It is written to allow the
+main lines to be cut and pasted into a terminal to accomplish the
+steps.  I have not set up a script because considerable interaction
+and checking is normally required.
+
+This section is derived from a separate file called {\sl
+Release\_instructions}.
+
+\begin{description}
+
+\item [Before a release:]
+
+Be sure that the other developers have committed anything that they
+want included in the release.
+
+Make sure VERSION and VERNUM in {\sl versched.f} are up to date.
+Make sure the version on the manual first page is current.
+
+Make sure {\sl sched\_work} is synced with the svn repository.  This
+should include the results of updating the manual.  Note that {\sl
+sched\_work} is my development directory.  You may have something
+different.
+
+Make sure that the leap seconds in {\sl \$SCHED/src/Sla/dat.f} and
+in {\sl \$PLANET\_DATA/naif0007.tls} (or equivalent like {\sl naif0010.tls}) 
+are up to date.  If there is a change here, update the slalib.a 
+in my other programming areas.
+
+\item [Setup files:]
+
+Update the setup files from the master:
+
+\begin{verbatim}
+cd $SCHED/setups
+makesetup
+\end{verbatim}
+
+\item [Station, frequency, and messages files:]
+
+These catalogs are maintained in pieces in separate subdirectories
+to the {\sl catalogs} directory.  There are files for the US, DSN, 
+EVN etc.  Different subdirectories are maintained by different people.
+There is an {\sl Update} script in the base {\sl catalogs} directory
+which does the file merge.  You can look in there to see what gets merged
+to form the stations, freq, and messages files.  Run {\sl Update} when
+all segments are up to date:
+
+\begin{verbatim}
+cd $SCHED/catalogs
+Update
+\end{verbatim}
+
+
+\item [Source and location files:]
+
+Update the source and locations catalogs from one or more geodetic
+solutions.  I have usually been using the latest solutions from GSFC
+and Petrov.  There are tools for doing this in the {\sl RELATED\_CODE}
+directory ({\sl NEWLOC} and {\sl NEWSRC}).  The detritus from updates,
+including all the input catalogs, are in directories outside of the
+\schedb development area.  As of early 2014, they are in
+subdirectories in: {\sl
+/home/noatak/cwalker/code/Calibration/GetCatalogs}.  Careful, with the
+need to put VLA pad positions into the ITRF, this is a bit of a
+minefield.  Also the main source catalog {\sl sources.vlba} is a
+merger of older catalogs and both GSFC and Petrov catalogs and that
+often takes attention.  Getting everything straight can take hours or
+even days if the programs get modified.
+
+Update the versions in these catalogs in the release area.
+
+
+
+\item [Test and produce standard output files:]
+
+Once the code is thought to be working, go to the {\sl examples} directory
+and run the {\sl Verify} script.  That will run all of the examples and 
+compare the output with the last standard output set, which is kept in the
+{\sl Stdout} subdirectory.  Once satisfied that all differences are 
+understood, run {\sl Newstd} to update the standard outputs.  Note that 
+both of these scripts will need to be maintained if changes or additions
+are made to the examples suite.
+
+Check some crd files with {\tt cksched} on a Sun.
+
+Check some vex files on a 64 bit Linux machine with
+{\tt /home/swc/software/VLBADIFX-TRUNK/bin/vexpeek}
+
+Try plotting, probably using example {\sl egplan.key}.
+
+
+\item [Compile for multiple architectures:]
+
+Compile and link \schedb for each target architecture.  Run {\sl
+Verify} in the examples directory after each compile and check {\tt
+testruns.out]} to make sure it works.  The compilations are without
+satellite tracking unless otherwise noted.  Doing multiple
+compilations has been useful for finding bugs that don't affect all
+compilers.  Currently I support \schedb on the architectures listed
+below.  Note that the environment variables \$PGPLOT\_DIR and \$PGPLOT\_FONT
+may need to be changed depending on where PGPLOT is stored for that
+compile (probably different for g77 and gfortran on Linux, for
+example).
+
+\begin{list}{}{\parsep 1ex  \itemsep 0em
+                 \leftmargin 8em  \itemindent -20em }
+
+  \item {\bf LINUX64GFORTRAN}  64 bit Intel linux compiled with gfortran (noatak).
+  \item {\bf LINUX64SPICE~~~}  64 bit Intel linux compiled with g77 and 
+                   including satellite tracking.
+  \item {\bf LINUX64~~~~~~~~}  64 bit Intel linux without spice.
+  \item {\bf OSX\_INTEL~~~~~~}  Intel Mac compiled with gfortran
+  \item {\bf SUN~~~~~~~~~~~~}  Sun Solaris compiled with f77.
+        Note some Sun's have too little memory for the default
+        parameter settings.
+\end{list}
+
+
+To compile on a given machine, login to that machine.
+
+\begin{itemize}
+
+\item Make sure the environment variable \$SCHED is set properly.  You
+can use the normal development directory.  Just be sure to revert to
+the default compilation when finished.
+
+\item Use the appropriate configure file such as configureLinuxSpice64
+to make a {\sl Makefile} appropriate for the architecture (Someday,
+get a proper configure script).
+
+3.  Clean out previous efforts with {\tt make clean}, then compile and
+link using {\tt make} (use {\tt gmake} on the Sun).
+
+4.  Copy the binary to the right subdirectory in {\sl bin}
+
+5.  Test the examples using Verify.  Also try plotting with an
+example.  There have been cases where a bug in plotting only affected
+on architecture.
+
+\end{itemize}
+
+To summarize:
+
+\begin{verbatim}
+cd $SCHED/src
+configureLinuxSpice64
+make clean   (gmake clean on the Sun)
+make         (gmake on the Sun)
+cp ../bin/sched ../bin/LINUX64SPICE/
+cd ../examples
+source ./Verify
+less testruns.out
+\end{verbatim}
+Try a plot.
+
+In the Verify step, look for unexpected differences.  Recorded run
+times will be different, and often there will be last-digit
+differences due to different rounding schemes.  Those are ok.  but
+anything else could be a sign of trouble.
+
+\item [Document the release:]
+
+The manual should have been kept up to date while programming was in
+progress.  Fill any gaps.
+
+Write a release note.  This will be mainly a link to the manual
+update section.  It will be sent to the vlbi exploder.
+
+Check the README and README.ftp files in \$SCHED to be sure that
+they are current.
+
+      
+\item [Set environment variables to aid the release:]
+
+Set the NEWVER in the window where this work is being done so
+that script segments below can be used with a cut-and-paste
+Also check a couple of places below (other machines) where the
+version number is also needed.  Note that the tar files are 
+kept separately from the development version of \sched.  
+If maintaining \schedb anywhere except cwalker's area, establish an
+area for that.
+
+\begin{verbatim}
+setenv NEWVER 11.3
+setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
+\end{verbatim}
+
+\item [Prepare the Manual:]
+
+The examples in the manual are grabbed from {\sl ../examples} starting
+from where latex is being run.  So this should be done in {\sl
+\$SCHED/doc}, the normal place in a distribution.  The homebrew
+inserttex scheme used in the past has been replaced with
+verbatiminput.
+
+Process the manual.  {\tt latex} will probably need to be run 3 or
+more times to get all the links right.  The html files are prepared
+with {\tt latex2html} after {\tt latex} is working.  The local icons
+switch keeps users from having to go to NRAO for the up etc buttons.
+The -link option controls how deep the automatic contents pages go at
+each level.  Without it, the contents on the top level page are
+excessively long.  The {\tt -long\_titles 5} causes the html node names to be
+based on the section headings, not just a sequence number.  This makes
+for referable names that won't keep changing.
+     
+\begin{verbatim}
+cd $SCHED/doc
+latex sched.tex   (may need several repeats to get internal links right)
+latex2html -local_icons -link 2 -long_titles 5 sched.tex
+\end{verbatim}
+
+{\tt latex2html} will put its output files in a subdirectory called
+{\sl sched}.  Put copies of the examples and catalogs in appropriate
+subdirectories of that directory to allow simple links.  Don't worry
+about setups here for now.  Give user write privileges to make other
+maintenance easier.  Some of the catalogs are write restricted in the
+{\sl \$SCHED/catalogs} area to help prevent modifications to the
+derived files produced by {\tt Update}
+
+\begin{verbatim}
+/bin/rm -r sched/catalogs/*
+/bin/rm -r sched/examples/*
+tar cf - ../catalogs/sources.vlba*  ../catalogs/sources.petrov \
+         ../catalogs/sources.rfc*  ../catalogs/sources.gfsc* \
+         ../catalogs/freq.dat  ../catalogs/freq_RDBE.dat \
+         ../catalogs/stations.dat  ../catalogs/stations_RDBE.dat \
+         ../catalogs/locations.dat  ../catalogs/peak.cmd \
+         ../catalogs/linefreqs.dat \
+         ../examples/*.key         ../examples/*.com \
+         ../examples/*.set         ../examples/egcentsrc.dat \
+            | (cd sched; tar xfp -)
+chmod  u+w sched/catalogs/*
+\end{verbatim}
+
+
+\item [Make the release version:]
+
+Put together a new directory tree to hold the release.  This will be
+very similar to the development version, but will not evolve after the
+release, and will not contain some of the extra baggage of old files
+etc that bloat the size of the development area.
+
+Make a directory for the new version.  In this case it in in the 
+{\sl files} subdirectory of my home area.
+
+\begin{verbatim}
+setenv SCHEDNEW ~/files/sched_$NEWVER
+mkdir $SCHEDNEW
+cd $SCHEDNEW
+\end{verbatim}
+
+Check out the current SCHED from svn.  It lands in a subdirectory, so
+move it up, including the .svn files.  Don't be alarmed about messages
+indicating sched/. and sched/.. can't be moved.
+
+\begin{verbatim}
+svn checkout https://svn.aoc.nrao.edu/repos/sched/trunk/sched
+mv sched/* .
+mv sched/.* .
+\end{verbatim}
+
+Copy over the examples/Stdout files, the execute modules, the setup
+files, the html manual, and PGPLOT installation stuff, none of which
+are under svn (they are fast changing, bulky, and can be derived from
+files that are in svn).  The --delete deletes files on the receiving
+side that are not on the sending side and is useful when updating,
+say, a beta release that is not being done from scratch.
+
+\begin{verbatim}
+rsync -auv --delete --exclude ".svn" $SCHED/bin  $SCHEDNEW
+rsync -auv --delete --exclude ".svn" $SCHED/examples/Stdout $SCHEDNEW/examples
+rsync -auv --delete --exclude ".svn" --exclude "AAA_OLD" $SCHED/setups $SCHEDNEW
+rsync -auv --delete --exclude ".svn" $SCHED/doc/sched $SCHEDNEW/doc
+rsync -auv --delete --exclude ".svn" --exclude "*.o" $SCHED/PGPLOT $SCHEDNEW
+\end{verbatim}
+
+Do a compilation to be sure all is there and run {\sl Verify} to make
+sure it works.  Then clean out the {\sl examples} directory using
+{\tt schclean "*"} to avoid bloating the tar file.
+
+Test the completeness using an rsync dry run.  The release directory
+was filled with an svn checkout and some limited rsyncs, so it could
+have missed something.  Also if some iteration happened, it might not
+be complete. Note that output lines that end with a / are just an
+indication of having entered the directory.  They don't indicate a
+missing file.
+
+\begin{verbatim}
+rsync -auvn --exclude ".svn" --exclude "TEST" --exclude "*.o" \
+   --exclude "*TEMP*" --exclude "*OLD*" --exclude "RELATED_CODE" \
+   --exclude "*~" --exclude "*old*"  --exclude "*save*" \
+   --exclude "*new*" \
+   ../sched_work/* .
+\end{verbatim}
+
+
+\item [Make the tar file:]
+
+Make the distribution tar file.  First be sure there are no old copies
+in the archive and ftp areas.  Also go through the \schedb directory
+structures weeding out excess files that don't want to end up in the
+tar file.  The tar command below will also omit many that are not
+needed.  As part of this, be sure to clean out the Verify output
+with {\tt schclean "*"} in the {\sl examples} subdirectory.  Otherwise
+the tar file will much bigger than necessary.
+
+Note the {\tt --excludes} include the lib directory which has the NAIF
+software.  Without that, the satellite version cannot be linked.
+Without that, anyone wanting to do satellite tracking will need the
+AOC version or a special export.  Also the {\sl RELATED\_CODE}
+directory is excluded as users shouldn't need it.  But the \schedb
+maintainer will.  The {\sl PGPLOT} directory is included because users
+may well want it.   Note that the binaries will be included.
+
+\begin{verbatim}
+cd $SCHEDNEW/examples
+schclean "*"
+cd $SCHEDNEW
+tar --exclude "bin/sched" \
+    --exclude ".svn" --exclude "*.o" --exclude "*~" \
+    --exclude "lib" --exclude "core*" --exclude "TEST"  \
+    --exclude "RELATED_CODE" \
+     -cf $TARDIR/sched_$NEWVER.tar .
+gzip $TARDIR/sched_$NEWVER.tar
+\end{verbatim}
+
+
+\item [Test the release:]
+
+This will not have the NAIF software so it will not be the internal
+release.  Clean out {\sl sched\_temp} first if needed.  Unpack the
+source distribution tar file into {\sl
+/users/cwalker/files/sched\_temp} (or wherever you want - but adjust
+{\tt SCHTEST} accordingly) and test the compilation without the
+satellite stuff.  Use the makefile that does not use the spice package
+(run configureLinux) Check testruns.out at the end.  This is best done
+in a sacrificial window so the changed environment variables don't
+haunt you later.
+
+\begin{verbatim}
+setenv SCHTEST /users/cwalker/files/sched_temp
+setenv SCHED $SCHTEST
+cd $SCHTEST
+chmod u+w $SCHTEST/catalogs/*
+/bin/rm -r *
+tar -xvf $TARDIR/sched_{$NEWVER}.tar.gz --gunzip
+cd src
+configureLinux64
+make
+cd ../examples
+Verify
+\end{verbatim}
+
+
+Maybe run the "Dry Run" rsync above to check for completeness.
+
+     Kill the window to dump the unwanted \$SCHED etc. or at least:
+\begin{verbatim}
+setenv SCHED /users/cwalker/files/sched_work
+\end{verbatim}
+
+
+\item [Put files on the ftp site:]
+
+Put the tar file on the ftp site.  Maybe some day, make a web site
+for this.   Note that the binaries are in the tar
+file now.
+
+\begin{verbatim}
+mkdir $FTP/sched/sched_$NEWVER
+cp $TARDIR/sched_$NEWVER.tar.gz  $FTP/sched/sched_$NEWVER/
+\end{verbatim}
+
+Copy over README.ftp if it has changed.
+
+\item [Put the documentation on the personal web pages:]
+
+This is to create the copy of the web pages currently available at
+{\sl www.aoc.nrao.cwalker/\~cwalker/sched/sched.html}.  My web pages
+are staged to a separate area where I can work on them, then copied to
+the {\sl public\_html} area.  That copy happens as part of the backup
+job run twice per day using cron.  While doing the update, it is a
+good idea to clean up the staging area and html area.  They tend to
+accumulate unneeded old files for old versions.
+
+The instructions here are based on the machine names for R.C. Walker.
+They may change for a new maintainer.
+
+Note that the files will all be in a directory numbered for the
+release.  The file where users will look is a symbolic link to the
+generic file {\sl sched}.
+
+\begin{verbatim}
+setenv WEBDIR /home/noatak/cwalker/webnrao
+cd ~
+mkdir $WEBDIR/sched_$NEWVER
+cp -R $SCHEDNEW/doc/sched/* $WEBDIR/sched_$NEWVER/
+cd $WEBDIR
+/bin/rm sched
+ln -s sched_{$NEWVER} sched
+cd $SCHED
+\end{verbatim}
+
+
+\item [Announce the release and get it installed at the AOC:]
+
+Send the email announcement to:
+vlbi@nrao.edu,scistaff@nrao.edu,analysts@nrao.edu,pperley@nrao.edu,
+vlbaops@nrao.edu,vlbatests@nrao.edu
+
+Announcements of preliminary releases can go to:
+nmsci@nrao.edu,analysts@nrao.edu,pperley@nrao.edu,vlbaops@nrao.edu
+
+Also, at some point, include the other \schedb developers:
+small@jive.nl,campbell@jive.nl,c.reynolds@curtin.edu.au,alef@mpifr-bonn.mpg.de
+
+The AOC release is in software areas where I do not have write
+privileges.  Tell the computer people (helpdesk) to place the update
+in the computer areas.  Include the following information in email to
+them (adjust version number):
+
+The new release is in {\sl /users/cwalker/files/sched\_11.3}
+
+The executables {\sl (sched, schclean)} are in machine specific
+subdirectories under bin.  They go in {\sl /usr/local/bin}.  For the
+in-house linux64 versions, use the one with the SPICE libraries
+(LINUX64SPICE). These support spacecraft tracking.  We no longer
+support LINUX32 or MACPPC.
+
+The manual is in {\sl doc/sched/*} and goes in
+http://www.aoc.nrao.edu/software/sched/*
+
+The catalogs and setups are in separate directories that go in {\sl
+/usr/local/sched}.  Note that the subdirectories in the {\sl catalogs}
+directory ({\sl Master\_NRAO} etc) should not be included.
+
+
+\item [Make a tagged version in svn:]
+
+There is demand for tagging the releases, so here are the instructions.
+This basically marks a revision as the tag (release).
+To do so from trunk ( There is a slight variation for a branch origen):
+
+\begin{verbatim}
+svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
+         https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER \
+         -m "Tagging SCHED $NEWVER for maintenance"
+\end{verbatim}
+
+To backfit a tag to other than the latest version:
+
+\begin{verbatim}
+svn copy -r 276 https://svn.aoc.nrao.edu/repos/sched/trunk/sched \
+         https://svn.aoc.nrao.edu/repos/sched/tags/sched_9.3 \
+         -m "Tagging release 9.3 of sched."
+\end{verbatim}
+
+
+\item [SVN branch and other SVN info:]
+
+OPTIONAL (I normally don't do this)
+
+Under some circumstances, it might be useful to have a full copy of a
+release that is maintained with svn.  This involves making a branch
+or tag (I think they are equivalent), and then checking it out to 
+a new directory.  Then to be really useful, the items not maintained
+in svn should be copied in.  I tried this with my first post-svn 
+release in 2009, but found it too much work to maintain, so abandoned the
+practice.  But the instructions are here in case.  They have been
+edited since they were last tried, so watch for gotchas.
+
+Make the branch - just a different directory than the tag.
+
+\begin{verbatim}
+svn copy https://svn.aoc.nrao.edu/repos/sched/trunk \
+         https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-$NEWVER \
+         -m "Branching the 8.0 release of SCHED"
+\end{verbatim}
+
+To make a corresponding development area for the branch:
+
+\begin{verbatim}
+setenv SCHEDBASE ~/files/sched_branch$NEWVER
+mkdir $SCHEDBASE
+cd $SCHEDBASE
+svn checkout https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-$NEWVER/ .
+\end{verbatim}
+
+Don't drop the period at the end of the last command (= current directory)
+
+Copy over the examples/Stdout files, the execute modules, and the html.
+The exclusion of .svn files shouldn't be needed, but just in case...
+
+\begin{verbatim}
+cd $SCHEDNEW
+rsync -auv --exclude ".svn" bin  $SCHEDBASE
+rsync -auv --exclude ".svn" examples/Stdout $SCHEDBASE/examples
+rsync -auv --exclude ".svn" doc/sched $SCHEDBASE/doc
+\end{verbatim}
+
+
+Some SVN HINTS:
+
+In order to ignore some files in svn status etc.
+Note the "." on the end of the second one.  
+ignore.txt is needed for the second form.
+
+\begin{verbatim}
+cd examples
+svn propset svn:ignore "*" Stdout
+svn propset svn:ignore -F ignore.txt .
+cd ../doc
+svn propset svn:ignore "*" sched
+\end{verbatim}
+
+Developer advice:
+
+If you are a developer and have an svn maintained version and wish to
+update the items not in svn, such as the html manual, the Stdout
+example outputs, or the setups (derived from makesetup), it might be
+easiest to download and unpack the tar file into a new directory,
+then rsync the desired stuff to your development area.
 
 \end{description}
+
 
 \chapter{\label{CHP:CHANG}RELEASE NOTES}
 
@@ -13625,6 +14152,17 @@ more information.
 
 
 \begin{itemize}
+
+\item Incorporate the file Release\_instructions into a
+\htmlref{manual section of the same name}{SEC:RELEASE}.  This is mainly
+for the primary \schedb developer.  If you have a morbid interest in 
+what is involved, or want to understand why releases don't happen very
+often, feel free to browse the section.  May 2, 2014.  RCW.
+
+\item Got the Linux GFORTRAN compilation working again at the AOC, now
+without a special compiler.  A recent Redhat upgrade provided the
+required compiler update.  Removed configureLinux64gfortranAOC which is
+no longer needed.  April 1, 2014  RCW  (not a joke). 
 
 \item Move NEWLOC, the program for creating {\sl locations.dat} from a
 geodetic station solution, to the RELATED\_CODE area and add it to
@@ -13937,7 +14475,7 @@ shorter set-and-remember time and shorter down-sampling level setting
 times on the VLBA.  May 22, 2013.
 
 \item Changed the compiler (FC) in configureLinux64gfortran from a
-specific one, newer than the default, needed at the AOC do support 
+specific one, newer than the default, needed at the AOC to support 
 pgplot to generic gfortran.  Made configureLinux64gfortranAOC to 
 retain the AOC specific path to gfortran.  May 10, 2013.  RCW.
 

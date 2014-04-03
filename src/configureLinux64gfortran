@@ -1,22 +1,7 @@
-
-  ****   This is not working.  PGPLOT uses gfortran from 
-
-/usr/lib64 -lX11 -L/usr/local/compilers/rhel-5/x86_64/gcc-4.3.1
-
-I tried editing the Makefile to use that for everything, including the link,
-but it is still getting routines it can't find.  This needs to be fixed.
-NRAO is at 4.1.2-52  which seems to me to be ancient history.
-
-Feb. 2, 2014.
-
-
-
-
 #! /bin/csh
 #
 # *** This is for the default gfortran compiler.
-# *** At the AOC, this will use a version of the compiler that is too old for
-# *** pgplot.  Use configureLinux64gfortranAOC for a newer version.
+# *** This is ok after April 2014 at the AOC, unlike in the past.
 #
 # Use sed and the template Makefile.master to build a Makefile
 # for a Linux 64bit machine using gfortran (gcc4+) without satellite tracking.
@@ -28,10 +13,11 @@ Feb. 2, 2014.
 # *******  Be sure PGPLOT_DIR is set properly!                     *******
 # *******  At the AOC with SCHED's version of pgplot, we use       *******
 # *******  setenv PGPLOT_DIR $SCHED/PGPLOT/linux64gfortran_5.3.1/  *******
+# *******  Also setenv PGPLOT_FONT $PGPLOT_DIR/grfont.dat          *******
 # ************************************************************************
 #
 # RCW  Oct 30, 2008
-# Updates RCW Jan. 31, 2012.
+# Updates RCW Jan. 31, 2012,   April 1, 2014.
 #
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
@@ -74,5 +60,5 @@ sed -f makelinux64gf_sedscript Makefile.master > Makefile
 
 echo '******************************************************************'
 echo 'Before compiling or using SCHED,'
-echo 'be sure PGPLOT_DIR points to the right place (sched pgplot area?).'
+echo 'be sure PGPLOT_DIR and PGPLOT_FONT point to the right place (sched pgplot area?).'
 echo '******************************************************************'
