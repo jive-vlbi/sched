@@ -141,7 +141,7 @@ C
          WRITE( MSGTXT, '( A, A, I3 )' ) 
      1       'INFDB: CRDNCH is required and must be between 1 and ', 
      2       MAXCRD
-         CALL WLOG( MSGTXT )
+         CALL WLOG( 1, MSGTXT )
          CALL WLOG( 1, '       when CRDFREQ or CRDDOP is specified.' )
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, I3, A, I5 )' ) 
