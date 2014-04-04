@@ -50,14 +50,14 @@ C
       INTEGER NTSYSON(MAXSTA), NTSYS(MAXSTA), TSYSGAP(MAXSTA), THISGAP
       REAL LASTBYTE(MAXSTA)
       REAL MAXDISKU
-      PARAMETER (MAXDISKU = 22.*60. * 1.008 * (1024./1000.) / 8.)
+      PARAMETER (MAXDISKU = 22.*60. * 2.016 * (1024./1000.) / 8.)
       SAVE LASTTSYS, LASTTSON, LASTBYTE
       DATA LASTTSYS /MAXSTA*0/
       DATA LASTTSON /MAXSTA*0/
       DATA LASTBYTE /MAXSTA*0.0/
 C-----------------------------------------------------------------------
 C
-C     MAXDISKU is 22 mins of 1 Gbps recording (allow factor 1.008 for
+C     MAXDISKU is 22 mins of 2 Gbps recording (allow factor 1.008 for
 C     headers).
 C
       IF ( DEBUG .AND. ISCN .LE. 2) 
