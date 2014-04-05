@@ -2,14 +2,16 @@ README file for the SCHED root directory.
 By Craig Walker
 
 This is the root directory for everything needed to install and run
-the VLBI scheduling program SCHED.  
+the VLBI scheduling program SCHED.  If you are seeing this, you
+have probably already unpacked the distribution tar file.  If not,
+that is the first thing to do.
 
-To utilize SCHED, you should set the environment variable SCHED
-should point to this directory.  The environment variable PGPLOT_DIR
-and PGPLOT_FONT should be set to the location of your pgplot libraries
-and font file.
+To utilize SCHED, you should set the environment variable SCHED to
+point to this directory.  The environment variables PGPLOT_DIR and
+PGPLOT_FONT should be set to the location of your pgplot libraries and
+font file.  Note PGPLOT_FONT is usually $PGPLOT_DIR/grfont.dat.
 
-An HTML version of the SCHED Manual is on the World Wide Web at
+An HTML version of the SCHED Manual is on the Internet at
 http://www.aoc.nrao.edu/software/sched/index.html.   
 Another copy, which might be newer during the release process, is at:
 http://www.aoc.nrao.edu/~cwalker/sched/sched.html or
@@ -17,7 +19,7 @@ http://www.aoc.nrao.edu/~cwalker/sched_beta/sched/sched.html
 After you unpack the release tar file, the manual is availble locally
 on your machine at $SCHED/doc/sched/sched.html.  A postscript version 
 can be made by running latex on sched.tex in ./doc. Warning, it is 
-large - almost 300 pages - and evolving rapidly.  If you can use either 
+large - almost 300 pages - and evolving rapidly.  If you can use a
 Web version, it is more convenient and will be kept up to date.  The
 author has not generated a postscript or pdf version in many years.
 
@@ -96,6 +98,8 @@ The subdirectories here are:
 ./src/Sla:      The routines from the SLALIB required by SCHED and 
                 UPTIME.  This is only a subset of the SLALIB.
 
+./PGPLOT:       Location code and libraries for PGPLOT in case 
+                it is not installed on your machine already.
 
 Any subdirectories in all capital letters are associated with code
 management and testing and usually can be ignored (should not be in
@@ -103,36 +107,37 @@ the export version).  The most likely exception is if you want to
 use the version of PGPLOT sent with SCHED.
 
 For all use of SCHED, you should unpack the tar file.  It has the
-catalogs, examples, standard setups etc.  It also has the code in
-case you need to recompile.
+catalogs, examples, standard setups, binaries for various
+architectures, etc.  It also has the code in case you need to
+recompile.
 
 For certain types of computers, binary executables are provided.  As
-of Feb 2013, those are Linux on Intel, Solaris, and Mac OSX (Intel).
+of April 2014, those are Linux on Intel, Solaris, and Mac OSX (Intel).
 All Linux versions are for 64 bit machines (LINUX64).  There is a
 version with (LINUX64SPICE) and without (LINUX64) the code needed for
 spacecraft tracking.  Most of the Linux versions use g77, but there is
 a gfortran compilation of the 64 bit, non-satellite version.  If one
 of those is what you need, your simplest installation scheme is to
-download the binary file and put it in the bin area.
+copy the binary file to the bin directory, or wherever you wish to
+keep your load modules.
 
-If you need or want to compile SCHED, unpack the tar file, set the
-SCHED environment variable to the base SCHED directory, and cd to the
-src subdirectory.  There for one of the architectures mentioned above
-and a few others, you may be able to use one of the very short
-scripts, such as configureLinux, that construct a Makefile based on
-Makefile.master (if someone can contribute a proper configure script,
-it would be appreciated).  If there are problems, edit the
-Makefile.master to reflect your local conditions.  Makefile.master is
-heavily commented to try to make this easy.  Once you have the
-makefile ready, run gnu make (the default on Linux and Mac - gmake on
-Sun), and SCHED should compile and the executable should be put in the
-$SCHED/bin directory.  For more information, see the manual.
+If you need or want to compile SCHED cd to the src subdirectory.
+There, for one of the architectures mentioned above and a few others,
+you may be able to use one of the very short scripts, such as
+configureLinux, that constructs a Makefile based on Makefile.master (if
+someone can contribute a proper configure script, it would be
+appreciated).  If there are problems, edit the Makefile.master to
+reflect your local conditions.  Makefile.master is heavily commented
+to try to make this easy.  Once you have the makefile ready, run gnu
+make (the default on Linux and Mac - gmake on Sun), and SCHED should
+compile and the executable should be put in the $SCHED/bin directory.
+For more information, see the manual.
 
 SCHED uses the PGPLOT routines from Caltech for plotting.  SCHED
 requires PGPLOT Version 5.2 or later.  Usually these routines are
 acquired independently of SCHED.  They can be installed from from the
 Caltech distribution.  There is exensive documenation, including
-instructions on how to get it, on the World Wide Web at
+instructions on how to get it, on the Internet at
 http://astro.caltech.edu/~tjp/pgplot.  I have found the pgplot is
 often available as a package for apt-get, fink and the like so check
 your repositories.  Note that you may run into trouble with the 32-64
@@ -151,7 +156,7 @@ this case, plotting will not work, but otherwise the programs
 should be fine.  Plotting is not critical for the main program
 tasks.  But as of the 6 Mar 98 version, the plotting capabilities
 are quite nice and it is well worth the effort of getting pgplot
-installed.
+installed.  It really helps with experiment planning.
 
 SCHED understands how to get positions for the planets, the Moon and
 the Sun.  For this it uses a JPL ephemeris.  It is expected that, at
@@ -182,24 +187,29 @@ routine TSTTTY in ./src/Cit/sys_unix should just be modified to return
 in the sys_linux subdirectory.
 
 As of the May 2002 version, SCHED can plot the locations of stations
-on a map.  SCHED can read vector files to generate continental, national,
-and US state boundaries and New Mexico roads (it is being used for
-New Mexico Array configuration studies).  The vector files are kept
-in the same directory as the ephemeris.  They are not distributed with
-SCHED because they are individually larger than the whole rest of the
-SCHED distribution.  If you want the files, contact cwalker@nrao.edu
-for information on where to pick them up.
+on a map.  SCHED can read vector files to generate continental,
+national, and US state boundaries and New Mexico roads (it is being
+used for New Mexico Array configuration studies).  The vector files
+are kept in the same directory as the ephemeris.  They are not
+distributed with SCHED again because of bulk.  If you want the files,
+contact cwalker@nrao.edu for information on where to pick them up.
 
 Good luck and happy scheduling!
 
 Between me and a concerted effort by Franco Tinarelli in Bologna,
 a few years ago, SCHED has been tested on:
 
+Current support as of April 2014
+  Linux on Intel 64 bit machines using g77
+  Linux on Intel 64 bit machine using gfortran
+  Sun Sparc workstation using Solaris.
+  Mac OS X v10.7 with gfortran on an Intel Macbook Pro  and Mac Pro.
+
 Tested recently as of Jan 2011
   Linux on Intel 32 and 64 bit machines using g77
   Linux on Intel 64 bit machine using gfortran
   Sun Sparc workstation using Solaris.
-  Mac OS X v10.6 with gfortran on an Intel Macbook Pro
+  Mac OS X v10.6 with gfortran on an Intel Macbook Pro 
   Mac OS X v10.5 with gfortran on an Intel Mac Pro
 
 Tested as at NRAO (Apr. 2005)
@@ -231,7 +241,7 @@ Most of SCHED is supported by Craig Walker at NRAO, Socorro, NM.
 (cwalker@nrao.edu).  The VEX portions of SCHED are supported by Des
 Small at JIVE in the Netherlands (small@jive.nl) with contributions
 from Cormac Reynolds at Curtin (c.reynolds@curtin.edu.au). The
-interactive plotting capabilities are supported by Franco Tinarelli in
+interactive plotting capabilities were supported by Franco Tinarelli in
 Bologna, Italy (TINARELLI@astbo1.bo.cnr.it), although some of the
 changes for configuration studies were added by Craig Walker.
 

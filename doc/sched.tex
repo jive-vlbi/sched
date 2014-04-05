@@ -6897,7 +6897,7 @@ Some established values of {\tt INTENTs} in the VLA environment are
 listed here.  Also some requested for other instruments are listed.
 Most will not be used in VLBI schedules.  A VLBI
 specific list has not been generated.  Of interest for the VLA are {\tt
-DETERMINE\_AUTOPHASE} and {\tt DETERMINE\_OFFSET\_POINTING}.
+DETERMINE\_AUTOPHASE} and {\tt DETERMINE\_OFFSET\_POINTING}.  
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \item {\tt OBSERVE\_TARGET}
@@ -6919,6 +6919,7 @@ DETERMINE\_AUTOPHASE} and {\tt DETERMINE\_OFFSET\_POINTING}.
 \item {\tt DETERMINE\_OPACITY\_TIPPING\_STYLE}
 \item {\tt OBSERVE\_PULSAR}
 \item {\tt TIME\_PULSAR}
+\item {\tt SetAtnGain}
 \item {\tt OTHER}
 \end{list}
 
@@ -6941,12 +6942,13 @@ allow mixing methods of specifing these aspects of the observing.
 \rcwbox
 {Up to 25 character strings of up to 80 characters each.  Can use 
 separate lines as long as the preceding line ends in a comma.}
-{Any strings.  'NONE' clears all INTENTES'}
+{Any strings.  'NONE' clears all INTENTs'}
 {Blank}
 {All {\tt INTENTs} keep the last value if none are specified.  If any
 are specified, all are initialized to blank, and must be respecified
 if still desired.}
-{{\tt intent = 'DETERMINE\_AUTOPHASE', 'CALIBRATE\_BANDPASS'}}
+{{\tt intent = 'DETERMINE\_AUTOPHASE', 'CALIBRATE\_BANDPASS'} or
+{\tt intent=VLA:SetAtnGain}}
 
 
 \subsubsection{\label{MP:LINEINIT}{\tt LINEINIT}}
@@ -11395,13 +11397,6 @@ setini = egvlba.2cm /
 endset /
 \end{verbatim}
 
-  The next example is of a rather simple file for 1 cm VSOP
-observations using VLBA and MarkIV formats.  It is the standard setup
-file {\sl vsop1cm.set}.  \schedb defaults are used to set almost
-everything including the station names and recording formats.
-
-\verbatiminput{../setups/vsop1cm.set}
-
 \newpage
 
 This example is for a Mark~III mode B observation.  This shows a
@@ -11471,7 +11466,7 @@ This example shows a setup file for dual frequency, wide spanned
 bandwidth, geodetic style observations.  Note that the firstlo
 has to be specified separately for each channel because it varies.
 
-\verbatiminput{../setups/vgeo-128-8-1.set}
+\verbatiminput{../setups/vgeo-256-8-2.set}
 
 
 \subsection{\label{SSEC:SETLST}Summary List of Setup File Parameters}
@@ -14155,11 +14150,15 @@ then rsync the desired stuff to your development area.
 
 \item Planned release date for SCHED 11.3 is April 4, 2014.
 
+\item Modify the criteria by which the Vex routines judge whether 
+adequate breaks in the recordings are being provided for media changes.
+Larger files are now allowed.  April 4, 2014  Cormac Reynolds.
+
 \item Incorporate the file Release\_instructions into a
 \htmlref{manual section of the same name}{SEC:RELEASE}.  This is mainly
 for the primary \schedb developer.  If you have a morbid interest in 
 what is involved, or want to understand why releases don't happen very
-often, feel free to browse the section.  May 2, 2014.  RCW.
+often, feel free to browse the section.  April 2, 2014.  RCW.
 
 \item Got the Linux GFORTRAN compilation working again at the AOC, now
 without a special compiler.  A recent Redhat upgrade provided the
