@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 11.3 of April 4, 2014}
+\title{THE \schedb USER MANUAL \\  Version 11.3u1 of April 11, 2014}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -1157,7 +1157,7 @@ emphemeris routines used for pointing at planets will not generally be
 available.  It is also not of much interest beyond the staff
 responsible for maintaining the VLBA.
 
-\item[\htmladdnormallink{{\sl doptg2.com}}{examples/doptg.com}] is a
+\item[\htmladdnormallink{{\sl doptg2.com}}{examples/doptg2.com}] is a
 script that creates and runs VLBA pointing observations.  It is very
 much like {\sl doptg.com} except that it uses the \htmlref{{\tt DOSTA}}
 {MP:DOSTA} parameter to allow the same script to be used for stations
@@ -1171,15 +1171,15 @@ fact, the required NAIF software libraries would hugely increase the
 size of the SCHED distribution and are not normally included.  This
 file has not been updated from MARK5A to MARK5C.
 
-\item[\htmladdnormallink{{\sl egmk5vex.key}}{examples/mt506.key}] was
-originally a file for testing Mark5A recording at the stations.  It
-uses a special stations catalog.  It is basically out of date now
-that Mark5 is the standard.  This file has not been updated from MARK5A 
-to MARK5C.
+\item[\htmladdnormallink{{\sl dq415.key}}{examples/dq415.key}] is
+a data quality test file from early 2014 that uses the RDBE and MARK5C.
+It samples most of the RF bands available on the VLBA.
 
-\item[\htmladdnormallink{{\sl mt506.key}}{examples/mt506.key}] is
-one of the weekly VLBA integrity check observations.  It is here mainly
-to exercize SCHED in a mode that uses lots of setup files.
+\item[\htmladdnormallink{{\sl mt506.key}}{examples/mt506.key}] is one
+of the weekly VLBA integrity check observations from the MARK5A era.
+It is here mainly to exercize SCHED in a mode that uses lots of setup
+files.  It is similar to the more modern {\sl dq415.key} but uses the
+outdated recording system.  It should probably be removed soon.
 
 \item[\htmladdnormallink{{\sl jvla.key}}{examples/jvla.key}] is
 an example covering use of the VLA as a phased array for VLBI.  This
@@ -14147,6 +14147,20 @@ then rsync the desired stuff to your development area.
 
 
 \begin{itemize}
+
+\item Planned release of SCHED 11.3u1 is April 13, 2014.
+
+\item Example dq415.key, a VLBA data quality test, was introduced.
+This should replace mt506.key eventually, but that has not happened
+yet. April 10, 2014.  RCW.
+
+\item A bug in the setting of pcalx frequencies for the VLBA legacy system
+was found by operations.  It affected setups with multiple IFs with different
+IF sidebands.  In fixing that, another bug was found that affected frequencies
+set for the VLBA legacy system channels when the sideband inversion option
+was being used (the option that allows different stations to use different IF
+sideband but the same BBC sideband as is required for PFB observations with
+Green Bank at some frequencies).  April 10, 2014.  RCW.
 
 \item Planned release date for SCHED 11.3 is April 4, 2014.
 
