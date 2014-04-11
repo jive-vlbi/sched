@@ -18,9 +18,10 @@ C     too many channels.  These parameters are:
 C       CRDN          Number of channels for the BBCs (1 per BBC).
 C       CRDF(ICH)     Baseband frequency for channel.
 C       CRDB(ICH)     Bandwidth for channel.
-C       CRDS(ICH)     Sideband for channel (U/L)
+C       CRDS(ICH)     Baseband sideband for channel (U/L)
 C       CRDLOSUM(ICH) LO sum to use for setting up PCALX.
 C     The legacy system sample rate can 
+C     Note CRDS is from SIDEBD, which is SIDEBAND in the setup.
 C
 C     Note that, for historical reasons, there is a potential 
 C     confusion because the BBC parameters of the call
@@ -409,7 +410,13 @@ C           Deal with sidebands.  Keep same as RDBE before any
 C           inversions.  Note that we need to do the same as in DOPCRD
 C           or the frequencies will be wrong.
 C
-            IF( CRDSIDE(ICH,KS) .EQ. 'U' ) THEN
+C    *******************  I think I need SIDEDB not CRDSIDE - need to use
+C                         the final sideband setting.
+C           Note that CRDSIDE is a saved version of SIDEDB from before
+C           any sideband inversions were done.  The channel index is
+C           the setup file channel index, not the crd channel.
+C
+            IF( SIDEBD(ICHS,KS) .EQ. 'U' ) THEN
                CRDS(ICH) = 'U'
                ICRDS(ICH) = 1
             ELSE
