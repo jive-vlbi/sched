@@ -124,10 +124,35 @@ C
                SRVER2 = SRCVER
             END IF
 C
-C           Require a source name.
+C           Require a source name.  Have them always in upper
+C           case.  Case diversity makes matches hard later.
+C           Don't allow "*" - the vex parser doesn't like it.
+C           This is an issue for SGRA*, M81* etc.
 C           
             DO INAME = 1, MALIAS
                CALL UPCASE( SRCNAM(INAME) )
+C
+               IF( INDEX( SRCNAM(INAME), ';' ) .NE. 0  .OR.
+     1             INDEX( SRCNAM(INAME), ':' ) .NE. 0  .OR.
+     2             INDEX( SRCNAM(INAME), '=' ) .NE. 0  .OR.
+     3             INDEX( SRCNAM(INAME), '&' ) .NE. 0  .OR.
+     4             INDEX( SRCNAM(INAME), '*' ) .NE. 0  .OR.
+     5             INDEX( SRCNAM(INAME), '$' ) .NE. 0  .OR.
+     5             INDEX( SRCNAM(INAME)(1:LEN1(SRCNAM(INAME))), ' ' ) 
+     6                .NE. 0  .OR.
+     7             INDEX( SRCNAM(INAME), '"' ) .NE. 0 ) THEN
+                  CALL WLOG( 1, 
+     1               'SRREAD: The source name '//SRCNAM(INAME)//
+     2               ' contains an illegal character for Vex.' )
+                  CALL WLOG( 1, 
+     1               '        The source is in catalog: '// 
+     2               INFILE )
+                  CALL WLOG( 1, 
+     1               '        The illegal characters are '//
+     2               '(tab) (new line) ; : = & * $ " and (space).' )
+                  CALL ERRLOG ( 'Change the source name and rerun. ' )
+               END IF
+C
             END DO
 C
 C           Temporary hook to look for the sources with low errors.

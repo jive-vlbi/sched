@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 11.3u1 of April 11, 2014}
+\title{THE \schedb USER MANUAL \\  Version 11.3 Update 1 of April 14, 2014}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -13671,10 +13671,21 @@ understood, run {\sl Newstd} to update the standard outputs.  Note that
 both of these scripts will need to be maintained if changes or additions
 are made to the examples suite.
 
-Check some crd files with {\tt cksched} on a Sun.
+Check the {\sl crd.} files with {\tt cksched} on a Sun.  There is a 
+script {\sl Legacy\_cksched} that can be used to run cksched on all
+{\sl crd} files in a directory.  It should be run on the updated
+{\sl Stdout} directory as that has a sample from each example, rather 
+than all.  Running in the {\sl examples} directory would create a 
+huge amount of output.
 
-Check some vex files on a 64 bit Linux machine with
-{\tt /home/swc/software/VLBADIFX-TRUNK/bin/vexpeek}
+Check the {\sl vex} files on a 64 bit Linux machine with {\sl
+Check\_vex}.  This runs {\tt
+/home/swc/software/VLBADIFX-TRUNK/bin/vexpeek} on all of the {\sl vex}
+files.  Since there is only one per example, it does not matter if
+this is done in {\sl examples} or in {\sl examples/Stdout}.  Note that
+the error messages go to standard error so they do not go through a
+simple pipe, such as to {\sl less}.  Use the construct {\sl Check\_vex
+$|$\& less}
 
 Try plotting, probably using example {\sl egplan.key}.
 
@@ -14148,19 +14159,29 @@ then rsync the desired stuff to your development area.
 
 \begin{itemize}
 
-\item Planned release of SCHED 11.3u1 is April 13, 2014.
+\item Planned release of SCHED 11.3 update 1 is April 14, 2014.
+
+\item Prohibit source names that contain characters that the VEX
+parsers do not like, including "*".  April 14, 2014  RCW
+
+\item Added script {\sl Legacy\_cksched} that can be used to run all
+the {\sl crd} files from the examples through the legacy system's
+checker to improve the ability to find problems.  The script needs
+to be run from a machine that has access to cksched, such as shire
+at the AOC.  April 11, 2014 RCW.
 
 \item Example dq415.key, a VLBA data quality test, was introduced.
 This should replace mt506.key eventually, but that has not happened
 yet. April 10, 2014.  RCW.
 
-\item A bug in the setting of pcalx frequencies for the VLBA legacy system
-was found by operations.  It affected setups with multiple IFs with different
-IF sidebands.  In fixing that, another bug was found that affected frequencies
-set for the VLBA legacy system channels when the sideband inversion option
-was being used (the option that allows different stations to use different IF
-sideband but the same BBC sideband as is required for PFB observations with
-Green Bank at some frequencies).  April 10, 2014.  RCW.
+\item A bug in the setting of pcalx frequencies for the VLBA legacy
+system was found by operations.  It affected setups with multiple IFs
+with different IF sidebands.  In fixing that, another bug was found
+that affected frequencies set for the VLBA legacy system channels when
+the sideband inversion option was being used (the option that allows
+different stations to use different IF sideband but the same BBC
+sideband as is required for PFB observations with Green Bank at some
+frequencies).  April 10, 2014.  RCW.
 
 \item Planned release date for SCHED 11.3 is April 4, 2014.
 
