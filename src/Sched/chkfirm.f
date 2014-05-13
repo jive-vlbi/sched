@@ -58,7 +58,7 @@ C
      1         DBE(KS)(1:LEN1(DBE(KS))),
      2         ') specified for DAR = ', 
      3         DAR(KSTA)(1:LEN1(DAR(KSTA))), 
-     4         ' and NCHAN=', NCHAN, ' at station ', 
+     4         ' and NCHAN=', NCHAN(KS), ' at station ', 
      5         SETSTA(1,KS)(1:LEN1(SETSTA(1,KS)))
             CALL WLOG( 1, MSGTXT )
             MSGTXT = ' '
