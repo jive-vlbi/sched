@@ -106,7 +106,7 @@ C     Warn if PCFS will have problem, but tone it down for ALLVLBA.
 C
       IF( SCANL-SCAN1 .GT. 2000 ) THEN
          MSGTXT = ' '
-         WRITE( MSGTXT, '( A, I3, A )' ) 
+         WRITE( MSGTXT, '( A, I6, A )' ) 
      1       'VXWRT: WARNING: More than 2000 scans (', (SCANL-SCAN1),
      2       ') in this schedule.' 
          CALL WLOG( 1,MSGTXT)
