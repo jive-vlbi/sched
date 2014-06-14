@@ -4686,6 +4686,7 @@ OPTIMIZATION (Beware --- experimental features!):
 \htlm{OPHLIMWT}{} Importance of near limits vs other weights {\tt OPTMODE=HAS}.
 \htlm{OPHLIMTI}{} Importance of HA vs other weights {\tt OPTMODE=HAS}.
 \htlm{OPHMAXDT}{} Maximum offset from desired HA to consider {\tt OPTMODE=HAS}.
+\htlm{HIGROUP}{~} Group a few scans from which to choose one based on El.
 \htlm{AUTOPEAK}{} Insert reference pointing scans.
 \htlm{MAPLIM}{~~} Lat/long limits for station map when {\tt OBSTYPE=CONFIG}
 \htlm{GRIDNR}{~~} Number of radial cells in uv optimization grid.
@@ -6844,6 +6845,26 @@ be used to set the scan lengths.
 {Reverts to not being used if not specified for a scan.}
 {{\tt GROUP=2}}
 
+\subsubsection{\label{MP:HIGROUP}{\tt HIGROUP}}
+
+[\tt HIGROUP} is used in conjunction with \htmlref{{\tt OPTMODE}}
+{MP:OPTMODE}
+{\em SCHED} has the ability to accept loops through scans.  The two
+parameters that allow this are {\tt GROUP} and {\tt REPEAT}.  They
+should be specified along with the parameters of the first scan in the
+loop.  {\tt GROUP} specifies the number of scans to be involved in a
+loop.  {\tt REPEAT} specifies how many times to go around the loop.
+Any start or stop times specified for the scans of the loop will
+only apply to the first pass.  {\tt DURation} or {\tt DWELL} should
+be used to set the scan lengths.
+
+\rcwbox
+{Integer.}
+{Any.}
+{Not used.}
+{Reverts to not grouping scans.}
+{{\tt HIGROUP=6}}
+
 
 \subsubsection{\label{MP:IATUTC}{\tt IATUTC}}
 
@@ -7947,6 +7968,16 @@ so it would be difficult to use it for phase referencing.  Also it would
 be awkward to use to schedule blocks of scans around the sky for atmospheric
 solutions (for aips task DELZN).  These limitations should be removed
 in future versions.
+
+\item[{\tt HIGHEL:}.] This mode is used, mainly for test observations,
+to allow SCHED to pick a scan with good elevation across the array from
+among a group of scans.  The number of scans from which to pick is
+specified with \htmlref{{\tt HIGROUP}}{MP:HIGROUP}.  \schedb will do the 
+geometry calculations for each of the {\tt HIGROUP} scans and pick the
+one with the highest minimum elevation.  It will keep that scan and
+skip the others in the group.  This is especially useful for the 
+data quality tests and startup scripts.  See example 
+\htmladdnormallink{{\sl dqhiel.key}}{examples/dqhiel.key}.
 
 \end{description}
 
@@ -14134,6 +14165,10 @@ then rsync the desired stuff to your development area.
 % seek point for editing:  development version
 
 
+*******************   Finish edhiel.key - get 327 sources.
+
+
+
 
 %  ToDo:
 
@@ -14159,6 +14194,12 @@ then rsync the desired stuff to your development area.
 \subsection{\label{SSEC:VER_11.3}Version 11.4}
 
 \begin{itemize}
+
+\item ****  FINISH  **** Add OPTMODE='HIGHEL' to simplify constructing certain kinds of
+test observations.  It picks the source with the highest minimum elevation
+across the array from a group, designated with new parameter HIGROUP,
+of scans, presumably on different sources.  Building associated
+example dqhiel.key.  May 29, 2014.  RCW.
 
 \item Fix bug in CHKFIRM error message when DBE and DAR are not compatible.
 2014may13  RCW.
