@@ -32,6 +32,7 @@ C
       CALL KEYADD( 'GAP', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'REPeat', 0.D0, 1, KD, KC, KI )
       CALL KEYADD( 'GROUP', 0.D0, 1, KD, KC, KI )
+      CALL KEYADD( 'HIGROUP', 1.D0, 1, KD, KC, KI )
       CALL KEYADD( 'PEAK', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'NOPEAK', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'TSYS', UNSET, 1, KD, KC, KI )

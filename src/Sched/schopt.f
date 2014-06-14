@@ -227,6 +227,8 @@ C           true if only a duration (or dwell) was specified by the user
 C           for the scan.  Otherwise the user specified time will be
 C           used (if the user specified start, ADJUST will be false).
 C   
+      write(*,*) 'schopt ', optmode
+
             IF( OPTMODE .EQ. 'NONE' ) THEN
 C   
 C              Non-optimizing mode:  Just use next input scan.  If
@@ -279,6 +281,16 @@ C              with one input scan per output scan.  Try to optimize
 C              for hour angles.  This is a one pass operation.
 C
                CALL OPTHAS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+               ORIGEN(ISCN) = 2
+C
+            ELSE IF( OPTMODE .EQ. 'HIGHEL' ) THEN
+C
+C              Create a schedule using the input scans as a source list
+C              with groups of scans, designated using HIGROUP, from which
+C              the one with the highest minimum elevation will be 
+C              chosen.  Note this routine can change KSCN.
+C
+               CALL OPTHIEL( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
                ORIGEN(ISCN) = 2
 C
             ELSE
