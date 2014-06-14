@@ -144,5 +144,13 @@ C
       END DO
   200 CONTINUE
 C
+C     Check that HIGROUP is not used when not using OPTMODE='HIGHEL'
+C
+      DO KSCN = 1, NSCANS
+         IF( HIGROUP(KSCN) .GE. 2 .AND. OPTMODE .NE. 'HIGHEL' ) THEN
+           CALL ERRLOG( 'CHKSC1: HIGROUP used without OPTMODE=HIGHEL' )
+         END IF
+      END DO
+C
       RETURN
       END

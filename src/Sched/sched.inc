@@ -287,8 +287,8 @@ C
 C                      C1950, C2000, and CDATE  record which 
 C                      epoch was in the catalog.  
 C
-C                      There is room for 5 names for source aliases.  
-C                      Plus there is an 8 or less character version 
+C                      There is room for MALIAS (now 10) names for source 
+C                      aliases.  Plus there is an 8 or less character version 
 C                      for schedules that need it.
 C
 C                      WARNING, there is some complexity in the source
@@ -694,6 +694,7 @@ C
       INTEGER          SRCNUM(MAXSCN), IDOPSRC(MAXSCN), QUAL(MAXSCN)
       INTEGER          SETNUM(MAXSCN), NSETUP(MAXSCN,MAXSTA)
       INTEGER          FSETI(MAXSCN,MAXSTA), DOPEAK(MAXSCN)
+      INTEGER          HIGROUP(MAXSCN)
       INTEGER          POINT(MAXSCN), DURONLY(MAXSCN), NOWAIT(MAXSCN)
       INTEGER          ISCINT(MSCINT,MAXSCN), NSCINT(MAXSCN), NINTENT
       INTEGER          CRDNCH(MAXSCN), CRDCH1(MAXSCN)
@@ -707,7 +708,7 @@ C
       CHARACTER        PREEMPT(MAXSCN)*5, INTENT(MINTENT)*80
 C
       COMMON  /SCHN2A/ SRCNUM, IDOPSRC, QUAL, SETNUM, NSETUP, FSETI,
-     1                 DOPEAK, POINT, DURONLY, NOWAIT, 
+     1                 DOPEAK, HIGROUP, POINT, DURONLY, NOWAIT, 
      2                 ISCINT, NSCINT, NINTENT, CRDNCH, CRDCH1, 
      3                 CRDSETCH, STASCN,
      4                 GOTCRD,NOTSYS, DOPCAL, CRDDOP, DWELL, TANT1,

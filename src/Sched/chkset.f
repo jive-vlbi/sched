@@ -245,6 +245,9 @@ C
      1         CALL CHKGDAR( KS, ERRS )
          IF( DAR(ISETSTA(KS)) .EQ. 'MKIV'  ) 
      1         CALL CHK4DAR( KS, NBBC(ISETSTA(KS)), ERRS )
+         IF( DAR(ISETSTA(KS)) .EQ. 'CDAS'  ) 
+     1         CALL CHKCDAS( KS, ERRS )
+
 C
 C        Check various recorder related parameters.  Stripped of 
 C        tape stuff July 22, 2010.  RCW
