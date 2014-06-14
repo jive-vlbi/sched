@@ -110,5 +110,10 @@ C
 C     Jump here when done.
 C
   999 CONTINUE
+C
+C     Set KEEP.  I don't think this routine should ever want a scan
+C     not kept.
+C
+      KEEP = .TRUE.
       RETURN
       END
