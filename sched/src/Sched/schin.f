@@ -122,6 +122,7 @@ C
             KD( KEYPTR( 'POINT', KC, KI ) ) = UNSET
             KD( KEYPTR( 'SCANTAG', KC, KI ) ) = BLANK
             KD( KEYPTR( 'GEOSEG', KC, KI ) ) = 0.D0
+            KD( KEYPTR( 'HIGROUP', KC, KI ) ) = 1.D0
 C
 C           For toggle pairs.
 C
@@ -361,6 +362,11 @@ C
          PKWATCH = KD( KEYPTR( 'PKWATCH', KC, KI ) ) .EQ. 0.D0
          PEAKFILE = KCHAR( 'PEAKFILE', 80, .FALSE., KD, KC, KI ) 
          CALL ENVIR( PEAKFILE )
+C
+C        Get any specification of a group of scans from which to
+C        select the highest elevation one.
+C
+         HIGROUP(ISCN) = KD( KEYPTR( 'HIGROUP', KC, KI ) )
 C     
 C        Get setup file name.
 C

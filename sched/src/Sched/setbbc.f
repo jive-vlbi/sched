@@ -110,6 +110,12 @@ C     Gino Tuccari's DBBC
 C
          CALL BBCDBBC( KS )
 C
+      ELSE IF( DAR(ISETSTA(KS)) .EQ. 'CDAS') THEN
+C
+C        Chinese DAR
+C
+         CALL BBCCDAS( KS )
+C
       ELSE IF( DAR(ISETSTA(KS)) .EQ. 'R1002') THEN
 C
 C
