@@ -208,6 +208,7 @@ C
       OPHA(TO)     = OPHA(FROM)
       OPHAWID(TO)  = OPHAWID(FROM)
       OPHAWT(TO)   = OPHAWT(FROM)
+      HIGROUP(TO)  = HIGROUP(FROM)
 C
       RETURN
       END
