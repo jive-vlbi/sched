@@ -67,7 +67,7 @@
 
 
 \begin{document}
-\title{THE \schedb USER MANUAL \\  Version 11.3 Update 1 of April 14, 2014}
+\title{THE \schedb USER MANUAL \\  Version 11.4 Beta of June 17, 2014}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -6847,7 +6847,7 @@ be used to set the scan lengths.
 
 \subsubsection{\label{MP:HIGROUP}{\tt HIGROUP}}
 
-[\tt HIGROUP} is used in conjunction with \htmlref{{\tt OPTMODE}}
+{\tt HIGROUP} is used in conjunction with \htmlref{{\tt OPTMODE}}
 {MP:OPTMODE}
 {\em SCHED} has the ability to accept loops through scans.  The two
 parameters that allow this are {\tt GROUP} and {\tt REPEAT}.  They
@@ -8296,12 +8296,18 @@ is to allow the user to explicitly set the times and source for
 pointing, but allow \schedb to take care of all the other messy
 details of converting the scan to a pointing scan.
 
-{\tt POINT=-1} means don't add a pointing scan even if you can.
+{\tt POINT=-1} means don't add a pointing scan even if you can.  This
+is useful especially when \htmlref{{\tt AUTOPEAK}}{MP:AUTOPEAK}) has
+been specified, but you are doing low frequency scans.
+
+To turn \htmlref{{\tt AUTOPEAK}}{MP:AUTOPEAK}) back on after using
+{\tt POINT=-1}, set {\tt POINT} to a value less than -1, say -2 or
+-999 (the value it has in the program if not set).
 
 \rcwbox
 {None or a number.  None means zero.  The number specifies a pointing group.  -1 means don't add pointing here.}
 {Any integer 0 or above, but should match a pointing group if not zero}
-{Not set}
+{Not set (actually set to -999)}
 {Set back to the unset state for each scan to avoid doing the
 whole schedule in pointing mode}
 {{\tt POINT=2}}
@@ -14164,12 +14170,6 @@ then rsync the desired stuff to your development area.
 
 % seek point for editing:  development version
 
-
-*******************   Finish edhiel.key - get 327 sources.
-
-
-
-
 %  ToDo:
 
 %     Every update:  Check leap seconds.
@@ -14191,18 +14191,21 @@ then rsync the desired stuff to your development area.
 %     Re-calculate the slew rates for the VLBA antennas.
 %     Protect 2cm and 3mm better against inappropriate ch1 for filter.
 
-\subsection{\label{SSEC:VER_11.3}Version 11.4}
+\subsection{\label{SSEC:VER_11.4}Version 11.4}
 
 \begin{itemize}
 
-\item ****  FINISH  **** Add OPTMODE='HIGHEL' to simplify constructing certain kinds of
+\item Starting to add CDAS support.  Only a few hooks so far. 
+June 17, 2014  RCW.
+
+\item Add OPTMODE='HIGHEL' to simplify constructing certain kinds of
 test observations.  It picks the source with the highest minimum elevation
 across the array from a group, designated with new parameter HIGROUP,
-of scans, presumably on different sources.  Building associated
-example dqhiel.key.  May 29, 2014.  RCW.
+of scans, presumably on different sources.  Make associated
+example dqhiel.key.  June 17, 2014.  RCW.
 
 \item Fix bug in CHKFIRM error message when DBE and DAR are not compatible.
-2014may13  RCW.
+May 13, 2014  RCW.
 
 \end{itemize}
 
