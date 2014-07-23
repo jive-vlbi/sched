@@ -18,14 +18,16 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           KS, ICH, ISIDEBD ! , nwarn
+      INTEGER           I, J, NIFERR
+      INTEGER           KS, ICH, JCH, ISIDEBD ! , nwarn
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
       INTEGER           NFWARN
       INTEGER           LEN1, ISETF
+      INTEGER           NLOW, NHIGH
       DOUBLE PRECISION  BBOFF, BB1, BB2, SLOP
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*)
-      LOGICAL           ERRS, DEQUAL, OBWARN, SHOWID
-      LOGICAL           IFHIGH, IFLOW
+      LOGICAL           ERRS, DEQUAL, OBWARN, SHOWID, FILTERR, ALREADY
+      CHARACTER         IFHIGH(MCHAN)*2, IFLOW(MCHAN)*2, IFERRS(MCHAN)*2
 C
       DATA     OBWARN   / .TRUE. /
       DATA     N40WARN  / MAXSET*1 /
@@ -169,13 +171,16 @@ C        CR: Eventually a single 10-1024 MHz IF will become available
 C        with a future firmware release (but probably not for all
 C        versions of DBBC). 
 C        For now the following appears to be correct.
-C        Baseband frequencies must be between 10 and 512 MHz or between
-C        512 and 1024 MHz. They appear to be fully flexible within that
-C        range.
+C        Baseband frequencies for a given filter must be between 10 and
+C        512 MHz or between 512 and 1024 MHz. They appear to be fully
+C        flexible within that range.
 C
-         IFHIGH = .FALSE.
-         IFLOW = .FALSE.
+
+         NLOW = 0
+         NHIGH = 0
+         NIFERR = 0
          DO ICH = 1, NCHAN(KS)
+            FILTERR = .FALSE.
 C
 C           Check that it is in the IF.
 C
@@ -192,10 +197,22 @@ C
      3            '.  Must be between 10 and 1024 MHz.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
-            ELSE IF( BB1 .LT. 512 ) THEN
-               IFLOW = .TRUE.
+            ELSE IF( BB1 .LT. 512.5D0 ) THEN
+C              Check that this low (10-512 MHz) IF has not previously
+C              been used on high
+               NLOW = NLOW+1
+               DO I = 1, NHIGH
+                  IF( IFHIGH(I) .EQ. IFCHAN(ICH,KS) ) FILTERR = .TRUE.
+               END DO
+               IFLOW(NLOW) = IFCHAN(ICH,KS)
             ELSE 
-               IFHIGH = .TRUE.
+C              Check that this high (512-1024) IF has not previously
+C              been used on low
+               NHIGH = NHIGH+1
+               DO I = 1, NLOW
+                  IF( IFLOW(I) .EQ. IFCHAN(ICH,KS) ) FILTERR = .TRUE.
+               END DO
+               IFHIGH(NHIGH) = IFCHAN(ICH,KS)
             END IF
 C
 C           Check the other end of the sideband.  Just warn of the
@@ -262,17 +279,49 @@ C
                NFWARN = NFWARN + 1
                SHOWID = .TRUE.
             END IF
+
+            IF (FILTERR) THEN
+                  ALREADY = .FALSE.
+                  DO I = 1, NIFERR
+                     IF( IFCHAN(ICH,KS) .EQ. IFERRS(I) ) ALREADY=.TRUE.
+                  END DO
+                  NIFERR = NIFERR + 1
+                  IFERRS(NIFERR) = IFCHAN(ICH,KS)
+                  IF( .NOT. ALREADY) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, A, A, A, A, A )' )
+     1                  'CHKDBFQ: Illegal BBCSYN placement for ',
+     2                   'DBE=DBBC_DDC. All BBSYN of an IF ',
+     3                  'must either be between 10 and 512 MHz *or* ',
+     4                  'between 512 and 1024 MHz. ',
+     5                  'Check frequencies for IF ', IFCHAN(ICH,KS)
+                     CALL WLOG( 1, MSGTXT )
+                     ERRS = .TRUE.
+                  END IF
+            END IF
+
          END DO
 
-         IF( IFHIGH .AND. IFLOW ) THEN
-            MSGTXT = ' '
-            WRITE( MSGTXT, '( A, A, A )' )
-     1         'CHKDBFQ: Illegal BBCSYN placement for DBE=DBBC_DDC. ',
-     2         'All BBSYN must either be between 10 and 512 MHz', 
-     3         '*or* between 512 and 1024 MHz. '
-            CALL WLOG( 1, MSGTXT )
-            SHOWID = .TRUE.
-         END IF
+CC        Check that no IF is trying to use both 10-512 and 512-1024 MHz
+CC        filters
+C         DO ICH = 1, NLOW
+C            DO JCH = 1, NHIGH
+C            IF( IFHIGH(ICH) .EQ. IFLOW(JCH) .AND. 
+C     1          IFHIGH(ICH) .NE. ALWARN .AND. 
+C     2          IFLOW(JCH) .NE. ALWARN) THEN
+C                  MSGTXT = ' '
+C                  WRITE( MSGTXT, '( A, A, A, A, A, A )' )
+C     1               'CHKDBFQ: Illegal BBCSYN placement for ',
+C     2                'DBE=DBBC_DDC. ',
+C     3               'All BBSYN of an IF must either be between ', 
+C     4               '10 and 512 MHz *or* between 512 and 1024 MHz. ',
+C     5               'Check frequencies for IF ', IFHIGH(ICH)
+C                  CALL WLOG( 1, MSGTXT )
+C                  SHOWID = .TRUE.
+C                  ALWARN = IFHIGH(ICH)
+C               END IF
+C            END DO
+C         END DO
 C
 C
       END IF
