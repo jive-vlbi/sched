@@ -182,7 +182,8 @@ C
          DO ICH = 1, NCHAN(KS)
             FILTERR = .FALSE.
 C
-C           Check that it is in the IF.
+C           Check that it is in the IF, and only one filter set is used
+C           for each IF
 C
             ISIDEBD = 1
             IF( SIDEBD(ICH,KS) .EQ. 'L' ) ISIDEBD = -1
@@ -213,6 +214,25 @@ C              been used on low
                   IF( IFLOW(I) .EQ. IFCHAN(ICH,KS) ) FILTERR = .TRUE.
                END DO
                IFHIGH(NHIGH) = IFCHAN(ICH,KS)
+            END IF
+            IF (FILTERR) THEN
+                  ALREADY = .FALSE.
+                  DO I = 1, NIFERR
+                     IF( IFCHAN(ICH,KS) .EQ. IFERRS(I) ) ALREADY=.TRUE.
+                  END DO
+                  NIFERR = NIFERR + 1
+                  IFERRS(NIFERR) = IFCHAN(ICH,KS)
+                  IF( .NOT. ALREADY) THEN
+                     MSGTXT = ' '
+                     WRITE( MSGTXT, '( A, A, A, A, A, A )' )
+     1                  'CHKDBFQ: Illegal BBCSYN placement for ',
+     2                   'DBE=DBBC_DDC. All BBSYN of an IF ',
+     3                  'must either be between 10 and 512 MHz *or* ',
+     4                  'between 512 and 1024 MHz. ',
+     5                  'Check frequencies for IF ', IFCHAN(ICH,KS)
+                     CALL WLOG( 1, MSGTXT )
+                     ERRS = .TRUE.
+                  END IF
             END IF
 C
 C           Check the other end of the sideband.  Just warn of the
@@ -280,50 +300,9 @@ C
                SHOWID = .TRUE.
             END IF
 
-            IF (FILTERR) THEN
-                  ALREADY = .FALSE.
-                  DO I = 1, NIFERR
-                     IF( IFCHAN(ICH,KS) .EQ. IFERRS(I) ) ALREADY=.TRUE.
-                  END DO
-                  NIFERR = NIFERR + 1
-                  IFERRS(NIFERR) = IFCHAN(ICH,KS)
-                  IF( .NOT. ALREADY) THEN
-                     MSGTXT = ' '
-                     WRITE( MSGTXT, '( A, A, A, A, A, A )' )
-     1                  'CHKDBFQ: Illegal BBCSYN placement for ',
-     2                   'DBE=DBBC_DDC. All BBSYN of an IF ',
-     3                  'must either be between 10 and 512 MHz *or* ',
-     4                  'between 512 and 1024 MHz. ',
-     5                  'Check frequencies for IF ', IFCHAN(ICH,KS)
-                     CALL WLOG( 1, MSGTXT )
-                     ERRS = .TRUE.
-                  END IF
-            END IF
 
          END DO
 
-CC        Check that no IF is trying to use both 10-512 and 512-1024 MHz
-CC        filters
-C         DO ICH = 1, NLOW
-C            DO JCH = 1, NHIGH
-C            IF( IFHIGH(ICH) .EQ. IFLOW(JCH) .AND. 
-C     1          IFHIGH(ICH) .NE. ALWARN .AND. 
-C     2          IFLOW(JCH) .NE. ALWARN) THEN
-C                  MSGTXT = ' '
-C                  WRITE( MSGTXT, '( A, A, A, A, A, A )' )
-C     1               'CHKDBFQ: Illegal BBCSYN placement for ',
-C     2                'DBE=DBBC_DDC. ',
-C     3               'All BBSYN of an IF must either be between ', 
-C     4               '10 and 512 MHz *or* between 512 and 1024 MHz. ',
-C     5               'Check frequencies for IF ', IFHIGH(ICH)
-C                  CALL WLOG( 1, MSGTXT )
-C                  SHOWID = .TRUE.
-C                  ALWARN = IFHIGH(ICH)
-C               END IF
-C            END DO
-C         END DO
-C
-C
       END IF
 C
 C     Identify the setup if there was a problem.
