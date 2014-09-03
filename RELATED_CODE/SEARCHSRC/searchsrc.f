@@ -3,9 +3,10 @@ C
 C     Quick and dirty source search tool.
 C
 C     Read a SCHED catalog.
-C     Filter by position and flux density.
+C     Filter by position, flux density and resolution
 C     Write a new SCHED catalog.
 C     Adapted from newsrc.f  Jun. 12, 2013
+C     Latest mods (add resolution) Aug. 5, 2014
 C
 C
       INCLUDE 'rdcat.inc'
@@ -19,7 +20,7 @@ C
       INTEGER          IRAH, IRAM, IRAS, IDECD, IDECM, IDECS
       DOUBLE PRECISION PI, RADSEC
       DOUBLE PRECISION REFRA, REFDEC, SLA_DSEP
-      REAL             MAXOFF, MINFLUX
+      REAL             MAXOFF, MINFLUX, MINRES
       LOGICAL          GOTFLUX, ISNEW(MSRC)
       CHARACTER        TEXT*80, LASTEQ*5
       CHARACTER        RAOUT*16, DECOUT*17, TFORM*17
@@ -50,8 +51,9 @@ C
       REFRA = RADSEC * 15.D0 * ( IRAH * 3600.D0 + IRAM * 60.D0 + IRAS )
       REFDEC = RADSEC * ( IDECD * 3600.D0 + IDECM * 60.D0 + IDECS )
 C
-      WRITE(*,*) '  Maximum offset (deg) and minimum flux '
-      READ(*,*) MAXOFF, MINFLUX
+      WRITE(*,*) '  Maximum offset (deg), minimum flux, and ',
+     1      'minimum resolution (fract). '
+      READ(*,*) MAXOFF, MINFLUX, MINRES
 C
       WRITE(*,*) '  Output SCHED catalog:'
       READ(*,'(A)') NEWFILE
@@ -120,7 +122,8 @@ C
      1   NIN, ' Sources read from old SCHED catalog:  ', SRCFILE
 C
 C     Get the separations (deg) and maximum flux densities for each
-C     source.  Set a keep flag.
+C     source.  Keep a resolution number corresponding to the 
+C     peak flux.  Set a keep flag.
 C
       DO ISRC = 1, NSRC
          SEP(ISRC) = SLA_DSEP( RA(ISRC), DEC(ISRC), REFRA, REFDEC )
@@ -129,12 +132,19 @@ C       write(*,*) isrc, '  ', name(1,isrc), sep(isrc),
 C     1                 ra(isrc), dec(isrc)
          PEAKFLX(ISRC) = 0.D0
          DO I = 1, MFLX
-            IF( MOD( I, 3 ) .NE. 1 ) THEN
+            IF( MOD( I, 3 ) .EQ. 2 .AND. 
+     1            FLUX(I,ISRC) .GT. PEAKFLX(ISRC) ) THEN
                PEAKFLX(ISRC) = MAX( FLUX(I,ISRC), PEAKFLX(ISRC) )
+               IF( I+1 .LE. MFLX ) THEN
+                  RESOLV(ISRC) = FLUX(I+1,ISRC) / FLUX(I,ISRC)
+               ELSE
+                  RESOLV(ISRC) = 0.0
+               END IF
             END IF
          END DO
          KEEP(ISRC) = SEP(ISRC) .LE. MAXOFF .AND.
-     1                PEAKFLX(ISRC) .GT. MINFLUX
+     1                PEAKFLX(ISRC) .GT. MINFLUX .AND.
+     2                RESOLV(ISRC) .GT. MINRES
       END DO      
 C
 C     Open the output file so that header lines can be transferred.

@@ -277,6 +277,15 @@ C
               LOT = TLO(I) / 2.D0
               NHT = MIN( 10, INT( FMAX / LOT ) )
             END IF
+C
+C           Loop over the already chosen synthesizer settings.
+C           IHAR will be the minimum harmonic number for cases 
+C           where the IF frequency of the harmonic interference 
+C           falls in the 512-1024 range.  It will be used in
+C           selecting the least bad LO when a good one (no harmonic
+C           issues) can be found.
+C
+            IHAR = 100
             DO J = 1, NLO
              IF( LO(J) .LE. 8.D0 .OR. 
      1           ( MODETEST(KS) .AND. SY(J) .LT. 3 ) ) THEN
@@ -287,13 +296,14 @@ C
                NHJ = MIN( 10, INT( FMAX / LOJ ) )
              END IF
 C
-             IHAR = 100
+C            Now loop over the harmonics. 
+C
              DO K = 1, NHT
               DO L = 1, NHJ
 C
 C              Allow a birdy at 500 (out of band), but not 1000 (in band)
 C
-               IFF = ABS( TLO(I) * K - LO(J) * L )
+               IFF = ABS( LOT * K - LOJ * L )
                IF( IFF .GT. 0.52 .AND. IFF .LT. 1.03 ) THEN
                 IHAR = MIN( K, L, IHAR )
                 USEIT = .FALSE.
@@ -302,7 +312,8 @@ C
              END DO
             END DO
 C
-C           If no birdy possibilities were found, use this TLO
+C           If no birdy possibilities were found, use this TLO.
+C           Skip out of the search.
 C
             IF( USEIT ) THEN
              DLO = I
@@ -365,6 +376,7 @@ C
 C        So start the nested loops with the one new frequency.
 C             
          IF( .NOT. GOTGOOD .AND. ISETNUM(KS) .NE. LSETUP ) THEN
+C         IF( ISETNUM(KS) .NE. LSETUP ) THEN
           IF( TLO(DLO) .LE. 8.D0 ) THEN
              LOT = TLO(DLO)
              NHT = MIN( 5, INT( FMAX / LOT ) )

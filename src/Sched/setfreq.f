@@ -110,7 +110,8 @@ C
             END IF
             TEMP8 = ISIDE1 * ( FREQREF(ICH,KS) - FIRSTLO(ICH,KS) )
             IF( GOTBBF .AND. ABS(TEMP8-BBSYN(ICH,KS)) .GT. 1.D-3 ) THEN
-               CALL WLOG( 1, 'SETFREQ: Frequencies do not sum.' )
+               CALL WLOG( 1, 'SETFREQ: BBSYN, FREQREF+FREQOFF, and '//
+     1             ' FIRSTLO specified but not consistent.' )
                CALL ERRLOG( STDMSG )
             ELSE IF( GOTNETS .AND. GOTBBS .AND. 
      1           ISIDE1 * INETSD .NE. ISIDEBD ) THEN

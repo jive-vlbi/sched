@@ -19,7 +19,7 @@ C     For any scan but first
 C        check early start doesn't overlap
 C     For above and VEX control
 C        36s tape reversal
-C        40s mode change
+C        40s mode change   (THIS MIGHT BE TOO HIGH - RCW Sep 1, 2014).
 C        OBSOLETE: tape change time
 C        37m postpass
 C
@@ -316,6 +316,9 @@ C
 C           Removed tape reversal check.
 C        
 C           Check for mode change < 40s 
+C           RCW  Sep 1, 2014.  This number is probably too high but
+C           I'm not sure what to change it do.  So just alter the
+C           warning for now.
 C
             IF ( MODSCN(ISCN) .NE. MODSCN(ISCN-1) .AND.
      1          (STARTJ(ISCN) - TAPOFF) .LT. 
@@ -329,8 +332,10 @@ C
      1             'VXSCHK:  WARNING: Mode setup < 40s for ',
      3             'station ', STATION(STANUM(ISTA))
                CALL WLOG( 1, MSGTXT )
-               CALL WLOG( 1,'         FS Stations need 40s for '//
-     1             'any mode change, incl frequency shift.')
+               CALL WLOG( 1,'         FS Stations once needed 40s '//
+     1             'for any mode change, incl frequency shift.')
+               CALL WLOG( 1,'         This may no longer be true '//
+     1             'but the new value is not yet clear.')
                WARNFS = .TRUE.
             END IF
 C        
