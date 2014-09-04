@@ -329,7 +329,7 @@ C              If the stations match it is impossible
 C
                CALL PRTSCN( ISCN, 'VXSCHK' )
                WRITE( MSGTXT, '( A, A, A )' ) 
-     1             'VXSCHK:  WARNING: Mode setup < 40s for ',
+     1             'VXSCHK:  WARNING: Mode setup <= 40s for ',
      3             'station ', STATION(STANUM(ISTA))
                CALL WLOG( 1, MSGTXT )
                CALL WLOG( 1,'         FS Stations once needed 40s '//
