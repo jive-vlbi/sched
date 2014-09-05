@@ -1,1 +1,0 @@
-../makesetup/ffreq.f
