@@ -103,11 +103,17 @@ C
       END IF
 C
 C     Warn if PCFS will have problem, but tone it down for ALLVLBA.
+C     The DRUDG limit is 20000.  See email from Ed Himwich 18sep2014.
+C     He claims it has been that large since October 2007 (version 9.1)
+C     so I'm not sure why this was still set to 2000 until now.
+C     I am changing it to 20000.  But note that MAXSCNS in sched.inc
+C     is 4000 as of this writing, so we should not hit this test
+C     unless that parameter is changed.
 C
-      IF( SCANL-SCAN1 .GT. 2000 ) THEN
+      IF( SCANL-SCAN1 .GT. 20000 ) THEN
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, I6, A )' ) 
-     1       'VXWRT: WARNING: More than 2000 scans (', (SCANL-SCAN1),
+     1       'VXWRT: WARNING: More than 29000 scans (', (SCANL-SCAN1),
      2       ') in this schedule.' 
          CALL WLOG( 1,MSGTXT)
          IF( ALLVLBA ) THEN
