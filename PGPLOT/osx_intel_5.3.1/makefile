@@ -28,10 +28,10 @@ FFLAGD=
 #
 # C compiler and compilation flags
 #
-XINCL=-I/usr/X11R6/include
+XINCL=-I/opt/local/include
 MOTIF_INCL=
-ATHENA_INCL=-I/usr/X11R6/include
-TK_INCL=-I/usr/local/include 
+ATHENA_INCL=-I/opt/local/include
+TK_INCL=-I/opt/local/include
 RV_INCL=
 CCOMPL=gcc
 CFLAGC=-DPG_PPU -O2 -I.
@@ -45,10 +45,10 @@ PGBIND_FLAGS=bsd
 #
 # Loader library-flags
 #
-LIBS=
-MOTIF_LIBS=-lXm -lXt 
-ATHENA_LIBS=-lXaw -lXt -lXmu -lXext 
-TK_LIBS=-L/usr/local/lib -ltk -ltcl  -ldl
+LIBS=-L/opt/local/lib -lX11 -lm
+MOTIF_LIBS=-lXm -lXt -L/opt/local/lib -lX11 -lm
+ATHENA_LIBS=-lXaw -lXt -lXmu -lXext -L/opt/local/lib -lX11 -lm
+TK_LIBS=-L/usr/local/lib -ltk -ltcl -L/opt/local/lib -lX11 -lm -ldl
 #
 #	Loader command for PGPLOT library
 #
