@@ -15,6 +15,8 @@
 !    TID70 -> DSS43
 !    ROB70 -> DSS63
 !
+! CR, November 10 2014: added new 21cm wideband mode for Tid.
+!
 Name = go18cm  Station = DSS14   priority = 5
   rf1 =  1608, 1608    ifname =   '2N', '1N'    fe = '18cm', '18cm'
   rf2 =  1708, 1708    altifn =   '1A', '2A' 
@@ -49,14 +51,21 @@ Name = go1cm  Station = DSS14   priority = 5
   ! Range assuming low patch, but there is a problem with filters
 /
 
-Name = ti18cm  Station = DSS43, DSS45, DSS43LBA, DSS45LBA, DSS34, DSS34LBA   priority = 5
+Name = ti18cm  Station = DSS43, DSS43LBA, priority = 5
   rf1 = 1608, 1608      ifname = '2N',  '1N'  fe = '18cm', '18cm'
   rf2 = 1708, 1708      altifn = '1A',  '2A'
   pol =  RCP,  LCP      lo1 = 1380.00, 1380.00
-  note = 'LO from Harbison, e-mail 20/03/97. other values guesses'
-  ! especially no idea on rf* and if names, uses ?? DAR
-  ! earlier email suggested 1480 firstlo.
-  ! rf and lo from Naudet, 20 Nov 1997 (jsu)
+  note = 'CR: email from Horiuchi 2014-11-10. Currently LCP only'
+  ! This is more or less superseded by the new broadband 21cm setup
+  ! but apparently there is still a use case to keep this one.
+/
+
+Name = ti21cm  Station = DSS43, DSS43LBA, priority = 4
+  rf1 = 1400, 1400      ifname = '2N',  '1N'  fe = '18cm', '18cm'
+  rf2 = 1940, 1940      altifn = '1A',  '2A'
+  pol =  RCP,  LCP      lo1 = 1325.00, 1325.00
+  note = 'CR: email from Horiuchi 2014-11-10. Currently LCP only'
+  ! RF ranges assume new JPL Digital backend
 /
 
 Name = ti13cm  Station = DSS43, DSS45, DSS43LBA, DSS45LBA, DSS34, DSS34LBA   priority = 5
