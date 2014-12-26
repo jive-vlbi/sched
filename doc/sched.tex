@@ -703,10 +703,11 @@ schedule observations of planets.  To do so, it obtains positions from
 a JPL ephemeris file.  Mostly this is used for single-dish calibration
 observations.
 
-\item[\htmlref{Satellite file}{MP:SATFILE}:] \schedb can also be used to
-schedule observations of satellites.  To do so, it obtains orbital elements
-from the {\tt SATFILE}.  This is used for holography and for spacecraft
-navigation projects.
+\item[\htmlref{Satellite file}{MP:SATFILE}:] \schedb can also be used
+to schedule observations of satellites.  To do so, it obtains orbital
+elements from the {\tt SATFILE} or {\tt TLEFILE} which are specified
+in the \htmlref{\tt SATINIT}{SEC:SATINIT} section.  This is used for
+holography and for spacecraft navigation projects.
 
 
 \end{description}
@@ -2601,13 +2602,12 @@ sets the power levels, samples the signals at a 1024 MHz sample rate
 basebands, resamples the data to 2 bits, and formats it for recording.
 It takes the place of the IF distributers, baseband converters,
 samplers, and formatter (including pulse cal detectors) in the old
-VLBA system.  Sometime in 2013, the VLBA antennas will have two RDBE
-systems each, allowing an increase in the number of channels, at least
-with the DDC personality (see below).  In addition to allowing
-increased numbers of channels, the use of 2 RDBEs allows simultaneous
-access to all 4 VLBA IFs.  That is useful for the S/X system and for
-the new 4-8 GHz system, for which two polarization pairs of output
-data are available.
+VLBA system.  The VLBA antennas have two RDBE systems each, allowing
+an increase in the number of channels, at least with the DDC
+personality (see below).  In addition to allowing increased numbers of
+channels, the use of 2 RDBEs allows simultaneous access to all 4 VLBA
+IFs.  That is useful for the S/X system and for the new 4-8 GHz
+system, for which two polarization pairs of output data are available.
 
 Control of the RDBE and Mark5C recorders is handled by a new VLBA
 control system running on a standard Linux computer.  The new system
@@ -2656,50 +2656,50 @@ analog signal and the final filtered signal is a subband.
 {\bf RDBE PFB PERSONALITY:}
 
 The FPGA in the RDBE supports multiple personalities that can be
-swapped as needed.  The first developed, and only one available in
-early 2012, is the PFB personality that uses a polyphase filter to
-break each of the two 512 MHz IFs into 16 basebands of 32 MHz each,
-all lower sideband.  Exactly 16 channels must be recorded, selected
-from the total of 32 provided from both inputs.  This personality is
-selected setting the \htmlref{{\tt DBE}}{SP:DBE} parameter to {\tt
-RDBE\_PFB} in the setup file.  Of the 16 subbands of the polyphase
-filter from each IF, 15 provide good data.  The other is really 16 MHz
-from each end of the 512 MHz, is probably not useful.  It is made
-available for selection in cases where it is desired to have all 16
-required channels in one polarization.  More typically, 8 channels,
-constituting polarization pairs, will be selected from each IF input.
-This personality can only provide 32 MHz basebands at fixed
-frequencies within the IF for a total of 2 Gbps.  Other than selecting
-the desired subbands, there is no tuning flexibility.  Note that
-the PFB personality cannot be used on both RDBEs at a VLBA station
-(once those are available) because the required VDIF output is not
-available and because the required 2 Gbps per RDBE is beyond the
-capacity of the recording system.
+swapped as needed.  The first developed was the PFB personality that
+uses a polyphase filter to break each of the two 512 MHz IFs into 16
+basebands of 32 MHz each, all lower sideband.  Exactly 16 channels
+must be recorded, arbitrarily selected from the total of 32 provided
+from both inputs.  This personality is selected by setting the
+\htmlref{{\tt DBE}}{SP:DBE} parameter to {\tt RDBE\_PFB} in the setup
+file.  Of the 16 subbands of the polyphase filter from each IF, 15
+provide good data.  The other is really 16 MHz from each end of the
+512 MHz, and is not useful.  It is made available for selection in
+cases where it is desired to have all 16 required channels in one
+polarization.  More typically, 8 channels, constituting polarization
+pairs, will be selected from each IF input.  This personality can only
+provide 32 MHz basebands at fixed frequencies within the IF for a
+total of 2 Gbps.  Other than selecting the desired subbands, there is
+no tuning flexibility.  Note that the PFB personality cannot be used
+on both RDBEs at a VLBA station because the required VDIF output is
+not available and because the required 2 Gbps per RDBE is beyond the
+capacity of the recording system if both are used.
 
 
 {\bf RDBE DDC PERSONALITY:}
 
 The second personality that is available is the DDC (Digital Down
-Converter - under final testing in late 2012).  It is selected using
-the \htmlref{{\tt DBE}}{SP:DBE} parameter set to {\tt RDBE\_DDC} in
-the setup file. This personality will provide a few 4 (possibly 8
-later) filters per RDBE that can provide arbitrary offset frequencies
-and can provide any bandwidth at the factor of 2 steps between 1 and
-64 MHz.  (That may be extended downward some day).  There is a
-complication forced by the use of a polyphase filter first step of
-filtration to get the clock rate down to values the FPGA can support.
-Such filters do not have flexible frequency ranges.  This one splits
-the band into 3 segments, 512 to 640 MHz, 640 to 896 MHz, and 896 to
-1024 MHz.  Each baseband must be confined to one of those ranges.  The
-``crossover'' frequencies at the filter edges have a range of
-something like 4-10 MHz (to be determined) that is not really usable.
-\schedb will issue a warning if an attempt is made to have a baseband
-cross one of these boundaries.  Note that the polyphase filter to use
-will be determined by the frequency of the LO sum.  It is possible
-that users of the 128 MHz bandwidth will want to offset slightly for
-better pulse cal performance and this will cause a tiny fraction of
-the band to get aliased.  \schedb will issue warnings, but this can be
-tolerated.
+Converter).  It is selected using the \htmlref{{\tt DBE}}{SP:DBE}
+parameter set to {\tt RDBE\_DDC} in the setup file. This personality
+provides up to 4 filters per RDBE and there are 2 RDBE units at each
+station.  The filters can have frequencies that are multiples of
+15.625 MHz (see below).  The bandwidths of the DDC filters can be any
+factor of 2 step between 1 and 128 MHz.
+
+There is a complication forced by the use of a polyphase filter first
+step of filtration to get the clock rate down to values the FPGA can
+support.  Such filters do not have flexible frequency ranges.  This
+one splits the band into 3 segments, 512 to 640 MHz, 640 to 896 MHz,
+and 896 to 1024 MHz.  Each baseband must be confined to one of those
+ranges.  The ``crossover'' frequencies at the filter edges have a
+range of something like 4-10 MHz (to be determined) that is not really
+usable.  \schedb will issue a warning if an attempt is made to have a
+baseband cross one of these boundaries.  Note that the polyphase
+filter to use will be determined by the frequency of the LO sum.  It
+is possible that users of the 128 MHz bandwidth will want to offset
+slightly for better pulse cal performance and this will cause a tiny
+fraction of the band to get aliased.  \schedb will issue warnings, but
+this can be tolerated.
 
 The frequencies for the band edges in the DDC personality can be set
 to any multiple of $256 / (2^{32})$ MHz = $0.0596046$ Hz in principle.
@@ -2707,14 +2707,12 @@ But values that are not integer Hz would cause problems elsewhere -
 mainly with returning to phase after changes.  The smallest allowed
 value that qualifies is 15.625 kHz.  One way to look at the allowed
 values is that they are N*125 kHz plus 0, 15.625, 31.250, 46.875,
-62.500, 78.125, 93.750, or 109.375 kHz.  For the moment, it may be
-best to stick to multiples of 10 kHz (the step in the BBCs of the old
-system) until we determine that there is adequate precision
-everywhere.  The only way to do the is with multiples of 250 kHz.
-However finer tuning (multiples of 15.625 kHz) is now (\schedb version
-10.2) supposed to work, but has not yet been tested.  /schedb will 
-warn if the frequency is not a multiple of 250 kHz and will abort if
-it is not a multiple of 15.625 kHz.
+62.500, 78.125, 93.750, or 109.375 kHz.  If working with other
+antennas with legacy systems, it will be necessary to stick to
+multiples of 10 kHz which is only possible with the DDC by using
+multiples of 250 kHz.  /schedb will warn if the frequency is not a
+multiple of 250 kHz and will abort if it is not a multiple of 15.625
+kHz.
 
 {\bf VLBA TUNING RESTRICTIONS:}
 
@@ -2734,18 +2732,18 @@ we hope to upgrade the front end synthesizers to designs with more
 tuning options, and in fact design and prototyping of such a system
 has started, although deployment is not yet funded (Feb 2012).
 
-Note that, for the initial /schedb implementation in place (versions
-9.4, through at least 10.1) the code to provide default channel
-frequencies based on the band has not yet been written.  It is
-necessary to give the frequencies in the setup file.  See the simple
-examples.  The defaulting capability will be added eventually.  But
-for now, the upper-edge baseband frequencies with PFB personality must
-be from the following list: 1040.0, 1008.0, 976.0, 944.0, 912.0,
-880.0, 848.0, 816.0, 784.0, 752.0, 720.0, 688.0, 656.0, 624.0, 592.0,
-560.0.  These can either be selected directly using the {\tt BBSYN}
-setup file parameter, or values of {\tt FREQREF} and {\tt FREQOFF}
-can be selected so that the difference between the desired baseband
-frequency and the signed sum of all other LOs is one of these values.
+Note that, for the initial /schedb implementation of the RDBE, the
+code to provide default channel frequencies based on the band has not
+yet been written.  It is necessary to give the frequencies in the
+setup file.  See the simple examples.  The defaulting capability will
+be added eventually.  But for now, the upper-edge baseband frequencies
+with PFB personality must be from the following list: 1040.0, 1008.0,
+976.0, 944.0, 912.0, 880.0, 848.0, 816.0, 784.0, 752.0, 720.0, 688.0,
+656.0, 624.0, 592.0, 560.0.  These can either be selected directly
+using the {\tt BBSYN} setup file parameter, or values of {\tt FREQREF}
+and {\tt FREQOFF} can be selected so that the difference between the
+desired baseband frequency and the signed sum of all other LOs is one
+of these values.
 
 {\bf EXAMPLES:}
 
@@ -4237,17 +4235,20 @@ plain.
 
 \section{\label{SEC:SATEL}Satellite Tracking}
 
-There is a project to use the VLBA to provide positional data to help
+There was a project to use the VLBA to provide positional data to help
 navigate interplanetary spacecraft.  For this project, the VLBA must
-be able to point at the spacecraft so the ability to do so has been
+be able to point at the spacecraft so the ability to do so was
 added to \schedb as of March 2004.  The spacecraft positions are
 obtained with the help of {\sl spice} files that are typically from
-JPL.  The NAIF software package from JPL is called to read the spice
-files and calculate positions.  The NAIF software significantly
-increases the size of a \schedb distribution, and the satellite
-tracking capability is unlikely to be needed outside the AOC.
-Therefore the tracking capability is not included in the default
-\schedb distribution.
+JPL.  In Dec. 2014, this capability was augumented to utilize 
+TLE (Two Line Ephemeris) files.
+
+The NAIF software package from JPL is called to read the spice files
+and calculate positions.  It is also used in processing the TLE files.
+The NAIF software significantly increases the size of a \schedb
+distribution, and the satellite tracking capability is unlikely to be
+needed outside the AOC.  Therefore the tracking capability is not
+included in the default \schedb distribution.
 
 To use the tracking capability, a \htmlref{{\tt Satellite
 Initialization}}{SEC:SATINIT} section needs to be included in the
@@ -4275,6 +4276,8 @@ when using the satellite tracking.  Some day, this should all be
 handled better, but the effect is under an arcsecond so it does not
 matter for pointing antennas.
 
+The items in the {\tt SATINIT} section are:
+
 \begin{enumerate}
 
 \item {\tt SATNAME:} The name of the satellite.  This is only used internally
@@ -4285,11 +4288,12 @@ the scan inputs.  This name is not sent to the NAIF software.
 other celestial body, for that matter).  This number is assigned by JPL.
 You need to know this number but I'm not really sure how you get it.
 This number is sent to the NAIF software to tell it which satellite to
-process.  For satellites, these numbers are negative.  The are positive
+process.  For satellites, these numbers are negative.  They are positive
 for planets etc.
 
 \item {\tt KERFILE:} A {\sl spice} kernel file that gives information such
-as leap seconds.  It is likely to have the extension {\sl .tls}.
+as leap seconds.  It is likely to have the extension {\sl .tls}.  Standard
+versions at NRAO are in the $PLANET_DATA area.
 
 \item {\tt SATFILE:} The {\sl spice} file for the satellite.  It is likely
 to have the extension {\sl .bsp}.  Note that it must contain the satellite
@@ -4298,17 +4302,23 @@ to calculate the vector from the antenna to the body.  That will usually
 mean that the Earth should be included and might require others, especially
 if the satellite is orbiting around some other body.
 
+\item {\tt TLEFILE:} The Two Line Ephemeris file for the satellite.
+It is likely to have the extension {\sl .bsp}.
+
 \end{enumerate}
 
 When groups have been given for all satellites, give a line that
 contains the word {\tt ENDSAT} and a slash.
 
 If the above section is provided and one of the satellites is a source
-in the schedule, \schedb will call the NAIF software every scan to
-get updated positions and rates.  It will also calculate an approximate
-parallax correction for each station.  This can amount to several
-arcseconds, and the calculation is believed to be good to an arcsecond
-or better.
+in the schedule, \schedb will call the NAIF software once for a
+nominal position for the summary file etc, then again for every scan
+for every stations to get updated positions and rates.  It will also
+calculate an approximate parallax correction for each station.  This
+can amount to several arcseconds, and the calculation is believed to
+be good to an arcsecond or better.  The scan/station dependent positions
+are written to the {\sl .crd} files for the VLBA.  See the note below
+about VEX files.
 
 For a satellite (or any moving source, for that matter), \schedb plotting
 can help you see where the object is going.  In the RD (RA/Dec) plots,
@@ -4491,7 +4501,6 @@ CATALOGS and other other ``external'' input.
 \htlm{FREQFILE}{} File containing standard frequency setups.
 \htlm{PEAKFILE}{} File with reference pointing parameters.
 \htlm{PEAKINIT}{} Following inputs are for reference pointing.
-\htlm{SATFILE}{~} File containing satellite orbital elements.
 \htlm{PCENTERS}{} Flag for start of lists of multiple phase centers
 
 \end{list}
@@ -8790,19 +8799,6 @@ rotation for each position of a focus/rotation raster.}
 {Only one set used per experiment.}
 {{\tt ROTOFF=-1.5,0,0,0,1.5}}
 
-\subsubsection{\label{MP:SATFILE}\tt SATFILE}
-
-{\tt SATFILE} is used to specify the name of a file of
-orbital elements for satellite observations.  This is normally
-only used for single dish testing, specifically holography.
-
-\rcwbox
-{A character string of up to 80 characters.  Should be a file name.}
-{Any character string.}
-{'NONE' --- means don't open such a file.}
-{Only one used per experiment.}
-{{\tt SATFILE = 'orbits.2000jan15.dat'}}
-
 
 \subsubsection{\label{MP:SCANTAG}\tt SCANTAG}
 
@@ -8917,7 +8913,8 @@ is very good --- certainly good enough for use for pointing which
 is the primary use envisioned (note that much work would be required
 on the correlator to correlate planetary observations).  There is
 a similar capability for pointing at satellites using orbital
-elements in \htmlref{{\tt SATFILE:}}{MP:SATFILE}.
+elements in {\tt SATFILE} or {\tt TLEFILE} that are specified in the
+\htmlref{{\tt SATINIT section}}{SEC:SATINIT}.
 
 The Solar System objects that \schedb understands are Mercury, Venus,
 Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, and Sun.
@@ -10055,11 +10052,13 @@ software have 8 character source name limits.
 \item [{\tt Ra}:] Right ascension. Remember that the VLA and
 Westerbork need sub-arcsecond positions for phasing.
 
-\item [{\tt RAERR}:] The angular error in the RA direction in
-milliarcseconds.  Note that for RA, this is not the coordinate error.
-For that, one would need to divide RAERR by 15 to convert to time units
-and divide by cos(dec) to account for the convergence of lines of RA
-near the poles.
+\item [{\tt RAERR}:] The coordinate error in the RA direction in but
+in milliarcseconds.  Note that for RA, this is 15 times the coordinate
+value error.  But it is the coordinate error in the sense that, to get
+the position error in angle on the sky, one would need to divide by
+cos(Dec).  Prior to Dec 2014, this manual description indicated that
+RAERR was the angle on the sky, but in practice for some time before
+that, it had been the coordinate error in milliarcseconds.
 
 \item [{\tt Dec}:] Declination.
 
@@ -11688,9 +11687,8 @@ same bandwidth, only one needs to be set.
 
 For the RDBE systems with the PFB personality ({\tt DBE = RDBE\_PFB}),
 the bandwidth must be 32 MHz.  There are no options.  For the DDC
-personality ({\tt DBE = RDBE\_DDC}), the baseband channel
-bandwidth can be anywhere between 1 and 64 MHz in factor of 2
-steps, with possible extension down to 125 kHz some day.  For the 
+personality ({\tt DBE = RDBE\_DDC}), the baseband channel bandwidth
+can be anywhere between 1 and 128 MHz in factor of 2 steps.  For the
 DBBC, the options are the factors of 2 between 1 and 16 MHz, with
 additional options at 32 and 512 MHz to be enabled in the future.
 
@@ -11777,23 +11775,13 @@ parameters.
 For MkIV all BBCs at a given station should fall in the range 100 -
 220 (the ``Low patch'') or 220 - 500 the ``High patch'').
 
-For the VLBA DAR and MkIV systems, the baseband frequency must be set
-on even 10 kHz frequencies.
+For the VLBA legacy DAR and MkIV systems, the baseband frequency must
+be set on even 10 kHz frequencies.
 
-The future is with the digital backends - the RDBE for the system
-being developed in the U.S. and the DBBC system from Noto being deployed
-in Europe.  There are also systems in other parts of the world but
+The future is with the digital backends - the RDBE for the VLBA and
+related systems and the DBBC system from Noto being deployed in Europe
+and elsewhere.  There are also systems in other parts of the world but
 more information is needed before those can be described.
-
-The RDBE DDC personality ({\tt DBE = RDBE\_DDC}) will support
-frequencies set to any even Hertz.  But the infrastructure in many
-places is not set up to handle frequencies with that many significant
-digits.  Four byte numbers are used and print formats, including in
-control files such as the vex file, do not have enough digits.  Thus
-for now, RDBE frequencies must be set to even 10 kHz as with the older
-systems.  Finer tuning may be provided in the future, but will require
-and end-to-end search through SCHED and various other places for
-places where the precision can be lost.
 
 With the RDBE DDC personality, there are some IF frequencies to avoid.
 After sampling at 1024 GHz (the usable IF frequencies are between 512
@@ -11807,48 +11795,46 @@ and 896-1024 MHz.  Baseband channels can be placed anywhere in any one
 of those 3 filter bands, but one should not attempt to cross the
 boundary between two.  That won't work and \schedb will issue a warning.
 
-The DDC personality can provide 8 basebands per RDBE.  Those basebands
-can have bandwidths of the factors of 2 between 1 and 64.0 MHz with
-possible extension down to 125 kHz eventually.  The total output bit
-rate has a maximum of 2048 Mbps.  The values of {\tt BBSYN} can set to
-any frequencies that are 1024 MHz (the sample rate) divided by powers
-of 2.  The finest setting is 0.0596046 Hz.  But any frequency that
-does not have an integer number of cycles in one second can cause big
-problems with carrying phase over various events like frequency
-switches.  So the settings must be limited to multiples of 15.625
-kHz --- the smallest setting that has an integer number of cycles in a
-second.  This can be looked at as N*125 kHz + 0, 15.625, 31.250,
-46.875, 62.500, 78.125, 93.750, or 109.375 kHz.  \schedb will not
-accept settings that are not multiples of 15.625 kHz.  But until we
-have a chance to make sure that the frequencies are kept to sufficient
-precision for finer settings, it is advisable to use multiples of 10 
-kHz, which is only actually possible with multiples of 250 kHz.  \schedb
-will warn of attempts to use finer settings.  Note that any
-crd files to control the old system while the DDC is in use will have
-BBC frequencies rounded to the nearest 10 kHz because of hardware
-limitations.  That should be ok as data from the BBCs are most likely
-not going to be recorded.
+The DDC personality can provide 4 basebands per RDBE and there are two
+RDBE units at each station.  Those basebands can have bandwidths of
+the factors of 2 between 1 and 128.0 MHz.  Spectral zoom mode in the
+DiFX correlator can be used to obtain narrower bandwidths.  The total
+output bit rate has a maximum of 2048 Mbps.  The values of {\tt BBSYN}
+can be set to any frequencies that are 1024 MHz (the sample rate)
+divided by powers of 2.  The finest setting is 0.0596046 Hz.  But any
+frequency that does not have an integer number of cycles in one second
+can cause big problems with carrying phase over various events like
+frequency switches.  So the settings must be limited to multiples of
+15.625 kHz --- the smallest setting that has an integer number of
+cycles in a second.  This can be looked at as N*125 kHz + 0, 15.625,
+31.250, 46.875, 62.500, 78.125, 93.750, or 109.375 kHz.  \schedb will
+not accept settings that are not multiples of 15.625 kHz.  Projects
+working with stations with other systems constrained to multiples of
+10 kHz should use frequencies that are multiples of 250 kHz.  \schedb
+will warn of attempts to use finer settings.  Note that any crd files
+to control the old system while the DDC is in use will have BBC
+frequencies rounded to the nearest 10 kHz because of hardware
+limitations in the legacy BBCs.  That should be ok as data from the
+BBCs are most likely not going to be recorded.
 
-The PFB personality of the RDBE, ({\tt DBE = RDBE\_PFB}) has rather rigid
-baseband frequency options.  A polyphase filter divides the 512-1024
-band into 17 baseband channels, 15 of which have 32 MHz bandwidth.
-The other 2 are half bands on the ends (actually full bands, but
-centered on the sample rate and half that).  Those edge channels
-cannot be used.  In the initial implementation, only every other
-channel could be used, starting with the one topping at 1008 MHz.
+The PFB personality of the RDBE, ({\tt DBE = RDBE\_PFB}) has rather
+rigid baseband frequency options.  A polyphase filter divides the
+512-1024 band into 17 baseband channels, 15 of which have 32 MHz
+bandwidth.  The other 2 are half bands on the ends (actually full
+bands, but centered on the sample rate and half that).  Those edge
+channels do not provide useful data, but often one is used when
+recording single polarization to reach the required 16 basebands.
 Each RDBE has 2 IF inputs and puts out 2048 Mbps (512 MHz total
 bandwidth with 2 bit samples and Nyquist sampling) in 16 total
 baseband channels.  There is not yet any ability to vary the bit rate.
-With the original PFB personality, there are 8 basebands from each
-input IF in the pattern mentioned above.  An early modification
-(almost available at this writing) is to allow any 16 total channels
-to be chosen from the 30 usable channels generated.
+The 16 channel can be chosen arbitrarly from all those produced from
+both IFs.
 
-The allowed {\tt BBSYN} frequencies for the PFB personality are
+The allowed {\tt BBSYN} frequencies for the PFB personality are 1040.0
 1008.0, 976.0, 944.0, 912.0, 880.0, 848.0, 816.0, 784.0, 752.0, 720.0,
 688.0, 656.0, 624.0, 592.0, and 560.0 and the bands must be lower
 sideband.  The frequencies listed are at the top of the 32 MHz
-channel.
+channel.  The first is the one that will produce a corrupted baseband.
 
 The DBBC system is more of a plug replacement for the MarkIV. The DBBC
 has a range of possible IF frequencies, but currently only 2 are
@@ -12130,8 +12116,11 @@ in terms of tracks despite the switch to disks because the concept is still
 used in Mark5A and in Mark5A+ playback of Mark5B.  Options are:
 \begin{verse}
 
-\noindent ~~~~ {\tt ~~~~~~~} - Set to DAR type for first stage default.\\
-\noindent VLBA formats - VLBA type systems:  \\
+\noindent ~~~~ {\tt ~~~~~~~} - Set according to DAR/DBE type for first 
+stage default.\\
+\noindent ~~~~ {\tt VDIF~~~} - When DBE=RDBE_DDC  \\
+\noindent ~~~~ {\tt MARK5B~} - When DBE=RDBE_PFB or using DBBC  \\
+\noindent VLBA formats - VLBA legacy type systems:  \\
 \noindent ~~~~ {\tt VLBA~~~} - Let \schedb choose the fan out. \\
 \noindent ~~~~ {\tt VLBA1:1} - 1 bitstream on 1 tape track. VLBA format.  \\
 \noindent ~~~~ {\tt VLBA1:2} - 1 bitstream on 2 tape tracks (fan out).    \\
@@ -14149,6 +14138,29 @@ then rsync the desired stuff to your development area.
 \subsection{\label{SSEC:VER_11.4}Version 11.4}
 
 \begin{itemize}
+
+\item Implemented the use of TLE (Two Line Ephemeris) files for
+satellite tracking.  This made use of a subroutine much like SATEP
+that was provided by Walter Brisken.  Inside SCHED, there is little
+difference between using the TLE files and the Spice files (.bsp)
+files we have been using for satellites.  The use of a TLE file is
+triggered by providing a {\tt TLEFILE} rather than a {\tt SATFILE} in
+the SATINI section.  Dec. 9, 2014 RCW.
+
+\item Force MarkIV format setups for disk stations to use TAPEMODE=1.
+This means that there is one pass per "head position".  Head position
+is a tape, not disk concept.  A Radioastron project somehow had 
+tried to use two passes per head position for a MarkIV station.
+Dec. 8, 2014.  RCW.
+
+\item There have been changes related to LBA at least in the examples,
+maybe more.  This could use documentation.
+
+\item Prevent setting an unused synthesizer to the same frequency
+as a used one.  Nov. 12, 2014  RCW.
+
+\item Only allow VDIF or NONE for the format when using DBE=RDBE_DDC.
+Nov. 12, 2014  RCW.
 
 \item Amy Mioduszewski made a pass through the manual updating VLA
 items.  She notes that some other systems such at MERLIN could use
