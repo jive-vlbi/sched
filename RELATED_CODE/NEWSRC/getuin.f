@@ -7,7 +7,7 @@ C
       INCLUDE  'newsrc.inc'
 C
       INTEGER     IER, LEN1
-      CHARACTER   YNIN*1
+      CHARACTER   YNIN*1, INLINE*256
 C
 C ----------------------------------------------------------------
 C
@@ -51,7 +51,8 @@ C
      1     '(PETROV, GSFC, GSFCAST, SCHED):'
       READ(*,'(A)') SOUFMT
       IF( SOUFMT .NE. 'PETROV' .AND. SOUFMT .NE. 'GSFCAST' .AND.
-     1    SOUFMT .NE. 'GSFC' .AND. SOUFMT .NE. 'SCHED' ) THEN
+     1    SOUFMT .NE. 'GSFC' .AND. SOUFMT .NE. 'GSFCAS2' .AND.
+     2    SOUFMT .NE. 'SCHED' ) THEN
          WRITE(*,*) ' Unknown format '
          STOP
       END IF
@@ -141,14 +142,43 @@ C
 C     Write information about the fluxes to the head of the output 
 C     file.
 C
+      WRITE( 12, '( A )' ) '!  Source catalog for SCHED'
+      WRITE( 12, '( A )' ) '! '
+      IF( .NOT. KEEPOLD ) THEN
+         WRITE( 12, '( 2A )' ) '!  Sources are from ',
+     1        GEOFILE(1:LEN1(GEOFILE))
+         WRITE( 12, '( 2A )' ) '!  Some aliases are from ',
+     1        SRCFILE(1:LEN1(SRCFILE))
+      END IF
+      WRITE( 12, '( A )' ) '! '
       WRITE( 12, '( A )' ) ' '
       WRITE( 12, '( 2A )' ) '!  Flux numbers are in triplets of ',
-     1     'frequency (GHz), total and unresolved flux (Jy)'
+     1     'frequency (GHz), short and long baseline flux density (Jy)'
       WRITE( 12, '( 2A )' ) '!  Flux of -9.99 means no data.  ',
      1     '-1 is unknown limit.'
       WRITE( 12, '( 2A )' ) '!  Other negative is -1*(upper limit).'
       WRITE( 12, '( A )' ) ' '
       WRITE( 12, '( A )' ) ' '
+C
+      IF( SOUFMT .EQ. 'SCHED' ) THEN
+         WRITE( 12, '( 2A )' ) '!  Header lines from ', 
+     1        GEOFILE(1:LEN1(GEOFILE))
+      WRITE( 12, '( A )' ) ' '
+  100 CONTINUE
+         INLINE = ' '
+         READ( 9, '( A )' ) INLINE
+         IF( INLINE(1:1) .EQ. '!' .OR. INLINE .EQ. ' ' ) THEN
+            WRITE( 12, '( A )' ) INLINE(1:LEN1(INLINE))
+            GO TO 100
+         END IF
+C
+C        Stop reading if a source line is found.
+C
+         CALL UPCASE( INLINE )
+         IF( INDEX( INLINE, 'SOURCE' ) .NE. 0 ) GO TO 100
+
+      END IF   
+      REWIND( UNIT = 9 )
 C
 C
       RETURN

@@ -28,8 +28,12 @@ C
      1       ( VNAME(IP) .EQ. 'VLA' .AND. LEN1(VNAME(IP)) .EQ. 3 ) ) 
      2       IPCEN = IP
       END DO
-      WRITE(*,*) 'Indices: ', NS, ISPT, ISLA, ISN8, 
-     1                        NV, IPN8, IPPT, IPCEN
+      WRITE(*,*) ' '
+      WRITE(*,*) 'Adjusting VLA antenna positions.'
+      WRITE(*,*) 'Indices: Num sta, Geo: Pie Town, VLA, VLAN8:', 
+     1            NS, ISPT, ISLA, ISN8
+      WRITE(*,*) '         Num VLA, VLA: Pie Town, VLA, VLAN8:',
+     1            NV, IPN8, IPPT, IPCEN
 C
 C     If dealing with a geodesy solution without the VLA, put in a
 C     something reasonable.
@@ -66,11 +70,18 @@ C
       END IF
 C
 C     Convert VLA positions to meters in a system with axes
-C     parallel to the ITRF.
+C     parallel to the ITRF.  With the new VLA coordinates that are
+C     aligned with the ITRF, this is just the misalignment.  The
+C     numbers are set in newloc.inc.  There was an 0.76" offset
+C     set in the 2011 version, but I don't know that we have any
+C     real information not that PT is gone to justify that.  Opt
+C     for the zero option.
 C
       CL = MNS * COS( VLALONG )
       SL = MNS * SIN( VLALONG )
-      WRITE(*,'(A,3F14.9)') 'Long: ', VLALONG, CL, SL
+      WRITE(*,'(A,3F14.9)') 'VLA rotation wrt ITRF radians: ', 
+     1     VLALONG, CL, SL
+
 C
       DO IP = 1, NV
          IRVLAX(IP) = VLAX(IP) * CL + VLAY(IP) * SL 

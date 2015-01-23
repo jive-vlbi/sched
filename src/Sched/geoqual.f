@@ -2,7 +2,7 @@
      1                    PRDEBUG, ZATMERR )
 C
 C     Get the quality measure of scans SC1 to SC2.  This gets the
-C     quality measure for this particular choice of soruces.  The calling
+C     quality measure for this particular choice of sources.  The calling
 C     program will then pick the highest set with the highest quality
 C     measure.  
 C

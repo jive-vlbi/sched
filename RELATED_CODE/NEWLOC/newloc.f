@@ -111,6 +111,7 @@ C     Write new locations file.
 C
       CALL WRTLOC
 C
+      WRITE(*,*) 'NEWLOC ending'
       STOP
       END
  

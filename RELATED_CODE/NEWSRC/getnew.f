@@ -11,7 +11,7 @@ C
 C
       INTEGER   I, ICAT, IR, IH, IN, JN, IFL, NOBS, INLEN
       INTEGER   RAH, DECD, RAM, DECM, RDSRC, ISTAT, LEN1
-      REAL      RAS, DECS
+      DOUBLE PRECISION  RAS, DECS
       LOGICAL   HEADDONE
       CHARACTER INLINE*256, NEWSIGN*1
 C
@@ -60,8 +60,9 @@ C        Do not read lines of SCHED format files.
 C
          IF( SOUFMT .NE. 'SCHED' ) THEN
             READ( 10, '(A)', END=300 ) INLINE
+            INLEN = LEN1(INLINE)
+C           write(*,*) INLINE(1:LEN1(INLINE))
          END IF
-         INLEN = LEN1(INLINE)
 C
 C        First read a Goddard type source line.
 C        Now there are two Goddard formats.  The Astro data was
@@ -79,7 +80,6 @@ C
      2              ' F11.4, 22X, I8 )' )
      3             NEWNAME(1,NCAT), RAH, RAM, RAS, NEWRAE(NCAT), 
      4             NEWSIGN, DECD, DECM, DECS, NEWDECE(NCAT), NOBS
-
 C
 C
 C              Set the REMARK based on the user provided strings since
@@ -120,7 +120,6 @@ C
      4             NEWNAME(1,NCAT), NEWNAME(2,NCAT), NEWNAME(3,NCAT), 
      5             RAH, RAM, RAS, NEWRAE(NCAT), 
      6             NEWSIGN, DECD, DECM, DECS, NEWDECE(NCAT), NOBS
-
 C
 C
 C              Set the REMARK based on the user provided strings since
@@ -139,9 +138,77 @@ C
 C
 C              Skip the line
 C              Recent versions have a blank after the line with the dashes.
+C              Deal with that by testing INLEN above.
+C              More recent versions have no dashes.  Aarg!  Add the 
+C              version with the verticle bars.
 C
                GO TO 200
             END IF
+C
+C
+         ELSE IF( SOUFMT .EQ. 'GSFCAS2' ) THEN
+C
+C           In Dec. 2014 with a preliminary astro catalog from GSFC, I 
+C           encountered yet another format.  This will be called 
+C           GSFCAS2.
+C
+C           For this format, there is nothing distinctive about the
+C           actual source lines rather than the header lines.  But
+C           there is a line of column delimiters just before the actual
+C           data.
+C
+C           There is only one source name.  There is a column for IAU
+C           names, but it is not filled in.  Leave reading it as an
+C           option, but blank it if it's set to 0, as all are in the
+C           file I have.  The unused column is the first, so treat that
+C           as NEWNAME(2,NCAT)
+C
+C           The errors are in arcseconds.
+C
+            IF( HEADDONE .AND. INLEN .GT. 0 ) THEN
+C
+C              Read the line with fixed format.
+C
+               READ( INLINE, '( A8, 1X, A8, '//
+     1              '1X, I2, 1X, I2, 1X, F11.8, 1X, '//
+     2              'A1, I2, 1X, I2, 1X, F10.7, 1X, F10.8, 1X, F9.7, '//
+     3              '38X, I6 )' )
+     4             NEWNAME(2,NCAT), NEWNAME(1,NCAT), RAH, RAM, RAS, 
+     6             NEWSIGN, DECD, DECM, DECS, 
+     7             NEWRAE(NCAT), NEWDECE(NCAT), NOBS
+               WRITE( *, '( A8, 1X, A8, '//
+     1              '1X, I2, 1X, I2, 1X, F11.8, 1X, '//
+     2              'A1, I2, 1X, I2, 1X, F10.7, 1X, F10.8, 1X, F9.7, '//
+     3              '38X, I6 )' )
+     4             NEWNAME(2,NCAT), NEWNAME(1,NCAT), RAH, RAM, RAS, 
+     6             NEWSIGN, DECD, DECM, DECS, 
+     7             NEWRAE(NCAT), NEWDECE(NCAT), NOBS
+C
+               IF( NEWNAME(2,NCAT) .EQ. '0' ) NEWNAME(2,NCAT) = ' '
+               NEWNAME(3,NCAT) = ' '
+               NEWRAE(NCAT) = NEWRAE(NCAT) * 1000.0
+               NEWDECE(NCAT) = NEWDECE(NCAT) * 1000.0
+C
+C              Set the REMARK based on the user provided strings since
+C              it is not in the file.  There are no fluxes so those
+C              may come from the old file.  Don't set IFLXREF
+C
+               WRITE( INREMARK(NCAT), '( A, I5, A )' )
+     1            USRREMRK(1:LEN1(USRREMRK)), NOBS, ' obs.'
+               INEQUIN(NCAT) = 'J2000'
+C
+            ELSE 
+C
+               NCAT = NCAT - 1
+C
+               IF( INLINE(1:24) .EQ. '        |        |  |  |' ) 
+     1              HEADDONE = .TRUE.
+C
+C              Skip the line
+C
+               GO TO 200
+            END IF
+C
 C
 C        Alternatively, read a line from Petrov's *.txt file.  That was
 C        the only file that has the flux densities.  Note added Mar 2014.

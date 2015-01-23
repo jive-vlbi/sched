@@ -51,14 +51,16 @@ C
 C     VLA longitude D,M,S   
 C     Now working with VLA "ITRF" coordinates so this is just a small
 C     offset from zero to account for any rotation of the VLA and 
-C     ITRF frames.
+C     ITRF frames.  
 C
       PARAMETER         (VLALD=0.D0)
       PARAMETER         (VLALM=0.D0)
-      PARAMETER         (VLAITS=0.76D0)
-C      PARAMETER         (VLAITS=0.D0)
 C
-C     Choose which to use here:
+C     Choose which to use.  Without PT, I don't know how we can get
+C     this so I am selecting zero for 2014.
+C
+C      PARAMETER         (VLAITS=0.76D0)
+      PARAMETER         (VLAITS=0.D0)
 C
       PARAMETER         ( VLALS = VLAITS )
 C

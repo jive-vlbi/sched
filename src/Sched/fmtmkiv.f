@@ -322,9 +322,15 @@ C
          END IF
 C
 C        Set the TAPEMODE if not already.
+C        Don't use values other than 1 for disk - the pass concept
+C        isn't there.
 C
          IF( TAPEMODE(KS) .EQ. 0 ) THEN
-            TAPEMODE(KS) = TMODE
+            IF( USEDISK(ISTA) ) THEN
+               TAPEMODE(KS) = 1
+            ELSE
+               TAPEMODE(KS) = TMODE
+            END IF
 C
 C        Now check the reasonableness of a preset TAPEMODE.
 C

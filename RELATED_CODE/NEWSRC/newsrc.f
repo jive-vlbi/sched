@@ -1,28 +1,57 @@
       PROGRAM NEWSRC
 C
 C     Read an old SCHED catalog.
+C       As of Dec. 2014, this will generally be the alias file.
 C     Read a new catalog, as from the geodesy community.
 C     Replace coordinates and errors in the old catalog.
 C     Add any new aliases.
 C     Add any new sources.
-C     If a Petrov .txt file, add flux information.
 C     Sort.
-C     Look for duplicates by position.
+C
+C     For sanity checks:
+C        Look for duplicates by position.
+C        Look for duplicate names.
+C
 C     Write a new SCHED catalog.
-C     Added a SCHED source catalog format to the possible
-C     inputs.  Nov. 2011  RCW.
+
+C     Partial history:
+C       Added a SCHED source catalog format to the possible
+C       inputs.  Nov. 2011  RCW.
 C
 C     If the input is a Petrov SCHED file, that file, as of
 C     2011d, needs to have SRCCAT / at the start and ENDCAT
 C     at the end removed.  It also needs FLUXREF added.
+C     Some time before Dec. 2014, this is no longer necessary.
+C     For KEYIN format files, copy all comments before the first line with "SOURCE".
+C     to the output file.
 C
+C     Dec. 2014.  Adding new GSFCAS2 format
+C     Also adding hardwired option to make alias file.
+C     I expect not to use it often.  If needed, set DOALIAS=.TRUE.
+C     and the output file will be heavily filtered.
+C
+C     Dec. 2014.  Trying to get GSFC to deliver keyin format files.
+C
+C  The inputs to Newsrc are.  Items in [] are suggestions when using alias file.
+C    1.  The old catalog.  Usually the pared down catalog with the aliases [sources.aliases]
+C    2.  Y/N question whether to keep sources not in new solution.         [N]
+C    3.  Which to keep if source in both files (NEW, BEST).                [NEW]
+C    4.  Y/N question whether to keep fluxes not in the new solution.      [N]
+C    5.  New input solution data file.
+C    6.  New input solution file format (PETROV, GSFC, GSFCAST, SCHED)
+C    7.  Output SCHED catalog file name.
+C    8.  REMARK to be added to each new source, if not in input file.
+C    9.  FLUXREF if there are fluxes but no associated FLUXREF
+
+
 C
       INCLUDE 'rdcat.inc'
       INCLUDE 'newsrc.inc'
 C
       INTEGER          MBIN
       PARAMETER        (MBIN=20)
-      INTEGER          LEN1, IND(MSRC), I, IISRC, ISRC, ICAT, J, K
+      INTEGER          LEN1, IND(MSRC), I, IISRC, ISRC, ICAT
+      INTEGER          J, J1, K, K1, MRA(MAL), MDEC(MAL)
       INTEGER          IO, IOJ, NOLD, NNEW, ICH, LIMATCH
       INTEGER          NIN, NOUT, NMATCH, NNOUT, NVLA, NJVAS, IB
       INTEGER          NRABIN(MBIN), NDECBIN(MBIN)
@@ -32,7 +61,9 @@ C
       REAL             SIGTOL, RSEPTOL, DSEPTOL
       REAL             RDIFE, DDIFE, RRMSSEP, DRMSSEP
       LOGICAL          GOTFLUX, MATCH(MSRC), UNIQUE
+      LOGICAL          NAMEKEEP, DOALIAS
       LOGICAL          NEWBEST, OLDBEST, MATCHNAM, MATCHPOS, MATCHFLG
+      logical          stripped
       CHARACTER        TEXT*132, LASTEQ*5
       CHARACTER        RAOUT*16, DECOUT*17, TFORM*17
       CHARACTER        OUTLINE*132, OUTNAME(MAL)*12
@@ -52,7 +83,7 @@ C
          NDECBIN(IB) = 0
       END DO
 C
-C     Get the user input and open the files.
+C     Get the user input and open the files.  Copy comments.
 C
       CALL GETUIN
 C
@@ -71,6 +102,22 @@ C     Read the new catalog.  Check for duplicate names.
 C
       CALL GETNEW
 C
+C     Get the tolerance for when to warn of matching names and not
+C     matching positions.
+C     SIGTOL sets the limit at 6 sigma.  It also converts from 
+C     mas to radians.
+C     With 6 sigma, there are a fairly large number of matches
+C     by name but not position.  See later.
+C
+      SIGTOL = 6.0
+      WRITE(*,*) ' '
+      WRITE(*,*) 'Matching sources between catalogs. '
+      WRITE(*,*) 
+     1  '   Warnings issued for pairs more than 6 sigma apart.'
+      WRITE(*,*) ' '
+C
+      SIGTOL = SIGTOL * RADSEC / 1000.0
+C
 C     Now we have all the data.  Try to match sources.
 C     Loop over the new sources, looking for what to do relative
 C     to the old sources.
@@ -78,6 +125,7 @@ C
       NADD = 0
       NMATCH = 0
       NREPLACE = 0
+
       DO ICAT = 1, NCAT
 C
          INOLD(ICAT) = .FALSE.
@@ -145,6 +193,11 @@ C
 C              Get the separation tolerance.  If the error is 0, assume
 C              is it 40 mas. (ok for JVAS etc).  
 C
+C              In practice, the RAERRs have been coordinate errors, but
+C              in mas, not time seconds.  They need a cos(dec) correction
+C              to be angle on the sky, or the comparisons need to not
+C              have a cos(dec) correction.
+C
                URAE = RAERR(ISRC)
                IF( URAE .EQ. 0.0 ) URAE = 40.0
                UDECE = DECERR(ISRC)
@@ -156,23 +209,35 @@ C
 C
 C              Get the tolerance.
 C              SIGTOL sets the limit at 6 sigma.  It also converts from 
-C              mas to radians.
+C              mas to radians.  See where it is set above.
 C              With 6 sigma, there are a fairly large number of matches
 C              by name but not position.  See later.
+C              Note that the RA error is in the corrdinate angle, not
+C              angle on the sky, the error numbers are high near the pole.
+C              Dec. 2014.  Add a constant so sources can match even if the
+C              errors are so small that they might be suspicious.  Make
+C              that constant 5 mas on the sky.
 C
-               SIGTOL = 6.0 * RADSEC / 1000.0
                RDIFE = SQRT( URAE**2 + NURAE**2 )
                DDIFE = SQRT( UDECE**2 + NUDECE**2 )
-               RSEPTOL = SIGTOL * RDIFE
-               DSEPTOL = SIGTOL * DDIFE
+               RSEPTOL = MAX( SIGTOL * RDIFE, SIGTOL * 5.0 )
+               DSEPTOL = MAX( SIGTOL * DDIFE, 
+     1                        SIGTOL * 5.0 / DCOS(DEC(ISRC)) )
 C
 C              Finally test for a match.  RSEP and DSEP are in radians.
+C              Compare coordinate angle, not sky angle.
 C
-               RSEP = ABS( RA(ISRC) - NEWRA(ICAT) ) * DCOS(DEC(ISRC))
+C               RSEP = ABS( RA(ISRC) - NEWRA(ICAT) ) * DCOS(DEC(ISRC))
+               RSEP = ABS( RA(ISRC) - NEWRA(ICAT) )
                DSEP = ABS( DEC(ISRC) - NEWDEC(ICAT) )
                MATCHPOS = RSEP .LT. RSEPTOL .AND. DSEP .LT. DSEPTOL
 C
-               MATCH(ICAT) = MATCHNAM .OR. MATCHPOS
+C              Decide if the the pair of sources match. Until Dec. 2014,
+C              we kept sources that matched either name or position.
+C              That was changed to requiring both match as we go away
+C              from using any catalogs except Petrov and GSFC.
+C
+               MATCH(ICAT) = MATCHNAM .AND. MATCHPOS
 C
 C              If there is a name match without a position match, complain.
 C              This would have been the symptom with some misidentifications
@@ -195,10 +260,12 @@ C
 C
                IF( MATCH(ICAT) .AND. .NOT. ( MATCHNAM .AND. MATCHFLG ) )
      1              THEN
-                  IF( MATCHNAM ) WRITE(*, '( A )' )
-     1               'Names match, but not positions: '
-                  IF( MATCHPOS ) WRITE(*, '( 6A )' )
-     1               'Positions match, but not names: '
+                  IF( MATCHNAM ) WRITE(*, '( 2A )' )
+     1               'Names match, but not positions.  ',
+     2               'Keep only the new information. '
+                  IF( MATCHPOS ) WRITE(*, '( 2A )' )
+     1               'Positions match, but not names. ',
+     2               'Keep only the new information.'
                   WRITE(*, '( A, 8(1X, A ))' ) '   Old names: ',
      1               ( NAME(I,ISRC)(1:LEN1(NAME(I,ISRC))),I=1,8 ) 
                   WRITE(*, '( A, 8(1X, A ))' ) '   New names: ',
@@ -461,9 +528,146 @@ C
       NVLA = 0
       NJVAS = 0
       DO ISRC = 1, NSRC
-         TEXT = ' '
          IO = IND(ISRC)
-         IF( ISNEW(IO) .NE. 0 .OR. KEEPOLD ) THEN
+C
+C        For special code version that makes the alias file, detect
+C        whether to keep the source.  Only sources with aliases not
+C        in the "new" catalog, and meeting other criteria, will be kept.
+C        Most sources will be dropped here because there are no aliases 
+C        that need to be maintined.  Usually DOALIAS should be false 
+C        when not creating the alias file.
+C
+         NAMEKEEP = .TRUE.
+C         DOALIAS = .TRUE.      
+         DOALIAS = .FALSE.
+         IF( DOALIAS ) THEN
+C
+C           Get the number of names for the source.
+C        
+            NNEW = 0
+            DO J = 1, MAL
+               IF( NAME(J,IO) .NE. ' ' ) NNEW = J
+            END DO
+C
+C           Some reasons not to keep the source.
+C              Only 1 or 2 names - aliases not needed.
+C              VLA or JVAS source.
+C              Not in latest rfc or GSFC catalog.
+C
+            IF( NNEW .LE. 2 ) NAMEKEEP = .FALSE.
+            IF( INDEX( REMARK(IO), 'VLA' ) .NE. 0 ) NAMEKEEP = .FALSE.
+            IF( INDEX( REMARK(IO), 'JVAS' ) .NE. 0 ) NAMEKEEP = .FALSE.
+            IF( .NOT. ( INDEX( REMARK(IO), 'GSFC 2011B' ) .NE. 0 .OR.
+     1           INDEX( REMARK(IO), 'rfc_2014d' ) .NE. 0 ) )
+     2           NAMEKEEP = .FALSE.
+C
+C           Don't keep the source if the J name ends in
+C           a letter.  This indicates there are close pairs and 
+C           aliases might not be reliable.
+C
+            DO J = 1, NNEW
+               K = LEN1( NAME(J,IO) )
+               IF( NAME(J,IO)(1:1) .EQ. 'J' .AND. (
+     1             NAME(J,IO)(K:K) .EQ. 'A' .OR. 
+     2             NAME(J,IO)(K:K) .EQ. 'B' .OR. 
+     3             NAME(J,IO)(K:K) .EQ. 'C' .OR. 
+     4             NAME(J,IO)(K:K) .EQ. 'D' ) )
+     5             NAMEKEEP = .FALSE.
+            END DO
+C
+C           Don't keep 2 J names that differ only in the last digit of
+C           one of the coordinates.  Don't do this for B1950 names because
+C           the proper B1950 name and the IVS name may differ.  Don't 
+C           worry about the Dec sign.
+C
+            stripped = .false.
+C            write(*, '(A, 2I5, L2, 2X, 8(1X,A12) )') 
+C     1           '=== Testing', io, isnew(io),
+C     2           namekeep, (name(k,io),k=1,nnew)
+C
+            DO J = 1, NNEW
+               K = LEN1( NAME(J,IO) )
+               IF( NAME(J,IO)(1:1) .EQ. 'J' .AND. 
+      1            LEN1( NAME(J,IO) ) .EQ. 10 ) THEN
+                  READ( NAME(J,IO)(2:5), '( I4 )', ERR = 100 ) MRA(J) 
+                  READ( NAME(J,IO)(7:10), '( I4 )', ERR = 100 ) MDEC(J) 
+               ELSE
+                  MRA(J) = -999
+                  MDEC(J) = -999
+               END IF
+               GO TO 101
+  100          CONTINUE
+               MRA(J) = -999
+               MDEC(J) = -999
+  101          CONTINUE             
+               stripped = .false.
+               IF( J .GT. 2 ) THEN
+                  DO K = 1, J - 1
+                     IF( ABS( MRA(K) - MRA(J) ) .LE. 1 .AND. 
+     1                   ABS( MDEC(K) - MDEC(J) ) .LE. 1 .AND.
+     2                   MRA(K) .NE. -999 .AND. MRA(J) .NE. -999 .AND.
+     3                   MDEC(K) .NE. -999 .AND. MDEC(K) .NE. -999) THEN
+C                        write(*,*) 'Removing ', name(j,io)
+                        stripped = .true.
+                        NAME(J,IO) =  ' '
+                     END IF
+                  END DO
+               END IF
+            END DO            
+C
+C           Left shift the array over the blanks.  Get new NNEW
+C
+            K = 0
+            DO J = 1, NNEW
+               IF( NAME(J,IO) .NE. ' ' ) THEN
+                  K = K + 1
+                  NAME(K,IO) = NAME(J,IO)
+               END IF
+            END DO
+            IF( K .LT. NNEW ) THEN
+               DO J = K+1, NNEW
+                  NAME(J,IO) = ' '
+               END DO
+            END IF
+            NNEW = K
+            IF( NNEW .LE. 2 ) NAMEKEEP = .FALSE.
+C
+C
+C            if( stripped ) then
+C               write(*, '( A, 6X, L2, 2X, 8(1X,A12) )') 
+C     1          ' stripped down:', namekeep, (name(k,io),k=1,nnew)
+C            end if
+C
+C           Now write a list of cases where there are two names that
+C           differ only in the last character.  Objects of hand edit?
+C           Warning, according to the 2011 GSFC file, the B1950 name and
+C           the IVS name (used in calc-solve) in the same format can differ
+C           So those cases should not be eliminated.
+C
+            IF( ( ISNEW(IO) .NE. 0 .OR. KEEPOLD ) .AND. NAMEKEEP ) THEN
+               DO J = 2, NNEW
+                  K = LEN1( NAME(J,IO) )
+                  DO J1 = 1, J - 1
+                     K1 = LEN1( NAME(J1,IO) )
+                     IF( K .EQ. K1 .AND. 
+     1                   NAME(J,IO)(1:K-1) .EQ. NAME(J1,IO)(1:K1-1) ) 
+     2                   THEN
+                        WRITE(*,'(A,1X, 2I5,8(1X,A8))') 
+     1                    'Very similar names ', IO, ISRC, 
+     2                    (NAME(I,IO), I=1,NNEW)
+                     END IF
+                  END DO
+               END DO
+            END IF
+C
+C
+         END IF      
+C
+C        Now write the new source if wanted.
+C
+         TEXT = ' '
+         IF( ( ISNEW(IO) .NE. 0 .OR. KEEPOLD ) .AND. NAMEKEEP ) THEN
+C            write(*,*) ' writing source ', io
             NOUT = NOUT + 1
             IF( EQUINOX(IO) .NE. LASTEQ ) THEN
                WRITE( 12, '( A, A )' ) 'EQUINOX = ', EQUINOX(IO)
@@ -569,6 +773,10 @@ C
       WRITE(*, '( I6, A )' ) NADD, ' new sources added.'
       WRITE(*, '( I6, A )' ) NOUT - NMATCH - NADD, 
      1     ' sources from the old catalog kept.'
+      IF( DOALIAS ) THEN
+         WRITE(*,*) '   Above number is likely to be wrong when '//
+     1       'making an alias file.'
+      END IF
       WRITE(*, '( 5X, I6, A )' ) NVLA, ' VLA calibrator list sources'//
       1      ' included.  May not be good for VLBI'
       WRITE(*, '( 5X, I6, A )' ) NJVAS, ' JVAS survey sources'//
@@ -605,10 +813,11 @@ C
 C
 C     Give the matching source statistics.
 C
+      WRITE(*,*) ' '
       WRITE(*,'( A )') 
      1    ' Histogram of separations in sigma for matching sources'
       WRITE(*,'( A )') 
-     1    '  Low edge  High edge  # RA     # Dec '
+     1    '  Bin range # RA  # Dec '
       DO IB = 1, MBIN - 1
          WRITE( *, '( 2F6.1, 2I6 )' )
      1      VBIN(IB), VBIN(IB+1), NRABIN(IB), NDECBIN(IB)

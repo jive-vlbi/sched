@@ -16,7 +16,7 @@ C
       INTEGER    ISRC, IR, IH, IN, JN
 C ----------------------------------------------------------------
 C     The continue line is where we loop back to for the next source.
-
+C
       NSRC = 0
 50    CONTINUE
 C
