@@ -257,9 +257,15 @@ C
                WRITE( LINE(CLINE)(22:132), '( A, A )' ) 'KERFILE: ',
      1                 KERFILE(SATN(ISRC))(1:LEN1(KERFILE(SATN(ISRC))))
                CLINE = CLINE + 1
-               WRITE( LINE(CLINE)(22:132), '( A, A )' ) 'SATFILE: ',
+               IF( SATFILE(SATN(ISRC))(1:4) .NE. 'NONE' ) THEN
+                  WRITE( LINE(CLINE)(22:132), '( A, A )' ) 'SATFILE: ',
      1                 SATFILE(SATN(ISRC))(1:LEN1(SATFILE(SATN(ISRC))))
-            END IF
+               END IF
+               IF( TLEFILE(SATN(ISRC))(1:4) .NE. 'NONE' ) THEN
+                  WRITE( LINE(CLINE)(22:132), '( A, A )' ) 'TLEFILE: ',
+     1                 TLEFILE(SATN(ISRC))(1:LEN1(TLEFILE(SATN(ISRC))))
+               END IF
+           END IF
 C
 C           Tell if the source is a pointing center for a multi-field
 C           processing.

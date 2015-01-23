@@ -35,11 +35,18 @@ C              Call the satellite position routine for the first
 C              scan for the first source to get a position for
 C              the source catalog.  Note that this routine will
 C              be called for each scan/station when actually making
-C              schedules.
+C              schedules.  Use presence of SATFILE to determine which
+C              routine to call.  SATINI made sure one, and not both
+C              of SATFILE and TLEFILE are not 'NONE'.
 C
                IF( ISSAT .NE. 0 ) THEN
-                  CALL SATEP( ISSAT, 1, 0, 'VLBA', 
-     1                  SRA, SDEC, SDRA, SDDEC, T0, DIST, GEOVEL )
+                  IF( SATFILE(ISSAT)(1:4) .NE. 'NONE' ) THEN
+                     CALL SATEP( ISSAT, 1, 0, 'VLBA', 
+     1                     SRA, SDEC, SDRA, SDDEC, T0, DIST, GEOVEL )
+                  ELSE
+                     CALL SATTLE( ISSAT, 1, 0, 'VLBA', 
+     1                     SRA, SDEC, SDRA, SDDEC, T0, DIST, GEOVEL )
+                  END IF
 C
 C                 Add the satellite to the source catalog.
 C

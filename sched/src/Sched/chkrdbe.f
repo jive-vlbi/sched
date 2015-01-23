@@ -48,7 +48,7 @@ C        PFB  One RDBE  VDIF    Not implemented.
 C        PFB  One RDBE  MARK5B  Ok
 C        PFB  Two RDBE  Any     Can't do because of bit rate limitations.
 C        DDC  All cases VDIF    Ok
-C        DDC  One RDBE  MARK5B  Ok
+C        DDC  One RDBE  MARK5B  No.  MARK5B/DDC support ended before Nov 2014.
 C        DDC  Two RDBE  MARK5B  No.  Cannot be merged.
 C
       IF( DBE(KS) .EQ. 'RDBE_PFB' .AND. ( FORMAT(KS) .NE. 'MARK5B' 
@@ -61,27 +61,19 @@ C
          CALL WLOG( 1, '          It must be MARK5B for DBE=RDBE_PFB.' )
          ERRS = .TRUE.
       END IF
-      IF( DBE(KS) .EQ. 'RDBE_DDC' .AND. MIF .EQ. 2 .AND.
-     1    ( FORMAT(KS) .NE. 'VDIF' .AND. FORMAT(KS) .NE. 'MARK5B'
-     2      .AND. FORMAT(KS) .NE. 'NONE' ) ) THEN
-         MSGTXT = ' '
-         WRITE( MSGTXT, '( 3A )' )
-     1      'CHKRDBE:  Format ', FORMAT(KS), ' specified for setup ',
-     2      SETNAME(KS)(1:LEN1(SETNAME(KS)))
-         CALL WLOG( 1, MSGTXT )
-         CALL WLOG( 1, '          It must be VDIF or MARK5B ' //
-     1        'for DBE=RDBE_DDC with 4 basebands or fewer.' )
-         ERRS = .TRUE.
-      END IF
-      IF( DBE(KS) .EQ. 'RDBE_DDC' .AND. MIF .EQ. 4 .AND.
+C
+C     Now only need one DDC case and it does not depend on the number of
+C     IFs.
+C
+      IF( DBE(KS) .EQ. 'RDBE_DDC' .AND.
      1    ( FORMAT(KS) .NE. 'VDIF' .AND. FORMAT(KS) .NE. 'NONE' ) ) THEN
          MSGTXT = ' '
          WRITE( MSGTXT, '( 3A )' )
      1      'CHKRDBE:  Format ', FORMAT(KS), ' specified for setup ',
      2      SETNAME(KS)(1:LEN1(SETNAME(KS)))
          CALL WLOG( 1, MSGTXT )
-         CALL WLOG( 1, '          It must be VDIF ' //
-     1        'for DBE=RDBE_DDC with 5-8 basebands.' )
+         CALL WLOG( 1, '          It must be VDIF or NONE' //
+     1        'for DBE=RDBE_DDC.' )
          ERRS = .TRUE.
       END IF
 C

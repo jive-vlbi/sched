@@ -120,6 +120,9 @@ C
          IF( VNAME(IV)(6:6) .EQ. '0' ) THEN
             VNAME(IV)(6:7) = VNAME(IV)(7:7) // ' '
          END IF
+C
+C        Basically a debug print:
+C
          write(*, '( A, A, 3I5, 3F12.4 )' ) ' VLA Station found: ', 
      1           VNAME(IV), iv, nv, mp, vlax(iv),
      2           vlay(iv), vlaz(iv)
@@ -127,6 +130,8 @@ C
 C
 C     Write the list.
 C
+      WRITE(*,*) ' '
+      WRITE(*, '( A )' ) 'VLA pad locations in VLA frame.'
       DO IV = 1, NV
          WRITE(*, '( A8, 3F14.4 )' ) 
      1       VNAME(IV), VLAX(IV), VLAY(IV), VLAZ(IV)

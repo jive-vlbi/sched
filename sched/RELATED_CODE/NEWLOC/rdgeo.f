@@ -57,7 +57,8 @@ C
 C     Get dates for reference frame and "current" comparisons.
 C
       WRITE(*,*) 'Reference epoch for rates yr, mo, dy.'
-      WRITE(*,*) 'Also current epoch for rates yr, mo, dy' 
+      WRITE(*,*) 'Also epoch (yr, mo, dy) ' //
+     1     'for print of current positions'
       WRITE(*,*) ' (eg 1997 1 1 2006 3 10):'
       READ(*,*) YEAR, MONTH, DAY, CYEAR, CMONTH, CDAY
       WRITE(*,*) 'Reference day: ', YEAR, MONTH, DAY
@@ -74,6 +75,10 @@ C     possibility of station names containing blanks and episodic
 C     dates.  So use fixed format (Sept 2011 mod).  Then eliminate
 C     blanks and actually use the episodic dates.  There should
 C     no longer be a need to run a set script to fix the names.
+C
+      WRITE(*,*) ' '
+      WRITE(*,*) 'Reading positions file. '
+      WRITE(*,*) ' St.#  In Name  Fixed Name  Start YMD MJD  ERR'
 C
 C     Jump here for next line of the Positions file.
 C
@@ -114,7 +119,6 @@ C
                IF( INSTA(IC:IC) .EQ. '_' ) STA(IS)(IC:IC) = ' '
                IF( INSTA(IC:IC) .EQ. ' ' ) STA(IS)(IC:IC) = '_'
             END DO
-        write(*,*) 'positions station: ', is, '  ', insta, '  ', sta(is)
 C
 C           Get the start time for the positions file.
 C           Don't do this if one was not given.
@@ -132,9 +136,12 @@ C
                   STOP
                END IF     
                VLBIBEG(NS) = EPMJD
-         write(*,*) 'rdgeo epmjd ', epsy, epsm, epsd, epmjd, err
+               WRITE(*, '( I5, 4A, I6, 2I3, F8.0, I3 )' )
+     1             IS, '  ', INSTA, '  ', STA(IS),
+     2             EPSY, EPSM, EPSD, EPMJD, ERR
             ELSE
                VLBIBEG(NS) = 0.D0
+               WRITE(*, '( I5, 4A )' )  is, '  ', insta, '  ', sta(is)
             END IF
 C
 C           Transfer data to the output arrays
@@ -238,6 +245,11 @@ C
 C                 Add the externally supplied epoch.
 C
                   VLBIJDAY(IS) = JDAY
+C
+C                 Write that the station has been added.
+C
+                  write(*,*) 'Rates added ', modsta, IS,
+     1                VLBIRX(IS), VLBIRY(IS), VLBIRZ(IS)
                END IF
             END DO
 C
@@ -309,6 +321,7 @@ C
                IF( STA(IS) .EQ. MODSTA ) THEN
                   GOTOFF(IS) = 'GEO'
                   VLBIOF(IS) = READOFF
+                  WRITE(*,*) 'Offset added ', IS, STA(IS), VLBIOF(IS)
                END IF
             END DO
 C

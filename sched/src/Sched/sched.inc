@@ -133,7 +133,7 @@ C
       INTEGER          IUSCH, IUSRC, IUSTA, IUTAP, IUSET
       INTEGER          IPRT, IULOC, IUVBA, ISUM, IUOPT, IVEX, IFRQ
       INTEGER          IFRQLST, IFLAG, ICOV, IUPK, IOMS, IV2D, IMAP
-      INTEGER          IOPT, ILOG, IMSG, IORB, IPRE
+      INTEGER          IOPT, ILOG, IMSG, IORB, IPRE, ITLE
 C
       PARAMETER        (IUSCH=8)
       PARAMETER        (IUSRC=9)
@@ -161,6 +161,7 @@ C     Unit 24 is used by RDLOC.
       PARAMETER        (IORB=31)
       PARAMETER        (IV2D=32)
       PARAMETER        (IPRE=33)
+      PARAMETER        (ITLE=34)
 C
 C
 C     Station catalog.   Contains MSTA stations.
@@ -335,7 +336,8 @@ C                       SUNDIS is the distance from the sun.
 C                       PLANET means the source is a planet and the
 C                              position will be from the JPL ephemeris.
 C                       SATEL  means that the source is a satellite
-C                              with orbital elements in SATFILE
+C                              with orbital elements in SATFILE or
+C                              TLEFILE.
 C                       SATN is the satellite index for the source.
 C                       CSUSED are flags for lists that show which 
 C                              names were used.
@@ -428,10 +430,11 @@ C
       INTEGER          SATNUM(MAXSAT)
       CHARACTER        SATNAME(MAXSAT)*12
       CHARACTER        SATFILE(MAXSAT)*128
+      CHARACTER        TLEFILE(MAXSAT)*128
       CHARACTER        KERFILE(MAXSAT)*128
 C
       COMMON  /SCHSAT/ NSAT, SATNUM
-      COMMON  /SCHCAT/ SATNAME, SATFILE, KERFILE
+      COMMON  /SCHCAT/ SATNAME, SATFILE, TLEFILE, KERFILE
 C 
 C
 C     Spectral line rest frequencies.

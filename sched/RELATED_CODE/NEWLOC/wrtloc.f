@@ -19,9 +19,9 @@ C
       READ(*,'(A)') NEWLOCF
       OPEN( UNIT=13, FILE=NEWLOCF, STATUS='NEW', ACCESS='SEQUENTIAL',
      1      FORM='FORMATTED', IOSTAT=IER )
-      WRITE(*,'( A, I3, A )') 'Opening new locations file on unit ', 
+      WRITE(*,'( A, I3, 2X, A )') 'Opening new locations file on unit ', 
      1      13, NEWLOCF
-      WRITE(*,*) '  OPEN error code: ', IER
+      WRITE(*,*) '  OPEN error code: ', IER, '   0 means opened ok.'
 C
 C  ------------  Toss this - not reading old catalog any more  -------
 C     For any stations not in the new data, copy over the old data
@@ -65,7 +65,7 @@ C
       WRITE( 13, '( A )' ) '! '
 C
       DO IS = 1, NS
-         WRITE( 13, '( 6X, A,A, F8.1, F9.1, A,F8.4 )' )
+         WRITE( 13, '( 6X, A,A, A, F8.1, A, F9.1, A,F8.4 )' )
      1     '  DBNAME=', STA(IS),
      2     '  BEGIN=', VLBIBEG(IS),
      3     '  END=', VLBIEND(IS),
