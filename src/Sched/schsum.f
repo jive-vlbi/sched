@@ -226,8 +226,14 @@ C
          DO I = 1, NSAT
             WRITE( ISUM, '( A, A )' )
      1      '  SATNAME:   ', SATNAME(I)(1:LEN1(SATNAME(I)))
-            WRITE( ISUM, '( A, A )' )
-     1      '     SATFILE:   ', SATFILE(I)(1:LEN1(SATFILE(I)))
+            IF( SATFILE(I)(1:4) .NE. 'NONE' ) THEN
+               WRITE( ISUM, '( A, A )' )
+     1           '     SATFILE:   ', SATFILE(I)(1:LEN1(SATFILE(I)))
+            END IF
+            IF( TLEFILE(I)(1:4) .NE. 'NONE' ) THEN
+               WRITE( ISUM, '( A, A )' )
+     1           '     TLEFILE:   ', TLEFILE(I)(1:LEN1(SATFILE(I)))
+            END IF
             WRITE( ISUM, '( A, A )' )
      1      '     KERFILE:   ', KERFILE(I)(1:LEN1(KERFILE(I)))
          END DO

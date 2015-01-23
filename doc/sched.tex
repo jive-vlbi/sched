@@ -129,9 +129,10 @@
   \hyperref[FR:#1]{{\tt #1:}}{\tt #2}%
 }
 %--Shipman end
+%\title{THE {{\sc SCHED}} USER MANUAL \\ Version 11.4 Test of Jan. 22, 2015}
 
 \begin{document}
-\title{THE {{\sc SCHED}} USER MANUAL \\ Version 11.4 Test of Jan. 22, 2015}
+\title{THE SCHED USER MANUAL \protect\\ Version 11.4 Test of Jan. 22, 2015}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -14148,7 +14149,7 @@ steps.  I have not set up a script because considerable interaction
 and checking is normally required.
 
 This section is derived from a separate file called {\sl
-Release\_instructions}.
+Release\_instructions} that is no longer being maintained.
 
 \begin{description}
 
@@ -14172,7 +14173,7 @@ in my other programming areas.
 
 \item [Setup files:]
 
-Update the setup files from the master:
+Update the setup files from the master if needed:
 
 \begin{verbatim}
 cd $SCHED/setups
@@ -14348,29 +14349,65 @@ from where latex is being run.  So this should be done in {\sl
 inserttex scheme used in the past has been replaced with
 verbatiminput.
 
-Process the manual.  {\tt latex} will probably need to be run 3 or
-more times to get all the links right.  The html files are prepared
-with {\tt latex2html} after {\tt latex} is working.  The local icons
-switch keeps users from having to go to NRAO for the up etc buttons.
-The -link option controls how deep the automatic contents pages go at
-each level.  Without it, the contents on the top level page are
-excessively long.  The {\tt -long\_titles 5} causes the html node names to be
+Process the manual.  The manual is in file {\sl \$SCHED/doc/sched.tex}
+which is configured for processing by {\tt latex, pdflatex}, and {\tt
+htlatex}.  The first produces a .dvi file which can then be used by
+various programs to produce other formats.  But this is probably not
+the way to go.  Note that {\tt latex} or {\tt pdflatex} will be need
+to be run at least 3 times to get all the references right.  {\tt
+htlatex} does three passes of the latex step regardless.  pdflatex
+directly produces a monolithic pdf file with active hyperlinks.  {\tt
+htlatex} produces the HTML files with chunking to the level specified
+in the call as shown below.  Note that the various files produced by
+{\tt latex, pdflatex}, and {\tt htlatex} are not necessarily
+compatible, so it is a good idea to delete them before running a
+different program.  The script {\tt latexclean} can do the cleanup as
+shown below.  That is certainly something to try if there is a crash
+for non-obvious reasons.
+
+Note that, until Jan. 2015, the HTML manual was prepared with {\tt
+latex2html}, but that program is no longer being supported and stopped
+working at the AOC.  So we converted to htlatex, which involved
+retyping most of the hyperref references in the text.  So we cannot
+easily go back.  In the process, the automatically-generated names of
+the html pages, and the number of such pages, changed.  Any references
+in external documents are going to have to change.
+
+For a release, both the {\sl .pdf} and {\sl HTML} can be made using the 
+sequence below.  Note that {\tt htlatex} makes the {\sl .html} files
+in the {\sl doc} area, then copies, not moves, them to the desired
+subdirectory specified in the third argument --- {\sl sched} in this
+case.  So the {\tt /bin/rm *.html} command below is to clean out 
+the excess.
+
+{\tt pdflatex} will probably need to be run 3 or
+more times to get all the links right.  It will leave the {\sl sched.pdf} file
+in the {\sl doc} area.
+The html files are prepared
+with {\tt htlatex}.  
+The "3" in the example causes the {\sl .html} node names to be
 based on the section headings, not just a sequence number.  This makes
-for referable names that won't keep changing.
+for referable names that won't keep changing.  The {\tt -dsched/} causes
+the {\sl .html} files to be copied to the {\sl sched} subdirectory, after
+which the originals in the current area ({\sl doc}) are deleted.
      
 \begin{verbatim}
 cd $SCHED/doc
-latex sched.tex   (may need several repeats to get internal links right)
-latex2html -local_icons -link 2 -long_titles 5 sched.tex
+latexclean sched
+pdflatex sched.tex   (may need several repeats to get internal links right)
+latexclean sched
+htlatex sched.tex "html,3,sec-filename" " " "-dsched/"
+/bin/rm *.html
 \end{verbatim}
 
-{\tt latex2html} will put its output files in a subdirectory called
-{\sl sched}.  Put copies of the examples and catalogs in appropriate
-subdirectories of that directory to allow simple links.  Don't worry
-about setups here for now.  Give user write privileges to make other
-maintenance easier.  Some of the catalogs are write restricted in the
-{\sl \$SCHED/catalogs} area to help prevent modifications to the
-derived files produced by {\tt Update}
+
+The HTML files will be expecting to find copies of the examples and
+catalogs in appropriate subdirectories of the {\sl sched} directory to
+allow simple links.  So update them.  Don't worry about setups here
+for now.  Give user write privileges to make other maintenance easier.
+Some of the catalogs are write restricted in the {\sl
+\$SCHED/catalogs} area to help prevent modifications to the derived
+files produced by {\tt Update}
 
 \begin{verbatim}
 /bin/rm -r sched/catalogs/*
@@ -14719,6 +14756,14 @@ then rsync the desired stuff to your development area.
 \subsection{\label{SSEC:VER_11.4}Version 11.4}
 
 \begin{itemize}
+
+\item The HTML version of the manual had been derived from the {\sl
+schec.tex} latex file using latex2html.  But that program is not
+longer supported and has proven problematic to use with the latest
+latex code.  Therefore, the manual was modified to work with pdflatex
+and htlatex to produce both pdf and HTML versions.  Help for this was
+obtained from John Shipman and William Colburn (Schlake) of NRAO.
+Completed by Craig Walker, Jan. 22, 2015.
 
 \item Implemented the use of TLE (Two Line Ephemeris) files for
 satellite tracking.  This made use of a subroutine much like SATEP

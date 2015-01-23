@@ -50,8 +50,13 @@ C
             END IF
          ELSE IF( SATEL(ISRC) ) THEN
             ISAT = SATN(ISRC)
-            CALL SATEP( ISAT, ISCN, ISTA, 'VLBA', PRA, PDEC, 
+            IF( SATFILE(ISAT) .NE. 'NONE' ) THEN
+               CALL SATEP( ISAT, ISCN, ISTA, 'VLBA', PRA, PDEC, 
      1                  DDRA, DDDEC, PPMTIME, DIST, GEOVEL )
+            ELSE
+               CALL SATTLE( ISAT, ISCN, ISTA, 'VLBA', PRA, PDEC, 
+     1                  DDRA, DDDEC, PPMTIME, DIST, GEOVEL )
+            END IF
          END IF
 C
          PDRA    = DDRA

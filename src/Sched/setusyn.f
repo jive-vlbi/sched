@@ -296,20 +296,27 @@ C
                NHJ = MIN( 10, INT( FMAX / LOJ ) )
              END IF
 C
+C            Don't set the unused synthesizer to the same frequency
+C            as a used one.  That has potential for trouble.
+C
+             IF( LOT .EQ. LOJ ) USEIT = .FALSE.
+C
 C            Now loop over the harmonics. 
 C
-             DO K = 1, NHT
-              DO L = 1, NHJ
+             IF( USEIT ) THEN
+              DO K = 1, NHT
+               DO L = 1, NHJ
 C
-C              Allow a birdy at 500 (out of band), but not 1000 (in band)
+C               Allow a birdy at 500 (out of band), but not 1000 (in band)
 C
-               IFF = ABS( LOT * K - LOJ * L )
-               IF( IFF .GT. 0.52 .AND. IFF .LT. 1.03 ) THEN
-                IHAR = MIN( K, L, IHAR )
-                USEIT = .FALSE.
-               END IF
+                IFF = ABS( LOT * K - LOJ * L )
+                IF( IFF .GT. 0.52 .AND. IFF .LT. 1.03 ) THEN
+                 IHAR = MIN( K, L, IHAR )
+                 USEIT = .FALSE.
+                END IF
+               END DO
               END DO
-             END DO
+             END IF
             END DO
 C
 C           If no birdy possibilities were found, use this TLO.

@@ -1,8 +1,6 @@
 
 
 
-
-
 This is not working.  The SPICE library is built with g77 and it does not
 seem to be compatible with gfortran.  We eventually need to build, or better,
 get a gfortran version of the libraries.  Sigh.
@@ -15,37 +13,47 @@ March 17, 2010.
 
 
 #! /bin/csh
+#  
+#  Trying to make this work - January 2015  RCW and Bruce Rowen.
+#  Update to be very much like configureLinux64gfortran.
 #
 # Use sed and the template Makefile.master to build a Makefile
 # for 64-bit Linux machines with satellite tracking using gfortran
 #
-# RCW  Oct 30, 2008
+# Original:  RCW  Oct 30, 2008
+# Updating Jan. 22, 2015 based on the configureLinux64gfortran that
+# had been updated on Jan. 31, 2012,   April 1, 2014 by RCW.
 #
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
 #
 /bin/rm Makefile
-/bin/rm -f makelinuxspice64gfortran.sedscript
+/bin/rm -f makelinuxsp64gf.sedscript
 
 # Make a file for sed with all the required changes to Makefile.master
 # Note that LPGPLOT is not needed for this case.
 
-cat <<EOF >! makelinuxspice64gfortran_sedscript
+cat <<EOF >! makelinuxsp64gf_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinuxSpice64gfortran:
 s:#ARCHSED: ARCH = LINUX:
 s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib64 -lX11:
-s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -L/usr/lib64 -lpng:
+s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Sat/*.f):
-s:#SATLDSED: SATLD = ../lib/LINUX64/spicelib.a ../lib/LINUX64/support.a -lm:
+s:#SATLDSED: SATLD = ../lib/LINUX64GFORTRAN/spicelib.a ../lib/LINUX64GFORTRAN/support.a -lm:
 EOF
 
 #  Run sed with the above file.
 
-sed -f makelinuxspice64gfortran_sedscript Makefile.master > Makefile
-/bin/rm makelinuxspice64gfortran_sedscript
+sed -f makelinuxsp64gf_sedscript Makefile.master > Makefile
+/bin/rm makelinuxsp64gf_sedscript
 
 #  When running make, you will see a variety of benign warnings that can be 
 #  ignored.  The main one concerns character variables being truncated when
 #  a variable of one length is set to equal a variable of another length.
+
+echo '******************************************************************'
+echo 'Before compiling or using SCHED,'
+echo 'be sure PGPLOT_DIR and PGPLOT_FONT point to the right place (sched pgplot area?).'
+echo '******************************************************************'

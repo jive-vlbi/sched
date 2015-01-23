@@ -16,6 +16,7 @@ C
       CHARACTER         TSTART*9, TSTOP*9, TRA*16, TDEC*16, TFORM*16
       CHARACTER         PMFT*9, PMVLBAD*9, PMHUMAND*16
       CHARACTER         HUMAND1*16, HUMAND2*16, VLBAD1*9, VLBAD2*9
+      CHARACTER         DFMT*30
       DOUBLE PRECISION  LSTOP, PRA, PDEC, PPMTIME
       DOUBLE PRECISION  PMFRACD, FRACD1, FRACD2
       SAVE              PMSET, LCALTIME
@@ -89,11 +90,19 @@ C
      3      '  calib=''', CALCODE(ISRC), ''''
 C
 C     Write proper motion information if needed.
+C     A crazy user wants scan rates close to the slew rates and
+C     the old format is not providing enough digits.  Increase
+C     the digits, but only if needed.
 C
       IF( PDRA .NE. 0.0 .OR. PDDEC .NE. 0.0  ) THEN
          CALL SCHDAY( PPMTIME, PMVLBAD, PMHUMAND, PMDOY, PMFRACD )
          PMFT = TFORM( PMFRACD*TWOPI, 'T', 0, 2, 2, 'hms' )
-         WRITE( IUVBA, '( 5A, F10.2, A, F10.2 )' )
+         IF( ABS( PDRA ) .GT. 1.D5 .OR. ABS( PDDEC ).GT. 1.D5 ) THEN
+            DFMT = '( 5A, F14.2, A, F14.2 )'
+         ELSE 
+            DFMT = '( 5A, F10.2, A, F10.2 )'
+         END IF
+         WRITE( IUVBA, DFMT )
      1        ' epochd=', PMVLBAD, ' epocht=', PMFT, 
      2        ' dra=', PDRA, ' ddec=', PDDEC
          PMSET = .TRUE.

@@ -104,7 +104,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2014Sep22-19:35:39"
+ VERSION = "2015Jan23-05:16:35"
 
 !  
 !  =====================================================================
@@ -3671,6 +3671,14 @@ Name = gbt2cm_d3  Station = GBT_VLBA, GBT_COLD priority = 0
 !  for VLBI, we use just beam 1.   From email by Frank Ghigo Aug 15, 2011.
 !-------------------------------------------------------------------------
 
+!  Following from email Frank Ghigo to Feng Gao Sept. 25, 2014.
+ Name = gbt1cm_x1  Station = GBT_VLBA, GBT_COLD    Priority = 0
+   rf1    = 21012, 21012   ifname = B,    D
+   rf2    = 21524, 21524   fe     = '1cm', '1cm'
+   pol    =   RCP,   LCP   lo1    = 22036, 22036
+   note = 'LO1=28.068, LO2=16.532, LO3=10.5 '
+ /
+
 Name = gbt1cm_a1  Station = GBT_VLBA, GBT_COLD priority = 0
   rf1 = 21212, 21212    ifname = B,    D
   rf2 = 21724, 21724    fe  = '1cm', '1cm'
@@ -6785,6 +6793,8 @@ Name = no1cm  Station = NOBEYAMA   priority = 5
 !    TID70 -> DSS43
 !    ROB70 -> DSS63
 !
+! CR, November 10 2014: added new 21cm wideband mode for Tid.
+!
 Name = go18cm  Station = DSS14   priority = 5
   rf1 =  1608, 1608    ifname =   '2N', '1N'    fe = '18cm', '18cm'
   rf2 =  1708, 1708    altifn =   '1A', '2A' 
@@ -6819,14 +6829,21 @@ Name = go1cm  Station = DSS14   priority = 5
   ! Range assuming low patch, but there is a problem with filters
 /
 
-Name = ti18cm  Station = DSS43, DSS45, DSS43LBA, DSS45LBA, DSS34, DSS34LBA   priority = 5
+Name = ti18cm  Station = DSS43, DSS43LBA, priority = 5
   rf1 = 1608, 1608      ifname = '2N',  '1N'  fe = '18cm', '18cm'
   rf2 = 1708, 1708      altifn = '1A',  '2A'
   pol =  RCP,  LCP      lo1 = 1380.00, 1380.00
-  note = 'LO from Harbison, e-mail 20/03/97. other values guesses'
-  ! especially no idea on rf* and if names, uses ?? DAR
-  ! earlier email suggested 1480 firstlo.
-  ! rf and lo from Naudet, 20 Nov 1997 (jsu)
+  note = 'CR: email from Horiuchi 2014-11-10. Currently LCP only'
+  ! This is more or less superseded by the new broadband 21cm setup
+  ! but apparently there is still a use case to keep this one.
+/
+
+Name = ti21cm  Station = DSS43, DSS43LBA, priority = 4
+  rf1 = 1400, 1400      ifname = '2N',  '1N'  fe = '18cm', '18cm'
+  rf2 = 1940, 1940      altifn = '1A',  '2A'
+  pol =  RCP,  LCP      lo1 = 1325.00, 1325.00
+  note = 'CR: email from Horiuchi 2014-11-10. Currently LCP only'
+  ! RF ranges assume new JPL Digital backend
 /
 
 Name = ti13cm  Station = DSS43, DSS45, DSS43LBA, DSS45LBA, DSS34, DSS34LBA   priority = 5

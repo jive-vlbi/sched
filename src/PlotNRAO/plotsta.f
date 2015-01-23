@@ -114,7 +114,7 @@ C        Now allow user to change station selections if in screen
 C        mode.
 C
          IF( SCREEN .AND. INTERACT ) THEN
-            CALL WRTMSG( 0, 'PLOTSTA', 'plstainstructions' )
+            CALL WRTMSG( 1, 'PLOTSTA', 'plstainstructions' )
             XCH = ( LONMAX + LONMIN ) / 2.0
             YCH = ( LATMAX + LATMIN ) / 2.0
   100       CONTINUE
