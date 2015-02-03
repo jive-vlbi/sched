@@ -1,0 +1,374 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>twovxf</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>twovxf</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ TWOVXF ( Two states defining a frame transformation )
+ 
+      SUBROUTINE TWOVXF ( AXDEF, INDEXA, PLNDEF, INDEXP, XFORM )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Find the state transformation from a base frame to the
+     right-handed frame defined by two state vectors:  one state
+     vector defining a specified axis and a second state vector
+     defining a specified coordinate plane.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     AXES
+     FRAMES
+     MATRIX
+     TRANSFORMATION
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION   AXDEF  ( 6 )
+      INTEGER            INDEXA
+      DOUBLE PRECISION   PLNDEF ( 6 )
+      INTEGER            INDEXP
+      DOUBLE PRECISION   XFORM  ( 6, 6 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  -------------------------------------------------
+     AXDEF      I   State defining a principal axis.
+     INDEXA     I   Principal axis number of AXDEF (X=1, Y=2, Z=3).
+     PLNDEF     I   State defining (with AXDEF) a principal plane.
+     INDEXP     I   Second axis number (with INDEXA) of principal
+                    plane.
+     XFORM      O   Output state transformation matrix.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     AXDEF      is a &quot;generalized&quot; state vector defining one of the
+                principal axes of a reference frame. This vector
+                consists of three components of a vector-valued
+                function of one independent variable t followed by
+                the derivatives of the components with respect to that
+                variable:
+
+                   ( a, b, c, da/dt, db/dt, dc/dt )
+
+                This routine treats the input states as unitless, but
+                in most applications the input states represent
+                quantities that have associated units. The first three
+                components must have the same units, and the units of
+                the last three components must be compatible with
+                those of the first three:  if the first three
+                components of AXDEF
+
+                   ( a, b, c )
+
+                have units U and t has units T, then the units of 
+                AXDEF normally would be
+
+                   ( U, U, U, U/T, U/T, U/T )
+
+                Note that the direction and angular velocity defined
+                by AXDEF are actually independent of U, so scaling
+                AXDEF doesn't affect the output of this routine.
+                
+                AXDEF could represent position and velocity; it could
+                also represent velocity and acceleration.  AXDEF could
+                for example represent the velocity and acceleration of
+                a time-dependent position vector ( x(t), y(t), z(t) ),
+                in which case AXDEF would be defined by
+ 
+                   a     = dx/dt
+                   b     = dy/dt
+                   c     = dz/dt
+
+                            2      2
+                   da/dt = d x / dt
+
+                            2      2
+                   db/dt = d y / dt
+
+                            2      2
+                   dc/dt = d z / dt
+
+                Below, we'll call the normalized (unit length) version
+                of
+
+                   ( a, b, c )
+
+                the &quot;direction&quot; of AXDEF.
+
+                We call the frame relative to which AXDEF is specified
+                the &quot;base frame.&quot;  The input state PLNDEF must be
+                specified relative to the same base frame.
+
+
+     INDEXA     is the index of the reference frame axis that is
+                parallel to the direction of AXDEF.
+
+                   Value of INDEXA             Axis
+ 
+                         1                      X
+                         2                      Y
+                         3                      Z
+
+
+     PLNDEF     is a state vector defining (with AXDEF) a principal
+                plane of the reference frame.  This vector consists
+                of three components followed by their derivatives with
+                respect to the independent variable t associated with
+                AXDEF, so PLNDEF is
+
+                   ( e, f, g, de/dt, df/dt, dg/dt )
+
+                Below, we'll call the unitized version of 
+
+                   ( e, f, g )
+
+                the &quot;direction&quot; of PLNDEF.
+
+                The second axis of the principal plane containing the
+                direction vectors of AXDEF and PLNDEF is perpendicular
+                to the first axis and has positive dot product with
+                the direction vector of PLNDEF.
+
+                The first three components of PLNDEF must have the
+                same units, and the units of the last three components
+                must be compatible with those of the first three:  if
+                the first three components of PLNDEF 
+                
+                   ( e, f, g )
+                
+                have units U2 and t has units T, then the units of
+                PLNDEF normally would be
+
+                   ( U2, U2, U2, U2/T, U2/T, U2/T )
+
+                ***For meaningful results, the angular velocities
+                   defined by AXDEF and PLNDEF must both have units of
+                   1/T.***
+
+                As with AXDEF, scaling PLNDEF doesn't affect the 
+                output of this routine.
+
+                AXDEF and PLNDEF must be specified relative to a
+                common reference frame, which we call the &quot;base
+                frame.&quot;
+
+
+     INDEXP     is the index of  second axis of the principal frame
+                determined by AXDEF and PLNDEF.  The association of
+                integer values and axes is the same as for INDEXA.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     XFORM      is the 6x6 matrix that transforms states from the
+                frame relative to which AXDEF and PLNDEF are specified
+                (the &quot;base frame&quot;) to the frame whose axes and
+                derivative are determined by AXDEF, PLNDEF, INDEXA and
+                INDEXP.
+
+                The matrix XFORM has the structure shown below:
+
+                    -            -
+                   |       :      |
+                   |   R   :  0   |
+                   | ......:......|
+                   |       :      |
+                   | dR_dt :  R   |
+                   |       :      |
+                    -            -
+
+                where R is a rotation matrix that is a function of
+                the independent variable associated with AXDEF and
+                PLNDEF, and where dR_dt is the derivative of R
+                with respect to that independent variable.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If INDEXA or INDEXP is not in the set {1,2,3} the error
+        SPICE(BADINDEX) will be signaled.
+
+     2) If INDEXA and INDEXP are the same the error
+        SPICE(UNDEFINEDFRAME) will be signaled.
+
+     3) If the cross product of the vectors AXDEF and PLNDEF is zero,
+        the error SPICE(DEPENDENTVECTORS) will be signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Given two linearly independent state vectors AXDEF and PLNDEF,
+     define vectors DIR1 and DIR2 by
+
+        DIR1 = ( AXDEF(1),   AXDEF(2),   AXDEF(3)  ) 
+        DIR2 = ( PLNDEF(1),  PLNDEF(2),  PLNDEF(3) )
+ 
+     Then there is a unique right-handed reference frame F having:
+
+        DIR1 lying along the INDEXA axis.
+
+        DIR2 lying in the INDEXA-INDEXP coordinate plane, such that
+        the dot product of DIR2 with the positive INDEXP axis is
+        positive.
+
+     This routine determines the 6x6 matrix that transforms states
+     from the base frame used to represent the input vectors to the
+     the frame F determined by AXDEF and PLNDEF.  Thus a state vector
+
+        S       = ( x, y, z, dx/dt, dy/dt, dz/dt ) 
+         base
+
+     in the input reference frame will be transformed to
+                     
+        S       = XFORM * S
+         F                 base
+  
+     in the frame F determined by AXDEF and PLNDEF.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The time-dependent Sun-Canopus reference frame associated with a
+     spacecraft uses the spacecraft-sun state to define the Z axis and
+     the Canopus direction to define the X-Z plane.
+
+     Define an approximate &quot;state vector&quot; for Canopus using the
+     J2000-relative, unit direction vector toward Canopus at a
+     specified time ET (time is needed to compute proper motion) as
+     position and the zero vector as velocity.  Call this state vector
+     STCANO.  Let STSUN be the J2000-relative state of the sun
+     relative to the spacecraft at ET.
+
+     Then the matrix XFISC that transforms states from J2000 to the
+     Sun-Canopus reference frame at ET is returned by the call
+
+        CALL <b>TWOVXF</b> ( STSUN, 3, STCANO, 1, XFISC )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     W.M. Owen       (JPL)
+     W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 18-DEC-2004 (NJB) (WMO) (WLT)</PRE>
+<h4>Link to routine TWOVXF source file <a href='../../../src/spicelib/twovxf.f'>twovxf.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:21 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,423 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>erract</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>erract</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+     ERRACT  ( Get/Set Default Error Action )
+ 
+      SUBROUTINE ERRACT ( OP, ACTION )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Retrieve or set the default error action.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/error.html">ERROR</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ERROR
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)                 OP
+      CHARACTER*(*)                 ACTION
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      OP         I   Operation -- 'GET' or 'SET'
+      ACTION    I/O  Error response action
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      OP       Indicates the operation -- 'GET' or 'SET'.  'GET' means,
+               &quot;Set ACTION to the current value of the error response
+               action.&quot;
+               'SET' means, &quot;update the error response action to the
+               value indicated by ACTION.&quot;
+
+               OP may be in mixed case; for example,
+
+                      CALL <b>ERRACT</b> ( 'gEt', ACTION )
+
+               will work.
+
+
+      ACTION   When OP is 'SET', ACTION is an input argument.  It
+               takes the values,  'ABORT',  'IGNORE',
+               'REPORT', 'RETURN', and 'DEFAULT'.
+
+               Please read the &quot;required reading&quot; file if you
+               haven't already done so!
+
+               Briefly, the meanings of the error response
+               choices are as follows:
+
+               1.  'ABORT'  --  When an error is detected by a
+                                SPICELIB routine, or when
+                                ANY routine signals detection
+                   of an error via a call to <a href="sigerr.html">SIGERR</a>, the
+                   toolkit will output any error messages that
+                   it has been enabled to output (see <a href="errprt.html">ERRPRT</a>
+                   and ERRDEV also ), and then execute a
+                   FORTRAN STOP statement.
+
+               2.  'REPORT' --  In this mode, the toolkit does
+                                NOT abort when errors are detected.
+                                When <a href="sigerr.html">SIGERR</a> is called to report
+                   an error, all error messages that the toolkit
+                   is enabled to output will be sent to the
+                   designated error output device.  Similarly,
+                   a call to <a href="setmsg.html">SETMSG</a> will result in the long
+                   error message being output, if the toolkit
+                   is enabled to output it.
+
+
+               3.  'RETURN' --  In this mode, the toolkit also
+                                does NOT abort when errors are
+                                detected.  Instead, error messages
+                   are output if the toolkit is enabled to do
+                   so, and subsequently, ALL TOOLKIT ROUTINES
+                   RETURN IMMEDIATELY UPON ENTRY until the
+                   error status is reset via a call to <a href="reset.html">RESET</a>.
+                   (No, <a href="reset.html">RESET</a> itself doesn't return on entry).
+                   Resetting the error status will cause the
+                   toolkit routines to resume their normal
+                   execution threads.
+
+
+
+               4.  'IGNORE' --  The toolkit will not take any
+                                action in response to errors;
+                                calls to <a href="sigerr.html">SIGERR</a> will have no
+                                effect.
+
+
+               5.  'DEFAULT' -- This mode is the same as 'ABORT',
+                                except that an additional error
+                                message is output.  The additional
+                                message informs the user that the
+                                error response action can be
+                                modified, and refers to documentation
+                                of the error handling feature.
+
+
+
+               ACTION may be in mixed case; for example,
+
+                          CALL <b>ERRACT</b> ( 'SET', 'igNORe' )
+
+               will work.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+      ACTION   When OP is 'GET', ACTION is the current error response
+               action.  Possible values are:  'ABORT', 'REPORT',
+               'RETURN', and 'IGNORE'.  See &quot;Detailed Input&quot;
+               for descriptions of the meanings of these values.
+
+               ACTION is not an output unless OP is 'GET'.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+      This routine detects invalid values of OP and ACTION.
+
+      The short error messages set by this routine are:
+
+      1. 'SPICE(INVALIDOPERATION)'    -- bad OP value
+      2. 'SPICE(INVALIDACTION)'       -- bad ACTION value.
+
+
+      Also, this routine is part of the SPICELIB error
+      handling mechanism.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+      First of all, please read the ``required reading'' file.
+      The information below will make a lot more sense if you do.
+
+      Here is a brief discussion of how to use this routine.
+
+      If you are a user, you will probably be interested
+      in only the 'SET' operation (as far as this routine is
+      concerned, ok?).  As indicated in the &quot;detailed
+      input&quot; section above, the choices for ACTION are
+      'ABORT', 'REPORT', 'RETURN', 'IGNORE', and 'DEFAULT'.  These
+      choices control the way the toolkit behaves when an
+      error is detected.  The toolkit thinks an error has
+      been detected when <a href="sigerr.html">SIGERR</a> is called.
+
+      1.  'ABORT'   In this mode, the toolkit sends error messages
+          to the error output device and then stops.
+          This is the default mode.  It is probably
+          the one to choose for running non-interactive programs.
+          You may also wish to use this for programs which
+          have many bugs, or in other cases where continued
+          operation following detection of an error isn't useful.
+
+      2.  'REPORT'  In this mode, the toolkit sends error messages
+          to the error output device and keeps going.  This mode
+          may be useful if you are debugging a large program,
+          since you can get more information from a single test run.
+          You will probably want to use ERRDEV to indicate a file
+          where your error messages should be sent.
+
+      3.  'RETURN'  In this mode, the toolkit also sends error messages
+           to the error output device and &quot;keeps going&quot;.  But
+           instead of following their normal execution threads,
+           the toolkit routines will simply return immediately upon
+           entry, once an error has been detected.
+           The availability of this feature makes it safe to call
+           multiple toolkit routines without checking the error
+           status after each one returns; if one routine detects
+           an error, subsequent calls to toolkit routines will have
+           no effect; therefore, no crash will occur.  The error
+           messages set by the routine which detected the error
+           will remain available for retrieval by <a href="getmsg.html">GETMSG</a>.
+
+      4.   'IGNORE'  This mode can be dangerous!  It is best
+           used when running a program whose behavior you
+           understand well, in cases where you wish to suppress
+           annoying messages.  BUT, if an unexpected error
+           occurs, you won't hear about it from anyone, except
+           possibly your run-time system.
+
+      5.  'DEFAULT'  As the name suggests, this is the default
+           error handling mode.  The error handling mechanism
+           starts out in this mode when a program using the
+           toolkit is run, and the mode remains 'DEFAULT' until
+           it is changed via a call to this routine.
+           This mode is the same as 'ABORT',
+           except that an additional error message is output.
+           The additional message informs the user that the
+           error response action can be modified, and refers
+           to documentation of the error handling feature.
+
+
+      NOTE:
+
+          By default, error messages are printed to the screen
+          when errors are detected.  You may want to send them
+          to a different output device, or choose a subset to
+          output.  Use the routines ERRDEV and <a href="errprt.html">ERRPRT</a> to choose
+          the output device and select the messages to output,
+          respectively.
+
+          You can also suppress the automatic output of messages
+          and retrieve them directly in your own program.  <a href="getmsg.html">GETMSG</a>
+          can be used for this.  To make sure that the messages
+          retrieved correspond to the FIRST error that occurred,
+          use 'RETURN' mode.  In 'REPORT' mode, new messages
+          overwrite old ones in the SPICELIB message storage
+          area, so <a href="getmsg.html">GETMSG</a> will get the messages from the LATEST
+          error that occurred.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+      1.  Setting up 'ABORT' mode:
+
+
+          C
+          C      We wish to have our program abort if an error
+          C      is detected.  But instead of having the error
+          C      messages printed on the screen, we want them
+          C      to be written to the file, ERROR_LOG.DAT
+          C      (This is valid VAX/VMS file name; syntax
+          C      on your system may be different ).
+          C
+          C      We want to see all of the messages, so we
+          C      call <a href="errprt.html">ERRPRT</a>, using the 'ALL' option.
+          C
+          C      Finally, we call <b>ERRACT</b> to set the action to 'ABORT':
+          C
+
+                 CALL ERRDEV ( 'SET', 'ERROR_LOG.DAT' )
+
+                 CALL <a href="errprt.html">ERRPRT</a> ( 'SET',  'ALL'  )
+
+                 CALL <b>ERRACT</b> ( 'SET', 'ABORT' )
+
+
+
+      2.  Setting up 'REPORT' mode:
+
+          C
+          C      This is the same thing as before, except
+          C      that the argument supplied to <b>ERRACT</b>
+          C      is different.
+          C
+
+                 CALL ERRDEV ( 'SET', 'ERROR_LOG.DAT' )
+
+                 CALL <a href="errprt.html">ERRPRT</a> ( 'SET',   'ALL'  )
+
+                 CALL <b>ERRACT</b> ( 'SET', 'REPORT' )
+
+
+      3.  Setting up 'RETURN' mode:  This is the same
+          as example #2, except that the <b>ERRACT</b> call becomes:
+
+                 CALL <b>ERRACT</b> ( 'SET', 'RETURN' )
+
+
+
+      4.  Setting up 'IGNORE' mode:
+
+          C      In this case, we aren't going to have
+          C      ANY error messages (unless the call
+          C      to <b>ERRACT</b> itself fails), so we don't
+          C      really need to call <a href="errprt.html">ERRPRT</a> and ERRDEV.
+          C      (If the call to <b>ERRACT</b> DOES fail, which
+          C      it can do only if we misspell &quot;IGNORE,&quot;
+          C      the resulting error messages will go to
+          C      the screen).
+
+
+                 CALL <b>ERRACT</b> ( 'SET', 'IGNORE' )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      N.J. Bachman    (JPL)
+      K.R. Gehringer  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+     SPICELIB Version 2.0.0, 22-APR-1996 (KRG)
+
+         This subroutine has been modified in an attempt to improve 
+         the general performance of the SPICELIB error handling 
+         mechanism. The specific modification has been to change the 
+         type of the error action passed to <a href="putact.html">PUTACT</a> from a short 
+         character string to an integer. This change is backwardly 
+         incompatible because the type of the input argument has 
+         changed. This should pose no difficulties because <a href="putact.html">PUTACT</a> is a 
+         private subroutine used by the error handling system, and 
+         hence isolated from direct use.
+
+     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+         Comment section for permuted index source lines was added
+         following the header.
+
+     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB)</PRE>
+<h4>Link to routine ERRACT source file <a href='../../../src/spicelib/erract.f'>erract.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:19 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,277 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>stelab</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>stelab</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      STELAB     ( Stellar Aberration )
+ 
+      SUBROUTINE STELAB ( POBJ, VOBS, APPOBJ )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+      Correct the apparent position of an object for stellar
+      aberration.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+      EPHEMERIS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION   POBJ   ( 3 )
+      DOUBLE PRECISION   VOBS   ( 3 )
+      DOUBLE PRECISION   APPOBJ ( 3 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      POBJ       I   Position of an object with respect to the
+                     observer.
+      VOBS       I   Velocity of the observer with respect to the
+                     Solar System barycenter.
+      APPOBJ     O   Apparent position of the object with respect to
+                     the observer, corrected for stellar aberration.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      POBJ        is the position (x, y, z, km) of an object with
+                  respect to the observer, possibly corrected for
+                  light time.
+
+      VOBS        is the velocity (dx/dt, dy/dt, dz/dt, km/sec)
+                  of the observer with respect to the Solar System
+                  barycenter.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+      APPOBJ      is the apparent position of the object relative
+                  to the observer, corrected for stellar aberration.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the velocity of the observer is greater than or equal
+        to the speed of light, the error SPICE(VALUEOUTOFRANGE)
+        is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+      Let r be the vector from the observer to the object, and v be
+          -                                                    -
+      the velocity of the observer with respect to the Solar System
+      barycenter. Let w be the angle between them. The aberration
+      angle phi is given by
+
+           sin(phi) = v sin(w) / c
+
+      Let h be the vector given by the cross product
+          -
+
+            h = r X v
+            -   -   -
+
+      Rotate r by phi radians about h to obtain the apparent position
+             -                      -
+      of the object.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+      In the following example, <b>STELAB</b> is used to correct the position
+      of a target body for stellar aberration.
+
+
+          (Previous subroutine calls have loaded the SPK file and
+           the leapseconds kernel file.)
+
+
+      C
+      C     Get the geometric state of the observer OBS relative to 
+      C     the solar system barycenter.
+      C
+            CALL <a href="spkssb.html">SPKSSB</a> ( OBS, ET, 'J2000', SOBS )
+
+      C
+      C     Get the light-time corrected position TPOS of the target
+      C     body TARG as seen by the observer. Normally we would
+      C     call <a href="spkpos.html">SPKPOS</a> to obtain this vector, but we already have
+      C     the state of the observer relative to the solar system
+      C     barycenter, so we can avoid looking up that state twice
+      C     by calling <a href="spkapo.html">SPKAPO</a>.
+      C
+            CALL <a href="spkapo.html">SPKAPO</a> ( TARG, ET, 'J2000', SOBS, 'LT', TPOS, LT )
+
+      C
+      C     Apply the correction for stellar aberration to the
+      C     light-time corrected position of the target body.
+      C     The corrected position is returned in the argument
+      C     PCORR.
+      C
+            CALL <b>STELAB</b> ( TPOS, SOBS(4), PCORR )
+
+
+      Note that this example is somewhat contrived. The sequence
+      of calls above could be replaced by a single call to <a href="spkezp.html">SPKEZP</a>,
+      using the aberration correction flag 'LT+S'.
+
+      For more information on aberration-corrected states or
+      positions, see the headers of any of the routines
+
+         <a href="spkezr.html">SPKEZR</a>
+         <a href="spkez.html">SPKEZ</a>
+         <a href="spkpos.html">SPKPOS</a>
+         <a href="spkezp.html">SPKEZP</a>
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      1) W.M. Owen, Jr., JPL IOM #314.8-524, &quot;The Treatment of
+         Aberration in Optical Navigation&quot;, 8 February 1985.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      N.J. Bachman    (JPL)
+      H.A. Neilan     (JPL)
+      W.L. Taber      (JPL)
+      I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+     SPICELIB Version 1.1.1, 8-JAN-2008 (NJB)
+
+         The header example was updated to remove references
+         to <a href="spkapp.html">SPKAPP</a>.
+
+     SPICELIB Version 1.1.0, 8-FEB-1999 (WLT)
+
+         The example was corrected so that SOBS(4) is passed
+         into <b>STELAB</b> instead of STARG(4).
+
+     SPICELIB Version 1.0.2, 10-MAR-1992 (WLT)
+
+         Comment section for permuted index source lines was added
+         following the header.
+
+     SPICELIB Version 1.0.1, 8-AUG-1990 (HAN)
+
+         Examples section of the header was updated to replace
+         calls to the GEF ephemeris readers by calls to the
+         new SPK ephemeris reader.
+
+     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT)</PRE>
+<h4>Link to routine STELAB source file <a href='../../../src/spicelib/stelab.f'>stelab.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:12 2014</pre>
+
+</body>
+</html>
+

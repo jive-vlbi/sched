@@ -1,0 +1,325 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>gipool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>gipool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ GIPOOL (Get integers from the kernel pool)
+ 
+      ENTRY GIPOOL ( NAME, START, ROOM, N, IVALS, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Return the integer value of a kernel variable from the
+     kernel pool.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/kernel.html">KERNEL</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONSTANTS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     CHARACTER*(*)         NAME
+     INTEGER               START
+     INTEGER               ROOM
+     INTEGER               N
+     INTEGER               IVALS    ( * )
+     LOGICAL               FOUND
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     NAME       I   Name of the variable whose value is to be returned.
+     START      I   Which component to start retrieving for NAME
+     ROOM       I   The largest number of values to return.
+     N          O   Number of values returned for NAME.
+     IVALS      O   Values associated with NAME.
+     FOUND      O   True if variable is in pool.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     NAME       is the name of the variable whose values are to be
+                returned. If the variable is not in the pool with
+                numeric type, FOUND will be FALSE.
+
+     START      is the index of the first component of NAME to return.
+                If START is less than 1, it will be treated as 1.  If
+                START is greater than the total number of components
+                available for NAME, no values will be returned (N will
+                be set to zero).  However, FOUND will still be set to
+                .TRUE.
+
+     ROOM       is the maximum number of components that should be
+                returned for this variable.  (Usually it is the amount
+                of ROOM available in the array IVALS). If ROOM is
+                less than 1 the error 'SPICE(BADARRAYSIZE)' will be
+                signaled.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     N          is the number of values associated with NAME that
+                are returned.  It will always be less than or equal
+                to ROOM.
+
+                If NAME is not in the pool with numeric type, no value
+                is given to N.
+
+     IVALS      is the array of values associated with NAME. Any
+                numeric value having non-zero fractional part is
+                rounded to the closest integer. If NAME is not in the
+                pool or does not have numeric type, no values are
+                assigned to the elements of IVALS.
+
+     FOUND      is TRUE if the variable is in the pool and has numeric
+                type, FALSE if it is not.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the value of ROOM is less than one the error
+        'SPICE(BADARRAYSIZE)' is signaled.
+
+     2) If a value requested is outside the valid range
+        of integers, the error 'SPICE(INTOUTOFRANGE)' is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine provides the user interface for retrieving
+     integer data stored in the kernel pool.  This interface
+     allows you to retrieve the data associated with a variable
+     in multiple accesses.  Under some circumstances this alleviates
+     the problem of having to know in advance the maximum amount
+     of space needed to accommodate all kernel variables.
+
+     However, this method of access does come with a price. It is
+     always more efficient to retrieve all of the data associated
+     with a kernel pool data in one call than it is to retrieve
+     it in sections.
+
+     See also the entry points <a href="gdpool.html">GDPOOL</a> and <a href="gcpool.html">GCPOOL</a>.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The following code fragment demonstrates how the data stored
+     in a kernel pool variable can be retrieved in pieces.
+
+     First we need some declarations.
+
+        INTEGER               ROOM
+        PARAMETER           ( ROOM = 3 )
+
+        CHARACTER*(8)         VARNAM
+        CHARACTER*(3)         INDENT
+        INTEGER               START
+        INTEGER               N
+        LOGICAL               FOUND
+        INTEGER               IVALS(ROOM)
+
+
+     Next load the data in the file 'typical.ker' into the
+     kernel pool.
+
+        CALL <a href="ldpool.html">LDPOOL</a> ( 'typical.ker' )
+
+     Next we shall print the values stored for the kernel pool
+     variable 'MYDATA'
+
+        VARNAM = 'MYDATA'
+        INDENT = ' '
+        START  =  1
+
+        CALL <b>GIPOOL</b> ( VARNAM, START, ROOM, N, IVALS, FOUND )
+
+        IF ( .NOT. FOUND )
+           WRITE (*,*) 'There is no numeric data available for MYDATA.'
+        ELSE
+
+           WRITE (*,*) 'Values for MYDATA.'
+           WRITE (*,*)
+
+           DO I = 1, N
+              WRITE (*,*) INDENT, IVALS(I)
+           END DO
+
+           DO WHILE ( N .EQ. ROOM )
+
+              START = START + N
+              CALL <b>GIPOOL</b> ( VARNAM, START, ROOM, N, IVALS, FOUND )
+
+              DO I = 1, N
+                 WRITE (*,*) INDENT, IVALS(I)
+              END DO
+
+           END DO
+
+        END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     W.L. Taber  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 8.1.1, 14-JUL-2014 (NJB)
+
+        Updated description of IVALS in Detailed_Output
+        header section.
+
+    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB)
+
+        ZZPINI call was updated for compatibility
+        with new watcher system implementation.
+
+    SPICELIB Version 8.0.1, 22-DEC-2004 (NJB)
+
+        Corrected an in-line comment relating to finding the
+        head node of the conflict resolution list for NAME.
+
+    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT)
+
+        Added the entry points <a href="pcpool.html">PCPOOL</a>, <a href="pdpool.html">PDPOOL</a> and <a href="pipool.html">PIPOOL</a> to allow
+        direct insertion of data into the kernel pool without having
+        to read an external file.
+
+        Added the interface <a href="lmpool.html">LMPOOL</a> that allows SPICE
+        programs to load text kernels directly from memory
+        instead of requiring a text file.
+
+        Added the entry point <a href="szpool.html">SZPOOL</a> to return kernel pool definition
+        parameters.
+
+        Added the entry point <a href="dvpool.html">DVPOOL</a> to allow the removal of a variable
+        from the kernel pool.
+
+        Added the entry point <a href="gnpool.html">GNPOOL</a> to allow users to determine
+        variables that are present in the kernel pool
+
+    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT)
+
+        The implementation of the kernel pool was completely redone
+        to improve performance in loading and fetching data.  In
+        addition the pool was upgraded so that variables may be
+        either string or numeric valued.
+
+        The entry points <a href="gcpool.html">GCPOOL</a>, <a href="gdpool.html">GDPOOL</a>, <b>GIPOOL</b> and <a href="dtpool.html">DTPOOL</a> were added
+        to the routine.</PRE>
+<h4>Link to routine GIPOOL source file <a href='../../../src/spicelib/pool.f'>pool.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:26 2014</pre>
+
+</body>
+</html>
+

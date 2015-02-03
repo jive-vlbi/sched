@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>sgfrvi</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>sgfrvi</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SGFRVI ( Generic Segments: Fetch ref. value and index )
+ 
+      SUBROUTINE SGFRVI ( HANDLE, DESCR, X, VALUE, INDX, FOUND )
+      IMPLICIT NONE
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Given the handle of a DAF and the descriptor associated with
+     a generic DAF segment in the file, find the reference value
+     associated with the value X and it's index.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/daf.html">DAF</a> Required Reading.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     GENERIC SEGMENTS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               HANDLE
+      DOUBLE PRECISION      DESCR ( * )
+      DOUBLE PRECISION      X
+      DOUBLE PRECISION      VALUE
+      INTEGER               INDX
+      LOGICAL               FOUND
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   The handle of a DAF open for reading.
+     DESCR      I   The descriptor for a DAF generic segment.
+     X          I   The key value used to find a reference and index.
+     VALUE      O   The reference value associated with X.
+     INDX       O   The index of VALUE within the reference values.
+     FOUND      O   A flag indicating whether values for X were found.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE     is the handle of a DAF open for reading
+
+     DESCR      is the descriptor of the generic segment that we are
+                going to search for a reference value to associate with
+                X.
+
+     X          a value for which the associated reference value
+                and reference index is requested.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     VALUE      is the reference value associated with the input value
+                X.
+
+     INDX       is the index of VALUE within the set of reference
+                values for the generic segment. This value may be used
+                to obtain a particular packet of data from the generic
+                segment.
+
+     FOUND      is a logical flag indicating whether a reference value
+                associated with X was found. If a reference value was
+                found, FOUND will have a value of TRUE; otherwise it
+                will have a value of FALSE.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     This subroutine makes use of parameters defined in the file
+     'sgparam.inc'.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) The error SPICE(UNKNOWNREFDIR) will be signalled if
+        the reference directory structure is unrecognized.  The most
+        likely cause of this error is that an upgrade to your
+        version of the SPICE toolkit is needed.
+
+     2) If a value computed for the index of an implicitly indexed
+        generic segment is too large to be represented as an integer,
+        the error SPICE(INDEXTOOLARGE) will be signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      See the description of HANDLE above.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine allows you to easily find the index and value
+     of the reference item that should be associated with a
+     value X.  Given this information you can then easily retrieve
+     the packet that should be associated with X.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you have a generic segment that contains the
+     following items.
+
+         1)  Packets that model the motion of a body as a function
+             of time over some interval of time.
+
+         2)  Reference values that are the epochs corresponding
+             to the beginning of the intervals for the packets.
+
+     To retrieve the correct packet to use to compute the position
+     and velocity of the body at a particular epoch,  ET, you could
+     use the following code. (Note this block of code assumes that
+     you aren't going to run into any exceptional cases such as ET
+     falling outside the range of times for which the packets can
+     provide ephemeris data.)
+
+        Find out the index of the time that should be associated
+        with the ET we've been given
+
+        CALL <b>SGFRVI</b> ( HANDLE, DESCR, ET,  ETFND, INDX, FOUND )
+
+        Fetch the INDX'th ephemeris packet from the segment.
+
+        CALL <a href="sgfpkt.html">SGFPKT</a> ( HANDLE, DESCR, INDX, EPHEM )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     The segment described by DESCR MUST be a generic segment,
+     otherwise the results of this routine are not predictable.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      K.R. Gehringer  (JPL)
+      W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.0, 07-SEP-2001 (EDW)
+
+        Replaced <a href="dafrda.html">DAFRDA</a> call with <a href="dafgda.html">DAFGDA</a>.
+
+    SPICELIB Version 1.1.0, 08-MAY-1996 (WLT)
+
+        A bug was found in the EXPCLS index case when the
+        trying to retrieve the last value in a generic segment.
+        This bug was discovered by the HP compiler complaining
+        that an index used was not initialized.
+
+        The offending line was
+
+                 MYVALU = BUFFER(I)
+
+        The corrected line is:
+
+                 MYVALU = BUFFER(BFINDX)
+
+    SPICELIB Version 1.0.0, 28-Mar-1994 (KRG) (WLT)</PRE>
+<h4>Link to routine SGFRVI source file <a href='../../../src/spicelib/sgfrvi.f'>sgfrvi.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:57 2014</pre>
+
+</body>
+</html>
+

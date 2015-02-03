@@ -1,0 +1,376 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ckr01</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ckr01</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      CKR01 ( C-kernel, read pointing record, data type 1 )
+ 
+      SUBROUTINE CKR01 ( HANDLE, DESCR, SCLKDP, TOL, NEEDAV,
+     .                   RECORD, FOUND                       )
+      IMPLICIT NONE
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Read a pointing record from a CK segment, data type 1.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               HANDLE
+      DOUBLE PRECISION      DESCR  ( * )
+      DOUBLE PRECISION      SCLKDP
+      DOUBLE PRECISION      TOL
+      LOGICAL               NEEDAV
+      DOUBLE PRECISION      RECORD ( * )
+      LOGICAL               FOUND
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   File handle.
+     DESCR      I   Segment descriptor.
+     SCLKDP     I   Spacecraft clock time.
+     TOL        I   Time tolerance.
+     NEEDAV     I   True when angular velocity data is requested.
+     RECORD     O   Pointing data record.
+     FOUND      O   True when data is found.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE     is the integer handle of the CK file containing the
+                segment.
+
+     DESCR      is the descriptor of the segment.
+
+     SCLKDP     is an encoded spacecraft clock time for which
+                pointing is being requested.  The SPICELIB routines
+                <a href="scencd.html">SCENCD</a> and <a href="scdecd.html">SCDECD</a> are used to encode and decode SCLK
+                times.
+
+     TOL        is a time tolerance, measured in the same units as
+                encoded spacecraft clock.
+
+                The record returned by <b>CKR01</b> is the one whose time is
+                closest to SCLKDP and within TOL units of SCLKDP.
+
+     NEEDAV     is true when angular velocity data is requested.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     RECORD     is the pointing record.  Contents are as follows:
+
+                   RECORD( 1 ) = CLKOUT
+
+                   RECORD( 2 ) = q0
+                   RECORD( 3 ) = q1
+                   RECORD( 4 ) = q2
+                   RECORD( 5 ) = q3
+
+                   RECORD( 6 ) = Av1  ]
+                   RECORD( 7 ) = Av2  |-- Returned optionally
+                   RECORD( 8 ) = Av3  ]
+
+                CLKOUT is the encoded spacecraft clock time for the
+                returned pointing values. CLKOUT will be the closest
+                time in the segment to the input time as long as it is
+                within the input tolerance (see FOUND below). If SCLKDP
+                falls at the exact midpoint of two times, the record
+                for the greater of the two will be returned.
+
+                The quantities q0 - q3 represent a quaternion.
+                The quantities Av1, Av2, and Av3 represent the angular
+                velocity vector, and are returned if the segment
+                contains angular velocity data and NEEDAV is true.
+                The components of the angular velocity vector are
+                specified relative to the inertial reference frame
+                for the segment.
+
+     FOUND      is true if a record was found to satisfy the pointing
+                request. FOUND will be false when there is no pointing
+                instance within the segment whose time falls within
+                the requested time tolerance on either side of the
+                input time.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the specified handle does not belong to any file that is
+         currently known to be open, an error is diagnosed by a
+         routine that this routine calls.
+
+     2)  If DESCR is not a valid, packed descriptor of a segment in
+         the CK file specified by HANDLE, the results of this routine
+         are unpredictable.
+
+     3)  If the segment is not of data type 1, as specified in the
+         third integer component of the segment descriptor, then
+         the error SPICE(WRONGDATATYPE) is signalled.
+
+     4)  If there is a need for angular velocity data and the segment
+         contains no such data, the error SPICE(NOAVDATA) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     The file containing the segment is specified by its handle, and
+     should be opened for read, either by <a href="cklpf.html">CKLPF</a> or <a href="dafopr.html">DAFOPR</a>.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     See the CK Required Reading file for a detailed description of
+     the structure of a type 1 pointing segment.
+
+     This routine searches a type 1 segment for the pointing instance
+     whose associated time is closest to the time that pointing was
+     requested for. If this time is within the tolerance specified by
+     the user, it sets FOUND equal to true and returns information in
+     the array RECORD that <a href="cke01.html">CKE01</a> uses to evaluate the pointing at the
+     time CLKOUT.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The CKRnn routines are usually used in tandem with the CKEnn
+     routines, which evaluate the record returned by CKRnn to give
+     the pointing information and output time.
+
+     The following code fragment searches through a file (represented
+     by HANDLE) for all segments applicable to the Voyager 2 wide angle
+     camera, for a particular spacecraft clock time, which have data
+     type 1.  It then evaluates the pointing for that epoch and prints
+     the result.
+
+     C
+     C     - Get the spacecraft clock time. Must encode it for use
+     C       in the C-kernel.
+     C
+     C     - Set the time tolerance high to catch anything close to
+     C       the input time.
+     C
+     C     - We don't need angular velocity data.
+     C
+           SC     = -32
+           INST   = -32002
+           TOL    =  1000.D0
+           NEEDAV = .FALSE.
+           DTYPE  =  1
+     C
+     C     Load the Voyager 2 spacecraft clock kernel and the C-kernel.
+     C
+           CALL <a href="furnsh.html">FURNSH</a> ( 'VGR_SCLK.TSC'        )
+           CALL <a href="dafopr.html">DAFOPR</a> ( 'VGR2_CK.BC',  HANDLE )
+     C
+     C     Convert the input request time to ticks.
+     C
+           WRITE (*,*) 'Enter spacecraft clock time string:'
+           READ (*,FMT='(A)') SCLKCH
+           CALL <a href="scencd.html">SCENCD</a> ( SC, SCLKCH, SCLKDP )
+
+     C
+     C     Search from the beginning through all segments.
+     C
+           CALL <a href="dafbfs.html">DAFBFS</a> ( HANDLE )
+           CALL <a href="daffna.html">DAFFNA</a> ( SFND   )
+
+           DO WHILE ( SFND )
+
+              CALL <a href="dafgn.html">DAFGN</a> ( <a href="ident.html">IDENT</a>                 )
+              CALL <a href="dafgs.html">DAFGS</a> ( DESCR                 )
+              CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+
+              IF ( INST          .EQ. ICD( 1 )  .AND.
+          .        DTYPE         .EQ. ICD( 3 )  .AND.
+          .        SCLKDP + TOL  .GE. DCD( 1 )  .AND.
+          .        SCLKDP - TOL  .LE. DCD( 2 ) ) THEN
+
+                 CALL <b>CKR01</b> ( HANDLE, DESCR, SCLKDP, TOL, NEEDAV,
+          .                   RECORD, FOUND )
+
+                 IF ( FOUND ) THEN
+
+                    CALL <a href="cke01.html">CKE01</a> ( NEEDAV, RECORD, CMAT, AV, CLKOUT )
+
+                    WRITE (*,*) 'Segment descriptor and identifier:'
+                    WRITE (*,*) DCD, ICD
+                    WRITE (*,*) <a href="ident.html">IDENT</a>
+
+                    WRITE (*,*) 'C-matrix:'
+                    WRITE (*,*) CMAT
+
+                 END IF
+
+              END IF
+
+              CALL <a href="daffna.html">DAFFNA</a> ( SFND )
+
+           END DO
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) The file containing the segment should be opened for read,
+        either by <a href="cklpf.html">CKLPF</a> or <a href="dafopr.html">DAFOPR</a>.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     J.M. Lynch     (JPL)
+     J.E. McLean    (JPL)
+     M.J. Spencer   (JPL)
+     R.E. Thurman   (JPL)
+     I.M. Underwood (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.1, 22-AUG-2006 (EDW)
+
+        Replaced references to <a href="ldpool.html">LDPOOL</a> with references 
+        to <a href="furnsh.html">FURNSH</a>.
+
+    SPICELIB Version 1.2.0, 07-SEP-2001 (EDW)
+
+        Replaced <a href="dafrda.html">DAFRDA</a> call with <a href="dafgda.html">DAFGDA</a>.
+        Added IMPLICIT NONE.
+
+    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.1.0, 30-AUG-1991 (JML)
+
+        This routine now checks the segment descriptor to
+        determine if it has been given a type 1 segment.
+
+        The FOUND flag is set to FALSE at the beginning of
+        the routine.
+
+        The particulars section was changed to provide a more
+        general description of the function of this routine. The
+        information that was originally in Particulars was moved
+        to the body of the code.
+
+        The example program was changed so that the tolerance
+        and data type are used in selecting which segments to read.
+
+    SPICELIB Version 1.0.1, 02-NOV-1990 (JML)
+
+        The example program was corrected so that the input
+        instrument code was tested against ICD(1) instead of
+        ICD(3).
+
+    SPICELIB Version 1.0.0, 07-SEP-1990 (RET) (IMU)</PRE>
+<h4>Link to routine CKR01 source file <a href='../../../src/spicelib/ckr01.f'>ckr01.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:57 2014</pre>
+
+</body>
+</html>
+

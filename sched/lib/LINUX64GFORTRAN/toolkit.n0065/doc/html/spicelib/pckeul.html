@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>pckeul</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>pckeul</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ PCKEUL ( PCK, get Euler angles at time from PCK file )
+
+      SUBROUTINE PCKEUL ( BODY, ET, FOUND, REF, EULANG )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+      This routine is obsolete.  It supports only the type 02 binary
+      PCK format.  It is maintained only for backward compatibility
+
+      Return Euler angles and their derivatives and their reference
+      frame, given an input time and body and reference frame from
+      a PCK binary file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+      <a href="../req/naif_ids.html">NAIF_IDS</a>
+     <a href="../req/rotation.html">ROTATION</a>
+      <a href="../req/time.html">TIME</a>
+      <a href="../req/pck.html">PCK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+      TRANSFORMATION
+      ROTATION
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      INTEGER              BODY
+      DOUBLE PRECISION     ET
+      LOGICAL              FOUND
+      CHARACTER*(*)        REF
+      DOUBLE PRECISION     EULANG   ( 6 )
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      BODY       I   ID code of body
+      ET         I   Epoch of transformation
+      FOUND      O   True if ET, BODY found in a PCK file
+      REF        O   Name of inertial ref. frame of state
+      EULANG     O   Euler angles and their derivatives.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      BODY        is the integer ID code of the body for which the
+                  state transformation matrix is requested. Bodies
+                  are numbered according to the standard NAIF
+                  numbering scheme.  The numbering scheme is
+                  explained in the NAIF_IDS required reading file.
+
+      ET          is the epoch at which the state transformation
+                  matrix is requested.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+      FOUND       if the Euler angles for the requested time
+                  and body are found in a PCK binary file,
+                  FOUND is true.  Otherwise, it's false.
+
+      REF         is the name of an inertial ref. frame.
+                  (See the routine <a href="chgirf.html">CHGIRF</a> for a full list of names.)
+
+      EULANG      the Euler angles and their derivatives at
+                  time ET. The rotation matrix is
+                  [ EULANG(3) ]  [EULANG(2)] [EULANG(1)]
+                               3            1           3
+
+                  and   dEULANG(1)/dt = EULANG(4)
+                        dEULANG(2)/dt = EULANG(5)
+                        dEULANG(3)/dt = EULANG(6)
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Here we load a binary PCK files and use <b>PCKEUL</b> to get the
+     Euler angles.
+
+     C
+     C  Load binary PCK file.
+     C
+        CALL <a href="pcklof.html">PCKLOF</a> ('example.pck', HANDLE)
+
+     C  Call routine to get Euler angles phi, delta, w.
+
+        CALL <b>PCKEUL</b> ( BODY, ET, FOUND, REF, EULANG )
+
+     The Euler angles and their derivatives are returned
+     in EULANG.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+      A binary PCK kernel must be loaded with <a href="pcklof.html">PCKLOF</a> before
+      calling this routine.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      K. S. Zukor   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 2.0.1, 03-JAN-2014 (EDW)
+
+        Minor edits to Procedure; clean trailing whitespace.
+        Removed unneeded Revisions section.
+
+    SPICELIB Version 2.0.0, 21-MAR-1995 (KSZ)
+
+        <b>PCKEUL</b> modified to check in.  <a href="pckmat.html">PCKMAT</a> takes
+        over for <b>PCKEUL</b> in many cases.  REF now a character.
+
+    SPICELIB Version 1.1.0, 18-OCT-1994 (KSZ)
+
+        Fixed bug which incorrecly modded DW by two pi.
+
+    SPICELIB Version 1.0.0, 11-MAR-1994 (KSZ)</PRE>
+<h4>Link to routine PCKEUL source file <a href='../../../src/spicelib/pckeul.f'>pckeul.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:43 2014</pre>
+
+</body>
+</html>
+

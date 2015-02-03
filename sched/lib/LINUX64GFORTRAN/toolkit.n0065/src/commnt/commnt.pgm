@@ -1,0 +1,1151 @@
+C$Procedure   COMMNT ( Comment utility program )
+ 
+      PROGRAM COMMNT
+      IMPLICIT NONE
+ 
+C$ Abstract
+C
+C     NAIF Toolkit utility program for adding, reading, extracting,
+C     and deleting comments from a binary file.
+C
+C$ Disclaimer
+C
+C     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
+C     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
+C     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
+C     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
+C     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
+C     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
+C     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
+C     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
+C     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
+C     SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
+C
+C     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
+C     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
+C     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+C     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
+C     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
+C     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
+C
+C     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
+C     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
+C     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
+C     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
+C
+C$ Required_Reading
+C
+C     SPC
+C     DAS
+C
+C$ Author_and_Institution
+C
+C     W.L. Taber     (JPL)
+C     K.R. Gehringer (JPL)
+C     J.E. McLean    (JPL)
+C     M.J. Spencer   (JPL)
+C
+C$ Version
+C
+C-    Version 6.0.1, 08-MAY-2001 (BVS)
+C
+C       Increased LINLEN from 255 to 1000 to make it consistent 
+C       with SPICELIB's SPC* and SUPPORT's DAF* internal line sizes.
+C
+C-    Version 5.0.1, 21-JUL-1997 (WLT)
+C
+C       Modified the banner at start up so that the version of the
+C       toolkit used to link COMMNT will be displayed.
+C
+C       In addition all WRITE statements were replaced by calls to
+C       TOSTDO.
+C
+C-    Version 5.0.0, 05-MAY-1994 (KRG)
+C
+C       Modified the program to use the new file type identification
+C       capability that was added to spicelib. No file type menu is
+C       necessary now, as the file type is determined during the
+C       execution of the program.
+C
+C       The prompts for the begin and end markers used to extract a
+C       subset of text lines from an input comment file which were then
+C       placed into the comment area of a SPICE binary kernel file have
+C       been removed. The entire input comment file is now placed into
+C       the comment area of the binary kernel file. This change
+C       simplifies the user interaction with the program.
+C
+C       Added support for the new PCK binary kernel files.
+C
+C       If an error occurs during the extraction of comments to a file,
+C       the file that was being created is deleted. We cannot know
+C       whether the file had been successfully created before the error
+C       occurred.
+C
+C-    Version 4.0.0, 11-DEC-1992 (KRG)
+C
+C        Added code to support the E-Kernel, and redesigned the
+C        user interface.
+C
+C-    Version 3.1.0, 19-NOV-1991 (MJS)
+C
+C        Variable QUIT initialized to FALSE.
+C
+C-    Version 3.0.1, 10-AUG-1991 (CHA) (NJB)
+C
+C        Updated comments to reflect status as a Toolkit
+C        utility program.  Message indicating that no comments
+C        were found in the specified file was changed to include
+C        the file name.
+C
+C-    Version 2.0.0, 28-JUN-1991 (JEM)
+C
+C        The option to read the comments from the comment
+C        area of a binary SPK or CK was added to the menu.
+C
+C-    Version 1.0.0, 05-APR-1991 (JEM)
+C
+C-&
+ 
+C
+C     SPICELIB functions
+C
+      INTEGER               CARDI
+      INTEGER               RTRIM
+ 
+      LOGICAL               EXISTS
+      LOGICAL               FAILED
+C
+C     Parameters
+C
+C     Set the version of the comment program. This should be updated
+C     every time a change is made, and it should agree with the
+C     version number in the header.
+C
+      CHARACTER*(*)         VERSN
+      PARAMETER           ( VERSN = '6.0.1' )
+C
+C     Set a value for the logical unit which represents the standard
+C     output device, commonly a terminal. A value of 6 is widely used,
+C     but the Fortran standard does not specify a value, so it may be
+C     different for different Fortran implementations.
+C
+      INTEGER               STDOUT
+      PARAMETER           ( STDOUT = 6 )
+C
+C     Lower bound for a SPICELIB CELL data structure.
+C
+      INTEGER               LBCELL
+      PARAMETER           ( LBCELL = -5 )
+C
+C     Maximum number of open binary files allowed.
+C
+      INTEGER               MAXOPN
+      PARAMETER           ( MAXOPN = 1 )
+C
+C     Set a value for a replacement marker.
+C
+      CHARACTER*(*)         REPMRK
+      PARAMETER           ( REPMRK = '#' )
+C
+C     Set a value for a filename prompt.
+C
+      CHARACTER*(*)         FILPRM
+      PARAMETER           ( FILPRM = 'Filename? ' )
+C
+C     File types
+C
+      CHARACTER*(*)         CKTYP
+      PARAMETER           ( CKTYP  = 'CK'  )
+ 
+      CHARACTER*(*)         EKTYP
+      PARAMETER           ( EKTYP  = 'EK'  )
+ 
+      CHARACTER*(*)         PCKTYP
+      PARAMETER           ( PCKTYP = 'PCK' )
+ 
+      CHARACTER*(*)         SPKTYP
+      PARAMETER           ( SPKTYP = 'SPK' )
+C
+C     Set a value for the length of a text line.
+C
+      INTEGER               LINLEN
+      PARAMETER           ( LINLEN = 1000 )
+C
+C     Set a value for the length of an error message.
+C
+      INTEGER               ERRLEN
+      PARAMETER           ( ERRLEN = 320 )
+C
+C     Set a value for the length of a filename.
+C
+      INTEGER               FNMLEN
+      PARAMETER           ( FNMLEN = 128 )
+C
+C     Set a length for the prompts in the prompt table.
+C
+      INTEGER               PRMLEN
+      PARAMETER           ( PRMLEN = 80 )
+C
+C     Set a length for the status of a file: 'OLD' or 'NEW'.
+C
+      INTEGER               STALEN
+      PARAMETER           ( STALEN = 3 )
+C
+C     Set the length for the architecture of a file.
+C
+      INTEGER               ARLEN
+      PARAMETER           ( ARLEN = 3 )
+C
+C     Set the length for the type of a file.
+C
+      INTEGER               TYPLEN
+      PARAMETER           ( TYPLEN = 4 )
+C
+C     Set a length for the option values.
+C
+      INTEGER               OPTLEN
+      PARAMETER           ( OPTLEN = 20 )
+C
+C     Set a length for the title of a menu.
+C
+      INTEGER               TTLLEN
+      PARAMETER           ( TTLLEN = 20 )
+C
+C     Set a length for an option name (what is typed to select it)
+C     for a menu.
+C
+      INTEGER               ONMLEN
+      PARAMETER           ( ONMLEN  = 1 )
+C
+C     Set the length of the text description of an option on a menu.
+C
+      INTEGER               OTXLEN
+      PARAMETER           ( OTXLEN = 40 )
+C
+C     The number of options available on the main menu.
+C
+      INTEGER               MNOPT
+      PARAMETER           ( MNOPT = 5 )
+C
+C     Set up some mnemonics for indexing the prompts in the prompt
+C     table.
+C
+      INTEGER               BINIDX
+      PARAMETER           ( BINIDX = 1          )
+ 
+      INTEGER               COMIDX
+      PARAMETER           ( COMIDX = BINIDX + 1 )
+C
+C     Set the maximum size of the filename table: this must be the
+C     number of distinct ``types'' of files that the program may
+C     require.
+C
+      INTEGER               MAXFNM
+      PARAMETER           ( MAXFNM = COMIDX )
+C
+C     Set up some mnemonics for indexing the messages in the message
+C     table.
+C
+      INTEGER               RDMSG
+      PARAMETER           ( RDMSG = 1           )
+ 
+      INTEGER               ADDMSG
+      PARAMETER           ( ADDMSG = RDMSG + 1  )
+ 
+      INTEGER               EXTMSG
+      PARAMETER           ( EXTMSG = ADDMSG + 1 )
+ 
+      INTEGER               DELMSG
+      PARAMETER           ( DELMSG = EXTMSG + 1 )
+ 
+      INTEGER               QITMSG
+      PARAMETER           ( QITMSG = DELMSG + 1 )
+ 
+      INTEGER               OKMSG
+      PARAMETER           ( OKMSG = QITMSG + 1  )
+ 
+      INTEGER               BADMSG
+      PARAMETER           ( BADMSG = OKMSG + 1  )
+C
+C     Set the maximum size of the message table: There should be a
+C     message for each ``type'' of action that the program can take.
+C
+      INTEGER               MAXMSG
+      PARAMETER           ( MAXMSG = BADMSG )
+C
+C     Set up some mnemonics for the OK and not OK status messages.
+C
+      INTEGER               STOK
+      PARAMETER           ( STOK  = 1        )
+ 
+      INTEGER               STNOK
+      PARAMETER           ( STNOK = STOK + 1 )
+C
+C     Set the maximum number of status messages that are available.
+C
+      INTEGER               MXSTAT
+      PARAMETER           ( MXSTAT = STNOK )
+ 
+C
+C     We need to have TKVLEN characters to hold the current version
+C     of the toolkit.
+C
+      INTEGER               TKVLEN
+      PARAMETER           ( TKVLEN = 12 )
+C
+C     Variables
+C
+      CHARACTER*(ARLEN)     ARCH
+      CHARACTER*(ERRLEN)    ERRMSG
+      CHARACTER*(FNMLEN)    FNMTBL(MAXFNM)
+      CHARACTER*(LINLEN)    LINE
+      CHARACTER*(ONMLEN)    MAINNM(MNOPT)
+      CHARACTER*(TTLLEN)    MAINTL
+      CHARACTER*(OTXLEN)    MAINTX(MNOPT)
+      CHARACTER*(OPTLEN)    MAINVL(MNOPT)
+      CHARACTER*(LINLEN)    MESSAG
+      CHARACTER*(LINLEN)    MESSGS(MAXMSG)
+      CHARACTER*(OPTLEN)    OPTION
+      CHARACTER*(PRMLEN)    PRMPTS(MAXFNM)
+      CHARACTER*(PRMLEN)    PRMTBL(MAXFNM)
+      CHARACTER*(STALEN)    STATBL(MAXFNM)
+      CHARACTER*(LINLEN)    STATUS(MXSTAT)
+      CHARACTER*(TYPLEN)    TYPE
+ 
+      CHARACTER*(TKVLEN)    TKV
+ 
+ 
+ 
+      INTEGER               COMLUN
+      INTEGER               HANDLE
+      INTEGER               I
+      INTEGER               IOPT
+      INTEGER               NUMFNM
+      INTEGER               NUMOPN
+      INTEGER               OPNSET(LBCELL:MAXOPN)
+      INTEGER               R
+      INTEGER               TBLIDX(MAXFNM)
+ 
+      LOGICAL               COMNTS
+      LOGICAL               CONTNU
+      LOGICAL               DONE
+      LOGICAL               EOC
+      LOGICAL               FILEOK
+      LOGICAL               INSBLN
+      LOGICAL               MORE
+      LOGICAL               NDFNMS
+      LOGICAL               TRYAGN
+      SAVE
+C
+C     We want to insert a blank line between additions if there are
+C     already comments in the binary file. We indicate this by giving
+C     the variable INSBLN the value .TRUE..
+C
+      DATA                  INSBLN  / .TRUE. /
+C
+C     Define the main menu title ...
+C
+      DATA   MAINTL    / 'COMMNT Options      ' /
+C
+C     Define the main menu option values ...
+C
+      DATA   MAINVL   /
+     .                  'QUIT                ',
+     .                  'ADD_COMMENTS        ',
+     .                  'READ_COMMENTS       ',
+     .                  'EXTRACT_COMMENTS    ',
+     .                  'DELETE_COMMENTS     '
+     .                /
+C
+C     Define the main menu descriptive text for each option ...
+C
+      DATA   MAINTX   /
+     .                   'Quit.',
+     .                   'Add comments to a binary file.',
+     .                   'Read the comments in a binary file.',
+     .                   'Extract comments from a binary file.',
+     .                   'Delete the comments in a binary file.'
+     .                /
+C
+C     Define the main menu option names ...
+C
+      DATA   MAINNM   /
+     .                   'Q',
+     .                   'A',
+     .                   'R',
+     .                   'E',
+     .                   'D'
+     .                /
+ 
+C
+C     Register the COMMNT main program with the SPICELIB error handler.
+C
+      CALL CHKIN ( 'COMMNT' )
+      CALL CLCOMM
+ 
+      CALL TKVRSN( 'TOOLKIT', TKV )
+      R = RTRIM(TKV)
+C
+C     Set the error action to 'RETURN'. We don't want the program
+C     to abort if an error is signalled. We check FAILED where
+C     necessary. If an error is signalled, we'll just handle the
+C     error, display an appropriate message, then call RESET at the
+C     end of the loop to continue.
+C
+      CALL ERRACT ( 'SET', 'RETURN' )
+C
+C     Set the error messages that we want to have displayed. We will
+C     diaplay the SPICELIB short and long error messages. This is done
+C     to ensure that some sort of an error message is displayed if an
+C     error occurs. In several places, long error messages are not set,
+C     so if only the long error messages were displayed, it would be
+C     possible to have an error signalled and not see any error
+C     information. This is not a very useful thing.
+C
+      CALL ERRPRT ( 'SET', 'NONE, SHORT, LONG, TRACEBACK' )
+C
+C     Set up the prompt table for the different types of files.
+C
+      PRMTBL(COMIDX) = 'Enter the name of the comment file' //
+     .                 ' to be ' // REPMRK // '.'
+      PRMTBL(BINIDX) = 'Enter the name of the binary file.'
+C
+C     Set up the message table for the different ``types'' of
+C     operations. The message table contains generic messages which will
+C     have their missing parts filled in after the option and file type
+C     havve been selected.
+C
+      MESSGS(RDMSG)  = 'Reading the comment area of the ' // REPMRK //
+     .                 ' file.'
+      MESSGS(ADDMSG) = 'Adding comments to the ' // REPMRK // ' file.'
+      MESSGS(EXTMSG) = 'Extracting comments from the ' // REPMRK //
+     .                 ' file.'
+      MESSGS(DELMSG) = 'Deleting the comment area of ' // REPMRK //
+     .                 ' file.'
+      MESSGS(QITMSG) = 'Quitting the program.'
+      MESSGS(OKMSG)  = 'The comments were successfully '
+     .                 // REPMRK // '.'
+      MESSGS(BADMSG) = 'The comments were NOT successfully '
+     .                 // REPMRK // '.'
+C
+C     Display a brief commercial with the name of the program and the
+C     version.
+C
+      LINE = '   Welcome to COMMNT Version: ' // REPMRK
+      CALL REPMC ( LINE, REPMRK, VERSN, LINE )
+ 
+      CALL TOSTDO ( ' '  )
+      CALL TOSTDO ( LINE )
+ 
+      LINE = '        (Spice Toolkit ' // TKV(1:R) // ')'
+      CALL TOSTDO ( LINE )
+      CALL TOSTDO ( ' '  )
+C
+C     Initialize the CELL oriented set for collecting open DAF or DAS
+C     files in the event of an error.
+C
+      CALL SSIZEI ( MAXOPN, OPNSET )
+C
+C     While there is still more to do ...
+C
+      DONE = .FALSE.
+      DO WHILE ( .NOT. DONE )
+C
+C        We initialize a few things here, so that they get reset for
+C        every trip through the loop.
+C
+C        Initialize the logical flags that we use.
+C
+         COMNTS = .FALSE.
+         CONTNU = .TRUE.
+         EOC    = .FALSE.
+         NDFNMS = .FALSE.
+C
+C        Initialize the filename table, ...
+C
+         FNMTBL(BINIDX) = ' '
+         FNMTBL(COMIDX) = ' '
+C
+C        the file status table, ...
+C
+         STATBL(BINIDX) = ' '
+         STATBL(COMIDX) = ' '
+C
+C        the table indices, ...
+C
+         TBLIDX(BINIDX) = 0
+         TBLIDX(COMIDX) = 0
+C
+C        set the number of file names to zero, ...
+C
+         NUMFNM = 0
+C
+C        the prompts in the prompt table, ...
+C
+         PRMPTS(BINIDX) = ' '
+         PRMPTS(COMIDX) = ' '
+C
+C        the message, and the option.
+C
+         MESSAG = ' '
+         OPTION = ' '
+C
+C        Set the status messages.
+C
+         STATUS(STOK)  = MESSGS(OKMSG)
+         STATUS(STNOK) = MESSGS(BADMSG)
+C
+C        Get the option to be performed from the main menu.
+C
+         CALL GETOPT ( MAINTL, MNOPT, MAINNM, MAINTX, IOPT )
+ 
+         OPTION = MAINVL(IOPT)
+C
+C        Set up the messages and other information for the option
+C        selected.
+C
+         IF ( CONTNU ) THEN
+ 
+            IF ( OPTION .EQ. 'ADD_COMMENTS' ) THEN
+ 
+               NDFNMS    = .TRUE.
+               NUMFNM    = 2
+               MESSAG    = MESSGS(ADDMSG)
+               TBLIDX(1) = COMIDX
+               PRMPTS(1) = PRMTBL(COMIDX)
+               CALL REPMC ( PRMPTS(1), REPMRK, 'added', PRMPTS(1) )
+ 
+               STATBL(COMIDX) = 'OLD'
+               TBLIDX(2)      = BINIDX
+               PRMPTS(2)      = PRMTBL(BINIDX)
+               STATBL(BINIDX) = 'OLD'
+C
+C              Set the operation status messages.
+C
+               STATUS(STOK) = MESSGS(OKMSG)
+               CALL REPMC ( STATUS(STOK), REPMRK, 'added',
+     .                      STATUS(STOK)                   )
+               STATUS (STNOK) = MESSGS(BADMSG)
+               CALL REPMC ( STATUS(STNOK), REPMRK, 'added',
+     .                      STATUS(STNOK)                   )
+ 
+            ELSE IF ( OPTION .EQ. 'READ_COMMENTS' ) THEN
+ 
+               NDFNMS    = .TRUE.
+               NUMFNM    = 1
+               MESSAG    = MESSGS(RDMSG)
+               TBLIDX(1) = BINIDX
+               PRMPTS(1) = PRMTBL(BINIDX)
+               STATBL(BINIDX) = 'OLD'
+C
+C              Set the operation status messages.
+C
+               STATUS(STOK) = MESSGS(OKMSG)
+               CALL REPMC ( STATUS(STOK), REPMRK, 'read',
+     .                      STATUS(STOK)                  )
+               STATUS (STNOK) = MESSGS(BADMSG)
+               CALL REPMC ( STATUS(STNOK), REPMRK, 'read',
+     .                      STATUS(STNOK)                  )
+ 
+            ELSE IF ( OPTION .EQ. 'EXTRACT_COMMENTS' ) THEN
+ 
+               NDFNMS    = .TRUE.
+               NUMFNM    = 2
+               MESSAG    = MESSGS(EXTMSG)
+               TBLIDX(1) = BINIDX
+               PRMPTS(1) = PRMTBL(BINIDX)
+               STATBL(BINIDX) = 'OLD'
+               TBLIDX(2)      = COMIDX
+               PRMPTS(2)      = PRMTBL(COMIDX)
+               CALL REPMC ( PRMPTS(2), REPMRK, 'created', PRMPTS(2) )
+               STATBL(COMIDX) = 'NEW'
+C
+C              Set the operation status messages.
+C
+               STATUS(STOK) = MESSGS(OKMSG)
+               CALL REPMC ( STATUS(STOK), REPMRK, 'extracted',
+     .                      STATUS(STOK)                       )
+               STATUS (STNOK) = MESSGS(BADMSG)
+               CALL REPMC ( STATUS(STNOK), REPMRK, 'extracted',
+     .                      STATUS(STNOK)                       )
+ 
+            ELSE IF ( OPTION .EQ. 'DELETE_COMMENTS' ) THEN
+ 
+               NDFNMS         = .TRUE.
+               NUMFNM         = 1
+               MESSAG         = MESSGS(DELMSG)
+               TBLIDX(1)      = BINIDX
+               PRMPTS(1)      = PRMTBL(BINIDX)
+               STATBL(BINIDX) = 'OLD'
+C
+C              Set the operation status messages.
+C
+               STATUS(STOK) = MESSGS(OKMSG)
+               CALL REPMC ( STATUS(STOK), REPMRK, 'deleted',
+     .                      STATUS(STOK)                     )
+               STATUS (STNOK) = MESSGS(BADMSG)
+               CALL REPMC ( STATUS(STNOK), REPMRK, 'deleted',
+     .                      STATUS(STNOK)                     )
+ 
+            ELSE IF ( OPTION .EQ. 'QUIT' ) THEN
+ 
+               MESSAG = MESSGS(QITMSG)
+ 
+            END IF
+ 
+         END IF
+C
+C        Collect any filenames that we may need.
+C
+         IF ( CONTNU .AND. NDFNMS ) THEN
+C
+C           we always need at least one filename if we get to here.
+C
+            I    = 1
+            MORE = .TRUE.
+            DO WHILE ( MORE )
+ 
+               FILEOK = .FALSE.
+               TRYAGN = .TRUE.
+ 
+               DO WHILE ( TRYAGN )
+ 
+                  CALL TOSTDO ( ' '       )
+                  CALL TOSTDO ( PRMPTS(I) )
+                  CALL TOSTDO ( ' '       )
+ 
+                  CALL GETFNM ( FILPRM,
+     .                          STATBL(TBLIDX(I)),
+     .                          FNMTBL(TBLIDX(I)),
+     .                          FILEOK,
+     .                          ERRMSG             )
+C
+C                 If the filename is OK, increment the filename index
+C                 and leave the try again loop. Otherwise, write out the
+C                 error message, and give the opportunity to go around
+C                 again.
+C
+                  IF ( FILEOK ) THEN
+ 
+                     I      = I + 1
+                     TRYAGN = .FALSE.
+ 
+                  ELSE
+ 
+                     CALL TOSTDO ( ' '    )
+                     CALL TOSTDO ( ERRMSG )
+                     CALL TOSTDO ( ' '    )
+ 
+                     CALL CNFIRM ( 'Try again? (Yes/No) ', TRYAGN )
+ 
+                     IF ( .NOT. TRYAGN ) THEN
+ 
+                        CONTNU = .FALSE.
+                        MORE   = .FALSE.
+ 
+                     END IF
+ 
+                  END IF
+ 
+               END DO
+ 
+               IF ( I .GT. NUMFNM ) THEN
+ 
+                  MORE = .FALSE.
+ 
+               END IF
+ 
+            END DO
+ 
+         END IF
+C
+C        Get the file architecture and type.
+C
+         IF ( CONTNU .AND. NDFNMS ) THEN
+ 
+            CALL GETFAT ( FNMTBL(BINIDX) , ARCH, TYPE )
+ 
+            IF ( FAILED() ) THEN
+ 
+               CONTNU = .FALSE.
+ 
+            END IF
+ 
+         END IF
+C
+C        Check to see that we got back a valid architecture and type.
+C
+         IF ( CONTNU .AND. NDFNMS ) THEN
+ 
+            IF ( ( ARCH .EQ. '?' ) .OR. ( TYPE .EQ. '?' ) ) THEN
+ 
+               CONTNU = .FALSE.
+ 
+               CALL SETMSG ( 'The architecture and type of the'   //
+     .                       ' binary file ''#'' could not be'    //
+     .                       ' determined. A common error is to'  //
+     .                       ' give the name of a text file'      //
+     .                       ' instead of the name of a binary'   //
+     .                       ' file.'                              )
+               CALL ERRCH  ( '#', FNMTBL(BINIDX)                   )
+               CALL SIGERR ( 'SPICE(BADFILEFORMAT)'                )
+ 
+            END IF
+ 
+         END IF
+C
+C        Customize the message. We know we can do this, because we
+C        need files, and so we don't have the QUIT message.
+C
+         IF ( CONTNU .AND. NDFNMS ) THEN
+ 
+            CALL REPMC ( MESSAG, REPMRK, TYPE, MESSAG )
+ 
+         END IF
+C
+C        Process the option that was selected so long ago.
+C
+         IF ( CONTNU ) THEN
+ 
+            IF ( OPTION .EQ. 'QUIT' ) THEN
+ 
+               CALL TOSTDO ( ' '    )
+               CALL TOSTDO ( MESSAG )
+               CALL TOSTDO ( ' '    )
+ 
+               DONE = .TRUE.
+ 
+            ELSE IF ( OPTION .EQ. 'ADD_COMMENTS' ) THEN
+ 
+               CALL TOSTDO ( ' '    )
+               CALL TOSTDO ( MESSAG )
+ 
+               LINE = 'From File: ' // REPMRK
+               CALL REPMC ( LINE, REPMRK, FNMTBL(COMIDX), LINE )
+               CALL TOSTDO ( ' '  )
+               CALL TOSTDO ( LINE )
+ 
+               LINE = 'To File  : ' // REPMRK
+               CALL REPMC ( LINE, REPMRK, FNMTBL(BINIDX), LINE )
+               CALL TOSTDO ( LINE )
+C
+C              Open the text file which contains the comments to be
+C              added to the binary file.
+C
+               CALL TXTOPR ( FNMTBL(COMIDX), COMLUN )
+ 
+               IF ( .NOT. FAILED() ) THEN
+ 
+                  IF ( TYPE .EQ. CKTYP ) THEN
+C
+C                    Open the binary file, add the comments, and close
+C                    the binary file.
+C
+                     CALL DAFOPW ( FNMTBL(BINIDX), HANDLE   )
+                     CALL SPCAC  ( HANDLE, COMLUN, ' ', ' ' )
+                     CALL DAFCLS ( HANDLE                   )
+ 
+                  ELSE IF ( TYPE .EQ. PCKTYP ) THEN
+C
+C                    Open the binary file, add the comments, and close
+C                    the binary file.
+C
+                     CALL DAFOPW ( FNMTBL(BINIDX), HANDLE   )
+                     CALL SPCAC  ( HANDLE, COMLUN, ' ', ' ' )
+                     CALL DAFCLS ( HANDLE                   )
+ 
+                  ELSE IF ( TYPE .EQ. SPKTYP ) THEN
+C
+C                    Open the binary file, add the comments, and close
+C                    the binary file.
+C
+                     CALL DAFOPW ( FNMTBL(BINIDX), HANDLE   )
+                     CALL SPCAC  ( HANDLE, COMLUN, ' ', ' ' )
+                     CALL DAFCLS ( HANDLE                   )
+ 
+                  ELSE IF ( TYPE .EQ. EKTYP ) THEN
+C
+C                    Open the binary file, add the comments, and close
+C                    the binary file.
+C
+                     CALL DASOPW ( FNMTBL(BINIDX), HANDLE            )
+                     CALL DASACU ( COMLUN, ' ',  ' ', INSBLN, HANDLE )
+                     CALL DASCLS ( HANDLE                            )
+ 
+                  END IF
+C
+C                 Close the comment file.
+C
+                  CLOSE ( COMLUN )
+ 
+               END IF
+C
+C              Display the status of the operation that was selected.
+C
+               CALL TOSTDO ( ' ' )
+               IF ( FAILED() ) THEN
+                  CALL TOSTDO ( STATUS(STNOK) )
+               ELSE
+                  CALL TOSTDO ( STATUS(STOK) )
+               END IF
+ 
+            ELSE IF ( OPTION .EQ. 'READ_COMMENTS' ) THEN
+ 
+               CALL TOSTDO ( ' ' )
+               CALL TOSTDO ( MESSAG )
+ 
+               LINE = 'File: ' // REPMRK
+               CALL REPMC ( LINE, REPMRK, FNMTBL(BINIDX), LINE )
+               CALL TOSTDO ( ' ' )
+               CALL TOSTDO ( LINE )
+               CALL TOSTDO ( ' ' )
+ 
+               IF ( TYPE .EQ. CKTYP ) THEN
+C
+C                 Open the binary file, read the comments, and close
+C                 the binary file.
+C
+                  CALL DAFOPR ( FNMTBL(BINIDX), HANDLE )
+C
+C                 The comments are read a line at a time and displayed
+C                 on the screen.
+C
+                  CALL SPCRFL ( HANDLE, LINE, EOC )
+ 
+                  IF ( .NOT. FAILED() ) THEN
+ 
+                     IF ( EOC ) THEN
+ 
+                        CALL TOSTDO ( 'There were no comments '
+     .                  //            'found in the file.' )
+ 
+                     END IF
+ 
+                     DO WHILE ( ( .NOT. EOC      ) .AND.
+     .                          ( .NOT. FAILED() )       )
+ 
+                        CALL TOSTDO ( LINE )
+                        CALL SPCRNL ( LINE, EOC )
+ 
+                     END DO
+ 
+                  END IF
+ 
+                  CALL DAFCLS ( HANDLE )
+ 
+               ELSE IF ( TYPE .EQ. PCKTYP ) THEN
+C
+C                 Open the binary file, read the comments, and close
+C                 the binary file.
+C
+                  CALL DAFOPR ( FNMTBL(BINIDX), HANDLE )
+C
+C                 The comments are read a line at a time and displayed
+C                 on the screen.
+C
+                  CALL SPCRFL ( HANDLE, LINE, EOC )
+ 
+                  IF ( .NOT. FAILED() ) THEN
+ 
+                     IF ( EOC ) THEN
+ 
+                        CALL TOSTDO ( 'There were no comment'
+     .                  //            'found in the file.' )
+ 
+                     END IF
+ 
+                     DO WHILE ( ( .NOT. EOC      ) .AND.
+     .                          ( .NOT. FAILED() )       )
+ 
+                        CALL TOSTDO ( LINE )
+                        CALL SPCRNL ( LINE, EOC )
+ 
+                     END DO
+ 
+                  END IF
+ 
+                  CALL DAFCLS ( HANDLE )
+ 
+               ELSE IF ( TYPE .EQ. SPKTYP ) THEN
+C
+C                 Open the binary file, read the comments, and close
+C                 the binary file.
+C
+                  CALL DAFOPR ( FNMTBL(BINIDX), HANDLE )
+C
+C                 The comments are read a line at a time and displayed
+C                 on the screen.
+C
+                  CALL SPCRFL ( HANDLE, LINE, EOC )
+ 
+                  IF ( .NOT. FAILED() ) THEN
+ 
+                     IF ( EOC ) THEN
+ 
+                        CALL TOSTDO ( 'There were no comments '
+     .                  //            'found in the file.' )
+ 
+                     END IF
+ 
+                     DO WHILE ( ( .NOT. EOC      ) .AND.
+     .                          ( .NOT. FAILED() )       )
+ 
+                        CALL TOSTDO ( LINE )
+                        CALL SPCRNL ( LINE, EOC )
+ 
+                     END DO
+ 
+                  END IF
+ 
+                  CALL DAFCLS ( HANDLE )
+ 
+               ELSE IF ( TYPE .EQ. EKTYP ) THEN
+C
+C                 Open the binary file, read the comments, and close
+C                 the binary file.
+C
+                  CALL DASOPR ( FNMTBL(BINIDX), HANDLE )
+                  CALL DASECU ( HANDLE, STDOUT, COMNTS )
+                  CALL DASCLS ( HANDLE                 )
+ 
+                  IF ( .NOT. COMNTS ) THEN
+ 
+                     LINE = 'There were no comments found' //
+     .                      ' in the file.'
+                     CALL TOSTDO ( LINE )
+ 
+                  END IF
+ 
+               END IF
+C
+C              Display the status of the operation that was selected.
+C
+               CALL TOSTDO ( ' ' )
+               IF ( FAILED() ) THEN
+                  CALL TOSTDO ( STATUS(STNOK) )
+               ELSE
+                  CALL TOSTDO ( STATUS(STOK) )
+               END IF
+ 
+            ELSE IF ( OPTION .EQ. 'EXTRACT_COMMENTS' ) THEN
+ 
+               CALL TOSTDO ( ' '    )
+               CALL TOSTDO ( MESSAG )
+ 
+               LINE = 'From File: ' // REPMRK
+               CALL REPMC ( LINE, REPMRK, FNMTBL(BINIDX), LINE )
+               CALL TOSTDO ( ' '  )
+               CALL TOSTDO ( LINE )
+ 
+               LINE = 'To File  : ' // REPMRK
+               CALL REPMC ( LINE, REPMRK, FNMTBL(COMIDX), LINE )
+               CALL TOSTDO ( LINE )
+C
+C              Open the text file.
+C
+               CALL TXTOPN ( FNMTBL(COMIDX), COMLUN )
+ 
+               IF ( .NOT. FAILED() ) THEN
+ 
+                  IF ( TYPE .EQ. CKTYP ) THEN
+C
+C                    Open the binary file, extract the comments, and
+C                    close the binary file.
+C
+                     CALL DAFOPR ( FNMTBL(BINIDX), HANDLE )
+                     CALL SPCEC  ( HANDLE, COMLUN         )
+                     CALL DAFCLS ( HANDLE                 )
+ 
+                  ELSE IF ( TYPE .EQ. PCKTYP ) THEN
+C
+C                    Open the binary file, extract the comments, and
+C                    close the binary file.
+C
+                     CALL DAFOPR ( FNMTBL(BINIDX), HANDLE )
+                     CALL SPCEC  ( HANDLE, COMLUN         )
+                     CALL DAFCLS ( HANDLE                 )
+ 
+                  ELSE IF ( TYPE .EQ. SPKTYP ) THEN
+C
+C                    Open the binary file, extract the comments, and
+C                    close the binary file.
+C
+                     CALL DAFOPR ( FNMTBL(BINIDX), HANDLE )
+                     CALL SPCEC  ( HANDLE, COMLUN         )
+                     CALL DAFCLS ( HANDLE                 )
+ 
+                  ELSE IF ( TYPE .EQ. EKTYP ) THEN
+C
+C                    Open the binary file, extract the comments, and
+C                    close the binary file.
+C
+                     CALL DASOPR ( FNMTBL(BINIDX), HANDLE )
+                     CALL DASECU ( HANDLE, COMLUN, COMNTS )
+                     CALL DASCLS ( HANDLE                 )
+ 
+                     IF ( .NOT. COMNTS ) THEN
+ 
+                        LINE = 'There were no comments found' //
+     .                         ' in the file.'
+                        CALL TOSTDO ( LINE )
+ 
+                     END IF
+ 
+                  END IF
+C
+C                 Close the text file that we opened.
+C
+                  CLOSE ( COMLUN )
+ 
+               END IF
+C
+C              Display the status of the operation that was selected.
+C
+               CALL TOSTDO ( ' ' )
+               IF ( FAILED() ) THEN
+                  CALL TOSTDO ( STATUS(STNOK) )
+               ELSE
+                  CALL TOSTDO ( STATUS(STOK) )
+               END IF
+ 
+            ELSE IF ( OPTION .EQ. 'DELETE_COMMENTS' ) THEN
+ 
+               CALL TOSTDO ( ' ' )
+               CALL TOSTDO ( MESSAG )
+ 
+               LINE = 'File: ' // REPMRK
+               CALL REPMC ( LINE, REPMRK, FNMTBL(BINIDX), LINE )
+               CALL TOSTDO ( ' '  )
+               CALL TOSTDO ( LINE )
+ 
+               IF ( TYPE .EQ. CKTYP ) THEN
+C
+C                 Open the binary file, delete the comments, and close
+C                 the binary file.
+C
+                  CALL DAFOPW ( FNMTBL(BINIDX), HANDLE )
+                  CALL SPCDC  ( HANDLE                 )
+                  CALL DAFCLS ( HANDLE                 )
+ 
+               ELSE IF ( TYPE .EQ. PCKTYP ) THEN
+C
+C                 Open the binary file, delete the comments, and close
+C                 the binary file.
+C
+                  CALL DAFOPW ( FNMTBL(BINIDX), HANDLE )
+                  CALL SPCDC  ( HANDLE                 )
+                  CALL DAFCLS ( HANDLE                 )
+ 
+               ELSE IF ( TYPE .EQ. SPKTYP ) THEN
+C
+C                 Open the binary file, delete the comments, and close
+C                 the binary file.
+C
+                  CALL DAFOPW ( FNMTBL(BINIDX), HANDLE )
+                  CALL SPCDC  ( HANDLE                 )
+                  CALL DAFCLS ( HANDLE                 )
+ 
+               ELSE IF ( TYPE .EQ. EKTYP ) THEN
+C
+C                 Open the binary file, delete the comments, and close
+C                 the binary file.
+C
+                  CALL DASOPW ( FNMTBL(BINIDX), HANDLE )
+                  CALL DASDC  ( HANDLE                 )
+                  CALL DASCLS ( HANDLE                 )
+ 
+               END IF
+C
+C              Display the status of the operation that was selected.
+C
+               CALL TOSTDO ( ' ' )
+               IF ( FAILED() ) THEN
+                  CALL TOSTDO ( STATUS(STNOK) )
+               ELSE
+                  CALL TOSTDO ( STATUS(STOK) )
+               END IF
+ 
+            END IF
+ 
+         END IF
+C
+C        If anything failed, close any binary files that might still be
+C        open and reset the error handling before getting the next
+C        option.
+C
+         IF ( FAILED() ) THEN
+C
+C           Before we can attempt to perform any clean up actions if an
+C           error occurred, we need to reset the SPICELIB error handling
+C           mechanism so that we can call the SPICELIB routines that we
+C           need to.
+C
+            CALL RESET
+C
+C           Clear out any binary file handles in the open set, OPNSET.
+C
+            CALL SCARDI ( 0, OPNSET         )
+            CALL CLEARI ( MAXOPN, OPNSET(1) )
+C
+C           Get the handles for any DAF files which may still be open.
+C
+            CALL DAFHOF ( OPNSET )
+ 
+            NUMOPN = CARDI ( OPNSET )
+ 
+            IF ( NUMOPN .GT. 0 ) THEN
+ 
+               DO I = 1, NUMOPN
+ 
+                  CALL DAFCLS ( OPNSET(I) )
+ 
+               END DO
+ 
+            END IF
+C
+C           Clear out any binary file handles in the open set, OPNSET.
+C
+            CALL SCARDI ( 0, OPNSET         )
+            CALL CLEARI ( MAXOPN, OPNSET(1) )
+C
+C           Get the handles for any DAS files which may still be open.
+C
+            CALL DASHOF ( OPNSET )
+ 
+            NUMOPN = CARDI ( OPNSET )
+ 
+            IF ( NUMOPN .GT. 0 ) THEN
+ 
+               DO I = 1, NUMOPN
+ 
+                  CALL DASCLS ( OPNSET(I) )
+ 
+               END DO
+ 
+            END IF
+C
+C           If there was an error and we were extracting comments to a
+C           file, then we should delete the file that was created,
+C           because we do not know whether the extraction was completed
+C           successfully.
+C
+            IF ( OPTION .EQ. 'EXTRACT_COMMENTS' ) THEN
+ 
+               IF ( EXISTS( FNMTBL(COMIDX) ) ) THEN
+                  CALL DELFIL( FNMTBL(COMIDX) )
+               END IF
+ 
+            END IF
+C
+C           Finally, reset the error handling, and go get the next
+C           option. This is just to be sure.
+C
+            CALL RESET
+ 
+         END IF
+ 
+      END DO
+ 
+      CALL CHKOUT ( 'COMMNT' )
+ 
+      END

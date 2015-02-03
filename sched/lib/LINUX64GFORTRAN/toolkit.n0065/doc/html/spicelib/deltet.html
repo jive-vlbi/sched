@@ -1,0 +1,271 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>deltet</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>deltet</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DELTET ( Delta ET, ET - UTC )
+ 
+      SUBROUTINE DELTET ( EPOCH, EPTYPE, DELTA )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Return the value of Delta ET (ET-UTC) for an input epoch.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/time.html">TIME</a>
+     <a href="../req/kernel.html">KERNEL</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     TIME
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION EPOCH
+      CHARACTER*(*)    EPTYPE
+      DOUBLE PRECISION DELTA
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      EPOCH      I   Input epoch (seconds past J2000).
+      EPTYPE     I   Type of input epoch ('UTC' or 'ET').
+      DELTA      O   Delta ET (ET-UTC) at input epoch.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      EPOCH       is the epoch at which Delta ET is to be computed.
+                  This may be either UTC or ephemeris seconds past
+                  J2000, as specified by EPTYPE.
+
+      EPTYPE      indicates the type of input epoch. It may be either
+                  of the following:
+
+                     'UTC'    input is UTC seconds past J2000.
+                     'ET'     input is ephemeris seconds past J2000.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+      DELTA       is the value of
+
+                     Delta ET = ET - UTC
+
+                  at the input epoch. This is added to UTC to give
+                  ET, or subtracted from ET to give UTC. The routine
+                  is reversible: that is, given the following calls,
+
+                     CALL <b>DELTET</b> ( UTC,      'UTC', DEL1 )
+                     CALL <b>DELTET</b> ( UTC+DEL1, 'ET',  DEL2 )
+
+                  the expression
+
+                     ( DEL1 .EQ. DEL2 )
+
+                  is always true.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the input epoch is not recognized, the error
+        SPICE(INVALIDEPOCH) is signaled.
+
+     2) If the variables necessary for the computation of DELTA
+        have not been loaded into the kernel pool, the error
+        SPICE(KERNELVARNOTFOUND) is signaled.
+
+     3) If the number of leapseconds in the pool is greater than
+        the local leapseconds buffer size, the error 
+        SPICE(BUFFEROVERFLOW) is signaled.   
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+      The constants necessary for computing the offset are taken
+      from the kernel pool, where they are assumed to have been
+      loaded from a kernel file.
+
+      The tables are consulted to determine the number of leap seconds
+      preceding the input epoch. Also, an approximation to the periodic
+      yearly variation (which has an amplitude of just under two
+      milliseconds) in the difference between ET and TAI (Atomic Time)
+      is computed. The final value of Delta ET is given by
+
+            Delta ET = ( ET - TAI ) + leap seconds
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+      The following example shows how <b>DELTET</b> may be used to convert
+      from UTC seconds past J2000 to ephemeris seconds past J2000.
+
+            CALL <b>DELTET</b> ( UTCSEC, 'UTC', DELTA )
+            ET = UTCSEC + DELTA
+
+      The following example shows how <b>DELTET</b> may be used to convert
+      from ephemeris seconds past J2000 to UTC seconds past J2000.
+
+            CALL <b>DELTET</b> ( ET, 'ET', DELTA )
+            UTCSEC = ET - DELTA
+
+      See the TIME required reading for further examples.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+      The routines <a href="utc2et.html">UTC2ET</a> and <a href="et2utc.html">ET2UTC</a> are preferred for conversions
+      between UTC and ET. This routine is provided mainly as a utility
+      for <a href="utc2et.html">UTC2ET</a> and <a href="et2utc.html">ET2UTC</a>.
+
+      The kernel pool containing leapseconds and relativistic terms
+      MUST be loaded prior to calling this subroutine. Examples
+      demonstrating how to load a kernel pool are included in the
+      Required Reading file time.req and in the &quot;Examples&quot;
+      section of this header. For more general information about
+      kernel pools, please consult the Required Reading file
+      kernel.req.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      Astronomical Almanac.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      W.M. Owen       (JPL)
+      I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.2, 18-APR-2014 (BVS)
+
+        Minor header edits.
+
+    SPICELIB Version 1.2.1, 18-MAY-2010 (BVS)
+
+        Removed &quot;C$&quot; marker from text in the header.
+
+    SPICELIB Version 1.2.0, 24-AUG-1998 (WLT)
+
+        The previous upgrade introduced an error in the fetch
+        of the variable <b>DELTET</b>/M from the kernel pool.  This
+        error was corrected.
+
+    SPICELIB Version 1.1.0, 20-APR-1998 (NJB)
+
+        Calls to <a href="rtpool.html">RTPOOL</a> were replaced with calls to <a href="gdpool.html">GDPOOL</a>, which
+        does more robust error checking.  Check for buffer overflow
+        was added.  Local declarations were re-organized.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) (IMU)</PRE>
+<h4>Link to routine DELTET source file <a href='../../../src/spicelib/deltet.f'>deltet.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:11 2014</pre>
+
+</body>
+</html>
+

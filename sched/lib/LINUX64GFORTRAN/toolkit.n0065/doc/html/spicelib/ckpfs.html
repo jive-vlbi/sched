@@ -1,0 +1,386 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ckpfs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ckpfs</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      CKPFS ( C-kernel, get pointing from segment )
+ 
+      SUBROUTINE CKPFS ( HANDLE, DESCR, SCLKDP, TOL,  NEEDAV,
+     .                   CMAT,   AV,    CLKOUT, FOUND         )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Evaluate pointing data from a segment for a given time.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      INCLUDE               'ckparam.inc'
+ 
+      INTEGER               HANDLE
+      DOUBLE PRECISION      DESCR  ( *    )
+      DOUBLE PRECISION      SCLKDP
+      DOUBLE PRECISION      TOL
+      LOGICAL               NEEDAV
+      DOUBLE PRECISION      CMAT   ( 3, 3 )
+      DOUBLE PRECISION      AV     ( 3    )
+      DOUBLE PRECISION      CLKOUT
+      LOGICAL               FOUND
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   CK file handle.
+     DESCR      I   Segment descriptor.
+     SCLKDP     I   Spacecraft clock time.
+     TOL        I   Time tolerance.
+     NEEDAV     I   True when angular velocity data is requested.
+     CMAT       O   C-matrix.
+     AV         O   Angular velocity vector.
+     CLKOUT     O   Output spacecraft clock time.
+     FOUND      O   True when requested pointing is available.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE     is the handle of the binary CK file containing the
+                desired segment. The file should have been opened
+                for read access, either by <a href="cklpf.html">CKLPF</a> or <a href="dafopr.html">DAFOPR</a>.
+
+     DESCR      is the packed descriptor of the segment.
+
+     SCLKDP     is the encoded spacecraft clock time for which
+                pointing is desired.
+
+     TOL        is a time tolerance, measured in the same units as
+                encoded spacecraft clock.  The C-matrix returned by
+                <b>CKPFS</b> is the one whose time is closest to SCLKDP and
+                within TOL units of SCLKDP.
+
+     NEEDAV     is true when angular velocity data is requested.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     CMAT       is a rotation matrix that transforms the components of
+                of a vector expressed in the reference frame given in
+                the segment to components expressed in the instrument
+                fixed frame at time CLKOUT.
+
+                Thus, if a vector v has components x, y, z in the
+                CK base frame, then v has components x', y', z' in
+                the instrument fixed frame at time CLKOUT:
+
+                     [ x' ]     [          ] [ x ]
+                     | y' |  =  |   CMAT   | | y |
+                     [ z' ]     [          ] [ z ]
+
+                If the x', y', z' components are known, use the
+                transpose of the C-matrix to determine x, y, z as
+                follows.
+
+                     [ x ]      [          ]T    [ x' ]
+                     | y |  =   |   CMAT   |     | y' |
+                     [ z ]      [          ]     [ z' ]
+                             (Transpose of CMAT)
+
+     AV         is the angular velocity vector. This is returned only
+                if it has been requested, as indicated by NEEDAV. In
+                other words, if NEEDAV is true, then the pointing
+                records in the segment must contain AV data.
+
+                The angular velocity vector is the right-handed axis
+                about which the reference frame tied to the instrument
+                is instantaneously rotating at time CLKOUT. The
+                magnitude of AV is the magnitude of the instantaneous
+                velocity of the rotation, in radians per second.
+
+                The components of AV are given relative to the
+                reference frame specified in the segment descriptor.
+
+     CLKOUT     is the encoded spacecraft clock time associated with
+                the returned C-matrix and, optionally, the returned
+                angular velocity vector.
+
+     FOUND      is true if a C-matrix and an angular velocity vector
+                (if requested) were found to satisfy the pointing
+                request. FOUND will be false otherwise.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the data type of the segment is not one of those supported
+         by this routine, the error SPICE(CKUNKNOWNDATATYPE) is
+         signaled.
+
+     2)  If the specified handle does not belong to any file that is
+         currently known to be open, an error is diagnosed by a
+         routine that this routine calls.
+
+     3)  If DESCR is not a valid, packed descriptor of a segment in
+         the CK file specified by HANDLE, the results of this routine
+         are unpredictable.
+
+     4)  If TOL is negative, FOUND is false.
+
+     5)  If NEEDAV is true, but the segment doesn't contain AV data,
+         an error is signaled by a routine that this routine calls.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The structure of this routine is just a big case statement. Each
+     segment data type is supported by two routines:
+
+        CKRnn   which reads a single logical pointing record from a
+                segment of type nn.  (A logical record is defined as
+                a collection of numbers sufficient to determine the
+                C-matrix, and optionally the angular velocity vector,
+                at the input time.)
+
+        CKEnn   which evaluates the pointing record returned by CKRnn
+                to give the C-matrix and optionally the angular
+                velocity vector at the input time.
+
+     The data type is determined from the segment descriptor, and the
+     appropriate routines are called.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     <b>CKPFS</b> allows you to be more selective than <a href="ckgp.html">CKGP</a> or <a href="ckgpav.html">CKGPAV</a> about
+     choosing segments to satisfy CK pointing requests.
+
+     Suppose MOC.BC is a CK file consisting of several segments
+     containing Mars Observer Camera pointing data. Each segment
+     covers the same time period, but produces different pointing
+     values (one segment may contain predict values, another may
+     contain telemetry-based values, and others may contain different
+     corrected versions).
+
+     The following code fragment shows how different the results are
+     for each segment. The program steps through the file segment by
+     segment and requests pointing for the same time from each 
+     segment. The results are printed to the screen.
+
+     GETIME is an imaginary routine used to get an encoded SCLK time
+     (SCLKDP) and time tolerance from the user.
+
+           SC     = -94
+           INST   = -94001
+           NEEDAV = .TRUE.
+
+           CALL <a href="cklpf.html">CKLPF</a> ( 'MOC.BC', HANDLE )
+
+           CALL GETIME ( SCLKDP, TOL, QUIT )
+
+     C
+     C     For each time, begin a forward search through the file, and
+     C     for each segment found, get its descriptor, identifier, and
+     C     evaluate the pointing.
+     C
+           DO WHILE ( .NOT. QUIT )
+
+              CALL <a href="dafbfs.html">DAFBFS</a> ( HANDLE )
+              CALL <a href="daffna.html">DAFFNA</a> ( FOUND  )
+
+              DO WHILE ( FOUND )
+
+                 CALL <a href="dafgs.html">DAFGS</a> ( DESCR )
+                 CALL <a href="dafgn.html">DAFGN</a> ( <a href="ident.html">IDENT</a> )
+
+                 CALL <b>CKPFS</b> ( HANDLE, DESCR, SCLKDP, TOL,   NEEDAV,
+          .                   CMAT,   AV,    CLKOUT, PFOUND         )
+
+                 IF ( PFOUND ) THEN
+                    WRITE (*,*) 'Segment:          ', <a href="ident.html">IDENT</a>
+                    WRITE (*,*) 'C-Matrix:         ', CMAT
+                    WRITE (*,*) 'Angular velocity: ', AV
+
+                 ELSE
+                    CALL <a href="scdecd.html">SCDECD</a> ( SC, SCLKDP, SCLKCH )
+                    WRITE (*,*) 'Data not found at time ', SCLKCH
+
+                 END IF
+
+                 CALL <a href="daffna.html">DAFFNA</a> ( FOUND )
+
+              END DO
+
+              CALL GETIME ( SCLKDP, TOL, QUIT )
+
+           END DO
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     A C-kernel file should have been loaded by either <a href="cklpf.html">CKLPF</a>
+     or <a href="dafopr.html">DAFOPR</a>.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     J.M. Lynch     (JPL)
+     B.V. Semenov   (JPL)
+     M.J. Spencer   (JPL)
+     R.E. Thurman   (JPL)
+     I.M. Underwood (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 6.0.0, 24-MAR-2014 (NJB)
+
+        Bug fix: this routine now sets the output FOUND to 
+        .FALSE. if a SPICE error is detected.
+     
+        The routine was updated to handle data type 6 segments. 
+        Several comment typos were corrected.
+
+    SPICELIB Version 5.0.0, 19-AUG-2002 (NJB)
+
+        The routine was updated to handle data type 5 segments. 
+
+    SPICELIB Version 4.0.0, 02-MAY-1999 (BVS)
+
+        The routine was updated to handle data type 4 segments. 
+        The RECSIZ size parameter was eliminated. The dimension 
+        of the RECORD buffer is now defined by the CKMRSZ parameter
+        specified in the 'ckparam.inc' include file.
+
+    SPICELIB Version 3.0.0, 11-SEP-1992 (JML)
+
+        The routine was updated to handle data type 3 segments.
+
+    SPICELIB Version 2.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 2.0.0, 30-AUG-1991 (JML)
+
+         The routine was updated to handle data type 2 segments.
+
+         FOUND is now initialized to false.
+
+    SPICELIB Version 1.0.1, 02-NOV-1990 (JML)
+
+         The restriction that a C-kernel file must be loaded
+         was explicitly stated.
+
+
+    SPICELIB Version 1.0.0, 07-SEP-1990 (RET) (IMU)</PRE>
+<h4>Link to routine CKPFS source file <a href='../../../src/spicelib/ckpfs.f'>ckpfs.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:57 2014</pre>
+
+</body>
+</html>
+

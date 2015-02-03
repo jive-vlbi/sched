@@ -1,0 +1,261 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>drdlat</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>drdlat</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ DRDLAT ( Derivative of rectangular w.r.t. latitudinal )
+ 
+      SUBROUTINE DRDLAT ( R, LONG, LAT, JACOBI )
+      IMPLICIT NONE
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Compute the Jacobian of the transformation from latitudinal to
+     rectangular coordinates.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     COORDINATES
+     DERIVATIVES
+     MATRIX
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION      R
+      DOUBLE PRECISION      LONG
+      DOUBLE PRECISION      LAT
+      DOUBLE PRECISION      JACOBI ( 3, 3 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     RADIUS     I   Distance of a point from the origin.
+     LONG       I   Angle of the point from the XZ plane in radians.
+     LAT        I   Angle of the point from the XY plane in radians.
+     JACOBI     O   Matrix of partial derivatives.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      RADIUS     Distance of a point from the origin.
+
+      LONG       Angle of the point from the XZ plane in radians.
+                 The angle increases in the counterclockwise sense
+                 about the +Z axis.
+
+      LAT        Angle of the point from the XY plane in radians.
+                 The angle increases in the direction of the +Z axis.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     JACOBI     is the matrix of partial derivatives of the conversion
+                between latitudinal and rectangular coordinates. It has
+                the form
+
+                    .-                                 -.
+                    |  DX/DR     DX/DLONG     DX/DLAT   |
+                    |                                   |
+                    |  DY/DR     DY/DLONG     DY/DLAT   |
+                    |                                   |
+                    |  DZ/DR     DZ/DLONG     DZ/DLAT   |
+                    `-                                 -'
+
+               evaluated at the input values of R, LONG and LAT.
+               Here X, Y, and Z are given by the familiar formulae
+
+                   X = R * COS(LONG) * COS(LAT)
+                   Y = R * SIN(LONG) * COS(LAT)
+                   Z = R *             SIN(LAT)
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     Error free.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     It is often convenient to describe the motion of an object
+     in latitudinal coordinates. It is also convenient to manipulate
+     vectors associated with the object in rectangular coordinates.
+
+     The transformation of a latitudinal state into an equivalent
+     rectangular state makes use of the Jacobian of the
+     transformation between the two systems.
+
+     Given a state in latitudinal coordinates,
+
+          ( r, long, lat, dr, dlong, dlat )
+
+     the velocity in rectangular coordinates is given by the matrix
+     equation
+                    t          |                                t
+        (dx, dy, dz)   = JACOBI|             * (dr, dlong, dlat)
+                               |(r,long,lat)
+                                            
+     This routine computes the matrix 
+
+              |
+        JACOBI|
+              |(r,long,lat)
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose you have a model that gives radius, longitude, and
+     latitude as functions of time (r(t), long(t), lat(t)), and
+     that the derivatives (dr/dt, dlong/dt, dlat/dt) are computable.
+     To find the velocity of the object in rectangular coordinates,
+     multiply the Jacobian of the transformation from latitudinal
+     to rectangular (evaluated at r(t), long(t), lat(t)) by the
+     vector of derivatives of the latitudinal coordinates.
+
+     This is illustrated by the following code fragment.
+
+        C
+        C     Load the derivatives of r, long and lat into the
+        C     latitudinal velocity vector LATV.
+        C
+              LATV(1) = DR_DT    ( T )
+              LATV(2) = DLONG_DT ( T )
+              LATV(3) = DLAT_DT  ( T )
+
+        C
+        C     Determine the Jacobian of the transformation from
+        C     latitudinal to rectangular coordinates, using the 
+        C     latitudinal coordinates at time T.
+        C
+              CALL <b>DRDLAT</b> ( R(T), LONG(T), LAT(T), JACOBI )
+
+        C
+        C     Multiply the Jacobian by the latitudinal velocity to
+        C     obtain the rectangular velocity RECV.
+        C
+              CALL <a href="mxv.html">MXV</a> ( JACOBI, LATV, RECV )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     W.L. Taber     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 19-JUL-2001 (WLT)</PRE>
+<h4>Link to routine DRDLAT source file <a href='../../../src/spicelib/drdlat.f'>drdlat.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:12 2014</pre>
+
+</body>
+</html>
+

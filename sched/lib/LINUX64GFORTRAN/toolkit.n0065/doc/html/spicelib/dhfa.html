@@ -1,0 +1,327 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dhfa</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dhfa</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ DHFA ( Time derivative of half angle )
+
+      DOUBLE PRECISION FUNCTION DHFA( STATE, BODYR)
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Calculate the value of the time derivative of the
+     half angle of a spherical body given a state vector
+     STATE and body radius BODYR.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      IMPLICIT NONE
+      
+      DOUBLE PRECISION      STATE (6)
+      DOUBLE PRECISION      BODYR
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     STATE      I   SPICE state vector
+     BODYR      I   Radius of body
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     STATE      the state vector of a target body as seen from an 
+                observer.
+
+     BODYR      the radius of the target body observed from the 
+                position in STATE; the target body assumed as a sphere.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     The function returns the double precision value of the time
+     derivative of the half angle of a spherical body in radians 
+     per second.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) A negative value for BODYR causes SPICE(BADRADIUS) to signal.
+
+     2) A position component of STATE equaling the zero vector
+        causes SPICE(DEGENERATECASE) to signal.
+
+     3) A condition where the body radius exceeds the distance from
+        the body to the observer causes SPICE(BADGEOMETRY) to signal.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     In this discussion, the notation
+
+        &lt; V1, V2 &gt;
+
+     indicates the dot product of vectors V1 and V2.
+
+     The expression
+
+                     body_radius
+        sin(ALPHA) = -----------                                  (1)
+                       range
+
+     describes the half angle (ALPHA) of a spherical body, i.e. the 
+     angular radius of the spherical body as viewed by an observer at
+     distance 'range'.
+
+     Solve for ALPHA
+
+                   -1  body_radius
+        ALPHA = sin  ( ----------- )                              (2)
+                         range
+
+     Take the derivative of ALPHA with respect to time
+
+      d                   1                   d    body_radius
+      --(ALPHA) =  --------------------- *    __ (----------- )   (3)
+      dt           1 -   body_radius  2   1/2 dt    range
+                (      [ ----------- ]   )
+                          range
+
+      d              - body_radius             1      d
+      --(ALPHA) =  --------------------- *   ------ * __(range)   (4)
+      dt           1 -   body_radius  2  1/2      2   dt
+                (      [ ----------- ]  )    range
+                          range
+
+      With
+                        _  _
+      d               &lt; R, V &gt;              -
+      -- ( range )  = -------- ,  range = ||R||                   (5)
+      dt                 -
+                       ||R||
+
+     Apply (5) to equation (4)
+                                                        _  _
+      d              - body_radius             1      &lt; R, V &gt; 
+      --(ALPHA) =  --------------------- *   ------ *  --------   (6)
+      dt           1 -   body_radius  2  1/2     2     range
+                (      [ ----------- ]  )    range
+                            range
+
+     Carry range through the denominator gives
+
+                                                _  _
+      d              - body_radius            &lt; R, V &gt; 
+      --(ALPHA) =  --------------------- *    --------            (7)
+      dt                 2            2  1/2        2
+                   (range - body_radius )      range
+
+      So since
+                       -    -         _  _
+         ^  -       &lt;  R,   V &gt;     &lt; R, V &gt; 
+       &lt; R, V &gt;   =   ---        =  -------- 
+                       -              range
+                     ||R||
+
+                                                ^  _
+      d              - body_radius            &lt; R, V &gt; 
+      --(ALPHA) =  --------------------- *    --------            (8)
+      dt                 2            2  1/2        
+                   (range - body_radius )      range
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+           PROGRAM DHFA_EX
+           IMPLICIT              NONE
+     
+           INTEGER               DIM
+     
+           DOUBLE PRECISION      ET
+           DOUBLE PRECISION      LT
+           DOUBLE PRECISION      DHADT
+           DOUBLE PRECISION      RAD   (3)
+           DOUBLE PRECISION      STATE (6)
+     
+           INTEGER               STRLEN
+           PARAMETER           ( STRLEN = 64 )
+     
+           CHARACTER*(STRLEN)    BEGSTR
+     
+     
+           DOUBLE PRECISION      <a href="spd.html">SPD</a>
+           DOUBLE PRECISION      <b>DHFA</b>
+     C
+     C     Load kernels.
+     C 
+           CALL <a href="furnsh.html">FURNSH</a> ('<a href= "standard.html">standard.tm</a>')
+     
+     C
+     C     An approximate time corresponding to a maximal angular
+     C     separation between the earth and Moon as seen from the sun.
+     C
+           BEGSTR = '2007-DEC-17 04:04:46.935443 (TDB)'
+           CALL <a href="str2et.html">STR2ET</a>( BEGSTR, ET )
+           
+           CALL <a href="bodvrd.html">BODVRD</a> ('SUN', 'RADII', 3, DIM, RAD )
+           
+           CALL <a href="spkezr.html">SPKEZR</a> ('MOON', ET, 'J2000', 'NONE', 'SUN', STATE, LT )
+     
+     C
+     C     The derivative of the half angle at ET should have a near-to
+     C     maximal value as the Moon velocity vector points either
+     C     towards the sun or away.
+     C
+           DHADT = <b>DHFA</b>( STATE, RAD(1) )
+           WRITE(*,*) 'Half angle derivative at begin time  : ', DHADT
+           
+     C
+     C     Two weeks later the derivate should have a similar
+     C     magnitude but the opposite sign.
+     C
+           ET = <a href="spd.html">SPD</a>() * 14.D0 + ET
+
+           CALL <a href="spkezr.html">SPKEZR</a> ('MOON', ET, 'J2000', 'NONE', 'SUN', STATE, LT )
+
+           DHADT = <b>DHFA</b>( STATE, RAD(1) )
+           WRITE(*,*) 'Half angle derivative two weeks later: ', DHADT
+
+           END
+
+   The program compiled on OS X with g77 outputs (radians/sec):
+
+     Half angle derivative at begin time  :  -2.53879935E-11
+     Half angle derivative two weeks later:   2.94362059E-11
+
+   As expected, the derivate values have similar magnitudes but
+   opposite signs.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     E.D. Wright    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1, 06-JUL-2009 (EDW)
+
+        Rename of the ZZDHA call to <b>DHFA</b>.
+
+    SPICELIB Version 1.0.0, 10-FEB-2009 (EDW) (NJB)</PRE>
+<h4>Link to routine DHFA source file <a href='../../../src/spicelib/dhfa.f'>dhfa.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:11 2014</pre>
+
+</body>
+</html>
+

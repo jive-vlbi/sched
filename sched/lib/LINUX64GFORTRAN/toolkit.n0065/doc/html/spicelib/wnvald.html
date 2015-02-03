@@ -1,0 +1,273 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>wnvald</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>wnvald</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      WNVALD ( Validate a DP window )
+ 
+      SUBROUTINE WNVALD ( SIZE, N, A )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Form a valid double precision window from the contents
+     of a window array.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/windows.html">WINDOWS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     WINDOWS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               LBCELL
+      PARAMETER           ( LBCELL = -5 )
+ 
+      INTEGER               SIZE
+      INTEGER               N
+      DOUBLE PRECISION      A        ( LBCELL:* )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     SIZE       I   Size of window.
+     N          I   Original number of endpoints.
+     A         I,O  Input, output window.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     SIZE        is the size of the window to be validated. This
+                 is the maximum number of endpoints that the cell
+                 used to implement the window is capable of holding
+                 at any one time.
+
+     N           is the original number of endpoints in the input
+                 cell.
+
+     A           on input, is a (possibly uninitialized) cell array
+                 SIZE containing N endpoints of (possibly unordered
+                 and non-disjoint) intervals.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     A           on output, is a window containing the union of the
+                 intervals in the input cell.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1. If the number of endpoints N is odd, the error
+        SPICE(UNMATCHENDPTS) is signalled.
+
+     2. If the number of end points of the window exceeds its size, the
+        error SPICE(WINDOWTOOSMALL) is signalled.
+
+     3. If the left endpoint is greater than the right endpoint, the
+        error SPICE(BADENDPOINTS) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine takes as input a cell array containing pairs of
+     endpoints and validates it to form a window.
+
+     On input, A is a cell of size SIZE containing N endpoints.
+     During validation, the intervals are ordered, and overlapping
+     intervals are merged. On output, the cardinality of A is
+     the number of endpoints remaining, and it is ready for use with
+     any of the window routines.
+
+     Because validation is done in place, there is no chance of
+     overflow.
+
+     Validation is primarily useful for ordering and merging
+     intervals read from input files or initialized in DATA
+     statements.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The following small program
+
+            INTEGER               <a href="cardd.html">CARDD</a>
+            INTEGER               <a href="sized.html">SIZED</a>
+
+            DOUBLE PRECISION      WINDOW  ( LBCELL:20 )
+
+            DATA                  WINDOW  /  0,  0,
+           .                                10, 12,
+                                             2,  7,
+                                            13, 15,
+                                             1,  5,
+                                            23, 29,   8*0 /
+
+            CALL <b>WNVALD</b> ( 20, 10, WINDOW )
+
+            WRITE (6,*) 'Current intervals: ', <a href="cardd.html">CARDD</a> ( WINDOW ) / 2
+            WRITE (6,*) 'Maximum intervals: ', <a href="sized.html">SIZED</a> ( WINDOW ) / 2
+            WRITE (6,*)
+            WRITE (6,*) 'Intervals:'
+            WRITE (6,*)
+
+            DO I = 1, <a href="cardd.html">CARDD</a> ( WINDOW ), 2
+               WRITE (6,*) WINDOW(I), WINDOW(I+1)
+            END DO
+
+            END
+
+     produces the following output (possibly formatted differently).
+
+            Current intervals:        5
+            Maximum intervals:       10
+
+            Intervals:
+
+             0.000000000000000     0.000000000000000
+             1.000000000000000     7.000000000000000
+             10.00000000000000     12.00000000000000
+             13.00000000000000     15.00000000000000
+             23.00000000000000     29.00000000000000
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     H.A. Neilan     (JPL)
+     W.L. Taber      (JPL)
+     I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.1.1, 30-JUL-2002 (NJB)
+
+        Fixed bugs in example program.
+
+    SPICELIB Version 1.1.0, 14-AUG-1995 (HAN)
+
+        Fixed a character string that continued over two lines. 
+        The &quot;//&quot; characters were missing. The Alpha/OpenVMS compiler 
+        issued a warning regarding this incorrect statement syntax.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU)</PRE>
+<h4>Link to routine WNVALD source file <a href='../../../src/spicelib/wnvald.f'>wnvald.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:28 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,420 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dasa2l</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dasa2l</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DASA2L ( DAS, address to physical location )
+ 
+      SUBROUTINE DASA2L ( HANDLE, TYPE,   ADDRSS,
+     .                    CLBASE, CLSIZE, RECNO,  WORDNO )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Map a DAS address to a physical location in a specified DAS file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/das.html">DAS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     DAS
+     FILES
+     TRANSFORMATION
+     UTILITY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+ 
+      INTEGER               HANDLE
+      INTEGER               TYPE
+      INTEGER               ADDRSS
+      INTEGER               CLBASE
+      INTEGER               CLSIZE
+      INTEGER               RECNO
+      INTEGER               WORDNO
+ 
+      INTEGER               CHAR
+      PARAMETER           ( CHAR   =  1  )
+ 
+      INTEGER               INT
+      PARAMETER           ( INT    =  3  )
+ 
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   DAS file handle.
+     TYPE       I   Data type specifier.
+     ADDRSS     I   DAS address of a word of data type TYPE.
+     CLBASE,
+     CLSIZE     O   Cluster base record number and size.
+     RECNO,
+     WORDNO     O   Record/word pair corresponding to ADDRSS.
+     CHAR       P   Parameter indicating character data type.
+     INT        P   Parameter indicating integer data type.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE         is the file handle of an open DAS file.
+
+     TYPE           is a data type specifier. TYPE may be any of
+                    the parameters
+
+                       CHAR
+                       DP
+                       INT
+
+                    which indicate `character', `double precision',
+                    and `integer' respectively.
+
+
+     ADDRSS         is the address in a DAS of a word of data
+                    type TYPE. For each data type (double precision,
+                    integer, or character), addresses range
+                    from 1 to the maximum current value for that type,
+                    which is available from <a href="dafrfr.html">DAFRFR</a>.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     CLBASE,
+     CLSIZE         are, respectively, the base record number and
+                    size, in records, of the cluster containing the
+                    word corresponding to ADDRSS. The cluster spans
+                    records numbered CLBASE through CLBASE +
+                    CLSIZE - 1.
+
+     RECNO,
+     WORD           are, respectively, the number of the physical
+                    record and the number of the word within the
+                    record that correspond to ADDRSS. Word numbers
+                    start at 1 and go up to NC, ND, or NI in
+                    character, double precision, or integer records
+                    respectively.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     CHAR,
+     DP,
+     INT            are data type specifiers which indicate
+                    `character', `double precision', and `integer'
+                    respectively. These parameters are used in
+                    all DAS routines that require a data type
+                    specifier as input.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If TYPE is not recognized, the error SPICE(DASINVALIDTYPE)
+         will be signaled.
+
+     2)  ADDRSS must be between 1 and LAST inclusive, where LAST
+         is last address in the DAS for a word of the specified
+         type. If ADDRSS is out of range, the error
+         SPICE(DASNOSUCHADDRESS) will be signaled.
+
+     3)  If this routine doesn't find an expected cluster descriptor
+         in a directory record, the error SPICE(BADDASDIRECTORY) is
+         signaled.
+
+     4)  If the input handle is invalid, the error will be diagnosed
+         by routines called by this routine.
+
+     If any of the above exceptions occur, the output arguments may
+     contain bogus information.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See the description of the argument HANDLE in $Detailed_Input.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The DAS architecture allows a programmer to think of the data
+     within a DAS file as three one-dimensional arrays: one of
+     double precision numbers, one of integers, and one of characters.
+     This model allows a programmer to ask the DAS system for the
+     `nth double precision number (or integer, or character) in the
+     file'.
+
+     DAS files are Fortran direct access files, so to find the
+     `nth double precision number', you must have the number of the
+     record containing it and the `word number', or position, within
+     the record of the double precision number. This routine finds
+     the record/word number pair that specify the physical location
+     in a DAS file corresponding to a DAS address.
+
+     As opposed to DAFs, the mapping of addresses to physical
+     locations for a DAS file depends on the organization of data in
+     the file. For example, given a fixed set of DAS file summary
+     parameters, the physical location of the nth double precision
+     number can depend on how many integer and character records have
+     been written prior to the record containing that double precision
+     number.
+
+     The cluster information output from this routine allows the
+     caller to substantially reduce the number of directory reads
+     required to read a from range of addresses that spans
+     multiple physical records; the reading program only need call
+     this routine once per cluster read, rather than once per
+     physical record read.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Use this routine to read integers from a range of
+         addresses. This is done in the routine <a href="dasrdi.html">DASRDI</a>.
+
+            C
+            C     Decide how many integers to read.
+            C
+                  NUMINT = LAST - FIRST + 1
+                  NREAD  = 0
+
+            C
+            C     Find out the physical location of the first
+            C     integer. If FIRST is invalid, <b>DASA2L</b> will take care
+            C     of the problem.
+            C
+                  CALL <b>DASA2L</b> (  HANDLE,  INT,     FIRST,
+                 .               CLBASE,  CLSIZE,  RECNO,  WORDNO  )
+
+            C
+            C     Read as much data from record RECNO as necessary.
+            C
+                  N  =  MIN ( NUMINT,  NWI - WORDNO + 1 )
+
+                  CALL <a href="dasrri.html">DASRRI</a> ( HANDLE, RECNO, WORDNO, WORDNO + N-1,
+                 .              DATA                                 )
+
+                  NREAD  =  N
+                  RECNO  =  RECNO + 1
+
+            C
+            C     Read from as many additional records as necessary.
+            C
+                  DO WHILE ( NREAD .LT. NUMINT )
+            C
+            C        At this point, RECNO if RECNO refers to 
+            C        a record in the current cluster, RECNO 
+            C        is the correct number of the record to read 
+            C        from next. Otherwise, the next cluster of
+            C        records containing integer data must be located.
+            C        CLBASE is the number of the first record of
+            C        the cluster we're about to read from.
+            C
+                     IF (  RECNO  .LT.  ( CLBASE + CLSIZE )  ) THEN
+            C
+            C           We can continue reading from the current
+            C           cluster.
+            C
+                        N  =  MIN ( NUMINT - NREAD,  NWI )
+
+                        CALL <a href="dasrri.html">DASRRI</a> (  HANDLE,
+                 .                     RECNO,
+                 .                     1,
+                 .                     N,
+                 .                     DATA ( NREAD + 1 )   )
+
+                        NREAD   =   NREAD + N
+                        RECNO   =   RECNO + 1
+
+
+                     ELSE
+            C
+            C           We must find the next integer cluster to
+            C           read from. The first integer in this
+            C           cluster has address FIRST + NREAD.
+            C
+                        CALL <b>DASA2L</b> ( HANDLE,
+                 .                    INT,
+                 .                    FIRST + NREAD,
+                 .                    CLBASE,
+                 .                    CLSIZE,
+                 .                    RECNO,
+                 .                    WORDNO  )
+
+                     END IF
+
+                  END DO
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer (JPL)
+     N.J. Bachman   (JPL)
+     W.L. Taber     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 2.0.0 APR-15-2014 (NJB)
+     
+        Previous update was 25-FEB-2014 
+
+        Bug fix: value of variable FAST for &quot;unknown&quot; files with one
+        directory record is now stored in TBFAST. The routine
+        previously computed correct outputs but did so more slowly
+        than necessary when multiple &quot;fast&quot; files were accessed.
+
+        Functional change: new entries in the file attribute table are
+        now inserted at index 1; the existing part of the table is
+        shifted to make room. Old entries drop off the end of the
+        list. The previous algorithm simply overwrote the first entry
+        once the table became full. 
+     
+        The file attribute table was expanded to store values of a
+        &quot;read only&quot; flag for each file. This enables the routine to
+        avoid look up of maximum addresses for known, read-only,
+        non-segregated files.
+       
+        Tests of <a href="failed.html">FAILED</a> and backup loop termination checks
+        were added. Logic was introduced to prevent reliance on
+        previous values of logical flags unless those flags were
+        set on a successful call. On any call that fails, the 
+        table entry for the current file is marked as unused by
+        setting the handle entry to zero.
+
+        The state variables FIRST and RDONLY have been removed.
+
+        Unneeded declarations were removed.
+
+        The code was re-structured to improve clarity.
+     
+    SPICELIB Version 1.2.1 20-NOV-2001 (NJB)
+
+        Comment fix: diagram showing directory record pointers
+        incorrectly showed element 2 of the record as a backward
+        pointer. The element is actually a forward pointer.
+
+    SPICELIB Version 1.2.0 03-JUL-1996 (NJB)
+
+        Bug fix: calculation to determine whether file is segregated
+        has been fixed.
+
+    SPICELIB Version 1.1.1 19-DEC-1995 (NJB)
+
+        Corrected title of permuted index entry section.
+
+    SPICELIB Version 1.1.0, 03-NOV-1995 (NJB)
+
+        Re-written to optimize address calculations for segregated,
+        read-only files.
+
+    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG)
+
+        Fixed a typo in the $ Brief_I/O section of the header.
+
+        Removed references to specific DAS file open routines in the
+        $ Detailed_Input section of the header. This was done in order
+        to minimize documentation changes if the DAS open routines ever
+        change.
+
+    SPICELIB Version 1.0.0, 11-NOV-1992 (NJB) (WLT)</PRE>
+<h4>Link to routine DASA2L source file <a href='../../../src/spicelib/dasa2l.f'>dasa2l.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:07 2014</pre>
+
+</body>
+</html>
+
