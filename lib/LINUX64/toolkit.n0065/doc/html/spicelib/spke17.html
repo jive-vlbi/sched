@@ -1,0 +1,277 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spke17</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spke17</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SPKE17 ( Evaluate a type 17 SPK data record)
+ 
+      SUBROUTINE SPKE17 ( ET, RECIN, STATE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Evaluates a single SPK data record from a segment of type 17
+    (Equinoctial Elements).
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/spk.html">SPK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     EPHEMERIS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION      ET
+      DOUBLE PRECISION      RECIN  ( * )
+      DOUBLE PRECISION      STATE  ( 6 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     ET         I   Target epoch.
+     RECIN      I   Data record.
+     STATE      O   State (position and velocity).
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ET          is a target epoch, specified as ephemeris seconds past
+                 J2000, at which a state vector is to be computed.
+
+     RECIN       is a data record which, when evaluated at epoch ET,
+                 will give the state (position and velocity) of some
+                 body, relative to some center, in some inertial
+                 reference frame.
+
+                 The structure of RECIN is:
+
+                 RECIN (1)  epoch of the elements in ephemeris seconds
+                            past J2000.
+
+                 RECIN (2)-RECIN (10) Equinoctial Elements:
+
+
+                 RECIN (2)  is the semi-major axis (A) of the orbit.
+
+                 RECIN (3)  is the value of H at the specified epoch.
+                            ( E*SIN(ARGP+NODE) ).
+
+                 RECIN (4)  is the value of K at the specified epoch
+                            ( E*COS(ARGP+NODE) ).
+
+                 RECIN (5)  is the mean longitude (MEAN0+ARGP+NODE)at
+                            the epoch of the elements.
+
+                 RECIN (6)  is the value of P (TAN(INC/2)*SIN(NODE))at
+                            the specified epoch.
+
+                 RECIN (7)  is the value of Q (TAN(INC/2)*COS(NODE))at
+                            the specified epoch.
+
+                 RECIN (8)  is the rate of the longitude of periapse
+                            (dARGP/dt + dNODE/dt ) at the epoch of
+                            the elements.  This rate is assumed to hold
+                            for all time.
+
+                 RECIN (9)  is the derivative of the mean longitude
+                            ( dM/dt + dARGP/dt + dNODE/dt ).  This
+                            rate is assumed to be constant.
+
+                 RECIN (10)  is the rate of the longitude of the
+                             ascending node ( dNODE/dt).
+
+                 RECIN (11) Right Ascension of the pole of the
+                            orbital reference system relative to the
+                            reference frame of the associated SPK
+                            segment.
+
+                 RECIN (12) Declination of the pole of the
+                            orbital reference system relative to
+                            the reference frame of the associated
+                            SPK segment.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     STATE       is the state produced by evaluating RECIN at ET.
+                 Units are km and km/sec.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the eccentricity is greater than 0.9, the error
+        'SPICE(BADECCENTRICITY)' will be signalled.
+
+     2) If the semi-major axis is non-positive, the error
+        'SPICE(BADSEMIAXIS)' is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine performs a cursory examination of the elements
+     of a type 17 SPK data record and then passes the equinoctial
+     elements contained in that record on to the SPICE routine
+     <a href="eqncpv.html">EQNCPV</a> for evaluation.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The SPKEnn routines are almost always used in conjunction with
+     the corresponding SPKRnn routines, which read the records from
+     SPK files.
+
+     The data returned by the SPKRnn routine is in its rawest form,
+     taken directly from the segment.  As such, it will be meaningless
+     to a user unless he/she understands the structure of the data type
+     completely.  Given that understanding, however, the SPKRnn
+     routines might be used to examine raw segment data before
+     evaluating it with the SPKEnn routines.
+
+
+     C
+     C     Get a segment applicable to a specified body and epoch.
+     C
+           CALL <a href="spksfs.html">SPKSFS</a> ( BODY, ET, HANDLE, DESCR, <a href="ident.html">IDENT</a>, FOUND )
+
+     C
+     C     Look at parts of the descriptor.
+     C
+           CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+           CENTER = ICD( 2 )
+           REF    = ICD( 3 )
+           TYPE   = ICD( 4 )
+
+           IF ( TYPE .EQ. 17 ) THEN
+
+              CALL <a href="spkr17.html">SPKR17</a> ( HANDLE, DESCR, ET, RECORD )
+                  .
+                  .  Look at the RECORD data.
+                  .
+              CALL <b>SPKE17</b> ( ET, RECORD, STATE )
+                  .
+                  .  Check out the evaluated state.
+                  .
+           END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 8-JAN-1997 (WLT)</PRE>
+<h4>Link to routine SPKE17 source file <a href='../../../src/spicelib/spke17.f'>spke17.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:03 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,279 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>vprjpi</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>vprjpi</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      VPRJPI ( Vector projection onto plane, inverted )
+ 
+      SUBROUTINE VPRJPI ( VIN, PROJPL, INVPL, VOUT, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Find the vector in a specified plane that maps to a specified
+     vector in another plane under orthogonal projection.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/planes.html">PLANES</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     GEOMETRY
+     MATH
+     PLANE
+     VECTOR
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               UBPL
+      PARAMETER           ( UBPL   =    4 )
+ 
+      DOUBLE PRECISION      VIN    (    3 )
+      DOUBLE PRECISION      PROJPL ( UBPL )
+      DOUBLE PRECISION      INVPL  ( UBPL )
+      DOUBLE PRECISION      VOUT   (    3 )
+      LOGICAL               FOUND
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     VIN        I   The projected vector.
+     PROJPL     I   Plane containing VIN.
+     INVPL      I   Plane containing inverse image of VIN.
+     VOUT       O   Inverse projection of VIN.
+     FOUND      O   Flag indicating whether VOUT could be calculated.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     VIN,
+     PROJPL,
+     INVPL          are, respectively, a 3-vector, a SPICELIB plane
+                    containing the vector, and a SPICELIB plane
+                    containing the inverse image of the vector under
+                    orthogonal projection onto PROJPL.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     VOUT           is the inverse orthogonal projection of VIN.  This
+                    is the vector lying in the plane INVPL whose
+                    orthogonal projection onto the plane PROJPL is
+                    VIN.  VOUT is valid only when FOUND (defined below)
+                    is .TRUE.  Otherwise, VOUT is undefined.
+
+     FOUND          indicates whether the inverse orthogonal projection
+                    of VIN could be computed.  FOUND is .TRUE. if so,
+                    .FALSE. otherwise.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the geometric planes defined by PROJPL and INVPL are
+         orthogonal, or nearly so, the inverse orthogonal projection
+         of VIN may be undefined or have magnitude too large to
+         represent with double precision numbers.  In either such
+         case, FOUND will be set to .FALSE.
+
+     2)  Even when FOUND is .TRUE., VOUT may be a vector of extremely
+         large magnitude, perhaps so large that it is impractical to
+         compute with it.  It's up to you to make sure that this
+         situation does not occur in your application of this routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Projecting a vector orthogonally onto a plane can be thought of
+     as finding the closest vector in the plane to the original vector.
+     This `closest vector' always exists; it may be coincident with the
+     original vector.  Inverting an orthogonal projection means finding
+     the vector in a specified plane whose orthogonal projection onto
+     a second specified plane is a specified vector.  The vector whose
+     projection is the specified vector is the inverse projection of
+     the specified vector, also called the `inverse image under
+     orthogonal projection' of the specified vector.  This routine
+     finds the inverse orthogonal projection of a vector onto a plane.
+
+     Related routines are <a href="vprjp.html">VPRJP</a>, which projects a vector onto a plane
+     orthogonally, and <a href="vproj.html">VPROJ</a>, which projects a vector onto another
+     vector orthogonally.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)   Suppose
+
+             VIN    =  ( 0.0, 1.0, 0.0 ),
+
+          and that PROJPL has normal vector
+
+             PROJN  =  ( 0.0, 0.0, 1.0 ).
+
+          Also, let's suppose that INVPL has normal vector and constant
+
+             INVN   =  ( 0.0, 2.0, 2.0 )
+             INVC   =    4.0.
+
+          Then VIN lies on the y-axis in the x-y plane, and we want to
+          find the vector VOUT lying in INVPL such that the orthogonal
+          projection of VOUT the x-y plane is VIN.  Let the notation
+          &lt; a, b &gt; indicate the inner product of vectors a and b.
+          Since every point X in INVPL satisfies the equation
+
+             &lt;  X,  (0.0, 2.0, 2.0)  &gt;  =  4.0,
+
+          we can verify by inspection that the vector
+
+             ( 0.0, 1.0, 1.0 )
+
+          is in INVPL and differs from VIN by a multiple of PROJN.  So
+
+             ( 0.0, 1.0, 1.0 )
+
+          must be VOUT.
+
+          To find this result using SPICELIB, we can create the
+          SPICELIB planes PROJPL and INVPL using the code fragment
+
+             CALL <a href="nvp2pl.html">NVP2PL</a>  ( PROJN,  VIN,   PROJPL )
+             CALL <a href="nvc2pl.html">NVC2PL</a>  ( INVN,   INVC,  INVPL  )
+
+          and then perform the inverse projection using the call
+
+             CALL <b>VPRJPI</b> ( VIN, PROJPL, INVPL, VOUT )
+
+          <b>VPRJPI</b> will return the value
+
+             VOUT = ( 0.0, 1.0, 1.0 )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     [1] `Calculus and Analytic Geometry', Thomas and Finney.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 2.0.0, 17-FEB-2004 (NJB)
+
+        Computation of LIMIT was re-structured to avoid 
+        run-time underflow warnings on some platforms.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 01-NOV-1990 (NJB)</PRE>
+<h4>Link to routine VPRJPI source file <a href='../../../src/spicelib/vprjpi.f'>vprjpi.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:25 2014</pre>
+
+</body>
+</html>
+

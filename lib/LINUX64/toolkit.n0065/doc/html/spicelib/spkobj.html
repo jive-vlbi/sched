@@ -1,0 +1,379 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spkobj</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spkobj</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SPKOBJ ( SPK objects )
+ 
+      SUBROUTINE SPKOBJ ( SPK, IDS )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Find the set of ID codes of all objects in a specified SPK file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/cells.html">CELLS</a>
+     <a href="../req/daf.html">DAF</a>
+     <a href="../req/sets.html">SETS</a>
+     <a href="../req/spk.html">SPK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     EPHEMERIS
+     UTILITY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+
+      INTEGER               LBCELL
+      PARAMETER           ( LBCELL = -5 )
+
+      CHARACTER*(*)         SPK
+      INTEGER               IDS ( LBCELL : * )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     SPK        I   Name of SPK file.
+     IDS       I/O  Set of ID codes of objects in SPK file.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     SPK            is the name of an SPK file.
+     
+     IDS            is an initialized SPICELIB set data structure.
+                    IDS optionally may contain a set of ID codes on
+                    input; on output, the data already present in
+                    IDS will be combined with ID code set found for the
+                    file SPK.
+
+                    If IDS contains no data on input, its size and
+                    cardinality still must be initialized.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     IDS            is a SPICELIB set data structure which contains
+                    the union of its contents upon input with the set
+                    of ID codes of each object for which ephemeris
+                    data are present in the indicated SPK file. The
+                    elements of SPICELIB sets are unique; hence each
+                    ID code in IDS appears only once, even if the SPK
+                    file contains multiple segments for that ID code.
+
+                    See the Examples section below for a complete
+                    example program showing how to retrieve the ID
+                    codes from IDS.
+                                      
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the input file has transfer format, the error 
+         SPICE(INVALIDFORMAT) is signaled.
+
+     2)  If the input file is not a transfer file but has architecture
+         other than DAF, the error SPICE(BADARCHTYPE) is signaled.
+
+     3)  If the input file is a binary DAF file of type other than
+         SPK, the error SPICE(BADFILETYPE) is signaled.
+
+     4)  If the SPK file cannot be opened or read, the error will
+         be diagnosed by routines called by this routine.
+
+     5)  If the size of the output set argument IDS is insufficient to
+         contain the actual number of ID codes of objects covered by
+         the indicated SPK file, the error will be diagnosed by
+         routines called by this routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine provides an API via which applications can determine
+     the set of objects for which there are ephemeris data in a
+     specified SPK file.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Display the coverage for each object in a specified SPK file.
+         Find the set of objects in the file.  Loop over the contents
+         of the ID code set:  find the coverage for each item in the
+         set and display the coverage.
+
+              PROGRAM IDCOV
+              IMPLICIT NONE
+
+        C
+        C     SPICELIB functions
+        C
+              INTEGER               <a href="cardi.html">CARDI</a>
+              INTEGER               <a href="wncard.html">WNCARD</a>
+        C
+        C     Local parameters
+        C
+        C
+        C     Declare the coverage window.  Make enough room
+        C     for MAXIV intervals.
+        C
+              INTEGER               FILSIZ
+              PARAMETER           ( FILSIZ = 255 )
+
+              INTEGER               LBCELL
+              PARAMETER           ( LBCELL = -5 )
+
+              INTEGER               MAXIV
+              PARAMETER           ( MAXIV  = 1000 )
+
+              INTEGER               WINSIZ
+              PARAMETER           ( WINSIZ = 2 * MAXIV )
+
+              INTEGER               TIMLEN
+              PARAMETER           ( TIMLEN = 50 )
+
+              INTEGER               MAXOBJ
+              PARAMETER           ( MAXOBJ = 1000 )
+
+        C
+        C     Local variables
+        C
+              CHARACTER*(FILSIZ)    LSK
+              CHARACTER*(FILSIZ)    SPK
+              CHARACTER*(TIMLEN)    TIMSTR
+
+              DOUBLE PRECISION      B
+              DOUBLE PRECISION      COVER ( LBCELL : WINSIZ )
+              DOUBLE PRECISION      E
+
+              INTEGER               I
+              INTEGER               IDS   ( LBCELL : MAXOBJ )
+              INTEGER               J
+              INTEGER               NIV
+
+
+        C
+        C     Load a leapseconds kernel for output time conversion.
+        C     <a href="spkcov.html">SPKCOV</a> itself does not require a leapseconds kernel.
+        C
+              CALL PROMPT ( 'Name of leapseconds kernel &gt; ', LSK )
+              CALL <a href="furnsh.html">FURNSH</a> ( LSK )
+
+        C
+        C     Get name of SPK file.
+        C
+              CALL PROMPT ( 'Name of SPK file           &gt; ', SPK )
+
+        C
+        C     Initialize the set IDS.
+        C
+              CALL <a href="ssizei.html">SSIZEI</a> ( MAXOBJ, IDS )
+
+        C
+        C     Initialize the window COVER.
+        C
+              CALL <a href="ssized.html">SSIZED</a> ( WINSIZ, COVER )
+
+        C
+        C     Find the set of objects in the SPK file.
+        C
+              CALL <b>SPKOBJ</b> ( SPK, IDS )
+
+        C
+        C     We want to display the coverage for each object.  Loop
+        C     over the contents of the ID code set, find the coverage
+        C     for each item in the set, and display the coverage.
+        C
+              DO I = 1, <a href="cardi.html">CARDI</a>( IDS )
+        C
+        C        Find the coverage window for the current 
+        C        object. Empty the coverage window each time 
+        C        so we don't include data for the previous object.
+        C
+                 CALL <a href="scardd.html">SCARDD</a> ( 0,   COVER )
+                 CALL <a href="spkcov.html">SPKCOV</a> ( SPK, IDS(I), COVER )
+
+        C
+        C        Get the number of intervals in the coverage
+        C        window.
+        C
+                 NIV = <a href="wncard.html">WNCARD</a> ( COVER ) 
+
+        C
+        C        Display a simple banner.
+        C
+                 WRITE (*,*) '========================================'
+                 WRITE (*,*) 'Coverage for object ', IDS(I)
+
+        C
+        C        Convert the coverage interval start and stop
+        C        times to TDB calendar strings.
+        C
+                 DO J = 1, NIV
+        C
+        C           Get the endpoints of the Jth interval.
+        C
+                    CALL <a href="wnfetd.html">WNFETD</a> ( COVER, J, B, E )
+        C
+        C           Convert the endpoints to TDB calendar
+        C           format time strings and display them.
+        C
+                    CALL <a href="timout.html">TIMOUT</a> ( B,
+             .                    'YYYY MON DD HR:MN:SC.### ' //
+             .                    '(TDB) ::TDB',
+             .                    TIMSTR                        )
+                    WRITE (*,*) ' '
+                    WRITE (*,*) 'Interval: ', J
+                    WRITE (*,*) 'Start:    ', TIMSTR
+
+                    CALL <a href="timout.html">TIMOUT</a> ( E,
+             .                    'YYYY MON DD HR:MN:SC.### ' //
+             .                    '(TDB) ::TDB',
+             .                    TIMSTR                        )
+                    WRITE (*,*) 'Stop:     ', TIMSTR
+                    WRITE (*,*) ' '
+
+                 END DO
+
+                 WRITE (*,*) '========================================'
+
+              END DO
+
+              END
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) If an error occurs while this routine is updating the set
+        IDS, the set may be corrupted.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.2, 01-JUL-2014 (NJB)
+
+        Updated index entries.
+
+    SPICELIB Version 1.0.1, 30-NOV-2007 (NJB)
+
+        Corrected bug in program in header Examples section:
+        program now empties the coverage window prior to collecting
+        data for the current object. Deleted declaration of unused
+        parameter NAMLEN in example program. Updated example to
+        use <a href="wncard.html">WNCARD</a> rather than <a href="cardd.html">CARDD</a>.
+
+    SPICELIB Version 1.0.0, 30-DEC-2004 (NJB)</PRE>
+<h4>Link to routine SPKOBJ source file <a href='../../../src/spicelib/spkobj.f'>spkobj.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:05 2014</pre>
+
+</body>
+</html>
+

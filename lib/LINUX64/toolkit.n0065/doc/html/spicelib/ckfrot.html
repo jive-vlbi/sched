@@ -1,0 +1,237 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ckfrot</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ckfrot</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      CKFROT ( C-kernel, find rotation )
+ 
+      SUBROUTINE CKFROT ( INST, ET, ROTATE, REF, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Find the rotation from a C-kernel Id to the native
+     frame at the time requested.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+      INTEGER               INST
+      DOUBLE PRECISION      ET
+      DOUBLE PRECISION      ROTATE  ( 3, 3 )
+      INTEGER               REF
+      LOGICAL               FOUND
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     INST       I   NAIF instrument ID.
+     ET         I   Epoch measured in seconds past J2000.
+     ROTATE     O   rotation from CK platform to frame REF.
+     REF        O   Reference frame.
+     FOUND      O   True when requested pointing is available.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     INST       is the unique NAIF integer ID for the spacecraft
+                instrument for which data is being requested.
+
+     ET         is the epoch for which the state rotation
+                is desired. ET should be given in seconds past the
+                epoch of J2000.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     ROTATE     is a rotation matrix that converts
+                positions relative to the input frame (given by INST)
+                to positions relative to the frame REF.
+
+                Thus, if a state S has components x,y,z,dx,dy,dz
+                in the frame of INST, frame, then S has components
+                x', y', z', dx', dy', dz' in frame REF.
+
+                     [  x' ]     [           ] [  x ]
+                     |  y' |  =  |   ROTATE  | |  y |
+                     [  z' ]     [           ] [  z ]
+
+
+     REF        is the id-code reference frame to which ROTATE will
+                transform states.
+
+     FOUND      is true if a record was found to satisfy the pointing
+                request.  FOUND will be false otherwise.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If a C-kernel file is not loaded using <a href="cklpf.html">CKLPF</a> prior to calling
+         this routine, an error is signalled by a routine that this
+         routine calls.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     <b>CKFROT</b> searches through files loaded by <a href="cklpf.html">CKLPF</a> to locate a segment
+     that can satisfy the request for position rotation
+     for instrument INST at time ET.  You must load a C-kernel
+     file using <a href="cklpf.html">CKLPF</a> before calling this routine.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     <b>CKFROT</b> searches through files loaded by <a href="cklpf.html">CKLPF</a> to satisfy a
+     pointing request. Last-loaded files are searched first, and
+     individual files are searched in backwards order, giving
+     priority to segments that were added to a file later than the
+     others. <b>CKFROT</b> considers only those segments that contain
+     angular velocity data.
+
+     The search ends when a segment is found that can give pointing
+     for the specified instrument at the request time.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     A C-kernel file should have been loaded by <a href="cklpf.html">CKLPF</a>.
+
+     In addition it is helpful to load a CK-info file into the
+     Kernel pool.  This file should have the following variables
+     defined.
+
+       CK_&lt;INST&gt;_SCLK = SCLK idcode that yields SCLK mapping for INST.
+       CK_&lt;INST&gt;_SPK  = SPK idcode  that yields ephemeris for INST.
+
+     where &lt;INST&gt; is the integer string corresponding to INST.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     W.L. Taber (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.0, 17-FEB-2000 (WLT)
+
+        The routine now checks to make sure convert ET to TICKS
+        and that at least one C-kernel is loaded before trying
+        to look up the transformation.  Also the routine now calls
+        <a href="sce2c.html">SCE2C</a> instead of <a href="sce2t.html">SCE2T</a>.
+
+    SPICELIB Version 1.0.0, 03-MAR-1999 (WLT)</PRE>
+<h4>Link to routine CKFROT source file <a href='../../../src/spicelib/ckfrot.f'>ckfrot.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:55 2014</pre>
+
+</body>
+</html>
+

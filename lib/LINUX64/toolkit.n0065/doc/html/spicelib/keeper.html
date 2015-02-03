@@ -1,0 +1,411 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>keeper</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>keeper</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ KEEPER ( Keeps track of SPICE kernels )
+ 
+      SUBROUTINE KEEPER ( WHICH,  KIND,
+     .                    FILE,   COUNT, FILTYP,  HANDLE,
+     .                    SOURCE, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     This routine is an umbrella for a collection of entry points
+     that manage the loading and unloading of SPICE kernels from
+     an application program.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     KERNEL
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+      CHARACTER*(*)         KIND
+      INTEGER               WHICH
+      CHARACTER*(*)         FILE
+      INTEGER               COUNT
+      CHARACTER*(*)         FILTYP
+      INTEGER               HANDLE
+      CHARACTER*(*)         SOURCE
+      LOGICAL               FOUND
+ 
+
+      INTEGER               FILSIZ
+      PARAMETER           ( FILSIZ = 255 )
+
+      INTEGER               FTSIZE
+      PARAMETER           ( FTSIZE = 5000 )
+
+      INTEGER               MAXTXT
+      PARAMETER           ( MAXTXT = 300 )
+
+      INTEGER               MAXFIL
+      PARAMETER           ( MAXFIL = FTSIZE + MAXTXT )
+ 
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  ENTRY POINT
+     --------  ---  --------------------------------------------------
+     KIND       I   <a href="ktotal.html">KTOTAL</a>, <a href="kdata.html">KDATA</a>
+     FILE      I/O  <a href="furnsh.html">FURNSH</a>, <a href="kdata.html">KDATA</a>,  <a href="unload.html">UNLOAD</a>, <a href="kinfo.html">KINFO</a>
+     FILTYP    I/O  <a href="ktotal.html">KTOTAL</a>, <a href="kdata.html">KDATA</a>,  <a href="kinfo.html">KINFO</a>
+     COUNT      O   <a href="ktotal.html">KTOTAL</a>
+     HANDLE     O   <a href="kdata.html">KDATA</a>,  <a href="kinfo.html">KINFO</a>
+     SOURCE     O   <a href="kdata.html">KDATA</a>.  <a href="kinfo.html">KINFO</a>
+     FOUND      O   <a href="kdata.html">KDATA</a>.  <a href="kinfo.html">KINFO</a>
+     FILSIZ     P   Maximum file name length.
+     MAXFIL     P   Is the maximum number of files that can be loaded.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     See Individual Entry points.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     See Individual Entry points.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     FILSIZ    is the maximum file name length that can be
+               accommodated by this set of routines.
+     
+
+     MAXFIL    is the number of entries that can be stored in <b>KEEPER</b>'s
+               kernel database.  Each time a kernel is loaded via
+               <a href="furnsh.html">FURNSH</a>, a database entry is created for that kernel.
+               If a meta-kernel is loaded, a database entry is created
+               for the meta-kernel itself and for all files referenced
+               in the meta-kernel's KERNELS_TO_LOAD specification.
+               Unloading a kernel or meta-kernel deletes database
+               entries created when the file was loaded.
+
+               The parameter MAXFIL is an upper bound on number of
+               SPICE kernels that can be loaded at any time via the
+               <b>KEEPER</b> interface, but the number of kernels that can be
+               loaded may be smaller, since re-loading a loaded kernel
+               or meta-kernel results in creation of additional
+               database entries.
+
+               Kernels loaded into the <b>KEEPER</b> system are subject to
+               constraints imposed by lower-level subsystems. The
+               binary kernel systems (SPK, CK, binary PCK, and EK)
+               have their own limits on the maximum number of kernels
+               that may be loaded.
+
+               The total number of DAF-based files (this set includes
+               SPKs, CKs, and binary PCKs) that may be loaded at any
+               time may not exceed 1000.  This limit applies whether
+               the files are loaded via <a href="furnsh.html">FURNSH</a> or lower-level loaders
+               such as <a href="spklef.html">SPKLEF</a> or <a href="dafopr.html">DAFOPR</a>.  File access performance
+               normally will degrade as the number of loaded kernels
+               increases.
+
+               The total number of DAS-based files that may be loaded
+               at any time is currently limited to 20 files.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the main routine <b>KEEPER</b> is called, the error
+       'SPICE(BOGUSENTRY)' will be signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine serves as an umbrella for a collection of
+     entry points that unify the task of loading, tracking,
+     and unloading SPICE kernels.  A description of each entry
+     point is given below:
+
+     <a href="furnsh.html">FURNSH</a>    Furnish a kernel to a program.  This entry point
+               provides a single interface for loading kernels into
+               your application program.  All SPICE kernels (Text
+               kernels, SPK, CK, Binary PCK, and EK) can be loaded
+               through this entry point.  In addition, special text
+               kernels, called meta-Text kernels, that contain a list
+               of other kernels to load can be processed by <a href="furnsh.html">FURNSH</a>.
+
+               Meta-text kernels allow you to easily control which
+               kernels will be loaded by your program without having
+               to write your own kernel managing routines.
+
+     <a href="ktotal.html">KTOTAL</a>    returns the number of kernels that are currently
+               available to your program as a result of previous calls
+               to <a href="furnsh.html">FURNSH</a> and <a href="unload.html">UNLOAD</a>.
+
+     <a href="kdata.html">KDATA</a>     provides an interface for retrieving (in order of their
+               specification through <a href="furnsh.html">FURNSH</a>) kernels that are active in
+               your application.
+
+     <a href="kinfo.html">KINFO</a>     allows you to retrieve information about a loaded
+               kernel using the name of that kernel.
+
+     <a href="kclear.html">KCLEAR</a>    Unloads all kernels that were loaded via the <b>KEEPER</b>
+               system, clears the kernel pool, and re-initializes the
+               <b>KEEPER</b> system.
+              
+     <a href="unload.html">UNLOAD</a>    provides an interface for unloading kernels that have
+               been loaded via the routine <a href="furnsh.html">FURNSH</a>.
+
+     For more details concerning any particular entry point, see the
+     header for that entry point.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The code fragment below illustrates the use of the various entry
+     points of <b>KEEPER</b>.  The details of creating meta-text kernels are
+     not discussed here, but are spelled out in the entry point
+     <a href="furnsh.html">FURNSH</a>.
+
+
+     Load several kernels into the program.
+
+
+     CALL <a href="furnsh.html">FURNSH</a> ( 'myspk.bsp'    )
+     CALL <a href="furnsh.html">FURNSH</a> ( 'myck.bc'      )
+     CALL <a href="furnsh.html">FURNSH</a> ( 'leapsecs.ker' )
+     CALL <a href="furnsh.html">FURNSH</a> ( 'sclk.tsc'     )
+     CALL <a href="furnsh.html">FURNSH</a> ( 'metatext.ker' )
+
+     See how many kernels have been loaded.
+
+     CALL <a href="ktotal.html">KTOTAL</a> ( 'ALL', COUNT )
+
+     WRITE (*,*) 'The total number of kernels is: ', COUNT
+
+     Summarize the kernels and types.
+
+     DO WHICH = 1, COUNT
+
+        CALL <a href="kdata.html">KDATA</a>( WHICH, 'ALL', FILE, FILTYP, SOURCE, HANDLE, FOUND )
+
+        IF ( .NOT. FOUND ) THEN
+
+           WRITE (*,*) 'This is NOT supposed to happen.  Call NAIF'
+           WRITE (*,*) 'and let them know of this problem.'
+
+        ELSE
+
+           WRITE (*,*)
+           WRITE (*,*) 'File  : ', FILE
+           WRITE (*,*) 'Type  : ', FILTYP
+           WRITE (*,*) 'Handle: ', HANDLE
+
+           IF ( SOURCE .NE. ' ' ) THEN
+              WRITE (*,*) 'This file was loaded via meta-text kernel:'
+              WRITE (*,*) SOURCE
+           END IF
+
+        END IF
+
+     END DO
+
+
+     Unload the first kernel we loaded.
+
+     CALL <a href="unload.html">UNLOAD</a> ( 'myspk.bsp' )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     C.H. Acton      (JPL)
+     N.J. Bachman    (JPL)
+     W.L. Taber      (JPL)
+     B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 4.1.0, 01-JUL-2014 (NJB) (BVS)
+
+        Updated the discussion of kernel variable watches in entry
+        points <a href="kclear.html">KCLEAR</a> and <a href="unload.html">UNLOAD</a>. Added to the <a href="furnsh.html">FURNSH</a> header mention
+        of the effects of failure during text kernel or meta-kernel
+        loading.
+
+     Last update was 12-APR-2012 (BVS)
+
+        Increased FTSIZE (from 1000 to 5000).
+
+        Changed to use <a href="sepool.html">SEPOOL</a> instead of <a href="stpool.html">STPOOL</a> to reduce loading time
+        for large meta-kernels due to n^2 delay in <a href="stpool.html">STPOOL</a>.
+
+    SPICELIB Version 4.0.2, 13-APR-2011 (EDW)
+
+        Trivial edit to <a href="kclear.html">KCLEAR</a> Restrictions, replaced P*<a href="pool.html">POOL</a> with
+        PXPOOL. The &quot;*&quot; character causes the HTML documentation
+        script to create a link for the &quot;<a href="pool.html">POOL</a>&quot; substring.
+
+    SPICELIB Version 4.0.1, 10-FEB-2010 (EDW)
+
+        Added mention of the restriction on kernel pool variable 
+        names to MAXLEN (defined in pool.f) characters or less.
+
+    SPICELIB Version 4.0.0, 02-APR-2009 (NJB)
+
+        Continued path values are now supported. <a href="furnsh.html">FURNSH</a> now rejects
+        file names longer than FILSIZ characters.
+
+        Deleted references to unneeded variable DOALL. Made
+        THSTYP declaration compatible with TYPES array.
+
+    SPICELIB Version 3.0.1, 27-APR-2007 (NJB)
+
+        Fixed header typo: added quotes to literal string
+        input arguments in example <a href="furnsh.html">FURNSH</a> calls.
+
+    SPICELIB Version 3.0.0, 15-NOV-2006 (NJB)
+
+        Added entry point <a href="kclear.html">KCLEAR</a>. Bug fix:  meta-kernel unloading bug
+        in <a href="unload.html">UNLOAD</a> was corrected. Some header updates were made.
+
+    SPICELIB Version 2.0.2, 29-JUL-2003 (NJB) (CHA)
+
+        Only the header of the entry point <a href="furnsh.html">FURNSH</a> was modified.
+        Numerous updates were made to improve clarity.  Some
+        corrections were made.
+
+    SPICELIB VERSION 2.0.1, 06-DEC-2002 (NJB)
+
+        Typo in header example was corrected.
+
+    SPICELIB VERSION 2.0.0, 07-JAN-2002 (WLT)
+
+        Added a call to <a href="cvpool.html">CVPOOL</a> in <a href="furnsh.html">FURNSH</a> so that watches that are
+        triggered are triggered by loading Meta-kernels and not by
+        some external interaction with the kernel pool.
+
+        Added code to make sure that <a href="unload.html">UNLOAD</a> has the effect of
+        loading all remaining kernels in the order they were first
+        introduced.
+
+    SPICELIB Version 1.1.0, 19-SEP-2000 (WLT)
+
+        Corrected the error message template used
+        by ZZLDKER
+
+    SPICELIB Version 1.0.1, 16-DEC-1999 (NJB)
+
+        Documentation fix:  corrected second code example in the
+        header of the entry point <a href="furnsh.html">FURNSH</a>.  The example previously used
+        the kernel variable PATH_NAMES; that name has been replaced
+        with the correct name PATH_VALUES.
+
+    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT)</PRE>
+<h4>Link to routine KEEPER source file <a href='../../../src/spicelib/keeper.f'>keeper.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:31 2014</pre>
+
+</body>
+</html>
+

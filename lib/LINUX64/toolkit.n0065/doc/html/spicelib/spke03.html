@@ -1,0 +1,290 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spke03</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spke03</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SPKE03 ( S/P Kernel, evaluate, type 3 )
+ 
+      SUBROUTINE SPKE03 ( ET, RECORD, STATE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Evaluate a single SPK data record from a segment of type 3
+     (Chebyshev Polynomials, position and velocity).
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/spk.html">SPK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     EPHEMERIS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION      ET
+      DOUBLE PRECISION      RECORD   ( * )
+      DOUBLE PRECISION      STATE    ( 6 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     ET         I   Evaluation epoch.
+     RECORD     I   Data record.
+     STATE      O   State (position and velocity).
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ET          is the epoch at which a state vector or Euler angle
+                 state is to be computed. The epoch is represented as
+                 seconds past J2000 TDB.
+
+     RECORD      is a data record which, when evaluated at epoch ET,
+                 will yield three function components and their
+                 derivatives with respect to time. The record
+                 structure for SPK type 3 data is:
+
+                    +--------------------------------------+
+                    | record size (excluding this element) |
+                    +--------------------------------------+
+                    | Coverage interval midpoint           |
+                    +--------------------------------------+
+                    | Coverage interval radius             |
+                    +--------------------------------------+
+                    | Coeffs for X position component      |
+                    +--------------------------------------+
+                    | Coeffs for Y position component      |
+                    +--------------------------------------+
+                    | Coeffs for Z position component      |
+                    +--------------------------------------+
+                    | Coeffs for X velocity component      |
+                    +--------------------------------------+
+                    | Coeffs for Y velocity component      |
+                    +--------------------------------------+
+                    | Coeffs for Z velocity component      |
+                    +--------------------------------------+
+
+                 In the above record
+
+                    - Times are expressed as seconds past J2000 TDB.
+                    - Position components have units of km.
+                    - Velocity components have units of km/s.
+
+                 RECORD must be declared by the caller with size large
+                 enough to accommodate the largest record that can be
+                 returned by this routine. See the INCLUDE file
+                 spkrec.inc for the correct record length.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     STATE       is the state. In order, X, Y, Z, X', Y', and Z'.
+                 Units are km and km/sec.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the input record contains an invalid coefficient count, 
+        the error SPICE(INVALIDCOUNT) will be signaled.
+
+     2) If the input record contains invalid domain transformation
+        parameters, the error will be diagnosed by a routine in the
+        call tree of this routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The exact format and structure of type 3 (Chebyshev polynomials,
+     position and velocity) segments are described in the SPK
+     Required Reading file.
+
+     A type 3 segment contains six sets of Chebyshev coefficients,
+     one set each for the position coordinates X, Y, and Z, and one
+     set each for the velocity coordinates X', Y', and Z'.  <b>SPKE03</b>
+     calls the routine <a href="chbval.html">CHBVAL</a> to evaluate each polynomial, and arrive
+     at the complete state.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The SPKEnn routines are almost always used in conjunction with
+     the corresponding SPKRnn routines, which read the records from
+     SPK files.
+
+     The data returned by the SPKRnn routine is in its rawest form,
+     taken directly from the segment.  As such, it will be meaningless
+     to a user unless he/she understands the structure of the data type
+     completely.  Given that understanding, however, the SPKRnn
+     routines might be used to examine raw segment data before
+     evaluating it with the SPKEnn routines.
+
+
+     C
+     C     Get a segment applicable to a specified body and epoch.
+     C
+           CALL <a href="spksfs.html">SPKSFS</a> ( BODY, ET, HANDLE, DESCR, <a href="ident.html">IDENT</a>, FOUND )
+
+     C
+     C     Look at parts of the descriptor.
+     C
+           CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+           CENTER = ICD( 2 )
+           REF    = ICD( 3 )
+           TYPE   = ICD( 4 )
+
+           IF ( TYPE .EQ. 3 ) THEN
+
+              CALL <a href="spkr03.html">SPKR03</a> ( HANDLE, DESCR, ET, RECORD )
+                  .
+                  .  Look at the RECORD data.
+                  .
+              CALL <b>SPKE03</b> ( ET, RECORD, STATE )
+                  .
+                  .  Check out the evaluated state.
+                  .
+           END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     NAIF Document 168.0, &quot;S- and P- Kernel (SPK) Specification and
+     User's Guide&quot;
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     R.E. Thurman    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 2.0.0, 31-DEC-2013 (NJB)
+
+        Added error checks for invalid coefficient counts
+        and invalid interval radius. Changed error handling
+        style to &quot;discovery.&quot; Enhanced header documentation.
+
+    SPICELIB Version 1.0.3, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.2, 23-AUG-1991 (HAN)
+
+        SPK03 was removed from the Required_Reading section of the
+        header. The information in the SPK03 Required Reading file
+        is now part of the SPK Required Reading file.
+
+    SPICELIB Version 1.0.1, 22-MAR-1990 (HAN)
+
+        Literature references added to the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (RET)</PRE>
+<h4>Link to routine SPKE03 source file <a href='../../../src/spicelib/spke03.f'>spke03.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:03 2014</pre>
+
+</body>
+</html>
+

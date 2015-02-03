@@ -1,0 +1,279 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>stcg01</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>stcg01</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   STCG01 ( STAR catalog type 1, get star data )
+ 
+      SUBROUTINE STCG01 ( INDEX,  RA,     DEC,    RASIG,
+     .                    DECSIG, CATNUM, SPTYPE, VMAG )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Get data for a single star from a SPICE type 1 star catalog.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ek.html">EK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               INDEX
+      DOUBLE PRECISION      RA
+      DOUBLE PRECISION      DEC
+      DOUBLE PRECISION      RASIG
+      DOUBLE PRECISION      DECSIG
+      INTEGER               CATNUM
+      CHARACTER*(*)         SPTYPE
+      DOUBLE PRECISION      VMAG
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     INDEX       I   Star index.
+     RA          O   Right ascension in radians.
+     DEC         O   Declination in radians.
+     RAS         O   Right ascension uncertainty in radians.
+     DECS        O   Declination uncertainty in radians.
+     CATNUM      O   Catalog number.
+     SPTYPE      O   Spectral type.
+     VMAG        O   Visual magnitude.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     INDEX       is the index of the star in the list of stars
+                 that satisfy the selection criteria specified in
+                 the last call to <a href="stcf01.html">STCF01</a>.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     RA          is right ascension of the star at the catalog epoch
+                 in radians relative to the J2000 inertial frame.
+
+     DEC         is declination of the star at the catalog epoch in
+                 radians relative to the J2000 inertial frame.
+
+     RASIG       is the uncertainty in right ascension of the star at
+                 the catalog epoch in radians.
+
+     DECSIG      is the uncertainty in declination of the star at
+                 the catalog epoch in radians.
+
+     CATNUM      is the star number in the catalog.
+
+     SPTYPE      is the star's spectral type. See catalog description
+                 for more information regarding encoding of spectral
+                 type values.
+
+     VMAG        is the visual magnitude of the star.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If fetching of any of output values fails, then
+        the error 'SPICE(BADSTARINDEX)' is signalled.
+
+     2) If no star catalog has been loaded, the error is dianosed
+        by a routine called by this one.
+
+     3) If <a href="stcf01.html">STCF01</a> was not called first, the EK query
+        error 'SPICE(INVALIDINDEX)' is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     This routine reads the data from SPICE type 1 star catalog file
+     loaded into the program by a call to <a href="stcl01.html">STCL01</a>.
+
+     SPICE type 1 star catalog files MUST contain a single data table.
+     It can occupy a single segment or it can spread across multiple
+     segments. This table MUST include the following columns:
+
+        column name                data type          units
+     -------------------------------------------------------
+        RA                   DOUBLE PRECISION        DEGREES
+        DEC                  DOUBLE PRECISION        DEGREES
+        RA_SIGMA             DOUBLE PRECISION        DEGREES
+        DEC_SIGMA            DOUBLE PRECISION        DEGREES
+        CATALOG_NUMBER       INTEGER
+        SPECTRAL_TYPE        CHARACTER*(4)
+        VISUAL_MAGNITUDE     DOUBLE PRECISION
+
+     Nulls are not allowed in any of the columns.
+     Other columns can also be present in the table but their data
+     will NOT be accessible through <a href="stcf01.html">STCF01</a> and <b>STCG01</b> --
+     the interface used to access data in the catalog. Note
+     that the names and attributes of these additional columns
+     must be identical for all segments containing this table.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine is intended to be a part of the user interface to
+     the SPICE type 1 star catalog. It allows the caller to retrieve
+     data for a single star found by <a href="stcf01.html">STCF01</a> using the star's
+     index within the search result array. This subroutine MUST
+     NOT be called before a search by <a href="stcf01.html">STCF01</a> was done.
+
+     Other routines in the SPICE type 1 star catalog access
+     family are:
+
+        <a href="stcl01.html">STCL01</a>  load the catalog file and make its data
+                available for search and retrieval.
+
+        <a href="stcf01.html">STCF01</a>  search through the catalog for all stars within
+                a specified RA-DEC rectangle.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     In the following code fragment, <b>STCG01</b> is used to retrieve
+     position and characteristics for every star within an RA - DEC
+     rectangle from a particular SPICE type 1 star catalog.
+
+     C
+     C     Load catalog file.
+     C
+           CALL <a href="stcl01.html">STCL01</a> ( CATFN, TABNAM, HANDLE )
+     C
+     C     Search through the loaded catalog.
+     C
+           CALL <a href="stcf01.html">STCF01</a> ( TABNAM, RAMIN,  RAMAX,
+          .              DECMIN, DECMAX, NSTARS )
+     C
+     C     Retrieve data for every star found.
+     C
+           DO I = 1, NSTARS
+
+              CALL <b>STCG01</b> ( I, RA, DEC, RASIG, DECSIG,
+          .                 CATNUM, SPTYPE, VMAG )
+
+           END DO
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) The catalog file <b>STCG01</b> reads data from MUST be loaded
+        by <a href="stcl01.html">STCL01</a> and a search through the catalog MUST be done by
+        <a href="stcf01.html">STCF01</a> before <b>STCG01</b> is called.
+
+     2) No other EK queries can be made between the call to <a href="stcf01.html">STCF01</a>
+        and the call to <b>STCG01</b>.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 15-MAY-1996 (BVS)</PRE>
+<h4>Link to routine STCG01 source file <a href='../../../src/spicelib/stcg01.f'>stcg01.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:11 2014</pre>
+
+</body>
+</html>
+

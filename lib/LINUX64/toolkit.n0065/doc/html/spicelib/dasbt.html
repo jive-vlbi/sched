@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dasbt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dasbt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ DASBT ( DAS, convert binary file to transfer file )
+ 
+      SUBROUTINE DASBT ( BINFIL, XFRLUN )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Convert the contents of a binary DAS file to an equivalent DAS
+     transfer file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/das.html">DAS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONVERSION
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)         BINFIL
+      INTEGER               XFRLUN
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     BINFIL     I   Name of the binary DAS file to be converted.
+     XFRLUN     I   Logical unit of a previously opened file.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     BINFIL   The name of a binary DAS file which is to be converted
+              to an equivalent DAS transfer file.
+
+     XFRLUN   The Fortran logical unit number of a previously opened
+              file. The DAS transfer file will be written to the
+              file attached to this logical unit beginning at the
+              current position in the file.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)   If the binary DAS file specified by the filename BINFIL
+          cannot be opened for read access, an appropriate error
+          message will be signalled by a DAS file access routine that
+          is called by this routine.
+
+     2)   If for some reason the DAS transfer file cannot be written
+          to, the error SPICE(FILEWRITEFAILED) is signalled.
+
+     3)   If, for any reason, the DAS file cannot be read, a DAS file
+          access routine will signal an error with appropriate error
+          message.
+
+     4)   The binary DAS file opened by this routine, BINFIL, is only
+          GUARANTEED to be closed upon successful completion of the
+          binary to transfer conversion process. In the event of an
+          error, the caller of this routine is required to close the
+          binary DAS file BINFIL.
+
+     5)   If the values for the number of reserved records or the
+          number of reserved characters in a DAS file is nonzero,
+          the error SPICE(BADDASFILE) will be signalled. THIS ERROR
+          IS SIGNALLED ONLY BECAUSE THE RESERVED RECORD AREA HAS
+          NOT YET BEEN IMPLEMENTED.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See arguments BINFIL, XFRLUN.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Any binary DAS file may be transferred between heterogeneous
+     Fortran environments by converting it to an equivalent file
+     containing only ASCII characters called a DAS transfer file.
+     Such a file can be transferred almost universally using any number
+     of established protocols. Once transferred, the DAS transfer file
+     can be converted to a binary file using the representations native
+     to the new host environment.
+
+     This routine provides a mechanism for converting a binary DAS
+     file into an equivalent DAS transfer file. It is one of a pair of
+     routines for performing conversions between the binary format of a
+     DAS file and the DAS transfer file. The inverse of this routine is
+     the routine <a href="dastb.html">DASTB</a>.
+
+     Upon successful completion, the DAS transfer file attached to
+     Fortran logical unit XFRLUN will contain the same data as the
+     binary DAS file BINFIL in an encoded ASCII format. The binary DAS
+     file BINFIL will be closed when this routine exits successfully.
+     The DAS transfer file will remain open, as it was on entry, and it
+     will be positioned to write on the first line following the
+     encoded data from the binary DAS file.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Let
+
+        BINFIL   be the name of a binary DAS file which is to be
+                 converted to an equivalent DAS transfer file. This
+                 could be for purposes of porting the data to a
+                 different computer platform, or possibly for
+                 archival storage of the data.
+
+        XFRLUN   be the Fortran logical unit to which the DAS transfer
+                 file is to be written.
+
+     Then, the following subroutine call would read the binary DAS
+     file BINFIL, convert its contents into an encoded format, and
+     then write that data to the DAS transfer file attached to XFRLUN,
+     beginning at the current position in that file.
+
+        CALL <b>DASBT</b> ( BINFIL, XFRLUN )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 3.0.0, 13-AUG-1994 (KRG)
+
+        Updated the header and in line comments to reflect the change
+        from calling files text files to calling them transfer files.
+
+        Changed the variable name TXTLUN to XFRLUN to make it
+        compatible with the change in terminology.
+
+    SPICELIB Version 2.0.0, 13-AUG-1994 (KRG)
+
+        A potential problem with list directed writes was fixed. Some
+        compilers have list directed writes that write multiple comma
+        separated items to one line and other compilers write these to
+        multiple lines even when all of the output will fit on a single
+        line. This was fixed by replacing all of the affected list
+        directed write statements with code to put the desired data
+        into a character string and then write the character string.
+
+    SPICELIB Version 1.0.0, 29-OCT-1992 (KRG)</PRE>
+<h4>Link to routine DASBT source file <a href='../../../src/spicelib/dasbt.f'>dasbt.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:07 2014</pre>
+
+</body>
+</html>
+

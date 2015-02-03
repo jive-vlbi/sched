@@ -1,0 +1,464 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>eul2m</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>eul2m</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      EUL2M ( Euler angles to matrix )
+ 
+      SUBROUTINE EUL2M (  ANGLE3,   ANGLE2,   ANGLE1,
+     .                    AXIS3,    AXIS2,    AXIS1,   R  )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Construct a rotation matrix from a set of Euler angles.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/rotation.html">ROTATION</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     MATRIX
+     ROTATION
+     TRANSFORMATION
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION      ANGLE3
+      DOUBLE PRECISION      ANGLE2
+      DOUBLE PRECISION      ANGLE1
+ 
+      INTEGER               AXIS3
+      INTEGER               AXIS2
+      INTEGER               AXIS1
+ 
+      DOUBLE PRECISION      R ( 3, 3 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     ANGLE3,
+     ANGLE2,
+     ANGLE1     I   Rotation angles about third, second, and first
+                    rotation axes (radians).
+     AXIS3,
+     AXIS2,
+     AXIS1      I   Axis numbers of third, second, and first rotation
+                    axes.
+
+     R          O   Product of the 3 rotations.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ANGLE3,
+     ANGLE2,
+     ANGLE1,
+
+     AXIS3,
+     AXIS2,
+     AXIS1          are, respectively, a set of three angles and three
+                    coordinate axis numbers; each pair ANGLEx and
+                    AXISx specifies a coordinate transformation
+                    consisting of a rotation by ANGLEx radians about
+                    the coordinate axis indexed by AXISx.  These
+                    coordinate transformations are typically
+                    symbolized by
+
+                       [ ANGLEx ]     .
+                                 AXISx
+
+                    See the $ Particulars section below for details
+                    concerning this notation.
+
+                    Note that these coordinate transformations rotate
+                    vectors by
+
+                       -ANGLEx
+
+                    radians about the axis indexed by AXISx.
+
+                    The values of AXISx may be 1, 2, or 3, indicating
+                    the x, y, and z axes respectively.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     R              is a rotation matrix representing the composition
+                    of the rotations defined by the input angle-axis
+                    pairs.  Together, the three pairs specify a
+                    composite transformation that is the result of
+                    performing the rotations about the axes indexed
+                    by AXIS1, AXIS2, and AXIS3, in that order.  So,
+
+                       R = [ ANGLE3 ]    [ ANGLE2 ]      [ ANGLE1 ]
+                                    AXIS3          AXIS2          AXIS1
+
+                    See the $ Particulars section below for details
+                    concerning this notation.
+
+                    The resulting matrix R may be thought of as a
+                    coordinate transformation; applying it to a vector
+                    yields the vector's coordinates in the rotated
+                    system.
+
+                    Viewing R as a coordinate transformation matrix,
+                    the basis that R transforms vectors to is created
+                    by rotating the original coordinate axes first by
+                    ANGLE1 radians about the coordinate axis indexed
+                    by AXIS1, next by ANGLE2 radians about the
+                    coordinate axis indexed by AXIS2, and finally by
+                    ANGLE3 radians about coordinate axis indexed by
+                    AXIS3.  At the second and third steps of this
+                    process, the coordinate axes about which rotations
+                    are performed belong to the bases resulting from
+                    the previous rotations.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)   If any of AXIS3, AXIS2, or AXIS1 do not have values in
+
+             { 1, 2, 3 },
+
+          the error SPICE(BADAXISNUMBERS) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     A word about notation:  the symbol
+
+        [ x ]
+             i
+
+     indicates a rotation of x radians about the ith coordinate axis.
+     To be specific, the symbol
+
+        [ x ]
+             1
+
+     indicates a coordinate system rotation of x radians about the
+     first, or x-, axis; the corresponding matrix is
+
+        +-                    -+
+        |  1      0       0    |
+        |                      |
+        |  0    cos(x)  sin(x) |.
+        |                      |
+        |  0   -sin(x)  cos(x) |
+        +-                    -+
+
+     Remember, this is a COORDINATE SYSTEM rotation by x radians; this
+     matrix, when applied to a vector, rotates the vector by -x
+     radians, not x radians.  Applying the matrix to a vector yields
+     the vector's representation relative to the rotated coordinate
+     system.
+
+     The analogous rotation about the second, or y-, axis is
+     represented by
+
+        [ x ]
+             2
+
+     which symbolizes the matrix
+
+        +-                    -+
+        | cos(x)   0   -sin(x) |
+        |                      |
+        |  0       1      0    |,
+        |                      |
+        | sin(x)   0    cos(x) |
+        +-                    -+
+
+     and the analogous rotation about the third, or z-, axis is
+     represented by
+
+        [ x ]
+             3
+
+     which symbolizes the matrix
+
+        +-                    -+
+        |  cos(x)  sin(x)   0  |
+        |                      |
+        | -sin(x)  cos(x)   0  |.
+        |                      |
+        |  0        0       1  |
+        +-                    -+
+
+     From time to time, (depending on one's line of work, perhaps) one
+     may happen upon a pair of coordinate systems related by a
+     sequence of rotations.  For example, the coordinate system
+     defined by an instrument such as a camera is sometime specified
+     by RA, DEC, and twist; if alpha, delta, and phi are the rotation
+     angles, then the series of rotations
+
+        [ phi ]     [ pi/2  -  delta ]     [ alpha ]
+               3                      2             3
+
+     produces a transformation from inertial to camera coordinates.
+
+     This routine is related to the SPICELIB routine <a href="m2eul.html">M2EUL</a>, which
+     produces a sequence of Euler angles, given a rotation matrix.
+     This routine is a `left inverse' of <a href="m2eul.html">M2EUL</a>:  the sequence of
+     calls
+
+        CALL <a href="m2eul.html">M2EUL</a> ( R,  AXIS3,   AXIS2,   AXIS1,
+       .                 ANGLE3,  ANGLE2,  ANGLE1     )
+
+        CALL <b>EUL2M</b> (     ANGLE3,  ANGLE2,  ANGLE1,
+       .                 AXIS3,   AXIS2,   AXIS1,   R )
+
+     preserves R, except for round-off error.
+
+
+     On the other hand, the sequence of calls
+
+        CALL <b>EUL2M</b> (     ANGLE3,  ANGLE2,  ANGLE1,
+       .                 AXIS3,   AXIS2,   AXIS1,   R )
+
+        CALL <a href="m2eul.html">M2EUL</a> ( R,  AXIS3,   AXIS2,   AXIS1,
+       .                 ANGLE3,  ANGLE2,  ANGLE1     )
+
+     preserve ANGLE3, ANGLE2, and ANGLE1 only if these angles start
+     out in the ranges that <a href="m2eul.html">M2EUL</a>'s outputs are restricted to.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Create a coordinate transformation matrix by rotating
+         the original coordinate axes first by 30 degrees about
+         the z axis, next by 60 degrees about the y axis resulting
+         from the first rotation, and finally by -50 degrees about
+         the z axis resulting from the first two rotations.
+
+
+            C
+            C     Create the coordinate transformation matrix
+            C
+            C                   o          o          o
+            C        R  =  [ -50  ]   [  60  ]   [  30  ]
+            C                      3          2          3
+            C
+            C     All angles in radians, please.   The SPICELIB
+            C     function <a href="rpd.html">RPD</a> (radians per degree) gives the
+            C     conversion factor.
+            C
+            C     The z axis is `axis 3'; the y axis is `axis 2'.
+            C
+                  ANGLE1 = <a href="rpd.html">RPD</a>() *  30.D0
+                  ANGLE2 = <a href="rpd.html">RPD</a>() *  60.D0
+                  ANGLE3 = <a href="rpd.html">RPD</a>() * -50.D0
+
+                  AXIS1  = 3
+                  AXIS2  = 2
+                  AXIS3  = 3
+
+                  CALL <b>EUL2M</b> (  ANGLE3, ANGLE2, ANGLE1,
+                 .              AXIS3,  AXIS2,  AXIS1,   R  )
+
+
+     2)  A trivial example using actual numbers.
+
+         The code fragment
+
+            CALL <b>EUL2M</b> (  0.D0,     0.D0,     <a href="halfpi.html">HALFPI</a>(),
+           .                 1,        1,            3,      R  )
+
+         sets R equal to the matrix
+
+            +-                  -+
+            |  0      1       0  |
+            |                    |
+            | -1      0       0  |.
+            |                    |
+            |  0      0       1  |
+            +-                  -+
+
+
+     3)  Finding the rotation matrix specified by a set of `clock,
+         cone, and twist' angles, as defined on the Voyager 2 project:
+
+            Voyager 2 narrow angle camera pointing, relative to the
+            Sun-Canopus coordinate system, was frequently specified
+            by a set of Euler angles called `clock, cone, and twist'.
+            These defined a 3-2-3 coordinate transformation matrix
+            TSCTV as the product
+
+               [ twist ]  [ cone ]   [ clock ] .
+                        3         2           3
+
+            Given the angles CLOCK, CONE, and TWIST (in units of
+            radians), we can compute TSCTV with the code fragment
+
+               CALL <b>EUL2M</b> (  TWIST,  CONE,  CLOCK,
+              .              3,      2,     3,      TSCTV  )
+
+
+     4)  Finding the rotation matrix specified by a set of `right
+         ascension, declination, and twist' angles, as defined on the
+         Galileo project:
+
+            Galileo scan platform pointing, relative to an inertial
+            reference frame, (EME50 variety) is frequently specified
+            by a set of Euler angles called `right ascension (RA),
+            declination (Dec), and twist'. These define a 3-2-3
+            coordinate transformation matrix TISP as the product
+
+               [ Twist ]  [ pi/2 - Dec ]   [ RA ] .
+                        3               2        3
+
+            Given the angles RA, DEC, and TWIST (in units of radians),
+            we can compute TISP with the code fragment
+
+               CALL <b>EUL2M</b> (  TWIST,   <a href="halfpi.html">HALFPI</a>()-DEC,   RA,
+              .              3,       2,              3,   TISP  )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     Beware:  more than one definition of &quot;RA, DEC and twist&quot; exists.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     [1]  `Galileo Attitude and Camera Models', JPL IOM 314-323,
+           W. M. Owen, Jr.,  Nov. 11, 1983.  NAIF document number
+           204.0.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.1, 26-DEC-2006 (NJB)
+
+        Corrected header typo.
+
+    SPICELIB Version 1.2.0, 25-AUG-2005 (NJB)
+
+        Updated to remove non-standard use of duplicate arguments
+        in <a href="rotmat.html">ROTMAT</a> calls.
+
+    SPICELIB Version 1.1.2, 14-OCT-2004 (LSE)
+
+        Corrected a typo in the header.
+
+    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.1.0, 02-NOV-1990 (NJB)
+
+        Names of input arguments changed to reflect the order in
+        which the rotations are applied when their product is
+        computed.  The header was upgraded to describe notation in
+        more detail.  Examples were added.
+
+    SPICELIB Version 1.0.0, 30-AUG-1990 (NJB)</PRE>
+<h4>Link to routine EUL2M source file <a href='../../../src/spicelib/eul2m.f'>eul2m.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:20 2014</pre>
+
+</body>
+</html>
+

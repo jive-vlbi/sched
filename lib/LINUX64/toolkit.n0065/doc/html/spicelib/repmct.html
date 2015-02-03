@@ -1,0 +1,330 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>repmct</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>repmct</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+  REPMCT  ( Replace marker with cardinal text )
+ 
+      SUBROUTINE REPMCT ( IN, MARKER, VALUE, CASE, OUT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Replace a marker with the text representation of a
+     cardinal number.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CHARACTER
+     CONVERSION
+     STRING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)         IN
+      CHARACTER*(*)         MARKER
+      INTEGER               VALUE
+      CHARACTER*1           CASE
+      CHARACTER*(*)         OUT
+ 
+      INTEGER               MAXLCN
+      PARAMETER           ( MAXLCN = 145 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     IN         I   Input string.
+     MARKER     I   Marker to be replaced.
+     VALUE      I   Cardinal value.
+     CASE       I   Case of replacement text.
+     OUT        O   Output string.
+     MAXLCN     P   Maximum length of a cardinal number.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     IN             is an arbitrary character string.
+
+     MARKER         is an arbitrary character string. The first
+                    occurrence of MARKER in the input string is
+                    to be replaced by the text representation of
+                    the cardinal number VALUE.
+
+                    Leading and trailing blanks in MARKER are NOT
+                    significant. In particular, no substitution is
+                    performed if MARKER is blank.
+
+     VALUE          is an arbitrary integer.
+
+     CASE           indicates the case of the replacement text.
+                    CASE may be any of the following:
+
+                       CASE     Meaning        Example
+                       ----     -----------    -----------------------
+                       U, u     Uppercase      ONE HUNDRED FIFTY-THREE
+
+                       L, l     Lowercase      one hundred fifty-three
+
+                       C, c     Capitalized    One hundred fifty-three
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     OUT            is the string obtained by substituting the text
+                    representation of the cardinal number VALUE for
+                    the first occurrence of MARKER in the input string.
+
+                    OUT and IN must be identical or disjoint.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     MAXLCN         is the maximum expected length of any cardinal
+                    text. 145 characters are sufficient to hold the
+                    text representing any value in the range
+
+                      ( -10**12, 10**12 )
+
+                    An example of a number whose text representation
+                    is of maximum length is
+
+                       - 777 777 777 777
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If OUT does not have sufficient length to accommodate the
+        result of the substitution, the result will be truncated on
+        the right.
+
+     2) If MARKER is blank, or if MARKER is not a substring of IN,
+        no substitution is performed. (OUT and IN are identical.)
+
+     3) If the value of CASE is not recognized, the error
+        SPICE(INVALIDCASE) is signalled. OUT is not changed.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This is one of a family of related routines for inserting values
+     into strings. They are typically used to construct messages that
+     are partly fixed, and partly determined at run time. For example,
+     a message like
+
+        'Fifty-one pictures were found in directory [USER.DATA].'
+
+     might be constructed from the fixed string
+
+        '#1 pictures were found in directory #2.'
+
+     by the calls
+
+        CALL <b>REPMCT</b> ( STRING, '#1', NPICS,  'C', STRING )
+        CALL <a href="repmc.html">REPMC</a>  ( STRING, '#2', DIRNAM,      STRING )
+
+     which substitute the cardinal text 'Fifty-one' and the character
+     string '[USER.DATA]' for the markers '#1' and '#2' respectively.
+
+     The complete list of routines is shown below.
+
+        <a href="repmc.html">REPMC</a>    ( Replace marker with character string value )
+        <a href="repmd.html">REPMD</a>    ( Replace marker with double precision value )
+        <a href="repmf.html">REPMF</a>    ( Replace marker with formatted d.p. value )
+        <a href="repmi.html">REPMI</a>    ( Replace marker with integer value )
+        <b>REPMCT</b>   ( Replace marker with cardinal text)
+        <a href="repmot.html">REPMOT</a>   ( Replace marker with ordinal text )
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The following examples illustrate the use of <b>REPMCT</b> to
+     replace a marker within a string with the cardinal text
+     corresponding to an integer.
+
+     Uppercase
+     ---------
+
+        Let
+
+           MARKER = '#'
+           IN     = 'INVALID COMMAND.  WORD # WAS NOT RECOGNIZED.'
+
+        Then following the call,
+
+           CALL <b>REPMCT</b> ( IN, '#', 5, 'U', IN  )
+
+        IN is
+
+           'INVALID COMMAND.  WORD FIVE WAS NOT RECOGNIZED.'
+
+     Lowercase
+     ---------
+
+        Let
+
+           MARKER = ' XX '
+           IN     = 'Word XX of the XX sentence was misspelled.'
+
+        Then following the call,
+
+           CALL <b>REPMCT</b> ( IN, '  XX  ', 5, 'L', OUT )
+
+        OUT is
+
+           'Word five of the XX sentence was misspelled.'
+
+
+     Capitalized
+     -----------
+
+        Let
+
+           MARKER = ' XX '
+           IN     = 'Name:  YY.  Rank:  XX.'
+
+        Then following the calls,
+
+           CALL <a href="repmc.html">REPMC</a>  ( IN,  'YY', 'Moriarty', OUT )
+           CALL <b>REPMCT</b> ( OUT, 'XX',     1, 'C', OUT )
+
+        OUT is
+
+           'Name:  Moriarty.  Rank:  One.'
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) VALUE must be in the range accepted by subroutine <a href="inttxt.html">INTTXT</a>.
+        This range is currently
+
+           ( -10**12, 10**12 )
+
+        Note that the endpoints of the interval are excluded.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     B.V. Semenov   (JPL)
+     W.L. Taber     (JPL)
+     I.M. Underwood (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.1.0, 21-SEP-2013 (BVS)
+
+        Minor efficiency update: the routine now looks up the first
+        and last non-blank characters only once.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 30-AUG-1990 (NJB) (IMU)</PRE>
+<h4>Link to routine REPMCT source file <a href='../../../src/spicelib/repmct.f'>repmct.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:50 2014</pre>
+
+</body>
+</html>
+

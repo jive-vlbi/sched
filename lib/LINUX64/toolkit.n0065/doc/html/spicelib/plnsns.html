@@ -1,0 +1,251 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>plnsns</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>plnsns</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      PLNSNS ( Planetographic Longitude Sense )
+ 
+      INTEGER FUNCTION PLNSNS ( BODID )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+    This function returns the quotient of the planetographic
+    and planetocentric longitude for a user specified body.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     PCK
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+      INTEGER               BODID
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     BODID      I   is the NAIF id-code of some solar system object.
+
+     Function returns planetographic/planetocentric
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     BODID      is the NAIF id-code of some planet, asteroid, comet
+                or natural satellite of a planet.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     Based upon loaded PCK values in the kernel pool, the function
+     returns the quotient
+
+           planetographic longitude
+           ------------------------
+           planetocentric longitude
+
+     for the body specified by BODID.  I.e.  1 if planetographic
+     and planetocentric longitude are the same for the input body,
+     -1 if the planetographic and planetocentric longitude are
+     opposite for the specified body.  If PCK information for
+     the specified body can not be located in the kernel pool
+     the function returns the value 0.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     Error free.
+
+     1) If sufficient orientation information for the object
+     specified by BODID is not available in the kernel pool,
+     the function returns the value 0.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     A text PCK kernel must be loaded via the routine <a href="furnsh.html">FURNSH</a>
+     that contains the orientation information for the body specified
+     by BODID.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine returns the multiplicative factor needed
+     to convert planetographic longitude to planetocentric
+     longitude.
+
+     This routine relies on the proper orientation for the
+     specified body having been loaded in the kernel pool.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you have the planetographic coordinates
+     of some point on the surface of an object and that you
+     need to convert these coordinates to bodyfixed rectangular
+     coordinates.  This conversion requires knowledge of the
+     sense of planetographic longitude.  The code fragment below
+     shows how you go about using this routine to perform the
+     conversion.
+
+     We assume that the variables LAT, LONG, HEIGHT contain the
+     planetographic latitude, longitude and height above the
+     reference surface of some point.  Moreover, let F be the
+     flattening factor for the reference spheroid.
+
+     ( F = (Equatorial Radius - Polar Radius ) / Equatorial Radius )
+
+     Finally, let EQRAD be the equatorial radius.
+
+     We first need to convert planetographic longitude to
+     planetocentric longitude.
+
+        FACTOR = <b>PLNSNS</b>(BODID)
+
+        IF ( FACTOR .EQ. 0 ) THEN
+
+           WRITE (*,*) 'Sorry, we don''t have data available.'
+           STOP
+
+        END IF
+
+     Compute the planetocentric longitude
+
+        PCLONG = FACTOR * LONG
+
+     Now convert the planetographic coordinates with
+     planetographic longitude replaced by planetocentric
+     longitude rectangular coordinates.  (Note the conversion
+     to planetocentric longitude is required because <a href="georec.html">GEOREC</a>
+     assumes that the ordering latitude, longitude, altitude
+     is a right handed ordering.  Replacing planetographic
+     longitude by planetocentric longitude ensures that we
+     have a right handed coordinate system.)
+
+        CALL <a href="georec.html">GEOREC</a> ( LAT, PCLONG, HEIGHT, EQRAD, F, REC )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1, 11-MAY-2009 (BVS)
+
+        Replaced <a href="ldpool.html">LDPOOL</a> with FURNSN in the header. Re-ordered header
+        sections.
+
+    SPICELIB Version 1.0.0, 7-JAN-1997 (WLT)</PRE>
+<h4>Link to routine PLNSNS source file <a href='../../../src/spicelib/plnsns.f'>plnsns.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:45 2014</pre>
+
+</body>
+</html>
+

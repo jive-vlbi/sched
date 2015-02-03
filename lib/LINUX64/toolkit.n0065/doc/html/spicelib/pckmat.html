@@ -1,0 +1,302 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>pckmat</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>pckmat</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ PCKMAT ( PCK, get transformation matrix at time )
+
+      SUBROUTINE PCKMAT ( BODY, ET, REF, TSIPM, FOUND )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+      Given a body and epoch, return the name of an inertial
+      reference frame and the 6 x 6 state transformation matrix
+      from that frame to the body fixed frame.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/naif_ids.html">NAIF_IDS</a>
+     <a href="../req/rotation.html">ROTATION</a>
+     <a href="../req/time.html">TIME</a>
+     <a href="../req/pck.html">PCK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     TRANSFORMATION
+     ROTATION
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      INTEGER              BODY
+      DOUBLE PRECISION     ET
+      INTEGER              REF
+      DOUBLE PRECISION     TSIPM ( 6, 6 )
+      LOGICAL              FOUND
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     BODY       I   ID code of some body.
+     ET         I   Epoch of transformation.
+     REF        O   Integer code for inertial reference frame.
+     TSIPM      O   Transformation from Inertial to PM for BODY at ET.
+     FOUND      O   True if data for BODY and ET are found.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     BODY        is the integer ID code of the body for which the
+                 state transformation matrix is requested. Bodies
+                 are numbered according to the standard NAIF
+                 numbering scheme.  The numbering scheme is
+                 explained in the NAIF_IDS required reading file.
+
+     ET          is the epoch at which the state transformation
+                 matrix is requested.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     REF         is the integer code for the inertial reference frame
+                 of the state transformation matrix TSIPM. (See the
+                 routine <a href="chgirf.html">CHGIRF</a> for a full list of inertial reference
+                 frame names.)
+
+     TSIPM       is a 6x6 transformation matrix. It is used to
+                 transform states from inertial coordinates to body
+                 fixed (also called equator and prime meridian --- PM)
+                 coordinates.
+
+                 Given a state S in the inertial reference frame
+                 specified by REF, the corresponding state in the body
+                 fixed reference frame is given by the matrix vector
+                 product:
+
+                    TSIPM * S
+
+                 See the PCK required reading for further details
+                 concerning PCK reference frames.
+
+                 NOTE: The inverse of TSIPM is NOT its transpose. The
+                 matrix, TSIPM, has the structure shown below:
+
+                             -            -
+                            |       :      |
+                            |   R   :  0   |
+                            | ......:......|
+                            |       :      |
+                            | dR_dt :  R   |
+                            |       :      |
+                             -            -
+
+                 where R is a time varying rotation matrix and dR_dt
+                 is its derivative.  The inverse of this matrix is:
+
+                             -              -
+                            |     T  :       |
+                            |    R   :  0    |
+                            | .......:.......|
+                            |        :       |
+                            |      T :   T   |
+                            | dR_dt  :  R    |
+                            |        :       |
+                             -              -
+
+                 The SPICE routine <a href="invstm.html">INVSTM</a> is available for producing
+                 this inverse.
+
+      FOUND      if the data allowing the computation of a state
+                 transformation matrix for the requested time and body
+                 are found in a binary PCK file, FOUND will have the
+                 value .TRUE., otherwise it will have the value
+                 .FALSE..
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the size of the type 20 PCK record to be  retrieved is too
+         large to fit into RECORD, the error SPICE(PCKRECTOOLARGE)
+         will be signaled.
+
+     2)  Any error that occurs while reading PCK data will be
+         diagnosed by a routine in the call tree of this routine.
+
+     3)  If the requested transformation matrix cannot be computed
+         using data from loaded binary PCK files, FOUND is returned
+         with the value .FALSE.. This is not a SPICE error.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     This routine computes transformation matrices using data
+     provided by a loaded binary PCK kernel.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The matrix for transforming an inertial state into a body fixed
+     states is the 6x6 matrix shown below as a block structured
+     matrix.
+
+                 -            -
+                |       :      |
+                | TIPM  :  0   |
+                | ......:......|
+                |       :      |
+                | DTIPM : TIPM |
+                |       :      |
+                 -            -
+
+     If a binary PCK file record can be found for the time and body
+     requested, it will be used. The most recently loaded binary PCK
+     file has first priority, followed by previously loaded binary PCK
+     files in backward time order. If no binary PCK file has been
+     loaded, the text P_constants kernel file is used.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Here we load a binary PCK files and use <a href="pckeul.html">PCKEUL</a> to get the
+     Euler angles.
+
+     C
+     C  Load binary PCK file.
+     C
+        CALL <a href="pcklof.html">PCKLOF</a> ('example.pck', HANDLE)
+
+     C  Call routine to get transformation matrix.
+
+        CALL <b>PCKMAT</b> ( BODY, ET, REF, TIPM, FOUND )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      K. S. Zukor     (JPL)
+      K. R. Gehringer (JPL)
+      N. J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+     SPICELIB Version 3.0.0, 03-JAN-2014 (NJB) (EDW)
+
+         Minor edits to Procedure; clean trailing whitespace.
+         Removed unneeded Revisions section.
+
+         Updated to support type 20. Changed long error message
+         for the case of RECORD having insufficient room: the
+         user is no longer advised to modify the record size.
+
+     SPICELIB Version 2.0.0, 22-MAR-1995 (KRG) (KSZ)
+
+         Added PCK type 03. Added a new exception. Made some minor
+         comment changes.
+
+     SPICELIB Version 1.0.0, 21-MAR-1995 (KSZ)
+
+         Replaces <a href="pckeul.html">PCKEUL</a> and returns the transformation
+         matrix rather than the Euler angles.</PRE>
+<h4>Link to routine PCKMAT source file <a href='../../../src/spicelib/pckmat.f'>pckmat.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:43 2014</pre>
+
+</body>
+</html>
+

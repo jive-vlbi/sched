@@ -1,0 +1,584 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>tisbod</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>tisbod</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      TISBOD ( Transformation, inertial state to bodyfixed )
+ 
+      SUBROUTINE TISBOD ( REF, BODY, ET, TSIPM )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+      Return a 6x6 matrix that transforms states in inertial
+      coordinates to states in body-equator-and-prime-meridian
+      coordinates.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+      <a href="../req/pck.html">PCK</a>
+      <a href="../req/naif_ids.html">NAIF_IDS</a>
+     <a href="../req/rotation.html">ROTATION</a>
+      <a href="../req/time.html">TIME</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+      TRANSFORMATION
+      ROTATION
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      IMPLICIT NONE
+ 
+      INCLUDE               'errhnd.inc'
+      INCLUDE               'frmtyp.inc'
+
+      CHARACTER*(*)         REF
+      INTEGER               BODY
+      DOUBLE PRECISION      ET
+      DOUBLE PRECISION      TSIPM   ( 6,6 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      REF        I   ID of inertial reference frame to transform from
+      BODY       I   ID code of body
+      ET         I   Epoch of transformation
+      TSIPM      O   Transformation (state), inertial to prime meridian
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      REF         is the NAIF name for an inertial reference frame.
+                  Acceptable names include:
+
+                    Name       Description
+                    --------   --------------------------------
+                    'J2000'    Earth mean equator, dynamical
+                               equinox of J2000
+
+                    'B1950'    Earth mean equator, dynamical
+                               equinox of B1950
+
+                    'FK4'      Fundamental Catalog (4)
+
+                    'DE-118'   JPL Developmental Ephemeris (118)
+
+                    'DE-96'    JPL Developmental Ephemeris ( 96)
+
+                    'DE-102'   JPL Developmental Ephemeris (102)
+
+                    'DE-108'   JPL Developmental Ephemeris (108)
+
+                    'DE-111'   JPL Developmental Ephemeris (111)
+
+                    'DE-114'   JPL Developmental Ephemeris (114)
+
+                    'DE-122'   JPL Developmental Ephemeris (122)
+
+                    'DE-125'   JPL Developmental Ephemeris (125)
+
+                    'DE-130'   JPL Developmental Ephemeris (130)
+
+                    'GALACTIC' Galactic System II
+
+                    'DE-200'   JPL Developmental Ephemeris (200)
+
+                    'DE-202'   JPL Developmental Ephemeris (202)
+
+                  (See the routine <a href="chgirf.html">CHGIRF</a> for a full list of names.)
+
+                  The output TIPM will give the transformation
+                  from this frame to the bodyfixed frame specified by
+                  BODY at the epoch specified by ET.
+
+      BODY        is the integer ID code of the body for which the
+                  state transformation matrix is requested. Bodies
+                  are numbered according to the standard NAIF
+                  numbering scheme.  The numbering scheme is
+                  explained in the NAIF_IDS required reading file.
+
+      ET          is the epoch at which the state transformation
+                  matrix is requested. (This is typically the
+                  epoch of observation minus the one-way light time
+                  from the observer to the body at the epoch of
+                  observation.)
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+      TSIPM       is a 6x6 transformation matrix.  It is used to
+                  transform states from inertial coordinates to body
+                  fixed (also called equator and prime meridian ---
+                  PM) coordinates.
+
+                  Given a state S in the inertial reference frame
+                  specified by REF, the corresponding bodyfixed state
+                  is given by the matrix vector product:
+
+                     TSIPM * S
+
+                  The X axis of the PM system is directed  to the
+                  intersection of the equator and prime meridian.
+                  The Z axis points along  the spin axis and points
+                  towards the same side of the invariable plane of
+                  the solar system as does earth's north pole.
+
+                  NOTE: The inverse of TSIPM is NOT its transpose.
+                        The matrix, TSIPM, has a structure as shown
+                        below:
+
+                             -            -
+                            |       :      |
+                            |   R   :  0   |
+                            | ......:......|
+                            |       :      |
+                            | dR_dt :  R   |
+                            |       :      |
+                             -            -
+
+                        where R is a time varying rotation matrix and
+                        dR_dt is its derivative.  The inverse of this
+                        matrix is:
+
+                             -              -
+                            |     T  :       |
+                            |    R   :  0    |
+                            | .......:.......|
+                            |        :       |
+                            |      T :   T   |
+                            | dR_dt  :  R    |
+                            |        :       |
+                             -              -
+
+                        The SPICE routine <a href="invstm.html">INVSTM</a> is available for
+                        producing this inverse.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+      1) If data required to define the body-fixed frame associated
+         with BODY are not found in the binary PCK system or the kernel
+         pool, the error SPICE(FRAMEDATANOTFOUND) is signaled. In
+         the case of IAU style body-fixed frames, the absence of
+         prime meridian polynomial data (which are required) is used 
+         as an indicator of missing data.
+
+      2) If the test for exception (1) passes, but in fact requested
+         data are not available in the kernel pool, the error will be
+         signaled by routines in the call tree of this routine.
+
+      3) If the kernel pool does not contain all of the data required
+         to define the number of nutation precession angles
+         corresponding to the available nutation precession
+         coefficients, the error SPICE(INSUFFICIENTANGLES) is
+         signaled.
+
+      4) If the reference frame REF is not recognized, a routine
+         called by <b>TISBOD</b> will diagnose the condition and invoke the
+         SPICE error handling system.
+
+      5) If the specified body code BODY is not recognized, the
+         error is diagnosed by a routine called by <b>TISBOD</b>.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+      The matrix for transforming inertial states to bodyfixed
+      states is the 6x6 matrix shown below as a block structured
+      matrix.
+
+                 -            -
+                |       :      |
+                | TIPM  :  0   |
+                | ......:......|
+                |       :      |
+                | DTIPM : TIPM |
+                |       :      |
+                 -            -
+
+     This can also be expressed in terms of Euler angles
+     PHI, DELTA and W.  The transformation from inertial to
+     bodyfixed coordinates is represented in the SPICE kernel
+     pool as:
+
+            TIPM = [W] [DELTA] [PHI]
+                      3       1     3
+      Thus
+
+           DTIPM = d[W] /dt [DELTA] [PHI]
+                       3           1     3
+
+                 + [W] d[DELTA] /dt [PHI]
+                      3             1     3
+
+                 + [W] [DELTA] d[PHI] /dt
+                      3       1          3
+
+
+      If a binary PCK file record can be used for the time and
+      body requested, it will be used.  The most recently loaded
+      binary PCK file has first priority, followed by previously
+      loaded binary PCK files in backward time order.  If no
+      binary PCK file has been loaded, the text P_constants
+      kernel file is used.
+
+      If there is only text PCK kernel information, it is
+      expressed in terms of RA, DEC and W (same W as above), where
+
+        RA    = PHI - <a href="halfpi.html">HALFPI</a>()
+        DEC   = <a href="halfpi.html">HALFPI</a>() - DELTA
+
+      The angles RA, DEC, and W are defined as follows in the
+      text PCK file:
+
+                                         2      ____
+                                    RA2*t       \
+            RA  = RA0  + RA1*t/T  + ------   +  /     a  sin theta
+                                       2        ----   i          i
+                                      T           i
+
+                                          2     ____
+                                    DEC2*t      \
+            DEC = DEC0 + DEC1*t/T + -------  +  /    d  cos theta
+                                        2       ----  i          i
+                                       T          i
+
+
+                                        2      ____
+                                    W2*t       \
+            W   = W0   + W1*t/d   + -----   +  /     w  sin theta
+                                       2       ----   i          i
+                                      d          i
+
+
+      where:
+
+            d = seconds/day
+
+            T = seconds/Julian century
+
+            a , d , and w  arrays apply to satellites only.
+             i   i       i
+
+            theta  = THETA0(i) + THETA1(i)*t/T are specific to each
+                 i
+
+            planet.
+
+
+        These angles -- typically nodal rates -- vary in number and
+        definition from one planetary system to the next.
+
+        Thus
+                                         ____
+                             2*RA2*t     \
+          dRA/dt  = RA1/T  + -------   + /   a THETA1(i)/T cos theta
+                                 2       ---- i                     i
+                                T          i
+
+                                         ____
+                             2*DEC2*t    \
+          dDEC/dt = DEC1/T + --------  - /    d  THETA1(i)/T sin theta
+                                 2       ----  i                      i
+                                T          i
+
+                                         ____
+                             2*W2*t      \
+          dW/dt   = W1/d   + ------    + /    w  THETA1(i)/T cos theta
+                                 2       ----  i                      i
+                                d          i
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+      Note that the data needed to compute the output state transition
+      matrix must have been made available to your program by having
+      loaded an appropriate binary or text PCK file via <a href="furnsh.html">FURNSH</a>.
+
+      Example 1.
+
+      In the following code fragment, <b>TISBOD</b> is used to transform
+      a state in J2000 inertial coordinates to a state in bodyfixed
+      coordinates.
+
+      The 6-vectors EULANG represents the inertial state (position and
+      velocity) of an object with respect to the center of the body
+      at time ET.
+
+      C
+      C     First load the kernel pool.
+      C
+            CALL <a href="furnsh.html">FURNSH</a> ( 'PLANETARY_CONSTANTS.KER' )
+
+      C
+      C     Next get the transformation and its derivative.
+      C
+            CALL <b>TISBOD</b> ( 'J2000', BODY, ET, TSIPM )
+
+      C
+      C     Convert position to bodyfixed coordinates.
+      C
+            CALL <a href="mxvg.html">MXVG</a>    ( TSIPM, EULANG, 6, 6, BDSTAT )
+
+
+      Example 2.
+
+      In the example below, <b>TISBOD</b> is used to compute
+      the angular velocity vector (with respect to an inertial frame)
+      of the specified body at time ET.
+
+      C
+      C     First get the state transformation matrix.
+      C
+            CALL <b>TISBOD</b> ( BODY,  ET,   TSIPM )
+
+      C
+      C     This matrix has the form:
+      C
+      C           -            -
+      C          |       :      |
+      C          | TIPM  :  0   |
+      C          | ......:......|
+      C          |       :      |
+      C          | DTIPM : TIPM |
+      C          |       :      |
+      C           -            -
+      C
+      C     We extract TIPM and DTIPM
+      C
+
+            DO  I = 1,3
+               DO  J = 1,3
+
+                  TIPM  ( I, J ) = TSIPM ( I,   J )
+                  DTIPM ( I, J ) = TSIPM ( I+3, J )
+
+               END DO
+            END DO
+
+      C
+      C     The transpose of TIPM and DTIPM, (TPMI and DTPMI), give
+      C     the transformation from bodyfixed coordinates to inertial
+      C     coordinates.
+      C
+      C     Here is a fact about the relationship between angular
+      C     velocity associated with a time varying rotation matrix
+      C     that gives the orientation of a body with respect to
+      C     an inertial frame.
+      C
+      C        The angular velocity vector can be read from the off
+      C        diagonal components of the matrix product:
+      C
+      C                                t
+      C        OMEGA =     DTPMI * TPMI
+      C
+      C                         t
+      C              =     DTIPM * TIPM
+      C
+      C        the components of the angular velocity V will appear
+      C        in this matrix as:
+      C
+      C             _                   _
+      C            |                     |
+      C            |   0    -V(3)  V(2)  |
+      C            |                     |
+      C            |  V(3)    0   -V(1)  |
+      C            |                     |
+      C            | -V(2)   V(1)   0    |
+      C            |_                   _|
+      C
+      C
+            CALL <a href="mtxm.html">MTXM</a> ( DTIPM, TIPM, OMEGA )
+
+            V(1) = OMEGA (3,2)
+            V(2) = OMEGA (1,3)
+            V(3) = OMEGA (2,1)
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+      The kernel pool must be loaded with the appropriate coefficients
+      (from the P_constants kernel or binary PCK file) prior to
+      calling this routine.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      N. J. Bachman   (JPL)
+      W. L. Taber     (JPL)
+      K. S. Zukor     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 4.4.0, 01-FEB-2008 (NJB)
+
+        The routine was updated to improve the error messages created
+        when required PCK data are not found. Now in most cases the
+        messages are created locally rather than by the kernel pool
+        access routines. In particular missing binary PCK data will
+        be indicated with a reasonable error message.
+
+    SPICELIB Version 4.3.0, 13-DEC-2005 (NJB)
+
+        Bug fix:  previous update introduced bug in state 
+        transformation when REF was unequal to PCK native frame.
+
+    SPICELIB Version 4.2.0, 23-OCT-2005 (NJB)
+
+        Re-wrote portions of algorithm to simplify source code.
+        Updated to remove non-standard use of duplicate arguments
+        in <a href="mxm.html">MXM</a> and <a href="vaddg.html">VADDG</a> calls.
+
+        Replaced calls to ZZBODVCD with calls to <a href="bodvcd.html">BODVCD</a>.
+
+    SPICELIB Version 4.1.0, 05-JAN-2005 (NJB)
+
+        Tests of routine <a href="failed.html">FAILED</a>() were added.
+
+     SPICELIB Version 4.0.0, 12-FEB-2004 (NJB)
+
+         Code has been updated to support satellite ID codes in the
+         range 10000 to 99999 and to allow nutation precession angles
+         to be associated with any object. 
+
+         Implementation changes were made to improve robustness
+         of the code.
+
+     SPICELIB Version 3.3.0, 29-MAR-1995 (WLT)
+
+         Properly initialized the variable NPAIRS.
+
+     SPICELIB Version 3.2.0, 22-MAR-1995 (KSZ)
+
+         Changed to call <a href="pckmat.html">PCKMAT</a> rather than <a href="pckeul.html">PCKEUL</a>.
+
+     SPICELIB Version 3.1.0, 18-OCT-1994 (KSZ)
+
+         Fixed bug which incorrectly modded DW by two pi.
+
+     SPICELIB Version 3.0.0, 10-MAR-1994 (KSZ)
+
+         Changed to look for binary PCK file, and used this
+         to find Euler angles, if such data has been loaded.
+
+     SPICELIB Version 2.0.1, 10-MAR-1992 (WLT)
+
+         Comment section for permuted index source lines was added
+         following the header.
+
+     SPICELIB Version 2.0.0, 04-SEP-1991 (NJB)
+
+         Updated to handle P_constants referenced to different epochs
+         and inertial reference frames.
+
+         $Required_Reading and $Literature_References sections were
+         updated.
+
+     SPICELIB Version 1.0.0, 05-NOV-1990 (WLT)</PRE>
+<h4>Link to routine TISBOD source file <a href='../../../src/spicelib/tisbod.f'>tisbod.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:19 2014</pre>
+
+</body>
+</html>
+

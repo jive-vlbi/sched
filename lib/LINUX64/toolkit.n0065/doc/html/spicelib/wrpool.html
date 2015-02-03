@@ -1,0 +1,300 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>wrpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>wrpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ WRPOOL ( Write the variables in pool to a specified unit )
+ 
+      ENTRY WRPOOL ( UNIT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Write to a specified unit a set of &quot;keyword = value&quot; assignments
+     for all currently defined kernel variables. The assignments 
+     constitute a text kernel from which the current state of the 
+     kernel pool can be restored.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/kernel.html">KERNEL</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONSTANTS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     INTEGER        UNIT
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     UNIT       I   Logical unit to which the variables in the pool
+                    will be written.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     UNIT       is the logical unit to which the variables in the pool
+                will be written.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     This routine writes to the specified logical unit the kernel
+     variables present in the kernel pool. Each variable consists of a
+     name and a set of associated values. The variables are written in
+     the form of a series of &quot;keyword = value&quot; assignments. The
+     assignments are preceded by a SPICE text kernel &quot;\begindata&quot;
+     marker.
+     
+     The output of this routine, if written to a text file, is a SPICE
+     text kernel. The current contents of the kernel pool can be
+     restored by clearing the pool and then loading this text kernel.
+
+     If the values are to be written to an output kernel file, the
+     file should be opened with a logical unit determined by the
+     calling program.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The following code fragment demonstrates how the data from
+     several kernel files can be loaded into a kernel pool. After the
+     pool is loaded, the values in the pool are written to a kernel
+     file.
+
+
+     C
+     C     Store in an array the names of the kernel files whose
+     C     values will be loaded into the kernel pool.
+     C
+           KERNEL (1) = 'AXES.KER'
+           KERNEL (2) = 'GM.KER'
+           KERNEL (3) = 'LEAP_SECONDS.KER'
+
+     C
+     C     Clear the kernel pool. (This is optional.)
+     C
+           CALL <a href="clpool.html">CLPOOL</a>
+
+     C
+     C     Load the variables from the three kernel files into the
+     C     the kernel pool.
+     C
+           DO I = 1, 3
+             CALL <a href="ldpool.html">LDPOOL</a> ( KERNEL (I) )
+           END DO
+
+     C
+     C     We can examine the values associated with any double
+     C     precision variable in the kernel pool using <a href="gdpool.html">GDPOOL</a>.
+     C
+           CALL <a href="gdpool.html">GDPOOL</a> ( VARIABLE, 1, NMAX, NUMVAL, VALUES, FOUND )
+
+     C
+     C     Open the new text file 'NEWKERNEL.KER'.
+     C
+           CALL TXTOPN ( 'NEWKERNEL.KER', UNIT )
+
+     C
+     C     Write the values in the kernel pool to the file.
+     C
+           CALL <b>WRPOOL</b> ( UNIT )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     H.A. Neilan     (JPL)
+     I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 8.1.1, 30-JUN-2014 (NJB)
+
+        Updated header to more accurately describe the output
+        of this routine.
+
+    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB)
+
+        Updated code example to use TXTOPN.
+
+    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT)
+
+        Added the entry points <a href="pcpool.html">PCPOOL</a>, <a href="pdpool.html">PDPOOL</a> and <a href="pipool.html">PIPOOL</a> to allow
+        direct insertion of data into the kernel pool without having
+        to read an external file.
+
+        Added the interface <a href="lmpool.html">LMPOOL</a> that allows SPICE
+        programs to load text kernels directly from memory
+        instead of requiring a text file.
+
+        Added the entry point <a href="szpool.html">SZPOOL</a> to return kernel pool definition
+        parameters.
+
+        Added the entry point <a href="dvpool.html">DVPOOL</a> to allow the removal of a variable
+        from the kernel pool.
+
+        Added the entry point <a href="gnpool.html">GNPOOL</a> to allow users to determine
+        variables that are present in the kernel pool
+
+    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT)
+
+        The implementation of the kernel pool was completely redone
+        to improve performance in loading and fetching data.  In
+        addition the pool was upgraded so that variables may be
+        either string or numeric valued.  Both types are supported
+        by <b>WRPOOL</b>.
+
+    SPICELIB Version 5.0.0, 22-AUG-1990 (NJB)
+
+        Increased value of parameter MAXVAL to 5000 to accommodate
+        storage of SCLK coefficients in the kernel pool.
+
+    SPICELIB Version 4.0.0, 12-JUN-1990 (IMU)
+
+        All entry points except <a href="pool.html">POOL</a> and <a href="clpool.html">CLPOOL</a> now initialize the
+        pool if it has not been done yet.
+
+    SPICELIB Version 3.0.0, 23-OCT-1989 (HAN)
+
+        Added declaration of <a href="failed.html">FAILED</a>. <a href="failed.html">FAILED</a> is checked in the
+        DO-loops in <a href="ldpool.html">LDPOOL</a> and <b>WRPOOL</b> to prevent infinite looping.
+
+    SPICELIB Version 1.2.0, 9-MAR-1989 (HAN)
+
+        Parameters BEGDAT and BEGTXT have been moved into the
+        Declarations section.
+
+    SPICELIB Version 1.1.0, 16-FEB-1989 (IMU) (NJB)
+
+        Parameters MAXVAR, MAXVAL, MAXLEN moved into Declarations.
+        (Actually, MAXLEN was implicitly 32 characters, and has only
+        now been made an explicit---and changeable---limit.)
+
+        Declaration of unused function <a href="failed.html">FAILED</a> removed.
+
+    SPICELIB Version 1.0.0, 8-JAN-1989 (IMU)</PRE>
+<h4>Link to routine WRPOOL source file <a href='../../../src/spicelib/pool.f'>pool.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:29 2014</pre>
+
+</body>
+</html>
+
