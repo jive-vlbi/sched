@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>uddc</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>uddc</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ UDDC ( Derivative of function less than zero, df(x)/dx &lt; 0 )
+
+      SUBROUTINE UDDC ( UDFUNC, X, DX, ISDECR )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+    This routine calculates the derivative of UDFUNC with respect 
+    to time for X, then determines if the derivative has 
+    a negative value.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+    MATH
+    DERIVATIVE
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      IMPLICIT NONE
+
+      EXTERNAL              UDFUNC
+
+      DOUBLE PRECISION      X
+      DOUBLE PRECISION      DX
+      LOGICAL               ISDECR
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     UDFUNC     I   The routine that computes the scalar value
+                    of interest.
+     X          I   Independent variable of UDFUNC.
+     DX         I   Interval from X for derivative calculation.
+     ISDECR     O   Boolean indicating if the derivative is negative.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     UDFUNC     the routine that returns the value of the scalar 
+                quantity function of interest at X. The calling 
+                sequence for UDFUNC is:
+
+                   CALL UDFUNC ( X, VALUE )
+
+                where:
+
+                   X       the double precision value of the 
+                           independent variable of the function
+                           at which to determine the scalar value.
+
+                   VALUE   the double precision value returned by 
+                           UDFUNC at X.
+
+                Functionally:
+
+                   VALUE = UDFUNC ( X )
+
+     X          a scalar double precision value at which to determine
+                the derivative of UDFUNC.
+
+                For many SPICE uses, X will represent ephemeris time, 
+                expressed as seconds past J2000 TDB.
+
+     DX         a scalar double precision value representing half the 
+                interval in units of X separating the evaluation
+                values of UDFUNC; the evaluations occur at (X + DX) 
+                and (X - DX).
+
+                DX may be negative but must be non-zero.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     ISDECR      a scalar boolean indicating if the first derivative
+                 of UDFUNC with respect to the independent variable 
+                 at X is less than zero.
+
+                 Functionally:
+
+                               d UDFUNC(x) |
+                    ISDECR =   --          |  &lt;  0
+                               dx          |
+                                            X
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+    None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) A routine in the call tree of this routine signals
+        SPICE(DIVIDEBYZERO) if DX has a value of zero.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     If the evaluation of UDFUNC requires SPICE kernel data, the
+     appropriate kernels must be loaded before calling this routine.
+
+        - SPK data: the calling application must load ephemeris data
+          for the targets, observer, and any intermediate objects in 
+          a chain connecting the targets and observer for the time
+          used in the evaluation. If aberration corrections are 
+          used, the states of target and observer relative to the 
+          solar system barycenter must be calculable from the 
+          available ephemeris data.
+
+        - If non-inertial reference frames are used, then PCK
+          files, frame kernels, C-kernels, and SCLK kernels may be
+          needed.
+
+     Such kernel data are normally loaded once per program run, NOT 
+     every time this routine is called. 
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+    This routine only wraps a <a href="uddf.html">UDDF</a> call, examining the sign of the
+    derivative value returned by <a href="uddf.html">UDDF</a>.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+    See <a href="gfuds.html">GFUDS</a>.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+    None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+    See <a href="uddf.html">UDDF</a> header
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+    N.J. Bachman   (JPL)
+    E.D. Wright    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+   SPICELIB Version 1.0.0,  31-MAR-2010 (EDW) </PRE>
+<h4>Link to routine UDDC source file <a href='../../../src/spicelib/uddc.f'>uddc.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:21 2014</pre>
+
+</body>
+</html>
+

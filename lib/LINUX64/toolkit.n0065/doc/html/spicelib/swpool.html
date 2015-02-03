@@ -1,0 +1,339 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>swpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>swpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ SWPOOL ( Set watch on a pool variable )
+ 
+      ENTRY SWPOOL ( AGENT, NNAMES, NAMES )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Add a name to the list of agents to notify whenever a member of
+     a list of kernel variables is updated.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/kernel.html">KERNEL</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONSTANTS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     CHARACTER*(*)         AGENT
+     INTEGER               NNAMES
+     CHARACTER*(*)         NAMES  ( * )
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     AGENT      I   The name of an agent to be notified after updates.
+     NNAMES     I   The number of variables to associate with AGENT.
+     NAMES      I   Variable names whose update causes the notice.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     AGENT       is the name of a routine or entry point (agency) that
+                 will want to know when the kernel pool variables
+                 designated by NAMES have been updated. 
+
+     NNAMES      is the number of kernel pool variable names that will
+                 be associated with AGENT.
+
+     NAMES       is an array of names of variables in the kernel pool.
+                 Whenever any of these is updated, a notice will be
+                 posted for AGENT so that one can quickly check
+                 whether needed data has been modified.
+
+                 Any kernel variable may be associated with multiple
+                 agents; this call adds AGENT to each set of agents
+                 associated with a member of NAMES.
+
+                 The variables designated by NAMES need not exist in
+                 the kernel pool at the time a watch is set.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If sufficient room is not available to hold a new kernel
+        variable name, the error SPICE(KERVARSETOVERFLOW) will be
+        signaled.
+
+     2) If sufficient room is not available to hold a new agent
+        name, the error SPICE(TOOMANYWATCHES) will be signaled.
+
+     3) If any kernel variable in the array NAMES is already watched
+        by MAXAGT agents, and AGENT is not already associated with
+        that kernel variable, the error (AGENTLISTOVERFLOW) will be
+        signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The kernel pool is a convenient place to store a wide
+     variety of data needed by routines in SPICELIB and routines
+     that interface with SPICELIB routines.  However, when
+     a single name has a large quantity of data associated with
+     it, it becomes inefficient to constantly query the kernel
+     pool for values that are not updated on a frequent basis.
+
+     This entry point allows a routine to instruct the kernel pool
+     to post a message whenever a particular value gets updated.
+     In this way, a routine can quickly determine whether or not
+     data it requires has been updated since the last time the
+     data was accessed.  This makes it reasonable to buffer
+     the data in local storage and update it only when
+     a variable in the kernel pool that affects this data has
+     been updated.
+
+     Note that <b>SWPOOL</b> has a side effect.  Whenever a call to
+     <b>SWPOOL</b> is made, the agent specified in the calling sequence
+     is added to the list of agents that should be notified that
+     an update of its variables has occurred.  In other words
+     the code
+
+         CALL <b>SWPOOL</b> ( AGENT, NNAMES, NAMES  )
+         CALL <a href="cvpool.html">CVPOOL</a> ( AGENT,         UPDATE )
+
+     will always return UPDATE as .TRUE.
+
+     This feature allows for a slightly cleaner use of <b>SWPOOL</b> and
+     <a href="cvpool.html">CVPOOL</a> as shown in the example below.  Because <b>SWPOOL</b>
+     automatically loads AGENT into the list of agents to notify of
+     a kernel pool update, you do not have to include the code for
+     fetching the initial values of the kernel variables in the
+     initialization portion of a subroutine.  Instead, the code for
+     the first fetch from the pool is the same as the code for
+     fetching when the pool is updated.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you have an application subroutine, MYTASK, that
+     needs to access a large data set in the kernel pool.  If this
+     data could be kept in local storage and kernel pool queries
+     performed only when the data in the kernel pool has been
+     updated, the routine can perform much more efficiently.
+
+     The code fragment below illustrates how you might make use of this
+     feature.
+
+     C
+     C     On the first call to this routine establish those variables
+     C     that we will want to read from the kernel pool only when
+     C     new values have been established.
+     C
+           IF ( FIRST ) THEN
+
+              FIRST = .FALSE.
+              HAVE  = .FALSE.
+
+              CALL <b>SWPOOL</b> ( 'MYTASK', NNAMES, NAMES )
+
+           END IF
+
+     C
+     C     If any of the variables has been updated, fetch
+     C     it from the kernel pool. (Note that this also
+     C     handles getting variables for the first time.)
+     C     We use HAVE to indicate the fetch succeeded. If it
+     C     didn't, we need to attempt the fetch on the next 
+     C     pass into this routine.
+     C
+           CALL <a href="cvpool.html">CVPOOL</a> ( 'MYTASK', UPDATE )
+
+           IF (  UPDATE  .OR (.NOT. HAVE ) ) THEN
+
+              CALL <a href="gdpool.html">GDPOOL</a> ( 'MYTASK_VAR_1', 1, M, N1, VALS1, FOUND(1) )
+              CALL <a href="gdpool.html">GDPOOL</a> ( 'MYTASK_VAR_2', 1, M, N2, VALS2, FOUND(2) )
+                      .
+                      .
+                      .
+              CALL <a href="gdpool.html">GDPOOL</a> ( 'MYTASK_VAR_N', 1, M, NN, VALSN, FOUND(N) )
+
+           END IF
+
+           IF ( <a href="failed.html">FAILED</a>() ) THEN
+                 .
+                 .
+              do something about the failure
+                 .
+                 .
+
+           ELSE
+
+              HAVE = .TRUE.
+
+           END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     W.L. Taber      (JPL)
+     B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 8.2.0, 30-JUL-2013 (BVS)
+
+        Updated to increment <a href="pool.html">POOL</a> state counter.
+
+    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB)
+
+        This routine was re-written to work with the new
+        watcher system implementation. Several bugs related
+        to watch system overflow were fixed.
+
+        The code example was updated to handle kernel pool
+        fetch failure.
+
+    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT)
+
+        Added the entry points <a href="pcpool.html">PCPOOL</a>, <a href="pdpool.html">PDPOOL</a> and <a href="pipool.html">PIPOOL</a> to allow
+        direct insertion of data into the kernel pool without having
+        to read an external file.
+
+        Added the interface <a href="lmpool.html">LMPOOL</a> that allows SPICE
+        programs to load text kernels directly from memory
+        instead of requiring a text file.
+
+        Added the entry point <a href="szpool.html">SZPOOL</a> to return kernel pool definition
+        parameters.
+
+        Added the entry point <a href="dvpool.html">DVPOOL</a> to allow the removal of a variable
+        from the kernel pool.
+
+        Added the entry point <a href="gnpool.html">GNPOOL</a> to allow users to determine
+        variables that are present in the kernel pool
+
+    SPICELIB Version 7.0.0, 20-SEP-1995 (WLT)
+
+        The implementation of the kernel pool was completely redone
+        to improve performance in loading and fetching data.  In
+        addition the pool was upgraded so that variables may be
+        either string or numeric valued.
+
+    SPICELIB Version 6.0.0, 31-MAR-1992 (WLT)
+
+        The entry points <b>SWPOOL</b> and <a href="cvpool.html">CVPOOL</a> were added.</PRE>
+<h4>Link to routine SWPOOL source file <a href='../../../src/spicelib/pool.f'>pool.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:14 2014</pre>
+
+</body>
+</html>
+

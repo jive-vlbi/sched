@@ -1,0 +1,377 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>nearpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>nearpt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      NEARPT ( Nearest point on an ellipsoid )
+ 
+      SUBROUTINE NEARPT ( POSITN, A, B, C, NPOINT, ALT )
+      IMPLICIT NONE
+      
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     This routine locates the point on the surface of an ellipsoid
+     that is nearest to a specified position. It also returns the
+     altitude of the position above the ellipsoid.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ALTITUDE  
+     ELLIPSOID
+     GEOMETRY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION      POSITN ( 3 )
+      DOUBLE PRECISION      A
+      DOUBLE PRECISION      B
+      DOUBLE PRECISION      C
+      DOUBLE PRECISION      NPOINT ( 3 )
+      DOUBLE PRECISION      ALT
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     POSITN     I   Position of a point in body-fixed frame.
+     A          I   Length of semi-axis parallel to x-axis.
+     B          I   Length of semi-axis parallel to y-axis.
+     C          I   Length on semi-axis parallel to z-axis.
+     NPOINT     O   Point on the ellipsoid closest to POSITN.
+     ALT        O   Altitude of POSITN above the ellipsoid.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     POSITN     3-vector giving the position of a point with respect
+                to the center of an ellipsoid. The vector is expressed
+                in a body-fixed reference frame. The semi-axes of the
+                ellipsoid are aligned with the x, y, and z-axes of the
+                body-fixed frame.
+
+     A          Length of the semi-axis of the ellipsoid that is
+                parallel to the x-axis of the body-fixed reference
+                frame.
+
+     B          Length of the semi-axis of the ellipsoid that is
+                parallel to the y-axis of the body-fixed reference
+                frame.
+
+     C          Length of the semi-axis of the ellipsoid that is
+                parallel to the z-axis of the body-fixed reference
+                frame.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     NPOINT     is the nearest point on the ellipsoid to POSITN.
+                NPOINT is a 3-vector expressed in the body-fixed
+                reference frame.
+
+     ALT        is the altitude of POSITN above the ellipsoid. If
+                POSITN is inside the ellipsoid, ALT will be negative
+                and have magnitude equal to the distance between
+                NPOINT and POSITN.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If any of the axis lengths A, B or C are non-positive, the
+        error SPICE(BADAXISLENGTH) will be signaled.
+
+     2) If the ratio of the longest to the shortest ellipsoid axis
+        is large enough so that arithmetic expressions involving its
+        squared value may overflow, the error SPICE(BADAXISLENGTH)
+        will be signaled.  
+        
+     3) If any of the expressions
+
+           A * ABS( POSITN(1) ) / m**2
+           B * ABS( POSITN(2) ) / m**2
+           C * ABS( POSITN(3) ) / m**2
+
+        where m is the minimum of { A, B, C }, is large enough so 
+        that arithmetic expressions involving these sub-expressions
+        may overflow, the error SPICE(INPUTSTOOLARGE) is signaled.
+
+     4) If the axes of the ellipsoid have radically different
+        magnitudes, for example if the ratios of the axis lengths vary
+        by 10 orders of magnitude, the results may have poor
+        precision. No error checks are done to identify this problem.
+
+     5) If the axes of the ellipsoid and the input point POSITN have
+        radically different magnitudes, for example if the ratio of
+        the magnitude of POSITN to the length of the shortest axis is
+        1.E25, the results may have poor precision. No error checks
+        are done to identify this problem.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Many applications of this routine are more easily performed
+     using the higher-level SPICELIB routine <a href="subpnt.html">SUBPNT</a>. This routine
+     is the mathematical workhorse on which <a href="subpnt.html">SUBPNT</a> relies.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Example 1.
+
+     The code fragment below illustrates how you can use SPICELIB to
+     compute the apparent sub-earth point on the moon.
+
+     C
+     C     Load the ephemeris, leapseconds and physical constants
+     C     files first.  We assume the names of these files are
+     C     stored in the character variables SPK, LSK and
+     C     PCK.
+     C
+           CALL <a href="furnsh.html">FURNSH</a> ( SPK )
+           CALL <a href="furnsh.html">FURNSH</a> ( LSK )
+           CALL <a href="furnsh.html">FURNSH</a> ( PCK )
+
+     C
+     C     Get the apparent position of the moon as seen from the 
+     C     earth.  Look up this position vector in the moon 
+     C     body-fixed frame IAU_MOON. The orientation of the 
+     C     IAU_MOON frame will be computed at epoch ET-LT. 
+     C
+           CALL <a href="spkpos.html">SPKPOS</a> ( 'moon',  ET,    'IAU_MOON', 'LT+S', 
+          .              'earth', TRGPOS, LT                 )
+
+     C
+     C     Negate the moon's apparent position to obtain the 
+     C     position of the earth in the moon's body-fixed frame.
+     C 
+           CALL <a href="vminus.html">VMINUS</a> ( TRGPOS, EVEC )
+           
+     C
+     C     Get the lengths of the principal axes of the moon.
+     C     Transfer the elements of the array RADII to the 
+     C     variables A, B, C to enhance readability.
+     C
+           CALL <a href="bodvrd.html">BODVRD</a> (  'MOON',    'RADII', DIM, RADII )
+           CALL <a href="vupack.html">VUPACK</a> (  RADII,  A,       B,   C     )
+
+     C
+     C     Finally get the point <a href="subpnt.html">SUBPNT</a> on the surface of the
+     C     moon closest to the earth --- the sub-earth point.
+     C     <a href="subpnt.html">SUBPNT</a> is expressed in the IAU_MOON reference frame.
+     C
+           CALL <b>NEARPT</b> ( EVEC, A, B, C, <a href="subpnt.html">SUBPNT</a>, ALT )
+
+
+     Example 2.
+
+     One can use this routine to define a generalization of GEODETIC
+     coordinates called GAUSSIAN coordinates of a triaxial body.  (The
+     name is derived from the famous Gauss-map of classical
+     differential geometry).  The coordinates are longitude,
+     latitude, and altitude.
+
+     We let the x-axis of the body fixed coordinate system point
+     along the longest axis of the triaxial body.  The y-axis points
+     along the middle axis and the z-axis points along the shortest
+     axis.
+
+     Given a point P, there is a point on the ellipsoid that is
+     closest to P, call it Q.  The latitude and longitude of P
+     are determined by constructing the outward pointing unit normal
+     to the ellipsoid at Q.  Latitude of P is the latitude that the
+     normal points toward in the body-fixed frame. Longitude is
+     the longitude the normal points to in the body-fixed frame.
+     The altitude is the signed distance from P to Q, positive if P
+     is outside the ellipsoid, negative if P is inside.
+     (the mapping of the point Q to the unit normal at Q is the
+     Gauss-map of Q).
+
+     To obtain the Gaussian coordinates of a point whose position
+     in body-fixed rectangular coordinates is given by a vector P,
+     the code fragment below will suffice.
+
+        CALL <b>NEARPT</b> ( P,    A, B, C, Q, ALT  )
+        CALL <a href="surfnm.html">SURFNM</a> (       A, B, C  Q, NRML )
+
+        CALL <a href="reclat.html">RECLAT</a> ( NRML, R, LONG, LAT     )
+
+     The Gaussian coordinates are LONG, LAT, and ALT.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     See the Exceptions header section above.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     C.H. Acton      (JPL)
+     N.J. Bachman    (JPL)
+     W.L. Taber      (JPL)
+     E.D. Wright     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.4.0, 27-JUN-2013 (NJB)
+
+        Updated in-line comments.
+
+     Last update was 04-MAR-2013 (NJB)
+
+        Bug fix: now correctly computes off-axis solution for
+        the case of a prolate ellipsoid and a viewing point
+        on the interior long axis.
+
+    SPICELIB Version 1.3.1, 07-FEB-2008 (NJB)
+
+        Header update: header now refers to <a href="subpnt.html">SUBPNT</a> rather
+        than deprecated routine <a href="subpt.html">SUBPT</a>.
+
+    SPICELIB Version 1.3.0, 07-AUG-2006 (NJB)
+
+        Bug fix:  added initialization of variable SNGLPT to support
+                  operation under the Macintosh Intel Fortran
+                  compiler. Note that this bug did not affect
+                  operation of this routine on other platforms.
+
+    SPICELIB Version 1.2.0, 15-NOV-2005 (EDW) (NJB)
+     
+        Various changes were made to ensure that all loops terminate.
+         
+        Bug fix:  scale of transverse component of error vector
+        was corrected for the exterior point case.
+
+        Bug fix:  non-standard use of duplicate arguments in <a href="vscl.html">VSCL</a>
+        calls was corrected.
+         
+        Error checking was added to screen out inputs that might
+        cause numeric overflow.
+     
+        Replaced <a href="bodvar.html">BODVAR</a> call in examples to <a href="bodvrd.html">BODVRD</a>.
+
+    SPICELIB Version 1.1.1, 28-JUL-2003 (NJB) (CHA)
+
+        Various header corrections were made. 
+
+    SPICELIB Version 1.1.0, 27-NOV-1990 (WLT)
+
+        The routine was substantially rewritten to achieve
+        more robust behavior and document the mathematics
+        of the routine.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT)</PRE>
+<h4>Link to routine NEARPT source file <a href='../../../src/spicelib/nearpt.f'>nearpt.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:39 2014</pre>
+
+</body>
+</html>
+

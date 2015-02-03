@@ -1,0 +1,259 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dafhlu</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dafhlu</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ DAFHLU ( DAF, handle to logical unit )
+
+      ENTRY DAFHLU ( HANDLE, UNIT )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Return the logical unit associated with a handle.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONVERSION
+     DAF
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     INTEGER               HANDLE
+     INTEGER               UNIT
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   Handle of a DAF file.
+     UNIT       O   Corresponding logical unit.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE      is the handle associated with a previously opened
+                 DAF file.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     UNIT        is the Fortran logical unit to which the file is
+                 connected.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If an error occurs while attempting to fetch a logical
+        unit, routines in the call tree process and signal any
+        appropriate errors.  The value of UNIT in this case is
+        undefined.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The best reason for knowing the logical unit to which a DAF
+     is connected is to read or write from the records reserved in a
+     file. Since these records are by definition invisible to the DAF
+     routines, you must read and write them directly.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     In the following code fragment, the first reserved record in
+     a newly created DAF is used to store the name and address
+     of the person who created it.
+
+        FTYPE = 'TEST'
+        CALL <a href="dafonw.html">DAFONW</a> ( FNAME, FTYPE, 3, 6, IFNAME, 5, HANDLE )
+        CALL <b>DAFHLU</b> ( HANDLE, UNIT )
+
+        WRITE (UNIT,REC=2) 'Ellis Wyatt, JPL ',
+       .                   '4800 Oak Grove Drive ',
+       .                   'Room 301-125A ',
+       .                   'Pasadena, CA 91109'
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) This routine may only be used to retrieve logical units
+        for DAFs loaded or created using the interfaces available
+        in this entry point umbrella.  Using this entry point to
+        retrieve units for files not loaded through these interfaces
+        may result in unexpected behavior.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     K.R. Gehringer  (JPL)
+     W.L. Taber      (JPL)
+     R.E. Thurman    (JPL)
+     F.S. Turner     (JPL)
+     I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 8.0.1, 10-OCT-2012 (EDW)
+
+        Corrected ordering of header section.
+
+        Removed the obsolete Reference citation to &quot;NAIF
+        Document 167.0.&quot;
+
+    SPICELIB Version 8.0.0, 13-NOV-2001 (FST)
+
+        This routine was updated to utilize the new handle manager
+        software to manage binary file formats and consolidated
+        I/O code.
+
+    SPICELIB Version 7.0.4, 08-OCT-1999 (WLT)
+
+        The environment lines were expanded so that the supported
+        environments are now explicitely given.  New
+        environments are WIN-NT
+
+    SPICELIB Version 7.0.3, 16-SEP-1999 (NJB)
+
+        CSPICE environments were added.  Some typos were corrected.
+
+    SPICELIB Version 7.0.2, 28-JUL-1999 (WLT)
+
+        The environment lines were expanded so that the supported
+        environments are now explicitly given.  New
+        environments are PC-DIGITAL, SGI-O32 and SGI-N32.
+
+    SPICELIB Version 7.0.1, 17-MAR-1999 (WLT)
+
+        The environment lines were expanded so that the supported
+        environments are now explicitly given.  Previously,
+        environments such as SUN-SUNOS and SUN-SOLARIS were implied
+        by the environment label SUN.
+
+    SPICELIB Version 1.0.3, 29-SEP-1993 (KRG)
+
+        Removed references to specific DAF file open routines in the
+        $ Detailed_Input section of the header. This was done in order
+        to minimize documentation changes if these open routines ever
+        change.
+
+        Changed the example to use the new entry point <a href="dafonw.html">DAFONW</a>.
+
+    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.1, 22-MAR-1990 (HAN)
+
+        Literature references added to the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU)</PRE>
+<h4>Link to routine DAFHLU source file <a href='../../../src/spicelib/dafah.f'>dafah.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:04 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,3673 @@
+C$Program  MSOPCK ( make CK 1, 2 or 3 from quats, angs or mats)
+
+      PROGRAM MSOPCK
+
+C$ Abstract
+C
+C     This program creates a type 1, 2 or 3 CK file from an input text
+C     file containing orientation provided as quaternions, Euler
+C     angles, or matrices and angular rates.
+C
+C     Program usage:
+C
+C       > msopck <setup_file> <input_data_file_name> <output_ck_name>
+C
+C$ Disclaimer
+C
+C     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
+C     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
+C     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
+C     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
+C     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
+C     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
+C     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
+C     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
+C     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
+C     SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
+C
+C     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
+C     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
+C     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+C     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
+C     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
+C     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
+C
+C     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
+C     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
+C     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
+C     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
+C
+C$ Files
+C
+C     This program takes setup information from a setup file in
+C     test kernel file format. Example of a setup file is below:
+C
+C         \begindata
+C
+C            LSK_FILE_NAME           = 'LSK file name'
+C
+C            SCLK_FILE_NAME          = 'SCLK file name'
+C
+C            MAKE_FAKE_SCLK          = 'fake SCLK file name'
+C
+C            FRAMES_FILE_NAME        = 'FK file name'
+C
+C            INTERNAL_FILE_NAME      = 'internal file name string'
+C
+C            COMMENTS_FILE_NAME      = 'file containing comments'
+C
+C            CK_TYPE                 = 1, 2 or 3
+C
+C            CK_SEGMENT_ID           = 'segment ID string'
+C
+C            INSTRUMENT_ID           = NAIF instrument ID
+C
+C            REFERENCE_FRAME_NAME    = 'reference frame name'
+C
+C            ANGULAR_RATE_PRESENT    = 'YES', 'NO', 'MAKE UP' or
+C                                      'MAKE UP/NO AVERAGING'
+C
+C            QUATERNION_NORM_ERROR   = maximum normalization error
+C
+C            ANGULAR_RATE_THRESHOLD  = ( max X rate, rad/sec 
+C                                        max Y rate, rad/sec
+C                                        max Z rate, rad/sec )
+C
+C            MAXIMUM_VALID_INTERVAL  = interval length, seconds
+C
+C            TIME_CORRECTION         = bias to be appiled to input 
+C                                      time tags, seconds
+C     
+C            INPUT_DATA_TYPE         = 'MSOP QUATERNIONS', 
+C                                      'SPICE QUATERNIONS' 
+C                                      'EULER ANGLES' or 
+C                                      'MATRICES'
+C
+C            INPUT_TIME_TYPE         = 'SCLK', 'UTC', 'TICKS',
+C                                      'DSCLK', or 'ET'
+C
+C            EULER_ROTATIONS_ORDER   = order of rotation as 3 element
+C                                      array; ex: ( 'X' 'Y' 'Z' )
+C
+C            EULER_ROTATIONS_TYPE    = 'SPACE' (default) or 'BODY'
+C
+C            ANGULAR_RATE_FRAME      = 'REFERENCE' or 'INSTRUMENT'
+C
+C            EULER_ANGLE_UNITS       = 'DEGREES' or 'RADIANS'
+C
+C            OFFSET_ROTATION_ANGLES  = 3 angles, ex: ( 0.5, 0.1, 0.1 )
+C
+C            OFFSET_ROTATION_AXES    = 3 axes, ex: ( 'X' 'Y' 'Z' )
+C
+C            OFFSET_ROTATION_UNITS   = 'DEGREES' or 'RADIANS'
+C
+C            DOWN_SAMPLE_TOLERANCE   = down sampling tolerance, 
+C                                      in radians
+C
+C            INCLUDE_INTERVAL_TABLE  = 'YES' (default) or 'NO'
+C
+C            CHECK_TIME_ORDER        = 'YES' or 'NO' (default)
+C
+C            PRODUCER_ID             = 'producer group/person name'
+C      
+C         \begintext
+C  
+C     where:
+C        
+C            LSK_FILE_NAME           leapseconds file name. Required 
+C                                    input.
+C
+C            SCLK_FILE_NAME          SCLK file name. Required input.
+C                                    If not provided, then
+C                                    MAKE_FAKE_SCLK keyword must be
+C                                    present.
+C                                    
+C            MAKE_FAKE_SCLK          Name of the fake SCLK file to be
+C                                    made by the program. Must be
+C                                    present if SCLK_FILE_NAME keyword
+C                                    was not provided.
+C
+C            FRAMES_FILE_NAME        frames file name; this setup
+C                                    parameter is optional and must 
+C                                    be provided only if orientation
+C                                    is given relative to a user-
+C                                    defined frame
+C
+C            INTERNAL_FILE_NAME      internal file name as 80-chars
+C                                    long string; optional, if not 
+C                                    present, set automatically to
+C                                    default value
+C                                    
+C            COMMENTS_FILE_NAME      file containing comments to 
+C                                    add to the comment area 
+C                                    of an output CK file. Optional,
+C                                    input, but if not present, then 
+C                                    only defaults are written to CK
+C                                    comment area.
+C
+C            CK_TYPE                 output CK segment type, can be 
+C                                    1, 2 or 3. Required input.
+C
+C            CK_SEGMENT_ID           40-char segment ID string;
+C                                    optional, if not present set to 
+C                                    default value.
+C
+C            INSTRUMENT_ID           the s/c structure NAIF ID of 
+C                                    the orientation data to write 
+C                                    to the CK file. Required input.
+C
+C            REFERENCE_FRAME_NAME    reference frame name for 
+C                                    orientation data. Required input.
+C
+C            ANGULAR_RATE_PRESENT    angular rates state flag, possible 
+C                                    values: 'YES', 'NO', 'MAKE UP',
+C                                    or 'MAKE UP/NO AVERAGING''MAKE UP' 
+C                                    and 'MAKE UP/NO AVERAGING' apply 
+C                                    only for output CK file types 2 
+C                                    or 3
+C
+C                                    'MAKE UP' and 
+C                                    'MAKE UP/NO AVERAGING', 
+C                                    have the same effect for type 2 
+C                                    CKs, in which manufactured rates 
+C                                    will be consistent with
+C                                    orientation but not continuous 
+C                                    in time
+C
+C                                    'MAKE UP' creates angular rates for
+C                                    type 3 CKs by using three 
+C                                    consecutive quaternions, 
+C                                    calculating the angular rate
+C                                    between the first and second, 
+C                                    then the second and third, then 
+C                                    averaging the angular rates,
+C                                    assigning this average as the 
+C                                    angular rate for the second
+C                                    (middle) quaternion
+C
+C                      x-------------x------------x
+C                      Q1            Q2           Q3
+C
+C             angular_rate   = angular rate from Q1 to Q2
+C                         12
+C
+C             angular_rate   = angular rate from Q2 to Q3
+C                         23
+C             so
+C
+C             angular_rate   =  (1/2)(angular_rate   + angular_rate  )
+C                         Q2                      12               23
+C
+C                                    'MAKE UP/NO AVERAGING' creates 
+C                                    angular rates for type 3 CKs by
+C                                    assigning the angular rate derived 
+C                                    from the second and third 
+C                                    quaternions to the second
+C                                    quaternion; angular rates made 
+C                                    up for type 3 CK are continuous 
+C                                    but not consistent with
+C                                    orientation change
+C
+C                      x-------------x------------x
+C                      Q1            Q2           Q3
+C                         
+C             angular_rate   = angular rate from Q2 to Q3
+C                         23
+C             so
+C             
+C             angular_rate   = angular_rate
+C                         Q2               23
+C
+C                                    Do not expect angular rates 
+C                                    created with the 'MAKE UP' flag
+C                                    to accurately represent reality.
+C
+C            QUATERNION_NORM_ERROR   DP number specifying maximum
+C                                    normalization error for input 
+C                                    quaternions, optional, but if not 
+C                                    present, no filtering occurs
+C
+C            ANGULAR_RATE_FRAME      specifies whether angular rates 
+C                                    are given in the 'REFERENCE' 
+C                                    frame or 'INSTRUMENT' frame,
+C                                    optional, bit if not present,
+C                                    assumed as 'REFERENCE'
+C 
+C            ANGULAR_RATE_THRESHOLD  three DP number specifying 
+C                                    threshold for maximum X, Y and Z
+C                                    angular rates in radians per 
+C                                    seconds, optional, but if not 
+C                                    present, no filtering occurs
+C                                    
+C            MAXIMUM_VALID_INTERVAL  maximum interval between two 
+C                                    adjacent input points for which 
+C                                    interpolation still allowed, in
+C                                    seconds, optional, but if not 
+C                                    present, interpolation allowed in
+C                                    the whole coverage interval
+C
+C            TIME_CORRECTION         signed number of seconds
+C                                    representing fixed correction to
+C                                    be added to each input time tag, 
+C                                    optional, no correction applied
+C                                    if not provided 
+C
+C            INPUT_DATA_TYPE         type of input data; can be one of
+C                                    'MSOP QUATERNIONS', 'SPICE 
+C                                    QUATERNIONS', 'EULER ANGLES' or 
+C                                    'MATRICES'. Required input.
+C
+C            INPUT_TIME_TYPE         input time tags type, possible 
+C                                    values: 'SCLK', 'UTC', 'TICKS', 
+C                                    'DSCLK', or 'ET'
+C
+C            EULER_ROTATIONS_ORDER   order of rotation for Euler angles
+C                                    input; must be provided when 
+C                                    INPUT_DATA_TYPE is 'EULER 
+C                                    ANGLES'; must be a 3 element like
+C                                    ( 'X' 'Y' 'Z' ) or ( 1, 2, 3 )
+C
+C            EULER_ROTATIONS_TYPE    defines the rotation type for Euler
+C                                    rotation: 'BODY' or 'SPACE',
+C                                    function defaults to 'SPACE'
+C
+C            EULER_ANGLE_UNITS       specifies units for input 
+C                                    euler angles: 'DEGREES' or 
+C                                    'RADIANS'; must be present in 
+C                                    INPUT_DATA_TYPE = 'EULER ANGLES'.
+C
+C            OFFSET_ROTATION_ANGLES  Euler angles specifying fixed 
+C                                    rotation from CK reference frame 
+C                                    to the reference frame relative 
+C                                    to which input orientation is 
+C                                    given, optional, but if present,
+C                                    companion keywords must
+C                                    also exist with three elements,
+C                                    e.g. ( 0.5, 0.2, 0.1 )
+C
+C            OFFSET_ROTATION_AXES    corresponding rotation axis for 
+C                                    angles in OFFSET_ROTATION_ANGLES
+C                                    keyword; must have three elements
+C                                    ( 'X', 'Y', 'Z' ) or ( 1, 2, 3 ), 
+C                                    optional, but if present, companion
+C                                    keywords must also exist
+C  
+C            OFFSET_ROTATION_UNITS   units for OFFSET_ROTATION_ANGLES 
+C                                    angles: 'DEGREES' or 'RADIANS', 
+C                                    optional, but if present, companion
+C                                    keywords must also exist
+C
+C            DOWN_SAMPLE_TOLERANCE   angle, in radians, representing
+C                                    maximum rotation difference
+C                                    between orientation provided by
+C                                    the data points eliminated from
+C                                    input data stream and orientation
+C                                    computed by interpolating using CK
+C                                    type 3 algorithm between data
+C                                    points written to the output CK
+C                                    file; if this keyword is present,
+C                                    MSOPCK creates output type 3 CK
+C                                    that includes only a subset of the
+C                                    input data points, resulting in
+C                                    smaller output CK file
+C                                    ``matching'' the input attitude to
+C                                    specified tolerance; optional, no
+C                                    down sampling is performed if not
+C                                    provided; ignored if provided for
+C                                    output CK types other than type 3
+C
+C            INCLUDE_INTERVAL_TABLE  optional flag indicating whether
+C                                    the interpolation interval table
+C                                    is to be included into the comment
+C                                    area of the output CK and program's
+C                                    screen output ('YES', default) or
+C                                    not ('NO').
+C
+C            CHECK_TIME_ORDER        optional flag indicating whether 
+C                                    the program should check if the
+C                                    input data records are
+C                                    time-ordered and report an error
+C                                    if not. The check is done if this
+C                                    keyword is set to 'YES'. If the
+C                                    keyword is set to 'NO' or omitted
+C                                    the check is not done.
+C
+C            PRODUCER_ID             name of a group or person who 
+C                                    created the file
+C
+C$ Author_and_Institution
+C
+C     B.V.Semenov, NAIF/JPL
+C
+C$ Version
+C 
+C-    Version 6.2.0, 2013-07-01 (BVS)
+C
+C        BUG FIX: changed the algorithm that determines the clock rate
+C        to be stored in type 2 output segments to use the average rate
+C        computed from the input record endpoints rather than the
+C        average rate computed by averaging all rate values fetched
+C        from the loaded SCLK coefficient table.
+C
+C        BUG FIX: to prevent roundoff errors for clocks with very fine
+C        ticks changed the delta added to the start time of the "zero"
+C        length intervals in type 2 CK with made up angular rates from
+C        0.01 ticks to 0.000001 seconds.
+C
+C-    Version 6.1.0, 2012-04-11 (BVS)
+C
+C        Added optional setup file keyword CHECK_TIME_ORDER.
+C
+C        BUG FIX (in SUPPORT's CK3SDN): changed the down-sampling
+C        end-point selection algorithm to not consider end-point
+C        quaternions that are close to 180 degrees apart to prevent
+C        cases in which the quaternion (QMINI) and matrix
+C        (LINROT_M-like) interpolation algorithms produce rotations in
+C        the opposite directions due to numerics.
+C
+C-    Version 6.0.0, 2006-11-07 (BVS)
+C
+C        Numerous small updates including:
+C
+C           -  added ET (ephemeris seconds past J2000) to the list of
+C              accepted time formats.
+C
+C           -  added optional setup file keyword telling the program to
+C              make a fake SCLK kernel (MAKE_FAKE_SCLK = 'fake SCLK
+C              name').
+C
+C           -  changed the way in which the user specified angular rate
+C              threshold is applied: the absolute value of angular rate
+C              components is now compared to the user supplied
+C              maximum;
+C
+C           -  added check for the angular rate threshold value to be
+C              positive;
+C
+C           -  added check for expected number of items of each input
+C              line to improve run time diagnostic of insufficient data
+C        
+C           -  improved error messages;
+C
+C           -  added global SAVE to the main program and all routines
+C              to prevent potential memory problems in the f2c'ed
+C              version of the program
+C
+C-    Version 5.0.0, 2006-06-23 (BVS)
+C
+C        Added DSCLK (decimal SCLK) to the list of accepted time
+C        formats. Added setup file keyword controlling inclusion of the
+C        interpolation interval table into the comment area and screen
+C        output (INCLUDE_INTERVAL_TABLE  = 'YES'(default) or 'NO').
+C
+C-    Version 4.1.0, 2005-09-26 (BVS)
+C
+C        Changed to load specified FK file before any other setup
+C        parameters that might depend on it are processed.
+C
+C-    Version 4.0.0, 2005-09-21 (BVS)
+C
+C        Added capability to down sample input attitude data stream
+C        before writing a type 3 CK file.
+C
+C-    Version 3.1.0, 2004-04-05 (EDW)
+C
+C        Replaced LDPOOL calls with FURNSH. Doing so ensures
+C        the ASCII terminator test for text kernels.
+C
+C-    Version 3.0.0, 2003-05-05 (EDW)
+C
+C        Added capability to perform a BODY or SPACE rotation 
+C        using defined Euler angles. Default behavior is SPACE
+C        as that was the pre-existing functionality.
+C
+C        Header and comment edits.
+C
+C-    Alpha Version 2.0.0, 2001-04-25 (BVS)
+C  
+C        Added TICKS (DP SCLK) to the list of accepted time formats.
+C        Made 1.9.0 addition backward compatible by adding 'MAKE UP/
+C        NO AVERAGING'; now 'MAKE UP' work the way it used to (averages
+C        made up rates for type 3) and 'MAKE UP/NO AVERAGING' does not 
+C        do averaging. Updated template output and fixed backslashes 
+C        before begindata and begintext.
+C
+C-    Alpha Version 1.9.0, 2000-10-02 (BVS)
+C  
+C        Changed AV manufacturing algorithm for CK3 to remove 
+C        averaging. Now it's the same as for CK2.
+C   
+C-    Alpha Version 1.8.0, 1999-DEC-01 (BVS)
+C  
+C        Replaced CKCLS with DAFCLS (... until CKCLS will be made 
+C        less smart about changing DAF IDs :-)
+C   
+C-    Alpha Version 1.7.0, 1999-SEP-19 (BVS)
+C  
+C        Added capability to apply bias to input times. 
+C   
+C-    Alpha Version 1.6.0, 1999-SEP-12 (BVS)
+C  
+C        Added quaternion normalization for both cases of 
+C        angular rate manufacturing (CK types 2 and 3) in order 
+C        to get around tight ``ISROT'' tolerances in LINROT_M. 
+C   
+C-    Alpha Version 1.5.0, 1999-JUN-25 (BVS)
+C  
+C        Changed the logic to eliminate gaps at the boundaries of  
+C        multiple segments generated in a single program run.
+C   
+C-    Alpha Version 1.4.0, 1999-APR-28 (BVS)
+C  
+C        Capability to manufacture angular rates was extended to 
+C        type 3 CK files.
+C   
+C-    Alpha Version 1.3.0, 1999-FEB-22 (BVS)
+C  
+C        Added capability to manufacture angular rates for type 2 
+C        CK files. Replaced SCE2T with SCE2C to enable fractional
+C        ticks.
+C   
+C-    Alpha Version 1.2.0, 1998-DEC-10 (BVS)
+C  
+C        Added PRODUCER_ID in the setup file. Added PRODUCT_CREATION
+C        _TIME to the comment area contents.
+C   
+C-    Alpha Version 1.1.1, 1998-DEC-02 (BVS)
+C  
+C        Incorrect order -- OFFSET * M instead of M * OFFSET --
+C        in which additional rotation was applied was corrected.
+C   
+C-    Alpha Version 1.1.0, 1998-SEP-04 (BVS)
+C  
+C        Added capabilities implemented by setup keywords 
+C        ANGULAR_RATE_FRAME, EULER_ANGLE_UNITS and 
+C        OFFSET_ROTATION_xxx. Quaternion filtering changed to 
+C        correspond to ATTREC.
+C   
+C-    Alpha Version 1.0.0, 1998-JUL-24 (BVS)
+C
+C        Initial release for MSOP delivery C4.1
+C
+C-&
+     
+      IMPLICIT              NONE
+
+C
+C     Parameters.
+C 
+
+      CHARACTER*(*)         VERSN
+      PARAMETER           ( VERSN = 'Version 6.2.0, 2013-07-01' )
+      
+      INTEGER               WORDLN
+      PARAMETER           ( WORDLN = 40 )
+
+      INTEGER               LINELN
+      PARAMETER           ( LINELN = 265 )
+      
+      INTEGER               NBUFF
+      PARAMETER           ( NBUFF = 100000 )
+      
+C
+C     Setup keywords.
+C
+      CHARACTER*(*)         LSKKWD
+      PARAMETER           ( LSKKWD = 'LSK_FILE_NAME' )
+      
+      CHARACTER*(*)         SCLKWD
+      PARAMETER           ( SCLKWD = 'SCLK_FILE_NAME' )
+      
+      CHARACTER*(*)         MFSKWD
+      PARAMETER           ( MFSKWD = 'MAKE_FAKE_SCLK' )
+      
+      CHARACTER*(*)         FRAKWD
+      PARAMETER           ( FRAKWD = 'FRAMES_FILE_NAME' )
+      
+      CHARACTER*(*)         IFNKWD
+      PARAMETER           ( IFNKWD = 'INTERNAL_FILE_NAME' )
+      
+      CHARACTER*(*)         CMMKWD
+      PARAMETER           ( CMMKWD = 'COMMENTS_FILE_NAME' )
+      
+      CHARACTER*(*)         TYPKWD
+      PARAMETER           ( TYPKWD = 'CK_TYPE' )
+      
+      CHARACTER*(*)         SIDKWD
+      PARAMETER           ( SIDKWD = 'CK_SEGMENT_ID' )
+      
+      CHARACTER*(*)         INSKWD
+      PARAMETER           ( INSKWD = 'INSTRUMENT_ID' )
+      
+      CHARACTER*(*)         REFKWD
+      PARAMETER           ( REFKWD = 'REFERENCE_FRAME_NAME' )
+      
+      CHARACTER*(*)         ARPKWD
+      PARAMETER           ( ARPKWD = 'ANGULAR_RATE_PRESENT' )
+      
+      CHARACTER*(*)         QERKWD
+      PARAMETER           ( QERKWD = 'QUATERNION_NORM_ERROR' )
+      
+      CHARACTER*(*)         AERKWD
+      PARAMETER           ( AERKWD = 'ANGULAR_RATE_THRESHOLD' )
+      
+      CHARACTER*(*)         INTKWD
+      PARAMETER           ( INTKWD = 'MAXIMUM_VALID_INTERVAL' )
+      
+      CHARACTER*(*)         TCRKWD
+      PARAMETER           ( TCRKWD = 'TIME_CORRECTION' )
+      
+      CHARACTER*(*)         DTPKWD
+      PARAMETER           ( DTPKWD = 'INPUT_DATA_TYPE' )
+      
+      CHARACTER*(*)         TTPKWD
+      PARAMETER           ( TTPKWD = 'INPUT_TIME_TYPE' )
+
+      CHARACTER*(*)         EULKWD
+      PARAMETER           ( EULKWD = 'EULER_ROTATIONS_ORDER' )
+
+      CHARACTER*(*)         EULTYP
+      PARAMETER           ( EULTYP = 'EULER_ROTATIONS_TYPE' )      
+      
+      CHARACTER*(*)         EUUKWD
+      PARAMETER           ( EUUKWD = 'EULER_ANGLE_UNITS' )
+            
+      CHARACTER*(*)         ARFKWD
+      PARAMETER           ( ARFKWD = 'ANGULAR_RATE_FRAME' )
+      
+      CHARACTER*(*)         ORAKWD
+      PARAMETER           ( ORAKWD = 'OFFSET_ROTATION_ANGLES' )
+      
+      CHARACTER*(*)         ORXKWD
+      PARAMETER           ( ORXKWD = 'OFFSET_ROTATION_AXES' )
+      
+      CHARACTER*(*)         ORUKWD
+      PARAMETER           ( ORUKWD = 'OFFSET_ROTATION_UNITS' )
+      
+      CHARACTER*(*)         PIDKWD
+      PARAMETER           ( PIDKWD = 'PRODUCER_ID' )
+      
+      CHARACTER*(*)         SDNKWD
+      PARAMETER           ( SDNKWD = 'DOWN_SAMPLE_TOLERANCE' )
+      
+      CHARACTER*(*)         IITKWD
+      PARAMETER           ( IITKWD = 'INCLUDE_INTERVAL_TABLE' )
+      
+      CHARACTER*(*)         CTOKWD
+      PARAMETER           ( CTOKWD = 'CHECK_TIME_ORDER' )
+      
+C
+C     Run time meta information keywords.
+C
+      CHARACTER*(*)         PCTKWD
+      PARAMETER           ( PCTKWD = 'PRODUCT_CREATION_TIME ' )
+      
+      CHARACTER*(*)         BTMKWD
+      PARAMETER           ( BTMKWD = 'START_TIME            ' )
+      
+      CHARACTER*(*)         ETMKWD
+      PARAMETER           ( ETMKWD = 'STOP_TIME             ' )
+      
+C
+C     Pre-defined setup keyword values.   
+C
+      CHARACTER*(*)         YESVAL
+      PARAMETER           ( YESVAL = 'YES' )
+
+      CHARACTER*(*)         NOVAL
+      PARAMETER           ( NOVAL  = 'NO' )
+
+      CHARACTER*(*)         MUPVAL
+      PARAMETER           ( MUPVAL = 'MAKE UP' )
+
+      CHARACTER*(*)         MUNVAL
+      PARAMETER           ( MUNVAL = 'MAKE UP/NO AVERAGING' )
+
+      CHARACTER*(*)         INSVAL
+      PARAMETER           ( INSVAL = 'INSTRUMENT' )
+
+      CHARACTER*(*)         REFVAL
+      PARAMETER           ( REFVAL = 'REFERENCE' )
+      
+      CHARACTER*(*)         DEGVAL
+      PARAMETER           ( DEGVAL = 'DEGREES' )
+      
+      CHARACTER*(*)         RADVAL
+      PARAMETER           ( RADVAL = 'RADIANS' )
+
+      CHARACTER*(*)         BODVAL
+      PARAMETER           ( BODVAL = 'BODY' )
+
+      CHARACTER*(*)         SPAVAL
+      PARAMETER           ( SPAVAL = 'SPACE' )
+
+C
+C     Input data types.
+C
+      CHARACTER*(*)         DMQUAT
+      PARAMETER           ( DMQUAT = 'MSOP QUATERNIONS' )
+
+      CHARACTER*(*)         DSQUAT
+      PARAMETER           ( DSQUAT = 'SPICE QUATERNIONS' )
+
+      CHARACTER*(*)         DEULER
+      PARAMETER           ( DEULER = 'EULER ANGLES' )
+
+      CHARACTER*(*)         DMATRX
+      PARAMETER           ( DMATRX = 'MATRICES' )
+
+C
+C     Time types.
+C
+      CHARACTER*(*)         TTUTC
+      PARAMETER           ( TTUTC = 'UTC' )
+
+      CHARACTER*(*)         TTSCLK
+      PARAMETER           ( TTSCLK = 'SCLK' )
+      
+      CHARACTER*(*)         TTTICK
+      PARAMETER           ( TTTICK = 'TICKS' )
+
+      CHARACTER*(*)         TTDCLK
+      PARAMETER           ( TTDCLK = 'DSCLK' )
+      
+      CHARACTER*(*)         TTET
+      PARAMETER           ( TTET = 'ET' )
+      
+C
+C     Output UTC time picture -- ISO standard.
+C
+      CHARACTER*(*)         PICTUR
+      PARAMETER           ( PICTUR = 'YYYY-MM-DDTHR:MN:SC.###' )
+      
+      CHARACTER*(*)         SEGHED
+      PARAMETER           ( SEGHED = 'SEG.SUMMARY: ID #, COVERG: # #' )
+      
+      CHARACTER*(*)         SEGLIN
+      PARAMETER           ( SEGLIN = '      #    #' )
+      
+      CHARACTER*(*)         SEGTY1
+      PARAMETER           ( SEGTY1 = 
+     . 'DISCRETE POINTING DATA -- COVERAGE SUMMARY IS NOT APPLICABLE' )
+
+C
+C     Backslash character ord.
+C
+      INTEGER               BSLASH
+      PARAMETER           ( BSLASH = 92 )
+      
+C
+C     Increment, as fraction of a second, to be added to the start time
+C     of the "zero" length intervals in type 2 CK with made up angular
+C     rates.
+C
+      DOUBLE PRECISION      TIKTOL
+      PARAMETER           ( TIKTOL = 1.D-6 )
+      
+C
+C     Number of lines in the template display.
+C
+      INTEGER               TEMCNT
+      PARAMETER           ( TEMCNT = 49 )
+      
+C
+C     Variables.
+C 
+      CHARACTER*(80)        TEMPLT ( TEMCNT )
+      CHARACTER*(LINELN)    ERROR
+      CHARACTER*(LINELN)    PRODID
+      CHARACTER*(LINELN)    CMMNTF
+      CHARACTER*(LINELN)    FRAMEF
+      CHARACTER*(LINELN)    INPUTF
+      CHARACTER*(LINELN)    LINE
+      CHARACTER*(LINELN)    LINESV
+      CHARACTER*(LINELN)    HLINE
+      CHARACTER*(LINELN)    LSKF
+      CHARACTER*(LINELN)    OUTPTF
+      CHARACTER*(LINELN)    SCLKF
+      CHARACTER*(LINELN)    FSCLKF
+      CHARACTER*(LINELN)    SETUPF
+      CHARACTER*(WORDLN)    FRMNAM
+      CHARACTER*(WORDLN)    SEGID
+      CHARACTER*(WORDLN)    WORD
+      CHARACTER*(WORDLN)    HWORD
+      CHARACTER*(WORDLN)    TTYPE
+      CHARACTER*(WORDLN)    DTYPE
+      CHARACTER*(WORDLN*2)  IFNAME
+      CHARACTER*(WORDLN*2)  DASHLN
+      CHARACTER*(WORDLN*2)  ASTRLN
+      CHARACTER*(1)         EAXIS   ( 3 )
+      CHARACTER*(1)         OFFAXS  ( 3 )
+      
+      DOUBLE PRECISION      AVVS    ( 3, NBUFF )
+      DOUBLE PRECISION      INTRVL
+      DOUBLE PRECISION      MAT     ( 3, 3 )
+      DOUBLE PRECISION      OFFMAT  ( 3, 3 )
+      DOUBLE PRECISION      EULANG  ( 3 )
+      DOUBLE PRECISION      OFFANG  ( 3 )
+      DOUBLE PRECISION      QERROR
+      DOUBLE PRECISION      QUATS   ( 4, NBUFF )
+      DOUBLE PRECISION      HQUAT   ( 4 )
+      DOUBLE PRECISION      RATES   ( NBUFF )
+      DOUBLE PRECISION      RERROR  ( 3 )
+      DOUBLE PRECISION      STARTT  ( NBUFF )
+      DOUBLE PRECISION      STOPT   ( NBUFF )
+      DOUBLE PRECISION      HDPARR  ( NBUFF ) 
+      DOUBLE PRECISION      SCLKDP
+      DOUBLE PRECISION      QN      ( 4 )
+      DOUBLE PRECISION      NORMQ
+      DOUBLE PRECISION      EARATE
+      DOUBLE PRECISION      BEGTIM
+      DOUBLE PRECISION      ENDTIM
+      DOUBLE PRECISION      TVEC    ( 6 )
+      DOUBLE PRECISION      SQUAT   ( 4 )
+      DOUBLE PRECISION      SAVV    ( 3 )
+      DOUBLE PRECISION      SSTRTT
+      DOUBLE PRECISION      SSTPT
+      DOUBLE PRECISION      TIMCOR
+      DOUBLE PRECISION      SDNTOL
+      DOUBLE PRECISION      SCLKMD  ( 2 )
+      DOUBLE PRECISION      SCLKOF  ( 2 )
+      DOUBLE PRECISION      CLKLFT
+      DOUBLE PRECISION      CLKRGH
+      DOUBLE PRECISION      CLKFRC
+      
+      DOUBLE PRECISION      CURMAT  ( 3, 3 )
+      DOUBLE PRECISION      PRVMAT  ( 3, 3 )
+      DOUBLE PRECISION      NXTMAT  ( 3, 3 )
+      DOUBLE PRECISION      HMAT    ( 3, 3 )
+      DOUBLE PRECISION      SCLDAV  ( 3 )
+      DOUBLE PRECISION      HRATE
+
+      DOUBLE PRECISION      TMPDP
+      DOUBLE PRECISION      TMPDP1
+      DOUBLE PRECISION      TMPDP2
+      DOUBLE PRECISION      TMPVEC  ( 3 )
+      DOUBLE PRECISION      TMPMAT  ( 3, 3 )
+
+      DOUBLE PRECISION      PREVT
+      
+      INTEGER               EULAXS  ( 3 )
+      INTEGER               OFFAXI  ( 3 )
+      INTEGER               IORDER  ( NBUFF )
+      INTEGER               PTR
+      INTEGER               CKTYPE
+      INTEGER               HANDLE
+      INTEGER               INDEX
+      INTEGER               INPLUN
+      INTEGER               INSTID
+      INTEGER               N
+      INTEGER               SCID
+      INTEGER               I
+      INTEGER               J
+      INTEGER               LCOUNT
+      INTEGER               NINTS
+      INTEGER               SILUN
+      INTEGER               SELUN
+      INTEGER               SCRTCH
+      INTEGER               HLUN
+      INTEGER               BADCNT
+      INTEGER               SRTIDX
+      INTEGER               STPIDX
+      INTEGER               NFILDS
+      INTEGER               NITEMS
+      
+      LOGICAL               ANGRAT
+      LOGICAL               ARFLAG
+      LOGICAL               INSARF
+      LOGICAL               APPNDF
+      LOGICAL               EOF
+      LOGICAL               FOUND
+      LOGICAL               FOUND1
+      LOGICAL               FOUND2
+      LOGICAL               CKOPND
+      LOGICAL               BADQUA
+      LOGICAL               BADRAT
+      LOGICAL               SEOPND
+      LOGICAL               SIOPND
+      LOGICAL               CMMFLG
+      LOGICAL               OFFROT
+      LOGICAL               SAVBTM
+      
+      LOGICAL               QFILTER
+      LOGICAL               RFILTER
+      LOGICAL               MUARAT
+      LOGICAL               AVGRAT
+      LOGICAL               WRTSEG
+      LOGICAL               EULBOD
+      LOGICAL               DNSMPL
+      LOGICAL               ADDTAB
+      LOGICAL               CHKTO
+      
+C
+C     SPICELIB functions.
+C
+      INTEGER               SCTYPE
+      INTEGER               WDCNT
+      INTEGER               RTRIM
+      LOGICAL               EXISTS
+      INTEGER               FRSTNP
+      INTEGER               POS
+      INTEGER               ISRCHD
+      LOGICAL               EQSTR
+      DOUBLE PRECISION      DPMAX
+      DOUBLE PRECISION      DPMIN
+      DOUBLE PRECISION      VNORMG
+      DOUBLE PRECISION      RPD
+
+C
+C     Save everything to prevent potential memory problems in f2c'ed
+C     version.
+C
+      SAVE
+
+C
+C     Initialize everything that compilers might flag as
+C     un-initialized. All of these are initialized within multi-branch
+C     IF cases with one of the branches erroring out.
+C
+      EARATE = RPD()
+      INSARF = .FALSE.
+      MUARAT = .FALSE.
+      AVGRAT = .FALSE.
+      WRTSEG = .FALSE.
+      EULBOD = .FALSE.
+      ADDTAB = .TRUE.
+      CHKTO  = .FALSE.
+
+C
+C     Standard SPICE error handling.
+C
+      CALL CHKIN  ( 'MSOPCK' )
+
+C
+C     Display only short and long error messages.
+C
+      CALL ERRPRT ( 'SET', 'NONE, SHORT, LONG, TRACEBACK' )
+      
+C
+C     Display version.
+C
+      CALL TKVRSN( 'TOOLKIT', WORD )
+      CALL TOSTDO( ' ' )
+      CALL TOSTDO( 'MSOPCK Utility Program, ' //
+     .             VERSN //
+     .             '; SPICE Toolkit Ver. ' //
+     .             WORD(:RTRIM(WORD)) )
+      CALL TOSTDO( ' ' )
+         
+C
+C     Get command line.
+C
+      CALL GETCML( LINE )
+      
+C
+C     Did we get three parameters on the command line?
+C
+      IF ( WDCNT( LINE ) .NE. 3 ) THEN
+      
+C
+C        Check whether someone requested help or template. If 
+C        not, display usage.
+C
+         CALL UCASE( LINE, LINE )
+
+         CALL PREFIX( ' ', 1, LINE )
+         CALL SUFFIX( ' ', 1, LINE )
+         
+         IF      ( POS ( LINE, ' -H ',    1 ) .NE. 0 .OR. 
+     .             POS ( LINE, ' -HELP ', 1 ) .NE. 0      ) THEN
+         
+            TEMPLT(  1 ) = '   This program creates type 1, 2'
+     .      //             ' or 3 CK file from an input'
+            TEMPLT(  2 ) = '   orientation data provided in a'
+     .      //             ' text file as quaternions,'
+            TEMPLT(  3 ) = '   euler angles or matrices tagge'
+     .      //             'd by UTC, SCLK, or ET times.'
+            TEMPLT(  4 ) = ' '
+            TEMPLT(  5 ) = '   See MSOPCK User''s Guide for m'
+     .      //             'ore information.'
+            TEMPLT(  6 ) = ' '
+            
+            DO I = 1, 6
+               CALL TOSTDO( TEMPLT(I) )
+            END DO
+         
+         ELSE IF ( POS ( LINE, ' -T ',        1 ) .NE. 0 .OR.
+     .             POS ( LINE, ' -TEMPLATE ', 1 ) .NE. 0     ) THEN
+         
+            TEMPLT(  1 ) = '   MSOPCK Setup File Template. Se'
+     .      //             'e MSOPCK User''s Guide for more'
+            TEMPLT(  2 ) = '   information.'
+            TEMPLT(  3 ) = ' '
+            TEMPLT(  4 ) = '   ' // CHAR(BSLASH) // 'begindata'
+            TEMPLT(  5 ) = ' '
+            TEMPLT(  6 ) = '      LSK_FILE_NAME           = '''
+     .      //             'LSK file name'''
+            TEMPLT(  7 ) = '      SCLK_FILE_NAME          = '''
+     .      //             'SCLK file name'''
+            TEMPLT(  8 ) = '         or'
+            TEMPLT(  9 ) = '      MAKE_FAKE_SCLK          = '''
+     .      //             'fake SCLK file name'''
+            TEMPLT( 10 ) = '      FRAMES_FILE_NAME        = '''
+     .      //             'FK file name'''
+            TEMPLT( 11 ) = ' '
+            TEMPLT( 12 ) = '      INTERNAL_FILE_NAME      = '''
+     .      //             'internal file name string'''
+            TEMPLT( 13 ) = '      COMMENTS_FILE_NAME      = '''
+     .      //             'file containing comments'''
+            TEMPLT( 14 ) = ' '
+            TEMPLT( 15 ) = '      CK_TYPE                 = 1'
+     .      //             ', 2, or 3'
+            TEMPLT( 16 ) = '      CK_SEGMENT_ID           = '''
+     .      //             'segment ID string'''
+            TEMPLT( 17 ) = '      INSTRUMENT_ID           = N'
+     .      //             'AIF instrument ID'
+            TEMPLT( 18 ) = '      REFERENCE_FRAME_NAME    = '''
+     .      //             'reference frame name'''
+            TEMPLT( 19 ) = '      ANGULAR_RATE_PRESENT    = '''
+     .      //             'YES'', ''NO'', ''MAKE UP'', or'
+            TEMPLT( 20 ) = '                                '
+     .      //             '''MAKE UP/NO AVERAGING'''
+            TEMPLT( 21 ) = ' '
+            TEMPLT( 22 ) = '      QUATERNION_NORM_ERROR   = m'
+     .      //             'aximum normalization error'
+            TEMPLT( 23 ) = '      ANGULAR_RATE_THRESHOLD  = ('
+     .      //             ' max X rate, rad/sec'
+            TEMPLT( 24 ) = '                                 '
+     .      //             ' max Y rate, rad/sec'
+            TEMPLT( 25 ) = '                                 '
+     .      //             ' max Z rate, rad/sec )'
+            TEMPLT( 26 ) = '      MAXIMUM_VALID_INTERVAL  = i'
+     .      //             'nterval length, seconds'
+            TEMPLT( 27 ) = '      TIME_CORRECTION         = b'
+     .      //             'ias to be appiled to input times, seconds'
+            TEMPLT( 28 ) = ' '
+            TEMPLT( 29 ) = '      INPUT_TIME_TYPE         = '''
+     .      //             'SCLK'', ''UTC'', ''TICKS'', ''DSCLK'', '
+     .      //             'or ''ET'''
+            TEMPLT( 30 ) = '      INPUT_DATA_TYPE         = '''
+     .      //             'MSOP QUATERNIONS'','
+            TEMPLT( 31 ) = '                                '''
+     .      //             'SPICE QUATERNIONS'','
+            TEMPLT( 32 ) = '                                '''
+     .      //             'EULER ANGLES'', or'
+            TEMPLT( 33 ) = '                                '''
+     .      //             'MATRICES'''
+            TEMPLT( 34 ) = '      EULER_ANGLE_UNITS       = '''
+     .      //             'DEGREES'' or ''RADIANS'''
+            TEMPLT( 35 ) = '      EULER_ROTATIONS_ORDER   = r'
+     .      //             'otation axes; example: ( ''X'' '''
+     .      //             'Y'' ''Z'' )'
+            TEMPLT( 36 ) = '      EULER_ROTATIONS_TYPE    = '
+     .      //             '''BODY'' or ''SPACE'' (default SPACE)'
+            TEMPLT( 37 ) = '      ANGULAR_RATE_FRAME      = '''
+     .      //             'REFERENCE'' or ''INSTRUMENT'''
+            TEMPLT( 38 ) = ' '
+            TEMPLT( 39 ) = '      OFFSET_ROTATION_ANGLES  = a'
+     .      //             'ngles; example: ( 0.5, 0.1, 0.1 )'
+            TEMPLT( 40 ) = '      OFFSET_ROTATION_AXES    = r'
+     .      //             'otation axes: example: ( ''X'' '''
+     .      //             'Y'' ''Z'' )'
+            TEMPLT( 41 ) = '      OFFSET_ROTATION_UNITS   = '''
+     .      //             'DEGREES'' or ''RADIANS'''
+            TEMPLT( 42 ) = '      DOWN_SAMPLE_TOLERANCE   = '
+     .      //             'down sampling tolerance, radians'
+            TEMPLT( 43 ) = '      INCLUDE_INTERVAL_TABLE  = '
+     .      //             '''YES'' or ''NO'' (default ''YES'')'
+            TEMPLT( 44 ) = '      CHECK_TIME_ORDER        = '
+     .      //             '''YES'' or ''NO'' (default ''NO'')'
+            TEMPLT( 45 ) = ' '
+            TEMPLT( 46 ) = '      PRODUCER_ID             = '''
+     .      //             'producer group/person name'''
+            TEMPLT( 47 ) = ' '
+            TEMPLT( 48 ) = '   ' // CHAR(BSLASH) // 'begintext'
+            TEMPLT( 49 ) = ' '
+            
+            DO I = 1, TEMCNT
+               CALL TOSTDO( TEMPLT(I) )
+            END DO
+         
+         ELSE
+         
+            CALL TOSTDO( 'Usage: ' )
+            CALL TOSTDO( ' ' )
+            CALL TOSTDO( '  > msopck <setup_file> <input_file> ' //
+     .                '<output_ck_file>' )
+            CALL TOSTDO( ' ' )
+            
+         END IF
+         
+         STOP
+
+      END IF
+
+C
+C     Extract file names from command line. Setup file and input file
+C     must exist.
+C
+      CALL NEXTWD( LINE, SETUPF, LINE )
+      IF ( .NOT. EXISTS( SETUPF ) ) THEN
+         CALL SETMSG ( 'The setup file ''#'' specified as the first ' //
+     .                 'argument on the command line doesn''t '       //
+     .                 'exist.'                                       )
+         CALL ERRCH  ( '#', SETUPF                                    )
+         CALL SIGERR ( 'SPICE(SETUPDOESNOTEXIST)'                     )
+      END IF
+      
+      CALL NEXTWD( LINE, INPUTF, LINE )
+      IF ( .NOT. EXISTS( INPUTF ) ) THEN
+         CALL SETMSG ( 'The input data '                              //
+     .                 'file ''#'' specified as the second '          //
+     .                 'argument on the command line doesn''t '       //
+     .                 'exist.'                                       )
+         CALL ERRCH  ( '#', INPUTF                                    )
+         CALL SIGERR ( 'SPICE(INPUTDOESNOTEXIST)'                     )
+      END IF
+
+      CALL NEXTWD( LINE, OUTPTF, LINE )
+      IF ( EXISTS( OUTPTF ) ) THEN
+C
+C        Well, an output file has its right to exist. And if it's 
+C        so, we set a flag that new segment will be appended to 
+C        an existing file instead of being written to a new one.
+C        But first we check whether this existing file is a CK.
+C
+         CALL GETFAT ( OUTPTF, WORD, LINE )
+         IF ( WORD .NE. 'DAF' .OR. LINE .NE. 'CK' ) THEN
+            CALL SETMSG ( 'The file ''#'' specified as the third '    //
+     .                    'argument on the command line isn''t a '    //
+     .                    'CK file. CK segments cannot be appended'   //
+     .                    'to a file that is not a CK.'               )
+            CALL ERRCH  ( '#', OUTPTF                                 )
+            CALL SIGERR ( 'SPICE(NOTACKFILE)'                         )
+         END IF
+         APPNDF = .TRUE.
+         
+      ELSE
+C
+C        Otherwise, it's a new file. So flag is FALSE.
+C
+         APPNDF = .FALSE.
+         
+      END IF
+C
+C     Whatever file it is -- existing or new, it's not opened yet. :)
+C     The same is true for both scratch files -- one for errors and 
+C     another for interpolation intervals.
+C
+      CKOPND = .FALSE.
+      SEOPND = .FALSE.
+      SIOPND = .FALSE.
+            
+C
+C     Load setup file into the pool and retrieve all setup values
+C     from POOL.
+C
+      CALL FURNSH( SETUPF )
+
+C
+C     The first thing to do is to get the name of and load FK file.
+C     This must be done before everything else because some routines
+C     called later to process other setup file parameters may rely on
+C     the data that might have been provided in the FK. Note that the
+C     FK name is an optional setup file parameter, so we don't complain
+C     if it is not there.
+C
+      CALL GCPOOL( FRAKWD, 1, 1, N, FRAMEF, FOUND )
+      IF ( FOUND ) THEN
+         CALL FURNSH( FRAMEF )
+      END IF
+
+C
+C     The second thing to do is to get the instrument ID. We need it to
+C     figure out what the spacecraft ID is before we get to the point
+C     where we may be asked to make an fake SCLK.
+C
+      CALL GIPOOL( INSKWD, 1, 1, N, INSTID, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         CALL SETMSG ( 'No NAIF Instrument ID was provided in the '   //
+     .                 'setup file using the keyword ''#''.'          )
+         CALL ERRCH  ( '#', INSKWD                                    )
+         CALL SIGERR ( 'SPICE(NOINSTRUMENTID)'                        )
+      END IF
+
+C
+C     Find out what is NAIF ID for the S/C from the instruments ID.
+C
+      CALL CKMETA ( INSTID, 'SCLK', SCID )
+
+      IF ( SCID .EQ. 0 ) THEN
+         CALL SETMSG ( 'The NAIF ID for the spacecraft cannot be '    //
+     .                 'determined from the NAIF instrument ID '      //
+     .                 '''#''. Check whether this instrument ID is a '//
+     .                 'legitimate ID for the instrument/structure '  //
+     .                 'of interest.'                                 )
+         CALL ERRINT ( '#', INSTID                                    )
+         CALL SIGERR ( 'SPICE(BADINSTRUMENTID)'                       )
+      END IF
+      
+C
+C     Get producer ID string.
+C
+      CALL GCPOOL( PIDKWD, 1, 1, N, PRODID, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         CALL SETMSG ( 'No producer ID was provided in the '          //
+     .                 'setup file using the keyword ''#''.'          )
+         CALL ERRCH  ( '#', PIDKWD                                    )
+         CALL SIGERR ( 'SPICE(NOPRODUCERID)'                          )
+      END IF
+
+C
+C     Get the name of and load LSK file.
+C
+      CALL GCPOOL( LSKKWD, 1, 1, N, LSKF, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         CALL SETMSG ( 'No leapseconds file name was provided in '    //
+     .                 'the setup file using the keyword ''#''.'      )
+         CALL ERRCH  ( '#', LSKKWD                                    )
+         CALL SIGERR ( 'SPICE(NOSLKFILENAME)'                         )
+      ELSE
+         CALL FURNSH( LSKF )
+      END IF
+
+C
+C     Try to get both setup file keywords related to SCLK files.
+C
+      CALL GCPOOL( SCLKWD, 1, 1, N, SCLKF,  FOUND1 )
+      CALL GCPOOL( MFSKWD, 1, 1, N, FSCLKF, FOUND2 )
+
+      IF      ( FOUND1 .AND. FOUND2 ) THEN
+
+C
+C        Both SCLK keywords were provided. Complain and stop.
+C
+         CALL SETMSG ( 'Only one of the SCLK keywords ''#'' '         //
+     .                 'and ''#'' can be present in the setup '       //
+     .                 'file. The setup file ''#'' contained both '   //
+     .                 'of them.'                                     )
+         CALL ERRCH  ( '#', SCLKWD                                    )
+         CALL ERRCH  ( '#', MFSKWD                                    )
+         CALL ERRCH  ( '#', SETUPF                                    )
+         CALL SIGERR ( 'SPICE(TWOSCLKFILENAMES)'                      )
+
+      ELSE IF ( FOUND1 ) THEN
+
+C
+C        The name of an existing SCLK was provided. Load it using
+C        FURNSH.
+C
+         CALL FURNSH( SCLKF )
+
+      ELSE IF ( FOUND2 ) THEN
+
+C
+C        The name of a fake SCLK to be made was provided. Make it
+C        and load it using FURNSH. First, check if this file already
+C        exists.
+C
+         IF ( EXISTS( FSCLKF ) ) THEN
+
+            CALL SETMSG ( 'The SCLK file ''#'' specified '            //
+     .                    'using the setup file keyword ''#'' '       //
+     .                    'already exists. '                          )
+            CALL ERRCH  ( '#', FSCLKF                                 )
+            CALL ERRCH  ( '#', MFSKWD                                 )
+            CALL SIGERR ( 'SPICE(FAKESCLKEXISTS)'                     )
+
+         ELSE
+
+C
+C           Make a fake SCLK that starts at J2000.
+C
+            CALL MKFCLK( FSCLKF, SCID, 0.D0, 
+     .                   PRODID // ' using MSOPCK program' )
+
+            CALL FURNSH( FSCLKF )
+
+         END IF
+
+      ELSE
+
+C
+C        Neither of the two SCLK keywords was provided. Complain
+C        and stop.
+C
+         CALL SETMSG ( 'Neither the name of an existing SCLK file '   //
+     .                 'was provided using the setup file '           //
+     .                 'keyword ''#'' nor the name of a fake SCLK '   //
+     .                 'to be made was given using the '              //
+     .                 'keyword ''#''.'                               )
+         CALL ERRCH  ( '#', SCLKWD                                    )
+         CALL ERRCH  ( '#', MFSKWD                                    )
+         CALL SIGERR ( 'SPICE(NOSCLKFILENAMES)'                       )
+
+      END IF
+
+C
+C     Get CK type...
+C
+      CALL GIPOOL( TYPKWD, 1, 1, N, CKTYPE, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         CALL SETMSG ( 'No output CK segment type was provided '      //
+     .                 'in the setup file using the keyword ''#''.'   )
+         CALL ERRCH  ( '#', TYPKWD                                    )
+         CALL SIGERR ( 'SPICE(NOCKSEGMENTTYPE)'                       )
+      END IF
+
+C
+C     ...check whether it's 1, 2 or 3.
+C
+      IF ( CKTYPE .EQ. 1 .OR. 
+     .     CKTYPE .EQ. 2 .OR.
+     .     CKTYPE .EQ. 3 ) THEN
+      ELSE
+         CALL SETMSG ( 'The output CK segment type value ''#'' '      //
+     .                 'provided in the setup file keyword ''#'' is ' //
+     .                 'not acceptable. Acceptable values are 1, 2 '  //
+     .                 'and 3.'                                       )
+         CALL ERRINT ( '#', CKTYPE                                    )
+         CALL ERRCH  ( '#', TYPKWD                                    )
+         CALL SIGERR ( 'SPICE(BADCKTYPESPEC)'                         )
+      END IF
+
+C
+C     Get reference frame name.
+C
+      CALL GCPOOL( REFKWD, 1, 1, N, FRMNAM, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         CALL SETMSG ( 'No reference frame name was provided '        //
+     .                 'in the setup file using keyword ''#''.'       )
+         CALL ERRCH  ( '#', REFKWD                                    )
+         CALL SIGERR ( 'SPICE(NOFRAMENAME)'                           )
+      ELSE
+
+C
+C        Check whether we can recognize this name.
+C
+         CALL NAMFRM ( FRMNAM, N )
+         IF ( N .EQ. 0 ) THEN
+
+            CALL SETMSG ( 'The reference frame ''#'' specified '      //
+     .                    'using the setup file keyword ''#'' is '    //
+     .                    'not recognized.'                           )
+            CALL ERRCH  ( '#', FRMNAM                                 )
+            CALL ERRCH  ( '#', REFKWD                                 )
+            CALL SIGERR ( 'SPICE(UNRECOGNIZEDFRAME)'                  )
+
+         END IF
+
+      END IF
+      
+C
+C     Look whether angular rates are present or not. 
+C
+      CALL GCPOOL( ARPKWD, 1, 1, N, WORD, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+
+         CALL SETMSG ( 'No angular rate flag was provided '           //
+     .                 'in the setup file using the keyword ''#''.'   )
+         CALL ERRCH  ( '#', ARPKWD                                    )
+         CALL SIGERR ( 'SPICE(NOANGULARRATEFLAG)'                     )
+
+      END IF
+
+C
+C     Does the flag have a value that we expected?
+C
+      IF      ( EQSTR( WORD, YESVAL ) ) THEN
+ 
+         ANGRAT = .TRUE.
+         MUARAT = .FALSE.
+         AVGRAT = .FALSE.
+
+      ELSE IF ( EQSTR( WORD, NOVAL  ) ) THEN
+
+         ANGRAT = .FALSE.
+         MUARAT = .FALSE.
+         AVGRAT = .FALSE.
+
+      ELSE IF ( EQSTR( WORD, MUPVAL  ) ) THEN
+
+         ANGRAT = .FALSE.
+         MUARAT = .TRUE.
+         AVGRAT = .TRUE.
+
+      ELSE IF ( EQSTR( WORD, MUNVAL  ) ) THEN
+
+         ANGRAT = .FALSE.
+         MUARAT = .TRUE.
+         AVGRAT = .FALSE.
+
+      ELSE
+
+         CALL SETMSG ( 'The angular rate flag specified using the '   //
+     .                 'setup file keyword ''#'' has the value '      //
+     .                 '''#'' while it can be only ''#'', ''#'', '    //
+     .                 '''#'' or ''#''.'                              )
+         CALL ERRCH  ( '#', ARPKWD                                    )
+         CALL ERRCH  ( '#', WORD                                      )
+         CALL ERRCH  ( '#', YESVAL                                    )
+         CALL ERRCH  ( '#', NOVAL                                     )
+         CALL ERRCH  ( '#', MUPVAL                                    )
+         CALL ERRCH  ( '#', MUNVAL                                    )
+         CALL SIGERR ( 'SPICE(BADANGULARRATEFLAG)'                    )
+
+      END IF
+
+C
+C     Check whether making angular rates up was requested for CK types
+C     other that 2 or 3.
+C      
+      IF ( MUARAT ) THEN
+
+         IF ( .NOT. ( CKTYPE .EQ. 2 .OR. CKTYPE .EQ. 3 ) ) THEN 
+
+            CALL SETMSG ( 'The angular rate flag ''#'' specified in ' //
+     .                    'the setup file keyword ''#'' is '          //
+     .                    'applicable only for the output CK types '  //
+     .                    '2 and 3.'                                  )
+            CALL ERRCH  ( '#', WORD                                   )
+            CALL ERRCH  ( '#', ARPKWD                                 )
+            CALL SIGERR ( 'SPICE(NARATESFLAG)'                        )
+
+         END IF
+
+      END IF
+
+C
+C     Angular rates must be present for type 2 CK, if making them up
+C     wasn't requested.
+C
+      IF ( .NOT. ANGRAT .AND. .NOT. MUARAT .AND. CKTYPE .EQ. 2 ) THEN
+
+         CALL SETMSG ( 'The angular rate flag specified in the setup '//
+     .                 'file keyword ''#'' must be set to ''#'' (in ' //
+     .                 'which case angular rates must be present in ' //
+     .                 'the input file) or ''#'' (in which case '     //
+     .                 'angular rates will manufactured by the '      //
+     .                 'program) if creation of a type 2 CK file was '//
+     .                 'requested.'                                   )
+         CALL ERRCH  ( '#', ARPKWD                                    )
+         CALL ERRCH  ( '#', YESVAL                                    )
+         CALL ERRCH  ( '#', MUPVAL                                    )
+         CALL SIGERR ( 'SPICE(NORATESFORTYPE2CK)'                     )
+
+      END IF
+
+C
+C     Get maximum quaternion normalization error. If not present, then
+C     no filtering required. If present, check whether provided value 
+C     makes sense.
+C
+      CALL GDPOOL( QERKWD, 1, 1, N, QERROR, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         QFILTER = .FALSE.
+      ELSE
+         IF ( QERROR .LE. 0.D0 .OR. QERROR .GE. 1.D0 ) THEN
+            CALL SETMSG ( 'The quaternion normalization error value ' //
+     .                    '''#'' provided in the setup file using '   //
+     .                    'the keyword ''#'' doesn''t make sense. It '//
+     .                    'should be less than 1 but greater than 0.' )
+            CALL ERRDP  ( '#', QERROR                                 )
+            CALL ERRCH  ( '#', QERKWD                                 )
+            CALL SIGERR ( 'SPICE(BADQUATTHRESHOLD)'                   )
+         END IF
+         QFILTER = .TRUE.
+      END IF
+      
+C
+C     Get angular rate components threshold values, ...  only if 
+C     we have to consider rates at all.
+C
+      RFILTER = .FALSE.
+
+      IF ( ANGRAT ) THEN
+
+C
+C        Run DTPOOL first -- it tells us more that GDPOOL. Angular rate
+C        thresholds are also optional.  
+C
+         CALL DTPOOL( AERKWD, FOUND, N, WORD )
+         
+         IF ( .NOT. FOUND ) THEN
+            RFILTER = .FALSE.
+         ELSE
+         
+C
+C           What if it's present but not the right type?
+C
+            IF ( N .NE. 3 .OR. WORD .NE. 'N' ) THEN
+               CALL SETMSG ( 'The number of values provided for the ' //
+     .                       'maximum angular rate using the setup '  //
+     .                       'file keyword ''#'' is not equal to 3 '  //
+     .                       'or one of its elements is not a DP '    //
+     .                       'number.'                                )
+               CALL ERRCH  ( '#', AERKWD                              )
+               CALL SIGERR ( 'SPICE(BADANGRATEERROR)'                 )
+            END IF
+
+C
+C           If we are here, the keyword looks fine. Get the values and
+C           check them.
+C
+            CALL GDPOOL( AERKWD, 1, 3, N, RERROR, FOUND )
+
+            DO I = 1, 3
+               IF ( RERROR(I) .LE. 0 ) THEN
+                  CALL SETMSG ( 'The maximum angular rate value '     //
+     .                          '''#'' provided in the setup file '   //
+     .                          'using the keyword ''#'' doesn''t '   //
+     .                          'make sense. It should be greater '   //
+     .                          'than 0.'                             )
+                  CALL ERRDP  ( '#', RERROR(I)                        )
+                  CALL ERRCH  ( '#', AERKWD                           )
+                  CALL SIGERR ( 'SPICE(BADRATETHRESHOLD)'             )
+               END IF
+            END DO
+         
+            RFILTER = .TRUE.
+            
+         END IF
+         
+C
+C        Find out relative to what frame angular rates are.  
+C
+         CALL GCPOOL( ARFKWD, 1, 1, N, WORD, FOUND )
+         
+         IF ( .NOT. FOUND ) THEN
+C
+C           Keyword wasn't in a setup file. Set default to AR to be 
+C           relative to the reference frame rather than instrument
+C           frame.
+C
+            INSARF = .FALSE.
+            
+         ELSE
+C
+C           Keyword was there. See if we can recognize value.
+C
+            IF      ( EQSTR( WORD, INSVAL ) ) THEN
+               INSARF = .TRUE.
+            ELSE IF ( EQSTR( WORD, REFVAL  ) ) THEN
+               INSARF = .FALSE.
+            ELSE
+               CALL SETMSG ( 'The angular rate reference frame flag ' //
+     .                       'specified using the setup file '        //
+     .                       'keyword ''#'' has value ''#'' while '   //
+     .                       'it can be only ''#'' or ''#''.'         )
+               CALL ERRCH  ( '#', ARFKWD                              )
+               CALL ERRCH  ( '#', WORD                                )
+               CALL ERRCH  ( '#', INSVAL                              )
+               CALL ERRCH  ( '#', REFVAL                              )
+               CALL SIGERR ( 'SPICE(BADRATEFRAMEFLAG)'                )
+            END IF
+            
+         END IF
+         
+      END IF
+
+C
+C     Get maximum interpolation interval length.
+C
+      CALL GDPOOL( INTKWD, 1, 1, N, INTRVL, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         INTRVL = DPMAX()
+      END IF
+
+C
+C     Get fixed time correction value (signed seconds).
+C
+      CALL GDPOOL( TCRKWD, 1, 1, N, TIMCOR, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         TIMCOR = 0.D0
+      END IF
+
+C
+C     Get segment ID string, if present. If not -- make up 
+C     default value.
+C
+      CALL GCPOOL( SIDKWD, 1, 1, N, SEGID, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         SEGID = OUTPTF(1:40)
+      END IF
+
+C
+C     If output CK file is a new file, get internal file name, if 
+C     present. If not present -- make up default value.
+C
+      CMMFLG = .FALSE.
+
+      IF ( .NOT. APPNDF ) THEN
+
+         CALL GCPOOL( IFNKWD, 1, 1, N, IFNAME, FOUND )
+
+         IF ( .NOT. FOUND ) THEN
+            IFNAME = OUTPTF(1:60)
+         END IF
+C
+C        Also for a new CK file we get name of external file 
+C        containing comments if such was provided.
+C
+         CALL GCPOOL( CMMKWD, 1, 1, N, CMMNTF, FOUND )
+
+         IF ( FOUND ) THEN
+
+            IF ( .NOT. EXISTS( CMMNTF )) THEN
+               CALL SETMSG ( 'The external comments file ''#'' '      //
+     .                       'specified using the setup file keyword '//
+     .                       '''#'' doesn''t exist.'                  )
+               CALL ERRCH  ( '#', CMMNTF                              )
+               CALL ERRCH  ( '#', CMMKWD                              )
+               CALL SIGERR ( 'SPICE(NOCOMMENTSFILE)'                  )
+            END IF
+
+         END IF
+
+         CMMFLG = FOUND       
+
+      END IF
+      
+C
+C     What is our input data type? 
+C
+      CALL GCPOOL( DTPKWD, 1, 1, N, DTYPE, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         CALL SETMSG ( 'No input data type identifier was provided '  //
+     .                 'in the setup file using the keyword ''#''.'   )
+         CALL ERRCH  ( '#', DTPKWD                                    )
+         CALL SIGERR ( 'SPICE(NODATATYPEFLAG)'                        )
+      ELSE
+      
+         
+C
+C        Can we recognize this data type?
+C
+         IF ( EQSTR( DTYPE, DMQUAT ) .OR. 
+     .        EQSTR( DTYPE, DSQUAT ) .OR.
+     .        EQSTR( DTYPE, DEULER ) .OR.
+     .        EQSTR( DTYPE, DMATRX )         ) THEN
+C
+C           Yes, we can.
+C  
+         ELSE
+C
+C           No, we cannot. Complain.
+C
+            CALL SETMSG ( 'The input data type ''#'' specified using '//
+     .                    'the setup file keyword ''#'' is not '      //
+     .                    'recognized. Acceptable values are ''#'', ' //
+     .                    '''#'', ''#'' and ''#''.'                   )
+            CALL ERRCH  ( '#', DTYPE                                  )
+            CALL ERRCH  ( '#', DTPKWD                                 )
+            CALL ERRCH  ( '#', DMQUAT                                 )
+            CALL ERRCH  ( '#', DSQUAT                                 )
+            CALL ERRCH  ( '#', DEULER                                 )
+            CALL ERRCH  ( '#', DMATRX                                 )
+            CALL SIGERR ( 'SPICE(BADDATATYPEFLAG)'                    )
+            
+         END IF      
+         
+      END IF
+
+C
+C     What is our input time type? 
+C
+      CALL GCPOOL( TTPKWD, 1, 1, N, TTYPE, FOUND )
+
+      IF ( .NOT. FOUND ) THEN
+         CALL SETMSG ( 'No input time type identifier was provided '  //
+     .                 'in the setup file using the keyword ''#''.'   )
+         CALL ERRCH  ( '#', TTPKWD                                    )
+         CALL SIGERR ( 'SPICE(NOTIMETYPEFLAG)'                        )
+      ELSE
+C
+C        Can we recognize this time type?
+C
+         IF      ( EQSTR( TTYPE, TTSCLK ) .OR. 
+     .             EQSTR( TTYPE, TTUTC  ) .OR.
+     .             EQSTR( TTYPE, TTET   ) .OR.
+     .             EQSTR( TTYPE, TTTICK )       ) THEN
+
+C
+C           Yes, we can. For time types SCLK, UTC, TICKS, and ET we
+C           don't need to do anything else at this point.
+C
+
+         ELSE IF ( EQSTR( TTYPE, TTDCLK )  ) THEN
+
+C
+C           But if the time type is DSCLK we need to check if the clock
+C           is a type 1 SCLK and if it has exactly two fields. If so,
+C           we will need get the module and offset of the minor (right)
+C           field.
+C
+            IF ( SCTYPE( SCID ) .NE. 1 ) THEN
+               CALL SETMSG ( 'The input time type ''#'' specified '   //
+     .                       'using the setup file keyword ''#'' '    //
+     .                       'can be used only when input time tags ' //
+     .                       'are to be converted to type 1 SPICE '   //
+     .                       'SCLKs. The type of the clock '          //
+     .                       'associated with s/c ID ''#'' was '      //
+     .                       'not 1; it was #.'                       )
+               CALL ERRCH  ( '#', TTDCLK                              )
+               CALL ERRCH  ( '#', TTPKWD                              )
+               CALL ERRINT ( '#', SCID                                )
+               CALL ERRINT ( '#', SCTYPE( SCID )                      )
+               CALL SIGERR ( 'SPICE(NOTTYPE1SCLK)'                    )
+            END IF
+
+            NFILDS = 0
+            CALL SCLI01 ( 'SCLK01_N_FIELDS', SCID, 1, N, NFILDS )
+            IF ( NFILDS .NE. 2 ) THEN
+               CALL SETMSG ( 'The input time type ''#'' specified '   //
+     .                       'using the setup file keyword ''#'' '    //
+     .                       'can be used only when input time tags ' //
+     .                       'are to be converted to type 1 SPICE '   //
+     .                       'SCLKs that have exactly two fields. '   //
+     .                       'The number of fields in the clock '     //
+     .                       'associated with s/c ID ''#'' was '      //
+     .                       'not 2; it was #.'                       )
+               CALL ERRCH  ( '#', TTDCLK                              )
+               CALL ERRCH  ( '#', TTPKWD                              )
+               CALL ERRINT ( '#', SCID                                )
+               CALL ERRINT ( '#', NFILDS                              )
+               CALL SIGERR ( 'SPICE(NOTTWOFIELDSCLK)'                 )
+            END IF
+
+            CALL SCLD01 ( 'SCLK01_MODULI',  SCID, 2, N, SCLKMD )
+            IF ( N .NE. 2 ) THEN
+               CALL SETMSG ( 'The input time type ''#'' specified '   //
+     .                       'using the setup file keyword ''#'' '    //
+     .                       'can be used only when input time tags ' //
+     .                       'are to be converted to type 1 SPICE '   //
+     .                       'SCLKs that have exactly two fields. '   //
+     .                       'The number of values in MODULI '        //
+     .                       'keyword for the clock '                 //
+     .                       'associated with s/c ID ''#'' was '      //
+     .                       'not 2; it was #.'                       )
+               CALL ERRCH  ( '#', TTDCLK                              )
+               CALL ERRCH  ( '#', TTPKWD                              )
+               CALL ERRINT ( '#', SCID                                )
+               CALL ERRINT ( '#', N                                   )
+               CALL SIGERR ( 'SPICE(NOTTWOMODULI)'                    )
+            END IF
+            
+            CALL SCLD01 ( 'SCLK01_OFFSETS', SCID, 2, N, SCLKOF )
+            IF ( N .NE. 2 ) THEN
+               CALL SETMSG ( 'The input time type ''#'' specified '   //
+     .                       'using the setup file keyword ''#'' '    //
+     .                       'can be used only when input time tags ' //
+     .                       'are to be converted to type 1 SPICE '   //
+     .                       'SCLKs that have exactly two fields. '   //
+     .                       'The number of values in OFFSETS '       //
+     .                       'keyword for the clock '                 //
+     .                       'associated with s/c ID ''#'' was '      //
+     .                       'not 2; it was #.'                       )
+               CALL ERRCH  ( '#', TTDCLK                              )
+               CALL ERRCH  ( '#', TTPKWD                              )
+               CALL ERRINT ( '#', SCID                                )
+               CALL ERRINT ( '#', N                                   )
+               CALL SIGERR ( 'SPICE(NOTTWOOFFSETS)'                   )
+            END IF
+
+         ELSE
+C
+C           No, we cannot. Complain.
+C
+            CALL SETMSG ( 'The input time type ''#'' specified using '//
+     .                    'the setup file keyword ''#'' is not '      //
+     .                    'recognized. Acceptable values are ''#'', ' //
+     .                    '''#'', ''#'', ''#'', and ''#''.'           )
+            CALL ERRCH  ( '#', TTYPE                                  )
+            CALL ERRCH  ( '#', TTPKWD                                 )
+            CALL ERRCH  ( '#', TTSCLK                                 )
+            CALL ERRCH  ( '#', TTUTC                                  )
+            CALL ERRCH  ( '#', TTTICK                                 )
+            CALL ERRCH  ( '#', TTDCLK                                 )
+            CALL ERRCH  ( '#', TTET                                   )
+            CALL SIGERR ( 'SPICE(BADTIMETYPEFLAG)'                    )
+            
+         END IF      
+         
+      END IF
+      
+C
+C     If input data type is Euler angles, we need to know what the 
+C     order of rotation is.
+C
+      IF ( EQSTR( DTYPE, DEULER ) ) THEN
+C
+C        Run DTPOOL first -- it tells us more that GDPOOL.   
+C
+         CALL DTPOOL( EULKWD, FOUND, N, WORD )
+         
+         IF ( .NOT. FOUND ) THEN
+            CALL SETMSG ( 'The order of rotations must be provided '  //
+     .                    'using the setup file keyword ''#'' if '    //
+     .                    'the ''#'' setup file keyword is set to '   //
+     .                    '''#''.'                                    )
+            CALL ERRCH  ( '#', EULKWD                                 )
+            CALL ERRCH  ( '#', DTPKWD                                 )
+            CALL ERRCH  ( '#', DEULER                                 )
+            CALL SIGERR ( 'SPICE(NOROTATIONORDER)'                    )
+         
+         ELSE
+         
+C
+C           What if it's present but not 3 elements?
+C
+            IF ( N .NE. 3 ) THEN
+               CALL SETMSG ( 'The number of values provided using '   //
+     .                       'the setup file keyword ''#'' is not '   //
+     .                       'equal 3.'                               )
+               CALL ERRCH  ( '#', EULKWD                              )
+               CALL SIGERR ( 'SPICE(BADROTATIONSORDER)'               )
+            END IF
+C
+C           Ok, if it's character, we get and decode 'X', 'Y' and 'Z'.
+C           If it's integer we just check it and save it.
+C
+            IF      ( WORD .EQ. 'C' ) THEN
+               CALL GCPOOL( EULKWD, 1, 3, N, EAXIS, FOUND )
+               DO I = 1, 3 
+                  IF      ( EQSTR( EAXIS(I), 'X' ) ) THEN
+                     EULAXS( I ) = 1
+                  ELSE IF ( EQSTR( EAXIS(I), 'Y' ) ) THEN
+                     EULAXS( I ) = 2
+                  ELSE IF ( EQSTR( EAXIS(I), 'Z' ) ) THEN
+                     EULAXS( I ) = 3
+                  ELSE
+                     CALL SETMSG ( 'The element ''#'' of the Euler '  //
+     .                             'rotations order provided using '  //
+     .                             'the setup file keyword ''#'' is  '//
+     .                             'not ''X'', ''Y'' or ''Z''.'       )
+                     CALL ERRCH  ( '#', EAXIS(I)                      )
+                     CALL ERRCH  ( '#', EULKWD                        )
+                     CALL SIGERR ( 'SPICE(BADROTATIONAXISXYZ)'        )
+                  END IF
+               END DO
+            ELSE IF ( WORD .EQ. 'N' ) THEN
+               CALL GIPOOL( EULKWD, 1, 3, N, EULAXS, FOUND )
+               DO I = 1, 3
+                  IF ( EULAXS(I) .LE. 0 .OR. EULAXS(I) .GE. 4 ) THEN
+                     CALL SETMSG ( 'The element # of the Euler '      //
+     .                             'rotations order provided using '  //
+     .                             'the setup file keyword ''#'' is ' //
+     .                             'not 1, 2 or 3.'                   )
+                     CALL ERRINT ( '#', EULAXS(I)                     )
+                     CALL ERRCH  ( '#', EULKWD                        )
+                     CALL SIGERR ( 'SPICE(BADROTATIONAXIS123)'        )
+                  END IF
+               END DO
+            ELSE
+               CALL SETMSG ( 'The kernel pool variable ''#'' type '   //
+     .                       'was ''#''.'                             )
+               CALL ERRCH  ( '#', EULKWD                              )
+               CALL ERRCH  ( '#', WORD                                )
+               CALL SIGERR ( 'SPICE(BADROTAXESFORMAT)'                )
+            END IF
+         
+         END IF
+         
+C
+C        We need to know the input angle units.
+C
+         CALL GCPOOL( EUUKWD, 1, 1, N, WORD, FOUND )
+         IF ( .NOT. FOUND ) THEN
+            CALL SETMSG ( 'No units for input Euler angles were '     //
+     .                    'provided in the setup file using the '     //
+     .                    'keyword ''#''.'                            )
+            CALL ERRCH  ( '#', EUUKWD                                 )
+            CALL SIGERR ( 'SPICE(NOEULERANGLEUNITS)'                  )
+         END IF
+
+C
+C        Do we recognize these units?
+C
+         IF      ( EQSTR( WORD, DEGVAL ) ) THEN
+            EARATE = RPD()
+         ELSE IF ( EQSTR( WORD, RADVAL  ) ) THEN
+            EARATE = 1.D0
+         ELSE
+            CALL SETMSG ( 'The Euler angle units specified using '    //
+     .                    'the setup file keyword ''#'' were '        //
+     .                    '''#''. Acceptable values are only ''#'' '  //
+     .                    'and ''#''.'                                )
+            CALL ERRCH  ( '#', EUUKWD                                 )
+            CALL ERRCH  ( '#', WORD                                   )
+            CALL ERRCH  ( '#', DEGVAL                                 )
+            CALL ERRCH  ( '#', RADVAL                                 )
+            CALL SIGERR ( 'SPICE(BADEULERANGLEUNITS)'                 )
+         END IF
+
+C
+C        Body or Space rotation? If no marker, default to space.
+C         
+         CALL GCPOOL( EULTYP, 1, 1, N, WORD, FOUND )
+
+         IF ( .NOT. FOUND ) THEN
+            EULBOD = .FALSE.
+         ELSE
+
+            IF ( EQSTR( WORD, BODVAL ) ) THEN
+               EULBOD = .TRUE.
+            ELSEIF ( EQSTR( WORD, SPAVAL ) ) THEN
+               EULBOD = .FALSE.
+            ELSE
+               
+               CALL SETMSG ( 'The Euler rotation type specified '     //
+     .                       'using the setup file keyword ''#'' '    //
+     .                       'was ''#'' while it can be '             //
+     .                       'only ''#''  or ''#''.'                  )
+               CALL ERRCH  ( '#', EULTYP                              )
+               CALL ERRCH  ( '#', WORD                                )
+               CALL ERRCH  ( '#', BODVAL                              )
+               CALL ERRCH  ( '#', SPAVAL                              )
+               CALL SIGERR ( 'SPICE(BADROTATIONTYPE)'                 )
+ 
+            END IF
+            
+         END IF
+
+      END IF
+         
+C
+C     And at last we check whether we have an offset rotation which
+C     must be applied to our orientation.
+C
+      CALL DTPOOL( ORAKWD, FOUND, N, WORD )
+      
+      IF ( FOUND ) THEN
+      
+C
+C        Yes, it looks there was a keyword containing Euler angles 
+C        specifying offset rotation. But did the value contain 
+C        three numbers?
+C
+         IF ( N .NE. 3 .OR. WORD .NE. 'N' ) THEN
+         
+            CALL SETMSG ( 'Too few or too many offset angle values '  //
+     .                    'were specified using the setup file '      //
+     .                    'keyword ''#'' or these values weren''t '   //
+     .                    'numbers.'                                  )
+            CALL ERRCH  ( '#', ORAKWD                                 )
+            CALL SIGERR ( 'SPICE(BADOFFSETANGLES)'                    )
+            
+         ELSE
+C
+C           Get values for angles.
+C  
+            CALL GDPOOL( ORAKWD, 1, 3, N, OFFANG, FOUND )
+
+         END IF
+         
+C
+C        Now let's see whether there are axis for these angles.
+C
+         CALL DTPOOL( ORXKWD, FOUND, N, WORD )
+         IF ( .NOT. FOUND .OR. N .NE. 3  ) THEN
+         
+            CALL SETMSG ( 'No offset angle axes were specified '      //
+     .                    'using the setup file keyword ''#'' or '    //
+     .                    'this keyword didn''t contain an array '    //
+     .                    'of three values.'                          )
+            CALL ERRCH  ( '#', ORXKWD                                 )
+            CALL SIGERR ( 'SPICE(NOOFFSETANGLEAXES)'                  )
+            
+         ELSE
+C
+C           Yes, there are. Get 'hem! If it's character, we get and
+C           decode 'X', 'Y' and 'Z'. If it's integer we just check 
+C           it and save it.
+C
+            IF      ( WORD .EQ. 'C' ) THEN
+               CALL GCPOOL( ORXKWD, 1, 3, N, OFFAXS, FOUND )
+               DO I = 1, 3 
+                  IF      ( EQSTR( OFFAXS(I), 'X' ) ) THEN
+                     OFFAXI( I ) = 1
+                  ELSE IF ( EQSTR( OFFAXS(I), 'Y' ) ) THEN
+                     OFFAXI( I ) = 2
+                  ELSE IF ( EQSTR( OFFAXS(I), 'Z' ) ) THEN
+                     OFFAXI( I ) = 3
+                  ELSE
+                     CALL SETMSG ( 'The element ''#'' of the offset ' //
+     .                             'rotations order provided using '  //
+     .                             'the setup file keyword ''#'' is ' //
+     .                             'not ''X'', ''Y'' or ''Z''.'       )
+                     CALL ERRCH  ( '#', OFFAXS(I)                     )
+                     CALL ERRCH  ( '#', ORXKWD                        )
+                     CALL SIGERR ( 'SPICE(BADOFFSETAXISXYZ)'          )
+                  END IF
+               END DO
+            ELSE IF ( WORD .EQ. 'N' ) THEN
+               CALL GIPOOL( ORXKWD, 1, 3, N, OFFAXI, FOUND )
+               DO I = 1, 3
+                  IF ( OFFAXI(I) .LE. 0 .OR. OFFAXI(I) .GE. 4 ) THEN
+                     CALL SETMSG ( 'The element # of the Euler '      //
+     .                             'rotations order provided using '  //
+     .                             'the setup file keyword ''#'' is ' //
+     .                             'not 1, 2 or 3.'                   )
+                     CALL ERRINT ( '#', OFFAXI(I)                     )
+                     CALL ERRCH  ( '#', ORXKWD                        )
+                     CALL SIGERR ( 'SPICE(BADOFFSETAXIS123)'          )
+                  END IF
+               END DO
+            ELSE
+               CALL SETMSG ( 'The kernel pool variable ''#'' type '   //
+     .                       'was ''#''.'                             )
+               CALL ERRCH  ( '#', ORXKWD                              )
+               CALL ERRCH  ( '#', WORD                                )
+               CALL SIGERR ( 'SPICE(BADOFFSETAXESFORMAT)'             )
+            END IF
+
+         END IF
+         
+C
+C        And, what are the units?
+C
+         CALL DTPOOL( ORUKWD, FOUND, N, WORD )
+         IF ( .NOT. FOUND .OR. N .NE. 1 .OR. WORD .NE. 'C' ) THEN
+         
+            CALL SETMSG ( 'No offset angle units were specified '     //
+     .                    'using the setup file keyword ''#'' or '    //
+     .                    'this keyword wasn''t set to a '            //
+     .                    'character string.'                         )
+            CALL ERRCH  ( '#', ORUKWD                                 )
+            CALL ERRCH  ( '#', WORD                                   )
+            CALL SIGERR ( 'SPICE(NOOFFSETANGLEUNITS)'                 )
+            
+         ELSE        
+C
+C           Get units flag. Apply conversion to offset angles.
+C
+            CALL GCPOOL( ORUKWD, 1, 1, N, WORD, FOUND )
+            
+            IF      ( EQSTR( WORD, DEGVAL ) ) THEN
+C
+C              Go from degrees to radians.
+C
+               DO I = 1, 3
+                  OFFANG( I ) = OFFANG( I ) * RPD()
+               END DO
+               
+            ELSE IF ( EQSTR( WORD, RADVAL  ) ) THEN
+C
+C              No conversion needed.
+C
+            ELSE           
+               CALL SETMSG ( 'The offset angle units specified in '   //
+     .                       'using the setup file keyword ''#'' '    //
+     .                       'were ''#'' while they can be only '     //
+     .                       '''#'' or ''#''.'                        )
+               CALL ERRCH  ( '#', ORUKWD                              )
+               CALL ERRCH  ( '#', WORD                                )
+               CALL ERRCH  ( '#', DEGVAL                              )
+               CALL ERRCH  ( '#', RADVAL                              )
+               CALL SIGERR ( 'SPICE(BADOFFSETANGUNITS)'               )
+            END IF
+            
+         END IF
+         
+C
+C        It looks like we have got all necessary pieces together. Set
+C        flag and compute matrix from angles.
+C
+         OFFROT = .TRUE.
+         
+         CALL EUL2M ( OFFANG(1), OFFANG(2), OFFANG(3),
+     .                OFFAXI(1), OFFAXI(2), OFFAXI(3), OFFMAT )
+         
+      ELSE
+C
+C        Nope, there were no offset Euler angles. Set corresponding 
+C        flag.
+C
+         OFFROT = .FALSE.
+         
+      END IF
+      
+C
+C     Get down sampling tolerance. If not present, then no down
+C     sampling is required (the FOUND returned by GDPOOL is the 
+C     flag indicating that.)
+C
+      CALL GDPOOL( SDNKWD, 1, 1, N, SDNTOL, DNSMPL )
+
+C
+C     Check for the flag indicating whether interpolation interval 
+C     table is to be included into the comments and screen output.
+C
+      CALL GCPOOL( IITKWD, 1, 1, N, WORD, FOUND )
+
+      IF ( FOUND ) THEN
+
+         IF      ( EQSTR( WORD, YESVAL ) ) THEN
+            ADDTAB = .TRUE.
+         ELSE IF ( EQSTR( WORD, NOVAL  ) ) THEN
+            ADDTAB = .FALSE.
+         ELSE
+            CALL SETMSG ( 'The setup file keyword ''#'' indicating '  //
+     .                    'whether an interpolation '                 //
+     .                    'intervals table should be included '       //
+     .                    'into the output CK file comment area '     //
+     .                    'and the program''s output had value '      //
+     .                    '''#''. The only allowed values for '       //
+     .                    'this keyword are ''#'' and ''#''.'         )
+            CALL ERRCH  ( '#', IITKWD                                 )
+            CALL ERRCH  ( '#', WORD                                   )
+            CALL ERRCH  ( '#', YESVAL                                 )
+            CALL ERRCH  ( '#', NOVAL                                  )
+            CALL SIGERR ( 'SPICE(BADTABLEFLAG)'                       )
+         END IF
+
+      ELSE
+         ADDTAB = .TRUE.
+      END IF
+
+C
+C     Check for the flag indicating whether we need to check for input
+C     records to be strictly time-ordered.
+C
+      CALL GCPOOL( CTOKWD, 1, 1, N, WORD, FOUND )
+
+      IF ( FOUND ) THEN
+
+         IF      ( EQSTR( WORD, YESVAL ) ) THEN
+            CHKTO = .TRUE.
+         ELSE IF ( EQSTR( WORD, NOVAL  ) ) THEN
+            CHKTO = .FALSE.
+         ELSE
+            CALL SETMSG ( 'The setup file keyword ''#'' indicating '  //
+     .                    'whether input records should be checked '  //
+     .                    'to be strictly time-ordered had value '    //
+     .                    '''#''. The only allowed values for '       //
+     .                    'this keyword are ''#'' and ''#''.'         )
+            CALL ERRCH  ( '#', CTOKWD                                 )
+            CALL ERRCH  ( '#', WORD                                   )
+            CALL ERRCH  ( '#', YESVAL                                 )
+            CALL ERRCH  ( '#', NOVAL                                  )
+            CALL SIGERR ( 'SPICE(BADCHECKFLAG)'                       )
+         END IF
+
+      ELSE
+         CHKTO = .FALSE.
+      END IF
+
+C
+C     Final touch in setup processing: depending on the input data
+C     type, output CK type and angular rate flag set the number of we
+C     expect on each data line. Every line should have at least one
+C     time tag, thus initially the count is 1.
+C
+      NITEMS = 1
+
+C
+C     For type 2 CKs input might contain the stop time tag.
+C
+      IF ( CKTYPE .EQ. 2 .AND. .NOT. MUARAT .AND. ANGRAT ) THEN
+         NITEMS = NITEMS + 1
+      END IF
+
+C
+C     For quats, angles, and matrices, add their corresponding size.
+C
+      IF      ( EQSTR( DTYPE, DMQUAT ) .OR. 
+     .          EQSTR( DTYPE, DSQUAT ) ) THEN
+         NITEMS = NITEMS + 4 
+      ELSE IF ( EQSTR( DTYPE, DEULER ) ) THEN
+         NITEMS = NITEMS + 3
+      ELSE IF ( EQSTR( DTYPE, DMATRX ) ) THEN
+         NITEMS = NITEMS + 9
+      END IF
+
+C
+C     Finally, count in angular rates it they should be picked from the
+C     input.
+C
+      IF ( ANGRAT ) THEN            
+         NITEMS = NITEMS + 3
+      END IF
+
+C
+C     OK, we have got all setups. Time to do some real work.
+C     Open input file and set record counter to 0.
+C
+      INDEX = 0
+      LCOUNT = 0
+      BADCNT = 0
+      SAVBTM = .FALSE.
+
+      SSTRTT = DPMAX()
+      SSTPT  = DPMIN()
+
+      PREVT  = DPMIN()
+
+      CALL TXTOPR( INPUTF, INPLUN )
+      DASHLN = '----------------------------------------' //
+     .         '----------------------------------------'
+      ASTRLN = '****************************************' //
+     .         '****************************************'
+C
+C     Read lines from input file until EOF
+C
+      CALL READLN( INPLUN, LINE, EOF )
+      
+      DO WHILE ( .NOT. EOF )
+      
+C
+C        This second level loop is for writing multiple segments.
+C        We stop collecting data when EOF or we fill internal data 
+C        buffer completely.
+C
+         DO WHILE( .NOT. EOF .AND. INDEX .LT. NBUFF )
+
+C
+C           It's not EOF and buffer is not full. Increment record
+C           index and go ahead.
+C
+            INDEX = INDEX + 1 
+            LCOUNT = LCOUNT + 1
+            LINESV = LINE
+            
+C
+C           Before doing any parsing let's check if this line contains
+C           enough data. If not, complain and stop.
+C
+            IF ( WDCNT( LINE ) .LT. NITEMS ) THEN
+               CALL SETMSG ( 'The line # of the input file '          //
+     .                       'contains only # space-delimited items ' //
+     .                       'while according to the setup file '     //
+     .                       'parameters it is expected to contain '  //
+     .                       '# items.'                               )
+               CALL ERRINT ( '#', LCOUNT                              )
+               CALL ERRINT ( '#', WDCNT( LINE )                       )
+               CALL ERRINT ( '#', NITEMS                              )
+               CALL SIGERR ( 'SPICE(BADINPUTDATALINE)'                )
+            END IF
+         
+C
+C           We need parse our inputs lines. We do it differently 
+C           depending on output CK type, input data type and angular 
+C           rate presence flag. 
+C
+C           First we get the first time tag (and only time tag for 
+C           types 1 and 3). Note that internally we store time as 
+C           ET seconds, not encoded SCLKs. We will convert times to
+C           SCLKs right before writing CK file.
+C
+            CALL NEXTWD( LINE, WORD, LINE )
+
+            IF ( EQSTR( TTYPE, TTSCLK ) ) THEN        
+   
+               CALL SCENCD( SCID, WORD, SCLKDP )
+               CALL SCT2E ( SCID, SCLKDP, STARTT( INDEX ) )  
+           
+            ELSE IF  ( EQSTR( TTYPE, TTUTC ) ) THEN      
+      
+               CALL STR2ET( WORD, STARTT( INDEX ) )
+
+            ELSE IF  ( EQSTR( TTYPE, TTTICK ) ) THEN        
+    
+               CALL NPARSD( WORD, SCLKDP, ERROR, PTR )
+
+               IF ( PTR .NE. 0 ) THEN
+                  CALL SETMSG ( 'The DP SCLK (ticks) time ''#'' '     //
+     .                          'from the line # of the input '       //
+     .                          'file is not a number.'               )
+                  CALL ERRCH  ( '#', WORD                             )
+                  CALL ERRINT ( '#', LCOUNT                           )
+                  CALL SIGERR ( 'SPICE(BADDPSCLK1)'                   )
+               END IF
+
+               CALL SCT2E ( SCID, SCLKDP, STARTT( INDEX ) )
+
+            ELSE IF  ( EQSTR( TTYPE, TTET ) ) THEN        
+    
+               CALL NPARSD( WORD, STARTT( INDEX ), ERROR, PTR )
+
+               IF ( PTR .NE. 0 ) THEN
+                  CALL SETMSG ( 'The ET seconds past J2000 time '     //
+     .                          '''#'' from the line # of the '       //
+     .                          'input file is not a number.'         )
+                  CALL ERRCH  ( '#', WORD                             )
+                  CALL ERRINT ( '#', LCOUNT                           )
+                  CALL SIGERR ( 'SPICE(BADET1)'                       )
+               END IF
+
+            ELSE IF  ( EQSTR( TTYPE, TTDCLK ) ) THEN
+
+C
+C              A decimal SCLK must be a DP number.
+C
+               CALL NPARSD( WORD, SCLKDP, ERROR, PTR )
+
+               IF ( PTR .NE. 0 ) THEN
+                  CALL SETMSG ( 'The decimal SCLK time ''#'' from '   //
+     .                          'the line # of the input file is '    //
+     .                          'not a number.'                       )
+                  CALL ERRCH  ( '#', WORD                             )
+                  CALL ERRINT ( '#', LCOUNT                           )
+                  CALL SIGERR ( 'SPICE(BADDECIMALSCLK1)'              )
+               END IF
+
+C
+C              Extract left and right SCLK fields from decimal SCLK
+C              while saving fractional ticks.
+C
+               CALL RMAIND ( SCLKDP, 1.D0, CLKLFT, CLKFRC )
+               CLKFRC = CLKFRC * SCLKMD( 2 )
+               CALL RMAIND ( CLKFRC, 1.D0, CLKRGH, TMPDP )
+               CLKFRC = TMPDP
+               CLKRGH = CLKRGH + SCLKOF( 2 )
+
+C
+C              Re-package left and right fields into SCLK string,
+C              convert it to encoded SCLK, add fractional part to it,
+C              and convert more precise encoded SCLK to ET.
+C
+               HWORD = '#:#'
+               CALL REPMI ( HWORD, '#', NINT( CLKLFT ), HWORD )
+               CALL REPMI ( HWORD, '#', NINT( CLKRGH ), HWORD )
+
+               CALL SCENCD( SCID, HWORD, SCLKDP )
+               SCLKDP = SCLKDP + CLKFRC
+               CALL SCT2E ( SCID, SCLKDP, STARTT( INDEX ) )
+ 
+            END IF
+
+C
+C           If requested, check for time-ordered input. Signal an
+C           error if it is not.
+C           
+            IF ( CHKTO ) THEN
+               
+               IF ( STARTT( INDEX ) .LE. PREVT ) THEN
+                  CALL SETMSG ( 'The time ''#'' from '                //
+     .                          'the line # of the input file is '    //
+     .                          'less than or equal to the time '     //
+     .                          'from the previous line. The input '  //
+     .                          'file records must be strictly '      //
+     .                          'time-ordered.'                       )
+                  CALL ERRCH  ( '#', WORD                             )
+                  CALL ERRINT ( '#', LCOUNT                           )
+                  CALL SIGERR ( 'SPICE(TIMESOUTOFORDER)'              )
+               END IF
+
+               PREVT = STARTT( INDEX )
+
+            END IF
+
+C
+C           Add time bias (TIMCOR is 0 if no correction was requested.)
+C
+            STARTT( INDEX ) = STARTT( INDEX ) + TIMCOR
+            
+C
+C           For type 2 there is a second time tag, but only if 
+C           we have real angular rates provided on the input. If
+C           angular rates will have to be made up, we don't expect
+C           second time tag.
+C
+            IF ( CKTYPE .EQ. 2 .AND. .NOT. MUARAT .AND. ANGRAT ) THEN
+            
+               CALL NEXTWD( LINE, WORD, LINE )
+               
+               IF       ( EQSTR( TTYPE, TTSCLK ) ) THEN              
+
+                  CALL SCENCD( SCID, WORD, SCLKDP )      
+                  CALL SCT2E ( SCID, SCLKDP, STOPT( INDEX ) )
+
+               ELSE IF  ( EQSTR( TTYPE, TTUTC ) ) THEN               
+
+                  CALL STR2ET( WORD, STOPT( INDEX ) )
+
+               ELSE IF  ( EQSTR( TTYPE, TTTICK ) ) THEN            
+
+                  CALL NPARSD( WORD, SCLKDP, ERROR, PTR )
+
+                  IF ( PTR .NE. 0 ) THEN
+                     CALL SETMSG ( 'The DP SCLK (ticks) time ''#'' '  //
+     .                             'from the line # of the input '    //
+     .                             'file is not a number.'            )
+                     CALL ERRCH  ( '#', WORD                          )
+                     CALL ERRINT ( '#', LCOUNT                        )
+                     CALL SIGERR ( 'SPICE(BADDPSCLK2)'                )
+                  END IF
+
+                  CALL SCT2E ( SCID, SCLKDP, STOPT( INDEX ) ) 
+
+               ELSE IF  ( EQSTR( TTYPE, TTET ) ) THEN            
+
+                  CALL NPARSD( WORD, STOPT( INDEX ), ERROR, PTR )
+
+                  IF ( PTR .NE. 0 ) THEN
+                     CALL SETMSG ( 'The ET seconds past J2000 time '  //
+     .                             '''#'' from the line # of the '    //
+     .                             'input file is not a number.'      )
+                     CALL ERRCH  ( '#', WORD                          )
+                     CALL ERRINT ( '#', LCOUNT                        )
+                     CALL SIGERR ( 'SPICE(BADET2)'                    )
+                  END IF
+
+               ELSE IF  ( EQSTR( TTYPE, TTDCLK ) ) THEN
+
+C
+C                 A decimal SCLK must be a DP number.
+C
+                  CALL NPARSD( WORD, SCLKDP, ERROR, PTR )
+
+                  IF ( PTR .NE. 0 ) THEN
+                     CALL SETMSG ( 'The decimal SCLK time ''#'' from '//
+     .                             'the line # of the input file is ' //
+     .                             'not a number.'                    )
+                     CALL ERRCH  ( '#', WORD                          )
+                     CALL ERRINT ( '#', LCOUNT                        )
+                     CALL SIGERR ( 'SPICE(BADDECIMALSCLK2)'           )
+
+                  END IF
+
+C
+C                 Extract left and right SCLK fields from decimal SCLK
+C                 while saving fractional ticks.
+C
+                  CALL RMAIND ( SCLKDP, 1.D0, CLKLFT, CLKFRC )
+                  CLKFRC = CLKFRC * SCLKMD( 2 )
+                  CALL RMAIND ( CLKFRC, 1.D0, CLKRGH, TMPDP )
+                  CLKFRC = TMPDP
+                  CLKRGH = CLKRGH + SCLKOF( 2 )
+
+C
+C                 Re-package left and right fields into SCLK string,
+C                 convert it to encoded SCLK, add fractional part to it,
+C                 and convert more precise encoded SCLK to ET.
+C
+                  HWORD = '#:#'
+                  CALL REPMI ( HWORD, '#', NINT( CLKLFT ), HWORD )
+                  CALL REPMI ( HWORD, '#', NINT( CLKRGH ), HWORD )
+                  
+                  CALL SCENCD( SCID, HWORD, SCLKDP )
+                  SCLKDP = SCLKDP + CLKFRC
+                  CALL SCT2E ( SCID, SCLKDP, STOPT( INDEX ) )  
+ 
+               END IF
+                  
+C
+C              Add time bias (TIMCOR is 0 if no correction was 
+C              requested.)
+C
+               STOPT( INDEX ) = STOPT( INDEX ) + TIMCOR
+            
+            END IF
+            
+C
+C           Next item(s) that we need to get belong to the orientation 
+C           data part of the input record and convert it to the 
+C           quaternion.
+C           
+            IF       ( EQSTR( DTYPE, DMQUAT ) ) THEN
+
+C
+C              For MSOP-type quaternions we first extract them into an
+C              intermediate quaternion.
+C
+               DO I = 1, 4
+                  CALL NEXTWD( LINE, WORD, LINE )
+                  CALL NPARSD( WORD, HQUAT(I), ERROR, PTR )
+                  IF ( PTR .NE. 0 ) THEN
+                     CALL SETMSG ( 'The quaternion component ''#'' '  //
+     .                             'from the line # of the input '    //
+     .                             'file is not a number.'            )
+                     CALL ERRCH  ( '#', WORD                          )
+                     CALL ERRINT ( '#', LCOUNT                        )
+                     CALL SIGERR ( 'SPICE(BADMSOPQUATERNION)'         )
+                  END IF
+               END DO
+C
+C              And after that we reassign it to the main buffer and 
+C              conjugate (shift/negate) it along the way.
+C
+               QUATS( 1, INDEX ) =  HQUAT(4)
+               QUATS( 2, INDEX ) = -HQUAT(1)
+               QUATS( 3, INDEX ) = -HQUAT(2)
+               QUATS( 4, INDEX ) = -HQUAT(3)
+               
+            ELSE IF  ( EQSTR( DTYPE, DSQUAT ) ) THEN
+C
+C              For SPICE-style quaternions we simply extract them 
+C              into the main buffer .
+C
+               DO I = 1, 4
+                  CALL NEXTWD( LINE, WORD, LINE )
+                  CALL NPARSD( WORD, QUATS( I, INDEX ), ERROR, PTR )
+                  IF ( PTR .NE. 0 ) THEN
+                     CALL SETMSG ( 'The quaternion component ''#'' '  //
+     .                             'from the line # of the input '    //
+     .                             'file is not a number.'            )
+                     CALL ERRCH  ( '#', WORD                          )
+                     CALL ERRINT ( '#', LCOUNT                        )
+                     CALL SIGERR ( 'SPICE(BADSPICEQUATERNION)'        )
+                  END IF
+               END DO               
+
+            ELSE IF  ( EQSTR( DTYPE, DEULER ) ) THEN
+C
+C              For Euler angles we extract them into an intermediate 
+C              array, convert to matrix, after that to quaternion and 
+C              store quaternion in the main buffer.
+C
+               DO I = 1, 3
+                  CALL NEXTWD( LINE, WORD, LINE )
+                  CALL NPARSD( WORD, EULANG( I ), ERROR, PTR )
+                  IF ( PTR .NE. 0 ) THEN
+                     CALL SETMSG ( 'The angle ''#'' from the '        //
+     .                             'line # of the input file is '     //
+     .                             'not a number.'                    )
+                     CALL ERRCH  ( '#', WORD                          )
+                     CALL ERRINT ( '#', LCOUNT                        )
+                     CALL SIGERR ( 'SPICE(BADANGLE)'                  )
+                  END IF
+               END DO
+
+C
+C              If a Body based rotation.
+C
+               IF ( EULBOD ) THEN
+                  EULANG( 1 ) = - EULANG( 1 )
+                  EULANG( 2 ) = - EULANG( 2 )
+                  EULANG( 3 ) = - EULANG( 3 )
+               END IF
+
+C
+C              Convert the angles definitions to a rotation matrix.
+C              
+               
+               CALL EUL2M (  EULANG(1) * EARATE, 
+     .                       EULANG(2) * EARATE, 
+     .                       EULANG(3) * EARATE,
+     .                       EULAXS(1), EULAXS(2), EULAXS(3), MAT )
+
+C              
+C              If a Body based rotation.
+C              
+               IF ( EULBOD ) THEN
+                  CALL XPOSE( MAT, TMPMAT ) 
+                  CALL MEQU ( TMPMAT, MAT )
+               END IF
+
+C
+C              Convert the matrix to quaternions.
+C
+               CALL M2Q( MAT, QUATS( 1, INDEX ) )
+               
+            ELSE IF  ( EQSTR( DTYPE, DMATRX ) ) THEN
+
+C
+C              For matrices we extract them into an intermediate 
+C              matrix, after that convert it to quaternion and 
+C              store quaternion in the main buffer. Note that we expect 
+C              matrices to be provided in row-major order.
+C
+               DO I = 1, 3
+                  DO J = 1, 3
+                     CALL NEXTWD( LINE, WORD, LINE )
+                     CALL NPARSD( WORD, MAT(I,J), ERROR, PTR )
+                     IF ( PTR .NE. 0 ) THEN
+                        CALL SETMSG ( 'The matrix element ''#'' from '//
+     .                                'the line # of the input file ' //
+     .                                'is not a number.'              )
+                        CALL ERRCH  ( '#', WORD                       )
+                        CALL ERRINT ( '#', LCOUNT                     )
+                        CALL SIGERR ( 'SPICE(BADMATRIX)'              )
+                     END IF
+                  END DO
+               END DO
+
+               CALL M2Q( MAT, QUATS( 1, INDEX ) )
+               
+            END IF
+            
+C
+C           We are done with orientation data. Now it's time for 
+C           angular rates. We need the only if angular rate presence 
+C           flag is set to 'YES'.
+C     
+            IF ( ANGRAT ) THEN            
+C
+C              Well, there is no freedom in angular rate 
+C              representation -- we should always have 3 elements.
+C
+               DO I = 1, 3
+                  CALL NEXTWD( LINE, WORD, LINE )
+                  CALL NPARSD( WORD, AVVS( I, INDEX ), ERROR, PTR )
+                  IF ( PTR .NE. 0 ) THEN
+                     CALL SETMSG ( 'The angular rate element ''#'' ' //
+     .                             'from the line # of the input '   //
+     .                             'file is not a number.'            )
+                     CALL ERRCH  ( '#', WORD                          )
+                     CALL ERRINT ( '#', LCOUNT                        )
+                     CALL SIGERR ( 'SPICE(BADANGULARRATE)'            )
+                  END IF
+
+C
+C                 But in case of Euler angles input, angular rates must 
+C                 be expressed in units consistent with units for 
+C                 angles.
+C
+                  IF ( EQSTR( DTYPE, DEULER ) ) THEN
+                     AVVS( I, INDEX ) = AVVS( I, INDEX ) * EARATE
+                  END IF
+
+               END DO               
+               
+            END IF
+            
+C
+C           Now let's check whether orientation and angular rate data
+C           that we have obtained from this input line are good.
+C           We do quaternion first but only if filtering for quats was 
+C           requested.
+C     
+            BADQUA = .FALSE.
+
+            IF ( QFILTER ) THEN
+   
+C
+C              Algorithm for quaternion normalization/check implemented 
+C              in a few steps below was borrowed from ATTREC, ver 1.1.
+C
+C              Step 1: Normalize quaternion
+C
+               CALL VHATG( QUATS( 1, INDEX ), 4, QN )
+               
+C
+C              Step 2: Calculate Norm of original Quaternion
+C
+               NORMQ  = VNORMG( QUATS( 1, INDEX ), 4 ) 
+               
+C
+C              Step 3: Check for goodness of quaternion components by 
+C              comparison of each element with it's normalized element.
+C
+               DO J = 1, 4
+                  IF ( DABS(QUATS(J,INDEX) - QN(J)) .GT. QERROR ) THEN
+                     BADQUA = .TRUE.
+                  END IF
+               END DO
+               
+C
+C              Step 4: Check for quaternion = zero vector.
+C
+               IF ( NORMQ .EQ. 0.D0 ) THEN
+                  BADQUA = .TRUE.
+               END IF
+
+            END IF
+            
+C
+C           Now angular rate. Again, only if rate information was
+C           present and filtering was requested.
+C
+            BADRAT = .FALSE.
+
+            IF ( ANGRAT .AND. RFILTER ) THEN
+      
+               IF ( DABS( AVVS( 1, INDEX ) ) .GT. RERROR( 1 ) .OR. 
+     .              DABS( AVVS( 2, INDEX ) ) .GT. RERROR( 2 ) .OR.
+     .              DABS( AVVS( 3, INDEX ) ) .GT. RERROR( 3 ) ) THEN
+     
+C
+C                 One of the components of this rate doesn't 
+C                 into specified threshold.
+C
+                  BADRAT = .TRUE.
+                  
+               END IF
+                  
+            END IF
+            
+C
+C           Is this record bad? Write the line into scratch buffer,
+C           decrement INDEX and proceed to the next line.
+C
+            IF ( BADQUA .OR. BADRAT ) THEN
+               
+               INDEX = INDEX - 1
+               BADCNT = BADCNT + 1
+               
+C
+C              Is scratch file open? Open it if not.
+C
+               IF ( .NOT. SEOPND ) THEN
+                  CALL TXTOPS( SELUN )
+                  SEOPND = .TRUE.
+               END IF
+               
+C
+C              Write the line number, diagnostics and line itself.
+C
+               HLINE = '# ON LINE #: #'
+               IF ( BADQUA ) THEN                     
+                  CALL REPMC( HLINE, '#', 'BAD QAUT', HLINE )
+               ELSE 
+                  CALL REPMC( HLINE, '#', 'BAD RATE', HLINE )
+               END IF
+               CALL REPMI( HLINE, '#', LCOUNT, HLINE )
+               CALL REPMC( HLINE, '#', LINESV, HLINE )
+               
+               CALL WRITLN( HLINE, SELUN )
+               
+            ELSE
+
+C
+C              It looks like both, quaternion and angular rate, were
+C              OK. Let's see if the AR was given relative to the 
+C              instrument frame rather than relative to reference 
+C              frame.
+C
+               IF ( INSARF .AND. ANGRAT ) THEN
+
+C
+C                 Yes, it was. We need to compute matrix and multiply
+C                 AR by the transpose of that matrix.
+C
+                  CALL Q2M ( QUATS( 1, INDEX ), MAT )
+                  CALL MTXV( MAT, AVVS( 1, INDEX ), TMPVEC )
+                  CALL VEQU( TMPVEC, AVVS( 1, INDEX ) )
+
+               END IF
+               
+C
+C              Let's also see if there is an additional offset that
+C              must be added to this rotation.
+C
+               IF ( OFFROT ) THEN
+               
+C
+C                 Apply it to quaternion first.
+C
+                  CALL Q2M ( QUATS( 1, INDEX ), MAT )
+                  CALL MXM ( MAT, OFFMAT, TMPMAT )
+                  CALL M2Q ( TMPMAT, QUATS( 1, INDEX ) )
+                  
+C
+C                 Apply it to angular rate, if it's present.
+C
+                  IF ( ANGRAT ) THEN
+                     CALL MTXV( OFFMAT, AVVS(1,INDEX), TMPVEC )
+                     CALL VEQU( TMPVEC, AVVS(1,INDEX) )
+                  END IF
+                                    
+               END IF
+
+            END IF
+
+C
+C           We have collected all data from the current line; read 
+C           the next line.
+C
+            CALL READLN( INPLUN, LINE, EOF )
+            
+C
+C           End of the secondary (fill buffer) loop.
+C
+         END DO
+
+C
+C        We either reached EOF or filled our buffers. In any case,
+C        we need to check whether we need to write a segment, do 
+C        nothing or complain if no data was collected at all.
+C        
+         IF ( INDEX .EQ. 0 ) THEN
+         
+C
+C           We can have INDEX equal zero at this point for only one
+C           reason: the input file contained some data records but all
+C           of them were "filtered out" using values from quaternion
+C           and/or angular rate threshold parameters specified in the 
+C           setup file. Let the user know about this.
+C              
+            CALL SETMSG ( 'Of the # data lines from the input file '  //
+     .                    'none contained values that satisfied '     //
+     .                    'quaternion and/or angular rate threshold ' //
+     .                    'constraints given in the setup file.'      )
+            CALL ERRINT ( '#', LCOUNT                                 )
+            CALL SIGERR ( 'SPICE(NOACCEPTABLEDATA)'                   )
+               
+         ELSE IF ( INDEX .EQ. 1 ) THEN
+
+C
+C           If we have one data point in the buffer it can be a carry-
+C           over from the previous segment. Let's check whether we have
+C           already written something to the output CK file.
+C
+            IF ( CKOPND ) THEN
+            
+C
+C              We did. So this point is a carry over. We don't need  
+C              to write one more segment containing just it.
+C
+               WRTSEG = .FALSE.
+
+            ELSE
+
+C
+C              It looks like it's the one and only data point provided
+C              in the input file. We need to write one-point segment.
+C
+               WRTSEG = .TRUE.   
+
+            END IF
+
+         ELSE
+         
+C
+C           We have more than one data point -- we need to write  
+C           another segment.
+C        
+            WRTSEG = .TRUE.
+            
+         END IF
+         
+C
+C        Let's see what we decided.
+C
+         IF ( WRTSEG ) THEN
+         
+C
+C           It looks like we need to write a segment. First, lets 
+C           find order of primary record times -- every CK type that 
+C           this program can output requires times to be in strictly
+C           increasing order.
+C
+            CALL ORDERD ( STARTT, INDEX, IORDER )
+               
+C
+C           Reorder all buffers by found order.
+C
+            CALL REORDD ( IORDER, INDEX, STARTT )
+            CALL REORDD ( IORDER, INDEX, STOPT  )
+               
+C
+C           Reorder quats column by column.
+C
+            DO I = 1, 4
+               DO J = 1, INDEX
+                  HDPARR( J ) = QUATS( I, J )
+               END DO
+               CALL REORDD ( IORDER, INDEX, HDPARR )
+               DO J = 1, INDEX
+                  QUATS( I, J ) = HDPARR( J )
+               END DO
+            END DO
+               
+C
+C           Do the same for AVVS.
+C
+            DO I = 1, 3
+               DO J = 1, INDEX
+                  HDPARR( J ) = AVVS( I, J )
+               END DO
+               CALL REORDD ( IORDER, INDEX, HDPARR )
+               DO J = 1, INDEX
+                  AVVS( I, J ) = HDPARR( J )
+               END DO
+            END DO
+            
+C
+C           We need to save the last collected data point to use at 
+C           as first point of the next CK segment (if there will be 
+C           such.)
+C
+            SSTRTT     = STARTT ( INDEX )
+            SSTPT      = STOPT  ( INDEX )
+   
+            SQUAT( 1 ) = QUATS  ( 1, INDEX )
+            SQUAT( 2 ) = QUATS  ( 2, INDEX )
+            SQUAT( 3 ) = QUATS  ( 3, INDEX )
+            SQUAT( 4 ) = QUATS  ( 4, INDEX )
+            
+            SAVV ( 1 ) = AVVS   ( 1, INDEX )
+            SAVV ( 2 ) = AVVS   ( 2, INDEX )
+            SAVV ( 3 ) = AVVS   ( 3, INDEX )
+       
+C
+C           For all CK segments we will create a coverage
+C           summary table in the comment area of the output
+C           file. The header of the table is the same for all CK 
+C           types. First we check whether scratch that will contain 
+C           comments is opened already; if not -- open it.
+C
+            IF ( .NOT. SIOPND ) THEN
+               CALL TXTOPS( SILUN )
+               SIOPND = .TRUE.
+            END IF
+               
+C
+C           Write segment interval table header.
+C
+            HLINE = SEGHED
+            CALL REPMI ( HLINE, '#', INSTID, HLINE )
+            CALL TIMOUT( STARTT(1), PICTUR, HWORD )
+            CALL REPMC ( HLINE, '#', HWORD, HLINE )
+            IF ( CKTYPE .EQ. 2 .AND. .NOT. MUARAT ) THEN
+               CALL TIMOUT( STOPT(INDEX),  PICTUR, HWORD )
+            ELSE
+               CALL TIMOUT( STARTT(INDEX), PICTUR, HWORD )
+            END IF
+            CALL REPMC ( HLINE, '#', HWORD, HLINE )
+            CALL WRITLN( HLINE, SILUN )
+            CALL WRITLN( DASHLN, SILUN )
+                     
+C
+C           Now we will get all additional data that is 
+C           needed but wasn't present in the input file. This 
+C           data is different for a different CK types.
+C
+            IF      ( CKTYPE .EQ. 1 ) THEN
+                  
+C
+C              Guess.. we have everything for Type 1. What a luck!
+C              We just need to convert times to encoded SCLKs.
+C       
+               DO I = 1, INDEX
+                  CALL SCE2C( SCID, STARTT( I ), TMPDP )
+                  STARTT( I ) = TMPDP
+               END DO
+
+C
+C              One other things we need to do is to put into the 
+C              comment area coverage table a warning message saying
+C              that segment contains discrete data.
+C
+               HLINE = SEGTY1
+               CALL WRITLN( HLINE, SILUN )
+                     
+            ELSE IF ( CKTYPE .EQ. 2 ) THEN
+                  
+C
+C              Lets see whether we have got angular rates from the 
+C              input or we have to make them up.
+C
+               IF ( MUARAT ) THEN
+               
+C
+C                 Well, we have to make them up. This how we do it:
+C                 
+C                 -- if time interval between two quaternions is 
+C                    less or equal to the maximum interpolation 
+C                    interval set in the setup file, we set stop time 
+C                    for current record to the start time of the next 
+C                    record
+C
+C                 -- then we compute constant angular rate getting us 
+C                    from orientation expressed by the current 
+C                    quaternions to the orientation expressed by the 
+C                    next one and save it as the rate in current 
+C                    record;
+C
+C                 -- if time interval between current and next is too
+C                    big, we set stop time to start + TIKTOL and 
+C                    angular rate to 0;
+C
+C                 We go into the loop only if we have more than one 
+C                 record.
+C
+                  IF ( INDEX .GT. 1 ) THEN                  
+                  
+                     DO I = 1, INDEX - 1
+                     
+C
+C                       Check time spacing between the current and 
+C                       the next point.
+C
+                        IF ( STARTT(I+1) - STARTT(I) .LE. INTRVL ) THEN
+                        
+C
+C                          We can interpolate between these points.
+C                          If it's the first point we compute matrix
+C                          from current quaternion. Otherwise we 
+C                          will use saved matrix.
+C
+                           IF ( I .EQ. 1 ) THEN
+                              CALL VHATG( QUATS( 1, I ), 4, QN )
+                              CALL Q2M  ( QN, CURMAT )
+                           END IF
+                           
+C
+C                          Compute matrix from the next quaternion.
+C
+                           CALL VHATG( QUATS( 1, I+1 ), 4, QN )
+                           CALL Q2M  ( QN, NXTMAT )
+                           
+C
+C                          Compute scaled angular rate using LINROT_M 
+C                          from MGSSPICE and divide it by time 
+C                          duration, if it's non-zero.
+C
+                           CALL LINROT_M( CURMAT, NXTMAT, 1.0D0, 
+     .                                    HMAT, SCLDAV          )
+     
+                           IF ( STARTT(I+1)-STARTT(I) .GT. 0.D0 ) THEN
+                           
+                              HRATE = 1.D0 / ( STARTT(I+1)-STARTT(I) )
+                              CALL VSCL( HRATE, SCLDAV, AVVS( 1, I ) )
+                              STOPT(I) = STARTT(I+1)
+                              
+                           ELSE
+                           
+C
+C                             Current and next times are the same --
+C                             "NO CAN DO, SORRY ..."
+C
+                              CALL SETMSG ( 'Two identical times (# ' //
+     .                                      'ET) were provided in '   //
+     .                                      'the input file. Angular '//
+     .                                      'rates cannot be made '   //
+     .                                      'up.'                     )
+                              CALL ERRDP  ( '#', STARTT(I+1)          )
+                              CALL SIGERR ( 'SPICE(IDENTICALTIMES1)'  )
+                           
+                           END IF
+                        
+                        ELSE
+                        
+C
+C                          Well, the current and the next points are 
+C                          too far apart -- we cannot interpolate 
+C                          between them and therefore we set stop time 
+C                          to start time + TIKTOL and rate to zero.
+C
+                           STOPT( I )   = STARTT( I ) + TIKTOL
+                           AVVS( 1, I ) = 0.D0
+                           AVVS( 2, I ) = 0.D0
+                           AVVS( 3, I ) = 0.D0
+                           
+C
+C                          Compute matrix from the next quaternion 
+C                          because it's going to get re-assigned and 
+C                          used as "current" matrix on the next step.
+C                          
+                           CALL VHATG( QUATS( 1, I+1 ), 4, QN )
+                           CALL Q2M  ( QN, NXTMAT )
+                           
+                        END IF
+                        
+C
+C                       Copy "next" matrix to "current" matrix.
+C
+                        CALL MEQU ( NXTMAT, CURMAT )
+                        
+                     END DO
+                     
+                  END IF
+                  
+C
+C                 Now, for the last (and maybe only :) record: set 
+C                 stop time to start time + TIKTOL and rate to zero.
+C
+                  STOPT( INDEX ) = STARTT( INDEX ) + TIKTOL
+                  AVVS( 1, INDEX ) = 0.D0
+                  AVVS( 2, INDEX ) = 0.D0
+                  AVVS( 3, INDEX ) = 0.D0
+                  
+               END IF
+
+C
+C              Generate comment area intervals table. 
+C
+               HRATE = STARTT(1)
+
+               DO I = 1, INDEX
+
+                  IF ( I .EQ. INDEX ) THEN
+
+                     HLINE = SEGLIN
+
+                     CALL TIMOUT( HRATE, PICTUR, HWORD )
+                     CALL REPMC ( HLINE, '#', HWORD, HLINE )
+                     CALL TIMOUT( STOPT(I), PICTUR, HWORD )
+                     CALL REPMC ( HLINE, '#', HWORD, HLINE )
+
+                     CALL WRITLN( HLINE, SILUN )
+
+                  ELSE
+
+                     IF ( STOPT(I) .LT. STARTT(I+1) ) THEN
+
+                        HLINE = SEGLIN
+
+                        CALL TIMOUT( HRATE, PICTUR, HWORD )
+                        CALL REPMC ( HLINE, '#', HWORD, HLINE )
+                        CALL TIMOUT( STOPT(I), PICTUR, HWORD )
+                        CALL REPMC ( HLINE, '#', HWORD, HLINE )
+
+                        CALL WRITLN( HLINE, SILUN )
+
+                        HRATE = STARTT(I+1)
+
+                     END IF
+
+                  END IF
+
+               END DO
+
+C
+C              And at last, we need to convert ETs to SCLKs for start
+C              and stop times. We will check for time consistency and 
+C              recompute rates along the way.
+C    
+               DO I = 1, INDEX
+
+                  IF ( STARTT( I ) .GE. STOPT( I ) ) THEN
+                     CALL SETMSG ( 'Start time (# ET) of an '      //
+     .                             'input record is greater '      //
+     .                             'than or equal to stop time '   //
+     .                             '(# ET). This is not allowed '  //
+     .                             'for Type 2 CK input.'          )
+                     CALL ERRDP  ( '#', STARTT(I)                  )
+                     CALL ERRDP  ( '#', STOPT(I)                   )
+                     CALL SIGERR ( 'SPICE(INCONSISTENTTIMES1)'     )
+                  END IF
+
+                  CALL SCE2C( SCID, STARTT( I ), TMPDP1 )
+                  CALL SCE2C( SCID, STOPT( I ),  TMPDP2 )
+
+                  IF ( TMPDP1 .GE. TMPDP2 ) THEN
+                     CALL SETMSG ( 'Encoded ticks (#) '            //
+     .                             'corresponding to start '       //
+     .                             'time (# ET) of an input '      //
+     .                             'record are greater '           //
+     .                             'than or equal to encoded '     //
+     .                             'ticks # corresponding to '     //
+     .                             'stop time '                    //
+     .                             '(# ET). This is not allowed '  //
+     .                             'for Type 2 CK input.'          )
+                     CALL ERRDP  ( '#', TMPDP1                     )
+                     CALL ERRDP  ( '#', STARTT(I)                  )
+                     CALL ERRDP  ( '#', TMPDP2                     )
+                     CALL ERRDP  ( '#', STOPT(I)                   )
+                     CALL SIGERR ( 'SPICE(INCONSISTENTTIMES2)'     )
+                  END IF
+
+                  RATES( I )  = ( STOPT(I) - STARTT(I) ) / 
+     .                          ( TMPDP2   - TMPDP1    ) 
+
+                  STARTT( I ) = TMPDP1
+                  STOPT( I )  = TMPDP2
+
+               END DO
+                                    
+            ELSE IF ( CKTYPE .EQ. 3 ) THEN
+
+C
+C              For type 3 we must come up with interpolation intervals
+C              using maximum interval duration from the setup file;
+C              RATES array will hold beginnings of these intervals. We
+C              will also use STOPT array to hold ends of intervals
+C              though they are not needed for CK data, just for
+C              intervals table in the comment area.
+C
+               NINTS = 1
+               RATES(NINTS) = STARTT( 1 )
+
+               IF ( INDEX .GT. 1 ) THEN
+                  DO I = 2, INDEX
+                     IF ( STARTT(I) - STARTT(I-1) .GT. INTRVL ) THEN
+                        NINTS = NINTS + 1
+                        RATES(NINTS) =  STARTT(I)
+                        STOPT(NINTS-1) = STARTT(I-1)
+                     END IF                  
+                  END DO
+               END IF
+               STOPT(NINTS) = STARTT(INDEX)        
+               
+C
+C              Lets see whether we have got angular rates from the 
+C              input or we have to make them up.
+C
+               IF ( MUARAT ) THEN
+               
+C
+C                 Well, we have to make them up. Lets check if have 
+C                 more than one point.
+C
+                  IF ( INDEX .GT. 1 ) THEN
+
+C
+C                    We sure do :) -- let's go over points and 
+C                    compute rates for each of them. We will take 
+C                    special care of the points that are starts
+C                    and stops of the interpolation intervals.
+C
+                     DO I = 2, INDEX
+                     
+C
+C                       If it's the second point we compute matrix
+C                       for the first quaternion. Otherwise we 
+C                       will use saved matrix.
+C
+                        IF ( I .EQ. 2 ) THEN
+                           CALL VHATG( QUATS( 1, I - 1 ), 4, QN )
+                           CALL Q2M  ( QN, PRVMAT )
+                        END IF
+                        
+C
+C                       Now we compute matrix from current quaternion
+C                       and compute constant angular rate for rotation
+C                       between them.
+C
+                        CALL VHATG( QUATS( 1, I ), 4, QN )
+                        CALL Q2M  ( QN, CURMAT )
+                        CALL LINROT_M( PRVMAT, CURMAT, 1.0D0, 
+     .                                 HMAT, SCLDAV )
+     
+                        IF ( STARTT(I) - STARTT(I-1) .NE. 0.D0 ) THEN
+                           
+                           HRATE = 1.D0 / ( STARTT(I) - STARTT(I-1) )
+                           CALL VSCL( HRATE, SCLDAV, AVVS( 1, I ) )
+                           
+                        ELSE
+C
+C                          Current and next times are the same --
+C                          "NO CAN DO, SORRY ..."
+C
+                           CALL SETMSG ( 'Two identical times '       //
+     .                                   '(# ET) were provided in '   //
+     .                                   'the input file. Angular '   //
+     .                                   'rates cannot be made up.'   )
+                           CALL ERRDP  ( '#', STARTT(I+1)             )
+                           CALL SIGERR ( 'SPICE(IDENTICALTIMES2)'     )
+                           
+                        END IF
+                                                
+C
+C                       Now we need to check whether our previous point
+C                       is at the start or stop of some interpolation 
+C                       interval. Search for its time in the interval 
+C                       start and stop time arrays.
+C
+                        SRTIDX = ISRCHD ( STARTT(I-1), NINTS, RATES )
+                        STPIDX = ISRCHD ( STARTT(I-1), NINTS, STOPT )
+                        
+                        IF ( SRTIDX .NE. 0 .AND. STPIDX .NE. 0 ) THEN
+
+C
+C                          Well, previous point is a an interval by 
+C                          itself -- it's present in both start and 
+C                          stop arrays -- the only thing we can do 
+C                          for it is to set its rate to zero.
+C
+                           AVVS( 1, I - 1 ) = 0.D0
+                           AVVS( 2, I - 1 ) = 0.D0
+                           AVVS( 3, I - 1 ) = 0.D0
+                           
+                        ELSE IF ( SRTIDX .NE. 0 ) THEN
+
+C
+C                          Previous point is the start of some 
+C                          interval. We need to set its rate to the 
+C                          value we just computed, the one that 
+C                          bring us from that point to the current 
+C                          point.
+C
+                           CALL VEQU( AVVS(1,I), AVVS(1,I-1) )
+                           
+                        ELSE IF ( STPIDX .NE. 0 ) THEN
+     
+C
+C                          Previous point is the stop of some 
+C                          interval. Correct rate -- the one that 
+C                          rotates from the point before previous 
+C                          point to the previous point -- is already 
+C                          in there. We don't need to do anything 
+C                          to change it.
+C                          
+
+                        ELSE
+                        
+C
+C                          Well, our previous point is just a point 
+C                          in a middle. Based on user request, we will 
+C                          save computed rate in the previous point
+C                          or compute average value of this rate and 
+C                          previous rate and save it in the previous 
+C                          point.
+C
+                           IF ( AVGRAT ) THEN
+
+C
+C                             This is what the program did originally,
+C                             prior to the version 2.0 -- rate at given
+C                             point was computed as an average of the
+C                             rate which bring us from the previous
+C                             point to this point and the rate that
+C                             bring us from this point to the next
+C                             point.
+C
+                              CALL VADD( AVVS(1,I-1), AVVS(1,I), TMPVEC)
+                              CALL VSCL( 0.5D0, TMPVEC, AVVS(1,I-1) )
+
+                           ELSE 
+
+C
+C                             But it turned out that this averaging
+C                             doesn't work for spinners with nutation.
+C                             It produced bizarre results that just
+C                             didn't make any sense in terms of physics.
+C                             Then averaging approach was augmented with
+C                             something similar to type 2 -- storing 
+C                             in previous point the rate that takes us
+C                             from previous point to the current point.
+C
+                              CALL VEQU( AVVS(1,I), AVVS(1,I-1) )
+
+                           END IF
+
+                        END IF
+                        
+C
+C                       Memorize current matrix in previous.      
+C                    
+                        CALL MEQU( CURMAT, PRVMAT )
+                           
+                     END DO
+
+C
+C                    Check whether the very last point was an interval 
+C                    itself and set rate to zero. Otherwise, the rate
+C                    which is there is OK already.
+C
+                     IF ( STARTT(INDEX) .EQ. RATES(NINTS) ) THEN
+                     
+                        AVVS( 1, INDEX ) = 0.D0
+                        AVVS( 2, INDEX ) = 0.D0
+                        AVVS( 3, INDEX ) = 0.D0
+                        
+                     END IF
+                     
+                  ELSE
+                  
+C
+C                    Set angular rate of our only point to zero.
+C
+                     AVVS( 1, INDEX ) = 0.D0
+                     AVVS( 2, INDEX ) = 0.D0
+                     AVVS( 3, INDEX ) = 0.D0
+                     
+                  END IF
+                     
+               END IF
+               
+C
+C              Convert ETs to SCLKs for start times.
+C    
+               DO I = 1, INDEX
+                  CALL SCE2C( SCID, STARTT( I ), TMPDP )
+                  STARTT( I ) = TMPDP
+               END DO
+                     
+C
+C              Generate comment area intervals table. 
+C
+               DO I = 1, NINTS
+                  HLINE = SEGLIN
+                  CALL TIMOUT( RATES(I), PICTUR, HWORD )
+                  CALL REPMC ( HLINE, '#', HWORD, HLINE )
+                  CALL TIMOUT( STOPT(I), PICTUR, HWORD )
+                  CALL REPMC ( HLINE, '#', HWORD, HLINE )
+                  CALL WRITLN( HLINE, SILUN )
+               END DO
+
+C
+C              Now (at last!) convert interval start times to SCLKs.
+C                 
+               DO I = 1, NINTS
+                  CALL SCE2C( SCID, RATES( I ), TMPDP )
+                  RATES( I ) = TMPDP
+               END DO
+                  
+            END IF
+
+C
+C           Add one more line at the bottom of the segment coverage 
+C           summary table.
+C
+            CALL WRITLN( ' ', SILUN )
+               
+C
+C           All processing is done. We can write CK data now. But
+C           did we open the file already?
+C
+            IF ( .NOT. CKOPND ) THEN
+C
+C              Was it a new or existing file?
+C
+               IF ( APPNDF ) THEN               
+C
+C                 It's an existing file. Use DAFOPR to open it for 
+C                 write access.
+C
+                  CALL DAFOPW ( OUTPTF, HANDLE )
+                  
+               ELSE              
+C
+C                 It's a new file. Use CKOPN. Let's reserve a 
+C                 few hundreds records for future comments.
+C
+                  CALL CKOPN  ( OUTPTF, IFNAME, 300, HANDLE )
+
+               END IF
+C
+C              Don't forget to set OPENED flag. :)
+C     
+               CKOPND = .TRUE.
+               
+            END IF
+            
+C
+C           We opened the CK for write access. Now call the proper
+C           CKWxx writer depending on what type of segment we 
+C           need to write. Also save current end time for future 
+C           comment area meta-information output.
+C
+            IF      ( CKTYPE .EQ. 1 ) THEN
+
+               CALL CKW01 ( HANDLE, STARTT(1), STARTT(INDEX), 
+     .                      INSTID, FRMNAM, ANGRAT, SEGID,  
+     .                      INDEX , STARTT, QUATS, AVVS )
+     
+               ENDTIM = STARTT(INDEX)
+   
+            ELSE IF ( CKTYPE .EQ. 2 ) THEN
+         
+               CALL CKW02 ( HANDLE, STARTT(1), STOPT(INDEX), 
+     .                      INSTID, FRMNAM,  SEGID,
+     .                      INDEX , STARTT, STOPT, QUATS, AVVS, 
+     .                      RATES )
+   
+               ENDTIM = STOPT(INDEX)
+
+            ELSE IF ( CKTYPE .EQ. 3 ) THEN
+            
+               ARFLAG = ANGRAT .OR. MUARAT
+
+               IF ( DNSMPL ) THEN
+                  CALL CK3SDN ( SDNTOL, ARFLAG,
+     .                          INDEX, STARTT, QUATS, AVVS, 
+     .                          NINTS, RATES, HDPARR, IORDER )
+               END IF
+               
+               CALL CKW03 ( HANDLE, STARTT(1), STARTT(INDEX), 
+     .                      INSTID, FRMNAM   , ARFLAG, SEGID,  
+     .                      INDEX , STARTT   , QUATS, AVVS, NINTS,
+     .                      RATES )
+
+               ENDTIM = STARTT(INDEX)
+
+            END IF
+            
+C
+C           Save the very first start time to use in run time 
+C           meta-information output to comment area.
+C
+            IF ( .NOT. SAVBTM ) THEN
+            
+               SAVBTM = .TRUE.
+               BEGTIM = STARTT(1)
+               
+            END IF
+               
+         END IF         
+C
+C        Don't forget to reset index. We reset it to 1 copy the 
+C        last data point written to current segment to the first
+C        data point to be written to the next segment.
+C
+         INDEX = 1
+         
+         STARTT( 1 ) = SSTRTT 
+         STOPT ( 1 ) = SSTPT
+   
+         QUATS ( 1, 1 ) = SQUAT ( 1 )
+         QUATS ( 2, 1 ) = SQUAT ( 2 )
+         QUATS ( 3, 1 ) = SQUAT ( 3 )
+         QUATS ( 4, 1 ) = SQUAT ( 4 )
+         
+         AVVS  ( 1, 1 ) = SAVV  ( 1 )
+         AVVS  ( 2, 1 ) = SAVV  ( 2 )
+         AVVS  ( 3, 1 ) = SAVV  ( 3 )
+         
+C
+C        End of the primary (read input data) loop.
+C
+      END DO
+
+C
+C     Let see if we encountered EOF with our first read and therefore
+C     didn't even get into the main loop.
+C
+      IF ( .NOT. CKOPND ) THEN
+
+            CALL SETMSG ( 'The input data file ''#'' doesn''t '       //
+     .                    'contain any data.'                         )
+            CALL ERRCH  ( '#', INPUTF                                 )
+            CALL SIGERR ( 'SPICE(EMPTYINPUTFILE)'                     )
+               
+      END IF
+
+C
+C     Collect all comments in one big scratch file. Open it first.
+C
+      CALL TXTOPS( SCRTCH )
+      
+C
+C     Copy contents the external comments file. Clean up non-printing 
+C     characters on the way. 
+C
+      IF ( .NOT. APPNDF .AND. CMMFLG ) THEN
+      
+         CALL WRITLN( ' ', SCRTCH )
+         CALL WRITLN( ASTRLN, SCRTCH )
+         CALL WRITLN( ' ', SCRTCH )
+      
+         CALL TXTOPR( CMMNTF, HLUN )
+         CALL READLN( HLUN, LINE, EOF )      
+         
+         DO WHILE ( .NOT. EOF )
+
+            DO WHILE ( FRSTNP(LINE) .NE. 0 )
+               N = FRSTNP(LINE)
+               LINE(N:N) = ' '
+            END DO
+
+            CALL WRITLN( LINE, SCRTCH )
+            CALL READLN( HLUN, LINE, EOF )   
+   
+         END DO
+         
+         CLOSE( HLUN )
+         
+      END IF
+      
+C
+C     Copy contents of the setup file
+C
+      CALL WRITLN( ' ', SCRTCH )
+      CALL WRITLN( ASTRLN, SCRTCH )
+
+      LINE = 'MSOPCK SETUP FILE: #'
+
+      CALL REPMC ( LINE, '#', SETUPF, LINE )
+      CALL WRITLN( LINE, SCRTCH )
+      CALL WRITLN( ASTRLN, SCRTCH )
+      CALL WRITLN( ' ', SCRTCH )
+      
+      CALL TXTOPR( SETUPF, HLUN )
+
+      CALL READLN( HLUN, LINE, EOF )
+   
+      DO WHILE ( .NOT. EOF )
+
+         DO WHILE ( FRSTNP(LINE) .NE. 0 )
+            N = FRSTNP(LINE)
+            LINE(N:N) = ' '
+         END DO
+
+         CALL WRITLN( LINE, SCRTCH )
+         CALL READLN( HLUN, LINE, EOF )
+ 
+      END DO
+
+      CLOSE( HLUN )
+      
+C
+C     Run time meta information -- start, stop and creation times.
+C
+      CALL WRITLN( ' ', SCRTCH )
+      CALL WRITLN( ASTRLN, SCRTCH )
+
+      LINE = 'RUN-TIME OBTAINED META INFORMATION:'
+      CALL WRITLN( LINE, SCRTCH )
+      CALL WRITLN( ASTRLN, SCRTCH )
+      CALL WRITLN( ' ', SCRTCH )   
+
+      HLINE = PCTKWD // '= #'
+      HWORD = 'YYYY-MM-DDTHR:MN:SC'
+      CALL CPUTIM ( TVEC )
+      CALL DPFMT  ( TVEC(1), '0YYY',  HWORD(1:4)   )
+      CALL DPFMT  ( TVEC(2), '0M',    HWORD(6:7)   )
+      CALL DPFMT  ( TVEC(3), '0D',    HWORD(9:10)  )
+      CALL DPFMT  ( TVEC(4), '0h',    HWORD(12:13) )
+      CALL DPFMT  ( TVEC(5), '0m',    HWORD(15:16) )
+      CALL DPFMT  ( TVEC(6), '0s',    HWORD(18:19) )
+      CALL REPMC ( HLINE, '#', HWORD,  HLINE )
+      CALL WRITLN( HLINE, SCRTCH )
+      
+      HLINE = BTMKWD // '= #'
+      CALL SCT2E ( SCID, BEGTIM, TMPDP )
+      BEGTIM = TMPDP
+      CALL TIMOUT( BEGTIM, PICTUR, HWORD )
+      CALL REPMC ( HLINE, '#', HWORD, HLINE )
+      CALL WRITLN( HLINE, SCRTCH )
+
+      HLINE = ETMKWD // '= #'
+      CALL SCT2E ( SCID, ENDTIM, TMPDP )
+      ENDTIM = TMPDP
+      CALL TIMOUT( ENDTIM, PICTUR, HWORD )
+      CALL REPMC ( HLINE, '#', HWORD, HLINE )
+      CALL WRITLN( HLINE, SCRTCH )
+
+C
+C     Copy intervals information from scratch file.
+C
+      IF ( SIOPND .AND. ADDTAB ) THEN
+      
+         CALL WRITLN( ' ', SCRTCH )
+         CALL WRITLN( ASTRLN, SCRTCH )
+         LINE = 'INTERPOLATION INTERVALS IN THE FILE SEGMENTS:'
+         CALL WRITLN( LINE, SCRTCH )
+         CALL WRITLN( ASTRLN, SCRTCH )
+         CALL WRITLN( ' ', SCRTCH )
+   
+         REWIND ( UNIT = SILUN )
+
+         CALL READLN( SILUN, LINE, EOF )
+
+         DO WHILE ( .NOT. EOF )
+            CALL WRITLN( LINE, SCRTCH )
+            CALL READLN( SILUN, LINE, EOF )     
+         END DO
+         
+      END IF
+
+C
+C     Copy bad input records numbers.
+C
+      IF ( SEOPND ) THEN
+      
+         CALL WRITLN( ' ', SCRTCH )
+         CALL WRITLN( ASTRLN, SCRTCH )
+
+         LINE = 'BAD DATA RECORDS FROM THE INPUT FILE: # OF # (#%)'
+
+         CALL REPMI ( LINE, '#', BADCNT, LINE )
+         CALL REPMI ( LINE, '#', LCOUNT, LINE )
+         CALL REPMF ( LINE, '#', 100.D0*BADCNT/LCOUNT, 4, 'F', LINE )
+
+         CALL WRITLN( LINE  , SCRTCH )
+         CALL WRITLN( ASTRLN, SCRTCH )
+         CALL WRITLN( ' '   , SCRTCH )
+   
+         REWIND ( UNIT = SELUN )
+         CALL READLN( SELUN, LINE, EOF )
+
+         DO WHILE ( .NOT. EOF )
+            CALL WRITLN( LINE, SCRTCH )
+            CALL READLN( SELUN, LINE, EOF )     
+         END DO
+         
+      END IF
+            
+      CALL WRITLN( ' '   , SCRTCH )
+      CALL WRITLN( ASTRLN, SCRTCH )
+
+C
+C     Add comments to the file.     
+C
+      REWIND ( UNIT = SCRTCH )
+
+      IF ( CKOPND ) THEN
+         CALL SPCAC ( HANDLE, SCRTCH, ' ', ' ' )
+      END IF
+
+C
+C     Dump comments to the screen.
+C  
+      REWIND ( UNIT = SCRTCH )
+
+      CALL READLN( SCRTCH, LINE, EOF )    
+
+      DO WHILE ( .NOT. EOF )
+         CALL TOSTDO( LINE(:RTRIM(LINE)) )
+         CALL READLN( SCRTCH, LINE, EOF )    
+      END DO
+
+C
+C     Close input file.
+C
+      CLOSE( INPLUN )
+
+C
+C     Close output CK file.
+C
+      IF ( CKOPND ) THEN
+         CALL DAFCLS( HANDLE )
+      END IF
+      
+C
+C     Dump CK for testing.
+C
+      CALL GCPOOL( 'DUMP_OUTPUT_CK', 1, 1, N, LINE, FOUND )
+      IF ( FOUND .AND. EQSTR( LINE, 'YES' ) ) THEN
+         CALL ZZMCKDMP( OUTPTF )
+      END IF
+      
+
+C
+C     Check out :)
+C
+      CALL CHKOUT  ( 'MSOPCK' )
+      
+      END

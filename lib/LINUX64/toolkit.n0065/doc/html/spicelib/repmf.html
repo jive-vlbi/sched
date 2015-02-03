@@ -1,0 +1,375 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>repmf</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>repmf</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+  REPMF  ( Replace marker with formatted d.p. value )
+ 
+      SUBROUTINE REPMF ( IN, MARKER, VALUE, SIGDIG, FORMAT, OUT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Replace a marker in a string with a formatted double precision
+     value.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CHARACTER
+     CONVERSION
+     STRING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)         IN
+      CHARACTER*(*)         MARKER
+      DOUBLE PRECISION      VALUE
+      INTEGER               SIGDIG
+      CHARACTER*(*)         FORMAT
+      CHARACTER*(*)         OUT
+ 
+      INTEGER               MAXLFD
+      PARAMETER           ( MAXLFD = 56 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     IN         I   Input string.
+     MARKER     I   Marker to be replaced.
+     VALUE      I   Replacement value.
+     SIGDIG     I   Significant digits in replacement text.
+     FORMAT     I   Format: 'E' or 'F'.
+     OUT        O   Output string.
+     MAXLFD     P   Maximum length of a formatted DP number.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     IN             is an arbitrary character string.
+
+     MARKER         is an arbitrary character string. The first
+                    occurrence of MARKER in the input string is
+                    to be replaced by VALUE.
+
+                    Leading and trailing blanks in MARKER are NOT
+                    significant. In particular, no substitution is
+                    performed if MARKER is blank.
+
+     VALUE          is an arbitrary double precision number.
+
+     SIGDIG         is the number of significant digits with
+                    which VALUE is to be represented. SIGDIG
+                    must be greater than zero and less than 15.
+
+     FORMAT         is the format in which VALUE is to be represented.
+                    FORMAT may be any of the following:
+
+                       FORMAT  Meaning      Example
+                       ------  -----------  ----------------
+                       E, e    Scientific   3.14159E+03
+                               (exponent)
+                               notation
+
+                       F, f    Fixed-point  3141.59
+                               notation
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     OUT            is the string obtained by substituting the text
+                    representation of VALUE for the first occurrence
+                    of MARKER in the input string.
+
+                    The text representation of VALUE is in scientific
+                    (exponent) or fixed-point notation, depending on
+                    having the value of FORMAT, and having the number
+                    of significant digits specified by SIGDIG.
+                    The representation of VALUE is produced by the
+                    routine <a href="dpstrf.html">DPSTRF</a>; see that routine for details
+                    concerning the representation of double precision
+                    numbers.
+
+                    OUT and IN must be identical or disjoint.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     MAXLFD         is the maximum expected length of the text
+                    representation of a formatted double precision
+                    number. 56 characters are sufficient to hold any
+                    result returned by <a href="dpstrf.html">DPSTRF</a>. (See $Restrictions.)
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     Error Free.
+
+     1) If OUT does not have sufficient length to accommodate the
+        result of the substitution, the result will be truncated on
+        the right.
+
+     2) If MARKER is blank, or if MARKER is not a substring of IN,
+        no substitution is performed. (OUT and IN are identical.)
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This is one of a family of related routines for inserting values
+     into strings. They are typically to construct messages that
+     are partly fixed, and partly determined at run time. For example,
+     a message like
+
+        'Fifty-one pictures were found in directory [USER.DATA].'
+
+     might be constructed from the fixed string
+
+        '#1 pictures were found in directory #2.'
+
+     by the calls
+
+        CALL <a href="repmct.html">REPMCT</a> ( STRING, '#1', N_PICS,  'C', STRING )
+        CALL <a href="repmc.html">REPMC</a>  ( STRING, '#2', DIR_NAME,     STRING )
+
+     which substitute the cardinal text 'Fifty-one' and the character
+     string '[USER.DATA]' for the markers '#1' and '#2' respectively.
+
+     The complete list of routines is shown below.
+
+        <a href="repmc.html">REPMC</a>    ( Replace marker with character string value )
+        <a href="repmd.html">REPMD</a>    ( Replace marker with double precision value )
+        <b>REPMF</b>    ( Replace marker with formatted d.p. value )
+        <a href="repmi.html">REPMI</a>    ( Replace marker with integer value )
+        <a href="repmct.html">REPMCT</a>   ( Replace marker with cardinal text)
+        <a href="repmot.html">REPMOT</a>   ( Replace marker with ordinal text )
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1. Let
+
+           IN = 'Invalid operation value.  The value was #.'
+
+        Then following the call,
+
+           CALL <b>REPMF</b> ( IN, '#', 5.0D1, 2, 'E', IN  )
+
+        IN is
+
+           'Invalid operation value.  The value was 5.0E+01.'
+
+
+     2. Let
+
+           IN = 'Left endpoint exceeded right endpoint.  The left
+                 endpoint was: XX.  The right endpoint was: XX.'
+
+        Then following the call,
+
+           CALL <b>REPMF</b> ( IN, '  XX  ',  -5.2D-9, 3, 'E', OUT )
+
+        OUT is
+
+           'Left endpoint exceeded right endpoint.  The left
+            endpoint was: -5.20E-09.  The right endpoint was: XX.'
+
+
+     3. Let
+
+           IN = 'Invalid operation value.  The value was # units.'
+
+        Then following the call,
+
+           CALL <b>REPMF</b> ( IN, '#', 5.0D1, 3, 'F', IN  )
+
+        IN is
+
+           'Invalid operation value.  The value was 50.0 units..'
+
+
+     4. In the above example, if SIGDIG is 1 instead of 3, IN becomes
+
+           'Invalid operation value.  The value was 50 units.'
+
+
+     5. Let
+
+           IN = 'Invalid operation value.  The value was #.'
+
+        Then following the call,
+
+           CALL <b>REPMF</b> ( IN, '#', 5.0D1, 100, 'E', IN  )
+
+        IN is
+
+           'Invalid operation value.  The value was
+            5.0000000000000E+01.'
+
+        Note that even though 100 digits of precision were requested,
+        only 14 were returned.
+
+
+     6. Let
+
+           MARKER = '&amp;'
+           NUM    = 23
+           CHANCE = 'fair'
+           SCORE  = 4.665D0
+
+        Then following the sequence of calls,
+
+           CALL <a href="repmi.html">REPMI</a> ( 'There are &amp; routines that have a '  //
+          .             '&amp; chance of meeting your needs.'    //
+          .             'The maximum score was &amp;.',
+          .             '&amp;',
+          .             NUM,
+          .             MSG  )
+
+           CALL <a href="repmc.html">REPMC</a> ( MSG, '&amp;', CHANCE, MSG )
+
+           CALL <b>REPMF</b> ( MSG, '&amp;', SCORE, 4, 'F', MSG )
+
+        MSG is
+
+           'There are 23 routines that have a fair chance of
+            meeting your needs.  The maximum score was 4.665.'
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) The maximum number of significant digits returned is 14.
+
+     2) This routine makes explicit use of the format of the string
+        returned by <a href="dpstrf.html">DPSTRF</a>; should that routine change, substantial
+        work may be required to bring this routine back up to snuff.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     B.V. Semenov   (JPL)
+     W.L. Taber     (JPL)
+     I.M. Underwood (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.0, 23-SEP-2013 (BVS)
+
+        Minor efficiency update: the routine now looks up the first
+        and last non-blank characters only once.
+
+    SPICELIB Version 1.1.0, 15-AUG-2002 (WLT)
+
+        The routine is now error free.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 30-AUG-1990 (NJB) (IMU)</PRE>
+<h4>Link to routine REPMF source file <a href='../../../src/spicelib/repmf.f'>repmf.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:51 2014</pre>
+
+</body>
+</html>
+

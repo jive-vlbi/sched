@@ -1,0 +1,404 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>sctk01</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>sctk01</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+       SCTK01 ( Convert type 1 SCLK string to ticks )
+ 
+      ENTRY SCTK01 ( SC, CLKSTR, TICKS )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Convert a character representation of a type 1 spacecraft clock
+     count to ticks.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/sclk.html">SCLK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONVERSION
+     TIME
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     CHARACTER*(*)         CLKSTR
+     DOUBLE PRECISION      TICKS
+     INTEGER               SC
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     SC         I   NAIF spacecraft ID code.
+     CLKSTR     I   Character representation of a clock count.
+     TICKS      O   Number of ticks represented by the clock count.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     SC         is a NAIF spacecraft identification code.  See the
+                `Examples' section below, and also the NAIF_IDS
+                required reading file for a complete list of body ID
+                codes.
+
+
+     CLKSTR     on input is the character representation of a
+                spacecraft clock count (SCLK), without a partition
+                number.
+
+                Using Galileo as an example, a SCLK string without
+                a partition number has the form
+
+                               wwwwwwww:xx:y:z
+
+                where z is a mod-8 counter (values 0-7) which
+                increments approximately once every 8 1/3 ms., y is a
+                mod-10 counter (values 0-9) which increments once
+                every time z turns over, i.e., approximately once every
+                66 2/3 ms., xx is a mod-91 (values 0-90) counter
+                which increments once every time y turns over, i.e.,
+                once every 2/3 seconds. wwwwwwww is the Real-Time
+                Image Count (RIM), which increments once every time
+                xx turns over, i.e., once every 60 2/3 seconds. The
+                roll-over expression for the RIM is 16777215, which
+                corresponds to approximately 32 years.
+
+                wwwwwwww, xx, y, and z are referred to interchangeably
+                as the fields or components of the spacecraft count.
+                SCLK components may be separated by any of the
+                single character delimiters in the string DELIMS, with
+                any number of spaces separating the components and
+                the delimiters. The presence of the RIM component
+                is required. Successive components may be omitted, and
+                in such cases are assumed to represent zero values.
+
+                Values for the individual components may exceed the
+                maximum expected values. For instance, '0:0:0:9' is
+                an acceptable Galileo clock string, and indicates the
+                same time interval as '0:0:1:1'.
+
+                Consecutive delimiters containing no intervening digits
+                are treated as if they delimit zero components, except
+                in the case of blanks.  Consecutive blanks are treated
+                as a single blank.
+
+                Trailing zeros should always be included to match the
+                length of the counter.  For example, a Galileo clock
+                count of '25684.90' should not be represented as
+                '25684.9'.
+
+                Some spacecraft clock components have offset, or
+                starting, values different from zero.  For example,
+                with an offset value of 1, a mod 20 counter would
+                cycle from 1 to 20 instead of from 0 to 19.
+
+                See the SCLK required reading for a detailed
+                description of the Galileo, Mars Observer, and Voyager
+                clock formats.
+
+                See the `Examples' section in <b>SCTK01</b>, below.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     TICKS      is the number of &quot;ticks&quot; corresponding to the input
+                spacecraft clock string CLKSTR.  &quot;Ticks&quot; are the units
+                in which encoded SCLK strings are represented.
+
+                A typical Galileo SCLK string looks like
+
+                             'wwwwwwww xx y z',
+
+                as described above. Since z is the mod-8 (one tick)
+                counter, the number of ticks represented by y is 8*y.
+                And since y is the mod-10 counter, the number of ticks
+                represented by xx is 10*8*xx. The total number of
+                ticks represented by the above string is
+
+                              wwwwwwww( 7280 ) +
+                                    xx(   80 ) +
+                                     y(    8 ) +
+                                     z
+
+                Clock strings for other spacecraft are converted in
+                a similar manner.
+
+                See Examples below.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  This routine assumes that that an SCLK kernel appropriate
+         to the spacecraft clock identified by the input argument SC
+         has been loaded.  If an SCLK kernel has not been loaded,
+         does not contain all of the required data, or contains
+         invalid data, error diagnoses will be performed by routines
+         called by this routine.  The output argument TICKS will not
+         be modified.
+
+         The variables that must be set by the SCLK kernel are:
+
+            -  The number of fields in an (unabridged) SCLK string
+            -  The output delimiter code
+            -  The parallel time system code
+            -  The moduli of the fields of an SCLK string
+            -  The offsets for each clock field.
+            -  The SCLK coefficients array
+            -  The partition start times
+            -  The partition end times
+
+         When using SCLK kernels that map SCLK to a time system other
+         than ET (also called barycentric dynamical time---`TDB'), it
+         is necessary to have a leapseconds kernel loaded at the time
+         this routine is called.  If a leapseconds kernel is required
+         for conversion between SCLK and ET but is not loaded, the
+         error will be diagnosed by routines called by this routine.
+         The output argument TICKS will not be modified.
+
+         The time system that an SCLK kernel maps SCLK to is indicated
+         by the variable SCLK_TIME_SYSTEM_nn in the kernel, where nn
+         is the negative of the NAIF integer code for the spacecraft.
+         The time system used in a kernel is TDB if and only if the
+         variable is assigned the value 1.
+
+
+     2)  If any of the following kernel variables have invalid values,
+         the error will be diagnosed by routines called by this
+         routine:
+
+            -  The time system code
+            -  The number of SCLK coefficients
+            -  The number of partition start times
+            -  The number of partition end times
+            -  The number of fields of a SCLK string
+            -  The number of moduli for a SCLK string
+
+         If the number of values for any item read from the kernel
+         pool exceeds the maximum allowed value, it is may not be
+         possible to diagnose the error correctly, since overwriting
+         of memory may occur.  This particular type of error is not
+         diagnosed by this routine.
+
+
+     3)  The input argument CLKSTR may be invalid for a variety of
+         reasons:
+
+            -- One of the extracted clock components cannot be parsed
+               as an integer
+
+            -- CLKSTR contains too many components
+
+            -- the value  of one of the components is less than the
+               offset value
+
+         If any of these conditions is detected, the error
+         SPICE(INVALIDSCLKSTRING) is signalled.  The output argument
+         TICKS will not be modified.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine converts a character string representation of a
+     spacecraft clock count into the number of ticks represented
+     by the clock count.  An important distinction between this type
+     of conversion and that carried out by <a href="scencd.html">SCENCD</a> is that this routine
+     treats spacecraft clock times as representations of time
+     intervals, not absolute times.
+
+     This routine does not make use of any partition information.
+     See <a href="scencd.html">SCENCD</a> for details on how to make use of partition numbers.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Below are some examples illustrating various inputs and the
+         resulting outputs for the Galileo spacecraft.
+
+         CLKSTR                TICKS
+         ----------------      --------------------
+         '0:0:0:1'             1
+         '0:0:1'               8
+         '0:1'                 80
+         '1'                   7280
+         '1 0 0 0'             7280
+         '1,0,0,0'             7280
+         '1:90'                14480
+         '1:9'                 8000
+         '1:09'                8000
+         '0-0-10'              80   |--  Third component is supposed
+         '0-1-0'               80   |    to be a mod-10 count.
+         '0/1/0'               Error: '/' is not an accepted delimiter.
+         '1: 00 : 0 : 1'       7281
+         '1:::1'               7281
+         '1.1.1.1.1'           Error: Too many components
+         '1.1.1.1.'            Error: The last delimiter signals that
+                                      a fifth component will follow.
+
+
+         The following examples are for the Voyager 2 spacecraft. Note
+         that the last component of the Voyager clock has an offset
+         value of 1.
+
+         CLKSTR                TICKS
+         ----------------      --------------------
+         '0.0.001'             0
+         '0:0:002'             1
+         '0:01'                800
+         '1'                   48000
+         '1.0'                 48000
+         '1.0.0'               Error: The 3rd component is never 0.
+         '0.0:100'             99
+         '0-60-1'              48000
+         '1-1-1'               48800
+         '1-1-2'               48801
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1)  An SCLK kernel appropriate to the spacecraft clock identified
+         by SC must be loaded at the time this routine is called.
+
+     2)  If the SCLK kernel used with this routine does not map SCLK
+         directly to barycentric dynamical time, a leapseconds kernel
+         must be loaded at the time this routine is called.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman (JPL)
+     J.M. Lynch   (JPL)
+     B.V. Semenov (JPL)
+     R.E. Thurman (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 2.3.0, 09-SEP-2013 (BVS)
+
+        Updated to keep track of the <a href="pool.html">POOL</a> counter and call ZZCVPOOL.
+
+    SPICELIB Version 2.2.0, 05-MAR-2009 (NJB)
+
+        Bug fix: this routine now keeps track of whether its
+        kernel pool look-up succeeded. If not, a kernel pool
+        lookup is attempted on the next call to this routine.
+
+    SPICELIB Version 2.1.0, 09-NOV-2007 (NJB)
+
+        Bug fix: changed maximum value arguments to 1 in 
+        calls to <a href="scli01.html">SCLI01</a> to fetch NFIELD and DELCDE values.
+
+    SPICELIB Version 2.0.0, 17-APR-1992 (NJB)
+
+        Header was updated, particularly $Exceptions and $Restrictions
+        sections.  Kernel pool watch is now set on required kernel
+        variables.  Comment section for permuted index source lines
+        was added following the header.
+
+    SPICELIB Version 1.0.0, 04-SEP-1990 (NJB) (JML) (RET)</PRE>
+<h4>Link to routine SCTK01 source file <a href='../../../src/spicelib/sc01.f'>sc01.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:56 2014</pre>
+
+</body>
+</html>
+

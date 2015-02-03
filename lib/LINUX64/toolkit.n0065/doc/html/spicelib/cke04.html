@@ -1,0 +1,416 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cke04</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cke04</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      CKE04 ( C-kernel, evaluate pointing record, type 4 )
+
+      SUBROUTINE CKE04 ( NEEDAV, RECORD, CMAT, AV, CLKOUT )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Evaluate a pointing record returned by <a href="ckr04.html">CKR04</a> from a CK type 4
+     segment. Return the C-matrix and angular velocity vector 
+     associated with the time CLKOUT.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      IMPLICIT NONE
+
+      INCLUDE               'ckparam.inc'
+
+      LOGICAL               NEEDAV
+      DOUBLE PRECISION      RECORD ( * )
+      DOUBLE PRECISION      CMAT   ( 3, 3 )
+      DOUBLE PRECISION      AV     ( 3 )
+      DOUBLE PRECISION      CLKOUT
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     NEEDAV     I   True if angular velocity is requested.
+     RECORD     I   Data type 4 pointing record.
+     CMAT       O   C-matrix.
+     AV         O   Angular velocity vector.
+     CLKOUT     O   SCLK associated with C-matrix.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     NEEDAV     is true if angular velocity is requested.
+
+     RECORD     is a set of double precision numbers returned by 
+                <a href="ckr04.html">CKR04</a>. RECORD must have the following structure:
+
+                ---------------------------------------------------
+                |    Encoded onboard time which is the closest    |
+                |  to SCLKDP and belongs to one of approximation  |
+                |                   intervals                     |
+                ---------------------------------------------------
+                |       encoded SCLK time of the midpoint of      |
+                |             interpolation interval              |
+                ---------------------------------------------------
+                |          radii of interpolation interval        |
+                |    expressed as double precision SCLK ticks     |
+                ---------------------------------------------------
+                |         Number of coefficients for q0           |
+                ---------------------------------------------------
+                |         Number of coefficients for q1           |
+                ---------------------------------------------------
+                |         Number of coefficients for q2           |
+                ---------------------------------------------------
+                |         Number of coefficients for q3           |
+                ---------------------------------------------------
+                |         Number of coefficients for AV1          |
+                ---------------------------------------------------
+                |         Number of coefficients for AV2          |
+                ---------------------------------------------------
+                |         Number of coefficients for AV3          |
+                ---------------------------------------------------
+                |               q0 Cheby coefficients             |
+                ---------------------------------------------------
+                |               q1 Cheby coefficients             |
+                ---------------------------------------------------
+                |               q2 Cheby coefficients             |
+                ---------------------------------------------------
+                |               q3 Cheby coefficients             |
+                ---------------------------------------------------
+                |         AV1 Cheby coefficients (optional)       |
+                ---------------------------------------------------
+                |         AV2 Cheby coefficients (optional)       |
+                ---------------------------------------------------
+                |         AV3 Cheby coefficients (optional)       |
+                ---------------------------------------------------
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     CMAT       is a rotation matrix that transforms the components
+                of a vector expressed in the inertial frame given in
+                the segment to components expressed in the instrument
+                fixed frame at the returned time.
+
+                Thus, if a vector v has components x, y, z in the
+                inertial frame, then v has components x', y', z' in
+                the instrument fixed frame where:
+
+                     [ x' ]     [          ] [ x ]
+                     | y' |  =  |   CMAT   | | y |
+                     [ z' ]     [          ] [ z ]
+
+                If the x', y', z' components are known, use the
+                transpose of the C-matrix to determine x, y, z as
+                follows.
+
+                     [ x ]      [          ]T    [ x' ]
+                     | y |  =   |   CMAT   |     | y' |
+                     [ z ]      [          ]     [ z' ]
+                              (Transpose of CMAT)
+
+     AV         is the angular velocity vector of the instrument fixed
+                frame defined by CMAT.  The angular velocity is
+                returned only if NEEDAV is true.
+
+                The direction of the angular velocity vector gives
+                the right-handed axis about which the instrument fixed
+                reference frame is rotating. The magnitude of AV is
+                the magnitude of the instantaneous velocity of the
+                rotation, in radians per second.
+
+                The angular velocity vector is returned in component
+                form
+
+                         AV = [ AV1  , AV2  , AV3  ]
+
+                which is in terms of the inertial coordinate frame
+                specified in the segment descriptor.
+
+     CLKOUT     is the encoded SCLK associated with the returned
+                C-matrix and angular velocity vector.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     See 'ckparam.inc'.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     Error free.
+
+     No checking is done to determine whether RECORD is valid.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     For a detailed description of the structure of a type 4 pointing
+     segment, see the CK Required Reading file.
+
+     The work done by <b>CKE04</b> is to calculate quaternion and angular
+     velocity components using Chebyshev polynomial approximation
+     parameters. The second step of evaluation is to convert the
+     pointing portion of the record from quaternion form to C-matrix
+     form.
+
+     The angular velocity vector will only be returned if it has been
+     requested. In other words, if NEEDAV is true, the routine will
+     expect the angular velocity component of the record to be 
+     present.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The CKRnn routines are usually used in tandem with the CKEnn
+     routines, which evaluate the record returned by CKRnn to give
+     the pointing information and output time.
+
+     The following code fragment searches through all of the segments
+     in a file applicable to the Mars Global Surveyor spacecraft bus
+     that are of data type 4, for a particular spacecraft clock time.
+     It then evaluates the pointing for that epoch and prints the
+     result.
+
+     C
+     C     CK parameters include file.
+     C
+           INCLUDE               'ckparam.inc'
+     C
+     C     Declarations
+     C
+           CHARACTER*(20)        SCLKCH
+           CHARACTER*(20)        SCTIME
+           CHARACTER*(40)        <a href="ident.html">IDENT</a>
+
+           DOUBLE PRECISION      AV     ( 3 )
+           DOUBLE PRECISION      CLKOUT
+           DOUBLE PRECISION      CMAT   ( 3, 3 )
+           DOUBLE PRECISION      DCD    ( 2 )
+           DOUBLE PRECISION      DESCR  ( 5 )
+           DOUBLE PRECISION      RECORD ( CK4RSZ )
+           DOUBLE PRECISION      SCLKDP
+           DOUBLE PRECISION      TOL
+
+           INTEGER               HANDLE
+           INTEGER               I
+           INTEGER               ICD    ( 6 )
+           INTEGER               INST
+           INTEGER               SC
+
+           LOGICAL               FND
+           LOGICAL               NEEDAV
+           LOGICAL               SFND
+     C
+     C     Initial values.
+     C
+           SC     = -94
+           INST   = -94000
+           NEEDAV = .FALSE.
+     C
+     C     Load the MGS SCLK kernel and the C-kernel.
+     C
+           CALL <a href="furnsh.html">FURNSH</a>( 'MGS_SCLK.TSC' )
+           CALL <a href="dafopr.html">DAFOPR</a>( 'MGS_CK4.BC', HANDLE )
+     C
+     C     Get the spacecraft clock time. Then encode it for use
+     C     in the C-kernel.
+     C
+           CALL PROMPT( 'Enter SCLK string: ', SCLKCH )
+           CALL <a href="scencd.html">SCENCD</a>( SC, SCLKCH, SCLKDP )
+     C
+     C     Use a tolerance of 2 seconds (half of the nominal
+     C     separation between MGS pointing instances ).
+     C
+           CALL <a href="sctiks.html">SCTIKS</a> ( SC, '0000000002:000', TOL )
+     C
+     C     Search from the beginning of the CK file through all
+     C     of the segments.
+     C
+           CALL <a href="dafbfs.html">DAFBFS</a>( HANDLE )
+           CALL <a href="daffna.html">DAFFNA</a>( SFND   )
+
+           FND = .FALSE.
+
+           DO WHILE ( ( SFND ) .AND. ( .NOT. FND ) )
+     C
+     C        Get the segment identifier and descriptor.
+     C
+              CALL <a href="dafgn.html">DAFGN</a>( <a href="ident.html">IDENT</a> )
+              CALL <a href="dafgs.html">DAFGS</a>( DESCR )
+     C
+     C        Unpack the segment descriptor into its integer and
+     C        double precision components.
+     C
+              CALL <a href="dafus.html">DAFUS</a>( DESCR, 2, 6, DCD, ICD )
+     C
+     C        Determine if this segment should be processed.
+     C
+              IF ( ( INST          .EQ. ICD( 1 ) ) .AND.
+          .        ( SCLKDP + TOL  .GE. DCD( 1 ) ) .AND.
+          .        ( SCLKDP - TOL  .LE. DCD( 2 ) ) .AND.
+          .        ( CK4DTP        .EQ. ICD( 3 ) )      ) THEN
+     C
+     C           Find CK 4 record covering requested time.
+     C
+                 CALL <a href="ckr04.html">CKR04</a>( HANDLE, DESCR, SCLKDP, TOL, NEEDAV,
+          .                  RECORD, FND )
+
+                 IF ( FND ) THEN
+     C
+     C              Compute pointing using found CK 4 record.
+     C
+                    CALL <b>CKE04</b>( NEEDAV, RECORD, CMAT, AV, CLKOUT)
+
+                    CALL <a href="scdecd.html">SCDECD</a>( SC, CLKOUT, SCTIME )
+
+                    WRITE (*,*)
+                    WRITE (*,*) 'Segment identifier: ', <a href="ident.html">IDENT</a>
+                    WRITE (*,*)
+                    WRITE (*,*) 'Pointing returned for time: ',
+          .                      SCTIME
+                    WRITE (*,*)
+                    WRITE (*,*) 'C-matrix:'
+                    WRITE (*,*)
+                    WRITE (*,*) ( CMAT(1,I), I = 1, 3 )
+                    WRITE (*,*) ( CMAT(2,I), I = 1, 3 )
+                    WRITE (*,*) ( CMAT(3,I), I = 1, 3 )
+                    WRITE (*,*)
+
+                 END IF
+
+              END IF
+
+              CALL <a href="daffna.html">DAFFNA</a> ( SFND )
+
+           END DO
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) No checking is done on the input RECORD.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     Y.K. Zaiko     (JPL)
+     B.V. Semenov   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.2, 18-APR-2014 (BVS)
+
+        Minor header edits.
+
+    SPICELIB Version 1.0.1, 22-AUG-2006 (EDW)
+
+        Replaced references to <a href="ldpool.html">LDPOOL</a> with references 
+        to <a href="furnsh.html">FURNSH</a>.
+
+    SPICELIB Version 1.0.0, 05-MAY-1999 (YKZ) (BVS)</PRE>
+<h4>Link to routine CKE04 source file <a href='../../../src/spicelib/cke04.f'>cke04.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:55 2014</pre>
+
+</body>
+</html>
+

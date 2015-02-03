@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>gfrepu</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>gfrepu</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+   GFREPU ( GF, progress report update )
+ 
+      ENTRY GFREPU ( IVBEG, IVEND, TIME )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     This entry point tells the progress reporting system 
+     how far a search has progressed.
+ 
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/gf.html">GF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     SEARCH
+     UTILITY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     DOUBLE PRECISION      IVBEG
+     DOUBLE PRECISION      IVEND
+     DOUBLE PRECISION      TIME
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     IVBEG      I   Start time of work interval.
+     IVEND      I   End time of work interval.
+     TIME       I   Current time being examined in the search process
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     IVBEG,
+     IVEND    are the bounds of an interval that is contained in some
+              interval belonging to the confinement window. The
+              confinement window is associated with some root finding
+              activity. It is used to determine how much total time is
+              being searched in order to find the events of interest.
+
+              In order for a meaningful progress report to be
+              displayed, IVBEG and IVEND must satisfy the following
+              constraints:
+
+                 - IVBEG must be less than or equal to IVEND.
+
+                 - The interval [ IVBEG, IVEND ] must be contained in
+                   some interval of the confinement window. It can be
+                   a proper subset of the containing interval; that
+                   is, it can be smaller than the interval of the
+                   confinement window that contains it.
+
+                 - Over a search pass, the sum of the differences
+
+                      IVEND - IVBEG
+
+                   for all calls to this routine made during the pass
+                   must equal the measure of the confinement window.
+
+
+     TIME     is the current time reached in the search for an event.
+              TIME must lie in the interval 
+
+                 IVBEG : IVEND
+
+              inclusive. The input values of TIME for a given interval
+              need not form an increasing sequence.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None. This routine does perform console I/O when progress
+     reporting is enabled.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If IVBEG and IVEND are in decreasing order, the error
+        SPICE(BADENDPOINTS) is signaled.
+
+     2) If TIME is not in the closed interval [IVBEG, IVEND], the
+        error SPICE(VALUEOUTOFRANGE) is signaled.
+
+     3) Any I/O errors resulting from writing to standard output
+        will be diagnosed by routines in the call tree of this
+        routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This entry point is used to indicate the current progress of a
+     search. Using information recorded through the initialization
+     entry point of this routine, the progress reporting system
+     determines how much work has been completed and whether or not to
+     report it on the users screen.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     See the header of the umbrella routine <a href="gfrprt.html">GFRPRT</a>.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     This routine has no way of enforcing that the input values of
+     IVBEG and IVEND are compatible with the input window passed to
+     <a href="gfrepi.html">GFREPI</a>. Callers of this routine are responsible for ensuring
+     that this requirement is obeyed.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     L.S. Elson     (JPL)
+     W.L. Taber     (JPL)
+     I.M. Underwood (JPL)
+     B.V. Semenov   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1 10-FEB-2014 (BVS)
+
+        Added declarations of IVBEG and IVEND to the Declarations
+        section.
+
+    SPICELIB Version 1.0.0 21-FEB-2009 (NJB) (LSE) (WLT) (IMU)</PRE>
+<h4>Link to routine GFREPU source file <a href='../../../src/spicelib/gfrprt.f'>gfrprt.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:25 2014</pre>
+
+</body>
+</html>
+

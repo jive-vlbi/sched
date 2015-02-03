@@ -1,0 +1,346 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>et2utc</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>et2utc</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      ET2UTC ( Ephemeris Time to UTC )
+ 
+      SUBROUTINE ET2UTC ( ET, FORMAT, PREC, UTCSTR )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+      Convert an input time from ephemeris seconds past J2000
+      to Calendar, Day-of-Year, or Julian Date format, UTC.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+      <a href="../req/time.html">TIME</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+      TIME
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+      DOUBLE PRECISION      ET
+      CHARACTER*(*)         FORMAT
+      INTEGER               PREC
+      CHARACTER*(*)         UTCSTR
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      ET         I   Epoch, given in ephemeris seconds past J2000.
+      FORMAT     I   Format of output epoch.
+      PREC       I   Digits of precision in fractional seconds or days.
+      UTCSTR     O   Output time string, UTC.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      ET          is the input epoch, ephemeris seconds past J2000.
+
+      FORMAT      is the format of the output time string. It may be
+                  any of the following:
+
+
+                    'C'      Calendar format, UTC.
+
+                    'D'      Day-of-Year format, UTC.
+
+                    'J'      Julian Date format, UTC.
+
+                    'ISOC'   ISO Calendar format, UTC.
+
+                    'ISOD'   ISO Day-of-Year format, UTC.
+
+      PREC        is the number of digits of precision to which
+                  fractional seconds (for Calendar and Day-of-Year
+                  formats) or days (for Julian Date format) are to
+                  be computed. If PREC is zero or smaller, no decimal
+                  point is appended to the output string. If PREC is
+                  greater than 14, it is treated as 14.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+      UTCSTR      is the output time string equivalent to the input
+                  epoch, in the specified format.  Some examples are
+                  shown below.
+
+                        'C'      '1986 APR 12 16:31:09.814'
+                        'D'      '1986-102 // 16:31:12.814'
+                        'J'      'JD 2446533.18834276'
+                        'ISOC'   '1987-04-12T16:31:12.814'
+                        'ISOD'   '1987-102T16:31:12.814'
+
+                  If an error occurs, UTCSTR is not changed.
+
+                  Fractional seconds, or for Julian dates, fractional
+                  days, are rounded to the precision level specified
+                  by the input argument PREC.
+
+                  UTCSTR should be declared to be at least
+                  20 + PREC characters in length to ensure
+                  sufficient room to hold calendar strings
+                  for modern epochs.  For epochs prior to
+                  1000 A.D. at least 24 + PREC characters in
+                  length are required to hold the output
+                  calendar string.
+
+                  For epochs prior to 1000 A.D. Jan 1 calendar
+                  and day of year formats are returned with the
+                  era (A.D. or B.C.) attached to the year.  For
+                  example
+
+                       '877 A.D. MAR 17 13:29:11.829'
+                       '471 B.C. Jan 01 12:00:00.000'
+                       '471 B.C. 001 // 12:00:00.000'
+
+                  ISO formats do not support the inclusion of an era.
+                  For years prior to 1 A.D. an error will be signaled
+                  if ISO format has been requested.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the format for the output string is not recognized, the
+        error SPICE(INVALIDTIMEFORMAT) is signaled.
+
+     2) If PREC is less than or equal to zero, it is treated as
+        zero.  If PREC is greater than 14, it is treated as 14.
+
+     3) If one of the ISO formats is specified (ISOC or ISOD) but
+        the year corresponding to ET is prior to 1  A.D. on the
+        Gregorian Calendar, the error SPICE(YEAROUTOFRANGE) will
+        be signaled.
+
+     4) Epochs prior to 15 Oct, 1582 on the Gregorian calendar (the
+        calendar commonly used in western societies) are returned in
+        the &quot;extended&quot; Gregorian Calendar.  To convert epochs to the
+        Julian calendar see the entry point <a href="gr2jul.html">GR2JUL</a> in the routine
+        <a href="jul2gr.html">JUL2GR</a>.
+
+     5) This routine does not attempt to account for variations
+        in the length of the second that were in effect prior
+        to Jan 1, 1972.  For days prior to that date, we assume
+        there are exactly 86400 ephemeris seconds. Consequently
+        the UTC Gregorian calendar strings produced for epochs
+        prior to Jan 1, 1972 differ from the corresponding
+        TDB calendar strings by approximately 41.18 seconds.
+        (TDB Gregorian calendar strings are produced by the
+        routine <a href="etcal.html">ETCAL</a>).
+
+     6) If a leapseconds kernel has not been loaded prior to calling
+        this routine, an error will be signaled by a routine in the
+        call tree of this routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine handles the task of converting a double precision
+     representation of an epoch to a character string suitable for
+     human consumption.  The more general routine <a href="timout.html">TIMOUT</a> may also be
+     used to convert ET to time strings.
+ 
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Let the value of ET be -527644192.5403653 ephemeris seconds
+     past J2000. Assuming that the nominal values in the kernel pool
+     have not been altered, the following calls
+
+        CALL <b>ET2UTC</b> ( ET, 'C', 0, UTCSTR )
+        CALL <b>ET2UTC</b> ( ET, 'C', 3, UTCSTR )
+        CALL <b>ET2UTC</b> ( ET, 'D', 5, UTCSTR )
+        CALL <b>ET2UTC</b> ( ET, 'J', 7, UTCSTR )
+
+     produce the following output strings
+
+        '1983 APR 13 12:09:14'
+        '1983 APR 13 12:09:14.274'
+        '1983-103 // 12:09:14.27400'
+        'JD 2445438.0064152'
+
+     respectively.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     Jesperson and Fitz-Randolph, From Sundials to Atomic Clocks,
+     Dover Publications, New York, 1977.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     C.H. Acton      (JPL)
+     N.J. Bachman    (JPL)
+     B.V. Semenov    (JPL)
+     W.L. Taber      (JPL)
+     W.M. Owen       (JPL)
+     I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 3.0.4, 06-APR-2009 (NJB)
+
+        Header was updated to state that fractional
+        seconds or days are rounded in the output
+        string.
+
+    SPICELIB Version 3.0.3, 28-JAN-2008 (BVS)
+
+        Fixed typo in the ISOC example string in Detailed_Output.
+
+    SPICELIB Version 3.0.2, 29-JUL-2003 (NJB) (CHA)
+
+        Various header changes were made to improve clarity and 
+        more fully explain the routine's functionality.
+
+    SPICELIB Version 3.0.1, 14-SEP-2000 (EDW)
+
+        Added <a href="failed.html">FAILED</a> check after <a href="ttrans.html">TTRANS</a> call during the calendar &quot;C&quot;
+        format processing to catch failure signal from <a href="ttrans.html">TTRANS</a>. 
+        Lack of this check caused CSPICE based programs to core dump
+        if <b>ET2UTC</b> was called without a leapseconds kernel while
+        error action was set to RETURN.
+
+    SPICELIB Version 3.0.0, 13-MAR-1996 (WLT)
+
+        The construction of the numerical components of the
+        output string are now handled by the SPICELIB routine
+        <a href="ttrans.html">TTRANS</a>.
+
+        In addition the routine now supports the ISO formats and
+        the era associated with an epoch (B.C. or A.D.) in non
+        ISO formats.
+
+    SPICELIB Version 2.1.0, 11-JUL-1995 (KRG)
+
+        Removed some potential compile warnings that could be caused
+        by truncation of double precision values to integers through
+        a direct assignment. The direct assignment has been replaced
+        with a call to the intrinsic function IDINT.
+
+    SPICELIB Version 2.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 2.0.0, 21-MAR-1991 (NJB) (JML)
+
+        Two bugs involving rounding errors were corrected.  One of
+        the bugs caused conversion errors of magnitude as large as
+        1 second.  See $Revisions for details.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) (IMU)</PRE>
+<h4>Link to routine ET2UTC source file <a href='../../../src/spicelib/et2utc.f'>et2utc.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:20 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>irftrn</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>irftrn</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      IRFTRN ( Inertial reference frame transformation )
+ 
+      SUBROUTINE IRFTRN ( REFA, REFB, ROTAB )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Return the matrix that transforms vectors from one specified
+     inertial reference frame to another.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/spk.html">SPK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONVERSION
+     COORDINATES
+     FRAMES
+     MATRIX
+     ROTATION
+     TRANSFORMATION
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)         REFA
+      CHARACTER*(*)         REFB
+      DOUBLE PRECISION      ROTAB ( 3, 3 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     REFA       I   Name of reference frame to transform vectors FROM.
+     REFB       I   Name of reference frame to transform vectors TO.
+     ROTAB      O   REFA-to-REFB transformation matrix.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     REFA,
+     REFB           Names of two inertial reference frames.  Any names
+                    accepted by the routine <a href="irfnum.html">IRFNUM</a> may be used.  See
+                    $Particulars for a list of some of the more
+                    commonly used inertial reference frame names.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     ROTAB          is a rotation matrix that transforms the
+                    coordinates of a vector V relative to the
+                    reference frame specified by REFA to the
+                    coordinates of V relative to the reference frame
+                    specified by REFB.  The transformation is carried
+                    out by the matrix multiplication
+
+                       V = ROTAB * V.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If either of the input reference frame names is invalid, the
+         error will be diagnosed by routines called by this routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Normally applications should call the more general, higher level 
+     routine <a href="pxform.html">PXFORM</a> instead of this routine.
+     
+     This routine is a macro that replaces the code fragment
+
+        CALL <a href="irfnum.html">IRFNUM</a> ( REFA,  CODEA        )
+        CALL <a href="irfnum.html">IRFNUM</a> ( REFB,  CODEB        )
+        CALL <a href="irfrot.html">IRFROT</a> ( CODEA, CODEB, ROTAB )
+
+
+     Among the reference frame names accepted by <a href="irfnum.html">IRFNUM</a> are:
+
+        'J2000'
+        'B1950'
+        'FK4'
+        'DE-96'
+        'DE-102'
+        'DE-108'
+        'DE-111'
+        'DE-114'
+        'DE-118'
+        'DE-122'
+        'DE-125'
+        'DE-130'
+        'DE-200'
+        'DE-202'
+        'GALACTIC'
+
+     See the SPICELIB routine GHGIRF for details.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Transform a vector V1950 from the B1950 to the J2000 
+         reference frame.
+
+            C
+            C     Ask <b>IRFTRN</b> for the matrix that transforms vectors
+            C     from the B1950 to the J2000 reference frame.
+            C
+                  CALL <b>IRFTRN</b> ( 'B1950', 'J2000', TRANS )
+
+            C
+            C     Now transform V1950 to the J2000 reference frame.
+            C
+                  CALL <a href="mxv.html">MXV</a> ( TRANS, V1950, V2000 )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.2, 28-SEP-2004 (NJB)
+
+        Corrected comment in code example in header.  Made other minor
+        updates to header.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 30-AUG-1991 (NJB)</PRE>
+<h4>Link to routine IRFTRN source file <a href='../../../src/spicelib/irftrn.f'>irftrn.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:30 2014</pre>
+
+</body>
+</html>
+

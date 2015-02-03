@@ -1,0 +1,1825 @@
+C$Program     SPKMERGE
+C
+      PROGRAM SPKMERGE
+ 
+      IMPLICIT NONE
+C
+C$ Abstract
+C
+C     SPKMERGE creates new SPK files by merging entire or subsets of
+C     one or more existing SPK files.
+C
+C$ Disclaimer
+C
+C     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
+C     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
+C     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
+C     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
+C     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
+C     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
+C     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
+C     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
+C     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
+C     SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
+C
+C     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
+C     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
+C     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+C     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
+C     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
+C     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
+C
+C     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
+C     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
+C     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
+C     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
+C
+C$ Required_Reading
+C
+C     SPKMERGE User's Guide
+C
+C$ Keywords
+C
+C     EPHEMERIS
+C
+C$ Input
+C
+C     SPKMERGE requires the name of a command file. The file name can
+C     be entered on the command line, or entered in response to a
+C     prompt.
+C
+C     Refer to the SPKMERGE User's Guide for information on creating the
+C     command file.
+C
+C$ Particulars
+C
+C     Refer to the SPKMERGE User's Guide.
+C
+C$ Examples
+C
+C     Refer to the SPKMERGE User's Guide.
+C
+C$ Restrictions
+C
+C     None.
+C
+C$ Literature_References
+C
+C     None.
+C
+C$ Author_and_Institution
+C
+C     M.J. Spencer   (JPL)
+C
+C$ Version
+C
+C-    SPICE Toolkit Version 3.4.0, 17-JAN-2014 (BVS)
+C
+C        Increased the following parameters:
+C
+C           MAXBOD -- from 1000 to 10000
+C
+C           MAXSYM -- from 500 to 6000
+C
+C           MAXVAL -- from 500 to 6000
+C
+C           WINSIZ -- from 4000 to MAXBOD * 4
+C
+C           WNSSIZ -- from 6000 to MAXBOD * 6
+C
+C           VALLEN -- from 200 to 300
+C
+C-    SPICE Toolkit Version 3.3.0, 02-NOV-2006 (BVS)
+C
+C        Replaced LDPOOL with FURNSH.
+C
+C-    SPICE Toolkit Version 3.2.1, 03-NOV-2000 (EDW)
+C
+C        Added a BYEBYE( 'SUCCESS' ) call at program's end.
+C
+C-    Spice Toolkit Version 3.2.0 18-NOV-1999 (FST)
+C
+C        The source code documentation for SPKMERGE has been greatly
+C        enhanced.  The WORK array is now properly initialized, which
+C        prevents the program from looping infinitely in some cases.
+C        Integer parameters have been defined to improve the ease of
+C        interpreting the values assigned to the WORK array.
+C
+C-    Spice Toolkit Version 3.1.0 10-NOV-1998 (FST)
+C
+C        The call to DAFOPN was replaced with SPKOPN to set the
+C        ID_WORD to 'DAF/SPK ' as opposed to the ambiguous 'NAIF/DAF'.
+C        The calls to UTC2ET were replaced with STR2ET to allow a
+C        more flexible number of time string inputs. TDB (ET) time is
+C        now an acceptable input.
+C
+C-    Spice Toolkit Version 3.0.0 25-SEP-1997 (WLT)
+C
+C         The call to WNFLTD was commented out so that small
+C         segments are not exclude from the merge operation.
+C
+C-    Spice Toolkit Version 2.1.0 09-JAN-1997 (WLT)
+C
+C         Replaced calls to DPFMT_1 to DPFMT.
+C
+C-    Spice Toolkit Version 2.0.0 30-MAY-1996 (WLT)
+C
+C         Writes to logical units were replaced by calls to
+C         WRITLN so as to make the program more portable.
+C
+C-    Beta Version 1.2.0, 12-JAN-1995 (MJS)
+C
+C       Fixed the filter of redundant data. Last version incorrectly
+C       stored the previous data for a body in the WIN symbol table.
+C
+C       Changed line
+C
+C           CALL SYPUTD (BODCH,  SEGWIN(1), N,
+C          .             WINSYM, WINPTR,    WINVAL)
+C
+C       to
+C
+C           CALL SYPUTD (BODCH,  SEGWIN(1), CARDD(SEGWIN),
+C          .             WINSYM, WINPTR,    WINVAL)
+C
+C-    Beta Version 1.1.0, 21-OCT-1994 (MJS)
+C
+C       This version summarizes bodies correctly in the log file.
+C       Previously, non-consecutive bodies in the BODY array that have
+C       identical windows of coverage were not shown correctly.
+C
+C-    Beta Version 1.0.0, 29-JUN-1994 (MJS)
+C
+C-&
+ 
+C
+C     SPICELIB functions
+C
+      DOUBLE PRECISION    DPMAX
+      DOUBLE PRECISION    DPMIN
+      INTEGER             CARDD
+      INTEGER             ISRCHI
+      INTEGER             RTRIM
+ 
+C
+C     Other functions
+C
+      INTEGER             SYMLEN
+      PARAMETER          (SYMLEN = 100)
+ 
+      CHARACTER*(SYMLEN)  CRTPTR
+ 
+C
+C     Local parameters
+C
+ 
+C
+C     The command file comment that indicates the start
+C     of SPKMERGE commands.
+C
+      CHARACTER*(*)       BEGMKR
+      PARAMETER          (BEGMKR = '; BEGIN SPKMERGE COMMANDS')
+ 
+C
+C     The command file keyword that indicates the UTC or TDB
+C     time interval start.
+C
+      CHARACTER*(*)       BEGNAM
+      PARAMETER          (BEGNAM = 'BEGIN_TIME')
+ 
+C
+C     The command file keyword that indicates the ID codes for
+C     the SPK bodies of interest.
+C
+      CHARACTER*(*)       BODNAM
+      PARAMETER          (BODNAM = 'BODIES')
+ 
+C
+C     The command file keyword that instructs SPKMERGE to include
+C     the comments from the listed source SPK.
+C
+      CHARACTER*(*)       CMTNAM
+      PARAMETER          (CMTNAM = 'INCLUDE_COMMENTS')
+ 
+C
+C     The command file comment that indicates the end of the
+C     SPKMERGE commands.
+C
+      CHARACTER*(*)       ENDMKR
+      PARAMETER          (ENDMKR = '; END SPKMERGE COMMANDS')
+ 
+C
+C     The command file keyword that indicates the UTC or TDB
+C     time interval stop.
+C
+      CHARACTER*(*)       ENDNAM
+      PARAMETER          (ENDNAM = 'END_TIME')
+ 
+C
+C     The command file keyword that indicates the name of an ASCII
+C     text file to include as comments in the new merged SPK.
+C
+      CHARACTER*(*)       INCNAM
+      PARAMETER          (INCNAM = 'INCLUDE_TEXT_FILE')
+ 
+C
+C     The command file keyword that instructs SPKMERGE to produce a
+C     log file.
+C
+      CHARACTER*(*)       LOGNAM
+      PARAMETER          (LOGNAM = 'LOG_FILE')
+ 
+C
+C     The command file keyword that indicates the name of the
+C     leapseconds kernel to load.
+C
+      CHARACTER*(*)       LSKNAM
+      PARAMETER          (LSKNAM = 'LEAPSECONDS_KERNEL')
+ 
+C
+C     The command file keyword that indicates the name of the
+C     SPK file to create.
+C
+      CHARACTER*(*)       SPKNAM
+      PARAMETER          (SPKNAM = 'SPK_KERNEL')
+ 
+C
+C     The command file keyword that indicates the name of a
+C     source SPK file to be read.
+C
+      CHARACTER*(*)       SRCNAM
+      PARAMETER          (SRCNAM = 'SOURCE_SPK_KERNEL')
+ 
+C
+C     SPKMERGE Version.
+C
+      CHARACTER*(*)       VER
+      PARAMETER          (VER    = '3.4')
+ 
+C
+C     The value of the WORK array that indicates that data for the
+C     body ID code stored in the parallel array BODY has been merged
+C     in from the current source SPK.
+C
+      INTEGER             ISUSED
+      PARAMETER          (ISUSED   = 0)
+ 
+C
+C     Cell parameter.
+C
+      INTEGER             LBCELL
+      PARAMETER          (LBCELL = -5)
+ 
+C
+C     The maximum number of bodies that SPKMERGE is capable of
+C     processing.
+C
+      INTEGER             MAXBOD
+      PARAMETER          (MAXBOD = 10000)
+ 
+C
+C     The maximum number of entries in the command file symbol table.
+C
+      INTEGER             MAXSYM
+      PARAMETER          (MAXSYM = 6000)
+ 
+C
+C     The maximum number of values in the command file symbol table.
+C
+      INTEGER             MAXVAL
+      PARAMETER          (MAXVAL = 6000)
+ 
+C
+C     The number of double precision components in the SPK segment
+C     descriptor.
+C
+      INTEGER             ND
+      PARAMETER          (ND     = 2)
+ 
+C
+C     The number of integer components in the SPK segment descriptor.
+C
+      INTEGER             NI
+      PARAMETER          (NI     = 6)
+ 
+C
+C     The value of the WORK array that indicates that the body ID code
+C     stored in the parallel array BODY is to be placed into the log
+C     file at the next write.
+C
+      INTEGER             TOLOG
+      PARAMETER          (TOLOG  = 1)
+ 
+C
+C     The value of the WORK array that indicates that data for the
+C     body ID code stored in the parallel array BODY was not taken
+C     from this source SPK file.
+C
+      INTEGER             UNUSED
+      PARAMETER          (UNUSED = -1)
+ 
+C
+C     The maximum length of character strings that are fetched from the
+C     command file symbol table.
+C
+      INTEGER             VALLEN
+      PARAMETER          (VALLEN = 300)
+ 
+C
+C     Twice the maximum number of intervals that may be stored in the
+C     window data structures. This number should be at least:
+C     (2 * MAXBOD).
+C
+      INTEGER             WINSIZ
+      PARAMETER          (WINSIZ = MAXBOD * 4)
+ 
+C
+C     The maximum number of data elements that may be stored in the
+C     symbol tables that store window data structures for each body ID
+C     code.  This number should be at least: (6 * MAXBOD).
+C
+      INTEGER             WNSSIZ
+      PARAMETER          (WNSSIZ = MAXBOD * 6)
+
+C
+C     Log file line lengths. Consistent with LINLEN in RDCMD and 
+C     CPARSE_2.
+C
+      INTEGER              LINLEN
+      PARAMETER           (LINLEN = 350)
+
+C
+C     Local variables
+C
+ 
+C
+C     Character string used to hold the root of a symbol in the command
+C     file symbol table.
+C
+      CHARACTER*(SYMLEN)  BEGSYM
+ 
+C
+C     This string stores the body ID codes converted from integers to
+C     string.  These are then used as symbols in the LOC and WIN symbol
+C     table.
+C
+      CHARACTER*(16)      BODCH
+ 
+C
+C     The symbol component of the command file symbol table.
+C     The command file symbol table contains the contents of
+C     the successfully parsed SPKMERGE command file.  The
+C     symbols are constructed in pieces separated by '~''s to
+C     replicate the layered structure of the SPKMERGE command file.
+C
+      CHARACTER*(SYMLEN)  CMDSYM (LBCELL: MAXSYM)
+ 
+C
+C     The value component of the command file symbol table. See
+C     CMDSYM for an explanation of the command file symbol table.
+C
+      CHARACTER*(VALLEN)  CMDVAL (LBCELL: MAXVAL)
+ 
+C
+C     The string used to collect any error messages returned from
+C     NPARSI.
+C
+      CHARACTER*(80)      ERR
+ 
+C
+C     Miscellaneous line of text for storing the command line, etc.
+C
+      CHARACTER*(LINLEN)  LINE
+ 
+C
+C     The symbol component of the LOC symbol table.  The LOC symbol
+C     table stores the window data structures for each body ID code
+C     that is merged into the new SPK file from a particular source SPK.
+C     Only the interval pairs from the window for each body ID code are
+C     actually stored in the symbol table.  The cardinality is easily
+C     recovered with the retrieve routine, SYGETD.
+C
+      CHARACTER*(16)      LOCSYM (LBCELL: MAXBOD)
+ 
+C
+C     Miscellaneous character string that stores the names of source SPK
+C     files, log files, etc.
+C
+      CHARACTER*(VALLEN)  NAME
+ 
+C
+C     The character string used to store the name of an SPK segment.
+C
+      CHARACTER*(40)      SEGNAM
+ 
+C
+C     Character strings used to store symbols constructed to retrieve
+C     values from the command file symbol table.
+C
+      CHARACTER*(SYMLEN)  SRCSYM
+      CHARACTER*(SYMLEN)  SYMBOL
+ 
+C
+C     Miscellaneous line of text for storing the lines headed for
+C     STDOUT.
+C
+      CHARACTER*(LINLEN)  TEXT
+ 
+C
+C     String that holds the toolkit version.
+C
+      CHARACTER*(8)       TKV
+ 
+C
+C     Character string that stores the system time stamp.
+C
+      CHARACTER*(22)      TSTAMP
+ 
+C
+C     An array of characters that is used to store values retrieved
+C     from the command file symbol table.
+C
+      CHARACTER*(VALLEN)  VAL    (MAXVAL)
+ 
+C
+C     Single string used to store individual results retrieved from
+C     the command file symbol table.
+C
+      CHARACTER*(VALLEN)  VALUE
+ 
+C
+C     The symbol component of the WIN symbol table. The WIN symbol
+C     table stores the window data structures for each body ID code
+C     that is merged into the new SPK file. Only the interval pairs
+C     from the window for each body ID code are actually stored in
+C     the symbol table.  The cardinality is easily recovered with
+C     the retrieve routine, SYGETD.
+C
+      CHARACTER*(16)      WINSYM (LBCELL: MAXBOD)
+ 
+C
+C     An instance of a WINDOW used to hold the time coverage of a
+C     particular body.
+C
+      DOUBLE PRECISION    ADDWIN (LBCELL: WINSIZ)
+ 
+C
+C     The requested start time for a merge interval.
+C
+      DOUBLE PRECISION    BEGTIM
+ 
+C
+C     The double precision components of an SPK segment descriptor.
+C
+      DOUBLE PRECISION    DC     (ND)
+ 
+C
+C     The final time for a requested merge interval.
+C
+      DOUBLE PRECISION    ENDTIM
+ 
+C
+C     The WINDOW that holds the global requested merge time intervals.
+C
+      DOUBLE PRECISION    GWIND  (LBCELL: WINSIZ)
+ 
+C
+C     The value component of the LOC symbol table. See LOCSYM for a
+C     complete description of the LOC symbol table.
+C
+      DOUBLE PRECISION    LOCVAL (LBCELL: WNSSIZ)
+ 
+C
+C     An instance of a WINDOW that is used to hold the time coverage
+C     of a particular body.
+C
+      DOUBLE PRECISION    LOCWIN (LBCELL: WINSIZ)
+ 
+C
+C     A packed DAF segment summary descriptor.
+C
+      DOUBLE PRECISION    SEGSUM ((NI+1)/2 + ND )
+ 
+C
+C     Another instance of a WINDOW used to hold the time coverage of a
+C     particular body.
+C
+      DOUBLE PRECISION    SEGWIN (LBCELL: WINSIZ)
+ 
+C
+C     Yet another instance of a WINDOW used to hold the time coverage of
+C     a particular body.
+C
+      DOUBLE PRECISION    TMPWIN (LBCELL: WINSIZ)
+ 
+C
+C     Time vector that holds the results of the call to CPUTIM.
+C
+      DOUBLE PRECISION    TVEC   (6)
+ 
+C
+C     A WINDOW data structure used to hold the requested requested
+C     intervals of coverage for a particular source SPK.  This is the
+C     local analogue of GWIND.
+C
+      DOUBLE PRECISION    WIND   (LBCELL: WINSIZ)
+ 
+C
+C     The value component of the WIN symbol table. See WINSYM for a
+C     complete description of the WIN symbol table.
+C
+      DOUBLE PRECISION    WINVAL (LBCELL: WNSSIZ)
+ 
+C
+C     Body ID code.
+C
+      INTEGER             BOD
+ 
+C
+C     Integer array used to hold the body ID codes of bodies that are to
+C     be considered for merging at the local level.
+C
+      INTEGER             BODY   (MAXBOD)
+ 
+C
+C     The pointer component of the command file symbol table. See CMDSYM
+C     for a detailed description of this symbol table.
+C
+      INTEGER             CMDPTR (LBCELL: MAXSYM)
+ 
+C
+C     Logical unit for the comment file.
+C
+      INTEGER             CMTUNT
+ 
+C
+C     Integer array used to hold the body ID codes of bodies that are to
+C     be considered for merging at the global level.
+C
+      INTEGER             GBODY  (MAXBOD)
+ 
+      INTEGER             I
+ 
+C
+C     Integer components of a SPK segment descriptor.
+C
+      INTEGER             IC     (NI)
+ 
+      INTEGER             J
+      INTEGER             K
+ 
+C
+C     The pointer component of the LOC symbol table.  See LOCSYM for a
+C     detailed description of this symbol table.
+C
+      INTEGER             LOCPTR (LBCELL: MAXBOD)
+ 
+C
+C     Logical unit for the log file.
+C
+      INTEGER             LOGUNT
+ 
+      INTEGER             M
+      INTEGER             N
+ 
+C
+C     The number of bodies considered for merging for the current source
+C     SPK.
+C
+      INTEGER             NBODY
+ 
+C
+C     SPK file handle.
+C
+      INTEGER             NEWHAN
+ 
+C
+C     Number of bodies to be merged, listed at the global level.
+C
+      INTEGER             NGBODY
+ 
+C
+C     SPK files to create counter.
+C
+      INTEGER             NSPK
+ 
+C
+C     SPK source file counter.
+C
+      INTEGER             NSRC
+ 
+      INTEGER             NVAL
+ 
+C
+C     SPK file handle.
+C
+      INTEGER             OLDHAN
+ 
+C
+C     NPARSI pointer.
+C
+      INTEGER             PNTER
+ 
+      INTEGER             UNIT
+ 
+C
+C     The pointer component to the WIN symbol table. See WINSYM for a
+C     detailed description of this symbol table.
+C
+      INTEGER             WINPTR (LBCELL: MAXBOD)
+ 
+C
+C     The WORK array parallels the BODY array, and indicates the status
+C     of the merge for each body from the current source SPK.
+C     Acceptable values are:
+C
+C        UNUSED - If WORK(I) = UNUSED then the body associated with
+C                 BODY(I) has yet to provide data to the merged SPK
+C                 from the current source SPK.
+C
+C        ISUSED - If WORK(I) = ISUSED then the body associated with
+C                 BODY(I) has contributed data to the merged SPK from
+C                 the current source SPK.
+C
+C        TOLOG  - If WORK(I) = TOLOG then the body associated with
+C                 BODY(I) is about to have it's contributions logged.
+C
+      INTEGER             WORK   (MAXBOD)
+ 
+C
+C     This logical indicates whether or not every body meeting the
+C     time requirements from the current source SPK is to be considered
+C     for inclusion.
+C
+      LOGICAL             ALL
+ 
+C
+C     This logical indicates whether or not comments from the current
+C     source SPK are to be included in the new SPK.  If .TRUE. then
+C     comments from the source SPK are to be included in the new file.
+C
+      LOGICAL             COMMNT
+ 
+C
+C     This logical indicates whether or not the new SPK file contains
+C     any data.  If it happens that none of the source files meet the
+C     requested bodies or time coverages, then DATA will be .FALSE.
+C
+      LOGICAL             DATA
+ 
+ 
+      LOGICAL             FND
+      LOGICAL             LOG
+      LOGICAL             SAME
+ 
+C
+C     Indicates whether or not the current source SPK has contributed
+C     data to the new SPK.
+C
+      LOGICAL             USED
+
+C
+C     Save all.
+C
+      SAVE
+ 
+C
+C     Set error handling mode.
+C
+      CALL TRCOFF
+      CALL ERRACT ('SET', 'ABORT')
+ 
+C
+C     Initialize all cells.
+C
+      CALL SSIZEC (MAXSYM, CMDSYM)
+      CALL SSIZEI (MAXSYM, CMDPTR)
+      CALL SSIZEC (MAXVAL, CMDVAL)
+ 
+      CALL SSIZEC (MAXBOD, WINSYM)
+      CALL SSIZEI (MAXBOD, WINPTR)
+      CALL SSIZED (WNSSIZ, WINVAL)
+ 
+      CALL SSIZEC (MAXBOD, LOCSYM)
+      CALL SSIZEI (MAXBOD, LOCPTR)
+      CALL SSIZED (WNSSIZ, LOCVAL)
+ 
+      CALL SSIZED (WINSIZ, SEGWIN)
+      CALL SSIZED (WINSIZ, ADDWIN)
+      CALL SSIZED (WINSIZ, TMPWIN)
+      CALL SSIZED (WINSIZ, LOCWIN)
+      CALL SSIZED (WINSIZ, WIND  )
+      CALL SSIZED (WINSIZ, GWIND )
+ 
+C
+C     Initialize the WORK array.  Set all the values to UNUSED.
+C
+      DO I = 1, MAXBOD
+ 
+         WORK(I) = UNUSED
+ 
+      END DO
+ 
+C
+C     Get the current time and date. This info will be stored in the log
+C     file.
+C
+C               1234567890123456789012
+      TSTAMP = '    -  -  /  :  :     '
+ 
+      CALL CPUTIM (TVEC)
+ 
+      CALL DPFMT (TVEC(1), 'YYYY',  TSTAMP(1:4)  )
+      CALL DPFMT (TVEC(2), '0M',    TSTAMP(6:7)  )
+      CALL DPFMT (TVEC(3), '0D',    TSTAMP(9:10) )
+      CALL DPFMT (TVEC(4), '0h',    TSTAMP(12:13))
+      CALL DPFMT (TVEC(5), '0m',    TSTAMP(15:16))
+      CALL DPFMT (TVEC(6), '0s.tt', TSTAMP(18:22))
+ 
+      TEXT = 'SPKMERGE -- SPK Merge Tool, Version #, SPICE Toolkit #'
+ 
+      CALL TKVRSN ( 'toolkit', TKV )
+      CALL REPMC  ( TEXT, '#', VER, TEXT )
+      CALL REPMC  ( TEXT, '#', TKV, TEXT )
+ 
+      CALL TOSTDO ( TEXT )
+      CALL TOSTDO ( ' '  )
+ 
+C
+C     Check the command line for the name of the command file.
+C
+      CALL GETCML (LINE)
+ 
+C
+C     If the line is empty, then prompt the user for the name of the
+C     command file to process.
+C
+      IF (LINE .EQ. ' ') THEN
+ 
+         CALL TOSTDO ( 'Enter the name of the command file' )
+         CALL TOSTDO ( ' ' )
+         CALL PROMPT ('> ', LINE)
+         CALL TOSTDO ( ' ' )
+ 
+      END IF
+ 
+C
+C     Parse the command file and store the contents in key/value
+C     pairs in the command symbol table.
+C
+      CALL RDCMD (LINE, CMDSYM, CMDPTR, CMDVAL)
+ 
+C
+C     Fetch the LSK file name from the command file symbol table.
+C
+      CALL SYGETC (LSKNAM, CMDSYM, CMDPTR, CMDVAL, N, VALUE, FND)
+ 
+      IF ( .NOT. FND ) THEN
+ 
+         CALL CHKIN  ( 'SPKMERGE'                                )
+         CALL SETMSG ( 'This error is never supposed to occur. '
+     .   //            'Please contact NAIF.'                    )
+         CALL SIGERR ( 'SPICE(BUG)'                              )
+         CALL CHKOUT ( 'SPKMERGE'                                )
+         CALL BYEBYE ( 'FAILURE'                                 )
+ 
+      END IF
+C
+C     Load the LSK.
+C
+      CALL FURNSH (VALUE)
+ 
+C
+C     Start with the first SPK.
+C
+      NSPK = 0
+ 
+C
+C     Fetch the name of the first SPK to create out of the
+C     command file symbol table.
+C
+      CALL SYGETC (SPKNAM, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+ 
+      IF ( .NOT. FND ) THEN
+ 
+         CALL CHKIN  ( 'SPKMERGE'                                )
+         CALL SETMSG ( 'This error is never supposed to occur. '
+     .   //            'Please contact NAIF.'                    )
+         CALL SIGERR ( 'SPICE(BUG)'                              )
+         CALL CHKOUT ( 'SPKMERGE'                                )
+         CALL BYEBYE ( 'FAILURE'                                 )
+ 
+      END IF
+ 
+C
+C     Loop over the number of SPK files we are to create. Note: We are
+C     using NVAL as a temporary variable, since we will make the same
+C     call to SYGETC at the end of the DO WHILE loop.
+C
+      DO WHILE (NSPK .LT. NVAL)
+ 
+C
+C        Increment the NSPK file counter.
+C
+         NSPK = NSPK + 1
+ 
+C
+C        Open the new file that we are about to create.
+C
+         CALL SPKOPN (VAL(NSPK), 'SPKMERGE', 0, NEWHAN)
+ 
+C
+C        Set the DATA flag to .FALSE. for this new SPK file.
+C        If it remains .FALSE. we will know to warn the user
+C        that the output file contains no data.
+C
+         DATA = .FALSE.
+ 
+C
+C        Let the user know which SPK file we are creating.
+C
+         TEXT = 'Creating ' // VAL(NSPK)(1:RTRIM(VAL(NSPK)))
+         CALL TOSTDO ( TEXT )
+ 
+C
+C        Determine whether or not we are to create a log file.
+C        Build the keyword that should contain the name of the
+C        desired log for this new SPK.
+C
+C
+         SYMBOL = CRTPTR(SPKNAM, NSPK, LOGNAM)
+ 
+C
+C        Retrieve the name of the log file.
+C
+         CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, N, VALUE, FND)
+ 
+C
+C        Check to see whether we actually found the log file key in
+C        the command file symbol table.
+C
+         IF (FND) THEN
+ 
+C
+C           If so, create the new log file.
+C
+            CALL TXTOPN (VALUE, LOGUNT)
+ 
+C
+C           Set LOG to .TRUE. to let us know that we are keeping
+C           a log.  Set NAME to the name of the log file we just
+C           created.
+C
+            LOG  = .TRUE.
+            NAME = VALUE
+ 
+         ELSE
+ 
+C
+C           If the log file wasn't explicitly requested in the command
+C           file, then open a scratch file.  We do this since we will
+C           include the log in the comment region of the new SPK file.
+C
+            CALL TXTOPS (LOGUNT)
+ 
+C
+C           Set LOG to .FALSE. so that we know we're writing to
+C           the scratch file instead.
+C
+            LOG = .FALSE.
+ 
+         END IF
+ 
+C
+C        Put a header on the log file. Include the name of the
+C        SPK file we're creating: VAL(NSPK).
+C
+         LINE = '; $ LOG FILE'
+ 
+         CALL REPMC (LINE, '$', VAL(NSPK), LINE)
+ 
+         CALL WRITLN ( LINE, LOGUNT )
+         CALL WRITLN ( ' ',  LOGUNT )
+ 
+C
+C        Add the time and date of creation.
+C
+         LINE = '; Created $.'
+ 
+         CALL REPMC (LINE, '$', TSTAMP, LINE )
+ 
+         CALL WRITLN ( LINE,   LOGUNT )
+         CALL WRITLN ( ';',    LOGUNT )
+         CALL WRITLN ( BEGMKR, LOGUNT )
+         CALL WRITLN ( ' ',    LOGUNT )
+ 
+C
+C        Retrieve the name of the LSK used in the command file.
+C
+         CALL SYGETC (LSKNAM, CMDSYM, CMDPTR, CMDVAL, N, VALUE, FND)
+ 
+C
+C        Write out the leapseconds file name to the log file.
+C
+         CALL WRDNLN (LSKNAM, VALUE,     1, LOGUNT)
+         CALL WRITLN ( ' ',    LOGUNT )
+ 
+C
+C        Write the name of the SPK file that is being created.
+C
+         CALL WRDNLN (SPKNAM, VAL(NSPK), 1, LOGUNT)
+ 
+C
+C        If we are writing a log file, include its name.
+C
+         IF (LOG) THEN
+            CALL WRDNLN (LOGNAM, NAME, 3, LOGUNT)
+         END IF
+ 
+C
+C        Include files are text files to include into the comment region
+C        of the new SPK file. Build the name of the symbol that contains
+C        all the include files for this SPK file.
+C
+         SYMBOL = CRTPTR(SPKNAM, NSPK, INCNAM)
+ 
+C
+C        Fetch the include file names.
+C
+         CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+ 
+C
+C        If we find some, then write their names in the log file.
+C
+         IF (FND) THEN
+            DO I = 1, NVAL
+               CALL WRDNLN (INCNAM, VAL(I), 3, LOGUNT)
+            END DO
+         END IF
+ 
+C
+C        Open a scratch file for any comments we'll add.
+C
+         CALL TXTOPS (CMTUNT)
+ 
+C
+C        Initialize the WIN symbol table and GWIND, as we are about to
+C        retrieve the global bodies and times requested for this body.
+C
+         CALL SCARDC (0, WINSYM)
+         CALL SCARDI (0, WINPTR)
+         CALL SCARDD (0, WINVAL)
+         CALL SCARDD (0, GWIND )
+ 
+C
+C        Construct the key for this SPK's global BEGIN_TIME value.
+C
+         BEGSYM = CRTPTR(SPKNAM, NSPK, BEGNAM)
+ 
+C
+C        Fetch the global BEGIN_TIME time strings.
+C
+         CALL SYGETC (BEGSYM, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+ 
+C
+C        If values are found, store them in the GWIND window.
+C
+         IF (FND) THEN
+ 
+C
+C           Loop over all the number of values in the BEGIN_TIME
+C           symbol.
+C
+            DO I = 1, NVAL
+ 
+C
+C              Convert the BEGIN_TIME value into ET.
+C
+               CALL STR2ET (VAL(I), BEGTIM)
+ 
+C
+C              Now create the keyword for the companion END_TIME.
+C              Note this is built from the value of I and the preceding
+C              BEGSYM.  So we know we are getting the one and only mate
+C              to BEGTIM.
+C
+               SYMBOL = CRTPTR(BEGSYM, I, ENDNAM)
+ 
+C
+C              Fetch the END_TIME value from the command symbol table.
+C
+               CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, N, VALUE,
+     .                      FND)
+ 
+               IF ( .NOT. FND ) THEN
+ 
+                  CALL CHKIN  ( 'SPKMERGE'                        )
+                  CALL SETMSG ( 'This error is never supposed to '
+     .            //            'occur Please contact NAIF.'      )
+                  CALL SIGERR ( 'SPICE(BUG)'                      )
+                  CALL CHKOUT ( 'SPKMERGE'                        )
+                  CALL BYEBYE ( 'FAILURE'                         )
+ 
+               END IF
+ 
+C
+C              Convert the END_TIME string to ET.
+C
+               CALL STR2ET (VALUE,  ENDTIM)
+ 
+C
+C              Put this interval into the global time window, GWIND.
+C
+               CALL WNINSD (BEGTIM, ENDTIM, GWIND)
+ 
+            END DO
+ 
+C
+C        If there are no values to store in GWIND, then just set the
+C        bounds to DPMIN() and DPMAX(), i.e. collect all allowable ET
+C        times.
+C
+         ELSE
+ 
+            CALL WNINSD (DPMIN(), DPMAX(), GWIND)
+ 
+         END IF
+ 
+C
+C        Now find all the global bodies that are to be merged into
+C        the new file.  First build the keyword for the global bodies
+C        destined for this SPK file.
+C
+         SYMBOL = CRTPTR(SPKNAM, NSPK, BODNAM)
+ 
+C
+C        Fetch the values from the command symbol table.
+C
+         CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, N, VALUE, FND)
+ 
+C
+C        If global bodies are found store them in the GBODY array.
+C
+         IF (FND) THEN
+ 
+C
+C           Parse the bodies character string.
+C
+            CALL LPARSM (VALUE, ', ', MAXBOD, NGBODY, VAL)
+            DO I = 1, NGBODY
+               CALL NPARSI (VAL(I), GBODY(I), ERR, PNTER)
+            END DO
+ 
+C
+C        Otherwise, set NGBODY to 0, to indicate that there are no
+C        global body merge requests.
+C
+         ELSE
+ 
+            NGBODY = 0
+ 
+         END IF
+ 
+C
+C        Start with the first SPK source file.  Build the symbol name
+C        for the source SPKs and fetch their names from the command
+C        symbol table.
+C
+         SRCSYM = CRTPTR (SPKNAM, NSPK, SRCNAM)
+         CALL SYGETC (SRCSYM, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+ 
+         IF ( .NOT. FND ) THEN
+ 
+            CALL CHKIN  ( 'SPKMERGE'                                )
+            CALL SETMSG ( 'This error is never supposed to occur. '
+     .      //            'Please contact NAIF.'                    )
+            CALL SIGERR ( 'SPICE(BUG)'                              )
+            CALL CHKOUT ( 'SPKMERGE'                                )
+            CALL BYEBYE ( 'FAILURE'                                 )
+ 
+         END IF
+ 
+ 
+         NSRC   = 0
+ 
+C
+C        Loop over all the source SPK files.
+C
+         DO WHILE (NSRC .LT. NVAL)
+ 
+C
+C           Increment the NSRC source SPK file counter.
+C
+            NSRC = NSRC + 1
+ 
+C
+C           Store the name of the source file in NAME.
+C
+            NAME = VAL(NSRC)
+ 
+ 
+C
+C           Open the SPK file.
+C
+            CALL DAFOPR (NAME, OLDHAN)
+ 
+C
+C           Initialize USED to .FALSE. If we actually use data from
+C           this source SPK file, then USED will be set to .TRUE.
+C
+            USED = .FALSE.
+ 
+C
+C           Determine the local bodies and times requested for this
+C           source SPK from the command file.  Initialize the LOC symbol
+C           table and the WIND window structure.
+C
+            CALL SCARDC (0, LOCSYM)
+            CALL SCARDI (0, LOCPTR)
+            CALL SCARDD (0, LOCVAL)
+            CALL SCARDD (0, WIND  )
+ 
+C
+C           Start by extracting the local BEGIN_TIME. First build the
+C           keyword to go to the symbol table with.
+C
+            BEGSYM = CRTPTR(SRCSYM, NSRC, BEGNAM)
+ 
+C
+C           Now fetch the values from the command symbol table.
+C
+            CALL SYGETC (BEGSYM, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+ 
+C
+C           If local time windows are specified, then put all of the
+C           intervals into the local time schedule WIND.
+C
+            IF (FND) THEN
+ 
+C
+C              Loop over all the retrieved 'BEGIN_TIME' strings.
+C
+               DO I = 1, NVAL
+ 
+C
+C                 Convert the start time string into ET.
+C
+                  CALL STR2ET (VAL(I), BEGTIM)
+ 
+C
+C                 Find the companion 'END_TIME' value and retrieve it
+C                 from the command file symbol table.
+C
+                  SYMBOL = CRTPTR(BEGSYM, I, ENDNAM)
+                  CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, N, VALUE,
+     .                         FND)
+ 
+                  IF ( .NOT. FND ) THEN
+ 
+                     CALL CHKIN  ( 'SPKMERGE'                        )
+                     CALL SETMSG ( 'This error is never supposed to '
+     .               //            'occur. Please contact NAIF.'     )
+                     CALL SIGERR ( 'SPICE(BUG)'                      )
+                     CALL CHKOUT ( 'SPKMERGE'                        )
+                     CALL BYEBYE ( 'FAILURE'                         )
+ 
+                  END IF
+ 
+C
+C                 Convert the end time string into ET.
+C
+                  CALL STR2ET (VALUE,  ENDTIM)
+ 
+C
+C                 Insert the window into the local window WIND.
+C
+                  CALL WNINSD (BEGTIM, ENDTIM, WIND)
+ 
+               END DO
+ 
+C
+C           If no local time windows were specified use the global
+C           window.
+C
+            ELSE
+ 
+               CALL COPYD  (GWIND,  WIND)
+ 
+            END IF
+ 
+C
+C           Now retrieve the list of local bodies process for this
+C           source SPK file.  First create the keyword to retrieve from
+C           the command file symbol table, then fetch the values.
+C
+            SYMBOL = CRTPTR(SRCSYM, NSRC, BODNAM)
+            CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, N, VALUE, FND)
+ 
+C
+C           If we find values, parse the string and store the ID codes
+C           in the local body array, BODY.  The number of local bodies
+C           to process is stored in the variable NBODY.
+C
+            IF (FND) THEN
+               CALL LPARSM (VALUE, ', ', MAXBOD, NBODY, VAL)
+               DO I = 1, NBODY
+                  CALL NPARSI (VAL(I), BODY(I), ERR, PNTER)
+               END DO
+ 
+C
+C           Otherwise, copy the global body array into the local one.
+C
+            ELSE
+ 
+               CALL MOVEI (GBODY, NGBODY, BODY)
+               NBODY = NGBODY
+ 
+            END IF
+ 
+C
+C           If NBODY is 0, then grab all the bodies in the file
+C           satisfying the time constraints.  Set ALL to .TRUE. to
+C           indicate this state.
+C
+            IF (NBODY .EQ. 0) THEN
+ 
+               ALL = .TRUE.
+ 
+            ELSE
+ 
+               ALL = .FALSE.
+ 
+            END IF
+ 
+C
+C           Loop over all bodies listed and set WORK to UNUSED.
+C
+            DO I = 1, NBODY
+               WORK(I) = UNUSED
+            END DO
+ 
+C
+C           Start from the last segment in the source SPK kernel.
+C           Use the DAF array search routines to locate the
+C           descriptors of interest.
+C
+            CALL DAFBBS (OLDHAN)
+            CALL DAFFPA (FND)
+ 
+C
+C           Loop over all segments in the source file. Note: FND will
+C           be reused in the loop below for other purposes.  The call
+C           to DAFFPA just prior to loop exit will return the proper
+C           value of FND to continue the loop.
+C
+            DO WHILE (FND)
+ 
+C
+C              Initialize the windows we will be using.
+C
+               CALL SCARDD (0, SEGWIN)
+               CALL SCARDD (0, TMPWIN)
+               CALL SCARDD (0, LOCWIN)
+               CALL SCARDD (0, ADDWIN)
+ 
+C
+C              Retrieve the segment name and descriptor. Unpack the
+C              descriptor.
+C
+               CALL DAFGN  (SEGNAM)
+               CALL DAFGS  (SEGSUM)
+               CALL DAFUS  (SEGSUM, ND, NI, DC, IC)
+ 
+C
+C              Put the segment time boundaries into the SEGWIN
+C              schedule.
+C
+               CALL WNINSD (DC(1),  DC(2), SEGWIN)
+ 
+C
+C              Intersect the segment time coverage with the times
+C              stored in the local time window, WIND.  This will
+C              return the desired times to subset from this segment.
+C
+               CALL WNINTD (SEGWIN, WIND,  TMPWIN)
+ 
+C
+C              Copy the results of this intersection back into the
+C              SEGWIN window.
+C
+               CALL COPYD  (TMPWIN, SEGWIN)
+ 
+C
+C              Store the IDCODE for the TARGET from the segment
+C              descriptor in BOD.
+C
+               BOD = IC(1)
+ 
+C
+C              See if BOD is one of the bodies that were requested
+C              for the merge.  Note: If NBODY is 0, this will
+C              immediately return 0.
+C
+               J   = ISRCHI (BOD, NBODY, BODY)
+ 
+C
+C              Now check to see if we are to include this body.
+C              If ALL is .TRUE. or J is something other than 0
+C              then we have to consider including it. Otherwise just
+C              ignore and proceed to the next segment.
+C
+               IF (ALL .OR. J .NE. 0) THEN
+ 
+C
+C                 If ALL is .TRUE. and J is 0, we use start using the
+C                 BODY array to hold values that we have looked at
+C                 already.
+C
+                  IF (ALL .AND. J .EQ. 0) THEN
+ 
+C
+C                    Check to see if the number of bodies we are
+C                    dealing with is greater than the BODY array
+C                    can hold.
+C
+                     IF (NBODY .LT. MAXBOD) THEN
+ 
+C
+C                       Augment NBODY to keep it as an accurate count
+C                       of the number of elements stored in the BODY
+C                       ARRAY.
+C
+                        NBODY   = NBODY + 1
+                        J       = NBODY
+ 
+C
+C                       Store the current body in the BODY array.
+C
+                        BODY(J) = BOD
+ 
+C
+C                    If the number of bodies exceeds MAXBOD, signal an
+C                    error as this is the maximum number of BODIES
+C                    SPKMERGE can process.
+C
+                     ELSE
+ 
+                        CALL CHKIN  ( 'SPKMERGE'                       )
+                        CALL SETMSG ( 'The number of bodies to subset '
+     .                  //            'from source SPK # exceeds #.  '
+     .                  //            'This is the maximum number of '
+     .                  //            'bodies SPKMERGE can handle.'    )
+                        CALL ERRCH  ( '#', NAME                        )
+                        CALL ERRINT ( '#', MAXBOD                      )
+                        CALL SIGERR ( 'SPKMERGE(TOOMANYBODIES)'        )
+                        CALL CHKOUT ( 'SPKMERGE'                       )
+                        CALL BYEBYE ( 'FAILURE'                        )
+ 
+                     END IF
+ 
+                  END IF
+ 
+C
+C                 Convert the body ID code for this segment into
+C                 a string (keyword).
+C
+                  CALL INTSTR (BOD,       BODCH)
+ 
+C
+C                 Retrieve the windows in time that have already
+C                 been written to the new SPK file.
+C
+                  CALL SYGETD (BODCH,     WINSYM, WINPTR, WINVAL, N,
+     .                         TMPWIN(1), FND)
+ 
+C
+C                 Set N to 0, if no windows for this body are found.
+C
+                  IF (.NOT. FND) THEN
+                     N = 0
+                  END IF
+ 
+C
+C                 Initialize the cell size that holds the current
+C                 windows.
+C
+                  CALL SCARDD (N,      TMPWIN)
+ 
+C
+C                 Take the window from the available segment coverage,
+C                 and subtract the times already placed into the SPK
+C                 file. Place the results in ADDWIN.
+C
+                  CALL WNDIFD (SEGWIN, TMPWIN, ADDWIN)
+ 
+C
+C                 In versions of the program prior to version 3.0.0
+C                 the following filter was performed on the ADD
+C                 window.  At the time of the update to 3.0.0 this
+C                 appears to create more problems than it solves.
+C                 Hence the call to WNFLTD is commented out.
+C
+C                        WLT --- Sep 25, 1997
+C
+C                  CALL WNFLTD (1.0D0,  ADDWIN)
+ 
+C
+C                 Determine how many "intervals" we need to include from
+C                 this file.
+C
+                  N = CARDD(ADDWIN)
+ 
+C
+C                 A positive N indicates we need to copy data from this
+C                 segment into the new SPK file.
+C
+                  IF (N .GT. 0) THEN
+ 
+C
+C                    Set USED to TRUE, since we have used data from this
+C                    source file.
+C
+                     USED    = .TRUE.
+ 
+C
+C                    Set WORK(J) to ISUSED to indicate we included
+C                    data for the BODY from this source SPK file.
+C
+                     WORK(J) = ISUSED
+ 
+C
+C                    Add the new segments to the SPK file. Note:
+C                    the loop moves in steps of two to account
+C                    for the way intervals are stored in the ADDWIN
+C                    window.
+C
+                     DO I = 1, N, 2
+                        CALL SPKSUB (OLDHAN,    SEGSUM,      SEGNAM,
+     .                               ADDWIN(I), ADDWIN(I+1), NEWHAN)
+                     END DO
+ 
+C
+C                    Now union the windows TMPWIN (windows already
+C                    present in the new file) and ADDWIN (windows we
+C                    just added to the file).  Store the results in
+C                    SEGWIN.
+C
+                     CALL WNUNID (TMPWIN, ADDWIN,    SEGWIN)
+ 
+C
+C                    Add the results into the symbol table, overwriting
+C                    what was previously present.
+C
+                     CALL SYPUTD (BODCH,  SEGWIN(1), CARDD(SEGWIN),
+     .                            WINSYM, WINPTR,    WINVAL)
+ 
+C
+C                    Fetch the windows from the LOC symbol table related
+C                    to this body.  We do this to keep track of all the
+C                    time coverages of all bodies we pull out of this
+C                    source SPK.
+C
+                     CALL SYGETD (BODCH,     LOCSYM, LOCPTR, LOCVAL, N,
+     .                            LOCWIN(1), FND)
+ 
+C
+C                    If any are found then union the windows just added
+C                    to the SPK with those from the LOC symbol table.
+C
+                     IF (FND) THEN
+ 
+C
+C                       Initialize the cardinality of the LOCWIN
+C                       window.
+C
+                        CALL SCARDD (N,      LOCWIN)
+ 
+C
+C                       Union the contents of LOCWIN with the newly
+C                       added segments windows, ADDWIN.  Store the
+C                       results in TMPWIN.
+C
+                        CALL WNUNID (LOCWIN, ADDWIN, TMPWIN)
+ 
+C
+C                       Copy TMPWIN onto ADDWIN.
+C
+                        CALL COPYD  (TMPWIN, ADDWIN)
+ 
+                     END IF
+ 
+C
+C                    Place the new windows back into the LOC symbol
+C                    table.
+C
+                     CALL SYPUTD (BODCH,  ADDWIN(1), CARDD(ADDWIN),
+     .                            LOCSYM, LOCPTR,    LOCVAL)
+ 
+                  END IF
+ 
+               END IF
+ 
+C
+C              Retrieve the previous segment from this source SPK file.
+C              Note: FND is set back to what the DO WHILE loop exit
+C              condition expects.
+C
+               CALL DAFFPA (FND)
+ 
+            END DO
+ 
+C
+C           Add the name of the source file to the log file if data in
+C           the file was used.
+C
+            IF (USED) THEN
+ 
+C
+C              Set the DATA flag to .TRUE.  This indicates that we added
+C              data to the new SPK file.  If DATA remains .FALSE.  then
+C              we know that no data has been added to the new SPK.
+C
+               DATA   = .TRUE.
+ 
+C
+C              Create the key that determines whether to include
+C              comments from this source SPK file in the newly
+C              created SPK, then fetch the value.
+C
+               SYMBOL = CRTPTR(SRCSYM, NSRC, CMTNAM)
+               CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, N, VALUE,
+     .                      FND)
+ 
+C
+C              Extract the comments if we need to.  Do this only if
+C              the first character of VALUE is 'Y' or 'y'.
+C
+               IF (FND .AND. (VALUE(1:1) .EQ. 'Y' .OR.
+     .                        VALUE(1:1) .EQ. 'y')) THEN
+ 
+C
+C                 Extract the comments and append them to the text
+C                 file at CMTUNT.
+C
+                  CALL SPCEC (OLDHAN, CMTUNT)
+ 
+C
+C                 Set COMMNT to .TRUE. to indicate that we are
+C                 including comments from this source SPK file.
+C
+                  COMMNT = .TRUE.
+ 
+               ELSE
+ 
+C
+C                 Otherwise set COMMNT to .FALSE.
+C
+                  COMMNT = .FALSE.
+ 
+               END IF
+ 
+C
+C              Write the bodies and the times. Summarize them if
+C              possible.
+C
+               I = 1
+ 
+C
+C              Find the index of the first body in the BODY array which
+C              contributed data to the new SPK file.
+C
+               DO WHILE (I .LE. NBODY .AND. WORK(I) .EQ. UNUSED)
+                  I = I + 1
+               END DO
+ 
+C
+C              Loop over the remaining values of I...
+C
+               DO WHILE (I .LE. NBODY)
+ 
+C
+C                 Write the name of the source SPK file to the LOG file.
+C
+                  CALL WRDNLN (SRCNAM, NAME, 3, LOGUNT)
+ 
+C
+C                 Write out whether the comments from this source file
+C                 were included in the output SPK.
+C
+                  IF (COMMNT) THEN
+ 
+                     VALUE = 'YES'
+ 
+                  ELSE
+ 
+                     VALUE = 'NO'
+ 
+                  END IF
+ 
+                  CALL WRDNLN (CMTNAM, VALUE, 5, LOGUNT)
+ 
+C
+C                 Now convert the ID code of the body we are currently
+C                 examining to a string.
+C
+                  CALL INTSTR (BODY(I),   BODCH)
+ 
+C
+C                 Fetch the time windows stored in the LOC symbol
+C                 table for this body.  Place the windows into TMPWIN.
+C
+                  CALL SYGETD (BODCH,     LOCSYM, LOCPTR, LOCVAL, N,
+     .                         TMPWIN(1), FND)
+ 
+C
+C                 Find any other remaining bodies that have the same
+C                 time coverage as this one.
+C
+                  DO J = I, NBODY
+ 
+C
+C                    Only consider the current body if included into the
+C                    new SPK from this source file.
+C
+                     IF (WORK(J) .EQ. ISUSED) THEN
+ 
+C
+C                       Retrieve the time windows associated with the
+C                       current body.  Place them into SEGWIN.
+C
+                        CALL INTSTR (BODY(J), BODCH)
+                        CALL SYGETD (BODCH,   LOCSYM,  LOCPTR, LOCVAL,
+     .                               M,       SEGWIN(1), FND)
+ 
+C
+C                       Now, only consider these two bodies as
+C                       equivalent if they have the same coverage. First
+C                       check to see if the number of windows agree.
+C
+                        IF (M .EQ. N) THEN
+ 
+                           SAME = .TRUE.
+ 
+C
+C                          Now check to see if each entry in the
+C                          windows match.
+C
+                           DO K = 1, N
+                              SAME = SAME .AND. SEGWIN(K) .EQ. TMPWIN(K)
+                           END DO
+ 
+                        ELSE
+ 
+                           SAME = .FALSE.
+ 
+                        END IF
+ 
+C
+C                       If this and the original body have the same
+C                       coverage, then set work of J to 1.
+C
+                        IF (SAME) THEN
+ 
+                           WORK(J) = TOLOG
+ 
+                        END IF
+ 
+                     END IF
+ 
+                  END DO
+ 
+C
+C                 Build up the lines of text for the log file.
+C
+                  VALUE = ' '
+ 
+C
+C                 Build the BODIES line as it will be written to the
+C                 LOG file.
+C
+                  DO J = I, NBODY
+ 
+C
+C                    We need only consider bodies whose WORK value
+C                    is 1.
+C
+                     IF (WORK(J) .EQ. TOLOG) THEN
+ 
+C
+C                       Restore the WORK value back to -1 to indicate we
+C                       finished logging coverage for this body.
+C
+                        WORK(J) = UNUSED
+ 
+                        CALL SUFFIX (     ' #,', 0,       VALUE)
+                        CALL REPMI  (VALUE, '#', BODY(J), VALUE)
+ 
+                     END IF
+ 
+                  END DO
+ 
+C
+C                 Find the end of the BODIES list string.
+C
+                  J = RTRIM(VALUE)
+ 
+C
+C                 Remove the last ',' from the VALUE string.
+C
+                  VALUE(J:J) = ' '
+ 
+C
+C                 Dump the keyword and value to the LOG file.
+C
+                  CALL WRDNLN (BODNAM, VALUE, 5, LOGUNT)
+ 
+C
+C                 Now write all the windows of time included for these
+C                 bodies to the LOG file.  The times stored in the
+C                 LOG are in UTC.
+C
+                  DO J = 1, N, 2
+ 
+                     CALL ET2UTC (TMPWIN(J), 'C', 3, VALUE)
+                     CALL WRDNLN (BEGNAM, VALUE, 5, LOGUNT)
+ 
+                     CALL ET2UTC (TMPWIN(J+1), 'C', 3, VALUE)
+                     CALL WRDNLN (ENDNAM, VALUE, 5, LOGUNT)
+ 
+                  END DO
+ 
+C
+C                 Now find the next body for processing.
+C
+                  DO WHILE (I .LE. NBODY .AND. WORK(I) .EQ. UNUSED)
+ 
+                     I = I + 1
+ 
+                  END DO
+ 
+               END DO
+ 
+            END IF
+ 
+C
+C           Next source SPK file.  Note FND will be restored to the
+C           value it should assume.  Close the last source file to
+C           free up resources.
+C
+            CALL DAFCLS (OLDHAN)
+            CALL SYGETC (SRCSYM, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+ 
+         END DO
+ 
+C
+C        Add the trailing end marker to the log file
+C
+         CALL WRITLN ( ' ',    LOGUNT )
+         CALL WRITLN ( ENDMKR, LOGUNT )
+ 
+C
+C        Add the log file to the comment area.
+C
+         REWIND(LOGUNT)
+         CALL SPCAC (NEWHAN, LOGUNT, ' ', ' ')
+         CLOSE (LOGUNT)
+ 
+C
+C        Add the include files to the comment area.
+C
+         SYMBOL = CRTPTR(SPKNAM, NSPK, INCNAM)
+         CALL SYGETC (SYMBOL, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+         IF (FND) THEN
+            DO I = 1, NVAL
+               CALL TXTOPR (VAL(I), UNIT)
+               CALL SPCAC  (NEWHAN, UNIT, ' ', ' ')
+               CLOSE (UNIT)
+            END DO
+         END IF
+ 
+C
+C        Add any comments to the include file.
+C
+         REWIND (CMTUNT)
+         CALL SPCAC  (NEWHAN, CMTUNT, ' ', ' ')
+         CLOSE  (CMTUNT)
+ 
+C
+C        For this file to be useful, it should have some data.
+C
+         IF (.NOT. DATA) THEN
+            CALL TOSTDO ( 'New SPK file contains no data!' )
+         END IF
+ 
+         CALL TOSTDO ( ' ' )
+ 
+C
+C        Next SPK file.
+C
+         CALL DAFCLS (NEWHAN)
+         CALL SYGETC (SPKNAM, CMDSYM, CMDPTR, CMDVAL, NVAL, VAL, FND)
+ 
+      END DO
+
+      CALL BYEBYE( 'SUCCESS' )
+      END
