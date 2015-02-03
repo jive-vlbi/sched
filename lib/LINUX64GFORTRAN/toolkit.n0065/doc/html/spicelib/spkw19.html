@@ -1,0 +1,472 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spkw19</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spkw19</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SPKW19 ( Write SPK segment, type 19 )
+ 
+      SUBROUTINE SPKW19 ( HANDLE,  BODY,    CENTER,  FRAME,    
+     .                    FIRST,   LAST,    SEGID,   NINTVL,
+     .                    NPKTS,   SUBTPS,  DEGRES,  PACKTS, 
+     .                    EPOCHS,  IVLBDS,  SELLST          )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Write a type 19 segment to an SPK file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/daf.html">DAF</a>
+     <a href="../req/naif_ids.html">NAIF_IDS</a>
+     <a href="../req/spc.html">SPC</a>
+     <a href="../req/spk.html">SPK</a>
+     <a href="../req/time.html">TIME</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     EPHEMERIS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE 
+
+      INCLUDE 'spk19.inc'
+      INCLUDE 'spkrec.inc'
+
+      
+      INTEGER               HANDLE
+      INTEGER               BODY
+      INTEGER               CENTER
+      CHARACTER*(*)         FRAME
+      DOUBLE PRECISION      FIRST
+      DOUBLE PRECISION      LAST
+      CHARACTER*(*)         SEGID
+      INTEGER               NINTVL
+      INTEGER               NPKTS  ( * )
+      INTEGER               SUBTPS ( * )
+      INTEGER               DEGRES ( * )
+      DOUBLE PRECISION      PACKTS ( * )
+      DOUBLE PRECISION      EPOCHS ( * )
+      DOUBLE PRECISION      IVLBDS ( * )
+      LOGICAL               SELLST
+      
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   Handle of an SPK file open for writing.
+     BODY       I   NAIF ID code for an ephemeris object.
+     CENTER     I   NAIF ID code for center of motion of BODY.
+     FRAME      I   Reference frame name.
+     FIRST      I   Start time of interval covered by segment.
+     LAST       I   End time of interval covered by segment.
+     SEGID      I   Segment identifier.
+     NINTVL     I   Number of mini-segments and interpolation 
+                    intervals.
+     NPKTS      I   Array of packet counts of mini-segments.
+     SUBTPS     I   Array of segment subtypes of mini-segments.
+     DEGRES     I   Array of polynomial degrees of mini-segments.
+     PACKTS     I   Array of data packets of mini-segments.
+     EPOCHS     I   Array of epochs of mini-segments.
+     IVLBDS     I   Interpolation interval bounds.
+     SELLST     I   Interval selection flag.
+     MAXDEG     P   Maximum allowed degree of interpolating polynomial.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE         is the handle of an SPK file that has been opened
+                    for writing.
+
+
+     BODY           is the NAIF integer code for an ephemeris object
+                    whose state relative to another body is described
+                    by the segment to be created.
+
+
+     CENTER         is the NAIF integer code for the center of motion
+                    of the object identified by BODY.
+
+
+     FRAME          is the NAIF name for a reference frame
+                    relative to which the state information for BODY
+                    is specified.
+
+     FIRST,
+     LAST           are, respectively, the bounds of the time interval
+                    over which the segment defines the state of BODY.
+
+                    FIRST must be greater than or equal to the first
+                    interpolation interval start time; LAST must be
+                    less than or equal to the last interpolation 
+                    interval stop time. See the description of IVLBDS
+                    below.
+
+
+     SEGID          is the segment identifier. An SPK segment
+                    identifier may contain up to 40 characters.
+
+
+     NINTVL         is the number of interpolation intervals
+                    associated with the input data. The interpolation
+                    intervals are associated with data sets referred
+                    to as &quot;mini-segments.&quot;
+
+                    The input data comprising each mini-segment are:
+            
+                       - a packet count
+                       - a type 19 subtype
+                       - an interpolating polynomial degree
+                       - a sequence of type 19 data packets
+                       - a sequence of packet epochs
+                    
+                    These inputs are described below.
+
+
+     NPKTS          is an array of packet counts. The Ith element of
+                    NPKTS is the packet count of the Ith interpolation
+                    interval/mini-segment.
+
+                    NPKTS has dimension NINTVL.
+
+
+     SUBTPS         is an array of type 19 subtypes. The Ith element
+                    of SUBTPS is the subtype of the packets associated
+                    with the Ith interpolation interval/mini-segment.
+
+                    SUBTPS has dimension NINTVL.
+
+
+     DEGRES         is an array of interpolating polynomial degrees.
+                    The Ith element of DEGRES is the polynomial degree
+                    of the packets associated with the Ith
+                    interpolation interval/mini-segment.
+
+                    For subtype 0, interpolation degrees must be
+                    equivalent to 3 mod 4, that is, they must be in
+                    the set
+
+                       { 3, 7, 11, ..., MAXDEG }
+
+                    For subtype 1, interpolation degrees must be odd
+                    and must be in the range 1:MAXDEG.
+
+                    DEGRES has dimension NINTVL.
+
+
+     PACKTS         is an array containing data packets for all input
+                    mini-segments. The packets for a given
+                    mini-segment are stored contiguously in increasing
+                    time order. The order of the sets of packets for
+                    different mini-segments is the same as the order
+                    of their corresponding interpolation intervals.
+
+                    Each packet represents geometric states of BODY
+                    relative to CENTER, specified relative to FRAME.
+                    The packet structure depends on the segment
+                    subtype as follows:
+
+                       Type 0 (indicated by code S19TP0):
+
+                           x,  y,  z,  dx/dt,  dy/dt,  dz/dt,
+                           vx, vy, vz, dvx/dt, dvy/dt, dvz/dt
+                    
+                       where x, y, z represent Cartesian position
+                       components and  vx, vy, vz represent Cartesian
+                       velocity components.  Note well:  vx, vy, and
+                       vz *are not necessarily equal* to the time
+                       derivatives of x, y, and z. This packet 
+                       structure mimics that of the Rosetta/MEX orbit
+                       file.
+                      
+                       Type 1 (indicated by code S19TP1):
+
+                           x,  y,  z,  dx/dt,  dy/dt,  dz/dt
+                    
+                       where x, y, z represent Cartesian position
+                       components and  vx, vy, vz represent Cartesian
+                       velocity components.
+
+                    Position units are kilometers, velocity units 
+                    are kilometers per second, and acceleration units
+                    are kilometers per second per second.
+
+
+     EPOCHS         is an array containing epochs for all input
+                    mini-segments. Each epoch is expressed as seconds
+                    past J2000 TDB. The epochs have a one-to-one
+                    relationship with the packets in the input packet
+                    array.
+
+                    The epochs for a given mini-segment are stored
+                    contiguously in increasing order. The order of the
+                    sets of epochs for different mini-segments is the
+                    same as the order of their corresponding
+                    interpolation intervals.
+
+                    For each mini-segment, &quot;padding&quot; is allowed: the
+                    sequence of epochs for that mini-segment may start
+                    before the corresponding interpolation interval
+                    start time and end after the corresponding
+                    interpolation interval stop time. Padding is used
+                    to control behavior of interpolating polynomials
+                    near interpolation interval boundaries.
+
+                    Due to possible use of padding, the elements of
+                    EPOCHS, taken as a whole, may not be in increasing
+                    order.
+
+
+     IVLBDS         is an array of interpolation interval boundary
+                    times. This array is an ordered list of the
+                    interpolation interval start times, to which the
+                    the end time for the last interval is appended.
+
+                    The Ith interpolation interval is the time
+                    coverage interval of the Ith mini-segment (see the
+                    description of NPKTS above).
+
+                    For each mini-segment, the corresponding
+                    interpolation interval's start time is greater
+                    than or equal to the mini-segment's first epoch,
+                    and the interval's stop time is less than or equal
+                    to the mini-segment's last epoch.
+
+                    For each interpolation interval other than the
+                    last, the interval's coverage stop time coincides
+                    with the coverage start time of the next interval.
+                    There are no coverage gaps, and coverage overlap
+                    for adjacent intervals consists of a single epoch.
+                 
+                    IVLBDS has dimension NINTVL+1.
+
+
+     SELLST         is a logical flag indicating to the SPK type 19
+                    segment reader <a href="spkr19.html">SPKR19</a> how to select the
+                    interpolation interval when a request time
+                    coincides with a time boundary shared by two
+                    interpolation intervals. When SELLST (&quot;select
+                    last&quot;) is .TRUE., the later interval is selected;
+                    otherwise the earlier interval is selected.
+   
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.  See $Particulars for a description of the effect of this
+     routine.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     MAXDEG         is the maximum allowed degree of the interpolating
+                    polynomial. 
+
+                    See the INCLUDE file spk19.inc for the value of
+                    MAXDEG.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     If any of the following exceptions occur, this routine will return
+     without creating a new segment.
+
+
+     1)  If FIRST is greater than LAST then the error
+         SPICE(BADDESCRTIMES) will be signaled.
+
+     2)  If FRAME is not a recognized name, the error
+         SPICE(INVALIDREFFRAME) is signaled.
+
+     3)  If the last non-blank character of SEGID occurs past index
+         40, the error SPICE(SEGIDTOOLONG) is signaled.
+
+     4)  If SEGID contains any nonprintable characters, the error
+         SPICE(NONPRINTABLECHARS) is signaled.
+
+     5)  If NINTVL is not at least 1, the error SPICE(INVALIDCOUNT)
+         is signaled.
+         
+     6)  If the elements of the array IVLBDS are not in strictly
+         increasing order, the error SPICE(BOUNDSOUTOFORDER) will be
+         signaled.
+
+     7)  If the first interval start time IVLBDS(1) is greater than
+         FIRST, or if the last interval end time IVLBDS(N+1) is less
+         than LAST, the error SPICE(COVERAGEGAP) will be signaled.
+
+     8)  If any packet count in the array NPKTS is not at least 2, the
+         error SPICE(TOOFEWPACKETS) will be signaled.
+
+     9)  If any subtype code in the array SUBTPS is not recognized,
+         the error SPICE(INVALIDSUBTYPE) will be signaled.
+
+    10)  If any interpolation degree in the array DEGRES
+         is not at least 1 or is greater than MAXDEG, the
+         error SPICE(INVALIDDEGREE) is signaled.
+
+    11)  If the window size implied by any element of the array DEGRES
+         is odd, the error SPICE(BADWINDOWSIZE) is signaled.
+
+    12)  If the elements of the array EPOCHS corresponding to a given
+         mini-segment are not in strictly increasing order, the error
+         SPICE(TIMESOUTOFORDER) will be signaled.
+
+    13)  If the first epoch of a mini-segment exceeds the start
+         time of the associated interpolation interval, or if the
+         last epoch of the mini-segment precedes the end time of the
+         interpolation interval, the error SPICE(BOUNDSDISAGREE)
+         is signaled.
+
+    14)  Any error that occurs while writing the output segment will
+         be diagnosed by routines in the call tree of this routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     A new type 19 SPK segment is written to the SPK file attached
+     to HANDLE.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine writes an SPK type 19 data segment to the open SPK
+     file according to the format described in the type 19 section of
+     the SPK Required Reading. The SPK file must have been opened with
+     write access.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you have states and are prepared to produce
+     a segment of type 19 in an SPK file.
+
+     The following code fragment could be used to add the new segment
+     to a previously opened SPK file attached to HANDLE. The file must
+     have been opened with write access.
+
+        C
+        C     Create a segment identifier.
+        C
+                  SEGID = 'MY_SAMPLE_SPK_TYPE_19_SEGMENT'
+
+        C
+        C     Write the segment.
+        C
+              CALL <b>SPKW19</b> ( HANDLE,  BODY,    CENTER,  FRAME,    
+             .              FIRST,   LAST,    SEGID,   NINTVL,  
+             .              NPKTS,   SUBTPS,  DEGRES,  PACKTS,
+             .              EPOCHS,  IVLBDS,  SELLST           )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     B.V. Semenov   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 05-FEB-2014 (NJB) (BVS)</PRE>
+<h4>Link to routine SPKW19 source file <a href='../../../src/spicelib/spkw19.f'>spkw19.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:10 2014</pre>
+
+</body>
+</html>
+

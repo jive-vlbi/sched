@@ -1,0 +1,340 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>tcheck</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>tcheck</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      TCHECK ( Time Check )
+ 
+      SUBROUTINE TCHECK ( TVEC, TYPE, MODS, MODIFY, OK, ERROR )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     If component checking is enabled, this routine
+     determines whether the components of a time vector are in
+     the &quot;usual&quot; range for the components.  If component checking
+     is not enabled, this routine simply returns after setting
+     the outputs.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     TIME
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+      DOUBLE PRECISION      TVEC   ( * )
+      CHARACTER*(*)         TYPE
+      LOGICAL               MODS
+      CHARACTER*(*)         MODIFY ( * )
+      LOGICAL               OK
+      CHARACTER*(*)         ERROR
+ 
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     TVEC       I   A vector of time components
+     TYPE       I   The type of time vector.
+     MODS       I   A logical indicating the presence of modifiers
+     MODIFY     I   The values of the modifiers
+     OK         O   Indicates success or failure of component checks.
+     ERROR      O   Diagnostic message if .NOT. OK.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     TVEC       is an array of double precision numbers that
+                represent the components of some calendar epoch.
+
+     TYPE       is kind of calendar epoch represented by TVEC
+                legitimate values are 'YMD' and 'YD'
+
+     MODS       is a logical flag indicating whether any of the
+                items in MODIFY are non-blank.  If some item
+                in MODIFY is non-blank, MODS will be TRUE.  If
+                all items in MODIFY are blank, MODS will be FALSE.
+
+     MODIFY     is an array of strings indicating how the
+                interpretation of the various components of TVEC
+                should be modified.  Blank values indicate that
+                the default interpretation should be applied.
+                Non-blank components will have the following values
+                and meanings.
+
+
+               Component   Meaning   Possible Non-blank Modifier Values
+               ---------   -------   ----------------------------------
+               1           ERA       'A.D.', 'B.C.'
+               2           Weekday   'SUN',  'MON', ... etc.
+               3           AM/PM     'A.M.', 'P.M.'
+               4           System    'UTC',  'TDB', 'TDT'
+               5           Time Zone 'UTC+i:i', 'UTC-i:i'
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     OK        is returned TRUE if all components of TVEC are within
+               the normal range of values.  If some problem arises,
+               OK will be returned with the value FALSE.  Note that
+               component checking has not been enabled by a call
+               to <a href="tparch.html">TPARCH</a>, the value of OK is automatically set to
+               TRUE.
+
+     ERROR     If OK is returned with the value TRUE, ERROR will be
+               returned as a blank.  However, if OK is FALSE, ERROR
+               will contain a diagnostic indicating what was wrong
+               with the components of TVEC. Note that
+               component checking has not been enabled by a call
+               to <a href="tparch.html">TPARCH</a>, the value of ERROR is automatically set to
+               a blank.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     Error free.
+
+     1) All problems with TVEC are diagnosed via the logical OK
+        and the message ERROR.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine works in conjunction with the entry point <a href="tparch.html">TPARCH</a>.
+     If <a href="tparch.html">TPARCH</a> has not been called with the input value 'YES' this
+     routine simply sets the outputs as indicated above and returns.
+
+     Usually strings such as February 32, 1997 are regarded as
+     erroneous.  However, the SPICE time subsystem is capable
+     of attaching meaning to such strings.  The routines <a href="tparch.html">TPARCH</a> and
+     <b>TCHECK</b> allow you to treat such strings as erroneous throughout
+     the SPICE time sub-system.
+
+     This routine examines the components of a time vector and
+     determines whether or not all of the values in the vector
+     are within the normal bounds.
+
+     To pass inspection:
+
+        Years must be integers.
+
+        Months must be in the range from 1 to 12 and must be integers.
+
+        Days of the month must be in the normal ranges.  For example
+             if the month specified is January, the day of the month
+             must be greater than or equal to 1.0D0 and strictly less
+             than 32.0D0 (The normal range for February is a function
+             of whether the year specified is a leap year. The
+             Gregorian calendar is used to determine leap years.)
+
+        Day of the year must be greater than or equal to 1.0D0
+             and strictly less than 366.0D0  (367.0D0 in a leap year.
+             The Gregorian calendar is used to determine leap years.)
+
+        Hours must be greater than or equal to 0.0D0 and strictly
+             less than 24.0D0.  If the AMPM modifier is included
+             hours must be greater than or equal to 1.0D0 and strictly
+             less than 13.0D0.
+
+        Minutes must be greater than or equal to 0.0D0 and must
+             be strictly less than 60.0D0
+
+        Seconds must be greater than or equal to 0.0D0 and strictly
+             less than 60.0D0 (61.0D0 during the last minute of the
+             30th of June and the 31st of December).
+
+        If some component other than the seconds component is
+        not an integer, all components of lesser significance must
+        be zero.
+
+     This routine  is designed to work in conjunction
+     with the SPICE routine <a href="tpartv.html">TPARTV</a> and it is anticipated that
+     it will be called in the following fashion
+
+        CALL <a href="tpartv.html">TPARTV</a> ( STRING, TVEC, NTVEC,  TYPE,
+    .                 MODIFY, MODS, YABBRV, SUCCES, ERROR )
+
+        IF ( .NOT. SUCCES ) THEN
+
+           communicate the diagnostic message and
+           take other actions as appropriate
+
+           RETURN
+
+        END IF
+
+        IF ( SUCCES .AND. CHECK ) THEN
+            CALL <b>TCHECK</b> ( TVEC, TYPE, MODS, MODIFY, OK, ERROR )
+        END IF
+
+        IF ( .NOT. OK ) THEN
+
+           communicate the diagnostic message and
+           take other actions as appropriate
+
+           RETURN
+
+        END IF
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you have parsed a string (via <a href="tpartv.html">TPARTV</a>) and want
+     to enforce normal ranges of the components.  The following
+     sequence of calls will perform the checks on components.
+
+        get the current checking setting
+
+        CALL <a href="tchckd.html">TCHCKD</a> ( CURNT )
+
+        turn on component checking.
+
+        CALL <a href="tparch.html">TPARCH</a> ( 'YES' )
+
+        Check the components.
+
+        CALL <b>TCHECK</b> ( TVEC, TYPE, MODS, MODIFY, OK, ERROR )
+
+        Reset the checking setting to the original value.
+
+        CALL <a href="tparch.html">TPARCH</a> ( CURNT )
+
+
+        Now handle any problems that were diagnosed by <b>TCHECK</b>
+
+        IF ( .NOT. OK ) THEN
+
+           do something
+
+        END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     W.L. Taber      (JPL)
+     B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1 10-FEB-2014 (BVS)
+
+        Fixed typo in the Declarations section in the <a href="tparch.html">TPARCH</a> header:
+        STRING -&gt; TYPE.
+
+    SPICELIB Version 1.0.0, 26-JUL-1996 (WLT)</PRE>
+<h4>Link to routine TCHECK source file <a href='../../../src/spicelib/tcheck.f'>tcheck.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:18 2014</pre>
+
+</body>
+</html>
+

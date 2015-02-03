@@ -1,0 +1,259 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>kinfo</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>kinfo</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      KINFO ( Kernel Information )
+ 
+      ENTRY KINFO ( FILE, FILTYP, SOURCE, HANDLE, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Return information about a specific kernel
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     KERNEL
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     CHARACTER*(*)         FILE
+     CHARACTER*(*)         FILTYP
+     CHARACTER*(*)         SOURCE
+     INTEGER               HANDLE
+     LOGICAL               FOUND
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     FILE       I   Name of a kernel to fetch information for
+     FILTYP     O   The type of the kernel
+     SOURCE     O   Name of the source file used to load FILE.
+     HANDLE     O   The handle attached to FILE.
+     FOUND      O   TRUE if the specified file could be located.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     FILE       is the name of a kernel file for which <a href="keeper.html">KEEPER</a>
+                information is desired.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     FILTYP      is the type of the kernel specified by FILE.  FILE
+                 will be blank if FILE is not on the list of loaded
+                 kernels.
+
+     SOURCE      is the name of the source file that was used to
+                 specify FILE as one to load.  If FILE was loaded
+                 directly via a call to <a href="furnsh.html">FURNSH</a>, SOURCE will be blank.
+                 If FILE is not on the list of loaded kernels, SOURCE
+                 will be blank
+
+     HANDLE      is the handle attached to FILE if it is a binary
+                 kernel.  If FILE is a text kernel or meta-text kernel
+                 HANDLE will be zero.  If FILE is not on the list of
+                 loaded kernels, HANDLE will be set to zero.
+
+     FOUND       is returned TRUE if FILE is on the <a href="keeper.html">KEEPER</a> list of
+                 loaded kernels.  If there is no such file, FOUND will
+                 be set to FALSE.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     Error free.
+
+     1) If the specified file is not on the list of files that
+        are currently loaded via the interface <a href="furnsh.html">FURNSH</a>, FOUND
+        will be FALSE, HANDLE will be set to zero and FILTYP
+        and SOURCE will be set to blanks.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This entry point allows you to request information directly
+     for a specific SPICE kernel.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose you wish to determine the type of a loaded kernel
+     so that you can call the correct summarizing routines
+     for the kernel.  The following bit of pseudo code shows
+     how you might use this entry point together with summarizing
+     code to produce a report on the file.  (Note that the
+     routines SPK_SUMMRY, CK_SUMMRY, PCK_SUMMRY and EK_SUMMRY
+     are simply names to indicate what you might do with the
+     information returned by <b>KINFO</b>.  They are not routines that
+     are part of the SPICE toolkit.)
+
+     FILE = '&lt;name of the file of interest&gt;'
+
+     CALL <b>KINFO</b> ( FILE, FILTYP, SOURCE, HANDLE, FOUND )
+
+     IF ( .NOT. FOUND ) THEN
+        WRITE (*,*) FILE
+        WRITE (*,*) 'is not loaded at this time.'
+     ELSE
+
+        IF      ( FILTYP .EQ. 'SPK' ) THEN
+
+           WRITE (*,*) FILE
+           WRITE (*,*) 'is an SPK file.'
+
+           CALL SPK_SUMMRY ( HANDLE )
+
+        ELSE IF ( FILTYP .EQ. 'CK'  ) THEN
+
+           WRITE (*,*) FILE
+           WRITE (*,*) 'is a CK file.'
+
+           CALL CK_SUMMRY ( HANDLE )
+
+        ELSE IF ( FILTYP .EQ. 'PCK' ) THEN
+
+           WRITE (*,*) FILE
+           WRITE (*,*) 'is a  PCK file.'
+
+           CALL PCK_SUMMRY ( HANDLE )
+
+        ELSE IF ( FILTYP .EQ. 'EK'  ) THEN
+
+           WRITE (*,*) FILE
+           WRITE (*,*) 'is an EK file.'
+
+           CALL EK_SUMMRY ( HANDLE )
+
+        ELSE IF ( FILTYP .EQ. 'META') THEN
+           WRITE (*,*) FILE
+           WRITE (*,*) 'is a meta-text kernel.'
+        ELSE
+           WRITE (*,*) FILE
+           WRITE (*,*) 'is a text kernel.'
+        END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT)</PRE>
+<h4>Link to routine KINFO source file <a href='../../../src/spicelib/keeper.f'>keeper.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:31 2014</pre>
+
+</body>
+</html>
+

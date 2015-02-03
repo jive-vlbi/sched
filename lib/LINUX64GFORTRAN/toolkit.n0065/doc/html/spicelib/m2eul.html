@@ -1,0 +1,558 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>m2eul</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>m2eul</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      M2EUL ( Matrix to Euler angles )
+ 
+      SUBROUTINE M2EUL (  R,  AXIS3,   AXIS2,   AXIS1,
+     .                        ANGLE3,  ANGLE2,  ANGLE1  )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Factor a rotation matrix as a product of three rotations about
+     specified coordinate axes.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/rotation.html">ROTATION</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ANGLE
+     MATRIX
+     ROTATION
+     TRANSFORMATION
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION      R      ( 3, 3 )
+ 
+      INTEGER               AXIS3
+      INTEGER               AXIS2
+      INTEGER               AXIS1
+ 
+      DOUBLE PRECISION      ANGLE3
+      DOUBLE PRECISION      ANGLE2
+      DOUBLE PRECISION      ANGLE1
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     R          I   A rotation matrix to be factored.
+     AXIS3,
+     AXIS2,
+     AXIS1      I   Numbers of third, second, and first rotation axes.
+     ANGLE3,
+     ANGLE2,
+     ANGLE1     O   Third, second, and first Euler angles, in radians.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     R              is a 3x3 rotation matrix that is to be factored as
+                    a product of three rotations about a specified
+                    coordinate axes.  The angles of these rotations are
+                    called `Euler angles'.
+
+     AXIS3,
+     AXIS2,
+     AXIS1          are the indices of the rotation axes of the
+                    `factor' rotations, whose product is R.  R is
+                    factored as
+
+                       R = [ ANGLE3 ]     [ ANGLE2 ]     [ ANGLE1 ]   .
+                                    AXIS3          AXIS2         AXIS1
+
+                    The axis numbers must belong to the set {1, 2, 3}.
+                    The second axis number MUST differ from the first
+                    and third axis numbers.
+
+                    See the $ Particulars section below for details
+                    concerning this notation.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     ANGLE3,
+     ANGLE2,
+     ANGLE1         are the Euler angles corresponding to the matrix
+                    R and the axes specified by AXIS3, AXIS2, and
+                    AXIS1.  These angles satisfy the equality
+
+                       R = [ ANGLE3 ]     [ ANGLE2 ]     [ ANGLE1 ]
+                                   AXIS3          AXIS2          AXIS1
+
+
+                    See the $ Particulars section below for details
+                    concerning this notation.
+
+                    The range of ANGLE3 and ANGLE1 is (-pi, pi].
+
+                    The range of ANGLE2 depends on the exact set of
+                    axes used for the factorization.  For
+                    factorizations in which the first and third axes
+                    are the same,
+
+                       R = [r]  [s]  [t] ,
+                              a    b    a
+
+                    the range of ANGLE2 is [0, pi].
+
+
+                    For factorizations in which the first and third
+                    axes are different,
+
+                       R = [r]  [s]  [t] ,
+                              a    b    c
+
+                    the range of ANGLE2 is [-pi/2, pi/2].
+
+                    For rotations such that ANGLE3 and ANGLE1 are not
+                    uniquely determined, ANGLE3 will always be set to
+                    zero; ANGLE1 is then uniquely determined.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)   If any of AXIS3, AXIS2, or AXIS1 do not have values in
+
+             { 1, 2, 3 },
+
+          then the error SPICE(BADAXISNUMBERS) is signaled.
+
+     2)   An arbitrary rotation matrix cannot be expressed using
+          a sequence of Euler angles unless the second rotation axis
+          differs from the other two.  If AXIS2 is equal to AXIS3 or
+          AXIS1, then then error SPICE(BADAXISNUMBERS) is signaled.
+
+     3)   If the input matrix R is not a rotation matrix, the error
+          SPICE(NOTAROTATION) is signaled.
+
+     4)   If ANGLE3 and ANGLE1 are not uniquely determined, ANGLE3
+          is set to zero, and ANGLE1 is determined.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     A word about notation:  the symbol
+
+        [ x ]
+             i
+
+     indicates a coordinate system rotation of x radians about the
+     ith coordinate axis.  To be specific, the symbol
+
+        [ x ]
+             1
+
+     indicates a coordinate system rotation of x radians about the
+     first, or x-, axis; the corresponding matrix is
+
+        +-                    -+
+        |  1      0       0    |
+        |                      |
+        |  0    cos(x)  sin(x) |.
+        |                      |
+        |  0   -sin(x)  cos(x) |
+        +-                    -+
+
+     Remember, this is a COORDINATE SYSTEM rotation by x radians; this
+     matrix, when applied to a vector, rotates the vector by -x
+     radians, not x radians.  Applying the matrix to a vector yields
+     the vector's representation relative to the rotated coordinate
+     system.
+
+     The analogous rotation about the second, or y-, axis is
+     represented by
+
+        [ x ]
+             2
+
+     which symbolizes the matrix
+
+        +-                    -+
+        | cos(x)   0   -sin(x) |
+        |                      |
+        |  0       1      0    |,
+        |                      |
+        | sin(x)   0    cos(x) |
+        +-                    -+
+
+     and the analogous rotation about the third, or z-, axis is
+     represented by
+
+        [ x ]
+             3
+
+     which symbolizes the matrix
+
+        +-                    -+
+        |  cos(x)  sin(x)   0  |
+        |                      |
+        | -sin(x)  cos(x)   0  |.
+        |                      |
+        |  0        0       1  |
+        +-                    -+
+
+
+     The input matrix is assumed to be the product of three
+     rotation matrices, each one of the form
+
+        +-                    -+
+        |  1      0       0    |
+        |                      |
+        |  0    cos(r)  sin(r) |     (rotation of r radians about the
+        |                      |      x-axis),
+        |  0   -sin(r)  cos(r) |
+        +-                    -+
+
+
+        +-                    -+
+        | cos(s)   0   -sin(s) |
+        |                      |
+        |  0       1      0    |     (rotation of s radians about the
+        |                      |      y-axis),
+        | sin(s)   0    cos(s) |
+        +-                    -+
+
+     or
+
+        +-                    -+
+        |  cos(t)  sin(t)   0  |
+        |                      |
+        | -sin(t)  cos(t)   0  |     (rotation of t radians about the
+        |                      |      z-axis),
+        |  0        0       1  |
+        +-                    -+
+
+     where the second rotation axis is not equal to the first or
+     third.  Any rotation matrix can be factored as a sequence of
+     three such rotations, provided that this last criterion is met.
+
+     This routine is related to the SPICELIB routine <a href="eul2m.html">EUL2M</a>, which
+     produces a rotation matrix, given a sequence of Euler angles.
+     This routine is a `right inverse' of <a href="eul2m.html">EUL2M</a>:  the sequence of
+     calls
+
+        CALL <b>M2EUL</b> ( R,  AXIS3,   AXIS2,   AXIS1,
+       .                 ANGLE3,  ANGLE2,  ANGLE1     )
+
+        CALL <a href="eul2m.html">EUL2M</a> (     ANGLE3,  ANGLE2,  ANGLE1,
+       .                 AXIS3,   AXIS2,   AXIS1,   R )
+
+     preserves R, except for round-off error.
+
+
+     On the other hand, the sequence of calls
+
+        CALL <a href="eul2m.html">EUL2M</a> (     ANGLE3,  ANGLE2,  ANGLE1,
+       .                 AXIS3,   AXIS2,   AXIS1,   R )
+
+        CALL <b>M2EUL</b> ( R,  AXIS3,   AXIS2,   AXIS1,
+       .                 ANGLE3,  ANGLE2,  ANGLE1     )
+
+
+     preserve ANGLE3, ANGLE2, and ANGLE1 only if these angles start
+     out in the ranges that <b>M2EUL</b>'s outputs are restricted to.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Conversion of instrument pointing from a matrix representation
+         to Euler angles:
+
+         Suppose we want to find camera pointing in alpha, delta, and
+         kappa, given the inertial-to-camera coordinate transformation
+
+
+    +-                                                               -+
+    |  0.49127379678135830  0.50872620321864170  0.70699908539882417  |
+    |                                                                 |
+    | -0.50872620321864193 -0.49127379678135802  0.70699908539882428  |
+    |                                                                 |
+    |  0.70699908539882406 -0.70699908539882439  0.01745240643728360  |
+    +-                                                               -+
+
+
+         We want to find angles alpha, delta, kappa such that
+
+            TICAM  =  [ kappa ]  [ pi/2 - delta ]  [ pi/2 + alpha ] .
+                               3                 1                 3
+
+         We can use the following small program to do this computation:
+
+
+            PROGRAM EX1
+            IMPLICIT NONE
+
+            DOUBLE PRECISION      <a href="dpr.html">DPR</a>
+            DOUBLE PRECISION      <a href="halfpi.html">HALFPI</a>
+            DOUBLE PRECISION      <a href="twopi.html">TWOPI</a>
+
+            DOUBLE PRECISION      ALPHA
+            DOUBLE PRECISION      ANG1
+            DOUBLE PRECISION      ANG2
+            DOUBLE PRECISION      DELTA
+            DOUBLE PRECISION      KAPPA
+            DOUBLE PRECISION      TICAM  ( 3, 3 )
+
+
+            DATA TICAM /  0.49127379678135830D0,
+           .             -0.50872620321864193D0,
+           .              0.70699908539882406D0,
+           .              0.50872620321864170D0,
+           .             -0.49127379678135802D0,
+           .             -0.70699908539882439D0,
+           .              0.70699908539882417D0,
+           .              0.70699908539882428D0,
+           .              0.01745240643728360D0  /
+
+
+            CALL <b>M2EUL</b> ( TICAM, 3, 1, 3, KAPPA, ANG2, ANG1 )
+
+            DELTA = <a href="halfpi.html">HALFPI</a>() - ANG2
+            ALPHA = ANG1     - <a href="halfpi.html">HALFPI</a>()
+
+            IF ( KAPPA .LT. 0.D0 ) THEN
+               KAPPA = KAPPA + <a href="twopi.html">TWOPI</a>()
+            END IF
+
+            IF ( ALPHA .LT. 0.D0 ) THEN
+               ALPHA = ALPHA + <a href="twopi.html">TWOPI</a>()
+            END IF
+
+            WRITE (*,'(1X,A,F24.14)') 'Alpha (deg): ', <a href="dpr.html">DPR</a>() * ALPHA
+            WRITE (*,'(1X,A,F24.14)') 'Delta (deg): ', <a href="dpr.html">DPR</a>() * DELTA
+            WRITE (*,'(1X,A,F24.14)') 'Kappa (deg): ', <a href="dpr.html">DPR</a>() * KAPPA
+
+            END
+
+
+         The program's output should be something like
+
+            Alpha (deg):       315.00000000000000
+            Delta (deg):         1.00000000000000
+            Kappa (deg):        45.00000000000000
+
+         possibly formatted a little differently, or degraded slightly
+         by round-off.
+
+
+     2)  Conversion of instrument pointing angles from a non-J2000,
+         not necessarily inertial frame to J2000-relative RA, Dec,
+         and Twist.
+
+         Suppose that we have pointing for some instrument expressed as
+
+            [ gamma ]  [ beta ]  [ alpha ]
+                     3         2          3
+
+         with respect to some coordinate system S.  For example, S
+         could be a spacecraft-fixed system.
+
+         We will suppose that the transformation from J2000
+         coordinates to system S coordinates is given by the rotation
+         matrix J2S.
+
+         The rows of J2S are the unit basis vectors of system S, given
+         in J2000 coordinates.
+
+         We want to express the pointing with respect to the J2000
+         system as the sequence of rotations
+
+            [ kappa ]  [ pi/2 - delta ]  [ pi/2 + alpha ] .
+                     3                 1                 3
+
+         First, we use subroutine <a href="eul2m.html">EUL2M</a> to form the transformation
+         from system S to instrument coordinates S2INST.
+
+            CALL <a href="eul2m.html">EUL2M</a> ( GAMMA, BETA, ALPHA, 3, 2, 3, S2INST )
+
+         Next, we form the transformation from J2000 to instrument
+         coordinates J2INST.
+
+            CALL <a href="mxm.html">MXM</a> ( S2INST, J2S, J2INST )
+
+         Finally, we express J2INST using the desired Euler angles, as
+         in the first example:
+
+            CALL <b>M2EUL</b> ( J2INST, 3, 1, 3, TWIST, ANG2, ANG3 )
+
+            RA   =  ANG3 - <a href="halfpi.html">HALFPI</a>()
+            DEC  =  <a href="halfpi.html">HALFPI</a>() - ANG2
+
+         If we wish to make sure that RA, DEC, and TWIST are in
+         the ranges [0, 2pi), [-pi/2, pi/2], and [0, 2pi)
+         respectively, we may add the code
+
+            IF ( RA .LT. 0.D0 ) THEN
+               RA = RA + <a href="twopi.html">TWOPI</a>()
+            END IF
+
+            IF ( TWIST .LT. 0.D0 ) THEN
+               TWIST = TWIST + <a href="twopi.html">TWOPI</a>()
+            END IF
+
+         Note that DEC is already in the correct range, since ANG2
+         is in the range [0, pi] when the first and third input axes
+         are equal.
+
+         Now RA, DEC, and TWIST express the instrument pointing
+         as RA, Dec, and Twist, relative to the J2000 system.
+
+         A warning note:  more than one definition of RA, Dec, and
+         Twist is extant.  Before using this example in an application,
+         check that the definition given here is consistent with that
+         used in your application.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.1, 21-DEC-2006 (NJB)
+
+        Error corrected in header example:  input matrix
+        previously did not match shown outputs.  Offending
+        example now includes complete program.
+
+    SPICELIB Version 1.2.0, 15-OCT-2005 (NJB)
+
+        Updated to remove non-standard use of duplicate arguments
+        in <a href="mxm.html">MXM</a> and <a href="mtxm.html">MTXM</a> calls.  A short error message cited in
+        the Exceptions section of the header failed to match
+        the actual short message used; this has been corrected.
+
+    SPICELIB Version 1.1.2, 13-OCT-2004 (NJB)
+
+        Fixed header typo.
+
+    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.1.0, 02-NOV-1990 (NJB)
+
+        Header upgraded to describe notation in more detail.  Argument
+        names were changed to describe the use of the arguments more
+        accurately.  No change in functionality was made; the operation
+        of the routine is identical to that of the previous version.
+
+    SPICELIB Version 1.0.0, 03-SEP-1990 (NJB)</PRE>
+<h4>Link to routine M2EUL source file <a href='../../../src/spicelib/m2eul.f'>m2eul.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:37 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,348 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spkw12</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spkw12</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SPKW12 ( SPK, write segment, type 12 )
+ 
+      SUBROUTINE SPKW12 (  HANDLE,  BODY,    CENTER,  FRAME,
+     .                     FIRST,   LAST,    SEGID,   DEGREE,
+     .                     N,       STATES,  EPOCH1,  STEP     )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Write a type 12 segment to an SPK file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/naif_ids.html">NAIF_IDS</a>
+     <a href="../req/spc.html">SPC</a>
+     <a href="../req/spk.html">SPK</a>
+     <a href="../req/time.html">TIME</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     EPHEMERIS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE 
+
+      INCLUDE 'spk12.inc'
+
+      INTEGER               HANDLE
+      INTEGER               BODY
+      INTEGER               CENTER
+      CHARACTER*(*)         FRAME
+      DOUBLE PRECISION      FIRST
+      DOUBLE PRECISION      LAST
+      CHARACTER*(*)         SEGID
+      INTEGER               DEGREE
+      INTEGER               N
+      DOUBLE PRECISION      STATES ( 6, * )
+      DOUBLE PRECISION      EPOCH1
+      DOUBLE PRECISION      STEP
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     MAXDEG     P   Maximum degree of interpolating polynomials.
+     TOLSCL     P   Scale factor used to compute time bound tolerance.
+     HANDLE     I   Handle of an SPK file open for writing.
+     BODY       I   NAIF code for an ephemeris object.
+     CENTER     I   NAIF code for center of motion of BODY.
+     FRAME      I   Reference frame name.
+     FIRST      I   Start time of interval covered by segment.
+     LAST       I   End time of interval covered by segment.
+     SEGID      I   Segment identifier.
+     DEGREE     I   Degree of interpolating polynomials.
+     N          I   Number of states.
+     STATES     I   Array of states.
+     EPOCH1     I   Epoch of first state in STATES array.
+     STEP       I   Time step separating epochs of states.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE         is the file handle of an SPK file that has been
+                    opened for writing.
+
+     BODY           is the NAIF integer code for an ephemeris object
+                    whose state relative to another body is described
+                    by the segment to be created.
+
+     CENTER         is the NAIF integer code for the center of motion
+                    of the object identified by BODY.
+
+     FRAME          is the NAIF name for a reference frame
+                    relative to which the state information for BODY
+                    is specified.
+
+     FIRST,
+     LAST           are, respectively, the start and stop times of
+                    the time interval over which the segment defines
+                    the state of BODY.
+
+     SEGID          is the segment identifier.  An SPK segment
+                    identifier may contain up to 40 characters.
+
+     DEGREE         is the degree of the Lagrange polynomials used to
+                    interpolate the states.  All components of the
+                    state vectors are interpolated by polynomials of
+                    fixed degree.
+
+     N              is the number of states in the input state vector
+                    array.
+
+     STATES         contains a time-ordered array of geometric states
+                    ( x, y, z, dx/dt, dy/dt, dz/dt, in kilometers and
+                    kilometers per second ) of BODY relative to CENTER,
+                    specified relative to FRAME.
+
+     EPOCH1         is the epoch corresponding to the first state in
+                    the state array.  Because extra states are needed
+                    at the beginning and end of the segment in order
+                    for the interpolation method to work, EPOCH1 will
+                    normally precede FIRST.
+
+     STEP           is the time step separating the epochs of adjacent
+                    states in the input state array.  STEP is specified
+                    in seconds.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.  See $Particulars for a description of the effect of this
+     routine.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     See the include file spk12.inc for declarations of the 
+     parameters described below.
+
+
+     TOLSCL         is a tolerance scale factor (also called a
+                    &quot;relative tolerance&quot;) used for time coverage
+                    bound checking. TOLSCL is unitless. TOLSCL
+                    produces a tolerance value via the formula
+
+                       TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) )
+
+                    where FIRST and LAST are the coverage time bounds
+                    of a type 12 segment, expressed as seconds past
+                    J2000 TDB.
+
+                    The resulting parameter TOL is used as a tolerance
+                    for comparing the input segment descriptor time
+                    bounds to the first and last epoch covered by the
+                    sequence of time intervals defined by the inputs
+                    to <b>SPKW12</b>:
+
+                       EPOCH1
+                       STEP
+                       N
+
+
+     MAXDEG         is the maximum degree of Hermite polynomials that
+                    can be used to interpolate states from the segment
+                    written by this routine.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     If any of the following exceptions occur, this routine will return
+     without creating a new segment.
+
+     1)  If FRAME is not a recognized name, the error
+         SPICE(INVALIDREFFRAME) is signaled.
+
+     2)  If the last non-blank character of SEGID occurs past index 40,
+         the error SPICE(SEGIDTOOLONG) is signaled.
+
+     3)  If SEGID contains any nonprintable characters, the error
+         SPICE(NONPRINTABLECHARS) is signaled.
+
+     4)  If DEGREE is not at least 1 or is greater than MAXDEG, the
+         error SPICE(INVALIDDEGREE) is signaled.
+
+     5)  If DEGREE is not odd, the error SPICE(INVALIDDEGREE) is 
+         signaled.
+
+     6)  If the number of states N is not at least (DEGREE+1)/2, the 
+         error SPICE(TOOFEWSTATES) will be signaled.
+
+     7)  If FIRST is greater than LAST then the error
+         SPICE(BADDESCRTIMES) will be signaled.
+
+     8)  If STEP is non-positive, the error SPICE(INVALIDSTEPSIZE) will
+         be signaled.
+
+     9)  If the first epoch EPOCH1 is greater than FIRST, the error
+         SPICE(BADDESCRTIMES) will be signaled.
+
+    10)  If the start time of the first record exceeds the descriptor
+         begin time by more than a computed tolerance, or if the end
+         time of the last record precedes the descriptor end time by
+         more than a computed tolerance, the error SPICE(COVERAGEGAP)
+         is signaled. See the Parameters section above for a
+         description of the tolerance.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     A new type 12 SPK segment is written to the SPK file attached
+     to HANDLE.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine writes an SPK type 12 data segment to the open SPK
+     file according to the format described in the type 12 section of
+     the SPK Required Reading. The SPK file must have been opened with
+     write access.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you have states and are prepared to produce
+     a segment of type 12 in an SPK file.
+
+     The following code fragment could be used to add the new segment
+     to a previously opened SPK file attached to HANDLE. The file must
+     have been opened with write access.
+
+            C
+            C     Create a segment identifier.
+            C
+                  SEGID = 'MY_SAMPLE_SPK_TYPE_12_SEGMENT'
+
+            C
+            C     Write the segment.
+            C
+                  CALL <b>SPKW12</b> (  HANDLE,  BODY,    CENTER,  FRAME,
+                .                FIRST,   LAST,    SEGID,   DEGREE,
+                .                N,       STATES,  EPOCH1,  STEP     )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 2.0.0, 18-JAN-2013 (NJB)
+
+        Relaxed test on relationship between the time bounds of the
+        input record set (determined by EPOCH1, STEP, and N) and the
+        descriptor bounds FIRST and LAST. Now the descriptor bounds
+        may extend beyond the time bounds of the record set by a ratio
+        computed using the parameter TOLSCL (see Parameters above for
+        details). MAXDEG was increased to 27. 
+
+        Corrected long error message for even degree case.
+
+    SPICELIB Version 1.0.0, 25-FEB-2000 (NJB)</PRE>
+<h4>Link to routine SPKW12 source file <a href='../../../src/spicelib/spkw12.f'>spkw12.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:10 2014</pre>
+
+</body>
+</html>
+

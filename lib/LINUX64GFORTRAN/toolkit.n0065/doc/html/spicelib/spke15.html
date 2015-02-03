@@ -1,0 +1,352 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spke15</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spke15</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SPKE15 ( Evaluate a type 15 SPK data record)
+ 
+      SUBROUTINE SPKE15 ( ET, RECIN, STATE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Evaluates a single SPK data record from a segment of type 15
+    (Precessing Conic Propagation).
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/spk.html">SPK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     EPHEMERIS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      DOUBLE PRECISION      ET
+      DOUBLE PRECISION      RECIN  ( * )
+      DOUBLE PRECISION      STATE  ( 6 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     ET         I   Target epoch.
+     RECIN      I   Data record.
+     STATE      O   State (position and velocity).
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ET          is a target epoch, specified as ephemeris seconds past
+                 J2000, at which a state vector is to be computed.
+
+     RECIN       is a data record which, when evaluated at epoch ET,
+                 will give the state (position and velocity) of some
+                 body, relative to some center, in some inertial
+                 reference frame.
+
+                 The structure of RECIN is:
+
+                 RECIN(1)             epoch of periapsis
+                                      in ephemeris seconds past J2000.
+                 RECIN(2)-RECIN(4)    unit trajectory pole vector
+                 RECIN(5)-RECIN(7)    unit periapsis vector
+                 RECIN(8)             semi-latus rectum---p in the
+                                      equation:
+
+                                      r = p/(1 + ECC*COS(Nu))
+
+                 RECIN(9)             eccentricity
+                 RECIN(10)            J2 processing flag describing
+                                      what J2 corrections are to be
+                                      applied when the orbit is
+                                      propagated.
+
+                                      All J2 corrections are applied
+                                      if this flag has a value that
+                                      is not 1,2 or 3.
+
+                                      If the value of the flag is 3
+                                      no corrections are done.
+
+                                      If the value of the flag is 1
+                                      no corrections are computed for
+                                      the precession of the line
+                                      of apsides.  However, regression
+                                      of the line of nodes is
+                                      performed.
+
+                                      If the value of the flag is 2
+                                      no corrections are done for
+                                      the regression of the line of
+                                      nodes. However, precession of the
+                                      line of apsides is performed.
+
+                                      Note that J2 effects are computed
+                                      only if the orbit is elliptic and
+                                      does not intersect the central
+                                      body.
+
+                 RECIN(11)-RECIN(13)  unit central body pole vector
+                 RECIN(14)            central body GM
+                 RECIN(15)            central body J2
+                 RECIN(16)            central body radius
+
+                 Units are radians, km, seconds
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     STATE       is the state produced by evaluating RECIN at ET.
+                 Units are km and km/sec.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the eccentricity is less than zero, the error
+        'SPICE(BADECCENTRICITY)' will be signalled.
+
+     2) If the semi-latus rectum is non-positive, the error
+        'SPICE(BADLATUSRECTUM)' is signalled.
+
+     3) If the pole vector, trajectory pole vector or periapsis vector
+        has zero length, the error 'SPICE(BADVECTOR)' is signalled.
+
+     4) If the trajectory pole vector and the periapsis vector are
+        not orthogonal, the error 'SPICE(BADINITSTATE)' is
+        signalled.  The test for orthogonality is very crude.  The
+        routine simply checks that the absolute value of the dot
+        product of the unit vectors parallel to the trajectory pole
+        and periapse vectors is less than 0.00001.  This check is
+        intended to catch blunders, not to enforce orthogonality to
+        double precision tolerance.
+
+     5) If the mass of the central body is non-positive, the error
+       'SPICE(NONPOSITIVEMASS)' is signalled.
+
+     6) If the radius of the central body is negative, the error
+       'SPICE(BADRADIUS)' is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This algorithm applies J2 corrections for precessing the
+     node and argument of periapse for an object orbiting an
+     oblate spheroid.
+
+     Note the effects of J2 are incorporated only for elliptic
+     orbits that do not intersect the central body.
+
+     While the derivation of the effect of the various harmonics
+     of gravitational field are beyond the scope of this header
+     the effect of the J2 term of the gravity model are as follows
+
+
+        The line of node precesses. Over one orbit average rate of
+        precession,  DNode/dNu,  is given by
+
+                                3 J2
+              dNode/dNu =  -  -----------------  DCOS( inc )
+                                2 (P/RPL)**2
+
+        (Since this is always less than zero for oblate spheroids, this
+           should be called regression of nodes.)
+
+        The line of apsides precesses. The average rate of precession
+        DPeri/dNu is given by
+                                   3 J2
+              dPeri/dNu =     ----------------- ( 5*DCOS ( inc ) - 1 )
+                                2 (P/RPL)**2
+
+        Details of these formulae are given in the Battin's book (see
+        literature references below).
+
+
+     It is assumed that this routine is used in conjunction with
+     the routine <a href="spkr15.html">SPKR15</a> as shown here:
+
+        CALL <a href="spkr15.html">SPKR15</a> ( HANDLE, DESCR, ET, RECIN         )
+        CALL <b>SPKE15</b> (                ET, RECIN, STATE  )
+
+     where it is known in advance that the HANDLE, DESCR pair points
+     to a type 15 data segment.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The SPKEnn routines are almost always used in conjunction with
+     the corresponding SPKRnn routines, which read the records from
+     SPK files.
+
+     The data returned by the SPKRnn routine is in its rawest form,
+     taken directly from the segment.  As such, it will be meaningless
+     to a user unless he/she understands the structure of the data type
+     completely.  Given that understanding, however, the SPKRnn
+     routines might be used to examine raw segment data before
+     evaluating it with the SPKEnn routines.
+
+
+     C
+     C     Get a segment applicable to a specified body and epoch.
+     C
+           CALL <a href="spksfs.html">SPKSFS</a> ( BODY, ET, HANDLE, DESCR, <a href="ident.html">IDENT</a>, FOUND )
+
+     C
+     C     Look at parts of the descriptor.
+     C
+           CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+           CENTER = ICD( 2 )
+           REF    = ICD( 3 )
+           TYPE   = ICD( 4 )
+
+           IF ( TYPE .EQ. 15 ) THEN
+
+              CALL <a href="spkr15.html">SPKR15</a> ( HANDLE, DESCR, ET, RECORD )
+                  .
+                  .  Look at the RECORD data.
+                  .
+              CALL <b>SPKE15</b> ( ET, RECORD, STATE )
+                  .
+                  .  Check out the evaluated state.
+                  .
+           END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     [1] `Fundamentals of Celestial Mechanics', Second Edition 1989
+         by J.M.A. Danby;  Willman-Bell, Inc., P.O. Box 35025
+         Richmond Virginia;  pp 345-347.
+
+     [2] `Astronautical Guidance', by Richard H. Battin. 1964
+          McGraw-Hill Book Company, San Francisco.  pp 199
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      K.R. Gehringer  (JPL)
+      S.   Schlaifer  (JPL)
+      W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.0, 02-SEP-2005 (NJB)
+
+        Updated to remove non-standard use of duplicate arguments
+        in <a href="vhat.html">VHAT</a>, <a href="vrotv.html">VROTV</a>, and <a href="vscl.html">VSCL</a> calls.
+
+    SPICELIB Version 1.1.0, 29-FEB-1996 (KRG)
+
+        The declaration for the SPICELIB function <a href="pi.html">PI</a> is now
+        preceded by an EXTERNAL statement declaring <a href="pi.html">PI</a> to be an 
+        external function. This removes a conflict with any
+        compilers that have a <a href="pi.html">PI</a> intrinsic function.
+
+    SPICELIB Version 1.0.0, 15-NOV-1994 (WLT) (SS)</PRE>
+<h4>Link to routine SPKE15 source file <a href='../../../src/spicelib/spke15.f'>spke15.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:03 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,376 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dasadc</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dasadc</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DASADC ( DAS, add data, character )
+ 
+      SUBROUTINE DASADC ( HANDLE, N, BPOS, EPOS, DATA )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Add character data to a DAS file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/das.html">DAS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ARRAY
+     ASSIGNMENT
+     DAS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               HANDLE
+      INTEGER               N
+      INTEGER               BPOS
+      INTEGER               EPOS
+      CHARACTER*(*)         DATA   ( * )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   DAS file handle.
+     N          I   Number of characters to add to file.
+     BPOS,
+     EPOS       I   Begin and end positions of substrings.
+     DATA       I   Array of character strings.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE         is a file handle of a DAS file opened for writing.
+
+     N              is the number of characters, in the specified set
+                    of substrings, to add to the specified DAS file.
+
+     BPOS,
+     EPOS           are begin and end character positions that define
+                    a set of substrings in the input array.  This
+                    routine writes characters from the specified set
+                    of substrings to the specified DAS file.
+
+     DATA           is an array of character strings, some portion of
+                    whose contents are to be added to the specified
+                    DAS file.  Specifically, the first N characters of
+                    the substrings
+
+                       DATA(I) (BPOS:EPOS),    I = 1, ...
+
+                    are appended to the character data in the file.
+                    The order of characters in the input substrings
+                    is considered to increase from left to right
+                    within each element of DATA, and to increase
+                    with the indices of the elements of DATA.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.  See $Particulars for a description of the effect of this
+     routine.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the input file handle is invalid, the error will be
+         diagnosed by routines called by this routine.
+
+     2)  If EPOS or BPOS are outside of the range
+
+            [  1,  LEN( DATA(1) )  ]
+
+         or if EPOS &lt; BPOS, the error SPICE(BADSUBSTRINGBOUNDS) will
+         be signalled.
+
+     3)  If the input count N is less than 1, no data will be
+         added to the specified DAS file.
+
+     4)  If an I/O error occurs during the data addition attempted
+         by this routine, the error will be diagnosed by routines
+         called by this routine.
+
+     5)  If N is greater than the number of characters in the
+         specified set of input substrings, the results of calling
+         this routine are unpredictable.  This routine cannot
+         detect this error.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See the description of the argument HANDLE in $Detailed_Input.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine adds character data to a DAS file by `appending' it
+     after any character data already in the file.  The sense in which
+     the data is `appended' is that the data will occupy a range of
+     logical addresses for character data that immediately follow the
+     last logical address of a character that is occupied at the time
+     this routine is called.  The diagram below illustrates this
+     addition:
+
+        +-------------------------+
+        |    (already in use)     |  Character logical address 1
+        +-------------------------+
+                    .
+                    .
+                    .
+        +-------------------------+  Last character logical address
+        |   (already in use)      |  in use before call to <b>DASADC</b>
+        +-------------------------+
+        | DATA(1) (BPOS:BPOS)     |  First added character
+        +-------------------------+
+        | DATA(1) (BPOS+1:BPOS+1) |
+        +-------------------------+
+                     .
+                     .
+                     .
+        +-------------------------+
+        | DATA(1) (EPOS:EPOS)     |
+        +-------------------------+
+        | DATA(2) (BPOS:BPOS)     |
+        +-------------------------+
+                     .
+                     .
+                     .
+        +-------------------------+
+        | DATA(R) (C:C)           |  Nth added character---here R is
+        +-------------------------+
+                                        INT ( (N+L-1)/L )
+
+                                     where L = EPOS - BPOS + 1, and
+                                     C is
+
+                                        N - (R-1)*L
+
+
+     The logical organization of the characters in the DAS file is
+     independent of the order of addition to the file or physical
+     location of any data of integer or double precision type.
+
+     The actual physical write operations that add the input array
+     DATA to the indicated DAS file may not take place before this
+     routine returns, since the DAS system buffers data that is
+     written as well as data that is read.  In any case, the data
+     will be flushed to the file at the time the file is closed, if
+     not earlier.  A physical write of all buffered records can be
+     forced by calling the SPICELIB routine <a href="daswbr.html">DASWBR</a> (DAS, write
+     buffered records).
+
+     In order to update character logical addresses that already
+     contain data, the SPICELIB routine <a href="dasudc.html">DASUDC</a> (DAS, update data,
+     character) should be used.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Create the new DAS file TEST.DAS and add 120 characters to it.
+         Close the file, then re-open it and read the data back out.
+
+
+                  PROGRAM TEST_ADD
+
+                  CHARACTER*(80)        LINES ( 3 )
+                  CHARACTER*(4)         TYPE
+
+                  INTEGER               HANDLE
+                  INTEGER               I
+
+                  DATA LINES  / 'Here is the first line.',
+                 .              'Here is the second line.',
+                 .              'Here is the third line.'    /
+
+            C
+            C     Open a new DAS file.  Use the file name as
+            C     the internal file name.
+            C
+                  TYPE = 'TEST'
+                  CALL DASONW ( 'TEST.DAS', TYPE, 'TEST.DAS', HANDLE )
+
+            C
+            C     Add the contents of the array LINES to the file.
+            C     Since the lines are short, just use the first 40
+            C     characters of each one.
+            C
+                  CALL <b>DASADC</b> ( HANDLE, 120, 1, 40, LINES )
+
+            C
+            C     Close the file.
+            C
+                  CALL <a href="dascls.html">DASCLS</a> ( HANDLE )
+
+            C
+            C     Now verify the addition of data by opening the
+            C     file for read access and retrieving the data.
+            C
+                  CALL DASOPR ( 'TEST.DAS', HANDLE )
+
+                  DO I = 1, 3
+                     LINES(I) = ' '
+                  END DO
+
+                  CALL <a href="dasrdc.html">DASRDC</a> ( HANDLE, 1, 120, 1, 40, LINES )
+
+            C
+            C     Dump the data to the screen.  We should see the
+            C     sequence
+            C
+            C        Here is the first line.
+            C        Here is the second line.
+            C        Here is the third line.
+            C
+                  WRITE (*,*) ' '
+                  WRITE (*,*) 'Data from TEST.DAS: '
+                  WRITE (*,*) ' '
+                  WRITE (*,*) LINES
+
+                  END
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer (JPL)
+     N.J. Bachman   (JPL)
+     W.L. Taber     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.0 10-APR-2014 (NJB)
+
+        Deleted declarations of unused parameters.
+
+        Corrected header comments: routine that flushes
+        written, buffered records is <a href="daswbr.html">DASWBR</a>, not DASWUR.
+
+    SPICELIB Version 1.1.1 19-DEC-1995 (NJB)
+
+        Corrected title of permuted index entry section.
+
+    SPICELIB Version 1.1.0 12-MAY-1994 (KRG) (NJB)
+
+        Test of <a href="failed.html">FAILED</a>() added to loop termination condition.
+
+        Removed references to specific DAS file open routines in the
+        $ Detailed_Input section of the header. This was done in order
+        to minimize documentation changes if the DAS open routines ever
+        change.
+
+        Modified the $ Examples section to demonstrate the new ID word
+        format which includes a file type and to include a call to the
+        new routine DASONW, open new, which makes use of the file
+        type. Also, a variable for the type of the file to be created
+        was added.
+
+    SPICELIB Version 1.0.0, 11-NOV-1992 (NJB) (WLT)</PRE>
+<h4>Link to routine DASADC source file <a href='../../../src/spicelib/dasadc.f'>dasadc.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:07 2014</pre>
+
+</body>
+</html>
+

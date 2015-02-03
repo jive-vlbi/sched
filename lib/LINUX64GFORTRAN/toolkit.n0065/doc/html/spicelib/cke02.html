@@ -1,0 +1,363 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cke02</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cke02</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+  CKE02 ( C-kernel, evaluate pointing record, data type 2 )
+ 
+      SUBROUTINE CKE02 ( NEEDAV, RECORD, CMAT, AV, CLKOUT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+   Evaluate a pointing record returned by <a href="ckr02.html">CKR02</a> from a CK data type 2
+   segment. Return the C-matrix and angular velocity vector associated
+   with the time CLKOUT.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+   <a href="../req/ck.html">CK</a>
+     <a href="../req/rotation.html">ROTATION</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+   POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      LOGICAL               NEEDAV
+      DOUBLE PRECISION      RECORD ( *    )
+      DOUBLE PRECISION      CMAT   ( 3, 3 )
+      DOUBLE PRECISION      AV     ( 3    )
+      DOUBLE PRECISION      CLKOUT
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     NEEDAV     I   True if angular velocity is requested.
+     RECORD     I   Data type 2 pointing record.
+     CMAT       O   C-matrix.
+     AV         O   Angular velocity vector.
+     CLKOUT     O   SCLK associated with C-matrix.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     NEEDAV     is true if angular velocity is requested.
+
+     RECORD     is a set of double precision numbers returned by <a href="ckr02.html">CKR02</a>
+                that contain sufficient information from a data type
+                2 pointing segment to evaluate the C-matrix and the
+                angular velocity vector for a particular instance.
+
+                The contents of RECORD are as follows:
+
+                   RECORD( 1  ) = start SCLKDP of interval
+
+                   RECORD( 2  ) = SCLK for which pointing was found
+
+                   RECORD( 3  ) = seconds / tick rate
+
+                   RECORD( 4  ) = q0
+                   RECORD( 5  ) = q1
+                   RECORD( 6  ) = q2
+                   RECORD( 7  ) = q3
+
+                   RECORD( 8  ) = av1
+                   RECORD( 9  ) = av2
+                   RECORD( 10 ) = av3
+
+                The quantities q0 - q3 are the components of the
+                quaternion that represents the C - matrix associated
+                with the start of the interval. The quantities av1,
+                av2, and av3 are the components of the angular velocity
+                vector.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     CMAT       is a rotation matrix that transforms the components
+                of a vector expressed in the inertial frame given in
+                the segment to components expressed in the instrument
+                fixed frame at the returned time.
+
+                Thus, if a vector v has components x, y, z in the
+                inertial frame, then v has components x', y', z' in the
+                instrument fixed frame where:
+
+                     [ x' ]     [          ] [ x ]
+                     | y' |  =  |   CMAT   | | y |
+                     [ z' ]     [          ] [ z ]
+
+                If the x', y', z' components are known, use the
+                transpose of the C-matrix to determine x, y, z as
+                follows.
+
+                     [ x ]      [          ]T    [ x' ]
+                     | y |  =   |   CMAT   |     | y' |
+                     [ z ]      [          ]     [ z' ]
+                              (Transpose of CMAT)
+
+     AV         is the angular velocity vector. The angular velocity
+                contained in RECORD is returned only if NEEDAV is true.
+
+                The direction of the angular velocity vector gives
+                the right-handed axis about which the instrument fixed
+                reference frame is rotating. The magnitude of AV is
+                the magnitude of the instantaneous velocity of the
+                rotation, in radians per second.
+
+                The angular velocity vector is returned in component
+                form
+
+                         AV = [ AV1  , AV2  , AV3  ]
+
+                which is in terms of the inertial coordinate frame
+                specified in the segment descriptor.
+
+     CLKOUT     is the encoded SCLK associated with the returned
+                C-matrix and angular velocity vector.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) No checking is done to determine whether RECORD is valid.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     For a detailed description of the structure of a type 2 pointing
+     segment, see the CK Required Reading.
+
+     Pointing data in a type 2 segment consists of intervals during
+     which the orientation of the spacecraft structure can be described
+     by an initial C-matrix and a constant angular velocity vector.
+     From the information contained in the pointing record returned by
+     <a href="ckr02.html">CKR02</a>, this subroutine calculates and returns the C-matrix
+     associated with the time returned by <a href="ckr02.html">CKR02</a>. It also returns the
+     angular velocity vector contained in the pointing record.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     A call to a CKEnn routine is almost always preceded by a call to
+     the corresponding CKRnn routine, which gets the logical record
+     that CKEnn evaluates.
+
+     The following code fragment searches through a file (represented
+     by HANDLE) for all segments applicable to the Voyager 2 wide angle
+     camera, for a particular spacecraft clock time, that are of data
+     types 1 or 2. It then evaluates the pointing for that epoch and
+     prints the result.
+
+
+           SC     = -32
+           INST   = -32002
+     C
+     C     Load the Voyager 2 spacecraft clock kernel and the C-kernel.
+     C
+           CALL <a href="furnsh.html">FURNSH</a> ( 'VGR_SCLK.TSC'        )
+           CALL <a href="dafopr.html">DAFOPR</a> ( 'VGR2_CK.BC',  HANDLE )
+
+     C
+     C     Get the spacecraft clock time. Must encode it for use
+     C     in the C-kernel.
+     C
+
+           WRITE (*,*) 'Enter spacecraft clock time string:'
+           READ (*,FMT='(A)') SCLKCH
+           CALL <a href="scencd.html">SCENCD</a> ( SC, SCLKCH, SCLKDP )
+
+     C
+     C     Search from the beginning through all segments.
+     C
+           CALL <a href="dafbfs.html">DAFBFS</a> ( HANDLE )
+           CALL <a href="daffna.html">DAFFNA</a> ( SFND   )
+
+           DO WHILE ( SFND )
+
+              CALL <a href="dafgn.html">DAFGN</a> ( <a href="ident.html">IDENT</a>                 )
+              CALL <a href="dafgs.html">DAFGS</a> ( DESCR                 )
+              CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+
+              IF ( INST          .EQ. ICD( 1 )  .AND.
+          .        SCLKDP + TOL  .GE. DCD( 1 )  .AND.
+          .        SCLKDP - TOL  .LE. DCD( 2 ) ) THEN
+
+                 DTYPE = ICD ( 3 )
+
+                 IF ( DTYPE .EQ. 1 ) THEN
+
+                    CALL <a href="ckr01.html">CKR01</a> ( HANDLE, DESCR, SCLKDP, TOL, NEEDAV,
+          .                      RECORD, FOUND                       )
+
+                    IF ( FOUND ) THEN
+                       CALL <a href="cke01.html">CKE01</a> ( NEEDAV, RECORD, CMAT, AV, CLKOUT )
+                    END IF
+
+                 ELSE  IF ( DTYPE .EQ. 2 ) THEN
+
+                    CALL <a href="ckr02.html">CKR02</a> ( HANDLE, DESCR, SCLKDP, TOL,
+          .                      RECORD, FOUND )
+
+                    IF ( FOUND ) THEN
+                       CALL <b>CKE02</b> ( NEEDAV, RECORD, CMAT, AV, CLKOUT )
+                    END IF
+
+                 END IF
+
+                 IF ( FOUND ) THEN
+
+                    WRITE (*,*) 'Segment descriptor and identifier:'
+                    WRITE (*,*) DCD, ICD
+                    WRITE (*,*) <a href="ident.html">IDENT</a>
+
+                    WRITE (*,*) 'C-matrix:'
+                    WRITE (*,*) CMAT
+
+                 END IF
+
+              END IF
+
+              CALL <a href="daffna.html">DAFFNA</a> ( SFND )
+
+           END DO
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     J.M. Lynch     (JPL)
+     W.L. Taber     (JPL)
+     E.D. Wright    (JPL)
+     B.V. Semenov   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.3, 31-JAN-2008 (BVS)
+
+        Removed non-standard end-of-declarations marker
+        'C%&amp;END_DECLARATIONS' from comments.
+
+    SPICELIB Version 1.0.2, 22-AUG-2006 (EDW)
+
+        Replaced references to <a href="ldpool.html">LDPOOL</a> with references 
+        to <a href="furnsh.html">FURNSH</a>.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 30-AUG-1991 (JML)</PRE>
+<h4>Link to routine CKE02 source file <a href='../../../src/spicelib/cke02.f'>cke02.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:54 2014</pre>
+
+</body>
+</html>
+

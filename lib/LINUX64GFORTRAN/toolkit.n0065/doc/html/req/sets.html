@@ -1,0 +1,592 @@
+<HTML>
+<HEAD>
+<TITLE> Sets </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Sets</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Sets">Sets</A>
+      <A HREF="#Abstract">Abstract</A>
+         <A HREF="#Revisions">Revisions</A>
+      <A HREF="#Introduction">Introduction</A>
+      <A HREF="#Initialization">Initialization</A>
+      <A HREF="#Cell routines">Cell routines</A>
+      <A HREF="#Unary Routines">Unary Routines</A>
+      <A HREF="#Binary Routines">Binary Routines</A>
+      <A HREF="#Comparison Routines">Comparison Routines</A>
+      <A HREF="#Summary">Summary</A>
+         <A HREF="#Initialization0">Initialization</A>
+         <A HREF="#Utilities">Utilities</A>
+         <A HREF="#Unary">Unary</A>
+         <A HREF="#Binary">Binary</A>
+         <A HREF="#Comparison">Comparison</A>
+         <A HREF="#Set Relationships">Set Relationships</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Sets"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Sets
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2010 MAY 18 by B. V. Semenov.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Sets are SPICE data structures that are a special case of SPICE cells --
+   vectors of type double precision, integer, or character -- carrying with
+   them their own dimension and knowledge of how many components have been
+   used.
+<P>
+ 
+<BR><BR>
+<A NAME="Revisions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Revisions
+</H3><P><BR><BR>
+   September 04, 2002
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> Minor changes of formatting and wording were made. References to the
+non-existent EMPTYx routines were deleted.
+<BR><BR></UL>
+   September 27, 1991
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> A typo in the previous version of March, 1990 has been corrected.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The set data type is a subclass of the more basic SPICELIB cell data
+   type. In order to understand and use sets, you must first understand how
+   to use cells.
+<P>
+ 
+   A ``set'' is a character, integer, or double precision cell in which the
+   following restrictions are observed:
+<P>
+ 
+<UL>
+<TT>1.</TT> The elements of a set are distinct: sets never contain duplicate elements.
+Character sets are case sensitive. For example, a set may contain all of
+the following strings:
+<BR><BR></UL>
+<PRE>
+            'AB', 'Ab', 'aB', 'ab'.
+</PRE>
+<UL>
+<TT>2.</TT> The elements of a set are always stored contiguously in elements 1 through
+N, where N is the cardinality of the set.
+<BR><BR></UL>
+<UL>
+<TT>3.</TT> The elements are sorted in increasing order. Set routines come in groups of
+three, one for character sets, one for double precision sets, and one for
+integer sets. The name of each routine ends in C, D, or I, according to the
+type of set upon which it operates.
+<BR><BR></UL>
+   Thus, <a href="../spicelib/insrtc.html">INSRTC</a> inserts an element into a character set, <a href="../spicelib/insrtd.html">INSRTD</a> inserts an
+   element into a double precision set, and <a href="../spicelib/insrti.html">INSRTI</a> inserts an element into
+   an integer set. We will refer to the generic routines by substituting an
+   x for the last letter. Thus, the routine ELEMx may refer to <a href="../spicelib/elemc.html">ELEMC</a>,
+   <a href="../spicelib/elemd.html">ELEMD</a>, or <a href="../spicelib/elemi.html">ELEMI</a>. In specific contexts, we will use the specific names of
+   routines.
+<P>
+ 
+<BR><BR>
+<A NAME="Initialization"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Initialization
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Like other cells, sets must be initialized before they can be used.
+   Because it is frequently useful to pre-load the elements of a set, you
+   can initialize a set from a non-empty array. This process, called
+   validation, is done by the set routines <a href="../spicelib/validc.html">VALIDC</a>, <a href="../spicelib/validd.html">VALIDD</a> and <a href="../spicelib/validi.html">VALIDI</a>. In
+   the following example,
+<P>
+ 
+<PRE>
+    INTEGER      LBCELL
+    PARAMETER  ( LBCELL = -5 )
+ 
+    INTEGER      BODIES  ( LBCELL:100 )
+ 
+    DATA       ( BODIES(I), I = 1, 8 )   /  3, 301,
+   .                                        3, 399,
+   .                                        5, 501,
+   .                                        6, 601   /
+ 
+    CALL <a href="../spicelib/validi.html">VALIDI</a> ( 100, 8, BODIES )
+</PRE>
+   the integer set BODIES is validated. The size of BODIES is set to 100.
+   The eight elements of the array (stored in elements 1 through 8) are
+   ordered internally; duplicate elements (in this case, the number 3,
+   which appears twice) are removed; and the cardinality of the set becomes
+   the number of distinct elements, seven. The set is now ready for use
+   with the remaining set routines.
+<P>
+ 
+   The original contents of elements LBCELL through 0 are destroyed during
+   validation.
+<P>
+ 
+   Validation of an array is useful primarily for creating sets from arrays
+   initialized in DATA statements or filled via input operations. Because
+   the array is ordered during validation, the array may contain duplicate
+   elements, and may be unsorted (or, more precisely, sorted according to
+   some other, possibly more meaningful, criteria).
+<P>
+ 
+<BR><BR>
+<A NAME="Cell routines"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Cell routines
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   A set is by definition a special kind of cell. Thus any of the general
+   cell routines may be used with sets. Sets may be copied using COPYx, and
+   the cardinality of a set may be determined by using CARDx. The APPNDx
+   routines may be used to add elements to a SPICELIB set, provided the set
+   is validated prior to use.
+<P>
+ 
+   An example of using the SPICELIB cardinality functions to define a loop
+   bound:
+<P>
+ 
+<PRE>
+   WRITE (6,*) 'Winners of the Nobel Prize for Physics:'
+ 
+   DO I = 1, <a href="../spicelib/cardc.html">CARDC</a> ( NOBEL )
+      WRITE (6,*) NOBEL(I)
+   END DO
+</PRE>
+   The integer function SIZEx returns the size (maximum cardinality) of a
+   set. This is useful primarily for predicting situations in which
+   overflow can occur.
+<P>
+ 
+<BR><BR>
+<A NAME="Unary Routines"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Unary Routines
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Unary routines operate on a single set. Two unary operations are
+   supported, both of which may alter the contents of the input set.
+<P>
+ 
+<UL>
+<TT>1.</TT> The insertion of an element into a set.
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> The removal of an element from a set.
+<BR><BR></UL>
+   In the following example, the element
+<P>
+ 
+<PRE>
+   'PLUTO'
+</PRE>
+   is removed from the character set PLANETS and inserted into the
+   character set ASTEROIDS.
+<P>
+ 
+<PRE>
+   CALL <a href="../spicelib/removc.html">REMOVC</a> ( 'PLUTO', PLANETS   )
+   CALL <a href="../spicelib/insrtc.html">INSRTC</a> ( 'PLUTO', ASTEROIDS )
+</PRE>
+   If
+<P>
+ 
+<PRE>
+   'PLUTO'
+</PRE>
+   is not an element of the set PLANETS, then the contents of PLANETS are
+   not changed. Similarly, if
+<P>
+ 
+<PRE>
+   'PLUTO'
+</PRE>
+   is already an element of ASTEROIDS, the contents of ASTEROIDS remain
+   unchanged.
+<P>
+ 
+   If a set is not large enough to accommodate the insertion of an element,
+   the SPICELIB error handling mechanism reports the excess.
+<P>
+ 
+<BR><BR>
+<A NAME="Binary Routines"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Binary Routines
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Binary routines operate on two input sets to produce a third (distinct)
+   output set. The four major algebraic binary set operations are
+   supported: UNION, INTERSECTION, DIFFERENCE, and SYMMETRIC DIFFERENCE.
+<P>
+ 
+   The UNION of two sets contains every element which is in the first set,
+   or in the second set, or in both sets.
+<P>
+ 
+<PRE>
+   {a,b}        U       {c,d}       =    {a,b,c,d}
+   {a,b,c}      U       {b,c,d}     =    {a,b,c,d}
+   {a,b,c,d}    U       {}          =    {a,b,c,d}
+   {}           U       {a,b,c,d}   =    {a,b,c,d}
+   {}           U       {}          =    {}
+</PRE>
+   The INTERSECTION of two sets contains every element which is in both the
+   first set AND in the second set.
+<P>
+ 
+<PRE>
+   {a,b}        *       {c,d}       =    {}
+   {a,b,c}      *       {b,c,d}     =    {b,c}
+   {a,b,c,d}    *       {}          =    {}
+   {}           *       {a,b,c,d}   =    {}
+   {}           *       {}          =    {}
+</PRE>
+   The DIFFERENCE of two sets contains every element which is in the first
+   set, but NOT in the second.
+<P>
+ 
+<PRE>
+   {a,b}        -       {c,d}       =    {a,b}
+   {a,b,c}      -       {b,c,d}     =    {a}
+   {a,b,c,d}    -       {}          =    {a,b,c,d}
+   {}           -       {a,b,c,d}   =    {}
+   {}           -       {}          =    {}
+</PRE>
+   The SYMMETRIC DIFFERENCE of two sets contains every element which is in
+   the first set OR in the second set, but NOT in both sets.
+<P>
+ 
+<PRE>
+   {a,b}        ^       {c,d}       =    {a,b,c,d}
+   {a,b,c}      ^       {b,c,d}     =    {a,d}
+   {a,b,c,d}    ^       {}          =    {a,b,c,d}
+   {}           ^       {a,b,c,d}   =    {a,b,c,d}
+   {}           ^       {}          =    {}
+</PRE>
+   Each of the routines takes two input sets and returns an output set.
+<P>
+ 
+   The following calls
+<P>
+ 
+<PRE>
+   CALL <a href="../spicelib/unionc.html">UNIONC</a> ( PLANETS, ASTEROIDS, RESULT )
+   CALL <a href="../spicelib/interc.html">INTERC</a> ( PLANETS, ASTEROIDS, RESULT )
+   CALL <a href="../spicelib/diffc.html">DIFFC</a>  ( PLANETS, ASTEROIDS, RESULT )
+   CALL <a href="../spicelib/sdiffc.html">SDIFFC</a> ( PLANETS, ASTEROIDS, RESULT )
+</PRE>
+   respectively place the union, intersection, difference, and symmetric
+   difference of the character sets PLANETS and ASTEROIDS into the
+   character set RESULT.
+<P>
+ 
+   In each case, if the output set RESULT is not large enough to hold the
+   result of the operation, as many elements as will fit are inserted into
+   the set, and the SPICELIB error handling mechanism reports the excess.
+<P>
+ 
+   In each of the binary routines, the output set must be distinct from
+   both of the input sets. (All four of the binary operations can be
+   performed in place, but not efficiently. Consequently, for the sake of
+   consistency, none of the routines work in place.) For example, the
+   following calls are invalid.
+<P>
+ 
+<PRE>
+   CALL <a href="../spicelib/unioni.html">UNIONI</a> ( CURRENT, NEW,     CURRENT )
+   CALL <a href="../spicelib/interi.html">INTERI</a> ( NEW,     CURRENT, CURRENT )
+</PRE>
+   In each of the examples above, the subroutine may or may not return an
+   error. However, the results will almost certainly be wrong.
+<P>
+ 
+<BR><BR>
+<A NAME="Comparison Routines"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Comparison Routines
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The comparison routines implement the following tests.
+<P>
+ 
+<UL>
+<TT>1.</TT> Is a given item a member of a set?
+<BR><BR></UL>
+<UL>
+<TT>2.</TT> Does a given relationship exist between two sets?
+<BR><BR></UL>
+   In the first case, the LOGICAL functions <a href="../spicelib/elemc.html">ELEMC</a>, <a href="../spicelib/elemd.html">ELEMD</a>, and <a href="../spicelib/elemi.html">ELEMI</a> are
+   true whenever the specified item is an element of the specified set, and
+   are false otherwise. Let the character sets PLANETS and ASTEROIDS
+   contain the following elements.
+<P>
+ 
+<PRE>
+   PLANETS            ASTEROIDS
+   --------           ----------
+   'Earth'            'Apollo'
+   'Mars'             'Ceres'
+   'Pluto'
+   'Venus'
+</PRE>
+   Then all of the following expressions are true.
+<P>
+ 
+<PRE>
+   <a href="../spicelib/elemc.html">ELEMC</a> ( 'Earth',  PLANETS   )
+   <a href="../spicelib/elemc.html">ELEMC</a> ( 'Pluto',  PLANETS   )
+   <a href="../spicelib/elemc.html">ELEMC</a> ( 'Ceres',  ASTEROIDS )
+</PRE>
+   And all of the following expressions are false.
+<P>
+ 
+<PRE>
+   <a href="../spicelib/elemc.html">ELEMC</a> ( 'Saturn', PLANETS   )
+   <a href="../spicelib/elemc.html">ELEMC</a> ( 'Pluto',  ASTEROIDS )
+   <a href="../spicelib/elemc.html">ELEMC</a> ( 'CERES',  ASTEROIDS )
+</PRE>
+   The LOGICAL functions <a href="../spicelib/setc.html">SETC</a>, <a href="../spicelib/setd.html">SETD</a>, and <a href="../spicelib/seti.html">SETI</a> are true whenever the
+   specified relationship between two sets exists, and are false otherwise.
+<P>
+ 
+   In the following example, <a href="../spicelib/seti.html">SETI</a> is used to repeat an operation for as
+   long as the integer set FINISHED remains a proper subset of the integer
+   set PLANNED.
+<P>
+ 
+<PRE>
+   DO WHILE ( <a href="../spicelib/seti.html">SETI</a> ( FINISHED, '&lt;', PLANNED ) )
+    .
+    .
+   END DO
+</PRE>
+   The full list of valid operators is given below.
+<P>
+ 
+<PRE>
+   Operator     is read
+   --------     ---------------------------------------------
+   '='          "is equal to (contains the same elements as)"
+   '&lt;&gt;'         "is not equal to"
+   '&lt;='         "is a subset of"
+   '&lt;'          "is a proper subset of"
+   '&gt;='         "is a superset of"
+   '&gt;'          "is a proper superset of"
+</PRE>
+   Let the integer sets A, B, and C contain the following elements. Let E
+   be an empty integer set.
+<P>
+ 
+<PRE>
+   A        B        C
+   ---      ---      ---
+   1        1        1
+   2        3        3
+   3
+   4
+</PRE>
+   Then all of the following expressions are true.
+<P>
+ 
+<PRE>
+   <a href="../spicelib/seti.html">SETI</a> ( B, '=',  C )      "B is equal to C"
+   <a href="../spicelib/seti.html">SETI</a> ( A, '&lt;&gt;', C )      "A is not equal to C"
+   <a href="../spicelib/seti.html">SETI</a> ( A, '&gt;',  B )      "A is a proper superset of B"
+   <a href="../spicelib/seti.html">SETI</a> ( B, '&lt;=', C )      "B is a subset of C"
+   <a href="../spicelib/seti.html">SETI</a> ( C, '&lt;=', B )      "C is a subset of B"
+   <a href="../spicelib/seti.html">SETI</a> ( A, '&lt;=', A )      "A is a subset of A"
+   <a href="../spicelib/seti.html">SETI</a> ( E, '&lt;=', B )      "E is a subset of B"
+   <a href="../spicelib/seti.html">SETI</a> ( E, '&lt;',  B )      "E is a proper subset of B"
+   <a href="../spicelib/seti.html">SETI</a> ( E, '&lt;=', E )      "E is a subset of E"
+</PRE>
+   And all of the following are false.
+<P>
+ 
+<PRE>
+   <a href="../spicelib/seti.html">SETI</a> ( B, '&lt;&gt;',  C )      "B is not equal to C"
+   <a href="../spicelib/seti.html">SETI</a> ( A, '=',   C )      "A is equal to C"
+   <a href="../spicelib/seti.html">SETI</a> ( A, '&lt;',   B )      "A is a proper subset of B"
+   <a href="../spicelib/seti.html">SETI</a> ( B, '&lt;',   C )      "B is a proper subset of C"
+   <a href="../spicelib/seti.html">SETI</a> ( B, '&gt;=',  A )      "B is a superset of A"
+   <a href="../spicelib/seti.html">SETI</a> ( A, '&gt;',   A )      "A is a proper superset of A"
+   <a href="../spicelib/seti.html">SETI</a> ( E, '&gt;=',  A )      "E is a superset of A"
+   <a href="../spicelib/seti.html">SETI</a> ( E, '&lt;',   E )      "E is a proper subset of E"
+</PRE>
+<BR><BR>
+<A NAME="Summary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Summary
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The following table summarizes the set routines in the SPICELIB library.
+<P>
+ 
+<BR><BR>
+<A NAME="Initialization0"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Initialization
+</H3><P><BR><BR>
+<DL><DT>
+<B>
+ VALIDx ( SIZE, N, SET )
+</B><BR><BR>
+<DD>
+ Validate a set from an array.<BR>
+</DL>
+<BR><BR>
+<A NAME="Utilities"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Utilities
+</H3><P><BR><BR>
+<DL><DT>
+<B>
+ SIZEx ( CELL )
+</B><BR><BR>
+<DD>
+ Return the size of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ CARDx ( CELL )
+</B><BR><BR>
+<DD>
+ Return the cardinality of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ COPYx ( ORIG, COPY )
+</B><BR><BR>
+<DD>
+ Copy the contents of a cell.<BR>
+</DL>
+<BR><BR>
+<A NAME="Unary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Unary
+</H3><P><BR><BR>
+<DL><DT>
+<B>
+ INSRTx ( ITEM, SET )
+</B><BR><BR>
+<DD>
+ Insert an item into a set.<BR>
+</DL>
+<DL><DT>
+<B>
+ REMOVx ( ITEM, SET )
+</B><BR><BR>
+<DD>
+ Remove an item from a set.<BR>
+</DL>
+<BR><BR>
+<A NAME="Binary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Binary
+</H3><P><BR><BR>
+<DL><DT>
+<B>
+ UNIONx ( A, B, C )
+</B><BR><BR>
+<DD>
+ Take the union of two sets.<BR>
+</DL>
+<DL><DT>
+<B>
+ INTERx ( A, B, C )
+</B><BR><BR>
+<DD>
+ Take the intersection of two sets.<BR>
+</DL>
+<DL><DT>
+<B>
+ DIFFx ( A, B, C )
+</B><BR><BR>
+<DD>
+ Take the difference of two sets.<BR>
+</DL>
+<DL><DT>
+<B>
+ SDIFFx ( A, B, C )
+</B><BR><BR>
+<DD>
+ Take the symmetric difference of two sets.<BR>
+</DL>
+<BR><BR>
+<A NAME="Comparison"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Comparison
+</H3><P><BR><BR>
+<DL><DT>
+<B>
+ ELEMx ( ITEM, SET)
+</B><BR><BR>
+<DD>
+ Is an item in a set?<BR>
+</DL>
+<DL><DT>
+<B>
+ SETx ( A, REL, B )
+</B><BR><BR>
+<DD>
+ What is the relationship between two sets? Set relationships are listed
+below.<BR>
+</DL>
+<BR><BR>
+<A NAME="Set Relationships"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Set Relationships
+</H3><P><BR><BR>
+<PRE>
+   =      is equal to (contains the same elements as)
+ 
+   &lt;&gt;     is not equal to
+ 
+   &lt;=     is a subset of
+ 
+   &lt;      is a proper subset of
+ 
+   &gt;=     is a superset of
+ 
+   &gt;      is a proper superset of
+</PRE>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

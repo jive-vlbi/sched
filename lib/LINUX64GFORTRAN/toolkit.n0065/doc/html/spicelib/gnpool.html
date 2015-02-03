@@ -1,0 +1,329 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>gnpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>gnpool</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ GNPOOL (Get names of kernel pool variables)
+ 
+      ENTRY GNPOOL ( NAME, START, ROOM, N, CVALS, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Return names of kernel variables matching a specified template.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/kernel.html">KERNEL</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONSTANTS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     CHARACTER*(*)         NAME
+     INTEGER               START
+     INTEGER               ROOM
+     INTEGER               N
+     CHARACTER*(*)         CVALS    ( * )
+     LOGICAL               FOUND
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     NAME       I   Template that names should match.
+     START      I   Index of first matching name to retrieve.
+     ROOM       I   The largest number of values to return.
+     N          O   Number of values returned for NAME.
+     CVALS      O   Kernel pool variables whose names match NAME.
+     FOUND      O   True if there is at least one match.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     NAME       is a <a href="matchi.html">MATCHI</a> template which will be used when searching
+                for variable names in the kernel pool.  The characters
+                '*' and '%' are used for the wild string and wild
+                characters respectively.  For details of string
+                pattern matching see the header of the routine <a href="matchi.html">MATCHI</a>.
+
+
+     START      is the index of the first variable name to return that
+                matches the NAME template.  The matching names are
+                assigned indices ranging from 1 to NVAR, where NVAR is
+                the number of matching names.  The index of a name does
+                not indicate how it compares alphabetically to another
+                name.
+
+                If START is less than 1, it will be treated as 1.  If
+                START is greater than the total number of matching
+                variable names, no values will be returned and N will
+                be set to zero.  However, FOUND will still be set to
+                .TRUE.
+
+
+     ROOM       is the maximum number of variable names that should
+                be returned for this template.  If ROOM is less than 1
+                the error 'SPICE(BADARRAYSIZE)' will be signaled.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     N          is the number of variable names matching NAME that are
+                returned.  It will always be less than or equal to
+                ROOM.
+
+                If no variable names match NAME, N is set to zero.
+
+
+     CVALS      is an array of kernel pool variables whose names match
+                the template NAME and which have indices ranging from
+                START to START+N-1.
+
+                Note that in general the names returned in CVALS are
+                not sorted.
+
+                If no variables match NAME, no values are assigned to
+                the elements of CVALS.
+
+                If the length of CVALS is less than the length of the
+                variable names, the values returned will be truncated
+                on the right. To ensure that names are not truncated,
+                CVALS should be declared to be at least
+                CHARACTER*(32).
+
+
+     FOUND      is TRUE if the some variable name in the kernel pool
+                matches NAME, FALSE if it is not.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the value of ROOM is less than one the error
+        'SPICE(BADARRAYSIZE)' is signaled.
+
+     2) If CVALS has declared length less than the size of a
+        name to be returned, the name will be truncated on
+        the right.  See MAXCHR for the maximum stored size of
+        string variables.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine provides the user interface for retrieving the names
+     of kernel pool variables. This interface allows you to retrieve
+     the names matching a template via multiple accesses.  Under some
+     circumstances this alleviates the problem of having to know in
+     advance the maximum amount of space needed to accommodate all
+     matching names.
+
+     However, this method of access does come with a price. It is
+     always more efficient to retrieve all of the data associated with
+     a kernel pool variable in one call than it is to retrieve it in
+     sections.  The parameter MAXVAR defines the upper bound on the
+     number of possible matching names.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The following code fragment demonstrates how the names of kernel
+     pool variables matching a template can be retrieved in pieces.
+
+     First we need some declarations.
+
+        INTEGER               ROOM
+        PARAMETER           ( ROOM = 3 )
+
+        CHARACTER*(3)         INDENT
+        CHARACTER*(80)        CVALS  (ROOM)
+        CHARACTER*(8)         VARNAM
+
+        INTEGER               START
+        INTEGER               N
+
+        LOGICAL               FOUND
+
+
+     Next load the data in the file 'typical.ker' into the
+     kernel pool.
+
+        CALL <a href="ldpool.html">LDPOOL</a> ( 'typical.ker' )
+
+     Next we shall print the names of kernel variables that match the
+     template 'BODY599*'.
+
+        VARNAM = 'BODY599*'
+        INDENT = ' '
+        START  =  1
+
+        CALL <b>GNPOOL</b> ( VARNAM, START, ROOM, N, CVALS, FOUND )
+
+        IF ( .NOT. FOUND ) THEN
+
+           WRITE (*,*) 'There are no matching variables ' //
+       .               'in the kernel pool.'
+        ELSE
+
+           WRITE (*,*) 'Kernel pool variables:'
+           WRITE (*,*)
+
+           DO I = 1, N
+              WRITE (*,*) INDENT, CVALS(I)
+           END DO
+
+           DO WHILE ( N .EQ. ROOM )
+
+              START = START + N
+              CALL <b>GNPOOL</b> ( VARNAM, START, ROOM, N, CVALS, FOUND )
+
+              DO I = 1, N
+                 WRITE (*,*) INDENT, CVALS(I)
+              END DO
+
+           END DO
+
+        END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman (JPL)
+     W.L. Taber   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 8.1.0, 19-MAR-2009 (NJB)
+
+        ZZPINI call was updated for compatibility
+        with new watcher system implementation.
+
+    SPICELIB Version 8.0.0, 04-JUN-1999 (WLT)
+
+        Added the entry points <a href="pcpool.html">PCPOOL</a>, <a href="pdpool.html">PDPOOL</a> and <a href="pipool.html">PIPOOL</a> to allow
+        direct insertion of data into the kernel pool without having
+        to read an external file.
+
+        Added the interface <a href="lmpool.html">LMPOOL</a> that allows SPICE
+        programs to load text kernels directly from memory
+        instead of requiring a text file.
+
+        Added the entry point <a href="szpool.html">SZPOOL</a> to return kernel pool definition
+        parameters.
+
+        Added the entry point <a href="dvpool.html">DVPOOL</a> to allow the removal of a variable
+        from the kernel pool.
+
+        Added the entry point <b>GNPOOL</b> to allow users to determine
+        variables that are present in the kernel pool</PRE>
+<h4>Link to routine GNPOOL source file <a href='../../../src/spicelib/pool.f'>pool.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:26 2014</pre>
+
+</body>
+</html>
+

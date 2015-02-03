@@ -1,0 +1,322 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>sgmeta</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>sgmeta</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SGMETA ( Generic segments: Fetch meta data value )
+ 
+      SUBROUTINE SGMETA ( HANDLE, DESCR, MNEMON, VALUE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Obtain the value of a specified generic segment meta data item.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+      <a href="../req/daf.html">DAF</a> Required Reading
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+       GENERIC SEGMENTS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+ 
+      INTEGER               HANDLE
+      DOUBLE PRECISION      DESCR  ( * )
+      INTEGER               MNEMON
+      INTEGER               VALUE
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      HANDLE     I   Handle of a DAF open for reading.
+      DESCR      I   Descriptor for a generic segment in the DAF.
+      MNEMON     I   An integer mnemonic for the desired meta data.
+      VALUE      O   The value of the meta data item requested.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE     is the handle of a DAF opened for reading that
+                contains the generic segment described by DESCR.
+
+     DESCR      is the descriptor of a generic segment. This must
+                be the descriptor for a generic segment in the DAF
+                associated with HANDLE.
+
+     MNEMON     is the mnemonic used to represent the desired piece of
+                meta data. See the file 'sgparam.inc' for details, the
+                mnemonics, and their values.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     VALUE      is the value of the meta data item associated with
+                the mnemonic MNEMON that is in the generic segment
+                specified by HANDLE and DESCR.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     This subroutine makes use of parameters defined in the file
+     'sgparam.inc'.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the mnemonic for the meta data item is not valid, the error
+        SPICE(UNKNOWNMETAITEM) will be signalled.
+
+     2) If the last address in the DAF segment that reports the number
+        of meta data items that exist in the segment is less than
+        MNMETA, the error SPICE(INVALIDMETADATA) will be signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      See the description of HANDLE above.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine is a utility for fetching the meta data associated
+     with a DAF generic segment.
+
+     A DAF generic segment contains several logical data partitions:
+
+        1) A partition for constant values to be associated with each
+           data packet in the segment.
+
+        2) A partition for the data packets.
+
+        3) A partition for reference values.
+
+        4) A partition for a packet directory, if the segment contains
+           variable sized packets.
+
+        5) A partition for a reference value directory.
+
+        6) A reserved partition that is not currently used. This
+           partition is only for the use of the NAIF group at the Jet
+           Propulsion Laboratory (JPL).
+
+        7) A partition for the meta data which describes the locations
+           and sizes of other partitions as well as providing some
+           additional descriptive information about the generic
+           segment.
+
+                 +============================+
+                 |         Constants          |
+                 +============================+
+                 |          Packet 1          |
+                 |----------------------------|
+                 |          Packet 2          |
+                 |----------------------------|
+                 |              .             |
+                 |              .             |
+                 |              .             |
+                 |----------------------------|
+                 |          Packet N          |
+                 +============================+
+                 |      Reference Values      |
+                 +============================+
+                 |      Packet Directory      |
+                 +============================+
+                 |    Reference  Directory    |
+                 +============================+
+                 |       Reserved  Area       |
+                 +============================+
+                 |     Segment Meta Data      |
+                 +----------------------------+
+
+     Only the placement of the meta data at the end of a segment is
+     required. The other data partitions may occur in any order in the
+     segment because the meta data will contain pointers to the
+     appropriate locations of the other data partitions within the
+     segment.
+
+     The meta data for the segment should be obtained only through
+     use of this routine, <b>SGMETA</b>.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that we would like to know how many constants, data
+     packets, and reference values are in the generic segment that we
+     have located in the DAF file associated with HANDLE.
+
+     C
+     C     Get the number of constants.
+     C
+           CALL <b>SGMETA</b> ( HANDLE, DESCR, NCON, NCONST )
+     C
+     C     Get the number of data packets.
+     C
+           CALL <b>SGMETA</b> ( HANDLE, DESCR, NPKT, NPKTS )
+     C
+     C     Get the number of constants.
+     C
+           CALL <b>SGMETA</b> ( HANDLE, DESCR, NREF, NREFS )
+
+     C
+     C     Print the values.
+     C
+           WRITE (*, *) 'Number of Constants       : ', NCONST
+           WRITE (*, *) 'Number of Data Packets    : ', NPKTS
+           WRITE (*, *) 'Number of Reference Values: ', NREFS
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     The segment described by DESCR MUST be a generic segment,
+     otherwise the results of this routine are not predictable.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      K.R. Gehringer  (JPL)
+      W.L. Taber      (JPL)
+      F.S. Turner     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.4.0, 07-SEP-2001 (EDW)
+
+        Replaced <a href="dafrda.html">DAFRDA</a> call with <a href="dafgda.html">DAFGDA</a>.
+
+    SPICELIB Version 1.3.0, 14-JUN-1999 (FST)
+
+        Altered the check in/out structure to be more reasonable.
+        This introduced redundant code, but only to increase the
+        efficiency of the normal mode of operation.
+
+    SPICELIB Version 1.2.0, 24-SEP-1998 (FST)
+
+        Modified the code that handles reading the meta data from the
+        DAF to handle the case when the number of meta data items in
+        the file exceeds the current maximum defined in sgparam.inc.
+        In the event that this situation occurs, the routine loads
+        what meta data it can interpret and ignores the rest.  In
+        this event if NMETA is requested, it is returned as MXMETA in
+        sgparam.inc.
+
+        An additional exception is now trapped by the routine. If
+        a generic segment in a DAF reports less than the known minimum
+        number of meta data items, then the routine signals the
+        error SPICE(INVALIDMETADATA).
+
+        The conditions that cause the SPICE(UNKNOWNMETAITEM) to be
+        signaled have been altered. Now if the integer mnemonic
+        is not between 1 and METASZ inclusive, or NMETA the error
+        is signaled.  In the versions preceding this change, for
+        segments that reported less than NMETA items of meta data
+        could not use this routine to request the number of meta
+        data items without signalling SPICE(UNKNOWNMETAITEM).
+
+    SPICELIB Version 1.1.0, 11-APR-1995 (KRG)
+
+        Modified the code that deals with the EQUIVALENCEd part
+        descriptor. We now call MOVED rather than using a direct
+        assignment.
+
+    SPICELIB Version 1.0.0, 11-APR-1995 (KRG) (WLT)</PRE>
+<h4>Link to routine SGMETA source file <a href='../../../src/spicelib/sgmeta.f'>sgmeta.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:57 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,271 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dasioc</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dasioc</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DASIOC ( DAS, Fortran I/O, character )
+ 
+      SUBROUTINE DASIOC ( ACTION, UNIT, RECNO, RECORD )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Perform Fortran reads and writes of character records.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/das.html">DAS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     DAS
+     FILES
+     UTILITY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               NWC
+      PARAMETER           ( NWC = 1024 )
+ 
+      CHARACTER*(*)         ACTION
+      INTEGER               UNIT
+      INTEGER               RECNO
+      CHARACTER*(NWC)       RECORD
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     ACTION     I   Action to take (read or write).
+     UNIT       I   Fortran unit connected to DAS file.
+     RECNO      I   Number of record to read or write.
+     RECORD    I-O  DAS character record.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ACTION         is a character string specifying whether to read
+                    from or write to the specified DAS file.  Possible
+                    values are:
+
+                       'READ'
+                       'WRITE'
+
+                    Case and leading or trailing blanks are not
+                    significant.
+
+
+     UNIT           is the Fortran unit number connected to the DAS
+                    file that is to be read or written.  Given the
+                    handle of the DAS file, the unit number can be
+                    obtained using DASHLU.
+
+     RECNO          is the Fortran record number of the record to be
+                    read or written.
+
+     RECORD         is a character array whose contents are to be
+                    written to record RECNO, if ACTION is WRITE.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     RECORD         is a character array whose contents are to be
+                    set equal to those of record RECNO, if ACTION is
+                    READ.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     NWC            is the number of characters in a DAS character
+                    record.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the value of ACTION is not recognized, the error
+         SPICE(UNRECOGNIZEDACTION) is signalled.
+
+     2)  If a Fortran read error occurs, the error
+         SPICE(DASFILEREADFAILED) is signalled.
+
+     3)  If a Fortran write error occurs, the error
+         SPICE(DASFILEWRITEFAILED) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See the description of the argument UNIT in $Detailed_Input.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Normally, routines outside of SPICELIB will not need to call this
+     routine directly.  Writes to DAS files should be performed using
+     the DASADx and DASUDx routines; reads should be performed using
+     the DASRDx routines.
+
+     This routines centralizes I/O and the concommitant error handling
+     for DAS character records.
+
+     Although most DAS routines use file handles to indentify DAS
+     files, this routine uses Fortran logical units for this purpose.
+     Using unit numbers allows the DASIOx routines to be called from
+     any DAS routine, including entry points of DASFM.  (DASFM
+     contains as entry points the routines DASHLU and DASLUH, which
+     map between handles and unit numbers.)
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Read and print to the screen character records number 10
+         through 20 from the DAS file designated by HANDLE.
+
+            CHARACTER*(NWC)       RECORD
+
+                           .
+                           .
+                           .
+
+            CALL DASHLU ( HANDLE, UNIT )
+            CALL DASHFN ( HANDLE, NAME )
+
+            DO I = 1, 20
+
+               CALL <b>DASIOC</b> ( 'READ', UNIT, 10, RECORD )
+
+               LABEL = 'Contents of the # record in DAS file #: '
+
+               CALL <a href="repmot.html">REPMOT</a> ( LABEL,  '#',  I,  'L',   LABEL )
+               CALL <a href="repmc.html">REPMC</a>  ( LABEL,  '#',      NAME,  LABEL )
+
+               WRITE (*,*) LABEL
+               WRITE (*,*) ' '
+               WRITE (*,*) RECORD
+
+            END DO
+
+
+
+     2)  Write the contents of the string RECORD to record number
+         10 in the DAS file designated by HANDLE.
+
+
+            CHARACTER*(NWC)       RECORD
+
+                           .
+                           .
+                           .
+
+            CALL DASHLU (  HANDLE,  UNIT               )
+            CALL <b>DASIOC</b> ( 'WRITE',  UNIT,  10,  RECORD )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     W.L. Taber     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 30-JUN-1992 (NJB) (WLT)</PRE>
+<h4>Link to routine DASIOC source file <a href='../../../src/spicelib/dasioc.f'>dasioc.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:08 2014</pre>
+
+</body>
+</html>
+

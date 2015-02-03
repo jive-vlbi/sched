@@ -1,0 +1,266 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spke08</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spke08</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SPKE08 ( S/P Kernel, evaluate, type 8 )
+ 
+      SUBROUTINE SPKE08 ( ET, RECORD, STATE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Evaluate a single SPK data record from a segment of type 8
+     (equally spaced discrete states, interpolated by Lagrange
+     polynomials).
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/spk.html">SPK</a>
+     <a href="../req/time.html">TIME</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     EPHEMERIS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      IMPLICIT NONE
+
+      INCLUDE 'spkrec.inc'
+ 
+      DOUBLE PRECISION      ET
+      DOUBLE PRECISION      RECORD ( * )
+      DOUBLE PRECISION      STATE  ( 6 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     ET         I   Target epoch.
+     RECORD     I   Data record.
+     STATE      O   State (position and velocity).
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ET          is a target epoch, at which a state vector is to
+                 be computed.
+
+     RECORD      is a data record which, when evaluated at epoch ET,
+                 will give the state (position and velocity) of some
+                 body, relative to some center, in some inertial
+                 reference frame.  Normally, the caller of this routine
+                 will obtain RECORD by calling <a href="spkr08.html">SPKR08</a>.
+
+                 The structure of the record is as follows:
+
+                    +----------------------+
+                    | number of states (n) |
+                    +----------------------+
+                    | start epoch          |
+                    +----------------------+
+                    | step size            |
+                    +----------------------+
+                    | state 1 (6 elts.)    |
+                    +----------------------+
+                    | state 2 (6 elts.)    |
+                    +----------------------+
+                                .
+                                .
+                                .
+                    +----------------------+
+                    | state n (6 elts.)    |
+                    +----------------------+
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     STATE       is the state. In order, the elements are
+
+                    X, Y, Z, X', Y', and Z'
+
+                 Units are km and km/sec.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  The caller of this routine must ensure that the input record
+         is appropriate for the supplied ET value. Otherwise,
+         arithmetic overflow may result.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The exact format and structure of type 8 (equally spaced discrete
+     states, interpolated by Lagrange polynomials) segments are
+     described in the SPK Required Reading file.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The SPKEnn routines are almost always used in conjunction with
+     the corresponding SPKRnn routines, which read the records from
+     SPK files.
+
+     The data returned by the SPKRnn routine is in its rawest form,
+     taken directly from the segment.  As such, it will be meaningless
+     to a user unless he/she understands the structure of the data type
+     completely.  Given that understanding, however, the SPKRnn
+     routines might be used to examine raw segment data before
+     evaluating it with the SPKEnn routines.
+
+
+     C
+     C     Get a segment applicable to a specified body and epoch.
+     C
+           CALL <a href="spksfs.html">SPKSFS</a> ( BODY, ET, HANDLE, DESCR, <a href="ident.html">IDENT</a>, FOUND )
+
+     C
+     C     Look at parts of the descriptor.
+     C
+           CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+           CENTER = ICD( 2 )
+           REF    = ICD( 3 )
+           TYPE   = ICD( 4 )
+
+           IF ( TYPE .EQ. 8 ) THEN
+
+              CALL <a href="spkr08.html">SPKR08</a> ( HANDLE, DESCR, ET, RECORD )
+                  .
+                  .  Look at the RECORD data.
+                  .
+              CALL <b>SPKE08</b> ( ET, RECORD, STATE )
+                  .
+                  .  Check out the evaluated state.
+                  .
+           END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 2.0.0, 10-DEC-2013 (NJB)
+
+        RECORD is now strictly an input; it is not overwritten by this
+        routine. Formerly RECORD was used as a workspace array.
+
+    SPICELIB Version 1.1.0, 25-AUG-2005 (NJB)
+
+        Updated to remove non-standard use of duplicate arguments
+        in <a href="xposeg.html">XPOSEG</a> and <a href="lgresp.html">LGRESP</a> calls.
+
+    SPICELIB Version 1.0.0, 14-AUG-1993 (NJB)</PRE>
+<h4>Link to routine SPKE08 source file <a href='../../../src/spicelib/spke08.f'>spke08.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:03 2014</pre>
+
+</body>
+</html>
+

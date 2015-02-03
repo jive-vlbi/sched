@@ -1,0 +1,383 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>locati</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>locati</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      LOCATI ( Locate an identifier in a list )
+ 
+      SUBROUTINE LOCATI ( ID, IDSZ,  LIST,  <a href="pool.html">POOL</a>, AT, PRESNT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     This routine locates the current location of an identifier
+     within a list or finds a location within the list to
+     store it and then does so.  It returns the location of
+     the identifier and a flag indicating whether or not the
+     identifier was already present.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+       UTILITY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+      INTEGER               LBPOOL
+      PARAMETER           ( LBPOOL = -5 )
+ 
+      INTEGER               ID   (            * )
+      INTEGER               IDSZ
+      INTEGER               LIST ( IDSZ,      * )
+      INTEGER               <a href="pool.html">POOL</a> ( 2, LBPOOL: * )
+      INTEGER               AT
+      LOGICAL               PRESNT
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+      VARIABLE  I/O  DESCRIPTION
+      --------  ---  --------------------------------------------------
+      ID         I   An array of integers that comprise an identifier
+      IDSZ       I   The number of integer components per identifier
+      LIST      I/O  A list of known identifiers
+      <a href="pool.html">POOL</a>      I/O  A doubly linked list used for search the list
+      AT        I/O  Location of the ID in the list
+      PRESNT     O   If ID was already in the list TRUE otherwise FALSE
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ID          is an integer array that serves as an identifier
+                 for some object.  For example it might be a SPICE
+                 id code for a planet or satellite; it might be the
+                 instrument id and mode of operation of an instrument.
+                 See the examples section for more details.
+
+     IDSZ        is the number of components in the array ID.
+
+     LIST        is an array containing several ID's.  The array
+                 should be declared so as to have the same upper
+                 bound at least as large as the upper bound used
+                 in the declaration of <a href="pool.html">POOL</a>.
+
+     <a href="pool.html">POOL</a>        is a linked list pool that gives the search order
+                 for examining LIST to locate ID's.  The declaration
+                 of <a href="pool.html">POOL</a> and LIST need to be compatible.  Normally,
+                 the declaration should look like this:
+
+                    INTEGER   LIST (IDSZ,         LSTSIZ )
+                    INTEGER   <a href="pool.html">POOL</a> (   2, LBPOOL: LSTSIZ )
+
+                 If <a href="pool.html">POOL</a> is declared with the statement
+
+                    INTEGER   <a href="pool.html">POOL</a> (   2, LBPOOL: PSIZE  )
+
+                 then you must make sure that PSIZE is less than
+                 or equal to LSTSIZ.
+
+                 <a href="pool.html">POOL</a> should be initialized before the first
+                 call to this routine with the SPICE routine
+                 <a href="lnkini.html">LNKINI</a>.
+
+     AT          is a value that is set by this routine and that
+                 you should never reset yourself.  It points
+                 to the head of the linked list used for
+                 searching LIST.  Changing AT will destroy the
+                 link between <a href="pool.html">POOL</a> and LIST.
+
+                 There is one exception to these restrictions.
+                 The first call to this routine that occurs after
+                 initializing <a href="pool.html">POOL</a>, AT may have any value. It will
+                 be set upon output and from that time on, you should
+                 not alter its value except by calling this routine
+                 to do so.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     AT          on output AT points to the location in LIST
+                 of ID.
+
+     PRESNT      is a logical flag.  It indicates whether or not
+                 ID was already present in the LIST when this
+                 routine was called.  If ID was already in LIST
+                 PRESNT is returned with the value TRUE.  Otherwise
+                 it is returned with the value FALSE.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the value of AT is less than zero or greater than
+        the declared size of <a href="pool.html">POOL</a> (except immediately after
+        initializing or re-initializing <a href="pool.html">POOL</a>) the
+        error 'SPICE(ADDRESSOUTOFBOUNDS)' will be signalled.
+
+     2) If the linked list pool <a href="pool.html">POOL</a> is corrupted by a higher
+        level routine, a diagnosis of the problem will be
+        made by a routine called by this one.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine serves as a utility for managing the bookkeeping
+     needed when using a local buffering scheme which removes
+     the last used item when the local buffer becomes full.
+
+     It is primarily a programming utility.  Unless you are dealing
+     with a problem very similar to the one just described, you
+     probably shouldn't be using this routine.
+
+     The example below illustrates the intended use of this
+     routine.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Consider the following programming situation.
+
+     Suppose that a routine is being written that will
+     access large amounts of data stored in the SPICE
+     kernel pool.  Kernel pool access requires overhead that
+     may be prohibitive under some circumstances.  Buffering
+     data locally and only fetching data from the kernel pool
+     when it has not been buffered locally, may substantially
+     improve the performance of the routine being written.
+
+     However, since FORTRAN does not allow dynamic memory allocation
+     the local data storage must be set at compile time.  As
+     a result the local data buffer might become full during
+     an execution of your program.  If data for an item needs
+     to be fetched from the kernel pool once the buffer has become
+     full, you must either repeatedly call the kernel pool to fetch
+     the new data or overwrite some of the data in your local buffer.
+
+     This routine helps with the decisions of which items to
+     overwrite.  In addition it always moves the last requested
+     item to the head of the index used for searching the buffered
+     ID's.  In this way if the same item is needed many times
+     in succession, there will be very little overhead associated
+     with finding the item.  Thus the routine spends its time
+     in computing the desired quantities, not in looking up the
+     parameters needed for the computation.
+
+     Below is a fragment of code that illustrates how this routine
+     should be used. In the situation outlined above.  We'll suppose
+     that we are fetching MDLSIZ double precision numbers from the
+     kernel pool that are associated with the item
+
+         'BODYid_MAGMODEL'
+
+     And that we are computing something with this model data.
+
+
+        INTEGER               MDLSIZ
+        PARAMETER           ( MDLSIZ = xxxxxx )
+
+        We'll create room to buffer this data for 8 bodies.
+
+
+        INTEGER               PSIZE
+        PARAMETER           ( PSIZE = 8 )
+
+
+        The ID's we shall be using are 1-dimensional. They are body
+        ID's for planets or and their satellites.
+
+        INTEGER               IDSZ
+        PARAMETER           ( IDSZ = 1 )
+
+        INTEGER               AT
+        INTEGER               DIM
+        INTEGER               LIST   (   IDSZ,  PSIZE        )
+        INTEGER               <a href="pool.html">POOL</a>   (      2,  LBPOOL:PSIZE )
+
+        DOUBLE PRECISION      MAGMDL ( MDLSIZ,  PSIZE        )
+        DOUBLE PRECISION      MODEL  ( MDLSIZ                )
+
+        LOGICAL               FIRST
+        LOGICAL               PRESNT
+
+        SAVE
+
+        DATA                  FIRST / .TRUE. /
+
+
+        The block below handles initializing the linked list pool.
+
+        IF ( FIRST ) THEN
+
+           FIRST = .FALSE.
+
+           CALL <a href="lnkini.html">LNKINI</a> ( PSIZE, <a href="pool.html">POOL</a> )
+
+        END IF
+
+        See if the data associated with ID has already been
+        buffered.
+
+        CALL <b>LOCATI</b> ( ID, IDSZ, LIST, <a href="pool.html">POOL</a>, AT, PRESNT )
+
+        IF ( .NOT. PRESNT ) THEN
+
+           The data has not yet been buffered, look it up.  Normally
+           you might want to check to see if the data exists and
+           handle things appropriately if it doesn't but this is just
+           to give you the idea...
+
+           CALL <a href="bodvcd.html">BODVCD</a> ( ID, 'MAGMODEL', 3, DIM, MAGMDL ( 1, AT ) )
+
+        END IF
+
+        Put the model data into the array MODEL for ease of
+        reading the rest of the code.
+
+        CALL MOVED ( MAGMDL(1,AT), MDLSIZ, MODEL )
+
+
+        Now do whatever processing is needed ....
+
+     There are a few things to note about the code fragment above.
+     First the handling of the buffering of data was very easy.
+     Second, if this routine is called again using the same ID,
+     the buffer will already contain the needed model.  Moreover
+     the routine <b>LOCATI</b> will return very quickly because the
+     ID will already be at the head of the list indexed by <a href="pool.html">POOL</a>.
+
+     You can also easily add an entry point to this routine that
+     will force it to look up data from the kernel pool on the
+     next call.  All that needs to be done is re-initialize the
+     linked list pool.
+
+        ENTRY DOLOOK
+
+        CALL <a href="lnkini.html">LNKINI</a> ( PSIZE, <a href="pool.html">POOL</a> )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+      N.J. Bachman    (JPL)
+      W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1, 24-OCT-2005 (NJB)
+
+        Header update:  changed reference to <a href="bodvar.html">BODVAR</a> to reference
+        to <a href="bodvcd.html">BODVCD</a>.
+
+    SPICELIB Version 1.0.0, 9-APR-1997 (WLT)</PRE>
+<h4>Link to routine LOCATI source file <a href='../../../src/spicelib/locati.f'>locati.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:34 2014</pre>
+
+</body>
+</html>
+
