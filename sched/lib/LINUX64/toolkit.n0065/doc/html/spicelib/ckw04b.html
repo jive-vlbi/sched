@@ -1,0 +1,353 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ckw04b</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ckw04b</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      CKW04B ( CK type 04: Begin a segment )
+
+      SUBROUTINE CKW04B ( HANDLE, BEGTIM, INST, REF, AVFLAG, SEGID )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Begin a type CK04 segment in the DAF file associated with
+     HANDLE. See also <a href="ckw04a.html">CKW04A</a> and <a href="ckw04e.html">CKW04E</a>.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      IMPLICIT              NONE
+
+      INCLUDE               'sgparam.inc'
+      INCLUDE               'ckparam.inc'
+
+      INTEGER               HANDLE
+      CHARACTER*(*)         SEGID
+      INTEGER               INST
+      LOGICAL               AVFLAG
+      CHARACTER*(*)         REF
+      DOUBLE PRECISION      BEGTIM
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     HANDLE     I   The handle of an DAF file open for writing.
+     SEGID      I   The string to use for segment identifier.
+     INST       I   The NAIF ID code for the SC or instrument.
+     AVFLAG     I   The angular rates flag.
+     REF        I   The reference frame for this segment.
+     BEGTIM     I   The segment coverage start encoded SCLK time
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE     is the file handle of a CK file that has been
+                opened for writing.
+
+     SEGID      is the segment identifier. CK segment identifier
+                may contain up to 40 printing ASCII characters.
+
+     INST       is the SPICE ID for the SC structure or instrument 
+                whose orientation are to be recorded in a CK file.
+
+     AVFLAG     angular rates flag indicates whether segment will 
+                contain angular rate information.
+
+     REF        is the name of a reference frame that pointing is  
+                given with respect to, for example 'J2000'.
+
+     BEGTIM     is the encoded SCLK time for the start of the segment
+                coverage.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.      The input data is used to create the segment summary 
+                for the segment being started in the DAF file 
+                associated with HANDLE.
+
+                See the $ Particulars section for details about the
+                structure of a type 4 CK segment.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     This subroutine makes use of parameters defined in the files
+     'sgparam.inc' and 'ckparam.inc'.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) File access errors are diagnosed by routines in the call tree
+        of this routine.
+
+     2) If numeric ID for given reference frame cannot be resolved 
+        from it's name SPICE(INVALIDREFFRAME) is signalled.
+
+     2) If SEGID is more than 40 characters long, the error
+        SPICE(SEGIDTOOLONG) is signalled.
+
+     3) If SEGID contains any nonprintable characters, the error
+        SPICE(NONPRINTABLECHARS) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See HANDLE in the $ Detailed_Input section.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine begins writing a type 4 CK segment to the open DAF
+     file that is associated with HANDLE. The file must have been
+     opened with write access.
+
+     This routine is one of a set of three routines for creating and
+     adding data to type 4 CK segments. These routines are:
+
+        <b>CKW04B</b>: Begin a type 4 CK segment. This routine must be
+                called before any data may be added to a type 4
+                segment.
+
+        <a href="ckw04a.html">CKW04A</a>: Add data to a type 4 CK segment. This routine may be
+                called any number of times after a call to <b>CKW04B</b> to
+                add type 4 records to the CK segment that was
+                started.
+
+        <a href="ckw04e.html">CKW04E</a>: End a type 4 CK segment. This routine is called to
+                make the type 4 segment a permanent addition to the
+                DAF file. Once this routine is called, no further type
+                4 records may be added to the segment. A new segment
+                must be started.
+
+     A type 4 CK segment consists of coefficient sets for variable
+     order Chebyshev polynomials over consecutive time intervals of 
+     a variable length. The gaps between intervals are allowed.
+     The Chebyshev polynomials represent individual quaternion 
+     components q0, q1, q2 and q3 and individual angular velocities 
+     AV1, AV2 and AV3 if they are included with the data.
+
+     The pointing data supplied to the type 4 CK writer (<a href="ckw04a.html">CKW04A</a>) 
+     is packed into an array as a sequence of records,
+
+        ----------------------------------------------------
+        | Record 1 | Record 2 | .. | Record N-1 | Record N |
+        ----------------------------------------------------
+
+     with each record in data packets has the following format.
+
+        ----------------------------------------------------
+        | The midpoint of the approximation interval       |
+        ----------------------------------------------------
+        | The radius of the approximation interval         |
+        ----------------------------------------------------
+        | Number of coefficients for q0                    |
+        ----------------------------------------------------
+        | Number of coefficients for q1                    |
+        ----------------------------------------------------
+        | Number of coefficients for q2                    |
+        ----------------------------------------------------
+        | Number of coefficients for q3                    |
+        ----------------------------------------------------
+        | Number of coefficients for AV1                   |
+        ----------------------------------------------------
+        | Number of coefficients for AV2                   |
+        ----------------------------------------------------
+        | Number of coefficients for AV3                   |
+        ----------------------------------------------------
+        | q0 Cheby coefficients                            |
+        ----------------------------------------------------
+        | q1 Cheby coefficients                            |
+        ----------------------------------------------------
+        | q2 Cheby coefficients                            |
+        ----------------------------------------------------
+        | q3 Cheby coefficients                            |
+        ----------------------------------------------------
+        | AV1 Cheby coefficients (optional)                |
+        ----------------------------------------------------
+        | AV2 Cheby coefficients (optional)                |
+        ----------------------------------------------------
+        | AV3 Cheby coefficients (optional)                |
+        ----------------------------------------------------
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Assume that we have:
+
+        HANDLE   is the handle of an CK file opened with write
+                 access.
+
+        SEGID    is a character string of no more than 40 characters
+                 which provides a pedigree for the data in the CK
+                 segment we will create.
+
+        INST     is the SPICE ID code for the instrument whose
+                 pointing data is to be placed into the file.
+
+        AVFLAG   angular rates flag.
+
+        REFFRM   is the name of the SPICE reference frame for the
+                 pointing data.
+
+        BEGTIM   is the starting encoded SCLK time for which the
+                 segment is valid.
+
+        ENDTIM   is the ending encoded SCLK time for which the segment
+                 is valid.
+
+        N        is the number of type 4 records that we want to
+                 put into a segment in an CK file.
+
+        NPKTS    is integer array which contains the lengths of
+                 variable size data packets 
+
+        RECRDS   contains N type 4 records packaged for the CK
+                 file.
+
+        SCSTRT   contains the initial encoded SC time for each of
+                 the records contained in RECRDS, where
+
+                    SCSTRT(I) &lt; SCSTRT(I+1), I = 1, N-1
+
+                    SCSTRT(1) &lt;= FIRST, SCSTRT(N) &lt; LAST
+
+     Then the following code fragment demonstrates how to create
+     a type 4 CK segment if all of the data for the segment is
+     available at one time.
+
+     C
+     C     Begin the segment.
+     C
+           CALL <b>CKW04B</b> ( HANDLE, BEGTIM, INST, REF, AVFLAG, SEGID )
+     C
+     C     Add the data to the segment all at once.
+     C
+           CALL <a href="ckw04a.html">CKW04A</a> ( HANDLE, N, NPKTS, RECRDS, SCSTRT )
+     C
+     C     End the segment, making the segment a permanent
+     C     addition to the CK file.
+     C
+           CALL <a href="ckw04e.html">CKW04E</a> ( HANDLE, ENDTIM )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) The file containing the segment should be opened for read
+        or write access either by <a href="ckopn.html">CKOPN</a> or <a href="dafopw.html">DAFOPW</a>.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     Y.K. Zaiko     (JPL)
+     B.V. Semenov   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1, 18-APR-2014 (BVS)
+
+        Minor header edits.
+
+    SPICELIB Version 1.0.0, 05-MAY-1999 (YKZ) (BVS)</PRE>
+<h4>Link to routine CKW04B source file <a href='../../../src/spicelib/ckw04b.f'>ckw04b.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:58 2014</pre>
+
+</body>
+</html>
+

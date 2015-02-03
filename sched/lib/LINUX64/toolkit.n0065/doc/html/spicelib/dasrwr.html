@@ -1,0 +1,334 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dasrwr</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dasrwr</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DASRWR ( DAS, read/write records )
+ 
+      SUBROUTINE DASRWR ( HANDLE,
+     .                    RECNO,
+     .                    RECC,
+     .                    RECD,
+     .                    RECI,
+     .                    FIRST,
+     .                    LAST,
+     .                    DATAD,
+     .                    DATAI,
+     .                    DATAC   )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Read and write DAS physical records.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/das.html">DAS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ASSIGNMENT
+     DAS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               NWD
+      PARAMETER           ( NWD    =  128 )
+ 
+      INTEGER               NWI
+      PARAMETER           ( NWI    =  256 )
+ 
+      INTEGER               NWC
+      PARAMETER           ( NWC    = 1024 )
+ 
+      INTEGER               HANDLE
+      INTEGER               RECNO
+      CHARACTER*(*)         RECC
+      DOUBLE PRECISION      RECD    ( NWD )
+      INTEGER               RECI    ( NWI )
+      INTEGER               FIRST
+      INTEGER               LAST
+      DOUBLE PRECISION      DATAD   ( * )
+      INTEGER               DATAI   ( * )
+      CHARACTER*(*)         DATAC
+ 
+      INTEGER               BUFSZD
+      PARAMETER           ( BUFSZD = 10 )
+ 
+      INTEGER               BUFSZI
+      PARAMETER           ( BUFSZI = 10 )
+ 
+      INTEGER               BUFSZC
+      PARAMETER           ( BUFSZC = 10 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Entry points
+     --------  ---  --------------------------------------------------
+     HANDLE     I   RRD, RRI, RRC, WRD, WRI, WRC, URD, URI, URC
+     RECNO      I   RRD, RRI, RRC, WRD, WRI, WRC, URD, URI, URC
+     RECC       I   WRC
+     RECD       I   WRD
+     RECI       I   WRI
+     FIRST      I   RRD, RRI, RRC, URD, URI, URC
+     LAST       I   RRD, RRI, RRC, URD, URI, URC
+     DATAD      O   RRD, URD
+     DATAI      O   RRI, URI
+     DATAC      O   RRC, URC
+     NWD        P   RRD, WRD, URD
+     NWI        P   RRI, WRI, URI
+     NWC        P   RRC, WRC, URC
+     BUFSZD     P   RRD, WRD, URD
+     BUFSZI     P   RRI, WRI, URI
+     BUFSZC     P   RRC, WRC, URC
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     See the entry points for a discussion of their inputs.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     See the entry points for a discussion of their outputs.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     NWD           is the number of DPs in a single DAS record
+                   containing DPs.
+
+     NWI           is the number of integers in a single DAS record
+                   containing integers.
+
+     NWC           is the number of characters in a single DAS record
+                   containing characters.
+
+     BUFSZD,
+     BUFSZI,
+     BUFSZC        are, respectively, the number of records in the
+                   data buffers for double precision, integer, and
+                   character records.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If this routine is called directly, the error
+         SPICE(BOGUSENTRY) will be signaled.
+
+     See the entry points for discussions of their exceptions.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See the description of the argument HANDLE in the headers of
+     the entry points for a description of files accessed by this
+     set of routines.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This suite of routines provides buffered read and write access to
+     DAS files.  The purpose of this feature is to increase the
+     performance of application programs that access DAS files:  in
+     particular, repeated reads from or writes to a given record
+     should be relatively fast, because the contents of the most
+     recently accessed records are buffered in memory.  Thus <b>DASRWR</b>
+     and its entry points act as a miniature virtual memory system for
+     DAS files.
+
+     These routines are intended primarily for use by other SPICELIB
+     routines; users' application programs will not normally need to
+     call these routines.  Writing to a DAS file with these routines
+     demands a particularly circumspect approach:  it's quite easy to
+     end up with something other than a DAS file if one misuses the
+     routines.
+
+     The entry points of <b>DASRWR</b> support writing, reading, and updating
+     the records in a DAS file.  The distinction between writing and
+     updating is that any record may be written (as long as the record
+     belongs to a file open for writing), but only existing records
+     may be updated.  `Writing' a record sets the values of all of
+     the elements of the record, while a subrange of the elements of an
+     existing record may be `updated'.
+
+     For each of these three operations, there are three DAS routines,
+     one for each supported data type.  The names of the routines are
+
+        -- For writing:     <a href="daswrc.html">DASWRC</a>,  <a href="daswrd.html">DASWRD</a>,  <a href="daswri.html">DASWRI</a>
+        -- For updating:    <a href="dasurc.html">DASURC</a>,  <a href="dasurd.html">DASURD</a>,  <a href="dasuri.html">DASURI</a>
+        -- For reading:     <a href="dasrrc.html">DASRRC</a>,  <a href="dasrrd.html">DASRRD</a>,  <a href="dasrri.html">DASRRI</a>
+
+     Users should note that, unlike in the case of SPICELIB's DAF
+     routines, the DAS routines buffer data that is written as well
+     as data that is read.  Consequently a DAS file does not
+     necessarily yet contain, at any moment, all of the data that
+     has been written to it by the DASWRx or DASURx routines.  The
+     written data that is buffered is written out when the need
+     to buffer additional data requires it, and also when the user
+     commands the closure of a file that has been written.  So, at
+     the time a DAS file is closed, the contents of the physical file
+     do reflect what has been `written' to the file by the DASWRx and
+     DASURx entry points.
+
+     At any time, an application program can force the DAS system to
+     write to a DAS file any buffered records maintained for that
+     file.  The entry point <a href="daswbr.html">DASWBR</a> (DAS, write buffered records)
+     provides this capability.
+
+     <b>DASRWR</b> contains three record buffers:  one of character type,
+     one of double precision type, and one of integer type.  Each
+     buffer has enough room for an integer number of records.  The
+     sizes of the buffers are parameterized and can be increased if
+     necessary.  When contemplating the revision of the buffer
+     sizes selected by NAIF, SPICELIB users should take note of the
+     following points:
+
+        -- Changing values of parameters in NAIF subroutines may cause
+           a maintenance burden for the users of the modified NAIF
+           code, since any changes made to a SPICELIB routine will have
+           to be made to any new version of that routine released by
+           NAIF in a later version of SPICELIB.
+
+        -- The effect of buffer size on the speed with which an
+           application executes is highly dependent on the specific
+           application.  In some cases, increasing the buffer sizes
+           may slow the application down.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     See the entry points for examples specific to those routines.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer (JPL)
+     N.J. Bachman   (JPL)
+     W.L. Taber     (JPL)
+     B.V. Semenov   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.1.1, 10-FEB-2014 (BVS)
+
+        Added description of NWD, NWI, and NWC to the Parameters
+        and Brief_I/O sections of the header.
+
+    SPICELIB Version 1.1.0, 17-NOV-1995 (NJB)
+
+        Made modifications to the DASRRx routines to enhance
+        efficiency.  Removed references to the function RETURN.
+
+        Removed weird spaces from ENTRY statements.
+
+    SPICELIB Version 1.0.1, 28-OCT-1993 (KRG)
+
+        Removed references to specific DAS file open routines in the
+        $ Detailed_Input section of the header for each entry point.
+        This was done in order to minimize documentation changes if the
+        DAS open routines ever change.
+
+    SPICELIB Version 1.0.0, 30-JUN-1992 (NJB) (WLT)</PRE>
+<h4>Link to routine DASRWR source file <a href='../../../src/spicelib/dasrwr.f'>dasrwr.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:09 2014</pre>
+
+</body>
+</html>
+

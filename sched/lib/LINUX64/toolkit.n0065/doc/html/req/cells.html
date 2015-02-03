@@ -1,0 +1,371 @@
+<HTML>
+<HEAD>
+<TITLE> Cells </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><A HREF="index.html">Index Page</A></SMALL></SMALL>
+  </DIV>
+  <B>Cells</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+   <A HREF="#Cells">Cells</A>
+      <A HREF="#Abstract">Abstract</A>
+         <A HREF="#Revisions">Revisions</A>
+      <A HREF="#Introduction">Introduction</A>
+      <A HREF="#Naming Conventions">Naming Conventions</A>
+      <A HREF="#Using Cells">Using Cells</A>
+      <A HREF="#Character Cells">Character Cells</A>
+      <A HREF="#Cell-based data types">Cell-based data types</A>
+   <A HREF="#Summary">Summary</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Cells"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Cells
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   Last revised on 2002 SEP 04 by N. J. Bachman.
+<P>
+ 
+<BR><BR>
+<A NAME="Abstract"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Abstract
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Cells are SPICE data structures that are vectors of type double
+   precision, integer, or character type carrying with them their own
+   dimension and knowledge of how many components have been used.
+<P>
+ 
+<BR><BR>
+<A NAME="Revisions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H3> Revisions
+</H3><P><BR><BR>
+   September 04, 2002
+<P>
+ 
+<UL>
+<TT>&#32;&#32;</TT> Minor changes of formatting and wording were made.
+<BR><BR></UL>
+<BR><BR>
+<A NAME="Introduction"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Introduction
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   A ``cell array"' is an array dimensioned from LBCELL to CMAX, where
+   LBCELL is the standard lower bound of a cell (currently -5) and CMAX is
+   the maximum number of elements that the cell is allowed to contain at
+   any one time---that is, the maximum cardinality of the cell.
+<P>
+ 
+   A ``cell"' is a cell array in which elements LBCELL through 0 contain
+   information about whatever is stored in the rest of the array. CMAX is
+   stored in this part of the cell, as is CCUR, the current cardinality of
+   the cell. For character cells, these values are encoded into character
+   strings. The SPICELIB cell's compact representation allows the user to
+   declare, pass, and otherwise manipulate cells without having to keep
+   track of separate pointers and dimensions for each cell array. Thus, a
+   routine to merge the contents of two arrays into a third, when coded
+   using cells, looks like this
+<P>
+ 
+<PRE>
+   CALL MERGE ( OLD, NEW, TOTAL )
+</PRE>
+   instead of like this
+<P>
+ 
+<PRE>
+   CALL MERGE ( OLD, N_OLD, NEW, N_NEW, MAX_TOTAL, TOTAL, N_TOTAL )
+</PRE>
+   This is especially convenient for arrays that need to be passed as
+   arguments through several levels of subprograms. Frequently, such arrays
+   are placed in common blocks to avoid the proliferation of pointers and
+   dimensions in calling sequences. This also remedies one of the serious
+   flaws in the implementation of Fortran arrays---the inability of a
+   subprogram to determine the size of an argument array into which it is
+   to place values. Since the size of a cell is always available,
+   subroutines that manipulate cells can always check for overflow
+   conditions.
+<P>
+ 
+<BR><BR>
+<A NAME="Naming Conventions"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Naming Conventions
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The type of a cell is the same as the type of the cell array. In
+   general, cell routines come in groups of three, the last letter of which
+   indicates the cell type. We will refer to the generic routines by
+   substituting an ``x"' for the last letter. Thus, CARDx may be any of the
+   following: <a href="../spicelib/cardc.html">CARDC</a>, <a href="../spicelib/cardd.html">CARDD</a>, or <a href="../spicelib/cardi.html">CARDI</a>. In specific contexts, we will use the
+   specific names of routines. Before a cell can be used, it must be
+   initialized. During initialization, the size is set to the maximum
+   cardinality of the cell, the current cardinality is set to zero, and the
+   remaining control information becomes undefined. A cell need be
+   initialized only once, after which it may be used freely. (This assumes,
+   of course, that routines which manipulate the cells remember to reset
+   the cardinality when appropriate.)
+<P>
+ 
+   The subroutine SSIZEx is used to initialize a cell, as shown below.
+<P>
+ 
+<PRE>
+   INTEGER          LBCELL
+   PARAMETER      ( LBCELL = -5 )
+ 
+   DOUBLE PRECISION X    ( LBCELL:100 )
+   DOUBLE PRECISION TEMP ( LBCELL:100 )
+    .
+    .
+ 
+   CALL <a href="../spicelib/ssized.html">SSIZED</a> ( 100, X    )
+   CALL <a href="../spicelib/ssized.html">SSIZED</a> ( 100, TEMP )
+</PRE>
+   We strongly recommend that you use a parameter, LBCELL, to declare the
+   lower bounds of cells, as shown above.
+<P>
+ 
+<BR><BR>
+<A NAME="Using Cells"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Using Cells
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPICELIB cells may be populated using the APPNDx routines. These
+   routines ``append'' a datum to a cell: they insert a specified data item
+   into the lowest-indexed free slot in the data area of the cell array.
+   The APPNDx routines automatically update the cell's cardinality to
+   reflect the addition of the new datum.
+<P>
+ 
+   To append three double precision numbers onto an empty double precision
+   cell, we could use the code fragment
+<P>
+ 
+<PRE>
+   INTEGER            LBCELL
+   PARAMETER        ( LBCELL = -5 )
+ 
+   DOUBLE PRECISION   X ( LBCELL : 100 )
+ 
+   CALL <a href="../spicelib/ssized.html">SSIZED</a> ( 100, X )
+ 
+   CALL <a href="../spicelib/appndd.html">APPNDD</a> ( 0.D0, X )
+   CALL <a href="../spicelib/appndd.html">APPNDD</a> ( 0.D0, X )
+   CALL <a href="../spicelib/appndd.html">APPNDD</a> ( 1.D0, X )
+</PRE>
+   Another subroutine SCARDx is used to adjust the cardinality of a cell.
+   This is necessary when directly inserting items into or removing items
+   from a cell, as shown below.
+<P>
+ 
+<PRE>
+   CALL <a href="../spicelib/ssized.html">SSIZED</a> ( 100, X )
+ 
+   X(1) = 0.D0
+   X(2) = 0.D0
+   X(3) = 1.D0
+ 
+   CALL <a href="../spicelib/scardd.html">SCARDD</a> ( 3, X )
+</PRE>
+   SSIZEx and SCARDx should always be used in lieu of altering the contents
+   of elements LBCELL through 0 directly.
+<P>
+ 
+   The subroutine COPYx copies the elements of one cell to another cell.
+   This can be useful for modifying temporary or working cells, or for
+   saving copies of cells which are about to be changed. For example,
+<P>
+ 
+<PRE>
+   INTEGER            LBCELL
+   PARAMETER        ( LBCELL = -5 )
+ 
+   DOUBLE PRECISION   X    ( LBCELL : 100 )
+   DOUBLE PRECISION   TEMP ( LBCELL : 100 )
+ 
+   CALL <a href="../spicelib/ssized.html">SSIZED</a> ( 100, X    )
+   CALL <a href="../spicelib/ssized.html">SSIZED</a> ( 100, TEMP )
+ 
+   CALL <a href="../spicelib/copyd.html">COPYD</a> ( X, TEMP )
+</PRE>
+   copies the contents of X into TEMP. In this case, the cells are the same
+   size (each can hold up to 100 elements), so the operation will always
+   succeed. In general, if the output cell is not large enough to hold the
+   contents of the input cell, as many elements as will fit are inserted
+   into the output cell, and the SPICELIB error handling mechanism reports
+   the number of excess elements.
+<P>
+ 
+   An extra check is performed by <a href="../spicelib/copyc.html">COPYC</a>, which copies character cells. In
+   order to avoid truncation problems, <a href="../spicelib/copyc.html">COPYC</a> verifies that the operation
+   can be performed without losing any of the non-blank characters in the
+   original cell. The loss of one or more non-blank characters is reported
+   through the SPICELIB error handling mechanism.
+<P>
+ 
+   The integer function CARDx returns the cardinality of a cell. This may
+   be used to determine whether a cell is empty or not. (The cardinality of
+   an empty cell is zero.) It may also be used to assist in accessing the
+   elements of a cell individually, as in the following example.
+<P>
+ 
+<PRE>
+   WRITE (6,*) 'Winners of the Nobel Prize for Physics:'
+ 
+   DO I = 1, <a href="../spicelib/cardc.html">CARDC</a> ( NOBEL )
+      WRITE (6,*) NOBEL(I)
+   END DO
+</PRE>
+   The integer function SIZEx returns the size (maximum cardinality) of a
+   cell. This is useful primarily for predicting situations in which
+   overflow can occur, as in the following example.
+<P>
+ 
+<PRE>
+   IF ( <a href="../spicelib/cardc.html">CARDC</a> ( WINNERS ) .LE. <a href="../spicelib/sizec.html">SIZEC</a> ( NOBEL ) ) THEN
+      CALL <a href="../spicelib/copyc.html">COPYC</a> ( WINNERS, NOBEL )
+   ELSE
+     .
+     .
+     .
+   END IF
+</PRE>
+<BR><BR>
+<A NAME="Character Cells"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Character Cells
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   As we mentioned earlier, the size and cardinality of a cell are stored
+   in the control area of the cell (elements LBCELL through 0). For numeric
+   data types, this is accomplished by simple assignment. However, in the
+   case of cell arrays of type character, the values for the size and
+   cardinality must be encoded into character strings.
+<P>
+ 
+   This is done by storing the numbers in base CHBASE, where CHBASE is the
+   number of distinct characters in the character set supported by the host
+   machine and compiler. (In ASCII environments, CHBASE is always at least
+   128, and may be as high as 256.) The numbers are encoded and decoded by
+   subroutines <a href="../spicelib/enchar.html">ENCHAR</a> and <a href="../spicelib/dechar.html">DECHAR</a> respectively. The value of parameter
+   MINLEN (declared in <a href="../spicelib/enchar.html">ENCHAR</a>) constrains the minimum length of the
+   elements in a cell array. The nominal value for MINLEN is 5. Given this
+   value,
+<P>
+ 
+<PRE>
+   INTEGER          LBCELL
+   PARAMETER      ( LBCELL = -5 )
+ 
+   CHARACTER*5      NAMES    ( LBCELL:1000 )
+</PRE>
+   is a legal cell declaration, while
+<P>
+ 
+<PRE>
+   INTEGER          LBCELL
+   PARAMETER      ( LBCELL = -5 )
+ 
+   CHARACTER*4      NAMES    ( LBCELL:1000 )
+</PRE>
+   is not.
+<P>
+ 
+<BR><BR>
+<A NAME="Cell-based data types"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Cell-based data types
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   SPICELIB contains several extended data types based on cells. For
+   example, one family of routines uses cells to implement algebraic sets
+   of all types (character, integer, double precision). Another uses double
+   precision cells to manipulate collections of closed intervals of the
+   real numbers, called windows.
+<P>
+ 
+   All of these data types are supported by routines designed to manipulate
+   them. However, because they are based on cells, all of these data types
+   can be manipulated by the general cell routines as well. Thus, COPYx can
+   be used to copy sets and windows, just as it can be used to copy vanilla
+   cells.
+<P>
+ 
+<BR><BR>
+<A NAME="Summary"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Summary
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   The following table summarizes the SPICELIB cell routines.
+<P>
+ 
+<DL><DT>
+<B>
+ SSIZEx ( SIZE, CELL )
+</B><BR><BR>
+<DD>
+ Initialize (set the size of) a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ SCARDx ( CARD, CELL )
+</B><BR><BR>
+<DD>
+ Set the cardinality of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ SIZEx ( CELL )
+</B><BR><BR>
+<DD>
+ Return the size of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ CARDx ( CELL )
+</B><BR><BR>
+<DD>
+ Return the cardinality of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ COPYx ( ORIG, COPY )
+</B><BR><BR>
+<DD>
+ Copy the contents of a cell.<BR>
+</DL>
+<DL><DT>
+<B>
+ APPNDx ( ITEM, CELL )
+</B><BR><BR>
+<DD>
+ Append an item to a cell.<BR>
+</DL>
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>

@@ -1,0 +1,261 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>spcb2t</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>spcb2t</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ SPCB2T ( SPK and CK, binary to text )
+ 
+      SUBROUTINE SPCB2T ( BINARY, UNIT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Convert the contents of a binary SPK or CK file to text,
+     including comments if present, and write them to a text file
+     opened by the calling program.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/spc.html">SPC</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)         BINARY
+      INTEGER               UNIT
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     BINARY     I   Name of an existing binary SPK or CK file.
+     UNIT       I   Logical unit connected to a text file.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     BINARY      is the name of an existing binary SPK or CK file
+                 that may contain comments in its comment area.
+
+     UNIT        is the logical unit connected to a text file that
+                 has been opened for write access.  Use the routine
+                 TXTOPN to open this file.  Upon exit, this file will
+                 contain the same data and comments as the binary
+                 file, but in text format which is more suitable for
+                 transfer between heterogeneous computing environments.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If there is a problem opening or reading from the binary file,
+        a routine that <b>SPCB2T</b> calls diagnoses and signals an error.
+
+     2) If there is a problem writing to the text file,
+        the error SPICE(FILEWRITEFAILED) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See arguments BINARY and UNIT above.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The SPICELIB SPK and CK reader subroutines read binary files.
+     However, because different computing environments have different
+     binary representations of numbers, you must convert SPK and CK
+     files to text format when porting from one system to another.
+     After converting the file to text, you can transfer it using
+     a transfer protocol program like Kermit or FTP.  Then, convert
+     the text file back to binary format.
+
+     The following is a list of the SPICELIB routines that convert
+     SPK and CK files between binary and text format:
+
+        <a href="spca2b.html">SPCA2B</a>    converts text to binary.  It opens the text file,
+                  creates a new binary file, and closes both files.
+
+        <a href="spcb2a.html">SPCB2A</a>    converts binary to text.  It opens the binary file,
+                  creates a new text file, and closes both files.
+
+        <a href="spct2b.html">SPCT2B</a>    converts text to binary.  It creates a new binary
+                  file and closes it.  The text file is open on
+                  entrance and exit.
+
+        <b>SPCB2T</b>    converts binary to text.  It opens the binary
+                  file and closes it.  The text file is open on
+                  entrance and exit
+
+     See the SPC required reading for more information
+     about SPC routines and the SPK and CK file formats.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The following code fragment creates a text file containing
+     text format SPK data and comments preceded and followed
+     by a standard label.
+
+     The SPICELIB routine TXTOPN opens a new text file and TXTOPR
+     opens an existing text file for read access.  TEXT and
+     BINARY are character strings that contain the names of the
+     text and binary files.
+
+            CALL TXTOPN ( TEXT, UNIT )
+
+            (Write header label to UNIT)
+
+            CALL <b>SPCB2T</b> ( BINARY, UNIT )
+
+            (Write trailing label to UNIT)
+
+            CLOSE ( UNIT )
+
+
+     The following code fragment reconverts the text format
+     SPK data and comments back into binary format.
+
+            CALL TXTOPR ( TEXT, UNIT )
+
+            (Read, or just read past, header label from UNIT)
+
+            CALL <a href="spct2b.html">SPCT2B</a> ( UNIT, BINARY )
+
+            (Read trailing label from UNIT, if desired )
+
+            CLOSE ( UNIT )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1)  This routine assumes that the comment area of the binary SPK
+         or CK file contains only text stored by <a href="spcac.html">SPCAC</a>.  Comments
+         written any other way may not be handled properly.
+
+     2)  UNIT must be obtained via TXTOPN.  Use TXTOPN to open new
+         text files for write access and get the logical unit.
+         System dependencies regarding opening text files have
+         been isolated in the routines TXTOPN and TXTOPR.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     J.E. McLean    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 05-APR-1991 (JEM)</PRE>
+<h4>Link to routine SPCB2T source file <a href='../../../src/spicelib/spcb2t.f'>spcb2t.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:00 2014</pre>
+
+</body>
+</html>
+

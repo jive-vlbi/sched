@@ -1,0 +1,246 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ckbss</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ckbss</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ CKBSS ( C-kernel, begin search for segment )
+ 
+      ENTRY CKBSS ( INST, SCLKDP, TOL, NEEDAV )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Initiate search through loaded files to find segments applicable
+     to the spacecraft instrument and time specified.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     INTEGER               INST
+     DOUBLE PRECISION      SCLKDP
+     DOUBLE PRECISION      TOL
+     LOGICAL               NEEDAV
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     INST       I   Spacecraft and instrument ID.
+     SCLKDP     I   Encoded spacecraft clock time.
+     TOL        I   Time tolerance.
+     NEEDAV     I   Is there a need for angular velocity?
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     <b>CKBSS</b> sets up a search for segments. The four quantities below
+     establish the search criteria.
+
+
+     INST       is the NAIF ID of an instrument.
+
+     SCLKDP     is an encoded spacecraft clock time.
+
+     TOL        is a time tolerance, measured in the same units as
+                encoded spacecraft clock.
+
+     NEEDAV     indicates whether or not angular velocity data is
+                required.
+
+                If true, only segments containing pointing and angular
+                velocity data will be checked. If false, segments
+                containing just pointing data will also be considered.
+
+
+     A segment matches the <b>CKBSS</b>/<a href="cksns.html">CKSNS</a> search criteria when the
+     following statements are true.
+
+        1) INST matches the instrument number for the segment.
+
+        2) The time interval [SCLKDP - TOL, SCLKDP + TOL] intersects
+           the time interval of the segment.
+
+        3) If angular velocity data is required, as indicated by
+           NEEDAV, the segment contains angular velocity data.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If no files have been loaded, the error SPICE(NOLOADEDFILES)
+        is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     All files loaded by <a href="cklpf.html">CKLPF</a> are potential search targets for
+     <a href="cksns.html">CKSNS</a>.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     <b>CKBSS</b> sets up a search for segments by <a href="cksns.html">CKSNS</a>. It records the
+     instrument and time to be searched for, and whether to require
+     segments containing angular velocity data. If angular velocity
+     data are required, only segments containing angular velocity
+     data will be returned by <a href="cksns.html">CKSNS</a>. If angular velocity data are
+     not required, segments returned by <a href="cksns.html">CKSNS</a> may or may not contain
+     angular velocity data.
+
+     <b>CKBSS</b> determines the first task that <a href="cksns.html">CKSNS</a> will have to perform
+     if it is called to get an applicable segment.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     See Examples in <a href="ckbsr.html">CKBSR</a>.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     M.J. Spencer   (JPL)
+     J.E. McLean    (JPL)
+     R.E. Thurman   (JPL)
+     I.M. Underwood (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 4.1.0, 20-NOV-2001 (NJB)
+
+        Updated to support new doubly-linked list implementation:
+        partial segment list that cannot be buffered is now
+        deallocated here rather than in <a href="cksns.html">CKSNS</a>.  Minor changes to
+        comments were made as well.
+
+    SPICELIB Version 4.0.0, 17-FEB-2000 (WLT)
+
+        Added the Entry point <a href="ckhave.html">CKHAVE</a>
+
+    SPICELIB Version 3.0.0, 03-MAR-1999 (WLT)
+
+        The parameter STSIZE was increased from 1000 to 4000 to
+        avoid the buffering error that exists in the <a href="ckbsr.html">CKBSR</a>.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 07-SEP-1990 (RET) (IMU)</PRE>
+<h4>Link to routine CKBSS source file <a href='../../../src/spicelib/ckbsr.f'>ckbsr.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:54 2014</pre>
+
+</body>
+</html>
+

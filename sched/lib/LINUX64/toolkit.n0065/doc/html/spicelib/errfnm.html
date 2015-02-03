@@ -1,0 +1,286 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>errfnm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>errfnm</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      ERRFNM ( Insert filename into long error message text )
+ 
+      SUBROUTINE ERRFNM ( MARKER, UNIT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Substitute the first occurrence of a marker in the current long
+     error message with the name of the file attached to the logical
+     unit number.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/error.html">ERROR</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ERROR
+     STRING
+     UNITS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)         MARKER
+ 
+      INTEGER               UNIT
+ 
+      INTEGER               FILEN
+      PARAMETER           ( FILEN = 128 )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     MARKER     I   A substring in the error message that is to be
+                    replaced.
+     UNIT       I   Logical unit number attached to a file.
+     FILEN      P   Maximum length of filename.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     MARKER     is a character string which marks a position in
+                the long error message where a character string
+                is to be substituted.  Leading and trailing blanks
+                in MARKER are not significant.
+
+                Case IS significant;  'XX' is considered to be
+                a different marker from 'xx'.
+
+     UNIT       is the logical unit number attached to a file.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     FILEN      is the maximum file name length that can be
+                accommodated by this routine.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     Error free.
+
+     1) If the logical unit number is not attached to a file, the
+        string inserted into the long error message is:
+
+        '&lt;unavailable from the system&gt;'
+
+     2) If the FORTRAN INQUIRE statement fails to execute properly,
+        the string inserted into the long error message is:
+
+        '&lt;unavailable from the system&gt;'
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See &quot;Detailed_Input&quot; description of the variable UNIT.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1. The following code fragment reads a record from a file
+        then checks to see if the read was successful. If the
+        read failed, an error message is constructed that
+        specifies the record number, the filename and the value
+        of IOSTAT.
+
+        <b>ERRFNM</b> is used to replace the marker in the long error
+        message with the name of the file.
+
+
+        READ ( UNIT, REC=RECNUM, IOSTAT=IOSTAT ) RECORD
+
+         IF ( IOSTAT .NE. 0 ) THEN
+
+            CALL <a href="setmsg.html">SETMSG</a> ( 'Error reading record number # from ' //
+      .                   'file FILENAME. The value of IOSTAT ' //
+      .                   'was #.'                              )
+
+            CALL <a href="errint.html">ERRINT</a> ( '#',         RECNUM   )
+            CALL <b>ERRFNM</b> ( 'FILENAME',  UNIT     )
+            CALL <a href="errint.html">ERRINT</a> ( '#',         IOSTAT   )
+            CALL <a href="sigerr.html">SIGERR</a> ( 'SPICE(READFAILURE)'  )
+            CALL CHKOUT ( 'SAMPLE'              )
+            RETURN
+
+         END IF
+
+
+         If the unit is attached to the file SAMPLE.DAT, RECNUM
+         is 15 and IOSTAT is 36, and the INQUIRE statement in
+         this routine executed successfully, the long error
+         message is:
+
+           'Error reading record number 15 from file SAMPLE.DAT.
+            The value of IOSTAT was 36.'
+
+
+         If the unit is not attached to a file or if the INQUIRE
+         statement in this routine failed to execute successfully,
+         the long error message is:
+
+           'Error reading record number 15 from file
+           &lt;unavailable from the system&gt;. The value of IOSTAT
+           was 36.'
+
+
+     2. Note that the case of the marker is significant. The following
+        code fragment contains a call to <b>ERRFNM</b> using a marker
+        that does not appear in the long error message.
+
+
+        READ ( UNIT, REC=RECNUM, IOSTAT=IOSTAT ) RECORD
+
+         IF ( IOSTAT .NE. 0 ) THEN
+
+            CALL <a href="setmsg.html">SETMSG</a> ( 'Error reading record number # from ' //
+      .                   'file FILENAME. The value of IOSTAT ' //
+      .                   'was #.'                              )
+
+            CALL <a href="errint.html">ERRINT</a> ( '#',         RECNUM   )
+            CALL <b>ERRFNM</b> ( 'filename',  UNIT     )
+            CALL <a href="errint.html">ERRINT</a> ( '#',         IOSTAT   )
+            CALL <a href="sigerr.html">SIGERR</a> ( 'SPICE(READFAILURE)'  )
+            CALL CHKOUT ( 'SAMPLE'              )
+            RETURN
+
+         END IF
+
+
+         If the marker is not found, <b>ERRFNM</b> does not substitute
+         the filename for the marker. The long error message in
+         this case is:
+
+           'Error reading record number 15 from file FILENAME.
+            The value of IOSTAT was 36.'
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     The filename length is restricted by the parameter FILEN.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     H.A. Neilan    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 05-APR-1991 (HAN)</PRE>
+<h4>Link to routine ERRFNM source file <a href='../../../src/spicelib/errfnm.f'>errfnm.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:19 2014</pre>
+
+</body>
+</html>
+

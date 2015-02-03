@@ -1,0 +1,293 @@
+C$Procedure VERSION ( Print library version information )
+ 
+      PROGRAM VERSION
+      IMPLICIT NONE
+ 
+C$ Abstract
+C
+C     This program prints to standard output the current SPICE
+C     distribution version number, hardware system ID, operating
+C     system ID, compiler name, the format of double precision
+C     numbers for the hardware architecture, and the max and min
+C     values for double precision and integer numbers.
+C
+C$ Disclaimer
+C
+C     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
+C     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
+C     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
+C     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
+C     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
+C     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
+C     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
+C     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
+C     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
+C     SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
+C
+C     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
+C     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
+C     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+C     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
+C     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
+C     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
+C
+C     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
+C     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
+C     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
+C     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
+C
+C$ Required_Reading
+C
+C     None.
+C
+C$ Keyword
+C
+C     VERSION
+C     UTILITY
+C
+C$ Parameters
+C
+C     LINELN            length of line output string, set to 80.
+C
+C     DATEID            update version time string, set to 20.
+C
+C$ Exceptions
+C
+C     None.
+C
+C$ Files
+C
+C     None.
+C
+C$ Particulars
+C
+C     The version utility may use 3 different command line arguments.
+C     The default (no arguments) returns the Toolkit version string.
+C
+C     Usage: $ version [OPTION]
+C
+C$ Description
+C
+C     None.
+C
+C$ Examples
+C
+C
+C     Default behavior:
+C
+C     $ version
+C     N0051
+C
+C     Display all (-a) information:
+C
+C     $version -a
+C
+C     Toolkit version  : N0051
+C     System           : PC
+C     Operating System : LINUX
+C     Compiler         : LINUX G77
+C     File Format      : LTL-IEEE
+C     MAX DP           :  1.7976931348623E+308
+C     MIN DP           : -1.7976931348623E+308
+C     MAX INT          :  2147483647
+C     MIN INT          : -2147483647
+C
+C     Display version (-v) information:
+C
+C     $version -v
+C
+C     Version Utility for SPICE Toolkit edition N0051,
+C     last update: 1.1.0, 05-OCT-2001
+C
+C     Display help (-h) information:
+C
+C     $version -h
+C
+C     Usage: version [OPTION]
+C     no arguments   output only the SPICE toolkit version string.
+C     -a(ll)         output all environment variables; SPICE toolkit
+C                    version, system ID, operating system, compiler,
+C                    binary file format, max and min values for
+C                    double precision and integer numbers.
+C     -v(ersion)     output the version of the utility.
+C
+C$ Restrictions
+C
+C     None.
+C
+C$ Literature_References
+C
+C     None.
+C
+C$ Author_and_Institution
+C
+C     W.L. Taber      (JPL)
+C     F.S. Turner     (JPL)
+C     E.D. Wright     (JPL)
+C
+C$ Version
+C
+C     SPICELIB Version 1.1.0 26-SEP-2001 (FST) (EDW)
+C
+C        Added TEXT_FORMAT output.
+C
+C        Included options for SYSTEM, O/S, COMPILER, FILE_FORMAT,
+C        max/min DPs & integers, outputs, version, and help.
+C
+C        Added proper SPICE header.
+C
+C     SPICELIB Version 1.0.0 13-NOV-2001 (WLT)
+C
+C        First version, Thu NOV 13 10:04:41 PST 1997 W.L. Taber
+C
+C-&
+ 
+C
+C     SPICELIB functions.
+C
+      DOUBLE PRECISION      DPMAX
+      DOUBLE PRECISION      DPMIN
+ 
+      INTEGER               INTMAX
+      INTEGER               INTMIN
+      INTEGER               POS
+      INTEGER               RTRIM
+      INTEGER               WDCNT
+ 
+C
+C     Local Parameters.
+C
+      CHARACTER*(20)        DATEID
+      PARAMETER           ( DATEID = '1.1.0, 07-JAN-2002' )
+ 
+      INTEGER               LINELN
+      PARAMETER           ( LINELN = 80 )
+ 
+C
+C     Local Variables.
+C
+      CHARACTER*(80)        CMPLR
+      CHARACTER*(80)        FFORM
+      CHARACTER*(LINELN)    LINE
+      CHARACTER*(LINELN)    LINOUT ( 6 )
+      CHARACTER*(80)        OS
+      CHARACTER*(80)        SYS
+      CHARACTER*(80)        TFORM
+      CHARACTER*(6)         VRSN
+ 
+      INTEGER               I
+ 
+C
+C     Get command line.
+C
+      CALL GETCML( LINE )
+      CALL UCASE ( LINE, LINE )
+ 
+      CALL TKVRSN   ( 'TOOLKIT'    , VRSN )
+ 
+C
+C     Parse the command line for arguments. Appropriately respond.
+C
+      IF ( WDCNT( LINE ) .EQ. 0 ) THEN
+ 
+C
+C        No arguments, default to the toolkit version string.
+C
+         CALL TOSTDO ( VRSN( 1:RTRIM(VRSN) ) )
+ 
+      ELSE IF ( ( POS ( LINE, '-A', 1 ) .EQ. 1 ) ) THEN
+ 
+C
+C        All. Output everything.
+C
+         CALL TOSTDO( ' ' )
+         CALL TOSTDO   ( 'Toolkit version  : '//VRSN  )
+ 
+         CALL ZZPLATFM ( 'SYSTEM', SYS )
+         CALL TOSTDO   ( 'System           : '//SYS   )
+ 
+         CALL ZZPLATFM ( 'O/S', OS  )
+         CALL TOSTDO   ( 'Operating System : '//OS    )
+ 
+         CALL ZZPLATFM ( 'COMPILER', CMPLR  )
+         CALL TOSTDO   ( 'Compiler         : '//CMPLR )
+ 
+         CALL ZZPLATFM ( 'FILE_FORMAT', FFORM  )
+         CALL TOSTDO   ( 'File Format      : '//FFORM )
+ 
+         CALL ZZPLATFM ( 'TEXT_FORMAT', TFORM )
+         CALL TOSTDO   ( 'Text File Format : '//TFORM )
+ 
+         LINOUT(1) =  'MAX DP           :  #'
+         CALL REPMD  ( LINOUT(1), '#', DPMAX(), 23, LINOUT(1) )
+         CALL TOSTDO ( LINOUT(1) )
+ 
+         LINOUT(2) =  'MIN DP           : #'
+         CALL REPMD  ( LINOUT(2), '#', DPMIN(), 23, LINOUT(2) )
+         CALL TOSTDO ( LINOUT(2) )
+ 
+         LINOUT(3) =  'MAX INT          :  #'
+         CALL REPMI  ( LINOUT(3), '#', INTMAX(), LINOUT(3) )
+         CALL TOSTDO ( LINOUT(3) )
+ 
+         LINOUT(4) =  'MIN INT          : #'
+         CALL REPMI  ( LINOUT(4), '#', INTMIN(), LINOUT(4) )
+         CALL TOSTDO ( LINOUT(4) )
+ 
+         CALL TOSTDO( ' ' )
+ 
+      ELSE IF ( ( POS ( LINE, '-V', 1 ) .EQ. 1 ) ) THEN
+ 
+C
+C        Version. Output the utility version string.
+C
+         LINOUT(1) = 'Version Utility for SPICE Toolkit edition '
+     .             //VRSN( 1:RTRIM(VRSN) )
+     .             //', last update: '
+     .             //DATEID
+ 
+         CALL TOSTDO( ' ' )
+         CALL TOSTDO( LINOUT(1) )
+         CALL TOSTDO( ' ' )
+ 
+      ELSE IF ( ( POS ( LINE, '-H', 1 ) .EQ. 1 ) ) THEN
+ 
+C
+C        Help. How does does one use this perplexing routine?
+C
+         LINOUT(1) = 'Usage: version [OPTION]'
+         LINOUT(2) = ' no arguments   output only'
+     .   //             ' the SPICE toolkit version string.'
+         LINOUT(3) = ' -a(ll)         output all environment'
+     .   //          ' variables; SPICE toolkit version, system'
+         LINOUT(4) = '                ID, operating system,'
+     .   //          ' compiler, and binary file format, '
+         LINOUT(5) = '                max and min values for'
+     .   //          ' double precision and integer numbers.'
+         LINOUT(6) = ' -v(ersion)     output the version of the'
+     .   //          ' utility.'
+ 
+         CALL TOSTDO( ' ' )
+         DO I = 1, 6
+            CALL TOSTDO( LINOUT(I)( 1:RTRIM( LINOUT(I) ) ) )
+         END DO
+         CALL TOSTDO( ' ' )
+ 
+      ELSE
+ 
+C
+C        The user put something on the command line, but nothing
+C        known. Return the toolkit version string.
+C
+         CALL TOSTDO ( VRSN( 1:RTRIM(VRSN) ) )
+ 
+      END IF
+ 
+ 
+C
+C     Done. Indicate as much. Say bye.
+C
+      CALL BYEBYE ( 'SUCCESS' )
+ 
+      STOP
+      END

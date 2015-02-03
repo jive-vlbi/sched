@@ -1,0 +1,365 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dafopw</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dafopw</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ DAFOPW ( DAF, open for write )
+
+      ENTRY DAFOPW ( FNAME, HANDLE )
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Open a DAF for subsequent write requests.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     DAF
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     CHARACTER*(*)         FNAME
+     INTEGER               HANDLE
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     FNAME      I   Name of DAF to be opened.
+     HANDLE     O   Handle assigned to DAF.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     FNAME       is the name of a DAF to be opened with write
+                 access.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     HANDLE      is the file handle associated with the file. This
+                 handle is used to identify the file in subsequent
+                 calls to other DAF routines.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the specified file has already been opened, either by
+        the DAF routines or by other code, an error is signaled by
+        routines in the call tree of this routine.  Note that this
+        response is not paralleled by <a href="dafopr.html">DAFOPR</a>, which allows you
+        to open a DAF for reading even if it is already open for
+        reading.
+
+     2) If the specified file cannot be opened without exceeding
+        the maximum number of files, the error SPICE(DAFFTFULL)
+        is signaled.
+
+     3) If the attempt to read the file's file record fails, the
+        error SPICE(FILEREADFAILED) will be signalled.
+
+     4) If the specified file is not a DAF file, an error is
+        signaled by routines in the call tree of this routine.
+
+     5) If no logical units are available, an error is
+        signaled by routines called by this routine.
+
+     6) If the file does not exist, the error SPICE(FILENOTFOUND)
+        is signaled by routines in the call tree of this routine.
+
+     7) If an I/O error occurs in the process of opening the file,
+        routines in the call tree of this routine signal an error.
+
+     8) If the file name is blank or otherwise inappropriate
+        routines in the call tree of this routine signal an error.
+
+     9) If the file was transferred improperly via FTP, routines
+        in the call tree of this routine signal an error.
+
+    10) If the file utilizes a non-native binary file format, an
+        error is signaled by routines in the call tree of this
+        routine.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See argument FNAME.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Most DAFs require only read access. If you do not need to
+     change the contents of a file, you should open it with <a href="dafopr.html">DAFOPR</a>.
+     Use <b>DAFOPW</b> when you need to
+
+        -- change (update) one or more summaries, names, or
+           arrays within a file; or
+
+        -- add new arrays to a file.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     In the following code fragment, <b>DAFOPW</b> is used to open a
+     file, which is then searched for arrays containing data for
+     a particular object. The code for the object is then changed
+     (perhaps to reflect some new convention).
+
+        CALL <b>DAFOPW</b> ( FNAME, HANDLE )
+        CALL <a href="dafbfs.html">DAFBFS</a> ( HANDLE )
+        CALL <a href="daffna.html">DAFFNA</a> ( FOUND  )
+
+        DO WHILE ( FOUND )
+           CALL <a href="dafgs.html">DAFGS</a> ( SUM )
+           CALL <a href="dafus.html">DAFUS</a> ( SUM, ND, NI, DC, IC )
+
+           IF ( IC(1) .EQ. OLD_CODE ) THEN
+              IC(1) = NEW_CODE
+
+              CALL <a href="dafps.html">DAFPS</a> ( ND, NI, DC, IC, SUM )
+              CALL <a href="dafrs.html">DAFRS</a> ( SUM )
+           END IF
+
+           CALL <a href="daffna.html">DAFFNA</a> ( FOUND )
+        END DO
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) Only file of the native binary file format may be opened
+        with this routine.
+
+     2) Files opened using this routine must be closed with <a href="dafcls.html">DAFCLS</a>.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer  (JPL)
+     N.J. Bachman    (JPL)
+     J.M. Lynch      (JPL)
+     J.E. McLean     (JPL)
+     W.L. Taber      (JPL)
+     F.S. Turner     (JPL)
+     I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 8.1.1, 10-OCT-2012 (EDW)
+
+        Corrected ordering of header section.
+
+        Removed the obsolete Reference citation to &quot;NAIF
+        Document 167.0.&quot;
+
+    SPICELIB Version 8.1.0, 02-APR-2002 (FST)
+
+        This routine was updated to accomodate changes to the
+        handle manager interface.  See <a href="dafah.html">DAFAH</a>'s Revision section
+        for details.
+
+    SPICELIB Version 8.0.0, 13-NOV-2001 (FST)
+
+        This routine was updated to utilize the new handle manager
+        software to manage binary file formats and consolidated
+        I/O code.
+
+    SPICELIB Version 7.0.4, 08-OCT-1999 (WLT)
+
+        The environment lines were expanded so that the supported
+        environments are now explicitely given.  New
+        environments are WIN-NT
+
+    SPICELIB Version 7.0.3, 16-SEP-1999 (NJB)
+
+        CSPICE environments were added.  Some typos were corrected.
+
+    SPICELIB Version 7.0.2, 28-JUL-1999 (WLT)
+
+        The environment lines were expanded so that the supported
+        environments are now explicitly given.  New
+        environments are PC-DIGITAL, SGI-O32 and SGI-N32.
+
+    SPICELIB Version 7.0.1, 17-MAR-1999 (WLT)
+
+        The environment lines were expanded so that the supported
+        environments are now explicitly given.  Previously,
+        environments such as SUN-SUNOS and SUN-SOLARIS were implied
+        by the environment label SUN.
+
+    SPICELIB Version 6.0.0, 03-MAR-1999 (FST)
+
+        This entry point now attempts to locate and validate the
+        FTP validation string contained in the file record.
+
+    SPICELIB Version 5.0.0, 27-SEP-1993 (KRG)
+
+        This routine was modified to use a subroutine to obtain the
+        architecture of the file rather than using hard coded values
+        for comparing to the file ID word. This was done in order to
+        isolate the code which checks to determine a file architecture,
+        and to make the identification of file types easier through a
+        change to the file ID word.
+
+        In particular, the changes to this routine support the change
+        of the file ID word from 'NAIF/DAF' or 'NAIF/NIP' to 'DAF/xxxx'
+        where 'xxxx' represents a four character mnemonic code for the
+        type of data in the file.
+
+        Removed the error SPICE(DAFNOIDWORD) as it was no longer
+        relevant.
+
+        Added the error SPICE(NOTADAFFILE) if this routine is called
+        with a file that does not contain an ID word identifying the
+        file as a DAF file.
+
+        Changed the long error message when the error
+        SPICE(NOTADAFFILE) is signalled to suggest that a common error
+        is attempting to load a text version of the desired file rather
+        than the binary version.
+
+    SPICELIB Version 4.0.0, 25-FEB-1993 (JML)
+
+        The INQUIRE statement that checks if the file is already open
+        now also checks that the file exists.
+
+        A new variable LUN is used for the logical unit number
+        returned by <a href="getlun.html">GETLUN</a>.
+
+        The IF-THEN statements were reorganized to improve readability.
+
+        A long error message is now set when the DAF id word is not
+        recognized.  Also, the file is closed when this error is
+        signalled.
+
+        IOSTAT is now checked after the file record is read.
+
+        The file name is checked to see if it is blank.
+
+        The file name string that is passed to the FORTRAN OPEN and
+        INQUIRE statements has been chopped at the last non-blank
+        character.
+
+    SPICELIB Version 3.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 3.0.0, 03-SEP-1991 (NJB) (WLT)
+
+        <b>DAFOPW</b> now allows multiple files to be open for writing.
+
+        This routine was updated so that it now keeps current the set
+        of DAF handles returned by <a href="dafhof.html">DAFHOF</a>.
+
+    SPICELIB Version 2.0.0, 24-JAN-1991 (JEM)
+
+        <b>DAFOPW</b> now accepts the ID word 'NAIF/NIP' as well 'NAIF/DAF'.
+
+    SPICELIB Version 1.0.1, 22-MAR-1990 (HAN)
+
+        Literature references added to the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU)</PRE>
+<h4>Link to routine DAFOPW source file <a href='../../../src/spicelib/dafah.f'>dafah.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:05 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,252 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>rdencd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>rdencd</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+  RDENCD  ( Read encoded d.p. numbers from file )
+ 
+      SUBROUTINE RDENCD ( UNIT, N, DATA )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Read N encoded d.p. numbers from a text file, decoding them
+     into their equivalent d.p. numbers.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONVERSION
+     NUMBERS
+     UTILITY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               UNIT
+      INTEGER               N
+      DOUBLE PRECISION      DATA(*)
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+      UNIT      I    Fortran unit number of input text file.
+      N         I    Number of d.p. numbers to read and decode.
+      DATA      I    List of decoded d.p. numbers.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     UNIT     The Fortran unit number for a previously opened text
+              file. All reading will begin at the CURRENT POSITION
+              in the text file.
+
+     N        The number of encoded double precision numbers, to be
+              read from the text file attached to UNIT.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     DATA     List of decoded double precision numbers read from the
+              text file attached to UNIT.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)   If N, the number of data items, is not positive, the error
+          SPICE(INVALIDARGUMENT) will be signalled.
+
+     2)   If an error occurs while reading from the text file
+          attached to  UNIT, the error SPICE(FILEREADFAILED) will
+          be signalled.
+
+     3)   If an error occurs while decoding a number, the error
+          SPICE(DECODINGERROR) will be signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See the description of UNIT in Detailed_Input.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine will read N encoded double precision numbers from
+     the current position in a previously opened text file. The
+     current position in a file is defined to be the text line
+     immediately following the last text line that was written or
+     read. The numbers will be decoded and placed into a list of
+     double precision numbers which will be passed back to the caller.
+     The encoded double precision numbers are represented as quoted
+     character strings so that a Fortran list directed read may be
+     used to read the encoded values, rather than a formatted read
+     with the format specifier FMT = '(A)'.
+
+     This routine is one of a pair of routines which are used to
+     encode and decode d.p. numbers:
+
+           <a href="wrencd.html">WRENCD</a> -- Encode and write d.p. numbers to a file.
+           <b>RDENCD</b> -- Read and decode d.p. numbers from a file.
+
+     The encoding/decoding of d.p. numbers is performed to provide a
+     portable means for transferring data values.
+
+     Currently the encoded d.p. numbers are represented in a base
+     16 ``scientific notation.'' See <a href="dp2hx.html">DP2HX</a>.FOR and <a href="hx2dp.html">HX2DP</a>.FOR for
+     details.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose we have the following input file which contains the
+     values 1.0D0 - 100.0D0 in encoded format, and that the input
+     file has already been opened for reading. The arrow, '--&gt;',
+     indicates the current position in the file.
+
+        --&gt;'1^1' '2^1' '3^1' '4^1' '5^1' '6^1' '7^1' '8^1' '9^1'
+           'A^1' 'B^1' 'C^1' 'D^1' 'E^1' 'F^1' '1^2' '11^2' '12^2'
+           '13^2' '14^2' '15^2' '16^2' '17^2' '18^2' '19^2' '1A^2'
+           '1B^2' '1C^2' '1D^2' '1E^2' '1F^2' '2^2' '21^2' '22^2'
+           '23^2' '24^2' '25^2' '26^2' '27^2' '28^2' '29^2' '2A^2'
+           '2B^2' '2C^2' '2D^2' '2E^2' '2F^2' '3^2' '31^2' '32^2'
+           '33^2' '34^2' '35^2' '36^2' '37^2' '38^2' '39^2' '3A^2'
+           '3B^2' '3C^2' '3D^2' '3E^2' '3F^2' '4^2'
+           '41^2' '42^2' '43^2' '44^2' '45^2' '46^2' '47^2' '48^2'
+           '49^2' '4A^2' '4B^2' '4C^2' '4D^2' '4E^2' '4F^2' '5^2'
+           '51^2' '52^2' '53^2' '54^2' '55^2' '56^2' '57^2' '58^2'
+           '59^2' '5A^2' '5B^2' '5C^2' '5D^2' '5E^2' '5F^2' '6^2'
+           '61^2' '62^2' '63^2' '64^2'
+
+     Then the following code fragment would read and decode these
+     100 values.
+
+           N = 100
+           CALL <b>RDENCD</b>( UNIT, N, DATA )
+
+      Upon returning, the array data would contain the values
+      1.0D0 - 100.0D0.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer (JPL)
+     F.S. Turner    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.1.0, 19-MAR-1999 (FST)
+
+        Modified the long error message for SPICE(FILEREADFAILED)
+        to indicate the possibility of an incomplete text transfer
+        file as the cause.
+
+    SPICELIB Version 1.0.0, 20-OCT-1992 (KRG)</PRE>
+<h4>Link to routine RDENCD source file <a href='../../../src/spicelib/rdencd.f'>rdencd.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:48 2014</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,222 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>readln</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>readln</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      READLN ( Read a text line from a logical unit )
+ 
+      SUBROUTINE READLN ( UNIT, LINE, EOF )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     This routine will read a single line of text from the Fortran
+     logical unit UNIT, reporting the end of file if it occurs.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ASCII
+     TEXT
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      INTEGER            UNIT
+      CHARACTER*(*)      LINE
+      LOGICAL            EOF
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+      UNIT      I    The Fortran unit number to use for input.
+      LINE      O    The line read from the file.
+      EOF       O    A logical flag indicating the end of file.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     UNIT     The Fortran unit number for the input. This may
+              be either the unit number for the terminal, or the
+              unit number of a previously opened text file.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     LINE     On output, this will contain the next text line
+              encountered when reading from UNIT.
+
+              If the length of the character string LINE is shorter
+              than the length of the current line in the text file, the
+              line is truncated on the right by the Fortran READ
+              statement, filling LINE with the first LEN(LINE)
+              characters from the current line in the file.
+
+              If an error or the end of file occurs during the
+              attempt to read from UNIT, the value of this variable
+              is not guaranteed.
+
+     EOF      On output, this variable will be set to .TRUE. if the
+              end of file ( IOSTAT &lt; 0 ) is encountered during the
+              attempt to read from unit UNIT. Otherwise, this
+              variable will be set to .FALSE..
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)   If an error occurs while attempting to read from the text
+          file attached to UNIT, the error SPICE(FILEREADFAILED) will
+          be signalled.
+
+     This routine only checks in with the error handler in the event
+     that an error occurred. (Discovery check in)
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+      This routine will read a single line, a text record, from the
+      logical unit UNIT. UNIT may be the terminal, or it may be a
+      logical unit number obtained from a Fortran OPEN or INQUIRE
+      statement. This routine will set a logical flag, EOF, on output
+      if the end of the file is encountered during the read attempt.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+      CALL <b>READLN</b> ( UNIT, LINE, EOF )
+
+      IF ( EOF ) THEN
+         &lt; The end of file, deal with it appropriately &gt;
+      END IF
+
+      You now have a line of text from unit UNIT.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB     1.0.0, 20-DEC-1995 (KRG)
+
+        The routine graduated
+
+    Beta Version 1.0.1, 22-NOV-1994 (KRG)
+
+        Cleaned up the comments a little bit. No code changes.
+
+    Beta Version 1.0.0, 17-DEC-1992 (KRG)</PRE>
+<h4>Link to routine READLN source file <a href='../../../src/spicelib/readln.f'>readln.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:48 2014</pre>
+
+</body>
+</html>
+

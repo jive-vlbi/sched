@@ -1,0 +1,310 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>sgwfpk</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>sgwfpk</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ SGWFPK ( Generic segements: Write fixed size packets. )
+ 
+      ENTRY SGWFPK ( HANDLE, NPKTS, PKTDAT, NREFS, REFDAT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Write one or more fixed size data packets to the generic segment
+     currently being written to the DAF file associated with HANDLE.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/daf.html">DAF</a> Required Reading.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     GENERIC SEGMENTS
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     INTEGER               HANDLE
+     INTEGER               NPKTS
+     DOUBLE PRECISION      PKTDAT ( * )
+     INTEGER               NREFS
+     DOUBLE PRECISION      REFDAT ( * )
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+      HANDLE    I    Handle of a DAF file opened with write access.
+      NPKTS     I    Number of data packets to write to a segment.
+      PKTDAT    I    Array of packet data.
+      NREFS     I    Number of reference values.
+      REFDAT    I    Reference data.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+      HANDLE   Handle of a DAF file opened with write access. This is
+               the handle of a file in which a generic segment has
+               been started and is currently being written.
+
+      NPKTS    Number of data packets to write to a segment.
+
+      PKTDAT   A singly dimensioned array containing the fixed size
+               data packets to be added to the segment associated with
+               HANDLE.
+
+               For fixed size data packets, PKTDAT will have the
+               following structure:
+
+               Packet #  Range of Locations
+               --------  ---------------------------------------------
+
+                     1   PKTDAT(1)              to PKTDAT(PS)
+                     2   PKTDAT(PS+1)           to PKTDAT(2*PS)
+                     3   PKTDAT(2*PS+1)         to PKTDAT(3*PS)
+                     4   PKTDAT(3*PS+1)         to PKTDAT(4*PS)
+
+                                          .
+                                          .
+                                          .
+
+                 NPKTS   PKTDAT((NPKTS-1)*PS+1) to PKTDAT(NPKTS*PS)
+
+               where PS = PKTSIZ.
+
+      NREFS    Number of reference values.
+
+               For implicitly indexed packets, NREFS must have a value
+               of two (2).
+
+               When writing packets to a segment which uses an implicit
+               index type, the value specified by NREFS is used only on
+               the first call to <b>SGWFPK</b>. On all subsequent calls to
+               these subroutines for a particular implicitly indexed
+               segment, the value of NREFS is ignored.
+
+               For explicitly indexed packets, NREFS must be equal to
+               NPKTS, i.e., there should ba a reference value for each
+               data packet being written to the segment.
+
+               When writing packets to a segment which uses an explicit
+               index type, the value specified by NREFS is used on
+               every call to <b>SGWFPK</b> and it must be equal to NPKTS.
+
+      REFDAT   Reference data values.
+
+               For implicitly indexed packets, there must be two (2)
+               values. The reference values represent a starting
+               reference value and a stepsize between consecutive
+               reference values, respectively.
+
+               In order to avoid, or at least minimize, numerical
+               difficulties associated with computing index values for
+               generic segments with implicit index types, the value of
+               the stepsize must be an integer, i.e., DINT(REFDAT(2))
+               must equal REFDAT(2).
+
+               When writing packets to a segment which uses an implicit
+               index type, the values specified by REFDAT are used only
+               on the first call to <b>SGWFPK</b>. On all subsequent calls to
+               this subroutine for a particular implicitly indexed
+               segment, REFDAT is ignored.
+
+               For explicitly indexed packets, there must be NPKTS
+               referencevalues and the values must be in increasing
+               order:
+
+                  REFDAT(I) &lt; REFDAT(I+1), I = 1, NPKTS-1
+
+               When writing packets to a segment which uses an explicit
+               index type, the values specified by REFDAT are used on
+               every call to <b>SGWFPK</b>. On all calls to these subroutines
+               after the first, the value of REFDAT(1) must be greater
+               than than the value of REFDAT(NPKTS) from the previous
+               call. This preserves the ordering of the reference
+               values for the entire segment.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     This subroutine makes use of parameters defined in the file
+     'sgparam.inc'.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If there are no generic segments with fixed packet sizes
+        currently being written, the error SPICE(CALLEDOUTOFORDER) will
+        be signalled.
+
+     2) If there is not a generic segment with fixed packet size being
+        written to the file associated with HANDLE, the error
+        SPICE(SEGMENTNOTFOUND) will be signalled.
+
+     3) If the type of generic segment being written to this file is
+        not a fixed packet size generic segment, the error
+        SPICE(SEGTYPECONFLICT) will be signalled.
+
+     4) If the number of packets to be written to the generic segment
+        is not positive, the error SPICE(NUMPACKETSNOTPOS) will be
+        signalled.
+
+     5) If an explicitly indexed generic segment is being written and
+        the number of reference values, NREFS, is not equal to the
+        number of data packets being written, NPKTS, the error
+        SPICE(INCOMPATIBLENUMREF) will be signalled.
+
+     6) If an explicitly indexed generic segment is being written and
+        the reference values are not in increasing order, the error
+        SPICE(UNORDEREDREFS) will be signalled.
+
+     7) If an explicitly indexed generic segment is being written and
+        the first reference value on the second or later additions
+        of packets to the generic segment is not greater than the last
+        reference value from the previous addition of packets, the
+        error SPICE(UNORDEREDREFS) will be signalled.
+
+     8) If an implicitly indexed generic segment is being written and
+        the number of reference values, NREFS, is not equal to two (2)
+        on the first call to this subroutine for a particular segment,
+        then the error SPICE(INCOMPATIBLENUMREF) will be signalled.
+
+     9) If an implicitly indexed generic segment is being written and
+        the second reference value, the step size used for indexing, is
+        not integral, i.e., DINT(REFDAT(2)) .NE. REFDAT(2), the error
+        SPICE(REFVALNOTINTEGER) will be signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See HANDLE in the $ Detailed_Input section.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine will write one or more fixed size data packets to a
+     generic segment in the DAF file associated with HANDLE. The
+     generic segment must have been started by a call to <a href="sgbwfs.html">SGBWFS</a>.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     See the $ Examples section in the header for the main subroutine.
+     It contains examples wich demonstrate the use of the entry points
+     in the generic segments sequential writer. The entry points which
+     comprise the generic segments sequential writer must be used
+     together in the proper manner. Rather than repeating the examples
+     for each entry point they are provided in a single location.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer    (JPL)
+     W.L. Taber        (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 05-APR-1995 (KRG) (WLT)</PRE>
+<h4>Link to routine SGWFPK source file <a href='../../../src/spicelib/sgseqw.f'>sgseqw.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:58 2014</pre>
+
+</body>
+</html>
+

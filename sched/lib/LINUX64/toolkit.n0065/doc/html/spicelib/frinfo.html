@@ -1,0 +1,298 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>frinfo</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>frinfo</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ FRINFO ( FRame INFOrmation )
+ 
+      ENTRY FRINFO ( FRCODE, CENT, CLASS, CLSSID, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Retrieve the minimal attributes associated with a frame
+     needed for converting transformations to and from it.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/frames.html">FRAMES</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     FRAMES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     IMPLICIT NONE
+     INTEGER               FRCODE
+     INTEGER               CENT
+     INTEGER               CLASS
+     INTEGER               CLSSID
+     LOGICAL               FOUND
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     FRCODE     I   the ID code for some frame
+     CENT       O   the center of the frame
+     CLASS      O   the class (type) of the frame
+     CLSSID     O   the ID code for the frame within its class.
+     FOUND      O   TRUE if the requested information is available.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     FRCODE      is the ID code for some reference frame.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     CENT        is the body ID code for the center of the reference
+                 frame (if such an ID code is appropriate).
+
+     CLASS       is the class or type of the frame. This identifies
+                 which subsystem will be used to perform frame
+                 transformations.
+
+     CLSSID      is the ID code used for the frame within its class.
+                 This may be different from the frame ID code.
+
+     FOUND       is TRUE if CENT, CLASS and CCODE are available.
+                 Otherwise, FOUND is returned with the value FALSE.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If a frame definition is encountered that does not define
+        a central body for the frame, the error will be diagnosed
+        by routines in the call tree of this routine.
+
+     2) If a frame definition is encountered that does not define
+        a class for the frame, the error will be diagnosed by routines
+        in the call tree of this routine.
+
+     3) If a frame definition is encountered that does not define
+        a class ID for the frame, the error will be diagnosed by
+        routines in the call tree of this routine.
+
+     4) If a kernel variable defining a frame name is found, but
+        that variable has dimension greater than 1, the error
+        SPICE(INVALIDDIMENSION) will be signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This is a low level routine needed by state transformation
+     software to transform states and attitudes between different
+     reference frames.
+
+     The routine first examines local &quot;hard-coded&quot; information about
+     reference frames to see if the requested frame belongs to this
+     set. If it does that information is returned.
+
+     If the requested information is not stored locally, the routine
+     then examines the kernel pool to see if the requested information
+     is stored there. If it is and has the expected format, the data
+     is retrieved and returned.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you needed to determine the center of some
+     reference frame. The following code fragment illustrates
+     how to use this routine to determine this information.
+
+        CALL <b>FRINFO</b> ( FRCODE, CENT, CLASS, CLSSID, FOUND )
+
+        IF ( FOUND ) THEN
+
+           WRITE (*,*) 'The center of reference frame ', FRCODE
+           WRITE (*,*) 'has body ID code : ', CENT
+
+        ELSE
+
+           WRITE (*,*) 'There is insufficient data for frame ', FRCODE
+
+        END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     B.V. Semenov    (JPL)
+     W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 4.1.0, 08-AUG-2012 (BVS) 
+
+        The routine was updated to be more efficient by using hashes
+        instead kernel <a href="pool.html">POOL</a> look-ups for kernel <a href="pool.html">POOL</a> frames and by
+        using hases instead of ordered array searches for built-in
+        frames.
+
+    SPICELIB Version 4.0.0, 12-SEP-2005 (NJB)
+
+        Entry point <b>FRINFO</b> is no longer error-free. The following
+        errors are now diagnosed:
+
+           - Invalid dimension of frame name variable
+
+           - If a valid frame name assignment is present:
+
+              + Missing frame ID code assignment
+              + Missing class assignment
+              + Missing class ID assignment
+
+        Specification of frame center by name or ID is now supported.
+        Previously only ID codes could be used to identify frame
+        centers. Various frame definition errors that were previously
+        ignored are now diagnosed.      
+
+    SPICELIB Version 3.1.0, 20-DEC-2004 (BVS)
+
+        Removed special handling of the frame IDs less than -999. If
+        they cannot be ``resolved'' using kernel pool keywords, the
+        frame is NOT declared CK-based with center ID derived by
+        dividing frame ID by a 1000 and class ID assigned the frame ID
+        anymore. In the current practice with multitude of TK frames
+        with IDs set instrument IDs this default behavior is simply
+        not valid.
+
+    SPICELIB Version 3.0.1, 25-JUN-1999 (WLT)
+
+        Extended documentation of entry point <a href="cnmfrm.html">CNMFRM</a> and
+        corrected example for that entry point.
+
+    SPICELIB Version 3.0.0, 03-JUN-1997 (WLT)
+
+        The entry points <a href="cidfrm.html">CIDFRM</a> and <a href="cnmfrm.html">CNMFRM</a> were added so that
+        user's may determine the frame-id and name to associated
+        with a planetary object.
+
+    SPICELIB Version 2.0.0, 04-APR-1997 (WLT)
+
+        The routine was upgraded to reflect that a block of
+        frame ID codes have been reserved for use by the DSN.
+        ID codes 13001 to 13999 have been set aside for DSN
+        models for the orientation of the earth. These frames
+        are all PCK frames. Moreover, the PCK ID code to
+        use with these frames is simply the Frame-Code minus 10000.
+        All of these frames are centered at the earth (body 399).
+
+    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT)
+
+       The values NINERT and NNINRT are included instead of
+       being declared locally.
+
+    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT)</PRE>
+<h4>Link to routine FRINFO source file <a href='../../../src/spicelib/framex.f'>framex.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:22 2014</pre>
+
+</body>
+</html>
+

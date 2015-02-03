@@ -1,0 +1,266 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cidfrm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cidfrm</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ CIDFRM ( Center ID to FRaMe id and name )
+ 
+      ENTRY CIDFRM ( CENT, FRCODE, FRNAME, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Retrieve frame ID code and name to associate with a frame center.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/frames.html">FRAMES</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     FRAMES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     IMPLICIT NONE
+     INTEGER               CENT
+     INTEGER               FRCODE
+     CHARACTER*(*)         FRNAME
+     LOGICAL               FOUND
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     CENT       I   an object to associate a frame with.
+     FRCODE     O   the ID code of the frame associated with CENT
+     FRNAME     O   the name of the frame with ID FRCODE
+     FOUND      O   TRUE if the requested information is available.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     CENT        is the ID code for object for which there is a
+                 preferred reference frame.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     FRCODE      is the frame ID code to associate with the object
+                 specified by CENT.
+
+     FRNAME      is the name of the frame that should be associated
+                 with the object specified by CNAME. FRNAME should be
+                 declared as CHARACTER*(26) to ensure that it can
+                 contain the full name of the frame. If FRNAME does
+                 not have enough room to hold the full name of the
+                 frame, the name will be truncated on the right.
+
+     FOUND       is TRUE if the appropriate frame ID code and frame
+                 name can be determined. Otherwise FOUND is returned
+                 with the value FALSE.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If FRNAME is not have room to contain the frame name, the name
+        will be truncated on the right. ( Declaring FRNAME to be
+        CHARACTER*(26) will ensure that the name will not be
+        truncated.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine allows the user to determine the frame that should
+     be associated with a particular object. For example, if you
+     need the frame to associate with the Io, you can call <b>CIDFRM</b>
+     to determine the frame name and ID code for the bodyfixed frame
+     of Io.
+
+     The preferred frame to use with an object is specified via one
+     of the kernel pool variables:
+
+         OBJECT_&lt;cent&gt;_FRAME
+
+     where &lt;cent&gt; is the decimal representation of the integer CENT.
+
+     For those PCK objects that have &quot;built-in&quot; frame names this
+     routine returns the corresponding &quot;IAU&quot; frame and frame ID code.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that you want to determine the state of a target
+     in the preferred reference frame of some observer. This
+     routine can be used in conjunction with <a href="spkez.html">SPKEZ</a> to compute
+     the state.
+
+        CALL <b>CIDFRM</b> ( OBS, FRCODE, FRNAME, FOUND )
+
+        IF ( .NOT. FOUND ) THEN
+
+           WRITE (*,*) 'The bodyfixed frame for object ', OBS
+           WRITE (*,*) 'could not be identified.'
+           STOP
+
+        END IF
+
+        CALL <a href="spkez.html">SPKEZ</a> ( TARG, ET, FRNAME, ABCORR, OBS, STATE, LT )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     B.V. Semenov    (JPL)
+     W.L. Taber      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 3.2.0, 08-AUG-2012 (BVS) 
+
+        The routine was updated to be more efficient by using hashes
+        instead kernel <a href="pool.html">POOL</a> look-ups for kernel <a href="pool.html">POOL</a> frames and by
+        using hases instead of ordered array searches for built-in
+        frames.
+
+    SPICELIB Version 3.1.1, 09-FEB-2011 (NJB) 
+
+        Bug fix: corrected logic for object-frame association for case
+        where the assigned frame value is denoted by a frame code.
+
+    SPICELIB Version 3.0.1, 25-JUN-1999 (WLT)
+
+        Extended documentation of entry point <a href="cnmfrm.html">CNMFRM</a> and
+        corrected example for that entry point.
+
+    SPICELIB Version 3.0.0, 03-JUN-1997 (WLT)
+
+        The entry points <b>CIDFRM</b> and <a href="cnmfrm.html">CNMFRM</a> were added so that
+        user's may determine the frame-id and name to associated
+        with a planetary object.
+
+    SPICELIB Version 2.0.0, 04-APR-1997 (WLT)
+
+        The routine was upgraded to reflect that a block of
+        frame ID codes have been reserved for use by the DSN.
+        ID codes 13001 to 13999 have been set aside for DSN
+        models for the orientation of the earth. These frames
+        are all PCK frames. Moreover, the PCK ID code to
+        use with these frames is simply the Frame-Code minus 10000.
+        All of these frames are centered at the earth (body 399).
+
+    SPICELIB Version 1.1.0, 14-OCT-1996 (WLT)
+
+       The values NINERT and NNINRT are included instead of
+       being declared locally.
+
+    SPICELIB Version 1.0.0, 18-SEP-1995 (WLT)</PRE>
+<h4>Link to routine CIDFRM source file <a href='../../../src/spicelib/framex.f'>framex.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:54 2014</pre>
+
+</body>
+</html>
+
