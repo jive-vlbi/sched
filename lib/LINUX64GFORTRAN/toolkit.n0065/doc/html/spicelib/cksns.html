@@ -1,0 +1,316 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cksns</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cksns</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ CKSNS ( C-kernel, Select next segment )
+ 
+      ENTRY CKSNS ( HANDLE, DESCR, SEGID, FOUND )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Search through loaded files to find a segment matching the
+     requested instrument, time, and need for angular velocity.
+     Buffer segment descriptors, identifiers, and handles in the
+     process to minimize file reads.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     INTEGER               HANDLE
+     DOUBLE PRECISION      DESCR  ( * )
+     CHARACTER*(*)         SEGID
+     LOGICAL               FOUND
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     O   Handle of file containing the applicable segment.
+     DESCR      O   Descriptor of the applicable segment.
+     SEGID      O   Identifier of the applicable segment.
+     FOUND      O   True if a segment was found.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     HANDLE     is an integer handle of the file containing the
+                segment matching the instrument and time
+                specifications made in the last call to <a href="ckbss.html">CKBSS</a>.
+
+     DESCR,
+     SEGID      are the descriptor and identifier of the segment found
+                which matches the instrument and time specifications
+                made in the last call to <a href="ckbss.html">CKBSS</a>.
+
+     FOUND      is true if an applicable segment was found.  False
+                otherwise.  If FOUND is false, the values of the
+                other arguments are meaningless.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If <b>CKSNS</b> is called without <a href="ckbss.html">CKBSS</a> ever having been called,
+        the error 'SPICE(CALLCKBSSFIRST)' is signaled.
+
+     2) If no segment is found that matches the search criteria,
+        FOUND is set to false, but the values of HANDLE, DESCR,
+        and SEGID will be meaningless.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     All files loaded by <a href="cklpf.html">CKLPF</a> are potential search targets for
+     <b>CKSNS</b>. The files are all referred to by their integer handles.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     <b>CKSNS</b> is used to locate segments based on the search criteria
+     established by the most recent call to <a href="ckbss.html">CKBSS</a>.  When a segment
+     is found it will have the following characteristics:
+
+        1) Its instrument will match the instrument specified in the
+           call to <a href="ckbss.html">CKBSS</a>.
+
+        2) Its time interval will intersect the time interval
+
+              [SCLKDP - TOL, SCLKDP + TOL],
+
+           where SCLKDP and TOL were specified in the call to <a href="ckbss.html">CKBSS</a>.
+
+        3) If there is a need for angular velocity data, as specified
+           by NEEDAV in the call to <a href="ckbss.html">CKBSS</a>, a returned segment
+           will contain angular velocity data. If there is no need
+           for such data, the returned segment may or may not contain
+           angular velocity data.
+
+     The first call to <b>CKSNS</b> following a call to <a href="ckbss.html">CKBSS</a> starts a search
+     through loaded files and either returns the first applicable
+     segment, or indicates that no segment was found.
+
+     <b>CKSNS</b> searches through last-loaded files first. Individual
+     files are searched backwards, so that segments that were inserted
+     last into the file get checked first.
+
+     Subsequent calls to <b>CKSNS</b> pick up the search exactly where the
+     previous calls left off. If a segment is not found, future calls
+     will also indicate that no segment could be found, until a new
+     search is begun.
+
+     <b>CKSNS</b> also buffers segment descriptors and identifiers, to
+     attempt to minimize file reads.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     See Examples in <a href="ckbsr.html">CKBSR</a>.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) This subroutine assumes that a search has been initiated by
+        a call to <a href="ckbss.html">CKBSS</a>.
+
+     2) When a CK file is loaded or unloaded, a new search must 
+        be started via a call to <a href="ckbss.html">CKBSS</a> before this routine may
+        be called.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     J.E. McLean    (JPL)
+     M.J. Spencer   (JPL)
+     R.E. Thurman   (JPL)
+     I.M. Underwood (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 4.5.0, 24-FEB-2011 (NJB)
+
+        Bug fix: in the 'MAKE ROOM' state, when the suspended activity
+        is 'ADD TO FRONT' and no segment table room is available, the
+        instrument table's pointer to the current segment list is now
+        set to null. Previously the pointer was allowed to go stale.
+
+    SPICELIB Version 4.2.0, 08-SEP-2005 (NJB)
+
+        Updated to remove non-standard use of duplicate arguments
+        in MOVED call.   
+
+    SPICELIB Version 4.1.0, 20-NOV-2001 (NJB)
+
+        Bug fixes:  
+          
+           1) When a segment list is freed because the entire list 
+              is contributed by a single CK file, and the list is
+              too large to be buffered, the corresponding intrument
+              table pointer is now set to null.  
+
+           2) An algorithm change has eliminated a bug caused by not 
+              updating the current instrument index when instrument
+              table entries  having empty segment lists were compressed
+              out of the instrument table.  Previously the instrument
+              table pointer IINDEX could go stale after the 
+              compression.
+
+           3) DAF calls are now followed by tests of <a href="failed.html">FAILED</a>()
+              in order to ensure that the main state loop terminates.
+
+        The &quot;re-use interval&quot; feature was introduced to improve speed 
+        in the case where repeated, consecutive requests are satisified
+        by the same segment.
+
+        The segment list cost algorithm was modified slightly:  
+        the contribution of a file search to the cost of a list
+        is included only when the file search is completed.  The
+        cost of finding the re-use interval is accounted for when
+        unbuffered searches are required.
+
+        The file table size has been increased to 1000, in order
+        to take advantage of the DAF system's new ability to load 
+        1000 files.
+
+        The instrument table size has been increased to 100 in order to
+        decrease the chance of thrashing due to swapping segment
+        lists for different bodies.
+     
+        Various small updates and corrections were made to the 
+        comments throughout the file.
+
+    SPICELIB Version 4.0.0, 17-FEB-2000 (WLT)
+
+        Added the Entry point <a href="ckhave.html">CKHAVE</a>
+
+    SPICELIB Version 3.0.0, 03-MAR-1999 (WLT)
+
+        The parameter STSIZE was increased from 1000 to 4000 to
+        avoid the buffering error that exists in the <a href="ckbsr.html">CKBSR</a>.
+
+    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.1.0, 01-NOV-1990 (JML)
+
+        A check on the initial value of the variable STATUS
+        was added in order to detect the situation in which
+        <a href="ckbss.html">CKBSS</a> was never called to initiate a search.
+
+
+    SPICELIB Version 1.0.0, 07-SEP-1990 (RET) (IMU)</PRE>
+<h4>Link to routine CKSNS source file <a href='../../../src/spicelib/ckbsr.f'>ckbsr.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:58 2014</pre>
+
+</body>
+</html>
+

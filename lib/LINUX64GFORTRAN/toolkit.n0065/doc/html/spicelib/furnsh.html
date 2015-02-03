@@ -1,0 +1,546 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>furnsh</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>furnsh</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      FURNSH ( Furnish a program with SPICE kernels )
+ 
+      ENTRY FURNSH ( FILE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Load one or more SPICE kernels into a program.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+      None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+      UTILITY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     CHARACTER*(*)         FILE
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     FILE       I   SPICE kernel file (text or binary).
+     FILSIZ     P   Maximum file name length.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     FILE       is a SPICE kernel file.  The file may be either binary
+                or text. If the file is a binary SPICE kernel it will
+                be loaded into the appropriate SPICE subsystem.  If
+                FILE is a SPICE text kernel it will be loaded into the
+                kernel pool. If FILE is a SPICE meta-kernel containing
+                initialization instructions (through use of the
+                correct kernel pool variables), the files specified in
+                those variables will be loaded into the appropriate
+                SPICE subsystem.
+
+                The SPICE text kernel format supports association of
+                names and data values using a &quot;keyword = value&quot;
+                format. The keyword-value pairs thus defined are
+                called &quot;kernel variables.&quot;  
+
+                While any information can be placed in a text kernel
+                file, the following string valued kernel variables are
+                recognized by SPICE as meta-kernel keywords:
+
+                     KERNELS_TO_LOAD
+                     PATH_SYMBOLS
+                     PATH_VALUES
+
+                Each kernel variable is discussed below.
+
+                KERNELS_TO_LOAD   is a list of SPICE kernels to be
+                                  loaded into a program.  If file
+                                  names do not fit within the kernel
+                                  pool 80 character limit, they may be
+                                  continued to subsequent array
+                                  elements by placing the continuation
+                                  character ('+') at the end of an
+                                  element and then placing the
+                                  remainder of the file name in the
+                                  next array element.  (See the
+                                  examples below for an illustration
+                                  of this technique or consult the
+                                  routine <a href="stpool.html">STPOOL</a> for further details.)
+
+                                  You may use one or more PATH_SYMBOL
+                                  assignments (see below) to specify
+                                  strings to be substituted for some
+                                  part of a file name.
+
+                PATH_SYMBOLS      is a list of strings (without
+                                  embedded blanks) which if
+                                  encountered following the '$'
+                                  character will be replaced with the
+                                  corresponding PATH_VALUES string.
+                                  Note that PATH_SYMBOLS are
+                                  interpreted only in values
+                                  associated with the KERNELS_TO_LOAD
+                                  variable. There must be a one-to-one
+                                  correspondence between the values
+                                  supplied for PATH_SYMBOLS and
+                                  PATH_VALUES. For the purpose of
+                                  determining this correspondence, any
+                                  path value that is continued over
+                                  multiple array elements counts as a
+                                  single value.
+
+                PATH_VALUES       is a list of expansions to use when
+                                  PATH_SYMBOLS are encountered. If
+                                  path values do not fit within the
+                                  kernel pool 80 character limit, they
+                                  may be continued in the same way as
+                                  file names (see the KERNELS_TO_LOAD
+                                  description above).
+
+               These kernel pool variables persist within the kernel
+               pool only until all kernels associated with the
+               variable KERNELS_TO_LOAD have been loaded.  Once all
+               specified kernels have been loaded, the variables
+               KERNELS_TO_LOAD, PATH_SYMBOLS and PATH_VALUES are
+               removed from the kernel pool.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None. The routine loads various SPICE kernels for use by your
+     application.  
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     FILSIZ    is the maximum file name length that can be
+               accommodated by this routine.
+
+     MAXFIL    is the number of entries that can be stored in <a href="keeper.html">KEEPER</a>'s
+               kernel database.  Each time a kernel is loaded via
+               <b>FURNSH</b>, a database entry is created for that kernel.
+               If a meta-kernel is loaded, a database entry is created
+               for the meta-kernel itself and for all files referenced
+               in the meta-kernel's KERNELS_TO_LOAD specification.
+               Unloading a kernel or meta-kernel deletes database
+               entries created when the file was loaded.
+
+               The parameter MAXFIL is an upper bound on number of
+               SPICE kernels that can be loaded at any time via the
+               <a href="keeper.html">KEEPER</a> interface, but the number of kernels that can be
+               loaded may be smaller, since re-loading a loaded kernel
+               or meta-kernel results in creation of additional
+               database entries.
+
+               Kernels loaded into the <a href="keeper.html">KEEPER</a> system are subject to
+               constraints imposed by lower-level subsystems. The
+               binary kernel systems (SPK, CK, binary PCK, and EK)
+               have their own limits on the maximum number of kernels
+               that may be loaded.
+
+               The total number of DAF-based files (this set includes
+               SPKs, CKs, and binary PCKs) that may be loaded at any
+               time may not exceed 1000.  This limit applies whether
+               the files are loaded via <b>FURNSH</b> or lower-level loaders
+               such as <a href="spklef.html">SPKLEF</a> or <a href="dafopr.html">DAFOPR</a>.  File access performance
+               normally will degrade as the number of loaded kernels
+               increases.
+
+               The total number of DAS-based files that may be loaded
+               at any time is currently limited to 20 files.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If a problem is encountered while trying to load FILE,
+        it will be diagnosed by a routine in the call tree of this
+        routine.
+
+     2) If the input FILE is a meta-kernel and some file in the
+        KERNELS_TO_LOAD assignment cannot be found, or if an error
+        occurs while trying to load a file specified by this
+        assignment, the error will be diagnosed by a routine in the
+        call tree of this routine, and this routine will return. Any
+        files loaded prior to encountering the missing file will
+        remain loaded.
+
+     3) If an attempt to load a text kernel fails while the kernel is
+        being parsed, any kernel variable assignments made before
+        the failure occurred will be retained in the kernel pool.
+
+     4) If a PATH_SYMBOLS assignment is specified without a
+        corresponding PATH_VALUES assignment, the error
+        SPICE(NOPATHVALUE) will be signaled.
+
+     5) If a meta-text kernel is supplied to <b>FURNSH</b> that contains
+        instructions specifying that another meta-text kernel be
+        loaded, the error SPICE(RECURSIVELOADING) will be signaled.
+
+     6) If the input file name has non-blank length exceeding FILSIZ
+        characters, the error SPICE(FILENAMETOOLONG) is signaled.
+
+     7) If the input file is a meta-kernel and some file in the
+        KERNELS_TO_LOAD assignment has name length exceeding FILSIZ
+        characters, the error SPICE(FILENAMETOOLONG) is signaled.
+
+     8) If the input file is a meta-kernel and some value in the
+        PATH_VALUES assignment has length exceeding FILSIZ
+        characters, the error SPICE(PATHTOOLONG) is signaled.
+
+     9) If the input file is a meta-kernel and some file in the
+        KERNELS_TO_LOAD assignment has, after symbol substitution,
+        combined name and path length exceeding FILSIZ characters, the
+        error SPICE(FILENAMETOOLONG) is signaled.
+
+    10) The error 'SPICE(BADVARNAME)' signals from a routine in the
+        call tree of <b>FURNSH</b> if a kernel pool variable name length
+        exceeds MAXLEN characters (defined in pool.f).
+
+    
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     The input FILE is examined and loaded into the appropriate SPICE
+     subsystem.  If the file is a meta-kernel, any kernels specified
+     by the KERNELS_TO_LOAD keyword (and if present, the PATH_SYMBOLS
+     and PATH_VALUES keywords) are loaded as well.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine provides a uniform interface to the SPICE kernel
+     loading systems.  It allows you to easily assemble a list of
+     SPICE kernels required by your application and to modify that set
+     without modifying the source code of programs that make use of
+     these kernels.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Example 1
+     ---------
+
+     Load the leapseconds kernel naif0007.tls and the planetary
+     ephemeris SPK file de405s.bsp.
+
+        CALL <b>FURNSH</b> ( 'naif0007.tls' )
+        CALL <b>FURNSH</b> ( 'de405s.bsp'   )
+
+
+     Example 2
+     ---------
+
+     This example illustrates how you could create a meta-kernel file
+     for a program that requires several text and binary kernels.
+ 
+     First create a list of the kernels you need in a text file as
+     shown below.
+
+        \begintext
+
+           Here are the SPICE kernels required for my application
+           program.
+
+           Note that kernels are loaded in the order listed. Thus we
+           need to list the highest priority kernel last.
+
+
+        \begindata
+
+        KERNELS_TO_LOAD = ( 
+
+              '/home/mydir/kernels/spk/lowest_priority.bsp',
+              '/home/mydir/kernels/spk/next_priority.bsp',
+              '/home/mydir/kernels/spk/highest_priority.bsp',
+              '/home/mydir/kernels/text/leapsecond.ker',
+              '/home/mydir/kernels+',
+              '/custom+',
+              '/kernel_data/constants.ker',
+              '/home/mydir/kernels/text/sclk.tsc',
+              '/home/mydir/kernels/ck/c-kernel.bc' )
+
+
+     Note that the file name
+
+        /home/mydir/kernels/custom/kernel_data/constants.ker
+
+     is continued across several lines in the right hand side of the
+     assignment of the kernel variable KERNELS_TO_LOAD.
+
+     Once you've created your list of kernels, call <b>FURNSH</b> near the
+     beginning of your application program to load the meta-kernel
+     automatically at program start up.
+
+        CALL <b>FURNSH</b> ( 'myfile.txt' )
+
+     This will cause each of the kernels listed in your meta-kernel
+     to be loaded.
+
+
+     Example 3
+     ---------
+
+     This example illustrates how you can simplify the previous
+     kernel list by using PATH_SYMBOLS.
+
+
+        \begintext
+
+           Here are the SPICE kernels required for my application
+           program.
+
+           We are going to let A substitute for the directory that
+           contains SPK files; B substitute for the directory that
+           contains C-kernels; and C substitute for the directory that
+           contains text kernels.  And we'll let D substitute for
+           a &quot;custom&quot; directory that contains a special planetary
+           constants kernel made just for our mission.
+
+           Note that our PATH_VALUES and the corresponding
+           PATH_SYMBOLS must be listed in the same order.
+
+
+        \begindata
+
+        PATH_VALUES  = ( '/home/mydir/kernels/spk',
+                         '/home/mydir/kernels/ck',
+                         '/home/mydir/kernels/text',
+                         '/home/mydir/kernels/custom/kernel_data' )
+
+        PATH_SYMBOLS = ( 'A',
+                         'B',
+                         'C',
+                         'D'  )
+
+        KERNELS_TO_LOAD = (  '$A/lowest_priority.bsp',
+                             '$A/next_priority.bsp',
+                             '$A/highest_priority.bsp',
+                             '$C/leapsecond.ker',
+                             '$D/constants.ker',
+                             '$C/sclk.tsc',
+                             '$B/c-kernel.bc'         )
+
+
+     Example 4
+     ---------
+
+     This example illustrates continuation of path values. The
+     meta-kernel shown here is a modified version of that from
+     example 3.
+     
+        \begintext
+
+           Here are the SPICE kernels required for my application
+           program.
+
+           We are going to let A substitute for the directory that
+           contains SPK files; B substitute for the directory that
+           contains C-kernels; and C substitute for the directory that
+           contains text kernels.  And we'll let D substitute for
+           a &quot;custom&quot; directory that contains a special planetary
+           constants kernel made just for our mission.
+
+           Note that our PATH_VALUES and the corresponding
+           PATH_SYMBOLS must be listed in the same order.
+
+           The values for path symbols A and D are continued over
+           multiple lines.
+
+        \begindata
+
+        PATH_VALUES  = ( '/very_long_top_level_path_name/mydir/+',
+                         'kernels/spk',
+                         '/home/mydir/kernels/ck',
+                         '/home/mydir/kernels/text',
+                         '/very_long_top_level_path_name+',
+                         '/mydir/kernels/custom+',
+                         '/kernel_data'                )
+
+        PATH_SYMBOLS = ( 'A',
+                         'B',
+                         'C',
+                         'D'  )
+
+        KERNELS_TO_LOAD = (  '$A/lowest_priority.bsp',
+                             '$A/next_priority.bsp',
+                             '$A/highest_priority.bsp',
+                             '$C/leapsecond.ker',
+                             '$D/constants.ker',
+                             '$C/sclk.tsc',
+                             '$B/c-kernel.bc'         )
+ 
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) A meta-kernel cannot reference another meta-kernel.
+
+     2) Failure during an attempt to load a text kernel or a 
+        meta-kernel can result in a subset of the intended kernel
+        variables being set or a subset of the intended files
+        being loaded. <b>FURNSH</b> does not &quot;clean up&quot; so as to undo the
+        effects of a failed load operation.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     C.H. Acton      (JPL)
+     N.J. Bachman    (JPL)
+     W.L. Taber      (JPL)
+     B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 4.1.0, 01-JUL-2014 (NJB) (BVS)
+
+        Updated discussion of partially completed kernel loading.
+
+     Last update was 12-APR-2012 (BVS)
+
+        Changed to use <a href="sepool.html">SEPOOL</a> instead of <a href="stpool.html">STPOOL</a> to reduce loading time
+        for large meta-kernels due to n^2 delay in <a href="stpool.html">STPOOL</a>.
+
+    SPICELIB Version 4.0.1, 10-FEB-2010 (EDW)
+
+        Added mention of the restriction on kernel pool variable 
+        names to MAXLEN (defined in pool.f) characters or less.
+
+    SPICELIB Version 4.0.0, 02-APR-2009 (NJB)
+
+        Continued path values are now supported. <b>FURNSH</b> now rejects
+        file names longer than FILSIZ characters.
+
+    SPICELIB Version 2.0.3, 27-APR-2007 (NJB)
+
+        Fixed header typo: added quotes to literal string
+        input arguments in example <b>FURNSH</b> calls.
+
+    SPICELIB Version 2.0.2, 15-NOV-2006 (NJB)
+
+        Added description of parameter MAXFIL to header.
+
+    SPICELIB Version 2.0.1, 29-JUL-2003 (NJB) (CHA)
+
+        Numerous updates to improve clarity.  Some corrections were
+        made.
+
+    SPICELIB VERSION 2.0.0, 23-AUG-2001 (WLT)
+
+        Added a call to <a href="cvpool.html">CVPOOL</a> in <b>FURNSH</b> so that watches that are
+        triggered are triggered by loading Meta-kernels and not by
+        some external interaction with the kernel pool.
+
+    SPICELIB Version 1.1.0, 19-SEP-2000 (WLT)
+
+        Corrected the error message template used
+        by ZZLDKER
+
+    SPICELIB Version 1.0.1, 16-DEC-1999 (NJB)
+
+        Documentation fix:  corrected second code example in the
+        header of this entry point.  The example previously used the
+        kernel variable PATH_NAMES; that name has been replaced with
+        the correct name PATH_VALUES.
+
+    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT)</PRE>
+<h4>Link to routine FURNSH source file <a href='../../../src/spicelib/keeper.f'>keeper.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:22 2014</pre>
+
+</body>
+</html>
+

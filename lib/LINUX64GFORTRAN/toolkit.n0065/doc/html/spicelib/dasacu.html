@@ -1,0 +1,432 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dasacu</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dasacu</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DASACU ( DAS add comments from a logical unit )
+ 
+      SUBROUTINE DASACU ( COMLUN, BEGMRK, ENDMRK, INSBLN, HANDLE )
+      
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Add comments to a previously opened binary DAS file from a
+     previously opened text file attached to a Fortran logical unit.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               COMLUN
+      CHARACTER*(*)         BEGMRK
+      CHARACTER*(*)         ENDMRK
+      LOGICAL               INSBLN
+      INTEGER               HANDLE
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+      COMLUN    I   Logical unit of the open comment text file.
+      BEGMRK    I   The begin comments marker in the comment text file.
+      ENDMRK    I   The end comments marker in the comment text file.
+      INSBLN    I   A flag indicating whether to insert a blank line.
+      HANDLE    I   Handle of a DAS file opened with write access.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     COMLUN   The Fortran logical unit of a previously opened text
+              file which contains comments that are to be added to
+              the comment area of a binary E-Kernel file.
+
+     BEGMRK   A marker which identifies the beginning of the comments
+              in the comment text file. This marker must appear on a
+              line by itself, and leading and trailing blanks are not
+              significant.
+
+              The line immediately following this marker is the first
+              comment line to be placed into the comment area of the
+              binary DAS file.
+
+              If the begin marker is blank, BEGMRK .EQ. ' ', then the
+              comments are assumed to start at the current location
+              in the comment text file.
+
+     ENDMRK   A marker which identifies the end of the comments in the
+              comment text file. This marker must appear on a line by
+              itself, and leading and trailing blanks are not
+              significant.
+
+              The line immediately preceeding this marker is the last
+              comment line to be placed into the comment area of the
+              binary DAS file.
+
+              If the end marker is blank, ENDMRK .EQ. ' ', then the
+              comments are assumed to stop at the end of the comment
+              text file.
+
+     INSBLN   A logical flag which indicates whether a blank line is
+              to be inserted into the comment area of the binary DAS
+              file attached to HANDLE before any comments are added
+              to the comment area of the DAS file. This is to provide
+              a simple mechanism for separating any comments already
+              contained in the comment area of a DAS file from those
+              comments that are being added.
+
+              If the comment area of a binary DAS file is empty, the
+              value of this flag is not significant, the comments will
+              simply be placed into the comment area.
+
+     HANDLE   The file handle for a binary DAS file that has been
+              opened with write access.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)   If the scratch file for temporarily holding the comments
+          culled from the text file cannot be opened, then the
+          error SPICE(FILEOPENFAILED) will be signalled.
+
+     2)   If a non printing ASCII character is encountered in the
+          comments, the error SPICE(ILLEGALCHARACTER) will be
+          signalled.
+
+     3)   If the begin marker cannot be found in the text file, the
+          error SPICE(MARKERNOTFOUND) will be signalled.
+
+     4)   If the end marker cannot be found in the text file, the
+          error SPICE(MARKERNOTFOUND) will be signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     1)   See parameters COMLUN and HANDLE in the $ Detailed_Inputs
+          section.
+
+     2)   A scratch file is used to temporarily hold the comments
+          culled from the comment text file. This is so we do not
+          have to find the place where we started searching for
+          comments in the original file.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine will place all lines between two specified markers,
+     a `begin comments marker' and an `end comments marker,' in a
+     text file into the comment area of a binary DAS file attached to
+     HANDLE. If the `begin comments marker' is blank, then the
+     comments are asumed to start at the current location of the
+     comment text file attached to COMLUN. If the `end comments
+     marker' is blank, then the comments are assumed to stop at the
+     end of the comment text file attached to COMLUN.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     We will be using the files `jabber.txt', 'batty.txt', and
+     `wndrland.das' in the example which follows.
+
+     `wndrland.das' is a binary DAS file with an empty comment area
+                    into which we are going to place the entire file
+                    `jabber.txt' and a selected portion of the file
+                    `batty.txt'.
+
+     `jabber.txt'   is a text file that is to be placed into the
+                    comment area of the binary DAS file `wndrland.das'.
+
+     `batty.txt'    is a text file from which will have a selected
+                    portion of its text placed into the comment area
+                    of the binary DAS file `wndrland.das'.
+
+     Let -BOF- and -EOF- denote the beginning and end of a file,
+     respectively.
+
+     The file `jabber.txt' contains:
+
+        -BOF-
+                  The Jabberwock
+
+        'Twas brillig, and the slithy toves
+              Did gyre and gimble in the wabe;
+        All mimsy were the borogoves,
+              And the mome raths outgrabe.
+
+        ``Beware the Jabberwock, my son!
+              The jaws that bite, the claws that catch!''
+
+        And as in uffish thought he stood,
+              The Jabberwock, with eyes of flame,
+        Came whiffling through the tulgey wood,
+              And burbled as it came!
+
+        One, two! One, two! And through and through
+              The vorpal blade went snicker-snack!
+        He left it dead, and with its head
+              He went galumphing back.
+
+        ``And hast thou slain the Jabberwock?
+              Come to my arms, my beamish boy!
+        O frabjous day! Callooh! Callay!''
+              He chortled in his joy.
+
+               Through the Looking-Glass
+               Lewis Carroll
+        -EOF-
+
+     The file `batty.txt' contains:
+
+        -BOF-
+        This file contains a brief poem about bats.
+
+        BEGIN bat poem
+        Twinkle, twinkle, little bat!
+        How I wonder what you're at!
+        Up above the world you fly!
+        Like a teatray in the sky.
+
+               Alice's Adventures in Wonderland
+               Lewis Carroll
+        END bat poem
+
+        And that's that for bats.
+        -EOF-
+
+     Let
+
+           JABLUN   be the logical unit for the file `jabber.txt'
+           BATLUN   be the logical unit for the file `batty.txt'
+     and
+           HANDLE   be the DAS handle for the file `wndrland.das'
+
+     The code fragment
+
+     C
+     C      Open the files.
+     C
+            CALL DASOPW ( `wndrland.das', HANDLE )
+            CALL TXTOPN ( `jabber.txt'  , JABLUN )
+            CALL TXTOPN ( `batty.txt'   , BATLUN )
+     C
+     C      Initialize the markers for the file `jabber.txt'. We want
+     C      to include the entire file, so both markers are blank.
+     C
+            BEGMRK = ' '
+            ENDMRK = ' '
+            INSBLN = .TRUE.
+     C
+     C      Add the comments from the file 'jabber.txt'
+     C
+            CALL <b>DASACU</b> ( JABLUN, BEGMRK, ENDMRK, INSBLN, HANDLE )
+     C
+     C      Initialize the markers for the file `batty.txt'. We want
+     C      to include the bat poem only, so we define the begin and
+     C      end markere accordingly.
+     C
+            BEGMRK = 'BEGIN bat poem'
+            ENDMRK = 'END bat poem'
+            INSBLN = .TRUE.
+     C
+     C      Add the comments from the file 'batty.txt'
+     C
+            CALL <b>DASACU</b> ( BATLUN, BEGMRK, ENDMRK, INSBLN, HANDLE )
+     C
+     C      Close the files.
+
+            CLOSE       ( JABLUN )
+            CLOSE       ( BATLUN )
+            CALL <a href="dascls.html">DASCLS</a> ( HANDLE )
+
+     will create a comment area in `wndrland.das' which contains:
+
+        -BOC-
+                  The Jabberwock
+
+        'Twas brillig, and the slithy toves
+              Did gyre and gimble in the wabe;
+        All mimsy were the borogoves,
+              And the mome raths outgrabe.
+
+        ``Beware the Jabberwock, my son!
+              The jaws that bite, the claws that catch!''
+
+        And as in uffish thought he stood,
+              The Jabberwock, with eyes of flame,
+        Came whiffling through the tulgey wood,
+              And burbled as it came!
+
+        One, two! One, two! And through and through
+              The vorpal blade went snicker-snack!
+        He left it dead, and with its head
+              He went galumphing back.
+
+        ``And hast thou slain the Jabberwock?
+              Come to my arms, my beamish boy!
+        O frabjous day! Callooh! Callay!''
+              He chortled in his joy.
+
+               Through the Looking-Glass
+               Lewis Carroll
+
+        Twinkle, twinkle, little bat!
+        How I wonder what you're at!
+        Up above the world you fly!
+        Like a teatray in the sky.
+
+               Alice's Adventures in Wonderland
+               Lewis Carroll
+        -EOC-
+
+     where -BOC- and -EOC- represent the beginning and end of the
+     comments, respectively.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) The begin comments marker, BEGMRK, and the end comments marker,
+        ENDMRK, must each appear alone on a line in the comment text
+        file if they are not blank.
+
+     2) The maximum length of a text line in a comment file is
+        specified by the LINLEN parameter defined below. Currently
+        this values is 255 characters.
+
+     3) The maximum length of a single line comment in the comment
+        area is specified by the parameter LINLEN defined below.
+        Currently this value is 255 characters.
+
+     4) This routine uses constants that are specific to the ASCII
+        character sequence. The results of using this routine with
+        a different character sequence are unpredictable.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB 1.2.0, 07-JUL-1996 (NJB)
+
+        Removed declaration, DATA and SAVE statements for unused
+        variable FIRST.
+
+    Beta Version 1.1.0, 20-SEP-1995 (KRG)
+
+        Added a check of <a href="failed.html">FAILED</a> after the call to <a href="getlun.html">GETLUN</a> to trap
+        an error, if one is signalled by <a href="getlun.html">GETLUN</a>, before attempting to 
+        open the SCRATCH file.
+
+    Beta Version 1.0.0, 4-JAN-1993 (KRG)</PRE>
+<h4>Link to routine DASACU source file <a href='../../../src/spicelib/dasacu.f'>dasacu.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:07 2014</pre>
+
+</body>
+</html>
+

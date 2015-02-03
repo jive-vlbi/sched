@@ -1,0 +1,250 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dafcad</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dafcad</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DAFCAD ( DAF, continue adding data )
+ 
+      ENTRY DAFCAD ( HANDLE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Select a DAF that already has a new array in progress as the
+     one to continue adding data to.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+     INTEGER               HANDLE
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   Handle of DAF to continue adding data to.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE         is the handle of a DAF that is open for write
+                    access and in which a new array has been
+                    started by a call to <a href="dafbna.html">DAFBNA</a>.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1) If the input handle is not that of a DAF that is open
+        for writing, the error will be diagnosed by routines called
+        by this routine.
+
+     2) If no array is currently being added to in the file indicated
+        by HANDLE, the error will be diagnosed by this routine or
+        routines called by this routine.  If <b>DAFCAD</b> can detect the
+        problem, the error SPICE(NOARRAYSTARTED) will be signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     <b>DAFCAD</b> supports simultaneous addition of data to arrays in
+     multiple DAFs.  In applications that use this capability,
+     <b>DAFCAD</b> should be called prior to each call to <a href="dafada.html">DAFADA</a> or <a href="dafena.html">DAFENA</a>
+     to specify which DAF is to be acted upon.
+
+     Here is a code fragment that adds a new array to each of N
+     existing DAFs, simultaneously.  The data to be added to each
+     is broken up into M chunks; one chunk is written to each DAF
+     at a time.  The data is contained in the array CHUNK, dimensioned
+
+         DOUBLE PRECISION      CHUNK ( MAXDAT, M, N )
+
+     The actual amount of data in the Jth chunk for the Ith file is
+     given by
+
+         AMOUNT (J,I)
+
+
+
+         DO I = 1, N
+            CALL <a href="dafopw.html">DAFOPW</a> ( HANDLE(I) )
+            CALL <a href="dafbna.html">DAFBNA</a> ( HANDLE(I) )
+         END DO
+
+         DO J = 1, M
+
+            DO I = 1, N
+               CALL <b>DAFCAD</b>  ( HANDLE(I)                  )
+               CALL <a href="dafada.html">DAFADA</a>  ( CHUNK(1,J,I),  AMOUNT(J,I) )
+            END DO
+
+         END DO
+
+         DO I = 1, N
+            CALL <b>DAFCAD</b>  ( HANDLE(I) )
+            CALL <a href="dafena.html">DAFENA</a>
+         END DO
+
+
+     Note that if we write all of the data for each array to just one
+     DAF at a time, we don't need to use <b>DAFCAD</b>:
+
+        DO I = 1, N
+
+           CALL <a href="dafopw.html">DAFOPW</a> ( HANDLE(I) )
+           CALL <a href="dafbna.html">DAFBNA</a> ( HANDLE(I) )
+
+           DO J = 1, M
+              CALL <a href="dafada.html">DAFADA</a> ( CHUNK(1,J,I),  AMOUNT(J,I) )
+           END DO
+
+           CALL <a href="dafena.html">DAFENA</a>
+
+        END DO
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     See <a href="dafana.html">DAFANA</a>.
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     W.L. Taber     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 3.0.0, 16-NOV-2001 (FST)
+
+        Updated entry points to support changes made to the DAF
+        system that utilize the new handle manager.  See
+        the Revisions section of <a href="dafana.html">DAFANA</a> for a detailed
+        discussion of the changes.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 04-SEP-1991 (NJB) (WLT)</PRE>
+<h4>Link to routine DAFCAD source file <a href='../../../src/spicelib/dafana.f'>dafana.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:02 2014</pre>
+
+</body>
+</html>
+

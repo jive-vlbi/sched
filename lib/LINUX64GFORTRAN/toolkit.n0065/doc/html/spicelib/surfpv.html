@@ -1,0 +1,541 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>surfpv</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>surfpv</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SURFPV ( Surface point and velocity )
+ 
+      SUBROUTINE SURFPV ( STVRTX, STDIR, A, B, C, STX, FOUND )
+      IMPLICIT NONE
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Find the state (position and velocity) of the surface intercept 
+     defined by a specified ray, ray velocity, and ellipsoid.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ELLIPSOID
+     GEOMETRY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      DOUBLE PRECISION      STVRTX ( 6 )
+      DOUBLE PRECISION      STDIR  ( 6 )
+      DOUBLE PRECISION      A
+      DOUBLE PRECISION      B
+      DOUBLE PRECISION      C
+      DOUBLE PRECISION      STX    ( 6 )
+      LOGICAL               FOUND
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     STVRTX     I   State of ray's vertex.
+     STDIR      I   State of ray's direction vector.
+     A          I   Length of ellipsoid semi-axis along the x-axis.
+     B          I   Length of ellipsoid semi-axis along the y-axis.
+     C          I   Length of ellipsoid semi-axis along the z-axis.
+     STX        O   State of surface intercept.
+     FOUND      O   Flag indicating whether intercept state was found.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     STVRTX         is the state of a ray's vertex. The first three
+                    components of STVRTX are the vertex's x, y, and z
+                    position components; the vertex's x, y, and z
+                    velocity components follow.
+
+                    The reference frame relative to which STVRTX is
+                    specified has axes aligned with with those of a
+                    triaxial ellipsoid. See the description below of
+                    the arguments A, B, and C.
+
+                    The vertex may be inside or outside of this
+                    ellipsoid, but not on it, since the surface 
+                    intercept is a discontinuous function at
+                    vertices on the ellipsoid's surface.
+
+                    No assumption is made about the units of length
+                    and time, but these units must be consistent with
+                    those of the other inputs.
+
+
+     STDIR          is the state of the input ray's direction vector.
+                    The first three components of STDIR are a non-zero
+                    vector giving the x, y, and z components of the
+                    ray's direction; the direction vector's x, y, and
+                    z velocity components follow.
+
+                    STDIR is specified relative to the same reference
+                    frame as is STVRTX.
+
+
+     A,
+     B,
+     C              are, respectively, the lengths of a triaxial
+                    ellipsoid's semi-axes lying along the x, y, and
+                    z axes of the reference frame relative to which
+                    STVRTX and STDIR are specified.
+                    
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     STX            is the state of the intercept of the input ray on
+                    the surface of the input ellipsoid. The first
+                    three components of STX are the intercept's x, y,
+                    and z position components; the intercept's x, y,
+                    and z velocity components follow.
+
+                    STX is specified relative to the same reference
+                    frame as are STVRTX and STDIR.
+
+                    STX is defined if and only if both the intercept
+                    and its velocity are computable, as indicated by
+                    the output argument FOUND.
+
+                    The position units of STX are the same as those of
+                    STVRTX, STDIR, and A, B, and C. The time units are
+                    the same as those of STVRTX and STDIR.
+
+
+     FOUND          is a logical flag indicating whether STX is
+                    defined. FOUND is .TRUE. if and only if both the
+                    intercept and its velocity are computable. Note
+                    that in some cases the intercept may computable
+                    while the velocity is not; this can happen for
+                    near-tangency cases.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the input ray's direction vector is the zero vector, then
+         a routine in the call tree of this routine will signal
+         an error.
+
+     2)  If any of the ellipsoid's axis lengths is nonpositive,
+         a routine in the call tree of this routine will signal
+         an error.
+
+     3)  If the vertex of the ray is on the ellipsoid,
+         the error SPICE(INVALIDVERTEX) is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The position and velocity of the ray's vertex as well as the
+     ray's direction vector and velocity vary with time. The
+     inputs to <b>SURFPV</b> may be considered the values of these
+     vector functions at a particular time, say t0. Thus
+
+        State of vertex:            STVRTX = ( V(t0), V'(t0) )
+
+        State of direction vector:  STDIR  = ( D(t0), D'(t0) )
+
+     To determine the intercept point, W(t0), we simply compute the
+     intersection of the ray originating at V(t0) in the direction of
+     D(t0) with the ellipsoid
+
+          2      2      2
+         x      y      z
+        --- +  --- +  ---  =  1
+          2      2      2
+         A      B      C
+
+     W(t) is the path of the intercept point along the surface of
+     the ellipsoid. To determine the velocity of the intercept point,
+     we need to take the time derivative of W(t), and evaluate it at
+     t0. Unfortunately W(t) is a complicated expression, and its
+     derivative is even more complicated.
+
+     However, we know that the derivative of W(t) at t0, W'(t0), is
+     tangent to W(t) at t0. Thus W'(t0) lies in the plane that is
+     tangent to the ellipsoid at t0. Let X(t) be the curve in the
+     tangent plane that represents the intersection of the ray
+     emanating from V(t0) with direction D(t0) with that tangent
+     plane.
+
+        X'(t0) = W'(t0)
+
+     The expression for X'(t) is much simpler than that of W'(t);
+     <b>SURFPV</b> evaluates X'(t) at t0.
+
+
+     Derivation of X(t) and X'(t)
+     ----------------------------------------------------------------
+
+     W(t0) is the intercept point. Let N be a surface normal at I(t0).
+     Then the tangent plane at W(t0) is the set of points X(t) such
+     that
+
+        &lt; X(t) - I(t0), N &gt; = 0
+
+     X(t) can be expressed as the vector sum of the vertex
+     and some scalar multiple of the direction vector,
+
+        X(t) = V(t) + s(t) * D(t)
+
+     where s(t) is a scalar function of time. The derivative of
+     X(t) is given by
+
+        X'(t) = V'(t)  +  s(t) * D'(t)  +  s'(t) * D(t)
+
+     We have V(t0), V'(t0), D(t0), D'(t0), W(t0), and N, but to
+     evaluate X'(t0), we need s(t0) and s'(t0). We derive an
+     expression for s(t) as follows.
+
+     Because X(t) is in the tangent plane, it must satisfy
+
+        &lt; X(t) - W(t0), N &gt; = 0.
+
+     Substituting the expression for X(t) into the equation above
+     gives
+
+        &lt; V(t) + s(t) * D(t) - W(t0), N &gt; = 0.
+
+     Thus
+
+        &lt; V(t) - W(t0), N &gt;  +  s(t) * &lt; D(t), N &gt; = 0,
+
+     and
+                    &lt; V(t) - W(t0), N &gt;
+        s(t)  =  -  -------------------
+                        &lt; D(t), N &gt;
+
+     The derivative of s(t) is given by
+
+        s'(t) =
+
+            &lt; D(t),N &gt; * &lt; V'(t),N &gt;  -  &lt; V(t)-W(t0),N &gt; * &lt; D'(t),N &gt;
+        -   -----------------------------------------------------------
+                                             2
+                                  &lt; D(t), N &gt;
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The numerical results shown for these examples may differ across
+     platforms. The results depend on the compiler and supporting
+     libraries, and the machine specific arithmetic implementation.
+
+
+     1) Illustrate the role of the ray vertex velocity and 
+        ray direction vector velocity via several simple cases. Also
+        show the results of a near-tangency computation.
+
+
+     Example code begins here.
+
+
+           PROGRAM EX1
+           IMPLICIT NONE
+
+           CHARACTER*(*)         F1
+           PARAMETER           ( F1 = '(A,3E23.16)' )
+
+           DOUBLE PRECISION      A
+           DOUBLE PRECISION      B
+           DOUBLE PRECISION      C
+           DOUBLE PRECISION      STVRTX ( 6 )
+           DOUBLE PRECISION      STDIR  ( 6 )
+           DOUBLE PRECISION      STX    ( 6 )
+
+           INTEGER               I
+
+           LOGICAL               FOUND
+
+           A      = 1.D0
+           B      = 2.D0
+           C      = 3.D0
+
+           WRITE (*,*) ' '
+           WRITE (*,*) 'Ellipsoid radii:'
+           WRITE (*,*) '     A = ', A
+           WRITE (*,*) '     B = ', B
+           WRITE (*,*) '     C = ', C
+
+           WRITE (*,*) ' '
+           WRITE (*,*) 'Case 1: Vertex varies, direction is constant'
+           WRITE (*,*) ' '
+
+           STVRTX( 1 ) =  2.D0
+           STVRTX( 2 ) =  0.D0
+           STVRTX( 3 ) =  0.D0
+           STVRTX( 4 ) =  0.D0
+           STVRTX( 5 ) =  0.D0
+           STVRTX( 6 ) =  3.D0
+
+
+           STDIR ( 1 ) = -1.D0
+           STDIR ( 2 ) =  0.D0
+           STDIR ( 3 ) =  0.D0
+           STDIR ( 4 ) =  0.D0
+           STDIR ( 5 ) =  0.D0
+           STDIR ( 6 ) =  0.D0
+
+           WRITE (*,* ) 'Vertex:'
+           WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 )
+           WRITE (*,* ) 'Vertex velocity:'
+           WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 )
+           WRITE (*,* ) 'Direction:'
+           WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 )
+           WRITE (*,* ) 'Direction velocity:'
+           WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 )
+
+           CALL <b>SURFPV</b> ( STVRTX, STDIR, A, B, C, STX, FOUND )
+
+           IF ( .NOT. FOUND ) THEN
+              WRITE (*,*) ' No intercept state found.'
+           ELSE
+              WRITE (*,* ) 'Intercept:'
+              WRITE (*,F1) ' ', ( STX(I),  I = 1,3 )
+              WRITE (*,* ) 'Intercept velocity:'
+              WRITE (*,F1) ' ', ( STX(I),  I = 4,6 )
+              WRITE (*,* ) ' '
+           END IF
+
+           WRITE (*,*) ' '
+           WRITE (*,*) 'Case 2: Vertex and direction both vary'
+           WRITE (*,*) ' '
+
+           STDIR ( 6 ) =  4.D0
+
+           WRITE (*,* ) 'Vertex:'
+           WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 )
+           WRITE (*,* ) 'Vertex velocity:'
+           WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 )
+           WRITE (*,* ) 'Direction:'
+           WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 )
+           WRITE (*,* ) 'Direction velocity:'
+           WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 )
+
+           CALL <b>SURFPV</b> ( STVRTX, STDIR, A, B, C, STX, FOUND )
+
+           IF ( .NOT. FOUND ) THEN
+              WRITE (*,*) ' No intercept state found.'
+           ELSE
+              WRITE (*,* ) 'Intercept:'
+              WRITE (*,F1) ' ', ( STX(I),  I = 1,3 )
+              WRITE (*,* ) 'Intercept velocity:'
+              WRITE (*,F1) ' ', ( STX(I),  I = 4,6 )
+              WRITE (*,* ) ' '
+           END IF
+
+           WRITE (*,*) ' '
+           WRITE (*,*) 'Case 3: Vertex and direction both vary;'
+           WRITE (*,*) '        near-tangent case.'
+           WRITE (*,*) ' '
+
+           STVRTX( 3 ) =  C - 1.D-15
+           STVRTX( 6 ) =  1.D299
+           STDIR ( 6 ) =  1.D299
+
+           WRITE (*,* ) 'Vertex:'
+           WRITE (*,F1) ' ', ( STVRTX(I), I = 1,3 )
+           WRITE (*,* ) 'Vertex velocity:'
+           WRITE (*,F1) ' ', ( STVRTX(I), I = 4,6 )
+           WRITE (*,* ) 'Direction:'
+           WRITE (*,F1) ' ', ( STDIR(I),  I = 1,3 )
+           WRITE (*,* ) 'Direction velocity:'
+           WRITE (*,F1) ' ', ( STDIR(I),  I = 4,6 )
+
+           CALL <b>SURFPV</b> ( STVRTX, STDIR, A, B, C, STX, FOUND )
+
+           IF ( .NOT. FOUND ) THEN
+              WRITE (*,*) ' No intercept state found.'
+           ELSE
+              WRITE (*,* ) 'Intercept:'
+              WRITE (*,F1) ' ', ( STX(I),  I = 1,3 )
+              WRITE (*,* ) 'Intercept velocity:'
+              WRITE (*,F1) ' ', ( STX(I),  I = 4,6 )
+              WRITE (*,* ) ' '
+           END IF
+
+           END
+
+
+     When this program was executed on a PC/Linux/g77 platform, the
+     output was: 
+
+
+  Ellipsoid radii:
+       A =   1.
+       B =   2.
+       C =   3.
+
+  Case 1: Vertex varies, direction is constant
+
+  Vertex:
+   0.2000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00
+  Vertex velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.3000000000000000E+01
+  Direction:
+  -0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00
+  Direction velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.0000000000000000E+00
+  Intercept:
+   0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00
+  Intercept velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.3000000000000000E+01
+
+
+  Case 2: Vertex and direction both vary
+
+  Vertex:
+   0.2000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00
+  Vertex velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.3000000000000000E+01
+  Direction:
+  -0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00
+  Direction velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.4000000000000000E+01
+  Intercept:
+   0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00
+  Intercept velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.7000000000000000E+01
+
+
+  Case 3: Vertex and direction both vary;
+          near-tangent case.
+
+  Vertex:
+   0.2000000000000000E+01 0.0000000000000000E+00 0.2999999999999999E+01
+  Vertex velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.1000000000000000+300
+  Direction:
+  -0.1000000000000000E+01 0.0000000000000000E+00 0.0000000000000000E+00
+  Direction velocity:
+   0.0000000000000000E+00 0.0000000000000000E+00 0.1000000000000000+300
+  Intercept:
+   0.2580956827951785E-07 0.0000000000000000E+00 0.2999999999999999E+01
+  Intercept velocity:
+  -0.3874532036207665+307 0.0000000000000000E+00 0.2999999974190432+300
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+     J.E. McLean    (JPL)
+     W.L. Taber     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 31-MAR-2009 (NJB) (JEM) (WLT)</PRE>
+<h4>Link to routine SURFPV source file <a href='../../../src/spicelib/surfpv.f'>surfpv.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:13 2014</pre>
+
+</body>
+</html>
+

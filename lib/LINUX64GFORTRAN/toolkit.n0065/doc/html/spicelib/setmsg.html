@@ -1,0 +1,245 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>setmsg</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>setmsg</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+     SETMSG  ( Set Long Error Message )
+ 
+      SUBROUTINE SETMSG ( MSG )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Set the value of the current long error message.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/error.html">ERROR</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ERROR
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      CHARACTER*(*)                 MSG
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     MSG        I   A long error message.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     MSG     A ``long'' error message.
+             MSG is a detailed description of the error.
+             MSG is supposed to start with the name of the
+             module which detected the error, followed by a
+             colon.  Example:
+
+                'RDTEXT:  There are no more free logical units'
+
+             Only the first LMSGLN characters of MSG are stored;
+             any further characters are truncated.  
+
+             Generally, MSG will be stored internally by the SPICELIB
+             error handling mechanism.  The only exception
+             is the case in which the user has commanded the
+             toolkit to ``ignore'' the error indicated by MSG.
+
+             As a default, MSG will be output to the screen.
+             See the required reading file for a discussion of how
+             to customize toolkit error handling behavior, and
+             in particular, the disposition of MSG.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     LMSGLN  is the maximum length of the long error message.  See
+             the include file errhnd.inc for the value of LMSGLN.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     This routine does not detect any errors.
+
+     However, this routine is part of the interface to the
+     SPICELIB error handling mechanism.  For this reason,
+     this routine does not participate in the trace scheme,
+     even though it has external references.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     The SPICELIB routine <a href="sigerr.html">SIGERR</a> should always be called
+     AFTER this routine is called, when an error is detected.
+
+     The effects of this routine are:
+
+        1.  If acceptance of a new long error message is
+            allowed:
+
+            MSG will be stored internally.  As a result,
+            The SPICELIB routine, <a href="getmsg.html">GETMSG</a>, will be able to
+            retrieve MSG, until MSG has been ``erased''
+            by a call to <a href="reset.html">RESET</a>, or overwritten by another
+            call to <b>SETMSG</b>.
+
+
+        2.  If acceptance of a new long error message is not allowed,
+            a call to this routine has no effect.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+      In the following example, N is supposed to be less than
+      MAXLUN.  If it isn't, an error condition exists.
+
+      C
+      C      We will need a free logical unit.  But only if we don't
+      C      have too many files open already.
+      C
+
+             IF ( N .EQ. MAXLUN ) THEN
+
+                CALL <b>SETMSG</b> ( 'RDTEXT: Too many files open already' )
+                CALL <a href="sigerr.html">SIGERR</a> ( 'SPICE(TOOMANYFILESOPEN)' )
+
+                RETURN
+
+             END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     <a href="sigerr.html">SIGERR</a> must be called once after each call to this routine.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.2, 29-JUL-1997 (NJB)
+
+        Maximum length of the long error message is now represented
+        by the parameter LMSGLN.  Miscellaneous header fixes were
+        made.  Some indentation and vertical white space abnormalities
+        in the code were fixed.  Some dubious comments were deleted
+        from the code.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB)</PRE>
+<h4>Link to routine SETMSG source file <a href='../../../src/spicelib/setmsg.f'>setmsg.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:57 2014</pre>
+
+</body>
+</html>
+

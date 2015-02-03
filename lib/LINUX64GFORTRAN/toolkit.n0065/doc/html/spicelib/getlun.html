@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>getlun</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>getlun</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      GETLUN ( Get a free logical unit )
+ 
+      SUBROUTINE GETLUN ( UNIT )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Return the number of a free logical unit.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER          UNIT
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  --------------------------------------------------
+     UNIT       O   The number of a free logical unit.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     UNIT        is the number of a free logical unit (also called
+                 an &quot;external unit&quot;). If no free units are available,
+                 the value of UNIT is 0.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If there are no free logical units available, UNIT is assigned
+         the value 0, and the error SPICE(NOFREELOGICALUNIT) is
+         signalled.
+
+     2)  This routine obtains a logical unit number from FNDLUN.
+         FNDLUN executes a Fortran INQUIRE statement; if that statement
+         fails to execute properly, FNDLUN returns a negative unit
+         number.  In this case, <b>GETLUN</b> assigns the value 0 to UNIT,
+         and the error SPICE(INQUIREFAILED) is signalled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     <b>GETLUN</b> returns the number of the first (unreserved) unit not
+     currently connected to a file.  It thus frees the user from
+     having to maintain an accounting of which units are open, which
+     are closed, and which are available.
+
+     This routine is related to the routines FNDLUN, RESLUN, and
+     FRELUN.  Together, these routines support coordinated usage of
+     Fortran logical units.  <b>GETLUN</b> (Get a free logical unit) and
+     FNDLUN (Find a free logical unit) both have the function of
+     returning a logical unit number that is not reserved or already
+     in use.  The principal difference between the functionality of
+     these routines is that <b>GETLUN</b> both returns a status code and
+     signals an error if a free unit is not found, while FNDLUN
+     merely returns a status code.
+
+     RESLUN is used to reserve logical unit numbers, so that they will
+     not be returned by <b>GETLUN</b> or FNDLUN; FRELUN frees logical units
+     previously reserved via calls to RESLUN.
+
+     Logical units 5-7 are reserved by default. Other units may be
+     reserved by calling RESLUN. Once reserved, units (except 5-7) may
+     be unreserved by calling FRELUN.
+
+     To reserve logical unit numbers for special use, refer to
+     RESLUN. To make reserved units available to <b>GETLUN</b> or FNDLUN,
+     refer to FRELUN.
+
+     A unit returned by <b>GETLUN</b> does NOT automatically become a
+     reserved unit.  If the user wishes to reserve a unit found by
+     <b>GETLUN</b>, the call to <b>GETLUN</b> must be followed by a call to RESLUN.
+
+     This routine obtains a logical unit number via a call to FNDLUN.
+     FNDLUN uses an INQUIRE statement; if that statement doesn't
+     execute properly, <b>GETLUN</b> will signal the error.  This arrangement
+     allows FNDLUN to be error free.
+
+     The range of possible unit numbers returned by <b>GETLUN</b> is dependent
+     on the parameters MINLUN and MAXLUN, which are defined in FNDLUN.
+
+     Note that although 0 is a valid logical unit number on some
+     systems, a value of 0 returned by <b>GETLUN</b> indicates that no free
+     logical unit was available, rather than that logical unit 0 is
+     available.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The following code fragment illustrates the use of <b>GETLUN</b>.
+
+        CALL <b>GETLUN</b> ( UNIT )
+
+        IF ( UNIT .EQ. 0 ) THEN
+           RETURN
+        END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     This routine never returns a logical unit number of 0.  The
+     value 0 is used to indicate that no free logical unit was
+     found.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     C.A. Curzon     (JPL)
+     H.A. Neilan     (JPL)
+     I.M. Underwood  (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.2, 18-MAY-2010 (BVS)
+
+        Removed &quot;C$&quot; marker from text in the header.
+
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (IMU)</PRE>
+<h4>Link to routine GETLUN source file <a href='../../../src/spicelib/getlun.f'>getlun.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:23 2014</pre>
+
+</body>
+</html>
+

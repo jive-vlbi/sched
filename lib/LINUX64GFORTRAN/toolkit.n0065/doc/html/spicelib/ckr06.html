@@ -1,0 +1,351 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ckr06</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ckr06</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+ CKR06 ( C-kernel, read record from segment, type 6 )
+ 
+      SUBROUTINE CKR06 ( HANDLE, DESCR, SCLKDP, TOL, NEEDAV,
+     .                   RECORD, FOUND                       )
+      IMPLICIT NONE
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Read a single CK data record from a segment of type 6
+     (ESOC/DDID Piecewise Interpolation).
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      INCLUDE 'ckparam.inc'
+      INCLUDE 'ck06.inc'
+ 
+      INTEGER               HANDLE
+      DOUBLE PRECISION      DESCR    ( 5 )
+      DOUBLE PRECISION      SCLKDP
+      DOUBLE PRECISION      TOL
+      LOGICAL               NEEDAV
+      DOUBLE PRECISION      RECORD   ( * )
+      LOGICAL               FOUND
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   File handle.
+     DESCR      I   Segment descriptor.
+     SCLKDP     I   Pointing request time.
+     TOL        I   Lookup tolerance.
+     NEEDAV     I   Angular velocity flag.
+     RECORD     O   Data record.
+     FOUND      O   Flag indicating whether record was found.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE,
+     DESCR       are the file handle and segment descriptor for a CK
+                 segment of type 6.
+
+     SCLKDP      is an encoded spacecraft clock time indicating the
+                 epoch for which pointing is desired.
+
+     TOL         is a time tolerance, measured in the same units as
+                 encoded spacecraft clock.
+
+                 When SCLKDP falls between the start time of one of
+                 the mini-segment intervals and the last time tag of
+                 that interval, the tolerance has no effect because
+                 pointing will be returned at the request time.
+
+                 However, if the request time falls within a coverage
+                 gap in one of the intervals, or outside of any
+                 interval, then the tolerance is used to determine if
+                 pointing should be returned at the closest epoch for
+                 which pointing is available. This epoch is either an
+                 interval's start time or the smaller of an interval's
+                 end time and its last time tag.
+
+
+     NEEDAV      is true if angular velocity is requested. If the
+                 input segment descriptor indicates angular velocity
+                 is absent, the error SPICE(NOAVDATA) is signaled.
+
+                 Note: although all subtypes of type 6 records either
+                 contain or compute angular velocity, a CK creator may
+                 choose to indicate that the provided angular velocity
+                 data are not valid; this can be done by setting the
+                 segment descriptor angular velocity flag to .FALSE.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     RECORD      is a set of data from the specified segment which,
+                 when evaluated at epoch SCLKDP, will give the 
+                 attitude and angular velocity of some body, relative
+                 to the reference frame indicated by DESCR.
+
+                 The structure of the record is as follows:
+
+                    +----------------------+
+                    | evaluation epoch     |
+                    +----------------------+
+                    | subtype code         |
+                    +----------------------+
+                    | number of packets (n)|
+                    +----------------------+
+                    | nominal SCLK rate    |
+                    +----------------------+
+                    | packet 1             |
+                    +----------------------+
+                    | packet 2             |
+                    +----------------------+
+                                .
+                                .
+                                .
+                    +----------------------+
+                    | packet n             |
+                    +----------------------+
+                    | epochs 1--n          |
+                    +----------------------+
+
+                 The packet size is a function of the subtype code.
+                 All packets in a record have the same size.
+
+
+     FOUND       is a logical flag indicating whether data were found.
+                 If NEEDAV is .FALSE., data will be found if the
+                 request time is within TOL ticks of a time for which
+                 the segment provides data. If NEEDAV is .TRUE., the
+                 segment's angular velocity flag must also be set in
+                 order for data to be found.
+                                               
+                 A type 6 segment provides data for times that are
+                 between its descriptor time bounds and that are
+                 within the coverage region of a mini-segment
+                 interval. The coverage region of a mini-segment
+                 interval extends from its start time to the lesser of
+                 its stop time and its last time tag.
+                 
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     This routine roughly follows the pattern established in the
+     lower-numbered CK data type readers of not explicitly performing
+     error diagnoses. In particular, the C-kernel from which data are
+     read is assumed to be valid in most respects. The few exceptions
+     that are handled here are listed below.
+
+     1)  If the input HANDLE does not designate a loaded CK file, the
+         error will be diagnosed by routines called by this routine.
+
+     2)  If the segment specified by DESCR is not of data type 6, the
+         error SPICE(WRONGCKTYPE) is signaled.
+
+     3)  If the input SCLK value is not within TOL ticks of a time 
+         for which the segment provides data, FOUND is set to .FALSE.
+         and the output record is undefined.
+
+     4)  If the window size is non-positive or greater than the
+         maximum allowed value, the error SPICE(INVALIDVALUE) is
+         signaled.
+
+     5)  If the window size is not compatible with the segment
+         subtype, the error SPICE(INVALIDVALUE) is signaled.
+
+     6)  If the segment subtype is not recognized, the error
+         SPICE(INVALIDSUBTYPE) is signaled.
+
+     7)  If the tolerance is negative, the error SPICE(NEGATIVETOL) is
+         signaled.
+
+     8)  If an error occurs while trying to read data from a C-kernel,
+         the error is diagnosed by routines in the call tree of this 
+         routine.
+
+     9)  If the input segment descriptor indicates that angular
+         velocity data are not present, and if the input flag NEEDAV
+         is set to .TRUE., then the error SPICE(NOAVDATA) is signaled.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See argument HANDLE.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     See the CK Required Reading file for a description of the
+     structure of a data type 6 segment.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The data returned by the CKRnn routine is in its rawest form,
+     taken directly from the segment.  As such, it will be meaningless
+     to a user unless he/she understands the structure of the data type
+     completely.  Given that understanding, however, the CKRxx
+     routines might be used to &quot;dump&quot; and check segment data for a
+     particular epoch.
+
+
+     C
+     C     Get a segment applicable to a specified body and epoch.
+     C
+     C     CALL <a href="ckbss.html">CKBSS</a> ( INST,   SCLKDP, TOL,   NEEDAV )
+           CALL <a href="cksns.html">CKSNS</a> ( HANDLE, DESCR,  SEGID, SFND   )
+
+           IF ( .NOT. SFND ) THEN
+              [Handle case of pointing not being found]
+           END IF
+
+     C
+     C     Look at parts of the descriptor.
+     C
+           CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+           CENTER = ICD( 2 )
+           REF    = ICD( 3 )
+           TYPE   = ICD( 4 )
+
+           IF ( TYPE .EQ. 6 ) THEN
+
+              CALL <b>CKR06</b> ( HANDLE, DESCR, SCLKDP, TOL, NEEDAV,
+          .                RECORD, FOUND                       )
+
+              IF ( .NOT. FOUND ) THEN
+                 [Handle case of pointing not being found]
+              END IF
+
+              [Look at the RECORD data]
+                  .
+                  .
+                  .
+           END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1)  Correctness of the C-kernel read by this routine is 
+         assumed.
+
+     2)  Correctness of inputs must be ensured by the caller of
+         this routine.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman    (JPL)
+     B.V. Semenov    (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0, 14-MAR-2014 (NJB) (BVS)</PRE>
+<h4>Link to routine CKR06 source file <a href='../../../src/spicelib/ckr06.f'>ckr06.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:58 2014</pre>
+
+</body>
+</html>
+

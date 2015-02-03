@@ -1,0 +1,227 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cgv2el</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cgv2el</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      CGV2EL ( Center and generating vectors to ellipse )
+ 
+      SUBROUTINE CGV2EL ( CENTER, VEC1, VEC2, ELLIPS )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Form a SPICELIB ellipse from a center vector and two generating
+     vectors.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ellipses.html">ELLIPSES</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ELLIPSE
+     GEOMETRY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               UBEL
+      PARAMETER           ( UBEL    =   9 )
+ 
+      DOUBLE PRECISION      CENTER (    3 )
+      DOUBLE PRECISION      VEC1   (    3 )
+      DOUBLE PRECISION      VEC2   (    3 )
+      DOUBLE PRECISION      ELLIPS ( UBEL )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     CENTER,
+     VEC1,
+     VEC2       I   Center and two generating vectors for an ellipse.
+     ELLIPS     O   The SPICELIB ellipse defined by the input vectors.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     CENTER,
+     VEC1,
+     VEC2           are a center and two generating vectors defining
+                    an ellipse in three-dimensional space.  The
+                    ellipse is the set of points
+
+                       CENTER  +  cos(theta) VEC1  +  sin(theta) VEC2
+
+                    where theta ranges over the interval (-pi, pi].
+                    VEC1 and VEC2 need not be linearly independent.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     ELLIPS         is the SPICELIB ellipse defined by the input
+                    vectors.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If VEC1 and VEC2 are linearly dependent, ELLIPS will be
+         degenerate.  SPICELIB ellipses are allowed to represent
+         degenerate geometric ellipses.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     SPICELIB ellipses serve to simplify calling sequences and reduce
+     the chance for error in declaring and describing argument lists
+     involving ellipses.
+
+     The set of ellipse conversion routines is
+
+        <b>CGV2EL</b> ( Center and generating vectors to ellipse )
+        <a href="el2cgv.html">EL2CGV</a> ( Ellipse to center and generating vectors )
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Find the intersecton of an ellipse with a plane.  The ellipse
+         is defined by the vectors CENTER, VEC1, and VEC2.  The plane
+         is defined by the normal vector N and the constant C.
+
+            C
+            C    Make a SPICELIB ellipse.  Make a plane while
+            C    we're at it.
+            C
+                 CALL <b>CGV2EL</b> ( CENTER, VEC1, VEC2,  ELLIPS  )
+                 CALL <a href="nvc2pl.html">NVC2PL</a> ( N,      C,           PLANE   )
+
+            C
+            C    Find the intersection of the ellipse and plane.
+            C    NXPTS is the number of intersection points; XPT1
+            C    and XPT2 are the points themselves.
+            C
+                 CALL <a href="inelpl.html">INELPL</a> ( ELLIPS, PLANE, NXPTS, XPT1, XPT2 )
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     N.J. Bachman   (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT)
+
+        Comment section for permuted index source lines was added
+        following the header.
+
+    SPICELIB Version 1.0.0, 02-NOV-1990 (NJB)</PRE>
+<h4>Link to routine CGV2EL source file <a href='../../../src/spicelib/cgv2el.f'>cgv2el.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:53 2014</pre>
+
+</body>
+</html>
+

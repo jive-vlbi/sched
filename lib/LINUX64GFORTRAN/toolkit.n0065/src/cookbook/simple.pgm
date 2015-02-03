@@ -1,0 +1,371 @@
+C$Procedure    SIMPLE (Simple program to demonstrate NAIF toolkit)
+C
+       PROGRAM SIMPLE
+C
+C$ Abstract
+C
+C      SIMPLE - A simple program to demonstrate the NAIF toolkit.
+C
+C      This 'cookbook' program demonstrates the use of NAIF SPK
+C      Ephemeris files and software.
+C
+C      Although this program is not extremely sophisticated, it can
+C      serve as a starting point from which you could build your own
+C      program.
+C
+C$ Disclaimer
+C
+C     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
+C     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
+C     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
+C     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
+C     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
+C     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
+C     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
+C     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
+C     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
+C     SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
+C
+C     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
+C     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
+C     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+C     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
+C     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
+C     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
+C
+C     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
+C     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
+C     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
+C     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
+C
+C$ Input
+C
+C      The user is prompted for the following input:
+C
+C         - The name of a NAIF leapseconds kernel file.
+C         - The name of one binary NAIF SPK ephemeris file.
+C         - NAIF ID for the first target body.
+C         - NAIF ID for the second target body.
+C         - NAIF ID for the observing body.
+C         - A UTC epoch at which to begin.
+C         - A UTC epoch at which to end.
+C
+C$ Output
+C
+C      The program calculates the angular separation of the two
+C      target bodies as seen from the observing body for 12 equally
+C      spaced times in the time interval defined by the beginning
+C      UTC time and the ending UTC time. The ephemeris times (ET)
+C      and the angular separation for the two target bodies are
+C      displayed on the screen.
+C
+C$ Particulars
+C
+C      The user enters the ID codes for two target bodies and an
+C      observer (these may be any objects in the solar system for
+C      which the user has data) and the endpoints of a time interval.
+C      The interval is divided into 12 equally spaced times, and for
+C      each time, the angular separation between the two target bodies
+C      as seen from the observer is calculated. The results are then
+C      displayed on the terminal screen.
+C
+C      For the sake of brevity, this program does NO error checking
+C      on its inputs. Mistakes will cause the program to crash. But
+C      since this is an example program, that's OK.
+C
+C$ References
+C
+C      None.
+C
+C$ Version
+C
+C-    SPICELIB Version 3.5.0, 10-JUL-2002 (EDW)
+C
+C        Replaced all load routines (if appropriate) with
+C        FURNSH calls. Replaced WRITE(*,*) with CALL TOSTDO
+C        (if appropriate); replaced READ(*,*) with CALL PROMPT.
+C
+C        Replaced SPKEZ call with SPKEZR.
+C      
+C-    SPICELIB Version 4.1.1, 03-NOV-2000 (EDW)
+C
+C        Added a BYEBYE( 'SUCCESS' ) call at program's end.
+C
+C     Version 4.1   05-AUG-1994  Update by HAN
+C
+C            Cleaned up the code.
+C
+C     Version 4.0   01-APR-1992  Update by KRG
+C
+C            Changed the value of MAXPTS from 20 to 10 so that
+C            they could all be seen on the screen.
+C
+C            Added the variable UTCTIM.
+C
+C            Changed the following variables:
+C
+C               - CAL(2)  to  UTCBEG and UTCEND
+C               - BODY(3) to  OBSRVR and TARBOD(2)
+C               - BEGIN   to  ETBEG
+C               - END     to  ETEND
+C
+C            Removed the call to CLPOOL()
+C
+C            Moved the beginning of the DO WHILE (CONTIN .EQ. 'Y')
+C            loop, so that you may now enter different target and
+C            observing bodies as well as new UTC begin and end times.
+C
+C            Removed the output stuff for writing the initial time
+C            case, and rearranged the output loop so that this
+C            information still appears. Also changed the heading
+C            on the output table.
+C
+C            Fixed some INTEGER/DOUBLE PRECISION mixed mode arithmetic
+C            using DBLE() to convert the INTEGERS to DOUBLE PRECISION.
+C
+C      Version 3.0   23-SEP-1991  Update by HAN
+C            Removed the declaration of the unused variable "FAILED".
+C
+C      Version 2.0   10-SEP-1991  Update by HAN
+C            Changed the code so that it didn't have any statement
+C            labels, reorganized the declarations, and added a line
+C            to convert to uppercase the response to the inquiry about
+C            continuing.
+C
+C      Version 1.4   23-JUL-1989  Update by RET
+C            Converted GEF stuff to SPK stuff.
+C
+C      Version 1.3   18-JUL-1989  Update by HAN
+C            Changed format of prompts.
+C            Changed standard input and output units to '*'.
+C
+C      Version 1.2   30-JUN-1988   Update by HAN
+C            Error handling code
+C            New GEF routine calling sequences
+C            Time conversion routines use kernel pool
+C
+C      Version 1.1   20-MAR-88     Update by CHA
+C            Corrected KERNEL name
+C
+C      Version 1     ??-???-87     IMU
+C-&
+ 
+ 
+C
+C     SPICELIB functions
+C
+      DOUBLE PRECISION   VSEP
+      DOUBLE PRECISION   DPR
+ 
+C
+C     Local parameters
+C
+      CHARACTER*(*)      TBLFMT
+      PARAMETER        ( TBLFMT  = '(2X,A20,5X,F15.8,'' deg'')' )
+ 
+      INTEGER            FILEN
+      PARAMETER        ( FILEN   = 128 )
+ 
+      INTEGER            MAXPTS
+      PARAMETER        ( MAXPTS  =  10 )
+
+C
+C     Local variables
+C
+      CHARACTER*(FILEN)  EPHEM
+      CHARACTER*(FILEN)  KERNEL
+      CHARACTER*(80)     LINE
+      CHARACTER*(64)     OBSRVR
+      CHARACTER*(64)     TARBOD   (2)      
+      CHARACTER*(30)     UTCBEG
+      CHARACTER*(30)     UTCEND
+      CHARACTER*(30)     UTCTIM
+      CHARACTER*(1)      CONTIN
+      
+      INTEGER            I
+ 
+      DOUBLE PRECISION   ETBEG
+      DOUBLE PRECISION   ETEND
+      DOUBLE PRECISION   DELTA
+      DOUBLE PRECISION   ET
+      DOUBLE PRECISION   LT
+      DOUBLE PRECISION   STATE  (6,2)
+      DOUBLE PRECISION   X      (MAXPTS)
+      DOUBLE PRECISION   Y      (MAXPTS)
+ 
+ 
+C
+C     Introduction.
+C
+      CALL TOSTDO (' ') 
+      CALL TOSTDO (' ')
+      CALL TOSTDO ('                    Welcome to SIMPLE' )
+      CALL TOSTDO (' ')
+      CALL TOSTDO ('This program calculates the angular separation'//
+     .             ' of two' )
+      CALL TOSTDO ('target bodies as seen from an observing body.')
+      CALL TOSTDO (' ')
+      CALL TOSTDO ('The angular separations are calculated for each'//
+     .             ' of 10' )
+      CALL TOSTDO ('equally spaced times in a given time interval.'//
+     .             ' A table' )
+      CALL TOSTDO ('of the results is presented.')
+      CALL TOSTDO (' ')
+ 
+C
+C     Prompt for the leapseconds kernel file. This file is necessary
+C     if the time conversion routines are to work.
+C
+      CALL TOSTDO (' ')
+      CALL PROMPT ('Enter the name of a leapseconds kernel file: ',
+     .              KERNEL )
+ 
+C
+C     Load the leapseconds information into the SPICELIB kernel pool
+C     so that the time conversion routines can gain access to it.
+C
+      CALL FURNSH ( KERNEL )
+ 
+C
+C     Get the name of the input SPK ephemeris file.
+C
+      CALL TOSTDO (' ')
+      CALL PROMPT ('Enter the name of a binary SPK ephemeris file: ',
+     .              EPHEM )
+ 
+C
+C     Load the SPK ephemeris file.
+C
+      CALL FURNSH ( EPHEM )
+ 
+C
+C     Begin the loop to continue until the user wants to quit.
+C
+      CONTIN = 'Y'
+ 
+      DO WHILE ( CONTIN .EQ. 'Y' )
+ 
+C
+C        Get the NAIF IDs for the two target bodies and the observing
+C        body.
+C
+         CALL TOSTDO (' ')
+         CALL PROMPT ('Enter the name of the observing body: ',
+     .                 OBSRVR )
+ 
+         CALL TOSTDO (' ')
+         CALL PROMPT ('Enter the name of the first target body: ',
+     .                 TARBOD(1) )
+ 
+         CALL TOSTDO (' ')
+         CALL PROMPT ('Enter the name of the second target body: ',
+     .                 TARBOD(2) )
+ 
+C
+C        Get the beginning and ending UTC times for the time interval
+C        of interest.
+C
+         CALL TOSTDO (' ')
+         CALL PROMPT ('Enter the beginning UTC time: ', UTCBEG )
+ 
+         CALL TOSTDO (' ')
+         CALL PROMPT ('Enter the ending UTC time: ', UTCEND )
+ 
+         CALL TOSTDO (' ')
+         CALL TOSTDO ( 'Working ... Please wait.' )
+         CALL TOSTDO (' ')
+ 
+C
+C        Convert the UTC times to ephemeris seconds past J2000 (ET),
+C        since that is what the SPICELIB readers are expecting.
+C
+         CALL STR2ET ( UTCBEG, ETBEG )
+         CALL STR2ET ( UTCEND, ETEND )
+         CALL ET2UTC ( ETBEG, 'C', 0, UTCBEG )
+         CALL ET2UTC ( ETEND, 'C', 0, UTCEND )
+ 
+C
+C        Calculate the difference between evaluation times.
+C
+         DELTA = ( ETEND - ETBEG ) / DBLE(MAXPTS - 1)
+ 
+C
+C        For each time, get the apparent states of the two target
+C        bodies as seen from the observer.
+C
+         ET = ETBEG
+ 
+         DO I = 1, MAXPTS
+ 
+            CALL SPKEZR( TARBOD ( 1 ),   ET, 'J2000', 'LT+S', OBSRVR,
+     .                   STATE( 1,1 ), LT )
+            CALL SPKEZR( TARBOD ( 2 ),   ET, 'J2000', 'LT+S', OBSRVR,
+     .                   STATE( 1,2 ), LT )
+ 
+C
+C           Save the time and the separation between the target bodies
+C           (in degrees), as seen from the observer, for output to the
+C           screen.
+C
+            X(I) = ET
+            Y(I) = VSEP ( STATE(1,1), STATE(1,2) ) * DPR ()
+            ET   = ET + DELTA
+ 
+         END DO
+ 
+C
+C        Display the time and angular separation of the desired
+C        target bodies for the requested observer for each of the
+C        equally spaced evaluation times in the given time interval.
+C
+C        If you have a graphics package, you may wish to write the
+C        time and angular separation data to a file, and then plot
+C        them for added effect.
+C
+         CALL TOSTDO (' ')
+         LINE = 'The angular separation between bodies # and #,'
+         CALL REPMC ( LINE, '#', TARBOD(1), LINE )
+         CALL REPMC ( LINE, '#', TARBOD(2), LINE )
+         CALL TOSTDO( LINE )
+ 
+         LINE = 'as seen from body #.'
+         CALL REPMC ( LINE, '#', OBSRVR, LINE )
+         CALL TOSTDO( LINE )
+ 
+         CALL TOSTDO (' ')
+         LINE = 'From: #'
+         CALL REPMC ( LINE, '#', UTCBEG, LINE )
+         CALL TOSTDO( LINE )
+ 
+         LINE = 'To  : #'
+         CALL REPMC ( LINE, '#', UTCEND, LINE )
+         CALL TOSTDO( LINE )
+ 
+         CALL TOSTDO (' ')
+         CALL TOSTDO ('       UTC Time                 Separation' )
+         CALL TOSTDO ('----------------------------------------------')
+
+         DO I = 1, MAXPTS
+            CALL ET2UTC ( X(I), 'C', 0, UTCTIM )
+            WRITE (*,FMT=TBLFMT) UTCTIM(1:20),Y(I)
+         END DO
+ 
+         CALL TOSTDO (' ')
+         CALL PROMPT ('Continue? (Enter Y or N): ', CONTIN )
+         CALL TOSTDO (' ')
+         CALL TOSTDO (' ')
+ 
+C
+C        Check to see if a 'small' Y was entered 'y', and if so change
+C        it to upper case.
+C
+         IF ( CONTIN .EQ. 'y' ) THEN
+            CONTIN = 'Y'
+         ELSE IF ( CONTIN .EQ. ' ' ) THEN
+            CONTIN = 'Y'
+         END IF
+ 
+      END DO
+
+      CALL BYEBYE( 'SUCCESS' )
+      END

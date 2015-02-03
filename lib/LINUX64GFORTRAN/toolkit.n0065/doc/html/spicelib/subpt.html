@@ -1,0 +1,561 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>subpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>subpt</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      SUBPT ( Sub-observer point )
+ 
+      SUBROUTINE SUBPT ( METHOD,  TARGET,  ET,         
+     .                   ABCORR,  OBSRVR,  SPOINT,  ALT )
+      
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Deprecated: This routine has been superseded by the SPICELIB
+     routine <a href="subpnt.html">SUBPNT</a>. This routine is supported for purposes of
+     backward compatibility only.
+
+     Compute the rectangular coordinates of the sub-observer point on
+     a target body at a particular epoch, optionally corrected for
+     planetary (light time) and stellar aberration.  Return these
+     coordinates expressed in the body-fixed frame associated with the
+     target body.  Also, return the observer's altitude above the
+     target body.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/frames.html">FRAMES</a>
+     <a href="../req/pck.html">PCK</a>
+     <a href="../req/spk.html">SPK</a>
+     <a href="../req/time.html">TIME</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     GEOMETRY
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      IMPLICIT NONE
+
+      INCLUDE               'zzctr.inc'
+      
+      CHARACTER*(*)         METHOD
+      CHARACTER*(*)         TARGET
+      DOUBLE PRECISION      ET
+      CHARACTER*(*)         ABCORR
+      CHARACTER*(*)         OBSRVR
+      DOUBLE PRECISION      SPOINT ( 3 )
+      DOUBLE PRECISION      ALT
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     METHOD     I   Computation method.
+     TARGET     I   Name of target body.
+     ET         I   Epoch in ephemeris seconds past J2000 TDB.
+     ABCORR     I   Aberration correction.
+     OBSRVR     I   Name of observing body.
+     SPOINT     O   Sub-observer point on the target body.
+     ALT        O   Altitude of the observer above the target body.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     METHOD      is a short string specifying the computation method
+                 to be used.  The choices are:
+
+                    'Near point'       The sub-observer point is 
+                                       defined as the nearest point on
+                                       the target relative to the
+                                       observer.
+
+                    'Intercept'        The sub-observer point is
+                                       defined as the target surface
+                                       intercept of the line
+                                       containing the observer and the
+                                       target's center.
+                    
+                 In both cases, the intercept computation treats the
+                 surface of the target body as a triaxial ellipsoid.
+                 The ellipsoid's radii must be available in the kernel
+                 pool.
+
+                 Neither case nor white space are significant in 
+                 METHOD.  For example, the string ' NEARPOINT' is 
+                 valid.                 
+
+
+     TARGET      is the name of a target body.  Optionally, you may
+                 supply the integer ID code for the object as
+                 an integer string.  For example both 'MOON' and
+                 '301' are legitimate strings that indicate the 
+                 moon is the target body. This routine assumes
+                 that this body is modeled by a tri-axial ellipsoid,
+                 and that a PCK file containing its radii has been
+                 loaded into the kernel pool via <a href="furnsh.html">FURNSH</a>. 
+
+     ET          is the epoch in ephemeris seconds past J2000 at which
+                 the sub-observer point on the target body is to be
+                 computed.
+
+
+     ABCORR      indicates the aberration corrections to be applied
+                 when computing the observer-target state.  ABCORR
+                 may be any of the following.
+
+                    'NONE'     Apply no correction. Return the 
+                               geometric sub-observer point on the
+                               target body.
+
+                    'LT'       Correct for planetary (light time)
+                               aberration.  Both the state and rotation
+                               of the target body are corrected for 
+                               light time.
+
+                    'LT+S'     Correct for planetary (light time) and
+                               stellar aberrations. Both the state and
+                               rotation of the target body are 
+                               corrected for light time.
+
+
+                    'CN'       Converged Newtonian light time
+                               correction. In solving the light time
+                               equation, the 'CN' correction iterates
+                               until the solution converges (three
+                               iterations on all supported platforms).
+                               Whether the 'CN+S' solution is
+                               substantially more accurate than the
+                               'LT' solution depends on the geometry
+                               of the participating objects and on the
+                               accuracy of the input data. In all
+                               cases this routine will execute more
+                               slowly when a converged solution is
+                               computed. See the Particulars section
+                               of <a href="spkezr.html">SPKEZR</a> for a discussion of precision
+                               of light time corrections.
+
+                               Both the state and rotation of the
+                               target body are corrected for light
+                               time.
+
+                    'CN+S'     Converged Newtonian light time
+                               correction and stellar aberration
+                               correction.
+
+                               Both the state and rotation of the
+                               target body are corrected for light
+                               time.
+
+     OBSRVR      is the name of the observing body.  This is typically
+                 a spacecraft, the earth, or a surface point on the
+                 earth. Optionally, you  may supply the ID code of
+                 the object as an integer string. For example, both
+                 'EARTH' and '399' are legitimate strings to supply
+                 to indicate the observer is Earth.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     SPOINT      is the sub-observer point on the target body at ET
+                 expressed relative to the body-fixed frame of the
+                 target body.  
+
+                 The sub-observer point is defined either as the point
+                 on the target body that is closest to the observer,
+                 or the target surface intercept of the line from the
+                 observer to the target's center; the input argument
+                 METHOD selects the definition to be used.
+
+                 The body-fixed frame, which is time-dependent, is
+                 evaluated at ET if ABCORR is 'NONE'; otherwise the
+                 frame is evaluated at ET-LT, where LT is the one-way
+                 light time from target to observer.
+
+                 The state of the target body is corrected for 
+                 aberration as specified by ABCORR; the corrected 
+                 state is used in the geometric computation.  As 
+                 indicated above, the rotation of the target is 
+                 retarded by one-way light time if ABCORR specifies
+                 that light time correction is to be done.
+
+
+     ALT         is the &quot;altitude&quot; of the observer above the target
+                 body.  When METHOD specifies a &quot;near point&quot; 
+                 computation, ALT is truly altitude in the standard 
+                 geometric sense:  the length of a segment dropped from
+                 the observer to the target's surface, such that the
+                 segment is perpendicular to the surface at the 
+                 contact point SPOINT.
+
+                 When METHOD specifies an &quot;intercept&quot; computation, ALT
+                 is still the length of the segment from the observer
+                 to the surface point SPOINT, but this segment in
+                 general is not perpendicular to the surface.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     If any of the listed errors occur, the output arguments are 
+     left unchanged.
+ 
+
+     1) If the input argument METHOD is not recognized, the error
+        SPICE(DUBIOUSMETHOD) is signaled.
+
+     2) If either of the input body names TARGET or OBSRVR cannot be
+        mapped to NAIF integer codes, the error SPICE(IDCODENOTFOUND)
+        is signaled.
+
+     3) If OBSRVR and TARGET map to the same NAIF integer ID codes, the
+        error SPICE(BODIESNOTDISTINCT) is signaled.  
+
+     4) If frame definition data enabling the evaluation of the state 
+        of the target relative to the observer in target body-fixed
+        coordinates have not been loaded prior to calling <b>SUBPT</b>, the
+        error will be diagnosed and signaled by a routine in the call
+        tree of this routine.   
+
+     5) If the specified aberration correction is not recognized, the
+        error will be diagnosed and signaled by a routine in the call
+        tree of this routine.
+
+     6) If insufficient ephemeris data have been loaded prior to 
+        calling <b>SUBPT</b>, the error will be diagnosed and signaled by a 
+        routine in the call tree of this routine.  
+
+     7) If the triaxial radii of the target body have not been loaded
+        into the kernel pool prior to calling <b>SUBPT</b>, the error will be 
+        diagnosed and signaled by a routine in the call tree of this 
+        routine.   
+
+     8) The target must be an extended body:  if any of the radii of 
+        the target body are non-positive, the error will be diagnosed
+        and signaled by routines in the call tree of this routine.
+ 
+     9) If PCK data supplying a rotation model for the target body 
+        have not been loaded prior to calling <b>SUBPT</b>, the error will be 
+        diagnosed and signaled by a routine in the call tree of this 
+        routine.   
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     Appropriate SPK, PCK, and frame kernels must be loaded
+     prior by the calling program before this routine is called.
+
+     The following data are required:
+
+        - SPK data:  ephemeris data for target and observer must be
+          loaded.  If aberration corrections are used, the states of
+          target and observer relative to the solar system barycenter
+          must be calculable from the available ephemeris data.
+          Typically ephemeris data are made available by loading one
+          or more SPK files via <a href="furnsh.html">FURNSH</a>.
+
+        - PCK data:  triaxial radii for the target body must be loaded
+          into the kernel pool.  Typically this is done by loading a 
+          text PCK file via <a href="furnsh.html">FURNSH</a>.
+
+        - Further PCK data:  rotation data for the target body must
+          be loaded.  These may be provided in a text or binary PCK
+          file.  Either type of file may be loaded via <a href="furnsh.html">FURNSH</a>.
+
+        - Frame data:  if a frame definition is required to convert
+          the observer and target states to the body-fixed frame of
+          the target, that definition must be available in the kernel
+          pool.  Typically the definition is supplied by loading a
+          frame kernel via <a href="furnsh.html">FURNSH</a>.
+
+     In all cases, kernel data are normally loaded once per program
+     run, NOT every time this routine is called.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     <b>SUBPT</b> computes the sub-observer point on a target body.
+     (The sub-observer point is commonly called the sub-spacecraft
+     point when the observer is a spacecraft.)  <b>SUBPT</b> also
+     determines the altitude of the observer above the target body.
+
+     There are two different popular ways to define the sub-observer
+     point:  &quot;nearest point on target to observer&quot; or &quot;target surface 
+     intercept of line containing observer and target.&quot;  These 
+     coincide when the target is spherical and generally are distinct
+     otherwise.
+
+     When comparing sub-point computations with results from sources
+     other than SPICE, it's essential to make sure the same geometric
+     definitions are used.  
+     
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The numerical results shown for this example may differ across
+     platforms.  The results depend on the SPICE kernels used as
+     input, the compiler and supporting libraries, and the machine 
+     specific arithmetic implementation. 
+
+     In the following example program, the file
+
+        spk_m_031103-040201_030502.bsp
+
+     is a binary SPK file containing data for Mars Global Surveyor,
+     Mars, and the Sun for a time interval bracketing the date 
+
+         2004 JAN 1 12:00:00 UTC. 
+
+     pck00007.tpc is a planetary constants kernel file containing
+     radii and rotation model constants.  naif0007.tls is a
+     leapseconds kernel.
+
+     Find the sub-observer point of the Mars Global Surveyor (MGS)
+     spacecraft on Mars for a specified time.  Perform the computation
+     twice, using both the &quot;intercept&quot; and &quot;near point&quot; options.
+
+
+           IMPLICIT NONE
+
+           CHARACTER*25          METHOD ( 2 )
+
+           INTEGER               I
+
+           DOUBLE PRECISION      ALT
+           DOUBLE PRECISION      <a href="dpr.html">DPR</a>
+           DOUBLE PRECISION      ET
+           DOUBLE PRECISION      LAT      
+           DOUBLE PRECISION      LON      
+           DOUBLE PRECISION      RADIUS   
+           DOUBLE PRECISION      SPOINT ( 3 )
+
+           DATA                  METHOD / 'Intercept', 'Near point' /
+
+     C
+     C     Load kernel files.
+     C
+           CALL <a href="furnsh.html">FURNSH</a> ( 'naif0007.tls'                   )
+           CALL <a href="furnsh.html">FURNSH</a> ( 'pck00007.tpc'                   )
+           CALL <a href="furnsh.html">FURNSH</a> ( 'spk_m_031103-040201_030502.bsp' )
+
+     C
+     C     Convert the UTC request time to ET (seconds past  
+     C     J2000, TDB).
+     C     
+           CALL <a href="str2et.html">STR2ET</a> ( '2004 JAN 1 12:00:00', ET )
+
+     C
+     C     Compute sub-spacecraft point using light time and stellar 
+     C     aberration corrections.  Use the &quot;target surface intercept&quot; 
+     C     definition of sub-spacecraft point on the first loop
+     C     iteration, and use the &quot;near point&quot; definition on the
+     C     second.
+     C
+           DO I = 1, 2
+
+              CALL <b>SUBPT</b> ( METHOD(I),  
+          .               'MARS',     ET,     'LT+S', 
+          .               'MGS',      SPOINT,  ALT    )
+
+     C
+     C        Convert rectangular coordinates to planetocentric
+     C        latitude and longitude.  Convert radians to degrees.
+     C
+              CALL <a href="reclat.html">RECLAT</a> ( SPOINT, RADIUS, LON, LAT  )
+
+              LON = LON * <a href="dpr.html">DPR</a> ()
+              LAT = LAT * <a href="dpr.html">DPR</a> ()
+
+     C
+     C        Write the results.
+     C
+              WRITE (*,*) ' '
+              WRITE (*,*) 'Computation method: ', METHOD(I)
+              WRITE (*,*) ' '
+              WRITE (*,*) '  Radius                   (km)  = ', RADIUS
+              WRITE (*,*) '  Planetocentric Latitude  (deg) = ', LAT
+              WRITE (*,*) '  Planetocentric Longitude (deg) = ', LON
+              WRITE (*,*) '  Altitude                 (km)  = ', ALT
+              WRITE (*,*) ' '
+
+           END DO
+
+           END
+
+
+     When this program is executed, the output will be: 
+
+
+        Computation method: Intercept
+
+          Radius                   (km)  =   3387.97077
+          Planetocentric Latitude  (deg) =  -39.7022724
+          Planetocentric Longitude (deg) =  -159.226663
+          Altitude                 (km)  =   373.173506
+
+
+        Computation method: Near point
+
+          Radius                   (km)  =   3387.9845
+          Planetocentric Latitude  (deg) =  -39.6659329
+          Planetocentric Longitude (deg) =  -159.226663
+          Altitude                 (km)  =   373.166636
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     C.H. Acton     (JPL)
+     N.J. Bachman   (JPL)
+     J.E. McLean    (JPL)
+     B.V. Semenov   (JPL) 
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.3.0, 04-JUL-2014 (NJB) (BVS)
+
+        Discussion of light time corrections was updated. Assertions
+        that converged light time corrections are unlikely to be
+        useful were removed.
+
+     Last update was 19-SEP-2013 (BVS)
+
+        Updated to save the input body names and ZZBODTRN state
+        counters and to do name-ID conversions only if the counters
+        have changed.
+
+    SPICELIB Version 1.2.3, 18-MAY-2010 (BVS) 
+
+        Index line now states that this routine is deprecated.
+
+    SPICELIB Version 1.2.2, 17-MAR-2009 (EDW) 
+
+        Typo correction in Required_Reading, changed 
+        FRAME to FRAMES.
+
+    SPICELIB Version 1.2.1, 07-FEB-2008 (NJB) 
+
+        Abstract now states that this routine is deprecated.
+
+    SPICELIB Version 1.2.0, 24-OCT-2005 (NJB)
+
+        Replaced call to <a href="bodvar.html">BODVAR</a> with call to <a href="bodvcd.html">BODVCD</a>.
+
+    SPICELIB Version 1.1.0, 21-JUL-2004 (EDW)
+
+        Changed <a href="bodn2c.html">BODN2C</a> call to <a href="bods2c.html">BODS2C</a> giving the routine
+        the capability to accept string representations of
+        interger IDs for TARGET and OBSRVR.
+
+    SPICELIB Version 1.0.1, 27-JUL-2003 (NJB) (CHA)
+
+        Various header corrections were made.  The example program
+        was upgraded to use real kernels, and the program's output is
+        shown.
+
+    SPICELIB Version 1.0.0, 03-SEP-1999 (NJB) (JEM)</PRE>
+<h4>Link to routine SUBPT source file <a href='../../../src/spicelib/subpt.f'>subpt.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:12 2014</pre>
+
+</body>
+</html>
+

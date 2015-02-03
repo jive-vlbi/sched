@@ -1,0 +1,649 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>xfmsta</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>xfmsta</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      XFMSTA ( Transform state between coordinate systems)
+ 
+      SUBROUTINE XFMSTA ( ISTATE, ICOSYS, OCOSYS, BODY, OSTATE )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Transform a state between coordinate systems.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     CONVERSION
+     COORDINATE
+     EPHEMERIS
+c     STATE
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+      IMPLICIT NONE
+
+      INCLUDE               'zzctr.inc'
+ 
+      DOUBLE PRECISION      ISTATE(6)
+      CHARACTER*(*)         ICOSYS
+      CHARACTER*(*)         OCOSYS
+      CHARACTER*(*)         BODY
+      DOUBLE PRECISION      OSTATE(6)
+      
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     VARIABLE  I/O  DESCRIPTION
+     --------  ---  -------------------------------------------------
+     ISTATE     I   Input state.
+     ICOSYS     I   Current (input) coordinate system.
+     OCOSYS     I   Desired (output) coordinate system.
+     BODY       I   Name or NAIF ID of body with which
+                    coordinates are associated (if applicable).
+     OSTATE     O   Converted output state.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     ISTATE     is a state vector in the input (ICOSYS) coordinate
+                system representing position and velocity.
+
+                All angular measurements must be in radians.
+
+                Note: body radii values taken from the kernel
+                pool are used when converting to or from geodetic or
+                planetographic coordinates. It is the user's
+                responsibility to verify the distance inputs are in
+                the same units as the radii in the kernel pool,
+                typically kilometers.
+
+     ICOSYS     is the name of the coordinate system that the input
+                state vector (ISTATE) is currently in. 
+
+                ICOSYS may be any of the following:
+
+                    'RECTANGULAR' 
+                    'CYLINDRICAL' 
+                    'LATITUDINAL'
+                    'SPHERICAL'   
+                    'GEODETIC'   
+                    'PLANETOGRAPHIC'   
+
+                Leading spaces, trailing spaces, and letter case
+                are ignored. For example, ' cyLindRical  ' would be
+                accepted.
+
+     OCOSYS     is the name of the coordinate system that the state
+                should be converted to.
+
+                Please see the description of ICOSYS for details.
+
+     BODY       is the name or NAIF ID of the body associated with the
+                planetographic or geodetic coordinate system.
+
+                If neither of the coordinate system choices are
+                geodetic or planetographic, BODY may be an empty
+                string (' ').
+
+                Examples of accepted body names or IDs are:
+                         'Earth'
+                         '399'
+
+                Leading spaces, trailing spaces, and letter case are
+                ignored.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     OSTATE     is the state vector that has been converted to the
+                output coordinate system (OCOSYS).
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If either the input or output coordinate system is not
+         recognized, the error SPICE(COORDSYSNOTREC) is signaled.
+
+     2)  If the input body name cannot be converted to a NAIF ID
+         (applies to geodetic and planetographic coordinate
+         systems), the error 'SPICE(IDCODENOTFOUND)' is signaled.
+
+     3)  If the input state ISTATE is not valid, meaning the position
+         but not the velocity is along the z-axis, the error
+         'SPICE(INVALIDSTATE)' is signaled.
+
+         Note: If both the input position and velocity are along
+         the z-axis and the output coordinate system is not
+         rectangular, the velocity can still be calculated even 
+         though the Jacobian is undefined. This case will not 
+         signal an error. An example of the input position and
+         velocity along the z-axis is below.
+
+                       Term    Value
+                       -----   ------
+                         x       0    
+                         y       0 
+                         z       z 
+                       dx/dt     0 
+                       dy/dt     0 
+                       dz/dt   dz_dt
+
+     4)  If either the input or output coordinate system is 
+         geodetic or planetographic and at least one of the body's
+         radii is less than or equal to zero, the error 
+         SPICE(INVALIDRADIUS) will be signaled. 
+
+     5)  If either the input or output coordinate system is
+         geodetic or planetographic and the difference of the
+         equatorial and polar radii divided by the equatorial radius
+         would produce numeric overflow, the error
+         'SPICE(INVALIDRADIUS)' will be signaled. 
+
+     6)  If the product of the Jacobian and velocity components
+         may lead to numeric overflow, the error
+         'SPICE(NUMERICOVERFLOW)' is signaled.  
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     SPK, PCK, CK, and FK kernels may be required. 
+
+     If the input or output coordinate systems are either geodetic or
+     planetographic, a PCK providing the radii of the body
+     name BODY must be loaded via <a href="furnsh.html">FURNSH</a>.
+
+     Kernel data are normally loaded once per program run, NOT every
+     time this routine is called.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     Input Order
+     -------------------------------------------
+
+     The input and output states will be structured by the 
+     following descriptions.
+
+     For rectangular coordinates, the state vector is the following
+     in which X, Y, and Z are the rectangular position components and
+     DX, DY, and DZ are the time derivatives of each position
+     component.
+
+             ISTATE = ( X, Y, Z, DX, DY, DZ )
+
+     For cylindrical coordinates, the state vector is the following
+     in which R is the radius, LONG is the longitudes, Z is the
+     height, and DR, DLONG, and DZ are the time derivatives of each
+     position component.
+
+             ISTATE = ( R, LONG, Z, DR, DLONG, DZ )
+
+     For latitudinal coordinates, the state vector is the following
+     in which R is the radius, LONG is the longitude, LAT is the 
+     latitude, and DR, DLONG, and DLAT are the time derivatives of
+     each position component.
+
+             ISTATE = ( R, LONG, LAT, DR, DLONG, DLAT )
+
+     For spherical coordinates, the state vector is the following in
+     which R is the radius, COLAT is the colatitude, LONG is the 
+     longitude, and DR, DCOLAT, and DLONG are the time derivatives of
+     each position component.
+
+             ISTATE = ( R, COLAT, LONG, DR, DCOLAT, DLONG )
+
+     For geodetic coordinates, the state vector is the following in
+     which LONG is the longitude, LAT is the latitude, ALT is the
+     altitude, and DLONG, DLAT, and DALT are the time derivatives of 
+     each position component.
+
+             ISTATE = ( LONG, LAT, ALT, DLONG, DLAT, DALT )
+
+     For planetographic coordinates, the state vector is the
+     following in which LONG is the longitude, LAT is the latitude,
+     ALT is the altitude, and DLONG, DLAT, and DALT are the time
+     derivatives of each position component. 
+
+             ISTATE = ( LONG, LAT, ALT, DLONG, DLAT, DALT )
+
+
+     Input Boundaries
+     -------------------------------------------
+
+     There are intervals the input angles must fall within if
+     the input coordinate system is not rectangular. These
+     intervals are provided below.
+
+        Input variable    Input meaning   Input interval [rad]
+        --------------    -------------   ------------------------
+            LONG           Longitude        0     &lt;= LONG  &lt;  2*pi
+            LAT            Latitude        -pi/2  &lt;= LAT   &lt;= pi/2
+            COLAT          Colatitude       0     &lt;= COLAT &lt;= pi
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     The numerical results shown for these examples may differ across
+     platforms. The results depend on the SPICE kernels used as
+     input, the compiler and supporting libraries, and the machine 
+     specific arithmetic implementation. 
+
+     1) Find the apparent state of Phoebe as seen by CASSINI in the
+        J2000 frame at 2004 Jun 11 19:32:00. Transform the state
+        from rectangular to latitudinal coordinates. For verification,
+        transform the state back from latitudinal to rectangular
+        coordinates. 
+
+        Use the meta-kernel shown below to load the required SPICE
+        kernels.
+
+           KPL/MK
+
+           File name: xfmsta_ex1.tm
+
+           This meta-kernel is intended to support operation of SPICE
+           example programs. The kernels shown here should not be
+           assumed to contain adequate or correct versions of data
+           required by SPICE-based user applications.
+
+           In order for an application to use this meta-kernel, the
+           kernels referenced here must be present in the user's
+           current working directory.
+
+           The names and contents of the kernels referenced
+           by this meta-kernel are as follows:
+
+                  File name                     Contents
+                  ---------                     --------
+                  cpck05Mar2004.tpc             Planet orientation and
+                                                radii
+                  naif0009.tls                  Leapseconds
+                  020514_SE_SAT105.bsp          Satellite ephemeris for
+                                                Saturn
+                  030201AP_SK_SM546_T45.bsp     CASSINI ephemeris
+                  981005_PLTEPH-DE405S.bsp      Planetary ephemeris
+
+
+           \begindata
+
+           KERNELS_TO_LOAD = ( 'naif0009.tls'  ,
+                               '020514_SE_SAT105.bsp'  ,
+                               '030201AP_SK_SM546_T45.bsp'  ,
+                               '981005_PLTEPH-DE405S.bsp',
+                               'cpck05Mar2004.tpc'   )
+
+           End of meta-kernel
+
+        Example code begins here.
+
+           PROGRAM  EX1_XFMSTA
+           IMPLICIT NONE
+     C
+     C     Local parameters
+     C
+     C     METAKR is the meta-kernel's filename.
+     C
+           CHARACTER*(*)         METAKR
+           PARAMETER           ( METAKR = 'xfmsta_ex1.tm' )
+
+           CHARACTER*(*)         FORM
+           PARAMETER           ( FORM = '(F16.6, F16.6, F16.6)' )
+
+     C
+     C     Local variables
+     C
+     C     STAREC is the state of Phoebe with respect to CASSINI in 
+     C     rectangular coordinates. STALAT is the state rotated into
+     C     latitudinal coordinates. STREC2 is the state transformed
+     C     back into rectangular coordinates from latitudinal.
+     C
+           DOUBLE PRECISION      STAREC (6)
+           DOUBLE PRECISION      STALAT (6)
+           DOUBLE PRECISION      STREC2 (6)
+
+     C
+     C     ET is the ephemeris time (TDB) corresponding to the
+     C     observation.
+     C
+           DOUBLE PRECISION      ET
+           DOUBLE PRECISION      LT
+
+           INTEGER               I
+
+     C
+     C     The required kernels must be loaded.
+     C
+           CALL <a href="furnsh.html">FURNSH</a> ( METAKR )
+
+     C
+     C     Calculate the state at 2004 Jun 11 19:32:00 UTC.
+     C
+           CALL <a href="str2et.html">STR2ET</a> ( '2004-JUN-11-19:32:00', ET )
+
+     C
+     C     Calculate the apparent state of Phoebe as seen by
+     C     CASSINI in the J2000 frame.
+     C
+           CALL <a href="spkezr.html">SPKEZR</a> ( 'PHOEBE',  ET, 'IAU_PHOEBE', 'LT+S',
+          .              'CASSINI', STAREC, LT )
+
+     C
+     C     Transform the state from rectangular to latitudinal.
+     C     Notice that since neither the input nor output
+     C     coordinate frames are 'geodetic' or 'planetographic',
+     C     the input for the body name is a blank string.
+     C
+           CALL <b>XFMSTA</b> ( STAREC, 'RECTANGULAR', 'LATITUDINAL', ' ',
+          .              STALAT )
+
+     C
+     C     Transform the state back to rectangular from latitudinal
+     C     for verification. This result should be very similar to
+     C     STAREC.
+     C
+           CALL <b>XFMSTA</b> ( STALAT, 'LATITUDINAL', 'RECTANGULAR',' ',
+          .              STREC2 )
+
+     C
+     C     Report the results.
+     C
+           WRITE (*,*)    ' '
+           WRITE (*,*)    'Phoebe as seen by CASSINI - rectangular'
+           WRITE (*,*)    '  Position [km]:'
+           WRITE (*,FORM) (STAREC(I), I = 1, 3)
+           WRITE (*,*)    '  Velocity [km/s]:'
+           WRITE (*,FORM) (STAREC(I), I = 4, 6)
+           WRITE (*,*)    ' '
+           WRITE (*,*)    'Phoebe as seen by CASSINI - latitudinal'
+           WRITE (*,*)    '  Position [km, rad, rad]:'
+           WRITE (*,FORM) (STALAT(I), I = 1, 3)
+           WRITE (*,*)    '  Velocity [km/s, rad/s, rad/s]:'
+           WRITE (*,FORM) (STALAT(I), I = 4, 6)
+           WRITE (*,*)    ' '
+           WRITE (*,*)    'Verification: '
+           WRITE (*,*)    'Phoebe as seen by CASSINI - rectangular'
+           WRITE (*,*)    '  Position [km]:'
+           WRITE (*,FORM) (STREC2(I), I = 1, 3)
+           WRITE (*,*)    '  Velocity [km/s]:'
+           WRITE (*,FORM) (STREC2(I), I = 4, 6)
+
+           END
+
+        When this program was executed using gfortran on a PC Linux
+        64 bit environment, the output was:
+
+             Phoebe as seen by CASSINI - rectangular
+               Position [km]:
+                -1982.639762     -934.530471     -166.562595
+               Velocity [km/s]:
+                    3.970832       -3.812496       -2.371663
+
+             Phoebe as seen by CASSINI - latitudinal
+               Position [km, rad, rad]:
+                 2198.169858       -2.701121       -0.075846
+               Velocity [km/s, rad/s, rad/s]:
+                   -1.780939        0.002346       -0.001144
+
+             Verification:
+             Phoebe as seen by CASSINI - rectangular
+               Position [km]:
+                -1982.639762     -934.530471     -166.562595
+               Velocity [km/s]:
+                    3.970832       -3.812496       -2.371663
+
+     2) Transform a given state from cylindrical to planetographic
+        coordinates with respect to Earth. 
+
+        Use the meta-kernel shown below to load the required SPICE
+        kernels.
+
+           KPL/MK
+
+           File name: xfmsta_ex2.tm
+
+           This meta-kernel is intended to support operation of SPICE
+           example programs. The kernels shown here should not be
+           assumed to contain adequate or correct versions of data
+           required by SPICE-based user applications.
+
+           In order for an application to use this meta-kernel, the
+           kernels referenced here must be present in the user's
+           current working directory.
+
+           The names and contents of the kernels referenced
+           by this meta-kernel are as follows:
+
+              File name                     Contents
+              ---------                     --------
+              cpck05Mar2004.tpc             Planet orientation and
+                                            radii
+
+           \begindata
+
+              KERNELS_TO_LOAD = ( 'cpck05Mar2004.tpc' )
+
+           \begintext
+
+           End of meta-kernel
+
+
+        Example code begins here.
+
+           PROGRAM  EX2_XFMSTA
+           IMPLICIT NONE
+
+     C
+     C     Local parameters
+     C
+     C     METAKR is the meta-kernel's filename.
+     C
+           CHARACTER*(*)         METAKR
+           PARAMETER           ( METAKR = 'xfmsta_ex2.tm' )
+
+           CHARACTER*(*)         FORM
+           PARAMETER           ( FORM = '(F16.6, F16.6, F16.6)' )
+
+     C
+     C     Local variables
+     C
+     C     STACYL is the state in cylindrical coordinates.
+     C
+           DOUBLE PRECISION      STACYL (6)
+     C
+     C     STAPLN is the state transformed into planetographic
+     C     coordinates.
+     C
+           DOUBLE PRECISION      STAPLN (6)
+     C
+     C     STCYL2 is the state transformed back into
+     C     cylindrical coordinates from planetographic.
+     C
+           DOUBLE PRECISION      STCYL2 (6)
+
+           INTEGER               I
+
+           DATA STACYL / 1.0D0, 0.5D0, 0.5D0, 0.2D0, 0.1D0, -0.2D0 /
+     C
+     C     The required kernels must be loaded.
+     C
+           CALL <a href="furnsh.html">FURNSH</a> ( METAKR )
+
+     C
+     C     Transform the state from cylindrical to planetographic.
+     C     Note that since one of the coordinate systems is
+     C     planetographic, the body name must be input.
+     C
+           CALL <b>XFMSTA</b> ( STACYL, 'CYLINDRICAL', 'PLANETOGRAPHIC',
+          .              'EARTH', STAPLN )
+
+     C
+     C     Transform the state back to cylindrical from
+     C     planetographic for verification. The result should be very
+     C     close to STACYL.
+     C
+           CALL <b>XFMSTA</b> ( STAPLN, 'PLANETOGRAPHIC', 'CYLINDRICAL',
+          .              'EARTH', STCYL2 )
+
+     C
+     C     Report the results.
+     C
+           WRITE (*,*)    'Cylindrical state'
+           WRITE (*,*)    '  Position [km, rad, km]:'
+           WRITE (*,FORM) (STACYL(I), I = 1, 3)
+           WRITE (*,*)    '  Velocity [km/s, rad/s, km/s]:'
+           WRITE (*,FORM) (STACYL(I), I = 4, 6)
+           WRITE (*,*)    ' '
+           WRITE (*,*) 'Planetographic state'
+           WRITE (*,*)    '  Position [rad, rad, km]:'
+           WRITE (*,FORM) (STAPLN(I), I = 1, 3)
+           WRITE (*,*)    '  Velocity [rad/s, rad/s, km/s]:'
+           WRITE (*,FORM) (STAPLN(I), I = 4, 6)
+           WRITE (*,*)    ' '
+           WRITE (*,*)    'Verification:  Cylindrical state'
+           WRITE (*,*)    '  Position [km, rad, km]:'
+           WRITE (*,FORM) (STCYL2(I), I = 1, 3)
+           WRITE (*,*)    '  Velocity [km/s, rad/s, km/s]:'
+           WRITE (*,FORM) (STCYL2(I), I = 4, 6)
+
+           END
+
+        When this program was executed using gfortran on a PC Linux
+        64 bit environment, the output was:
+
+             Cylindrical state
+               Position [km, rad, km]:
+                    1.000000        0.500000        0.500000
+               Velocity [km/s, rad/s, km/s]:
+                    0.200000        0.100000       -0.200000
+
+             Planetographic state
+               Position [rad, rad, km]:
+                    0.500000        1.547727    -6356.238467
+               Velocity [rad/s, rad/s, km/s]:
+                    0.100000       -0.004721       -0.195333
+
+             Verification:  Cylindrical state
+               Position [km, rad, km]:
+                    1.000000        0.500000        0.500000
+               Velocity [km/s, rad/s, km/s]:
+                    0.200000        0.100000       -0.200000
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     S.C. Krening      (JPL)
+     B.V. Semenov      (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.0.0  22-APR-2014 (SCK)(BVS)</PRE>
+<h4>Link to routine XFMSTA source file <a href='../../../src/spicelib/xfmsta.f'>xfmsta.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:25:29 2014</pre>
+
+</body>
+</html>
+

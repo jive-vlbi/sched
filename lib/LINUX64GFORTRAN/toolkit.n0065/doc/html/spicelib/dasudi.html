@@ -1,0 +1,322 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>dasudi</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>dasudi</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      DASUDI ( DAS, update data, integer )
+ 
+      SUBROUTINE DASUDI ( HANDLE, FIRST, LAST, DATA )
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Update data in a specified range of integer addresses in a DAS
+     file.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/das.html">DAS</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     ARRAY
+     ASSIGNMENT
+     DAS
+     FILES
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               HANDLE
+      INTEGER               FIRST
+      INTEGER               LAST
+      INTEGER               DATA   ( * )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   DAS file handle.
+     FIRST,
+     LAST       I   Range of integer addresses to write to.
+     DATA       I   An array of integers.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE         is a file handle of a DAS file opened for writing.
+
+     FIRST,
+     LAST           are the first and last of a range of DAS logical
+                    addresses of integers.  These addresses satisfy the
+                    inequality
+
+                       1  &lt;   FIRST   &lt;   LAST   &lt;   LASTI
+                          _           -          -
+
+                    where LASTI is the last integer logical address in
+                    use in the DAS file designated by HANDLE.
+
+     DATA           is an array of integers.  The array elements
+                    DATA(1) through DATA(N) will be written to the
+                    indicated DAS file, where N is LAST - FIRST + 1.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     See $Particulars for a description of the effect of this routine.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the input file handle is invalid, the error will be
+         diagnosed by routines called by this routine.
+
+     2)  Only logical addresses that already contain data may be
+         updated:  if either FIRST or LAST are outside the range
+
+           [ 1,  LASTI ]
+
+         where LASTI is the last integer logical address that
+         currently contains data in the indicated DAS file, the error
+         SPICE(INVALIDADDRESS) is signalled.  The DAS file will not be
+         modified.
+
+     3)  If FIRST &gt; LAST but both addresses are valid, this routine
+         will not modify the indicated DAS file.  No error will be
+         signalled.
+
+     4)  If an I/O error occurs during the data update attempted
+         by this routine, the error will be diagnosed by routines
+         called by this routine.  FIRST and LAST will not be modified.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     See the description of the argument HANDLE in $Detailed_Input.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     This routine replaces the integer data in the specified range of
+     logical addresses within a DAS file with the contents of the
+     input array DATA.
+
+     The actual physical write operations that update the indicated
+     DAS file with the contents of the input array DATA may not take
+     place before this routine returns, since the DAS system buffers
+     data that is written as well as data that is read.  In any case,
+     the data will be flushed to the file at the time the file is
+     closed, if not earlier.  A physical write of all buffered
+     records can be forced by calling the SPICELIB routine <a href="daswbr.html">DASWBR</a>
+     (DAS, write buffered records).
+
+     In order to append integer data to a DAS file, filling in a range
+     of integer logical addresses that starts immediately after the
+     last integer logical address currently in use, the SPICELIB
+     routine <a href="dasadi.html">DASADI</a> ( DAS add data, integer ) should be used.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     1)  Write to addresses 1 through 500 in a DAS file in
+         random-access fashion by updating the file.  Recall
+         that data must be present in the file before it can
+         be updated.
+
+
+                  PROGRAM UP
+
+                  CHARACTER*(4)         TYPE
+
+                  INTEGER               DATA    ( 500 )
+
+                  INTEGER               HANDLE
+                  INTEGER               I
+
+            C
+            C     Open the new DAS file RAND.DAS.  Use the file name
+            C     as the internal file name.
+            C
+                  TYPE = 'TEST'
+                  CALL DASONW ( 'TEST.DAS', TYPE, 'TEST.DAS', HANDLE )
+
+            C
+            C     Append 500 integers to the file; after the data is
+            C     present, we're free to update it in any order we
+            C     please.  (<a href="cleari.html">CLEARI</a> zeros out an integer array.)
+            C
+                  CALL <a href="cleari.html">CLEARI</a> (           500,  DATA )
+                  CALL <a href="dasadi.html">DASADI</a> (  HANDLE,  500,  DATA )
+
+            C
+            C     Now the integer logical addresses 1:500 can be
+            C     written to in random-access fashion.  We'll fill them
+            C     in in reverse order.
+            C
+                  DO I = 500, 1, -1
+                     CALL <b>DASUDI</b> ( HANDLE, I, I, I )
+                  END DO
+
+            C
+            C     Close the file.
+            C
+                  CALL <a href="dascls.html">DASCLS</a> ( HANDLE )
+
+            C
+            C     Now make sure that we updated the file properly.
+            C     Open the file for reading and dump the contents
+            C     of the integer logical addresses 1:500.
+            C
+                  CALL DASOPR ( 'RAND.DAS',  HANDLE      )
+
+                  CALL <a href="cleari.html">CLEARI</a> (              500,  DATA  )
+                  CALL <a href="dasrdi.html">DASRDI</a> (  HANDLE,  1, 500,  DATA  )
+
+                  WRITE (*,*) 'Contents of RAND.DAS:'
+                  WRITE (*,*) ' '
+                  WRITE (*,*) DATA
+
+                  END
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     K.R. Gehringer (JPL)
+     N.J. Bachman   (JPL)
+     W.L. Taber     (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.2.0 10-APR-2014 (NJB)
+
+        Deleted declarations of unused parameters.
+
+        Corrected header comments: routine that flushes
+        written, buffered records is <a href="daswbr.html">DASWBR</a>, not DASWUR.
+
+    SPICELIB Version 1.1.1 19-DEC-1995 (NJB)
+
+        Corrected title of permuted index entry section.
+
+    SPICELIB Version 1.1.0, 12-MAY-1994 (KRG) (NJB)
+
+        Test of <a href="failed.html">FAILED</a>() added to loop termination conditions.
+
+        Removed references to specific DAS file open routines in the
+        $ Detailed_Input section of the header. This was done in order
+        to minimize documentation changes if the DAS open routines ever
+        change.
+
+        Modified the $ Examples section to demonstrate the new ID word
+        format which includes a file type and to include a call to the
+        new routine DASONW, open new for write, which makes use of the
+        file type. Also,  a variable for the type of the file to be
+        created was added.
+
+    SPICELIB Version 1.0.0, 11-NOV-1992 (NJB) (WLT)</PRE>
+<h4>Link to routine DASUDI source file <a href='../../../src/spicelib/dasudi.f'>dasudi.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:24:09 2014</pre>
+
+</body>
+</html>
+

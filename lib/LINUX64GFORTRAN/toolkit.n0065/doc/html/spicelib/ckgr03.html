@@ -1,0 +1,344 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>ckgr03</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>ckgr03</b> </td>
+    </tr>
+
+    <tr>
+      <td style="vertical-align: top;">
+
+<small><div align="center">
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div></small>
+       <br>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+            <small>
+              <a href="#Procedure">Procedure<br></a>
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Keywords">Keywords<br></a>
+              <a href="#Declarations">Declarations<br></a>
+              <a href="#Brief_I/O">Brief_I/O<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Detailed_Input">Detailed_Input<br></a>
+              <a href="#Detailed_Output">Detailed_Output<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Particulars">Particulars<br></a>
+
+              </small>
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">
+              <small>               <a href="#Examples">Examples<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+             </small>
+            </td>
+          </tr>
+        </tbody>
+</table>
+
+<h4><a name="Procedure">Procedure</a></h4>
+<PRE>
+      CKGR03 ( C-kernel, get record, type 03 )
+ 
+      SUBROUTINE CKGR03 ( HANDLE, DESCR, RECNO, RECORD )
+      IMPLICIT NONE
+ 
+</PRE>
+<h4><a name="Abstract">Abstract</a></h4>
+<PRE>
+     Given the handle and descriptor of a type 3 segment in a CK file,
+     return a specified pointing instance from that segment.
+</PRE>
+<h4><a name="Required_Reading">Required_Reading</a></h4>
+<PRE>
+     <a href="../req/ck.html">CK</a>
+     <a href="../req/daf.html">DAF</a>
+</PRE>
+<h4><a name="Keywords">Keywords</a></h4>
+<PRE>
+     POINTING
+</PRE>
+<h4><a name="Declarations">Declarations</a></h4>
+<PRE>
+ 
+      INTEGER               HANDLE
+      DOUBLE PRECISION      DESCR   ( * )
+      INTEGER               RECNO
+      DOUBLE PRECISION      RECORD  ( * )
+ 
+</PRE>
+<h4><a name="Brief_I/O">Brief_I/O</a></h4>
+<PRE>
+     Variable  I/O  Description
+     --------  ---  --------------------------------------------------
+     HANDLE     I   The handle of the file containing the segment.
+     DESCR      I   The segment descriptor.
+     RECNO      I   The number of the pointing instance to be returned.
+     RECORD     O   The pointing record.
+</PRE>
+<h4><a name="Detailed_Input">Detailed_Input</a></h4>
+<PRE>
+     HANDLE     is the handle of the binary CK file containing the
+                desired segment. The file should have been opened
+                for read or write access, either by <a href="cklpf.html">CKLPF</a>, <a href="dafopr.html">DAFOPR</a>,
+                or <a href="dafopw.html">DAFOPW</a>.
+
+     DESCR      is the packed descriptor of the data type 3 segment.
+
+     RECNO      is the number of the discrete pointing instance to be
+                returned from the data type 3 segment.
+</PRE>
+<h4><a name="Detailed_Output">Detailed_Output</a></h4>
+<PRE>
+     RECORD     is the pointing instance indexed by RECNO in the
+                segment.  The contents are as follows:
+
+                   RECORD( 1 ) = CLKOUT
+
+                   RECORD( 2 ) = q0
+                   RECORD( 3 ) = q1
+                   RECORD( 4 ) = q2
+                   RECORD( 5 ) = q3
+
+                   RECORD( 6 ) = av1  ]
+                   RECORD( 7 ) = av2  |-- Returned optionally
+                   RECORD( 8 ) = av3  ]
+
+                CLKOUT is the encoded spacecraft clock time associated
+                with the returned pointing values.
+
+                The quantities q0 - q3 are the components of the
+                quaternion that represents the C-matrix that transforms
+                vectors from the inertial reference frame of the
+                segment to the instrument frame at time CLKOUT.
+
+                The quantities av1, av2, and av3 represent the
+                angular velocity vector, and are returned only if
+                the segment contains angular velocity data. The
+                components of the angular velocity vector are
+                specified relative to the inertial reference
+                frame of the segment.
+</PRE>
+<h4><a name="Parameters">Parameters</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Exceptions">Exceptions</a></h4>
+<PRE>
+     1)  If the segment is not of data type 3, the error
+         SPICE(CKWRONGDATATYPE) is signalled.
+
+     2)  If RECNO is less than one or greater than the number of
+         records in the specified segment, the error
+         SPICE(CKNONEXISTREC) is signalled.
+
+     3)  If the specified handle does not belong to any DAF file that
+         is currently known to be open, an error is diagnosed by a
+         routine that this routine calls.
+
+     4)  If DESCR is not a valid descriptor of a segment in the CK
+         file specified by HANDLE, the results of this routine are
+         unpredictable.
+</PRE>
+<h4><a name="Files">Files</a></h4>
+<PRE>
+     The file specified by HANDLE should be open for read or
+     write access.
+</PRE>
+<h4><a name="Particulars">Particulars</a></h4>
+<PRE>
+     For a detailed description of the structure of a type 3 segment,
+     see the CK required reading.
+
+     This is a utility routine that may be used to read the individual
+     pointing instances that make up a type 3 segment.  It is normally
+     used in conjunction with <a href="cknr03.html">CKNR03</a>, which gives the number of
+     pointing instances stored in a segment.
+</PRE>
+<h4><a name="Examples">Examples</a></h4>
+<PRE>
+     Suppose that MOC.BC is a CK file that contains segments of
+     data type 3.  Then the following code fragment extracts the
+     SCLK time, boresight vector, and angular velocity vector for
+     each pointing instance in the first segment in the file.
+
+
+           INTEGER               ICD     ( 6 )
+           INTEGER               HANDLE
+           INTEGER               NREC
+           INTEGER               I
+
+           DOUBLE PRECISION      DCD     ( 2 )
+           DOUBLE PRECISION      DESCR   ( 5 )
+           DOUBLE PRECISION      RECORD  ( 8 )
+           DOUBLE PRECISION      QUAT    ( 4 )
+           DOUBLE PRECISION      AV      ( 3 )
+           DOUBLE PRECISION      BORE    ( 3 )
+           DOUBLE PRECISION      CMAT    ( 3, 3 )
+           DOUBLE PRECISION      SCLKDP
+
+           LOGICAL               FOUND
+           LOGICAL               AVSEG
+
+     C
+     C     First load the file. (The file may also be opened by using
+     C     <a href="cklpf.html">CKLPF</a>.)
+     C
+           CALL <a href="dafopr.html">DAFOPR</a> ( 'MOC.BC', HANDLE )
+     C
+     C     Begin forward search.  Find the first array.
+     C
+           CALL <a href="dafbfs.html">DAFBFS</a> ( HANDLE )
+           CALL <a href="daffna.html">DAFFNA</a> ( FOUND  )
+     C
+     C     Get segment descriptor.
+     C
+           CALL <a href="dafgs.html">DAFGS</a> ( DESCR )
+     C
+     C     Unpack the segment descriptor into its double precision
+     C     and integer components.
+     C
+           CALL <a href="dafus.html">DAFUS</a> ( DESCR, 2, 6, DCD, ICD )
+     C
+     C     The data type for a segment is located in the third integer
+     C     component of the descriptor.
+     C
+           IF ( ICD( 3 ) .EQ. 3 ) THEN
+     C
+     C        Does the segment contain AV data?
+     C
+              AVSEG =  ( ICD(4) .EQ. 1 )
+     C
+     C        How many records does this segment contain?
+     C
+              CALL <a href="cknr03.html">CKNR03</a> ( HANDLE, DESCR, NREC )
+
+              DO I = 1, NREC
+     C
+     C           Get the Ith pointing instance in the segment.
+     C
+                 CALL <b>CKGR03</b> ( HANDLE, DESCR, I, RECORD )
+
+     C
+     C           Unpack RECORD into the time, quaternion, and av.
+     C
+                 SCLKDP = RECORD ( 1 )
+
+                 CALL MOVED ( RECORD(2), 4, QUAT )
+
+                 IF  ( AVSEG )  THEN
+                    CALL MOVED ( RECORD(6), 3, AV   )
+                 END IF
+
+     C
+     C           The boresight vector is the third row of the C-matrix.
+     C
+                 CALL <a href="q2m.html">Q2M</a> ( QUAT, CMAT )
+
+                 BORE(1) = CMAT(3,1)
+                 BORE(2) = CMAT(3,2)
+                 BORE(3) = CMAT(3,3)
+     C
+     C           Write out the results.
+     C
+                 WRITE (*,*) 'Record: ', I
+                 WRITE (*,*)
+                 WRITE (*,*) 'SCLK time = ', SCLKDP
+                 WRITE (*,*)
+                 WRITE (*,*) 'boresight: ', BORE
+
+                 IF ( AVSEG ) THEN
+                    WRITE (*,*)
+                    WRITE (*,*) 'angular velocity: ', AV
+                 END IF
+
+              END DO
+
+           END IF
+</PRE>
+<h4><a name="Restrictions">Restrictions</a></h4>
+<PRE>
+     1) The binary CK file containing the segment whose descriptor was
+        passed to this routine must be opened for read or write access
+        by either <a href="cklpf.html">CKLPF</a>, <a href="dafopr.html">DAFOPR</a>, <a href="dafopw.html">DAFOPW</a>.
+</PRE>
+<h4><a name="Literature_References">Literature_References</a></h4>
+<PRE>
+     None.
+</PRE>
+<h4><a name="Author_and_Institution">Author_and_Institution</a></h4>
+<PRE>
+     J.M. Lynch (JPL)
+</PRE>
+<h4><a name="Version">Version</a></h4>
+<PRE>
+    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW)
+
+        Replaced <a href="dafrda.html">DAFRDA</a> call with <a href="dafgda.html">DAFGDA</a>.
+        Added IMPLICIT NONE.
+
+    SPICELIB Version 1.0.0, 25-NOV-1992 (JML)</PRE>
+<h4>Link to routine CKGR03 source file <a href='../../../src/spicelib/ckgr03.f'>ckgr03.f</a> </h4>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Tue Jul 15 14:23:55 2014</pre>
+
+</body>
+</html>
+
