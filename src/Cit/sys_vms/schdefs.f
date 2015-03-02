@@ -14,7 +14,7 @@ C----------------------------------------------------------------------
       ELSE IF( FTYPE .EQ. 'stations' ) THEN
          FILENAME = 'stations_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'sources' ) THEN
-         FILENAME = 'sources.vlba'
+         FILENAME = 'sources.gsfc'
       ELSE IF( FTYPE .EQ. 'frequency' ) THEN
          FILENAME = 'freq_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'peakcommand' ) THEN

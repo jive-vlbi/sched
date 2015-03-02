@@ -16,7 +16,7 @@ C
 C
 C     Draw a green ring around stations not in their original positions.
 C
-      IF( MOVED(ISTA) ) THEN
+      IF( MOVEDS(ISTA) ) THEN
          CALL PGSCI( 3 )
          CALL PGSCH( RINGSIZE ) 
          CALL PGPT1( XPLT(ISTA), YPLT(ISTA), -9 )

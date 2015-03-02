@@ -196,12 +196,12 @@ C     turns into a ring around the symbol.
 C     
       DO ISTA = 1, NSTA
          IF( PSTBCK(ISTA,1) .NE. 1 ) THEN
-            CALL PLMARK( ISTA, MOVED, RINGSIZE, DOTSIZE )
+            CALL PLMARK( ISTA, MOVEDS, RINGSIZE, DOTSIZE )
          END IF
       END DO
       DO ISTA = 1, NSTA
          IF( PSTBCK(ISTA,1) .EQ. 1 ) THEN
-            CALL PLMARK( ISTA, MOVED, RINGSIZE, DOTSIZE )
+            CALL PLMARK( ISTA, MOVEDS, RINGSIZE, DOTSIZE )
          END IF
       END DO
 C

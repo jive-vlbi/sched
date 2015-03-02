@@ -1,17 +1,3 @@
-
-
-
-This is not working.  The SPICE library is built with g77 and it does not
-seem to be compatible with gfortran.  We eventually need to build, or better,
-get a gfortran version of the libraries.  Sigh.
-
-March 17, 2010.
-
-
-
-
-
-
 #! /bin/csh
 #  
 #  Trying to make this work - January 2015  RCW and Bruce Rowen.
@@ -27,13 +13,14 @@ March 17, 2010.
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
 #
+setenv SEDFILE makelinuxsp64gf_sedscript
 /bin/rm Makefile
-/bin/rm -f makelinuxsp64gf.sedscript
+/bin/rm -f $SEDFILE
 
 # Make a file for sed with all the required changes to Makefile.master
 # Note that LPGPLOT is not needed for this case.
 
-cat <<EOF >! makelinuxsp64gf_sedscript
+cat <<EOF >! $SEDFILE
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinuxSpice64gfortran:
 s:#ARCHSED: ARCH = LINUX:
 s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
@@ -46,8 +33,8 @@ EOF
 
 #  Run sed with the above file.
 
-sed -f makelinuxsp64gf_sedscript Makefile.master > Makefile
-/bin/rm makelinuxsp64gf_sedscript
+sed -f $SEDFILE Makefile.master > Makefile
+/bin/rm $SEDFILE
 
 #  When running make, you will see a variety of benign warnings that can be 
 #  ignored.  The main one concerns character variables being truncated when
@@ -56,4 +43,7 @@ sed -f makelinuxsp64gf_sedscript Makefile.master > Makefile
 echo '******************************************************************'
 echo 'Before compiling or using SCHED,'
 echo 'be sure PGPLOT_DIR and PGPLOT_FONT point to the right place (sched pgplot area?).'
+echo 'When testing at the AOC from the cwalker area, use (tchs):'
+echo 'setenv PGPLOT_DIR /users/cwalker/files/sched_work/PGPLOT/linux64gfortran_5.3.1/'
+echo 'setenv PGPLOT_FONT /users/cwalker/files/sched_work/PGPLOT/linux64gfortran_5.3.1/'
 echo '******************************************************************'

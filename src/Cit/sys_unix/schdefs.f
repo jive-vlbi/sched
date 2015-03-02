@@ -14,7 +14,12 @@ C----------------------------------------------------------------------
       ELSE IF( FTYPE .EQ. 'stations' ) THEN
          FILENAME = '$SCHED/catalogs/stations_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'sources' ) THEN
-         FILENAME = '$SCHED/catalogs/sources.vlba'
+C
+C        This could be sources.gsfc or sources.petrov.
+C        sources.gsfc has more aliases.  Use it.
+C        sources.petrov has many more sources as of Feb. 2015
+C
+         FILENAME = '$SCHED/catalogs/sources.gsfc'
       ELSE IF( FTYPE .EQ. 'frequency' ) THEN
          FILENAME = '$SCHED/catalogs/freq_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'peakcommand' ) THEN
