@@ -1,5 +1,16 @@
       PROGRAM NEWSRC
 C
+C
+C     This program may no longer be needed as of February 2015.  David Gordon 
+C     of GSFC is supplying a catalog with aliases, including, where needed, (see 
+C     egdelzn.key) the J2000 names with only 2 dec digits.  Petrov is resisting
+C     adding aliases, but maybe that will just be the price of using his
+C     catalog, which has a lot more sources.  Using unmodified catalogs will be
+C     a lot less work for the mythical new SCHED maintainer.
+C     Craig Walker  Feb. 21, 2015.
+C
+C
+C
 C     Read an old SCHED catalog.
 C       As of Dec. 2014, this will generally be the alias file.
 C     Read a new catalog, as from the geodesy community.
@@ -7,6 +18,7 @@ C     Replace coordinates and errors in the old catalog.
 C     Add any new aliases.
 C     Add any new sources.
 C     Sort.
+C
 C
 C     For sanity checks:
 C        Look for duplicates by position.
@@ -30,7 +42,18 @@ C     Also adding hardwired option to make alias file.
 C     I expect not to use it often.  If needed, set DOALIAS=.TRUE.
 C     and the output file will be heavily filtered.
 C
-C     Dec. 2014.  Trying to get GSFC to deliver keyin format files.
+C     Dec. 2014.  Trying to get GSFC to deliver keyin format files.  Got one in Feb 2015.
+C
+C     Getting the GSFC file made me look at the meaning or RAERR.  The manual 
+C     says it is the angular error in mas.  To get the coordinate error, one would
+C     need to divide by 15 to get time units and cos(dec) for the converging RA lines.
+C     But past catalogs have considered it to be a coordinate error, apparently
+C     in mas, not time msec.  Awkward.
+C     Feb 2015:  Modify this program to make the handling of RAERR more explicit.
+C     We are still debating which form to use, but for now, assume mas of coordinate error.
+C     Convert all input files to that form, then at the end, convert to the desired type.
+C     Then there is only one change if we decide to use something else.
+C     Assume old catalogs are corrdinate mas, so no change needed.
 C
 C  The inputs to Newsrc are.  Items in [] are suggestions when using alias file.
 C    1.  The old catalog.  Usually the pared down catalog with the aliases [sources.aliases]
@@ -196,7 +219,9 @@ C
 C              In practice, the RAERRs have been coordinate errors, but
 C              in mas, not time seconds.  They need a cos(dec) correction
 C              to be angle on the sky, or the comparisons need to not
-C              have a cos(dec) correction.
+C              have a cos(dec) correction.  This is all being considered
+C              in Feb. 2015.  For now, keeping coordinate error in mas.
+C              If filling fake errors, don't worry about RAERR vs Dec.
 C
                URAE = RAERR(ISRC)
                IF( URAE .EQ. 0.0 ) URAE = 40.0
@@ -212,22 +237,24 @@ C              SIGTOL sets the limit at 6 sigma.  It also converts from
 C              mas to radians.  See where it is set above.
 C              With 6 sigma, there are a fairly large number of matches
 C              by name but not position.  See later.
+
 C              Note that the RA error is in the corrdinate angle, not
 C              angle on the sky, the error numbers are high near the pole.
-C              Dec. 2014.  Add a constant so sources can match even if the
-C              errors are so small that they might be suspicious.  Make
-C              that constant 5 mas on the sky.
+C              Dec. 2014.  Make a minimum tolerance for the separation of
+C              5 mas so that especially tiny error bars don't preclude clear
+C              matches.   
+C              Here the coordinate difference is compared with the coordinate
+C              errors, so we don't need any explicity cos(dec) adjustments.
 C
                RDIFE = SQRT( URAE**2 + NURAE**2 )
                DDIFE = SQRT( UDECE**2 + NUDECE**2 )
-               RSEPTOL = MAX( SIGTOL * RDIFE, SIGTOL * 5.0 )
-               DSEPTOL = MAX( SIGTOL * DDIFE, 
-     1                        SIGTOL * 5.0 / DCOS(DEC(ISRC)) )
+               RSEPTOL = SIGTOL * MAX( RDIFE, 5.0 )
+               DSEPTOL = SIGTOL * MAX( DDIFE, 5.0 )
 C
 C              Finally test for a match.  RSEP and DSEP are in radians.
 C              Compare coordinate angle, not sky angle.
+C              Do not scale by DCOS(DEC(ISRC))
 C
-C               RSEP = ABS( RA(ISRC) - NEWRA(ICAT) ) * DCOS(DEC(ISRC))
                RSEP = ABS( RA(ISRC) - NEWRA(ICAT) )
                DSEP = ABS( DEC(ISRC) - NEWDEC(ICAT) )
                MATCHPOS = RSEP .LT. RSEPTOL .AND. DSEP .LT. DSEPTOL

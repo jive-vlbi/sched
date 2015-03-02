@@ -47,7 +47,7 @@ C
          DOTSIZE = 2.2
          RINGSIZE = DOTSIZE + 0.8
          DO ISTA = 1, MAXSTA
-            MOVED(ISTA) = .FALSE.
+            MOVEDS(ISTA) = .FALSE.
          END DO
          FIRST = .FALSE.
          PLOTCONT = .FALSE.
@@ -253,7 +253,7 @@ C                 if you type "M" or middle click (giving 'D')
 C
                   IF( CH .EQ. 'M' .OR. CH .EQ. 'D' ) THEN
 C
-                     MOVED(IMARK) = .TRUE.
+                     MOVEDS(IMARK) = .TRUE.
 C
 C                    Don't put this in the log.  Use PUTOUT. 
 C
@@ -273,7 +273,7 @@ C
 C
 C                       Now plot the new position, complete with ring.
 C
-                        CALL PLMARK( IMARK, MOVED, RINGSIZE, DOTSIZE )
+                        CALL PLMARK( IMARK, MOVEDS, RINGSIZE, DOTSIZE )
 C
 C                       Make the changes needed to use the new
 C                       position.  First get the XYZ coordinates.
@@ -340,7 +340,7 @@ C
 C
 C                    Replot the point.
 C
-                     CALL PLMARK( IMARK, MOVED, RINGSIZE, DOTSIZE )
+                     CALL PLMARK( IMARK, MOVEDS, RINGSIZE, DOTSIZE )
                   END IF
                   GO TO 100
 C
@@ -359,12 +359,12 @@ C                 Replot the points to reflect any changes by UVOPT
 C
                   DO ISTA = 1, NSTA
                      IF( PSTBCK(ISTA,1) .NE. 1 ) THEN
-                        CALL PLMARK( ISTA, MOVED, RINGSIZE, DOTSIZE )
+                        CALL PLMARK( ISTA, MOVEDS, RINGSIZE, DOTSIZE )
                      END IF
                   END DO
                   DO ISTA = 1, NSTA
                      IF( PSTBCK(ISTA,1) .EQ. 1 ) THEN
-                        CALL PLMARK( ISTA, MOVED, RINGSIZE, DOTSIZE )
+                        CALL PLMARK( ISTA, MOVEDS, RINGSIZE, DOTSIZE )
                      END IF
                   END DO
 C

@@ -89,6 +89,9 @@ C
                INREMARK(NCAT) = USRREMRK
                INEQUIN(NCAT) = 'J2000'
 C
+C              The RA error appears to be mas of coordinate error, so
+C              no change needed.
+C
             ELSE
 C
                NCAT = NCAT -1
@@ -129,6 +132,9 @@ C
                WRITE( INREMARK(NCAT), '( A, I5, A )' )
      1            USRREMRK(1:LEN1(USRREMRK)), NOBS, ' obs.'
                INEQUIN(NCAT) = 'J2000'
+C
+C              The RA error appears to be mas of coordinate error, so
+C              no change needed.
 C
             ELSE 
 C
@@ -186,6 +192,9 @@ C
 C
                IF( NEWNAME(2,NCAT) .EQ. '0' ) NEWNAME(2,NCAT) = ' '
                NEWNAME(3,NCAT) = ' '
+C
+C              The RA error appears to be the actual coordinate error
+C              in arcseconds.  Convert to mas.  No Dec correction needed.
                NEWRAE(NCAT) = NEWRAE(NCAT) * 1000.0
                NEWDECE(NCAT) = NEWDECE(NCAT) * 1000.0
 C
@@ -244,6 +253,10 @@ C
      1            USRREMRK(1:LEN1(USRREMRK)), NOBS, ' obs.'
                IFLXREF(NCAT) = USRFLXRF
                INEQUIN(NCAT) = 'J2000'
+C
+C              The RA error appears to be mas of coordinate error, so
+C              no change needed.
+C
             ELSE
                NCAT = NCAT - 1
                GO TO 200
@@ -283,6 +296,10 @@ C
             IF(IFLX(1,NCAT) .NE. 0.0 .AND. IFLXREF(NCAT) .EQ. ' ') THEN
                IFLXREF(NCAT) = USRFLXRF
             END IF
+C
+C           The RA error appears to be mas of coordinate error, so
+C           no change needed.
+C
          ELSE
             WRITE(*,*) 'Unrecognized format'
             STOP

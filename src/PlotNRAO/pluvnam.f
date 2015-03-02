@@ -125,7 +125,7 @@ C
             CHLONG = TFORM( LONG(STANUM(ISTA)), ' ', 1, 3, 2, ':: ' )
             POSLINE = CHLAT // '  ' // CHLONG
             CALL PGTEXT( X1, Y1, STANAME(ISTA) )
-            IF( MOVED(ISTA) ) CALL PGSCI( 3 )
+            IF( MOVEDS(ISTA) ) CALL PGSCI( 3 )
             CALL PGTEXT( X1 + 0.35 * LBXR, Y1, POSLINE )
          END IF
       END DO
