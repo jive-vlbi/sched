@@ -114,10 +114,11 @@
 !
 !
 
+!  --  This file created by Update.  Do not edit.  --
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2015Jan24-07:00:18"
+ VERSION = "2015Feb26-00:44:38"
 
 !
 !  =====================================================================
@@ -1200,6 +1201,16 @@
     TSETTLE=2  DAR=LBA  DISK=LBADR   NDRIVES=1  NBBC=2
     TSCAL=CONT
   /
+  STATION=CED_DBBC     STCODE=Cd    CONTROL=VEX
+! Ceduna with the DBBC backend
+! email from Jamie McCallum 20150217
+    MOUNT=ALTAZ      AX1RATE=40   AX2RATE=40  AX1LIM= -170,300 AX2LIM=5.0,89.0
+    DBNAME = CEDUNA
+    AX1ACC=0.02778 AX2ACC=0.02778
+!    ELEV=    100.00    LONG= -133:48:35.38        LAT=-31:52:00.00
+    TSETTLE=2  DAR=DBBC DBBCVER=ASTRO  DISK=MARK5B MEDIADEF=DISK NDRIVES=1 NBBC=8
+  /
+
   STATION=HOB_MK5   STCODE=Ho  CONTROL=VEX ! position from SKED catalog.
     DBNAME = HOBART26
     MOUNT=XYEW AX1RATE=40 AX2RATE=40 
@@ -1278,6 +1289,17 @@
     TSCAL=CONT
    /
 
+!   Info from January 28, 2015 email from Stuart Weston.
+    STATION=WARK30M STCODE=Wa CONTROL=VEX
+    ! AUT University 30m, Mk5B recorder
+    DBNAME=WARK30M
+    MOUNT=ALTAZ AX1RATE=22.2 AX2RATE=21.6 AX1LIM=-179,354 AX2LIM=6,90.1
+    AX1ACC=0.2 AX2ACC=0.25
+    TSETTLE=2  DAR=DBBC DBBCVER=ASTRO
+    DISK=MARK5B MEDIADEF=DISK
+   /
+
+
   STATION=WW_LBA     STCODE=Ww    CONTROL=VEX
 !   All info assembled by Chris Phillips from various sources
 ! This is the Wark12M with the LBA recorder.
@@ -1300,18 +1322,18 @@
   /
 
   STATION=KATHERIN     STCODE=Ke    CONTROL=VEX
-!   from Jim Lovell
+!   from Jim Lovell   DBNAME is for Feb 2015 GSFC catalog
     MOUNT=ALTAZ      AX1RATE=300   AX2RATE=75  AX1LIM= -270,270 AX2LIM=5,88.5
-    DBNAME = KATHERIN
+    DBNAME = KATH12M  
     AX1ACC=1.3 AX2ACC=1.3
     TSETTLE=2  DAR=DBBC  DISK=MARK5B   DBBCVER=ASTRO
     TSCAL=CONT
   /
 
   STATION=YARRAGAD     STCODE=Yg    CONTROL=VEX
-!   from Jim Lovell
+!   from Jim Lovell   DBNAME is for Feb 2015 GSFC catalog
     MOUNT=ALTAZ      AX1RATE=300   AX2RATE=75  AX1LIM= -270,270 AX2LIM=5,88.5
-    DBNAME = YARRAGAD
+    DBNAME = YARRA12M
     AX1ACC=1.3 AX2ACC=1.3
     TSETTLE=2  DAR=DBBC  DISK=MARK5B   DBBCVER=ASTRO
     TSCAL=CONT
@@ -1368,6 +1390,7 @@
 !     PDBURE added based on Krichbaum email of 22sep2004. RCW
 !  =====================================================================
 !  Actually none of these stations are in common use now (2005)
+!  Feb 15, 2015  LMT added, and that will be in use shortly.
 !
   STATION=HAYSTACK    STCODE=Hs  CONTROL=VEX
     DBNAME = HAYSTACK
@@ -1385,6 +1408,32 @@
     DISK=MARK5A   MEDIADEF=DISK NBBC=8
    /
  
+!  LMT.  Based on information provided for bd180d (May 2014).
+!  bd180d position (old):  X= -768702.4521  Y= -5988521.13180  Z= 2063369.11170
+!  Position provided by Shep Doeleman, about Feb 16, 2015.
+
+   STATION=LMT  STCODE=Lm  CONTROL=VLBA
+     DBNAME = LMT
+     !BEGIN=     0.00  END=100000.00  AXISOFF=  0.0000
+     X= -768715.632   Y= -5988507.072    Z= 2063354.852
+     DXDT= 0.0000  DYDT= 0.0000  DZDT= 0.000  EPOCH=54466
+     FRAME='Shep e-mail 24 June 2013'
+     MOUNT=ALTAZ
+     ! Information from Pete Schloerb e-mails,
+     !   11 April 2014 and 04 May 2014
+     !   AX1LIM should be -90,450 but only using +90,450 for now
+     AX1LIM=90,450 AX2LIM=0,90
+     AX1RATE=42.0 AX2RATE=60.0
+     AX1ACC=0.5  AX2ACC=1.0
+     TSETTLE=5 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16
+     DISK=MARK5C   MEDIADEF=DISK    TSCAL=GAP 
+     ! Tsys     gaps should be longer than  1 minute
+     ! Pointing gaps should be longer than  5 minutes plus slews
+     ! Focusing gaps should be longer than 20 minutes
+    /
+
+
+
 ! Clearly out of date info.  July 22, 2010  RCW.
 !  STATION=QUAB      STCODE=Qb  CONTROL=VLBA 
 !    MOUNT=ALTAZ AX1RATE=60 AX2RATE=60 AX1LIM=270,810 AX2LIM=15,88

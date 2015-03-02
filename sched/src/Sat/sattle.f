@@ -55,6 +55,7 @@ C     Call arguments.  Most obvious.  T0 is reference time for
 C     rates and is taken to be the same as the scan start time.
 C     ISAT is the satellite number (as per SATINI).
 C     INSTRU is the instrument, probably 'VLBA'.  Not used for now.
+C     Don't worry about the GFORTRAN complaint about being unused.
 C     ISTA is the station number.  If 0, do geocentric.  If not,
 C     do parallax correction for this station.
 C
@@ -76,7 +77,7 @@ C
 C
 C     Variables
 C
-      INTEGER               KSTA
+      INTEGER               KSTA, PASS
       CHARACTER*(1)         FORMAT
       CHARACTER*20          TFORM, RAC, DECC
       CHARACTER*(STRLEN)    UTC
@@ -112,6 +113,10 @@ C
 C     Epoch of the TLE data
 C
       DOUBLE PRECISION TLEEPO(MAXSAT)
+C
+C     Variables for the frame conversion for TLEs.
+C
+      DOUBLE PRECISION PRECM(6,6), INVPRC(6,6), TMPSTA(6)
 C
 C     Text containing TLEs
 C  
@@ -206,18 +211,69 @@ C     format, rounded to the nearest seconds.
 C
       ET  =   ETBEG
 C
-C     Get initial position assuming infinite speed of light
+C     Get initial position assuming infinite speed of light.
+C     Then iterate twice to get the speed corrected time.
 C
-      CALL EV2LIN(ET, GEO, TLE(1,ISAT), STATE)
+C     Another note (see below) from Jon Giorgini - Feb. 20, 2015:
+C     Different routines are needed for high and low orbit cases.
+C     The dividing line is at a period of 225 minutes.  Below that,
+C     use EV2LIN and above use DPSPCE.  The period is in ELEMS(9)
+C     from GETELMS and is in rad/minute.
 C
-C     Correct for light travel time from object
+      PASS = 1
+      DO WHILE ( PASS .LE. 3 )
+         IF( PASS .GE. 2 ) THEN
 C
-      X = STATE(1)
-      Y = STATE(2)
-      Z = STATE(3)
-      DIST = SQRT( X*X + Y*Y + Z*Z )
-      ET = ET - DIST/299792.458
-      CALL EV2LIN(ET, GEO, TLE(1,ISAT), STATE)
+C           Correct for light travel time from object after the
+C           first pass.
+C
+            X = STATE(1)
+            Y = STATE(2)
+            Z = STATE(3)
+            DIST = SQRT( X*X + Y*Y + Z*Z )
+            ET = ET - DIST/299792.458
+         END IF
+C
+         IF( TLE(9,ISAT) .GE. ( TWOPI / 225.D0 ) ) THEN
+            CALL EV2LIN(ET, GEO, TLE(1,ISAT), STATE)
+         ELSE
+            CALL DPSPCE(ET, GEO, TLE(1,ISAT), STATE)
+         END IF
+C
+         PASS = PASS + 1
+      END DO
+C
+C     Note from Jon D. Giorgini at JPL via Walter on Feb. 17, 2015:
+C     STATE() returned by EV2LIN (basically, NORAD's SGP4 model
+C     with some weighted averaging between epochs) is in the 
+C     Earth-Centered Inertial (ECI) reference frame, and relative 
+C     to the true equator and mean equinox" (TEME) of the epoch of 
+C     the elements.
+C
+C     From SPKEZR (used for the bsp files), the STATE output is in 
+C     the inertial J2000 system requested by the calling argument.
+C
+C     The following sequence was suggested by Giorgini to convert
+C     the EV2LIN results to the same frame as the SPKEZR results.
+C
+C     Get rotation matrix from TEME @ET (sec past J2000 epoch) to J2000
+C     PRECM is 6x6, goes from J2000 -> TEME
+
+C
+      CALL ZZTEME( ET, PRECM )
+C
+C     Invert state transformation matrix to go from TEME -> J2000
+C   
+      CALL INVSTM( PRECM, INVPRC )
+C
+C     Do transformation of state from EV2LIN's TEME to J2000
+C
+      CALL MXVG( INVPRC, STATE, 6, 6, TMPSTA )
+C
+C     Copy (overwrite) original TEME state vector store from EV2LIN
+C
+      CALL MOVED( TMPSTA, 6, STATE )
+C
 C
 C     Some debugging printout.
 C
