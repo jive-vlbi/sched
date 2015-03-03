@@ -14239,21 +14239,26 @@ Update
 Install the latest source and locations catalogs from the geodetic
 community.  This used to involve reformatting them, often a
 complicated task especially if formats changed, but now both Goddard
-(David Gordon) and Leonid Petrov are providing files in the correct
+(David Gordon) and Leonid Petrov (RFC) are providing files in the correct
 format to use directly.  The source files can be found either by
 contacting the above people, or by looking for ``GSFC VLBI'' or
 ``Petrov VLBI'' with a search engine.  The locations file is from
-Goddard.  The latest source files should be copied into {\sl
+Goddard.  
+
+The latest source files should be copied into {\sl
 \$SCHED/catalogs} while the locations file with a date identifier
 should be copied to {\sl \$SCHED/catalogs/Master\_NRAO}.  Then the
 symbolic links {\sl sources.gsfc} and {\sl sources.petrov} in 
-{\sl \$SCHED/catalogs} and the link {\sl locations.gsrc} should
+{\sl \$SCHED/catalogs} and the link {\sl locations.gsfc} should
 be updated in {\sl \$SCHED/catalogs/Master\_NRAO}.  The final 
 {\sl locations.dat} file in {\sl \$SCHED/catalogs} will include both
 this downloaded file plus contributions from other places.  It 
 is built when Update is run in {\sl \$SCHED/catalogs}, which updates
 most of the catalogs.  All of the new files and links should be added
-to svn.
+to svn.  If SCHED complains about duplicate station data, it might be
+that a station that formerly came from one of the other locations 
+files has been added to the geodetic solution.  The geodetic solution
+should be given preference.
 
 Note that reformatting the files used to involve the programs {\sl NEWLOC}
 and {\sl NEWLOC} in {\sl \$SCHED/RELATED\_CODE}, but those should no
@@ -14413,7 +14418,9 @@ in the call as shown below.  Note that the various files produced by
 compatible, so it is a good idea to delete them before running a
 different program.  The script {\tt latexclean} can do the cleanup as
 shown below.  That is certainly something to try if there is a crash
-for non-obvious reasons.
+for non-obvious reasons.  It is probably wise to run bare {\tt latex}
+until it runs ok, as I have seen errors caught by it not caught by
+{\tt htlatex}.
 
 Note that, until Jan. 2015, the HTML manual was prepared with {\tt
 latex2html}, but that program is no longer being supported and stopped
@@ -14778,42 +14785,57 @@ then rsync the desired stuff to your development area.
 % seek point for editing:  development version
 
 %  ToDo:
-
-%     Every update:  Check leap seconds.
-%     Search through this file for incomplete items, generally flagged
-%     with a line of asterisks.
-%     Allow VLAONLY schedules?  Maybe these don't differ from any other
-%         single station schedules any more.
-%     Modify choice of unset synthesizer for the new synthesizers.
-%     Revisit the whole issue of scan and recording start times.  Take
-%       into account any delays in start of correlation.  Also deal with
-%       "conservative" slew estimates causing lost data.
-%     Related - revisit schtim.f for tape stoppages, readbacks etc.
-%     Update the station code list.
-%     Update all examples for no Mark5A at VLBA.
-%     Warn that even MHz frequency settings are poor for pulse cal.
-%        Most observations are doing it now days.
-%     Put more in summary about multiple field centers - like for each
-%        set, add number of fields and field of view needed.
-%     Re-calculate the slew rates for the VLBA antennas.
-%     Protect 2cm and 3mm better against inappropriate ch1 for filter.
-%     Allow more then 12 characters for setup name in .sum scan summary.
-%     Protect against excessively long lineset names.
-%     Amy - need new constraints for VLA on channels per IF.
-%     Let user know when sideband inversion is to be used in correlation.
+%     Every update, check leap seconds.  Update SLA routine dat.f and 
+%        any $PLANET_DATA/naif00nn.tls files if one is planned.
+%     ToDo items moved to the {\hyperref[SSEC:BUGS]Wish List} March 2, 2015.
 
 
 \subsection{\label{SSEC:VER_11.4}Version 11.4}
 
 \begin{itemize}
 
-\item Obtaining KEYIN format source files from GSFC (David Gordon).  
-While looking at these, I realized that RAERR has not been conforming
-to what is described in this manual (angular error in mas).  Previous
-catalogs have had a coordinate error, but in mas, not milli-timesec, 
-which would need to be divided by cos(dec) to get the angular error.
-Will continue with the coordinate error and change the manual 
-definition.  Feb. 22, 2013  Craig Walker
+\item Leonid
+
+\item GSFC (David Gordon) is now providing a locations file in 
+KEYIN format.  That is now placed in the catalogs/Master\_NRAO directory
+and combined with other locations files to make {\sl locations.dat}.
+Conversion from geodetic formats is no longer needed.
+
+\item \schedb has long come with a combined source catalog that contained
+sources from JVAS, an old VLA calibrator list, the GSFC solutions and
+the Petrov RFC solutions.  Creating the combined list has been a somewhat
+painful job, especially when the input catalog formats change.  Now that
+both Goddard and Petrov are providing ready to use catalogs, and those
+catalogs have many thousands of sources, combined that I have retired
+and no longer will be able to support the conversions, we have abandoned
+sources.vlba.  The latest files from GSFC and Petrov will be kept in
+{\sl \$SCHED/catalogs} in files whose names indicate the solution they 
+are from.  There are symbolic links called sources.gsfc and sources.rfc
+which can be used to avoid having to keep up with the release names.
+The examples have been converted to use one of the other of these catalogs.
+The GSFC file contains a number of aliases for the popular sources.
+The RFC catalog just has the J2000 and 1950 names.  The RFC catalog has
+far more sources --- over 9000 in the 2015feb version.
+March 2, 2015  Craig Walker
+
+\item While looking at the new source catalogs, I realized that RAERR
+has not been conforming to what was described in this manual.  The manual
+claimed that the error was in mas of angular error on the sky.  In 
+practice, it has been mas, but in coordinate error.  Note that the 
+RA coordinate is in time seconds, so the reported error (mas) would need
+to be divided by 15 to get the actual coordinate error in the coordinate
+units.  To get the angular error from the coordinate error, the value
+needs to be divided by dos(dec).  Rather than change the catalogs, the
+description of RAERR in the manual was changed to say that it is the
+coordinate error in mas.  Feb. 22, 2013 Craig Walker
+
+\item GSFC (David Gordon) is now providing their source data in KEYIN
+format which can be used without conversion.  Feb. 2015  Craig Walker
+
+\item Leonid Petrov has provided his Radio Fundamental Catalog (RFC)
+in KEYIN format for some time.  But we have now arranged so that we
+no longer make any modifications and just use it as sent.  It has
+over 9000 sources in the latest version.  Feb. 2015 Craig Walker
 
 \item Making corrections to the TLE ephemeris based satellite tracking
 to get it to agree with bsp based tracking.  Walter Brisken is testing
@@ -18904,6 +18926,60 @@ been addressed, but not taken out here.
 
 
 \begin{itemize}
+
+\item Search through this file for incomplete items, generally flagged
+      with a line of asterisks.  Before March 2015  RCW.
+
+\item Allow VLAONLY schedules?  Maybe these don't differ from any other
+      single station schedules any more. Before March 2015  RCW.
+
+\item Modify choice of unset synthesizer frequency for the new synthesizers.
+      It should be easier without the setting constraints of the old ones.
+      Before March 2015  RCW.
+
+\item Revisit the whole issue of scan and recording start times.  Take
+      into account any delays in start of correlation.  Also revisit 
+      schtim.f for tape stoppages, readbacks etc.  The meaning of scan 
+      times is now rather different from in the tape days and SCHEDs 
+      bookkeeping is no longer well matched.  But the new scheme may 
+      not match what non-VLBA stations are doing.  Before March 2015  RCW.
+
+\item Remeasure VLBA slew rates.  Current ones probably too low.  I
+      measured them right after discovering that they were below the VLBA
+      specs.  But engineering did some readjustments that are not 
+      reflected in the current catalog values. Before March 2015  RCW.
+
+\item Update the station code list. Before March 2015  RCW.
+
+\item Update all examples for no Mark5A at VLBA. Mostly done. Before 
+      March 2015  RCW.
+
+\item Warn that even MHz frequency settings are poor for pulse cal
+      because of aliasing.  Most observations are doing it now because 
+      of PFB the restrictions, even though it is not necessary with 
+      the DDC.  Before March 2015  RCW.
+
+\item Put more in the summary file about multiple field centers - like 
+      for each set, add number of fields and field of view needed.
+      Before March 2015  RCW.
+
+\item Protect 2cm and 3mm better against inappropriate ch1 for filter
+      in the IF converter. Before March 2015  RCW.
+
+\item Allow more then 12 characters for setup name in .sum scan summary.
+      Before March 2015  RCW.
+
+\item Protect against excessively long lineset names. Before March 2015  RCW.
+
+\item Need new constraints for VLA on channels per IF. Before March 2015  RCW.
+
+\item Let the user know when sideband inversion is to be used in correlation.
+      Before March 2015  RCW.
+
+\item Revisit the suite of examples - it has grown organically and lacks
+      coherence now.  The number could be reduced.  Many were added to 
+      demonstrate one new feature.  Those could be combined.  Before March 
+      2015  RCW.
 
 \item Add Calibrator selection.  Before Mar 2014  RCW.
 
