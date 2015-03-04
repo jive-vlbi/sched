@@ -24,14 +24,13 @@
 % to switch to pdflatex and htlatex.
 % To convert to html with limited depth to the top index and
 % node names based on the section headings: 
-
 %   latex2html -local_icons -link 2 -long_titles 5 sched.tex
-
 % after it works well with latex.
+%  ---------  End legacy  ---------------------
+
 % Note that the $SCHED/doc/sched subdirectories should contain
 % links on unix systems generated with:
 % ln -s ../../examples
-
 % ln -s ../../catalogs
 % ln -s ../../setups
 % Other OS's require some equivalent, or create those directories and
@@ -129,10 +128,11 @@
   \hyperref[FR:#1]{{\tt #1:}}{\tt #2}%
 }
 %--Shipman end
-%\title{THE {{\sc SCHED}} USER MANUAL \\ Version 11.4 Test of Jan. 22, 2015}
+
+%  ===================  Begin actual text =====================
 
 \begin{document}
-\title{THE SCHED USER MANUAL \protect\\ Version 11.4 Test of Jan. 22, 2015}
+\title{THE SCHED USER MANUAL \protect\\ Version 11.4,  Release of March 6, 2015}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -201,12 +201,12 @@ entirely up to date.
 
 \begin{list}{}{\parsep 0.5em \itemsep 0.5em }
 
-\item The world of VLBI is in a transition from the traditional
+\item The world of VLBI has mostly converted from the traditional
 backends to the newer digital backends such as the RDBE and the DBBC
 and to newer recording systems such as the MARK5C.  \schedb supports
-many of the digital backends and new recorders.  But not all of the
-examples have been converted yet and some sections of the manual may
-still be somewhat dated.  We're working on it.
+many of the digital backends and new recorders.  You may encounter
+some legacy information in the manual and examples that relate to
+the old systems.  
 
 \item The MARK5A recorders were removed from the VLBA in December
 2013.  All projects must now use the RDBE.  All VLBA stations have
@@ -217,17 +217,6 @@ setups with names like v6cm... will work with the DDC.  As of April,
 remaining ones are still used to collect pointing data and some old
 style calibration data, mainly for test purposes.
 
-\item Many requests for help from \schedb users are the result of trying
-to specify more information than necessary.  \schedb knows how to set up
-the details for most observations at most stations.  Before trying to
-figure out LO settings or, for example, details of VLA setup parameters,
-try just setting the final frequency you want and let \schedb try to
-determine the details based on the {\sl freq.dat} file.  In most cases,
-you only need to set {\tt NCHAN, BITS, BBFILTER, FREQREF, FREQOFF,
-NETSIDE,} and {\tt POL}.  In fact, you can just set {\tt BAND} rather
-than {\tt FREQREF} and {\tt FREQOFF} and \schedb will give you the
-standard default frequencies.
-
 \item Mark IV users please see the 
 {\hyperref[SSEC:MKIV]{Mark~IV Section}}
 for information about mode and mode change restrictions.
@@ -236,7 +225,7 @@ for information about mode and mode change restrictions.
 about the ``observe'' date to use for precession.  Please see the
 discussion of the input parameter 
 {\hyperref[MP:PRECDATE]{{\tt PRECDATE}}}.
-But you really should not be using B1950!
+But you really should not be using B1950 coordinates!
 
 \item Please note that all setup files intended to be used for
 spectral line observations using 
@@ -256,11 +245,12 @@ schedule will provide.  See the
 {\hyperref[SEC:PLOT]{plotting section}}
 for details.
 
-\item This manual is written with LaTeX and latex2html.  It is meant
-to be read using a browser.  A postscript version could be generated
-for printing.  But it is over 280 pages long and should be updated with
-each release.  Printing it would be considered unfriendly to the
-world's forests.  The authors have not printed it in many years.
+\item This manual is written with LaTeX and converted to html using
+htlatex.  It is meant to be read using a browser.  A postscript or pdf
+version could be generated for printing.  But it is over 300 pages
+long and should be updated with each release.  Printing it would be
+considered unfriendly to the world's forests.  The authors have not
+printed it in many years.
 
 \end{list}
 
@@ -14208,7 +14198,12 @@ programs are found starting at https://svn.aoc.nrao.edu/repos/VLBA.
 
 \item [Setup files:]
 
-Update the setup files from the master if needed:
+Update the setup files from the master if needed.  Note that the following
+will replace most of the setup files, but there are a fair number, mostly
+for the lba, that are not built by makesetup, so do not do a global delete
+of the .set files.  Note that the .set files are in the svn repository,
+so run a commit after running makesetup.  If you do inadvertantly delete
+the lba setups, they can be recovered from the repository.
 
 \begin{verbatim}
 cd $SCHED/setups
@@ -14234,38 +14229,43 @@ Update
 \item [Source and location files:]
 
 Install the latest source and locations catalogs from the geodetic
-community.  This used to involve reformatting them, often a
-complicated task especially if formats changed, but now both Goddard
-(David Gordon) and Leonid Petrov (RFC) are providing files in the correct
-format to use directly.  The source files can be found either by
-contacting the above people, or by looking for ``GSFC VLBI'' or
-``Petrov VLBI'' with a search engine.  The locations file is from
-Goddard.  
+community.  The source files can be found either by contacting Goddard
+(David Gordon) and Leonid Petrov (Radio Fundamental Catalog), or by
+looking for ``GSFC VLBI'' or ``Petrov VLBI'' with a search engine.
+The locations file is from Goddard (also Gordon).
 
-The latest source files should be copied into {\sl
-\$SCHED/catalogs} while the locations file with a date identifier
-should be copied to {\sl \$SCHED/catalogs/Master\_NRAO}.  Then the
-symbolic links {\sl sources.gsfc} and {\sl sources.petrov} in 
-{\sl \$SCHED/catalogs} and the link {\sl locations.gsfc} should
-be updated in {\sl \$SCHED/catalogs/Master\_NRAO}.  The final 
-{\sl locations.dat} file in {\sl \$SCHED/catalogs} will include both
-this downloaded file plus contributions from other places.  It 
-is built when Update is run in {\sl \$SCHED/catalogs}, which updates
-most of the catalogs.  All of the new files and links should be added
-to svn.  If SCHED complains about duplicate station data, it might be
-that a station that formerly came from one of the other locations 
-files has been added to the geodetic solution.  The geodetic solution
-should be given preference.
+The latest source files, with their names that identify the release,
+should put in {\sl \$SCHED/catalogs} while the locations file with its
+name including a release identifier should be put in {\sl
+\$SCHED/catalogs/Master\_NRAO}.  Then the symbolic links {\sl
+sources.gsfc} and {\sl sources.rfc} in {\sl \$SCHED/catalogs} and the
+link {\sl locations.gsfc} in {\sl \$SCHED/catalogs/Master\_NRAO}
+should be updated.  The final {\sl locations.dat} file in {\sl
+\$SCHED/catalogs} will include both this downloaded file plus
+contributions from other places.  It is built when Update is run in
+{\sl \$SCHED/catalogs}, which updates most of the catalogs.  All of
+the new files and links should be added to svn.  If SCHED complains
+about duplicate station data, it might be that a station that formerly
+came from one of the other locations files has been added to the
+geodetic solution.  The geodetic solution should be given preference.
+Watch out station data based on few observations.  They might have
+unreasonably large rates.  This happened with the new data for the DSN
+stations DSS14 and DSS63 in the 2015feb release, and we reverted to
+using the old data in {\sl stations_DSN}.
 
-Note that reformatting the files used to involve the programs {\sl NEWLOC}
+The old catalogs can be moved out of the main /schedb area.  I have
+put a lot of such stuff in
+~cwalker/files/sched\_ARCHIVE\_nonSVN/catalogs.  The new catalogs
+should be added in svn.  After copying (not moving) them to some
+storage location, the old ones should be deleted with svn.
+
+Note that updating the source and locations files used to involve
+reformatting the ones acquired from the geodetic groups, often a
+complicated task especially if formats changed.  But now both GSFC and
+Petrov are providing files in the correct format to use directly.  The
+reformatting of the files used to involve the programs {\sl NEWLOC}
 and {\sl NEWLOC} in {\sl \$SCHED/RELATED\_CODE}, but those should no
 longer be needed.
-
-The old catalogs can be moved out of the main /schedb area.  I have put
-a lot of such stuff in ~cwalker/files/sched\_ARCHIVE\_nonSVN/catalogs. 
-Assuming that the new catalogs were included in svn, they should be 
-copied to the place where they will be stored, then deleted with svn 
-from the main /schedb area.
 
 
 \item [Test and produce standard output files:]
@@ -14454,6 +14454,13 @@ htlatex sched.tex "html,3,sec-filename" " " "-dsched/"
 /bin/rm *.html
 \end{verbatim}
 
+It may be useful to add a symlink in the sched directory so old bookmarks
+work.
+\begin{verbatim}
+cd $SCHED/doc/sched
+ln -s sched.html index.html.
+\end{verbatim}
+
 
 The HTML files will be expecting to find copies of the examples and
 catalogs in appropriate subdirectories of the {\sl sched} directory to
@@ -14464,6 +14471,7 @@ Some of the catalogs are write restricted in the {\sl
 files produced by {\tt Update}
 
 \begin{verbatim}
+cd $SCHED/doc
 /bin/rm -r sched/catalogs/*
 /bin/rm -r sched/examples/*
 tar cf - ../catalogs/sources.*  ../catalogs/sources.petrov \
@@ -18924,14 +18932,27 @@ been addressed, but not taken out here.
 
 \begin{itemize}
 
+\item Implement VEX2.  This might not be a very big job if the current VEX
+      code is modified.  But in the interests of code maintainability,
+      it would be a good time to take advantage of many changes in SCHED
+      internal bookkeeping to simplify the VEX code.  VEX2 contains a
+      number of features wanted or needed once antenna control is switched
+      away from the legacy system on the VLBA.  Mar. 4, 2015
+
 \item Search through this file for incomplete items, generally flagged
-      with a line of asterisks.  Before March 2015  RCW.
+      with a line of asterisks.  Generally, go through the manual looking
+      for items that are not up to date.  Before March 2015  RCW.
 
 \item Allow VLAONLY schedules?  Maybe these don't differ from any other
       single station schedules any more. Before March 2015  RCW.
 
-\item Modify choice of unset synthesizer frequency for the new synthesizers.
-      It should be easier without the setting constraints of the old ones.
+\item Support the new synthesizers with their 10 kHz tuning steps rather
+      than the 200/300 MHz steps of the old units.  
+
+\item Modify the choice of frequencies for the synthesizers that are not in
+      use to reflect the capabilities of the new synthesizers.
+      It should be easier to find settings whose harmonics won't interact
+      with harmonics of the in-use synthesizers to cause internal RFI.
       Before March 2015  RCW.
 
 \item Revisit the whole issue of scan and recording start times.  Take
