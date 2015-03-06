@@ -274,10 +274,10 @@ C           one.  MIF is already set depending on the capability.
 C
             IF( MIF .EQ. 4 .AND. NCHAN(KS) .GT. 8 ) THEN
                MSGTXT = ' '              
-               WRITE( MSGTXT, '( A, A, I4 )' )
+               WRITE( MSGTXT, '( A, A, A, I4 )' )
      1           'CHKRDBE: For DAR=RDBE2, DBE=RDBE_DDC, and VDIF ',
      2           'format, NCHAN must <= 8.', 
-     3           ' Setup specified.', NCHAN(KS)
+     3           ' Setup specified ', NCHAN(KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
