@@ -40,3 +40,24 @@ EOF
 /bin/cp n2227sch.pt   Stdout
 
 #/bin/cp *obs.gb    Stdout  Don't have in examples any more.
+
+# Now fix things like converting  -0.0 to 0.0 so that Verify
+# doesn't find differences due to minor formatting differences.
+# This runs the same sed scripts on the standard files that will
+# get run by Check_results on the new files.
+
+cd Stdout
+set schfiles = `ls *sch.*`
+echo 'Adjusting items like -0.0 in sch files.'
+echo $schfiles
+foreach file  ($schfiles)
+   sed -i -f ../Check_sed $file
+end
+
+set sumfiles = `ls *.sum`
+echo 'Adjusting items like -0.0 in sum files.'
+echo $sumfiles
+foreach file  ($sumfiles)
+   sed -i -f ../Check_sed $file
+end
+cd ..
