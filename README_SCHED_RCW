@@ -1,0 +1,87 @@
+These are instructions to create, manage, and delete a svn branch
+and related work areas for SCHED where I can freely use commits of partially
+complete stuff for moving between the AOC and home without affecting 
+the usability of the main trunk area.
+
+Some instructions from red-bean.com manual, much condensed.
+
+*** Before doing anything, be sure the branch and trunk are updated.
+
+While using the branch, set
+setenv SCHED /users/cwalker/files/sched_rcw/sched
+
+In the following the ^ refers to https://svn.aoc.nrao.edu/repos/sched
+That is set automatically somehow.
+------------------------------------------
+To create the branch:
+setenv SCHED /users/cwalker/files/sched_work
+cd $SCHED
+svn update
+svn copy ^/trunk  ^/branches/sched_rcw \
+  -m "Creating branch for local development"
+
+That creates ^/branches/sched_rcw/sched which contains the sched files
+corresponding to ^/trunk/sched
+------------------------------------------
+To create a working area for the branch (At AOC.  Something similar elsewhere):
+cd /users/cwalker/files/
+svn checkout https://svn.aoc.nrao.edu/repos/sched/branches/sched_rcw
+
+To test, set:
+setenv SCHED /users/cwalker/files/sched_rcw/sched
+------------------------------------------
+To pull in anything from trunk that was committed after the split:
+The merge updates the working copy.
+Then commit to put into the scn branch.
+cd to the sched_rcw area.
+svn merge ^/trunk -m "Updating changes in trunk to branch"
+TEST
+svn commit
+------------------------------------------
+To sync back to sched_work:
+
+Make sure trunk is up to date, and committed.
+setenv SCHED /users/cwalker/files/sched
+cd $SCHED
+svn update
+svn status -u
+svn commit     (if needed)
+
+First update the branch work area with the trunk modifications, and test.
+Note that the 
+
+setenv $SCHED /users/cwalker/files/sched_rcw/sched
+cd $SCHED
+svn update
+svn merge ^/trunk/sched
+TEST the build.
+svn status -u
+svn commit     (if needed)
+
+Now "reintegrate" the branch with trunk:
+setenv SCHED /users/cwalker/files/sched_work
+cd $SCHED
+svn merge --reintegrate ^/branches/sched_rcw/sched
+#  Might --dry-run the above first.
+#  TEST
+svn commit   (if needed - probably will be)
+
+Got:  System's issue, I think.
+noatak<396>% svn merge --dry-run --reintegrate ^/branches/sched_rcw/sched
+svn: Querying mergeinfo requires version 3 of the FSFS filesystem schema; filesystem '/home/asg/svn/sched/db' uses only version 2
+
+I think I'm giving up on this for now.  Mar. 15, 2015.
+
+The reintegrated branch can no longer be used normally, so it
+is best to delete it and make a new one if one is wanted.
+To delete the branch, if desired:
+Also need to delete the working copy (I think).
+
+svn delete ^/sched/branches/sched_rcw -m "get rid of rcw branch"
+cd /users/files/sched_rcw
+chmod -R a+w *
+/usr/bin -R *
+
+Then recreate it as above if desired to use it more.  This sounds
+mainly worthwhile for big projects.
+------------------------------------------------------

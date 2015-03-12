@@ -72,7 +72,7 @@ C       VERNUM  = 11.3
 C       VERSION = 'Release of April 4, 2014'
 C        VERSION = 'Version 11.3 update 1.  April 14, 2014'
         VERNUM  = 11.4
-        VERSION = 'Release 11.4.  March 12, 2014'
+        VERSION = 'Release 11.4.  March 14, 2015'
 C
       RETURN
       END
