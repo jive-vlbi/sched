@@ -1,13 +1,15 @@
 %  The SCHED User Manual latex file.
 
-% To make an html version of this manual, first be sure the
-% desired output directory is present.  Normally this is
-% $SCHED/doc/sched where this file (sched.tex) is kept in
-% $SCHED/doc.
-% Then use the following line to create the html:
-
-% htlatex sched.tex "html,3,sec-filename" " " "-dsched/"
-
+% To make an html version of this manual:
+%  Be sure $SCHED/doc/sched is present.  Then type:
+%  htlatex sched.tex "html,3,sec-filename" " " "-dsched/"
+%  To $SCHED/doc/sched/sched.css, add the line 
+%  h5.subsubsectionHead{font-size:150%;}
+%  Delete the html files in $SCHED/doc
+%  In $SCHED/doc/, do:  ln -s sched.html index.html if needed.
+%    
+%  Complete instructions are in the Release Instructions section.
+%
 % The "html,3" chunks the file to 3 levels which chunks it to
 % about 50 html files.
 % The "-d sched" puts the output in a sched subdirectory.
@@ -132,7 +134,7 @@
 %  ===================  Begin actual text =====================
 
 \begin{document}
-\title{THE SCHED USER MANUAL \protect\\ Version 11.4,  Release of March 6, 2015}
+\title{THE SCHED USER MANUAL \protect\\ Version 11.4,  Release of March 14, 2015}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
@@ -410,23 +412,14 @@ in.
 information on NRAO and links to most NRAO resources.
 
 \item 
-{\href{http://www.vlba.nrao.edu/}{VLBA Home Page:}}
+{\href{https://science.nrao.edu/facilities/vlba}{VLBA Home Page:}}
 VLBA information and links
 including much of importance to someone scheduling VLBI.
 
 \item 
-{\href{http://www.vla.nrao.edu/astro/guides/vlbivla/current/}{VLBI at the VLA guide:}}
+{\href{https://science.nrao.edu/facilities/vla/docs/manuals/obsguide/modes/vlbi}
+{VLBI at the VLA.}}
 Extensive information on VLBI observations with the VLA.
-
-%\item 
-%\htmladdnormallink{Possible Substitution of Y1 for PT During VLBA Dynamic%s:}{http://www.aoc.nrao.edu/~gtaylor/y1gotcha.html} Information about
-%potential concerns if your project might be scheduled during VLA-Pie Town
-%link observations on VLA and you are given a VLA antenna instead of
-%VLBA\_PT.  Note that the analog PT link has been taken down and use of
-%Pie Town with the VLA will not resume until a digital link has been
-%developed and activated so this is not currently (late 2007 --- still true
-%late 2013) a concern.  Also Y1 is still not available with the new VLA
-%systems as of late 2013.
 
 \item 
 {\href{http://www.gb.nrao.edu/~fghigo/gbtdoc/vlbinfo.html\#hifreq}{VLBI on the GBT:}}
@@ -440,11 +433,6 @@ scheduling.
 Information about VLBI at Arecibo.  You will need to follow a couple
 of links from the above page - somehow the URL doesn't change going
 down the links.
-
-\item 
-{\href{http://www.mpifr-bonn.mpg.de/EVN/VLBAeff.html}{VLBA Terminal at Effelsberg 100m.}}
-Information on using the VLBA terminal at Effelsberg.
-
 
 
 \item 
@@ -1095,6 +1083,14 @@ specific scans from preemption at Pie Town and Mauna Kea for daily
 EOP observations of up to 1.5 hr.
 
 \item[
+{\href{examples/dqhiel.key}{{\sl dqhiel.key}}}]
+demonstrates how to use the {\tt HIGHEL} optimization mode which can
+pick the scan with the highest elevations across the array from among
+a group of suggested scans.  It is useful for testing but also can be
+useful for picking fringe finders etc.  This schedule is based on 
+the regular data quality tests.
+
+\item[
 {\href{examples/egrdbe2.key}{{\sl egrdbe2.key}}}]
 demonstrates a \schedb file for use with the new digital backend and
 Mark5C recorders being deployed on the VLBA and elsewhere.  This one
@@ -1116,15 +1112,6 @@ Example sched input for a VLBA using the RDBE with the PFB personality
 and the wideband 6 cm receiver.  Setups are given that use dual
 polarization in one pair of IFs and that use single polarization in
 two IFs at very different frequencies.
-
-\item[
-{\href{examples/egrdbe.key}{{\sl egrdbe.key}}}]
-demonstrates a \schedb file for use with the new digital backend and
-Mark5C recorders being deployed on the VLBA and elsewhere.  This also
-uses the PFB personality which gives many channels of fixed frequency
-and bandwidth.  This key file demonstrates fully specified setup
-files.  It also demonstrates how to set up a key file for piggyback
-MARK5A and MARK5C scheduling.
 
 \item[
 {\href{examples/egddc.key}{{\sl egddc.key}}}]
@@ -1187,14 +1174,6 @@ is a sample file for line observations involving the VLBA,
 the EVN,and the GBT.
 
 \item[
-{\href{examples/egiv.key}{{\sl egiv.key}}}] is a
-sample schedule for Mark IV/VLBA observations involving mainly EVN
-stations.  It will generate a VEX format file for stations controlled
-by the field system and VLBA type control files for the VLBA and other
-stations that need them.  It is an OH spectral line observation so it
-is also an example of spectral line observing.
-
-\item[
 {\href{examples/egvsop.key}{{\sl egvsop.key}}}] is a
 sample schedule for Mark~IV / VLBA observations specifically using
 modes appropriate for observations with the Japanese VLBI satellite,
@@ -1212,6 +1191,14 @@ on
 {\hyperref[SEC:REFPOINT]{reference pointing}}, which is done
 explicitly in this file.   This file uses the RDBE\_DDC at 2 Gbps
 using 8 channels of 64 MHz each.
+
+\item[
+{\href{examples/eg3mmb.key}{{\sl eg3mmb.key}}}] is another 2Gbps
+VLBA schedule for observations at 86 GHz.  There is special emphasis
+on 
+{\hyperref[SEC:REFPOINT]{reference pointing}}, which is done
+automatically in this file based on information in the {\sl peak.cmd}
+file. 
 
 \item[
 {\href{examples/eg3mmc.key}{{\sl eg3mmc.key}}}] is
@@ -1294,6 +1281,13 @@ sample schedule for the EVN and EVLA that observes near 6.7 GHz.  It
 is the same as {\sl evn\_line\_meth.key}, but with the EVLA added.
 
 \item[
+{\href{examples/egmk5vex.key}{{\sl egmk5vex.key}}}]
+is for EVN only observations using the Mark5 system.  It is based on
+a Network Monitoring schedule.
+Note that it is a bit dated in that it uses the Mark5A system for 
+a VLBA station which no longer has that option.
+
+\item[
 {\href{examples/hsa1cm.key}{{\sl hsa1cm.key}}}] is a
 sample schedule for the High Sensitivity Array (HSA - VLBA + GBT +
 Effelsberg) at 1cm.  This file does not include the
@@ -1317,6 +1311,18 @@ tracking.
 \item[
 {\href{examples/lba.key}{{\sl lba.key}}}] is a
 sample schedule for the Long Baseline Array in Australia.
+
+\item[
+{\href{examples/lba\_h2o.key}{{\sl lba\_h20.key}}}] is a
+sample schedule for the Long Baseline Array in Australia
+using LBA DAS/Recorder only.  Observations are at the 22 GHz
+water line.
+
+\item[
+{\href{examples/lba\_oh.key}{{\sl lba\_oh.key}}}] is a
+sample schedule for the Long Baseline Array in Australia
+using LBA DAS/Recorder only.  Observations are at the 1.8 GHz
+OH line.
 
 \item[
 {\href{examples/lba\_mk5.key}{{\sl lba\_mk5.key}}}] is a
@@ -1381,10 +1387,47 @@ created by the PFB personality of the RDBE on the VLBA.
 {\href{examples/n2227.key}{{\sl n2227.key}}}] is a
 sample USNO Earth Orientation observation using PT and MK.
 
-{\href{examples/pfbsettst.key}{{\sl pfbsettst.key}}} is a
+\item[
+{\href{examples/pfbsettst.key}{{\sl pfbsettst.key}}}] is a
 vehicle for testing all the new RDBE/MARK5C standard setup files that
 use the pfb personality.  These are the setups that start with 
 {\sl rdbe\_pfb}.
+
+\item[
+{\href{examples/egsat.key}{{\sl egsat.key}}}] is a
+sample VLBA observation of spacecraft with bsp ephemeris files.  Note
+that the satellite tracking in \schedb uses the NAIF software from JPL.
+The object libraries for linux g77 and gfortran are included with SCHED, but
+may not be usable on all machines.  The code is not exported.  Normally,
+other than in the AOC, the stub routines are used and \schedb cannot 
+deal with satellites.  Also, \schedb does not have a way to pass the 
+necessary site dependent, moving source positions to non-VLBA stations.
+
+\item[
+{\href{examples/tlesat.key}{{\sl tlesat.key}}}] is a sample VLBA observation
+of spacecraft using TLE ephemeris files.  See the note above (egsat.key) about 
+the satellite tracking software.  It applies here too.
+
+\item[
+{\href{examples/newsyn.key}{{\sl newsyn.key}}}] is a VLBA test observation
+to check the performance of the new front end synthesizers being designed
+in 2013-2015.  Those synthesizers have finer tuning steps than the current
+ones (10kHz vs 200 or 300 MHz).  They are not yet deployed except at a 
+couple of sites so this example is not yet of interest to users.
+
+\item[
+{\href{examples/tstsets.key}{{\sl tstsets.key}}}] is a VLBA test observation
+that tests the standard setups used with the RDBE/DDC.  Only bit rates under
+512 Mbps are tested.  This is not a maintenance schedule, not one users 
+would likely want to emulate.
+
+\item[
+{\href{examples/piggyback.key}{{\sl piggyback.key}}}] is a VLBA test observation
+that observes with both the Mark5A and Mark5C systems.  As of early 2015, only
+two VLBA stations even have Mark5A so this is only of interest to VLBA
+testers.
+
+
 
 
 \end{description}
@@ -3010,11 +3053,6 @@ yet, but VLA27 would be similar).
 {\href{examples/rdbepfb.key}{{\sl rdbepfb.key}}} which is
 an even simpler case with just the VLBA and using a standard setup.
 
-{\href{examples/egrdbe.key}{{\sl egrdbe.key}}}
-which demonstrates
-more fully specified setups and demonstrates scheduling of piggyback
-Mark5A and Mark5C observations.
-
 {\href{examples/eg3mm\_rd2.key}{{\sl eg3mm\_rd2.key}}} which
 shows how to do referencing pointing at 3mm, including using narrow
 band data on masers, when the RDBE is used with the PFB personality.
@@ -4160,7 +4198,7 @@ are typical. % ********  (add more or reference another document).
 At frequencies greater than 15 GHz, the VLA a priori pointing is not good enough so
 reference pointing must be used.  That is also controlled through use
 of 
-{\hyperref[MP:INTENTs]{{\tt INTENTs}}}.
+{\hyperref[MP:INTENTs]{{\tt INTENsT}}}.
 
 ******  Document how to insert pointing scans, and the use of 
 automatic insertion of pointing scans.
@@ -4833,6 +4871,9 @@ PROGRAM CONTROL:
                         \sched.
 \htlm{PLOT}{~~~~} Invoke plotting part of \sched.
 \htln{SCHedule}{SCHEDULE}{} Name of file containing rest of schedule.
+\htlm{FREQLIST}{} Write some information from the frequency file to
+                  {\sl frequencies.list} and quit.
+\htlm{NOSETUP}{~} Do not use a setup.  For planning schedules.
 \end{list}
 
 CATALOGS and other other ``external'' input.
@@ -4845,6 +4886,7 @@ CATALOGS and other other ``external'' input.
 \htlm{SRCFILE2}{} Name of second external source file.
 \htlm{STACAT}{~~} Flag for start of in-line station catalog.
 \htlm{STAFILE}{~} Name of external station file.
+\htlm{LOCFILE}{~} Name of locations file.
 \htlm{TAPEFILE}{} File name for tape initialization information.
 \htlm{TAPEINI}{~} Flag that next group of input is tape
                         initialization.
@@ -4867,7 +4909,7 @@ GENERAL CONTROL PARAMETERS:
 \htlm{INTENTs}{~} Directives for observing, correlation, and processing.
 \htlm{LINEPG}{~~} Number of lines per page in operator schedules.
 \htlm{LST}{~~~~~} Schedule is in LST for specified station.
-\htlm{NCHAN}{~~~} Number of baseband channels (Obsolete - set setups).
+\htlm{NCHAN}{~~~} Number of baseband channels (Obsolete - set in setups).
 \htlm{PRECDATE}{} ``Observe'' date for coordinate conversions.
 \htlm{SUMITEM}{~} Items to show in the summary file.
 \htlm{TANTSTA1}{} List 1 of stations for Ta measurement requests.
@@ -4907,7 +4949,7 @@ SCAN PROPERTIES:
 \htlm{DOPINCR}{~} Minimum increments for frequency setting.
 \htlm{DOPPLER}{~} Set frequency based on velocity for
                         spectral line.
-\htln{NODOP}{DOPPLER}{~} Turn off Doppler calculations.
+\htln{NODOP}{DOPPLER}{~~~} Turn off Doppler calculations.
 \htlm{DOMKA}{~~~} Record on Mark5A during Mark5C observations.
 \htlm{DOPCAL}{~~} Obsolete form of {\tt DOPPLER}.
 \htlm{DOPSRC}{~~} Set frequency based on velocity of this source.
@@ -4919,6 +4961,8 @@ SCAN PROPERTIES:
 \htlm{CRDFREQ}{~} Force VLBA legacy BBC frequencies separate from RDBE.
 \htlm{CRDBW}{~~~} Force VLBA legacy BBC bandwidth separate from RDBE.
 \htln{CRDDOP}{CRDDOP}{~~} Provoke Doppler setting of VLBA legacy 
+                         BBCs separate from RDBE.
+\htln{CRDNODOP}{CRDDOP}{} End Doppler setting of VLBA legacy 
                          BBCs separate from RDBE.
 \htlm{CRDSETCH}{} List of setup baseband channels to use on VLBA legacy 
                          system.
@@ -4932,8 +4976,8 @@ SCAN PROPERTIES:
                          stations.
 \htln{TANT2}{TANT1}{~~~} Turn on Ta measurement at the {\tt TANTSTA2}
                         stations.
-\htlm{TSYS}{~~~~} Turn on Tsys measurements.
-\htln{NOTSYS}{TSYS}{~~} Do not measure system temperature.
+\htlm{TSYS}{~~~~} Turn on Tsys measurements (obsolete)
+\htln{NOTSYS}{TSYS}{~~} Do not measure system temperature (obsolete)
 \htlm{GEOSEG}{~~} Insert a geodetic (DELZN) segment.
 \htlm{GEOSRCS}{~} Gives a list of sources for geodetic segments.
 \htlm{GEOPRT}{~~} Turn on debugging print from geodetic insertion.
@@ -4948,8 +4992,8 @@ SCAN PROPERTIES:
                      source in a geodetic sequence.
 \htlm{GEOLOWEL}{} Upper boundary of ``low'' elevation region for geo sources.
 \htlm{GEOHIEL}{~} Lower boundary of ``high'' elevation region for geo sources.
-\htlm{PN3DB}{~~}  Do VLBA half power tracking tests.
-\htln{NOPN3DB}{PTVLBA}{} Turn off VLBA tracking tests.
+\htlm{PN3DB}{~~~}  Do VLBA half power tracking tests.
+\htln{NOPN3DB}{PTVLBA}{~} Turn off VLBA tracking tests.
 \htlm{PTVLBA}{~~} Do VLBA pointing sequence.
 \htln{NOPTVLBA}{PTVLBA}{} Turn off VLBA pointing measurements.
 \htlm{TAVLBA}{~~} Request Tant measuring mode.
@@ -4968,14 +5012,15 @@ SCAN PROPERTIES:
 \htlm{CRDLINE}{~} Arbitrary line for VLBA files for on-line testing.
 \end{list}
 
-RECORDER CONTROL (Obsolete parameters after switch to disk):
+RECORDER CONTROL
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \htlm{MINPAUSE}{} Minimum record stop time between scans.
-\htln{RECord}{RECORD}{~~} Record on tape this scan. Non-zero to not record.
+\htln{RECord}{RECORD}{~~} Record this scan. Non-zero or NOREC to not record.
+\htln{NORECord}{RECORD}{} Do not record this scan.
 \end{list}
 
-The following parameters are obsolete as they only applied to tape.
+The following parameters are obsolete as they only applied only to tape.
 
 \begin{list}{}{\parsep 0em  \itemsep 0em }
 \htlm{AUTOTAPE}{} Request automatic tape changes. Give tape time.
@@ -12078,8 +12123,8 @@ confused about what signal is in each baseband channel.
 \htls{BBSYN}{~~~} BBC frequency setting for each baseband channel.
 \htls{BBSYN2}{~~} Second set of BBC frequencies for frequency switching.
 \htls{BITS}{~~~~} Number of bits per sample.
-\htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
 \htls{DBE}{~~~~~} The personality to use in a digital backend.
+\htls{DUALX}{~~~} Mode allowing more than 500~MHz at X band.
 \htls{ELCOLIM}{~} Collimation offset in elevation.
 \htls{FE}{~~~~~~} Receivers to be used.
 \htls{FIRMFILE}{} A firmware file name to use - VLBA testers only!
@@ -12110,6 +12155,7 @@ confused about what signal is in each baseband channel.
 \htls{PCALXB1}{~} Bit and channel assignment of ch1 of a pcal detector.
 \htlt{PCALXB2}{PCALXB1}{~} Bit and channel assignment of ch2 of a pcal
                   detector.
+\htls{POL}{~~~~~} The polarization of each channel.
 \htls{PTINCR}{~~} Step size for pointing patterns.
 \htls{PTOFF}{~~~} Off source distance for pointing patterns.
 \htlt{RCHAN}{LCHAN}{~~~} {\tt IFCHAN} to use if {\tt IFCHAN=R} (RCP).
@@ -14408,34 +14454,51 @@ setenv TARDIR /users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
 
 \item [Prepare the Manual:]
 
+First, be sure that the manual is as up-to-date as you can reasonably
+make it.  That said, there are sections that still need work as time
+allows.  The manual is the equivalent of over 300 pages so maintaining
+it is a significant job.  The most important parts to keep current are
+the parameter descriptions and that the summary indexes of those
+descriptions..  The {\tt htlatex} scheme does not automatically
+produce complete indices of the parameters as {\tt latex2htms} did, so
+the summary lists are now much more important but easy to forget.
+Also, make sure the list of changes in the release notes section is
+complete.  It is best to keep the manual up-to-date whenever changes
+are made, not to wait until just before a release.
+
 The examples in the manual are grabbed from {\sl ../examples} starting
 from where latex is being run.  So this should be done in {\sl
-\$SCHED/doc}, the normal place in a distribution.  The homebrew
-inserttex scheme used in the past has been replaced with
-verbatiminput.
+\$SCHED/doc}, the normal place in a distribution, so the examples will
+be from {\sl \$SCHED/examples}.  Note that these are not the copies of
+the examples that will be put (see below) in {\sl
+\$SCHED/doc/sched/examples}.
 
 Process the manual.  The manual is in file {\sl \$SCHED/doc/sched.tex}
 which is configured for processing by {\tt latex, pdflatex}, and {\tt
-htlatex}.  The first produces a .dvi file which can then be used by
+htlatex}.  {\tt latex} produces a .dvi file which can then be used by
 various programs to produce other formats.  But this is probably not
-the way to go.  Note that {\tt latex} or {\tt pdflatex} will be need
-to be run at least 3 times to get all the references right.  {\tt
+the way to go.  However, it is useful to run bare {\tt latex} first
+to shake out any problems in the file.  It seems to catch some errors that
+the others miss.  Note that {\tt latex} or {\tt pdflatex} will be need
+to be run at least 3 or 4 times to get all the references right.  {\tt
 htlatex} does three passes of the latex step regardless.  pdflatex
 directly produces a monolithic pdf file with active hyperlinks.  {\tt
 htlatex} produces the HTML files with chunking to the level specified
-in the call as shown below.  Note that the various files produced by
-{\tt latex, pdflatex}, and {\tt htlatex} are not necessarily
-compatible, so it is a good idea to delete them before running a
-different program.  The script {\tt latexclean} can do the cleanup as
-shown below.  That is certainly something to try if there is a crash
-for non-obvious reasons.  It is probably wise to run bare {\tt latex}
-until it runs ok, as I have seen errors caught by it not caught by
-{\tt htlatex}.
+in the call as shown below.  The html files produced by {\tt htlatex}
+are the standard form for distribution of the manual.  The pdf file
+from {\tt pdflatex} can be considered optional.
+
+Note that the various files produced by {\tt latex, pdflatex}, and
+{\tt htlatex} are not necessarily compatible, (so I've been tole) so
+it is a good idea to delete them before running a different program.
+The script {\tt latexclean} can do the cleanup as shown below.  That
+is certainly something to try if there is a crash for non-obvious
+reasons.
 
 Note that, until Jan. 2015, the HTML manual was prepared with {\tt
 latex2html}, but that program is no longer being supported and stopped
 working at the AOC.  So we converted to htlatex, which involved
-retyping most of the hyperref references in the text.  So we cannot
+retyping most of the hyperref references in the text.  We cannot
 easily go back.  In the process, the automatically-generated names of
 the html pages, and the number of such pages, changed.  Any references
 in external documents are going to have to change.
@@ -14445,35 +14508,46 @@ sequence below.  Note that {\tt htlatex} makes the {\sl .html} files
 in the {\sl doc} area, then copies, not moves, them to the desired
 subdirectory specified in the third argument --- {\sl sched} in this
 case.  So the {\tt /bin/rm *.html} command below is to clean out 
-the excess.
+the unneeded files in the {\sl doc} directory.
 
-{\tt pdflatex} will probably need to be run 3 or
-more times to get all the links right.  It will leave the {\sl sched.pdf} file
-in the {\sl doc} area.
-The html files are prepared
-with {\tt htlatex}.  
-The "3" in the example causes the {\sl .html} node names to be
-based on the section headings, not just a sequence number.  This makes
-for referable names that won't keep changing.  The {\tt -dsched/} causes
-the {\sl .html} files to be copied to the {\sl sched} subdirectory, after
-which the originals in the current area ({\sl doc}) are deleted.
+The files produced by {\tt htlatex} that included sections that used
+{\tt \\subsubsection} in the tex file (all of the parameter
+descriptions!)  will have, by default, a very tiny font for the
+section headers --- much smaller than the font used for the rest of
+the text.  It's hard to believe that someone would set that up, but they
+did.  The cure identified so far is to add the following line to the
+sched.css file in \$SCHED/doc/sched.  I think it can go anywhere, but
+I've been putting it in as the second to last line:
+\begin{verbatim}
+h5.subsubsectionHead{font-size:150%;}
+\end{verbatim}
+
+{\tt pdflatex} will leave the {\sl sched.pdf} file in the {\sl doc}
+area.  The html files are prepared with {\tt htlatex}.  The
+"sec-filename" in the example causes the {\sl .html} node names to be
+based on the section headings, not just a sequence number.  The "3"
+controls how finely the manual is chunked into multiple html files.
+The "3" shown seems to be a reasonable choice, although some of the
+files were multiple files in the {\tt latex2html} days.  Naming the
+output files makes for referable names that won't keep changing.  The
+{\tt -dsched/} argument causes the {\sl .html} files to be copied to
+the {\sl sched} subdirectory, after which the originals in the current
+area ({\sl doc}) can be deleted.
      
 \begin{verbatim}
 cd $SCHED/doc
 latexclean sched
-pdflatex sched.tex   (may need several repeats to get internal links right)
+latex sched.tex        (correct any errors found)
 latexclean sched
+pdflatex sched.tex     (optional; may need several repeats to get links right)
+latexclean sched
+/bin/rm sched/*.html   (cleans out old files)
 htlatex sched.tex "html,3,sec-filename" " " "-dsched/"
 /bin/rm *.html
-\end{verbatim}
-
-It may be useful to add a symlink in the sched directory so old bookmarks
-work.
-\begin{verbatim}
 cd $SCHED/doc/sched
-ln -s sched.html index.html.
+emacs sched/sched.css        (Add the line as described above.)
+ln -s sched.html index.html  (To help some old bookmarks)
 \end{verbatim}
-
 
 The HTML files will be expecting to find copies of the examples and
 catalogs in appropriate subdirectories of the {\sl sched} directory to
@@ -14487,12 +14561,9 @@ files produced by {\tt Update}
 cd $SCHED/doc
 /bin/rm -r sched/catalogs/*
 /bin/rm -r sched/examples/*
-tar cf - ../catalogs/sources.*  ../catalogs/sources.petrov \
-         ../catalogs/sources.rfc*  ../catalogs/sources.gfsc* \
-         ../catalogs/freq.dat  ../catalogs/freq_RDBE.dat \
-         ../catalogs/stations.dat  ../catalogs/stations_RDBE.dat \
-         ../catalogs/locations.dat  ../catalogs/peak.cmd \
-         ../catalogs/linefreqs.dat \
+tar cf - ../catalogs/sources.*     ../catalogs/freq*.dat \
+         ../catalogs/stations*.dat ../catalogs/locations.dat \
+         ../catalogs/peak.cmd      ../catalogs/linefreqs.dat \
          ../examples/*.key         ../examples/*.com \
          ../examples/*.set         ../examples/egcentsrc.dat \
             | (cd sched; tar xfp -)
@@ -14818,10 +14889,17 @@ then rsync the desired stuff to your development area.
 
 
 \subsection{\label{SSEC:VER_11.4}Version 11.4}
-]
+
 The nominal release date for this version is March 12, 2015.
 
 \begin{itemize}
+
+\item Updating the manual.  Make sure the parameter summary lists are
+complete because they have become more important now that we don't
+have the {\tt latex2html} indices.  Make sure all the example files are
+listed (they weren't). Update the release instructions
+in the manual.  The manual probably still has out-of-date sections as
+much has been changing.  March 10, 2015  Craig Walker.
 
 \item Modify the Newstd script in the examples area to change various constructs
 like -0.0 in the {\sl sch} and {\sl sum} files to prevent spurious diffs when
@@ -14894,7 +14972,7 @@ capable \schedb with GFORTRAN.  That is likely to become the main
 version shortly.  Jan. 23, 2015  RCW and Bruce Rowen.
 
 \item The HTML version of the manual had been derived from the {\sl
-schec.tex} latex file using latex2html.  But that program is not
+schec.tex} latex file using latex2html.  But that program is no
 longer supported and has proven problematic to use with the latest
 latex code.  Therefore, the manual was modified to work with pdflatex
 and htlatex to produce both pdf and HTML versions.  Help for this was
