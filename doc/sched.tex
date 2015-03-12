@@ -14615,6 +14615,10 @@ rsync -auv --delete --exclude ".svn" \
      --exclude "*.o" $SCHED/PGPLOT $SCHEDNEW
 \end{verbatim}
 
+Will need \$SCHED set to \$SCHEDNEW to run {\sl Verify}.
+\begin{verbatim}
+setenv SCHED $SCHEDNEW
+\end{verbatim}
 Do a compilation to be sure all is there and run {\sl Verify} to make
 sure it works.  Then clean out the {\sl examples} directory using
 {\tt schclean "*"} to avoid bloating the tar file.
@@ -14624,7 +14628,8 @@ was filled with an svn checkout and some limited rsyncs, so it could
 have missed something.  Also if some iteration happened, it might not
 be complete. Note that output lines that end with a / are just an
 indication of having entered the directory.  They don't indicate a
-missing file.
+missing file.  Some non-svn files may show, like the latex temporary 
+files.
 
 \begin{verbatim}
 rsync -auvn --exclude ".svn" --exclude "TEST" --exclude "*.o" \
