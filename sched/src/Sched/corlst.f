@@ -319,9 +319,11 @@ C
      2         LINE3(1:LEN1(LINE3)), LINE4(1:LEN1(LINE4)), 
      3         LINE5(1:LEN1(LINE5)), LINE6(1:LEN1(LINE6))
 C
-         WRITE( ISUM, '( A, A, /, A, A, /, A, A )' )
+         WRITE( ISUM, '( A, A, /, A, A, /, A, A, /, A, A )' )
      1       ' NOTES:  Above numbers assume the same correlator ',
      2       'parameters are used for all data.',
+     3       '         The ''baseline hours'' include the ',
+     4       'autocorrelations (for data size calculations).',
      3       '         The correlator output data rate is for ',
      4       'real-time processing.',
      5       '         Above numbers assume the same correlator',
