@@ -216,23 +216,23 @@ C              been used on low
                IFHIGH(NHIGH) = IFCHAN(ICH,KS)
             END IF
             IF (FILTERR) THEN
-                  ALREADY = .FALSE.
-                  DO I = 1, NIFERR
-                     IF( IFCHAN(ICH,KS) .EQ. IFERRS(I) ) ALREADY=.TRUE.
-                  END DO
-                  NIFERR = NIFERR + 1
-                  IFERRS(NIFERR) = IFCHAN(ICH,KS)
-                  IF( .NOT. ALREADY) THEN
-                     MSGTXT = ' '
-                     WRITE( MSGTXT, '( A, A, A, A, A, A )' )
-     1                  'CHKDBFQ: Illegal BBCSYN placement for ',
-     2                   'DBE=DBBC_DDC. All BBSYN of an IF ',
-     3                  'must either be between 10 and 512 MHz *or* ',
-     4                  'between 512 and 1024 MHz. ',
-     5                  'Check frequencies for IF ', IFCHAN(ICH,KS)
-                     CALL WLOG( 1, MSGTXT )
-                     ERRS = .TRUE.
-                  END IF
+               ALREADY = .FALSE.
+               DO I = 1, NIFERR
+                  IF( IFCHAN(ICH,KS) .EQ. IFERRS(I) ) ALREADY=.TRUE.
+               END DO
+               NIFERR = NIFERR + 1
+               IFERRS(NIFERR) = IFCHAN(ICH,KS)
+               IF( .NOT. ALREADY) THEN
+                  MSGTXT = ' '
+                  WRITE( MSGTXT, '( A, A, A, A, A, A )' )
+     1               'CHKDBFQ: Illegal BBCSYN placement for ',
+     2                'DBE=DBBC_DDC. All BBSYN of an IF ',
+     3               'must either be between 10 and 512 MHz *or* ',
+     4               'between 512 and 1024 MHz. ',
+     5               'Check frequencies for IF ', IFCHAN(ICH,KS)
+                  CALL WLOG( 1, MSGTXT )
+                  ERRS = .TRUE.
+               END IF
             END IF
 C
 C           Check the other end of the sideband.  Just warn of the

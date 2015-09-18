@@ -147,10 +147,10 @@ C
                ERRS = .TRUE.
             END IF
 C
-C           Bits per sample must be 2.
+C           Bits per sample must be 2 or 1.
 C
             DO ICH = 1, NCHAN(KS)
-               IF( BITS(ICH,KS) .NE. 2 ) THEN
+               IF( BITS(ICH,KS) .NE. 2 .AND.  BITS(ICH,KS) .NE. 1 ) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, A, I3 )' )
      1               'CHKDBBC: BITS must be 2 for DBE=DBBC_PFB. ',
@@ -227,7 +227,7 @@ C           1 bit recording is possible via channel selection. Don't
 C           currently support this.
 C
             DO ICH = 1, NCHAN(KS)
-               IF( BITS(ICH,KS) .NE. 2 ) THEN
+               IF( BITS(ICH,KS) .NE. 2 .AND. BITS(ICH,KS) .NE. 1) THEN
                   MSGTXT = ' '
                   WRITE( MSGTXT, '( A, A, I3 )' )
      1               'CHKDBBC: BITS must be 2 for DBE=DBBC_DDC. ',
