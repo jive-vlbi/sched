@@ -25,7 +25,8 @@ C     Loop through channels assigning the channel to the
 C     same BBC as a previous one with the same FREQREF and IFCHAN,
 C     if there is one (can be different sideband), or to a new BBC.
 C     Note that LBA BBCs can each provide 2 *USB* sidebands with contiguous
-C     frequencies or a conventional LSB/USB. Use GOTMATCH to record
+C     frequencies or a conventional LSB/USB in 16 MHz mode. In 64 MHz
+C     mode, dual sideband is not possible. Use GOTMATCH to record
 C     whether a given BBC already has been assigned to a frequency.
 C
       DO ICH = 1, NCHAN(KS)
@@ -34,8 +35,9 @@ C
                IF( (FREQREF(ICH,KS) .EQ. FREQREF(JCH,KS) .OR.
      1          (FREQREF(ICH,KS) - BBFILT(ICH,KS)) .EQ. FREQREF(JCH,KS))
      2             .AND. (IFCHAN(ICH,KS) .EQ. IFCHAN(JCH,KS) )
-     3             .AND. .NOT. GOTMATCH(JCH) 
-     4             .AND. .NOT. GOTMATCH(ICH) ) THEN
+     3             .AND. ( ABS(BBFILT(ICH,KS) - 64.0) > 1E-3)
+     4             .AND. .NOT. GOTMATCH(JCH) 
+     5             .AND. .NOT. GOTMATCH(ICH) ) THEN
                      BBC(ICH,KS) = BBC(JCH,KS)
                      GOTMATCH(JCH) = .TRUE.
                      GOTMATCH(ICH) = .TRUE.
