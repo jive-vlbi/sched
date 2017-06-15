@@ -31,7 +31,7 @@ C
       INTEGER        SNBBC, KS, ICH, I, LNAME, LEN1, JCH
       LOGICAL        ERRS, ALDONE, IFISLO, IFISHI, SPLPATCH
       LOGICAL        USENOR, PATERR, GEOPATER, GEOSPLPA
-      REAL           LOWEDGE, HIEDGE
+      REAL           LOWEDGE, HIEDGE, BBSYNMIN, BBSYNMAX
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'CHK4DAR: starting.' )
 C
@@ -274,9 +274,18 @@ C        Drudg uses to determine whether to patch to high or low.
          END IF
 C
 C        BBC synthesizer setting, must be between 100 and 500
+C        unless IF3 (which is an extra mixer) is in use.
 C
-         IF( BBSYN(ICH,KS) .LT. 100.0 .OR.
-     1       BBSYN(ICH,KS) .GT. 500.0 ) THEN
+         BBSYNMIN = 100
+         BBSYNMAX = 500
+         IF( IFCHAN(ICH,KS) .EQ. '3N' .OR. 
+     2       IFCHAN(ICH,KS) .EQ. '3O' ) THEN
+            BBSYNMIN = BBSYNMIN + 500
+            BBSYNMAX = BBSYNMAX + 500
+         END IF
+C
+         IF( BBSYN(ICH,KS) .LT. BBSYNMIN .OR.
+     1       BBSYN(ICH,KS) .GT. BBSYNMAX ) THEN
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, F8.2 )' )
      1         'CHK4DAR: BBSYN not between 100 and 500: ', 
@@ -427,8 +436,8 @@ C
 C
 C        copy this bit on frequency switching, already disallowed
 C
-         IF( FRSWITCH(KS) .AND. (BBSYN2(ICH,KS) .LT. 100.0 .OR.
-     1       BBSYN2(ICH,KS) .GT. 500.0 ) ) THEN
+         IF( FRSWITCH(KS) .AND. (BBSYN2(ICH,KS) .LT. BBSYNMIN .OR.
+     1       BBSYN2(ICH,KS) .GT. BBSYNMAX ) ) THEN
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, F8.2 )' )
      1         'CHK4DAR: BBSYN2 not between 100 and 500: ', 
