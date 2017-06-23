@@ -11,9 +11,10 @@ C     each setup file, especially if different frequency sets
 C     are being checked.  Also, since it is called from FSFREQ,
 C     it can get called from print routines etc.
 C
-C     Original based on CHKDBFQ, but modified by CR to the best of
+C     Original based on CHKRDBE, but modified by CR to the best of
 C     current knowledge...
 C     Removed unused variables from declarations.  Aug. 30, 2013. RCW
+C     2017-06-22 added DBBC filter 4 (1024-1536 MHz). CR
 C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
@@ -23,11 +24,13 @@ C
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
       INTEGER           NFWARN
       INTEGER           LEN1, ISETF
-      INTEGER           NLOW, NHIGH
+      INTEGER           NFILT1, NFILT2, NFILT4
       DOUBLE PRECISION  BBOFF, BB1, BB2, SLOP
       DOUBLE PRECISION  BBCBW(*), BBCFREQ(*)
       LOGICAL           ERRS, DEQUAL, OBWARN, SHOWID, FILTERR, ALREADY
-      CHARACTER         IFHIGH(MCHAN)*2, IFLOW(MCHAN)*2, IFERRS(MCHAN)*2
+      LOGICAL           INARRAY
+      CHARACTER         IFFILT1(MCHAN)*2, IFFILT2(MCHAN)*2
+      CHARACTER         IFFILT4(MCHAN)*2, IFERRS(MCHAN)*2
 C
       DATA     OBWARN   / .TRUE. /
       DATA     N40WARN  / MAXSET*1 /
@@ -169,15 +172,16 @@ C
 C
 C        CR: Eventually a single 10-1024 MHz IF will become available
 C        with a future firmware release (but probably not for all
-C        versions of DBBC). 
-C        For now the following appears to be correct.
-C        Baseband frequencies for a given filter must be between 10 and
-C        512 MHz or between 512 and 1024 MHz. They appear to be fully
-C        flexible within that range.
+C        versions of DBBC). For now the following appears to be correct.
+C        Baseband frequencies for a given filter must be between 10-512
+C        MHz (filter 2) or 512-1024 MHz (filter 1) or between 1024-1536
+C        MHz (filter 4 - not in all firmware versions). They appear to
+C        be fully flexible within each range.
 C
 
-         NLOW = 0
-         NHIGH = 0
+         NFILT1 = 0
+         NFILT2 = 0
+         NFILT4 = 0
          NIFERR = 0
          DO ICH = 1, NCHAN(KS)
             FILTERR = .FALSE.
@@ -190,32 +194,40 @@ C
             BB1 = BBCFREQ(ICH)
             BB2 = BBCFREQ(ICH) + ISIDEBD * BBCBW(ICH)
             IF( BB1 .LT. 10.0D0 .OR.
-     1          BB1 .GT. 1024.0D0 ) THEN
+     1          BB1 .GT. 1536.0D0 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F8.2, A )' )
      1            'CHKDBFQ: Invalid BBSYN for DBE=DBBC_DDC: ', 
      2            BBCFREQ(ICH),
-     3            '.  Must be between 10 and 1024 MHz.'
+     3            '.  Must be between 10 and 1536 MHz.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             ELSE IF( BB1 .LT. 512.5D0 ) THEN
-C              Check that this low (10-512 MHz) IF has not previously
-C              been used on high
-               NLOW = NLOW+1
-               DO I = 1, NHIGH
-                  IF( IFHIGH(I) .EQ. IFCHAN(ICH,KS) ) FILTERR = .TRUE.
-               END DO
-               IFLOW(NLOW) = IFCHAN(ICH,KS)
-            ELSE 
-C              Check that this high (512-1024) IF has not previously
-C              been used on low
-               NHIGH = NHIGH+1
-               DO I = 1, NLOW
-                  IF( IFLOW(I) .EQ. IFCHAN(ICH,KS) ) FILTERR = .TRUE.
-               END DO
-               IFHIGH(NHIGH) = IFCHAN(ICH,KS)
+C               Filter 2
+               NFILT2 = NFILT2+1
+               IFFILT2(NFILT2) = IFCHAN(ICH,KS)
+               IF( INARRAY( IFCHAN(ICH,KS), IFFILT1, NFILT1 )) 
+     1             FILTERR = .TRUE.
+               IF( INARRAY( IFCHAN(ICH,KS), IFFILT4, NFILT4 )) 
+     1             FILTERR = .TRUE.
+            ELSE IF( BB1 .LT. 1024.5D0 ) THEN
+C               Filter 1
+               NFILT1 = NFILT1+1
+               IFFILT1(NFILT1) = IFCHAN(ICH,KS)
+               IF( INARRAY( IFCHAN(ICH,KS), IFFILT2, NFILT2 )) 
+     1             FILTERR = .TRUE.
+               IF( INARRAY( IFCHAN(ICH,KS), IFFILT4, NFILT4 )) 
+     1             FILTERR = .TRUE.
+            ELSE IF( BB1 .LT. 1536.5D0 ) THEN
+C               Filter 4
+               NFILT4 = NFILT4+1
+               IFFILT4(NFILT4) = IFCHAN(ICH,KS)
+               IF( INARRAY( IFCHAN(ICH,KS), IFFILT1, NFILT1 )) 
+     1             FILTERR = .TRUE.
+               IF( INARRAY( IFCHAN(ICH,KS), IFFILT2, NFILT2 )) 
+     1             FILTERR = .TRUE.
             END IF
-            IF (FILTERR) THEN
+            IF( FILTERR ) THEN
                ALREADY = .FALSE.
                DO I = 1, NIFERR
                   IF( IFCHAN(ICH,KS) .EQ. IFERRS(I) ) ALREADY=.TRUE.
@@ -224,11 +236,12 @@ C              been used on low
                IFERRS(NIFERR) = IFCHAN(ICH,KS)
                IF( .NOT. ALREADY) THEN
                   MSGTXT = ' '
-                  WRITE( MSGTXT, '( A, A, A, A, A, A )' )
+                  WRITE( MSGTXT, '( A, A, A, A, A, A, A )' )
      1               'CHKDBFQ: Illegal BBCSYN placement for ',
      2                'DBE=DBBC_DDC. All BBSYN of an IF ',
      3               'must either be between 10 and 512 MHz *or* ',
-     4               'between 512 and 1024 MHz. ',
+     4               'between 512 and 1024 MHz *or*',
+     4               'between 1024 and 1536 MHz. ',
      5               'Check frequencies for IF ', IFCHAN(ICH,KS)
                   CALL WLOG( 1, MSGTXT )
                   ERRS = .TRUE.
@@ -240,7 +253,7 @@ C           issue in this case.  Only warn once if it is less than
 C           1% of the band - it's probably because of trying to get
 C           decent pcal frequencies.
 C
-            SLOP = MAX( 10.D0 - BB2, BB2 - 1024.D0 )
+            SLOP = MAX( 10.D0 - BB2, BB2 - 1536.D0 )
             IF( ( SLOP .GT. 0.D0 .AND. OBWARN ) .OR. 
      1            SLOP .GT. 0.01 * BBCBW(ICH) ) THEN
                MSGTXT = ' '
@@ -251,7 +264,7 @@ C
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1            '          ', SLOP,
-     2            ' MHz outside the IF band of 10-1024 MHz.'
+     2            ' MHz outside the IF band of 10-1536 MHz.'
                CALL WLOG( 1, MSGTXT )
                CALL WLOG( 1, '         That Part of the band '//
      1            'will be corrupted.' )
