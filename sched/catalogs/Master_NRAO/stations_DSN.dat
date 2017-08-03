@@ -16,11 +16,6 @@
 !
 ! Robledo to Mark5  19jan2006  RCW based on Cormac Reynolds email.
 !
-! Added DSS34 with temporary reduced slew rate.  Had to comment it all out
-!   because I don't have a position.  But could be put back when XYZ is
-!   available.  The temporary slew rate went away long before Nov 28, 2012
-!   when I got an email from Shinji Horiuchi (cdscc.nasa.gov) saying it
-!   is back to 0.8 degree/sec.
 !
 ! Adjusted slew speeds and added accelerations based on 810-005 document
 ! on "Antenna Positioning" from the DSN web site.  June 15, 2009.  RCW
@@ -78,9 +73,11 @@
 !  Tidbinbilla:
 !     All antennas (wikipedia and SCHED files):
 !       Name    Positions used     Description
-!      DSS-34  In this file        34m BWG
+!      DSS-34  locations_dsn.dat   34m BWG
+!      DSS-35  locations_dsn.dat   34m BWG
+!      DSS-36  locations_dsn.dat   34m BWG
 !      DSS-43  locations_DSN.dat   Was 64m, now 70m ** USE TIDBIN64 **
-!      DSS-45  geo solution        34m
+!      DSS-45  geo solution        34m, decommissioned 2016
 !      DSS-46  none                26m decommissioned 2009
 !      DSS-49  geo solution        Is the Parkes 64m.  Find under "PARKES"
 !     Not in Wikipedia
@@ -89,27 +86,30 @@
 
   STATION=DSS34   STCODE=Ti  CONTROL=VEX
     !  DSS34 - Australia 34m BWG antenna similar to DSS45
-    !  Temporary azimuth slew limit temporarily low (June 2009 RCW -
-    !  From email from Shinji Horiuchi.  Put back to 48 Nov 28, 2012.)
-!     DBNAME = DSS34   Not yet in correlator data base.
-!       ITRF93 Epoch 2003 from JPL document 810-005, Rev.E.  
-!       Epoch is 2003.0.  Rate is from DSS43
-!     X=-4461147.093 Y=2682439.239 Z=-3674393.133
-!     DXDT= -0.03802 DYDT= -0.00205 DZDT=  0.04229 EPOCH=52640
-!     FRAME='ITRF93 from JPL doc 810-005'
      DBNAME = DSS34
      MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
      AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
-     TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
-     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+    ! DVP
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
    / 
   STATION=DSS35   STCODE=Ti  CONTROL=VEX
     !  DSS35 - Australia 34m antenna 
+    ! Uses DVP.
      DBNAME = DSS35
      MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
      AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
-     TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
-     DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS36   STCODE=Ti  CONTROL=VEX
+    !  DSS36 - Australia 34m antenna 
+     DBNAME = DSS36
+     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+     AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    ! Uses DVP.
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
    / 
   STATION=DSS43   STCODE=Ti  CONTROL=VEX
     !  Old SCHED name TID70 - Australia 70m.  
@@ -118,17 +118,20 @@
     DBNAME = TIDBIN64
     MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=230,759.8 AX2LIM=6,86
     AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
-    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
-    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+    ! Uses DVP.
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
    / 
-  STATION=DSS45   STCODE=Ti  CONTROL=VEX
-    !  Old SCHED name TID34 (confusing with DSS34) - Australia 34m HEF  
-    DBNAME = DSS45
-    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
-    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
-    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
-    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
-   / 
+! DSS45 Decommissioned in 2016
+!  STATION=DSS45   STCODE=Ti  CONTROL=VEX
+!    !  Old SCHED name TID34 (confusing with DSS34) - Australia 34m HEF  
+!    
+!    DBNAME = DSS45
+!    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+!    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+!    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
+!    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+!   / 
 !
 ! Robledo:
 !     All antennas (wikipedia and SCHED files):
