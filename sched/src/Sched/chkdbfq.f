@@ -11,7 +11,7 @@ C     each setup file, especially if different frequency sets
 C     are being checked.  Also, since it is called from FSFREQ,
 C     it can get called from print routines etc.
 C
-C     Original based on CHKRDBE, but modified by CR to the best of
+C     Original based on CHKDBFQ, but modified by CR to the best of
 C     current knowledge...
 C     Removed unused variables from declarations.  Aug. 30, 2013. RCW
 C     2017-06-22 added DBBC filter 4 (1024-1536 MHz). CR
@@ -147,14 +147,6 @@ C
      3            SIDEBD(ICH,KS)
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
-            END IF
-            IF( DEQUAL( BBCBW(ICH), 32.0D0 ) ) THEN
-               MSGTXT = ' '
-               WRITE( MSGTXT, '( A, A )' )
-     1            'CHKDBFQ: You have requested 32 MHz bandwidth for ',
-     2            'DBE=DBBC_DDC. This is not available yet! '
-               CALL WLOG( 1, MSGTXT )
-               SHOWID = .TRUE.
             END IF
 C
 C           Also Sampling must be Nyquist rate.
