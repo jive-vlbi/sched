@@ -10,7 +10,13 @@ C               RCW  1991 April 12  Convert to characters for MNAME and
 C                                   DNAME
 C
         CHARACTER MLIST(12)*3, MNAME*3, DNAME*3, DLIST(7)*3
+Cf2py intent(out) MNAME
+Cf2py intent(out) DNAME
         INTEGER MLENG(12), Y, M, D, JD, J, NYRM1, IC, NDAYS, LEAP, ML
+Cf2py intent(in, out) Y
+Cf2py intent(in, out) M
+Cf2py intent(in, out) D
+Cf2py intent(out) JD
         DATA MLIST/'Jan','Feb','Mar','Apr','May','Jun',
      1             'Jul','Aug','Sep','Oct','Nov','Dec'/
         DATA MLENG/31,28,31,30,31,30,31,31,30,31,30,31/

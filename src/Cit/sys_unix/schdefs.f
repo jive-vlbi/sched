@@ -7,6 +7,7 @@ C
 C     This is the Unix/Linux version.
 C
       CHARACTER    FTYPE*(*), FILENAME*(*)
+Cf2py intent(in, out) FILENAME
       CHARACTER    FTEXT*80
 C----------------------------------------------------------------------
       IF( FTYPE .EQ. 'location' ) THEN

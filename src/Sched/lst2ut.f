@@ -7,7 +7,10 @@ C     but goes backwards from that routine using an iterative
 C     proceedure.  LSTtim and UT should be in fractional days.
 C
       INTEGER            SIDDAY, YEAR, DAY, ITER
+Cf2py intent(out) YEAR
+Cf2py intent(out) DAY
       DOUBLE PRECISION   LONG, LSTTIM, UT, GMST, GMSTD, JULTIM
+Cf2py intent(out) UT
       DOUBLE PRECISION   TU, GMSTDN, JULNEW, TWOPI, S2R
       PARAMETER          (TWOPI=6.283185307179586476925287D0)
       PARAMETER          (S2R=0.7272205216643039849D-4)
