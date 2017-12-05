@@ -4,6 +4,7 @@ C     Set a version number for the SCHED main code.
 C     Note that a coarser, date based version is set in sched.f
 C
       REAL PLTVER
+Cf2py intent(out) PLTVER
 C ----------------------------------------------------------------------
 C      PLTVER = 1.02   ! Went with 16 Oct 2001 version.
 C      PLTVER = 1.03   ! RCW configuration search stuff.

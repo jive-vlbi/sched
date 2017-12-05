@@ -50,7 +50,7 @@
 #FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 #FC = f77 -C -u                       # SUN  IBM/AIX
 #FC = ifort -u -c -warn unused -warn declarations # Linux with Intel compiler.
-#FC = gfortran -Wall -fimplicit-none -fno-backslash  # gfortran 
+#FC = gfortran -Wall -fimplicit-none -fno-backslash -fPIC # gfortran 
 #       (OS X with gfortran.  Other gfortran?  
 #       Might need -m64 for 64 bit in some cases)
 
@@ -270,7 +270,7 @@ all:
 	cd Plot; $(MAKE) "FC=$(FC)"
 	cd PlotNRAO; $(MAKE) "FC=$(FC)"
 	cd Plotstub; $(MAKE) "FC=$(FC)"
-	$(MAKE) $(ARCH) "FC=$(FC)"
+	$(MAKE) $(ARCH) "FC=$(FC)" "CC=gcc -fPIC"
 	$(MAKE) $(BINDIR)/sched
 
 $(BINDIR)/sched: $(SCHED_OBJS)

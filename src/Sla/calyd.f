@@ -62,6 +62,9 @@
       IMPLICIT NONE
 
       INTEGER IY,IM,ID,NY,ND,J
+Cf2py intent(out) NY
+Cf2py intent(out) ND
+Cf2py intent(out) J
 
       INTEGER I
 

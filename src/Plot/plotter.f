@@ -7,6 +7,8 @@ C
       INCLUDE 'plot.inc'
 C
       LOGICAL     MKFILES, RESTART
+Cf2py intent(out) MKFILES
+Cf2py intent(in, out) RESTART
       INTEGER     STAT
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL PUTOUT( 'PLOTTER: Starting. ' )

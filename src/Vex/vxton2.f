@@ -18,10 +18,10 @@ C         SIDE:   Net side band
 C         BBCWID:  Filter width
 C         TONINT: Interval for tones
 C     Output
-C         NTNCHN(ICHAN): Number of tones detected per channel
-C         ITNCHN(MAXTON,NLOCHN): indicating the tones to detect
 C         NTONE:   Number of idependent tone setting
 C         TNCHN: list of NCHAN values, linking a channel to a tone def
+C         NTNCHN(ICHAN): Number of tones detected per channel
+C         ITNCHN(MAXTON,NLOCHN): indicating the tones to detect
 C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
@@ -34,7 +34,11 @@ C     MAXTON=16 is the maximum number of tones
 C     MAXPC is 8 now, soon to be 16.
 C
       INTEGER NLOCHN, NTNCHN(NLOCHN), ITNCHN(MAXTON,NLOCHN)
+Cf2py intent(out) NTNCHN
+Cf2py intent(out) ITNCHN
       INTEGER NTONE, TNCHN(NLOCHN)
+Cf2py intent(out) NTONE
+Cf2py intent(out) TNCHN
       DOUBLE PRECISION LO(NLOCHN), DTONINT
       REAL TONINT, BBCWID(NLOCHN)
       CHARACTER SIDE(NLOCHN)*1
