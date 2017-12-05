@@ -19,7 +19,10 @@ C
 C
       CHARACTER   NAME*(*)
       INTEGER     ISTA, JSTA, KSTA, NC, LEN1
+Cf2py intent(out) ISTA
+Cf2py intent(out) KSTA
       LOGICAL     DOIT
+Cf2py intent(out) DOIT
 C ---------------------------------------------------------------
 C     First find the station in the catalog.  Allow matches with
 C     either the station code or the station name.  Don't allow more

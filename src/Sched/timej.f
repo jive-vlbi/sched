@@ -5,8 +5,11 @@ C     the year, day of year, and time of day.  JTIME is in fractional
 C     days.  TIME is in radians.
 C
       DOUBLE PRECISION   JTIME, TIME, RADDAY, FD
+Cf2py intent(out) TIME
       PARAMETER          (RADDAY = 2.D0 * 3.141592653589793238D0)
       INTEGER            YEAR, DAY, JM, JD, NY, J
+Cf2py intent(out) YEAR
+Cf2py intent(out) DAY
       CHARACTER*60       MSGTXT
       CHARACTER*10       TFORM, CTIME
 C --------------------------------------------------------------------

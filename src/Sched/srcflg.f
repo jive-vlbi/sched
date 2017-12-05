@@ -20,6 +20,7 @@ C
 C
       INTEGER        KSRC, ISRC, INAME
       LOGICAL        GOTALL
+Cf2py intent(out) GOTALL
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SRCFLG starting' )
 C

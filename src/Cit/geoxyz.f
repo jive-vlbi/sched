@@ -49,7 +49,14 @@ C
 C     R. C. Walker
 C
       INTEGER           MODE, IER
+Cf2py intent(out) IER
       DOUBLE PRECISION  LONG, LAT, HT, X, Y, Z
+Cf2py intent(in, out) LONG
+Cf2py intent(in, out) LAT
+Cf2py intent(in, out) HT
+Cf2py intent(in, out) X
+Cf2py intent(in, out) Y
+Cf2py intent(in, out) Z
       DOUBLE PRECISION  SMAXIS, FLATEN, C, S
       PARAMETER         (SMAXIS=6378137.D0)
       PARAMETER         (FLATEN=1.D0/298.257223563D0)
