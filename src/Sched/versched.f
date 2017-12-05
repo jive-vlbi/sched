@@ -5,6 +5,8 @@ C     Note that a coarser, date based version is set in sched.f
 C
       REAL VERNUM
       CHARACTER  VERSION*(*)
+Cf2py intent(out) VERNUM
+Cf2py intent(out) VERSION
 C ----------------------------------------------------------------------
 C      VERNUM = 5.18    !  Oct 2001 release
 C      VERNUM = 5.19    !  Early 2002 development

@@ -47,7 +47,9 @@
 
       INTEGER IY,IM,ID
       DOUBLE PRECISION DJM
+Cf2py intent(out) DJM
       INTEGER J
+Cf2py intent(out) J
 
 *  Month lengths in days
       INTEGER MTAB(12)
