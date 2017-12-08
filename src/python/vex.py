@@ -1,5 +1,6 @@
 from catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog
 from util import f2str
+import dbbc_patching
 
 from sched import parameter
 
@@ -335,15 +336,36 @@ def modes_block():
             return None, datastream, None
 
         elif track_format.startswith("MARK5B"):
+            try:
+                channel_data = [(setup.sidebd[channel_index],
+                                 setup.bbc[channel_index],
+                                 bit)
+                                for channel_index in range(setup.nchan)
+                                for bit in ["sign", "mag"][
+                                        :int(setup.bits[channel_index])]]
+                input_bitstreams = dbbc_patching.get_input_bitstreams(
+                    channel_data)
+                # on-disk bitstreams are the compressed input bitstreams
+                sorted_bitstreams = sorted(input_bitstreams)
+                on_disk_bitstreams = (sorted_bitstreams.index(i)
+                                      for i in input_bitstreams)
+                bitstream_data = zip(input_bitstreams, 
+                                     on_disk_bitstreams,
+                                     (d[2] for d in channel_data), # sign/mag
+                                     range(setup.nchan))
+            except dbbc_patching.NoMatchingPatch:
+                bitstream_data = ((bitstream, bitstream, bit, channel_index)
+                                  for bitstream, (_, _, bit, channel_index) 
+                                  in enumerate(channel_order))
             bitstream = (("stream_sample_rate",
                           "{:7.3f} Ms/sec".format(setup.samprate)),) + \
                         tuple(("stream_def",
                                freq[channel_index][5], # FREQ link name
                                bit,
-                               bitstream,
-                               bitstream)
-                              for bitstream, (_, _, bit, channel_index) 
-                              in enumerate(channel_order))
+                               input_bitstream,
+                               on_disk_bitstream)
+                              for (input_bitstream, on_disk_bitstream, 
+                                   bit, channel_index) in bitstream_data)
             return bitstream, None, None
 
         else:
