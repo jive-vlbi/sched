@@ -402,8 +402,8 @@ def modes_block():
                              :int(setup.bits[channel_index])])]))
             return None, None, track
 
-    blocks = {"IF", "BBC", "PHASE_CAL_DETECT", "FREQ", 
-              "TRACKS", "BITSTREAMS", "DATASTREAMS"}
+    blocks = ["IF", "BBC", "PHASE_CAL_DETECT", "FREQ", 
+              "TRACKS", "BITSTREAMS", "DATASTREAMS"]
     # mode is mappings from block type to a 
     # <mapping from block def to stations>
     modes = [{block: defaultdict(set) for block in blocks}]
@@ -563,9 +563,17 @@ def modes_block():
 def {};
      ref $PROCEDURES = Procedure:{};
 """.format(mode_name, ":".join(station.stcode for station in stations))[1:]
-        
-        for block, block_defs in mode.items():
+        # go through all block in order
+        for block in blocks:
+            if block not in mode.keys():
+                continue
+            block_defs = mode[block]
             for block_def, block_stations in block_defs.items():
+                block_defs[block_def] = sorted(block_stations)
+            # name the defs in order of stations (relevant for name suffix, 
+            # when there would otherwise be a name clash)
+            for block_def, block_stations in sorted(block_defs.items(),
+                                                    key=lambda i: i[1]):
                 block_def_mode_stations[block][block_def][mode_name].update(
                     block_stations)
                 block_name = block_def_name[block].get(block_def)
@@ -574,13 +582,16 @@ def {};
                         block_name_function[block](block_def),
                         set(block_def_name[block].values()))
                     block_def_name[block][block_def] = block_name
+            # now add the defs to the mode block in block name order
+            for block_def, block_stations in \
+                sorted(block_defs.items(),
+                       key=lambda i: block_def_name[block][i[0]]):
                 modes_text += """
      ref ${} = {}{};
-""".format(block, block_name, 
+""".format(block,  block_def_name[block][block_def], 
            "".join(":" + station for station in block_stations))[1:]
     
         modes_text += "enddef;\n"
-
     
     # blocks referenced in modes
     for block in blocks:
@@ -712,7 +723,7 @@ def stations_block():
     stations_text = "$STATION;\n"
     for index, station in enumerate(stations):
         stations_text += "*\ndef {};\n".format(station.stcode)
-        for block, function in generator.items():
+        for block, function in sorted(generator.items()):
             block_def = function(station, index)
             name = block_def_name[block].get(block_def)
             if name is None:
@@ -726,10 +737,10 @@ def stations_block():
             stations_text += "     ref ${} = {};\n".format(block, name)
         stations_text += "enddef;\n"
 
-    for block, def_name in block_def_name.items():
+    for block, def_name in sorted(block_def_name.items()):
         stations_text += block_separator
         stations_text += "${};\n".format(block)
-        for def_, name in def_name.items():
+        for def_, name in sorted(def_name.items(), key=lambda i: i[1]):
             stations_text += "*\n{}".format(block_def2str(name, def_))
             
     return stations_text
