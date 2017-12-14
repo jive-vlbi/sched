@@ -98,7 +98,8 @@ if mkfiles and bytes(s.schsco.optmode).decode().strip() != "UPTIME" and \
     s.omsout(restart)
     s.vexout()
 
-    with open("{}.vex2".format(f2str(s.schc1.expcode)), "w") as vex_file:
+    with open("{}.vex2".format(f2str(s.schc1.expcode).lower()), "w") \
+         as vex_file:
         vex.write(vex_file)
     
     if s.schcon.dovsop:
