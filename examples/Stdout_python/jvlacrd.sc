@@ -1,0 +1,102 @@
+!*  Schedule for VLBA_SC   *!
+!*  Experiment jvla     *!
+!* Schedule Version:       1.00 *!
+!* Processed by SCHED version:  11.50 *!
+!* PI:       Amy Mioduszewski *!
+!* Address:  NRAO *!
+!*           PO Box 0 *!
+!*           Socorro, NM 87801 *!
+!*  *!
+!* Phone:    575 835 7263 *!
+!* EMAIL:    amiodusz@nrao.edu *!
+!* Fax: *!
+!* Phone during observation: 575 835 7263 *!
+!* Observing mode: *!
+!* Notes: *!
+!*  *!
+!*  *!
+!*  *!
+!*  Start at 17h00m00s     Wed, 2012 Apr 25  Day of year  116   *!
+program=jvla    
+
+diskformat=mark5c
+media=(1,disk)
+
+!* The first scan is preceeded by a setup scan *!
+!* that ends at the start time of the first scan  *!
+
+!* --- Scan from 17h00m00s to 17h05m00s   Wed, 2012 Apr 25 --- *!
+sname='J0217+7349'  ra=02h17m30.813369s  dec= 73d49'32.62179"  qual=999  calib='V'
+maxcaltime= 120
+fe=(1,6cm),(3,6cm)
+fexfer=(2,norm)
+noise=(1,low-s),(2,low-s),(3,low-s),(4,low-s)
+synth=( 1,15.6),( 2,-5.9),( 3,15.6)
+logging=STANDARD
+nchan= 4
+format=VLBA1:4
+ifdistr=(1,0),(2,0),(3,0),(4,0)
+baseband=(1,1),(2,2),(3,3),(4,4)
+ifchan=(1,A),(2,C),(3,A),(4,C)
+sideband=(1,L),(2,L),(3,L),(4,L)
+bits=(1,2),(2,2),(3,2),(4,2)
+period=(1,1),(2,1),(3,1),(4,1)
+level=(1,-1),(2,-1),(3,-1),(4,-1)
+azcolim=   0.00  elcolim=   0.00
+bbsynth=( 1,936.01),( 2,936.01),( 3,840.01),( 4,840.01)
+bbfilter=(1,16M),(2,16M),(3,16M),(4,16M)
+pcal=1MHZ
+pcalxbit1=(1,S1),(2,S3),(3,S1),(4,S3),(5,S1),(6,S2),(7,S3),(8,S4)
+pcalxbit2=(1,S2),(2,S4),(3,S2),(4,S4),(5,M1),(6,M2),(7,M3),(8,M4)
+pcalxfreq1=(1,10),(2,10),(3,13010),(4,13010),(5,0),(6,0),(7,0),(8,0)
+pcalxfreq2=(1,10),(2,10),(3,13010),(4,13010),(5,0),(6,0),(7,0),(8,0)
+samplerate=32M
+disk=off
+  date = 2012Apr25
+stop=17h00m00s   !NEXT!        
+qual=  0
+disk=off
+stop=17h05m00s   !NEXT!
+
+!* --- Scan from 17h05m20s to 17h10m20s   Wed, 2012 Apr 25 --- *!
+sname='J0217+7349'  ra=02h17m30.813369s  dec= 73d49'32.62179"  qual=999  calib='V'
+disk=off
+stop=17h05m20s   !NEXT!        
+qual=  0
+disk=off
+stop=17h10m20s   !NEXT!
+
+!* --- Scan from 17h10m40s to 17h15m40s   Wed, 2012 Apr 25 --- *!
+sname='J0217+7349'  ra=02h17m30.813369s  dec= 73d49'32.62179"  qual=999  calib='V'
+disk=off
+stop=17h10m40s   !NEXT!        
+qual=  0
+disk=off
+stop=17h15m40s   !NEXT!
+
+!* --- Scan from 17h16m00s to 17h21m00s   Wed, 2012 Apr 25 --- *!
+sname='J0217+7349'  ra=02h17m30.813369s  dec= 73d49'32.62179"  qual=999  calib='V'
+disk=off
+stop=17h16m00s   !NEXT!        
+qual=  0
+disk=off
+stop=17h21m00s   !NEXT!
+
+!* --- Scan from 17h21m20s to 17h26m20s   Wed, 2012 Apr 25 --- *!
+sname='J0217+7349'  ra=02h17m30.813369s  dec= 73d49'32.62179"  qual=999  calib='V'
+disk=off
+stop=17h21m20s   !NEXT!        
+qual=  0
+disk=off
+stop=17h26m20s   !NEXT!
+
+!* --- Scan from 17h26m40s to 17h31m40s   Wed, 2012 Apr 25 --- *!
+sname='J0217+7349'  ra=02h17m30.813369s  dec= 73d49'32.62179"  qual=999  calib='V'
+disk=off
+stop=17h26m40s   !NEXT!        
+qual=  0
+disk=off
+stop=17h31m40s   !NEXT!
+disk=off
+stop=17h31m45s   !NEXT!
+     !QUIT! 

@@ -1,0 +1,972 @@
+VEX_rev = 1.5;
+*    VEX/SCHED:  1.5.87
+*    Other versions: Sched:  11.5  Plot: 1.06  JPL-ephem: 1.01
+*------------------------------------------------------------------------------
+$GLOBAL;
+     ref $EXPER = lbaoh;
+*                                                      +------------+
+*                         PI revision number:          |    1.0000  |
+*                                                      +------------+
+*    mode:       LBA, 1.4 GHz continuum. 2X16 MHz band, dual pol
+*------------------------------------------------------------------------------
+$EXPER;
+*
+def lbaoh;
+     exper_name = lbaoh;
+     exper_description = "OH masers in star forming regions";
+     PI_name = "Cormac Reynolds";
+     PI_email = cormac.reynolds@csiro.au;
+*    address:   CSIRO
+*                
+*                
+*                
+*    phone:     1111
+*    during obs: 
+*    fax:        
+*
+*    year, doy: 2000, 229
+*    date     : Wed 16 Aug 2000
+*    MJD      : 51772
+     exper_nominal_start=2000y229d23h00m00s;
+     exper_nominal_stop=2000y230d15h05m00s;
+*
+     target_correlator = LBA;
+*
+*    integr_time    :     1.000 s
+*    number_channels:    32
+*    number_antenna :  4
+*    cross_polarize : Yes
+*    weight_func    : UNIFORM
+*    distrib_medium : DAT
+*    distrib_format : FITS
+*    source_pos_cat : STANDARD
+*    distribute_to  : 
+*                     Cormac
+*                     CSIRO
+*
+enddef;
+*------------------------------------------------------------------------------
+$MODE;
+*
+def Nescio;
+     ref $PROCEDURES = Mode_01;
+     ref $FREQ = 1665.00MHz2x4MHz:At:Mp:Pa;
+     ref $FREQ = 1665.00MHz2x4MHz#02:Ho;
+     ref $IF = LO@700MHzDPolNoTone:At;
+     ref $IF = LO@1000MHzDPolNoTone:Mp;
+     ref $IF = LO@1050MHzDPolNoTone:Ho;
+     ref $IF = LO@1600MHzDPolNoTone:Pa;
+     ref $BBC = 2BBCs:At:Mp:Pa;
+     ref $BBC = 2BBCs#02:Ho;
+     ref $TRACKS = LBA_.2Ch2bit1to1:At:Mp:Pa;
+     ref $TRACKS = MARK5B.2Ch2bit1to1:Ho;
+     ref $HEAD_POS = LBAVoid:At:Mp:Pa;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:At:Mp:Ho:Pa;
+     ref $PASS_ORDER = LBADummy:At:Mp:Pa;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = NoDetect:At:Mp:Ho:Pa;
+enddef;
+*
+def Doppler@G300.969;
+     ref $PROCEDURES = Mode_02;
+     ref $FREQ = 1664.00MHz2x4MHz:At:Mp:Pa;
+     ref $FREQ = 1664.00MHz2x4MHz#02:Ho;
+     ref $IF = LO@700MHzDPolNoTone:At;
+     ref $IF = LO@1000MHzDPolNoTone:Mp;
+     ref $IF = LO@1050MHzDPolNoTone:Ho;
+     ref $IF = LO@1600MHzDPolNoTone:Pa;
+     ref $BBC = 2BBCs:At:Mp:Pa;
+     ref $BBC = 2BBCs#02:Ho;
+     ref $TRACKS = LBA_.2Ch2bit1to1:At:Mp:Pa;
+     ref $TRACKS = MARK5B.2Ch2bit1to1:Ho;
+     ref $HEAD_POS = LBAVoid:At:Mp:Pa;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:At:Mp:Ho:Pa;
+     ref $PASS_ORDER = LBADummy:At:Mp:Pa;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = NoDetect:At:Mp:Ho:Pa;
+enddef;
+*------------------------------------------------------------------------------
+$STATION;
+*
+def At;
+     ref $SITE = ATCA;
+     ref $ANTENNA = ATCA;
+     ref $DAS = 1LBA+NONE<LBADR;
+enddef;
+*
+def Mp;
+     ref $SITE = MOPRA;
+     ref $ANTENNA = MOPRA;
+     ref $DAS = 1LBA+NONE<LBADR;
+enddef;
+*
+def Ho;
+     ref $SITE = HOB_DBBC;
+     ref $ANTENNA = HOB_DBBC;
+     ref $DAS = 2DBBC+MARK5B<;
+enddef;
+*
+def Pa;
+     ref $SITE = PARKES;
+     ref $ANTENNA = PARKES;
+     ref $DAS = 1LBA+NONE<LBADR;
+enddef;
+*------------------------------------------------------------------------------
+$PROCEDURES;
+*
+def Mode_01;
+     procedure_name_prefix =  "01";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_02;
+     procedure_name_prefix =  "02";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*------------------------------------------------------------------------------
+$SITE;
+*
+def ATCA;
+     site_type = fixed;
+     site_name = ATCA;
+     site_ID = At;
+*    elev=  252.02 long=-149:33:53. lat=-30:18:46.4
+     site_position =-4751639.85972 m: 2791700.35670 m:-3200491.11339 m;
+     site_velocity = -0.030990   m/yr: -0.004580   m/yr:  0.042030  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 1997y001d;
+     site_position_epoch =   50449;
+enddef;
+*
+def MOPRA;
+     site_type = fixed;
+     site_name = MOPRA;
+     site_ID = Mp;
+*    elev=  867.32 long=-149:05:58. lat=-31:16:04.1
+     site_position =-4682769.05850 m: 2802619.04217 m:-3291759.33837 m;
+     site_velocity = -0.037040   m/yr: -0.009020   m/yr:  0.045020  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 1997y051d;
+     site_position_epoch =   50499;
+enddef;
+*
+def HOB_DBBC;
+     site_type = fixed;
+     site_name = HOB_DBBC;
+     site_ID = Ho;
+*    elev=   65.09 long=-147:26:25. lat=-42:48:12.9
+     site_position =-3950237.35900 m: 2522347.68040 m:-4311561.87900 m;
+     site_velocity = -0.038660   m/yr:  0.007880   m/yr:  0.040940  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+enddef;
+*
+def PARKES;
+     site_type = fixed;
+     site_name = PARKES;
+     site_ID = Pa;
+*    elev=  414.66 long=-148:15:48. lat=-32:59:54.2
+     site_position =-4554232.48640 m: 2816758.86620 m:-3454035.01370 m;
+     site_velocity = -0.033170   m/yr: -0.003580   m/yr:  0.048610  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+enddef;
+*------------------------------------------------------------------------------
+$ANTENNA;
+*
+def ATCA;
+     axis_type = az : el;
+     antenna_motion = el :  20.0 deg/min :  3 sec;  *    0.222 deg/sec/sec
+     antenna_motion = az :  40.0 deg/min :  3 sec;  *    0.222 deg/sec/sec
+     axis_offset =    0.00000 m;
+enddef;
+*
+def MOPRA;
+     axis_type = az : el;
+     antenna_motion = el :  19.0 deg/min :  3 sec;  *    0.222 deg/sec/sec
+     antenna_motion = az :  38.0 deg/min :  3 sec;  *    0.222 deg/sec/sec
+     axis_offset =    0.00000 m;
+enddef;
+*
+def HOB_DBBC;
+     axis_type = x : yew;
+     antenna_motion = x :  40.0 deg/min :  2 sec;  *    0.028 deg/sec/sec
+     antenna_motion = y :  40.0 deg/min :  2 sec;  *    0.028 deg/sec/sec
+     axis_offset =    8.19370 m;
+enddef;
+*
+def PARKES;
+     axis_type = az : el;
+     antenna_motion = el :  12.0 deg/min :  2 sec;  *    0.017 deg/sec/sec
+     antenna_motion = az :  22.0 deg/min :  2 sec;  *    0.033 deg/sec/sec
+     axis_offset =   -0.02420 m;
+enddef;
+*------------------------------------------------------------------------------
+$DAS;
+*
+def 1LBA+NONE<LBADR;
+     record_transport_type = S2;
+     electronics_rack_type = LBA;
+     number_drives = 1;
+     headstack = 1 :            : 0 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*
+def 2DBBC+MARK5B<;
+     record_transport_type = Mark5B;
+     electronics_rack_type = DBBC;
+     number_drives = 2;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 1 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*------------------------------------------------------------------------------
+$SOURCE;
+*
+def 0823-500;
+     source_name = 0823-500;
+*    this source had calibrator code:  
+     ra = 08h25m26.8688000s; dec = -50d10'38.486800"; ref_coord_frame = J2000;
+*    ra = 08h23m57.6227277s; dec = -50d00'46.869165"; ref_coord_frame = B1950;
+*    ra = 08h25m25.7017403s; dec = -50d10'36.741106"; ref_coord_frame = Date;
+enddef;
+*
+def 1148-671;
+     source_name = 1148-671;
+*    this source had calibrator code:  
+     ra = 11h51m13.4265300s; dec = -67d28'11.094500"; ref_coord_frame = J2000;
+*    ra = 11h48m46.6522411s; dec = -67d11'29.623128"; ref_coord_frame = B1950;
+*    ra = 11h51m12.2099029s; dec = -67d28'25.519495"; ref_coord_frame = Date;
+enddef;
+*
+def 1215-457;
+     source_name = 1215-457;
+*    this source had calibrator code:  
+     ra = 12h18m06.2417400s; dec = -46d00'28.930200"; ref_coord_frame = J2000;
+*    ra = 12h15m27.4427466s; dec = -45d43'49.261903"; ref_coord_frame = B1950;
+*    ra = 12h18m06.1548536s; dec = -46d00'39.914067"; ref_coord_frame = Date;
+enddef;
+*
+def 1740-517;
+     source_name = 1740-517;
+*    this source had calibrator code:  
+     ra = 17h44m25.4506300s; dec = -51d44'43.792700"; ref_coord_frame = J2000;
+*    ra = 17h40m27.1978998s; dec = -51d43'27.022498"; ref_coord_frame = B1950;
+*    ra = 17h44m28.1838084s; dec = -51d44'49.415305"; ref_coord_frame = Date;
+enddef;
+*
+def G337.705;
+     source_name = G337.705;
+*    this source had calibrator code:  
+     ra = 16h38m29.6500000s; dec = -47d00'35.500000"; ref_coord_frame = J2000;
+*    ra = 16h34m48.9910370s; dec = -46d54'38.929258"; ref_coord_frame = B1950;
+*    ra = 16h38m31.7415839s; dec = -47d00'43.623219"; ref_coord_frame = Date;
+*    velocity_wrt_LSR =     -45.00 km/sec; * warning, only given here for 1st channel
+*    calculations used radio definition 
+enddef;
+*
+def G300.969;
+     source_name = G300.969;
+*    this source had calibrator code:  
+     ra = 12h34m53.2000000s; dec = -61d39'40.000000"; ref_coord_frame = J2000;
+*    ra = 12h32m01.5214850s; dec = -61d23'08.242009"; ref_coord_frame = B1950;
+*    ra = 12h34m52.8802223s; dec = -61d39'55.077057"; ref_coord_frame = Date;
+*    velocity_wrt_LSR =     -45.00 km/sec; * warning, only given here for 1st channel
+*    calculations used radio definition 
+enddef;
+*
+def 1934-638;
+     source_name = 1934-638;
+*    this source had calibrator code: V
+*    alternate source name: J1939-6342
+*    alternate source name: J1939-63
+*    GSFC 2015a astro solution, unpublished     13 observations.
+     ra = 19h39m25.0262814s; dec = -63d42'45.624366"; ref_coord_frame = J2000;
+*    ra = 19h34m47.6066963s; dec = -63d49'37.722743"; ref_coord_frame = B1950;
+*    ra = 19h39m29.2189343s; dec = -63d42'44.920047"; ref_coord_frame = Date;
+enddef;
+*------------------------------------------------------------------------------
+$FREQ;
+*
+def 1665.00MHz2x4MHz;
+* mode =  1    stations =At:Mp:Pa
+     sample_rate =   8.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1665.00 MHz : U :   4.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1665.00 MHz : U :   4.00 MHz : &CH02 : &BBC02 : &NoCal; *Lcp
+enddef;
+*
+def 1665.00MHz2x4MHz#02;
+* mode =  1    stations =Ho
+     sample_rate =   8.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1665.00 MHz : U :   4.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1665.00 MHz : U :   4.00 MHz : &CH02 : &BBC09 : &NoCal; *Lcp
+enddef;
+*
+def 1664.00MHz2x4MHz;
+* mode =  2    stations =At:Mp:Pa
+     sample_rate =   8.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1664.00 MHz : U :   4.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1664.00 MHz : U :   4.00 MHz : &CH02 : &BBC02 : &NoCal; *Lcp
+enddef;
+*
+def 1664.00MHz2x4MHz#02;
+* mode =  2    stations =Ho
+     sample_rate =   8.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1664.00 MHz : U :   4.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1664.00 MHz : U :   4.00 MHz : &CH02 : &BBC09 : &NoCal; *Lcp
+enddef;
+*------------------------------------------------------------------------------
+$IF;
+*
+def LO@700MHzDPolNoTone;
+* mode =  1    stations =At
+* mode =  2    stations =At
+     if_def = &IF_2N : 2N : R :   700.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :   700.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@1000MHzDPolNoTone;
+* mode =  1    stations =Mp
+* mode =  2    stations =Mp
+     if_def = &IF_2N : 2N : R :  1000.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :  1000.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@1050MHzDPolNoTone;
+* mode =  1    stations =Ho
+* mode =  2    stations =Ho
+     if_def = &IF_A1 : A1 : R :  1050.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_B1 : B1 : L :  1050.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@1600MHzDPolNoTone;
+* mode =  1    stations =Pa
+* mode =  2    stations =Pa
+     if_def = &IF_2N : 2N : R :  1600.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :  1600.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*------------------------------------------------------------------------------
+$BBC;
+*
+def 2BBCs;
+* mode =  1    stations =At:Mp:Pa
+* mode =  2    stations =At:Mp:Pa
+     BBC_assign = &BBC01 :  1 : &IF_2N;
+     BBC_assign = &BBC02 :  2 : &IF_1N;
+enddef;
+*
+def 2BBCs#02;
+* mode =  1    stations =Ho
+* mode =  2    stations =Ho
+     BBC_assign = &BBC01 :  1 : &IF_A1;
+     BBC_assign = &BBC09 :  9 : &IF_B1;
+enddef;
+*------------------------------------------------------------------------------
+$PHASE_CAL_DETECT;
+*
+def NoDetect;
+* mode =  1    stations =At:Mp:Ho:Pa
+* mode =  2    stations =At:Mp:Ho:Pa
+     phase_cal_detect = &NoCal;
+enddef;
+*------------------------------------------------------------------------------
+$TRACKS;
+*
+def LBA_.2Ch2bit1to1;
+* mode =  1    stations =At:Mp:Pa
+* mode =  2    stations =At:Mp:Pa
+*    format = LBA, and fan-out = 1
+*    mode requires   8.00Mb/s/tr; stations using disks
+     S2_data_source = VLBA;
+     S2_recording_mode = none;
+     fanout_def =   : &CH01 : sign : 1:  0;
+     fanout_def =   : &CH01 :  mag : 1:  1;
+     fanout_def =   : &CH02 : sign : 1:  2;
+     fanout_def =   : &CH02 :  mag : 1:  3;
+enddef;
+*
+def MARK5B.2Ch2bit1to1;
+* mode =  1    stations =Ho
+* mode =  2    stations =Ho
+*    firmware_type = DBBC_DDC;
+*    format = MARK5B, and fan-out = 1
+*    mode requires   8.00Mb/s/tr; stations using disks
+     track_frame_format = MARK5B;
+     fanout_def =   : &CH01 : sign : 1:  2;
+     fanout_def =   : &CH01 :  mag : 1:  3;
+     fanout_def =   : &CH02 : sign : 1:  4;
+     fanout_def =   : &CH02 :  mag : 1:  5;
+enddef;
+*------------------------------------------------------------------------------
+$HEAD_POS;
+def LBAVoid;
+* mode =  1    stations =At:Mp:Pa
+* mode =  2    stations =At:Mp:Pa
+*     Head positions irrelevant for Disk: empty def
+enddef;
+def DiskVoid;
+* mode =  1    stations =Ho
+* mode =  2    stations =Ho
+*     Head positions irrelevant for Disk: empty def
+enddef;
+*------------------------------------------------------------------------------
+$PASS_ORDER;
+*
+def LBADummy;
+* mode =  1    stations =At:Mp:Pa
+* mode =  2    stations =At:Mp:Pa
+* LBA masquerading as S2 needs a dummy value
+     S2_group_order = 0;
+enddef;
+*
+def DiskVoid;
+* mode =  1    stations =Ho
+* mode =  2    stations =Ho
+*     Pass orders irrelevant for Disk: empty def
+enddef;
+*------------------------------------------------------------------------------
+$ROLL;
+*
+def NoRoll;
+* mode =  1    stations =At:Mp:Ho:Pa
+* mode =  2    stations =At:Mp:Ho:Pa
+*    barrel-roll set to 'roll_off', so reverse-roll by  0 (1 head)
+     roll = off;
+enddef;
+*------------------------------------------------------------------------------
+$SCHED;
+* schedule section for experiment lbaoh   
+* OH masers in star forming regions                                       
+scan No0001;
+* intent = "CALIBRATE_DELAY"
+     start=2000y229d23h00m00s; mode=Doppler@G300.969; source=0823-500;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=At:    0 sec:  300 sec:    0.000 GB:   0 :       : 1;
+     station=Mp:    0 sec:  300 sec:    0.000 GB:   0 :       : 1;
+     station=Ho:    0 sec:  300 sec:    0.000 GB:   :       : 1;
+     station=Pa:    0 sec:  300 sec:    0.000 GB:   0 :       : 1;
+endscan;
+scan No0002;
+* intent = "CALIBRATE_DELAY"
+     start=2000y229d23h05m00s; mode=Doppler@G300.969; source=1148-671;
+     station=At:   93 sec:  420 sec:    1.200 GB:   0 :       : 1;
+     station=Mp:   98 sec:  420 sec:    1.200 GB:   0 :       : 1;
+     station=Ho:   74 sec:  420 sec:    1.202 GB:   :       : 1;
+     station=Pa:  159 sec:  420 sec:    1.200 GB:   0 :       : 1;
+endscan;
+scan No0003;
+* intent = "OBSERVE_TARGET"
+     start=2000y229d23h12m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   20 sec: 1680 sec:    2.880 GB:   0 :       : 1;
+     station=Mp:   21 sec: 1680 sec:    2.880 GB:   0 :       : 1;
+     station=Ho:   32 sec: 1680 sec:    2.885 GB:   :       : 1;
+     station=Pa:   39 sec: 1680 sec:    2.880 GB:   0 :       : 1;
+endscan;
+scan No0004;
+* intent = "CALIBRATE_DELAY"
+     start=2000y229d23h40m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   34 sec:  300 sec:    9.600 GB:   0 :       : 1;
+     station=Mp:   35 sec:  300 sec:    9.600 GB:   0 :       : 1;
+     station=Ho:   48 sec:  300 sec:    9.615 GB:   :       : 1;
+     station=Pa:   65 sec:  300 sec:    9.600 GB:   0 :       : 1;
+endscan;
+scan No0005;
+* intent = "OBSERVE_TARGET"
+     start=2000y229d23h45m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   34 sec: 1500 sec:   10.800 GB:   0 :       : 1;
+     station=Mp:   36 sec: 1500 sec:   10.800 GB:   0 :       : 1;
+     station=Ho:   48 sec: 1500 sec:   10.817 GB:   :       : 1;
+     station=Pa:   65 sec: 1500 sec:   10.800 GB:   0 :       : 1;
+endscan;
+scan No0006;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d00h10m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   35 sec:  300 sec:   16.800 GB:   0 :       : 1;
+     station=Mp:   37 sec:  300 sec:   16.800 GB:   0 :       : 1;
+     station=Ho:   46 sec:  300 sec:   16.827 GB:   :       : 1;
+     station=Pa:   68 sec:  300 sec:   16.800 GB:   0 :       : 1;
+endscan;
+scan No0007;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d00h15m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   36 sec: 1500 sec:   18.000 GB:   0 :       : 1;
+     station=Mp:   37 sec: 1500 sec:   18.000 GB:   0 :       : 1;
+     station=Ho:   46 sec: 1500 sec:   18.029 GB:   :       : 1;
+     station=Pa:   68 sec: 1500 sec:   18.000 GB:   0 :       : 1;
+endscan;
+scan No0008;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d00h40m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   37 sec:  300 sec:   24.000 GB:   0 :       : 1;
+     station=Mp:   38 sec:  300 sec:   24.000 GB:   0 :       : 1;
+     station=Ho:   44 sec:  300 sec:   24.038 GB:   :       : 1;
+     station=Pa:   71 sec:  300 sec:   24.000 GB:   0 :       : 1;
+endscan;
+scan No0009;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d00h45m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   37 sec: 1500 sec:   25.200 GB:   0 :       : 1;
+     station=Mp:   39 sec: 1500 sec:   25.200 GB:   0 :       : 1;
+     station=Ho:   44 sec: 1500 sec:   25.240 GB:   :       : 1;
+     station=Pa:   71 sec: 1500 sec:   25.200 GB:   0 :       : 1;
+endscan;
+scan No0010;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d01h10m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   38 sec:  300 sec:   31.200 GB:   0 :       : 1;
+     station=Mp:   40 sec:  300 sec:   31.200 GB:   0 :       : 1;
+     station=Ho:   47 sec:  300 sec:   31.250 GB:   :       : 1;
+     station=Pa:   74 sec:  300 sec:   31.200 GB:   0 :       : 1;
+endscan;
+scan No0011;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d01h15m00s; mode=Doppler@G300.969; source=G300.969;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=At:   38 sec: 1500 sec:   32.400 GB:   0 :       : 1;
+     station=Mp:   40 sec: 1500 sec:   32.400 GB:   0 :       : 1;
+     station=Ho:   47 sec: 1500 sec:   32.452 GB:   :       : 1;
+     station=Pa:   74 sec: 1500 sec:   32.400 GB:   0 :       : 1;
+endscan;
+scan No0012;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d01h40m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   39 sec:  300 sec:   38.400 GB:   0 :       : 1;
+     station=Mp:   41 sec:  300 sec:   38.400 GB:   0 :       : 1;
+     station=Ho:   48 sec:  300 sec:   38.461 GB:   :       : 1;
+     station=Pa:   77 sec:  300 sec:   38.400 GB:   0 :       : 1;
+endscan;
+scan No0013;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d01h45m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   39 sec: 1500 sec:   39.600 GB:   0 :       : 1;
+     station=Mp:   42 sec: 1500 sec:   39.600 GB:   0 :       : 1;
+     station=Ho:   48 sec: 1500 sec:   39.663 GB:   :       : 1;
+     station=Pa:   77 sec: 1500 sec:   39.600 GB:   0 :       : 1;
+endscan;
+scan No0014;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d02h10m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   40 sec:  300 sec:   45.600 GB:   0 :       : 1;
+     station=Mp:   42 sec:  300 sec:   45.600 GB:   0 :       : 1;
+     station=Ho:   49 sec:  300 sec:   45.673 GB:   :       : 1;
+     station=Pa:   79 sec:  300 sec:   45.600 GB:   0 :       : 1;
+endscan;
+scan No0015;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d02h15m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   40 sec: 1500 sec:   46.800 GB:   0 :       : 1;
+     station=Mp:   42 sec: 1500 sec:   46.800 GB:   0 :       : 1;
+     station=Ho:   49 sec: 1500 sec:   46.875 GB:   :       : 1;
+     station=Pa:   80 sec: 1500 sec:   46.800 GB:   0 :       : 1;
+endscan;
+scan No0016;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d02h40m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   39 sec:  300 sec:   52.800 GB:   0 :       : 1;
+     station=Mp:   42 sec:  300 sec:   52.800 GB:   0 :       : 1;
+     station=Ho:   50 sec:  300 sec:   52.884 GB:   :       : 1;
+     station=Pa:   80 sec:  300 sec:   52.800 GB:   0 :       : 1;
+endscan;
+scan No0017;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d02h45m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   39 sec: 1500 sec:   54.000 GB:   0 :       : 1;
+     station=Mp:   42 sec: 1500 sec:   54.000 GB:   0 :       : 1;
+     station=Ho:   50 sec: 1500 sec:   54.086 GB:   :       : 1;
+     station=Pa:   81 sec: 1500 sec:   54.000 GB:   0 :       : 1;
+endscan;
+scan No0018;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d03h10m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   43 sec:  300 sec:   60.000 GB:   0 :       : 1;
+     station=Mp:   44 sec:  300 sec:   60.000 GB:   0 :       : 1;
+     station=Ho:   50 sec:  300 sec:   60.096 GB:   :       : 1;
+     station=Pa:   77 sec:  300 sec:   60.000 GB:   0 :       : 1;
+endscan;
+scan No0019;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d03h15m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   43 sec: 1500 sec:   61.200 GB:   0 :       : 1;
+     station=Mp:   44 sec: 1500 sec:   61.200 GB:   0 :       : 1;
+     station=Ho:   50 sec: 1500 sec:   61.298 GB:   :       : 1;
+     station=Pa:   77 sec: 1500 sec:   61.200 GB:   0 :       : 1;
+endscan;
+scan No0020;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d03h40m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   48 sec:  300 sec:   67.200 GB:   0 :       : 1;
+     station=Mp:   50 sec:  300 sec:   67.200 GB:   0 :       : 1;
+     station=Ho:   50 sec:  300 sec:   67.308 GB:   :       : 1;
+     station=Pa:   83 sec:  300 sec:   67.200 GB:   0 :       : 1;
+endscan;
+scan No0021;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d03h45m00s; mode=Doppler@G300.969; source=G337.705;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=At:  129 sec: 1800 sec:   68.400 GB:   0 :       : 1;
+     station=Mp:  137 sec: 1800 sec:   68.400 GB:   0 :       : 1;
+     station=Ho:   76 sec: 1800 sec:   68.509 GB:   :       : 1;
+     station=Pa:  224 sec: 1800 sec:   68.400 GB:   0 :       : 1;
+endscan;
+scan No0022;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d04h15m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:  123 sec:  300 sec:   75.600 GB:   0 :       : 1;
+     station=Mp:  131 sec:  300 sec:   75.600 GB:   0 :       : 1;
+     station=Ho:   79 sec:  300 sec:   75.721 GB:   :       : 1;
+     station=Pa:  219 sec:  300 sec:   75.600 GB:   0 :       : 1;
+endscan;
+scan No0023;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d04h20m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   52 sec: 1500 sec:   76.800 GB:   0 :       : 1;
+     station=Mp:   54 sec: 1500 sec:   76.800 GB:   0 :       : 1;
+     station=Ho:   50 sec: 1500 sec:   76.923 GB:   :       : 1;
+     station=Pa:   92 sec: 1500 sec:   76.800 GB:   0 :       : 1;
+endscan;
+scan No0024;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d04h45m00s; mode=Doppler@G300.969; source=1215-457;
+     station=At:   51 sec:  300 sec:   82.800 GB:   0 :       : 1;
+     station=Mp:   54 sec:  300 sec:   82.800 GB:   0 :       : 1;
+     station=Ho:   50 sec:  300 sec:   82.932 GB:   :       : 1;
+     station=Pa:   92 sec:  300 sec:   82.800 GB:   0 :       : 1;
+endscan;
+scan No0025;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d04h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:  105 sec: 1500 sec:   84.000 GB:   0 :       : 1;
+     station=Mp:  112 sec: 1500 sec:   84.000 GB:   0 :       : 1;
+     station=Ho:   84 sec: 1500 sec:   84.134 GB:   :       : 1;
+     station=Pa:  190 sec: 1500 sec:   84.000 GB:   0 :       : 1;
+endscan;
+scan No0026;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d05h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   36 sec:  300 sec:   90.000 GB:   0 :       : 1;
+     station=Mp:   37 sec:  300 sec:   90.000 GB:   0 :       : 1;
+     station=Ho:   47 sec:  300 sec:   90.144 GB:   :       : 1;
+     station=Pa:   64 sec:  300 sec:   90.000 GB:   0 :       : 1;
+endscan;
+scan No0027;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d05h20m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   84 sec: 1500 sec:   91.200 GB:   0 :       : 1;
+     station=Mp:   88 sec: 1500 sec:   91.200 GB:   0 :       : 1;
+     station=Ho:   84 sec: 1500 sec:   91.346 GB:   :       : 1;
+     station=Pa:  157 sec: 1500 sec:   91.200 GB:   0 :       : 1;
+endscan;
+scan No0028;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d05h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   92 sec:  300 sec:   97.200 GB:   0 :       : 1;
+     station=Mp:   97 sec:  300 sec:   97.200 GB:   0 :       : 1;
+     station=Ho:   85 sec:  300 sec:   97.356 GB:   :       : 1;
+     station=Pa:  173 sec:  300 sec:   97.200 GB:   0 :       : 1;
+endscan;
+scan No0029;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d05h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   38 sec: 1500 sec:   98.400 GB:   0 :       : 1;
+     station=Mp:   39 sec: 1500 sec:   98.400 GB:   0 :       : 1;
+     station=Ho:   46 sec: 1500 sec:   98.557 GB:   :       : 1;
+     station=Pa:   68 sec: 1500 sec:   98.400 GB:   0 :       : 1;
+endscan;
+scan No0030;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d06h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   38 sec:  300 sec:  104.400 GB:   0 :       : 1;
+     station=Mp:   40 sec:  300 sec:  104.400 GB:   0 :       : 1;
+     station=Ho:   44 sec:  300 sec:  104.567 GB:   :       : 1;
+     station=Pa:   68 sec:  300 sec:  104.400 GB:   0 :       : 1;
+endscan;
+scan No0031;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d06h20m00s; mode=Doppler@G300.969; source=G300.969;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=At:  102 sec: 1500 sec:  105.600 GB:   0 :       : 1;
+     station=Mp:  108 sec: 1500 sec:  105.600 GB:   0 :       : 1;
+     station=Ho:   87 sec: 1500 sec:  105.769 GB:   :       : 1;
+     station=Pa:  195 sec: 1500 sec:  105.600 GB:   0 :       : 1;
+endscan;
+scan No0032;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d06h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:  106 sec:  300 sec:  111.600 GB:   0 :       : 1;
+     station=Mp:  113 sec:  300 sec:  111.600 GB:   0 :       : 1;
+     station=Ho:   87 sec:  300 sec:  111.779 GB:   :       : 1;
+     station=Pa:  204 sec:  300 sec:  111.600 GB:   0 :       : 1;
+endscan;
+scan No0033;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d06h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   40 sec: 1500 sec:  112.800 GB:   0 :       : 1;
+     station=Mp:   41 sec: 1500 sec:  112.800 GB:   0 :       : 1;
+     station=Ho:   42 sec: 1500 sec:  112.980 GB:   :       : 1;
+     station=Pa:   72 sec: 1500 sec:  112.800 GB:   0 :       : 1;
+endscan;
+scan No0034;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d07h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   39 sec:  300 sec:  118.800 GB:   0 :       : 1;
+     station=Mp:   41 sec:  300 sec:  118.800 GB:   0 :       : 1;
+     station=Ho:   40 sec:  300 sec:  118.990 GB:   :       : 1;
+     station=Pa:   71 sec:  300 sec:  118.800 GB:   0 :       : 1;
+endscan;
+scan No0035;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d07h20m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:  110 sec: 1500 sec:  120.000 GB:   0 :       : 1;
+     station=Mp:  117 sec: 1500 sec:  120.000 GB:   0 :       : 1;
+     station=Ho:   87 sec: 1500 sec:  120.192 GB:   :       : 1;
+     station=Pa:  213 sec: 1500 sec:  120.000 GB:   0 :       : 1;
+endscan;
+scan No0036;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d07h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:  109 sec:  300 sec:  126.000 GB:   0 :       : 1;
+     station=Mp:  116 sec:  300 sec:  126.000 GB:   0 :       : 1;
+     station=Ho:   85 sec:  300 sec:  126.202 GB:   :       : 1;
+     station=Pa:  212 sec:  300 sec:  126.000 GB:   0 :       : 1;
+endscan;
+scan No0037;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d07h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   39 sec: 1500 sec:  127.200 GB:   0 :       : 1;
+     station=Mp:   41 sec: 1500 sec:  127.200 GB:   0 :       : 1;
+     station=Ho:   37 sec: 1500 sec:  127.404 GB:   :       : 1;
+     station=Pa:   72 sec: 1500 sec:  127.200 GB:   0 :       : 1;
+endscan;
+scan No0038;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d08h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   36 sec:  300 sec:  133.200 GB:   0 :       : 1;
+     station=Mp:   38 sec:  300 sec:  133.200 GB:   0 :       : 1;
+     station=Ho:   38 sec:  300 sec:  133.413 GB:   :       : 1;
+     station=Pa:   69 sec:  300 sec:  133.200 GB:   0 :       : 1;
+endscan;
+scan No0039;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d08h20m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:  104 sec: 1500 sec:  134.400 GB:   0 :       : 1;
+     station=Mp:  112 sec: 1500 sec:  134.400 GB:   0 :       : 1;
+     station=Ho:   83 sec: 1500 sec:  134.615 GB:   :       : 1;
+     station=Pa:  206 sec: 1500 sec:  134.400 GB:   0 :       : 1;
+endscan;
+scan No0040;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d08h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   96 sec:  300 sec:  140.400 GB:   0 :       : 1;
+     station=Mp:  104 sec:  300 sec:  140.400 GB:   0 :       : 1;
+     station=Ho:   80 sec:  300 sec:  140.625 GB:   :       : 1;
+     station=Pa:  191 sec:  300 sec:  140.400 GB:   0 :       : 1;
+endscan;
+scan No0041;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d08h50m00s; mode=Doppler@G300.969; source=G337.705;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=At:   41 sec: 1500 sec:  141.600 GB:   0 :       : 1;
+     station=Mp:   43 sec: 1500 sec:  141.600 GB:   0 :       : 1;
+     station=Ho:   40 sec: 1500 sec:  141.827 GB:   :       : 1;
+     station=Pa:   79 sec: 1500 sec:  141.600 GB:   0 :       : 1;
+endscan;
+scan No0042;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d09h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   50 sec:  300 sec:  147.600 GB:   0 :       : 1;
+     station=Mp:   54 sec:  300 sec:  147.600 GB:   0 :       : 1;
+     station=Ho:   40 sec:  300 sec:  147.836 GB:   :       : 1;
+     station=Pa:  100 sec:  300 sec:  147.600 GB:   0 :       : 1;
+endscan;
+scan No0043;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d09h20m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:   95 sec: 1500 sec:  148.800 GB:   0 :       : 1;
+     station=Mp:   99 sec: 1500 sec:  148.800 GB:   0 :       : 1;
+     station=Ho:   76 sec: 1500 sec:  149.038 GB:   :       : 1;
+     station=Pa:  164 sec: 1500 sec:  148.800 GB:   0 :       : 1;
+endscan;
+scan No0044;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d09h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:  107 sec:  300 sec:  154.800 GB:   0 :       : 1;
+     station=Mp:  112 sec:  300 sec:  154.800 GB:   0 :       : 1;
+     station=Ho:   72 sec:  300 sec:  155.048 GB:   :       : 1;
+     station=Pa:  183 sec:  300 sec:  154.800 GB:   0 :       : 1;
+endscan;
+scan No0045;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d09h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   56 sec: 1500 sec:  156.000 GB:   0 :       : 1;
+     station=Mp:   61 sec: 1500 sec:  156.000 GB:   0 :       : 1;
+     station=Ho:   42 sec: 1500 sec:  156.250 GB:   :       : 1;
+     station=Pa:  119 sec: 1500 sec:  156.000 GB:   0 :       : 1;
+endscan;
+scan No0046;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d10h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   52 sec:  300 sec:  162.000 GB:   0 :       : 1;
+     station=Mp:   57 sec:  300 sec:  162.000 GB:   0 :       : 1;
+     station=Ho:   42 sec:  300 sec:  162.259 GB:   :       : 1;
+     station=Pa:  108 sec:  300 sec:  162.000 GB:   0 :       : 1;
+endscan;
+scan No0047;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d10h20m00s; mode=Doppler@G300.969; source=G300.969;
+     station=At:  120 sec: 1500 sec:  163.200 GB:   0 :       : 1;
+     station=Mp:  126 sec: 1500 sec:  163.200 GB:   0 :       : 1;
+     station=Ho:   75 sec: 1500 sec:  163.461 GB:   :       : 1;
+     station=Pa:  206 sec: 1500 sec:  163.200 GB:   0 :       : 1;
+endscan;
+scan No0048;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d10h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:  124 sec:  300 sec:  169.200 GB:   0 :       : 1;
+     station=Mp:  130 sec:  300 sec:  169.200 GB:   0 :       : 1;
+     station=Ho:   80 sec:  300 sec:  169.471 GB:   :       : 1;
+     station=Pa:  210 sec:  300 sec:  169.200 GB:   0 :       : 1;
+endscan;
+scan No0049;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d10h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   44 sec: 1500 sec:  170.400 GB:   0 :       : 1;
+     station=Mp:   48 sec: 1500 sec:  170.400 GB:   0 :       : 1;
+     station=Ho:   43 sec: 1500 sec:  170.673 GB:   :       : 1;
+     station=Pa:   91 sec: 1500 sec:  170.400 GB:   0 :       : 1;
+endscan;
+scan No0050;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d11h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   37 sec:  300 sec:  176.400 GB:   0 :       : 1;
+     station=Mp:   40 sec:  300 sec:  176.400 GB:   0 :       : 1;
+     station=Ho:   43 sec:  300 sec:  176.682 GB:   :       : 1;
+     station=Pa:   74 sec:  300 sec:  176.400 GB:   0 :       : 1;
+endscan;
+scan No0051;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d11h20m00s; mode=Doppler@G300.969; source=G337.705;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=At:   36 sec: 1500 sec:  177.600 GB:   0 :       : 1;
+     station=Mp:   39 sec: 1500 sec:  177.600 GB:   0 :       : 1;
+     station=Ho:   43 sec: 1500 sec:  177.884 GB:   :       : 1;
+     station=Pa:   73 sec: 1500 sec:  177.600 GB:   0 :       : 1;
+endscan;
+scan No0052;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d11h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   30 sec:  300 sec:  183.600 GB:   0 :       : 1;
+     station=Mp:   32 sec:  300 sec:  183.600 GB:   0 :       : 1;
+     station=Ho:   43 sec:  300 sec:  183.894 GB:   :       : 1;
+     station=Pa:   59 sec:  300 sec:  183.600 GB:   0 :       : 1;
+endscan;
+scan No0053;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d11h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   30 sec: 1500 sec:  184.800 GB:   0 :       : 1;
+     station=Mp:   31 sec: 1500 sec:  184.800 GB:   0 :       : 1;
+     station=Ho:   43 sec: 1500 sec:  185.096 GB:   :       : 1;
+     station=Pa:   58 sec: 1500 sec:  184.800 GB:   0 :       : 1;
+endscan;
+scan No0054;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d12h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   31 sec:  300 sec:  190.800 GB:   0 :       : 1;
+     station=Mp:   33 sec:  300 sec:  190.800 GB:   0 :       : 1;
+     station=Ho:   43 sec:  300 sec:  191.105 GB:   :       : 1;
+     station=Pa:   59 sec:  300 sec:  190.800 GB:   0 :       : 1;
+endscan;
+scan No0055;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d12h20m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   32 sec: 1500 sec:  192.000 GB:   0 :       : 1;
+     station=Mp:   34 sec: 1500 sec:  192.000 GB:   0 :       : 1;
+     station=Ho:   43 sec: 1500 sec:  192.307 GB:   :       : 1;
+     station=Pa:   61 sec: 1500 sec:  192.000 GB:   0 :       : 1;
+endscan;
+scan No0056;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d12h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   34 sec:  300 sec:  198.000 GB:   0 :       : 1;
+     station=Mp:   35 sec:  300 sec:  198.000 GB:   0 :       : 1;
+     station=Ho:   42 sec:  300 sec:  198.317 GB:   :       : 1;
+     station=Pa:   63 sec:  300 sec:  198.000 GB:   0 :       : 1;
+endscan;
+scan No0057;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d12h50m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   35 sec: 1500 sec:  199.200 GB:   0 :       : 1;
+     station=Mp:   36 sec: 1500 sec:  199.200 GB:   0 :       : 1;
+     station=Ho:   42 sec: 1500 sec:  199.519 GB:   :       : 1;
+     station=Pa:   65 sec: 1500 sec:  199.200 GB:   0 :       : 1;
+endscan;
+scan No0058;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d13h15m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   36 sec:  300 sec:  205.200 GB:   0 :       : 1;
+     station=Mp:   37 sec:  300 sec:  205.200 GB:   0 :       : 1;
+     station=Ho:   41 sec:  300 sec:  205.528 GB:   :       : 1;
+     station=Pa:   66 sec:  300 sec:  205.200 GB:   0 :       : 1;
+endscan;
+scan No0059;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d13h20m00s; mode=Doppler@G300.969; source=G337.705;
+     station=At:   36 sec: 1500 sec:  206.400 GB:   0 :       : 1;
+     station=Mp:   38 sec: 1500 sec:  206.400 GB:   0 :       : 1;
+     station=Ho:   41 sec: 1500 sec:  206.730 GB:   :       : 1;
+     station=Pa:   68 sec: 1500 sec:  206.400 GB:   0 :       : 1;
+endscan;
+scan No0060;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d13h45m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   37 sec:  300 sec:  212.400 GB:   0 :       : 1;
+     station=Mp:   39 sec:  300 sec:  212.400 GB:   0 :       : 1;
+     station=Ho:   40 sec:  300 sec:  212.740 GB:   :       : 1;
+     station=Pa:   68 sec:  300 sec:  212.400 GB:   0 :       : 1;
+endscan;
+scan No0061;
+* intent = "OBSERVE_TARGET"
+     start=2000y230d13h50m00s; mode=Doppler@G300.969; source=G337.705;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=At:   38 sec: 1800 sec:  213.600 GB:   0 :       : 1;
+     station=Mp:   40 sec: 1800 sec:  213.600 GB:   0 :       : 1;
+     station=Ho:   40 sec: 1800 sec:  213.942 GB:   :       : 1;
+     station=Pa:   70 sec: 1800 sec:  213.600 GB:   0 :       : 1;
+endscan;
+scan No0062;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d14h20m00s; mode=Doppler@G300.969; source=1740-517;
+     station=At:   38 sec:  300 sec:  220.800 GB:   0 :       : 1;
+     station=Mp:   40 sec:  300 sec:  220.800 GB:   0 :       : 1;
+     station=Ho:   40 sec:  300 sec:  221.153 GB:   :       : 1;
+     station=Pa:   67 sec:  300 sec:  220.800 GB:   0 :       : 1;
+endscan;
+scan No0063;
+* intent = "CALIBRATE_DELAY"
+     start=2000y230d14h25m00s; mode=Doppler@G300.969; source=1934-638;
+     station=At:   38 sec: 2400 sec:  222.000 GB:   0 :       : 1;
+     station=Mp:   40 sec: 2400 sec:  222.000 GB:   0 :       : 1;
+     station=Ho:   54 sec: 2400 sec:  222.355 GB:   :       : 1;
+     station=Pa:   74 sec: 2400 sec:  222.000 GB:   0 :       : 1;
+endscan;

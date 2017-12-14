@@ -1,0 +1,36 @@
+#  Template v2d file for DiFX correlation of egrd2
+
+vex = egrd2.vex.obs
+antennas = HN, LA, PT, BR, MK, GB
+ANTENNA HN { }
+ANTENNA LA { }
+ANTENNA PT { }
+ANTENNA BR { }
+ANTENNA MK { }
+ANTENNA GB { }
+
+# The nChan should never be less than 128.
+# For numbers of channels < 128, set specAvg so nChan/specAvg
+# gives the desired number of channels
+SETUP default
+{
+  tInt =  2.000
+  nFFTChan =    128
+  nChan =  64
+  doPolar = True # Full stokes
+}
+
+# This, along with SETUP default above, should always be done
+RULE default
+{
+  setup = default
+}
+
+#  SETUP place holders (commented)
+# SETUP trdbe_db.1cm {}
+# SETUP trdbe_rcp.1cm {}
+
+# Sources (pointing centers) with recorded data but no offset pointing centers:
+SOURCE M84 { calCode = V }
+SOURCE 3C279 { calCode = V }
+SOURCE 3C345 { calCode = V }

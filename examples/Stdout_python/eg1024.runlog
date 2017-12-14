@@ -1,0 +1,113 @@
+ 
+    Welcome to program SCHED.  Version:  11.50
+ 
+The manual is at http://www.aoc.nrao.edu/software/sched/index.html
+Unix users should set $SCHED to the base area where SCHED is installed.
+Most run time messages will be in sched.runlog
+ 
+Some useful commands to give now if running interactively:
+   SCHedule=<filename>    :  Specify input file.
+   PLOT                   :  Invokes uv, xy, rd, and uptime plotting.
+   FREQLIST=lowF,highF    :  Make frequency list (MHz).  Then exit.
+   EXIT                   :  Leave program.
+   /                      :  End of inputs - run program (or EXIT).
+ 
+SRREAD:  Reading source catalog:  Program_input
+RDSET:   Reading setup file:      eg1024-1024
+STREAD:  Reading station catalog: /home/eldering/sched/catalogs/stations_RDBE.dat
+STREAD:  Reading locations file:  /home/eldering/sched/catalogs/locations.dat
+RDLOC:  Locations.dat stations ONSALA85   and ONSALA85   appear to be the same (time and position).  Sep (m):      0.11
+SRREAD:  Reading source catalog:  /home/eldering/sched/catalogs/sources.gsfc
+GETFREQ: Reading frequency file:  /home/eldering/sched/catalogs/freq_RDBE.dat
+INPUT:   Found    51 input scans.
+SHORTN: WARNING - Source names longer than 8 characters used.
+        This will be a problem if geodetic software (SOLV etc) is used.
+        This might be a problem on some correlators.
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+SETCHAN: Must use dual sidebands because of the maximum BBCs available at some site:   8
+TWOHDSET: Using 64 track mode for wide bandwidth.
+TWOHDSET:  Using 16 Mbps per track record rate.  Mark IV format on disk only.
+SCHOPT:  First output scan will be number     1
+ 
+WRTMSG: Special message from routine AUTODOWN:
+ 
+  * Some stations are unable to reach a scheduled source before the
+    scan end time.  In most cases, those stations, if using disk
+    recordings, are being removed from the affected scans.  Usually
+    the antenna is ready late because of a long slew, especially a
+    cable wrap on alt/az antennas.  But it is also possible that
+    other parameters that can delay a scan start time, such as
+    TLEVSET (time allowed for the first scan of a setup for digital
+    backends to set levels), are playing a role.  Omission of an
+    antenna in a scan for which it is not ready by the end can be
+    overridden using DODOWN, which is scan dependent.  Also using
+    DWELL time scheduling can prevent such cases.  With DWELL
+    with a second, but not a third argument, this may still happen
+    if there are slow antennas.
+ 
+    Note that, if using DWELL with a second argument, the antenna
+    that does not make it to source is counted as one of the ones
+    not to wait for.  So don't be surprised if, for example, you
+    specified not to wait for 2 and there is only one that gets there
+    late.  There is likely to be another that was scheduled for the
+    scan that has been removed for too long a slew.
+ 
+    In cases where an antenna is removed from a scan for too long a
+    slew, a "W" will be placed as the UP indicator.  That appears
+    as a flag (along with "D", "H", "R", and "S") on some lines in
+    the summary file scan listings.  It also appears in some cases
+    in the sch file.
+ 
+    Removing scans with too long slews is capable of creating an
+    undesired situation when phase referencing.  When a wrap is
+    needed, it is usually needed for one source before the other of
+    a referencing pair.  With scan removal, this causes one of the
+    sources to get skipped repeatedly until the second source needs
+    the wrap, even though both sources would have been ok after
+    a wrap.  To try to avoid this syndrome, SCHED will not remove
+    a station from a scan for too long slew if it is an ALTAZ
+    antenna and the slew is more than 315 degrees - ie it is a
+    wrap.
+ 
+    Removing scans with too longs slews can have another bad effect
+    when scheduling with DURATION.  If a long slew preceeds a series
+    of short scans, it is possible to reject all of those short scans
+    as each is rejected, causing the next to move up to where
+    it will be rejected in turn.  Therefore SCHED detects when it
+    it has emptied a scan of stations because of slews and, instead
+    of skipping the scan as it would one with all antennas down, it
+    reinstates all of the long-slew stations.  Those stations won't
+    get to the source, but at least the next scan will be pushed out
+    to where they will get to it.
+ 
+    Be warned that, if your project can be time shifted as part of
+    dynamic scheduling, incidents of problems with long slews
+    can affect different scans than those for which you tested the
+    schedule.
+ 
+SCHOPT:  There will be    51 output scans (    1 -    51) from  63/16:00:00 to  63/18:44:40
+CHKSCN:    41 scans had more than half the antennas arrive on-source after the start time.
+              This could be normal if using duration scheduling with small gaps.
+SUMOPE:  Writing summary file eg1024.sum
+STALST:  WARNING - A station has zero axis offset, which is unlikely.
+         Accurate positions, including axis offsets are needed for correlation.
+         Is your station location information adequate?
+         See the summary file station list to see which stations are suspect.
+OMSOUT:  Writing OMS file eg1024.oms
+VXWRT :  Writing  V E X  file eg1024.vex
+V2DOUT:  Writing V2D file eg1024.tv2d
+FLAGS:   Writing apriori flagging file eg1024.flag
+ Processing EFLSBERG
+ Processing JODRELL1
+ Processing CAMBG32M
+ Processing ONSALA85
+ Processing WSTRBORK
+ Processing NOTO
+ Processing MEDICINA
+ Processing TORUN

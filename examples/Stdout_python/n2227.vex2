@@ -1,0 +1,571 @@
+VEX_rev = 2.0;
+*    SCHED vers: 
+*    VEX/SCHED:  2.0.1
+*    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
+*------------------------------------------------------------------------------
+$GLOBAL;
+     ref $EXPER = n2227;
+*                                                      +------------+
+*                         PI revision number:          |    4.0000  |
+*                                                      +------------+
+*    mode:       S/X
+*------------------------------------------------------------------------------
+$EXPER;
+*
+def n2227;
+     exper_name = n2227;
+     exper_description = "USNO Daily UT1-UTC Measurement";
+     PI_name = "David Boboltz";
+     PI_email = ut1@nrao.edu;
+*    address:   United States Naval Observatory
+*               3450 Massachusetts Ave, NW
+*               Washington, DC 20392-5420
+*               U.S.A.
+*    phone:     202 762 1488
+*    during obs:202 762 1488
+*    fax:       
+*    DELZN-based MK-PT UT1-UTC measurement
+*
+*    year, doy: 2012, 227
+*    date     : Tue 14 Aug 2012
+*    MJD      : 56153
+     exper_nominal_start=2012y227d14h30m00s;
+     exper_nominal_stop=2012y227d15h09m48s;
+*
+     target_correlator = VLBADIFX;
+*
+*    integr_time    : 2.0 s
+*    number_channels: 64
+*    number_antenna : 2
+*    cross_polarize : No
+*    weight_func    : UNIFORM
+*    distrib_medium : FTP
+*    distrib_format : FITS
+*    source_pos_cat : STANDARD
+*    distribute_to  :
+*                     Walter Brisken
+*                     P. O. Box O
+*                     Socorro NM 87801
+*                     
+*
+enddef;
+*------------------------------------------------------------------------------
+$MODE;
+*
+def Mode0;
+     ref $PROCEDURES = Procedure:Pt:Mk;
+     ref $IF = LO@2900MHzRPolTone/1:Mk:Pt;
+     ref $BBC = 16BBCs:Mk:Pt;
+     ref $PHASE_CAL_DETECT = Detect:Mk:Pt;
+     ref $FREQ = 2052.000000MHz16x32MHz:Mk:Pt;
+     ref $BITSTREAMS = BS16Ch2Bit:Mk:Pt;
+enddef;
+*------------------------------------------------------------------------------
+$IF;
+*
+def LO@2900MHzRPolTone/1;
+* Mode0: Mk, Pt
+     if_def = &IF_A : A : R :   2900.00 MHz : L : 1 MHz;
+     if_def = &IF_B : B : R :   7900.00 MHz : U : 1 MHz;
+enddef;
+*------------------------------------------------------------------------------
+$BBC;
+*
+def 16BBCs;
+* Mode0: Mk, Pt
+     BBC_assign = &BBC01 :  1 : &IF_A;
+     BBC_assign = &BBC02 :  2 : &IF_A;
+     BBC_assign = &BBC03 :  3 : &IF_A;
+     BBC_assign = &BBC04 :  4 : &IF_A;
+     BBC_assign = &BBC05 :  5 : &IF_A;
+     BBC_assign = &BBC06 :  6 : &IF_A;
+     BBC_assign = &BBC07 :  7 : &IF_B;
+     BBC_assign = &BBC08 :  8 : &IF_B;
+     BBC_assign = &BBC09 :  9 : &IF_B;
+     BBC_assign = &BBC10 : 10 : &IF_B;
+     BBC_assign = &BBC11 : 11 : &IF_B;
+     BBC_assign = &BBC12 : 12 : &IF_B;
+     BBC_assign = &BBC13 : 13 : &IF_B;
+     BBC_assign = &BBC14 : 14 : &IF_B;
+     BBC_assign = &BBC15 : 15 : &IF_B;
+     BBC_assign = &BBC16 : 16 : &IF_B;
+enddef;
+*------------------------------------------------------------------------------
+$PHASE_CAL_DETECT;
+*
+def Detect;
+* Mode0: Mk, Pt
+     phase_cal_detect = &PCD : 2;
+enddef;
+*------------------------------------------------------------------------------
+$FREQ;
+*
+def 2052.000000MHz16x32MHz;
+* Mode0: Mk, Pt
+     chan_def =  : 2052.000000 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2084.000000 MHz : U :   32.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2116.000000 MHz : U :   32.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2212.000000 MHz : U :   32.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 2244.000000 MHz : U :   32.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 2276.000000 MHz : U :   32.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8460.000000 MHz : L :   32.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8492.000000 MHz : L :   32.00 MHz : &CH08 : &BBC08 : &PCD;
+     chan_def =  : 8524.000000 MHz : L :   32.00 MHz : &CH09 : &BBC09 : &PCD;
+     chan_def =  : 8588.000000 MHz : L :   32.00 MHz : &CH10 : &BBC10 : &PCD;
+     chan_def =  : 8652.000000 MHz : L :   32.00 MHz : &CH11 : &BBC11 : &PCD;
+     chan_def =  : 8716.000000 MHz : L :   32.00 MHz : &CH12 : &BBC12 : &PCD;
+     chan_def =  : 8780.000000 MHz : L :   32.00 MHz : &CH13 : &BBC13 : &PCD;
+     chan_def =  : 8844.000000 MHz : L :   32.00 MHz : &CH14 : &BBC14 : &PCD;
+     chan_def =  : 8876.000000 MHz : L :   32.00 MHz : &CH15 : &BBC15 : &PCD;
+     chan_def =  : 8908.000000 MHz : L :   32.00 MHz : &CH16 : &BBC16 : &PCD;
+enddef;
+*------------------------------------------------------------------------------
+$BITSTREAMS;
+*
+def BS16Ch2Bit;
+* Mode0: Mk, Pt
+     stream_sample_rate =  64.000 Ms/sec;
+     stream_def = &CH01 : sign :  0 :  0;
+     stream_def = &CH01 :  mag :  1 :  1;
+     stream_def = &CH02 : sign :  2 :  2;
+     stream_def = &CH02 :  mag :  3 :  3;
+     stream_def = &CH03 : sign :  4 :  4;
+     stream_def = &CH03 :  mag :  5 :  5;
+     stream_def = &CH04 : sign :  6 :  6;
+     stream_def = &CH04 :  mag :  7 :  7;
+     stream_def = &CH05 : sign :  8 :  8;
+     stream_def = &CH05 :  mag :  9 :  9;
+     stream_def = &CH06 : sign : 10 : 10;
+     stream_def = &CH06 :  mag : 11 : 11;
+     stream_def = &CH07 : sign : 12 : 12;
+     stream_def = &CH07 :  mag : 13 : 13;
+     stream_def = &CH08 : sign : 14 : 14;
+     stream_def = &CH08 :  mag : 15 : 15;
+     stream_def = &CH09 : sign : 16 : 16;
+     stream_def = &CH09 :  mag : 17 : 17;
+     stream_def = &CH10 : sign : 18 : 18;
+     stream_def = &CH10 :  mag : 19 : 19;
+     stream_def = &CH11 : sign : 20 : 20;
+     stream_def = &CH11 :  mag : 21 : 21;
+     stream_def = &CH12 : sign : 22 : 22;
+     stream_def = &CH12 :  mag : 23 : 23;
+     stream_def = &CH13 : sign : 24 : 24;
+     stream_def = &CH13 :  mag : 25 : 25;
+     stream_def = &CH14 : sign : 26 : 26;
+     stream_def = &CH14 :  mag : 27 : 27;
+     stream_def = &CH15 : sign : 28 : 28;
+     stream_def = &CH15 :  mag : 29 : 29;
+     stream_def = &CH16 : sign : 30 : 30;
+     stream_def = &CH16 :  mag : 31 : 31;
+enddef;
+*------------------------------------------------------------------------------
+$STATION;
+*
+def Pt;
+     ref $ANTENNA = VLBA_PT;
+     ref $DAS = RDBE_PFB+Mark5C;
+     ref $SITE = VLBA_PT;
+enddef;
+*
+def Mk;
+     ref $ANTENNA = VLBA_MK;
+     ref $DAS = RDBE_PFB+Mark5C;
+     ref $SITE = VLBA_MK;
+enddef;
+*------------------------------------------------------------------------------
+$ANTENNA;
+*
+def VLBA_MK;
+     axis_type = az : el;
+     antenna_motion = az :   86.8 deg/min : 6 sec;
+     antenna_motion = el :   28.3 deg/min : 6 sec;
+     pointing_sector = &ccw : ccw : az : -90.0 :  90.0 : el : 2.25 : 90.0;
+     pointing_sector =   &n :   n : az :  90.0 : 270.0 : el : 2.25 : 90.0;
+     pointing_sector =  &cw :  cw : az : 270.0 : -90.0 : el : 2.25 : 90.0;
+     axis_offset =     2.1343 m;
+enddef;
+*
+def VLBA_PT;
+     axis_type = az : el;
+     antenna_motion = az :   82.3 deg/min : 6 sec;
+     antenna_motion = el :   29.3 deg/min : 6 sec;
+     pointing_sector = &ccw : ccw : az : -90.0 :  90.0 : el : 2.25 : 90.0;
+     pointing_sector =   &n :   n : az :  90.0 : 270.0 : el : 2.25 : 90.0;
+     pointing_sector =  &cw :  cw : az : 270.0 : -90.0 : el : 2.25 : 90.0;
+     axis_offset =     2.1375 m;
+enddef;
+*------------------------------------------------------------------------------
+$DAS;
+*
+def RDBE_PFB+Mark5C;
+     equip = recorder :   Mark5C :   &Mark5C;
+     equip =     rack : RDBE_PFB : &RDBE_PFB;
+enddef;
+*------------------------------------------------------------------------------
+$SITE;
+*
+def VLBA_MK;
+     site_type = fixed;
+     site_name = VLBA_MK;
+     site_ID = Mk;
+     site_position = -5464075.18470 m : -2495248.10550 m :  2148297.36490 m;
+     site_velocity =  -0.014440 m/yr :   0.062640 m/yr :   0.032340 m/yr;
+     site_position_epoch = 2013y1d;
+     horizon_map_az = 0.0 deg : 5.0 : 10.0 : 15.0 : 20.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 170.0 : 175.0 : 185.0 : 190.0 : 195.0 : 200.0 : 205.0 : 210.0 : 215.0 : 220.0 : 255.0 : 260.0 : 270.0 : 275.0 : 280.0 : 285.0 : 290.0 : 295.0 : 300.0 : 305.0 : 310.0 : 315.0 : 320.0 : 325.0 : 330.0 : 335.0 : 340.0 : 345.0 : 350.0 : 355.0 : 360.0;
+     horizon_map_el = 5.0 deg : 4.0 : 3.0 : 3.0 : 2.0 : 2.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 6.0 : 8.0 : 8.0 : 11.0 : 12.0 : 13.0 : 13.0 : 11.0 : 11.0 : 9.0 : 7.0 : 5.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 5.0 : 6.0 : 8.0 : 10.0 : 12.0 : 14.0 : 12.0 : 11.0 : 9.0 : 10.0 : 11.0 : 10.0 : 12.0 : 14.0 : 12.0 : 9.0 : 7.0 : 5.0;
+enddef;
+*
+def VLBA_PT;
+     site_type = fixed;
+     site_name = VLBA_PT;
+     site_ID = Pt;
+     site_position = -1640953.93830 m : -5014816.02370 m :  3575411.79160 m;
+     site_velocity =  -0.014610 m/yr :  -0.000210 m/yr :  -0.005210 m/yr;
+     site_position_epoch = 2013y1d;
+     horizon_map_az = 0.0 deg : 5.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 165.0 : 170.0 : 180.0 : 185.0 : 190.0 : 195.0 : 200.0 : 240.0 : 245.0 : 250.0 : 255.0 : 265.0 : 270.0 : 275.0 : 280.0 : 285.0 : 360.0;
+     horizon_map_el = 2.0 deg : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 3.0 : 3.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0;
+enddef;
+*------------------------------------------------------------------------------
+$PROCEDURES;
+*
+def Procedure;
+     procedure_name_prefix =  "01";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*------------------------------------------------------------------------------
+$SOURCE;
+def IIIZW2;
+     source_name = IIIZW2;
+     ra = 00h10m31.0059090s; dec = 10d58'29.504285"; ref_coord_frame = J2000;
+enddef;
+def 0019+058;
+     source_name = 0019+058;
+     ra = 00h22m32.4412105s; dec = 06d08'04.268974"; ref_coord_frame = J2000;
+enddef;
+def 0048-097;
+     source_name = 0048-097;
+     ra = 00h50m41.3173870s; dec = -09d29'05.210290"; ref_coord_frame = J2000;
+enddef;
+def 0055-059;
+     source_name = 0055-059;
+     ra = 00h58m05.0663113s; dec = -05d39'52.278156"; ref_coord_frame = J2000;
+enddef;
+def 0115-214;
+     source_name = 0115-214;
+     ra = 01h17m48.7801337s; dec = -21d11'06.633134"; ref_coord_frame = J2000;
+enddef;
+def 0332-403;
+     source_name = 0332-403;
+     ra = 03h34m13.6544894s; dec = -40d08'25.397888"; ref_coord_frame = J2000;
+enddef;
+def 0340+362;
+     source_name = 0340+362;
+     ra = 03h43m28.9524086s; dec = 36d22'12.429663"; ref_coord_frame = J2000;
+enddef;
+def 0345+460;
+     source_name = 0345+460;
+     ra = 03h49m18.7415716s; dec = 46d09'59.657788"; ref_coord_frame = J2000;
+enddef;
+def 0358+210;
+     source_name = 0358+210;
+     ra = 04h01m45.1660764s; dec = 21d10'28.586979"; ref_coord_frame = J2000;
+enddef;
+def 0400-319;
+     source_name = 0400-319;
+     ra = 04h02m21.2660063s; dec = -31d47'25.945473"; ref_coord_frame = J2000;
+enddef;
+def 0402-362;
+     source_name = 0402-362;
+     ra = 04h03m53.7498989s; dec = -36d05'01.913125"; ref_coord_frame = J2000;
+enddef;
+def 0405-385;
+     source_name = 0405-385;
+     ra = 04h06m59.0353375s; dec = -38d26'28.042357"; ref_coord_frame = J2000;
+enddef;
+def 0415+398;
+     source_name = 0415+398;
+     ra = 04h19m22.5495223s; dec = 39d55'28.977513"; ref_coord_frame = J2000;
+enddef;
+def 0422-380;
+     source_name = 0422-380;
+     ra = 04h24m42.2437084s; dec = -37d56'20.784170"; ref_coord_frame = J2000;
+enddef;
+def 0430+289;
+     source_name = 0430+289;
+     ra = 04h33m37.8298597s; dec = 29d05'55.477012"; ref_coord_frame = J2000;
+enddef;
+def 0442+389;
+     source_name = 0442+389;
+     ra = 04h46m11.4940339s; dec = 39d00'17.099955"; ref_coord_frame = J2000;
+enddef;
+def 0506+101;
+     source_name = 0506+101;
+     ra = 05h09m27.4570691s; dec = 10d11'44.600120"; ref_coord_frame = J2000;
+enddef;
+def 0524+034;
+     source_name = 0524+034;
+     ra = 05h27m32.7054441s; dec = 03d31'31.516617"; ref_coord_frame = J2000;
+enddef;
+def 0534-340;
+     source_name = 0534-340;
+     ra = 05h36m28.4323726s; dec = -34d01'11.468371"; ref_coord_frame = J2000;
+enddef;
+def 0537-286;
+     source_name = 0537-286;
+     ra = 05h39m54.2814732s; dec = -28d39'55.947897"; ref_coord_frame = J2000;
+enddef;
+def 0606-223;
+     source_name = 0606-223;
+     ra = 06h08m59.6868447s; dec = -22d20'20.956638"; ref_coord_frame = J2000;
+enddef;
+def 0627-199;
+     source_name = 0627-199;
+     ra = 06h29m23.7618648s; dec = -19d59'19.723569"; ref_coord_frame = J2000;
+enddef;
+def 0749+540;
+     source_name = 0749+540;
+     ra = 07h53m01.3845675s; dec = 53d52'59.637088"; ref_coord_frame = J2000;
+enddef;
+def 0804+499;
+     source_name = 0804+499;
+     ra = 08h08m39.6662836s; dec = 49d50'36.530415"; ref_coord_frame = J2000;
+enddef;
+def J1058+81;
+     source_name = J1058+81;
+     ra = 10h58m11.5353667s; dec = 81d14'32.675174"; ref_coord_frame = J2000;
+enddef;
+def 1637+826;
+     source_name = 1637+826;
+     ra = 16h32m31.9698993s; dec = 82d32'16.399948"; ref_coord_frame = J2000;
+enddef;
+def 1803+784;
+     source_name = 1803+784;
+     ra = 18h00m45.6839183s; dec = 78d28'04.018440"; ref_coord_frame = J2000;
+enddef;
+*------------------------------------------------------------------------------
+$SCHED;
+*
+scan No0002;
+     start = 2012y227d14h30m56s;
+     mode = Mode0;
+     source = 0405-385;
+     station = Pt : 0 sec : 20 sec :     0.000 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :     0.000 GB : &n : 1;
+endscan;
+*
+scan No0003;
+     start = 2012y227d14h32m56s;
+     mode = Mode0;
+     source = IIIZW2;
+     station = Pt : 0 sec : 20 sec :     4.103 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :     4.103 GB : &n : 1;
+endscan;
+*
+scan No0004;
+     start = 2012y227d14h35m13s;
+     mode = Mode0;
+     source = 0340+362;
+     station = Pt : 0 sec : 20 sec :     8.205 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :     8.205 GB : &n : 1;
+endscan;
+*
+scan No0005;
+     start = 2012y227d14h38m13s;
+     mode = Mode0;
+     source = 0115-214;
+     station = Pt : 0 sec : 20 sec :    12.308 GB : &cw : 1;
+     station = Mk : 0 sec : 20 sec :    12.308 GB : &cw : 1;
+endscan;
+*
+scan No0006;
+     start = 2012y227d14h39m30s;
+     mode = Mode0;
+     source = 0332-403;
+     station = Pt : 0 sec : 20 sec :    16.410 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    16.410 GB : &n : 1;
+endscan;
+*
+scan No0007;
+     start = 2012y227d14h40m21s;
+     mode = Mode0;
+     source = 0534-340;
+     station = Pt : 0 sec : 20 sec :    20.513 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    20.513 GB : &n : 1;
+endscan;
+*
+scan No0008;
+     start = 2012y227d14h42m06s;
+     mode = Mode0;
+     source = 0524+034;
+     station = Pt : 0 sec : 20 sec :    24.615 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    24.615 GB : &n : 1;
+endscan;
+*
+scan No0009;
+     start = 2012y227d14h42m49s;
+     mode = Mode0;
+     source = 0506+101;
+     station = Pt : 0 sec : 20 sec :    28.718 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    28.718 GB : &n : 1;
+endscan;
+*
+scan No0010;
+     start = 2012y227d14h44m26s;
+     mode = Mode0;
+     source = 0627-199;
+     station = Pt : 0 sec : 20 sec :    32.820 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    32.820 GB : &n : 1;
+endscan;
+*
+scan No0011;
+     start = 2012y227d14h45m05s;
+     mode = Mode0;
+     source = 0537-286;
+     station = Pt : 0 sec : 20 sec :    36.923 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    36.923 GB : &n : 1;
+endscan;
+*
+scan No0012;
+     start = 2012y227d14h46m56s;
+     mode = Mode0;
+     source = 0048-097;
+     station = Pt : 0 sec : 20 sec :    41.026 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    41.026 GB : &n : 1;
+endscan;
+*
+scan No0013;
+     start = 2012y227d14h47m32s;
+     mode = Mode0;
+     source = 0055-059;
+     station = Pt : 0 sec : 20 sec :    45.128 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    45.128 GB : &n : 1;
+endscan;
+*
+scan No0014;
+     start = 2012y227d14h50m12s;
+     mode = Mode0;
+     source = 0442+389;
+     station = Pt : 0 sec : 20 sec :    49.231 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    49.231 GB : &n : 1;
+endscan;
+*
+scan No0015;
+     start = 2012y227d14h50m50s;
+     mode = Mode0;
+     source = 0415+398;
+     station = Pt : 0 sec : 20 sec :    53.333 GB :  &cw : 1;
+     station = Mk : 0 sec : 20 sec :    53.333 GB : &ccw : 1;
+endscan;
+*
+scan No0016;
+     start = 2012y227d14h51m34s;
+     mode = Mode0;
+     source = 0345+460;
+     station = Pt : 0 sec : 20 sec :    57.436 GB :  &cw : 1;
+     station = Mk : 0 sec : 20 sec :    57.436 GB : &ccw : 1;
+endscan;
+*
+scan No0017;
+     start = 2012y227d14h53m30s;
+     mode = Mode0;
+     source = 0804+499;
+     station = Pt : 0 sec : 20 sec :    61.538 GB :  &cw : 1;
+     station = Mk : 0 sec : 20 sec :    61.538 GB : &ccw : 1;
+endscan;
+*
+scan No0018;
+     start = 2012y227d14h54m04s;
+     mode = Mode0;
+     source = 0749+540;
+     station = Pt : 0 sec : 20 sec :    65.641 GB :  &cw : 1;
+     station = Mk : 0 sec : 20 sec :    65.641 GB : &ccw : 1;
+endscan;
+*
+scan No0019;
+     start = 2012y227d14h57m07s;
+     mode = Mode0;
+     source = 0422-380;
+     station = Pt : 0 sec : 20 sec :    69.743 GB :  &cw : 1;
+     station = Mk : 0 sec : 20 sec :    69.743 GB : &ccw : 1;
+endscan;
+*
+scan No0020;
+     start = 2012y227d14h57m43s;
+     mode = Mode0;
+     source = 0402-362;
+     station = Pt : 0 sec : 20 sec :    73.846 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    73.846 GB : &n : 1;
+endscan;
+*
+scan No0021;
+     start = 2012y227d15h00m09s;
+     mode = Mode0;
+     source = 1803+784;
+     station = Pt : 0 sec : 20 sec :    77.949 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    77.949 GB : &n : 1;
+endscan;
+*
+scan No0022;
+     start = 2012y227d15h00m45s;
+     mode = Mode0;
+     source = 1637+826;
+     station = Pt : 0 sec : 20 sec :    82.051 GB :  &cw : 1;
+     station = Mk : 0 sec : 20 sec :    82.051 GB : &ccw : 1;
+endscan;
+*
+scan No0023;
+     start = 2012y227d15h03m14s;
+     mode = Mode0;
+     source = 0405-385;
+     station = Pt : 0 sec : 20 sec :    86.154 GB :  &cw : 1;
+     station = Mk : 0 sec : 20 sec :    86.154 GB : &ccw : 1;
+endscan;
+*
+scan No0024;
+     start = 2012y227d15h03m55s;
+     mode = Mode0;
+     source = 0400-319;
+     station = Pt : 0 sec : 20 sec :    90.256 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    90.256 GB : &n : 1;
+endscan;
+*
+scan No0025;
+     start = 2012y227d15h05m28s;
+     mode = Mode0;
+     source = 0019+058;
+     station = Pt : 0 sec : 20 sec :    94.359 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    94.359 GB : &n : 1;
+endscan;
+*
+scan No0026;
+     start = 2012y227d15h06m04s;
+     mode = Mode0;
+     source = IIIZW2;
+     station = Pt : 0 sec : 20 sec :    98.461 GB : &n : 1;
+     station = Mk : 0 sec : 20 sec :    98.461 GB : &n : 1;
+endscan;
+*
+scan No0027;
+     start = 2012y227d15h08m39s;
+     mode = Mode0;
+     source = 0430+289;
+     station = Pt : 0 sec : 20 sec :   102.564 GB : &cw : 1;
+     station = Mk : 0 sec : 20 sec :   102.564 GB :  &n : 1;
+endscan;
+*
+scan No0028;
+     start = 2012y227d15h09m28s;
+     mode = Mode0;
+     source = 0358+210;
+     station = Pt : 0 sec : 20 sec :   106.666 GB :  &n : 1;
+     station = Mk : 0 sec : 20 sec :   106.666 GB : &cw : 1;
+endscan;
