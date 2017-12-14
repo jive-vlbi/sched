@@ -1,0 +1,145 @@
+ 
+    Welcome to program SCHED.  Version:  11.50
+ 
+The manual is at http://www.aoc.nrao.edu/software/sched/index.html
+Unix users should set $SCHED to the base area where SCHED is installed.
+Most run time messages will be in sched.runlog
+ 
+Some useful commands to give now if running interactively:
+   SCHedule=<filename>    :  Specify input file.
+   PLOT                   :  Invokes uv, xy, rd, and uptime plotting.
+   FREQLIST=lowF,highF    :  Make frequency list (MHz).  Then exit.
+   EXIT                   :  Leave program.
+   /                      :  End of inputs - run program (or EXIT).
+ 
+RDSET:   Reading setup file:      band.21cm
+RDSET:   Reading setup file:      band.18cm
+RDSET:   Reading setup file:      band.13cm
+RDSET:   Reading setup file:      band.6cm
+RDSET:   Reading setup file:      band.4cm
+RDSET:   Reading setup file:      band.2cm
+RDSET:   Reading setup file:      band.1cm
+RDSET:   Reading setup file:      band.7mm
+RDSET:   Reading setup file:      band.6-16
+RDSET:   Reading setup file:      band.6-4
+RDSET:   Reading setup file:      band.9050
+STREAD:  Reading station catalog: /home/eldering/sched/catalogs/stations.dat
+STREAD:  Reading locations file:  /home/eldering/sched/catalogs/locations.dat
+RDLOC:  Locations.dat stations ONSALA85   and ONSALA85   appear to be the same (time and position).  Sep (m):      0.11
+GLSTDAY: CAUTION:  You have specified a UT start day for an LST schedule.
+    Unless this is for dynamic scheduling, please check scan dates carefully.
+SRREAD:  Reading source catalog:  /home/eldering/sched/catalogs/sources.rfc
+GETFREQ: Reading frequency file:  /home/eldering/sched/catalogs/freq.dat
+INPUT:   Found    11 input scans.
+STREAD: ==== WARNING ==== Mark5A specified for a VLBA  station.
+        Those recorders have been removed from most VLBA stations.
+SETREC:  Barrel roll is obsolete - not used for disk
+ 
+HARMWARN:  Setup file: band.1cm
+ 
+WRTMSG: Special message from routine HARMWARN:
+ 
+Internally generated RFI tones can result from mixing of harmonics of
+the front-end synthesizers on the VLBA.  Under some circumstances,
+these tones can have very high amplitudes and cause ringing across the
+band.  In other circumstances, they are not actually seen.  An
+exhaustive study of when they are a problem has not been made.  They
+are known to be an issue with the new 6cm system when two different
+LOs are used to get observations at well separated RF frequencies.
+Spot checks for 13cm/4cm and 1cm observations suggest that they might
+not actually be a problem there.  The tones are likely to be strongest
+with lower harmonics with the worst case being when the fundamental
+output of one synthesizer is in the observing band for another.
+ 
+Any pair of the 3 synthesizers can be involved.  Also, the oscillator
+frequency for synthesizer outputs above 8.0 GHz is actually at half
+the output freqeuncy, so one needs to worry about harmonics of that
+half frequency.
+ 
+Some of the synthesizer frequencies will be forced by the science.
+But the unused synthesizers can be set at any valid set point and that
+choice matters.  SCHED can do fairly well at picking benign settings
+so it is recommended to let SCHED make the choice.  SCHED warns when
+the specified synthesizer frequencies could cause problems.  You are
+seeing this message because SCHED has detected one or more cases in
+your setups where harmonics of the LO settings can mix and produce a
+tone in your IF bands.  This does not mean that there will be a signal
+there for sure, just that it is possible.  Also, such tones are
+normally only a problem if they fall within a baseband, so the
+warnings below indicate if that is the case, at least if you have not
+changed the frequenies from the setup file values using Doppler or
+in-line frequency specification.  You probably only need to worry if
+there is a 'yes' in the last column.
+ 
+If you get this warning and have forced the unused synthesizer
+frequencies, you should change that and let SCHED pick the
+frequencies.  Or you can try other settings.  Sometimes a specific RF
+frequency can be observed with more than one setting of the
+synthesizers.  Check the freq.dat table for alternatives and, if there
+are some, try forcing them.  If your science can tolerate slightly
+different frequencies, such as when obtaining wide spanned bandwidth
+with observations at opposite ends of the receiver range, you might be
+able to move the chosen bands to allow use of a different synthesizer
+setting.  Perhaps the easiest thing to do in most cases is to shift
+your baseband frequecies so that the tone, while still in the IF, is
+not in one of the basebands.
+ 
+ 
+          There are possible tones in the IF due to mixing of harmonics of the
+          VLBA front end synthesizer outputs.  See sched.runlog for detailed information.
+ 
+Setup Syn  LO(GHz)  Osc Harmonic Syn LO(GHz)  Osc Harmonic   IF (MHz) RF    In BBC
+  61   1     9.1   4.55    3.5    3   12.4   6.20    2.5    850.00  22350.00   NO
+  61   1     9.1   4.55    4.0    3   12.4   6.20    3.0    800.00  22300.00   NO
+ 
+CHKSET:  See sched.runlog for information on 2cm frequencies.
+ 
+WRTMSG: Special message from routine CHKSET:
+ 
+NOTE ABOUT 2CM FREQUENCIES: This message was triggered by your
+observation with the legacy system near 15.3 GHz.  There is an
+inconsistency between the frequencies specified in the standard setup
+files and by a specification of BAND='2cm' in SCHED.  The standard
+setup files use a center frequency of 15360.99.  This is also the
+frequency at which the VLBA gains are measured.  The center frequency
+used by SCHED for BAND='2cm' is 15285.49.  These frequencies are near
+the edge of the "U" band at the VLA so it is likely that the lower
+frequency was chosen for better VLA performance.  On the other hand,
+the higher frequency is in a shared radio astronomy band (15.35-15.4
+GHz) so is more protected.  One or the other could be changed so that
+they match, but that has not been done in order to avoid a glitch in
+on-going projects.  For most purposes, these two frequency settings
+should be equivalent, but this message is provided to clarify the
+situation, and to explain why the calibration gains might be for a
+slightly different frequency than your observations.
+ 
+ 
+ 
+WRTMSG: Special message from routine CHKVDIFX:
+ 
+You have allowed the DiFX software correlator to adjust your average
+time to be an integral number of input FFT intervals (and an integral
+number of short-term accumulator intervals).  You did this by
+specifying CORAVG without a second argument set to "EXACT".  What you
+did is the default, and recommended, option.  The adjustment will be a
+few percent or less in most cases, although it can get as high as
+sqrt(2) for an extreme narrow bandwidth case with a large number of
+spectral channels.
+ 
+SCHOPT:  First output scan will be number     1
+SCHOPT:  There will be    11 output scans (    1 -    11) from  41/21:48:13 to  41/23:17:58
+SUMOPE:  Writing summary file mt506.sum
+OMSOUT:  Writing OMS file mt506.oms
+VXWRT :  Writing  V E X  file mt506.vex
+V2DOUT:  Writing V2D file mt506.tv2d
+FLAGS:   Writing apriori flagging file mt506.flag
+ Processing VLBA_PT
+ Processing VLBA_KP
+ Processing VLBA_LA
+ Processing VLBA_SC
+ Processing VLBA_FD
+ Processing VLBA_HN
+ Processing VLBA_NL
+ Processing VLBA_BR
+ Processing VLBA_OV
+ Processing VLBA_MK

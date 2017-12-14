@@ -1,0 +1,1910 @@
+VEX_rev = 1.5;
+*    VEX/SCHED:  1.5.87
+*    Other versions: Sched:  11.5  Plot: 1.06  JPL-ephem: 1.01
+*------------------------------------------------------------------------------
+$GLOBAL;
+     ref $EXPER = EO906;
+*                                                      +------------+
+*                         PI revision number:          |    1.0000  |
+*                                                      +------------+
+*    mode:       Observations of an extragalactic HI source at 21cm (128 Mb/s)
+*------------------------------------------------------------------------------
+$EXPER;
+*
+def EO906;
+     exper_name = EO906;
+     exper_description = "EVN observations of my favourite extragalactic 21-cm source";
+     PI_name = "A.N. Observer";
+     PI_email = anobserver@institute.country;
+*    address:   An Institute
+*               A Street
+*               A Town
+*               A Country
+*    phone:     555 1000
+*    during obs:555 1000
+*    fax:       555 1001
+*    notes:     Place additional information here (note2-4 available)
+*
+*    year, doy: 2002, 359
+*    date     : Wed 25 Dec 2002
+*    MJD      : 52633
+     exper_nominal_start=2002y359d00h15m00s;
+     exper_nominal_stop=2002y359d11h07m00s;
+*
+     target_correlator = JIVE;
+*
+*    integr_time    :     2.000 s
+*    number_channels:   512
+*    number_antenna :  8
+*    cross_polarize : No
+*    weight_func    : UNIFORM
+*    distrib_medium : DAT
+*    distrib_format : FITS
+*    source_pos_cat : FROM SCHEDULE
+*    distribute_to  : 
+*                     An Institute
+*                     A Street
+*                     A Country
+*    corr_notes : 
+*               Place special requirements here (cornote2-4 available)
+*
+enddef;
+*------------------------------------------------------------------------------
+$MODE;
+*
+def eo999.21cm;
+     ref $PROCEDURES = Mode_01;
+     ref $FREQ = 1420.00MHz4x8MHz:Jb:Wb:Mc:On:Ur;
+     ref $FREQ = 1420.00MHz4x8MHz#02:Ef;
+     ref $FREQ = 1420.00MHz4x8MHz#03:Nt:Tr;
+     ref $IF = LO@1230MHzDPolNoTone:Jb;
+     ref $IF = LO@1265MHzDPolNoTone:Wb;
+     ref $IF = LO@1250MHzDPolNoTone:Ef;
+     ref $IF = LO@1036MHzDPolNoTone:Mc;
+     ref $IF = LO@799MHzDPolNoTone:Nt;
+     ref $IF = LO@1220MHzDPolNoTone:On;
+     ref $IF = LO@2300MHzDPolNoTone:Tr;
+     ref $IF = LO@1300MHzDPolNoTone:Ur;
+     ref $BBC = 4BBCs:Jb:Wb:Mc:On:Ur;
+     ref $BBC = 4BBCs#02:Ef;
+     ref $BBC = 4BBCs#03:Nt:Tr;
+     ref $TRACKS = MKIV.4Ch2bit1to2:Jb:Mc:Nt:On:Tr;
+     ref $TRACKS = MARK5B.4Ch2bit1to1:Wb:Ur;
+     ref $TRACKS = MARK5B.4Ch2bit1to1#02:Ef;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Jb:Wb:Ef:Mc:Nt:On:Tr:Ur;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = NoDetect:Jb:Wb:Ef:Mc:Nt:On:Tr:Ur;
+enddef;
+*
+def Doppler@M84;
+     ref $PROCEDURES = Mode_02;
+     ref $FREQ = 1411.56MHz4x8MHz:Jb:Wb:Mc:On:Ur;
+     ref $FREQ = 1411.56MHz4x8MHz#02:Ef;
+     ref $FREQ = 1411.56MHz4x8MHz#03:Nt:Tr;
+     ref $IF = LO@1230MHzDPolNoTone:Jb;
+     ref $IF = LO@1265MHzDPolNoTone:Wb;
+     ref $IF = LO@1250MHzDPolNoTone:Ef;
+     ref $IF = LO@1036MHzDPolNoTone:Mc;
+     ref $IF = LO@799MHzDPolNoTone:Nt;
+     ref $IF = LO@1220MHzDPolNoTone:On;
+     ref $IF = LO@2300MHzDPolNoTone:Tr;
+     ref $IF = LO@1300MHzDPolNoTone:Ur;
+     ref $BBC = 4BBCs:Jb:Wb:Mc:On:Ur;
+     ref $BBC = 4BBCs#02:Ef;
+     ref $BBC = 4BBCs#03:Nt:Tr;
+     ref $TRACKS = MKIV.4Ch2bit1to2:Jb:Mc:Nt:On:Tr;
+     ref $TRACKS = MARK5B.4Ch2bit1to1:Wb:Ur;
+     ref $TRACKS = MARK5B.4Ch2bit1to1#02:Ef;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Jb:Wb:Ef:Mc:Nt:On:Tr:Ur;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = NoDetect:Jb:Wb:Ef:Mc:Nt:On:Tr:Ur;
+enddef;
+*------------------------------------------------------------------------------
+$STATION;
+*
+def Jb;
+     ref $SITE = JODRELL1;
+     ref $ANTENNA = JODRELL1;
+     ref $DAS = 2MKIV+NONE<Mark5A;
+enddef;
+*
+def Wb;
+     ref $SITE = WSTRBORK;
+     ref $ANTENNA = WSTRBORK;
+     ref $DAS = 2MKIV+NONE<;
+enddef;
+*
+def Ef;
+     ref $SITE = EFLSBERG;
+     ref $ANTENNA = EFLSBERG;
+     ref $DAS = 2DBBC+NONE<;
+enddef;
+*
+def Mc;
+     ref $SITE = MEDICINA;
+     ref $ANTENNA = MEDICINA;
+     ref $DAS = 2MKIV+NONE<Mark5A;
+enddef;
+*
+def Nt;
+     ref $SITE = NOTO;
+     ref $ANTENNA = NOTO;
+     ref $DAS = 2VLBA4+NONE<Mark5A;
+enddef;
+*
+def On;
+     ref $SITE = ONSALA85;
+     ref $ANTENNA = ONSALA85;
+     ref $DAS = 2MKIV+NONE<Mark5A;
+enddef;
+*
+def Tr;
+     ref $SITE = TORUN;
+     ref $ANTENNA = TORUN;
+     ref $DAS = 1VLBA4+NONE<Mark5A;
+enddef;
+*
+def Ur;
+     ref $SITE = URUMQI;
+     ref $ANTENNA = URUMQI;
+     ref $DAS = 2MKIV+NONE<;
+enddef;
+*------------------------------------------------------------------------------
+$PROCEDURES;
+*
+def Mode_01;
+     procedure_name_prefix =  "01";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_02;
+     procedure_name_prefix =  "02";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*------------------------------------------------------------------------------
+$SITE;
+*
+def JODRELL1;
+     site_type = fixed;
+     site_name = JODRELL1;
+     site_ID = Jb;
+*    elev=  179.41 long= 002:18:30. lat= 53:14:11.5
+     site_position = 3822626.04000 m: -154105.65000 m: 5086486.04000 m;
+     site_velocity = -0.011700   m/yr:  0.017040   m/yr:  0.009310  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 1997y001d;
+     site_position_epoch =   50449;
+enddef;
+*
+def WSTRBORK;
+     site_type = fixed;
+     site_name = WSTRBORK;
+     site_ID = Wb;
+*    elev=   71.21 long=-006:38:00. lat= 52:54:55.1
+     site_position = 3828445.65900 m:  445223.60000 m: 5064921.56800 m;
+     site_velocity = -0.013530   m/yr:  0.017040   m/yr:  0.008730  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 1997y001d;
+     site_position_epoch =   50449;
+enddef;
+*
+def EFLSBERG;
+     site_type = fixed;
+     site_name = EFLSBERG;
+     site_ID = Ef;
+*    elev=  416.72 long=-006:53:01. lat= 50:31:29.4
+     site_position = 4033947.26160 m:  486990.78660 m: 4900430.99150 m;
+     site_velocity = -0.013620   m/yr:  0.016920   m/yr:  0.010770  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+     horizon_map_az =  0.0 deg: 10.0: 20.0: 30.0: 40.0: 50.0: 60.0: 70.0: 80.0:
+                                90.0:100.0:110.0:120.0:130.0:140.0:150.0:160.0:
+                               170.0:180.0:190.0:200.0:210.0:220.0:230.0:240.0:
+                               250.0:260.0:270.0:280.0:290.0:300.0:310.0:320.0:
+                               330.0:340.0:350.0:360.0;
+     horizon_map_el = 11.0 deg: 13.0: 16.0: 19.0: 21.0: 21.0: 21.0: 20.0: 18.0:
+                                15.0: 16.0: 16.0: 15.0: 15.0: 13.0:  8.0:  7.0:
+                                 7.0:  7.0:  7.0:  9.0: 11.0: 11.0: 11.0: 10.0:
+                                 9.0:  8.0: 12.0: 14.0: 14.0: 14.0: 14.0: 13.0:
+                                 8.0:  7.0:  8.0: 11.0;
+enddef;
+*
+def MEDICINA;
+     site_type = fixed;
+     site_name = MEDICINA;
+     site_ID = Mc;
+*    elev=   67.15 long=-011:38:49. lat= 44:31:13.8
+     site_position = 4461369.69540 m:  919597.12400 m: 4449559.38120 m;
+     site_velocity = -0.018120   m/yr:  0.018830   m/yr:  0.011090  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+enddef;
+*
+def NOTO;
+     site_type = fixed;
+     site_name = NOTO;
+     site_ID = Nt;
+*    elev=  143.22 long=-014:59:20. lat= 36:52:33.8
+     site_position = 4934562.84070 m: 1321201.54280 m: 3806484.73360 m;
+     site_velocity = -0.017470   m/yr:  0.017630   m/yr:  0.015050  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+     horizon_map_az =  0.0 deg: 10.0: 30.0: 70.0:100.0:120.0:150.0:180.0:300.0:
+                               310.0:360.0;
+     horizon_map_el =  8.0 deg:  7.0:  6.0:  9.0:  6.5:  5.0:  6.0:  5.0:  5.0:
+                                 6.5:  7.5;
+enddef;
+*
+def ONSALA85;
+     site_type = fixed;
+     site_name = ONSALA85;
+     site_ID = On;
+*    elev=   58.48 long=-011:55:04. lat= 57:23:35.1
+     site_position = 3370965.90900 m:  711466.19780 m: 5349664.19470 m;
+     site_velocity = -0.014020   m/yr:  0.014660   m/yr:  0.010270  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+enddef;
+*
+def TORUN;
+     site_type = fixed;
+     site_name = TORUN;
+     site_ID = Tr;
+*    elev=  133.61 long=-018:33:50. lat= 53:05:43.7
+     site_position = 3638558.51000 m: 1221969.72000 m: 5077036.76000 m;
+     site_velocity = -0.016010   m/yr:  0.016450   m/yr:  0.007520  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 1997y001d;
+     site_position_epoch =   50449;
+     horizon_map_az =  0.0 deg:360.0;
+     horizon_map_el =  2.0 deg:  2.0;
+enddef;
+*
+def URUMQI;
+     site_type = fixed;
+     site_name = URUMQI;
+     site_ID = Ur;
+*    elev= 2033.22 long=-087:10:41. lat= 43:28:17.4
+     site_position =  228310.21290 m: 4631922.76560 m: 4367064.06380 m;
+     site_velocity = -0.032090   m/yr: -0.000150   m/yr:  0.005640  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+enddef;
+*------------------------------------------------------------------------------
+$ANTENNA;
+*
+def JODRELL1;
+     axis_type = az : el;
+     antenna_motion = el :   8.0 deg/min :  6 sec;  *    0.023 deg/sec/sec
+     antenna_motion = az :  15.0 deg/min :  6 sec;  *    0.026 deg/sec/sec
+     axis_offset =    0.00000 m;
+enddef;
+*
+def WSTRBORK;
+     axis_type = ha : dec;
+     antenna_motion = dec :  18.0 deg/min : 10 sec;  *    0.100 deg/sec/sec
+     antenna_motion = ha :  18.0 deg/min : 10 sec;  *    0.100 deg/sec/sec
+     axis_offset =    4.95000 m;
+enddef;
+*
+def EFLSBERG;
+     axis_type = az : el;
+     antenna_motion = el :  15.0 deg/min :  9 sec;  *    0.020 deg/sec/sec
+     antenna_motion = az :  25.0 deg/min :  9 sec;  *    0.020 deg/sec/sec
+     axis_offset =    0.01450 m;
+enddef;
+*
+def MEDICINA;
+     axis_type = az : el;
+     antenna_motion = el :  30.0 deg/min :  3 sec;  *    0.310 deg/sec/sec
+     antenna_motion = az :  45.0 deg/min :  3 sec;  *    0.820 deg/sec/sec
+     axis_offset =    1.82790 m;
+enddef;
+*
+def NOTO;
+     axis_type = az : el;
+     antenna_motion = el :  30.0 deg/min :  2 sec;  * 1000.000 deg/sec/sec
+     antenna_motion = az :  43.0 deg/min :  2 sec;  * 1000.000 deg/sec/sec
+     axis_offset =    1.83160 m;
+enddef;
+*
+def ONSALA85;
+     axis_type = ha : dec;
+     antenna_motion = dec :  14.7 deg/min :  5 sec;  *    0.052 deg/sec/sec
+     antenna_motion = ha :  17.6 deg/min :  5 sec;  *    0.070 deg/sec/sec
+     axis_offset =    2.15000 m;
+enddef;
+*
+def TORUN;
+     axis_type = az : el;
+     antenna_motion = el :  16.0 deg/min :  5 sec;  *    0.030 deg/sec/sec
+     antenna_motion = az :  30.0 deg/min :  5 sec;  *    0.050 deg/sec/sec
+     axis_offset =    0.00000 m;
+enddef;
+*
+def URUMQI;
+     axis_type = az : el;
+     antenna_motion = el :  30.0 deg/min :  2 sec;  *    0.500 deg/sec/sec
+     antenna_motion = az :  60.0 deg/min :  2 sec;  *    0.500 deg/sec/sec
+     axis_offset =   -0.00660 m;
+enddef;
+*------------------------------------------------------------------------------
+$DAS;
+*
+def 2MKIV+NONE<Mark5A;
+     record_transport_type = Mark5A;
+     electronics_rack_type = Mark4;
+     number_drives = 2;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 1 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*
+def 2MKIV+NONE<;
+     record_transport_type = Mark5B;
+     electronics_rack_type = Mark4;
+     number_drives = 2;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 1 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*
+def 2DBBC+NONE<;
+     record_transport_type = Mark5B;
+     electronics_rack_type = DBBC;
+     number_drives = 2;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 1 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*
+def 2VLBA4+NONE<Mark5A;
+     record_transport_type = Mark5A;
+     electronics_rack_type = VLBA4;
+     number_drives = 2;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 1 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*
+def 1VLBA4+NONE<Mark5A;
+     record_transport_type = Mark5A;
+     electronics_rack_type = VLBA4;
+     number_drives = 1;
+     headstack = 1 :            : 0 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*------------------------------------------------------------------------------
+$SOURCE;
+*
+def M84;
+     source_name = M84;
+*    this source had calibrator code:  
+     ra = 12h25m03.7433290s; dec =  12d53'13.139580"; ref_coord_frame = J2000;
+*    ra = 12h22m31.5820127s; dec =  13d09'49.768970"; ref_coord_frame = B1950;
+*    ra = 12h25m11.8316714s; dec =  12d52'14.486060"; ref_coord_frame = Date;
+*    velocity_wrt_LSR =       0.00 km/sec; * warning, only given here for 1st channel
+*    calculations used redshift 
+enddef;
+*
+def J1215+1654;
+     source_name = J1215+1654;
+*    this source had calibrator code: V
+*    alternate source name: 1212+171
+*    GSFC 2015a astro solution, unpublished   1827 observations.
+     ra = 12h15m03.9791391s; dec =  16d54'37.956859"; ref_coord_frame = J2000;
+*    ra = 12h12m31.4496979s; dec =  17d11'18.145494"; ref_coord_frame = B1950;
+*    ra = 12h15m12.1624395s; dec =  16d53'37.820508"; ref_coord_frame = Date;
+enddef;
+*
+def J1224+2122;
+     source_name = J1224+2122;
+*    this source had calibrator code: V
+*    alternate source name: 1222+216
+*    alternate source name: J1224+21
+*    GSFC 2015a astro solution, unpublished    386 observations.
+     ra = 12h24m54.4584128s; dec =  21d22'46.388639"; ref_coord_frame = J2000;
+*    ra = 12h22m23.4087275s; dec =  21d39'23.037024"; ref_coord_frame = B1950;
+*    ra = 12h25m02.5143885s; dec =  21d21'44.812048"; ref_coord_frame = Date;
+enddef;
+*
+def 3C273;
+     source_name = 3C273;
+*    this source had calibrator code: V
+*    alternate source name: 3C273B
+*    alternate source name: J1229+0203
+*    alternate source name: 1226+023
+*    alternate source name: J1229+02
+*    GSFC 2015a astro solution, unpublished  31967 observations.
+     ra = 12h29m06.6997295s; dec =  02d03'08.598285"; ref_coord_frame = J2000;
+*    ra = 12h26m33.2458332s; dec =  02d19'43.305781"; ref_coord_frame = B1950;
+*    ra = 12h29m14.7994096s; dec =  02d02'13.882507"; ref_coord_frame = Date;
+enddef;
+*
+def 3C279;
+     source_name = 3C279;
+*    this source had calibrator code: V
+*    alternate source name: J1256-0547
+*    alternate source name: 1253-055
+*    alternate source name: J1256-05
+*    GSFC 2015a astro solution, unpublished   7533 observations.
+     ra = 12h56m11.1665682s; dec = -05d47'21.524998"; ref_coord_frame = J2000;
+*    ra = 12h53m35.8313006s; dec = -05d31'07.996138"; ref_coord_frame = B1950;
+*    ra = 12h56m19.1793428s; dec = -05d48'12.621226"; ref_coord_frame = Date;
+enddef;
+*------------------------------------------------------------------------------
+$FREQ;
+*
+def 1420.00MHz4x8MHz;
+* mode =  1    stations =Jb:Wb:Mc:On:Ur
+     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1420.00 MHz : U :   8.00 MHz : &CH01 : &BBC02 : &NoCal; *Rcp
+     chan_def = :  1420.00 MHz : U :   8.00 MHz : &CH02 : &BBC01 : &NoCal; *Lcp
+     chan_def = :  1421.00 MHz : U :   8.00 MHz : &CH03 : &BBC04 : &NoCal; *Rcp
+     chan_def = :  1421.00 MHz : U :   8.00 MHz : &CH04 : &BBC03 : &NoCal; *Lcp
+enddef;
+*
+def 1420.00MHz4x8MHz#02;
+* mode =  1    stations =Ef
+     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1420.00 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1420.00 MHz : U :   8.00 MHz : &CH02 : &BBC05 : &NoCal; *Lcp
+     chan_def = :  1421.00 MHz : U :   8.00 MHz : &CH03 : &BBC02 : &NoCal; *Rcp
+     chan_def = :  1421.00 MHz : U :   8.00 MHz : &CH04 : &BBC06 : &NoCal; *Lcp
+enddef;
+*
+def 1420.00MHz4x8MHz#03;
+* mode =  1    stations =Nt:Tr
+     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1420.00 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1420.00 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &NoCal; *Lcp
+     chan_def = :  1421.00 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &NoCal; *Rcp
+     chan_def = :  1421.00 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &NoCal; *Lcp
+enddef;
+*
+def 1411.56MHz4x8MHz;
+* mode =  2    stations =Jb:Wb:Mc:On:Ur
+     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH01 : &BBC02 : &NoCal; *Rcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH02 : &BBC01 : &NoCal; *Lcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH03 : &BBC04 : &NoCal; *Rcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH04 : &BBC03 : &NoCal; *Lcp
+enddef;
+*
+def 1411.56MHz4x8MHz#02;
+* mode =  2    stations =Ef
+     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH02 : &BBC05 : &NoCal; *Lcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH03 : &BBC02 : &NoCal; *Rcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH04 : &BBC06 : &NoCal; *Lcp
+enddef;
+*
+def 1411.56MHz4x8MHz#03;
+* mode =  2    stations =Nt:Tr
+     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &NoCal; *Lcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &NoCal; *Rcp
+     chan_def = :  1411.56 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &NoCal; *Lcp
+enddef;
+*------------------------------------------------------------------------------
+$IF;
+*
+def LO@1230MHzDPolNoTone;
+* mode =  1    stations =Jb
+* mode =  2    stations =Jb
+     if_def = &IF_2N : 2N : R :  1230.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :  1230.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@1265MHzDPolNoTone;
+* mode =  1    stations =Wb
+* mode =  2    stations =Wb
+     if_def = &IF_2N : 2N : R :  1265.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :  1265.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@1250MHzDPolNoTone;
+* mode =  1    stations =Ef
+* mode =  2    stations =Ef
+     if_def = &IF_A2 : A2 : R :  1250.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_B4 : B4 : L :  1250.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@1036MHzDPolNoTone;
+* mode =  1    stations =Mc
+* mode =  2    stations =Mc
+     if_def = &IF_2N : 2N : R :  1036.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :  1036.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@799MHzDPolNoTone;
+* mode =  1    stations =Nt
+* mode =  2    stations =Nt
+     if_def = &IF_C : C : R :   799.10 MHz : U ; * PCall off!   0.0   0.0  18+2     0 NA
+     if_def = &IF_A : A : L :   799.10 MHz : U ; * PCall off!   0.0   0.0  18+2     0 NA
+enddef;
+*
+def LO@1220MHzDPolNoTone;
+* mode =  1    stations =On
+* mode =  2    stations =On
+     if_def = &IF_2N : 2N : R :  1220.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :  1220.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@2300MHzDPolNoTone;
+* mode =  1    stations =Tr
+* mode =  2    stations =Tr
+     if_def = &IF_C : C : R :  2300.00 MHz : L ; * PCall off!   0.0   0.0  18cm     0 NA
+     if_def = &IF_A : A : L :  2300.00 MHz : L ; * PCall off!   0.0   0.0  18cm     0 NA
+enddef;
+*
+def LO@1300MHzDPolNoTone;
+* mode =  1    stations =Ur
+* mode =  2    stations =Ur
+     if_def = &IF_2N : 2N : R :  1300.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+     if_def = &IF_1N : 1N : L :  1300.00 MHz : U ; * PCall off!   0.0   0.0  NA     0 NA
+enddef;
+*------------------------------------------------------------------------------
+$BBC;
+*
+def 4BBCs;
+* mode =  1    stations =Jb:Wb:Mc:On:Ur
+* mode =  2    stations =Jb:Wb:Mc:On:Ur
+     BBC_assign = &BBC02 :  2 : &IF_2N;
+     BBC_assign = &BBC01 :  1 : &IF_1N;
+     BBC_assign = &BBC04 :  4 : &IF_2N;
+     BBC_assign = &BBC03 :  3 : &IF_1N;
+enddef;
+*
+def 4BBCs#02;
+* mode =  1    stations =Ef
+* mode =  2    stations =Ef
+     BBC_assign = &BBC01 :  1 : &IF_A2;
+     BBC_assign = &BBC05 :  5 : &IF_B4;
+     BBC_assign = &BBC02 :  2 : &IF_A2;
+     BBC_assign = &BBC06 :  6 : &IF_B4;
+enddef;
+*
+def 4BBCs#03;
+* mode =  1    stations =Nt:Tr
+* mode =  2    stations =Nt:Tr
+     BBC_assign = &BBC01 :  1 : &IF_C;
+     BBC_assign = &BBC02 :  2 : &IF_A;
+     BBC_assign = &BBC03 :  3 : &IF_C;
+     BBC_assign = &BBC04 :  4 : &IF_A;
+enddef;
+*------------------------------------------------------------------------------
+$PHASE_CAL_DETECT;
+*
+def NoDetect;
+* mode =  1    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+* mode =  2    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+     phase_cal_detect = &NoCal;
+enddef;
+*------------------------------------------------------------------------------
+$TRACKS;
+*
+def MKIV.4Ch2bit1to2;
+* mode =  1    stations =Jb:Mc:Nt:On:Tr
+* mode =  2    stations =Jb:Mc:Nt:On:Tr
+*    format = MKIV1:2, and fan-out = 2
+*    mode requires   8.00Mb/s/tr; stations using disks
+     track_frame_format = Mark4;
+     data_modulation = off;
+     fanout_def =   : &CH01 : sign : 1:  2:  4;
+     fanout_def =   : &CH01 :  mag : 1:  6:  8;
+     fanout_def =   : &CH02 : sign : 1: 10: 12;
+     fanout_def =   : &CH02 :  mag : 1: 14: 16;
+     fanout_def =   : &CH03 : sign : 1: 18: 20;
+     fanout_def =   : &CH03 :  mag : 1: 22: 24;
+     fanout_def =   : &CH04 : sign : 1: 26: 28;
+     fanout_def =   : &CH04 :  mag : 1: 30: 32;
+enddef;
+*
+def MARK5B.4Ch2bit1to1;
+* mode =  1    stations =Wb:Ur
+* mode =  2    stations =Wb:Ur
+*    format = MARK5B, and fan-out = 1
+*    mode requires  16.00Mb/s/tr; stations using disks
+     track_frame_format = MARK5B;
+     fanout_def =   : &CH01 : sign : 1:  4;
+     fanout_def =   : &CH01 :  mag : 1:  5;
+     fanout_def =   : &CH02 : sign : 1:  2;
+     fanout_def =   : &CH02 :  mag : 1:  3;
+     fanout_def =   : &CH03 : sign : 1:  8;
+     fanout_def =   : &CH03 :  mag : 1:  9;
+     fanout_def =   : &CH04 : sign : 1:  6;
+     fanout_def =   : &CH04 :  mag : 1:  7;
+enddef;
+*
+def MARK5B.4Ch2bit1to1#02;
+* mode =  1    stations =Ef
+* mode =  2    stations =Ef
+*    firmware_type = DBBC_DDC;
+*    format = MARK5B, and fan-out = 1
+*    mode requires  16.00Mb/s/tr; stations using disks
+     track_frame_format = MARK5B;
+     fanout_def =   : &CH01 : sign : 1:  2;
+     fanout_def =   : &CH01 :  mag : 1:  3;
+     fanout_def =   : &CH02 : sign : 1:  6;
+     fanout_def =   : &CH02 :  mag : 1:  7;
+     fanout_def =   : &CH03 : sign : 1:  4;
+     fanout_def =   : &CH03 :  mag : 1:  5;
+     fanout_def =   : &CH04 : sign : 1:  8;
+     fanout_def =   : &CH04 :  mag : 1:  9;
+enddef;
+*------------------------------------------------------------------------------
+$HEAD_POS;
+def DiskVoid;
+* mode =  1    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+* mode =  2    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+*     Head positions irrelevant for Disk: empty def
+enddef;
+*------------------------------------------------------------------------------
+$PASS_ORDER;
+*
+def DiskVoid;
+* mode =  1    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+* mode =  2    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+*     Pass orders irrelevant for Disk: empty def
+enddef;
+*------------------------------------------------------------------------------
+$ROLL;
+*
+def NoRoll;
+* mode =  1    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+* mode =  2    stations =Jb:Wb:Ef:Mc:Nt:On:Tr:Ur
+*    barrel-roll set to 'roll_off', so reverse-roll by  0 (1 head)
+     roll = off;
+enddef;
+*------------------------------------------------------------------------------
+$SCHED;
+* schedule section for experiment EO906   
+* EVN observations of my favourite extragalactic 21-cm source             
+scan No0001;
+*    start=2002y359d00h15m00s <= original start, modified for tape start.
+     start=2002y359d00h14m55s; mode=Doppler@M84; source=J1215+1654;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+     station=Wb:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+     station=Ef:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+     station=Mc:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+     station=Nt:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+     station=On:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+     station=Tr:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+     station=Ur:    5 sec:  125 sec:    0.000 GB:   :       : 1;
+endscan;
+scan No0002;
+     start=2002y359d00h17m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:    2.000 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:    2.003 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:    2.003 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:    2.000 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:    2.000 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:    2.000 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:    2.000 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:    2.003 GB:   :       : 1;
+endscan;
+scan No0003;
+     start=2002y359d00h26m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:   10.640 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:   10.657 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:   10.657 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:   10.640 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:   10.640 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:   10.640 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:   10.640 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:   10.657 GB:   :       : 1;
+endscan;
+scan No0004;
+     start=2002y359d00h28m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   12.560 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   12.580 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   12.580 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   12.560 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:   12.560 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   12.560 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   12.560 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:   12.580 GB:   :       : 1;
+endscan;
+scan No0005;
+     start=2002y359d00h37m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:   21.200 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:   21.234 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:   21.234 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:   21.200 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:   21.200 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:   21.200 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:   21.200 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec:   21.234 GB:   :       : 1;
+endscan;
+scan No0006;
+     start=2002y359d00h39m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   23.120 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   23.157 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   23.157 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   23.120 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:   23.120 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   23.120 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   23.120 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec:   23.157 GB:   :       : 1;
+endscan;
+scan No0007;
+     start=2002y359d00h48m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:   31.760 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:   31.811 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:   31.811 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:   31.760 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:   31.760 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:   31.760 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:   31.760 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:   31.811 GB:   :       : 1;
+endscan;
+scan No0008;
+     start=2002y359d00h50m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   33.680 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   33.734 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   33.734 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   33.680 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:   33.680 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   33.680 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   33.680 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec:   33.734 GB:   :       : 1;
+endscan;
+scan No0009;
+*    start=2002y359d01h01m00s <= original start, modified for tape start.
+     start=2002y359d01h00m55s; mode=Doppler@M84; source=J1215+1654;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:    0 sec:  125 sec:   42.320 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:   42.388 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:   42.388 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:   42.320 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:   42.320 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:   42.320 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:   42.320 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:   42.388 GB:   :       : 1;
+endscan;
+scan No0010;
+     start=2002y359d01h03m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   44.320 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   44.391 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   44.391 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   44.320 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:   44.320 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   44.320 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   44.320 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:   44.391 GB:   :       : 1;
+endscan;
+scan No0011;
+     start=2002y359d01h12m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:   52.960 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:   53.045 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:   53.045 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:   52.960 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:   52.960 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:   52.960 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:   52.960 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:   53.045 GB:   :       : 1;
+endscan;
+scan No0012;
+     start=2002y359d01h14m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   54.880 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   54.968 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   54.968 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   54.880 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:   54.880 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   54.880 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   54.880 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:   54.968 GB:   :       : 1;
+endscan;
+scan No0013;
+     start=2002y359d01h23m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:   63.520 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:   63.622 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:   63.622 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:   63.520 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:   63.520 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:   63.520 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:   63.520 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:   63.622 GB:   :       : 1;
+endscan;
+scan No0014;
+     start=2002y359d01h25m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   65.440 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   65.545 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   65.545 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   65.440 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:   65.440 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   65.440 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   65.440 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:   65.545 GB:   :       : 1;
+endscan;
+scan No0015;
+     start=2002y359d01h34m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:   74.080 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:   74.199 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:   74.199 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:   74.080 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:   74.080 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:   74.080 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:   74.080 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:   74.199 GB:   :       : 1;
+endscan;
+scan No0016;
+     start=2002y359d01h36m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   76.000 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   76.122 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   76.122 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   76.000 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:   76.000 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   76.000 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   76.000 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:   76.122 GB:   :       : 1;
+endscan;
+scan No0017;
+*    start=2002y359d01h47m00s <= original start, modified for tape start.
+     start=2002y359d01h46m55s; mode=Doppler@M84; source=J1215+1654;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:    0 sec:  125 sec:   84.640 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:   84.775 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:   84.775 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:   84.640 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:   84.640 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:   84.640 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:   84.640 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:   84.775 GB:   :       : 1;
+endscan;
+scan No0018;
+     start=2002y359d01h49m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   86.640 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   86.779 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   86.779 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   86.640 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:   86.640 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   86.640 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   86.640 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:   86.779 GB:   :       : 1;
+endscan;
+scan No0019;
+     start=2002y359d01h58m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:   95.280 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:   95.432 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:   95.432 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:   95.280 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:   95.280 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:   95.280 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:   95.280 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:   95.432 GB:   :       : 1;
+endscan;
+scan No0020;
+     start=2002y359d02h00m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:   97.200 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:   97.356 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:   97.356 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:   97.200 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:   97.200 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:   97.200 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:   97.200 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:   97.356 GB:   :       : 1;
+endscan;
+scan No0021;
+     start=2002y359d02h09m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:  105.840 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  106.009 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  106.009 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  105.840 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  105.840 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  105.840 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:  105.840 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:  106.009 GB:   :       : 1;
+endscan;
+scan No0022;
+     start=2002y359d02h11m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  107.760 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  107.932 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  107.932 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  107.760 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  107.760 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  107.760 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  107.760 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:  107.932 GB:   :       : 1;
+endscan;
+scan No0023;
+     start=2002y359d02h20m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:  116.400 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  116.586 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  116.586 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  116.400 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  116.400 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  116.400 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:  116.400 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:  116.586 GB:   :       : 1;
+endscan;
+scan No0024;
+     start=2002y359d02h22m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  118.320 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  118.509 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  118.509 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  118.320 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  118.320 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  118.320 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  118.320 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:  118.509 GB:   :       : 1;
+endscan;
+scan No0025;
+*    start=2002y359d02h33m00s <= original start, modified for tape start.
+     start=2002y359d02h32m55s; mode=Doppler@M84; source=J1215+1654;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:    0 sec:  125 sec:  126.960 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  127.163 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  127.163 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  126.960 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  126.960 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  126.960 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  126.960 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:  127.163 GB:   :       : 1;
+endscan;
+scan No0026;
+     start=2002y359d02h35m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  128.960 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  129.166 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  129.166 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  128.960 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  128.960 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  128.960 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  128.960 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:  129.166 GB:   :       : 1;
+endscan;
+scan No0027;
+     start=2002y359d02h44m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:  137.600 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  137.820 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  137.820 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  137.600 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  137.600 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  137.600 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:  137.600 GB:   :       : 1;
+     station=Ur:   11 sec:  120 sec:  137.820 GB:   :       : 1;
+endscan;
+scan No0028;
+     start=2002y359d02h46m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  139.520 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  139.743 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  139.743 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  139.520 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  139.520 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  139.520 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  139.520 GB:   :       : 1;
+     station=Ur:   11 sec:  540 sec:  139.743 GB:   :       : 1;
+endscan;
+scan No0029;
+     start=2002y359d02h55m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:  148.160 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  148.397 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  148.397 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  148.160 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  148.160 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  148.160 GB:   :       : 1;
+     station=Tr:   32 sec:  120 sec:  148.160 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec:  148.397 GB:   :       : 1;
+endscan;
+scan No0030;
+     start=2002y359d02h57m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  150.080 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  150.320 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  150.320 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  150.080 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  150.080 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  150.080 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  150.080 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec:  150.320 GB:   :       : 1;
+endscan;
+scan No0031;
+     start=2002y359d03h06m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:  158.720 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  158.974 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  158.974 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  158.720 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  158.720 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  158.720 GB:   :       : 1;
+     station=Tr:   31 sec:  120 sec:  158.720 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec:  158.974 GB:   :       : 1;
+endscan;
+scan No0032;
+     start=2002y359d03h08m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  160.640 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  160.897 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  160.897 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  160.640 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  160.640 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  160.640 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  160.640 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec:  160.897 GB:   :       : 1;
+endscan;
+scan No0033;
+*    start=2002y359d03h19m00s <= original start, modified for tape start.
+     start=2002y359d03h18m55s; mode=Doppler@M84; source=J1215+1654;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:    0 sec:  125 sec:  169.280 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  169.551 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  169.551 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  169.280 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  169.280 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  169.280 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  169.280 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:  169.551 GB:   :       : 1;
+endscan;
+scan No0034;
+     start=2002y359d03h21m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  171.280 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  171.554 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  171.554 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  171.280 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  171.280 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  171.280 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  171.280 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec:  171.554 GB:   :       : 1;
+endscan;
+scan No0035;
+     start=2002y359d03h30m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:  179.920 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  180.208 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  180.208 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  179.920 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  179.920 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  179.920 GB:   :       : 1;
+     station=Tr:   31 sec:  120 sec:  179.920 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec:  180.208 GB:   :       : 1;
+endscan;
+scan No0036;
+     start=2002y359d03h32m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  181.840 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  182.131 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  182.131 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  181.840 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  181.840 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  181.840 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  181.840 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec:  182.131 GB:   :       : 1;
+endscan;
+scan No0037;
+     start=2002y359d03h41m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   48 sec:  120 sec:  190.480 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  190.785 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  190.785 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  190.480 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  190.480 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  190.480 GB:   :       : 1;
+     station=Tr:   31 sec:  120 sec:  190.480 GB:   :       : 1;
+     station=Ur:   10 sec:  120 sec:  190.785 GB:   :       : 1;
+endscan;
+scan No0038;
+     start=2002y359d03h43m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  192.400 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  192.708 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  192.708 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  192.400 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  192.400 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  192.400 GB:   :       : 1;
+     station=Tr:   31 sec:  540 sec:  192.400 GB:   :       : 1;
+     station=Ur:   10 sec:  540 sec:  192.708 GB:   :       : 1;
+endscan;
+scan No0039;
+*    start=2002y359d03h54m00s <= original start, modified for tape start.
+     start=2002y359d03h53m55s; mode=Doppler@M84; source=3C279;
+     station=Jb:   46 sec:  485 sec:  201.040 GB:   :       : 1;
+     station=Wb:    0 sec:  485 sec:  201.362 GB:   :       : 1;
+     station=Ef:    0 sec:  485 sec:  201.362 GB:   :       : 1;
+     station=Mc:    0 sec:  485 sec:  201.040 GB:   :       : 1;
+     station=Nt:    0 sec:  485 sec:  201.040 GB:   :       : 1;
+     station=On:    0 sec:  485 sec:  201.040 GB:   :       : 1;
+     station=Tr:    0 sec:  485 sec:  201.040 GB:   :       : 1;
+     station=Ur:    0 sec:  485 sec:  201.362 GB:   :       : 1;
+endscan;
+scan No0040;
+*    start=2002y359d04h05m00s <= original start, modified for tape start.
+     start=2002y359d04h04m55s; mode=Doppler@M84; source=J1224+2122;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   47 sec:  185 sec:  208.800 GB:   :       : 1;
+     station=Wb:    0 sec:  185 sec:  209.134 GB:   :       : 1;
+     station=Ef:    0 sec:  185 sec:  209.134 GB:   :       : 1;
+     station=Mc:    0 sec:  185 sec:  208.800 GB:   :       : 1;
+     station=Nt:    0 sec:  185 sec:  208.800 GB:   :       : 1;
+     station=On:    0 sec:  185 sec:  208.800 GB:   :       : 1;
+     station=Tr:    0 sec:  185 sec:  208.800 GB:   :       : 1;
+     station=Ur:    0 sec:  185 sec:  209.134 GB:   :       : 1;
+endscan;
+scan No0041;
+*    start=2002y359d04h10m00s <= original start, modified for tape start.
+     start=2002y359d04h09m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  211.760 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  212.099 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  212.099 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  211.760 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  211.760 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  211.760 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  211.760 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:  212.099 GB:   :       : 1;
+endscan;
+scan No0042;
+     start=2002y359d04h12m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  213.760 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  214.102 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  214.102 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  213.760 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  213.760 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  213.760 GB:   :       : 1;
+     station=Tr:   30 sec:  540 sec:  213.760 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  214.102 GB:   :       : 1;
+endscan;
+scan No0043;
+     start=2002y359d04h21m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:  222.400 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  222.756 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  222.756 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  222.400 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  222.400 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  222.400 GB:   :       : 1;
+     station=Tr:   30 sec:  120 sec:  222.400 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  222.756 GB:   :       : 1;
+endscan;
+scan No0044;
+     start=2002y359d04h23m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  224.320 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  224.679 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  224.679 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  224.320 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  224.320 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  224.320 GB:   :       : 1;
+     station=Tr:   30 sec:  540 sec:  224.320 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  224.679 GB:   :       : 1;
+endscan;
+scan No0045;
+     start=2002y359d04h32m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   47 sec:  120 sec:  232.960 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  233.333 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  233.333 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  232.960 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  232.960 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  232.960 GB:   :       : 1;
+     station=Tr:   30 sec:  120 sec:  232.960 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  233.333 GB:   :       : 1;
+endscan;
+scan No0046;
+     start=2002y359d04h34m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  234.880 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  235.256 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  235.256 GB:   :       : 1;
+     station=Mc:   14 sec:  540 sec:  234.880 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  234.880 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  234.880 GB:   :       : 1;
+     station=Tr:   30 sec:  540 sec:  234.880 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  235.256 GB:   :       : 1;
+endscan;
+scan No0047;
+     start=2002y359d04h43m00s; mode=Doppler@M84; source=J1215+1654;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   47 sec:  120 sec:  243.520 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  243.910 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  243.910 GB:   :       : 1;
+     station=Mc:   14 sec:  120 sec:  243.520 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  243.520 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  243.520 GB:   :       : 1;
+     station=Tr:   29 sec:  120 sec:  243.520 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  243.910 GB:   :       : 1;
+endscan;
+scan No0048;
+     start=2002y359d04h45m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  245.440 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  245.833 GB:   :       : 1;
+     station=Ef:   39 sec:  540 sec:  245.833 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  245.440 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  245.440 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  245.440 GB:   :       : 1;
+     station=Tr:   29 sec:  540 sec:  245.440 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  245.833 GB:   :       : 1;
+endscan;
+scan No0049;
+*    start=2002y359d04h56m00s <= original start, modified for tape start.
+     start=2002y359d04h55m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  254.080 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  254.486 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  254.486 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  254.080 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  254.080 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  254.080 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  254.080 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:  254.486 GB:   :       : 1;
+endscan;
+scan No0050;
+     start=2002y359d04h58m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   46 sec:  540 sec:  256.080 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  256.490 GB:   :       : 1;
+     station=Ef:   39 sec:  540 sec:  256.490 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  256.080 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:  256.080 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  256.080 GB:   :       : 1;
+     station=Tr:   29 sec:  540 sec:  256.080 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  256.490 GB:   :       : 1;
+endscan;
+scan No0051;
+     start=2002y359d05h07m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   46 sec:  120 sec:  264.720 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  265.143 GB:   :       : 1;
+     station=Ef:   39 sec:  120 sec:  265.143 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  264.720 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  264.720 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  264.720 GB:   :       : 1;
+     station=Tr:   28 sec:  120 sec:  264.720 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  265.143 GB:   :       : 1;
+endscan;
+scan No0052;
+     start=2002y359d05h09m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   45 sec:  540 sec:  266.640 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  267.067 GB:   :       : 1;
+     station=Ef:   39 sec:  540 sec:  267.067 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  266.640 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  266.640 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  266.640 GB:   :       : 1;
+     station=Tr:   28 sec:  540 sec:  266.640 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  267.067 GB:   :       : 1;
+endscan;
+scan No0053;
+     start=2002y359d05h18m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   46 sec:  120 sec:  275.280 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  275.720 GB:   :       : 1;
+     station=Ef:   38 sec:  120 sec:  275.720 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  275.280 GB:   :       : 1;
+     station=Nt:   13 sec:  120 sec:  275.280 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  275.280 GB:   :       : 1;
+     station=Tr:   28 sec:  120 sec:  275.280 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  275.720 GB:   :       : 1;
+endscan;
+scan No0054;
+     start=2002y359d05h20m00s; mode=Doppler@M84; source=M84;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   45 sec:  540 sec:  277.200 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  277.643 GB:   :       : 1;
+     station=Ef:   38 sec:  540 sec:  277.643 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  277.200 GB:   :       : 1;
+     station=Nt:   13 sec:  540 sec:  277.200 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  277.200 GB:   :       : 1;
+     station=Tr:   28 sec:  540 sec:  277.200 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  277.643 GB:   :       : 1;
+endscan;
+scan No0055;
+*    start=2002y359d05h31m00s <= original start, modified for tape start.
+     start=2002y359d05h30m55s; mode=Doppler@M84; source=3C273;
+     station=Jb:    0 sec:  485 sec:  285.840 GB:   :       : 1;
+     station=Wb:    0 sec:  485 sec:  286.297 GB:   :       : 1;
+     station=Ef:    0 sec:  485 sec:  286.297 GB:   :       : 1;
+     station=Mc:    0 sec:  485 sec:  285.840 GB:   :       : 1;
+     station=Nt:    0 sec:  485 sec:  285.840 GB:   :       : 1;
+     station=On:    0 sec:  485 sec:  285.840 GB:   :       : 1;
+     station=Tr:    0 sec:  485 sec:  285.840 GB:   :       : 1;
+     station=Ur:    0 sec:  485 sec:  286.297 GB:   :       : 1;
+endscan;
+scan No0056;
+*    start=2002y359d05h42m00s <= original start, modified for tape start.
+     start=2002y359d05h41m55s; mode=Doppler@M84; source=J1224+2122;
+     station=Jb:    0 sec:  185 sec:  293.600 GB:   :       : 1;
+     station=Wb:    0 sec:  185 sec:  294.070 GB:   :       : 1;
+     station=Ef:    0 sec:  185 sec:  294.070 GB:   :       : 1;
+     station=Mc:    0 sec:  185 sec:  293.600 GB:   :       : 1;
+     station=Nt:    0 sec:  185 sec:  293.600 GB:   :       : 1;
+     station=On:    0 sec:  185 sec:  293.600 GB:   :       : 1;
+     station=Tr:    0 sec:  185 sec:  293.600 GB:   :       : 1;
+     station=Ur:    0 sec:  185 sec:  294.070 GB:   :       : 1;
+endscan;
+scan No0057;
+*    start=2002y359d05h47m00s <= original start, modified for tape start.
+     start=2002y359d05h46m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  296.560 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  297.034 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  297.034 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  296.560 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  296.560 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  296.560 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  296.560 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:  297.034 GB:   :       : 1;
+endscan;
+scan No0058;
+     start=2002y359d05h49m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   44 sec:  540 sec:  298.560 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  299.038 GB:   :       : 1;
+     station=Ef:   38 sec:  540 sec:  299.038 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec:  298.560 GB:   :       : 1;
+     station=Nt:   15 sec:  540 sec:  298.560 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  298.560 GB:   :       : 1;
+     station=Tr:   27 sec:  540 sec:  298.560 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  299.038 GB:   :       : 1;
+endscan;
+scan No0059;
+     start=2002y359d05h58m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   43 sec:  120 sec:  307.200 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  307.691 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  307.691 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  307.200 GB:   :       : 1;
+     station=Nt:   15 sec:  120 sec:  307.200 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  307.200 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  307.200 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  307.691 GB:   :       : 1;
+endscan;
+scan No0060;
+     start=2002y359d06h00m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   43 sec:  540 sec:  309.120 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  309.615 GB:   :       : 1;
+     station=Ef:   39 sec:  540 sec:  309.615 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec:  309.120 GB:   :       : 1;
+     station=Nt:   15 sec:  540 sec:  309.120 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  309.120 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  309.120 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  309.615 GB:   :       : 1;
+endscan;
+scan No0061;
+     start=2002y359d06h09m00s; mode=Doppler@M84; source=J1215+1654;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   42 sec:  120 sec:  317.760 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  318.268 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  318.268 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  317.760 GB:   :       : 1;
+     station=Nt:   15 sec:  120 sec:  317.760 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  317.760 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  317.760 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  318.268 GB:   :       : 1;
+endscan;
+scan No0062;
+     start=2002y359d06h11m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   42 sec:  540 sec:  319.680 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  320.191 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  320.191 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  319.680 GB:   :       : 1;
+     station=Nt:   15 sec:  540 sec:  319.680 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  319.680 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  319.680 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  320.191 GB:   :       : 1;
+endscan;
+scan No0063;
+     start=2002y359d06h20m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   42 sec:  120 sec:  328.320 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  328.845 GB:   :       : 1;
+     station=Ef:   42 sec:  120 sec:  328.845 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  328.320 GB:   :       : 1;
+     station=Nt:   15 sec:  120 sec:  328.320 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  328.320 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  328.320 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  328.845 GB:   :       : 1;
+endscan;
+scan No0064;
+     start=2002y359d06h22m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   41 sec:  540 sec:  330.240 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  330.768 GB:   :       : 1;
+     station=Ef:   41 sec:  540 sec:  330.768 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  330.240 GB:   :       : 1;
+     station=Nt:   15 sec:  540 sec:  330.240 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  330.240 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  330.240 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  330.768 GB:   :       : 1;
+endscan;
+scan No0065;
+*    start=2002y359d06h33m00s <= original start, modified for tape start.
+     start=2002y359d06h32m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  338.880 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  339.422 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  339.422 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  338.880 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  338.880 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  338.880 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  338.880 GB:   :       : 1;
+     station=Ur:    0 sec:  125 sec:  339.422 GB:   :       : 1;
+endscan;
+scan No0066;
+     start=2002y359d06h35m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   40 sec:  540 sec:  340.880 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  341.425 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  341.425 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  340.880 GB:   :       : 1;
+     station=Nt:   14 sec:  540 sec:  340.880 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  340.880 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  340.880 GB:   :       : 1;
+     station=Ur:    9 sec:  540 sec:  341.425 GB:   :       : 1;
+endscan;
+scan No0067;
+     start=2002y359d06h44m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   39 sec:  120 sec:  349.520 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  350.079 GB:   :       : 1;
+     station=Ef:   43 sec:  120 sec:  350.079 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  349.520 GB:   :       : 1;
+     station=Nt:   14 sec:  120 sec:  349.520 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  349.520 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  349.520 GB:   :       : 1;
+     station=Ur:    9 sec:  120 sec:  350.079 GB:   :       : 1;
+endscan;
+scan No0068;
+     start=2002y359d06h46m00s; mode=Doppler@M84; source=M84;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   39 sec:  540 sec:  351.440 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  352.002 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  352.002 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  351.440 GB:   :       : 1;
+     station=Nt:   14 sec:  540 sec:  351.440 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  351.440 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  351.440 GB:   :       : 1;
+endscan;
+scan No0069;
+     start=2002y359d06h55m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  360.080 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  360.656 GB:   :       : 1;
+     station=Ef:   44 sec:  120 sec:  360.656 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  360.080 GB:   :       : 1;
+     station=Nt:   14 sec:  120 sec:  360.080 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  360.080 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  360.080 GB:   :       : 1;
+endscan;
+scan No0070;
+     start=2002y359d06h57m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   39 sec:  540 sec:  362.000 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  362.579 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  362.579 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  362.000 GB:   :       : 1;
+     station=Nt:   13 sec:  540 sec:  362.000 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  362.000 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  362.000 GB:   :       : 1;
+endscan;
+scan No0071;
+     start=2002y359d07h06m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   37 sec:  120 sec:  370.640 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  371.233 GB:   :       : 1;
+     station=Ef:   44 sec:  120 sec:  371.233 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  370.640 GB:   :       : 1;
+     station=Nt:   13 sec:  120 sec:  370.640 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  370.640 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  370.640 GB:   :       : 1;
+endscan;
+scan No0072;
+     start=2002y359d07h08m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   38 sec:  540 sec:  372.560 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  373.156 GB:   :       : 1;
+     station=Ef:   43 sec:  540 sec:  373.156 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  372.560 GB:   :       : 1;
+     station=Nt:   13 sec:  540 sec:  372.560 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  372.560 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  372.560 GB:   :       : 1;
+endscan;
+scan No0073;
+*    start=2002y359d07h19m00s <= original start, modified for tape start.
+     start=2002y359d07h18m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  381.200 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  381.810 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  381.810 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  381.200 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  381.200 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  381.200 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  381.200 GB:   :       : 1;
+endscan;
+scan No0074;
+     start=2002y359d07h21m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   36 sec:  540 sec:  383.200 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  383.813 GB:   :       : 1;
+     station=Ef:   43 sec:  540 sec:  383.813 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  383.200 GB:   :       : 1;
+     station=Nt:   13 sec:  540 sec:  383.200 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  383.200 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  383.200 GB:   :       : 1;
+endscan;
+scan No0075;
+     start=2002y359d07h30m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  391.840 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  392.467 GB:   :       : 1;
+     station=Ef:   44 sec:  120 sec:  392.467 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  391.840 GB:   :       : 1;
+     station=Nt:   12 sec:  120 sec:  391.840 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  391.840 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  391.840 GB:   :       : 1;
+endscan;
+scan No0076;
+     start=2002y359d07h32m00s; mode=Doppler@M84; source=M84;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   36 sec:  540 sec:  393.760 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  394.390 GB:   :       : 1;
+     station=Ef:   43 sec:  540 sec:  394.390 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  393.760 GB:   :       : 1;
+     station=Nt:   12 sec:  540 sec:  393.760 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  393.760 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  393.760 GB:   :       : 1;
+endscan;
+scan No0077;
+     start=2002y359d07h41m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  402.400 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  403.044 GB:   :       : 1;
+     station=Ef:   44 sec:  120 sec:  403.044 GB:   :       : 1;
+     station=Mc:   13 sec:  120 sec:  402.400 GB:   :       : 1;
+     station=Nt:   12 sec:  120 sec:  402.400 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  402.400 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  402.400 GB:   :       : 1;
+endscan;
+scan No0078;
+     start=2002y359d07h43m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   37 sec:  540 sec:  404.320 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  404.967 GB:   :       : 1;
+     station=Ef:   43 sec:  540 sec:  404.967 GB:   :       : 1;
+     station=Mc:   13 sec:  540 sec:  404.320 GB:   :       : 1;
+     station=Nt:   12 sec:  540 sec:  404.320 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  404.320 GB:   :       : 1;
+     station=Tr:   26 sec:  540 sec:  404.320 GB:   :       : 1;
+endscan;
+scan No0079;
+     start=2002y359d07h52m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  412.960 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  413.621 GB:   :       : 1;
+     station=Ef:   44 sec:  120 sec:  413.621 GB:   :       : 1;
+     station=Mc:   12 sec:  120 sec:  412.960 GB:   :       : 1;
+     station=Nt:   12 sec:  120 sec:  412.960 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  412.960 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  412.960 GB:   :       : 1;
+endscan;
+scan No0080;
+     start=2002y359d07h54m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   37 sec:  540 sec:  414.880 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  415.544 GB:   :       : 1;
+     station=Ef:   43 sec:  540 sec:  415.544 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec:  414.880 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  414.880 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  414.880 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  414.880 GB:   :       : 1;
+endscan;
+scan No0081;
+*    start=2002y359d08h05m00s <= original start, modified for tape start.
+     start=2002y359d08h04m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  423.520 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  424.198 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  424.198 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  423.520 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  423.520 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  423.520 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  423.520 GB:   :       : 1;
+endscan;
+scan No0082;
+     start=2002y359d08h07m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   37 sec:  540 sec:  425.520 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  426.201 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  426.201 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec:  425.520 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  425.520 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  425.520 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  425.520 GB:   :       : 1;
+endscan;
+scan No0083;
+     start=2002y359d08h16m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  434.160 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  434.855 GB:   :       : 1;
+     station=Ef:   43 sec:  120 sec:  434.855 GB:   :       : 1;
+     station=Mc:   12 sec:  120 sec:  434.160 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  434.160 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  434.160 GB:   :       : 1;
+     station=Tr:   26 sec:  120 sec:  434.160 GB:   :       : 1;
+endscan;
+scan No0084;
+     start=2002y359d08h18m00s; mode=Doppler@M84; source=M84;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   37 sec:  540 sec:  436.080 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  436.778 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  436.778 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec:  436.080 GB:   :       : 1;
+     station=Nt:   11 sec:  540 sec:  436.080 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  436.080 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  436.080 GB:   :       : 1;
+endscan;
+scan No0085;
+     start=2002y359d08h27m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  444.720 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  445.432 GB:   :       : 1;
+     station=Ef:   43 sec:  120 sec:  445.432 GB:   :       : 1;
+     station=Mc:   12 sec:  120 sec:  444.720 GB:   :       : 1;
+     station=Nt:   11 sec:  120 sec:  444.720 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  444.720 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  444.720 GB:   :       : 1;
+endscan;
+scan No0086;
+     start=2002y359d08h29m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   37 sec:  540 sec:  446.640 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  447.355 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  447.355 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec:  446.640 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:  446.640 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  446.640 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  446.640 GB:   :       : 1;
+endscan;
+scan No0087;
+     start=2002y359d08h38m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  455.280 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  456.009 GB:   :       : 1;
+     station=Ef:   43 sec:  120 sec:  456.009 GB:   :       : 1;
+     station=Mc:   12 sec:  120 sec:  455.280 GB:   :       : 1;
+     station=Nt:   10 sec:  120 sec:  455.280 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  455.280 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  455.280 GB:   :       : 1;
+endscan;
+scan No0088;
+     start=2002y359d08h40m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   37 sec:  540 sec:  457.200 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  457.932 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  457.932 GB:   :       : 1;
+     station=Mc:   12 sec:  540 sec:  457.200 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:  457.200 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  457.200 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  457.200 GB:   :       : 1;
+endscan;
+scan No0089;
+*    start=2002y359d08h51m00s <= original start, modified for tape start.
+     start=2002y359d08h50m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  465.840 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  466.585 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  466.585 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  465.840 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  465.840 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  465.840 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  465.840 GB:   :       : 1;
+endscan;
+scan No0090;
+     start=2002y359d08h53m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   37 sec:  540 sec:  467.840 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  468.589 GB:   :       : 1;
+     station=Ef:   42 sec:  540 sec:  468.589 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  467.840 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:  467.840 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  467.840 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  467.840 GB:   :       : 1;
+endscan;
+scan No0091;
+     start=2002y359d09h02m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   38 sec:  120 sec:  476.480 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  477.242 GB:   :       : 1;
+     station=Ef:   42 sec:  120 sec:  477.242 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  476.480 GB:   :       : 1;
+     station=Nt:   10 sec:  120 sec:  476.480 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  476.480 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  476.480 GB:   :       : 1;
+endscan;
+scan No0092;
+     start=2002y359d09h04m00s; mode=Doppler@M84; source=M84;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   37 sec:  540 sec:  478.400 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  479.166 GB:   :       : 1;
+     station=Ef:   41 sec:  540 sec:  479.166 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  478.400 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:  478.400 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  478.400 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  478.400 GB:   :       : 1;
+endscan;
+scan No0093;
+     start=2002y359d09h13m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   37 sec:  120 sec:  487.040 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  487.819 GB:   :       : 1;
+     station=Ef:   42 sec:  120 sec:  487.819 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  487.040 GB:   :       : 1;
+     station=Nt:   10 sec:  120 sec:  487.040 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  487.040 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  487.040 GB:   :       : 1;
+endscan;
+scan No0094;
+     start=2002y359d09h15m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   36 sec:  540 sec:  488.960 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  489.742 GB:   :       : 1;
+     station=Ef:   41 sec:  540 sec:  489.742 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  488.960 GB:   :       : 1;
+     station=Nt:   10 sec:  540 sec:  488.960 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  488.960 GB:   :       : 1;
+     station=Tr:   25 sec:  540 sec:  488.960 GB:   :       : 1;
+endscan;
+scan No0095;
+     start=2002y359d09h24m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   37 sec:  120 sec:  497.600 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  498.396 GB:   :       : 1;
+     station=Ef:   42 sec:  120 sec:  498.396 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  497.600 GB:   :       : 1;
+     station=Nt:   10 sec:  120 sec:  497.600 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  497.600 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  497.600 GB:   :       : 1;
+endscan;
+scan No0096;
+     start=2002y359d09h26m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   36 sec:  540 sec:  499.521 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  500.319 GB:   :       : 1;
+     station=Ef:   41 sec:  540 sec:  500.319 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  499.521 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  499.521 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  499.521 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  499.521 GB:   :       : 1;
+endscan;
+scan No0097;
+*    start=2002y359d09h37m00s <= original start, modified for tape start.
+     start=2002y359d09h36m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  508.161 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  508.973 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  508.973 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  508.161 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  508.161 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  508.161 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  508.161 GB:   :       : 1;
+endscan;
+scan No0098;
+     start=2002y359d09h39m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   36 sec:  540 sec:  510.161 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  510.976 GB:   :       : 1;
+     station=Ef:   41 sec:  540 sec:  510.976 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  510.161 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  510.161 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  510.161 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  510.161 GB:   :       : 1;
+endscan;
+scan No0099;
+     start=2002y359d09h48m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   37 sec:  120 sec:  518.801 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  519.630 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  519.630 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  518.801 GB:   :       : 1;
+     station=Nt:    9 sec:  120 sec:  518.801 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  518.801 GB:   :       : 1;
+     station=Tr:   25 sec:  120 sec:  518.801 GB:   :       : 1;
+endscan;
+scan No0100;
+     start=2002y359d09h50m00s; mode=Doppler@M84; source=M84;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   36 sec:  540 sec:  520.721 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  521.553 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  521.553 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  520.721 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  520.721 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  520.721 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  520.721 GB:   :       : 1;
+endscan;
+scan No0101;
+     start=2002y359d09h59m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   36 sec:  120 sec:  529.361 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  530.207 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  530.207 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  529.361 GB:   :       : 1;
+     station=Nt:    9 sec:  120 sec:  529.361 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  529.361 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  529.361 GB:   :       : 1;
+endscan;
+scan No0102;
+     start=2002y359d10h01m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   35 sec:  540 sec:  531.281 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  532.130 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  532.130 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  531.281 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  531.281 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  531.281 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  531.281 GB:   :       : 1;
+endscan;
+scan No0103;
+     start=2002y359d10h10m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   36 sec:  120 sec:  539.921 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  540.784 GB:   :       : 1;
+     station=Ef:   41 sec:  120 sec:  540.784 GB:   :       : 1;
+     station=Mc:   11 sec:  120 sec:  539.921 GB:   :       : 1;
+     station=Nt:    9 sec:  120 sec:  539.921 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  539.921 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  539.921 GB:   :       : 1;
+endscan;
+scan No0104;
+     start=2002y359d10h12m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   35 sec:  540 sec:  541.841 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  542.707 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  542.707 GB:   :       : 1;
+     station=Mc:   11 sec:  540 sec:  541.841 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  541.841 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  541.841 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  541.841 GB:   :       : 1;
+endscan;
+scan No0105;
+*    start=2002y359d10h23m00s <= original start, modified for tape start.
+     start=2002y359d10h22m55s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:    0 sec:  125 sec:  550.481 GB:   :       : 1;
+     station=Wb:    0 sec:  125 sec:  551.361 GB:   :       : 1;
+     station=Ef:    0 sec:  125 sec:  551.361 GB:   :       : 1;
+     station=Mc:    0 sec:  125 sec:  550.481 GB:   :       : 1;
+     station=Nt:    0 sec:  125 sec:  550.481 GB:   :       : 1;
+     station=On:    0 sec:  125 sec:  550.481 GB:   :       : 1;
+     station=Tr:    0 sec:  125 sec:  550.481 GB:   :       : 1;
+endscan;
+scan No0106;
+     start=2002y359d10h25m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   35 sec:  540 sec:  552.481 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  553.364 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  553.364 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:  552.481 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  552.481 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  552.481 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  552.481 GB:   :       : 1;
+endscan;
+scan No0107;
+     start=2002y359d10h34m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   36 sec:  120 sec:  561.121 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  562.018 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  562.018 GB:   :       : 1;
+     station=Mc:   10 sec:  120 sec:  561.121 GB:   :       : 1;
+     station=Nt:    9 sec:  120 sec:  561.121 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  561.121 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  561.121 GB:   :       : 1;
+endscan;
+scan No0108;
+     start=2002y359d10h36m00s; mode=Doppler@M84; source=M84;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Jb:   35 sec:  540 sec:  563.041 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  563.941 GB:   :       : 1;
+     station=Ef:   40 sec:  540 sec:  563.941 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:  563.041 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  563.041 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  563.041 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  563.041 GB:   :       : 1;
+endscan;
+scan No0109;
+     start=2002y359d10h45m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   35 sec:  120 sec:  571.681 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  572.595 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  572.595 GB:   :       : 1;
+     station=Mc:   10 sec:  120 sec:  571.681 GB:   :       : 1;
+     station=Nt:    9 sec:  120 sec:  571.681 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  571.681 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  571.681 GB:   :       : 1;
+endscan;
+scan No0110;
+     start=2002y359d10h47m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   34 sec:  540 sec:  573.601 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  574.518 GB:   :       : 1;
+     station=Ef:   39 sec:  540 sec:  574.518 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:  573.601 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  573.601 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  573.601 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  573.601 GB:   :       : 1;
+endscan;
+scan No0111;
+     start=2002y359d10h56m00s; mode=Doppler@M84; source=J1215+1654;
+     station=Jb:   35 sec:  120 sec:  582.241 GB:   :       : 1;
+     station=Wb:   26 sec:  120 sec:  583.172 GB:   :       : 1;
+     station=Ef:   40 sec:  120 sec:  583.172 GB:   :       : 1;
+     station=Mc:   10 sec:  120 sec:  582.241 GB:   :       : 1;
+     station=Nt:    9 sec:  120 sec:  582.241 GB:   :       : 1;
+     station=On:   26 sec:  120 sec:  582.241 GB:   :       : 1;
+     station=Tr:   24 sec:  120 sec:  582.241 GB:   :       : 1;
+endscan;
+scan No0112;
+     start=2002y359d10h58m00s; mode=Doppler@M84; source=M84;
+     station=Jb:   34 sec:  540 sec:  584.161 GB:   :       : 1;
+     station=Wb:   26 sec:  540 sec:  585.095 GB:   :       : 1;
+     station=Ef:   39 sec:  540 sec:  585.095 GB:   :       : 1;
+     station=Mc:   10 sec:  540 sec:  584.161 GB:   :       : 1;
+     station=Nt:    9 sec:  540 sec:  584.161 GB:   :       : 1;
+     station=On:   26 sec:  540 sec:  584.161 GB:   :       : 1;
+     station=Tr:   24 sec:  540 sec:  584.161 GB:   :       : 1;
+endscan;

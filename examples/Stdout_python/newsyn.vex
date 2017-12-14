@@ -1,0 +1,1512 @@
+VEX_rev = 1.5;
+*    VEX/SCHED:  1.5.87
+*    Other versions: Sched:  11.5  Plot: 1.06  JPL-ephem: 1.01
+*------------------------------------------------------------------------------
+$GLOBAL;
+     ref $EXPER = newsyn;
+*                                                      +------------+
+*                         PI revision number:          |    1.0000  |
+*                                                      +------------+
+*    mode:       6cm 128-4-2
+*------------------------------------------------------------------------------
+$EXPER;
+*
+def newsyn;
+     exper_name = newsyn;
+     exper_description = "A new synthesizer test";
+     PI_name = "Craig Walker";
+     PI_email = cwalker@nrao.edu;
+*    address:   National Radio Astronomy Observatory
+*               P. O. Box O
+*               Socorro, New Mexico, 87801
+*                U.S.A.
+*    phone:     505 835 7247
+*    during obs:505 835 7247
+*    fax:       505 835 7027
+*    notes:     Testing the new synthesizers
+*
+*    year, doy: 2013, 225
+*    date     : Tue 13 Aug 2013
+*    MJD      : 56517
+     exper_nominal_start=2013y225d19h00m00s;
+     exper_nominal_stop=2013y225d21h19m30s;
+*
+     target_correlator = VLBADIFX;
+*
+*    integr_time    :     1.000 s
+*    number_channels:   256
+*    number_antenna : 10
+*    cross_polarize : Yes
+*    weight_func    : UNIFORM
+*    distrib_medium : FTP
+*    distrib_format : FITS
+*    source_pos_cat : STANDARD
+*    distribute_to  : 
+*                     Craig Walker
+*                     P. O. Box O
+*                     Socorro NM 87801
+*    corr_notes : 
+*               Please correlate 225 2 21:15:16 to 21:19:04
+*               with 0.1 second integration and 32 channels.
+*               These are the last few scans.  They have fast switching.
+*
+enddef;
+*------------------------------------------------------------------------------
+$MODE;
+*
+def stdz1.2cm;
+     ref $PROCEDURES = Mode_01;
+     ref $FREQ = 15269.25MHz4x16MHz:Nl:La:Kp:Ov:Br;
+     ref $IF = LO@14600MHzDPolTone/1:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def stdz2.2cm;
+     ref $PROCEDURES = Mode_02;
+     ref $FREQ = 15269.25MHz4x16MHz:Nl:Kp:Ov:Br;
+     ref $FREQ = 15269.25MHz4x16MHz#02:La;
+     ref $IF = LO@14600MHzDPolTone/1:Nl:Kp:Ov:Br;
+     ref $IF = LO@14621MHzDPolNoTone:La;
+     ref $BBC = 4BBCs:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect:Nl:Kp:Ov:Br;
+     ref $PHASE_CAL_DETECT = NoDetect:La;
+enddef;
+*
+def stdz3.2cm;
+     ref $PROCEDURES = Mode_03;
+     ref $FREQ = 15269.00MHz4x16MHz:Nl:La:Kp:Ov:Br;
+     ref $IF = LO@14600MHzDPolTone/1:Nl:Kp:Ov:Br;
+     ref $IF = LO@14620MHzDPolTone/1:La;
+     ref $BBC = 4BBCs:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#02:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def stdz_u1.2cm;
+     ref $PROCEDURES = Mode_04;
+     ref $FREQ = 15190.25MHz4x16MHz:Nl:La:Kp:Ov:Br;
+     ref $IF = LO@14600MHzDPolTone/1:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#03:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def stdz_u2.2cm;
+     ref $PROCEDURES = Mode_05;
+     ref $FREQ = 15190.25MHz4x16MHz:Nl:La:Kp:Ov:Br;
+     ref $IF = LO@14600MHzDPolTone/1:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#03:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def stdz_u3.2cm;
+     ref $PROCEDURES = Mode_06;
+     ref $FREQ = 15190.25MHz4x16MHz:Nl:La:Kp:Ov:Br;
+     ref $IF = LO@14600MHzDPolTone/1:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#03:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def stdz_u4.2cm;
+     ref $PROCEDURES = Mode_07;
+     ref $FREQ = 15190.25MHz4x16MHz:Nl:La:Kp:Ov:Br;
+     ref $IF = LO@14600MHzDPolTone/1:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#03:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def TwoLO_1.6cm;
+     ref $PROCEDURES = Mode_08;
+     ref $FREQ = DualFreq4x16MHz:Nl:La:Kp:Ov:Br;
+     ref $IF = DualFreqRPolTone/1:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs#02:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#04:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def TwoLO_2.6cm;
+     ref $PROCEDURES = Mode_09;
+     ref $FREQ = DualFreq4x16MHz#02:Nl:La:Kp:Ov:Br;
+     ref $IF = DualFreqRPolTone/1#02:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs#02:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#05:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def TwoLO.sx;
+     ref $PROCEDURES = Mode_10;
+     ref $FREQ = DualFreq4x16MHz#03:Nl:La:Kp:Ov:Br;
+     ref $IF = DualFreqRPolTone/1#03:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs#02:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#06:Nl:La:Kp:Ov:Br;
+enddef;
+*
+def TwoLO.dualx;
+     ref $PROCEDURES = Mode_11;
+     ref $FREQ = DualFreq4x16MHz#04:Nl:La:Kp:Ov:Br;
+     ref $IF = DualFreqRPolTone/1#04:Nl:La:Kp:Ov:Br;
+     ref $BBC = 4BBCs#03:Nl:La:Kp:Ov:Br;
+     ref $TRACKS = VDIF.4Ch2bit1to1:Nl:La:Kp:Ov:Br;
+*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $ROLL = NoRoll:Nl:La:Kp:Ov:Br;
+*    ref $PASS_ORDER = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = UsbDetect#07:Nl:La:Kp:Ov:Br;
+enddef;
+*------------------------------------------------------------------------------
+$STATION;
+*
+def Nl;
+     ref $SITE = VLBA_NL;
+     ref $ANTENNA = VLBA_NL;
+     ref $DAS = 2RDBE2+NONE<;
+enddef;
+*
+def La;
+     ref $SITE = VLBA_LA;
+     ref $ANTENNA = VLBA_LA;
+     ref $DAS = 2RDBE2+NONE<;
+enddef;
+*
+def Kp;
+     ref $SITE = VLBA_KP;
+     ref $ANTENNA = VLBA_KP;
+     ref $DAS = 2RDBE2+NONE<;
+enddef;
+*
+def Ov;
+     ref $SITE = VLBA_OV;
+     ref $ANTENNA = VLBA_OV;
+     ref $DAS = 2RDBE2+NONE<;
+enddef;
+*
+def Br;
+     ref $SITE = VLBA_BR;
+     ref $ANTENNA = VLBA_BR;
+     ref $DAS = 2RDBE2+NONE<;
+enddef;
+*------------------------------------------------------------------------------
+$PROCEDURES;
+*
+def Mode_01;
+     procedure_name_prefix =  "01";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_02;
+     procedure_name_prefix =  "02";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_03;
+     procedure_name_prefix =  "03";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_04;
+     procedure_name_prefix =  "04";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_05;
+     procedure_name_prefix =  "05";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_06;
+     procedure_name_prefix =  "06";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_07;
+     procedure_name_prefix =  "07";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_08;
+     procedure_name_prefix =  "08";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_09;
+     procedure_name_prefix =  "09";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_10;
+     procedure_name_prefix =  "10";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*
+def Mode_11;
+     procedure_name_prefix =  "11";
+     tape_change =  420 sec;
+     headstack_motion =    6 sec;
+     new_source_command =    5 sec;
+     new_tape_setup =   20 sec;
+     setup_always = on :  20 sec;
+     parity_check = off : 100 sec;
+     tape_prepass = off : 600 sec;
+     preob_cal  = on :  10 sec : preob;
+     midob_cal  = on :  15 sec : midob;
+     postob_cal = on :   0 sec : postob;
+enddef;
+*------------------------------------------------------------------------------
+$SITE;
+*
+def VLBA_NL;
+     site_type = fixed;
+     site_name = VLBA_NL;
+     site_ID = Nl;
+*    elev=  222.24 long= 091:34:26. lat= 41:46:17.1
+     site_position = -130872.49870 m:-4762317.09250 m: 4226851.00140 m;
+     site_velocity = -0.015530   m/yr:  0.001460   m/yr: -0.002140  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+     horizon_map_az =  0.0 deg:  5.0: 75.0: 80.0: 85.0:100.0:105.0:110.0:115.0:
+                               120.0:125.0:130.0:135.0:140.0:145.0:150.0:155.0:
+                               160.0:165.0:170.0:190.0:195.0:200.0:220.0:225.0:
+                               360.0;
+     horizon_map_el =  2.0 deg:  2.0:  2.0:  3.0:  6.0:  6.0:  8.0:  7.0:  7.0:
+                                 6.0:  7.0:  7.0:  6.0:  6.0:  7.0:  7.0:  6.0:
+                                 5.0:  4.0:  3.0:  3.0:  2.0:  3.0:  3.0:  2.0:
+                                 2.0;
+enddef;
+*
+def VLBA_LA;
+     site_type = fixed;
+     site_name = VLBA_LA;
+     site_ID = La;
+*    elev= 1962.43 long= 106:14:44. lat= 35:46:30.4
+     site_position =-1449752.58390 m:-4975298.57570 m: 3709123.84590 m;
+     site_velocity = -0.014400   m/yr:  0.000550   m/yr: -0.004710  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+     horizon_map_az =  0.0 deg:  5.0: 75.0: 80.0: 85.0:130.0:135.0:145.0:150.0:
+                               250.0:255.0:300.0:305.0:315.0:320.0:340.0:345.0:
+                               360.0;
+     horizon_map_el =  2.0 deg:  2.0:  2.0:  3.0:  2.0:  2.0:  3.0:  3.0:  2.0:
+                                 2.0:  3.0:  3.0:  4.0:  4.0:  3.0:  3.0:  2.0:
+                                 2.0;
+enddef;
+*
+def VLBA_KP;
+     site_type = fixed;
+     site_name = VLBA_KP;
+     site_ID = Kp;
+*    elev= 1901.99 long= 111:36:44. lat= 31:57:22.7
+     site_position =-1995678.84020 m:-5037317.69680 m: 3357328.02510 m;
+     site_velocity = -0.013740   m/yr:  0.000790   m/yr: -0.006170  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+     horizon_map_az =  0.0 deg:  5.0: 45.0: 50.0: 55.0: 60.0: 65.0: 70.0: 75.0:
+                                80.0: 85.0: 90.0: 95.0:105.0:110.0:115.0:120.0:
+                               150.0:155.0:165.0:170.0:180.0:185.0:215.0:220.0:
+                               225.0:230.0:235.0:240.0:255.0:260.0:265.0:270.0:
+                               360.0;
+     horizon_map_el =  2.0 deg:  2.0:  2.0:  5.0:  6.0:  7.0:  7.0:  8.0:  8.0:
+                                 9.0:  6.0:  3.0:  2.0:  2.0:  3.0:  3.0:  2.0:
+                                 2.0:  3.0:  3.0:  2.0:  2.0:  3.0:  3.0:  4.0:
+                                 4.0:  5.0:  5.0:  4.0:  4.0:  3.0:  3.0:  2.0:
+                                 2.0;
+enddef;
+*
+def VLBA_OV;
+     site_type = fixed;
+     site_name = VLBA_OV;
+     site_ID = Ov;
+*    elev= 1196.31 long= 118:16:37. lat= 37:13:53.9
+     site_position =-2409150.40180 m:-4478573.11800 m: 3838617.33850 m;
+     site_velocity = -0.018570   m/yr:  0.006660   m/yr: -0.003330  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+     horizon_map_az =  0.0 deg:  5.0: 10.0: 15.0: 20.0: 25.0: 30.0: 35.0: 40.0:
+                                45.0: 50.0: 60.0: 65.0: 70.0: 75.0: 80.0: 85.0:
+                                90.0: 95.0:100.0:105.0:110.0:115.0:120.0:125.0:
+                               130.0:145.0:150.0:155.0:175.0:180.0:185.0:190.0:
+                               195.0:200.0:205.0:210.0:230.0:235.0:240.0:245.0:
+                               250.0:260.0:265.0:270.0:280.0:285.0:290.0:295.0:
+                               300.0:305.0:310.0:350.0:355.0:360.0;
+     horizon_map_el =  3.0 deg:  5.0:  5.0:  7.0:  9.0: 10.0: 12.0: 13.0: 13.0:
+                                14.0: 15.0: 15.0: 13.0: 12.0: 11.0: 10.0:  9.0:
+                                 8.0:  7.0:  6.0:  6.0:  5.0:  4.0:  3.0:  3.0:
+                                 4.0:  4.0:  3.0:  2.0:  2.0:  3.0:  3.0:  4.0:
+                                 5.0:  5.0:  6.0:  7.0:  7.0:  6.0:  7.0:  8.0:
+                                 9.0:  9.0:  8.0:  7.0:  7.0:  5.0:  4.0:  4.0:
+                                 3.0:  3.0:  2.0:  2.0:  3.0:  3.0;
+enddef;
+*
+def VLBA_BR;
+     site_type = fixed;
+     site_name = VLBA_BR;
+     site_ID = Br;
+*    elev=  250.48 long= 119:40:59. lat= 48:07:52.4
+     site_position =-2112065.20620 m:-3705356.50480 m: 4726813.67590 m;
+     site_velocity = -0.014820   m/yr:  0.000510   m/yr: -0.007190  m/yr;
+*    First line below is VEX standard format.  Use only when readers are ready.
+*    site_position_epoch = 2013y001d;
+     site_position_epoch =   56293;
+     horizon_map_az =  0.0 deg:  5.0: 10.0: 15.0: 25.0: 30.0: 40.0: 45.0: 70.0:
+                                75.0:120.0:125.0:130.0:135.0:155.0:160.0:185.0:
+                               190.0:195.0:220.0:225.0:235.0:240.0:245.0:250.0:
+                               255.0:265.0:270.0:275.0:300.0:305.0:310.0:315.0:
+                               330.0:335.0:340.0:345.0:350.0:360.0;
+     horizon_map_el =  2.0 deg:  2.0:  3.0:  2.0:  2.0:  3.0:  3.0:  4.0:  4.0:
+                                 5.0:  5.0:  4.0:  4.0:  3.0:  3.0:  2.0:  2.0:
+                                 3.0:  4.0:  4.0:  3.0:  3.0:  4.0:  4.0:  5.0:
+                                 6.0:  6.0:  5.0:  6.0:  6.0:  5.0:  6.0:  5.0:
+                                 5.0:  4.0:  4.0:  3.0:  2.0:  2.0;
+enddef;
+*------------------------------------------------------------------------------
+$ANTENNA;
+*
+def VLBA_NL;
+     axis_type = az : el;
+     antenna_motion = el :  28.7 deg/min :  6 sec;  *    0.250 deg/sec/sec
+     antenna_motion = az :  82.5 deg/min :  6 sec;  *    0.750 deg/sec/sec
+     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
+     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
+     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
+     axis_offset =    2.13080 m;
+enddef;
+*
+def VLBA_LA;
+     axis_type = az : el;
+     antenna_motion = el :  29.5 deg/min :  6 sec;  *    0.250 deg/sec/sec
+     antenna_motion = az :  82.0 deg/min :  6 sec;  *    0.750 deg/sec/sec
+     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
+     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
+     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
+     axis_offset =    2.13210 m;
+enddef;
+*
+def VLBA_KP;
+     axis_type = az : el;
+     antenna_motion = el :  29.4 deg/min :  6 sec;  *    0.250 deg/sec/sec
+     antenna_motion = az :  80.8 deg/min :  6 sec;  *    0.750 deg/sec/sec
+     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
+     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
+     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
+     axis_offset =    2.13120 m;
+enddef;
+*
+def VLBA_OV;
+     axis_type = az : el;
+     antenna_motion = el :  28.7 deg/min :  6 sec;  *    0.250 deg/sec/sec
+     antenna_motion = az :  84.5 deg/min :  6 sec;  *    0.750 deg/sec/sec
+     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
+     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
+     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
+     axis_offset =    2.13060 m;
+enddef;
+*
+def VLBA_BR;
+     axis_type = az : el;
+     antenna_motion = el :  29.0 deg/min :  6 sec;  *    0.250 deg/sec/sec
+     antenna_motion = az :  83.6 deg/min :  6 sec;  *    0.750 deg/sec/sec
+     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
+     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
+     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
+     axis_offset =    2.12990 m;
+enddef;
+*------------------------------------------------------------------------------
+$DAS;
+*
+def 2RDBE2+NONE<;
+     record_transport_type = Mark5C;
+     electronics_rack_type = RDBE2;
+     number_drives = 2;
+     headstack = 1 :            : 0 ;
+     headstack = 2 :            : 1 ;
+     tape_motion = adaptive : 0 min: 0 min: 10 sec;
+enddef;
+*------------------------------------------------------------------------------
+$SOURCE;
+*
+def 0923+392;
+     source_name = 0923+392;
+*    this source had calibrator code: V
+*    alternate source name: J0927+3902
+*    rfc_2015a Petrov, 2015, unpublished.  252917 observations
+     ra = 09h27m03.0139400s; dec =  39d02'20.851810"; ref_coord_frame = J2000;
+*    ra = 09h23m55.3192192s; dec =  39d15'23.566407"; ref_coord_frame = B1950;
+*    ra = 09h27m52.9780906s; dec =  38d58'43.579266"; ref_coord_frame = Date;
+enddef;
+*------------------------------------------------------------------------------
+$FREQ;
+*
+def 15269.25MHz4x16MHz;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:Kp:Ov:Br
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = : 15269.25 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
+     chan_def = : 15269.25 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
+     chan_def = : 15285.25 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
+     chan_def = : 15285.25 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
+enddef;
+*
+def 15269.25MHz4x16MHz#02;
+* mode =  2    stations =La
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = : 15269.25 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &NoCal; *Rcp
+     chan_def = : 15269.25 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &NoCal; *Lcp
+     chan_def = : 15285.25 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &NoCal; *Rcp
+     chan_def = : 15285.25 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &NoCal; *Lcp
+enddef;
+*
+def 15269.00MHz4x16MHz;
+* mode =  3    stations =Nl:La:Kp:Ov:Br
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = : 15269.00 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
+     chan_def = : 15269.00 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
+     chan_def = : 15285.00 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
+     chan_def = : 15285.00 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
+enddef;
+*
+def 15190.25MHz4x16MHz;
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = : 15190.25 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
+     chan_def = : 15190.25 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
+     chan_def = : 15526.25 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
+     chan_def = : 15526.25 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
+enddef;
+*
+def DualFreq4x16MHz;
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  4944.25 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
+     chan_def = :  4960.25 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
+     chan_def = :  6680.25 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
+     chan_def = :  6696.25 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
+enddef;
+*
+def DualFreq4x16MHz#02;
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  4444.25 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
+     chan_def = :  4460.25 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
+     chan_def = :  7192.25 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
+     chan_def = :  7208.25 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
+enddef;
+*
+def DualFreq4x16MHz#03;
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  2219.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
+     chan_def = :  2235.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
+     chan_def = :  8380.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
+     chan_def = :  8396.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
+enddef;
+*
+def DualFreq4x16MHz#04;
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  8280.25 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
+     chan_def = :  8264.25 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
+     chan_def = :  8603.25 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
+     chan_def = :  8619.25 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
+enddef;
+*------------------------------------------------------------------------------
+$IF;
+*
+def LO@14600MHzDPolTone/1;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:Kp:Ov:Br
+* mode =  3    stations =Nl:Kp:Ov:Br
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+     if_def = &IF_B : B : R : 14600.00 MHz : U : 1 MHz ; *   14600.00  10900.00  2cm     0 NA
+     if_def = &IF_D : D : L : 14600.00 MHz : U : 1 MHz ; *   14600.00  10900.00  2cm     0 NA
+enddef;
+*
+def LO@14621MHzDPolNoTone;
+* mode =  2    stations =La
+     if_def = &IF_B : B : R : 14620.50 MHz : U ; * PCall off!   14620.50  15600.00  2cm     0 NA
+     if_def = &IF_D : D : L : 14620.50 MHz : U ; * PCall off!   14620.50  15600.00  2cm     0 NA
+enddef;
+*
+def LO@14620MHzDPolTone/1;
+* mode =  3    stations =La
+     if_def = &IF_B : B : R : 14620.00 MHz : U : 1 MHz ; *   14620.00  15600.00  2cm     0 NA
+     if_def = &IF_D : D : L : 14620.00 MHz : U : 1 MHz ; *   14620.00  15600.00  2cm     0 NA
+enddef;
+*
+def DualFreqRPolTone/1;
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+     if_def = &IF_A : A : R :  4100.00 MHz : U : 1 MHz ; *    5900.00   4100.00  6cm     0 NA
+     if_def = &IF_B : B : R :  5900.00 MHz : U : 1 MHz ; *    5900.00   4100.00  6cm     0 NA
+enddef;
+*
+def DualFreqRPolTone/1#02;
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+     if_def = &IF_A : A : R :  3600.00 MHz : U : 1 MHz ; *    7900.00   3600.00  6cm     0 NA
+     if_def = &IF_B : B : R :  7900.00 MHz : L : 1 MHz ; *    7900.00   3600.00  6cm     0 NA
+enddef;
+*
+def DualFreqRPolTone/1#03;
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+     if_def = &IF_A : A : R :  2900.00 MHz : L : 1 MHz ; *    7600.00   2900.00  13cm     0 NA
+     if_def = &IF_B : B : R :  7600.00 MHz : U : 1 MHz ; *    7600.00   2900.00  4cm     0 NA
+enddef;
+*
+def DualFreqRPolTone/1#04;
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+     if_def = &IF_B : B : R :  7600.00 MHz : U : 1 MHz ; *    7600.00   2900.00  4cm     0 NA
+     if_def = &IF_D : D : R :  9400.00 MHz : L : 1 MHz ; *    7600.00   2900.00  4cm     0 NA
+enddef;
+*------------------------------------------------------------------------------
+$BBC;
+*
+def 4BBCs;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:La:Kp:Ov:Br
+* mode =  3    stations =Nl:La:Kp:Ov:Br
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+     BBC_assign = &BBC01 :  1 : &IF_B;
+     BBC_assign = &BBC02 :  2 : &IF_D;
+     BBC_assign = &BBC03 :  3 : &IF_B;
+     BBC_assign = &BBC04 :  4 : &IF_D;
+enddef;
+*
+def 4BBCs#02;
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+     BBC_assign = &BBC01 :  1 : &IF_A;
+     BBC_assign = &BBC02 :  2 : &IF_A;
+     BBC_assign = &BBC03 :  3 : &IF_B;
+     BBC_assign = &BBC04 :  4 : &IF_B;
+enddef;
+*
+def 4BBCs#03;
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+     BBC_assign = &BBC01 :  1 : &IF_B;
+     BBC_assign = &BBC02 :  2 : &IF_B;
+     BBC_assign = &BBC03 :  3 : &IF_D;
+     BBC_assign = &BBC04 :  4 : &IF_D;
+enddef;
+*------------------------------------------------------------------------------
+$PHASE_CAL_DETECT;
+*
+def UsbDetect;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:Kp:Ov:Br
+     phase_cal_detect = &U_Cal :  1 : 16 :  0;
+enddef;
+*
+def NoDetect;
+* mode =  2    stations =La
+     phase_cal_detect = &NoCal;
+enddef;
+*
+def UsbDetect#02;
+* mode =  3    stations =Nl:La:Kp:Ov:Br
+     phase_cal_detect = &U_Cal :  2 : 16 :  0;
+enddef;
+*
+def UsbDetect#03;
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+     phase_cal_detect = &U_Cal :  1 : 16 :  0;
+enddef;
+*
+def UsbDetect#04;
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+     phase_cal_detect = &U_Cal :  1 : 16 :  0;
+enddef;
+*
+def UsbDetect#05;
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+     phase_cal_detect = &U_Cal :  1 : 16 :  0;
+enddef;
+*
+def UsbDetect#06;
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+     phase_cal_detect = &U_Cal :  1 : 16 :  0;
+enddef;
+*
+def UsbDetect#07;
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+     phase_cal_detect = &U_Cal :  1 : 16 :  0;
+enddef;
+*------------------------------------------------------------------------------
+$TRACKS;
+*
+def VDIF.4Ch2bit1to1;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:La:Kp:Ov:Br
+* mode =  3    stations =Nl:La:Kp:Ov:Br
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+*    firmware_type = RDBE_DDC;
+*    format = VDIF, and fan-out = 1
+*    mode requires  32.00Mb/s/tr; stations using disks
+     track_frame_format = VDIF5032;
+     fanout_def =   : &CH01 : sign : 1:  1;
+     fanout_def =   : &CH01 :  mag : 1:  1;
+     fanout_def =   : &CH02 : sign : 1:  2;
+     fanout_def =   : &CH02 :  mag : 1:  2;
+     fanout_def =   : &CH03 : sign : 1:  3;
+     fanout_def =   : &CH03 :  mag : 1:  3;
+     fanout_def =   : &CH04 : sign : 1:  4;
+     fanout_def =   : &CH04 :  mag : 1:  4;
+enddef;
+*------------------------------------------------------------------------------
+$HEAD_POS;
+def DiskVoid;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:La:Kp:Ov:Br
+* mode =  3    stations =Nl:La:Kp:Ov:Br
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+*     Head positions irrelevant for Disk: empty def
+enddef;
+*------------------------------------------------------------------------------
+$PASS_ORDER;
+*
+def DiskVoid;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:La:Kp:Ov:Br
+* mode =  3    stations =Nl:La:Kp:Ov:Br
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+*     Pass orders irrelevant for Disk: empty def
+enddef;
+*------------------------------------------------------------------------------
+$ROLL;
+*
+def NoRoll;
+* mode =  1    stations =Nl:La:Kp:Ov:Br
+* mode =  2    stations =Nl:La:Kp:Ov:Br
+* mode =  3    stations =Nl:La:Kp:Ov:Br
+* mode =  4    stations =Nl:La:Kp:Ov:Br
+* mode =  5    stations =Nl:La:Kp:Ov:Br
+* mode =  6    stations =Nl:La:Kp:Ov:Br
+* mode =  7    stations =Nl:La:Kp:Ov:Br
+* mode =  8    stations =Nl:La:Kp:Ov:Br
+* mode =  9    stations =Nl:La:Kp:Ov:Br
+* mode = 10    stations =Nl:La:Kp:Ov:Br
+* mode = 11    stations =Nl:La:Kp:Ov:Br
+*    barrel-roll set to 'roll_off', so reverse-roll by  0 (1 head)
+     roll = off;
+enddef;
+*------------------------------------------------------------------------------
+$SCHED;
+* schedule section for experiment newsyn  
+* A new synthesizer test                                                  
+scan No0001;
+     start=2013y225d19h00m00s; mode=stdz1.2cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:  120 sec:    0.000 GB:   : &n    : 1;
+     station=La:    0 sec:  120 sec:    0.000 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:    0.000 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:    0.000 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:    0.000 GB:   : &n    : 1;
+endscan;
+scan No0002;
+     start=2013y225d19h02m06s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:    3.865 GB:   : &n    : 1;
+     station=La:    1 sec:  120 sec:    3.865 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:    3.865 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:    3.865 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:    3.865 GB:   : &n    : 1;
+endscan;
+scan No0003;
+     start=2013y225d19h04m12s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:    7.729 GB:   : &n    : 1;
+     station=La:    1 sec:  120 sec:    7.697 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:    7.729 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:    7.729 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:    7.729 GB:   : &n    : 1;
+endscan;
+scan No0004;
+     start=2013y225d19h06m18s; mode=stdz1.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   11.594 GB:   : &n    : 1;
+     station=La:    1 sec:  120 sec:   11.529 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   11.594 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:   11.594 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   11.594 GB:   : &n    : 1;
+endscan;
+scan No0005;
+     start=2013y225d19h08m24s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   15.458 GB:   : &n    : 1;
+     station=La:    1 sec:  120 sec:   15.362 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   15.458 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:   15.458 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   15.458 GB:   : &n    : 1;
+endscan;
+scan No0006;
+     start=2013y225d19h10m30s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   19.323 GB:   : &n    : 1;
+     station=La:    1 sec:  120 sec:   19.194 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   19.323 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:   19.323 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   19.323 GB:   : &n    : 1;
+endscan;
+scan No0007;
+     start=2013y225d19h12m36s; mode=stdz_u1.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   23.187 GB:   : &n    : 1;
+     station=La:    1 sec:  120 sec:   23.026 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   23.187 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:   23.187 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   23.187 GB:   : &n    : 1;
+endscan;
+scan No0008;
+     start=2013y225d19h14m42s; mode=stdz_u2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   27.052 GB:   : &n    : 1;
+     station=La:    0 sec:  120 sec:   26.859 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   27.052 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:   27.052 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   27.052 GB:   : &n    : 1;
+endscan;
+scan No0009;
+     start=2013y225d19h16m48s; mode=stdz_u3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   30.917 GB:   : &n    : 1;
+     station=La:    0 sec:  120 sec:   30.723 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   30.917 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:   30.917 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   30.917 GB:   : &n    : 1;
+endscan;
+scan No0010;
+     start=2013y225d19h18m54s; mode=stdz_u4.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   34.781 GB:   : &n    : 1;
+     station=La:    0 sec:  120 sec:   34.588 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   34.781 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:   34.781 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   34.781 GB:   : &n    : 1;
+endscan;
+scan No0011;
+     start=2013y225d19h21m00s; mode=stdz1.2cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:   10 sec:   38.646 GB:   : &n    : 1;
+     station=La:    0 sec:   10 sec:   38.453 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:   38.646 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:   38.646 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:   38.646 GB:   : &n    : 1;
+endscan;
+scan No0012;
+     start=2013y225d19h21m16s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:   38.968 GB:   : &n    : 1;
+     station=La:    0 sec:   10 sec:   38.775 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:   38.968 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:   38.968 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:   38.968 GB:   : &n    : 1;
+endscan;
+scan No0013;
+     start=2013y225d19h21m32s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:   39.290 GB:   : &n    : 1;
+     station=La:    0 sec:   10 sec:   39.097 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:   39.290 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:   39.290 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:   39.290 GB:   : &n    : 1;
+endscan;
+scan No0014;
+     start=2013y225d19h21m48s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:  300 sec:   39.612 GB:   : &n    : 1;
+     station=La:    0 sec:  300 sec:   39.419 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:   39.612 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:   39.612 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:   39.612 GB:   : &n    : 1;
+endscan;
+scan No0015;
+     start=2013y225d19h26m54s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:  300 sec:   49.273 GB:   : &n    : 1;
+     station=La:    0 sec:  300 sec:   49.080 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:   49.273 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:   49.273 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:   49.273 GB:   : &n    : 1;
+endscan;
+scan No0016;
+     start=2013y225d19h32m00s; mode=TwoLO.sx; source=0923+392;
+     station=Nl:    0 sec:  300 sec:   58.935 GB:   : &n    : 1;
+     station=La:    0 sec:  300 sec:   58.742 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:   58.935 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:   58.935 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:   58.935 GB:   : &n    : 1;
+endscan;
+scan No0017;
+     start=2013y225d19h37m06s; mode=TwoLO.dualx; source=0923+392;
+     station=Nl:    0 sec:  300 sec:   68.596 GB:   : &n    : 1;
+     station=La:    0 sec:  300 sec:   68.403 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:   68.596 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:   68.596 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:   68.596 GB:   : &n    : 1;
+endscan;
+scan No0018;
+     start=2013y225d19h42m12s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   78.258 GB:   : &n    : 1;
+     station=La:    0 sec:   20 sec:   78.064 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   78.258 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   78.258 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   78.258 GB:   : &n    : 1;
+endscan;
+scan No0019;
+     start=2013y225d19h42m38s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   78.902 GB:   : &n    : 1;
+     station=La:    0 sec:   20 sec:   78.709 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   78.902 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   78.870 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   78.902 GB:   : &n    : 1;
+endscan;
+scan No0020;
+     start=2013y225d19h43m04s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   79.546 GB:   : &n    : 1;
+     station=La:    0 sec:   20 sec:   79.353 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   79.546 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   79.481 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   79.546 GB:   : &n    : 1;
+endscan;
+scan No0021;
+     start=2013y225d19h43m30s; mode=TwoLO_2.6cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:   20 sec:   80.190 GB:   : &n    : 1;
+     station=La:    0 sec:   20 sec:   79.997 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   80.190 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   80.093 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   80.190 GB:   : &n    : 1;
+endscan;
+scan No0022;
+     start=2013y225d19h43m56s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   80.834 GB:   : &n    : 1;
+     station=La:    0 sec:   20 sec:   80.641 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   80.834 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   80.705 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   80.834 GB:   : &n    : 1;
+endscan;
+scan No0023;
+     start=2013y225d19h44m22s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   81.478 GB:   : &n    : 1;
+     station=La:    0 sec:   20 sec:   81.285 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   81.478 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   81.317 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   81.478 GB:   : &n    : 1;
+endscan;
+scan No0024;
+     start=2013y225d19h44m48s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   82.122 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:   81.929 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   82.122 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   81.929 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   82.122 GB:   : &n    : 1;
+endscan;
+scan No0025;
+     start=2013y225d19h45m14s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   82.766 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:   82.573 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   82.766 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   82.541 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   82.766 GB:   : &n    : 1;
+endscan;
+scan No0026;
+     start=2013y225d19h45m40s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   83.410 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:   83.217 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   83.410 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   83.153 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   83.410 GB:   : &n    : 1;
+endscan;
+scan No0027;
+     start=2013y225d19h46m06s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:   84.055 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:   83.861 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:   84.055 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:   20 sec:   83.765 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:   84.055 GB:   : &n    : 1;
+endscan;
+scan No0028;
+     start=2013y225d19h46m32s; mode=stdz1.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   84.699 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:   84.505 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   84.699 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:   84.377 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   84.699 GB:   : &n    : 1;
+endscan;
+scan No0029;
+     start=2013y225d19h48m38s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   88.563 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:   88.370 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   88.563 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:   88.209 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   88.563 GB:   : &n    : 1;
+endscan;
+scan No0030;
+     start=2013y225d19h50m44s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:   92.428 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:   92.235 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   92.428 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:   92.041 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   92.428 GB:   : &n    : 1;
+endscan;
+scan No0031;
+     start=2013y225d19h52m50s; mode=stdz1.2cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:  120 sec:   96.292 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:   96.099 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:   96.292 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:   95.874 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:   96.292 GB:   : &n    : 1;
+endscan;
+scan No0032;
+     start=2013y225d19h54m56s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  100.157 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:   99.964 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  100.157 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:   99.706 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  100.157 GB:   : &n    : 1;
+endscan;
+scan No0033;
+     start=2013y225d19h57m02s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  104.022 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  103.828 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  104.022 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:  103.538 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  104.022 GB:   : &n    : 1;
+endscan;
+scan No0034;
+     start=2013y225d19h59m08s; mode=stdz_u1.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  107.886 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  107.693 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  107.886 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:  107.371 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  107.886 GB:   : &n    : 1;
+endscan;
+scan No0035;
+     start=2013y225d20h01m14s; mode=stdz_u2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  111.751 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  111.557 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  111.751 GB:   : &ccw  : 1;
+     station=Ov:    1 sec:  120 sec:  111.203 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  111.751 GB:   : &n    : 1;
+endscan;
+scan No0036;
+     start=2013y225d20h03m20s; mode=stdz_u3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  115.615 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  115.422 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  115.615 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  115.036 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  115.615 GB:   : &n    : 1;
+endscan;
+scan No0037;
+     start=2013y225d20h05m26s; mode=stdz_u4.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  119.480 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  119.287 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  119.480 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  118.900 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  119.480 GB:   : &n    : 1;
+endscan;
+scan No0038;
+     start=2013y225d20h07m32s; mode=stdz1.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:  123.344 GB:   : &cw   : 1;
+     station=La:    0 sec:   10 sec:  123.151 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:  123.344 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:  122.765 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:  123.344 GB:   : &n    : 1;
+endscan;
+scan No0039;
+     start=2013y225d20h07m48s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:  123.666 GB:   : &cw   : 1;
+     station=La:    0 sec:   10 sec:  123.473 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:  123.666 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:  123.087 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:  123.666 GB:   : &n    : 1;
+endscan;
+scan No0040;
+     start=2013y225d20h08m04s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:  123.988 GB:   : &cw   : 1;
+     station=La:    0 sec:   10 sec:  123.795 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:  123.988 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:  123.409 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:  123.988 GB:   : &n    : 1;
+endscan;
+scan No0041;
+     start=2013y225d20h08m20s; mode=TwoLO_1.6cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:  300 sec:  124.311 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  124.117 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  124.311 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  123.731 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  124.311 GB:   : &n    : 1;
+endscan;
+scan No0042;
+     start=2013y225d20h13m26s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:  300 sec:  133.972 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  133.779 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  133.972 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  133.392 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  133.972 GB:   : &n    : 1;
+endscan;
+scan No0043;
+     start=2013y225d20h18m32s; mode=TwoLO.sx; source=0923+392;
+     station=Nl:    0 sec:  300 sec:  143.633 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  143.440 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  143.633 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  143.054 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  143.633 GB:   : &n    : 1;
+endscan;
+scan No0044;
+     start=2013y225d20h23m38s; mode=TwoLO.dualx; source=0923+392;
+     station=Nl:    0 sec:  300 sec:  153.295 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  153.102 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  153.295 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  152.715 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  153.295 GB:   : &n    : 1;
+endscan;
+scan No0045;
+     start=2013y225d20h28m44s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  162.956 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  162.763 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  162.956 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  162.377 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  162.956 GB:   : &n    : 1;
+endscan;
+scan No0046;
+     start=2013y225d20h29m10s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  163.600 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  163.407 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  163.600 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  163.021 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  163.600 GB:   : &n    : 1;
+endscan;
+scan No0047;
+     start=2013y225d20h29m36s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  164.244 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  164.051 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  164.244 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  163.665 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  164.244 GB:   : &n    : 1;
+endscan;
+scan No0048;
+     start=2013y225d20h30m02s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  164.889 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  164.695 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  164.889 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  164.309 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  164.889 GB:   : &n    : 1;
+endscan;
+scan No0049;
+     start=2013y225d20h30m28s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  165.533 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  165.339 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  165.533 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  164.953 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  165.533 GB:   : &n    : 1;
+endscan;
+scan No0050;
+     start=2013y225d20h30m54s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  166.177 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  165.984 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  166.177 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  165.597 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  166.177 GB:   : &n    : 1;
+endscan;
+scan No0051;
+     start=2013y225d20h31m20s; mode=TwoLO_1.6cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:   20 sec:  166.821 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  166.628 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  166.821 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  166.241 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  166.821 GB:   : &n    : 1;
+endscan;
+scan No0052;
+     start=2013y225d20h31m46s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  167.465 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  167.272 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  167.465 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  166.885 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  167.465 GB:   : &n    : 1;
+endscan;
+scan No0053;
+     start=2013y225d20h32m12s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  168.109 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  167.916 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  168.109 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  167.529 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  168.109 GB:   : &n    : 1;
+endscan;
+scan No0054;
+     start=2013y225d20h32m38s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  168.753 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  168.560 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  168.753 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  168.173 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  168.753 GB:   : &n    : 1;
+endscan;
+scan No0055;
+     start=2013y225d20h33m04s; mode=stdz1.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  169.397 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  169.204 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  169.397 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  168.818 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  169.397 GB:   : &n    : 1;
+endscan;
+scan No0056;
+     start=2013y225d20h35m10s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  173.262 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  173.069 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  173.262 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  172.682 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  173.262 GB:   : &n    : 1;
+endscan;
+scan No0057;
+     start=2013y225d20h37m16s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  177.126 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  176.933 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  177.126 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  176.547 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  177.126 GB:   : &n    : 1;
+endscan;
+scan No0058;
+     start=2013y225d20h39m22s; mode=stdz1.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  180.991 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  180.798 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  180.991 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  180.411 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  180.991 GB:   : &n    : 1;
+endscan;
+scan No0059;
+     start=2013y225d20h41m28s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  184.855 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  184.662 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  184.855 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  184.276 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  184.855 GB:   : &n    : 1;
+endscan;
+scan No0060;
+     start=2013y225d20h43m34s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  188.720 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  188.527 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  188.720 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  188.140 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  188.720 GB:   : &n    : 1;
+endscan;
+scan No0061;
+     start=2013y225d20h45m40s; mode=stdz_u1.2cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:  120 sec:  192.585 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  192.391 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  192.585 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  192.005 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  192.585 GB:   : &n    : 1;
+endscan;
+scan No0062;
+     start=2013y225d20h47m46s; mode=stdz_u2.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  196.449 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  196.256 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  196.449 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  195.870 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  196.449 GB:   : &n    : 1;
+endscan;
+scan No0063;
+     start=2013y225d20h49m52s; mode=stdz_u3.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  200.314 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  200.121 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  200.314 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  199.734 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  200.314 GB:   : &n    : 1;
+endscan;
+scan No0064;
+     start=2013y225d20h51m58s; mode=stdz_u4.2cm; source=0923+392;
+     station=Nl:    0 sec:  120 sec:  204.178 GB:   : &cw   : 1;
+     station=La:    0 sec:  120 sec:  203.985 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  120 sec:  204.178 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  120 sec:  203.599 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  120 sec:  204.178 GB:   : &n    : 1;
+endscan;
+scan No0065;
+     start=2013y225d20h54m04s; mode=stdz1.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:  208.043 GB:   : &cw   : 1;
+     station=La:    0 sec:   10 sec:  207.850 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:  208.043 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:  207.463 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:  208.043 GB:   : &n    : 1;
+endscan;
+scan No0066;
+     start=2013y225d20h54m20s; mode=stdz2.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:  208.365 GB:   : &cw   : 1;
+     station=La:    0 sec:   10 sec:  208.172 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:  208.365 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:  207.785 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:  208.365 GB:   : &n    : 1;
+endscan;
+scan No0067;
+     start=2013y225d20h54m36s; mode=stdz3.2cm; source=0923+392;
+     station=Nl:    0 sec:   10 sec:  208.687 GB:   : &cw   : 1;
+     station=La:    0 sec:   10 sec:  208.494 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   10 sec:  208.687 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   10 sec:  208.107 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   10 sec:  208.687 GB:   : &n    : 1;
+endscan;
+scan No0068;
+     start=2013y225d20h54m52s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:  300 sec:  209.009 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  208.816 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  209.009 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  208.429 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  209.009 GB:   : &n    : 1;
+endscan;
+scan No0069;
+     start=2013y225d20h59m58s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:  300 sec:  218.671 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  218.477 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  218.671 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  218.091 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  218.671 GB:   : &n    : 1;
+endscan;
+scan No0070;
+     start=2013y225d21h05m04s; mode=TwoLO.sx; source=0923+392;
+     station=Nl:    0 sec:  300 sec:  228.332 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  228.139 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  228.332 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  227.752 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  228.332 GB:   : &n    : 1;
+endscan;
+scan No0071;
+     start=2013y225d21h10m10s; mode=TwoLO.dualx; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:  300 sec:  237.993 GB:   : &cw   : 1;
+     station=La:    0 sec:  300 sec:  237.800 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:  300 sec:  237.993 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:  300 sec:  237.414 GB:   : &ccw  : 1;
+     station=Br:    0 sec:  300 sec:  237.993 GB:   : &n    : 1;
+endscan;
+scan No0072;
+     start=2013y225d21h15m16s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  247.655 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  247.462 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  247.655 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  247.075 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  247.655 GB:   : &n    : 1;
+endscan;
+scan No0073;
+     start=2013y225d21h15m42s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  248.299 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  248.106 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  248.299 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  247.719 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  248.299 GB:   : &n    : 1;
+endscan;
+scan No0074;
+     start=2013y225d21h16m08s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  248.943 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  248.750 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  248.943 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  248.363 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  248.943 GB:   : &n    : 1;
+endscan;
+scan No0075;
+     start=2013y225d21h16m34s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  249.587 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  249.394 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  249.587 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  249.007 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  249.587 GB:   : &n    : 1;
+endscan;
+scan No0076;
+     start=2013y225d21h17m00s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  250.231 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  250.038 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  250.231 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  249.652 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  250.231 GB:   : &n    : 1;
+endscan;
+scan No0077;
+     start=2013y225d21h17m26s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  250.875 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  250.682 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  250.875 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  250.296 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  250.875 GB:   : &n    : 1;
+endscan;
+scan No0078;
+     start=2013y225d21h17m52s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  251.519 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  251.326 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  251.519 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  250.940 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  251.519 GB:   : &n    : 1;
+endscan;
+scan No0079;
+     start=2013y225d21h18m18s; mode=TwoLO_2.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  252.163 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  251.970 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  252.163 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  251.584 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  252.163 GB:   : &n    : 1;
+endscan;
+scan No0080;
+     start=2013y225d21h18m44s; mode=TwoLO_1.6cm; source=0923+392;
+     station=Nl:    0 sec:   20 sec:  252.808 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  252.614 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  252.808 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  252.228 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  252.808 GB:   : &n    : 1;
+endscan;
+scan No0081;
+     start=2013y225d21h19m10s; mode=TwoLO_2.6cm; source=0923+392;
+*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
+     station=Nl:    0 sec:   20 sec:  253.452 GB:   : &cw   : 1;
+     station=La:    0 sec:   20 sec:  253.258 GB:   : &ccw  : 1;
+     station=Kp:    0 sec:   20 sec:  253.452 GB:   : &ccw  : 1;
+     station=Ov:    0 sec:   20 sec:  252.872 GB:   : &ccw  : 1;
+     station=Br:    0 sec:   20 sec:  253.452 GB:   : &n    : 1;
+endscan;
