@@ -1,0 +1,132 @@
+ 
+    Welcome to program SCHED.  Version:  11.50
+ 
+The manual is at http://www.aoc.nrao.edu/software/sched/index.html
+Unix users should set $SCHED to the base area where SCHED is installed.
+Most run time messages will be in sched.runlog
+ 
+Some useful commands to give now if running interactively:
+   SCHedule=<filename>    :  Specify input file.
+   PLOT                   :  Invokes uv, xy, rd, and uptime plotting.
+   FREQLIST=lowF,highF    :  Make frequency list (MHz).  Then exit.
+   EXIT                   :  Leave program.
+   /                      :  End of inputs - run program (or EXIT).
+ 
+SRREAD:  Reading source catalog:  Program_input
+RDSET:   Reading setup file:      3mm_RDBE.set
+STREAD:  Reading station catalog: /home/eldering/sched/catalogs/stations_RDBE.dat
+STREAD:  Reading locations file:  /home/eldering/sched/catalogs/locations.dat
+RDLOC:  Locations.dat stations ONSALA85   and ONSALA85   appear to be the same (time and position).  Sep (m):      0.11
+SRREAD:  Reading source catalog:  /home/eldering/sched/catalogs/sources.gsfc
+SRREAD:  Reading source catalog:  /home/eldering/sched/catalogs/sources.pointing
+RDSET:   Reading setup file:      /home/eldering/sched/setups/ptr7mm.set
+GETFREQ: Reading frequency file:  /home/eldering/sched/catalogs/freq_RDBE.dat
+INPUT:   Found    37 input scans.
+SHORTN: WARNING - Source names longer than 8 characters used.
+        This will be a problem if geodetic software (SOLV etc) is used.
+        This might be a problem on some correlators.
+ 
+HARMWARN:  Setup file: 3mm_RDBE.set
+ 
+WRTMSG: Special message from routine HARMWARN:
+ 
+Internally generated RFI tones can result from mixing of harmonics of
+the front-end synthesizers on the VLBA.  Under some circumstances,
+these tones can have very high amplitudes and cause ringing across the
+band.  In other circumstances, they are not actually seen.  An
+exhaustive study of when they are a problem has not been made.  They
+are known to be an issue with the new 6cm system when two different
+LOs are used to get observations at well separated RF frequencies.
+Spot checks for 13cm/4cm and 1cm observations suggest that they might
+not actually be a problem there.  The tones are likely to be strongest
+with lower harmonics with the worst case being when the fundamental
+output of one synthesizer is in the observing band for another.
+ 
+Any pair of the 3 synthesizers can be involved.  Also, the oscillator
+frequency for synthesizer outputs above 8.0 GHz is actually at half
+the output freqeuncy, so one needs to worry about harmonics of that
+half frequency.
+ 
+Some of the synthesizer frequencies will be forced by the science.
+But the unused synthesizers can be set at any valid set point and that
+choice matters.  SCHED can do fairly well at picking benign settings
+so it is recommended to let SCHED make the choice.  SCHED warns when
+the specified synthesizer frequencies could cause problems.  You are
+seeing this message because SCHED has detected one or more cases in
+your setups where harmonics of the LO settings can mix and produce a
+tone in your IF bands.  This does not mean that there will be a signal
+there for sure, just that it is possible.  Also, such tones are
+normally only a problem if they fall within a baseband, so the
+warnings below indicate if that is the case, at least if you have not
+changed the frequenies from the setup file values using Doppler or
+in-line frequency specification.  You probably only need to worry if
+there is a 'yes' in the last column.
+ 
+If you get this warning and have forced the unused synthesizer
+frequencies, you should change that and let SCHED pick the
+frequencies.  Or you can try other settings.  Sometimes a specific RF
+frequency can be observed with more than one setting of the
+synthesizers.  Check the freq.dat table for alternatives and, if there
+are some, try forcing them.  If your science can tolerate slightly
+different frequencies, such as when obtaining wide spanned bandwidth
+with observations at opposite ends of the receiver range, you might be
+able to move the chosen bands to allow use of a different synthesizer
+setting.  Perhaps the easiest thing to do in most cases is to shift
+your baseband frequecies so that the tone, while still in the IF, is
+not in one of the basebands.
+ 
+ 
+          There are possible tones in the IF due to mixing of harmonics of the
+          VLBA front end synthesizer outputs.  See sched.runlog for detailed information.
+ 
+Setup Syn  LO(GHz)  Osc Harmonic Syn LO(GHz)  Osc Harmonic   IF (MHz) RF    In BBC
+   1   1    12.9   6.45    1.0    3   12.1   6.05    1.0    800.00  86300.00   YES
+ 
+WRTMSG: Special message from routine CHKVDIFX:
+ 
+You have allowed the DiFX software correlator to adjust your average
+time to be an integral number of input FFT intervals (and an integral
+number of short-term accumulator intervals).  You did this by
+specifying CORAVG without a second argument set to "EXACT".  What you
+did is the default, and recommended, option.  The adjustment will be a
+few percent or less in most cases, although it can get as high as
+sqrt(2) for an extreme narrow bandwidth case with a large number of
+spectral channels.
+ 
+SCHOPT:  First output scan will be number    38
+ 
+WRTMSG: Special message from routine AUTODOWN:
+ 
+  * Stations using automatic tape allocation or disk recording systems
+    are being removed from scans when the source is below the antenna
+    pointing limits.  This behavior can be overridden using DODOWN.
+ 
+SCHOPT:  There will be    97 output scans (   38 -   134) from 187/02:30:00 to 187/09:38:15
+CHKSCN:     7 scans had more than half the antennas arrive on-source after the start time.
+              This could be normal if using duration scheduling with small gaps.
+SUMOPE:  Writing summary file eg3mmrd2.sum
+OMSOUT:  Writing OMS file eg3mmrd2.oms
+VXWRT :  Writing  V E X  file eg3mmrd2.vex
+V2DOUT:  Writing V2D file eg3mmrd2.tv2d
+FLAGS:   Writing apriori flagging file eg3mmrd2.flag
+ Processing VLBA_FD
+ 
+WRTMSG: Special message from routine VLBASU:
+ 
+VLBASU: For stations using the RDBE, but also having old VLBA style
+control systems (eg VLBA), crd files will be generated that may have
+reduced channels and adjusted samplerate, frequencies and bandwidths
+to conform to the capabilities of the old system.  These only affect
+the old backend and recorder, not the new hardware.  They only affect
+observations in that they will be used for reference pointing until
+the new control system can point the antenna.  Also the system
+temperatures and pulse cal information will be useful for monitoring
+system health.  Note that, until Sept. 20, 2012, SCHED also set the
+format to 'none', but it was then realized that this was not allowing
+the formatter to be configured which prevented the pulse cal
+detectors, which are in the formatter, from being set up properly.
+ 
+ Processing VLBA_PT
+ Processing VLBA_LA
+ Processing VLBA_KP
+ Processing VLBA_MK

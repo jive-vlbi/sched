@@ -1,0 +1,34 @@
+#  Template v2d file for DiFX correlation of lba
+
+vex = lba.vex.obs
+antennas = PA, AT, MP, HO, CD
+ANTENNA PA { }
+ANTENNA AT { }
+ANTENNA MP { }
+ANTENNA HO { }
+ANTENNA CD { }
+
+# The nChan should never be less than 128.
+# For numbers of channels < 128, set specAvg so nChan/specAvg
+# gives the desired number of channels
+SETUP default
+{
+  tInt =  1.000
+  nFFTChan =    128
+  nChan =  32
+  doPolar = True # Full stokes
+}
+
+# This, along with SETUP default above, should always be done
+RULE default
+{
+  setup = default
+}
+
+#  SETUP place holders (commented)
+# SETUP /home/eldering/sched/setups/lba21cm-2p-4IF.set {}
+
+# Sources (pointing centers) with recorded data but no offset pointing centers:
+SOURCE 0437-454 { calCode = V }
+SOURCE 0438-436 { calCode = V }
+SOURCE 0537-441 { calCode = V }

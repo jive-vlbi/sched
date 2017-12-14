@@ -1,0 +1,344 @@
+!*  Schedule for VLBA_NL   *!
+!*  Experiment ge001    *!
+!* Schedule Version:       1.00 *!
+!* Processed by SCHED version:  11.50 *!
+!* PI:       Craig Walker *!
+!* Address:  National Radio Astronomy Observatory *!
+!*           P. O. Box O *!
+!*           Socorro, New Mexico, 87801 *!
+!*            U.S.A. *!
+!* Phone:    505 835 7247 *!
+!* EMAIL:    cwalker@nrao.edu *!
+!* Fax:      505 835 7027 *!
+!* Phone during observation: 505 835 7247 *!
+!* Observing mode: 6cm 128-4-2 *!
+!* Notes: *!
+!*  *!
+!*  *!
+!*  *!
+!*  Start at 17h29m55s     Wed, 1997 Mar 05  Day of year   64   *!
+program=ge001   
+
+diskformat=mark5a
+media=(1,disk)
+
+!* The first scan is preceeded by a setup scan *!
+!* that ends at the start time of the first scan  *!
+
+!* --- Scan from 17h29m55s to 17h52m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+maxcaltime= 120
+fe=(1,6cm),(3,6cm)
+fexfer=(2,norm)
+noise=(1,low-s),(2,low-s),(3,low-s),(4,low-s)
+synth=( 1,15.1),( 2,-5.6),( 3,15.1)
+logging=STANDARD
+nchan= 8
+format=VLBA1:2
+ifdistr=(1,0),(2,0),(3,0),(4,0)
+baseband=(1,1),(2,2),(3,1),(4,2),(5,3),(6,4),(7,3),(8,4)
+ifchan=(1,A),(2,C),(3,A),(4,C),(5,A),(6,C),(7,A),(8,C)
+sideband=(1,U),(2,U),(3,L),(4,L),(5,U),(6,U),(7,L),(8,L)
+bits=(1,2),(2,2),(3,2),(4,2),(5,2),(6,2),(7,2),(8,2)
+period=(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1)
+level=(1,-1),(2,-1),(3,-1),(4,-1),(5,-1),(6,-1),(7,-1),(8,-1)
+azcolim=   0.00  elcolim=   0.00
+bbsynth=( 1,620.25),( 2,620.25),( 3,620.25),( 4,620.25),( 5,604.25),( 6,604.25)
+bbsynth=( 7,604.25),( 8,604.25)
+bbfilter=(1,8M),(2,8M),(3,8M),(4,8M),(5,8M),(6,8M),(7,8M),(8,8M)
+pcal=1MHZ
+pcalxbit1=(1,S1),(2,S3),(3,S5),(4,S7),(5,S1),(6,S3),(7,S5),(8,S7)
+pcalxbit2=(1,S2),(2,S4),(3,S6),(4,S8),(5,S2),(6,S4),(7,S6),(8,S8)
+pcalxfreq1=(1,750),(2,250),(3,750),(4,250),(5,6750),(6,6250),(7,6750),(8,6250)
+pcalxfreq2=(1,750),(2,250),(3,750),(4,250),(5,6750),(6,6250),(7,6750),(8,6250)
+samplerate=16M
+disk=off
+  date = 1997Mar05
+stop=17h29m55s   !NEXT!        
+qual=  0
+disk=on
+stop=17h52m00s   !NEXT!
+
+!* --- Scan from 17h59m55s to 18h22m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=17h59m55s   !NEXT!        
+qual=  0
+disk=on
+stop=18h22m00s   !NEXT!
+
+!* --- Scan from 18h29m55s to 18h52m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=18h29m55s   !NEXT!        
+qual=  0
+disk=on
+stop=18h52m00s   !NEXT!
+
+!* --- Scan from 18h59m55s to 19h22m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=18h59m55s   !NEXT!        
+qual=  0
+disk=on
+stop=19h22m00s   !NEXT!
+
+!* --- Scan from 19h29m55s to 19h52m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=19h29m55s   !NEXT!        
+qual=  0
+disk=on
+stop=19h52m00s   !NEXT!
+
+!* --- Scan from 19h59m55s to 20h22m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=19h59m55s   !NEXT!        
+qual=  0
+disk=on
+stop=20h22m00s   !NEXT!
+
+!* --- Scan from 20h29m55s to 20h52m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=20h29m55s   !NEXT!        
+qual=  0
+disk=on
+stop=20h52m00s   !NEXT!
+
+!* --- Scan from 20h59m55s to 21h22m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=20h59m55s   !NEXT!        
+qual=  0
+disk=on
+stop=21h22m00s   !NEXT!
+
+!* --- Scan from 21h29m55s to 21h52m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=21h29m55s   !NEXT!        
+qual=  0
+disk=on
+stop=21h52m00s   !NEXT!
+
+!* --- Scan from 21h59m55s to 22h22m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=21h59m55s   !NEXT!        
+qual=  0
+disk=on
+stop=22h22m00s   !NEXT!
+
+!* --- Scan from 22h29m55s to 22h52m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=22h29m55s   !NEXT!        
+qual=  0
+disk=on
+stop=22h52m00s   !NEXT!
+
+!* --- Scan from 22h59m55s to 23h22m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=22h59m55s   !NEXT!        
+qual=  0
+disk=on
+stop=23h22m00s   !NEXT!
+
+!* --- Scan from 23h29m55s to 23h52m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=23h29m55s   !NEXT!        
+qual=  0
+disk=on
+stop=23h52m00s   !NEXT!
+
+!* --- Scan from 23h59m55s to 00h22m00s   Wed, 1997 Mar 05 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=23h59m55s   !NEXT!        
+qual=  0
+disk=on
+date=1997Mar06
+stop=00h22m00s   !NEXT!
+
+!* --- Scan from 00h36m55s to 00h59m00s   Thu, 1997 Mar 06 --- *!
+sname='3C84'  ra=03h19m48.160094s  dec= 41d30'42.10413"  qual=999  calib='V'
+disk=off
+stop=00h36m55s   !NEXT!        
+qual=  0
+disk=on
+stop=00h59m00s   !NEXT!
+
+!* --- Scan from 01h06m55s to 01h29m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=01h06m55s   !NEXT!        
+qual=  0
+disk=on
+stop=01h29m00s   !NEXT!
+
+!* --- Scan from 01h36m55s to 01h59m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=01h36m55s   !NEXT!        
+qual=  0
+disk=on
+stop=01h59m00s   !NEXT!
+
+!* --- Scan from 02h06m55s to 02h29m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=02h06m55s   !NEXT!        
+qual=  0
+disk=on
+stop=02h29m00s   !NEXT!
+
+!* --- Scan from 02h36m55s to 02h59m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=02h36m55s   !NEXT!        
+qual=  0
+disk=on
+stop=02h59m00s   !NEXT!
+
+!* --- Scan from 03h06m55s to 03h29m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=03h06m55s   !NEXT!        
+qual=  0
+disk=on
+stop=03h29m00s   !NEXT!
+
+!* --- Scan from 03h36m55s to 03h59m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=03h36m55s   !NEXT!        
+qual=  0
+disk=on
+stop=03h59m00s   !NEXT!
+
+!* --- Scan from 04h06m55s to 04h29m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=04h06m55s   !NEXT!        
+qual=  0
+disk=on
+stop=04h29m00s   !NEXT!
+
+!* --- Scan from 04h36m55s to 04h59m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=04h36m55s   !NEXT!        
+qual=  0
+disk=on
+stop=04h59m00s   !NEXT!
+
+!* --- Scan from 05h06m55s to 05h29m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=05h06m55s   !NEXT!        
+qual=  0
+disk=on
+stop=05h29m00s   !NEXT!
+
+!* --- Scan from 05h36m55s to 05h59m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=05h36m55s   !NEXT!        
+qual=  0
+disk=on
+stop=05h59m00s   !NEXT!
+
+!* --- Scan from 06h06m55s to 06h29m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=06h06m55s   !NEXT!        
+qual=  0
+disk=on
+stop=06h29m00s   !NEXT!
+
+!* --- Scan from 06h36m55s to 06h59m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=06h36m55s   !NEXT!        
+qual=  0
+disk=on
+stop=06h59m00s   !NEXT!
+
+!* --- Scan from 07h06m55s to 07h29m00s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=07h06m55s   !NEXT!        
+qual=  0
+disk=on
+stop=07h29m00s   !NEXT!
+
+!* --- Scan from 07h43m55s to 08h06m00s   Thu, 1997 Mar 06 --- *!
+sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+disk=off
+stop=07h43m55s   !NEXT!        
+qual=  0
+disk=on
+stop=08h06m00s   !NEXT!
+
+!* --- Scan from 08h06m25s to 08h28m30s   Thu, 1997 Mar 06 --- *!
+sname='NRAO512'  ra=16h40m29.632773s  dec= 39d46'46.02848"  qual=999  calib='V'
+disk=off
+stop=08h06m25s   !NEXT!        
+qual=  0
+disk=on
+stop=08h28m30s   !NEXT!
+
+!* --- Scan from 08h32m25s to 08h54m30s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=08h32m25s   !NEXT!        
+qual=  0
+disk=on
+stop=08h54m30s   !NEXT!
+
+!* --- Scan from 08h58m25s to 09h20m30s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=08h58m25s   !NEXT!        
+qual=  0
+disk=on
+stop=09h20m30s   !NEXT!
+
+!* --- Scan from 09h24m25s to 09h46m30s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=09h24m25s   !NEXT!        
+qual=  0
+disk=on
+stop=09h46m30s   !NEXT!
+
+!* --- Scan from 09h50m25s to 10h12m30s   Thu, 1997 Mar 06 --- *!
+sname='DA193'  ra=05h55m30.805611s  dec= 39d48'49.16496"  qual=999  calib='V'
+disk=off
+stop=09h50m25s   !NEXT!        
+qual=  0
+disk=on
+stop=10h12m30s   !NEXT!
+
+!* --- Scan from 12h52m25s to 13h14m30s   Thu, 1997 Mar 06 --- *!
+sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+disk=off
+stop=12h52m25s   !NEXT!        
+qual=  0
+disk=on
+stop=13h14m30s   !NEXT!
+
+!* --- Scan from 13h18m25s to 13h40m30s   Thu, 1997 Mar 06 --- *!
+sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+disk=off
+stop=13h18m25s   !NEXT!        
+qual=  0
+disk=on
+stop=13h40m30s   !NEXT!
+disk=off
+stop=13h40m35s   !NEXT!
+     !QUIT! 

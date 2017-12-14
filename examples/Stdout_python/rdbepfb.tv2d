@@ -1,0 +1,35 @@
+#  Template v2d file for DiFX correlation of rdbepfb
+
+vex = rdbepfb.vex.obs
+antennas = HN, LA, PT, BR, MK
+ANTENNA HN { }
+ANTENNA LA { }
+ANTENNA PT { }
+ANTENNA BR { }
+ANTENNA MK { }
+
+# The nChan should never be less than 128.
+# For numbers of channels < 128, set specAvg so nChan/specAvg
+# gives the desired number of channels
+SETUP default
+{
+  tInt =  2.000
+  nFFTChan =    128
+  nChan =  64
+  doPolar = True # Full stokes
+}
+
+# This, along with SETUP default above, should always be done
+RULE default
+{
+  setup = default
+}
+
+#  SETUP place holders (commented)
+# SETUP /home/eldering/sched/setups/rdbe_pfb_4980_dual.set {}
+
+# Sources (pointing centers) with recorded data but no offset pointing centers:
+SOURCE M84 { calCode = V }
+SOURCE 3C273 { calCode = V }
+SOURCE M87 { calCode = V }
+SOURCE 3C279 { calCode = V }
