@@ -966,7 +966,7 @@ def block_def2str(name, block_def, keyword="def", mode_stations={}):
 """.format(keyword, name)[1:]
 
     # add a comment in which mode this is referenced by which stations
-    for mode, stations in mode_stations.items():
+    for mode, stations in sorted(mode_stations.items()):
         ret += """
 * {}: {}
 """.format(mode, ", ".join(sorted(stations)))[1:]
