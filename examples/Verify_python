@@ -31,556 +31,551 @@ echo " "
 # Set the directory of the SCHED executable to be tested:
 setenv SCHBIN $SCHED/bin/$1
 setenv SCHEXC "$SCHED/src/python/sched.py"
-echo Running SCHED from $SCHBIN
+echo Running SCHED from $SCHEXC
 
 # Set location of "standard" results.
-if( -e $SCHED/examples/Stdout ) then
-   setenv SCH_STDOUT $SCHED/examples/Stdout
-else if( -e Stdout ) then
-   setenv SCH_STDOUT Stdout
+if( -e $SCHED/examples/Stdout_python ) then
+   setenv SCH_STDOUT $SCHED/examples/Stdout_python
+else if( -e Stdout_python ) then
+   setenv SCH_STDOUT Stdout_python
 else
    echo Standard output file directory not found.
    exit
 endif
 
-# Set the location of the current $SCHED so that Verify can ignore
-# differences in file paths on future comparisons.
-source $SCH_STDOUT/SetSchedStd
+setenv LOGOUT testruns_python.out
 
 #  First clean out any old files.
 $SCHBIN/schclean "*"
+/bin/rm *.vex2
 /bin/rm doptgt.com
-/bin/rm testruns.out
+/bin/rm $LOGOUT
 
-date > testruns.out
+date > $LOGOUT
 
 #  Now run SCHED on the examples and compare results with standards.
 #  In alphabetical order for ease of comparison with ls etc.
 
-echo All output will be in testruns.out
-
 #  eg1024.key not done
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg1024.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg1024.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing eg1024.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg1024.key > /dev/null
 mv sched.runlog eg1024.runlog
-./Check_results eg1024 mc $SCH_STDOUT eg1024.key >> testruns.out
+./Check_results_python eg1024 mc $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg2head.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg2head.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing eg2head.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg2head.key > /dev/null
 mv sched.runlog n02l1.runlog
-./Check_results n02l1 ef $SCH_STDOUT eg2head.key >> testruns.out
+./Check_results_python n02l1 ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg3mma.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg3mma.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing eg3mma.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg3mma.key > /dev/null
 mv sched.runlog eg3mma.runlog
-./Check_results eg3mma pt $SCH_STDOUT eg3mma.key >> testruns.out
+./Check_results_python eg3mma pt $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg3mmb.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg3mmb.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing eg3mmb.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg3mmb.key > /dev/null
 mv sched.runlog eg3mmb.runlog
-./Check_results eg3mmb pt $SCH_STDOUT eg3mmb.key >> testruns.out
+./Check_results_python eg3mmb pt $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing eg3mmc.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg3mmc.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing eg3mmc.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg3mmc.key > /dev/null
 mv sched.runlog eg3mmc.runlog
-./Check_results eg3mmc pt $SCH_STDOUT eg3mmc.key >> testruns.out
+./Check_results_python eg3mmc pt $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "**************" Processing eg3mm_rd2.key "**************" | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg3mm_rd2.key  >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "**************" Processing eg3mm_rd2.key "**************" | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg3mm_rd2.key > /dev/null
 mv sched.runlog eg3mmrd2.runlog
-./Check_results eg3mmrd2 pt $SCH_STDOUT eg3mm_rd2.key >> testruns.out
+./Check_results_python eg3mmrd2 pt $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*************" Processing eg512g.key "******************"  | tee -a  testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg512g.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*************" Processing eg512g.key "******************"  | tee -a  $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg512g.key > /dev/null
 mv sched.runlog eg512g.runlog
-./Check_results eg512g hn $SCH_STDOUT eg512g.key >> testruns.out
+./Check_results_python eg512g hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing eg512.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg512.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing eg512.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg512.key > /dev/null
 mv sched.runlog eg512.runlog
-./Check_results eg512 hn $SCH_STDOUT eg512.key >> testruns.out
+./Check_results_python eg512 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing eg5cm.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg5cm.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing eg5cm.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg5cm.key > /dev/null
 mv sched.runlog eg5cm.runlog
-./Check_results eg5cm y $SCH_STDOUT eg5cm.key >> testruns.out
+./Check_results_python eg5cm y $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egglobal.key "******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egglobal.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egglobal.key "******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egglobal.key > /dev/null
 mv sched.runlog ge001.runlog
-./Check_results ge001 hn $SCH_STDOUT egglobal.key >> testruns.out
+./Check_results_python ge001 hn $SCH_STDOUT >> $LOGOUT
 
 # egiii.key not done.  Key file deleted May 12, 2010.
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "**********" Processing egglobalOH.key "*****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egglobalOH.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "**********" Processing egglobalOH.key "*****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egglobalOH.key > /dev/null
 mv sched.runlog eggl_oh.runlog
-./Check_results eggl_oh hn $SCH_STDOUT egglobalOH.key >> testruns.out
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing eglst.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eglst.key >> testruns.out
+./Check_results_python eggl_oh hn $SCH_STDOUT >> $LOGOUT
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing eglst.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eglst.key > /dev/null
 mv sched.runlog eglst.runlog
-./Check_results eglst hn $SCH_STDOUT eglst.key >> testruns.out
+./Check_results_python eglst hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egmk5vex.key "******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egmk5vex.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egmk5vex.key "******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egmk5vex.key > /dev/null
 mv sched.runlog mk5vxg.runlog
-./Check_results mk5vxg ef $SCH_STDOUT egmk5vex.key >> testruns.out
+./Check_results_python mk5vxg ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*************" Processing egOH.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egOH.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*************" Processing egOH.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egOH.key > /dev/null
 mv sched.runlog egoh.runlog
-./Check_results egoh hn $SCH_STDOUT egOH.key >> testruns.out
+./Check_results_python egoh hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egplan.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egplan.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egplan.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egplan.key > /dev/null
 mv sched.runlog egplan.runlog
-./Check_results egplan hn $SCH_STDOUT egplan.key >> testruns.out
+./Check_results_python egplan hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egvlba.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egvlba.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egvlba.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egvlba.key > /dev/null
 mv sched.runlog egvlba.runlog
-./Check_results egvlba hn $SCH_STDOUT egvlba.key >> testruns.out
+./Check_results_python egvlba hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*************" Processing eg24.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < eg24.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*************" Processing eg24.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/eg24.key > /dev/null
 mv sched.runlog eg24.runlog
-./Check_results eg24 hn $SCH_STDOUT eg24.key >> testruns.out
+./Check_results_python eg24 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing egddc.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egddc.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing egddc.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egddc.key > /dev/null
 mv sched.runlog egddc.runlog
-./Check_results egddc hn $SCH_STDOUT egddc.key >> testruns.out
+./Check_results_python egddc hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing egddc2.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egddc2.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing egddc2.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egddc2.key > /dev/null
 mv sched.runlog egddc2.runlog
-./Check_results egddc2 hn $SCH_STDOUT egddc2.key >> testruns.out
+./Check_results_python egddc2 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "******" Processing piggyback.key for MARK5A"*************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-sed   's:\!'MARK5A'::' piggyback.key > temp.key
-$SCHEXC < temp.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "******" Processing piggyback.key for MARK5A"*************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+sed   's:\!'MARK5A'::' $SCH_STDOUT/piggyback.key > temp.key
+$SCHEXC < temp.key > /dev/null
 mv sched.runlog piggya.runlog
-./Check_results piggya hn $SCH_STDOUT piggyback.key >> testruns.out
+./Check_results_python piggya hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "******" Processing piggyback.key for MARK5C"*************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-sed   's:\!'MARK5C'::' piggyback.key > temp.key
-$SCHEXC < temp.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "******" Processing piggyback.key for MARK5C"*************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+sed   's:\!'MARK5C'::' $SCH_STDOUT/piggyback.key > temp.key
+$SCHEXC < temp.key > /dev/null
 mv sched.runlog piggyc.runlog
-./Check_results piggyc hn $SCH_STDOUT piggyback.key >> testruns.out
+./Check_results_python piggyc hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egcwide.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egcwide.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egcwide.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egcwide.key > /dev/null
 mv sched.runlog egcwide.runlog
-./Check_results egcwide hn $SCH_STDOUT egcwide.key >> testruns.out
+./Check_results_python egcwide hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egrdbe2.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egrdbe2.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egrdbe2.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egrdbe2.key > /dev/null
 mv sched.runlog egrd2.runlog
-./Check_results egrd2 hn $SCH_STDOUT egrdbe2.key >> testruns.out
+./Check_results_python egrd2 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing rdbepfb.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < rdbepfb.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing rdbepfb.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/rdbepfb.key > /dev/null
 mv sched.runlog rdbepfb.runlog
-./Check_results rdbepfb hn $SCH_STDOUT rdbepfb.key >> testruns.out
+./Check_results_python rdbepfb hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing newsyn.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < newsyn.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing newsyn.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/newsyn.key > /dev/null
 mv sched.runlog newsyn.runlog
-./Check_results newsyn la $SCH_STDOUT newsyn.key >> testruns.out
+./Check_results_python newsyn la $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egcent.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egcent.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egcent.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egcent.key > /dev/null
 mv sched.runlog egcent.runlog
-./Check_results egcent hn $SCH_STDOUT egcent.key >> testruns.out
+./Check_results_python egcent hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egdelzn.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egdelzn.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egdelzn.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egdelzn.key > /dev/null
 mv sched.runlog egdelzn.runlog
-./Check_results egdelzn hn $SCH_STDOUT egdelzn.key >> testruns.out
+./Check_results_python egdelzn hn $SCH_STDOUT >> $LOGOUT
 
 # n2227.key USNO sample added Aug. 21, 2012.
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing n2227.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < n2227.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing n2227.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/n2227.key > /dev/null
 mv sched.runlog n2227.runlog
-./Check_results n2227 pt $SCH_STDOUT n2227.key >> testruns.out
+./Check_results_python n2227 pt $SCH_STDOUT >> $LOGOUT
 
 # pfbsettst.key test PFB setups.
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*********" Processing pfbsettst.key "*****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < pfbsettst.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*********" Processing pfbsettst.key "*****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/pfbsettst.key > /dev/null
 mv sched.runlog pfbtst.runlog
-./Check_results pfbtst hn $SCH_STDOUT pfbsettst.key >> testruns.out
+./Check_results_python pfbtst hn $SCH_STDOUT >> $LOGOUT
 
 # tstsets.key test DDC setups.
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*********" Processing tstsets.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < tstsets.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*********" Processing tstsets.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/tstsets.key > /dev/null
 mv sched.runlog tstsets.runlog
-./Check_results tstsets hn $SCH_STDOUT tstsets.key >> testruns.out
+./Check_results_python tstsets hn $SCH_STDOUT >> $LOGOUT
 
 #  egdifx.key deleted May 12, 2010.
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing egvsop.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < egvsop.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing egvsop.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/egvsop.key > /dev/null
 mv sched.runlog vt002.runlog
-./Check_results vt002 hn $SCH_STDOUT egvsop.key >> testruns.out
+./Check_results_python vt002 hn $SCH_STDOUT >> $LOGOUT
 
 #  EVN examples
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "******" Processing evn_cont_strong.key "****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < evn_cont_strong.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "******" Processing evn_cont_strong.key "****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/evn_cont_strong.key > /dev/null
 mv sched.runlog eo999.runlog
-./Check_results eo999 ef $SCH_STDOUT evn_cont_strong.key >> testruns.out
+./Check_results_python eo999 ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "******" Processing evn_cont_strong_pol.key "************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < evn_cont_strong_pol.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "******" Processing evn_cont_strong_pol.key "************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/evn_cont_strong_pol.key > /dev/null
 mv sched.runlog eo902.runlog
-./Check_results eo902 ef $SCH_STDOUT evn_cont_strong_pol.key >> testruns.out
+./Check_results_python eo902 ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*******" Processing evn_cont_weak_256.key "*************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < evn_cont_weak_256.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*******" Processing evn_cont_weak_256.key "*************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/evn_cont_weak_256.key > /dev/null
 mv sched.runlog eo903.runlog
-./Check_results eo903 ef $SCH_STDOUT evn_cont_weak_256.key >> testruns.out
+./Check_results_python eo903 ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*********" Processing evn_cont_weak_512.key "***********"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < evn_cont_weak_512.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*********" Processing evn_cont_weak_512.key "***********"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/evn_cont_weak_512.key > /dev/null
 mv sched.runlog eo904.runlog
-./Check_results eo904 ef $SCH_STDOUT evn_cont_weak_512.key >> testruns.out
+./Check_results_python eo904 ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "********" Processing evn_cont_weak_snap.key "***********"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < evn_cont_weak_snap.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "********" Processing evn_cont_weak_snap.key "***********"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/evn_cont_weak_snap.key > /dev/null
 mv sched.runlog eo905.runlog
-./Check_results eo905 ef $SCH_STDOUT evn_cont_weak_snap.key >> testruns.out
+./Check_results_python eo905 ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*********" Processing evn_line_hi.key "*****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < evn_line_hi.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*********" Processing evn_line_hi.key "*****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/evn_line_hi.key > /dev/null
 mv sched.runlog eo906.runlog
-./Check_results eo906 ef $SCH_STDOUT evn_line_hi.key >> testruns.out
+./Check_results_python eo906 ef $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*********" Processing evn_line_meth.key "***************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < evn_line_meth.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*********" Processing evn_line_meth.key "***************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/evn_line_meth.key > /dev/null
 mv sched.runlog eo907.runlog
-./Check_results eo907 ef $SCH_STDOUT evn_line_meth.key >> testruns.out
+./Check_results_python eo907 ef $SCH_STDOUT >> $LOGOUT
 
 #  Back to other examples.
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing hsa21cm.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < hsa21cm.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing hsa21cm.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/hsa21cm.key > /dev/null
 mv sched.runlog bw089.runlog
-./Check_results bw089 hn $SCH_STDOUT hsa21cm.key >> testruns.out
+./Check_results_python bw089 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing hsa1cm.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < hsa1cm.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing hsa1cm.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/hsa1cm.key > /dev/null
 mv sched.runlog hsa1cm.runlog
-./Check_results hsa1cm hn $SCH_STDOUT hsa1cm.key >> testruns.out
+./Check_results_python hsa1cm hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing manual_1.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < manual_1.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing manual_1.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/manual_1.key > /dev/null
 mv sched.runlog be001.runlog
-./Check_results be001 hn $SCH_STDOUT manual_1.key >> testruns.out
+./Check_results_python be001 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing manual_2.key "******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < manual_2.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing manual_2.key "******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/manual_2.key > /dev/null
 mv sched.runlog be002.runlog
-./Check_results be002 hn $SCH_STDOUT manual_2.key >> testruns.out
+./Check_results_python be002 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "**********" Processing manual_line.key "****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < manual_line.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "**********" Processing manual_line.key "****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/manual_line.key > /dev/null
 mv sched.runlog bd027.runlog
-./Check_results bd027 hn $SCH_STDOUT manual_line.key >> testruns.out
+./Check_results_python bd027 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "**********" Processing manual_simp.key "****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < manual_simp.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "**********" Processing manual_simp.key "****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/manual_simp.key > /dev/null
 mv sched.runlog uvcov.runlog
-./Check_results uvcov hn $SCH_STDOUT manual_simp.key >> testruns.out
+./Check_results_python uvcov hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing mt506.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < mt506.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing mt506.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/mt506.key > /dev/null
 mv sched.runlog mt506.runlog
-./Check_results mt506 hn $SCH_STDOUT mt506.key >> testruns.out
+./Check_results_python mt506 hn $SCH_STDOUT >> $LOGOUT
 
-echo "******************************************************"  >> testruns.out
-echo "************" Processing dq415.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < dq415.key >> testruns.out
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing dq415.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/dq415.key > /dev/null
 mv sched.runlog dq415.runlog
-./Check_results dq415 hn $SCH_STDOUT dq415.key >> testruns.out
+./Check_results_python dq415 hn $SCH_STDOUT >> $LOGOUT
 
-echo "******************************************************"  >> testruns.out
-echo "************" Processing dqhiel.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < dqhiel.key >> testruns.out
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing dqhiel.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/dqhiel.key > /dev/null
 mv sched.runlog dqhiel.runlog
-./Check_results dqhiel hn $SCH_STDOUT dqhiel.key >> testruns.out
+./Check_results_python dqhiel hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing planvla.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < planvla.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing planvla.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/planvla.key > /dev/null
 mv sched.runlog yplan.runlog
-./Check_results yplan y $SCH_STDOUT planvla.key >> testruns.out
+./Check_results_python yplan y $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "***********" Processing vips11.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < vips11.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "***********" Processing vips11.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/vips11.key > /dev/null
 mv sched.runlog vips11.runlog
-./Check_results vips11 hn $SCH_STDOUT vips11.key >> testruns.out
+./Check_results_python vips11 hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "*************" Processing jvla.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < jvla.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "*************" Processing jvla.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/jvla.key > /dev/null
 mv sched.runlog jvla.runlog
-./Check_results jvla hn $SCH_STDOUT jvla.key >> testruns.out
+./Check_results_python jvla hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing hsaddc.key "*******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < hsaddc.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing hsaddc.key "*******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/hsaddc.key > /dev/null
 mv sched.runlog hsaddc.runlog
-./Check_results hsaddc hn $SCH_STDOUT hsaddc.key >> testruns.out
+./Check_results_python hsaddc hn $SCH_STDOUT >> $LOGOUT
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "**************" Processing lba.key "********************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < lba.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "**************" Processing lba.key "********************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/lba.key > /dev/null
 mv sched.runlog lba.runlog
-./Check_results lba at $SCH_STDOUT lba.key >> testruns.out
+./Check_results_python lba at $SCH_STDOUT >> $LOGOUT
 
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing lba_h2o.key "****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < lba_h2o.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing lba_h2o.key "****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/lba_h2o.key > /dev/null
 mv sched.runlog lbah2o.runlog
-./Check_results lbah2o at $SCH_STDOUT lba_h2o.key >> testruns.out
+./Check_results_python lbah2o at $SCH_STDOUT >> $LOGOUT
 
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing lba_oh.key "*****************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < lba_oh.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing lba_oh.key "*****************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/lba_oh.key > /dev/null
 mv sched.runlog lbaoh.runlog
-./Check_results lbaoh at $SCH_STDOUT lba_oh.key >> testruns.out
+./Check_results_python lbaoh at $SCH_STDOUT >> $LOGOUT
 
 
-echo " " >> testruns.out
-echo " " >> testruns.out
-echo "******************************************************"  >> testruns.out
-echo "************" Processing lba_mk5.key "******************"  | tee -a testruns.out
-echo "******************************************************"  >> testruns.out
-$SCHEXC < lba_mk5.key >> testruns.out
+echo " " >> $LOGOUT
+echo " " >> $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+echo "************" Processing lba_mk5.key "******************"  | tee -a $LOGOUT
+echo "******************************************************"  >> $LOGOUT
+$SCHEXC < $SCH_STDOUT/lba_mk5.key > /dev/null
 mv sched.runlog lba_mk5.runlog
-./Check_results lba_mk5 at $SCH_STDOUT lba_mk5.key >> testruns.out
+./Check_results_python lba_mk5 at $SCH_STDOUT >> $LOGOUT
 
-echo ' --------------------------------------------------' >> testruns.out
+echo ' --------------------------------------------------' >> $LOGOUT
 
-date >> testruns.out
-echo ' --------------------------------------------------' >> testruns.out
+date >> $LOGOUT
+echo ' --------------------------------------------------' >> $LOGOUT
 
 echo "===================================================="
-echo "Examine   testruns.out   for results."
+echo "Examine   $LOGOUT   for results."
 echo "  It will contain sched runtime output and comparison"
 echo "  with standard results in directory Stdout."
 echo "Do not worry about numbers differing in last digit -"
 echo "  Some machines round differently"
 echo "===================================================="
-
-grep -av "This schedule produced on:" testruns.out > testruns.out.filtered
