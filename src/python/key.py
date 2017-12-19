@@ -283,7 +283,7 @@ class Parser:
             
             match = self.control_re.match(text)
             if match:
-                self._handle_match(match)
+                self._handle_control(match)
             else:
                 res = self.scanner.scan(text)
                 if res[1] != "":
