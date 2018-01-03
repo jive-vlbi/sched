@@ -27,7 +27,7 @@ def getsta(stdin, values, index, gotvex, mjd1):
             f = open(station_file, "r")
         except Exception as e:
             s.putout(str(e))
-            s.error("Station catalog: {} not opened".format(infile))
+            s.error("Station catalog: {} not opened".format(station_file))
         else:
             with f:
                 input_iterator = key.KeyfileIterator(f)
