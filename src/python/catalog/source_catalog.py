@@ -25,7 +25,6 @@ class SourceCatalog(Catalog):
     LOGICAL          PLANET(MAXSRC), SATEL(MAXSRC)
     CHARACTER        CSUSED(MALIAS,MAXSRC)*1
     INTEGER          SRCATN(MAXSRC)
-    CHARACTER        SRCNAME(MAXSRC)*12
     """
     maxsource = s.schn1.srcatn.shape[0]
     block_items = {
@@ -75,9 +74,6 @@ class SourceCatalog(Catalog):
             "velref",
             "veldef",
             "csused"
-        ],
-        s.schc1: [
-            "srcname"
         ]
     }
 
