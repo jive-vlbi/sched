@@ -183,13 +183,16 @@ enddef;
 def modes_block():
     # some common block variables are indexed by scan number, but not part 
     # of the scan catalog, the indices are offset from the catalog entries
-    scan_offset = s.schn1.scan1 - 1
-    scans = ScanCatalog().read()
+    scan_catalog = ScanCatalog()
+    scan_catalog.read()
+    scans = scan_catalog.scheduled()
+    scan_offset = scan_catalog.scan_offset
     
     setups = SetupCatalog().read()
 
-    stations = StationCatalog().read()
-    stations = [stations[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
+    station_catalog = StationCatalog()
+    station_catalog.read()
+    stations = station_catalog.scheduled()
 
     format_map = {"MARKIII": "Mark3A",
                   "MKIV": "Mark4",
@@ -712,8 +715,9 @@ def stations_block():
         else:
             return "{}+{}".format(rack, recorder)
 
-    stations = StationCatalog().read()
-    stations = [stations[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
+    station_catalog = StationCatalog()
+    station_catalog.read()
+    stations = station_catalog.scheduled()
     
     generator = {"SITE": lambda station, index: do_site(station),
                  "ANTENNA": lambda station, index: do_antenna(station),
@@ -805,16 +809,18 @@ def scan_sector(station, scan, az1, el1):
     return None
     
 def source_block():
-    sources = [source for source in SourceCatalog().read() if source.sused]
+    catalog = SourceCatalog()
+    catalog.read()
+    catalog.set_aliases()
+    sources = catalog.scheduled()
     source_text = "$SOURCE;\n"
     source_defs = 0
     for source in sources:
-        aliases = source.source[np.in1d(source.csused, ["+", "*"])]
-        source_defs += len(aliases)
+        source_defs += len(source.aliases)
         if source_defs > 1000:
             s.wlog(1, "VXWRSU: WARNING: More than 1000 sources in this "
                    "schedule. This VEX will NOT run on the Field System!")
-        for alias in aliases:
+        for alias in source.aliases:
             source_text += """
 def {};
      source_name = {};
@@ -827,11 +833,14 @@ enddef;
     return source_text
 
 def sched_block(scan_mode):
-    scan_offset = s.schn1.scan1 - 1
-    scans = ScanCatalog().read()[scan_offset: s.schn1.scanl]
+    catalog = ScanCatalog()
+    catalog.read()
+    scans = catalog.scheduled()
+    scan_offset = catalog.scan_offset
     
-    stations = StationCatalog().read()
-    stations = [stations[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
+    station_catalog = StationCatalog()
+    station_catalog.read()
+    stations = station_catalog.scheduled()
 
     setups = SetupCatalog().read()[:s.setn1.nset]
 
