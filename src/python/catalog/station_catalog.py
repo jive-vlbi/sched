@@ -101,3 +101,9 @@ class StationCatalog(Catalog):
 
     def read(self):
         return super().read()[:s.schsta.msta]
+
+    def scheduled(self):
+        """
+        Pre: self has entries
+        """
+        return [self.entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
