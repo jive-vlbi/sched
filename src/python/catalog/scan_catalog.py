@@ -173,4 +173,11 @@ class ScanCatalog(Catalog):
         super().__init__(self.maxscan, self.block_items)
 
     def read(self):
-        return super().read()[s.schn1.scan1-1: s.schn1.scanl]
+        self.scan_offset = s.schn1.scan1 - 1
+        return super().read()
+
+    def scheduled(self):
+        """
+        Pre: self has entries
+        """
+        return self.entries[self.scan_offset: s.schn1.scanl]

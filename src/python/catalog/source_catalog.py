@@ -2,6 +2,8 @@ from .catalog import Catalog
 
 import schedlib as s
 
+import numpy as np
+
 class SourceCatalog(Catalog):
     """
     CHARACTER        SOURCE(MALIAS,MAXSRC)*12, SOUR8(MAXSRC)*8
@@ -79,4 +81,18 @@ class SourceCatalog(Catalog):
 
     def __init__(self):
         super().__init__(self.maxsource, self.block_items)
+
+    def scheduled(self):
+        """
+        Pre: self has initialized entries
+        """
+        return [source for source in self.entries if source.sused]
+
+    def set_aliases(self):
+        """
+        Pre: self has initialized entries
+        """
+        for source in self.scheduled():
+            source.aliases = source.source[np.in1d(source.csused, ["+", "*"])]
+        
 
