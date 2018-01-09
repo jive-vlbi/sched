@@ -194,6 +194,7 @@ def modes_block():
 
     station_catalog = StationCatalog()
     station_catalog.read()
+    station_catalog.add_scheduled_attributes()
     stations = station_catalog.scheduled()
 
     format_map = {"MARKIII": "Mark3A",
@@ -434,14 +435,12 @@ def modes_block():
     for scan_index, scan in enumerate(scans):
         scan_mode = {block: defaultdict(set) for block in blocks}
 
-        for station_index, station in enumerate(stations):
-            setup = setups[s.schn2a.nsetup[scan_index+scan_offset, 
-                                           station_index] - 1]
+        for station in stations:
+            setup = setups[station.nsetup[scan_index+scan_offset] - 1]
             station_code = station.stcode
-            if s.schn2a.stascn[scan_index+scan_offset, station_index]:
+            if station.stascn[scan_index+scan_offset]:
                 # add pcal to IF def if pcal was specified in the schedule
-                frequency_setup_index = s.schn2a.fseti[scan_index+scan_offset,
-                                                       station_index]
+                frequency_setup_index = station.fseti[scan_index+scan_offset]
                 if_pcal = ()
                 if frequency_setup_index > 0:
                     tone_interval = pcal_map[
@@ -684,10 +683,11 @@ def stations_block():
         antenna += (("axis_offset", "{:10.5} m".format(station.axoff)),)
         return antenna
 
-    def do_das(station, usedisk):
+    def do_das(station):
         das = tuple()
         recorder = None
-        if usedisk and (station.disk in ("MARK5" + abc for abc in "ABC")):
+        if station.usedisk and \
+           (station.disk in ("MARK5" + abc for abc in "ABC")):
             recorder = "Mark5" + station.disk[5]
             das += (("equip", "recorder", recorder, "&" + recorder),)
                 
@@ -719,18 +719,18 @@ def stations_block():
 
     station_catalog = StationCatalog()
     station_catalog.read()
+    station_catalog.add_scheduled_attributes()
     stations = station_catalog.scheduled()
     
-    generator = {"SITE": lambda station, index: do_site(station),
-                 "ANTENNA": lambda station, index: do_antenna(station),
-                 "DAS": lambda station, index: do_das(station, 
-                                                      s.schn5.usedisk[index])}
+    generator = {"SITE": do_site,
+                 "ANTENNA": do_antenna,
+                 "DAS": do_das}
     block_def_name = {block: {} for block in generator.keys()}
     stations_text = "$STATION;\n"
-    for index, station in enumerate(stations):
+    for station in stations:
         stations_text += "*\ndef {};\n".format(station.stcode)
         for block, function in sorted(generator.items()):
-            block_def = function(station, index)
+            block_def = function(station)
             name = block_def_name[block].get(block_def)
             if name is None:
                 if block == "DAS":
@@ -840,21 +840,21 @@ def sched_block(scan_mode):
     scans = catalog.scheduled()
     scan_offset = catalog.scan_offset
     
-    station_catalog = StationCatalog()
-    station_catalog.read()
-    stations = station_catalog.scheduled()
+    catalog = StationCatalog()
+    catalog.read()
+    catalog.add_scheduled_attributes()
+    stations = catalog.scheduled()
 
-    setups = SetupCatalog().read()[:s.setn1.nset]
+    setups = SetupCatalog().read()
 
     byte_offset = defaultdict(float) # station -> expected bytes recorded
 
     ret = "$SCHED;\n"
     for scan_index, scan in enumerate(scans):
         found_one = False
-        for station_index, station in enumerate(stations):
-            setup = setups[s.schn2a.nsetup[scan_index+scan_offset, 
-                                           station_index] - 1]
-            if s.schn2a.stascn[scan_index+scan_offset, station_index] and \
+        for station in stations:
+            setup = setups[station.nsetup[scan_index+scan_offset] - 1]
+            if station.stascn[scan_index+scan_offset] and \
                (station.station.startswith("VLBA") or setup.format != "NONE"):
                 found_one = True
                 break
@@ -866,9 +866,8 @@ def sched_block(scan_mode):
                     ("source", scan.scnsrc))
         scan_name = "No{:04d}".format(scan_index+scan_offset+1)
         for station_index, station in enumerate(stations):
-            if s.schn2a.stascn[scan_index+scan_offset, station_index]:
-                setup = setups[s.schn2a.nsetup[scan_index+scan_offset, 
-                                               station_index] - 1]
+            if station.stascn[scan_index+scan_offset]:
+                setup = setups[station.nsetup[scan_index+scan_offset] - 1]
                 if (scan.grabto == "FILE") and (scan.datapath == "IN2NET"):
                     s.errlog("VXSCH: You have requested a GRABTO (ftp) scan, "
                              "but you are  not recording to disk. You must set "
@@ -930,17 +929,16 @@ def sched_block(scan_mode):
                    (setup.format != "NONE"):
                     # cast from numpy.float to python float so round returns int
                     data_good = round(max(
-                        float(s.schn6.tonsrc[scan_index+scan_offset, 
-                                             station_index] - 
+                        float(station.tonsrc[scan_index+scan_offset] - 
                               scan.startj) * parameter.secpday,
                         0))
                     data_stop = round(float(scan.stopj - scan.startj) * 
                                       parameter.secpday)
-                    if s.schn5.usedisk[station_index]:
+                    if station.usedisk:
                         media_position = "{:9.3f} GB".format(
                             byte_offset[station.stcode])
-                        byte_offset[station.stcode] = s.schn5.gbytes[
-                            scan_index+scan_offset, station_index]
+                        byte_offset[station.stcode] = station.gbytes[
+                            scan_index+scan_offset]
                     else:
                         media_position = ""
 
@@ -948,8 +946,8 @@ def sched_block(scan_mode):
                     if station.station.startswith("VLBA"):
                         zone = scan_sector(
                             station, scan,
-                            s.schn6.az1[scan_index+scan_offset, station_index],
-                            s.schn6.el1[scan_index+scan_offset, station_index])
+                            station.az1[scan_index+scan_offset],
+                            station.el1[scan_index+scan_offset])
                         # assumption here is that the zone name is the link name
                         # according to comments in sched this is true in the
                         # normal case, otherwise 3 zones have the same name,

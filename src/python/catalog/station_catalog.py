@@ -1,4 +1,4 @@
-from .catalog import Catalog
+from .catalog import Catalog, get_arrays
 
 import schedlib as s
 
@@ -107,3 +107,52 @@ class StationCatalog(Catalog):
         Pre: self has entries
         """
         return [self.entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
+
+
+    """
+    INTEGER          NSETUP(MAXSCN,MAXSTA)
+    INTEGER          FSETI(MAXSCN,MAXSTA)
+    LOGICAL          STASCN(MAXSCN,MAXSTA)
+    LOGICAL          USETAPE(MAXSTA), USEDISK(MAXSTA)
+    REAL             GBYTES(MAXSCN,MAXSTA)
+    DOUBLE PRECISION TONSRC(MAXSCN,MAXSTA), TSLEW(MAXSCN,MAXSTA)
+    REAL             EL1(MAXSCN,MAXSTA), AZ1(MAXSCN,MAXSTA)
+    REAL             HA1(MAXSCN,MAXSTA), PA1(MAXSCN,MAXSTA)
+    REAL             EL2(MAXSCN,MAXSTA), AZ2(MAXSCN,MAXSTA)
+    REAL             HA2(MAXSCN,MAXSTA), PA2(MAXSCN,MAXSTA)
+    CHARACTER        UP1(MAXSCN,MAXSTA)*1, UP2(MAXSCN,MAXSTA)*1
+    """
+    scheduled_station_items = {
+        s.schn2a: [
+            'nsetup',
+            'fseti',
+            'stascn'],
+        s.schn5: [
+            'usetape',
+            'usedisk',
+            'gbytes'],
+        s.schn6: [
+            'tonsrc',
+            'tslew',
+            'el1',
+            'az1',
+            'ha1',
+            'pa1',
+            'el2',
+            'az2',
+            'ha2',
+            'pa2'],
+        s.schc6: [
+            'up1',
+            'up2']
+    }
+    
+    def add_scheduled_attributes(self):
+        """
+        Pre: self has entries
+        """
+        arrays = get_arrays(self.scheduled_station_items)
+        for index, entry in enumerate(self.scheduled()):
+            for key, value in arrays.items():
+                setattr(entry, key, value[index])
+            
