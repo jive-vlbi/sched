@@ -178,6 +178,6 @@ class ScanCatalog(Catalog):
 
     def scheduled(self):
         """
-        Pre: self has entries
+        Pre: self.read has been called
         """
         return self.entries[self.scan_offset: s.schn1.scanl]
