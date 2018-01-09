@@ -114,8 +114,8 @@ def {};
 *    during obs:{}
 *    fax:       {}
 """.format(*(f2str(contact) for contact in [s.schsco.phone,
-                                                     s.schsco.obsphone,
-                                                     s.schsco.fax]))[1:]
+                                            s.schsco.obsphone,
+                                            s.schsco.fax]))[1:]
 
     comment_prefix = "*    "
     ret += text2comments((f2str(note) for note in s.schsco.note), 
