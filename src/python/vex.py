@@ -121,7 +121,10 @@ def {};
     ret += text2comments((f2str(note) for note in s.schsco.note), 
                          comment_prefix)
 
-    year, doy, time_ = s.timej(s.schn2c.stopj[0])
+    scan_catalog = ScanCatalog()
+    scan_catalog.read()
+    scans = scan_catalog.scheduled()
+    year, doy, time_ = s.timej(scans[0].stopj)
     year, month, day, jd, mname, dname = s.tdatecw(year, 1, doy)
     ret += """
 *
@@ -132,9 +135,8 @@ def {};
            f2str(dname), day, f2str(mname), year,
            int(jd - 2400000.5 ))[1:]
 
-    ret += "     exper_nominal_start={};\n".format(time2str(s.schn2c.startj[0]))
-    ret += "     exper_nominal_stop={};\n".format(time2str(
-        s.schn2c.stopj[s.schn1.scanl - 1]))
+    ret += "     exper_nominal_start={};\n".format(time2str(scans[0].startj))
+    ret += "     exper_nominal_stop={};\n".format(time2str(scans[-1].stopj))
 
     if s.schcon.coverlet:
         with open("schedcov.tmp", "r") as f:
