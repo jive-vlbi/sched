@@ -228,7 +228,7 @@ class SetupCatalog(Catalog):
         self.entries = self.entries[:s.setn1.nset]
         # nchan is not derived from the length of keyin channel parameters,
         # but is a parameter by itself. Therefore do the reduction of the 
-        # size of arrays which depend on.
+        # size of arrays which depend on it here.
         channel_attributes = [
             "ifreqnum",
             "ifreqif",
