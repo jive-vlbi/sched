@@ -1,6 +1,17 @@
 import numpy as np
 import util
 
+def get_arrays(block_items):
+    # gather a copy (because .T returns a view) of all arrays in C-order
+    vector_func = np.vectorize(util.f2str, otypes=[object])
+    arrays = {item: 
+              vector_func(getattr(block, item).T)
+              if getattr(block, item).dtype.kind == "S" else 
+              getattr(block, item).T.copy()
+              for block, items in block_items.items()
+              for item in items}
+    return arrays
+
 class Catalog(object):
     """
     Base class to help read f2py common blocks in python objects
@@ -23,6 +34,7 @@ class Catalog(object):
         self.nr_elements = nr_elements
         self.block_items = block_items
         self.attributes = sum(block_items.values(), [])
+
     
     def prime(self):
         """
@@ -31,14 +43,7 @@ class Catalog(object):
         Where the common blocks contain fixed length arrays,
         set the length of the entries using the variable defining the length.
         """
-        # gather a copy (because .T returns a view) of all arrays in C-order
-        vector_func = np.vectorize(util.f2str, otypes=[object])
-        arrays = {item: 
-                  vector_func(getattr(block, item).T)
-                  if getattr(block, item).dtype.kind == "S" else 
-                  getattr(block, item).T.copy()
-                  for block, items in self.block_items.items()
-                  for item in items}
+        arrays = get_arrays(self.block_items)
         # create an entry for each index of the arrays
         self.entries = [
             self.CatalogEntry(
