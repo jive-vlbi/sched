@@ -67,12 +67,6 @@ while True:
     s.srlis.srln = 0
 
     input_(stdin)
-    # with open("/tmp/common_blocks.python", "wb") as f:
-    #     import util; util.dump_common_blocks(f)
-
-    # s.input()
-    # with open("/tmp/common_blocks.fortran", "wb") as f:
-    #     import util; util.dump_common_blocks(f)
     s.defaults()
     s.schpre()
     s.chksc1()
