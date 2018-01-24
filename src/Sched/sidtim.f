@@ -22,6 +22,7 @@ C     numbers.
 C
       DOUBLE PRECISION  JULTIM, LONG, TWOPI, LST, LSTDAY
       INTEGER           SIDDAY
+Cf2py intent(out) SIDDAY, LST, LSTDAY
       DOUBLE PRECISION  TU, S2R, GMSTD
 C --------------------------------------------------------------------
 C      call wlog( 0, 'sidtim starting' )
