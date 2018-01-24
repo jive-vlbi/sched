@@ -7,3 +7,4 @@ from .source_catalog import SourceCatalog
 from .satellite_catalog import SatelliteCatalog
 from .phase_center_catalog import PhaseCenterCatalog
 from .setup_catalog import SetupCatalog
+from .source_plot_catalog import SourcePlotCatalog
