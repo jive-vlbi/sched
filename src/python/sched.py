@@ -86,8 +86,7 @@ while True:
     else:
         break
 
-if mkfiles and bytes(s.schsco.optmode).decode().strip() != "UPTIME" and \
-   not s.schcon.noset:
+if mkfiles and (f2str(s.schsco.optmode) != "UPTIME") and not s.schcon.noset:
     s.scnrange()
     s.omsout(restart)
     s.vexout()
@@ -102,6 +101,5 @@ if mkfiles and bytes(s.schsco.optmode).decode().strip() != "UPTIME" and \
     s.flags()
     s.stafiles()
     
-
 s.delscr(False)
 s.putout(" -------  Finished  ----------- ")
