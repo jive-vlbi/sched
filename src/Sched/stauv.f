@@ -17,6 +17,10 @@ C
 C
       INTEGER     ISCN, ISTA, CATSTA, CATSRC
       REAL        U1, U2, V1, V2
+Cf2py intent(out) U1
+Cf2py intent(out) U2
+Cf2py intent(out) V1
+Cf2py intent(out) V2
       REAL        HAR, CH, SH, CD, SD, UXY
 C -------------------------------------------------------------------
 C     Get station number in catalog.
