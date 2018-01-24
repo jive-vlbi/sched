@@ -76,8 +76,12 @@ while True:
     s.chkscn()
     s.schsum(restart)
     s.fluxh(parameter.ilog, s.schsco.logfile)
-    mkfiles, restart = s.plotter(restart)
-
+    if s.schcon.plot:
+        import plot # initializes matplotlib, so only do when requested
+        mkfiles, restart = plot.show(restart)
+    else:
+        mkfiles, restart = True, False
+    
     if restart:
         s.delscr(restart)
         s.wlog(0, " ")
