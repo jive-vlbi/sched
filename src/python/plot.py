@@ -173,19 +173,25 @@ class PlotCheckBox(QWidget):
         return self.line.get_color()
 
     def set_color(self, color):
-        return self.line.set_color(color)
+        r = self.line.set_color(color)
+        self.figure.canvas.draw()
+        return r
 
     def get_visible(self):
         return self.figure.get_visible()
 
     def set_visible(self, to):
-        return self.figure.set_visible(to)
+        r = self.figure.set_visible(to)
+        self.figure.canvas.draw()
+        return r
 
     def get_linewidth(self):
         return self.line.get_linewidth()
 
     def set_linewidth(self, width):
-        return self.line.set_linewidth(width)
+        r = self.line.set_linewidth(width)
+        self.figure.canvas.draw()
+        return r
 
     def get_properties(self):
         return plt.getp(self.line)
