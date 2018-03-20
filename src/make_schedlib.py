@@ -11,7 +11,7 @@ import collections
 sched_srcdir = os.path.split(os.path.realpath(__file__))[0]
 
 parser = argparse.ArgumentParser(
-    description="Wrapper around f2py. Builds a list of source file depending "
+    description="Wrapper around f2py. Builds a list of source files depending "
     "on the system architecture. Other arguments will be forwarded to f2py.",
     add_help=False)
 parser.add_argument("-h", "--help", help="show this help and f2py's",
@@ -451,7 +451,7 @@ Cit/sys_sun/error.f
 Cit/sys_sun/vlbope.f
 """)
 
-# fortran function to create a python interface for
+# fortran functions to create a python interface for
 functions = """
 accsrc 
 chkcode 
@@ -463,6 +463,7 @@ defaults
 delscr 
 dopfq 
 errlog 
+error 
 flags 
 fluxh 
 geoxyz 
