@@ -855,6 +855,9 @@ class MainWidget(QDialog):
                         axis.plot(
                             x, y, label="{} - {}".format(*baseline),
                             **configuration.get_properties(baseline))
+            figure.subplots_adjust(left=0.05, right=0.95,
+                                   bottom=0.05, top=0.95,
+                                   wspace=.5, hspace=.5)
             # hide unused axes
             for axis in axes[len(plot_sources):]:
                 axis.set_visible(False)
