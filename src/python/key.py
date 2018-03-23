@@ -24,6 +24,19 @@ import operator as op
 import itertools
 import copy
 import collections
+import atexit
+import os
+
+try:
+    import readline
+    histfile = os.path.join(os.path.expanduser("~"), ".sched_history")
+    try:
+        readline.read_history_file(histfile)
+    except FileNotFoundError:
+        pass
+    atexit.register(readline.write_history_file, histfile)
+except ImportError:
+    pass
 
 class TokeniseError(RuntimeError): pass
 class ParseError(RuntimeError): pass
@@ -146,6 +159,11 @@ class Parser:
 
     def readline(self):
         self.line_number += 1
+        if (self.input_ is sys.stdin) and self.input_.isatty():
+            try:
+                return input("* ") + "\n"
+            except EOFError:
+                return ""
         return self.input_.readline()
 
     def set_defaults(self, record, state):
@@ -269,8 +287,6 @@ class Parser:
                 if len(tokens) > 0:
                     raise ParseError("Unexpected end of input")
                 raise StopIteration()
-            if self.input_.isatty():
-                print("* ", end="", flush=True)
             # read line by line to allow special control sequences to be 
             # interactive, this only works if tokens are on a single line
             # (assumed to be the case)
