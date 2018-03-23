@@ -21,8 +21,8 @@ from astropy.time import Time
 
 from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QScrollArea, \
     QTabWidget, QPushButton, QCheckBox, QGroupBox, QLabel, QLineEdit, \
-    QComboBox, QMenu, QDialog, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy
+    QComboBox, QMenu, QDialog, QRadioButton, \
+    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy, QButtonGroup
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QCursor, QDoubleValidator
 
@@ -212,6 +212,31 @@ class PlotCheckBox(QWidget):
     def get_properties(self):
         return plt.getp(self.line)
 
+class HighlightGroup(QWidget):
+    choices = ("Hide", "Show", "Mark")
+    clicked = pyqtSignal()
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        layout = QVBoxLayout(self)
+        self.buttons = QButtonGroup(self)
+        for index, text in enumerate(self.choices):
+            button = QRadioButton(text)
+            button.clicked.connect(self.clicked)
+            self.buttons.addButton(button, index)
+            layout.addWidget(button)
+
+    def current_text(self):
+        return self.buttons.checkedButton().text()
+
+    def select(self, text):
+        self.buttons.button(self.choices.index(text)).setChecked(True)
+        
+    def setChecked(self, to):
+        if to:
+            self.select("Show")
+        else:
+            self.select("Hide")
+
 class BaselinesWidget(QGroupBox):
     changed = pyqtSignal()
     def _toggle(self, widgets):
@@ -264,6 +289,28 @@ class BaselinesWidget(QGroupBox):
 class BaselineSelectionWidget(BaselinesWidget):
     def get_visible(self, baseline):
         return self.check_box[baseline].isChecked()
+
+class BaselineHighlightWidget(BaselinesWidget):
+    def __init__(self, stations, parent=None):
+        super().__init__(stations, "", HighlightGroup, 
+                         parent)
+
+    def _toggle(self, widgets):
+        min_index = min(HighlightGroup.choices.index(w.current_text()) 
+                        for w in widgets)
+        to = HighlightGroup.choices[
+            (min_index + 1) % len(HighlightGroup.choices)]
+        for w in widgets:
+            w.select(to)
+
+    def get_properties(self, baseline):
+        highlight = self.check_box[baseline].current_text() == "Mark"
+        return {"linewidth": 3 if highlight else 1,
+                "color": "b" if highlight else "r"}
+
+    def get_visible(self, baseline):
+        return self.check_box[baseline].current_text() != "Hide"
+
 
 class BaselineConfigurationWidget(QWidget):
     def _set_plot(self):
@@ -450,8 +497,15 @@ class UVWidget(QWidget):
         top_layout.setStretchFactor(self.sources, 1)
         master_layout.addLayout(top_layout)
 
-        self.baselines = BaselineConfigurationWidget(stations, self)
-        master_layout.addWidget(self.baselines)
+        self.tab_widget = QTabWidget(self)
+        self.tab_widget.addTab(
+            BaselineHighlightWidget(stations, self.tab_widget), "Highlight")
+        self.tab_widget.addTab(
+            BaselineConfigurationWidget(stations, self.tab_widget), "Advanced")
+        master_layout.addWidget(self.tab_widget)
+
+    def get_configuration_widget(self):
+        return self.tab_widget.currentWidget()
 
 class XYBaseWidget(QWidget): # shared by XY and Uptime
     def _check_x_axis(self):
@@ -728,6 +782,7 @@ class MainWidget(QDialog):
                     for alias in source.aliases:
                         alias_source[alias] = source.aliases[0]
             
+            configuration = self.uv.get_configuration_widget()
             # plot sources in a square pattern, expanding columns before rows
             items = len(plot_sources)
             columns = math.ceil(math.sqrt(items))
@@ -775,7 +830,7 @@ class MainWidget(QDialog):
                     baselines = itertools.combinations(self.stations, 2)
                     for station1, station2 in baselines:
                         station_names = (station1.station, station2.station)
-                        if self.uv.baselines.get_visible(station_names) and \
+                        if configuration.get_visible(station_names) and \
                            station1.stascn[scan_index] and \
                            station2.stascn[scan_index]:
                             diff = mfs_station_uv[station1] - \
@@ -797,7 +852,7 @@ class MainWidget(QDialog):
                 for baseline, [x, y] in baseline_xy.items():
                         axis.plot(
                             x, y, label="{} - {}".format(*baseline),
-                            **self.uv.baselines.get_properties(baseline))
+                            **configuration.get_properties(baseline))
             # hide unused axes
             for axis in axes[len(plot_sources):]:
                 axis.set_visible(False)
