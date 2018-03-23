@@ -19,7 +19,7 @@ import numpy as np
 
 from astropy.time import Time
 
-from PyQt5.QtWidgets import QApplication, QWidget, QFrame, \
+from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QScrollArea, \
     QTabWidget, QPushButton, QCheckBox, QGroupBox, QLabel, QLineEdit, \
     QComboBox, QMenu, QDialog, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy
@@ -123,7 +123,13 @@ class MarkerSelection(QComboBox):
 class SourcesWidget(QGroupBox):
     def __init__(self, sources, parent=None):
         super().__init__("Sources", parent)
-        layout = QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
+        scroll = QScrollArea(self)
+        main_layout.addWidget(scroll)
+        sources_widget = QWidget(self)
+        sources_layout = QVBoxLayout(sources_widget)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.source_checkbox = {}
         for source in sources:
             alias = source.aliases[0]
@@ -131,14 +137,24 @@ class SourcesWidget(QGroupBox):
                 label = "{} ({})".format(alias, ", ".join(source.aliases[1:]))
             else:
                 label = alias
-            checkbox = QCheckBox(label, self)
+            checkbox = QCheckBox(label, sources_widget)
             checkbox.setChecked(True)
-            layout.addWidget(checkbox)
+            sources_layout.addWidget(checkbox)
             self.source_checkbox[alias] = checkbox
+        all_button = QPushButton("All", self)
+        scroll.setWidget(sources_widget)
+        main_layout.addWidget(all_button)
+        all_button.clicked.connect(self.change_all)
 
     def selected_sources(self):
         return [source for source, checkbox in self.source_checkbox.items()
                 if checkbox.isChecked()]
+
+    def change_all(self):
+        to = not any(checkbox.isChecked() 
+                     for checkbox in self.source_checkbox.values())
+        for checkbox in self.source_checkbox.values():
+            checkbox.setChecked(to)
 
 class PlotCheckBox(QWidget):
     def __init__(self, parent=None):
@@ -431,6 +447,7 @@ class UVWidget(QWidget):
         self._check_axis()
         self.sources = SourcesWidget(sources, self)
         top_layout.addWidget(self.sources)
+        top_layout.setStretchFactor(self.sources, 1)
         master_layout.addLayout(top_layout)
 
         self.baselines = BaselineConfigurationWidget(stations, self)
@@ -485,6 +502,7 @@ class XYBaseWidget(QWidget): # shared by XY and Uptime
         self._check_x_axis()
         self.sources = SourcesWidget(sources, self)
         top_layout.addWidget(self.sources)
+        top_layout.setStretchFactor(self.sources, 2)
         master_layout.addLayout(top_layout)
 
         self.stations = StationsWidget(stations, self)
