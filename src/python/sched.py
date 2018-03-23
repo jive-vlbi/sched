@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from sched import input_, parameter
+from sched import input_, parameter, schin_module, getfreq
 import vex
 from util import f2str
 import key
@@ -27,6 +27,13 @@ parser.add_argument(
     "SCHED is non-interactive in this mode. If a parameter value is given, "
     "the resulting KEYIN text is written to that file. Warning: "
     "do not run an untrusted template, since it can contain arbitrary code.")
+parser.add_argument("-p", "--plot", action="store_true", default=False,
+                    help="Start plotting routines even if PLOT is not enabled "
+                    "in the KEYIN input.")
+parser.add_argument("-f", "--freqlist", nargs=2, type=float, default=None,
+                    metavar=("lowF", "highF"),
+                    help="Make frequency list (MHz). Then exit.")
+
 args = parser.parse_args()
 
 if args.template is None:
@@ -59,6 +66,20 @@ s.vern.vernum, version = s.versched()
 s.verc.version = bytes(version).decode().ljust(s.verc.version.itemsize)
 s.stmsg()
 
+if args.freqlist is not None:
+    # first initialize default files stored in fortran common block 
+    # state default values are (value, operator) tuples
+    msgfile_default = schin_module.state_defaults["msgfile"]
+    s.schsco.msgfile = msgfile_default[1](msgfile_default[0]).ljust(
+        s.schsco.msgfile.itemsize)
+    freqfile_default = schin_module.state_defaults["freqfile"]
+    s.schsco.freqfile = freqfile_default[1](freqfile_default[0]).ljust(
+        s.schsco.freqfile.itemsize)
+    s.schcon.freqlist = args.freqlist
+    getfreq()
+    s.wlog(1, "DIVERT:   Frequency table written.  Stopping.")
+    sys.exit(0)
+
 restart = False
 
 while True:
@@ -76,7 +97,7 @@ while True:
     s.chkscn()
     s.schsum(restart)
     s.fluxh(parameter.ilog, s.schsco.logfile)
-    if s.schcon.plot:
+    if s.schcon.plot or args.plot:
         import plot # initializes matplotlib, so only do when requested
         mkfiles, restart = plot.show(restart)
     else:
