@@ -776,6 +776,8 @@ class MainWidget(QDialog):
     def plot_uv(self):
         with wait_cursor():
             plot_sources = self.uv.sources.selected_sources()
+            if len(plot_sources) == 0:
+                return
             alias_source = {}
             for source in self.sources:
                 if source.aliases[0] in plot_sources:
@@ -860,6 +862,8 @@ class MainWidget(QDialog):
     def plot_xy(self):
         with wait_cursor():
             plot_sources = self.xy.sources.selected_sources()
+            if len(plot_sources) == 0:
+                return
             alias_source = set()
             for source in self.sources:
                 if source.aliases[0] in plot_sources:
