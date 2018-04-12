@@ -41,6 +41,7 @@ except ImportError:
 class TokeniseError(RuntimeError): pass
 class ParseError(RuntimeError): pass
 class InputError(RuntimeError): pass
+class EOFBeforeFirstItem(BaseException): pass
 
 Token = collections.namedtuple("Token", ["type_", "value", "file_", "line"])
 
@@ -56,7 +57,7 @@ operators = {ast.Add: op.add,
              ast.USub: op.neg}
 
 def eval_expr(expr):
-    return eval_(ast.parse(expr, mode='eval').body)
+    return eval_(ast.parse(expr, mode="eval").body)
 
 def eval_(node):
     if isinstance(node, ast.Num): # <number>
@@ -70,22 +71,22 @@ def eval_(node):
 
 def s_expression(scanner, token):
     try:
-        return ('number', float(eval_expr(token[1:-1])))
+        return ("number", float(eval_expr(token[1:-1])))
     except:
-        return ('value', token)
+        return ("value", token)
 
 def s_keyword(scanner, token):
-    if len(token) > 9 or '.' in token:
-        res = ('value', token)
+    if (len(token) > 9) or ("." in token):
+        res = ("value", token)
     else:
-        res = ('key', token)
+        res = ("key", token)
     return res
 
 def s_quote(scanner, token):
-    return ('quote', token[1:-1])
+    return ("quote", token[1:-1])
 
 def s_number(scanner, token):
-    return ('number', float(token))
+    return ("number", float(token))
 
 def s_angle(scanner, token): # also time
     if token.startswith("-"):
@@ -97,16 +98,16 @@ def s_angle(scanner, token): # also time
     ## It's not python to use reduce.
     ## But I neither remember nor care what is.
     val = functools.reduce(lambda acc, x: 60*acc+float(x), l, 0.0) 
-    return ('number', multiplier * val)
+    return ("number", multiplier * val)
 
 def s_value(scanner, token):
-    return ('value', token)
+    return ("value", token)
 
 def s_string(scanner, token):
-    return ('value', token)
+    return ("value", token)
 
 def s_misc(scanner, token):
-    return ('misc', token)
+    return ("misc", token)
 
 class Parser:
     """
@@ -117,29 +118,23 @@ class Parser:
         # (?=...): look-ahead, but doesn't consume
         token_separator = "(?=[\s,/]|$)" 
         self.scanner = re.Scanner([
-            ("\!.*\n", None),
+            ("\![^\n]*", None),
             ("[ \t]+", None),
-            ("\n", None),
-            ("\r\n", None),
-            ("=", lambda s, t: ('equal', None)),
-            ("'[^'\n]*'", s_quote), 
-            ("\"[^\"\n]*\"", s_quote), # Sigh.  Double quotes used in freq.dat
-            ("/", lambda s, t: ('end_chunk', None)),
-            (",", lambda s, t: ('comma', None)),
+            ("\n|(\r\n)", lambda s, t: ("newline", None)),
+            ("=", lambda s, t: ("equal", None)),
+            ("('[^'\n]*')|(\"[^\"\n]*\")", s_quote), 
+            (",", lambda s, t: ("comma", None)),
             ("[+-]?[0-9]+:[0-9]+:[0-9]+(\.[0-9]*)?" + token_separator, s_angle),
             ("[+-]?[0-9]+:[0-9]+(\.[0-9]*)?" + token_separator, s_angle),
             ("[+-]?[0-9]*\.[0-9]+(E[+-][0-9]{1,3})?(?![A-Za-z_0-9()])" + 
              token_separator, s_number),
             ("[+-]?[0-9]+\.?(?![A-Za-z_0-9()])" + token_separator, s_number),
-            # '@' may appear in value (email address)
-            ("[@\.$:()/A-Za-z_0-9\_+-]*@[@\.$:()/A-Za-z_0-9\_+-]*", s_value),
-            # apparently parens and unquoted minus signs are allowed 
-            # in keywords?
-            ("[A-Za-z0-9][:()A-Za-z_0-9._+-]*(?=[ \t]*(=|/|\n|\r\n))?", 
-             s_keyword),
             ("\([\d*+\-/.()E\s]+\)", s_expression),
-            ("[\.$:()/A-Za-z_0-9\_+-]+", s_value),
-            (".*", s_misc)
+            # keywords can be sliced
+            ("[A-Za-z0-9][:()A-Za-z_0-9_+-]*(?=([ \t=/\n]|(\r\n)))", 
+             s_keyword),
+            ("[@\.$:()/A-Za-z_0-9\_+-]+", s_value),
+            ("[^\n]*", s_misc)
         ])
         self.set_defaults(record_defaults, state_defaults)
         self.input_stack = collections.OrderedDict()
@@ -170,20 +165,33 @@ class Parser:
         self.record_defaults = record
         self.state_defaults = state
 
+    def p_skip_newline(self):
+        while self.tok.type_ == "newline":
+            self.tok = next(self.tokIt)
+
     def p_chunk(self):
         entries = []
-        while self.tok.type_ != 'end_chunk':
+        self.p_skip_newline()
+        if self.tok.type_ == "EOF":
+            raise EOFBeforeFirstItem()
+        # create items until the token iterator is on a value starting with a /
+        while not ((self.tok.type_ == "value") and 
+                   self.tok.value.startswith("/")):
             entries.append(self.p_item())
+            self.p_skip_newline()
+        # read until a newline or EOF
+        while self.tok.type_ not in ("newline", "EOF"):
+            self.tok = next(self.tokIt)
         logging.debug("p_chunk %s", str(self.tok))
         return dict(entries)
 
     def p_item(self):
         lhs = self.p_key()
-        if self.tok.type_ == 'equal':
-            logging.debug("p_item %s", str(self.tok))
+        if self.tok.type_ == "equal":
             self.tok = next(self.tokIt)
+            logging.debug("p_item %s", str(self.tok))
             rhs = self.p_rhs()
-        elif self.tok.type_ in ['value', 'quote', 'number']:
+        elif self.tok.type_ in ["quote", "number"]:
             rhs = self.p_rhs()
         else:
             rhs = True # for unitary expressions.
@@ -191,7 +199,8 @@ class Parser:
 
     def p_key(self):
         logging.debug("p_key: %s", str(self.tok))
-        if self.tok.type_ != 'key':
+        self.p_skip_newline()
+        if self.tok.type_ != "key":
             raise ParseError("Expected key token, got %s" % str(self.tok))
 
         keyword = self.tok.value.upper()
@@ -202,7 +211,7 @@ class Parser:
     def p_rhs(self):
         val = self.p_value()
         rhs = [val]
-        while self.tok.type_ == 'comma':
+        while self.tok.type_ == "comma":
             logging.debug("p_rhs: %s", str(self.tok))
             self.tok = next(self.tokIt)
             rhs.append(self.p_value()) # p_value advances tok beyond the value.
@@ -211,7 +220,8 @@ class Parser:
         return rhs
 
     def p_value(self):
-        if self.tok.type_ not in ['value', 'quote', 'number', 'key']:
+        self.p_skip_newline()
+        if self.tok.type_ not in ["value", "quote", "number", "key"]:
             raise ParseError("Unexpected RHS token %s" % str(self.tok))
         val = self.tok
         logging.debug("p_value: %s", str(val))
@@ -277,6 +287,9 @@ class Parser:
                 except ParseError as txt:
                     raise ParseError("{} line {}: {}".format(
                         self.tok.file_.name, self.tok.line, txt))
+                except EOFBeforeFirstItem:
+                    # continue with next file
+                    pass
                 except StopIteration:
                     break
                 # remove used tokens from the collection
@@ -287,14 +300,14 @@ class Parser:
                 if len(tokens) > 0:
                     raise ParseError("Unexpected end of input")
                 raise StopIteration()
+
             # read line by line to allow special control sequences to be 
             # interactive, this only works if tokens are on a single line
             # (assumed to be the case)
             text = self.readline()
             if len(text) == 0:
+                tokens.append(Token("EOF", "", self.input_, self.line_number))
                 self._pop_input()
-                if self.input_ is None:
-                    raise StopIteration()
                 continue
             
             match = self.control_re.match(text)
@@ -369,7 +382,7 @@ def convert(fnin, fnout):
     
 if __name__=="__main__":
     import sys, logging
-    logging.basicConfig(filename='example.log', level=logging.DEBUG)
+    logging.basicConfig(filename="example.log", level=logging.DEBUG)
     logging.debug("Srsly you guys")
     convert(sys.argv[1], sys.argv[2])
     
