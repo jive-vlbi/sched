@@ -2,13 +2,13 @@ from sched import parameter
 
 import schedlib as s
 
-def toggle(present, key1, key2, default):
-    value1 = (key1 in present)
-    value2 = (key2 in present)
-    if value1 and value2:
-        s.errlog("TOGGLE: You can't set both {} and {}".format(key1, key2))
-    elif not (value1 or value2):
+def toggle(values, present, key1, key2, default):
+    if (key1 in present) and (key2 in present):
+        s.errlog("TOGGLE: You can't set both {} and {}!".format(key1, key2))
+    elif (key1 not in present) and (key2 not in present):
         return default
-    elif value1:
-        return True
-    return False
+    elif key1 in present:
+        return values[key1]
+    else:
+        return not values[key2]
+
