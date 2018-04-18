@@ -5,11 +5,17 @@ import schedlib as s
 import numpy as np
 
 def times(lst, start, stop, day, year):
-    if lst:
-        if not isinstance(lst, str):
+    # the parameter LST is both a boolean flag (implemented by floats) 
+    # and a string for the LST station
+    use_lst = True
+    if isinstance(lst, (float, int)):
+        if lst == 0:
             lst = "VLA"
         else:
-            lst = lst.upper()
+            use_lst = False
+    elif isinstance(lst, str):
+        lst = lst.upper()
+    if use_lst:
         indices = np.argwhere(s.schcst.station == 
                               lst.ljust(s.schcst.station.itemsize).encode())
         if len(indices) == 0:

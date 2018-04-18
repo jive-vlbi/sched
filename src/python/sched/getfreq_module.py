@@ -43,7 +43,7 @@ def getfreq():
         "lo1":      [[],            util.noop],
         "ch1rf1":   [[],            util.noop],
         "ch1rf2":   [[],            util.noop],
-        "dualx":    [False,         util.noop],
+        "dualx":    [1.,            util.to_bool],
         "syn":      [[0., 0., 0.],  util.noop],
         "lcp50cm":  ["NARROW",      util.upper],
         "rcp50cm":  ["NARROW",      util.upper],

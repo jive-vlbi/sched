@@ -24,7 +24,7 @@ def infdb(values, present, entries, index):
     default = False
     if index > 0:
         default = entries[index-1].crddop
-    entry.crddop = toggle(present, "crddop", "crdnodop", default)
+    entry.crddop = toggle(values, present, "crddop", "crdnodop", default)
     entry.gotcrd = entry.crddop or any(freq > 0 for freq in entry.crdfreq)
 
     if ((entry.crdnch < 1) or (entry.crdnch > maxcrd)) and \
@@ -47,7 +47,7 @@ def infdb(values, present, entries, index):
         default = False
         if index > 0:
             default = entries[index-1].dopcal
-        entry.dopcal = toggle(present, "doppler", "nodop", default)
+        entry.dopcal = toggle(values, present, "doppler", "nodop", default)
 
     # dopincr's scan index dimension is the first, instead of the last,
     # so it doesn't fit into the catalog logic, write into the common block 
