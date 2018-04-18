@@ -207,7 +207,7 @@ def srread(input_iterator, stdin, select, thiscat):
                 s.errlog("SRREAD: Illegal character {} in CALCODE for {}".format(
                     entry.calcode[0], entry.source[0]))
 
-            if ("DRA" in present) or ("DDEC" in present):
+            if ("dra" in present) or ("ddec" in present):
                 entry.pmtime, error = s.sla_cldj(*values["pmepoch"][:3])
                 if error not in [0, 3]:
                     s.errlog(" SRREAD: Problem converting planetary motion "
@@ -219,9 +219,8 @@ def srread(input_iterator, stdin, select, thiscat):
             if "parallax" in present:
                 entry.paralax = values["parallax"]
             entry.paralax /= 1000.
-            if (set(("PMRA", "PMDEC", "PARALAX", "PARALLAX")) & 
-                set(record.keys())) and \
-                (entry.epocht < 1900. or entry.epocht > 2100.):
+            if (set(("pmra", "pmdec", "paralax", "parallax")) & present) and \
+               (entry.epocht < 1900. or entry.epocht > 2100.):
                 s.wlog(1, "SRREAD: **** Proper motions specified for {}".format(
                     entry.source[0]))
                 s.wlog(1, "             But a very unlikely EPOCH given: {}".\
