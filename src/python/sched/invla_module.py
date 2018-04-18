@@ -15,7 +15,8 @@ def invla(values, present, entries, index, case):
         default = False
         if index > 0:
             default = (entries[index-1].vlatsys == "T")
-        entry.vlatsys = "T" if toggle(present, "vlantsys", "vlatsys", default) \
+        entry.vlatsys = "T" if toggle(values, present, "vlantsys", "vlatsys", 
+                                      default) \
                         else " "
 
         if entry.vlaphs == "":

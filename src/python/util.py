@@ -69,7 +69,7 @@ def merge_record_with_defaults(record, record_defaults, state_defaults):
                (all_keys[key_index+1].startswith(key)):
                 raise KeyinError("'Ambiguous keyword: {}".format(key))
             full_key = all_keys[key_index]
-
+            
             # if the default is a list, slice the given value into the default
             if isinstance(values[full_key], list):
                 if isinstance(value, str):
@@ -107,6 +107,9 @@ foreach = lambda f: (lambda x: [f(e) for e in x])
 strip_upper = lambda x: x.upper().strip()
 multiply_by = lambda m: (lambda x: x * m)
 extend_to = lambda l: (lambda x: x + [x[0]] * (l - len(x)))
+# map int to bool (as KEYIN doesn't do bool), 
+# the unconventional True if 0 else False comes from SCHED
+to_bool = lambda x: x == 0 
 def chain(*functions):
     def ret(x):
         for f in functions:

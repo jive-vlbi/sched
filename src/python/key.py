@@ -194,7 +194,7 @@ class Parser:
         elif self.tok.type_ in ["quote", "number"]:
             rhs = self.p_rhs()
         else:
-            rhs = True # for unitary expressions.
+            rhs = 0.0 # for unitary expressions.
         return (lhs, rhs)
 
     def p_key(self):

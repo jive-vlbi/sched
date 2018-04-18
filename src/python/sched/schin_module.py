@@ -16,27 +16,27 @@ maxchan = s.schn2b.freq.shape[0]
 
 record_defaults = {
     "comment":  ["",                    util.noop],
-    "crddop":   [None,                  util.noop],
-    "crdnodop": [None,                  util.noop],
-    "doppler":  [None,                  util.noop],
-    "nodop":    [None,                  util.noop],
+    "crddop":   [1.,                    util.to_bool],
+    "crdnodop": [1.,                    util.to_bool],
+    "doppler":  [1.,                    util.to_bool],
+    "nodop":    [1.,                    util.to_bool],
     "duration": [parameter.unset,       util.noop],
     "freqlist": [[parameter.unset] * 2, util.noop],
     "geoseg":   [0.,                    util.multiply_by(parameter.onesec)],
     "group":    [1,                     util.noop],
     "repeat":   [1,                     util.noop],
     "intents":  [[],                    util.noop],
-    "record":   [None,                  util.noop],
-    "norecord": [None,                  util.noop],
-    "ptvlba":   [None,                  util.noop],
-    "noptvlba": [None,                  util.noop],
-    "tavlba":   [None,                  util.noop],
-    "notavlba": [None,                  util.noop],
-    "tsys":     [None,                  util.noop],
-    "notsys":   [None,                  util.noop],
-    "pn3db":    [None,                  util.noop],
-    "nopn3db":  [None,                  util.noop],
-    "point":    [-999,                  lambda x: 0 if x is True else x],
+    "record":   [1.,                    util.to_bool],
+    "norecord": [1.,                    util.to_bool],
+    "ptvlba":   [1.,                    util.to_bool],
+    "noptvlba": [1.,                    util.to_bool],
+    "tavlba":   [1.,                    util.to_bool],
+    "notavlba": [1.,                    util.to_bool],
+    "tsys":     [1.,                    util.to_bool],
+    "notsys":   [1.,                    util.to_bool],
+    "pn3db":    [1.,                    util.to_bool],
+    "nopn3db":  [1.,                    util.to_bool],
+    "point":    [-999,                  util.noop],
     "scantag":  ["",                    util.noop],
     "start":    [parameter.unset,       util.noop],
     "stop":     [parameter.unset,       util.noop],
@@ -100,8 +100,8 @@ state_defaults = {
     "source":    ["DUMMY",                 util.upper],
     "qual":      [0.,                      util.noop],
     "centers":   ["",                      util.upper],
-    "tant1":     [0,                       lambda x: x == 0],
-    "tant2":     [0,                       lambda x: x == 0],
+    "tant1":     [0.,                      util.to_bool],
+    "tant2":     [0.,                      util.to_bool],
     "caltime":   [120.,                    util.noop],
     "ptslew":    [160.,                    util.noop],
     "pcal":      ["",                      util.upper],
@@ -111,11 +111,11 @@ state_defaults = {
     "elcolim":   [0.,                      util.noop],
     "opmiss":    [0.,                      util.noop],
     "crdline":   ["",                      util.noop],
-    "dodown":    [False,                   util.noop],
+    "dodown":    [1.,                      util.to_bool],
     "preempt":   ["--",                    util.upper],
     "peak":      [parameter.unset,         util.noop],
-    "autopeak":  [False,                   util.noop],
-    "pkwatch":   [False,                   util.noop],
+    "autopeak":  [1.,                      util.to_bool],
+    "pkwatch":   [1.,                      util.to_bool],
     "higroup":   [1.,                      util.noop],
     "setup":     ["DUMMY",                 os.path.expandvars],
     "freq":      [[0.],                    util.chain(
@@ -130,7 +130,7 @@ state_defaults = {
     "crdbw":     [[0.],                    util.chain(
         util.foreach(lambda x: round(x, 7)), util.extend_to(maxchan))],
     "dopsrc":    ["",                      util.upper],
-    "dopcal":    [False,                   util.noop],
+    "dopcal":    [1.,                      util.to_bool],
     "linename":  ["",                      util.upper],
     "dopincr":   [[0., 0.],                util.noop],
     "vlamode":   ["ZZ",                    util.upper],
@@ -155,26 +155,26 @@ state_defaults = {
     "ophawid":   [0.,                      util.noop],
     "ophawt":    [1.,                      util.noop],
     "ophmaxdt":  [7200.,                   util.noop],
-    "wrap24":    [False,                   util.noop],
+    "wrap24":    [1.,                      util.to_bool],
     "expt":      ["No description given.", util.noop],
     "expcode":   ["NUG",                   util.noop],
     "linepg":    [55.,                     util.noop],
     "tpref":     [-1.,                     util.noop],
     "ptdur":     [20.,                     util.noop],
     "precdate":  [1979.9,                  util.noop],
-    "dovex":     [False,                   util.noop],
-    "vextest":   [False,                   util.noop],
-    "domka":     [False,                   util.noop],
+    "dovex":     [0.,                      util.to_bool],
+    "vextest":   [1.,                      util.to_bool],
+    "domka":     [1.,                      util.to_bool],
     "obstype":   ["NONE",                  util.upper],
     "doscans":   [[0., 0.],                util.noop],
     "optmode":   ["NONE",                  util.upper],
     "opdur":     [0.,                      util.multiply_by(parameter.onesec)],
-    "opnosub":   [False,                   util.noop],
+    "opnosub":   [1.,                      util.to_bool],
     "opskip":    [0.,                      util.noop],
     "optslew":   [1.,                      util.noop],
     "optlowt":   [15.,                     util.noop],
     "ophasta":   ["PT",                    util.upper],
-    "tapesync":  [False,                   util.noop],
+    "tapesync":  [1.,                      util.to_bool],
     "opprtlev":  [0.,                      util.noop],
     "opelprio":  [[0.] * 4,                util.noop],
     "maplim":    [[0.] * 4,                util.noop],
@@ -185,7 +185,7 @@ state_defaults = {
     "gridw0":    [0.,                      util.noop],
     "gridstep":  [3.,                      util.noop],
     "gridmeas":  ["COUNT",                 util.upper],
-    "gridvla":   [False,                   util.noop],
+    "gridvla":   [1.,                      util.to_bool],
     "uvmfs":     [[1., 1.],                util.noop],
     "geoprt":    [-1.,                     util.noop],
     "geotries":  [20,                      util.noop],
@@ -233,17 +233,19 @@ state_defaults = {
     "focoff":    [[0.] * 20,               util.noop],
     "rotoff":    [[0.] * 20,               util.noop],
     "sumitem":   [[""] * 10,               util.foreach(util.upper)],
-    "lst":       [False,                   util.noop],
+    # the parameter LST is both a boolean flag (implemented by floats) 
+    # and a string for the LST station, the logic is implemented in times()
+    "lst":       [1.0,                     util.noop],
     "tantsta1":  [[""] * maxsta,           util.foreach(util.upper)],
     "tantsta2":  [[""] * maxsta,           util.foreach(util.upper)],
     "prestart":  [parameter.unset,         util.multiply_by(parameter.onesec)],
     "minpause":  [parameter.unset,         util.multiply_by(parameter.onesec)],
-    "debug":     [False,                   util.noop],
-    "overwrite": [False,                   util.noop],
-    "override":  [False,                   util.noop],
-    "nosetup":   [False,                   util.noop],
-    "plot":      [False,                   util.noop],
-    "pubplot":   [False,                   util.noop],
+    "debug":     [1.,                      util.to_bool],
+    "overwrite": [1.,                      util.to_bool],
+    "override":  [1.,                      util.to_bool],
+    "nosetup":   [1.,                      util.to_bool],
+    "plot":      [1.,                      util.to_bool],
+    "pubplot":   [1.,                      util.to_bool],
 }
 
 attribute_to_key = {
@@ -512,8 +514,9 @@ def schin(stdin):
                     ("tanvlba", "tavlba", "notavlba"),
                     ("dopn3db", "pn3db", "nopn3db")):
                 setattr(entry, attribute,
-                        toggle(present, key1, key2, get_default(attribute)))
-
+                        toggle(values, present, key1, key2, 
+                               get_default(attribute)))
+            
             s.schcon.autopeak = values["autopeak"]
             s.schcon.pkwatch = values["pkwatch"]
             s.schsco.peakfile = values["peakfile"].ljust(
@@ -583,7 +586,7 @@ def schin(stdin):
     s.schn4.ptdur = values["ptdur"]
     s.schcon.precdate = values["precdate"]
 
-    s.schcon.dovex = (not values["dovex"] or gotvex)
+    s.schcon.dovex = (values["dovex"] or gotvex)
     s.schcon.vextest = values["vextest"]
 
     s.schcon.domka = values["domka"]
