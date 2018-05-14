@@ -1,4 +1,5 @@
 from sched import srread, rdpeak, stread, rfreq, satini, pcread, rdset
+from catalog import SetupFileCatalog
 
 import schedlib as s
 
@@ -16,20 +17,11 @@ def schfiles(input_iterator, stdin, values, present, gotsat):
         gotsat = True
 
     def handle_setinit():
-        addit = True
         setinit = values["setinit"]
-        for i in range(s.schsf.nsetf):
-            if bytes(s.schssf.setfile[i]).decode().strip() == setinit:
-                addit = False
-                isetf = i + 1
-        if addit and (s.schsf.nsetf < s.schsf.mschn.shape[0]):
-            s.schssf.setfile[s.schsf.nsetf] = setinit.ljust(
-                s.schssf.setfile.itemsize)
-            s.schsf.nsetf += 1
-            isetf = s.schsf.nsetf
-        elif addit:
-            s.errlog("SCHFILES: Too many setup files.")
-        rdset(setinit, input_iterator, isetf)
+        index = SetupFileCatalog.extend_with(setinit, 
+                                             "SCHFILES: Too many setup files.")
+        
+        rdset(setinit, input_iterator, index)
             
     # handle inline catalogs, possible ones are:
     inline_catalogs = [

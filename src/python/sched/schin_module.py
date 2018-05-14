@@ -1,6 +1,6 @@
 from sched import getsta, getfreq, schfiles, gettim, gintent, toggle, infdb, \
     invla, schrep, scndup, getcov, getcor, times, sttant, parameter
-from catalog import ScanCatalog
+from catalog import ScanCatalog, SetupFileCatalog
 import key
 import util
 
@@ -522,17 +522,8 @@ def schin(stdin):
             s.schsco.peakfile = values["peakfile"].ljust(
                 s.schsco.peakfile.itemsize)
 
-            padded = values["setup"].ljust(s.schssf.setfile.itemsize)
-            file_indices = np.argwhere(s.schssf.setfile == padded.encode())
-            if len(file_indices) == 0:
-                if s.schsf.nsetf < len(s.schssf.setfile):
-                    s.schssf.setfile[s.schsf.nsetf] = padded
-                    s.schsf.nsetf += 1
-                    entry.setnum = int(s.schsf.nsetf)
-                else:
-                    s.errlog(" SCHIN: Too many setup files. ")
-            else:
-                entry.setnum = file_indices[0][0] + 1
+            entry.setnum = SetupFileCatalog.extend_with(
+                values["setup"], " SCHIN: Too many setup files. ")
             
             infdb(values, present, catalog.entries, index)
             invla(values, present, catalog.entries, index, 1)

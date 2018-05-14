@@ -1,4 +1,5 @@
 from sched import rdset
+from catalog import SetupFileCatalog, SetupCatalog
 
 import key
 
@@ -8,12 +9,13 @@ def getset():
     if s.schcon.debug:
         s.wlog(0, "GETSET: Starting.")
 
-    for index, setfile in enumerate(s.schssf.setfile[:s.schsf.nsetf]):
-        setfilename = bytes(setfile).decode().strip()
+    for index, entry in enumerate(SetupFileCatalog().read()):
+        setfilename = entry.setfile
         if setfilename in {"DUMMY", "DEFAULT"}:
             s.errlog(" SETUP file required. ")
         else:
-            if setfile not in s.setc1.setname[:s.setn1.nset]:
+            if setfilename not in \
+               (entry.setname for entry in SetupCatalog().read()):
                 try:
                     f = open(setfilename, "r")
                 except Exception as e:
