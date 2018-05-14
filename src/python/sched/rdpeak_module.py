@@ -1,4 +1,4 @@
-from catalog import PeakCatalog
+from catalog import PeakCatalog, SetupFileCatalog
 from sched import rfreq
 import util
 
@@ -118,23 +118,11 @@ def rdpeak_implementation(input_iterator, stdin):
                    "with a new setup file.")
 
         def check_pointing_setup(filename):
-            last = 0
-            for i in range(s.schsf.nsetf):
-                if filename == bytes(s.schssf.setfile[i]).decode().strip():
-                    last = i + 1
-
-            if last == 0:
-                if s.schsf.nsetf < s.schssf.setfile.shape[0]:
-                    s.schssf.setfile[s.schsf.nsetf] = \
-                        filename.ljust(s.schssf.setfile.itemsize)
-                    s.schsf.nsetf += 1
-                    last = int(s.schsf.nsetf)
-                else:
-                    s.errlog("RDPEAK: Exceeded limit on number of setup "
-                             "files while adding ones needed for "
-                             "reference pointing.")
-            return last
-
+            return SetupFileCatalog.extend_with(
+                filename, 
+                "RDPEAK: Exceeded limit on number of setup files while adding "
+                "ones needed for reference pointing.")
+        
         entry.pklset = check_pointing_setup(entry.psetfile)
         entry.pklsetl = check_pointing_setup(entry.plsetfil)
         if (len(entry.pksta) == 0) and index > 0:
