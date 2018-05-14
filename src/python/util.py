@@ -118,7 +118,7 @@ def chain(*functions):
     return ret
 
 def f2str(f_str):
-    return bytes(f_str).decode().strip()
+    return bytes(f_str).decode().rstrip()
 
 
 # common block functions are for debugging
