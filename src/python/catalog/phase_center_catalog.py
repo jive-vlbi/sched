@@ -42,4 +42,6 @@ class PhaseCenterCatalog(Catalog):
         return self.entries
 
     def read(self):
-        return super().read()[:s.schsou.ncent]
+        super().read()
+        self.entries = self.entries[:s.schsou.ncent]
+        return self.entries

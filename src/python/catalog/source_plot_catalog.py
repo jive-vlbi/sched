@@ -32,5 +32,7 @@ class SourcePlotCatalog(Catalog):
         super().__init__(self.max_source, self.block_items)
 
     def read(self):
-        return super().read()[:s.srlis.srln]
+        super().read()
+        self.entries = self.entries[:s.srlis.srln]
+        return self.entries
     
