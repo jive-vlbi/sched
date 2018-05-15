@@ -61,4 +61,6 @@ C     Looking at the code, it seems like this should be PKMINEL(MPKGRP)
         return self.entries
 
     def read(self):
-        return super().read()[:s.schpeakn.npkgrp]
+        super().read()
+        self.entries = self.entries[:s.schpeakn.npkgrp]
+        return self.entries

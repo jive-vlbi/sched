@@ -100,7 +100,9 @@ class StationCatalog(Catalog):
         return self.entries
 
     def read(self):
-        return super().read()[:s.schsta.msta]
+        super().read()
+        self.entries = self.entries[:s.schsta.msta]
+        return self.entries
 
     def scheduled(self):
         """

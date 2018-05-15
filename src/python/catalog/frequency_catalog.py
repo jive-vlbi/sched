@@ -84,4 +84,6 @@ class FrequencyCatalog(Catalog):
         return self.entries
     
     def read(self):
-        return super().read()[:s.frqn.nfreq]
+        super().read()
+        self.entries = self.entries[:s.frqn.nfreq]
+        return self.entries
