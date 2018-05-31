@@ -1,4 +1,5 @@
       SUBROUTINE CHKV4DAR( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED called by CHKSET that checks a few specific
 C     restrictions on the VLBA4 racks, original VLBAG racks with a MkIV

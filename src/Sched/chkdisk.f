@@ -1,4 +1,5 @@
       SUBROUTINE CHKDISK( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED that checks some generic disk specific
 C     setup parameters.  There isn't much here yet.

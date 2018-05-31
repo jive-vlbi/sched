@@ -1,4 +1,5 @@
       SUBROUTINE CHKVDAR( KS, SNBBC, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED called by CHKSET that checks items related
 C     to the VLBA DAR's.  It will only be called if the DAR is

@@ -1,4 +1,5 @@
       SUBROUTINE SETFREQ( KS, NEEDCAT )
+Cf2py intent(out) NEEDCAT
 C
 C     Routine called by setup defaulting routine, SETDEFS,
 C     to establish the frequencies and sidebands of all 

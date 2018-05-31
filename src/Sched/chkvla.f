@@ -1,4 +1,5 @@
       SUBROUTINE CHKVLA( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Subroutine for SCHED called by CHKSET that checks some
 C     VLA specific setup file parameters.
