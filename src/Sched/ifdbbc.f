@@ -1,4 +1,5 @@
       SUBROUTINE IFDBBC( MYDBBCVER, MAXBBC, MAXIF, IFBBC, MIF )
+Cf2py intent(out) IFBBC, MIF
 C
 C     CR: 26 March, 2013
 C     Routine for Sched called by BBCDBBC and CHKDBBC which gives the

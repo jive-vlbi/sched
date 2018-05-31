@@ -1,4 +1,5 @@
       SUBROUTINE CHKGDAR( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED called by CHKSET that checks a few specific
 C     restrictions on the "geodetic" VLBA racks.

@@ -1,4 +1,5 @@
       SUBROUTINE CHKRDBE( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED called by CHKSET that checks items related
 C     to the use of the RDBE digital backend.
