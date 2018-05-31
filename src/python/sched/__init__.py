@@ -25,3 +25,12 @@ from .sttant_module   import sttant
 from .schin_module    import schin
 from .getset_module   import getset
 from .input_module    import input_
+from .bbcalt_module   import bbcalt
+from .ifdbbc_module   import ifdbbc
+from .bbcdbbc_module  import bbcdbbc
+from .setbbc_module   import setbbc
+from .setdefs_module  import setdefs
+from .chkdbbc_module  import chkdbbc
+from .chkset_module   import chkset
+from .defset_module   import defset
+from .defaults_module import defaults
