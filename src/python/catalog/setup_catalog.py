@@ -252,6 +252,7 @@ class SetupCatalog(Catalog):
             "altifc",
             "netside",
             "side1"]
+        # FIX maybe put all channel attributes in a class
         for entry in self.entries:
             nchan = entry.nchan
             # track is the only multidimensional attribute, so do it separately
