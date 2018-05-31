@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from sched import input_, parameter, schin_module, getfreq
+from sched import input_, parameter, schin_module, getfreq, defaults
 import vex
 from util import f2str
 import key
@@ -88,7 +88,7 @@ while True:
     s.srlis.srln = 0
 
     input_(stdin)
-    s.defaults()
+    defaults()
     s.schpre()
     s.chksc1()
     s.schopt()
