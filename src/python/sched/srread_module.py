@@ -134,7 +134,8 @@ def srread(input_iterator, stdin, select, thiscat):
                              for source in values["source"] 
                              if source != ""]
             if np.in1d(encoded_alias, 
-                       np.where(s.schn1.srcatn == 0, s.schc1.srcname, 0)).any():
+                       np.where(s.schn1.srcatn[:s.schn1.nsrc] == 0, 
+                                s.schc1.srcname[:s.schn1.nsrc], 0)).any():
                 keepit = True
                 srused = True
         else:
@@ -233,7 +234,6 @@ def srread(input_iterator, stdin, select, thiscat):
                  values["calcode"], srused)
             
     # end of record loop
-    
     catalog.write(range(index))
     s.schsou.msrc = index
     if thiscat == "1":
