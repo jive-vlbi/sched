@@ -1,4 +1,5 @@
       SUBROUTINE CHKWIDAR( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED called by CHKSET that checks items related
 C     to the use of the WIDAR correlator to format Mark5 disks.

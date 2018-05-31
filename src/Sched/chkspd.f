@@ -1,4 +1,5 @@
       SUBROUTINE CHKSPD( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED called by CHKSET that checks the 
 C     bit rate per track and the tape speeds for VLBA, Mark III, and

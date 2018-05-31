@@ -1,4 +1,5 @@
       SUBROUTINE CHKDBFQ( KS, BBCBW, BBCFREQ, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED called by CHKDBBC and FSFREQ that checks
 C     the frequencies and bandwidths requested for the DBBC.

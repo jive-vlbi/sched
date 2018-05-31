@@ -1,4 +1,5 @@
       SUBROUTINE CHKVLBA( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine for SCHED, called by CHKSET, that checks a number of
 C     items specific to the VLBA.

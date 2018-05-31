@@ -1,4 +1,5 @@
       SUBROUTINE CHKCDAS( KS, ERRS )
+Cf2py intent(in, out) ERRS
 C
 C     Routine called by CHKSET to check the setup for a CDAS 
 C     (Chinese Data Aquisition System) station.

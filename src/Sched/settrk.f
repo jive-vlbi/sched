@@ -1,5 +1,6 @@
       SUBROUTINE SETTRK( NCHAN, TAPEMODE, FORMAT, BITS, TRACK, MCHAN,
      1           KBBC, SIDEBAND, DBE, DAR, KS, TWOHEAD, DEBUG, ILOG )
+Cf2py intent(out) TRACK
 C
 C     Routine for SCHED, called by SETDEFS, that sets the track 
 C     assignments, if needed.  It will only be called if
