@@ -17,6 +17,10 @@ class Catalog(object):
     Base class to help read f2py common blocks in python objects
     and write back
     """
+
+    # FIX: replace indexing member to other catalog entries 
+    #      with actual catalog entry
+
     class CatalogEntry(object):
         def __init__(self, **kwargs):
             self.attributes = list(kwargs.keys())
