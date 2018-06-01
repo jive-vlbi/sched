@@ -69,13 +69,12 @@ def chkdbbc(setup_entry, station_entry):
                     errs = True
 
             somebad = False
-            for ich in range(setup_entry.nchan):
-                iif = ifnam.find(setup_entry.ifchan[ich][0])
-                bbc = setup_entry.bbc[ich]
+            for channel in setup_entry.channel:
+                iif = ifnam.find(channel.ifchan[0])
+                bbc = channel.bbc
                 if (iif != -1) and ifbbc[bbc-1, iif]:
                     s.wlog(1, "CHKDBBC: Illegal IF input {} for DBBC, channel "
-                           "{} BBC {}".format(setup_entry.ifchan[ich], ich+1, 
-                                              bbc))
+                           "{} BBC {}".format(channel.ifchan, ich+1, bbc))
                     s.wlog(1, "         Allowed IF index and first character "
                            "for this BBC are: {}".format(
                                "".join("({}, {})".format(i+1, ifnam[i])

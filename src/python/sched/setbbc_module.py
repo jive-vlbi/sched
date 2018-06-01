@@ -9,16 +9,16 @@ def setbbc(ks, setup_catalog, frequency_entries, station_entries):
         s.wlog(0, "SETBBC: Starting.")
 
     setup_entry = setup_catalog.entries[ks-1]
-    for ich in range(setup_entry.nchan):
-        if setup_entry.ifreqnum[ich] >= 1:
-            if setup_entry.ifchan[ich] == "":
-                setup_entry.ifchan[ich] = \
-                    frequency_entries[setup_entry.ifreqnum[ich]-1].\
-                    fifnam[setup_entry.ifreqif[ich]-1]
+    for ich, channel in enumerate(setup_entry.channel):
+        if channel.ifreqnum >= 1:
+            if channel.ifchan == "":
+                channel.ifchan = frequency_entries[channel.ifreqnum-1].\
+                                 fifnam[channel.ifreqif-1]
         else:
-            if setup_entry.ifchan[ich] == "":
+            if channel.ifchan == "":
                 s.wlog(1, "SETBBC: Cannot set IFCHANs.  First bad channel: "
-                       "{} of {} total.".format(ich + 1, setup_entry.nchan))
+                       "{} of {} total.".format(ich + 1, 
+                                                len(setup_entry.channel)))
                 s.errset(ks)
     setup_catalog.write(range(ks-1, ks))
     
