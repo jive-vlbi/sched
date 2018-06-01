@@ -8,13 +8,13 @@ import numpy as np
 
 import math
 
-def freq_range(setup_entry, ich):
+def freq_range(channel):
     # rounds to multiples of 10 (copied from SCHED)
-    bandwidth = math.floor(setup_entry.bbfilt[ich] / 10) * 10
-    if setup_entry.netside[ich] == "L":
-        return (setup_entry.freqref[ich] - bandwidth, setup_entry.freqref[ich])
+    bandwidth = math.floor(channel.bbfilt / 10) * 10
+    if channel.netside == "L":
+        return (channel.freqref - bandwidth, channel.freqref)
     else:
-        return (setup_entry.freqref[ich], setup_entry.freqref[ich] + bandwidth)
+        return (channel.freqref, channel.freqref + bandwidth)
     
 
 itout = 1
@@ -53,51 +53,50 @@ def chkset(ks):
         if (s.schcon.dovex or s.schcon.dovsop) and setup_entry.frswitch:
             s.wlog(1, "CHKSET:  Cannot frequency switch with VEX or VSOP file.")
 
-        if setup_entry.nchan < 1:
+        if len(setup_entry.channel) < 1:
             s.wlog(1, "CHKSET: Setup file must have at least 1 channel unless "
                    "OBSTYPE=VLA.")
             s.errlog("CHKSET: The error is in {}".format(setup_entry.setname))
             
         overwarn = False
-        for ich in range(setup_entry.nchan):
-            if setup_entry.sidebd[ich] not in ("U", "L"):
+        for ich, channel in enumerate(setup_entry.channel):
+            if channel.sidebd not in ("U", "L"):
                 s.wlog(1, "CHKSET: Sideband not U or L in {}".format(
                     setup_entry.setname))
                 errs = True
-            if setup_entry.pol[ich][:3] not in ("RCP", "LCP"):
+            if channel.pol[:3] not in ("RCP", "LCP"):
                 s.wlog(1, "CHKSET: In setup {} polarization of chan {} "
                        "not given or deduced (should be RCP or LCP).".format(
                            setup_entry.setname, ich+1))
                 errs = True
 
-            if ich > 0:
-                for jch in range(ich + 1, setup_entry.nchan):
-                    if (setup_entry.pol[ich] != setup_entry.pol[jch]) and \
-                       (setup_entry.ifchan[ich] == setup_entry.ifchan[jch]):
-                        s.wlog(1, "CHKSET:  In setup {} IF channel {} is "
-                               "assigned to {} in chan {} and to {} in chan {} "
-                               "Not possible.".format(setup_entry.setname, 
-                                                      setup_entry.ifchan[ich], 
-                                                      setup_entry.pol[ich], 
-                                                      ich+1, 
-                                                      setup_entry.pol[jch], 
-                                                      jch+1))
-                        errs = True
+            for jch, other in enumerate(setup_entry.channel[ich+1:], ich+1):
+                if (channel.pol != other.pol) and \
+                   (channel.ifchan == other.ifchan):
+                    s.wlog(1, "CHKSET:  In setup {} IF channel {} is "
+                           "assigned to {} in chan {} and to {} in chan {} "
+                           "Not possible.".format(setup_entry.setname, 
+                                                  channel.ifchan, 
+                                                  channel.pol, 
+                                                  ich+1, 
+                                                  channel.pol, 
+                                                  jch+1))
+                    errs = True
             
             if s.schn1.vlbitp:
-                if setup_entry.bbfilt[ich] > 0.5001 * setup_entry.samprate:
+                if channel.bbfilt > 0.5001 * setup_entry.samprate:
                     s.wlog(1, "CHKSET: Bandwidth more than half of sample rate")
                     errs = True
-                if (setup_entry.bbfilt[ich] < 0.4999 * setup_entry.samprate) \
+                if (channel.bbfilt < 0.4999 * setup_entry.samprate) \
                    and sampwarn:
                     s.wlog(0, "CHKSET note: Oversampling specified.")
                     sampwarn = False
 
             if ich > 0:
-                freq_i = freq_range(setup_entry, ich)
-                for jch in range(ich-1):
-                    if setup_entry.pol[ich] == setup_entry.pol[jch]:
-                        freq_j = freq_range(setup_entry, jch)
+                freq_i = freq_range(channel)
+                for jch, other in enumerate(setup_entry.channel[:ich-1]):
+                    if channel.pol == other.pol:
+                        freq_j = freq_range(other)
                         if (freq_j[0] <= freq_i[0] < freq_j[1]) or \
                            (freq_j[0] < freq_i[1] <= freq_j[1]):
                             overwarn = True
@@ -138,7 +137,7 @@ def chkset(ks):
 
     # end of if not vlaonly
     
-    if warn2cm and (15100 < setup_entry.freqref[0] < 15500) and \
+    if warn2cm and (15100 < setup_entry.channel[0].freqref < 15500) and \
        setup_entry.setsta[0].startswith("VLBA") and (setup_entry.totbps < 1000):
         s.wlog(1, " ")
         s.wlog(1, "CHKSET:  See sched.runlog for information on 2cm "
@@ -154,9 +153,9 @@ def chkset(ks):
     if errs:
         s.wlog(1, "CHKSET:  Freq groups used or checked:")
         frequencies = FrequencyCatalog().read()
-        for ich in range(setup_entry.nchan):
-            if setup_entry.ifreqnum[ich] > 0:
+        for ich, channel in enumerate(setup_entry.channel):
+            if channel.ifreqnum > 0:
                 s.wlog(1, " Channel: {}  Frequency Group: {}".format(
-                    ich+1, frequencies[setup_entry.ifreqnum-1].frname))
+                    ich+1, frequencies[channel.ifreqnum-1].frname))
         
         s.errset(ks)
