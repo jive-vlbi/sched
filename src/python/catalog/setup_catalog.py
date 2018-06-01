@@ -223,13 +223,8 @@ class SetupCatalog(Catalog):
     def __init__(self):
         super().__init__(self.maxsetup, self.block_items)
 
-    def read(self):
-        super().read()
-        self.entries = self.entries[:s.setn1.nset]
-        # nchan is not derived from the length of keyin channel parameters,
-        # but is a parameter by itself. Therefore do the reduction of the 
-        # size of arrays which depend on it here.
-        channel_attributes = [
+    class Channel(object):
+        attributes = {
             "ifreqnum",
             "ifreqif",
             "sfchan",
@@ -251,12 +246,44 @@ class SetupCatalog(Catalog):
             "ifchan",
             "altifc",
             "netside",
-            "side1"]
-        # FIX maybe put all channel attributes in a class
+            "side1"}
+        def __init__(self, entry, index):
+            self.entry = entry
+            self.index = index
+
+        # forward attribute get and set to entry
+        def __getattr__(self, attr):
+            if attr in self.attributes:
+                return getattr(self.entry, attr)[self.index]
+            # track is the only multidimensional attribute, 
+            # so do it separately
+            elif attr == "track":
+                return getattr(self.entry, attr)[:, self.index]
+            raise AttributeError()
+
+        def __setattr__(self, attr, value):
+            if attr in self.attributes:
+                getattr(self.entry, attr)[self.index] = value
+            # track is the only multidimensional attribute, 
+            # so do it separately
+            elif attr == "track":
+                getattr(self.entry, attr)[:, self.index] = value
+            else:
+                super().__setattr__(attr, value)
+    
+    def read(self):
+        super().read()
+        self.entries = self.entries[:s.setn1.nset]
+        # nchan is not derived from the length of keyin channel parameters,
+        # but is a parameter by itself. Therefore do the reduction of the 
+        # size of arrays which depend on it here.
         for entry in self.entries:
             nchan = entry.nchan
             # track is the only multidimensional attribute, so do it separately
             entry.track = entry.track[:, :nchan]
-            for attr in channel_attributes:
+            for attr in self.Channel.attributes:
                 setattr(entry, attr, getattr(entry, attr)[:nchan])
+            # create a view to all parameters accessed by channel index
+            entry.channel = [self.Channel(entry, index) 
+                             for index in range(nchan)]
         return self.entries
