@@ -33,7 +33,7 @@ def rdpeak_open(stdin):
         s.wlog(1, "        It is with the standard catalogs.")
         s.errlog(" Fix PEAKFILE or do not invoke AUTOPEAK or POINT.")
     with f:
-        rdpeak_implementation(key.KeyfileIterator(f), stdin)
+        rdpeak_implementation(key.KeyfileLister(f), stdin)
 
 def rdpeak(input_iterator, stdin):
     if (s.schcon.debug):
