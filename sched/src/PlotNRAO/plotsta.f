@@ -6,6 +6,7 @@ C     plots interactively.  It also triggers configuration
 C     optimization based on user cursor input.
 C
 C     Split from PLOTUV 28 Dec 2001  RCW.
+C     Fixed problem with flagged times after a source moved  3 May 2018 RCW.
 C
       INCLUDE 'sched.inc'
       INCLUDE 'plot.inc'
@@ -245,7 +246,18 @@ C
                   END DO
 C
 C                 If I don't get a good station number, try again)
-                  IF( IMARK .EQ. 0 ) GO TO 100
+C
+                  IF( IMARK .EQ. 0 ) THEN
+                     MSGTXT = ' '
+                     MSGTXT = 'PLOTSTA:  '//
+     1                        'Marked station not identified. '//
+     2                        '  Try again.'
+                     CALL WLOG( 1, MSGTXT )
+                     GO TO 100
+                  END IF
+C
+C                 Record the station catalog number of the marked station.
+C
                   IS = STANUM(IMARK)
 C
 C                 Deal with a request to move a station.  This happens
@@ -262,6 +274,18 @@ C
                      YCHNEW = YCH
                      IER = PGCURS( XCHNEW, YCHNEW, CHN )
                      IF( IER .EQ. 1 ) THEN
+C
+C                       Announce the new position.
+C
+                        WRITE( MSGTXT, '( 2A, 2F12.7, F8.1A, 2F12.7 )' )
+     1                      STATION(IS), ' New lat. long. elev: ',
+     2                      YCHNEW, XCHNEW, ELEV(IS), '    Old: ', 
+     3                      LAT(IS) / RADDEG, LONG(IS) / RADDEG
+                        CALL WLOG( 1, MSGTXT )
+C
+C                       Set the new coordinates.  This must come after 
+C                       above lines.
+C
                         LONG(IS) = XCHNEW * RADDEG
                         LAT(IS) = YCHNEW * RADDEG
 C
@@ -288,13 +312,24 @@ C                       Now update the scan geometry parameters.
 C                       Use STAGEO, not SCHSRC which will be absorbed
 C                       into STAGEO.
 C                        
+C                       Do not select only scans with STASCN set. 
+C                       That gets into trouble when the new position
+C                       allows observations when the previous position
+C                       did not.  Simple example - moving station to
+C                       much higher latitude for a high dec source.
+C
                         LASTJSCN = 0
                         DO ISCN = SCAN1, SCANL
-                           IF( STASCN(ISCN,IMARK) ) THEN
+C Don't do this                            IF( STASCN(ISCN,IMARK) ) THEN
                               CALL STAGEO( ISCN, IMARK, STARTJ(ISCN),
      1                              LASTJSCN, LASTTIME, T_AVAIL )
                               LASTJSCN = ISCN
-                           END IF
+                              STASCN(ISCN,IMARK) = 
+     1                           UP1(ISCN,IMARK) .EQ. ' ' .AND.
+     2                           UP2(ISCN,IMARK) .EQ. ' ' .AND.
+     3                           ( EL1(ISCN,IMARK) + EL2(ISCN,IMARK) ) /
+     4                              2.0 .GT. OPMINEL(ISCN)               
+C End of inappropriate selection          END IF
                         END DO
 C
 C                       Get the cursor to stay at the new position.
