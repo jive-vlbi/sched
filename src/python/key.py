@@ -324,6 +324,53 @@ class Parser:
                     tokens.append(Token(token[0], token[1], 
                                         self.input_, self.line_number))
 
+    def list_keyfile(self):
+        # add control_re logic back in and see if it matters on runtime
+        tokens = []
+        while True:
+            text = self.readline()
+            if text == "":
+                tokens.append(Token("EOF", "", self.input_, self.line_number))
+                self._pop_input()
+                if self.input_ is None:
+                    break
+                else:
+                    continue
+            match = self.control_re.match(text)
+            if match:
+                self._handle_control(match)
+            else:
+                res = self.scanner.scan(text)
+                if res[1] != "":
+                    raise ParseError("{} line {}: Unparsed text: {}.".format(
+                        self.input_.name, self.line_number, res[1][:20]))
+                for token in res[0]:
+                    # the scanner returns the type and text
+                    # add the file and line number
+                    tokens.append(Token(token[0], token[1], 
+                                        self.input_, self.line_number))
+        
+        # try to parse records from current tokens
+        chunks = []
+        self.tokIt = iter(tokens)
+        while True:
+            try:
+                self.tok = next(self.tokIt)
+                chunks.append(self.p_chunk())
+            except ParseError as txt:
+                raise ParseError("{} line {}: {}".format(
+                    self.tok.file_.name, self.tok.line, txt))
+            except EOFBeforeFirstItem:
+                left_over = list(self.tokIt)
+                if len(left_over) > 0:
+                    raise InputError("Unexpected end of input")
+                break
+            except StopIteration:
+                break
+
+        return chunks
+
+
 def print_tree(res):
     logging.debug("Result: %s", str(res))
     all_chunks_text = []
@@ -362,11 +409,34 @@ class KeyfileIterator:
         """
         self.parser.set_defaults(record, state)
 
+class KeyfileLister:
+    def __init__(self, input_, record_defaults={}, state_defaults={}):
+        # make parser available as an ugly hack to be able to access the input
+        # as reading the coverletter text is done outside of the keyin parser
+        # as it is not in keyin form
+        self.input_ = input_
+        self.parser = Parser(input_, record_defaults, state_defaults)
+        self.iterator = None
+
+    def __iter__(self):
+        if self.iterator is None:
+            self.iterator = iter(self.parser.list_keyfile())
+        return self.iterator
+
+    def __next__(self):
+        return next(self.iterator)
+
+    def set_defaults(self, record, state):
+        """
+        This is used to show interactive help
+        """
+        self.parser.set_defaults(record, state)
+
 def iterate_keyfile(f):
     return Parser(f).iterate_keyfile()
 
 def read_keyfile(f):
-    return list(iterate_keyfile(f))
+    return Parser(f).list_keyfile()
 
 def process_file(f):
     res = read_keyfile(f)
