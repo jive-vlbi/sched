@@ -23,7 +23,7 @@
 !  VERSION is the date and time when this catalog was
 !  assembled from the master subcatalogs.
  
- VERSION = "2015Mar03-18:50:14"
+ VERSION = "2018Jun26-20:29:00"
 
 !  This locations file is based on positions from geodesy observations
 !  analyzed at Goddard Space Flight Center.
@@ -1009,8 +1009,8 @@
 !
 !   The DSN stations in stations_DSN.dat (that is a part of 
 !   the main SCHED stations catalog stations.dat) are:
-!   DSS13, DSS14, DSS15, DSS34, DSS43, DSS45, DSS54, DSS63, and DSS65
-!   These are the only ones that SCHED will pay attention to.
+!   DSS13, DSS14, DSS15, DSS34, DSS35, DSS36, DSS43, DSS45, DSS54, DSS63, and
+!   DSS65. These are the only ones that SCHED will pay attention to.
 !
 !   The following are the stations included in geodetic solutions 
 !   and not needed here:
@@ -1046,7 +1046,7 @@
     FRAME='From Kurt Liewer - JPL - 3 Feb 1997'
 /
 !
-!   Australia  DSS4n
+!   Australia  DSS3n and DSS4n
 !
 !        DBNAME=DSS43     AXISTYPE=ALTAZ  AXISOFF=  0.0000
 !    70m.  Use TIDBIN64 in the geo solutions.
@@ -1054,6 +1054,25 @@
 !    DXDT= -0.03802  DYDT= -0.00205  DZDT=  0.04229  EPOCH=50449
 !    FRAME='USNO - Ref Frame 1998-6  1995-1 coords in 1998-6'
 !/
+
+    DBNAME=DSS34     AXISTYPE=altz   AXISOFF= -0.0002
+    X= -4461147.4205 Y=  2682439.2423  Z= -3674392.5623
+    DXDT= -0.03585  DYDT=  0.00003  DZDT=  0.04530  EPOCH=56293
+    FRAME='CR: vector difference from DSS43 to match http://deepspace.jpl.nasa.gov/dsndocs/810-005/301/301K.pdf'
+/
+        DBNAME=DSS35     BEGIN=     0.00  END=100000.00  AXISOFF=  0.0000
+    X= -4461273.4175  Y=  2682568.9283  Z= -3674151.5223
+    DXDT= -0.03585  DYDT=  0.00003  DZDT=  0.04530  EPOCH=56293
+    FRAME='CR: vector difference from DSS43 to match http://deepspace.jpl.nasa.gov/dsndocs/810-005/301/301K.pdf'
+/
+        DBNAME=DSS36     BEGIN=     0.00  END=100000.00  AXISOFF=  0.0000
+    X= -4461168.7425 Y= 2682814.6603 Z= -3674083.3303
+    DXDT= -0.03585  DYDT=  0.00003  DZDT=  0.04530  EPOCH=56293
+    FRAME='CR: vector difference from DSS43 to match http://deepspace.jpl.nasa.gov/dsndocs/810-005/301/301K.pdf'
+/
+
+
+
         DBCODE=TZ  DBNAME=TDBIN_TS  AXISTYPE=SPAC   AXISOFF=  0.3910
 !   Tracking station, I think.
     X= -4461083.5140  Y=  2682281.7450  Z= -3674570.3920
@@ -1303,92 +1322,49 @@
 
 !   stations_KVN.dat and locations_KVN.dat received by email to 
 !   Craig Walker from Taehyun Jung Aug. 26, 2014.  They were copied to
-!   this directory, and the stations were commented out in this file
+!   Master_JIVE, and the stations were commented out in this file
 !   The Update script now includes those files.  Sep. 2, 2014 RCW.
 !   Curiously, the KVN stations were only in locations.dat, not in
 !   any stations.dat before these changes.
 !
-        DBCODE=CD  DBNAME=CEDUNA    AXISTYPE=ALTAZ  AXISOFF=  0.0024
+!   20170305 - Moved Tid (DSS34) to Master_NRAO/locations_DSN.dat. Removed old
+!   stations (previously commented out). Removed old DBCODE keyword from all
+!   entries (no longer used by SCHED). 
+!
+        DBNAME=CEDUNA    AXISTYPE=ALTAZ  AXISOFF=  0.0024
     X= -3753442.7457  Y=  3912709.7530  Z= -3348067.6095
     DXDT= -0.04173  DYDT=  0.00267  DZDT=  0.04990  EPOCH=50449
     FRAME='GSFC - solution 2008a'
 /
-       DBCODE=MP  DBNAME=MOPRA     AXISTYPE=altz   AXISOFF=  0.0000
+       DBNAME=MOPRA     AXISTYPE=altz   AXISOFF=  0.0000
     X= -4682769.05850  Y= 2802619.04217  Z= -3291759.33837 
     DXDT=  -0.03704  DYDT=  -0.00902  DZDT=  0.04502  EPOCH=    50499
     FRAME='astrogeo.org 2009d'
 /
-        DBCODE=AK  DBNAME=ASKAP29    AXISTYPE=altz   AXISOFF=  0.00
+        DBNAME=ASKAP29    AXISTYPE=altz   AXISOFF=  0.00
     X= -2556743.707  Y= 5097440.315  Z= -2847749.657
-    DXDT= 0.0  DYDT=  0.00  DZDT=  0.0  EPOCH=50449
+    DXDT= -0.0466  DYDT=  0.00626  DZDT=  0.05305  EPOCH=51544
     FRAME='Leonid Petrov, priv. comm.'
 /
-        DBCODE=AK  DBNAME=ASKAP32    AXISTYPE=altz   AXISOFF=  0.00
+        DBNAME=ASKAP32    AXISTYPE=altz   AXISOFF=  0.00
     X= -2558276.03  Y= 5095032.59 Z= -2850671.51
-    DXDT= 0.0  DYDT=  0.00  DZDT=  0.0  EPOCH=50449
+    DXDT= -0.0466  DYDT=  0.00626  DZDT=  0.05305  EPOCH=51544
     FRAME='Leonid Petrov, priv. comm. 2014-12-18'
 /
-        DBCODE=AK  DBNAME=ASKAP07    AXISTYPE=altz   AXISOFF=  0.00
+        DBNAME=ASKAP07    AXISTYPE=altz   AXISOFF=  0.00
     X= -2556279.416  Y= 5097245.383 Z= -2848523.218
-    DXDT= 0.0  DYDT=  0.00  DZDT=  0.0  EPOCH=50449
+    DXDT= -0.0466  DYDT=  0.00626  DZDT=  0.05305  EPOCH=51544
     FRAME='John Reynolds, priv. comm. 2015-01-12'
 /
-!   This station has appeared in the GSFC locations file, so not needed here.
-!        DBCODE=KE  DBNAME=KATHERIN  AXISTYPE=altz   AXISOFF=  0.0000
-!    X= -4147354.47163  Y= 4581542.19732   Z= -1573303.37180
-!    DXDT=  0.00000  DYDT=  0.00000  DZDT=  0.00000  EPOCH=50449
-!    FRAME='GSFC via Jamie McCallum'
-! /
-!   This station has appeared in the GSFC locations file, so not needed here.
-!        DBCODE=YG  DBNAME=YARRAGAD  AXISTYPE=altz   AXISOFF=  0.0000
-!    X= -2388896.319  Y=  5043349.302  Z= -3078591.295
-!    DXDT=  0.00000  DYDT=  0.00000  DZDT=  0.00000  EPOCH=50449
-!    FRAME='Jim Lovell, priv. comm.'
-! /
-!   This station has appeared in the GSFC locations file, so not needed here.
-!        DBCODE=HT  DBNAME=HART15M   AXISTYPE=altz   AXISOFF=  0.0
-!    X=  5085488.1729  Y=  2668159.9945  Z= -2768694.6774
-!    DXDT= -0.00093  DYDT=  0.01981  DZDT=  0.01641  EPOCH=51544
-!    FRAME='Approximate position from Jon Quick'
-! /
-        DBCODE=WA  DBNAME=WARK30M   BEGIN=     0.00  END=100000.00  
-    AXISOFF= 0.0000 
-    X= -5115425.635   Y=   477880.304   Z= -3767042.837 DXDT= 0.00000
-    DYDT=  0.00000  DZDT=  0.00000  EPOCH=    0
-    FRAME='Leonid Petrov Jan 14, 2015: 2011A'
+        DBNAME=WARK30M   BEGIN=     0.00  END=100000.00  AXISOFF= 2.5000 
+    X= -5115425.5457   Y=   477880.3165   Z= -3767042.7506 
+    DXDT= -0.0193 DYDT= -0.0014   DZDT= 0.0328   EPOCH=    51544
+    FRAME='Leonid Petrov Aug. 2017: AUA025'
 /
 
-!   DSS34 doesn't really belong here, but it is not in the geodetic databases
-
-    DBCODE=TI  DBNAME=DSS34     AXISTYPE=altz   AXISOFF= -0.0002
-    X=-4461146.905 Y=2682439.289 Z=-3674393.334
-    DXDT=-0.03595 DYDT=-0.00007 DZDT=0.04289 EPOCH=50449
-    FRAME='Approximate from JPL'
-/
-
-! These are superseded by the stations in locations_KVN.dat.  See 
-! comments at top of file.
-! Some day they should be deleted here, but save for now in case of
-! trouble.
-!   KVN stations temporarily live here.
-!    DBCODE=KY  DBNAME=KVNYS     AXISTYPE='altaz'   AXISOFF=0.0  EPOCH=51544
-!    X= -3042278.2562 Y= 4045902.8094 Z=  3867376.1435
-!    DXDT= -0.02404  DYDT=  0.00300  DZDT=  -0.00636
-!    FRAME='Approximate from Chris Phillips'
-!/
-!    DBCODE=KU  DBNAME=KVNUS     AXISTYPE='altaz'   AXISOFF=0.0  EPOCH=51544
-!    X= -3287268.1566 Y= 4023449.1207 Z=  3687380.1796
-!    DXDT= -0.02404  DYDT=  0.00300  DZDT=  -0.00636
-!    FRAME='Approximate from Chris Phillips'
-!/
-!    DBCODE=KT  DBNAME=KVNTN     AXISTYPE='altaz'   AXISOFF=0.0  EPOCH=51544
-!    X= -3171731.4809 Y=4292677.3733 Z=  3481040.4580
-!    DXDT= -0.02404  DYDT=  0.00300  DZDT=  -0.00636
-!    FRAME='Approximate from Chris Phillips'
-!/
 
 !   GMRT.
-    DBCODE=GM  DBNAME=GMRT     AXISTYPE=altz   AXISOFF=  0.0000
+    DBNAME=GMRT     AXISTYPE=altz   AXISOFF=  0.0000
     X=  1656988.9135  Y=  5797576.2281  Z=  2073756.22
     DXDT= 0.0  DYDT=  0.0  DZDT= 0.0  EPOCH=0
     FRAME='Approximate position of random GMRT antenna from Chris Phillips'
@@ -1399,229 +1375,229 @@
 ! AT_W104 is the only pad with a geodetic measurement. Other pads are computed
 ! by dead reckoning from that position according to the stations offsets used
 ! at ATCA (provided my Mark Wieringa). These offsets are only accurate to a 
-! few cm.
+! few cm and change every re-config.
 !
-        DBCODE=ATCA  DBNAME=AT_W104   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W104   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751639.85972  Y= 2791700.35670  Z= -3200491.11339 
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='ATCA-W104 pad from astrogeo.org 2009'
 /
-        DBCODE=ATCA  DBNAME=AT_N2   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_N2   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751637.61372  Y= 2791734.5617  Z= -3200464.67139
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_N5   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_N5   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751657.54872  Y= 2791746.3047  Z= -3200425.00839
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_N7   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_N7   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751670.83972  Y= 2791754.1337  Z= -3200398.56639
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_N11   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_N11   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751697.42072  Y= 2791769.7907  Z= -3200345.68239
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_N14   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_N14   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751717.35672  Y= 2791781.5337  Z= -3200306.01939
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W0   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W0   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752447.78172  Y= 2790328.7857  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W2   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W2   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752432.24472  Y= 2790355.1617  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W4   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W4   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752416.70772  Y= 2790381.5387  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W6   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W6   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752401.17072  Y= 2790407.9147  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W8   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W8   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752385.63372  Y= 2790434.2907  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W10   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W10   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752370.09672  Y= 2790460.6677  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W12   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W12   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752354.55972  Y= 2790487.0437  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W14   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W14   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752339.02272  Y= 2790513.4207  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W16   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W16   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752323.48572  Y= 2790539.7967  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W32   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W32   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752199.19072  Y= 2790750.8077  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W45   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W45   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4752098.19972  Y= 2790922.2537  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W64   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W64   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751950.59872  Y= 2791172.8287  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W84   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W84   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751795.22972  Y= 2791436.5927  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W98   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W98   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751686.47072  Y= 2791621.2277  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W100   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W100   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751670.93372  Y= 2791647.6037  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W102   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W102   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751655.39672  Y= 2791673.9797  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W106   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W106   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751624.32272  Y= 2791726.7327  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W109   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W109   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751601.01772  Y= 2791766.2967  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W110   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W110   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751593.24872  Y= 2791779.4857  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W111   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W111   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751585.48072  Y= 2791792.6737  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W112   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W112   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751577.71172  Y= 2791805.8617  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W113   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W113   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751569.94372  Y= 2791819.0497  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W124   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W124   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751484.49072  Y= 2791964.1197  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W125   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W125   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751476.72172  Y= 2791977.3077  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W128   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W128   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751453.41672  Y= 2792016.8727  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W129   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W129   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751445.64772  Y= 2792030.0607  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W140   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W140   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751360.19472  Y= 2792175.1307  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W147   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W147   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751305.81472  Y= 2792267.4477  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W148   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W148   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751298.04672  Y= 2792280.6357  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W163   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W163   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751181.51972  Y= 2792478.4587  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W168   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W168   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751142.67672  Y= 2792544.3997  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W172   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W172   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751111.60372  Y= 2792597.1527  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W173   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W173   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751103.83472  Y= 2792610.3407  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W182   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W182   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4751033.91872  Y= 2792729.0337  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W189   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W189   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4750979.53872  Y= 2792821.3517  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W190   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W190   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4750971.77072  Y= 2792834.5397  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W195   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W195   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4750932.92772  Y= 2792900.4807  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W196   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W196   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4750925.15972  Y= 2792913.6687  Z= -3200491.11339
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'
 /
-        DBCODE=ATCA  DBNAME=AT_W392   AXISTYPE=altz   AXISOFF=  0.0000
+        DBNAME=AT_W392   AXISTYPE=altz   AXISOFF=  0.0000
     X= -4749402.52072  Y= 2795498.5367  Z= -3200491.06039
     DXDT=  -0.03099  DYDT=  -0.00458  DZDT=  0.04203  EPOCH=    50449
     FRAME='Calculated by offset from AT_W104 pad'

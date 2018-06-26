@@ -4,6 +4,14 @@ C     Subroutine to write the panel with the station names etc
 C     when doing UV plots of more than one station.
 C
 C     Pulled out of PLOTSTA  3 apr 2002  RCW.
+C     Prevented listing stations if PSTNUM too high.  May 31, 2018.  RCW.
+C
+C     Should run with line width 1 if the station list is large (OPTIONS 
+C     in control panel).
+C
+C     Add writing of .dat and .csv files when writing an output plot
+C     file.  June 9, 2018  RCW.  Call to WRTSTL.
+C
 C
 C     ========================================================
 C     Second Panel - Station names and coordinates.  Put after
@@ -18,12 +26,18 @@ C
       INTEGER           KSET
       LOGICAL           SCREEN
 C
-      INTEGER           ISTA, NPSTA
+      INTEGER           ISTA, NPSTA, ST1
       INTEGER           LBCL, ICOL, NLBCOL
       REAL              X1, Y1
       REAL              LBYS, LBXS, LBYR, LBXR, LBCH
       CHARACTER         CHLAT*9, CHLONG*10, TFORM*15, POSLINE*40
 C ---------------------------------------------------------------------
+C     Trigger writing of comma separated value and SCHED style catalog
+C     files using the current station locations.
+C
+      IF( .NOT. SCREEN ) CALL WRTSTL
+C
+      ST1 = 1
       IF( PSTNUM .LE. 20 ) THEN
 C
 C        1 Column 20 Labels Max
@@ -45,9 +59,9 @@ C
          LBXS = 0.2
          LBXR = 0.45
 C
-      ELSE IF( PSTNUM .LE. 94 ) THEN
+      ELSE IF( PSTNUM .LE. 80 ) THEN
 C
-C        2 Column 94 Labels Max
+C        2 Column 80 Labels Max
 C
          LBCL = 2
          LBCH = 0.80
@@ -56,16 +70,28 @@ C
          LBXS = 0.1
          LBXR = 0.45
 C
-      ELSE
+      ELSE IF( PSTNUM .LE. 132 ) THEN
 C
-C        3 Column 180 Labels Max
+C        3 Column 132 Labels Max
 C
          LBCL = 3
-         LBCH = 0.5
+         LBCH = 0.58
          LBYS = 1.0
-         LBYR = 0.8 / 60
+         LBYR = 0.8 / 38
          LBXS = 0.05
          LBXR = 0.3
+C
+      ELSE    !  Too many.
+C
+C        2 Column 80 Labels Max.  Print end if list.
+C
+         ST1 = PSTNUM - 79
+         LBCL = 2
+         LBCH = 0.80
+         LBYR = 0.8 / 35
+         LBYS = 1.0 - LBYR
+         LBXS = 0.1
+         LBXR = 0.45
 C
       END IF
 C
@@ -86,12 +112,21 @@ C
       NPSTA = 0
       X1 = LBXS
       ICOL = 1
-      NLBCOL = PSTNUM / LBCL
-      IF( MOD( PSTNUM, LBCL) .GT. 0. ) NLBCOL = NLBCOL + 1
+      NLBCOL = ( PSTNUM - ST1 + 1 ) / LBCL
+      IF( MOD( PSTNUM - ST1 + 1, LBCL) .GT. 0. ) NLBCOL = NLBCOL + 1
+C
+C     If ST1 not 1, warn of missing stations.
+C
+      IF( ST1 .GT. 1 ) THEN
+         WRITE( POSLINE, '( A, I4, A )' ) 'First ', ST1 - 1, 
+     1    ' stations not listed. '
+         CALL PGTEXT( X1, LBYS, POSLINE )
+         LBYS = LBYS - LBYR
+      END IF
 C
 C     Loop over stations
 C
-      DO ISTA = 1, NSTA
+      DO ISTA = ST1, NSTA
          IF( PSTBCK(ISTA,1) .EQ. 1 ) THEN
             NPSTA = NPSTA + 1
 C
