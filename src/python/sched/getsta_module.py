@@ -30,7 +30,7 @@ def getsta(stdin, values, index, gotvex, mjd1):
             s.error("Station catalog: {} not opened".format(station_file))
         else:
             with f:
-                input_iterator = key.KeyfileIterator(f)
+                input_iterator = key.KeyfileLister(f)
                 stread(input_iterator, stdin, mjd1)
         
     last_station_file = station_file

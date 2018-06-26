@@ -22,7 +22,7 @@ def getset():
                     s.wlog(1, str(e))
                     s.errlog("RDSET: Problem opening setup file")
                 with f:
-                    input_iterator = key.KeyfileIterator(f)
+                    input_iterator = key.KeyfileLister(f)
                     rdset(setfilename, input_iterator, index+1)
 
     s.setn2a.fifmin[:, :s.setn1.nset].setfield(0., dtype=s.setn2a.fifmin.dtype)

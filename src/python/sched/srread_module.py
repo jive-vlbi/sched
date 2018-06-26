@@ -35,7 +35,7 @@ def srread_open(filename, stdin, select, thiscat):
         s.putout(str(e))
         s.error("Source catalog: {} not opened".format(filename))
     with f:
-        return srread(key.KeyfileIterator(f), stdin, select, thiscat)
+        return srread(key.KeyfileLister(f), stdin, select, thiscat)
 
 def srread(input_iterator, stdin, select, thiscat):
     global eqwarn, lastfile, record_defaults, state_defaults
