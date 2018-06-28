@@ -17,32 +17,6 @@ import copy
 vex_version = "2.0" # version of VEX definition
 sched_version = "1" # version of SCHED VEX writing routine
 
-class Block:
-    def __init__(self, name, defs=[]):
-        self.name = name
-        self.defs = copy.deepcopy(defs)
-
-class RefDef:
-    def __init__(self, name, refs=[]):
-        self.name = name
-        self.refs = copy.deepcopy(refs)
-
-class ValueDef:
-    def __init__(self, name, params=[]):
-        self.name = name
-        self.params = copy.deepcopy(params)
-
-class Ref:
-    def __init__(self, block, name, qualifiers=[]):
-        self.block = block
-        self.name = name
-        self.qualifiers = copy.deepcopy(qualifiers)
-
-class ParamValues:
-    def __init__(self, parameter, values):
-        self.parameter = parameter
-        self.values = values
-
 block_separator = "*------------------------------------------------------"\
                   "------------------------\n"
 def write(output):
