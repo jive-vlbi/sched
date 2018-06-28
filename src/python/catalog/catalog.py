@@ -15,7 +15,8 @@ def get_arrays(block_items):
 class Catalog(object):
     """
     Base class to help read f2py common blocks in python objects
-    and write back
+    and write back.
+    Instances of subclasses share the state with each other.
     """
 
     # FIX: replace indexing member to other catalog entries 
@@ -24,21 +25,38 @@ class Catalog(object):
     class CatalogEntry(object):
         def __init__(self, **kwargs):
             self.attributes = list(kwargs.keys())
-            for key, value in kwargs.items():
-                setattr(self, key, value)
-
+            self.__dict__.update(kwargs)
+        
         def set_keyin_values(self, values, attribute_to_key):
             for attribute in self.attributes:
                 if attribute_to_key.get(attribute) in values:
                     setattr(self, attribute, 
                             values[attribute_to_key[attribute]])
+
+        def __str__(self):
+            return str(self.__dict__)
            
 
-    def __init__(self, nr_elements, block_items):
-        self.nr_elements = nr_elements
-        self.block_items = block_items
-        self.attributes = sum(block_items.values(), [])
-
+    def __init__(self, nr_elements, block_items, extended_attributes=set()):
+        """
+        nr_elements: the maximum number of catalog entries
+        block_items: {schedlib block: [attribute of block]}
+        extended_attributes: {name of attribute not represented in 
+                              Fortran common blocks}
+        """
+        try:
+            self.__dict__ = type(self)._shared_state
+            assert(self.nr_elements == nr_elements)
+            assert(self.block_items == block_items)
+            assert(self.extended_attributes == extended_attributes)
+        except AttributeError:
+            # no shared state for this class yet, create and assign
+            self.__dict__ = type(self)._shared_state = {}
+            self.nr_elements = nr_elements
+            self.block_items = block_items
+            self.attributes = sum(block_items.values(), [])
+            self.extended_attributes = extended_attributes
+            self.prime()
     
     def prime(self):
         """
@@ -53,6 +71,8 @@ class Catalog(object):
             self.CatalogEntry(
                 **{key: value[i] for key, value in arrays.items()})
             for i in range(self.nr_elements)]
+        for attribute in self.extended_attributes:
+            setattr(entry, attribute, None)
         return self.entries
 
     def read(self):
@@ -60,7 +80,18 @@ class Catalog(object):
         Read the catalog entries from the common blocks.
         Only return entries that have defined values.
         """
-        return self.prime()
+        arrays = get_arrays(self.block_items)
+        entries = self.scheduled()
+        for i, entry in enumerate(entries):
+            entry.__dict__.update(
+                {key: value[i] for key, value in arrays.items()})
+        return entries
+    
+    def scheduled(self):
+        """
+        Return entries that have defined values.
+        """
+        return self.entries
 
     def write(self, indices=None):
         """

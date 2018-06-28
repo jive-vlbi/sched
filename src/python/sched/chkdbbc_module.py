@@ -50,6 +50,7 @@ def chkdbbc(setup_entry, station_entry):
                 errs = True
 
         elif setup_entry.dbe == "DBBC_DDC":
+            # FIX should be e-series dependent
             if setup_entry.samprate not in (2, 4, 8, 16, 32, 64):
                 s.wlog(1, "CHKDBBC: Invalid SAMPRATE specified: {} for "
                        "DBE=DBBC_DDC. Must be 2 to 64 Msamp/s.")

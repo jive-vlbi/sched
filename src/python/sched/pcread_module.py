@@ -23,7 +23,6 @@ def pcread(input_iterator):
         s.wlog(0, "PCREAD:  Starting to read groups of phase centers")
     
     catalog = PhaseCenterCatalog()
-    catalog.prime()
 
     start = int(s.schsou.ncent)
     index = start

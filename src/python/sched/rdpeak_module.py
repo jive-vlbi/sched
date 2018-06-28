@@ -87,7 +87,6 @@ def rdpeak_implementation(input_iterator, stdin):
     }
 
     catalog = PeakCatalog()
-    catalog.prime()
     start = int(s.schpeakn.npkgrp)
     index = start
     for record in input_iterator:

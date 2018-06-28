@@ -377,7 +377,6 @@ def schin(stdin):
 
     restart = False
 
-    catalog.prime()
     index = 0
     while True:
         try:

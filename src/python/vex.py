@@ -20,6 +20,12 @@ sched_version = "1" # version of SCHED VEX writing routine
 block_separator = "*------------------------------------------------------"\
                   "------------------------\n"
 def write(output):
+    # read in all catalogs, so other methods can assume their entries are valid
+    for Catalog in (SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog):
+        Catalog().read()
+    StationCatalog().add_scheduled_attributes()
+    SourceCatalog().set_aliases()
+
     output.write(header_block())
     output.write(block_separator)
     output.write(global_block())
@@ -95,9 +101,7 @@ def {};
     ret += text2comments((f2str(note) for note in s.schsco.note), 
                          comment_prefix)
 
-    scan_catalog = ScanCatalog()
-    scan_catalog.read()
-    scans = scan_catalog.scheduled()
+    scans = ScanCatalog().used()
     year, doy, time_ = s.timej(scans[0].stopj)
     year, month, day, jd, mname, dname = s.tdatecw(year, 1, doy)
     ret += """
@@ -160,16 +164,12 @@ def modes_block():
     # some common block variables are indexed by scan number, but not part 
     # of the scan catalog, the indices are offset from the catalog entries
     scan_catalog = ScanCatalog()
-    scan_catalog.read()
-    scans = scan_catalog.scheduled()
+    scans = scan_catalog.used()
     scan_offset = scan_catalog.scan_offset
     
-    setups = SetupCatalog().read()
+    setups = SetupCatalog().scheduled()
 
-    station_catalog = StationCatalog()
-    station_catalog.read()
-    station_catalog.add_scheduled_attributes()
-    stations = station_catalog.scheduled()
+    stations = StationCatalog().used()
 
     format_map = {"MARKIII": "Mark3A",
                   "MKIV": "Mark4",
@@ -691,10 +691,7 @@ def stations_block():
         else:
             return "{}+{}".format(rack, recorder)
 
-    station_catalog = StationCatalog()
-    station_catalog.read()
-    station_catalog.add_scheduled_attributes()
-    stations = station_catalog.scheduled()
+    stations = StationCatalog().used()
     
     generator = {"SITE": do_site,
                  "ANTENNA": do_antenna,
@@ -785,10 +782,7 @@ def scan_sector(station, scan, az1, el1):
     return None
     
 def source_block():
-    catalog = SourceCatalog()
-    catalog.read()
-    catalog.set_aliases()
-    sources = catalog.scheduled()
+    sources = SourceCatalog().used()
     source_text = "$SOURCE;\n"
     source_defs = 0
     for source in sources:
@@ -810,16 +804,12 @@ enddef;
 
 def sched_block(scan_mode):
     catalog = ScanCatalog()
-    catalog.read()
-    scans = catalog.scheduled()
+    scans = catalog.used()
     scan_offset = catalog.scan_offset
     
-    catalog = StationCatalog()
-    catalog.read()
-    catalog.add_scheduled_attributes()
-    stations = catalog.scheduled()
+    stations = StationCatalog().used()
 
-    setups = SetupCatalog().read()
+    setups = SetupCatalog().scheduled()
 
     byte_offset = defaultdict(float) # station -> expected bytes recorded
 

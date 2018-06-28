@@ -22,7 +22,7 @@ def defaults():
     station_catalog.add_scheduled_attributes()
     if not s.schn1.notape and any(station.station.startswith("VLBA") and 
                                   (station.disk == "MARK5A") 
-                                  for station in station_catalog.scheduled()):
+                                  for station in station_catalog.used()):
         s.wlog(1, "STREAD: ==== WARNING ==== Mark5A specified for a VLBA "
                " station.")
         s.wlog(1, "        Those recorders have been removed from most "
@@ -45,7 +45,7 @@ def defaults():
     scan_catalog = ScanCatalog()
     scan_catalog.read()
     setups = SetupCatalog().read()
-    for scan_index, scan in enumerate(scan_catalog.scheduled(), 
+    for scan_index, scan in enumerate(scan_catalog.used(), 
                                       scan_catalog.scan_offset):
         if (scan.grabto != "NONE") and (scan.datapath == "IN2DISK"):
             if scan.grabtime[0] < 0:
@@ -53,7 +53,7 @@ def defaults():
             if scan.grabtime[1] < 0:
                 scan.grabtime[1] = 10
             if scan.grabgap == 0:
-                for station in station_catalog.scheduled():
+                for station in station_catalog.used():
                     if station.stascn[scan_index]:
                         bps = setups[station.nsetup[scan_index] - 1].totbps
                         scan.grabgap = max(scan.grabgap,
