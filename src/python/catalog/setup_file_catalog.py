@@ -37,11 +37,6 @@ class SetupFileCatalog(Catalog):
     def __init__(self):
         super().__init__(self.max_setup_files, self.block_items)
 
-    def read(self):
-        super().read()
-        self.entries = self.entries[:s.schsf.nsetf]
-        return self.entries
-
     def scheduled(self):
         return self.entries[:s.schsf.nsetf]
 
@@ -52,7 +47,7 @@ class SetupFileCatalog(Catalog):
         and return the (Fortran based) index of the entry
         """
         catalog = cls()
-        catalog.prime()
+        catalog.read()
         # create an entry for the setup file if it is new
         index = next((index for index, entry in enumerate(catalog.scheduled())
                       if entry.setfile == filename), None)

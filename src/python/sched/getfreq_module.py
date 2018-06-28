@@ -20,8 +20,7 @@ def getfreq():
             keyin_data = read_keyfile(f)
     
     catalog = FrequencyCatalog()
-    catalog.prime()
-
+    
     if len(keyin_data) > catalog.maxfreq:
         s.errlog("GETFREQ: Too many frequency groups. ")
 

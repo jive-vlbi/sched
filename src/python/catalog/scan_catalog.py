@@ -177,7 +177,7 @@ class ScanCatalog(Catalog):
         return super().read()
 
     def scheduled(self):
-        """
-        Pre: self.read has been called
-        """
-        return self.entries[self.scan_offset: s.schn1.scanl]
+        return self.entries[:s.schn1.scanl]
+
+    def used(self):
+        return self.entries[self.scan_offset:s.schn1.scanl]

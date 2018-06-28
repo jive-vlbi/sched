@@ -16,7 +16,6 @@ def rdset(setreq, input_iterator, isetf):
         s.wlog(0, "RDSET: Reading setup {} {}".format(isetf, setreq))
     
     catalog = SetupCatalog()
-    catalog.prime()
 
     start = int(s.setn1.nset)
     index = start

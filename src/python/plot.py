@@ -737,7 +737,7 @@ class MainWidget(QDialog):
         station_catalog = StationCatalog()
         station_catalog.read()
         station_catalog.add_scheduled_attributes()
-        self.stations = station_catalog.scheduled()
+        self.stations = station_catalog.used()
         
         self.tab_widget = QTabWidget(self)
         self.uv = UVWidget(self.sources, self.stations, self.tab_widget)
@@ -749,7 +749,7 @@ class MainWidget(QDialog):
         self.radec = RADecWidget(self.radec_sources, self.tab_widget)
         self.tab_widget.addTab(self.radec, "RA-Dec")
         self.beam = BeamWidget(self.sources, self.stations, 
-                               self.scan_catalog.scheduled(), self.tab_widget)
+                               self.scan_catalog.used(), self.tab_widget)
         self.tab_widget.addTab(self.beam, "Beam")
         
         window_layout.addWidget(self.tab_widget)
@@ -809,7 +809,7 @@ class MainWidget(QDialog):
             
             source_baseline_xy = defaultdict(
                 lambda: defaultdict(lambda: [[], []]))
-            for scan_index, scan in enumerate(self.scan_catalog.scheduled(), 
+            for scan_index, scan in enumerate(self.scan_catalog.used(), 
                                               self.scan_catalog.scan_offset):
                 if scan.scnsrc not in alias_source:
                     continue
@@ -930,7 +930,7 @@ class MainWidget(QDialog):
                 axis_function.append(f)
 
 
-            for scan_index, scan in enumerate(self.scan_catalog.scheduled(), 
+            for scan_index, scan in enumerate(self.scan_catalog.used(), 
                                               self.scan_catalog.scan_offset):
                 if scan.scnsrc not in alias_source:
                     continue
@@ -1023,7 +1023,7 @@ class MainWidget(QDialog):
 
             source_station_left = defaultdict(lambda: defaultdict(list))
             source_station_width = defaultdict(lambda: defaultdict(list))
-            scans = self.scan_catalog.scheduled()
+            scans = self.scan_catalog.used()
             for scan_index, scan in enumerate(scans, 
                                               self.scan_catalog.scan_offset):
                 if scan.scnsrc not in alias_source:
@@ -1200,7 +1200,7 @@ class MainWidget(QDialog):
             u = np.zeros((sched_uv_size, 1))
             v = np.zeros((sched_uv_size, 1))
             uv_index = 0
-            for scan_index, scan in enumerate(self.scan_catalog.scheduled(), 
+            for scan_index, scan in enumerate(self.scan_catalog.used(), 
                                               self.scan_catalog.scan_offset):
                 if not ((scan.scnsrc in aliases) and 
                         (scan.setnum == setup_number)):

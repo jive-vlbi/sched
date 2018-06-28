@@ -60,7 +60,5 @@ C     Looking at the code, it seems like this should be PKMINEL(MPKGRP)
             entry.pksta = entry.pksta[:entry.npksta]
         return self.entries
 
-    def read(self):
-        super().read()
-        self.entries = self.entries[:s.schpeakn.npkgrp]
-        return self.entries
+    def scheduled(self):
+        return self.entries[:s.schpeakn.npkgrp]

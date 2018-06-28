@@ -31,8 +31,6 @@ class SourcePlotCatalog(Catalog):
     def __init__(self):
         super().__init__(self.max_source, self.block_items)
 
-    def read(self):
-        super().read()
-        self.entries = self.entries[:s.srlis.srln]
-        return self.entries
+    def scheduled(self):
+        return self.entries[:s.srlis.srln]
     

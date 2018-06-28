@@ -138,7 +138,6 @@ def stread(input_iterator, stdin, mjd1):
             
     # update the station values with station and location file catalog values
     station_catalog = StationCatalog()
-    station_catalog.prime()
 
     warnxyz = True
     locwarn = True
