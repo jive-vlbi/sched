@@ -25,7 +25,6 @@ def satini(input_iterator):
         s.wlog(0, "SATINI: starting.")
     
     catalog = SatelliteCatalog()
-    catalog.prime()
     attribute_to_key = dict(zip(catalog.attributes, catalog.attributes))
 
     start = int(s.schsat.nsat)

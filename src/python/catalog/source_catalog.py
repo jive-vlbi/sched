@@ -83,9 +83,9 @@ class SourceCatalog(Catalog):
         super().__init__(self.maxsource, self.block_items)
 
     def scheduled(self):
-        """
-        Pre: self has initialized entries
-        """
+        return self.entries[:s.schsou.msrc]
+
+    def used(self):
         return [source for source in self.entries if source.sused]
 
     def set_aliases(self):

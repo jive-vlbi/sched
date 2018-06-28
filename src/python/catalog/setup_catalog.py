@@ -270,14 +270,13 @@ class SetupCatalog(Catalog):
                 getattr(self.entry, attr)[:, self.index] = value
             else:
                 super().__setattr__(attr, value)
-    
+
     def read(self):
-        super().read()
-        self.entries = self.entries[:s.setn1.nset]
+        ret = super().read()
         # nchan is not derived from the length of keyin channel parameters,
         # but is a parameter by itself. Therefore do the reduction of the 
         # size of arrays which depend on it here.
-        for entry in self.entries:
+        for entry in ret:
             nchan = entry.nchan
             # track is the only multidimensional attribute, so do it separately
             entry.track = entry.track[:, :nchan]
@@ -286,4 +285,7 @@ class SetupCatalog(Catalog):
             # create a view to all parameters accessed by channel index
             entry.channel = [self.Channel(entry, index) 
                              for index in range(nchan)]
-        return self.entries
+        return ret
+    
+    def scheduled(self):
+        return self.entries[:s.setn1.nset]

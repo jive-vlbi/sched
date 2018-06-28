@@ -24,7 +24,6 @@ def rfreq(input_iterator):
         "restfreq": "restfreq",
     }
     catalog = LineRestFrequencyCatalog()
-    catalog.prime()
     start = int(s.schlin.nlgp)
     index = start
 

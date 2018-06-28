@@ -91,25 +91,27 @@ class StationCatalog(Catalog):
             entry.nhoriz = len(entry.horaz)
         return super().write(indices)
 
-    def prime(self):
-        super().prime()
-        for entry in self.entries:
+    def adjust_lengths(self, entries):
+        for entry in entries:
             length = entry.nhoriz
             entry.horaz = entry.horaz[:length]
             entry.horel = entry.horel[:length]
-        return self.entries
+        
+    def prime(self):
+        ret = super().prime()
+        self.adjust_lengths(ret)
+        return ret
 
     def read(self):
-        super().read()
-        self.entries = self.entries[:s.schsta.msta]
-        return self.entries
+        ret = super().read()
+        self.adjust_lengths(ret)
+        return ret
 
     def scheduled(self):
-        """
-        Pre: self has entries
-        """
-        return [self.entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
+        return self.entries[:s.schsta.msta]
 
+    def used(self):
+        return [self.entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
 
     """
     INTEGER          NSETUP(MAXSCN,MAXSTA)
@@ -154,7 +156,7 @@ class StationCatalog(Catalog):
         Pre: self has entries
         """
         arrays = get_arrays(self.scheduled_station_items)
-        for index, entry in enumerate(self.scheduled()):
+        for index, entry in enumerate(self.used()):
             for key, value in arrays.items():
                 setattr(entry, key, value[index])
             

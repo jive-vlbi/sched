@@ -83,7 +83,5 @@ class FrequencyCatalog(Catalog):
                 setattr(entry, attribute, getattr(entry, attribute)[:length])
         return self.entries
     
-    def read(self):
-        super().read()
-        self.entries = self.entries[:s.frqn.nfreq]
-        return self.entries
+    def scheduled(self):
+        return self.entries[:s.frqn.nfreq]

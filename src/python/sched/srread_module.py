@@ -99,7 +99,6 @@ def srread(input_iterator, stdin, select, thiscat):
     s.wlog(0, "SRREAD:  Reading source catalog:  {}".format(infile[-(100-24):]))
     
     catalog = SourceCatalog()
-    catalog.prime()
     index = s.schsou.msrc
     
     for record in input_iterator:
