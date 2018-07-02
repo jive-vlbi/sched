@@ -24,14 +24,12 @@ class Catalog(object):
 
     class CatalogEntry(object):
         def __init__(self, **kwargs):
-            self.attributes = list(kwargs.keys())
             self.__dict__.update(kwargs)
         
         def set_keyin_values(self, values, attribute_to_key):
-            for attribute in self.attributes:
-                if attribute_to_key.get(attribute) in values:
-                    setattr(self, attribute, 
-                            values[attribute_to_key[attribute]])
+            for attribute, key in attribute_to_key.items():
+                if key in values:
+                    setattr(self, attribute, values[key])
 
         def __str__(self):
             return str(self.__dict__)
@@ -71,8 +69,9 @@ class Catalog(object):
             self.CatalogEntry(
                 **{key: value[i] for key, value in arrays.items()})
             for i in range(self.nr_elements)]
-        for attribute in self.extended_attributes:
-            setattr(entry, attribute, None)
+        for entry in self.entries:
+            for attribute in self.extended_attributes:
+                setattr(entry, attribute, None)
         return self.entries
 
     def read(self):
