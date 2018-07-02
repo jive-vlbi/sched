@@ -221,7 +221,7 @@ class SetupCatalog(Catalog):
     }
 
     def __init__(self):
-        super().__init__(self.maxsetup, self.block_items)
+        super().__init__(self.maxsetup, self.block_items, {"dbbcfw"})
 
     class Channel(object):
         attributes = {
@@ -289,3 +289,13 @@ class SetupCatalog(Catalog):
     
     def scheduled(self):
         return self.entries[:s.setn1.nset]
+
+    @staticmethod
+    def is_dbbc_e_firmware(entry):
+        """
+        Returns whether the setup entry represent a setup with e-series
+        DBBC firmware (True|False or None if not defined).
+        """
+        if entry.dbbcfw == "":
+            return None
+        return entry.dbbcfw[-1] in ("E", "F")

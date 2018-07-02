@@ -7,6 +7,7 @@ import schedlib as s
 
 import itertools
 
+dbbc_firmware_warnings = set()
 def rdset(setreq, input_iterator, isetf):
     s.setn1.sdebug = s.schcon.debug
     if s.setn1.sdebug:
@@ -96,6 +97,7 @@ def rdset(setreq, input_iterator, isetf):
         "pcalfr1":  [[0.] * maxpc,      util.noop],
         "pcalfr2":  [[0.] * maxpc,      util.noop],
         "m4patch":  ["astro",           util.upper],
+        "dbbcfw":   ["",                util.upper],
     }
     record_defaults = {
         "station": [[""] * s.setc2.setsta.shape[0], util.foreach(util.upper)],
@@ -208,6 +210,15 @@ def rdset(setreq, input_iterator, isetf):
         else:
             s.errlog("'CHKSET: Invalid PCAL specification: {}".format(
                 entry.spcal))
+
+        if (entry.dbbcfw not in ("", "104", "105", "105E", "105F", "106E", 
+                                 "106F")) and \
+            (entry.dbbcfw not in dbbc_firmware_warnings):
+            s.wlog(1, "RDSET - WARNING: {} is not a known DBBC firmware "
+                   "version.".format(entry.dbbcfw))
+            s.wlog(1, "                 Heuristics might still work, but check "
+                   "schedule carefully.")
+            dbbc_firmware_warnings.add(entry.dbbcfw)
         
         index += 1
 

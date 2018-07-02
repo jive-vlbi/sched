@@ -1,4 +1,5 @@
 from sched import ifdbbc
+from catalog import SetupCatalog
 
 import schedlib as s
 
@@ -50,10 +51,14 @@ def chkdbbc(setup_entry, station_entry):
                 errs = True
 
         elif setup_entry.dbe == "DBBC_DDC":
-            # FIX should be e-series dependent
-            if setup_entry.samprate not in (2, 4, 8, 16, 32, 64):
+            allowed_sample_rate = {False: (2, 4, 8, 16, 32),
+                                   True: (4, 8, 16, 32, 64),
+                                   None: (2, 4, 8, 16, 32, 64)}[
+                                   SetupCatalog.is_dbbc_e_firmware(setup_entry)]
+            if setup_entry.samprate not in allowed_sample_rate:
                 s.wlog(1, "CHKDBBC: Invalid SAMPRATE specified: {} for "
-                       "DBE=DBBC_DDC. Must be 2 to 64 Msamp/s.")
+                       "DBE=DBBC_DDC. Must be {} to {} Msamp/s.".format(
+                           min(allowed_sample_rate), max(allowed_sample_rate)))
                 errs = True
 
             bits = set(setup_entry.bits)

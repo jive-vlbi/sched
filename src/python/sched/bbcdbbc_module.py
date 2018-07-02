@@ -1,4 +1,5 @@
 from sched import bbcalt, ifdbbc
+from catalog import SetupCatalog
 
 import schedlib as s
 
@@ -13,9 +14,10 @@ def bbcdbbc(ks, setup_entry, station_entry):
     if s.schcon.debug:
         s.wlog(1, "BBCDBBC: Starting")
 
-    # 32 MHz requires E mode firmware, for now configure non-E if not required
-    # FIX maybe add E mode firmware switch to setup (keyin)?
-    e_firmware = setup_entry.samprate > 63
+    e_firmware = SetupCatalog.is_dbbc_e_firmware(setup_entry)
+    if e_firmware is None:
+        # 32 MHz requires E mode firmware, configure for non-E if not required
+        e_firmware = setup_entry.samprate > 63
     ifbbc, mif = ifdbbc(station_entry.dbbcver, e_firmware) 
     max_bbc = ifbbc.shape[0]
     if station_entry.nbbc > max_bbc:
