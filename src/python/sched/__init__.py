@@ -32,5 +32,6 @@ from .setbbc_module   import setbbc
 from .setdefs_module  import setdefs
 from .chkdbbc_module  import chkdbbc
 from .chkset_module   import chkset
+from .setexpnd_module import setexpnd
 from .defset_module   import defset
 from .defaults_module import defaults

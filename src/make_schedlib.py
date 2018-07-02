@@ -492,6 +492,7 @@ flags
 fluxh 
 geoxyz 
 getsun 
+gnset 
 jplver 
 listfreq 
 lst2ut 
@@ -509,12 +510,12 @@ schpre
 schsum 
 scnrange 
 setchan 
-setexpnd 
 setfcat 
 setfirm 
 setfreq 
 sethw1 
 setrec 
+setstdef 
 settrk 
 setusyn 
 sdopincr 
