@@ -21,7 +21,7 @@ C
       INCLUDE  'sched.inc'
       INCLUDE  'schset.inc'
 C
-      INTEGER           I, J
+      INTEGER           I
       INTEGER           KS, ICH, JCH, ISIDEBD ! , nwarn
       INTEGER           N40WARN(MAXSET), N528WARN(MAXSET)
       INTEGER           NFWARN, NIFERR
@@ -104,7 +104,7 @@ C
                ERRS = .TRUE.
                CALL WLOG( 1, MSGTXT )
             END IF
-            IF( BBCFREQ(ICH) .EQ. 1040.0 .AND. 
+            IF( BBCFREQ(ICH) .EQ. 1040.0D0 .AND. 
      1            N40WARN(ISETF) .LE. 1 ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, F8.2, A )' )
@@ -114,7 +114,7 @@ C
                N40WARN(ISETF) = N40WARN(ISETF) + 1
                SHOWID = .TRUE.
             END IF
-            IF( BBCFREQ(ICH) .EQ. 528.0 .AND. 
+            IF( BBCFREQ(ICH) .EQ. 528.0D0 .AND. 
      1            N528WARN(ISETF) .LE. 1 ) THEN
 C      **********************   Is this one true for the DBBC?
                MSGTXT = ' '
