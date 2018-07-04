@@ -142,7 +142,7 @@ C
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKDBBC: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=DBBC_PFB. Must be 32.0 Msamp/s.'
+     2           ' for DBE=DBBC_PFB. Must be 64.0 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
