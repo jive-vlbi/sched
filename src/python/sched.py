@@ -57,7 +57,7 @@ else:
 #       integers to a string, and then trim that string to 1 character,
 #       for example b"az" -> [97, 122] -> ["97", "122"] -> "91".
 #       assigning a python string to an f2py generated fortran string gives
-#       to correct result
+#       the correct result
 # fortran: strings are fixed length character arrays, fortran doesn't have a
 #          end-of-string marker, it will just append blanks (spaces) in any
 #          string operation, eg "foo   " == "foo" evaluates to true.
