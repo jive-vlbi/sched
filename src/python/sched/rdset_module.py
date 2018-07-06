@@ -208,7 +208,7 @@ def rdset(setreq, input_iterator, isetf):
         if entry.spcal in pcal_map.keys():
             entry.spcal = pcal_map[entry.spcal]
         else:
-            s.errlog("'CHKSET: Invalid PCAL specification: {}".format(
+            s.errlog("CHKSET: Invalid PCAL specification: {}".format(
                 entry.spcal))
 
         if (entry.dbbcfw not in ("", "104", "105", "105E", "105F", "106E", 
