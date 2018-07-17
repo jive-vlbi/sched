@@ -108,7 +108,7 @@ def chkset(ks):
         if station_entry.dar.startswith("RDBE"):
             errs = s.chkrdbe(ks, errs)
         if station_entry.dar.startswith("DBBC"):
-            errs = chkdbbc(setup_entry, station_entry) or errs
+            errs = chkdbbc(ks, setup_entry, station_entry) or errs
         if station_entry.dar == "WIDAR":
             errs = s.chkwidar(ks, errs)
         if station_entry.dar in ("VLBA", "VLBAG", "VLBA4"):
