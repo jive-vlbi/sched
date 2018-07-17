@@ -97,7 +97,10 @@ def rdset(setreq, input_iterator, isetf):
         "pcalfr1":  [[0.] * maxpc,      util.noop],
         "pcalfr2":  [[0.] * maxpc,      util.noop],
         "m4patch":  ["astro",           util.upper],
-        "dbbcfw":   ["",                util.upper],
+        "dbbcfw":   ["",                util.chain(
+            lambda x: str(x).rstrip("0").rstrip(".") 
+            if type(x) == float else x, 
+            util.upper)],
     }
     record_defaults = {
         "station": [[""] * s.setc2.setsta.shape[0], util.foreach(util.upper)],
