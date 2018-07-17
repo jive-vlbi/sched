@@ -15,9 +15,6 @@ def bbcdbbc(ks, setup_entry, station_entry):
         s.wlog(1, "BBCDBBC: Starting")
 
     e_firmware = SetupCatalog.is_dbbc_e_firmware(setup_entry)
-    if e_firmware is None:
-        # 32 MHz requires E mode firmware, configure for non-E if not required
-        e_firmware = setup_entry.samprate > 63
     ifbbc, mif = ifdbbc(station_entry.dbbcver, e_firmware) 
     max_bbc = ifbbc.shape[0]
     if station_entry.nbbc > max_bbc:

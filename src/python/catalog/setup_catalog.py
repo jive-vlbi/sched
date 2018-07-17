@@ -294,8 +294,10 @@ class SetupCatalog(Catalog):
     def is_dbbc_e_firmware(entry):
         """
         Returns whether the setup entry represent a setup with e-series
-        DBBC firmware (True|False or None if not defined).
+        DBBC firmware (True|False).
         """
         if entry.dbbcfw == "":
-            return None
+            # 32 MHz requires E mode firmware, 
+            # configure for non-E if not required
+            return entry.samprate > 63
         return entry.dbbcfw[-1] in ("E", "F")
