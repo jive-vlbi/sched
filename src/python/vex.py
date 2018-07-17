@@ -253,7 +253,8 @@ def modes_block():
         
         freq = tuple(("chan_def",
                       "",
-                      "{:.6f} MHz".format(lo_sum[channel_index]).rstrip(".0"),
+                      "{:.6f}".format(lo_sum[channel_index]).rstrip("0").\
+                      rstrip(".") + " MHz",
                       setup.netside[channel_index],
                       "{:7.2f} MHz".format(bbc_width[channel_index])
                       if bbc_width[channel_index] >= 1 else
