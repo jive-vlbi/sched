@@ -681,8 +681,8 @@ class BeamWidget(QWidget):
         for row, (label, attribute, options) in enumerate((
                 ("Source", "source", [s.aliases[0] for s in sources]),
                 ("Wavelength (cm)", "wavelength", 
-                 ["{:.1f}".format(w[0] * 100).rstrip(".0") + " ({})".format(
-                     util.f2str(s.schssf.setfile[w[1]]))
+                 ["{:.1f}".format(w[0] * 100).rstrip("0").rstrip(".") + 
+                  " ({})".format(util.f2str(s.schssf.setfile[w[1]]))
                   for w in self.wave_index]),
                 ("Oversampling factor", "oversampling", map(str, range(1, 11))),
                 ("Weight", "weight", ["Natural", "Uniform"]),
@@ -1182,7 +1182,7 @@ class MainWidget(QDialog):
             setup_number = self.beam.get_setup_index()
             wavelength = 300 / s.schsf.sffreq[0, setup_number-1]
             wave_text = "{} cm".format(
-                "{:.1f}".format(wavelength * 100).rstrip(".0"))
+                "{:.1f}".format(wavelength * 100).rstrip("0").rstrip("."))
             source = self.beam.get_source()
             figure.canvas.set_window_title("Beam Plot ({}, {})".format(
                 source, wave_text))
