@@ -71,7 +71,8 @@ def chkdbbc(ks, setup_entry, station_entry):
             errs = True
 
         for ifchan in setup_entry.ifchan:
-            if (ifchan[0] not in ifnam) or (ifchan[1] not in "1234 "):
+            if (ifchan[0] not in ifnam) or \
+               ((len(ifchan) > 1) and (ifchan[1] not in "1234 ")):
                 s.wlog(1, "CHKDBBC: IFCHAN '{}' not A[1-4], B[1-4], C[1-4] "
                        "or D[1-4]".format(ifchan))
                 errs = True
