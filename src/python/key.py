@@ -276,6 +276,7 @@ class Parser:
             self._push_input(groups["include"].strip())
 
     def iterate_keyfile(self):
+        # method intended for interactive use of KEYIN records
         tokens = []
         while True:
             # try to parse records from current tokens
@@ -325,7 +326,7 @@ class Parser:
                                         self.input_, self.line_number))
 
     def list_keyfile(self):
-        # add control_re logic back in and see if it matters on runtime
+        # will return all KEYIN records available on the input
         tokens = []
         while True:
             text = self.readline()
@@ -424,12 +425,15 @@ class KeyfileLister:
         return self.iterator
 
     def __next__(self):
+        if self.iterator is None:
+            self.iterator = iter(self.parser.list_keyfile())
         return next(self.iterator)
 
     def set_defaults(self, record, state):
         """
         This is used to show interactive help
         """
+        assert(self.iterator is None)
         self.parser.set_defaults(record, state)
 
 def iterate_keyfile(f):
