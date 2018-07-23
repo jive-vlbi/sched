@@ -8,16 +8,19 @@
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
 #
-/bin/rm Makefile
-/bin/rm -f makelinux64.sedscript
+
+set Target="linux64"
+
+/bin/rm -f Makefile
+/bin/rm -f make${Target}.sedscript
 
 # Make a file for sed with all the required changes to Makefile.master
 # Note that LPGPLOT is not needed for this case.
 
-cat <<EOF >! makelinux64_sedscript
-s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux64:
+cat <<EOF >! make${Target}_sedscript
+s:Makefile for SCHED:Temporary makefile for SCHED made by configure${Target}:
 s:#ARCHSED: ARCH = LINUX:
-s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash:
+s:#FCSED: FC = g77 -Wall -Wimplicit -Wsurprising -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib64 -lX11:
 s:#LDPGPLOTSED: LDPGPLOT = -lpgplot -lpng:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
@@ -25,7 +28,10 @@ s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
 EOF
 
+echo "s:BINDIR *= *../bin:&/${Target}:" >> make${Target}_sedscript
+mkdir -p ../bin/${Target}
+
 #  Run sed with the above file.
 
-sed -f makelinux64_sedscript Makefile.master > Makefile
-/bin/rm makelinux64_sedscript
+sed -f make${Target}_sedscript Makefile.master > Makefile
+/bin/rm make${Target}_sedscript

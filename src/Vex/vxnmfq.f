@@ -81,8 +81,12 @@ C
 C     Add 3 digit MHz for DDC and also change cutoff points to
 C     x.50 from x.99 to better match the use of NINT for the wider
 C     band cases.  RCW May 7, 2012.
+C     Add 4 digit MHz for ALMA.  AJM Feb 1, 2016
 C
-      IF( BBVAL .GT. 99.50 ) THEN
+      IF( BBVAL .GT. 999.50 ) THEN
+         WRITE( NAME(LPOS:LPOS+6), '( I4, A3 )' )
+     1        NINT( BBVAL ),'MHz'
+      ELSE IF( BBVAL .GT. 99.50 ) THEN
          WRITE( NAME(LPOS:LPOS+5), '( I3, A3 )' ) 
      1        NINT( BBVAL ),'MHz'
       ELSE IF( BBVAL .GT. 9.50 ) THEN

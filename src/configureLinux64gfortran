@@ -12,7 +12,7 @@
 # ************************************************************************
 # *******  Be sure PGPLOT_DIR is set properly!                     *******
 # *******  At the AOC with SCHED's version of pgplot, we use       *******
-# *******  setenv PGPLOT_DIR $SCHED/PGPLOT/linux64gfortran_5.3.1/  *******
+# *******  setenv PGPLOT_DIR $SCHED/PGPLOT/${Target}ortran_5.3.1/  *******
 # *******  Also setenv PGPLOT_FONT $PGPLOT_DIR/grfont.dat          *******
 # ************************************************************************
 #
@@ -22,15 +22,18 @@
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
 #
+
+set Target=linux64gf
+
 /bin/rm Makefile
-/bin/rm -f makelinux64gf_sedscript
+/bin/rm -f make${Target}_sedscript
 
 # Make a file for sed with all the required changes to Makefile.master
 # The detailed specification of gfortran is required because the default gfortran
 # at the AOC is older than what is required for the pgplot gif routines.
 
-cat <<EOF >! makelinux64gf_sedscript
-s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux64gfortran:
+cat <<EOF >! make${Target}_sedscript
+s:Makefile for SCHED:Temporary makefile for SCHED made by configure${Target}ortran:
 s:#ARCHSED: ARCH = LINUX:
 s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib64 -lX11:
@@ -39,6 +42,9 @@ s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
 EOF
+
+echo "s:BINDIR *= *../bin:&/${Target}:" >> make${Target}_sedscript
+mkdir -p ../bin/${Target}
 
 # Some changed stuff kept in case they are needed again.
 #  Removed png from one line above.  Keep here in case needed.
@@ -49,8 +55,8 @@ EOF
 
 #  Run sed with the above file.
 
-sed -f makelinux64gf_sedscript Makefile.master > Makefile
-/bin/rm makelinux64gf_sedscript
+sed -f make${Target}_sedscript Makefile.master > Makefile
+/bin/rm make${Target}_sedscript
 
 
 #  When running make, you will see a variety of benign warnings that can be 
