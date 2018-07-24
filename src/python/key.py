@@ -26,6 +26,7 @@ import copy
 import collections
 import atexit
 import os
+import json
 
 try:
     import readline
@@ -419,14 +420,46 @@ class KeyfileLister:
         self.parser = Parser(input_, record_defaults, state_defaults)
         self.iterator = None
 
-    def __iter__(self):
+    def init_iterator(self):
         if self.iterator is None:
-            self.iterator = iter(self.parser.list_keyfile())
+            # if the input is a file in the SCHED catalogs directory, 
+            # check cache
+            expand_catalog = os.path.join(os.path.expandvars("$SCHED"), 
+                                          "catalogs")
+            input_split = os.path.split(self.input_.name)
+            try:
+                catalog_dir = os.path.samefile(input_split[0], expand_catalog)
+            except:
+                catalog_dir = False
+
+            if catalog_dir:
+                cache_filename = os.path.join(expand_catalog, "cache",
+                                              input_split[1])
+                try:
+                    cache_up_to_date = os.path.getmtime(self.input_.name) < \
+                                       os.path.getmtime(cache_filename)
+                except:
+                    cache_up_to_date = False
+                if cache_up_to_date:
+                    with open(cache_filename, "r") as cache_file:
+                        data = json.load(cache_file)
+                else:
+                    data = self.parser.list_keyfile()
+                    try:
+                        with open(cache_filename, "w") as cache_file:
+                            json.dump(data, cache_file)
+                    except:
+                        pass
+                self.iterator = iter(data)
+            else:
+                self.iterator = iter(self.parser.list_keyfile())
+
+    def __iter__(self):
+        self.init_iterator()
         return self.iterator
 
     def __next__(self):
-        if self.iterator is None:
-            self.iterator = iter(self.parser.list_keyfile())
+        self.init_iterator()
         return next(self.iterator)
 
     def set_defaults(self, record, state):
@@ -446,8 +479,6 @@ def process_file(f):
     res = read_keyfile(f)
     print_tree(res)
 
-import json
-    
 def convert(fnin, fnout):
     with open(fnin, "r") as i:
         j = read_keyfile(i)
