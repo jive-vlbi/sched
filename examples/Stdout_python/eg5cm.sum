@@ -121,16 +121,16 @@ RECORDING SYSTEM AND CALIBRATION INFORMATION:
 
   List of scan-dependent controls seen for recording timing.
    MINPAUSE:   10.
-   PRESTART:    5.
+   PRESTART:    0.
 
   DISKS - Stations potentially recording on disks.
    Station    Drive type   DAR     NBBC    Tsys
-   JODRELL2     MARK5A     MKIV     14     GAP 
-   CAMBG32M     MARK5A     VLBA4     8     GAP 
+   JODRELL2     MARK5B     DBBC     14     GAP 
+   CAMBG32M     MARK5B     DBBC      8     GAP 
    EFLSBERG     MARK5B     DBBC     16     CONT
-   ONSALA85     MARK5A     MKIV     14     GAP 
-   MEDICINA     MARK5A     MKIV     14     GAP 
-   TORUN        MARK5A     VLBA4     8     GAP 
+   ONSALA85     MARK5B     DBBC     14     GAP 
+   MEDICINA     MARK5B     DBBC     14     GAP 
+   TORUN        MARK5B     DBBC      8     GAP 
    VLA27        MARK5C     WIDAR     8     CONT
 
 
@@ -147,13 +147,13 @@ EXPERIMENT SUMMARY:
 STATION SCAN SUMMARIES:
   Station  Control   Scans   Scan   Record  Record   Gbytes
                             Hours   Hours   Scans
-  JODRELL2   VEX      220   10.27   10.29      18      148.
-  CAMBG32M   VEX      220   10.27   10.29      18      148.
-  EFLSBERG   VEX      220   10.27   10.29      18      148.
-  ONSALA85   VEX      220   10.27   10.29      18      148.
-  MEDICINA   VEX      220   10.27   10.29      18      148.
-  TORUN      VEX      220   10.27   10.29      18      148.
-  VLA27      VEX       75    3.53    2.99       6       43.
+  JODRELL2   VEX      220   10.27   10.27      18      148.
+  CAMBG32M   VEX      220   10.27   10.27      18      148.
+  EFLSBERG   VEX      220   10.27   10.27      18      148.
+  ONSALA85   VEX      220   10.27   10.27      18      148.
+  MEDICINA   VEX      220   10.27   10.27      18      148.
+  TORUN      VEX      220   10.27   10.27      18      148.
+  VLA27      VEX       75    3.53    2.98       6       43.
 
   Notes on the station scan summaries: 
 
@@ -165,10 +165,6 @@ STATION SCAN SUMMARIES:
     MARK5C will have one observe scan per record scan and there is no limit to the number.
 
 
-    Recording started before scan start time   113 times.  See PRESTART and MINPAUSE.
-    They may have been kept running through short scan gaps.
-    The number can be large because each station/scan combination counts.
-
 
 
 
@@ -176,13 +172,17 @@ STATION SCAN SUMMARIES:
  SETUP FILES:
 
 
+The following setup groups are the same as group   1 below.
+   2:CAMBG32M
+
+
  ======== Setup file: eo999.5cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     j2b5cm          Values confirmed by E-mail P.Burgess (JFD 26Oct98)
+     jb5cm_g         Generated from sess118M1nme.setini, sess118M1.setini, sess217M1nme.setini, sess*
 
    Setup group:    1         Station: JODRELL2          Total bit rate:    32
-   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
-   Number of channels:  4    DBE type:                  Speedup factor:   2.00
+   Format: MARK5B            Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    DBE type: DBBC_DDC         Speedup factor:   1.00
 
    Disk used to record data.
 
@@ -190,9 +190,9 @@ STATION SCAN SUMMARIES:
    Net SB=         U         U         U         U
    IF SB =         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP 
-   BBC   =         2         1         4         3
+   BBC   =         1         9         2        10
    BBC SB=         U         U         U         U
-   IF    =        2N        1N        2N        1N
+   IF    =        A1        B1        A1        B1
 
   The following frequency sets based on these setups were used.
 
@@ -200,47 +200,16 @@ STATION SCAN SUMMARIES:
    LO sum=   6666.46  6666.46  6666.46  6666.46
    BBC fr=    146.46   146.46   146.46   146.46
    Bandwd=      2.00     2.00     2.00     2.00
-    Matching frequency sets:   1
+    Matching frequency sets:   1   2
 
    Track assignments are: 
-    track1=   2,  6, 10, 14
+    track1=   2,  6,  4,  8
     barrel=roll_off 
 
 
  ======== Setup file: eo999.5cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     cm5cm           MK2 LO setting-400MHz, P. Burgess (JFD 15Oct01)
-
-   Setup group:    2         Station: CAMBG32M          Total bit rate:    32
-   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
-   Number of channels:  4    DBE type:                  Speedup factor:   2.00
-
-   Disk used to record data.
-
-   1st LO=   6120.00   6120.00   6120.00   6120.00
-   Net SB=         U         U         U         U
-   IF SB =         U         U         U         U
-   Pol.  =      RCP       LCP       RCP       LCP 
-   BBC   =         1         2         3         4
-   BBC SB=         U         U         U         U
-   IF    =        C         A         C         A 
-
-  The following frequency sets based on these setups were used.
-
-  Frequency Set:   2  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
-   LO sum=   6666.46  6666.46  6666.46  6666.46
-   BBC fr=    546.46   546.46   546.46   546.46
-   Bandwd=      2.00     2.00     2.00     2.00
-    Matching frequency sets:   2
-
-   Track assignments are: 
-    track1=   2,  6, 10, 14
-    barrel=roll_off 
-
-
- ======== Setup file: eo999.5cm
-   Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     ef5cm3          5cm prime focus receiver. 500-1000 MHz IF.
+     ef5cm_g         Generated from sess118M1nme.setini, sess118M1.setini, sess217M1nme.setini, sess*
 
    Setup group:    3         Station: EFLSBERG          Total bit rate:    32
    Format: MARK5B            Bits per sample: 2         Sample rate:  4.000
@@ -252,9 +221,9 @@ STATION SCAN SUMMARIES:
    Net SB=         U         U         U         U
    IF SB =         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP 
-   BBC   =         1         5         2         6
+   BBC   =         1         9         2        10
    BBC SB=         U         U         U         U
-   IF    =        A1        B3        A1        B3
+   IF    =        A1        C3        A1        C3
 
   The following frequency sets based on these setups were used.
 
@@ -271,11 +240,11 @@ STATION SCAN SUMMARIES:
 
  ======== Setup file: eo999.5cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     on5cm           emails from M. Lindqvust 8-10 apr 2012
+     o85cm_g         Generated from sess118M1nme.setini, sess118M1.setini, sess217M1nme.setini, sess*
 
    Setup group:    4         Station: ONSALA85          Total bit rate:    32
-   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
-   Number of channels:  4    DBE type:                  Speedup factor:   2.00
+   Format: MARK5B            Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    DBE type: DBBC_DDC         Speedup factor:   1.00
 
    Disk used to record data.
 
@@ -283,9 +252,9 @@ STATION SCAN SUMMARIES:
    Net SB=         U         U         U         U
    IF SB =         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP 
-   BBC   =         2         1         4         3
+   BBC   =         1         9         2        10
    BBC SB=         U         U         U         U
-   IF    =        2N        1N        2N        1N
+   IF    =        A1        C1        A1        C1
 
   The following frequency sets based on these setups were used.
 
@@ -296,17 +265,17 @@ STATION SCAN SUMMARIES:
     Matching frequency sets:   4
 
    Track assignments are: 
-    track1=   2,  6, 10, 14
+    track1=   2,  6,  4,  8
     barrel=roll_off 
 
 
  ======== Setup file: eo999.5cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc5cm           Updated by e-mail Orlati (13Feb2006)
+     mc5cm_g         Generated from sess118M1nme.setini, sess118M1.setini, sess217M1nme.setini, sess*
 
    Setup group:    5         Station: MEDICINA          Total bit rate:    32
-   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
-   Number of channels:  4    DBE type:                  Speedup factor:   2.00
+   Format: MARK5B            Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    DBE type: DBBC_DDC         Speedup factor:   1.00
 
    Disk used to record data.
 
@@ -314,9 +283,9 @@ STATION SCAN SUMMARIES:
    Net SB=         U         U         U         U
    IF SB =         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP 
-   BBC   =         2         1         4         3
+   BBC   =         1         9         2        10
    BBC SB=         U         U         U         U
-   IF    =        2N        1N        2N        1N
+   IF    =        A1        C1        A1        C1
 
   The following frequency sets based on these setups were used.
 
@@ -327,17 +296,17 @@ STATION SCAN SUMMARIES:
     Matching frequency sets:   5
 
    Track assignments are: 
-    track1=   2,  6, 10, 14
+    track1=   2,  6,  4,  8
     barrel=roll_off 
 
 
  ======== Setup file: eo999.5cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     tr5cm           Values confirmed by E-mail Borkowski (JFD 26Oct98)
+     tr5cm_g         Generated from sess118M1nme.setini, sess118M1.setini, sess217M1nme.setini, sess*
 
    Setup group:    6         Station: TORUN             Total bit rate:    32
-   Format: MKIV1:1           Bits per sample: 2         Sample rate:  4.000
-   Number of channels:  4    DBE type:                  Speedup factor:   2.00
+   Format: MARK5B            Bits per sample: 2         Sample rate:  4.000
+   Number of channels:  4    DBE type: DBBC_DDC         Speedup factor:   1.00
 
    Disk used to record data.
 
@@ -345,9 +314,9 @@ STATION SCAN SUMMARIES:
    Net SB=         U         U         U         U
    IF SB =         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP 
-   BBC   =         1         2         3         4
+   BBC   =         1         9         2        10
    BBC SB=         U         U         U         U
-   IF    =        C         A         C         A 
+   IF    =        A1        B1        A1        B1
 
   The following frequency sets based on these setups were used.
 
@@ -358,7 +327,7 @@ STATION SCAN SUMMARIES:
     Matching frequency sets:   6
 
    Track assignments are: 
-    track1=   2,  6, 10, 14
+    track1=   2,  6,  4,  8
     barrel=roll_off 
 
 
@@ -2055,13 +2024,13 @@ SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
                 Obs. start time.     Obs. end time.      Total 
  Station          Day    Time         Day    Time        GBytes
                      (UT)                 (UT)
-  JODRELL2       359  07:00:00       359  18:07:00        148.2
-  CAMBG32M       359  07:00:00       359  18:07:00        148.2
-  EFLSBERG       359  07:00:00       359  18:07:00        148.4
-  ONSALA85       359  07:00:00       359  18:07:00        148.2
-  MEDICINA       359  07:00:00       359  18:07:00        148.2
-  TORUN          359  07:00:00       359  18:07:00        148.2
-  VLA27          359  09:21:00       359  18:07:00         43.3
+  JODRELL2       359  07:00:00       359  18:07:00        148.1
+  CAMBG32M       359  07:00:00       359  18:07:00        148.1
+  EFLSBERG       359  07:00:00       359  18:07:00        148.1
+  ONSALA85       359  07:00:00       359  18:07:00        148.1
+  MEDICINA       359  07:00:00       359  18:07:00        148.1
+  TORUN          359  07:00:00       359  18:07:00        148.1
+  VLA27          359  09:21:00       359  18:07:00         43.2
 
  POSITIONS OF SOURCES USED IN RECORDING SCANS
      Catalog positions marked with *. 
@@ -2117,12 +2086,12 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  W51        eo999.5cm             1 2 3 4 5 6 7                     7.200   111.775
-  J1557-0001 eo999.5cm             1 2 3 4 5 6                       0.050     0.750
-  J1922+1530 eo999.5cm             1 2 3 4 5 6 7                     2.700    37.116
-  J2005+7752 eo999.5cm             1 2 3 4 5 6 7                     0.133     2.185
-  3C454.3    eo999.5cm             1 2 3 4 5 6                       0.133     1.985
-  J2320+0513 eo999.5cm             1 2 3 4 5 6                       0.050     0.750
+  W51        eo999.5cm             1 3 4 5 6 7                       7.200   111.775
+  J1557-0001 eo999.5cm             1 3 4 5 6                         0.050     0.750
+  J1922+1530 eo999.5cm             1 3 4 5 6 7                       2.700    37.116
+  J2005+7752 eo999.5cm             1 3 4 5 6 7                       0.133     2.185
+  3C454.3    eo999.5cm             1 3 4 5 6                         0.133     1.985
+  J2320+0513 eo999.5cm             1 3 4 5 6                         0.050     0.750
 
 
 EFFECT OF SOLAR CORONA
@@ -2164,11 +2133,11 @@ CATALOGS, FILES, and CODE VERSIONS
 
 Catalogs: 
   Station:   /home/eldering/sched/catalogs/stations.dat
-                 Version:  2017Dec13-14:55:25
+                 Version:  2018Jul19-11:08:28
   Location:  /home/eldering/sched/catalogs/locations.dat
                  Version:  2015Feb26-16:00:00
   Frequency: /home/eldering/sched/catalogs/freq.dat
-                 Version:  2017Dec13-14:55:25
+                 Version:  2018Jul19-11:08:28
   Source:   /home/eldering/sched/catalogs/sources.gsfc
                  Version:  Not given
   Source2:  NONE

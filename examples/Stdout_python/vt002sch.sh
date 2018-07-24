@@ -195,11 +195,11 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: vsop6cm.set
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     sh6cm           Update freq. range AnTao 22Mar08
+     sh6cm_g         Generated from sess317C2Gglob.setini, sess217C2Ge.setini
 
    Setup group:    1         Station: SHANGHAI          Total bit rate:   128
    Format: MARK5B            Bits per sample: 2         Sample rate: 32.000
-   Number of channels:  2    DBE type:                  Speedup factor:   1.00
+   Number of channels:  2    DBE type: DBBC_DDC         Speedup factor:   1.00
 
    Disk used to record data.
 
@@ -207,9 +207,9 @@ SETUP FILE INFORMATION:
    Net SB=         U         U
    IF SB =         U         U
    Pol.  =      LCP       LCP 
-   BBC   =         1         2
+   BBC   =         5         6
    BBC SB=         U         U
-   IF    =        A         A 
+   IF    =        B         B 
 
   The following frequency sets based on these setups were used.
 

@@ -65,7 +65,8 @@ def Mode0;
      ref $BBC = 8BBCs:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 8BBCs#02:Ef;
      ref $PHASE_CAL_DETECT = Detect:Br:Ef:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
-     ref $FREQ = 22174.250000MHz8x16MHz:Br:Ef:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
+     ref $FREQ = 22174.25MHz8x16MHz:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
+     ref $FREQ = 22174.25MHz8x16MHz#02:Ef;
      ref $BITSTREAMS = BS8Ch2Bit:Ef;
      ref $DATASTREAMS = VDIF_8000-1Thr8Ch:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
 enddef;
@@ -78,8 +79,8 @@ def Mode1;
      ref $BBC = 8BBCs#03:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 8BBCs#04:Ef;
      ref $PHASE_CAL_DETECT = NoDetect:Br:Ef:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
-     ref $FREQ = 21629.500000MHz8x16MHz:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
-     ref $FREQ = 21629.500000MHz8x16MHz#02:Ef;
+     ref $FREQ = 21629.5MHz8x16MHz:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
+     ref $FREQ = 21629.5MHz8x16MHz#02:Ef;
      ref $BITSTREAMS = BS8Ch2Bit#02:Ef;
      ref $DATASTREAMS = VDIF_8000-1Thr8Ch:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
 enddef;
@@ -95,7 +96,7 @@ enddef;
 def LO@20800MHzDPolNoTone;
 * Mode1: Ef
      if_def = &IF_A1 : A1 : R :  20800.00 MHz : U;
-     if_def = &IF_B3 : B3 : L :  20800.00 MHz : U;
+     if_def = &IF_C3 : C3 : L :  20800.00 MHz : U;
 enddef;
 *
 def LO@21200MHzLPolTone/1;
@@ -105,8 +106,8 @@ enddef;
 *
 def LO@21200MHzLPolTone/1#02;
 * Mode0: Ef
-     if_def = &IF_A3 : A3 : L :  21200.00 MHz : U : 1 MHz;
-     if_def = &IF_B3 : B3 : L :  21200.00 MHz : U : 1 MHz;
+     if_def = &IF_C3 : C3 : L :  21200.00 MHz : U : 1 MHz;
+     if_def = &IF_D3 : D3 : L :  21200.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@22236MHzDPolNoTone;
@@ -136,14 +137,14 @@ enddef;
 *
 def 8BBCs#02;
 * Mode0: Ef
-     BBC_assign = &BBC01 : 1 : &IF_A3;
-     BBC_assign = &BBC02 : 2 : &IF_A3;
-     BBC_assign = &BBC03 : 3 : &IF_A3;
-     BBC_assign = &BBC04 : 4 : &IF_A3;
-     BBC_assign = &BBC05 : 5 : &IF_B3;
-     BBC_assign = &BBC06 : 6 : &IF_B3;
-     BBC_assign = &BBC07 : 7 : &IF_B3;
-     BBC_assign = &BBC08 : 8 : &IF_B3;
+     BBC_assign = &BBC09 :  9 : &IF_C3;
+     BBC_assign = &BBC10 : 10 : &IF_C3;
+     BBC_assign = &BBC11 : 11 : &IF_C3;
+     BBC_assign = &BBC12 : 12 : &IF_C3;
+     BBC_assign = &BBC13 : 13 : &IF_D3;
+     BBC_assign = &BBC14 : 14 : &IF_D3;
+     BBC_assign = &BBC15 : 15 : &IF_D3;
+     BBC_assign = &BBC16 : 16 : &IF_D3;
 enddef;
 *
 def 8BBCs#03;
@@ -160,14 +161,14 @@ enddef;
 *
 def 8BBCs#04;
 * Mode1: Ef
-     BBC_assign = &BBC01 : 1 : &IF_A1;
-     BBC_assign = &BBC05 : 5 : &IF_B3;
-     BBC_assign = &BBC06 : 6 : &IF_B3;
-     BBC_assign = &BBC02 : 2 : &IF_A1;
-     BBC_assign = &BBC07 : 7 : &IF_B3;
-     BBC_assign = &BBC03 : 3 : &IF_A1;
-     BBC_assign = &BBC04 : 4 : &IF_A1;
-     BBC_assign = &BBC08 : 8 : &IF_B3;
+     BBC_assign = &BBC01 :  1 : &IF_A1;
+     BBC_assign = &BBC09 :  9 : &IF_C3;
+     BBC_assign = &BBC10 : 10 : &IF_C3;
+     BBC_assign = &BBC02 :  2 : &IF_A1;
+     BBC_assign = &BBC11 : 11 : &IF_C3;
+     BBC_assign = &BBC03 :  3 : &IF_A1;
+     BBC_assign = &BBC04 :  4 : &IF_A1;
+     BBC_assign = &BBC12 : 12 : &IF_C3;
 enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
@@ -184,40 +185,52 @@ enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
-def 21629.500000MHz8x16MHz;
+def 21629.5MHz8x16MHz;
 * Mode1: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     chan_def =  : 21629.500000 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
-     chan_def =  : 21629.500000 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal;
-     chan_def =  : 21643.500000 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &NoCal;
-     chan_def =  : 21659.750000 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal;
-     chan_def =  : 21659.750000 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &NoCal;
-     chan_def =  : 21675.250000 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &NoCal;
-     chan_def =  : 21693.000000 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &NoCal;
-     chan_def =  : 21693.000000 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &NoCal;
+     chan_def =  :  21629.5 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
+     chan_def =  :  21629.5 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal;
+     chan_def =  :  21643.5 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &NoCal;
+     chan_def =  : 21659.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal;
+     chan_def =  : 21659.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &NoCal;
+     chan_def =  : 21675.25 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &NoCal;
+     chan_def =  :    21693 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &NoCal;
+     chan_def =  :    21693 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &NoCal;
 enddef;
 *
-def 21629.500000MHz8x16MHz#02;
+def 21629.5MHz8x16MHz#02;
 * Mode1: Ef
-     chan_def =  : 21629.500000 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
-     chan_def =  : 21629.500000 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal;
-     chan_def =  : 21643.500000 MHz : U :   16.00 MHz : &CH03 : &BBC06 : &NoCal;
-     chan_def =  : 21659.750000 MHz : U :   16.00 MHz : &CH04 : &BBC02 : &NoCal;
-     chan_def =  : 21659.750000 MHz : U :   16.00 MHz : &CH05 : &BBC07 : &NoCal;
-     chan_def =  : 21675.250000 MHz : U :   16.00 MHz : &CH06 : &BBC03 : &NoCal;
-     chan_def =  : 21693.000000 MHz : U :   16.00 MHz : &CH07 : &BBC04 : &NoCal;
-     chan_def =  : 21693.000000 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &NoCal;
+     chan_def =  :  21629.5 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
+     chan_def =  :  21629.5 MHz : U :   16.00 MHz : &CH02 : &BBC09 : &NoCal;
+     chan_def =  :  21643.5 MHz : U :   16.00 MHz : &CH03 : &BBC10 : &NoCal;
+     chan_def =  : 21659.75 MHz : U :   16.00 MHz : &CH04 : &BBC02 : &NoCal;
+     chan_def =  : 21659.75 MHz : U :   16.00 MHz : &CH05 : &BBC11 : &NoCal;
+     chan_def =  : 21675.25 MHz : U :   16.00 MHz : &CH06 : &BBC03 : &NoCal;
+     chan_def =  :    21693 MHz : U :   16.00 MHz : &CH07 : &BBC04 : &NoCal;
+     chan_def =  :    21693 MHz : U :   16.00 MHz : &CH08 : &BBC12 : &NoCal;
 enddef;
 *
-def 22174.250000MHz8x16MHz;
-* Mode0: Br, Ef, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     chan_def =  : 22174.250000 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
-     chan_def =  : 22161.250000 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
-     chan_def =  : 22122.250000 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
-     chan_def =  : 22057.250000 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
-     chan_def =  : 21979.250000 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
-     chan_def =  : 21888.250000 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
-     chan_def =  : 21758.250000 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
-     chan_def =  : 21732.250000 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+def 22174.25MHz8x16MHz;
+* Mode0: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     chan_def =  : 22174.25 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 22161.25 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 22122.25 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 22057.25 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 21979.25 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 21888.25 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 21758.25 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 21732.25 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+enddef;
+*
+def 22174.25MHz8x16MHz#02;
+* Mode0: Ef
+     chan_def =  : 22174.25 MHz : U :   16.00 MHz : &CH01 : &BBC09 : &PCD;
+     chan_def =  : 22161.25 MHz : U :   16.00 MHz : &CH02 : &BBC10 : &PCD;
+     chan_def =  : 22122.25 MHz : U :   16.00 MHz : &CH03 : &BBC11 : &PCD;
+     chan_def =  : 22057.25 MHz : U :   16.00 MHz : &CH04 : &BBC12 : &PCD;
+     chan_def =  : 21979.25 MHz : U :   16.00 MHz : &CH05 : &BBC13 : &PCD;
+     chan_def =  : 21888.25 MHz : U :   16.00 MHz : &CH06 : &BBC14 : &PCD;
+     chan_def =  : 21758.25 MHz : U :   16.00 MHz : &CH07 : &BBC15 : &PCD;
+     chan_def =  : 21732.25 MHz : U :   16.00 MHz : &CH08 : &BBC16 : &PCD;
 enddef;
 *------------------------------------------------------------------------------
 $BITSTREAMS;
