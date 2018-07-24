@@ -65,25 +65,26 @@ $MODE;
 *
 def v6cm-256-8-2-UL;
      ref $PROCEDURES = Mode_01;
-     ref $FREQ = 4979.75MHz8x8MHz:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk:Gb:Tr:Nt;
-     ref $FREQ = 4979.75MHz8x8MHz#02:Ef;
-     ref $FREQ = 4979.75MHz8x8MHz#03:Jb:Wb:On:Mc;
+     ref $FREQ = 4979.75MHz8x8MHz:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk:Gb;
+     ref $FREQ = 4979.75MHz8x8MHz#02:Ef:Jb:On:Mc:Tr:Nt;
+     ref $FREQ = 4979.75MHz8x8MHz#03:Wb;
      ref $IF = LO@5600MHzDPolTone/1#02:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk;
      ref $IF = LO@5600MHzDPolTone/1:Gb;
      ref $IF = LO@4100MHzDPolTone/1:Ef;
-     ref $IF = LO@4840MHzDPolTone/1:Jb:Wb;
-     ref $IF = LO@4830MHzDPolTone/1:On;
+     ref $IF = LO@4840MHzDPolTone/1:Jb;
+     ref $IF = LO@4587MHzDPolTone/1:Wb;
+     ref $IF = LO@4100MHzDPolTone/1#02:On;
      ref $IF = LO@4600MHzDPolTone/1:Mc;
      ref $IF = LO@4200MHzDPolTone/1:Tr;
-     ref $IF = LO@4120MHzDPolTone/1:Nt;
+     ref $IF = LO@4600MHzDPolTone/1#02:Nt;
      ref $BBC = 8BBCs:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk:Gb;
      ref $BBC = 8BBCs#02:Ef;
-     ref $BBC = 8BBCs#03:Jb:Wb:On:Mc;
-     ref $BBC = 8BBCs#04:Tr:Nt;
+     ref $BBC = 8BBCs#03:Jb:Tr;
+     ref $BBC = 8BBCs#04:Wb;
+     ref $BBC = 8BBCs#05:On:Mc;
+     ref $BBC = 8BBCs#06:Nt;
      ref $TRACKS = VLBA.8Ch2bit1to2:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk:Gb;
-     ref $TRACKS = MARK5B.8Ch2bit1to1:Ef;
-     ref $TRACKS = MKIV.8Ch2bit1to2:Jb:On:Mc:Tr:Nt;
-     ref $TRACKS = MARK5B.8Ch2bit1to1#02:Wb;
+     ref $TRACKS = MARK5B.8Ch2bit1to1:Ef:Jb:Wb:On:Mc:Tr:Nt;
 *    ref $HEAD_POS = DiskVoid <= obsolete definition
      ref $ROLL = NoRoll:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk:Gb:Ef:Jb:Wb:On:Mc:Tr:Nt;
 *    ref $PASS_ORDER = DiskVoid <= obsolete definition
@@ -167,37 +168,37 @@ enddef;
 def Jb;
      ref $SITE = JODRELL2;
      ref $ANTENNA = JODRELL2;
-     ref $DAS = 2MKIV+NONE<Mark5A;
+     ref $DAS = 2DBBC+NONE<;
 enddef;
 *
 def Wb;
      ref $SITE = WSTRBORK;
      ref $ANTENNA = WSTRBORK;
-     ref $DAS = 2MKIV+NONE<;
+     ref $DAS = 2DBBC+NONE<;
 enddef;
 *
 def On;
      ref $SITE = ONSALA85;
      ref $ANTENNA = ONSALA85;
-     ref $DAS = 2MKIV+NONE<Mark5A;
+     ref $DAS = 2DBBC+NONE<;
 enddef;
 *
 def Mc;
      ref $SITE = MEDICINA;
      ref $ANTENNA = MEDICINA;
-     ref $DAS = 2MKIV+NONE<Mark5A;
+     ref $DAS = 2DBBC+NONE<;
 enddef;
 *
 def Tr;
      ref $SITE = TORUN;
      ref $ANTENNA = TORUN;
-     ref $DAS = 1VLBA4+NONE<Mark5A;
+     ref $DAS = 1DBBC+NONE<;
 enddef;
 *
 def Nt;
      ref $SITE = NOTO;
      ref $ANTENNA = NOTO;
-     ref $DAS = 2VLBA4+NONE<Mark5A;
+     ref $DAS = 2DBBC+NONE<;
 enddef;
 *------------------------------------------------------------------------------
 $PROCEDURES;
@@ -736,38 +737,11 @@ def 2DBBC+NONE<;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *
-def 2MKIV+NONE<Mark5A;
-     record_transport_type = Mark5A;
-     electronics_rack_type = Mark4;
-     number_drives = 2;
-     headstack = 1 :            : 0 ;
-     headstack = 2 :            : 1 ;
-     tape_motion = adaptive : 0 min: 0 min: 10 sec;
-enddef;
-*
-def 2MKIV+NONE<;
+def 1DBBC+NONE<;
      record_transport_type = Mark5B;
-     electronics_rack_type = Mark4;
-     number_drives = 2;
-     headstack = 1 :            : 0 ;
-     headstack = 2 :            : 1 ;
-     tape_motion = adaptive : 0 min: 0 min: 10 sec;
-enddef;
-*
-def 1VLBA4+NONE<Mark5A;
-     record_transport_type = Mark5A;
-     electronics_rack_type = VLBA4;
+     electronics_rack_type = DBBC;
      number_drives = 1;
      headstack = 1 :            : 0 ;
-     tape_motion = adaptive : 0 min: 0 min: 10 sec;
-enddef;
-*
-def 2VLBA4+NONE<Mark5A;
-     record_transport_type = Mark5A;
-     electronics_rack_type = VLBA4;
-     number_drives = 2;
-     headstack = 1 :            : 0 ;
-     headstack = 2 :            : 1 ;
      tape_motion = adaptive : 0 min: 0 min: 10 sec;
 enddef;
 *------------------------------------------------------------------------------
@@ -837,7 +811,7 @@ enddef;
 $FREQ;
 *
 def 4979.75MHz8x8MHz;
-* mode =  1    stations =Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk:Gb:Tr:Nt
+* mode =  1    stations =Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk:Gb
      sample_rate =  16.000 Ms/sec;  * (2bits/sample)
      chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
      chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
@@ -850,7 +824,20 @@ def 4979.75MHz8x8MHz;
 enddef;
 *
 def 4979.75MHz8x8MHz#02;
-* mode =  1    stations =Ef
+* mode =  1    stations =Ef:Jb:On:Mc:Tr:Nt
+     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
+     chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
+     chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH02 : &BBC09 : &L_Cal; *Lcp
+     chan_def = :  4979.75 MHz : U :   8.00 MHz : &CH03 : &BBC01 : &L_Cal; *Rcp
+     chan_def = :  4979.75 MHz : U :   8.00 MHz : &CH04 : &BBC09 : &L_Cal; *Lcp
+     chan_def = :  4995.75 MHz : L :   8.00 MHz : &CH05 : &BBC02 : &L_Cal; *Rcp
+     chan_def = :  4995.75 MHz : L :   8.00 MHz : &CH06 : &BBC10 : &L_Cal; *Lcp
+     chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH07 : &BBC02 : &L_Cal; *Rcp
+     chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH08 : &BBC10 : &L_Cal; *Lcp
+enddef;
+*
+def 4979.75MHz8x8MHz#03;
+* mode =  1    stations =Wb
      sample_rate =  16.000 Ms/sec;  * (2bits/sample)
      chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
      chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH02 : &BBC05 : &L_Cal; *Lcp
@@ -860,19 +847,6 @@ def 4979.75MHz8x8MHz#02;
      chan_def = :  4995.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
      chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH07 : &BBC02 : &L_Cal; *Rcp
      chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH08 : &BBC06 : &L_Cal; *Lcp
-enddef;
-*
-def 4979.75MHz8x8MHz#03;
-* mode =  1    stations =Jb:Wb:On:Mc
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH01 : &BBC02 : &L_Cal; *Rcp
-     chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH02 : &BBC01 : &L_Cal; *Lcp
-     chan_def = :  4979.75 MHz : U :   8.00 MHz : &CH03 : &BBC02 : &L_Cal; *Rcp
-     chan_def = :  4979.75 MHz : U :   8.00 MHz : &CH04 : &BBC01 : &L_Cal; *Lcp
-     chan_def = :  4995.75 MHz : L :   8.00 MHz : &CH05 : &BBC04 : &L_Cal; *Rcp
-     chan_def = :  4995.75 MHz : L :   8.00 MHz : &CH06 : &BBC03 : &L_Cal; *Lcp
-     chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH07 : &BBC04 : &L_Cal; *Rcp
-     chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH08 : &BBC03 : &L_Cal; *Lcp
 enddef;
 *------------------------------------------------------------------------------
 $IF;
@@ -886,37 +860,43 @@ enddef;
 def LO@4100MHzDPolTone/1;
 * mode =  1    stations =Ef
      if_def = &IF_A1 : A1 : R :  4100.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
-     if_def = &IF_B3 : B3 : L :  4100.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_C3 : C3 : L :  4100.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
 enddef;
 *
 def LO@4840MHzDPolTone/1;
-* mode =  1    stations =Jb:Wb
-     if_def = &IF_2N : 2N : R :  4840.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
-     if_def = &IF_1N : 1N : L :  4840.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+* mode =  1    stations =Jb
+     if_def = &IF_A1 : A1 : R :  4840.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_B1 : B1 : L :  4840.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
 enddef;
 *
-def LO@4830MHzDPolTone/1;
+def LO@4587MHzDPolTone/1;
+* mode =  1    stations =Wb
+     if_def = &IF_A1 : A1 : R :  4587.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_B1 : B1 : L :  4587.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+enddef;
+*
+def LO@4100MHzDPolTone/1#02;
 * mode =  1    stations =On
-     if_def = &IF_2N : 2N : R :  4830.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
-     if_def = &IF_1N : 1N : L :  4830.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_A1 : A1 : R :  4100.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_C1 : C1 : L :  4100.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
 enddef;
 *
 def LO@4600MHzDPolTone/1;
 * mode =  1    stations =Mc
-     if_def = &IF_2N : 2N : R :  4600.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
-     if_def = &IF_1N : 1N : L :  4600.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_A1 : A1 : R :  4600.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_C1 : C1 : L :  4600.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
 enddef;
 *
 def LO@4200MHzDPolTone/1;
 * mode =  1    stations =Tr
-     if_def = &IF_C : C : R :  4200.00 MHz : U : 1 MHz ; *   0.0   0.0  6cm     0 NA
-     if_def = &IF_A : A : L :  4200.00 MHz : U : 1 MHz ; *   0.0   0.0  6cm     0 NA
+     if_def = &IF_A1 : A1 : R :  4200.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_B1 : B1 : L :  4200.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
 enddef;
 *
-def LO@4120MHzDPolTone/1;
+def LO@4600MHzDPolTone/1#02;
 * mode =  1    stations =Nt
-     if_def = &IF_C : C : R :  4120.10 MHz : U : 1 MHz ; *   0.0   0.0  6cm     0 NA
-     if_def = &IF_A : A : L :  4120.10 MHz : U : 1 MHz ; *   0.0   0.0  6cm     0 NA
+     if_def = &IF_A1 : A1 : R :  4600.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
+     if_def = &IF_C2 : C2 : L :  4600.00 MHz : U : 1 MHz ; *   0.0   0.0  NA     0 NA
 enddef;
 *
 def LO@5600MHzDPolTone/1#02;
@@ -938,25 +918,41 @@ enddef;
 def 8BBCs#02;
 * mode =  1    stations =Ef
      BBC_assign = &BBC01 :  1 : &IF_A1;
-     BBC_assign = &BBC05 :  5 : &IF_B3;
+     BBC_assign = &BBC09 :  9 : &IF_C3;
      BBC_assign = &BBC02 :  2 : &IF_A1;
-     BBC_assign = &BBC06 :  6 : &IF_B3;
+     BBC_assign = &BBC10 : 10 : &IF_C3;
 enddef;
 *
 def 8BBCs#03;
-* mode =  1    stations =Jb:Wb:On:Mc
-     BBC_assign = &BBC02 :  2 : &IF_2N;
-     BBC_assign = &BBC01 :  1 : &IF_1N;
-     BBC_assign = &BBC04 :  4 : &IF_2N;
-     BBC_assign = &BBC03 :  3 : &IF_1N;
+* mode =  1    stations =Jb:Tr
+     BBC_assign = &BBC01 :  1 : &IF_A1;
+     BBC_assign = &BBC09 :  9 : &IF_B1;
+     BBC_assign = &BBC02 :  2 : &IF_A1;
+     BBC_assign = &BBC10 : 10 : &IF_B1;
 enddef;
 *
 def 8BBCs#04;
-* mode =  1    stations =Tr:Nt
-     BBC_assign = &BBC01 :  1 : &IF_C;
-     BBC_assign = &BBC02 :  2 : &IF_A;
-     BBC_assign = &BBC03 :  3 : &IF_C;
-     BBC_assign = &BBC04 :  4 : &IF_A;
+* mode =  1    stations =Wb
+     BBC_assign = &BBC01 :  1 : &IF_A1;
+     BBC_assign = &BBC05 :  5 : &IF_B1;
+     BBC_assign = &BBC02 :  2 : &IF_A1;
+     BBC_assign = &BBC06 :  6 : &IF_B1;
+enddef;
+*
+def 8BBCs#05;
+* mode =  1    stations =On:Mc
+     BBC_assign = &BBC01 :  1 : &IF_A1;
+     BBC_assign = &BBC09 :  9 : &IF_C1;
+     BBC_assign = &BBC02 :  2 : &IF_A1;
+     BBC_assign = &BBC10 : 10 : &IF_C1;
+enddef;
+*
+def 8BBCs#06;
+* mode =  1    stations =Nt
+     BBC_assign = &BBC01 :  1 : &IF_A1;
+     BBC_assign = &BBC09 :  9 : &IF_C2;
+     BBC_assign = &BBC02 :  2 : &IF_A1;
+     BBC_assign = &BBC10 : 10 : &IF_C2;
 enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
@@ -993,7 +989,7 @@ def VLBA.8Ch2bit1to2;
 enddef;
 *
 def MARK5B.8Ch2bit1to1;
-* mode =  1    stations =Ef
+* mode =  1    stations =Ef:Jb:Wb:On:Mc:Tr:Nt
 *    firmware_type = DBBC_DDC;
 *    format = MARK5B, and fan-out = 1
 *    mode requires  16.00Mb/s/tr; stations using disks
@@ -1014,53 +1010,6 @@ def MARK5B.8Ch2bit1to1;
      fanout_def =   : &CH07 :  mag : 1:  5;
      fanout_def =   : &CH08 : sign : 1:  8;
      fanout_def =   : &CH08 :  mag : 1:  9;
-enddef;
-*
-def MKIV.8Ch2bit1to2;
-* mode =  1    stations =Jb:On:Mc:Tr:Nt
-*    format = MKIV1:2, and fan-out = 2
-*    mode requires   8.00Mb/s/tr; stations using disks
-     track_frame_format = Mark4;
-     data_modulation = off;
-     fanout_def =   : &CH01 : sign : 1:  2:  4;
-     fanout_def =   : &CH01 :  mag : 1:  6:  8;
-     fanout_def =   : &CH02 : sign : 1: 10: 12;
-     fanout_def =   : &CH02 :  mag : 1: 14: 16;
-     fanout_def =   : &CH03 : sign : 1: 18: 20;
-     fanout_def =   : &CH03 :  mag : 1: 22: 24;
-     fanout_def =   : &CH04 : sign : 1: 26: 28;
-     fanout_def =   : &CH04 :  mag : 1: 30: 32;
-     fanout_def =   : &CH05 : sign : 1:  3:  5;
-     fanout_def =   : &CH05 :  mag : 1:  7:  9;
-     fanout_def =   : &CH06 : sign : 1: 11: 13;
-     fanout_def =   : &CH06 :  mag : 1: 15: 17;
-     fanout_def =   : &CH07 : sign : 1: 19: 21;
-     fanout_def =   : &CH07 :  mag : 1: 23: 25;
-     fanout_def =   : &CH08 : sign : 1: 27: 29;
-     fanout_def =   : &CH08 :  mag : 1: 31: 33;
-enddef;
-*
-def MARK5B.8Ch2bit1to1#02;
-* mode =  1    stations =Wb
-*    format = MARK5B, and fan-out = 1
-*    mode requires  16.00Mb/s/tr; stations using disks
-     track_frame_format = MARK5B;
-     fanout_def =   : &CH01 : sign : 1: 12;
-     fanout_def =   : &CH01 :  mag : 1: 13;
-     fanout_def =   : &CH02 : sign : 1: 10;
-     fanout_def =   : &CH02 :  mag : 1: 11;
-     fanout_def =   : &CH03 : sign : 1:  4;
-     fanout_def =   : &CH03 :  mag : 1:  5;
-     fanout_def =   : &CH04 : sign : 1:  2;
-     fanout_def =   : &CH04 :  mag : 1:  3;
-     fanout_def =   : &CH05 : sign : 1: 16;
-     fanout_def =   : &CH05 :  mag : 1: 17;
-     fanout_def =   : &CH06 : sign : 1: 14;
-     fanout_def =   : &CH06 :  mag : 1: 15;
-     fanout_def =   : &CH07 : sign : 1:  8;
-     fanout_def =   : &CH07 :  mag : 1:  9;
-     fanout_def =   : &CH08 : sign : 1:  6;
-     fanout_def =   : &CH08 :  mag : 1:  7;
 enddef;
 *------------------------------------------------------------------------------
 $HEAD_POS;
@@ -1116,12 +1065,12 @@ scan No0002;
      station=Br:    0 sec: 1325 sec:   42.739 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:   42.739 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:   42.468 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:   42.400 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:   42.468 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:   42.468 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:   42.400 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:   42.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:   42.400 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:   42.400 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:   42.468 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:   42.468 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:   42.468 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:   42.468 GB:   :       : 1;
 endscan;
 scan No0003;
 *    start=1997y064d18h30m00s <= original start, modified for tape start.
@@ -1137,12 +1086,12 @@ scan No0003;
      station=Br:    0 sec: 1325 sec:   85.478 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:   85.478 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:   84.936 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:   84.800 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:   84.936 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:   84.936 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:   84.800 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:   84.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:   84.800 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:   84.800 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:   84.936 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:   84.936 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:   84.936 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:   84.936 GB:   :       : 1;
 endscan;
 scan No0004;
 *    start=1997y064d19h00m00s <= original start, modified for tape start.
@@ -1158,12 +1107,12 @@ scan No0004;
      station=Br:    0 sec: 1325 sec:  128.218 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  128.218 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  127.404 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  127.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  127.404 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  127.404 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  127.200 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  127.200 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  127.200 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  127.200 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  127.404 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  127.404 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  127.404 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  127.404 GB:   :       : 1;
 endscan;
 scan No0005;
 *    start=1997y064d19h30m00s <= original start, modified for tape start.
@@ -1179,12 +1128,12 @@ scan No0005;
      station=Br:    0 sec: 1325 sec:  170.957 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  170.957 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  169.871 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  169.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  169.871 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  169.871 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  169.600 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  169.600 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  169.600 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  169.600 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  169.871 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  169.871 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  169.871 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  169.871 GB:   :       : 1;
 endscan;
 scan No0006;
 *    start=1997y064d20h00m00s <= original start, modified for tape start.
@@ -1201,12 +1150,12 @@ scan No0006;
      station=Br:    0 sec: 1325 sec:  213.696 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  213.696 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  212.339 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  212.000 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  212.339 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  212.339 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  212.000 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  212.000 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  212.000 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  212.000 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  212.339 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  212.339 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  212.339 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  212.339 GB:   :       : 1;
 endscan;
 scan No0007;
 *    start=1997y064d20h30m00s <= original start, modified for tape start.
@@ -1222,12 +1171,12 @@ scan No0007;
      station=Br:    0 sec: 1325 sec:  256.435 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  256.435 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  254.807 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  254.400 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  254.807 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  254.807 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  254.400 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  254.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  254.400 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  254.400 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  254.807 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  254.807 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  254.807 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  254.807 GB:   :       : 1;
 endscan;
 scan No0008;
 *    start=1997y064d21h00m00s <= original start, modified for tape start.
@@ -1243,12 +1192,12 @@ scan No0008;
      station=Br:    0 sec: 1325 sec:  299.174 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  299.174 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  297.275 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  296.800 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  297.275 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  297.275 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  296.800 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  296.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  296.800 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  296.800 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  297.275 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  297.275 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  297.275 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  297.275 GB:   :       : 1;
 endscan;
 scan No0009;
 *    start=1997y064d21h30m00s <= original start, modified for tape start.
@@ -1264,12 +1213,12 @@ scan No0009;
      station=Br:    0 sec: 1325 sec:  341.914 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  341.914 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  339.743 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  339.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  339.743 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  339.743 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  339.200 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  339.200 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  339.200 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  339.200 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  339.743 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  339.743 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  339.743 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  339.743 GB:   :       : 1;
 endscan;
 scan No0010;
 *    start=1997y064d22h00m00s <= original start, modified for tape start.
@@ -1286,12 +1235,12 @@ scan No0010;
      station=Br:    0 sec: 1325 sec:  384.653 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  384.653 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  382.211 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  381.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  382.211 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  382.211 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  381.600 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  381.600 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  381.600 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  381.600 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  382.211 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  382.211 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  382.211 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  382.211 GB:   :       : 1;
 endscan;
 scan No0011;
 *    start=1997y064d22h30m00s <= original start, modified for tape start.
@@ -1308,12 +1257,12 @@ scan No0011;
      station=Mk:    5 sec: 1325 sec:    0.000 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  427.392 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  424.678 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  424.000 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  424.678 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  424.678 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  424.000 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  424.000 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  424.000 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  424.000 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  424.678 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  424.678 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  424.678 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  424.678 GB:   :       : 1;
 endscan;
 scan No0012;
 *    start=1997y064d23h00m00s <= original start, modified for tape start.
@@ -1330,12 +1279,12 @@ scan No0012;
      station=Mk:    0 sec: 1325 sec:   42.739 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  470.131 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  467.146 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  466.400 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  467.146 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  467.146 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  466.400 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  466.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  466.400 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  466.400 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  467.146 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  467.146 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  467.146 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  467.146 GB:   :       : 1;
 endscan;
 scan No0013;
 *    start=1997y064d23h30m00s <= original start, modified for tape start.
@@ -1352,12 +1301,12 @@ scan No0013;
      station=Mk:    0 sec: 1325 sec:   85.478 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  512.870 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  509.614 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  508.800 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  509.614 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  509.614 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  508.800 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  508.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  508.800 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  508.800 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  509.614 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  509.614 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  509.614 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  509.614 GB:   :       : 1;
 endscan;
 scan No0014;
 *    start=1997y065d00h00m00s <= original start, modified for tape start.
@@ -1375,12 +1324,12 @@ scan No0014;
      station=Mk:    0 sec: 1325 sec:  128.218 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  555.610 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  552.082 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  551.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  552.082 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  552.082 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  551.200 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  551.200 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  551.200 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  551.200 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  552.082 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  552.082 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  552.082 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  552.082 GB:   :       : 1;
 endscan;
 scan No0015;
 *    start=1997y065d00h37m00s <= original start, modified for tape start.
@@ -1397,10 +1346,10 @@ scan No0015;
      station=Mk:    0 sec: 1325 sec:  170.957 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  598.349 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  594.550 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  593.600 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  593.600 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  593.600 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  593.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  594.550 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  594.550 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  594.550 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  594.550 GB:   :       : 1;
 endscan;
 scan No0016;
 *    start=1997y065d01h07m00s <= original start, modified for tape start.
@@ -1417,11 +1366,11 @@ scan No0016;
      station=Mk:    0 sec: 1325 sec:  213.696 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  641.088 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  637.018 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  636.000 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  636.000 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  636.000 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  636.000 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  593.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  637.018 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  637.018 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  637.018 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  637.018 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  594.550 GB:   :       : 1;
 endscan;
 scan No0017;
 *    start=1997y065d01h37m00s <= original start, modified for tape start.
@@ -1438,11 +1387,11 @@ scan No0017;
      station=Mk:    0 sec: 1325 sec:  256.435 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  683.827 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  679.485 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  678.400 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  678.400 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  678.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  678.400 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  636.000 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  679.485 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  679.485 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  679.485 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  679.485 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  637.018 GB:   :       : 1;
 endscan;
 scan No0018;
 *    start=1997y065d02h07m00s <= original start, modified for tape start.
@@ -1460,10 +1409,10 @@ scan No0018;
      station=Mk:    0 sec: 1325 sec:  299.174 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  726.566 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  721.953 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  720.800 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  720.800 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  720.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  720.800 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  721.953 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  721.953 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  721.953 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  721.953 GB:   :       : 1;
 endscan;
 scan No0019;
 *    start=1997y065d02h37m00s <= original start, modified for tape start.
@@ -1480,10 +1429,10 @@ scan No0019;
      station=Mk:    0 sec: 1325 sec:  341.914 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  769.306 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  764.421 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  763.200 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  763.200 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  763.200 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  763.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  764.421 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  764.421 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  764.421 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  764.421 GB:   :       : 1;
 endscan;
 scan No0020;
 *    start=1997y065d03h07m00s <= original start, modified for tape start.
@@ -1500,9 +1449,9 @@ scan No0020;
      station=Mk:    0 sec: 1325 sec:  384.653 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  812.045 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  806.889 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  805.600 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  805.600 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  805.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  806.889 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  806.889 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  806.889 GB:   :       : 1;
 endscan;
 scan No0021;
 *    start=1997y065d03h37m00s <= original start, modified for tape start.
@@ -1518,9 +1467,9 @@ scan No0021;
      station=Br:    0 sec: 1325 sec:  854.784 GB:   : &n    : 1;
      station=Mk:    0 sec: 1325 sec:  427.392 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  854.784 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  848.000 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  848.000 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  848.000 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  849.357 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  849.357 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  849.357 GB:   :       : 1;
 endscan;
 scan No0022;
 *    start=1997y065d04h07m00s <= original start, modified for tape start.
@@ -1536,9 +1485,9 @@ scan No0022;
      station=Br:    0 sec: 1325 sec:  897.523 GB:   : &n    : 1;
      station=Mk:    0 sec: 1325 sec:  470.131 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  897.523 GB:   :       : 1;
-     station=Jb:  618 sec: 1325 sec:  890.400 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  890.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  890.400 GB:   :       : 1;
+     station=Jb:  618 sec: 1325 sec:  891.825 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  891.825 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  891.825 GB:   :       : 1;
 endscan;
 scan No0023;
 *    start=1997y065d04h37m00s <= original start, modified for tape start.
@@ -1555,9 +1504,9 @@ scan No0023;
      station=Br:    0 sec: 1325 sec:  940.262 GB:   : &n    : 1;
      station=Mk:    0 sec: 1325 sec:  512.870 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  940.262 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  932.800 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  932.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  932.800 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  934.292 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  934.292 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  934.292 GB:   :       : 1;
 endscan;
 scan No0024;
 *    start=1997y065d05h07m00s <= original start, modified for tape start.
@@ -1573,9 +1522,9 @@ scan No0024;
      station=Br:    0 sec: 1325 sec:  983.002 GB:   : &n    : 1;
      station=Mk:    0 sec: 1325 sec:  555.610 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec:  983.002 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec:  975.200 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec:  975.200 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec:  975.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec:  976.760 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec:  976.760 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec:  976.760 GB:   :       : 1;
 endscan;
 scan No0025;
 *    start=1997y065d05h37m00s <= original start, modified for tape start.
@@ -1591,8 +1540,8 @@ scan No0025;
      station=Br:    0 sec: 1325 sec: 1025.741 GB:   : &n    : 1;
      station=Mk:    0 sec: 1325 sec:  598.349 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec: 1025.741 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1017.600 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1017.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1019.228 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1019.228 GB:   :       : 1;
 endscan;
 scan No0026;
 *    start=1997y065d06h07m00s <= original start, modified for tape start.
@@ -1607,9 +1556,9 @@ scan No0026;
      station=Br:    0 sec: 1325 sec: 1068.480 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  641.088 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec: 1068.480 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1060.000 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1060.000 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1017.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1061.696 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1061.696 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1019.228 GB:   :       : 1;
 endscan;
 scan No0027;
 *    start=1997y065d06h37m00s <= original start, modified for tape start.
@@ -1624,9 +1573,9 @@ scan No0027;
      station=Br:    0 sec: 1325 sec: 1111.219 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  683.827 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec: 1111.219 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1102.400 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1102.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1060.000 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1104.164 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1104.164 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1061.696 GB:   :       : 1;
 endscan;
 scan No0028;
 *    start=1997y065d07h07m00s <= original start, modified for tape start.
@@ -1642,9 +1591,9 @@ scan No0028;
      station=Br:    0 sec: 1325 sec: 1153.959 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  726.566 GB:   : &ccw  : 1;
      station=Gb:    0 sec: 1325 sec: 1153.959 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1144.800 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1144.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1102.400 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1146.632 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1146.632 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1104.164 GB:   :       : 1;
 endscan;
 scan No0029;
 *    start=1997y065d07h44m00s <= original start, modified for tape start.
@@ -1660,12 +1609,12 @@ scan No0029;
      station=Br:    0 sec: 1325 sec: 1196.698 GB:   : &cw   : 1;
      station=Gb:    0 sec: 1325 sec: 1196.698 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  849.357 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1187.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1189.100 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  594.550 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1187.200 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  805.600 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1144.800 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  678.400 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1189.100 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  806.889 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1146.632 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  679.485 GB:   :       : 1;
 endscan;
 scan No0030;
 *    start=1997y065d08h06m30s <= original start, modified for tape start.
@@ -1681,12 +1630,12 @@ scan No0030;
      station=Br:    0 sec: 1325 sec: 1239.437 GB:   : &cw   : 1;
      station=Gb:    1 sec: 1325 sec: 1239.437 GB:   :       : 1;
      station=Ef:    0 sec: 1325 sec:  891.825 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1229.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1231.568 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  637.018 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1229.600 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  848.000 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1187.200 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  720.800 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1231.568 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  849.357 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1189.100 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  721.953 GB:   :       : 1;
 endscan;
 scan No0031;
 *    start=1997y065d08h32m30s <= original start, modified for tape start.
@@ -1700,9 +1649,9 @@ scan No0031;
      station=Ov:    0 sec: 1325 sec: 1196.698 GB:   : &ccw  : 1;
      station=Br:    0 sec: 1325 sec: 1282.176 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  769.306 GB:   : &ccw  : 1;
-     station=Jb:  511 sec: 1325 sec: 1272.000 GB:   :       : 1;
-     station=On:  442 sec: 1325 sec: 1272.000 GB:   :       : 1;
-     station=Tr:   10 sec: 1325 sec: 1229.600 GB:   :       : 1;
+     station=Jb:  511 sec: 1325 sec: 1274.035 GB:   :       : 1;
+     station=On:  442 sec: 1325 sec: 1274.035 GB:   :       : 1;
+     station=Tr:   10 sec: 1325 sec: 1231.568 GB:   :       : 1;
 endscan;
 scan No0032;
 *    start=1997y065d08h58m30s <= original start, modified for tape start.
@@ -1715,9 +1664,9 @@ scan No0032;
      station=Ov:    0 sec: 1325 sec: 1239.437 GB:   : &ccw  : 1;
      station=Br:    0 sec: 1325 sec: 1324.916 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  812.045 GB:   : &ccw  : 1;
-     station=Jb:    0 sec: 1325 sec: 1314.400 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1314.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1272.000 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1316.503 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1316.503 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1274.035 GB:   :       : 1;
 endscan;
 scan No0033;
 *    start=1997y065d09h24m30s <= original start, modified for tape start.
@@ -1732,10 +1681,10 @@ scan No0033;
      station=Br:    0 sec: 1325 sec: 1367.655 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  854.784 GB:   : &ccw  : 1;
      station=Ef:    0 sec: 1325 sec:  934.292 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1356.800 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1356.800 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  890.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1314.400 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1358.971 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1358.971 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  891.825 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1316.503 GB:   :       : 1;
 endscan;
 scan No0034;
 *    start=1997y065d09h50m30s <= original start, modified for tape start.
@@ -1748,11 +1697,11 @@ scan No0034;
      station=Br:    0 sec: 1325 sec: 1410.394 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  897.523 GB:   : &ccw  : 1;
      station=Ef:    0 sec: 1325 sec:  976.760 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1399.200 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1399.200 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  932.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1356.800 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  763.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1401.439 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1401.439 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  934.292 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1358.971 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  764.421 GB:   :       : 1;
 endscan;
 scan No0035;
 *    start=1997y065d10h16m30s <= original start, modified for tape start.
@@ -1761,11 +1710,11 @@ scan No0035;
      station=Br:    0 sec: 1325 sec: 1453.133 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  940.262 GB:   : &ccw  : 1;
      station=Ef:    0 sec: 1325 sec: 1019.228 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1441.600 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1441.600 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec:  975.200 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1399.200 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  805.600 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1443.907 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1443.907 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec:  976.760 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1401.439 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  806.889 GB:   :       : 1;
 endscan;
 scan No0036;
 *    start=1997y065d10h42m30s <= original start, modified for tape start.
@@ -1774,11 +1723,11 @@ scan No0036;
      station=Br:    0 sec: 1325 sec: 1495.873 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec:  983.002 GB:   : &ccw  : 1;
      station=Ef:    0 sec: 1325 sec: 1061.696 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1484.000 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1484.000 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec: 1017.600 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1441.600 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  848.000 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1486.375 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1486.375 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec: 1019.228 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1443.907 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  849.357 GB:   :       : 1;
 endscan;
 scan No0037;
 *    start=1997y065d11h08m30s <= original start, modified for tape start.
@@ -1787,11 +1736,11 @@ scan No0037;
      station=Br:    0 sec: 1325 sec: 1538.612 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec: 1025.741 GB:   : &ccw  : 1;
      station=Ef:    0 sec: 1325 sec: 1104.164 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1526.401 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1526.401 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec: 1060.000 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1484.000 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  890.400 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1528.843 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1528.843 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec: 1061.696 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1486.375 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  891.825 GB:   :       : 1;
 endscan;
 scan No0038;
 *    start=1997y065d11h34m30s <= original start, modified for tape start.
@@ -1799,11 +1748,11 @@ scan No0038;
      station=Br:    0 sec: 1325 sec: 1581.351 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec: 1068.480 GB:   : &ccw  : 1;
      station=Ef:    0 sec: 1325 sec: 1146.632 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1568.801 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1568.801 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec: 1102.400 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1526.401 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  932.800 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1571.311 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1571.311 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec: 1104.164 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1528.843 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  934.292 GB:   :       : 1;
 endscan;
 scan No0039;
 *    start=1997y065d12h00m30s <= original start, modified for tape start.
@@ -1812,23 +1761,23 @@ scan No0039;
      station=Br:    0 sec: 1325 sec: 1624.090 GB:   : &cw   : 1;
      station=Mk:    0 sec: 1325 sec: 1111.219 GB:   : &ccw  : 1;
      station=Ef:    0 sec: 1325 sec: 1189.100 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1611.201 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1611.201 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec: 1144.800 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1568.801 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec:  975.200 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1613.779 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1613.779 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec: 1146.632 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1571.311 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec:  976.760 GB:   :       : 1;
 endscan;
 scan No0040;
 *    start=1997y065d12h26m30s <= original start, modified for tape start.
      start=1997y065d12h26m25s; mode=v6cm-256-8-2-UL; source=DA193;
      station=Br:    0 sec: 1325 sec: 1666.830 GB:   : &cw   : 1;
      station=Ef:    0 sec: 1325 sec: 1231.568 GB:   :       : 1;
-     station=Jb:    0 sec: 1325 sec: 1653.601 GB:   :       : 1;
+     station=Jb:    0 sec: 1325 sec: 1656.246 GB:   :       : 1;
      station=Wb:    0 sec: 1325 sec:  679.485 GB:   :       : 1;
-     station=On:    0 sec: 1325 sec: 1653.601 GB:   :       : 1;
-     station=Mc:    0 sec: 1325 sec: 1187.200 GB:   :       : 1;
-     station=Tr:    0 sec: 1325 sec: 1611.201 GB:   :       : 1;
-     station=Nt:    0 sec: 1325 sec: 1017.600 GB:   :       : 1;
+     station=On:    0 sec: 1325 sec: 1656.246 GB:   :       : 1;
+     station=Mc:    0 sec: 1325 sec: 1189.100 GB:   :       : 1;
+     station=Tr:    0 sec: 1325 sec: 1613.779 GB:   :       : 1;
+     station=Nt:    0 sec: 1325 sec: 1019.228 GB:   :       : 1;
 endscan;
 scan No0041;
 *    start=1997y065d12h52m30s <= original start, modified for tape start.
