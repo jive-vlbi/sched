@@ -435,7 +435,7 @@ def schin(stdin):
                     input_iterator.input_.close()
                 try:
                     input_ = open(schedule, "r")
-                    input_iterator = key.KeyfileLister(
+                    input_iterator = key.KeyfileIterator(
                         input_, record_defaults, state_defaults)
                     restart = True
                     continue # read next record from new iterator
