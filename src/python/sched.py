@@ -33,6 +33,8 @@ parser.add_argument("-p", "--plot", action="store_true", default=False,
 parser.add_argument("-f", "--freqlist", nargs=2, type=float, default=None,
                     metavar=("lowF", "highF"),
                     help="Make frequency list (MHz). Then exit.")
+parser.add_argument("-k", "--key", required=False, type=str,
+                    help="Use the argument as input KEYIN schedule file.")
 
 args = parser.parse_args()
 
@@ -79,6 +81,9 @@ if args.freqlist is not None:
     getfreq()
     s.wlog(1, "DIVERT:   Frequency table written.  Stopping.")
     sys.exit(0)
+if args.key is not None:
+    # set default schedule file
+    schin_module.state_defaults["schedule"][0] = args.key
 
 restart = False
 
