@@ -8,6 +8,14 @@ import schedlib as s
 # import matplotlib and call .use immediately
 import matplotlib
 matplotlib.use("Qt5Agg")
+
+# import function to improve toolbar, but might not be available on all systems
+try:
+    from plot_toolbar import adjust as adjust_toolbar
+except ImportError:
+    def adjust_toolbar(*args, **kwargs):
+        pass
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.figure
 import matplotlib.pyplot as plt
@@ -985,6 +993,9 @@ class MainWidget(QDialog):
                         else:
                             call_draw = True
                     figure.canvas.mpl_connect("draw_event", draw_event)
+                else:
+                    axis.xaxis.lst_base_date = date.fromordinal(
+                        int(axis.get_xlim()[0]))
             if axis_type[0] == "Sec":
                 axis.invert_xaxis()
             if axis_type[1] == "Sec":
@@ -992,6 +1003,7 @@ class MainWidget(QDialog):
             
             legend = axis.legend()
             legend.draggable()
+            adjust_toolbar(figure, axis_type[0])
 
     def plot_uptime(self):
         with wait_cursor():
@@ -1095,6 +1107,10 @@ class MainWidget(QDialog):
                     else:
                         call_draw = True
                 figure.canvas.mpl_connect("draw_event", draw_event)
+            else:
+                for axis in axes:
+                    axis.xaxis.lst_base_date = date.fromordinal(
+                        int(axis.get_xlim()[0]))
             
             plotted_stations = [station.station for station in stations
                                 if station.station in legend_line]
@@ -1102,6 +1118,7 @@ class MainWidget(QDialog):
                              for station in plotted_stations]
             legend = figure.legend(station_lines, plotted_stations)
             legend.draggable()
+            adjust_toolbar(figure, axis_type)
 
     def plot_radec(self):
         with wait_cursor():
