@@ -301,7 +301,7 @@ class Parser:
             if self.input_ is None:
                 if len(tokens) > 0:
                     raise ParseError("Unexpected end of input")
-                raise StopIteration()
+                return
 
             # read line by line to allow special control sequences to be 
             # interactive, this only works if tokens are on a single line
