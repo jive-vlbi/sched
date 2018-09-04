@@ -215,19 +215,21 @@ class PlotCheckBox(QWidget):
 
 class HighlightGroup(QWidget):
     choices = ("Hide", "Show", "Mark")
+    choices_text = {c: c[0] for c in choices}
+    text_choices = {c[0]: c for c in choices}
     clicked = pyqtSignal()
     def __init__(self, parent=None):
         super().__init__(parent)
-        layout = QVBoxLayout(self)
+        layout = QHBoxLayout(self)
         self.buttons = QButtonGroup(self)
-        for index, text in enumerate(self.choices):
-            button = QRadioButton(text)
+        for index, choice in enumerate(self.choices):
+            button = QRadioButton(self.choices_text[choice])
             button.clicked.connect(self.clicked)
             self.buttons.addButton(button, index)
             layout.addWidget(button)
 
     def current_text(self):
-        return self.buttons.checkedButton().text()
+        return self.text_choices[self.buttons.checkedButton().text()]
 
     def select(self, text):
         self.buttons.button(self.choices.index(text)).setChecked(True)
@@ -293,7 +295,9 @@ class BaselineSelectionWidget(BaselinesWidget):
 
 class BaselineHighlightWidget(BaselinesWidget):
     def __init__(self, stations, parent=None):
-        super().__init__(stations, "", HighlightGroup, 
+        super().__init__(stations, 
+                         "Select H(ide), S(how) or M(ark) per baseline", 
+                         HighlightGroup, 
                          parent)
 
     def _toggle(self, widgets):
