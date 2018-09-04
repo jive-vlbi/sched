@@ -23,7 +23,7 @@ from astropy.time import Time
 from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QScrollArea, \
     QTabWidget, QPushButton, QCheckBox, QGroupBox, QLabel, QLineEdit, \
     QComboBox, QMenu, QDialog, QRadioButton, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QSizePolicy, QButtonGroup
+    QVBoxLayout, QHBoxLayout, QGridLayout, QButtonGroup
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QCursor, QDoubleValidator
 
