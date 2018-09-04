@@ -265,29 +265,37 @@ class BaselinesWidget(QGroupBox):
 
     def __init__(self, stations, title, checkbox_type, parent=None):
         super().__init__(title, parent)
-        selection_layout = QGridLayout(self)
+        scroll_layout = QVBoxLayout(self)
+        self.setLayout(scroll_layout)
+        scroll_area = QScrollArea(self)
+        scroll_layout.addWidget(scroll_area)
+        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        scroll_widget = QWidget(scroll_area)
+        selection_layout = QGridLayout(scroll_widget)
         self.check_box = {} # {(station_row, station_column): checkbox_type()}
-        all_button = QPushButton("All", self)
+        all_button = QPushButton("All", scroll_widget)
         all_button.clicked.connect(self._handle_all)
         selection_layout.addWidget(all_button, 0, 0)
 
         for column, header in enumerate(stations[1:], 1):
-            button = QPushButton("\n".join(header.station), self)
+            button = QPushButton("\n".join(header.station), scroll_widget)
             button.clicked.connect(lambda _, s=header.station: 
                                    self._handle_station(s))
             selection_layout.addWidget(button, 0, column)
 
         for row, header in enumerate(stations[:-1], 1):
-            button = QPushButton(header.station, self)
+            button = QPushButton(header.station, scroll_widget)
             button.clicked.connect(lambda _, s=header.station: 
                                    self._handle_station(s))
             selection_layout.addWidget(button, row, 0)
             for column, item in enumerate(stations[row:], row):
-                check_box = checkbox_type(parent=self)
+                check_box = checkbox_type(parent=scroll_widget)
                 check_box.setChecked(True)
                 check_box.clicked.connect(self.changed)
                 self.check_box[(header.station, item.station)] = check_box
                 selection_layout.addWidget(check_box, row, column)
+        scroll_area.setWidget(scroll_widget)
 
 class BaselineSelectionWidget(BaselinesWidget):
     def get_visible(self, baseline):
