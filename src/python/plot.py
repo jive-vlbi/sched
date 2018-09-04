@@ -5,6 +5,7 @@ import util
 
 import schedlib as s
 
+# import matplotlib and call .use immediately
 import matplotlib
 matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
