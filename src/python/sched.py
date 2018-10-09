@@ -93,6 +93,7 @@ while True:
     s.srlis.srln = 0
 
     input_(stdin)
+    print("SCHED:   Processing input.")
     defaults()
     s.schpre()
     s.chksc1()
