@@ -750,7 +750,7 @@ class MainWidget(QDialog):
         source_catalog = SourceCatalog()
         source_catalog.read()
         source_catalog.set_aliases()
-        self.sources = source_catalog.scheduled()
+        self.sources = source_catalog.used()
         self.radec_sources = [e for e in SourcePlotCatalog().read() 
                               if not e.srlused]
         self.scan_catalog = ScanCatalog()
