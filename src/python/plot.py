@@ -1075,7 +1075,7 @@ class MainWidget(QDialog):
                         left = station_left[station]
                         bottom = [len(stations) - station_index] * len(left)
                         legend_line[station.station] = axis.barh(
-                            bottom=bottom, left=left,
+                            y=bottom, left=left,
                             width=source_station_width[source][station],
                             label=station.station,
                             **self.uptime.stations.get_properties(
@@ -1088,7 +1088,7 @@ class MainWidget(QDialog):
                 axis.set_xbound(lower=start, upper=end)
                 axis.yaxis.set_label_text(source)
                 axis.tick_params(axis="y", which="both", 
-                                 left="off", labelleft="off")
+                                 left=False, labelleft=False)
             figure.autofmt_xdate()
             if axis_type == "UT":
                 # Cludge to update the label of a time axis to reflect the
