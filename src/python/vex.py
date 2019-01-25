@@ -928,6 +928,7 @@ def sched_block(scan_mode):
                                   "{} sec".format(min(data_good, data_stop)),
                                   "{} sec".format(data_stop),
                                   media_position,
+                                  "", # pass always null
                                   pointing_sector,
                                   0 if scan.norec else 1),)
 
