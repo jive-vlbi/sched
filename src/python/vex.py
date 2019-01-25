@@ -628,7 +628,7 @@ def stations_block():
                     "{:10.6f} m/yr".format(i) for i in
                     (station.dxpos, station.dypos, station.dzpos)),
                 ("site_position_epoch", 
-                 "{}y{}d".format(*s.timej(station.mjdrate)[:2])))
+                 "{}y{:03d}d".format(*s.timej(station.mjdrate)[:2])))
         if station.nhoriz > 1:
             site += (("horizon_map_az", "{} deg".format(station.horaz[0])) + \
                      tuple(station.horaz[1:]),
