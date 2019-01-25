@@ -763,9 +763,11 @@ def pointing_sectors(station):
         if zone_counter[zone] == 1:
             return ""
         return "#{}".format(zone_counter[zone])
-    return tuple(("pointing_sector", "&" + zone[0] + name_suffix(zone), zone[0],
-                  "az", zone[1], zone[2],
-                  "el", zone[3], zone[4]) for zone in zones)
+    deg = "{} deg"
+    return tuple(("pointing_sector", zone[0], "&" + zone[0] + name_suffix(zone),
+                  "az", deg.format(zone[1]), deg.format(zone[2]),
+                  "el", deg.format(zone[3]), deg.format(zone[4])) 
+                 for zone in zones)
 
 def scan_sector(station, scan, az1, el1):
     if (station.mount == "ALTAZ") and \
