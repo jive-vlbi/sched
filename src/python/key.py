@@ -24,20 +24,8 @@ import operator as op
 import itertools
 import copy
 import collections
-import atexit
 import os
 import json
-
-try:
-    import readline
-    histfile = os.path.join(os.path.expanduser("~"), ".sched_history")
-    try:
-        readline.read_history_file(histfile)
-    except FileNotFoundError:
-        pass
-    atexit.register(readline.write_history_file, histfile)
-except ImportError:
-    pass
 
 class TokeniseError(RuntimeError): pass
 class ParseError(RuntimeError): pass
