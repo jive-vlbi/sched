@@ -11,6 +11,19 @@ import schedlib as s
 import argparse
 import sys
 import io
+import atexit
+import os
+
+try:
+    import readline
+    histfile = os.path.join(os.path.expanduser("~"), ".sched_history")
+    try:
+        readline.read_history_file(histfile)
+    except FileNotFoundError:
+        pass
+    atexit.register(readline.write_history_file, histfile)
+except ImportError:
+    pass
 
 parser = argparse.ArgumentParser(
     description="Python wrapper around SCHED")
