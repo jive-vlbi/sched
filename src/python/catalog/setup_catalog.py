@@ -297,7 +297,19 @@ class SetupCatalog(Catalog):
         DBBC firmware (True|False).
         """
         if entry.dbbcfw == "":
-            # 32 MHz requires E mode firmware, 
-            # configure for non-E if not required
-            return entry.samprate > 63
+            return False # assume 107 (or better)
         return entry.dbbcfw[-1] in ("E", "F")
+
+    @classmethod
+    def dbbc_firmware_allowed_sample_rates(cls, entry):
+        """
+        Returns the set of allowed sample rates for the configured 
+        DBBC firmware.
+        """
+        if cls.is_dbbc_e_firmware(entry):
+            return {4, 8, 16, 32, 64}
+        if entry.dbbcfw == "": # assume 107 (or better)
+            return {2, 4, 8, 16, 32, 64}
+        if entry.dbbcfw < "107": # known firmwares are 104 and 105
+            return {2, 4, 8, 16, 32}
+        return {2, 4, 8, 16, 32, 64}

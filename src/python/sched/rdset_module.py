@@ -215,7 +215,7 @@ def rdset(setreq, input_iterator, isetf):
                 entry.spcal))
 
         if (entry.dbbcfw not in ("", "104", "105", "105E", "105F", "106E", 
-                                 "106F")) and \
+                                 "106F", "107")) and \
             (entry.dbbcfw not in dbbc_firmware_warnings):
             s.wlog(1, "RDSET - WARNING: {} is not a known DBBC firmware "
                    "version.".format(entry.dbbcfw))
