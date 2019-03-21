@@ -52,15 +52,15 @@ def chkdbbc(ks, setup_entry, station_entry):
             errs = True
 
     elif setup_entry.dbe == "DBBC_DDC":
-        allowed_sample_rate = {False: (2, 4, 8, 16, 32),
-                               True: (4, 8, 16, 32, 64)}[e_firmware]
-        if setup_entry.samprate not in allowed_sample_rate:
+        allowed_sample_rates = SetupCatalog.dbbc_firmware_allowed_sample_rates(
+            setup_entry)
+        if setup_entry.samprate not in allowed_sample_rates:
             firmware_text = ", firmware {}".format(setup_entry.dbbcfw) \
                             if setup_entry.dbbcfw != "" else ""
             s.wlog(1, "CHKDBBC: Invalid SAMPRATE specified: {} for "
                    "DBE=DBBC_DDC{}. Must be {} to {} Msamp/s.".format(
                        setup_entry.samprate, firmware_text,
-                       min(allowed_sample_rate), max(allowed_sample_rate)))
+                       min(allowed_sample_rates), max(allowed_sample_rates)))
             errs = True
 
         bits = set(b for b in setup_entry.bits)
