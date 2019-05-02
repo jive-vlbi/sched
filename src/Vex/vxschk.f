@@ -1,5 +1,9 @@
       SUBROUTINE VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS, WARNTSOF, 
      1                  NTSYS, NTSYSON, TSYSGAP, WARNBANK)
+Cf2py intent(in) ISCN
+Cf2py intent(out) TAPOFF
+Cf2py intent(in, out) WARNFS, WARNTS, WARNTSOF, NTSYS, NTSYSON, TSYSGAP
+Cf2py intent(in, out) WARNBANK
       IMPLICIT NONE
 C
 C     Routine specific for the VEX extension of SCHED. 

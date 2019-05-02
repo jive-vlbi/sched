@@ -541,6 +541,7 @@ vexout
 vlascns 
 vsopwrt 
 vxs2md 
+vxschk 
 vxton2 
 wlog 
 wrtmsg
