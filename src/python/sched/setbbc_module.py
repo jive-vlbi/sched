@@ -38,6 +38,7 @@ def setbbc(ks, setup_catalog, frequency_entries, station_entries):
                     "VLBA4": s.bbcgeo,
                     "MKIV": s.bbcm4,
                     "DBBC": handle_dbbc,
+                    "DBBC3": handle_dbbc,
                     "CDAS": s.bbccdas,
                     "R1002": s.bbckvsr,
                     "LBA": s.bbclba}.get(station_entry.dar, None)

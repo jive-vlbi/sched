@@ -1,4 +1,4 @@
-from sched import ifdbbc
+from sched import ifdbbc, ifdbbc3
 from catalog import SetupCatalog
 
 import schedlib as s
@@ -11,9 +11,45 @@ def chkdbbc(ks, setup_entry, station_entry):
     
     errs = False
     
-    ifnam = "ABCD"
-    e_firmware = SetupCatalog.is_dbbc_e_firmware(setup_entry)
-    ifbbc, mif = ifdbbc(station_entry.dbbcver, e_firmware)
+    if station_entry.dar == "DBBC3":
+        ifnam = "ABCDEFGH"
+        ifbbc, mif = ifdbbc3()
+    else:
+        ifnam = "ABCD"
+        e_firmware = SetupCatalog.is_dbbc_e_firmware(setup_entry)
+        ifbbc, mif = ifdbbc(station_entry.dbbcver, e_firmware)
+
+    def check_ifchan():
+        somebad = False
+        for ifchan in setup_entry.ifchan:
+            if (ifchan[0] not in ifnam) or \
+               ((len(ifchan) > 1) and (ifchan[1] not in "1234 ")):
+                if_descriptors = [c + "[1-4]" for c in ifnam]
+                ifnam_text = ", ".join(if_descriptors[:-1]) + \
+                             " or " + if_descriptors[-1]
+                s.wlog(1, "CHKDBBC: IFCHAN '{}' not {}".format(
+                    ifchan, ifnam_text))
+                somebad = True
+        return somebad
+
+    def check_channels():
+        somebad = False
+        for ich, channel in enumerate(setup_entry.channel):
+            iif = ifnam.find(channel.ifchan[0])
+            bbc = channel.bbc
+            if (iif == -1) or (not ifbbc[bbc-1, iif]):
+                s.wlog(1, "CHKDBBC: Illegal IF input {} for DBBC, channel "
+                       "{} BBC {}".format(channel.ifchan, ich+1, bbc))
+                s.wlog(1, "         Allowed IF index and first character "
+                       "for this BBC are: {}".format(
+                           "".join("({}, {})".format(i+1, ifnam[i])
+                                   for i in np.where(ifbbc[bbc-1] == 1)[0])
+                       ))
+                somebad = True
+        if somebad:
+            s.wlog(1, "        Be careful of special wiring restrictions "
+                   "for these DARs.")
+        return somebad
 
     if s.schn1.vlbitp and (setup_entry.format != "NONE") and \
        (len(np.unique(setup_entry.ifchan)) > mif):
@@ -21,7 +57,11 @@ def chkdbbc(ks, setup_entry, station_entry):
                format(mif, station_entry.station))
         errs = True
 
-    if setup_entry.dbe == "DBBC_PFB":
+    if station_entry.dar == "DBBC3":
+        errs = check_ifchan() or errs
+        errs = check_channels() or errs
+
+    elif setup_entry.dbe == "DBBC_PFB":
         if not setup_entry.modetest:
             s.wlog(1, "CHKDBBC: You have specified DBE=DBBC_PFB The PFB "
                    "mode is not yet supported in the DBBC. This schedule "
@@ -70,31 +110,11 @@ def chkdbbc(ks, setup_entry, station_entry):
                        ", ".join(str(i) for i in sorted(bits))))
             errs = True
 
-        for ifchan in setup_entry.ifchan:
-            if (ifchan[0] not in ifnam) or \
-               ((len(ifchan) > 1) and (ifchan[1] not in "1234 ")):
-                s.wlog(1, "CHKDBBC: IFCHAN '{}' not A[1-4], B[1-4], C[1-4] "
-                       "or D[1-4]".format(ifchan))
-                errs = True
+        errs = check_ifchan() or errs
+        errs = check_channels() or errs
 
-        somebad = False
-        for ich, channel in enumerate(setup_entry.channel):
-            iif = ifnam.find(channel.ifchan[0])
-            bbc = channel.bbc
-            if (iif == -1) or (not ifbbc[bbc-1, iif]):
-                s.wlog(1, "CHKDBBC: Illegal IF input {} for DBBC, channel "
-                       "{} BBC {}".format(channel.ifchan, ich+1, bbc))
-                s.wlog(1, "         Allowed IF index and first character "
-                       "for this BBC are: {}".format(
-                           "".join("({}, {})".format(i+1, ifnam[i])
-                                   for i in np.where(ifbbc[bbc-1] == 1)[0])
-                       ))
-                somebad = True
-                errs = True
-        if somebad:
-            s.wlog(1, "        Be careful of special wiring restrictions "
-                   "for these DARs.")
+    if station_entry.dar != "DBBC3":
+        errs = s.chkdbfq(ks, setup_entry.bbfilt, setup_entry.bbsyn, errs)
 
-    errs = s.chkdbfq(ks, setup_entry.bbfilt, setup_entry.bbsyn, errs)
     return errs
                 
