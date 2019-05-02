@@ -208,8 +208,10 @@ def modes_block():
         return if_, if_channel
         
     def do_bbc(setup, if_, if_channel):
+        # BBC numbers brought into range 1-16 for drudg
         bbc_channel = OrderedDict(
-            [(bbc, channel) for channel, bbc in enumerate(setup.bbc)])
+            [((bbc - 1) % 16 + 1, channel) 
+             for channel, bbc in enumerate(setup.bbc)])
         bbc = tuple(("BBC_assign",
                      "&BBC{:02d}".format(bbc_number),
                      bbc_number,
@@ -277,6 +279,51 @@ def modes_block():
         if track_format is None:
             return None, None, None
         
+        def datastream_for_channels(datastream_link, channel_links):
+            thread_link = "&thread0"
+            datastream = (("datastream", datastream_link, "VDIF"),
+                          ("thread", 
+                           datastream_link, 
+                           thread_link, 
+                           0, # thread number
+                           len(channel_links),
+                           "{:7.3f} Ms/sec".format(setup.samprate),
+                           setup.bits[0],
+                           "real",
+                           8000)) + \
+                tuple(("channel",
+                       datastream_link,
+                       thread_link,
+                       channel_link,
+                       channel_in_thread)
+                       for channel_in_thread, channel_link in enumerate(
+                               channel_links))
+            return datastream
+
+        if station.dar == "DBBC3":
+            if not track_format.startswith("VDIF"):
+                raise RuntimeError(
+                    "SCHED can only create VDIF VEX files for the DBBC3, "
+                    "data format {} is not supported for {}.".format(
+                        track_format, station.station))
+            # create one data stream per IF
+            used_ifs = {channel.ifchan for channel in setup.channel}
+            # sort by frequency and sideband, L(ower) before U(pper)
+            channel_order = sorted(setup.channel, 
+                                   key=lambda x: (x.freqref, x.sidebd))
+            
+            datastream = ()
+            for index, if_ in enumerate(sorted(used_ifs), 1):
+                datastream_link = "&DS{}".format(index)
+                channel_links = [
+                    freq[index][5] # FREQ link name
+                    for index, channel in enumerate(channel_order)
+                    if channel.ifchan == if_]
+                datastream += datastream_for_channels(datastream_link, 
+                                                      channel_links)
+            return None, datastream, None
+
+
         channel_order = sorted(
             ((setup.sidebd[channel_index],
               setup.bbc[channel_index],
@@ -291,29 +338,15 @@ def modes_block():
                          in channel_order
                          for bit in ["sign", "mag"][
                                  :int(setup.bits[channel_index])])
+                
         if track_format.startswith("VDIF"):
             # hard-coded 1 thread VDIF section, with astro patching
             datastream_link = "&DS1"
-            thread_link = "&thread0"
-            datastream = (("datastream", datastream_link, "VDIF"),
-                          ("thread", 
-                           datastream_link, 
-                           thread_link, 
-                           0, # thread number
-                           setup.nchan,
-                           "{:7.3f} Ms/sec".format(setup.samprate),
-                           setup.bits[0],
-                           "real",
-                           8000)) + \
-                tuple(("channel",
-                       datastream_link,
-                       thread_link,
-                       freq[channel_index][5], # FREQ link name
-                       channel_in_thread)
-                       for channel_in_thread, 
-                       (_, _, bit, channel_index) 
-                       in enumerate(channel for channel in channel_order
-                                    if channel[2] == "sign"))
+            channel_links = [freq[channel[3]][5] for channel in channel_order
+                             if channel[2] == "sign"]
+            datastream = datastream_for_channels(datastream_link, 
+                                                 channel_links)
+                                                 
             return None, datastream, None
 
         elif track_format.startswith("MARK5B"):

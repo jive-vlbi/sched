@@ -27,6 +27,7 @@ from .getset_module   import getset
 from .input_module    import input_
 from .bbcalt_module   import bbcalt
 from .ifdbbc_module   import ifdbbc
+from .ifdbbc3_module  import ifdbbc3
 from .bbcdbbc_module  import bbcdbbc
 from .setbbc_module   import setbbc
 from .setdefs_module  import setdefs
