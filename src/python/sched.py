@@ -48,6 +48,10 @@ parser.add_argument("-f", "--freqlist", nargs=2, type=float, default=None,
                     help="Make frequency list (MHz). Then exit.")
 parser.add_argument("-k", "--key", required=False, type=str,
                     help="Use the argument as input KEYIN schedule file.")
+parser.add_argument("--old_style_vex", action="store_true", default=False,
+                    help="Use the old VEX file printing function. "
+                    "This function does not support all new features of "
+                    "pySCHED.")
 
 args = parser.parse_args()
 
@@ -133,11 +137,16 @@ while True:
 if mkfiles and (f2str(s.schsco.optmode) != "UPTIME") and not s.schcon.noset:
     s.scnrange()
     s.omsout(restart)
-    s.vexout()
+    if args.old_style_vex:
+        s.vexout()
+    else:
+        with open("{}.vex".format(f2str(s.schc1.expcode).lower()), "w") \
+             as vex_file:
+            vex.write(vex_file, vex_version="1.5")
 
     with open("{}.vex2".format(f2str(s.schc1.expcode).lower()), "w") \
          as vex_file:
-        vex.write(vex_file)
+        vex.write(vex_file, vex_version="2.0")
     
     if s.schcon.dovsop:
         s.vsopwrt()
