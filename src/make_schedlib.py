@@ -540,6 +540,7 @@ versched
 vexout 
 vlascns 
 vsopwrt 
+vxs2md 
 vxton2 
 wlog 
 wrtmsg
