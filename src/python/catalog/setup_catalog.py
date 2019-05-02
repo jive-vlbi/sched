@@ -259,7 +259,7 @@ class SetupCatalog(Catalog):
             # so do it separately
             elif attr == "track":
                 return getattr(self.entry, attr)[:, self.index]
-            raise AttributeError()
+            raise AttributeError(attr)
 
         def __setattr__(self, attr, value):
             if attr in self.attributes:
