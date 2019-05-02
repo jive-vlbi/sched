@@ -13,37 +13,38 @@ from collections import defaultdict, OrderedDict
 import itertools
 import functools
 import copy
+import os.path
 
-vex_version = "2.0" # version of VEX definition
-sched_version = "1" # version of SCHED VEX writing routine
+sched_version = "2" # version of SCHED VEX writing routine
 
 block_separator = "*------------------------------------------------------"\
                   "------------------------\n"
-def write(output):
+def write(output, vex_version="2.0"):
+    assert vex_version in {"1.5", "2.0"}
     # read in all catalogs, so other methods can assume their entries are valid
     for Catalog in (SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog):
         Catalog().read()
     StationCatalog().add_scheduled_attributes()
     SourceCatalog().set_aliases()
 
-    output.write(header_block())
+    output.write(header_block(vex_version))
     output.write(block_separator)
-    output.write(global_block())
+    output.write(global_block(vex_version))
     output.write(block_separator)
-    output.write(exper_block())
+    output.write(exper_block(vex_version))
     output.write(block_separator)
-    mode_text, scan_mode_name = modes_block()
+    mode_text, scan_mode_name = modes_block(vex_version)
     output.write(mode_text)
     output.write(block_separator)
-    output.write(stations_block())
+    output.write(stations_block(vex_version))
     output.write(block_separator)
-    output.write(procedures_block())
+    output.write(procedures_block(vex_version))
     output.write(block_separator)
-    output.write(source_block())
+    output.write(source_block(vex_version))
     output.write(block_separator)
-    output.write(sched_block(scan_mode_name))
+    output.write(sched_block(scan_mode_name, vex_version))
 
-def header_block():
+def header_block(vex_version):
     return """
 VEX_rev = {};
 *    SCHED vers: {}
@@ -54,7 +55,7 @@ VEX_rev = {};
            vex_version, sched_version,
            float(s.vern.vernum), float(s.plver()), float(s.jplver()))[1:]
 
-def global_block():
+def global_block(vex_version):
     return """
 $GLOBAL;
      ref $EXPER = {};
@@ -66,7 +67,7 @@ $GLOBAL;
            float(s.schco.schver),
            f2str(s.schsco.obsmode))[1:]
 
-def exper_block():
+def exper_block(vex_version):
     expcode = f2str(s.schc1.expcode)
     ret  = """
 $EXPER;
@@ -160,7 +161,7 @@ enddef;
 
     return ret
 
-def modes_block():
+def modes_block(vex_version):
     # some common block variables are indexed by scan number, but not part 
     # of the scan catalog, the indices are offset from the catalog entries
     scan_catalog = ScanCatalog()
@@ -175,8 +176,10 @@ def modes_block():
                   "MKIV": "Mark4",
                   "VLBA": "VLBA",
                   # 2 valid LBA formats in vex2 LBA_AT and LBA_VSOP, 
-                  # no idea which is supposed to be used
+                  # no idea which is supposed to be used.
+                  # For VEX1 only the fact that it starts with LBA is used.
                   "LBA": "LBA_AT",
+                  "S2": "S2",
                   "MARK5B": "MARK5B",
                   "VDIF": "VDIF"} 
                   
@@ -199,7 +202,7 @@ def modes_block():
             [(if_, channel) for channel, if_ in enumerate(setup.ifchan)])
         if_ = tuple(("if_def",
                      "&IF_" + if_name,
-                     if_name,
+                     if_name if vex_version < "2" else "",
                      setup.pol[channel][0], # only take first character (RCP->R)
                      "{:9.2f} MHz".format(setup.firstlo[channel]),
                      setup.side1[channel]) +
@@ -269,13 +272,96 @@ def modes_block():
                       # based, so -1 for array indexing
                       phase_cal[tone_channel[channel_index] - 1][1])
                      for channel_index in range(setup.nchan))
+        if vex_version < "2":
+            freq += (("sample_rate", "{:7.3f} Ms/sec".format(setup.samprate)),)
         return phase_cal, freq
+
+    def do_track(setup, station, track_format, bbc=None): 
+        # bbc represents the $BBC VEX section, only used for S2 format in VEX1
         
-    def do_datastream_type(setup, freq):
-        track_format = next((
-            track_format for sched_format, track_format in format_map.items()
-            if setup.format.startswith(sched_format)),
-                            None)
+        if track_format is None:
+            track_format = "NONE"
+        
+        fanout = int(setup.fanout)
+        if track_format.startswith("LBA") or track_format.startswith("MARK5B"):
+            def track_number(base_track, bit_index, fanout_index):
+                return base_track + bit_index
+        elif track_format.startswith("VDIF"):
+            def track_number(base_track, bit_index, fanout_index):
+                return base_track
+        else:
+            def track_number(base_track, bit_index, fanout_index):
+                return base_track + fanout_index * 2 + \
+                    bit_index * 2 * fanout
+
+        if vex_version < "2":
+            if track_format == "NONE":
+                return (("track_frame_format", "NONE"),)
+            elif track_format.startswith("S2"):
+                iset = setups.index(setup) + 1
+                s2mdnm, valid, ns2usd, is2usd = s.vxs2md(iset, True)
+                if not valid:
+                    raise RuntimeError("Inconsistent or impossible S2 mode")
+                track = (("S2_recording_mode", f2str(s2mdnm)),)
+                if station.dar == "MKIV":
+                    # link to BBC 1 and 2
+                    track += (("S2_data_source", bbc[0][1], bbc[1][1]),)
+                elif station.dar in {"VLBA", "VLBAG"}:
+                    bbc_numbers = {c.bbc for c in setup.channel}
+                    if bbc_numbers <= {1, 2, 3, 4}:
+                        track += (("S2_data_source", "VLBA_BBC_1-4"),)
+                    elif bbc_numbers <= {5, 6, 7, 8}:
+                        track += (("S2_data_source", "VLBA_BBC_5-8"),)
+                    else:
+                        raise RuntimeError("Inconsistent DAR connection")
+                elif station.dar == "NONE":
+                    track += (("S2_data_source", "none"), )
+                else:
+                    track += (("S2_data_source", station.dar), )
+                # no fanout_defs
+                return track
+                
+            elif track_format.startswith("LBA"):
+                track = (("S2_data_source", "VLBA"),
+                         ("S2_recording_mode", "none"))
+            elif track_format.startswith("VDIF"):
+                # 5032 functionality copied from SCHED, undocumented VEX,
+                # not used by JIVE
+                track = (("track_frame_format", "VDIF5032"),)                
+            else:
+                track = (("track_frame_format", track_format),)
+                if track_format == "Mark3A":
+                    track += (("data_modulation", "off"),)
+                if track_format == "VLBA":
+                    track += (("data_modulation", "on"),)
+
+        else: # vex_version >= "2"
+            track = (("track_frame_format", track_format),)
+            track += (("sample_rate", "{:7.3f} Ms/sec".format(setup.samprate)),)
+            
+        for channel_index in range(setup.nchan):
+            base_track_number = setup.track[0, channel_index]
+            if s.schn5.twohead and (base_track_number > 33):
+                base_track_number -= 64
+                headstack = 2
+            else:
+                headstack = 1
+
+            track += tuple(itertools.chain(
+                [("fanout_def",
+                  "",
+                  freq[channel_index][5], # FREQ link name
+                  bit,
+                  headstack) +
+                  tuple(track_number(base_track_number, bit_index, 
+                                 fanout_index) 
+                        for fanout_index in range(fanout))
+                 for bit_index, bit in enumerate(["sign", "mag"][
+                         :int(setup.bits[channel_index])])]))
+        return track
+        
+    def do_datastream_type(setup, freq, station, track_format): 
+        assert(vex_version >= "2")
         if track_format is None:
             return None, None, None
         
@@ -383,46 +469,125 @@ def modes_block():
             return bitstream, None, None
 
         else:
-            assert(setup.tapemode == 1)
-            fanout = int(setup.fanout)
-            if track_format.startswith("LBA"):
-                def track_number(base_track, bit_index, fanout_index):
-                    return base_track + bit_index
-            else:
-                def track_number(base_track, bit_index, fanout_index):
-                    return base_track + fanout_index * 2 + \
-                        bit_index * 2 * fanout
-
-            track = (("track_frame_format", track_format),
-                     ("sample_rate", "{:7.3f} Ms/sec".format(setup.samprate)))
-            for channel_index in range(setup.nchan):
-                base_track_number = setup.track[0, channel_index]
-                if s.schn5.twohead and (base_track_number > 33):
-                    base_track_number -= 64
-                    headstack = 2
-                else:
-                    headstack = 1
-
-                track += tuple(itertools.chain(
-                    [("fanout_def",
-                      "",
-                      freq[channel_index][5], # FREQ link name
-                      bit,
-                      headstack) +
-                      tuple(track_number(base_track_number, bit_index, 
-                                     fanout_index) 
-                            for fanout_index in range(fanout))
-                     for bit_index, bit in enumerate(["sign", "mag"][
-                             :int(setup.bits[channel_index])])]))
+            track = do_track(setup, station, track_format, vex_version)
             return None, None, track
 
-    blocks = ["IF", "BBC", "PHASE_CAL_DETECT", "FREQ", 
-              "TRACKS", "BITSTREAMS", "DATASTREAMS"]
+    def do_roll(setup):
+        roll_by = -1
+        if setup.barrel == "roll_auto":
+            if setup.format.startswith("MARKIII"):
+                roll_by = 0
+            else:
+                if setup.tapemode in {1, 2}:
+                    roll_by = 16
+                elif setup.tapemode in {4, 8}:
+                    roll_by = 8
+                elif setup.tapemode == 0:
+                    roll_by = 0
+        else:
+            roll_by = {"roll_off": 0,
+                       "roll_16": 16,
+                       "roll_8": 8}.get(setup.barrel, -1)
+
+        if roll_by == -1:
+            raise RuntimeError("Unknown barrel-roll: {}".format(setup.barrel))
+
+        if roll_by == 0:
+            return (("roll", "off"),)
+        else:
+            roll = (("roll", "on"),
+                    ("roll_reinit_period", "2 sec"),
+                    ("roll_inc_period", 1))
+
+        heads = 1
+        if s.schn5.twohead and any(max(channel.track[:setup.tapemode-1]) >= 64
+                                   for channel in setup.channel):
+            heads = 2
+
+        n_groups = 4
+        for head in range(1, heads + 1):
+            if roll_by == 8:
+                for group in range(n_groups):
+                    if group <= n_groups / 2:
+                        min_track = group * 2 * 32 / n_groups + 2
+                    else:
+                        min_track = (group - n_groups / 2) * 2 * 32 / n_groups \
+                                    + 2
+                    for i in range(1, 32 / n_groups + 1):
+                        if group < n_groups / 2:
+                            track = group * 2 * 32 / n_group + i * 2
+                        else:
+                            track = (group - n_groups / 2) * 2 * 32 / n_groups \
+                                    + i * 2 + 1
+
+                        roll_def = ("roll_def", head, track)
+                        for j in range(8):
+                            roll_to = track - 2 * j
+                            if roll_to < min_track:
+                                roll_to += 2 * 32 / n_groups
+                            roll_def += (roll_to,)
+                        roll += (roll_def,)
+            elif roll_by == 16:
+                for group in range(n_groups):
+                    for i in range(1, 32 / n_groups + 1):
+                        if group < n_groups / 2:
+                            track = group * 2 * 32 / n_groups + i * 2
+                        else:
+                            track = (group - n_groups / 2) * 2 * 32 / n_groups \
+                                    + i * 2 + 1
+
+                        roll_def = ("roll_def", head, track)
+                        for j in range(16):
+                            if j < 8:
+                                alt_group = group
+                                j_alt = j
+                            else:
+                                if group % 2 == 1:
+                                    alt_group = group - 1
+                                else:
+                                    alt_group = group + 1
+                                j_alt = j - 8
+                                
+                            if alt_group < n_groups / 2:
+                                roll_to = alt_group * 2 * 32 / n_groups + \
+                                          i * 2 - j_alt * 2
+                                min_track = alt_group * 2 * 32 / n_groups + 2
+                            else:
+                                roll_to = (alt_group - n_groups / 2) * 2 * 32 \
+                                          / n_groups + i * 2 - j_alt * 2 + 1
+                                min_track = (alt_group - n_groups / 2) * 2 * 32\
+                                            / n_groups + 2 + 1
+
+                            if roll_to < min_track:
+                                roll_to = roll_to + 2 * 32 / n_groups
+
+                            roll_def += (roll_to, )
+                        
+                        roll += (roll_def,)
+
+    def do_pass_order(setup, track_format):
+        if track_format is None:
+            return None
+
+        if track_format.startswith("LBA"):
+            return (("S2_group_order", 0),)
+
+        if track_format == "S2":
+            group_order = ("S2_group_order",) + tuple(range(setup.tapemode))
+            return (group_order,)
+            
+        return None
+    
+    blocks = ["IF", "BBC", "PHASE_CAL_DETECT", "FREQ", "TRACKS", 
+              "ROLL", "PASS_ORDER", # VEX 1
+              "BITSTREAMS", "DATASTREAMS"] # VEX 2
     # mode is mappings from block type to a 
     # <mapping from block def to stations>
     modes = [{block: defaultdict(set) for block in blocks}]
     # mapping from scan index to index in modes list
     scan_mode_index = {}
+    # mapping from mode index to set of setup files used
+    mode_index_setups = defaultdict(set)
 
     def add_to_mode(mode, scan_mode):
         for block, block_defs in scan_mode.items():
@@ -443,10 +608,12 @@ def modes_block():
     for scan_index, scan in enumerate(scans):
         scan_mode = {block: defaultdict(set) for block in blocks}
 
+        setups_used = set()
         for station in stations:
             setup = setups[station.nsetup[scan_index+scan_offset] - 1]
             station_code = station.stcode
             if station.stascn[scan_index+scan_offset]:
+                setups_used.add(setup)
                 # add pcal to IF def if pcal was specified in the schedule
                 frequency_setup_index = station.fseti[scan_index+scan_offset]
                 if_pcal = ()
@@ -469,14 +636,31 @@ def modes_block():
                 scan_mode["PHASE_CAL_DETECT"][phase_cal].add(station_code)
                 scan_mode["FREQ"][freq].add(station_code)
                 
-                bitstream, datastream, track = do_datastream_type(
-                    setup, freq)
-                if bitstream is not None:
-                    scan_mode["BITSTREAMS"][bitstream].add(station_code)
-                if datastream is not None:
-                    scan_mode["DATASTREAMS"][datastream].add(station_code)
-                if track is not None:
+                track_format = next(
+                    (track_format for sched_format, track_format in 
+                     format_map.items()
+                     if setup.format.startswith(sched_format)),
+                    None)
+                if vex_version < "2":
+                    track = do_track(
+                        setup, station, track_format, bbc)
                     scan_mode["TRACKS"][track].add(station_code)
+
+                    roll = do_roll(setup)
+                    scan_mode["ROLL"][roll].add(station_code)
+
+                    pass_order = do_pass_order(setup, track_format)
+                    if pass_order is not None:
+                        scan_mode["PASS_ORDER"][pass_order].add(station_code)
+                else:
+                    bitstream, datastream, track = do_datastream_type(
+                        setup, freq, station, track_format)
+                    if bitstream is not None:
+                        scan_mode["BITSTREAMS"][bitstream].add(station_code)
+                    if datastream is not None:
+                        scan_mode["DATASTREAMS"][datastream].add(station_code)
+                    if track is not None:
+                        scan_mode["TRACKS"][track].add(station_code)
         
         mode_index = next((index for index, mode in enumerate(modes) 
                            if add_to_mode(mode, scan_mode)), 
@@ -486,6 +670,7 @@ def modes_block():
             mode_index = len(modes)
             modes.append(scan_mode)
         scan_mode_index[scan_index] = mode_index
+        mode_index_setups[mode_index].update(s.setname for s in setups_used)
 
     # functions to name block defs
     def make_if_name(block_def):
@@ -531,10 +716,18 @@ def modes_block():
         return "BS{}Ch{}Bit".format(len(channels), len(bits))
 
     def make_tracks_name(block_def):
-        track_format = next(param_values[1] for param_values in block_def
-                            if param_values[0] == "track_frame_format")
-        fanout = next(len(param_values) - 5 for param_values in block_def
-                      if param_values[0] == "fanout_def")
+        track_format = next((param_values[1] for param_values in block_def
+                             if param_values[0] == "track_frame_format"),
+                            None)
+        if track_format is None:
+            if any(param_values[0] == "S2_recording_mode"
+                   for param_values in block_def):
+                track_format = "S2"
+            else:
+                track_format = "NoTrackFormat"
+        fanout = next((len(param_values) - 5 for param_values in block_def
+                       if param_values[0] == "fanout_def"),
+                      0)
         channels = set(param_values[2] for param_values in block_def
                        if param_values[0] == "fanout_def")
         bits = set(param_values[3] for param_values in block_def
@@ -544,6 +737,28 @@ def modes_block():
                                           len(bits),
                                           fanout)
 
+    def make_roll_name(block_def):
+        on_off = next((param_values[1] for param_values in block_def
+                       if param_values[0] == "roll"),
+                      "off")
+        if on_off == "on":
+            roll_def = next((param_values for param_values in block_def
+                             if param_values[0] == "roll_def"),
+                            None)
+            if roll_def is None:
+                return "RollNone"
+            # count the number of alternative tracks,
+            # subtract "roll_def" head and track number
+            return "Roll{}".format(len(roll_def) - 3)
+        else:
+            return "NoRoll"
+
+    def make_pass_order_name(block_def):
+        passes = next((len(param_values) - 1 for param_values in block_def
+                       if param_values[0] == "S2_group_order"),
+                      0)
+        return "{}Pass".format(passes)
+
     block_name_function = {
         "IF": make_if_name, 
         "BBC": make_bbc_name, 
@@ -551,7 +766,10 @@ def modes_block():
         "FREQ": make_freq_name, 
         "TRACKS": make_tracks_name, 
         "BITSTREAMS": make_bitstreams_name, 
-        "DATASTREAMS": make_datastreams_name}
+        "DATASTREAMS": make_datastreams_name,
+        "ROLL": make_roll_name,
+        "PASS_ORDER": make_pass_order_name
+    }
 
     # {block -> {def -> name}}
     block_def_name = {block: {} for block in blocks} 
@@ -564,8 +782,13 @@ def modes_block():
     scan_mode_name = {}
     # modes
     modes_text = "$MODE;\n"
+    mode_names = set()
     for mode_index, mode in enumerate(modes):
-        mode_name = "Mode{}".format(mode_index)
+        setup_files = (os.path.split(s)[-1] 
+                       for s in mode_index_setups[mode_index])
+        stripped = (s[:-4] if s[-4:] == ".set" else s for s in setup_files)
+        mode_name = extend_name("+".join(sorted(stripped)), mode_names)
+        mode_names.add(mode_name)
         scan_mode_name.update(
             {si: mode_name for si, mi in scan_mode_index.items()
              if mode_index == mi})
@@ -621,7 +844,7 @@ def {};
     
     return (modes_text, scan_mode_name)
 
-def procedures_block():
+def procedures_block(vex_version):
     # just a hardcoded procedure
     return """
 $PROCEDURES;
@@ -641,14 +864,17 @@ def Procedure;
 enddef;
 """[1:]
 
-def stations_block():
+def stations_block(vex_version):
     def do_site(station):
         # force 2 char site code
         if len(station.stcode) == 0:
             site_id =  ("site_ID", "Xx")
         elif len(station.stcode) == 1:
-            site_id = ("site_ID", station.stcode + station.stcode.lower(), 
-                       station.stcode)
+            if vex_version >= "2":
+                site_id = ("site_ID", station.stcode + station.stcode.lower(),
+                           station.stcode)
+            else:
+                site_id = ("site_ID", station.stcode)
         else:
             site_id = ("site_ID", station.stcode[:2])
         site = (("site_type", "fixed"),
@@ -686,40 +912,83 @@ def stations_block():
                          "{} sec".format(int(station.tsettle))))
             if (station.mount == "ALTAZ") and \
                station.station.startswith("VLBA"):
-                antenna += pointing_sectors(station)
+                antenna += pointing_sectors(station, vex_version)
             
         antenna += (("axis_offset", "{:10.5} m".format(station.axoff)),)
         return antenna
 
     def do_das(station):
         das = tuple()
-        recorder = None
-        if station.usedisk and \
-           (station.disk in ("MARK5" + abc for abc in "ABC")):
-            recorder = "Mark5" + station.disk[5]
-            das += (("equip", "recorder", recorder, "&" + recorder),)
+        if station.usedisk:
+            if station.disk in ("MARK5" + abc for abc in "ABC"):
+                recorder = "Mark5" + station.disk[5]
+            elif station.disk == "LBADR":
+                recorder = "S2"
+            else:
+                # replicating SCHED vxwrda.f: use recorder in error output
+                # while disk is used for comparison
+                raise RuntimeError("Unknown recorder of type: {}".format(
+                    station.recorder))
+            
+            if vex_version < "2":
+                das += (("record_transport_type", recorder),)
+            else:
+                das += (("equip", "recorder", recorder, "&" + recorder),)
                 
         dar_map = {"MKIV": "Mark4",
-                   "RDBE": "RDBE_DDC",
-                   "RDBE2": "RDBE_PFB", # just guessing about RDBE mapping
-                   "VLBAG": "VLBAG4",
                    "NONE": "none",
                    "R1002": "Mark4"}
-        dar_map.update({k: k for k in ("VLBA", "VLBA4", "K4", "WIDAR", "LBA",
-                                       "DBBC")})
+        dar_map.update({k: k for k in ("VLBA", "VLBA4", "K4", "WIDAR", "LBA")})
+        if vex_version < "2":
+            dar_map.update({"MKIII": "Mark3A",
+                            "VLBAG": "VLBAG",
+                            "RDBE": "RDBE",
+                            "RDBE2": "RDBE2",
+                            "DBBC": "DBBC", 
+                            "DBBC3": "DBBC"})
+        else:
+            dar_map.update({"VLBAG": "VLBAG4",
+                            "RDBE": "RDBE_DDC",
+                            "RDBE2": "RDBE_DDC",
+                            "DBBC": "DBBC_DDC",
+                            "DBBC3": "DBBC_DDC"})
         try:
             electronics = dar_map[station.dar]
-            das += (("equip", "rack", electronics, "&" + electronics),)
+            if vex_version < "2":
+                das += (("electronics_rack_type", electronics),)
+            else:
+                das += (("equip", "rack", electronics, "&" + electronics),)
         except KeyError:
             raise RuntimeError("Unknown DAR of type: {}".format(station.dar))
+
+        if vex_version < "2":
+            das += (("number_drives", str(station.stndriv)),)
+            if not ((1 <= station.stndriv <= 9) and (1 <= station.nheads <= 9)):
+                raise RuntimeError(
+                    "Inconsitent number of drives/headstacks")
+            for drive in range(station.stndriv):
+                for head in range(1, station.nheads + 1):
+                    das += (("headstack", head + station.nheads * drive, 
+                             "", drive),)
+
+            if station.usetape or (not s.schcon.vextest):
+                das += (("tape_motion", "adaptive", 
+                         "0 min", "0 min", "10 sec"),)
 
         return das
 
     def make_das_name(block_def):
-        rack = next(param_values[2] for param_values in block_def
-                    if param_values[1] == "rack")
-        recorder = next((param_values[2] for param_values in block_def
-                         if param_values[1] == "recorder"), None)
+        if vex_version < "2":
+            rack = next(param_values[1] for param_values in block_def
+                        if param_values[0] == "electronics_rack_type")
+            recorder = next((param_values[1] for param_values in block_def
+                             if param_values[0] == "record_transport_type"), 
+                            None) 
+        else:
+            rack = next(param_values[2] for param_values in block_def
+                        if param_values[1] == "rack")
+            recorder = next((param_values[2] for param_values in block_def
+                             if param_values[1] == "recorder"), None)
         if recorder is None:
             return rack
         else:
@@ -756,7 +1025,7 @@ def stations_block():
             
     return stations_text
 
-def pointing_sectors(station):
+def pointing_sectors(station, vex_version):
     ax1 = station.ax1lim
     ax2 = station.ax2lim
     diff = ax1[1] - ax1[0]
@@ -797,10 +1066,18 @@ def pointing_sectors(station):
             return ""
         return "#{}".format(zone_counter[zone])
     deg = "{} deg"
-    return tuple(("pointing_sector", zone[0], "&" + zone[0] + name_suffix(zone),
-                  "az", deg.format(zone[1]), deg.format(zone[2]),
-                  "el", deg.format(zone[3]), deg.format(zone[4])) 
-                 for zone in zones)
+    if vex_version < "2":
+        return tuple(("pointing_sector", "&" + zone[0] + name_suffix(zone),
+                      "az", deg.format(zone[1]), deg.format(zone[2]),
+                      "el", deg.format(zone[3]), deg.format(zone[4])) 
+                     for zone in zones)
+    else:
+        # VEX 2 added a zone name
+        return tuple(("pointing_sector", zone[0], 
+                      "&" + zone[0] + name_suffix(zone),
+                      "az", deg.format(zone[1]), deg.format(zone[2]),
+                      "el", deg.format(zone[3]), deg.format(zone[4])) 
+                     for zone in zones)
 
 def scan_sector(station, scan, az1, el1):
     if (station.mount == "ALTAZ") and \
@@ -817,14 +1094,14 @@ def scan_sector(station, scan, az1, el1):
         return zone
     return None
     
-def source_block():
+def source_block(vex_version):
     sources = SourceCatalog().used()
     source_text = "$SOURCE;\n"
     source_defs = 0
     for source in sources:
         source_defs += len(source.aliases)
         if source_defs > 1000:
-            s.wlog(1, "VXWRSU: WARNING: More than 1000 sources in this "
+            s.wlog(1, "WARNING: More than 1000 sources in this "
                    "schedule. This VEX will NOT run on the Field System!")
         for alias in source.aliases:
             source_text += """
@@ -838,7 +1115,7 @@ enddef;
             
     return source_text
 
-def sched_block(scan_mode):
+def sched_block(scan_mode, vex_version):
     catalog = ScanCatalog()
     scans = catalog.used()
     scan_offset = catalog.scan_offset
@@ -956,12 +1233,15 @@ def sched_block(scan_mode):
                         if zone is not None:
                             pointing_sector = "&" + zone
                         
+                    pass_ = ""
+                    if vex_version < "2" and station.disk == "LBADR":
+                        pass_ = 0
                     scan_def += (("station",
                                   station.stcode,
                                   "{} sec".format(min(data_good, data_stop)),
                                   "{} sec".format(data_stop),
                                   media_position,
-                                  "", # pass always null
+                                  pass_,
                                   pointing_sector,
                                   0 if scan.norec else 1),)
 
