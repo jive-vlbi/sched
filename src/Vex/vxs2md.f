@@ -1,4 +1,6 @@
       SUBROUTINE VXS2MD( ISET, S2MODE, VALID, NS2USD, IS2USD, DOWARN )
+Cf2py intent(in) ISET, DOWARN
+Cf2py intent(out) S2MODE, VALID, NS2USD, IS2USD
 C 
 C     Routine specific for the VEX extension of SCHED. 
 C     Figures out S2 mode name and checks validity
