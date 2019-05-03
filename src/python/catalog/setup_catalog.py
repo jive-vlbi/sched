@@ -290,6 +290,12 @@ class SetupCatalog(Catalog):
     def scheduled(self):
         return self.entries[:s.setn1.nset]
 
+    def used(self):
+        """
+        Pre: catalog is read.
+        """
+        return [entry for entry in self.scheduled() if entry.used]
+        
     @staticmethod
     def is_dbbc_e_firmware(entry):
         """
