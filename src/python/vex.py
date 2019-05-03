@@ -1357,8 +1357,7 @@ def str2def(s):
     return s[:32]
 
 def str2val(s):
-    s = re.sub("[;:=&*$]", "X", s)
-    if (len(s) == 0) or re.match(".*\s.*", s):
+    if (len(s) == 0) or re.match(".*[\s;:=&*$].*", s):
         # pre-undo all standard C-quoting rules
         s = s.replace('\\', '\\\\')
         s = s.replace('"', '\\"')
