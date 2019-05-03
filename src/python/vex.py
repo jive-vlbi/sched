@@ -211,11 +211,12 @@ def modes_block(vex_version):
         return channel_a - channel_b
 
     def do_if(setup, if_pcal):
-        # reverse order to mimic behaviour of SCHED: 
-        # with duplicate IFs, use the first
-        if_channel = OrderedDict(
-            [(if_, channel) 
-             for channel, if_ in reversed(list(enumerate(setup.ifchan)))])
+        # with duplicate IFs, use the first (mimic SCHED)
+        if_channel = OrderedDict()
+        for channel, if_ in enumerate(setup.ifchan):
+            if if_ not in if_channel:
+                if_channel[if_] = channel
+        
         if_ = tuple(("if_def",
                      "&IF_" + if_name,
                      if_name if vex_version < "2" else "",
