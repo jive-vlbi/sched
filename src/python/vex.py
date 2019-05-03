@@ -1028,7 +1028,8 @@ def stations_block(vex_version):
             name = block_def_name[block].get(block_def)
             if name is None:
                 if block == "DAS":
-                    name = make_das_name(block_def)
+                    name = extend_name(make_das_name(block_def), 
+                                       block_def_name["DAS"].values())
                 else:
                     # SITE/ANTENNA, just use station name
                     name = station.station
