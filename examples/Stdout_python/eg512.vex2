@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -28,8 +28,8 @@ def eg512;
 *    year, doy: 1997, 63
 *    date     : Tue 4 Mar 1997
 *    MJD      : 50511
-     exper_nominal_start=1997y63d12h00m00s;
-     exper_nominal_stop=1997y64d05h08m19s;
+     exper_nominal_start=1997y063d12h00m00s;
+     exper_nominal_stop=1997y064d05h08m19s;
 *
      target_correlator = SOCORRO;
 *
@@ -51,7 +51,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def eg512-256;
      ref $PROCEDURES = Procedure:Hn:Sc:Gb;
      ref $IF = LO@4100MHzDPolTone/1:Hn:Sc;
      ref $IF = LO@5636MHzDPolTone/1:Gb;
@@ -61,7 +61,7 @@ def Mode0;
      ref $DATASTREAMS = VDIF_8000-1Thr8Ch:Gb:Hn:Sc;
 enddef;
 *
-def Mode1;
+def eg512-512;
      ref $PROCEDURES = Procedure:Hn:Sc:Gb;
      ref $IF = LO@4100MHzDPolTone/1:Hn:Sc;
      ref $IF = LO@5636MHzDPolTone/1:Gb;
@@ -74,24 +74,24 @@ enddef;
 $IF;
 *
 def LO@4100MHzDPolTone/1;
-* Mode0: Hn, Sc
-* Mode1: Hn, Sc
-     if_def = &IF_A : A : R :   4100.00 MHz : U : 1 MHz;
-     if_def = &IF_C : C : L :   4100.00 MHz : U : 1 MHz;
+* eg512-256: Hn, Sc
+* eg512-512: Hn, Sc
+     if_def = &IF_A :  : R :   4100.00 MHz : U : 1 MHz;
+     if_def = &IF_C :  : L :   4100.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@5636MHzDPolTone/1;
-* Mode0: Gb
-* Mode1: Gb
-     if_def = &IF_A : A : R :   5636.00 MHz : L : 1 MHz;
-     if_def = &IF_C : C : L :   5636.00 MHz : L : 1 MHz;
+* eg512-256: Gb
+* eg512-512: Gb
+     if_def = &IF_A :  : R :   5636.00 MHz : L : 1 MHz;
+     if_def = &IF_C :  : L :   5636.00 MHz : L : 1 MHz;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 8BBCs;
-* Mode0: Gb, Hn, Sc
-* Mode1: Gb, Hn, Sc
+* eg512-256: Gb, Hn, Sc
+* eg512-512: Gb, Hn, Sc
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
@@ -105,19 +105,19 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* Mode0: Gb, Hn, Sc
+* eg512-256: Gb, Hn, Sc
      phase_cal_detect = &PCD : 1 : 8;
 enddef;
 *
 def Detect#02;
-* Mode1: Gb, Hn, Sc
+* eg512-512: Gb, Hn, Sc
      phase_cal_detect = &PCD : 1 : 16;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 4917.75MHz8x16MHz;
-* Mode1: Gb, Hn, Sc
+* eg512-512: Gb, Hn, Sc
      chan_def =  : 4917.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 4917.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 4933.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -129,7 +129,7 @@ def 4917.75MHz8x16MHz;
 enddef;
 *
 def 4950.75MHz8x8MHz;
-* Mode0: Gb, Hn, Sc
+* eg512-256: Gb, Hn, Sc
      chan_def =  : 4950.75 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 4950.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 4958.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -143,7 +143,7 @@ enddef;
 $DATASTREAMS;
 *
 def VDIF_8000-1Thr8Ch;
-* Mode0: Gb, Hn, Sc
+* eg512-256: Gb, Hn, Sc
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 8 :  16.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -157,7 +157,7 @@ def VDIF_8000-1Thr8Ch;
 enddef;
 *
 def VDIF_8000-1Thr8Ch#02;
-* Mode1: Gb, Hn, Sc
+* eg512-512: Gb, Hn, Sc
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 8 :  32.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -174,19 +174,19 @@ $STATION;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def Sc;
      ref $ANTENNA = VLBA_SC;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_SC;
 enddef;
 *
 def Gb;
      ref $ANTENNA = GBT_VLBA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = GBT_VLBA;
 enddef;
 *------------------------------------------------------------------------------
@@ -221,9 +221,9 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def RDBE_PFB+Mark5C;
+def RDBE_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
-     equip =     rack : RDBE_PFB : &RDBE_PFB;
+     equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
@@ -292,8 +292,8 @@ enddef;
 $SCHED;
 *
 scan No0001;
-     start = 1997y63d12h00m00s;
-     mode = Mode0;
+     start = 1997y063d12h00m00s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :     0.000 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :     0.000 GB :  : &ccw : 1;
@@ -301,8 +301,8 @@ scan No0001;
 endscan;
 *
 scan No0002;
-     start = 1997y63d12h22m20s;
-     mode = Mode0;
+     start = 1997y063d12h22m20s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :    42.510 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :    42.510 GB :  : &ccw : 1;
@@ -310,8 +310,8 @@ scan No0002;
 endscan;
 *
 scan No0003;
-     start = 1997y63d12h44m40s;
-     mode = Mode0;
+     start = 1997y063d12h44m40s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :    85.021 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :    85.021 GB :  : &ccw : 1;
@@ -319,8 +319,8 @@ scan No0003;
 endscan;
 *
 scan No0004;
-     start = 1997y63d13h07m00s;
-     mode = Mode0;
+     start = 1997y063d13h07m00s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :   127.531 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   127.531 GB :  : &ccw : 1;
@@ -328,8 +328,8 @@ scan No0004;
 endscan;
 *
 scan No0005;
-     start = 1997y63d13h29m20s;
-     mode = Mode0;
+     start = 1997y063d13h29m20s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :   170.041 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   170.041 GB :  : &ccw : 1;
@@ -337,8 +337,8 @@ scan No0005;
 endscan;
 *
 scan No0006;
-     start = 1997y63d13h51m40s;
-     mode = Mode0;
+     start = 1997y063d13h51m40s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :   212.552 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   212.552 GB :  : &ccw : 1;
@@ -346,8 +346,8 @@ scan No0006;
 endscan;
 *
 scan No0007;
-     start = 1997y63d14h14m00s;
-     mode = Mode0;
+     start = 1997y063d14h14m00s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :   255.062 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   255.062 GB :  : &ccw : 1;
@@ -355,8 +355,8 @@ scan No0007;
 endscan;
 *
 scan No0008;
-     start = 1997y63d14h36m20s;
-     mode = Mode0;
+     start = 1997y063d14h36m20s;
+     mode = eg512-256;
      source = 3C454.3;
      station = Hn : 0 sec : 1320 sec :   297.572 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   297.572 GB :  : &ccw : 1;
@@ -364,8 +364,8 @@ scan No0008;
 endscan;
 *
 scan No0009;
-     start = 1997y63d15h00m41s;
-     mode = Mode0;
+     start = 1997y063d15h00m41s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   340.083 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   340.083 GB :  : &ccw : 1;
@@ -373,8 +373,8 @@ scan No0009;
 endscan;
 *
 scan No0010;
-     start = 1997y63d15h23m01s;
-     mode = Mode0;
+     start = 1997y063d15h23m01s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   382.593 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   382.593 GB :  : &ccw : 1;
@@ -382,8 +382,8 @@ scan No0010;
 endscan;
 *
 scan No0011;
-     start = 1997y63d15h45m21s;
-     mode = Mode0;
+     start = 1997y063d15h45m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   425.103 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   425.103 GB :  : &ccw : 1;
@@ -391,8 +391,8 @@ scan No0011;
 endscan;
 *
 scan No0012;
-     start = 1997y63d16h07m41s;
-     mode = Mode0;
+     start = 1997y063d16h07m41s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   467.614 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   467.614 GB :  : &ccw : 1;
@@ -400,8 +400,8 @@ scan No0012;
 endscan;
 *
 scan No0013;
-     start = 1997y63d16h30m01s;
-     mode = Mode0;
+     start = 1997y063d16h30m01s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   510.124 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   510.124 GB :  : &ccw : 1;
@@ -409,8 +409,8 @@ scan No0013;
 endscan;
 *
 scan No0014;
-     start = 1997y63d16h52m21s;
-     mode = Mode0;
+     start = 1997y063d16h52m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   552.634 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   552.634 GB :  : &ccw : 1;
@@ -418,8 +418,8 @@ scan No0014;
 endscan;
 *
 scan No0015;
-     start = 1997y63d17h18m21s;
-     mode = Mode0;
+     start = 1997y063d17h18m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   595.145 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   595.145 GB :  : &ccw : 1;
@@ -427,8 +427,8 @@ scan No0015;
 endscan;
 *
 scan No0016;
-     start = 1997y63d17h44m21s;
-     mode = Mode0;
+     start = 1997y063d17h44m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   637.655 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   637.655 GB :  : &ccw : 1;
@@ -436,8 +436,8 @@ scan No0016;
 endscan;
 *
 scan No0017;
-     start = 1997y63d18h10m21s;
-     mode = Mode0;
+     start = 1997y063d18h10m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   680.165 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   680.165 GB :  : &ccw : 1;
@@ -445,8 +445,8 @@ scan No0017;
 endscan;
 *
 scan No0018;
-     start = 1997y63d18h36m21s;
-     mode = Mode0;
+     start = 1997y063d18h36m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   722.676 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   722.676 GB :  : &ccw : 1;
@@ -454,8 +454,8 @@ scan No0018;
 endscan;
 *
 scan No0019;
-     start = 1997y63d18h58m41s;
-     mode = Mode0;
+     start = 1997y063d18h58m41s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   765.186 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   765.186 GB :  : &ccw : 1;
@@ -463,8 +463,8 @@ scan No0019;
 endscan;
 *
 scan No0020;
-     start = 1997y63d19h21m01s;
-     mode = Mode0;
+     start = 1997y063d19h21m01s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   807.696 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   807.696 GB :  : &ccw : 1;
@@ -472,8 +472,8 @@ scan No0020;
 endscan;
 *
 scan No0021;
-     start = 1997y63d19h43m21s;
-     mode = Mode0;
+     start = 1997y063d19h43m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   850.207 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :   850.207 GB :  : &ccw : 1;
@@ -481,8 +481,8 @@ scan No0021;
 endscan;
 *
 scan No0022;
-     start = 1997y63d20h05m41s;
-     mode = Mode0;
+     start = 1997y063d20h05m41s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   892.717 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   892.717 GB :  : &ccw : 1;
@@ -490,8 +490,8 @@ scan No0022;
 endscan;
 *
 scan No0023;
-     start = 1997y63d20h28m01s;
-     mode = Mode0;
+     start = 1997y063d20h28m01s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   935.227 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   935.227 GB :  : &ccw : 1;
@@ -499,8 +499,8 @@ scan No0023;
 endscan;
 *
 scan No0024;
-     start = 1997y63d20h50m21s;
-     mode = Mode0;
+     start = 1997y063d20h50m21s;
+     mode = eg512-256;
      source = 3C84;
      station = Hn : 0 sec : 1320 sec :   977.738 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :   977.738 GB :  : &ccw : 1;
@@ -508,8 +508,8 @@ scan No0024;
 endscan;
 *
 scan No0025;
-     start = 1997y63d21h14m59s;
-     mode = Mode0;
+     start = 1997y063d21h14m59s;
+     mode = eg512-256;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1020.248 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1020.248 GB :  : &ccw : 1;
@@ -517,8 +517,8 @@ scan No0025;
 endscan;
 *
 scan No0026;
-     start = 1997y63d21h37m19s;
-     mode = Mode0;
+     start = 1997y063d21h37m19s;
+     mode = eg512-256;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1062.758 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1062.758 GB :  : &ccw : 1;
@@ -526,8 +526,8 @@ scan No0026;
 endscan;
 *
 scan No0027;
-     start = 1997y63d21h59m39s;
-     mode = Mode0;
+     start = 1997y063d21h59m39s;
+     mode = eg512-256;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1105.269 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1105.269 GB :  : &ccw : 1;
@@ -535,8 +535,8 @@ scan No0027;
 endscan;
 *
 scan No0028;
-     start = 1997y63d22h21m59s;
-     mode = Mode0;
+     start = 1997y063d22h21m59s;
+     mode = eg512-256;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1147.779 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1147.779 GB :  : &ccw : 1;
@@ -544,8 +544,8 @@ scan No0028;
 endscan;
 *
 scan No0029;
-     start = 1997y63d23h33m59s;
-     mode = Mode1;
+     start = 1997y063d23h33m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1190.289 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1190.289 GB :  : &ccw : 1;
@@ -553,8 +553,8 @@ scan No0029;
 endscan;
 *
 scan No0030;
-     start = 1997y64d00h00m00s;
-     mode = Mode1;
+     start = 1997y064d00h00m00s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1319 sec :  1275.310 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1319 sec :  1275.310 GB :  : &ccw : 1;
@@ -562,8 +562,8 @@ scan No0030;
 endscan;
 *
 scan No0031;
-     start = 1997y64d00h25m59s;
-     mode = Mode1;
+     start = 1997y064d00h25m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1360.331 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1360.331 GB :  : &ccw : 1;
@@ -571,8 +571,8 @@ scan No0031;
 endscan;
 *
 scan No0032;
-     start = 1997y64d00h51m59s;
-     mode = Mode1;
+     start = 1997y064d00h51m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1445.351 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1445.351 GB :  : &ccw : 1;
@@ -580,8 +580,8 @@ scan No0032;
 endscan;
 *
 scan No0033;
-     start = 1997y64d01h17m59s;
-     mode = Mode1;
+     start = 1997y064d01h17m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1530.372 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1530.372 GB :  : &ccw : 1;
@@ -589,8 +589,8 @@ scan No0033;
 endscan;
 *
 scan No0034;
-     start = 1997y64d01h43m59s;
-     mode = Mode1;
+     start = 1997y064d01h43m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1615.393 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1615.393 GB :  : &ccw : 1;
@@ -598,8 +598,8 @@ scan No0034;
 endscan;
 *
 scan No0035;
-     start = 1997y64d02h09m59s;
-     mode = Mode1;
+     start = 1997y064d02h09m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1700.413 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1700.413 GB :  : &ccw : 1;
@@ -607,8 +607,8 @@ scan No0035;
 endscan;
 *
 scan No0036;
-     start = 1997y64d02h32m19s;
-     mode = Mode1;
+     start = 1997y064d02h32m19s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1785.434 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1785.434 GB :  : &ccw : 1;
@@ -616,8 +616,8 @@ scan No0036;
 endscan;
 *
 scan No0037;
-     start = 1997y64d02h54m39s;
-     mode = Mode1;
+     start = 1997y064d02h54m39s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1870.454 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1870.454 GB :  : &ccw : 1;
@@ -625,8 +625,8 @@ scan No0037;
 endscan;
 *
 scan No0038;
-     start = 1997y64d03h16m59s;
-     mode = Mode1;
+     start = 1997y064d03h16m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  1955.475 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  1955.475 GB :  : &ccw : 1;
@@ -634,8 +634,8 @@ scan No0038;
 endscan;
 *
 scan No0039;
-     start = 1997y64d03h39m19s;
-     mode = Mode1;
+     start = 1997y064d03h39m19s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  2040.496 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  2040.496 GB :  : &ccw : 1;
@@ -643,8 +643,8 @@ scan No0039;
 endscan;
 *
 scan No0040;
-     start = 1997y64d04h01m39s;
-     mode = Mode1;
+     start = 1997y064d04h01m39s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  2125.516 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  2125.516 GB :  : &ccw : 1;
@@ -652,8 +652,8 @@ scan No0040;
 endscan;
 *
 scan No0041;
-     start = 1997y64d04h23m59s;
-     mode = Mode1;
+     start = 1997y064d04h23m59s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  2210.537 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  2210.537 GB :  : &ccw : 1;
@@ -661,8 +661,8 @@ scan No0041;
 endscan;
 *
 scan No0042;
-     start = 1997y64d04h46m19s;
-     mode = Mode1;
+     start = 1997y064d04h46m19s;
+     mode = eg512-512;
      source = J0508+84;
      station = Hn : 0 sec : 1320 sec :  2295.558 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :  2295.558 GB :  : &ccw : 1;

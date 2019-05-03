@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -52,7 +52,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def v18cm-512-8-2;
      ref $PROCEDURES = Procedure:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $IF = LO@2400MHzDPolTone/1:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 8BBCs:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -61,7 +61,7 @@ def Mode0;
      ref $DATASTREAMS = VDIF_8000-1Thr8Ch:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
 enddef;
 *
-def Mode1;
+def v6cm-512-8-2;
      ref $PROCEDURES = Procedure:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $IF = LO@5600MHzDPolTone/1:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 8BBCs:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -73,22 +73,22 @@ enddef;
 $IF;
 *
 def LO@2400MHzDPolTone/1;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_A : A : R :   2400.00 MHz : L : 1 MHz;
-     if_def = &IF_C : C : L :   2400.00 MHz : L : 1 MHz;
+* v18cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     if_def = &IF_A :  : R :   2400.00 MHz : L : 1 MHz;
+     if_def = &IF_C :  : L :   2400.00 MHz : L : 1 MHz;
 enddef;
 *
 def LO@5600MHzDPolTone/1;
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_A : A : R :   5600.00 MHz : L : 1 MHz;
-     if_def = &IF_C : C : L :   5600.00 MHz : L : 1 MHz;
+* v6cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     if_def = &IF_A :  : R :   5600.00 MHz : L : 1 MHz;
+     if_def = &IF_C :  : L :   5600.00 MHz : L : 1 MHz;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 8BBCs;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v18cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v6cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
@@ -102,15 +102,15 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v18cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v6cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      phase_cal_detect = &PCD : 1 : 16;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 1608.75MHz8x16MHz;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v18cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 1608.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 1608.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 1624.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -122,7 +122,7 @@ def 1608.75MHz8x16MHz;
 enddef;
 *
 def 4964.75MHz8x16MHz;
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v6cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 4964.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 4964.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 4980.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -136,8 +136,8 @@ enddef;
 $DATASTREAMS;
 *
 def VDIF_8000-1Thr8Ch;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v18cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* v6cm-512-8-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 8 :  32.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -154,61 +154,61 @@ $STATION;
 *
 def Br;
      ref $ANTENNA = VLBA_BR;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_BR;
 enddef;
 *
 def Fd;
      ref $ANTENNA = VLBA_FD;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_FD;
 enddef;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def Kp;
      ref $ANTENNA = VLBA_KP;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_KP;
 enddef;
 *
 def La;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_LA;
 enddef;
 *
 def Mk;
      ref $ANTENNA = VLBA_MK;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_MK;
 enddef;
 *
 def Nl;
      ref $ANTENNA = VLBA_NL;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_NL;
 enddef;
 *
 def Ov;
      ref $ANTENNA = VLBA_OV;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_OV;
 enddef;
 *
 def Pt;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_PT;
 enddef;
 *
 def Sc;
      ref $ANTENNA = VLBA_SC;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_SC;
 enddef;
 *------------------------------------------------------------------------------
@@ -316,9 +316,9 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def RDBE_PFB+Mark5C;
+def RDBE_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
-     equip =     rack : RDBE_PFB : &RDBE_PFB;
+     equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
@@ -463,7 +463,7 @@ $SCHED;
 *
 scan No0169;
      start = 2011y359d13h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :     0.000 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :     0.000 GB :  : &ccw : 1;
@@ -479,7 +479,7 @@ endscan;
 *
 scan No0170;
      start = 2011y359d13h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  2953.055 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  2963.099 GB :  : &ccw : 1;
@@ -495,7 +495,7 @@ endscan;
 *
 scan No0171;
      start = 2011y359d13h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  2970.575 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  2980.554 GB :  : &ccw : 1;
@@ -511,7 +511,7 @@ endscan;
 *
 scan No0172;
      start = 2011y359d13h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 17 sec : 290 sec :  2988.094 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  2997.944 GB :  : &ccw : 1;
@@ -527,7 +527,7 @@ endscan;
 *
 scan No0173;
      start = 2011y359d13h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 17 sec : 290 sec :  3005.678 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  3015.335 GB :  : &ccw : 1;
@@ -543,7 +543,7 @@ endscan;
 *
 scan No0174;
      start = 2011y359d13h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  3023.262 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  3032.726 GB :  : &ccw : 1;
@@ -559,7 +559,7 @@ endscan;
 *
 scan No0175;
      start = 2011y359d13h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  3040.781 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  3050.052 GB :  : &ccw : 1;
@@ -575,7 +575,7 @@ endscan;
 *
 scan No0176;
      start = 2011y359d13h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  3058.301 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  3067.378 GB :  : &ccw : 1;
@@ -591,7 +591,7 @@ endscan;
 *
 scan No0177;
      start = 2011y359d13h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  3075.756 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  3084.704 GB :  : &ccw : 1;
@@ -607,7 +607,7 @@ endscan;
 *
 scan No0178;
      start = 2011y359d13h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  3093.211 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  3102.030 GB :  : &ccw : 1;
@@ -623,7 +623,7 @@ endscan;
 *
 scan No0179;
      start = 2011y359d13h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 20 sec : 290 sec :  3110.666 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  3119.292 GB :  : &ccw : 1;
@@ -639,7 +639,7 @@ endscan;
 *
 scan No0180;
      start = 2011y359d13h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 20 sec : 290 sec :  3128.057 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  3136.554 GB :  : &ccw : 1;
@@ -655,7 +655,7 @@ endscan;
 *
 scan No0181;
      start = 2011y359d13h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 20 sec : 290 sec :  3145.448 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  3153.815 GB :  : &ccw : 1;
@@ -671,7 +671,7 @@ endscan;
 *
 scan No0182;
      start = 2011y359d14h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  3162.838 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  3171.077 GB :  : &ccw : 1;
@@ -687,7 +687,7 @@ endscan;
 *
 scan No0183;
      start = 2011y359d14h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 21 sec : 290 sec :  3181.517 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  3189.756 GB :  : &ccw : 1;
@@ -703,7 +703,7 @@ endscan;
 *
 scan No0184;
      start = 2011y359d14h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 21 sec : 290 sec :  3198.843 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  3206.953 GB :  : &ccw : 1;
@@ -719,7 +719,7 @@ endscan;
 *
 scan No0185;
      start = 2011y359d14h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  3216.169 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  3224.150 GB :  : &ccw : 1;
@@ -735,7 +735,7 @@ endscan;
 *
 scan No0186;
      start = 2011y359d14h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 22 sec : 290 sec :  3233.431 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  3241.348 GB :  : &ccw : 1;
@@ -751,7 +751,7 @@ endscan;
 *
 scan No0187;
      start = 2011y359d14h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  3250.693 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3258.545 GB :  : &ccw : 1;
@@ -767,7 +767,7 @@ endscan;
 *
 scan No0188;
      start = 2011y359d14h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 22 sec : 290 sec :  3267.954 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3275.678 GB :  : &ccw : 1;
@@ -783,7 +783,7 @@ endscan;
 *
 scan No0189;
      start = 2011y359d14h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  3285.216 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3292.811 GB :  : &ccw : 1;
@@ -799,7 +799,7 @@ endscan;
 *
 scan No0190;
      start = 2011y359d14h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  3302.413 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3309.944 GB :  : &ccw : 1;
@@ -815,7 +815,7 @@ endscan;
 *
 scan No0191;
      start = 2011y359d14h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  3319.611 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3327.077 GB :  : &ccw : 1;
@@ -831,7 +831,7 @@ endscan;
 *
 scan No0192;
      start = 2011y359d14h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  3336.808 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3344.210 GB :  : &ccw : 1;
@@ -847,7 +847,7 @@ endscan;
 *
 scan No0193;
      start = 2011y359d15h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  3354.005 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  3361.343 GB :  : &ccw : 1;
@@ -863,7 +863,7 @@ endscan;
 *
 scan No0194;
      start = 2011y359d15h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  3372.684 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3380.022 GB :  : &ccw : 1;
@@ -879,7 +879,7 @@ endscan;
 *
 scan No0195;
      start = 2011y359d15h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  3389.817 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3397.091 GB :  : &ccw : 1;
@@ -895,7 +895,7 @@ endscan;
 *
 scan No0196;
      start = 2011y359d15h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  3406.950 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3414.159 GB :  : &ccw : 1;
@@ -911,7 +911,7 @@ endscan;
 *
 scan No0197;
      start = 2011y359d15h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  3424.083 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3431.228 GB :  : &ccw : 1;
@@ -927,7 +927,7 @@ endscan;
 *
 scan No0198;
      start = 2011y359d15h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  3441.216 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3448.296 GB :  : &ccw : 1;
@@ -943,7 +943,7 @@ endscan;
 *
 scan No0199;
      start = 2011y359d15h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  3458.285 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3465.365 GB :  : &ccw : 1;
@@ -959,7 +959,7 @@ endscan;
 *
 scan No0200;
      start = 2011y359d15h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  3475.353 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3482.434 GB :  : &ccw : 1;
@@ -975,7 +975,7 @@ endscan;
 *
 scan No0201;
      start = 2011y359d15h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  3492.422 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3499.502 GB :  : &ccw : 1;
@@ -991,7 +991,7 @@ endscan;
 *
 scan No0202;
      start = 2011y359d15h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  3509.490 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3516.571 GB :  : &ccw : 1;
@@ -1007,7 +1007,7 @@ endscan;
 *
 scan No0203;
      start = 2011y359d15h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  3526.559 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3533.639 GB :  : &ccw : 1;
@@ -1023,7 +1023,7 @@ endscan;
 *
 scan No0204;
      start = 2011y359d15h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  3543.628 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3550.708 GB :  : &ccw : 1;
@@ -1039,7 +1039,7 @@ endscan;
 *
 scan No0205;
      start = 2011y359d15h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3560.696 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3567.777 GB :  : &ccw : 1;
@@ -1055,7 +1055,7 @@ endscan;
 *
 scan No0206;
      start = 2011y359d16h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  3577.700 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  3584.845 GB :  : &ccw : 1;
@@ -1071,7 +1071,7 @@ endscan;
 *
 scan No0207;
      start = 2011y359d16h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3596.379 GB :  : &ccw : 1;
      station = Fd : 26 sec : 290 sec :  3603.524 GB :  : &ccw : 1;
@@ -1087,7 +1087,7 @@ endscan;
 *
 scan No0208;
      start = 2011y359d16h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3613.383 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3620.528 GB :  : &ccw : 1;
@@ -1103,7 +1103,7 @@ endscan;
 *
 scan No0209;
      start = 2011y359d16h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3630.387 GB :  : &ccw : 1;
      station = Fd : 26 sec : 290 sec :  3637.597 GB :  : &ccw : 1;
@@ -1119,7 +1119,7 @@ endscan;
 *
 scan No0210;
      start = 2011y359d16h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3647.392 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3654.601 GB :  : &ccw : 1;
@@ -1135,7 +1135,7 @@ endscan;
 *
 scan No0211;
      start = 2011y359d16h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3664.396 GB :  : &ccw : 1;
      station = Fd : 26 sec : 290 sec :  3671.669 GB :  : &ccw : 1;
@@ -1151,7 +1151,7 @@ endscan;
 *
 scan No0212;
      start = 2011y359d16h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3681.400 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3688.674 GB :  : &ccw : 1;
@@ -1167,7 +1167,7 @@ endscan;
 *
 scan No0213;
      start = 2011y359d16h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3698.404 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3705.742 GB :  : &ccw : 1;
@@ -1183,7 +1183,7 @@ endscan;
 *
 scan No0214;
      start = 2011y359d16h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3715.408 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3722.811 GB :  : &ccw : 1;
@@ -1199,7 +1199,7 @@ endscan;
 *
 scan No0215;
      start = 2011y359d16h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3732.412 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3739.879 GB :  : &ccw : 1;
@@ -1215,7 +1215,7 @@ endscan;
 *
 scan No0216;
      start = 2011y359d16h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3749.417 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3756.948 GB :  : &ccw : 1;
@@ -1231,7 +1231,7 @@ endscan;
 *
 scan No0217;
      start = 2011y359d17h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  3766.421 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  3774.017 GB :  : &ccw : 1;
@@ -1247,7 +1247,7 @@ endscan;
 *
 scan No0218;
      start = 2011y359d17h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3785.099 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3792.695 GB :  : &ccw : 1;
@@ -1263,7 +1263,7 @@ endscan;
 *
 scan No0219;
      start = 2011y359d17h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3802.104 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3809.764 GB :  : &ccw : 1;
@@ -1279,7 +1279,7 @@ endscan;
 *
 scan No0220;
      start = 2011y359d17h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3819.108 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3826.833 GB :  : &ccw : 1;
@@ -1295,7 +1295,7 @@ endscan;
 *
 scan No0221;
      start = 2011y359d17h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3836.112 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3843.901 GB :  : &ccw : 1;
@@ -1311,7 +1311,7 @@ endscan;
 *
 scan No0222;
      start = 2011y359d17h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3853.116 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3860.970 GB :  : &ccw : 1;
@@ -1327,7 +1327,7 @@ endscan;
 *
 scan No0223;
      start = 2011y359d17h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3870.120 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3878.038 GB :  : &ccw : 1;
@@ -1343,7 +1343,7 @@ endscan;
 *
 scan No0224;
      start = 2011y359d17h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3887.124 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3895.107 GB :  : &ccw : 1;
@@ -1359,7 +1359,7 @@ endscan;
 *
 scan No0225;
      start = 2011y359d17h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3904.128 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3912.176 GB :  : &ccw : 1;
@@ -1375,7 +1375,7 @@ endscan;
 *
 scan No0226;
      start = 2011y359d17h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3921.133 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  3929.244 GB :  : &ccw : 1;
@@ -1391,7 +1391,7 @@ endscan;
 *
 scan No0227;
      start = 2011y359d17h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3938.137 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3946.313 GB :  : &ccw : 1;
@@ -1407,7 +1407,7 @@ endscan;
 *
 scan No0228;
      start = 2011y359d17h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  3955.141 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3963.446 GB :  : &ccw : 1;
@@ -1423,7 +1423,7 @@ endscan;
 *
 scan No0229;
      start = 2011y359d17h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  3972.145 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  3980.579 GB :  : &ccw : 1;
@@ -1439,7 +1439,7 @@ endscan;
 *
 scan No0230;
      start = 2011y359d18h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  3989.149 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  3997.712 GB :  : &ccw : 1;
@@ -1455,7 +1455,7 @@ endscan;
 *
 scan No0231;
      start = 2011y359d18h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  4007.828 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  4016.391 GB :  : &ccw : 1;
@@ -1471,7 +1471,7 @@ endscan;
 *
 scan No0232;
      start = 2011y359d18h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  4024.832 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  4033.524 GB :  : &ccw : 1;
@@ -1487,7 +1487,7 @@ endscan;
 *
 scan No0233;
      start = 2011y359d18h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  4041.836 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  4050.657 GB :  : &ccw : 1;
@@ -1503,7 +1503,7 @@ endscan;
 *
 scan No0234;
      start = 2011y359d18h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  4058.840 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  4067.854 GB :  : &ccw : 1;
@@ -1519,7 +1519,7 @@ endscan;
 *
 scan No0235;
      start = 2011y359d18h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  4075.909 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  4085.051 GB :  : &ccw : 1;
@@ -1535,7 +1535,7 @@ endscan;
 *
 scan No0236;
      start = 2011y359d18h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  4092.978 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  4102.249 GB :  : &ccw : 1;
@@ -1551,7 +1551,7 @@ endscan;
 *
 scan No0237;
      start = 2011y359d18h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  4110.046 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  4119.446 GB :  : &ccw : 1;
@@ -1567,7 +1567,7 @@ endscan;
 *
 scan No0238;
      start = 2011y359d18h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  4127.114 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  4136.643 GB :  : &ccw : 1;
@@ -1583,7 +1583,7 @@ endscan;
 *
 scan No0239;
      start = 2011y359d18h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  4144.183 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  4153.840 GB :  : &ccw : 1;
@@ -1599,7 +1599,7 @@ endscan;
 *
 scan No0240;
      start = 2011y359d18h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  4161.251 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  4171.102 GB :  : &ccw : 1;
@@ -1615,7 +1615,7 @@ endscan;
 *
 scan No0241;
      start = 2011y359d19h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  4178.319 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  4188.364 GB :  : &ccw : 1;
@@ -1631,7 +1631,7 @@ endscan;
 *
 scan No0242;
      start = 2011y359d19h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  4196.998 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  4207.042 GB :  : &ccw : 1;
@@ -1647,7 +1647,7 @@ endscan;
 *
 scan No0243;
      start = 2011y359d19h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  4214.131 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  4224.304 GB :  : &ccw : 1;
@@ -1663,7 +1663,7 @@ endscan;
 *
 scan No0244;
      start = 2011y359d19h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  4231.264 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  4241.630 GB :  : &ccw : 1;
@@ -1679,7 +1679,7 @@ endscan;
 *
 scan No0245;
      start = 2011y359d19h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  4248.396 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  4258.957 GB :  : &ccw : 1;
@@ -1695,7 +1695,7 @@ endscan;
 *
 scan No0246;
      start = 2011y359d19h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  4265.529 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  4276.283 GB :  : &ccw : 1;
@@ -1711,7 +1711,7 @@ endscan;
 *
 scan No0247;
      start = 2011y359d19h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  4282.662 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  4293.609 GB :  : &ccw : 1;
@@ -1727,7 +1727,7 @@ endscan;
 *
 scan No0248;
      start = 2011y359d19h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  4299.859 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  4311.000 GB :  : &ccw : 1;
@@ -1743,7 +1743,7 @@ endscan;
 *
 scan No0249;
      start = 2011y359d19h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  4317.057 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  4328.390 GB :  : &ccw : 1;
@@ -1759,7 +1759,7 @@ endscan;
 *
 scan No0250;
      start = 2011y359d19h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  4334.254 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  4345.781 GB :  : &ccw : 1;
@@ -1775,7 +1775,7 @@ endscan;
 *
 scan No0251;
      start = 2011y359d19h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  4351.451 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  4363.171 GB :  : &ccw : 1;
@@ -1791,7 +1791,7 @@ endscan;
 *
 scan No0252;
      start = 2011y359d19h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  4368.648 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  4380.626 GB :  : &ccw : 1;
@@ -1807,7 +1807,7 @@ endscan;
 *
 scan No0253;
      start = 2011y359d19h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 22 sec : 290 sec :  4385.910 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  4398.082 GB :  : &ccw : 1;
@@ -1823,7 +1823,7 @@ endscan;
 *
 scan No0254;
      start = 2011y359d20h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  4403.172 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  4415.537 GB :  : &ccw : 1;
@@ -1839,7 +1839,7 @@ endscan;
 *
 scan No0255;
      start = 2011y359d20h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  4421.851 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  4434.215 GB :  : &ccw : 1;
@@ -1855,7 +1855,7 @@ endscan;
 *
 scan No0256;
      start = 2011y359d20h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 21 sec : 290 sec :  4439.112 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  4451.735 GB :  : &ccw : 1;
@@ -1871,7 +1871,7 @@ endscan;
 *
 scan No0257;
      start = 2011y359d20h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 21 sec : 290 sec :  4456.438 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  4469.254 GB :  : &ccw : 1;
@@ -1887,7 +1887,7 @@ endscan;
 *
 scan No0258;
      start = 2011y359d20h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 21 sec : 290 sec :  4473.765 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  4486.774 GB :  : &ccw : 1;
@@ -1903,7 +1903,7 @@ endscan;
 *
 scan No0259;
      start = 2011y359d20h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 21 sec : 290 sec :  4491.091 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  4504.358 GB :  : &ccw : 1;
@@ -1919,7 +1919,7 @@ endscan;
 *
 scan No0260;
      start = 2011y359d20h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 20 sec : 290 sec :  4508.417 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  4521.942 GB :  : &ccw : 1;
@@ -1935,7 +1935,7 @@ endscan;
 *
 scan No0261;
      start = 2011y359d20h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 20 sec : 290 sec :  4525.808 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  4539.526 GB :  : &ccw : 1;
@@ -1951,7 +1951,7 @@ endscan;
 *
 scan No0262;
      start = 2011y359d20h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 20 sec : 290 sec :  4543.198 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  4557.110 GB :  : &ccw : 1;
@@ -1967,7 +1967,7 @@ endscan;
 *
 scan No0263;
      start = 2011y359d20h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 20 sec : 290 sec :  4560.589 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  4574.758 GB :  : &ccw : 1;
@@ -1983,7 +1983,7 @@ endscan;
 *
 scan No0264;
      start = 2011y359d20h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  4577.979 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  4592.407 GB :  : &ccw : 1;
@@ -1999,7 +1999,7 @@ endscan;
 *
 scan No0265;
      start = 2011y359d21h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  4595.435 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  4610.055 GB :  : &ccw : 1;
@@ -2015,7 +2015,7 @@ endscan;
 *
 scan No0266;
      start = 2011y359d21h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  4614.113 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4628.734 GB :  : &ccw : 1;
@@ -2031,7 +2031,7 @@ endscan;
 *
 scan No0267;
      start = 2011y359d21h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  4631.568 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4646.446 GB :  : &ccw : 1;
@@ -2047,7 +2047,7 @@ endscan;
 *
 scan No0268;
      start = 2011y359d21h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  4649.088 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  4664.159 GB :  : &ccw : 1;
@@ -2063,7 +2063,7 @@ endscan;
 *
 scan No0269;
      start = 2011y359d21h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  4666.607 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  4681.936 GB :  : &ccw : 1;
@@ -2079,7 +2079,7 @@ endscan;
 *
 scan No0270;
      start = 2011y359d21h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  4684.127 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  4699.712 GB :  : &ccw : 1;
@@ -2095,7 +2095,7 @@ endscan;
 *
 scan No0271;
      start = 2011y359d21h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 17 sec : 290 sec :  4701.646 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  4717.489 GB :  : &ccw : 1;
@@ -2111,7 +2111,7 @@ endscan;
 *
 scan No0272;
      start = 2011y359d21h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 17 sec : 290 sec :  4719.230 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  4735.266 GB :  : &ccw : 1;
@@ -2127,7 +2127,7 @@ endscan;
 *
 scan No0273;
      start = 2011y359d21h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 17 sec : 290 sec :  4736.814 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  4753.043 GB :  : &ccw : 1;
@@ -2143,7 +2143,7 @@ endscan;
 *
 scan No0274;
      start = 2011y359d21h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  4754.398 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  4770.820 GB :  : &ccw : 1;
@@ -2159,7 +2159,7 @@ endscan;
 *
 scan No0275;
      start = 2011y359d21h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  4772.047 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4788.597 GB :  : &ccw : 1;
@@ -2175,7 +2175,7 @@ endscan;
 *
 scan No0276;
      start = 2011y359d21h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  4789.695 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4806.309 GB :  : &ccw : 1;
@@ -2191,7 +2191,7 @@ endscan;
 *
 scan No0277;
      start = 2011y359d21h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  4807.344 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4824.021 GB :  : &ccw : 1;
@@ -2207,7 +2207,7 @@ endscan;
 *
 scan No0278;
      start = 2011y359d22h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  4824.992 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  4841.734 GB :  : &ccw : 1;
@@ -2223,7 +2223,7 @@ endscan;
 *
 scan No0279;
      start = 2011y359d22h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  4843.671 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4860.413 GB :  : &ccw : 1;
@@ -2239,7 +2239,7 @@ endscan;
 *
 scan No0280;
      start = 2011y359d22h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  4861.319 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4878.125 GB :  : &ccw : 1;
@@ -2255,7 +2255,7 @@ endscan;
 *
 scan No0281;
      start = 2011y359d22h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  4878.968 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4895.837 GB :  : &ccw : 1;
@@ -2271,7 +2271,7 @@ endscan;
 *
 scan No0282;
      start = 2011y359d22h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  4896.616 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4913.550 GB :  : &ccw : 1;
@@ -2287,7 +2287,7 @@ endscan;
 *
 scan No0283;
      start = 2011y359d22h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  4914.265 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4931.262 GB :  : &ccw : 1;
@@ -2303,7 +2303,7 @@ endscan;
 *
 scan No0284;
      start = 2011y359d22h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  4931.913 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4948.975 GB :  : &ccw : 1;
@@ -2319,7 +2319,7 @@ endscan;
 *
 scan No0285;
      start = 2011y359d22h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  4949.562 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4966.687 GB :  : &ccw : 1;
@@ -2335,7 +2335,7 @@ endscan;
 *
 scan No0286;
      start = 2011y359d22h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  4967.210 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  4984.399 GB :  : &ccw : 1;
@@ -2351,7 +2351,7 @@ endscan;
 *
 scan No0287;
      start = 2011y359d22h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  4984.858 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5002.112 GB :  : &ccw : 1;
@@ -2367,7 +2367,7 @@ endscan;
 *
 scan No0288;
      start = 2011y359d22h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5002.507 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5019.824 GB :  : &ccw : 1;
@@ -2383,7 +2383,7 @@ endscan;
 *
 scan No0289;
      start = 2011y359d23h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  5020.155 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  5037.537 GB :  : &ccw : 1;
@@ -2399,7 +2399,7 @@ endscan;
 *
 scan No0290;
      start = 2011y359d23h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5038.834 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5056.215 GB :  : &ccw : 1;
@@ -2415,7 +2415,7 @@ endscan;
 *
 scan No0291;
      start = 2011y359d23h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5056.482 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5073.928 GB :  : &ccw : 1;
@@ -2431,7 +2431,7 @@ endscan;
 *
 scan No0292;
      start = 2011y359d23h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5074.131 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5091.640 GB :  : &ccw : 1;
@@ -2447,7 +2447,7 @@ endscan;
 *
 scan No0293;
      start = 2011y359d23h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5091.779 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5109.353 GB :  : &ccw : 1;
@@ -2463,7 +2463,7 @@ endscan;
 *
 scan No0294;
      start = 2011y359d23h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5109.428 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5127.065 GB :  : &ccw : 1;
@@ -2479,7 +2479,7 @@ endscan;
 *
 scan No0295;
      start = 2011y359d23h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5127.076 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5144.777 GB :  : &ccw : 1;
@@ -2495,7 +2495,7 @@ endscan;
 *
 scan No0296;
      start = 2011y359d23h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5144.725 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5162.490 GB :  : &ccw : 1;
@@ -2511,7 +2511,7 @@ endscan;
 *
 scan No0297;
      start = 2011y359d23h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5162.373 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5180.202 GB :  : &ccw : 1;
@@ -2527,7 +2527,7 @@ endscan;
 *
 scan No0298;
      start = 2011y359d23h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5180.021 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5197.915 GB :  : &ccw : 1;
@@ -2543,7 +2543,7 @@ endscan;
 *
 scan No0299;
      start = 2011y359d23h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5197.670 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5215.627 GB :  : &ccw : 1;
@@ -2559,7 +2559,7 @@ endscan;
 *
 scan No0300;
      start = 2011y359d23h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5215.318 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  5233.339 GB :  : &ccw : 1;
@@ -2575,7 +2575,7 @@ endscan;
 *
 scan No0301;
      start = 2011y359d23h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5232.967 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  5251.116 GB :  : &ccw : 1;
@@ -2591,7 +2591,7 @@ endscan;
 *
 scan No0302;
      start = 2011y360d00h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  5250.615 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  5268.893 GB :  : &ccw : 1;
@@ -2607,7 +2607,7 @@ endscan;
 *
 scan No0303;
      start = 2011y360d00h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5269.294 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  5287.572 GB :  : &ccw : 1;
@@ -2623,7 +2623,7 @@ endscan;
 *
 scan No0304;
      start = 2011y360d00h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5286.942 GB :  : &ccw : 1;
      station = Fd : 14 sec : 290 sec :  5305.349 GB :  : &ccw : 1;
@@ -2639,7 +2639,7 @@ endscan;
 *
 scan No0305;
      start = 2011y360d00h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5304.591 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5323.125 GB :  : &ccw : 1;
@@ -2655,7 +2655,7 @@ endscan;
 *
 scan No0306;
      start = 2011y360d00h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5322.239 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5340.838 GB :  : &ccw : 1;
@@ -2671,7 +2671,7 @@ endscan;
 *
 scan No0307;
      start = 2011y360d00h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5339.888 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  5358.550 GB :  : &ccw : 1;
@@ -2687,7 +2687,7 @@ endscan;
 *
 scan No0308;
      start = 2011y360d00h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5357.536 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  5376.263 GB :  : &ccw : 1;
@@ -2703,7 +2703,7 @@ endscan;
 *
 scan No0309;
      start = 2011y360d00h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5375.185 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  5393.911 GB :  : &ccw : 1;
@@ -2719,7 +2719,7 @@ endscan;
 *
 scan No0310;
      start = 2011y360d00h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5392.833 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  5411.560 GB :  : &ccw : 1;
@@ -2735,7 +2735,7 @@ endscan;
 *
 scan No0311;
      start = 2011y360d00h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5410.481 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  5429.208 GB :  : &ccw : 1;
@@ -2751,7 +2751,7 @@ endscan;
 *
 scan No0312;
      start = 2011y360d00h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5428.130 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  5446.856 GB :  : &ccw : 1;
@@ -2767,7 +2767,7 @@ endscan;
 *
 scan No0313;
      start = 2011y360d01h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  5445.778 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  5464.440 GB :  : &ccw : 1;
@@ -2783,7 +2783,7 @@ endscan;
 *
 scan No0314;
      start = 2011y360d01h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5464.457 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  5483.119 GB :  : &ccw : 1;
@@ -2799,7 +2799,7 @@ endscan;
 *
 scan No0315;
      start = 2011y360d01h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5482.105 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  5500.639 GB :  : &ccw : 1;
@@ -2815,7 +2815,7 @@ endscan;
 *
 scan No0316;
      start = 2011y360d01h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5499.754 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  5518.158 GB :  : &ccw : 1;
@@ -2831,7 +2831,7 @@ endscan;
 *
 scan No0317;
      start = 2011y360d01h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5517.402 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  5535.678 GB :  : &ccw : 1;
@@ -2847,7 +2847,7 @@ endscan;
 *
 scan No0318;
      start = 2011y360d01h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5535.051 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  5553.197 GB :  : &ccw : 1;
@@ -2863,7 +2863,7 @@ endscan;
 *
 scan No0319;
      start = 2011y360d01h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5552.699 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  5570.652 GB :  : &ccw : 1;
@@ -2879,7 +2879,7 @@ endscan;
 *
 scan No0320;
      start = 2011y360d01h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5570.348 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  5588.107 GB :  : &ccw : 1;
@@ -2895,7 +2895,7 @@ endscan;
 *
 scan No0321;
      start = 2011y360d01h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5587.996 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  5605.562 GB :  : &ccw : 1;
@@ -2911,7 +2911,7 @@ endscan;
 *
 scan No0322;
      start = 2011y360d01h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5605.645 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  5623.018 GB :  : &ccw : 1;
@@ -2927,7 +2927,7 @@ endscan;
 *
 scan No0323;
      start = 2011y360d01h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5623.293 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  5640.408 GB :  : &ccw : 1;
@@ -2943,7 +2943,7 @@ endscan;
 *
 scan No0324;
      start = 2011y360d01h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 16 sec : 290 sec :  5640.941 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  5657.799 GB :  : &ccw : 1;
@@ -2959,7 +2959,7 @@ endscan;
 *
 scan No0325;
      start = 2011y360d01h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 16 sec : 290 sec :  5658.590 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  5675.189 GB :  : &ccw : 1;
@@ -2975,7 +2975,7 @@ endscan;
 *
 scan No0326;
      start = 2011y360d02h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  5676.238 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  5692.580 GB :  : &ccw : 1;
@@ -2991,7 +2991,7 @@ endscan;
 *
 scan No0327;
      start = 2011y360d02h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 17 sec : 290 sec :  5694.917 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  5711.259 GB :  : &ccw : 1;
@@ -3007,7 +3007,7 @@ endscan;
 *
 scan No0328;
      start = 2011y360d02h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 17 sec : 290 sec :  5712.501 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  5728.585 GB :  : &ccw : 1;
@@ -3023,7 +3023,7 @@ endscan;
 *
 scan No0329;
      start = 2011y360d02h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  5730.085 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  5745.911 GB :  : &ccw : 1;
@@ -3039,7 +3039,7 @@ endscan;
 *
 scan No0330;
      start = 2011y360d02h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  5747.604 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  5763.173 GB :  : &ccw : 1;
@@ -3055,7 +3055,7 @@ endscan;
 *
 scan No0331;
      start = 2011y360d02h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  5765.124 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  5780.435 GB :  : &ccw : 1;
@@ -3071,7 +3071,7 @@ endscan;
 *
 scan No0332;
      start = 2011y360d02h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  5782.644 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  5797.696 GB :  : &ccw : 1;
@@ -3087,7 +3087,7 @@ endscan;
 *
 scan No0333;
      start = 2011y360d02h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  5800.099 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  5814.958 GB :  : &ccw : 1;
@@ -3103,7 +3103,7 @@ endscan;
 *
 scan No0334;
      start = 2011y360d02h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  5817.554 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  5832.220 GB :  : &ccw : 1;
@@ -3119,7 +3119,7 @@ endscan;
 *
 scan No0335;
      start = 2011y360d02h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  5835.009 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  5849.417 GB :  : &ccw : 1;
@@ -3135,7 +3135,7 @@ endscan;
 *
 scan No0336;
      start = 2011y360d02h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 20 sec : 290 sec :  5852.464 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  5866.614 GB :  : &ccw : 1;
@@ -3151,7 +3151,7 @@ endscan;
 *
 scan No0337;
      start = 2011y360d03h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  5869.854 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  5883.812 GB :  : &ccw : 1;
@@ -3167,7 +3167,7 @@ endscan;
 *
 scan No0338;
      start = 2011y360d03h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 20 sec : 290 sec :  5888.533 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  5902.490 GB :  : &ccw : 1;
@@ -3183,7 +3183,7 @@ endscan;
 *
 scan No0339;
      start = 2011y360d03h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 21 sec : 290 sec :  5905.924 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  5919.688 GB :  : &ccw : 1;
@@ -3199,7 +3199,7 @@ endscan;
 *
 scan No0340;
      start = 2011y360d03h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 21 sec : 290 sec :  5923.250 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  5936.820 GB :  : &ccw : 1;
@@ -3215,7 +3215,7 @@ endscan;
 *
 scan No0341;
      start = 2011y360d03h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 21 sec : 290 sec :  5940.576 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  5953.953 GB :  : &ccw : 1;
@@ -3231,7 +3231,7 @@ endscan;
 *
 scan No0342;
      start = 2011y360d03h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 21 sec : 290 sec :  5957.902 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  5971.086 GB :  : &ccw : 1;
@@ -3247,7 +3247,7 @@ endscan;
 *
 scan No0343;
      start = 2011y360d03h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 22 sec : 290 sec :  5975.229 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  5988.219 GB :  : &ccw : 1;
@@ -3263,7 +3263,7 @@ endscan;
 *
 scan No0344;
      start = 2011y360d03h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  5992.490 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6005.352 GB :  : &ccw : 1;
@@ -3279,7 +3279,7 @@ endscan;
 *
 scan No0345;
      start = 2011y360d03h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 22 sec : 290 sec :  6009.752 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6022.484 GB :  : &ccw : 1;
@@ -3295,7 +3295,7 @@ endscan;
 *
 scan No0346;
      start = 2011y360d03h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  6027.014 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6039.617 GB :  : &ccw : 1;
@@ -3311,7 +3311,7 @@ endscan;
 *
 scan No0347;
      start = 2011y360d03h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  6044.275 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6056.686 GB :  : &ccw : 1;
@@ -3327,7 +3327,7 @@ endscan;
 *
 scan No0348;
      start = 2011y360d03h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  6061.473 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6073.754 GB :  : &ccw : 1;
@@ -3343,7 +3343,7 @@ endscan;
 *
 scan No0349;
      start = 2011y360d03h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  6078.670 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6090.822 GB :  : &ccw : 1;
@@ -3359,7 +3359,7 @@ endscan;
 *
 scan No0350;
      start = 2011y360d04h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  6095.867 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  6107.891 GB :  : &ccw : 1;
@@ -3375,7 +3375,7 @@ endscan;
 *
 scan No0351;
      start = 2011y360d04h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  6114.546 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6126.569 GB :  : &ccw : 1;
@@ -3391,7 +3391,7 @@ endscan;
 *
 scan No0352;
      start = 2011y360d04h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  6131.743 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6143.638 GB :  : &ccw : 1;
@@ -3407,7 +3407,7 @@ endscan;
 *
 scan No0353;
      start = 2011y360d04h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  6148.876 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6160.706 GB :  : &ccw : 1;
@@ -3423,7 +3423,7 @@ endscan;
 *
 scan No0354;
      start = 2011y360d04h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  6166.009 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6177.774 GB :  : &ccw : 1;
@@ -3439,7 +3439,7 @@ endscan;
 *
 scan No0355;
      start = 2011y360d04h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  6183.142 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6194.843 GB :  : &ccw : 1;
@@ -3455,7 +3455,7 @@ endscan;
 *
 scan No0356;
      start = 2011y360d04h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  6200.274 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6211.911 GB :  : &ccw : 1;
@@ -3471,7 +3471,7 @@ endscan;
 *
 scan No0357;
      start = 2011y360d04h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  6217.407 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6228.979 GB :  : &ccw : 1;
@@ -3487,7 +3487,7 @@ endscan;
 *
 scan No0358;
      start = 2011y360d04h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  6234.476 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6246.048 GB :  : &ccw : 1;
@@ -3503,7 +3503,7 @@ endscan;
 *
 scan No0359;
      start = 2011y360d04h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  6251.544 GB :  : &ccw : 1;
      station = Fd : 26 sec : 290 sec :  6263.116 GB :  : &ccw : 1;
@@ -3519,7 +3519,7 @@ endscan;
 *
 scan No0360;
      start = 2011y360d04h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  6268.612 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6280.120 GB :  : &ccw : 1;
@@ -3535,7 +3535,7 @@ endscan;
 *
 scan No0361;
      start = 2011y360d05h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  6285.681 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  6297.188 GB :  : &ccw : 1;
@@ -3551,7 +3551,7 @@ endscan;
 *
 scan No0362;
      start = 2011y360d05h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  6304.359 GB :  : &ccw : 1;
      station = Fd : 26 sec : 290 sec :  6315.867 GB :  : &ccw : 1;
@@ -3567,7 +3567,7 @@ endscan;
 *
 scan No0363;
      start = 2011y360d05h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  6321.428 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6332.871 GB :  : &ccw : 1;
@@ -3583,7 +3583,7 @@ endscan;
 *
 scan No0364;
      start = 2011y360d05h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6338.496 GB :  : &ccw : 1;
      station = Fd : 26 sec : 290 sec :  6349.939 GB :  : &ccw : 1;
@@ -3599,7 +3599,7 @@ endscan;
 *
 scan No0365;
      start = 2011y360d05h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6355.500 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6366.943 GB :  : &ccw : 1;
@@ -3615,7 +3615,7 @@ endscan;
 *
 scan No0366;
      start = 2011y360d05h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6372.504 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6384.012 GB :  : &ccw : 1;
@@ -3631,7 +3631,7 @@ endscan;
 *
 scan No0367;
      start = 2011y360d05h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6389.508 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6401.080 GB :  : &ccw : 1;
@@ -3647,7 +3647,7 @@ endscan;
 *
 scan No0368;
      start = 2011y360d05h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6406.512 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6418.148 GB :  : &ccw : 1;
@@ -3663,7 +3663,7 @@ endscan;
 *
 scan No0369;
      start = 2011y360d05h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6423.516 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6435.217 GB :  : &ccw : 1;
@@ -3679,7 +3679,7 @@ endscan;
 *
 scan No0370;
      start = 2011y360d05h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6440.520 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6452.285 GB :  : &ccw : 1;
@@ -3695,7 +3695,7 @@ endscan;
 *
 scan No0371;
      start = 2011y360d05h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6457.523 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6469.354 GB :  : &ccw : 1;
@@ -3711,7 +3711,7 @@ endscan;
 *
 scan No0372;
      start = 2011y360d05h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6474.527 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6486.422 GB :  : &ccw : 1;
@@ -3727,7 +3727,7 @@ endscan;
 *
 scan No0373;
      start = 2011y360d05h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6491.531 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6503.490 GB :  : &ccw : 1;
@@ -3743,7 +3743,7 @@ endscan;
 *
 scan No0374;
      start = 2011y360d06h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  6508.535 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  6520.559 GB :  : &ccw : 1;
@@ -3759,7 +3759,7 @@ endscan;
 *
 scan No0375;
      start = 2011y360d06h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6527.214 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6539.237 GB :  : &ccw : 1;
@@ -3775,7 +3775,7 @@ endscan;
 *
 scan No0376;
      start = 2011y360d06h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6544.218 GB :  : &ccw : 1;
      station = Fd : 25 sec : 290 sec :  6556.306 GB :  : &ccw : 1;
@@ -3791,7 +3791,7 @@ endscan;
 *
 scan No0377;
      start = 2011y360d06h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6561.222 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6573.374 GB :  : &ccw : 1;
@@ -3807,7 +3807,7 @@ endscan;
 *
 scan No0378;
      start = 2011y360d06h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6578.226 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6590.507 GB :  : &ccw : 1;
@@ -3823,7 +3823,7 @@ endscan;
 *
 scan No0379;
      start = 2011y360d06h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6595.229 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6607.640 GB :  : &ccw : 1;
@@ -3839,7 +3839,7 @@ endscan;
 *
 scan No0380;
      start = 2011y360d06h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6612.233 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6624.772 GB :  : &ccw : 1;
@@ -3855,7 +3855,7 @@ endscan;
 *
 scan No0381;
      start = 2011y360d06h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6629.237 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6641.905 GB :  : &ccw : 1;
@@ -3871,7 +3871,7 @@ endscan;
 *
 scan No0382;
      start = 2011y360d06h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6646.241 GB :  : &ccw : 1;
      station = Fd : 24 sec : 290 sec :  6659.038 GB :  : &ccw : 1;
@@ -3887,7 +3887,7 @@ endscan;
 *
 scan No0383;
      start = 2011y360d06h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6663.245 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  6676.171 GB :  : &ccw : 1;
@@ -3903,7 +3903,7 @@ endscan;
 *
 scan No0384;
      start = 2011y360d06h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6680.249 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  6693.368 GB :  : &ccw : 1;
@@ -3919,7 +3919,7 @@ endscan;
 *
 scan No0385;
      start = 2011y360d07h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  6697.253 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  6710.565 GB :  : &ccw : 1;
@@ -3935,7 +3935,7 @@ endscan;
 *
 scan No0386;
      start = 2011y360d07h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6715.932 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  6729.244 GB :  : &ccw : 1;
@@ -3951,7 +3951,7 @@ endscan;
 *
 scan No0387;
      start = 2011y360d07h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6732.936 GB :  : &ccw : 1;
      station = Fd : 23 sec : 290 sec :  6746.441 GB :  : &ccw : 1;
@@ -3967,7 +3967,7 @@ endscan;
 *
 scan No0388;
      start = 2011y360d07h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6749.939 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  6763.639 GB :  : &ccw : 1;
@@ -3983,7 +3983,7 @@ endscan;
 *
 scan No0389;
      start = 2011y360d07h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 26 sec : 290 sec :  6766.943 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  6780.900 GB :  : &ccw : 1;
@@ -3999,7 +3999,7 @@ endscan;
 *
 scan No0390;
      start = 2011y360d07h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 26 sec : 290 sec :  6783.947 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  6798.162 GB :  : &ccw : 1;
@@ -4015,7 +4015,7 @@ endscan;
 *
 scan No0391;
      start = 2011y360d07h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  6800.951 GB :  : &ccw : 1;
      station = Fd : 22 sec : 290 sec :  6815.424 GB :  : &ccw : 1;
@@ -4031,7 +4031,7 @@ endscan;
 *
 scan No0392;
      start = 2011y360d07h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  6818.020 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  6832.686 GB :  : &ccw : 1;
@@ -4047,7 +4047,7 @@ endscan;
 *
 scan No0393;
      start = 2011y360d07h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  6835.088 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  6850.012 GB :  : &ccw : 1;
@@ -4063,7 +4063,7 @@ endscan;
 *
 scan No0394;
      start = 2011y360d07h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  6852.156 GB :  : &ccw : 1;
      station = Fd : 21 sec : 290 sec :  6867.338 GB :  : &ccw : 1;
@@ -4079,7 +4079,7 @@ endscan;
 *
 scan No0395;
      start = 2011y360d07h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 25 sec : 290 sec :  6869.225 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  6884.664 GB :  : &ccw : 1;
@@ -4095,7 +4095,7 @@ endscan;
 *
 scan No0396;
      start = 2011y360d07h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 25 sec : 290 sec :  6886.293 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  6902.055 GB :  : &ccw : 1;
@@ -4111,7 +4111,7 @@ endscan;
 *
 scan No0397;
      start = 2011y360d07h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  6903.361 GB :  : &ccw : 1;
      station = Fd : 20 sec : 290 sec :  6919.445 GB :  : &ccw : 1;
@@ -4127,7 +4127,7 @@ endscan;
 *
 scan No0398;
      start = 2011y360d08h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  6920.494 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  6936.836 GB :  : &ccw : 1;
@@ -4143,7 +4143,7 @@ endscan;
 *
 scan No0399;
      start = 2011y360d08h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 24 sec : 290 sec :  6939.173 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  6955.515 GB :  : &ccw : 1;
@@ -4159,7 +4159,7 @@ endscan;
 *
 scan No0400;
      start = 2011y360d08h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 24 sec : 290 sec :  6956.306 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  6972.970 GB :  : &ccw : 1;
@@ -4175,7 +4175,7 @@ endscan;
 *
 scan No0401;
      start = 2011y360d08h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  6973.438 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  6990.425 GB :  : &ccw : 1;
@@ -4191,7 +4191,7 @@ endscan;
 *
 scan No0402;
      start = 2011y360d08h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  6990.636 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  7007.880 GB :  : &ccw : 1;
@@ -4207,7 +4207,7 @@ endscan;
 *
 scan No0403;
      start = 2011y360d08h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 23 sec : 290 sec :  7007.833 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  7025.399 GB :  : &ccw : 1;
@@ -4223,7 +4223,7 @@ endscan;
 *
 scan No0404;
      start = 2011y360d08h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 23 sec : 290 sec :  7025.030 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  7042.919 GB :  : &ccw : 1;
@@ -4239,7 +4239,7 @@ endscan;
 *
 scan No0405;
      start = 2011y360d08h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  7042.228 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  7060.438 GB :  : &ccw : 1;
@@ -4255,7 +4255,7 @@ endscan;
 *
 scan No0406;
      start = 2011y360d08h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 22 sec : 290 sec :  7059.489 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  7078.022 GB :  : &ccw : 1;
@@ -4271,7 +4271,7 @@ endscan;
 *
 scan No0407;
      start = 2011y360d08h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 22 sec : 290 sec :  7076.751 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7095.606 GB :  : &ccw : 1;
@@ -4287,7 +4287,7 @@ endscan;
 *
 scan No0408;
      start = 2011y360d08h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 21 sec : 290 sec :  7094.013 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7113.255 GB :  : &ccw : 1;
@@ -4303,7 +4303,7 @@ endscan;
 *
 scan No0409;
      start = 2011y360d09h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  7111.339 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  7130.903 GB :  : &ccw : 1;
@@ -4319,7 +4319,7 @@ endscan;
 *
 scan No0410;
      start = 2011y360d09h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 21 sec : 290 sec :  7130.018 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  7149.582 GB :  : &ccw : 1;
@@ -4335,7 +4335,7 @@ endscan;
 *
 scan No0411;
      start = 2011y360d09h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 20 sec : 290 sec :  7147.344 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  7167.294 GB :  : &ccw : 1;
@@ -4351,7 +4351,7 @@ endscan;
 *
 scan No0412;
      start = 2011y360d09h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 20 sec : 290 sec :  7164.734 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  7185.007 GB :  : &ccw : 1;
@@ -4367,7 +4367,7 @@ endscan;
 *
 scan No0413;
      start = 2011y360d09h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 20 sec : 290 sec :  7182.125 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7202.719 GB :  : &ccw : 1;
@@ -4383,7 +4383,7 @@ endscan;
 *
 scan No0414;
      start = 2011y360d09h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7199.516 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7220.368 GB :  : &ccw : 1;
@@ -4399,7 +4399,7 @@ endscan;
 *
 scan No0415;
      start = 2011y360d09h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7216.971 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7238.016 GB :  : &ccw : 1;
@@ -4415,7 +4415,7 @@ endscan;
 *
 scan No0416;
      start = 2011y360d09h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7234.426 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7255.665 GB :  : &ccw : 1;
@@ -4431,7 +4431,7 @@ endscan;
 *
 scan No0417;
      start = 2011y360d09h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  7251.881 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7273.313 GB :  : &ccw : 1;
@@ -4447,7 +4447,7 @@ endscan;
 *
 scan No0418;
      start = 2011y360d09h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  7269.400 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7290.961 GB :  : &ccw : 1;
@@ -4463,7 +4463,7 @@ endscan;
 *
 scan No0419;
      start = 2011y360d09h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  7286.920 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7308.610 GB :  : &ccw : 1;
@@ -4479,7 +4479,7 @@ endscan;
 *
 scan No0420;
      start = 2011y360d09h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  7304.439 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7326.258 GB :  : &ccw : 1;
@@ -4495,7 +4495,7 @@ endscan;
 *
 scan No0421;
      start = 2011y360d09h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  7321.959 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7343.907 GB :  : &ccw : 1;
@@ -4511,7 +4511,7 @@ endscan;
 *
 scan No0422;
      start = 2011y360d10h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  7339.479 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  7361.555 GB :  : &ccw : 1;
@@ -4527,7 +4527,7 @@ endscan;
 *
 scan No0423;
      start = 2011y360d10h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  7358.157 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7380.234 GB :  : &ccw : 1;
@@ -4543,7 +4543,7 @@ endscan;
 *
 scan No0424;
      start = 2011y360d10h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7375.677 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7397.882 GB :  : &ccw : 1;
@@ -4559,7 +4559,7 @@ endscan;
 *
 scan No0425;
      start = 2011y360d10h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7393.132 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7415.531 GB :  : &ccw : 1;
@@ -4575,7 +4575,7 @@ endscan;
 *
 scan No0426;
      start = 2011y360d10h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7410.587 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7433.179 GB :  : &ccw : 1;
@@ -4591,7 +4591,7 @@ endscan;
 *
 scan No0427;
      start = 2011y360d10h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7428.042 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7450.828 GB :  : &ccw : 1;
@@ -4607,7 +4607,7 @@ endscan;
 *
 scan No0428;
      start = 2011y360d10h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7445.497 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7468.476 GB :  : &ccw : 1;
@@ -4623,7 +4623,7 @@ endscan;
 *
 scan No0429;
      start = 2011y360d10h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7462.952 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7486.125 GB :  : &ccw : 1;
@@ -4639,7 +4639,7 @@ endscan;
 *
 scan No0430;
      start = 2011y360d10h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7480.407 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7503.773 GB :  : &ccw : 1;
@@ -4655,7 +4655,7 @@ endscan;
 *
 scan No0431;
      start = 2011y360d10h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7497.862 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7521.421 GB :  : &ccw : 1;
@@ -4671,7 +4671,7 @@ endscan;
 *
 scan No0432;
      start = 2011y360d10h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7515.317 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7539.070 GB :  : &ccw : 1;
@@ -4687,7 +4687,7 @@ endscan;
 *
 scan No0433;
      start = 2011y360d11h00m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  7532.772 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  7556.718 GB :  : &ccw : 1;
@@ -4703,7 +4703,7 @@ endscan;
 *
 scan No0434;
      start = 2011y360d11h04m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7551.451 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7575.397 GB :  : &ccw : 1;
@@ -4719,7 +4719,7 @@ endscan;
 *
 scan No0435;
      start = 2011y360d11h09m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7568.906 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7593.045 GB :  : &ccw : 1;
@@ -4735,7 +4735,7 @@ endscan;
 *
 scan No0436;
      start = 2011y360d11h14m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7586.361 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7610.694 GB :  : &ccw : 1;
@@ -4751,7 +4751,7 @@ endscan;
 *
 scan No0437;
      start = 2011y360d11h19m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7603.816 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7628.342 GB :  : &ccw : 1;
@@ -4767,7 +4767,7 @@ endscan;
 *
 scan No0438;
      start = 2011y360d11h24m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7621.271 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7645.991 GB :  : &ccw : 1;
@@ -4783,7 +4783,7 @@ endscan;
 *
 scan No0439;
      start = 2011y360d11h29m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7638.727 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7663.639 GB :  : &ccw : 1;
@@ -4799,7 +4799,7 @@ endscan;
 *
 scan No0440;
      start = 2011y360d11h33m50s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7656.182 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7681.288 GB :  : &ccw : 1;
@@ -4815,7 +4815,7 @@ endscan;
 *
 scan No0441;
      start = 2011y360d11h38m40s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7673.637 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7698.936 GB :  : &ccw : 1;
@@ -4831,7 +4831,7 @@ endscan;
 *
 scan No0442;
      start = 2011y360d11h43m30s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7691.092 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  7716.584 GB :  : &ccw : 1;
@@ -4847,7 +4847,7 @@ endscan;
 *
 scan No0443;
      start = 2011y360d11h48m20s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7708.547 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  7734.297 GB :  : &ccw : 1;
@@ -4863,7 +4863,7 @@ endscan;
 *
 scan No0444;
      start = 2011y360d11h53m10s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7726.002 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  7752.009 GB :  : &ccw : 1;
@@ -4879,7 +4879,7 @@ endscan;
 *
 scan No0445;
      start = 2011y360d11h58m00s;
-     mode = Mode0;
+     mode = v18cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7743.457 GB :  : &ccw : 1;
      station = Fd : 15 sec : 290 sec :  7769.722 GB :  : &ccw : 1;
@@ -4895,7 +4895,7 @@ endscan;
 *
 scan No0446;
      start = 2011y360d12h04m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 0 sec : 290 sec :  7760.912 GB :  : &ccw : 1;
      station = Fd : 0 sec : 290 sec :  7787.434 GB :  : &ccw : 1;
@@ -4911,7 +4911,7 @@ endscan;
 *
 scan No0447;
      start = 2011y360d12h09m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7779.591 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7806.113 GB :  : &ccw : 1;
@@ -4927,7 +4927,7 @@ endscan;
 *
 scan No0448;
      start = 2011y360d12h14m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7797.046 GB :  : &ccw : 1;
      station = Fd : 16 sec : 290 sec :  7823.761 GB :  : &ccw : 1;
@@ -4943,7 +4943,7 @@ endscan;
 *
 scan No0449;
      start = 2011y360d12h19m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7814.501 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  7841.410 GB :  : &ccw : 1;
@@ -4959,7 +4959,7 @@ endscan;
 *
 scan No0450;
      start = 2011y360d12h24m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7831.956 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  7858.994 GB :  : &ccw : 1;
@@ -4975,7 +4975,7 @@ endscan;
 *
 scan No0451;
      start = 2011y360d12h29m00s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 19 sec : 290 sec :  7849.411 GB :  : &ccw : 1;
      station = Fd : 17 sec : 290 sec :  7876.578 GB :  : &ccw : 1;
@@ -4991,7 +4991,7 @@ endscan;
 *
 scan No0452;
      start = 2011y360d12h33m50s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 19 sec : 290 sec :  7866.866 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  7894.162 GB :  : &ccw : 1;
@@ -5007,7 +5007,7 @@ endscan;
 *
 scan No0453;
      start = 2011y360d12h38m40s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  7884.321 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  7911.681 GB :  : &ccw : 1;
@@ -5023,7 +5023,7 @@ endscan;
 *
 scan No0454;
      start = 2011y360d12h43m30s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  7901.841 GB :  : &ccw : 1;
      station = Fd : 18 sec : 290 sec :  7929.201 GB :  : &ccw : 1;
@@ -5039,7 +5039,7 @@ endscan;
 *
 scan No0455;
      start = 2011y360d12h48m20s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 0718+793;
      station = Br : 18 sec : 290 sec :  7919.360 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  7946.720 GB :  : &ccw : 1;
@@ -5055,7 +5055,7 @@ endscan;
 *
 scan No0456;
      start = 2011y360d12h53m10s;
-     mode = Mode1;
+     mode = v6cm-512-8-2;
      source = 1053+815;
      station = Br : 18 sec : 290 sec :  7936.880 GB :  : &ccw : 1;
      station = Fd : 19 sec : 290 sec :  7964.175 GB :  : &ccw : 1;

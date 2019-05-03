@@ -1,6 +1,7 @@
 VEX_rev = 1.5;
-*    VEX/SCHED:  1.5.87
-*    Other versions: Sched:  11.5  Plot: 1.06  JPL-ephem: 1.01
+*    SCHED vers: 
+*    VEX/SCHED:  1.5.2
+*    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
      ref $EXPER = tstsets;
@@ -32,478 +33,1371 @@ def tstsets;
 *
      target_correlator = VLBADIFX;
 *
-*    integr_time    :     2.000 s
-*    number_channels:    64
-*    number_antenna :  2
+*    integr_time    : 2.0 s
+*    number_channels: 64
+*    number_antenna : 2
 *    cross_polarize : No
 *    weight_func    : UNIFORM
 *    distrib_medium : FTP
 *    distrib_format : FITS
 *    source_pos_cat : STANDARD
-*    distribute_to  : 
+*    distribute_to  :
 *                     Craig Walker
 *                     P. O. Box O
 *                     Socorro NM 87801
+*                     
 *
 enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
 def vsx-128-4-2-R;
-     ref $PROCEDURES = Mode_01;
-     ref $FREQ = DualFreq4x8MHz:Hn:La:Pt;
-     ref $IF = DualFreqRPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzRPolTone/1:Hn:La:Pt;
      ref $BBC = 4BBCs:Hn:La:Pt;
-     ref $TRACKS = VDIF.4Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect:Hn:La:Pt;
+     ref $FREQ = 2262.75MHz4x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.4Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect:Hn:La:Pt;
 enddef;
 *
 def vsx-128-4-2;
-     ref $PROCEDURES = Mode_02;
-     ref $FREQ = DualFreq4x8MHz#02:Hn:La:Pt;
-     ref $IF = DualFreqDPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzDPolTone/1:Hn:La:Pt;
      ref $BBC = 4BBCs#02:Hn:La:Pt;
-     ref $TRACKS = VDIF.4Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect:Hn:La:Pt;
+     ref $FREQ = 2266.75MHz4x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.4Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#02:Hn:La:Pt;
 enddef;
 *
 def vsx-256-8-2-R;
-     ref $PROCEDURES = Mode_03;
-     ref $FREQ = DualFreq8x8MHz:Hn:La:Pt;
-     ref $IF = DualFreqRPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzRPolTone/1:Hn:La:Pt;
      ref $BBC = 8BBCs:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 2254.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#03:Hn:La:Pt;
 enddef;
 *
 def vsx-256-8-2;
-     ref $PROCEDURES = Mode_04;
-     ref $FREQ = DualFreq8x8MHz#02:Hn:La:Pt;
-     ref $IF = DualFreqDPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzDPolTone/1:Hn:La:Pt;
      ref $BBC = 8BBCs#02:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 2262.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#04:Hn:La:Pt;
 enddef;
 *
 def v18cm-256-8-2-L-UL;
-     ref $PROCEDURES = Mode_05;
-     ref $FREQ = 1640.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@2600MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#03:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 1640.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect:Hn:La:Pt;
 enddef;
 *
 def v18cm-256-8-2-UL;
-     ref $PROCEDURES = Mode_06;
-     ref $FREQ = 1659.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@2600MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 1659.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#02:Hn:La:Pt;
 enddef;
 *
 def v13cm-256-8-2-R-UL;
-     ref $PROCEDURES = Mode_07;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzRPolTone/1#02:Hn:La:Pt;
+     ref $BBC = 8BBCs#05:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
      ref $FREQ = 2247.75MHz8x8MHz:Hn:La:Pt;
-     ref $IF = LO@3100MHzRPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#03:Hn:La:Pt;
 enddef;
 *
 def v13cm-256-8-2-UL;
-     ref $PROCEDURES = Mode_08;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzDPolTone/1#02:Hn:La:Pt;
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
      ref $FREQ = 2263.75MHz8x8MHz:Hn:La:Pt;
-     ref $IF = LO@3100MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#04:Hn:La:Pt;
 enddef;
 *
 def v6cm-256-8-2-L-UL;
-     ref $PROCEDURES = Mode_09;
-     ref $FREQ = 4968.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@5600MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#03:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 4968.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#05:Hn:La:Pt;
 enddef;
 *
 def v6cm-256-8-2-UL;
-     ref $PROCEDURES = Mode_10;
-     ref $FREQ = 4979.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@5600MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 4979.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#06:Hn:La:Pt;
 enddef;
 *
 def v4cm-256-8-2-R-UL;
-     ref $PROCEDURES = Mode_11;
-     ref $FREQ = 8395.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@7600MHzRPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#05:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#06:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 8395.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#07:Hn:La:Pt;
 enddef;
 *
 def v4cm-256-8-2-UL;
-     ref $PROCEDURES = Mode_12;
-     ref $FREQ = 8413.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@7600MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#07:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 8413.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#08:Hn:La:Pt;
 enddef;
 *
 def v2cm-256-8-2-L-UL;
-     ref $PROCEDURES = Mode_13;
-     ref $FREQ = 15339.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@14600MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#06:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#08:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 15339.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#09:Hn:La:Pt;
 enddef;
 *
 def v2cm-256-8-2-UL;
-     ref $PROCEDURES = Mode_14;
-     ref $FREQ = 15357.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@14600MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#07:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 15357.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#10:Hn:La:Pt;
 enddef;
 *
 def v1cm-256-8-2-L-UL;
-     ref $PROCEDURES = Mode_15;
-     ref $FREQ = 22210.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@21500MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#06:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#08:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 22210.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#11:Hn:La:Pt;
 enddef;
 *
 def v1cm-256-8-2-UL;
-     ref $PROCEDURES = Mode_16;
-     ref $FREQ = 22225.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@21500MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#07:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 22225.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#12:Hn:La:Pt;
 enddef;
 *
 def v7mm-256-8-2-L-UL;
-     ref $PROCEDURES = Mode_17;
-     ref $FREQ = 43193.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@42400MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#03:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 43193.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#13:Hn:La:Pt;
 enddef;
 *
 def v7mm-256-8-2-UL;
-     ref $PROCEDURES = Mode_18;
-     ref $FREQ = 43209.75MHz8x8MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@42400MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 43209.75MHz8x8MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#14:Hn:La:Pt;
 enddef;
 *
 def vsx-256-8-2-R-UL;
-     ref $PROCEDURES = Mode_19;
-     ref $FREQ = DualFreq8x8MHz#03:Hn:La:Pt;
-     ref $IF = DualFreqRPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzRPolTone/1:Hn:La:Pt;
      ref $BBC = 8BBCs:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 2262.75MHz8x8MHz#02:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#15:Hn:La:Pt;
 enddef;
 *
 def vsx-256-8-2-UL;
-     ref $PROCEDURES = Mode_20;
-     ref $FREQ = DualFreq8x8MHz#04:Hn:La:Pt;
-     ref $IF = DualFreqDPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzDPolTone/1:Hn:La:Pt;
      ref $BBC = 8BBCs#02:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect#02:Hn:La:Pt;
+     ref $FREQ = 2262.75MHz8x8MHz#03:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = DsbDetect#16:Hn:La:Pt;
 enddef;
 *
 def v18cm-512-8-2-L;
-     ref $PROCEDURES = Mode_21;
-     ref $FREQ = 1542.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@2400MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#03:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 1542.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#05:Hn:La:Pt;
 enddef;
 *
 def v18cm-512-8-2;
-     ref $PROCEDURES = Mode_22;
-     ref $FREQ = 1608.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@2400MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 1608.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#06:Hn:La:Pt;
 enddef;
 *
 def v13cm-512-8-2-R;
-     ref $PROCEDURES = Mode_23;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzRPolTone/1#02:Hn:La:Pt;
+     ref $BBC = 8BBCs#05:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
      ref $FREQ = 2210.75MHz8x16MHz:Hn:La:Pt;
-     ref $IF = LO@3100MHzRPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#07:Hn:La:Pt;
 enddef;
 *
 def v13cm-512-8-2;
-     ref $PROCEDURES = Mode_24;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzDPolTone/1#02:Hn:La:Pt;
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
      ref $FREQ = 2234.75MHz8x16MHz:Hn:La:Pt;
-     ref $IF = LO@3100MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#08:Hn:La:Pt;
 enddef;
 *
 def v6cm-512-8-2-L;
-     ref $PROCEDURES = Mode_25;
-     ref $FREQ = 4924.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@5600MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#03:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 4924.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#09:Hn:La:Pt;
 enddef;
 *
 def v6cm-512-8-2;
-     ref $PROCEDURES = Mode_26;
-     ref $FREQ = 4964.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@5600MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 4964.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#10:Hn:La:Pt;
 enddef;
 *
 def v4cm-512-8-2-R;
-     ref $PROCEDURES = Mode_27;
-     ref $FREQ = 8352.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@7600MHzRPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#05:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#06:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 8352.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#11:Hn:La:Pt;
 enddef;
 *
 def v4cm-512-8-2;
-     ref $PROCEDURES = Mode_28;
-     ref $FREQ = 8384.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@7600MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#07:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 8384.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#12:Hn:La:Pt;
 enddef;
 *
 def v2cm-512-8-2-L;
-     ref $PROCEDURES = Mode_29;
-     ref $FREQ = 15296.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@14600MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#06:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#08:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 15296.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#13:Hn:La:Pt;
 enddef;
 *
 def v2cm-512-8-2;
-     ref $PROCEDURES = Mode_30;
-     ref $FREQ = 15328.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@14600MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#07:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 15328.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#14:Hn:La:Pt;
 enddef;
 *
 def v1cm-512-8-2-L;
-     ref $PROCEDURES = Mode_31;
-     ref $FREQ = 22164.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@21500MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#06:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#08:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 22164.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#15:Hn:La:Pt;
 enddef;
 *
 def v1cm-512-8-2;
-     ref $PROCEDURES = Mode_32;
-     ref $FREQ = 22196.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@21500MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#04:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#07:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 22196.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#16:Hn:La:Pt;
 enddef;
 *
 def v7mm-512-8-2-L;
-     ref $PROCEDURES = Mode_33;
-     ref $FREQ = 43148.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@42400MHzLPolTone/1:Hn:La:Pt;
-     ref $BBC = 4BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#03:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 43148.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#17:Hn:La:Pt;
 enddef;
 *
 def v7mm-512-8-2;
-     ref $PROCEDURES = Mode_34;
-     ref $FREQ = 43180.75MHz8x16MHz:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
      ref $IF = LO@42400MHzDPolTone/1:Hn:La:Pt;
-     ref $BBC = 8BBCs#03:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $BBC = 8BBCs#04:Hn:La:Pt;
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 43180.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#18:Hn:La:Pt;
 enddef;
 *
 def vsx-512-8-2-R;
-     ref $PROCEDURES = Mode_35;
-     ref $FREQ = DualFreq8x16MHz:Hn:La:Pt;
-     ref $IF = DualFreqRPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzRPolTone/1:Hn:La:Pt;
      ref $BBC = 8BBCs:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 2234.75MHz8x16MHz#02:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#19:Hn:La:Pt;
 enddef;
 *
 def vsx-512-8-2;
-     ref $PROCEDURES = Mode_36;
-     ref $FREQ = DualFreq8x16MHz#02:Hn:La:Pt;
-     ref $IF = DualFreqDPolTone/1:Hn:La:Pt;
+     ref $PROCEDURES = Procedure:Hn:La:Pt;
+     ref $IF = LO@3100MHzDPolTone/1:Hn:La:Pt;
      ref $BBC = 8BBCs#02:Hn:La:Pt;
-     ref $TRACKS = VDIF.8Ch2bit1to1#02:Hn:La:Pt;
-*    ref $HEAD_POS = DiskVoid <= obsolete definition
+     ref $PHASE_CAL_DETECT = Detect#03:Hn:La:Pt;
+     ref $FREQ = 2250.75MHz8x16MHz:Hn:La:Pt;
+     ref $TRACKS = VDIF5032.8Ch2bit1to1:Hn:La:Pt;
      ref $ROLL = NoRoll:Hn:La:Pt;
-*    ref $PASS_ORDER = DiskVoid <= obsolete definition
-     ref $PHASE_CAL_DETECT = UsbDetect#20:Hn:La:Pt;
+enddef;
+*------------------------------------------------------------------------------
+$IF;
+*
+def LO@14600MHzDPolTone/1;
+* v2cm-256-8-2-UL: Hn, La, Pt
+* v2cm-512-8-2: Hn, La, Pt
+     if_def = &IF_B : B : R :  14600.00 MHz : U : 1 MHz;
+     if_def = &IF_D : D : L :  14600.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@14600MHzLPolTone/1;
+* v2cm-256-8-2-L-UL: Hn, La, Pt
+* v2cm-512-8-2-L: Hn, La, Pt
+     if_def = &IF_D : D : L :  14600.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@21500MHzDPolTone/1;
+* v1cm-256-8-2-UL: Hn, La, Pt
+* v1cm-512-8-2: Hn, La, Pt
+     if_def = &IF_B : B : R :  21500.00 MHz : U : 1 MHz;
+     if_def = &IF_D : D : L :  21500.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@21500MHzLPolTone/1;
+* v1cm-256-8-2-L-UL: Hn, La, Pt
+* v1cm-512-8-2-L: Hn, La, Pt
+     if_def = &IF_D : D : L :  21500.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@2400MHzDPolTone/1;
+* v18cm-512-8-2: Hn, La, Pt
+     if_def = &IF_A : A : R :   2400.00 MHz : L : 1 MHz;
+     if_def = &IF_C : C : L :   2400.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@2400MHzLPolTone/1;
+* v18cm-512-8-2-L: Hn, La, Pt
+     if_def = &IF_C : C : L :   2400.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@2600MHzDPolTone/1;
+* v18cm-256-8-2-UL: Hn, La, Pt
+     if_def = &IF_A : A : R :   2600.00 MHz : L : 1 MHz;
+     if_def = &IF_C : C : L :   2600.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@2600MHzLPolTone/1;
+* v18cm-256-8-2-L-UL: Hn, La, Pt
+     if_def = &IF_C : C : L :   2600.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@3100MHzDPolTone/1;
+* vsx-128-4-2: Hn, La, Pt
+* vsx-256-8-2: Hn, La, Pt
+* vsx-256-8-2-UL: Hn, La, Pt
+* vsx-512-8-2: Hn, La, Pt
+     if_def = &IF_A : A : R :   3100.00 MHz : L : 1 MHz;
+     if_def = &IF_C : C : L :   3100.00 MHz : L : 1 MHz;
+     if_def = &IF_B : B : R :   7600.00 MHz : U : 1 MHz;
+     if_def = &IF_D : D : L :   7600.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@3100MHzDPolTone/1#02;
+* v13cm-256-8-2-UL: Hn, La, Pt
+* v13cm-512-8-2: Hn, La, Pt
+     if_def = &IF_A : A : R :   3100.00 MHz : L : 1 MHz;
+     if_def = &IF_C : C : L :   3100.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@3100MHzRPolTone/1;
+* vsx-128-4-2-R: Hn, La, Pt
+* vsx-256-8-2-R: Hn, La, Pt
+* vsx-256-8-2-R-UL: Hn, La, Pt
+* vsx-512-8-2-R: Hn, La, Pt
+     if_def = &IF_A : A : R :   3100.00 MHz : L : 1 MHz;
+     if_def = &IF_B : B : R :   7600.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@3100MHzRPolTone/1#02;
+* v13cm-256-8-2-R-UL: Hn, La, Pt
+* v13cm-512-8-2-R: Hn, La, Pt
+     if_def = &IF_A : A : R :   3100.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@42400MHzDPolTone/1;
+* v7mm-256-8-2-UL: Hn, La, Pt
+* v7mm-512-8-2: Hn, La, Pt
+     if_def = &IF_A : A : R :  42400.00 MHz : U : 1 MHz;
+     if_def = &IF_C : C : L :  42400.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@42400MHzLPolTone/1;
+* v7mm-256-8-2-L-UL: Hn, La, Pt
+* v7mm-512-8-2-L: Hn, La, Pt
+     if_def = &IF_C : C : L :  42400.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@5600MHzDPolTone/1;
+* v6cm-256-8-2-UL: Hn, La, Pt
+* v6cm-512-8-2: Hn, La, Pt
+     if_def = &IF_A : A : R :   5600.00 MHz : L : 1 MHz;
+     if_def = &IF_C : C : L :   5600.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@5600MHzLPolTone/1;
+* v6cm-256-8-2-L-UL: Hn, La, Pt
+* v6cm-512-8-2-L: Hn, La, Pt
+     if_def = &IF_C : C : L :   5600.00 MHz : L : 1 MHz;
+enddef;
+*
+def LO@7600MHzDPolTone/1;
+* v4cm-256-8-2-UL: Hn, La, Pt
+* v4cm-512-8-2: Hn, La, Pt
+     if_def = &IF_B : B : R :   7600.00 MHz : U : 1 MHz;
+     if_def = &IF_D : D : L :   7600.00 MHz : U : 1 MHz;
+enddef;
+*
+def LO@7600MHzRPolTone/1;
+* v4cm-256-8-2-R-UL: Hn, La, Pt
+* v4cm-512-8-2-R: Hn, La, Pt
+     if_def = &IF_B : B : R :   7600.00 MHz : U : 1 MHz;
+enddef;
+*------------------------------------------------------------------------------
+$BBC;
+*
+def 4BBCs;
+* vsx-128-4-2-R: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_A;
+     BBC_assign = &BBC02 : 2 : &IF_A;
+     BBC_assign = &BBC03 : 3 : &IF_B;
+     BBC_assign = &BBC04 : 4 : &IF_B;
+enddef;
+*
+def 4BBCs#02;
+* vsx-128-4-2: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_A;
+     BBC_assign = &BBC02 : 2 : &IF_C;
+     BBC_assign = &BBC03 : 3 : &IF_B;
+     BBC_assign = &BBC04 : 4 : &IF_D;
+enddef;
+*
+def 8BBCs;
+* vsx-256-8-2-R: Hn, La, Pt
+* vsx-256-8-2-R-UL: Hn, La, Pt
+* vsx-512-8-2-R: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_A;
+     BBC_assign = &BBC02 : 2 : &IF_A;
+     BBC_assign = &BBC03 : 3 : &IF_A;
+     BBC_assign = &BBC04 : 4 : &IF_A;
+     BBC_assign = &BBC05 : 5 : &IF_B;
+     BBC_assign = &BBC06 : 6 : &IF_B;
+     BBC_assign = &BBC07 : 7 : &IF_B;
+     BBC_assign = &BBC08 : 8 : &IF_B;
+enddef;
+*
+def 8BBCs#02;
+* vsx-256-8-2: Hn, La, Pt
+* vsx-256-8-2-UL: Hn, La, Pt
+* vsx-512-8-2: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_A;
+     BBC_assign = &BBC02 : 2 : &IF_C;
+     BBC_assign = &BBC03 : 3 : &IF_A;
+     BBC_assign = &BBC04 : 4 : &IF_C;
+     BBC_assign = &BBC05 : 5 : &IF_B;
+     BBC_assign = &BBC06 : 6 : &IF_D;
+     BBC_assign = &BBC07 : 7 : &IF_B;
+     BBC_assign = &BBC08 : 8 : &IF_D;
+enddef;
+*
+def 8BBCs#03;
+* v18cm-256-8-2-L-UL: Hn, La, Pt
+* v18cm-512-8-2-L: Hn, La, Pt
+* v6cm-256-8-2-L-UL: Hn, La, Pt
+* v6cm-512-8-2-L: Hn, La, Pt
+* v7mm-256-8-2-L-UL: Hn, La, Pt
+* v7mm-512-8-2-L: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_C;
+     BBC_assign = &BBC02 : 2 : &IF_C;
+     BBC_assign = &BBC03 : 3 : &IF_C;
+     BBC_assign = &BBC04 : 4 : &IF_C;
+     BBC_assign = &BBC05 : 5 : &IF_C;
+     BBC_assign = &BBC06 : 6 : &IF_C;
+     BBC_assign = &BBC07 : 7 : &IF_C;
+     BBC_assign = &BBC08 : 8 : &IF_C;
+enddef;
+*
+def 8BBCs#04;
+* v13cm-256-8-2-UL: Hn, La, Pt
+* v13cm-512-8-2: Hn, La, Pt
+* v18cm-256-8-2-UL: Hn, La, Pt
+* v18cm-512-8-2: Hn, La, Pt
+* v6cm-256-8-2-UL: Hn, La, Pt
+* v6cm-512-8-2: Hn, La, Pt
+* v7mm-256-8-2-UL: Hn, La, Pt
+* v7mm-512-8-2: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_A;
+     BBC_assign = &BBC02 : 2 : &IF_C;
+     BBC_assign = &BBC03 : 3 : &IF_A;
+     BBC_assign = &BBC04 : 4 : &IF_C;
+     BBC_assign = &BBC05 : 5 : &IF_A;
+     BBC_assign = &BBC06 : 6 : &IF_C;
+     BBC_assign = &BBC07 : 7 : &IF_A;
+     BBC_assign = &BBC08 : 8 : &IF_C;
+enddef;
+*
+def 8BBCs#05;
+* v13cm-256-8-2-R-UL: Hn, La, Pt
+* v13cm-512-8-2-R: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_A;
+     BBC_assign = &BBC02 : 2 : &IF_A;
+     BBC_assign = &BBC03 : 3 : &IF_A;
+     BBC_assign = &BBC04 : 4 : &IF_A;
+     BBC_assign = &BBC05 : 5 : &IF_A;
+     BBC_assign = &BBC06 : 6 : &IF_A;
+     BBC_assign = &BBC07 : 7 : &IF_A;
+     BBC_assign = &BBC08 : 8 : &IF_A;
+enddef;
+*
+def 8BBCs#06;
+* v4cm-256-8-2-R-UL: Hn, La, Pt
+* v4cm-512-8-2-R: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_B;
+     BBC_assign = &BBC02 : 2 : &IF_B;
+     BBC_assign = &BBC03 : 3 : &IF_B;
+     BBC_assign = &BBC04 : 4 : &IF_B;
+     BBC_assign = &BBC05 : 5 : &IF_B;
+     BBC_assign = &BBC06 : 6 : &IF_B;
+     BBC_assign = &BBC07 : 7 : &IF_B;
+     BBC_assign = &BBC08 : 8 : &IF_B;
+enddef;
+*
+def 8BBCs#07;
+* v1cm-256-8-2-UL: Hn, La, Pt
+* v1cm-512-8-2: Hn, La, Pt
+* v2cm-256-8-2-UL: Hn, La, Pt
+* v2cm-512-8-2: Hn, La, Pt
+* v4cm-256-8-2-UL: Hn, La, Pt
+* v4cm-512-8-2: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_B;
+     BBC_assign = &BBC02 : 2 : &IF_D;
+     BBC_assign = &BBC03 : 3 : &IF_B;
+     BBC_assign = &BBC04 : 4 : &IF_D;
+     BBC_assign = &BBC05 : 5 : &IF_B;
+     BBC_assign = &BBC06 : 6 : &IF_D;
+     BBC_assign = &BBC07 : 7 : &IF_B;
+     BBC_assign = &BBC08 : 8 : &IF_D;
+enddef;
+*
+def 8BBCs#08;
+* v1cm-256-8-2-L-UL: Hn, La, Pt
+* v1cm-512-8-2-L: Hn, La, Pt
+* v2cm-256-8-2-L-UL: Hn, La, Pt
+* v2cm-512-8-2-L: Hn, La, Pt
+     BBC_assign = &BBC01 : 1 : &IF_D;
+     BBC_assign = &BBC02 : 2 : &IF_D;
+     BBC_assign = &BBC03 : 3 : &IF_D;
+     BBC_assign = &BBC04 : 4 : &IF_D;
+     BBC_assign = &BBC05 : 5 : &IF_D;
+     BBC_assign = &BBC06 : 6 : &IF_D;
+     BBC_assign = &BBC07 : 7 : &IF_D;
+     BBC_assign = &BBC08 : 8 : &IF_D;
+enddef;
+*------------------------------------------------------------------------------
+$PHASE_CAL_DETECT;
+*
+def Detect;
+* vsx-128-4-2: Hn, La, Pt
+* vsx-128-4-2-R: Hn, La, Pt
+     phase_cal_detect = &PCD : 1 : 8 : 0;
+enddef;
+*
+def Detect#02;
+* v13cm-256-8-2-R-UL: Hn, La, Pt
+* v13cm-256-8-2-UL: Hn, La, Pt
+* v18cm-256-8-2-L-UL: Hn, La, Pt
+* v18cm-256-8-2-UL: Hn, La, Pt
+* v1cm-256-8-2-L-UL: Hn, La, Pt
+* v1cm-256-8-2-UL: Hn, La, Pt
+* v2cm-256-8-2-L-UL: Hn, La, Pt
+* v2cm-256-8-2-UL: Hn, La, Pt
+* v4cm-256-8-2-R-UL: Hn, La, Pt
+* v4cm-256-8-2-UL: Hn, La, Pt
+* v6cm-256-8-2-L-UL: Hn, La, Pt
+* v6cm-256-8-2-UL: Hn, La, Pt
+* v7mm-256-8-2-L-UL: Hn, La, Pt
+* v7mm-256-8-2-UL: Hn, La, Pt
+* vsx-256-8-2: Hn, La, Pt
+* vsx-256-8-2-R: Hn, La, Pt
+* vsx-256-8-2-R-UL: Hn, La, Pt
+* vsx-256-8-2-UL: Hn, La, Pt
+     phase_cal_detect = &PCD : 1 : 8;
+enddef;
+*
+def Detect#03;
+* v13cm-512-8-2: Hn, La, Pt
+* v13cm-512-8-2-R: Hn, La, Pt
+* v18cm-512-8-2: Hn, La, Pt
+* v18cm-512-8-2-L: Hn, La, Pt
+* v1cm-512-8-2: Hn, La, Pt
+* v1cm-512-8-2-L: Hn, La, Pt
+* v2cm-512-8-2: Hn, La, Pt
+* v2cm-512-8-2-L: Hn, La, Pt
+* v4cm-512-8-2: Hn, La, Pt
+* v4cm-512-8-2-R: Hn, La, Pt
+* v6cm-512-8-2: Hn, La, Pt
+* v6cm-512-8-2-L: Hn, La, Pt
+* v7mm-512-8-2: Hn, La, Pt
+* v7mm-512-8-2-L: Hn, La, Pt
+* vsx-512-8-2: Hn, La, Pt
+* vsx-512-8-2-R: Hn, La, Pt
+     phase_cal_detect = &PCD : 1 : 16;
+enddef;
+*------------------------------------------------------------------------------
+$FREQ;
+*
+def 15296.75MHz8x16MHz;
+* v2cm-512-8-2-L: Hn, La, Pt
+     chan_def =  : 15296.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 15312.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 15328.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 15344.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 15360.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 15376.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 15392.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 15408.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 15328.75MHz8x16MHz;
+* v2cm-512-8-2: Hn, La, Pt
+     chan_def =  : 15328.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 15328.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 15344.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 15344.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 15360.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 15360.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 15376.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 15376.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 15339.75MHz8x8MHz;
+* v2cm-256-8-2-L-UL: Hn, La, Pt
+     chan_def =  : 15339.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 15339.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 15355.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 15355.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 15371.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 15371.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 15387.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 15387.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 15357.75MHz8x8MHz;
+* v2cm-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 15357.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 15357.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 15357.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 15357.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 15373.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 15373.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 15373.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 15373.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 1542.75MHz8x16MHz;
+* v18cm-512-8-2-L: Hn, La, Pt
+     chan_def =  : 1542.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 1558.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 1574.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 1590.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 1606.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 1622.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 1638.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 1654.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 1608.75MHz8x16MHz;
+* v18cm-512-8-2: Hn, La, Pt
+     chan_def =  : 1608.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 1608.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 1624.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 1624.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 1640.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 1640.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 1656.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 1656.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 1640.75MHz8x8MHz;
+* v18cm-256-8-2-L-UL: Hn, La, Pt
+     chan_def =  : 1640.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 1640.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 1656.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 1656.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 1672.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 1672.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 1688.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 1688.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 1659.75MHz8x8MHz;
+* v18cm-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 1659.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 1659.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 1659.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 1659.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 1675.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 1675.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 1675.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 1675.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2210.75MHz8x16MHz;
+* v13cm-512-8-2-R: Hn, La, Pt
+     chan_def =  : 2210.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2226.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2242.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2258.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 2274.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 2290.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 2350.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 2366.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 22164.75MHz8x16MHz;
+* v1cm-512-8-2-L: Hn, La, Pt
+     chan_def =  : 22164.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 22180.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 22196.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 22212.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 22228.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 22244.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 22260.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 22276.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 22196.75MHz8x16MHz;
+* v1cm-512-8-2: Hn, La, Pt
+     chan_def =  : 22196.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 22196.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 22212.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 22212.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 22228.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 22228.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 22244.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 22244.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 22210.75MHz8x8MHz;
+* v1cm-256-8-2-L-UL: Hn, La, Pt
+     chan_def =  : 22210.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 22210.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 22226.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 22226.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 22242.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 22242.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 22258.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 22258.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 22225.75MHz8x8MHz;
+* v1cm-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 22225.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 22225.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 22225.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 22225.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 22241.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 22241.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 22241.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 22241.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2234.75MHz8x16MHz;
+* v13cm-512-8-2: Hn, La, Pt
+     chan_def =  : 2234.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2234.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2250.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2250.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 2266.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 2266.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 2282.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 2282.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 2234.75MHz8x16MHz#02;
+* vsx-512-8-2-R: Hn, La, Pt
+     chan_def =  : 2234.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2250.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2266.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2282.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8384.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8400.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8416.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8432.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 2247.75MHz8x8MHz;
+* v13cm-256-8-2-R-UL: Hn, La, Pt
+     chan_def =  : 2247.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2247.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2263.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2263.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 2279.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 2279.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 2295.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 2295.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2250.75MHz8x16MHz;
+* vsx-512-8-2: Hn, La, Pt
+     chan_def =  : 2250.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2250.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2266.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2266.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8400.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8400.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8416.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8416.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 2254.75MHz8x8MHz;
+* vsx-256-8-2-R: Hn, La, Pt
+     chan_def =  : 2254.75 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2262.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2270.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2278.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8404.75 MHz : U :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8412.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8420.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8428.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2262.75MHz4x8MHz;
+* vsx-128-4-2-R: Hn, La, Pt
+     chan_def =  : 2262.75 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2270.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 8412.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 8420.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2262.75MHz8x8MHz;
+* vsx-256-8-2: Hn, La, Pt
+     chan_def =  : 2262.75 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2262.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2270.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2270.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8412.75 MHz : U :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8412.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8420.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8420.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2262.75MHz8x8MHz#02;
+* vsx-256-8-2-R-UL: Hn, La, Pt
+     chan_def =  : 2262.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2262.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2278.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2278.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8412.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8412.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8428.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8428.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2262.75MHz8x8MHz#03;
+* vsx-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 2262.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2262.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2262.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2262.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8412.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8412.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8412.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8412.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2263.75MHz8x8MHz;
+* v13cm-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 2263.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2263.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 2263.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 2263.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 2279.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 2279.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 2279.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 2279.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 2266.75MHz4x8MHz;
+* vsx-128-4-2: Hn, La, Pt
+     chan_def =  : 2266.75 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 2266.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 8416.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 8416.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 43148.75MHz8x16MHz;
+* v7mm-512-8-2-L: Hn, La, Pt
+     chan_def =  : 43148.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 43164.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 43180.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 43196.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 43212.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 43228.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 43244.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 43260.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 43180.75MHz8x16MHz;
+* v7mm-512-8-2: Hn, La, Pt
+     chan_def =  : 43180.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 43180.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 43196.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 43196.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 43212.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 43212.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 43228.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 43228.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 43193.75MHz8x8MHz;
+* v7mm-256-8-2-L-UL: Hn, La, Pt
+     chan_def =  : 43193.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 43193.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 43209.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 43209.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 43225.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 43225.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 43241.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 43241.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 43209.75MHz8x8MHz;
+* v7mm-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 43209.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 43209.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 43209.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 43209.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 43225.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 43225.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 43225.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 43225.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 4924.75MHz8x16MHz;
+* v6cm-512-8-2-L: Hn, La, Pt
+     chan_def =  : 4924.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 4940.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 4964.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 4980.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 4996.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 5022.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 5038.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 5054.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 4964.75MHz8x16MHz;
+* v6cm-512-8-2: Hn, La, Pt
+     chan_def =  : 4964.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 4964.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 4980.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 4980.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 4996.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 4996.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 5012.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 5012.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 4968.75MHz8x8MHz;
+* v6cm-256-8-2-L-UL: Hn, La, Pt
+     chan_def =  : 4968.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 4968.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 4984.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 4984.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 5000.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 5000.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 5016.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 5016.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 4979.75MHz8x8MHz;
+* v6cm-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 4979.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 4979.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 4979.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 4979.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 4995.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 4995.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 4995.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 4995.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 8352.75MHz8x16MHz;
+* v4cm-512-8-2-R: Hn, La, Pt
+     chan_def =  : 8352.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 8368.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 8384.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 8400.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8416.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8432.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8448.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8464.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 8384.75MHz8x16MHz;
+* v4cm-512-8-2: Hn, La, Pt
+     chan_def =  : 8384.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 8384.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 8400.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 8400.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8416.75 MHz : U :   16.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8416.75 MHz : U :   16.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8432.75 MHz : U :   16.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8432.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 8395.75MHz8x8MHz;
+* v4cm-256-8-2-R-UL: Hn, La, Pt
+     chan_def =  : 8395.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 8395.75 MHz : U :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 8411.75 MHz : L :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 8411.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8427.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8427.75 MHz : U :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8443.75 MHz : L :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8443.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*
+def 8413.75MHz8x8MHz;
+* v4cm-256-8-2-UL: Hn, La, Pt
+     chan_def =  : 8413.75 MHz : L :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 8413.75 MHz : L :    8.00 MHz : &CH02 : &BBC02 : &PCD;
+     chan_def =  : 8413.75 MHz : U :    8.00 MHz : &CH03 : &BBC03 : &PCD;
+     chan_def =  : 8413.75 MHz : U :    8.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 8429.75 MHz : L :    8.00 MHz : &CH05 : &BBC05 : &PCD;
+     chan_def =  : 8429.75 MHz : L :    8.00 MHz : &CH06 : &BBC06 : &PCD;
+     chan_def =  : 8429.75 MHz : U :    8.00 MHz : &CH07 : &BBC07 : &PCD;
+     chan_def =  : 8429.75 MHz : U :    8.00 MHz : &CH08 : &BBC08 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
+*------------------------------------------------------------------------------
+$TRACKS;
+*
+def VDIF5032.4Ch2bit1to1;
+* vsx-128-4-2: Hn, La, Pt
+* vsx-128-4-2-R: Hn, La, Pt
+     track_frame_format = VDIF5032;
+     fanout_def =  : &CH01 : sign : 1 : 1;
+     fanout_def =  : &CH01 :  mag : 1 : 1;
+     fanout_def =  : &CH02 : sign : 1 : 2;
+     fanout_def =  : &CH02 :  mag : 1 : 2;
+     fanout_def =  : &CH03 : sign : 1 : 3;
+     fanout_def =  : &CH03 :  mag : 1 : 3;
+     fanout_def =  : &CH04 : sign : 1 : 4;
+     fanout_def =  : &CH04 :  mag : 1 : 4;
+enddef;
+*
+def VDIF5032.8Ch2bit1to1;
+* v13cm-256-8-2-R-UL: Hn, La, Pt
+* v13cm-256-8-2-UL: Hn, La, Pt
+* v13cm-512-8-2: Hn, La, Pt
+* v13cm-512-8-2-R: Hn, La, Pt
+* v18cm-256-8-2-L-UL: Hn, La, Pt
+* v18cm-256-8-2-UL: Hn, La, Pt
+* v18cm-512-8-2: Hn, La, Pt
+* v18cm-512-8-2-L: Hn, La, Pt
+* v1cm-256-8-2-L-UL: Hn, La, Pt
+* v1cm-256-8-2-UL: Hn, La, Pt
+* v1cm-512-8-2: Hn, La, Pt
+* v1cm-512-8-2-L: Hn, La, Pt
+* v2cm-256-8-2-L-UL: Hn, La, Pt
+* v2cm-256-8-2-UL: Hn, La, Pt
+* v2cm-512-8-2: Hn, La, Pt
+* v2cm-512-8-2-L: Hn, La, Pt
+* v4cm-256-8-2-R-UL: Hn, La, Pt
+* v4cm-256-8-2-UL: Hn, La, Pt
+* v4cm-512-8-2: Hn, La, Pt
+* v4cm-512-8-2-R: Hn, La, Pt
+* v6cm-256-8-2-L-UL: Hn, La, Pt
+* v6cm-256-8-2-UL: Hn, La, Pt
+* v6cm-512-8-2: Hn, La, Pt
+* v6cm-512-8-2-L: Hn, La, Pt
+* v7mm-256-8-2-L-UL: Hn, La, Pt
+* v7mm-256-8-2-UL: Hn, La, Pt
+* v7mm-512-8-2: Hn, La, Pt
+* v7mm-512-8-2-L: Hn, La, Pt
+* vsx-256-8-2: Hn, La, Pt
+* vsx-256-8-2-R: Hn, La, Pt
+* vsx-256-8-2-R-UL: Hn, La, Pt
+* vsx-256-8-2-UL: Hn, La, Pt
+* vsx-512-8-2: Hn, La, Pt
+* vsx-512-8-2-R: Hn, La, Pt
+     track_frame_format = VDIF5032;
+     fanout_def =  : &CH01 : sign : 1 : 1;
+     fanout_def =  : &CH01 :  mag : 1 : 1;
+     fanout_def =  : &CH02 : sign : 1 : 2;
+     fanout_def =  : &CH02 :  mag : 1 : 2;
+     fanout_def =  : &CH03 : sign : 1 : 3;
+     fanout_def =  : &CH03 :  mag : 1 : 3;
+     fanout_def =  : &CH04 : sign : 1 : 4;
+     fanout_def =  : &CH04 :  mag : 1 : 4;
+     fanout_def =  : &CH05 : sign : 1 : 5;
+     fanout_def =  : &CH05 :  mag : 1 : 5;
+     fanout_def =  : &CH06 : sign : 1 : 6;
+     fanout_def =  : &CH06 :  mag : 1 : 6;
+     fanout_def =  : &CH07 : sign : 1 : 7;
+     fanout_def =  : &CH07 :  mag : 1 : 7;
+     fanout_def =  : &CH08 : sign : 1 : 8;
+     fanout_def =  : &CH08 :  mag : 1 : 8;
+enddef;
+*------------------------------------------------------------------------------
+$ROLL;
+*
+def NoRoll;
+* v13cm-256-8-2-R-UL: Hn, La, Pt
+* v13cm-256-8-2-UL: Hn, La, Pt
+* v13cm-512-8-2: Hn, La, Pt
+* v13cm-512-8-2-R: Hn, La, Pt
+* v18cm-256-8-2-L-UL: Hn, La, Pt
+* v18cm-256-8-2-UL: Hn, La, Pt
+* v18cm-512-8-2: Hn, La, Pt
+* v18cm-512-8-2-L: Hn, La, Pt
+* v1cm-256-8-2-L-UL: Hn, La, Pt
+* v1cm-256-8-2-UL: Hn, La, Pt
+* v1cm-512-8-2: Hn, La, Pt
+* v1cm-512-8-2-L: Hn, La, Pt
+* v2cm-256-8-2-L-UL: Hn, La, Pt
+* v2cm-256-8-2-UL: Hn, La, Pt
+* v2cm-512-8-2: Hn, La, Pt
+* v2cm-512-8-2-L: Hn, La, Pt
+* v4cm-256-8-2-R-UL: Hn, La, Pt
+* v4cm-256-8-2-UL: Hn, La, Pt
+* v4cm-512-8-2: Hn, La, Pt
+* v4cm-512-8-2-R: Hn, La, Pt
+* v6cm-256-8-2-L-UL: Hn, La, Pt
+* v6cm-256-8-2-UL: Hn, La, Pt
+* v6cm-512-8-2: Hn, La, Pt
+* v6cm-512-8-2-L: Hn, La, Pt
+* v7mm-256-8-2-L-UL: Hn, La, Pt
+* v7mm-256-8-2-UL: Hn, La, Pt
+* v7mm-512-8-2: Hn, La, Pt
+* v7mm-512-8-2-L: Hn, La, Pt
+* vsx-128-4-2: Hn, La, Pt
+* vsx-128-4-2-R: Hn, La, Pt
+* vsx-256-8-2: Hn, La, Pt
+* vsx-256-8-2-R: Hn, La, Pt
+* vsx-256-8-2-R-UL: Hn, La, Pt
+* vsx-256-8-2-UL: Hn, La, Pt
+* vsx-512-8-2: Hn, La, Pt
+* vsx-512-8-2-R: Hn, La, Pt
+     roll = off;
 enddef;
 *------------------------------------------------------------------------------
 $STATION;
 *
 def Hn;
-     ref $SITE = VLBA_HN;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = 2RDBE2+NONE<;
+     ref $DAS = RDBE2+Mark5C;
+     ref $SITE = VLBA_HN;
 enddef;
 *
 def La;
-     ref $SITE = VLBA_LA;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = 2RDBE2+NONE<;
+     ref $DAS = RDBE2+Mark5C;
+     ref $SITE = VLBA_LA;
 enddef;
 *
 def Pt;
-     ref $SITE = VLBA_PT;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = 2RDBE2+NONE<;
+     ref $DAS = RDBE2+Mark5C;
+     ref $SITE = VLBA_PT;
+enddef;
+*------------------------------------------------------------------------------
+$ANTENNA;
+*
+def VLBA_HN;
+     axis_type = az : el;
+     antenna_motion = az :   81.3 deg/min : 6 sec;
+     antenna_motion = el :   26.7 deg/min : 6 sec;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     axis_offset =     2.1303 m;
+enddef;
+*
+def VLBA_LA;
+     axis_type = az : el;
+     antenna_motion = az :   82.0 deg/min : 6 sec;
+     antenna_motion = el :   29.5 deg/min : 6 sec;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     axis_offset =     2.1321 m;
+enddef;
+*
+def VLBA_PT;
+     axis_type = az : el;
+     antenna_motion = az :   82.3 deg/min : 6 sec;
+     antenna_motion = el :   29.3 deg/min : 6 sec;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     axis_offset =     2.1375 m;
+enddef;
+*------------------------------------------------------------------------------
+$DAS;
+*
+def RDBE2+Mark5C;
+     record_transport_type = Mark5C;
+     electronics_rack_type = RDBE2;
+     number_drives = 2;
+     headstack = 1 :  : 0;
+     headstack = 2 :  : 1;
+     tape_motion = adaptive : 0 min : 0 min : 10 sec;
+enddef;
+*------------------------------------------------------------------------------
+$SITE;
+*
+def VLBA_HN;
+     site_type = fixed;
+     site_name = VLBA_HN;
+     site_ID = Hn;
+     site_position =  1446374.86580 m : -4447939.67740 m :  4322306.18380 m;
+     site_velocity =  -0.015770 m/yr :  -0.001520 m/yr :   0.004250 m/yr;
+     site_position_epoch = 2013y001d;
+     horizon_map_az = 0.0 deg : 5.0 : 30.0 : 35.0 : 40.0 : 45.0 : 65.0 : 70.0 : 80.0 : 85.0 : 90.0 : 95.0 : 100.0 : 105.0 : 110.0 : 115.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 170.0 : 190.0 : 195.0 : 200.0 : 205.0 : 210.0 : 220.0 : 225.0 : 230.0 : 235.0 : 240.0 : 245.0 : 250.0 : 255.0 : 270.0 : 275.0 : 290.0 : 295.0 : 315.0 : 320.0 : 325.0 : 330.0 : 335.0 : 345.0 : 350.0 : 355.0 : 360.0;
+     horizon_map_el = 6.0 deg : 6.0 : 6.0 : 4.0 : 5.0 : 4.0 : 4.0 : 5.0 : 5.0 : 4.0 : 5.0 : 4.0 : 4.0 : 5.0 : 3.0 : 4.0 : 4.0 : 5.0 : 4.0 : 6.0 : 5.0 : 7.0 : 7.0 : 5.0 : 3.0 : 5.0 : 4.0 : 4.0 : 2.0 : 5.0 : 5.0 : 6.0 : 6.0 : 5.0 : 6.0 : 4.0 : 5.0 : 5.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 5.0 : 5.0 : 6.0 : 5.0 : 5.0 : 6.0 : 6.0 : 5.0 : 5.0 : 6.0;
+enddef;
+*
+def VLBA_LA;
+     site_type = fixed;
+     site_name = VLBA_LA;
+     site_ID = La;
+     site_position = -1449752.58390 m : -4975298.57570 m :  3709123.84590 m;
+     site_velocity =  -0.014400 m/yr :   0.000550 m/yr :  -0.004710 m/yr;
+     site_position_epoch = 2013y001d;
+     horizon_map_az = 0.0 deg : 5.0 : 75.0 : 80.0 : 85.0 : 130.0 : 135.0 : 145.0 : 150.0 : 250.0 : 255.0 : 300.0 : 305.0 : 315.0 : 320.0 : 340.0 : 345.0 : 360.0;
+     horizon_map_el = 2.0 deg : 2.0 : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0;
+enddef;
+*
+def VLBA_PT;
+     site_type = fixed;
+     site_name = VLBA_PT;
+     site_ID = Pt;
+     site_position = -1640953.93830 m : -5014816.02370 m :  3575411.79160 m;
+     site_velocity =  -0.014610 m/yr :  -0.000210 m/yr :  -0.005210 m/yr;
+     site_position_epoch = 2013y001d;
+     horizon_map_az = 0.0 deg : 5.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 165.0 : 170.0 : 180.0 : 185.0 : 190.0 : 195.0 : 200.0 : 240.0 : 245.0 : 250.0 : 255.0 : 265.0 : 270.0 : 275.0 : 280.0 : 285.0 : 360.0;
+     horizon_map_el = 2.0 deg : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 3.0 : 3.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0;
 enddef;
 *------------------------------------------------------------------------------
 $PROCEDURES;
 *
-def Mode_01;
+def Procedure;
      procedure_name_prefix =  "01";
      tape_change =  420 sec;
      headstack_motion =    6 sec;
@@ -516,1966 +1410,335 @@ def Mode_01;
      midob_cal  = on :  15 sec : midob;
      postob_cal = on :   0 sec : postob;
 enddef;
-*
-def Mode_02;
-     procedure_name_prefix =  "02";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_03;
-     procedure_name_prefix =  "03";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_04;
-     procedure_name_prefix =  "04";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_05;
-     procedure_name_prefix =  "05";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_06;
-     procedure_name_prefix =  "06";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_07;
-     procedure_name_prefix =  "07";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_08;
-     procedure_name_prefix =  "08";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_09;
-     procedure_name_prefix =  "09";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_10;
-     procedure_name_prefix =  "10";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_11;
-     procedure_name_prefix =  "11";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_12;
-     procedure_name_prefix =  "12";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_13;
-     procedure_name_prefix =  "13";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_14;
-     procedure_name_prefix =  "14";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_15;
-     procedure_name_prefix =  "15";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_16;
-     procedure_name_prefix =  "16";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_17;
-     procedure_name_prefix =  "17";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_18;
-     procedure_name_prefix =  "18";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_19;
-     procedure_name_prefix =  "19";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_20;
-     procedure_name_prefix =  "20";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_21;
-     procedure_name_prefix =  "21";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_22;
-     procedure_name_prefix =  "22";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_23;
-     procedure_name_prefix =  "23";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_24;
-     procedure_name_prefix =  "24";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_25;
-     procedure_name_prefix =  "25";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_26;
-     procedure_name_prefix =  "26";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_27;
-     procedure_name_prefix =  "27";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_28;
-     procedure_name_prefix =  "28";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_29;
-     procedure_name_prefix =  "29";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_30;
-     procedure_name_prefix =  "30";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_31;
-     procedure_name_prefix =  "31";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_32;
-     procedure_name_prefix =  "32";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_33;
-     procedure_name_prefix =  "33";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_34;
-     procedure_name_prefix =  "34";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_35;
-     procedure_name_prefix =  "35";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*
-def Mode_36;
-     procedure_name_prefix =  "36";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
-*------------------------------------------------------------------------------
-$SITE;
-*
-def VLBA_HN;
-     site_type = fixed;
-     site_name = VLBA_HN;
-     site_ID = Hn;
-*    elev=  295.57 long= 071:59:11. lat= 42:56:01.0
-     site_position = 1446374.86580 m:-4447939.67740 m: 4322306.18380 m;
-     site_velocity = -0.015770   m/yr: -0.001520   m/yr:  0.004250  m/yr;
-*    First line below is VEX standard format.  Use only when readers are ready.
-*    site_position_epoch = 2013y001d;
-     site_position_epoch =   56293;
-     horizon_map_az =  0.0 deg:  5.0: 30.0: 35.0: 40.0: 45.0: 65.0: 70.0: 80.0:
-                                85.0: 90.0: 95.0:100.0:105.0:110.0:115.0:120.0:
-                               125.0:130.0:135.0:140.0:145.0:150.0:155.0:160.0:
-                               165.0:170.0:190.0:195.0:200.0:205.0:210.0:220.0:
-                               225.0:230.0:235.0:240.0:245.0:250.0:255.0:270.0:
-                               275.0:290.0:295.0:315.0:320.0:325.0:330.0:335.0:
-                               345.0:350.0:355.0:360.0;
-     horizon_map_el =  6.0 deg:  6.0:  6.0:  4.0:  5.0:  4.0:  4.0:  5.0:  5.0:
-                                 4.0:  5.0:  4.0:  4.0:  5.0:  3.0:  4.0:  4.0:
-                                 5.0:  4.0:  6.0:  5.0:  7.0:  7.0:  5.0:  3.0:
-                                 5.0:  4.0:  4.0:  2.0:  5.0:  5.0:  6.0:  6.0:
-                                 5.0:  6.0:  4.0:  5.0:  5.0:  4.0:  5.0:  5.0:
-                                 4.0:  4.0:  5.0:  5.0:  6.0:  5.0:  5.0:  6.0:
-                                 6.0:  5.0:  5.0:  6.0;
-enddef;
-*
-def VLBA_LA;
-     site_type = fixed;
-     site_name = VLBA_LA;
-     site_ID = La;
-*    elev= 1962.43 long= 106:14:44. lat= 35:46:30.4
-     site_position =-1449752.58390 m:-4975298.57570 m: 3709123.84590 m;
-     site_velocity = -0.014400   m/yr:  0.000550   m/yr: -0.004710  m/yr;
-*    First line below is VEX standard format.  Use only when readers are ready.
-*    site_position_epoch = 2013y001d;
-     site_position_epoch =   56293;
-     horizon_map_az =  0.0 deg:  5.0: 75.0: 80.0: 85.0:130.0:135.0:145.0:150.0:
-                               250.0:255.0:300.0:305.0:315.0:320.0:340.0:345.0:
-                               360.0;
-     horizon_map_el =  2.0 deg:  2.0:  2.0:  3.0:  2.0:  2.0:  3.0:  3.0:  2.0:
-                                 2.0:  3.0:  3.0:  4.0:  4.0:  3.0:  3.0:  2.0:
-                                 2.0;
-enddef;
-*
-def VLBA_PT;
-     site_type = fixed;
-     site_name = VLBA_PT;
-     site_ID = Pt;
-*    elev= 2364.69 long= 108:07:09. lat= 34:18:03.7
-     site_position =-1640953.93830 m:-5014816.02370 m: 3575411.79160 m;
-     site_velocity = -0.014610   m/yr: -0.000210   m/yr: -0.005210  m/yr;
-*    First line below is VEX standard format.  Use only when readers are ready.
-*    site_position_epoch = 2013y001d;
-     site_position_epoch =   56293;
-     horizon_map_az =  0.0 deg:  5.0: 60.0: 65.0: 70.0: 75.0: 80.0: 85.0:165.0:
-                               170.0:180.0:185.0:190.0:195.0:200.0:240.0:245.0:
-                               250.0:255.0:265.0:270.0:275.0:280.0:285.0:360.0;
-     horizon_map_el =  2.0 deg:  2.0:  2.0:  3.0:  3.0:  2.0:  3.0:  2.0:  2.0:
-                                 3.0:  3.0:  4.0:  4.0:  3.0:  4.0:  4.0:  3.0:
-                                 4.0:  3.0:  3.0:  4.0:  3.0:  3.0:  2.0:  2.0;
-enddef;
-*------------------------------------------------------------------------------
-$ANTENNA;
-*
-def VLBA_HN;
-     axis_type = az : el;
-     antenna_motion = el :  26.7 deg/min :  6 sec;  *    0.250 deg/sec/sec
-     antenna_motion = az :  81.3 deg/min :  6 sec;  *    0.750 deg/sec/sec
-     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
-     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
-     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
-     axis_offset =    2.13030 m;
-enddef;
-*
-def VLBA_LA;
-     axis_type = az : el;
-     antenna_motion = el :  29.5 deg/min :  6 sec;  *    0.250 deg/sec/sec
-     antenna_motion = az :  82.0 deg/min :  6 sec;  *    0.750 deg/sec/sec
-     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
-     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
-     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
-     axis_offset =    2.13210 m;
-enddef;
-*
-def VLBA_PT;
-     axis_type = az : el;
-     antenna_motion = el :  29.3 deg/min :  6 sec;  *    0.250 deg/sec/sec
-     antenna_motion = az :  82.3 deg/min :  6 sec;  *    0.750 deg/sec/sec
-     pointing_sector = &ccw  : az : -90.00 deg:  90.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 1
-     pointing_sector = &n    : az :  90.00 deg: 270.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 2
-     pointing_sector = &cw   : az : 270.00 deg: 450.00 deg: el :  2.25 deg: 90.00 deg; * cable wrap zone 3
-     axis_offset =    2.13750 m;
-enddef;
-*------------------------------------------------------------------------------
-$DAS;
-*
-def 2RDBE2+NONE<;
-     record_transport_type = Mark5C;
-     electronics_rack_type = RDBE2;
-     number_drives = 2;
-     headstack = 1 :            : 0 ;
-     headstack = 2 :            : 1 ;
-     tape_motion = adaptive : 0 min: 0 min: 10 sec;
-enddef;
 *------------------------------------------------------------------------------
 $SOURCE;
-*
 def 1053+815;
      source_name = 1053+815;
-*    this source had calibrator code: V
-*    alternate source name: J1058+8114
-*    rfc_2015a Petrov, 2015, unpublished.  37743 observations
      ra = 10h58m11.5353850s; dec =  81d14'32.675120"; ref_coord_frame = J2000;
-*    ra = 10h53m36.2294494s; dec =  81d30'35.567764"; ref_coord_frame = B1950;
-*    ra = 10h59m31.0607343s; dec =  81d09'19.053943"; ref_coord_frame = Date;
-enddef;
-*------------------------------------------------------------------------------
-$FREQ;
-*
-def DualFreq4x8MHz;
-* mode =  1    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2262.75 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2270.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
-     chan_def = :  8412.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  8420.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
-enddef;
-*
-def DualFreq4x8MHz#02;
-* mode =  2    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2266.75 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2266.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  8416.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  8416.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-enddef;
-*
-def DualFreq8x8MHz;
-* mode =  3    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2254.75 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2262.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
-     chan_def = :  2270.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  2278.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
-     chan_def = :  8404.75 MHz : U :   8.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  8412.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &U_Cal; *Rcp
-     chan_def = :  8420.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  8428.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &U_Cal; *Rcp
-enddef;
-*
-def DualFreq8x8MHz#02;
-* mode =  4    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2262.75 MHz : U :   8.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2262.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  2270.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  2270.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  8412.75 MHz : U :   8.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  8412.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  8420.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  8420.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 1640.75MHz8x8MHz;
-* mode =  5    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  1640.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Lcp
-     chan_def = :  1640.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = :  1656.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Lcp
-     chan_def = :  1656.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = :  1672.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Lcp
-     chan_def = :  1672.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = :  1688.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Lcp
-     chan_def = :  1688.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 1659.75MHz8x8MHz;
-* mode =  6    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  1659.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  1659.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = :  1659.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  1659.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = :  1675.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  1675.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = :  1675.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  1675.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 2247.75MHz8x8MHz;
-* mode =  7    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2247.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  2247.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Rcp
-     chan_def = :  2263.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  2263.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Rcp
-     chan_def = :  2279.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  2279.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Rcp
-     chan_def = :  2295.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  2295.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Rcp
-enddef;
-*
-def 2263.75MHz8x8MHz;
-* mode =  8    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2263.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  2263.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = :  2263.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  2263.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = :  2279.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  2279.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = :  2279.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  2279.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 4968.75MHz8x8MHz;
-* mode =  9    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  4968.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Lcp
-     chan_def = :  4968.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = :  4984.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Lcp
-     chan_def = :  4984.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = :  5000.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Lcp
-     chan_def = :  5000.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = :  5016.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Lcp
-     chan_def = :  5016.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 4979.75MHz8x8MHz;
-* mode = 10    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  4979.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = :  4979.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  4979.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = :  4995.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  4995.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  4995.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 8395.75MHz8x8MHz;
-* mode = 11    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  8395.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  8395.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Rcp
-     chan_def = :  8411.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  8411.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Rcp
-     chan_def = :  8427.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  8427.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Rcp
-     chan_def = :  8443.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  8443.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Rcp
-enddef;
-*
-def 8413.75MHz8x8MHz;
-* mode = 12    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  8413.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  8413.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = :  8413.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  8413.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = :  8429.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  8429.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = :  8429.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  8429.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 15339.75MHz8x8MHz;
-* mode = 13    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 15339.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Lcp
-     chan_def = : 15339.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = : 15355.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Lcp
-     chan_def = : 15355.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = : 15371.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Lcp
-     chan_def = : 15371.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = : 15387.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Lcp
-     chan_def = : 15387.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 15357.75MHz8x8MHz;
-* mode = 14    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 15357.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = : 15357.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = : 15357.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = : 15357.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = : 15373.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = : 15373.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = : 15373.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = : 15373.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 22210.75MHz8x8MHz;
-* mode = 15    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 22210.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Lcp
-     chan_def = : 22210.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = : 22226.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Lcp
-     chan_def = : 22226.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = : 22242.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Lcp
-     chan_def = : 22242.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = : 22258.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Lcp
-     chan_def = : 22258.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 22225.75MHz8x8MHz;
-* mode = 16    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 22225.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = : 22225.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = : 22225.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = : 22225.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = : 22241.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = : 22241.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = : 22241.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = : 22241.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 43193.75MHz8x8MHz;
-* mode = 17    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 43193.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Lcp
-     chan_def = : 43193.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = : 43209.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Lcp
-     chan_def = : 43209.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = : 43225.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Lcp
-     chan_def = : 43225.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = : 43241.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Lcp
-     chan_def = : 43241.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 43209.75MHz8x8MHz;
-* mode = 18    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 43209.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = : 43209.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = : 43209.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = : 43209.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = : 43225.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = : 43225.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = : 43225.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = : 43225.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def DualFreq8x8MHz#03;
-* mode = 19    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2262.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  2262.75 MHz : U :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Rcp
-     chan_def = :  2278.75 MHz : L :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  2278.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Rcp
-     chan_def = :  8412.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  8412.75 MHz : U :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Rcp
-     chan_def = :  8428.75 MHz : L :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  8428.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Rcp
-enddef;
-*
-def DualFreq8x8MHz#04;
-* mode = 20    stations =Hn:La:Pt
-     sample_rate =  16.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2262.75 MHz : L :   8.00 MHz : &CH01 : &BBC01 : &L_Cal; *Rcp
-     chan_def = :  2262.75 MHz : L :   8.00 MHz : &CH02 : &BBC02 : &L_Cal; *Lcp
-     chan_def = :  2262.75 MHz : U :   8.00 MHz : &CH03 : &BBC03 : &L_Cal; *Rcp
-     chan_def = :  2262.75 MHz : U :   8.00 MHz : &CH04 : &BBC04 : &L_Cal; *Lcp
-     chan_def = :  8412.75 MHz : L :   8.00 MHz : &CH05 : &BBC05 : &L_Cal; *Rcp
-     chan_def = :  8412.75 MHz : L :   8.00 MHz : &CH06 : &BBC06 : &L_Cal; *Lcp
-     chan_def = :  8412.75 MHz : U :   8.00 MHz : &CH07 : &BBC07 : &L_Cal; *Rcp
-     chan_def = :  8412.75 MHz : U :   8.00 MHz : &CH08 : &BBC08 : &L_Cal; *Lcp
-enddef;
-*
-def 1542.75MHz8x16MHz;
-* mode = 21    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  1542.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Lcp
-     chan_def = :  1558.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  1574.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Lcp
-     chan_def = :  1590.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  1606.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Lcp
-     chan_def = :  1622.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  1638.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Lcp
-     chan_def = :  1654.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 1608.75MHz8x16MHz;
-* mode = 22    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  1608.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  1608.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  1624.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  1624.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  1640.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  1640.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  1656.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  1656.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 2210.75MHz8x16MHz;
-* mode = 23    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2210.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2226.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
-     chan_def = :  2242.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  2258.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
-     chan_def = :  2274.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  2290.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Rcp
-     chan_def = :  2350.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  2366.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Rcp
-enddef;
-*
-def 2234.75MHz8x16MHz;
-* mode = 24    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2234.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2234.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  2250.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  2250.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  2266.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  2266.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  2282.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  2282.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 4924.75MHz8x16MHz;
-* mode = 25    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  4924.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Lcp
-     chan_def = :  4940.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  4964.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Lcp
-     chan_def = :  4980.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  4996.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Lcp
-     chan_def = :  5022.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  5038.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Lcp
-     chan_def = :  5054.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 4964.75MHz8x16MHz;
-* mode = 26    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  4964.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  4964.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  4980.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  4980.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  4996.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  4996.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  5012.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  5012.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 8352.75MHz8x16MHz;
-* mode = 27    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  8352.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  8368.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
-     chan_def = :  8384.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  8400.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
-     chan_def = :  8416.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  8432.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Rcp
-     chan_def = :  8448.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  8464.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Rcp
-enddef;
-*
-def 8384.75MHz8x16MHz;
-* mode = 28    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  8384.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  8384.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  8400.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  8400.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  8416.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  8416.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  8432.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  8432.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 15296.75MHz8x16MHz;
-* mode = 29    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 15296.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Lcp
-     chan_def = : 15312.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = : 15328.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Lcp
-     chan_def = : 15344.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = : 15360.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Lcp
-     chan_def = : 15376.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = : 15392.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Lcp
-     chan_def = : 15408.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 15328.75MHz8x16MHz;
-* mode = 30    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 15328.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = : 15328.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = : 15344.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = : 15344.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = : 15360.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = : 15360.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = : 15376.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = : 15376.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 22164.75MHz8x16MHz;
-* mode = 31    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 22164.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Lcp
-     chan_def = : 22180.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = : 22196.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Lcp
-     chan_def = : 22212.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = : 22228.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Lcp
-     chan_def = : 22244.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = : 22260.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Lcp
-     chan_def = : 22276.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 22196.75MHz8x16MHz;
-* mode = 32    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 22196.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = : 22196.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = : 22212.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = : 22212.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = : 22228.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = : 22228.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = : 22244.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = : 22244.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 43148.75MHz8x16MHz;
-* mode = 33    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 43148.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Lcp
-     chan_def = : 43164.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = : 43180.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Lcp
-     chan_def = : 43196.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = : 43212.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Lcp
-     chan_def = : 43228.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = : 43244.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Lcp
-     chan_def = : 43260.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def 43180.75MHz8x16MHz;
-* mode = 34    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = : 43180.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = : 43180.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = : 43196.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = : 43196.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = : 43212.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = : 43212.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = : 43228.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = : 43228.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*
-def DualFreq8x16MHz;
-* mode = 35    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2234.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2250.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Rcp
-     chan_def = :  2266.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  2282.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Rcp
-     chan_def = :  8384.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  8400.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Rcp
-     chan_def = :  8416.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  8432.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Rcp
-enddef;
-*
-def DualFreq8x16MHz#02;
-* mode = 36    stations =Hn:La:Pt
-     sample_rate =  32.000 Ms/sec;  * (2bits/sample)
-     chan_def = :  2250.75 MHz : U :  16.00 MHz : &CH01 : &BBC01 : &U_Cal; *Rcp
-     chan_def = :  2250.75 MHz : U :  16.00 MHz : &CH02 : &BBC02 : &U_Cal; *Lcp
-     chan_def = :  2266.75 MHz : U :  16.00 MHz : &CH03 : &BBC03 : &U_Cal; *Rcp
-     chan_def = :  2266.75 MHz : U :  16.00 MHz : &CH04 : &BBC04 : &U_Cal; *Lcp
-     chan_def = :  8400.75 MHz : U :  16.00 MHz : &CH05 : &BBC05 : &U_Cal; *Rcp
-     chan_def = :  8400.75 MHz : U :  16.00 MHz : &CH06 : &BBC06 : &U_Cal; *Lcp
-     chan_def = :  8416.75 MHz : U :  16.00 MHz : &CH07 : &BBC07 : &U_Cal; *Rcp
-     chan_def = :  8416.75 MHz : U :  16.00 MHz : &CH08 : &BBC08 : &U_Cal; *Lcp
-enddef;
-*------------------------------------------------------------------------------
-$IF;
-*
-def DualFreqRPolTone/1;
-* mode =  1    stations =Hn:La:Pt
-* mode =  3    stations =Hn:La:Pt
-* mode = 19    stations =Hn:La:Pt
-* mode = 35    stations =Hn:La:Pt
-     if_def = &IF_A : A : R :  3100.00 MHz : L : 1 MHz ; *    7600.00   3100.00  13cm     0 NA
-     if_def = &IF_B : B : R :  7600.00 MHz : U : 1 MHz ; *    7600.00   3100.00  4cm     0 NA
-enddef;
-*
-def DualFreqDPolTone/1;
-* mode =  2    stations =Hn:La:Pt
-* mode =  4    stations =Hn:La:Pt
-* mode = 20    stations =Hn:La:Pt
-* mode = 36    stations =Hn:La:Pt
-     if_def = &IF_A : A : R :  3100.00 MHz : L : 1 MHz ; *    7600.00   3100.00  13cm     0 NA
-     if_def = &IF_C : C : L :  3100.00 MHz : L : 1 MHz ; *    7600.00   3100.00  13cm     0 NA
-     if_def = &IF_B : B : R :  7600.00 MHz : U : 1 MHz ; *    7600.00   3100.00  4cm     0 NA
-     if_def = &IF_D : D : L :  7600.00 MHz : U : 1 MHz ; *    7600.00   3100.00  4cm     0 NA
-enddef;
-*
-def LO@2600MHzLPolTone/1;
-* mode =  5    stations =Hn:La:Pt
-     if_def = &IF_C : C : L :  2600.00 MHz : L : 1 MHz ; *   15400.00   2600.00  20cm     0 NA
-enddef;
-*
-def LO@2600MHzDPolTone/1;
-* mode =  6    stations =Hn:La:Pt
-     if_def = &IF_A : A : R :  2600.00 MHz : L : 1 MHz ; *   15400.00   2600.00  20cm     0 NA
-     if_def = &IF_C : C : L :  2600.00 MHz : L : 1 MHz ; *   15400.00   2600.00  20cm     0 NA
-enddef;
-*
-def LO@3100MHzRPolTone/1;
-* mode =  7    stations =Hn:La:Pt
-* mode = 23    stations =Hn:La:Pt
-     if_def = &IF_A : A : R :  3100.00 MHz : L : 1 MHz ; *   15400.00   3100.00  13cm     0 NA
-enddef;
-*
-def LO@3100MHzDPolTone/1;
-* mode =  8    stations =Hn:La:Pt
-* mode = 24    stations =Hn:La:Pt
-     if_def = &IF_A : A : R :  3100.00 MHz : L : 1 MHz ; *   15400.00   3100.00  13cm     0 NA
-     if_def = &IF_C : C : L :  3100.00 MHz : L : 1 MHz ; *   15400.00   3100.00  13cm     0 NA
-enddef;
-*
-def LO@5600MHzLPolTone/1;
-* mode =  9    stations =Hn:La:Pt
-* mode = 25    stations =Hn:La:Pt
-     if_def = &IF_C : C : L :  5600.00 MHz : L : 1 MHz ; *   15100.00   5600.00  6cm     0 NA
-enddef;
-*
-def LO@5600MHzDPolTone/1;
-* mode = 10    stations =Hn:La:Pt
-* mode = 26    stations =Hn:La:Pt
-     if_def = &IF_A : A : R :  5600.00 MHz : L : 1 MHz ; *   15100.00   5600.00  6cm     0 NA
-     if_def = &IF_C : C : L :  5600.00 MHz : L : 1 MHz ; *   15100.00   5600.00  6cm     0 NA
-enddef;
-*
-def LO@7600MHzRPolTone/1;
-* mode = 11    stations =Hn:La:Pt
-* mode = 27    stations =Hn:La:Pt
-     if_def = &IF_B : B : R :  7600.00 MHz : U : 1 MHz ; *    7600.00  15100.00  4cm     0 NA
-enddef;
-*
-def LO@7600MHzDPolTone/1;
-* mode = 12    stations =Hn:La:Pt
-* mode = 28    stations =Hn:La:Pt
-     if_def = &IF_B : B : R :  7600.00 MHz : U : 1 MHz ; *    7600.00  15100.00  4cm     0 NA
-     if_def = &IF_D : D : L :  7600.00 MHz : U : 1 MHz ; *    7600.00  15100.00  4cm     0 NA
-enddef;
-*
-def LO@14600MHzLPolTone/1;
-* mode = 13    stations =Hn:La:Pt
-* mode = 29    stations =Hn:La:Pt
-     if_def = &IF_D : D : L : 14600.00 MHz : U : 1 MHz ; *   14600.00  10900.00  2cm     0 NA
-enddef;
-*
-def LO@14600MHzDPolTone/1;
-* mode = 14    stations =Hn:La:Pt
-* mode = 30    stations =Hn:La:Pt
-     if_def = &IF_B : B : R : 14600.00 MHz : U : 1 MHz ; *   14600.00  10900.00  2cm     0 NA
-     if_def = &IF_D : D : L : 14600.00 MHz : U : 1 MHz ; *   14600.00  10900.00  2cm     0 NA
-enddef;
-*
-def LO@21500MHzLPolTone/1;
-* mode = 15    stations =Hn:La:Pt
-* mode = 31    stations =Hn:La:Pt
-     if_def = &IF_D : D : L : 21500.00 MHz : U : 1 MHz ; *    9100.00   6100.00  1cm 12400 NA
-enddef;
-*
-def LO@21500MHzDPolTone/1;
-* mode = 16    stations =Hn:La:Pt
-* mode = 32    stations =Hn:La:Pt
-     if_def = &IF_B : B : R : 21500.00 MHz : U : 1 MHz ; *    9100.00   6100.00  1cm 12400 NA
-     if_def = &IF_D : D : L : 21500.00 MHz : U : 1 MHz ; *    9100.00   6100.00  1cm 12400 NA
-enddef;
-*
-def LO@42400MHzLPolTone/1;
-* mode = 17    stations =Hn:La:Pt
-* mode = 33    stations =Hn:La:Pt
-     if_def = &IF_C : C : L : 42400.00 MHz : U : 1 MHz ; *    3900.00   7600.00  7mm 34800 NA
-enddef;
-*
-def LO@42400MHzDPolTone/1;
-* mode = 18    stations =Hn:La:Pt
-* mode = 34    stations =Hn:La:Pt
-     if_def = &IF_A : A : R : 42400.00 MHz : U : 1 MHz ; *    3900.00   7600.00  7mm 34800 NA
-     if_def = &IF_C : C : L : 42400.00 MHz : U : 1 MHz ; *    3900.00   7600.00  7mm 34800 NA
-enddef;
-*
-def LO@2400MHzLPolTone/1;
-* mode = 21    stations =Hn:La:Pt
-     if_def = &IF_C : C : L :  2400.00 MHz : L : 1 MHz ; *   14600.00   2400.00  20cm     0 NA
-enddef;
-*
-def LO@2400MHzDPolTone/1;
-* mode = 22    stations =Hn:La:Pt
-     if_def = &IF_A : A : R :  2400.00 MHz : L : 1 MHz ; *   14600.00   2400.00  20cm     0 NA
-     if_def = &IF_C : C : L :  2400.00 MHz : L : 1 MHz ; *   14600.00   2400.00  20cm     0 NA
-enddef;
-*------------------------------------------------------------------------------
-$BBC;
-*
-def 4BBCs;
-* mode =  1    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_A;
-     BBC_assign = &BBC02 :  2 : &IF_A;
-     BBC_assign = &BBC03 :  3 : &IF_B;
-     BBC_assign = &BBC04 :  4 : &IF_B;
-enddef;
-*
-def 4BBCs#02;
-* mode =  2    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_A;
-     BBC_assign = &BBC02 :  2 : &IF_C;
-     BBC_assign = &BBC03 :  3 : &IF_B;
-     BBC_assign = &BBC04 :  4 : &IF_D;
-enddef;
-*
-def 8BBCs;
-* mode =  3    stations =Hn:La:Pt
-* mode = 19    stations =Hn:La:Pt
-* mode = 35    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_A;
-     BBC_assign = &BBC02 :  2 : &IF_A;
-     BBC_assign = &BBC03 :  3 : &IF_A;
-     BBC_assign = &BBC04 :  4 : &IF_A;
-     BBC_assign = &BBC05 :  5 : &IF_B;
-     BBC_assign = &BBC06 :  6 : &IF_B;
-     BBC_assign = &BBC07 :  7 : &IF_B;
-     BBC_assign = &BBC08 :  8 : &IF_B;
-enddef;
-*
-def 8BBCs#02;
-* mode =  4    stations =Hn:La:Pt
-* mode = 20    stations =Hn:La:Pt
-* mode = 36    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_A;
-     BBC_assign = &BBC02 :  2 : &IF_C;
-     BBC_assign = &BBC03 :  3 : &IF_A;
-     BBC_assign = &BBC04 :  4 : &IF_C;
-     BBC_assign = &BBC05 :  5 : &IF_B;
-     BBC_assign = &BBC06 :  6 : &IF_D;
-     BBC_assign = &BBC07 :  7 : &IF_B;
-     BBC_assign = &BBC08 :  8 : &IF_D;
-enddef;
-*
-def 4BBCs#03;
-* mode =  5    stations =Hn:La:Pt
-* mode =  9    stations =Hn:La:Pt
-* mode = 17    stations =Hn:La:Pt
-* mode = 21    stations =Hn:La:Pt
-* mode = 25    stations =Hn:La:Pt
-* mode = 33    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_C;
-     BBC_assign = &BBC02 :  2 : &IF_C;
-     BBC_assign = &BBC03 :  3 : &IF_C;
-     BBC_assign = &BBC04 :  4 : &IF_C;
-     BBC_assign = &BBC05 :  5 : &IF_C;
-     BBC_assign = &BBC06 :  6 : &IF_C;
-     BBC_assign = &BBC07 :  7 : &IF_C;
-     BBC_assign = &BBC08 :  8 : &IF_C;
-enddef;
-*
-def 8BBCs#03;
-* mode =  6    stations =Hn:La:Pt
-* mode =  8    stations =Hn:La:Pt
-* mode = 10    stations =Hn:La:Pt
-* mode = 18    stations =Hn:La:Pt
-* mode = 22    stations =Hn:La:Pt
-* mode = 24    stations =Hn:La:Pt
-* mode = 26    stations =Hn:La:Pt
-* mode = 34    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_A;
-     BBC_assign = &BBC02 :  2 : &IF_C;
-     BBC_assign = &BBC03 :  3 : &IF_A;
-     BBC_assign = &BBC04 :  4 : &IF_C;
-     BBC_assign = &BBC05 :  5 : &IF_A;
-     BBC_assign = &BBC06 :  6 : &IF_C;
-     BBC_assign = &BBC07 :  7 : &IF_A;
-     BBC_assign = &BBC08 :  8 : &IF_C;
-enddef;
-*
-def 4BBCs#04;
-* mode =  7    stations =Hn:La:Pt
-* mode = 23    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_A;
-     BBC_assign = &BBC02 :  2 : &IF_A;
-     BBC_assign = &BBC03 :  3 : &IF_A;
-     BBC_assign = &BBC04 :  4 : &IF_A;
-     BBC_assign = &BBC05 :  5 : &IF_A;
-     BBC_assign = &BBC06 :  6 : &IF_A;
-     BBC_assign = &BBC07 :  7 : &IF_A;
-     BBC_assign = &BBC08 :  8 : &IF_A;
-enddef;
-*
-def 4BBCs#05;
-* mode = 11    stations =Hn:La:Pt
-* mode = 27    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_B;
-     BBC_assign = &BBC02 :  2 : &IF_B;
-     BBC_assign = &BBC03 :  3 : &IF_B;
-     BBC_assign = &BBC04 :  4 : &IF_B;
-     BBC_assign = &BBC05 :  5 : &IF_B;
-     BBC_assign = &BBC06 :  6 : &IF_B;
-     BBC_assign = &BBC07 :  7 : &IF_B;
-     BBC_assign = &BBC08 :  8 : &IF_B;
-enddef;
-*
-def 8BBCs#04;
-* mode = 12    stations =Hn:La:Pt
-* mode = 14    stations =Hn:La:Pt
-* mode = 16    stations =Hn:La:Pt
-* mode = 28    stations =Hn:La:Pt
-* mode = 30    stations =Hn:La:Pt
-* mode = 32    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_B;
-     BBC_assign = &BBC02 :  2 : &IF_D;
-     BBC_assign = &BBC03 :  3 : &IF_B;
-     BBC_assign = &BBC04 :  4 : &IF_D;
-     BBC_assign = &BBC05 :  5 : &IF_B;
-     BBC_assign = &BBC06 :  6 : &IF_D;
-     BBC_assign = &BBC07 :  7 : &IF_B;
-     BBC_assign = &BBC08 :  8 : &IF_D;
-enddef;
-*
-def 4BBCs#06;
-* mode = 13    stations =Hn:La:Pt
-* mode = 15    stations =Hn:La:Pt
-* mode = 29    stations =Hn:La:Pt
-* mode = 31    stations =Hn:La:Pt
-     BBC_assign = &BBC01 :  1 : &IF_D;
-     BBC_assign = &BBC02 :  2 : &IF_D;
-     BBC_assign = &BBC03 :  3 : &IF_D;
-     BBC_assign = &BBC04 :  4 : &IF_D;
-     BBC_assign = &BBC05 :  5 : &IF_D;
-     BBC_assign = &BBC06 :  6 : &IF_D;
-     BBC_assign = &BBC07 :  7 : &IF_D;
-     BBC_assign = &BBC08 :  8 : &IF_D;
-enddef;
-*------------------------------------------------------------------------------
-$PHASE_CAL_DETECT;
-*
-def UsbDetect;
-* mode =  1    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 :  8 :  0;
-enddef;
-*
-def UsbDetect#02;
-* mode =  2    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 :  8 :  0;
-enddef;
-*
-def UsbDetect#03;
-* mode =  3    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 :  8;
-enddef;
-*
-def UsbDetect#04;
-* mode =  4    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect;
-* mode =  5    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#02;
-* mode =  6    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#03;
-* mode =  7    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#04;
-* mode =  8    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#05;
-* mode =  9    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#06;
-* mode = 10    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#07;
-* mode = 11    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#08;
-* mode = 12    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#09;
-* mode = 13    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#10;
-* mode = 14    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#11;
-* mode = 15    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#12;
-* mode = 16    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#13;
-* mode = 17    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#14;
-* mode = 18    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#15;
-* mode = 19    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def DsbDetect#16;
-* mode = 20    stations =Hn:La:Pt
-     phase_cal_detect = &L_Cal :  1 :  8;
-enddef;
-*
-def UsbDetect#05;
-* mode = 21    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#06;
-* mode = 22    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#07;
-* mode = 23    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#08;
-* mode = 24    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#09;
-* mode = 25    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#10;
-* mode = 26    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#11;
-* mode = 27    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#12;
-* mode = 28    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#13;
-* mode = 29    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#14;
-* mode = 30    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#15;
-* mode = 31    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#16;
-* mode = 32    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#17;
-* mode = 33    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#18;
-* mode = 34    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#19;
-* mode = 35    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*
-def UsbDetect#20;
-* mode = 36    stations =Hn:La:Pt
-     phase_cal_detect = &U_Cal :  1 : 16;
-enddef;
-*------------------------------------------------------------------------------
-$TRACKS;
-*
-def VDIF.4Ch2bit1to1;
-* mode =  1    stations =Hn:La:Pt
-* mode =  2    stations =Hn:La:Pt
-*    firmware_type = RDBE_DDC;
-*    format = VDIF, and fan-out = 1
-*    mode requires  16.00Mb/s/tr; stations using disks
-     track_frame_format = VDIF5032;
-     fanout_def =   : &CH01 : sign : 1:  1;
-     fanout_def =   : &CH01 :  mag : 1:  1;
-     fanout_def =   : &CH02 : sign : 1:  2;
-     fanout_def =   : &CH02 :  mag : 1:  2;
-     fanout_def =   : &CH03 : sign : 1:  3;
-     fanout_def =   : &CH03 :  mag : 1:  3;
-     fanout_def =   : &CH04 : sign : 1:  4;
-     fanout_def =   : &CH04 :  mag : 1:  4;
-enddef;
-*
-def VDIF.8Ch2bit1to1;
-* mode =  3    stations =Hn:La:Pt
-* mode =  4    stations =Hn:La:Pt
-* mode =  5    stations =Hn:La:Pt
-* mode =  6    stations =Hn:La:Pt
-* mode =  7    stations =Hn:La:Pt
-* mode =  8    stations =Hn:La:Pt
-* mode =  9    stations =Hn:La:Pt
-* mode = 10    stations =Hn:La:Pt
-* mode = 11    stations =Hn:La:Pt
-* mode = 12    stations =Hn:La:Pt
-* mode = 13    stations =Hn:La:Pt
-* mode = 14    stations =Hn:La:Pt
-* mode = 15    stations =Hn:La:Pt
-* mode = 16    stations =Hn:La:Pt
-* mode = 17    stations =Hn:La:Pt
-* mode = 18    stations =Hn:La:Pt
-* mode = 19    stations =Hn:La:Pt
-* mode = 20    stations =Hn:La:Pt
-*    firmware_type = RDBE_DDC;
-*    format = VDIF, and fan-out = 1
-*    mode requires  16.00Mb/s/tr; stations using disks
-     track_frame_format = VDIF5032;
-     fanout_def =   : &CH01 : sign : 1:  1;
-     fanout_def =   : &CH01 :  mag : 1:  1;
-     fanout_def =   : &CH02 : sign : 1:  2;
-     fanout_def =   : &CH02 :  mag : 1:  2;
-     fanout_def =   : &CH03 : sign : 1:  3;
-     fanout_def =   : &CH03 :  mag : 1:  3;
-     fanout_def =   : &CH04 : sign : 1:  4;
-     fanout_def =   : &CH04 :  mag : 1:  4;
-     fanout_def =   : &CH05 : sign : 1:  5;
-     fanout_def =   : &CH05 :  mag : 1:  5;
-     fanout_def =   : &CH06 : sign : 1:  6;
-     fanout_def =   : &CH06 :  mag : 1:  6;
-     fanout_def =   : &CH07 : sign : 1:  7;
-     fanout_def =   : &CH07 :  mag : 1:  7;
-     fanout_def =   : &CH08 : sign : 1:  8;
-     fanout_def =   : &CH08 :  mag : 1:  8;
-enddef;
-*
-def VDIF.8Ch2bit1to1#02;
-* mode = 21    stations =Hn:La:Pt
-* mode = 22    stations =Hn:La:Pt
-* mode = 23    stations =Hn:La:Pt
-* mode = 24    stations =Hn:La:Pt
-* mode = 25    stations =Hn:La:Pt
-* mode = 26    stations =Hn:La:Pt
-* mode = 27    stations =Hn:La:Pt
-* mode = 28    stations =Hn:La:Pt
-* mode = 29    stations =Hn:La:Pt
-* mode = 30    stations =Hn:La:Pt
-* mode = 31    stations =Hn:La:Pt
-* mode = 32    stations =Hn:La:Pt
-* mode = 33    stations =Hn:La:Pt
-* mode = 34    stations =Hn:La:Pt
-* mode = 35    stations =Hn:La:Pt
-* mode = 36    stations =Hn:La:Pt
-*    firmware_type = RDBE_DDC;
-*    format = VDIF, and fan-out = 1
-*    mode requires  32.00Mb/s/tr; stations using disks
-     track_frame_format = VDIF5032;
-     fanout_def =   : &CH01 : sign : 1:  1;
-     fanout_def =   : &CH01 :  mag : 1:  1;
-     fanout_def =   : &CH02 : sign : 1:  2;
-     fanout_def =   : &CH02 :  mag : 1:  2;
-     fanout_def =   : &CH03 : sign : 1:  3;
-     fanout_def =   : &CH03 :  mag : 1:  3;
-     fanout_def =   : &CH04 : sign : 1:  4;
-     fanout_def =   : &CH04 :  mag : 1:  4;
-     fanout_def =   : &CH05 : sign : 1:  5;
-     fanout_def =   : &CH05 :  mag : 1:  5;
-     fanout_def =   : &CH06 : sign : 1:  6;
-     fanout_def =   : &CH06 :  mag : 1:  6;
-     fanout_def =   : &CH07 : sign : 1:  7;
-     fanout_def =   : &CH07 :  mag : 1:  7;
-     fanout_def =   : &CH08 : sign : 1:  8;
-     fanout_def =   : &CH08 :  mag : 1:  8;
-enddef;
-*------------------------------------------------------------------------------
-$HEAD_POS;
-def DiskVoid;
-* mode =  1    stations =Hn:La:Pt
-* mode =  2    stations =Hn:La:Pt
-* mode =  3    stations =Hn:La:Pt
-* mode =  4    stations =Hn:La:Pt
-* mode =  5    stations =Hn:La:Pt
-* mode =  6    stations =Hn:La:Pt
-* mode =  7    stations =Hn:La:Pt
-* mode =  8    stations =Hn:La:Pt
-* mode =  9    stations =Hn:La:Pt
-* mode = 10    stations =Hn:La:Pt
-* mode = 11    stations =Hn:La:Pt
-* mode = 12    stations =Hn:La:Pt
-* mode = 13    stations =Hn:La:Pt
-* mode = 14    stations =Hn:La:Pt
-* mode = 15    stations =Hn:La:Pt
-* mode = 16    stations =Hn:La:Pt
-* mode = 17    stations =Hn:La:Pt
-* mode = 18    stations =Hn:La:Pt
-* mode = 19    stations =Hn:La:Pt
-* mode = 20    stations =Hn:La:Pt
-* mode = 21    stations =Hn:La:Pt
-* mode = 22    stations =Hn:La:Pt
-* mode = 23    stations =Hn:La:Pt
-* mode = 24    stations =Hn:La:Pt
-* mode = 25    stations =Hn:La:Pt
-* mode = 26    stations =Hn:La:Pt
-* mode = 27    stations =Hn:La:Pt
-* mode = 28    stations =Hn:La:Pt
-* mode = 29    stations =Hn:La:Pt
-* mode = 30    stations =Hn:La:Pt
-* mode = 31    stations =Hn:La:Pt
-* mode = 32    stations =Hn:La:Pt
-* mode = 33    stations =Hn:La:Pt
-* mode = 34    stations =Hn:La:Pt
-* mode = 35    stations =Hn:La:Pt
-* mode = 36    stations =Hn:La:Pt
-*     Head positions irrelevant for Disk: empty def
-enddef;
-*------------------------------------------------------------------------------
-$PASS_ORDER;
-*
-def DiskVoid;
-* mode =  1    stations =Hn:La:Pt
-* mode =  2    stations =Hn:La:Pt
-* mode =  3    stations =Hn:La:Pt
-* mode =  4    stations =Hn:La:Pt
-* mode =  5    stations =Hn:La:Pt
-* mode =  6    stations =Hn:La:Pt
-* mode =  7    stations =Hn:La:Pt
-* mode =  8    stations =Hn:La:Pt
-* mode =  9    stations =Hn:La:Pt
-* mode = 10    stations =Hn:La:Pt
-* mode = 11    stations =Hn:La:Pt
-* mode = 12    stations =Hn:La:Pt
-* mode = 13    stations =Hn:La:Pt
-* mode = 14    stations =Hn:La:Pt
-* mode = 15    stations =Hn:La:Pt
-* mode = 16    stations =Hn:La:Pt
-* mode = 17    stations =Hn:La:Pt
-* mode = 18    stations =Hn:La:Pt
-* mode = 19    stations =Hn:La:Pt
-* mode = 20    stations =Hn:La:Pt
-* mode = 21    stations =Hn:La:Pt
-* mode = 22    stations =Hn:La:Pt
-* mode = 23    stations =Hn:La:Pt
-* mode = 24    stations =Hn:La:Pt
-* mode = 25    stations =Hn:La:Pt
-* mode = 26    stations =Hn:La:Pt
-* mode = 27    stations =Hn:La:Pt
-* mode = 28    stations =Hn:La:Pt
-* mode = 29    stations =Hn:La:Pt
-* mode = 30    stations =Hn:La:Pt
-* mode = 31    stations =Hn:La:Pt
-* mode = 32    stations =Hn:La:Pt
-* mode = 33    stations =Hn:La:Pt
-* mode = 34    stations =Hn:La:Pt
-* mode = 35    stations =Hn:La:Pt
-* mode = 36    stations =Hn:La:Pt
-*     Pass orders irrelevant for Disk: empty def
-enddef;
-*------------------------------------------------------------------------------
-$ROLL;
-*
-def NoRoll;
-* mode =  1    stations =Hn:La:Pt
-* mode =  2    stations =Hn:La:Pt
-* mode =  3    stations =Hn:La:Pt
-* mode =  4    stations =Hn:La:Pt
-* mode =  5    stations =Hn:La:Pt
-* mode =  6    stations =Hn:La:Pt
-* mode =  7    stations =Hn:La:Pt
-* mode =  8    stations =Hn:La:Pt
-* mode =  9    stations =Hn:La:Pt
-* mode = 10    stations =Hn:La:Pt
-* mode = 11    stations =Hn:La:Pt
-* mode = 12    stations =Hn:La:Pt
-* mode = 13    stations =Hn:La:Pt
-* mode = 14    stations =Hn:La:Pt
-* mode = 15    stations =Hn:La:Pt
-* mode = 16    stations =Hn:La:Pt
-* mode = 17    stations =Hn:La:Pt
-* mode = 18    stations =Hn:La:Pt
-* mode = 19    stations =Hn:La:Pt
-* mode = 20    stations =Hn:La:Pt
-* mode = 21    stations =Hn:La:Pt
-* mode = 22    stations =Hn:La:Pt
-* mode = 23    stations =Hn:La:Pt
-* mode = 24    stations =Hn:La:Pt
-* mode = 25    stations =Hn:La:Pt
-* mode = 26    stations =Hn:La:Pt
-* mode = 27    stations =Hn:La:Pt
-* mode = 28    stations =Hn:La:Pt
-* mode = 29    stations =Hn:La:Pt
-* mode = 30    stations =Hn:La:Pt
-* mode = 31    stations =Hn:La:Pt
-* mode = 32    stations =Hn:La:Pt
-* mode = 33    stations =Hn:La:Pt
-* mode = 34    stations =Hn:La:Pt
-* mode = 35    stations =Hn:La:Pt
-* mode = 36    stations =Hn:La:Pt
-*    barrel-roll set to 'roll_off', so reverse-roll by  0 (1 head)
-     roll = off;
 enddef;
 *------------------------------------------------------------------------------
 $SCHED;
-* schedule section for experiment tstsets 
-* Test DDC setups                                                         
+*
 scan No0001;
-     start=2014y358d23h00m00s; mode=vsx-128-4-2-R; source=1053+815;
-*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Hn:    0 sec:  300 sec:    0.000 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:    0.000 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:    0.000 GB:   : &ccw  : 1;
+     start = 2014y358d23h00m00s;
+     mode = vsx-128-4-2-R;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :     0.000 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :     0.000 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :     0.000 GB :  : &ccw : 1;
 endscan;
+*
 scan No0002;
-     start=2014y358d23h05m06s; mode=vsx-128-4-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:    4.831 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:    4.831 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:    4.831 GB:   : &ccw  : 1;
+     start = 2014y358d23h05m06s;
+     mode = vsx-128-4-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :     4.831 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :     4.831 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :     4.831 GB :  : &ccw : 1;
 endscan;
+*
 scan No0003;
-     start=2014y358d23h10m12s; mode=vsx-256-8-2-R; source=1053+815;
-     station=Hn:    0 sec:  300 sec:    9.661 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:    9.661 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:    9.661 GB:   : &ccw  : 1;
+     start = 2014y358d23h10m12s;
+     mode = vsx-256-8-2-R;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :     9.661 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :     9.661 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :     9.661 GB :  : &ccw : 1;
 endscan;
+*
 scan No0004;
-     start=2014y358d23h15m18s; mode=vsx-256-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   19.323 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   19.323 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   19.323 GB:   : &ccw  : 1;
+     start = 2014y358d23h15m18s;
+     mode = vsx-256-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    19.323 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    19.323 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    19.323 GB :  : &ccw : 1;
 endscan;
+*
 scan No0005;
-     start=2014y358d23h20m24s; mode=v18cm-256-8-2-L-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   28.984 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   28.984 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   28.984 GB:   : &ccw  : 1;
+     start = 2014y358d23h20m24s;
+     mode = v18cm-256-8-2-L-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    28.984 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    28.984 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    28.984 GB :  : &ccw : 1;
 endscan;
+*
 scan No0006;
-     start=2014y358d23h25m30s; mode=v18cm-256-8-2-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   38.646 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   38.646 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   38.646 GB:   : &ccw  : 1;
+     start = 2014y358d23h25m30s;
+     mode = v18cm-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    38.646 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    38.646 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    38.646 GB :  : &ccw : 1;
 endscan;
+*
 scan No0007;
-     start=2014y358d23h30m36s; mode=v13cm-256-8-2-R-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   48.307 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   48.307 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   48.307 GB:   : &ccw  : 1;
+     start = 2014y358d23h30m36s;
+     mode = v13cm-256-8-2-R-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    48.307 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    48.307 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    48.307 GB :  : &ccw : 1;
 endscan;
+*
 scan No0008;
-     start=2014y358d23h35m42s; mode=v13cm-256-8-2-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   57.969 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   57.969 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   57.969 GB:   : &ccw  : 1;
+     start = 2014y358d23h35m42s;
+     mode = v13cm-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    57.969 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    57.969 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    57.969 GB :  : &ccw : 1;
 endscan;
+*
 scan No0009;
-     start=2014y358d23h40m48s; mode=v6cm-256-8-2-L-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   67.630 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   67.630 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   67.630 GB:   : &ccw  : 1;
+     start = 2014y358d23h40m48s;
+     mode = v6cm-256-8-2-L-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    67.630 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    67.630 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    67.630 GB :  : &ccw : 1;
 endscan;
+*
 scan No0010;
-     start=2014y358d23h45m54s; mode=v6cm-256-8-2-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   77.292 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   77.292 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   77.292 GB:   : &ccw  : 1;
+     start = 2014y358d23h45m54s;
+     mode = v6cm-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    77.292 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    77.292 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    77.292 GB :  : &ccw : 1;
 endscan;
+*
 scan No0011;
-     start=2014y358d23h51m00s; mode=v4cm-256-8-2-R-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   86.953 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   86.953 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   86.953 GB:   : &ccw  : 1;
+     start = 2014y358d23h51m00s;
+     mode = v4cm-256-8-2-R-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    86.953 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    86.953 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    86.953 GB :  : &ccw : 1;
 endscan;
+*
 scan No0012;
-     start=2014y358d23h56m06s; mode=v4cm-256-8-2-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:   96.614 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:   96.614 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:   96.614 GB:   : &ccw  : 1;
+     start = 2014y358d23h56m06s;
+     mode = v4cm-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :    96.614 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :    96.614 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :    96.614 GB :  : &ccw : 1;
 endscan;
+*
 scan No0013;
-     start=2014y359d00h01m12s; mode=v2cm-256-8-2-L-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  106.276 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  106.276 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  106.276 GB:   : &ccw  : 1;
+     start = 2014y359d00h01m12s;
+     mode = v2cm-256-8-2-L-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   106.276 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   106.276 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   106.276 GB :  : &ccw : 1;
 endscan;
+*
 scan No0014;
-     start=2014y359d00h06m18s; mode=v2cm-256-8-2-UL; source=1053+815;
-*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Hn:    0 sec:  300 sec:  115.937 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  115.937 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  115.937 GB:   : &ccw  : 1;
+     start = 2014y359d00h06m18s;
+     mode = v2cm-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   115.937 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   115.937 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   115.937 GB :  : &ccw : 1;
 endscan;
+*
 scan No0015;
-     start=2014y359d00h11m24s; mode=v1cm-256-8-2-L-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  125.599 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  125.599 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  125.599 GB:   : &ccw  : 1;
+     start = 2014y359d00h11m24s;
+     mode = v1cm-256-8-2-L-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   125.599 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   125.599 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   125.599 GB :  : &ccw : 1;
 endscan;
+*
 scan No0016;
-     start=2014y359d00h16m30s; mode=v1cm-256-8-2-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  135.260 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  135.260 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  135.260 GB:   : &ccw  : 1;
+     start = 2014y359d00h16m30s;
+     mode = v1cm-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   135.260 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   135.260 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   135.260 GB :  : &ccw : 1;
 endscan;
+*
 scan No0017;
-     start=2014y359d00h21m36s; mode=v7mm-256-8-2-L-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  144.922 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  144.922 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  144.922 GB:   : &ccw  : 1;
+     start = 2014y359d00h21m36s;
+     mode = v7mm-256-8-2-L-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   144.922 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   144.922 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   144.922 GB :  : &ccw : 1;
 endscan;
+*
 scan No0018;
-     start=2014y359d00h26m42s; mode=v7mm-256-8-2-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  154.583 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  154.583 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  154.583 GB:   : &ccw  : 1;
+     start = 2014y359d00h26m42s;
+     mode = v7mm-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   154.583 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   154.583 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   154.583 GB :  : &ccw : 1;
 endscan;
+*
 scan No0019;
-     start=2014y359d00h31m48s; mode=vsx-256-8-2-R-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  164.244 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  164.244 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  164.244 GB:   : &ccw  : 1;
+     start = 2014y359d00h31m48s;
+     mode = vsx-256-8-2-R-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   164.244 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   164.244 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   164.244 GB :  : &ccw : 1;
 endscan;
+*
 scan No0020;
-     start=2014y359d00h36m54s; mode=vsx-256-8-2-UL; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  173.906 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  173.906 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  173.906 GB:   : &ccw  : 1;
+     start = 2014y359d00h36m54s;
+     mode = vsx-256-8-2-UL;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   173.906 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   173.906 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   173.906 GB :  : &ccw : 1;
 endscan;
+*
 scan No0021;
-     start=2014y359d00h42m00s; mode=v18cm-512-8-2-L; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  183.567 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  183.567 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  183.567 GB:   : &ccw  : 1;
+     start = 2014y359d00h42m00s;
+     mode = v18cm-512-8-2-L;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   183.567 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   183.567 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   183.567 GB :  : &ccw : 1;
 endscan;
+*
 scan No0022;
-     start=2014y359d00h47m06s; mode=v18cm-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  202.890 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  202.890 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  202.890 GB:   : &ccw  : 1;
+     start = 2014y359d00h47m06s;
+     mode = v18cm-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   202.890 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   202.890 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   202.890 GB :  : &ccw : 1;
 endscan;
+*
 scan No0023;
-     start=2014y359d00h52m12s; mode=v13cm-512-8-2-R; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  222.213 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  222.213 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  222.213 GB:   : &ccw  : 1;
+     start = 2014y359d00h52m12s;
+     mode = v13cm-512-8-2-R;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   222.213 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   222.213 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   222.213 GB :  : &ccw : 1;
 endscan;
+*
 scan No0024;
-     start=2014y359d00h57m18s; mode=v13cm-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  241.536 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  241.536 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  241.536 GB:   : &ccw  : 1;
+     start = 2014y359d00h57m18s;
+     mode = v13cm-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   241.536 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   241.536 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   241.536 GB :  : &ccw : 1;
 endscan;
+*
 scan No0025;
-     start=2014y359d01h02m24s; mode=v6cm-512-8-2-L; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  260.859 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  260.859 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  260.859 GB:   : &ccw  : 1;
+     start = 2014y359d01h02m24s;
+     mode = v6cm-512-8-2-L;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   260.859 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   260.859 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   260.859 GB :  : &ccw : 1;
 endscan;
+*
 scan No0026;
-     start=2014y359d01h07m30s; mode=v6cm-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  280.182 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  280.182 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  280.182 GB:   : &ccw  : 1;
+     start = 2014y359d01h07m30s;
+     mode = v6cm-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   280.182 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   280.182 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   280.182 GB :  : &ccw : 1;
 endscan;
+*
 scan No0027;
-     start=2014y359d01h12m36s; mode=v4cm-512-8-2-R; source=1053+815;
-*              :data_good:data_stop:goto_foot: pass:  wrap :driv:tape at
-     station=Hn:    0 sec:  300 sec:  299.505 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  299.505 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  299.505 GB:   : &ccw  : 1;
+     start = 2014y359d01h12m36s;
+     mode = v4cm-512-8-2-R;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   299.505 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   299.505 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   299.505 GB :  : &ccw : 1;
 endscan;
+*
 scan No0028;
-     start=2014y359d01h17m42s; mode=v4cm-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  318.827 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  318.827 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  318.827 GB:   : &ccw  : 1;
+     start = 2014y359d01h17m42s;
+     mode = v4cm-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   318.827 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   318.827 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   318.827 GB :  : &ccw : 1;
 endscan;
+*
 scan No0029;
-     start=2014y359d01h22m48s; mode=v2cm-512-8-2-L; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  338.150 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  338.150 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  338.150 GB:   : &ccw  : 1;
+     start = 2014y359d01h22m48s;
+     mode = v2cm-512-8-2-L;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   338.150 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   338.150 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   338.150 GB :  : &ccw : 1;
 endscan;
+*
 scan No0030;
-     start=2014y359d01h27m54s; mode=v2cm-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  357.473 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  357.473 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  357.473 GB:   : &ccw  : 1;
+     start = 2014y359d01h27m54s;
+     mode = v2cm-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   357.473 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   357.473 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   357.473 GB :  : &ccw : 1;
 endscan;
+*
 scan No0031;
-     start=2014y359d01h33m00s; mode=v1cm-512-8-2-L; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  376.796 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  376.796 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  376.796 GB:   : &ccw  : 1;
+     start = 2014y359d01h33m00s;
+     mode = v1cm-512-8-2-L;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   376.796 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   376.796 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   376.796 GB :  : &ccw : 1;
 endscan;
+*
 scan No0032;
-     start=2014y359d01h38m06s; mode=v1cm-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  396.119 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  396.119 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  396.119 GB:   : &ccw  : 1;
+     start = 2014y359d01h38m06s;
+     mode = v1cm-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   396.119 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   396.119 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   396.119 GB :  : &ccw : 1;
 endscan;
+*
 scan No0033;
-     start=2014y359d01h43m12s; mode=v7mm-512-8-2-L; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  415.442 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  415.442 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  415.442 GB:   : &ccw  : 1;
+     start = 2014y359d01h43m12s;
+     mode = v7mm-512-8-2-L;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   415.442 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   415.442 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   415.442 GB :  : &ccw : 1;
 endscan;
+*
 scan No0034;
-     start=2014y359d01h48m18s; mode=v7mm-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  434.765 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  434.765 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  434.765 GB:   : &ccw  : 1;
+     start = 2014y359d01h48m18s;
+     mode = v7mm-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   434.765 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   434.765 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   434.765 GB :  : &ccw : 1;
 endscan;
+*
 scan No0035;
-     start=2014y359d01h53m24s; mode=vsx-512-8-2-R; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  454.088 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  454.088 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  454.088 GB:   : &ccw  : 1;
+     start = 2014y359d01h53m24s;
+     mode = vsx-512-8-2-R;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   454.088 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   454.088 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   454.088 GB :  : &ccw : 1;
 endscan;
+*
 scan No0036;
-     start=2014y359d01h58m30s; mode=vsx-512-8-2; source=1053+815;
-     station=Hn:    0 sec:  300 sec:  473.410 GB:   : &ccw  : 1;
-     station=La:    0 sec:  300 sec:  473.410 GB:   : &ccw  : 1;
-     station=Pt:    0 sec:  300 sec:  473.410 GB:   : &ccw  : 1;
+     start = 2014y359d01h58m30s;
+     mode = vsx-512-8-2;
+     source = 1053+815;
+     station = Hn : 0 sec : 300 sec :   473.410 GB :  : &ccw : 1;
+     station = La : 0 sec : 300 sec :   473.410 GB :  : &ccw : 1;
+     station = Pt : 0 sec : 300 sec :   473.410 GB :  : &ccw : 1;
 endscan;

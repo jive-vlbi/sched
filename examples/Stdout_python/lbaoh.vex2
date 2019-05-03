@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -51,7 +51,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def oh;
      ref $PROCEDURES = Procedure:At:Mp:Ho:Pa;
      ref $IF = LO@1000MHzDPolNoTone:Mp;
      ref $IF = LO@1050MHzDPolNoTone:Ho;
@@ -69,39 +69,39 @@ enddef;
 $IF;
 *
 def LO@1000MHzDPolNoTone;
-* Mode0: Mp
-     if_def = &IF_2N : 2N : R :   1000.00 MHz : U;
-     if_def = &IF_1N : 1N : L :   1000.00 MHz : U;
+* oh: Mp
+     if_def = &IF_2N :  : R :   1000.00 MHz : U;
+     if_def = &IF_1N :  : L :   1000.00 MHz : U;
 enddef;
 *
 def LO@1050MHzDPolNoTone;
-* Mode0: Ho
-     if_def = &IF_A1 : A1 : R :   1050.00 MHz : U;
-     if_def = &IF_B1 : B1 : L :   1050.00 MHz : U;
+* oh: Ho
+     if_def = &IF_A1 :  : R :   1050.00 MHz : U;
+     if_def = &IF_B1 :  : L :   1050.00 MHz : U;
 enddef;
 *
 def LO@1600MHzDPolNoTone;
-* Mode0: Pa
-     if_def = &IF_2N : 2N : R :   1600.00 MHz : U;
-     if_def = &IF_1N : 1N : L :   1600.00 MHz : U;
+* oh: Pa
+     if_def = &IF_2N :  : R :   1600.00 MHz : U;
+     if_def = &IF_1N :  : L :   1600.00 MHz : U;
 enddef;
 *
 def LO@700MHzDPolNoTone;
-* Mode0: At
-     if_def = &IF_2N : 2N : R :    700.00 MHz : U;
-     if_def = &IF_1N : 1N : L :    700.00 MHz : U;
+* oh: At
+     if_def = &IF_2N :  : R :    700.00 MHz : U;
+     if_def = &IF_1N :  : L :    700.00 MHz : U;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 2BBCs;
-* Mode0: At, Mp, Pa
+* oh: At, Mp, Pa
      BBC_assign = &BBC01 : 1 : &IF_2N;
      BBC_assign = &BBC02 : 2 : &IF_1N;
 enddef;
 *
 def 2BBCs#02;
-* Mode0: Ho
+* oh: Ho
      BBC_assign = &BBC01 : 1 : &IF_A1;
      BBC_assign = &BBC09 : 9 : &IF_B1;
 enddef;
@@ -109,20 +109,20 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def NoDetect;
-* Mode0: At, Ho, Mp, Pa
+* oh: At, Ho, Mp, Pa
      phase_cal_detect = &NoCal;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 1664MHz2x4MHz;
-* Mode0: At, Mp, Pa
+* oh: At, Mp, Pa
      chan_def =  : 1664 MHz : U :    4.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 1664 MHz : U :    4.00 MHz : &CH02 : &BBC02 : &NoCal;
 enddef;
 *
 def 1664MHz2x4MHz#02;
-* Mode0: Ho
+* oh: Ho
      chan_def =  : 1664 MHz : U :    4.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 1664 MHz : U :    4.00 MHz : &CH02 : &BBC09 : &NoCal;
 enddef;
@@ -130,7 +130,7 @@ enddef;
 $TRACKS;
 *
 def LBA_AT.2Ch2bit1to1;
-* Mode0: At, Mp, Pa
+* oh: At, Mp, Pa
      track_frame_format = LBA_AT;
      sample_rate =   8.000 Ms/sec;
      fanout_def =  : &CH01 : sign : 1 : 0;
@@ -142,7 +142,7 @@ enddef;
 $BITSTREAMS;
 *
 def BS2Ch2Bit;
-* Mode0: Ho
+* oh: Ho
      stream_sample_rate =   8.000 Ms/sec;
      stream_def = &CH01 : sign : 0 : 0;
      stream_def = &CH02 :  mag : 1 : 1;
@@ -152,25 +152,25 @@ $STATION;
 *
 def At;
      ref $ANTENNA = ATCA;
-     ref $DAS = LBA;
+     ref $DAS = LBA+S2;
      ref $SITE = ATCA;
 enddef;
 *
 def Mp;
      ref $ANTENNA = MOPRA;
-     ref $DAS = LBA;
+     ref $DAS = LBA+S2;
      ref $SITE = MOPRA;
 enddef;
 *
 def Ho;
      ref $ANTENNA = HOB_DBBC;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC_DDC+Mark5B;
      ref $SITE = HOB_DBBC;
 enddef;
 *
 def Pa;
      ref $ANTENNA = PARKES;
-     ref $DAS = LBA;
+     ref $DAS = LBA+S2;
      ref $SITE = PARKES;
 enddef;
 *------------------------------------------------------------------------------
@@ -206,13 +206,14 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def DBBC+Mark5B;
-     equip = recorder : Mark5B : &Mark5B;
-     equip =     rack :   DBBC :   &DBBC;
+def DBBC_DDC+Mark5B;
+     equip = recorder :   Mark5B :   &Mark5B;
+     equip =     rack : DBBC_DDC : &DBBC_DDC;
 enddef;
 *
-def LBA;
-     equip = rack : LBA : &LBA;
+def LBA+S2;
+     equip = recorder :  S2 :  &S2;
+     equip =     rack : LBA : &LBA;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
@@ -303,7 +304,7 @@ $SCHED;
 *
 scan No0001;
      start = 2000y229d23h00m00s;
-     mode = Mode0;
+     mode = oh;
      source = 0823-500;
      station = At : 0 sec : 300 sec :     0.000 GB :  :  : 1;
      station = Mp : 0 sec : 300 sec :     0.000 GB :  :  : 1;
@@ -313,7 +314,7 @@ endscan;
 *
 scan No0002;
      start = 2000y229d23h05m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1148-671;
      station = At :  93 sec : 420 sec :     1.200 GB :  :  : 1;
      station = Mp :  98 sec : 420 sec :     1.200 GB :  :  : 1;
@@ -323,7 +324,7 @@ endscan;
 *
 scan No0003;
      start = 2000y229d23h12m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 20 sec : 1680 sec :     2.880 GB :  :  : 1;
      station = Mp : 21 sec : 1680 sec :     2.880 GB :  :  : 1;
@@ -333,7 +334,7 @@ endscan;
 *
 scan No0004;
      start = 2000y229d23h40m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 34 sec : 300 sec :     9.600 GB :  :  : 1;
      station = Mp : 35 sec : 300 sec :     9.600 GB :  :  : 1;
@@ -343,7 +344,7 @@ endscan;
 *
 scan No0005;
      start = 2000y229d23h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 34 sec : 1500 sec :    10.800 GB :  :  : 1;
      station = Mp : 36 sec : 1500 sec :    10.800 GB :  :  : 1;
@@ -353,7 +354,7 @@ endscan;
 *
 scan No0006;
      start = 2000y230d00h10m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 35 sec : 300 sec :    16.800 GB :  :  : 1;
      station = Mp : 37 sec : 300 sec :    16.800 GB :  :  : 1;
@@ -363,7 +364,7 @@ endscan;
 *
 scan No0007;
      start = 2000y230d00h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 36 sec : 1500 sec :    18.000 GB :  :  : 1;
      station = Mp : 37 sec : 1500 sec :    18.000 GB :  :  : 1;
@@ -373,7 +374,7 @@ endscan;
 *
 scan No0008;
      start = 2000y230d00h40m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 37 sec : 300 sec :    24.000 GB :  :  : 1;
      station = Mp : 38 sec : 300 sec :    24.000 GB :  :  : 1;
@@ -383,7 +384,7 @@ endscan;
 *
 scan No0009;
      start = 2000y230d00h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 37 sec : 1500 sec :    25.200 GB :  :  : 1;
      station = Mp : 39 sec : 1500 sec :    25.200 GB :  :  : 1;
@@ -393,7 +394,7 @@ endscan;
 *
 scan No0010;
      start = 2000y230d01h10m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 38 sec : 300 sec :    31.200 GB :  :  : 1;
      station = Mp : 40 sec : 300 sec :    31.200 GB :  :  : 1;
@@ -403,7 +404,7 @@ endscan;
 *
 scan No0011;
      start = 2000y230d01h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 38 sec : 1500 sec :    32.400 GB :  :  : 1;
      station = Mp : 40 sec : 1500 sec :    32.400 GB :  :  : 1;
@@ -413,7 +414,7 @@ endscan;
 *
 scan No0012;
      start = 2000y230d01h40m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 39 sec : 300 sec :    38.400 GB :  :  : 1;
      station = Mp : 41 sec : 300 sec :    38.400 GB :  :  : 1;
@@ -423,7 +424,7 @@ endscan;
 *
 scan No0013;
      start = 2000y230d01h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 39 sec : 1500 sec :    39.600 GB :  :  : 1;
      station = Mp : 42 sec : 1500 sec :    39.600 GB :  :  : 1;
@@ -433,7 +434,7 @@ endscan;
 *
 scan No0014;
      start = 2000y230d02h10m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 40 sec : 300 sec :    45.600 GB :  :  : 1;
      station = Mp : 42 sec : 300 sec :    45.600 GB :  :  : 1;
@@ -443,7 +444,7 @@ endscan;
 *
 scan No0015;
      start = 2000y230d02h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 40 sec : 1500 sec :    46.800 GB :  :  : 1;
      station = Mp : 42 sec : 1500 sec :    46.800 GB :  :  : 1;
@@ -453,7 +454,7 @@ endscan;
 *
 scan No0016;
      start = 2000y230d02h40m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 39 sec : 300 sec :    52.800 GB :  :  : 1;
      station = Mp : 42 sec : 300 sec :    52.800 GB :  :  : 1;
@@ -463,7 +464,7 @@ endscan;
 *
 scan No0017;
      start = 2000y230d02h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 39 sec : 1500 sec :    54.000 GB :  :  : 1;
      station = Mp : 42 sec : 1500 sec :    54.000 GB :  :  : 1;
@@ -473,7 +474,7 @@ endscan;
 *
 scan No0018;
      start = 2000y230d03h10m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 43 sec : 300 sec :    60.000 GB :  :  : 1;
      station = Mp : 44 sec : 300 sec :    60.000 GB :  :  : 1;
@@ -483,7 +484,7 @@ endscan;
 *
 scan No0019;
      start = 2000y230d03h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 43 sec : 1500 sec :    61.200 GB :  :  : 1;
      station = Mp : 44 sec : 1500 sec :    61.200 GB :  :  : 1;
@@ -493,7 +494,7 @@ endscan;
 *
 scan No0020;
      start = 2000y230d03h40m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 48 sec : 300 sec :    67.200 GB :  :  : 1;
      station = Mp : 50 sec : 300 sec :    67.200 GB :  :  : 1;
@@ -503,7 +504,7 @@ endscan;
 *
 scan No0021;
      start = 2000y230d03h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 129 sec : 1800 sec :    68.400 GB :  :  : 1;
      station = Mp : 137 sec : 1800 sec :    68.400 GB :  :  : 1;
@@ -513,7 +514,7 @@ endscan;
 *
 scan No0022;
      start = 2000y230d04h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 123 sec : 300 sec :    75.600 GB :  :  : 1;
      station = Mp : 131 sec : 300 sec :    75.600 GB :  :  : 1;
@@ -523,7 +524,7 @@ endscan;
 *
 scan No0023;
      start = 2000y230d04h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 52 sec : 1500 sec :    76.800 GB :  :  : 1;
      station = Mp : 54 sec : 1500 sec :    76.800 GB :  :  : 1;
@@ -533,7 +534,7 @@ endscan;
 *
 scan No0024;
      start = 2000y230d04h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1215-457;
      station = At : 51 sec : 300 sec :    82.800 GB :  :  : 1;
      station = Mp : 54 sec : 300 sec :    82.800 GB :  :  : 1;
@@ -543,7 +544,7 @@ endscan;
 *
 scan No0025;
      start = 2000y230d04h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 105 sec : 1500 sec :    84.000 GB :  :  : 1;
      station = Mp : 112 sec : 1500 sec :    84.000 GB :  :  : 1;
@@ -553,7 +554,7 @@ endscan;
 *
 scan No0026;
      start = 2000y230d05h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 36 sec : 300 sec :    90.000 GB :  :  : 1;
      station = Mp : 37 sec : 300 sec :    90.000 GB :  :  : 1;
@@ -563,7 +564,7 @@ endscan;
 *
 scan No0027;
      start = 2000y230d05h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At :  84 sec : 1500 sec :    91.200 GB :  :  : 1;
      station = Mp :  88 sec : 1500 sec :    91.200 GB :  :  : 1;
@@ -573,7 +574,7 @@ endscan;
 *
 scan No0028;
      start = 2000y230d05h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At :  92 sec : 300 sec :    97.200 GB :  :  : 1;
      station = Mp :  97 sec : 300 sec :    97.200 GB :  :  : 1;
@@ -583,7 +584,7 @@ endscan;
 *
 scan No0029;
      start = 2000y230d05h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 38 sec : 1500 sec :    98.400 GB :  :  : 1;
      station = Mp : 39 sec : 1500 sec :    98.400 GB :  :  : 1;
@@ -593,7 +594,7 @@ endscan;
 *
 scan No0030;
      start = 2000y230d06h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 38 sec : 300 sec :   104.400 GB :  :  : 1;
      station = Mp : 40 sec : 300 sec :   104.400 GB :  :  : 1;
@@ -603,7 +604,7 @@ endscan;
 *
 scan No0031;
      start = 2000y230d06h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 102 sec : 1500 sec :   105.600 GB :  :  : 1;
      station = Mp : 108 sec : 1500 sec :   105.600 GB :  :  : 1;
@@ -613,7 +614,7 @@ endscan;
 *
 scan No0032;
      start = 2000y230d06h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 106 sec : 300 sec :   111.600 GB :  :  : 1;
      station = Mp : 113 sec : 300 sec :   111.600 GB :  :  : 1;
@@ -623,7 +624,7 @@ endscan;
 *
 scan No0033;
      start = 2000y230d06h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 40 sec : 1500 sec :   112.800 GB :  :  : 1;
      station = Mp : 41 sec : 1500 sec :   112.800 GB :  :  : 1;
@@ -633,7 +634,7 @@ endscan;
 *
 scan No0034;
      start = 2000y230d07h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 39 sec : 300 sec :   118.800 GB :  :  : 1;
      station = Mp : 41 sec : 300 sec :   118.800 GB :  :  : 1;
@@ -643,7 +644,7 @@ endscan;
 *
 scan No0035;
      start = 2000y230d07h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 110 sec : 1500 sec :   120.000 GB :  :  : 1;
      station = Mp : 117 sec : 1500 sec :   120.000 GB :  :  : 1;
@@ -653,7 +654,7 @@ endscan;
 *
 scan No0036;
      start = 2000y230d07h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 109 sec : 300 sec :   126.000 GB :  :  : 1;
      station = Mp : 116 sec : 300 sec :   126.000 GB :  :  : 1;
@@ -663,7 +664,7 @@ endscan;
 *
 scan No0037;
      start = 2000y230d07h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 39 sec : 1500 sec :   127.200 GB :  :  : 1;
      station = Mp : 41 sec : 1500 sec :   127.200 GB :  :  : 1;
@@ -673,7 +674,7 @@ endscan;
 *
 scan No0038;
      start = 2000y230d08h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 36 sec : 300 sec :   133.200 GB :  :  : 1;
      station = Mp : 38 sec : 300 sec :   133.200 GB :  :  : 1;
@@ -683,7 +684,7 @@ endscan;
 *
 scan No0039;
      start = 2000y230d08h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 104 sec : 1500 sec :   134.400 GB :  :  : 1;
      station = Mp : 112 sec : 1500 sec :   134.400 GB :  :  : 1;
@@ -693,7 +694,7 @@ endscan;
 *
 scan No0040;
      start = 2000y230d08h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At :  96 sec : 300 sec :   140.400 GB :  :  : 1;
      station = Mp : 104 sec : 300 sec :   140.400 GB :  :  : 1;
@@ -703,7 +704,7 @@ endscan;
 *
 scan No0041;
      start = 2000y230d08h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 41 sec : 1500 sec :   141.600 GB :  :  : 1;
      station = Mp : 43 sec : 1500 sec :   141.600 GB :  :  : 1;
@@ -713,7 +714,7 @@ endscan;
 *
 scan No0042;
      start = 2000y230d09h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At :  50 sec : 300 sec :   147.600 GB :  :  : 1;
      station = Mp :  54 sec : 300 sec :   147.600 GB :  :  : 1;
@@ -723,7 +724,7 @@ endscan;
 *
 scan No0043;
      start = 2000y230d09h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At :  95 sec : 1500 sec :   148.800 GB :  :  : 1;
      station = Mp :  99 sec : 1500 sec :   148.800 GB :  :  : 1;
@@ -733,7 +734,7 @@ endscan;
 *
 scan No0044;
      start = 2000y230d09h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 107 sec : 300 sec :   154.800 GB :  :  : 1;
      station = Mp : 112 sec : 300 sec :   154.800 GB :  :  : 1;
@@ -743,7 +744,7 @@ endscan;
 *
 scan No0045;
      start = 2000y230d09h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At :  56 sec : 1500 sec :   156.000 GB :  :  : 1;
      station = Mp :  61 sec : 1500 sec :   156.000 GB :  :  : 1;
@@ -753,7 +754,7 @@ endscan;
 *
 scan No0046;
      start = 2000y230d10h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At :  52 sec : 300 sec :   162.000 GB :  :  : 1;
      station = Mp :  57 sec : 300 sec :   162.000 GB :  :  : 1;
@@ -763,7 +764,7 @@ endscan;
 *
 scan No0047;
      start = 2000y230d10h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G300.969;
      station = At : 120 sec : 1500 sec :   163.200 GB :  :  : 1;
      station = Mp : 126 sec : 1500 sec :   163.200 GB :  :  : 1;
@@ -773,7 +774,7 @@ endscan;
 *
 scan No0048;
      start = 2000y230d10h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 124 sec : 300 sec :   169.200 GB :  :  : 1;
      station = Mp : 130 sec : 300 sec :   169.200 GB :  :  : 1;
@@ -783,7 +784,7 @@ endscan;
 *
 scan No0049;
      start = 2000y230d10h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 44 sec : 1500 sec :   170.400 GB :  :  : 1;
      station = Mp : 48 sec : 1500 sec :   170.400 GB :  :  : 1;
@@ -793,7 +794,7 @@ endscan;
 *
 scan No0050;
      start = 2000y230d11h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 37 sec : 300 sec :   176.400 GB :  :  : 1;
      station = Mp : 40 sec : 300 sec :   176.400 GB :  :  : 1;
@@ -803,7 +804,7 @@ endscan;
 *
 scan No0051;
      start = 2000y230d11h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 36 sec : 1500 sec :   177.600 GB :  :  : 1;
      station = Mp : 39 sec : 1500 sec :   177.600 GB :  :  : 1;
@@ -813,7 +814,7 @@ endscan;
 *
 scan No0052;
      start = 2000y230d11h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 30 sec : 300 sec :   183.600 GB :  :  : 1;
      station = Mp : 32 sec : 300 sec :   183.600 GB :  :  : 1;
@@ -823,7 +824,7 @@ endscan;
 *
 scan No0053;
      start = 2000y230d11h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 30 sec : 1500 sec :   184.800 GB :  :  : 1;
      station = Mp : 31 sec : 1500 sec :   184.800 GB :  :  : 1;
@@ -833,7 +834,7 @@ endscan;
 *
 scan No0054;
      start = 2000y230d12h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 31 sec : 300 sec :   190.800 GB :  :  : 1;
      station = Mp : 33 sec : 300 sec :   190.800 GB :  :  : 1;
@@ -843,7 +844,7 @@ endscan;
 *
 scan No0055;
      start = 2000y230d12h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 32 sec : 1500 sec :   192.000 GB :  :  : 1;
      station = Mp : 34 sec : 1500 sec :   192.000 GB :  :  : 1;
@@ -853,7 +854,7 @@ endscan;
 *
 scan No0056;
      start = 2000y230d12h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 34 sec : 300 sec :   198.000 GB :  :  : 1;
      station = Mp : 35 sec : 300 sec :   198.000 GB :  :  : 1;
@@ -863,7 +864,7 @@ endscan;
 *
 scan No0057;
      start = 2000y230d12h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 35 sec : 1500 sec :   199.200 GB :  :  : 1;
      station = Mp : 36 sec : 1500 sec :   199.200 GB :  :  : 1;
@@ -873,7 +874,7 @@ endscan;
 *
 scan No0058;
      start = 2000y230d13h15m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 36 sec : 300 sec :   205.200 GB :  :  : 1;
      station = Mp : 37 sec : 300 sec :   205.200 GB :  :  : 1;
@@ -883,7 +884,7 @@ endscan;
 *
 scan No0059;
      start = 2000y230d13h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 36 sec : 1500 sec :   206.400 GB :  :  : 1;
      station = Mp : 38 sec : 1500 sec :   206.400 GB :  :  : 1;
@@ -893,7 +894,7 @@ endscan;
 *
 scan No0060;
      start = 2000y230d13h45m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 37 sec : 300 sec :   212.400 GB :  :  : 1;
      station = Mp : 39 sec : 300 sec :   212.400 GB :  :  : 1;
@@ -903,7 +904,7 @@ endscan;
 *
 scan No0061;
      start = 2000y230d13h50m00s;
-     mode = Mode0;
+     mode = oh;
      source = G337.705;
      station = At : 38 sec : 1800 sec :   213.600 GB :  :  : 1;
      station = Mp : 40 sec : 1800 sec :   213.600 GB :  :  : 1;
@@ -913,7 +914,7 @@ endscan;
 *
 scan No0062;
      start = 2000y230d14h20m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1740-517;
      station = At : 38 sec : 300 sec :   220.800 GB :  :  : 1;
      station = Mp : 40 sec : 300 sec :   220.800 GB :  :  : 1;
@@ -923,7 +924,7 @@ endscan;
 *
 scan No0063;
      start = 2000y230d14h25m00s;
-     mode = Mode0;
+     mode = oh;
      source = 1934-638;
      station = At : 38 sec : 2400 sec :   222.000 GB :  :  : 1;
      station = Mp : 40 sec : 2400 sec :   222.000 GB :  :  : 1;

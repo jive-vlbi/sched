@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -51,7 +51,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def trdbe_db.1cm;
      ref $PROCEDURES = Procedure:Hn:La:Pt:Br:Mk:Gb;
      ref $IF = LO@21300MHzDPolTone/5:Br:Hn:La:Mk:Pt;
      ref $IF = LO@22836MHzDPolTone/5:Gb;
@@ -62,7 +62,7 @@ def Mode0;
      ref $BITSTREAMS = BS16Ch2Bit:Br:Gb:Hn:La:Mk:Pt;
 enddef;
 *
-def Mode1;
+def trdbe_rcp.1cm;
      ref $PROCEDURES = Procedure:Hn:La:Pt:Br:Mk:Gb;
      ref $IF = LO@21300MHzRPolTone/1:Br:Hn:La:Mk:Pt;
      ref $IF = LO@22836MHzRPolTone/1:Gb;
@@ -73,7 +73,7 @@ def Mode1;
      ref $BITSTREAMS = BS16Ch2Bit:Br:Gb:Hn:La:Mk:Pt;
 enddef;
 *
-def Mode2;
+def trdbe_db.1cm#02;
      ref $PROCEDURES = Procedure:Hn:La:Pt:Br:Mk:Gb;
      ref $IF = LO@21300MHzDPolTone/5:Br:Hn:La:Mk:Pt;
      ref $IF = LO@22836MHzDPolTone/5:Gb;
@@ -87,34 +87,34 @@ enddef;
 $IF;
 *
 def LO@21300MHzDPolTone/5;
-* Mode0: Br, Hn, La, Mk, Pt
-* Mode2: Br, Hn, La, Mk, Pt
-     if_def = &IF_B : B : R :  21300.00 MHz : U : 5 MHz;
-     if_def = &IF_D : D : L :  21300.00 MHz : U : 5 MHz;
+* trdbe_db.1cm: Br, Hn, La, Mk, Pt
+* trdbe_db.1cm#02: Br, Hn, La, Mk, Pt
+     if_def = &IF_B :  : R :  21300.00 MHz : U : 5 MHz;
+     if_def = &IF_D :  : L :  21300.00 MHz : U : 5 MHz;
 enddef;
 *
 def LO@21300MHzRPolTone/1;
-* Mode1: Br, Hn, La, Mk, Pt
-     if_def = &IF_B : B : R :  21300.00 MHz : U : 1 MHz;
+* trdbe_rcp.1cm: Br, Hn, La, Mk, Pt
+     if_def = &IF_B :  : R :  21300.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@22836MHzDPolTone/5;
-* Mode0: Gb
-* Mode2: Gb
-     if_def = &IF_B : B : R :  22836.00 MHz : L : 5 MHz;
-     if_def = &IF_D : D : L :  22836.00 MHz : L : 5 MHz;
+* trdbe_db.1cm: Gb
+* trdbe_db.1cm#02: Gb
+     if_def = &IF_B :  : R :  22836.00 MHz : L : 5 MHz;
+     if_def = &IF_D :  : L :  22836.00 MHz : L : 5 MHz;
 enddef;
 *
 def LO@22836MHzRPolTone/1;
-* Mode1: Gb
-     if_def = &IF_B : B : R :  22836.00 MHz : L : 1 MHz;
+* trdbe_rcp.1cm: Gb
+     if_def = &IF_B :  : R :  22836.00 MHz : L : 1 MHz;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 16BBCs;
-* Mode0: Br, Gb, Hn, La, Mk, Pt
-* Mode2: Br, Gb, Hn, La, Mk, Pt
+* trdbe_db.1cm: Br, Gb, Hn, La, Mk, Pt
+* trdbe_db.1cm#02: Br, Gb, Hn, La, Mk, Pt
      BBC_assign = &BBC01 :  1 : &IF_B;
      BBC_assign = &BBC02 :  2 : &IF_D;
      BBC_assign = &BBC03 :  3 : &IF_B;
@@ -134,7 +134,7 @@ def 16BBCs;
 enddef;
 *
 def 16BBCs#02;
-* Mode1: Br, Gb, Hn, La, Mk, Pt
+* trdbe_rcp.1cm: Br, Gb, Hn, La, Mk, Pt
      BBC_assign = &BBC01 :  1 : &IF_B;
      BBC_assign = &BBC02 :  2 : &IF_B;
      BBC_assign = &BBC03 :  3 : &IF_B;
@@ -156,81 +156,81 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* Mode0: Br, Gb, Hn, La, Mk, Pt
-* Mode2: Br, Gb, Hn, La, Mk, Pt
-     phase_cal_detect = &PCD : 1;
-     phase_cal_detect = &PCD : 2;
+* trdbe_db.1cm: Br, Gb, Hn, La, Mk, Pt
+* trdbe_db.1cm#02: Br, Gb, Hn, La, Mk, Pt
+     phase_cal_detect = &PCD1 : 1;
+     phase_cal_detect = &PCD2 : 2;
 enddef;
 *
 def Detect#02;
-* Mode1: Br, Gb, Hn, La, Mk, Pt
+* trdbe_rcp.1cm: Br, Gb, Hn, La, Mk, Pt
      phase_cal_detect = &PCD : 2;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 22276MHz16x32MHz;
-* Mode0: Gb
-     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &PCD;
-     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH02 : &BBC02 : &PCD;
-     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH03 : &BBC03 : &PCD;
-     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH04 : &BBC04 : &PCD;
-     chan_def =  : 22148 MHz : U :   32.00 MHz : &CH05 : &BBC05 : &PCD;
-     chan_def =  : 22148 MHz : U :   32.00 MHz : &CH06 : &BBC06 : &PCD;
-     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH07 : &BBC07 : &PCD;
-     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH08 : &BBC08 : &PCD;
-     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH09 : &BBC09 : &PCD;
-     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH10 : &BBC10 : &PCD;
-     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH11 : &BBC11 : &PCD;
-     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH12 : &BBC12 : &PCD;
-     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH13 : &BBC13 : &PCD;
-     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH14 : &BBC14 : &PCD;
-     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH15 : &BBC15 : &PCD;
-     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH16 : &BBC16 : &PCD;
+* trdbe_db.1cm: Gb
+     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &PCD1;
+     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH02 : &BBC02 : &PCD1;
+     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH03 : &BBC03 : &PCD1;
+     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH04 : &BBC04 : &PCD1;
+     chan_def =  : 22148 MHz : U :   32.00 MHz : &CH05 : &BBC05 : &PCD1;
+     chan_def =  : 22148 MHz : U :   32.00 MHz : &CH06 : &BBC06 : &PCD1;
+     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH07 : &BBC07 : &PCD1;
+     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH08 : &BBC08 : &PCD1;
+     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH09 : &BBC09 : &PCD2;
+     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH10 : &BBC10 : &PCD2;
+     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH11 : &BBC11 : &PCD1;
+     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH12 : &BBC12 : &PCD1;
+     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH13 : &BBC13 : &PCD1;
+     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH14 : &BBC14 : &PCD1;
+     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH15 : &BBC15 : &PCD1;
+     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH16 : &BBC16 : &PCD1;
 enddef;
 *
 def 22276MHz16x32MHz#02;
-* Mode2: Gb
-     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &PCD;
-     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH02 : &BBC02 : &PCD;
-     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH03 : &BBC03 : &PCD;
-     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH04 : &BBC04 : &PCD;
-     chan_def =  : 22180 MHz : U :   32.00 MHz : &CH05 : &BBC05 : &PCD;
-     chan_def =  : 22180 MHz : U :   32.00 MHz : &CH06 : &BBC06 : &PCD;
-     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH07 : &BBC07 : &PCD;
-     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH08 : &BBC08 : &PCD;
-     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH09 : &BBC09 : &PCD;
-     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH10 : &BBC10 : &PCD;
-     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH11 : &BBC11 : &PCD;
-     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH12 : &BBC12 : &PCD;
-     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH13 : &BBC13 : &PCD;
-     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH14 : &BBC14 : &PCD;
-     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH15 : &BBC15 : &PCD;
-     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH16 : &BBC16 : &PCD;
+* trdbe_db.1cm#02: Gb
+     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &PCD1;
+     chan_def =  : 22276 MHz : U :   32.00 MHz : &CH02 : &BBC02 : &PCD1;
+     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH03 : &BBC03 : &PCD1;
+     chan_def =  : 22212 MHz : U :   32.00 MHz : &CH04 : &BBC04 : &PCD1;
+     chan_def =  : 22180 MHz : U :   32.00 MHz : &CH05 : &BBC05 : &PCD2;
+     chan_def =  : 22180 MHz : U :   32.00 MHz : &CH06 : &BBC06 : &PCD2;
+     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH07 : &BBC07 : &PCD1;
+     chan_def =  : 22084 MHz : U :   32.00 MHz : &CH08 : &BBC08 : &PCD1;
+     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH09 : &BBC09 : &PCD2;
+     chan_def =  : 22020 MHz : U :   32.00 MHz : &CH10 : &BBC10 : &PCD2;
+     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH11 : &BBC11 : &PCD1;
+     chan_def =  : 21956 MHz : U :   32.00 MHz : &CH12 : &BBC12 : &PCD1;
+     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH13 : &BBC13 : &PCD1;
+     chan_def =  : 21892 MHz : U :   32.00 MHz : &CH14 : &BBC14 : &PCD1;
+     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH15 : &BBC15 : &PCD1;
+     chan_def =  : 21828 MHz : U :   32.00 MHz : &CH16 : &BBC16 : &PCD1;
 enddef;
 *
 def 22308MHz16x32MHz;
-* Mode0: Br, Hn, La, Mk, Pt
-     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH01 : &BBC01 : &PCD;
-     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH02 : &BBC02 : &PCD;
-     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH03 : &BBC03 : &PCD;
-     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH04 : &BBC04 : &PCD;
-     chan_def =  : 22180 MHz : L :   32.00 MHz : &CH05 : &BBC05 : &PCD;
-     chan_def =  : 22180 MHz : L :   32.00 MHz : &CH06 : &BBC06 : &PCD;
-     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH07 : &BBC07 : &PCD;
-     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH08 : &BBC08 : &PCD;
-     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH09 : &BBC09 : &PCD;
-     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH10 : &BBC10 : &PCD;
-     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH11 : &BBC11 : &PCD;
-     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH12 : &BBC12 : &PCD;
-     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH13 : &BBC13 : &PCD;
-     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH14 : &BBC14 : &PCD;
-     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH15 : &BBC15 : &PCD;
-     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH16 : &BBC16 : &PCD;
+* trdbe_db.1cm: Br, Hn, La, Mk, Pt
+     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH01 : &BBC01 : &PCD1;
+     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH02 : &BBC02 : &PCD1;
+     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH03 : &BBC03 : &PCD1;
+     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH04 : &BBC04 : &PCD1;
+     chan_def =  : 22180 MHz : L :   32.00 MHz : &CH05 : &BBC05 : &PCD2;
+     chan_def =  : 22180 MHz : L :   32.00 MHz : &CH06 : &BBC06 : &PCD2;
+     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH07 : &BBC07 : &PCD1;
+     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH08 : &BBC08 : &PCD1;
+     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH09 : &BBC09 : &PCD1;
+     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH10 : &BBC10 : &PCD1;
+     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH11 : &BBC11 : &PCD1;
+     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH12 : &BBC12 : &PCD1;
+     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH13 : &BBC13 : &PCD1;
+     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH14 : &BBC14 : &PCD1;
+     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH15 : &BBC15 : &PCD2;
+     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH16 : &BBC16 : &PCD2;
 enddef;
 *
 def 22308MHz16x32MHz#02;
-* Mode1: Gb
+* trdbe_rcp.1cm: Gb
      chan_def =  : 22308 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 22276 MHz : U :   32.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 22244 MHz : U :   32.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -250,27 +250,27 @@ def 22308MHz16x32MHz#02;
 enddef;
 *
 def 22308MHz16x32MHz#03;
-* Mode2: Br, Hn, La, Mk, Pt
-     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH01 : &BBC01 : &PCD;
-     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH02 : &BBC02 : &PCD;
-     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH03 : &BBC03 : &PCD;
-     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH04 : &BBC04 : &PCD;
-     chan_def =  : 22212 MHz : L :   32.00 MHz : &CH05 : &BBC05 : &PCD;
-     chan_def =  : 22212 MHz : L :   32.00 MHz : &CH06 : &BBC06 : &PCD;
-     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH07 : &BBC07 : &PCD;
-     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH08 : &BBC08 : &PCD;
-     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH09 : &BBC09 : &PCD;
-     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH10 : &BBC10 : &PCD;
-     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH11 : &BBC11 : &PCD;
-     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH12 : &BBC12 : &PCD;
-     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH13 : &BBC13 : &PCD;
-     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH14 : &BBC14 : &PCD;
-     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH15 : &BBC15 : &PCD;
-     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH16 : &BBC16 : &PCD;
+* trdbe_db.1cm#02: Br, Hn, La, Mk, Pt
+     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH01 : &BBC01 : &PCD1;
+     chan_def =  : 22308 MHz : L :   32.00 MHz : &CH02 : &BBC02 : &PCD1;
+     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH03 : &BBC03 : &PCD1;
+     chan_def =  : 22244 MHz : L :   32.00 MHz : &CH04 : &BBC04 : &PCD1;
+     chan_def =  : 22212 MHz : L :   32.00 MHz : &CH05 : &BBC05 : &PCD1;
+     chan_def =  : 22212 MHz : L :   32.00 MHz : &CH06 : &BBC06 : &PCD1;
+     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH07 : &BBC07 : &PCD1;
+     chan_def =  : 22116 MHz : L :   32.00 MHz : &CH08 : &BBC08 : &PCD1;
+     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH09 : &BBC09 : &PCD1;
+     chan_def =  : 22052 MHz : L :   32.00 MHz : &CH10 : &BBC10 : &PCD1;
+     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH11 : &BBC11 : &PCD1;
+     chan_def =  : 21988 MHz : L :   32.00 MHz : &CH12 : &BBC12 : &PCD1;
+     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH13 : &BBC13 : &PCD1;
+     chan_def =  : 21924 MHz : L :   32.00 MHz : &CH14 : &BBC14 : &PCD1;
+     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH15 : &BBC15 : &PCD2;
+     chan_def =  : 21860 MHz : L :   32.00 MHz : &CH16 : &BBC16 : &PCD2;
 enddef;
 *
 def 22340MHz16x32MHz;
-* Mode1: Br, Hn, La, Mk, Pt
+* trdbe_rcp.1cm: Br, Hn, La, Mk, Pt
      chan_def =  : 22340 MHz : L :   32.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 22308 MHz : L :   32.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 22276 MHz : L :   32.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -292,9 +292,9 @@ enddef;
 $BITSTREAMS;
 *
 def BS16Ch2Bit;
-* Mode0: Br, Gb, Hn, La, Mk, Pt
-* Mode1: Br, Gb, Hn, La, Mk, Pt
-* Mode2: Br, Gb, Hn, La, Mk, Pt
+* trdbe_db.1cm: Br, Gb, Hn, La, Mk, Pt
+* trdbe_db.1cm#02: Br, Gb, Hn, La, Mk, Pt
+* trdbe_rcp.1cm: Br, Gb, Hn, La, Mk, Pt
      stream_sample_rate =  64.000 Ms/sec;
      stream_def = &CH01 : sign :  0 :  0;
      stream_def = &CH01 :  mag :  1 :  1;
@@ -334,37 +334,37 @@ $STATION;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def La;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_LA;
 enddef;
 *
 def Pt;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_PT;
 enddef;
 *
 def Br;
      ref $ANTENNA = VLBA_BR;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_BR;
 enddef;
 *
 def Mk;
      ref $ANTENNA = VLBA_MK;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_MK;
 enddef;
 *
 def Gb;
      ref $ANTENNA = GBT_VLBA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = GBT_VLBA;
 enddef;
 *------------------------------------------------------------------------------
@@ -429,9 +429,9 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def RDBE_PFB+Mark5C;
+def RDBE_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
-     equip =     rack : RDBE_PFB : &RDBE_PFB;
+     equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
@@ -534,7 +534,7 @@ $SCHED;
 *
 scan No0004;
      start = 2010y337d15h45m00s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :     0.000 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :     0.000 GB :  : &n : 1;
@@ -546,7 +546,7 @@ endscan;
 *
 scan No0005;
      start = 2010y337d15h50m01s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   287.179 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   287.179 GB :  : &n : 1;
@@ -558,7 +558,7 @@ endscan;
 *
 scan No0006;
      start = 2010y337d15h55m02s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   358.973 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   358.973 GB :  : &n : 1;
@@ -570,7 +570,7 @@ endscan;
 *
 scan No0007;
      start = 2010y337d16h00m03s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   430.768 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   430.768 GB :  : &n : 1;
@@ -582,7 +582,7 @@ endscan;
 *
 scan No0008;
      start = 2010y337d16h05m04s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   502.563 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   502.563 GB :  : &n : 1;
@@ -594,7 +594,7 @@ endscan;
 *
 scan No0009;
      start = 2010y337d16h10m05s;
-     mode = Mode1;
+     mode = trdbe_rcp.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   574.357 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   574.357 GB :  : &n : 1;
@@ -606,7 +606,7 @@ endscan;
 *
 scan No0010;
      start = 2010y337d16h15m05s;
-     mode = Mode2;
+     mode = trdbe_db.1cm#02;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   646.152 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   646.152 GB :  : &n : 1;
@@ -618,7 +618,7 @@ endscan;
 *
 scan No0011;
      start = 2010y337d16h20m06s;
-     mode = Mode2;
+     mode = trdbe_db.1cm#02;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   717.947 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   717.947 GB :  : &n : 1;
@@ -630,7 +630,7 @@ endscan;
 *
 scan No0012;
      start = 2010y337d16h25m07s;
-     mode = Mode2;
+     mode = trdbe_db.1cm#02;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   789.742 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   789.742 GB :  : &n : 1;
@@ -642,7 +642,7 @@ endscan;
 *
 scan No0013;
      start = 2010y337d16h30m57s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :   861.536 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   861.536 GB :  : &n : 1;
@@ -654,7 +654,7 @@ endscan;
 *
 scan No0014;
      start = 2010y337d16h35m57s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :   933.331 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   933.331 GB :  : &n : 1;
@@ -666,7 +666,7 @@ endscan;
 *
 scan No0015;
      start = 2010y337d16h40m58s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1005.126 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1005.126 GB :  : &n : 1;
@@ -678,7 +678,7 @@ endscan;
 *
 scan No0016;
      start = 2010y337d16h45m59s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1076.920 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1076.920 GB :  : &n : 1;
@@ -690,7 +690,7 @@ endscan;
 *
 scan No0017;
      start = 2010y337d16h51m00s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1148.715 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1148.715 GB :  : &n : 1;
@@ -702,7 +702,7 @@ endscan;
 *
 scan No0018;
      start = 2010y337d16h56m00s;
-     mode = Mode1;
+     mode = trdbe_rcp.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1220.510 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1220.510 GB :  : &n : 1;
@@ -714,7 +714,7 @@ endscan;
 *
 scan No0019;
      start = 2010y337d17h01m01s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1292.304 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1292.304 GB :  : &n : 1;
@@ -726,7 +726,7 @@ endscan;
 *
 scan No0020;
      start = 2010y337d17h06m02s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1364.099 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1364.099 GB :  : &n : 1;
@@ -738,7 +738,7 @@ endscan;
 *
 scan No0021;
      start = 2010y337d17h11m03s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1435.894 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1435.894 GB :  : &n : 1;
@@ -750,7 +750,7 @@ endscan;
 *
 scan No0022;
      start = 2010y337d17h16m49s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  1507.688 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1507.688 GB :  : &n : 1;
@@ -762,7 +762,7 @@ endscan;
 *
 scan No0023;
      start = 2010y337d17h21m50s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  1579.483 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1579.483 GB :  : &n : 1;
@@ -774,7 +774,7 @@ endscan;
 *
 scan No0024;
      start = 2010y337d17h26m51s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  1651.278 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1651.278 GB :  : &n : 1;
@@ -786,7 +786,7 @@ endscan;
 *
 scan No0025;
      start = 2010y337d17h31m52s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  1723.072 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1723.072 GB :  : &n : 1;
@@ -798,7 +798,7 @@ endscan;
 *
 scan No0026;
      start = 2010y337d17h36m52s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  1794.867 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1794.867 GB :  : &n : 1;
@@ -810,7 +810,7 @@ endscan;
 *
 scan No0027;
      start = 2010y337d17h41m53s;
-     mode = Mode1;
+     mode = trdbe_rcp.1cm;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  1866.662 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1866.662 GB :  : &n : 1;
@@ -822,7 +822,7 @@ endscan;
 *
 scan No0028;
      start = 2010y337d17h46m54s;
-     mode = Mode2;
+     mode = trdbe_db.1cm#02;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  1938.456 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1938.456 GB :  : &n : 1;
@@ -834,7 +834,7 @@ endscan;
 *
 scan No0029;
      start = 2010y337d17h51m55s;
-     mode = Mode2;
+     mode = trdbe_db.1cm#02;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  2010.251 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  2010.251 GB :  : &n : 1;
@@ -846,7 +846,7 @@ endscan;
 *
 scan No0030;
      start = 2010y337d17h56m55s;
-     mode = Mode2;
+     mode = trdbe_db.1cm#02;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :  2082.046 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  2082.046 GB :  : &n : 1;
@@ -858,7 +858,7 @@ endscan;
 *
 scan No0031;
      start = 2010y337d18h02m41s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2153.841 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2153.841 GB :  :  &n : 1;
@@ -870,7 +870,7 @@ endscan;
 *
 scan No0032;
      start = 2010y337d18h07m42s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2225.635 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2225.635 GB :  :  &n : 1;
@@ -882,7 +882,7 @@ endscan;
 *
 scan No0033;
      start = 2010y337d18h12m43s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2297.430 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2297.430 GB :  :  &n : 1;
@@ -894,7 +894,7 @@ endscan;
 *
 scan No0034;
      start = 2010y337d18h17m43s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2369.225 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2369.225 GB :  :  &n : 1;
@@ -906,7 +906,7 @@ endscan;
 *
 scan No0035;
      start = 2010y337d18h22m44s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2441.019 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2441.019 GB :  :  &n : 1;
@@ -918,7 +918,7 @@ endscan;
 *
 scan No0036;
      start = 2010y337d18h27m45s;
-     mode = Mode1;
+     mode = trdbe_rcp.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2512.814 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2512.814 GB :  :  &n : 1;
@@ -930,7 +930,7 @@ endscan;
 *
 scan No0037;
      start = 2010y337d18h32m46s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2584.609 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2584.609 GB :  :  &n : 1;
@@ -942,7 +942,7 @@ endscan;
 *
 scan No0038;
      start = 2010y337d18h37m46s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2656.403 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2656.403 GB :  :  &n : 1;
@@ -954,7 +954,7 @@ endscan;
 *
 scan No0039;
      start = 2010y337d18h42m47s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2728.198 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2728.198 GB :  :  &n : 1;
@@ -966,7 +966,7 @@ endscan;
 *
 scan No0040;
      start = 2010y337d18h51m18s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C345;
      station = Hn : 0 sec : 1500 sec :  2799.993 GB :  : &cw : 1;
      station = La : 0 sec : 1500 sec :  2799.993 GB :  : &cw : 1;
@@ -978,7 +978,7 @@ endscan;
 *
 scan No0041;
      start = 2010y337d19h16m39s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C345;
      station = Hn : 0 sec : 1500 sec :  3184.607 GB :  : &cw : 1;
      station = La : 0 sec : 1500 sec :  3184.607 GB :  : &cw : 1;
@@ -990,7 +990,7 @@ endscan;
 *
 scan No0042;
      start = 2010y337d19h42m00s;
-     mode = Mode0;
+     mode = trdbe_db.1cm;
      source = 3C345;
      station = Hn : 0 sec : 1500 sec :  3569.222 GB :  : &cw : 1;
      station = La : 0 sec : 1500 sec :  3569.222 GB :  : &cw : 1;
