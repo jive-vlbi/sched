@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -51,7 +51,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def egvlba.20cm;
      ref $PROCEDURES = Procedure:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk;
      ref $IF = LO@2400MHzDPolTone/1:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 4BBCs:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -63,15 +63,15 @@ enddef;
 $IF;
 *
 def LO@2400MHzDPolTone/1;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_A : A : R :   2400.00 MHz : L : 1 MHz;
-     if_def = &IF_C : C : L :   2400.00 MHz : L : 1 MHz;
+* egvlba.20cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     if_def = &IF_A :  : R :   2400.00 MHz : L : 1 MHz;
+     if_def = &IF_C :  : L :   2400.00 MHz : L : 1 MHz;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 4BBCs;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.20cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
@@ -81,14 +81,14 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.20cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      phase_cal_detect = &PCD : 1 : 64 : 0;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 1425.75MHz4x64MHz;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.20cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 1425.75 MHz : U :   64.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 1425.75 MHz : U :   64.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 1620.75 MHz : U :   64.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -98,7 +98,7 @@ enddef;
 $DATASTREAMS;
 *
 def VDIF_8000-1Thr4Ch;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.20cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 4 : 128.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -111,61 +111,61 @@ $STATION;
 *
 def Sc;
      ref $ANTENNA = VLBA_SC;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_SC;
 enddef;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def Nl;
      ref $ANTENNA = VLBA_NL;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_NL;
 enddef;
 *
 def Fd;
      ref $ANTENNA = VLBA_FD;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_FD;
 enddef;
 *
 def La;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_LA;
 enddef;
 *
 def Pt;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_PT;
 enddef;
 *
 def Kp;
      ref $ANTENNA = VLBA_KP;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_KP;
 enddef;
 *
 def Ov;
      ref $ANTENNA = VLBA_OV;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_OV;
 enddef;
 *
 def Br;
      ref $ANTENNA = VLBA_BR;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_BR;
 enddef;
 *
 def Mk;
      ref $ANTENNA = VLBA_MK;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_MK;
 enddef;
 *------------------------------------------------------------------------------
@@ -273,9 +273,9 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def RDBE_PFB+Mark5C;
+def RDBE_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
-     equip =     rack : RDBE_PFB : &RDBE_PFB;
+     equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
@@ -424,7 +424,7 @@ $SCHED;
 *
 scan No0001;
      start = 1995y186d20h00m00s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :     0.000 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :     0.000 GB :  :   &n : 1;
@@ -440,7 +440,7 @@ endscan;
 *
 scan No0002;
      start = 1995y186d20h04m20s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :    30.917 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :    30.917 GB :  :   &n : 1;
@@ -456,7 +456,7 @@ endscan;
 *
 scan No0003;
      start = 1995y186d20h08m40s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :    61.833 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :    61.833 GB :  :   &n : 1;
@@ -472,7 +472,7 @@ endscan;
 *
 scan No0004;
      start = 1995y186d20h13m00s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :    92.750 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :    92.750 GB :  :   &n : 1;
@@ -488,7 +488,7 @@ endscan;
 *
 scan No0005;
      start = 1995y186d20h19m20s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   123.666 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   123.666 GB :  :   &n : 1;
@@ -504,7 +504,7 @@ endscan;
 *
 scan No0006;
      start = 1995y186d20h23m40s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   154.583 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   154.583 GB :  :   &n : 1;
@@ -520,7 +520,7 @@ endscan;
 *
 scan No0007;
      start = 1995y186d20h28m00s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc :  3 sec : 240 sec :   185.500 GB :  : &ccw : 1;
      station = Hn :  9 sec : 240 sec :   185.500 GB :  :   &n : 1;
@@ -536,7 +536,7 @@ endscan;
 *
 scan No0008;
      start = 1995y186d20h32m20s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   216.030 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   215.257 GB :  :   &n : 1;
@@ -552,7 +552,7 @@ endscan;
 *
 scan No0009;
      start = 1995y186d20h36m40s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   246.946 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   246.173 GB :  :   &n : 1;
@@ -568,7 +568,7 @@ endscan;
 *
 scan No0010;
      start = 1995y186d20h41m00s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   277.863 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   277.090 GB :  :   &n : 1;
@@ -584,7 +584,7 @@ endscan;
 *
 scan No0011;
      start = 1995y186d20h45m20s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   308.780 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   308.007 GB :  :   &n : 1;
@@ -600,7 +600,7 @@ endscan;
 *
 scan No0012;
      start = 1995y186d20h49m40s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   339.696 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   338.923 GB :  :   &n : 1;
@@ -616,7 +616,7 @@ endscan;
 *
 scan No0013;
      start = 1995y186d20h54m00s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   370.613 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   369.840 GB :  :   &n : 1;
@@ -632,7 +632,7 @@ endscan;
 *
 scan No0014;
      start = 1995y186d20h58m20s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   401.529 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   400.756 GB :  :   &n : 1;
@@ -648,7 +648,7 @@ endscan;
 *
 scan No0015;
      start = 1995y186d21h02m40s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0923+2815;
      station = Sc : 0 sec : 240 sec :   432.446 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   431.673 GB :  :   &n : 1;
@@ -664,7 +664,7 @@ endscan;
 *
 scan No0016;
      start = 1995y186d21h07m00s;
-     mode = Mode0;
+     mode = egvlba.20cm;
      source = J0925-2027;
      station = Sc : 193 sec : 600 sec :   463.363 GB :  : &n : 1;
      station = Hn :  82 sec : 600 sec :   462.590 GB :  : &n : 1;

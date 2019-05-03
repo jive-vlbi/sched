@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -51,7 +51,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def hsaddc.6cm;
      ref $PROCEDURES = Procedure:Y:Mk:Br:Ov:Kp:Fd:Pt:La:Nl:Hn:Sc:Eb:Gb;
      ref $IF = LO@4100MHzDPolNoTone:Y;
      ref $IF = LO@4100MHzDPolTone/1:Br:Eb:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -65,7 +65,7 @@ def Mode0;
      ref $DATASTREAMS = VDIF_8000-1Thr4Ch:Br:Eb:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc:Y;
 enddef;
 *
-def Mode1;
+def hsaddc.7mm;
      ref $PROCEDURES = Procedure:Y:Mk:Br:Ov:Kp:Fd:Pt:La:Nl:Hn:Sc:Eb:Gb;
      ref $IF = LO@42400MHzDPolNoTone:Y;
      ref $IF = LO@42400MHzDPolTone/1:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -79,7 +79,7 @@ def Mode1;
      ref $DATASTREAMS = VDIF_8000-1Thr4Ch:Br:Eb:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc:Y;
 enddef;
 *
-def Mode2;
+def hsaddc.3mm+ptdl7mm+vla_x_poin;
      ref $PROCEDURES = Procedure:Y:Mk:Br:Ov:Kp:Fd:Pt:La:Nl:Hn:Sc:Eb:Gb;
      ref $IF = LO@42400MHzDPolNoTone#02:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $IF = LO@85500MHzDPolTone/1:Eb;
@@ -97,7 +97,7 @@ def Mode2;
      ref $DATASTREAMS = VDIF_8000-1Thr4Ch#02:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
 enddef;
 *
-def Mode3;
+def hsaddc_2MHz.7mm;
      ref $PROCEDURES = Procedure:Y:Mk:Br:Ov:Kp:Fd:Pt:La:Nl:Hn:Sc:Eb:Gb;
      ref $IF = LO@42400MHzDPolNoTone:Y;
      ref $IF = LO@42400MHzDPolTone/1:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -111,7 +111,7 @@ def Mode3;
      ref $DATASTREAMS = VDIF_8000-1Thr4Ch#02:Br:Eb:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc:Y;
 enddef;
 *
-def Mode4;
+def hsaddc.3mm;
      ref $PROCEDURES = Procedure:Y:Mk:Br:Ov:Kp:Fd:Pt:La:Nl:Hn:Sc:Eb:Gb;
      ref $IF = LO@85500MHzDPolTone/1:Eb;
      ref $IF = LO@85500MHzDPolTone/1#02:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -122,7 +122,7 @@ def Mode4;
      ref $DATASTREAMS = VDIF_8000-1Thr4Ch:Br:Eb:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
 enddef;
 *
-def Mode5;
+def ptdl7mm;
      ref $PROCEDURES = Procedure:Y:Mk:Br:Ov:Kp:Fd:Pt:La:Nl:Hn:Sc:Eb:Gb;
      ref $IF = LO@42400MHzDPolNoTone#02:Br:Mk:Ov;
      ref $BBC = 4BBCs:Br:Mk:Ov;
@@ -134,86 +134,86 @@ enddef;
 $IF;
 *
 def LO@4100MHzDPolNoTone;
-* Mode0: Y
-     if_def = &IF_A : A : R :   4100.00 MHz : U;
-     if_def = &IF_C : C : L :   4100.00 MHz : U;
-     if_def = &IF_B : B : R :   4100.00 MHz : U;
-     if_def = &IF_D : D : L :   4100.00 MHz : U;
+* hsaddc.6cm: Y
+     if_def = &IF_A :  : R :   4100.00 MHz : U;
+     if_def = &IF_C :  : L :   4100.00 MHz : U;
+     if_def = &IF_B :  : R :   4100.00 MHz : U;
+     if_def = &IF_D :  : L :   4100.00 MHz : U;
 enddef;
 *
 def LO@4100MHzDPolTone/1;
-* Mode0: Br, Eb, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_A : A : R :   4100.00 MHz : U : 1 MHz;
-     if_def = &IF_C : C : L :   4100.00 MHz : U : 1 MHz;
+* hsaddc.6cm: Br, Eb, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     if_def = &IF_A :  : R :   4100.00 MHz : U : 1 MHz;
+     if_def = &IF_C :  : L :   4100.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@42400MHzDPolNoTone;
-* Mode1: Y
-* Mode3: Y
-     if_def = &IF_A : A : R :  42400.00 MHz : U;
-     if_def = &IF_C : C : L :  42400.00 MHz : U;
-     if_def = &IF_B : B : R :  42400.00 MHz : U;
-     if_def = &IF_D : D : L :  42400.00 MHz : U;
+* hsaddc.7mm: Y
+* hsaddc_2MHz.7mm: Y
+     if_def = &IF_A :  : R :  42400.00 MHz : U;
+     if_def = &IF_C :  : L :  42400.00 MHz : U;
+     if_def = &IF_B :  : R :  42400.00 MHz : U;
+     if_def = &IF_D :  : L :  42400.00 MHz : U;
 enddef;
 *
 def LO@42400MHzDPolNoTone#02;
-* Mode2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode5: Br, Mk, Ov
-     if_def = &IF_A : A : R :  42400.00 MHz : U;
-     if_def = &IF_C : C : L :  42400.00 MHz : U;
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* ptdl7mm: Br, Mk, Ov
+     if_def = &IF_A :  : R :  42400.00 MHz : U;
+     if_def = &IF_C :  : L :  42400.00 MHz : U;
 enddef;
 *
 def LO@42400MHzDPolTone/1;
-* Mode1: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode3: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_A : A : R :  42400.00 MHz : U : 1 MHz;
-     if_def = &IF_C : C : L :  42400.00 MHz : U : 1 MHz;
+* hsaddc.7mm: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc_2MHz.7mm: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     if_def = &IF_A :  : R :  42400.00 MHz : U : 1 MHz;
+     if_def = &IF_C :  : L :  42400.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@43936MHzDPolTone/1;
-* Mode1: Eb
-* Mode3: Eb
-     if_def = &IF_A : A : R :  43936.00 MHz : L : 1 MHz;
-     if_def = &IF_C : C : L :  43936.00 MHz : L : 1 MHz;
+* hsaddc.7mm: Eb
+* hsaddc_2MHz.7mm: Eb
+     if_def = &IF_A :  : R :  43936.00 MHz : L : 1 MHz;
+     if_def = &IF_C :  : L :  43936.00 MHz : L : 1 MHz;
 enddef;
 *
 def LO@5636MHzDPolTone/1;
-* Mode0: Gb
-     if_def = &IF_A : A : R :   5636.00 MHz : L : 1 MHz;
-     if_def = &IF_C : C : L :   5636.00 MHz : L : 1 MHz;
+* hsaddc.6cm: Gb
+     if_def = &IF_A :  : R :   5636.00 MHz : L : 1 MHz;
+     if_def = &IF_C :  : L :   5636.00 MHz : L : 1 MHz;
 enddef;
 *
 def LO@85500MHzDPolTone/1;
-* Mode2: Eb
-* Mode4: Eb
-     if_def = &IF_A : A : R :  85500.00 MHz : U : 1 MHz;
-     if_def = &IF_C : C : L :  85500.00 MHz : U : 1 MHz;
+* hsaddc.3mm: Eb
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Eb
+     if_def = &IF_A :  : R :  85500.00 MHz : U : 1 MHz;
+     if_def = &IF_C :  : L :  85500.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@85500MHzDPolTone/1#02;
-* Mode2: Gb
-* Mode4: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_B : B : R :  85500.00 MHz : U : 1 MHz;
-     if_def = &IF_D : D : L :  85500.00 MHz : U : 1 MHz;
+* hsaddc.3mm: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Gb
+     if_def = &IF_B :  : R :  85500.00 MHz : U : 1 MHz;
+     if_def = &IF_D :  : L :  85500.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@8588MHzDPolNoTone;
-* Mode2: Y
-     if_def = &IF_A : A : R :   8588.00 MHz : L;
-     if_def = &IF_C : C : L :   8588.00 MHz : L;
-     if_def = &IF_B : B : R :   8588.00 MHz : L;
-     if_def = &IF_D : D : L :   8588.00 MHz : L;
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Y
+     if_def = &IF_A :  : R :   8588.00 MHz : L;
+     if_def = &IF_C :  : L :   8588.00 MHz : L;
+     if_def = &IF_B :  : R :   8588.00 MHz : L;
+     if_def = &IF_D :  : L :   8588.00 MHz : L;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 4BBCs;
-* Mode0: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode1: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode2: Br, Eb, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode3: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode4: Eb
-* Mode5: Br, Mk, Ov
+* hsaddc.3mm: Eb
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Br, Eb, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.6cm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc_2MHz.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* ptdl7mm: Br, Mk, Ov
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
@@ -221,10 +221,10 @@ def 4BBCs;
 enddef;
 *
 def 4BBCs#02;
-* Mode0: Y
-* Mode1: Y
-* Mode2: Y
-* Mode3: Y
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Y
+* hsaddc.6cm: Y
+* hsaddc.7mm: Y
+* hsaddc_2MHz.7mm: Y
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_B;
@@ -232,8 +232,8 @@ def 4BBCs#02;
 enddef;
 *
 def 4BBCs#03;
-* Mode2: Gb
-* Mode4: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Gb
      BBC_assign = &BBC01 : 1 : &IF_B;
      BBC_assign = &BBC02 : 2 : &IF_D;
      BBC_assign = &BBC03 : 3 : &IF_B;
@@ -243,31 +243,31 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* Mode0: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode1: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode2: Eb, Gb
-* Mode4: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Eb, Gb
+* hsaddc.6cm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      phase_cal_detect = &PCD : 1 : 128 : 0;
 enddef;
 *
 def Detect#02;
-* Mode3: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc_2MHz.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      phase_cal_detect = &PCD : 1 : 2 : 0;
 enddef;
 *
 def NoDetect;
-* Mode0: Y
-* Mode1: Y
-* Mode2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
-* Mode3: Y
-* Mode5: Br, Mk, Ov
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
+* hsaddc.6cm: Y
+* hsaddc.7mm: Y
+* hsaddc_2MHz.7mm: Y
+* ptdl7mm: Br, Mk, Ov
      phase_cal_detect = &NoCal;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 43117.25MHz4x2MHz;
-* Mode2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 43117.25 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 43117.25 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal;
      chan_def =  : 43217.25 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal;
@@ -275,7 +275,7 @@ def 43117.25MHz4x2MHz;
 enddef;
 *
 def 43119.25MHz4x2MHz;
-* Mode5: Br, Mk, Ov
+* ptdl7mm: Br, Mk, Ov
      chan_def =  : 43119.25 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 43119.25 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal;
      chan_def =  : 43219.25 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal;
@@ -283,7 +283,7 @@ def 43119.25MHz4x2MHz;
 enddef;
 *
 def 43126.25MHz4x2MHz;
-* Mode3: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc_2MHz.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 43126.25 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 43126.25 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 43176.25 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -291,7 +291,7 @@ def 43126.25MHz4x2MHz;
 enddef;
 *
 def 43126.25MHz4x2MHz#02;
-* Mode3: Y
+* hsaddc_2MHz.7mm: Y
      chan_def =  : 43126.25 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 43126.25 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal;
      chan_def =  : 43176.25 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal;
@@ -299,7 +299,7 @@ def 43126.25MHz4x2MHz#02;
 enddef;
 *
 def 43168.25MHz4x128MHz;
-* Mode1: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 43168.25 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 43168.25 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 43296.25 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -307,7 +307,7 @@ def 43168.25MHz4x128MHz;
 enddef;
 *
 def 43168.25MHz4x128MHz#02;
-* Mode1: Y
+* hsaddc.7mm: Y
      chan_def =  : 43168.25 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 43168.25 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &NoCal;
      chan_def =  : 43296.25 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &NoCal;
@@ -315,7 +315,7 @@ def 43168.25MHz4x128MHz#02;
 enddef;
 *
 def 4868.25MHz4x128MHz;
-* Mode0: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.6cm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 4868.25 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 4868.25 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 4996.25 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -323,7 +323,7 @@ def 4868.25MHz4x128MHz;
 enddef;
 *
 def 4868.25MHz4x128MHz#02;
-* Mode0: Y
+* hsaddc.6cm: Y
      chan_def =  : 4868.25 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 4868.25 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &NoCal;
      chan_def =  : 4996.25 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &NoCal;
@@ -331,7 +331,7 @@ def 4868.25MHz4x128MHz#02;
 enddef;
 *
 def 8332MHz4x128MHz;
-* Mode2: Y
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Y
      chan_def =  : 8332 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 8332 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &NoCal;
      chan_def =  : 8460 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &NoCal;
@@ -339,8 +339,8 @@ def 8332MHz4x128MHz;
 enddef;
 *
 def 86140.25MHz4x128MHz;
-* Mode2: Eb, Gb
-* Mode4: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Eb, Gb
      chan_def =  : 86140.25 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 86140.25 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 86268.25 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -350,10 +350,10 @@ enddef;
 $DATASTREAMS;
 *
 def VDIF_8000-1Thr4Ch;
-* Mode0: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
-* Mode1: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
-* Mode2: Eb, Gb, Y
-* Mode4: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Eb, Gb, Y
+* hsaddc.6cm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
+* hsaddc.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 4 : 256.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -363,9 +363,9 @@ def VDIF_8000-1Thr4Ch;
 enddef;
 *
 def VDIF_8000-1Thr4Ch#02;
-* Mode2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode3: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
-* Mode5: Br, Mk, Ov
+* hsaddc.3mm+ptdl7mm+vla_x_poin: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* hsaddc_2MHz.7mm: Br, Eb, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc, Y
+* ptdl7mm: Br, Mk, Ov
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 4 :   4.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -384,73 +384,73 @@ enddef;
 *
 def Mk;
      ref $ANTENNA = VLBA_MK;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_MK;
 enddef;
 *
 def Br;
      ref $ANTENNA = VLBA_BR;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_BR;
 enddef;
 *
 def Ov;
      ref $ANTENNA = VLBA_OV;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_OV;
 enddef;
 *
 def Kp;
      ref $ANTENNA = VLBA_KP;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_KP;
 enddef;
 *
 def Fd;
      ref $ANTENNA = VLBA_FD;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_FD;
 enddef;
 *
 def Pt;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_PT;
 enddef;
 *
 def La;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_LA;
 enddef;
 *
 def Nl;
      ref $ANTENNA = VLBA_NL;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_NL;
 enddef;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def Sc;
      ref $ANTENNA = VLBA_SC;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_SC;
 enddef;
 *
 def Eb;
      ref $ANTENNA = EB_RDBE;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = EB_RDBE;
 enddef;
 *
 def Gb;
      ref $ANTENNA = GBT_VLBA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = GBT_VLBA;
 enddef;
 *------------------------------------------------------------------------------
@@ -579,9 +579,9 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def RDBE_PFB+Mark5C;
+def RDBE_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
-     equip =     rack : RDBE_PFB : &RDBE_PFB;
+     equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *
 def WIDAR+Mark5C;
@@ -778,35 +778,35 @@ $SCHED;
 *
 scan No0056;
      start = 2012y116d17h00m00s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station = Y : 0 sec : 360 sec :     0.000 GB :  :  : 0;
 endscan;
 *
 scan No0057;
      start = 2012y116d17h06m20s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station = Y : 0 sec : 70 sec :     0.000 GB :  :  : 0;
 endscan;
 *
 scan No0058;
      start = 2012y116d17h07m50s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = J0217+7349;
      station = Y : 0 sec : 70 sec :     0.000 GB :  :  : 0;
 endscan;
 *
 scan No0059;
      start = 2012y116d17h09m06s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station = Y : 0 sec : 60 sec :     0.000 GB :  :  : 0;
 endscan;
 *
 scan No0060;
      start = 2012y116d17h00m00s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station = Mk : 0 sec : 540 sec :     0.000 GB :  : &ccw : 1;
      station = Br : 0 sec : 540 sec :     0.000 GB :  : &ccw : 1;
@@ -824,7 +824,7 @@ endscan;
 *
 scan No0061;
      start = 2012y116d17h10m12s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :     0.000 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   139.125 GB :  : &ccw : 1;
@@ -843,7 +843,7 @@ endscan;
 *
 scan No0062;
      start = 2012y116d17h15m51s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :    77.292 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   216.416 GB :  : &ccw : 1;
@@ -862,7 +862,7 @@ endscan;
 *
 scan No0063;
      start = 2012y116d17h21m30s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :   154.583 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   293.708 GB :  : &ccw : 1;
@@ -881,7 +881,7 @@ endscan;
 *
 scan No0064;
      start = 2012y116d17h27m08s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :   231.875 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   370.999 GB :  : &ccw : 1;
@@ -900,7 +900,7 @@ endscan;
 *
 scan No0065;
      start = 2012y116d17h32m47s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :   309.166 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   448.291 GB :  : &ccw : 1;
@@ -919,7 +919,7 @@ endscan;
 *
 scan No0066;
      start = 2012y116d17h38m07s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station =  Y : 0 sec : 60 sec :   386.458 GB :  :      : 1;
      station = Mk : 0 sec : 60 sec :   525.582 GB :  : &ccw : 1;
@@ -938,7 +938,7 @@ endscan;
 *
 scan No0067;
      start = 2012y116d17h39m27s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :   401.916 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   541.041 GB :  : &ccw : 1;
@@ -957,7 +957,7 @@ endscan;
 *
 scan No0068;
      start = 2012y116d17h45m06s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :   479.207 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   618.332 GB :  : &ccw : 1;
@@ -976,7 +976,7 @@ endscan;
 *
 scan No0069;
      start = 2012y116d17h50m45s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :   556.499 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   695.624 GB :  : &ccw : 1;
@@ -995,7 +995,7 @@ endscan;
 *
 scan No0070;
      start = 2012y116d17h56m24s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :   633.790 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   772.915 GB :  : &ccw : 1;
@@ -1014,7 +1014,7 @@ endscan;
 *
 scan No0071;
      start = 2012y116d18h02m02s;
-     mode = Mode0;
+     mode = hsaddc.6cm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :   711.082 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   850.207 GB :  : &ccw : 1;
@@ -1033,7 +1033,7 @@ endscan;
 *
 scan No0072;
      start = 2012y116d18h07m22s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station = Eb : 0 sec : 300 sec :   927.498 GB :  :  : 0;
      station = Gb : 1 sec : 300 sec :   926.983 GB :  :  : 0;
@@ -1041,7 +1041,7 @@ endscan;
 *
 scan No0073;
      start = 2012y116d18h12m42s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station = Eb : 0 sec : 600 sec :   927.498 GB :  :  : 0;
      station = Gb : 1 sec : 600 sec :   926.983 GB :  :  : 0;
@@ -1049,21 +1049,21 @@ endscan;
 *
 scan No0074;
      start = 2012y116d18h14m02s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = J0217+7349;
      station = Y : 0 sec : 180 sec :   788.373 GB :  :  : 0;
 endscan;
 *
 scan No0075;
      start = 2012y116d18h17m08s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station = Y : 0 sec : 60 sec :   788.373 GB :  :  : 0;
 endscan;
 *
 scan No0076;
      start = 2012y116d18h23m02s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :   788.373 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :   927.498 GB :  : &ccw : 1;
@@ -1082,7 +1082,7 @@ endscan;
 *
 scan No0077;
      start = 2012y116d18h28m41s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :   865.665 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1004.790 GB :  : &ccw : 1;
@@ -1101,7 +1101,7 @@ endscan;
 *
 scan No0078;
      start = 2012y116d18h34m20s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :   942.956 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1082.081 GB :  : &ccw : 1;
@@ -1120,7 +1120,7 @@ endscan;
 *
 scan No0079;
      start = 2012y116d18h39m58s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :  1020.248 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1159.373 GB :  : &ccw : 1;
@@ -1139,7 +1139,7 @@ endscan;
 *
 scan No0080;
      start = 2012y116d18h45m36s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :  1097.539 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1236.664 GB :  : &ccw : 1;
@@ -1158,7 +1158,7 @@ endscan;
 *
 scan No0081;
      start = 2012y116d18h50m56s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station = Eb : 0 sec : 600 sec :  1313.956 GB :  :  : 0;
      station = Gb : 0 sec : 600 sec :  1313.183 GB :  :  : 0;
@@ -1166,21 +1166,21 @@ endscan;
 *
 scan No0082;
      start = 2012y116d18h56m36s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = J0217+7349;
      station = Y : 0 sec : 180 sec :  1174.831 GB :  :  : 0;
 endscan;
 *
 scan No0083;
      start = 2012y116d18h59m42s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station = Y : 0 sec : 60 sec :  1174.831 GB :  :  : 0;
 endscan;
 *
 scan No0084;
      start = 2012y116d19h01m16s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :  1174.831 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1313.956 GB :  : &ccw : 1;
@@ -1199,7 +1199,7 @@ endscan;
 *
 scan No0085;
      start = 2012y116d19h06m55s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :  1252.122 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1391.247 GB :  : &ccw : 1;
@@ -1218,7 +1218,7 @@ endscan;
 *
 scan No0086;
      start = 2012y116d19h12m33s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :  1329.414 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1468.539 GB :  : &ccw : 1;
@@ -1237,7 +1237,7 @@ endscan;
 *
 scan No0087;
      start = 2012y116d19h17m53s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :  1406.705 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1545.830 GB :  : &ccw : 1;
@@ -1256,7 +1256,7 @@ endscan;
 *
 scan No0088;
      start = 2012y116d19h23m31s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0243+7120;
      station =  Y : 0 sec : 300 sec :  1483.997 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1623.122 GB :  : &ccw : 1;
@@ -1275,7 +1275,7 @@ endscan;
 *
 scan No0089;
      start = 2012y116d19h29m09s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0217+7349;
      station =  Y : 0 sec : 300 sec :  1561.288 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1700.413 GB :  : &ccw : 1;
@@ -1294,7 +1294,7 @@ endscan;
 *
 scan No0090;
      start = 2012y116d19h35m47s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0303+4716;
      station = Eb : 0 sec : 600 sec :  1777.705 GB :  :  : 0;
      station = Gb : 0 sec : 600 sec :  1776.932 GB :  :  : 0;
@@ -1302,21 +1302,21 @@ endscan;
 *
 scan No0091;
      start = 2012y116d19h40m09s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = J0303+4716;
      station = Y : 0 sec : 180 sec :  1638.580 GB :  :  : 0;
 endscan;
 *
 scan No0092;
      start = 2012y116d19h43m15s;
-     mode = Mode1;
+     mode = hsaddc.7mm;
      source = J0303+4716;
      station = Y : 0 sec : 60 sec :  1638.580 GB :  :  : 0;
 endscan;
 *
 scan No0093;
      start = 2012y116d19h46m07s;
-     mode = Mode3;
+     mode = hsaddc_2MHz.7mm;
      source = J0303+4716;
      station =  Y : 0 sec : 120 sec :  1638.580 GB :  :      : 1;
      station = Mk : 0 sec : 120 sec :  1777.705 GB :  : &ccw : 1;
@@ -1335,7 +1335,7 @@ endscan;
 *
 scan No0094;
      start = 2012y116d19h49m11s;
-     mode = Mode3;
+     mode = hsaddc_2MHz.7mm;
      source = P-SPER;
      station =  Y : 0 sec : 300 sec :  1639.063 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1778.188 GB :  : &ccw : 1;
@@ -1354,7 +1354,7 @@ endscan;
 *
 scan No0095;
      start = 2012y116d19h55m19s;
-     mode = Mode3;
+     mode = hsaddc_2MHz.7mm;
      source = J0303+4716;
      station =  Y : 0 sec : 120 sec :  1640.271 GB :  :      : 1;
      station = Mk : 0 sec : 120 sec :  1779.395 GB :  : &ccw : 1;
@@ -1373,7 +1373,7 @@ endscan;
 *
 scan No0096;
      start = 2012y116d19h58m28s;
-     mode = Mode3;
+     mode = hsaddc_2MHz.7mm;
      source = P-SPER;
      station =  Y : 0 sec : 300 sec :  1640.754 GB :  :      : 1;
      station = Mk : 0 sec : 300 sec :  1779.878 GB :  : &ccw : 1;
@@ -1392,7 +1392,7 @@ endscan;
 *
 scan No0097;
      start = 2012y116d20h04m42s;
-     mode = Mode3;
+     mode = hsaddc_2MHz.7mm;
      source = J0303+4716;
      station =  Y : 0 sec : 120 sec :  1641.961 GB :  :      : 1;
      station = Mk : 0 sec : 120 sec :  1781.086 GB :  : &ccw : 1;
@@ -1411,7 +1411,7 @@ endscan;
 *
 scan No0098;
      start = 2012y116d20h08m23s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = J0217+7349;
      station = Eb : 0 sec : 1200 sec :  1781.569 GB :  :  : 0;
      station = Gb : 0 sec : 1200 sec :  1780.792 GB :  :  : 0;
@@ -1419,7 +1419,7 @@ endscan;
 *
 scan No0099;
      start = 2012y116d20h28m43s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = J0217+7349;
      station = Eb : 0 sec : 600 sec :  1781.569 GB :  :  : 0;
      station = Gb : 0 sec : 600 sec :  1780.792 GB :  :  : 0;
@@ -1427,7 +1427,7 @@ endscan;
 *
 scan No0100;
      start = 2012y116d20h35m57s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = P-TXCAM;
      station = Kp : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
      station = Fd : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
@@ -1440,7 +1440,7 @@ endscan;
 *
 scan No0101;
      start = 2012y116d20h37m03s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = P-TXCAM;
      station = Kp : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
      station = Fd : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
@@ -1453,7 +1453,7 @@ endscan;
 *
 scan No0102;
      start = 2012y116d20h36m05s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = P-TXCAM;
      station = Mk : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
      station = Br : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
@@ -1462,7 +1462,7 @@ endscan;
 *
 scan No0103;
      start = 2012y116d20h37m11s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = P-TXCAM;
      station = Mk : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
      station = Br : 0 sec : 60 sec :  1781.569 GB :  : &ccw : 0;
@@ -1471,7 +1471,7 @@ endscan;
 *
 scan No0104;
      start = 2012y116d20h39m03s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0217+7349;
      station = Mk : 0 sec : 300 sec :  1781.569 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  1781.569 GB :  : &ccw : 1;
@@ -1489,7 +1489,7 @@ endscan;
 *
 scan No0105;
      start = 2012y116d20h44m39s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0243+7120;
      station = Mk : 0 sec : 300 sec :  1858.861 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  1858.861 GB :  : &ccw : 1;
@@ -1507,7 +1507,7 @@ endscan;
 *
 scan No0106;
      start = 2012y116d20h50m16s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0217+7349;
      station = Mk : 0 sec : 300 sec :  1936.152 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  1936.152 GB :  : &ccw : 1;
@@ -1525,7 +1525,7 @@ endscan;
 *
 scan No0107;
      start = 2012y116d20h55m52s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0243+7120;
      station = Mk : 0 sec : 300 sec :  2013.444 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  2013.444 GB :  : &ccw : 1;
@@ -1543,7 +1543,7 @@ endscan;
 *
 scan No0108;
      start = 2012y116d21h01m28s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0217+7349;
      station = Mk : 0 sec : 300 sec :  2090.735 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  2090.735 GB :  : &ccw : 1;
@@ -1561,7 +1561,7 @@ endscan;
 *
 scan No0109;
      start = 2012y116d21h06m48s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = J0217+7349;
      station = Eb : 0 sec : 600 sec :  2168.027 GB :  :  : 0;
      station = Gb : 0 sec : 600 sec :  2167.250 GB :  :  : 0;
@@ -1569,7 +1569,7 @@ endscan;
 *
 scan No0110;
      start = 2012y116d21h14m05s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = P-TXCAM;
      station = Kp : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
      station = Fd : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
@@ -1582,7 +1582,7 @@ endscan;
 *
 scan No0111;
      start = 2012y116d21h15m11s;
-     mode = Mode2;
+     mode = hsaddc.3mm+ptdl7mm+vla_x_poin;
      source = P-TXCAM;
      station = Kp : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
      station = Fd : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
@@ -1595,7 +1595,7 @@ endscan;
 *
 scan No0112;
      start = 2012y116d21h14m12s;
-     mode = Mode5;
+     mode = ptdl7mm;
      source = SIO-RCAS;
      station = Mk : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
      station = Br : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
@@ -1604,7 +1604,7 @@ endscan;
 *
 scan No0113;
      start = 2012y116d21h15m18s;
-     mode = Mode5;
+     mode = ptdl7mm;
      source = SIO-RCAS;
      station = Mk : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
      station = Br : 0 sec : 60 sec :  2168.027 GB :  : &ccw : 0;
@@ -1613,7 +1613,7 @@ endscan;
 *
 scan No0114;
      start = 2012y116d21h17m08s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0217+7349;
      station = Mk : 0 sec : 300 sec :  2168.027 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  2168.027 GB :  : &ccw : 1;
@@ -1631,7 +1631,7 @@ endscan;
 *
 scan No0115;
      start = 2012y116d21h22m44s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0243+7120;
      station = Mk : 0 sec : 300 sec :  2245.318 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  2245.318 GB :  : &ccw : 1;
@@ -1649,7 +1649,7 @@ endscan;
 *
 scan No0116;
      start = 2012y116d21h28m19s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0217+7349;
      station = Mk : 0 sec : 300 sec :  2322.610 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  2322.610 GB :  : &ccw : 1;
@@ -1667,7 +1667,7 @@ endscan;
 *
 scan No0117;
      start = 2012y116d21h33m54s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0243+7120;
      station = Mk : 0 sec : 300 sec :  2399.901 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  2399.901 GB :  : &ccw : 1;
@@ -1685,7 +1685,7 @@ endscan;
 *
 scan No0118;
      start = 2012y116d21h39m30s;
-     mode = Mode4;
+     mode = hsaddc.3mm;
      source = J0217+7349;
      station = Mk : 0 sec : 300 sec :  2477.193 GB :  : &ccw : 1;
      station = Br : 0 sec : 300 sec :  2477.193 GB :  : &ccw : 1;

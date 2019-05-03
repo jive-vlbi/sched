@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -51,7 +51,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def egvlba.6cm;
      ref $PROCEDURES = Procedure:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk;
      ref $IF = LO@4100MHzDPolTone/1:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 4BBCs:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -60,7 +60,7 @@ def Mode0;
      ref $DATASTREAMS = VDIF_8000-1Thr4Ch:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
 enddef;
 *
-def Mode1;
+def egvlba.2cm;
      ref $PROCEDURES = Procedure:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk;
      ref $IF = LO@14600MHzDPolTone/1:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 4BBCs#02:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
@@ -72,21 +72,21 @@ enddef;
 $IF;
 *
 def LO@14600MHzDPolTone/1;
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_B : B : R :  14600.00 MHz : U : 1 MHz;
-     if_def = &IF_D : D : L :  14600.00 MHz : U : 1 MHz;
+* egvlba.2cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     if_def = &IF_B :  : R :  14600.00 MHz : U : 1 MHz;
+     if_def = &IF_D :  : L :  14600.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@4100MHzDPolTone/1;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-     if_def = &IF_A : A : R :   4100.00 MHz : U : 1 MHz;
-     if_def = &IF_C : C : L :   4100.00 MHz : U : 1 MHz;
+* egvlba.6cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+     if_def = &IF_A :  : R :   4100.00 MHz : U : 1 MHz;
+     if_def = &IF_C :  : L :   4100.00 MHz : U : 1 MHz;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 4BBCs;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.6cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
@@ -94,7 +94,7 @@ def 4BBCs;
 enddef;
 *
 def 4BBCs#02;
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.2cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      BBC_assign = &BBC01 : 1 : &IF_B;
      BBC_assign = &BBC02 : 2 : &IF_D;
      BBC_assign = &BBC03 : 3 : &IF_B;
@@ -104,15 +104,15 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.2cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.6cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      phase_cal_detect = &PCD : 1 : 128 : 0;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 15240.25MHz4x128MHz;
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.2cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 15240.25 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 15240.25 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 15368.25 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -120,7 +120,7 @@ def 15240.25MHz4x128MHz;
 enddef;
 *
 def 4740.25MHz4x128MHz;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.6cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 4740.25 MHz : U :  128.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 4740.25 MHz : U :  128.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 4868.25 MHz : U :  128.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -130,8 +130,8 @@ enddef;
 $DATASTREAMS;
 *
 def VDIF_8000-1Thr4Ch;
-* Mode0: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* Mode1: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.2cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* egvlba.6cm: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 4 : 256.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -144,61 +144,61 @@ $STATION;
 *
 def Sc;
      ref $ANTENNA = VLBA_SC;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_SC;
 enddef;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def Nl;
      ref $ANTENNA = VLBA_NL;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_NL;
 enddef;
 *
 def Fd;
      ref $ANTENNA = VLBA_FD;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_FD;
 enddef;
 *
 def La;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_LA;
 enddef;
 *
 def Pt;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_PT;
 enddef;
 *
 def Kp;
      ref $ANTENNA = VLBA_KP;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_KP;
 enddef;
 *
 def Ov;
      ref $ANTENNA = VLBA_OV;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_OV;
 enddef;
 *
 def Br;
      ref $ANTENNA = VLBA_BR;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_BR;
 enddef;
 *
 def Mk;
      ref $ANTENNA = VLBA_MK;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_MK;
 enddef;
 *------------------------------------------------------------------------------
@@ -306,9 +306,9 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def RDBE_PFB+Mark5C;
+def RDBE_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
-     equip =     rack : RDBE_PFB : &RDBE_PFB;
+     equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
@@ -457,7 +457,7 @@ $SCHED;
 *
 scan No0009;
      start = 2014y186d16h36m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :     0.000 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :     0.000 GB :  : &ccw : 1;
@@ -472,7 +472,7 @@ endscan;
 *
 scan No0010;
      start = 2014y186d16h41m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   556.499 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   556.499 GB :  : &ccw : 1;
@@ -487,7 +487,7 @@ endscan;
 *
 scan No0011;
      start = 2014y186d16h45m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   618.332 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   618.332 GB :  : &ccw : 1;
@@ -502,7 +502,7 @@ endscan;
 *
 scan No0012;
      start = 2014y186d16h49m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   680.165 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   680.165 GB :  : &ccw : 1;
@@ -517,7 +517,7 @@ endscan;
 *
 scan No0013;
      start = 2014y186d16h54m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   741.999 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   741.999 GB :  : &ccw : 1;
@@ -532,7 +532,7 @@ endscan;
 *
 scan No0014;
      start = 2014y186d16h58m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   803.832 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   803.832 GB :  : &ccw : 1;
@@ -547,7 +547,7 @@ endscan;
 *
 scan No0015;
      start = 2014y186d17h02m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   865.665 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   865.665 GB :  : &ccw : 1;
@@ -562,7 +562,7 @@ endscan;
 *
 scan No0016;
      start = 2014y186d17h07m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   927.498 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   927.498 GB :  : &ccw : 1;
@@ -577,7 +577,7 @@ endscan;
 *
 scan No0017;
      start = 2014y186d17h11m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :   989.331 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :   989.331 GB :  : &ccw : 1;
@@ -592,7 +592,7 @@ endscan;
 *
 scan No0018;
      start = 2014y186d17h15m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1051.165 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1051.165 GB :  : &ccw : 1;
@@ -607,7 +607,7 @@ endscan;
 *
 scan No0019;
      start = 2014y186d17h20m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1112.998 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1112.998 GB :  : &ccw : 1;
@@ -622,7 +622,7 @@ endscan;
 *
 scan No0020;
      start = 2014y186d17h24m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1174.831 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1174.831 GB :  :   &n : 1;
@@ -637,7 +637,7 @@ endscan;
 *
 scan No0021;
      start = 2014y186d17h28m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1236.664 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1236.664 GB :  :   &n : 1;
@@ -652,7 +652,7 @@ endscan;
 *
 scan No0022;
      start = 2014y186d17h33m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1298.498 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1298.498 GB :  :   &n : 1;
@@ -667,7 +667,7 @@ endscan;
 *
 scan No0023;
      start = 2014y186d17h37m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1360.331 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1360.331 GB :  :   &n : 1;
@@ -682,7 +682,7 @@ endscan;
 *
 scan No0024;
      start = 2014y186d17h41m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1422.164 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1422.164 GB :  :   &n : 1;
@@ -697,7 +697,7 @@ endscan;
 *
 scan No0025;
      start = 2014y186d17h46m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1483.997 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1483.997 GB :  :   &n : 1;
@@ -712,7 +712,7 @@ endscan;
 *
 scan No0026;
      start = 2014y186d17h50m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1545.831 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1545.831 GB :  :   &n : 1;
@@ -727,7 +727,7 @@ endscan;
 *
 scan No0027;
      start = 2014y186d17h54m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1607.664 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1607.664 GB :  :   &n : 1;
@@ -742,7 +742,7 @@ endscan;
 *
 scan No0028;
      start = 2014y186d17h59m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1669.497 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1669.497 GB :  :   &n : 1;
@@ -757,7 +757,7 @@ endscan;
 *
 scan No0029;
      start = 2014y186d18h07m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  1731.330 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1731.330 GB :  :  &cw : 1;
@@ -773,7 +773,7 @@ endscan;
 *
 scan No0030;
      start = 2014y186d18h11m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  1793.164 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1793.164 GB :  :  &cw : 1;
@@ -789,7 +789,7 @@ endscan;
 *
 scan No0031;
      start = 2014y186d18h19m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1854.997 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1854.997 GB :  :   &n : 1;
@@ -805,7 +805,7 @@ endscan;
 *
 scan No0032;
      start = 2014y186d18h23m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1916.830 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1916.830 GB :  :   &n : 1;
@@ -821,7 +821,7 @@ endscan;
 *
 scan No0033;
      start = 2014y186d18h28m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  1978.663 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  1978.663 GB :  :   &n : 1;
@@ -837,7 +837,7 @@ endscan;
 *
 scan No0034;
      start = 2014y186d18h32m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2040.497 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2040.497 GB :  :   &n : 1;
@@ -853,7 +853,7 @@ endscan;
 *
 scan No0035;
      start = 2014y186d18h36m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2102.330 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2102.330 GB :  :   &n : 1;
@@ -869,7 +869,7 @@ endscan;
 *
 scan No0036;
      start = 2014y186d18h41m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2164.163 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2164.163 GB :  :   &n : 1;
@@ -885,7 +885,7 @@ endscan;
 *
 scan No0037;
      start = 2014y186d18h45m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2225.996 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2225.996 GB :  :   &n : 1;
@@ -901,7 +901,7 @@ endscan;
 *
 scan No0038;
      start = 2014y186d18h49m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2287.830 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2287.830 GB :  :   &n : 1;
@@ -917,7 +917,7 @@ endscan;
 *
 scan No0039;
      start = 2014y186d18h54m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2349.663 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2349.663 GB :  :   &n : 1;
@@ -933,7 +933,7 @@ endscan;
 *
 scan No0040;
      start = 2014y186d18h58m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc :   0 sec : 240 sec :  2411.496 GB :  : &ccw : 1;
      station = Hn :   0 sec : 240 sec :  2411.496 GB :  :   &n : 1;
@@ -949,7 +949,7 @@ endscan;
 *
 scan No0041;
      start = 2014y186d19h02m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2473.329 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2473.329 GB :  :   &n : 1;
@@ -965,7 +965,7 @@ endscan;
 *
 scan No0042;
      start = 2014y186d19h07m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2535.163 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2535.163 GB :  :   &n : 1;
@@ -981,7 +981,7 @@ endscan;
 *
 scan No0043;
      start = 2014y186d19h15m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  2596.996 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2596.996 GB :  :  &cw : 1;
@@ -997,7 +997,7 @@ endscan;
 *
 scan No0044;
      start = 2014y186d19h19m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  2658.829 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2658.829 GB :  :  &cw : 1;
@@ -1013,7 +1013,7 @@ endscan;
 *
 scan No0045;
      start = 2014y186d19h27m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2720.662 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2720.662 GB :  :   &n : 1;
@@ -1029,7 +1029,7 @@ endscan;
 *
 scan No0046;
      start = 2014y186d19h31m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2782.496 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2782.496 GB :  :   &n : 1;
@@ -1045,7 +1045,7 @@ endscan;
 *
 scan No0047;
      start = 2014y186d19h36m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2844.329 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2844.329 GB :  :   &n : 1;
@@ -1061,7 +1061,7 @@ endscan;
 *
 scan No0048;
      start = 2014y186d19h40m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2906.162 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2906.162 GB :  :   &n : 1;
@@ -1077,7 +1077,7 @@ endscan;
 *
 scan No0049;
      start = 2014y186d19h44m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  2967.995 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  2967.995 GB :  :   &n : 1;
@@ -1093,7 +1093,7 @@ endscan;
 *
 scan No0050;
      start = 2014y186d19h49m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3029.829 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3029.829 GB :  :   &n : 1;
@@ -1109,7 +1109,7 @@ endscan;
 *
 scan No0051;
      start = 2014y186d19h53m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3091.662 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3091.662 GB :  :   &n : 1;
@@ -1125,7 +1125,7 @@ endscan;
 *
 scan No0052;
      start = 2014y186d19h57m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3153.495 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3153.495 GB :  :   &n : 1;
@@ -1141,7 +1141,7 @@ endscan;
 *
 scan No0053;
      start = 2014y186d20h02m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3215.328 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3215.328 GB :  :   &n : 1;
@@ -1157,7 +1157,7 @@ endscan;
 *
 scan No0054;
      start = 2014y186d20h06m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3277.162 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3277.162 GB :  :   &n : 1;
@@ -1173,7 +1173,7 @@ endscan;
 *
 scan No0055;
      start = 2014y186d20h10m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3338.995 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3338.995 GB :  :   &n : 1;
@@ -1189,7 +1189,7 @@ endscan;
 *
 scan No0056;
      start = 2014y186d20h15m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3400.828 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3400.828 GB :  :   &n : 1;
@@ -1205,7 +1205,7 @@ endscan;
 *
 scan No0057;
      start = 2014y186d20h23m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  3462.661 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3462.661 GB :  :  &cw : 1;
@@ -1221,7 +1221,7 @@ endscan;
 *
 scan No0058;
      start = 2014y186d20h27m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  3524.495 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3524.495 GB :  :  &cw : 1;
@@ -1237,7 +1237,7 @@ endscan;
 *
 scan No0059;
      start = 2014y186d20h35m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3586.328 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3586.328 GB :  :   &n : 1;
@@ -1253,7 +1253,7 @@ endscan;
 *
 scan No0060;
      start = 2014y186d20h39m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3648.161 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3648.161 GB :  :   &n : 1;
@@ -1269,7 +1269,7 @@ endscan;
 *
 scan No0061;
      start = 2014y186d20h44m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3709.994 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3709.994 GB :  :   &n : 1;
@@ -1285,7 +1285,7 @@ endscan;
 *
 scan No0062;
      start = 2014y186d20h48m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3771.828 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3771.828 GB :  :   &n : 1;
@@ -1301,7 +1301,7 @@ endscan;
 *
 scan No0063;
      start = 2014y186d20h52m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3833.661 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3833.661 GB :  :   &n : 1;
@@ -1317,7 +1317,7 @@ endscan;
 *
 scan No0064;
      start = 2014y186d20h57m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3895.494 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3895.494 GB :  :   &n : 1;
@@ -1333,7 +1333,7 @@ endscan;
 *
 scan No0065;
      start = 2014y186d21h01m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  3957.327 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  3957.327 GB :  :   &n : 1;
@@ -1349,7 +1349,7 @@ endscan;
 *
 scan No0066;
      start = 2014y186d21h05m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4019.161 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4019.161 GB :  :   &n : 1;
@@ -1365,7 +1365,7 @@ endscan;
 *
 scan No0067;
      start = 2014y186d21h10m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4080.994 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4080.994 GB :  :   &n : 1;
@@ -1381,7 +1381,7 @@ endscan;
 *
 scan No0068;
      start = 2014y186d21h14m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4142.827 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4142.827 GB :  :   &n : 1;
@@ -1397,7 +1397,7 @@ endscan;
 *
 scan No0069;
      start = 2014y186d21h18m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4204.660 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4204.660 GB :  :   &n : 1;
@@ -1413,7 +1413,7 @@ endscan;
 *
 scan No0070;
      start = 2014y186d21h23m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4266.493 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4266.493 GB :  :  &cw : 1;
@@ -1429,7 +1429,7 @@ endscan;
 *
 scan No0071;
      start = 2014y186d21h31m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  4328.326 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4328.326 GB :  :  &cw : 1;
@@ -1445,7 +1445,7 @@ endscan;
 *
 scan No0072;
      start = 2014y186d21h35m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = DA193;
      station = Sc : 0 sec : 240 sec :  4390.159 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4390.159 GB :  :  &cw : 1;
@@ -1461,7 +1461,7 @@ endscan;
 *
 scan No0073;
      start = 2014y186d21h43m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4451.992 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4451.992 GB :  :  &cw : 1;
@@ -1477,7 +1477,7 @@ endscan;
 *
 scan No0074;
      start = 2014y186d21h47m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4513.825 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4513.825 GB :  :  &cw : 1;
@@ -1493,7 +1493,7 @@ endscan;
 *
 scan No0075;
      start = 2014y186d21h52m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4575.658 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4575.658 GB :  :  &cw : 1;
@@ -1509,7 +1509,7 @@ endscan;
 *
 scan No0076;
      start = 2014y186d21h56m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4637.491 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4637.491 GB :  :  &cw : 1;
@@ -1525,7 +1525,7 @@ endscan;
 *
 scan No0077;
      start = 2014y186d22h00m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4699.324 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4699.324 GB :  :  &cw : 1;
@@ -1541,7 +1541,7 @@ endscan;
 *
 scan No0078;
      start = 2014y186d22h05m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4761.157 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4761.157 GB :  :  &cw : 1;
@@ -1557,7 +1557,7 @@ endscan;
 *
 scan No0079;
      start = 2014y186d22h09m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4822.990 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4822.990 GB :  :  &cw : 1;
@@ -1573,7 +1573,7 @@ endscan;
 *
 scan No0080;
      start = 2014y186d22h13m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4884.823 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4884.823 GB :  :  &cw : 1;
@@ -1589,7 +1589,7 @@ endscan;
 *
 scan No0081;
      start = 2014y186d22h18m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  4946.656 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  4946.656 GB :  :  &cw : 1;
@@ -1605,7 +1605,7 @@ endscan;
 *
 scan No0082;
      start = 2014y186d22h22m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5008.489 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5008.489 GB :  :  &cw : 1;
@@ -1621,7 +1621,7 @@ endscan;
 *
 scan No0083;
      start = 2014y186d22h26m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5070.322 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5070.322 GB :  :  &cw : 1;
@@ -1637,7 +1637,7 @@ endscan;
 *
 scan No0084;
      start = 2014y186d22h31m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5132.155 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5132.155 GB :  :  &cw : 1;
@@ -1653,7 +1653,7 @@ endscan;
 *
 scan No0085;
      start = 2014y186d22h39m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = OQ208;
      station = Sc : 0 sec : 240 sec :  5193.988 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5193.988 GB :  :   &n : 1;
@@ -1668,7 +1668,7 @@ endscan;
 *
 scan No0086;
      start = 2014y186d22h43m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = OQ208;
      station = Sc : 0 sec : 240 sec :  5255.821 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5255.821 GB :  :   &n : 1;
@@ -1683,7 +1683,7 @@ endscan;
 *
 scan No0087;
      start = 2014y186d22h51m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5317.654 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5317.654 GB :  :  &cw : 1;
@@ -1699,7 +1699,7 @@ endscan;
 *
 scan No0088;
      start = 2014y186d22h55m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5379.487 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5379.487 GB :  :  &cw : 1;
@@ -1715,7 +1715,7 @@ endscan;
 *
 scan No0089;
      start = 2014y186d23h00m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5441.320 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5441.320 GB :  :  &cw : 1;
@@ -1731,7 +1731,7 @@ endscan;
 *
 scan No0090;
      start = 2014y186d23h04m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5503.153 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5503.153 GB :  :  &cw : 1;
@@ -1747,7 +1747,7 @@ endscan;
 *
 scan No0091;
      start = 2014y186d23h08m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5564.986 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5564.986 GB :  :  &cw : 1;
@@ -1763,7 +1763,7 @@ endscan;
 *
 scan No0092;
      start = 2014y186d23h13m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5626.819 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5626.819 GB :  :  &cw : 1;
@@ -1779,7 +1779,7 @@ endscan;
 *
 scan No0093;
      start = 2014y186d23h17m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5688.652 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5688.652 GB :  :  &cw : 1;
@@ -1795,7 +1795,7 @@ endscan;
 *
 scan No0094;
      start = 2014y186d23h21m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5750.485 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5750.485 GB :  :  &cw : 1;
@@ -1811,7 +1811,7 @@ endscan;
 *
 scan No0095;
      start = 2014y186d23h26m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5812.318 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5812.318 GB :  :  &cw : 1;
@@ -1827,7 +1827,7 @@ endscan;
 *
 scan No0096;
      start = 2014y186d23h30m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5874.151 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5874.151 GB :  :  &cw : 1;
@@ -1843,7 +1843,7 @@ endscan;
 *
 scan No0097;
      start = 2014y186d23h34m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5935.984 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5935.984 GB :  :  &cw : 1;
@@ -1859,7 +1859,7 @@ endscan;
 *
 scan No0098;
      start = 2014y186d23h39m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  5997.817 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  5997.817 GB :  :  &cw : 1;
@@ -1875,7 +1875,7 @@ endscan;
 *
 scan No0099;
      start = 2014y186d23h47m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = OQ208;
      station = Sc : 0 sec : 240 sec :  6059.650 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6059.650 GB :  :   &n : 1;
@@ -1891,7 +1891,7 @@ endscan;
 *
 scan No0100;
      start = 2014y186d23h51m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = OQ208;
      station = Sc : 0 sec : 240 sec :  6121.483 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6121.483 GB :  :   &n : 1;
@@ -1907,7 +1907,7 @@ endscan;
 *
 scan No0101;
      start = 2014y186d23h59m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6183.316 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6183.316 GB :  :  &cw : 1;
@@ -1923,7 +1923,7 @@ endscan;
 *
 scan No0102;
      start = 2014y187d00h03m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6245.149 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6245.149 GB :  :  &cw : 1;
@@ -1939,7 +1939,7 @@ endscan;
 *
 scan No0103;
      start = 2014y187d00h08m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6306.982 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6306.982 GB :  :  &cw : 1;
@@ -1955,7 +1955,7 @@ endscan;
 *
 scan No0104;
      start = 2014y187d00h12m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6368.815 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6368.815 GB :  :  &cw : 1;
@@ -1971,7 +1971,7 @@ endscan;
 *
 scan No0105;
      start = 2014y187d00h16m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6430.648 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6430.648 GB :  :  &cw : 1;
@@ -1987,7 +1987,7 @@ endscan;
 *
 scan No0106;
      start = 2014y187d00h21m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6492.481 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6492.481 GB :  :  &cw : 1;
@@ -2003,7 +2003,7 @@ endscan;
 *
 scan No0107;
      start = 2014y187d00h25m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6554.314 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6554.314 GB :  :  &cw : 1;
@@ -2019,7 +2019,7 @@ endscan;
 *
 scan No0108;
      start = 2014y187d00h29m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6616.147 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6616.147 GB :  :  &cw : 1;
@@ -2035,7 +2035,7 @@ endscan;
 *
 scan No0109;
      start = 2014y187d00h34m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6677.980 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6677.980 GB :  :  &cw : 1;
@@ -2051,7 +2051,7 @@ endscan;
 *
 scan No0110;
      start = 2014y187d00h38m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6739.813 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6739.813 GB :  :  &cw : 1;
@@ -2067,7 +2067,7 @@ endscan;
 *
 scan No0111;
      start = 2014y187d00h42m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6801.646 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6801.646 GB :  :  &cw : 1;
@@ -2083,7 +2083,7 @@ endscan;
 *
 scan No0112;
      start = 2014y187d00h47m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  6863.479 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6863.479 GB :  :  &cw : 1;
@@ -2099,7 +2099,7 @@ endscan;
 *
 scan No0113;
      start = 2014y187d00h55m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = OQ208;
      station = Sc : 0 sec : 240 sec :  6925.312 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6925.312 GB :  :   &n : 1;
@@ -2115,7 +2115,7 @@ endscan;
 *
 scan No0114;
      start = 2014y187d00h59m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = OQ208;
      station = Sc : 0 sec : 240 sec :  6987.146 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  6987.146 GB :  :   &n : 1;
@@ -2131,7 +2131,7 @@ endscan;
 *
 scan No0115;
      start = 2014y187d01h07m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7048.979 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7048.979 GB :  :  &cw : 1;
@@ -2147,7 +2147,7 @@ endscan;
 *
 scan No0116;
      start = 2014y187d01h11m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7110.812 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7110.812 GB :  :  &cw : 1;
@@ -2163,7 +2163,7 @@ endscan;
 *
 scan No0117;
      start = 2014y187d01h16m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7172.645 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7172.645 GB :  :  &cw : 1;
@@ -2179,7 +2179,7 @@ endscan;
 *
 scan No0118;
      start = 2014y187d01h20m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7234.478 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7234.478 GB :  :  &cw : 1;
@@ -2195,7 +2195,7 @@ endscan;
 *
 scan No0119;
      start = 2014y187d01h24m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7296.311 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7296.311 GB :  :  &cw : 1;
@@ -2211,7 +2211,7 @@ endscan;
 *
 scan No0120;
      start = 2014y187d01h29m00s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7358.144 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7358.144 GB :  :  &cw : 1;
@@ -2227,7 +2227,7 @@ endscan;
 *
 scan No0121;
      start = 2014y187d01h33m20s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7419.977 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7419.977 GB :  :  &cw : 1;
@@ -2243,7 +2243,7 @@ endscan;
 *
 scan No0122;
      start = 2014y187d01h37m40s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Sc : 0 sec : 240 sec :  7481.810 GB :  : &ccw : 1;
      station = Hn : 0 sec : 240 sec :  7481.810 GB :  :  &cw : 1;
@@ -2259,7 +2259,7 @@ endscan;
 *
 scan No0123;
      start = 2014y187d01h42m00s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Hn : 0 sec : 240 sec :  7543.643 GB :  :  &cw : 1;
      station = Nl : 0 sec : 240 sec :  7479.491 GB :  :  &cw : 1;
@@ -2274,7 +2274,7 @@ endscan;
 *
 scan No0124;
      start = 2014y187d01h46m20s;
-     mode = Mode1;
+     mode = egvlba.2cm;
      source = 4C39.25;
      station = Hn : 0 sec : 240 sec :  7605.476 GB :  :  &cw : 1;
      station = Nl : 0 sec : 240 sec :  7541.324 GB :  :  &cw : 1;
@@ -2289,7 +2289,7 @@ endscan;
 *
 scan No0125;
      start = 2014y187d01h50m40s;
-     mode = Mode0;
+     mode = egvlba.6cm;
      source = 4C39.25;
      station = Hn : 0 sec : 240 sec :  7667.309 GB :  :  &cw : 1;
      station = Nl : 0 sec : 240 sec :  7603.157 GB :  :  &cw : 1;

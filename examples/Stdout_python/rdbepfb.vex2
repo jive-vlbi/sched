@@ -1,6 +1,6 @@
 VEX_rev = 2.0;
 *    SCHED vers: 
-*    VEX/SCHED:  2.0.1
+*    VEX/SCHED:  2.0.2
 *    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -51,7 +51,7 @@ enddef;
 *------------------------------------------------------------------------------
 $MODE;
 *
-def Mode0;
+def rdbe_pfb_4980_dual;
      ref $PROCEDURES = Procedure:Hn:La:Pt:Br:Mk;
      ref $IF = LO@4100MHzDPolTone/1:Br:Hn:La:Mk:Pt;
      ref $BBC = 16BBCs:Br:Hn:La:Mk:Pt;
@@ -63,15 +63,15 @@ enddef;
 $IF;
 *
 def LO@4100MHzDPolTone/1;
-* Mode0: Br, Hn, La, Mk, Pt
-     if_def = &IF_A : A : R :   4100.00 MHz : U : 1 MHz;
-     if_def = &IF_C : C : L :   4100.00 MHz : U : 1 MHz;
+* rdbe_pfb_4980_dual: Br, Hn, La, Mk, Pt
+     if_def = &IF_A :  : R :   4100.00 MHz : U : 1 MHz;
+     if_def = &IF_C :  : L :   4100.00 MHz : U : 1 MHz;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
 def 16BBCs;
-* Mode0: Br, Hn, La, Mk, Pt
+* rdbe_pfb_4980_dual: Br, Hn, La, Mk, Pt
      BBC_assign = &BBC01 :  1 : &IF_A;
      BBC_assign = &BBC02 :  2 : &IF_C;
      BBC_assign = &BBC03 :  3 : &IF_A;
@@ -93,14 +93,14 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* Mode0: Br, Hn, La, Mk, Pt
+* rdbe_pfb_4980_dual: Br, Hn, La, Mk, Pt
      phase_cal_detect = &PCD : 2;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 4884MHz16x32MHz;
-* Mode0: Br, Hn, La, Mk, Pt
+* rdbe_pfb_4980_dual: Br, Hn, La, Mk, Pt
      chan_def =  : 4884 MHz : L :   32.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 4884 MHz : L :   32.00 MHz : &CH02 : &BBC02 : &PCD;
      chan_def =  : 4916 MHz : L :   32.00 MHz : &CH03 : &BBC03 : &PCD;
@@ -122,7 +122,7 @@ enddef;
 $BITSTREAMS;
 *
 def BS16Ch2Bit;
-* Mode0: Br, Hn, La, Mk, Pt
+* rdbe_pfb_4980_dual: Br, Hn, La, Mk, Pt
      stream_sample_rate =  64.000 Ms/sec;
      stream_def = &CH01 : sign :  0 :  0;
      stream_def = &CH01 :  mag :  1 :  1;
@@ -162,31 +162,31 @@ $STATION;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def La;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_LA;
 enddef;
 *
 def Pt;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_PT;
 enddef;
 *
 def Br;
      ref $ANTENNA = VLBA_BR;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_BR;
 enddef;
 *
 def Mk;
      ref $ANTENNA = VLBA_MK;
-     ref $DAS = RDBE_PFB+Mark5C;
+     ref $DAS = RDBE_DDC+Mark5C;
      ref $SITE = VLBA_MK;
 enddef;
 *------------------------------------------------------------------------------
@@ -244,9 +244,9 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def RDBE_PFB+Mark5C;
+def RDBE_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
-     equip =     rack : RDBE_PFB : &RDBE_PFB;
+     equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
@@ -344,7 +344,7 @@ $SCHED;
 *
 scan No0004;
      start = 2010y337d15h45m17s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :     0.000 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :     0.000 GB :  : &n : 1;
@@ -355,7 +355,7 @@ endscan;
 *
 scan No0005;
      start = 2010y337d15h50m27s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C273;
      station = Hn : 0 sec : 280 sec :   287.179 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   287.179 GB :  : &n : 1;
@@ -366,7 +366,7 @@ endscan;
 *
 scan No0006;
      start = 2010y337d15h55m36s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   358.973 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   358.973 GB :  : &n : 1;
@@ -377,7 +377,7 @@ endscan;
 *
 scan No0007;
      start = 2010y337d16h00m45s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C273;
      station = Hn : 0 sec : 280 sec :   430.768 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   430.768 GB :  : &n : 1;
@@ -388,7 +388,7 @@ endscan;
 *
 scan No0008;
      start = 2010y337d16h05m54s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   502.563 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   502.563 GB :  : &n : 1;
@@ -399,7 +399,7 @@ endscan;
 *
 scan No0009;
      start = 2010y337d16h11m03s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C273;
      station = Hn : 0 sec : 280 sec :   574.357 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   574.357 GB :  : &n : 1;
@@ -410,7 +410,7 @@ endscan;
 *
 scan No0010;
      start = 2010y337d16h16m13s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   646.152 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   646.152 GB :  : &n : 1;
@@ -421,7 +421,7 @@ endscan;
 *
 scan No0011;
      start = 2010y337d16h21m22s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C273;
      station = Hn : 0 sec : 280 sec :   717.947 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   717.947 GB :  : &n : 1;
@@ -432,7 +432,7 @@ endscan;
 *
 scan No0012;
      start = 2010y337d16h26m32s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C279;
      station = Hn : 0 sec : 280 sec :   789.742 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   789.742 GB :  : &n : 1;
@@ -443,7 +443,7 @@ endscan;
 *
 scan No0013;
      start = 2010y337d16h31m41s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = 3C273;
      station = Hn : 0 sec : 280 sec :   861.536 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   861.536 GB :  : &n : 1;
@@ -454,7 +454,7 @@ endscan;
 *
 scan No0014;
      start = 2010y337d16h36m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :   933.331 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :   933.331 GB :  : &n : 1;
@@ -465,7 +465,7 @@ endscan;
 *
 scan No0015;
      start = 2010y337d16h41m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1005.126 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1005.126 GB :  : &n : 1;
@@ -476,7 +476,7 @@ endscan;
 *
 scan No0016;
      start = 2010y337d16h46m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  1076.920 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1076.920 GB :  : &n : 1;
@@ -487,7 +487,7 @@ endscan;
 *
 scan No0017;
      start = 2010y337d16h51m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1148.715 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1148.715 GB :  : &n : 1;
@@ -498,7 +498,7 @@ endscan;
 *
 scan No0018;
      start = 2010y337d16h56m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  1220.510 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1220.510 GB :  : &n : 1;
@@ -509,7 +509,7 @@ endscan;
 *
 scan No0019;
      start = 2010y337d17h01m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1292.304 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1292.304 GB :  : &n : 1;
@@ -520,7 +520,7 @@ endscan;
 *
 scan No0020;
      start = 2010y337d17h06m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  1364.099 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1364.099 GB :  : &n : 1;
@@ -531,7 +531,7 @@ endscan;
 *
 scan No0021;
      start = 2010y337d17h11m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1435.894 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1435.894 GB :  : &n : 1;
@@ -542,7 +542,7 @@ endscan;
 *
 scan No0022;
      start = 2010y337d17h16m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  1507.688 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1507.688 GB :  : &n : 1;
@@ -553,7 +553,7 @@ endscan;
 *
 scan No0023;
      start = 2010y337d17h21m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1579.483 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1579.483 GB :  : &n : 1;
@@ -564,7 +564,7 @@ endscan;
 *
 scan No0024;
      start = 2010y337d17h26m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  1651.278 GB :  : &n : 1;
      station = La : 0 sec : 280 sec :  1651.278 GB :  : &n : 1;
@@ -575,7 +575,7 @@ endscan;
 *
 scan No0025;
      start = 2010y337d17h31m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1723.072 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  1723.072 GB :  :  &n : 1;
@@ -586,7 +586,7 @@ endscan;
 *
 scan No0026;
      start = 2010y337d17h36m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  1794.867 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  1794.867 GB :  :  &n : 1;
@@ -597,7 +597,7 @@ endscan;
 *
 scan No0027;
      start = 2010y337d17h41m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  1866.662 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  1866.662 GB :  :  &n : 1;
@@ -608,7 +608,7 @@ endscan;
 *
 scan No0028;
      start = 2010y337d17h46m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  1938.456 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  1938.456 GB :  :  &n : 1;
@@ -619,7 +619,7 @@ endscan;
 *
 scan No0029;
      start = 2010y337d17h51m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2010.251 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2010.251 GB :  :  &n : 1;
@@ -630,7 +630,7 @@ endscan;
 *
 scan No0030;
      start = 2010y337d17h56m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  2082.046 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2082.046 GB :  :  &n : 1;
@@ -641,7 +641,7 @@ endscan;
 *
 scan No0031;
      start = 2010y337d18h01m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2153.841 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2153.841 GB :  :  &n : 1;
@@ -652,7 +652,7 @@ endscan;
 *
 scan No0032;
      start = 2010y337d18h06m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M87;
      station = Hn : 0 sec : 280 sec :  2225.635 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2225.635 GB :  :  &n : 1;
@@ -663,7 +663,7 @@ endscan;
 *
 scan No0033;
      start = 2010y337d18h11m50s;
-     mode = Mode0;
+     mode = rdbe_pfb_4980_dual;
      source = M84;
      station = Hn : 0 sec : 280 sec :  2297.430 GB :  : &cw : 1;
      station = La : 0 sec : 280 sec :  2297.430 GB :  :  &n : 1;
