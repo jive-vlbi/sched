@@ -1385,12 +1385,13 @@ def text2comments(lines, comment_prefix):
 
 def time2str(t):
     year, doy, time_ = s.timej(t)
-    return "{}y{}d{}".format(year, doy, f2str(
+    return "{:}y{:03d}d{}".format(year, doy, f2str(
         s.tformwrp(time_, "T", 0, 2, 2, "hms")))
 
 def extend_name(base_name, used_names):
     extension = 2
-    base_name = str2def(base_name)
+    # def is at most 32 chars, reserve 3 for the extension
+    base_name = str2def(base_name)[:29]
     
     name = base_name
     while name in used_names:
