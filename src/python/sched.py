@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from sched import input_, parameter, schin_module, getfreq, defaults
-import vex
+from sched import input_, parameter, schin_module, getfreq, defaults, vexout
 from util import f2str
 import key
 
@@ -140,13 +139,7 @@ if mkfiles and (f2str(s.schsco.optmode) != "UPTIME") and not s.schcon.noset:
     if args.old_style_vex:
         s.vexout()
     else:
-        with open("{}.vex".format(f2str(s.schc1.expcode).lower()), "w") \
-             as vex_file:
-            vex.write(vex_file, vex_version="1.5")
-
-    with open("{}.vex2".format(f2str(s.schc1.expcode).lower()), "w") \
-         as vex_file:
-        vex.write(vex_file, vex_version="2.0")
+        vexout()
     
     if s.schcon.dovsop:
         s.vsopwrt()

@@ -36,3 +36,4 @@ from .chkset_module   import chkset
 from .setexpnd_module import setexpnd
 from .defset_module   import defset
 from .defaults_module import defaults
+from .vexout_module   import vexout
