@@ -262,7 +262,11 @@ def modes_block(vex_version):
                          setup.netside, 
                          bbc_width, 
                          tone_interval)
-            phase_cal = tuple(("phase_cal_detect", "&PCD") +
+            if ntone > 1:
+                link = "&PCD{}"
+            else:
+                link = "&PCD"
+            phase_cal = tuple(("phase_cal_detect", link.format(phase_def + 1)) +
                               tuple(itone_per_def[:ntone_per_def[
                                   phase_def], 
                                                   phase_def])
