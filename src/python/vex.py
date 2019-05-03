@@ -102,7 +102,8 @@ def {};
     ret += text2comments((f2str(note) for note in s.schsco.note), 
                          comment_prefix)
 
-    scans = ScanCatalog().used()
+    catalog = ScanCatalog()
+    scans = catalog.used()
     year, doy, time_ = s.timej(scans[0].stopj)
     year, month, day, jd, mname, dname = s.tdatecw(year, 1, doy)
     ret += """
@@ -114,7 +115,19 @@ def {};
            f2str(dname), day, f2str(mname), year,
            int(jd - 2400000.5 ))[1:]
 
-    ret += "     exper_nominal_start={};\n".format(time2str(scans[0].startj))
+    # The scan start times will be adjusted by tape offset in the $SCHED block,
+    # since this adjustment is never written back to the common blocks, 
+    # get the tape offset here too.
+    # The SCHED function vxschk returns booleans to allow the caller to 
+    # generate warning messages, ignore those here.
+    max_stations = s.schn1.stanum.shape[0]
+    tape_offset, _, _, _, _, _, _, _ = s.vxschk(
+        catalog.scan_offset + 1, False, np.full((max_stations,), False),
+        np.full((max_stations,), False), np.full((max_stations,), 0), 
+        np.full((max_stations,), 0), np.full((max_stations,), 0), False)
+
+    ret += "     exper_nominal_start={};\n".format(
+        time2str(scans[0].startj - tape_offset))
     ret += "     exper_nominal_stop={};\n".format(time2str(scans[-1].stopj))
 
     if s.schcon.coverlet:
@@ -1126,8 +1139,23 @@ def sched_block(scan_mode, vex_version):
 
     byte_offset = defaultdict(float) # station -> expected bytes recorded
 
+    warn_field_system = False
+    warn_bank = False
+    max_stations = s.schn1.stanum.shape[0]
+    warn_tsys = np.full((max_stations,), False)
+    warn_tsys_off = np.full((max_stations,), False)
+    ntsys = np.full((max_stations,), 0)
+    ntsys_on = np.full((max_stations,), 0)
+    tsys_gap = np.full((max_stations,), 0)
+
     ret = "$SCHED;\n"
     for scan_index, scan in enumerate(scans):
+        tape_offset, warn_field_system, warn_tsys, warn_tsys_off, ntsys, \
+            ntsys_on, tsys_gap, warn_bank = s.vxschk(
+                scan_index + scan_offset + 1, warn_field_system, warn_tsys,
+                warn_tsys_off, ntsys, ntsys_on, tsys_gap, warn_bank)
+        scan_startj = scan.startj - tape_offset
+
         found_one = False
         for station in stations:
             setup = setups[station.nsetup[scan_index+scan_offset] - 1]
@@ -1138,32 +1166,32 @@ def sched_block(scan_mode, vex_version):
         if not found_one:
             continue
 
-        scan_def = (("start", time2str(scan.startj)),
+        scan_def = (("start", time2str(scan_startj)),
                     ("mode", scan_mode[scan_index]),
                     ("source", scan.scnsrc))
         scan_name = "No{:04d}".format(scan_index+scan_offset+1)
-        for station_index, station in enumerate(stations):
+        for station in stations:
             if station.stascn[scan_index+scan_offset]:
                 setup = setups[station.nsetup[scan_index+scan_offset] - 1]
                 if (scan.grabto == "FILE") and (scan.datapath == "IN2NET"):
-                    s.errlog("VXSCH: You have requested a GRABTO (ftp) scan, "
-                             "but you are  not recording to disk. You must set "
-                             "DATAPATH=IN2DISK")
+                    raise RuntimeError(
+                        "You have requested a GRABTO (ftp) scan, but you are "
+                        "not recording to disk. You must set DATAPATH=IN2DISK")
                 
                 if scan.grabto == "NET":
-                    s.wlog(1, "VXSCH: You have requested GRABTO=NET, but that "
+                    s.wlog(1, "You have requested GRABTO=NET, but that "
                            "is not supported in VEX and will be ignored. ")
 
                 elif scan.grabto == "FILE":
                     grab_duration, before_stop = scan.grabtime
-                    scan_duration = (scan.stopj - scan.startj) * \
+                    scan_duration = (scan.stopj - scan_startj) * \
                                     parameter.secpday
                     if grab_duration + before_stop > scan_duration:
-                        s.errlog("VXSCH:   WARNING: You have scheduled a "
-                                 "GRABTO scan, but the GRABTIME is not "
-                                 "consistent with the scan length. Please "
-                                 "increase the scan length or change the "
-                                 "GRABTIME parameters.")
+                        raise RuntimeError(
+                            "You have scheduled a GRABTO scan, but the "
+                            "GRABTIME is not consistent with the scan length. "
+                            "Please increase the scan length or change the "
+                            "GRABTIME parameters.")
                     # cast from numpy.float to python float so round returns int
                     grab_stop = round(float(scan_duration-before_stop))
                     grab_start = round(float(grab_stop-grab_duration))
@@ -1182,10 +1210,10 @@ def sched_block(scan_mode, vex_version):
                         bitrate = setup.totbps
                         # assume a 110Mbps disk2file rate and some latency
                         expected_time = 5 + grab_duration * bitrate / 110
-                        gap = (scans[scan_index+1].startj - scan.stopj) * \
-                              parameter.secpday
+                        gap = (scans[scan_index+1].startj - tape_offset - 
+                               scan.stopj) * parameter.secpday
                         if expected_time > gap:
-                            s.wlog(1, "VXTRAN: You have scheduled an ftp "
+                            s.wlog(1, "You have scheduled an ftp "
                                    "(GRABTO) scan but you have not left a long "
                                    "enough gap to transfer the data before the "
                                    "next scan starts. Try inserting a gap of "
@@ -1193,7 +1221,7 @@ def sched_block(scan_mode, vex_version):
                                        expected_time + 1, scan_index + 1))
                 elif scan.datapath == "IN2NET":
                     # cast from numpy.float to python float so round returns int
-                    duration = round(float(scan.stopj - scan.startj) * 
+                    duration = round(float(scan.stopj - scan_startj) * 
                                      parameter.secpday)
                     scan_def += (("data_transfer",
                                   station.stcode,
@@ -1207,9 +1235,9 @@ def sched_block(scan_mode, vex_version):
                     # cast from numpy.float to python float so round returns int
                     data_good = round(max(
                         float(station.tonsrc[scan_index+scan_offset] - 
-                              scan.startj) * parameter.secpday,
+                              scan_startj) * parameter.secpday,
                         0))
-                    data_stop = round(float(scan.stopj - scan.startj) * 
+                    data_stop = round(float(scan.stopj - scan_startj) * 
                                       parameter.secpday)
                     if station.usedisk:
                         media_position = "{:9.3f} GB".format(
@@ -1247,6 +1275,41 @@ def sched_block(scan_mode, vex_version):
 
         ret += "*\n{}".format(
             block_def2str(scan_name, scan_def, keyword="scan"))
+
+    tsys_message = False
+    for index in np.nonzero(warn_tsys)[0]:
+        if stations[index].tscal == "GAP":
+            s.wlog(1, "{} has {} Tsys measurements. Maximum interval = "
+                   "{} minutes.".format(
+                       station.station, ntsys[index], tsys_gap[index]))
+            tsys_message = True
+    if tsys_message:
+        s.wlog(1, 
+               "Tsys calibration at most MkIV stations is taken during every "
+               "gap in recording,\n"
+               "but these appear over 15 min apart for the stations listed "
+               "above!\n"
+               "This can be improved by inserting gaps at regular intervals.\n"
+               "Note this is not an issue for  Westerbork or Arecibo.")
+        s.wrtmsg(0, "VXSCH", "tsysgap")
+
+    tsys_message = False
+    for index in np.nonzero(warn_tsys_off)[0]:
+        if stations[index].tscal == "GAP":
+            s.wlog(1, "{} : only {} out of {} Tsys measurements are on-source".\
+                   format(station.station, ntsys_on[index], ntsys[index]))
+            tsys_message = True
+    if tsys_message:
+        s.wlog(1, "Stations listed above are affected by slewing during Tsys "
+               "calibration")
+        s.wrtmsg(0, "VXSCH", "tsysoffsrc")
+    
+    if warn_field_system:
+        s.wlog(1, "WARNING: Scan timing problem for PCFS, "
+               "this VEX will NOT run!!!!")
+
+    if warn_bank:
+        s.wrtmsg(1, "VXSCH", "warnbank")
 
     return ret
     
