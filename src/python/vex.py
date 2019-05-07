@@ -19,7 +19,7 @@ sched_version = "2" # version of SCHED VEX writing routine
 
 block_separator = "*------------------------------------------------------"\
                   "------------------------\n"
-def write(output, vex_version="2.0"):
+def write(output, vex_version="2.0", print_warnings=False):
     assert vex_version in {"1.5", "2.0"}
     # read in all catalogs, so other methods can assume their entries are valid
     for Catalog in (SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog):
@@ -33,16 +33,16 @@ def write(output, vex_version="2.0"):
     output.write(block_separator)
     output.write(exper_block(vex_version))
     output.write(block_separator)
-    mode_text, scan_mode_name = modes_block(vex_version)
+    mode_text, scan_mode_name = modes_block(vex_version, print_warnings)
     output.write(mode_text)
     output.write(block_separator)
-    output.write(stations_block(vex_version))
+    output.write(stations_block(vex_version, print_warnings))
     output.write(block_separator)
     output.write(procedures_block(vex_version))
     output.write(block_separator)
-    output.write(source_block(vex_version))
+    output.write(source_block(vex_version, print_warnings))
     output.write(block_separator)
-    output.write(sched_block(scan_mode_name, vex_version))
+    output.write(sched_block(scan_mode_name, vex_version, print_warnings))
 
 def header_block(vex_version):
     return """
@@ -174,7 +174,7 @@ enddef;
 
     return ret
 
-def modes_block(vex_version):
+def modes_block(vex_version, print_warnings):
     # some common block variables are indexed by scan number, but not part 
     # of the scan catalog, the indices are offset from the catalog entries
     scan_catalog = ScanCatalog()
@@ -626,6 +626,7 @@ def modes_block(vex_version):
                 mode[block][block_def].update(block_stations)
         return True
 
+    do_phase_cal_warning = False
     for scan_index, scan in enumerate(scans):
         scan_mode = {block: defaultdict(set) for block in blocks}
 
@@ -645,6 +646,8 @@ def modes_block(vex_version):
                         if_pcal = (tone_interval,)
                 else:
                     tone_interval = pcal_map[setup.spcal.upper()]
+                if tone_interval != 1:
+                    do_phase_cal_warning = True
                 
                 if_, if_channel = do_if(setup, if_pcal)
                 scan_mode["IF"][if_].add(station_code)
@@ -693,6 +696,20 @@ def modes_block(vex_version):
         scan_mode_index[scan_index] = mode_index
         mode_index_setups[mode_index].update(s.setname for s in setups_used)
 
+    if do_phase_cal_warning and (not s.schn5.allvlba) and print_warnings:
+        s.wlog(1, "WARNING, Phase cal not under computer control for some "
+               "stations.")
+        s.wlog(1, "Contact stations by e-mail to make sure phase cal is "
+               "switched off.")
+        s.wlog(1, "Phase cal is under computer control for VLBA stations and "
+               "many others.")
+
+    if (len(modes) > 20) and print_warnings:
+        s.wlog(1, "WARNING: More than 20 VEX modes ({}) in this schedule. ".\
+               format(len(modes)))
+        s.wlog(1, "This VEX will NOT run in the field system!")
+        s.wlog(1, "It should be ok on the VLBA.")
+    
     # functions to name block defs
     def make_if_name(block_def):
         pols = set(if_def[3] for if_def in block_def)
@@ -885,7 +902,7 @@ def Procedure;
 enddef;
 """[1:]
 
-def stations_block(vex_version):
+def stations_block(vex_version, print_warnings):
     def do_site(station):
         # force 2 char site code
         if len(station.stcode) == 0:
@@ -933,7 +950,8 @@ def stations_block(vex_version):
                          "{} sec".format(int(station.tsettle))))
             if (station.mount == "ALTAZ") and \
                station.station.startswith("VLBA"):
-                antenna += pointing_sectors(station, vex_version)
+                antenna += pointing_sectors(station, vex_version, 
+                                            print_warnings)
             
         antenna += (("axis_offset", "{:10.5} m".format(station.axoff)),)
         return antenna
@@ -1047,7 +1065,7 @@ def stations_block(vex_version):
             
     return stations_text
 
-def pointing_sectors(station, vex_version):
+def pointing_sectors(station, vex_version, print_warnings):
     ax1 = station.ax1lim
     ax2 = station.ax2lim
     diff = ax1[1] - ax1[0]
@@ -1058,11 +1076,12 @@ def pointing_sectors(station, vex_version):
         else:
             zones = (("n",  ax1[0], ax1[1], ax2[0], 90.),
                      ("np", 0.,     0.,     90.,    ax2[1]))
-            s.wlog(1, "WRAPZONE: {} has over-the-top pointing.".format(
-                station.station) )
-            s.wlog(1, "          This is not well supported in SCHED.  "
-                   "Az and El may be wrong ")
-            s.wlog(1, "          and slew calculations may be way off.")
+            if print_warnings:
+                s.wlog(1, "WRAPZONE: {} has over-the-top pointing.".format(
+                    station.station) )
+                s.wlog(1, "          This is not well supported in SCHED.  "
+                       "Az and El may be wrong ")
+                s.wlog(1, "          and slew calculations may be way off.")
     elif diff <= 720:
         if ax2[1] <= 90.0001:
             zones = (("ccw", ax1[0], ax1[1] - 360, ax2[0], ax2[1]),
@@ -1076,10 +1095,11 @@ def pointing_sectors(station, vex_version):
                      ("ccwp", ax1[1] - 360, ax1[0] + 360, 90., ax2[1]),
                      ("ccwp", ax1[0] + 360, ax1[0], 90., ax2[1]))
     else: # diff > 720
-        s.wlog(1, "WRAPZONE: Station {} has an azimuth wrap range over "
-               "180 degrees.".format(station.station))
-        s.wlog(1, "          SCHED is not set up for that")
-        s.wlog(1, "          Will not give wrap zones in VEX file.")
+        if print_warnings:
+            s.wlog(1, "WRAPZONE: Station {} has an azimuth wrap range over "
+                   "180 degrees.".format(station.station))
+            s.wlog(1, "          SCHED is not set up for that")
+            s.wlog(1, "          Will not give wrap zones in VEX file.")
         
     zone_counter = defaultdict(int)
     def name_suffix(zone):
@@ -1116,13 +1136,13 @@ def scan_sector(station, scan, az1, el1):
         return zone
     return None
     
-def source_block(vex_version):
+def source_block(vex_version, print_warnings):
     sources = SourceCatalog().used()
     source_text = "$SOURCE;\n"
     source_defs = 0
     for source in sources:
         source_defs += len(source.aliases)
-        if source_defs > 1000:
+        if (source_defs > 1000) and print_warnings:
             s.wlog(1, "WARNING: More than 1000 sources in this "
                    "schedule. This VEX will NOT run on the Field System!")
         for alias in source.aliases:
@@ -1137,7 +1157,7 @@ enddef;
             
     return source_text
 
-def sched_block(scan_mode, vex_version):
+def sched_block(scan_mode, vex_version, print_warnings):
     catalog = ScanCatalog()
     scans = catalog.used()
     scan_offset = catalog.scan_offset
@@ -1150,6 +1170,7 @@ def sched_block(scan_mode, vex_version):
 
     warn_field_system = False
     warn_bank = False
+    old_warn_bank = False
     max_stations = s.schn1.stanum.shape[0]
     warn_tsys = np.full((max_stations,), False)
     warn_tsys_off = np.full((max_stations,), False)
@@ -1157,13 +1178,27 @@ def sched_block(scan_mode, vex_version):
     ntsys_on = np.full((max_stations,), 0)
     tsys_gap = np.full((max_stations,), 0)
 
+    # SCHED function VXSCHK use MODSCN (a mode index value) to compare if 
+    # two scans use different modes to warn for mode changes
+    modes = list(set(scan_mode.values()))
+
     ret = "$SCHED;\n"
     for scan_index, scan in enumerate(scans):
+        # write modscn value (used by vxschk) directly into common block
+        s.vex3.modscn[scan_index + scan_offset] = \
+            modes.index(scan_mode[scan_index])
         tape_offset, warn_field_system, warn_tsys, warn_tsys_off, ntsys, \
             ntsys_on, tsys_gap, warn_bank = s.vxschk(
                 scan_index + scan_offset + 1, warn_field_system, warn_tsys,
                 warn_tsys_off, ntsys, ntsys_on, tsys_gap, warn_bank)
         scan_startj = scan.startj - tape_offset
+        if (not old_warn_bank) and warn_bank and print_warnings:
+            s.wlog(0, "The scan detailed below has exceeded the limit for "
+                   "continuous recording. Insert a gap before this scan, or "
+                   "reduce its length if necessary:")
+            s.prtscn(scan_index + scan_offset + 1, "VXSCH")
+            s.wlog(0, " ")
+        old_warn_bank = warn_bank
 
         found_one = False
         for station in stations:
@@ -1188,8 +1223,9 @@ def sched_block(scan_mode, vex_version):
                         "not recording to disk. You must set DATAPATH=IN2DISK")
                 
                 if scan.grabto == "NET":
-                    s.wlog(1, "You have requested GRABTO=NET, but that "
-                           "is not supported in VEX and will be ignored. ")
+                    if print_warnings:
+                        s.wlog(1, "You have requested GRABTO=NET, but that "
+                               "is not supported in VEX and will be ignored. ")
 
                 elif scan.grabto == "FILE":
                     grab_duration, before_stop = scan.grabtime
@@ -1221,7 +1257,7 @@ def sched_block(scan_mode, vex_version):
                         expected_time = 5 + grab_duration * bitrate / 110
                         gap = (scans[scan_index+1].startj - tape_offset - 
                                scan.stopj) * parameter.secpday
-                        if expected_time > gap:
+                        if (expected_time > gap) and print_warnings:
                             s.wlog(1, "You have scheduled an ftp "
                                    "(GRABTO) scan but you have not left a long "
                                    "enough gap to transfer the data before the "
@@ -1285,40 +1321,43 @@ def sched_block(scan_mode, vex_version):
         ret += "*\n{}".format(
             block_def2str(scan_name, scan_def, keyword="scan"))
 
-    tsys_message = False
-    for index in np.nonzero(warn_tsys)[0]:
-        if stations[index].tscal == "GAP":
-            s.wlog(1, "{} has {} Tsys measurements. Maximum interval = "
-                   "{} minutes.".format(
-                       station.station, ntsys[index], tsys_gap[index]))
-            tsys_message = True
-    if tsys_message:
-        s.wlog(1, 
-               "Tsys calibration at most MkIV stations is taken during every "
-               "gap in recording,\n"
-               "but these appear over 15 min apart for the stations listed "
-               "above!\n"
-               "This can be improved by inserting gaps at regular intervals.\n"
-               "Note this is not an issue for  Westerbork or Arecibo.")
-        s.wrtmsg(0, "VXSCH", "tsysgap")
+    if print_warnings:
+        tsys_message = False
+        for index in np.nonzero(warn_tsys)[0]:
+            if stations[index].tscal == "GAP":
+                s.wlog(1, "{:<8} has {:>4} Tsys measurements. Maximum interval "
+                       "= {:>4} minutes.".format(stations[index].station, 
+                                                 ntsys[index], tsys_gap[index]))
+                tsys_message = True
+        if tsys_message:
+            s.wlog(1, 
+                   "Tsys calibration at most MkIV stations is taken during "
+                   "every gap in recording,\n"
+                   "but these appear over 15 min apart for the stations listed "
+                   "above!\n"
+                   "This can be improved by inserting gaps at regular "
+                   "intervals.\n"
+                   "Note this is not an issue for  Westerbork or Arecibo.")
+            s.wrtmsg(0, "VXSCH", "tsysgap")
 
-    tsys_message = False
-    for index in np.nonzero(warn_tsys_off)[0]:
-        if stations[index].tscal == "GAP":
-            s.wlog(1, "{} : only {} out of {} Tsys measurements are on-source".\
-                   format(station.station, ntsys_on[index], ntsys[index]))
-            tsys_message = True
-    if tsys_message:
-        s.wlog(1, "Stations listed above are affected by slewing during Tsys "
-               "calibration")
-        s.wrtmsg(0, "VXSCH", "tsysoffsrc")
-    
-    if warn_field_system:
-        s.wlog(1, "WARNING: Scan timing problem for PCFS, "
-               "this VEX will NOT run!!!!")
+        tsys_message = False
+        for index in np.nonzero(warn_tsys_off)[0]:
+            if stations[index].tscal == "GAP":
+                s.wlog(1, "{:<8}: only {:>4} out of {:>4} Tsys measurements "
+                       "are on-source".format(stations[index].station, 
+                                              ntsys_on[index], ntsys[index]))
+                tsys_message = True
+        if tsys_message:
+            s.wlog(1, "Stations listed above are affected by slewing during "
+                   "Tsys calibration")
+            s.wrtmsg(0, "VXSCH", "tsysoffsrc")
 
-    if warn_bank:
-        s.wrtmsg(1, "VXSCH", "warnbank")
+        if warn_field_system:
+            s.wlog(1, "WARNING: Scan timing problem for PCFS, "
+                   "this VEX will NOT run!!!!")
+
+        if warn_bank:
+            s.wrtmsg(1, "VXSCH", "warnbank")
 
     return ret
     
