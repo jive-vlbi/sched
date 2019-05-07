@@ -500,6 +500,7 @@ omsout
 plbeam 
 plver 
 pkfinish 
+prtscn 
 putout 
 recctl 
 sattim 

@@ -37,12 +37,18 @@ def vexout():
         if (s.schcon.override or (not all_none) or \
             (observation_type == "PTVLBA")) and \
             (observation_type != "CONFIG"):
+            # write two VEX (version) files, 
+            # only print warnings while making the first one
             with open("{}.vex".format(f2str(s.schc1.expcode).lower()), "w") \
                  as vex_file:
-                vex.write(vex_file, vex_version="1.5")
+                s.wlog(0, "Writing V E X file {}".format(vex_file.name))
+                vex.write(vex_file, vex_version="1.5", print_warnings=True)
+                # write VEX file name to common block for v2dout
+                s.vex1.vexfile = vex_file.name.ljust(s.vex1.vexfile.itemsize)
             with open("{}.vex2".format(f2str(s.schc1.expcode).lower()), "w") \
                  as vex_file:
-                vex.write(vex_file, vex_version="2.0")
+                s.wlog(0, "Writing V E X 2 file {}".format(vex_file.name))
+                vex.write(vex_file, vex_version="2.0", print_warnings=False)
 
             if observation_type != "PTVLBA":
                 s.v2dout()
