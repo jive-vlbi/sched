@@ -1,4 +1,5 @@
-from catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog
+from catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog, \
+                    FrequencyCatalog
 from util import f2str
 import dbbc_patching
 import vex_scans
@@ -23,7 +24,8 @@ block_separator = "*------------------------------------------------------"\
 def write(output, vex_version="2.0", print_warnings=False):
     assert vex_version in {"1.5", "2.0"}
     # read in all catalogs, so other methods can assume their entries are valid
-    for Catalog in (SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog):
+    for Catalog in (SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog,
+                    FrequencyCatalog):
         Catalog().read()
     station_catalog = StationCatalog()
     station_catalog.add_scheduled_attributes()
@@ -1287,7 +1289,9 @@ def sched_block(scan_mode, vex_version, print_warnings):
             block_def2str(scan_name, scan_def, keyword="scan"))
 
     if print_warnings:
-        vex_scans.check_tsys(scans, scan_offset, stations)
+        frequency_setups = FrequencyCatalog().scheduled()
+        vex_scans.check_tsys(scans, scan_offset, stations, setups, 
+                             frequency_setups)
 
         warn_field_system = vex_scans.check_minimum_scan_duration(
             scans, scan_offset, stations) \

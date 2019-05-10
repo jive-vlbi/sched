@@ -63,7 +63,7 @@ class FrequencyCatalog(Catalog):
     }
     
     def __init__(self):
-        super().__init__(self.maxfreq, self.block_items)
+        super().__init__(self.maxfreq, self.block_items, {"tscal"})
 
     def write(self, indices=None):
         if indices is None:
