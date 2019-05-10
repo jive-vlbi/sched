@@ -150,11 +150,13 @@ def check_mode_change(scans, scan_offset, stations, scan_mode):
             any_warning = True
     return any_warning
 
-def check_tsys(scans, scan_offset, stations):
+def check_tsys(scans, scan_offset, stations, setups, frequency_setups):
+    # TSCAL in the frequency setup will override the TSCAL of the station
+    # (if present)
 
     tsys_warnings = []
     tsys_off_source_warnings = []
-    for station in (station for station in stations if station.tscal == "GAP"):
+    for station in stations:
         last_stop = 0 # any MJD that will trigger a gap to the next scan
         n_tsys = 0
         n_tsys_on = 0
@@ -165,7 +167,23 @@ def check_tsys(scans, scan_offset, stations):
         for scan_index, scan in enumerate(scans, scan_offset):
             if not station.stascn[scan_index]:
                 continue
+            scan_tscal = station.tscal
+            # -1: FORTRAN -> python indexing
+            setup = setups[station.nsetup[scan_index] - 1]
+            # get the frequency setup index from the first channel,
+            # this assumes they are all equal (as the SCHED code should enforce)
+            if (setup.ifreqnum[0] >= 1):
+                frequency_tscal = frequency_setups[setup.ifreqnum[0] -1].tscal
+                if frequency_tscal is not None:
+                    scan_tscal = frequency_tscal
+            if scan_tscal == "CONT":
+                # update last tsys measurement variables
+                last_tsys = scan.stopj
+                if station.tonsrc[scan_index] < scan.stopj:
+                    last_tsys_on_source = scan.stopj
+                continue
             
+            # scan tscal is GAP, check interval between (on source) measurements
             if (scan.startj - last_stop) * secpday > gap_seconds:
                 # a tsys measurement in this scan
                 n_tsys += 1
