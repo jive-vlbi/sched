@@ -118,6 +118,7 @@ class StationCatalog(Catalog):
     INTEGER          FSETI(MAXSCN,MAXSTA)
     LOGICAL          STASCN(MAXSCN,MAXSTA)
     LOGICAL          USETAPE(MAXSTA), USEDISK(MAXSTA)
+    DOUBLE PRECISION TPSTART(MAXSCN,MAXSTA)
     REAL             GBYTES(MAXSCN,MAXSTA)
     DOUBLE PRECISION TONSRC(MAXSCN,MAXSTA), TSLEW(MAXSCN,MAXSTA)
     REAL             EL1(MAXSCN,MAXSTA), AZ1(MAXSCN,MAXSTA)
@@ -134,6 +135,7 @@ class StationCatalog(Catalog):
         s.schn5: [
             'usetape',
             'usedisk',
+            'tpstart',
             'gbytes'],
         s.schn6: [
             'tonsrc',
