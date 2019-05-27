@@ -1,8 +1,7 @@
-from catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog
-from util import f2str
-import dbbc_patching
-
-from sched import parameter
+from .catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog
+from .util import f2str
+from . import dbbc_patching
+from .sched import parameter
 
 import schedlib as s
 
