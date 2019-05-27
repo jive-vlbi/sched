@@ -1,10 +1,8 @@
-from catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog, \
-                    FrequencyCatalog
-from util import f2str
-import dbbc_patching
-import vex_scans
-
-from sched import parameter
+from .catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog, \
+                     FrequencyCatalog
+from .util import f2str
+from . import dbbc_patching, vex_scans
+from .sched import parameter
 
 import schedlib as s
 
