@@ -206,9 +206,9 @@ C                        and STCODEU is the upper case version of STCODE
 C
       INTEGER          MSTA
       INTEGER          ISCHSTA(MAXCAT), MJDRATE(MAXCAT)
-      CHARACTER        STAFILE*80
+      CHARACTER        STAFILE*1024
       CHARACTER        STVER*20
-      CHARACTER        LOCAFILE*80
+      CHARACTER        LOCAFILE*1024
       CHARACTER        LOCAVER*20
       CHARACTER        STATION(MAXCAT)*8
       CHARACTER        STCODE(MAXCAT)*3
@@ -308,7 +308,7 @@ C     to simplify usage.  Meanwhile, consider adding more aliases
 C     and more characters per name as we have hit both limits.
 C         
       INTEGER          MSRC
-      CHARACTER        SRCFILE*80, SRVER*20, SRCFILE2*80, SRVER2*20
+      CHARACTER        SRCFILE*1024, SRVER*20, SRCFILE2*1024, SRVER2*20
       CHARACTER        SOURCE(MALIAS,MAXSRC)*12, SOUR8(MAXSRC)*8
       CHARACTER        CALCODE(MAXSRC)*1, REMARK(MAXSRC)*80
       DOUBLE PRECISION RACAT(MAXSRC),  DECCAT(MAXSRC)
@@ -458,8 +458,8 @@ C
       LOGICAL          NOSET, COVERLET, AUTOPEAK, PKWATCH
       LOGICAL          OVERRIDE, READLOG, DODOWN(MAXSCN)
       CHARACTER        MSGTXT*256, SUMITEM(10)*8, DOSTA*8
-      CHARACTER        EPHFILE*80, FREQFILE*80, FREQVER*20
-      CHARACTER        PEAKFILE*80, LOGFILE*80, MSGFILE*80
+      CHARACTER        EPHFILE*1024, FREQFILE*1024, FREQVER*20
+      CHARACTER        PEAKFILE*1024, LOGFILE*80, MSGFILE*1024
       DOUBLE PRECISION FREQLIST(2), PRECDATE
 C
 C                      Schedule optimization and plotting:
