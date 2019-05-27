@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-from sched import input_, parameter, schin_module, getfreq, defaults, vexout
-from util import f2str
-import key
+from pysched.sched import input_, parameter, schin_module, getfreq, defaults, \
+    vexout
+from pysched.util import f2str
+from pysched import key
 
 from bottle import SimpleTemplate
 import schedlib as s
@@ -120,7 +121,8 @@ while True:
     s.schsum(restart)
     s.fluxh(parameter.ilog, s.schsco.logfile)
     if s.schcon.plot or args.plot:
-        import plot # initializes matplotlib, so only do when requested
+        # initializes matplotlib, so only do when requested
+        from pysched import plot
         mkfiles, restart = plot.show(restart)
     else:
         mkfiles, restart = True, False
