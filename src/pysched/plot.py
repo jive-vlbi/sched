@@ -19,10 +19,14 @@ except ImportError:
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.figure
 import matplotlib.pyplot as plt
-from matplotlib.backends.qt_editor.formlayout import ColorButton, to_qcolor
 import matplotlib.dates
 import matplotlib.units
 import matplotlib.cbook
+from matplotlib.colors import to_hex
+
+# hack around bug in formlayout, set an environment variable to force use of Qt5
+import os; os.environ["QT_API"] = "pyqt5"
+from formlayout import ColorButton
 
 import numpy as np
 
@@ -33,7 +37,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QScrollArea, \
     QComboBox, QMenu, QDialog, QRadioButton, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QButtonGroup
 from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtGui import QCursor, QDoubleValidator
+from PyQt5.QtGui import QCursor, QDoubleValidator, QColor
 
 import itertools
 from collections import defaultdict, OrderedDict
@@ -42,7 +46,7 @@ from datetime import datetime, timedelta, date
 from contextlib import contextmanager
 
 # list of colors to cycle through
-color_list = list("bgrcmyk") + ["orange", "brown"] 
+color_list = [to_hex(c) for c in "bgrcmyk"] + ["orange", "brown"] 
 
 @contextmanager
 def wait_cursor():
@@ -63,7 +67,7 @@ class NoneDateConverter(type(matplotlib.units.registry[datetime])):
         if matplotlib.units.ConversionInterface.is_numlike(value):
             return value
         else:
-            if not matplotlib.cbook.iterable(value):
+            if not np.iterable(value):
                 return _to_ordinalf(value)
             else:
                 d = np.asarray(value)
@@ -356,7 +360,7 @@ class BaselineConfigurationWidget(QWidget):
     def check_update(self):
         if self.automatic_update.isChecked():
             attributes = {"color": (lambda c: self.color_button.set_color(
-                              to_qcolor(c))), 
+                              QColor(c))), 
                           "visible": self.plot_check_box.setChecked, 
                           "linewidth": (lambda v: self.width_edit.setText(
                               str(v)))}
@@ -474,7 +478,7 @@ class StationsWidget(QGroupBox):
             layout.addWidget(checkbox, row, 1)
 
             color = ColorButton(self)
-            color.set_color(to_qcolor(next(color_cycle)))
+            color.set_color(QColor(next(color_cycle)))
             self.color_button[name] = color
             layout.addWidget(color, row, 2)
 
@@ -664,7 +668,7 @@ class RADecWidget(QWidget):
             else:
                 marker = next(marker_cycle)
             widgets["Marker"].setCurrentText(marker)
-            widgets["Color"].set_color(to_qcolor(next(color_cycle)))
+            widgets["Color"].set_color(QColor(next(color_cycle)))
 
 class BeamWidget(QWidget):
     def get_source(self):
@@ -1002,7 +1006,7 @@ class MainWidget(QDialog):
                 axis.invert_yaxis()
             
             legend = axis.legend()
-            legend.draggable()
+            legend.set_draggable(True)
             adjust_toolbar(figure, axis_type[0])
 
     def plot_uptime(self):
@@ -1117,7 +1121,7 @@ class MainWidget(QDialog):
             station_lines = [legend_line[station] 
                              for station in plotted_stations]
             legend = figure.legend(station_lines, plotted_stations)
-            legend.draggable()
+            legend.set_draggable(True)
             adjust_toolbar(figure, axis_type)
 
     def plot_radec(self):
@@ -1187,7 +1191,7 @@ class MainWidget(QDialog):
                 annotations = label_annotations[text.get_text()]
                 visible = annotations and annotations[0].get_visible()
                 text.set_alpha(visible_alpha[visible])
-            legend.draggable(True)
+            legend.set_draggable(True)
             # allow clicking in the legend to show/hide points/labels
             def onpick(event):
                 artist_type = type(event.artist)
