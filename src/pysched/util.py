@@ -7,6 +7,7 @@ import collections
 import copy
 import re
 import itertools
+import os.path
 
 class KeyinError(RuntimeError):
     pass
@@ -179,3 +180,6 @@ def diff_where(diff, key, slice_=None):
         return np.argwhere(diff[key][0] != diff[key][1])
     else:
         return np.argwhere(diff[key][0][slice_] != diff[key][1][slice_])
+
+def expand_file_name(shell_file_name):
+    return os.path.expanduser(os.path.expandvars(shell_file_name))
