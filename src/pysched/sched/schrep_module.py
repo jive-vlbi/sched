@@ -1,4 +1,4 @@
-from sched import parameter, scndup
+from . import parameter, scndup
 
 import schedlib as s
 

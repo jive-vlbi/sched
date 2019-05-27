@@ -1,7 +1,6 @@
-from catalog import PhaseCenterCatalog
-import util
-
-import key
+from ..catalog import PhaseCenterCatalog
+from .. import util
+from .. import key
 
 import schedlib as s
 

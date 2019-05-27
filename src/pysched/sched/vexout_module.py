@@ -1,6 +1,6 @@
-from catalog import ScanCatalog, SourceCatalog, SetupCatalog
-from util import f2str
-import vex
+from ..catalog import ScanCatalog, SourceCatalog, SetupCatalog
+from ..util import f2str
+from .. import vex
 
 import schedlib as s
 

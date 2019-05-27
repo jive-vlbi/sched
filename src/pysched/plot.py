@@ -1,7 +1,7 @@
-from catalog import SourceCatalog, StationCatalog, ScanCatalog, \
+from .catalog import SourceCatalog, StationCatalog, ScanCatalog, \
     SourcePlotCatalog
-from sched import parameter
-import util
+from .sched import parameter
+from . import util
 
 import schedlib as s
 
@@ -11,7 +11,7 @@ matplotlib.use("Qt5Agg")
 
 # import function to improve toolbar, but might not be available on all systems
 try:
-    from plot_toolbar import adjust as adjust_toolbar
+    from .plot_toolbar import adjust as adjust_toolbar
 except ImportError:
     def adjust_toolbar(*args, **kwargs):
         pass

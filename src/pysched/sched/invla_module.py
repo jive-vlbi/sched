@@ -1,4 +1,4 @@
-from sched import toggle
+from . import toggle
 
 import schedlib as s
 

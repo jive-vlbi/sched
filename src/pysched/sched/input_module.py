@@ -1,5 +1,6 @@
-from sched import schin, getfreq, rdpeak_open, srread_open, getset, parameter
-import util
+from . import schin, getfreq, rdpeak_open, srread_open, getset, \
+    parameter
+from .. import util
 
 import schedlib as s
 

@@ -1,6 +1,6 @@
-from util import f2str
-from catalog import StationCatalog, ScanCatalog, SetupCatalog
-from sched import defset
+from ..util import f2str
+from ..catalog import StationCatalog, ScanCatalog, SetupCatalog
+from . import defset
 
 import schedlib as s
 

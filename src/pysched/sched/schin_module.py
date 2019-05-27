@@ -1,8 +1,7 @@
-from sched import getsta, getfreq, schfiles, gettim, gintent, toggle, infdb, \
-    invla, schrep, scndup, getcov, getcor, times, sttant, parameter
-from catalog import ScanCatalog, SetupFileCatalog
-import key
-import util
+from . import getsta, getfreq, schfiles, gettim, gintent, toggle, infdb, \
+    invla, schrep, scndup, getcov, getcor, times, sttant, parameter, schdefs
+from ..catalog import ScanCatalog, SetupFileCatalog
+from .. import util, key
 
 import schedlib as s
 
@@ -71,21 +70,15 @@ keep_for_next = {
     'comment', 'intents' }
 
 state_defaults = {
-    "schedule":  ["",                      os.path.expandvars],
-    "freqfile":  [s.schdefs("frequency", " " * 80).decode().strip(), 
-                                           os.path.expandvars],
-    "stafile":   [s.schdefs("stations", " " * 80).decode().strip(), 
-                                           os.path.expandvars],
-    "locfile":   [s.schdefs("location", " " * 80).decode().strip(), 
-                                           os.path.expandvars],
-    "msgfile":   [s.schdefs("messages", " " * 80).decode().strip(), 
-                                           os.path.expandvars],
-    "peakfile":  [s.schdefs("peakcommand", " " * 80).decode().strip(), 
-                                           os.path.expandvars],
-    "srcfile":   [s.schdefs("sources", " " * 80).decode().strip(), 
-                                           os.path.expandvars],
-    "srcfile2":  ["NONE",                  os.path.expandvars],
-    "ephfile":   ["NONE",                  os.path.expandvars],
+    "schedule":  ["",                      util.noop],
+    "freqfile":  [schdefs("frequency"),    util.noop],
+    "stafile":   [schdefs("stations"),     util.noop],
+    "locfile":   [schdefs("location"),     util.noop],
+    "msgfile":   [schdefs("messages"),     util.noop],
+    "peakfile":  [schdefs("peakcommand"),  util.noop],
+    "srcfile":   [schdefs("sources"),      util.noop],
+    "srcfile2":  ["NONE",                  util.noop],
+    "ephfile":   ["NONE",                  util.noop],
     "dosta":     ["ALL",                   util.upper],
     "day":       [0,                       util.noop],
     "month":     [1,                       util.noop],
@@ -117,7 +110,7 @@ state_defaults = {
     "autopeak":  [1.,                      util.to_bool],
     "pkwatch":   [1.,                      util.to_bool],
     "higroup":   [1.,                      util.noop],
-    "setup":     ["DUMMY",                 os.path.expandvars],
+    "setup":     ["DUMMY",                 util.noop],
     "freq":      [[0.],                    util.chain(
         util.foreach(lambda x: round(x, 7)), util.extend_to(maxchan))],
     "bw":        [[0.],                    util.chain(
@@ -322,7 +315,8 @@ def schin(stdin):
         input_ = stdin
     else:
         try:
-            input_ = open(state_defaults["schedule"][0], "r")
+            input_ = open(util.expand_file_name(state_defaults["schedule"][0]),
+                          "r")
         except Exception as e:
             s.wlog(1, str(e))
             s.errlog("SCHFILES: Problem opening schedule file {}".format(
@@ -407,7 +401,7 @@ def schin(stdin):
             s.schcon.overwrit = values["overwrite"]
             s.schcon.override = values["override"]
 
-            s.schsco.msgfile = values["msgfile"].ljust(
+            s.schsco.msgfile = util.expand_file_name(values["msgfile"]).ljust(
                 s.schsco.msgfile.itemsize)
 
             if s.schcon.debug and (index < 3):
@@ -415,8 +409,8 @@ def schin(stdin):
 
             s.schcon.freqlist = values["freqlist"]
             if "freqlist" in present:
-                s.schsco.freqfile = values["freqfile"].ljust(
-                    s.schsco.freqfile.itemsize)
+                s.schsco.freqfile = util.expand_file_name(values["freqfile"]).\
+                                    ljust(s.schsco.freqfile.itemsize)
                 getfreq()
                 s.wlog(1, "DIVERT:   Frequency table written.  Stopping.")
                 sys.exit(0)
@@ -434,7 +428,7 @@ def schin(stdin):
                 if input_iterator.input_ is not stdin:
                     input_iterator.input_.close()
                 try:
-                    input_ = open(schedule, "r")
+                    input_ = open(util.expand_file_name(schedule), "r")
                     input_iterator = key.KeyfileIterator(
                         input_, record_defaults, state_defaults)
                     restart = True
@@ -518,11 +512,12 @@ def schin(stdin):
             
             s.schcon.autopeak = values["autopeak"]
             s.schcon.pkwatch = values["pkwatch"]
-            s.schsco.peakfile = values["peakfile"].ljust(
-                s.schsco.peakfile.itemsize)
+            s.schsco.peakfile = util.expand_file_name(values["peakfile"]).\
+                                ljust(s.schsco.peakfile.itemsize)
 
             entry.setnum = SetupFileCatalog.extend_with(
-                values["setup"], " SCHIN: Too many setup files. ")
+                util.expand_file_name(values["setup"]), 
+                " SCHIN: Too many setup files. ")
             
             infdb(values, present, catalog.entries, index)
             invla(values, present, catalog.entries, index, 1)
@@ -581,7 +576,8 @@ def schin(stdin):
 
     s.schcon.domka = values["domka"]
 
-    s.schsco.ephfile = values["ephfile"].ljust(s.schsco.ephfile.itemsize)
+    s.schsco.ephfile = util.expand_file_name(values["ephfile"]).ljust(
+        s.schsco.ephfile.itemsize)
 
     s.chkcode(s.schc1.expcode)
 
@@ -679,12 +675,15 @@ def schin(stdin):
     
     times(values["lst"], start, stop, day, year)
     
-    s.schcsc.srcfile = values["srcfile"].ljust(s.schcsc.srcfile.itemsize)
-    s.schcsc.srcfile2 = values["srcfile2"].ljust(s.schcsc.srcfile2.itemsize)
+    s.schcsc.srcfile = util.expand_file_name(values["srcfile"]).ljust(
+        s.schcsc.srcfile.itemsize)
+    s.schcsc.srcfile2 = util.expand_file_name(values["srcfile2"]).ljust(
+        s.schcsc.srcfile2.itemsize)
 
     sttant(values["tantsta1"], values["tantsta2"])
 
-    s.schsco.freqfile = values["freqfile"].ljust(s.schsco.freqfile.itemsize)
+    s.schsco.freqfile = util.expand_file_name(values["freqfile"]).ljust(
+        s.schsco.freqfile.itemsize)
     s.schcon.freqlist = values["freqlist"]
 
     if "autotape" in present:

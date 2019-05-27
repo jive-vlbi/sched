@@ -1,8 +1,6 @@
-from catalog import StationCatalog
-from sched import parameter
-import util
-
-import key
+from ..catalog import StationCatalog
+from . import parameter
+from .. import util, key
 
 import schedlib as s
 

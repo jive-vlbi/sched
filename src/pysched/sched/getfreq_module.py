@@ -1,7 +1,6 @@
-from catalog import FrequencyCatalog
-import util
-
-from key import read_keyfile
+from ..catalog import FrequencyCatalog
+from .. import util
+from ..key import read_keyfile
 
 import schedlib as s
 

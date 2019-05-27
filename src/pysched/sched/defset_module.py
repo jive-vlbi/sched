@@ -1,4 +1,4 @@
-from sched import setexpnd, setdefs, chkset
+from . import setexpnd, setdefs, chkset
 
 import schedlib as s
 
