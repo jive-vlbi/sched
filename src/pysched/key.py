@@ -18,6 +18,8 @@
 ## (9) Value may be blank ("").
 ## Entries terminated by "/"
 
+from .sched import get_catalog_dir
+
 import re, sys, logging, functools
 import ast
 import operator as op
@@ -412,16 +414,15 @@ class KeyfileLister:
         if self.iterator is None:
             # if the input is a file in the SCHED catalogs directory, 
             # check cache
-            expand_catalog = os.path.join(os.path.expandvars("$SCHED"), 
-                                          "catalogs")
             input_split = os.path.split(self.input_.name)
+            catalog_dir = get_catalog_dir()
             try:
-                catalog_dir = os.path.samefile(input_split[0], expand_catalog)
+                is_catalog_dir = os.path.samefile(input_split[0], catalog_dir)
             except:
-                catalog_dir = False
+                is_catalog_dir = False
 
-            if catalog_dir:
-                cache_filename = os.path.join(expand_catalog, "cache",
+            if is_catalog_dir:
+                cache_filename = os.path.join(catalog_dir, "cache",
                                               input_split[1])
                 try:
                     cache_up_to_date = os.path.getmtime(self.input_.name) < \
