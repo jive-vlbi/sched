@@ -1,5 +1,5 @@
 import numpy as np
-import util
+from .. import util
 
 def get_arrays(block_items):
     # gather a copy (because .T returns a view) of all arrays in C-order
