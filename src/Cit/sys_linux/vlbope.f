@@ -9,9 +9,9 @@ C+
 C
 C     f2c will not concatenate strings when one is declared *(*)!
 C
-      CHARACTER*80  NAME
-      CHARACTER*10  TYPE
-      CHARACTER*10  STATUS
+      CHARACTER*1024 NAME
+      CHARACTER*10   TYPE
+      CHARACTER*10   STATUS
 C
 C Input parameters:
 C   UNIT : Fortran unit number to be used
