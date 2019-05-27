@@ -1,47 +1,40 @@
 #!/usr/bin/env python3
+
+import setuptools
 import numpy.f2py as f2py
+from numpy.distutils.core import setup, Extension
+from distutils.command.sdist import sdist
 
 import platform
 import argparse
 import sys
 import os
-import collections
-
-# this relies on this file being in $SCHED/src
-sched_srcdir = os.path.split(os.path.realpath(__file__))[0]
 
 parser = argparse.ArgumentParser(
-    description="Wrapper around f2py. Builds a list of source files depending "
-    "on the system architecture. Other arguments will be forwarded to f2py.",
+    description="Setup script for pySCHED. Builds a list of source files "
+    "depending on the system architecture. Other arguments will be forwarded "
+    "to setup.",
     add_help=False)
-parser.add_argument("-h", "--help", help="show this help and f2py's",
-                    action="store_true")
 parser.add_argument("--schedarch",  
                     choices=["linux", "unix", "sun", "hp"],
                     default=None, 
-                    help="Operating system for machine dependent fortran "
+                    help="operating system for machine dependent fortran "
                     "routines. Defaults to linux.")
+
 args, other_args = parser.parse_known_args()
-if args.help:
-    parser.print_help()
-    print(f2py.f2py2e.__usage__)
-    sys.exit(0)
+sys.argv[1:] = other_args
 
 if args.schedarch is None:
     arch = "linux"
     system = platform.system()
-    # FIX: extent
     if system not in ["Linux", "MacOS"]:
         print("Warning: unknown architecture '{}'. Will fall back to '{}'.".\
               format(system, arch))
 else:
     arch = args.schedarch
 
-def to_paths(text):
-    return [line.split("/") for line in text.split()]
-
 # source files to compile
-sources = to_paths("""
+sources = """
 Cit/geoid.f
 Cit/geoxyz.f
 Cit/julda.f
@@ -420,12 +413,11 @@ Vex/vxwrst.f
 Vex/vxwrsu.f
 Vex/vxwrt.f
 Vex/vxwrtr.f
-python/f2pyinc.f
-python/tformwrp.f
-""")
+pysched/tformwrp.f
+""".split()
 
 if arch in ["hp", "linux", "sun", "unix"]:
-    sources += to_paths("""
+    sources += """
 Cit/sys_unix/envir.f
 Cit/sys_unix/krdlin.f
 Cit/sys_unix/prognm.f
@@ -434,22 +426,22 @@ Cit/sys_unix/schdefs.f
 Cit/sys_unix/symsub.f
 Cit/sys_unix/tsttty.f
 Cit/sys_unix/vmshlp.f
-""")
+""".split()
 
 if arch == "linux":
-    sources += to_paths("""
+    sources += """
 Cit/sys_linux/error.f
 Cit/sys_linux/exit.c
 Cit/sys_linux/gerror.c
 Cit/sys_linux/idate.c
 Cit/sys_linux/isatty.c
 Cit/sys_linux/vlbope.f
-""")
+""".split()
 elif arch in ["sun", "hp"]:
-    sources += to_paths("""
+    sources += """
 Cit/sys_sun/error.f
 Cit/sys_sun/vlbope.f
-""")
+""".split()
 
 # fortran functions to create a python interface for
 functions = """
@@ -505,7 +497,6 @@ putout
 recctl 
 sattim 
 sbpair 
-schdefs 
 schopt 
 schpre 
 schsum 
@@ -549,20 +540,75 @@ wlog
 wrtmsg
 """.split()
 
+includes = """
+Cit/rdcat.inc
+Plot/beam.inc
+Plot/plot.inc
+Plot/proj.inc
+Plot/sched.inc
+Plot/schset.inc
+Plot/srlist.inc
+Sat/sched.inc
+Sched/plot.inc
+Sched/rdcat.inc
+Sched/sched.inc
+Sched/schfreq.inc
+Sched/schpeak.inc
+Sched/schset.inc
+Sched/srlist.inc
+Sched/vxlink.inc
+Vex/sched.inc
+Vex/schset.inc
+Vex/vxlink.inc
+""".split()
+
+# include catalogs and setups directory contents
+data_files = [(dir_, [os.path.join(dir_, file_) for file_ in files])
+              for data_dir in ("catalogs", "setups")
+              for dir_, _, files in os.walk(data_dir)]
+
 # F2py assumes a Fortran dialect from the file name. For F77, it only accepts
 # comments starting with a 'C'. But Sched uses '!' for comments too. This hack
 # forces f2py to scan for those too.
 f2py.crackfortran.is_f_file = lambda _: False
 
-# Call f2py, it reads arguments from sys.argv, so fill that
-sys.argv[1:] = "-c -m schedlib only: {functions} : {sources}".format(
-    functions=" ".join(functions), 
-    sources=" ".join((os.path.join(sched_srcdir, *s) for s in sources))).split()
-sys.argv.extend(other_args)
-os.chdir(os.path.join(sched_srcdir, "python"))
-try:
-    f2py.f2py2e.main()
-except:
-    import traceback
-    traceback.print_exc()
-    sys.exit(1)
+extension = Extension(
+    name="schedlib",
+    sources=["src/" + s for s in sources + includes],
+    f2py_options=["only:"] + functions + [":"])
+setup(
+    cmdclass={"sdist": sdist},
+    name="pySCHED",
+    version="1.0.0",
+    author="Bob Eldering",
+    author_email="eldering@jive.eu",
+    description="Python extension of NRAO's VLBI scheduling program SCHED "
+    "(see http://www.aoc.nrao.edu/~cwalker/sched/)",
+    url="https://github.com/jive-vlbi/sched",
+    packages=setuptools.find_packages("src"),
+    package_dir={"": "src"},
+    data_files=data_files,
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Fortran",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering :: Astronomy"],
+    scripts=["src/sched.py"],
+    ext_modules=[extension],
+    setup_requires=["numpy>=1.16"],
+    install_requires=["numpy>=1.16",
+                      # seen problem with 5.11 and 5.12:
+                      # >>> import PyQt5.QtCore
+                      # Traceback (most recent call last):
+                      # File "<stdin>", line 1, in <module>
+                      # ModuleNotFoundError: No module named 'PyQt5.sip'
+                      "pyqt5<5.11", 
+                      "matplotlib",
+                      "formlayout",
+                      "astropy",
+                      "bottle"
+                  ]
+)
