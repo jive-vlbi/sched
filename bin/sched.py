@@ -1,1 +1,1 @@
-../src/python/sched.py
+../src/sched.py
