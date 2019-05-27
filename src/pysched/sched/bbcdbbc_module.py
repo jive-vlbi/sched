@@ -1,5 +1,5 @@
-from sched import bbcalt, ifdbbc, ifdbbc3
-from catalog import SetupCatalog
+from . import bbcalt, ifdbbc, ifdbbc3
+from ..catalog import SetupCatalog
 
 import schedlib as s
 

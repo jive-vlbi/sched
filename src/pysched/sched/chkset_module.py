@@ -1,6 +1,6 @@
-from sched import chkdbbc
-from catalog import SetupCatalog, StationCatalog, FrequencyCatalog
-from util import f2str
+from . import chkdbbc
+from ..catalog import SetupCatalog, StationCatalog, FrequencyCatalog
+from ..util import f2str
 
 import schedlib as s
 

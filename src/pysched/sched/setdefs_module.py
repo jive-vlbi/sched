@@ -1,6 +1,6 @@
-from catalog import SetupCatalog, SetupFileCatalog, StationCatalog, \
+from ..catalog import SetupCatalog, SetupFileCatalog, StationCatalog, \
                     FrequencyCatalog
-from sched import parameter, setbbc
+from . import parameter, setbbc
 
 import schedlib as s
 

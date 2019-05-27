@@ -1,4 +1,4 @@
-from sched import bbcdbbc
+from . import bbcdbbc
 
 import schedlib as s
 

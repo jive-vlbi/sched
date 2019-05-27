@@ -1,8 +1,6 @@
-from catalog import PeakCatalog, SetupFileCatalog
-from sched import rfreq
-import util
-
-import key
+from ..catalog import PeakCatalog, SetupFileCatalog
+from . import rfreq, schdefs
+from .. import util, key
 
 import schedlib as s
 
@@ -55,10 +53,10 @@ def rdpeak_implementation(input_iterator, stdin):
                  else input_iterator.input_.name
     
     state_defaults = {
-        "srcfile":  [s.schdefs("refpointing", " " * 80).decode().strip(), 
+        "srcfile":  [schdefs("refpointing"),          
                            util.noop],
-        "setup":    ["",   os.path.expandvars],
-        "setupl":   ["",   os.path.expandvars],
+        "setup":    ["",   util.expand_file_name],
+        "setupl":   ["",   util.expand_file_name],
         "minfreq":  [60e3, util.noop],
         "minel":    [30.,  util.noop],
         "dwell":    [60.,  util.multiply_by(1 / 86400.)],
@@ -142,7 +140,7 @@ def rdpeak_implementation(input_iterator, stdin):
 
     s.schpeakn.npkgrp = index
 
-    s.schpeakc.psrcfile = os.path.expandvars(state_defaults["srcfile"][0]).\
+    s.schpeakc.psrcfile = util.expand_file_name(state_defaults["srcfile"][0]).\
                           ljust(s.schpeakc.psrcfile.itemsize)
 
     catalog.write(range(start, index))

@@ -1,7 +1,6 @@
-from sched import rdset
-from catalog import SetupFileCatalog, SetupCatalog
-
-import key
+from . import rdset
+from ..catalog import SetupFileCatalog, SetupCatalog
+from .. import key
 
 import schedlib as s
 

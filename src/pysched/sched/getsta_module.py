@@ -1,7 +1,6 @@
-from sched import parameter, stread
-from catalog import StationCatalog
-
-import key
+from . import parameter, stread
+from ..catalog import StationCatalog
+from .. import key, util
 
 import schedlib as s
 
@@ -19,9 +18,10 @@ def getsta(stdin, values, index, gotvex, mjd1):
     if index == 0:
         last_station_file = ""
 
-    station_file = values["stafile"]
+    station_file = util.expand_file_name(values["stafile"])
     s.schcst.stafile = station_file.ljust(s.schcst.stafile.itemsize)
-    s.schcst.locafile = values["locfile"].ljust(s.schcst.locafile.itemsize)
+    s.schcst.locafile = util.expand_file_name(values["locfile"]).ljust(
+        s.schcst.locafile.itemsize)
     if (station_file.upper() != "NONE") and (station_file != last_station_file):
         try:
             f = open(station_file, "r")

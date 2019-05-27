@@ -1,4 +1,4 @@
-from sched import parameter
+from . import parameter
 
 import schedlib as s
 

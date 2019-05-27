@@ -1,7 +1,6 @@
-from catalog import SetupCatalog
-import util
-from sched import parameter
-import key
+from ..catalog import SetupCatalog
+from .. import util, key
+from . import parameter
 
 import schedlib as s
 

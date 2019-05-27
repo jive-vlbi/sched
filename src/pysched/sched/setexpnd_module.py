@@ -1,4 +1,4 @@
-from catalog import SetupCatalog, StationCatalog
+from ..catalog import SetupCatalog, StationCatalog
 
 import schedlib as s
 

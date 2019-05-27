@@ -1,7 +1,5 @@
-from catalog import LineRestFrequencyCatalog
-import util
-
-import key
+from ..catalog import LineRestFrequencyCatalog
+from .. import util, key
 
 import schedlib as s
 

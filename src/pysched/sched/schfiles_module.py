@@ -1,5 +1,5 @@
-from sched import srread, rdpeak, stread, rfreq, satini, pcread, rdset
-from catalog import SetupFileCatalog
+from . import srread, rdpeak, stread, rfreq, satini, pcread, rdset
+from ..catalog import SetupFileCatalog
 
 import schedlib as s
 

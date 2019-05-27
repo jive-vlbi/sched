@@ -1,20 +1,20 @@
-from catalog import SatelliteCatalog
-from sched import parameter
-import util
+from ..catalog import SatelliteCatalog
+from . import parameter
+from .. import util
 
 import schedlib as s
 
 import os.path
 
 record_defaults = {
-    "satfile": ["NONE", os.path.expandvars],
-    "tlefile": ["NONE", os.path.expandvars],
+    "satfile": ["NONE", util.expand_file_name],
+    "tlefile": ["NONE", util.expand_file_name],
     "endsat":  [None, util.noop],
 }
 state_defaults = {
     "satname": ["", util.upper],
     "satnum": [parameter.unset, util.noop],
-    "kerfile": ["NONE", os.path.expandvars],
+    "kerfile": ["NONE", util.expand_file_name],
 }
 
 def satini(input_iterator):
