@@ -38,11 +38,14 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 """
 import matplotlib.backends.qt_editor.figureoptions as figureoptions
-import matplotlib.backends.qt_editor.formlayout as formlayout
 import matplotlib.dates
 import six
 from matplotlib.colors import rgb2hex
 from matplotlib.colors import colorConverter
+
+# hack around bug in formlayout, set an environment variable to force use of Qt5
+import os; os.environ["QT_API"] = "pyqt5"
+import formlayout
 
 from PyQt5.QtWidgets import QWidget, QTimeEdit, QMessageBox, QHBoxLayout, \
     QSpinBox, QAction
