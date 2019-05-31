@@ -3,7 +3,7 @@
 from pysched.sched import input_, parameter, schin_module, getfreq, defaults, \
     vexout
 from pysched.util import f2str
-from pysched import key
+from pysched import key, update_catalogs
 
 from bottle import SimpleTemplate
 import schedlib as s
@@ -52,6 +52,9 @@ parser.add_argument("--old_style_vex", action="store_true", default=False,
                     help="Use the old VEX file printing function. "
                     "This function does not support all new features of "
                     "pySCHED.")
+parser.add_argument("-U", "--no_update", action="store_true", default=False,
+                    help="Do not automatically update the catalogs in {}.".\
+                    format(update_catalogs.checkout_dir))
 
 args = parser.parse_args()
 
@@ -84,6 +87,9 @@ else:
 s.vern.vernum, version = s.versched()
 s.verc.version = bytes(version).decode().ljust(s.verc.version.itemsize)
 s.stmsg()
+
+if not args.no_update:
+    update_catalogs.update_catalogs()
 
 if args.freqlist is not None:
     # first initialize default files stored in fortran common block 

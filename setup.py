@@ -608,6 +608,7 @@ setup(
                       "matplotlib",
                       "formlayout",
                       "astropy",
-                      "bottle"
+                      "bottle",
+                      "gitpython"
                   ]
 )
