@@ -34,9 +34,6 @@ def update_catalogs():
             repo = git.Repo(checkout_dir)
 
         repo.git.checkout("data_files")
-        s.wlog(1, "Updating catalogs in {}".format(checkout_dir))
-        repo.git.pull()
-        s.wlog(1, "Catalogs in {} are up-to-date.".format(checkout_dir))
 
         # point $SCHED to the checkout if not explicitly set, restore at exit
         if "SCHED" not in os.environ:
@@ -44,6 +41,11 @@ def update_catalogs():
             def restore():
                 del os.environ["SCHED"]
             atexit.register(restore)
+
+        s.wlog(1, "Updating catalogs in {}".format(checkout_dir))
+        repo.git.pull()
+        s.wlog(1, "Catalogs in {} are up-to-date.".format(checkout_dir))
+
     except git.exc.GitError as e:
         s.wlog(1, "Warning, failed to update catalogs.")
         s.wlog(0, "Update failed with error: {}".format(e))
