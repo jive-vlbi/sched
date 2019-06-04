@@ -27,7 +27,9 @@ def update_catalogs():
     try:
         if not os.path.exists(checkout_dir):
             s.wlog(1, "Downloading catalogs to {}".format(checkout_dir))
+            # clone a shallow, single branch version to reduce data usage
             repo = git.Repo.clone_from(git_repository, checkout_dir, 
+                                       depth=1, branch="data_files", 
                                        progress=Spinner())
             print()
         else:
