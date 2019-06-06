@@ -578,7 +578,7 @@ extension = Extension(
     f2py_options=["only:"] + functions + [":"])
 setup(
     cmdclass={"sdist": sdist},
-    name="pySCHED",
+    name="pythonSCHED",
     version="1.0.0",
     author="Bob Eldering",
     author_email="eldering@jive.eu",
@@ -598,6 +598,7 @@ setup(
         "Topic :: Scientific/Engineering :: Astronomy"],
     scripts=["src/sched.py"],
     ext_modules=[extension],
+    python_requires=">=3",
     setup_requires=["numpy>=1.16"],
     install_requires=["numpy>=1.16",
                       # seen problem with 5.11 and 5.12:
