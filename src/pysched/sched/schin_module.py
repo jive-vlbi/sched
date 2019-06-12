@@ -419,7 +419,7 @@ def schin(stdin):
             s.schcon.plot = values["plot"]
             s.schcon.pubplot = values["pubplot"]
 
-            schedule = values["schedule"]
+            schedule = util.expand_file_name(values["schedule"])
             if (schedule != "") and \
                ((input_iterator.input_ is stdin) or 
                 (input_iterator.input_.name != schedule)):
@@ -428,7 +428,7 @@ def schin(stdin):
                 if input_iterator.input_ is not stdin:
                     input_iterator.input_.close()
                 try:
-                    input_ = open(util.expand_file_name(schedule), "r")
+                    input_ = open(schedule, "r")
                     input_iterator = key.KeyfileIterator(
                         input_, record_defaults, state_defaults)
                     restart = True
