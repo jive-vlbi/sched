@@ -1,8 +1,16 @@
+import os
+
+# git import will raise an exception if it cannot find the executable,
+# this can be suppressed with the environment variable GIT_PYTHON_REFRESH
+_var = "GIT_PYTHON_REFRESH"
+_old_value = os.environ.get(_var)
+os.environ[_var] = "quiet"
 import git
+if _old_value is not None:
+    os.environ[_var] = _old_value
 
 import schedlib as s
 
-import os
 import atexit
 import sys
 
