@@ -534,7 +534,6 @@ vexout
 vlascns 
 vsopwrt 
 vxs2md 
-vxschk 
 vxton2 
 wlog 
 wrtmsg
@@ -579,7 +578,7 @@ extension = Extension(
 setup(
     cmdclass={"sdist": sdist},
     name="pythonSCHED",
-    version="1.0.2",
+    version="1.1.0",
     author="Bob Eldering",
     author_email="eldering@jive.eu",
     description="Python extension of NRAO's VLBI scheduling program SCHED "

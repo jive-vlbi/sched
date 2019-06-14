@@ -54,6 +54,7 @@ def getfreq():
         "vlasyna":  [None,          util.noop], # not used
         "vlasynb":  [None,          util.noop], # not used
         "fefilter": [None,          util.noop], # not used
+        "tscal":    [None,          lambda x: x if x is None else x.upper()]
     }
 
     # map from frequency catalog entry attributes to keyin keywords
@@ -63,7 +64,8 @@ def getfreq():
         "fstnam": "station",
         "prio": "priority",
         "fifnam": "ifname",
-        "faltif": "altifn"
+        "faltif": "altifn",
+        "tscal": "tscal"
     }
     # above are the exceptions to the rule: remove first 'f' to go from 
     # attribute to key
@@ -78,6 +80,10 @@ def getfreq():
         # copy all values to the common block placeholder
         entry = catalog.entries[index]
         entry.set_keyin_values(values, attribute_to_key)
+        if entry.tscal not in (None, "CONT", "GAP"):
+            raise RuntimeError("Unknown TSCAL in frequency catalog for {} "
+                               "entry {}:  {}".format(
+                                   entry.station, entry.name, entry.tscal))
     
     catalog.write(range(len(keyin_data)))
 
