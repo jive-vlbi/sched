@@ -1,4 +1,4 @@
-from sched.parameter import secpday
+from .sched.parameter import secpday
 
 import schedlib as s
 
