@@ -598,7 +598,8 @@ setup(
     scripts=["src/sched.py"],
     ext_modules=[extension],
     python_requires=">=3",
-    setup_requires=["numpy>=1.16"],
+    setup_requires=["numpy>=1.16",
+                    "setuptools>=24.3"],
     install_requires=["numpy>=1.16",
                       # seen problem with 5.11 and 5.12:
                       # >>> import PyQt5.QtCore
