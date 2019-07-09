@@ -123,66 +123,6 @@ def chain(*functions):
 def f2str(f_str):
     return bytes(f_str).decode().rstrip()
 
-
-# common block functions are for debugging
-def dump_common_blocks(dest):
-    for lib_element in dir(schedlib):
-        if not lib_element.startswith("__"):
-            possible_block = getattr(schedlib, lib_element)
-            for block_element in possible_block.__dict__.keys():
-                if not block_element.startswith("_"):
-                    pickle.dump(
-                        (lib_element, block_element, 
-                         getattr(possible_block, block_element)),
-                        dest)
-
-def read_common_blocks(source):
-    ret = collections.defaultdict(dict)
-    try:
-        while True:
-            (block, element, value) = pickle.load(source)
-            ret[block][element] = value
-    except EOFError:
-        pass
-    return ret
-
-def common_block_diff(x, y):
-    ret = set()
-    for block, elements in x.items():
-        for element, value in elements.items():
-            if isinstance(value, np.ndarray):
-                if value.dtype.kind == "f": 
-                    if not np.allclose(value, y[block][element]):
-                        ret.add((block, element))
-                elif value.dtype.kind == "S":
-                    vector_func = np.vectorize(
-                        lambda x: x.ljust(value.dtype.itemsize),
-                        otypes=[value.dtype])
-                    if not np.array_equal(vector_func(value), 
-                                          vector_func(y[block][element])):
-                        ret.add((block, element))
-                else:
-                    if not np.array_equal(value, y[block][element]):
-                        ret.add((block, element))
-            else:
-                if value != y[block][element]:
-                    ret.add((block, element))
-    return ret
-
-def common_block_file_diff(fn1, fn2, ignore_block = set()):
-    with open(fn1, "rb") as f1, open(fn2, "rb") as f2:
-        cb1 = read_common_blocks(f1)
-        cb2 = read_common_blocks(f2)
-        diffs = common_block_diff(cb1, cb2)
-        return {d: (cb1[d[0]][d[1]], cb2[d[0]][d[1]]) for d in diffs
-                if d[0] not in ignore_block}
-
-def diff_where(diff, key, slice_=None):
-    if slice_ is None:
-        return np.argwhere(diff[key][0] != diff[key][1])
-    else:
-        return np.argwhere(diff[key][0][slice_] != diff[key][1][slice_])
-
 def expand_file_name(shell_file_name):
     return os.path.expanduser(os.path.expandvars(shell_file_name))
 
