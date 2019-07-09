@@ -3,6 +3,8 @@ import schedlib
 
 import numpy as np
 
+import pkg_resources
+
 import collections
 import copy
 import re
@@ -183,3 +185,10 @@ def diff_where(diff, key, slice_=None):
 
 def expand_file_name(shell_file_name):
     return os.path.expanduser(os.path.expandvars(shell_file_name))
+
+def get_catalog_dir():
+    if "SCHED" in os.environ:
+        return os.path.join(os.environ["SCHED"], "catalogs")
+    else:
+        return os.path.join(pkg_resources.resource_filename("pysched", ".."), 
+                            "catalogs")

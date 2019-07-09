@@ -1,7 +1,7 @@
 # there is a potential problem with cyclic imports here 
 # (eg. input calls schfiles), but so far I haven't found a fortran call cycle,
 # so with the right order, exposing the module functions like this works fine
-from .schdefs_module  import schdefs, get_catalog_dir
+from .schdefs_module  import schdefs
 from .stread_module   import stread
 from .srread_module   import srread, srread_open
 from .getfreq_module  import getfreq

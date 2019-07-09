@@ -18,7 +18,7 @@
 ## (9) Value may be blank ("").
 ## Entries terminated by "/"
 
-from .sched import get_catalog_dir
+from .util import get_catalog_dir
 
 import re, sys, logging, functools
 import ast
