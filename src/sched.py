@@ -92,7 +92,7 @@ if not args.no_update:
 # update_catalogs can set os.environ["SCHED"], which is used in the 
 # initialization of sched sched modules, so delay the import to here
 from pysched.sched import input_, parameter, schin_module, getfreq, defaults, \
-    vexout, schopt
+    vexout
 
 if args.freqlist is not None:
     # first initialize default files stored in fortran common block 
