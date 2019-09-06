@@ -323,7 +323,8 @@ def stread(input_iterator, stdin, mjd1):
               "MEDIADEF")
 
         if (entry.xpos, entry.ypos, entry.zpos) == (0., 0., 0.):
-            s.errlog("STREAD: Location required for {}".format(entry.station))
+            s.errlog("STREAD: Location required for {}: infile={}, locfile={}".\
+                     format(entry.station, infile, locfile))
 
         if entry.tscal not in ("CONT", "GAP"):
             s.errlog("STREAD: Unknown TSCAL for {}:  {}".format(

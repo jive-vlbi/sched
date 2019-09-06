@@ -27,7 +27,7 @@ C
       DATA          (KI(I),I=1,3)   / MPLK, 0, 3 /
       DATA          GOTKEYS / .FALSE. /
 C ------------------------------------------------------------------
-      IF( DEBUG ) CALL PUTOUT( 'PLOTTER: Starting. ' )
+      IF( DEBUG ) CALL PUTOUT( 'PLOTTY: Starting. ' )
 C
       IF( .NOT. PLOT ) THEN
          MKFILES = .TRUE.
@@ -146,15 +146,15 @@ C
             IF( MKFILES .AND. MISSING ) THEN
                DOEXIT = .TRUE.
                MKFILES = .FALSE.
-               CALL PUTOUT( 'PLOTTER: Will not write output files '//
+               CALL PUTOUT( 'PLOTTY: Will not write output files '//
      1              ' because of missing information (cover?)' )
             END IF
             IF( MKFILES .AND. DIDRST ) THEN
                DOEXIT = .TRUE.
                MKFILES = .FALSE.
-               CALL PUTOUT( 'PLOTTER: Will not write output files' //
+               CALL PUTOUT( 'PLOTTY: Will not write output files' //
      1                   ' after RESTART.  Parameters might be wrong.' )
-               CALL PUTOUT( 'PLOTTER: Rerun SCHED with input file.' )
+               CALL PUTOUT( 'PLOTTY: Rerun SCHED with input file.' )
             END IF
             IF( DOEXIT .OR. MKFILES ) GO TO 990
 C
@@ -239,7 +239,7 @@ C
      1                      RXMIN, RXMAX, RYMIN, RYMAX )
             ELSE IF( TYPE .EQ. 'XY' ) THEN
                IF( PLSTA .EQ. 'NONE' ) THEN
-                  CALL PUTOUT( 'PLOTTER: Please specify station.' )
+                  CALL PUTOUT( 'PLOTTY: Please specify station.' )
                   GO TO 100
                ELSE
                   CALL PLOTXY( KSET, KSRC, KSTA, XAXIS, YAXIS,
@@ -249,7 +249,7 @@ C
                   CALL PLOTRD( SCREEN, COLOR, 
      1               RXMIN, RXMAX, RYMIN, RYMAX )
             ELSE
-               CALL PUTOUT( 'PLOTTER:  Invalid TYPE. ' )
+               CALL PUTOUT( 'PLOTTY:  Invalid TYPE. ' )
                GO TO 100
             END IF
 C

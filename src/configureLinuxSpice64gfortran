@@ -13,7 +13,10 @@
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
 #
-setenv SEDFILE makelinuxsp64gf_sedscript
+
+set Target=linuxsp64gf
+
+setenv SEDFILE make${Target}_sedscript
 /bin/rm Makefile
 /bin/rm -f $SEDFILE
 
@@ -30,6 +33,9 @@ s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Sat/*.f):
 s:#SATLDSED: SATLD = ../lib/LINUX64GFORTRAN/spicelib.a ../lib/LINUX64GFORTRAN/support.a -lm:
 EOF
+
+echo "s:BINDIR *= *../bin:&/${Target}:" >> make${Target}_sedscript
+mkdir -p ../bin/${Target}
 
 #  Run sed with the above file.
 

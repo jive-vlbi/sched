@@ -26,13 +26,36 @@ C
      1     COM, 'this source had calibrator code: ', 
      2     CALCODE(ISRC)
 C
-      IF( PLANET(ISRC) .OR. SATEL(ISRC) ) THEN
+      IF( PLANET(ISRC) ) THEN
          WRITE( IVEX, '( A1, 4X, A, A )' )
-     1     COM, 'This source is a planet or satellite.  ',
+     1     COM, 'This source is a planet.  ',
      2     'The motion is not handled in VEX.'
          WRITE( IVEX, '( A1, 4X, A )' )
      1     COM, 'Do not use the position for pointing or correlation.'
       END IF
+
+      IF( SATEL(ISRC) ) THEN
+
+         WRITE( IVEX, '( A1, 4X, A / A1, 4X, A)' )
+     1     COM, 'This source is a satellite; using NRAO extension:  ',
+     2     COM, 'Do not use the position for pointing or correlation.'
+
+C        Grab the satellite number and output the name of the TLE
+C        file and the satellite number.  The satini routine checks
+C        that exactly one of satfile/tlefile contains 'NONE'.
+
+         I = SATN (ISRC)
+         IF( SATFILE(I)(1:4) .NE. 'NONE' ) THEN
+            WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
+     1         SATFILE (I)(1:LEN1(SATFILE (I))),
+     2         SATNUM (I)
+         ELSE
+            WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
+     1         TLEFILE (I)(1:LEN1(TLEFILE (I))),
+     2         SATNUM (I)
+         END IF
+      END IF
+
 C
       DO I = 1, MALIAS
          IF( I .NE. INAME ) THEN
