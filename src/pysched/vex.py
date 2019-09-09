@@ -263,8 +263,7 @@ def modes_block(vex_version, print_warnings):
             else:
                 link = "&PCD"
             phase_cal = tuple(("phase_cal_detect", link.format(phase_def + 1)) +
-                              tuple(itone_per_def[:ntone_per_def[
-                                  phase_def], 
+                              tuple(itone_per_def[:ntone_per_def[phase_def], 
                                                   phase_def])
                               for phase_def in range(ntone))
         else:
@@ -650,8 +649,13 @@ def modes_block(vex_version, print_warnings):
                 bbc, bbc_channel = do_bbc(setup, if_, if_channel)
                 scan_mode["BBC"][bbc].add(station_code)
 
-                phase_cal, freq = do_phasecal_and_freq(
-                    setup, scan, tone_interval, bbc, bbc_channel)
+                try:
+                    phase_cal, freq = do_phasecal_and_freq(
+                        setup, scan, tone_interval, bbc, bbc_channel)
+                except ValueError:
+                    raise RuntimeError(
+                        "Inconsistent or incomplete frequency setup for {} "
+                        "in setup {}.".format(station.station, setup.setname))
                 scan_mode["PHASE_CAL_DETECT"][phase_cal].add(station_code)
                 scan_mode["FREQ"][freq].add(station_code)
                 
