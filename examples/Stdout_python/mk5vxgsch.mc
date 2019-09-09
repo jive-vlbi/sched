@@ -94,7 +94,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: NME-MK5.18CM
    Matching groups in /home/eldering/sched/catalogs/freq_RDBE.dat:
-     mc18cm_g        Generated from sess117L2Gglob.setini, sess217L5.setini, sess117LGe.setini, sess*
+     mc18cm_g        Generated from sess119L5nme.setini, sess119LG.setini, sess219L5nme.setini, sess*
 
    Setup group:    1         Station: MEDICINA          Total bit rate:   128
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -127,15 +127,15 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
- * 3C84              03 16 29.567263   * 03 19 48.160094     03 19 59.000215       1.30
-   J0319+4130        41 19 51.91701    * 41 30 42.10413      41 31 29.21940        2.69
+ * 3C84              03 16 29.567265   * 03 19 48.160096     03 19 59.000217       1.50
+   J0319+4130        41 19 51.91692    * 41 30 42.10404      41 31 29.21931        2.86
    0316+413          /home/eldering/sched/catalogs/sources.gsfc
-   J0319+41          GSFC 2015a astro solution, unpublished  10208 observations.
+   J0319+41          GSFC 2016a X/S astro solution,  10291 observations.
 
-   0552+398          05 52 01.407169   * 05 55 30.805611     05 55 43.523746       0.00
+   0552+398          05 52 01.407168   * 05 55 30.805611     05 55 43.523746       0.00
    J0555+3948        39 48 21.94581    * 39 48 49.16496      39 49 00.05192        0.00
  * DA193             /home/eldering/sched/catalogs/sources.gsfc
-   J0555+39          GSFC 2015a astro solution, unpublished 394383 observations.
+   J0555+39          GSFC 2016a X/S astro solution, 415688 observations.
 
 
 
@@ -145,8 +145,8 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  3C84       NME-MK5.18CM          1 2 3 4 5 6 7                     1.833    33.514
-  DA193      NME-MK5.18CM          1 2 3 4 5 6                       2.200    32.779
+  3C84       NME-MK5.18CM          1 2 3 4 5 6                       1.833    23.319
+  DA193      NME-MK5.18CM          1 2 3 4 5                         2.200    21.814
 
 
 EFFECT OF SOLAR CORONA

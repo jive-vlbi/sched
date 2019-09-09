@@ -1412,15 +1412,15 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
- * 0718+793          07 18 08.855893   * 07 26 11.735254     07 28 16.060593       0.53
-   J0726+7911        79 17 22.63934    * 79 11 31.01620      79 09 49.53552        0.10
+ * 0718+793          07 18 08.855888   * 07 26 11.735249     07 28 16.060588       0.53
+   J0726+7911        79 17 22.63932    * 79 11 31.01618      79 09 49.53550        0.10
                      /home/eldering/sched/catalogs/sources.rfc
-                     rfc_2015a Petrov, 2015, unpublished.  48801 observations
+                     rfc_2018a Petrov and Kovalev, in preparation  59826 observations
 
- * 1053+815          10 53 36.229449   * 10 58 11.535385     10 59 18.929809       0.66
+ * 1053+815          10 53 36.229447   * 10 58 11.535383     10 59 18.929807       0.66
    J1058+8114        81 30 35.56776    * 81 14 32.67512      81 10 14.17078        0.10
                      /home/eldering/sched/catalogs/sources.rfc
-                     rfc_2015a Petrov, 2015, unpublished.  37743 observations
+                     rfc_2018a Petrov and Kovalev, in preparation  38872 observations
 
 
 

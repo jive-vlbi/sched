@@ -1104,7 +1104,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.6cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc6cm_g         Generated from sess118C2Gglob.setini, sess217C2Gglob.setini, sess218C2Gglob.set*
+     mc6cm_g         Generated from sess119C2Gglob.setini, sess119C5nme.setini, sess119CGline.setini*
 
    Setup group:    5         Station: MEDICINA          Total bit rate:   256
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -1189,85 +1189,85 @@ SETUP FILE INFORMATION:
                      21 18 40.47331    * 21 30 58.59000      21 31 40.93135        0.00
                      From catalog imbedded in main SCHED input file.
 
-   0716+477          07 16 38.668012   * 07 20 21.497770     07 20 35.451606       0.10
- * J0720+4737        47 43 20.65401    * 47 37 44.12474      47 37 23.88110        0.08
+   0716+477          07 16 38.668010   * 07 20 21.497768     07 20 35.451604       0.08
+ * J0720+4737        47 43 20.65403    * 47 37 44.12477      47 37 23.88112        0.06
    J0720+47          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    245 observations.
+                     GSFC 2016a X/S astro solution,    245 observations.
 
-   0749+376          07 49 21.686725   * 07 52 40.907887     07 52 53.214219       0.23
- * J0752+3730        37 38 10.92091    * 37 30 24.31163      37 29 56.02059        0.27
+   0749+376          07 49 21.686723   * 07 52 40.907885     07 52 53.214217       0.19
+ * J0752+3730        37 38 10.92103    * 37 30 24.31175      37 29 56.02071        0.20
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    139 observations.
+                     GSFC 2016a X/S astro solution,    139 observations.
 
-   0851+071          08 51 08.449217   * 08 53 48.189940     08 53 57.817882       0.24
- * J0853+0654        07 06 12.14370    * 06 54 47.23524      06 54 10.44220        0.38
+   0851+071          08 51 08.449191   * 08 53 48.189914     08 53 57.817856       0.12
+ * J0853+0654        07 06 12.14296    * 06 54 47.23450      06 54 10.44146        0.20
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    133 observations.
+                     GSFC 2016a X/S astro solution,    133 observations.
 
- * 4C39.25           09 23 55.319215   * 09 27 03.013936     09 27 14.354214       0.30
-   J0927+3902        39 15 23.56645    * 39 02 20.85186      39 01 30.45863        0.16
+ * 4C39.25           09 23 55.319216   * 09 27 03.013937     09 27 14.354215       0.31
+   J0927+3902        39 15 23.56644    * 39 02 20.85185      39 01 30.45862        0.16
    0923+392          /home/eldering/sched/catalogs/sources.gsfc
-   J0927+39          GSFC 2015a astro solution, unpublished 245753 observations.
+   J0927+39          GSFC 2016a X/S astro solution, 250526 observations.
 
-   0955+476          09 55 08.528426   * 09 58 19.671641     09 58 31.205594       0.00
- * J0958+4725        47 39 28.28176    * 47 25 07.84245      47 24 10.09949        0.00
+   0955+476          09 55 08.528426   * 09 58 19.671642     09 58 31.205594       0.00
+ * J0958+4725        47 39 28.28175    * 47 25 07.84244      47 24 10.09948        0.00
    J0958+47          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished 175314 observations.
+                     GSFC 2016a X/S astro solution, 193238 observations.
 
-   1036+054          10 36 10.827221   * 10 38 46.779874     10 38 55.698859       0.05
- * J1038+0512        05 28 06.89975    * 05 12 29.08668      05 11 37.58459        0.11
+   1036+054          10 36 10.827223   * 10 38 46.779876     10 38 55.698862       0.06
+ * J1038+0512        05 28 06.89991    * 05 12 29.08683      05 11 37.58475        0.12
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    310 observations.
+                     GSFC 2016a X/S astro solution,    310 observations.
 
-   1125+366          11 25 17.950125   * 11 27 58.870822     11 28 07.958522       0.08
- * J1127+3620        36 36 59.66984    * 36 20 28.35135      36 19 23.15303        0.11
+   1125+366          11 25 17.950132   * 11 27 58.870829     11 28 07.958529       0.06
+ * J1127+3620        36 36 59.66980    * 36 20 28.35131      36 19 23.15298        0.08
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    428 observations.
+                     GSFC 2016a X/S astro solution,    535 observations.
 
-   1155+169          11 55 00.750372   * 11 57 34.836266     11 57 43.239686       0.10
- * J1157+1638        16 55 41.52546    * 16 38 59.65005      16 37 59.57611        0.12
+   1155+169          11 55 00.750375   * 11 57 34.836269     11 57 43.239689       0.09
+ * J1157+1638        16 55 41.52543    * 16 38 59.65002      16 37 59.57609        0.12
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    214 observations.
+                     GSFC 2016a X/S astro solution,    214 observations.
 
-   1410+138          14 10 11.429145   * 14 12 36.372633     14 12 43.462392       0.20
- * J1412+1334        13 48 39.93731    * 13 34 38.15271      13 33 46.75342        0.33
+   1410+138          14 10 11.429157   * 14 12 36.372645     14 12 43.462404       0.11
+ * J1412+1334        13 48 39.93733    * 13 34 38.15273      13 33 46.75344        0.17
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    216 observations.
+                     GSFC 2016a X/S astro solution,    216 observations.
 
-   1622+665          16 22 50.507467   * 16 23 04.521662     16 23 02.420014       0.76
- * J1623+6624        66 30 52.65009    * 66 24 01.07889      66 23 27.05718        0.31
+   1622+665          16 22 50.507573   * 16 23 04.521768     16 23 02.420120       0.37
+ * J1623+6624        66 30 52.64993    * 66 24 01.07873      66 23 27.05703        0.09
    1622+663          /home/eldering/sched/catalogs/sources.gsfc
-   J1623+66          GSFC 2015a astro solution, unpublished    147 observations.
+   J1623+66          GSFC 2016a X/S astro solution,    147 observations.
 
-   1621+392          16 21 23.470061   * 16 23 07.622387     16 23 11.678364       0.17
- * J1623+3909        39 16 26.80928    * 39 09 32.41107      39 09 00.97797        0.22
+   1621+392          16 21 23.470070   * 16 23 07.622396     16 23 11.678373       0.16
+ * J1623+3909        39 16 26.80923    * 39 09 32.41102      39 09 00.97792        0.21
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    144 observations.
+                     GSFC 2016a X/S astro solution,    144 observations.
 
  * NRAO512           16 38 48.169688   * 16 40 29.632773     16 40 33.460723       0.00
-   J1640+3946        39 52 30.08667    * 39 46 46.02848      39 46 19.10196        0.00
+   J1640+3946        39 52 30.08664    * 39 46 46.02845      39 46 19.10193        0.00
    1638+398          /home/eldering/sched/catalogs/sources.gsfc
-   J1640+39          GSFC 2015a astro solution, unpublished 110323 observations.
+   J1640+39          GSFC 2016a X/S astro solution, 124178 observations.
 
- * 3C345             16 41 17.606228   * 16 42 58.809966     16 43 02.613840       0.76
-   J1642+3948        39 54 10.81496    * 39 48 36.99402      39 48 10.73369        0.52
+ * 3C345             16 41 17.606229   * 16 42 58.809967     16 43 02.613841       0.79
+   J1642+3948        39 54 10.81492    * 39 48 36.99399      39 48 10.73366        0.59
    1641+399          /home/eldering/sched/catalogs/sources.gsfc
-   J1642+39          GSFC 2015a astro solution, unpublished  53430 observations.
+   J1642+39          GSFC 2016a X/S astro solution,  53724 observations.
 
-   1948+505          19 48 22.066052   * 19 49 43.492297     19 49 45.717063       0.29
- * J1949+5041        50 33 52.99450    * 50 41 31.97279      50 42 00.01571        0.33
+   1948+505          19 48 22.066052   * 19 49 43.492297     19 49 45.717062       0.29
+ * J1949+5041        50 33 52.99449    * 50 41 31.97278      50 42 00.01570        0.33
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    146 observations.
+                     GSFC 2016a X/S astro solution,    146 observations.
 
-   2022+274          20 22 45.618710   * 20 24 51.231244     20 24 56.561202       0.26
- * J2024+2736        27 26 13.38109    * 27 36 01.69749      27 36 35.52947        0.31
+   2022+274          20 22 45.618701   * 20 24 51.231235     20 24 56.561193       0.28
+ * J2024+2736        27 26 13.38095    * 27 36 01.69735      27 36 35.52933        0.32
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished     71 observations.
+                     GSFC 2016a X/S astro solution,     72 observations.
 
-   2103+213          21 03 55.220281   * 21 06 10.818207     21 06 16.913576       0.10
- * J2106+2135        21 23 31.98455    * 21 35 35.99635      21 36 17.44328        0.20
+   2103+213          21 03 55.220266   * 21 06 10.818193     21 06 16.913561       0.09
+ * J2106+2135        21 23 31.98454    * 21 35 35.99635      21 36 17.44327        0.17
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished     88 observations.
+                     GSFC 2016a X/S astro solution,    144 observations.
 
 
 
@@ -1277,35 +1277,35 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  B0712+472  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.000
-  B0739+366  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.207
-  B0850+054  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.945
-  B1030+074  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.281
-  B1127+385  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.636
-  B1152+199  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.530
-  B1359+154  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.554
-  B1555+375  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.383    10.945
-  B1600+434  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.742
-  B1608+656  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.712
-  B1933+503  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.500    14.987
-  B2045+265  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.500    13.850
-  B2108+213  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.830
-  J0720+4737 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.633
-  J0752+3730 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.802
-  J0853+0654 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.113
+  B0712+472  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.864
+  B0739+366  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.048
+  B0850+054  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.810
+  B1030+074  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    10.784
+  B1127+385  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.485
+  B1152+199  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.378
+  B1359+154  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.405
+  B1555+375  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.383    10.732
+  B1600+434  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.583
+  B1608+656  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    12.564
+  B1933+503  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.500    14.790
+  B2045+265  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.500    13.652
+  B2108+213  eo999.6cm             1 2 3 4 5 6 7 8 9                 0.400    11.727
+  J0720+4737 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.396
+  J0752+3730 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.628
+  J0853+0654 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.908
   4C39.25    eo999.6cm             1 2 3 4 5 6 7 8 9                 0.133     4.800
-  J0958+4725 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.050     1.160
-  J1038+0512 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.618
-  J1127+3620 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.209
-  J1157+1638 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333    10.147
-  J1412+1334 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.939
-  J1623+6624 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.504
-  J1623+3909 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.683    17.494
-  NRAO512    eo999.6cm             1 2 3 4 5 6 7 8 9                 0.050     1.664
+  J0958+4725 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.050     1.134
+  J1038+0512 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.070
+  J1127+3620 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     8.858
+  J1157+1638 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.818
+  J1412+1334 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.728
+  J1623+6624 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.316
+  J1623+3909 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.683    16.919
+  NRAO512    eo999.6cm             1 2 3 4 5 6 7 8 9                 0.050     1.648
   3C345      eo999.6cm             1 2 3 4 5 6 7 8 9                 0.133     4.800
-  J1949+5041 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.417    11.280
-  J2024+2736 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.417    11.858
-  J2106+2135 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.651
+  J1949+5041 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.417    11.005
+  J2024+2736 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.417    11.613
+  J2106+2135 eo999.6cm             1 2 3 4 5 6 7 8 9                 0.333     9.547
 
 
 EFFECT OF SOLAR CORONA

@@ -1135,20 +1135,20 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
-   0552+398          05 52 01.407169   * 05 55 30.805611     05 55 11.107204       0.00
-   J0555+3948        39 48 21.94581    * 39 48 49.16496      39 48 37.57944        0.00
+   0552+398          05 52 01.407168   * 05 55 30.805611     05 55 11.107204       0.00
+   J0555+3948        39 48 21.94581    * 39 48 49.16496      39 48 37.57943        0.00
  * DA193             /home/eldering/sched/catalogs/sources.gsfc
-   J0555+39          GSFC 2015a astro solution, unpublished 394383 observations.
+   J0555+39          GSFC 2016a X/S astro solution, 415688 observations.
 
- * 4C39.25           09 23 55.319215   * 09 27 03.013936     09 26 45.223484       0.30
-   J0927+3902        39 15 23.56645    * 39 02 20.85186      39 03 32.85686        0.16
+ * 4C39.25           09 23 55.319216   * 09 27 03.013937     09 26 45.223485       0.31
+   J0927+3902        39 15 23.56644    * 39 02 20.85185      39 03 32.85685        0.16
    0923+392          /home/eldering/sched/catalogs/sources.gsfc
-   J0927+39          GSFC 2015a astro solution, unpublished 245753 observations.
+   J0927+39          GSFC 2016a X/S astro solution, 250526 observations.
 
- * OQ208             14 04 45.615156   * 14 07 00.394414     14 06 49.063404       0.24
-   J1407+2827        28 41 29.23518    * 28 27 14.69022      28 28 42.99366        0.34
+ * OQ208             14 04 45.615156   * 14 07 00.394415     14 06 49.063404       0.24
+   J1407+2827        28 41 29.23515    * 28 27 14.69019      28 28 42.99363        0.35
    1404+286          /home/eldering/sched/catalogs/sources.gsfc
-   J1407+28          GSFC 2015a astro solution, unpublished  67871 observations.
+   J1407+28          GSFC 2016a X/S astro solution,  68278 observations.
 
 
 

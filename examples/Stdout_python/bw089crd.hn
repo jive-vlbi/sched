@@ -27,7 +27,7 @@ media=(1,disk)
 
 !* --- Scan from 23h30m00s to 23h35m00s   Sun, 2008 May 04 --- *!
 !*  EB should remove filter  *!
-sname='OJ287'  ra=08h54m48.874926s  dec= 20d06'30.64088"  qual=999  calib='V'
+sname='OJ287'  ra=08h54m48.874927s  dec= 20d06'30.64085"  qual=999  calib='V'
 maxcaltime= 120
 fe=(1,20cm),(3,20cm)
 fexfer=(2,norm)
@@ -60,7 +60,7 @@ disk=off
 stop=23h35m00s   !NEXT!
 
 !* --- Scan from 23h38m20s to 23h40m00s   Sun, 2008 May 04 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=23h38m20s   !NEXT!        
 qual=  0
@@ -76,7 +76,7 @@ disk=off
 stop=23h43m21s   !NEXT!
 
 !* --- Scan from 23h43m32s to 23h45m02s   Sun, 2008 May 04 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=23h43m32s   !NEXT!        
 qual=  0
@@ -92,7 +92,7 @@ disk=off
 stop=23h48m23s   !NEXT!
 
 !* --- Scan from 23h48m34s to 23h50m04s   Sun, 2008 May 04 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=23h48m34s   !NEXT!        
 qual=  0
@@ -108,7 +108,7 @@ disk=off
 stop=23h53m25s   !NEXT!
 
 !* --- Scan from 23h53m36s to 23h55m06s   Sun, 2008 May 04 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=23h53m36s   !NEXT!        
 qual=  0
@@ -124,7 +124,7 @@ disk=off
 stop=23h58m27s   !NEXT!
 
 !* --- Scan from 23h58m38s to 00h00m08s   Sun, 2008 May 04 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=23h58m38s   !NEXT!        
 qual=  0
@@ -141,7 +141,7 @@ disk=off
 stop=00h03m29s   !NEXT!
 
 !* --- Scan from 00h03m40s to 00h05m10s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h03m40s   !NEXT!        
 qual=  0
@@ -157,7 +157,7 @@ disk=off
 stop=00h08m31s   !NEXT!
 
 !* --- Scan from 00h08m42s to 00h10m12s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h08m42s   !NEXT!        
 qual=  0
@@ -173,7 +173,7 @@ disk=off
 stop=00h13m33s   !NEXT!
 
 !* --- Scan from 00h13m44s to 00h15m14s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h13m44s   !NEXT!        
 qual=  0
@@ -189,7 +189,7 @@ disk=off
 stop=00h18m35s   !NEXT!
 
 !* --- Scan from 00h18m46s to 00h20m16s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h18m46s   !NEXT!        
 qual=  0
@@ -205,7 +205,7 @@ disk=off
 stop=00h23m37s   !NEXT!
 
 !* --- Scan from 00h23m48s to 00h25m18s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h23m48s   !NEXT!        
 qual=  0
@@ -221,7 +221,7 @@ disk=off
 stop=00h28m39s   !NEXT!
 
 !* --- Scan from 00h28m50s to 00h30m20s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h28m50s   !NEXT!        
 qual=  0
@@ -237,7 +237,7 @@ disk=off
 stop=00h33m41s   !NEXT!
 
 !* --- Scan from 00h33m52s to 00h35m22s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h33m52s   !NEXT!        
 qual=  0
@@ -253,7 +253,7 @@ disk=off
 stop=00h38m43s   !NEXT!
 
 !* --- Scan from 00h38m54s to 00h40m24s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h38m54s   !NEXT!        
 qual=  0
@@ -269,7 +269,7 @@ disk=off
 stop=00h43m45s   !NEXT!
 
 !* --- Scan from 00h43m56s to 00h45m26s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h43m56s   !NEXT!        
 qual=  0
@@ -285,7 +285,7 @@ disk=off
 stop=00h48m47s   !NEXT!
 
 !* --- Scan from 00h48m58s to 00h50m28s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h48m58s   !NEXT!        
 qual=  0
@@ -293,7 +293,7 @@ disk=off
 stop=00h50m28s   !NEXT!
 
 !* --- Scan from 00h50m39s to 00h53m49s   Mon, 2008 May 05 --- *!
-sname='J1215+3448'  ra=12h15m55.601044s  dec= 34d48'15.22068"  qual=999  calib='V'
+sname='J1215+3448'  ra=12h15m55.601045s  dec= 34d48'15.22069"  qual=999  calib='V'
 disk=off
 stop=00h50m39s   !NEXT!        
 qual=  0
@@ -301,7 +301,7 @@ disk=off
 stop=00h53m49s   !NEXT!
 
 !* --- Scan from 00h54m00s to 00h55m30s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=00h54m00s   !NEXT!        
 qual=  0
@@ -309,7 +309,7 @@ disk=off
 stop=00h55m30s   !NEXT!
 
 !* --- Scan from 00h58m50s to 01h00m30s   Mon, 2008 May 05 --- *!
-sname='3C286'  ra=13h31m08.288051s  dec= 30d30'32.95924"  qual=999  calib='V'
+sname='3C286'  ra=13h31m08.288061s  dec= 30d30'32.95930"  qual=999  calib='V'
 disk=off
 stop=00h58m50s   !NEXT!        
 qual=  0
@@ -317,7 +317,7 @@ disk=off
 stop=01h00m30s   !NEXT!
 
 !* --- Scan from 01h03m50s to 01h05m30s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h03m50s   !NEXT!        
 qual=  0
@@ -330,7 +330,7 @@ disk=off
 stop=01h08m50s   !NEXT!
 
 !* --- Scan from 01h09m01s to 01h10m31s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h09m01s   !NEXT!        
 qual=  0
@@ -343,7 +343,7 @@ disk=off
 stop=01h13m51s   !NEXT!
 
 !* --- Scan from 01h14m02s to 01h15m32s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h14m02s   !NEXT!        
 qual=  0
@@ -356,7 +356,7 @@ disk=off
 stop=01h18m52s   !NEXT!
 
 !* --- Scan from 01h19m03s to 01h20m33s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h19m03s   !NEXT!        
 qual=  0
@@ -369,7 +369,7 @@ disk=off
 stop=01h23m53s   !NEXT!
 
 !* --- Scan from 01h24m04s to 01h25m34s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h24m04s   !NEXT!        
 qual=  0
@@ -382,7 +382,7 @@ disk=off
 stop=01h28m54s   !NEXT!
 
 !* --- Scan from 01h29m05s to 01h30m35s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h29m05s   !NEXT!        
 qual=  0
@@ -395,7 +395,7 @@ disk=off
 stop=01h33m55s   !NEXT!
 
 !* --- Scan from 01h34m06s to 01h35m36s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h34m06s   !NEXT!        
 qual=  0
@@ -408,7 +408,7 @@ disk=off
 stop=01h38m56s   !NEXT!
 
 !* --- Scan from 01h39m07s to 01h40m37s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h39m07s   !NEXT!        
 qual=  0
@@ -421,7 +421,7 @@ disk=off
 stop=01h43m57s   !NEXT!
 
 !* --- Scan from 01h44m08s to 01h45m38s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h44m08s   !NEXT!        
 qual=  0
@@ -429,7 +429,7 @@ disk=off
 stop=01h45m38s   !NEXT!
 
 !* --- Scan from 01h48m58s to 01h50m38s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h48m58s   !NEXT!        
 qual=  0
@@ -437,7 +437,7 @@ disk=off
 stop=01h50m38s   !NEXT!
 
 !* --- Scan from 01h50m49s to 01h53m59s   Mon, 2008 May 05 --- *!
-sname='J1215+3448'  ra=12h15m55.601044s  dec= 34d48'15.22068"  qual=999  calib='V'
+sname='J1215+3448'  ra=12h15m55.601045s  dec= 34d48'15.22069"  qual=999  calib='V'
 disk=off
 stop=01h50m49s   !NEXT!        
 qual=  0
@@ -445,7 +445,7 @@ disk=off
 stop=01h53m59s   !NEXT!
 
 !* --- Scan from 01h54m10s to 01h55m40s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h54m10s   !NEXT!        
 qual=  0
@@ -461,7 +461,7 @@ disk=off
 stop=01h59m01s   !NEXT!
 
 !* --- Scan from 01h59m12s to 02h00m42s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=01h59m12s   !NEXT!        
 qual=  0
@@ -477,7 +477,7 @@ disk=off
 stop=02h04m03s   !NEXT!
 
 !* --- Scan from 02h04m14s to 02h05m44s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h04m14s   !NEXT!        
 qual=  0
@@ -493,7 +493,7 @@ disk=off
 stop=02h09m05s   !NEXT!
 
 !* --- Scan from 02h09m16s to 02h10m46s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h09m16s   !NEXT!        
 qual=  0
@@ -509,7 +509,7 @@ disk=off
 stop=02h14m07s   !NEXT!
 
 !* --- Scan from 02h14m18s to 02h15m48s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h14m18s   !NEXT!        
 qual=  0
@@ -525,7 +525,7 @@ disk=off
 stop=02h19m09s   !NEXT!
 
 !* --- Scan from 02h19m20s to 02h20m50s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h19m20s   !NEXT!        
 qual=  0
@@ -541,7 +541,7 @@ disk=off
 stop=02h24m11s   !NEXT!
 
 !* --- Scan from 02h24m22s to 02h25m52s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h24m22s   !NEXT!        
 qual=  0
@@ -557,7 +557,7 @@ disk=off
 stop=02h29m13s   !NEXT!
 
 !* --- Scan from 02h29m24s to 02h30m54s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h29m24s   !NEXT!        
 qual=  0
@@ -565,7 +565,7 @@ disk=off
 stop=02h30m54s   !NEXT!
 
 !* --- Scan from 02h34m14s to 02h35m54s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h34m14s   !NEXT!        
 qual=  0
@@ -573,7 +573,7 @@ disk=off
 stop=02h35m54s   !NEXT!
 
 !* --- Scan from 02h36m05s to 02h39m15s   Mon, 2008 May 05 --- *!
-sname='J1215+3448'  ra=12h15m55.601044s  dec= 34d48'15.22068"  qual=999  calib='V'
+sname='J1215+3448'  ra=12h15m55.601045s  dec= 34d48'15.22069"  qual=999  calib='V'
 disk=off
 stop=02h36m05s   !NEXT!        
 qual=  0
@@ -581,7 +581,7 @@ disk=off
 stop=02h39m15s   !NEXT!
 
 !* --- Scan from 02h39m26s to 02h40m56s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h39m26s   !NEXT!        
 qual=  0
@@ -597,7 +597,7 @@ disk=off
 stop=02h44m17s   !NEXT!
 
 !* --- Scan from 02h44m28s to 02h45m58s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h44m28s   !NEXT!        
 qual=  0
@@ -613,7 +613,7 @@ disk=off
 stop=02h49m19s   !NEXT!
 
 !* --- Scan from 02h49m30s to 02h51m00s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h49m30s   !NEXT!        
 qual=  0
@@ -629,7 +629,7 @@ disk=off
 stop=02h54m21s   !NEXT!
 
 !* --- Scan from 02h54m32s to 02h56m02s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h54m32s   !NEXT!        
 qual=  0
@@ -645,7 +645,7 @@ disk=off
 stop=02h59m23s   !NEXT!
 
 !* --- Scan from 02h59m34s to 03h01m04s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=02h59m34s   !NEXT!        
 qual=  0
@@ -661,7 +661,7 @@ disk=off
 stop=03h04m25s   !NEXT!
 
 !* --- Scan from 03h04m36s to 03h06m06s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h04m36s   !NEXT!        
 qual=  0
@@ -677,7 +677,7 @@ disk=off
 stop=03h09m27s   !NEXT!
 
 !* --- Scan from 03h09m38s to 03h11m08s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h09m38s   !NEXT!        
 qual=  0
@@ -693,7 +693,7 @@ disk=off
 stop=03h14m29s   !NEXT!
 
 !* --- Scan from 03h14m40s to 03h16m10s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h14m40s   !NEXT!        
 qual=  0
@@ -709,7 +709,7 @@ disk=off
 stop=03h19m31s   !NEXT!
 
 !* --- Scan from 03h19m42s to 03h21m12s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h19m42s   !NEXT!        
 qual=  0
@@ -717,7 +717,7 @@ disk=off
 stop=03h21m12s   !NEXT!
 
 !* --- Scan from 03h24m32s to 03h26m12s   Mon, 2008 May 05 --- *!
-sname='3C286'  ra=13h31m08.288051s  dec= 30d30'32.95924"  qual=999  calib='V'
+sname='3C286'  ra=13h31m08.288061s  dec= 30d30'32.95930"  qual=999  calib='V'
 disk=off
 stop=03h24m32s   !NEXT!        
 qual=  0
@@ -725,7 +725,7 @@ disk=off
 stop=03h26m12s   !NEXT!
 
 !* --- Scan from 03h29m32s to 03h31m12s   Mon, 2008 May 05 --- *!
-sname='OQ208'  ra=14h07m00.394414s  dec= 28d27'14.69022"  qual=999  calib='V'
+sname='OQ208'  ra=14h07m00.394415s  dec= 28d27'14.69019"  qual=999  calib='V'
 disk=off
 stop=03h29m32s   !NEXT!        
 qual=  0
@@ -733,7 +733,7 @@ disk=off
 stop=03h31m12s   !NEXT!
 
 !* --- Scan from 03h34m32s to 03h36m12s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h34m32s   !NEXT!        
 qual=  0
@@ -749,7 +749,7 @@ disk=off
 stop=03h39m33s   !NEXT!
 
 !* --- Scan from 03h39m44s to 03h41m14s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h39m44s   !NEXT!        
 qual=  0
@@ -765,7 +765,7 @@ disk=off
 stop=03h44m35s   !NEXT!
 
 !* --- Scan from 03h44m46s to 03h46m16s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h44m46s   !NEXT!        
 qual=  0
@@ -781,7 +781,7 @@ disk=off
 stop=03h49m37s   !NEXT!
 
 !* --- Scan from 03h49m48s to 03h51m18s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h49m48s   !NEXT!        
 qual=  0
@@ -797,7 +797,7 @@ disk=off
 stop=03h54m39s   !NEXT!
 
 !* --- Scan from 03h54m50s to 03h56m20s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h54m50s   !NEXT!        
 qual=  0
@@ -813,7 +813,7 @@ disk=off
 stop=03h59m41s   !NEXT!
 
 !* --- Scan from 03h59m52s to 04h01m22s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=03h59m52s   !NEXT!        
 qual=  0
@@ -829,7 +829,7 @@ disk=off
 stop=04h04m43s   !NEXT!
 
 !* --- Scan from 04h04m54s to 04h06m24s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h04m54s   !NEXT!        
 qual=  0
@@ -845,7 +845,7 @@ disk=off
 stop=04h09m45s   !NEXT!
 
 !* --- Scan from 04h09m56s to 04h11m26s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h09m56s   !NEXT!        
 qual=  0
@@ -861,7 +861,7 @@ disk=off
 stop=04h14m47s   !NEXT!
 
 !* --- Scan from 04h14m58s to 04h16m28s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h14m58s   !NEXT!        
 qual=  0
@@ -877,7 +877,7 @@ disk=off
 stop=04h19m49s   !NEXT!
 
 !* --- Scan from 04h20m00s to 04h21m30s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h20m00s   !NEXT!        
 qual=  0
@@ -893,7 +893,7 @@ disk=off
 stop=04h24m51s   !NEXT!
 
 !* --- Scan from 04h25m02s to 04h26m32s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h25m02s   !NEXT!        
 qual=  0
@@ -909,7 +909,7 @@ disk=off
 stop=04h29m53s   !NEXT!
 
 !* --- Scan from 04h30m04s to 04h31m34s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h30m04s   !NEXT!        
 qual=  0
@@ -925,7 +925,7 @@ disk=off
 stop=04h34m55s   !NEXT!
 
 !* --- Scan from 04h35m06s to 04h36m36s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h35m06s   !NEXT!        
 qual=  0
@@ -941,7 +941,7 @@ disk=off
 stop=04h39m57s   !NEXT!
 
 !* --- Scan from 04h40m08s to 04h41m38s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h40m08s   !NEXT!        
 qual=  0
@@ -957,7 +957,7 @@ disk=off
 stop=04h44m59s   !NEXT!
 
 !* --- Scan from 04h45m10s to 04h46m40s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h45m10s   !NEXT!        
 qual=  0
@@ -973,7 +973,7 @@ disk=off
 stop=04h50m01s   !NEXT!
 
 !* --- Scan from 04h50m12s to 04h51m42s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h50m12s   !NEXT!        
 qual=  0
@@ -981,7 +981,7 @@ disk=off
 stop=04h51m42s   !NEXT!
 
 !* --- Scan from 04h51m53s to 04h55m03s   Mon, 2008 May 05 --- *!
-sname='J1215+3448'  ra=12h15m55.601044s  dec= 34d48'15.22068"  qual=999  calib='V'
+sname='J1215+3448'  ra=12h15m55.601045s  dec= 34d48'15.22069"  qual=999  calib='V'
 disk=off
 stop=04h51m53s   !NEXT!        
 qual=  0
@@ -989,7 +989,7 @@ disk=off
 stop=04h55m03s   !NEXT!
 
 !* --- Scan from 04h55m14s to 04h56m44s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=04h55m14s   !NEXT!        
 qual=  0
@@ -997,7 +997,7 @@ disk=off
 stop=04h56m44s   !NEXT!
 
 !* --- Scan from 05h00m04s to 05h01m44s   Mon, 2008 May 05 --- *!
-sname='OQ208'  ra=14h07m00.394414s  dec= 28d27'14.69022"  qual=999  calib='V'
+sname='OQ208'  ra=14h07m00.394415s  dec= 28d27'14.69019"  qual=999  calib='V'
 disk=off
 stop=05h00m04s   !NEXT!        
 qual=  0
@@ -1005,7 +1005,7 @@ disk=off
 stop=05h01m44s   !NEXT!
 
 !* --- Scan from 05h05m04s to 05h06m44s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h05m04s   !NEXT!        
 qual=  0
@@ -1021,7 +1021,7 @@ disk=off
 stop=05h10m05s   !NEXT!
 
 !* --- Scan from 05h10m16s to 05h11m46s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h10m16s   !NEXT!        
 qual=  0
@@ -1037,7 +1037,7 @@ disk=off
 stop=05h15m07s   !NEXT!
 
 !* --- Scan from 05h15m18s to 05h16m48s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h15m18s   !NEXT!        
 qual=  0
@@ -1053,7 +1053,7 @@ disk=off
 stop=05h20m09s   !NEXT!
 
 !* --- Scan from 05h20m20s to 05h21m50s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h20m20s   !NEXT!        
 qual=  0
@@ -1069,7 +1069,7 @@ disk=off
 stop=05h25m11s   !NEXT!
 
 !* --- Scan from 05h25m22s to 05h26m52s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h25m22s   !NEXT!        
 qual=  0
@@ -1085,7 +1085,7 @@ disk=off
 stop=05h30m13s   !NEXT!
 
 !* --- Scan from 05h30m24s to 05h31m54s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h30m24s   !NEXT!        
 qual=  0
@@ -1101,7 +1101,7 @@ disk=off
 stop=05h35m15s   !NEXT!
 
 !* --- Scan from 05h35m26s to 05h36m56s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h35m26s   !NEXT!        
 qual=  0
@@ -1117,7 +1117,7 @@ disk=off
 stop=05h40m17s   !NEXT!
 
 !* --- Scan from 05h40m28s to 05h41m58s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h40m28s   !NEXT!        
 qual=  0
@@ -1133,7 +1133,7 @@ disk=off
 stop=05h45m19s   !NEXT!
 
 !* --- Scan from 05h45m30s to 05h47m00s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h45m30s   !NEXT!        
 qual=  0
@@ -1141,7 +1141,7 @@ disk=off
 stop=05h47m00s   !NEXT!
 
 !* --- Scan from 05h47m11s to 05h50m21s   Mon, 2008 May 05 --- *!
-sname='J1215+3448'  ra=12h15m55.601044s  dec= 34d48'15.22068"  qual=999  calib='V'
+sname='J1215+3448'  ra=12h15m55.601045s  dec= 34d48'15.22069"  qual=999  calib='V'
 disk=off
 stop=05h47m11s   !NEXT!        
 qual=  0
@@ -1149,7 +1149,7 @@ disk=off
 stop=05h50m21s   !NEXT!
 
 !* --- Scan from 05h50m32s to 05h52m02s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h50m32s   !NEXT!        
 qual=  0
@@ -1157,7 +1157,7 @@ disk=off
 stop=05h52m02s   !NEXT!
 
 !* --- Scan from 05h55m22s to 05h57m02s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=05h55m22s   !NEXT!        
 qual=  0
@@ -1173,7 +1173,7 @@ disk=off
 stop=06h00m23s   !NEXT!
 
 !* --- Scan from 06h00m34s to 06h02m04s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h00m34s   !NEXT!        
 qual=  0
@@ -1189,7 +1189,7 @@ disk=off
 stop=06h05m25s   !NEXT!
 
 !* --- Scan from 06h05m36s to 06h07m06s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h05m36s   !NEXT!        
 qual=  0
@@ -1205,7 +1205,7 @@ disk=off
 stop=06h10m27s   !NEXT!
 
 !* --- Scan from 06h10m38s to 06h12m08s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h10m38s   !NEXT!        
 qual=  0
@@ -1221,7 +1221,7 @@ disk=off
 stop=06h15m29s   !NEXT!
 
 !* --- Scan from 06h15m40s to 06h17m10s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h15m40s   !NEXT!        
 qual=  0
@@ -1237,7 +1237,7 @@ disk=off
 stop=06h20m31s   !NEXT!
 
 !* --- Scan from 06h20m42s to 06h22m12s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h20m42s   !NEXT!        
 qual=  0
@@ -1253,7 +1253,7 @@ disk=off
 stop=06h25m33s   !NEXT!
 
 !* --- Scan from 06h25m44s to 06h27m14s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h25m44s   !NEXT!        
 qual=  0
@@ -1269,7 +1269,7 @@ disk=off
 stop=06h30m35s   !NEXT!
 
 !* --- Scan from 06h30m46s to 06h32m16s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h30m46s   !NEXT!        
 qual=  0
@@ -1285,7 +1285,7 @@ disk=off
 stop=06h35m37s   !NEXT!
 
 !* --- Scan from 06h35m48s to 06h37m18s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h35m48s   !NEXT!        
 qual=  0
@@ -1293,7 +1293,7 @@ disk=off
 stop=06h37m18s   !NEXT!
 
 !* --- Scan from 06h37m29s to 06h40m39s   Mon, 2008 May 05 --- *!
-sname='J1215+3448'  ra=12h15m55.601044s  dec= 34d48'15.22068"  qual=999  calib='V'
+sname='J1215+3448'  ra=12h15m55.601045s  dec= 34d48'15.22069"  qual=999  calib='V'
 disk=off
 stop=06h37m29s   !NEXT!        
 qual=  0
@@ -1301,7 +1301,7 @@ disk=off
 stop=06h40m39s   !NEXT!
 
 !* --- Scan from 06h40m50s to 06h42m20s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h40m50s   !NEXT!        
 qual=  0
@@ -1309,7 +1309,7 @@ disk=off
 stop=06h42m20s   !NEXT!
 
 !* --- Scan from 06h45m40s to 06h47m20s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h45m40s   !NEXT!        
 qual=  0
@@ -1325,7 +1325,7 @@ disk=off
 stop=06h50m41s   !NEXT!
 
 !* --- Scan from 06h50m52s to 06h52m22s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h50m52s   !NEXT!        
 qual=  0
@@ -1341,7 +1341,7 @@ disk=off
 stop=06h55m43s   !NEXT!
 
 !* --- Scan from 06h55m54s to 06h57m24s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=06h55m54s   !NEXT!        
 qual=  0
@@ -1357,7 +1357,7 @@ disk=off
 stop=07h00m45s   !NEXT!
 
 !* --- Scan from 07h00m56s to 07h02m26s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=07h00m56s   !NEXT!        
 qual=  0
@@ -1373,7 +1373,7 @@ disk=off
 stop=07h05m47s   !NEXT!
 
 !* --- Scan from 07h05m58s to 07h07m28s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=07h05m58s   !NEXT!        
 qual=  0
@@ -1389,7 +1389,7 @@ disk=off
 stop=07h10m49s   !NEXT!
 
 !* --- Scan from 07h11m00s to 07h12m30s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=07h11m00s   !NEXT!        
 qual=  0
@@ -1405,7 +1405,7 @@ disk=off
 stop=07h15m51s   !NEXT!
 
 !* --- Scan from 07h16m02s to 07h17m32s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=07h16m02s   !NEXT!        
 qual=  0
@@ -1421,7 +1421,7 @@ disk=off
 stop=07h20m53s   !NEXT!
 
 !* --- Scan from 07h21m04s to 07h22m34s   Mon, 2008 May 05 --- *!
-sname='J1220+3431'  ra=12h20m08.294139s  dec= 34d31'21.74343"  qual=999  calib='V'
+sname='J1220+3431'  ra=12h20m08.294131s  dec= 34d31'21.74349"  qual=999  calib='V'
 disk=off
 stop=07h21m04s   !NEXT!        
 qual=  0
@@ -1429,7 +1429,7 @@ disk=off
 stop=07h22m34s   !NEXT!
 
 !* --- Scan from 07h25m54s to 07h27m34s   Mon, 2008 May 05 --- *!
-sname='3C286'  ra=13h31m08.288051s  dec= 30d30'32.95924"  qual=999  calib='V'
+sname='3C286'  ra=13h31m08.288061s  dec= 30d30'32.95930"  qual=999  calib='V'
 disk=off
 stop=07h25m54s   !NEXT!        
 qual=  0
@@ -1437,7 +1437,7 @@ disk=off
 stop=07h27m34s   !NEXT!
 
 !* --- Scan from 07h30m54s to 07h32m34s   Mon, 2008 May 05 --- *!
-sname='OQ208'  ra=14h07m00.394414s  dec= 28d27'14.69022"  qual=999  calib='V'
+sname='OQ208'  ra=14h07m00.394415s  dec= 28d27'14.69019"  qual=999  calib='V'
 disk=off
 stop=07h30m54s   !NEXT!        
 qual=  0

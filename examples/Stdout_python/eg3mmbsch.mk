@@ -640,21 +640,21 @@ SETUP FILE INFORMATION:
                      Doppler based on LSR frame and radio definition.  Velocities:
                          -7.00    -7.00  -100.00  -100.00  -200.00  -200.00  -300.00  -300.00
 
-   3C273B            12 26 33.245833   * 12 29 06.699729     12 29 07.222742       1.05
-   J1229+0203        02 19 43.30578    * 02 03 08.59828      02 03 07.48959        1.37
+   3C273B            12 26 33.245835   * 12 29 06.699731     12 29 07.222743       1.03
+   J1229+0203        02 19 43.30570    * 02 03 08.59820      02 03 07.48950        1.38
  * 3C273             /home/eldering/sched/catalogs/sources.gsfc
-   1226+023          GSFC 2015a astro solution, unpublished  31967 observations.
+   1226+023          GSFC 2016a X/S astro solution,  32136 observations.
    J1229+02
 
- * 3C345             16 41 17.606228   * 16 42 58.809966     16 43 00.643635       0.76
-   J1642+3948        39 54 10.81496    * 39 48 36.99402      39 48 47.84481        0.52
+ * 3C345             16 41 17.606229   * 16 42 58.809967     16 43 00.643636       0.79
+   J1642+3948        39 54 10.81492    * 39 48 36.99399      39 48 47.84478        0.59
    1641+399          /home/eldering/sched/catalogs/sources.gsfc
-   J1642+39          GSFC 2015a astro solution, unpublished  53430 observations.
+   J1642+39          GSFC 2016a X/S astro solution,  53724 observations.
 
- * 3C454.3           22 51 29.519738   * 22 53 57.747938     22 53 59.128813       0.67
-   J2253+1608        15 52 54.34810    * 16 08 53.56093      16 08 55.77227        0.70
+ * 3C454.3           22 51 29.519739   * 22 53 57.747939     22 53 59.128813       0.65
+   J2253+1608        15 52 54.34808    * 16 08 53.56091      16 08 55.77225        0.73
    2251+158          /home/eldering/sched/catalogs/sources.gsfc
-   J2253+16          GSFC 2015a astro solution, unpublished  40748 observations.
+   J2253+16          GSFC 2016a X/S astro solution,  41272 observations.
 
 
 

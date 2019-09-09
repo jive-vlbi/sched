@@ -57,12 +57,10 @@ def water;
      ref $IF = LO@21500MHzDPolNoTone:Cd;
      ref $IF = LO@22200MHzDPolNoTone:Ho;
      ref $BBC = 2BBCs:At:Mp:Pa;
-     ref $BBC = 2BBCs#02:Cd;
-     ref $BBC = 2BBCs#03:Ho;
+     ref $BBC = 2BBCs#02:Cd:Ho;
      ref $PHASE_CAL_DETECT = NoDetect:At:Cd:Ho:Mp:Pa;
      ref $FREQ = 22235MHz2x16MHz:At:Mp:Pa;
-     ref $FREQ = 22235MHz2x16MHz#02:Cd;
-     ref $FREQ = 22235MHz2x16MHz#03:Ho;
+     ref $FREQ = 22235MHz2x16MHz#02:Cd:Ho;
      ref $TRACKS = LBA_AT.2Ch2bit1to1:At:Mp:Pa;
      ref $BITSTREAMS = BS2Ch2Bit:Cd:Ho;
 enddef;
@@ -73,12 +71,10 @@ def water#02;
      ref $IF = LO@21500MHzDPolNoTone:Cd;
      ref $IF = LO@22200MHzDPolNoTone:Ho;
      ref $BBC = 2BBCs:At:Mp:Pa;
-     ref $BBC = 2BBCs#02:Cd;
-     ref $BBC = 2BBCs#03:Ho;
+     ref $BBC = 2BBCs#02:Cd:Ho;
      ref $PHASE_CAL_DETECT = NoDetect:At:Cd:Ho:Mp:Pa;
      ref $FREQ = 22230MHz2x16MHz:At:Mp:Pa;
-     ref $FREQ = 22230MHz2x16MHz#02:Cd;
-     ref $FREQ = 22230MHz2x16MHz#03:Ho;
+     ref $FREQ = 22230MHz2x16MHz#02:Cd:Ho;
      ref $TRACKS = LBA_AT.2Ch2bit1to1:At:Mp:Pa;
      ref $BITSTREAMS = BS2Ch2Bit:Cd:Ho;
 enddef;
@@ -116,17 +112,10 @@ def 2BBCs;
 enddef;
 *
 def 2BBCs#02;
-* water: Cd
-* water#02: Cd
+* water: Cd, Ho
+* water#02: Cd, Ho
      BBC_assign = &BBC01 : 1 : &IF_A1;
      BBC_assign = &BBC05 : 5 : &IF_B1;
-enddef;
-*
-def 2BBCs#03;
-* water: Ho
-* water#02: Ho
-     BBC_assign = &BBC01 : 1 : &IF_A1;
-     BBC_assign = &BBC09 : 9 : &IF_B1;
 enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
@@ -146,15 +135,9 @@ def 22230MHz2x16MHz;
 enddef;
 *
 def 22230MHz2x16MHz#02;
-* water#02: Cd
+* water#02: Cd, Ho
      chan_def =  : 22230 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 22230 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal;
-enddef;
-*
-def 22230MHz2x16MHz#03;
-* water#02: Ho
-     chan_def =  : 22230 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
-     chan_def =  : 22230 MHz : U :   16.00 MHz : &CH02 : &BBC09 : &NoCal;
 enddef;
 *
 def 22235MHz2x16MHz;
@@ -164,15 +147,9 @@ def 22235MHz2x16MHz;
 enddef;
 *
 def 22235MHz2x16MHz#02;
-* water: Cd
+* water: Cd, Ho
      chan_def =  : 22235 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 22235 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal;
-enddef;
-*
-def 22235MHz2x16MHz#03;
-* water: Ho
-     chan_def =  : 22235 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
-     chan_def =  : 22235 MHz : U :   16.00 MHz : &CH02 : &BBC09 : &NoCal;
 enddef;
 *------------------------------------------------------------------------------
 $TRACKS;
@@ -250,7 +227,7 @@ def HOB_DBBC;
      axis_type = x : yew;
      antenna_motion =   x :   40.0 deg/min : 2 sec;
      antenna_motion = yew :   40.0 deg/min : 2 sec;
-     axis_offset =     8.1937 m;
+     axis_offset =     8.1944 m;
 enddef;
 *
 def MOPRA;
@@ -264,7 +241,7 @@ def PARKES;
      axis_type = az : el;
      antenna_motion = az :   22.0 deg/min : 2 sec;
      antenna_motion = el :   12.0 deg/min : 2 sec;
-     axis_offset =    -0.0242 m;
+     axis_offset =    -0.0214 m;
 enddef;
 *------------------------------------------------------------------------------
 $DAS;
@@ -303,9 +280,9 @@ def HOB_DBBC;
      site_type = fixed;
      site_name = HOB_DBBC;
      site_ID = Ho;
-     site_position = -3950237.35900 m :  2522347.68040 m : -4311561.87900 m;
-     site_velocity =  -0.038660 m/yr :   0.007880 m/yr :   0.040940 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -3950237.40300 m :  2522347.68410 m : -4311561.83350 m;
+     site_velocity =  -0.039010 m/yr :   0.007960 m/yr :   0.041100 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def MOPRA;
@@ -321,9 +298,9 @@ def PARKES;
      site_type = fixed;
      site_name = PARKES;
      site_ID = Pa;
-     site_position = -4554232.48640 m :  2816758.86620 m : -3454035.01370 m;
-     site_velocity =  -0.033170 m/yr :  -0.003580 m/yr :   0.048610 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -4554232.53800 m :  2816758.86560 m : -3454034.96860 m;
+     site_velocity =  -0.034250 m/yr :  -0.003010 m/yr :   0.048370 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *------------------------------------------------------------------------------
 $PROCEDURES;
@@ -357,15 +334,15 @@ def J1604-4441;
 enddef;
 def 0637-752;
      source_name = 0637-752;
-     ra = 06h35m46.5079161s; dec = -75d16'16.815357"; ref_coord_frame = J2000;
+     ra = 06h35m46.5078985s; dec = -75d16'16.815470"; ref_coord_frame = J2000;
 enddef;
 def J1427-4206;
      source_name = J1427-4206;
-     ra = 14h27m56.2975652s; dec = -42d06'19.437555"; ref_coord_frame = J2000;
+     ra = 14h27m56.2975620s; dec = -42d06'19.437608"; ref_coord_frame = J2000;
 enddef;
 def 1921-293;
      source_name = 1921-293;
-     ra = 19h24m51.0559540s; dec = -29d14'30.121032"; ref_coord_frame = J2000;
+     ra = 19h24m51.0559525s; dec = -29d14'30.121070"; ref_coord_frame = J2000;
 enddef;
 *------------------------------------------------------------------------------
 $SCHED;

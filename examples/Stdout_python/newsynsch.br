@@ -1006,9 +1006,9 @@ SETUP FILE INFORMATION:
                         (B1950)             (J2000)             (Date)            (mas)
 
  * 0923+392          09 23 55.319219   * 09 27 03.013940     09 27 52.978091       0.13
-   J0927+3902        39 15 23.56641    * 39 02 20.85181      38 58 43.57927        0.10
+   J0927+3902        39 15 23.56640    * 39 02 20.85180      38 58 43.57926        0.10
                      /home/eldering/sched/catalogs/sources.rfc
-                     rfc_2015a Petrov, 2015, unpublished.  252917 observations
+                     rfc_2018a Petrov and Kovalev, in preparation  259044 observations
 
 
 

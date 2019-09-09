@@ -750,200 +750,200 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
- * 0048-097          00 48 09.975920   * 00 50 41.317387     00 51 14.144052       0.00
-   J0050-0929       -09 45 24.21193    *-09 29 05.21029     -09 25 27.73216        0.01
+ * 0048-097          00 48 09.975919   * 00 50 41.317387     00 51 14.144051       0.00
+   J0050-0929       -09 45 24.21200    *-09 29 05.21036     -09 25 27.73223        0.01
    J0050-09          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  44817 observations.
+                     GSFC 2016a X/S astro solution,  46110 observations.
 
- * 0119+115          01 19 03.080127   * 01 21 41.595043     01 22 15.798987       0.00
-   J0121+1149        11 34 09.31518    * 11 49 50.41317      11 53 12.28570        0.01
+ * 0119+115          01 19 03.080126   * 01 21 41.595043     01 22 15.798987       0.00
+   J0121+1149        11 34 09.31522    * 11 49 50.41321      11 53 12.28575        0.01
    J0121+11          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  48826 observations.
+                     GSFC 2016a X/S astro solution,  62476 observations.
 
- * 0138-097          01 38 56.858733   * 01 41 25.832165     01 41 57.856628       0.02
-   J0141-0928       -09 43 51.64867    *-09 28 43.67418     -09 25 21.67055        0.03
+ * 0138-097          01 38 56.858731   * 01 41 25.832163     01 41 57.856626       0.02
+   J0141-0928       -09 43 51.64875    *-09 28 43.67426     -09 25 21.67064        0.03
    J0141-09          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   1968 observations.
+                     GSFC 2016a X/S astro solution,   2431 observations.
 
- * 0221+067          02 21 49.960397   * 02 24 28.428195     02 25 02.278053       0.02
-   J0224+0659        06 45 50.43669    * 06 59 23.34152      07 02 19.26154        0.03
+ * 0221+067          02 21 49.960395   * 02 24 28.428193     02 25 02.278052       0.02
+   J0224+0659        06 45 50.43663    * 06 59 23.34146      07 02 19.26149        0.02
    J0224+06          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   1989 observations.
+                     GSFC 2016a X/S astro solution,   2444 observations.
 
- * 0300+470          03 00 10.111203   * 03 03 35.242221     03 04 18.716530       0.01
-   J0303+4716        47 04 33.67711    * 47 16 16.27545      47 18 37.37005        0.01
+ * 0300+470          03 00 10.111202   * 03 03 35.242220     03 04 18.716529       0.01
+   J0303+4716        47 04 33.67710    * 47 16 16.27544      47 18 37.37004        0.01
    J0303+47          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  26549 observations.
+                     GSFC 2016a X/S astro solution,  27726 observations.
 
- * 0332-403          03 32 25.231593   * 03 34 13.654489     03 34 36.072975       0.01
-   J0334-4008       -40 18 24.05067    *-40 08 25.39789     -40 06 04.07223        0.01
+ * 0332-403          03 32 25.231597   * 03 34 13.654493     03 34 36.072978       0.01
+   J0334-4008       -40 18 24.05077    *-40 08 25.39799     -40 06 04.07234        0.01
    J0334-40          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   6310 observations.
+                     GSFC 2016a X/S astro solution,  40613 observations.
 
- * 0346-279          03 46 34.026310   * 03 48 38.144574     03 49 04.034078       0.03
-   J0348-2749       -27 58 20.96618    *-27 49 13.56563     -27 47 06.32189        0.02
+ * 0346-279          03 46 34.026308   * 03 48 38.144572     03 49 04.034076       0.02
+   J0348-2749       -27 58 20.96634    *-27 49 13.56580     -27 47 06.32206        0.02
    J0348-27          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   1686 observations.
+                     GSFC 2016a X/S astro solution,   2996 observations.
 
- * 0358+210          03 58 49.071435   * 04 01 45.166076     04 02 22.319539       0.02
-   J0401+2110        21 02 08.65447    * 21 10 28.58698      21 12 13.77088        0.03
+ * 0358+210          03 58 49.071436   * 04 01 45.166077     04 02 22.319540       0.02
+   J0401+2110        21 02 08.65445    * 21 10 28.58696      21 12 13.77086        0.03
    J0401+21          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2148 observations.
+                     GSFC 2016a X/S astro solution,   2606 observations.
 
- * 0402-362          04 02 02.589853   * 04 03 53.749899     04 04 16.660784       0.01
-   J0403-3605       -36 13 11.84941    *-36 05 01.91312     -36 03 05.99161        0.01
+ * 0402-362          04 02 02.589855   * 04 03 53.749901     04 04 16.660786       0.01
+   J0403-3605       -36 13 11.84950    *-36 05 01.91321     -36 03 05.99170        0.01
    J0403-36          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   8398 observations.
+                     GSFC 2016a X/S astro solution,  10648 observations.
 
- * 0405-385          04 05 12.017320   * 04 06 59.035338     04 07 20.996451       0.02
-   J0406-3826       -38 34 26.02585    *-38 26 28.04236     -38 24 34.41519        0.02
+ * 0405-385          04 05 12.017325   * 04 06 59.035342     04 07 20.996456       0.02
+   J0406-3826       -38 34 26.02584    *-38 26 28.04235     -38 24 34.41519        0.02
    J0406-38          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2990 observations.
+                     GSFC 2016a X/S astro solution,   4894 observations.
 
- * 0420-014          04 20 43.539849   * 04 23 15.800726     04 23 47.770147       0.00
-   J0423-0120       -01 27 28.70025    *-01 20 33.06554     -01 19 00.74914        0.01
+ * 0420-014          04 20 43.539847   * 04 23 15.800724     04 23 47.770145       0.00
+   J0423-0120       -01 27 28.70032    *-01 20 33.06561     -01 19 00.74921        0.00
    J0423-01          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  47498 observations.
+                     GSFC 2016a X/S astro solution,  73969 observations.
 
- * 0506+101          05 06 42.040853   * 05 09 27.457069     05 10 02.117202       0.01
-   J0509+1011        10 07 59.50154    * 10 11 44.60012      10 12 33.66888        0.03
+ * 0506+101          05 06 42.040852   * 05 09 27.457068     05 10 02.117201       0.01
+   J0509+1011        10 07 59.50157    * 10 11 44.60016      10 12 33.66892        0.02
    J0509+10          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2365 observations.
+                     GSFC 2016a X/S astro solution,   3271 observations.
 
- * 0524+034          05 24 54.913887   * 05 27 32.705444     05 28 05.684818       0.01
-   J0527+0331        03 29 04.36412    * 03 31 31.51662      03 32 04.83517        0.03
+ * 0524+034          05 24 54.913885   * 05 27 32.705442     05 28 05.684815       0.01
+   J0527+0331        03 29 04.36407    * 03 31 31.51657      03 32 04.83512        0.02
    J0527+03          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2775 observations.
+                     GSFC 2016a X/S astro solution,   3390 observations.
 
- * 0534-340          05 34 39.559077   * 05 36 28.432373     05 36 50.528132       0.05
-   J0536-3401       -34 02 58.18772    *-34 01 11.46837     -34 00 42.83983        0.05
+ * 0534-340          05 34 39.559067   * 05 36 28.432363     05 36 50.528122       0.03
+   J0536-3401       -34 02 58.18771    *-34 01 11.46836     -34 00 42.83982        0.04
    J0536-34          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    952 observations.
+                     GSFC 2016a X/S astro solution,   1507 observations.
 
- * 0537-286          05 37 56.930594   * 05 39 54.281473     05 40 18.291197       0.02
-   J0539-2839       -28 41 28.03777    *-28 39 55.94790     -28 39 31.11961        0.02
+ * 0537-286          05 37 56.930602   * 05 39 54.281481     05 40 18.291205       0.01
+   J0539-2839       -28 41 28.03797    *-28 39 55.94809     -28 39 31.11980        0.01
    J0539-28          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   3954 observations.
+                     GSFC 2016a X/S astro solution,  11995 observations.
 
- * 0646-306          06 46 19.200703   * 06 48 14.096463     06 48 37.451706       0.03
-   J0648-3044       -30 40 54.42099    *-30 44 19.65960     -30 45 02.15385        0.04
+ * 0646-306          06 46 19.200705   * 06 48 14.096465     06 48 37.451707       0.02
+   J0648-3044       -30 40 54.42109    *-30 44 19.65970     -30 45 02.15395        0.02
    J0648-30          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   1382 observations.
+                     GSFC 2016a X/S astro solution,   2702 observations.
 
- * 0727-115          07 27 58.097813   * 07 30 19.112473     07 30 48.343357       0.00
-   J0730-1141       -11 34 52.58098    *-11 41 12.60054     -11 42 33.81259        0.00
+ * 0727-115          07 27 58.097813   * 07 30 19.112473     07 30 48.343358       0.00
+   J0730-1141       -11 34 52.58106    *-11 41 12.60062     -11 42 33.81266        0.00
    J0730-11          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished 157824 observations.
+                     GSFC 2016a X/S astro solution, 211104 observations.
 
- * 0743-006          07 43 21.047500   * 07 45 54.082327     07 46 25.967279       0.02
-   J0745-0044       -00 36 55.80436    *-00 44 17.53988     -00 45 51.55245        0.03
+ * 0743-006          07 43 21.047499   * 07 45 54.082326     07 46 25.967279       0.01
+   J0745-0044       -00 36 55.80430    *-00 44 17.53982     -00 45 51.55239        0.02
    J0745-00          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   1599 observations.
+                     GSFC 2016a X/S astro solution,   3838 observations.
 
- * 0800+618          08 00 57.365166   * 08 05 18.179555     08 06 11.947013       0.01
-   J0805+6144        61 52 56.46049    * 61 44 23.70057      61 42 38.27274        0.00
+ * 0800+618          08 00 57.365167   * 08 05 18.179556     08 06 11.947014       0.01
+   J0805+6144        61 52 56.46048    * 61 44 23.70057      61 42 38.27274        0.00
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  25075 observations.
+                     GSFC 2016a X/S astro solution,  32752 observations.
 
- * 0823+033          08 23 13.540326   * 08 25 50.338355     08 26 23.110850       0.00
-   J0825+0309        03 19 15.40180    * 03 09 24.52007      03 07 18.63766        0.01
+ * 0823+033          08 23 13.540326   * 08 25 50.338355     08 26 23.110851       0.00
+   J0825+0309        03 19 15.40176    * 03 09 24.52002      03 07 18.63762        0.01
    J0825+03          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  55945 observations.
+                     GSFC 2016a X/S astro solution,  59900 observations.
 
- * OJ287             08 51 57.250615   * 08 54 48.874926     08 55 24.864464       0.00
-   J0854+2006        20 17 58.41743    * 20 06 30.64088      20 04 06.66694        0.00
+ * OJ287             08 51 57.250615   * 08 54 48.874927     08 55 24.864465       0.00
+   J0854+2006        20 17 58.41740    * 20 06 30.64085      20 04 06.66691        0.00
    0851+202          /home/eldering/sched/catalogs/sources.gsfc
-   J0854+20          GSFC 2015a astro solution, unpublished 216540 observations.
+   J0854+20          GSFC 2016a X/S astro solution, 270807 observations.
 
- * 0854-108          08 54 17.411992   * 08 56 41.804154     08 57 11.946911       0.02
-   J0856-1105       -10 53 39.88075    *-11 05 14.43030     -11 07 45.22495        0.02
+ * 0854-108          08 54 17.411993   * 08 56 41.804155     08 57 11.946912       0.01
+   J0856-1105       -10 53 39.88077    *-11 05 14.43032     -11 07 45.22497        0.01
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2648 observations.
+                     GSFC 2016a X/S astro solution,   4244 observations.
 
- * 0920+390          09 20 06.318432   * 09 23 14.452932     09 23 53.876477       0.01
-   J0923+3849        39 02 32.11182    * 38 49 39.91009      38 47 01.47222        0.01
+ * 0920+390          09 20 06.318434   * 09 23 14.452934     09 23 53.876479       0.01
+   J0923+3849        39 02 32.11184    * 38 49 39.91011      38 47 01.47225        0.01
    J0923+38          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   5173 observations.
+                     GSFC 2016a X/S astro solution,   6310 observations.
 
-   0922+407          09 22 50.724316   * 09 26 00.426851     09 26 40.168035       0.11
- * J0926+4029        40 42 49.48283    * 40 29 49.67258      40 27 09.94504        0.16
+   0922+407          09 22 50.724314   * 09 26 00.426849     09 26 40.168033       0.11
+ * J0926+4029        40 42 49.48270    * 40 29 49.67245      40 27 09.94491        0.14
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    146 observations.
+                     GSFC 2016a X/S astro solution,    146 observations.
 
- * 4C39.25           09 23 55.319215   * 09 27 03.013936     09 27 42.355975       0.30
-   J0927+3902        39 15 23.56645    * 39 02 20.85186      38 59 40.33381        0.16
+ * 4C39.25           09 23 55.319216   * 09 27 03.013937     09 27 42.355976       0.31
+   J0927+3902        39 15 23.56644    * 39 02 20.85185      38 59 40.33380        0.16
    0923+392          /home/eldering/sched/catalogs/sources.gsfc
-   J0927+39          GSFC 2015a astro solution, unpublished 245753 observations.
+   J0927+39          GSFC 2016a X/S astro solution, 250526 observations.
 
- * 0955+476          09 55 08.528426   * 09 58 19.671641     09 58 59.736055       0.00
-   J0958+4725        47 39 28.28176    * 47 25 07.84245      47 22 13.10790        0.00
+ * 0955+476          09 55 08.528426   * 09 58 19.671642     09 58 59.736056       0.00
+   J0958+4725        47 39 28.28175    * 47 25 07.84244      47 22 13.10790        0.00
    J0958+47          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished 175314 observations.
+                     GSFC 2016a X/S astro solution, 193238 observations.
 
- * 1015+359          10 15 16.226759   * 10 18 10.988102     10 18 47.858217       0.01
-   J1018+3542        35 57 41.35613    * 35 42 39.44094      35 39 34.45766        0.02
+ * 1015+359          10 15 16.226758   * 10 18 10.988101     10 18 47.858216       0.01
+   J1018+3542        35 57 41.35612    * 35 42 39.44093      35 39 34.45764        0.02
    J1018+35          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   3262 observations.
+                     GSFC 2016a X/S astro solution,   3583 observations.
 
- * 1034-374          10 34 38.182391   * 10 36 53.439599     10 37 21.824456       0.06
-   J1036-3744       -37 28 39.71482    *-37 44 15.06573     -37 47 46.67981        0.07
+ * 1034-374          10 34 38.182392   * 10 36 53.439599     10 37 21.824457       0.04
+   J1036-3744       -37 28 39.71487    *-37 44 15.06579     -37 47 46.67986        0.05
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    333 observations.
+                     GSFC 2016a X/S astro solution,   1094 observations.
 
- * 1034-293          10 34 55.824625   * 10 37 16.079737     10 37 45.642906       0.01
-   J1037-2934       -29 18 26.97249    *-29 34 02.81338     -29 37 32.42800        0.01
+ * 1034-293          10 34 55.824627   * 10 37 16.079739     10 37 45.642908       0.01
+   J1037-2934       -29 18 26.97257    *-29 34 02.81346     -29 37 32.42808        0.01
    J1037-29          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  28113 observations.
+                     GSFC 2016a X/S astro solution,  32457 observations.
 
- * 1045-188          10 45 40.093268   * 10 48 06.620608     10 48 37.675483       0.02
-   J1048-1909       -18 53 44.08700    *-19 09 35.72663     -19 13 06.04771        0.03
+ * 1045-188          10 45 40.093282   * 10 48 06.620623     10 48 37.675497       0.01
+   J1048-1909       -18 53 44.08754    *-19 09 35.72717     -19 13 06.04826        0.02
    J1048-19          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2094 observations.
+                     GSFC 2016a X/S astro solution,   6097 observations.
 
- * 1213-172          12 13 11.668007   * 12 15 46.751761     12 16 20.190221       0.02
-   J1215-1731       -17 15 05.20065    *-17 31 45.40302     -17 35 26.56134        0.02
+ * 1213-172          12 13 11.668007   * 12 15 46.751762     12 16 20.190222       0.01
+   J1215-1731       -17 15 05.20071    *-17 31 45.40308     -17 35 26.56139        0.01
    J1215-17          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2574 observations.
+                     GSFC 2016a X/S astro solution,   5942 observations.
 
- * 1342+663          13 42 41.043792   * 13 44 08.679630     13 44 28.656456       0.04
-   J1344+6606        66 21 13.16145    * 66 06 11.64383      66 03 14.31724        0.01
+ * 1342+663          13 42 41.043786   * 13 44 08.679624     13 44 28.656450       0.04
+   J1344+6606        66 21 13.16142    * 66 06 11.64380      66 03 14.31721        0.01
    J1344+66          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   3628 observations.
+                     GSFC 2016a X/S astro solution,   4432 observations.
 
- * 1418+546          14 18 06.187308   * 14 19 46.597404     14 20 09.355323       0.01
-   J1419+5423        54 36 58.06477    * 54 23 14.78718      54 20 31.98673        0.00
+ * 1418+546          14 18 06.187310   * 14 19 46.597405     14 20 09.355324       0.01
+   J1419+5423        54 36 58.06476    * 54 23 14.78717      54 20 31.98672        0.00
    J1419+54          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  51703 observations.
+                     GSFC 2016a X/S astro solution,  71191 observations.
 
- * 1508+572          15 08 45.204537   * 15 10 02.922370     15 10 21.313114       0.03
-   J1510+5702        57 14 02.08981    * 57 02 43.37598      57 00 30.32747        0.02
+ * 1508+572          15 08 45.204540   * 15 10 02.922373     15 10 21.313117       0.04
+   J1510+5702        57 14 02.08981    * 57 02 43.37598      57 00 30.32746        0.02
    J1510+57          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2375 observations.
+                     GSFC 2016a X/S astro solution,   2501 observations.
 
- * 1514+197          15 14 40.985840   * 15 16 56.796162     15 17 27.130226       0.01
-   J1516+1932        19 43 10.94252    * 19 32 12.99209      19 29 57.22203        0.02
+ * 1514+197          15 14 40.985841   * 15 16 56.796164     15 17 27.130228       0.01
+   J1516+1932        19 43 10.94247    * 19 32 12.99203      19 29 57.22197        0.02
    J1516+19          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2699 observations.
+                     GSFC 2016a X/S astro solution,   4472 observations.
 
  * 1823+568          18 23 14.951498   * 18 24 07.068376     18 24 20.769734       0.01
-   J1824+5651        56 49 18.07204    * 56 51 01.49084      56 51 25.79995        0.01
+   J1824+5651        56 49 18.07201    * 56 51 01.49082      56 51 25.79993        0.01
    J1824+56          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   8409 observations.
+                     GSFC 2016a X/S astro solution,   9435 observations.
 
- * 2229+695          22 29 11.655571   * 22 30 36.469753     22 30 56.824485       0.01
-   J2230+6946        69 31 02.64646    * 69 46 28.07690      69 49 33.76236        0.00
+ * 2229+695          22 29 11.655572   * 22 30 36.469754     22 30 56.824486       0.01
+   J2230+6946        69 31 02.64646    * 69 46 28.07689      69 49 33.76235        0.00
    J2230+69          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  60134 observations.
+                     GSFC 2016a X/S astro solution,  83078 observations.
 
- * 2351-154          23 51 55.881457   * 23 54 30.195174     23 55 03.990922       0.03
-   J2354-1513       -15 29 53.02142    *-15 13 11.21291     -15 09 27.02969        0.04
+ * 2351-154          23 51 55.881455   * 23 54 30.195172     23 55 03.990920       0.02
+   J2354-1513       -15 29 53.02153    *-15 13 11.21302     -15 09 27.02980        0.03
    J2354-15          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   1272 observations.
+                     GSFC 2016a X/S astro solution,   1900 observations.
 
- * 2355-106          23 55 36.945020   * 23 58 10.882402     23 58 44.569886       0.01
-   J2358-1020       -10 36 50.74015    *-10 20 08.61136     -10 16 25.92539        0.01
+ * 2355-106          23 55 36.945019   * 23 58 10.882401     23 58 44.569884       0.01
+   J2358-1020       -10 36 50.74023    *-10 20 08.61144     -10 16 25.92547        0.01
    J2358-10          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   8814 observations.
+                     GSFC 2016a X/S astro solution,  16531 observations.
 
 
 
@@ -1000,10 +1000,10 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
-   1053+815          10 53 36.229430   * 10 58 11.535367     10 59 06.247430       0.02
-   J1058+8114        81 30 35.56782    * 81 14 32.67517      81 11 21.29036        0.00
+   1053+815          10 53 36.229432   * 10 58 11.535369     10 59 06.247432       0.03
+   J1058+8114        81 30 35.56783    * 81 14 32.67518      81 11 21.29037        0.00
  * J1058+81          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  35335 observations.
+                     GSFC 2016a X/S astro solution,  35777 observations.
 
 
 

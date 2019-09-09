@@ -522,10 +522,10 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
- * 0316+413          03 16 29.567282   * 03 19 48.160113     03 20 07.751037       0.14
-   J0319+4130        41 19 51.91849    * 41 30 42.10561      41 32 01.19586        0.11
+ * 0316+413          03 16 29.567283   * 03 19 48.160114     03 20 07.751038       0.14
+   J0319+4130        41 19 51.91856    * 41 30 42.10568      41 32 01.19593        0.11
                      /home/eldering/sched/catalogs/sources.rfc
-                     rfc_2015a Petrov, 2015, unpublished.  15475 observations
+                     rfc_2018a Petrov and Kovalev, in preparation  15726 observations
 
 
 

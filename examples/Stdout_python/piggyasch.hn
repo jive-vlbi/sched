@@ -362,20 +362,20 @@ SETUP FILE INFORMATION:
                      From catalog imbedded in main SCHED input file.
                      Blank sky one degree from 3C345
 
- * M84               12 22 31.582019   * 12 25 03.743335     12 25 37.375907       0.04
-   J1225+1253        13 09 49.76867    * 12 53 13.13928      12 49 27.53776        0.10
+ * M84               12 22 31.582018   * 12 25 03.743334     12 25 37.375906       0.04
+   J1225+1253        13 09 49.76866    * 12 53 13.13927      12 49 27.53775        0.11
    1222+131          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    667 observations.
+                     GSFC 2016a X/S astro solution,    667 observations.
 
- * 3C279             12 53 35.831301   * 12 56 11.166568     12 56 45.389857       0.66
-   J1256-0547       -05 31 07.99614    *-05 47 21.52500     -05 50 55.65945        0.93
+ * 3C279             12 53 35.831310   * 12 56 11.166577     12 56 45.389866       0.34
+   J1256-0547       -05 31 07.99627    *-05 47 21.52513     -05 50 55.65958        0.56
    1253-055          /home/eldering/sched/catalogs/sources.gsfc
-   J1256-05          GSFC 2015a astro solution, unpublished   7533 observations.
+   J1256-05          GSFC 2016a X/S astro solution,  13160 observations.
 
- * 3C345             16 41 17.606228   * 16 42 58.809966     16 43 19.772342       0.76
-   J1642+3948        39 54 10.81496    * 39 48 36.99402      39 47 24.10942        0.52
+ * 3C345             16 41 17.606229   * 16 42 58.809967     16 43 19.772342       0.79
+   J1642+3948        39 54 10.81492    * 39 48 36.99399      39 47 24.10938        0.59
    1641+399          /home/eldering/sched/catalogs/sources.gsfc
-   J1642+39          GSFC 2015a astro solution, unpublished  53430 observations.
+   J1642+39          GSFC 2016a X/S astro solution,  53724 observations.
 
 
 

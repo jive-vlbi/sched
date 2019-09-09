@@ -583,15 +583,15 @@ SETUP FILE INFORMATION:
                      40 59 42.77368    * 41 16 08.42000      41 20 50.06279        0.00
                      From catalog imbedded in main SCHED input file.
 
-   0042+456          00 42 13.281432   * 00 45 00.034163     00 45 47.020805       0.23
- * J0045+4555        45 38 51.45430    * 45 55 15.27267      45 59 57.40094        0.20
+   0042+456          00 42 13.281413   * 00 45 00.034143     00 45 47.020785       0.22
+ * J0045+4555        45 38 51.45452    * 45 55 15.27289      45 59 57.40116        0.19
                      /home/eldering/sched/catalogs/sources.rfc
-                     rfc_2015a Petrov, 2015, unpublished.  181 observations
+                     rfc_2018a Petrov and Kovalev, in preparation  181 observations
 
-   0134+329          01 34 49.826377   * 01 37 41.299443     01 38 29.862106       0.52
- * J0137+3309        32 54 20.25891    * 33 09 35.13309      33 13 54.50248        0.50
+   0134+329          01 34 49.826477   * 01 37 41.299543     01 38 29.862206       0.34
+ * J0137+3309        32 54 20.25959    * 33 09 35.13377      33 13 54.50316        0.44
                      /home/eldering/sched/catalogs/sources.rfc
-                     rfc_2015a Petrov, 2015, unpublished.  140 observations
+                     rfc_2018a Petrov and Kovalev, in preparation  169 observations
 
 
 

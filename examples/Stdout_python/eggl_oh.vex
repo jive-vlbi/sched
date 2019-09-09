@@ -30,7 +30,7 @@ def eggl_oh;
 *    date     : Tue 4 Mar 1997
 *    MJD      : 50511
      exper_nominal_start=1997y063d12h00m00s;
-     exper_nominal_stop=1997y064d06h06m35s;
+     exper_nominal_stop=1997y064d06h25m00s;
 *
 *-------------------- cover  letter --------------------
 *Any text can be written here.  It will be written to the
@@ -64,30 +64,27 @@ enddef;
 $MODE;
 *
 def egiv;
-     ref $PROCEDURES = Procedure:Jb:Wb:Ef:On:Mc:Nt:Tr:Hn:Sc:Gb;
+     ref $PROCEDURES = Procedure:Jb:Wb:Ef:On:Mc:Tr:Hn:Sc:Gb;
      ref $IF = LO@1220MHzDPolNoTone:On;
-     ref $IF = LO@1279MHzDPolNoTone:Nt;
+     ref $IF = LO@1247MHzDPolNoTone:Wb;
      ref $IF = LO@1295MHzDPolNoTone:Mc;
-     ref $IF = LO@1490MHzDPolNoTone:Ef;
-     ref $IF = LO@1510MHzDPolNoTone:Jb;
-     ref $IF = LO@2100MHzDPolNoTone:Tr;
+     ref $IF = LO@1510MHzDPolNoTone:Ef;
+     ref $IF = LO@2272MHzDPolNoTone:Jb;
+     ref $IF = LO@2300MHzDPolNoTone:Tr;
      ref $IF = LO@2400MHzDPolNoTone:Gb;
      ref $IF = LO@2600MHzDPolNoTone:Hn:Sc;
-     ref $IF = LO@983MHzDPolNoTone:Wb;
      ref $BBC = 4BBCs:Ef;
      ref $BBC = 4BBCs#02:Gb:Hn:Sc;
      ref $BBC = 4BBCs#03:Jb:Tr;
-     ref $BBC = 4BBCs#04:Mc;
-     ref $BBC = 4BBCs#05:Nt;
-     ref $BBC = 4BBCs#06:On;
-     ref $BBC = 4BBCs#07:Wb;
-     ref $PHASE_CAL_DETECT = NoDetect:Ef:Gb:Hn:Jb:Mc:Nt:On:Sc:Tr:Wb;
-     ref $FREQ = 1665MHz4x1MHz:Ef:Jb:Mc:Nt:Tr;
+     ref $BBC = 4BBCs#04:Mc:On;
+     ref $BBC = 4BBCs#05:Wb;
+     ref $PHASE_CAL_DETECT = NoDetect:Ef:Gb:Hn:Jb:Mc:On:Sc:Tr:Wb;
+     ref $FREQ = 1665MHz4x1MHz:Ef:Jb:Mc:On:Tr;
      ref $FREQ = 1665MHz4x1MHz#02:Gb:Hn:Sc;
-     ref $FREQ = 1665MHz4x1MHz#03:On:Wb;
-     ref $TRACKS = MARK5B.4Ch2bit1to1:Ef:Jb:Mc:Nt:On:Tr:Wb;
+     ref $FREQ = 1665MHz4x1MHz#03:Wb;
+     ref $TRACKS = MARK5B.4Ch2bit1to1:Ef:Jb:Mc:On:Tr:Wb;
      ref $TRACKS = VDIF5032.4Ch2bit1to1:Gb:Hn:Sc;
-     ref $ROLL = NoRoll:Ef:Gb:Hn:Jb:Mc:Nt:On:Sc:Tr:Wb;
+     ref $ROLL = NoRoll:Ef:Gb:Hn:Jb:Mc:On:Sc:Tr:Wb;
 enddef;
 *------------------------------------------------------------------------------
 $IF;
@@ -95,13 +92,13 @@ $IF;
 def LO@1220MHzDPolNoTone;
 * egiv: On
      if_def = &IF_A1 : A1 : R :   1220.00 MHz : U;
-     if_def = &IF_B4 : B4 : L :   1220.00 MHz : U;
+     if_def = &IF_C1 : C1 : L :   1220.00 MHz : U;
 enddef;
 *
-def LO@1279MHzDPolNoTone;
-* egiv: Nt
-     if_def = &IF_A1 : A1 : R :   1279.00 MHz : U;
-     if_def = &IF_C2 : C2 : L :   1279.00 MHz : U;
+def LO@1247MHzDPolNoTone;
+* egiv: Wb
+     if_def = &IF_A1 : A1 : R :   1247.00 MHz : U;
+     if_def = &IF_B1 : B1 : L :   1247.00 MHz : U;
 enddef;
 *
 def LO@1295MHzDPolNoTone;
@@ -110,22 +107,22 @@ def LO@1295MHzDPolNoTone;
      if_def = &IF_C1 : C1 : L :   1295.00 MHz : U;
 enddef;
 *
-def LO@1490MHzDPolNoTone;
-* egiv: Ef
-     if_def = &IF_A2 : A2 : R :   1490.00 MHz : U;
-     if_def = &IF_C4 : C4 : L :   1490.00 MHz : U;
-enddef;
-*
 def LO@1510MHzDPolNoTone;
-* egiv: Jb
-     if_def = &IF_A1 : A1 : R :   1510.00 MHz : U;
-     if_def = &IF_B1 : B1 : L :   1510.00 MHz : U;
+* egiv: Ef
+     if_def = &IF_A2 : A2 : R :   1510.00 MHz : U;
+     if_def = &IF_C4 : C4 : L :   1510.00 MHz : U;
 enddef;
 *
-def LO@2100MHzDPolNoTone;
+def LO@2272MHzDPolNoTone;
+* egiv: Jb
+     if_def = &IF_A1 : A1 : R :   2272.00 MHz : L;
+     if_def = &IF_B1 : B1 : L :   2272.00 MHz : L;
+enddef;
+*
+def LO@2300MHzDPolNoTone;
 * egiv: Tr
-     if_def = &IF_A1 : A1 : R :   2100.00 MHz : L;
-     if_def = &IF_B1 : B1 : L :   2100.00 MHz : L;
+     if_def = &IF_A1 : A1 : R :   2300.00 MHz : L;
+     if_def = &IF_B1 : B1 : L :   2300.00 MHz : L;
 enddef;
 *
 def LO@2400MHzDPolNoTone;
@@ -138,12 +135,6 @@ def LO@2600MHzDPolNoTone;
 * egiv: Hn, Sc
      if_def = &IF_A : A : R :   2600.00 MHz : L;
      if_def = &IF_C : C : L :   2600.00 MHz : L;
-enddef;
-*
-def LO@983MHzDPolNoTone;
-* egiv: Wb
-     if_def = &IF_A1 : A1 : R :    983.00 MHz : U;
-     if_def = &IF_B1 : B1 : L :    983.00 MHz : U;
 enddef;
 *------------------------------------------------------------------------------
 $BBC;
@@ -173,7 +164,7 @@ def 4BBCs#03;
 enddef;
 *
 def 4BBCs#04;
-* egiv: Mc
+* egiv: Mc, On
      BBC_assign = &BBC01 :  1 : &IF_A1;
      BBC_assign = &BBC09 :  9 : &IF_C1;
      BBC_assign = &BBC02 :  2 : &IF_A1;
@@ -181,22 +172,6 @@ def 4BBCs#04;
 enddef;
 *
 def 4BBCs#05;
-* egiv: Nt
-     BBC_assign = &BBC01 :  1 : &IF_A1;
-     BBC_assign = &BBC09 :  9 : &IF_C2;
-     BBC_assign = &BBC02 :  2 : &IF_A1;
-     BBC_assign = &BBC10 : 10 : &IF_C2;
-enddef;
-*
-def 4BBCs#06;
-* egiv: On
-     BBC_assign = &BBC01 : 1 : &IF_A1;
-     BBC_assign = &BBC05 : 5 : &IF_B4;
-     BBC_assign = &BBC02 : 2 : &IF_A1;
-     BBC_assign = &BBC06 : 6 : &IF_B4;
-enddef;
-*
-def 4BBCs#07;
 * egiv: Wb
      BBC_assign = &BBC01 : 1 : &IF_A1;
      BBC_assign = &BBC05 : 5 : &IF_B1;
@@ -207,14 +182,14 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def NoDetect;
-* egiv: Ef, Gb, Hn, Jb, Mc, Nt, On, Sc, Tr, Wb
+* egiv: Ef, Gb, Hn, Jb, Mc, On, Sc, Tr, Wb
      phase_cal_detect = &NoCal;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 1665MHz4x1MHz;
-* egiv: Ef, Jb, Mc, Nt, Tr
+* egiv: Ef, Jb, Mc, On, Tr
      chan_def =  : 1665 MHz : U :    1.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 1665 MHz : U :    1.00 MHz : &CH02 : &BBC09 : &NoCal;
      chan_def =  : 1667 MHz : U :    1.00 MHz : &CH03 : &BBC02 : &NoCal;
@@ -232,7 +207,7 @@ def 1665MHz4x1MHz#02;
 enddef;
 *
 def 1665MHz4x1MHz#03;
-* egiv: On, Wb
+* egiv: Wb
      chan_def =  : 1665 MHz : U :    1.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 1665 MHz : U :    1.00 MHz : &CH02 : &BBC05 : &NoCal;
      chan_def =  : 1667 MHz : U :    1.00 MHz : &CH03 : &BBC02 : &NoCal;
@@ -243,7 +218,7 @@ enddef;
 $TRACKS;
 *
 def MARK5B.4Ch2bit1to1;
-* egiv: Ef, Jb, Mc, Nt, On, Tr, Wb
+* egiv: Ef, Jb, Mc, On, Tr, Wb
      track_frame_format = MARK5B;
      fanout_def =  : &CH01 : sign : 1 : 2;
      fanout_def =  : &CH01 :  mag : 1 : 3;
@@ -271,7 +246,7 @@ enddef;
 $ROLL;
 *
 def NoRoll;
-* egiv: Ef, Gb, Hn, Jb, Mc, Nt, On, Sc, Tr, Wb
+* egiv: Ef, Gb, Hn, Jb, Mc, On, Sc, Tr, Wb
      roll = off;
 enddef;
 *------------------------------------------------------------------------------
@@ -279,25 +254,25 @@ $STATION;
 *
 def Jb;
      ref $ANTENNA = JODRELL1;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = JODRELL1;
 enddef;
 *
 def Wb;
      ref $ANTENNA = WSTRBORK;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = WSTRBORK;
 enddef;
 *
 def Ef;
      ref $ANTENNA = EFLSBERG;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = EFLSBERG;
 enddef;
 *
 def On;
      ref $ANTENNA = ONSALA85;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = ONSALA85;
 enddef;
 *
@@ -305,12 +280,6 @@ def Mc;
      ref $ANTENNA = MEDICINA;
      ref $DAS = DBBC+Mark5B;
      ref $SITE = MEDICINA;
-enddef;
-*
-def Nt;
-     ref $ANTENNA = NOTO;
-     ref $DAS = DBBC+Mark5B;
-     ref $SITE = NOTO;
 enddef;
 *
 def Tr;
@@ -341,16 +310,16 @@ $ANTENNA;
 *
 def EFLSBERG;
      axis_type = az : el;
-     antenna_motion = az :   25.0 deg/min : 9 sec;
-     antenna_motion = el :   15.0 deg/min : 9 sec;
-     axis_offset =     0.0145 m;
+     antenna_motion = az :   25.0 deg/min : 16 sec;
+     antenna_motion = el :   15.0 deg/min : 16 sec;
+     axis_offset =     0.0143 m;
 enddef;
 *
 def GBT_VLBA;
      axis_type = az : el;
      antenna_motion = az :   36.0 deg/min : 20 sec;
      antenna_motion = el :   18.0 deg/min : 20 sec;
-     axis_offset =    -0.0877 m;
+     axis_offset =    -0.0878 m;
 enddef;
 *
 def JODRELL1;
@@ -365,13 +334,6 @@ def MEDICINA;
      antenna_motion = az :   45.0 deg/min : 3 sec;
      antenna_motion = el :   30.0 deg/min : 3 sec;
      axis_offset =     1.8279 m;
-enddef;
-*
-def NOTO;
-     axis_type = az : el;
-     antenna_motion = az :   43.0 deg/min : 2 sec;
-     antenna_motion = el :   30.0 deg/min : 2 sec;
-     axis_offset =     1.8316 m;
 enddef;
 *
 def ONSALA85;
@@ -395,7 +357,7 @@ def VLBA_HN;
      pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1303 m;
+     axis_offset =       2.13 m;
 enddef;
 *
 def VLBA_SC;
@@ -405,7 +367,7 @@ def VLBA_SC;
      pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1346 m;
+     axis_offset =     2.1352 m;
 enddef;
 *
 def WSTRBORK;
@@ -434,6 +396,15 @@ def DBBC+Mark5B#02;
      tape_motion = adaptive : 0 min : 0 min : 10 sec;
 enddef;
 *
+def DBBC+Mark5C;
+     record_transport_type = Mark5C;
+     electronics_rack_type = DBBC;
+     number_drives = 2;
+     headstack = 1 :  : 0;
+     headstack = 2 :  : 1;
+     tape_motion = adaptive : 0 min : 0 min : 10 sec;
+enddef;
+*
 def RDBE2+Mark5C;
      record_transport_type = Mark5C;
      electronics_rack_type = RDBE2;
@@ -449,9 +420,9 @@ def EFLSBERG;
      site_type = fixed;
      site_name = EFLSBERG;
      site_ID = Ef;
-     site_position =  4033947.26160 m :   486990.78660 m :  4900430.99150 m;
-     site_velocity =  -0.013620 m/yr :   0.016920 m/yr :   0.010770 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =  4033947.23550 m :   486990.79430 m :  4900431.00170 m;
+     site_velocity =  -0.014410 m/yr :   0.016730 m/yr :   0.010600 m/yr;
+     site_position_epoch = 2014y001d;
      horizon_map_az = 0.0 deg : 10.0 : 20.0 : 30.0 : 40.0 : 50.0 : 60.0 : 70.0 : 80.0 : 90.0 : 100.0 : 110.0 : 120.0 : 130.0 : 140.0 : 150.0 : 160.0 : 170.0 : 180.0 : 190.0 : 200.0 : 210.0 : 220.0 : 230.0 : 240.0 : 250.0 : 260.0 : 270.0 : 280.0 : 290.0 : 300.0 : 310.0 : 320.0 : 330.0 : 340.0 : 350.0 : 360.0;
      horizon_map_el = 11.0 deg : 13.0 : 16.0 : 19.0 : 21.0 : 21.0 : 21.0 : 20.0 : 18.0 : 15.0 : 16.0 : 16.0 : 15.0 : 15.0 : 13.0 : 8.0 : 7.0 : 7.0 : 7.0 : 7.0 : 9.0 : 11.0 : 11.0 : 11.0 : 10.0 : 9.0 : 8.0 : 12.0 : 14.0 : 14.0 : 14.0 : 14.0 : 13.0 : 8.0 : 7.0 : 8.0 : 11.0;
 enddef;
@@ -460,9 +431,9 @@ def GBT_VLBA;
      site_type = fixed;
      site_name = GBT_VLBA;
      site_ID = Gb;
-     site_position =   882589.41020 m : -4924872.34160 m :  3943729.40620 m;
-     site_velocity =  -0.014750 m/yr :  -0.001330 m/yr :   0.003020 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =   882589.40020 m : -4924872.34840 m :  3943729.40420 m;
+     site_velocity =  -0.014810 m/yr :  -0.001290 m/yr :   0.002940 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def JODRELL1;
@@ -478,29 +449,18 @@ def MEDICINA;
      site_type = fixed;
      site_name = MEDICINA;
      site_ID = Mc;
-     site_position =  4461369.69540 m :   919597.12400 m :  4449559.38120 m;
-     site_velocity =  -0.018120 m/yr :   0.018830 m/yr :   0.011090 m/yr;
-     site_position_epoch = 2013y001d;
-enddef;
-*
-def NOTO;
-     site_type = fixed;
-     site_name = NOTO;
-     site_ID = Nt;
-     site_position =  4934562.84070 m :  1321201.54280 m :  3806484.73360 m;
-     site_velocity =  -0.017470 m/yr :   0.017630 m/yr :   0.015050 m/yr;
-     site_position_epoch = 2013y001d;
-     horizon_map_az = 0.0 deg : 10.0 : 30.0 : 70.0 : 100.0 : 120.0 : 150.0 : 180.0 : 300.0 : 310.0 : 360.0;
-     horizon_map_el = 8.0 deg : 7.0 : 6.0 : 9.0 : 6.5 : 5.0 : 6.0 : 5.0 : 5.0 : 6.5 : 7.5;
+     site_position =  4461369.67180 m :   919597.13490 m :  4449559.39950 m;
+     site_velocity =  -0.018320 m/yr :   0.018710 m/yr :   0.011530 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def ONSALA85;
      site_type = fixed;
      site_name = ONSALA85;
      site_ID = On;
-     site_position =  3370965.90900 m :   711466.19780 m :  5349664.19470 m;
-     site_velocity =  -0.014020 m/yr :   0.014660 m/yr :   0.010270 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =  3370965.87870 m :   711466.19780 m :  5349664.20060 m;
+     site_velocity =  -0.014360 m/yr :   0.014530 m/yr :   0.010520 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def TORUN;
@@ -518,9 +478,9 @@ def VLBA_HN;
      site_type = fixed;
      site_name = VLBA_HN;
      site_ID = Hn;
-     site_position =  1446374.86580 m : -4447939.67740 m :  4322306.18380 m;
-     site_velocity =  -0.015770 m/yr :  -0.001520 m/yr :   0.004250 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =  1446374.84630 m : -4447939.68770 m :  4322306.18960 m;
+     site_velocity =  -0.016020 m/yr :  -0.001650 m/yr :   0.004550 m/yr;
+     site_position_epoch = 2014y001d;
      horizon_map_az = 0.0 deg : 5.0 : 30.0 : 35.0 : 40.0 : 45.0 : 65.0 : 70.0 : 80.0 : 85.0 : 90.0 : 95.0 : 100.0 : 105.0 : 110.0 : 115.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 170.0 : 190.0 : 195.0 : 200.0 : 205.0 : 210.0 : 220.0 : 225.0 : 230.0 : 235.0 : 240.0 : 245.0 : 250.0 : 255.0 : 270.0 : 275.0 : 290.0 : 295.0 : 315.0 : 320.0 : 325.0 : 330.0 : 335.0 : 345.0 : 350.0 : 355.0 : 360.0;
      horizon_map_el = 6.0 deg : 6.0 : 6.0 : 4.0 : 5.0 : 4.0 : 4.0 : 5.0 : 5.0 : 4.0 : 5.0 : 4.0 : 4.0 : 5.0 : 3.0 : 4.0 : 4.0 : 5.0 : 4.0 : 6.0 : 5.0 : 7.0 : 7.0 : 5.0 : 3.0 : 5.0 : 4.0 : 4.0 : 2.0 : 5.0 : 5.0 : 6.0 : 6.0 : 5.0 : 6.0 : 4.0 : 5.0 : 5.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 5.0 : 5.0 : 6.0 : 5.0 : 5.0 : 6.0 : 6.0 : 5.0 : 5.0 : 6.0;
 enddef;
@@ -529,9 +489,9 @@ def VLBA_SC;
      site_type = fixed;
      site_name = VLBA_SC;
      site_ID = Sc;
-     site_position =  2607848.63790 m : -5488069.53580 m :  1932739.73260 m;
-     site_velocity =   0.007130 m/yr :   0.009460 m/yr :   0.012310 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =  2607848.64360 m : -5488069.53530 m :  1932739.74710 m;
+     site_velocity =   0.006930 m/yr :   0.009350 m/yr :   0.012590 m/yr;
+     site_position_epoch = 2014y001d;
      horizon_map_az = 0.0 deg : 5.0 : 10.0 : 20.0 : 25.0 : 40.0 : 45.0 : 50.0 : 55.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 95.0 : 100.0 : 105.0 : 110.0 : 115.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 175.0 : 180.0 : 185.0 : 190.0 : 200.0 : 205.0 : 210.0 : 215.0 : 220.0 : 230.0 : 235.0 : 240.0 : 245.0 : 250.0 : 260.0 : 265.0 : 270.0 : 275.0 : 280.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 6.0 : 6.0 : 8.0 : 9.0 : 9.0 : 8.0 : 8.0 : 9.0 : 10.0 : 12.0 : 14.0 : 16.0 : 16.0 : 15.0 : 13.0 : 13.0 : 12.0 : 11.0 : 11.0 : 10.0 : 9.0 : 9.0 : 11.0 : 13.0 : 14.0 : 14.0 : 15.0 : 13.0 : 12.0 : 10.0 : 10.0 : 9.0 : 8.0 : 8.0 : 7.0 : 7.0 : 6.0 : 4.0 : 3.0 : 2.0 : 2.0;
 enddef;
@@ -540,7 +500,7 @@ def WSTRBORK;
      site_type = fixed;
      site_name = WSTRBORK;
      site_ID = Wb;
-     site_position =  3828445.65900 m :   445223.60000 m :  5064921.56800 m;
+     site_position =  3828746.98000 m :   442591.85000 m :  5064923.08000 m;
      site_velocity =  -0.013530 m/yr :   0.017040 m/yr :   0.008730 m/yr;
      site_position_epoch = 1997y001d;
 enddef;
@@ -568,11 +528,11 @@ def S_PER;
 enddef;
 def 3C84;
      source_name = 3C84;
-     ra = 03h19m48.1600936s; dec =  41d30'42.104135"; ref_coord_frame = J2000;
+     ra = 03h19m48.1600956s; dec =  41d30'42.104043"; ref_coord_frame = J2000;
 enddef;
 def 3C454.3;
      source_name = 3C454.3;
-     ra = 22h53m57.7479376s; dec =  16d08'53.560929"; ref_coord_frame = J2000;
+     ra = 22h53m57.7479385s; dec =  16d08'53.560908"; ref_coord_frame = J2000;
 enddef;
 *------------------------------------------------------------------------------
 $SCHED;
@@ -586,7 +546,6 @@ scan No0001;
      station = Ef : 0 sec : 1320 sec :     0.000 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :     0.000 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :     0.000 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :     0.000 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :     0.000 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :     0.000 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :     0.000 GB :  : &ccw : 1;
@@ -602,7 +561,6 @@ scan No0002;
      station = Ef : 0 sec : 1320 sec :     2.644 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :     2.644 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :     2.644 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :     2.644 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :     2.644 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :     2.657 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :     2.657 GB :  : &ccw : 1;
@@ -618,7 +576,6 @@ scan No0003;
      station = Ef : 0 sec : 1320 sec :     5.288 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :     5.288 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :     5.288 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :     5.288 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :     5.288 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :     5.314 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :     5.314 GB :  : &ccw : 1;
@@ -634,7 +591,6 @@ scan No0004;
      station = Ef : 0 sec : 1320 sec :     7.933 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :     7.933 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :     7.933 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :     7.933 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :     7.933 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :     7.971 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :     7.971 GB :  : &ccw : 1;
@@ -650,7 +606,6 @@ scan No0005;
      station = Ef : 0 sec : 1320 sec :    10.577 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    10.577 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    10.577 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    10.577 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    10.577 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    10.628 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    10.628 GB :  : &ccw : 1;
@@ -658,7 +613,7 @@ scan No0005;
 endscan;
 *
 scan No0006;
-     start = 1997y063d14h15m12s;
+     start = 1997y063d14h15m21s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    13.221 GB :  :      : 1;
@@ -666,7 +621,6 @@ scan No0006;
      station = Ef : 0 sec : 1320 sec :    13.221 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    13.221 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    13.221 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    13.221 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    13.221 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    13.284 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    13.284 GB :  : &ccw : 1;
@@ -674,7 +628,7 @@ scan No0006;
 endscan;
 *
 scan No0007;
-     start = 1997y063d14h37m52s;
+     start = 1997y063d14h38m01s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    15.865 GB :  :      : 1;
@@ -682,7 +636,6 @@ scan No0007;
      station = Ef : 0 sec : 1320 sec :    15.865 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    15.865 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    15.865 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    15.865 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    15.865 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    15.941 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    15.941 GB :  : &ccw : 1;
@@ -690,7 +643,7 @@ scan No0007;
 endscan;
 *
 scan No0008;
-     start = 1997y063d15h09m46s;
+     start = 1997y063d15h10m04s;
      mode = egiv;
      source = 3C84;
      station = Jb : 0 sec : 1320 sec :    18.510 GB :  :      : 1;
@@ -705,7 +658,7 @@ scan No0008;
 endscan;
 *
 scan No0009;
-     start = 1997y063d15h40m26s;
+     start = 1997y063d15h40m46s;
      mode = egiv;
      source = S_PER;
      station = Jb : 4 sec : 1320 sec :    21.154 GB :  :      : 1;
@@ -713,7 +666,6 @@ scan No0009;
      station = Ef : 0 sec : 1320 sec :    21.154 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    21.154 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    21.154 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    18.510 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    21.154 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    21.255 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    21.255 GB :  : &ccw : 1;
@@ -721,7 +673,7 @@ scan No0009;
 endscan;
 *
 scan No0010;
-     start = 1997y063d16h03m06s;
+     start = 1997y063d16h03m26s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    23.798 GB :  :      : 1;
@@ -729,7 +681,6 @@ scan No0010;
      station = Ef : 0 sec : 1320 sec :    23.798 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    23.798 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    23.798 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    21.154 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    23.798 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    23.912 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    23.912 GB :  : &ccw : 1;
@@ -737,7 +688,7 @@ scan No0010;
 endscan;
 *
 scan No0011;
-     start = 1997y063d16h25m46s;
+     start = 1997y063d16h26m06s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    26.442 GB :  :      : 1;
@@ -745,7 +696,6 @@ scan No0011;
      station = Ef : 0 sec : 1320 sec :    26.442 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    26.442 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    26.442 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    23.798 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    26.442 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    26.569 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    26.569 GB :  : &ccw : 1;
@@ -753,7 +703,7 @@ scan No0011;
 endscan;
 *
 scan No0012;
-     start = 1997y063d16h48m26s;
+     start = 1997y063d16h48m46s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    29.086 GB :  :      : 1;
@@ -761,7 +711,6 @@ scan No0012;
      station = Ef : 0 sec : 1320 sec :    29.086 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    29.086 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    29.086 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    26.442 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    29.086 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    29.226 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    29.226 GB :  : &ccw : 1;
@@ -769,7 +718,7 @@ scan No0012;
 endscan;
 *
 scan No0013;
-     start = 1997y063d17h11m06s;
+     start = 1997y063d17h11m26s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    31.731 GB :  :      : 1;
@@ -777,7 +726,6 @@ scan No0013;
      station = Ef : 0 sec : 1320 sec :    31.731 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    31.731 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    31.731 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    29.086 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    31.731 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    31.883 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    31.883 GB :  : &ccw : 1;
@@ -785,7 +733,7 @@ scan No0013;
 endscan;
 *
 scan No0014;
-     start = 1997y063d17h33m46s;
+     start = 1997y063d17h34m06s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    34.375 GB :  :      : 1;
@@ -793,7 +741,6 @@ scan No0014;
      station = Ef : 0 sec : 1320 sec :    34.375 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    34.375 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    34.375 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    31.731 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    34.375 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    34.540 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    34.540 GB :  : &ccw : 1;
@@ -801,7 +748,7 @@ scan No0014;
 endscan;
 *
 scan No0015;
-     start = 1997y063d18h16m19s;
+     start = 1997y063d18h16m40s;
      mode = egiv;
      source = 3C84;
      station = Jb : 1 sec : 1320 sec :    37.019 GB :  :      : 1;
@@ -809,7 +756,6 @@ scan No0015;
      station = Ef : 0 sec : 1320 sec :    37.019 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    37.019 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    37.019 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    34.375 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    37.019 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    37.197 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    37.197 GB :  : &ccw : 1;
@@ -817,7 +763,7 @@ scan No0015;
 endscan;
 *
 scan No0016;
-     start = 1997y063d18h41m49s;
+     start = 1997y063d18h42m10s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    39.663 GB :  :      : 1;
@@ -825,7 +771,6 @@ scan No0016;
      station = Ef : 0 sec : 1320 sec :    39.663 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    39.663 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    39.663 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    37.019 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    39.663 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    39.853 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    39.853 GB :  : &ccw : 1;
@@ -833,7 +778,7 @@ scan No0016;
 endscan;
 *
 scan No0017;
-     start = 1997y063d19h04m29s;
+     start = 1997y063d19h04m50s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    42.308 GB :  :      : 1;
@@ -841,7 +786,6 @@ scan No0017;
      station = Ef : 0 sec : 1320 sec :    42.308 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    42.308 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    42.308 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    39.663 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    42.308 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    42.510 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    42.510 GB :  : &ccw : 1;
@@ -849,7 +793,7 @@ scan No0017;
 endscan;
 *
 scan No0018;
-     start = 1997y063d19h27m09s;
+     start = 1997y063d19h27m30s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    44.952 GB :  :      : 1;
@@ -857,7 +801,6 @@ scan No0018;
      station = Ef : 0 sec : 1320 sec :    44.952 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    44.952 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    44.952 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    42.308 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    44.952 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    45.167 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    45.167 GB :  : &ccw : 1;
@@ -865,7 +808,7 @@ scan No0018;
 endscan;
 *
 scan No0019;
-     start = 1997y063d19h49m49s;
+     start = 1997y063d19h50m10s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    47.596 GB :  :      : 1;
@@ -873,7 +816,6 @@ scan No0019;
      station = Ef : 0 sec : 1320 sec :    47.596 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    47.596 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    47.596 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    44.952 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    47.596 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    47.824 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    47.824 GB :  : &ccw : 1;
@@ -881,7 +823,7 @@ scan No0019;
 endscan;
 *
 scan No0020;
-     start = 1997y063d20h12m29s;
+     start = 1997y063d20h12m50s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    50.240 GB :  :      : 1;
@@ -889,7 +831,6 @@ scan No0020;
      station = Ef : 0 sec : 1320 sec :    50.240 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    50.240 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    50.240 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    47.596 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    50.240 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    50.481 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    50.481 GB :  : &ccw : 1;
@@ -897,7 +838,7 @@ scan No0020;
 endscan;
 *
 scan No0021;
-     start = 1997y063d20h35m09s;
+     start = 1997y063d20h35m30s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    52.884 GB :  :      : 1;
@@ -905,7 +846,6 @@ scan No0021;
      station = Ef : 0 sec : 1320 sec :    52.884 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    52.884 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    52.884 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    50.240 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    52.884 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    53.138 GB :  : &ccw : 1;
      station = Sc : 0 sec : 1320 sec :    53.138 GB :  : &ccw : 1;
@@ -913,7 +853,7 @@ scan No0021;
 endscan;
 *
 scan No0022;
-     start = 1997y063d20h59m38s;
+     start = 1997y063d20h59m59s;
      mode = egiv;
      source = 3C84;
      station = Jb : 0 sec : 1320 sec :    55.529 GB :  :      : 1;
@@ -921,7 +861,6 @@ scan No0022;
      station = Ef : 0 sec : 1320 sec :    55.529 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    55.529 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    55.529 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    52.884 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    55.529 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    55.795 GB :  :   &n : 1;
      station = Sc : 0 sec : 1320 sec :    55.795 GB :  : &ccw : 1;
@@ -929,14 +868,13 @@ scan No0022;
 endscan;
 *
 scan No0023;
-     start = 1997y063d21h24m05s;
+     start = 1997y063d21h24m25s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    58.173 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :    58.173 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    58.173 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    58.173 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    55.529 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    58.173 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    58.452 GB :  :  &cw : 1;
      station = Sc : 0 sec : 1320 sec :    58.452 GB :  : &ccw : 1;
@@ -944,14 +882,13 @@ scan No0023;
 endscan;
 *
 scan No0024;
-     start = 1997y063d21h46m45s;
+     start = 1997y063d21h47m05s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    60.817 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :    60.817 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    60.817 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    60.817 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    58.173 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    60.817 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    61.109 GB :  :  &cw : 1;
      station = Sc : 0 sec : 1320 sec :    61.109 GB :  : &ccw : 1;
@@ -959,14 +896,13 @@ scan No0024;
 endscan;
 *
 scan No0025;
-     start = 1997y063d22h09m25s;
+     start = 1997y063d22h09m45s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    63.461 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :    63.461 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    63.461 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    63.461 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    60.817 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    63.461 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    63.765 GB :  :  &cw : 1;
      station = Sc : 0 sec : 1320 sec :    63.765 GB :  : &ccw : 1;
@@ -974,14 +910,13 @@ scan No0025;
 endscan;
 *
 scan No0026;
-     start = 1997y063d22h32m05s;
+     start = 1997y063d22h32m25s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    66.106 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :    66.106 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    66.106 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    66.106 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    63.461 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    66.106 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    66.422 GB :  :  &cw : 1;
      station = Sc : 0 sec : 1320 sec :    66.422 GB :  : &ccw : 1;
@@ -989,14 +924,13 @@ scan No0026;
 endscan;
 *
 scan No0027;
-     start = 1997y063d22h54m45s;
+     start = 1997y063d23h18m30s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    68.750 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :    68.750 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    68.750 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    68.750 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    66.106 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    68.750 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    69.079 GB :  :  &cw : 1;
      station = Sc : 0 sec : 1320 sec :    69.079 GB :  : &ccw : 1;
@@ -1004,14 +938,13 @@ scan No0027;
 endscan;
 *
 scan No0028;
-     start = 1997y063d23h40m49s;
+     start = 1997y063d23h41m10s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    71.394 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :    71.394 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    71.394 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    71.394 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    68.750 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    71.394 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    71.736 GB :  :  &cw : 1;
      station = Sc : 0 sec : 1320 sec :    71.736 GB :  : &ccw : 1;
@@ -1019,7 +952,7 @@ scan No0028;
 endscan;
 *
 scan No0029;
-     start = 1997y064d00h04m21s;
+     start = 1997y064d00h04m41s;
      mode = egiv;
      source = 3C84;
      station = Jb : 0 sec : 1320 sec :    74.038 GB :  :      : 1;
@@ -1033,14 +966,13 @@ scan No0029;
 endscan;
 *
 scan No0030;
-     start = 1997y064d00h27m50s;
+     start = 1997y064d00h28m11s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    76.683 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :    76.683 GB :  :      : 1;
      station = On : 0 sec : 1320 sec :    76.683 GB :  :      : 1;
      station = Mc : 0 sec : 1320 sec :    76.683 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :    71.394 GB :  :      : 1;
      station = Tr : 0 sec : 1320 sec :    76.683 GB :  :      : 1;
      station = Hn : 0 sec : 1320 sec :    77.050 GB :  :  &cw : 1;
      station = Sc : 0 sec : 1320 sec :    77.050 GB :  : &ccw : 1;
@@ -1048,7 +980,7 @@ scan No0030;
 endscan;
 *
 scan No0031;
-     start = 1997y064d00h50m30s;
+     start = 1997y064d00h50m51s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    79.327 GB :  :      : 1;
@@ -1062,7 +994,7 @@ scan No0031;
 endscan;
 *
 scan No0032;
-     start = 1997y064d01h13m10s;
+     start = 1997y064d01h13m31s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    81.971 GB :  :      : 1;
@@ -1076,7 +1008,7 @@ scan No0032;
 endscan;
 *
 scan No0033;
-     start = 1997y064d01h35m50s;
+     start = 1997y064d01h36m11s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    84.615 GB :  :      : 1;
@@ -1090,7 +1022,7 @@ scan No0033;
 endscan;
 *
 scan No0034;
-     start = 1997y064d01h58m30s;
+     start = 1997y064d01h58m51s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    87.259 GB :  :      : 1;
@@ -1104,7 +1036,7 @@ scan No0034;
 endscan;
 *
 scan No0035;
-     start = 1997y064d02h21m10s;
+     start = 1997y064d02h21m31s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    89.904 GB :  :      : 1;
@@ -1118,7 +1050,7 @@ scan No0035;
 endscan;
 *
 scan No0036;
-     start = 1997y064d02h45m12s;
+     start = 1997y064d03h03m36s;
      mode = egiv;
      source = 3C84;
      station = Jb : 0 sec : 1320 sec :    92.548 GB :  :      : 1;
@@ -1130,21 +1062,20 @@ scan No0036;
 endscan;
 *
 scan No0037;
-     start = 1997y064d03h26m43s;
+     start = 1997y064d03h45m07s;
      mode = egiv;
      source = S_PER;
-     station = Jb : 0 sec : 1320 sec :    95.192 GB :  :      : 1;
-     station = Ef : 0 sec : 1320 sec :    92.548 GB :  :      : 1;
-     station = On : 0 sec : 1320 sec :    95.192 GB :  :      : 1;
-     station = Mc : 0 sec : 1320 sec :    92.548 GB :  :      : 1;
-     station = Tr : 0 sec : 1320 sec :    95.192 GB :  :      : 1;
-     station = Hn : 0 sec : 1320 sec :    95.648 GB :  :  &cw : 1;
-     station = Sc : 0 sec : 1320 sec :    95.648 GB :  : &ccw : 1;
-     station = Gb : 0 sec : 1320 sec :    95.648 GB :  :      : 1;
+     station = Jb : 0 sec : 1320 sec :    95.192 GB :  :     : 1;
+     station = Ef : 0 sec : 1320 sec :    92.548 GB :  :     : 1;
+     station = On : 0 sec : 1320 sec :    95.192 GB :  :     : 1;
+     station = Mc : 0 sec : 1320 sec :    92.548 GB :  :     : 1;
+     station = Tr : 0 sec : 1320 sec :    95.192 GB :  :     : 1;
+     station = Hn : 0 sec : 1320 sec :    95.648 GB :  : &cw : 1;
+     station = Gb : 0 sec : 1320 sec :    95.648 GB :  :     : 1;
 endscan;
 *
 scan No0038;
-     start = 1997y064d03h49m23s;
+     start = 1997y064d04h07m47s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :    97.836 GB :  :     : 1;
@@ -1157,63 +1088,59 @@ scan No0038;
 endscan;
 *
 scan No0039;
-     start = 1997y064d04h12m03s;
+     start = 1997y064d04h30m27s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :   100.481 GB :  :     : 1;
      station = Ef : 0 sec : 1320 sec :    97.836 GB :  :     : 1;
      station = On : 0 sec : 1320 sec :   100.481 GB :  :     : 1;
      station = Mc : 0 sec : 1320 sec :    97.836 GB :  :     : 1;
-     station = Nt : 0 sec : 1320 sec :    74.038 GB :  :     : 1;
      station = Tr : 0 sec : 1320 sec :   100.481 GB :  :     : 1;
      station = Hn : 0 sec : 1320 sec :   100.962 GB :  : &cw : 1;
      station = Gb : 0 sec : 1320 sec :   100.962 GB :  :     : 1;
 endscan;
 *
 scan No0040;
-     start = 1997y064d04h34m43s;
+     start = 1997y064d04h53m07s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :   103.125 GB :  :     : 1;
      station = Ef : 0 sec : 1320 sec :   100.481 GB :  :     : 1;
      station = On : 0 sec : 1320 sec :   103.125 GB :  :     : 1;
      station = Mc : 0 sec : 1320 sec :   100.481 GB :  :     : 1;
-     station = Nt : 0 sec : 1320 sec :    76.683 GB :  :     : 1;
      station = Tr : 0 sec : 1320 sec :   103.125 GB :  :     : 1;
      station = Hn : 0 sec : 1320 sec :   103.619 GB :  : &cw : 1;
      station = Gb : 0 sec : 1320 sec :   103.619 GB :  :     : 1;
 endscan;
 *
 scan No0041;
-     start = 1997y064d04h57m23s;
+     start = 1997y064d05h15m47s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :   105.769 GB :  :     : 1;
      station = Ef : 0 sec : 1320 sec :   103.125 GB :  :     : 1;
      station = On : 0 sec : 1320 sec :   105.769 GB :  :     : 1;
      station = Mc : 0 sec : 1320 sec :   103.125 GB :  :     : 1;
-     station = Nt : 0 sec : 1320 sec :    79.327 GB :  :     : 1;
      station = Tr : 0 sec : 1320 sec :   105.769 GB :  :     : 1;
      station = Hn : 0 sec : 1320 sec :   106.276 GB :  : &cw : 1;
      station = Gb : 0 sec : 1320 sec :   106.276 GB :  :     : 1;
 endscan;
 *
 scan No0042;
-     start = 1997y064d05h20m03s;
+     start = 1997y064d05h38m27s;
      mode = egiv;
      source = S_PER;
      station = Jb : 0 sec : 1320 sec :   108.413 GB :  :     : 1;
      station = Ef : 0 sec : 1320 sec :   105.769 GB :  :     : 1;
      station = On : 0 sec : 1320 sec :   108.413 GB :  :     : 1;
      station = Mc : 0 sec : 1320 sec :   105.769 GB :  :     : 1;
-     station = Nt : 0 sec : 1320 sec :    81.971 GB :  :     : 1;
      station = Tr : 0 sec : 1320 sec :   108.413 GB :  :     : 1;
      station = Hn : 0 sec : 1320 sec :   108.933 GB :  : &cw : 1;
      station = Gb : 0 sec : 1320 sec :   108.933 GB :  :     : 1;
 endscan;
 *
 scan No0043;
-     start = 1997y064d05h44m35s;
+     start = 1997y064d06h03m00s;
      mode = egiv;
      source = 3C84;
      station = Jb : 0 sec : 1320 sec :   111.057 GB :  :  : 1;

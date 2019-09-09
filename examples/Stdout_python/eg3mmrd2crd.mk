@@ -27,7 +27,7 @@ media=(1,disk)
 
 !* --- Scan from 02h30m00s to 02h40m00s   Wed, 2000 Jul 05 --- *!
 !*     +++   Explicit continuum pointing   +++  *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 maxcaltime= 120
 fe=(1,7mm),(3,7mm)
 fexfer=(2,norm)
@@ -60,7 +60,7 @@ disk=off
 stop=02h40m00s   !NEXT!
 
 !* --- Scan from 02h40m00s to 02h50m00s   Wed, 2000 Jul 05 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=  0  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=  0  calib='V'
 fe=(2,3mm),(4,3mm)
 synth=( 1,12.9),( 2, 4.9),( 3,12.1)
 format=VLBA1:4
@@ -71,7 +71,7 @@ stop=02h50m00s   !NEXT!
 
 !* --- Scan from 02h51m00s to 02h54m00s   Wed, 2000 Jul 05 --- *!
 !*     +++   SCHED converts scan to pointing   +++  *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 format=NONE
@@ -84,7 +84,7 @@ disk=off
 stop=02h54m00s   !NEXT!
 
 !* --- Scan from 02h54m00s to 03h04m00s   Wed, 2000 Jul 05 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=  0  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=  0  calib='V'
 fe=(2,3mm),(4,3mm)
 synth=( 1,12.9),( 2, 4.9),( 3,12.1)
 format=VLBA1:4
@@ -94,7 +94,7 @@ stop=03h04m00s   !NEXT!
 
 !* --- Scan from 04h05m52s to 04h06m52s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 format=NONE
@@ -108,7 +108,7 @@ stop=04h06m52s   !NEXT!
 
 !* --- Scan from 04h06m58s to 04h07m58s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 disk=off
 stop=04h06m58s   !NEXT!        
 qual=  0
@@ -130,7 +130,7 @@ stop=04h19m15s   !NEXT!
 
 !* --- Scan from 04h20m58s to 04h21m58s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 format=NONE
@@ -490,7 +490,7 @@ stop=07h07m45s   !NEXT!
 
 !* --- Scan from 07h11m33s to 07h12m33s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 format=NONE
@@ -504,7 +504,7 @@ stop=07h12m33s   !NEXT!
 
 !* --- Scan from 07h12m39s to 07h13m39s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 disk=off
 stop=07h12m39s   !NEXT!        
 qual=  0
@@ -513,7 +513,7 @@ disk=off
 stop=07h13m39s   !NEXT!
 
 !* --- Scan from 07h13m45s to 07h23m45s   Wed, 2000 Jul 05 --- *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(2,3mm),(4,3mm)
 synth=( 1,12.9),( 2, 4.9),( 3,12.1)
 format=VLBA1:4
@@ -829,7 +829,7 @@ disk=off
 stop=09h27m40s   !NEXT!
 
 !* --- Scan from 09h28m15s to 09h38m15s   Wed, 2000 Jul 05 --- *!
-sname='3C454.3'  ra=22h53m57.747938s  dec= 16d08'53.56093"  qual=999  calib='V'
+sname='3C454.3'  ra=22h53m57.747939s  dec= 16d08'53.56091"  qual=999  calib='V'
 fe=(2,3mm),(4,3mm)
 synth=( 1,12.9),( 2, 4.9),( 3,12.1)
 nchan= 4
