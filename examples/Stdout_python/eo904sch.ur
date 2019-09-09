@@ -415,7 +415,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.6cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     ur6cm_g         Generated from sess118C2Gglob.setini, sess218C2Gglob.setini, sess317C2Gglob.set*
+     ur6cm_g         Generated from sess119C2Gglob.setini, sess119C5nme.setini, sess119CGline.setini*
 
    Setup group:    8         Station: URUMQI            Total bit rate:   512
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -463,19 +463,19 @@ SETUP FILE INFORMATION:
                      From catalog imbedded in main SCHED input file.
 
    0129+431          01 29 45.959987   * 01 32 44.126798     01 32 54.147855       0.20
- * J0132+4325        43 10 09.12647    * 43 25 32.66094      43 26 36.21901        0.19
+ * J0132+4325        43 10 09.12650    * 43 25 32.66097      43 26 36.21903        0.19
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished     94 observations.
+                     GSFC 2016a X/S astro solution,     94 observations.
 
    0151+474          01 51 47.798774   * 01 54 56.289885     01 55 07.085854       0.02
- * J0154+4743        47 28 44.75319    * 47 43 26.53960      47 44 28.57611        0.02
+ * J0154+4743        47 28 44.75316    * 47 43 26.53956      47 44 28.57607        0.02
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   2555 observations.
+                     GSFC 2016a X/S astro solution,   3054 observations.
 
- * 0234+285          02 34 55.589590   * 02 37 52.405677     02 38 02.720839       0.00
-   J0237+2848        28 35 11.40776    * 28 48 08.99001      28 48 59.96365        0.00
+ * 0234+285          02 34 55.589590   * 02 37 52.405677     02 38 02.720838       0.00
+   J0237+2848        28 35 11.40773    * 28 48 08.98999      28 48 59.96363        0.00
    J0237+28          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  54650 observations.
+                     GSFC 2016a X/S astro solution,  58420 observations.
 
 
 
@@ -485,9 +485,9 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  B0128+437  eo999.6cm             1 2 3 4 5 6 7 8                   2.200    55.266
-  J0132+4325 eo999.6cm             1 2 3 4 5 6 7 8                   1.833    45.190
-  J0154+4743 eo999.6cm             1 2 3 4 5 6 7 8                   0.183     4.959
+  B0128+437  eo999.6cm             1 2 3 4 5 6 7 8                   2.200    54.621
+  J0132+4325 eo999.6cm             1 2 3 4 5 6 7 8                   1.833    44.531
+  J0154+4743 eo999.6cm             1 2 3 4 5 6 7 8                   0.183     4.943
   0234+285   eo999.6cm             1 2 3 4 5 6 7 8                   0.183     5.133
 
 

@@ -26,7 +26,7 @@ media=(1,disk)
 !* that ends at the start time of the first scan  *!
 
 !* --- Scan from 02h30m00s to 02h40m00s   Wed, 2000 Jul 05 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 maxcaltime= 120
 fe=(1,7mm),(3,7mm)
 fexfer=(2,norm)
@@ -60,7 +60,7 @@ disk=off
 stop=02h40m00s   !NEXT!
 
 !* --- Scan from 02h40m00s to 02h50m00s   Wed, 2000 Jul 05 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=  0  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=  0  calib='V'
 fe=(2,3mm),(4,3mm)
 synth=( 1,12.9),( 2, 4.9),( 3,12.1)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -70,7 +70,7 @@ stop=02h50m00s   !NEXT!
 
 !* --- Scan from 04h02m38s to 04h03m38s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -84,7 +84,7 @@ stop=04h03m38s   !NEXT!
 
 !* --- Scan from 04h03m44s to 04h04m44s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 disk=off
 stop=04h03m44s   !NEXT!        
 qual=  0
@@ -111,7 +111,7 @@ stop=04h26m00s   !NEXT!
 
 !* --- Scan from 04h27m43s to 04h28m43s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -419,7 +419,7 @@ stop=07h02m00s   !NEXT!
 
 !* --- Scan from 07h05m48s to 07h06m48s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -433,7 +433,7 @@ stop=07h06m48s   !NEXT!
 
 !* --- Scan from 07h06m54s to 07h07m54s   Wed, 2000 Jul 05 --- *!
 !*  Following scan added by Sched for reference pointing  *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 disk=off
 stop=07h06m54s   !NEXT!        
 qual=  0
@@ -442,7 +442,7 @@ disk=off
 stop=07h07m54s   !NEXT!
 
 !* --- Scan from 07h08m00s to 07h18m00s   Wed, 2000 Jul 05 --- *!
-sname='3C345'  ra=16h42m58.809966s  dec= 39d48'36.99402"  qual=999  calib='V'
+sname='3C345'  ra=16h42m58.809967s  dec= 39d48'36.99399"  qual=999  calib='V'
 fe=(2,3mm),(4,3mm)
 synth=( 1,12.9),( 2, 4.9),( 3,12.1)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -706,7 +706,7 @@ disk=off
 stop=09h21m25s   !NEXT!
 
 !* --- Scan from 09h22m00s to 09h32m00s   Wed, 2000 Jul 05 --- *!
-sname='3C454.3'  ra=22h53m57.747938s  dec= 16d08'53.56093"  qual=999  calib='V'
+sname='3C454.3'  ra=22h53m57.747939s  dec= 16d08'53.56091"  qual=999  calib='V'
 fe=(2,3mm),(4,3mm)
 synth=( 1,12.9),( 2, 4.9),( 3,12.1)
 format=VLBA1:4

@@ -85,7 +85,7 @@ date=1997Mar06
 stop=00h22m00s   !NEXT!
 
 !* --- Scan from 00h36m55s to 00h59m00s   Thu, 1997 Mar 06 --- *!
-sname='3C84'  ra=03h19m48.160094s  dec= 41d30'42.10413"  qual=999  calib='V'
+sname='3C84'  ra=03h19m48.160096s  dec= 41d30'42.10404"  qual=999  calib='V'
 disk=off
 stop=00h36m55s   !NEXT!        
 qual=  0
@@ -269,7 +269,7 @@ disk=on
 stop=12h22m30s   !NEXT!
 
 !* --- Scan from 12h52m25s to 13h14m30s   Thu, 1997 Mar 06 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 disk=off
 stop=12h52m25s   !NEXT!        
 qual=  0
@@ -277,7 +277,7 @@ disk=on
 stop=13h14m30s   !NEXT!
 
 !* --- Scan from 13h18m25s to 13h40m30s   Thu, 1997 Mar 06 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 disk=off
 stop=13h18m25s   !NEXT!        
 qual=  0

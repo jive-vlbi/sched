@@ -325,11 +325,9 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: NME.18CM
    Matching groups in /home/eldering/sched/catalogs/freq_RDBE.dat:
-     ur21cm_g        Generated from sess317HG.setini, sess118LG.setini, sess218LG.setini, sess317LGl*
-    ****** Only   79.02 of  128.00 MHz total bandwidth is within the IFs
-           in the setup file before any FREQ or DOPPLER shifts.
+     ur18cm_g        Generated from sess119L5nme.setini, sess119LG.setini, sess219L5nme.setini, sess*
 
-   Setup group:    8         Station: URUMQI            Total bit rate:   512
+   Setup group:    7         Station: URUMQI            Total bit rate:   512
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
    Number of channels: 16    DBE type: DBBC_DDC         Speedup factor:   1.00
 
@@ -352,14 +350,14 @@ SETUP FILE INFORMATION:
 
   The following frequency sets based on these setups were used.
 
-   Frequency Set:   7  Setup file default.  Used with PCAL = 1MHz
+   Frequency Set:   6  Setup file default.  Used with PCAL = 1MHz
    LO sum=   1634.49  1634.49  1634.49  1634.49  1650.49  1650.49  1650.49  1650.49
              1666.49  1666.49  1666.49  1666.49  1682.49  1682.49  1682.49  1682.49
    BBC fr=    334.49   334.49   334.49   334.49   350.49   350.49   350.49   350.49
               366.49   366.49   366.49   366.49   382.49   382.49   382.49   382.49
    Bandwd=      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
                 8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
-    Matching frequency sets:   7
+    Matching frequency sets:   6
 
    Track assignments are: 
     track1=  18, 26,  2, 10, 20, 28,  4, 12, 22, 30,  6, 14, 24, 32,  8, 16
@@ -374,20 +372,20 @@ SETUP FILE INFORMATION:
                      30 58 42.26242    * 30 42 00.47980      30 41 12.27190        0.00
                      From catalog imbedded in main SCHED input file.
 
-   4C39.25           09 23 55.319215   * 09 27 03.013936     09 27 11.519557       0.30
- * J0927+3902        39 15 23.56645    * 39 02 20.85186      39 01 47.64907        0.16
+   4C39.25           09 23 55.319216   * 09 27 03.013937     09 27 11.519558       0.31
+ * J0927+3902        39 15 23.56644    * 39 02 20.85185      39 01 47.64906        0.16
    0923+392          /home/eldering/sched/catalogs/sources.gsfc
-   J0927+39          GSFC 2015a astro solution, unpublished 245753 observations.
+   J0927+39          GSFC 2016a X/S astro solution, 250526 observations.
 
    1156+295          11 56 57.786211   * 11 59 31.833912     11 59 38.587946       0.00
- * J1159+2914        29 31 25.73882    * 29 14 43.82692      29 13 55.72531        0.00
+ * J1159+2914        29 31 25.73880    * 29 14 43.82690      29 13 55.72529        0.00
    J1159+29          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished  69878 observations.
+                     GSFC 2016a X/S astro solution,  78215 observations.
 
- * OQ208             14 04 45.615156   * 14 07 00.394414     14 07 05.761440       0.24
-   J1407+2827        28 41 29.23518    * 28 27 14.69022      28 26 28.60971        0.34
+ * OQ208             14 04 45.615156   * 14 07 00.394415     14 07 05.761440       0.24
+   J1407+2827        28 41 29.23515    * 28 27 14.69019      28 26 28.60968        0.35
    1404+286          /home/eldering/sched/catalogs/sources.gsfc
-   J1407+28          GSFC 2015a astro solution, unpublished  67871 observations.
+   J1407+28          GSFC 2016a X/S astro solution,  68278 observations.
 
 
 
@@ -397,10 +395,10 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  FIRST_051  NME.18CM              1 2 3 4 5 6 7 8 9                 2.633    89.376
-  J0927+3902 NME.18CM              1 2 3 4 5 6 7 8 9                 0.122     4.400
-  J1159+2914 NME.18CM              1 2 3 4 5 6 7 8 9                 1.439    44.880
-  OQ208      NME.18CM              1 2 3 4 5 6 7 8 9                 0.206     7.400
+  FIRST_051  NME.18CM              1 2 3 4 5 6 7 8                   2.633    69.077
+  J0927+3902 NME.18CM              1 2 3 4 5 6 7 8                   0.122     3.422
+  J1159+2914 NME.18CM              1 2 3 4 5 6 7 8                   1.439    34.106
+  OQ208      NME.18CM              1 2 3 4 5 6 7 8                   0.206     5.756
 
 
 EFFECT OF SOLAR CORONA

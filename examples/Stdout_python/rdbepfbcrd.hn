@@ -26,7 +26,7 @@ media=(1,disk)
 !* that ends at the start time of the first scan  *!
 
 !* --- Scan from 15h45m17s to 15h49m57s   Fri, 2010 Dec 03 --- *!
-sname='3C279'  ra=12h56m11.166568s  dec=-05d47'21.52500"  qual=999  calib='V'
+sname='3C279'  ra=12h56m11.166577s  dec=-05d47'21.52513"  qual=999  calib='V'
 maxcaltime= 120
 fe=(1,6cm),(3,6cm)
 fexfer=(2,norm)
@@ -59,7 +59,7 @@ disk=off
 stop=15h49m57s   !NEXT!
 
 !* --- Scan from 15h50m27s to 15h55m07s   Fri, 2010 Dec 03 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 disk=off
 stop=15h50m27s   !NEXT!        
 qual=  0
@@ -67,7 +67,7 @@ disk=off
 stop=15h55m07s   !NEXT!
 
 !* --- Scan from 15h55m36s to 16h00m16s   Fri, 2010 Dec 03 --- *!
-sname='3C279'  ra=12h56m11.166568s  dec=-05d47'21.52500"  qual=999  calib='V'
+sname='3C279'  ra=12h56m11.166577s  dec=-05d47'21.52513"  qual=999  calib='V'
 disk=off
 stop=15h55m36s   !NEXT!        
 qual=  0
@@ -75,7 +75,7 @@ disk=off
 stop=16h00m16s   !NEXT!
 
 !* --- Scan from 16h00m45s to 16h05m25s   Fri, 2010 Dec 03 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 disk=off
 stop=16h00m45s   !NEXT!        
 qual=  0
@@ -83,7 +83,7 @@ disk=off
 stop=16h05m25s   !NEXT!
 
 !* --- Scan from 16h05m54s to 16h10m34s   Fri, 2010 Dec 03 --- *!
-sname='3C279'  ra=12h56m11.166568s  dec=-05d47'21.52500"  qual=999  calib='V'
+sname='3C279'  ra=12h56m11.166577s  dec=-05d47'21.52513"  qual=999  calib='V'
 disk=off
 stop=16h05m54s   !NEXT!        
 qual=  0
@@ -91,7 +91,7 @@ disk=off
 stop=16h10m34s   !NEXT!
 
 !* --- Scan from 16h11m03s to 16h15m43s   Fri, 2010 Dec 03 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 disk=off
 stop=16h11m03s   !NEXT!        
 qual=  0
@@ -99,7 +99,7 @@ disk=off
 stop=16h15m43s   !NEXT!
 
 !* --- Scan from 16h16m13s to 16h20m53s   Fri, 2010 Dec 03 --- *!
-sname='3C279'  ra=12h56m11.166568s  dec=-05d47'21.52500"  qual=999  calib='V'
+sname='3C279'  ra=12h56m11.166577s  dec=-05d47'21.52513"  qual=999  calib='V'
 disk=off
 stop=16h16m13s   !NEXT!        
 qual=  0
@@ -107,7 +107,7 @@ disk=off
 stop=16h20m53s   !NEXT!
 
 !* --- Scan from 16h21m22s to 16h26m02s   Fri, 2010 Dec 03 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 disk=off
 stop=16h21m22s   !NEXT!        
 qual=  0
@@ -115,7 +115,7 @@ disk=off
 stop=16h26m02s   !NEXT!
 
 !* --- Scan from 16h26m32s to 16h31m12s   Fri, 2010 Dec 03 --- *!
-sname='3C279'  ra=12h56m11.166568s  dec=-05d47'21.52500"  qual=999  calib='V'
+sname='3C279'  ra=12h56m11.166577s  dec=-05d47'21.52513"  qual=999  calib='V'
 disk=off
 stop=16h26m32s   !NEXT!        
 qual=  0
@@ -123,7 +123,7 @@ disk=off
 stop=16h31m12s   !NEXT!
 
 !* --- Scan from 16h31m41s to 16h36m21s   Fri, 2010 Dec 03 --- *!
-sname='3C273'  ra=12h29m06.699729s  dec= 02d03'08.59828"  qual=999  calib='V'
+sname='3C273'  ra=12h29m06.699731s  dec= 02d03'08.59820"  qual=999  calib='V'
 disk=off
 stop=16h31m41s   !NEXT!        
 qual=  0
@@ -131,7 +131,7 @@ disk=off
 stop=16h36m21s   !NEXT!
 
 !* --- Scan from 16h36m50s to 16h41m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=16h36m50s   !NEXT!        
 qual=  0
@@ -139,7 +139,7 @@ disk=off
 stop=16h41m30s   !NEXT!
 
 !* --- Scan from 16h41m50s to 16h46m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=16h41m50s   !NEXT!        
 qual=  0
@@ -147,7 +147,7 @@ disk=off
 stop=16h46m30s   !NEXT!
 
 !* --- Scan from 16h46m50s to 16h51m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=16h46m50s   !NEXT!        
 qual=  0
@@ -155,7 +155,7 @@ disk=off
 stop=16h51m30s   !NEXT!
 
 !* --- Scan from 16h51m50s to 16h56m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=16h51m50s   !NEXT!        
 qual=  0
@@ -163,7 +163,7 @@ disk=off
 stop=16h56m30s   !NEXT!
 
 !* --- Scan from 16h56m50s to 17h01m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=16h56m50s   !NEXT!        
 qual=  0
@@ -171,7 +171,7 @@ disk=off
 stop=17h01m30s   !NEXT!
 
 !* --- Scan from 17h01m50s to 17h06m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=17h01m50s   !NEXT!        
 qual=  0
@@ -179,7 +179,7 @@ disk=off
 stop=17h06m30s   !NEXT!
 
 !* --- Scan from 17h06m50s to 17h11m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=17h06m50s   !NEXT!        
 qual=  0
@@ -187,7 +187,7 @@ disk=off
 stop=17h11m30s   !NEXT!
 
 !* --- Scan from 17h11m50s to 17h16m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=17h11m50s   !NEXT!        
 qual=  0
@@ -195,7 +195,7 @@ disk=off
 stop=17h16m30s   !NEXT!
 
 !* --- Scan from 17h16m50s to 17h21m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=17h16m50s   !NEXT!        
 qual=  0
@@ -203,7 +203,7 @@ disk=off
 stop=17h21m30s   !NEXT!
 
 !* --- Scan from 17h21m50s to 17h26m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=17h21m50s   !NEXT!        
 qual=  0
@@ -211,7 +211,7 @@ disk=off
 stop=17h26m30s   !NEXT!
 
 !* --- Scan from 17h26m50s to 17h31m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=17h26m50s   !NEXT!        
 qual=  0
@@ -219,7 +219,7 @@ disk=off
 stop=17h31m30s   !NEXT!
 
 !* --- Scan from 17h31m50s to 17h36m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=17h31m50s   !NEXT!        
 qual=  0
@@ -227,7 +227,7 @@ disk=off
 stop=17h36m30s   !NEXT!
 
 !* --- Scan from 17h36m50s to 17h41m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=17h36m50s   !NEXT!        
 qual=  0
@@ -235,7 +235,7 @@ disk=off
 stop=17h41m30s   !NEXT!
 
 !* --- Scan from 17h41m50s to 17h46m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=17h41m50s   !NEXT!        
 qual=  0
@@ -243,7 +243,7 @@ disk=off
 stop=17h46m30s   !NEXT!
 
 !* --- Scan from 17h46m50s to 17h51m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=17h46m50s   !NEXT!        
 qual=  0
@@ -251,7 +251,7 @@ disk=off
 stop=17h51m30s   !NEXT!
 
 !* --- Scan from 17h51m50s to 17h56m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=17h51m50s   !NEXT!        
 qual=  0
@@ -259,7 +259,7 @@ disk=off
 stop=17h56m30s   !NEXT!
 
 !* --- Scan from 17h56m50s to 18h01m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=17h56m50s   !NEXT!        
 qual=  0
@@ -267,7 +267,7 @@ disk=off
 stop=18h01m30s   !NEXT!
 
 !* --- Scan from 18h01m50s to 18h06m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=18h01m50s   !NEXT!        
 qual=  0
@@ -275,7 +275,7 @@ disk=off
 stop=18h06m30s   !NEXT!
 
 !* --- Scan from 18h06m50s to 18h11m30s   Fri, 2010 Dec 03 --- *!
-sname='M87'  ra=12h30m49.423382s  dec= 12d23'28.04381"  qual=999  calib='V'
+sname='M87'  ra=12h30m49.423383s  dec= 12d23'28.04374"  qual=999  calib='V'
 disk=off
 stop=18h06m50s   !NEXT!        
 qual=  0
@@ -283,7 +283,7 @@ disk=off
 stop=18h11m30s   !NEXT!
 
 !* --- Scan from 18h11m50s to 18h16m30s   Fri, 2010 Dec 03 --- *!
-sname='M84'  ra=12h25m03.743335s  dec= 12d53'13.13928"  qual=999  calib='V'
+sname='M84'  ra=12h25m03.743334s  dec= 12d53'13.13927"  qual=999  calib='V'
 disk=off
 stop=18h11m50s   !NEXT!        
 qual=  0

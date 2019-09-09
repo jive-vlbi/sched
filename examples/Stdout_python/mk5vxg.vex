@@ -54,26 +54,26 @@ enddef;
 $MODE;
 *
 def NME-MK5.18CM;
-     ref $PROCEDURES = Procedure:Mc:Nt:Ef:Jb:Eb:Wb:Pt;
+     ref $PROCEDURES = Procedure:Mc:Ef:Jb:Eb:Wb:Pt;
      ref $IF = LO@1090MHzDPolTone/1:Eb;
      ref $IF = LO@1247MHzDPolTone/1:Wb;
-     ref $IF = LO@1279MHzDPolTone/1:Nt;
      ref $IF = LO@1295MHzDPolTone/1:Mc;
-     ref $IF = LO@1490MHzDPolTone/1:Ef;
-     ref $IF = LO@1510MHzDPolTone/1:Jb;
+     ref $IF = LO@1510MHzDPolTone/1:Ef;
+     ref $IF = LO@2272MHzDPolTone/1:Jb;
      ref $IF = LO@2400MHzDPolTone/1:Pt;
      ref $BBC = 4BBCs:Eb;
      ref $BBC = 4BBCs#02:Ef;
      ref $BBC = 4BBCs#03:Jb;
-     ref $BBC = 4BBCs#04:Mc:Wb;
-     ref $BBC = 4BBCs#05:Nt;
-     ref $BBC = 4BBCs#06:Pt;
-     ref $PHASE_CAL_DETECT = Detect:Eb:Ef:Jb:Mc:Nt:Pt:Wb;
+     ref $BBC = 4BBCs#04:Mc;
+     ref $BBC = 4BBCs#05:Pt;
+     ref $BBC = 4BBCs#06:Wb;
+     ref $PHASE_CAL_DETECT = Detect:Eb:Ef:Jb:Mc:Pt:Wb;
      ref $FREQ = 1642.25MHz4x8MHz:Eb:Pt;
-     ref $FREQ = 1642.25MHz4x8MHz#02:Ef:Jb:Mc:Nt:Wb;
-     ref $TRACKS = MARK5B.4Ch2bit1to1:Ef:Jb:Mc:Nt:Wb;
+     ref $FREQ = 1642.25MHz4x8MHz#02:Ef:Jb:Mc;
+     ref $FREQ = 1642.25MHz4x8MHz#03:Wb;
+     ref $TRACKS = MARK5B.4Ch2bit1to1:Ef:Jb:Mc:Wb;
      ref $TRACKS = VDIF5032.4Ch2bit1to1:Eb:Pt;
-     ref $ROLL = NoRoll:Eb:Ef:Jb:Mc:Nt:Pt:Wb;
+     ref $ROLL = NoRoll:Eb:Ef:Jb:Mc:Pt:Wb;
 enddef;
 *------------------------------------------------------------------------------
 $IF;
@@ -87,13 +87,7 @@ enddef;
 def LO@1247MHzDPolTone/1;
 * NME-MK5.18CM: Wb
      if_def = &IF_A1 : A1 : R :   1247.00 MHz : U : 1 MHz;
-     if_def = &IF_C1 : C1 : L :   1247.00 MHz : U : 1 MHz;
-enddef;
-*
-def LO@1279MHzDPolTone/1;
-* NME-MK5.18CM: Nt
-     if_def = &IF_A1 : A1 : R :   1279.00 MHz : U : 1 MHz;
-     if_def = &IF_C2 : C2 : L :   1279.00 MHz : U : 1 MHz;
+     if_def = &IF_B1 : B1 : L :   1247.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@1295MHzDPolTone/1;
@@ -102,16 +96,16 @@ def LO@1295MHzDPolTone/1;
      if_def = &IF_C1 : C1 : L :   1295.00 MHz : U : 1 MHz;
 enddef;
 *
-def LO@1490MHzDPolTone/1;
+def LO@1510MHzDPolTone/1;
 * NME-MK5.18CM: Ef
-     if_def = &IF_A2 : A2 : R :   1490.00 MHz : U : 1 MHz;
-     if_def = &IF_C4 : C4 : L :   1490.00 MHz : U : 1 MHz;
+     if_def = &IF_A2 : A2 : R :   1510.00 MHz : U : 1 MHz;
+     if_def = &IF_C4 : C4 : L :   1510.00 MHz : U : 1 MHz;
 enddef;
 *
-def LO@1510MHzDPolTone/1;
+def LO@2272MHzDPolTone/1;
 * NME-MK5.18CM: Jb
-     if_def = &IF_A1 : A1 : R :   1510.00 MHz : U : 1 MHz;
-     if_def = &IF_B1 : B1 : L :   1510.00 MHz : U : 1 MHz;
+     if_def = &IF_A2 : A2 : R :   2272.00 MHz : L : 1 MHz;
+     if_def = &IF_B2 : B2 : L :   2272.00 MHz : L : 1 MHz;
 enddef;
 *
 def LO@2400MHzDPolTone/1;
@@ -140,14 +134,14 @@ enddef;
 *
 def 4BBCs#03;
 * NME-MK5.18CM: Jb
-     BBC_assign = &BBC01 :  1 : &IF_A1;
-     BBC_assign = &BBC09 :  9 : &IF_B1;
-     BBC_assign = &BBC02 :  2 : &IF_A1;
-     BBC_assign = &BBC10 : 10 : &IF_B1;
+     BBC_assign = &BBC01 :  1 : &IF_A2;
+     BBC_assign = &BBC09 :  9 : &IF_B2;
+     BBC_assign = &BBC02 :  2 : &IF_A2;
+     BBC_assign = &BBC10 : 10 : &IF_B2;
 enddef;
 *
 def 4BBCs#04;
-* NME-MK5.18CM: Mc, Wb
+* NME-MK5.18CM: Mc
      BBC_assign = &BBC01 :  1 : &IF_A1;
      BBC_assign = &BBC09 :  9 : &IF_C1;
      BBC_assign = &BBC02 :  2 : &IF_A1;
@@ -155,25 +149,25 @@ def 4BBCs#04;
 enddef;
 *
 def 4BBCs#05;
-* NME-MK5.18CM: Nt
-     BBC_assign = &BBC01 :  1 : &IF_A1;
-     BBC_assign = &BBC09 :  9 : &IF_C2;
-     BBC_assign = &BBC02 :  2 : &IF_A1;
-     BBC_assign = &BBC10 : 10 : &IF_C2;
-enddef;
-*
-def 4BBCs#06;
 * NME-MK5.18CM: Pt
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
      BBC_assign = &BBC04 : 4 : &IF_C;
 enddef;
+*
+def 4BBCs#06;
+* NME-MK5.18CM: Wb
+     BBC_assign = &BBC01 : 1 : &IF_A1;
+     BBC_assign = &BBC05 : 5 : &IF_B1;
+     BBC_assign = &BBC02 : 2 : &IF_A1;
+     BBC_assign = &BBC06 : 6 : &IF_B1;
+enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* NME-MK5.18CM: Eb, Ef, Jb, Mc, Nt, Pt, Wb
+* NME-MK5.18CM: Eb, Ef, Jb, Mc, Pt, Wb
      phase_cal_detect = &PCD : 1 : 8 : 0;
 enddef;
 *------------------------------------------------------------------------------
@@ -189,18 +183,27 @@ def 1642.25MHz4x8MHz;
 enddef;
 *
 def 1642.25MHz4x8MHz#02;
-* NME-MK5.18CM: Ef, Jb, Mc, Nt, Wb
+* NME-MK5.18CM: Ef, Jb, Mc
      chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH02 : &BBC09 : &PCD;
      chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH03 : &BBC02 : &PCD;
      chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH04 : &BBC10 : &PCD;
      sample_rate =  16.000 Ms/sec;
 enddef;
+*
+def 1642.25MHz4x8MHz#03;
+* NME-MK5.18CM: Wb
+     chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH02 : &BBC05 : &PCD;
+     chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH03 : &BBC02 : &PCD;
+     chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH04 : &BBC06 : &PCD;
+     sample_rate =  16.000 Ms/sec;
+enddef;
 *------------------------------------------------------------------------------
 $TRACKS;
 *
 def MARK5B.4Ch2bit1to1;
-* NME-MK5.18CM: Ef, Jb, Mc, Nt, Wb
+* NME-MK5.18CM: Ef, Jb, Mc, Wb
      track_frame_format = MARK5B;
      fanout_def =  : &CH01 : sign : 1 : 2;
      fanout_def =  : &CH01 :  mag : 1 : 3;
@@ -228,7 +231,7 @@ enddef;
 $ROLL;
 *
 def NoRoll;
-* NME-MK5.18CM: Eb, Ef, Jb, Mc, Nt, Pt, Wb
+* NME-MK5.18CM: Eb, Ef, Jb, Mc, Pt, Wb
      roll = off;
 enddef;
 *------------------------------------------------------------------------------
@@ -240,21 +243,15 @@ def Mc;
      ref $SITE = MEDICINA;
 enddef;
 *
-def Nt;
-     ref $ANTENNA = NOTO;
-     ref $DAS = DBBC+Mark5B;
-     ref $SITE = NOTO;
-enddef;
-*
 def Ef;
      ref $ANTENNA = EFLSBERG;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = EFLSBERG;
 enddef;
 *
 def Jb;
      ref $ANTENNA = JODRELL2;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = JODRELL2;
 enddef;
 *
@@ -266,7 +263,7 @@ enddef;
 *
 def Wb;
      ref $ANTENNA = WSTRBORK;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = WSTRBORK;
 enddef;
 *
@@ -280,9 +277,9 @@ $ANTENNA;
 *
 def EFLSBERG;
      axis_type = az : el;
-     antenna_motion = az :   25.0 deg/min : 9 sec;
-     antenna_motion = el :   15.0 deg/min : 9 sec;
-     axis_offset =     0.0145 m;
+     antenna_motion = az :   25.0 deg/min : 16 sec;
+     antenna_motion = el :   15.0 deg/min : 16 sec;
+     axis_offset =     0.0143 m;
 enddef;
 *
 def JODRELL2;
@@ -299,13 +296,6 @@ def MEDICINA;
      axis_offset =     1.8279 m;
 enddef;
 *
-def NOTO;
-     axis_type = az : el;
-     antenna_motion = az :   43.0 deg/min : 2 sec;
-     antenna_motion = el :   30.0 deg/min : 2 sec;
-     axis_offset =     1.8316 m;
-enddef;
-*
 def VLBA_PT;
      axis_type = az : el;
      antenna_motion = az :   82.3 deg/min : 6 sec;
@@ -313,7 +303,7 @@ def VLBA_PT;
      pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1375 m;
+     axis_offset =     2.1379 m;
 enddef;
 *
 def WSTRBORK;
@@ -327,6 +317,15 @@ $DAS;
 *
 def DBBC+Mark5B;
      record_transport_type = Mark5B;
+     electronics_rack_type = DBBC;
+     number_drives = 2;
+     headstack = 1 :  : 0;
+     headstack = 2 :  : 1;
+     tape_motion = adaptive : 0 min : 0 min : 10 sec;
+enddef;
+*
+def DBBC+Mark5C;
+     record_transport_type = Mark5C;
      electronics_rack_type = DBBC;
      number_drives = 2;
      headstack = 1 :  : 0;
@@ -349,9 +348,9 @@ def EB_RDBE;
      site_type = fixed;
      site_name = EB_RDBE;
      site_ID = Eb;
-     site_position =  4033947.26160 m :   486990.78660 m :  4900430.99150 m;
-     site_velocity =  -0.013620 m/yr :   0.016920 m/yr :   0.010770 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =  4033947.23550 m :   486990.79430 m :  4900431.00170 m;
+     site_velocity =  -0.014410 m/yr :   0.016730 m/yr :   0.010600 m/yr;
+     site_position_epoch = 2014y001d;
      horizon_map_az = 0.0 deg : 10.0 : 20.0 : 30.0 : 40.0 : 50.0 : 60.0 : 70.0 : 80.0 : 90.0 : 100.0 : 110.0 : 120.0 : 130.0 : 140.0 : 150.0 : 160.0 : 170.0 : 180.0 : 190.0 : 200.0 : 210.0 : 220.0 : 230.0 : 240.0 : 250.0 : 260.0 : 270.0 : 280.0 : 290.0 : 300.0 : 310.0 : 320.0 : 330.0 : 340.0 : 350.0 : 360.0;
      horizon_map_el = 11.0 deg : 13.0 : 16.0 : 19.0 : 21.0 : 21.0 : 21.0 : 20.0 : 18.0 : 15.0 : 16.0 : 16.0 : 15.0 : 15.0 : 13.0 : 8.0 : 7.0 : 7.0 : 7.0 : 7.0 : 9.0 : 11.0 : 11.0 : 11.0 : 10.0 : 9.0 : 8.0 : 12.0 : 14.0 : 14.0 : 14.0 : 14.0 : 13.0 : 8.0 : 7.0 : 8.0 : 11.0;
 enddef;
@@ -360,9 +359,9 @@ def EFLSBERG;
      site_type = fixed;
      site_name = EFLSBERG;
      site_ID = Ef;
-     site_position =  4033947.26160 m :   486990.78660 m :  4900430.99150 m;
-     site_velocity =  -0.013620 m/yr :   0.016920 m/yr :   0.010770 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =  4033947.23550 m :   486990.79430 m :  4900431.00170 m;
+     site_velocity =  -0.014410 m/yr :   0.016730 m/yr :   0.010600 m/yr;
+     site_position_epoch = 2014y001d;
      horizon_map_az = 0.0 deg : 10.0 : 20.0 : 30.0 : 40.0 : 50.0 : 60.0 : 70.0 : 80.0 : 90.0 : 100.0 : 110.0 : 120.0 : 130.0 : 140.0 : 150.0 : 160.0 : 170.0 : 180.0 : 190.0 : 200.0 : 210.0 : 220.0 : 230.0 : 240.0 : 250.0 : 260.0 : 270.0 : 280.0 : 290.0 : 300.0 : 310.0 : 320.0 : 330.0 : 340.0 : 350.0 : 360.0;
      horizon_map_el = 11.0 deg : 13.0 : 16.0 : 19.0 : 21.0 : 21.0 : 21.0 : 20.0 : 18.0 : 15.0 : 16.0 : 16.0 : 15.0 : 15.0 : 13.0 : 8.0 : 7.0 : 7.0 : 7.0 : 7.0 : 9.0 : 11.0 : 11.0 : 11.0 : 10.0 : 9.0 : 8.0 : 12.0 : 14.0 : 14.0 : 14.0 : 14.0 : 13.0 : 8.0 : 7.0 : 8.0 : 11.0;
 enddef;
@@ -380,29 +379,18 @@ def MEDICINA;
      site_type = fixed;
      site_name = MEDICINA;
      site_ID = Mc;
-     site_position =  4461369.69540 m :   919597.12400 m :  4449559.38120 m;
-     site_velocity =  -0.018120 m/yr :   0.018830 m/yr :   0.011090 m/yr;
-     site_position_epoch = 2013y001d;
-enddef;
-*
-def NOTO;
-     site_type = fixed;
-     site_name = NOTO;
-     site_ID = Nt;
-     site_position =  4934562.84070 m :  1321201.54280 m :  3806484.73360 m;
-     site_velocity =  -0.017470 m/yr :   0.017630 m/yr :   0.015050 m/yr;
-     site_position_epoch = 2013y001d;
-     horizon_map_az = 0.0 deg : 10.0 : 30.0 : 70.0 : 100.0 : 120.0 : 150.0 : 180.0 : 300.0 : 310.0 : 360.0;
-     horizon_map_el = 8.0 deg : 7.0 : 6.0 : 9.0 : 6.5 : 5.0 : 6.0 : 5.0 : 5.0 : 6.5 : 7.5;
+     site_position =  4461369.67180 m :   919597.13490 m :  4449559.39950 m;
+     site_velocity =  -0.018320 m/yr :   0.018710 m/yr :   0.011530 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def VLBA_PT;
      site_type = fixed;
      site_name = VLBA_PT;
      site_ID = Pt;
-     site_position = -1640953.93830 m : -5014816.02370 m :  3575411.79160 m;
-     site_velocity =  -0.014610 m/yr :  -0.000210 m/yr :  -0.005210 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -1640953.95690 m : -5014816.05570 m :  3575411.77800 m;
+     site_velocity =  -0.014980 m/yr :  -0.001210 m/yr :  -0.005840 m/yr;
+     site_position_epoch = 2014y001d;
      horizon_map_az = 0.0 deg : 5.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 165.0 : 170.0 : 180.0 : 185.0 : 190.0 : 195.0 : 200.0 : 240.0 : 245.0 : 250.0 : 255.0 : 265.0 : 270.0 : 275.0 : 280.0 : 285.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 3.0 : 3.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0;
 enddef;
@@ -411,7 +399,7 @@ def WSTRBORK;
      site_type = fixed;
      site_name = WSTRBORK;
      site_ID = Wb;
-     site_position =  3828445.65900 m :   445223.60000 m :  5064921.56800 m;
+     site_position =  3828746.98000 m :   442591.85000 m :  5064923.08000 m;
      site_velocity =  -0.013530 m/yr :   0.017040 m/yr :   0.008730 m/yr;
      site_position_epoch = 1997y001d;
 enddef;
@@ -435,11 +423,11 @@ enddef;
 $SOURCE;
 def 3C84;
      source_name = 3C84;
-     ra = 03h19m48.1600936s; dec =  41d30'42.104135"; ref_coord_frame = J2000;
+     ra = 03h19m48.1600956s; dec =  41d30'42.104043"; ref_coord_frame = J2000;
 enddef;
 def DA193;
      source_name = DA193;
-     ra = 05h55m30.8056111s; dec =  39d48'49.164965"; ref_coord_frame = J2000;
+     ra = 05h55m30.8056108s; dec =  39d48'49.164962"; ref_coord_frame = J2000;
 enddef;
 *------------------------------------------------------------------------------
 $SCHED;
@@ -449,7 +437,6 @@ scan No0001;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 1320 sec :     0.000 GB :  :  : 1;
-     station = Nt : 0 sec : 1320 sec :     0.000 GB :  :  : 1;
      station = Ef : 0 sec : 1320 sec :     0.000 GB :  :  : 1;
      station = Jb : 0 sec : 1320 sec :     0.000 GB :  :  : 1;
      station = Eb : 0 sec : 1320 sec :     0.000 GB :  :  : 1;
@@ -461,7 +448,6 @@ scan No0002;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 660 sec :    21.154 GB :  :  : 1;
-     station = Nt : 0 sec : 660 sec :    21.154 GB :  :  : 1;
      station = Ef : 0 sec : 660 sec :    21.154 GB :  :  : 1;
      station = Jb : 0 sec : 660 sec :    21.154 GB :  :  : 1;
      station = Eb : 0 sec : 660 sec :    21.255 GB :  :  : 1;
@@ -473,7 +459,6 @@ scan No0003;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 660 sec :    31.731 GB :  :  : 1;
-     station = Nt : 0 sec : 660 sec :    31.731 GB :  :  : 1;
      station = Ef : 0 sec : 660 sec :    31.731 GB :  :  : 1;
      station = Jb : 0 sec : 660 sec :    31.731 GB :  :  : 1;
      station = Eb : 0 sec : 660 sec :    31.883 GB :  :  : 1;
@@ -485,7 +470,6 @@ scan No0004;
      mode = NME-MK5.18CM;
      source = 3C84;
      station = Mc : 0 sec : 1320 sec :    42.308 GB :  :  : 1;
-     station = Nt : 0 sec : 1320 sec :    42.308 GB :  :  : 1;
      station = Ef : 0 sec : 1320 sec :    42.308 GB :  :  : 1;
      station = Jb : 0 sec : 1320 sec :    42.308 GB :  :  : 1;
      station = Eb : 0 sec : 1320 sec :    42.510 GB :  :  : 1;
@@ -497,7 +481,6 @@ scan No0005;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 1320 sec :    63.461 GB :  :  : 1;
-     station = Nt : 0 sec : 1320 sec :    63.461 GB :  :  : 1;
      station = Ef : 0 sec : 1320 sec :    63.461 GB :  :  : 1;
      station = Jb : 0 sec : 1320 sec :    63.461 GB :  :  : 1;
      station = Eb : 0 sec : 1320 sec :    63.766 GB :  :  : 1;
@@ -509,7 +492,6 @@ scan No0006;
      mode = NME-MK5.18CM;
      source = 3C84;
      station = Mc : 0 sec : 1320 sec :    84.615 GB :  :  : 1;
-     station = Nt : 0 sec : 1320 sec :    84.615 GB :  :  : 1;
      station = Ef : 0 sec : 1320 sec :    84.615 GB :  :  : 1;
      station = Jb : 0 sec : 1320 sec :    84.615 GB :  :  : 1;
      station = Eb : 0 sec : 1320 sec :    85.021 GB :  :  : 1;
@@ -521,7 +503,6 @@ scan No0007;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 660 sec :   105.769 GB :  :  : 1;
-     station = Nt : 0 sec : 660 sec :   105.769 GB :  :  : 1;
      station = Ef : 0 sec : 660 sec :   105.769 GB :  :  : 1;
      station = Jb : 0 sec : 660 sec :   105.769 GB :  :  : 1;
      station = Eb : 0 sec : 660 sec :   106.276 GB :  :  : 1;
@@ -533,7 +514,6 @@ scan No0008;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 660 sec :   116.346 GB :  :  : 1;
-     station = Nt : 0 sec : 660 sec :   116.346 GB :  :  : 1;
      station = Ef : 0 sec : 660 sec :   116.346 GB :  :  : 1;
      station = Jb : 0 sec : 660 sec :   116.346 GB :  :  : 1;
      station = Eb : 0 sec : 660 sec :   116.903 GB :  :  : 1;
@@ -545,7 +525,6 @@ scan No0009;
      mode = NME-MK5.18CM;
      source = 3C84;
      station = Mc : 0 sec : 1320 sec :   126.923 GB :  :      : 1;
-     station = Nt : 0 sec : 1320 sec :   126.923 GB :  :      : 1;
      station = Ef : 0 sec : 1320 sec :   126.923 GB :  :      : 1;
      station = Jb : 0 sec : 1320 sec :   126.923 GB :  :      : 1;
      station = Eb : 0 sec : 1320 sec :   127.531 GB :  :      : 1;
@@ -558,7 +537,6 @@ scan No0010;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 1320 sec :   148.077 GB :  :  : 1;
-     station = Nt : 0 sec : 1320 sec :   148.077 GB :  :  : 1;
      station = Ef : 0 sec : 1320 sec :   148.077 GB :  :  : 1;
      station = Jb : 0 sec : 1320 sec :   148.077 GB :  :  : 1;
      station = Eb : 0 sec : 1320 sec :   148.786 GB :  :  : 1;
@@ -570,10 +548,9 @@ scan No0011;
      mode = NME-MK5.18CM;
      source = 3C84;
      station = Mc :  0 sec : 1320 sec :   169.230 GB :  :      : 1;
-     station = Nt :  0 sec : 1320 sec :   169.230 GB :  :      : 1;
-     station = Ef : 57 sec : 1320 sec :   169.230 GB :  :      : 1;
+     station = Ef : 67 sec : 1320 sec :   169.230 GB :  :      : 1;
      station = Jb : 11 sec : 1320 sec :   169.230 GB :  :      : 1;
-     station = Eb : 57 sec : 1320 sec :   170.041 GB :  :      : 1;
+     station = Eb : 67 sec : 1320 sec :   170.041 GB :  :      : 1;
      station = Wb :  0 sec : 1320 sec :   169.230 GB :  :      : 1;
      station = Pt :  0 sec : 1320 sec :    21.255 GB :  : &ccw : 1;
 endscan;
@@ -583,10 +560,9 @@ scan No0012;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc :  0 sec : 660 sec :   190.384 GB :  :  : 1;
-     station = Nt :  0 sec : 660 sec :   190.384 GB :  :  : 1;
-     station = Ef : 73 sec : 660 sec :   190.384 GB :  :  : 1;
+     station = Ef : 82 sec : 660 sec :   190.384 GB :  :  : 1;
      station = Jb : 47 sec : 660 sec :   190.384 GB :  :  : 1;
-     station = Eb : 73 sec : 660 sec :   191.297 GB :  :  : 1;
+     station = Eb : 82 sec : 660 sec :   191.297 GB :  :  : 1;
      station = Wb :  0 sec : 660 sec :   190.384 GB :  :  : 1;
 endscan;
 *
@@ -595,7 +571,6 @@ scan No0013;
      mode = NME-MK5.18CM;
      source = DA193;
      station = Mc : 0 sec : 660 sec :   200.961 GB :  :  : 1;
-     station = Nt : 0 sec : 660 sec :   200.961 GB :  :  : 1;
      station = Ef : 0 sec : 660 sec :   200.961 GB :  :  : 1;
      station = Jb : 0 sec : 660 sec :   200.961 GB :  :  : 1;
      station = Eb : 0 sec : 660 sec :   201.924 GB :  :  : 1;
@@ -607,10 +582,9 @@ scan No0014;
      mode = NME-MK5.18CM;
      source = 3C84;
      station = Mc :   0 sec : 1320 sec :   211.538 GB :  :      : 1;
-     station = Nt :   0 sec : 1320 sec :   211.538 GB :  :      : 1;
-     station = Ef :  89 sec : 1320 sec :   211.538 GB :  :      : 1;
+     station = Ef :  98 sec : 1320 sec :   211.538 GB :  :      : 1;
      station = Jb : 105 sec : 1320 sec :   211.538 GB :  :      : 1;
-     station = Eb :  89 sec : 1320 sec :   212.552 GB :  :      : 1;
+     station = Eb :  98 sec : 1320 sec :   212.552 GB :  :      : 1;
      station = Wb :   0 sec : 1320 sec :   211.538 GB :  :      : 1;
      station = Pt :   0 sec : 1320 sec :    42.510 GB :  : &ccw : 1;
 endscan;

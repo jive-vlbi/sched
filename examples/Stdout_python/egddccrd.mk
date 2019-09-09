@@ -105,7 +105,7 @@ disk=off
 stop=18h25m26s   !NEXT!
 
 !* --- Scan from 18h27m42s to 18h31m42s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -123,7 +123,7 @@ disk=off
 stop=18h31m42s   !NEXT!
 
 !* --- Scan from 18h31m48s to 18h35m48s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -140,7 +140,7 @@ disk=off
 stop=18h35m48s   !NEXT!
 
 !* --- Scan from 18h35m54s to 18h39m54s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -155,7 +155,7 @@ disk=off
 stop=18h39m54s   !NEXT!
 
 !* --- Scan from 18h40m00s to 18h44m00s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -169,7 +169,7 @@ disk=off
 stop=18h44m00s   !NEXT!
 
 !* --- Scan from 18h44m06s to 18h48m06s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -187,7 +187,7 @@ disk=off
 stop=18h48m06s   !NEXT!
 
 !* --- Scan from 18h48m12s to 18h52m12s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -204,7 +204,7 @@ disk=off
 stop=18h52m12s   !NEXT!
 
 !* --- Scan from 18h52m18s to 18h56m18s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -219,7 +219,7 @@ disk=off
 stop=18h56m18s   !NEXT!
 
 !* --- Scan from 18h56m24s to 19h00m24s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -233,7 +233,7 @@ disk=off
 stop=19h00m24s   !NEXT!
 
 !* --- Scan from 19h04m53s to 19h08m53s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -251,7 +251,7 @@ disk=off
 stop=19h08m53s   !NEXT!
 
 !* --- Scan from 19h08m59s to 19h12m59s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -268,7 +268,7 @@ disk=off
 stop=19h12m59s   !NEXT!
 
 !* --- Scan from 19h13m05s to 19h17m05s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -283,7 +283,7 @@ disk=off
 stop=19h17m05s   !NEXT!
 
 !* --- Scan from 19h17m11s to 19h21m11s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -297,7 +297,7 @@ disk=off
 stop=19h21m11s   !NEXT!
 
 !* --- Scan from 19h21m17s to 19h25m17s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -315,7 +315,7 @@ disk=off
 stop=19h25m17s   !NEXT!
 
 !* --- Scan from 19h25m23s to 19h29m23s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -332,7 +332,7 @@ disk=off
 stop=19h29m23s   !NEXT!
 
 !* --- Scan from 19h29m29s to 19h33m29s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -347,7 +347,7 @@ disk=off
 stop=19h33m29s   !NEXT!
 
 !* --- Scan from 19h33m35s to 19h37m35s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -361,7 +361,7 @@ disk=off
 stop=19h37m35s   !NEXT!
 
 !* --- Scan from 19h37m41s to 19h41m41s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -379,7 +379,7 @@ disk=off
 stop=19h41m41s   !NEXT!
 
 !* --- Scan from 19h41m47s to 19h45m47s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -396,7 +396,7 @@ disk=off
 stop=19h45m47s   !NEXT!
 
 !* --- Scan from 19h45m53s to 19h49m53s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -411,7 +411,7 @@ disk=off
 stop=19h49m53s   !NEXT!
 
 !* --- Scan from 19h49m59s to 19h53m59s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -425,7 +425,7 @@ disk=off
 stop=19h53m59s   !NEXT!
 
 !* --- Scan from 19h54m05s to 19h58m05s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -443,7 +443,7 @@ disk=off
 stop=19h58m05s   !NEXT!
 
 !* --- Scan from 19h58m11s to 20h02m11s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -460,7 +460,7 @@ disk=off
 stop=20h02m11s   !NEXT!
 
 !* --- Scan from 20h02m17s to 20h06m17s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -475,7 +475,7 @@ disk=off
 stop=20h06m17s   !NEXT!
 
 !* --- Scan from 20h06m23s to 20h10m23s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -553,7 +553,7 @@ disk=off
 stop=20h30m41s   !NEXT!
 
 !* --- Scan from 20h32m36s to 20h36m36s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -571,7 +571,7 @@ disk=off
 stop=20h36m36s   !NEXT!
 
 !* --- Scan from 20h36m42s to 20h40m42s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -588,7 +588,7 @@ disk=off
 stop=20h40m42s   !NEXT!
 
 !* --- Scan from 20h40m48s to 20h44m48s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -603,7 +603,7 @@ disk=off
 stop=20h44m48s   !NEXT!
 
 !* --- Scan from 20h44m54s to 20h48m54s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -617,7 +617,7 @@ disk=off
 stop=20h48m54s   !NEXT!
 
 !* --- Scan from 20h49m00s to 20h53m00s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -635,7 +635,7 @@ disk=off
 stop=20h53m00s   !NEXT!
 
 !* --- Scan from 20h53m06s to 20h57m06s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -652,7 +652,7 @@ disk=off
 stop=20h57m06s   !NEXT!
 
 !* --- Scan from 20h57m12s to 21h01m12s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -667,7 +667,7 @@ disk=off
 stop=21h01m12s   !NEXT!
 
 !* --- Scan from 21h01m18s to 21h05m18s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -681,7 +681,7 @@ disk=off
 stop=21h05m18s   !NEXT!
 
 !* --- Scan from 21h05m24s to 21h09m24s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -699,7 +699,7 @@ disk=off
 stop=21h09m24s   !NEXT!
 
 !* --- Scan from 21h09m30s to 21h13m30s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -716,7 +716,7 @@ disk=off
 stop=21h13m30s   !NEXT!
 
 !* --- Scan from 21h13m36s to 21h17m36s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -731,7 +731,7 @@ disk=off
 stop=21h17m36s   !NEXT!
 
 !* --- Scan from 21h17m42s to 21h21m42s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -745,7 +745,7 @@ disk=off
 stop=21h21m42s   !NEXT!
 
 !* --- Scan from 21h21m48s to 21h25m48s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -763,7 +763,7 @@ disk=off
 stop=21h25m48s   !NEXT!
 
 !* --- Scan from 21h25m54s to 21h29m54s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -780,7 +780,7 @@ disk=off
 stop=21h29m54s   !NEXT!
 
 !* --- Scan from 21h30m00s to 21h34m00s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -795,7 +795,7 @@ disk=off
 stop=21h34m00s   !NEXT!
 
 !* --- Scan from 21h34m06s to 21h38m06s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -809,7 +809,7 @@ disk=off
 stop=21h38m06s   !NEXT!
 
 !* --- Scan from 21h38m12s to 21h42m12s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -827,7 +827,7 @@ disk=off
 stop=21h42m12s   !NEXT!
 
 !* --- Scan from 21h42m18s to 21h46m18s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -844,7 +844,7 @@ disk=off
 stop=21h46m18s   !NEXT!
 
 !* --- Scan from 21h46m24s to 21h50m24s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -859,7 +859,7 @@ disk=off
 stop=21h50m24s   !NEXT!
 
 !* --- Scan from 21h50m30s to 21h54m30s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -873,7 +873,7 @@ disk=off
 stop=21h54m30s   !NEXT!
 
 !* --- Scan from 21h54m36s to 21h58m36s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -891,7 +891,7 @@ disk=off
 stop=21h58m36s   !NEXT!
 
 !* --- Scan from 21h58m42s to 22h02m42s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -908,7 +908,7 @@ disk=off
 stop=22h02m42s   !NEXT!
 
 !* --- Scan from 22h02m48s to 22h06m48s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -923,7 +923,7 @@ disk=off
 stop=22h06m48s   !NEXT!
 
 !* --- Scan from 22h06m54s to 22h10m54s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -937,7 +937,7 @@ disk=off
 stop=22h10m54s   !NEXT!
 
 !* --- Scan from 22h33m27s to 22h37m27s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -955,7 +955,7 @@ disk=off
 stop=22h37m27s   !NEXT!
 
 !* --- Scan from 22h37m33s to 22h41m33s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -972,7 +972,7 @@ disk=off
 stop=22h41m33s   !NEXT!
 
 !* --- Scan from 22h41m39s to 22h45m39s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -987,7 +987,7 @@ disk=off
 stop=22h45m39s   !NEXT!
 
 !* --- Scan from 22h45m45s to 22h49m45s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1001,7 +1001,7 @@ disk=off
 stop=22h49m45s   !NEXT!
 
 !* --- Scan from 22h49m51s to 22h53m51s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -1019,7 +1019,7 @@ disk=off
 stop=22h53m51s   !NEXT!
 
 !* --- Scan from 22h53m57s to 22h57m57s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -1036,7 +1036,7 @@ disk=off
 stop=22h57m57s   !NEXT!
 
 !* --- Scan from 22h58m03s to 23h02m03s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -1051,7 +1051,7 @@ disk=off
 stop=23h02m03s   !NEXT!
 
 !* --- Scan from 23h02m09s to 23h06m09s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1065,7 +1065,7 @@ disk=off
 stop=23h06m09s   !NEXT!
 
 !* --- Scan from 23h06m15s to 23h10m15s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -1083,7 +1083,7 @@ disk=off
 stop=23h10m15s   !NEXT!
 
 !* --- Scan from 23h10m21s to 23h14m21s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -1100,7 +1100,7 @@ disk=off
 stop=23h14m21s   !NEXT!
 
 !* --- Scan from 23h14m27s to 23h18m27s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -1115,7 +1115,7 @@ disk=off
 stop=23h18m27s   !NEXT!
 
 !* --- Scan from 23h18m33s to 23h22m33s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1129,7 +1129,7 @@ disk=off
 stop=23h22m33s   !NEXT!
 
 !* --- Scan from 23h22m39s to 23h26m39s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -1147,7 +1147,7 @@ disk=off
 stop=23h26m39s   !NEXT!
 
 !* --- Scan from 23h26m45s to 23h30m45s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -1164,7 +1164,7 @@ disk=off
 stop=23h30m45s   !NEXT!
 
 !* --- Scan from 23h30m51s to 23h34m51s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -1179,7 +1179,7 @@ disk=off
 stop=23h34m51s   !NEXT!
 
 !* --- Scan from 23h34m57s to 23h38m57s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1193,7 +1193,7 @@ disk=off
 stop=23h38m57s   !NEXT!
 
 !* --- Scan from 23h39m03s to 23h43m03s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -1211,7 +1211,7 @@ disk=off
 stop=23h43m03s   !NEXT!
 
 !* --- Scan from 23h43m09s to 23h47m09s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -1228,7 +1228,7 @@ disk=off
 stop=23h47m09s   !NEXT!
 
 !* --- Scan from 23h47m15s to 23h51m15s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -1243,7 +1243,7 @@ disk=off
 stop=23h51m15s   !NEXT!
 
 !* --- Scan from 23h51m21s to 23h55m21s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1257,7 +1257,7 @@ disk=off
 stop=23h55m21s   !NEXT!
 
 !* --- Scan from 23h55m27s to 23h59m27s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 format=VLBA1:4
@@ -1275,7 +1275,7 @@ disk=off
 stop=23h59m27s   !NEXT!
 
 !* --- Scan from 23h59m33s to 00h03m33s   Wed, 1995 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 format=VLBA1:2
@@ -1293,7 +1293,7 @@ date=1995Jul06
 stop=00h03m33s   !NEXT!
 
 !* --- Scan from 00h03m39s to 00h07m39s   Thu, 1995 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,90cm),(4,90cm)
 synth=( 1,15.4),( 2,15.4),( 3,15.4)
 ifchan=(1,B),(3,B)
@@ -1308,7 +1308,7 @@ disk=off
 stop=00h07m39s   !NEXT!
 
 !* --- Scan from 00h07m45s to 00h11m45s   Thu, 1995 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,7mm),(3,7mm)
 synth=( 1, 3.9),( 2, 7.6),( 3,11.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)

@@ -562,10 +562,10 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
- * 2145+067          21 45 36.078475   * 21 48 05.458673     21 48 47.853634       0.26
-   J2148+0657        06 43 40.90460    * 06 57 38.60421      07 01 36.10446        0.25
+ * 2145+067          21 45 36.078473   * 21 48 05.458671     21 48 47.853633       0.26
+   J2148+0657        06 43 40.90456    * 06 57 38.60416      07 01 36.10442        0.25
    J2148+06          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished 103488 observations.
+                     GSFC 2016a X/S astro solution, 110505 observations.
 
 
 

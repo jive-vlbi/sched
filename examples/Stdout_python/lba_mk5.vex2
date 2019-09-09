@@ -63,14 +63,14 @@ def lba3cm-2p-4IF;
      ref $IF = LO@9000MHzDPolNoTone:Cd;
      ref $BBC = 2BBCs:Ak;
      ref $BBC = 4BBCs:At:Mp:Pa;
-     ref $BBC = 8BBCs:Cd:Hh:Ke:Yg;
-     ref $BBC = 8BBCs#02:Ho;
+     ref $BBC = 8BBCs:Cd:Ho:Ke:Yg;
+     ref $BBC = 8BBCs#02:Hh;
      ref $BBC = 8BBCs#03:Ww;
      ref $PHASE_CAL_DETECT = NoDetect:Ak:At:Cd:Hh:Ho:Ke:Mp:Pa:Ww:Yg;
      ref $FREQ = 8409MHz2x64MHz:Ak;
      ref $FREQ = 8409MHz8x16MHz:At:Mp:Pa;
-     ref $FREQ = 8409MHz8x16MHz#02:Cd:Hh:Ke:Ww:Yg;
-     ref $FREQ = 8409MHz8x16MHz#03:Ho;
+     ref $FREQ = 8409MHz8x16MHz#02:Cd:Ho:Ke:Ww:Yg;
+     ref $FREQ = 8409MHz8x16MHz#03:Hh;
      ref $TRACKS = LBA_AT.2Ch2bit1to1:Ak;
      ref $TRACKS = LBA_AT.8Ch2bit1to1:At:Mp:Pa;
      ref $BITSTREAMS = BS8Ch2Bit:Cd:Ho;
@@ -106,7 +106,7 @@ enddef;
 def LO@8080MHzDPolNoTone;
 * lba3cm-2p-4IF: Hh
      if_def = &IF_A1 :  : R :   8080.00 MHz : U;
-     if_def = &IF_B1 :  : L :   8080.00 MHz : U;
+     if_def = &IF_C1 :  : L :   8080.00 MHz : U;
 enddef;
 *
 def LO@8100MHzDPolNoTone;
@@ -144,7 +144,7 @@ def 4BBCs;
 enddef;
 *
 def 8BBCs;
-* lba3cm-2p-4IF: Cd, Hh, Ke, Yg
+* lba3cm-2p-4IF: Cd, Ho, Ke, Yg
      BBC_assign = &BBC01 : 1 : &IF_A1;
      BBC_assign = &BBC05 : 5 : &IF_B1;
      BBC_assign = &BBC02 : 2 : &IF_A1;
@@ -156,15 +156,15 @@ def 8BBCs;
 enddef;
 *
 def 8BBCs#02;
-* lba3cm-2p-4IF: Ho
+* lba3cm-2p-4IF: Hh
      BBC_assign = &BBC01 :  1 : &IF_A1;
-     BBC_assign = &BBC09 :  9 : &IF_B1;
+     BBC_assign = &BBC09 :  9 : &IF_C1;
      BBC_assign = &BBC02 :  2 : &IF_A1;
-     BBC_assign = &BBC10 : 10 : &IF_B1;
+     BBC_assign = &BBC10 : 10 : &IF_C1;
      BBC_assign = &BBC03 :  3 : &IF_A1;
-     BBC_assign = &BBC11 : 11 : &IF_B1;
+     BBC_assign = &BBC11 : 11 : &IF_C1;
      BBC_assign = &BBC04 :  4 : &IF_A1;
-     BBC_assign = &BBC12 : 12 : &IF_B1;
+     BBC_assign = &BBC12 : 12 : &IF_C1;
 enddef;
 *
 def 8BBCs#03;
@@ -207,7 +207,7 @@ def 8409MHz8x16MHz;
 enddef;
 *
 def 8409MHz8x16MHz#02;
-* lba3cm-2p-4IF: Cd, Hh, Ke, Ww, Yg
+* lba3cm-2p-4IF: Cd, Ho, Ke, Ww, Yg
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal;
      chan_def =  : 8425 MHz : U :   16.00 MHz : &CH03 : &BBC02 : &NoCal;
@@ -219,7 +219,7 @@ def 8409MHz8x16MHz#02;
 enddef;
 *
 def 8409MHz8x16MHz#03;
-* lba3cm-2p-4IF: Ho
+* lba3cm-2p-4IF: Hh
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH02 : &BBC09 : &NoCal;
      chan_def =  : 8425 MHz : U :   16.00 MHz : &CH03 : &BBC02 : &NoCal;
@@ -337,7 +337,7 @@ def Ke;
 enddef;
 *
 def Yg;
-     ref $ANTENNA = YARRAGAD;
+     ref $ANTENNA = KATHERIN;
      ref $DAS = DBBC_DDC+Mark5B;
      ref $SITE = YARRAGAD;
 enddef;
@@ -350,7 +350,7 @@ enddef;
 *
 def Hh;
      ref $ANTENNA = HART;
-     ref $DAS = DBBC_DDC+Mark5B;
+     ref $DAS = DBBC_DDC+Mark5C;
      ref $SITE = HART;
 enddef;
 *------------------------------------------------------------------------------
@@ -381,21 +381,21 @@ def HART;
      axis_type = ha : dec;
      antenna_motion =  ha :   30.0 deg/min : 20 sec;
      antenna_motion = dec :   30.0 deg/min : 20 sec;
-     axis_offset =     6.6951 m;
+     axis_offset =     6.6944 m;
 enddef;
 *
 def HOB_DBBC;
      axis_type = x : yew;
      antenna_motion =   x :   40.0 deg/min : 2 sec;
      antenna_motion = yew :   40.0 deg/min : 2 sec;
-     axis_offset =     8.1937 m;
+     axis_offset =     8.1944 m;
 enddef;
 *
 def KATHERIN;
      axis_type = az : el;
      antenna_motion = az :  300.0 deg/min : 2 sec;
      antenna_motion = el :   75.0 deg/min : 2 sec;
-     axis_offset =     0.0032 m;
+     axis_offset =        0.0 m;
 enddef;
 *
 def MOPRA;
@@ -409,27 +409,25 @@ def PARKES;
      axis_type = az : el;
      antenna_motion = az :   22.0 deg/min : 2 sec;
      antenna_motion = el :   12.0 deg/min : 2 sec;
-     axis_offset =    -0.0242 m;
+     axis_offset =    -0.0214 m;
 enddef;
 *
 def WARK12M;
      axis_type = az : el;
      antenna_motion = az :  600.0 deg/min : 2 sec;
      antenna_motion = el :   60.0 deg/min : 2 sec;
-     axis_offset =    -0.0016 m;
-enddef;
-*
-def YARRAGAD;
-     axis_type = az : el;
-     antenna_motion = az :  300.0 deg/min : 2 sec;
-     antenna_motion = el :   75.0 deg/min : 2 sec;
-     axis_offset =    -0.0026 m;
+     axis_offset =        0.0 m;
 enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
 def DBBC_DDC+Mark5B;
      equip = recorder :   Mark5B :   &Mark5B;
+     equip =     rack : DBBC_DDC : &DBBC_DDC;
+enddef;
+*
+def DBBC_DDC+Mark5C;
+     equip = recorder :   Mark5C :   &Mark5C;
      equip =     rack : DBBC_DDC : &DBBC_DDC;
 enddef;
 *
@@ -471,27 +469,29 @@ def HART;
      site_type = fixed;
      site_name = HART;
      site_ID = Hh;
-     site_position =  5085442.76370 m :  2668263.79130 m : -2768696.75230 m;
-     site_velocity =  -0.001090 m/yr :   0.019160 m/yr :   0.015860 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position =  5085442.76080 m :  2668263.80910 m : -2768696.72920 m;
+     site_velocity =  -0.001000 m/yr :   0.019200 m/yr :   0.016180 m/yr;
+     site_position_epoch = 2014y001d;
+     horizon_map_az = 0.0 deg : 10.0 : 14.0 : 19.0 : 23.0 : 26.0 : 29.0 : 31.0 : 55.0 : 63.0 : 72.0 : 95.0 : 104.0 : 110.0 : 114.0 : 119.0 : 125.0 : 131.0 : 138.0 : 147.0 : 159.0 : 172.0 : 178.0 : 182.0 : 188.0 : 201.0 : 213.0 : 222.0 : 229.0 : 235.0 : 241.0 : 246.0 : 250.0 : 256.0 : 260.0 : 264.0 : 270.0 : 279.0 : 285.0 : 293.0 : 302.0 : 311.0 : 318.0 : 325.0 : 331.0 : 334.0 : 337.0 : 341.0 : 346.0 : 350.0 : 360.0;
+     horizon_map_el = 19.0 deg : 18.0 : 17.0 : 15.0 : 13.0 : 11.0 : 9.0 : 7.0 : 6.0 : 6.0 : 7.0 : 8.0 : 9.0 : 11.0 : 13.0 : 15.0 : 17.0 : 19.0 : 21.0 : 23.0 : 25.0 : 26.0 : 33.0 : 33.0 : 26.0 : 25.0 : 23.0 : 21.0 : 19.0 : 17.0 : 15.0 : 13.0 : 11.0 : 9.0 : 7.0 : 5.0 : 3.0 : 3.0 : 5.0 : 7.0 : 9.0 : 10.0 : 10.0 : 9.0 : 9.0 : 11.0 : 13.0 : 15.0 : 17.0 : 18.0 : 19.0;
 enddef;
 *
 def HOB_DBBC;
      site_type = fixed;
      site_name = HOB_DBBC;
      site_ID = Ho;
-     site_position = -3950237.35900 m :  2522347.68040 m : -4311561.87900 m;
-     site_velocity =  -0.038660 m/yr :   0.007880 m/yr :   0.040940 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -3950237.40300 m :  2522347.68410 m : -4311561.83350 m;
+     site_velocity =  -0.039010 m/yr :   0.007960 m/yr :   0.041100 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def KATHERIN;
      site_type = fixed;
      site_name = KATHERIN;
      site_ID = Ke;
-     site_position = -4147354.64490 m :  4581542.39110 m : -1573303.21960 m;
-     site_velocity =  -0.035500 m/yr :  -0.008070 m/yr :   0.057310 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -4147354.69130 m :  4581542.37720 m : -1573303.15650 m;
+     site_velocity =  -0.037710 m/yr :  -0.011590 m/yr :   0.056300 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def MOPRA;
@@ -507,27 +507,27 @@ def PARKES;
      site_type = fixed;
      site_name = PARKES;
      site_ID = Pa;
-     site_position = -4554232.48640 m :  2816758.86620 m : -3454035.01370 m;
-     site_velocity =  -0.033170 m/yr :  -0.003580 m/yr :   0.048610 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -4554232.53800 m :  2816758.86560 m : -3454034.96860 m;
+     site_velocity =  -0.034250 m/yr :  -0.003010 m/yr :   0.048370 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def WARK12M;
      site_type = fixed;
      site_name = WARK12M;
      site_ID = Ww;
-     site_position = -5115324.42790 m :   477843.29690 m : -3767192.83440 m;
-     site_velocity =  -0.023910 m/yr :  -0.000280 m/yr :   0.032410 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -5115324.46020 m :   477843.29000 m : -3767192.80130 m;
+     site_velocity =  -0.021220 m/yr :  -0.003070 m/yr :   0.036020 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *
 def YARRAGAD;
      site_type = fixed;
      site_name = YARRAGAD;
      site_ID = Yg;
-     site_position = -2388896.13020 m :  5043349.99320 m : -3078590.85770 m;
-     site_velocity =  -0.049780 m/yr :   0.011620 m/yr :   0.047360 m/yr;
-     site_position_epoch = 2013y001d;
+     site_position = -2388896.18900 m :  5043350.00190 m : -3078590.80370 m;
+     site_velocity =  -0.048140 m/yr :   0.009600 m/yr :   0.051060 m/yr;
+     site_position_epoch = 2014y001d;
 enddef;
 *------------------------------------------------------------------------------
 $PROCEDURES;
@@ -549,15 +549,15 @@ enddef;
 $SOURCE;
 def 0437-454;
      source_name = 0437-454;
-     ra = 04h39m00.8546732s; dec = -45d22'22.562901"; ref_coord_frame = J2000;
+     ra = 04h39m00.8546668s; dec = -45d22'22.563172"; ref_coord_frame = J2000;
 enddef;
 def 0438-436;
      source_name = 0438-436;
-     ra = 04h40m17.1799744s; dec = -43d33'08.604356"; ref_coord_frame = J2000;
+     ra = 04h40m17.1799667s; dec = -43d33'08.604274"; ref_coord_frame = J2000;
 enddef;
 def 0537-441;
      source_name = 0537-441;
-     ra = 05h38m50.3615546s; dec = -44d05'08.938934"; ref_coord_frame = J2000;
+     ra = 05h38m50.3615595s; dec = -44d05'08.939013"; ref_coord_frame = J2000;
 enddef;
 *------------------------------------------------------------------------------
 $SCHED;

@@ -70,7 +70,7 @@ disk=off
 stop=18h15m20s   !NEXT!
 
 !* --- Scan from 18h19m20s to 18h23m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -81,7 +81,7 @@ disk=off
 stop=18h23m20s   !NEXT!
 
 !* --- Scan from 18h23m40s to 18h27m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -92,7 +92,7 @@ disk=off
 stop=18h27m40s   !NEXT!
 
 !* --- Scan from 18h28m00s to 18h32m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -103,7 +103,7 @@ disk=off
 stop=18h32m00s   !NEXT!
 
 !* --- Scan from 18h32m20s to 18h36m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -114,7 +114,7 @@ disk=off
 stop=18h36m20s   !NEXT!
 
 !* --- Scan from 18h36m40s to 18h40m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -125,7 +125,7 @@ disk=off
 stop=18h40m40s   !NEXT!
 
 !* --- Scan from 18h41m00s to 18h45m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -136,7 +136,7 @@ disk=off
 stop=18h45m00s   !NEXT!
 
 !* --- Scan from 18h45m20s to 18h49m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -147,7 +147,7 @@ disk=off
 stop=18h49m20s   !NEXT!
 
 !* --- Scan from 18h49m40s to 18h53m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -158,7 +158,7 @@ disk=off
 stop=18h53m40s   !NEXT!
 
 !* --- Scan from 18h54m00s to 18h58m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -169,7 +169,7 @@ disk=off
 stop=18h58m00s   !NEXT!
 
 !* --- Scan from 18h58m20s to 19h02m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -180,7 +180,7 @@ disk=off
 stop=19h02m20s   !NEXT!
 
 !* --- Scan from 19h02m40s to 19h06m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -191,7 +191,7 @@ disk=off
 stop=19h06m40s   !NEXT!
 
 !* --- Scan from 19h07m00s to 19h11m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -224,7 +224,7 @@ disk=off
 stop=19h23m20s   !NEXT!
 
 !* --- Scan from 19h27m20s to 19h31m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -235,7 +235,7 @@ disk=off
 stop=19h31m20s   !NEXT!
 
 !* --- Scan from 19h31m40s to 19h35m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -246,7 +246,7 @@ disk=off
 stop=19h35m40s   !NEXT!
 
 !* --- Scan from 19h36m00s to 19h40m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -257,7 +257,7 @@ disk=off
 stop=19h40m00s   !NEXT!
 
 !* --- Scan from 19h40m20s to 19h44m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -268,7 +268,7 @@ disk=off
 stop=19h44m20s   !NEXT!
 
 !* --- Scan from 19h44m40s to 19h48m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -279,7 +279,7 @@ disk=off
 stop=19h48m40s   !NEXT!
 
 !* --- Scan from 19h49m00s to 19h53m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -290,7 +290,7 @@ disk=off
 stop=19h53m00s   !NEXT!
 
 !* --- Scan from 19h53m20s to 19h57m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -301,7 +301,7 @@ disk=off
 stop=19h57m20s   !NEXT!
 
 !* --- Scan from 19h57m40s to 20h01m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -312,7 +312,7 @@ disk=off
 stop=20h01m40s   !NEXT!
 
 !* --- Scan from 20h02m00s to 20h06m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -323,7 +323,7 @@ disk=off
 stop=20h06m00s   !NEXT!
 
 !* --- Scan from 20h06m20s to 20h10m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -334,7 +334,7 @@ disk=off
 stop=20h10m20s   !NEXT!
 
 !* --- Scan from 20h10m40s to 20h14m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -345,7 +345,7 @@ disk=off
 stop=20h14m40s   !NEXT!
 
 !* --- Scan from 20h15m00s to 20h19m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -378,7 +378,7 @@ disk=off
 stop=20h31m20s   !NEXT!
 
 !* --- Scan from 20h35m20s to 20h39m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -389,7 +389,7 @@ disk=off
 stop=20h39m20s   !NEXT!
 
 !* --- Scan from 20h39m40s to 20h43m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -400,7 +400,7 @@ disk=off
 stop=20h43m40s   !NEXT!
 
 !* --- Scan from 20h44m00s to 20h48m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -411,7 +411,7 @@ disk=off
 stop=20h48m00s   !NEXT!
 
 !* --- Scan from 20h48m20s to 20h52m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -422,7 +422,7 @@ disk=off
 stop=20h52m20s   !NEXT!
 
 !* --- Scan from 20h52m40s to 20h56m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -433,7 +433,7 @@ disk=off
 stop=20h56m40s   !NEXT!
 
 !* --- Scan from 20h57m00s to 21h01m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -444,7 +444,7 @@ disk=off
 stop=21h01m00s   !NEXT!
 
 !* --- Scan from 21h01m20s to 21h05m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -455,7 +455,7 @@ disk=off
 stop=21h05m20s   !NEXT!
 
 !* --- Scan from 21h05m40s to 21h09m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -466,7 +466,7 @@ disk=off
 stop=21h09m40s   !NEXT!
 
 !* --- Scan from 21h10m00s to 21h14m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -477,7 +477,7 @@ disk=off
 stop=21h14m00s   !NEXT!
 
 !* --- Scan from 21h14m20s to 21h18m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -488,7 +488,7 @@ disk=off
 stop=21h18m20s   !NEXT!
 
 !* --- Scan from 21h18m40s to 21h22m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -499,7 +499,7 @@ disk=off
 stop=21h22m40s   !NEXT!
 
 !* --- Scan from 21h23m00s to 21h27m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -532,7 +532,7 @@ disk=off
 stop=21h39m20s   !NEXT!
 
 !* --- Scan from 21h43m20s to 21h47m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -543,7 +543,7 @@ disk=off
 stop=21h47m20s   !NEXT!
 
 !* --- Scan from 21h47m40s to 21h51m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -554,7 +554,7 @@ disk=off
 stop=21h51m40s   !NEXT!
 
 !* --- Scan from 21h52m00s to 21h56m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -565,7 +565,7 @@ disk=off
 stop=21h56m00s   !NEXT!
 
 !* --- Scan from 21h56m20s to 22h00m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -576,7 +576,7 @@ disk=off
 stop=22h00m20s   !NEXT!
 
 !* --- Scan from 22h00m40s to 22h04m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -587,7 +587,7 @@ disk=off
 stop=22h04m40s   !NEXT!
 
 !* --- Scan from 22h05m00s to 22h09m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -598,7 +598,7 @@ disk=off
 stop=22h09m00s   !NEXT!
 
 !* --- Scan from 22h09m20s to 22h13m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -609,7 +609,7 @@ disk=off
 stop=22h13m20s   !NEXT!
 
 !* --- Scan from 22h13m40s to 22h17m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -620,7 +620,7 @@ disk=off
 stop=22h17m40s   !NEXT!
 
 !* --- Scan from 22h18m00s to 22h22m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -631,7 +631,7 @@ disk=off
 stop=22h22m00s   !NEXT!
 
 !* --- Scan from 22h22m20s to 22h26m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -642,7 +642,7 @@ disk=off
 stop=22h26m20s   !NEXT!
 
 !* --- Scan from 22h26m40s to 22h30m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -653,7 +653,7 @@ disk=off
 stop=22h30m40s   !NEXT!
 
 !* --- Scan from 22h31m00s to 22h35m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -664,7 +664,7 @@ disk=off
 stop=22h35m00s   !NEXT!
 
 !* --- Scan from 22h51m20s to 22h55m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -675,7 +675,7 @@ disk=off
 stop=22h55m20s   !NEXT!
 
 !* --- Scan from 22h55m40s to 22h59m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -686,7 +686,7 @@ disk=off
 stop=22h59m40s   !NEXT!
 
 !* --- Scan from 23h00m00s to 23h04m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -697,7 +697,7 @@ disk=off
 stop=23h04m00s   !NEXT!
 
 !* --- Scan from 23h04m20s to 23h08m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -708,7 +708,7 @@ disk=off
 stop=23h08m20s   !NEXT!
 
 !* --- Scan from 23h08m40s to 23h12m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -719,7 +719,7 @@ disk=off
 stop=23h12m40s   !NEXT!
 
 !* --- Scan from 23h13m00s to 23h17m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -730,7 +730,7 @@ disk=off
 stop=23h17m00s   !NEXT!
 
 !* --- Scan from 23h17m20s to 23h21m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -741,7 +741,7 @@ disk=off
 stop=23h21m20s   !NEXT!
 
 !* --- Scan from 23h21m40s to 23h25m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -752,7 +752,7 @@ disk=off
 stop=23h25m40s   !NEXT!
 
 !* --- Scan from 23h26m00s to 23h30m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -763,7 +763,7 @@ disk=off
 stop=23h30m00s   !NEXT!
 
 !* --- Scan from 23h30m20s to 23h34m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -774,7 +774,7 @@ disk=off
 stop=23h34m20s   !NEXT!
 
 !* --- Scan from 23h34m40s to 23h38m40s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -785,7 +785,7 @@ disk=off
 stop=23h38m40s   !NEXT!
 
 !* --- Scan from 23h39m00s to 23h43m00s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -796,7 +796,7 @@ disk=off
 stop=23h43m00s   !NEXT!
 
 !* --- Scan from 23h47m00s to 23h51m00s   Sat, 2014 Jul 05 --- *!
-sname='OQ208'  ra=14h07m00.394414s  dec= 28d27'14.69022"  qual=999  calib='V'
+sname='OQ208'  ra=14h07m00.394415s  dec= 28d27'14.69019"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -807,7 +807,7 @@ disk=off
 stop=23h51m00s   !NEXT!
 
 !* --- Scan from 23h51m20s to 23h55m20s   Sat, 2014 Jul 05 --- *!
-sname='OQ208'  ra=14h07m00.394414s  dec= 28d27'14.69022"  qual=999  calib='V'
+sname='OQ208'  ra=14h07m00.394415s  dec= 28d27'14.69019"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -818,7 +818,7 @@ disk=off
 stop=23h55m20s   !NEXT!
 
 !* --- Scan from 23h59m20s to 00h03m20s   Sat, 2014 Jul 05 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -830,7 +830,7 @@ date=2014Jul06
 stop=00h03m20s   !NEXT!
 
 !* --- Scan from 00h03m40s to 00h07m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -841,7 +841,7 @@ disk=off
 stop=00h07m40s   !NEXT!
 
 !* --- Scan from 00h08m00s to 00h12m00s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -852,7 +852,7 @@ disk=off
 stop=00h12m00s   !NEXT!
 
 !* --- Scan from 00h12m20s to 00h16m20s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -863,7 +863,7 @@ disk=off
 stop=00h16m20s   !NEXT!
 
 !* --- Scan from 00h16m40s to 00h20m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -874,7 +874,7 @@ disk=off
 stop=00h20m40s   !NEXT!
 
 !* --- Scan from 00h21m00s to 00h25m00s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -885,7 +885,7 @@ disk=off
 stop=00h25m00s   !NEXT!
 
 !* --- Scan from 00h25m20s to 00h29m20s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -896,7 +896,7 @@ disk=off
 stop=00h29m20s   !NEXT!
 
 !* --- Scan from 00h29m40s to 00h33m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -907,7 +907,7 @@ disk=off
 stop=00h33m40s   !NEXT!
 
 !* --- Scan from 00h34m00s to 00h38m00s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -918,7 +918,7 @@ disk=off
 stop=00h38m00s   !NEXT!
 
 !* --- Scan from 00h38m20s to 00h42m20s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -929,7 +929,7 @@ disk=off
 stop=00h42m20s   !NEXT!
 
 !* --- Scan from 00h42m40s to 00h46m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -940,7 +940,7 @@ disk=off
 stop=00h46m40s   !NEXT!
 
 !* --- Scan from 00h47m00s to 00h51m00s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -951,7 +951,7 @@ disk=off
 stop=00h51m00s   !NEXT!
 
 !* --- Scan from 00h55m00s to 00h59m00s   Sun, 2014 Jul 06 --- *!
-sname='OQ208'  ra=14h07m00.394414s  dec= 28d27'14.69022"  qual=999  calib='V'
+sname='OQ208'  ra=14h07m00.394415s  dec= 28d27'14.69019"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -962,7 +962,7 @@ disk=off
 stop=00h59m00s   !NEXT!
 
 !* --- Scan from 00h59m20s to 01h03m20s   Sun, 2014 Jul 06 --- *!
-sname='OQ208'  ra=14h07m00.394414s  dec= 28d27'14.69022"  qual=999  calib='V'
+sname='OQ208'  ra=14h07m00.394415s  dec= 28d27'14.69019"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -973,7 +973,7 @@ disk=off
 stop=01h03m20s   !NEXT!
 
 !* --- Scan from 01h07m20s to 01h11m20s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -984,7 +984,7 @@ disk=off
 stop=01h11m20s   !NEXT!
 
 !* --- Scan from 01h11m40s to 01h15m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -995,7 +995,7 @@ disk=off
 stop=01h15m40s   !NEXT!
 
 !* --- Scan from 01h16m00s to 01h20m00s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1006,7 +1006,7 @@ disk=off
 stop=01h20m00s   !NEXT!
 
 !* --- Scan from 01h20m20s to 01h24m20s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -1017,7 +1017,7 @@ disk=off
 stop=01h24m20s   !NEXT!
 
 !* --- Scan from 01h24m40s to 01h28m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1028,7 +1028,7 @@ disk=off
 stop=01h28m40s   !NEXT!
 
 !* --- Scan from 01h29m00s to 01h33m00s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -1039,7 +1039,7 @@ disk=off
 stop=01h33m00s   !NEXT!
 
 !* --- Scan from 01h33m20s to 01h37m20s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1050,7 +1050,7 @@ disk=off
 stop=01h37m20s   !NEXT!
 
 !* --- Scan from 01h37m40s to 01h41m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -1061,7 +1061,7 @@ disk=off
 stop=01h41m40s   !NEXT!
 
 !* --- Scan from 01h42m00s to 01h46m00s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)
@@ -1072,7 +1072,7 @@ disk=off
 stop=01h46m00s   !NEXT!
 
 !* --- Scan from 01h46m20s to 01h50m20s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(2,2cm),(4,2cm)
 synth=( 1,14.6),( 2,10.9),( 3,10.9)
 ifchan=(1,B),(2,D),(3,B),(4,D)
@@ -1083,7 +1083,7 @@ disk=off
 stop=01h50m20s   !NEXT!
 
 !* --- Scan from 01h50m40s to 01h54m40s   Sun, 2014 Jul 06 --- *!
-sname='4C39.25'  ra=09h27m03.013936s  dec= 39d02'20.85186"  qual=999  calib='V'
+sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 fe=(1,6cm),(3,6cm)
 synth=( 1,13.6),( 2, 4.1),( 3,13.6)
 ifchan=(1,A),(2,C),(3,A),(4,C)

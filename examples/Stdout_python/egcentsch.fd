@@ -153,22 +153,22 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
-   0920+284          09 20 54.881889   * 09 23 51.523418     09 23 34.936705       0.28
- * J0923+2815        28 28 19.23756    * 28 15 25.02222      28 16 34.27099        0.42
+   0920+284          09 20 54.881883   * 09 23 51.523412     09 23 34.936699       0.10
+ * J0923+2815        28 28 19.23727    * 28 15 25.02193      28 16 34.27071        0.14
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished     46 observations.
+                     GSFC 2016a X/S astro solution,    117 observations.
 
-   0922-202          09 22 53.792578   * 09 25 11.947384     09 24 59.116559       1.24
- * J0925-2027       -20 14 36.62735    *-20 27 35.60885     -20 26 36.22924        2.49
+   0922-202          09 22 53.792599   * 09 25 11.947405     09 24 59.116580       0.12
+ * J0925-2027       -20 14 36.62920    *-20 27 35.61070     -20 26 36.23109        0.27
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished     24 observations.
+                     GSFC 2016a X/S astro solution,    114 observations.
                       Pointing center for phase center group: J0925
                       Member of phase center group: J0925
 
- * 4C39.25           09 23 55.319215   * 09 27 03.013936     09 26 45.221678       0.30
-   J0927+3902        39 15 23.56645    * 39 02 20.85186      39 03 32.84151        0.16
+ * 4C39.25           09 23 55.319216   * 09 27 03.013937     09 26 45.221679       0.31
+   J0927+3902        39 15 23.56644    * 39 02 20.85185      39 03 32.84150        0.16
    0923+392          /home/eldering/sched/catalogs/sources.gsfc
-   J0927+39          GSFC 2015a astro solution, unpublished 245753 observations.
+   J0927+39          GSFC 2016a X/S astro solution, 250526 observations.
                       Pointing center for phase center group: 4C39
 
 

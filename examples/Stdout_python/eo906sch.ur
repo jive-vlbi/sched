@@ -305,9 +305,9 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.21cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     ur21cm_g        Generated from sess317HG.setini, sess118LG.setini, sess218LG.setini, sess317LGl*
+     ur18cm_g        Generated from sess119L5nme.setini, sess119LG.setini, sess219L5nme.setini, sess*
 
-   Setup group:    8         Station: URUMQI            Total bit rate:   128
+   Setup group:    7         Station: URUMQI            Total bit rate:   128
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
    Number of channels:  4    DBE type: DBBC_DDC         Speedup factor:   1.00
 
@@ -323,11 +323,11 @@ SETUP FILE INFORMATION:
 
   The following frequency sets based on these setups were used.
 
-  Frequency Set:   8  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
+  Frequency Set:   7  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
    LO sum=   1411.56  1411.56  1411.56  1411.56
    BBC fr=    111.56   111.56   111.56   111.56
    Bandwd=      8.00     8.00     8.00     8.00
-    Matching frequency sets:   8
+    Matching frequency sets:   7
 
    Track assignments are: 
     track1=   2,  6,  4,  8
@@ -344,28 +344,28 @@ SETUP FILE INFORMATION:
                      Doppler based on LSR frame and redshift.  Velocities:
                           0.00     0.00     0.00     0.00
 
-   1212+171          12 12 31.449698   * 12 15 03.979139     12 15 12.162440       0.02
- * J1215+1654        17 11 18.14549    * 16 54 37.95686      16 53 37.82051        0.03
+   1212+171          12 12 31.449701   * 12 15 03.979142     12 15 12.162443       0.02
+ * J1215+1654        17 11 18.14547    * 16 54 37.95683      16 53 37.82048        0.03
                      /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished   1827 observations.
+                     GSFC 2016a X/S astro solution,   2161 observations.
                      Doppler based on other sources.
 
-   1222+216          12 22 23.408727   * 12 24 54.458413     12 25 02.514389       0.07
- * J1224+2122        21 39 23.03702    * 21 22 46.38864      21 21 44.81205        0.13
+   1222+216          12 22 23.408719   * 12 24 54.458404     12 25 02.514380       0.05
+ * J1224+2122        21 39 23.03695    * 21 22 46.38856      21 21 44.81197        0.09
    J1224+21          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2015a astro solution, unpublished    386 observations.
+                     GSFC 2016a X/S astro solution,    386 observations.
                      Doppler based on other sources.
 
-   3C273B            12 26 33.245833   * 12 29 06.699729     12 29 14.799410       1.05
-   J1229+0203        02 19 43.30578    * 02 03 08.59828      02 02 13.88251        1.37
+   3C273B            12 26 33.245835   * 12 29 06.699731     12 29 14.799411       1.03
+   J1229+0203        02 19 43.30570    * 02 03 08.59820      02 02 13.88242        1.38
  * 3C273             /home/eldering/sched/catalogs/sources.gsfc
-   1226+023          GSFC 2015a astro solution, unpublished  31967 observations.
+   1226+023          GSFC 2016a X/S astro solution,  32136 observations.
    J1229+02          Doppler based on other sources.
 
- * 3C279             12 53 35.831301   * 12 56 11.166568     12 56 19.179343       0.66
-   J1256-0547       -05 31 07.99614    *-05 47 21.52500     -05 48 12.62123        0.93
+ * 3C279             12 53 35.831310   * 12 56 11.166577     12 56 19.179352       0.34
+   J1256-0547       -05 31 07.99627    *-05 47 21.52513     -05 48 12.62136        0.56
    1253-055          /home/eldering/sched/catalogs/sources.gsfc
-   J1256-05          GSFC 2015a astro solution, unpublished   7533 observations.
+   J1256-05          GSFC 2016a X/S astro solution,  13160 observations.
                      Doppler based on other sources.
 
 
@@ -376,11 +376,11 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  M84        eo999.21cm            1 2 3 4 5 6 7 8                   8.100   188.375
-  J1215+1654 eo999.21cm            1 2 3 4 5 6 7 8                   1.800    36.025
-  J1224+2122 eo999.21cm            1 2 3 4 5 6 7 8                   0.100     2.718
-  3C273      eo999.21cm            1 2 3 4 5 6 7 8                   0.133     3.733
-  3C279      eo999.21cm            1 2 3 4 5 6 7 8                   0.133     3.654
+  M84        eo999.21cm            1 2 3 4 5 6 7                     8.100   137.485
+  J1215+1654 eo999.21cm            1 2 3 4 5 6 7                     1.800    25.706
+  J1224+2122 eo999.21cm            1 2 3 4 5 6 7                     0.100     2.030
+  3C273      eo999.21cm            1 2 3 4 5 6 7                     0.133     2.800
+  3C279      eo999.21cm            1 2 3 4 5 6 7                     0.133     2.732
 
 
 EFFECT OF SOLAR CORONA

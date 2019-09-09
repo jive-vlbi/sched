@@ -1977,10 +1977,10 @@ SETUP FILE INFORMATION:
    J1310+32          From catalog imbedded in main SCHED input file.
                      ICRF - Ext.1 Source - 1998 IERS Annual Report
 
-   0552+398          05 52 01.407169   * 05 55 30.805611     05 55 57.367716       0.00
+   0552+398          05 52 01.407168   * 05 55 30.805611     05 55 57.367715       0.00
    J0555+3948        39 48 21.94581    * 39 48 49.16496      39 49 05.85255        0.00
  * DA193             /home/eldering/sched/catalogs/sources.gsfc
-   J0555+39          GSFC 2015a astro solution, unpublished 394383 observations.
+   J0555+39          GSFC 2016a X/S astro solution, 415688 observations.
 
 
 
