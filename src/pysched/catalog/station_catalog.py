@@ -147,6 +147,8 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
             'pkgroup']
     }
     
+    maxsta = s.schn5.usedisk.shape[0]
+    
     def read_scheduled_attributes(self):
         """
         Pre: self has entries
