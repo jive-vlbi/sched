@@ -1,7 +1,10 @@
+from ..catalog import StationCatalog
+
 import schedlib as s
 
 import copy
 
+station_catalog = StationCatalog()
 def scndup(entries, to, from_, copyall, caller):
     if s.schcon.debug:
         s.wlog(0, "SCNDUP: Duplicating scan {} to scan {}.  Called by: {} "
@@ -39,3 +42,5 @@ def scndup(entries, to, from_, copyall, caller):
         s.schn6.pa2[to, :] = s.schn6.pa2[from_, :]
         s.schc6.up2[to, :] = s.schc6.up2[from_, :]
         
+    # update the scan related attributes of stations in the catalog
+    station_catalog.read_scheduled_attributes()
