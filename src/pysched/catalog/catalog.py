@@ -12,6 +12,24 @@ def get_arrays(block_items):
               for item in items}
     return arrays
 
+def write(block_items, entries, indices):
+    for block, items in block_items.items():
+        for item in items:
+            dtype=getattr(block, item).dtype
+            vector_func = np.vectorize(
+                lambda x: x.ljust(dtype.itemsize),
+                otypes=[dtype])
+            for i in indices:
+                new_value = np.array(
+                    getattr(entries[i], item), dtype=dtype)
+                if dtype.kind == "S":
+                    # fill string with spaces fortran/sched style
+                    new_value = vector_func(new_value)
+                # if the new value is smaller, embed it
+                dest_slice = (slice(i, i+1), ) + \
+                             tuple(map(slice, new_value.shape))
+                getattr(block, item).T[dest_slice] = new_value
+
 class Catalog(object):
     """
     Base class to help read f2py common blocks in python objects
@@ -103,19 +121,4 @@ class Catalog(object):
         """
         if indices is None:
             indices = range(self.nr_elements)
-        for block, items in self.block_items.items():
-            for item in items:
-                dtype=getattr(block, item).dtype
-                vector_func = np.vectorize(
-                    lambda x: x.ljust(dtype.itemsize),
-                    otypes=[dtype])
-                for i in indices:
-                    new_value = np.array(
-                        getattr(self.entries[i], item), dtype=dtype)
-                    if dtype.kind == "S":
-                        # fill string with spaces fortran/sched style
-                        new_value = vector_func(new_value)
-                    # if the new value is smaller, embed it
-                    dest_slice = (slice(i, i+1), ) + \
-                                 tuple(map(slice, new_value.shape))
-                    getattr(block, item).T[dest_slice] = new_value
+        write(self.block_items, self.entries, indices)
