@@ -82,8 +82,8 @@ class SourceCatalog(Catalog):
     def __init__(self):
         super().__init__(self.maxsource, self.block_items)
 
-    def scheduled(self):
-        return self.entries[:s.schsou.msrc]
+    def scheduled_slice(self):
+        return slice(s.schsou.msrc)
 
     def used(self):
         return [source for source in self.entries if source.sused]

@@ -172,12 +172,12 @@ class ScanCatalog(Catalog):
     def __init__(self):
         super().__init__(self.maxscan, self.block_items)
 
-    def read(self):
+    def read(self, selection_slice=None):
         self.scan_offset = s.schn1.scan1 - 1
-        return super().read()
+        return super().read(selection_slice)
 
-    def scheduled(self):
-        return self.entries[:s.schn1.scanl]
+    def scheduled_slice(self):
+        return slice(s.schn1.scanl)
 
     def used(self):
         return self.entries[self.scan_offset:s.schn1.scanl]
