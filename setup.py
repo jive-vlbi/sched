@@ -446,6 +446,9 @@ Cit/sys_sun/vlbope.f
 # fortran functions to create a python interface for
 functions = """
 accsrc 
+addgeo 
+addpeak 
+autodown 
 bbccdas 
 bbcgeo 
 bbckvsr 
@@ -476,19 +479,33 @@ chkspd
 chkvdifx 
 cordef 
 delscr 
+diskpos 
 dopfq 
 errlog 
 error 
 errset 
 flags 
 fluxh 
+geomake 
 geoxyz 
+getpairs 
 getsun 
+gmkscn 
 gnset 
 jplver 
 listfreq 
 lst2ut 
+makeptg 
 omsout 
+optcells 
+optcsub 
+opthas 
+opthiel 
+optnone 
+optsch 
+optskd 
+opttim 
+optupt
 plbeam 
 plver 
 pkfinish 
@@ -497,9 +514,12 @@ putout
 recctl 
 sattim 
 sbpair 
+sch24 
 schopt 
 schpre 
 schsum 
+schtim 
+scngeo 
 scnrange 
 setchan 
 setfcat 
@@ -508,6 +528,7 @@ setfreq
 sethw1 
 setrec 
 setstdef 
+settps 
 settrk 
 setusyn 
 sdopincr 
@@ -519,6 +540,7 @@ sla_dat
 socdef 
 srcflg 
 srfinish 
+srinsert 
 srlist 
 stafiles 
 stano 

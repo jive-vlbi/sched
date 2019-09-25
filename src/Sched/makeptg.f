@@ -1,4 +1,6 @@
       SUBROUTINE MAKEPTG( LASTISCN, ISCN, KEEP )
+Cf2py intent(in) LASTISCN, ISCN
+Cf2py intent(in, out) KEEP
 C
 C     Subroutine for SCHED, called by SCHOPT, that converts a scan into
 C     a reference pointing scan.  This involves:

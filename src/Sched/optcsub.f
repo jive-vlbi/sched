@@ -1,4 +1,6 @@
       SUBROUTINE OPTCSUB( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+Cf2py intent(in) LASTISCN, KSCN, ISCN
+Cf2py intent(out) ADJUST, KEEP, DONE
 C
 
 C  ****** doesn't seem to be working properly  Mar 17, 2010.  Not making

@@ -1,4 +1,6 @@
       SUBROUTINE OPTCELLS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+Cf2py intent(in) LASTISCN, KSCN, ISCN
+Cf2py intent(out) ADJUST, KEEP, DONE
 C
 C     **  CSUB may have replaced this completely.
 C            But last I tried, CSUB was not working.  Also AIPS is not

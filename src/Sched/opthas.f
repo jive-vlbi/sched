@@ -1,4 +1,6 @@
       SUBROUTINE OPTHAS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+Cf2py intent(in) LASTISCN, KSCN, ISCN
+Cf2py intent(out) ADJUST, KEEP, DONE
 C
 C     Determine scans to observe with OPTMODE='HASEQ'.  This 
 C     mode makes one pass through the schedule assigning the next 

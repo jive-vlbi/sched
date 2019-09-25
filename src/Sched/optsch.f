@@ -1,5 +1,6 @@
 
       SUBROUTINE OPTSCH( ISCN )
+Cf2py intent(in) ISCN
 C
 C     Routine for optimization mode that writes the keyin input for 
 C     the optimized schedule.

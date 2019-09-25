@@ -1,4 +1,5 @@
       SUBROUTINE DISKPOS( ISCN, ISTA, LASTISCN )
+Cf2py intent(in) ISCN, ISTA, LASTISCN
 C
 C     Routine for SCHED called by SCHTAPE that deals with the
 C     accounting for disk based systems.  Basically it just gets
