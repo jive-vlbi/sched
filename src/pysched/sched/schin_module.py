@@ -260,8 +260,6 @@ attribute_to_key = {
     "pcal": "pcal",
     "focus": "focus",
     "rotation": "rotation",
-    "azcolim": "azcolim",
-    "elcolim":"elcolim" ,
     "opmiss": "opmiss",
     "scantag": "scantag",
     "crdline": "crdline",
@@ -298,7 +296,9 @@ attribute_to_key = {
     "ophmaxdt": "ophmaxdt",
     "dur": "duration",
     "prestart": "prestart",
-    "minpause": "minpause",    
+    "minpause": "minpause",
+    "sazcol": "azcolim",
+    "selcol": "elcolim",
 }
 
 def schin(stdin):
