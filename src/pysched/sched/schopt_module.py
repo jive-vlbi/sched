@@ -1,6 +1,6 @@
 from . import optnone, addpeak, addgeo
 from ..catalog import ScanCatalog, StationCatalog, SourceCatalog, \
-                    PhaseCenterCatalog, SetupCatalog, PeakCatalog
+    PhaseCenterCatalog, SetupCatalog, PeakCatalog
 from ..util import f2str
 
 import schedlib as s

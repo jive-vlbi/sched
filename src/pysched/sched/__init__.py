@@ -38,3 +38,7 @@ from .setexpnd_module import setexpnd
 from .defset_module   import defset
 from .defaults_module import defaults
 from .vexout_module   import vexout
+from .optnone_module  import optnone
+from .addpeak_module  import addpeak
+from .addgeo_module   import addgeo
+from .schopt_module   import schopt
