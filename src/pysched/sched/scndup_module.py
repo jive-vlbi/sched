@@ -37,7 +37,7 @@ def scndup(entries, to, from_, copyall, caller):
         s.schn6.az1[to, :] = s.schn6.az1[from_, :]
         s.schn6.ha1[to, :] = s.schn6.ha1[from_, :]
         s.schn6.pa1[to, :] = s.schn6.pa1[from_, :]
-        s.schc6.up1[to, :] = s.sccn6.up1[from_, :]
+        s.schc6.up1[to, :] = s.schc6.up1[from_, :]
         s.schn6.el2[to, :] = s.schn6.el2[from_, :]
         s.schn6.az2[to, :] = s.schn6.az2[from_, :]
         s.schn6.ha2[to, :] = s.schn6.ha2[from_, :]
