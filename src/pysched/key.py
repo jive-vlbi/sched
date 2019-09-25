@@ -124,7 +124,7 @@ class Parser:
             # keywords can be sliced
             ("[A-Za-z0-9][:()A-Za-z_0-9_+-]*(?=([ \t=/\n]|(\r\n)))", 
              s_keyword),
-            ("[@\.$:()/A-Za-z_0-9\_+-]+", s_value),
+            ("[@\.$:()/A-Za-z_0-9\_+*-]+", s_value),
             ("[^\n]*", s_misc)
         ])
         self.set_defaults(record_defaults, state_defaults)
