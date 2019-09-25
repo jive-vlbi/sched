@@ -1,4 +1,6 @@
       SUBROUTINE OPTNONE( KSCN, ISCN, ADJUST, KEEP, DONE )
+Cf2py intent(in) KSCN, ISCN
+Cf2py intent(out) ADJUST, KEEP, DONE
 C
 C     Routine for sched routine schopt that picks next scan in the
 C     case of no optimization.  This just returns the current input

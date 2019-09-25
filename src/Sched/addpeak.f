@@ -1,4 +1,6 @@
       SUBROUTINE ADDPEAK( LASTISCN, ISCN, PEAKOPT, IADJUST )
+Cf2py intent(in) LASTISCN, ISCN
+Cf2py intent(in, out) PEAKOPT, IADJUST
 C
 C     Routine for SCHED, called by SCHOPT, that inserts reference
 C     pointing scans.

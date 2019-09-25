@@ -1,4 +1,7 @@
       SUBROUTINE ADDGEO( LASTISCN, ISCN, GEOOPT, KEEP )
+Cf2py intent(in) LASTISCN, ISCN
+Cf2py intent(in, out) GEOOPT
+Cf2py intent(out) KEEP
 C
 C     This is the main routine for the automatic insertion of
 C     geodetic segments, mainly for atmospheric calibration.

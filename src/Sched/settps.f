@@ -1,4 +1,5 @@
       SUBROUTINE SETTPS( ISCN, LASTISCN )
+Cf2py intent(in) ISCN, LASTISCN
 C
 C     Routine for SCHED to set TPSTART - how long before the scan
 C     start time to start the recording.  Recorders may be started

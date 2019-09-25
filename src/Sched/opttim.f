@@ -1,5 +1,6 @@
       SUBROUTINE OPTTIM( LASTISCN, LASTSSCN, ISCN, ADJUST, 
      1                   USETIME, DOPRESC )
+Cf2py intent(in) LASTISCN, LASTSSCN, ISCN, ADJUST, USETIME, DOPRESC
 C
 C     Routine that adjust the time of optimized scans.  It's main
 C     use is in SCHOPT, but it is also called from GMKSCN and MAKESCN.

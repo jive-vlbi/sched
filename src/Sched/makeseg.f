@@ -2,6 +2,10 @@
      1                    OKGEO, USEGEO, SEGELEV, STARTB, TGEOEND, 
      2                    LSCN, NTSEG, TSRC, IDUM, SIGMA, SELTYPE,
      3                    WSTA )
+Cf2py intent(in) JSCN, ISCN, LASTISCN, OKGEO, USEGEO, SEGELEV, STARTB
+Cf2py intent(in) TGEOEND, SIGMA
+Cf2py intent(out) LSCN, NTSEG, TSRC, SELTYPE, WSTA
+Cf2py intent(in, out) IDUM
 C
 C     Routine for SCHED called by GEOMAKE that invents a 
 C     series of sources to try as a geodetic sequence.

@@ -1,4 +1,6 @@
       SUBROUTINE AUTODOWN( LASTISCN, ISCN, NGOOD )
+Cf2py intent(in) LASTISCN, ISCN
+Cf2py intent(out) NGOOD
 C
 C     Subroutine for SCHED that removes any stations using 
 C     disk recording from a scan in which the 

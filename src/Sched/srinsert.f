@@ -1,5 +1,6 @@
       SUBROUTINE SRINSERT( JSCN, KSRC, SRNAME, 
      1                     STARTK, STOPK, LASTISCN, MSCN )
+Cf2py intent(in) JSCN, KSRC, SRNAME, STARTK, STOPK, LASTISCN, MSCN
 C
 C     Routine for SCHED used by ADDPEAK while adding pointing scans.
 C     It could conceivably be used by others some day.  ADDPEAK 

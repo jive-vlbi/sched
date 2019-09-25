@@ -1,4 +1,6 @@
       SUBROUTINE OPTSKD( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+Cf2py intent(in) LASTISCN, KSCN, ISCN
+Cf2py intent(out) ADJUST, KEEP, DONE
 C
 C     Routine for optimization mode of sched that decides what to
 C     do with the next input scan.  It is used for OPTMODE=SCANS.

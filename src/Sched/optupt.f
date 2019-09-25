@@ -1,4 +1,7 @@
       SUBROUTINE OPTUPT( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+Cf2py intent(in, out) LASTISCN
+Cf2py intent(in) KSCN, ISCN
+Cf2py intent(out) ADJUST, KEEP, DONE
 C
 C     Routine for SCHED that creates a schedule useful for planning.
 C     Each scan (source) is expanded to a series of scans, each of

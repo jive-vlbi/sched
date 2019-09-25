@@ -1,4 +1,6 @@
       SUBROUTINE HALIM( ISCN, IREFSTA, HAMIN, HAMAX, THAMIN, THAMAX )
+Cf2py intent(in) ISCN, IREFSTA
+Cf2py intent(out) HAMIN, HAMAX, THAMIN, THAMAX
 C
 C     Routine for optimization modes.
 C     This routine figures out the hour angle limits for an input scan
