@@ -761,7 +761,7 @@ class MainWidget(QDialog):
         self.scan_catalog.read()
         station_catalog = StationCatalog()
         station_catalog.read()
-        station_catalog.add_scheduled_attributes()
+        station_catalog.read_scheduled_attributes()
         self.stations = station_catalog.used()
         
         self.tab_widget = QTabWidget(self)
