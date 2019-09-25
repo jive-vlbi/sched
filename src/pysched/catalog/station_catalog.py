@@ -116,6 +116,8 @@ class StationCatalog(Catalog):
     REAL             EL2(MAXSCN,MAXSTA), AZ2(MAXSCN,MAXSTA)
     REAL             HA2(MAXSCN,MAXSTA), PA2(MAXSCN,MAXSTA)
     CHARACTER        UP1(MAXSCN,MAXSTA)*1, UP2(MAXSCN,MAXSTA)*1
+C   from schpeak.inc, MPKSTA is defined as MAXSTA
+    INTEGER          PKGROUP(MPKSTA)
     """
     scheduled_station_items = {
         s.schn2a: [
@@ -140,7 +142,9 @@ class StationCatalog(Catalog):
             'pa2'],
         s.schc6: [
             'up1',
-            'up2']
+            'up2'],
+        s.schpeakn: [
+            'pkgroup']
     }
     
     def read_scheduled_attributes(self):
