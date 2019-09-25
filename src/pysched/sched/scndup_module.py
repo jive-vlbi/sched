@@ -13,7 +13,9 @@ def scndup(entries, to, from_, copyall, caller):
     if to > len(entries):
         s.errlog("SCHDUP: Output scan number {} too big for arrays of "
                  "dimension: {}".format(to+1, len(entries)))
-    entries[to] = copy.deepcopy(entries[from_])
+
+    # copy entry dict so the all references to entry are updated
+    entries[to].__dict__ = copy.deepcopy(entries[from_].__dict__)
     s.schn2a.nsetup[to, :] = s.schn2a.nsetup[from_, :]
     s.schn2a.fseti[to, :] = s.schn2a.fseti[from_, :]
     s.schn2a.stascn[to, :] = s.schn2a.stascn[from_, :]
