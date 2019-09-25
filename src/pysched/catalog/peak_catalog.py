@@ -53,12 +53,10 @@ C     Looking at the code, it seems like this should be PKMINEL(MPKGRP)
             entry.npksta = len(entry.pksta)
         return super().write(indices)
 
-    def prime(self):
-        super().prime()
-        for entry in self.entries:
+    def adjust_lengths(self, entries):
+        for entry in entries:
             entry.pksrc = entry.pksrc[:entry.npksrc]
             entry.pksta = entry.pksta[:entry.npksta]
-        return self.entries
 
     def scheduled(self):
         return self.entries[:s.schpeakn.npkgrp]
