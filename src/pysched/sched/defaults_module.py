@@ -19,7 +19,7 @@ def defaults():
     # Discourage use of MARK5A on the VLBA except for pointing.
     station_catalog = StationCatalog()
     station_catalog.read()
-    station_catalog.add_scheduled_attributes()
+    station_catalog.read_scheduled_attributes()
     if not s.schn1.notape and any(station.station.startswith("VLBA") and 
                                   (station.disk == "MARK5A") 
                                   for station in station_catalog.used()):

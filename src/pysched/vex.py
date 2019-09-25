@@ -26,7 +26,7 @@ def write(output, vex_version="2.0", print_warnings=False):
                     FrequencyCatalog):
         Catalog().read()
     station_catalog = StationCatalog()
-    station_catalog.add_scheduled_attributes()
+    station_catalog.read_scheduled_attributes()
     SourceCatalog().set_aliases()
     scan_catalog = ScanCatalog()
     vex_scans.apply_tape_offset(

@@ -153,7 +153,7 @@ class StationCatalog(Catalog):
             'up2']
     }
     
-    def add_scheduled_attributes(self):
+    def read_scheduled_attributes(self):
         """
         Pre: self has entries
         """
