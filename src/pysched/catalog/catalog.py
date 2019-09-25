@@ -73,13 +73,18 @@ class Catalog(object):
             self.attributes = sum(block_items.values(), [])
             self.extended_attributes = extended_attributes
             self.prime()
+
+    def adjust_lengths(self, entries):
+        """
+        Where the common blocks contain fixed length arrays,
+        set the length of the entries using the variable defining the length.
+        """
+        pass
     
     def prime(self):
         """
         Prepares the catalog with the values from common blocks to overwrite
         with keyin values before calling self.write().
-        Where the common blocks contain fixed length arrays,
-        set the length of the entries using the variable defining the length.
         """
         arrays = get_arrays(self.block_items)
         # create an entry for each index of the arrays
@@ -90,6 +95,7 @@ class Catalog(object):
         for entry in self.entries:
             for attribute in self.extended_attributes:
                 setattr(entry, attribute, None)
+        self.adjust_lengths(self.entries)
         return self.entries
 
     def read(self):
@@ -102,6 +108,7 @@ class Catalog(object):
         for i, entry in enumerate(entries):
             entry.__dict__.update(
                 {key: value[i] for key, value in arrays.items()})
+        self.adjust_lengths(entries)
         return entries
     
     def scheduled(self):
