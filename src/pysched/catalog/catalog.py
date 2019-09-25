@@ -126,7 +126,7 @@ class Catalog(object):
         """
         Return entries that have defined values.
         """
-        return self.entries
+        return self.entries[self.scheduled_slice()]
 
     def write(self, indices=None):
         """
