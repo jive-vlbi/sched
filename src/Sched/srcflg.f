@@ -1,4 +1,5 @@
       SUBROUTINE SRCFLG( GOTALL )
+Cf2py intent(out) GOTALL
 C
 C     Routine for SCHED called by SRREAD and SRFINISH that compares 
 C     catalog entries with sources requested in the schedule and sets
@@ -20,7 +21,6 @@ C
 C
       INTEGER        KSRC, ISRC, INAME
       LOGICAL        GOTALL
-Cf2py intent(out) GOTALL
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'SRCFLG starting' )
 C
