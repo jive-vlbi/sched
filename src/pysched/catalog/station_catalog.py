@@ -1,4 +1,4 @@
-from .catalog import Catalog, get_arrays
+from .catalog import Catalog, get_arrays, write
 
 import schedlib as s
 
@@ -151,4 +151,11 @@ class StationCatalog(Catalog):
         for index, entry in enumerate(self.used()):
             for key, value in arrays.items():
                 setattr(entry, key, value[index])
+
+    def write_scheduled_attributes(self):
+        """
+        Pre: read_scheduled_attributes is up to date
+        """
+        entries = self.used()
+        write(self.scheduled_station_items, entries, range(len(entries)))
             
