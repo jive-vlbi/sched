@@ -37,8 +37,8 @@ class SetupFileCatalog(Catalog):
     def __init__(self):
         super().__init__(self.max_setup_files, self.block_items)
 
-    def scheduled(self):
-        return self.entries[:s.schsf.nsetf]
+    def scheduled_slice(self):
+        return slice(s.schsf.nsetf)
 
     @classmethod
     def extend_with(cls, filename, error_message):

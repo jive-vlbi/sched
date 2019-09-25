@@ -58,5 +58,5 @@ C     Looking at the code, it seems like this should be PKMINEL(MPKGRP)
             entry.pksrc = entry.pksrc[:entry.npksrc]
             entry.pksta = entry.pksta[:entry.npksta]
 
-    def scheduled(self):
-        return self.entries[:s.schpeakn.npkgrp]
+    def scheduled_slice(self):
+        return slice(s.schpeakn.npkgrp)

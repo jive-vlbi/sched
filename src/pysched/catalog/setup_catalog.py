@@ -287,8 +287,8 @@ class SetupCatalog(Catalog):
                              for index in range(nchan)]
         return ret
     
-    def scheduled(self):
-        return self.entries[:s.setn1.nset]
+    def scheduled_slice(self):
+        return slice(s.setn1.nset)
 
     def used(self):
         """

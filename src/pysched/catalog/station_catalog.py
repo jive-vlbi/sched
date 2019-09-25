@@ -97,18 +97,8 @@ class StationCatalog(Catalog):
             entry.horaz = entry.horaz[:length]
             entry.horel = entry.horel[:length]
         
-    def prime(self):
-        ret = super().prime()
-        self.adjust_lengths(ret)
-        return ret
-
-    def read(self):
-        ret = super().read()
-        self.adjust_lengths(ret)
-        return ret
-
-    def scheduled(self):
-        return self.entries[:s.schsta.msta]
+    def scheduled_slice(self):
+        return slice(s.schsta.msta)
 
     def used(self):
         return [self.entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]

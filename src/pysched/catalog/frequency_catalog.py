@@ -81,5 +81,5 @@ class FrequencyCatalog(Catalog):
                               "fpol", "ffe", "fch1rf1", "fch1rf2", "fvchnsta"):
                 setattr(entry, attribute, getattr(entry, attribute)[:length])
     
-    def scheduled(self):
-        return self.entries[:s.frqn.nfreq]
+    def scheduled_slice(self):
+        return slice(s.frqn.nfreq)

@@ -98,18 +98,29 @@ class Catalog(object):
         self.adjust_lengths(self.entries)
         return self.entries
 
-    def read(self):
+    def read(self, selection_slice=None):
         """
         Read the catalog entries from the common blocks.
-        Only return entries that have defined values.
+        Only read and return entries that sliced by selection_slice, 
+        applied to self.entries.
+        If selection_slice is None, self.scheduled_slice() is used.
         """
+        if selection_slice is None:
+            selection_slice = self.scheduled_slice()
         arrays = get_arrays(self.block_items)
-        entries = self.scheduled()
-        for i, entry in enumerate(entries):
+        entries = self.entries[selection_slice]
+        for i, entry in zip(range(*selection_slice.indices(len(self.entries))), 
+                            entries):
             entry.__dict__.update(
                 {key: value[i] for key, value in arrays.items()})
         self.adjust_lengths(entries)
         return entries
+
+    def scheduled_slice(self):
+        """
+        Return the slice of entries that are scheduled.
+        """
+        return slice(None)
     
     def scheduled(self):
         """
