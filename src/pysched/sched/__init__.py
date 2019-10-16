@@ -40,5 +40,6 @@ from .defaults_module import defaults
 from .vexout_module   import vexout
 from .optnone_module  import optnone
 from .addpeak_module  import addpeak
+from .geomake_module  import geomake
 from .addgeo_module   import addgeo
 from .schopt_module   import schopt

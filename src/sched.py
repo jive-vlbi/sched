@@ -123,7 +123,7 @@ while True:
     defaults()
     s.schpre()
     s.chksc1()
-    s.schopt()
+    schopt()
     s.dopfq()
     s.getsun()
     s.chkscn()
