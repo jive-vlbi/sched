@@ -413,7 +413,9 @@ Vex/vxwrst.f
 Vex/vxwrsu.f
 Vex/vxwrt.f
 Vex/vxwrtr.f
-pysched/tformwrp.f
+pysched/tformwrp.f 
+pysched/ran5wrap.f 
+pysched/makesegw.f 
 """.split()
 
 if arch in ["hp", "linux", "sun", "unix"]:
@@ -486,7 +488,9 @@ error
 errset 
 flags 
 fluxh 
+geochk 
 geomake 
+geoqual 
 geoxyz 
 getpairs 
 getsun 
@@ -496,6 +500,7 @@ jplver
 listfreq 
 lst2ut 
 makeptg 
+makesegw 
 omsout 
 optcells 
 optcsub 
@@ -511,6 +516,7 @@ plver
 pkfinish 
 prtscn 
 putout 
+ran5wrap 
 recctl 
 sattim 
 sbpair 

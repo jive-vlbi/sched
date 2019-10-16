@@ -1,5 +1,8 @@
       SUBROUTINE GEOQUAL( SC1, SC1A, SC2, JSCN, MINSEL, TESTQUAL,
      1                    PRDEBUG, ZATMERR )
+Cf2py intent(in) SC1, SC1A, SC2, JSCN, MINSEL, PRDEBUG
+Cf2py intent(out) TESTQUAL
+Cf2py intent(in, out) ZATMERR
 C
 C     Get the quality measure of scans SC1 to SC2.  This gets the
 C     quality measure for this particular choice of sources.  The calling
