@@ -2,8 +2,9 @@
      1                 MINEL, KEEPSTA, NGOOD, OKSTA, SSTASCN, GMODE )
 Cf2py intent(in) LASTISCN, ISCN, JSCN, ISRC, SRCN, TAPPROX, MINEL, KEEPSTA
 Cf2py intent(in) GMODE
-Cf2py intent(out) NGOOD, OKSTA
-Cf2py intent(in, out) SSTASCN
+Cf2py intent(out) NGOOD
+C OKSTA is an out argument, but make it (in, out) to define its size
+Cf2py intent(in, out) OKSTA, SSTASCN
 C
 C     This is varient of MAKESCN to be used in the process of the
 C     geodetic scan insertion.  Besides what MAKESCN does, it can

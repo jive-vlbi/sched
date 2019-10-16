@@ -1,7 +1,10 @@
       SUBROUTINE GEOCHK( JSCN, ISCN, STARTB, TGEOEND, OKGEO, USEGEO,
      1                   SEGELEV )
 Cf2py intent(in) JSCN, ISCN, STARTB, TGEOEND
-Cf2py intent(out) OKGEO, USEGEO, SEGELEV
+C 2 argument which are actually out parameters, but the in is required
+C to define their dimension
+Cf2py intent(in, out) OKGEO, USEGEO
+Cf2py intent(out) SEGELEV
 C
 C     Make a pass through all the geodetic sources looking at the 
 C     midpoint of the block to see if enough stations are up.  It tolerates
