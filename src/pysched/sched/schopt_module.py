@@ -127,9 +127,9 @@ def schopt():
         if keep and (not done):
             if (peak_opt == 0) and ((scan.geolen > 0) or (geo_opt >= 1)):
                 insert_adjust = False
-                # geo_opt, keep = addgeo(last_scan_index, scan_index, geo_opt, 
-                #                        scans, stations)
-                geo_opt, keep = s.addgeo(last_scan_index, scan_index, geo_opt)
+                geo_opt, keep = addgeo(last_scan_index, scan_index, geo_opt, 
+                                       scans, stations)
+                # geo_opt, keep = s.addgeo(last_scan_index, scan_index, geo_opt)
                 scan_catalog.read(slice(len(scans)))
                 station_catalog.read_scheduled_attributes()
 
