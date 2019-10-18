@@ -607,7 +607,7 @@ setup(
                       # File "<stdin>", line 1, in <module>
                       # ModuleNotFoundError: No module named 'PyQt5.sip'
                       "pyqt5<5.11", 
-                      "matplotlib",
+                      "matplotlib>=3",
                       "formlayout",
                       "astropy",
                       "bottle",
