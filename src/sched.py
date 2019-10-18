@@ -22,6 +22,8 @@ try:
     atexit.register(readline.write_history_file, histfile)
 except ImportError:
     pass
+except Exception as e:
+    print("Warning, failed to import history file, error: {}".format(e))
 
 parser = argparse.ArgumentParser(
     description="Python wrapper around SCHED")
