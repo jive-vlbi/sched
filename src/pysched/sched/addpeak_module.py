@@ -1,7 +1,7 @@
 from .parameter import secpday, onesec
 from . import scndup
 from ..catalog import StationCatalog, ScanCatalog
-from ..util import f2str
+from ..util import f2str, bool2str
 
 import schedlib as s
 
@@ -226,8 +226,8 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
                                    "    {} {}   {:>7.0f}".format(
                                        p_src, peak_group.pksrc[p_src - 1], 
                                        min_slew, max_slew, min_el, max_el, 
-                                       "T" if sr_ok[p_src - 1] else "F", 
-                                       "T" if sr_ok2[p_src - 1] else "F", 
+                                       bool2str(sr_ok[p_src - 1]), 
+                                       bool2str(sr_ok2[p_src - 1]), 
                                        float(min_tot)))
                             
                     use_p_src = 0
