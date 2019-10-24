@@ -141,3 +141,5 @@ def get_catalog_dir():
     else:
         return os.path.join(pkg_resources.resource_filename("pysched", ".."), 
                             "catalogs")
+
+bool2str = lambda b: "T" if b else "F"
