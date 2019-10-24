@@ -1,7 +1,7 @@
-      SUBROUTINE RAN5WRAP(IDUM)
+      SUBROUTINE RAN5WRAP(IDUM, RESULT)
 Cf2py intent(in, out) IDUM
+Cf2py intent(out) RESULT
       INTEGER IDUM
-C RESULT is not used by caller of RAN5WRAP
       REAL RESULT
       RESULT = RAN5(IDUM)
       END

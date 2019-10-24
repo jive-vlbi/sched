@@ -27,7 +27,7 @@ def geomake(last_scan_index, j_scan, scan_index, n_seg, geo_stascn, geo_startj,
     kept = False
 
     for _ in range(100):
-        dummy_index = s.ran5wrap(dummy_index)
+        dummy_index, _ = s.ran5wrap(dummy_index)
     
     start_time = 0
     for station_index, station in enumerate(stations):
