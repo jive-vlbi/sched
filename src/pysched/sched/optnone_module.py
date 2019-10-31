@@ -15,10 +15,11 @@ def optnone(k_scan, scan_index):
 
     done = (k_scan > s.schn1.nscans)
     if (not done) and (k_scan != scan_index):
-        scndup(scan_catalog.entries, scan_index - 1, k_scan - 1, True, "OPTNONE")
+        scndup(scan_index - 1, k_scan - 1, True, "OPTNONE")
 
     # duronly, 1 means only start times, 4 only stop times specified
     adjust = (s.schn1.dwells and (scan_index > s.schn1.scan1)) and \
-             (scan_catalog.entries[scan_index - 1].duronly in {1, 4})
+             (scan_catalog.direct_access_entries[scan_index - 1].duronly in 
+              {1, 4})
     return (adjust, True, done)
         

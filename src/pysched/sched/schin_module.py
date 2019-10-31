@@ -554,7 +554,7 @@ def schin(stdin):
                              "after scan 1 with WRAP24. See scan: {}".\
                              format(from_+1))
             to = from_ + s.schn1.nscans
-            scndup(catalog.entries, to, from_, False, "SCHIN")
+            scndup(to, from_, False, "SCHIN", use_direct_access=False)
             catalog.entries[to].annot = catalog.entries[from_].annot
             start[to] = parameter.unset
             stop[to] = parameter.unset

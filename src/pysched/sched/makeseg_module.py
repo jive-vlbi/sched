@@ -1,5 +1,5 @@
 from .parameter import max_seg, secpday
-from ..catalog import ScanCatalog, StationCatalog
+from ..catalog import StationCatalog
 from ..util import f2str, bool2str
 
 import schedlib as s
@@ -77,8 +77,8 @@ def makeseg(j_scan, scan_index, last_scan_index, ok_geo, use_geo, seg_elevation,
         # scans in segment per station where station is up
         n_stascn = np.array([np.count_nonzero(
             np.logical_and(s.stascn[scan_range] != 0,
-                           np.logical_and(s.up1[scan_range] == "",
-                                          s.up2[scan_range] == "")))
+                           np.logical_and(f2str(s.up1[scan_range]) == "",
+                                          f2str(s.up2[scan_range]) == "")))
                              for s in stations], dtype=int)
 
         if s.schsou.geoprt >= 2:

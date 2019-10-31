@@ -14,17 +14,14 @@ def schopt():
         s.wlog(0, "SCHOPT: Starting.")
 
     scan_catalog = ScanCatalog()
-    scan_catalog.read()
-    scans = scan_catalog.entries
+    scans = scan_catalog.direct_access_entries
     
     station_catalog = StationCatalog()
-    station_catalog.read()
-    station_catalog.read_scheduled_attributes()
-    stations = station_catalog.used()
+    stations = station_catalog.used(use_direct_access=True)
 
     source_catalog = SourceCatalog()
     sources = source_catalog.read()
-
+    
     pc_catalog = PhaseCenterCatalog()
     phase_centers = pc_catalog.read()
 
@@ -33,16 +30,13 @@ def schopt():
     peak_groups = peak_catalog.read()
 
     # FIX way too crude
-    catalogs = [scan_catalog, station_catalog, source_catalog, pc_catalog]
+    catalogs = [source_catalog, pc_catalog]
     def call_schedlib(f, *args):
         for catalog in catalogs:
             catalog.write()
-        station_catalog.write_scheduled_attributes()
         ret = f(*args)
-        scan_catalog.read(slice(scan_catalog.nr_elements))
-        for catalog in catalogs[1:]:
+        for catalog in catalogs:
             catalog.read()
-        station_catalog.read_scheduled_attributes()
         return ret
 
     for scan in scans:
@@ -109,11 +103,9 @@ def schopt():
             else:
                 s.errlog("SCHOPT: Invalid OPTMODE: {}".format(optmode))
 
-            scan_catalog.write(range(scan_index - 1, scan_index))
             if keep and (not done):
                 s.opttim(last_scan_index, last_s_scan_index, scan_index, 
                     adjust, False, False)
-                scan_catalog.read(slice(scan_index - 1, scan_index))
                 if (s.schcon.opdur != 0) and \
                    (scan.stopj > 
                     scans[s.schn1.scan1 - 1].startj + s.schcon.opdur) and \
@@ -121,7 +113,6 @@ def schopt():
                     done = True
 
                 n_good = s.scngeo(last_scan_index, scan_index)
-                station_catalog.read_scheduled_attributes()
             
         insert_adjust = adjust
         if keep and (not done):
@@ -129,38 +120,25 @@ def schopt():
                 insert_adjust = False
                 geo_opt, keep = addgeo(last_scan_index, scan_index, geo_opt, 
                                        scans, stations)
-                # geo_opt, keep = s.addgeo(last_scan_index, scan_index, geo_opt)
-                scan_catalog.read(slice(len(scans)))
-                station_catalog.read_scheduled_attributes()
 
             peak_opt, insert_adjust = addpeak(
                 last_scan_index, scans, stations, setups, peak_groups,
                 peak_opt, insert_adjust, scan_index)
             peak_catalog.write()
-            scan_catalog.write()
-            # peak_opt, insert_adjust = s.addpeak(
-            #     last_scan_index, scan_index, peak_opt, insert_adjust)
             keep = s.makeptg(last_scan_index, scan_index, keep)
-            scan_catalog.read(slice(scan_index - 1, scan_index))
-            station_catalog.read()
-            station_catalog.read_scheduled_attributes()
 
         if keep and (not done):
             s.opttim(last_scan_index, last_s_scan_index, scan_index, 
                 insert_adjust, False, True)
             n_good = s.scngeo(last_scan_index, scan_index)
             n_good = s.autodown(last_scan_index, scan_index)
-
-            scan_catalog.read(slice(scan_index - 1, scan_index))
             
-            station_catalog.read_scheduled_attributes()
             keep = keep and ((n_good >= scan.opmian) or 
                              (optmode in {"CSUB", "HAS"}) or 
                              (scan.point >= 0))
             if not keep:
                 for station in stations:
                     station.stascn[scan_index - 1] = False
-                station_catalog.write_scheduled_attributes()
             else:
                 s.settps(scan_index, last_scan_index)
                 
@@ -168,8 +146,7 @@ def schopt():
                     if station.stascn[scan_index - 1] and s.schn1.vlbitp and \
                        (not s.schcon.noset) and station.usedisk:
                         s.diskpos(scan_index, station_index, last_scan_index)
-                station_catalog.read_scheduled_attributes()
-                             
+                
                 if (optmode not in {"NONE", "UPTIME"}) or s.schsou.anygeo:
                     s.optsch(scan_index)
 
@@ -201,8 +178,6 @@ def schopt():
         s.wlog(1, "SCHOPT: Did not schedule any scans")
         s.errlog(" Abort")
 
-    scan_catalog.write()
-    station_catalog.write_scheduled_attributes()
     source_catalog.write()
     s.accsrc(False)
     source_catalog.read()

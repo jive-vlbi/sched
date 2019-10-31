@@ -1,29 +1,47 @@
-from ..catalog import StationCatalog
+from ..catalog import StationCatalog, ScanCatalog
 
 import schedlib as s
 
 import copy
 
 station_catalog = StationCatalog()
-def scndup(entries, to, from_, copyall, caller):
+scan_catalog = ScanCatalog()
+def scndup(to, from_, copyall, caller, use_direct_access=True):
     if s.schcon.debug:
         s.wlog(0, "SCNDUP: Duplicating scan {} to scan {}.  Called by: {} "
                "copyall = {}".format(from_+1, to+1, caller, copyall))
-        s.wlog(0, "SCNDUP: ANNOT: {}".format(entries[from_].annot))
-    if to > len(entries):
+        s.wlog(0, "SCNDUP: ANNOT: {}".format(f2str(s.schc2a.annot[from_])))
+    if to >= ScanCatalog.maxscan:
         s.errlog("SCHDUP: Output scan number {} too big for arrays of "
-                 "dimension: {}".format(to+1, len(entries)))
+                 "dimension: {}".format(to+1, ScanCatalog.maxscan))
 
-    # copy entry dict so the all references to entry are updated
-    entries[to].__dict__ = copy.deepcopy(entries[from_].__dict__)
+    # copy the scan
+    if use_direct_access:
+        for block, items in scan_catalog.block_items.items():
+            for attr in items:
+                array = getattr(block, attr)
+                array[..., to] = array[..., from_]
+        entries = scan_catalog.entries
+        for attr in scan_catalog.extended_attributes:
+            setattr(entries[to], attr, 
+                    copy.deepcopy(getattr(entries[from_], attr)))
+    else:
+        entries = scan_catalog.entries
+        # copy entry dict so the all references to entry are updated
+        entries[to].__dict__ = copy.deepcopy(entries[from_].__dict__)
+    
     s.schn2a.nsetup[to, :] = s.schn2a.nsetup[from_, :]
     s.schn2a.fseti[to, :] = s.schn2a.fseti[from_, :]
     s.schn2a.stascn[to, :] = s.schn2a.stascn[from_, :]
     s.schn2b.dopincr[to, :] = s.schn2b.dopincr[from_, :]
     if not copyall:
         # reset some entries
-        entries[to].duronly = 1
-        entries[to].annot = ""
+        if use_direct_access:
+            s.schn2a.duronly[to] = 1
+            s.schc2a.annot[to] = "".ljust(s.schc2a.annot.itemsize)
+        else:
+            entries[to].duronly = 1
+            entries[to].annot = ""
     else:
         # copy station entries
         s.schn5.tpstart[to, :] = s.schn5.tpstart[from_, :]
@@ -43,6 +61,7 @@ def scndup(entries, to, from_, copyall, caller):
         s.schn6.ha2[to, :] = s.schn6.ha2[from_, :]
         s.schn6.pa2[to, :] = s.schn6.pa2[from_, :]
         s.schc6.up2[to, :] = s.schc6.up2[from_, :]
-        
-    # update the scan related attributes of stations in the catalog
-    station_catalog.read_scheduled_attributes()
+
+    if not use_direct_access:
+        # update the scan related attributes of stations in the catalog
+        station_catalog.read_scheduled_attributes()
