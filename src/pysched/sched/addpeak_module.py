@@ -1,6 +1,6 @@
 from .parameter import secpday, onesec
 from . import scndup
-from ..catalog import StationCatalog, ScanCatalog
+from ..catalog import StationCatalog
 from ..util import f2str, bool2str
 
 import schedlib as s
@@ -32,9 +32,6 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
     slew_max = np.empty(dtype=float, shape=(s.schpeakn.pksrnum.shape[0],))
     slew_min = np.empty(dtype=float, shape=(s.schpeakn.pksrnum.shape[0],))
     if peak_opt == 0:
-        station_catalog = StationCatalog()
-        scan_catalog = ScanCatalog()
-
         if s.schcon.pkwatch:
             s.wlog(0, " ")
             year, day1, start = s.timej(scan.startj)
@@ -51,11 +48,11 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
         for station in stations:
             group_index = station.pkgroup
             if station.stascn[scan_index - 1] and (group_index != 0) and \
-               ((station.up1[scan_index - 1] == "") or 
-                (station.up2[scan_index - 1] == "")):
+               ((f2str(station.up1[scan_index - 1]) == "") or 
+                (f2str(station.up2[scan_index - 1]) == "")):
                 n_good += 1
                 n_up[group_index - 1] += 1
-                
+
         if n_good == 0:
             if s.schcon.pkwatch:
                 s.wlog(0, "ADDPEAK:  Source down or below OPMINEL at all "
@@ -119,8 +116,7 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
         keep_origen = scan.origen
         scan.origen = 4
         for k_scan in range(scan_index, scan_index + n_try):
-            scndup(scans, k_scan, scan_index - 1, True, "ADDPEAK")
-        scan_catalog.write(range(scan_index - 1, scan_index + n_try))
+            scndup(k_scan, scan_index - 1, True, "ADDPEAK")
 
         n_added = 0
         m_scan = scan_index + n_try
@@ -137,11 +133,10 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
                     station.stascn[k_scan - 1] = \
                         station.stascn[m_scan - 1] and \
                         (station.pkgroup == group_index) and \
-                        ((station.up1[m_scan - 1] == "") or 
-                         (station.up2[m_scan - 1] == ""))
+                        ((f2str(station.up1[m_scan - 1]) == "") or 
+                         (f2str(station.up2[m_scan - 1]) == ""))
                     if station.stascn[k_scan - 1]:
                         got_station = True
-                station_catalog.write_scheduled_attributes()
 
                 if got_station:
                     for p_src in range(1, peak_group.npksrc + 1):
@@ -150,8 +145,6 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
                         k_src = peak_group.pksrnum[p_src - 1]
                         s.srinsert(k_scan, k_src, peak_group.pksrc[p_src - 1],
                                    start_k, stop_k, last_scan_index, m_scan)
-                        scan_catalog.read(slice(k_scan - 1, k_scan))
-                        station_catalog.read_scheduled_attributes()
 
                         sr_ok[p_src - 1] = True
                         sr_ok2[p_src - 1] = True
@@ -169,8 +162,8 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
 
                             if s.schcon.pkwatch:
                                 if station.stascn[k_scan - 1] and \
-                                   (station.up1[k_scan - 1] == "") and \
-                                   (station.up2[k_scan - 1] == ""):
+                                   (f2str(station.up1[k_scan - 1]) == "") and \
+                                   (f2str(station.up2[k_scan - 1]) == ""):
                                     watch_it = True
 
                                 if station.stascn[k_scan -1]:
@@ -259,11 +252,8 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
                             s.srinsert(k_scan, k_src, 
                                        peak_group.pksrc[p_src - 1], start2,
                                        stop2, last_scan_index, m_scan)
-                            scan_catalog.read(slice(k_scan - 1, k_scan))
-                            station_catalog.read_scheduled_attributes()
                             scans[k_scan - 1].point = group_index
-                            scan_catalog.write(range(k_scan - 1, k_scan))
-
+                            
                             j_scan = k_scan + 1
                             for station_index, station in enumerate(stations):
                                 if station.stascn[k_scan - 1]:
@@ -276,17 +266,14 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
 
                         s.srinsert(j_scan, k_src, peak_group.pksrc[p_src - 1],
                                    start_k, stop_k, last_pointing_scan, m_scan)
-                        scan_catalog.read(slice(j_scan - 1, j_scan))
-                        station_catalog.read_scheduled_attributes()
                         scans[j_scan - 1].point = group_index
-                        scan_catalog.write(range(j_scan - 1, j_scan))
-
+                        
                         if s.schcon.pkwatch:
                             s.wlog(0, "ADDPEAK: Adding {} scan(s) on {} for "
                                    "pointing group {}".format(
                                        ok_scan, peak_group.pksrc[p_src - 1],
                                        group_index))
-
+                        
                         for station_index, station in enumerate(stations):
                             if station.stascn[j_scan - 1]:
                                 last_target_scan[station_index] = j_scan
@@ -306,13 +293,11 @@ def addpeak(last_scan_index, scans, stations, setups, peak_groups,
 
         k_scan = scan_index + n_added
         if k_scan != m_scan:
-            scndup(scans, k_scan - 1, m_scan - 1, True, "ADDPEAK2")
+            scndup(k_scan - 1, m_scan - 1, True, "ADDPEAK2")
         scans[k_scan - 1].origen = keep_origen
 
         n_good = s.scngeo(last_target_scan, k_scan)
-        station_catalog.read_scheduled_attributes()
         scans[k_scan - 1].point = -999
-        scan_catalog.write(range(k_scan - 1, k_scan))
 
         if n_added > 0:
             peak_opt = n_added

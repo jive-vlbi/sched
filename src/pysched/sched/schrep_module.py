@@ -27,7 +27,7 @@ def schrep(values, entries, index, marker, start, stop, day, year):
         for r in range(repeat-1):
             for g in range(group):
                 index += 1
-                scndup(entries, index, marker, False, "SCHREP")
+                scndup(index, marker, False, "SCHREP", use_direct_access=False)
                 start[index] = parameter.unset
                 stop[index] = parameter.unset
                 day[index] = day[marker]
