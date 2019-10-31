@@ -1,4 +1,4 @@
-from . import geomake
+from . import geomake, gmkscn
 from .parameter import max_seg, secpday
 from ..util import f2str
 from ..catalog import StationCatalog, ScanCatalog
@@ -30,16 +30,12 @@ def addgeo(last_scan_index, scan_index, geo_opt, scans, stations):
         scan_stascn = geo_stascn[seg_index, :]
         approx_time = geo_startj[seg_index]
         seg_source_index = seg_sources[seg_index]
-        ok_sta = np.empty(dtype=bool, shape=(StationCatalog.maxsta,))
-        n_good, ok_sta, scan_stascn = s.gmkscn(
+        
+        n_good, ok_sta, scan_stascn = gmkscn(
             last_scan_index, scan_index, j_scan, 
             s.schsou.geosrci[seg_source_index - 1], 
             s.schcsc.geosrc[seg_source_index - 1], 
-            approx_time, scans[j_scan - 1].opminel, 0, ok_sta, scan_stascn, 
-            "FORCE")
-
-        ScanCatalog().read(slice(max(scan_index - 2, 0), scan_index))
-        StationCatalog().read_scheduled_attributes()
+            approx_time, scans[j_scan - 1].opminel, 0, scan_stascn, "FORCE")
 
         geo_opt -= 1
         scan = scans[scan_index - 1]

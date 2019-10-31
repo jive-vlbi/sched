@@ -38,6 +38,8 @@ from .setexpnd_module import setexpnd
 from .defset_module   import defset
 from .defaults_module import defaults
 from .vexout_module   import vexout
+from .gmkscn_module   import gmkscn
+from .makeseg_module  import makeseg
 from .optnone_module  import optnone
 from .addpeak_module  import addpeak
 from .geomake_module  import geomake

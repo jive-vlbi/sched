@@ -1,5 +1,7 @@
       SUBROUTINE STAGEO( ISCN, ISTA, T_EST1, LSCN,
      1                   LASTTIME, T_AVAIL, CALLER )
+Cf2py intent(in) ISCN, ISTA, T_EST1, LSCN, CALLER
+Cf2py intent(out) LASTTIME, T_AVAIL
 C
 C     General purpose geometry routine for calculation of
 C     the geometry for a station in a scan.  It is used a lot

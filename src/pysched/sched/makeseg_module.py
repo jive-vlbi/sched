@@ -1,3 +1,4 @@
+from . import gmkscn
 from .parameter import max_seg, secpday
 from ..catalog import StationCatalog
 from ..util import f2str, bool2str
@@ -113,15 +114,12 @@ def makeseg(j_scan, scan_index, last_scan_index, ok_geo, use_geo, seg_elevation,
                                    f2str(s.schcsc.geosrc[geo_index - 1]), 
                                    use_geo[geo_index - 1], approx_time))
 
-                    ok_sta = np.empty(dtype=bool, shape=(StationCatalog.maxsta,))
-                    n_good, ok_sta, scan_stascn = s.gmkscn(
+                    n_good, ok_sta, scan_stascn = gmkscn(
                         last_scan_index_copy, l_scan, j_scan, 
                         s.schsou.geosrci[geo_index - 1], 
-                        s.schcsc.geosrc[geo_index - 1], approx_time, 
-                        scans[j_scan - 1].opminel, 0, ok_sta, scan_stascn, "SET")
+                        f2str(s.schcsc.geosrc[geo_index - 1]), approx_time, 
+                        scans[j_scan - 1].opminel, 0, scan_stascn, "SET")
 
-                    ScanCatalog().read(slice(max(l_scan - 2, 0), l_scan))
-                    StationCatalog().read_scheduled_attributes()
                     k_stascn[geo_index - 1, :] = scan_stascn
 
                     n_new_low = 0
@@ -308,9 +306,7 @@ def makeseg(j_scan, scan_index, last_scan_index, ok_geo, use_geo, seg_elevation,
                         s.schcsc.geosrc[geo_index - 1], approx_time, 
                         scans[j_scan - 1].opminel, last_high_station, ok_sta, 
                         scan_stascn, "SET")
-                    ScanCatalog().read(slice(max(l_scan - 2, 0), l_scan))
-                    StationCatalog().read_scheduled_attributes()
-
+                    
                     k_stascn[geo_index - 1, :] = scan_stascn
 
                     sta_ok = True
@@ -528,9 +524,7 @@ def makeseg(j_scan, scan_index, last_scan_index, ok_geo, use_geo, seg_elevation,
                 s.schsou.geosrci[t_src[seg_index - 1] - 1], 
                 s.schcsc.geosrc[t_src[seg_index - 1] - 1], approx_time, 
                 scans[j_scan - 1].opminel, 0, ok_sta, scan_stascn, "FORCE")
-            ScanCatalog().read(slice(max(l_scan - 2, 0), l_scan))
-            StationCatalog().read_scheduled_attributes()
-
+            
             for i, station in enumerate(stations):
                 if station.stascn[l_scan - 1]:
                     in_scan[i] += 1

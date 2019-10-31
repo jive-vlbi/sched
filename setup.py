@@ -549,6 +549,7 @@ srfinish
 srinsert 
 srlist 
 stafiles 
+stageo 
 stano 
 stauv 
 stmsg 
