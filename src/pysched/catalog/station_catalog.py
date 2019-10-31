@@ -1,4 +1,5 @@
-from .catalog import Catalog, get_arrays, write
+from .catalog import Catalog, get_arrays, write, map_attr_array
+from ..util import f2str
 
 import schedlib as s
 
@@ -77,31 +78,7 @@ class StationCatalog(Catalog):
             'ypos', 
             'zalim', 
             'zpos']
-        }
-
-    def __init__(self):
-        super().__init__(self.maxcat, self.block_items)
-
-    def write(self, indices=None):
-        if indices is None:
-            entries = self.entries
-        else:
-            entries = [self.entries[i] for i in indices]
-        for entry in entries:
-            entry.nhoriz = len(entry.horaz)
-        return super().write(indices)
-
-    def adjust_lengths(self, entries):
-        for entry in entries:
-            length = entry.nhoriz
-            entry.horaz = entry.horaz[:length]
-            entry.horel = entry.horel[:length]
-        
-    def scheduled_slice(self):
-        return slice(s.schsta.msta)
-
-    def used(self):
-        return [self.entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
+    }
 
     """
     INTEGER          NSETUP(MAXSCN,MAXSTA)
@@ -119,6 +96,7 @@ class StationCatalog(Catalog):
 C   from schpeak.inc, MPKSTA is defined as MAXSTA
     INTEGER          PKGROUP(MPKSTA)
     """
+    maxsta = s.schn5.usedisk.shape[0]
     scheduled_station_items = {
         s.schn2a: [
             'nsetup',
@@ -147,13 +125,100 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
             'pkgroup']
     }
     
-    maxsta = s.schn5.usedisk.shape[0]
+    class DirectAccessCatalogEntry(object):
+        # a catalog entry which maps setattr and getattr directly to
+        # the COMMON blocks in schedlib
+
+        def __init__(self, index, attr_array, scheduled_attr_array):
+            self.__dict__["_index"] = index
+            self.__dict__["_attr_array"] = attr_array
+            self.__dict__["_scheduled_attr_array"] = scheduled_attr_array
+
+        def __getattr__(self, attr):
+            try:
+                array = self._attr_array[attr]
+                index = self._index
+            except KeyError:
+                # try the scheduled attributes next
+                try:
+                    array = self._scheduled_attr_array[attr]
+                    # map the index into all (catalog) stations to 
+                    # an index into scheduled stations
+                    index = next(i for i, e in enumerate(
+                        s.schn1.stanum[:s.schn1.nsta])
+                                 if e == self._index + 1)
+                except KeyError:
+                    raise AttributeError("'{}' object has no attribute '{}'".\
+                                         format(type(self).__name__, attr))
+                except StopIteration:
+                    raise RuntimeError(
+                        "Station {} has no scheduled attributes.".format(
+                            self.station))
+
+            if len(array.shape) > 1:
+                return array[..., index]
+            else:
+                ret = array[index]                    
+                if array.dtype.kind == "S":
+                    return f2str(ret)
+                return ret
+
+        def __setattr__(self, attr, value):
+            try:
+                array = self._attr_array[attr]
+                index = self._index
+            except KeyError:
+                try:
+                    # try the scheduled attributes next
+                    array = self._scheduled_attr_array[attr]
+                    index = next(i for i, e in enumerate(s.schn1.stanum)
+                                 if e == self._index + 1)
+                except KeyError:
+                    return super().__setattr__(attr, value)
+                except StopIteration:
+                    raise RuntimeError(
+                        "Station {} has no scheduled attributes.".format(
+                            self.station))
+
+            array[..., index] = value
+
+
+    def __init__(self):
+        super().__init__(self.maxcat, self.block_items)
+        self.scheduled_attr_array = map_attr_array(self.scheduled_station_items)
+        self.direct_access_entries = [
+            self.DirectAccessCatalogEntry(i, self.attr_array, 
+                                          self.scheduled_attr_array) 
+            for i in range(self.maxcat)]
+    
+    def write(self, indices=None):
+        if indices is None:
+            entries = self.entries
+        else:
+            entries = [self.entries[i] for i in indices]
+        for entry in entries:
+            entry.nhoriz = len(entry.horaz)
+        return super().write(indices)
+
+    def adjust_lengths(self, entries):
+        for entry in entries:
+            length = entry.nhoriz
+            entry.horaz = entry.horaz[:length]
+            entry.horel = entry.horel[:length]
+        
+    def scheduled_slice(self):
+        return slice(s.schsta.msta)
+
+    def used(self, use_direct_access=False):
+        entries = self.direct_access_entries if use_direct_access \
+                  else self.entries
+        return [entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
     
     def read_scheduled_attributes(self):
         """
         Pre: self has entries
         """
-        arrays = get_arrays(self.scheduled_station_items)
+        arrays = get_arrays(self.scheduled_attr_array)
         for index, entry in enumerate(self.used()):
             for key, value in arrays.items():
                 setattr(entry, key, value[index])
@@ -163,5 +228,5 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
         Pre: read_scheduled_attributes is up to date
         """
         entries = self.used()
-        write(self.scheduled_station_items, entries, range(len(entries)))
+        write(self.scheduled_attr_array, entries, range(len(entries)))
             

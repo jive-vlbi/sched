@@ -1,4 +1,5 @@
-from .catalog import Catalog
+from .catalog import Catalog, map_attr_array
+from ..util import f2str
 
 import schedlib as s
 
@@ -169,8 +170,44 @@ class ScanCatalog(Catalog):
         ]
     }
 
+    class DirectAccessCatalogEntry(object):
+        # a catalog entry which maps setattr and getattr directly to
+        # the COMMON blocks in schedlib
+
+        def __init__(self, index, attr_array):
+            self.__dict__["_index"] = index
+            self.__dict__["_attr_array"] = attr_array
+
+        def __getattr__(self, attr):
+            try:
+                array = self._attr_array[attr]
+            except KeyError:
+                raise AttributeError("'{}' object has no attribute '{}'".\
+                                     format(type(self).__name__, attr))
+
+            if len(array.shape) > 1:
+                return array[..., self._index]
+            else:
+                ret = array[self._index]
+                if array.dtype.kind == "S":
+                    return f2str(ret)
+                return ret
+
+        def __setattr__(self, attr, value):
+            try:
+                array = self._attr_array[attr]
+            except KeyError:
+                return super().__setattr__(attr, value)
+            
+            array[..., self._index] = value
+
+
     def __init__(self):
         super().__init__(self.maxscan, self.block_items)
+        self.attr_array = map_attr_array(self.block_items)
+        self.direct_access_entries = [
+            self.DirectAccessCatalogEntry(i, self.attr_array) 
+            for i in range(self.maxscan)]
 
     def read(self, selection_slice=None):
         self.scan_offset = s.schn1.scan1 - 1

@@ -1,34 +1,33 @@
 import numpy as np
 from .. import util
 
-def get_arrays(block_items):
+def get_arrays(attr_array):
     # gather a copy (because .T returns a view) of all arrays in C-order
     vector_func = np.vectorize(util.f2str, otypes=[object])
-    arrays = {item: 
-              vector_func(getattr(block, item).T)
-              if getattr(block, item).dtype.kind == "S" else 
-              getattr(block, item).T.copy()
-              for block, items in block_items.items()
-              for item in items}
+    arrays = {attr: vector_func(array.T) if array.dtype.kind == "S" 
+              else array.T.copy()
+              for attr, array in attr_array.items()}
     return arrays
 
-def write(block_items, entries, indices):
-    for block, items in block_items.items():
-        for item in items:
-            dtype=getattr(block, item).dtype
-            vector_func = np.vectorize(
-                lambda x: x.ljust(dtype.itemsize),
-                otypes=[dtype])
-            for i in indices:
-                new_value = np.array(
-                    getattr(entries[i], item), dtype=dtype)
-                if dtype.kind == "S":
-                    # fill string with spaces fortran/sched style
-                    new_value = vector_func(new_value)
-                # if the new value is smaller, embed it
-                dest_slice = (slice(i, i+1), ) + \
-                             tuple(map(slice, new_value.shape))
-                getattr(block, item).T[dest_slice] = new_value
+def write(attr_array, entries, indices):
+    for attr, array in attr_array.items():
+        dtype = array.dtype
+        vector_func = np.vectorize(lambda x: x.ljust(dtype.itemsize), 
+                                   otypes=[dtype])
+        for i in indices:
+            new_value = np.array(getattr(entries[i], attr), dtype=dtype)
+            if dtype.kind == "S":
+                # fill string with spaces fortran/sched style
+                new_value = vector_func(new_value)
+            # if the new value is smaller, embed it
+            dest_slice = (slice(i, i+1), ) + \
+                         tuple(map(slice, new_value.shape))
+            array.T[dest_slice] = new_value
+
+def map_attr_array(block_items):
+    return {attr: getattr(block, attr)
+            for block, attrs in block_items.items()
+            for attr in attrs}
 
 class Catalog(object):
     """
@@ -70,7 +69,8 @@ class Catalog(object):
             self.__dict__ = type(self)._shared_state = {}
             self.nr_elements = nr_elements
             self.block_items = block_items
-            self.attributes = sum(block_items.values(), [])
+            self.attr_array = map_attr_array(block_items)
+            self.attributes = list(self.attr_array.keys())
             self.extended_attributes = extended_attributes
             self.prime()
 
@@ -86,7 +86,7 @@ class Catalog(object):
         Prepares the catalog with the values from common blocks to overwrite
         with keyin values before calling self.write().
         """
-        arrays = get_arrays(self.block_items)
+        arrays = get_arrays(self.attr_array)
         # create an entry for each index of the arrays
         self.entries = [
             self.CatalogEntry(
@@ -107,7 +107,7 @@ class Catalog(object):
         """
         if selection_slice is None:
             selection_slice = self.scheduled_slice()
-        arrays = get_arrays(self.block_items)
+        arrays = get_arrays(self.attr_array)
         entries = self.entries[selection_slice]
         for i, entry in zip(range(*selection_slice.indices(len(self.entries))), 
                             entries):
@@ -139,4 +139,4 @@ class Catalog(object):
         """
         if indices is None:
             indices = range(self.nr_elements)
-        write(self.block_items, self.entries, indices)
+        write(self.attr_array, self.entries, indices)
