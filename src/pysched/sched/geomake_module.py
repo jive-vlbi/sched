@@ -1,6 +1,5 @@
 from .parameter import max_seg, secpday
 from . import makeseg
-from ..catalog import ScanCatalog, StationCatalog
 from ..util import f2str_array, f2str
 
 import schedlib as s
@@ -12,9 +11,6 @@ dummy_index = -12345
 def geomake(last_scan_index, j_scan, scan_index, n_seg, geo_stascn, geo_startj,
             stations, scans):
     global dummy_index
-
-    station_catalog = StationCatalog()
-    scan_catalog = ScanCatalog()
 
     sigma = np.empty(shape=(len(stations) * 2,), dtype=float)
     best_sigma = np.empty(shape=(len(stations),), dtype=float)
@@ -64,17 +60,6 @@ def geomake(last_scan_index, j_scan, scan_index, n_seg, geo_stascn, geo_startj,
             s.wlog(0, "GEOMAKE starting to construct trial segment {}.  "
                    "First scan: {}".format(trial, scan_index))
 
-        # test_seg_sources = np.empty(shape=(max_seg,), dtype=int)
-        # selection_type = np.empty(shape=(max_seg,), dtype="S3")
-        # worst_station = np.empty(shape=(max_seg,), dtype="S3")
-        # last_scan, n_scan_seg, test_seg_sources, dummy_index, selection_type, \
-        #     worst_station = s.makesegw(
-        #         j_scan, scan_index, last_scan_index, ok_geo, use_geo, 
-        #         seg_elevation, start_time, end_time, dummy_index, sigma)
-        # selection_type = f2str_array(selection_type)
-        # worst_station = f2str_array(worst_station)
-        # station_catalog.read_scheduled_attributes()
-        # scan_catalog.read(slice(scan_index - 1, scan_index - 1 + n_scan_seg))
         last_scan, n_scan_seg, test_seg_sources, dummy_index, selection_type, \
             worst_station = makeseg(
                 j_scan, scan_index, last_scan_index, ok_geo, use_geo, 
