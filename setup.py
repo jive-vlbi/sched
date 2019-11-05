@@ -553,6 +553,7 @@ stageo
 stano 
 stauv 
 stmsg 
+sunpos 
 tdatecw 
 tformwrp 
 timej 

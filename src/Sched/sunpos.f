@@ -1,4 +1,6 @@
       SUBROUTINE SUNPOS( JTIME, RAS, DECS )
+Cf2py intent(in) JTIME
+Cf2py intent(out) RAS, DECS
 C
 C     Routine to get the approximate position of the Sun at Julian 
 C     time TIME using the SLALIB routines.
