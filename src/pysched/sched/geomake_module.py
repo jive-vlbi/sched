@@ -1,5 +1,5 @@
 from .parameter import max_seg, secpday
-from . import makeseg
+from . import makeseg, geochk
 from ..util import f2str_array, f2str
 
 import schedlib as s
@@ -49,10 +49,8 @@ def geomake(last_scan_index, j_scan, scan_index, n_seg, geo_stascn, geo_startj,
         scan.opmian = len(stations) // 2
         s.wlog(1, "          Resetting to OPMINANT = {}".format(scan.opmian))
     
-    ok_geo = np.empty(shape=s.schsou.geosrci.shape, dtype=bool)
-    use_geo = np.empty(shape=s.schsou.geosrci.shape, dtype=int)
-    ok_geo, use_geo, seg_elevation = s.geochk(
-        j_scan, scan_index, start_time, end_time, ok_geo, use_geo)
+    ok_geo, use_geo, seg_elevation = geochk(
+        j_scan, scan_index, start_time, end_time)
     
     best_quality = 9999
     for trial in range(1, s.schsou.geotries + 1):

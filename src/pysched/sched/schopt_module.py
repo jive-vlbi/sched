@@ -1,6 +1,6 @@
 from . import optnone, addpeak, addgeo
 from ..catalog import ScanCatalog, StationCatalog, SourceCatalog, \
-    PhaseCenterCatalog, SetupCatalog, PeakCatalog
+    PhaseCenterCatalog, SetupCatalog, PeakCatalog, SetupFileCatalog
 from ..util import f2str
 
 import schedlib as s
@@ -28,6 +28,10 @@ def schopt():
     setups = SetupCatalog().read()
     peak_catalog = PeakCatalog() 
     peak_groups = peak_catalog.read()
+
+    # content of setup file catalog used in geochk (->addgeo->geomake->geochk)
+    # call here once
+    SetupFileCatalog().read()
 
     # FIX way too crude
     catalogs = [source_catalog, pc_catalog]
