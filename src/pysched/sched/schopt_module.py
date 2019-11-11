@@ -1,4 +1,4 @@
-from . import optnone, addpeak, addgeo
+from . import optnone, opthas, addpeak, addgeo
 from ..catalog import ScanCatalog, StationCatalog, SourceCatalog, \
     PhaseCenterCatalog, SetupCatalog, PeakCatalog, SetupFileCatalog
 from ..util import f2str
@@ -97,8 +97,7 @@ def schopt():
                     s.optupt, last_scan_index, k_scan, scan_index)
                 scan.origen = 2
             elif optmode == "HAS":
-                adjust, keep, done = call_schedlib(
-                    s.opthas, last_scan_index, k_scan, scan_index)
+                adjust, keep, done = opthas(last_scan_index, k_scan, scan_index)
                 scan.origen = 2
             elif optmode == "HIGHEL":
                 k_scan, adjust, keep, done = call_schedlib(
