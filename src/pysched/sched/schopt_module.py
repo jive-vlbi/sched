@@ -1,4 +1,4 @@
-from . import optnone, opthas, addpeak, addgeo
+from . import optnone, optskd, opthas, addpeak, addgeo
 from ..catalog import ScanCatalog, StationCatalog, SourceCatalog, \
     PhaseCenterCatalog, SetupCatalog, PeakCatalog, SetupFileCatalog
 from ..util import f2str
@@ -82,8 +82,7 @@ def schopt():
             if optmode == "NONE":
                 adjust, keep, done = optnone(k_scan, scan_index)
             elif optmode == "SCANS":
-                adjust, keep, done = call_schedlib(
-                    s.optskd, last_scan_index, k_scan, scan_index)
+                adjust, keep, done = optskd(last_scan_index, k_scan, scan_index)
             elif optmode == "CELLS":
                 adjust, keep, done = call_schedlib(
                     s.optcells, last_scan_index, k_scan, scan_index)
