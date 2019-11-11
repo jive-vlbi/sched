@@ -56,6 +56,7 @@ C
       SAVE       TUSE, TAVAIL
       SAVE       SRUSED, SRLOOK, SKIPTIME, SKIPINC, NSKIP
       SAVE       SDTOT
+      SAVE       OPHAT, OPHAWIDT
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'OPTHAS: Starting.' )
 C
