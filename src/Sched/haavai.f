@@ -1,5 +1,8 @@
       SUBROUTINE HAAVAI( THAMIN, THAMAX, TBEGIN, TEND, 
      1                   TAVAIL, TUSE, NHA, IHA, SIDR )
+Cf2py intent(in) THAMIN, THAMAX, TBEGIN, TEND, NHA, IHA
+Cf2py intent(out) TAVAIL, TUSE
+Cf2py intent(hide) SIDR
 C
 C     Subroutine for OPTHAS that gets the total time the source is 
 C     available.
