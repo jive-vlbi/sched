@@ -41,7 +41,10 @@ from .vexout_module   import vexout
 from .gmkscn_module   import gmkscn
 from .makeseg_module  import makeseg
 from .optnone_module  import optnone
+from .opthas_module   import opthas
 from .addpeak_module  import addpeak
+from .makescn_module  import makescn
+from .geochk_module   import geochk
 from .geomake_module  import geomake
 from .addgeo_module   import addgeo
 from .schopt_module   import schopt
