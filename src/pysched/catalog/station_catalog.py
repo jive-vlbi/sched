@@ -87,6 +87,7 @@ class StationCatalog(Catalog):
     LOGICAL          USETAPE(MAXSTA), USEDISK(MAXSTA)
     DOUBLE PRECISION TPSTART(MAXSCN,MAXSTA)
     REAL             GBYTES(MAXSCN,MAXSTA)
+    DOUBLE PRECISION LST1(MAXSCN,MAXSTA), LST2(MAXSCN,MAXSTA)
     DOUBLE PRECISION TONSRC(MAXSCN,MAXSTA), TSLEW(MAXSCN,MAXSTA)
     REAL             EL1(MAXSCN,MAXSTA), AZ1(MAXSCN,MAXSTA)
     REAL             HA1(MAXSCN,MAXSTA), PA1(MAXSCN,MAXSTA)
@@ -108,6 +109,8 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
             'tpstart',
             'gbytes'],
         s.schn6: [
+            'lst1',
+            'lst2',
             'tonsrc',
             'tslew',
             'el1',
