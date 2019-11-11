@@ -184,13 +184,12 @@ def schopt():
 
     source_catalog.write()
     s.accsrc(False)
-    source_catalog.read()
-    gotall = call_schedlib(s.srcflg)
+    gotall = s.srcflg()
 
     if not gotall:
         s.errlog("SCHOPT: Not all sources found; programming problem.")
 
-    call_schedlib(s.getpairs)
+    s.getpairs()
 
     year, day1, start = s.timej(scans[s.schn1.scan1 - 1].startj)
     year, day2, stop = s.timej(scans[s.schn1.scanl - 1].stopj)
@@ -203,8 +202,8 @@ def schopt():
                first=s.schn1.scan1, last=s.schn1.scanl,
                day1=day1, day2=day2, time1=time1, time2=time2))
 
-    call_schedlib(s.schtim)
-    call_schedlib(s.sch24)
+    s.schtim()
+    s.sch24()
 
     if s.schcon.debug:
         s.wlog(0, "SCHOPT: Done.")
