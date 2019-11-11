@@ -496,6 +496,8 @@ getpairs
 getsun 
 gmkscn 
 gnset 
+haavai 
+halim 
 jplver 
 listfreq 
 lst2ut 
@@ -521,6 +523,7 @@ recctl
 sattim 
 sbpair 
 sch24 
+schgeo 
 schopt 
 schpre 
 schsum 
