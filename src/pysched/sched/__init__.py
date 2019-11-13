@@ -41,6 +41,8 @@ from .vexout_module   import vexout
 from .gmkscn_module   import gmkscn
 from .makeseg_module  import makeseg
 from .optnone_module  import optnone
+from .optskd_module   import optskd
+from .optcells_module import optcells
 from .opthas_module   import opthas
 from .addpeak_module  import addpeak
 from .makescn_module  import makescn
