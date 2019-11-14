@@ -6,6 +6,7 @@ import copy
 
 station_catalog = StationCatalog()
 scan_catalog = ScanCatalog()
+copyall_attributes = {"startj", "stopj"}
 def scndup(to, from_, copyall, caller, use_direct_access=True):
     if s.schcon.debug:
         s.wlog(0, "SCNDUP: Duplicating scan {} to scan {}.  Called by: {} "
@@ -19,16 +20,22 @@ def scndup(to, from_, copyall, caller, use_direct_access=True):
     if use_direct_access:
         for block, items in scan_catalog.block_items.items():
             for attr in items:
-                array = getattr(block, attr)
-                array[..., to] = array[..., from_]
+                if copyall or (attr not in copyall_attributes):
+                    array = getattr(block, attr)
+                    array[..., to] = array[..., from_]
         entries = scan_catalog.entries
         for attr in scan_catalog.extended_attributes:
             setattr(entries[to], attr, 
                     copy.deepcopy(getattr(entries[from_], attr)))
     else:
         entries = scan_catalog.entries
+        if not copyall:
+            original = {k: getattr(entries[to], k) for k in copyall_attributes}
         # copy entry dict so the all references to entry are updated
         entries[to].__dict__ = copy.deepcopy(entries[from_].__dict__)
+        if not copyall:
+            for k, v in original.items():
+                setattr(entries[to], k, v)
     
     s.schn2a.nsetup[to, :] = s.schn2a.nsetup[from_, :]
     s.schn2a.fseti[to, :] = s.schn2a.fseti[from_, :]
