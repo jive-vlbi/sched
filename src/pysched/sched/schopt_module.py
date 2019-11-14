@@ -88,9 +88,7 @@ def schopt():
                     last_scan_index, k_scan, scan_index)
                 scan.origen = 2
             elif optmode == "CSUB":
-                adjust, keep, done = call_schedlib(
-                    s.optcsub, last_scan_index, k_scan, scan_index)
-                scan.origen = 2
+                s.errlog("SCHOPT: OPTMODE CSUB is not supported in pySCHED")
             elif optmode == "UPTIME":
                 last_scan_index, adjust, keep, done = call_schedlib(
                     s.optupt, last_scan_index, k_scan, scan_index)
