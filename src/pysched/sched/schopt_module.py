@@ -1,4 +1,4 @@
-from . import optnone, optskd, optcells, opthas, addpeak, addgeo
+from . import optnone, optskd, optcells, optupt, opthas, addpeak, addgeo
 from ..catalog import ScanCatalog, StationCatalog, SourceCatalog, \
     PhaseCenterCatalog, SetupCatalog, PeakCatalog, SetupFileCatalog
 from ..util import f2str
@@ -90,8 +90,8 @@ def schopt():
             elif optmode == "CSUB":
                 s.errlog("SCHOPT: OPTMODE CSUB is not supported in pySCHED")
             elif optmode == "UPTIME":
-                last_scan_index, adjust, keep, done = call_schedlib(
-                    s.optupt, last_scan_index, k_scan, scan_index)
+                last_scan_index, adjust, keep, done = optupt(
+                    last_scan_index, k_scan, scan_index)
                 scan.origen = 2
             elif optmode == "HAS":
                 adjust, keep, done = opthas(last_scan_index, k_scan, scan_index)
