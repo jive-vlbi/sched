@@ -43,6 +43,7 @@ from .makeseg_module  import makeseg
 from .optnone_module  import optnone
 from .optskd_module   import optskd
 from .optcells_module import optcells
+from .optcsub_module  import optcsub
 from .opthas_module   import opthas
 from .addpeak_module  import addpeak
 from .makescn_module  import makescn

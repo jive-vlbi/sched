@@ -1,5 +1,8 @@
       SUBROUTINE OPTCSAR( LASTISCN, KSCN, ISCN, SCNSTA, NS1, NS2, NS3, 
      1                    SCN1, SCN2, SCN3, TIME1, TIME2, TIME3 )
+Cf2py intent(in) LASTISCN, KSCN, ISCN
+Cf2py intent(in, out) SCNSTA, NS1, NS2, NS3, SCN1, SCN2
+Cf2py intent(out) SCN3, TIME1, TIME2, TIME3
 C
 C     Routine for SCHED, called by OPTCSUB, that trys to determine
 C     the optimimal subarrays for good sky coverage over each   

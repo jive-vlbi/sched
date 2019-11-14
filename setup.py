@@ -506,6 +506,7 @@ makesegw
 omsout 
 optcells 
 optcsub 
+optcsar 
 opthas 
 opthiel 
 optnone 
