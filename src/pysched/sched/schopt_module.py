@@ -1,4 +1,4 @@
-from . import optnone, optskd, optcells, optupt, opthas, addpeak, addgeo
+from . import optnone, optskd, optcells, optupt, opthas, opthiel, addpeak, addgeo
 from ..catalog import ScanCatalog, StationCatalog, SourceCatalog, \
     PhaseCenterCatalog, SetupCatalog, PeakCatalog, SetupFileCatalog
 from ..util import f2str
@@ -97,8 +97,8 @@ def schopt():
                 adjust, keep, done = opthas(last_scan_index, k_scan, scan_index)
                 scan.origen = 2
             elif optmode == "HIGHEL":
-                k_scan, adjust, keep, done = call_schedlib(
-                    s.opthiel, last_scan_index, k_scan, scan_index)
+                k_scan, adjust, keep, done = opthiel(
+                    last_scan_index, k_scan, scan_index)
                 scan.origen = 2
             else:
                 s.errlog("SCHOPT: Invalid OPTMODE: {}".format(optmode))

@@ -45,6 +45,7 @@ from .optskd_module   import optskd
 from .optcells_module import optcells
 from .optupt_module   import optupt
 from .opthas_module   import opthas
+from .opthiel_module  import opthiel
 from .addpeak_module  import addpeak
 from .makescn_module  import makescn
 from .geochk_module   import geochk
