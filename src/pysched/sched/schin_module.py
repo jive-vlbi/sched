@@ -67,7 +67,7 @@ keep_for_next = {
     'point', 'scantag', 'geoseg', 'higroup', 'doppler', 'nodop', 'crddop', 
     'crdnodop', 'record', 'norecord', 'ptvlba', 'noptvlba', 'tavlba', 
     'notavlba', 'tsys', 'notsys', 'vlatsys', 'vlantsys', 'stations', 
-    'comment', 'intents' }
+    'comment', 'intents', 'scanexps' }
 
 state_defaults = {
     "schedule":  ["",                      util.noop],
@@ -239,6 +239,7 @@ state_defaults = {
     "nosetup":   [1.,                      util.to_bool],
     "plot":      [1.,                      util.to_bool],
     "pubplot":   [1.,                      util.to_bool],
+    "scanexps":  [[],                      util.noop],
 }
 
 attribute_to_key = {
@@ -299,6 +300,7 @@ attribute_to_key = {
     "minpause": "minpause",
     "sazcol": "azcolim",
     "selcol": "elcolim",
+    "scanexps": "scanexps",
 }
 
 def schin(stdin):
@@ -377,6 +379,10 @@ def schin(stdin):
             record = next(input_iterator)
             # a weird one, only dwell[0]'s default does not carry over
             state_defaults["dwell"][0][0] = parameter.unset
+            # make a new scanexps overwrite the old list, 
+            # instead of the default behaviour of slicing into it
+            old_scanexps = state_defaults["scanexps"][0]
+            state_defaults["scanexps"][0] = []
             if restart:
                 old_values, old_present = values, present
                 values, present = util.merge_record_with_defaults(
@@ -388,8 +394,10 @@ def schin(stdin):
             else:
                 values, present = util.merge_record_with_defaults(
                     record, record_defaults, state_defaults)
+            if "scanexps" not in present:
+                state_defaults["scanexps"][0] = old_scanexps
+                values["scanexps"] = old_scanexps
             
-
             if "exit" in present:
                 if index == 0:
                     s.wlog(1, "SCHIN:  EXIT requested.  Shutting down.")
@@ -458,9 +466,13 @@ def schin(stdin):
             # nopeak overwrites peak and its default
             if "nopeak" in present:
                 state_defaults["peak"][0] = values["peak"] = -1.
+
+            if ("scanexps" in present) and \
+               ("NONE" in (v.upper() for v in values["scanexps"])):
+                state_defaults["scanexps"][0] = values["scanexps"] = []
             
             entry.set_keyin_values(values, attribute_to_key)
-            
+
             mjd1 = gettim(values, catalog.entries, index,
                           start, stop, day, year, mjd1)
             gotvex = getsta(stdin, values, index, gotvex, mjd1)

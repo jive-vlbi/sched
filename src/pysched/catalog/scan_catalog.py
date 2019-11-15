@@ -203,7 +203,7 @@ class ScanCatalog(Catalog):
 
 
     def __init__(self):
-        super().__init__(self.maxscan, self.block_items)
+        super().__init__(self.maxscan, self.block_items, {"scanexps"})
         self.attr_array = map_attr_array(self.block_items)
         self.direct_access_entries = [
             self.DirectAccessCatalogEntry(i, self.attr_array) 
