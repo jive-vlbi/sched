@@ -1,5 +1,8 @@
       SUBROUTINE GEOMAKE( LASTISCN, JSCN, ISCN, SEGSRCS, NSEG,
      1                    GSTASCN, GSTARTJ )
+Cf2py intent(in) LASTISCN, JSCN, ISCN
+Cf2py intent(out) SEGSRCS
+Cf2py intent(in, out) NSEG, GSTASCN, GSTARTJ
 C
 C     Routine for SCHED called by ADDGEO that makes a list
 C     of sources from the list of geo sources to fit into a

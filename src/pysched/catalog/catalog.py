@@ -1,16 +1,33 @@
 import numpy as np
 from .. import util
 
-def get_arrays(block_items):
+def get_arrays(attr_array):
     # gather a copy (because .T returns a view) of all arrays in C-order
     vector_func = np.vectorize(util.f2str, otypes=[object])
-    arrays = {item: 
-              vector_func(getattr(block, item).T)
-              if getattr(block, item).dtype.kind == "S" else 
-              getattr(block, item).T.copy()
-              for block, items in block_items.items()
-              for item in items}
+    arrays = {attr: vector_func(array.T) if array.dtype.kind == "S" 
+              else array.T.copy()
+              for attr, array in attr_array.items()}
     return arrays
+
+def write(attr_array, entries, indices):
+    for attr, array in attr_array.items():
+        dtype = array.dtype
+        vector_func = np.vectorize(lambda x: x.ljust(dtype.itemsize), 
+                                   otypes=[dtype])
+        for i in indices:
+            new_value = np.array(getattr(entries[i], attr), dtype=dtype)
+            if dtype.kind == "S":
+                # fill string with spaces fortran/sched style
+                new_value = vector_func(new_value)
+            # if the new value is smaller, embed it
+            dest_slice = (slice(i, i+1), ) + \
+                         tuple(map(slice, new_value.shape))
+            array.T[dest_slice] = new_value
+
+def map_attr_array(block_items):
+    return {attr: getattr(block, attr)
+            for block, attrs in block_items.items()
+            for attr in attrs}
 
 class Catalog(object):
     """
@@ -52,18 +69,24 @@ class Catalog(object):
             self.__dict__ = type(self)._shared_state = {}
             self.nr_elements = nr_elements
             self.block_items = block_items
-            self.attributes = sum(block_items.values(), [])
+            self.attr_array = map_attr_array(block_items)
+            self.attributes = list(self.attr_array.keys())
             self.extended_attributes = extended_attributes
             self.prime()
+
+    def adjust_lengths(self, entries):
+        """
+        Where the common blocks contain fixed length arrays,
+        set the length of the entries using the variable defining the length.
+        """
+        pass
     
     def prime(self):
         """
         Prepares the catalog with the values from common blocks to overwrite
         with keyin values before calling self.write().
-        Where the common blocks contain fixed length arrays,
-        set the length of the entries using the variable defining the length.
         """
-        arrays = get_arrays(self.block_items)
+        arrays = get_arrays(self.attr_array)
         # create an entry for each index of the arrays
         self.entries = [
             self.CatalogEntry(
@@ -72,25 +95,38 @@ class Catalog(object):
         for entry in self.entries:
             for attribute in self.extended_attributes:
                 setattr(entry, attribute, None)
+        self.adjust_lengths(self.entries)
         return self.entries
 
-    def read(self):
+    def read(self, selection_slice=None):
         """
         Read the catalog entries from the common blocks.
-        Only return entries that have defined values.
+        Only read and return entries that sliced by selection_slice, 
+        applied to self.entries.
+        If selection_slice is None, self.scheduled_slice() is used.
         """
-        arrays = get_arrays(self.block_items)
-        entries = self.scheduled()
-        for i, entry in enumerate(entries):
+        if selection_slice is None:
+            selection_slice = self.scheduled_slice()
+        arrays = get_arrays(self.attr_array)
+        entries = self.entries[selection_slice]
+        for i, entry in zip(range(*selection_slice.indices(len(self.entries))), 
+                            entries):
             entry.__dict__.update(
                 {key: value[i] for key, value in arrays.items()})
+        self.adjust_lengths(entries)
         return entries
+
+    def scheduled_slice(self):
+        """
+        Return the slice of entries that are scheduled.
+        """
+        return slice(None)
     
     def scheduled(self):
         """
         Return entries that have defined values.
         """
-        return self.entries
+        return self.entries[self.scheduled_slice()]
 
     def write(self, indices=None):
         """
@@ -103,19 +139,4 @@ class Catalog(object):
         """
         if indices is None:
             indices = range(self.nr_elements)
-        for block, items in self.block_items.items():
-            for item in items:
-                dtype=getattr(block, item).dtype
-                vector_func = np.vectorize(
-                    lambda x: x.ljust(dtype.itemsize),
-                    otypes=[dtype])
-                for i in indices:
-                    new_value = np.array(
-                        getattr(self.entries[i], item), dtype=dtype)
-                    if dtype.kind == "S":
-                        # fill string with spaces fortran/sched style
-                        new_value = vector_func(new_value)
-                    # if the new value is smaller, embed it
-                    dest_slice = (slice(i, i+1), ) + \
-                                 tuple(map(slice, new_value.shape))
-                    getattr(block, item).T[dest_slice] = new_value
+        write(self.attr_array, self.entries, indices)

@@ -123,6 +123,15 @@ def chain(*functions):
 def f2str(f_str):
     return bytes(f_str).decode().rstrip()
 
+def f2str_array(a):
+    # arrays of string are actually returned as matrices of numpy.bytes_
+    # with a fotran/C mix-up in memory layout
+    # eg: ["foo", "bar", "", ""] is returned as
+    #     [["f", "a", ""], ["o", "r", ""], ["o", "", ""], ["b", "", ""]]
+    return np.array(["".join(c.decode() for c in row).rstrip()
+                     for row in a.flatten(order="F").reshape(a.shape)], 
+                    dtype=object)
+
 def expand_file_name(shell_file_name):
     return os.path.expanduser(os.path.expandvars(shell_file_name))
 
@@ -132,3 +141,5 @@ def get_catalog_dir():
     else:
         return os.path.join(pkg_resources.resource_filename("pysched", ".."), 
                             "catalogs")
+
+bool2str = lambda b: "T" if b else "F"

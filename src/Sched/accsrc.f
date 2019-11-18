@@ -1,4 +1,5 @@
       SUBROUTINE ACCSRC( INCLPTG )
+Cf2py intent(in) INCLPTG
 C
 C     Subroutine for SCHED that accumulates a list of all sources
 C     that have been used in the schedule.  It looks for the main

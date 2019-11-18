@@ -1,4 +1,6 @@
       SUBROUTINE SCHGEO( ISCN, ISTA, JTIME, HA, EL, AZ, LSTTIM, PA )
+Cf2py intent(in) ISCN, ISTA, JTIME
+Cf2py intent(out) HA, EL, AZ, LSTTIM, PA
 C
 C     Subroutine to calculate HA, EL, AZ, and LST from
 C     Modified Julian time (JTIME), RA, DEC, LONG, and LAT.

@@ -1,4 +1,6 @@
       SUBROUTINE SCNGEO( LASTISCN, NGOOD, ISCN )
+Cf2py intent(in) LASTISCN, ISCN
+Cf2py intent(out) NGOOD
 C
 C     Subroutine for SCHED that gets the geometry of a scan for all
 C     stations.  It is basically a station loop for STAGEO

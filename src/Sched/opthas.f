@@ -1,4 +1,6 @@
       SUBROUTINE OPTHAS( LASTISCN, KSCN, ISCN, ADJUST, KEEP, DONE )
+Cf2py intent(in) LASTISCN, KSCN, ISCN
+Cf2py intent(out) ADJUST, KEEP, DONE
 C
 C     Determine scans to observe with OPTMODE='HASEQ'.  This 
 C     mode makes one pass through the schedule assigning the next 
@@ -50,10 +52,11 @@ C
       INTEGER    SRUSED(MAXINS), SRLOOK(MAXINS)
       LOGICAL    LDUMMY
       SAVE       NOUT, SCNUSED, DURTOT, RSTA
-      SAVE       HAMIN, HAMAX, HABEGIN, HAEND
+      SAVE       HAMIN, HAMAX, HABEGIN, HAEND, THAMIN, THAMAX
       SAVE       TUSE, TAVAIL
       SAVE       SRUSED, SRLOOK, SKIPTIME, SKIPINC, NSKIP
       SAVE       SDTOT
+      SAVE       OPHAT, OPHAWIDT
 C ----------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'OPTHAS: Starting.' )
 C

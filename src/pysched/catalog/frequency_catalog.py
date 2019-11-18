@@ -74,14 +74,12 @@ class FrequencyCatalog(Catalog):
             entry.fnif = len(entry.fifnam)
         return super().write(indices)
 
-    def prime(self):
-        super().prime()
-        for entry in self.entries:
+    def adjust_lengths(self, entries):
+        for entry in entries:
             length = entry.fnif
             for attribute in ("fifnam", "faltif", "frf1", "frf2", "flo1",
                               "fpol", "ffe", "fch1rf1", "fch1rf2", "fvchnsta"):
                 setattr(entry, attribute, getattr(entry, attribute)[:length])
-        return self.entries
     
-    def scheduled(self):
-        return self.entries[:s.frqn.nfreq]
+    def scheduled_slice(self):
+        return slice(s.frqn.nfreq)

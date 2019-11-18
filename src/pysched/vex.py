@@ -26,7 +26,7 @@ def write(output, vex_version="2.0", print_warnings=False):
                     FrequencyCatalog):
         Catalog().read()
     station_catalog = StationCatalog()
-    station_catalog.add_scheduled_attributes()
+    station_catalog.read_scheduled_attributes()
     SourceCatalog().set_aliases()
     scan_catalog = ScanCatalog()
     vex_scans.apply_tape_offset(
@@ -1182,6 +1182,9 @@ def sched_block(scan_mode, vex_version, print_warnings):
         scan_def = (("start", time2str(scan.startj)),
                     ("mode", scan_mode[scan_index]),
                     ("source", scan.scnsrc))
+        if (vex_version >= "2") and (len(scan.scanexps) > 0):
+            scan_def += (
+                ("intent", "", "EXPERIMENTS", ",".join(scan.scanexps)),)
         scan_name = "No{:04d}".format(scan_index+scan_offset+1)
         for station in stations:
             if station.stascn[scan_index+scan_offset]:

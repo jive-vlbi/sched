@@ -413,7 +413,9 @@ Vex/vxwrst.f
 Vex/vxwrsu.f
 Vex/vxwrt.f
 Vex/vxwrtr.f
-pysched/tformwrp.f
+pysched/tformwrp.f 
+pysched/ran5wrap.f 
+pysched/makesegw.f 
 """.split()
 
 if arch in ["hp", "linux", "sun", "unix"]:
@@ -446,6 +448,9 @@ Cit/sys_sun/vlbope.f
 # fortran functions to create a python interface for
 functions = """
 accsrc 
+addgeo 
+addpeak 
+autodown 
 bbccdas 
 bbcgeo 
 bbckvsr 
@@ -476,30 +481,54 @@ chkspd
 chkvdifx 
 cordef 
 delscr 
+diskpos 
 dopfq 
 errlog 
 error 
 errset 
 flags 
 fluxh 
+geochk 
+geomake 
+geoqual 
 geoxyz 
+getpairs 
 getsun 
+gmkscn 
 gnset 
+haavai 
+halim 
 jplver 
 listfreq 
 lst2ut 
+makeptg 
+makesegw 
 omsout 
+optcells 
+optcsub 
+opthas 
+opthiel 
+optnone 
+optsch 
+optskd 
+opttim 
+optupt
 plbeam 
 plver 
 pkfinish 
 prtscn 
 putout 
+ran5wrap 
 recctl 
 sattim 
 sbpair 
+sch24 
+schgeo 
 schopt 
 schpre 
 schsum 
+schtim 
+scngeo 
 scnrange 
 setchan 
 setfcat 
@@ -508,6 +537,7 @@ setfreq
 sethw1 
 setrec 
 setstdef 
+settps 
 settrk 
 setusyn 
 sdopincr 
@@ -519,11 +549,14 @@ sla_dat
 socdef 
 srcflg 
 srfinish 
+srinsert 
 srlist 
 stafiles 
+stageo 
 stano 
 stauv 
 stmsg 
+sunpos 
 tdatecw 
 tformwrp 
 timej 
@@ -578,7 +611,7 @@ extension = Extension(
 setup(
     cmdclass={"sdist": sdist},
     name="pythonSCHED",
-    version="1.2.1",
+    version="1.3.0",
     author="Bob Eldering",
     author_email="eldering@jive.eu",
     description="Python extension of NRAO's VLBI scheduling program SCHED "

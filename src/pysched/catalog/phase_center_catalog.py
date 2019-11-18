@@ -39,15 +39,5 @@ class PhaseCenterCatalog(Catalog):
             entry.ctrsrcn = entry.ctrsrcn[:length]
             entry.ctrsrci = entry.ctrsrci[:length]
 
-    def prime(self):
-        ret = super().prime()
-        self.adjust_lengths(ret)
-        return ret
-
-    def read(self):
-        ret = super().read()
-        self.adjust_lengths(ret)
-        return ret
-
-    def scheduled(self):
-        return self.entries[:s.schsou.ncent]
+    def scheduled_slice(self):
+        return slice(s.schsou.ncent)
