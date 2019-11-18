@@ -20,9 +20,9 @@ echo '-------  diffs - local file vs file in ' $3 '-----------'
 #  Check the .runlog file. 
 
 echo '----------------------' $1.runlog '-------------------------'
-sed -e s:"$SCHED":"$SCHED_SUB":g $1.runlog | \
-  grep -v "Updating catalogs in $HOME/.pysched" | \
+grep -v "Updating catalogs in $HOME/.pysched" $1.runlog | \
   grep -v "Catalogs in $HOME/.pysched are up-to-date." | \
+  sed -e s:"$SCHED":"$SCHED_SUB":g | \
   sed -f Check_sed | diff - $3/$1.runlog
 
 #   Check the summary file.
