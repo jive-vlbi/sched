@@ -624,7 +624,7 @@ setup(
                       # Traceback (most recent call last):
                       # File "<stdin>", line 1, in <module>
                       # ModuleNotFoundError: No module named 'PyQt5.sip'
-                      "pyqt5<5.11", 
+                      "pyqt5!=5.11.*,!=5.12.*",
                       "matplotlib>=3",
                       "formlayout",
                       "astropy",
