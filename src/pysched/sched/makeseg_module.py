@@ -299,12 +299,11 @@ def makeseg(j_scan, scan_index, last_scan_index, ok_geo, use_geo, seg_elevation,
             for geo_index in range(1, s.schsou.ngeo + 1):
                 if ok_geo[geo_index - 1] and (selected[geo_index - 1] < s_scan1):
                     approx_time = scans[l_scan - 2].stopj + 60 / secpday
-                    ok_sta = np.empty(dtype=bool, shape=(StationCatalog.maxsta,))
-                    n_good, ok_sta, scan_stascn = s.gmkscn(
+                    n_good, ok_sta, scan_stascn = gmkscn(
                         last_scan_index_copy, l_scan, j_scan, 
                         s.schsou.geosrci[geo_index - 1], 
-                        s.schcsc.geosrc[geo_index - 1], approx_time, 
-                        scans[j_scan - 1].opminel, last_high_station, ok_sta, 
+                        f2str(s.schcsc.geosrc[geo_index - 1]), approx_time, 
+                        scans[j_scan - 1].opminel, last_high_station,
                         scan_stascn, "SET")
                     
                     k_stascn[geo_index - 1, :] = scan_stascn
@@ -518,12 +517,11 @@ def makeseg(j_scan, scan_index, last_scan_index, ok_geo, use_geo, seg_elevation,
                            approx_time, 
                            " ".join(bool2str(e) for e in scan_stascn[:n_sta])))
 
-            ok_sta = np.empty(dtype=bool, shape=(StationCatalog.maxsta,))
-            n_good, ok_sta, scan_stascn = s.gmkscn(
+            n_good, ok_sta, scan_stascn = gmkscn(
                 last_scan_index_copy, l_scan, j_scan, 
                 s.schsou.geosrci[t_src[seg_index - 1] - 1], 
-                s.schcsc.geosrc[t_src[seg_index - 1] - 1], approx_time, 
-                scans[j_scan - 1].opminel, 0, ok_sta, scan_stascn, "FORCE")
+                f2str(s.schcsc.geosrc[t_src[seg_index - 1] - 1]), approx_time, 
+                scans[j_scan - 1].opminel, 0, scan_stascn, "FORCE")
             
             for i, station in enumerate(stations):
                 if station.stascn[l_scan - 1]:
