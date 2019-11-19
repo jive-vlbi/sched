@@ -415,7 +415,6 @@ Vex/vxwrt.f
 Vex/vxwrtr.f
 pysched/tformwrp.f 
 pysched/ran5wrap.f 
-pysched/makesegw.f 
 """.split()
 
 if arch in ["hp", "linux", "sun", "unix"]:
@@ -448,8 +447,6 @@ Cit/sys_sun/vlbope.f
 # fortran functions to create a python interface for
 functions = """
 accsrc 
-addgeo 
-addpeak 
 autodown 
 bbccdas 
 bbcgeo 
@@ -488,13 +485,10 @@ error
 errset 
 flags 
 fluxh 
-geochk 
-geomake 
 geoqual 
 geoxyz 
 getpairs 
 getsun 
-gmkscn 
 gnset 
 haavai 
 halim 
@@ -502,17 +496,9 @@ jplver
 listfreq 
 lst2ut 
 makeptg 
-makesegw 
 omsout 
-optcells 
-optcsub 
-opthas 
-opthiel 
-optnone 
 optsch 
-optskd 
 opttim 
-optupt
 plbeam 
 plver 
 pkfinish 
@@ -524,7 +510,6 @@ sattim
 sbpair 
 sch24 
 schgeo 
-schopt 
 schpre 
 schsum 
 schtim 
