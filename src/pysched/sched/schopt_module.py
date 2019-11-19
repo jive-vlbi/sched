@@ -33,16 +33,6 @@ def schopt():
     # call here once
     SetupFileCatalog().read()
 
-    # FIX way too crude
-    catalogs = [source_catalog, pc_catalog]
-    def call_schedlib(f, *args):
-        for catalog in catalogs:
-            catalog.write()
-        ret = f(*args)
-        for catalog in catalogs:
-            catalog.read()
-        return ret
-
     for scan in scans:
         scan.origen = 1
 
