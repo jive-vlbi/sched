@@ -9,7 +9,7 @@ def bbcdbbc(ks, setup_entry, station_entry):
     """
     ks: Fortran index into setups
     setup_entry: changes will be written to catalog
-    station_entty: read only
+    station_entry: read only
     """
     if s.schcon.debug:
         s.wlog(1, "BBCDBBC: Starting")
