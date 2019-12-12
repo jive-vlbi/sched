@@ -1,4 +1,4 @@
-from . import chkdbbc
+from . import chkdbbc, check_emerlin
 from ..catalog import SetupCatalog, StationCatalog, FrequencyCatalog
 from ..util import f2str
 
@@ -109,6 +109,8 @@ def chkset(ks):
             errs = s.chkrdbe(ks, errs)
         if station_entry.dar.startswith("DBBC"):
             errs = chkdbbc(ks, setup_entry, station_entry) or errs
+        if station_entry.dar == "eMERL":
+            errs = check_emerlin(setup_entry, station_entry) or errs
         if station_entry.dar == "WIDAR":
             errs = s.chkwidar(ks, errs)
         if station_entry.dar in ("VLBA", "VLBAG", "VLBA4"):

@@ -297,7 +297,8 @@ def stread(input_iterator, stdin, mjd1):
         check(entry.dar,
               ("VLBA", "RDBE", "RDBE2", "DBBC", "DBBC3", "VLBAG", 
                "MKIV", "MKIII", "S2", "K4", "K5", "VERA", "VSOP", 
-               "VLBA4", "LBA", "R1002", "WIDAR", "CDAS", "NONE"),
+               "VLBA4", "LBA", "R1002", "WIDAR", "CDAS", "eMERL", 
+               "NONE"),
               ("MKIII", "S2"),
               entry.station,
               "DAR")
