@@ -30,9 +30,11 @@ from .bbcalt_module   import bbcalt
 from .ifdbbc_module   import ifdbbc
 from .ifdbbc3_module  import ifdbbc3
 from .bbcdbbc_module  import bbcdbbc
+from .bbcemerlin_module import bbc_emerlin
 from .setbbc_module   import setbbc
 from .setdefs_module  import setdefs
 from .chkdbbc_module  import chkdbbc
+from .checkemerlin_module import check_emerlin
 from .chkset_module   import chkset
 from .setexpnd_module import setexpnd
 from .defset_module   import defset

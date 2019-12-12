@@ -1,4 +1,4 @@
-from . import bbcdbbc
+from . import bbcdbbc, bbc_emerlin
 
 import schedlib as s
 
@@ -27,9 +27,11 @@ def setbbc(ks, setup_catalog, frequency_entries, station_entries):
        (station_entry.dar in ("VLBA", "VLBAG", "VLBA4")):
         s.bbcvs2(ks)
     else:
-        def handle_dbbc(ks):
-            bbcdbbc(ks, setup_entry, station_entry)
-            setup_catalog.write(range(ks-1, ks))
+        def handle_func(f):
+            def handle(ks):
+                f(ks, setup_entry, station_entry)
+                setup_catalog.write(range(ks-1, ks))
+            return handle
         bbc_func = {"VLBA": s.bbcvlba,
                     "RDBE": s.bbcrdbe,
                     "RDBE2": s.bbcrdbe,
@@ -37,11 +39,13 @@ def setbbc(ks, setup_catalog, frequency_entries, station_entries):
                     "VLBAG": s.bbcgeo,
                     "VLBA4": s.bbcgeo,
                     "MKIV": s.bbcm4,
-                    "DBBC": handle_dbbc,
-                    "DBBC3": handle_dbbc,
+                    "DBBC": handle_func(bbcdbbc),
+                    "DBBC3": handle_func(bbcdbbc),
                     "CDAS": s.bbccdas,
                     "R1002": s.bbckvsr,
-                    "LBA": s.bbclba}.get(station_entry.dar, None)
+                    "LBA": s.bbclba,
+                    "eMERL": handle_func(bbc_emerlin)}.get(
+                        station_entry.dar, None)
         if bbc_func is not None:
             bbc_func(ks)
         elif station_entry.dar != "NONE":
