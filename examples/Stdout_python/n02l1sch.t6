@@ -395,10 +395,10 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  FIRST_051  NME.18CM              1 2 3 4 5 6 7 8                   2.633    69.077
-  J0927+3902 NME.18CM              1 2 3 4 5 6 7 8                   0.122     3.422
-  J1159+2914 NME.18CM              1 2 3 4 5 6 7 8                   1.439    34.106
-  OQ208      NME.18CM              1 2 3 4 5 6 7 8                   0.206     5.756
+  FIRST_051  NME.18CM              1 2 3 4 5 6 7 8 9                 2.633    88.932
+  J0927+3902 NME.18CM              1 2 3 4 5 6 7 8 9                 0.122     4.400
+  J1159+2914 NME.18CM              1 2 3 4 5 6 7 8 9                 1.439    44.030
+  OQ208      NME.18CM              1 2 3 4 5 6 7 8 9                 0.206     7.400
 
 
 EFFECT OF SOLAR CORONA
