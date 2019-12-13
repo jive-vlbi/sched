@@ -16,6 +16,7 @@ import sys
 
 checkout_dir = os.path.join(os.path.expanduser("~"), ".pysched")
 git_repository = "https://github.com/jive-vlbi/sched.git"
+branch = "data_files_v1.4"
 
 class Spinner(git.RemoteProgress):
     cursor_chars = ["|", "/", "-", "\\"]
@@ -37,13 +38,18 @@ def update_catalogs():
             s.wlog(1, "Downloading catalogs to {}".format(checkout_dir))
             # clone a shallow, single branch version to reduce data usage
             repo = git.Repo.clone_from(git_repository, checkout_dir, 
-                                       depth=1, branch="data_files", 
+                                       depth=1, branch=branch, 
                                        progress=Spinner())
             print()
         else:
             repo = git.Repo(checkout_dir)
 
-        repo.git.checkout("data_files")
+        # make sure the required branch is in the local repo
+        if branch not in {b.name for b in repo.branches}:
+            repo.git.remote("set-branches", "origin", branch)
+            repo.git.fetch("origin", branch, depth=1)
+
+        repo.git.checkout(branch)
 
         # point $SCHED to the checkout if not explicitly set, restore at exit
         if "SCHED" not in os.environ:
