@@ -6,8 +6,8 @@ pySCHED is built upon [SCHED](http://www.aoc.nrao.edu/~cwalker/sched/) as develo
 
 ### pip
 
-sudo pip3 install numpy
-sudo pip3 install pythonSCHED
+sudo pip3 install numpy  
+sudo pip3 install pythonSCHED  
 
 The setup script of pySCHED requires NumPy (>=1.16).
 
@@ -19,8 +19,8 @@ sudo apt-get install python3-pip
 
 Alternatively, if you use conda, [this](https://github.com/jive-vlbi/sched/raw/python/pySCHED.yaml)  YAML file is a conda environment which includes both NumPy and pySCHED. To use it
 
-conda env create -f pySCHED.yaml
-conda activate pySCHED
+conda env create -f pySCHED.yaml  
+conda activate pySCHED  
 
 ## Usage
 
