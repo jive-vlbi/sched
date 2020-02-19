@@ -68,7 +68,9 @@ C
       GOTPOL = .TRUE.
       DO ICH = 1, NCHAN(KS)
          IF( POL(ICH,KS)(1:3) .NE. 'RCP' .AND.
-     1       POL(ICH,KS)(1:3) .NE. 'LCP' ) THEN
+     1       POL(ICH,KS)(1:3) .NE. 'LCP' .AND.
+     2       POL(ICH,KS)(1:1) .NE. 'X' .AND.
+     3       POL(ICH,KS)(1:1) .NE. 'Y' ) THEN
             IF( IFCHAN(ICH,KS) .EQ. RCHAN(KS) ) THEN
                POL(ICH,KS) = 'RCP'
             ELSE IF( IFCHAN(ICH,KS) .EQ. LCHAN(KS) ) THEN
