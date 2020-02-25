@@ -315,7 +315,7 @@ class SetupCatalog(Catalog):
         if cls.is_dbbc_e_firmware(entry):
             return {4, 8, 16, 32, 64}
         if entry.dbbcfw == "": # assume 107 (or better)
-            return {2, 4, 8, 16, 32, 64}
+            return {2, 4, 8, 16, 32, 64, 128}
         if entry.dbbcfw < "107": # known firmwares are 104 and 105
             return {2, 4, 8, 16, 32}
         return {2, 4, 8, 16, 32, 64}
