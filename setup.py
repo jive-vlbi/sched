@@ -619,12 +619,7 @@ setup(
     setup_requires=["numpy>=1.16",
                     "setuptools>=24.3"],
     install_requires=["numpy>=1.16",
-                      # seen problem with 5.11 and 5.12:
-                      # >>> import PyQt5.QtCore
-                      # Traceback (most recent call last):
-                      # File "<stdin>", line 1, in <module>
-                      # ModuleNotFoundError: No module named 'PyQt5.sip'
-                      "pyqt5!=5.11.*,!=5.12.*",
+                      "pyqt5",
                       "matplotlib>=3",
                       "formlayout",
                       "astropy",
