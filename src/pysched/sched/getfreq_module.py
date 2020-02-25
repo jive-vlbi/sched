@@ -88,7 +88,7 @@ def getfreq():
     catalog.write(range(len(keyin_data)))
 
     s.frqn.nfreq = len(keyin_data)
-    s.schsco.freqver =  state_defaults["version"][0].ljust(
-        s.schsco.freqver.itemsize)
+    s.schsco.freqver =  util.resize_string(state_defaults["version"][0], 
+                                           s.schsco.freqver.itemsize, "version")
 
     s.listfreq()

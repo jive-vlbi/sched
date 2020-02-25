@@ -335,10 +335,10 @@ def stread(input_iterator, stdin, mjd1):
               
     s.schsta.msta = index
 
-    s.schcst.stver = station_state_defaults["version"][0].ljust(
-        s.schcst.stver.itemsize)
-    s.schcst.locaver = location_state_defaults["version"][0].ljust(
-        s.schcst.locaver.itemsize)
+    s.schcst.stver = util.resize_string(station_state_defaults["version"][0],
+                                        s.schcst.stver.itemsize, "version")
+    s.schcst.locaver = util.resize_string(location_state_defaults["version"][0],
+                                          s.schcst.locaver.itemsize, "version")
 
     station_catalog.write(range(start, index))
 

@@ -409,16 +409,16 @@ def schin(stdin):
             s.schcon.overwrit = values["overwrite"]
             s.schcon.override = values["override"]
 
-            s.schsco.msgfile = util.expand_file_name(values["msgfile"]).ljust(
-                s.schsco.msgfile.itemsize)
+            s.schsco.msgfile = util.resize_string(util.expand_file_name(
+                values["msgfile"]), s.schsco.msgfile.itemsize, "msgfile")
 
             if s.schcon.debug and (index < 3):
                 s.wlog(0, "DIVERT: Starting")
 
             s.schcon.freqlist = values["freqlist"]
             if "freqlist" in present:
-                s.schsco.freqfile = util.expand_file_name(values["freqfile"]).\
-                                    ljust(s.schsco.freqfile.itemsize)
+                s.schsco.freqfile = util.resize_string(util.expand_file_name(
+                    values["freqfile"]), s.schsco.freqfile.itemsize, "freqfile")
                 getfreq()
                 s.wlog(1, "DIVERT:   Frequency table written.  Stopping.")
                 sys.exit(0)
@@ -456,7 +456,8 @@ def schin(stdin):
                     catalog.maxscan))
             entry = catalog.entries[index]
 
-            s.schsco.dosta = values["dosta"].ljust(s.schsco.dosta.itemsize)
+            s.schsco.dosta = util.resize_string(
+                values["dosta"], s.schsco.dosta.itemsize, "dosta")
             if (values["dosta"] != "ALL") and dostwarn:
                 s.wlog(0, "SCHIN:  DOSTA specified as {}".format(
                     values["dosta"]))
@@ -524,8 +525,8 @@ def schin(stdin):
             
             s.schcon.autopeak = values["autopeak"]
             s.schcon.pkwatch = values["pkwatch"]
-            s.schsco.peakfile = util.expand_file_name(values["peakfile"]).\
-                                ljust(s.schsco.peakfile.itemsize)
+            s.schsco.peakfile = util.resize_string(util.expand_file_name(
+                values["peakfile"]), s.schsco.peakfile.itemsize, "peakfile")
 
             entry.setnum = SetupFileCatalog.extend_with(
                 util.expand_file_name(values["setup"]), 
@@ -576,8 +577,10 @@ def schin(stdin):
         s.schn1.nscans = s.schn1.scanl
         index *= 2
     
-    s.schc1.expt = values["expt"].ljust(s.schc1.expt.itemsize)
-    s.schc1.expcode = values["expcode"].ljust(s.schc1.expcode.itemsize)
+    s.schc1.expt = util.resize_string(values["expt"], s.schc1.expt.itemsize, 
+                                      "expt")
+    s.schc1.expcode = util.resize_string(values["expcode"], 
+                                         s.schc1.expcode.itemsize, "expcode")
     s.schcon.linepg = values["linepg"]
     s.schn5.tpref = values["tpref"]
     s.schn4.ptdur = values["ptdur"]
@@ -588,15 +591,16 @@ def schin(stdin):
 
     s.schcon.domka = values["domka"]
 
-    s.schsco.ephfile = util.expand_file_name(values["ephfile"]).ljust(
-        s.schsco.ephfile.itemsize)
+    s.schsco.ephfile = util.resize_string(util.expand_file_name(
+        values["ephfile"]), s.schsco.ephfile.itemsize, "ephfile")
 
     s.chkcode(s.schc1.expcode)
 
     obstype = values["obstype"]
     if obstype[:4] == "MARK":
         obstype = "MK" + obstype[4:]
-    s.schsco.obstyp = obstype.ljust(s.schsco.obstyp.itemsize)
+    s.schsco.obstyp = util.resize_string(obstype, s.schsco.obstyp.itemsize, 
+                                         "obstype")
     s.schn1.mark2 = (obstype == "MKII")
     s.schn1.vlbitp = (obstype in ("VLBA", "MKIII", "VLBI", "MKIV"))
     s.schn1.vlaonly = (obstype == "VLA")
@@ -612,13 +616,15 @@ def schin(stdin):
     if ((s.schn1.doscans[0] == 0) != (s.schn1.doscans[1] == 0)):
         s.errlog("If using DOSCANS, specify both!")
 
-    s.schsco.optmode = values["optmode"].ljust(s.schsco.optmode.itemsize)
+    s.schsco.optmode = util.resize_string(values["optmode"], 
+                                          s.schsco.optmode.itemsize, "optmode")
     s.schcon.opdur   = values["opdur"]
     s.schcon.opnosub = values["opnosub"]
     s.schcon.opskip  = values["opskip"]
     s.schcon.optslew = values["optslew"]
     s.schcon.optlowt = values["optlowt"]
-    s.schsco.ophasta = values["ophasta"].ljust(s.schsco.ophasta.itemsize)
+    s.schsco.ophasta = util.resize_string(values["ophasta"], 
+                                          s.schsco.ophasta.itemsize, "ophasta")
     s.schcon.tapesync = values["tapesync"]
     s.schcon.opprtlev = values["opprtlev"]
 
@@ -631,14 +637,17 @@ def schin(stdin):
     s.schcon.gridmax  = values["gridmax"]
     s.schcon.gridw0   = values["gridw0"]
     s.schcon.gridstep = values["gridstep"]
-    s.schsco.gridmeas = values["gridmeas"].ljust(s.schsco.gridmeas.itemsize)
+    s.schsco.gridmeas = util.resize_string(values["gridmeas"], 
+                                           s.schsco.gridmeas.itemsize, 
+                                           "gridmeas")
     s.schcon.gridvla  = values["gridvla"]
     s.schcon.gridused = False
     s.schcon.nmfs = values["uvmfs"][0]
     s.schcon.mfsrat = values["uvmfs"][1]
 
     mgeo = s.schsou.geosrci.shape[0]
-    geosrcs = [src.ljust(s.schcsc.geosrc.itemsize) for src in values["geosrcs"]]
+    geosrcs = [util.resize_string(src, s.schcsc.geosrc.itemsize, "geosrcs") 
+               for src in values["geosrcs"]]
     s.schsou.ngeo = len(geosrcs[:mgeo])
     for i, src in enumerate(geosrcs):
         s.schcsc.geosrc[i] = src
@@ -673,7 +682,9 @@ def schin(stdin):
     s.tptpns()
 
     for i, sumitem in enumerate(values["sumitem"]):
-        s.schsco.sumitem[i] = sumitem.ljust(s.schsco.sumitem.itemsize)
+        s.schsco.sumitem[i] = util.resize_string(sumitem, 
+                                                 s.schsco.sumitem.itemsize, 
+                                                 "sumitem")
     if values["sumitem"][0] == "":
         s.schsco.sumitem[0] = "ELA".ljust(s.schsco.sumitem.itemsize)
         s.schsco.sumitem[1] = "DWELL".ljust(s.schsco.sumitem.itemsize)
@@ -687,15 +698,15 @@ def schin(stdin):
     
     times(values["lst"], start, stop, day, year)
     
-    s.schcsc.srcfile = util.expand_file_name(values["srcfile"]).ljust(
-        s.schcsc.srcfile.itemsize)
-    s.schcsc.srcfile2 = util.expand_file_name(values["srcfile2"]).ljust(
-        s.schcsc.srcfile2.itemsize)
+    s.schcsc.srcfile = util.resize_string(util.expand_file_name(
+        values["srcfile"]), s.schcsc.srcfile.itemsize, "srcfile")
+    s.schcsc.srcfile2 = util.resize_string(util.expand_file_name(
+        values["srcfile2"]), s.schcsc.srcfile2.itemsize, "srcfile2")
 
     sttant(values["tantsta1"], values["tantsta2"])
 
-    s.schsco.freqfile = util.expand_file_name(values["freqfile"]).ljust(
-        s.schsco.freqfile.itemsize)
+    s.schsco.freqfile = util.resize_string(util.expand_file_name(
+        values["freqfile"]), s.schsco.freqfile.itemsize, "freqfile")
     s.schcon.freqlist = values["freqlist"]
 
     if "autotape" in present:

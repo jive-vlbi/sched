@@ -19,9 +19,10 @@ def getsta(stdin, values, index, gotvex, mjd1):
         last_station_file = ""
 
     station_file = util.expand_file_name(values["stafile"])
-    s.schcst.stafile = station_file.ljust(s.schcst.stafile.itemsize)
-    s.schcst.locafile = util.expand_file_name(values["locfile"]).ljust(
-        s.schcst.locafile.itemsize)
+    s.schcst.stafile = util.resize_string(station_file, 
+                                          s.schcst.stafile.itemsize, "stafile")
+    s.schcst.locafile = util.resize_string(util.expand_file_name(
+        values["locfile"]), s.schcst.locafile.itemsize, "locfile")
     if (station_file.upper() != "NONE") and (station_file != last_station_file):
         try:
             f = open(station_file, "r")

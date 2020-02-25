@@ -1,3 +1,5 @@
+import schedlib as s
+
 import numpy as np
 from .. import util
 
@@ -12,8 +14,9 @@ def get_arrays(attr_array):
 def write(attr_array, entries, indices):
     for attr, array in attr_array.items():
         dtype = array.dtype
-        vector_func = np.vectorize(lambda x: x.ljust(dtype.itemsize), 
-                                   otypes=[dtype])
+        vector_func = np.vectorize(
+            lambda x: util.resize_string(x, dtype.itemsize, attr), 
+            otypes=[dtype])
         for i in indices:
             new_value = np.array(getattr(entries[i], attr), dtype=dtype)
             if dtype.kind == "S":

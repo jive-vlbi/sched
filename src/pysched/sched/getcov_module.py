@@ -1,3 +1,5 @@
+from .. import util
+
 import schedlib as s
 
 def getcov(values):
@@ -9,13 +11,17 @@ def getcov(values):
             "fax",
             "obsphone",
             "obsmode"]:
-        setattr(s.schsco, attribute, values[attribute].ljust(
-            getattr(s.schsco, attribute).itemsize))
+        setattr(s.schsco, attribute, 
+                util.resize_string(values[attribute], 
+                                   getattr(s.schsco, attribute).itemsize, 
+                                   attribute))
     for i in range(4):
-        s.schsco.address[i] = values["address" + str(i+1)].ljust(
-            s.schsco.address.itemsize)
-        s.schsco.note[i] = values["note" + str(i+1)].ljust(
-            s.schsco.note.itemsize)
+        address = "address" + str(i+1)
+        s.schsco.address[i] = util.resize_string(
+            values[address], s.schsco.address.itemsize, address)
+        note = "note" + str(i+1)
+        s.schsco.note[i] = util.resize_string(
+            values[note], s.schsco.note.itemsize, note)
 
 
     if s.schcon.debug:
@@ -77,5 +83,6 @@ def getcov(values):
         s.errlog("SCHIN: Remove exclamation marks.")
 
     for index, line in enumerate(text):
-        s.schsco.cover[index] = line.ljust(s.schsco.cover.itemsize)
+        s.schsco.cover[index] = util.resize_string(
+            line, s.schsco.cover.itemsize, "cover")
 

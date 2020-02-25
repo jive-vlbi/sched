@@ -140,8 +140,8 @@ def rdpeak_implementation(input_iterator, stdin):
 
     s.schpeakn.npkgrp = index
 
-    s.schpeakc.psrcfile = util.expand_file_name(state_defaults["srcfile"][0]).\
-                          ljust(s.schpeakc.psrcfile.itemsize)
+    s.schpeakc.psrcfile = util.resize_string(util.expand_file_name(
+        state_defaults["srcfile"][0]), s.schpeakc.psrcfile.itemsize, "srcfile")
 
     catalog.write(range(start, index))
 

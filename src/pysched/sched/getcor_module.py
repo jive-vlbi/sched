@@ -1,3 +1,5 @@
+from .. import util
+
 import schedlib as s
 
 def getcor(values):
@@ -7,7 +9,8 @@ def getcor(values):
     miscor = False
 
     correl = values["correl"]
-    s.schsco.correl = correl.ljust(s.schsco.correl.itemsize)
+    s.schsco.correl = util.resize_string(correl, s.schsco.correl.itemsize, 
+                                         "correl")
     if not s.schn1.notape and correl not in ("SOCORRO",
                                              "VLBADIFX",
                                              "VLBA",
@@ -43,15 +46,21 @@ def getcor(values):
     s.schco.cornant = values["cornant"]
     s.schco.corpol = (values["corpol"] == "ON")
     
-    s.schsco.corwtfn = values["corwtfn"].ljust(s.schsco.corwtfn.itemsize)
-    s.schsco.cortape = values["cortape"].ljust(s.schsco.cortape.itemsize)
-    s.schsco.cordfmt = values["cordfmt"].ljust(s.schsco.cordfmt.itemsize)
-    s.schsco.corsrcs = values["corsrcs"].ljust(s.schsco.corsrcs.itemsize)
+    s.schsco.corwtfn = util.resize_string(values["corwtfn"], 
+                                          s.schsco.corwtfn.itemsize, "corwtfn")
+    s.schsco.cortape = util.resize_string(values["cortape"], 
+                                          s.schsco.cortape.itemsize, "cortape")
+    s.schsco.cordfmt = util.resize_string(values["cordfmt"], 
+                                          s.schsco.cordfmt.itemsize, "cordfmt")
+    s.schsco.corsrcs = util.resize_string(values["corsrcs"], 
+                                          s.schsco.corsrcs.itemsize, "corsrcs")
     for i in range(4):
-        s.schsco.corship[i] = values["corship" + str(i+1)].ljust(
-            s.schsco.corship.itemsize)
-        s.schsco.cornote[i] = values["cornote" + str(i+1)].ljust(
-            s.schsco.cornote.itemsize)
+        corship = "corship" + str(i+1)
+        s.schsco.corship[i] = util.resize_string(
+            values[corship], s.schsco.corship.itemsize, corship)
+        cornote = "cornote" + str(i+1)
+        s.schsco.cornote[i] = util.resize_string(
+            values[cornote], s.schsco.cornote.itemsize, cornote)
 
     if not s.schn1.notape:
         s.chkcor()
@@ -118,4 +127,5 @@ def getcor(values):
             "      {}".format(values["cornote4"]),
             " "
     )):
-        s.schsco.corstuff[index] = line.ljust(s.schsco.corstuff.itemsize)
+        s.schsco.corstuff[index] = util.resize_string(
+            line, s.schsco.corstuff.itemsize, "corstuff")

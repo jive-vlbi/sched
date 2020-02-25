@@ -127,9 +127,9 @@ def srread(input_iterator, stdin, select, thiscat):
         if select:
             # check if any of the source name aliases is in the schedule and
             # hasn't been found
-            encoded_alias = [source.ljust(s.schc1.srcname.itemsize).encode()
-                             for source in values["source"] 
-                             if source != ""]
+            encoded_alias = [util.resize_string(
+                source, s.schc1.srcname.itemsize, "source").encode()
+                             for source in values["source"] if source != ""]
             if np.in1d(encoded_alias, 
                        np.where(s.schn1.srcatn[:s.schn1.nsrc] == 0, 
                                 s.schc1.srcname[:s.schn1.nsrc], 0)).any():
@@ -234,9 +234,9 @@ def srread(input_iterator, stdin, select, thiscat):
     catalog.write(range(index))
     s.schsou.msrc = index
     if thiscat == "1":
-        s.schcsc.srver = state_defaults["version"][0].ljust(
-            s.schcsc.srver.itemsize)
+        s.schcsc.srver = util.resize_string(
+            state_defaults["version"][0], s.schcsc.srver.itemsize, "version")
     elif thiscat == "3":
-        s.schcsc.srver2 = state_defaults["version"][0].ljust(
-            s.schcsc.srver2.itemsize)
+        s.schcsc.srver2 = util.resize_string(
+            state_defaults["version"][0], s.schcsc.srver2.itemsize, "version")
         

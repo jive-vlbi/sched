@@ -1,4 +1,5 @@
 from . import toggle
+from .. import util
 
 import schedlib as s
 
@@ -30,7 +31,8 @@ def invla(values, present, entries, index, case):
             warn = False
 
     elif case == 2:
-        s.schc3.vlatype = values["vlatype"].ljust(s.schc3.vlatype.itemsize)
+        s.schc3.vlatype = util.resize_string(values["vlatype"], 
+                                             s.schc3.vlatype.itemsize, "vlatype")
         s.schn3.vlausern = values["vlausern"]
         s.schn1.iatutc = values["iatutc"]
 
