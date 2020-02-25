@@ -1,10 +1,10 @@
-import pickle
-import schedlib
+import schedlib as s
 
 import numpy as np
 
 import pkg_resources
 
+import pickle
 import collections
 import copy
 import re
@@ -143,3 +143,12 @@ def get_catalog_dir():
                             "catalogs")
 
 bool2str = lambda b: "T" if b else "F"
+
+def resize_string(text, size, attr):
+    ret = text.ljust(size)
+    if len(ret) > size:
+        ret = ret[:size]
+        s.wlog(1, ("Warning, maximum string length exceeded for {attr}, "
+                   "truncating '{text}' to '{ret}'").format(
+                       attr=attr, text=text, ret=ret))
+    return ret

@@ -1,3 +1,5 @@
+from .. import util
+
 import schedlib as s
 
 import numpy as np
@@ -8,7 +10,8 @@ def gintent(intents, entries, scan_index):
         entry.nscint = len(intents)
         for intent_index, intent in enumerate(intents):
             # find in stored intents
-            padded = intent.ljust(s.schc2c.intent.itemsize)
+            padded = util.resize_string(intent, s.schc2c.intent.itemsize,
+                                        "intents")
             stored_indices = np.argwhere(
                 s.schc2c.intent[:s.schn2a.nintent] == padded.encode())
             if len(stored_indices) == 0:

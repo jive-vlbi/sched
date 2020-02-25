@@ -1,4 +1,5 @@
 from . import parameter
+from .. import util
 
 import schedlib as s
 
@@ -16,8 +17,8 @@ def times(lst, start, stop, day, year):
     elif isinstance(lst, str):
         lst = lst.upper()
     if use_lst:
-        indices = np.argwhere(s.schcst.station == 
-                              lst.ljust(s.schcst.station.itemsize).encode())
+        indices = np.argwhere(s.schcst.station == util.resize_string(
+            lst, s.schcst.station.itemsize, "lst").encode())
         if len(indices) == 0:
             s.errlog("TIMES: LST specified but station not in catalog")
 

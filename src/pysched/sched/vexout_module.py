@@ -1,5 +1,5 @@
 from ..catalog import ScanCatalog, SourceCatalog, SetupCatalog
-from ..util import f2str
+from ..util import f2str, resize_string
 from .. import vex
 
 import schedlib as s
@@ -44,7 +44,9 @@ def vexout():
                 s.wlog(0, "Writing V E X file {}".format(vex_file.name))
                 vex.write(vex_file, vex_version="1.5", print_warnings=True)
                 # write VEX file name to common block for v2dout
-                s.vex1.vexfile = vex_file.name.ljust(s.vex1.vexfile.itemsize)
+                s.vex1.vexfile = resize_string(vex_file.name, 
+                                               s.vex1.vexfile.itemsize,
+                                               "vexfile")
             with open("{}.vex2".format(f2str(s.schc1.expcode).lower()), "w") \
                  as vex_file:
                 s.wlog(0, "Writing V E X 2 file {}".format(vex_file.name))

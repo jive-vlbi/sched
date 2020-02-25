@@ -192,6 +192,9 @@ class Parser:
         logging.debug("p_key: %s", str(self.tok))
         self.p_skip_newline()
         if self.tok.type_ != "key":
+            if self.tok.type_ == "EOF":
+                raise ParseError("EOF while parsing record. Did you forget to "
+                                 "end the last line with a '/'?")
             raise ParseError("Expected key token, got %s" % str(self.tok))
 
         keyword = self.tok.value.upper()
