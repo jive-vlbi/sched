@@ -2,8 +2,14 @@
 
 from sys import argv
 
-configurations = (("linux64", "Linux64"), ("linux64gf", "Linux64gfortran"),
-                  ("linuxSpice64", "LinuxSpice64"), ("linuxsp64gf", "LinuxSpice64gfortran"))
+# configurations = (("linux64", "Linux64"), ("linux64gf", "Linux64gfortran"),
+#                   ("linuxSpice64", "LinuxSpice64"), ("linuxsp64gf", "LinuxSpice64gfortran"))
+
+# Here's the list of configurations to build. The previous set was larger, but the infrastructure
+# it depended on is rather obsolete. So, there are just two now: Linux64 and Linux64 with spice;
+# both compiled with gfortran since the older g77 compilers are hard to find. (jhj 2/7/20)
+
+configurations = (("linux64gf", "Linux64gfortran"), ("linuxsp64gf", "LinuxSpice64gfortran"))
 
 if len (argv) > 1:
     print ("usage: buildAll")
@@ -12,6 +18,7 @@ if len (argv) > 1:
     print ("       Current linux configurations are:")
     for a,b in configurations:
         print ("           {0} (--> bin/{1})".format (b, a))
+    print ("\n       OSX builds have to be done elsewhere and copied into place.")
     exit (1)
 
 from subprocess import call, check_call, check_output, CalledProcessError
