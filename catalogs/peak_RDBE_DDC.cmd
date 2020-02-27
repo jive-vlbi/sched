@@ -56,7 +56,7 @@ endlines /
 !  scans only and apply to all 3mm groups.  
 
 minfreq = 60000.0     !  Don't bother for lower frequencies (MHz)
-dwell = 1:00          !  Duration of peak scan.
+dwell = 3:40          !  Duration of peak scan.
 minel = 10.00         !  Minimum elevation for pointing.
 
 !  These also apply to scans for which conversion to pointing is 
