@@ -193,8 +193,9 @@ class Parser:
         self.p_skip_newline()
         if self.tok.type_ != "key":
             if self.tok.type_ == "EOF":
-                raise ParseError("EOF while parsing record. Did you forget to "
-                                 "end the last line with a '/'?")
+                raise ParseError("You may have unused parameters at the end of "
+                                 "the file (not triggered by a ‘/‘). Please "
+                                 "remove them or add a '/'.")
             raise ParseError("Expected key token, got %s" % str(self.tok))
 
         keyword = self.tok.value.upper()
