@@ -596,7 +596,7 @@ extension = Extension(
 setup(
     cmdclass={"sdist": sdist},
     name="pythonSCHED",
-    version="1.5.1",
+    version="1.5.2",
     author="Bob Eldering",
     author_email="eldering@jive.eu",
     description="Python extension of NRAO's VLBI scheduling program SCHED "
@@ -619,7 +619,9 @@ setup(
     setup_requires=["numpy>=1.16",
                     "setuptools>=24.3"],
     install_requires=["numpy>=1.16",
-                      "pyqt5",
+                      # on some systems pyqt 5.14 tries to build from source 
+                      # and fails
+                      "pyqt5<5.14", 
                       "matplotlib>=3",
                       "formlayout",
                       "astropy",
