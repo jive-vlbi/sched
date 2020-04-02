@@ -37,11 +37,14 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 """
+import matplotlib
 import matplotlib.backends.qt_editor.figureoptions as figureoptions
 import matplotlib.dates
+from matplotlib import cbook
 import six
 from matplotlib.colors import rgb2hex
 from matplotlib.colors import colorConverter
+from matplotlib.backends.qt_compat import QtGui
 
 # hack around bug in formlayout, set an environment variable to force use of Qt5
 import os; os.environ["QT_API"] = "pyqt5"
@@ -234,10 +237,15 @@ def edit_parameters(toolbar, x_axis_type):
         figure = axis.get_figure()
         figure.canvas.draw()
 
+    if LooseVersion(matplotlib.__version__) < LooseVersion("3.2"):
+        icon = figureoptions.get_icon("qt4_editor_options.svg")
+    else:
+        icon = QtGui.QIcon(str(cbook._get_data_path("images", 
+                                                    "qt4_editor_options.svg")))
     dialog = formlayout.FormDialog(
         datalist, 
         title="Figure options", 
-        icon=figureoptions.get_icon("qt4_editor_options.svg"), 
+        icon=icon, 
         apply=apply_callback)
     axes_tab = dialog.formwidget.widgetlist[0]
     if x_axis_type in ["GST", "LST"]:
