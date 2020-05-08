@@ -24,12 +24,14 @@ conda activate pySCHED
 
 ## Update
 
-The command to update pySCHED is:
+The command to update pySCHED is:   
+
 sudo pip3 install --upgrade pythonSCHED
 
-Or when using a conda installation:
-conda activate pySCHED
-pip install --upgrade pythonSCHED
+Or when using a conda installation:   
+
+conda activate pySCHED   
+pip install --upgrade pythonSCHED   
 
 ## Usage
 
