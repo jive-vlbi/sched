@@ -556,36 +556,45 @@ class XYBaseWidget(QWidget): # shared by XY and Uptime
     def __init__(self, x_items, y_items, sources, stations, parent=None):
         super().__init__(parent)
         self.y_items = y_items
-        master_layout = QVBoxLayout(self)
+        master_layout = QHBoxLayout(self)
         
-        top_layout = QHBoxLayout()
-        top_layout.addWidget(QLabel("X", self))
+        left_layout = QVBoxLayout()
+        left_layout.addStretch(1)
+
+        top_left_layout = QHBoxLayout()
+        left_layout.addStretch(1)
+        top_left_layout.addWidget(QLabel("X", self))
         self.x_axis = QComboBox(self)
         self.x_axis.addItems(x_items)
         self.x_axis.currentTextChanged.connect(self._check_x_axis)
-        top_layout.addWidget(self.x_axis)
+        top_left_layout.addWidget(self.x_axis)
         self.ut_offset = QComboBox(self)
         self.ut_offset.addItems(str(i) for i in range(-11, 13))
         self.ut_offset.setCurrentText("0")
-        top_layout.addWidget(self.ut_offset)
+        top_left_layout.addWidget(self.ut_offset)
         self.lst_base = QComboBox(self)
         self.lst_base.addItems(["Greenwich"] + [e.station for e in stations])
-        top_layout.addWidget(self.lst_base)
-        top_layout.addStretch(1)
+        top_left_layout.addWidget(self.lst_base)
+        top_left_layout.addStretch(1)
         if len(self.y_items) > 1:
-            top_layout.addWidget(QLabel("Y", self))
+            top_left_layout.addWidget(QLabel("Y", self))
             self.y_axis = QComboBox(self)
             self.y_axis.addItems(y_items)
-            top_layout.addWidget(self.y_axis)
-        top_layout.addStretch(1)
-        self._check_x_axis()
-        self.sources = SourcesWidget(sources, self)
-        top_layout.addWidget(self.sources)
-        top_layout.setStretchFactor(self.sources, 2)
-        master_layout.addLayout(top_layout)
+            top_left_layout.addWidget(self.y_axis)
 
+        self._check_x_axis()
+        left_layout.addLayout(top_left_layout)
+        
+        left_layout.addStretch(1)
+        
         self.stations = StationsWidget(stations, self)
-        master_layout.addWidget(self.stations)
+        left_layout.addWidget(self.stations)
+        left_layout.addStretch(1)
+
+        master_layout.addLayout(left_layout)
+
+        self.sources = SourcesWidget(sources, self)
+        master_layout.addWidget(self.sources)
 
 class XYWidget(XYBaseWidget):
     def __init__(self, sources, stations, parent=None):
