@@ -22,6 +22,15 @@ Alternatively, if you use conda, [this](https://github.com/jive-vlbi/sched/raw/p
 conda env create -f pySCHED.yaml  
 conda activate pySCHED  
 
+## Update
+
+The command to update pySCHED is:
+sudo pip3 install --upgrade pythonSCHED
+
+Or when using a conda installation:
+conda activate pySCHED
+pip install --upgrade pythonSCHED
+
 ## Usage
 
 After executing either the pip or conda installation method, the executable `sched.py` should be available in your $PATH.
