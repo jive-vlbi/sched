@@ -56,7 +56,7 @@ $MODE;
 def NME-MK5.18CM;
      ref $PROCEDURES = Procedure:Mc:Ef:Jb:Eb:Wb:Pt;
      ref $IF = LO@1090MHzDPolTone/1:Eb;
-     ref $IF = LO@1247MHzDPolTone/1:Wb;
+     ref $IF = LO@1287MHzDPolTone/1:Wb;
      ref $IF = LO@1295MHzDPolTone/1:Mc;
      ref $IF = LO@1510MHzDPolTone/1:Ef;
      ref $IF = LO@2272MHzDPolTone/1:Jb;
@@ -69,8 +69,7 @@ def NME-MK5.18CM;
      ref $BBC = 4BBCs#06:Wb;
      ref $PHASE_CAL_DETECT = Detect:Eb:Ef:Jb:Mc:Pt:Wb;
      ref $FREQ = 1642.25MHz4x8MHz:Eb:Pt;
-     ref $FREQ = 1642.25MHz4x8MHz#02:Ef:Jb:Mc;
-     ref $FREQ = 1642.25MHz4x8MHz#03:Wb;
+     ref $FREQ = 1642.25MHz4x8MHz#02:Ef:Jb:Mc:Wb;
      ref $BITSTREAMS = BS4Ch2Bit:Ef:Mc:Wb;
      ref $BITSTREAMS = BS4Ch2Bit#02:Jb;
      ref $DATASTREAMS = VDIF_8000-1Thr4Ch:Eb:Pt;
@@ -84,10 +83,10 @@ def LO@1090MHzDPolTone/1;
      if_def = &IF_D :  : L :   1090.00 MHz : U : 1 MHz;
 enddef;
 *
-def LO@1247MHzDPolTone/1;
+def LO@1287MHzDPolTone/1;
 * NME-MK5.18CM: Wb
-     if_def = &IF_A1 :  : R :   1247.00 MHz : U : 1 MHz;
-     if_def = &IF_B1 :  : L :   1247.00 MHz : U : 1 MHz;
+     if_def = &IF_A1 :  : R :   1287.00 MHz : U : 1 MHz;
+     if_def = &IF_B1 :  : L :   1287.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@1295MHzDPolTone/1;
@@ -158,10 +157,10 @@ enddef;
 *
 def 4BBCs#06;
 * NME-MK5.18CM: Wb
-     BBC_assign = &BBC01 : 1 : &IF_A1;
-     BBC_assign = &BBC05 : 5 : &IF_B1;
-     BBC_assign = &BBC02 : 2 : &IF_A1;
-     BBC_assign = &BBC06 : 6 : &IF_B1;
+     BBC_assign = &BBC01 :  1 : &IF_A1;
+     BBC_assign = &BBC09 :  9 : &IF_B1;
+     BBC_assign = &BBC02 :  2 : &IF_A1;
+     BBC_assign = &BBC10 : 10 : &IF_B1;
 enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
@@ -182,19 +181,11 @@ def 1642.25MHz4x8MHz;
 enddef;
 *
 def 1642.25MHz4x8MHz#02;
-* NME-MK5.18CM: Ef, Jb, Mc
+* NME-MK5.18CM: Ef, Jb, Mc, Wb
      chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
      chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH02 : &BBC09 : &PCD;
      chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH03 : &BBC02 : &PCD;
      chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH04 : &BBC10 : &PCD;
-enddef;
-*
-def 1642.25MHz4x8MHz#03;
-* NME-MK5.18CM: Wb
-     chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH01 : &BBC01 : &PCD;
-     chan_def =  : 1642.25 MHz : U :    8.00 MHz : &CH02 : &BBC05 : &PCD;
-     chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH03 : &BBC02 : &PCD;
-     chan_def =  : 1650.25 MHz : U :    8.00 MHz : &CH04 : &BBC06 : &PCD;
 enddef;
 *------------------------------------------------------------------------------
 $BITSTREAMS;
@@ -233,7 +224,7 @@ $STATION;
 *
 def Mc;
      ref $ANTENNA = MEDICINA;
-     ref $DAS = DBBC_DDC+Mark5B;
+     ref $DAS = DBBC_DDC+Mark5C;
      ref $SITE = MEDICINA;
 enddef;
 *
@@ -309,11 +300,6 @@ enddef;
 *------------------------------------------------------------------------------
 $DAS;
 *
-def DBBC_DDC+Mark5B;
-     equip = recorder :   Mark5B :   &Mark5B;
-     equip =     rack : DBBC_DDC : &DBBC_DDC;
-enddef;
-*
 def DBBC_DDC+Mark5C;
      equip = recorder :   Mark5C :   &Mark5C;
      equip =     rack : DBBC_DDC : &DBBC_DDC;
@@ -381,7 +367,7 @@ def WSTRBORK;
      site_type = fixed;
      site_name = WSTRBORK;
      site_ID = Wb;
-     site_position =  3828746.98000 m :   442591.85000 m :  5064923.08000 m;
+     site_position =  3828750.69690 m :   442589.21760 m :  5064921.57000 m;
      site_velocity =  -0.013530 m/yr :   0.017040 m/yr :   0.008730 m/yr;
      site_position_epoch = 1997y001d;
 enddef;

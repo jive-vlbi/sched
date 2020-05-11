@@ -53,8 +53,8 @@ $MODE;
 *
 def eg512-512;
      ref $PROCEDURES = Procedure:Hn:Sc:Nl:Fd:La:Mc:Nt:Jb:O6;
+     ref $IF = LO@21480MHzDPolTone/1:O6;
      ref $IF = LO@21500MHzDPolTone/1:Fd:Hn:La:Nl:Sc;
-     ref $IF = LO@21500MHzDPolTone/1#02:O6;
      ref $IF = LO@21869MHzDPolTone/1:Nt;
      ref $IF = LO@21964MHzDPolTone/1:Mc;
      ref $IF = LO@23024MHzDPolTone/1:Jb;
@@ -72,16 +72,16 @@ enddef;
 *------------------------------------------------------------------------------
 $IF;
 *
+def LO@21480MHzDPolTone/1;
+* eg512-512: O6
+     if_def = &IF_A1 : A1 : R :  21480.00 MHz : U : 1 MHz;
+     if_def = &IF_C1 : C1 : L :  21480.00 MHz : U : 1 MHz;
+enddef;
+*
 def LO@21500MHzDPolTone/1;
 * eg512-512: Fd, Hn, La, Nl, Sc
      if_def = &IF_B : B : R :  21500.00 MHz : U : 1 MHz;
      if_def = &IF_D : D : L :  21500.00 MHz : U : 1 MHz;
-enddef;
-*
-def LO@21500MHzDPolTone/1#02;
-* eg512-512: O6
-     if_def = &IF_A1 : A1 : R :  21500.00 MHz : U : 1 MHz;
-     if_def = &IF_C1 : C1 : L :  21500.00 MHz : U : 1 MHz;
 enddef;
 *
 def LO@21869MHzDPolTone/1;
@@ -272,7 +272,7 @@ enddef;
 *
 def Mc;
      ref $ANTENNA = MEDICINA;
-     ref $DAS = DBBC+Mark5B;
+     ref $DAS = DBBC+Mark5C;
      ref $SITE = MEDICINA;
 enddef;
 *
@@ -375,15 +375,6 @@ def VLBA_SC;
 enddef;
 *------------------------------------------------------------------------------
 $DAS;
-*
-def DBBC+Mark5B;
-     record_transport_type = Mark5B;
-     electronics_rack_type = DBBC;
-     number_drives = 2;
-     headstack = 1 :  : 0;
-     headstack = 2 :  : 1;
-     tape_motion = adaptive : 0 min : 0 min : 10 sec;
-enddef;
 *
 def DBBC+Mark5C;
      record_transport_type = Mark5C;
