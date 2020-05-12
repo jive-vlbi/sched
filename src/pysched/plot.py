@@ -1098,6 +1098,7 @@ class MainWidget(QDialog):
             end = time_function(scans[-1].stopj)
             for axis, source in zip(axes, plot_sources):
                 axis.xaxis.set_major_formatter(time_formatter)
+                axis.xaxis.set_major_locator(matplotlib.dates.AutoDateLocator())
                 axis.set_xbound(lower=start, upper=end)
                 axis.yaxis.set_label_text(source)
                 axis.tick_params(axis="y", which="both", 
@@ -1121,6 +1122,7 @@ class MainWidget(QDialog):
                         call_draw = True
                 figure.canvas.mpl_connect("draw_event", draw_event)
             else:
+                axis.xaxis.set_label_text(axis_type)
                 for axis in axes:
                     axis.xaxis.lst_base_date = date.fromordinal(
                         int(axis.get_xlim()[0]))
