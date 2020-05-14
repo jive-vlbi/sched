@@ -34,7 +34,7 @@ from astropy.time import Time
 
 from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QScrollArea, \
     QTabWidget, QPushButton, QCheckBox, QGroupBox, QLabel, QLineEdit, \
-    QComboBox, QMenu, QDialog, QRadioButton, \
+    QComboBox, QMenu, QRadioButton, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QButtonGroup
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QCursor, QDoubleValidator, QColor
@@ -746,7 +746,9 @@ class BeamWidget(QWidget):
             stations, "Baselines to include", QCheckBox, self)
         master_layout.addWidget(self.baselines)
 
-class MainWidget(QDialog):
+class MainWidget(QWidget):
+    finished = pyqtSignal()
+    
     def show_plot(self):
         active = self.tab_widget.tabText(self.tab_widget.currentIndex())
         {"UV": self.plot_uv,
@@ -806,6 +808,18 @@ class MainWidget(QDialog):
         exit_button.clicked.connect(lambda: self.done(0))
         restart_button.clicked.connect(lambda: self.done(2))
         window_layout.addWidget(control_widget)
+
+        self._result = None
+
+    # replicate signal functionality of a QDialog, without the window behaviour
+    def done(self, r):
+        self._result = r
+        self.finished.emit()
+
+    def result(self):
+        # 0 -> exit, 1 -> finish, 2 -> restart
+        # just exit if no result has been set (window closed manually)
+        return self._result if self._result is not None else 0
 
     def plot_uv(self):
         with wait_cursor():
