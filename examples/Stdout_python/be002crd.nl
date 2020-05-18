@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_NL   *!
 !*  Experiment BE002    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:  11.50 *!
+!* Processed by SCHED version:  11.50  Release 11.5; September 2018 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!

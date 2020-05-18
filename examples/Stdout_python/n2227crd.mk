@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_MK   *!
 !*  Experiment n2227    *!
 !* Schedule Version:       4.00 *!
-!* Processed by SCHED version:  11.50 *!
+!* Processed by SCHED version:  11.50  Release 11.5; September 2018 *!
 !* PI:       David Boboltz *!
 !* Address:  United States Naval Observatory *!
 !*           3450 Massachusetts Ave, NW *!
