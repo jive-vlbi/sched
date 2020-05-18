@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pysched.util import f2str
+from pysched.util import f2str, pysched_version
 from pysched import key, update_catalogs
 
 from bottle import SimpleTemplate
@@ -27,7 +27,7 @@ except Exception as e:
     print("Warning, failed to import history file, error: {}".format(e))
 
 parser = argparse.ArgumentParser(
-    description="Python wrapper around SCHED")
+    description=f"pySCHED version {pysched_version}, wrapper around SCHED")
 parser.add_argument(
     "-t", "--template", nargs="?", const="", default=None, metavar="FILE",
     help="Input is a template which renders to KEYIN text using the following "
@@ -56,8 +56,14 @@ parser.add_argument("--old_style_vex", action="store_true", default=False,
 parser.add_argument("-U", "--no_update", action="store_true", default=False,
                     help="Do not automatically update the catalogs in {}.".\
                     format(update_catalogs.checkout_dir))
+parser.add_argument("-v", "--version", action="store_true", default=False,
+                    help="Print version and exit.")
 
 args = parser.parse_args()
+
+if args.version:
+    print(pysched_version)
+    sys.exit(0)
 
 try:
     if args.template is None:
