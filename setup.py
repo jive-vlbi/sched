@@ -412,7 +412,8 @@ Vex/vxwrsi.f
 Vex/vxwrst.f
 Vex/vxwrsu.f
 Vex/vxwrt.f
-Vex/vxwrtr.f
+Vex/vxwrtr.f 
+pysched/openwrap.f 
 pysched/tformwrp.f 
 pysched/ran5wrap.f 
 pysched/verwrap.f 
@@ -498,6 +499,7 @@ listfreq
 lst2ut 
 makeptg 
 omsout 
+openwrap 
 optsch 
 opttim 
 plbeam 

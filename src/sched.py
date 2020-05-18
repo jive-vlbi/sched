@@ -78,6 +78,14 @@ try:
         else:
             stdin.name = "Rendered template"
 
+    if not args.no_update:
+        update_catalogs.update_catalogs()
+
+    # update_catalogs can set os.environ["SCHED"], which is used in the 
+    # initialization of sched modules, so delay the import to here
+    from pysched.sched import input_, parameter, schin_module, getfreq, \
+        defaults, vexout, schopt, stmsg
+
     # workaround for https://github.com/numpy/numpy/issues/9370
     # summary of the different views of strings
     # python: strings are a type of their own, which includes an encoding
@@ -93,17 +101,9 @@ try:
     #          string operation, eg "foo   " == "foo" evaluates to true.
     #          to mimic this behaviour, extend strings with spaces to fortran 
     #          length
-    s.vern.vernum, version = s.versched()
+    s.vern.vernum, version = s.verwrap()
     s.verc.version = bytes(version).decode().ljust(s.verc.version.itemsize)
-    s.stmsg()
-
-    if not args.no_update:
-        update_catalogs.update_catalogs()
-
-    # update_catalogs can set os.environ["SCHED"], which is used in the 
-    # initialization of sched sched modules, so delay the import to here
-    from pysched.sched import input_, parameter, schin_module, getfreq, \
-        defaults, vexout, schopt
+    stmsg()
 
     if args.freqlist is not None:
         # first initialize default files stored in fortran common block 
