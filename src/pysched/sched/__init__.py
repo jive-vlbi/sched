@@ -54,3 +54,4 @@ from .geochk_module   import geochk
 from .geomake_module  import geomake
 from .addgeo_module   import addgeo
 from .schopt_module   import schopt
+from .stmsg_module    import stmsg
