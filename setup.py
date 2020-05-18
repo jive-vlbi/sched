@@ -415,6 +415,7 @@ Vex/vxwrt.f
 Vex/vxwrtr.f
 pysched/tformwrp.f 
 pysched/ran5wrap.f 
+pysched/verwrap.f 
 """.split()
 
 if arch in ["hp", "linux", "sun", "unix"]:
@@ -547,7 +548,7 @@ tformwrp
 timej 
 tptpns 
 v2dout 
-versched 
+verwrap 
 vexout 
 vlascns 
 vsopwrt 
