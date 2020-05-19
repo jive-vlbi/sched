@@ -40,3 +40,18 @@ After executing either the pip or conda installation method, the executable `sch
 One of the features of pySCHED is that the catalog files will be downloaded/updated on start-up of `sched.py`. This allows for the catalog files to be updated separate from the pySCHED release cycle. The files will be installed in ~/.pysched. $SCHED will be set to this directory in pySCHED if not otherwise specified. The process of downloading and updating requires the version control software git to be installed and available in the $PATH. On most Linux systems, git will be available. If it is not, it can be installed with:
 
 sudo apt-get install git
+
+# Release history
+
+* __v1.2.0 (2019-09-27)__: Merge with SCHED release 11.5.
+* __v1.2.1 (2019-10-18)__: Bug fixes for readline and matplotlib version.
+* __v1.3.0 (2019-11-19)__: Added SCANEXPS keyword to signal intent in VEX2 files. To make that work, Fortran function leading to calls of SCNDUP are translated to Python.
+* __v1.4.0 (2019-12-13)__: Added 'eMERL' value to DAR keyword, to enable eMERLIN out-station automatic IF and BBC assignment.
+* __v1.5.0 (2020-02-25)__: Improved error/warning messages.
+* __v1.5.1 (2020-03-24)__: Updated the error message for a missing '/'.
+* __v1.5.2 (2020-03-26)__: Update version restriction to PyQt version.
+* __v1.5.3 (2020-04-02)__: Handle changes made in matplotlib version 3.2.
+* __v1.6.0 (2020-05-12)__: Catalog updates for May/June session and plot improvements.
+* __v1.7.0 (2020-05-18)__: Include pySCHED version in command line and interactive help text.
+
+
