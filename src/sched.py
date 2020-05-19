@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from pysched.util import f2str, pysched_version
+from pysched.util import f2str
 from pysched import key, update_catalogs
+from pysched.version import check_version, pysched_version
 
 from bottle import SimpleTemplate
 import schedlib as s
@@ -58,12 +59,18 @@ parser.add_argument("-U", "--no_update", action="store_true", default=False,
                     format(update_catalogs.checkout_dir))
 parser.add_argument("-v", "--version", action="store_true", default=False,
                     help="Print version and exit.")
+parser.add_argument("-V", "--no_version_check", action="store_true",
+                    default=False, help="Do not check for available updates "
+                    "to pySCHED.")
 
 args = parser.parse_args()
 
 if args.version:
     print(pysched_version)
     sys.exit(0)
+
+if not args.no_version_check:
+    check_version()
 
 try:
     if args.template is None:
