@@ -153,8 +153,3 @@ def resize_string(text, size, attr):
                    "truncating '{text}' to '{ret}'").format(
                        attr=attr, text=text, ret=ret))
     return ret
-
-try:
-    pysched_version = pkg_resources.get_distribution("pythonSCHED").version
-except:
-    pysched_version = "unknown"

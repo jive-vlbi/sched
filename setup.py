@@ -635,6 +635,7 @@ setup(
                       "formlayout",
                       "astropy",
                       "bottle",
-                      "gitpython"
+                      "gitpython",
+                      "requests"
                   ]
 )

@@ -1,16 +1,11 @@
 from .. import util
 from . import parameter
 from ..update_catalogs import checkout_dir
+from ..version import pysched_version
 
 import schedlib as s
 
 import os.path
-import pkg_resources
-
-try:
-    pysched_version = pkg_resources.get_distribution("pythonSCHED").version
-except:
-    pysched_version = "unknown"
 
 def stmsg():
     s.schcon.readlog = False
@@ -26,7 +21,7 @@ def stmsg():
         s.error(" Check why log file cannot be opened")
 
     s.wlog(1, " ")
-    s.wlog(1, f"    Welcome to pySCHED version {util.pysched_version} "
+    s.wlog(1, f"    Welcome to pySCHED version {pysched_version} "
            "based on ")
     s.wlog(1, f"    SCHED version: {s.vern.vernum} "
            f"{util.f2str(s.verc.version)}")
