@@ -592,6 +592,10 @@ data_files = [(dir_, [os.path.join(dir_, file_) for file_ in files])
 # forces f2py to scan for those too.
 f2py.crackfortran.is_f_file = lambda _: False
 
+this_dir = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_dir, "README.md")) as f:
+    long_description = f.read()
+
 extension = Extension(
     name="schedlib",
     sources=["src/" + s for s in sources + includes],
@@ -604,6 +608,8 @@ setup(
     author_email="eldering@jive.eu",
     description="Python extension of NRAO's VLBI scheduling program SCHED "
     "(see http://www.aoc.nrao.edu/~cwalker/sched/)",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/jive-vlbi/sched",
     packages=setuptools.find_packages("src"),
     package_dir={"": "src"},
