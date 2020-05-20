@@ -603,7 +603,7 @@ extension = Extension(
 setup(
     cmdclass={"sdist": sdist},
     name="pythonSCHED",
-    version="1.8.0",
+    version="1.8.1",
     author="Bob Eldering",
     author_email="eldering@jive.eu",
     description="Python extension of NRAO's VLBI scheduling program SCHED "

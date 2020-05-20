@@ -54,5 +54,6 @@ sudo apt-get install git
 * __v1.6.0 (2020-05-12)__: Catalog updates for May/June session and plot improvements.
 * __v1.7.0 (2020-05-18)__: Include pySCHED version in command line and interactive help text.
 * __v1.8.0 (2020-05-19)__: Do a version check on start-up.
+* __v1.8.1 (2020-05-20)__: Include README.md in distribution, it is required for installation.
 
 
