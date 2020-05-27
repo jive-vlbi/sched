@@ -42,7 +42,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
  --- Wed  25 Dec 2002   Day 359 ---
 
  Next scan frequencies:  6666.46  6666.46  6666.46  6666.46
- Next BBC frequencies:    266.46   266.46   266.46   266.46
+ Next BBC frequencies:    252.46   252.46   252.46   252.46
  Next scan bandwidths:      2.00     2.00     2.00     2.00
 
 07 00 00  J1922+1530   14 01 05  17.6 445.3 -5.4     -47.5     0        0   07 00 00
@@ -894,7 +894,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.5cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc5cm_g         Generated from sess119M1_16MHz.setini, sess119M1_4MHz.setini, sess119M1nme.seti*
+     mc5cm_g         Generated from sess220M1line.setini, sess220M1nme.setini
 
    Setup group:    4         Station: MEDICINA          Total bit rate:    32
    Format: MARK5B            Bits per sample: 2         Sample rate:  4.000
@@ -902,7 +902,7 @@ SETUP FILE INFORMATION:
 
    Disk used to record data.
 
-   1st LO=   6400.00   6400.00   6400.00   6400.00
+   1st LO=   6414.00   6414.00   6414.00   6414.00
    Net SB=         U         U         U         U
    IF SB =         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP 
@@ -914,7 +914,7 @@ SETUP FILE INFORMATION:
 
   Frequency Set:   4  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
    LO sum=   6666.46  6666.46  6666.46  6666.46
-   BBC fr=    266.46   266.46   266.46   266.46
+   BBC fr=    252.46   252.46   252.46   252.46
    Bandwd=      2.00     2.00     2.00     2.00
     Matching frequency sets:   4
 
