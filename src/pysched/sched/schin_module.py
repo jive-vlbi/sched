@@ -7,7 +7,6 @@ import schedlib as s
 
 import numpy as np
 
-import os.path
 import sys
 
 maxsta = s.schn1.stanum.shape[0]

@@ -2,7 +2,7 @@ from ..util import get_catalog_dir
 
 import schedlib as s
 
-import os
+import os.path
 
 file_type_defaults = {
     "location": "locations.dat",

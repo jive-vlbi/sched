@@ -4,8 +4,6 @@ from .. import util
 
 import schedlib as s
 
-import os.path
-
 record_defaults = {
     "satfile": ["NONE", util.expand_file_name],
     "tlefile": ["NONE", util.expand_file_name],
