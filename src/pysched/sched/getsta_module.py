@@ -4,8 +4,6 @@ from .. import key, util
 
 import schedlib as s
 
-import os.path
-
 last_station_file = ""
 
 def getsta(stdin, values, index, gotvex, mjd1):

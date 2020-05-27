@@ -4,8 +4,6 @@ from .. import util, key
 
 import schedlib as s
 
-import os.path
-
 # two versions of the actual function, one that opens a file 
 # and one that just uses the current keyin iterator
 
