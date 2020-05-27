@@ -11,7 +11,6 @@ if _old_value is not None:
 
 import schedlib as s
 
-import atexit
 import sys
 
 checkout_dir = os.path.join(os.path.expanduser("~"), ".pysched")
@@ -50,13 +49,6 @@ def update_catalogs():
             repo.git.fetch("origin", branch, depth=1)
 
         repo.git.checkout(branch)
-
-        # point $SCHED to the checkout if not explicitly set, restore at exit
-        if "SCHED" not in os.environ:
-            os.environ["SCHED"] = checkout_dir
-            def restore():
-                del os.environ["SCHED"]
-            atexit.register(restore)
 
         s.wlog(1, "Updating catalogs in {}".format(checkout_dir))
         repo.git.pull()
