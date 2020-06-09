@@ -90,14 +90,14 @@ C
          MKFILES = .TRUE.
          IF( MISSING ) THEN
             MKFILES = .FALSE.
-            CALL PUTOUT( 'PLOTTER: Will not write output files '//
+            CALL PUTOUT( 'PLMAIN: Will not write output files '//
      1                   ' because of missing information (cover?)' )
          END IF
          IF( DIDRST ) THEN
             MKFILES = .FALSE.
-            CALL PUTOUT( 'PLOTTER: Will not write output files' //
+            CALL PUTOUT( 'PLMAIN: Will not write output files' //
      1                   ' after RESTART.  Parameters might be wrong.' )
-            CALL PUTOUT( 'PLOTTER: Rerun SCHED with input file.' )
+            CALL PUTOUT( 'PLMAIN: Rerun SCHED with input file.' )
          END IF
          GOTO 990
 C
@@ -111,8 +111,9 @@ C
          GOTO 990
 C
 C     EXIT Button
+C     Also guarantee that files are not written in OBSTYPE=CONFIG
 C
-      ELSE IF ( ID .EQ. 10 ) THEN
+      ELSE IF ( ID .EQ. 10 .OR. OBSTYP .EQ. 'CONFIG' ) THEN
          MKFILES = .FALSE.
          GOTO 990
       END IF

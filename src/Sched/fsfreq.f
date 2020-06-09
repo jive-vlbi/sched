@@ -314,7 +314,7 @@ C
 C     DBBC (EVN etc.)
 C
       IF( DBE(KS) .EQ. 'DBBC_PFB' .OR. DBE(KS) .EQ. 'DBBC_DDC' ) THEN
-         CALL CHKDBFQ( KS, BBCBW, BBCFREQ, ERRS )
+         CALL CHKDBFQ( KS, BBCBW, BBCFREQ, ERRS, .FALSE. )
       END IF
 C
       IF( ERRS ) THEN

@@ -134,10 +134,14 @@
 %  ===================  Begin actual text =====================
 
 \begin{document}
-\title{THE SCHED USER MANUAL \protect\\ Version 11.5,  Development version, April 2015}
+\title{THE SCHED USER MANUAL \protect\\ Version 11.6,  Released February 2020}
 \author{R.C. Walker}
 \date{\today}
 \maketitle
+
+\textbf{\textit{This release, 11.6 (February 2020), is a data-only update to the earlier
+11.5 (Septemper 2018) release. The versions reported by the executables was
+the only update to the software itself.}}
 
 % *****   Update important notes item on state of the conversion
 
@@ -2846,7 +2850,7 @@ This section covers the scheduling of wide bandwidth observations.
 With the older tape and MARK5A systems, that means 512 or 1024 Mbps
 using or using a large number of "tracks" on disk.  With the digital
 backends (RDBE and DBBC) and newer recording systems (MARK5C for now,
-maybe X cube or MARK6 later), completely new systems are involved.
+maybe MARK6 later), completely new systems are involved.
 The first couple of paragraphs below are about the old systems.  Then
 the section goes into more detail about the new digital systems.
 
@@ -3146,50 +3150,63 @@ mentioned above, and is described and demonstrated in example
 
 \subsection{\label{SSEC:DBBC}DBBC:}
 
-The DBBC being developed for the EVN and many geodesy stations is also a
+The DBBC in use at the EVN, LBA and many geodesy stations is also a
 system that samples at 512 or 1024 MHz and digitally filters the signals
 to the desired bandwidths. But it has a different design where, like
 with the old BBCs, the frequency can be set flexibly anywhere in the IF
 band without concern about crossover frequencies etc.  The DBBC design
 has a module for each output baseband, so they are more directly
 comparable to BBCs. Support for the DDC personality of the DBBC has
-recently been implemented in \sched, but should be used with caution.
-The PFB personality is not yet supported.
+been implemented in \sched.
+The PFB personality has only skeleton support and should be used with care.
 
 The DDC personality is selected by default, and can be selected
 explicitly by setting the 
 {\hyperref[SP:DBE]{{\tt DBE}}} parameter to {\tt
 DBBC\_DDC} in the setup file. \schedb will also accept a value of {\tt
 DBBC\_PFB} but this is not properly supported and will simply mimic the
-PFB personality of the RDBE. There are several different versions of the
-DBBC being deployed with slightly different components. The major
-difference is in the patching of IFs (aka conditioning modules) to
-particular BBCs (this may become fully switchable with future upgrades).
-Three variants are recognized by \sched. The variant is specified in the
-stations file with the 
-{\hyperref[ST:DBBCVER]{{\tt DBBCVER}}} parameter.
-Each conditioning module (IF) has up to 4 switchable inputs. The signal
-available on each input is station dependent, so IF names (
-{\hyperref[FQ:IFNAME]{{\tt IFNAME}}}, 
-{\hyperref[SP:IFCHAN]{{\tt IFCHAN}}}) should be
-assigned with due reference to the particular station's wiring.
+PFB personality of the RDBE (they are largely compatible). There are several
+different versions of the DBBC being deployed with slightly different
+components. The major difference is in the patching of IFs (aka conditioning
+modules) to particular BBCs (this may become fully switchable with future
+upgrades). Three variants are recognized by \schedb -- ASTRO, GEO, HYBRID. The
+variant is specified in the stations file with the {\hyperref[ST:DBBCVER]{{\tt
+DBBCVER}}} parameter. Each conditioning module (IF) has up to 4 switchable
+inputs. The signal available on each input is station dependent, so IF names
+({\hyperref[FQ:IFNAME]{{\tt IFNAME}}}, {\hyperref[SP:IFCHAN]{{\tt IFCHAN}}})
+should be assigned with due reference to the particular station's wiring.
 
-Currently 2 IF filters are supported. One in the range 10-512 MHz and a
-second in the range 512-1024 MHz. A suite of additional IF filters will
-be enabled with a future firmware release but are not available yet and
-so are not yet supported by \sched. \schedb will warn you if your
-selected frequencies attempt to use both the 10-512 MHz and 512-1024
-filters at the same time.
+Support for the DBBC in \schedb is complicated by the multiplicity of versions, both in hardware configuration and firmware. There are up to 6 IF filters available, though only DBBC Version 3 (with the correct firmware) supports them all. The following table summarises the IF filters and which DBBC versions support them (this may require revision).
+\begin{table}[here]
+\begin{tabular}{|c|c|c|}
+IF Filter \# & Frequency     & Availability \\
+    \hline
+2        & 10-512~MHz    & All DBBC versions \\
+    1    & 512-1024~MHz  & All DBBC versions \\
+    4    & 1024-1536~MHz & DBBC2 with upgraded firmware and DBBC3  \\
+    6    & 10-1024~MHz   & DBBC3 \\
+    3    & 1536-2048~MHz   & DBBC3 \\
+    5    & 1150-1750~MHz   & DBBC3 \\
+\end{tabular}
+\caption{IF Filters available on the DBBC (version availabilities subject to confirmation!)}
+\end{table}
 
-Baseband filter widths of 1, 2, 4, 8 or 16 MHz are possible. 32 MHz will
-be enabled with a future firmware upgrade. The frequencies for the band
-edges in the DDC personality can be set to any multiple of 10 kHz.
-(There is also a binary tuning mode which allows band edges to be set to
-a multiple of $1024/2^{31} \,{\rm MHz} = 0.476 \,{\rm Hz}$, but its use
-is not advised and it is not currently supported by \sched.)
+\schedb will permit a schedule that uses any of the 6 IF filters, but will warn if one of the less commonly available ones (i.e. 3, 5, or 6) is used. 
+
+Baseband filter widths of 1, 2, 4, 8, 16 or 32~MHz are possible. The 32~MHz
+mode is only available on later versions with the `e-series' firmware upgrade
+and places additional constraints on which BBCs may be selected. These
+constraints are not understood by SCHED so normal defaulting mechanisms will
+fail - you will need to explicitly specify the BBC selection to use the 32~MHz filters.
+
+The frequencies for the band edges in the DDC personality can be set to any
+multiple of 10 kHz. (There is also a binary tuning mode which allows band edges
+to be set to a multiple of $1024/2^{31} \,{\rm MHz} = 0.476 \,{\rm Hz}$, but
+its use is not advised and it is not currently supported by \sched.)
 
 Sampling is done with 2 bits at Nyquist rate only (1 bit sampling can be
-emulated by channel selection on the recorder).
+emulated by bitstream selection on the recorder, and \schedb will allow you to
+set nbits=1).
 
 
 
@@ -14875,6 +14892,14 @@ then rsync the desired stuff to your development area.
 
 \section{\label{SEC:CURRENT}Recent Releases}
 
+\subsection{\label{SSEC:VER_11.6}Version 11.6 development}
+
+\begin{itemize}
+
+\item Add entries here to document additions to the code that users and
+other developers might find useful.
+
+\end{itemize}
 
 % seek point for editing:  development version
 
@@ -14884,13 +14909,11 @@ then rsync the desired stuff to your development area.
 %     ToDo items moved to the {\hyperref[SSEC:WISH]Wish List} March 2, 2015.
 
 
-\subsection{\label{SSEC:VER_11.5}Version 11.5 development}
+\subsection{\label{SSEC:VER_11.5}Version 11.5 (released September 2018)}
 
 \begin{itemize}
 
-\item Add to notes below correlator table in the .sum file that the
-``baseline hours'' includes autocorrelations as needed for data size
-calculations.  April 7, Craig Walker.
+\item Needs list of major mods to 11.5 release
 
 \end{itemize}
 

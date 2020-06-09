@@ -292,8 +292,11 @@ C
          IF( XPOS(MSTA) .EQ. 0.D0 .AND.
      1       YPOS(MSTA) .EQ. 0.D0 .AND.
      2       ZPOS(MSTA) .EQ. 0.D0 ) THEN
+CCC            CALL ERRLOG( 'STREAD: Location required for ' //
+CCC     1           STATION(MSTA) )
             CALL ERRLOG( 'STREAD: Location required for ' //
-     1          STATION(MSTA) )
+     1           STATION(MSTA) // ': infile=' // INFILE //
+     2           ', locfile=' // LOCFILE )
          END IF
 C
 C        Be sure the TSCAL is an allowed value.

@@ -1,0 +1,23 @@
+! 4gb_vddc_7mm.set
+!
+! 4096 Mbps VLBA only recording using 2 polz, 4 freq channels, 
+!      128 MHz bandwidth with 7mm receiver.  Uses DDC personality 
+!      of 2 RDBEs to get all 8 subbands.  The 4 subband (pairs)
+!      are adjacent in frequency.
+!
+! The 0.25 MHz offset in all these 4 Gbps setups are a) to avoid
+! the possible aliasing of pulse-cals at the edges of the subbands,
+! and b) will cause Sched to complain about going over the crossover
+! frequencies.
+!      Mark Claussen, 2020 Jan 17.
+!
+  nchan=8
+  bbfilt= 128.0
+  pol=dual
+  bits=2
+  freqref = 42912.75
+  dbe = rdbe_ddc
+  sideband = U
+  netside = U
+  freqoff = 0.0, 0.0, 128.0, 128.0, 256.0, 256.0, 384.0, 384.0 /
+endset /
