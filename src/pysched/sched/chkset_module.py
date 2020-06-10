@@ -64,10 +64,10 @@ def chkset(ks):
                 s.wlog(1, "CHKSET: Sideband not U or L in {}".format(
                     setup_entry.setname))
                 errs = True
-            if channel.pol[:3] not in ("RCP", "LCP"):
+            if channel.pol[:3] not in ("RCP", "LCP", "X", "Y"):
                 s.wlog(1, "CHKSET: In setup {} polarization of chan {} "
-                       "not given or deduced (should be RCP or LCP).".format(
-                           setup_entry.setname, ich+1))
+                       "not given or deduced (should be RCP, LCP, X or Y).".\
+                       format(setup_entry.setname, ich+1))
                 errs = True
 
             for jch, other in enumerate(setup_entry.channel[ich+1:], ich+1):
