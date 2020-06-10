@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_MK   *!
 !*  Experiment egdelzn  *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:  11.50  Release 11.5; September 2018 *!
+!* Processed by SCHED version:  11.60  Release 11.6; Feburary 2020 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!
@@ -480,13 +480,13 @@ qual=  0
 disk=off
 stop=19h50m44s   !NEXT!
 
-!* --- Scan from 19h51m00s to 19h51m45s   Mon, 2010 Jul 05 --- *!
+!* --- Scan from 19h51m01s to 19h51m46s   Mon, 2010 Jul 05 --- *!
 sname='4C39.25'  ra=09h27m03.013937s  dec= 39d02'20.85185"  qual=999  calib='V'
 disk=off
-stop=19h51m00s   !NEXT!        
+stop=19h51m01s   !NEXT!        
 qual=  0
 disk=off
-stop=19h51m45s   !NEXT!
+stop=19h51m46s   !NEXT!
 
 !* --- Scan from 19h52m02s to 19h54m02s   Mon, 2010 Jul 05 --- *!
 sname='J0926+4029'  ra=09h26m00.426849s  dec= 40d29'49.67245"  qual=999  calib='V'

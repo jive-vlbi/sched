@@ -1,7 +1,7 @@
 VEX_rev = 1.5;
-*    SCHED vers: Release 11.5; September 2018
+*    SCHED vers: Release 11.6; Feburary 2020
 *    VEX/SCHED:  1.5.2
-*    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
+*    Other versions: Sched:  11.6 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
      ref $EXPER = lba;
@@ -58,13 +58,17 @@ def lba21cm-2p-4IF;
      ref $IF = LO@1600MHzDPolNoTone:Pa;
      ref $IF = LO@2100MHzDPolNoTone:Cd;
      ref $IF = LO@700MHzDPolNoTone:At;
-     ref $BBC = 4BBCs:At:Mp:Pa;
-     ref $BBC = 8BBCs:Cd:Ho;
+     ref $BBC = 2BBCs:Mp;
+     ref $BBC = 4BBCs:At:Pa;
+     ref $BBC = 8BBCs:Cd;
+     ref $BBC = 8BBCs#02:Ho;
      ref $PHASE_CAL_DETECT = NoDetect:At:Cd:Ho:Mp:Pa;
-     ref $FREQ = 1384MHz8x16MHz:At:Mp:Pa;
+     ref $FREQ = 1384MHz2x64MHz:Mp;
+     ref $FREQ = 1384MHz8x16MHz:At:Pa;
      ref $FREQ = 1384MHz8x16MHz#02:Cd:Ho;
      ref $TRACKS = MARK5B.8Ch2bit1to1:Cd:Ho;
-     ref $TRACKS = S2.8Ch2bit1to1:At:Mp:Pa;
+     ref $TRACKS = S2.2Ch2bit1to1:Mp;
+     ref $TRACKS = S2.8Ch2bit1to1:At:Pa;
      ref $ROLL = NoRoll:At:Cd:Ho:Mp:Pa;
      ref $PASS_ORDER = 1Pass:At:Mp:Pa;
 enddef;
@@ -79,8 +83,8 @@ enddef;
 *
 def LO@1050MHzDPolNoTone;
 * lba21cm-2p-4IF: Ho
-     if_def = &IF_A1 : A1 : R :   1050.00 MHz : U;
-     if_def = &IF_B1 : B1 : L :   1050.00 MHz : U;
+     if_def = &IF_A3 : A3 : R :   1050.00 MHz : U;
+     if_def = &IF_B3 : B3 : L :   1050.00 MHz : U;
 enddef;
 *
 def LO@1600MHzDPolNoTone;
@@ -103,8 +107,14 @@ enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
+def 2BBCs;
+* lba21cm-2p-4IF: Mp
+     BBC_assign = &BBC01 : 1 : &IF_2N;
+     BBC_assign = &BBC02 : 2 : &IF_1N;
+enddef;
+*
 def 4BBCs;
-* lba21cm-2p-4IF: At, Mp, Pa
+* lba21cm-2p-4IF: At, Pa
      BBC_assign = &BBC01 : 1 : &IF_2N;
      BBC_assign = &BBC02 : 2 : &IF_1N;
      BBC_assign = &BBC03 : 3 : &IF_2N;
@@ -112,7 +122,7 @@ def 4BBCs;
 enddef;
 *
 def 8BBCs;
-* lba21cm-2p-4IF: Cd, Ho
+* lba21cm-2p-4IF: Cd
      BBC_assign = &BBC01 : 1 : &IF_A1;
      BBC_assign = &BBC05 : 5 : &IF_B1;
      BBC_assign = &BBC02 : 2 : &IF_A1;
@@ -121,6 +131,18 @@ def 8BBCs;
      BBC_assign = &BBC07 : 7 : &IF_B1;
      BBC_assign = &BBC04 : 4 : &IF_A1;
      BBC_assign = &BBC08 : 8 : &IF_B1;
+enddef;
+*
+def 8BBCs#02;
+* lba21cm-2p-4IF: Ho
+     BBC_assign = &BBC01 : 1 : &IF_A3;
+     BBC_assign = &BBC05 : 5 : &IF_B3;
+     BBC_assign = &BBC02 : 2 : &IF_A3;
+     BBC_assign = &BBC06 : 6 : &IF_B3;
+     BBC_assign = &BBC03 : 3 : &IF_A3;
+     BBC_assign = &BBC07 : 7 : &IF_B3;
+     BBC_assign = &BBC04 : 4 : &IF_A3;
+     BBC_assign = &BBC08 : 8 : &IF_B3;
 enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
@@ -132,8 +154,15 @@ enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
+def 1384MHz2x64MHz;
+* lba21cm-2p-4IF: Mp
+     chan_def =  : 1384 MHz : U :   64.00 MHz : &CH01 : &BBC01 : &NoCal;
+     chan_def =  : 1384 MHz : U :   64.00 MHz : &CH02 : &BBC02 : &NoCal;
+     sample_rate = 128.000 Ms/sec;
+enddef;
+*
 def 1384MHz8x16MHz;
-* lba21cm-2p-4IF: At, Mp, Pa
+* lba21cm-2p-4IF: At, Pa
      chan_def =  : 1384 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal;
      chan_def =  : 1384 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal;
      chan_def =  : 1400 MHz : U :   16.00 MHz : &CH03 : &BBC01 : &NoCal;
@@ -181,8 +210,18 @@ def MARK5B.8Ch2bit1to1;
      fanout_def =  : &CH08 :  mag : 1 : 17;
 enddef;
 *
+def S2.2Ch2bit1to1;
+* lba21cm-2p-4IF: Mp
+     S2_data_source = VLBA;
+     S2_recording_mode = none;
+     fanout_def =  : &CH01 : sign : 1 : 0;
+     fanout_def =  : &CH01 :  mag : 1 : 1;
+     fanout_def =  : &CH02 : sign : 1 : 2;
+     fanout_def =  : &CH02 :  mag : 1 : 3;
+enddef;
+*
 def S2.8Ch2bit1to1;
-* lba21cm-2p-4IF: At, Mp, Pa
+* lba21cm-2p-4IF: At, Pa
      S2_data_source = VLBA;
      S2_recording_mode = none;
      fanout_def =  : &CH01 : sign : 1 :  0;
@@ -269,7 +308,7 @@ def HOB_DBBC;
      axis_type = x : yew;
      antenna_motion =   x :   40.0 deg/min : 2 sec;
      antenna_motion = yew :   40.0 deg/min : 2 sec;
-     axis_offset =     8.1944 m;
+     axis_offset =     8.1931 m;
 enddef;
 *
 def MOPRA;
@@ -283,7 +322,7 @@ def PARKES;
      axis_type = az : el;
      antenna_motion = az :   22.0 deg/min : 2 sec;
      antenna_motion = el :   12.0 deg/min : 2 sec;
-     axis_offset =    -0.0214 m;
+     axis_offset =    -0.0194 m;
 enddef;
 *------------------------------------------------------------------------------
 $DAS;
@@ -337,9 +376,9 @@ def HOB_DBBC;
      site_type = fixed;
      site_name = HOB_DBBC;
      site_ID = Ho;
-     site_position = -3950237.40300 m :  2522347.68410 m : -4311561.83350 m;
-     site_velocity =  -0.039010 m/yr :   0.007960 m/yr :   0.041100 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -3950237.61920 m :  2522347.73490 m : -4311561.59740 m;
+     site_velocity =  -0.038070 m/yr :   0.008070 m/yr :   0.040870 m/yr;
+     site_position_epoch = 2020y001d;
 enddef;
 *
 def MOPRA;
@@ -355,9 +394,9 @@ def PARKES;
      site_type = fixed;
      site_name = PARKES;
      site_ID = Pa;
-     site_position = -4554232.53800 m :  2816758.86560 m : -3454034.96860 m;
-     site_velocity =  -0.034250 m/yr :  -0.003010 m/yr :   0.048370 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -4554232.74080 m :  2816758.85900 m : -3454034.69880 m;
+     site_velocity =  -0.033910 m/yr :  -0.002640 m/yr :   0.047850 m/yr;
+     site_position_epoch = 2020y001d;
 enddef;
 *------------------------------------------------------------------------------
 $PROCEDURES;

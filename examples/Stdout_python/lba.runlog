@@ -1,6 +1,6 @@
  
-    Welcome to pySCHED version 1.8.2 based on
-    SCHED version: 11.5 Release 11.5; September 2018
+    Welcome to pySCHED version 1.9.0 based on
+    SCHED version: 11.6 Release 11.6; Feburary 2020
  
 The manual is at http://www.aoc.nrao.edu/software/sched/index.html
 pySCHED will use the catalogs under /export/jive/eldering/.pysched unless $SCHED is set.
@@ -20,6 +20,33 @@ SRREAD:  Reading source catalog:  /home/eldering/sched/catalogs/sources.gsfc
 RDSET:   Reading setup file:      /home/eldering/sched/setups/lba21cm-2p-4IF.set
 GETFREQ: Reading frequency file:  /home/eldering/sched/catalogs/freq_RDBE.dat
 INPUT:   Found    37 input scans.
+CHKSFIL: Setup group,   5 in setup file   1 does not have the same sample rate as  other groups in the file.
+ 
+WRTMSG: Special message from routine CHKSFIL:
+ 
+You have sample rates that don't match in different setup groups in
+the same setup file.  Normally data recorded under all groups in a
+setup file are correlated with each other.  This is impossible with
+some correlators and requires special care with others.  With DiFX,
+for example, it may be possible to mix sample rates (and bandwidths by
+implication) to, for example, correlate several narrow baseband
+channels against one wide one.  To do so requires the right relative
+frequencies for all basebands and SCHED does not yet check to be sure
+the setups are reasonable.  A case where such a mode might be used is
+with the VLA at a required 128 MHz baseband bandwidth when it started
+doing VLBI being correlated against 32 MHz channels from the RDBE_PFB
+systems on the VLBA.  But this should be considered an untested mode
+and is not really available for users except on the southern hemisphere
+LBA where it is the standard way of incorporating ASKAP.
+ 
+When mixed sample rates, the options to use DOPPLER or FREQ to
+adjust the frequency from the schedule rather than the setup file
+will be blocked.  Those inputs assume all stations have the same
+channel structure which will not be true with mixed sample rates.
+ 
+SFINFO:  **** WARNING ****
+    The setup file:/home/eldering/sched/setups/lba21cm-2p-4IF.set  has unmatched channels at different stations.
+    DOPPLER, FREQ, and BW scan inputs will be disabled for this setup.
 SCHOPT:  First output scan will be number 1
 SCHOPT:  There will be 37 output scans (1 - 37) from 344/15:00:00 to 344/17:33:00
 CHKSCN:     2 scans had more than half the antennas arrive on-source after the start time.

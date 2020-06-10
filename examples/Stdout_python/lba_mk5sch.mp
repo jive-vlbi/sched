@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00
-Processed by SCHED version:  11.50  Release 11.5; September 2018
+Processed by SCHED version:  11.60  Release 11.6; Feburary 2020
 
 PI:       Cormac Reynolds
 
@@ -41,9 +41,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  --- Thu  10 Dec 2009   Day 344 ---
 
- Next scan frequencies:  8409.00  8409.00  8425.00  8425.00  8441.00  8441.00  8457.00  8457.00
- Next BBC frequencies:    609.00   609.00   625.00   625.00   641.00   641.00   657.00   657.00
- Next scan bandwidths:     16.00    16.00    16.00    16.00    16.00    16.00    16.00    16.00
+ Next scan frequencies:  8409.00  8409.00
+ Next BBC frequencies:    609.00   609.00
+ Next scan bandwidths:     64.00    64.00
 
 15 00 00  0537-441     06 14 17  75.4 205.9  0.6      31.3     0        0   15 00 00
 15 10 00  ---          06 24 18  74.4 211.5  0.8      38.5   600       38   15 00 01
@@ -193,30 +193,30 @@ SETUP FILE INFORMATION:
    Matching groups in /home/eldering/sched/catalogs/freq_RDBE.dat:
      mp3cm
 
-   Setup group:    3         Station: MOPRA             Total bit rate:   512
-   Format: LBA               Bits per sample: 2         Sample rate: 32.000
-   Number of channels:  8    DBE type:                  Speedup factor:   1.00
+   Setup group:    9         Station: MOPRA             Total bit rate:   512
+   Format: LBA               Bits per sample: 2         Sample rate:128.000
+   Number of channels:  2    DBE type:                  Speedup factor:   1.00
 
    Disk used to record data.
 
-   1st LO=   7800.00   7800.00   7800.00   7800.00   7800.00   7800.00   7800.00   7800.00
-   Net SB=         U         U         U         U         U         U         U         U
-   IF SB =         U         U         U         U         U         U         U         U
-   Pol.  =      RCP       LCP       RCP       LCP       RCP       LCP       RCP       LCP 
-   BBC   =         1         2         1         2         3         4         3         4
-   BBC SB=         U         U         U         U         U         U         U         U
-   IF    =        2N        1N        2N        1N        2N        1N        2N        1N
+   1st LO=   7800.00   7800.00
+   Net SB=         U         U
+   IF SB =         U         U
+   Pol.  =      RCP       LCP 
+   BBC   =         1         2
+   BBC SB=         U         U
+   IF    =        2N        1N
 
   The following frequency sets based on these setups were used.
 
-   Frequency Set:   2  Setup file default.  Used with PCAL = off
-   LO sum=   8409.00  8409.00  8425.00  8425.00  8441.00  8441.00  8457.00  8457.00
-   BBC fr=    609.00   609.00   625.00   625.00   641.00   641.00   657.00   657.00
-   Bandwd=     16.00    16.00    16.00    16.00    16.00    16.00    16.00    16.00
-    Matching frequency sets:   2   3
+   Frequency Set:   3  Setup file default.  Used with PCAL = off
+   LO sum=   8409.00  8409.00
+   BBC fr=    609.00   609.00
+   Bandwd=     64.00    64.00
+    Matching frequency sets:   3
 
    Track assignments are: 
-    track1=   0,  4,  2,  6,  8, 12, 10, 14
+    track1=   0,  2
     barrel=roll_off 
 
  POSITIONS OF SOURCES USED IN RECORDING SCANS
@@ -247,9 +247,9 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
      Baseline hours are only counted for scans above horizon at both ends.
   Source       Setup file             Frequency sets                  Observing hours
                                    (duplicates not shown)              Scan  Baseline
-  0437-454   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9 10                  0.600    25.725
-  0438-436   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9 10                  1.417    56.974
-  0537-441   ups/lba3cm-2p-4IF.set 1 2 4 5 6 7 9 10                  0.333    13.486
+  0437-454   ups/lba3cm-2p-4IF.set 1 2 3 4 5 6 7 9 10                0.600    25.725
+  0438-436   ups/lba3cm-2p-4IF.set 1 2 3 4 5 6 7 9 10                1.417    56.974
+  0537-441   ups/lba3cm-2p-4IF.set 1 2 3 4 5 6 7 9 10                0.333    13.486
 
 
 EFFECT OF SOLAR CORONA

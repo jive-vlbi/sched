@@ -6,7 +6,7 @@
 
 
 Schedule Version:       2.00
-Processed by SCHED version:  11.50  Release 11.5; September 2018
+Processed by SCHED version:  11.60  Release 11.6; Feburary 2020
 
 PI:       Huib van Langevelde
 
@@ -106,7 +106,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 17 11 42  J0045+4555   04 47 50  48.4 654.3  4.0      69.3     8      258   17 11 42
 17 14 42  =0042+456    04 50 50  47.9 654.6  4.1      69.0   180      269   17 11 43
 
-17 15 02  M31          04 51 10  45.7 648.6  4.1      64.2     8      269   17 15 02
+17 15 02  M31          04 51 11  45.7 648.6  4.1      64.2     8      269   17 15 02
 17 18 02  ---          04 54 11  45.2 649.0  4.2      63.9   180      281   17 15 03
 
 17 18 23  J0045+4555   04 54 32  47.3 654.9  4.1      68.6     9      281   17 18 23

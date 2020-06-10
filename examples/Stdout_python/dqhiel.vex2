@@ -1,7 +1,7 @@
 VEX_rev = 2.0;
-*    SCHED vers: Release 11.5; September 2018
+*    SCHED vers: Release 11.6; Feburary 2020
 *    VEX/SCHED:  2.0.2
-*    Other versions: Sched:  11.5 Plot: 1.06 JPL-ephem: 1.01
+*    Other versions: Sched:  11.6 Plot: 1.06 JPL-ephem: 1.01
 *------------------------------------------------------------------------------
 $GLOBAL;
      ref $EXPER = DQHIEL;
@@ -158,13 +158,14 @@ def ptd7mm+ptdl7mm;
      ref $PROCEDURES = Procedure:Sc:Hn:Nl:Fd:La:Pt:Kp:Ov:Br:Mk;
      ref $IF = LO@42400MHzDPolNoTone:Fd:Kp:La:Nl:Pt;
      ref $IF = LO@42400MHzDPolTone/1:Br:Mk:Ov;
-     ref $BBC = 4BBCs:Br:Fd:Kp:La:Mk:Nl:Ov:Pt;
+     ref $BBC = 2BBCs:Br:Mk:Ov;
+     ref $BBC = 4BBCs:Fd:Kp:La:Nl:Pt;
      ref $PHASE_CAL_DETECT = Detect#06:Br:Mk:Ov;
      ref $PHASE_CAL_DETECT = NoDetect:Fd:Kp:La:Nl:Pt;
-     ref $FREQ = 43115.75MHz4x16MHz:Br:Mk:Ov;
+     ref $FREQ = 43115.75MHz2x64MHz:Br:Mk:Ov;
      ref $FREQ = 43115.75MHz4x2MHz:Fd:Kp:La:Nl:Pt;
-     ref $DATASTREAMS = VDIF_8000-1Thr4Ch#02:Br:Mk:Ov;
-     ref $DATASTREAMS = VDIF_8000-1Thr4Ch#03:Fd:Kp:La:Nl:Pt;
+     ref $DATASTREAMS = VDIF_8000-1Thr2Ch:Br:Mk:Ov;
+     ref $DATASTREAMS = VDIF_8000-1Thr4Ch#02:Fd:Kp:La:Nl:Pt;
 enddef;
 *
 def band.3mm;
@@ -257,9 +258,15 @@ enddef;
 *------------------------------------------------------------------------------
 $BBC;
 *
+def 2BBCs;
+* ptd7mm+ptdl7mm: Br, Mk, Ov
+     BBC_assign = &BBC01 : 1 : &IF_A;
+     BBC_assign = &BBC02 : 2 : &IF_C;
+enddef;
+*
 def 4BBCs;
 * band.6-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
-* ptd7mm+ptdl7mm: Br, Fd, Kp, La, Mk, Nl, Ov, Pt
+* ptd7mm+ptdl7mm: Fd, Kp, La, Nl, Pt
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
@@ -357,7 +364,7 @@ enddef;
 *
 def Detect#06;
 * ptd7mm+ptdl7mm: Br, Mk, Ov
-     phase_cal_detect = &PCD : 1 : 16 : 0;
+     phase_cal_detect = &PCD : 1 : 64 : 0 : 2;
 enddef;
 *
 def NoDetect;
@@ -439,12 +446,10 @@ def 43103.75MHz8x16MHz;
      chan_def =  : 43151.75 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &PCD;
 enddef;
 *
-def 43115.75MHz4x16MHz;
+def 43115.75MHz2x64MHz;
 * ptd7mm+ptdl7mm: Br, Mk, Ov
-     chan_def =  : 43115.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD;
-     chan_def =  : 43115.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD;
-     chan_def =  : 43215.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD;
-     chan_def =  : 43215.75 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &PCD;
+     chan_def =  : 43115.75 MHz : U :   64.00 MHz : &CH01 : &BBC01 : &PCD;
+     chan_def =  : 43115.75 MHz : U :   64.00 MHz : &CH02 : &BBC02 : &PCD;
 enddef;
 *
 def 43115.75MHz4x2MHz;
@@ -525,6 +530,14 @@ enddef;
 *------------------------------------------------------------------------------
 $DATASTREAMS;
 *
+def VDIF_8000-1Thr2Ch;
+* ptd7mm+ptdl7mm: Br, Mk, Ov
+     datastream = &DS1 : VDIF;
+     thread = &DS1 : &thread0 : 0 : 2 : 128.000 Ms/sec : 2 : real : 8000;
+     channel = &DS1 : &thread0 : &CH01 : 0;
+     channel = &DS1 : &thread0 : &CH02 : 1;
+enddef;
+*
 def VDIF_8000-1Thr4Ch;
 * band.6-2: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      datastream = &DS1 : VDIF;
@@ -536,16 +549,6 @@ def VDIF_8000-1Thr4Ch;
 enddef;
 *
 def VDIF_8000-1Thr4Ch#02;
-* ptd7mm+ptdl7mm: Br, Mk, Ov
-     datastream = &DS1 : VDIF;
-     thread = &DS1 : &thread0 : 0 : 4 :  32.000 Ms/sec : 2 : real : 8000;
-     channel = &DS1 : &thread0 : &CH01 : 0;
-     channel = &DS1 : &thread0 : &CH02 : 1;
-     channel = &DS1 : &thread0 : &CH03 : 2;
-     channel = &DS1 : &thread0 : &CH04 : 3;
-enddef;
-*
-def VDIF_8000-1Thr4Ch#03;
 * ptd7mm+ptdl7mm: Fd, Kp, La, Nl, Pt
      datastream = &DS1 : VDIF;
      thread = &DS1 : &thread0 : 0 : 4 :   4.000 Ms/sec : 2 : real : 8000;
@@ -689,7 +692,7 @@ def VLBA_BR;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1302 m;
+     axis_offset =     2.1304 m;
 enddef;
 *
 def VLBA_FD;
@@ -699,7 +702,7 @@ def VLBA_FD;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1318 m;
+     axis_offset =     2.1317 m;
 enddef;
 *
 def VLBA_HN;
@@ -709,7 +712,7 @@ def VLBA_HN;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =       2.13 m;
+     axis_offset =     2.1299 m;
 enddef;
 *
 def VLBA_KP;
@@ -719,7 +722,7 @@ def VLBA_KP;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1314 m;
+     axis_offset =     2.1309 m;
 enddef;
 *
 def VLBA_LA;
@@ -729,7 +732,7 @@ def VLBA_LA;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1322 m;
+     axis_offset =      2.131 m;
 enddef;
 *
 def VLBA_MK;
@@ -739,7 +742,7 @@ def VLBA_MK;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =      2.134 m;
+     axis_offset =     2.1336 m;
 enddef;
 *
 def VLBA_NL;
@@ -759,7 +762,7 @@ def VLBA_OV;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1307 m;
+     axis_offset =     2.1309 m;
 enddef;
 *
 def VLBA_PT;
@@ -769,7 +772,7 @@ def VLBA_PT;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1379 m;
+     axis_offset =     2.1375 m;
 enddef;
 *
 def VLBA_SC;
@@ -779,7 +782,7 @@ def VLBA_SC;
      pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
      pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
-     axis_offset =     2.1352 m;
+     axis_offset =     2.1355 m;
 enddef;
 *------------------------------------------------------------------------------
 $DAS;
@@ -795,9 +798,9 @@ def VLBA_BR;
      site_type = fixed;
      site_name = VLBA_BR;
      site_ID = Br;
-     site_position = -2112065.22540 m : -3705356.51540 m :  4726813.66950 m;
-     site_velocity =  -0.015110 m/yr :   0.000420 m/yr :  -0.007020 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -2112065.30820 m : -3705356.51420 m :  4726813.61240 m;
+     site_velocity =  -0.014730 m/yr :   0.000110 m/yr :  -0.007690 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 10.0 : 15.0 : 25.0 : 30.0 : 40.0 : 45.0 : 70.0 : 75.0 : 120.0 : 125.0 : 130.0 : 135.0 : 155.0 : 160.0 : 185.0 : 190.0 : 195.0 : 220.0 : 225.0 : 235.0 : 240.0 : 245.0 : 250.0 : 255.0 : 265.0 : 270.0 : 275.0 : 300.0 : 305.0 : 310.0 : 315.0 : 330.0 : 335.0 : 340.0 : 345.0 : 350.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 4.0 : 4.0 : 3.0 : 3.0 : 4.0 : 4.0 : 5.0 : 6.0 : 6.0 : 5.0 : 6.0 : 6.0 : 5.0 : 6.0 : 5.0 : 5.0 : 4.0 : 4.0 : 3.0 : 2.0 : 2.0;
 enddef;
@@ -806,9 +809,9 @@ def VLBA_FD;
      site_type = fixed;
      site_name = VLBA_FD;
      site_ID = Fd;
-     site_position = -1324009.34290 m : -5332181.96440 m :  3231962.39050 m;
-     site_velocity =  -0.013080 m/yr :   0.000390 m/yr :  -0.004370 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -1324009.41200 m : -5332181.95760 m :  3231962.34920 m;
+     site_velocity =  -0.012560 m/yr :   0.000440 m/yr :  -0.005050 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 10.0 : 15.0 : 20.0 : 30.0 : 35.0 : 40.0 : 45.0 : 50.0 : 55.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 90.0 : 95.0 : 100.0 : 105.0 : 110.0 : 115.0 : 150.0 : 155.0 : 160.0 : 220.0 : 225.0 : 230.0 : 240.0 : 245.0 : 250.0 : 255.0 : 260.0 : 265.0 : 270.0 : 275.0 : 280.0 : 285.0 : 290.0 : 295.0 : 300.0 : 305.0 : 310.0 : 315.0 : 325.0 : 330.0 : 335.0 : 340.0 : 345.0 : 360.0;
      horizon_map_el = 5.0 deg : 4.0 : 5.0 : 5.0 : 3.0 : 3.0 : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 4.0 : 7.0 : 5.0 : 4.0 : 4.0 : 5.0 : 6.0 : 6.0 : 5.0 : 4.0 : 3.0 : 2.0 : 2.0 : 3.0 : 2.0 : 2.0 : 4.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 4.0 : 5.0 : 4.0 : 4.0 : 5.0 : 6.0 : 6.0 : 5.0 : 5.0;
 enddef;
@@ -817,9 +820,9 @@ def VLBA_HN;
      site_type = fixed;
      site_name = VLBA_HN;
      site_ID = Hn;
-     site_position =  1446374.84630 m : -4447939.68770 m :  4322306.18960 m;
-     site_velocity =  -0.016020 m/yr :  -0.001650 m/yr :   0.004550 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position =  1446374.75710 m : -4447939.69470 m :  4322306.20610 m;
+     site_velocity =  -0.015660 m/yr :  -0.001620 m/yr :   0.004160 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 30.0 : 35.0 : 40.0 : 45.0 : 65.0 : 70.0 : 80.0 : 85.0 : 90.0 : 95.0 : 100.0 : 105.0 : 110.0 : 115.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 170.0 : 190.0 : 195.0 : 200.0 : 205.0 : 210.0 : 220.0 : 225.0 : 230.0 : 235.0 : 240.0 : 245.0 : 250.0 : 255.0 : 270.0 : 275.0 : 290.0 : 295.0 : 315.0 : 320.0 : 325.0 : 330.0 : 335.0 : 345.0 : 350.0 : 355.0 : 360.0;
      horizon_map_el = 6.0 deg : 6.0 : 6.0 : 4.0 : 5.0 : 4.0 : 4.0 : 5.0 : 5.0 : 4.0 : 5.0 : 4.0 : 4.0 : 5.0 : 3.0 : 4.0 : 4.0 : 5.0 : 4.0 : 6.0 : 5.0 : 7.0 : 7.0 : 5.0 : 3.0 : 5.0 : 4.0 : 4.0 : 2.0 : 5.0 : 5.0 : 6.0 : 6.0 : 5.0 : 6.0 : 4.0 : 5.0 : 5.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 5.0 : 5.0 : 6.0 : 5.0 : 5.0 : 6.0 : 6.0 : 5.0 : 5.0 : 6.0;
 enddef;
@@ -828,9 +831,9 @@ def VLBA_KP;
      site_type = fixed;
      site_name = VLBA_KP;
      site_ID = Kp;
-     site_position = -1995678.85710 m : -5037317.70490 m :  3357328.01740 m;
-     site_velocity =  -0.013980 m/yr :   0.000800 m/yr :  -0.006120 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -1995678.93100 m : -5037317.69820 m :  3357327.96450 m;
+     site_velocity =  -0.013440 m/yr :   0.000670 m/yr :  -0.006850 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 45.0 : 50.0 : 55.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 90.0 : 95.0 : 105.0 : 110.0 : 115.0 : 120.0 : 150.0 : 155.0 : 165.0 : 170.0 : 180.0 : 185.0 : 215.0 : 220.0 : 225.0 : 230.0 : 235.0 : 240.0 : 255.0 : 260.0 : 265.0 : 270.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 2.0 : 5.0 : 6.0 : 7.0 : 7.0 : 8.0 : 8.0 : 9.0 : 6.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0;
 enddef;
@@ -839,9 +842,9 @@ def VLBA_LA;
      site_type = fixed;
      site_name = VLBA_LA;
      site_ID = La;
-     site_position = -1449752.60190 m : -4975298.58510 m :  3709123.84080 m;
-     site_velocity =  -0.014680 m/yr :   0.000490 m/yr :  -0.004580 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -1449752.68140 m : -4975298.57780 m :  3709123.79710 m;
+     site_velocity =  -0.014230 m/yr :   0.000450 m/yr :  -0.005270 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 75.0 : 80.0 : 85.0 : 130.0 : 135.0 : 145.0 : 150.0 : 250.0 : 255.0 : 300.0 : 305.0 : 315.0 : 320.0 : 340.0 : 345.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0;
 enddef;
@@ -850,9 +853,9 @@ def VLBA_MK;
      site_type = fixed;
      site_name = VLBA_MK;
      site_ID = Mk;
-     site_position = -5464075.20500 m : -2495248.06200 m :  2148297.39890 m;
-     site_velocity =  -0.014740 m/yr :   0.062630 m/yr :   0.032650 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -5464075.27840 m : -2495247.67510 m :  2148297.57730 m;
+     site_velocity =  -0.014020 m/yr :   0.062490 m/yr :   0.031830 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 10.0 : 15.0 : 20.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 170.0 : 175.0 : 185.0 : 190.0 : 195.0 : 200.0 : 205.0 : 210.0 : 215.0 : 220.0 : 255.0 : 260.0 : 270.0 : 275.0 : 280.0 : 285.0 : 290.0 : 295.0 : 300.0 : 305.0 : 310.0 : 315.0 : 320.0 : 325.0 : 330.0 : 335.0 : 340.0 : 345.0 : 350.0 : 355.0 : 360.0;
      horizon_map_el = 5.0 deg : 4.0 : 3.0 : 3.0 : 2.0 : 2.0 : 4.0 : 5.0 : 5.0 : 4.0 : 4.0 : 6.0 : 8.0 : 8.0 : 11.0 : 12.0 : 13.0 : 13.0 : 11.0 : 11.0 : 9.0 : 7.0 : 5.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 5.0 : 6.0 : 8.0 : 10.0 : 12.0 : 14.0 : 12.0 : 11.0 : 9.0 : 10.0 : 11.0 : 10.0 : 12.0 : 14.0 : 12.0 : 9.0 : 7.0 : 5.0;
 enddef;
@@ -861,9 +864,9 @@ def VLBA_NL;
      site_type = fixed;
      site_name = VLBA_NL;
      site_ID = Nl;
-     site_position =  -130872.51770 m : -4762317.10010 m :  4226850.99910 m;
-     site_velocity =  -0.015800 m/yr :   0.001400 m/yr :  -0.001980 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position =  -130872.60440 m : -4762317.09070 m :  4226850.97730 m;
+     site_velocity =  -0.015370 m/yr :   0.001300 m/yr :  -0.002380 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 75.0 : 80.0 : 85.0 : 100.0 : 105.0 : 110.0 : 115.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 170.0 : 190.0 : 195.0 : 200.0 : 220.0 : 225.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 2.0 : 3.0 : 6.0 : 6.0 : 8.0 : 7.0 : 7.0 : 6.0 : 7.0 : 7.0 : 6.0 : 6.0 : 7.0 : 7.0 : 6.0 : 5.0 : 4.0 : 3.0 : 3.0 : 2.0 : 3.0 : 3.0 : 2.0 : 2.0;
 enddef;
@@ -872,9 +875,9 @@ def VLBA_OV;
      site_type = fixed;
      site_name = VLBA_OV;
      site_ID = Ov;
-     site_position = -2409150.42450 m : -4478573.12200 m :  3838617.33550 m;
-     site_velocity =  -0.018850 m/yr :   0.006590 m/yr :  -0.003180 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -2409150.52770 m : -4478573.07980 m :  3838617.29990 m;
+     site_velocity =  -0.018330 m/yr :   0.006500 m/yr :  -0.003940 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 10.0 : 15.0 : 20.0 : 25.0 : 30.0 : 35.0 : 40.0 : 45.0 : 50.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 90.0 : 95.0 : 100.0 : 105.0 : 110.0 : 115.0 : 120.0 : 125.0 : 130.0 : 145.0 : 150.0 : 155.0 : 175.0 : 180.0 : 185.0 : 190.0 : 195.0 : 200.0 : 205.0 : 210.0 : 230.0 : 235.0 : 240.0 : 245.0 : 250.0 : 260.0 : 265.0 : 270.0 : 280.0 : 285.0 : 290.0 : 295.0 : 300.0 : 305.0 : 310.0 : 350.0 : 355.0 : 360.0;
      horizon_map_el = 3.0 deg : 5.0 : 5.0 : 7.0 : 9.0 : 10.0 : 12.0 : 13.0 : 13.0 : 14.0 : 15.0 : 15.0 : 13.0 : 12.0 : 11.0 : 10.0 : 9.0 : 8.0 : 7.0 : 6.0 : 6.0 : 5.0 : 4.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 5.0 : 5.0 : 6.0 : 7.0 : 7.0 : 6.0 : 7.0 : 8.0 : 9.0 : 9.0 : 8.0 : 7.0 : 7.0 : 5.0 : 4.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0;
 enddef;
@@ -883,9 +886,9 @@ def VLBA_PT;
      site_type = fixed;
      site_name = VLBA_PT;
      site_ID = Pt;
-     site_position = -1640953.95690 m : -5014816.05570 m :  3575411.77800 m;
-     site_velocity =  -0.014980 m/yr :  -0.001210 m/yr :  -0.005840 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position = -1640954.03570 m : -5014816.02810 m :  3575411.73740 m;
+     site_velocity =  -0.014350 m/yr :  -0.000090 m/yr :  -0.005920 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 165.0 : 170.0 : 180.0 : 185.0 : 190.0 : 195.0 : 200.0 : 240.0 : 245.0 : 250.0 : 255.0 : 265.0 : 270.0 : 275.0 : 280.0 : 285.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 2.0 : 3.0 : 3.0 : 2.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 4.0 : 3.0 : 4.0 : 3.0 : 3.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0;
 enddef;
@@ -894,9 +897,9 @@ def VLBA_SC;
      site_type = fixed;
      site_name = VLBA_SC;
      site_ID = Sc;
-     site_position =  2607848.64360 m : -5488069.53530 m :  1932739.74710 m;
-     site_velocity =   0.006930 m/yr :   0.009350 m/yr :   0.012590 m/yr;
-     site_position_epoch = 2014y001d;
+     site_position =  2607848.69850 m : -5488069.48010 m :  1932739.81690 m;
+     site_velocity =   0.007700 m/yr :   0.009280 m/yr :   0.012480 m/yr;
+     site_position_epoch = 2020y001d;
      horizon_map_az = 0.0 deg : 5.0 : 10.0 : 20.0 : 25.0 : 40.0 : 45.0 : 50.0 : 55.0 : 60.0 : 65.0 : 70.0 : 75.0 : 80.0 : 85.0 : 95.0 : 100.0 : 105.0 : 110.0 : 115.0 : 120.0 : 125.0 : 130.0 : 135.0 : 140.0 : 145.0 : 150.0 : 155.0 : 160.0 : 165.0 : 175.0 : 180.0 : 185.0 : 190.0 : 200.0 : 205.0 : 210.0 : 215.0 : 220.0 : 230.0 : 235.0 : 240.0 : 245.0 : 250.0 : 260.0 : 265.0 : 270.0 : 275.0 : 280.0 : 360.0;
      horizon_map_el = 2.0 deg : 2.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 6.0 : 6.0 : 8.0 : 9.0 : 9.0 : 8.0 : 8.0 : 9.0 : 10.0 : 12.0 : 14.0 : 16.0 : 16.0 : 15.0 : 13.0 : 13.0 : 12.0 : 11.0 : 11.0 : 10.0 : 9.0 : 9.0 : 11.0 : 13.0 : 14.0 : 14.0 : 15.0 : 13.0 : 12.0 : 10.0 : 10.0 : 9.0 : 8.0 : 8.0 : 7.0 : 7.0 : 6.0 : 4.0 : 3.0 : 2.0 : 2.0;
 enddef;
