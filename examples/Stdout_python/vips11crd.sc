@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_SC   *!
 !*  Experiment VIPS11   *!
 !* Schedule Version:       2.00 *!
-!* Processed by SCHED version:  11.50  Release 11.5; September 2018 *!
+!* Processed by SCHED version:  11.60  Release 11.6; Feburary 2020 *!
 !* PI:       Greg Taylor *!
 !* Address:  University of New Mexico *!
 !*           Department of Physics and Astronomy *!

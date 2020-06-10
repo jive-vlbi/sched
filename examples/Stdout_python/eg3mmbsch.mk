@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00
-Processed by SCHED version:  11.50  Release 11.5; September 2018
+Processed by SCHED version:  11.60  Release 11.6; Feburary 2020
 
 PI:       Craig Walker
 
@@ -41,9 +41,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  --- Wed   5 Jul 2000   Day 187 ---
 
- Next scan frequencies:  43115.75  43115.75  43215.75  43215.75
- Next BBC frequencies:     715.75    715.75    815.75    815.75
- Next scan bandwidths:      16.00     16.00     16.00     16.00
+ Next scan frequencies:  43115.75  43115.75
+ Next BBC frequencies:     715.75    715.75
+ Next scan bandwidths:      64.00     64.00
 
 02 30 00  3C273        11 01 47  62.2 127.0 -1.5     -48.7     0        0   Stopped 
 02 40 00  ---          11 11 49  64.1 130.8 -1.3     -45.4   600        0           
@@ -57,9 +57,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43115.75  43115.75  43215.75  43215.75
- Next BBC frequencies:     715.75    715.75    815.75    815.75
- Next scan bandwidths:      16.00     16.00     16.00     16.00
+ Next scan frequencies:  43115.75  43115.75
+ Next BBC frequencies:     715.75    715.75
+ Next scan bandwidths:      64.00     64.00
 
 04 02 38  3C345        12 34 40  33.7  54.7 -4.1     -91.5  4253      153   Stopped 
 04 03 38  ---          12 35 40  33.9  54.7 -4.1     -91.7    60      153           
@@ -81,9 +81,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43115.75  43115.75  43215.75  43215.75
- Next BBC frequencies:     715.75    715.75    815.75    815.75
- Next scan bandwidths:      16.00     16.00     16.00     16.00
+ Next scan frequencies:  43115.75  43115.75
+ Next BBC frequencies:     715.75    715.75
+ Next scan bandwidths:      64.00     64.00
 
 04 27 43  3C345        12 59 49  38.5  54.3 -3.7     -95.8    24      461   Stopped 
 04 28 43  ---          13 00 49  38.7  54.3 -3.7     -95.9    60      461           
@@ -295,9 +295,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43115.75  43115.75  43215.75  43215.75
- Next BBC frequencies:     715.75    715.75    815.75    815.75
- Next scan bandwidths:      16.00     16.00     16.00     16.00
+ Next scan frequencies:  43115.75  43115.75
+ Next BBC frequencies:     715.75    715.75
+ Next scan bandwidths:      64.00     64.00
 
 07 05 48  3C345        15 38 20  65.6  31.2 -1.1    -140.5   141     2337   Stopped 
 07 06 48  ---          15 39 20  65.8  30.9 -1.1    -141.0    60     2337           
@@ -498,21 +498,21 @@ SETUP FILE INFORMATION:
    Matching groups in /home/eldering/sched/catalogs/freq_RDBE.dat:
      v7mm_c8
 
-   Setup group:   10         Station: VLBA_MK           Total bit rate:   256
-   Format: VDIF              Bits per sample: 2         Sample rate: 32.000
-   Number of channels:  4    DBE type: RDBE_DDC
+   Setup group:   10         Station: VLBA_MK           Total bit rate:   512
+   Format: VDIF              Bits per sample: 2         Sample rate:128.000
+   Number of channels:  2    DBE type: RDBE_DDC
 
    Disk used to record data.
 
    Setup not used for recording data.
 
-   1st LO=  42400.00  42400.00  42400.00  42400.00
-   Net SB=         U         U         U         U
-   IF SB =         U         U         U         U
-   Pol.  =      RCP       LCP       RCP       LCP 
-   BBC   =         1         2         3         4
-   BBC SB=         U         U         U         U
-   IF    =        A         C         A         C 
+   1st LO=  42400.00  42400.00
+   Net SB=         U         U
+   IF SB =         U         U
+   Pol.  =      RCP       LCP 
+   BBC   =         1         2
+   BBC SB=         U         U
+   IF    =        A         C 
 
    VLBA FE=     7mm      omit     7mm      omit
    VLBA Synth=   3.9      7.6     11.6
@@ -521,12 +521,12 @@ SETUP FILE INFORMATION:
      See the crd files for VLBA legacy system setups and pcal detection details.
 
    Frequency Set:   1  Setup file default.  Used with PCAL = off
-   LO sum=   43115.75  43115.75  43215.75  43215.75
-   BBC fr=     715.75    715.75    815.75    815.75
-   Bandwd=      16.00     16.00     16.00     16.00
-   VLBA legacy crd files using  4 channels based on RDBE channels:   1  2  3  4
-   CRD fr=     715.75    715.75    815.75    815.75
-   CRD bw=      16.00     16.00     16.00     16.00
+   LO sum=   43115.75  43115.75
+   BBC fr=     715.75    715.75
+   Bandwd=      64.00     64.00
+   VLBA legacy crd files using  2 channels based on RDBE channels:   1  2
+   CRD fr=     739.75    739.75
+   CRD bw=      16.00     16.00
     Matching frequency sets:   1   2   3   4   5
 
 
