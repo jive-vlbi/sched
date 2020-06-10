@@ -14,16 +14,33 @@
 # Make a file for sed with all the required changes to Makefile.master
 # Note that LPGPLOT is not needed for this case.
 
+# Updated the build config to work on stock RHEL 7 (jhj 2/7/20)
+# Original is commented out below.
+
 cat <<EOF >! makelinux_sedscript
 s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux:
 s:#ARCHSED: ARCH = LINUX:
-s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash -fbounds-check:
-s:#XLDSED: XLD = -L/usr/X11R6/lib -lX11:
+s:#FCSED: FC = gfortran -Wall -Wimplicit -fno-backslash -fbounds-check:
+s:#XLDSED: XLD = -lX11:
 s:#LDPGPLOTSED: LDPGPLOT = -lpgplot -lpng:
 s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
 s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
 s:#SATLDSED: SATLD = :
 EOF
+
+# Previously:
+#
+# cat <<EOF >! makelinux_sedscript
+# s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinux:
+# s:#ARCHSED: ARCH = LINUX:
+# s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash -fbounds-check:
+# s:#XLDSED: XLD = -L/usr/X11R6/lib -lX11:
+# s:#LDPGPLOTSED: LDPGPLOT = -lpgplot -lpng:
+# s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
+# s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
+# s:#SATLDSED: SATLD = :
+# EOF
+
 
 #  Run sed with the above file.
 

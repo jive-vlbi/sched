@@ -1,0 +1,24 @@
+! 4gb_vddc_6cm.set
+!
+! 4096 Mbps VLBA only recording using 2 polz, 4 freq channels, 
+!      128 MHz bandwidth with 6cm receiver.  Uses DDC personality 
+!      of 2 RDBEs to get all 8 subbands.  The 4 subband (pairs)
+!      are adjacent in frequency.  This setup does not use the 
+!      wideband capabilities of the 6cm receiver; the spanned
+!      frequency range on the sky is 4611.75 - 5123.75 MHz.
+!
+! The 0.25 MHz offset in all these 4 Gbps setups are a) to avoid
+! the possible aliasing of pulse-cals at the edges of the subbands,
+! and b) will cause Sched to complain about going over the crossover
+! frequencies.
+!      Mark Claussen, 2020 Jan 17.
+!
+  nchan  = 8
+  bbfilt = 128.0
+  pol    = dual
+  bits   = 2
+  dbe = rdbe_ddc
+  netside = L
+  freqref = 4612.0
+  freqoff =  128.0, 128.0, 256.0, 256.0, 384.0, 384.0, 512.0, 512.0 /
+endset /
