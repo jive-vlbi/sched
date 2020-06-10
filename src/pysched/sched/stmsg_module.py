@@ -23,7 +23,7 @@ def stmsg():
     s.wlog(1, " ")
     s.wlog(1, f"    Welcome to pySCHED version {pysched_version} "
            "based on ")
-    s.wlog(1, f"    SCHED version: {s.vern.vernum} "
+    s.wlog(1, f"    SCHED version: {s.vern.vernum:.6} "
            f"{util.f2str(s.verc.version)}")
     s.wlog(1, " ")
     s.wlog(1, "The manual is at http://www.aoc.nrao.edu/software/sched/"
