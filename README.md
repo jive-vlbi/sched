@@ -109,6 +109,7 @@ sudo apt-get install git
 * __v1.8.1 (2020-05-20)__: Include README.md in distribution, it is required for installation.
 * __v1.8.2 (2020-05-27)__: Fixed update catalog writing to an unopened log file.
 * __v1.9.0 (2020-06-09)__: Overhaul of the README.
+* __v1.10.0 (2020-06-09)__: SCHED 11.6 merged into pySCHED.
 
 
 # Contact
