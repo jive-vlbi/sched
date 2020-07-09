@@ -20,6 +20,8 @@
 
 from .util import get_catalog_dir
 
+import schedlib
+
 import re, sys, logging, functools
 import ast
 import operator as op
@@ -174,6 +176,9 @@ class Parser:
         while self.tok.type_ not in ("newline", "EOF"):
             self.tok = next(self.tokIt)
         logging.debug("p_chunk %s", str(self.tok))
+        if len(entries) == 0:
+            schedlib.wlog(1, "Warning: empty record in {} line {}.".format(
+                self.tok.file_.name, self.tok.line))
         return dict(entries)
 
     def p_item(self):
