@@ -110,6 +110,7 @@ sudo apt-get install git
 * __v1.8.2 (2020-05-27)__: Fixed update catalog writing to an unopened log file.
 * __v1.9.0 (2020-06-09)__: Overhaul of the README.
 * __v1.10.0 (2020-06-22)__: SCHED 11.6 merged into pySCHED.
+* __v1.11.0 (2020-07-11)__: Add warning message on empty KEYIN input record.
 
 
 # Contact
