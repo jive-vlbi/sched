@@ -118,3 +118,9 @@ sudo apt-get install git
 **pySCHED** is maintained at the [Joint Institute for VLBI ERIC (JIVE)](https://www.jive.eu). You can reach the maintainers at [pysched@jive.eu](mailto:pysched@jive.eu).
 
 
+# Acknowledgement
+
+
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 730884.
+
+
