@@ -110,11 +110,18 @@ sudo apt-get install git
 * __v1.8.2 (2020-05-27)__: Fixed update catalog writing to an unopened log file.
 * __v1.9.0 (2020-06-09)__: Overhaul of the README.
 * __v1.10.0 (2020-06-22)__: SCHED 11.6 merged into pySCHED.
+* __v1.11.0 (2020-07-11)__: Add warning message on empty KEYIN input record.
 
 
 # Contact
 
 
 **pySCHED** is maintained at the [Joint Institute for VLBI ERIC (JIVE)](https://www.jive.eu). You can reach the maintainers at [pysched@jive.eu](mailto:pysched@jive.eu).
+
+
+# Acknowledgement
+
+
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 730884.
 
 
