@@ -45,8 +45,8 @@ def defaults():
     scan_catalog = ScanCatalog()
     scan_catalog.read()
     setups = SetupCatalog().read()
-    for scan_index, scan in enumerate(scan_catalog.used(), 
-                                      scan_catalog.scan_offset):
+    used_scans = scan_catalog.used()
+    for scan_index, scan in enumerate(used_scans, scan_catalog.scan_offset):
         if (scan.grabto != "NONE") and (scan.datapath == "IN2DISK"):
             if scan.grabtime[0] < 0:
                 scan.grabtime[0] = 30
@@ -58,5 +58,6 @@ def defaults():
                         bps = setups[station.nsetup[scan_index] - 1].totbps
                         scan.grabgap = max(scan.grabgap,
                                            5 + scan.grabtime[0] * bps / 110.)
-    scan_catalog.write()
+    scan_catalog.write(range(scan_catalog.scan_offset,
+                             scan_catalog.scan_offset + len(used_scans)))
     
