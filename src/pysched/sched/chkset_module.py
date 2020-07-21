@@ -24,7 +24,7 @@ def chkset(ks):
     setup_entry = SetupCatalog().read()[ks-1]
     station_catalog = StationCatalog()
     station_catalog.read()
-    station_catalog.read_scheduled_attributes()
+    station_catalog.read_non_scan_scheduled_attributes()
     station_entry = station_catalog.entries[setup_entry.isetsta-1]
     if s.schcon.debug:
         s.wlog(0, "CHKSET: Starting on {} in:".format(setup_entry.setsta[0]))

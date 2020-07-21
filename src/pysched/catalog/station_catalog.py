@@ -3,6 +3,8 @@ from ..util import f2str
 
 import schedlib as s
 
+import numpy as np
+
 class StationCatalog(Catalog):
     """
     INTEGER          ISCHSTA(MAXCAT), MJDRATE(MAXCAT)
@@ -128,6 +130,15 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
             'pkgroup']
     }
     
+    # all scheduled scan related attributes have an array shape of
+    # (scan, station)
+    scan_station_items = {
+        block: [attr for attr in attrs if len(getattr(block, attr).shape) == 2]
+        for block, attrs in scheduled_station_items.items()}
+    non_scan_station_items = {
+        block: [attr for attr in attrs if len(getattr(block, attr).shape) == 1]
+        for block, attrs in scheduled_station_items.items()}
+    
     class DirectAccessCatalogEntry(object):
         # a catalog entry which maps setattr and getattr directly to
         # the COMMON blocks in schedlib
@@ -189,6 +200,8 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
     def __init__(self):
         super().__init__(self.maxcat, self.block_items)
         self.scheduled_attr_array = map_attr_array(self.scheduled_station_items)
+        self.non_scan_attr_array = map_attr_array(self.non_scan_station_items)
+        self.has_scheduled_attributes_for = []
         self.direct_access_entries = [
             self.DirectAccessCatalogEntry(i, self.attr_array, 
                                           self.scheduled_attr_array) 
@@ -216,15 +229,47 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
         entries = self.direct_access_entries if use_direct_access \
                   else self.entries
         return [entries[i-1] for i in s.schn1.stanum[:s.schn1.nsta]]
+
+    def _read_scheduled_attributes_implementation(self, arrays):
+        for index, entry in enumerate(self.used()):
+            for key, value in arrays.items():
+                setattr(entry, key, value[index])
     
     def read_scheduled_attributes(self):
         """
         Pre: self has entries
         """
         arrays = get_arrays(self.scheduled_attr_array)
-        for index, entry in enumerate(self.used()):
-            for key, value in arrays.items():
-                setattr(entry, key, value[index])
+        self._read_scheduled_attributes_implementation(arrays)
+        self.has_scheduled_attributes_for = s.schn1.stanum[:s.schn1.nsta].copy()
+    
+    def read_scheduled_attributes_for_scan(self, scan_index):
+        """
+        Pre: self has entries
+        Read scan related attributes for @scan_index into station entries.
+        """
+        if not np.array_equal(self.has_scheduled_attributes_for,
+                              s.schn1.stanum[:s.schn1.nsta]):
+            # initialize the station entry scan arrays
+            self.read_scheduled_attributes()
+            return
+        
+        for block, attrs in self.scan_station_items.items():
+            for attr in attrs:
+                array = getattr(block, attr)
+                for station_index, entry in enumerate(self.used()):
+                    value = array[scan_index, station_index]
+                    if array.dtype.kind == "S":
+                        value = value.decode()
+                    getattr(entry, attr)[scan_index] = value
+
+    def read_non_scan_scheduled_attributes(self):
+        """
+        Pre: self has entries
+        Read scheduled attributes not related to scans into station entries.
+        """
+        arrays = get_arrays(self.non_scan_attr_array)
+        self._read_scheduled_attributes_implementation(arrays)
 
     def write_scheduled_attributes(self):
         """

@@ -71,4 +71,4 @@ def scndup(to, from_, copyall, caller, use_direct_access=True):
 
     if not use_direct_access:
         # update the scan related attributes of stations in the catalog
-        station_catalog.read_scheduled_attributes()
+        station_catalog.read_scheduled_attributes_for_scan(to)
