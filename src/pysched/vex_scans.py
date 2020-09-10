@@ -49,19 +49,19 @@ def check_recording_sizes(scans, scan_offset, stations):
         for scan_index, scan in ((i, s) 
                                  for i, s in enumerate(scans, scan_offset)
                                  if station.stascn[i]):
-            gbytes = station.gbytes[scan_index]
-            if gbytes - previous_gbytes > max_disk_unit:
-                scan_warnings.add(scan_index)
-
             if previous_scan_index is not None:
                 previous_scan = scans[previous_scan_index - scan_offset]
                 if (scan.startj - previous_scan.stopj) * secpday > gap_seconds:
                     previous_gbytes = station.gbytes[previous_scan_index]
             
+            gbytes = station.gbytes[scan_index]
+            if gbytes - previous_gbytes > max_disk_unit:
+                scan_warnings.add(scan_index)
+            
             previous_scan_index = scan_index
 
     # print messages, do not print a new message for consecutive scans
-    previous_scan_index = -42 # any value that doesn't trigger the above check
+    previous_scan_index = -42 # any value that triggers the check below
     for scan_index in sorted(scan_warnings):
         if scan_index != previous_scan_index + 1:
             s.wlog(0, "The scan detailed below has exceeded the limit for "
