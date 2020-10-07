@@ -434,7 +434,6 @@ Cit/sys_unix/vmshlp.f
 if arch == "linux":
     sources += """
 Cit/sys_linux/error.f
-Cit/sys_linux/exit.c
 Cit/sys_linux/gerror.c
 Cit/sys_linux/idate.c
 Cit/sys_linux/isatty.c
