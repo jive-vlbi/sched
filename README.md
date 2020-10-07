@@ -113,6 +113,7 @@ sudo apt-get install git
 * __v1.11.0 (2020-07-11)__: Add warning message on empty KEYIN input record.
 * __v1.12.0 (2020-07-21)__: Runtime improved by about 30%.
 * __v1.12.1 (2020-09-10)__: Bug fix, continuous recording warning would trigger too often.
+* __v1.13.0 (2020-10-05)__: Allow double bandwidth for eMERLIN if 1 bits sampling is used.
 
 
 # Contact
