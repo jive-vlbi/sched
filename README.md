@@ -114,6 +114,7 @@ sudo apt-get install git
 * __v1.12.0 (2020-07-21)__: Runtime improved by about 30%.
 * __v1.12.1 (2020-09-10)__: Bug fix, continuous recording warning would trigger too often.
 * __v1.13.0 (2020-10-05)__: Allow double bandwidth for eMERLIN if 1 bits sampling is used.
+* __v1.13.1 (2020-10-07)__: Bug(s) in exit.c function triggered compiler error. Turned out to be unused code, so removed from compilation list.
 
 
 # Contact
