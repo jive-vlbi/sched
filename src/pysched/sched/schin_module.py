@@ -675,7 +675,7 @@ def schin(stdin):
     s.schn4.foc = values["focoff"]
     s.schn4.rot = values["rotoff"]
 
-    if "tapefile" is present:
+    if "tapefile" in present:
         s.errlog("TAPEFILE given but tape initialization no longer "
                  "supported by SCHED")
     s.tptpns()
