@@ -94,7 +94,7 @@ sudo apt-get install git
 
 ### Using pySCHED within a SCHED environment
 
-The aforementioned usage can potentially generate some issues when pySCHED runs in an environment where the variable `$SCHED` is set for the NRAO SCHED program. If `$SCHED` is set to the path that points to the NRAO SCHED directory, then pySCHED would try to read the catalogs under such directory. In this case, pySCHED would be unable to download the most up-to-date catalogs and may fail.
+The aforementioned usage can potentially generate some issues when pySCHED runs in an environment where the variable `$SCHED` is set for the NRAO SCHED program. If `$SCHED` is indeed set to the path that points to the NRAO SCHED directory, then pySCHED would try to read the catalogs under such directory. In this case, pySCHED would be unable to download the most up-to-date catalogs and may fail.
 
 We therefore recommend to unset such variable before running pySCHED (which would then use the default `~/.pysched` directory) or set it to an alternate directory unrelated to the NRAO SCHED path.
 
