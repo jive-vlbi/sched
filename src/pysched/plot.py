@@ -1319,7 +1319,9 @@ class MainWidget(QWidget):
             # (cannot find the documentation on meaning of the axes)
             beam = np.flip(beam.T, 0)
 
-            image = axis.pcolormesh(x, y, beam, cmap=self.beam.get_color_map())
+            image = axis.pcolormesh(x, y, beam,
+                                    cmap=self.beam.get_color_map(),
+                                    shading="auto")
             color_bar = figure.colorbar(image, ax=axis)
             if self.beam.get_contours():
                 # levels copied from SCHED
