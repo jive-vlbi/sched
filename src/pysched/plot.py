@@ -732,7 +732,7 @@ class BeamWidget(QWidget):
                 ("Image transfer function", "image_transfer_function", 
                  ["Linear", "Logarithmic", "Square-root"]),
                 ("Color palette", "color_map", 
-                 sorted(matplotlib.cm.cmap_d.keys(), key=lambda x: x.lower()))
+                 sorted(plt.colormaps(), key=lambda x: x.lower()))
         )):
             top_layout.addWidget(QLabel(label, self), row, 0)
             w = QComboBox(self)
@@ -744,7 +744,7 @@ class BeamWidget(QWidget):
         self.contours = QCheckBox("Plot contours", self)
         top_layout.addWidget(self.contours, row + 1, 0)
         self.contour_colors = QComboBox(self)
-        self.contour_colors.addItems(sorted(matplotlib.cm.cmap_d.keys(), 
+        self.contour_colors.addItems(sorted(plt.colormaps(), 
                                             key=lambda x: x.lower()))
         self.contour_colors.setCurrentText("Spectral")
         top_layout.addWidget(self.contour_colors, row + 1, 1)
