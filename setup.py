@@ -632,7 +632,7 @@ setup(
                       "pyqt5<5.14", 
                       "matplotlib>=3",
                       # formlayout 1.2 has many changes to the API
-                      "formlayout<1.2",
+                      "formlayout",
                       "astropy",
                       "bottle",
                       "gitpython",
