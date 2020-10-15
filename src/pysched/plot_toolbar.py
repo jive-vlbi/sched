@@ -61,6 +61,20 @@ from PyQt5.Qt import PYQT_VERSION_STR
 if LooseVersion(PYQT_VERSION_STR) < LooseVersion("5.8"):
     raise ImportError("PyQt version 5.8 or higher is required")
 
+# many API changes from version 1.1 -> 1.2 in formlayout.FormDialog,
+# wrap the call to the constructor
+if LooseVersion(formlayout.__version__) < LooseVersion("1.2"):
+    def FormDialogWrapper(data, title, icon, apply):
+        return formlayout.FormDialog(
+            data, title=title, icon=icon, apply=apply)
+else:
+    def FormDialogWrapper(data, title, icon, apply):
+        def apply_wrapper(results, widgets):
+            apply(results)
+        return formlayout.FormDialog(
+            data, title, "", icon, None, apply_wrapper, True, True, "list",
+            None, "form", False, None, None)
+
 class LstWidget(QWidget):
     def __init__(self, value, lst_base_date, parent=None):
         super().__init__(parent)
@@ -242,12 +256,16 @@ def edit_parameters(toolbar, x_axis_type):
     else:
         icon = QtGui.QIcon(str(cbook._get_data_path("images", 
                                                     "qt4_editor_options.svg")))
-    dialog = formlayout.FormDialog(
+    dialog = FormDialogWrapper(
         datalist, 
         title="Figure options", 
         icon=icon, 
         apply=apply_callback)
     axes_tab = dialog.formwidget.widgetlist[0]
+    if LooseVersion(formlayout.__version__) >= LooseVersion("1.2"):
+        # in version >= 1.2 the widgetlist elements are (title, widget) tuples
+        axes_tab = axes_tab[1]
+
     if x_axis_type in ["GST", "LST"]:
         layout = axes_tab.formlayout
         for (value, row) in ((xmin, xmin_row), (xmax, xmax_row)):
