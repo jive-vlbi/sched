@@ -919,6 +919,8 @@ class MainWidget(QWidget):
             for axis in axes[len(plot_sources):]:
                 axis.set_visible(False)
 
+            figure.tight_layout()
+
     def plot_xy(self):
         with wait_cursor():
             plot_sources = self.xy.sources.selected_sources()
@@ -1040,6 +1042,7 @@ class MainWidget(QWidget):
             legend = axis.legend()
             legend.set_draggable(True)
             adjust_toolbar(figure, axis_type[0])
+            figure.tight_layout()
 
     def plot_uptime(self):
         with wait_cursor():
@@ -1157,6 +1160,7 @@ class MainWidget(QWidget):
             legend = figure.legend(station_lines, plotted_stations)
             legend.set_draggable(True)
             adjust_toolbar(figure, axis_type)
+            figure.tight_layout()
 
     def plot_radec(self):
         with wait_cursor():
@@ -1243,6 +1247,7 @@ class MainWidget(QWidget):
                     for annotation in annotations:
                         annotation.set_visible(visible)
             figure.canvas.mpl_connect('pick_event', onpick)
+            figure.tight_layout()
 
     def plot_beam(self):
         with wait_cursor():
@@ -1348,6 +1353,7 @@ class MainWidget(QWidget):
             axis.invert_xaxis()
             axis.yaxis.set_label_text("Dec (mas)")
             axis.set_title("Beam for {} at {}".format(source, wave_text))
+            figure.tight_layout()
 
 
 def show(is_restart):
