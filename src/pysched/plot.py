@@ -1157,9 +1157,13 @@ class MainWidget(QWidget):
                                 if station.station in legend_line]
             station_lines = [legend_line[station] 
                              for station in plotted_stations]
-            legend = figure.legend(station_lines, plotted_stations)
+            legend = axes[0].legend(station_lines, plotted_stations, ncol=4,
+                                    loc="lower left", bbox_to_anchor=(-0.05, 1))
             legend.set_draggable(True)
             adjust_toolbar(figure, axis_type)
+            # force a draw event to have tight layout work with
+            # how the figure is formatted when displayed
+            figure.canvas.draw()
             figure.tight_layout()
 
     def plot_radec(self):
