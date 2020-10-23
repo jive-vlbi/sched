@@ -124,6 +124,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.13.0 (2020-10-05)__: Allow double bandwidth for eMERLIN if 1 bits sampling is used.
 * __v1.13.1 (2020-10-07)__: Bug(s) in exit.c function triggered compiler error. Turned out to be unused code, so removed from compilation list.
 * __v1.13.2 (2020-10-14)__: Update code to support matplotlib version 3.3.
+* __v1.14.0 (2020-10-23)__: Updated legend layout of uptime plot and added a help button in the plot toolbar.
 
 
 # Contact
