@@ -2,12 +2,14 @@ from .catalog import SourceCatalog, StationCatalog, ScanCatalog, \
     SourcePlotCatalog
 from .sched import parameter
 from . import util
+from .plot_util import shut_up_mpl
 
 import schedlib as s
 
 # import matplotlib and call .use immediately
 import matplotlib
 matplotlib.use("Qt5Agg")
+matplotlib.rcParams["toolbar"] = "toolmanager"
 
 # in matplotlib version 3.3 the internal epoch was changed from year 1 to 1970
 # this epoch is used to convert dates to floating points internally
@@ -846,7 +848,8 @@ class MainWidget(QWidget):
             items = len(plot_sources)
             columns = math.ceil(math.sqrt(items))
             rows = math.ceil(items / columns)
-            figure, axes = plt.subplots(rows, columns, squeeze=False)
+            with shut_up_mpl():
+                figure, axes = plt.subplots(rows, columns, squeeze=False)
             figure.canvas.set_window_title("UV Plot")
             axes = axes.reshape((rows * columns,))
 
@@ -919,6 +922,7 @@ class MainWidget(QWidget):
             for axis in axes[len(plot_sources):]:
                 axis.set_visible(False)
 
+            adjust_toolbar(figure)
             figure.tight_layout()
 
     def plot_xy(self):
@@ -931,7 +935,8 @@ class MainWidget(QWidget):
                 if source.aliases[0] in plot_sources:
                     alias_source.update(source.aliases)
 
-            figure, axis = plt.subplots()
+            with shut_up_mpl():
+                figure, axis = plt.subplots()
             station_xy = defaultdict(lambda: [[], []])
 
             axis_type = [self.xy.get_x_axis(), 
@@ -1058,7 +1063,8 @@ class MainWidget(QWidget):
             stations = [station for station in self.stations
                         if self.uptime.stations.get_visible(station.station)]
             
-            figure, axes = plt.subplots(len(plot_sources), squeeze=False)
+            with shut_up_mpl():
+                figure, axes = plt.subplots(len(plot_sources), squeeze=False)
             axes = axes.reshape((len(plot_sources),))
 
             figure.canvas.set_window_title("Uptime Plot")
@@ -1168,7 +1174,8 @@ class MainWidget(QWidget):
 
     def plot_radec(self):
         with wait_cursor():
-            figure, axis = plt.subplots()
+            with shut_up_mpl():
+                figure, axis = plt.subplots()
             figure.canvas.set_window_title("RA-Dec Plot")
             label_points = {}
             label_annotations = {}
@@ -1251,11 +1258,13 @@ class MainWidget(QWidget):
                     for annotation in annotations:
                         annotation.set_visible(visible)
             figure.canvas.mpl_connect('pick_event', onpick)
+            adjust_toolbar(figure)
             figure.tight_layout()
 
     def plot_beam(self):
         with wait_cursor():
-            figure, axis = plt.subplots()
+            with shut_up_mpl():
+                figure, axis = plt.subplots()
             setup_number = self.beam.get_setup_index()
             wavelength = 300 / s.schsf.sffreq[0, setup_number-1]
             wave_text = "{} cm".format(
@@ -1357,6 +1366,7 @@ class MainWidget(QWidget):
             axis.invert_xaxis()
             axis.yaxis.set_label_text("Dec (mas)")
             axis.set_title("Beam for {} at {}".format(source, wave_text))
+            adjust_toolbar(figure)
             figure.tight_layout()
 
 
