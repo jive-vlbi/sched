@@ -35,6 +35,7 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 
 ### Dependecies
 
+- Python (>= 3.6).
 - NumPy (>= 1.16).
 - Git.
 
@@ -125,6 +126,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.13.1 (2020-10-07)__: Bug(s) in exit.c function triggered compiler error. Turned out to be unused code, so removed from compilation list.
 * __v1.13.2 (2020-10-14)__: Update code to support matplotlib version 3.3.
 * __v1.14.0 (2020-10-23)__: Updated legend layout of uptime plot and added a help button in the plot toolbar.
+* __v1.14.1 (2020-11-05)__: pySCHED uses string formatting introduced in python version 3.6. Make this requirement explicit.
 
 
 # Contact
