@@ -11,7 +11,7 @@ def bbcalt(ks, setup_entry, ifbbc, ifnam, warning, caller):
     ubbc = np.full(max_bbc, False)
     for bbc in setup_entry.bbc:
         if bbc > 0:
-            ubbc[bbc] = True
+            ubbc[bbc - 1] = True
     ifinput = {}
 
     for ich, channel in enumerate(setup_entry.channel):
