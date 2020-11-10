@@ -56,7 +56,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
  --- Wed   5 Mar 1997   Day  64 ---
 
  Next scan frequencies:  4979.75  4979.75  4979.75  4979.75  4995.75  4995.75  4995.75  4995.75
- Next BBC frequencies:    379.75   379.75   379.75   379.75   395.75   395.75   395.75   395.75
+ Next BBC frequencies:    635.75   635.75   635.75   635.75   651.75   651.75   651.75   651.75
  Next scan bandwidths:      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
 
 17 30 00  DA193        05 10 35  80.5 475.7 -0.7     -56.7     0        0   17 29 55
@@ -179,7 +179,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: /home/eldering/sched/setups/v6cm-256-8-2-UL.set
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc6cm_g         Generated from sess119C2Gglob.setini, sess119C5nme.setini, sess119CGline.setini*
+     mc6cm_g         Generated from sess320C4G.setini
 
    Setup group:    6         Station: MEDICINA          Total bit rate:   256
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -187,7 +187,7 @@ SETUP FILE INFORMATION:
 
    Disk used to record data.
 
-   1st LO=   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00
+   1st LO=   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00
    Net SB=         L         L         U         U         L         L         U         U
    IF SB =         U         U         U         U         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP       RCP       LCP       RCP       LCP 
@@ -199,7 +199,7 @@ SETUP FILE INFORMATION:
 
    Frequency Set:  10  Setup file default.  Used with PCAL = 1MHz
    LO sum=   4979.75  4979.75  4979.75  4979.75  4995.75  4995.75  4995.75  4995.75
-   BBC fr=    379.75   379.75   379.75   379.75   395.75   395.75   395.75   395.75
+   BBC fr=    635.75   635.75   635.75   635.75   651.75   651.75   651.75   651.75
    Bandwd=      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
     Matching frequency sets:  10
 
