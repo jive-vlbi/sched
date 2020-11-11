@@ -35,6 +35,7 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 
 ### Dependecies
 
+- Python (>= 3.6).
 - NumPy (>= 1.16).
 - Git.
 
@@ -92,6 +93,14 @@ sudo apt-get install git
 ```
 
 
+### Using pySCHED within a SCHED environment
+
+The aforementioned usage can potentially generate some issues when pySCHED runs in an environment where the variable `$SCHED` is set for the NRAO SCHED program. If `$SCHED` is indeed set to the path that points to the NRAO SCHED directory, then pySCHED will read the catalogs under that directory. In this case, pySCHED will not use the most up-to-date catalogs and may fail to schedule experiments requiring the latest updates.
+
+We therefore recommend to unset this variable before running pySCHED (which would then use the default `~/.pysched` directory) or to be sure the catalogs under the `$SCHED` directory are proficient to schedule your experiment.
+
+
+
 
 # Release history
 
@@ -113,6 +122,12 @@ sudo apt-get install git
 * __v1.11.0 (2020-07-11)__: Add warning message on empty KEYIN input record.
 * __v1.12.0 (2020-07-21)__: Runtime improved by about 30%.
 * __v1.12.1 (2020-09-10)__: Bug fix, continuous recording warning would trigger too often.
+* __v1.13.0 (2020-10-05)__: Allow double bandwidth for eMERLIN if 1 bits sampling is used.
+* __v1.13.1 (2020-10-07)__: Bug(s) in exit.c function triggered compiler error. Turned out to be unused code, so removed from compilation list.
+* __v1.13.2 (2020-10-14)__: Update code to support matplotlib version 3.3.
+* __v1.14.0 (2020-10-23)__: Updated legend layout of uptime plot and added a help button in the plot toolbar.
+* __v1.14.1 (2020-11-05)__: pySCHED uses string formatting introduced in python version 3.6. Make this requirement explicit.
+* __v1.14.2 (2020-11-06)__: Fortran index was used to index Python array, causing an error when 16 BBCs were used.
 
 
 # Contact
