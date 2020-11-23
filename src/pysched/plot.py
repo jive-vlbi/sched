@@ -95,7 +95,10 @@ def mjd2lst(mjd, longitude):
     # the base date used is deterministic but undefined
     # (only) useful for plotting
     _, _, lstday = s.sidtim(mjd, longitude, math.pi * 2)
-    fractional, integer = math.modf(lstday)
+    return epoch2datetime(lstday)
+
+def epoch2datetime(x):
+    fractional, integer = math.modf(x)
     return datetime.fromordinal(int(integer)) + \
         timedelta(seconds=round(fractional * 86400))
 
@@ -1028,9 +1031,9 @@ class MainWidget(QWidget):
                     def draw_event(event):
                         nonlocal call_draw
                         if call_draw:
-                            date_ = date.fromordinal(int(axis.get_xlim()[0]))
-                            axis.xaxis.set_label_text(axis_type[0] + " " +
-                                                      str(date_))
+                            start = epoch2datetime(axis.get_xlim()[0])
+                            axis.xaxis.set_label_text(
+                                f"Starting at UT {str(start)}")
                             call_draw = False
                             figure.canvas.draw()
                         else:
@@ -1146,8 +1149,9 @@ class MainWidget(QWidget):
                 def draw_event(event):
                     nonlocal call_draw
                     if call_draw:
-                        date_ = date.fromordinal(int(axis.get_xlim()[0]))
-                        axis.xaxis.set_label_text(axis_type + " " + str(date_))
+                        start = epoch2datetime(axis.get_xlim()[0])
+                        axis.xaxis.set_label_text(
+                            f"Starting at UT {str(start)}")
                         call_draw = False
                         figure.canvas.draw()
                     else:
