@@ -28,6 +28,9 @@ def stmsg():
     s.wlog(1, " ")
     s.wlog(1, "The manual is at http://www.aoc.nrao.edu/software/sched/"
            "index.html")
+    s.wlog(1, "Bug reports, feature requests and other discussions can be "
+           "posted on the GitHub page:")
+    s.wlog(1, "    https://github.com/jive-vlbi/sched")
     s.wlog(1, f"pySCHED will use the catalogs under {checkout_dir} unless "
            "$SCHED is set.")
     s.wlog(1, f"Most run time messages will be in {logfile}")
