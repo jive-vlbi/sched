@@ -70,7 +70,9 @@ def wait_cursor():
 def _to_ordinalf(d):
     if d is None:
         return None
-    return matplotlib.dates._to_ordinalf(d)
+    seconds = (d - datetime(d.year, d.month, d.day, tzinfo=d.tzinfo)).\
+               total_seconds()
+    return d.toordinal() + (seconds / 24 / 60 / 60)
 _to_ordinalf_np_vectorized = np.vectorize(_to_ordinalf)
 class NoneDateConverter(type(matplotlib.units.registry[datetime])):
     @staticmethod
