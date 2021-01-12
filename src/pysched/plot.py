@@ -1067,7 +1067,8 @@ class MainWidget(QWidget):
                         if self.uptime.stations.get_visible(station.station)]
             
             with shut_up_mpl():
-                figure, axes = plt.subplots(len(plot_sources), squeeze=False)
+                figure, axes = plt.subplots(len(plot_sources), squeeze=False,
+                                            sharex=True, sharey=True)
             axes = axes.reshape((len(plot_sources),))
 
             figure.canvas.set_window_title("Uptime Plot")
