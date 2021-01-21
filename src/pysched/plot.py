@@ -46,7 +46,8 @@ from astropy.time import Time
 from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QScrollArea, \
     QTabWidget, QPushButton, QCheckBox, QGroupBox, QLabel, QLineEdit, \
     QComboBox, QMenu, QRadioButton, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QButtonGroup
+    QVBoxLayout, QHBoxLayout, QGridLayout, QButtonGroup, \
+    QMessageBox
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QCursor, QDoubleValidator, QColor
 
@@ -700,6 +701,8 @@ class BeamWidget(QWidget):
         return self.source.currentText()
 
     def get_setup_index(self):
+        if len(self.wave_index) == 0:
+            return None
         return self.wave_index[self.wavelength.currentIndex()][1]
 
     def get_oversampling(self):
@@ -727,7 +730,8 @@ class BeamWidget(QWidget):
         
         used_setups = set(scan.setnum for scan in scans)
         self.wave_index = sorted((300 / s.schsf.sffreq[0, i-1], i)
-                                 for i in used_setups)
+                                 for i in used_setups
+                                 if s.schsf.sffreq[0, i-1] > 0)
         for row, (label, attribute, options) in enumerate((
                 ("Source", "source", [s.aliases[0] for s in sources]),
                 ("Wavelength (cm)", "wavelength", 
@@ -1270,9 +1274,14 @@ class MainWidget(QWidget):
 
     def plot_beam(self):
         with wait_cursor():
+            setup_number = self.beam.get_setup_index()
+            if setup_number is None:
+                QMessageBox.warning(self, "Cannot plot beam.",
+                                    "Incomplete frequency setup, "
+                                    "unable to create beam plot.")
+                return
             with shut_up_mpl():
                 figure, axis = plt.subplots()
-            setup_number = self.beam.get_setup_index()
             wavelength = 300 / s.schsf.sffreq[0, setup_number-1]
             wave_text = "{} cm".format(
                 "{:.1f}".format(wavelength * 100).rstrip("0").rstrip("."))
