@@ -130,6 +130,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.14.2 (2020-11-06)__: Fortran index was used to index Python array, causing an error when 16 BBCs were used.
 * __v1.15.0 (2020-11-23)__: Cleared up confusion about the starting day of time based plots.
 * __v1.16.0 (2021-01-12)__: Now compatible with matplotlib 3.3.3 and advertised the GitHub page in the start-up message.
+* __v1.16.1 (2021-01-21)__: Bug fix for XY plots.
 
 
 # Contact
