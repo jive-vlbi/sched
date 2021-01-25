@@ -37,6 +37,7 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 
 - Python (>= 3.6).
 - NumPy (>= 1.16).
+- PyQt5.
 - Git.
 
 
@@ -44,7 +45,7 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 ### pip
 
 ```bash
-sudo pip3 install numpy
+sudo pip3 install numpy pyqt
 sudo pip3 install pythonSCHED
 ```
 
