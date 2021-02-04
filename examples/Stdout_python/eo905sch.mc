@@ -42,7 +42,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
  --- Wed  25 Dec 2002   Day 359 ---
 
  Next scan frequencies:  4974.49  4974.49  4982.49  4982.49  4990.49  4990.49  4998.49  4998.49
- Next BBC frequencies:    630.49   630.49   638.49   638.49   646.49   646.49   654.49   654.49
+ Next BBC frequencies:    374.49   374.49   382.49   382.49   390.49   390.49   398.49   398.49
  Next scan bandwidths:      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
 
 22 00 00  J0720+4737   05 03 33  66.2 430.3 -2.3     -84.7     0        0   22 00 00
@@ -1104,7 +1104,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.6cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc6cm_g         Generated from sess320C4G.setini
+     mc6cm_g         Generated from sess121C2G.setini, sess121CG_32.setini
 
    Setup group:    5         Station: MEDICINA          Total bit rate:   256
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -1112,7 +1112,7 @@ SETUP FILE INFORMATION:
 
    Disk used to record data.
 
-   1st LO=   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00
+   1st LO=   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00
    Net SB=         U         U         U         U         U         U         U         U
    IF SB =         U         U         U         U         U         U         U         U
    Pol.  =      RCP       LCP       RCP       LCP       RCP       LCP       RCP       LCP 
@@ -1124,7 +1124,7 @@ SETUP FILE INFORMATION:
 
    Frequency Set:   5  Setup file default.  Used with PCAL = 1MHz
    LO sum=   4974.49  4974.49  4982.49  4982.49  4990.49  4990.49  4998.49  4998.49
-   BBC fr=    630.49   630.49   638.49   638.49   646.49   646.49   654.49   654.49
+   BBC fr=    374.49   374.49   382.49   382.49   390.49   390.49   398.49   398.49
    Bandwd=      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
     Matching frequency sets:   5
 
