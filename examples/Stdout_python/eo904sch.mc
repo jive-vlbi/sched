@@ -43,8 +43,8 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  Next scan frequencies:  4966.49  4966.49  4966.49  4966.49  4982.49  4982.49  4982.49  4982.49
                          4998.49  4998.49  4998.49  4998.49  5014.49  5014.49  5014.49  5014.49
- Next BBC frequencies:    622.49   622.49   622.49   622.49   638.49   638.49   638.49   638.49
-                          654.49   654.49   654.49   654.49   670.49   670.49   670.49   670.49
+ Next BBC frequencies:    366.49   366.49   366.49   366.49   382.49   382.49   382.49   382.49
+                          398.49   398.49   398.49   398.49   414.49   414.49   414.49   414.49
  Next scan bandwidths:      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
                             8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
 
@@ -436,7 +436,7 @@ SETUP FILE INFORMATION:
 
  ======== Setup file: eo999.6cm
    Matching groups in /home/eldering/sched/catalogs/freq.dat:
-     mc6cm_g         Generated from sess320C4G.setini
+     mc6cm_g         Generated from sess121C2G.setini, sess121CG_32.setini
 
    Setup group:    5         Station: MEDICINA          Total bit rate:   512
    Format: MARK5B            Bits per sample: 2         Sample rate: 16.000
@@ -444,8 +444,8 @@ SETUP FILE INFORMATION:
 
    Disk used to record data.
 
-   1st LO=   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00
-             4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00   4344.00
+   1st LO=   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00
+             4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00   4600.00
    Net SB=         L         L         U         U         L         L         U         U
                    L         L         U         U         L         L         U         U
    IF SB =         U         U         U         U         U         U         U         U
@@ -464,8 +464,8 @@ SETUP FILE INFORMATION:
    Frequency Set:   5  Setup file default.  Used with PCAL = 1MHz
    LO sum=   4966.49  4966.49  4966.49  4966.49  4982.49  4982.49  4982.49  4982.49
              4998.49  4998.49  4998.49  4998.49  5014.49  5014.49  5014.49  5014.49
-   BBC fr=    622.49   622.49   622.49   622.49   638.49   638.49   638.49   638.49
-              654.49   654.49   654.49   654.49   670.49   670.49   670.49   670.49
+   BBC fr=    366.49   366.49   366.49   366.49   382.49   382.49   382.49   382.49
+              398.49   398.49   398.49   398.49   414.49   414.49   414.49   414.49
    Bandwd=      8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
                 8.00     8.00     8.00     8.00     8.00     8.00     8.00     8.00
     Matching frequency sets:   5
