@@ -38,8 +38,31 @@ C
      1           LOGFILE )
             CALL PUTOUT( '     Please read them.' )
             CALL PUTOUT( ' ' )
-         ELSE
-            CALL PUTOUT( ' REMINDER - see ' // 
+
+            CALL PUTOUT( ' +-----------------------+')
+            CALL PUTOUT( ' | Version 11.6 Advisory |')
+            CALL PUTOUT( ' +-----------------------+')
+            CALL PUTOUT( ' -')
+            CALL PUTOUT( " - Sched v11.6 uses updated station " // 
+     1                   "coordinates as compared to")
+            CALL PUTOUT( " - previous sched releases. Users in the " //
+     1                   "middle of a multi-epoch")
+            CALL PUTOUT( " - astrometric sequence are advised to " //
+     1                   "continue using sched 11.5 for")
+            CALL PUTOUT( " - the duration of the project. To ensure " //
+     1                   "sched 11.5 is run by VLBA")
+            CALL PUTOUT( " - operations, please include in the .key " //
+     1                   "file a line similar to:")
+            CALL PUTOUT( " -")
+            CALL PUTOUT( " -     note1 = 'Please schedule with " //
+     1                   "Sched 11.5'")
+            CALL PUTOUT( " -")
+            CALL PUTOUT( " - All other projects should see improved " //
+     1                   "results with this new version")
+            CALL PUTOUT( " - of sched. ")
+
+          ELSE
+             CALL PUTOUT( ' REMINDER - see ' // 
      1             LOGFILE(1:LEN1(LOGFILE)) //
      2             ' for most run time messages.' )
          END IF
