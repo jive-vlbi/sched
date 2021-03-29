@@ -9,7 +9,8 @@ import schedlib as s
 # import matplotlib and call .use immediately
 import matplotlib
 matplotlib.use("Qt5Agg")
-matplotlib.rcParams["toolbar"] = "toolmanager"
+with shut_up_mpl():
+    matplotlib.rcParams["toolbar"] = "toolmanager"
 
 # in matplotlib version 3.3 the internal epoch was changed from year 1 to 1970
 # this epoch is used to convert dates to floating points internally
@@ -862,7 +863,7 @@ class MainWidget(QWidget):
             rows = math.ceil(items / columns)
             with shut_up_mpl():
                 figure, axes = plt.subplots(rows, columns, squeeze=False)
-            figure.canvas.set_window_title("UV Plot")
+            figure.canvas.manager.set_window_title("UV Plot")
             axes = axes.reshape((rows * columns,))
 
             unit, multiplier = self.uv.get_unit_multiplier()
@@ -954,7 +955,7 @@ class MainWidget(QWidget):
             axis_type = [self.xy.get_x_axis(), 
                          self.xy.get_y_axis()]
 
-            figure.canvas.set_window_title("{}-{} Plot".format(
+            figure.canvas.manager.set_window_title("{}-{} Plot".format(
                 *axis_type[::-1]))
 
             axis_function = []
@@ -1080,7 +1081,7 @@ class MainWidget(QWidget):
                                             sharex=True, sharey=True)
             axes = axes.reshape((len(plot_sources),))
 
-            figure.canvas.set_window_title("Uptime Plot")
+            figure.canvas.manager.set_window_title("Uptime Plot")
 
             axis_function = []
             axis_type = self.uptime.get_x_axis()
@@ -1190,7 +1191,7 @@ class MainWidget(QWidget):
         with wait_cursor():
             with shut_up_mpl():
                 figure, axis = plt.subplots()
-            figure.canvas.set_window_title("RA-Dec Plot")
+            figure.canvas.manager.set_window_title("RA-Dec Plot")
             label_points = {}
             label_annotations = {}
             # catalogs
@@ -1289,7 +1290,7 @@ class MainWidget(QWidget):
             wave_text = "{} cm".format(
                 "{:.1f}".format(wavelength * 100).rstrip("0").rstrip("."))
             source = self.beam.get_source()
-            figure.canvas.set_window_title("Beam Plot ({}, {})".format(
+            figure.canvas.manager.set_window_title("Beam Plot ({}, {})".format(
                 source, wave_text))
 
             aliases = set(next(s.aliases for s in self.sources 
