@@ -132,6 +132,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.16.0 (2021-01-12)__: Now compatible with matplotlib 3.3.3 and advertised the GitHub page in the start-up message.
 * __v1.16.1 (2021-01-21)__: Bug fix for XY plots.
 * __v1.17.0 (2021-03-29)__: Fix deprecations warned for by matplotlib 3.4.
+* __v1.18.0 (2021-05-21)__: Updates to plot UI for smaller desktop windows.
 
 
 # Contact
