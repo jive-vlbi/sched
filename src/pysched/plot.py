@@ -482,30 +482,37 @@ class StationsWidget(QGroupBox):
 
     def __init__(self, stations, parent=None):
         super().__init__("Stations", parent)
-        layout = QGridLayout(self)
+        main_layout = QVBoxLayout(self)
+        scroll = QScrollArea(self)
+        main_layout.addWidget(scroll)
+        stations_widget = QWidget(self)
+        stations_layout = QGridLayout(stations_widget)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.visible_checkbox = {}
         self.color_button = {}
         self.linewidth_edit = {}
         for column, label in enumerate(("Plot", "Color", "Linewidth"), 1):
-            layout.addWidget(QLabel(label, self), 0, column)
+            stations_layout.addWidget(QLabel(label, stations_widget), 0, column)
         color_cycle = itertools.cycle(color_list)
         for row, station in enumerate(stations, 1):
             name = station.station
-            layout.addWidget(QLabel(name, self), row, 0)
+            stations_layout.addWidget(QLabel(name, stations_widget), row, 0)
             
-            checkbox = QCheckBox(self)
+            checkbox = QCheckBox(stations_widget)
             checkbox.setChecked(True)
             self.visible_checkbox[name] = checkbox
-            layout.addWidget(checkbox, row, 1)
+            stations_layout.addWidget(checkbox, row, 1)
 
-            color = ColorButton(self)
+            color = ColorButton(stations_widget)
             color.set_color(QColor(next(color_cycle)))
             self.color_button[name] = color
-            layout.addWidget(color, row, 2)
+            stations_layout.addWidget(color, row, 2)
 
-            width = FloatEdit("1.0", self)
+            width = FloatEdit("1.0", stations_widget)
             self.linewidth_edit[name] = width
-            layout.addWidget(width, row, 3)
+            stations_layout.addWidget(width, row, 3)
+        scroll.setWidget(stations_widget)
             
 class UVWidget(QWidget):
     def _check_axis(self):
@@ -580,10 +587,8 @@ class XYBaseWidget(QWidget): # shared by XY and Uptime
         master_layout = QHBoxLayout(self)
         
         left_layout = QVBoxLayout()
-        left_layout.addStretch(1)
 
         top_left_layout = QHBoxLayout()
-        left_layout.addStretch(1)
         top_left_layout.addWidget(QLabel("X", self))
         self.x_axis = QComboBox(self)
         self.x_axis.addItems(x_items)
@@ -606,11 +611,8 @@ class XYBaseWidget(QWidget): # shared by XY and Uptime
         self._check_x_axis()
         left_layout.addLayout(top_left_layout)
         
-        left_layout.addStretch(1)
-        
         self.stations = StationsWidget(stations, self)
         left_layout.addWidget(self.stations)
-        left_layout.addStretch(1)
 
         master_layout.addLayout(left_layout)
 
@@ -1399,6 +1401,9 @@ def show(is_restart):
     window.setWindowTitle("SCHED Plot")
     window.finished.connect(app.closeAllWindows)
     window.show()
+    desktop = app.desktop()
+    desktop_size = desktop.screenGeometry(desktop.screenNumber(window)).size()
+    window.resize(window.size().boundedTo(desktop_size * 0.9))
     plt.ion()
     app.exec_()
     r = window.result() # 0 -> exit, 1 -> finish, 2 -> restart
