@@ -15,6 +15,9 @@ import functools
 import copy
 import os.path
 
+class EndOfLineComment(str):
+    pass
+
 sched_version = "2" # version of SCHED VEX writing routine
 
 block_separator = "*------------------------------------------------------"\
@@ -285,7 +288,8 @@ def modes_block(vex_version, print_warnings):
                           setup.bbc[channel_index])][1],
                       # phase cal link name, tone_channel is fortran
                       # based, so -1 for array indexing
-                      phase_cal[tone_channel[channel_index] - 1][1])
+                      phase_cal[tone_channel[channel_index] - 1][1],
+                      EndOfLineComment(setup.pol[channel_index]))
                      for channel_index in range(setup.nchan))
         if vex_version < "2":
             freq += (("sample_rate", "{:7.3f} Ms/sec".format(setup.samprate)),)
@@ -1333,12 +1337,23 @@ def block_def2str(name, block_def, keyword="def", mode_stations={}):
             param_columns[param][column] = \
                 max(param_columns[param][column], len(str(value)))
     for param_value in block_def:
+        if isinstance(param_value[-1], EndOfLineComment):
+            end_index = len(param_value) - 1
+        else:
+            end_index = len(param_value)
         param = param_value[0]
-        ret += "     {} = {};\n".format(
+        ret += "     {} = {};".format(
             param,
             " : ".join("{:>{width}}".format(value, 
                                             width=param_columns[param][column])
-                       for column, value in enumerate(param_value[1:])))
+                       for column, value in enumerate(param_value[1:end_index])
+            ))
+        if isinstance(param_value[-1], EndOfLineComment):
+            ret += " * {}\n".format(param_value[-1])
+        else:
+            ret += "\n"
+        
+        
     ret += "end{};\n".format(keyword)
     return ret
 
