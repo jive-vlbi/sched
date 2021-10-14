@@ -65,7 +65,8 @@ def lba21cm-2p-4IF;
      ref $PHASE_CAL_DETECT = NoDetect:At:Cd:Ho:Mp:Pa;
      ref $FREQ = 1384MHz2x64MHz:Mp;
      ref $FREQ = 1384MHz8x16MHz:At:Pa;
-     ref $FREQ = 1384MHz8x16MHz#02:Cd:Ho;
+     ref $FREQ = 1384MHz8x16MHz#02:Cd;
+     ref $FREQ = 1384MHz8x16MHz#03:Ho;
      ref $TRACKS = LBA_AT.2Ch2bit1to1:Mp;
      ref $TRACKS = LBA_AT.8Ch2bit1to1:At:Pa;
      ref $BITSTREAMS = BS8Ch2Bit:Cd;
@@ -134,14 +135,14 @@ enddef;
 *
 def 8BBCs#02;
 * lba21cm-2p-4IF: Ho
-     BBC_assign = &BBC01 : 1 : &IF_A3;
-     BBC_assign = &BBC05 : 5 : &IF_B3;
-     BBC_assign = &BBC02 : 2 : &IF_A3;
-     BBC_assign = &BBC06 : 6 : &IF_B3;
-     BBC_assign = &BBC03 : 3 : &IF_A3;
-     BBC_assign = &BBC07 : 7 : &IF_B3;
-     BBC_assign = &BBC04 : 4 : &IF_A3;
-     BBC_assign = &BBC08 : 8 : &IF_B3;
+     BBC_assign = &BBC01 :  1 : &IF_A3;
+     BBC_assign = &BBC09 :  9 : &IF_B3;
+     BBC_assign = &BBC02 :  2 : &IF_A3;
+     BBC_assign = &BBC10 : 10 : &IF_B3;
+     BBC_assign = &BBC03 :  3 : &IF_A3;
+     BBC_assign = &BBC11 : 11 : &IF_B3;
+     BBC_assign = &BBC04 :  4 : &IF_A3;
+     BBC_assign = &BBC12 : 12 : &IF_B3;
 enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
@@ -172,7 +173,7 @@ def 1384MHz8x16MHz;
 enddef;
 *
 def 1384MHz8x16MHz#02;
-* lba21cm-2p-4IF: Cd, Ho
+* lba21cm-2p-4IF: Cd
      chan_def =  : 1384 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 1384 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal; * LCP
      chan_def =  : 1400 MHz : U :   16.00 MHz : &CH03 : &BBC02 : &NoCal; * RCP
@@ -181,6 +182,18 @@ def 1384MHz8x16MHz#02;
      chan_def =  : 1416 MHz : U :   16.00 MHz : &CH06 : &BBC07 : &NoCal; * LCP
      chan_def =  : 1432 MHz : U :   16.00 MHz : &CH07 : &BBC04 : &NoCal; * RCP
      chan_def =  : 1432 MHz : U :   16.00 MHz : &CH08 : &BBC08 : &NoCal; * LCP
+enddef;
+*
+def 1384MHz8x16MHz#03;
+* lba21cm-2p-4IF: Ho
+     chan_def =  : 1384 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 1384 MHz : U :   16.00 MHz : &CH02 : &BBC09 : &NoCal; * LCP
+     chan_def =  : 1400 MHz : U :   16.00 MHz : &CH03 : &BBC02 : &NoCal; * RCP
+     chan_def =  : 1400 MHz : U :   16.00 MHz : &CH04 : &BBC10 : &NoCal; * LCP
+     chan_def =  : 1416 MHz : U :   16.00 MHz : &CH05 : &BBC03 : &NoCal; * RCP
+     chan_def =  : 1416 MHz : U :   16.00 MHz : &CH06 : &BBC11 : &NoCal; * LCP
+     chan_def =  : 1432 MHz : U :   16.00 MHz : &CH07 : &BBC04 : &NoCal; * RCP
+     chan_def =  : 1432 MHz : U :   16.00 MHz : &CH08 : &BBC12 : &NoCal; * LCP
 enddef;
 *------------------------------------------------------------------------------
 $TRACKS;

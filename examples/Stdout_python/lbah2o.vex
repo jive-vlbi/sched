@@ -61,7 +61,8 @@ def water;
      ref $BBC = 2BBCs#03:Ho;
      ref $PHASE_CAL_DETECT = NoDetect:At:Cd:Ho:Mp:Pa;
      ref $FREQ = 22235MHz2x16MHz:At:Mp:Pa;
-     ref $FREQ = 22235MHz2x16MHz#02:Cd:Ho;
+     ref $FREQ = 22235MHz2x16MHz#02:Cd;
+     ref $FREQ = 22235MHz2x16MHz#03:Ho;
      ref $TRACKS = MARK5B.2Ch2bit1to1:Cd:Ho;
      ref $TRACKS = S2.2Ch2bit1to1:At:Mp:Pa;
      ref $ROLL = NoRoll:At:Cd:Ho:Mp:Pa;
@@ -78,7 +79,8 @@ def water#02;
      ref $BBC = 2BBCs#03:Ho;
      ref $PHASE_CAL_DETECT = NoDetect:At:Cd:Ho:Mp:Pa;
      ref $FREQ = 22230MHz2x16MHz:At:Mp:Pa;
-     ref $FREQ = 22230MHz2x16MHz#02:Cd:Ho;
+     ref $FREQ = 22230MHz2x16MHz#02:Cd;
+     ref $FREQ = 22230MHz2x16MHz#03:Ho;
      ref $TRACKS = MARK5B.2Ch2bit1to1:Cd:Ho;
      ref $TRACKS = S2.2Ch2bit1to1:At:Mp:Pa;
      ref $ROLL = NoRoll:At:Cd:Ho:Mp:Pa;
@@ -128,7 +130,7 @@ def 2BBCs#03;
 * water: Ho
 * water#02: Ho
      BBC_assign = &BBC01 : 1 : &IF_A3;
-     BBC_assign = &BBC05 : 5 : &IF_B3;
+     BBC_assign = &BBC09 : 9 : &IF_B3;
 enddef;
 *------------------------------------------------------------------------------
 $PHASE_CAL_DETECT;
@@ -149,9 +151,16 @@ def 22230MHz2x16MHz;
 enddef;
 *
 def 22230MHz2x16MHz#02;
-* water#02: Cd, Ho
+* water#02: Cd
      chan_def =  : 22230 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 22230 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal; * LCP
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 22230MHz2x16MHz#03;
+* water#02: Ho
+     chan_def =  : 22230 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 22230 MHz : U :   16.00 MHz : &CH02 : &BBC09 : &NoCal; * LCP
      sample_rate =  32.000 Ms/sec;
 enddef;
 *
@@ -163,9 +172,16 @@ def 22235MHz2x16MHz;
 enddef;
 *
 def 22235MHz2x16MHz#02;
-* water: Cd, Ho
+* water: Cd
      chan_def =  : 22235 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 22235 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal; * LCP
+     sample_rate =  32.000 Ms/sec;
+enddef;
+*
+def 22235MHz2x16MHz#03;
+* water: Ho
+     chan_def =  : 22235 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 22235 MHz : U :   16.00 MHz : &CH02 : &BBC09 : &NoCal; * LCP
      sample_rate =  32.000 Ms/sec;
 enddef;
 *------------------------------------------------------------------------------
