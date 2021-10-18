@@ -458,7 +458,8 @@ def modes_block(vex_version, print_warnings):
             try:
                 channel_data = [(setup.sidebd[channel_index],
                                  setup.bbc[channel_index],
-                                 bit)
+                                 bit,
+                                 channel_index)
                                 for channel_index in range(setup.nchan)
                                 for bit in ["sign", "mag"][
                                         :int(setup.bits[channel_index])]]
@@ -468,10 +469,11 @@ def modes_block(vex_version, print_warnings):
                 sorted_bitstreams = sorted(input_bitstreams)
                 on_disk_bitstreams = (sorted_bitstreams.index(i)
                                       for i in input_bitstreams)
-                bitstream_data = zip(input_bitstreams, 
-                                     on_disk_bitstreams,
-                                     (d[2] for d in channel_data), # sign/mag
-                                     range(setup.nchan))
+                bitstream_data = zip(
+                    input_bitstreams, 
+                    on_disk_bitstreams,
+                    (d[2] for d in channel_data), # sign/mag
+                    (d[3] for d in channel_data)) # channel index
             except dbbc_patching.NoMatchingPatch:
                 bitstream_data = ((bitstream, bitstream, bit, channel_index)
                                   for bitstream, (_, _, bit, channel_index) 
