@@ -64,7 +64,8 @@ def water;
      ref $FREQ = 22235MHz2x16MHz#02:Cd;
      ref $FREQ = 22235MHz2x16MHz#03:Ho;
      ref $TRACKS = LBA_AT.2Ch2bit1to1:At:Mp:Pa;
-     ref $BITSTREAMS = BS2Ch2Bit:Cd:Ho;
+     ref $BITSTREAMS = BS2Ch2Bit:Cd;
+     ref $BITSTREAMS = BS2Ch2Bit#02:Ho;
 enddef;
 *
 def water#02;
@@ -80,7 +81,8 @@ def water#02;
      ref $FREQ = 22230MHz2x16MHz#02:Cd;
      ref $FREQ = 22230MHz2x16MHz#03:Ho;
      ref $TRACKS = LBA_AT.2Ch2bit1to1:At:Mp:Pa;
-     ref $BITSTREAMS = BS2Ch2Bit:Cd:Ho;
+     ref $BITSTREAMS = BS2Ch2Bit:Cd;
+     ref $BITSTREAMS = BS2Ch2Bit#02:Ho;
 enddef;
 *------------------------------------------------------------------------------
 $IF;
@@ -191,11 +193,23 @@ enddef;
 $BITSTREAMS;
 *
 def BS2Ch2Bit;
-* water: Cd, Ho
-* water#02: Cd, Ho
+* water: Cd
+* water#02: Cd
      stream_sample_rate =  32.000 Ms/sec;
      stream_def = &CH01 : sign : 0 : 0;
-     stream_def = &CH02 :  mag : 1 : 1;
+     stream_def = &CH01 :  mag : 1 : 1;
+     stream_def = &CH02 : sign : 4 : 2;
+     stream_def = &CH02 :  mag : 5 : 3;
+enddef;
+*
+def BS2Ch2Bit#02;
+* water: Ho
+* water#02: Ho
+     stream_sample_rate =  32.000 Ms/sec;
+     stream_def = &CH01 : sign : 0 : 0;
+     stream_def = &CH01 :  mag : 1 : 1;
+     stream_def = &CH02 : sign : 8 : 2;
+     stream_def = &CH02 :  mag : 9 : 3;
 enddef;
 *------------------------------------------------------------------------------
 $STATION;
