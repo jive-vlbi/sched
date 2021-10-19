@@ -281,11 +281,11 @@ class CustomizeCurvesTool(ToolBase):
                     ncol = 1
                     if apply_to_axis.legend_ is not None:
                         old_legend = apply_to_axis.get_legend()
-                        draggable = old_legend._draggable is not None
+                        draggable = old_legend.get_draggable()
                         ncol = old_legend._ncol
                     new_legend = apply_to_axis.legend(ncol=ncol)
                     if new_legend:
-                        new_legend.draggable(draggable)
+                        new_legend.set_draggable(draggable)
 
             # Redraw
             figure = apply_to_axis.get_figure()
