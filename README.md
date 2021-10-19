@@ -134,6 +134,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.17.0 (2021-03-29)__: Fix deprecations warned for by matplotlib 3.4.
 * __v1.18.0 (2021-05-21)__: Updates to plot UI for smaller desktop windows.
 * __v1.19.0 (2021-07-09)__: Add polarization comment for frequency channels in VEX file.
+* __v1.19.1 (2021-10-19)__: Bug fixes for BITSTREAMS section generation and deprecated functionality in Matplotlib that caused a crash setting axis properties.
 
 
 # Contact
