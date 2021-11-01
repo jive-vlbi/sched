@@ -39,7 +39,9 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 - NumPy (>= 1.16).
 - Git.
 
+#### PyQt5 dependencies
 
+**pySCHED** uses PyQt5 for its GUI. Since version 5.12, PyQt5 has external dependencies that are not automatically installed. Many systems have these dependencies installed, see [this discussion page](https://github.com/jive-vlbi/sched/discussions/16) if you see the error message ```Cannot load backend 'Qt5Agg' which requires the 'qt5' interactive framework, as 'headless' is currently running``` for details.
 
 ### pip
 
