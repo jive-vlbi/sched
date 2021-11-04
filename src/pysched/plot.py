@@ -58,6 +58,35 @@ import math
 from datetime import datetime, timedelta, date
 from contextlib import contextmanager
 
+# if matplotlib is configured to use latex to display
+if matplotlib.rcParams['text.usetex']:
+    import re
+    def escape_tex(text):
+        """
+        :param text: a plain text message
+        :return: the message escaped to appear correctly in LaTeX
+        """
+        conv = {
+            '&': r'\&',
+            '%': r'\%',
+            '$': r'\$',
+            '#': r'\#',
+            '_': r'\_',
+            '{': r'\{',
+            '}': r'\}',
+            '~': r'\textasciitilde{}',
+            '^': r'\^{}',
+            '\\': r'\textbackslash{}',
+            '<': r'\textless{}',
+            '>': r'\textgreater{}',
+        }
+        regex = re.compile('|'.join(re.escape(str(key)) for key in conv.keys()))
+        return regex.sub(lambda match: conv[match.group()], text)
+else:
+    def escape_tex(text):
+        return text
+
+
 # list of colors to cycle through
 color_list = [to_hex(c) for c in "bgrcmyk"] + ["orange", "brown"] 
 
@@ -923,12 +952,12 @@ class MainWidget(QWidget):
                 source_index = plot_sources.index(source)
                 axis = axes[source_index]
                 axis.set_aspect("equal")
-                axis.set_title(source)
+                axis.set_title(escape_tex(source))
                 axis.xaxis.set_label_text("U ({})".format(unit))
                 axis.yaxis.set_label_text("V ({})".format(unit))
                 for baseline, [x, y] in baseline_xy.items():
                         axis.plot(
-                            x, y, label="{} - {}".format(*baseline),
+                            x, y, label=escape_tex("{} - {}".format(*baseline)),
                             **configuration.get_properties(baseline))
             figure.subplots_adjust(left=0.05, right=0.95,
                                    bottom=0.05, top=0.95,
@@ -1027,7 +1056,7 @@ class MainWidget(QWidget):
             axis.yaxis.set_label_text(axis_type[1])
             for station, [x, y] in station_xy.items():
                 name = station.station
-                axis.plot(x, y, label=name,
+                axis.plot(x, y, label=escape_tex(name),
                           **self.xy.stations.get_properties(name))
 
             if axis_type[0] in ["UT", "LST", "GST"]:
@@ -1135,10 +1164,10 @@ class MainWidget(QWidget):
                     if station in station_left:
                         left = station_left[station]
                         bottom = [len(stations) - station_index] * len(left)
-                        legend_line[station.station] = axis.barh(
+                        legend_line[escape_tex(station.station)] = axis.barh(
                             y=bottom, left=left,
                             width=source_station_width[source][station],
-                            label=station.station,
+                            label=escape_tex(station.station),
                             **self.uptime.stations.get_properties(
                                 station.station))
             
@@ -1148,7 +1177,7 @@ class MainWidget(QWidget):
                 axis.xaxis.set_major_formatter(time_formatter)
                 axis.xaxis.set_major_locator(matplotlib.dates.AutoDateLocator())
                 axis.set_xbound(lower=start, upper=end)
-                axis.yaxis.set_label_text(source)
+                axis.yaxis.set_label_text(escape_tex(source))
                 axis.tick_params(axis="y", which="both", 
                                  left=False, labelleft=False)
             figure.autofmt_xdate()
@@ -1176,8 +1205,9 @@ class MainWidget(QWidget):
                     axis.xaxis.lst_base_date = date.fromordinal(
                         int(axis.get_xlim()[0]))
             
-            plotted_stations = [station.station for station in stations
-                                if station.station in legend_line]
+            plotted_stations = [escape_tex(station.station)
+                                for station in stations
+                                if escape_tex(station.station) in legend_line]
             station_lines = [legend_line[station] 
                              for station in plotted_stations]
             legend = axes[0].legend(station_lines, plotted_stations, ncol=4,
@@ -1199,7 +1229,8 @@ class MainWidget(QWidget):
             # catalogs
             calcodes = set(s.srlcalc for s in self.radec_sources)
             for calcode in sorted(calcodes):
-                catalog_label = self.radec.calcode_map.get(calcode, calcode)
+                catalog_label = escape_tex(
+                    self.radec.calcode_map.get(calcode, calcode))
                 if catalog_label == "":
                     catalog_label = "No label"
                 catalog_sources = [s for s in self.radec_sources
@@ -1218,7 +1249,7 @@ class MainWidget(QWidget):
                 visible = (len(catalog_sources) < 20) and points.get_visible()
                 annotations = []
                 for i, s in enumerate(catalog_sources):
-                    a = axis.annotate(s.srlname, xy=xy[i])
+                    a = axis.annotate(escape_tex(s.srlname), xy=xy[i])
                     a.set_visible(visible)
                     annotations.append(a)
                 label_annotations[catalog_label] = annotations
@@ -1235,7 +1266,7 @@ class MainWidget(QWidget):
                 annotations = []
                 for i, s in enumerate(self.sources):
                     annotations.append(
-                        axis.annotate(s.aliases[0], xy=xy[i]))
+                        axis.annotate(escape_tex(s.aliases[0]), xy=xy[i]))
                     label_annotations["SCHED"] = annotations
 
             axis.set_title("Dec - RA\n"
@@ -1292,8 +1323,8 @@ class MainWidget(QWidget):
             wave_text = "{} cm".format(
                 "{:.1f}".format(wavelength * 100).rstrip("0").rstrip("."))
             source = self.beam.get_source()
-            figure.canvas.manager.set_window_title("Beam Plot ({}, {})".format(
-                source, wave_text))
+            figure.canvas.manager.set_window_title(escape_tex(
+                "Beam Plot ({}, {})".format(source, wave_text)))
 
             aliases = set(next(s.aliases for s in self.sources 
                                if s.aliases[0] == source))
@@ -1387,7 +1418,8 @@ class MainWidget(QWidget):
             axis.xaxis.set_label_text("RA (mas)")
             axis.invert_xaxis()
             axis.yaxis.set_label_text("Dec (mas)")
-            axis.set_title("Beam for {} at {}".format(source, wave_text))
+            axis.set_title(escape_tex(
+                "Beam for {} at {}".format(source, wave_text)))
             adjust_toolbar(figure)
             figure.tight_layout()
 
