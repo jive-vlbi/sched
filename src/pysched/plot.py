@@ -96,32 +96,6 @@ def wait_cursor():
     yield
     QApplication.restoreOverrideCursor()
 
-# update matplotlib date converter to handle None, 
-# as that value is used to signal a line segment end
-def _to_ordinalf(d):
-    if d is None:
-        return None
-    if isinstance(d, datetime):
-        seconds = (d - datetime(d.year, d.month, d.day, tzinfo=d.tzinfo)).\
-            total_seconds()
-    else:
-        seconds = 0
-    return d.toordinal() + (seconds / 24 / 60 / 60)
-_to_ordinalf_np_vectorized = np.vectorize(_to_ordinalf)
-class NoneDateConverter(type(matplotlib.units.registry[datetime])):
-    @staticmethod
-    def convert(value, unit, axis):
-        if matplotlib.units.ConversionInterface.is_numlike(value):
-            return value
-        else:
-            if not np.iterable(value):
-                return _to_ordinalf(value)
-            else:
-                d = np.asarray(value)
-                if not d.size:
-                    return d
-                return _to_ordinalf_np_vectorized(d)
-matplotlib.units.registry[datetime] = NoneDateConverter()
 time_formatter = matplotlib.dates.DateFormatter("%H:%M:%S")
 
 def mjd2utc(mjd):
