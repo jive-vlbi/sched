@@ -630,7 +630,7 @@ setup(
                       # on some systems pyqt 5.14 tries to build from source 
                       # and fails
                       "pyqt5<5.14", 
-                      "matplotlib>=3",
+                      "matplotlib>=3.3.3",
                       "formlayout",
                       "astropy",
                       "bottle",
