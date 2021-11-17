@@ -53,10 +53,11 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QCursor, QDoubleValidator, QColor
 
 import itertools
-from collections import defaultdict, OrderedDict
+from collections import defaultdict, OrderedDict, namedtuple
 import math
 from datetime import datetime, timedelta, date
 from contextlib import contextmanager
+import copy
 
 # if matplotlib is configured to use latex to display
 if matplotlib.rcParams['text.usetex']:
@@ -589,7 +590,7 @@ class XYBaseWidget(QWidget): # shared by XY and Uptime
         self.y_items = y_items
         master_layout = QHBoxLayout(self)
         
-        left_layout = QVBoxLayout()
+        self.left_layout = QVBoxLayout()
 
         top_left_layout = QHBoxLayout()
         top_left_layout.addWidget(QLabel("X", self))
@@ -612,12 +613,12 @@ class XYBaseWidget(QWidget): # shared by XY and Uptime
             top_left_layout.addWidget(self.y_axis)
 
         self._check_x_axis()
-        left_layout.addLayout(top_left_layout)
+        self.left_layout.addLayout(top_left_layout)
         
         self.stations = StationsWidget(stations, self)
-        left_layout.addWidget(self.stations)
+        self.left_layout.addWidget(self.stations)
 
-        master_layout.addLayout(left_layout)
+        master_layout.addLayout(self.left_layout)
 
         self.sources = SourcesWidget(sources, self)
         master_layout.addWidget(self.sources)
@@ -633,6 +634,8 @@ class UptimeWidget(XYBaseWidget):
         x_items = ["UT", "GST", "LST"]
         y_items = ["Antenna"]
         super().__init__(x_items, y_items, sources, stations, parent)
+        self.slew_button = QCheckBox("Make slew times transparent", self)
+        self.left_layout.insertWidget(1, self.slew_button)
 
 class RADecWidget(QWidget):
     def get_visible(self, calcode):
@@ -1067,6 +1070,10 @@ class MainWidget(QWidget):
             adjust_toolbar(figure, axis_type[0])
             figure.tight_layout()
 
+    # Optionally plot the slew time in transparent color (bar1) and on source
+    # time opaque (bar2). Otherwise, plot the sum of both bars opaque.
+    StationBar = namedtuple("StationBar",
+                            ["left1", "width1", "left2", "width2"])
     def plot_uptime(self):
         with wait_cursor():
             plot_sources = self.uptime.sources.selected_sources()
@@ -1110,40 +1117,56 @@ class MainWidget(QWidget):
             else:
                 raise RuntimeError("Unhandled axis type {}".format(axis_type))
 
-            source_station_left = defaultdict(lambda: defaultdict(list))
-            source_station_width = defaultdict(lambda: defaultdict(list))
+            source_station_bars = defaultdict(lambda: defaultdict(list))
+            
             scans = self.scan_catalog.used()
             for scan_index, scan in enumerate(scans, 
                                               self.scan_catalog.scan_offset):
                 if scan.scnsrc not in alias_source:
                     continue
                 
-                left = time_function(scan.startj)
-                width = scan.stopj - scan.startj
-
+                left1 = time_function(scan.startj)
                 source = alias_source[scan.scnsrc]
-                station_left = source_station_left[source]
-                station_width = source_station_width[source]
                 for station in stations:
                     if station.stascn[scan_index] and \
                        (station.up1[scan_index] == "") and \
                        (station.up2[scan_index] == ""):
-                        station_left[station].append(left)
-                        station_width[station].append(width)
+                        on_source = max(scan.startj, station.tonsrc[scan_index])
+                        width1 = on_source - scan.startj
+                        left2 = time_function(on_source)
+                        width2 = scan.stopj - on_source
+
+                        source_station_bars[source][station].append(
+                            self.StationBar(left1, width1, left2, width2))
 
             legend_line = {}
-            for source, station_left in source_station_left.items():
+            for source, station_bars in source_station_bars.items():
                 axis = axes[plot_sources.index(source)]
                 for station_index, station in enumerate(stations):
-                    if station in station_left:
-                        left = station_left[station]
-                        bottom = [len(stations) - station_index] * len(left)
-                        legend_line[escape_tex(station.station)] = axis.barh(
-                            y=bottom, left=left,
-                            width=source_station_width[source][station],
-                            label=escape_tex(station.station),
-                            **self.uptime.stations.get_properties(
-                                station.station))
+                    if station in station_bars:
+                        bars = station_bars[station]
+                        bottom = [len(stations) - station_index] * len(bars)
+                        if self.uptime.slew_button.isChecked():
+                            bar_properties =self.uptime.stations.get_properties(
+                                station.station)
+                            slew_bar_properties = copy.deepcopy(bar_properties)
+                            slew_bar_properties['alpha'] = 0.3
+                            axis.barh(
+                                y=bottom, left=[bar.left1 for bar in bars],
+                                width=[bar.width1 for bar in bars],
+                                **slew_bar_properties)
+                            legend_line[station.station] = axis.barh(
+                                y=bottom, left=[bar.left2 for bar in bars],
+                                width=[bar.width2 for bar in bars],
+                                label=station.station,
+                                **bar_properties)
+                        else:
+                            legend_line[station.station] = axis.barh(
+                                y=bottom, left=[bar.left1 for bar in bars],
+                                width=[bar.width1 + bar.width2 for bar in bars],
+                                label=station.station,
+                                **self.uptime.stations.get_properties(
+                                    station.station))
             
             start = time_function(scans[0].startj)
             end = time_function(scans[-1].stopj)
