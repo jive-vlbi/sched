@@ -36,6 +36,7 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 ### Dependecies
 
 - Python (>= 3.6).
+- A Fortran compiler.
 - NumPy (>= 1.16).
 - Git.
 
@@ -43,7 +44,18 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 
 **pySCHED** uses PyQt5 for its GUI. Since version 5.12, PyQt5 has external dependencies that are not automatically installed. Many systems have these dependencies installed, see [this discussion page](https://github.com/jive-vlbi/sched/discussions/16) if you see the error message ```Cannot load backend 'Qt5Agg' which requires the 'qt5' interactive framework, as 'headless' is currently running``` for details.
 
+### conda (recommended)
+
+Using `conda` is the easiest installation method. This package manager is available for download [here](https://www.anaconda.com/products/individual). After installing `conda`, download [this](https://github.com/jive-vlbi/sched/raw/python/pySCHED.yaml) YAML file, which describes a conda environment including all mentioned dependencies and **pySCHED**. To use it:
+
+```bash
+conda env create -f pySCHED.yaml
+conda activate pySCHED
+```
+
 ### pip
+
+If you want to install **pySCHED** system wide, `pip` can be used directly:
 
 ```bash
 sudo pip3 install numpy
@@ -55,17 +67,6 @@ sudo pip3 install pythonSCHED
 ```bash
 sudo apt-get install python3-pip
 ```
-
-### conda
-
-Alternatively, if you use `conda`, [this](https://github.com/jive-vlbi/sched/raw/python/pySCHED.yaml) YAML file is a conda environment which includes both `NumPy` and **pySCHED**. To use it:
-
-```bash
-conda env create -f pySCHED.yaml  
-conda activate pySCHED
-```
-
-
 
 ## Update
 
