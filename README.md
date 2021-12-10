@@ -36,12 +36,26 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 ### Dependecies
 
 - Python (>= 3.6).
+- A Fortran compiler.
 - NumPy (>= 1.16).
 - Git.
 
+#### PyQt5 dependencies
 
+**pySCHED** uses PyQt5 for its GUI. Since version 5.12, PyQt5 has external dependencies that are not automatically installed. Many systems have these dependencies installed, see [this discussion page](https://github.com/jive-vlbi/sched/discussions/16) if you see the error message ```Cannot load backend 'Qt5Agg' which requires the 'qt5' interactive framework, as 'headless' is currently running``` for details.
+
+### conda (recommended)
+
+Using `conda` is the easiest installation method. This package manager is available for download [here](https://www.anaconda.com/products/individual). After installing `conda`, download [this](https://github.com/jive-vlbi/sched/raw/python/pySCHED.yaml) YAML file, which describes a conda environment including all mentioned dependencies and **pySCHED**. To use it:
+
+```bash
+conda env create -f pySCHED.yaml
+conda activate pySCHED
+```
 
 ### pip
+
+If you want to install **pySCHED** system wide, `pip` can be used directly:
 
 ```bash
 sudo pip3 install numpy
@@ -53,17 +67,6 @@ sudo pip3 install pythonSCHED
 ```bash
 sudo apt-get install python3-pip
 ```
-
-### conda
-
-Alternatively, if you use `conda`, [this](https://github.com/jive-vlbi/sched/raw/python/pySCHED.yaml) YAML file is a conda environment which includes both `NumPy` and **pySCHED**. To use it:
-
-```bash
-conda env create -f pySCHED.yaml  
-conda activate pySCHED
-```
-
-
 
 ## Update
 
@@ -134,6 +137,10 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.17.0 (2021-03-29)__: Fix deprecations warned for by matplotlib 3.4.
 * __v1.18.0 (2021-05-21)__: Updates to plot UI for smaller desktop windows.
 * __v1.19.0 (2021-07-09)__: Add polarization comment for frequency channels in VEX file.
+* __v1.19.1 (2021-10-19)__: Bug fixes for BITSTREAMS section generation and deprecated functionality in Matplotlib that caused a crash setting axis properties.
+* __v1.20.0 (2021-11-01)__: Add option to display slew times in the uptime plot.
+* __v1.20.1 (2021-11-04)__: Escape TeX special characters in Matplotlib plots titles and labels, when Matplotlib is configured to use LaTex to display text.
+* __v1.21.0 (2021-11-17)__: Fix deprecations warned for by matplotlib 3.5.
 
 
 # Contact
