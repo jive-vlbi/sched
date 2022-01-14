@@ -17,6 +17,7 @@ def getcor(values):
                                              "HAYSTACK",
                                              "BONN",
                                              "JIVE",
+                                             "JIVE_E-VLBI",
                                              "WASHINGTON",
                                              "USNO",
                                              "JPL",
@@ -30,9 +31,10 @@ def getcor(values):
         s.wlog(1, " ** WARNING: {} is not a recognized correlator.".format(
             correl))
         s.wlog(1, "     Recognized correlators are: SOCORRO, VLBADIFX, "
-               "VLBA, HAYSTACK, BONN, JIVE,")
-        s.wlog(1, "       USNO, JPL, BOLOGNA, MITAKA, PENTICTON, LBA, "
-               "FXCORR, ASC, and OTHER")
+               "VLBA, HAYSTACK, BONN,")
+        s.wlog(1, "       JIVE, JIVE_E-VLBI, USNO, JPL, BOLOGNA, MITAKA, "
+               "PENTICTON, LBA, ")
+        s.wlog(1, "       FXCORR, ASC, and OTHER")
         miscor = True
 
     s.schco.coravg = values["coravg"][0]
