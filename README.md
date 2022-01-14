@@ -141,6 +141,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.20.0 (2021-11-01)__: Add option to display slew times in the uptime plot.
 * __v1.20.1 (2021-11-04)__: Escape TeX special characters in Matplotlib plots titles and labels, when Matplotlib is configured to use LaTex to display text.
 * __v1.21.0 (2021-11-17)__: Fix deprecations warned for by matplotlib 3.5.
+* __v1.22.0 (2022-01-14)__: Add 'JIVE-e-VLBI' as possible target correlator.
 
 
 # Contact
