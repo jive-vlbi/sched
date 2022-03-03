@@ -627,9 +627,7 @@ setup(
     setup_requires=["numpy>=1.16",
                     "setuptools>=24.3"],
     install_requires=["numpy>=1.16",
-                      # on some systems pyqt 5.14 tries to build from source 
-                      # and fails
-                      "pyqt5<5.14", 
+                      "pyqt5", 
                       "matplotlib>=3.3.3",
                       "formlayout",
                       "astropy",
