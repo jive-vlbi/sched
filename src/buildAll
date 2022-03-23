@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+from sys import argv
+
+# configurations = (("linux64", "Linux64"), ("linux64gf", "Linux64gfortran"),
+#                   ("linuxSpice64", "LinuxSpice64"), ("linuxsp64gf", "LinuxSpice64gfortran"))
+
+# Here's the list of configurations to build. The previous set was larger, but the infrastructure
+# it depended on is rather obsolete. So, there are just two now: Linux64 and Linux64 with spice;
+# both compiled with gfortran since the older g77 compilers are hard to find. (jhj 2/7/20)
+
+configurations = (("linux64gf", "Linux64gfortran"), ("linuxsp64gf", "LinuxSpice64gfortran"))
+
+if len (argv) > 1:
+    print ("usage: buildAll")
+    print ("       Builds all of the various linux configurations.")
+    print ("       Files are located in subdirectories below bin.")
+    print ("       Current linux configurations are:")
+    for a,b in configurations:
+        print ("           {0} (--> bin/{1})".format (b, a))
+    print ("\n       OSX builds have to be done elsewhere and copied into place.")
+    exit (1)
+
+from subprocess import call, check_call, check_output, CalledProcessError
+from os import chdir, getcwd, environ, strerror
+
+PgplotDir="PGPLOT_DIR"
+
+if PgplotDir not in environ or len(environ [PgplotDir]) == 0:
+    environ [PgplotDir] = "/usr/lib"
+    print ("PGPLOT_DIR not set; using {0}".format (environ [PgplotDir]))
+
+pgplotDir = environ [PgplotDir]
+    
+          
+result = []
+sourceDirectory=getcwd()
+
+for directory, suffix in configurations:
+
+    try:
+
+        chdir (sourceDirectory)
+        print ("\n +++ Starting build of {0}".format (suffix))
+        check_call ("mkdir -p ../bin/{0}".format (directory), shell=True)
+        check_call ("./configure{0}".format(suffix), shell=True)
+        check_call ("make clean", shell=True)
+        check_call ("make", shell=True)
+        output = check_output ("ls -l ../bin/{0}/sched".format (directory), shell=True)
+        chdir ("../examples")
+        call ("./Verify {0}".format (directory), shell=True)
+        n = check_output ("grep -c -i error testruns.out", shell=True)
+        if int(n) > 5:
+            result.append ("*** Verify failed for {0}".format (suffix, output.decode ("utf-8").rstrip()))
+        else:
+            result.append ("Successfully created {0}: {1}".format (suffix, output.decode ("utf-8").rstrip()))
+        chdir (sourceDirectory)
+        check_call ("make clean", shell=True)
+        print (" ---\n")
+
+    except CalledProcessError as e:
+
+        message = "{0} failed: ({1}) {2}".format (e.cmd, e.returncode, strerror (e.returncode))
+        result.append ("Failed to create {0}: {1}".format (suffix, message))
+        print ("\n*** ERROR: {0}:\n{1}\n".format (message, e))
+        continue
+
+print ("\nSummary:\n")
+for r in result:
+    print ("--> {0}".format (r))

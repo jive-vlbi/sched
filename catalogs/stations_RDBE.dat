@@ -1,0 +1,1725 @@
+!  Stations Catalog stations_RDBE.dat for SCHED.
+!
+!     This is the verion of the stations catalog for use with the 
+!     digital data aquisition systems.  On the VLBA, this means 
+!     the RDBE, with 2 RDBE's per station.  On many other stations, 
+!     this will be the DBBC.
+!
+!     Do not modify the standard copy of stations_RDBE.dat directly.  It is 
+!     the combination of a number of "Master" files.  See proceedure 
+!     Update to see what is involved.  Users making a special version
+!     can modify private versions of stations_RDBE.dat at will.
+!
+!  INPUT PARAMETERS:
+!      Parm   Note  Description
+!     VERSION       Catalog version (Actually the date Update was run).
+!     STATION    3  Station name.
+!     STCODE        Station code.  Usually 2 letters.  Used for scheduling.
+!     DBNAME     1  Station name in VLBA correlator and geodetic station lists.
+!     DBCODE     1  Station code used in VLBA correlator data base.
+
+!     FRAME         Source of the solution providing station coordinates.
+!     ELEV       2  Site elevation above mean sea level or geocentric radius.
+!     LAT        2  Station latitude.
+!     LONG       2  Station longitude.
+!     ZALIM         Zenith angle limit.
+!     X          2  Station X coordinate.
+!     Y          2  Station Y coordinate.
+!     Z          2  Station X coordinate.
+!     DXDT          Rate of change of X coordinate (continental drift).
+!     DYDT          Ditto for Y coordinate.
+!     DZDT          Ditto for Z coordinate.
+!     EPOCH         Time of zero offset from X,Y,Z.
+!     DESCRIP       Any text.
+
+!     CONTROL       Type of control file.
+!     DAR           Type of data aquisition rack.
+!     RECORDER      Type of tape recorder.
+!     NDRIVES       Number of recorders at the site.
+!     NHEADS        Number of recording head stacks on each recorder.
+!     DISK          Type of disk system like MARK5A. Can have tape and disk.
+!     DISC          Alternative spelling of DISK.
+!     MEDIADEF      Default media - useful when there is a choice.
+!     NBBC          Number of baseband converters.
+!     DBBCVER       Version of the DBBC.
+
+!     HOR_AZ        A list of azimuths at which the horizon is measured.
+!     HOR_EL        The horizon elevation at the above azimuths.
+
+!     AX1LIM        Slew limits for first axis for several regions.
+!     AX2LIM        Slew limits for the second axis in the same regions.
+!     AX1RATE       The first axis slew rate.
+!     AX2RATE       The second axis slew rate.
+!     AX1ACC        Acceleration in deg/s/s, first axis
+!     AX2ACC        Acceleration in deg/s/s, second axis
+!     MOUNT         The mount type as used by SCHED.
+!     AXISTYPE   1  The mount type according to the VLBA correlator database.
+!     AXISOFF       The offset between the axes.
+
+!     TSETTLE       Extra time required for source change beyond dist/rate.
+!     MINSETUP      Minimum time between scans when using DWELL.
+!     TSCAL         Indicates how Tsys are done (gap, continuous)
+!     MAXSRCHR      Maximum number of sources (slews) per hour.
+!     TLEVSET       Time needed for first scan of setup for level setting.
+
+!     ENDCAT
+!  
+!   NOTES:
+!     1.  These items appear redundant with STCODE, STATION, and MOUNT, but
+!         reflect the contents of the VLBA correlator data base which can
+!         be, and often is, different from what is used in SCHED for 
+!         scheduling.  Often this difference reflects the refusal by the
+!         array schedulers to specify before observe time which specific 
+!         antenna is going to be used for single dish observations at places 
+!         like the VLA and Westerbork.  Therefore STCODE does not contain
+!         this information.  But the correlator must know and has separate
+!         database entries for each pad (gets which was used from the log).
+!         AXISTYPE is there as a consistency check.  SCHED users do not 
+!         need to specify DBCODE, DBNAME, or AXISTYPE if providing their 
+!         own catalog for SCHED.
+!     2.  At least one of (ELEV, LAT, LONG) or (X, Y, Z) must be provided.
+!         It is a bad idea to provide both.  SCHED will calculate the 
+!         missing one from the one provided.  Note if ELEV is large, 
+!         (ELEV, LAT, LONG) are treated as geocentric.  If it is small,
+!         they are treated as geodetic.
+!     3.  *** WARNING: SCHED uses the first 4 characters in many places 
+!         to detect a true VLBA station.  Those characters should only be VLBA
+!         if all the hardware all the way up the antenna is VLBA type.
+!
+!  ------------------------------------------------------------------
+!   HISTORY  (rather incomplete)
+!
+!  May. 12, 1989 - VLBA stations updated to VLBA Memo 644 (done later?)
+!  Feb.  3, 1994 - Update to Barry Clark station codes.
+!  Jan.  5, 1993 - New station codes and SN50 control.
+!                  Codes are the ones recommended by Porcas except for
+!                  a few single letter codes and a few 3 letter codes for DSN.
+!  Dec.  5, 1994 - Remove HCRK control type.  
+!  Jan. 17, 1995 - Added VLBA horizon information (150K limit). RCW 
+!  Nov. 18, 1995   Added VLBA mount information. RCW
+!  Feb. 15, 1996 - Add slew information for many sites. RCW
+!                - Make station names consistent with pc-sched and sked. RCW
+!                - pc-sched and sked catalogs don't agree on all parameters.
+!                - This whole area needs help.
+!  Dec.  2, 1996 - Add some Japanese stations.  Note in last months various
+!                  parameters like DAR, RECORDER etc were added.
+!  Mar. 14, 1997 - Merge with "huibstat.dat" to include VEX and 
+!                  Mark IV info. RCW.  Huibstat.dat from Huib vanLangevelde.
+!  Mar. 25, 1997 - Incorporate changes to EVN etc stations from Huib.
+!  Mar. 25, 1997 - Split into rcwstat.dat and huibstat.dat for maintenance.
+!                  From now on, stations.dat is the two catted together.
+!                  Do not modify it directly.
+!  Oct.     1997 - More splits - to stations_APT.dat, stations_DSN.dat,
+!                  stations_US.dat, stations_geodesy.dat, stations_EVN.dat,
+!                  and stations_mm.dat.
+!  Nov.  5, 1997 - Add some S2 entries for Green Bank, Arecibo ...
+!  Feb. 25, 1998 - Setting up to get station locations from correlator 
+!                  data base.
+!  --            - Probably did not document a bunch of changes.
+!  Jan. 23, 2001 - Point ARECIBO position to locations.dat.  RCW
+!  Apr. 23, 2001 - More Arecibo information prior to test.  RCW.
+!  Oct. 15,16 2001 - Fix some Arecibo stuff.
+!  Dec. 28, 2001 - Increase TSETTLE from 2 to 6 sec for VLBA based on
+!                  experience with 7mm Phase referencing.  RCW
+!  Apr. 26, 2002 - GBT slew rates.  Other GBT and Arec stuff changed
+!                  earlier.  RCW
+!  Feb. 22, 2003 - Accelerations.  Start Mark 5.
+!  Apr. 03, 2003 - MINSETUP added.
+!  Apr. 04, 2003 - VLBA TSETTLE reduced to 4 compensating for 
+!                  acceleration time.
+!  May. 04, 2004 - GBT TSETTLE set to 20 after BK100 experience.
+!  Nov. 08, 2006 - Switching most stations to Mark5.
+!  Dec. 04, 2006 - Add Westford.
+!  Oct. 12, 2011 - RDBE version.  
+!  Nov. 08, 2012 - RDBE2 version.
+!  Oct. 31, 2013 - The RDBE version is now for 2 RDBEs and there is no
+!                  separate RDBE2 version.  In Update, add all the
+!                  non-VLBA stations to the RDBE version.
+!
+!
+
+!  --  This file created by Update.  Do not edit.  --
+!  VERSION is the date and time when this catalog was
+!  assembled from the master subcatalogs.
+ 
+ VERSION = "2018Sep07-20:14:11"
+
+!  This is updated for SCHED 11.1.
+!  =====================================================================
+!  The following are US stations not in the DSN and not primarily used
+!  for mm VLBI.  This version of the catalog is for use on schedules
+!  using the dual RDBEs and Mark5C.  Some of the equipment specs differ
+!  from the Mark5A standard catalog but this has entirely replaced
+!  the single RDBE version as all VLBA stations now have 2 RDBEs.
+!  These stations are maintained in file stations_RDBE_US.dat.
+!  For now, it is the HSA antennas.
+!  =====================================================================
+!  Remove tapes from VLBA  Oct. 19, 2006.  RCW
+!
+!  Adjust slew rates according to measurements  April 29, 2010. RCW
+!  The rates are based on SCHED slew distance calculations and the
+!  flags from the on-line system.  Software and data are in RCW
+!  code area under VLBA_Test/SlewTest.  The plots of slew rates 
+!  are strongly curved for short slews if the settling time number
+!  is wrong so this was a good way to determine that value.  It is
+!  axis dependent, with the elevation taking longer.  The numbers
+!  in the program are TSETTLE plus 2 seconds because the simple 
+!  program does not explicitly take into account acceleration.
+!  Generically use 6 seconds for TSETTLE which is safe for dwell 
+!  times.  Some day, allow different values for different axes.
+!  Note that the nominal VLBA rates are AX1RATE=90 AX2RATE=30.
+!
+!  Recall that TSETTLE is meant to be the time taken after arriving at
+!  source before the beginning of good data.  MINSETUP is the minimum
+!  time required to set up a scan.  This can overlap with slewing. 
+!  TLEVSET is the time to perform the VLBA or VLA "set-and-remember"
+!  setting of the analog levels before the samplers in the RDBE and
+!  WIDAR systems.  This only happens for the first time the setup
+!  is encountered and can overlap with actual slewing.  TLEVSET added
+!  Nov. 2, 2012.  RCW.
+!
+!  Making the dual RDBE version the standard RDBE version, Oct. 31, 2013. RCW
+!
+  STATION=VLBA_PT   STCODE=Pt  CONTROL=VLBA 
+    DBNAME = PIETOWN
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=82.3 AX2RATE=29.3
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5 DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! PT    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 60, 65, 70, 75, 80, 85,165,170,180,185,190,195,
+             200,240,245,250,255,265,270,275,280,285,360
+    HOR_EL =   2,  2,  2,  3,  3,  2,  3,  2,  2,  3,  3,  4,  4,  3,
+               4,  4,  3,  4,  3,  3,  4,  3,  3,  2,  2
+  / 
+  STATION=VLBA_KP   STCODE=Kp  CONTROL=VLBA 
+    DBNAME = KP-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=80.8 AX2RATE=29.4
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! KP    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95,105,
+             110,115,120,150,155,165,170,180,185,215,220,225,230,235,
+             240,255,260,265,270,360
+    HOR_EL =   2,  2,  2,  5,  6,  7,  7,  8,  8,  9,  6,  3,  2,  2,
+               3,  3,  2,  2,  3,  3,  2,  2,  3,  3,  4,  4,  5,  5,
+               4,  4,  3,  3,  2,  2
+  / 
+  STATION=VLBA_LA   STCODE=La  CONTROL=VLBA 
+    DBNAME = LA-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=82.0 AX2RATE=29.5
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! LA    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 75, 80, 85,130,135,145,150,250,255,300,305,315,
+             320,340,345,360
+    HOR_EL =   2,  2,  2,  3,  2,  2,  3,  3,  2,  2,  3,  3,  4,  4,
+               3,  3,  2,  2
+  / 
+  STATION=VLBA_BR   STCODE=Br  CONTROL=VLBA 
+    DBNAME = BR-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=83.6 AX2RATE=29.0
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! BR    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 10, 15, 25, 30, 40, 45, 70, 75,120,125,130,135,
+             155,160,185,190,195,220,225,235,240,245,250,255,265,270,
+             275,300,305,310,315,330,335,340,345,350,360
+    HOR_EL =   2,  2,  3,  2,  2,  3,  3,  4,  4,  5,  5,  4,  4,  3,
+               3,  2,  2,  3,  4,  4,  3,  3,  4,  4,  5,  6,  6,  5,
+               6,  6,  5,  6,  5,  5,  4,  4,  3,  2,  2
+  / 
+  STATION=VLBA_FD   STCODE=Fd  CONTROL=VLBA 
+    DBNAME = FD-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=84.3 AX2RATE=30.5
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    AX1ACC=0.75  AX2ACC=0.25
+    ! FD    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 10, 15, 20, 30, 35, 40, 45, 50, 55, 60, 65, 70,
+              75, 80, 85, 90, 95,100,105,110,115,150,155,160,220,225,
+             230,240,245,250,255,260,265,270,275,280,285,290,295,300,
+             305,310,315,325,330,335,340,345,360
+    HOR_EL =   5,  4,  5,  5,  3,  3,  2,  3,  2,  2,  3,  4,  7,  5,
+               4,  4,  5,  6,  6,  5,  4,  3,  2,  2,  3,  2,  2,  4,
+               2,  2,  3,  3,  4,  5,  5,  4,  4,  3,  3,  2,  2,  3,
+               4,  5,  4,  4,  5,  6,  6,  5,  5
+  / 
+  STATION=VLBA_SC   STCODE=Sc  CONTROL=VLBA 
+    DBNAME = SC-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=84.5 AX2RATE=28.5
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! SC    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 10, 20, 25, 40, 45, 50, 55, 60, 65, 70, 75, 80,
+              85, 95,100,105,110,115,120,125,130,135,140,145,150,155,
+             160,165,175,180,185,190,200,205,210,215,220,230,235,240,
+             245,250,260,265,270,275,280,360
+    HOR_EL =   2,  2,  3,  3,  2,  2,  3,  3,  4,  6,  6,  8,  9,  9,
+               8,  8,  9, 10, 12, 14, 16, 16, 15, 13, 13, 12, 11, 11,
+              10,  9,  9, 11, 13, 14, 14, 15, 13, 12, 10, 10,  9,  8,
+               8,  7,  7,  6,  4,  3,  2,  2
+  / 
+  STATION=VLBA_NL   STCODE=Nl  CONTROL=VLBA 
+    DBNAME = NL-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=82.5 AX2RATE=28.7
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! NL    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 75, 80, 85,100,105,110,115,120,125,130,135,140,
+             145,150,155,160,165,170,190,195,200,220,225,360
+    HOR_EL =   2,  2,  2,  3,  6,  6,  8,  7,  7,  6,  7,  7,  6,  6,
+               7,  7,  6,  5,  4,  3,  3,  2,  3,  3,  2,  2
+  / 
+  STATION=VLBA_OV   STCODE=Ov  CONTROL=VLBA
+    DBNAME = OV-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=84.5 AX2RATE=28.7
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! OV    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 65, 70,
+              75, 80, 85, 90, 95,100,105,110,115,120,125,130,145,150,
+             155,175,180,185,190,195,200,205,210,230,235,240,245,250,
+             260,265,270,280,285,290,295,300,305,310,350,355,360
+    HOR_EL =   3,  5,  5,  7,  9, 10, 12, 13, 13, 14, 15, 15, 13, 12,
+              11, 10,  9,  8,  7,  6,  6,  5,  4,  3,  3,  4,  4,  3,
+               2,  2,  3,  3,  4,  5,  5,  6,  7,  7,  6,  7,  8,  9,
+               9,  8,  7,  7,  5,  4,  4,  3,  3,  2,  2,  3,  3
+  / 
+  STATION=VLBA_MK   STCODE=Mk  CONTROL=VLBA 
+    DBNAME = MK-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=86.8 AX2RATE=28.3
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! MK    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 10, 15, 20,120,125,130,135,140,145,150,155,160,
+             165,170,175,185,190,195,200,205,210,215,220,255,260,270,
+             275,280,285,290,295,300,305,310,315,320,325,330,335,340,
+             345,350,355,360
+    HOR_EL =   5,  4,  3,  3,  2,  2,  4,  5,  5,  4,  4,  6,  8,  8,
+              11, 12, 13, 13, 11, 11,  9,  7,  5,  3,  2,  2,  3,  3,
+               5,  6,  8, 10, 12, 14, 12, 11,  9, 10, 11, 10, 12, 14,
+              12,  9,  7,  5
+  / 
+  STATION=VLBA_HN   STCODE=Hn  CONTROL=VLBA 
+    DBNAME = HN-VLBA
+    MOUNT=ALTAZ  AX1LIM=-90,450 AX2LIM=2.25,90 AX1RATE=81.3 AX2RATE=26.7
+    AX1ACC=0.75  AX2ACC=0.25
+    TSETTLE=6 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16 
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    ! HN    From 150 K Ts line by Beasley and Medcalf  Aug 1992.
+    HOR_AZ =   0,  5, 30, 35, 40, 45, 65, 70, 80, 85, 90, 95,100,105,
+             110,115,120,125,130,135,140,145,150,155,160,165,170,190,
+             195,200,205,210,220,225,230,235,240,245,250,255,270,275,
+             290,295,315,320,325,330,335,345,350,355,360
+    HOR_EL =   6,  6,  6,  4,  5,  4,  4,  5,  5,  4,  5,  4,  4,  5,
+               3,  4,  4,  5,  4,  6,  5,  7,  7,  5,  3,  5,  4,  4,
+               2,  5,  5,  6,  6,  5,  6,  4,  5,  5,  4,  5,  5,  4,
+               4,  5,  5,  6,  5,  5,  6,  6,  5,  5,  6
+   / 
+
+! GBT:
+
+! Change DBNAME to match appropriate entry in locations.dat  Sep. 23, 2009
+! Change el limit based on Ghigo email of Aug 16, 2010.
+  STATION=GBT_VLBA   STCODE=Gb  CONTROL=VLBA
+    DBNAME = GBT-VLBA
+    MOUNT = ALTAZ AX1RATE=36  AX2RATE=18  AX1ACC=0.05  AX2ACC=0.05
+    AX1LIM= -90, 450    AX2LIM= 6, 88 
+!     TSETTLE based on BK110 experience.  This should be monitored.
+!     TLEVSET based on the needs of the RDBE.
+    TSETTLE = 20.0 TLEVSET=5   MINSETUP = 10
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    DAR=RDBE2 NBBC=16 ! RECORDER=VLBA  NDRIVES=2  NHEADS=1 
+   / 
+  STATION=GBT_COLD   STCODE=Gb  CONTROL=VLBA
+!   Special version of GBT entry with slow azimuth slew to use when 
+!   the temperature is below 17 F (-8.3C).  This happens mainly in
+!   Dec, Jan, and Feb and mainly at night.  
+! Change DBNAME to match appropriate entry in locations.dat  Jan. 23, 2009
+! Change el limit based on Ghigo email of Aug 16, 2010.
+    DBNAME = GBT-VLBA
+    MOUNT = ALTAZ AX1RATE=17  AX2RATE=18  AX1ACC=0.05  AX2ACC=0.05
+    AX1LIM= -90, 450    AX2LIM= 6, 88 
+!     TSETTLE based on BK110 experience.  This should be monitored.
+!     TLEVSET based on the needs of the RDBE.
+    TSETTLE = 20.0 TLEVSET=5   MINSETUP = 10
+    DISK=MARK6   MEDIADEF=DISK    TSCAL=CONT
+    DAR=RDBE2 NBBC=16 ! RECORDER=VLBA  NDRIVES=2  NHEADS=1 
+   / 
+!
+!   Other stations.
+!
+!  Put in RDBE2 even though I don't know that they are hooked up.
+!  If change back to RDBE, some examples may need fixes.
+!  STATION=ARECIBO   STCODE=Ar  CONTROL=VEX
+!    DBNAME = ARECIBO
+!    MOUNT=ALTAZ AX1RATE=25 AX2RATE=2.5 AX1LIM=0,720 AX2LIM=70.3,88.8
+!     TLEVSET based on the needs of the RDBE.
+!    TSETTLE = 7 TLEVSET=5 AX1ACC = 0.1  AX2ACC = 0.025
+!    DISK=MARK5C   MEDIADEF=DISK    TSCAL=CONT
+!    DAR=RDBE2  NBBC=16 !  RECORDER=VLBA4  NDRIVES=1  NHEADS=2  
+!   / 
+!! Arecibo 12m info from Phil Perillat (25 oct 2021)
+  STATION=ARECIBOC STCODE=Ac CONTROL=VEX
+      DBNAME = ARECIBOC
+     MOUNT=ALTAZ AX1RATE=300 AX2RATE=75 AX1LIM=-180,360 AX2LIM=6.0,88.0
+! TLEVSET based on the needs of the RDBE.
+     TSETTLE = 3 TLEVSET=5 AX1ACC = 1.3 AX2ACC = 1.3
+     DISK=MARK5C MEDIADEF=DISK TSCAL=GAP ! TSCAL=CONT
+     DAR=RDBE2 NBBC=8 ! RECORDER=VLBA4 NDRIVES=1 NHEADS=2 /
+!
+!  I had EB_VLBA here until Nov. 8, 2013.  That is now superceded by
+!  the antennas list in the JIVE supported area.
+!
+!
+!   VLA  WIDAR correlator.  VEX control.  Mark5C recorder.  DAR=WIDAR
+!
+  STATION=VLA       STCODE=Y   CONTROL=VEX
+     DBNAME = VLA
+     MOUNT=ALTAZ    AX1LIM=-85,445 AX2LIM=8,90 AX1RATE=40 AX2RATE=20
+     AX1ACC=2.2  AX2ACC=2.2  ! Broilo Dec. 5, 2005
+!       AX1ACC=1.5  AX2ACC=1.0  source?  From before Dec 2005.
+     TSETTLE = 6 TLEVSET=60 DAR=WIDAR  NBBC=8 
+     DISK=MARK5C   MEDIADEF=DISK    TSCAL=CONT
+     HOR_AZ = 0,360  HOR_EL = 8,8  !  Horizon not blocked to El limit.
+   / 
+  STATION=VLA1      STCODE=Y   CONTROL=VEX
+!    The coordinates are for pad E8 which will often, but not always,
+!    be the one used.  At 7mm, some other pad must be used because 
+!    antenna 9, on pad E8, does not have a receiver.
+     DBNAME = VLA_E8
+     MOUNT=ALTAZ    AX1LIM=-85,445 AX2LIM=8,90 AX1RATE=40 AX2RATE=20
+     AX1ACC=2.2  AX2ACC=2.2  ! Broilo Dec. 5, 2005
+     TSETTLE = 6 TLEVSET=60  DAR=WIDAR  NBBC=8 
+     DISK=MARK5C   MEDIADEF=DISK    TSCAL=CONT
+     HOR_AZ = 0,360  HOR_EL = 8,8  !  Horizon not blocked to El limit.
+   / 
+!     Old TSETTLE = 15  Below based on Ulvestad report from bu030a
+!     He had to add 12s (actually between 8 and 14).  
+!     Acceleration added since then and adds about 1s, so add 11.
+  STATION=VLA27     STCODE=Y  CONTROL=VEX
+     DBNAME = VLA
+     MOUNT=ALTAZ  AX1LIM=-85,445 AX2LIM=8,90 AX1RATE=40 AX2RATE=20
+     AX1ACC=2.2  AX2ACC=2.2  ! Broilo Dec. 5, 2005
+     TSETTLE = 6 TLEVSET=60  DAR=WIDAR  NBBC=8 
+     DISK=MARK5C   MEDIADEF=DISK    TSCAL=CONT
+     HOR_AZ = 0,360  HOR_EL = 8,8  !  Horizon not blocked to El limit.
+   / 
+!  
+!  =====================================================================
+!  The following entries in the SCHED stations catalog are for EVN
+!  antennas.
+!  These stations are maintained in file stations_EVN.dat.
+!  =====================================================================
+!
+!  Stations below are maintained by Huib van Langevelde.
+!  Stations below are maintained by Cormac Reynolds from 30Nov00.
+!  Stations below are maintained by Antonis Polatidis+ from Mar08
+!  Stations below are maintained by Friso Olnon (schedsvn) from Sep09
+!
+!    Do not modify stations.dat directly.  It is a combination of
+!    rcwstat.dat and huibstat.dat and any changes would be lost at the
+!    next update.
+!
+!  231097: Sh elevation limits
+!  211097: updates by Phil Edwards VSOG (hart_S2, Shang_s2)
+!  170997: changed to stations_EVN.dat (added Hart and Puschino)
+!  300797: latest version when starting numbering.
+!  250298: get positions from VLBA correlator data base (RCW).
+!  110599: Hart to MkIV (Huib) added comments from Quick 220699
+!  280300: Urumqi is a MkIV (soon)
+!  280300: Remove comma after Urumqi and set EB to 20 deg/min az.
+!  301100: Responsibility for maintenance passed to Cormac Reynolds.
+!  050701: TSETTLE for Ef changed from 2 to 15 secs.
+!  021001: NHEADS=2 for ONSALA60 and EFLSBERG
+!  031001: NBBC=8 for Mh (until replacements arrive).
+!  220102: recorder=VLBA4 for SH/YB
+!  030402: Update for 2 head recording, ShUrHhMcWbJbNtYbCmOnRo. Update JB1
+!       slew rates.
+!  140502: Cm DBNAME changed to match new locations.dat name.
+!  140903: Added accelerations for Ef,Cm,Jb1,Jb2,Mc,Mh,Hh
+!  260903: Added accelerations for Tr
+!  070104: Added acc for Wb
+!  230905: Tsettle for Jb2 from 20 to 2 secs (email from Gunn)
+!  270905: Shanghai reduced to 8 BBCs (email from An Tao)
+!  151105: Added DISK=MARK5A and MEDIADEF=DISK for EVN stations. Updated Torun
+!       TSETTLE (email from Borkowski)
+!  221105: Update Shanghai (email from An Tao)
+!  251105: Update Metsahovi (email Mujunen)
+!  080206: Onsala horizon
+!  061120: Added Mark5 for Eb and a few geodetics
+!  061122: EB_VLBA ndrives=2 and change Defford to a VLBA4
+!  070228: PV and PdB now have disk as default medium
+!  070820: Added Darnhall
+!  070822: Removed tape info (RECORDER, NDRIVES, NHEADS) from most stations.
+!  080510: Added new telescope YEBES40M, code YS, Mark5B but listed Mark5A
+!          Moved YEBES Yb to "Stations no longer used" and comment it out
+!  080610: Sh back to 14BBCs
+!  081105: Added MERLIN telescopes from JIVE database 
+!          Kept old info of Defford on "Stations no longer used" TSETTLE=2
+!          Await confirmation from JB people
+!  081105: Comment out NOTO_S2, no S2 in Noto
+!  081105: Added QUASAR stations - Sv Ba Zc
+!  090511: Added KUNMING station
+!  090706: Added BEIJING station (MIYUN50 to be?)
+!  090708: Modified AX* for SHANGHAI, URUMQI, KUNMING and BEIJING
+!  090924: Added Robledo 34m
+!  090924: Renamed BEIJING to MIYUN
+!  091015: Moved Robledo 34m to stations_DSN.dat
+!  011102: Updated Onsala 20m and 25m parameters  
+!  100722: Commenting out stations with newly prohibited control types
+!          or recorder types.  RCW.
+!  120613: Reduce Onsala60 elevation limit to 87 degress (was 88). DMS
+!  130404: Add HART15M. CR
+!  131106: Replacing EB_VLBA and EFLSBERG entries.
+!  131206: Renaming EB_VLBA to EB_RDBE.  RCW.
+!  140210: HART 26m now has a DBBC. CR
+!  140922: EB_RDBE changed to DAR=RDBE2.  RCW
+!  ------------------------------------------------------------------
+!  *************  WARNING  *******************
+!   SCHED uses the first 4 characters in many places to detect
+!   a true VLBA station.  Those characters should only be VLBA
+!   if all the hardware all the way up the antenna is VLBA type.
+!
+!  ------------------------------------------------------------------
+!
+!  STATION CATALOG entries for the Effelsberg DBBC and RDBE replaced
+! using new entries supplied by Uwe Bach
+!
+  STATION=EB_RDBE   STCODE=Eb  CONTROL=VEX
+    !   Note use "EFLSBERG" for the DBBC.
+    DBNAME = EFLSBERG
+    MOUNT=ALTAZ AX1RATE=25 AX2RATE=15 AX1LIM=34,480 AX2LIM=9,89
+    TSETTLE=16  DAR=RDBE2 TSCAL=CONT
+    NBBC=8 AX1ACC=0.018 AX2ACC=0.018
+    DISK=MARK5C MEDIADEF=DISK
+    !  The +10K over nominal Tsys horizon at 6cm.
+    !  Measured and send by Uwe Bach Jul 2013.
+    HOR_AZ =  0, 10, 20, 30, 40, 50, 60, 70, 80, 90,100,110,120,130,140,
+            150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,
+            300,310,320,330,340,350,360
+    HOR_EL = 11, 13, 16, 19, 21, 21, 21, 20, 18, 15, 16, 16, 15, 15, 13,
+              8,  7,  7,  7,  7,  9, 11, 11, 11, 10,  9,  8, 12, 14, 14,
+             14, 14, 13,  8,  7,  8, 11
+   / 
+!
+!!! out-station DAR=NONE to enable 64MHz subbands
+  STATION=CAMBG32M  STCODE=Cm  CONTROL=VEX
+!   CR changed DAR 12Jan01, changed Recorder 03Apr02.
+    ! slew rates updated from P. Burgess  (see: 
+    ! newton.jb.man.ac.uk/slews.htm)
+    ! Settle time updated from Bob Campbell email
+!!! convert to Jb-like DBBC with 5C/VDIF for eMERL outstation in EVN corr
+    DBNAME = CAMB32
+    MOUNT=ALTAZ AX1RATE=40 AX2RATE=20 AX1ACC=0.026 AX2ACC=0.0225
+    AX1LIM=270,685 AX2LIM=2,89
+!    TSETTLE=2 DAR=DBBC  DBBCVER=GEO  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    TSETTLE=2 DAR=VLBA4 ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK
+   /
+  STATION=DARNHALL  STCODE=Da  CONTROL=VEX
+!   added by CR 2007/08/20.  email from Peter Thomasson 2007/08/22. Note that
+! the maximum speed in either axis is reduced by a factor of ~16 if the
+! telescope is within 5 degrees of any limit (not modelled by SCHED).
+    ! Settle time updated from Bob Campbell email
+!!! convert to Jb-like DBBC with 5C/VDIF for eMERL outstation in EVN corr
+    DBNAME = DARNHALL
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+!    TSETTLE=2 DAR=DBBC  DBBCVER=GEO  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    TSETTLE=2 DAR=NONE  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK
+   /
+ STATION=DEFFORD   STCODE=De  CONTROL=VEX
+!   added by RMC 2008/08/26.
+!   slew rates assumed to be same as Darnhall until we hear from JB folk
+    ! Settle time updated from Bob Campbell email
+!!! convert to Jb-like DBBC with 5C/VDIF for eMERL outstation in EVN corr
+    DBNAME = DEFFORD
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+!    TSETTLE=2 DAR=DBBC  DBBCVER=GEO  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    TSETTLE=2 DAR=NONE  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK
+   /
+  STATION=KNOCKIN   STCODE=Kn  CONTROL=VEX
+!   added by RMC 2008/08/26.
+!   knockin = VLA (E-system) dish like darnhall
+    ! Settle time updated from Bob Campbell email
+!!! convert to Jb-like DBBC with 5C/VDIF for eMERL outstation in EVN corr
+    DBNAME = KNOCKIN
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+!    TSETTLE=2 DAR=DBBC  DBBCVER=GEO  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    TSETTLE=2 DAR=NONE  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK
+   /
+  STATION=TABLEY    STCODE=Ta  CONTROL=VEX
+!   added by RMC 2008/08/26.
+!   tabley (==pickmere) = VLA (E-system) dish like darnhall
+    ! Settle time updated from Bob Campbell email
+!!! convert to Jb-like DBBC with 5C/VDIF for eMERL outstation in EVN corr
+    DBNAME = TABLEY
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+!    TSETTLE=2 DAR=DBBC  DBBCVER=GEO  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    TSETTLE=2 DAR=NONE  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK
+   /
+  STATION=PICKMERE  STCODE=Pi  CONTROL=VEX
+!   copied from Tabley, change station name/abbrev, keep loc.dat DBNAME
+!   tabley (==pickmere) = VLA (E-system) dish like darnhall
+    ! Settle time updated from Bob Campbell email
+!!! convert to Jb-like DBBC with 5C/VDIF for eMERL outstation in EVN corr
+    DBNAME = TABLEY
+    MOUNT=ALTAZ AX1RATE=20 AX2RATE=20 AX1ACC=0.016 AX2ACC=0.016
+    AX1LIM=-85,325 AX2LIM=2.5,90
+!    TSETTLE=2 DAR=DBBC  DBBCVER=GEO  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    TSETTLE=2 DAR=NONE  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK
+   /
+  STATION=IRBENE   STCODE=Ir CONTROL=VEX  ZALIM=88.000 
+    DBNAME = IRBENE
+    MOUNT=ALTAZ AX1RATE=120 AX2RATE=120 AX1LIM=-330,330 AX2LIM=5,85
+    TSETTLE=3  DAR=DBBC  DBBCVER=ASTRO ! RECORDER=MKIV  NDRIVES=1  NHEADS=2
+!!! use 5B line if not fila10G (Gbps), use 5C line if fila10G (any rate)
+!    NBBC=16  DISK=MARK5B MEDIADEF=DISK
+    NBBC=16  DISK=MARK5C MEDIADEF=DISK
+  / 
+!
+!   STATION=IRBENE16   STCODE=Ib CONTROL=VEX  ZALIM=88.000 
+!     DBNAME = IRBENE16
+!     MOUNT=ALTAZ AX1RATE=120 AX2RATE=120  AX1LIM=-328,328 AX2LIM=3,90
+!     TSETTLE=3  DAR=DBBC  DBBCVER=ASTRO ! RECORDER=MKIV  NDRIVES=1  NHEADS=2
+! !!! use 5B line if not fila10G (Gbps), use 5C line if fila10G (any rate)
+! !    NBBC=16  DISK=MARK5B MEDIADEF=DISK
+!     NBBC=16  DISK=MARK5C MEDIADEF=DISK
+!   / 
+!
+!  SCHED dies reading the Simeiz input since control=SN50 was 
+!  disallowed.  So commenting the station out until it is fixed.
+!  July 22, 2010 RCW.
+!
+!  STATION=SIMEIZ    STCODE=Sm  CONTROL=SN50
+!   huib 12/9/96 used to be called Crimea
+!    DBNAME = CRIMEA
+!    MOUNT=ALTAZ AX1RATE=30 AX2RATE=18 AX1LIM=332,748 AX2LIM=3,85
+!    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
+!   / 
+! Entry for EFLSBERG updated by DMS 2013-11-06; content supplied by Uwe Bach.
+  STATION=EFLSBERG      STCODE=Ef  CONTROL=VEX
+    !  This is for DBBC.  Use EB_VLBA for the RDBE.
+    !  Uses Ef station code preferred by e-mail Dave Graham 26/11/96
+    !  acceleration from Graham Aug03
+    ! Settling terms update from Uwe Bach
+    DBNAME = EFLSBERG
+    MOUNT=ALTAZ AX1RATE=25 AX2RATE=15 AX1LIM=34,480 AX2LIM=9,89
+    TSETTLE=16 DAR=DBBC DBBCVER=ASTRO TSCAL=CONT
+    NBBC=16 AX1ACC=0.018 AX2ACC=0.018
+    DISK=MARK5C MEDIADEF=DISK
+    !  The +10K over nominal Tsys horizon at 6cm.
+    !  Measured and send by Uwe Bach Jul 2013.
+    HOR_AZ =  0, 10, 20, 30, 40, 50, 60, 70, 80, 90,100,110,120,130,140,
+            150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,
+            300,310,320,330,340,350,360
+    HOR_EL = 11, 13, 16, 19, 21, 21, 21, 20, 18, 15, 16, 16, 15, 15, 13,
+              8,  7,  7,  7,  7,  9, 11, 11, 11, 10,  9,  8, 12, 14, 14,
+             14, 14, 13,  8,  7,  8, 11
+   / 
+  STATION=JODRELL1   STCODE=Jb  CONTROL=VEX
+    DBNAME = JODLMKI
+    ! slew rates updated via Bob Campbell from P. Burgess (see: 
+    ! newton.jb.man.ac.uk/slews.htm)
+! RMC: converted to DBBC for sess.2/15 & DBBCVER=GEO for sess.2/16
+!      and DISK=5C (flexbuff) for sess.1/18
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=8 AX1ACC=0.026 AX2ACC=0.023
+    AX1LIM=-85,325 AX2LIM=3,89
+    TSETTLE=6 DAR=MKIV   ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+    NBBC=14 MAXSRCHR=12.0
+    DISK=MARK5C MEDIADEF=DISK
+   / 
+  STATION=JODRELL2   STCODE=Jb  CONTROL=VEX
+    ! slew rates updated from P. Burgess via Bob Campbell (see: 
+    ! newton.jb.man.ac.uk/slews.htm)
+! RMC: converted to DBBC for sess.2/15 & DBBCVER=GEO for sess.2/16
+!      and DISK=5C (flexbuff) for sess.1/18
+    DBNAME = JB_Mk_2
+    MOUNT=ALTAZ AX1RATE=20.0 AX2RATE=20.0 AX1ACC=0.016 AX2ACC=0.022
+    AX1LIM=-90,330 AX2LIM=1,90
+    TSETTLE=2 DAR=DBBC  DBBCVER=GEO  ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+    TSETTLE=2 DAR=MKIV   ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK
+   / 
+!
+!  To use the Jodrell dishes on the Cm VLBA DAR:
+!
+!  STATION=JB1_VLBA   STCODE=Jv  CONTROL=VEX
+!    DBNAME = JODLMKI
+!    MOUNT=ALTAZ AX1RATE=15 AX2RATE=10 AX1ACC=0.026 AX2ACC=0.023
+!    AX1LIM=-85,325 AX2LIM=3,89
+!    TSETTLE=2 DAR=VLBA4   ! RECORDER=VLBA4   NDRIVES=1  NHEADS=2 
+!    NBBC=14 MAXSRCHR=12.0
+!    DISK=MARK5A MEDIADEF=DISK
+!   / 
+ STATION=JB2_VLBA   STCODE=Jv  CONTROL=VEX
+   DBNAME = JB_Mk_2
+   MOUNT=ALTAZ AX1RATE=20.0 AX2RATE=20.0 AX1ACC=0.034 AX2ACC=0.022
+   AX1LIM=-90,330 AX2LIM=1,90
+   TSETTLE=2 DAR=VLBA4   ! RECORDER=VLBA4   NDRIVES=1  NHEADS=2 
+   NBBC=8 DISK=MARK5A MEDIADEF=DISK
+  / 
+  STATION=MEDICINA  STCODE=Mc  CONTROL=VEX
+!   huib: latest axis information from 96 TWG in Bologna
+! CR: updated from Orlati 8Aug03
+! RMC: converted to DBBC for session 1/15
+    DBNAME = MEDICINA
+    MOUNT=ALTAZ AX1RATE=45 AX2RATE=30 AX1ACC=0.82 AX2ACC=0.31
+    AX1LIM=270,810 AX2LIM=5,88.5
+    TSETTLE=3 DAR=MKIV   ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK
+   / 
+  STATION=METSAHOV  STCODE=Mh  CONTROL=VEX 
+!   huib 12/9/96 previously 'METS'
+!   CR: 15/10/01 previously 'DBNAME=METSHOVI'
+! CR: updated from A.Mujunen 11Aug03
+! CR: NBBC=8 until replacements arrive (30Oct01)
+! RMC: as DBBC: astro2 patching (A[1]=bbc1-4, B[1]=bbc9-12 in astro modes)
+!        thus matches the DBBCVER=GEO pattern as limited to these modes
+    DBNAME = METSAHOV
+    MOUNT=ALTAZ AX1RATE=60 AX2RATE=60 AX1ACC=0.25 AX2ACC=0.25
+    AX1LIM=-55,415 AX2LIM=5,95.0
+    TSETTLE=2 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5B MEDIADEF=DISK
+   / 
+  STATION=NOTO      STCODE=Nt  CONTROL=VEX 
+! RMC: as DBBC; 5C for e-VLBI with FILA10G
+    DBNAME = NOTO
+    MOUNT=ALTAZ AX1RATE=43 AX2RATE=30 AX1LIM=-87,450 AX2LIM=5,85.0
+    TSETTLE=2 DAR=DBBC  DBBCVER=HYBRID  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+!    NBBC=16 DISK=MARK5B MEDIADEF=DISK
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK
+    ! added horizon limits April 2003
+    HOR_AZ = 0,  10, 30, 70, 100, 120, 150, 180, 300, 310, 360
+    HOR_EL = 8,   7,  6,  9, 6.5,   5,   6,   5,    5, 6.5, 7.5
+! email update Cassaro April 2003 (CR 1May03)
+   / 
+!  AGP: 20/09/08 No S2 terminal in Noto 
+!  STATION=NOTO_S2   STCODE=Nt  CONTROL=VEX 
+!    DBNAME = NOTO
+!    MOUNT=ALTAZ AX1RATE=43 AX2RATE=30 AX1LIM=-87,450 AX2LIM=5,85.0
+!    TSETTLE=2 DAR=VLBAG  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=14
+!    ! added horizon limits April 2003
+!    HOR_AZ = 0,  10, 30, 70, 100, 120, 150, 180, 300, 310, 360
+!    HOR_EL = 8,   7,  6,  9, 6.5,   5,   6,   5,    5, 6.5, 7.5
+! email update Cassaro April 2003 (CR 1May03)
+!   /
+!  STATION=SARDINIA    STCODE=Sr  CONTROL=VEX 
+! !!RMC: patching info based on Feb'14 NMEs (L, K)
+!     DBNAME = SARDINIA
+!     MOUNT=ALTAZ AX1RATE=51 AX2RATE=30 AX1LIM=-90,450 AX2LIM=5,85
+!     AX1ACC=0.3 AX2ACC=0.18
+!     TSETTLE=3 DAR=DBBC  DBBCVER=ASTRO ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+!     NBBC=16 DISK=MARK5C MEDIADEF=DISK
+!    / 
+  STATION=ONSALA60    STCODE=O6  CONTROL=VEX
+!RMC: as DBBC
+!RMC: per Jun Yang: enable both Ons60 & Ons85 at same time with diff abbrev
+    DBNAME = ONSALA60
+    MOUNT=ALTAZ AX1RATE=180 AX2RATE=57 AX1LIM=270,810 AX2LIM=5,87
+    AX1ACC=0.3 AX2ACC=0.4
+    TSETTLE=5 DAR=MKIV   ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK
+   /
+  STATION=ONSALA85    STCODE=O8  CONTROL=VEX  ZALIM=88.000
+!RMC: as DBBC
+!RMC: per Jun Yang: enable both Ons60 & Ons85 at same time with diff abbrev
+    DBNAME = ONSALA85
+    MOUNT=EQUAT AX1RATE=17.6 AX2RATE=14.7 AX1LIM=-12,12 AX2LIM=-30,84
+    AX1ACC=0.070 AX2ACC=0.052
+    TSETTLE=5 DAR=MKIV   ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK TSCAL=CONT
+    HOR_AZ = 0
+    HOR_EL = 7.0
+   /
+  STATION=ONSALA20    STCODE=On  CONTROL=VEX
+!RMC: as DBBC
+!RMC: per Jun Yang: regular On abbrev with metric station-name
+    DBNAME = ONSALA60
+    MOUNT=ALTAZ AX1RATE=180 AX2RATE=57 AX1LIM=270,810 AX2LIM=5,87
+    AX1ACC=0.3 AX2ACC=0.4
+    TSETTLE=5 DAR=DBBC  DBBCVER=ASTRO ! RECORDER=MKIV   NDRIVES=1  NHEADS=2
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK  !!! TSCAL=CONT
+   /
+  STATION=ONSALA25    STCODE=On  CONTROL=VEX  ZALIM=88.000
+!RMC: as DBBC
+!RMC: per Jun Yang: regular On abbrev with metric station-name
+    DBNAME = ONSALA85
+    MOUNT=EQUAT AX1RATE=17.6 AX2RATE=14.7 AX1LIM=-12,12 AX2LIM=-30,84
+    AX1ACC=0.070 AX2ACC=0.052
+    TSETTLE=5 DAR=DBBC  DBBCVER=ASTRO ! RECORDER=MKIV   NDRIVES=1  NHEADS=2
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK TSCAL=CONT
+    HOR_AZ = 0
+    HOR_EL = 7.0
+   /
+STATION=SHANGHAI    STCODE=Sh  CONTROL=VEX 
+!RMC: as DBBC per Bo Xia 31mar2016
+    DBNAME = SESHAN25
+    MOUNT=ALTAZ AX1RATE=60 AX2RATE=36 AX1LIM=-70,420 AX2LIM=5,88.5
+    AX1ACC=0.5 AX2ACC=0.28 ! Li Bing 8jul2009
+    TSETTLE=2 DAR=DBBC  DBBCVER=ASTRO  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=16 DISK=MARK5B MEDIADEF=DISK
+   / 
+!  STATION=SHANG_S2    STCODE=Sh  CONTROL=VEX 
+!   huib 21/10/97 inserted S2 recorder. 23/10 elev limits
+!    mode SHANGHAI
+!    DBNAME = SESHAN25
+!    MOUNT=ALTAZ AX1RATE=30 AX2RATE=18 AX1LIM=-78,425 AX2LIM=5,87.0
+!    TSETTLE=2 DAR=VLBAG  RECORDER=S2    NDRIVES=8  NHEADS=1 NBBC=8
+!   / 
+     STATION=TIANMA65    STCODE=T6  CONTROL=VEX 
+!!  initial values for Tianma65 (Shanghai65)
+    DBNAME = TIANMA65
+    MOUNT=ALTAZ AX1RATE=30 AX2RATE=15 AX1LIM=-80,440 AX2LIM=7,88
+!    AX1ACC=0.5 AX2ACC=0.28
+    TSETTLE=2 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5B MEDIADEF=DISK
+   / 
+  STATION=TORUN     STCODE=Tr  CONTROL=VEX
+    ! CR: Slew updated from K.Borkowski, 2003Sep26.
+! RMC: as DBBC (starting sess.2/14)
+!     nbbc=8 because only 2 CORE2 boards; assumes v104_2 firmware
+    DBNAME = TORUN
+    MOUNT=ALTAZ AX1LIM=-80,440 AX2LIM=3,93 
+    AX1RATE=30 AX2RATE=16 AX1ACC=0.05 AX2ACC=0.03
+    TSETTLE=5 DAR=VLBA4 NDRIVES=1 ! RECORDER=VLBA4   NHEADS=2 
+    NBBC=8 DISK=MARK5B MEDIADEF=DISK
+    !   Use tsettle=15 if the goofy 40s one is retracted.
+    HOR_AZ = 0,360  HOR_EL = 2,2  !  Horizon not blocked to this limit
+   /
+!  STATION=TORUN_V     STCODE=Tr  CONTROL=VEX
+!    ! CR: Slew updated from K.Borkowski, 2003Sep26.
+!    DBNAME = TORUN
+!    MOUNT=ALTAZ AX1LIM=-80,440 AX2LIM=3,93 
+!    AX1RATE=30 AX2RATE=16 AX1ACC=0.05 AX2ACC=0.03
+!    TSETTLE=5 DAR=VLBA  ! RECORDER=VLBA  NDRIVES=1  NHEADS=1 
+!    NBBC=8 DISK=MARK5A MEDIADEF=DISK
+!!   Use tsettle=15 if the goofy 40s one is retracted.
+!    HOR_AZ = 0,360  HOR_EL = 2,2  !  Horizon not blocked to this limit
+!   / 
+!  STATION=WETTZELL  STCODE=Wz  CONTROL=SNAP
+!CR: update from Lorant (1Dec00)
+! updated slew rates/limits: C.Ploetz 8may2018; updated to DBBC
+    STATION=WETTZELL  STCODE=Wz  CONTROL=VEX !LORANT
+    DBNAME = WETTZELL
+    MOUNT=ALTAZ AX1RATE=240 AX2RATE=90 AX1LIM=251.5,831 AX2LIM=5,89
+!    TSETTLE=2  DAR=MKIV  ! RECORDER=MKIV  NDRIVES=1  NHEADS=2 
+!    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+    TSETTLE=2  DAR=DBBC  DBBCVER=ASTRO  ! RECORDER=MKIV  NDRIVES=1  NHEADS=2 
+    NBBC=16 DISK=MARK5B MEDIADEF=DISK
+   /
+!Wn info from C.Ploetz 8may2018
+    STATION=WETTZ13N  STCODE=Wn  CONTROL=VEX 
+    DBNAME = WETTZ13N
+    MOUNT=ALTAZ AX1RATE=720 AX2RATE=360 AX1LIM=-90,450 AX2LIM=5,90
+    TSETTLE=2  DAR=MKIV  ! RECORDER=MKIV  NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5B MEDIADEF=DISK
+   / 
+  STATION=WSTRBORK  STCODE=Wb  CONTROL=VEX
+!   updated 26Aug03 by Foley (CR: 7Jan04)
+!!now as DBBC (2 CoMo, 4 core2) , using RT1 (or RT0 for 5cm)
+!!vdif from sess.2/18
+    DBNAME = WB_RT1
+    MOUNT=EQUAT AX1RATE=18 AX2RATE=18 AX1ACC=0.1 AX2ACC=0.1
+    AX1LIM=-6.0,6.0 AX2LIM=-38,90
+    TSETTLE=10  DAR=MKIV   ! RECORDER=MKIV   NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK 
+   / 
+  STATION=YEBES40M       STCODE=Ys   CONTROL=VEX
+! AGP: May 2008 - New station YEBES40M
+! New Azimuth limits from P.de Vicente   (AGP 31Oct08)
+! RMC: as DBBC (starting sess.3/14) & 5C (starting sess.2/16)
+    DBNAME = YEBES40M
+    MOUNT=ALTAZ  AX1LIM=-60,420 AX2LIM=5,88 AX1RATE=60 AX2RATE=60
+    TSETTLE=15 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5C MEDIADEF=DISK
+   /
+  STATION=HART      STCODE=Hh  CONTROL=VEX  ZALIM=82.000
+!Hart to 5C for fila10G in e-
+    DBNAME = HARTRAO
+    MOUNT=EQUAT AX1LIM=-5.86,5.86 AX2LIM=-83,45 
+    AX1RATE=30 AX2RATE=30 AX1ACC=0.071 AX2ACC=0.071
+    TSETTLE=20  DAR=DBBC  DBBCVER=HYBRID
+    NBBC=16 DISK=MARK5C MEDIADEF=DISK
+!! horizon map from JQ (10oct'12)
+HOR_AZ =   0, 10, 14, 19, 23, 26, 29, 31, 55, 63, 72, 95,104,110,
+         114,119,125,131,138,147,159,172,178,182,188,201,213,222,
+         229,235,241,246,250,256,260,264,270,279,285,293,302,311,
+         318,325,331,334,337,341,346,350,360
+HOR_EL =  19, 18, 17, 15, 13, 11,  9,  7,  6,  6,  7,  8,  9, 11,
+          13, 15, 17, 19, 21, 23, 25, 26, 33, 33, 26, 25, 23, 21,
+          19, 17, 15, 13, 11,  9,  7,  5,  3,  3,  5,  7,  9, 10,
+          10,  9,  9, 11, 13, 15, 17, 18, 19
+   / 
+
+  STATION=HART15M     STCODE=Ht    CONTROL=VEX
+!   from Jon Quick. Added by CR 2013-04-04
+    DBNAME = HART15M
+    MOUNT=ALTAZ AX1LIM=-185,275 AX2LIM=2,88
+    AX1RATE=120 AX2RATE=60 AX1ACC=1.3 AX2ACC=1.3
+    TSETTLE=3  DAR=DBBC    DBBCVER=HYBRID
+    NBBC=16 DISK=MARK5B MEDIADEF=DISK   
+    DISK=MARK5B MEDIADEF=DISK   
+  /
+
+!  STATION=HART_S2   STCODE=Hh  CONTROL=VEX  ZALIM=82.000 
+! CR: update from J.Quick (13 Aug 2003)
+!    DBNAME = HARTRAO
+!    MOUNT=EQUAT AX1LIM=-5.86,5.86 AX2LIM=-83,45 
+!    AX1RATE=30 AX2RATE=30 AX1ACC=0.071 AX2ACC=0.071
+!    TSETTLE=20  DAR=NONE   RECORDER=S2     NDRIVES=8  NHEADS=1 NBBC=4 
+!   Will have an S2 with a "aussie" DAR, will have FS9
+!   /   
+!
+!   Other stations.
+!
+!
+!  STATION=USSURISK   STCODE=Us  CONTROL=SNAP
+! mode USSURIYSK
+!    MOUNT=ALTAZ  !    AX1RATE=   AX2RATE=   AX1LIM=        AX2LIM=
+!    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
+!  /
+!
+  STATION=URUMQI     STCODE=Ur  CONTROL=VEX
+! Updated to MkIV 04/2000. I am not sure it is known to
+! geo database. Coordinates are according to station:
+!  X = 228310.726       Y = 4631922.805         Z = 4367063.964
+  DBNAME = URUMQI
+!  other parameters taken to be the same as Shanghai, except MkIV.
+!  MOUNT= ALTAZ AX1RATE=30 AX2RATE=18 AX1LIM=-80,450 AX2LIM=5,88
+   MOUNT= ALTAZ AX1RATE=60 AX2RATE=30 AX1LIM=-80,450 AX2LIM=5,88 ! Yusup Ali  8jul2009
+!!! shift to DBBC after sess.2/17 tests/shift mid-way through
+   AX1ACC=0.5 AX2ACC=0.5 ! Yusup Ali  8jul2009
+   TSETTLE=2  DAR=MKIV  ! RECORDER=MKIV  NDRIVES=1  NHEADS=2 
+   NBBC=14 DISK=MARK5B MEDIADEF=DISK
+   /
+!CR: added from Lorant (1Dec00)
+!LORANT add Matera; many unknowns - MKIV, VLBA4 from Pino Colucci 22/05/00
+  STATION=MATERA    STCODE=Ma  CONTROL=VEX
+ ! Next line shows VLBA Correlator database values not used by SCHED:
+!        DBCODE=MA  DBNAME=MATERA    AXISTYPE='altz'  AXISOFF=  0.0000
+    DBNAME=MATERA 
+!    X=  4641938.78318 Y=   1393003.02605 Z=  4133325.52288
+!    DXDT= -0.00000 DYDT=  0.00000 DZDT=  0.00000 EPOCH=50449
+!    FRAME='?? LORANTS first order estimates '
+    MOUNT=ALTAZ AX1RATE=120 AX2RATE=120 AX1LIM=260,800 AX2LIM=4,88
+    TSETTLE=2 DAR=MKIV   ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+   /
+!
+!  Stations no longer in use.  Keep data in case useful some day.
+!  Beware that there are some (eg OV) with the same station codes
+!  as some others in the active list.
+!
+!  AGP 05112008: Moved here the infor on the YEBES 14m dish STCODE=Yb
+!  so that it is not cunfused with the YEBES40m 
+!  STATION=YEBES       STCODE=Yb   CONTROL=VEX
+!!   Recorder and NHEADs updated from Pablo Vicente, Feb 2002 (CR 3Apr02)
+!    DBNAME = YEBES
+!    MOUNT=ALTAZ  AX1LIM=-354,354 AX2LIM=10,89.9 AX1RATE=60 AX2RATE=60
+!    TSETTLE=15 DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+!    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+!   /
+!
+!  STATION=DWINGELO  STCODE=Dw CONTROL=SNAP  ZALIM=85.000 
+!    ELEV= 6364624.00  LONG=-006:23:48.12    LAT= 52:37:39.36  
+!    TSETTLE=2  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
+!   / 
+!
+!  STATION=PUSCHINO  STCODE=Pu CONTROL=VEX  ZALIM=85.
+!    ! Wild guesses on everything.
+!    ELEV=500  LONG=-37:55:00  LAT=56:00:00   
+!   Changed to S2 by Huib and updated name after e-mail Novikov 20/03/97
+!    TSETTLE=2  DAR=NONE  RECORDER=S2  NDRIVES=8  NHEADS=1 NBBC=14
+!   / 
+!  AGP 051108: Kept previous information for Defford
+!  The only difference is TSETTLE=2 cf TSETTLE=10 in the entires above
+!  Waiting to hear from JB people
+!  STATION=DEFFORD   STCODE=De  CONTROL=SN50  ZALIM=88.0  
+!   Not in correlator data base.
+!    ELEV=      41.0   LONG=02:08:35         LAT=52:06:01    
+!    TSETTLE=2  DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=1 
+!    NBBC=14 DISK=MARK5A MEDIADEF=DISK
+!   /
+
+
+! ================================================
+! The following are mm stations added 15 Nov 2005 
+! ================================================
+  STATION=PICOVEL   STCODE=PV  CONTROL=VEX
+    DBNAME = PICOVEL
+!      X=  5088969.8    Y=  -301682.6    Z=  3825016.0
+    MOUNT=ALTAZ AX1RATE=30 AX2RATE=30 AX1LIM=-90,450 AX2LIM=9,89
+    TSETTLE=2    DAR=VLBA4  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=14 DISK=MARK5A   MEDIADEF=DISK
+   /
+
+ STATION=PDBURE   STCODE=PB  CONTROL=VEX
+ DBNAME = PDBURE
+! Position of Pad W00.
+    X=  4524000.43   Y=  468042.14   Z=  4460309.76
+    MOUNT=ALTAZ AX1RATE=30 AX2RATE=30 AX1LIM=-90,450 AX2LIM=9,89
+    TSETTLE=2    DAR=MKIV  ! RECORDER=VLBA4  NDRIVES=1  NHEADS=2 
+    NBBC=8 DISK=MARK5A   MEDIADEF=DISK
+   /
+!====================================================
+!The following are QUASAR stations (Russia)
+! Should they go to geodecy stations ?
+! Positions from D. Graham (Sep 2008) -- now in normal IVS
+!====================================================
+!
+   STATION=BADARY STCODE=Bd CONTROL=VEX ZALIM=88.0 
+     DBNAME=BADARY
+     MOUNT=ALTAZ  AX1LIM=278,802 AX2LIM=10,80 AX1RATE=60 AX2RATE=30
+     AX1ACC=0.05 AX2ACC=0.05 
+     TSETTLE=5 DAR=R1002 ! RECORDER=VLBA4  NDRIVES=1 NHEADS=2 
+     NBBC=14 DISK=MARK5B  MEDIADEF=DISK
+   /
+   STATION=SVETLOE STCODE=Sv CONTROL=VEX ZALIM=88.0 
+     DBNAME=SVETLOE
+     MOUNT=ALTAZ  AX1LIM=278,802 AX2LIM=10,80 AX1RATE=60 AX2RATE=30
+     AX1ACC=0.05 AX2ACC=0.05
+     TSETTLE=5 DAR=R1002 ! RECORDER=VLBA4 NDRIVES=1 NHEADS=2 
+     NBBC=14  DISK=MARK5B  MEDIADEF=DISK
+   /
+   STATION=ZELENCHK STCODE=Zc CONTROL=VEX ZALIM=88.0 
+   DBNAME=ZELENCHK
+     MOUNT=ALTAZ  AX1LIM=278,802 AX2LIM=10,80 AX1RATE=60 AX2RATE=30
+     AX1ACC=0.05 AX2ACC=0.05 
+     TSETTLE=5      DAR=R1002 ! RECORDER=VLBA4 NDRIVES=1 NHEADS=2 
+     NBBC=14 DISK=MARK5B   MEDIADEF=DISK
+   /
+! ===================================================
+! The following are Chinese stations added 2 Sep 2009
+! ===================================================
+!
+  STATION=KUNMING    STCODE=Km  CONTROL=VEX
+!  info from Hao Longfei  11may2009 & 10oct2015
+  DBNAME = KUNMING
+   MOUNT= ALTAZ AX1RATE=60 AX2RATE=42 AX1LIM=-90,450 AX2LIM=5,88
+   AX1ACC=0.5 AX2ACC=0.3 ! Hao Longfei  8jul2009
+   TSETTLE=2  DAR=VLBA4  ! RECORDER=MKIV  NDRIVES=1  NHEADS=2 
+   NBBC=8 DISK=MARK5B MEDIADEF=DISK
+   /
+
+ STATION=MIYUN50   DBNAME=MIYUN50   STCODE=My  CONTROL=VEX
+!  From ZHU Xinying 6 July 2009.
+   MOUNT= ALTAZ AX1RATE=60 AX2RATE=30 AX1LIM=-270,270 AX2LIM=7,89
+   AX1ACC=0.5 AX2ACC=0.3 ! Zhu Xinying 8jul2009
+   TSETTLE=2  DAR=VLBA4
+   NBBC=8 DISK=MARK5A MEDIADEF=DISK
+   /
+!  
+!  =====================================================================
+!  The following entries in the SCHED stations catalog are stations that
+!  are members of the Asia Pacific Telescope.  
+!  These stations are maintained in file stations_APT.dat.
+!  =====================================================================
+!  2004 July 29 - ATNF broken out.  See ../Master_ATNF.   RCW.
+!  Commented out S2 (Usuda) July 22, 2010  RCW.
+!
+!  From Victor Migenes Nov 96   34m antenna  
+  STATION=KASHIM34  STCODE=Ks  CONTROL=VSOP  
+    DBNAME = KASHIM34
+    MOUNT=ALTAZ AX1RATE=40 AX2RATE=45 ax1lim=90,630 AX2LIM=7,88
+    TSETTLE=20  DAR=VSOP  RECORDER=VSOP NDRIVES=1 NHEADS=1 
+   /
+!  From Victor Migenes Nov 96    6m antenna   
+  STATION=KAGOSIMA  STCODE=Kg  CONTROL=VSOP  
+    MOUNT=ALTAZ AX1RATE=60 AX2RATE=60 ax1lim=270,810 AX2LIM=10,88
+    X=-3537007.8900  Y=4140258.0200  Z=3309951.0700 
+    TSETTLE=2  DAR=VSOP  RECORDER=VSOP NDRIVES=1 NHEADS=1 
+   /
+!  From Victor Migenes Nov 96    10m antenna   
+! STATION=MIZNA010  STCODE=Mz  CONTROL=VSOP  
+!   DBNAME = MIZNAO10
+!   MOUNT=ALTAZ AX1RATE=180 AX2RATE=180 ax1lim=-87,447 AX2LIM=3,88
+!   TSETTLE=2  DAR=VSOP  RECORDER=VSOP NDRIVES=1 NHEADS=1 
+!  /
+!  Victor Migenes  Nov 96 gave XYZ.  Also gave AX1LIM=270,810.
+!   This information is surely out of date.  Commented July 22, 2010 RCW.
+!  STATION=NOBEYA45  STCODE=Nb  CONTROL=SNAP 
+!    MOUNT=ALTAZ AX1RATE=18 AX2RATE=18 AX1LIM=120,690 AX2LIM=11,80
+!    X=-3871023.4900  Y=3428106.8000  Z=3724039.5000
+!    TSETTLE=20  DAR=MKIII  RECORDER=MKIII  NDRIVES=1  NHEADS=1 NBBC=14
+!   / 
+!  Usuda info from Phil Edwards 15jun99.  
+!  Based on email from Kenta Fujisawa.
+!  DBNAME changed Nov. 2010 to match GSFC solutions
+   STATION=USUDAVS   STCODE=Ud  CONTROL=VSOP
+    DBNAME = USUDA64
+    DAR=VSOP  RECORDER=VSOP NDRIVES=1 NHEADS=1
+    MOUNT=ALTAZ  AX1RATE=18  AX2RATE=18   AX1LIM=-90,450  AX2LIM=7.6,85
+    TSETTLE=20
+
+    HOR_AZ =   0,  5, 10, 15, 20,120,125,130,135,140,145,150,155,160,
+             165,170,175,185,190,195,200,205,210,215,220,255,260,270,
+             275,280,285,290,295,300,305,310,315,320,325,330,335,340,
+             345,350,355,360
+    HOR_EL = 7.6,7.6,7.6,7.6,7.6,7.6,7.6,7.6,  8,  9, 10, 10, 10, 10,
+              10, 10, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+              12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+              12, 11, 10, 10
+  /
+  STATION=USUDAVL STCODE=Ud  CONTROL=VEX
+    DBNAME = USUDA64
+    DAR=VLBAG  RECORDER=VLBA  NDRIVES=1  NHEADS=1 NBBC=14
+    MOUNT=ALTAZ  AX1RATE=18  AX2RATE=18   AX1LIM=-90,450  AX2LIM=7.6,85
+    TSETTLE=20
+
+    HOR_AZ =   0,  5, 10, 15, 20,120,125,130,135,140,145,150,155,160,
+             165,170,175,185,190,195,200,205,210,215,220,255,260,270,
+             275,280,285,290,295,300,305,310,315,320,325,330,335,340,
+             345,350,355,360
+    HOR_EL = 7.6,7.6,7.6,7.6,7.6,7.6,7.6,7.6,  8,  9, 10, 10, 10, 10,
+              10, 10, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+              12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+              12, 11, 10, 10
+  /
+
+
+! The following are VERA stations forwarded from Cormac Reynolds from
+! Simon Ellingsen from Mareki Honma.  See Reynolds email of Jan. 3, 2010.
+! The stations are Mizusawa and Yamaguchi.   RCW  March 22, 2010.
+! Note that there are entries that correspond in locations.dat.
+
+  STATION=VERAMZSW  STCODE=Vm  CONTROL=VEX
+    DBNAME = VERAMZSW
+    MOUNT=ALTAZ AX1RATE=126 AX2RATE=126 AX1ACC=2.10 AX2ACC=2.10   
+   ! rate in deg/min, acceralation in deg/s/s
+    AX1LIM=-90,450 AX2LIM=5,85
+    TSETTLE=10 DAR=VERA  RECORDER=VERA  NDRIVES=1  NHEADS=1 NBBC=16
+    DISK=MARK5B MEDIADEF=DISK
+/
+  STATION=YAMAGU32  STCODE=Ym  CONTROL=VEX
+    DBNAME = YAMAGU32
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1ACC=0.25 AX2ACC=0.25   
+   ! rate in deg/min, acceralation in deg/s/s
+    AX1LIM=2,358 AX2LIM=5,85
+    TSETTLE=10 DAR=VERA  RECORDER=VERA  NDRIVES=1  NHEADS=1 NBBC=16
+    DISK=MARK5B MEDIADEF=DISK
+/
+!
+! This vera station appears in the 2010a stations solutions. 
+! Parameters set same as VERAMZSW in ignorance of any differences.
+!
+  STATION=VERAISGK  STCODE=Vs  CONTROL=VEX
+    DBNAME = VERAISGK
+    MOUNT=ALTAZ AX1RATE=126 AX2RATE=126 AX1ACC=2.10 AX2ACC=2.10   
+   ! rate in deg/min, acceralation in deg/s/s
+    AX1LIM=-90,450 AX2LIM=5,85
+    TSETTLE=10 DAR=VERA  RECORDER=VERA  NDRIVES=1  NHEADS=1 NBBC=16
+    DISK=MARK5B MEDIADEF=DISK
+/
+!  =====================================================================
+!  The following entries in the SCHED stations catalog are for NASA Deep
+!  Space Network (DSN) antennas.
+!  These stations are maintained in file stations_DSN.dat.
+!  =====================================================================
+!
+! Coordinates where given here are geodetic, from DSN Radio Astronomy 
+!   web site at http://DSNra.jpl.nasa.gov  
+!
+! Updated by Jim Ulvestad, 21 Nov. 1997, based on information
+!   from Chuck Naudet and Valery Altunin.  NHEADS changed to 1
+!   for 70 and 34m, based on further information, 8 Dec. 1997
+!
+! Some az limit updates from Cristina Garcia Miro via Cormac Reynolds.
+!   Installed 14 Sep 2004  RCW.
+!
+! Robledo to Mark5  19jan2006  RCW based on Cormac Reynolds email.
+!
+!
+! Adjusted slew speeds and added accelerations based on 810-005 document
+! on "Antenna Positioning" from the DSN web site.  June 15, 2009.  RCW
+! Also really removed S2
+!
+! DSS54 moved from stations_JIVE.dat Oct. 15, 2009. RCW.
+!
+! Trying to rationalize the DSN stations, and switch to DSS style names
+! as much as possible given names from the geo solutions.  Oct 2011, RCW.
+!
+!  Goldstone:
+!     All antennas (wikipedia and SCHED files):
+!       Name    Positions used     Description
+!      DSS13  geo solution         "Venus" 34m BWG
+!      DSS14  locations_DSN.dat    "Mars" 70m 
+!              later locations.gsfc (GOLDMARS)
+!      DSS15  geo solution         "Uranus" 34m HEF  Two date ranges.
+!      DSS24,24,26  none           "Apollo" 34m BWG  (array?)
+!      DSS27,28     none           "Gemini" 34m BWG  (array?)
+!     Not in Wikipedia
+!      GOLDVENU  geo solution      Old DSS13. 
+!      GOLDS_TS  locations_DSN.dat VSOP tracking station
+!    
+!
+!   I will not provide station data for GOLDVENU because I think it 
+!   is no longer in use.  The geo solution is based on 1981-1991 data.
+
+  STATION=DSS13  STCODE=Go  CONTROL=VEX
+!   There is confusion between GOLDVENU and DSS13.
+!   I think DSS13 is the new 34m BWG and GOLDVENU is the old 26m
+!   From old catalog: ELEV= 6370000.00  LONG= 116:47:40.04    LAT= 35:14:49.79
+!   Now both are in the geodetic solution.
+    DBNAME=DSS13
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=270,810 AX2LIM=6,88
+    TSETTLE=2  DAR=MKIV   RECORDER=MKIV   NDRIVES=1  NHEADS=1 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS14   STCODE=Go  CONTROL=VEX
+    !  Old SCHED name GOLD70 - Goldstone 70m  Goldmars.
+    DBNAME = DSS14 
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15  AX1LIM=135,675 AX2LIM=6,86
+    AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
+    TSETTLE=2 DAR=MKIV   RECORDER=MKIV   NDRIVES=2  NHEADS=1 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS15  STCODE=Go  CONTROL=VEX
+    !  Old SCHED name GOLDHEF  - Goldstone 34m HEF
+    DBNAME = DSS15
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=270,720 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    TSETTLE=2  DAR=MKIV   RECORDER=MKIV   NDRIVES=2  NHEADS=1 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+
+!  Tidbinbilla:
+!     All antennas (wikipedia and SCHED files):
+!       Name    Positions used     Description
+!      DSS-34  locations_dsn.dat   34m BWG
+!      DSS-35  locations_dsn.dat   34m BWG
+!      DSS-36  locations_dsn.dat   34m BWG
+!      DSS-43  locations_DSN.dat   Was 64m, now 70m ** USE TIDBIN64 **
+!      DSS-45  geo solution        34m, decommissioned 2016
+!      DSS-46  none                26m decommissioned 2009
+!      DSS-49  geo solution        Is the Parkes 64m.  Find under "PARKES"
+!     Not in Wikipedia
+!      TIDBIN64 geo solution       DSS43.  Use this position.
+!      TDBIN_TS locations_DSN.dat  VSOP tracking station       
+
+  STATION=DSS34   STCODE=Ti  CONTROL=VEX
+    !  DSS34 - Australia 34m BWG antenna similar to DSS45
+     DBNAME = DSS34
+     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+     AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    ! DVP
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS35   STCODE=Ti  CONTROL=VEX
+    !  DSS35 - Australia 34m antenna 
+    ! Uses DVP.
+     DBNAME = DSS35
+     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+     AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS36   STCODE=Ti  CONTROL=VEX
+    !  DSS36 - Australia 34m antenna 
+     DBNAME = DSS36
+     MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+     AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    ! Uses DVP.
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS43   STCODE=Ti  CONTROL=VEX
+    !  Old SCHED name TID70 - Australia 70m.  
+    !  Change to use use TIDBIN64 from geodetic solutions, not old
+    !  DSS43 1998 position
+    DBNAME = TIDBIN64
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=230,759.8 AX2LIM=6,86
+    AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
+    ! Uses DVP.
+     TSETTLE=2  DAR=NONE  NBBC=16
+     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
+   / 
+! DSS45 Decommissioned in 2016
+!  STATION=DSS45   STCODE=Ti  CONTROL=VEX
+!    !  Old SCHED name TID34 (confusing with DSS34) - Australia 34m HEF  
+!    
+!    DBNAME = DSS45
+!    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+!    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+!    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=2  NHEADS=1 NBBC=14
+!    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+!   / 
+!
+! Robledo:
+!     All antennas (wikipedia and SCHED files):
+!       Name    Positions used     Description
+!      DSS-54  locations_DSN.dat   34m BWG
+!      DSS-55  None                34m BWG
+!      DSS-63  locations_DSN.dat   Was 64m, now 70m.
+!      DSS-65  geo solution        34m HEF  Some name confusion.
+!      DSS-66  None                26m Moved in 1983, Shut down in 1985.
+!     Not in wikipedia:
+!      ROBLED_32 geo solution      One experiment.  Old dead antenna?
+!      ROBLED_TS locations_DSN.dat VSOP tracking station.
+
+  STATION=DSS63    STCODE=Ro  CONTROL=VEX
+    !  Madrid 70m  Old SCHED name ROB70
+    DBNAME = DSS63
+    !  Update from Esther Mol, 17 May 2005 via Cormac:
+    !    Changes were addition of acceleration, change to 1 drive
+    !    and new tsettle.
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=140,669 AX2LIM=6,86
+    AX1ACC=0.20,2.5   AX2ACC=0.20, 2.5
+    TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS65    STCODE=Ro  CONTROL=VEX
+    !  Madrid 34m HEF.  Old SCHED name ROB34
+    DBNAME = DSS65A
+    !  Note that this antenna was moved about 61 meters around 
+    !  July 3, 2005.  At the new position, it is sometimes 
+    !  called DSS64.  The up-to-date position in locations.dat is
+    !  the one called DSS65A.  I modified this from DSS65 on Oct 10,
+    !  2011 based on the date ranges in the GSFC and RFC catalogs.
+
+    !  Update from Esther Mol, 17 May 2005 via Cormac:
+    !    Change was to change to 1 drive and new tsettle.
+    !    Note DSS-54 and DSS-55 are BWG 34m antennas at Madrid.
+    !    Original version had AX1RATE=12.  Almost certainly wrong.
+  MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=-88,358 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=DSS54   STCODE=Ro  CONTROL=VEX
+    ! Moved from stations_JIVE.dat   2009 Oct 15
+    !  Madrid 34m BWG  Old SCHED name ROB34BWG
+    DBNAME = DSS54
+    !  Update from Cristina Garcia, 16 Feb 2009 via Campbell:
+    !    New antenna available for 7mm
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=-90,359 AX2LIM=6,88
+    TSETTLE=10  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   /
+!  
+!  =====================================================================
+!  The following entries in the SCHED stations catalog are stations that
+!  are members of the Australian Long Basline Array (LBA)
+!  These stations are maintained in file stations_ATNF.dat.
+!  =====================================================================
+!  Changed TID70_S2 to use DBNAME=TIDBIN64 for the position while trying
+!  to rationalize DSN names.  That seems to be the name in the more recent
+!  geodetic solutions.  Oct 2011 RCW.
+
+!  August 3, 2017. Removed DSS45LBA, added DSS35LBA, DSS36LBA.
+!  March 12, 2013  Added WARKWORT with info from Stuart Weston email of
+!  March 6, 2013.  RCW.
+!
+  STATION=ATCA       STCODE=At    CONTROL=VEX
+!   All info from Phil Edwards, e-mail 09NOV96
+    MOUNT=ALTAZ      AX1RATE=40   AX2RATE=20  AX1LIM=-150,330  AX2LIM=12.0,89.0
+    AX1ACC=0.222 AX2ACC=0.222
+!    ELEV=    217.00    LONG= -149:34:12.00        LAT=-30:18:36.00
+   DBNAME = AT_W104     ! W104 is the default pad, but usage varies.
+   TSETTLE=3  DAR=LBA    DISK=LBADR NDRIVES=1  NBBC=4 
+   TSCAL=CONT
+  /
+  STATION=CEDUNA     STCODE=Cd    CONTROL=VEX
+!   All info from Phil Edwards, e-mail 09NOV96
+!   Rates and limits from Peter McCulloch e-mail 19-may-97
+!   More info from Phil Edwards email 15oct97
+    MOUNT=ALTAZ      AX1RATE=40   AX2RATE=40  AX1LIM= -170,300 AX2LIM=5.0,89.0
+    DBNAME = CEDUNA
+    AX1ACC=0.02778 AX2ACC=0.02778
+!    ELEV=    100.00    LONG= -133:48:35.38        LAT=-31:52:00.00
+    TSETTLE=2  DAR=LBA  DISK=LBADR   NDRIVES=1  NBBC=2
+    TSCAL=CONT
+  /
+  STATION=CDDBBC     STCODE=Cd    CONTROL=VEX
+!   All info from Phil Edwards, e-mail 09NOV96
+!   Rates and limits from Peter McCulloch e-mail 19-may-97
+!   More info from Phil Edwards email 15oct97
+    MOUNT=ALTAZ      AX1RATE=40   AX2RATE=40  AX1LIM= -170,300 AX2LIM=5.0,89.0
+    DBNAME = CEDUNA
+    AX1ACC=0.02778 AX2ACC=0.02778
+!    ELEV=    100.00    LONG= -133:48:35.38        LAT=-31:52:00.00
+    TSETTLE=2  DAR=DBBC DBBCVER=ASTRO  DISK=MARK5B MEDIADEF=DISK NDRIVES=1 NBBC=8
+  /
+
+  STATION=HOB_MK5   STCODE=Ho  CONTROL=VEX ! position from SKED catalog.
+    DBNAME = HOBART26
+    MOUNT=XYEW AX1RATE=40 AX2RATE=40 
+    AX1ACC=0.02778 AX2ACC=0.02778
+    AX1LIM=-83.05,83.05, -78.05,78.05 
+    AX2LIM=-71.05,71.05, -75.95,75.95
+    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
+    DISK=MARK5A MEDIADEF=DISK
+   /
+  STATION=HOBART      STCODE=Ho  CONTROL=VEX ! position from SKED catalog.
+    DBNAME = HOBART26
+    MOUNT=XYEW AX1RATE=40 AX2RATE=40 
+    AX1ACC=0.02778 AX2ACC=0.02778
+    AX1LIM=-83.05,83.05, -78.05,78.05 
+    AX2LIM=-71.05,71.05, -75.95,75.95
+    TSETTLE=2  DAR=LBA DISK=LBADR  NDRIVES=1  NBBC=2
+    TSCAL=CONT
+   / 
+  STATION=HOB_DBBC   STCODE=Ho  CONTROL=VEX ! position from SKED catalog.
+   DBNAME = HOBART26
+   MOUNT=XYEW AX1RATE=40 AX2RATE=40
+   AX1ACC=0.02778 AX2ACC=0.02778
+   AX1LIM=-83.05,83.05, -78.05,78.05
+   AX2LIM=-71.05,71.05, -75.95,75.95
+   TSETTLE=2  DAR=DBBC  DBBCVER=ASTRO RECORDER=MARK5B DISK=MARK5B MEDIADEF=DISK
+!  NDRIVES=1 NBBC=16
+  /
+  STATION=MOPRA      STCODE=Mp    CONTROL=VEX
+!   All info from Phil Edwards, e-mail 09NOV96
+    MOUNT=ALTAZ   AX1RATE=38   AX2RATE=19   AX1LIM=-150,330  AX2LIM=12.0,89.0
+    AX1ACC=0.222 AX2ACC=0.222
+!    ELEV=    840.00    LONG= -149:04:12.00    LAT=  -31:18:00.00        
+    DBNAME = MOPRA
+    TSETTLE=3  DAR=LBA DISK=LBADR   NDRIVES=1  NBBC=4
+    TSCAL=CONT
+   /
+  STATION=PARK_MK5 STCODE=Pa  CONTROL=VEX
+    DBNAME = PARKES
+    MOUNT=ALTAZ  AX1RATE=22  AX2RATE=12  AX1LIM=-155,295  AX2LIM=30.5,89.5
+    AX1ACC=0.033  AX2ACC=0.017   
+    TSETTLE=5  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=2 NBBC=14
+    DISK=MARK5B MEDIADEF=DISK
+   /
+  STATION=PARKES    STCODE=Pa  CONTROL=VEX
+    DBNAME = PARKES
+    MOUNT=ALTAZ  AX1RATE=22  AX2RATE=12  AX1LIM=-155,295  AX2LIM=30.5,89.5
+    AX1ACC=0.033  AX2ACC=0.017   
+    TSETTLE=2  DAR=LBA DISK=LBADR  NDRIVES=1  NHEADS=1 NBBC=4
+    TSCAL=CONT
+   / 
+  STATION=DSS34LBA STCODE=Ti  CONTROL=VEX
+    !  DSS34 - Australia 34m HEF, LBA recorder
+    DBNAME = DSS34
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    TSETTLE=2  DAR=LBA  DISK=LBADR  NHEADS=1 NBBC=2
+    TSCAL=CONT
+   /
+  STATION=DSS35LBA STCODE=Ti  CONTROL=VEX
+    !  DSS34 - Australia 34m HEF, LBA recorder
+    DBNAME = DSS35
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    TSETTLE=2  DAR=LBA  DISK=LBADR  NHEADS=1 NBBC=2
+    TSCAL=CONT
+   /
+  STATION=DSS36LBA STCODE=Ti  CONTROL=VEX
+    !  DSS34 - Australia 34m HEF, LBA recorder
+    DBNAME = DSS36
+    MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+    AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+    TSETTLE=2  DAR=LBA  DISK=LBADR  NHEADS=1 NBBC=2
+    TSCAL=CONT
+   /
+  STATION=DSS43LBA STCODE=Ti  CONTROL=VEX
+    !  DSS43 - Australia 70m, LBA recorder
+    DBNAME = TIDBIN64
+    MOUNT=ALTAZ AX1RATE=15 AX2RATE=15 AX1LIM=230,760 AX2LIM=6,86
+    AX1ACC=0.2,2.5   AX2ACC=0.2,2.5
+    TSETTLE=2  DAR=LBA DISK=LBADR  NDRIVES=1  NBBC=2
+    TSCAL=CONT
+   /
+
+! DSS45 decommissioned in 2016
+  !STATION=DSS45LBA STCODE=Ti  CONTROL=VEX
+  !  !  DSS45 - Australia 34m HEF, LBA recorder
+  !  DBNAME = DSS45
+  !  MOUNT=ALTAZ AX1RATE=48 AX2RATE=48 AX1LIM=180,630 AX2LIM=6,88
+  !  AX1ACC=0.4,5.0   AX2ACC=0.4,5.0
+  !  TSETTLE=2  DAR=LBA  DISK=LBADR  NHEADS=1 NBBC=2
+  !  TSCAL=CONT
+  ! /
+
+!   Info from March 6, 2013 email from Stuart Weston.
+    STATION=WARK12M STCODE=Ww CONTROL=VEX
+    ! AUT University 12m, Mk5B recorder
+    DBNAME=WARK12M
+    MOUNT=ALTAZ AX1RATE=600 AX2RATE=60 AX1LIM=-270,270 AX2LIM=7,88
+    AX1ACC=1.3 AX2ACC=1.3
+    TSETTLE=2  DAR=DBBC DBBCVER=ASTRO
+    DISK=MARK5B MEDIADEF=DISK
+    TSCAL=CONT
+   /
+
+!   Info from January 28, 2015 email from Stuart Weston.
+    STATION=WARK30M STCODE=Wa CONTROL=VEX
+    ! AUT University 30m, Mk5B recorder
+    DBNAME=WARK30M
+    MOUNT=ALTAZ AX1RATE=22.2 AX2RATE=21.6 AX1LIM=-179,354 AX2LIM=6,90.1
+    AX1ACC=0.2 AX2ACC=0.25
+    TSETTLE=2  DAR=DBBC DBBCVER=ASTRO
+    DISK=MARK5B MEDIADEF=DISK
+   /
+
+
+  STATION=WW_LBA     STCODE=Ww    CONTROL=VEX
+!   All info assembled by Chris Phillips from various sources
+! This is the Wark12M with the LBA recorder.
+! This recorder is not currently available.
+    MOUNT=ALTAZ AX1RATE=600 AX2RATE=60 AX1LIM=-270,270 AX2LIM=7,88
+    DBNAME = WARK12M
+    AX1ACC=1.3 AX2ACC=1.3
+    TSETTLE=2  DAR=LBA DISK=LBADR NDRIVES=1 NBBC=2
+    TSCAL=CONT
+  /
+
+  STATION=ASKAP     STCODE=Ak    CONTROL=VEX
+!   All info assembled by Chris Phillips from various sources
+! Acceleration is fake
+    MOUNT=ALTAZ      AX1RATE=180   AX2RATE=60  AX1LIM= -180,360 AX2LIM=15.4,88
+    DBNAME = ASKAP32
+    AX1ACC=3 AX2ACC=1
+    TSETTLE=2  DAR=LBA  DISK=LBADR   NDRIVES=1  NBBC=4
+    TSCAL=CONT
+  /
+
+  STATION=KATHERIN     STCODE=Ke    CONTROL=VEX
+!   from Jim Lovell   DBNAME is for Feb 2015 GSFC catalog
+    MOUNT=ALTAZ      AX1RATE=300   AX2RATE=75  AX1LIM= -270,270 AX2LIM=5,88.5
+    DBNAME = KATH12M  
+    AX1ACC=1.3 AX2ACC=1.3
+    TSETTLE=2  DAR=DBBC  DISK=MARK5B   DBBCVER=ASTRO
+    TSCAL=CONT
+  /
+
+  STATION=YARRAGAD     STCODE=Yg    CONTROL=VEX
+!   from Jim Lovell   DBNAME is for Feb 2015 GSFC catalog
+    MOUNT=ALTAZ      AX1RATE=300   AX2RATE=75  AX1LIM= -270,270 AX2LIM=5,88.5
+    DBNAME = YARRA12M
+    AX1ACC=1.3 AX2ACC=1.3
+    TSETTLE=2  DAR=DBBC  DISK=MARK5B   DBBCVER=ASTRO
+    TSCAL=CONT
+  /
+
+
+! Korean VLBI Network (KVN) "VERSOIN=2014-Aug-01"
+! Provided for SCHED by Taehyun Jung, Aug 26, 2014 by email to Craig Walker.
+!
+!	KVN YONSEI 
+  	STATION=KVNYS		STCODE=Ky	CONTROL=VEX
+	DBNAME = KVNYS	
+	MOUNT=ALTAZ	AX1LIM=-90,450	AX2LIM=5,88 AX1RATE=177 AX2RATE=177
+	AX1ACC=3  AX2ACC=3
+    DAR=NONE  NBBC=16  RECORDER=MARK5B TSETTLE=2
+    DISK=MARK5B   MEDIADEF=DISK    TSCAL=GAP
+    HOR_AZ = 0, 5, 10, 15, 25, 30, 45, 65, 75, 85, 
+			110, 112, 175, 180, 200, 245, 250  
+    HOR_EL = 3, 5, 7, 9, 8, 6, 7, 5, 4, 3, 
+			 6, 3, 6, 7, 3, 4, 3
+/
+!	KVN ULSAN
+  	STATION=KVNUS     STCODE=Ku   CONTROL=VEX
+    DBNAME = KVNUS
+    MOUNT=ALTAZ AX1LIM=-90,450  AX2LIM=5,88 AX1RATE=177 AX2RATE=177
+    AX1ACC=3  AX2ACC=3
+    DAR=NONE  NBBC=16  RECORDER=MARK5B TSETTLE=2
+    DISK=MARK5B   MEDIADEF=DISK    TSCAL=GAP
+    HOR_AZ =  0, 5, 10, 20, 30, 35, 40, 175, 180, 185, 190, 195, 
+			200, 205, 210, 215, 230, 235, 248, 255, 265, 270, 
+			280, 285, 290, 305, 310, 337, 345, 350
+    HOR_EL =  7, 3, 7, 6, 2, 3, 2, 3, 4, 4, 5, 4, 5, 6, 7, 8, 9,
+			 8, 9, 7, 6, 4, 5, 3, 2, 3, 2, 3, 2, 7
+/
+!	KVN TAMNA
+  	STATION=KVNTN     STCODE=Kt   CONTROL=VEX
+    DBNAME = KVNTN
+    MOUNT=ALTAZ AX1LIM=-90,450  AX2LIM=5,88 AX1RATE=177 AX2RATE=177
+    AX1ACC=3  AX2ACC=3
+    DAR=NONE  NBBC=16  RECORDER=MARK5B TSETTLE=2
+    DISK=MARK5B   MEDIADEF=DISK    TSCAL=GAP
+    HOR_AZ =  0, 35, 39, 45, 50, 55, 60, 70, 80, 90, 
+			295, 310, 315, 320, 330, 335, 345  
+    HOR_EL =  9, 8, 9, 8, 7, 6, 5, 4, 3, 2, 3, 4, 5,
+			 6, 7, 8, 9
+/
+
+!  
+!  =====================================================================
+!  The following entries in the SCHED stations catalog are for stations
+!  mainly used in CMVA observations.
+!  These stations are maintained in file stations_mm.dat.
+!     Some updates based on Krichbaum email of 18sep2001. RCW
+!     PDBURE added based on Krichbaum email of 22sep2004. RCW
+!  =====================================================================
+!  Actually none of these stations are in common use now (2005)
+!  Feb 15, 2015  LMT added, and that will be in use shortly.
+!
+  STATION=HAYSTACK    STCODE=Hs  CONTROL=VEX
+    DBNAME = HAYSTACK
+    MOUNT=ALTAZ AX1RATE=120 AX2RATE=120 AX1LIM=0,360 AX2LIM=5,88
+    TSETTLE=2  DAR=MKIV ! RECORDER=MKIV  NDRIVES=1  NHEADS=1 
+    DISK=MARK5A   MEDIADEF=DISK NBBC=14
+   / 
+
+! Kitt Peak millimeter antenna 
+  STATION=KITTPEAK   STCODE=Km  CONTROL=VLBA
+    DBNAME = KP12
+!    X= -1995954.40   Y= -5037389.40   Z=  3357044.30
+    MOUNT=ALTAZ AX1RATE=14 AX2RATE=14 AX1LIM=270,690 AX2LIM=15,88
+    TSETTLE=2    DAR=VLBA  ! RECORDER=VLBA  NDRIVES=2  NHEADS=1
+    DISK=MARK5A   MEDIADEF=DISK NBBC=8
+   /
+ 
+!  LMT.  Based on information provided for bd180d (May 2014).
+!  bd180d position (old):  X= -768702.4521  Y= -5988521.13180  Z= 2063369.11170
+!  Position provided by Shep Doeleman, about Feb 16, 2015.
+!  Based on observations from April 30, 2015 (oops, needs correction - future)
+
+   STATION=LMT  STCODE=Lm  CONTROL=VLBA
+     DBNAME = LMT
+     !BEGIN=     0.00  END=100000.00  AXISOFF=  0.0000
+     X= -768715.632   Y= -5988507.072    Z= 2063354.852
+!    EPOCH is date above position was obtained.
+!    Rate numbers are from Fort Davis which is on the same plate and
+!    is closest VLBA station - from GSFC.2015feb.
+     DXDT= -0.01281  DYDT=  0.00048  DZDT= -0.00454  EPOCH=56777
+     FRAME='Shep e-mail 24 June 2013'
+     MOUNT=ALTAZ
+     ! Information from Pete Schloerb e-mails,
+     !   11 April 2014 and 04 May 2014
+     !   AX1LIM should be -90,450 but only using +90,450 for now
+     AX1LIM=90,450 AX2LIM=0,90
+     AX1RATE=42.0 AX2RATE=60.0
+     AX1ACC=0.5  AX2ACC=1.0
+     TSETTLE=5 TLEVSET=5 MINSETUP=5  DAR=RDBE2  NBBC=16
+     DISK=MARK5C   MEDIADEF=DISK    TSCAL=GAP 
+     ! Tsys     gaps should be longer than  1 minute
+     ! Pointing gaps should be longer than  5 minutes plus slews
+     ! Focusing gaps should be longer than 20 minutes
+    /
+
+! Clearly out of date info.  July 22, 2010  RCW.
+!  STATION=QUAB      STCODE=Qb  CONTROL=VLBA 
+!    MOUNT=ALTAZ AX1RATE=60 AX2RATE=60 AX1LIM=270,810 AX2LIM=15,88
+!    ELEV=     306.00  LONG= 072:20:40.56    LAT= 42:23:33.36  
+!    TSETTLE=2  DAR=MKIII !  RECORDER=MKIII  NDRIVES=1  NHEADS=1 
+!   DISK=MARK5A   MEDIADEF=DISK  NBBC=14
+!   / 
+
+!  PDBURE and PICOVEL moved to Master_JIVE
+
+! Antennas moved to CARMA
+!  STATION=OVRO-MM      STCODE=Om  CONTROL=VLBA 
+!    DBNAME = OVRO_MMA
+!     ELEV= 6371610.00  LONG= 118:16:56.75    LAT= 37:02:47.52  
+!    MOUNT=ALTAZ AX1RATE=14 AX2RATE=14 AX1LIM=270,690 AX2LIM=14,88
+!    TSETTLE=2  DAR=VLBA  RECORDER=VLBA  NDRIVES=2  NHEADS=1 NBBC=8
+!      Uses the recording system at VLBA_OV
+!   /
+
+!  Antennas moved to CARMA
+!  STATION=HC-MM      STCODE=Hc  CONTROL=SNAP 
+!   Warning, dbname=hatcreek would get old 25m, I think.
+!    MOUNT=ALTAZ AX1RATE=30 AX2RATE=18 AX1LIM=-90,450 AX2LIM=15,90
+!    ELEV= 6370117.00  LONG= 121:28:23.99    LAT= 40:37:39.56  
+!    TSETTLE=2  DAR=MKIV  RECORDER=MKIV  NDRIVES=1  NHEADS=1 NBBC=14
+!    / 
+
+! No longer doing VLBI.
+! STATION=SEST     STCODE=LS  CONTROL=VEX
+!    DBNAME = SEST
+!     ELEV=       2412.33 LONG= 070:43:56.58 LAT=-29:15:47.60
+!    MOUNT=ALTAZ AX1RATE=60 AX2RATE=60 AX1LIM=270.0,810.0 AX2LIM=5,88
+!    TSETTLE=2   DAR=VLBA  RECORDER=VLBA  NDRIVES=1  NHEADS=1 NBBC=14
+!   /
+!  
+!  =====================================================================
+!  The following entries in the SCHED stations catalog are for stations
+!  mainly used in geodesy observations.
+!  These stations are maintained in file stations_geodesy.dat.
+!  =====================================================================
+!
+  STATION=ALGOPARK   STCODE=Ap  CONTROL=VEX
+!   huib 12/9/96 changed 2-letter code to Ap
+    !  Actually a master equatorial system so slews more complicated.
+    DBNAME = ALGOPARK
+    MOUNT=ALTAZ AX1RATE=24.4 AX2RATE=9.4 AX1LIM=41,454 AX2LIM=8.8,86.8
+    TSETTLE=2  DAR=VLBA4  NBBC=14 ! RECORDER=VLBA4  NDRIVES=1  NHEADS=1 
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+! STATION=GILCREEK   STCODE=Gc CONTROL=VEX  ZALIM=88.000 
+!   DBNAME = GILCREEK
+!   MOUNT=XYNS AX1RATE=60 AX2RATE=60 AX1LIM=-86,86 AX2LIM=-73.5,73.5
+!   TSETTLE=2  DAR=VLBA4  NBBC=14 ! RECORDER=VLBA  NDRIVES=1  NHEADS=1 
+!   DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+!  / 
+  STATION=KOKEE   STCODE=Kk CONTROL=VEX  ZALIM=88.000 
+    DBNAME = KOKEE
+    MOUNT=ALTAZ AX1RATE=120 AX2RATE=120 AX1LIM=270,810 AX2LIM=0,89.7
+    TSETTLE=2  DAR=VLBA4 NBBC=14 ! RECORDER=VLBA  NDRIVES=1  NHEADS=1 
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+    / 
+  STATION=FORTLEZA   STCODE=Ft CONTROL=VEX  ZALIM=88.000 
+    DBNAME = FORTLEZA
+    MOUNT=ALTAZ AX1RATE=40 AX2RATE=20 AX1LIM=171,709 AX2LIM=5,88
+    TSETTLE=2  DAR=MKIV  NBBC=14 ! RECORDER=MKIV  NDRIVES=1  NHEADS=1
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=NRAO20   STCODE=Gn CONTROL=VEX  ZALIM=88.000 
+    DBNAME = NRAO20
+    MOUNT=ALTAZ AX1RATE=120 AX2RATE=120 AX1LIM=270,810 AX2LIM=0,89.7
+    TSETTLE=2  DAR=VLBAG  NBBC=14 ! RECORDER=VLBA  NDRIVES=1  NHEADS=1
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+   / 
+  STATION=NYALES20   STCODE=Ny CONTROL=VEX  ZALIM=88.000 
+    DBNAME = NYALES20
+    MOUNT=ALTAZ AX1RATE=120 AX2RATE=120 AX1LIM=260,809 AX2LIM=0,89.7
+    TSETTLE=2  DAR=MKIV NBBC=14 ! RECORDER=MKIV  NDRIVES=1  NHEADS=1 
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+  / 
+  STATION=WESTFORD  STCODE=Wf CONTROL=VEX
+    DBNAME = WESTFORD  
+    MOUNT=ALTAZ AX1RATE=200.0 AX2RATE=120.0 AX1LIM=100.0,460.0 AX2LIM=4.0,87.2
+    TSETTLE=10  DAR=MKIV NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+  /    
+!  Most information pulled from rdv65.skd from August 2007.
+!  TSETTLE is a guess that is probably wrong.  
+!   STATION=TIGOCONC  STCODE=TC  CONTROL=VEX
+!     DBNAME=TIGOCONC
+!     MOUNT=ALTAZ AX1RATE=180.0 AX2RATE=90.0 AX1LIM=276.0,916.0 AX2LIM=0.0,90.0
+!     TSETTLE=2  DAR=VLBA4  NBBC=14
+!     DISK=MARK5B  MEDIADEF=DISK  TSCAL=GAP
+! !   This was actually a step mask in SKED, but it's used here as a segment mask.
+! !   To make that reasonable, a second entry 1 degree less than the start of the next
+! !   step has been added for each segment.
+!     HOR_AZ = 0,  20,  21, 105, 106, 122, 123, 130, 131, 149, 150, 193, 194, 214, 
+!            215, 223, 224, 240, 241, 265, 266, 283, 284, 347, 348, 351, 352, 359, 360 
+!     HOR_EL = 2,   2,   8,   2,   4,   4,  12,  12,   8,   8,   6,   6,  10,  10,   
+!              8,   8,   5,   5,   4,   4,   8,   8,   8,   8,   2,   2,   4,   4,   2
+!   /
+
+!  Here be wild guesses.
+!  TSETTLE is a guess that is probably wrong.  
+!  Some information from SKED catalogs.
+!  Horizon is a guess - not available in SKED file.  Probably wrong.
+  STATION=OHIGGINS  STCODE=OH  CONTROL=VEX
+    DBNAME=OHIGGINS
+    MOUNT=ALTAZ AX1RATE=90.0 AX2RATE=90.0 AX1LIM=270.0,630.0 AX2LIM=0.0,88.0
+    TSETTLE=2  DAR=VLBA4  NBBC=14
+    DISK=MARK5A  MEDIADEF=DISK  TSCAL=GAP
+    HOR_AZ = 0, 360
+    HOR_EL = 2,   2
+  /

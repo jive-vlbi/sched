@@ -1,0 +1,42 @@
+#! /bin/csh
+#
+# Use sed and the template Makefile.master to build a Makefile
+# for a MacOSX machine using gfortran (gcc4+) without satellite tracking.
+#
+# RCW  Oct 30, 2008
+# RCW  Jul 19, 2011.  This one is for pgplot files in $SCHED/lib/OSX_INTEL.
+#
+# If anyone knows how to make proper configure scripts and would like
+# to help by building one for SCHED, that would be much appreciated.
+#
+/bin/rm Makefile
+/bin/rm -f makemacosx.sedscript
+
+# Make a file for sed with all the required changes to Makefile.master
+
+cat <<EOF >! makemacosx_sedscript
+s:Makefile for SCHED:Temporary makefile for SCHED made by configureMacOSX:
+s:#ARCHSED: ARCH = LINUX:
+s:#FCSED: FC = gfortran -Wall -fimplicit-none -fno-backslash:
+s:#XLDSED: XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11:
+s:#LDPGPLOTSED: LDPGPLOT = -L\$(LPGPLOT) -lpgplot -lz -framework Foundation -framework AppKit:
+s:#JPL_SRCS_SED: JPL_SRCS = \$(wildcard Jpl/*.f):
+s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Satstub/*.f):
+s:#SATLDSED: SATLD = :
+EOF
+
+#  Run sed with the above file.
+
+sed -f makemacosx_sedscript Makefile.master > Makefile
+/bin/rm makemacosx_sedscript
+
+
+#  When running make, you will get a variety of benign warnings that can be 
+#  ignored.  The main one concerns character variables being truncated when
+#  a variable of one length is set to equal a variable of another length.
+
+echo '******************************************************************'
+echo 'Before compiling or using SCHED,'
+echo 'be sure PGPLOT_DIR and PGPLOT_FONT point to the right place (sched pgplot area?).'
+echo '******************************************************************'
+

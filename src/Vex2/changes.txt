@@ -1,0 +1,96 @@
+CR:
+---------------------------------------
+v79
+030303 vxnmfq: added new $FREQ name for freq (SUMILO) > 1e5
+
+030303 vxnmif: added new $IF name for freq (SUMILO) > 1e5
+
+030304 vxs2md: changed call to vxs2vl to use NETSIDE instead of SIDEBD for
+           checking validity (bug triggered by stations with low pass FIRSTLO).
+
+030521 vxwrmd: don't write headpos/passorder for disk only stations 
+      
+030902 vxcftr, vxwrtr: make sure that disk stations get different track modes
+to the tape stations so that vxwrmd works properly.
+
+030909 vxwrt: do not allow disks to be used for VEX files until DRUDG has been
+upgraded or unless VEXTEST is specified.
+
+---------------------------------------
+v80
+030929 vxcfhp: add check for disks
+       vxwrhp: Don't write headpos def for disks
+       vxcfpo: add check for disks
+       vxwrpo: Don't write passorder def for disks
+
+031103 chk4dar: check that either 1N or 2N are specified for MkIV racks.
+
+040107 chk4dar: improved error messages with 'messages.txt'
+
+---------------------------------------
+v81
+040920 chk4rec: changed tape speed error to be more informative
+040920 chkjive: changed seterr to errset, and changed the barrel-roll message
+040927 chk4rec: removed barrel-rolling warnings
+040927 chkv4rec: removed barrel-rolling warnings
+040927 vxwrrl: new barrel-rolling warnings
+041004 wlog.f: the format is wrong when TERM .ne. 0/1 - alert Craig
+041007 vxtramd.f: fixed a *really* nasty bug that occurred when adding new
+        modes iff the phase cal tones were off - indexing was wrong in copying
+        the old mode to the new mode
+041007 vxnmph.f: make setups that have pcal=off use the 'NoDetect' name
+041019 vxvlbs.f, vxmode.f, *.f: vxvlbs.f is a new routine to test the VLBA
+        stations to see if they are all doing the same thing. Any that are not
+        get noted in 'VLBASSTA' and 'VLBASSET' which we can be tested whenever
+        we are doing a station comparison. This test has been added throughout
+        the VEX code. 
+041025 chkjive: prohibit oversampling greater than 4 coming to jive
+041025 vxsch.f, vxtran.f: added ftp and evlbi scans
+---------------------------------------
+v85 050801
+vxwrda: make adaptive motion default for disks - can remove with VEXTEST
+vxsch: fixed bug in writing the Gbytes for stations that skipped scans
+
+---------------------------------------
+v86 050801
+vxvlbs.f, vxcf*.f: removed vxvlbs, as VLBAs now get one setup file per station
+        like everyone else. Setup comparators also changed because VLBA no
+        longer a special case.
+vxscns.f, vxsort.f, vxstli.f, vxtone.f, vxwrda.f, vxwrmd.f, vxwrpr.f, vxsch.f: 
+        This was a biggy. Allow use of modes with FORMAT=NONE (see eg3mmb.key).
+        Add checks in various places to make sure that these modes are skipped
+        and in the SCHED section replace the mode of the FORMAT=NONE scans with
+        the format of a recording scan. This was a fairly big overhaul and I
+        hope I haven't broken anything.
+vxgtst.f: simple function to return the SCHED Setup from which a VEX Mode was
+        derived
+vxscns.f: fixed bug where VXMDIFP was not set properly for all stations in scan
+        (see GB057)
+v86 051110
+vxsch, vxschk.f: added more rigorous testing for frequency of Tsys
+        measurements. Discourage long continuous motion with disks because of
+        need to bank switch.
+v86 051114
+vxscns.f: fixed bug which meant that spurious new modes were being created
+        (reported in c052a).
+v86 060203
+vxsch.f: minor changes to messages
+
+--------------------------
+v87 071102
+chk4dar.f: added geodetic patching
+vxsch.f: allow an extra digit in the GB section of the schedule.
+vxwrt.f: remove warning about using disks.
+v87 071217
+vxschk.f, vxsch.f: changed check on continuous recording so it depends on the
+      number of bytes recorded, not just the time. Changed text of warning.
+---------------------------
+v148 081120
+vxwrsi.f: added "site_velocity", "site_position_epoch"
+vxwrex.f: added "exper_nominal_start", "exper_nominal_end"
+---------------------------
+v154 081212
+vxsudt.f: Corrected the calculation of RARATE and DECRATE to be 'per year'
+          by multiplying the values of DRA DDEC (arc-sec per DAY) by 365.25
+          not dividing by 365.25 (corrected by D. Graham) 
+---------------------------
