@@ -55,8 +55,8 @@ C
           EXTSYNTH1 = ' '
           EXTSYNTH2 = ' '
           IF( SETSTA(1,KS)(1:4) .EQ. 'VLBA' ) THEN
-             WRITE( EXTSYNTH1, '( 2F10.2 )' ) SYNTH(1,KS) * 1.D3
-             WRITE( EXTSYNTH2, '( 2F10.2 )' ) SYNTH(2,KS) * 1.D3
+             WRITE( EXTSYNTH1, '( F10.2 )' ) SYNTH(1,KS) * 1.D3
+             WRITE( EXTSYNTH2, '( F10.2 )' ) SYNTH(2,KS) * 1.D3
              WRITE( LOPRT, '( 2F10.2 )' ) SYNTH(1,KS) * 1.D3, 
      1          SYNTH(2,KS) * 1.D3
           ELSE

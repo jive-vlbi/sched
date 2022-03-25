@@ -195,7 +195,7 @@ C     3       'asec/yr', SEP
 C
 C     and vlsr when needed, not actually used, but others may need it
 C
-      IF( VLSR(1,ISRC) .GT. -1.E+8 ) THEN
+      IF( (VLSR(1,ISRC) .GT. -1.E+8 ) .AND. VLSR(1,ISRC) .GT. 0) THEN
          IF( VELREF(ISRC) .EQ. 'G' ) THEN 
             WRITE( IVEX, '( A1, 4X, A, F10.2, 1X, A,
      1          A1, 1X, A1, A )' )

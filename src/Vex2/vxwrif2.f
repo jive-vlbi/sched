@@ -92,8 +92,10 @@ C
      2                COL, NINT(TONEINT(IIF)),'MHz', SEP
                ELSE
                   I2 = I1+15
-                  WRITE( MSGTXT(I1:I2), '( 1X, A1, 1X, A1, 1X, A  )' ) 
-     1                SEP, COM, 'PCall off!'
+                  WRITE( MSGTXT(I1:I2), '( 1X, A1  )' ) 
+     1                SEP
+C                  WRITE( MSGTXT(I1:I2), '( 1X, A1, 1X, A1, 1X, A  )' ) 
+C     1                SEP, COM, 'PCall off!'
                END IF
 C
 C              Now add the VLBA receiver information in a comment.
