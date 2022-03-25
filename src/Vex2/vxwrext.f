@@ -94,9 +94,9 @@ C
                      EXTSYNTH3 = NINT( EXTSYNTH3 / 3.D0 )
                      MSGTXT = ' '
                      WRITE( MSGTXT, '( 5X, A, 1X, A1, 1X, A, 1X, A1,
-     1                I6, 1X, A, 1X, A1)' ) 
+     1                I6.2, 1X, A, 1X, A1, 1X, A1, 1X, A)' ) 
      2                'extension = NRAO', COL, 'synth3', COL, 
-     3                EXTSYNTH3, 'MHz', SEP
+     3                EXTSYNTH3, 'MHz', SEP, COM, 'multiplied by 3'
                      I1 = LEN1( MSGTXT )
                      MSGTXT = MSGTXT(1:I1)
                      WRITE( IVEX, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
@@ -104,16 +104,16 @@ C
                      EXTSYNTH3 = NINT( EXTSYNTH3 / 6.D0 )
                      MSGTXT = ' '
                      WRITE( MSGTXT, '( 5X, A, 1X, A1, 1X, A, 1X, A1,
-     1                I6, 1X, A, 1X, A1)' ) 
+     1                I6.2, 1X, A, 1X, A1, 1X, A1, 1X, A)' ) 
      2                'extension = NRAO', COL, 'synth3', COL, 
-     3                EXTSYNTH3, 'MHz', SEP
+     3                EXTSYNTH3, 'MHz', SEP, COM, 'multiplied by 6'
                      I1 = LEN1( MSGTXT )
                      MSGTXT = MSGTXT(1:I1)
                      WRITE( IVEX, '( A )' ) MSGTXT(1:LEN1(MSGTXT))
                   ELSE
                      MSGTXT = ' '
                      WRITE( MSGTXT, '( 5X, A, 1X, A1, 1X, A, 1X, A1,
-     1                I6, 1X, A, 1X, A1)' ) 
+     1                I6.2, 1X, A, 1X, A1)' ) 
      2                'extension = NRAO', COL, 'synth3', COL, 
      3                EXTSYNTH3, 'MHz', SEP
                      I1 = LEN1( MSGTXT )

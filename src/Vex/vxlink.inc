@@ -2,7 +2,7 @@ C
 C     Set VEX version and version of VX routines
 C      
       CHARACTER VEXVER*3, VXSOFT*3
-      PARAMETER (VEXVER = '1.5', VXSOFT = '.87')
+      PARAMETER (VEXVER = '1.5', VXSOFT = '.88')
 C
 C     The Vex file name.  Wanted by some non-vex routines.
 C
