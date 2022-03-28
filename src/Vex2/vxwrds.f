@@ -408,7 +408,7 @@ C
      3                      A1 )' ) 
      4                     'channel =', LNK, 'DS', IDS, COL, LNK,
      5                     'thread', ICH-1, COL, LNK, 'CH', ICH, COL,
-     6                     ICH, SEP
+     6                     0, SEP
                        WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE))
                  END DO
               END DO 
