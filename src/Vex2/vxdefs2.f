@@ -15,12 +15,12 @@ C
 C     Global
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on GL def ')
-      CALL VXWRGL2
+      CALL VXWRGL
 C
 C     Experiment
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on EX def ')
-      CALL VXWREX2
+      CALL VXWREX
 C
 C     Mode
 C
@@ -30,17 +30,17 @@ C
 C     Station
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on ST def ')
-      CALL VXWRST2
+      CALL VXWRST
 C
 C     Procedures
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on PR def ')
-      CALL VXWRPR2
+      CALL VXWRPR
 C
 C     Sites
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on SI def ')
-      CALL VXWRSI2
+      CALL VXWRSI
 C
 C     Antennas.
 C
@@ -60,7 +60,7 @@ C
 C     Frequencies.
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on FQ def ')
-      CALL VXWRFQ2
+      CALL VXWRFQ
 C
 C     IFs
 C
@@ -70,12 +70,12 @@ C
 C     BBCs
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on BB def ')
-      CALL VXWRBB2
+      CALL VXWRBB
 C
 C     Phase cal.
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on PH def ')
-      CALL VXWRPH2
+      CALL VXWRPH
 C
 C     Tracks  (This is needed in practice, if not in principle,
 C     for OBSTYP=PTVLBA.  There is code in the routine to 

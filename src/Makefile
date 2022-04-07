@@ -281,7 +281,6 @@ all:
 	$(MAKE) $(ARCH) "FC=$(FC)"
 	$(MAKE) $(BINDIR)/sched
 
-$(info ************ TESTTTTTTTTTTTTTTTTTTTTT2 **********)
 $(BINDIR)/sched: $(SCHED_OBJS)
 	$(FC) -o $@ $(SCHED_OBJS) $(LDPGPLOT) $(XLD) $(SATLD)
 

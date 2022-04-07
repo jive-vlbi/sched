@@ -9,7 +9,7 @@ C
       INCLUDE 'vxlink2.inc'
 C
       INTEGER    VLBOPE, LEN1, IOERR, IXX, ISTA, JSTA
-      CHARACTER  OPTEXT*255, OPSTAT*4, VXNMPR2*32
+      CHARACTER  OPTEXT*255, OPSTAT*4, VXNMPR*32
       LOGICAL    EXISTS, VIOLFS
       REAL       PLTVER, VERJPL
       INTEGER    I, J
@@ -163,89 +163,89 @@ C     CR: 050801. VXVLBS no longer necessary (all stations get own setups)
 C      CALL VXVLBS 
 C     first find out how many modes there are
 C
-      CALL VXMODE2
+      CALL VXMODE
 C
 C     sort out how many FQ sections exist and how they are referenced
 C     If doing single dish, skip some that are not needed.  RCW Nov 2011
 C
 C     Freqency
 C
-      CALL VXSORT2( 'FQ', NFQVEX, FQISSET, NMODFQ, IMODFQ,
+      CALL VXSORT( 'FQ', NFQVEX, FQISSET, NMODFQ, IMODFQ,
      1     NSTAFQ, ISTAFQ, FQLINK )
 C
 C     IF
 C
-      CALL VXSORT2( 'IF', NIFVEX, IFISSET, NMODIF, IMODIF,
+      CALL VXSORT( 'IF', NIFVEX, IFISSET, NMODIF, IMODIF,
      1     NSTAIF, ISTAIF, IFLINK )
 C
 C     BBC
 C
-      CALL VXSORT2( 'BB', NBBVEX, BBISSET, NMODBB, IMODBB,
+      CALL VXSORT( 'BB', NBBVEX, BBISSET, NMODBB, IMODBB,
      1     NSTABB, ISTABB, BBLINK )
 C
 C     Tracks
 C
-      CALL VXSORT2( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
+      CALL VXSORT( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
      2       NSTATR, ISTATR, TRLINK )
 C
 C        Head position
 C
       IF( OBSTYP .NE. 'PTVLBA' ) THEN
-         CALL VXSORT2( 'HP', NHPVEX, HPISSET, NMODHP, IMODHP,
+         CALL VXSORT( 'HP', NHPVEX, HPISSET, NMODHP, IMODHP,
      1       NSTAHP, ISTAHP, HPLINK )
 C
 C        Pass order.
 C
-         CALL VXSORT2( 'PO', NPOVEX, POISSET, NMODPO, IMODPO,
+         CALL VXSORT( 'PO', NPOVEX, POISSET, NMODPO, IMODPO,
      2       NSTAPO, ISTAPO, POLINK )
 C
 C        Roll
 C
-         CALL VXSORT2( 'RL', NRLVEX, RLISSET, NMODRL, IMODRL,
+         CALL VXSORT( 'RL', NRLVEX, RLISSET, NMODRL, IMODRL,
      1        NSTARL, ISTARL, RLLINK )
       END IF
 C
 C     Phase Cal
 C
-      CALL VXSORT2( 'PH', NPHVEX, PHISSET, NMODPH, IMODPH,
+      CALL VXSORT( 'PH', NPHVEX, PHISSET, NMODPH, IMODPH,
      1     NSTAPH, ISTAPH, PHLINK )
 C
 C
 C     the Data acquisition info is station based, as are site and antenna
 C
-      CALL VXTELS2( 'DA', NDAVEX, ISTADA, DALINK )
+      CALL VXTELS( 'DA', NDAVEX, ISTADA, DALINK )
 C
-      CALL VXTELS2( 'SI', NSIVEX, ISTASI, SILINK )
+      CALL VXTELS( 'SI', NSIVEX, ISTASI, SILINK )
 C
-      CALL VXTELS2( 'AN', NANVEX, ISTAAN, ANLINK )
+      CALL VXTELS( 'AN', NANVEX, ISTAAN, ANLINK )
 C
 C     most commonly used FQ and PH values have to be stored by mode
 C     rather than SET, to make sorting in schedule possible (VXSCNS).
 C
-      CALL VXFQVX2
+      CALL VXFQVX
 C
 C     setup the phase cal tone links and tone1 (sort out relations
 C     between tones and freqs, needs to be run first to detect new
 C     freq and phasecal blocks
 C
-      CALL VXTONE2
+      CALL VXTONE
 C
 C     sort out the extra modes from changes in the schedule
 C
-      CALL VXSCNS2
+      CALL VXSCNS
 C
 C     Find the freq and phasecal blocks for the new modes
 C     redoes some of the work, no problem.
 C
-      CALL VXTONE2
+      CALL VXTONE
 C
 C
 C     and setting up PROCEDURES is completely trivial
 C
       NPRVEX = NMDVEX
       DO IXX = 1, NPRVEX
-         PRLINK( IXX ) = VXNMPR2( IXX )
-         CALL VXUNQL2( IXX, PRLINK )
+         PRLINK( IXX ) = VXNMPR( IXX )
+         CALL VXUNQL( IXX, PRLINK )
       END DO
 C
 C     now actually write the setups
