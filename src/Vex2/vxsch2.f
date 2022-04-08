@@ -116,7 +116,7 @@ C
 C
 C        Check various tape issues, return a common tape offset
 C
-         CALL VXSCHK2( ISCN, TAPOFF, WARNFS, WARNTS, WARNTSOF, NTSYS,
+         CALL VXSCHK( ISCN, TAPOFF, WARNFS, WARNTS, WARNTSOF, NTSYS,
      1                  NTSYSON, TSYSGAP, WARNBANK)
 C        Let the user know which was the first scan to raise warnbank
          IF (.NOT. OLDWARNB .AND. WARNBANK) THEN
@@ -134,7 +134,7 @@ C
 C
          IF( SKIPPED ) THEN
             TMPSRC = SCNSRC(ISCN)
-            CALL VXSTNM2( TMPSRC, .FALSE.)
+            CALL VXSTNM( TMPSRC, .FALSE.)
             WRITE( IVEX, '(A1, 4X, A, A)' ) COM, 'Skipping scan on:',
      1          TMPSRC(1:LEN1(TMPSRC))
             INPAGE = INPAGE + 1
@@ -144,7 +144,7 @@ C           Skip a scan with FORMAT=NONE if there are no stations that
 C           need to keep such scans, such as the VLBA.
 C
             TMPSRC = SCNSRC(ISCN)
-            CALL VXSTNM2( TMPSRC, .FALSE.)
+            CALL VXSTNM( TMPSRC, .FALSE.)
             MSGTXT = ' '
             WRITE( MSGTXT, '(A1, 4X, A, A, A)' ) COM, 'Skipping scan ',
      1          'with FORMAT=NONE on:',
@@ -292,7 +292,7 @@ C           Write source
 C
             LPOS = LEN1(LINE)+1
             TMPSRC = SCNSRC(ISCN)
-            CALL VXSTNM2( TMPSRC, .FALSE. )
+            CALL VXSTNM( TMPSRC, .FALSE. )
             WRITE( LINE(LPOS:) , '( 1X, A, A, A1 )' ) 'source=',
      1          TMPSRC(1:LEN1(TMPSRC)), SEP
 C
@@ -423,7 +423,7 @@ C                 to do the ftp data transfer - print warning if not
 C
                   IF( GRABTO(ISCN) .EQ. 'FILE' .AND. ISCN .LT. SCANL) 
      1                                                          THEN
-                     CALL VXTRAN2 ( TRANLEN, ISCN, ISTA, GAPERR )
+                     CALL VXTRAN ( TRANLEN, ISCN, ISTA, GAPERR )
                      IF (GAPERR) WARNGP = .TRUE.
                   END IF
                   LINE = ' '

@@ -44,7 +44,7 @@ C
                   END IF
 C
                   TMPSRC = SOURCE(I,ISRC)
-                  CALL VXSTNM2(TMPSRC,.FALSE.)
+                  CALL VXSTNM(TMPSRC,.FALSE.)
                   WRITE( IVEX, '( A1 )' ) COM
                   WRITE( IVEX, '( A, A, A1 )' ) 'def ',
      1                 TMPSRC(1:LEN1(TMPSRC)), SEP 

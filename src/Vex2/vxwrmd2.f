@@ -28,7 +28,7 @@ C
       INTEGER   IXX, I, ISTA, IMODE, LPOS
       INTEGER   LEN1, NTAPEST, ISET, MAXLINE
       CHARACTER LINE*520, LSETNAME*80, DEL*1
-      INTEGER   VXGTST2
+      INTEGER   VXGTST
 C     NTAPEST is a temporary counter for the number of stations in a
 C     given mode that use tapes.
 C ----------------------------------------------------------------------
@@ -71,7 +71,7 @@ C        go ahead and write the mode.  Some stations (eg VLBA) may need
 C        the scans fully defined for activities like single dish tests and
 C        reference pointing.
 C
-         ISET = VXGTST2( IMODE )
+         ISET = VXGTST( IMODE )
          IF( FORMAT(ISET)(1:4) .EQ. 'NONE' ) THEN
             WRITE( IVEX, '( A1 )' ) COM
             WRITE( IVEX, '( A1, A )' ) COM, 

@@ -31,7 +31,7 @@ C
          WRITE( IVEX, '( A1 )' ) COM
          WRITE( IVEX, '( A, A, A1 )' ) 'def ',
      1        IFLINK(IIF)(1:LEN1(IFLINK(IIF))), SEP
-         CALL VXSTLI2( IIF, NSTAIF, ISTAIF )
+         CALL VXSTLI( IIF, NSTAIF, ISTAIF )
 C
 C        Loop over channels.
 C
