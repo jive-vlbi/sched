@@ -1,4 +1,4 @@
-# Temporary makefile for SCHED made by configurelinux64gfortran
+# Temporary makefile for SCHED made by configureMacOSX
 #
 # Makefile.master is the template makefile.  It is not viable as it stands
 # but can be made viable by uncommenting various lines as described in
@@ -67,7 +67,7 @@
 #  are being used to make portable binaries.  With modern systems, they
 #  seem to cause problems.
 
- XLD = -L/usr/lib64 -lX11
+ XLD = -L/usr/lib -lgcc -L/usr/X11R6/lib -lX11
 #XLD =                                         # Should work on many systems.
                                                #  Use for pgplot stub.
 #XLD = -lX11		                       # X11 libraries, if needed
@@ -126,7 +126,7 @@ LPGPLOT = $(PGPLOT_DIR)
 # For linker:  (LPGPLOT not needed for all).
 #   If there are missing items, consider adding -lz
 
- LDPGPLOT = -L$(LPGPLOT) -lpgplot
+ LDPGPLOT = -L$(LPGPLOT) -lpgplot -lz -framework Foundation -framework AppKit
 
 #  Some options - will be set in the configure scripts, but you can change:
 #LDPGPLOT = -lpgplot -lpng       # pgplot, png, z in the standard load path.
@@ -213,7 +213,7 @@ CIT_SRCS = $(wildcard Cit/*.f)
 CIT_OBJS = $(CIT_SRCS:.f=.o)
 
 SCHED_SRCS = $(wildcard Sched/*.f)
-SCHED_OBJS = $(SCHED_SRCS:.f=.o) $(PLOT_OBJS) $(JPL_OBJS) $(SAT_OBJS) $(VEX_OBJS) $(VEX2_OBJS) $(SLA_OBJS) $(CIT_OBJS) $(ARCH_OBJS)
+SCHED_OBJS = $(SCHED_SRCS:.f=.o) $(PLOT_OBJS) $(JPL_OBJS) $(SAT_OBJS) $(VEX_OBJS) $(VEX2_OBJS)  $(SLA_OBJS) $(CIT_OBJS) $(ARCH_OBJS)
 
 UNIX_SRCS = $(wildcard Cit/sys_unix/*.f)
 UNIX_OBJS = $(UNIX_SRCS:.f=.o)
@@ -247,12 +247,11 @@ IBMAIX_OBJS = $(IBMAIX_FSRCS:.f=.o) $(IBMAIX_CSRCS:.c=.o) $(UNIX_OBJS)
 
 ARCH_OBJS = $($(ARCH)_OBJS)
 
-BINDIR = ../bin/linux64gf
+BINDIR = ../bin
 CP = /bin/cp
 RM = /bin/rm
 
 all:
-	
 	cd Vex; /bin/rm sched.inc; ln -s ../Sched/sched.inc sched.inc
 	cd Vex; /bin/rm schset.inc; ln -s ../Sched/schset.inc schset.inc
 	cd Vex2; /bin/rm sched2.inc; ln -s ../Sched/sched2.inc sched2.inc
