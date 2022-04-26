@@ -15,11 +15,8 @@ with shut_up_mpl():
 # in matplotlib version 3.3 the internal epoch was changed from year 1 to 1970
 # this epoch is used to convert dates to floating points internally
 # unfortunately that internal representation leaks to axis.get_xlim
-# so set the epoch to the old version here to get consistent behaviour with
-# both version (<3.3 and >=3.3)
-from distutils.version import LooseVersion
-if LooseVersion(matplotlib.__version__) >= LooseVersion("3.3"):
-    matplotlib.rcParams["date.epoch"] = "0000-12-31T00:00:00"
+# so set the epoch to the old version here (setup requires mpl >=3.3.3)
+matplotlib.rcParams["date.epoch"] = "0000-12-31T00:00:00"
 
 # import function to improve toolbar, but might not be available on all systems
 try:
