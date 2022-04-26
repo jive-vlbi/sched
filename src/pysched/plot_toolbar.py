@@ -53,9 +53,9 @@ from matplotlib.backends.qt_compat import QtGui
 import os; os.environ["QT_API"] = "pyqt5"
 import formlayout
 
-from distutils.version import LooseVersion
+from packaging import version
 from PyQt5.Qt import PYQT_VERSION_STR
-if LooseVersion(PYQT_VERSION_STR) < LooseVersion("5.8"):
+if version.parse(PYQT_VERSION_STR) < version.parse("5.8"):
     raise ImportError("PyQt version 5.8 or higher is required")
 from PyQt5.QtWidgets import QWidget, QTimeEdit, QMessageBox, QHBoxLayout, \
     QSpinBox, QAction, QInputDialog
@@ -66,7 +66,7 @@ from pathlib import Path
 
 # many API changes from version 1.1 -> 1.2 in formlayout.FormDialog,
 # wrap the call to the constructor
-if LooseVersion(formlayout.__version__) < LooseVersion("1.2"):
+if version.parse(formlayout.__version__) < version.parse("1.2"):
     def FormDialogWrapper(data, title, icon, apply):
         return formlayout.FormDialog(
             data, title=title, icon=icon, apply=apply)
@@ -297,7 +297,7 @@ class CustomizeCurvesTool(ToolBase):
             icon=QtGui.QIcon(self.image), 
             apply=apply_callback)
         axes_tab = dialog.formwidget.widgetlist[0]
-        if LooseVersion(formlayout.__version__) >= LooseVersion("1.2"):
+        if version.parse(formlayout.__version__) >= version.parse("1.2"):
             # in version >= 1.2 the widgetlist elements are
             # (title, widget) tuples
             axes_tab = axes_tab[1]

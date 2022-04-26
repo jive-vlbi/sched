@@ -1,5 +1,5 @@
 import requests
-from distutils.version import LooseVersion
+from packaging import version
 
 import pkg_resources
 
@@ -16,7 +16,7 @@ def get_latest_version():
 def check_version():
     try:
         latest_version = get_latest_version()
-        if LooseVersion(pysched_version) < LooseVersion(latest_version):
+        if version.parse(pysched_version) < version.parse(latest_version):
             print(f"Version {latest_version} of pySCHED is available through "
                   f"pip,\n you are running version {pysched_version}.")
     except Exception:
