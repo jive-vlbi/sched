@@ -633,6 +633,6 @@ setup(
                       "astropy",
                       "bottle",
                       "gitpython",
-                      "requests"
-                  ]
+                      "requests",
+                      "packaging"]
 )
