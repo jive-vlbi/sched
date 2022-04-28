@@ -142,6 +142,10 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.20.1 (2021-11-04)__: Escape TeX special characters in Matplotlib plots titles and labels, when Matplotlib is configured to use LaTex to display text.
 * __v1.21.0 (2021-11-17)__: Fix deprecations warned for by matplotlib 3.5.
 * __v1.22.0 (2022-01-14)__: Add 'JIVE-e-VLBI' as possible target correlator.
+* __v1.23.0 (2022-04-28)__: This version introduces three changes:
+  * Added extra version information to the VEX file.
+  * Search for a given setup file in the $SCHED/setups directory, if it does not include a path and is not found in the current directory.
+  * Replace deprecated distutils.version.LooseVersion with packaging.version.parse.
 
 
 # Contact
