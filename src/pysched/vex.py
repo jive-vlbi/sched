@@ -3,6 +3,7 @@ from .catalog import SetupCatalog, ScanCatalog, StationCatalog, SourceCatalog, \
 from .util import f2str
 from . import dbbc_patching, vex_scans
 from .sched import parameter
+from .version import pysched_version
 
 import schedlib as s
 
@@ -18,7 +19,7 @@ import os.path
 class EndOfLineComment(str):
     pass
 
-sched_version = "2" # version of SCHED VEX writing routine
+sched_version = "3" # version of SCHED VEX writing routine
 
 block_separator = "*------------------------------------------------------"\
                   "------------------------\n"
@@ -56,13 +57,22 @@ def write(output, vex_version="2.0", print_warnings=False):
 def header_block(vex_version):
     return """
 VEX_rev = {};
-*    SCHED vers: {}
-*    VEX/SCHED:  {}.{}
-*    Other versions: Sched: {:5.1f} Plot: {:4.2f} JPL-ephem: {:4.2f}
+*    pySCHED version: {}
+*    SCHED version:   {}
+*    VEX/SCHED:       {}.{}
+*    Other versions: Sched: {:5.1f} JPL-ephem: {:4.2f}
+*    Catalog versions:
+*       Frequency: {}
+*       Station:   {}
+*       Location:  {}
 """.format(vex_version,
+           pysched_version,
            f2str(s.verc.version),
            vex_version, sched_version,
-           float(s.vern.vernum), float(s.plver()), float(s.jplver()))[1:]
+           float(s.vern.vernum), float(s.jplver()),
+           f2str(s.schsco.freqver),
+           f2str(s.schcst.stver),
+           f2str(s.schcst.locaver))[1:]
 
 def global_block(vex_version):
     return """
