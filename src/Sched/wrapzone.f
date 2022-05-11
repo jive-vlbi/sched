@@ -100,16 +100,22 @@ C
                ZLOWAZ(3) = AX1LIM(1,KSTA) + 360.0
                ZHIGHAZ(3) = AX1LIM(2,KSTA)
 C
+ccc rmc (25sep2015): changed the over-the-top zone names associated
+ccc                  with the &n and &cw zones to match how the code
+ccc                  here following 'Deal with over-the-top' would build
+ccc                  up the pointer name in the $SCHED section
                IF( NZONES .EQ. 6 ) THEN
                   ZNAMES(4) = '&ccwp'         
                   ZLOWAZ(4) = ZLOWAZ(1) 
                   ZHIGHAZ(4) = ZHIGHAZ(1)
 C
-                  ZNAMES(5) = '&ccwp'         
+cc                  ZNAMES(5) = '&ccwp'
+                  ZNAMES(5) = '&np'
                   ZLOWAZ(5) = ZLOWAZ(2) 
                   ZHIGHAZ(5) = ZHIGHAZ(2)
 C
-                  ZNAMES(6) = '&ccwp'         
+cc                  ZNAMES(6) = '&ccwp'
+                  ZNAMES(6) = '&cwp'
                   ZLOWAZ(6) = ZLOWAZ(3) 
                   ZHIGHAZ(6) = ZHIGHAZ(3)
                END IF
