@@ -588,8 +588,11 @@ C                 But only do this for the VLBA for now until the EVN
 C                 etc are comfortable with having it here.  There is
 C                 a fear that some stations will pay attention to it,
 C                 but not have it properly implemented.
+CCC    rmc: all but GBT_VLBA, VLA27 for turning on PSC in oct/nov'15
 C
-                  IF( STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
+C                  IF( STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
+                  IF( (STANAME(ISTA)(1:3) .NE. 'GBT') .AND.
+     1                (STANAME(ISTA)(1:3) .NE. 'VLA')         ) THEN
                      CALL WRAPZONE( IVEX, ISCN, ISTA, ZONE )
                   ELSE 
                      ZONE = ' '
