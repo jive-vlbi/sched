@@ -68,6 +68,10 @@ sudo pip3 install pythonSCHED
 sudo apt-get install python3-pip
 ```
 
+### Known issues
+
+If you are encountering issues (both during installation or while running) with pySCHED, please check the [Discussions page](https://github.com/jive-vlbi/sched/discussions). We are summarizing here the most-common problems and how to solve them.
+
 ## Update
 
 The command to update pySCHED is:
