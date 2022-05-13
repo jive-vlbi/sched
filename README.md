@@ -150,6 +150,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
   * Added extra version information to the VEX file.
   * Search for a given setup file in the $SCHED/setups directory, if it does not include a path and is not found in the current directory.
   * Replace deprecated distutils.version.LooseVersion with packaging.version.parse.
+* __v1.24.0 (2022-05-13)__: Incorporate EVN SCHED patches for wrap zone into pySCHED.
 
 
 # Contact
