@@ -98,6 +98,15 @@ class StationCatalog(Catalog):
     CHARACTER        UP1(MAXSCN,MAXSTA)*1, UP2(MAXSCN,MAXSTA)*1
 C   from schpeak.inc, MPKSTA is defined as MAXSTA
     INTEGER          PKGROUP(MPKSTA)
+
+    INTEGER          NSTSC(MAXSTA), ENSTSC(MAXSTA), DNSTSC(MAXSTA)
+    REAL             SCNHR(MAXSTA), ESCNHR(MAXSTA), DSCNHR(MAXSTA)
+    DOUBLE PRECISION TCORR(MAXSCN,MAXSTA)
+    REAL             TPHR(MAXSTA), ETPHR(MAXSTA), DTPHR(MAXSTA)
+    INTEGER          TPSCN(MAXSTA), ETPSCN(MAXSTA), DTPSCN(MAXSTA)
+    REAL             TGBYTES(MAXSTA), EGBYTES(MAXSTA), DGBYTES(MAXSTA)
+    INTEGER          NRECONF(2,MAXSTA)
+    REAL             TTSYNC(MAXSTA)
     """
     maxsta = s.schn5.usedisk.shape[0]
     scheduled_station_items = {
@@ -109,7 +118,15 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
             'usetape',
             'usedisk',
             'tpstart',
-            'gbytes'],
+            'gbytes',
+            'nstsc', 'enstsc', 'dnstsc',
+            'scnhr', 'escnhr', 'dscnhr',
+            'tphr', 'etphr', 'dtphr',
+            'tpscn', 'etpscn', 'dtpscn',
+            'tgbytes', 'egbytes', 'dgbytes',
+            'nreconf',
+            'ttsync',
+            'tcorr'],
         s.schn6: [
             'lst1',
             'lst2',
@@ -131,12 +148,15 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
     }
     
     # all scheduled scan related attributes have an array shape of
-    # (scan, station)
+    # (scan, station) while the other (station,)
+    # the exception being nreconf, which has (2, station)
     scan_station_items = {
-        block: [attr for attr in attrs if len(getattr(block, attr).shape) == 2]
+        block: [attr for attr in attrs if len(getattr(block, attr).shape) == 2
+                and attr != 'nreconf']
         for block, attrs in scheduled_station_items.items()}
     non_scan_station_items = {
-        block: [attr for attr in attrs if len(getattr(block, attr).shape) == 1]
+        block: [attr for attr in attrs if len(getattr(block, attr).shape) == 1
+                or attr == 'nreconf']
         for block, attrs in scheduled_station_items.items()}
     
     class DirectAccessCatalogEntry(object):
