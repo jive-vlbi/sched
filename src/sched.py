@@ -95,14 +95,14 @@ try:
     # os.environ["SCHED"] is used in the initialization of sched modules,
     # so delay the import to here
     from pysched.sched import input_, parameter, schin_module, getfreq, \
-        defaults, vexout, schopt, stmsg
+        defaults, vexout, schopt, stmsg, schsum, stafiles
 
     # workaround for https://github.com/numpy/numpy/issues/9370
     # summary of the different views of strings
     # python: strings are a type of their own, which includes an encoding
     # f2py: returns bytes when fortran would return character*, 
     #       but when assigning a bytes variable to a character*, 
-    #       f2py will interpret it as a array of integers, convert each of those 
+    #       f2py will interpret it as a array of integers, convert each of those
     #       integers to a string, and then trim that string to 1 character,
     #       for example b"az" -> [97, 122] -> ["97", "122"] -> "91".
     #       assigning a python string to an f2py generated fortran string gives
@@ -152,7 +152,7 @@ try:
         s.dopfq()
         s.getsun()
         s.chkscn()
-        s.schsum(restart)
+        schsum(restart)
         s.fluxh(parameter.ilog, s.schsco.logfile)
         if s.schcon.plot or args.plot:
             # initializes matplotlib, so only do when requested
@@ -181,7 +181,7 @@ try:
             s.vsopwrt()
 
         s.flags()
-        s.stafiles()
+        stafiles()
 
     s.delscr(False)
     s.putout(" -------  Finished  ----------- ")

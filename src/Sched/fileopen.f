@@ -1,5 +1,7 @@
       SUBROUTINE FILEOPEN( ISTA, OVBA, OLOC )
-C
+Cf2py intent(in) ISTA
+Cf2py intent(out) OVBA, OLOC
+C     
 C     Opens the station files for SCHED.  They are:
 C       1.  The crd. file - VLBA style file for control of the tape 
 C                           drives and, for many stations, the

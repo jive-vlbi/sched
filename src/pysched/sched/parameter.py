@@ -1,10 +1,9 @@
 import math
 
-iusch = 8
-iusrc = 9
-iusta = 10
-iupk = 25
-ilog = 29
+iprt  = 14
+iuloc = 15
+iuvba = 16
+ilog  = 29
 unset = -9999.
 onesec = 1./86400.
 secpday = 86400

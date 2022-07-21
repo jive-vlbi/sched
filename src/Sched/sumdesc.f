@@ -1,5 +1,7 @@
       CHARACTER*100 FUNCTION SUMDESC( ITEM, LENGTH, LABFLAG )
-C
+Cf2py intent(in) ITEM
+Cf2py intent(out) LENGTH, LABFLAG
+C     
 C     Make the summary file descriptions for the line items.
 C
       INCLUDE        'sched.inc'

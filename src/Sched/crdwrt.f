@@ -1,4 +1,5 @@
       SUBROUTINE CRDWRT( ISCN, ISTA, FIRSTS )
+Cf2py intent(in) ISCN, ISTA, FIRSTS
 C
 C     Subroutine for SCHED.  Calls appropriate routine to write
 C     machine readable output.  Global files like VEX will have

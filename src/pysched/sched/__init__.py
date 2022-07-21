@@ -55,3 +55,5 @@ from .geomake_module  import geomake
 from .addgeo_module   import addgeo
 from .schopt_module   import schopt
 from .stmsg_module    import stmsg
+from .schsum_module   import schsum
+from .stafiles_module import stafiles
