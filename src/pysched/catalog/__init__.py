@@ -9,3 +9,4 @@ from .phase_center_catalog import PhaseCenterCatalog
 from .setup_catalog import SetupCatalog
 from .setup_file_catalog import SetupFileCatalog
 from .source_plot_catalog import SourcePlotCatalog
+from .frequency_set_catalog import FrequencySetCatalog
