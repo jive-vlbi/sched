@@ -1,0 +1,10 @@
+      SUBROUTINE CHKIFWRP( KS, RESULT, LOSUM, BBCBW )
+Cf2py intent(in) KS, LOSUM, BBCBW
+Cf2py intent(out) RESULT     
+      INTEGER            KS
+      CHARACTER          RESULT*(100)
+      DOUBLE PRECISION   BBCBW(32)
+      DOUBLE PRECISION   LOSUM(32)
+      CALL CHKIF(KS, RESULT, LOSUM, BBCBW)
+      RETURN
+      END

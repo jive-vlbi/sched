@@ -105,6 +105,7 @@ class SetupCatalog(Catalog):
     """
     
     maxsetup = s.setn1.isetnum.shape[0]
+    max_channels = s.setn2b.llevel.shape[0]
     block_items = {
         s.setn1: [
             "listks",

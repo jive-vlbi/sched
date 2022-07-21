@@ -210,7 +210,6 @@ Sched/schday.f
 Sched/schgeo.f
 Sched/schopt.f
 Sched/schpre.f
-Sched/schsum.f
 Sched/schtim.f
 Sched/scndup.f
 Sched/scngeo.f
@@ -258,7 +257,6 @@ Sched/stmsg.f
 Sched/stsum.f
 Sched/sumdat.f
 Sched/sumdesc.f
-Sched/sumope.f
 Sched/sumscn.f
 Sched/sunpos.f
 Sched/sunwarn.f
@@ -413,9 +411,13 @@ Vex/vxwrst.f
 Vex/vxwrsu.f
 Vex/vxwrt.f
 Vex/vxwrtr.f 
+pysched/chkifwrp.f
+pysched/closewrp.f
+pysched/fsfreqwr.f 
 pysched/openwrap.f 
 pysched/tformwrp.f 
 pysched/ran5wrap.f 
+pysched/sbhwrap.f
 pysched/verwrap.f 
 """.split()
 
@@ -464,6 +466,7 @@ chkcor
 chkdbfq 
 chkdisk 
 chkfirm 
+chkifwrp 
 chkjive 
 chkrdbe 
 chkv4dar
@@ -477,15 +480,19 @@ chkscn
 chksfil 
 chkspd 
 chkvdifx 
+closewrp 
 cordef 
+crdwrt 
 delscr 
 diskpos 
 dopfq 
 errlog 
 error 
 errset 
+fileopen 
 flags 
 fluxh 
+fsfreqwr 
 geoqual 
 geoxyz 
 getpairs 
@@ -508,12 +515,13 @@ prtscn
 putout 
 ran5wrap 
 recctl 
+sameset 
 sattim 
 sbpair 
+sbhwrap 
 sch24 
 schgeo 
 schpre 
-schsum 
 schtim 
 scngeo 
 scnrange 
@@ -543,6 +551,8 @@ stageo
 stano 
 stauv 
 stmsg 
+sumdat 
+sumdesc 
 sunpos 
 tdatecw 
 tformwrp 
@@ -602,7 +612,7 @@ extension = Extension(
 setup(
     cmdclass={"sdist": sdist},
     name="pythonSCHED",
-    version="1.24.0",
+    version="1.25.0-dev0",
     author="Bob Eldering",
     author_email="eldering@jive.eu",
     description="Python extension of NRAO's VLBI scheduling program SCHED "
@@ -634,5 +644,6 @@ setup(
                       "bottle",
                       "gitpython",
                       "requests",
-                      "packaging"]
+                      "packaging",
+                      "fortranformat"]
 )
