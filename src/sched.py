@@ -54,6 +54,10 @@ parser.add_argument("--old_style_vex", action="store_true", default=False,
                     help="Use the old VEX file printing function. "
                     "This function does not support all new features of "
                     "pySCHED.")
+parser.add_argument("--old_style_sum", action="store_true", default=False,
+                    help="Use the old SUM file printing functions. "
+                    "This function does not support all new features of "
+                    "pySCHED.")
 parser.add_argument("-U", "--no_update", action="store_true", default=False,
                     help="Do not automatically update the catalogs in {}.".\
                     format(update_catalogs.checkout_dir))
@@ -152,7 +156,10 @@ try:
         s.dopfq()
         s.getsun()
         s.chkscn()
-        schsum(restart)
+        if args.old_style_sum:
+            s.schsum(restart)
+        else:
+            schsum(restart)
         s.fluxh(parameter.ilog, s.schsco.logfile)
         if s.schcon.plot or args.plot:
             # initializes matplotlib, so only do when requested
@@ -181,7 +188,10 @@ try:
             s.vsopwrt()
 
         s.flags()
-        stafiles()
+        if args.old_style_sum:
+            s.stafiles()
+        else:
+            stafiles()
 
     s.delscr(False)
     s.putout(" -------  Finished  ----------- ")

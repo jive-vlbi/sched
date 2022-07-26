@@ -210,6 +210,7 @@ Sched/schday.f
 Sched/schgeo.f
 Sched/schopt.f
 Sched/schpre.f
+Sched/schsum.f 
 Sched/schtim.f
 Sched/scndup.f
 Sched/scngeo.f
@@ -256,7 +257,8 @@ Sched/stauv.f
 Sched/stmsg.f
 Sched/stsum.f
 Sched/sumdat.f
-Sched/sumdesc.f
+Sched/sumdesc.f 
+Sched/sumope.f 
 Sched/sumscn.f
 Sched/sunpos.f
 Sched/sunwarn.f
@@ -522,6 +524,7 @@ sbhwrap
 sch24 
 schgeo 
 schpre 
+schsum 
 schtim 
 scngeo 
 scnrange 
