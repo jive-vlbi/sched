@@ -471,7 +471,7 @@ SOURCE SCAN SUMMARY FOR SOURCES LISTED ABOVE
             output_file.write("""
      The 'DOSCANS' columns are for scans in the range selected by DOSCANS
      Those are the scans sent to the Vex and other files
-""")
+"""[1:])
 
         if s.schn1.fuzzy:
             headline_ext2 = "Scan  Baseline    Scan  Baseline"
