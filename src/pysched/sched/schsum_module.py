@@ -304,7 +304,7 @@ ALLOWED PREEMPTION TIMES
  ******* But the project is less than {max_block * 24:5.1f} hours long so this may not be a     
  ******* problem unless 2 such runs are scheduled back to back.                 
  ******* If that happens, your protection requests may be ignored.              
- *******"""[1:]
+ *******                                                                        """[1:]
                 write_files(text + "\n")
                 for line in text.split("\n"):
                     s.wlog(1, line.rstrip())
@@ -596,6 +596,8 @@ def write_correlator(sum_file, scans, scan_offset, setup_files):
       If the latter, the output data rates and volume are underestimated
       because the number of baselines is underestimated.
 
+
+
 """)
 
 
@@ -808,6 +810,7 @@ STATION SCAN SUMMARIES:
     and PRESTART to prevent short gaps.  However, also try to prevent record scans 
     of more than an hour to minimize risk to data from playback problems.
     MARK5C will have one observe scan per record scan and there is no limit to the number.
+
 """)
 
     if not s.schn1.notape and do_reconfigure:
@@ -818,7 +821,7 @@ STATION SCAN SUMMARIES:
     For VLBA DAR stations, total reconfigures and reconfigures during recording are shown.
     Reconfigures during recording can cause slow correlator sync.
     Any reconfigure can slow sync at JIVE.
-""")
+"""[1:])
 
     early_tape_starts = sum(sum(
         station.tpstart[scan_offset: scan_offset + len(scans)] != 0)
@@ -827,15 +830,14 @@ STATION SCAN SUMMARIES:
         sum_file.write(f"""
     Recording started before scan start time {early_tape_starts:5d} times.  See PRESTART and MINPAUSE.
     They may have been kept running through short scan gaps.
-    The number can be large because each station/scan combination counts.""")
+    The number can be large because each station/scan combination counts.
+""")
 
-    sum_file.write("\n\n")
+    sum_file.write("\n\n\n")
 
 def write_setups(sum_file, setups, stations, frequencies, frequency_sets,
                  scans, scan_offset):
     sum_file.write("""
-
-
 
  SETUP FILES:
 """)
