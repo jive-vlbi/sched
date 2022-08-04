@@ -5,7 +5,8 @@ from ..util import f2str
 from ..vex import sched_version as vex_version
 from ..version import pysched_version
 from .output_files import write_cover, format_float, write_freq_line, \
-    round_seconds, sun_warning, write_setup, write_sources
+    round_seconds, sun_warning, write_setup, write_sources, source_alias, \
+    write_solar_corona_warnings
 
 import schedlib as s
 
@@ -97,6 +98,9 @@ def schsum(restart):
                              scan_catalog.scan_offset)
 
         write_sources(sum_file, sources, setup_files, True)
+
+        write_solar_corona_warnings(sum_file, scans, scan_catalog.scan_offset,
+                                    sources, setup_files)
 
         write_separations(sum_file, sources)
 
@@ -921,7 +925,7 @@ def write_scans(sum_file, scans, scan_offset, stations, setup_files, sources,
         item_descriptor2, _, label_flag2 = s.sumdesc(item2)
         item_descriptor1 = f2str(item_descriptor1)
         item_descriptor2 = f2str(item_descriptor2)
-        
+
         # print 20 stations on one line
         for station_pass in range((len(stations) - 1) // 20 + 1):
             station_start = station_pass * 20

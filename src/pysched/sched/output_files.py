@@ -598,4 +598,30 @@ EFFECT OF SOLAR CORONA
 
 """)
 
-    
+def write_solar_corona_warnings(output_file, scans, scan_offset, sources,
+                                setup_files):
+    text = """
+SOLAR CORONA AFFECTED SCANS
+
+ Source       Separation Threshold Frequency
+"""[1:]
+    source_freq_warnings = set()
+    for scan_index, scan in enumerate(scans, scan_offset):
+        setup_file = setup_files[scan.setnum - 1]
+        if setup_file.mschn > 0:
+            min_freq = min(setup_file.sffreq[:setup_file.mschn])
+
+            threshold = 60 * (min_freq / 1000) ** -0.6
+            source = sources[scan.srcnum - 1]
+            if source.sundis < threshold:
+                alias = source_alias(source)
+                if (alias, min_freq) not in source_freq_warnings:
+                    text += (f" {alias: <12} {source.sundis:<10.1f} "
+                             f"{threshold:<9.1f} {min_freq:<.2f}\n")
+                    source_freq_warnings.add((alias, min_freq))
+
+    if len(source_freq_warnings) > 0:
+        output_file.write(text + "\n")
+        for line in text.split("\n"):
+            if line != "":
+                s.wlog(1, line)
