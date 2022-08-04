@@ -1,6 +1,6 @@
 from . import getsta, getfreq, schfiles, gettim, gintent, toggle, infdb, \
     invla, schrep, scndup, getcov, getcor, times, sttant, parameter, schdefs
-from ..catalog import ScanCatalog, SetupFileCatalog
+from ..catalog import ScanCatalog, SetupFileCatalog, StationCatalog
 from .. import util, key
 
 import schedlib as s
@@ -57,6 +57,7 @@ record_defaults = {
     "fastfor":  [None,                  util.noop],
     "reverse":  [None,                  util.noop],
     "stations": [[],                    util.foreach(util.upper)],
+    "sunwarn":  [[],                    util.noop],
 }
 
 # if an inline catalog is read, these values have to be passed to the next 
@@ -370,6 +371,8 @@ def schin(stdin):
     s.schn2a.nscint.fill(0)
     s.schn2a.iscint.fill(0)
 
+    sun_warning_overrides = {} # station: threshold in degrees
+
     restart = False
 
     index = 0
@@ -425,6 +428,13 @@ def schin(stdin):
             s.schcon.noset = values["nosetup"]
             s.schcon.plot = values["plot"]
             s.schcon.pubplot = values["pubplot"]
+
+            if (not isinstance(values["sunwarn"], list) or
+                (len(values["sunwarn"]) % 2 != 0)):
+                s.errlog("SCHIN: SUNWARN values have to be sequential pairs of "
+                         "station name and threshold to use for that station.")
+            sunwarn_iter = iter(values["sunwarn"])
+            sun_warning_overrides.update(dict(zip(sunwarn_iter, sunwarn_iter)))
 
             schedule = util.expand_file_name(values["schedule"])
             if (schedule != "") and \
@@ -707,6 +717,13 @@ def schin(stdin):
     s.schsco.freqfile = util.resize_string(util.expand_file_name(
         values["freqfile"]), s.schsco.freqfile.itemsize, "freqfile")
     s.schcon.freqlist = values["freqlist"]
+
+    station_catalog = StationCatalog()
+    for station, threshold in sun_warning_overrides.items():
+        station_index, _, _ = s.stano(station.upper())
+        if station_index == 0:
+            s.errlog(f"SCHIN: Station {station} not found in catalogs.")
+        station_catalog.entries[station_index - 1].sunwarn = threshold
 
     if "autotape" in present:
         s.wlog(1, "SCHIN:  Obsolete parameter AUTOTAPE given.  Ignored.")
