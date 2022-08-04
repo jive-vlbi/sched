@@ -62,25 +62,51 @@ def write_freq_line(output_file, header, items, decimal_point_at):
     output_file.write("\n")
     lines += 1
     return lines
-                
-def sun_warning(output_file, scan, sources, threshold):
+
+def source_alias(source):
+    return next(alias
+                for csused, alias in zip(reversed(source.csused),
+                                         reversed(source.source))
+                if csused != "")
+
+def sun_warning(output_file, scan, sources, threshold, forked_sources=None):
+    """
+    forked_sources: A set of source names, for which the warning already has
+                    been printed. If the source name is in this set 
+                    (or it is None), do not fork to standard output and .runlog.
+                    Add the source name to the set if it is printed to 
+                    standard output.
+    """
     line_counter = 0
-    sun_distance = sources[scan.srcnum - 1].sundis
+    source = sources[scan.srcnum - 1]
+    sun_distance = source.sundis
     if sun_distance < threshold:
-        output_file.write(
-            f"        Source only {sun_distance:6.1f} "
-            "degrees from the Sun.\n")
+        text = (f"        Source only {sun_distance:6.1f} degrees from "
+                "the Sun.\n")
+        output_file.write(text)
         line_counter += 1
+        
+        alias = source_alias(source)
+        if (forked_sources is not None) and (alias not in forked_sources):
+            s.wlog(1, f"SUNWARN: {alias} only {sun_distance:.1f} degrees "
+                   "from the Sun.")
+            forked_sources.add(alias)
 
     if scan.ivlaphs not in {0, scan.srcnum}:
-        sun_distance = sources[scan.ivlaphs - 1].sundis
+        source = sources[scan.ivlaphs - 1]
+        sun_distance = source.sundis
         if sun_distance < threshold:
-            output_file.write(
-                "         VLA phasing source only "
-                f"{sun_distance:6.1f} degrees "
-                "from the Sun.\n")
+            text = (f"         VLA phasing source only {sun_distance:6.1f} "
+                    "degrees from the Sun.")
+            output_file.write(text + "\n")
             line_counter += 1
-    
+
+            alias = source_alias(source)
+            if (forked_sources is not None) and (alias not in forked_sources):
+                s.wlog(1, f"SUNWARN: VLA phasing source {alias} only "
+                       f"{sun_distance:.1f} degrees from the Sun.")
+                forked_sources.add(alias)
+
     return line_counter
 
 def write_setup(output_file, setups, setup_index, frequencies, stations,
