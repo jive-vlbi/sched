@@ -685,7 +685,7 @@ class RADecWidget(QWidget):
         marker_cycle = itertools.cycle(sorted(
             set(MarkerSelection.description_character.keys()) -
             set(self.marker_map.values())))
-        for row, calcode in enumerate(sorted(calcodes) + ["SCHED"], 1):
+        for row, calcode in enumerate(sorted(calcodes) + ["SCHED", "Sun"], 1):
             catalog = self.calcode_map.get(calcode, calcode)
             layout.addWidget(
                 QLabel(catalog if catalog != "" else "No label", self), row, 0)
@@ -1261,10 +1261,22 @@ class MainWidget(QWidget):
                     **self.radec.get_properties("SCHED"))
 
                 annotations = []
-                for i, s in enumerate(self.sources):
+                for i, source in enumerate(self.sources):
                     annotations.append(
-                        axis.annotate(escape_tex(s.aliases[0]), xy=xy[i]))
-                    label_annotations["SCHED"] = annotations
+                        axis.annotate(escape_tex(source.aliases[0]), xy=xy[i]))
+                label_annotations["SCHED"] = annotations
+
+            # sun
+            if self.radec.get_visible("Sun"):
+                ra, dec = s.sunpos((s.schn1.tfirst +s.schn1.tend) / 2)
+                ra = (ra  / math.pi * 12) % 24
+                dec = dec / math.pi * 180
+
+                label_points["Sun"] = axis.scatter(
+                    [ra], [dec], label="Sun",
+                    **self.radec.get_properties("Sun"))
+
+                label_annotations["Sun"] = [axis.annotate("Sun", xy=[ra, dec])]
 
             axis.set_title("Dec - RA\n"
                            "Click in the legend to show/hide points/labels")
