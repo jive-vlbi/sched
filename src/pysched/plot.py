@@ -687,7 +687,8 @@ class RADecWidget(QWidget):
             set(self.marker_map.values())))
         for row, calcode in enumerate(sorted(calcodes) + ["SCHED"], 1):
             catalog = self.calcode_map.get(calcode, calcode)
-            layout.addWidget(QLabel(catalog, self), row, 0)
+            layout.addWidget(
+                QLabel(catalog if catalog != "" else "No label", self), row, 0)
             widgets = {}
             for column, (column_label, widget_function) in \
                 enumerate(columns.items(), 1):
