@@ -1221,43 +1221,45 @@ class MainWidget(QWidget):
             figure.canvas.manager.set_window_title("RA-Dec Plot")
             label_points = {}
             label_annotations = {}
+
             # catalogs
             calcodes = set(s.srlcalc for s in self.radec_sources)
             for calcode in sorted(calcodes):
-                catalog_label = escape_tex(
-                    self.radec.calcode_map.get(calcode, calcode))
-                if catalog_label == "":
-                    catalog_label = "No label"
-                catalog_sources = [s for s in self.radec_sources
-                                   if s.srlcalc == calcode]
-                xy = np.array(
-                    [[s.srlra, s.srldec] for s in catalog_sources])
-                xy[:, 0] /= parameter.radhr
-                xy[:, 1] /= parameter.raddeg
-                points = axis.scatter(xy[:, 0], xy[:, 1], label=catalog_label,
-                                      **self.radec.get_properties(calcode))
-                points.set_visible(self.radec.get_visible(calcode))
-                label_points[catalog_label] = points
-                
-                # plot source names if they dont clutter (and slow down)
-                # the plot
-                visible = (len(catalog_sources) < 20) and points.get_visible()
-                annotations = []
-                for i, s in enumerate(catalog_sources):
-                    a = axis.annotate(escape_tex(s.srlname), xy=xy[i])
-                    a.set_visible(visible)
-                    annotations.append(a)
-                label_annotations[catalog_label] = annotations
+                if self.radec.get_visible(calcode):
+                    catalog_label = escape_tex(
+                        self.radec.calcode_map.get(calcode, calcode))
+                    if catalog_label == "":
+                        catalog_label = "No label"
+                    catalog_sources = [s for s in self.radec_sources
+                                       if s.srlcalc == calcode]
+                    xy = np.array(
+                        [[s.srlra, s.srldec] for s in catalog_sources])
+                    xy[:, 0] /= parameter.radhr
+                    xy[:, 1] /= parameter.raddeg
+                    label_points[catalog_label] = axis.scatter(
+                        xy[:, 0], xy[:, 1], label=catalog_label,
+                        **self.radec.get_properties(calcode))
 
+                    # plot source names if they dont clutter (and slow down)
+                    # the plot
+                    visible = (len(catalog_sources) < 20)
+                    annotations = []
+                    for i, source in enumerate(catalog_sources):
+                        a = axis.annotate(escape_tex(source.srlname), xy=xy[i])
+                        a.set_visible(visible)
+                        annotations.append(a)
+                    label_annotations[catalog_label] = annotations
 
             # sched
             if self.radec.get_visible("SCHED"):
                 xy = np.array([[s.ra2000, s.d2000] for s in self.sources])
                 xy[:, 0] /= parameter.radhr
                 xy[:, 1] /= parameter.raddeg
+
                 label_points["SCHED"] = axis.scatter(
                     xy[:, 0], xy[:, 1], label="SCHED",
                     **self.radec.get_properties("SCHED"))
+
                 annotations = []
                 for i, s in enumerate(self.sources):
                     annotations.append(
