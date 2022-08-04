@@ -49,7 +49,7 @@ def stread(input_iterator, stdin, mjd1):
         "frame":    ["XX",         util.noop],
         "elev":     [0.,           util.noop],
         "lat":      [0.,           util.multiply_by(parameter.raddeg / 3600.)],
-        "long":     [0.,           util.multiply_by(parameter.raddeg /3600.)],
+        "long":     [0.,           util.multiply_by(parameter.raddeg / 3600.)],
         "zalim":    [None,         util.noop],
         "x":        [0.,           util.noop],
         "y":        [0.,           util.noop],
@@ -88,6 +88,7 @@ def stread(input_iterator, stdin, mjd1):
         "maxsrchr": [1e6,          util.noop],
         "tlevset":  [0.,           util.noop],
         "endcat":   [0.,           util.noop],
+        "sunwarn":  [10.,          util.noop],
     }
     input_iterator.set_defaults(station_record_defaults, station_state_defaults)
     
@@ -142,6 +143,8 @@ def stread(input_iterator, stdin, mjd1):
     # map from station catalog entry attributes to keyin keywords
     attribute_to_key = dict(zip(station_catalog.attributes, 
                                 station_catalog.attributes))
+    attribute_to_key.update(zip(station_catalog.extended_attributes,
+                                station_catalog.extended_attributes))
     attribute_to_key.update({
         "long_bn": "long",
         "horaz": "hor_az",

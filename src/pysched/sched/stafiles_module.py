@@ -236,7 +236,7 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
     state.line_index += 3
 
-    state.line_index += sun_warning(sch_file, scan, sources, 10)
+    state.line_index += sun_warning(sch_file, scan, sources, station.sunwarn)
 
 def stafiles():
     if s.schcon.debug:

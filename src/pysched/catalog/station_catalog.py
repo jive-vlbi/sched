@@ -218,7 +218,7 @@ C   from schpeak.inc, MPKSTA is defined as MAXSTA
 
 
     def __init__(self):
-        super().__init__(self.maxcat, self.block_items)
+        super().__init__(self.maxcat, self.block_items, {"sunwarn"})
         self.scheduled_attr_array = map_attr_array(self.scheduled_station_items)
         self.non_scan_attr_array = map_attr_array(self.non_scan_station_items)
         self.has_scheduled_attributes_for = []

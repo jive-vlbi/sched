@@ -909,6 +909,9 @@ def write_scans(sum_file, scans, scan_offset, stations, setup_files, sources,
         time = dt.strftime("%H:%M:%S")
         return f"{day_of_year: >3} {time}"
 
+    # only fork the sun warning to standard output once per source
+    forked_sources = set()
+    
     # print two sum items per pass
     for item_pass in range(last_sum_item_index // 2 + 1):
         item1 = f2str(s.schsco.sumitem[item_pass * 2])
@@ -1049,7 +1052,14 @@ SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
                     line_counter += 2
 
                     if not item1.startswith("TAPE"):
-                        line_counter += sun_warning(sum_file, scan, sources, 10)
+                        sun_warning_thresholds = [
+                            s.sunwarn for s in stations[station_start:
+                                                        station_end]
+                            if s.stascn[scan_index]]
+                        if len(sun_warning_thresholds) > 0:
+                            line_counter += sun_warning(
+                                sum_file, scan, sources,
+                                max(sun_warning_thresholds), forked_sources)
                 sum_file.write("\n")
                 line_counter += 1
                     
@@ -1181,14 +1191,8 @@ def write_separations(sum_file, sources):
         source1 = sources[index1]
         source2 = sources[index2]
         if separation <= threshold:
-            alias1 = next(alias
-                          for csused, alias in zip(reversed(source1.csused),
-                                                   reversed(source1.source))
-                          if csused != "")
-            alias2 = next(alias
-                          for csused, alias in zip(reversed(source2.csused),
-                                                   reversed(source2.source))
-                          if csused != "")
+            alias1 = source_alias(source1)
+            alias2 = source_alias(source2)
             sum_file.write(f"     {alias1: <12}  {alias2: <12}  "
                            f"{separation:8.4f}\n")
     
