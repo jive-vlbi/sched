@@ -1,0 +1,819 @@
+!   Source file for single dish Pointing of VLBA antennas.
+!   Useful both for systems tests and for reference pointing.
+!
+!   ***** DO NOT USE FOR VLBI  ****
+!   (Many of the positions are not good enough)
+!
+!   This whole file needs to be revisited and updated by someone.
+!
+!
+!   There are three main sections containing sources of different
+!   types.  They are:
+!      H2O masers (22 GHz)
+!      SiO masers (43 and 86 GHz)
+!      Continuum VLBI sources
+!
+!
+!   Note on CALCODES:
+!      'L'  On and off line frequencies will be used for pointing
+!           solutions for pointing analysis but not for reference 
+!           pointing???.
+!      'C'  ???
+!      'B'  ???
+!
+!  17 April 2001 - CALCODE=L set for many SiO masers.  RCW.
+!
+!  Jan 30, 2014 Adding P-WXPsc to the 7mm SiO sources at Krichbaum's
+!  request.  Also he provided a link to a useful site on masers at:
+!  http://www.narrabri.atnf.csiro.au/cgi-bin/obstools/siomaserdb.cgi?sortby=Ta&sortorder=DESC&band=7mm
+!  ------------------------  H2O Masers ------------------------
+!
+!   Note that the comments include a number of sources that were 
+!   tried and found to be too weak.
+!
+!  Below are B1950.  That needs update.
+
+       EQUINOX='B1950'
+!
+SOURCE='W3OH'     RA=02:23:17.453  DEC=61:38:57.18  VEL=-49,-49
+  CALCODE = ' '  
+!   H2O velocities.
+!   VLA test obs. of Jan 16, 1989.
+!   Very strong, differences might be bad.  Use total power pointing.
+!   Forster et al HCRK RA=02:23:17.31 DEC=61:38:57.33 VEL=-49.0 
+!   Welch 77:          RA=02:23:17.30 DEC=61:38:57.7  VEL-48 km/s
+/ 
+SOURCE='W3OHOH'     RA=02:23:17.453  DEC=61:38:57.18  VEL=-45,-45
+  CALCODE = 'L'
+!   OH and methanol velocities.
+/
+SOURCE='W3OHOFF'  RA=02:23:17.453  DEC=63:38:57.18  VEL=-45,-45  
+  CALCODE = 'L'
+!    off source for correlator tests etc.
+/
+SOURCE='L1448'    RA = 03:22:31.932  DEC = 30:34:51.88  VEL = 3.3
+  CALCODE = 'L'
+!   VLA test obs of Jan 16, 1989.
+!   Anglada preprint. +-15" RA=03:22:30.8 DEC=30:34:59. VEL=3.3
+!   Cesaroni preprint has IRAS03225+3034 at 
+!   03:22:31.1, 30:34:50.0 VEL=10.0  flux = 20 Jy. 
+!   In 2 MHz, gives about 0.7 of 3C84.
+!   Tried in pointing file 19may93 and got variable results, but
+!     less than 0.5 of 3C84 in 0.5 MHz. Not good.
+/
+SOURCE='ORION'    RA = 05:32:46.59   DEC=-05:24:31.0  VEL=5.5,5.5
+  CALCODE = ' '  !  Very strong.  Differences might be bad.
+!   VLA test observations of Jan. 16, 1989.  2 features.
+!   1:RA=05:32:46.645  DEC=-05:24:29.84  152 Jy in 3.125 MHz
+!   2:RA=05:32:46.543  DEC=-05:24:32.19  144 Jy in 3.125 MHz
+!   Separation 2.8" 
+!   GENZEL - mean of two  RA=05:32:46.6  DEC=-05:24:30.  VEL=5.5
+!   Welch 77: RA=05:32:47.58  DEC=-05:24:09.3  10.8 km/s
+!   Very strong maser - beware saturation.  Underlying
+!   continuum also strong so don't use very wide bandwidths.
+/
+SOURCE='S269'      RA = 06:11:46.914  DEC = 13:50:34.24   VEL = 18.0
+  CALCODE = 'L'
+!   VLA test observations of Jan 16 1989.  3.125 MHz BW
+!   Cesaroni RA=06:11:46.3  DEC= 13:50:31.0  VEL=18.0
+!   About 0.3 of 3C84 at PT on Dec. 21, 1988 at PT.
+/
+SOURCE='VYCMA'    RA=07:20:54.65 DEC=-25:40:12.3  VEL=18.0,18.0
+  CALCODE = 'L'
+!   Still have to extract Jan 16 VLA result  *****************
+!   Rosen..RCW  +-0.2"  Similar to Baudry
+!   Very strong - 0.46 of W3OH.  10 times 3C84.
+/
+SOURCE='RCRT'      RA=10:58:06.01  DEC=-18:03:21.8  VEL=3.7
+  CALCODE = 'L'
+!   Kleinmann position
+!   Cesaroni RA=10:58:06.0  DEC=-18:03:21.0  
+/
+SOURCE='RTVIR'     RA=13:00:05.70  DEC=05:27:15.2   VEL=22.5
+  CALCODE = 'L'
+!   Cesaroni;  Spencer...RCW   Position is for star.
+!   2/3 of 3C273 on Dec 30, 1988 in 2 MHz
+/
+SOURCE='WHYD'      RA=13:46:12.22  DEC=-28:07:06.5  VEL=38.6
+  CALCODE = 'L'
+!   Cesaroni;  Above is star position.
+!   Spencer...RCW  Maser at 13:46:12.07+-0.14 -28:07:08.5+-1.3
+!   1/3 of 3C273 on Dec 30, 1988 in 2 MHz.  Too weak.
+/ 
+SOURCE='UHER'      RA=16:23:34.86  DEC=19:00:18.0   VEL=-15.0
+  CALCODE = 'L'
+!   1/2 of 3C273 on Dec 30, 1988 in 2 MHz.  
+/ ! Cesaroni - Kleinmann position
+SOURCE='IRAS1629'  RA=16:29:21.0  DEC=-24:22:16.0  VEL=6.2
+  CALCODE = 'L'
+!   3 times 3C273 on Dec 30, 1988 in 2 MHz.
+/ ! Cesaroni  IRAS16293-2422
+SOURCE='GD25'     RA=17:16:56.48 DEC=-35:51:40.9  VEL=-79.0,-79.0
+  CALCODE = ' '   ! Very strong.  Differences might be bad.
+!   Corrected position - Rodriquez position off by ~10"  (corrected by Moran)
+!   Correct in Rodriquez,Canto, and Moran, 1988 Ap.J 333 p804
+!   Very strong on Dec 30, 1988 - similar to W3OH.
+/ ! Rodriquez...1979  +-.5"
+SOURCE='1740-29'   RA=17:40:15.5  DEC=-29:38:08.0  VEL=-2.0
+  CALCODE = 'L'
+!   2/3 of 3C273 on Dec 30, 1988.
+/ ! Cesaroni  HII region.
+SOURCE='VXSGR'     RA=18:05:03.0  DEC=-22:13:56.0  VEL=0.0  ! Kleinmann..
+  CALCODE = 'L'
+!   3/4 of 3C273 on Dec 30, 1988.
+!   Position needs improvement.
+/ ! Cesaroni RA=18:05:03.2  DEC=-22:14:06.0
+SOURCE='W31(1)'   RA=18:05:40.5  DEC=-19:52:23.  VEL=64.0
+  CALCODE = 'L'
+!   2/3 of 3C273 on Dec 30, 1988 in 2 MHz.
+/ ! Genzel  +-4"
+SOURCE='W31(2)'   RA=18:07:30.3  DEC=-19:56:38.  VEL=-1.0
+  CALCODE = 'L'
+!   Similar to 3C273 on Dec 30, 1988 in 2 MHz.
+!   Genzel  +-4"      
+/ ! Better than W31(1) and (2) on Dec 10, 1988. 
+SOURCE='1808-17'   RA=18:08:56.3  DEC=-17:32:16.0 VEL=32.0
+  CALCODE = 'L'
+!   Cesaroni  HII region.
+/
+SOURCE='W42'       RA=18:33:30.3  DEC=-07:14:42.0 VEL=110.0
+  CALCODE = 'L'
+!   Very Weak, Jan 13, 1989.
+/ ! Cesaroni  HII region.
+SOURCE='1846-01'   RA=18:46:09.544  DEC=-01:36:39.53  VEL=17
+  CALCODE = 'L'
+!   VLA Test obs Feb. 28, 1989
+!   RA=18:46:10.5  DEC=-01:36:32.0 VEL=17.0
+!   1/3 of 3C84 on Jan 13, 1989 in 2 MHz.  ok in good weather.
+!   Pointing position way off - nearby confusing source?
+/ ! Cesaroni  HII region
+SOURCE='34.3+01'  RA=18:50:46.31  DEC=01:11:10.7  VEL=58.0
+  CALCODE = 'L'
+!   VLA obs of Feb 28, 1989.  Mean of two features separated
+!   by 0.9"
+!   RA=18:50:46.4  DEC= 01:11:10.  VEL=58.0
+!   2/3 of 3C84 on Jan 13, 1989.
+/ ! Genzel   +-3"  Cesaroni calls this W44.
+SOURCE='W49N'     RA=19:07:49.78  DEC=09:01:15.3  VEL = 10.0,10.0
+  CALCODE = ' '  ! Total power very strong.  Differences might be bad.
+!   VLA obs of Feb 28, 1989.  Why so different from Dreher?
+!   RA=19:07:49.83  DEC= 09:01:15.5  VEL=10.0  ! Dreher +-.15 "
+!   Genzel RA=19:07:49.8  DEC= 09:01:17.  vel=10
+!   Welch 77:  RA=19:07:49.779  DEC=09:01:17.1  9.6 km/s
+!   Beware saturation!
+/
+SOURCE='W51MAIN'  RA=19:21:26.215  DEC=14:24:42.39  VEL 55.0,55.0
+  CALCODE = 'L'
+!   VLA test obs Feb 28, 1989
+!   Genzel:    RA=19:21:26.3    DEC=14:24:43.   VEL=55.0
+!   Welch 77:  RA=19:21:26.195  DEC=14:24:43.6  55 km/s
+/
+SOURCE='ON1'      RA=20:08:09.95  DEC=31:22:40.6  VEL=13.0,13.0
+  CALCODE = 'L'
+!   VLA test observations of FEB 28, 1989.  Two features.
+!   1: RA=20:08:09.968  DEC=31:22:40.86  4.34 Jy in 3.1MHz
+!   2: RA=20:08:09.885  DEC=31:22:39.50  1.06 Jy in 3.1MHz
+!   separation 1.66"
+!   RA=20:08:09.95  DEC= 31:22:39.2  VEL=13.0 ! Baudry +-2"
+!   Genzel  RA=20:08:09.8  DEC= 31:22:44.  
+!   Welch 77: RA=20:08:09.8   DEC=31:22:44  13 km/s
+!   About 0.3 of 3C84 in 2 MHz on Dec. 21, 1988.
+/
+SOURCE='GL2591'    RA=20:27:35.956  DEC=40:01:14.79  VEL=-22
+  CALCODE = 'L'
+!   VLA test obs of Feb 28, 1989
+!   RA=20:27:36.0  DEC=40:01:16.0  VEL=-22.0
+!   Cesaroni  HII region
+!   About 0.2 of 3C84 on Dec. 21, 1988 at PT in 2 MHz. 
+/
+SOURCE='W75S'     RA=20:37:13.30  DEC=42:12:09.7   VEL=1.0,1.0
+  CALCODE = 'L'
+!   VLA test obs of Feb 28, 1989.  Two features
+!   1: RA=20:37:13.701  DEC=42:12:05.80   12.8 Jy in 3.1 MHz
+!   2: RA=20:37:14.202  DEC=42:12:14.19   11.0 Jy in 2.1 MHz
+!   separation 10.1"
+!   RA=20:37:14.0  DEC= 42:12:13.  VEL=1.0
+!   Genzel  +-2.5"   W75 OH in Cesaroni
+!   Welch 77:  RA=20:37:14.0  DEC=42:12:13  -2 km/s
+!   1.6 times 3C84 in 2MHz on 88Dec21 at PT.  Good source.
+!   Very close to DR21.  Confused at some level.  Continuum
+!   was seen at 0.3 of 3C84.  Maybe use narrow line and good
+!   spectrum.
+/
+SOURCE='W75N'      RA=20:36:50.04  DEC=42:26:53   VEL=15.0,15.0
+  CALCODE = 'L'
+!   There is one dominent feature and one or two more.  The
+!   second brightest is listed below.  I am worried about the
+!   reality of all but the strongest.  Since the separation
+!   is 19.6", and errors in the map could be serious for the
+!   centroid. A third source is north of the bright one so
+!   the above position is above the centroid.  All secondary
+!   features are along a sidelobe line which is why I worry.
+!   1:  RA=20:36:50.008  DEC=42:26:58.53  28.8 Jy in 3.1 MHz
+!   2:  RA=20:36:50.111  DEC=42:26:38.96  12.4 Jy in 3.1 MHz
+!
+!   RA=20:36:50.5 DEC= 42:27:01  VEL= 15
+!   Cesaroni
+!   Less confused than W75S?
+/
+SOURCE='2130+55'   RA=21:30:37.37  DEC=55:40:26.8  VEL=-72
+  CALCODE = 'L'
+!   VLA position from Jan 16, 1989 test observations.
+!   Two roughly equal sources in 42 km/s band centered at -72.
+!   Separation 13.5"  So position probably not that reliable.
+!   1:  RA=21:30:37.988  DEC=55:40:31.09
+!   2:  RA=21:30:36.757  DEC=55:40:22.55
+!   Observations repeated Feb. 28, 1989 with one source/cal pair.
+!   1:  RA=21:30:37.971  DEC=55:40:31.39  6.2 Jy in 3.1 MHz
+!   2:  RA=21:30:36.740  DEC=55:40:22.61  3.9 Jy in 3.1 MHz
+!   Calibrator different.  Suggests positions good to about 0.3"
+!   Cesaroni HII region. RA=21:30:37.0  DEC=55:40:36.0  VEL=-72.0
+!   About 0.7 of 3C84 in 2 MHz on 88Dec21 at PT.
+/
+SOURCE='CEPA'      RA=22:54:19.09   DEC=61:45:45.6   VEL=-5.3
+  CALCODE = 'L'
+!   VLA obs of Feb 28, 1989  2 features:
+!   1:  RA=22:54:19.242  DEC=61:45:44.12  12.8 Jy in 3.1 MHz
+!   2:  RA=22:54:19.037  DEC=61:45:46.76  16.7 Jy in 3.1 MHz
+!   separation 3.0"
+!   RA=22:54:19.2  DEC=61:45:44.0  VEL=-5.3
+!   Cesaroni HII region.  Beware large continuum.
+!   0.6 of 3C84 on 88Dec21 in 2 MHz at PT.  OK
+!   Note from someone 1950: 22:54:19.04  61:45:47.35 with masers over 0.6"
+!       not too consistent with VLA results.
+/
+
+!   ----------------  7 mm SiO masers  --------------------
+
+!  Adapted from Vivek Dhawan's pointing_sources.dat on 5 Aug 2000 by RCW
+!  Prior to that date, there were 2 previous sets with different names for
+!  some of the same sources.  The names have been added here now that the 
+!  multiple name option is available.  This will help prevent old master schedules
+!  from failing.  It is recommended that users use the name that starts
+!  with "P-" to obviously distinguish the source from VLBI target sources.
+!  The older lists were from Vivek on April 1993 and 9 July 1997.  Some of 
+!  those sources are retained below for reasons explained in individual
+!  comments.
+
+!  SiO- MASERS: v=1 J=1-->0 43.122GHz.
+
+!  These sources are intended for use for reference pointing.
+!  Spectra are available on the SEST web page if necessary.
+!
+!  For questions: Contact Vivek Dhawan, vdhawan@nrao.edu.
+
+!  Set all to use on-off frequency data for pointing analysis pointing
+!  fits.  This is not used for reference pointing???.
+calcode='L'
+
+source='P-YCas'  CALCODE = 'L'
+RA=00:00:47.0    DEC=55:24:06     equinox=b1950  vel=48.6,48.6
+remarks='Jewell' /
+
+source='P-IRC+10011', 'P-IRC+10' CALCODE = 'L'
+RA=01:03:48.1    DEC=12:19:51     equinox=b1950  vel=7.1, 7.1
+remarks='Jewell.' /
+
+source='P-WXPsc' CALCODE = 'L'
+RA=1:06:25.99    DEC=12:35:53.16  equinox=j2000  vel=7.8, 7.8
+remarks='Mopra catalogue, via Krichbaum' /
+
+source='P-OCeti', 'OCeti' CALCODE = 'L'
+RA=02:19:20.793  DEC=-02:58:37.0  equinox=j2000  vel=45.0, 45.0
+remarks='Baudry position, SEST spectrum' /
+
+source='P-SPer'  CALCODE = 'L'
+RA=02:22:51.713  DEC=58:35:11.5   equinox=j2000  vel=-40., -40.
+remarks='Baudry' /
+
+source='P-IkTau','SiO-IkTau','IkTau' CALCODE = 'L'
+RA=03:53:28.71   DEC=11:24:22.6   equinox=j2000  vel=35.,35.
+remarks=' SEST pos & vel.' /
+
+source='P-IRC+50137'  CALCODE = 'L'
+RA=05:07:19.7    DEC=52:48:54     equinox=b1950  vel=2.7, 2.7
+remarks='Jewell.' /
+
+source='P-SOri'  CALCODE = 'L'
+RA=05:26:32.7    DEC=-04:43:52    equinox=b1950  vel=12.9, 12.9
+remarks='Jewell. weak.' /
+
+source='P-TxCam','SiO-TxCam', 'TxCam' CALCODE = 'L'
+RA=05:00:51.127  DEC=56:10:53.98  equinox=j2000  vel=7.5, 7.5
+remarks='Baudry pos.' /
+
+source='P-Orinew2', 'SiO-OriIRC2', 'OriIRC2' CALCODE = 'L'
+RA=05:35:14.505  DEC=-05:22:30.45 equinox=j2000  vel=-5,-5
+remarks='3mm test peakup @1MHz BW' /	
+
+source='P-UOri','SiO-UOri' CALCODE = 'L'
+RA=05:55:49.171  DEC=20:10:30.34  equinox=j2000  vel=-40.5, -40.5
+remarks=' baudry pos&vel; weak.' /
+
+source='P-VCam', 'SiO-VCam' CALCODE = 'L'
+RA=05:55:57.7    DEC=74:30:23     equinox=b1950  vel=6.5, 6.5  
+ /
+
+source='P-IRC+60169'  CALCODE = 'L'
+RA=06:30:00.6    DEC=60:58:50     equinox=b1950  vel=-23.9, -23.9
+remarks='Jewell.' /
+
+source='P-GXMon'      CALCODE = 'L'
+RA=06:52:46.93   DEC=08:25:21.1   equinox=j2000  vel=-10, -10
+remarks='sest' /
+
+source='P-VYCMa', 'SiO-VYCMa', 'VYCMaSiO' CALCODE = 'L'
+RA=07:22:58.27   DEC=-25:46:03.4  equinox=j2000  vel=15., 15.
+remarks='sest BW=4MHz' /
+
+source='P-VYCMx1'     CALCODE = 'L'
+RA=07:22:58.27   DEC=-25:46:03.4  equinox=j2000  vel=10., 10.
+remarks='sest BW=2MHz' /
+
+source='P-VYCMx2'     CALCODE = 'L'
+RA=07:22:58.27   DEC=-25:46:03.4  equinox=j2000  vel=22., 22.
+remarks='sest BW=1MHz' /
+
+source='P-RCnc'       CALCODE = 'L'
+RA=08:16:33.826  DEC=11:43:34.60  equinox=j2000  vel=14., 14.
+remarks='Baudry pos, sest vel' /
+
+source='P-IRC-20197'  CALCODE = 'L'
+RA=09:42:56.6    DEC=-21:47:54    equinox=b1950  vel=42.0, 42.0
+remarks='Jewell.' /
+
+source='P-RLMi', 'SiO-RLMi' CALCODE = 'L'
+RA=09:45:34.10   DEC=34:30:43.9   equinox=j2000  vel=2., 2.
+remarks='sest' /
+
+source='P-RLeo', 'SiO-RLeo', 'RLeo' CALCODE = 'L'
+RA=09:47:33.490  DEC=11:25:43.99  equinox=j2000  vel=3.0,3.0
+remarks='baudry pos, sest vel.' /
+
+source='P-RCrt'  CALCODE = 'L'
+RA=11:00:33.98   DEC=-18:19:28.5  equinox=j2000  vel=11., 11.
+remarks='sest' /
+
+source='P-RHya'  CALCODE = 'L'
+RA=13:49:58.5    DEC=-23:01:25    equinox=b1950  vel=-11.3, -11.3
+remarks='Jewell.' /
+
+source='P-RXBoo'  CALCODE = 'L'
+RA=14:24:11.609  DEC=25:42:13.73  equinox=j2000  vel=4, 4
+remarks=' Baudry pos, sest vel' /
+
+source='P-SCrB', 'SiO-SCrB' CALCODE = 'L'
+RA=15:21:23.94   DEC=31:22:03.3   equinox=j2000  vel=1.8, 1.8
+remarks=' sest pos & vel' /
+
+source='P-WXSer'  CALCODE = 'L'
+RA=15:25:32.0    DEC=19:44:13     equinox=b1950  vel=6.8, 6.8 
+remarks='Jewell.' /
+
+source='P-RUHer'  CALCODE = 'L'
+RA=16:08:08.0    DEC=25:12:00     equinox=j2000  vel=-13.5, -13.5
+remarks='baudry' /
+
+source='P-UHer', 'SiO-UHer' CALCODE = 'L'
+RA=16:25:47.52   DEC=18:53:32.8   equinox=j2000  vel=-14., -14.
+  / 
+
+source='P-OH2.6-0.4'  CALCODE = 'L'
+RA=17:50:10.9    DEC=-26:56:00.   equinox=b1950  vel=-3.9, -3.9
+remarks='Jewell.' /
+
+source='P-AHSco'  CALCODE = 'L'
+RA=17:11:16.98   DEC=-32:19:31.2  equinox=j2000  vel=-7, -7
+remarks='sest.' /
+
+source='P-V2108oph'  CALCODE = 'L'
+RA=17:14:19.37   DEC=08:56:02.5   equinox=j2000  vel=13, 13
+remarks='sest.' /
+
+source='P-VXSgr', 'SiO-VXSgr', 'VXSgrSiO' CALCODE = 'L'
+RA=18:08:04.062  DEC=-22:13:26.1  equinox=j2000  vel=5.,5.
+remarks=' baudry pos, sest vel 2MHz BW' /
+
+source='P-GYAql', 'SiO-GYAql' CALCODE = 'L'
+RA=19:50:06.35   DEC=-07:36:52.8  equinox=j2000  vel=30., 30.
+remarks=' sest' /
+
+source='P-RAql'  CALCODE = 'L'
+RA=19:06:22.19   DEC=08:13:47.4   equinox=j2000  vel=47, 47
+remarks=' sest.' /
+
+source='P-RTAql'  CALCODE = 'L'
+RA=19:38:01.60   DEC=11:43:18.5   equinox=j2000  vel=-29.7, -29.7
+remarks='sest' /
+
+source='P-ChiCyg', 'SiO-ChiCyg', 'ChiCyg' CALCODE = 'L'
+RA=19:50:33.9    DEC=32:54:51.3   equinox=j2000  vel=10.,10.
+remarks=' sest + old avgd.' / 
+
+source='P-RRAql'  CALCODE = 'L'
+RA=19:57:36.16   DEC=-01:53:10.5  equinox=j2000  vel=26.9, 26.9
+remarks='sest' /
+
+source='P-NMLCyg'  CALCODE = 'L'
+RA=20:46:25.532  DEC=40:06:59.35  equinox=j2000  vel=-5, -5
+remarks='baudry' /
+
+source='P-mucep', 'SiO-mucep', 'mucep' CALCODE = 'L'
+RA=21:43:30.446  DEC=58:46:48.4   equinox=j2000  vel=26.0,26.0
+remarks='Baudry' /
+
+source='P-RPeg'  CALCODE = 'L'
+RA=23:06:39.157  DEC=10:32:36.07  equinox=j2000  vel=20., 20.
+remarks='Baudry + sest' /
+
+source='P-RAqr', 'SiO-RAqr', 'RAqr' CALCODE = 'L'
+RA=23:43:49.44   DEC=-15:17:04.1  equinox=j2000  vel=-22.,-22.
+remarks=' sest' /
+
+!  From Vivek, 9 July 1997 and April 1993: 
+!  Vivek says OCeti, ChiCyg, and mucep are weak.
+!  Retained only sources that are not in the P- list above.
+
+source='SiO-WHya', 'WHya'
+RA=13:46:12.2    DEC=-28:07:07    equinox=b1950  vel=40.5  calcode=L
+remarks='Not in P- list, but is used in startup pointing!' /
+
+source='SiO-RCas', 'RCas'
+RA=23:58:24.734  DEC=51:23:19.57  equinox=j2000  vel=24.   calcode=L
+remarks='Also not in P-, but is used in startup pointing.' /
+
+
+! -------------------------  Continuum sources:  -------------------------------
+
+!   J2000 positions are from Almanac unless otherwise noted.
+!   Includes all sources with S>5 Jy at 5 or 8 GHz according to Perly
+!   calibration observations, Kuhr compendium, Almanac, and 140' pointing
+!   calibrator lists (and any other lists I have looked at).  Sources
+!   not useful for pointing are commented out (too big, etc.)
+!   By Kuhr, 3C120 should be in list but I know it is too weak now.
+!
+!   Don't use line mode for pointing fits.
+    CALCODE=' '
+!
+SOURCE='3C48' RA=01:34:49.832 DEC= 32:54:20.52 EQUINOX='B1950' 
+!   Position from VLA calibrator list via Caltech.
+!   BAARS ET AL AA 61  GHz/Jy  1.4:15.9  2.7:9.2  5.0:5.24  8.0:3.3
+!   Kuhr  .32:37   .75:26
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C84'      RA=03:19:48.160  DEC=41:30:42.11  EQUINOX='J2000'
+!   The best continuum source.  > 40 Jy.   RAP X band  37.0 Jy
+!   Kuhr   .18:69   .75:22   1.4:13   2.6:25  4.9:46  22:43  90:30
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C123'     RA=04:33:55.2    DEC= 29:34:14.   EQUINOX='B1950'
+!   BAARS ET AL  AA 61   Size 20"
+!   GHz/JY    1.4:49   5.0:16   2.8:8   15:5.6   22:3.7  Jy
+!   Kuhr      .32:135  .75:80
+!   About 0.1 of 3C84 on 88Dec10 at K band.
+!   Perley-Butler 2013 primary calibrator
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0438-436'   RA=04:40:17.180  DEC=-43:33:08.60  EQUINOX='J2000'
+!   Kuhr  GHz/Jy  .4:9  .64:8   1.4:6   5:6-7   31:1.5
+!   Almanac  5Ghz:3.9Jy
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C147'     RA=05:38:43.51   DEC=49:49:42.8    EQUINOX='B1950'
+!   BAARS   GHz/Jy  1.4:22.4   2.7:13.6  5.0:7.98  8.0:5.10  10.7:3.8
+!   Kuhr    .18:65   .75:35
+!   < 1"
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='DA193'     RA=05:55:30.806 DEC=39:48:49.17  EQUINOX='J2000'
+!   Almanac C 4.7Jy   RAP X 6.25 Jy
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C161'     RA=06:24:43.1   DEC=-05:51:14    EQUINOX='B1950'
+!   BAARS   GHz/Jy  1.4:19.0  2.7:11.4  5.0:6.62  8.0:4.18  10.7:3.09
+!   < 3"     Kuhr  .41:42    .64:34
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C196'   RA=08:13:36.0518  DEC=48:13:02.262  EQUINOX='J2000'
+!   Position from VLA calibrator list Oct. 3, 2014  RCW.
+!   Perley-Butler primary calibrator.
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0831+557'   RA=08:34:54.903   DEC=55:34:21.09  EQUINOX='J2000'
+!   Kuhr   GHz/Jy  .178:9  .97:8   1.4:8.5   5:5.6 
+!   Almanac  5.5 Jy     RAP 8GHz  3.3Jy      4C55.16
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C218'     RA=09:15:41.9   DEC=-11:52:49    EQUINOX='B1950'
+!   Baars position:  RA=09:15:41.5   DEC=-11:53:06
+!   BAARS   GHz/Jy  1.4:43.1  2.7:23.7  5.0:13.5  8.0:8.81  10.7:6.77
+!   Kuhr            .47:115   .64:97
+!   Big - 25" core and 200" halo at 21 cm   Hydra A   Low freq only
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0927+390'   RA=09:27:03.014  DEC=39:02:20.85  EQUINOX='J2000'
+!   RAP X band 7.20 Jy.
+!   Kuhr   GHz/Jy   .32:3  .75:2   1.4:2.8   5:8  10.6:12  22:6
+!   This is 4C39.25
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='1127-14'   RA=11:30:07.052  DEC=-14:49:27.39    EQUINOX='J2000'
+!   Almanac 4.7 Jy at 5 GHz
+!   Kuhr  GHz/Jy  .47:6   .64:6  1.4:7  5:5.6-7.4   31:2
+!   5 GHz pointing with VLBA in Sep 89  about 4.2 Jy - too weak.
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+!SOURCE='1216+06'   RA=12:16:50.1    DEC=06:06:09  EQUINOX='B1950'
+!   Kuhr  3c270.0  GHz/Jy  .41:36  .64:32  1.4:18   5.0:9   31:4 
+!   Leahy:  Twin jet, large.
+!   Close enough to 3C273 that it won't help pointing.
+!  REMARKS='From low accuracy pointing list - do not use for VLBI'
+! /
+SOURCE='3C273'     RA=12:29:06.6997   DEC=02:03:08.59  EQUINOX='J2000'
+!   Beware of jet below 6cm.
+!   Kuhr  .32:64   .64:56  1.4:45  5.0:43  15:40   22:32  90:14-20
+!   Order of 30 Jy.  RAP X band  27.2 Jy
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C274', 'VIRA'   RA=12:30:49.423   DEC=12:23:28.04  EQUINOX='J2000'
+!   J2000 position is from Almanac and is presumably the core.
+!   VIRGO A.   Large source, at least at low frequencies.
+!   Kuhr  .41:510  .64:460  1.4:220  5:75  15:28  90:7
+!   See notebook 1, p77 for accurate flux densities.  (20 Jy at K band.)
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C279'   RA=12:56:11.167   DEC=-05:47:21.53    EQUINOX='J2000'
+!  RAP X band  11.1 Jy.
+!  Kuhr   .47:13   .64:12  1.4:10   5:15  10.7:12   90:5
+!   1/3 of 3C273 on Dec 30, 1988 at K band.  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+ / 
+SOURCE='3C286'   RA=13:31:08.284   DEC=30:30:32.94  EQUINOX='J2000'
+!  BAARS    GHz/Jy  1.4:14.8   2.7:10.5   5.0:7.30  8.0:5.38  10.7:4.40
+!  Kuhr     .32:25   .75:20
+!  Size  < 5"
+!  Perley-Butler 2013 primary calibrator.
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C295'   RA=14:11:20.6477 DEC=52:12:09.141     EQUINOX='J2000'
+!  BAARS   GHz/Jy  1.4:22.3  2.7:12.2  5.0:6.36  8.0:3.65  10.7:2.53
+!  Kuhr    .18:82   .75:38
+!  Size  4"
+!  Position updated to VLA Calibrator list Oct 3, 2014 RCW
+!  Perley-Butler 2013 primary calibrator.
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C345'    RA=16:42:58.810    DEC=39:48:36.99   EQUINOX='J2000'
+!   1/3 of 3C273 at K band on Dec 30, 1988.  Less than 3C279.
+!   RAP X band 7.05 Jy
+!   Kuhr  GHz/Jy  .41:10   .75:8  1.4:7  5:5-11   22:9  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/ 
+SOURCE='3C348', 'HERCA'     RA=16:48:40.1    DEC= 05:04:28.    EQUINOX='B1950'
+! BAARS 115 arc sec separation between two components.
+!   GHz:Jy   .41:141   .64:114  1.4:45.0   5.0:11.8  8.0:7.19
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C353'     RA=17:17:54.6    DEC=-00:55:55.     EQUINOX='B1950'
+! BAARS  150 arc sec size 
+!   GHz:Jy   1.4:57.3   5.0:21.2  8.0:14.2
+!   Kuhr      .32:160    .64:108
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='NRAO530'    RA=17:33:02.706   DEC=-13:04:49.55  EQUINOX='J2000'
+!   RAP X band 5.8 Jy
+!   Kuhr   1.4:5.5   5:4.5
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C380'      RA=18:28:13.47   DEC=48:42:41.0   EQUINOX='B1950'
+!   Kuhr  GHz/Jy   0.178:70  .75:24   1.4:15   5:7   15:3
+!   Pearson, Perley, Readhead.  Core, halo.  Core dominated at 5Ghz.  Core < 2"
+!      halo ~6".  Should be ok.
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+!SOURCE='3C391.0'   RA=18:46:48.5   DEC=-00:58:58   EQUINOX='B1950'
+!   Kuhr  GHz/Jy  .16:43  .75:30  1.4:21  5:10
+!   SNR, size ~6' according to VLA proposal by Reynolds. 
+!  REMARKS='From low accuracy pointing list - do not use for VLBI'
+!/
+SOURCE='1833-210'   RA=18:33:39.917  DEC=-21:03:39.97  EQUINOX='J2000'
+!   RAP X band 6.5 Jy.    RAP position.
+/
+SOURCE='1921-293'  RA=19:24:51.056  DEC=-29:14:30.11    EQUINOX='J2000'
+!   OV-236
+!   140' 22GHz calibrator  16 Jy.   At 8GHz RAP gets 5.8 Jy
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/ 
+SOURCE='1934-638'  RA=19:39:25.006  DEC=-63:42:45.68  EQUINOX='J2000'
+!   Kuhr  GHz/Jy  .468:7  .635:11  1.4:16  5:6    In almanac, probably compact.
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='DR21'     RA=20:37:14.2    DEC= 42:08:57.    EQUINOX='B1950'
+!   Harris from Genzel  Centroid?
+!   0.33 of 3C84 on 88Dec21 at PT at K band.  
+!   BAARS  DEC=42:09:07   GHz/Jy  8.0:21.6  10.7:20.8    15:20   22:19
+!   Size 20".
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2134+004'  RA=21:36:38.586  DEC= 00:41:54.21    EQUINOX='J2000'
+!   RAP X band  7.03 Jy.  Almanac C band 10.3 Jy.
+!   Less than 0.1 of 3C84 on 88Dec21 at K band at PT. 
+!   Kuhr  GHz/Jy  .60:1.5  1.4:3   5:12   10.6:12   31:4.6
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2148+069'  RA=21:48:05.459  DEC=06:57:38.61  EQUINOX='J2000'
+!  RAP X band 6.52 Jy.  Almanac C band 2.5 Jy
+!  Kuhr  GHz/Jy  .32:3.6  .63:3.4   1.4:3   5:4-4.5  10.6:4.4
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='NGC7027'   RA=21:05:09.4    DEC=42:02:03    EQUINOX='B1950'
+!  BAARS   GHz/Jy  5.0:5.7  10.7:6.4  15:6.16   22:5.86
+!  10 arcsec in size
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C454.3 '  RA=22:51:29.521  DEC= 15:52:54.31    EQUINOX='B1950'
+!   VLA cal 13-Feb-85   C 4 4 3 1
+!   RAP X band 10.7 Jy  Kuhr GHz/Jy  .32:9.7  .63:15.8  1.4:11  5:10-24  31:4
+!   0.2 of 3C84 at K band on 88Dec21 at PT.  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2356-61'  RA=23:56:24.3   DEC=-61:11:40   EQUINOX='B1950'
+!   Kuhr GHz/Jy  .63:53  1.4:26  5:4-10
+/
+!    Some additional continuum sources of interest.
+!
+!
+SOURCE='TAUA'   RA=05:31:31    DEC=21:59:17    EQUINOX='B1950'
+!                CRAB:  Not sure where this position came from.
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='HERCA'  RA=16:48:41.2  DEC=05:04:24    EQUINOX='B1950'
+!   From Kraus
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='CYGA'   RA=19:57:45    DEC=40:36:0     EQUINOX='B1950'
+!   From Kraus
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='CASA'   RA=23:21:07    DEC=58:33:48     EQUINOX='B1950'
+!   From Kraus
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+
+SOURCE='0106+013' RA=01:06:04.5230 DEC= 01:19:01.060 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0133+476' RA=01:33:55.1050 DEC= 47:36:12.800 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0234+285' RA=02:34:55.5930 DEC= 28:35:11.350 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0235+164' RA=02:35:52.6300 DEC= 16:24:03.980 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0336-019' RA=03:36:58.9540 DEC=-01:56:16.920 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='NRAO150 ' RA=03:55:45.2560 DEC= 50:49:20.290 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0420-014' RA=04:20:43.5400 DEC=-01:27:28.660 EQUINOX='B1950' CALCODE='B'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0458-020' RA=04:58:41.3470 DEC=-02:03:34.000 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0528+134' RA=05:28:06.7600 DEC= 13:29:42.200 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0605-085' RA=06:05:36.0270 DEC=-08:34:20.300 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0607-157' RA=06:07:25.9820 DEC=-15:42:03.300 EQUINOX='B1950' CALCODE='B'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0727-115' RA=07:27:58.1000 DEC=-11:34:52.620 EQUINOX='B1950' CALCODE='B'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='0735+178' RA=07:35:14.1260 DEC= 17:49:09.300 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='OJ287   ' RA=08:51:57.2530 DEC= 20:17:58.440 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='4C39.25 ' RA=09:23:55.3160 DEC= 39:15:23.510 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='1127-145' RA=11:27:35.6730 DEC=-14:32:54.400 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='1334-127' RA=13:34:59.8150 DEC=-12:42:09.900 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='1510-089' RA=15:10:08.9030 DEC=-08:54:47.550 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='1633+382' RA=16:33:30.6280 DEC= 38:14:10.050 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='1749+096' RA=17:49:10.3860 DEC= 09:39:42.800 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='1928+738' RA=19:28:49.3480 DEC= 73:51:44.900 EQUINOX='B1950' CALCODE='B'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2005+403' RA=20:05:59.5600 DEC= 40:21:01.800 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2121+053' RA=21:21:14.7990 DEC= 05:22:27.450 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2145+067' RA=21:45:36.0760 DEC= 06:43:40.900 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='BLLAC   ' RA=22:00:39.3630 DEC= 42:02:08.570 EQUINOX='B1950' CALCODE='B'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2201+315' RA=22:01:01.4400 DEC= 31:31:05.850 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='3C446   ' RA=22:23:11.0870 DEC=-05:12:17.900 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='CTA102  ' RA=22:30:07.8120 DEC= 11:28:22.720 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+SOURCE='2345-167' RA=23:45:27.6870 DEC=-16:47:52.590 EQUINOX='B1950' CALCODE='C'  
+  REMARKS='From low accuracy pointing list - do not use for VLBI'
+/
+
+
+!   Nothing interesting below here
+
+
+!  -------  Some H2O masers that proved to be too weak or big ---------
+
+
+!  SOURCE='IRAS0436'  RA=04:36:09.8  DEC= 25:47:41.0 VEL=9.0
+!  CALCODE = 'L'
+!   Cesaroni   IRAS04361+2547
+!   Not detected on Dec 21, 1988 at Pie Town in 2 MHz
+!  /
+! SOURCE='ORIONA'    RA=05:32:57.76 DEC=-05:24:08.0 VEL=11.0 ! Baudry +-3"
+!  CALCODE = 'L'
+!   This is not a strong maser position!
+! /      
+! SOURCE='0536+35'  RA=05:36:06.4  DEC=35:39:21.0  VEL=-16.0
+!  CALCODE = 'L'
+!   Cesaroni    HII region.
+!   Not detected on Dec. 21, 1988 at Pie Town in 2 MHz.
+! /
+! SOURCE='S255'     RA=06:09:58.2  DEC= 18:00:17.  VEL=17.0
+!  CALCODE = 'L'
+!   Genzel  +-3"   VEL from Cesaroni
+!   About 0.1 of 3C84 on Dec. 21, 1988 at PT in 2 MHz. 
+! /
+! SOURCE='RLEO'      RA=09:44:52.23  DEC=11:39:41.9   VEL=-1.0
+!  CALCODE = 'L'
+!  Kleinmann position
+!  Cesaroni RA=09:44:52.6  DEC=11:39:44.0
+!  Not detected at PT on Dec. 21, 1988 in 2 MHz.
+! /
+! SOURCE='RXBOO'   RA=14:21:56.69  DEC=25:55:48.5   VEL=5.9
+!  CALCODE = 'L'
+!   Cesaroni;  Spencer...RCW  Above is star position.
+!   Spencer maser position 14:21:56.6+-0.05  25:55:50.0+-1.5
+!   Very weak.  Dec. 30, 1988.
+! /
+! SOURCE='RSVIR'     RA=14:24:46.0  DEC=04:54:09.0   VEL=-14.0
+!  CALCODE = 'L'
+!   Very weak,  Dec 30, 1988.
+! / Cesaroni    position not too good
+! SOURCE='W33B'     RA=18:10:58.9  DEC=-18:02:39.  VEL=59.0
+!  CALCODE = 'L'
+!   Very Weak, Jan 13, 1989
+! / Genzel  +-4"
+! SOURCE='S76W'      RA=18:53:34.0  DEC=07:49:45.0  VEL=3.0
+!  CALCODE = 'L'
+!   Very Weak on Jan 13, 1989.
+! / Cesaroni  HII region (confused?)
+! SOURCE='RAQL'      RA=19:03:57.67 DEC=08:09:10.3 VEL=47.5
+!  CALCODE = 'L'
+!   Very weak on Jan 13, 1989.
+!   Spencer..RCW  star position.  
+! / Spencer has at -08 deg but Cesaroni and Kleinmann have +8
+! SOURCE='RRAQL'     RA=19:55:00.2  DEC=-02:01:19.3 VEL=25.9
+!   Very weak, Jan 13, 1989.
+!   Spencer...RCW  star position +-1"  
+! / Radio position has 14" errors
+! SOURCE='TWPEG'     RA=22:01:43.21  DEC=28:06:20.4  VEL=-7.8 ! Kleinmann
+!  CALCODE = 'L'
+!   Cesaroni RA=22:01:41.0  DEC=28:06:30.0  
+!   Not detected on 88Dec21 at PT in 2 MHz.
+! /
+! SOURCE='S140'      RA=22:17:41.2  DEC=63:03:43.0  VEL=-2.0
+!   Cesaroni HII region.
+!   0.1 or less of 3C84 in 2 MHz at PT on 88Dec21.
+! /
+

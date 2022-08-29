@@ -43,13 +43,13 @@ C
             CALL PUTOUT( ' | Version 12.0 Advisory |')
             CALL PUTOUT( ' +-----------------------+')
             CALL PUTOUT( ' -')
-            CALL PUTOUT( " - Sched v11.6 uses updated station " // 
-     1                   "coordinates as compared to")
-            CALL PUTOUT( " - previous sched releases. Users in the " //
-     1                   "middle of a multi-epoch")
-            CALL PUTOUT( " - astrometric sequence are advised to " //
-     1                   "continue using sched 11.5 for")
-            CALL PUTOUT( " - the duration of the project. To ensure " //
+            CALL PUTOUT( " - Sched v11.7 incorporates the position " // 
+     1                   "changes from 11.5 to 11.6.  ")
+            CALL PUTOUT( " - If you are in a multi epoch observation" //
+     1                   " you may wish to continue using sched 11.5.")
+            CALL PUTOUT( " - Additionally Sched 11.7 uses a new  " //
+     1                   "default srcfile (if no srcfile is set in ")
+            CALL PUTOUT( " - your key file). To ensure " //
      1                   "sched 11.5 is run by VLBA")
             CALL PUTOUT( " - operations, please include in the .key " //
      1                   "file a line similar to:")
@@ -58,8 +58,7 @@ C
      1                   "Sched 11.5'")
             CALL PUTOUT( " -")
             CALL PUTOUT( " - All other projects should see improved " //
-     1                   "results with this new version")
-            CALL PUTOUT( " - of sched. ")
+     1                   "results with this new version of sched. ")
 
           ELSE
              CALL PUTOUT( ' REMINDER - see ' // 

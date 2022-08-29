@@ -365,7 +365,7 @@ C
 C        This is the case where there are some available blocks.
 C
          LINE1 = ' Time ranges available for USNO daily EOP '//
-     1        'observations at PT and MK:'
+     1        'observations:'
          WRITE( IUNIT, '( A )' ) LINE1
          WRITE( IPRE, '( A )' ) LINE1
 C

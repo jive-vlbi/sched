@@ -146,7 +146,7 @@ C
      1           ( DBE(KS) .EQ. 'RDBE_PFB' .OR.
      2             DBE(KS) .EQ. 'DBBC_PFB' .OR.
      3             DBE(KS) .EQ. 'DBBC_DDC' ) ) THEN
-               FORMAT(KS) = 'MARK6'
+               FORMAT(KS) = 'MARK5B'
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK6' .AND.
      1             DBE(KS) .EQ. 'RDBE_DDC' ) THEN
                FORMAT(KS) = 'VDIF'
