@@ -725,10 +725,10 @@ class BeamWidget(QWidget):
         return self.image_transfer_function.currentText()
 
     def get_color_map(self):
-        return matplotlib.cm.get_cmap(self.color_map.currentText())
+        return matplotlib.colormaps[self.color_map.currentText()]
 
     def get_contour_colors(self):
-        return matplotlib.cm.get_cmap(self.contour_colors.currentText())
+        return matplotlib.colormaps[self.contour_colors.currentText()]
 
     def get_contours(self):
         return self.contours.isChecked()
