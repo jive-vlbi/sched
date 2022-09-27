@@ -68,6 +68,10 @@ sudo pip3 install pythonSCHED
 sudo apt-get install python3-pip
 ```
 
+### Known issues
+
+If you are encountering issues (both during installation or while running) with pySCHED, please check the [Discussions page](https://github.com/jive-vlbi/sched/discussions). We are summarizing here the most-common problems and how to solve them.
+
 ## Update
 
 The command to update pySCHED is:
@@ -146,6 +150,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
   * Added extra version information to the VEX file.
   * Search for a given setup file in the $SCHED/setups directory, if it does not include a path and is not found in the current directory.
   * Replace deprecated distutils.version.LooseVersion with packaging.version.parse.
+* __v1.24.0 (2022-05-13)__: Incorporate EVN SCHED patches for wrap zone into pySCHED.
 
 
 # Contact
