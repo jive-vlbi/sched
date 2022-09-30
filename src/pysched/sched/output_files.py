@@ -625,3 +625,5 @@ SOLAR CORONA AFFECTED SCANS
         for line in text.split("\n"):
             if line != "":
                 s.wlog(1, line)
+        s.wlog(1, "See the summary file for more details about the effects "
+               "of the solar corona.")
