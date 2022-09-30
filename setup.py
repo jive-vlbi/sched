@@ -641,7 +641,7 @@ setup(
                     "setuptools>=24.3"],
     install_requires=["numpy>=1.16",
                       "pyqt5", 
-                      "matplotlib>=3.3.3",
+                      "matplotlib>=3.5.2",
                       "formlayout",
                       "astropy",
                       "bottle",
