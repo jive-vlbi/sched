@@ -152,6 +152,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
   * Replace deprecated distutils.version.LooseVersion with packaging.version.parse.
 * __v1.24.0 (2022-05-13)__: Incorporate EVN SCHED patches for wrap zone into pySCHED.
 * __v1.25.0 (2022-09-30)__: Raise the level at which warnings about sources too close to the sun are printed to standard output and make some of the thresholds used configurable.
+* __v1.25.1 (2022-10-06)__: Require a newer version of NumPy. In earlier version calling round(numpy.float) would return a float, which caused a problem in string formatting.
 
 
 # Contact
