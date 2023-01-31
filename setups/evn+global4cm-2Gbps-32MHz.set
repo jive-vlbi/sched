@@ -1,15 +1,53 @@
-  NCHAN = 16
+  BAND='4CM'
+  NCHAN=8
   BITS=2
-!!!  line below needed only if running sched v11.4 or earlier
-!  bbfilter = 16.0
-  BBFILTER = 32.0
-  FREQREF = 8319.49
-  FREQOFF = 0,0,0,0, 64,64,64,64, 128,128,128,128, 192,192,192,192
-  NETSIDE = L,L,U,U,  L, L, U, U,   L,  L,  U,  U,   L,  L,  U,  U
+  BBFILTER=64.0
+  FREQREF = 8240.0
+  FREQOFF = 0,0, 64,64, 128,128, 192,192
+  NETSIDE =U,U,U,U,U,U,U,U
+  DBE = 'RDBE_DDC'
   POL=dual
   PCAL  = 'off'
+  BARREL=ROLL_OFF 
+  STATION = VLBA, GBT_VLBA,GBT_COLD
   /
-! sess.3/21 - no T6
+!!! GBT might want to use IF B,D not A,C
+!!  IFCHAN = B,D,B,D,B,D,B,D
+!!  STATION = GBT_VLBA,GBT_COLD
+  /
+!!
+!!VLA
+!!! use same LO as picked for VLBA (7600)
+  NCHAN = 8
+  BBFILTER=64.0
+  FREQREF = 8240.0
+  FREQOFF = 0,0, 64,64, 128,128, 192,192
+  NETSIDE = U,U,U,U,U,U,U,U
+  FE = '4CM','4CM','4CM','4CM'
+  FIRSTLO = 7600.00
+  IFCHAN = A, C, B, D, A, C, B, D
+  DBE = 'WIDAR'
+  STATION = VLA27
+  /
+!!
+!EVNs use 16x 32MHz set-up
+!EVNs (non-DBBC backends)
+!  KVAZARs
+  FE=' ',' ',' ',' '
+  DBE = ' '
+  FIRSTLO = -9999.
+  IFCHAN = ' ',' ',' ',' ',' ',' ',' ',' '
+  NCHAN = 16
+  BBFILTER = 32.0
+  FREQREF = 8272.00
+  FREQOFF = 0,0,0,0, 64,64,64,64, 128,128,128,128, 192,192,192,192
+  NETSIDE = L,L,U,U, L,L,U,U, L,L,U,U, L,L,U,U
+  STATION = SVETLOE, ZELENCHK, BADARY
+  /
+! now the DBBC (& CDAS) stations that can provide 2Gbps via 8x 32MHz SBs per pol (4 core2 boards)
+  DBE = 'DBBC_DDC'
+  BBFILTER = 32.0
+  /
 !--------------------------------------------------------------------------
    firstlo= 7600,7600,7600,7600,7600,7600,7600,7600,7600,7600,7600,7600,7600,7600,7600,7600
    ifchan  =  A3,  C1,  A3,  C1,  A3,  C1,  A3,  C1,  A3,  C1,  A3,  C1,  A3,  C1,  A3,  C1
@@ -83,15 +121,13 @@
   NCHAN = 8
   BITS=2
   BBFILTER = 32.0
-!!!  line below needed only if running sched v11.4 or earlier
-!  bbfilter = 16.0
-  FREQREF = 8319.49
+  FREQREF = 8272.00
   FREQOFF = 64,64,64,64, 128,128,128,128
   NETSIDE =  L, L, U, U,   L,  L,  U,  U
   POL=dual
   PCAL  = 'off'
 !--------------------------------------------------
-   firstlo= 8012,8012,8012,8012,8012,8012,8012,8012
+   firstlo= 7965,7965,7965,7965,7965,7965,7965,7965
    ifchan =   A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1
    bbc     =   1,   9,   1,   9,   2,  10,   2,  10
   format = VDIF     station  =  WSTRBORK / 

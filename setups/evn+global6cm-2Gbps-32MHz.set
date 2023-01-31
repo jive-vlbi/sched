@@ -1,0 +1,183 @@
+! NRAOs use 8x 64MHz set-up
+!VLBAs
+  BAND='6CM'
+  NCHAN=8
+  BITS=2
+  BBFILTER=64.0
+  FREQREF =  4740.00
+  FREQOFF = 0,0, 64,64, 128,128, 192,192
+  NETSIDE  = U,U,U,U,U,U,U,U
+  DBE = 'RDBE_DDC'
+  POL=dual
+  PCAL  = 'off'
+  BARREL=ROLL_OFF 
+  STATION = VLBA, GBT_VLBA, GBT_COLD
+  /
+!
+!VLA
+  NCHAN = 8
+  BBFILTER=64.0
+  FREQREF = 4740.00
+  FREQOFF = 0,0, 64,64, 128,128, 192,192
+  NETSIDE = U,U,U,U,U,U,U,U
+  FE = '6CM','6CM','6CM','6CM'
+  FIRSTLO = 4100.0
+  IFCHAN = A, C, B, D, A, C, B, D
+  DBE = 'WIDAR'
+  STATION = VLA27
+  /
+!
+!EVNs (non-DBBC backends) - stay at 2Gbps
+  FE=' ',' ',' ',' '
+  DBE = ' '
+  FIRSTLO = -9999.
+  IFCHAN = ' ',' ',' ',' ',' ',' ',' ',' '
+  NCHAN=16
+  BITS=2
+  BBFILTER=32.0
+  FREQREF = 4772.00
+  FREQOFF = 0,0,0,0, 64,64,64,64, 128,128,128,128, 192,192,192,192
+  NETSIDE = L,L,U,U,  L, L, U, U,   L,  L,  U,  U,   L,  L,  U,  U
+  POL=dual
+  PCAL  = 'off'
+  BARREL=ROLL_OFF 
+  /
+! now the KVAZARs with full 32MHz via the R1002M
+   firstlo= 4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500
+   ifchan  =   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  STATION = SVETLOE, ZELENCHK, BADARY
+  /
+!
+!!! EVN DBBCs & others needing explicit patching
+DBE = 'DBBC_DDC'
+/
+!--------------------------------------------------------------------------
+   firstlo= 4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100
+   ifchan  =  A1,  C3,  A1,  C3,  A1,  C3,  A1,  C3,  A1,  C3,  A1,  C3,  A1,  C3,  A1,  C3
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF       station  =  EFLSBERG /
+!
+   firstlo= 5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664
+   ifchan  =  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF    station  =  JODRELL1 /
+!!
+   firstlo= 5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664,5664
+   ifchan  =  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF    station  =  JODRELL2 /
+!
+   firstlo= 4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088
+   ifchan  =  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF     station  =  ONSALA85 /
+!
+   firstlo= 4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600
+   ifchan  =  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF     station  =  HART /
+!
+   firstlo= 4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600
+   ifchan  =  A1,  C2,  A1,  C2,  A1,  C2,  A1,  C2,  A1,  C2,  A1,  C2,  A1,  C2,  A1,  C2
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF     station  =  NOTO /
+!
+   firstlo= 4158,4158,4158,4158,4158,4158,4158,4158,4158,4158,4158,4158,4158,4158,4158,4158
+   ifchan  =  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+   format = VDIF     station  =  YEBES40M /
+!
+   firstlo= 4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600,4600
+   ifchan  =  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF    station  =  MEDICINA /
+!
+   firstlo= 4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200
+   ifchan  =  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF     station  =  TORUN /
+!
+   firstlo= 4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100
+   ifchan =   A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = VDIF     station  =  IRBENE, IRBENE16 / 
+!
+   firstlo= 4620,4620,4620,4620,4620,4620,4620,4620,4620,4620,4620,4620,4620,4620,4620,4620
+   ifchan =   A2,  C1,  A2,  C1,  A2,  C1,  A2,  C1,  A2,  C1,  A2,  C1,  A2,  C1,  A2,  C1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = MARK5B   station  =  URUMQI /
+!
+   firstlo= 4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200
+   ifchan  =   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
+   bbc     =   1,   5,   1,   5,   2,   6,   2,   6,   3,   7,   3,   7,   4,   8,   4,   8
+  format = MARK5B  station  =  KUNMING /
+!!
+   firstlo= 4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200
+   ifchan =   A4,  B3,  A4,  B3,  A4,  B3,  A4,  B3,  A4,  B3,  A4,  B3,  A4,  B3,  A4,  B3
+   bbc     =   1,   5,   1,   5,   2,   6,   2,   6,   3,   7,   3,   7,   4,   8,   4,   8
+  format = VDIF    station  =  TIANMA65 
+  pcal = 'off' /                    
+!
+!
+!!!! WB limited to 1Gbps 
+!!!!   at C-band, 1G = upper half of 2G range
+  NCHAN=8
+  BITS=2
+  BBFILTER=32.0
+  FREQREF = 4772.00
+  FREQOFF = 128,128,128,128, 192,192,192,192
+  NETSIDE =   L,  L,  U,  U,   L,  L,  U,  U
+  POL=dual
+  PCAL  = 'off'
+   firstlo= 4529,4529,4529,4529,4529,4529,4529,4529
+   ifchan  =  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10
+  format = VDIF    station  =  WSTRBORK /
+!
+!
+!! eMERLIN using 64MHz subbands (put as DAR=NONE in sta catalog)
+!!   lowere half of the EVN 1Gbps band; 0.5-0.75 of 2Gbps band
+  NCHAN=2
+  BBFILTER = 64.0
+  FREQREF = 4868.00
+  FREQOFF = 0,0
+  NETSIDE = U,U
+  DBE = ' '
+  PCAL = 'off'
+!--------------------------------------------------------------------------
+   firstlo= 5664,5664
+   ifchan  =  A1,  B1
+   bbc     =   1,   9
+  format = VDIF    station  =  CAMBG32M /
+!
+   firstlo= 5664,5664
+   ifchan  =  A1,  B1
+   bbc     =   1,   9
+  format = VDIF    station  =  DARNHALL /
+!
+   firstlo= 5664,5664
+   ifchan  =  A1,  B1
+   bbc     =   1,   9
+  format = VDIF    station  =  KNOCKIN /
+!
+   firstlo= 5664,5664
+   ifchan  =  A1,  B1
+   bbc     =   1,   9
+  format = VDIF    station  =  PICKMERE /
+!
+   firstlo= 5664,5664
+   ifchan  =  A1,  B1
+   bbc     =   1,   9
+  format = VDIF    station  =  DEFFORD /
+!
+   firstlo= 5664,5664
+   ifchan  =  A1,  B1
+   bbc     =   1,   9
+  format = VDIF    station  =  JB1_MERL /
+!
+   firstlo= 5664,5664
+   ifchan  =  A1,  B1
+   bbc     =   1,   9
+  format = VDIF    station  =  JB2_MERL /
+!
