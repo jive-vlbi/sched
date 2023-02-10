@@ -40,7 +40,7 @@ C
             CALL PUTOUT( ' ' )
 
             CALL PUTOUT( ' +-----------------------+')
-            CALL PUTOUT( ' | Version 12.0 Advisory |')
+            CALL PUTOUT( ' | Version 11.8 Advisory |')
             CALL PUTOUT( ' +-----------------------+')
             CALL PUTOUT( ' -')
             CALL PUTOUT( " - Sched v11.7 incorporates the position " // 

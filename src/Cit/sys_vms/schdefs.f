@@ -18,7 +18,7 @@ C----------------------------------------------------------------------
       ELSE IF( FTYPE .EQ. 'frequency' ) THEN
          FILENAME = 'freq_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'peakcommand' ) THEN
-         FILENAME = 'peak.cmd'
+         FILENAME = 'peak_RDBE_DDC.cmd'
       ELSE IF( FTYPE .EQ. 'refpointing' ) THEN
          FILENAME = 'sources.peak'
       ELSE IF( FTYPE .EQ. 'messages' ) THEN
