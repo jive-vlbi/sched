@@ -12,6 +12,8 @@ matplotlib.use("Qt5Agg")
 with shut_up_mpl():
     matplotlib.rcParams["toolbar"] = "toolmanager"
 
+from pkg_resources import parse_version
+
 # in matplotlib version 3.3 the internal epoch was changed from year 1 to 1970
 # this epoch is used to convert dates to floating points internally
 # unfortunately that internal representation leaks to axis.get_xlim
@@ -1288,7 +1290,11 @@ class MainWidget(QWidget):
             axis.set_ybound(lower=-90, upper=90)
             legend = axis.legend()
             visible_alpha = {True: 1, False: 0.2}
-            for artist in legend.legendHandles:
+            if parse_version(matplotlib.__version__) < parse_version('3.7.0'):
+                legend_handles = legend.legendHandles
+            else:
+                legend_handles = legend.legend_handles
+            for artist in legend_handles:
                 artist.set_picker(5)
                 plot_artist = label_points[artist.get_label()]
                 artist.set_alpha(visible_alpha[plot_artist.get_visible()])
