@@ -139,7 +139,7 @@ C
 C
 C        Name and note.
 C
-         FRNAME(NFREQ) = KCHAR( 'NAME', 12, .FALSE., KD, KC, KI )
+         FRNAME(NFREQ) = KCHAR( 'NAME', 16, .FALSE., KD, KC, KI )
          FRNOTE(NFREQ) = KCHAR( 'NOTE', 80, .FALSE., KD, KC, KI )
 C
 C        Priority.
@@ -240,6 +240,10 @@ C
 C     Close frequency file
 C
       CLOSE( UNIT=IFRQ )
+C
+C     Create automate frequency settings
+C
+      CALL MAKEFREQ(NFREQ)
 C
 C     Print out some portion of the list if requested.
 C
