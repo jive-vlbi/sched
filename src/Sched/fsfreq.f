@@ -66,11 +66,11 @@ C ----------------------------------------------------------------------
 C
 C     Initialized array to zero to fix issues with planet's autopeak
 C          
-      DO I = 1, MAXCHN
-        DO J = 1, MAXSCN
-           BW(I,J) = 0.000
-        END DO    
-      END DO
+c      DO I = 1, MAXCHN
+c        DO J = 1, MAXSCN
+c           BW(I,J) = 0.000
+c        END DO    
+c      END DO
 C
 C     Make sure this wasn't mistakenly called with KF = 0, perhaps 
 C     when NOSETUP was specified.  I had a complaint from JIVE about

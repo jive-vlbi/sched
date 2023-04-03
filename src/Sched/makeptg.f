@@ -203,7 +203,8 @@ C
             END IF
          END DO
 C
-         IF( VLSR(1,SRCNUM(ISCN)) .GT. -1.E8 ) THEN
+         IF( VLSR(1,SRCNUM(ISCN)) .GT. -1.E8 .AND.  
+     1         CALCODE(ISRC) .EQ. 'L'  ) THEN
 C
 C           Needs doppler
 C
