@@ -64,14 +64,6 @@ C ----------------------------------------------------------------------
          CALL WLOG( 0, MSGTXT )
       END IF
 C
-C     Initialized array to zero to fix issues with planet's autopeak
-C          
-      DO I = 1, MAXCHN
-        DO J = 1, MAXSCN
-           BW(I,J) = 0.000
-        END DO    
-      END DO
-C
 C     Make sure this wasn't mistakenly called with KF = 0, perhaps 
 C     when NOSETUP was specified.  I had a complaint from JIVE about
 C     this happening.  It is probably ok to just not take action.
