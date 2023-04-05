@@ -1139,10 +1139,11 @@ def pointing_sectors(station, vex_version, print_warnings):
                      for zone in zones)
     else:
         # VEX 2 added a zone name
-        return tuple(("pointing_sector", zone[0], 
+        return tuple(("pointing_sector", 
                       "&" + zone[0] + name_suffix(zone),
                       "az", deg.format(zone[1]), deg.format(zone[2]),
-                      "el", deg.format(zone[3]), deg.format(zone[4])) 
+                      "el", deg.format(zone[3]), deg.format(zone[4]),
+                      zone[0]) 
                      for zone in zones)
 
 def scan_sector(station, scan, az1, el1):
