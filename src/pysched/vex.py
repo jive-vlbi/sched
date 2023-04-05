@@ -851,8 +851,12 @@ def modes_block(vex_version, print_warnings):
         modes_text += """
 *
 def {};
+""".format(mode_name)[1:]
+        if vex_version < "2":
+            modes_text += """
      ref $PROCEDURES = Procedure:{};
-""".format(mode_name, ":".join(station.stcode for station in stations))[1:]
+""".format(":".join(station.stcode for station in stations))[1:]
+        
         # go through all block in order
         for block in blocks:
             if block not in mode.keys():
@@ -900,6 +904,8 @@ def {};
     return (modes_text, scan_mode_name)
 
 def procedures_block(vex_version):
+    if vex_version >= "2":
+        return ""
     # just a hardcoded procedure
     return """
 $PROCEDURES;
