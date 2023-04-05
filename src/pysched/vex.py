@@ -19,7 +19,7 @@ import os.path
 class EndOfLineComment(str):
     pass
 
-sched_version = "4" # version of SCHED VEX writing routine
+sched_version = "5" # version of SCHED VEX writing routine
 
 block_separator = "*------------------------------------------------------"\
                   "------------------------\n"
