@@ -394,9 +394,11 @@ def modes_block(vex_version, print_warnings):
         if track_format is None:
             return None, None, None
         
-        def datastream_for_channels(datastream_link, channel_links):
+        def datastream_for_channels(datastream_label, channel_links):
+            datastream_link = "&" + datastream_label
             thread_link = "&thread0"
-            datastream = (("datastream", datastream_link, "VDIF"),
+            datastream = (("datastream",
+                           datastream_link, "VDIF", datastream_label),
                           ("thread", 
                            datastream_link, 
                            thread_link, 
@@ -429,12 +431,12 @@ def modes_block(vex_version, print_warnings):
             
             datastream = ()
             for index, if_ in enumerate(sorted(used_ifs), 1):
-                datastream_link = "&DS{}".format(index)
+                datastream_label = "DS{}".format(index) 
                 channel_links = [
                     freq[index][5] # FREQ link name
                     for index, channel in enumerate(channel_order)
                     if channel.ifchan == if_]
-                datastream += datastream_for_channels(datastream_link, 
+                datastream += datastream_for_channels(datastream_label,
                                                       channel_links)
             return None, datastream, None
 
@@ -456,10 +458,10 @@ def modes_block(vex_version, print_warnings):
                 
         if track_format.startswith("VDIF"):
             # hard-coded 1 thread VDIF section, with astro patching
-            datastream_link = "&DS1"
+            datastream_label = "DS1"
             channel_links = [freq[channel[3]][5] for channel in channel_order
                              if channel[2] == "sign"]
-            datastream = datastream_for_channels(datastream_link, 
+            datastream = datastream_for_channels(datastream_label, 
                                                  channel_links)
                                                  
             return None, datastream, None
