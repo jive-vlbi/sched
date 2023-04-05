@@ -10,7 +10,7 @@ C     Temporary values
 C
       DOUBLE PRECISION  TMP_FLO1(MFREQ)
       INTEGER           TMP_PRIO(MFREQ)
-      INTEGER           ISET, J, S2, S3, I
+      INTEGER           ISET, J, S2, S3, I, JSET
       DOUBLE PRECISION  TMP_LO
       INTEGER           FREQTOTAL
       INTEGER           TMP_RF1(MFREQ), TMP_RF2(MFREQ)
@@ -19,11 +19,15 @@ C
       DOUBLE PRECISION  DIFF
       CHARACTER         TSYN*10, TLO*10
       DOUBLE PRECISION  SYN2(21), SYN3(12)
-      DATA  SYN2 / 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0, 
-     1             8.1, 9.0, 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 
-     2             9.9 /
-      DATA  SYN3 / 9.9, 10.1, 10.4, 10.6, 10.9, 11.1, 11.4, 11.6, 
-     1             11.9, 12.1, 12.4, 12.6 /
+      DATA  SYN2 / 7.1D0, 7.2D0, 7.3D0, 7.4D0, 7.5D0, 7.6D0, 7.7D0, 
+     1             7.8D0, 7.9D0, 8.0D0, 8.1D0, 9.0D0, 9.1D0, 9.2D0, 
+     2             9.3D0, 9.4D0, 9.5D0, 9.6D0, 9.7D0, 9.8D0, 9.9D0 /
+      DATA  SYN3 / 9.9D0, 10.1D0, 10.4D0, 10.6D0, 10.9D0, 11.1D0, 
+     1             11.4D0, 11.6D0,11.9D0, 12.1D0, 12.4D0, 12.6D0 /
+C
+C     Sorting variables
+C
+      INTEGER           SINDEX(MFREQ), SRT(MFREQ)     
 C
 C     Initialize variables
       TMP_LO = 37000.0
@@ -82,11 +86,22 @@ C
           END IF
       END DO
 C
+C
+C     Sort by RF1
+C
+      DO ISET = TMP_FREQTOTAL, FREQTOTAL
+          SRT(ISET) = TMP_RF1(ISET)
+          SINDEX(ISET) = ISET
+      END DO
+C
+      CALL SORTRFX(TMP_FREQTOTAL, FREQTOTAL, SRT, SINDEX)      
+C
 C     Check 7mm rf1 and rf2 for limits;
 c     Create name, priority, 'station'
 C
       I = TMP_FREQTOTAL - 1
       DO ISET = TMP_FREQTOTAL, FREQTOTAL
+C          ISET = SINDEX(JSET)
 C         First iterate through syn1 values
           DO S2 = 1, 21
 C             Iterate through syn3 values
@@ -108,9 +123,15 @@ C                      FSYN(2,ISET) = TMP_FLO1(ISET)/1000.0
                       FSYN(2,I) = SYN2(S2)
                       FSYN(3,I) = SYN3(S3)
                       FRNOTE(I) = ''
-                      WRITE( FRNAME(I), '( A, F3.1, A, F4.1, A )' ) 
+                      IF(FSYN(3,I) .LT. 10) THEN
+                          WRITE( FRNAME(I), '( A, F3.1, A, F3.1, A )' ) 
      1                     "v7mm_", FSYN(2,I), '-', FSYN(3,I),
      2                      B_LETTER
+                      ELSE
+                          WRITE( FRNAME(I), '( A, F3.1, A, F4.1, A )') 
+     1                     "v7mm_", FSYN(2,I), '-', FSYN(3,I),
+     2                      B_LETTER
+                      END IF
 C
 C                     50 cm filter.
 C

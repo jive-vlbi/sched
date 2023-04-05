@@ -78,7 +78,7 @@ C       VERSION = 'Release 11.6; April 2020'
 C       VERNUM  = 11.7
 C       VERSION = 'Release 11.7; June 2022'
         VERNUM  = 12.0
-        VERSION = 'Release 12.0; June 2022'
+        VERSION = 'Release 12.0; April 2023'
 C
       RETURN
       END
