@@ -1,7 +1,7 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.25.4
+*    pySCHED version: 1.25.5
 *    SCHED version:   Release 11.6; Feburary 2020
-*    VEX/SCHED:       2.0.4
+*    VEX/SCHED:       2.0.5
 *    Other versions: Sched:  11.6 JPL-ephem: 1.01
 *    Catalog versions:
 *       Frequency: 2022Oct12-14:18:19
@@ -57,7 +57,6 @@ enddef;
 $MODE;
 *
 def oh;
-     ref $PROCEDURES = Procedure:At:Mp:Ho:Pa;
      ref $IF = LO@1000MHzDPolNoTone:Mp;
      ref $IF = LO@1050MHzDPolNoTone:Ho;
      ref $IF = LO@1600MHzDPolNoTone:Pa;
@@ -187,9 +186,9 @@ def ATCA;
      axis_type = az : el;
      antenna_motion = az :   40.0 deg/min : 3 sec;
      antenna_motion = el :   20.0 deg/min : 3 sec;
-     pointing_sector = ccw : &ccw : az : -150.0 deg :  -30.0 deg : el : 12.0 deg : 89.0 deg;
-     pointing_sector =   n :   &n : az :  -30.0 deg :  210.0 deg : el : 12.0 deg : 89.0 deg;
-     pointing_sector =  cw :  &cw : az :  210.0 deg : -150.0 deg : el : 12.0 deg : 89.0 deg;
+     pointing_sector = &ccw : az : -150.0 deg :  -30.0 deg : el : 12.0 deg : 89.0 deg : ccw;
+     pointing_sector =   &n : az :  -30.0 deg :  210.0 deg : el : 12.0 deg : 89.0 deg :   n;
+     pointing_sector =  &cw : az :  210.0 deg : -150.0 deg : el : 12.0 deg : 89.0 deg :  cw;
      axis_offset =        0.0 m;
 enddef;
 *
@@ -204,9 +203,9 @@ def MOPRA;
      axis_type = az : el;
      antenna_motion = az :   38.0 deg/min : 3 sec;
      antenna_motion = el :   19.0 deg/min : 3 sec;
-     pointing_sector = ccw : &ccw : az : -150.0 deg :  -30.0 deg : el : 12.0 deg : 89.0 deg;
-     pointing_sector =   n :   &n : az :  -30.0 deg :  210.0 deg : el : 12.0 deg : 89.0 deg;
-     pointing_sector =  cw :  &cw : az :  210.0 deg : -150.0 deg : el : 12.0 deg : 89.0 deg;
+     pointing_sector = &ccw : az : -150.0 deg :  -30.0 deg : el : 12.0 deg : 89.0 deg : ccw;
+     pointing_sector =   &n : az :  -30.0 deg :  210.0 deg : el : 12.0 deg : 89.0 deg :   n;
+     pointing_sector =  &cw : az :  210.0 deg : -150.0 deg : el : 12.0 deg : 89.0 deg :  cw;
      axis_offset =        0.0 m;
 enddef;
 *
@@ -214,9 +213,9 @@ def PARKES;
      axis_type = az : el;
      antenna_motion = az :   22.0 deg/min : 2 sec;
      antenna_motion = el :   12.0 deg/min : 2 sec;
-     pointing_sector = ccw : &ccw : az : -155.0 deg :  -65.0 deg : el : 30.5 deg : 89.5 deg;
-     pointing_sector =   n :   &n : az :  -65.0 deg :  205.0 deg : el : 30.5 deg : 89.5 deg;
-     pointing_sector =  cw :  &cw : az :  205.0 deg : -155.0 deg : el : 30.5 deg : 89.5 deg;
+     pointing_sector = &ccw : az : -155.0 deg :  -65.0 deg : el : 30.5 deg : 89.5 deg : ccw;
+     pointing_sector =   &n : az :  -65.0 deg :  205.0 deg : el : 30.5 deg : 89.5 deg :   n;
+     pointing_sector =  &cw : az :  205.0 deg : -155.0 deg : el : 30.5 deg : 89.5 deg :  cw;
      axis_offset =    -0.0194 m;
 enddef;
 *------------------------------------------------------------------------------
@@ -270,21 +269,6 @@ def PARKES;
      site_position_epoch = 2020y001d;
 enddef;
 *------------------------------------------------------------------------------
-$PROCEDURES;
-*
-def Procedure;
-     procedure_name_prefix =  "01";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
 *------------------------------------------------------------------------------
 $SOURCE;
 def 0823-500;
