@@ -1,7 +1,7 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.25.4
+*    pySCHED version: 1.25.5
 *    SCHED version:   Release 11.6; Feburary 2020
-*    VEX/SCHED:       2.0.4
+*    VEX/SCHED:       2.0.5
 *    Other versions: Sched:  11.6 JPL-ephem: 1.01
 *    Catalog versions:
 *       Frequency: 2022Oct12-14:18:19
@@ -59,7 +59,6 @@ enddef;
 $MODE;
 *
 def vsop1cm+vsop6cm;
-     ref $PROCEDURES = Procedure:T6:Tr:Nt:Eb:Jb:Wb:Mc:Hn:Gb:Nl:Sc:Mh:La:Kp:Ov:Br:Go;
      ref $IF = LO@21480MHzLPolNoTone:Mh;
      ref $IF = LO@21500MHzLPolNoTone:Br:Kp:La:Ov;
      ref $IF = LO@21914MHzLPolNoTone:Go;
@@ -291,7 +290,7 @@ $DATASTREAMS;
 *
 def VDIF_8000-1Thr2Ch;
 * vsop1cm+vsop6cm: Eb
-     datastream = &DS1 : VDIF;
+     datastream = &DS1 : VDIF : DS1;
      thread = &DS1 : &thread0 : 0 : 2 :  32.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
      channel = &DS1 : &thread0 : &CH02 : 1;
@@ -407,9 +406,9 @@ def DSS14;
      axis_type = az : el;
      antenna_motion = az :   15.0 deg/min : 2 sec;
      antenna_motion = el :   15.0 deg/min : 2 sec;
-     pointing_sector = ccw : &ccw : az : 135.0 deg : 315.0 deg : el : 6.0 deg : 86.0 deg;
-     pointing_sector =   n :   &n : az : 315.0 deg : 495.0 deg : el : 6.0 deg : 86.0 deg;
-     pointing_sector =  cw :  &cw : az : 495.0 deg : 135.0 deg : el : 6.0 deg : 86.0 deg;
+     pointing_sector = &ccw : az : 135.0 deg : 315.0 deg : el : 6.0 deg : 86.0 deg : ccw;
+     pointing_sector =   &n : az : 315.0 deg : 495.0 deg : el : 6.0 deg : 86.0 deg :   n;
+     pointing_sector =  &cw : az : 495.0 deg : 135.0 deg : el : 6.0 deg : 86.0 deg :  cw;
      axis_offset =        0.0 m;
 enddef;
 *
@@ -417,9 +416,9 @@ def EB_RDBE;
      axis_type = az : el;
      antenna_motion = az :   25.0 deg/min : 16 sec;
      antenna_motion = el :   15.0 deg/min : 16 sec;
-     pointing_sector = ccw : &ccw : az :  34.0 deg : 120.0 deg : el : 9.0 deg : 89.0 deg;
-     pointing_sector =   n :   &n : az : 120.0 deg : 394.0 deg : el : 9.0 deg : 89.0 deg;
-     pointing_sector =  cw :  &cw : az : 394.0 deg :  34.0 deg : el : 9.0 deg : 89.0 deg;
+     pointing_sector = &ccw : az :  34.0 deg : 120.0 deg : el : 9.0 deg : 89.0 deg : ccw;
+     pointing_sector =   &n : az : 120.0 deg : 394.0 deg : el : 9.0 deg : 89.0 deg :   n;
+     pointing_sector =  &cw : az : 394.0 deg :  34.0 deg : el : 9.0 deg : 89.0 deg :  cw;
      axis_offset =     0.0131 m;
 enddef;
 *
@@ -434,9 +433,9 @@ def JODRELL2;
      axis_type = az : el;
      antenna_motion = az :   20.0 deg/min : 2 sec;
      antenna_motion = el :   20.0 deg/min : 2 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg : -30.0 deg : el : 1.0 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az : -30.0 deg : 270.0 deg : el : 1.0 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 1.0 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg : -30.0 deg : el : 1.0 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az : -30.0 deg : 270.0 deg : el : 1.0 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 1.0 deg : 90.0 deg :  cw;
      axis_offset =      0.458 m;
 enddef;
 *
@@ -444,9 +443,9 @@ def MEDICINA;
      axis_type = az : el;
      antenna_motion = az :   45.0 deg/min : 3 sec;
      antenna_motion = el :   30.0 deg/min : 3 sec;
-     pointing_sector = ccw : &ccw : az : 270.0 deg : 450.0 deg : el : 5.0 deg : 88.5 deg;
-     pointing_sector =   n :   &n : az : 450.0 deg : 630.0 deg : el : 5.0 deg : 88.5 deg;
-     pointing_sector =  cw :  &cw : az : 630.0 deg : 270.0 deg : el : 5.0 deg : 88.5 deg;
+     pointing_sector = &ccw : az : 270.0 deg : 450.0 deg : el : 5.0 deg : 88.5 deg : ccw;
+     pointing_sector =   &n : az : 450.0 deg : 630.0 deg : el : 5.0 deg : 88.5 deg :   n;
+     pointing_sector =  &cw : az : 630.0 deg : 270.0 deg : el : 5.0 deg : 88.5 deg :  cw;
      axis_offset =     1.8278 m;
 enddef;
 *
@@ -454,12 +453,12 @@ def METSAHOV;
      axis_type = az : el;
      antenna_motion = az :   60.0 deg/min : 2 sec;
      antenna_motion = el :   60.0 deg/min : 2 sec;
-     pointing_sector =  ccw :  &ccw : az : -55.0 deg :  55.0 deg : el :  5.0 deg : 90.0 deg;
-     pointing_sector =    n :    &n : az :  55.0 deg : 305.0 deg : el :  5.0 deg : 90.0 deg;
-     pointing_sector =   cw :   &cw : az : 305.0 deg : -55.0 deg : el :  5.0 deg : 90.0 deg;
-     pointing_sector = ccwp : &ccwp : az : -55.0 deg :  55.0 deg : el : 90.0 deg : 95.0 deg;
-     pointing_sector = ccwp : &ccwp : az :  55.0 deg : 305.0 deg : el : 90.0 deg : 95.0 deg;
-     pointing_sector = ccwp : &ccwp : az : 305.0 deg : -55.0 deg : el : 90.0 deg : 95.0 deg;
+     pointing_sector =  &ccw : az : -55.0 deg :  55.0 deg : el :  5.0 deg : 90.0 deg :  ccw;
+     pointing_sector =    &n : az :  55.0 deg : 305.0 deg : el :  5.0 deg : 90.0 deg :    n;
+     pointing_sector =   &cw : az : 305.0 deg : -55.0 deg : el :  5.0 deg : 90.0 deg :   cw;
+     pointing_sector = &ccwp : az : -55.0 deg :  55.0 deg : el : 90.0 deg : 95.0 deg : ccwp;
+     pointing_sector = &ccwp : az :  55.0 deg : 305.0 deg : el : 90.0 deg : 95.0 deg : ccwp;
+     pointing_sector = &ccwp : az : 305.0 deg : -55.0 deg : el : 90.0 deg : 95.0 deg : ccwp;
      axis_offset =        0.0 m;
 enddef;
 *
@@ -467,9 +466,9 @@ def NOTO;
      axis_type = az : el;
      antenna_motion = az :   43.0 deg/min : 2 sec;
      antenna_motion = el :   30.0 deg/min : 2 sec;
-     pointing_sector = ccw : &ccw : az : -87.0 deg :  90.0 deg : el : 5.0 deg : 85.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 273.0 deg : el : 5.0 deg : 85.0 deg;
-     pointing_sector =  cw :  &cw : az : 273.0 deg : -87.0 deg : el : 5.0 deg : 85.0 deg;
+     pointing_sector = &ccw : az : -87.0 deg :  90.0 deg : el : 5.0 deg : 85.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 273.0 deg : el : 5.0 deg : 85.0 deg :   n;
+     pointing_sector =  &cw : az : 273.0 deg : -87.0 deg : el : 5.0 deg : 85.0 deg :  cw;
      axis_offset =     1.8296 m;
 enddef;
 *
@@ -477,9 +476,9 @@ def TIANMA65;
      axis_type = az : el;
      antenna_motion = az :   30.0 deg/min : 2 sec;
      antenna_motion = el :   15.0 deg/min : 2 sec;
-     pointing_sector = ccw : &ccw : az : -80.0 deg :  80.0 deg : el : 7.0 deg : 88.0 deg;
-     pointing_sector =   n :   &n : az :  80.0 deg : 280.0 deg : el : 7.0 deg : 88.0 deg;
-     pointing_sector =  cw :  &cw : az : 280.0 deg : -80.0 deg : el : 7.0 deg : 88.0 deg;
+     pointing_sector = &ccw : az : -80.0 deg :  80.0 deg : el : 7.0 deg : 88.0 deg : ccw;
+     pointing_sector =   &n : az :  80.0 deg : 280.0 deg : el : 7.0 deg : 88.0 deg :   n;
+     pointing_sector =  &cw : az : 280.0 deg : -80.0 deg : el : 7.0 deg : 88.0 deg :  cw;
      axis_offset =     0.0096 m;
 enddef;
 *
@@ -487,12 +486,12 @@ def TORUN;
      axis_type = az : el;
      antenna_motion = az :   30.0 deg/min : 5 sec;
      antenna_motion = el :   16.0 deg/min : 5 sec;
-     pointing_sector =  ccw :  &ccw : az : -80.0 deg :  80.0 deg : el :  3.0 deg : 90.0 deg;
-     pointing_sector =    n :    &n : az :  80.0 deg : 280.0 deg : el :  3.0 deg : 90.0 deg;
-     pointing_sector =   cw :   &cw : az : 280.0 deg : -80.0 deg : el :  3.0 deg : 90.0 deg;
-     pointing_sector = ccwp : &ccwp : az : -80.0 deg :  80.0 deg : el : 90.0 deg : 93.0 deg;
-     pointing_sector = ccwp : &ccwp : az :  80.0 deg : 280.0 deg : el : 90.0 deg : 93.0 deg;
-     pointing_sector = ccwp : &ccwp : az : 280.0 deg : -80.0 deg : el : 90.0 deg : 93.0 deg;
+     pointing_sector =  &ccw : az : -80.0 deg :  80.0 deg : el :  3.0 deg : 90.0 deg :  ccw;
+     pointing_sector =    &n : az :  80.0 deg : 280.0 deg : el :  3.0 deg : 90.0 deg :    n;
+     pointing_sector =   &cw : az : 280.0 deg : -80.0 deg : el :  3.0 deg : 90.0 deg :   cw;
+     pointing_sector = &ccwp : az : -80.0 deg :  80.0 deg : el : 90.0 deg : 93.0 deg : ccwp;
+     pointing_sector = &ccwp : az :  80.0 deg : 280.0 deg : el : 90.0 deg : 93.0 deg : ccwp;
+     pointing_sector = &ccwp : az : 280.0 deg : -80.0 deg : el : 90.0 deg : 93.0 deg : ccwp;
      axis_offset =        0.0 m;
 enddef;
 *
@@ -500,9 +499,9 @@ def VLBA_BR;
      axis_type = az : el;
      antenna_motion = az :   83.6 deg/min : 6 sec;
      antenna_motion = el :   29.0 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1304 m;
 enddef;
 *
@@ -510,9 +509,9 @@ def VLBA_HN;
      axis_type = az : el;
      antenna_motion = az :   81.3 deg/min : 6 sec;
      antenna_motion = el :   26.7 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1299 m;
 enddef;
 *
@@ -520,9 +519,9 @@ def VLBA_KP;
      axis_type = az : el;
      antenna_motion = az :   80.8 deg/min : 6 sec;
      antenna_motion = el :   29.4 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1309 m;
 enddef;
 *
@@ -530,9 +529,9 @@ def VLBA_LA;
      axis_type = az : el;
      antenna_motion = az :   82.0 deg/min : 6 sec;
      antenna_motion = el :   29.5 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =      2.131 m;
 enddef;
 *
@@ -540,9 +539,9 @@ def VLBA_NL;
      axis_type = az : el;
      antenna_motion = az :   82.5 deg/min : 6 sec;
      antenna_motion = el :   28.7 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1308 m;
 enddef;
 *
@@ -550,9 +549,9 @@ def VLBA_OV;
      axis_type = az : el;
      antenna_motion = az :   84.5 deg/min : 6 sec;
      antenna_motion = el :   28.7 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1309 m;
 enddef;
 *
@@ -560,9 +559,9 @@ def VLBA_SC;
      axis_type = az : el;
      antenna_motion = az :   84.5 deg/min : 6 sec;
      antenna_motion = el :   28.5 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1355 m;
 enddef;
 *
@@ -770,21 +769,6 @@ def WSTRBORK;
      site_position_epoch = 1997y001d;
 enddef;
 *------------------------------------------------------------------------------
-$PROCEDURES;
-*
-def Procedure;
-     procedure_name_prefix =  "01";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
 *------------------------------------------------------------------------------
 $SOURCE;
 def W3OH;

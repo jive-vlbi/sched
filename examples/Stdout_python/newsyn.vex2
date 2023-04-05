@@ -1,7 +1,7 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.25.4
+*    pySCHED version: 1.25.5
 *    SCHED version:   Release 11.6; Feburary 2020
-*    VEX/SCHED:       2.0.4
+*    VEX/SCHED:       2.0.5
 *    Other versions: Sched:  11.6 JPL-ephem: 1.01
 *    Catalog versions:
 *       Frequency: 2022Oct12-14:18:19
@@ -61,7 +61,6 @@ enddef;
 $MODE;
 *
 def stdz1.2cm;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@14600MHzDPolTone/1:Br:Kp:La:Nl:Ov;
      ref $BBC = 4BBCs:Br:Kp:La:Nl:Ov;
      ref $PHASE_CAL_DETECT = Detect:Br:Kp:La:Nl:Ov;
@@ -70,7 +69,6 @@ def stdz1.2cm;
 enddef;
 *
 def stdz3.2cm;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@14600MHzDPolTone/1:Br:Kp:Nl:Ov;
      ref $IF = LO@14620MHzDPolTone/1:La;
      ref $BBC = 4BBCs:Br:Kp:La:Nl:Ov;
@@ -80,7 +78,6 @@ def stdz3.2cm;
 enddef;
 *
 def stdz2.2cm;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@14600MHzDPolTone/1:Br:Kp:Nl:Ov;
      ref $IF = LO@14620MHzDPolNoTone:La;
      ref $BBC = 4BBCs:Br:Kp:La:Nl:Ov;
@@ -92,7 +89,6 @@ def stdz2.2cm;
 enddef;
 *
 def stdz_u1.2cm+stdz_u2.2cm+stdz_;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@14600MHzDPolTone/1:Br:Kp:La:Nl:Ov;
      ref $BBC = 4BBCs:Br:Kp:La:Nl:Ov;
      ref $PHASE_CAL_DETECT = Detect:Br:Kp:La:Nl:Ov;
@@ -101,7 +97,6 @@ def stdz_u1.2cm+stdz_u2.2cm+stdz_;
 enddef;
 *
 def TwoLO_1.6cm;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@4100MHzRPolTone/1:Br:Kp:La:Nl:Ov;
      ref $BBC = 4BBCs#02:Br:Kp:La:Nl:Ov;
      ref $PHASE_CAL_DETECT = Detect:Br:Kp:La:Nl:Ov;
@@ -110,7 +105,6 @@ def TwoLO_1.6cm;
 enddef;
 *
 def TwoLO_2.6cm;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@3600MHzRPolTone/1:Br:Kp:La:Nl:Ov;
      ref $BBC = 4BBCs#02:Br:Kp:La:Nl:Ov;
      ref $PHASE_CAL_DETECT = Detect:Br:Kp:La:Nl:Ov;
@@ -119,7 +113,6 @@ def TwoLO_2.6cm;
 enddef;
 *
 def TwoLO.sx;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@2900MHzRPolTone/1:Br:Kp:La:Nl:Ov;
      ref $BBC = 4BBCs#02:Br:Kp:La:Nl:Ov;
      ref $PHASE_CAL_DETECT = Detect:Br:Kp:La:Nl:Ov;
@@ -128,7 +121,6 @@ def TwoLO.sx;
 enddef;
 *
 def TwoLO.dualx;
-     ref $PROCEDURES = Procedure:Nl:La:Kp:Ov:Br;
      ref $IF = LO@7600MHzRPolTone/1:Br:Kp:La:Nl:Ov;
      ref $BBC = 4BBCs#03:Br:Kp:La:Nl:Ov;
      ref $PHASE_CAL_DETECT = Detect:Br:Kp:La:Nl:Ov;
@@ -314,7 +306,7 @@ def VDIF_8000-1Thr4Ch;
 * stdz2.2cm: Br, Kp, La, Nl, Ov
 * stdz3.2cm: Br, Kp, La, Nl, Ov
 * stdz_u1.2cm+stdz_u2.2cm+stdz_: Br, Kp, La, Nl, Ov
-     datastream = &DS1 : VDIF;
+     datastream = &DS1 : VDIF : DS1;
      thread = &DS1 : &thread0 : 0 : 4 :  32.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
      channel = &DS1 : &thread0 : &CH02 : 1;
@@ -324,7 +316,7 @@ enddef;
 *
 def VDIF_8000-1Thr4Ch#02;
 * TwoLO.sx: Br, Kp, La, Nl, Ov
-     datastream = &DS1 : VDIF;
+     datastream = &DS1 : VDIF : DS1;
      thread = &DS1 : &thread0 : 0 : 4 :  32.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH03 : 0;
      channel = &DS1 : &thread0 : &CH04 : 1;
@@ -370,9 +362,9 @@ def VLBA_BR;
      axis_type = az : el;
      antenna_motion = az :   83.6 deg/min : 6 sec;
      antenna_motion = el :   29.0 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1304 m;
 enddef;
 *
@@ -380,9 +372,9 @@ def VLBA_KP;
      axis_type = az : el;
      antenna_motion = az :   80.8 deg/min : 6 sec;
      antenna_motion = el :   29.4 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1309 m;
 enddef;
 *
@@ -390,9 +382,9 @@ def VLBA_LA;
      axis_type = az : el;
      antenna_motion = az :   82.0 deg/min : 6 sec;
      antenna_motion = el :   29.5 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =      2.131 m;
 enddef;
 *
@@ -400,9 +392,9 @@ def VLBA_NL;
      axis_type = az : el;
      antenna_motion = az :   82.5 deg/min : 6 sec;
      antenna_motion = el :   28.7 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1308 m;
 enddef;
 *
@@ -410,9 +402,9 @@ def VLBA_OV;
      axis_type = az : el;
      antenna_motion = az :   84.5 deg/min : 6 sec;
      antenna_motion = el :   28.7 deg/min : 6 sec;
-     pointing_sector = ccw : &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =   n :   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg;
-     pointing_sector =  cw :  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg;
+     pointing_sector = &ccw : az : -90.0 deg :  90.0 deg : el : 2.25 deg : 90.0 deg : ccw;
+     pointing_sector =   &n : az :  90.0 deg : 270.0 deg : el : 2.25 deg : 90.0 deg :   n;
+     pointing_sector =  &cw : az : 270.0 deg : -90.0 deg : el : 2.25 deg : 90.0 deg :  cw;
      axis_offset =     2.1309 m;
 enddef;
 *------------------------------------------------------------------------------
@@ -480,21 +472,6 @@ def VLBA_OV;
      horizon_map_el = 3.0 deg : 5.0 : 5.0 : 7.0 : 9.0 : 10.0 : 12.0 : 13.0 : 13.0 : 14.0 : 15.0 : 15.0 : 13.0 : 12.0 : 11.0 : 10.0 : 9.0 : 8.0 : 7.0 : 6.0 : 6.0 : 5.0 : 4.0 : 3.0 : 3.0 : 4.0 : 4.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0 : 4.0 : 5.0 : 5.0 : 6.0 : 7.0 : 7.0 : 6.0 : 7.0 : 8.0 : 9.0 : 9.0 : 8.0 : 7.0 : 7.0 : 5.0 : 4.0 : 4.0 : 3.0 : 3.0 : 2.0 : 2.0 : 3.0 : 3.0;
 enddef;
 *------------------------------------------------------------------------------
-$PROCEDURES;
-*
-def Procedure;
-     procedure_name_prefix =  "01";
-     tape_change =  420 sec;
-     headstack_motion =    6 sec;
-     new_source_command =    5 sec;
-     new_tape_setup =   20 sec;
-     setup_always = on :  20 sec;
-     parity_check = off : 100 sec;
-     tape_prepass = off : 600 sec;
-     preob_cal  = on :  10 sec : preob;
-     midob_cal  = on :  15 sec : midob;
-     postob_cal = on :   0 sec : postob;
-enddef;
 *------------------------------------------------------------------------------
 $SOURCE;
 def 0923+392;
