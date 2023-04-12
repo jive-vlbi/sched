@@ -179,12 +179,21 @@ C        used for synthesizer 3.  The old synthesizers are thought to
 C        put out a cleaner signal and, hence, are better for multiplying
 C        up for receiver first LOs.
 C
-         IF( MODETEST(KS) .AND. ( I .EQ. 1 .OR. I .EQ. 2 ) ) THEN
-            IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 0.01D0, 0, 0.D0,
+C        April 2023 Change: Accept all types of settings if MODETEST
+C        is true. If MODETEST is false, accept all values for new
+C        L404 settings
+C
+         IF( MODETEST(KS) ) THEN
+C             DON'T DO ANY CHECKS IF MODTEST IS SET
+         ELSE 
+             IF( ( .NOT. MODETEST(KS)) .AND. 
+     1                       ( I .EQ. 1 .OR. I .EQ. 2 ) ) THEN
+               IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 0.01D0, 0, 0.D0,
+     1           0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.
+            ELSE
+             IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 500.D0, 1, 100.D0, 
      1          0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.
-         ELSE
-            IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 500.D0, 1, 100.D0, 
-     1          0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.
+             END IF
          END IF
       END DO
 C

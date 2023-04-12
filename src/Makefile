@@ -212,7 +212,7 @@ SLA_OBJS = $(SLA_SRCS:.f=.o)
 CIT_SRCS = $(wildcard Cit/*.f)
 CIT_OBJS = $(CIT_SRCS:.f=.o)
 
-FREQ_SRCS = $(wildcard Sched/Freq/*.f)
+FREQ_SRCS = $(wildcard Sched/Freq/VLBA/*.f)
 FREQ_OBJS = $(FREQ_SRCS:.f=.o)
 
 SCHED_SRCS = $(wildcard Sched/*.f)
@@ -271,7 +271,7 @@ all:
 	cd Cit; $(MAKE) "FC=$(FC)"
 	cd Sla; $(MAKE) "FC=$(FC)"
 	cd Sched; $(MAKE) "FC=$(FC)"
-	cd Sched/Freq; $(MAKE) "FC=$(FC)"
+	cd Sched/Freq/VLBA; $(MAKE) "FC=$(FC)"
 	cd Jpl; $(MAKE) "FC=$(FC)"
 	cd Jplstub; $(MAKE) "FC=$(FC)"
 	cd Sat; $(MAKE) "FC=$(FC)"
@@ -325,7 +325,7 @@ clean:
 	cd Cit; $(MAKE) clean
 	cd Sla; $(MAKE) clean
 	cd Sched; $(MAKE) clean
-	cd Sched/Freq; $(MAKE) clean
+	cd Sched/Freq/VLBA; $(MAKE) clean
 	cd Jpl; $(MAKE) clean
 	cd Jplstub; $(MAKE) clean
 	cd Sat; $(MAKE) clean

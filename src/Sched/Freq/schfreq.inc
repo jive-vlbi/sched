@@ -1,1 +1,0 @@
-../schfreq.inc
