@@ -1116,8 +1116,8 @@ def pointing_sectors(station, vex_version, print_warnings):
                      ("n",    ax1[1] - 360, ax1[0] + 360, ax2[0], 90.),
                      ("cw",   ax1[0] + 360, ax1[0], ax2[0], 90.),
                      ("ccwp", ax1[0], ax1[1] - 360, 90., ax2[1]),
-                     ("ccwp", ax1[1] - 360, ax1[0] + 360, 90., ax2[1]),
-                     ("ccwp", ax1[0] + 360, ax1[0], 90., ax2[1]))
+                     ("np",   ax1[1] - 360, ax1[0] + 360, 90., ax2[1]),
+                     ("cwp",  ax1[0] + 360, ax1[0], 90., ax2[1]))
     else: # diff > 720
         if print_warnings:
             s.wlog(1, "WRAPZONE: Station {} has an azimuth wrap range over "
