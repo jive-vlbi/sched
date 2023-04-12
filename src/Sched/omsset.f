@@ -11,6 +11,7 @@ C
       INTEGER            SETSCANS, NRSCANS, USE4VLBA(MAXSET), VLBA1
       LOGICAL            VLBASAME, SAMESET, ISVLBA
       DOUBLE PRECISION   SETHOURS, NRHOURS
+      INTEGER            NCHANPRT
 C ---------------------------------------------------------------------
 C     For each setup file, find out if we can use a generic VLBA output
 C     group.
@@ -134,7 +135,8 @@ C
             WRITE( MSGTXT, '( A )' ) 
      1          '    BBC_SB             = '
             NCHR = 27
-            DO ICHAN = 1, NCHAN(KS)
+            NCHANPRT = MIN(NCHAN(KS), 31)
+            DO ICHAN = 1, NCHANPRT
                WRITE( SETMSG(NCHR:NCHR+1), '( A )' ) 
      1              IFCHAN(ICHAN,KS)
                WRITE( MSGTXT(NCHR:NCHR), '( A )' )
@@ -158,7 +160,8 @@ C
      1          '    POL                = '
             NCHR = 27
             NCHR1 = 27
-            DO ICHAN = 1, NCHAN(KS)
+            NCHANPRT = MIN(NCHAN(KS), 31)
+            DO ICHAN = 1, NCHANPRT
                WRITE( SETMSG(NCHR:NCHR), '( A1 )' ) 
      1              NETSIDE(ICHAN,KS)
                WRITE( MSGTXT(NCHR1:NCHR1), '( A1 )' )
