@@ -13,10 +13,11 @@ C
       DOUBLE PRECISION  TMP_LO
       INTEGER           FREQTOTAL
       INTEGER           TMP_RF1(MFREQ), TMP_RF2(MFREQ)
+      INTEGER           TMP_PRIO(MFREQ)
       INTEGER           TMP_FREQTOTAL
       INTEGER           TMP_FREQTOTAL2
       CHARACTER         B_LETTER, B2
-      INTEGER           IFAC, IFBD, JF, KF, ESIZE
+      INTEGER           IFAC, IFBD, JF, KF, ESIZE, IPRIO
 C
 C     Sorting variables
 C
@@ -25,6 +26,7 @@ C
 C     Initialize variables
       TMP_LO = 3400.0
       TMP_FREQTOTAL = FREQTOTAL + 1
+      IPRIO = TMP_FREQTOTAL
 C
 C     Calculate values for the first 6 cm Upper band 
 C
@@ -42,6 +44,14 @@ C     Calculate RF1 and RF2 values for 6cm Upper band
 C
       CALL GETRFX(TMP_FLO1, TMP_FREQTOTAL, FREQTOTAL, TMP_RF1, 
      1            TMP_RF2, 512, 1024)
+C
+C     Check RF1 for limits
+C
+      DO ISET = TMP_FREQTOTAL, FREQTOTAL
+          IF( TMP_FLO1(ISET) .GE. 4400 ) THEN
+              TMP_RF1(ISET) = 5050
+          END IF
+      END DO
 C
 C     Calculate values for the second 6cm Upper band 
 C
@@ -62,6 +72,28 @@ C
       CALL GETRFX(TMP_FLO1, TMP_FREQTOTAL2, FREQTOTAL, TMP_RF1, 
      1            TMP_RF2, 512, 1024)
 C
+C     Check RF1 for limits
+C
+      DO ISET = TMP_FREQTOTAL2, FREQTOTAL
+          IF( TMP_FLO1(ISET) .GE. 6100 ) THEN
+              TMP_RF1(ISET) = 6800
+          END IF
+      END DO
+C
+C     Calculate priority
+C    
+      DO ISET = IPRIO, FREQTOTAL
+          IF( TMP_RF1(ISET) .GE. 3912 .AND. 
+     1                      TMP_RF1(ISET) .LT. 4112 ) THEN
+              TMP_PRIO(ISET) = 1
+          ELSE IF( TMP_RF1(ISET) .LT. 3912 .OR. 
+     1        (TMP_RF1(ISET) .GE. 5050 .AND. TMP_RF1(ISET) .LE. 5600) 
+     2                .OR. (TMP_RF1(ISET) .GE. 6800) ) THEN
+              TMP_PRIO(ISET) = 2
+          ELSE
+              TMP_PRIO(ISET) = 0    
+          END IF
+      END DO
 C
 C
 C     Calculate values for the first 6 cm Lower band 
@@ -69,6 +101,7 @@ C
 C     LO Value
 C  
       TMP_FREQTOTAL2 = FREQTOTAL + 1
+      IPRIO = TMP_FREQTOTAL2
       TMP_LO = 5400
       DO ISET = TMP_FREQTOTAL2, MFREQ
          IF( TMP_LO  .LE. 6400.0 ) THEN
@@ -82,6 +115,14 @@ C     Calculate RF1 and RF2 values for the first 6cm Lower band
 C
       CALL GETRFX(TMP_FLO1, TMP_FREQTOTAL2, FREQTOTAL, TMP_RF1, 
      1            TMP_RF2, -1024, -512)
+C
+C     Check RF2 for limits
+C
+      DO ISET = TMP_FREQTOTAL2, FREQTOTAL
+          IF( TMP_FLO1(ISET) .LE. 5400 ) THEN
+              TMP_RF2(ISET) = 4750
+          END IF
+      END DO
 C
 C     Calculate values for the second 6cm second Lower band 
 C
@@ -101,6 +142,33 @@ C     Calculate RF1 and RF2 values for second 6cm Lower band
 C
       CALL GETRFX(TMP_FLO1, TMP_FREQTOTAL2, FREQTOTAL, TMP_RF1, 
      1            TMP_RF2, -1024, -512)
+C
+C     Check RF2 for limits
+C
+      DO ISET = TMP_FREQTOTAL2, FREQTOTAL
+          IF( TMP_FLO1(ISET) .LE. 7400 ) THEN
+              TMP_RF2(ISET) = 6700
+          END IF
+          IF( TMP_FLO1(ISET) .LE. 8600 ) THEN
+              TMP_RF2(ISET) = 7900
+          END IF
+      END DO
+C
+C     Calculate priority
+C    
+      DO ISET = IPRIO, FREQTOTAL
+          IF( TMP_RF1(ISET) .LE. 4376 .OR. 
+     1        (TMP_RF1(ISET) .GE. 5576 .AND. TMP_RF1(ISET) .LE. 6376)) 
+     2                THEN
+              TMP_PRIO(ISET) = 2
+          ELSE IF( (TMP_RF1(ISET) .GT. 4376 .AND. 
+     1                      TMP_RF1(ISET) .LE. 4750) .OR. 
+     2                       TMP_RF1(ISET) .GE. 7576 ) THEN
+              TMP_PRIO(ISET) = 1
+          ELSE
+              TMP_PRIO(ISET) = 0    
+          END IF 
+      END DO      
 C
 C
 C     Sort by RF1
@@ -127,6 +195,8 @@ C         Create name
           FRNOTE(JSET) = ''
           WRITE( FRNAME(JSET), '(A, F3.1, A)' ) "v6cm_", 
      1       FSYN(2,JSET), B_LETTER
+C         Set priority
+          PRIO(JSET) = TMP_PRIO(ISET)
 C         Set stations
           DO J = 1, MFSTA
               IF( J .EQ. 1 ) THEN
@@ -214,6 +284,8 @@ C
                   WRITE( FRNAME(I), '(A, F3.1, A, A, F3.1, A)' ) 
      1               "v6cm_", FSYN(2,I), B_LETTER, '-',
      2               FSYN(1,I), B2
+C                 Set Priority
+                  PRIO(I) = TMP_PRIO(JF) + TMP_PRIO(KF) + 1
 C                 Set stations
                   DO J = 1, MFSTA
                       IF( J .EQ. 1 ) THEN
