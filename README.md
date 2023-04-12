@@ -157,6 +157,9 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.25.3 (2023-02-23)__: Matplotlib version 3.7.0 deprecated the attribute legendHandles for legend_handles. This version supports both to suppress the warning message.
 * __v1.25.4 (2023-03-29)__: Fix a bug in the setup script NumPy version specification.
 * __v1.25.5 (2023-04-05)__: Updates to VEX2 writing routines (PROCEDURES, pointing_sector and datastream).
+* __v1.25.6 (2023-04-12)__: Two bug fixes:
+  * The OMS file writing Fortran function would write out of string boundaries for setups with more than 31 channels, into the setup file name. Only print the first 31 channels.
+  * Update the Python wrap zone writing equivalent to the changes to the Fortran code introduced in 1.24.0.
 
 
 # Contact
