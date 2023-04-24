@@ -278,8 +278,8 @@ C                 Create name
 C          
 C                 50 cm filter.
 C
-                  FLCP50CM(ISET) = 'NARROW'
-                  FRCP50CM(ISET) = 'NARROW'
+                  FLCP50CM(I) = 'NARROW'
+                  FRCP50CM(I) = 'NARROW'
 C        
                   WRITE( FRNAME(I), '(A, F3.1, A, A, F3.1, A)' ) 
      1               "v6cm_", FSYN(2,I), B_LETTER, '-',
@@ -309,8 +309,8 @@ C                 Set ifnam
                       END IF
                   END DO
 C                 Set fnif, fe, pol, rf1, rf2, and lo
-                  FNIF(ISET) = 4
-                  DO J = 1, FNIF(ISET)
+                  FNIF(I) = 4
+                  DO J = 1, FNIF(I)
                       IF( J .EQ. 1 .OR. J .EQ. 3) THEN
                           WRITE( FPOL(J,I), '(A3)' ) 'RCP'
                       ELSE
