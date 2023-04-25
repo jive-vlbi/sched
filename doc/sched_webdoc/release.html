@@ -1,0 +1,858 @@
+<html>
+  <body>
+<!--l. 14239--><p class="noindent" >
+<h3 class="sectionHead"><span class="titlemark">4.5   </span> <a 
+ id="x1-3080004.5"></a>Release Instructions.</h3>
+<!--l. 14241--><p class="noindent" >This section is mainly for the primary <span class="cmcsc-10">SCHED</span><span class="cmcsc-10">&#x00A0;</span>developer. It describes the process of making a <span class="cmcsc-10">SCHED</span><span class="cmcsc-10">&#x00A0;</span>release. It is written to allow the main lines to be cut and pasted into a terminal to accomplish the steps. I have not set up a script because considerable interaction and checking is normally required.
+  
+  <!--l. 14247--><p class="noindent" >This section is derived from a separate file called <span class="cmsl-10">Release</span><span class="cmsl-10">_instructions </span>that is no longer being maintained.
+
+  <dl class="description"><dt class="description"> <span class="cmbx-10">Before a release:</span> </dt><dd class="description">
+      
+      <!--l. 14254--><p class="noindent" >Be sure that the other developers have committed anything that they want included in the release.
+      <!--l. 14257--><p class="noindent" >Make sure VERSION and VERNUM in <span class="cmsl-10">versched.f</span> are up to date. Make sure the version on the manual first page is current.
+     <!--l. 14260--><p class="noindent" >Make sure <span class="cmsl-10">sched</span><span class="cmsl-10">_work</span> is synced with the svn repository. This should include the results of updating the manual. Note that <span class="cmsl-10">sched</span><span class="cmsl-10">_work</span> is my development directory. You may have something different.
+        <!--l. 14265--><p class="noindent" >Make sure that the leap seconds in <span class="cmsl-10">$SCHED/src/Sla/dat.f</span> and in <span class="cmsl-10">$PLANET</span><span class="cmsl-10">_DATA/naif0007.tls</span> (or equivalent like <span class="cmsl-10">naif0010.tls</span>) are up to date. If there is a change in dat.f, update the slalib.a in my other programming areas as they might affect the pointing and gain programs, although I'm not sure if any actually are sensitive to the leap second. The slalib library for those programs is in svn at https://svn.aoc.nrao.edu/repos/VLBA/rcwlib/trunk/slalib. The other programs are found starting at https://svn.aoc.nrao.edu/repos/VLBA. </dd><dt class="description"> <span class="cmbx-10">Setup files:</span> </dt><dd class="description">
+      <!--l. 14277--><p class="noindent" >Update the setup files from the master if needed. Note that the following will replace most of the setup files, but there are a fair number, mostly for the lba, that are not built by makesetup, so do not do a global delete of the .set files. Note that the .set files are in the svn repository, so run a commit after running makesetup. If you do inadvertantly delete the lba setups, they can be recovered from the repository. <div class="verbatim" id="verbatim-23"> cd&#x00A0;$SCHED/setups &#x00A0;<br />makesetup </div>
+        <!--l. 14287--><p class="nopar" > </dd><dt class="description"> <span class="cmbx-10">Station, frequency, and messages files:</span> </dt><dd class="description">
+      <!--l. 14291--><p class="noindent" >These catalogs are maintained in pieces in separate subdirectories to the <span class="cmsl-10">catalogs </span>directory. There are files for the US, DSN, EVN etc. Different subdirectories are maintained by different people. There is an <span class="cmsl-10">Update </span>script in the base <span class="cmsl-10">catalogs </span>directory which does the file merge. You can look in there to see what gets merged to form the stations, freq, and messages files. Run <span class="cmsl-10">Update </span>when all segments are up to date: <div class="verbatim" id="verbatim-24"> cd&#x00A0;$SCHED/catalogs &#x00A0;<br />Update </div>
+        <!--l. 14302--><p class="nopar" > </dd><dt class="description"> <span class="cmbx-10">Source and location files:</span> </dt><dd class="description">
+      <!--l. 14307--><p class="noindent" >Install the latest source and locations catalogs from the geodetic community. The source files can be found either by contacting Goddard (David Gordon) and Leonid Petrov (Radio Fundamental Catalog), or by looking for &#8220;GSFC VLBI&#8221; or &#8220;Petrov VLBI&#8221; with a search engine. The locations file is from Goddard (also Gordon).
+        <!--l. 14313--><p class="noindent" >The latest source files, with their names that identify the release, should put in <span class="cmsl-10">$SCHED/catalogs</span> while the locations file with its name including a release identifier should be put in <span 
+class="cmsl-10">$SCHED/catalogs/Master</span><span 
+class="cmsl-10">_NRAO</span>. Then the symbolic links <span 
+class="cmsl-10">sources.gsfc </span>and <span 
+class="cmsl-10">sources.rfc </span>in
+     <span 
+class="cmsl-10">$SCHED/catalogs </span>and the link <span 
+class="cmsl-10">locations.gsfc </span>in <span 
+class="cmsl-10">$SCHED/catalogs/Master</span><span 
+class="cmsl-10">_NRAO </span>should be
+     updated. The final <span 
+class="cmsl-10">locations.dat </span>file in <span 
+class="cmsl-10">$SCHED/catalogs </span>will include both this downloaded file
+     plus contributions from other places. It is built when Update is run in <span 
+class="cmsl-10">$SCHED/catalogs</span>, which
+     updates most of the catalogs. All of the new files and links should be added to svn. If SCHED
+     complains about duplicate station data, it might be that a station that formerly came from one of
+     the other locations files has been added to the geodetic solution. The geodetic solution should
+     be given preference. Watch out station data based on few observations. They might
+     have unreasonably large rates. This happened with the new data for the DSN stations
+     DSS14 and DSS63 in the 2015feb release, and we reverted to using the old data in
+     <span 
+class="cmsl-10">stations</span><span 
+class="cmsl-10">_DSN</span>.
+     <!--l. 14332--><p class="noindent" >The old catalogs can be moved out of the main /schedb area. I have put a lot of such stuff in
+     &#x00A0;cwalker/files/sched_ARCHIVE_nonSVN/catalogs. The new catalogs should be added in svn.
+     After copying (not moving) them to some storage location, the old ones should be deleted with
+     svn.
+     <!--l. 14338--><p class="noindent" >Note that updating the source and locations files used to involve reformatting the ones acquired
+     from the geodetic groups, often a complicated task especially if formats changed. But now both
+     GSFC and Petrov are providing files in the correct format to use directly. The reformatting of the
+     files used to involve the programs <span 
+class="cmsl-10">NEWLOC </span>and <span 
+class="cmsl-10">NEWLOC </span>in <span 
+class="cmsl-10">$SCHED/RELATED</span><span 
+class="cmsl-10">_CODE</span>, but
+     those should no longer be needed.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Test and produce standard output files:</span> </dt><dd 
+class="description">
+     <!--l. 14349--><p class="noindent" >Once the code is thought to be working, go to the <span 
+class="cmsl-10">examples </span>directory and run the <span 
+class="cmsl-10">Verify </span>script.
+     That will run all of the examples and compare the output with the last standard output
+     set, which is kept in the <span 
+class="cmsl-10">Stdout </span>subdirectory. Once satisfied that all differences are
+     understood, run <span 
+class="cmsl-10">Newstd </span>to update the standard outputs. Note that both of these
+     scripts will need to be maintained if changes or additions are made to the examples
+     suite.
+     <!--l. 14357--><p class="noindent" >Check the <span 
+class="cmsl-10">crd. </span>files with <span 
+class="cmtt-10">cksched </span>on a Sun. There is a script <span 
+class="cmsl-10">Legacy</span><span 
+class="cmsl-10">_cksched </span>that can be used to
+     run cksched on all <span 
+class="cmsl-10">crd </span>files in a directory. It should be run on the updated <span 
+class="cmsl-10">Stdout </span>directory as
+                                                                                
+                                                                                
+     that has a sample from each example, rather than all. Running in the <span 
+class="cmsl-10">examples </span>directory would
+     create a huge amount of output.
+     <!--l. 14364--><p class="noindent" >Check the <span 
+class="cmsl-10">vex </span>files on a 64 bit Linux machine with <span 
+class="cmsl-10">Check</span><span 
+class="cmsl-10">_vex</span>. This runs
+     <span 
+class="cmtt-10">/home/swc/software/VLBADIFX-TRUNK/bin/vexpeek </span>on all of the <span 
+class="cmsl-10">vex </span>files. Since there is only
+     one per example, it does not matter if this is done in <span 
+class="cmsl-10">examples </span>or in <span 
+class="cmsl-10">examples/Stdout</span>. Note that
+     the error messages go to standard error so they do not go through a simple pipe, such as to <span 
+class="cmsl-10">less</span>.
+     Use the construct <span 
+class="cmsl-10">Check</span><span 
+class="cmsl-10">_vex </span><span 
+class="cmsy-10">|</span><span 
+class="cmsl-10">&amp; less</span>
+     <!--l. 14373--><p class="noindent" >Try plotting, probably using example <span 
+class="cmsl-10">egplan.key</span>.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Compile for multiple architectures:</span> </dt><dd 
+class="description">
+     <!--l. 14378--><p class="noindent" >Compile and link <span 
+class="cmcsc-10">SCHED</span><span 
+class="cmcsc-10">&#x00A0;</span>for each target architecture. Run <span 
+class="cmsl-10">Verify </span>in the examples
+     directory after each compile and check <span 
+class="cmtt-10">testruns.out] </span>to make sure it works. The
+     compilations are without satellite tracking unless otherwise noted. Doing multiple
+     compilations has been useful for finding bugs that don't affect all compilers. Currently I
+     support <span 
+class="cmcsc-10">SCHED</span><span 
+class="cmcsc-10">&#x00A0;</span>on the architectures listed below. Note that the environment variables
+     $PGPLOT_DIR and $PGPLOT_FONT may need to be changed depending on where
+     PGPLOT is stored for that compile (probably different for g77 and gfortran on Linux, for
+     example).
+     <!--l. 14390--><p class="noindent" >
+                    <dl class="list2"><dt class="list">
+</dt><dd 
+class="list">
+                    <!--l. 14392--><p class="noindent" ><span 
+class="cmbx-10">LINUX64GFORTRAN</span>
+                    64
+                    bit
+                    Intel
+                    linux
+                    compiled
+                    with
+                    gfortran
+                    (noatak).
+                    </dd><dt class="list">
+</dt><dd 
+class="list">
+                    <!--l. 14393--><p class="noindent" ><span 
+class="cmbx-10">LINUX64SPICE</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span>
+                    64
+                    bit
+                    Intel
+                    linux
+                    compiled
+                    with
+                    g77
+                    and
+                    including
+                    satellite
+                    tracking.
+                    </dd><dt class="list">
+                                                                                
+                                                                                
+</dt><dd 
+class="list">
+                    <!--l. 14395--><p class="noindent" ><span 
+class="cmbx-10">LINUX64</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span>
+                    64
+                    bit
+                    Intel
+                    linux
+                    without
+                    spice.
+                    </dd><dt class="list">
+</dt><dd 
+class="list">
+                    <!--l. 14396--><p class="noindent" ><span 
+class="cmbx-10">OSX</span><span 
+class="cmbx-10">_INTEL</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span>
+                    Intel
+                    Mac
+                    compiled
+                    with
+                    gfortran
+                    </dd><dt class="list">
+</dt><dd 
+class="list">
+                    <!--l. 14397--><p class="noindent" ><span 
+class="cmbx-10">SUN</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span><span 
+class="cmbx-10">&#x00A0;</span>
+                    Sun
+                    Solaris
+                    compiled
+                    with
+                    f77.
+                    Note
+                    some
+                    Sun's
+                    have
+                    too
+                    little
+                    memory
+                    for
+                    the
+                    default
+                    parameter
+                    settings.</dd></dl>
+     <!--l. 14403--><p class="noindent" >To compile on a given machine, login to that machine.
+         <ul class="itemize1">
+         <li class="itemize">
+         Make
+         sure
+         the
+         environment
+                                                                                
+                                                                                
+         variable
+         $SCHED
+         is
+         set
+         properly.
+         You
+         can
+         use
+         the
+         normal
+         development
+         directory.
+         Just
+         be
+         sure
+         to
+         revert
+         to
+         the
+         default
+         compilation
+         when
+         finished.
+         </li>
+         <li class="itemize">
+         Use
+         the
+         appropriate
+         configure
+         file
+         such
+         as
+         configureLinuxSpice64
+         to
+         make
+         a
+         <span 
+class="cmsl-10">Makefile</span>
+         appropriate
+         for
+         the
+         architecture
+         (Someday,
+         get
+         a
+         proper
+         configure
+         script).
+         <!--l. 14415--><p class="noindent" >3.
+         Clean
+         out
+                                                                                
+                                                                                
+         previous
+         efforts
+         with
+         <span 
+class="cmtt-10">make</span>
+         <span 
+class="cmtt-10">clean</span>,
+         then
+         compile
+         and
+         link
+         using
+         <span 
+class="cmtt-10">make</span>
+         (use
+         <span 
+class="cmtt-10">gmake</span>
+         on
+         the
+         Sun).
+         <!--l. 14418--><p class="noindent" >4.
+         Copy
+         the
+         binary
+         to
+         the
+         right
+         subdirectory
+         in
+         <span 
+class="cmsl-10">bin</span>
+         <!--l. 14420--><p class="noindent" >5.
+         Test
+         the
+         examples
+         using
+         Verify.
+         Also
+         try
+         plotting
+         with
+         an
+         example.
+         There
+         have
+         been
+         cases
+         where
+         a
+         bug
+         in
+         plotting
+         only
+         affected
+         on
+         architecture.
+                                                                                
+                                                                                
+         </li></ul>
+     <!--l. 14426--><p class="noindent" >To summarize:
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-25">
+     cd&#x00A0;$SCHED/src
+     &#x00A0;<br />configureLinuxSpice64
+     &#x00A0;<br />make&#x00A0;clean&#x00A0;&#x00A0;&#x00A0;(gmake&#x00A0;clean&#x00A0;on&#x00A0;the&#x00A0;Sun)
+     &#x00A0;<br />make&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(gmake&#x00A0;on&#x00A0;the&#x00A0;Sun)
+     &#x00A0;<br />cp&#x00A0;../bin/sched&#x00A0;../bin/LINUX64SPICE/
+     &#x00A0;<br />cd&#x00A0;../examples
+     &#x00A0;<br />source&#x00A0;./Verify
+     &#x00A0;<br />less&#x00A0;testruns.out
+</div>
+     <!--l. 14437--><p class="nopar" >Try a plot.
+     <!--l. 14440--><p class="noindent" >In the Verify step, look for unexpected differences. Recorded run times will be different, and often
+     there will be last-digit differences due to different rounding schemes. Those are ok. but anything
+     else could be a sign of trouble.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Document the release:</span> </dt><dd 
+class="description">
+     <!--l. 14447--><p class="noindent" >The manual should have been kept up to date while programming was in progress. Fill any
+     gaps.
+     <!--l. 14450--><p class="noindent" >Write a release note. This will be mainly a link to the manual update section. It will be sent to
+     the vlbi exploder.
+     <!--l. 14453--><p class="noindent" >Check the README and README.ftp files in $SCHED to be sure that they are
+     current.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Set environment variables to aid the release:</span> </dt><dd 
+class="description">
+     <!--l. 14459--><p class="noindent" >Set the NEWVER in the window where this work is being done so that script segments below can
+     be used with a cut-and-paste Also check a couple of places below (other machines) where the
+     version number is also needed. Note that the tar files are kept separately from the development
+     version of <span 
+class="cmcsc-10">SCHED</span>. If maintaining <span 
+class="cmcsc-10">SCHED</span><span 
+class="cmcsc-10">&#x00A0;</span>anywhere except cwalker's area, establish an area for
+     that.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-26">
+     setenv&#x00A0;NEWVER&#x00A0;11.3
+     &#x00A0;<br />setenv&#x00A0;TARDIR&#x00A0;/users/cwalker/files/sched_ARCHIVE_nonSVN/TARFILES
+</div>
+     <!--l. 14470--><p class="nopar" >
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Prepare the Manual:</span> </dt><dd 
+class="description">
+     <!--l. 14474--><p class="noindent" >First, be sure that the manual is as up-to-date as you can reasonably make it. That said, there are
+     sections that still need work as time allows. The manual is the equivalent of over 300 pages so
+     maintaining it is a significant job. The most important parts to keep current are the parameter
+     descriptions and that the summary indexes of those descriptions.. The <span 
+class="cmtt-10">htlatex </span>scheme
+     does not automatically produce complete indices of the parameters as <span 
+class="cmtt-10">latex2htms</span>
+     did, so the summary lists are now much more important but easy to forget. Also,
+     make sure the list of changes in the release notes section is complete. It is best to keep
+     the manual up-to-date whenever changes are made, not to wait until just before a
+     release.
+     <!--l. 14486--><p class="noindent" >The examples in the manual are grabbed from <span 
+class="cmsl-10">../examples </span>starting from where latex is being run.
+     So this should be done in <span 
+class="cmsl-10">$SCHED/doc</span>, the normal place in a distribution, so the examples will
+     be from <span 
+class="cmsl-10">$SCHED/examples</span>. Note that these are not the copies of the examples that will be put
+     (see below) in <span 
+class="cmsl-10">$SCHED/doc/sched/examples</span>.
+     <!--l. 14493--><p class="noindent" >Process the manual. The manual is in file <span 
+class="cmsl-10">$SCHED/doc/sched.tex </span>which is configured for
+     processing by <span 
+class="cmtt-10">latex, pdflatex</span>, and <span 
+class="cmtt-10">htlatex</span>. <span 
+class="cmtt-10">latex </span>produces a .dvi file which can then be used
+     by various programs to produce other formats. But this is probably not the way to go. However, it
+     is useful to run bare <span 
+class="cmtt-10">latex </span>first to shake out any problems in the file. It seems to catch
+     some errors that the others miss. Note that <span 
+class="cmtt-10">latex </span>or <span 
+class="cmtt-10">pdflatex </span>will be need to be
+     run at least 3 or 4 times to get all the references right. <span 
+class="cmtt-10">htlatex </span>does three passes of
+     the latex step regardless. pdflatex directly produces a monolithic pdf file with active
+     hyperlinks. <span 
+class="cmtt-10">htlatex </span>produces the HTML files with chunking to the level specified
+     in the call as shown below. The html files produced by <span 
+class="cmtt-10">htlatex </span>are the standard
+     form for distribution of the manual. The pdf file from <span 
+class="cmtt-10">pdflatex </span>can be considered
+     optional.
+     <!--l. 14508--><p class="noindent" >Note that the various files produced by <span 
+class="cmtt-10">latex, pdflatex</span>, and <span 
+class="cmtt-10">htlatex </span>are not necessarily
+     compatible, (so I've been tole) so it is a good idea to delete them before running a different
+     program. The script <span 
+class="cmtt-10">latexclean </span>can do the cleanup as shown below. That is certainly something
+     to try if there is a crash for non-obvious reasons.
+     <!--l. 14515--><p class="noindent" >Note that, until Jan. 2015, the HTML manual was prepared with <span 
+class="cmtt-10">latex2html</span>, but that program
+     is no longer being supported and stopped working at the AOC. So we converted to htlatex, which
+     involved retyping most of the hyperref references in the text. We cannot easily go back. In
+     the process, the automatically-generated names of the html pages, and the number
+     of such pages, changed. Any references in external documents are going to have to
+     change.
+     <!--l. 14523--><p class="noindent" >For a release, both the <span 
+class="cmsl-10">.pdf </span>and <span 
+class="cmsl-10">HTML </span>can be made using the sequence below. Note
+     that <span 
+class="cmtt-10">htlatex </span>makes the <span 
+class="cmsl-10">.html </span>files in the <span 
+class="cmsl-10">doc </span>area, then copies, not moves, them
+                                                                                
+                                                                                
+     to the desired subdirectory specified in the third argument &#8212; <span 
+class="cmsl-10">sched </span>in this case. So
+     the <span 
+class="cmtt-10">/bin/rm *.html </span>command below is to clean out the unneeded files in the <span 
+class="cmsl-10">doc</span>
+     directory.
+     <!--l. 14530--><p class="noindent" >The files produced by <span 
+class="cmtt-10">htlatex </span>that included sections that used
+     <!--l. 14531--><p class="noindent" ><span 
+class="cmtt-10">subsubsection </span>in the tex file (all of the parameter descriptions!) will have, by default, a very tiny
+     font for the section headers &#8212; much smaller than the font used for the rest of the text. It's hard
+     to believe that someone would set that up, but they did. The cure identified so far is to add the
+     following line to the sched.css file in $SCHED/doc/sched. I think it can go anywhere, but I've
+     been putting it in as the second to last line:
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-27">
+     h5.subsubsectionHead{font-size:150%;}
+</div>
+     <!--l. 14540--><p class="nopar" >
+     <!--l. 14542--><p class="noindent" ><span 
+class="cmtt-10">pdflatex </span>will leave the <span 
+class="cmsl-10">sched.pdf </span>file in the <span 
+class="cmsl-10">doc </span>area. The html files are prepared with <span 
+class="cmtt-10">htlatex</span>.
+     The &#8221;sec-filename&#8221; in the example causes the <span 
+class="cmsl-10">.html </span>node names to be based on the section
+     headings, not just a sequence number. The &#8221;3&#8221; controls how finely the manual is chunked into
+     multiple html files. The &#8221;3&#8221; shown seems to be a reasonable choice, although some of the files
+     were multiple files in the <span 
+class="cmtt-10">latex2html </span>days. Naming the output files makes for referable names
+     that won't keep changing. The <span 
+class="cmtt-10">-dsched/ </span>argument causes the <span 
+class="cmsl-10">.html </span>files to be copied
+     to the <span 
+class="cmsl-10">sched </span>subdirectory, after which the originals in the current area (<span 
+class="cmsl-10">doc</span>) can be
+     deleted.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-28">
+     cd&#x00A0;$SCHED/doc
+     &#x00A0;<br />latexclean&#x00A0;sched
+     &#x00A0;<br />latex&#x00A0;sched.tex&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(correct&#x00A0;any&#x00A0;errors&#x00A0;found)
+     &#x00A0;<br />latexclean&#x00A0;sched
+     &#x00A0;<br />pdflatex&#x00A0;sched.tex&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(optional;&#x00A0;may&#x00A0;need&#x00A0;several&#x00A0;repeats&#x00A0;to&#x00A0;get&#x00A0;links&#x00A0;right)
+     &#x00A0;<br />latexclean&#x00A0;sched
+     &#x00A0;<br />/bin/rm&#x00A0;sched/*.html&#x00A0;&#x00A0;&#x00A0;(cleans&#x00A0;out&#x00A0;old&#x00A0;files)
+     &#x00A0;<br />htlatex&#x00A0;sched.tex&#x00A0;"html,3,sec-filename"&#x00A0;"&#x00A0;"&#x00A0;"-dsched/"
+     &#x00A0;<br />/bin/rm&#x00A0;*.html
+     &#x00A0;<br />cd&#x00A0;$SCHED/doc/sched
+     &#x00A0;<br />emacs&#x00A0;sched/sched.css&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(Add&#x00A0;the&#x00A0;line&#x00A0;as&#x00A0;described&#x00A0;above.)
+     &#x00A0;<br />ln&#x00A0;-s&#x00A0;sched.html&#x00A0;index.html&#x00A0;&#x00A0;(To&#x00A0;help&#x00A0;some&#x00A0;old&#x00A0;bookmarks)
+</div>
+     <!--l. 14567--><p class="nopar" >
+     <!--l. 14569--><p class="noindent" >The HTML files will be expecting to find copies of the examples and catalogs in appropriate
+     subdirectories of the <span 
+class="cmsl-10">sched </span>directory to allow simple links. So update them. Don't worry about
+     setups here for now. Give user write privileges to make other maintenance easier. Some of the
+     catalogs are write restricted in the <span 
+class="cmsl-10">$SCHED/catalogs </span>area to help prevent modifications to the
+     derived files produced by <span 
+class="cmtt-10">Update</span>
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-29">
+     cd&#x00A0;$SCHED/doc
+     &#x00A0;<br />/bin/rm&#x00A0;-r&#x00A0;sched/catalogs/*
+     &#x00A0;<br />/bin/rm&#x00A0;-r&#x00A0;sched/examples/*
+     &#x00A0;<br />tar&#x00A0;cf&#x00A0;-&#x00A0;../catalogs/sources.*&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../catalogs/rfc*&#x00A0;&#x00A0;../catalogs/freq*.dat&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../catalogs/stations*.dat&#x00A0;../catalogs/locations.dat&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../catalogs/peak*.cmd&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../catalogs/linefreqs.dat&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../examples/*.key&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../examples/*.com&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../examples/*.set&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;../examples/egcentsrc.dat&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;|&#x00A0;(cd&#x00A0;sched;&#x00A0;tar&#x00A0;xfp&#x00A0;-)
+     &#x00A0;<br />chmod&#x00A0;&#x00A0;u+w&#x00A0;sched/catalogs/*
+</div>
+     <!--l. 14588--><p class="nopar" >
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Make the release version:</span> </dt><dd 
+class="description">
+     <!--l. 14593--><p class="noindent" >Put together a new directory tree to hold the release. This will be very similar to the development
+     version, but will not evolve after the release, and will not contain some of the extra baggage of old
+     files etc that bloat the size of the development area.
+     <!--l. 14598--><p class="noindent" >Make a directory for the new version. In this case it in in the <span 
+class="cmsl-10">files </span>subdirectory of my home
+     area.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-30">
+     setenv&#x00A0;SCHEDNEW&#x00A0;~/files/sched_$NEWVER
+     &#x00A0;<br />mkdir&#x00A0;$SCHEDNEW
+     &#x00A0;<br />cd&#x00A0;$SCHEDNEW
+</div>
+     <!--l. 14605--><p class="nopar" >
+     <!--l. 14607--><p class="noindent" >Check out the current SCHED from svn. It lands in a subdirectory, so move it up, including the
+     .svn files. Don't be alarmed about messages indicating sched/. and sched/.. can't be
+     moved.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-31">
+     svn&#x00A0;checkout&#x00A0;https://svn.aoc.nrao.edu/repos/sched/trunk/sched
+     &#x00A0;<br />mv&#x00A0;sched/*&#x00A0;.
+     &#x00A0;<br />mv&#x00A0;sched/.*&#x00A0;.
+</div>
+     <!--l. 14615--><p class="nopar" >
+     <!--l. 14617--><p class="noindent" >Copy over the examples/Stdout files, the execute modules, the setup files, the html manual, and
+     PGPLOT installation stuff, none of which are under svn (they are fast changing, bulky, and can
+     be derived from files that are in svn). The &#8211;delete deletes files on the receiving side that are not
+     on the sending side and is useful when updating, say, a beta release that is not being done from
+     scratch.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-32">
+     rsync&#x00A0;-auv&#x00A0;--delete&#x00A0;--exclude&#x00A0;".svn"&#x00A0;$SCHED/bin&#x00A0;&#x00A0;$SCHEDNEW
+     &#x00A0;<br />rsync&#x00A0;-auv&#x00A0;--delete&#x00A0;--exclude&#x00A0;".svn"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;$SCHED/examples/Stdout&#x00A0;$SCHEDNEW/examples
+     &#x00A0;<br />rsync&#x00A0;-auv&#x00A0;--delete&#x00A0;--exclude&#x00A0;".svn"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;"AAA_OLD"&#x00A0;$SCHED/setups&#x00A0;$SCHEDNEW
+     &#x00A0;<br />rsync&#x00A0;-auv&#x00A0;--delete&#x00A0;--exclude&#x00A0;".svn"&#x00A0;$SCHED/doc/sched&#x00A0;$SCHEDNEW/doc
+     &#x00A0;<br />rsync&#x00A0;-auv&#x00A0;--delete&#x00A0;--exclude&#x00A0;".svn"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;"*.o"&#x00A0;$SCHED/PGPLOT&#x00A0;$SCHEDNEW
+</div>
+     <!--l. 14633--><p class="nopar" >
+     <!--l. 14635--><p class="noindent" >Will need $SCHED set to $SCHEDNEW to run <span 
+class="cmsl-10">Verify</span>.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-33">
+     setenv&#x00A0;SCHED&#x00A0;$SCHEDNEW
+</div>
+     <!--l. 14638--><p class="nopar" >Do a compilation to be sure all is there and run <span 
+class="cmsl-10">Verify </span>to make sure it works. Then clean out the
+     <span 
+class="cmsl-10">examples </span>directory using <span 
+class="cmtt-10">schclean "*" </span>to avoid bloating the tar file.
+     <!--l. 14643--><p class="noindent" >Test the completeness using an rsync dry run. The release directory was filled with an svn
+     checkout and some limited rsyncs, so it could have missed something. Also if some iteration
+     happened, it might not be complete. Note that output lines that end with a / are just an
+     indication of having entered the directory. They don't indicate a missing file. Some non-svn files
+     may show, like the latex temporary files.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-34">
+     rsync&#x00A0;-auvn&#x00A0;--exclude&#x00A0;".svn"&#x00A0;--exclude&#x00A0;"TEST"&#x00A0;--exclude&#x00A0;"*.o"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;"*TEMP*"&#x00A0;--exclude&#x00A0;"*OLD*"&#x00A0;--exclude&#x00A0;"RELATED_CODE"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;"*~"&#x00A0;--exclude&#x00A0;"*old*"&#x00A0;&#x00A0;--exclude&#x00A0;"*save*"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;"*new*"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;../sched_work/*&#x00A0;.
+</div>
+     <!--l. 14657--><p class="nopar" >
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Make the tar file:</span> </dt><dd 
+class="description">
+     <!--l. 14662--><p class="noindent" >Make the distribution tar file. First be sure there are no old copies in the archive
+     and ftp areas. Also go through the <span 
+class="cmcsc-10">SCHED</span><span 
+class="cmcsc-10">&#x00A0;</span>directory structures weeding out excess
+     files that don't want to end up in the tar file. The tar command below will also omit
+     many that are not needed. As part of this, be sure to clean out the Verify output with
+     <span 
+class="cmtt-10">schclean "*" </span>in the <span 
+class="cmsl-10">examples </span>subdirectory. Otherwise the tar file will much bigger than
+     necessary.
+     <!--l. 14670--><p class="noindent" >Note the <span 
+class="cmtt-10">--excludes </span>include the lib directory which has the NAIF software. Without that, the
+     satellite version cannot be linked. Without that, anyone wanting to do satellite tracking will
+     need the AOC version or a special export. Also the <span 
+class="cmsl-10">RELATED</span><span 
+class="cmsl-10">_CODE </span>directory is
+     excluded as users shouldn't need it. But the <span 
+class="cmcsc-10">SCHED</span><span 
+class="cmcsc-10">&#x00A0;</span>maintainer will. The <span 
+class="cmsl-10">PGPLOT</span>
+     directory is included because users may well want it. Note that the binaries will be
+     included.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-35">
+     cd&#x00A0;$SCHEDNEW/examples
+     &#x00A0;<br />schclean&#x00A0;"*"
+     &#x00A0;<br />cd&#x00A0;$SCHEDNEW
+     &#x00A0;<br />tar&#x00A0;--exclude&#x00A0;"bin/sched"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;".svn"&#x00A0;--exclude&#x00A0;"*.o"&#x00A0;--exclude&#x00A0;"*~"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;"lib"&#x00A0;--exclude&#x00A0;"core*"&#x00A0;--exclude&#x00A0;"TEST"&#x00A0;&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;--exclude&#x00A0;"RELATED_CODE"&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;-cf&#x00A0;$TARDIR/sched_$NEWVER.tar&#x00A0;.
+     &#x00A0;<br />gzip&#x00A0;$TARDIR/sched_$NEWVER.tar
+</div>
+     <!--l. 14688--><p class="nopar" >
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Test the release:</span> </dt><dd 
+class="description">
+     <!--l. 14693--><p class="noindent" >This will not have the NAIF software so it will not be the internal release. Clean out <span 
+class="cmsl-10">sched</span><span 
+class="cmsl-10">_temp</span>
+     first if needed. Unpack the source distribution tar file into <span 
+class="cmsl-10">/users/cwalker/files/sched</span><span 
+class="cmsl-10">_temp </span>(or
+     wherever you want - but adjust <span 
+class="cmtt-10">SCHTEST </span>accordingly) and test the compilation without the
+     satellite stuff. Use the makefile that does not use the spice package (run configureLinux) Check
+     testruns.out at the end. This is best done in a sacrificial window so the changed environment
+     variables don't haunt you later.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-36">
+     setenv&#x00A0;SCHTEST&#x00A0;/users/cwalker/files/sched_temp
+     &#x00A0;<br />setenv&#x00A0;SCHED&#x00A0;$SCHTEST
+     &#x00A0;<br />cd&#x00A0;$SCHTEST
+     &#x00A0;<br />chmod&#x00A0;u+w&#x00A0;$SCHTEST/catalogs/*
+     &#x00A0;<br />/bin/rm&#x00A0;-r&#x00A0;*
+     &#x00A0;<br />tar&#x00A0;-xvf&#x00A0;$TARDIR/sched_{$NEWVER}.tar.gz&#x00A0;--gunzip
+     &#x00A0;<br />cd&#x00A0;src
+     &#x00A0;<br />configureLinux64
+     &#x00A0;<br />make
+     &#x00A0;<br />cd&#x00A0;../examples
+     &#x00A0;<br />Verify
+</div>
+     <!--l. 14715--><p class="nopar" >
+     <!--l. 14718--><p class="noindent" >Maybe run the &#8221;Dry Run&#8221; rsync above to check for completeness.
+     <!--l. 14720--><p class="noindent" >Kill the window to dump the unwanted $SCHED etc. or at least:
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-37">
+     setenv&#x00A0;SCHED&#x00A0;/users/cwalker/files/sched_work
+</div>
+     <!--l. 14723--><p class="nopar" >
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Put files on the ftp site:</span> </dt><dd 
+class="description">
+     <!--l. 14728--><p class="noindent" >Put the tar file on the ftp site. Maybe some day, make a web site for this. Note that the binaries
+     are in the tar file now.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-38">
+     mkdir&#x00A0;$FTP/sched/sched_$NEWVER
+     &#x00A0;<br />cp&#x00A0;$TARDIR/sched_$NEWVER.tar.gz&#x00A0;&#x00A0;$FTP/sched/sched_$NEWVER/
+</div>
+     <!--l. 14735--><p class="nopar" >
+     <!--l. 14737--><p class="noindent" >Copy over README.ftp if it has changed.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Put the documentation on the personal web pages:</span> </dt><dd 
+class="description">
+     <!--l. 14741--><p class="noindent" >This is to create the copy of the web pages currently available at <span 
+class="cmsl-10">www.aoc.nrao.cwalker/</span><img 
+src="sched0x.png" alt="&#x02DC;c
+     "  class="tilde" ><span 
+class="cmsl-10">walker/sched/sched.html</span>. My web pages are staged to a separate area where I can work on them,
+     then copied to the <span 
+class="cmsl-10">public</span><span 
+class="cmsl-10">_html </span>area. That copy happens as part of the backup job
+     run twice per day using cron. While doing the update, it is a good idea to clean up
+     the staging area and html area. They tend to accumulate unneeded old files for old
+     versions.
+     <!--l. 14749--><p class="noindent" >The instructions here are based on the machine names for R.C. Walker. They may change for a
+     new maintainer.
+     <!--l. 14752--><p class="noindent" >Note that the files will all be in a directory numbered for the release. The file where users will
+     look is a symbolic link to the generic file <span 
+class="cmsl-10">sched</span>.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-39">
+     setenv&#x00A0;WEBDIR&#x00A0;/home/noatak/cwalker/webnrao
+     &#x00A0;<br />cd&#x00A0;~
+     &#x00A0;<br />mkdir&#x00A0;$WEBDIR/sched_$NEWVER
+     &#x00A0;<br />cp&#x00A0;-R&#x00A0;$SCHEDNEW/doc/sched/*&#x00A0;$WEBDIR/sched_$NEWVER/
+     &#x00A0;<br />cd&#x00A0;$WEBDIR
+     &#x00A0;<br />/bin/rm&#x00A0;sched
+     &#x00A0;<br />ln&#x00A0;-s&#x00A0;sched_{$NEWVER}&#x00A0;sched
+     &#x00A0;<br />cd&#x00A0;$SCHED
+</div>
+     <!--l. 14765--><p class="nopar" >
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Announce the release and get it installed at the AOC:</span> </dt><dd 
+class="description">
+     <!--l. 14770--><p class="noindent" >Send the email announcement to: vlbi@nrao.edu,scistaff@nrao.edu, vlbaops@nrao.edu,vlbatests@nrao.edu
+     <!--l. 14774--><p class="noindent" >Announcements of preliminary releases can go to: nmsci@nrao.edu,vlbatests@nrao.edu,vlbaops@nrao.edu
+     <!--l. 14777--><p class="noindent" >Also, at some point, include the other <span 
+class="cmcsc-10">SCHED</span><span 
+class="cmcsc-10">&#x00A0;</span>developers:
+     small@jive.nl,campbell@jive.nl,c.reynolds@curtin.edu.au,alef@mpifr-bonn.mpg.de
+     <!--l. 14780--><p class="noindent" >The AOC release is in software areas where I do not have write privileges. Tell the computer
+     people (helpdesk) to place the update in the computer areas. Include the following information in
+     email to them (adjust version number):
+     <!--l. 14785--><p class="noindent" >The new release is in <span 
+class="cmsl-10">/users/cwalker/files/sched</span><span 
+class="cmsl-10">_11.3</span>
+     <!--l. 14787--><p class="noindent" >The executables <span 
+class="cmsl-10">(sched, schclean) </span>are in machine specific subdirectories under bin. They go in
+     <span 
+class="cmsl-10">/usr/local/bin</span>. For the in-house linux64 versions, use the one with the SPICE libraries
+     (LINUX64SPICE). These support spacecraft tracking. We no longer support LINUX32 or
+     MACPPC.
+     <!--l. 14793--><p class="noindent" >The manual is in <span 
+class="cmsl-10">doc/sched/* </span>and goes in http://www.aoc.nrao.edu/software/sched/*
+     <!--l. 14796--><p class="noindent" >The catalogs and setups are in separate directories that go in <span 
+class="cmsl-10">/usr/local/sched</span>. Note
+     that the subdirectories in the <span 
+class="cmsl-10">catalogs </span>directory (<span 
+class="cmsl-10">Master</span><span 
+class="cmsl-10">_NRAO </span>etc) should not be
+     included.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Make a tagged version in svn:</span> </dt><dd 
+class="description">
+     <!--l. 14803--><p class="noindent" >There is demand for tagging the releases, so here are the instructions. This basically marks a
+     revision as the tag (release). To do so from trunk ( There is a slight variation for a branch
+     origen):
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-40">
+     svn&#x00A0;copy&#x00A0;https://svn.aoc.nrao.edu/repos/sched/trunk&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;https://svn.aoc.nrao.edu/repos/sched/tags/sched_$NEWVER&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;-m&#x00A0;"Tagging&#x00A0;SCHED&#x00A0;$NEWVER&#x00A0;for&#x00A0;maintenance"
+</div>
+     <!--l. 14811--><p class="nopar" >
+     <!--l. 14813--><p class="noindent" >To backfit a tag to other than the latest version:
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-41">
+     svn&#x00A0;copy&#x00A0;-r&#x00A0;276&#x00A0;https://svn.aoc.nrao.edu/repos/sched/trunk/sched&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;https://svn.aoc.nrao.edu/repos/sched/tags/sched_9.3&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;-m&#x00A0;"Tagging&#x00A0;release&#x00A0;9.3&#x00A0;of&#x00A0;sched."
+</div>
+     <!--l. 14819--><p class="nopar" >
+     </dd><dt class="description">
+<span 
+class="cmbx-10">SVN branch and other SVN info:</span> </dt><dd 
+class="description">
+     <!--l. 14824--><p class="noindent" >OPTIONAL (I normally don't do this)
+     <!--l. 14826--><p class="noindent" >Under some circumstances, it might be useful to have a full copy of a release that is
+     maintained with svn. This involves making a branch or tag (I think they are equivalent),
+     and then checking it out to a new directory. Then to be really useful, the items not
+     maintained in svn should be copied in. I tried this with my first post-svn release in
+     2009, but found it too much work to maintain, so abandoned the practice. But the
+     instructions are here in case. They have been edited since they were last tried, so watch for
+     gotchas.
+     <!--l. 14835--><p class="noindent" >Make the branch - just a different directory than the tag.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-42">
+     svn&#x00A0;copy&#x00A0;https://svn.aoc.nrao.edu/repos/sched/trunk&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-$NEWVER&#x00A0;\
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;-m&#x00A0;"Branching&#x00A0;the&#x00A0;8.0&#x00A0;release&#x00A0;of&#x00A0;SCHED"
+</div>
+     <!--l. 14841--><p class="nopar" >
+     <!--l. 14843--><p class="noindent" >To make a corresponding development area for the branch:
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-43">
+     setenv&#x00A0;SCHEDBASE&#x00A0;~/files/sched_branch$NEWVER
+     &#x00A0;<br />mkdir&#x00A0;$SCHEDBASE
+     &#x00A0;<br />cd&#x00A0;$SCHEDBASE
+     &#x00A0;<br />svn&#x00A0;checkout&#x00A0;https://svn.aoc.nrao.edu/repos/sched/branch/SCHED-$NEWVER/&#x00A0;.
+</div>
+     <!--l. 14850--><p class="nopar" >
+     <!--l. 14852--><p class="noindent" >Don't drop the period at the end of the last command (= current directory)
+     <!--l. 14854--><p class="noindent" >Copy over the examples/Stdout files, the execute modules, and the html. The exclusion of .svn
+     files shouldn't be needed, but just in case...
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-44">
+     cd&#x00A0;$SCHEDNEW
+     &#x00A0;<br />rsync&#x00A0;-auv&#x00A0;--exclude&#x00A0;".svn"&#x00A0;bin&#x00A0;&#x00A0;$SCHEDBASE
+     &#x00A0;<br />rsync&#x00A0;-auv&#x00A0;--exclude&#x00A0;".svn"&#x00A0;examples/Stdout&#x00A0;$SCHEDBASE/examples
+     &#x00A0;<br />rsync&#x00A0;-auv&#x00A0;--exclude&#x00A0;".svn"&#x00A0;doc/sched&#x00A0;$SCHEDBASE/doc
+</div>
+     <!--l. 14862--><p class="nopar" >
+     <!--l. 14865--><p class="noindent" >Some SVN HINTS:
+     <!--l. 14867--><p class="noindent" >In order to ignore some files in svn status etc. Note the &#8221;.&#8221; on the end of the second one.
+     ignore.txt is needed for the second form.
+                                                                                
+                                                                                
+     <div class="verbatim" id="verbatim-45">
+     cd&#x00A0;examples
+     &#x00A0;<br />svn&#x00A0;propset&#x00A0;svn:ignore&#x00A0;"*"&#x00A0;Stdout
+     &#x00A0;<br />svn&#x00A0;propset&#x00A0;svn:ignore&#x00A0;-F&#x00A0;ignore.txt&#x00A0;.
+     &#x00A0;<br />cd&#x00A0;../doc
+     &#x00A0;<br />svn&#x00A0;propset&#x00A0;svn:ignore&#x00A0;"*"&#x00A0;sched
+</div>
+     <!--l. 14877--><p class="nopar" >
+     <!--l. 14879--><p class="noindent" >Developer advice:
+     <!--l. 14881--><p class="noindent" >If you are a developer and have an svn maintained version and wish to update the items not in
+     svn, such as the html manual, the Stdout example outputs, or the setups (derived from
+     makesetup), it might be easiest to download and unpack the tar file into a new directory, then
+     rsync the desired stuff to your development area.
+  </dd></dl>
+  </body>
+  </html>
