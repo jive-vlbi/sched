@@ -186,7 +186,7 @@ C
          IF( MODETEST(KS) ) THEN
 C             DON'T DO ANY CHECKS IF MODTEST IS SET
          ELSE 
-             IF( ( .NOT. MODETEST(KS)) .AND. 
+             IF( ( SYNL404 ) .AND. 
      1                       ( I .EQ. 1 .OR. I .EQ. 2 ) ) THEN
                IF( BADLO( 'SYNTH X 1000.', R8FREQ(I), 0.01D0, 0, 0.D0,
      1           0.D0, 2000.0D0, 16000.D0, MSGTXT ) ) ERRS = .TRUE.

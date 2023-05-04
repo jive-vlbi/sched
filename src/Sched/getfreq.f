@@ -43,6 +43,10 @@ C
 C     Open frequencies catalog.  Indicate the attempt before 
 C     doing it so output messages make more sense.
 C
+      IF(SYNL404) THEN
+          FREQFILE = '$SCHED/catalogs/short_VNDA_freq_RDBE.dat'
+          CALL ENVIR( FREQFILE )
+      END IF
       CALL WLOG( 0, 'GETFREQ: Reading frequency file:  '//
      1              FREQFILE(1:LEN1(FREQFILE) ) )
       IER = VLBOPE( IFRQ, FREQFILE, 'TEXT', 'OLD', RESULT )
@@ -243,7 +247,9 @@ C
 C
 C     Create automate frequency settings
 C
-      CALL MAKEFREQ(NFREQ)
+      IF(SYNL404) THEN
+          CALL MAKEFREQ(NFREQ)
+      END IF
 C
 C     Print out some portion of the list if requested.
 C
