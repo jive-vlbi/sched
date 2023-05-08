@@ -154,6 +154,12 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.25.0 (2022-09-30)__: Raise the level at which warnings about sources too close to the sun are printed to standard output and make some of the thresholds used configurable.
 * __v1.25.1 (2022-10-06)__: Require a newer version of NumPy. In earlier version calling round(numpy.float) would return a float, which caused a problem in string formatting.
 * __v1.25.2 (2023-01-11)__: F2py from NumPy version 1.24 creates different data block wrappers, require an earlier version of NumPy for now.
+* __v1.25.3 (2023-02-23)__: Matplotlib version 3.7.0 deprecated the attribute legendHandles for legend_handles. This version supports both to suppress the warning message.
+* __v1.25.4 (2023-03-29)__: Fix a bug in the setup script NumPy version specification.
+* __v1.25.5 (2023-04-05)__: Updates to VEX2 writing routines (PROCEDURES, pointing_sector and datastream).
+* __v1.25.6 (2023-04-12)__: Two bug fixes:
+  * The OMS file writing Fortran function would write out of string boundaries for setups with more than 31 channels, into the setup file name. Only print the first 31 channels.
+  * Update the Python wrap zone writing equivalent to the changes to the Fortran code introduced in 1.24.0.
 
 
 # Contact
