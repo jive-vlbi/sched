@@ -9,6 +9,7 @@ C
       DOUBLE PRECISION  START, STOP
       INTEGER           YEAR1, YEAR2, DAY1, DAY2
       CHARACTER         CALLER*(*), TFORM*15, TSTOP*8, TSTART*8
+Cf2py CHARACTER(f2py_len=-1) CALLER
 C  ------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 1, 'PRTSCN starting.' )
 C

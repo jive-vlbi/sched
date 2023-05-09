@@ -8,6 +8,7 @@ C
 C
       INTEGER     ISCN, ISTA, TEARLY, TDWELL, ITSLEW, ISYNC
       CHARACTER   ITEM*(*)
+Cf2py CHARACTER(f2py_len=-1) ITEM
       INTEGER          IGB
       CHARACTER        UPA*1, UPC*2
 C -------------------------------------------------------------------

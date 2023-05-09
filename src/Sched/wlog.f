@@ -11,6 +11,7 @@ C
       INCLUDE  'sched.inc'
       INTEGER    TERM
       CHARACTER  MESSAGE*(*)
+Cf2py CHARACTER(f2py_len=-1) MESSAGE
       INTEGER    LEN1, NCH
 C-----------------------------------------------------------------------
 C     Programming check:

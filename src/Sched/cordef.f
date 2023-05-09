@@ -9,6 +9,8 @@ C
 C
       LOGICAL       MISCOR
       CHARACTER     CHPOL*(*)
+Cf2py CHARACTER(f2py_len=-1) CHPOL
+Cf2py intent(in, out) CHPOL
 C --------------------------------------------------------------------      
       IF( DEBUG ) CALL WLOG( 0, 'CORDEF starting.' )
       MISCOR = .FALSE.

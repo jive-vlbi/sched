@@ -18,6 +18,7 @@ C
       INCLUDE   'sched.inc'
 C
       CHARACTER   NAME*(*)
+Cf2py CHARACTER(f2py_len=-1) NAME
       INTEGER     ISTA, JSTA, KSTA, NC, LEN1
 Cf2py intent(out) ISTA
 Cf2py intent(out) KSTA

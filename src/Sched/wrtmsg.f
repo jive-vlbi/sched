@@ -17,6 +17,7 @@ C
       INCLUDE  'sched.inc'
 C
       CHARACTER   CALLER*(*), MSGNAM*(*), INLINE*256, OPTEXT*256
+Cf2py CHARACTER(f2py_len=-1) CALLER, MSGNAM
       INTEGER     VLBOPE, IERR, LEN1, NCH, TERM
       LOGICAL     INMSG
 C ---------------------------------------------------------------------

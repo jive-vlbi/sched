@@ -1,0 +1,9 @@
+      SUBROUTINE SUMDATWR( ITEM, ISCN, ISTA, RET )
+      CHARACTER      ITEM*(*)
+Cf2py CHARACTER(f2py_len=-1) ITEM
+      INTEGER        ISCN, ISTA
+      CHARACTER*6  RET, SUMDAT
+Cf2py intent(out) RET
+      RET = SUMDAT( ITEM, ISCN, ISTA )
+      RETURN
+      END

@@ -1,4 +1,5 @@
       SUBROUTINE SOCDEF( CHPOL )
+Cf2py CHARACTER(f2py_len=-1) CHPOL
 C
 C     A routine for SCHED, called by GETCOR, that checks that the
 C     required correlator parameters have been specified for the

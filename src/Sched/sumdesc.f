@@ -7,6 +7,7 @@ C
       INCLUDE        'sched.inc'
 C
       CHARACTER      ITEM*(*), SITEM*20
+Cf2py CHARACTER(f2py_len=-1) ITEM
       INTEGER        LEN1, LENGTH
       LOGICAL        LABFLAG
 C --------------------------------------------------------------------

@@ -11,6 +11,7 @@ C     If anyone knows a better way to do this in FORTRAN, let me know.
 C
       INTEGER    IUNIT, IERR, VLBOPE
       CHARACTER  FFILE*(*), OPTEXT*(256), LOCFILE*(256)
+Cf2py CHARACTER(f2py_len=-1) FFILE
 C ----------------------------------------------------------------------
 C
 C     Required by some compilers for concatenations:

@@ -420,6 +420,8 @@ pysched/openwrap.f
 pysched/tformwrp.f 
 pysched/ran5wrap.f 
 pysched/sbhwrap.f
+pysched/sumdatwr.f
+pysched/sumdwrap.f
 pysched/verwrap.f 
 """.split()
 
@@ -554,8 +556,8 @@ stageo
 stano 
 stauv 
 stmsg 
-sumdat 
-sumdesc 
+sumdatwr 
+sumdwrap 
 sunpos 
 tdatecw 
 tformwrp 
@@ -637,9 +639,9 @@ setup(
     scripts=["src/sched.py"],
     ext_modules=[extension],
     python_requires=">=3.6",
-    setup_requires=["numpy>=1.19, <1.24",
+    setup_requires=["numpy>=1.24.3",
                     "setuptools>=24.3"],
-    install_requires=["numpy>=1.19, <1.24",
+    install_requires=["numpy>=1.24.3",
                       "pyqt5", 
                       "matplotlib>=3.5.2",
                       "formlayout",

@@ -6,6 +6,7 @@ C     logfile, closes the logfile, and calls ERROR.
 C
       INCLUDE  'sched.inc'
       CHARACTER   MESSAGE*(*)
+Cf2py CHARACTER(f2py_len=-1) MESSAGE
 C -----------------------------------------------------------------
 C     Alert the user that something is very wrong.
 C

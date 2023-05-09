@@ -893,6 +893,15 @@ The following setup groups are the same as group{setup_index:4d} below.
         write_setup(sum_file, setups, setup_index, frequencies, stations,
                     frequency_sets, scans, scan_offset)
 
+
+def sumdesc(item):
+    item = f2str(item)
+    # the Fortran code expects " " for empty strings
+    if item == "":
+        item = " "
+    item_descriptor, _, label_flag = s.sumdwrap(item)
+    return item, f2str(item_descriptor), label_flag
+
 def write_scans(sum_file, scans, scan_offset, stations, setup_files, sources,
                 print_date):
     if s.schcon.debug:
@@ -918,13 +927,10 @@ def write_scans(sum_file, scans, scan_offset, stations, setup_files, sources,
     
     # print two sum items per pass
     for item_pass in range(last_sum_item_index // 2 + 1):
-        item1 = f2str(s.schsco.sumitem[item_pass * 2])
-        item2 = f2str(s.schsco.sumitem[item_pass * 2 + 1])
-
-        item_descriptor1, _, label_flag1 = s.sumdesc(item1)
-        item_descriptor2, _, label_flag2 = s.sumdesc(item2)
-        item_descriptor1 = f2str(item_descriptor1)
-        item_descriptor2 = f2str(item_descriptor2)
+        item1, item_descriptor1, label_flag1 = sumdesc(
+            s.schsco.sumitem[item_pass * 2])
+        item2, item_descriptor2, label_flag2 = sumdesc(
+            s.schsco.sumitem[item_pass * 2 + 1])
 
         # print 20 stations on one line
         for station_pass in range((len(stations) - 1) // 20 + 1):
@@ -1036,12 +1042,12 @@ SCAN  DAY START UT  SOURCE     TYPE  STATIONS    t => tape change
                         line2 += "  - "
 
                     line1 += "".join(
-                        f2str(s.sumdat(item1, scan_index + 1,
-                                       station_index + 1)).ljust(6)
+                        f2str(s.sumdatwr(item1, scan_index + 1,
+                                         station_index + 1)).ljust(6)
                         for station_index in range(station_start, station_end))
                     line2 += "".join(
-                        f2str(s.sumdat(item2, scan_index + 1,
-                                       station_index + 1)).ljust(6)
+                        f2str(s.sumdatwr(item2, scan_index + 1,
+                                         station_index + 1)).ljust(6)
                         for station_index in range(station_start, station_end))
 
                     if ((s.schn1.doscans[0] == 0) or

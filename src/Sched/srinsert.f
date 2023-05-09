@@ -31,6 +31,7 @@ C
       INTEGER            LASTKSCN(MAXSTA), ISTA, NGOOD
       DOUBLE PRECISION   STARTK, STOPK
       CHARACTER          SRNAME*(*)
+Cf2py CHARACTER(f2py_len=-1) SRNAME      
 C ---------------------------------------------------------------------
       IF( DEBUG .AND. MSCN .LT. 5 ) CALL WLOG( 0, 'SRINSERT starting.' )
 C

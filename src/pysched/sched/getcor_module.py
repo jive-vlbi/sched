@@ -73,7 +73,7 @@ def getcor(values):
                       "FXCORR"):
             s.socdef(values["corpol"])
         else:
-            s.cordef(values["corpol"])
+            values["corpol"] = util.f2str(s.cordef(values["corpol"]))
     
     if correl in ("SOCORRO",
                   "VLBADIFX",

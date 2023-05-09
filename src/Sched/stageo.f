@@ -49,6 +49,7 @@ C
       INTEGER          ISCN, ISTA, LSCN
       DOUBLE PRECISION T_EST1, T_EST2, T_AVAIL, LASTTIME
       CHARACTER        HORCHK*1, CALLER*(*)
+Cf2py CHARACTER(f2py_len=-1) CALLER    
 C ----------------------------------------------------------------
       IF( DEBUG .AND. ISCN .LE. 3 ) THEN
           MSGTXT = ' '
