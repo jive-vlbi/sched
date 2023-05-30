@@ -81,13 +81,6 @@ C
          WRITE( IVEX, '( A, A, A1 )' ) 'def ',
      1           MDLINK(IMODE)(1:LEN1(MDLINK(IMODE))), SEP
 C
-C        Procedure name are synchronous with IMODE
-C
-         WRITE( LINE, '( 5X, A, A, A1 )' )
-     1       'ref $PROCEDURES = ',
-     2       PRLINK(IXX)(1:LEN1(PRLINK(IXX))), SEP
-         WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
-C
 C        Other references have been sorted out in vxsort.
 C        Write here the freq section that belongs to this mode
 C

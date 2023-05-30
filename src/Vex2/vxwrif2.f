@@ -1,7 +1,8 @@
       SUBROUTINE VXWRIF2
 C 
-C     Routine specific for the VEX extension of SCHED. 
-C     Writes a specific section of the VEX file 
+C     Copy of Routine specific for the VEX extension of SCHED. 
+C     Adapted to vex2. 
+C     Writes a specific section of the VEX2 file 
 C     In this case the IF = $IF section 
 C     By H.J. van Langevelde, JIVE, 300496 
 C     Update to 1.4 240796
@@ -31,7 +32,7 @@ C
          WRITE( IVEX, '( A1 )' ) COM
          WRITE( IVEX, '( A, A, A1 )' ) 'def ',
      1        IFLINK(IIF)(1:LEN1(IFLINK(IIF))), SEP
-         CALL VXSTLI( IIF, NSTAIF, ISTAIF )
+         CALL VXSTLI2( IIF, NSTAIF, ISTAIF )
 C
 C        Loop over channels.
 C

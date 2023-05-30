@@ -32,11 +32,6 @@ C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on ST def ')
       CALL VXWRST
 C
-C     Procedures
-C
-      IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on PR def ')
-      CALL VXWRPR
-C
 C     Sites
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on SI def ')
@@ -60,7 +55,7 @@ C
 C     Frequencies.
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on FQ def ')
-      CALL VXWRFQ
+      CALL VXWRFQ2
 C
 C     IFs
 C
@@ -70,12 +65,12 @@ C
 C     BBCs
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on BB def ')
-      CALL VXWRBB
+      CALL VXWRBB2
 C
 C     Phase cal.
 C
       IF (DEBUG) CALL WLOG( 1,'   VXDEFS2: Start on PH def ')
-      CALL VXWRPH
+      CALL VXWRPH2
 C
 C     Tracks  (This is needed in practice, if not in principle,
 C     for OBSTYP=PTVLBA.  There is code in the routine to 

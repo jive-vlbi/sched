@@ -1,7 +1,8 @@
       SUBROUTINE VXWRDS
 C 
-C     Routine specific for the VEX extension of SCHED. 
-C     Replaces a specific section of the VEX file 
+C     Routine specific for the VEX2 extension of SCHED. 
+C     Replaces a specific section of the VEX2 file 
+C     Based on the VEX block
 C     In this case the TR = $TRACKS section 
 C     By H.J. van Langevelde, JIVE, 300496 
 C 
@@ -83,7 +84,7 @@ C
          WRITE( IVEX, '( A1 )' ) COM
          WRITE( IVEX, '( A, A, A1 )' ) 'def ',
      1        TRLINK(ITR)(1:LEN1(TRLINK(ITR))), SEP
-         CALL VXSTLI( ITR, NSTATR, ISTATR )
+         CALL VXSTLI2( ITR, NSTATR, ISTATR )
 C
 C        Write the DBE if one was specified and the FIRMFILE, if 
 C        specified.
