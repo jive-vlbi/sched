@@ -82,7 +82,7 @@ C                           deemed to be the same and is the only one
 C                           listed in the summary.
 C
       INTEGER           NSET, LISTKS(MSET)
-      CHARACTER         SETMSG*120
+      CHARACTER         SETMSG*256
 C
 C     Relate the setup to file names and other catalogs.
 C     ISETNUM and SETNAME are the number and name of the input setup
