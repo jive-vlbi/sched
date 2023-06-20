@@ -68,6 +68,26 @@ sudo pip3 install pythonSCHED
 sudo apt-get install python3-pip
 ```
 
+### NumPy version >= 1.24 and installing from source
+
+NumPy version 1.24.0 introduced a bug that caused the wrapper to Fortran arrays, that is created on install, to have the wrong dimensions in some cases. This bug was fixed in version 1.24.3. However, this newer version of NumPy requires code changes in **pySCHED** that in turn only work for NumPy version >= 1.24.
+
+Since NumPy version >= 1.24.3 is not ubiquitous available yet, we have chosen to make the default install of **pySCHED** require a version < 1.24. If you wish to use **pySCHED** with NumPy >= 1.24.3, you can do so by installing **pySCHED** from source. To do this, clone the **pySCHED** repository, checkout the `numpy-1.24.3` branch and run the install setup command:
+
+```bash
+git clone https://github.com/jive-vlbi/sched.git pySCHED
+cd pySCHED
+git checkout numpy-1.24.3
+pip install .
+```
+
+Notice the changed `pip install` command. If the `pySCHED.yaml` file is used to create a conda environment, remove these lines from the file:
+```bash
+  - pip:
+    - pythonSCHED
+```
+adapt the NumPy version requirement as desired and run the `pip install .` command after activating the pySCHED conda environment.
+
 ### Known issues
 
 If you are encountering issues (both during installation or while running) with pySCHED, please check the [Discussions page](https://github.com/jive-vlbi/sched/discussions). We are summarizing here the most-common problems and how to solve them.
@@ -160,6 +180,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.25.6 (2023-04-12)__: Two bug fixes:
   * The OMS file writing Fortran function would write out of string boundaries for setups with more than 31 channels, into the setup file name. Only print the first 31 channels.
   * Update the Python wrap zone writing equivalent to the changes to the Fortran code introduced in 1.24.0.
+* __v1.26.0 (2023-05-03)__: Skip writing pointing_sector lines in the $ANTENNA block of the VEX files for KVN stations.
 
 
 # Contact
