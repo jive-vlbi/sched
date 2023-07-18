@@ -514,7 +514,7 @@ C
 C     Make the non-multiple of 15.625 warning fatal.
 C
       IF( NFWARN .GT. 0 ) THEN
-         CALL ERROR( 'CHKRDFQ:  Use freqeuenies that are multiples '//
+         CALL ERROR( 'CHKRDFQ:  Use frequencies that are multiples '//
      1       'of 15.625 kHz.' )
       END IF
 C
