@@ -55,6 +55,7 @@ C
 C
       DATA               FWARN / .TRUE. /
       SAVE               FWARN
+      INTEGER            I, J
 C ----------------------------------------------------------------------
       IF( DEBUG ) THEN
          MSGTXT = ' '

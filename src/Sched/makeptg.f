@@ -203,7 +203,8 @@ C
             END IF
          END DO
 C
-         IF( VLSR(1,SRCNUM(ISCN)) .GT. -1.E8 ) THEN
+         IF( VLSR(1,SRCNUM(ISCN)) .GT. -1.E8 .AND.  
+     1         CALCODE(ISRC) .EQ. 'L'  ) THEN
 C
 C           Needs doppler
 C
@@ -235,7 +236,11 @@ C              Not PFB, so tune the main channels.
 C
                DOPCAL(ISCN) = .TRUE.
                DO ICHN = 1, MAXCHN
-                  BW(ICHN,ISCN) = 2.0D0
+C
+C                 We no longer change the BW to be 2, but rather use 
+C                 the one specified in the setup file               
+C                 BW(ICHN,ISCN) = 2.0D0
+C
                   FREQ(ICHN,ISCN) = 0.0D0
                END DO
             END IF

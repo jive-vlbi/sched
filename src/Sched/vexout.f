@@ -98,7 +98,6 @@ C         IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
      2         OBSTYP .NE. 'CONFIG' ) THEN
 C
             CALL VXWRT
-            CALL VXWRT2
 C
 C           Also write a template v2d file for DiFX correlation.
 C
