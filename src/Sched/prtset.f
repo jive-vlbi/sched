@@ -100,7 +100,7 @@ C
 C        Group number and station and some other items.
 C
          WRITE( IUNIT, '( 1X, /, A, I4, 2A, A, I5, /,  ' //
-     1       ' 3A, I1, A, F7.3 )' ) 
+     1       ' 3A, I1, A, F10.3 )' ) 
      2       '   Setup group: ', KS, 
      3       '         Station: ', SETSTA(1,KS),
      4       '          Total bit rate: ', NINT( TOTBPS(KS) ),
