@@ -1,4 +1,4 @@
-# Temporary makefile for SCHED made by configurelinux64gfortran
+# Temporary makefile for SCHED made by configureLinux
 #
 # Makefile.master is the template makefile.  It is not viable as it stands
 # but can be made viable by uncommenting various lines as described in
@@ -46,7 +46,7 @@
 #    With gfortran you will get lots of warnings.  Most are about string
 #    truncation and unused call arguments.  They should be benign.
 
- FC = gfortran -Wall -fimplicit-none -fno-backslash
+ FC = gfortran -Wall -Wimplicit -fno-backslash -fbounds-check
 #FC = g77 -Wall -Wimplicit -fno-backslash # g77 (Linux, OS X, and others)
 #FC = f77 -C -u                       # SUN  IBM/AIX
 #FC = ifort -u -c -warn unused -warn declarations # Linux with Intel compiler.
@@ -67,7 +67,7 @@
 #  are being used to make portable binaries.  With modern systems, they
 #  seem to cause problems.
 
- XLD = -L/usr/lib64 -lX11
+ XLD = -lX11
 #XLD =                                         # Should work on many systems.
                                                #  Use for pgplot stub.
 #XLD = -lX11		                       # X11 libraries, if needed
@@ -126,7 +126,7 @@ LPGPLOT = $(PGPLOT_DIR)
 # For linker:  (LPGPLOT not needed for all).
 #   If there are missing items, consider adding -lz
 
- LDPGPLOT = -L$(LPGPLOT) -lpgplot
+ LDPGPLOT = -lpgplot -lpng
 
 #  Some options - will be set in the configure scripts, but you can change:
 #LDPGPLOT = -lpgplot -lpng       # pgplot, png, z in the standard load path.
@@ -212,11 +212,8 @@ SLA_OBJS = $(SLA_SRCS:.f=.o)
 CIT_SRCS = $(wildcard Cit/*.f)
 CIT_OBJS = $(CIT_SRCS:.f=.o)
 
-FREQ_SRCS = $(wildcard Sched/Freq/VLBA/*.f)
-FREQ_OBJS = $(FREQ_SRCS:.f=.o)
-
 SCHED_SRCS = $(wildcard Sched/*.f)
-SCHED_OBJS = $(SCHED_SRCS:.f=.o) $(PLOT_OBJS) $(JPL_OBJS) $(SAT_OBJS) $(VEX_OBJS) $(VEX2_OBJS)  $(SLA_OBJS) $(CIT_OBJS) $(ARCH_OBJS) $(FREQ_OBJS)
+SCHED_OBJS = $(SCHED_SRCS:.f=.o) $(PLOT_OBJS) $(JPL_OBJS) $(SAT_OBJS) $(VEX_OBJS) $(VEX2_OBJS)  $(SLA_OBJS) $(CIT_OBJS) $(ARCH_OBJS)
 
 UNIX_SRCS = $(wildcard Cit/sys_unix/*.f)
 UNIX_OBJS = $(UNIX_SRCS:.f=.o)
@@ -250,7 +247,7 @@ IBMAIX_OBJS = $(IBMAIX_FSRCS:.f=.o) $(IBMAIX_CSRCS:.c=.o) $(UNIX_OBJS)
 
 ARCH_OBJS = $($(ARCH)_OBJS)
 
-BINDIR = ../bin/linux64gf
+BINDIR = ../bin
 CP = /bin/cp
 RM = /bin/rm
 
@@ -271,7 +268,6 @@ all:
 	cd Cit; $(MAKE) "FC=$(FC)"
 	cd Sla; $(MAKE) "FC=$(FC)"
 	cd Sched; $(MAKE) "FC=$(FC)"
-	cd Sched/Freq/VLBA; $(MAKE) "FC=$(FC)"
 	cd Jpl; $(MAKE) "FC=$(FC)"
 	cd Jplstub; $(MAKE) "FC=$(FC)"
 	cd Sat; $(MAKE) "FC=$(FC)"
@@ -325,7 +321,6 @@ clean:
 	cd Cit; $(MAKE) clean
 	cd Sla; $(MAKE) clean
 	cd Sched; $(MAKE) clean
-	cd Sched/Freq/VLBA; $(MAKE) clean
 	cd Jpl; $(MAKE) clean
 	cd Jplstub; $(MAKE) clean
 	cd Sat; $(MAKE) clean
