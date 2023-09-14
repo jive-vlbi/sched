@@ -557,7 +557,7 @@ C
                      ELSE 
                         STGB = 0.0
                      END IF
-                     WRITE( LINE(LPOS:LPOS+12), '( F9.3, A3, A1 )' ) 
+                     WRITE( LINE(LPOS:LPOS+15), '( F12.3, A3, A1 )' ) 
      1                      STGB,' GB', COL
 C
                   ELSE
