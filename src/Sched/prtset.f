@@ -57,7 +57,7 @@ C
             END IF
             MSGTXT = ' '
             IF( NEWFRQ ) THEN
-               WRITE( MSGTXT(1:18), '( 5X, A )' )
+               WRITE( MSGTXT(1:22), '( 5X, A )' )
      1            FRNAME(KF)(1:LEN1(FRNAME(KF)))
                IF( FRNOTE(KF) .NE. ' ' ) THEN
                   WRITE( MSGTXT(22:256), '( A )' ) 

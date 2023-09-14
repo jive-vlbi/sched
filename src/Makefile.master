@@ -203,6 +203,8 @@ SAT_OBJS = $(SAT_SRCS:.f=.o)
 VEX_SRCS = $(wildcard Vex/*.f)
 VEX_OBJS = $(VEX_SRCS:.f=.o)
 
+VEX2_SRCS = $(wildcard Vex2/*.f)
+VEX2_OBJS = $(VEX2_SRCS:.f=.o)
 
 SLA_SRCS = $(wildcard Sla/*.f)
 SLA_OBJS = $(SLA_SRCS:.f=.o)
@@ -210,8 +212,11 @@ SLA_OBJS = $(SLA_SRCS:.f=.o)
 CIT_SRCS = $(wildcard Cit/*.f)
 CIT_OBJS = $(CIT_SRCS:.f=.o)
 
+FREQ_SRCS = $(wildcard Sched/Freq/VLBA/*.f)
+FREQ_OBJS = $(FREQ_SRCS:.f=.o)
+
 SCHED_SRCS = $(wildcard Sched/*.f)
-SCHED_OBJS = $(SCHED_SRCS:.f=.o) $(PLOT_OBJS) $(JPL_OBJS) $(SAT_OBJS) $(VEX_OBJS) $(SLA_OBJS) $(CIT_OBJS) $(ARCH_OBJS)
+SCHED_OBJS = $(SCHED_SRCS:.f=.o) $(PLOT_OBJS) $(JPL_OBJS) $(SAT_OBJS) $(VEX_OBJS) $(VEX2_OBJS)  $(SLA_OBJS) $(CIT_OBJS) $(ARCH_OBJS) $(FREQ_OBJS)
 
 UNIX_SRCS = $(wildcard Cit/sys_unix/*.f)
 UNIX_OBJS = $(UNIX_SRCS:.f=.o)
@@ -252,6 +257,8 @@ RM = /bin/rm
 all:
 	cd Vex; /bin/rm sched.inc; ln -s ../Sched/sched.inc sched.inc
 	cd Vex; /bin/rm schset.inc; ln -s ../Sched/schset.inc schset.inc
+	cd Vex2; /bin/rm sched2.inc; ln -s ../Sched/sched2.inc sched2.inc
+	cd Vex2; /bin/rm schset2.inc; ln -s ../Sched/schset2.inc schset2.inc
 	cd Plot; /bin/rm sched.inc; ln -s ../Sched/sched.inc sched.inc
 	cd Plot; /bin/rm srlist.inc; ln -s ../Sched/srlist.inc srlist.inc
 	cd PlotNRAO; /bin/rm sched.inc; ln -s ../Sched/sched.inc sched.inc
@@ -260,14 +267,17 @@ all:
 	cd Sched; /bin/rm rdcat.inc; ln -s ../Cit/rdcat.inc rdcat.inc
 	cd Sched; /bin/rm plot.inc; ln -s ../Plot/plot.inc plot.inc
 	cd Sched; /bin/rm vxlink.inc; ln -s ../Vex/vxlink.inc vxlink.inc
+	cd Sched; /bin/rm vxlink2.inc; ln -s ../Vex2/vxlink2.inc vxlink2.inc
 	cd Cit; $(MAKE) "FC=$(FC)"
 	cd Sla; $(MAKE) "FC=$(FC)"
 	cd Sched; $(MAKE) "FC=$(FC)"
+	cd Sched/Freq/VLBA; $(MAKE) "FC=$(FC)"
 	cd Jpl; $(MAKE) "FC=$(FC)"
 	cd Jplstub; $(MAKE) "FC=$(FC)"
 	cd Sat; $(MAKE) "FC=$(FC)"
 	cd Satstub; $(MAKE) "FC=$(FC)"
 	cd Vex; $(MAKE) "FC=$(FC)"
+	cd Vex2; $(MAKE) "FC=$(FC)"
 	cd Plot; $(MAKE) "FC=$(FC)"
 	cd PlotNRAO; $(MAKE) "FC=$(FC)"
 	cd Plotstub; $(MAKE) "FC=$(FC)"
@@ -315,11 +325,13 @@ clean:
 	cd Cit; $(MAKE) clean
 	cd Sla; $(MAKE) clean
 	cd Sched; $(MAKE) clean
+	cd Sched/Freq/VLBA; $(MAKE) clean
 	cd Jpl; $(MAKE) clean
 	cd Jplstub; $(MAKE) clean
 	cd Sat; $(MAKE) clean
 	cd Satstub; $(MAKE) clean
 	cd Vex; $(MAKE) clean
+	cd Vex2; $(MAKE) clean
 	cd Plot; $(MAKE) clean
 	cd PlotNRAO; $(MAKE) clean
 	cd Plotstub; $(MAKE) clean

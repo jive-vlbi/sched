@@ -359,6 +359,7 @@ C
             POINT(ISCN) = KD( KEYPTR( 'POINT', KC, KI ) )
          END IF
          AUTOPEAK = KD( KEYPTR( 'AUTOPEAK', KC, KI ) ) .EQ. 0.D0
+         SYNL404 = KD( KEYPTR( 'SYNL404', KC, KI ) ) .EQ. 0.D0
          PKWATCH = KD( KEYPTR( 'PKWATCH', KC, KI ) ) .EQ. 0.D0
          PEAKFILE = KCHAR( 'PEAKFILE', 80, .FALSE., KD, KC, KI ) 
          CALL ENVIR( PEAKFILE )
