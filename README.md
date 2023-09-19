@@ -181,6 +181,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
   * The OMS file writing Fortran function would write out of string boundaries for setups with more than 31 channels, into the setup file name. Only print the first 31 channels.
   * Update the Python wrap zone writing equivalent to the changes to the Fortran code introduced in 1.24.0.
 * __v1.26.0 (2023-05-03)__: Skip writing pointing_sector lines in the $ANTENNA block of the VEX files for KVN stations.
+* __v1.26.1 (2023-09-19)__: Bug fix: the 3rd and 6th cable wrap zones would use the lower instead of upper limit of the first axis.
 
 
 # Contact
