@@ -10,7 +10,6 @@
   DBE = 'RDBE_DDC'
   POL=dual
   PCAL  = 'off'
-  BARREL=ROLL_OFF 
   STATION = VLBA
   /
 !
@@ -27,11 +26,26 @@
   STATION = VLA27
   /
 !
-!EVNs (non-DBBC backends) - stay at 2Gbps
+!LBA-format LBAs (Cd,Ho in DBBC section) 
+!   1Gbps, 4x 64MHz; 4772-4900 to avoid crossing 4928
+!   aligns with low-half of 2Gbps stations
   FE=' ',' ',' ',' '
   DBE = ' '
   FIRSTLO = -9999.
   IFCHAN = ' ',' ',' ',' ',' ',' ',' ',' '
+  NCHAN=4
+  BBFILTER=64.0
+  POL=DUAL
+  FREQREF = 4772
+  FREQOFF = 0,0, 64,64
+  NETSIDE = U,U,  U, U
+  BBC =     1,2,  3, 4
+  BITS = 2
+  PCAL = 'off'
+  STATION = ATCA, MOPRA  !,PARKES
+  /
+!
+!EVNs (DBBC & compatible)
   NCHAN=32
   BITS=2
   BBFILTER=32.0
@@ -54,11 +68,11 @@
    bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12,   5,  13,   5,  13,   6,  14,   6,  14,   7,  15,   7,  15,   8,  16,   8,  16
   format = VDIF    station  =  JODRELL1 /
 !!
-!   firstlo= 5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624
-!   firstlo= 5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636
-!   ifchan  =  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2
-!   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12,   5,  13,   5,  13,   6,  14,   6,  14,   7,  15,   7,  15,   8,  16,   8,  16
-!  format = VDIF    station  =  JODRELL2 /
+   firstlo= 5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624,5624
+   firstlo= 5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636,5636
+   ifchan  =  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2,  A2,  B2
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12,   5,  13,   5,  13,   6,  14,   6,  14,   7,  15,   7,  15,   8,  16,   8,  16
+  format = VDIF    station  =  JODRELL2 /
 !
 !   firstlo= 4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088
    firstlo= 4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100,4100
@@ -112,14 +126,14 @@
 !
 !!!! mark5B stations (UR, QUASARs, SH) limited to 2Gbps
 !!!!   Irbene16 as well because of VSI connectors in the back-end
-!!!!    set to the closest 256MHz range to the usual 2Gbps (6MHz lower at 4792--5048)
+!!!!   set to 4772-5028, to align with low-end of LBA-format At,Mp 
 !!!!! careful if you want phase-cal on, given the T6 entry above
   NCHAN=16
   BITS=2
   BBFILTER=32.0
 !  FREQREF = 4632.49
   FREQREF = 4644.00
-  FREQOFF = 192,192,192,192, 256,256,256,256, 320,320,320,320, 384,384,384,384
+  FREQOFF = 160,160,160,160, 224,224,224,224, 288,288,288,288, 352,352,352,352
   NETSIDE =   L,  L,  U,  U,   L,  L,  U,  U,   L,  L,  U,  U,   L,  L,  U,  U
   POL=DUAL
   PCAL='off'
@@ -129,15 +143,15 @@
    bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
   format = MARK5B   station  =  URUMQI /
 !
-!   firstlo= 4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500
-!   ifchan =    A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
-!   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
-!  format = MARK5B   station  =  SVETLOE, ZELENCHK, BADARY /
+   firstlo= 4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500,4500
+   ifchan =    A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
+   bbc     =   1,   9,   1,   9,   2,  10,   2,  10,   3,  11,   3,  11,   4,  12,   4,  12
+  format = MARK5B   station  =  SVETLOE, ZELENCHK, BADARY /
 !
-!   firstlo= 4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200
-!   ifchan  =   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
-!   bbc     =   1,   5,   1,   5,   2,   6,   2,   6,   3,   7,   3,   7,   4,   8,   4,   8
-!  format = MARK5B  station  =  KUNMING /
+   firstlo= 4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200
+   ifchan  =   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
+   bbc     =   1,   5,   1,   5,   2,   6,   2,   6,   3,   7,   3,   7,   4,   8,   4,   8
+  format = MARK5B  station  =  KUNMING /
 !
    firstlo= 4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088,4088
    ifchan  =  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1,  A1,  C1
@@ -145,14 +159,14 @@
   format = VDIF     station  =  IRBENE16 / 
 !
 !!SHESHAN added as a replacement for T6 in sess.3/21
-!   firstlo= 4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200
-!   ifchan =    A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
-!   bbc     =   1,   5,   1,   5,   2,   6,   2,   6,   3,   7,   3,   7,   4,   8,   4,   8
-!  format = MARK5B   station  =  SHANGHAI /
+   firstlo= 4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200,4200
+   ifchan =    A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B,   A,   B
+   bbc     =   1,   5,   1,   5,   2,   6,   2,   6,   3,   7,   3,   7,   4,   8,   4,   8
+  format = MARK5B   station  =  SHANGHAI /
 !
 !
 !!!! WB limited to 1Gbps 
-!!!!   at C-band, 1G = upper half of the above 2G range
+!!!!   at C-band, align with LBA-format At,Mp
   NCHAN=8
   BITS=2
   BBFILTER=32.0
@@ -160,24 +174,33 @@
 !  bbfilter=16.0
 !  FREQREF = 4632.49
   FREQREF = 4644.00
-  FREQOFF = 256,256,256,256, 320,320,320,320
+  FREQOFF = 160,160,160,160, 224,224,224,224
   NETSIDE =   L,  L,  U,  U,   L,  L,  U,  U
   POL=dual
   PCAL  = 'off'
-!   firstlo= 4517,4517,4517,4517,4517,4517,4517,4517
-   firstlo= 4529,4529,4529,4529,4529,4529,4529,4529
+   firstlo= 4433,4433,4433,4433,4433,4433,4433,4433
    ifchan  =  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1
    bbc     =   1,   9,   1,   9,   2,  10,   2,  10
   format = VDIF    station  =  WSTRBORK /
 !
+   firstlo= 4100,4100,4100,4100,4100,4100,4100,4100
+   ifchan  =  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1
+   bbc     =   1,   5,   1,   5,   2,   6,   2,   6
+  format = VDIF    station  =  HOB_DBBC /
+!
+   firstlo= 4100,4100,4100,4100,4100,4100,4100,4100
+   ifchan  =  A1,  B1,  A1,  B1,  A1,  B1,  A1,  B1
+   bbc     =   1,   5,   1,   5,   2,   6,   2,   6
+  format = VDIF    station  =  CDDBBC /
+!
 !
 !! eMERLIN using 64MHz subbands (put as DAR=NONE in sta catalog)
-!!   middle half of the the 1Gbps band (thus 0.5->0.75 of the 2Gbps band)
+!!   upper half of the the 1Gbps band (thus 0.25->0.5 of the 2Gbps band)
   NCHAN=2
   BBFILTER = 64.0
 !  FREQREF = 4632.49
   FREQREF = 4644.00
-  FREQOFF = 256,256
+  FREQOFF = 192,192
   NETSIDE =   U,  U
   PCAL = 'off'
 !--------------------------------------------------------------------------
