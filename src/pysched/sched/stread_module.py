@@ -21,7 +21,7 @@ def stread(input_iterator, stdin, mjd1):
     s.wlog(0, "STREAD:  Reading station catalog: {}".format(infile[-(100-25):]))
     s.wlog(0, "STREAD:  Reading locations file:  {}".format(locfile))
 
-    if locfile.upper not in ("NONE", "NOLOC"):
+    if locfile.upper() not in ("NONE", "NOLOC"):
         try:
             f = open(locfile, "r")
         except Exception as e:
