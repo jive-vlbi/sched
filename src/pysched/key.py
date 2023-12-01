@@ -36,7 +36,10 @@ class ParseError(RuntimeError): pass
 class InputError(RuntimeError): pass
 class EOFBeforeFirstItem(BaseException): pass
 
-Token = collections.namedtuple("Token", ["type_", "value", "file_", "line"])
+class Token(collections.namedtuple("TokenBase",
+                                   ["type_", "value", "file_", "line"])):
+    def __str__(self):
+        return (f"{self.type_} type token with value: '{self.value}'")
 
 # code to support arithmatic expressions, copied from:
 # https://stackoverflow.com/questions/2371436/evaluating-a-mathematical-expression-in-a-string 
