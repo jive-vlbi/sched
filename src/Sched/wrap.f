@@ -327,7 +327,7 @@ C
 C           Leave CURAZ1 and CURAZ2 as is, but complain.
 C
             MSGTXT = ' '
-            WRITE( MSGTXT, '( A, I4, A, A )' )
+            WRITE( MSGTXT, '( A, I4, A, A, A )' )
      1         'WRAP:  Could not get wrap for scan ', ISCN, 
      2         ', station: ', STANAME(ISTA),
      3         '  Program logic problem?' 
