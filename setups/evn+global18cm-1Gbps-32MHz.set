@@ -1,7 +1,3 @@
-!!!
-!! integral-MHz BBC tunings for LBA
-!
-!NRAOs use 8x 32MHz set-up
 !VLBAs
   BAND='18CM'
   NCHAN=8
@@ -13,7 +9,6 @@
   DBE = 'RDBE_DDC'
   POL=dual
   PCAL  = 'off'
-  BARREL=ROLL_OFF 
   STATION = VLBA, GBT_VLBA, GBT_COLD
 /
 !
@@ -103,7 +98,9 @@
    bbc     =   1,   9,   1,   9,   2,  10,   2,  10
   format = VDIF     station  =  SARDINIA /                    
 !!
-   firstlo= 1300,1300,1300,1300,1300,1300,1300,1300
+! new Ur LO at 186 (Nyq.zone 3)
+!   firstlo= 1300,1300,1300,1300,1300,1300,1300,1300
+   firstlo=  186, 186, 186, 186, 186, 186, 186, 186
    ifchan =   A2,  C1,  A2,  C1,  A2,  C1,  A2,  C1
    bbc     =   1,   9,   1,   9,   2,  10,   2,  10
   format = MARK5B   station  =  URUMQI /
@@ -113,6 +110,21 @@
    bbc     =   1,   5,   1,   5,   2,   6,   2,   6
   format = VDIF     station  =  TIANMA65 
   pcal = 'off' /                    
+!
+!
+!!! Robledo set up compatible with standard sched catalogues
+  DBE = ' '
+  NCHAN = 16
+  BBFILTER = 16.0
+  FREQREF = 1610.00
+  FREQOFF = 0,0,0,0, 32,32,32,32, 64,64,64,64, 96,96,96,96 
+  NETSIDE = L,L,U,U,  L, L, U, U,  L, L, U, U,  L, L, U, U
+  POL=dual
+  PCAL  = 'off'
+   firstlo= 1380,1380,1380,1380,1380,1380,1380,1380,1380,1380,1380,1380,1380,1380,1380,1380
+   ifchan  ='2N','1N','2N','1N','2N','1N','2N','1N','2N','1N','2N','1N','2N','1N','2N','1N'
+   bbc     =   2,   1,   2,   1,   4,   3,   4,   3,   6,   5,   6,   5,   8,   7,   8,   7
+  format = MKIV1:2  station = DSS63 /
 !
 !
 !!! eMERLIN using 64MHz subbands (put as DAR=NONE in sta catalog)
