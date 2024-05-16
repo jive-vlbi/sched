@@ -333,7 +333,7 @@ ALLOWED PREEMPTION TIMES
             if (preempt_ranges[0][0] - s.schn1.tfirst) > max_block:
                 too_long = True
             if (s.schn1.tend - preempt_ranges[-1][1]) > max_block:
-                too_long = Ture
+                too_long = True
             if any(next_range[0] - prev_range[1] > max_block
                    for next_range, prev_range in
                    zip(preempt_ranges[:-1], preempt_ranges[1:])):
@@ -343,7 +343,7 @@ ALLOWED PREEMPTION TIMES
                 text = f"""
  *******
  ******* There is at least one block of over {max_block * 24:5.1f} hr
- ******* when your PREEMPT specification does not allow {mininum_preempt_time * 24:5.1f} hr
+ ******* when your PREEMPT specification does not allow {minimum_preempt_time * 24:5.1f} hr
  ******* EOP observations on one baseline (PT-MK usually) to be inserted.
  ******* See details in the .sum or .preempt file."""[1:]
                 write_files(text + "\n")
