@@ -253,7 +253,7 @@ C
                ELSE
                    WRITE( LINE, '( 5X, A, A, A1, A, A1 )' ) 
      1             'ref $DATASTREAMS = ',
-     2             TRLINK(IXX)(1:LEN1(TRLINK(IXX)))
+     2             DSLINK(IXX)(1:LEN1(DSLINK(IXX)))
                END IF
                LPOS = LEN1(LINE)
                WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) SEP
@@ -266,7 +266,7 @@ C
                   ELSE
                       WRITE( LINE, '( 5X, A, A, A1, A, A1 )' ) 
      1                'ref $DATASTREAMS = ',
-     2                 TRLINK(IXX)(1:LEN1(TRLINK(IXX)))
+     2                 DSLINK(IXX)(1:LEN1(DSLINK(IXX)))
                   END IF
                   LPOS = LEN1(LINE)
                   WRITE( LINE(LPOS+1:LPOS+1), '( A1 )' ) COL
@@ -297,7 +297,7 @@ C
                   ELSE
                       WRITE( LINE, '( 5X, A, A, A1, A, A1 )' ) 
      1                'ref $DATASTREAMS = ',
-     2                TRLINK(IXX)(1:LEN1(TRLINK(IXX))),
+     2                DSLINK(IXX)(1:LEN1(DSLINK(IXX))),
      3                ' <= obsolete definition'
                   END IF
                   LPOS = LEN1(LINE)                  
