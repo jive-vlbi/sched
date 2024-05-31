@@ -183,10 +183,10 @@ C
       CALL VXSORT( 'BB', NBBVEX, BBISSET, NMODBB, IMODBB,
      1     NSTABB, ISTABB, BBLINK )
 C
-C     Tracks
+C     Datastream
 C
-      CALL VXSORT( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
-     2       NSTATR, ISTATR, TRLINK )
+      CALL VXSORT( 'DS', NTRVEX, TRISSET, NMODTR, IMODTR,
+     2       NSTATR, ISTATR, DSLINK )
 C
 C        Head position
 C

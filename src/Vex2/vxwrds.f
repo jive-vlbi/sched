@@ -6,12 +6,14 @@ C     Based on the VEX block
 C     In this case the TR = $TRACKS section 
 C     By H.J. van Langevelde, JIVE, 300496 
 C 
+C     Adapted by Adriana Escobar
+C
       INCLUDE 'sched2.inc' 
       INCLUDE 'schset2.inc' 
       INCLUDE 'vxlink2.inc' 
 C      
       INTEGER   ITR, KS, ICH, IBIT, IFAN, IP, HEDSTK, NS2USD
-      INTEGER   LPOS, I, ISTA, TRACK1, ITRK
+      INTEGER   LPOS, I, ISTA
       INTEGER   LEN1
       INTEGER   ISCAT
       CHARACTER LINE*132, THEBIT*4, TPSUBP, S2MDNM*7, IS2USD(16)*4
@@ -27,7 +29,7 @@ C     Nov 2011 - MarkIII is now ancient history so a abort if FORMAT=
 C     MARKIII was no longer needed.
       WRITE( IVEX, '( A, A1 )' ) '$DATASTREAMS', SEP     
 C
-C     Deal with no requested track information - like pointing.
+C     Deal with no requested datastream information - like pointing.
 C
 C      IF( NTRVEX .EQ. 0 .OR. OBSTYP .EQ. 'NONE' .OR. 
 C     1      OBSTYP .EQ. 'PTVLBA' ) THEN
@@ -37,11 +39,11 @@ C        Try to support pointing observations (no recording) with
 C        dummy format specification.  RCW  Nov. 21, 2011.
 C
 
-      write(*,*) 'vxwrtr remove this bit if track sections below work'
+      write(*,*) 'vxwrdr remove this bit if track sections below work'
          IF( OBSTYP .EQ. 'PTVLBA' ) THEN
             MSGTXT = ' '
             WRITE( MSGTXT, '( A, A )' )
-     1          'VXWRTR: Setting format to NONE for ',
+     1          'VXWRDS: Setting format to NONE for ',
      2          'pointing observations.'
             CALL WLOG( 1, MSGTXT )
             WRITE( IVEX, '( A )' )
@@ -49,8 +51,9 @@ C
             WRITE( IVEX, '( A1, A, A )' ) COM,
      1          ' This is a fake format for ',
      2          'non-recording observations.'
-C            WRITE( IVEX, '( 5X, A, A, A1 )' )
-C     1          'track_frame_format = ','NONE', SEP
+            WRITE( IVEX, '( 5X, A, A1, A, I1.1, 1X, A1, 1X, A, A1)' ) 
+     1          'datastream = ', LNK, 'DS', IDS, COL,  
+     2          FORMAT(KS)(1:LEN1(FORMAT(KS))), SEP
 C
 C           Wrap up.
 C
@@ -81,10 +84,13 @@ C
      4      ISCAT = ISTA
          END DO
 C
+C        Overwrite the name of the block if format
+C
          WRITE( IVEX, '( A1 )' ) COM
          WRITE( IVEX, '( A, A, A1 )' ) 'def ',
-     1        TRLINK(ITR)(1:LEN1(TRLINK(ITR))), SEP
+     1        DSLINK(ITR)(1:LEN1(DSLINK(ITR))), SEP
          CALL VXSTLI2( ITR, NSTATR, ISTATR )
+      
 C
 C        Write the DBE if one was specified and the FIRMFILE, if 
 C        specified.
@@ -97,14 +103,36 @@ C     1       WRITE( IVEX, '( A1, A, A, A )' ) COM,
 C     2         '    firmware_file = ', 
 C     3         FIRMFILE(KS)(1:LEN1(FIRMFILE(KS))), SEP
 C
-C        If format is none, write a minimal track def.
+C        If format is none, write a a generic datastream block
 C
          IF( FORMAT(KS)(1:4) .EQ. 'NONE' ) THEN
             WRITE( IVEX, '( A1, A, A )' ) COM,
      1          ' This is a fake format for ',
      2          'non-recording observations.'
-C            WRITE( IVEX, '( 5X, A, A, A1 )' )
-C     1          'track_frame_format = ','NONE', SEP
+            WRITE( IVEX, '( 5X, A, A1, A, I1.1, 1X, A1, 1X, A, A1)' ) 
+     1          'datastream = ', LNK, 'DS', IDS, COL,  
+     2          FORMAT(KS)(1:LEN1(FORMAT(KS))), SEP
+            DO ICH = 1, NCHAN(KS)
+               WRITE( LINE, '( 5X, A, 1X, A1, A, I1.1, 1X, 
+     1                A1, 1X, A1, A, I1.1, 1X, A1, 1X, I1.1,
+     2                1X, A1, 1X, I1.1, 1X, A1, F6.1, 1X, A,  
+     3                1X, A1, 1X, I1.1, 1X, A1, 1X, A, 1X, 
+     4                A1, 1X, I4, A1 )' ) 
+     5                'thread =', LNK, 'DS', IDS, COL, LNK,
+     6                'thread', ICH-1, COL, ICH-1, COL, 1, COL,
+     7                SAMPRATE(KS), 'Ms/sec', 
+     8                COL, BITS(1,KS), COL, 'real', COL, 
+     9                5000, SEP
+               WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE))
+               WRITE( LINE, '( 5X, A, 1X, A1, A, I1.1, 1X, 
+     1                A1, 1X, A1, A, I1.1, 1X, A1, 1X,
+     2                A1, A, I2.2, 1X, A1, 1X, I1.1,  
+     3                A1 )' ) 
+     4                'channel =', LNK, 'DS', IDS, COL, LNK,
+     5                'thread', ICH-1, COL, LNK, 'CH', ICH, COL,
+     6                0, SEP
+               WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE))
+            END DO
             WRITE( IVEX, '( A, A1 )' ) 'enddef',SEP
          ELSE
 C
@@ -120,7 +148,7 @@ C
      7         ( FANOUT(KS) .LT. 0.9 .AND.
      8         FORMAT(KS)(1:2) .NE. 'S2' )) THEN
               WRITE( MSGTXT, '( A, A, F6.2 )' )
-     1            'VXWRTR: unsupported recording mode/fan: ', 
+     1            'VXWRDS: unsupported recording mode/fan: ', 
      2            FORMAT(KS), FANOUT(KS)
               CALL ERRLOG( MSGTXT )
            END IF
@@ -146,6 +174,11 @@ C     2               'Mb/s/tr; stations using disks'
 C              END IF
 C          
 C             Now the format and modulation
+C
+C             NOTE: This class was adapted from the TRACKS section
+C              the below commented fields were left in case there is 
+C              modulation to be implement in the future for the
+C              datastream block.
 C                
               IF( FORMAT(KS)(1:7) .EQ. 'MARKIII' ) THEN
 C                       WRITE( IVEX, '( 5X, A, A, A1 )' )
@@ -190,7 +223,7 @@ C                 WRITE( IVEX, '( 5X, A, A, A1 )' )
 C     1               'data_modulation = ','off', SEP
               ELSE
                  WRITE( MSGTXT, '( A, A )' )
-     1               'VXWRTR: unsupported recording mode: ', FORMAT(KS)
+     1               'VXWRDS: unsupported recording mode: ', FORMAT(KS)
                  CALL ERRLOG( MSGTXT )
               END IF
            ELSE
@@ -210,7 +243,7 @@ C             Then find S2 mode
 C                
               CALL VXS2MD( KS, S2MDNM, S2OK, NS2USD, IS2USD, .TRUE. )
                     IF( .NOT. S2OK ) 
-     1            CALL ERRLOG('VXWRTR: inconsistent or impossible'//
+     1            CALL ERRLOG('VXWRDS: inconsistent or impossible'//
      2            ' S2 mode ')
 C              WRITE( LINE, '( 5X, A, A, A1 )' )
 C     1            'S2_recording_mode = ', S2MDNM(1:LEN1(S2MDNM)), SEP
@@ -283,17 +316,17 @@ C
                  DO ICH = 1, NCHAN(KS)
                     IF( BBC(ICH,KS) .LT. 5 .AND. BBC(ICH,KS) .GE. 1 ) 
      1                  THEN
-                       IF( HIBBC ) CALL ERRLOG('VXWRTR: Inconsistent '//
+                       IF( HIBBC ) CALL ERRLOG('VXWRDS: Inconsistent '//
      1                     'DAR connection')
                        LOWBBC = .TRUE.
                     ELSE IF( BBC(ICH,KS) .LT. 9 
      1                     .AND. BBC(ICH,KS) .GE. 5 ) THEN
-                       IF( LOWBBC ) CALL ERRLOG('VXWRTR: Inconsistent '
+                       IF( LOWBBC ) CALL ERRLOG('VXWRDS: Inconsistent '
      1                     //'DAR connection')
                        HIBBC = .TRUE.
                     ELSE 
                        CALL ERRLOG(
-     1                      'VXWRTR: Inconsistent DAR connection')
+     1                      'VXWRDS: Inconsistent DAR connection')
                     END IF
                  END DO
 C                 IF( HIBBC ) THEN
@@ -304,7 +337,7 @@ C                    WRITE( LINE(LPOS:), '( 1X, A, A1 )' )
 C     1                  'VLBA_BBC_1-4', SEP
 C                 ENDIF
               ELSE
-                 CALL WLOG( 1,'VXWRTR: WARNING, un-documented '//
+                 CALL WLOG( 1,'VXWRDS: WARNING, un-documented '//
      1               'S2_data_source, may not be recognized by PCFS ')
 C          
 C                A secial case of undocummented is NONE => none
