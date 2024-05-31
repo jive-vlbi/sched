@@ -99,8 +99,9 @@ C
      2       DAR(ISCAT) .EQ. 'RDBE2' .OR. 
      3       DAR(ISCAT) .EQ. 'S2' .OR. 
      4       DAR(ISCAT) .EQ. 'VLBAG' .OR.
-     5       DAR(ISCAT) .EQ. 'VLBA4' .OR. 
-     6       DAR(ISCAT) .EQ. 'K4' ) THEN
+     5       DAR(ISCAT) .EQ. 'VLBA4' .OR.
+     6       DAR(ISCAT) .EQ. 'VNDA' .OR. 
+     7       DAR(ISCAT) .EQ. 'K4' ) THEN
             WRITE( IVEX, '( 5X, A, A, A1 )' ) 
      1          'electronics_rack_type = ',
      2          DAR(ISCAT)(1:LEN1(DAR(ISCAT))), SEP

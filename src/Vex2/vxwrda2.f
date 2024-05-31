@@ -74,7 +74,8 @@ C
      3       DAR(ISCAT) .EQ. 'S2' .OR. 
      4       DAR(ISCAT) .EQ. 'VLBAG' .OR.
      5       DAR(ISCAT) .EQ. 'VLBA4' .OR. 
-     6       DAR(ISCAT) .EQ. 'K4' ) THEN
+     6       DAR(ISCAT) .EQ. 'VNDA' .OR. 
+     7       DAR(ISCAT) .EQ. 'K4' ) THEN
             WRITE( IVEX, '( 5X, A, 1X, A1, 1X, A, 
      1            1X, A1, 1X, A1, A, 1X, A1, 1X )' ) 
      2          'equip = rack', COL,
