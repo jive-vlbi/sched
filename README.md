@@ -184,6 +184,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.26.1 (2023-09-19)__: Bug fix: the 3rd and 6th cable wrap zones would use the lower instead of upper limit of the first axis.
 * __v1.26.2 (2023-12-04)__: Bug fix in the Fortran code for wrap zones: a rare warning message had the wrong number of formatting parameters.
 * __v1.26.3 (2024-05-16)__: Fixed typos in the sum file writing module.
+* __v1.26.4 (2024-06-03)__: Fixed bug triggered by using GRABTO with NOSETUP.
 
 
 # Contact
