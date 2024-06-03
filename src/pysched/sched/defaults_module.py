@@ -52,12 +52,6 @@ def defaults():
                 scan.grabtime[0] = 30
             if scan.grabtime[1] < 0:
                 scan.grabtime[1] = 10
-            if scan.grabgap == 0:
-                for station in station_catalog.used():
-                    if station.stascn[scan_index]:
-                        bps = setups[station.nsetup[scan_index] - 1].totbps
-                        scan.grabgap = max(scan.grabgap,
-                                           5 + scan.grabtime[0] * bps / 110.)
     scan_catalog.write(range(scan_catalog.scan_offset,
                              scan_catalog.scan_offset + len(used_scans)))
     
