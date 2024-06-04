@@ -626,7 +626,7 @@ C
       LOGICAL          LST, MARK2, VLBITP, VLAONLY, NOTAPE, CONFIG
       LOGICAL          TANTS1(MAXSTA), TANTS2(MAXSTA), FUZZY, GOTVLBA
       LOGICAL          GOTPREEM, WRAP24
-      CHARACTER        EXPT*72, EXPCODE*8
+      CHARACTER        EXPT*72, EXPCODE*16
 C
 C                      Calculated items:
 C

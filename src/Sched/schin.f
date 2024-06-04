@@ -507,7 +507,7 @@ C     Get items for which only the last input given is used.
 C
       EXPT = KCHAR( 'EXPT', 72, .FALSE., KD, KC, KI ) 
       IF( LEN1(EXPT) .EQ. 0 ) EXPT = 'No description given.'
-      EXPCODE = KCHAR( 'EXPCODE', 8, .FALSE., KD, KC, KI )
+      EXPCODE = KCHAR( 'EXPCODE', 16, .FALSE., KD, KC, KI )
       LINEPG = KD( KEYPTR( 'LINEPG', KC, KI ) )
       TPREF = KD( KEYPTR( 'TPREF', KC, KI ) )
       PTDUR = KD( KEYPTR( 'PTDUR', KC, KI ) )

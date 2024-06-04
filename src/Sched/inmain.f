@@ -141,7 +141,7 @@ C
 C
 C     Cover and experiment information.
 C
-      CALL KEYCHR( 'EXPCODE', 'NUG', 8, KD, KC, KI )
+      CALL KEYCHR( 'EXPCODE', 'NUG', 16, KD, KC, KI )
       CALL KEYCHR( 'EXPT', ' ', 72, KD, KC, KI )
       CALL KEYADD( 'LINEPG', 55.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'OBSTYPE', 'NONE', 8, KD, KC, KI )
