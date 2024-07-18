@@ -425,7 +425,28 @@ C
                  END IF
 C          
                  DO ICH = 1, NCHAN(KS)
-                    WRITE( LINE, '( 5X, A, 1X, A1, A, I1.1, 1X, 
+                    IF ( DBE(KS) .EQ. 'VNDA' ) THEN
+                      WRITE( LINE, '( 5X, A, 1X, A1, A, I1.1, 1X, 
+     1                      A1, 1X, A1, A, I1.1, 1X, A1, 1X, I1.1,
+     2                      1X, A1, 1X, I1.1, 1X, A1, F6.1, 1X, A,  
+     3                      1X, A1, 1X, I1.1, 1X, A1, 1X, A, 1X, 
+     4                      A1, 1X, I4, A1 )' ) 
+     5                     'thread =', LNK, 'DS', IDS, COL, LNK,
+     6                     'thread', ICH-1, COL, ICH-1, COL, 1, COL,
+     7                     SAMPRATE(KS)/FANOUT(KS), 'Ms/sec', 
+     8                     COL, BITS(1,KS), COL, 'complex', COL, 
+     9                     8000, SEP
+                       WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE))
+                       WRITE( LINE, '( 5X, A, 1X, A1, A, I1.1, 1X, 
+     1                      A1, 1X, A1, A, I1.1, 1X, A1, 1X,
+     2                      A1, A, I2.2, 1X, A1, 1X, I1.1,  
+     3                      A1 )' ) 
+     4                     'channel =', LNK, 'DS', IDS, COL, LNK,
+     5                     'thread', ICH-1, COL, LNK, 'CH', ICH, COL,
+     6                     0, SEP
+                       WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE))
+                    ELSE
+                        WRITE( LINE, '( 5X, A, 1X, A1, A, I1.1, 1X, 
      1                      A1, 1X, A1, A, I1.1, 1X, A1, 1X, I1.1,
      2                      1X, A1, 1X, I1.1, 1X, A1, F6.1, 1X, A,  
      3                      1X, A1, 1X, I1.1, 1X, A1, 1X, A, 1X, 
@@ -444,6 +465,7 @@ C
      5                     'thread', ICH-1, COL, LNK, 'CH', ICH, COL,
      6                     0, SEP
                        WRITE( IVEX, '( A, A1 )' ) LINE(1:LEN1(LINE))
+                    END IF
                  END DO
               END DO 
            END IF
