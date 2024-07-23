@@ -60,7 +60,9 @@ C
 C
 C              Write out telescope control files.
 C
-               CALL CRDWRT( ISCN, ISTA, FIRSTS )
+               IF( MAKECRD ) THEN
+                  CALL CRDWRT( ISCN, ISTA, FIRSTS )
+               END IF
 C
                FIRSTS = .FALSE.
             END IF
@@ -71,7 +73,9 @@ C
 C        Put final lines in telescope control file and CLOSE it.
 C        Last call is flagged by scan number -999.
 C
-         CALL CRDWRT( -999, ISTA, .FALSE. )
+         IF( MAKECRD ) THEN
+            CALL CRDWRT( -999, ISTA, .FALSE. )
+         END IF
          IF( OVBA ) CLOSE( UNIT=IUVBA )
          IF( OLOC ) CLOSE( UNIT=IULOC )
          IF( DEBUG ) CALL WLOG( 0, 'STAFILES: Files closed.' )

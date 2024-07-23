@@ -364,6 +364,11 @@ C
          PEAKFILE = KCHAR( 'PEAKFILE', 80, .FALSE., KD, KC, KI ) 
          CALL ENVIR( PEAKFILE )
 C
+C        Get explicit indication to create CRD files. (AED 7/23/2024)
+C
+         I1 = KEYPTR( 'MAKECRD', KC, KI )
+         MAKECRD = KD(I1) .EQ. 0.D0 
+C
 C        Get any specification of a group of scans from which to
 C        select the highest elevation one.
 C
