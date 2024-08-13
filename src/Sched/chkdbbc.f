@@ -195,19 +195,21 @@ C
 C           Sample rate can have many values.
 C           These may need to shift down by 1 if we do complex
 C           sampling.
-C           Current version of DBBC only allows 1-32 MHz channels and
+C           Current version of DBBC only allows 1-64 MHz channels and
 C           Nyquist sampling.
 C
-            IF( SAMPRATE(KS) .NE. 64.0 .AND.
-     1          SAMPRATE(KS) .NE. 32.0 .AND.
-     2          SAMPRATE(KS) .NE. 16.0 .AND.
-     3          SAMPRATE(KS) .NE. 8.0 .AND.
-     4          SAMPRATE(KS) .NE. 4.0 .AND.
-     5          SAMPRATE(KS) .NE. 2.0 ) THEN
+            IF( 
+     1          SAMPRATE(KS) .NE. 128.0 .AND.
+     2          SAMPRATE(KS) .NE. 64.0 .AND.
+     3          SAMPRATE(KS) .NE. 32.0 .AND.
+     4          SAMPRATE(KS) .NE. 16.0 .AND.
+     5          SAMPRATE(KS) .NE. 8.0 .AND.
+     6          SAMPRATE(KS) .NE. 4.0 .AND.
+     7          SAMPRATE(KS) .NE. 2.0 ) THEN
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKDBBC: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=DBBC_DDC. Must be 2 to 64 Msamp/s.'
+     2           ' for DBE=DBBC_DDC. Must be 2 to 128 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF

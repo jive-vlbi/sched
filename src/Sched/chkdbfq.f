@@ -143,16 +143,18 @@ C     ===  Now check the DDC personality. ===
 C
       IF( DBE(KS) .EQ. 'DBBC_DDC' ) THEN
 C
-C        All bandwidths must be between 1 and 16 MHz. 32 MHz is
-C        available with the e-series firmware.
+C        All bandwidths must be between 1 and 64 MHz (not all
+C        systems...) 
 C
          DO ICH = 1, NCHAN(KS)
-            IF( .NOT. ( DEQUAL( BBCBW(ICH), 32.0D0 ) .OR. 
-     2          DEQUAL( BBCBW(ICH), 16.0D0 ) .OR. 
-     3          DEQUAL( BBCBW(ICH), 8.0D0 ) .OR. 
-     4          DEQUAL( BBCBW(ICH), 4.0D0 ) .OR. 
-     5          DEQUAL( BBCBW(ICH), 2.0D0 ) .OR. 
-     6          DEQUAL( BBCBW(ICH), 1.0D0 ) ) ) THEN
+            IF( .NOT. ( 
+     1          DEQUAL( BBCBW(ICH), 64.0D0 ) .OR. 
+     2          DEQUAL( BBCBW(ICH), 32.0D0 ) .OR. 
+     3          DEQUAL( BBCBW(ICH), 16.0D0 ) .OR. 
+     4          DEQUAL( BBCBW(ICH), 8.0D0 ) .OR. 
+     5          DEQUAL( BBCBW(ICH), 4.0D0 ) .OR. 
+     6          DEQUAL( BBCBW(ICH), 2.0D0 ) .OR. 
+     7          DEQUAL( BBCBW(ICH), 1.0D0 ) ) ) THEN
                MSGTXT = ' '
                WRITE( MSGTXT, '( A, A, F8.3 )' )
      1            'CHKDBFQ: Bandwidth must be 1 to 32 MHz for ',
