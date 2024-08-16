@@ -168,8 +168,13 @@ C                VDIF5032 is appropriate for RDBE/DDC and WIDAR,
 C                but might need something else for other 
 C                systems.
 C
-                 WRITE( IVEX, '( 5X, A, A, A1 )' )
-     1               'track_frame_format = ','VDIF5032', SEP
+                 IF( DBE(KS)(1:4) .EQ. 'DBBC' ) THEN
+                     WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1                   'track_frame_format = ','VDIF8032', SEP
+                 ELSE
+                     WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1                   'track_frame_format = ','VDIF5032', SEP
+                 END IF
            
               ELSE IF( FORMAT(KS)(1:3) .EQ. 'LBA' ) THEN
 C                       WRITE( IVEX, '( 5X, A, A, A1 )' )

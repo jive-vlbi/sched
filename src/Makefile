@@ -1,4 +1,4 @@
-# Temporary makefile for SCHED made by configurelinux64gfortran
+# Temporary makefile for SCHED made by configureUbuntu
 #
 # Makefile.master is the template makefile.  It is not viable as it stands
 # but can be made viable by uncommenting various lines as described in
@@ -67,7 +67,7 @@
 #  are being used to make portable binaries.  With modern systems, they
 #  seem to cause problems.
 
- XLD = -L/usr/lib64 -lX11
+ XLD = -L/usr/lib -lX11
 #XLD =                                         # Should work on many systems.
                                                #  Use for pgplot stub.
 #XLD = -lX11		                       # X11 libraries, if needed
@@ -126,7 +126,7 @@ LPGPLOT = $(PGPLOT_DIR)
 # For linker:  (LPGPLOT not needed for all).
 #   If there are missing items, consider adding -lz
 
- LDPGPLOT = -L$(LPGPLOT) -lpgplot
+ LDPGPLOT = -L$(LPGPLOT) -lpgplot -lpng
 
 #  Some options - will be set in the configure scripts, but you can change:
 #LDPGPLOT = -lpgplot -lpng       # pgplot, png, z in the standard load path.
@@ -245,7 +245,7 @@ IBMAIX_OBJS = $(IBMAIX_FSRCS:.f=.o) $(IBMAIX_CSRCS:.c=.o) $(UNIX_OBJS)
 
 ARCH_OBJS = $($(ARCH)_OBJS)
 
-BINDIR = ../bin/linux64gf
+BINDIR = ../bin
 CP = /bin/cp
 RM = /bin/rm
 
