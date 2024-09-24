@@ -9,8 +9,8 @@ C
 C     Removed much tape handling July 22, 2010  RCW.
 C     Initialize HEAD for pointing type observations.  Nov. 11, 2011 RCW.
 C 
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C 
 C     Huib's local variables 

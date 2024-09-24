@@ -24,8 +24,8 @@ C
 C     Add the wrap zone specification, but block it temporarily
 C     for most stations.  Jan 2014.  RCW.
 C
-      INCLUDE 'sched2.inc'
-      INCLUDE 'schset2.inc'
+      INCLUDE 'sched.inc'
+      INCLUDE 'schset.inc'
       INCLUDE 'vxlink2.inc'
 C
       INTEGER     ISCN, ISTA, LEN1, NCHR, INT, ILEN

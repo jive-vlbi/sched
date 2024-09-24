@@ -13,8 +13,8 @@ C     Note: this class is the same as vxcftr.f since it was created as
 C     a place holder for when the DATASTREAM block would be empty and 
 C     simulated the TRACKS block for vex2 
 C
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C
       INTEGER ISET, JSET

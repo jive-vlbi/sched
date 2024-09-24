@@ -5,8 +5,8 @@ C     Writes the detailed source paramters,
 C     for ISRC, using INAME alias number
 C     By H.J. van Langevelde, JIVE, 051001
 C 
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C 
       INTEGER   ISRC, INAME

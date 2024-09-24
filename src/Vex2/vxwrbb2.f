@@ -6,8 +6,8 @@ C     Writes a specific section of the VEX2 file
 C     In this case the BB = $BBC section 
 C     By H.J. van Langevelde, JIVE, 300496 
 C 
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C 
 C     Huib's local variables 

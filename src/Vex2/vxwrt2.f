@@ -4,8 +4,8 @@ C     By H.J. van Langevelde, JIVE, 030596
 C     opens vex file, does some sorting and writes setup and 
 C     schedule sections
 C
-      INCLUDE 'sched2.inc'
-      INCLUDE 'schset2.inc'
+      INCLUDE 'sched.inc'
+      INCLUDE 'schset.inc'
       INCLUDE 'vxlink2.inc'
 C
       INTEGER    VLBOPE, LEN1, IOERR, IXX, ISTA, JSTA

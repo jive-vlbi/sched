@@ -4,8 +4,8 @@ C     Writes a specific section of the VEX file
 C     In this case the TR = $TRACKS section 
 C     By H.J. van Langevelde, JIVE, 300496 
 C 
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C      
       INTEGER   ITR, KS, ICH, IBIT, IFAN, IP, HEDSTK, NS2USD

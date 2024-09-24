@@ -29,8 +29,8 @@ C     ran into this when he specified EB first.  I am going to
 C     prevent the Vex code (VXCFIF) from using the same if_def for two
 C     IFs that are not both VLBA or both non-VLBA.
 C
-      INCLUDE  'sched2.inc'
-      INCLUDE  'schset2.inc'
+      INCLUDE  'sched.inc'
+      INCLUDE  'schset.inc'
 C
       INTEGER        KS, ICH
       INTEGER        LEN1

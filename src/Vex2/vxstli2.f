@@ -5,8 +5,8 @@ C     Adapted to vex2.
 C     Writes a comment line to indicate which stations used by def
 C     By H.J. van Langevelde, JIVE, 051296 
 C
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C
       INTEGER   IXX,NSTAXX(MAXMOD,MAXMOD), ISTAXX(MAXSTA,MAXMOD,MAXMOD)

@@ -6,8 +6,8 @@ C     I think this is a logical order...
 C     By H.J. van Langevelde, JIVE, 301196 
 C     Labeled by RCW, Nov 2011, after too much confusion.
 C
-      INCLUDE 'sched2.inc'
-      INCLUDE 'schset2.inc'
+      INCLUDE 'sched.inc'
+      INCLUDE 'schset.inc'
 C      
       INTEGER KS
 C ----------------------------------------------------------------------

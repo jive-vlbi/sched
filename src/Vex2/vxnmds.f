@@ -6,8 +6,8 @@ C       By H.J. van Langevelde, JIVE, 010996
 C     returns a name for an DATASTREAM block definition
 C     modified by Adriana Escobar
 C
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C
       INTEGER IXX, ISET, ICH, NDUMMY, NCH

@@ -21,8 +21,8 @@ C     to worry about overflowing it on the last addition.  If 512 is
 C     not adequate, simply increase the length of LINE and recompile.
 C     Apr. 27, 2012.  RCW.
 C 
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C 
       INTEGER   IXX, I, ISTA, IMODE, LPOS

@@ -11,8 +11,8 @@ C     for VLBA.  Aug. 11, 2011  R. C. Walker
 C     Add a digit to the FIRSTLO output to support the new VLBA
 C     synthesizers.  Mar. 20, 2013  RCW  (Synthesizers not in place yet.)
 C
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C      
       INTEGER IIF, KS, ICH, J, I1, I2

@@ -7,8 +7,8 @@ C     In this case the PH = $PHASE_CAL section
 C     By H.J. van Langevelde, JIVE, 300496 
 C     Updated for 1.4, 240796
 C
-      INCLUDE 'sched2.inc' 
-      INCLUDE 'schset2.inc' 
+      INCLUDE 'sched.inc' 
+      INCLUDE 'schset.inc' 
       INCLUDE 'vxlink2.inc' 
 C      
       INTEGER   IPH, ICH, KS, IP, LPOS
