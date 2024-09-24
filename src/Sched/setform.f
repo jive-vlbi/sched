@@ -143,13 +143,13 @@ C
       DO KS = 1, NSET
          IF( FORMAT(KS) .EQ. ' ' ) THEN
             IF( DISK(ISETSTA(KS)) .EQ. 'MARK6' .AND.
-     1           ( DBE(KS) .EQ. 'RDBE_PFB' .OR.
-     2             DBE(KS) .EQ. 'DBBC_PFB' .OR.
-     3             DBE(KS) .EQ. 'DBBC_DDC' ) ) THEN
+     1           ( DBE(KS) .EQ. 'RDBE_PFB'  ) ) THEN
                FORMAT(KS) = 'MARK5B'
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK6' .AND.
-     1             DBE(KS) .EQ. 'RDBE_DDC' .OR.
-     2             DBE(KS) .EQ. 'VNDA' ) THEN
+     1             (DBE(KS) .EQ. 'RDBE_DDC' .OR.
+     2             DBE(KS) .EQ. 'DBBC_PFB' .OR.
+     3             DBE(KS) .EQ. 'DBBC_DDC'.OR.
+     4             DBE(KS) .EQ. 'VNDA' ) ) THEN
                FORMAT(KS) = 'VDIF'
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
      1           ( DBE(KS) .EQ. 'RDBE_PFB' .OR.

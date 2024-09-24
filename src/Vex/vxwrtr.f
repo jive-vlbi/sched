@@ -170,9 +170,12 @@ C                systems.
 C
 C                VDIF8032 is appropriate for VNDA,
 C                but might need something else for other 
-C                systems. (AED 07/18/2024)
+C                systems. (AED 07/18/2024).
 C
-                 IF ( DBE(KS) .EQ. 'VNDA' ) THEN
+C                VDIF Format for DBBCs with Mark6  (Flexbuff 08/16/2024).
+C
+                 IF ( DBE(KS) .EQ. 'VNDA' .OR.
+     1               DBE(KS)(1:4) .EQ. 'DBBC' ) THEN
                      WRITE( IVEX, '( 5X, A, A, A1 )' )
      1               'track_frame_format = ','VDIF8032', SEP
                  ELSE
