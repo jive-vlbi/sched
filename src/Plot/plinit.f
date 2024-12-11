@@ -3,11 +3,13 @@ C
 C     Routine for sched that initialize all default plotting
 C     parameters.
 C
+C     Fix of rounding for km case, short baselines.  May 7, 2018 RCW
+C
       INCLUDE 'sched.inc'
       INCLUDE 'plot.inc'
 C
       INTEGER          I, J, K, STAT, PB, PGOPEN, LEN1, IERR
-      REAL             XYSIZ, Y1, X1
+      REAL             XYSIZ, XYMAX, Y1, X1
 C ----------------------------------------------------------------------
 C
 C     Set all DATA statements
@@ -837,15 +839,18 @@ C
       CALL MAXBAS( XYSIZ )
 C
 C     Round to major closest power of ten value
+C     Fixed for values under 1000  May 7, 2018  RCW
 C
-      DO 78 I = 1, 3
-        IF( ( XYSIZ / 10**I ) .GT. 0 ) THEN
+      XYMAX = 0.0
+      DO 78 I = 3, 0, -1
+        IF( ( XYSIZ / 10**I ) .GT. 0.0 ) THEN
            IF( MOD( XYSIZ, 10.0**I ) .GT. 0.0 ) THEN
               J = ( XYSIZ + 10.0**I ) / 10.0**I
-              XYSIZ = J * 10.0**I
+              XYMAX = J * 10.0**I
            END IF
         END IF
  78   CONTINUE
+      XYSIZ = XYMAX
 C
       PKMVAL(1) = -XYSIZ
       PKMVAL(2) = XYSIZ
