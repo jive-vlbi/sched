@@ -3,10 +3,14 @@ C
 C     Subroutine for SCHED that writes a table of station information 
 C     to summary file.  Include the tape initialization stuff.
 C
+C     June 8, 2018 RCW  Allow for STCODE longer than 2 characters in 
+C     top row of the baseline length table.  Also clean up some implicit
+C     type conversions that generated warnings.
+C
       INCLUDE  'sched.inc'
 C
       INTEGER    ISTA, ISCAT, IC1, IC2, BLENKM, LEN1, JSTA, JSCAT
-      INTEGER    NNSTA, MJD, NMINP, NPREST, ISCN, IM, IP
+      INTEGER    NNSTA, MJD, NMINP, NPREST, ISCN, IM, IP, ISCL, ISCL1
       REAL       BLENSQ, YEARS
       LOGICAL    ANYDISK, ANYELSE, AXWARN, NEW, MOREM, MOREP
       DOUBLE PRECISION  MINPPRT(6), PRESTPRT(6)
@@ -66,7 +70,7 @@ C     calculations.
 C
       DO ISTA = 1, NSTA
           ISCAT = STANUM(ISTA)
-          YEARS = ( MJD - MJDRATE(ISCAT) ) / 365.25D0
+          YEARS = REAL( ( MJD - MJDRATE(ISCAT) ) / 365.25D0 ) 
           WRITE( ISUM, '( 3X, A8, 2X, A3, 3F8.4, I7, 1X, 3F13.3 )' )
      1        STATION(ISCAT), STCODE(ISCAT),
      2        DXPOS(ISCAT), DYPOS(ISCAT), DZPOS(ISCAT), MJDRATE(ISCAT),
@@ -88,10 +92,12 @@ C
 C
 C        Write the station codes across the top.
 C
+         ISCL1 = LEN1(STCODE(1))
          DO ISTA = 1, NNSTA
             ISCAT = STANUM(ISTA)
-            IC1 = 11 + ( ISTA - 1 ) * 6
-            IC2 = IC1 + 1
+            ISCL = LEN1(STCODE(ISCAT))
+            IC1 = 13 - ISCL1 + ( ISTA - 1 ) * 6
+            IC2 = IC1 + ISCL - 1
             MSGTXT(IC1:IC2) = STCODE(ISCAT)
          END DO
 C
@@ -103,10 +109,11 @@ C
             MSGTXT = '   ' // STCODE(JSCAT)
             DO ISTA = 1, NNSTA
                ISCAT = STANUM(ISTA)
-               BLENSQ = ( ( XPOS(JSCAT) - XPOS(ISCAT) ) / 1000.0 )**2 +
-     1                  ( ( YPOS(JSCAT) - YPOS(ISCAT) ) / 1000.0 )**2 +
-     2                  ( ( ZPOS(JSCAT) - ZPOS(ISCAT) ) / 1000.0 )**2
-               BLENKM = SQRT( BLENSQ )
+               BLENSQ = REAL( 
+     1                  ( ( XPOS(JSCAT) - XPOS(ISCAT) ) / 1000.0 )**2 +
+     2                  ( ( YPOS(JSCAT) - YPOS(ISCAT) ) / 1000.0 )**2 +
+     3                  ( ( ZPOS(JSCAT) - ZPOS(ISCAT) ) / 1000.0 )**2 )
+               BLENKM = NINT( SQRT( BLENSQ ) )
                IC1 = 8 + ( ISTA - 1 ) * 6
                IC2 = IC1 + 5
                WRITE( MSGTXT(IC1:IC2), '( I5 )' ) BLENKM

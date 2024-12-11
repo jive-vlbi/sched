@@ -128,12 +128,14 @@ C                      IMSG  - File with text messages.
 C                      IORB  - Spacecraft table for VLBA correlator
 C                      IV2D  - Output v2d file.
 C                      IPRE  - Periods of allow preemption for EOP.
+C                      ICSV  - .csv file in WRTSEL in plotting code.
+C                      IDAT  - .dat file in WRTSEL in plotting code.
 C                      
 C                      
       INTEGER          IUSCH, IUSRC, IUSTA, IUTAP, IUSET
       INTEGER          IPRT, IULOC, IUVBA, ISUM, IUOPT, IVEX, IFRQ
       INTEGER          IFRQLST, IFLAG, ICOV, IUPK, IOMS, IV2D, IMAP
-      INTEGER          IOPT, ILOG, IMSG, IORB, IPRE, ITLE
+      INTEGER          IOPT, ILOG, IMSG, IORB, IPRE, ITLE, ICSV, IDAT
 C
       PARAMETER        (IUSCH=8)
       PARAMETER        (IUSRC=9)
@@ -162,6 +164,8 @@ C     Unit 24 is used by RDLOC.
       PARAMETER        (IV2D=32)
       PARAMETER        (IPRE=33)
       PARAMETER        (ITLE=34)
+      PARAMETER        (ICSV=35)
+      PARAMETER        (IDAT=36)
 C
 C
 C     Station catalog.   Contains MSTA stations.

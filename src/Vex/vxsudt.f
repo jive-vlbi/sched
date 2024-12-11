@@ -36,7 +36,7 @@ C
 
       IF( SATEL(ISRC) ) THEN
 
-         WRITE( IVEX, '( A1, 4X, A \ A1, 4X, A)' )
+         WRITE( IVEX, '( A1, 4X, A / A1, 4X, A)' )
      1     COM, 'This source is a satellite; using NRAO extension:  ',
      2     COM, 'Do not use the position for pointing or correlation.'
 
