@@ -32,7 +32,7 @@ C
 C     
 C        first the sample rate and bits/sample
 C            
-         WRITE( IVEX, '( 5X, A, F7.3, A, A1, 2X, A1, A, I1, A )' ) 
+         WRITE( IVEX, '( 5X, A, F9.3, A, A1, 2X, A1, A, I1, A )' ) 
      1        'sample_rate = ',SAMPRATE(KS),' Ms/sec', SEP, COM,
      2        ' (', BITS(1,KS) ,'bits/sample)'
 C
