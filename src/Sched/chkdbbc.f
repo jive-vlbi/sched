@@ -142,7 +142,7 @@ C
                MSGTXT = ' '              
                WRITE( MSGTXT, '( A, F8.3, A )' )
      1           'CHKDBBC: Invalid SAMPRATE specified: ', SAMPRATE(KS),
-     2           ' for DBE=DBBC_PFB. Must be 32.0 Msamp/s.'
+     2           ' for DBE=DBBC_PFB. Must be 64.0 Msamp/s.'
                CALL WLOG( 1, MSGTXT )
                ERRS = .TRUE.
             END IF
@@ -309,7 +309,7 @@ C        Check the frequencies and bandwidths.  This is pulled out
 C        so that it can be used again later on frequencies set in-line
 C        or using Doppler.
 C
-         CALL CHKDBFQ( KS, BBFILT(1,KS), BBSYN(1,KS), ERRS )
+         CALL CHKDBFQ( KS, BBFILT(1,KS), BBSYN(1,KS), ERRS, .TRUE. )
 C
       END IF
 C
