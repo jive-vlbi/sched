@@ -73,6 +73,10 @@
 *  preamble comments appropriately.           *
 * - - - - - - - - - - - - - - - - - - - - - - *
 
+*     2017 January 1
+      ELSE IF (UTC.GE.57754D0) THEN
+         DT=37.D0
+
 *     2015 July 1
       ELSE IF (UTC.GE.57204D0) THEN
          DT=36.D0
