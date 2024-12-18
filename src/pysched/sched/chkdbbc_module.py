@@ -114,7 +114,7 @@ def chkdbbc(ks, setup_entry, station_entry):
         errs = check_channels() or errs
 
     if station_entry.dar != "DBBC3":
-        errs = s.chkdbfq(ks, setup_entry.bbfilt, setup_entry.bbsyn, errs)
+        errs = s.chkdbfq(ks, setup_entry.bbfilt, setup_entry.bbsyn, errs, True)
 
     return errs
                 
