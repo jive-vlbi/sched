@@ -8,14 +8,16 @@
 # If anyone knows how to make proper configure scripts and would like
 # to help by building one for SCHED, that would be much appreciated.
 #
+set Target=linuxSpice64
+
 /bin/rm Makefile
-/bin/rm -f makelinuxspice64.sedscript
+/bin/rm -f make${Target}.sedscript
 
 # Make a file for sed with all the required changes to Makefile.master
 # Note that LPGPLOT is not needed for this case.
 
-cat <<EOF >! makelinuxspice64_sedscript
-s:Makefile for SCHED:Temporary makefile for SCHED made by configureLinuxSpice64:
+cat <<EOF >! make${Target}_sedscript
+s:Makefile for SCHED:Temporary makefile for SCHED made by configure${Target}:
 s:#ARCHSED: ARCH = LINUX:
 s:#FCSED: FC = g77 -Wall -Wimplicit -fno-backslash:
 s:#XLDSED: XLD = -L/usr/lib64 -lX11:
@@ -25,7 +27,10 @@ s:#SAT_SRCS_SED: SAT_SRCS = \$(wildcard Sat/*.f):
 s:#SATLDSED: SATLD = ../lib/LINUX64/spicelib.a ../lib/LINUX64/support.a -lm:
 EOF
 
+echo "s:BINDIR *= *../bin:&/${Target}:" >> make${Target}_sedscript
+mkdir -p ../bin/${Target}
+
 #  Run sed with the above file.
 
-sed -f makelinuxspice64_sedscript Makefile.master > Makefile
-/bin/rm makelinuxspice64_sedscript
+sed -f make${Target}_sedscript Makefile.master > Makefile
+/bin/rm make${Target}_sedscript
