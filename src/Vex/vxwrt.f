@@ -113,7 +113,7 @@ C
       IF( SCANL-SCAN1 .GT. 20000 ) THEN
          MSGTXT = ' '
          WRITE( MSGTXT, '( A, I6, A )' ) 
-     1       'VXWRT: WARNING: More than 29000 scans (', (SCANL-SCAN1),
+     1       'VXWRT: WARNING: More than 20000 scans (', (SCANL-SCAN1),
      2       ') in this schedule.' 
          CALL WLOG( 1,MSGTXT)
          IF( ALLVLBA ) THEN
