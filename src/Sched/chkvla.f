@@ -41,7 +41,7 @@ C     The following are the lower and upper frequencies for each band
 C     in MHz.
 C
       DATA  VLFREQ  / 0.D0, 200.D0, 900.D0, 2000.D0, 4000.D0, 8000.D0,
-     1               12.D3, 18.D3, 26.5D3, 40.D3 /
+     1               12.D3, 18.D3, 26.5D3, 38.D3 /
       DATA  VHFREQ  / 200.D0, 900.D0, 2000.D0, 4000.D0, 8000.D0, 12.D3,
      2               18.D3, 26.5D3, 40.D3, 50.D3 /
 C

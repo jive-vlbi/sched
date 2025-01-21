@@ -13,7 +13,7 @@
  * Initial revision
  *
  */
-static char rcsid[] = "$Id$";
+static char rcsid[] = "$Id: idate.c 2 2005-06-20 15:16:10Z reynolds $";
 #include <time.h>
 #include <sys/types.h>
 #include <sys/time.h>

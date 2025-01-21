@@ -38,8 +38,30 @@ C
      1           LOGFILE )
             CALL PUTOUT( '     Please read them.' )
             CALL PUTOUT( ' ' )
-         ELSE
-            CALL PUTOUT( ' REMINDER - see ' // 
+
+C            CALL PUTOUT( ' +-----------------------+')
+C            CALL PUTOUT( ' | Version 11.8 Advisory |')
+C            CALL PUTOUT( ' +-----------------------+')
+C            CALL PUTOUT( ' -')
+C            CALL PUTOUT( " - Sched v11.7 incorporates the position " // 
+C     1                   "changes from 11.5 to 11.6.  ")
+C            CALL PUTOUT( " - If you are in a multi epoch observation" //
+C     1                   " you may wish to continue using sched 11.5.")
+C            CALL PUTOUT( " - Additionally Sched 11.7 uses a new  " //
+C     1                   "default srcfile (if no srcfile is set in ")
+C            CALL PUTOUT( " - your key file). To ensure " //
+C     1                   "sched 11.5 is run by VLBA")
+C            CALL PUTOUT( " - operations, please include in the .key " //
+C     1                   "file a line similar to:")
+C            CALL PUTOUT( " -")
+C            CALL PUTOUT( " -     note1 = 'Please schedule with " //
+C     1                   "Sched 11.5'")
+C            CALL PUTOUT( " -")
+C            CALL PUTOUT( " - All other projects should see improved " //
+C     1                   "results with this new version of sched. ")
+
+          ELSE
+             CALL PUTOUT( ' REMINDER - see ' // 
      1             LOGFILE(1:LEN1(LOGFILE)) //
      2             ' for most run time messages.' )
          END IF

@@ -91,7 +91,8 @@ C        Check if the width of new string is
 C        less than the text area width 
 C
       IF( WFL .EQ. 1 ) THEN
-         CALL PGQTXT( XL, YL, 0.0, 0.0, STRING(1:PCH), XB, YB )
+C        CALL PGQTXT( XL, YL, 0.0, 0.0, STRING(1:PCH), XB, YB )
+         CALL PGQTXT( XL(1), YL(1), 0.0, 0.0, STRING(1:PCH), XB, YB )
          IF( ( X2 - X1 ) .LE. ( XB(4) - XB(1) ) ) THEN
             WFL = 0
             PCH = PCH - 1

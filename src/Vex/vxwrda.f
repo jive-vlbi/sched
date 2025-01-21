@@ -76,6 +76,11 @@ C
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',
      2              WRDISK(1:LEN1(WRDISK)), SEP
+             ELSE IF( DISK(STANUM(ISTA)) .EQ. 'MARK6' ) THEN
+                WRDISK = 'Mark6'
+                WRITE( IVEX, '( 5X, A, A, A1 )' )
+     1              'record_transport_type = ',
+     2              WRDISK(1:LEN1(WRDISK)), SEP
              ELSE IF( DISK(STANUM(ISTA)) .EQ. 'LBADR' ) THEN
                 WRITE( IVEX, '( 5X, A, A, A1 )' )
      1              'record_transport_type = ',

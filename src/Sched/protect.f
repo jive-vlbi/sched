@@ -307,12 +307,15 @@ C
 C
       LINE1 = ' The schedule can also designate which scans can be '//
      1        'preempted at'
-      LINE2 = ' PT and MK for daily USNO EOP observations using '//
-     1        'PREEMPT=''OK'' '
-      LINE3 = ' or ''NO''.  For details, see the manual discussion '//
-     1        'of PREEMPT.'
-      WRITE( IUNIT, '( A, 4( /, A ) )' ) ' ', LINE1, LINE2, LINE3, ' '
-      WRITE( IPRE, '( A, 4( /, A ) )' ) ' ', LINE1, LINE2, LINE3, ' '
+      LINE2 = ' some stations (often including MK) for daily USNO '//
+     1        ' EOP observations '
+      LINE3 = ' using PREEMPT=''OK'' or ''NO''.  For details, see '//
+     1        ' the manual '
+      LINE4 = ' discussion of PREEMPT.'
+      WRITE( IUNIT, '( A, 5( /, A ) )' ) ' ', 
+     1        LINE1, LINE2, LINE3, LINE4, ' '
+      WRITE( IPRE, '( A, 5( /, A ) )' ) ' ', 
+     1        LINE1, LINE2, LINE3, LINE4, ' '
 C
 C     Deal with the case where the entire project is protected.  Complain,
 C     but then be forgiving if the project is short.  This information also
@@ -362,7 +365,7 @@ C
 C        This is the case where there are some available blocks.
 C
          LINE1 = ' Time ranges available for USNO daily EOP '//
-     1        'observations at PT and MK:'
+     1        'observations:'
          WRITE( IUNIT, '( A )' ) LINE1
          WRITE( IPRE, '( A )' ) LINE1
 C

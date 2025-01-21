@@ -96,7 +96,7 @@ C
       PARAMETER     (MAXSET=50)
       PARAMETER     (MAXCHN=32)
       PARAMETER     (MAXLCH=MAXCHN)
-      PARAMETER     (MAXSAT=5)
+      PARAMETER     (MAXSAT=100)
       PARAMETER     (MAXCRD=4)
 C
 C     For intents.

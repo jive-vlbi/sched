@@ -20,11 +20,11 @@ C        This could be sources.gsfc or sources.petrov.
 C        sources.gsfc has more aliases.  Use it.
 C        sources.petrov has many more sources as of Feb. 2015
 C
-         FILENAME = '$SCHED/catalogs/sources.gsfc'
+         FILENAME = '$SCHED/catalogs/sources.vlba'
       ELSE IF( FTYPE .EQ. 'frequency' ) THEN
          FILENAME = '$SCHED/catalogs/freq_RDBE.dat'
       ELSE IF( FTYPE .EQ. 'peakcommand' ) THEN
-         FILENAME = '$SCHED/catalogs/peak.cmd'
+         FILENAME = '$SCHED/catalogs/peak_RDBE_DDC.cmd'
       ELSE IF( FTYPE .EQ. 'refpointing' ) THEN
          FILENAME = '$SCHED/catalogs/sources.peak'
       ELSE IF( FTYPE .EQ. 'messages' ) THEN

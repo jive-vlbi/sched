@@ -252,8 +252,9 @@ C
      7       RECORDER(MSTA) .NE. 'VSOP'   .AND. 
      8       RECORDER(MSTA) .NE. 'MARK5A' .AND. 
      9       RECORDER(MSTA) .NE. 'MARK5B' .AND. 
-     A       RECORDER(MSTA) .NE. 'MARK5C' .AND. 
-     B       RECORDER(MSTA) .NE. 'NONE' ) THEN
+     A       RECORDER(MSTA) .NE. 'MARK5C' .AND.
+     B       RECORDER(MSTA) .NE. 'MARK6' .AND.
+     C       RECORDER(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid recorder type ' //
      1          RECORDER(MSTA) // ' for ' // STATION(MSTA) )
          END IF
@@ -271,8 +272,9 @@ C
          IF( DISK(MSTA) .NE. 'MARK5A' .AND.
      1       DISK(MSTA) .NE. 'MARK5B' .AND.
      2       DISK(MSTA) .NE. 'MARK5C' .AND.
-     3       DISK(MSTA) .NE. 'LBADR' .AND.
-     4       DISK(MSTA) .NE. 'NONE' ) THEN
+     3       DISK(MSTA) .NE. 'MARK6' .AND.
+     4       DISK(MSTA) .NE. 'LBADR' .AND.
+     5       DISK(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DISK type ' //
      1          DISK(MSTA) // ' for ' // STATION(MSTA) )
          END IF
