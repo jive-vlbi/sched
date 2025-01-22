@@ -286,8 +286,9 @@ ALLOWED PREEMPTION TIMES
  .flag files.                                                                   
  
  The schedule can also designate which scans can be preempted at                
- PT and MK for daily USNO EOP observations using PREEMPT='OK'                   
- or 'NO'.  For details, see the manual discussion of PREEMPT.                   
+ some stations (often including MK) for daily USNO EOP observations
+ using PREEMPT='OK' or 'NO'.  For details, see the manual
+ discussion of PREEMPT.
  
 """[1:])
 
@@ -318,7 +319,7 @@ ALLOWED PREEMPTION TIMES
 
         else:
             write_files(" Time ranges available for USNO daily EOP "
-                        "observations at PT and MK:            \n")
+                        "observations:            \n")
             for index, (preempt_start, preempt_end) in \
                 enumerate(preempt_ranges, 1):
                 write_files(f"{index: >3}    "

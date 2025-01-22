@@ -309,13 +309,13 @@ def stread(input_iterator, stdin, mjd1):
         check(entry.recorder,
               ("VLBA", "MKIV", "VLBA4", "MKIII", 
                "S2", "K4", "K5", "VERA", "VSOP", 
-               "MARK5A", "MARK5B", "MARK5C", "NONE"),
+               "MARK5A", "MARK5B", "MARK5C", "MARK6", "NONE"),
               ("MKIII", "S2"),
               entry.station,
               "recorder")
             
         check(entry.disk,
-              ("MARK5A", "MARK5B", "MARK5C", "LBADR", "NONE"),
+              ("MARK5A", "MARK5B", "MARK5C", "MARK6", "LBADR", "NONE"),
               tuple(),
               entry.station,
               "DISK")

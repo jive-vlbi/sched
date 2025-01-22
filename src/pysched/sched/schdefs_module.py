@@ -7,9 +7,9 @@ import os.path
 file_type_defaults = {
     "location": "locations.dat",
     "stations": "stations_RDBE.dat",
-    "sources":  "sources.gsfc",
+    "sources":  "sources.vlba",
     "frequency": "freq_RDBE.dat",
-    "peakcommand": "peak.cmd",
+    "peakcommand": "peak_RDBE_DDC.cmd",
     "refpointing": "sources.peak",
     "messages": "messages.txt"}
 

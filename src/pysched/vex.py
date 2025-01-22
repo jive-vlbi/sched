@@ -984,6 +984,8 @@ def stations_block(vex_version, print_warnings):
         if station.usedisk:
             if station.disk in ("MARK5" + abc for abc in "ABC"):
                 recorder = "Mark5" + station.disk[5]
+            elif station.disk == "MARK6":
+                recorder = "Mark6"
             elif station.disk == "LBADR":
                 recorder = "S2"
             else:
