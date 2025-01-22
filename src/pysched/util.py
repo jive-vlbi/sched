@@ -145,11 +145,14 @@ def get_catalog_dir():
 
 bool2str = lambda b: "T" if b else "F"
 
+resize_warned = set()
 def resize_string(text, size, attr):
     ret = text.ljust(size)
     if len(ret) > size:
         ret = ret[:size]
-        s.wlog(1, ("Warning, maximum string length exceeded for {attr}, "
-                   "truncating '{text}' to '{ret}'").format(
-                       attr=attr, text=text, ret=ret))
+        if attr not in resize_warned:
+            s.wlog(1, ("Warning, maximum string length exceeded for {attr}, "
+                       "truncating '{text}' to '{ret}'").format(
+                           attr=attr, text=text, ret=ret))
+            resize_warned.add(attr)
     return ret
