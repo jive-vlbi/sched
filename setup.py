@@ -638,7 +638,7 @@ setup(
     ext_modules=[extension],
     python_requires=">=3.6",
     setup_requires=["numpy>=1.19, <1.24",
-                    "setuptools>=24.3"],
+                    "setuptools>=24.3, <60"],
     install_requires=["numpy>=1.19, <1.24",
                       "pyqt5", 
                       "matplotlib>=3.5.2",
