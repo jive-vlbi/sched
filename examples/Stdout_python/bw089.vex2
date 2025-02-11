@@ -1,11 +1,11 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.26.3
-*    SCHED version:   Release 11.6; Feburary 2020
+*    pySCHED version: 1.27.0
+*    SCHED version:   Release 11.8; April 2023
 *    VEX/SCHED:       2.0.5
-*    Other versions: Sched:  11.6 JPL-ephem: 1.01
+*    Other versions: Sched:  11.8 JPL-ephem: 1.01
 *    Catalog versions:
 *       Frequency: 2024May13-14:31:41
-*       Station:   2024May13-14:31:41
+*       Station:   2024Sep24-11:35:33
 *       Location:  2020Jan12
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -63,15 +63,14 @@ $MODE;
 def bw089;
      ref $IF = LO@1170MHzDPolTone/1:Ef;
      ref $IF = LO@2100MHzDPolTone/1:Gb;
-     ref $IF = LO@2165MHzDPolTone/1:Ar;
      ref $IF = LO@2400MHzDPolTone/1:Br:Fd:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
-     ref $BBC = 8BBCs:Ar:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
+     ref $BBC = 8BBCs:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $BBC = 8BBCs#02:Ef;
-     ref $PHASE_CAL_DETECT = Detect:Ar:Br:Ef:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
-     ref $FREQ = 1381.75MHz8x16MHz:Ar:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
+     ref $PHASE_CAL_DETECT = Detect:Br:Ef:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
+     ref $FREQ = 1381.75MHz8x16MHz:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
      ref $FREQ = 1381.75MHz8x16MHz#02:Ef;
      ref $BITSTREAMS = BS8Ch2Bit:Ef;
-     ref $DATASTREAMS = VDIF_8000-1Thr8Ch:Ar:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
+     ref $DATASTREAMS = VDIF_8000-1Thr8Ch:Br:Fd:Gb:Hn:Kp:La:Mk:Nl:Ov:Pt:Sc;
 enddef;
 *------------------------------------------------------------------------------
 $IF;
@@ -88,12 +87,6 @@ def LO@2100MHzDPolTone/1;
      if_def = &IF_C :  : L :   2100.00 MHz : L : 1 MHz;
 enddef;
 *
-def LO@2165MHzDPolTone/1;
-* bw089: Ar
-     if_def = &IF_A :  : R :   2165.00 MHz : L : 1 MHz;
-     if_def = &IF_C :  : L :   2165.00 MHz : L : 1 MHz;
-enddef;
-*
 def LO@2400MHzDPolTone/1;
 * bw089: Br, Fd, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      if_def = &IF_A :  : R :   2400.00 MHz : L : 1 MHz;
@@ -103,7 +96,7 @@ enddef;
 $BBC;
 *
 def 8BBCs;
-* bw089: Ar, Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* bw089: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      BBC_assign = &BBC01 : 1 : &IF_A;
      BBC_assign = &BBC02 : 2 : &IF_C;
      BBC_assign = &BBC03 : 3 : &IF_A;
@@ -129,14 +122,14 @@ enddef;
 $PHASE_CAL_DETECT;
 *
 def Detect;
-* bw089: Ar, Br, Ef, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* bw089: Br, Ef, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      phase_cal_detect = &PCD : 1 : 16;
 enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
 def 1381.75MHz8x16MHz;
-* bw089: Ar, Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* bw089: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      chan_def =  : 1381.75 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &PCD; * RCP
      chan_def =  : 1381.75 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &PCD; * LCP
      chan_def =  : 1397.75 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &PCD; * RCP
@@ -185,7 +178,7 @@ enddef;
 $DATASTREAMS;
 *
 def VDIF_8000-1Thr8Ch;
-* bw089: Ar, Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
+* bw089: Br, Fd, Gb, Hn, Kp, La, Mk, Nl, Ov, Pt, Sc
      datastream = &DS1 : VDIF : DS1;
      thread = &DS1 : &thread0 : 0 : 8 :  32.000 Ms/sec : 2 : real : 8000;
      channel = &DS1 : &thread0 : &CH01 : 0;
@@ -208,87 +201,71 @@ enddef;
 *
 def Sc;
      ref $ANTENNA = VLBA_SC;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_SC;
 enddef;
 *
 def Hn;
      ref $ANTENNA = VLBA_HN;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_HN;
 enddef;
 *
 def Gb;
      ref $ANTENNA = GBT_VLBA;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = GBT_VLBA;
 enddef;
 *
 def Nl;
      ref $ANTENNA = VLBA_NL;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_NL;
 enddef;
 *
 def Fd;
      ref $ANTENNA = VLBA_FD;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_FD;
 enddef;
 *
 def La;
      ref $ANTENNA = VLBA_LA;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_LA;
 enddef;
 *
 def Pt;
      ref $ANTENNA = VLBA_PT;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_PT;
 enddef;
 *
 def Kp;
      ref $ANTENNA = VLBA_KP;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_KP;
 enddef;
 *
 def Ov;
      ref $ANTENNA = VLBA_OV;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_OV;
 enddef;
 *
 def Br;
      ref $ANTENNA = VLBA_BR;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_BR;
 enddef;
 *
 def Mk;
      ref $ANTENNA = VLBA_MK;
-     ref $DAS = RDBE_DDC+Mark5C;
+     ref $DAS = RDBE_DDC+Mark6;
      ref $SITE = VLBA_MK;
-enddef;
-*
-def Ar;
-     ref $ANTENNA = ARECIBO;
-     ref $DAS = RDBE_DDC+Mark5C;
-     ref $SITE = ARECIBO;
 enddef;
 *------------------------------------------------------------------------------
 $ANTENNA;
-*
-def ARECIBO;
-     axis_type = az : el;
-     antenna_motion = az :   25.0 deg/min : 7 sec;
-     antenna_motion = el :    2.5 deg/min : 7 sec;
-     pointing_sector = &ccw : az :   0.0 deg : 360.0 deg : el : 70.30000305175781 deg : 88.80000305175781 deg : ccw;
-     pointing_sector =   &n : az : 360.0 deg : 360.0 deg : el : 70.30000305175781 deg : 88.80000305175781 deg :   n;
-     pointing_sector =  &cw : az : 360.0 deg : 720.0 deg : el : 70.30000305175781 deg : 88.80000305175781 deg :  cw;
-     axis_offset =        0.0 m;
-enddef;
 *
 def EFLSBERG;
      axis_type = az : el;
@@ -414,21 +391,12 @@ def DBBC_DDC+Mark5C;
      equip =     rack : DBBC_DDC : &DBBC_DDC;
 enddef;
 *
-def RDBE_DDC+Mark5C;
-     equip = recorder :   Mark5C :   &Mark5C;
+def RDBE_DDC+Mark6;
+     equip = recorder :    Mark6 :    &Mark6;
      equip =     rack : RDBE_DDC : &RDBE_DDC;
 enddef;
 *------------------------------------------------------------------------------
 $SITE;
-*
-def ARECIBO;
-     site_type = fixed;
-     site_name = ARECIBO;
-     site_ID = Ar;
-     site_position =  2390486.90000 m : -5564731.44000 m :  1994720.45000 m;
-     site_velocity =   0.009900 m/yr :   0.004540 m/yr :   0.010080 m/yr;
-     site_position_epoch = 2002y001d;
-enddef;
 *
 def EFLSBERG;
      site_type = fixed;
@@ -1167,7 +1135,6 @@ scan No0034;
      station = Ov : 0 sec : 100 sec :   302.725 GB :  : &ccw : 1;
      station = Br : 0 sec : 100 sec :   302.725 GB :  : &ccw : 1;
      station = Mk : 0 sec : 100 sec :    19.323 GB :  : &ccw : 1;
-     station = Ar : 0 sec : 100 sec :     0.000 GB :  : &ccw : 1;
 endscan;
 *
 scan No0035;
@@ -1185,7 +1152,6 @@ scan No0035;
      station = Kp : 11 sec : 200 sec :   309.166 GB :  : &ccw : 1;
      station = Ov : 11 sec : 200 sec :   309.166 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   309.166 GB :  : &ccw : 1;
-     station = Ar : 22 sec : 200 sec :     6.441 GB :  : &ccw : 1;
 endscan;
 *
 scan No0036;
@@ -1204,7 +1170,6 @@ scan No0036;
      station = Ov :  0 sec : 90 sec :   321.339 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   321.339 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :    25.764 GB :  : &ccw : 1;
-     station = Ar : 12 sec : 90 sec :    19.323 GB :  : &ccw : 1;
 endscan;
 *
 scan No0037;
@@ -1223,7 +1188,6 @@ scan No0037;
      station = Ov : 11 sec : 200 sec :   327.136 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   327.136 GB :  : &ccw : 1;
      station = Mk : 11 sec : 200 sec :    31.561 GB :  : &ccw : 1;
-     station = Ar : 22 sec : 200 sec :    25.120 GB :  : &ccw : 1;
 endscan;
 *
 scan No0038;
@@ -1242,7 +1206,6 @@ scan No0038;
      station = Ov :  0 sec : 90 sec :   339.310 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   339.310 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :    43.734 GB :  : &ccw : 1;
-     station = Ar : 12 sec : 90 sec :    38.002 GB :  : &ccw : 1;
 endscan;
 *
 scan No0039;
@@ -1261,7 +1224,6 @@ scan No0039;
      station = Ov : 11 sec : 200 sec :   345.107 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   345.107 GB :  : &ccw : 1;
      station = Mk : 11 sec : 200 sec :    49.531 GB :  : &ccw : 1;
-     station = Ar : 22 sec : 200 sec :    43.799 GB :  : &ccw : 1;
 endscan;
 *
 scan No0040;
@@ -1280,7 +1242,6 @@ scan No0040;
      station = Ov :  0 sec : 90 sec :   357.280 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   357.280 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :    61.704 GB :  : &ccw : 1;
-     station = Ar : 12 sec : 90 sec :    56.680 GB :  : &ccw : 1;
 endscan;
 *
 scan No0041;
@@ -1299,7 +1260,6 @@ scan No0041;
      station = Ov : 11 sec : 200 sec :   363.077 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   363.077 GB :  : &ccw : 1;
      station = Mk : 11 sec : 200 sec :    67.501 GB :  : &ccw : 1;
-     station = Ar : 23 sec : 200 sec :    62.477 GB :  : &ccw : 1;
 endscan;
 *
 scan No0042;
@@ -1318,7 +1278,6 @@ scan No0042;
      station = Ov :  0 sec : 90 sec :   375.250 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   375.250 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :    79.675 GB :  : &ccw : 1;
-     station = Ar : 13 sec : 90 sec :    75.359 GB :  : &ccw : 1;
 endscan;
 *
 scan No0043;
@@ -1337,7 +1296,6 @@ scan No0043;
      station = Ov : 11 sec : 200 sec :   381.047 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   381.047 GB :  : &ccw : 1;
      station = Mk : 11 sec : 200 sec :    85.472 GB :  : &ccw : 1;
-     station = Ar : 23 sec : 200 sec :    81.156 GB :  : &ccw : 1;
 endscan;
 *
 scan No0044;
@@ -1356,7 +1314,6 @@ scan No0044;
      station = Ov :  0 sec : 90 sec :   393.221 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   393.221 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :    97.645 GB :  : &ccw : 1;
-     station = Ar : 13 sec : 90 sec :    94.038 GB :  : &ccw : 1;
 endscan;
 *
 scan No0045;
@@ -1375,7 +1332,6 @@ scan No0045;
      station = Ov : 11 sec : 200 sec :   399.017 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   399.017 GB :  : &ccw : 1;
      station = Mk : 11 sec : 200 sec :   103.442 GB :  : &ccw : 1;
-     station = Ar : 23 sec : 200 sec :    99.835 GB :  : &ccw : 1;
 endscan;
 *
 scan No0046;
@@ -1394,7 +1350,6 @@ scan No0046;
      station = Ov :  0 sec : 90 sec :   411.191 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   411.191 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :   115.615 GB :  : &ccw : 1;
-     station = Ar : 13 sec : 90 sec :   112.717 GB :  : &ccw : 1;
 endscan;
 *
 scan No0047;
@@ -1413,7 +1368,6 @@ scan No0047;
      station = Ov : 11 sec : 200 sec :   416.988 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   416.988 GB :  : &ccw : 1;
      station = Mk : 11 sec : 200 sec :   121.412 GB :  : &ccw : 1;
-     station = Ar : 23 sec : 200 sec :   118.514 GB :  : &ccw : 1;
 endscan;
 *
 scan No0048;
@@ -1432,7 +1386,6 @@ scan No0048;
      station = Ov :  0 sec : 90 sec :   429.161 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   429.161 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :   133.585 GB :  : &ccw : 1;
-     station = Ar : 13 sec : 90 sec :   131.396 GB :  : &ccw : 1;
 endscan;
 *
 scan No0049;
@@ -1451,7 +1404,6 @@ scan No0049;
      station = Ov : 11 sec : 200 sec :   434.958 GB :  : &ccw : 1;
      station = Br : 11 sec : 200 sec :   434.958 GB :  : &ccw : 1;
      station = Mk : 11 sec : 200 sec :   139.382 GB :  : &ccw : 1;
-     station = Ar : 25 sec : 200 sec :   137.192 GB :  : &ccw : 1;
 endscan;
 *
 scan No0050;
@@ -1470,7 +1422,6 @@ scan No0050;
      station = Ov :  0 sec : 90 sec :   447.131 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   447.131 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :   151.556 GB :  : &ccw : 1;
-     station = Ar : 15 sec : 90 sec :   150.074 GB :  : &ccw : 1;
 endscan;
 *
 scan No0051;
@@ -1489,26 +1440,24 @@ scan No0051;
      station = Ov : 0 sec : 100 sec :   452.928 GB :  : &ccw : 1;
      station = Br : 0 sec : 100 sec :   452.928 GB :  : &ccw : 1;
      station = Mk : 0 sec : 100 sec :   157.353 GB :  : &ccw : 1;
-     station = Ar : 0 sec : 100 sec :   155.871 GB :  : &ccw : 1;
 endscan;
 *
 scan No0052;
      start = 2008y126d01h50m49s;
      mode = bw089;
      source = J1215+3448;
-     station = Ef :  20 sec : 190 sec :   462.820 GB :  :   &n : 1;
-     station = Sc :   0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
-     station = Hn :   0 sec : 190 sec :   459.369 GB :  :   &n : 1;
-     station = Gb :  18 sec : 190 sec :   399.146 GB :  :      : 1;
-     station = Nl :   0 sec : 190 sec :   459.369 GB :  :   &n : 1;
-     station = Fd :   0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
-     station = La :   0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
-     station = Pt :   0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
-     station = Kp :   0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
-     station = Ov :   0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
-     station = Br :   0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
-     station = Mk :   0 sec : 190 sec :   163.794 GB :  : &ccw : 1;
-     station = Ar : 190 sec : 190 sec :   162.312 GB :  : &ccw : 1;
+     station = Ef : 20 sec : 190 sec :   462.820 GB :  :   &n : 1;
+     station = Sc :  0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
+     station = Hn :  0 sec : 190 sec :   459.369 GB :  :   &n : 1;
+     station = Gb : 18 sec : 190 sec :   399.146 GB :  :      : 1;
+     station = Nl :  0 sec : 190 sec :   459.369 GB :  :   &n : 1;
+     station = Fd :  0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
+     station = La :  0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
+     station = Pt :  0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
+     station = Kp :  0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
+     station = Ov :  0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
+     station = Br :  0 sec : 190 sec :   459.369 GB :  : &ccw : 1;
+     station = Mk :  0 sec : 190 sec :   163.794 GB :  : &ccw : 1;
 endscan;
 *
 scan No0053;
@@ -1527,7 +1476,6 @@ scan No0053;
      station = Ov :  0 sec : 90 sec :   471.607 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   471.607 GB :  : &ccw : 1;
      station = Mk :  0 sec : 90 sec :   176.031 GB :  : &ccw : 1;
-     station = Ar :  7 sec : 90 sec :   174.550 GB :  :  &cw : 1;
 endscan;
 *
 scan No0054;
@@ -1546,7 +1494,6 @@ scan No0054;
      station = Ov :  0 sec : 190 sec :   477.404 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   477.404 GB :  : &ccw : 1;
      station = Mk :  0 sec : 190 sec :   181.828 GB :  : &ccw : 1;
-     station = Ar : 21 sec : 190 sec :   180.347 GB :  :  &cw : 1;
 endscan;
 *
 scan No0055;
@@ -1565,7 +1512,6 @@ scan No0055;
      station = Ov :  0 sec : 90 sec :   489.642 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   489.642 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   194.066 GB :  : &ccw : 1;
-     station = Ar : 22 sec : 90 sec :   192.585 GB :  : &ccw : 1;
 endscan;
 *
 scan No0056;
@@ -1584,7 +1530,6 @@ scan No0056;
      station = Ov :  0 sec : 190 sec :   495.439 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   495.439 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   199.863 GB :  : &ccw : 1;
-     station = Ar : 23 sec : 190 sec :   198.382 GB :  : &ccw : 1;
 endscan;
 *
 scan No0057;
@@ -1603,7 +1548,6 @@ scan No0057;
      station = Ov :  0 sec : 90 sec :   507.676 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   507.676 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   212.101 GB :  : &ccw : 1;
-     station = Ar : 24 sec : 90 sec :   210.619 GB :  : &ccw : 1;
 endscan;
 *
 scan No0058;
@@ -1622,7 +1566,6 @@ scan No0058;
      station = Ov :  0 sec : 190 sec :   513.473 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   513.473 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   217.898 GB :  : &ccw : 1;
-     station = Ar : 24 sec : 190 sec :   216.416 GB :  : &ccw : 1;
 endscan;
 *
 scan No0059;
@@ -1641,7 +1584,6 @@ scan No0059;
      station = Ov :  0 sec : 90 sec :   525.711 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   525.711 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   230.135 GB :  : &ccw : 1;
-     station = Ar : 26 sec : 90 sec :   228.654 GB :  : &ccw : 1;
 endscan;
 *
 scan No0060;
@@ -1660,7 +1602,6 @@ scan No0060;
      station = Ov :  0 sec : 190 sec :   531.508 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   531.508 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   235.932 GB :  : &ccw : 1;
-     station = Ar : 26 sec : 190 sec :   234.451 GB :  : &ccw : 1;
 endscan;
 *
 scan No0061;
@@ -1679,7 +1620,6 @@ scan No0061;
      station = Ov :  0 sec : 90 sec :   543.746 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   543.746 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   248.170 GB :  : &ccw : 1;
-     station = Ar : 28 sec : 90 sec :   246.689 GB :  : &ccw : 1;
 endscan;
 *
 scan No0062;
@@ -1698,7 +1638,6 @@ scan No0062;
      station = Ov :  0 sec : 190 sec :   549.543 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   549.543 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   253.967 GB :  : &ccw : 1;
-     station = Ar : 27 sec : 190 sec :   252.486 GB :  : &ccw : 1;
 endscan;
 *
 scan No0063;
@@ -1717,7 +1656,6 @@ scan No0063;
      station = Ov :  0 sec : 90 sec :   561.781 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   561.781 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   266.205 GB :  : &ccw : 1;
-     station = Ar : 30 sec : 90 sec :   264.723 GB :  : &ccw : 1;
 endscan;
 *
 scan No0064;
@@ -1736,7 +1674,6 @@ scan No0064;
      station = Ov :  0 sec : 190 sec :   567.577 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   567.577 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   272.002 GB :  : &ccw : 1;
-     station = Ar : 28 sec : 190 sec :   270.520 GB :  : &ccw : 1;
 endscan;
 *
 scan No0065;
@@ -1755,7 +1692,6 @@ scan No0065;
      station = Ov :  0 sec : 90 sec :   579.815 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   579.815 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   284.240 GB :  : &ccw : 1;
-     station = Ar : 31 sec : 90 sec :   282.758 GB :  : &ccw : 1;
 endscan;
 *
 scan No0066;
@@ -1774,7 +1710,6 @@ scan No0066;
      station = Ov :  0 sec : 190 sec :   585.612 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   585.612 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   290.036 GB :  : &ccw : 1;
-     station = Ar : 29 sec : 190 sec :   288.555 GB :  : &ccw : 1;
 endscan;
 *
 scan No0067;
@@ -1793,7 +1728,6 @@ scan No0067;
      station = Ov :  0 sec : 90 sec :   597.850 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   597.850 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   302.274 GB :  : &ccw : 1;
-     station = Ar : 33 sec : 90 sec :   300.793 GB :  : &ccw : 1;
 endscan;
 *
 scan No0068;
@@ -1812,7 +1746,6 @@ scan No0068;
      station = Ov : 0 sec : 100 sec :   603.647 GB :  : &ccw : 1;
      station = Br : 0 sec : 100 sec :   603.647 GB :  :   &n : 1;
      station = Mk : 0 sec : 100 sec :   308.071 GB :  : &ccw : 1;
-     station = Ar : 0 sec : 100 sec :   306.590 GB :  : &ccw : 1;
 endscan;
 *
 scan No0069;
@@ -1831,7 +1764,6 @@ scan No0069;
      station = Ov :  0 sec : 190 sec :   610.088 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   610.088 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   314.512 GB :  : &ccw : 1;
-     station = Ar : 16 sec : 190 sec :   313.031 GB :  : &ccw : 1;
 endscan;
 *
 scan No0070;
@@ -1850,7 +1782,6 @@ scan No0070;
      station = Ov :  0 sec : 90 sec :   622.326 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   622.326 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   326.750 GB :  : &ccw : 1;
-     station = Ar : 14 sec : 90 sec :   325.268 GB :  : &ccw : 1;
 endscan;
 *
 scan No0071;
@@ -1869,7 +1800,6 @@ scan No0071;
      station = Ov :  0 sec : 190 sec :   628.123 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   628.123 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   332.547 GB :  : &ccw : 1;
-     station = Ar : 31 sec : 190 sec :   331.065 GB :  : &ccw : 1;
 endscan;
 *
 scan No0072;
@@ -1888,7 +1818,6 @@ scan No0072;
      station = Ov :  0 sec : 90 sec :   640.360 GB :  : &ccw : 1;
      station = Br :  0 sec : 90 sec :   640.360 GB :  :   &n : 1;
      station = Mk :  0 sec : 90 sec :   344.785 GB :  : &ccw : 1;
-     station = Ar : 35 sec : 90 sec :   343.303 GB :  : &ccw : 1;
 endscan;
 *
 scan No0073;
@@ -1907,7 +1836,6 @@ scan No0073;
      station = Ov :  0 sec : 190 sec :   646.157 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   646.157 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   350.581 GB :  : &ccw : 1;
-     station = Ar : 29 sec : 190 sec :   349.100 GB :  : &ccw : 1;
 endscan;
 *
 scan No0074;
@@ -1944,7 +1872,6 @@ scan No0075;
      station = Ov :  0 sec : 190 sec :   664.192 GB :  : &ccw : 1;
      station = Br :  0 sec : 190 sec :   664.192 GB :  :   &n : 1;
      station = Mk :  0 sec : 190 sec :   368.616 GB :  : &ccw : 1;
-     station = Ar :  0 sec : 190 sec :   361.338 GB :  : &ccw : 1;
 endscan;
 *
 scan No0076;
@@ -2161,7 +2088,6 @@ scan No0087;
      station = Ov : 0 sec : 100 sec :   772.400 GB :  : &ccw : 1;
      station = Br : 0 sec : 100 sec :   772.400 GB :  :   &n : 1;
      station = Mk : 0 sec : 100 sec :   476.824 GB :  : &ccw : 1;
-     station = Ar : 0 sec : 100 sec :   373.576 GB :  : &ccw : 1;
 endscan;
 *
 scan No0088;
@@ -2180,7 +2106,6 @@ scan No0088;
      station = Ov : 0 sec : 100 sec :   778.841 GB :  : &ccw : 1;
      station = Br : 0 sec : 100 sec :   778.841 GB :  :   &n : 1;
      station = Mk : 0 sec : 100 sec :   483.265 GB :  : &ccw : 1;
-     station = Ar : 0 sec : 100 sec :   380.017 GB :  :  &cw : 1;
 endscan;
 *
 scan No0089;

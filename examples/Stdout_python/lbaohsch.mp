@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00
-Processed by SCHED version:  11.60  Release 11.6; Feburary 2020
+Processed by SCHED version:  11.80  Release 11.8; April 2023
 
 PI:       Cormac Reynolds
 
@@ -359,10 +359,10 @@ SETUP FILE INFORMATION:
                      Doppler based on LSR frame and radio definition.  Velocities:
                         -45.00   -45.00
 
- * 1934-638          19 34 47.606540   * 19 39 25.026124     19 39 29.218777       2.82
-   J1939-6342       -63 49 37.72156    *-63 42 45.62320     -63 42 44.91888        1.00
-   J1939-63          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2016a X/S astro solution,     13 observations.
+   J1939-6342        19 34 47.606836   * 19 39 25.026421     19 39 29.219074       3.32
+ * 1934-638         -63 49 37.72289    *-63 42 45.62450     -63 42 44.92018        0.98
+   J193925.0-63      /home/eldering/sched/catalogs/sources.vlba
+                     ICRF3 X/S astro solution,     21 observations.
                      Doppler based on other sources.
 
 

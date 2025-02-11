@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_SC   *!
 !*  Experiment VIPS11   *!
 !* Schedule Version:       2.00 *!
-!* Processed by SCHED version:  11.60  Release 11.6; Feburary 2020 *!
+!* Processed by SCHED version:  11.80  Release 11.8; April 2023 *!
 !* PI:       Greg Taylor *!
 !* Address:  University of New Mexico *!
 !*           Department of Physics and Astronomy *!
@@ -19,7 +19,7 @@
 !*  Start at 00h29m01s     Thu, 2006 Feb 16  Day of year   47   *!
 program=VIPS11  
 
-diskformat=mark5c
+diskformat=mark6 
 media=(1,disk)
 
 !* The first scan is preceeded by a setup scan *!

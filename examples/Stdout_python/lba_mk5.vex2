@@ -1,11 +1,11 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.26.3
-*    SCHED version:   Release 11.6; Feburary 2020
+*    pySCHED version: 1.27.0
+*    SCHED version:   Release 11.8; April 2023
 *    VEX/SCHED:       2.0.5
-*    Other versions: Sched:  11.6 JPL-ephem: 1.01
+*    Other versions: Sched:  11.8 JPL-ephem: 1.01
 *    Catalog versions:
 *       Frequency: 2024May13-14:31:41
-*       Station:   2024May13-14:31:41
+*       Station:   2024Sep24-11:35:33
 *       Location:  2020Jan12
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -38,7 +38,7 @@ def lba_mk5;
 *
      target_correlator = LBA;
 *
-*    integr_time    : 1.0 s
+*    integr_time    : 2.0 s
 *    number_channels: 32
 *    number_antenna : 5
 *    cross_polarize : Yes
@@ -65,21 +65,24 @@ def lba3cm-2p-4IF;
      ref $IF = LO@8100MHzDPolNoTone:Pa;
      ref $IF = LO@8800MHzDPolNoTone:Ho;
      ref $IF = LO@9040MHzDPolNoTone:Cd;
-     ref $BBC = 2BBCs:Ak:Mp;
-     ref $BBC = 4BBCs:At:Pa;
-     ref $BBC = 8BBCs:Cd:Ke:Yg;
+     ref $BBC = 2BBCs:Ak;
+     ref $BBC = 4BBCs:At:Mp:Pa;
+     ref $BBC = 4BBCs#02:Ke:Yg;
+     ref $BBC = 8BBCs:Cd;
      ref $BBC = 8BBCs#02:Hh;
      ref $BBC = 8BBCs#03:Ho;
      ref $BBC = 8BBCs#04:Ww;
      ref $PHASE_CAL_DETECT = NoDetect:Ak:At:Cd:Hh:Ho:Ke:Mp:Pa:Ww:Yg;
-     ref $FREQ = 8409MHz2x64MHz:Ak:Mp;
-     ref $FREQ = 8409MHz8x16MHz:At:Pa;
-     ref $FREQ = 8409MHz8x16MHz#02:Cd:Ke:Ww:Yg;
+     ref $FREQ = 8409MHz2x64MHz:Ak;
+     ref $FREQ = 8409MHz4x32MHz:Ke:Yg;
+     ref $FREQ = 8409MHz8x16MHz:At:Mp:Pa;
+     ref $FREQ = 8409MHz8x16MHz#02:Cd:Ww;
      ref $FREQ = 8409MHz8x16MHz#03:Hh:Ho;
-     ref $TRACKS = LBA_AT.2Ch2bit1to1:Ak:Mp;
-     ref $TRACKS = LBA_AT.8Ch2bit1to1:At:Pa;
+     ref $TRACKS = LBA_AT.2Ch2bit1to1:Ak;
+     ref $TRACKS = LBA_AT.8Ch2bit1to1:At:Mp:Pa;
+     ref $BITSTREAMS = BS4Ch2Bit:Ke:Yg;
      ref $BITSTREAMS = BS8Ch2Bit:Cd:Ho;
-     ref $BITSTREAMS = BS8Ch2Bit#02:Hh:Ke:Ww:Yg;
+     ref $BITSTREAMS = BS8Ch2Bit#02:Hh:Ww;
 enddef;
 *------------------------------------------------------------------------------
 $IF;
@@ -135,21 +138,29 @@ enddef;
 $BBC;
 *
 def 2BBCs;
-* lba3cm-2p-4IF: Ak, Mp
+* lba3cm-2p-4IF: Ak
      BBC_assign = &BBC01 : 1 : &IF_2N;
      BBC_assign = &BBC02 : 2 : &IF_1N;
 enddef;
 *
 def 4BBCs;
-* lba3cm-2p-4IF: At, Pa
+* lba3cm-2p-4IF: At, Mp, Pa
      BBC_assign = &BBC01 : 1 : &IF_2N;
      BBC_assign = &BBC02 : 2 : &IF_1N;
      BBC_assign = &BBC03 : 3 : &IF_2N;
      BBC_assign = &BBC04 : 4 : &IF_1N;
 enddef;
 *
+def 4BBCs#02;
+* lba3cm-2p-4IF: Ke, Yg
+     BBC_assign = &BBC01 : 1 : &IF_A1;
+     BBC_assign = &BBC05 : 5 : &IF_B1;
+     BBC_assign = &BBC02 : 2 : &IF_A1;
+     BBC_assign = &BBC06 : 6 : &IF_B1;
+enddef;
+*
 def 8BBCs;
-* lba3cm-2p-4IF: Cd, Ke, Yg
+* lba3cm-2p-4IF: Cd
      BBC_assign = &BBC01 : 1 : &IF_A1;
      BBC_assign = &BBC05 : 5 : &IF_B1;
      BBC_assign = &BBC02 : 2 : &IF_A1;
@@ -206,13 +217,21 @@ enddef;
 $FREQ;
 *
 def 8409MHz2x64MHz;
-* lba3cm-2p-4IF: Ak, Mp
+* lba3cm-2p-4IF: Ak
      chan_def =  : 8409 MHz : U :   64.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 8409 MHz : U :   64.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
 enddef;
 *
+def 8409MHz4x32MHz;
+* lba3cm-2p-4IF: Ke, Yg
+     chan_def =  : 8409 MHz : U :   32.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 8409 MHz : U :   32.00 MHz : &CH02 : &BBC05 : &NoCal; * LCP
+     chan_def =  : 8441 MHz : U :   32.00 MHz : &CH03 : &BBC02 : &NoCal; * RCP
+     chan_def =  : 8441 MHz : U :   32.00 MHz : &CH04 : &BBC06 : &NoCal; * LCP
+enddef;
+*
 def 8409MHz8x16MHz;
-* lba3cm-2p-4IF: At, Pa
+* lba3cm-2p-4IF: At, Mp, Pa
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
      chan_def =  : 8425 MHz : U :   16.00 MHz : &CH03 : &BBC01 : &NoCal; * RCP
@@ -224,7 +243,7 @@ def 8409MHz8x16MHz;
 enddef;
 *
 def 8409MHz8x16MHz#02;
-* lba3cm-2p-4IF: Cd, Ke, Ww, Yg
+* lba3cm-2p-4IF: Cd, Ww
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
      chan_def =  : 8409 MHz : U :   16.00 MHz : &CH02 : &BBC05 : &NoCal; * LCP
      chan_def =  : 8425 MHz : U :   16.00 MHz : &CH03 : &BBC02 : &NoCal; * RCP
@@ -250,7 +269,7 @@ enddef;
 $TRACKS;
 *
 def LBA_AT.2Ch2bit1to1;
-* lba3cm-2p-4IF: Ak, Mp
+* lba3cm-2p-4IF: Ak
      track_frame_format = LBA_AT;
      sample_rate = 128.000 Ms/sec;
      fanout_def =  : &CH01 : sign : 1 : 0;
@@ -260,7 +279,7 @@ def LBA_AT.2Ch2bit1to1;
 enddef;
 *
 def LBA_AT.8Ch2bit1to1;
-* lba3cm-2p-4IF: At, Pa
+* lba3cm-2p-4IF: At, Mp, Pa
      track_frame_format = LBA_AT;
      sample_rate =  32.000 Ms/sec;
      fanout_def =  : &CH01 : sign : 1 :  0;
@@ -282,6 +301,19 @@ def LBA_AT.8Ch2bit1to1;
 enddef;
 *------------------------------------------------------------------------------
 $BITSTREAMS;
+*
+def BS4Ch2Bit;
+* lba3cm-2p-4IF: Ke, Yg
+     stream_sample_rate =  64.000 Ms/sec;
+     stream_def = &CH01 : sign :  0 : 0;
+     stream_def = &CH01 :  mag :  1 : 1;
+     stream_def = &CH02 : sign :  8 : 4;
+     stream_def = &CH02 :  mag :  9 : 5;
+     stream_def = &CH03 : sign :  2 : 2;
+     stream_def = &CH03 :  mag :  3 : 3;
+     stream_def = &CH04 : sign : 10 : 6;
+     stream_def = &CH04 :  mag : 11 : 7;
+enddef;
 *
 def BS8Ch2Bit;
 * lba3cm-2p-4IF: Cd, Ho
@@ -305,7 +337,7 @@ def BS8Ch2Bit;
 enddef;
 *
 def BS8Ch2Bit#02;
-* lba3cm-2p-4IF: Hh, Ke, Ww, Yg
+* lba3cm-2p-4IF: Hh, Ww
      stream_sample_rate =  32.000 Ms/sec;
      stream_def = &CH01 : sign :  0 :  0;
      stream_def = &CH01 :  mag :  1 :  1;
@@ -598,15 +630,15 @@ enddef;
 $SOURCE;
 def 0437-454;
      source_name = 0437-454;
-     ra = 04h39m00.8546668s; dec = -45d22'22.563172"; ref_coord_frame = J2000;
+     ra = 04h39m00.8546637s; dec = -45d22'22.563188"; ref_coord_frame = J2000;
 enddef;
 def 0438-436;
      source_name = 0438-436;
-     ra = 04h40m17.1799667s; dec = -43d33'08.604274"; ref_coord_frame = J2000;
+     ra = 04h40m17.1799758s; dec = -43d33'08.604329"; ref_coord_frame = J2000;
 enddef;
 def 0537-441;
      source_name = 0537-441;
-     ra = 05h38m50.3615595s; dec = -44d05'08.939013"; ref_coord_frame = J2000;
+     ra = 05h38m50.3615595s; dec = -44d05'08.939023"; ref_coord_frame = J2000;
 enddef;
 *------------------------------------------------------------------------------
 $SCHED;

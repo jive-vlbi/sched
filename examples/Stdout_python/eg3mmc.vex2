@@ -1,11 +1,11 @@
 VEX_rev = 2.0;
-*    pySCHED version: 1.26.3
-*    SCHED version:   Release 11.6; Feburary 2020
+*    pySCHED version: 1.27.0
+*    SCHED version:   Release 11.8; April 2023
 *    VEX/SCHED:       2.0.5
-*    Other versions: Sched:  11.6 JPL-ephem: 1.01
+*    Other versions: Sched:  11.8 JPL-ephem: 1.01
 *    Catalog versions:
 *       Frequency: 2024May13-14:31:41
-*       Station:   2024May13-14:31:41
+*       Station:   2024Sep24-11:35:33
 *       Location:  2020Jan12
 *------------------------------------------------------------------------------
 $GLOBAL;
@@ -76,15 +76,15 @@ def pt7mm#02;
      ref $IF = LO@42400MHzDPolNoTone:Fd:Kp:La:Mk:Pt;
      ref $BBC = 4BBCs:Fd:Kp:La:Mk:Pt;
      ref $PHASE_CAL_DETECT = NoDetect:Fd:Kp:La:Mk:Pt;
-     ref $FREQ = 43120.17MHz4x2MHz:Mk;
-     ref $FREQ = 43122.06MHz4x2MHz:Fd:Kp:La:Pt;
+     ref $FREQ = 43113.17MHz4x16MHz:Mk;
+     ref $FREQ = 43115.06MHz4x16MHz:Fd:Kp:La:Pt;
 enddef;
 *
 def pt7mm#03;
      ref $IF = LO@42400MHzDPolNoTone:Fd:Kp:La:Mk:Pt;
      ref $BBC = 4BBCs:Fd:Kp:La:Mk:Pt;
      ref $PHASE_CAL_DETECT = NoDetect:Fd:Kp:La:Mk:Pt;
-     ref $FREQ = 43121.63MHz4x2MHz:Fd:Kp:La:Mk:Pt;
+     ref $FREQ = 43114.63MHz4x16MHz:Fd:Kp:La:Mk:Pt;
 enddef;
 *
 def v3mm-256-8-2#02;
@@ -99,23 +99,23 @@ def pt7mm#04;
      ref $IF = LO@42400MHzDPolNoTone:Fd:Kp:La:Mk:Pt;
      ref $BBC = 4BBCs:Fd:Kp:La:Mk:Pt;
      ref $PHASE_CAL_DETECT = NoDetect:Fd:Kp:La:Mk:Pt;
-     ref $FREQ = 43122.06MHz4x2MHz:Mk;
-     ref $FREQ = 43123.26MHz4x2MHz:Fd:Kp:La:Pt;
+     ref $FREQ = 43115.06MHz4x16MHz:Mk;
+     ref $FREQ = 43116.26MHz4x16MHz:Fd:Kp:La:Pt;
 enddef;
 *
 def pt7mm#05;
      ref $IF = LO@42400MHzDPolNoTone:Fd:Kp:La:Mk:Pt;
      ref $BBC = 4BBCs:Fd:Kp:La:Mk:Pt;
      ref $PHASE_CAL_DETECT = NoDetect:Fd:Kp:La:Mk:Pt;
-     ref $FREQ = 43122.8MHz4x2MHz:Fd:Kp:La:Pt;
-     ref $FREQ = 43123.26MHz4x2MHz:Mk;
+     ref $FREQ = 43115.8MHz4x16MHz:Fd:Kp:La:Pt;
+     ref $FREQ = 43116.26MHz4x16MHz:Mk;
 enddef;
 *
 def pt7mm#06;
      ref $IF = LO@42400MHzDPolNoTone:Mk;
      ref $BBC = 4BBCs:Mk;
      ref $PHASE_CAL_DETECT = NoDetect:Mk;
-     ref $FREQ = 43122.8MHz4x2MHz:Mk;
+     ref $FREQ = 43115.8MHz4x16MHz:Mk;
 enddef;
 *------------------------------------------------------------------------------
 $IF;
@@ -182,6 +182,40 @@ enddef;
 *------------------------------------------------------------------------------
 $FREQ;
 *
+def 43113.17MHz4x16MHz;
+* pt7mm#02: Mk
+     chan_def =  : 43113.17 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 43113.17 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
+     chan_def =  : 43213.16 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
+     chan_def =  : 43213.16 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
+enddef;
+*
+def 43114.63MHz4x16MHz;
+* pt7mm#03: Fd, Kp, La, Mk, Pt
+     chan_def =  : 43114.63 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 43114.63 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
+     chan_def =  : 43214.63 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
+     chan_def =  : 43214.63 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
+enddef;
+*
+def 43115.06MHz4x16MHz;
+* pt7mm#02: Fd, Kp, La, Pt
+* pt7mm#04: Mk
+     chan_def =  : 43115.06 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 43115.06 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
+     chan_def =  : 43215.07 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
+     chan_def =  : 43215.07 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
+enddef;
+*
+def 43115.8MHz4x16MHz;
+* pt7mm#05: Fd, Kp, La, Pt
+* pt7mm#06: Mk
+     chan_def =  :  43115.8 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  :  43115.8 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
+     chan_def =  : 43215.81 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
+     chan_def =  : 43215.81 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
+enddef;
+*
 def 43115.99MHz4x16MHz;
 * pt7mm: Fd, Kp, La, Mk, Pt
      chan_def =  : 43115.99 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
@@ -190,47 +224,13 @@ def 43115.99MHz4x16MHz;
      chan_def =  : 43215.99 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
 enddef;
 *
-def 43120.17MHz4x2MHz;
-* pt7mm#02: Mk
-     chan_def =  : 43120.17 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
-     chan_def =  : 43120.17 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
-     chan_def =  : 43220.16 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
-     chan_def =  : 43220.16 MHz : U :    2.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
-enddef;
-*
-def 43121.63MHz4x2MHz;
-* pt7mm#03: Fd, Kp, La, Mk, Pt
-     chan_def =  : 43121.63 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
-     chan_def =  : 43121.63 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
-     chan_def =  : 43221.63 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
-     chan_def =  : 43221.63 MHz : U :    2.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
-enddef;
-*
-def 43122.06MHz4x2MHz;
-* pt7mm#02: Fd, Kp, La, Pt
-* pt7mm#04: Mk
-     chan_def =  : 43122.06 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
-     chan_def =  : 43122.06 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
-     chan_def =  : 43222.07 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
-     chan_def =  : 43222.07 MHz : U :    2.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
-enddef;
-*
-def 43122.8MHz4x2MHz;
-* pt7mm#05: Fd, Kp, La, Pt
-* pt7mm#06: Mk
-     chan_def =  :  43122.8 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
-     chan_def =  :  43122.8 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
-     chan_def =  : 43222.81 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
-     chan_def =  : 43222.81 MHz : U :    2.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
-enddef;
-*
-def 43123.26MHz4x2MHz;
+def 43116.26MHz4x16MHz;
 * pt7mm#04: Fd, Kp, La, Pt
 * pt7mm#05: Mk
-     chan_def =  : 43123.26 MHz : U :    2.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
-     chan_def =  : 43123.26 MHz : U :    2.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
-     chan_def =  : 43223.26 MHz : U :    2.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
-     chan_def =  : 43223.26 MHz : U :    2.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
+     chan_def =  : 43116.26 MHz : U :   16.00 MHz : &CH01 : &BBC01 : &NoCal; * RCP
+     chan_def =  : 43116.26 MHz : U :   16.00 MHz : &CH02 : &BBC02 : &NoCal; * LCP
+     chan_def =  : 43216.26 MHz : U :   16.00 MHz : &CH03 : &BBC03 : &NoCal; * RCP
+     chan_def =  : 43216.26 MHz : U :   16.00 MHz : &CH04 : &BBC04 : &NoCal; * LCP
 enddef;
 *
 def 86233.49MHz8x8MHz;

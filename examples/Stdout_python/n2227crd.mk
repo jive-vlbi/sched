@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_MK   *!
 !*  Experiment n2227    *!
 !* Schedule Version:       4.00 *!
-!* Processed by SCHED version:  11.60  Release 11.6; Feburary 2020 *!
+!* Processed by SCHED version:  11.80  Release 11.8; April 2023 *!
 !* PI:       David Boboltz *!
 !* Address:  United States Naval Observatory *!
 !*           3450 Massachusetts Ave, NW *!
@@ -19,7 +19,7 @@
 !*  Start at 14h30m00s     Tue, 2012 Aug 14  Day of year  227   *!
 program=n2227   
 
-diskformat=mark5c
+diskformat=mark6 
 media=(1,disk)
 
 !* The first scan is preceeded by a setup scan *!

@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_NL   *!
 !*  Experiment bw089    *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:  11.60  Release 11.6; Feburary 2020 *!
+!* Processed by SCHED version:  11.80  Release 11.8; April 2023 *!
 !* PI:       J.M. Wrobel *!
 !* Address:  NRAO, P.O. Box O *!
 !*           Socorro, NM 87801 *!
@@ -19,7 +19,7 @@
 !*  Start at 23h30m00s     Sun, 2008 May 04  Day of year  125   *!
 program=bw089   
 
-diskformat=mark5c
+diskformat=mark6 
 media=(1,disk)
 
 !* The first scan is preceeded by a setup scan *!

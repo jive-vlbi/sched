@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_SC   *!
 !*  Experiment egOH     *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:  11.60  Release 11.6; Feburary 2020 *!
+!* Processed by SCHED version:  11.80  Release 11.8; April 2023 *!
 !* PI:       PI Name *!
 !* Address:  Address (line one) *!
 !*           Address (line two) *!
@@ -19,7 +19,7 @@
 !*  Start at 03h08m00s     Sat, 1995 Jun 03  Day of year  154   *!
 program=egOH    
 
-diskformat=mark5c
+diskformat=mark6 
 media=(1,disk)
 
 !* The first scan is preceeded by a setup scan *!

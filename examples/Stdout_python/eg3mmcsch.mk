@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00
-Processed by SCHED version:  11.60  Release 11.6; Feburary 2020
+Processed by SCHED version:  11.80  Release 11.8; April 2023
 
 PI:       Craig Walker
 
@@ -57,9 +57,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43120.17  43120.17  43220.16  43220.16
- Next BBC frequencies:     720.17    720.17    820.16    820.16
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43113.17  43113.17  43213.16  43213.16
+ Next BBC frequencies:     713.17    713.17    813.16    813.16
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 04 03 03  P-V2108OPH   12 35 05  21.9  88.1 -4.7     -72.2  4247       19   Stopped 
 04 04 03  ---          12 36 05  22.2  88.2 -4.6     -72.2    60       19           
@@ -81,9 +81,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43121.63  43121.63  43221.63  43221.63
- Next BBC frequencies:     721.63    721.63    821.63    821.63
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43114.63  43114.63  43214.63  43214.63
+ Next BBC frequencies:     714.63    714.63    814.63    814.63
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 04 27 36  P-AHSCO      12 59 42  10.4 130.1 -4.2     -58.4    78       58   Stopped 
 04 28 36  ---          13 00 42  10.6 130.2 -4.2     -58.2    60       58           
@@ -118,9 +118,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43121.63  43121.63  43221.63  43221.63
- Next BBC frequencies:     721.63    721.63    821.63    821.63
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43114.63  43114.63  43214.63  43214.63
+ Next BBC frequencies:     714.63    714.63    814.63    814.63
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 04 57 48  P-AHSCO      13 29 59  15.7 133.8 -3.7     -53.5   450       97   Stopped 
 04 58 48  ---          13 30 59  15.9 133.9 -3.7     -53.3    60       97           
@@ -139,9 +139,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 05 03 44  P-OH2.6-0.4  13 35 56  12.1 124.7 -4.3     -60.2    86      101   Stopped 
 05 04 44  ---          13 36 57  12.3 124.8 -4.3     -60.0    60      101           
@@ -176,9 +176,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 05 27 44  P-OH2.6-0.4  14 00 00  16.7 127.6 -3.9     -56.7    94      140   Stopped 
 05 28 44  ---          14 01 00  16.9 127.8 -3.9     -56.6    60      140           
@@ -200,9 +200,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 05 51 44  P-OH2.6-0.4  14 24 04  21.1 130.9 -3.5     -52.9    94      179   Stopped 
 05 52 44  ---          14 25 04  21.2 131.0 -3.5     -52.8    60      179           
@@ -237,9 +237,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 06 15 44  P-OH2.6-0.4  14 48 08  25.2 134.6 -3.1     -48.8    94      218   Stopped 
 06 16 44  ---          14 49 08  25.4 134.7 -3.1     -48.6    60      218           
@@ -261,9 +261,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 06 39 44  P-OH2.6-0.4  15 12 12  29.1 138.7 -2.7     -44.1    94      257   Stopped 
 06 40 44  ---          15 13 12  29.3 138.9 -2.7     -43.9    60      257           
@@ -298,9 +298,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43123.26  43123.26  43223.26  43223.26
- Next BBC frequencies:     723.26    723.26    823.26    823.26
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43116.26  43116.26  43216.26  43216.26
+ Next BBC frequencies:     716.26    716.26    816.26    816.26
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 07 05 13  P-RUHER      15 37 45  81.1  51.0 -0.5    -126.1    81      295   Stopped 
 07 06 13  ---          15 38 45  81.3  50.1 -0.5    -127.0    60      295           
@@ -319,9 +319,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 07 19 44  P-OH2.6-0.4  15 52 18  34.8 146.8 -2.0     -35.3    13      315   Stopped 
 07 20 44  ---          15 53 19  34.9 147.0 -2.0     -35.0    60      315           
@@ -356,9 +356,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 07 43 44  P-OH2.6-0.4  16 16 22  37.7 152.4 -1.6     -29.2    94      354   Stopped 
 07 44 44  ---          16 17 22  37.8 152.7 -1.6     -29.0    60      354           
@@ -380,9 +380,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 08 07 43  P-OH2.6-0.4  16 40 26  40.0 158.6 -1.2     -22.6    93      393   Stopped 
 08 08 43  ---          16 41 26  40.1 158.9 -1.2     -22.3    60      393           
@@ -417,9 +417,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 08 31 43  P-OH2.6-0.4  17 04 29  41.8 165.3 -0.8     -15.5    91      432   Stopped 
 08 32 43  ---          17 05 29  41.8 165.6 -0.8     -15.2    60      432           
@@ -441,9 +441,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.06  43122.06  43222.07  43222.07
- Next BBC frequencies:     722.06    722.06    822.07    822.07
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.06  43115.06  43215.07  43215.07
+ Next BBC frequencies:     715.06    715.06    815.07    815.07
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 08 55 42  P-OH2.6-0.4  17 28 32  42.9 172.4 -0.4      -8.0    90      470   Stopped 
 08 56 42  ---          17 29 33  42.9 172.8 -0.4      -7.7    60      470           
@@ -478,9 +478,9 @@ Stop UT                  LST      EL    AZ   HA  UP   ParA  Dwell   GBytes    SY
 
  ---------- Following scan added by Sched for reference pointing ----------
 
- Next scan frequencies:  43122.80  43122.80  43222.81  43222.81
- Next BBC frequencies:     722.80    722.80    822.81    822.81
- Next scan bandwidths:       2.00      2.00      2.00      2.00
+ Next scan frequencies:  43115.80  43115.80  43215.81  43215.81
+ Next BBC frequencies:     715.80    715.80    815.81    815.81
+ Next scan bandwidths:      16.00     16.00     16.00     16.00
 
 09 19 36  P-RPEG       17 52 30  14.2  83.7 -5.2     -72.0    21      509   Stopped 
 09 20 36  ---          17 53 31  14.5  83.8 -5.2     -72.1    60      509           
@@ -533,33 +533,33 @@ SETUP FILE INFORMATION:
     Matching frequency sets:   1   2   3   4   5
 
   Frequency Set:  11  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
-   LO sum=   43122.06  43122.06  43222.07  43222.07
-   BBC fr=     722.06    722.06    822.07    822.07
-   Bandwd=       2.00      2.00      2.00      2.00
+   LO sum=   43115.06  43115.06  43215.07  43215.07
+   BBC fr=     715.06    715.06    815.07    815.07
+   Bandwd=      16.00     16.00     16.00     16.00
     Matching frequency sets:  11  12  13  14  26
 
   Frequency Set:  15  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
-   LO sum=   43120.17  43120.17  43220.16  43220.16
-   BBC fr=     720.17    720.17    820.16    820.16
-   Bandwd=       2.00      2.00      2.00      2.00
+   LO sum=   43113.17  43113.17  43213.16  43213.16
+   BBC fr=     713.17    713.17    813.16    813.16
+   Bandwd=      16.00     16.00     16.00     16.00
     Matching frequency sets:  15
 
   Frequency Set:  16  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
-   LO sum=   43121.63  43121.63  43221.63  43221.63
-   BBC fr=     721.63    721.63    821.63    821.63
-   Bandwd=       2.00      2.00      2.00      2.00
+   LO sum=   43114.63  43114.63  43214.63  43214.63
+   BBC fr=     714.63    714.63    814.63    814.63
+   Bandwd=      16.00     16.00     16.00     16.00
     Matching frequency sets:  16  17  18  19  20
 
   Frequency Set:  27  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
-   LO sum=   43123.26  43123.26  43223.26  43223.26
-   BBC fr=     723.26    723.26    823.26    823.26
-   Bandwd=       2.00      2.00      2.00      2.00
+   LO sum=   43116.26  43116.26  43216.26  43216.26
+   BBC fr=     716.26    716.26    816.26    816.26
+   Bandwd=      16.00     16.00     16.00     16.00
     Matching frequency sets:  27  28  29  30  31
 
   Frequency Set:  32  Based on FREQ, BW, and/or DOPPLER in schedule.  Used with PCAL = off
-   LO sum=   43122.80  43122.80  43222.81  43222.81
-   BBC fr=     722.80    722.80    822.81    822.81
-   Bandwd=       2.00      2.00      2.00      2.00
+   LO sum=   43115.80  43115.80  43215.81  43215.81
+   BBC fr=     715.80    715.80    815.81    815.81
+   Bandwd=      16.00     16.00     16.00     16.00
     Matching frequency sets:  32  33  34  35  36
 
 

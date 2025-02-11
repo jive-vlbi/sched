@@ -6,7 +6,7 @@
 
 
 Schedule Version:       1.00
-Processed by SCHED version:  11.60  Release 11.6; Feburary 2020
+Processed by SCHED version:  11.80  Release 11.8; April 2023
 
 PI:       NRAO AOC Data Analysts
 
@@ -562,10 +562,10 @@ SETUP FILE INFORMATION:
    Source                         Source position (RA/Dec)                        Error
                         (B1950)             (J2000)             (Date)            (mas)
 
- * 2145+067          21 45 36.078473   * 21 48 05.458671     21 48 47.853633       0.26
-   J2148+0657        06 43 40.90456    * 06 57 38.60416      07 01 36.10442        0.25
-   J2148+06          /home/eldering/sched/catalogs/sources.gsfc
-                     GSFC 2016a X/S astro solution, 110505 observations.
+   J2148+0657        21 45 36.078470   * 21 48 05.458668     21 48 47.853629       0.03
+ * 2145+067          06 43 40.90458    * 06 57 38.60419      07 01 36.10444        0.03
+   J214805.4+06      /home/eldering/sched/catalogs/sources.vlba
+                     ICRF3 X/S astro solution, 108726 observations.
 
 
 

@@ -1,7 +1,7 @@
 !*  Schedule for VLBA_MK   *!
 !*  Experiment egCwide  *!
 !* Schedule Version:       1.00 *!
-!* Processed by SCHED version:  11.60  Release 11.6; Feburary 2020 *!
+!* Processed by SCHED version:  11.80  Release 11.8; April 2023 *!
 !* PI:       Craig Walker *!
 !* Address:  National Radio Astronomy Observatory *!
 !*           P. O. Box O *!
@@ -19,7 +19,7 @@
 !*  Start at 20h00m00s     Wed, 1995 Jul 05  Day of year  186   *!
 program=egCwide 
 
-diskformat=mark5c
+diskformat=mark6 
 media=(1,disk)
 
 !* The first scan is preceeded by a setup scan *!
