@@ -168,6 +168,7 @@ We therefore recommend to unset this variable before running pySCHED (which woul
 * __v1.26.2 (2023-12-04)__: Bug fix in the Fortran code for wrap zones: a rare warning message had the wrong number of formatting parameters.
 * __v1.26.3 (2024-05-16)__: Fixed typos in the sum file writing module.
 * __v1.26.4 (2024-06-03)__: Fixed bug triggered by using GRABTO with NOSETUP.
+* __v1.27.0 (2025-02-25)__: Merge with SCHED 11.8.
 
 
 # Contact
