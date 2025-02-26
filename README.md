@@ -37,7 +37,7 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 
 - Python (>= 3.6).
 - A Fortran compiler.
-- NumPy (>= 1.16).
+- NumPy (>= 1.16, < 1.24).
 - Git.
 
 #### PyQt5 dependencies
@@ -46,19 +46,22 @@ where the optional parameter `-p`  retrieves the graphical mode in order to be a
 
 ### conda (recommended)
 
-Using `conda` is the easiest installation method. This package manager is available for download [here](https://www.anaconda.com/products/individual). After installing `conda`, download [this](https://github.com/jive-vlbi/sched/raw/python/pySCHED.yaml) YAML file, which describes a conda environment including all mentioned dependencies and **pySCHED**. To use it:
+The recommended installation method for **pySCHED** is to use a conda compatible program. There are a few options for conda installers, like [Anaconda](https://www.anaconda.com/download), [Miniconda](https://docs.anaconda.com/miniconda/) and [Miniforge](https://github.com/conda-forge/miniforge). We recommend [Miniforge](https://github.com/conda-forge/miniforge), since it uses the conda-forge channels by default to download packages, which is free to use, while the default channel of the two other options are not free to use in all circumstances. See [this](https://www.anaconda.com/blog/is-conda-free#summarize) blog for further details and links.
+
+After installing your choice of conda, download [this](https://github.com/jive-vlbi/sched/raw/python/pySCHED.yaml) YAML file, which describes a conda environment including all mentioned dependencies and **pySCHED**. To use it:
 
 ```bash
 conda env create -f pySCHED.yaml
 conda activate pySCHED
 ```
 
-### pip
+### pip (not recommended)
 
-If you want to install **pySCHED** system wide, `pip` can be used directly:
+**pySCHED** requires an older version of both NumPy and setuptools, therefore we do not recommend installing it outside of a dedicated (virtual) environment. 
+If you want to install **pySCHED** using `pip`, it can be used directly:
 
 ```bash
-sudo pip3 install numpy
+sudo pip3 install 'numpy<1.24'
 sudo pip3 install pythonSCHED
 ```
 
@@ -67,26 +70,6 @@ sudo pip3 install pythonSCHED
 ```bash
 sudo apt-get install python3-pip
 ```
-
-### NumPy version >= 1.24 and installing from source
-
-NumPy version 1.24.0 introduced a bug that caused the wrapper to Fortran arrays, that is created on install, to have the wrong dimensions in some cases. This bug was fixed in version 1.24.3. However, this newer version of NumPy requires code changes in **pySCHED** that in turn only work for NumPy version >= 1.24.
-
-Since NumPy version >= 1.24.3 is not ubiquitous available yet, we have chosen to make the default install of **pySCHED** require a version < 1.24. If you wish to use **pySCHED** with NumPy >= 1.24.3, you can do so by installing **pySCHED** from source. To do this, clone the **pySCHED** repository, checkout the `numpy-1.24.3` branch and run the install setup command:
-
-```bash
-git clone https://github.com/jive-vlbi/sched.git pySCHED
-cd pySCHED
-git checkout numpy-1.24.3
-pip install .
-```
-
-Notice the changed `pip install` command. If the `pySCHED.yaml` file is used to create a conda environment, remove these lines from the file:
-```bash
-  - pip:
-    - pythonSCHED
-```
-adapt the NumPy version requirement as desired and run the `pip install .` command after activating the pySCHED conda environment.
 
 ### Known issues
 
