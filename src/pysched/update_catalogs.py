@@ -15,7 +15,7 @@ import sys
 
 checkout_dir = os.path.join(os.path.expanduser("~"), ".pysched")
 git_repository = "https://github.com/jive-vlbi/sched.git"
-branch = "data_files_v1.4"
+branch = "data_files_v1.27"
 
 class Spinner(git.RemoteProgress):
     cursor_chars = ["|", "/", "-", "\\"]
