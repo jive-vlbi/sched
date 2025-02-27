@@ -592,7 +592,8 @@ CCC    rmc: all but GBT_VLBA, VLA27 for turning on PSC in oct/nov'15
 C
 C                  IF( STANAME(ISTA)(1:4) .EQ. 'VLBA' ) THEN
                   IF( (STANAME(ISTA)(1:3) .NE. 'GBT') .AND.
-     1                (STANAME(ISTA)(1:3) .NE. 'VLA')         ) THEN
+     1                (STANAME(ISTA)(1:3) .NE. 'VLA') .AND.
+     1                (STANAME(ISTA)(1:3) .NE. 'KVN')       ) THEN
                      CALL WRAPZONE( IVEX, ISCN, ISTA, ZONE )
                   ELSE 
                      ZONE = ' '
