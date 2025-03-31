@@ -74,7 +74,7 @@ C     MSET needs to be large enough for one setup group per frequency
 C     group per station.  The number is driven by wideband VLBA 
 C     single dish testing.
 C
-      PARAMETER     (MAXSCN=4000)
+      PARAMETER     (MAXSCN=20000)
       PARAMETER     (MAXSTA=40)
       PARAMETER     (MSET  =400+5*MAXSTA)
 C
