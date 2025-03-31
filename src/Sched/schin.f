@@ -368,6 +368,13 @@ C        Get explicit indication to create CRD files. (AED 7/23/2024)
 C
          I1 = KEYPTR( 'MAKECRD', KC, KI )
          MAKECRD = KD(I1) .EQ. 0.D0 
+
+C
+C        Get type of vex file to generate (1.5 or 2). (AED 3/31/2025)
+C
+         I1 = KEYPTR( 'VEXVRSN', KC, KI )
+         VEXVRSN(1) = KD(I1)
+         VEXVRSN(2) = KD(I1+1)
 C
 C        Get any specification of a group of scans from which to
 C        select the highest elevation one.

@@ -117,6 +117,7 @@ C
       CALL KEYADD( 'DOSCANS', 0.D0, 2, KD, KC, KI )
       CALL KEYADD( 'WRAP24', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'MAKECRD', UNSET, 1, KD, KC, KI )
+      CALL KEYADD( 'VEXVRSN', UNSET, 2, KD, KC, KI )
 C
 C     Files.
 C

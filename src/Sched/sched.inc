@@ -457,14 +457,14 @@ C                      MISSING implies can plot, but not make files.
 C
       INTEGER          LINEPG
       INTEGER          ORIGEN(MAXSCN)
-      LOGICAL          PLOT, PUBPLOT, DEBUG, OVERWRIT 
+      LOGICAL          PLOT, PUBPLOT, DEBUG, OVERWRIT, TWOVEX
       LOGICAL          DOVEX, VEXTEST, DOMKA, DOVSOP, MISSING, MOVING
       LOGICAL          NOSET, COVERLET, AUTOPEAK, PKWATCH, SYNL404
       LOGICAL          OVERRIDE, READLOG, DODOWN(MAXSCN), MAKECRD
       CHARACTER        MSGTXT*256, SUMITEM(10)*8, DOSTA*8
       CHARACTER        EPHFILE*80, FREQFILE*80, FREQVER*20
       CHARACTER        PEAKFILE*80, LOGFILE*80, MSGFILE*80
-      DOUBLE PRECISION FREQLIST(2), PRECDATE
+      DOUBLE PRECISION FREQLIST(2), PRECDATE, VEXVRSN(2)
 C
 C                      Schedule optimization and plotting:
 C                      Also configuration optimization.
@@ -505,9 +505,9 @@ C
      7                 OPMISS, OPPRTLEV, OPNOSUB, TAPESYNC, MAPLIM,
      8                 GRIDNR, GRIDNT, GRIDMIN, GRIDMAX, GRIDW0, 
      9                 GRIDSTEP, GRIDUSED, GRIDVLA, NMFS, MFSRAT,
-     A                 DOTSIZE, RINGSIZE, LONMIN, LONMAX, 
+     A                 DOTSIZE, RINGSIZE, LONMIN, LONMAX, VEXVRSN,
      B                 LATMIN, LATMAX, LATMID, SYNL404, MAKECRD,
-     C                 NTICKS, LINESZ, LABELSZ, COLIND, MOVEDS
+     C                 NTICKS, LINESZ, LABELSZ, COLIND, MOVEDS, TWOVEX
       COMMON  /SCHSCO/ MSGTXT, SUMITEM, DOSTA, EPHFILE, 
      1                 FREQFILE, FREQVER, PEAKFILE, LOGFILE, MSGFILE,
      2                 OPHASTA, OPTMODE, GRIDMEAS

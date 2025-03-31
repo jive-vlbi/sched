@@ -19,7 +19,11 @@ C     Create a VEX output file
 C
       VIOLFS = .FALSE.
       IF( DEBUG ) CALL WLOG( 1, 'VXWRT2: Starting VEX section' )
-      WRITE( VEXFILE, '( A, A )' )  EXPCODE(1:LEN1(EXPCODE)), '.VEX2'
+      IF (TWOVEX ) THEN
+         WRITE( VEXFILE, '( A, A )' )  EXPCODE(1:LEN1(EXPCODE)), '.VEX2'
+      ELSE
+         WRITE( VEXFILE, '( A, A )' )  EXPCODE(1:LEN1(EXPCODE)), '.VEX'
+      END IF
       CALL DWCASE( VEXFILE )
 C     
 C     Find out if the .vex file already exists.

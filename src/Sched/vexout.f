@@ -7,10 +7,12 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER   ISET, ISCN, ISRC
-      LOGICAL   FMTNONE, ALLNONE
+      INTEGER   ISET, ISCN, ISRC, VV
+      LOGICAL   FMTNONE, ALLNONE, VEX2, VEX
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VEXOUT starting.' )
+      VEX = .FALSE.
+      VEX2 = .FALSE.
 C
 C     For the moment (9feb2001), the VEX writer cannot deal with
 C     FORMAT=NONE.  Therefore block it, but give Huib a back
@@ -97,8 +99,31 @@ C         IF( OVERRIDE .OR. .NOT. FMTNONE ) THEN
      1         OBSTYP .EQ. 'PTVLBA') .AND. 
      2         OBSTYP .NE. 'CONFIG' ) THEN
 C
-            CALL VXWRT
-            CALL VXWRT2
+C
+C           Default output vex file to vex2, but allow for 
+C           multiple versions with the VEXVRSN flag vexvrsn = 1.5, 2
+C           Default file extension will be .vex, but if there are 
+C           multiple files, they are differentiated as .vex and .vex2
+C           Adriana Escobar (AED) 03/31/2025
+C
+            DO VV = 1, 2
+               IF( VEXVRSN(VV) .EQ. 1.5 ) THEN
+                  VEX = .TRUE.
+               ELSE IF( VEXVRSN(VV) .EQ. -9999.D0 .OR. 
+     1                               VEXVRSN(VV) .EQ. 2 ) THEN
+                  VEX2 = .TRUE.
+               END IF
+            END DO
+
+            IF ( VEX ) THEN
+               CALL VXWRT
+            ENDIF
+            IF ( VEX2 ) THEN
+               IF ( VEX .AND. VEX2) THEN
+                  TWOVEX = .TRUE.
+               END IF
+               CALL VXWRT2
+            ENDIF
 C
 C           Also write a template v2d file for DiFX correlation.
 C
