@@ -7,7 +7,7 @@ C
       INCLUDE 'sched.inc'
       INCLUDE 'schset.inc'
 C
-      INTEGER   ISET, ISCN, ISRC, VV
+      INTEGER   ISET, ISCN, ISRC
       LOGICAL   FMTNONE, ALLNONE, VEX2, VEX
 C --------------------------------------------------------------------
       IF( DEBUG ) CALL WLOG( 0, 'VEXOUT starting.' )
@@ -106,14 +106,14 @@ C           Default file extension will be .vex, but if there are
 C           multiple files, they are differentiated as .vex and .vex2
 C           Adriana Escobar (AED) 03/31/2025
 C
-            DO VV = 1, 2
-               IF( VEXVRSN(VV) .EQ. 1.5 ) THEN
-                  VEX = .TRUE.
-               ELSE IF( VEXVRSN(VV) .EQ. -9999.D0 .OR. 
-     1                               VEXVRSN(VV) .EQ. 2 ) THEN
-                  VEX2 = .TRUE.
-               END IF
-            END DO
+            IF( VEXVRSN .EQ. '1.5' ) THEN
+                VEX = .TRUE.
+            ELSE IF( VEXVRSN .EQ. '2.0' ) THEN
+                VEX2 = .TRUE.
+            ELSE IF( VEXVRSN .EQ. 'BOTH' ) THEN
+                VEX = .TRUE.
+                VEX2 = .TRUE.
+            END IF
 
             IF ( VEX ) THEN
                CALL VXWRT

@@ -373,8 +373,14 @@ C
 C        Get type of vex file to generate (1.5 or 2). (AED 3/31/2025)
 C
          I1 = KEYPTR( 'VEXVRSN', KC, KI )
-         VEXVRSN(1) = KD(I1)
-         VEXVRSN(2) = KD(I1+1)
+         IF (KD(I1) .EQ. 1.5 ) THEN
+            VEXVRSN = '1.5'
+         ELSE IF (KD(I1) .EQ. 2 ) THEN
+            VEXVRSN = '2.0'
+         ELSE
+            VEXVRSN = KCHAR( 'VEXVRSN', 4, .FALSE., KD, KC, KI )
+            CALL UPCASE ( VEXVRSN )
+         END IF
 C
 C        Get any specification of a group of scans from which to
 C        select the highest elevation one.

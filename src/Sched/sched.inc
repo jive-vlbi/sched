@@ -464,7 +464,8 @@ C
       CHARACTER        MSGTXT*256, SUMITEM(10)*8, DOSTA*8
       CHARACTER        EPHFILE*80, FREQFILE*80, FREQVER*20
       CHARACTER        PEAKFILE*80, LOGFILE*80, MSGFILE*80
-      DOUBLE PRECISION FREQLIST(2), PRECDATE, VEXVRSN(2)
+      CHARACTER        VEXVRSN*4
+      DOUBLE PRECISION FREQLIST(2), PRECDATE
 C
 C                      Schedule optimization and plotting:
 C                      Also configuration optimization.
