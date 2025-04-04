@@ -108,7 +108,7 @@ C           Adriana Escobar (AED) 03/31/2025
 C
             IF( VEXVRSN .EQ. '1.5' ) THEN
                 VEX = .TRUE.
-            ELSE IF( VEXVRSN .EQ. '2.0' ) THEN
+            ELSE IF( VEXVRSN .EQ. '2.0' .OR. VEXVRSN .EQ. 'NONE') THEN
                 VEX2 = .TRUE.
             ELSE IF( VEXVRSN .EQ. 'BOTH' ) THEN
                 VEX = .TRUE.
