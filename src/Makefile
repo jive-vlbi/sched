@@ -250,7 +250,7 @@ IBMAIX_OBJS = $(IBMAIX_FSRCS:.f=.o) $(IBMAIX_CSRCS:.c=.o) $(UNIX_OBJS)
 
 ARCH_OBJS = $($(ARCH)_OBJS)
 
-BINDIR = ../bin
+BINDIR = ../bin/linux64gf
 CP = /bin/cp
 RM = /bin/rm
 
