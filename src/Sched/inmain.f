@@ -99,6 +99,7 @@ C
       CALL KEYADD( 'LST', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'DODOWN', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'AUTOPEAK', UNSET, 1, KD, KC, KI )
+      CALL KEYADD( 'SYNL404', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'PKWATCH', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'EXIT', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'PLOT', UNSET, 1, KD, KC, KI )
@@ -115,6 +116,8 @@ C
       CALL KEYADD( 'DOMKA', UNSET, 1, KD, KC, KI )
       CALL KEYADD( 'DOSCANS', 0.D0, 2, KD, KC, KI )
       CALL KEYADD( 'WRAP24', UNSET, 1, KD, KC, KI )
+      CALL KEYADD( 'MAKECRD', UNSET, 1, KD, KC, KI )
+      CALL KEYCHR( 'VEXVRSN', 'NONE', 4, KD, KC, KI )
 C
 C     Files.
 C
@@ -140,7 +143,7 @@ C
 C
 C     Cover and experiment information.
 C
-      CALL KEYCHR( 'EXPCODE', 'NUG', 8, KD, KC, KI )
+      CALL KEYCHR( 'EXPCODE', 'NUG', 16, KD, KC, KI )
       CALL KEYCHR( 'EXPT', ' ', 72, KD, KC, KI )
       CALL KEYADD( 'LINEPG', 55.D0, 1, KD, KC, KI )
       CALL KEYCHR( 'OBSTYPE', 'NONE', 8, KD, KC, KI )

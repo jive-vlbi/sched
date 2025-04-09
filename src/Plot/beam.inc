@@ -15,7 +15,8 @@ C
       INTEGER           NBASE, NPBAS, KXSIZE, KYSIZE
       INTEGER           MINPIX, MAXPIX
       PARAMETER         (NBASE =1)
-      PARAMETER         (NPBAS = 3000 * 100 * 2 )
+C      PARAMETER         (NPBAS = 3000 * 100 * 2 )
+      PARAMETER         (NPBAS = 20000 * 100 * 2 )
       PARAMETER         (KXSIZE=256)
       PARAMETER         (KYSIZE=256)
       PARAMETER         (MINPIX=32)

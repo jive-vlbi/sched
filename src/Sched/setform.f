@@ -148,7 +148,8 @@ C
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK6' .AND.
      1             (DBE(KS) .EQ. 'RDBE_DDC' .OR.
      2             DBE(KS) .EQ. 'DBBC_PFB' .OR.
-     3             DBE(KS) .EQ. 'DBBC_DDC') ) THEN
+     3             DBE(KS) .EQ. 'DBBC_DDC'.OR.
+     4             DBE(KS) .EQ. 'VNDA' ) ) THEN
                FORMAT(KS) = 'VDIF'
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
      1           ( DBE(KS) .EQ. 'RDBE_PFB' .OR.
@@ -157,7 +158,8 @@ C
                FORMAT(KS) = 'MARK5B'
 C
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5C' .AND.
-     1             DBE(KS) .EQ. 'RDBE_DDC' ) THEN
+     1             DBE(KS) .EQ. 'RDBE_DDC' .OR.
+     2             DBE(KS) .EQ. 'VNDA' ) THEN
                FORMAT(KS) = 'VDIF'   
 C
             ELSE IF( DISK(ISETSTA(KS)) .EQ. 'MARK5B' ) THEN

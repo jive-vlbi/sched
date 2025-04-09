@@ -227,7 +227,8 @@ C
      E       DAR(MSTA) .NE. 'R1002' .AND. 
      F       DAR(MSTA) .NE. 'WIDAR' .AND.
      G       DAR(MSTA) .NE. 'CDAS'  .AND.
-     H       DAR(MSTA) .NE. 'NONE' ) THEN
+     H       DAR(MSTA) .NE. 'VNDA'  .AND.
+     I       DAR(MSTA) .NE. 'NONE' ) THEN
             CALL ERRLOG( 'STREAD: Invalid DAR type ' //
      1          DAR(MSTA) // ' for ' // STATION(MSTA) )
          END IF

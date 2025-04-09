@@ -22,6 +22,7 @@ C     XX = PO pass_order
 C     XX = HP head_position
 C     XX = PH phase_cal
 C     XX = RL barrel_roll
+C     XX = DS DATASTREAMS
 C
 C     NXXVEX              total number of defs in block XX
 C     NMODXX(IMODE)       number of XX defs referenced in mode IMODE
@@ -118,7 +119,7 @@ C
       CHARACTER BBLINK(MAXMOD)*32, HPLINK(MAXMOD)*32, POLINK(MAXMOD)*32
       CHARACTER RLLINK(MAXMOD)*32, PHLINK(MAXMOD)*32, MDLINK(MAXMOD)*32
       CHARACTER DALINK(MAXSTA)*32, SILINK(MAXSTA)*32, ANLINK(MAXSTA)*32 
-      CHARACTER PRLINK(MAXMOD)*32
+      CHARACTER PRLINK(MAXMOD)*32, DSLINK(MAXMOD)*32
 C
       COMMON /VEX1/ NMDVEX, NFQVEX, NTRVEX, NIFVEX, NBBVEX, 
      1     NHPVEX, NPOVEX, NRLVEX, NPHVEX, 
@@ -135,7 +136,7 @@ C
      1     ISTADA, ISTASI, ISTAAN,
      2     FQLINK, TRLINK, IFLINK, BBLINK, HPLINK, POLINK,
      3     RLLINK, PHLINK, MDLINK, DALINK, SILINK, ANLINK,
-     4     PRLINK, VEXFILE
+     4     PRLINK, VEXFILE, DSLINK
 C
 C     the tones are the first to be stored not constructed on the fly
 C     and so are a few frequency settings

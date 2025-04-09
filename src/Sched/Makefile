@@ -36,3 +36,5 @@ $(SCHPTG_OBJS): schpeak.inc
 
 clean:
 	$(RM) $(OBJS)
+
+

@@ -62,6 +62,7 @@ C
      1              'Invokes uv, xy, rd, and uptime plotting.' )
       CALL WLOG( 1, '   FREQLIST=lowF,highF    :  Make frequency list'//
      1          ' (MHz).  Then exit.' )
+      CALL WLOG( 1, '   MAKECRD                :  Make crd files.' )
       CALL WLOG( 1, '   EXIT                   :  Leave program.' )
       CALL WLOG( 1, '   /                      :  End of inputs - '//
      1              'run program (or EXIT).' )

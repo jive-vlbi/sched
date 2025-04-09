@@ -35,7 +35,7 @@ C     local variables
 C     
       INTEGER   I, J, KS, JS, ISTA, JSTA, ISCAT, IMODE, IXX, JXX
       INTEGER   SETISXX(MSET), LEN1
-      LOGICAL NEWFND, VXCFFQ, VXCFIF, VXCFBB, VXCFTR, VXCFHP
+      LOGICAL NEWFND, VXCFFQ, VXCFIF, VXCFBB, VXCFTR, VXCFHP, VXCFDS
       LOGICAL VXCFRL, VXCFPO, VXCFPH
       LOGICAL PROBLEM
 C ----------------------------------------------------------------------
@@ -94,6 +94,11 @@ C
                         END IF
                      ELSE IF( BLOCK .EQ. 'TR' ) THEN
                         IF( VXCFTR( KS, JS ) ) THEN
+                           NEWFND = .FALSE.
+                           SETISXX(KS) = IXX
+                        END IF
+                     ELSE IF( BLOCK .EQ. 'DS' ) THEN
+                        IF( VXCFDS( KS, JS ) ) THEN
                            NEWFND = .FALSE.
                            SETISXX(KS) = IXX
                         END IF

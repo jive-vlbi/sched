@@ -466,8 +466,8 @@ C                    for now, the 'options' field is always blank.
                      WRITE( LINE(LPOS:), '( 1X, A1 )' ) 
      1                    SEP
 C                     LPOS = LEN1(LINE) + 1
+                     WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                   END IF
-                  WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                END DO
             END IF
 C     
