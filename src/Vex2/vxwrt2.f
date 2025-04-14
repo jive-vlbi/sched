@@ -187,6 +187,11 @@ C
       CALL VXSORT( 'BB', NBBVEX, BBISSET, NMODBB, IMODBB,
      1     NSTABB, ISTABB, BBLINK )
 C
+C     Tracks for bitstream
+C
+      CALL VXSORT( 'TR', NTRVEX, TRISSET, NMODTR, IMODTR,
+     2       NSTATR, ISTATR, TRLINK )
+C
 C     Datastream
 C
       CALL VXSORT( 'DS', NTRVEX, TRISSET, NMODTR, IMODTR,
