@@ -227,11 +227,11 @@ C
                   ILEN = LEN1( INTENT(ISCINT(INT,ISCN)) )
                   IF ( INTENT(ISCINT(INT,ISCN))(1:ILEN) .NE. 
      1                 'REFERENCE_POINTING_OFF') THEN                  
-                      WRITE( LINE, '( 4X, A, A1, 1X, A, 1X, A1,
+                      WRITE( LINE, '( 4X, A, A1, 1X, 3A, 1X, A1,
      1                     1X, A, 1X, A1 )' )  
-     2                    ' intent = ', 
-     3                    COL, INTENT(ISCINT(INT,ISCN))(1:ILEN),
-     4                    COL, 'True', SEP
+     2                    ' intent = ', COL,
+     3                    QOT, INTENT(ISCINT(INT,ISCN))(1:ILEN),
+     4                    QOT, COL, 'True', SEP
                       WRITE( IVEX, '( A )' ) LINE(1:LEN1(LINE))
                       INPAGE = INPAGE + 1
                   END IF
