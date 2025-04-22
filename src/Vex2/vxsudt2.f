@@ -49,10 +49,18 @@ C        that exactly one of satfile/tlefile contains 'NONE'.
             WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
      1         SATFILE (I)(1:LEN1(SATFILE (I))),
      2         SATNUM (I)
+            WRITE( IVEX, '( 5x, "bsp_file_name = ", A, ";" )')
+     1         SATFILE (I)(1:LEN1(SATFILE (I)))
+            WRITE( IVEX, '( 5x, "bsp_object_id = ", I8, ";" )')
+     1         SATNUM (I)
          ELSE
             WRITE( IVEX, '( 5x, "source_type = ", A, " : ", I8, ";" )')
      1         TLEFILE (I)(1:LEN1(TLEFILE (I))),
      2         SATNUM (I)
+            WRITE( IVEX, '( 5x, "bsp_file_name = ", A, ";" )')
+     1         TLEFILE (I)(1:LEN1(TLEFILE (I)))
+            WRITE( IVEX, '( 5x, "bsp_object_id = ", I8, ";" )')
+     1         SATNUM (I)
          END IF
       END IF
 
